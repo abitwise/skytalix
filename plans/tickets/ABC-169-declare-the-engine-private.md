@@ -9,7 +9,17 @@ epic: EPIC-007
 feature: —
 ---
 
-# ABC-169 — one manifest key and one header comment. ZERO executable lines
+# ABC-169 — one manifest key, one header comment and one pin element. ZERO executable lines
+
+> **Amended 2026-10-18 by BA/PM** (subtask `bapm-ABC-169-rescope`, at `main` `692770d6`) on the build stop
+> (`.grugops/queue/done/ticket-to-pr-ABC-169.md`, tip `4a0a075f`): A1–A5 held and A6 failed. `src/cli.test.ts:1759`
+> (`ABC-042` `A10`) pins the exact top-level key list of `package.json` in `AT_HEAD` (`:1766-1775`, 8 keys), so the
+> `"license"` key that A1 requires turns it red. **Ruling:** the delivery adds exactly one element, `"license"`, to
+> `AT_HEAD`, and changes nothing else in that test or that file (Scope 4). A5 now lists three files and A6 allows
+> that one line. `ADR-0036` (c) is re-read below and still does not fire. The UAT reading is unchanged. This follows
+> the `ABC-122` precedent (`amend-abc122-a4-pin`, 2026-09-25), which widened a fence by exactly one value in the same
+> test. The reasoning is in `.grugops/context/bapm-ABC-169-rescope/notes/`. The readings at `4a0a075f` for A1–A4 still
+> stand. The redo adds one commit that carries the pin line.
 
 > **Re-scoped 2026-10-18 by BA/PM** (task `wave-2026-09-25`, subtask `bapm-epic007-accept`) on the owner's word,
 > verbatim (`.grugops/context/wave-2026-09-25/notes/20261018T113000Z-orchestrator-decision-owner-word-engine-private-adr0044-epic007-accepted-c3e81a57.md`,
@@ -63,6 +73,12 @@ engine's evaluation rests on is credited where it is used.
    If `ADR-0044` D13, as the Architect's `arch-adr0044-accept` hop rewrites it to private, gives different wording,
    D13's wording wins. `A2` holds either way.
 3. **The four MIT kit files in `tools/grugops/`:** untouched. They stay MIT (the owner's word).
+4. **`src/cli.test.ts`, one pin element only** (amended 2026-10-18). Add the element `"license",` as one new line
+   inside `ABC-042` `A10`'s `AT_HEAD` array (`:1766-1775`). It can go anywhere in the array, because the assertion at
+   `:1788` sorts both sides; next to `"private",` reads best. Nothing else in the test changes: not the test's name,
+   its comments, `SCRIPTS_AT_HEAD` (`:1776-1786`), the reserved list (`:1789`), the `private` check (`:1792`), or the
+   `added` check (`:1799`). Nothing else in the file changes either. The pin keeps its purpose: it still checks the
+   manifest key by key, and now its list includes the one key this ticket adds.
 
 ## Out of scope
 
@@ -76,6 +92,7 @@ engine's evaluation rests on is credited where it is used.
 - The adjacent header sentence *"Every number below is HAND-TUNED and expected to move"* (`src/evaluate.ts:12`). It is
   left as written (coding rule 9). The credit names only `PIECE_VALUE` and the six tables.
 - `npm publish`, and any change to `"private": true`.
+- Any other test edit, including a new test for the `license` key. The amended `AT_HEAD` pin covers the key.
 
 ## Acceptance (Given/When/Then)
 
@@ -94,15 +111,23 @@ engine's evaluation rests on is credited where it is used.
 
   If either check fails, the change is not comment-only. The ticket stops and goes back to BA/PM.
 - **`A4` (no open-source files).** `git ls-files 'LICENSE*' 'NOTICE*' 'COPYING*'` prints nothing at the tip.
-- **`A5` (fences).** `git diff --name-only <base> <tip>` lists exactly `package.json` and `src/evaluate.ts`.
+- **`A5` (fences, amended 2026-10-18).** `git diff --name-only <base> <tip>` lists exactly `package.json`,
+  `src/evaluate.ts` and `src/cli.test.ts`. `git diff --numstat <base> <tip> -- src/cli.test.ts` shows 1 line added and 0
+  removed. That added line, trimmed, is `"license",`, and it sits between `const AT_HEAD = [` and the `];` that closes it.
   `git diff <base> <tip> -- tools package-lock.json` is empty.
-- **`A6` (the gates).** The four mandatory gates (lint, typecheck, unit, build) are green, with the same test count as
-  at `<base>`. No test file is added or edited.
+- **`A6` (the gates, amended 2026-10-18).** The four mandatory gates (lint, typecheck, unit, build) are green, with the
+  same test count as at `<base>`. No test file is added. The only test-file edit is A5's one line. `ABC-042` `A10`
+  passes at the tip. **The pin is still armed:** with only the `"license"` line taken out of `package.json` (the test
+  file as at the tip), `A10` is red, and it is the only red row. This is one reading in the hop record, not a new test,
+  and the line is restored before the commit.
 
 ## Dependencies
 
 - **None among open tickets.** It shares `package.json` with `ABC-168` (`bin`, `build`) and `ABC-172` (`name`), on
   different keys. Whichever merges later rebases.
+- **It also shares `src/cli.test.ts`'s `AT_HEAD` with `ABC-168`** (amended 2026-10-18). `ABC-168` adds `"bin"` there.
+  Whichever of the two merges later rebases and keeps both elements. `ABC-172` changes a value, not a key, so it
+  does not touch the pin.
 - **`ADR-0044` D13** is being rewritten to private by the Architect's `arch-adr0044-accept` hop, in parallel with this
   one. Only the credit wording reads from it (Scope 2), and `A2` holds either way.
 - **Gate: met.** The owner accepted `EPIC-007` and the revised `ADR-0044` on 2026-10-18 (`…c3e81a57`).
@@ -113,9 +138,22 @@ engine's evaluation rests on is credited where it is used.
   all"*). No `dependencies` key is added (`A1`). Expected result: no finding.
 - **`ADR-0036` (b1) and (b2) do not fire.** (b1) asks for an added or changed line of **executable code** in a
   production file, and `A3` proves there is none. (b2) asks for a new runtime import edge, and a comment adds none.
-  (c) does not fire: no test file is in the diff.
-- **Clause (d) (blast radius):** one production file, `src/evaluate.ts`, is named here, with comment lines only (`A3`,
-  `A5`).
+- **(c), re-read 2026-10-18 now that a test file is in the diff: it does not fire.** The clause
+  (`plans/tickets/ABC-041-render-seam-closure.md:228-231`) fires only if a test file in the diff *"introduces a
+  capability this lane does not already hold: network, a filesystem write outside a temp dir, or a new
+  `child_process` spawn"*. The edit adds one string literal to an array literal. It adds no import, no call and no
+  capability. The test already reads `package.json` with `readFileSync` (`:1762`), and read-only `node:fs` over the
+  repository's own files is named precedent in the clause. The clause's tie rule (*"whichever way a reading is
+  disputed, it fires"*) has nothing to act on, because a one-line string element leaves no reading to dispute.
+- **Other test-integrity rules, read 2026-10-18: none fires.** `tools/grugops/test-skip-integrity.js` counts skips,
+  and the edit adds none, so the skip count stays `0` and the check prints `No findings.`
+  `.grugops/test-skips.md` is not touched. `tools/grugops/qe-hop-integrity.js` checks QE hops at `Done`, and nothing
+  here changes what it reads. This pin edit does not weaken anything: the assertion, the reserved list and the
+  `scripts` checks stay as they are, and `A6`'s armed check shows the pin still goes red without the key. The
+  `ABC-122` amendment set the precedent: a BA/PM ruling may move a value in `ABC-042` `A10` by exactly the line that
+  the ticket's own manifest change requires.
+- **Clause (d) (blast radius):** two files under `src/`, both named here. `src/evaluate.ts` gets comment lines only
+  (`A3`). `src/cli.test.ts` gets one array element (`A5`).
 - **NFRs:** none apply. Because of `A3`'s transpile identity, the emitted code is unchanged, and so is every
   evaluation, puzzle, ladder and level pin.
 
@@ -125,35 +163,51 @@ engine's evaluation rests on is credited where it is used.
 2026-08-17 file-level grep alone is not empty. The owner's Q4 word (2026-10-10, `…5c8e2a17`) counts a production diff
 whose changed lines are all comments as zero production lines. The standing waiver therefore applies when `A3` holds.
 The label is "WAIVED (waived is not accepted)". **If `A3` fails, the owner's UAT applies.** `package.json` is not under
-`src/` and has no effect on the waiver.
+`src/` and has no effect on the waiver. **Unchanged by the 2026-10-18 amendment:** the 2026-08-17 grep's
+`grep -v '\.test\.ts$'` removes `src/cli.test.ts`, so the grep still names only `src/evaluate.ts`, and `A3` covers it.
 
 ## Test notes
 
 1. **`A3` is the real check.** A "comment" that slips one character outside the block changes the emitted code. The
    transpile identity catches that where a line-shape grep might not.
-2. **No new test.** `npm ci` exits `0`. The gates run because `package.json` and a `src/` file changed.
+2. **No new test, and one pin line amended** (Scope 4, amended 2026-10-18). `npm ci` exits `0`. The gates run
+   because `package.json` and `src/` files changed.
 3. `npm pkg get private license` prints one JSON object, not two bare lines. Read both values from it.
+4. **The test pins on `package.json`, read at `main` `692770d6`** (`grep -rn package.json` over the tracked
+   `*.test.ts`). Only the first goes red on this ticket:
+   - `src/cli.test.ts:1759` (`ABC-042` `A10`): `AT_HEAD` key list (`:1766-1775`), `SCRIPTS_AT_HEAD` values
+     (`:1776-1786`), reserved keys `bin`, `main`, `files`, `publishConfig`, `dependencies` (`:1789`), `private` is
+     `true` (`:1792`), and the added scripts are exactly `["chess"]` (`:1799`). **Red on `"license"`. Scope 4 fixes
+     it.**
+   - `src/cli.test.ts:1111` (`ABC-042` `A1`): `scripts.chess` is `node src/cli.ts`. Holds.
+   - `src/cli.test.ts:2386` (`ABC-059` `A1-A4`): exactly one script runs `src/cli.ts`. Holds.
+   - `src/line-input.test.ts:674`: there is no `dependencies` key. Holds.
+   - `src/cli.real-engine.test.ts:84`: the opt-in lane copies `package.json` byte for byte into a temp tree. Holds,
+     because it compares the copy with the file as it is.
+   No tracked test pins the value `cli-chess` or any `license` value.
 
 ## Size and priority
 
-**`XS`:** one manifest line and one comment paragraph, and no code. **Not `S`:** nothing here moves a value or a pin.
+**`XS`:** one manifest line, one comment paragraph and one pin element, and no code. **Not `S`:** the pin edit is one
+line that names the key this ticket adds. No value moves, and the pin's logic stays as it is.
 
 **`P1`, inherited from `EPIC-007`.** **Not lower:** the web project should see that it runs a private, all rights
 reserved program.
 
 ## Definition of Ready
 
-BA/PM, 2026-10-18, at `main` `50e081fc`. **Result: 10 of 10.**
+BA/PM, 2026-10-18, at `main` `50e081fc`. **Result: 10 of 10.** Re-scored 2026-10-18 at `main` `692770d6` (subtask
+`bapm-ABC-169-rescope`), after the `A6` stop. **Result: 10 of 10.** Items 2, 4, 5, 6 and 7 are re-read below.
 
 | # | item | verdict |
 |---|---|---|
 | 1 | problem clear | **✅** no `license` key; the tables are not credited |
-| 2 | scope and out-of-scope clear | **✅** two files; `LICENSE`, `NOTICE`, value changes and re-derivation fenced off |
+| 2 | scope and out-of-scope clear | **✅** three files, one of them a single pin element (Scope 4); `LICENSE`, `NOTICE`, value changes, re-derivation and any other test edit fenced off |
 | 3 | INVEST-shaped | **✅** independent of the code tickets; testable by `npm pkg get`, a grep and a transpile |
-| 4 | acceptance testable and measurable | **✅** one added line; five named strings; transpile byte identity; empty `git ls-files`; an exact file list |
-| 5 | dependencies known | **✅** none open; `package.json` shared; the D13 wording only |
-| 6 | security/NFR triggers with a measurable target | **✅** clause (a) fires; (b1) and (b2) do not, by `A3`; no NFR |
-| 7 | test notes present | **✅** three |
+| 4 | acceptance testable and measurable | **✅** one added manifest line; five named strings; transpile byte identity; empty `git ls-files`; an exact three-file list; a 1/0 numstat on the test file; the pin armed |
+| 5 | dependencies known | **✅** none open; `package.json` shared; `AT_HEAD` shared with `ABC-168`; the D13 wording only |
+| 6 | security/NFR triggers with a measurable target | **✅** clause (a) fires; (b1) and (b2) do not, by `A3`; (c) re-read and does not fire (no capability added); no NFR |
+| 7 | test notes present | **✅** four, one of them the list of `package.json` pins |
 | 8 | size assigned | **✅** `XS` |
 | 9 | priority assigned | **✅** `P1` |
 | 10 | no major unresolved blocker (owner acceptance) | **✅** the owner accepted `EPIC-007` and `ADR-0044` and chose private (`…c3e81a57`) |
