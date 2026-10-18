@@ -1,4 +1,7 @@
 # Board
+_Updated: 2026-10-18 by the Orchestrator (task `wave-2026-09-25`) — `ABC-169` merged (`60227f06`, gates green 58/1830, CLI_DEEP 10/10, PERFT_DEEP 32/32; UAT WAIVED by measurement) → Done. Open for BA/PM on the owner's word: QE-169-a (license value unpinned), QE-169-b ("hand-tuned" comments contradict the credit), R-169-1 (lock drift on ABC-172 A2 / ABC-168). In flight: `qe-ABC-170`._
+_Updated: 2026-10-18 by the Orchestrator (task `wave-2026-09-25`) — `ABC-170` delivered (`64b07741`, 1839/1839; A6 NFR-005 owed in a quiet window; owner UAT applies) → In Review. Briefs for `qe-ABC-169`/`secnfr-ABC-169` rewritten (empty in `a56fb986`, shell error); dispatched them with `qe-ABC-170` (width 3)._
+_Updated: 2026-10-18 by the Orchestrator (task `wave-2026-09-25`) — `ABC-169` delivered (`344a4128`, 1830/1830, UAT WAIVED by A3 comment-only measurement) → In Review; dispatched `qe-ABC-169` and `secnfr-ABC-169` (clause (a)). In flight: those two and `ticket-to-pr-ABC-170`._
 _Updated: 2026-10-18 by the Orchestrator (task `wave-2026-09-25`) — owner pulled ABC-170, ABC-169 → In Development (3/3). Dispatched: `ticket-to-pr-ABC-170`, `ticket-to-pr-ABC-169` (SE, parallel; no timing readings — ABC-170 A6 NFR-005 owed in a quiet window). ABC-146 holds for ABC-166 tonight._
 _Updated: 2026-10-18 by the Orchestrator (task `wave-2026-09-25`) — owner accepted ADR-0044 (`acbee0bc`) and EPIC-007 (`3535f283`, gates green 58/1830, CLI_DEEP 10/10, PERFT_DEEP 32/32); engine private/UNLICENSED. `ABC-170`, `ABC-169` → Ready (8/8); ABC-167, 171, 168, 172 held in Backlog at DoR 10/10 by Ready's WIP limit. ABC-166 waits on the owner's evening word. In flight: none._
 _Updated: 2026-10-18 by the Orchestrator (task `wave-2026-09-25`) — `arch-licence-eval` merged (`459d6741`, gates green 58/1830, CLI_DEEP 10/10, PERFT_DEEP 32/32): ADR-0044 D13 = AGPL-3.0-or-later evaluated (tables credited, kit MIT), PROPOSED. Owner owed: private-vs-AGPL choice, Q14, Q15, acceptance of ADR-0044 + EPIC-007. In flight: none._
@@ -830,38 +833,37 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 3/3)
+## In Development (WIP 1/3)
 - [ABC-146] ABC-085's verdict — run the same ladder harness under plain node, then take A1/A2 at step 4  (BA/PM, **XS, P1**, epic: EPIC-004, since: 2026-10-11, **DoR 9/10** — item 10 open: waits on the owner's acceptance of the ADR-0038 addendum, ABC-083's merge, and ABC-085's merge; if the owner declines, it becomes the ~43.5 h vitest run, re-scored before pull) **2026-10-11: ADR-0038 addendum ACCEPTED by the owner — the owner-acceptance part of item 10 is cleared; still waits on ABC-083's merge and ABC-085's merge.** **2026-10-11: ABC-085 merged (`1031911b`) — that wait is cleared; carries QE2-085-a (pin X6/X13/X14 call sites, 0 games) before the verdict. Still waits on ABC-083.** **2026-10-11: page synced (addendum ACCEPTED; ABC-085 merged; the ~5x factor named). Only ABC-083's merge is open.** **2026-10-12 re-score: DoR 9 → 8/10, stays Backlog. ADR-0038 addendum is already accepted (heading still says PROPOSED — Architect fix); ABC-083 merged (`f00038ef`). New ⚠️: ABC-152 turned vitest's module runner off, which ADR-0041 says caused the ~4.35× cost behind the plain-node route — owner question: verdict inside vitest (if a paired re-read fits 7–13 h) vs build as accepted. A5 now 180/180 games. Needs ~10 h with no timing window owed.** **2026-10-12: owner word "Re-measure, then vitest" → one paired re-measurement of the vitest-vs-node factor first (width 1); if the in-vitest verdict fits 7–13 h it runs there with no new code, else plain node as accepted. BA/PM page amendment owed; stays Backlog.** **2026-10-17: page amended in `bapm-cut-followups` (A0 paired factor by Security/NFR before the route; route V iff 10 h × worst pair ≤ 13 h; A7 ADR-0038 headings) → DoR 10/10 → Ready. Open owner question (non-blocking): worst-of-five vs median — the page uses the worst unless the owner says otherwise before A0.** **2026-10-17: pulled on owner word → In Development. First hop `secnfr-ABC-146-a0` (A0, paired factor, worst of five decides the route) HELD: A0 needs width 1, so it is dispatched alone after `ticket-to-pr-ABC-157` and `rm-ABC-158` report and no foreign vitest is running.** **2026-10-17: `secnfr-ABC-146-a0` READ (`c639a220`): 10/10 node counts equal, F_hi 1.006 (median 0.954) ≤ 1.30 → ROUTE V (verdict inside vitest, no new code; Scope 1–4 and A1–A4 cancelled per the page). Verdict run started by the Orchestrator in `wt-ABC-146`; Architect `arch-ABC-146-a7` dispatched for A7 (records only).** **2026-10-17: A7 MET (`3030bccf`: ADR-0038 headings ACCEPTED, addendum 2 records route V). Verdict running since 19:13:37Z on `c639a220`.** **2026-10-18: verdict run 1 exited 0 (17/17, 10.6 h, `d73c4d6c`), so every game terminated and replayed legally, but vitest's default reporter dropped every `LADDER` line: NO SCORE QUOTED. Re-run with `--reporter=verbose` waits on the owner's word.**
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## In Review (WIP 1/3)
 - [ABC-170] `src/engine.ts` takes optional `maxDepth`/`maxNodes`; absent = today's engine  (owner: BA/PM, size: XS, priority: P1, epic: EPIC-007, since: 2026-10-18, DoR 10/10; cut in `bapm-engine-revise`.)
-- [ABC-169] Declare the engine private: `"license": "UNLICENSED"` next to `"private": true` in `package.json`, and the Michniewski credit comment in the `src/evaluate.ts` header  (owner: BA/PM, size: XS, priority: P1, epic: EPIC-007, since: 2026-10-18, DoR 10/10; clause (a) Security/NFR hop; UAT expected WAIVED by comment-only measurement (A3), else owner's.)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## In Review (WIP 0/3)
 
 
 
@@ -921,6 +923,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+- [ABC-169] Declare the engine private: `"license": "UNLICENSED"` next to `"private": true` in `package.json`, and the Michniewski credit comment in the `src/evaluate.ts` header  (owner: BA/PM, size: XS, priority: P1, epic: EPIC-007, since: 2026-10-18, DoR 10/10; clause (a) Security/NFR hop; UAT expected WAIVED by comment-only measurement (A3), else owner's.) **Done 2026-10-18:** merged `60227f06`; QE PASS_WITH_GAPS (QE-169-a/b LOW), Security/NFR PASS_WITH_RISKS (R-169-1 LOW); UAT WAIVED by comment-only measurement (waiver grep names only `src/evaluate.ts`; comment-stripped transpile sha256 `629c825d…` identical, Orchestrator re-read) — waived is not accepted.
 - [ABC-157] The castling right test can be weakened to read ANY right: a build that castles on the other wing's or the opponent's right passes the whole default lane  (BA/PM, XS, P2, epic: EPIC-001, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from QE-024-a.) **2026-10-17: pulled on owner word → In Development; SE `ticket-to-pr-ABC-157` dispatched from `aa37f9cb`.** **2026-10-17: delivered (`968a5843`, tip `2202b8eb`; +90/−0 in one test file, `src/moves.ts` md5 unchanged; `X-any-right` now dies on the six rows; 58/1830) → In Review; QE `qe-ABC-157` dispatched.** **2026-10-17: QE `qe-ABC-157` PASS_WITH_GAPS (`003f0bbd`; QE-157-a LOW: the mixed-rights variant `W-mixed` passes every lane, witness `w Qk`; QE-157-b INFO) → merged `2079ddb1`, UAT WAIVED (0 production `src/` lines, measured; `src/moves.ts` md5 unchanged); gates green 58/1830, CLI_DEEP 10/10, PERFT_DEEP 32/32 → Done.**
 - [ABC-158] `AR-1`'s recorded checks miss four ways code reaches the runtime path, and pin neither "no loader flag" nor "no non-dev dependency\  (BA/PM, XS, P3, epic: —, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from QE-056-a/b.) **2026-10-17: pulled on owner word → In Development; Release Manager `rm-ABC-158` dispatched from `aa37f9cb` (records only).** **2026-10-17: delivered (tip `cdf4255b`; records only, AR-1 re-stated in `…901f43b6`, A2 6/6, A3 6/6) → In Review; QE `qe-ABC-158` dispatched.** **2026-10-17: QE `qe-ABC-158` PASS_WITH_GAPS (`a6b1577e`; QE-158-a..d LOW, -e/-f INFO: 8 forms load `nanoid` with checks 1–7 as recorded; a `src/` symlink and `.npmrc` `node-options` are caught by no instrumented route) → merged `fd56f3cf`, UAT WAIVED (0 production `src/` lines, measured); gates green 58/1824, CLI_DEEP 10/10 → Done.**
 - [ABC-096] Show the named opening when the book knows it — inside the frame's existing row identity  (BA/PM, S, P3, epic: EPIC-005, since: 2026-08-16, DoR 10/10 (was 8/10) ⚠️ needs ABC-093's format to carry the name; **the epic's droppable bullet — shed this first**; first third-party text to reach the terminal, so the ABC-018 escape-byte bar applies (G7); promote to P2 if the format would have to be re-opened to add it later) **2026-10-11: ABC-094 merged (`02dfa044`) — ordering dependency cleared; BA/PM re-score owed.** **2026-10-12 re-score: DoR 9/10, stays Backlog. Book carries names (`n` on 2,853 of 5,390 entries); scope cut to the family name (frame is 21 cols); new A7/A8. Open: Architect/Design ruling on how the name reaches the frame and who wins the message region. After ABC-095; droppable.** **2026-10-17: owner word "continue with ABC-096 in parallel" → In Design; Architect `design-ABC-096` dispatched on DoR item 10. Then BA/PM re-score, then SE. UAT held by the owner (frame-path production lines).** **2026-10-17: Architect ruled (ADR-0043, merged `8ed9ba2b`): name through the render seam as an injected probe; rejection line wins; S holds; NFR-007 now touched. Product calls decided under delegation (flicker accepted; missing-book warning overdraw accepted, UAT to look). BA/PM `bapm-rescore-ABC-096` dispatched.** **2026-10-17: BA/PM re-score merged (`6edadcf0`): DoR 10/10, S/P3, A1–A10 with code fence. Ready-for-Dev exit read by the Orchestrator → In Development; SE `ticket-to-pr-ABC-096` dispatched.** **2026-10-17: delivered (`a48da51c`, tip `2acebaa8`; 7 files inside the fence; A1–A10 pass; 58/1822, CLI_DEEP 10/10) → In Review; QE `qe-ABC-096` dispatched. Then Security/NFR (NFR-007 first-load ≤ 30 ms cold, quiet window), then owner UAT.** **2026-10-17: QE PASS_WITH_GAPS (`00fb0f75`; 20/22 mutants killed; QE-096-a LOW odd-offset astral cut unpinned, b INFO `": "` separator unpinned; d timing owed to Security/NFR). Orchestrator: close a+b before merge → SE `repair-ABC-096` (one test file).** **2026-10-17: repair `3ceda09a` closes QE-096-a/b (2 rows, each red on its mutant; 58/1824, CLI_DEEP 10/10) → In Security/NFR; `secnfr-ABC-096` dispatched (security review + NFR-007/A4 timing in a quiet window).** **2026-10-17: Security/NFR PASS_WITH_RISKS (`0f28b286`; no required fix; clause (b) quiet; window w1 CLEAN: A4 frame max 1.861 ms < 16, NFR-007 first call max 6.047 ms ≤ 30, spawn→frame 0 max 222 ms < 2 s; AR-096-C1CP LOW (C1/bidi in a book name reach a unicode terminal; compile-time refusal widening recommended, XS), AR-096-DISKCOLD LOW) → Ready for UAT. Owner owed: UAT word (not waived).** **2026-10-17: UAT ACCEPTED by the owner ("accept") → merged `b20eb451`; gates green on main (58 files / 1824 tests, CLI_DEEP 10/10, PERFT_DEEP 32/32, skip integrity 0) → Done. Unblocks ABC-159, ABC-161, ABC-164.**

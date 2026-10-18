@@ -11,6 +11,14 @@ feature: —
 
 # ABC-168 — the program a backend or GUI launches: stdin and stdout, the book file, a build, and the proof that standard tools can play it
 
+> **Amended 2026-10-18 by BA/PM** (subtask `bapm-ABC-169-rescope`, at `main` `692770d6`), before any build. This
+> ticket would have hit the same blocker that stopped `ABC-169` (`.grugops/queue/done/ticket-to-pr-ABC-169.md`).
+> `src/cli.test.ts:1759` (`ABC-042` `A10`) pins `package.json` key by key. Scope 2's `bin`, `build` and `uci` each
+> turn it red, and `A11` said the `src/cli*.test.ts` suites "pass unedited". **Ruling:** the delivery makes exactly
+> the four pin edits in Scope 6 and no other test edit. `A11` and `A12` are amended to match. Test note 5 lists the
+> `AGENTS.md` pins that Scope 5's edit has to keep green. The reasoning is in
+> `.grugops/context/bapm-ABC-169-rescope/notes/`.
+
 > **Accepted 2026-10-18 by the owner** (BA/PM, subtask `bapm-epic007-accept`). Owner word, verbatim
 > (`.grugops/context/wave-2026-09-25/notes/20261018T113000Z-orchestrator-decision-owner-word-engine-private-adr0044-epic007-accepted-c3e81a57.md`,
 > a transcription, not a stamp): *"accept the revised ADR-0044 and EPIC-007"*. The DoR item "owner acceptance" (item
@@ -49,6 +57,18 @@ plays. This ticket is also where `EPIC-007`'s value proof is read (M1, M2, M8(a)
 5. **`AGENTS.md`** (the Scribe, at build time): an `npm run uci` line, the new meaning of `npm run build`, and the lane
    flag. `AGENTS.md` is at its 24 576-byte budget (`wc -c` at `a10e09c2`), so the edit is net ≤ 0 B or rides with
    `ABC-164`.
+6. **`src/cli.test.ts`, `ABC-042` `A10`'s pin only (amended 2026-10-18).** There are exactly four edits, each written
+   literally:
+   1. add the element `"bin",` to `AT_HEAD` (`:1766-1775`);
+   2. take `"bin"` out of the reserved list (`:1789`), which leaves `["main", "files", "publishConfig",
+      "dependencies"]` (the key is now meant to be there);
+   3. change `SCRIPTS_AT_HEAD.build` (`:1783`) from `"tsc --noEmit"` to `"tsc -p tsconfig.build.json"`;
+   4. add `uci: "node src/uci.ts",` to `SCRIPTS_AT_HEAD` (`:1776-1786`). This pins the new script by value, and
+      `added` (`:1799`) stays `["chess"]`.
+
+   Nothing else in the test or the file changes, including the test's name, its comments, the sort-and-equal at
+   `:1788` and the `private` check at `:1792`. If `ABC-169` has merged first, `AT_HEAD` already holds `"license"`.
+   Keep it.
 
 ## Out of scope
 
@@ -97,10 +117,15 @@ plays. This ticket is also where `EPIC-007`'s value proof is read (M1, M2, M8(a)
   mate, resignation or a draw, with no GUI error dialog and no engine time loss. The GUI lists `OwnBook` and
   `Skill Level`, or, if it shows no options, the `-debug` log of `A8` shows both `option` lines. The owner's word is
   recorded as a transcription, never a stamp.
-- **`A11` (the terminal game, `EPIC-007` M5).** The `ADR-0044` D2 "no edit" list is unchanged from `<base>`. The
-  `src/cli*.test.ts` suites pass unedited. `npm run chess` still starts the terminal game.
-- **`A12` (fences).** `git diff --name-only <base> <tip>` lists only `src/uci.ts`, the real-child test file,
-  `tsconfig.build.json`, `package.json` and `AGENTS.md`. `package-lock.json` is unchanged (no dependency is added).
+- **`A11` (the terminal game, `EPIC-007` M5, amended 2026-10-18).** The `ADR-0044` D2 "no edit" list is unchanged
+  from `<base>`. The `src/cli*.test.ts` suites pass. The only edits to any of them are Scope 6's four, in
+  `src/cli.test.ts`. `npm run chess` still starts the terminal game. **The pin is still armed:** with the
+  `package.json` `bin` key taken out (the test file as at the tip), `ABC-042` `A10` is red, and it is the only red
+  row. This is one reading in the hop record, not a new test.
+- **`A12` (fences, amended 2026-10-18).** `git diff --name-only <base> <tip>` lists only `src/uci.ts`, the real-child
+  test file, `tsconfig.build.json`, `package.json`, `AGENTS.md` and `src/cli.test.ts`.
+  `git diff --numstat <base> <tip> -- src/cli.test.ts` shows 4 lines added and 2 removed, which are Scope 6's four
+  edits. `package-lock.json` is unchanged (no dependency is added).
 
 ## Dependencies
 
@@ -108,6 +133,8 @@ plays. This ticket is also where `EPIC-007`'s value proof is read (M1, M2, M8(a)
 - **The owner has installed `cutechess-cli` and En Croissant** before `A8`–`A10` (Q10: he will). Until then those three
   are `UNKNOWN - verify`, and the UAT waits (`EPIC-007` `RISK-EPIC007-02`).
 - **`package.json` is shared with `ABC-169` and `ABC-172`.** Each adds different keys. Whichever merges later rebases.
+- **`src/cli.test.ts`'s `AT_HEAD` is shared with `ABC-169`** (amended 2026-10-18). `ABC-169` adds `"license"` and
+  this ticket adds `"bin"`. Whichever merges later rebases and keeps both.
 - **Gate: met.** The owner accepted the revised `ADR-0044` and `EPIC-007` on 2026-10-18 (`…c3e81a57`).
 
 ## Security / NFR triggers
@@ -115,7 +142,8 @@ plays. This ticket is also where `EPIC-007`'s value proof is read (M1, M2, M8(a)
 - **Security: TRIGGERED → `In Security/NFR`.** `ADR-0036` (b1) fires on `process.`, on the `node:readline` import, and
   on the new import of the capability holder `book-file.ts` (limb 1). `ABC-041` clause (a) fires on `package.json`.
   Clause (c): the real-child lane spawns `node`, which `src/cli.test.ts` and `src/cli.real-engine.test.ts` already do,
-  so it is expected not to fire. Security/NFR rules on it. ASVS L1 applies to the one input path, stdin, which the
+  so it is expected not to fire. Security/NFR rules on it. Scope 6's pin edits add string literals only. They add no
+  import, no call and no capability, so they add nothing to (c). ASVS L1 applies to the one input path, stdin, which the
   session already filters to printable text.
 - **`ADR-0044` candidate rows for Security/NFR to place in `plans/nfr-catalog.md`:** (i) idle responsiveness (`A6`),
   (ii) time safety (`A8`, `A9`), (iii) stdout hygiene (every line an M4 keyword, checked in the lane).
@@ -132,6 +160,22 @@ plays. This ticket is also where `EPIC-007`'s value proof is read (M1, M2, M8(a)
 3. **No strength is claimed** from `A8` or `A9`. They are protocol and time safety.
 4. **QE re-runs `A7` in its own fresh clone**, because a build that only works in the engineer's tree is the failure it
    exists to catch.
+5. **The pins on `package.json` and `AGENTS.md` (amended 2026-10-18, read at `main` `692770d6`).** Only the first
+   needs an edit:
+   - `src/cli.test.ts:1759` (`ABC-042` `A10`): the key list, the script values, the reserved keys and the added
+     scripts. It goes red on `bin`, `build` and `uci`. **Scope 6 fixes it.**
+   - `src/cli.test.ts:1111` (`ABC-042` `A1`): `AGENTS.md` contains ``- Dev / run: `npm run chess` `` and
+     `scripts.chess` is `node src/cli.ts`. Scope 5 keeps that line exactly as it is.
+   - `src/cli.test.ts:2293` (`ABC-071`) and the `ABC-065` block (`:2173`): `AGENTS.md` has exactly one
+     `- Dev / run:` slot. The `npm run uci` line goes somewhere else, never under a second `- Dev / run:` label.
+   - `src/cli.test.ts:2386` (`ABC-059` `A1-A4`): exactly one script runs `src/cli.ts`, which `uci` does not. Also, no
+     span from a `Dev / run` up to the next `.`, `!` or `?` followed by a space may name any `npm run` other than
+     `npm run chess`. So `npm run uci` and the new `npm run build` sit outside every such span.
+   - `src/cli.test.ts:2438` (`ABC-109` `A5`): `AGENTS.md` is at most 24 576 B (Scope 5 already says so).
+   - `src/line-input.test.ts:674`: there is no `dependencies` key. Holds.
+   - `src/cli.real-engine.test.ts:84`: the opt-in lane copies `package.json` byte for byte. Holds, because a `bin`
+     that points at `dist/` is not read by `node src/cli.ts`.
+   `dist/` is already in `.gitignore`, so `A7`'s `git check-ignore` needs no `.gitignore` edit.
 
 ## Size and priority
 
@@ -143,7 +187,9 @@ plays. This ticket is also where `EPIC-007`'s value proof is read (M1, M2, M8(a)
 ## Definition of Ready
 
 BA/PM, 2026-10-18, at `main` `a10e09c2`. **Result: 10 of 10.** Re-scored 2026-10-18 at `main` `50e081fc` (subtask
-`bapm-epic007-accept`). It was 9 of 10 at the cut, with item 10 open until the owner accepted.
+`bapm-epic007-accept`). It was 9 of 10 at the cut, with item 10 open until the owner accepted. Re-read 2026-10-18 at
+`main` `692770d6` (subtask `bapm-ABC-169-rescope`): Scope 6, `A11`, `A12` and test note 5 were added. Items 2, 4 and 7
+still hold. **Still 10 of 10.**
 
 | # | item | verdict |
 |---|---|---|

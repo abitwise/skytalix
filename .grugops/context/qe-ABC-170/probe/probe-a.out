@@ -1,0 +1,7 @@
+{"positions":72,"walks":60,"budgets":[1,2,5,13,40,90],"doors":3,"comparisons":6768,"mismatches":0,"fenNotRestored":0,"depthRange":[1,15]}
+
+real	14m35.620s
+user	13m36.016s
+sys	0m7.266s
+
+[exited with code 0]

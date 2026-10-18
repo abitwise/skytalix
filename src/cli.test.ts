@@ -1767,6 +1767,7 @@ describe("ABC-042 — the shape of what was delivered", () => {
       "name",
       "version",
       "private",
+      "license",
       "type",
       "description",
       "engines",
