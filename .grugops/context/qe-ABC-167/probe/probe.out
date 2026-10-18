@@ -1,0 +1,108 @@
+## fresh go (choice 1)
+  in: ["go movetime 100"]
+  out: ["info depth 4 score cp 0 nodes 6165 time 110 nps 56045 pv e2e4","bestmove e2e4"]
+## movetime -5
+  in: ["position startpos","go movetime -5"]
+  out: ["info depth 1 score cp 69 nodes 21 time 20 nps 1050 pv e2e4","bestmove e2e4"]
+## movetime 0
+  in: ["position startpos","go movetime 0"]
+  out: ["info depth 1 score cp 69 nodes 21 time 20 nps 1050 pv e2e4","bestmove e2e4"]
+## movetime 100.5
+  in: ["position startpos","go movetime 100.5"]
+  out: ["info depth 6 score cp 52 nodes 97301 time 102 nps 953931 pv d2d4","bestmove d2d4"]
+## wtime -1000
+  in: ["position startpos","go wtime -1000 btime 5000"]
+  out: ["info depth 1 score cp 69 nodes 21 time 2 nps 10500 pv e2e4","bestmove e2e4"]
+## wtime 2000 winc 1000 (inc unpinned)
+  in: ["position startpos","go wtime 2000 btime 2000 winc 1000 binc 1000"]
+  out: ["info depth 8 score cp 28 nodes 606229 time 601 nps 1008700 pv g1f3","bestmove g1f3"]
+## black binc
+  in: ["position startpos moves e2e4","go wtime 2000 btime 2000 winc 0 binc 1000"]
+  out: ["info depth 8 score cp -12 nodes 606239 time 601 nps 1008717 pv d7d5","bestmove d7d5"]
+## movestogo 5
+  in: ["position startpos","go wtime 1000 btime 1000 movestogo 5"]
+  out: ["info depth 7 score cp 50 nodes 197653 time 201 nps 983348 pv d2d4","bestmove d2d4"]
+## movestogo 0
+  in: ["position startpos","go wtime 1000 btime 1000 movestogo 0"]
+  out: ["info string go movestogo needs an integer >= 1, got 0; ignored","info depth 6 score cp 52 nodes 45077 time 51 nps 883863 pv d2d4","bestmove d2d4"]
+## movetime+wtime
+  in: ["position startpos","go wtime 1000 btime 1000 movetime 300"]
+  out: ["info depth 7 score cp 50 nodes 300053 time 301 nps 996854 pv d2d4","bestmove d2d4"]
+## 1e5 time
+  in: ["position startpos","go movetime 1e5"]
+  out: ["info string go movetime needs a number, got 1e5; ignored","info depth 5 score cp 55 nodes 25621 time 3100 nps 8265 pv g1f3","bestmove g1f3"]
+## depth followed by keyword
+  in: ["position startpos","go depth movetime 100"]
+  out: ["info string go depth needs an integer >= 1, got movetime; ignored","info depth 9 score cp 20 nodes 3062805 time 3001 nps 1020595 pv e2e3","bestmove e2e3"]
+## searchmoves then depth
+  in: ["position startpos","go searchmoves e2e4 d2d4 depth 2"]
+  out: ["info string searchmoves is not supported; searching all moves","info depth 2 score cp 0 nodes 117 time 30 nps 3900 pv e2e4","bestmove e2e4"]
+## ponder holds
+  in: ["position startpos","go ponder","ponderhit"]
+  out: ["info depth 5 score cp 55 nodes 25621 time 3100 nps 8265 pv g1f3","bestmove g1f3"]
+## infinite then go
+  in: ["position startpos","go infinite","go depth 1"]
+  out: ["info depth 5 score cp 55 nodes 25621 time 3100 nps 8265 pv g1f3","bestmove g1f3","info depth 1 score cp 69 nodes 21 time 200 nps 105 pv e2e4","bestmove e2e4"]
+## infinite, ucinewgame, position, stop (stale)
+  in: ["position fen 7k/8/6K1/8/8/8/8/R7 b - - 1 1","go infinite","ucinewgame","position startpos","stop"]
+  out: ["info depth 9 score mate -1 nodes 21505 time 3100 nps 6937 pv h8g8","bestmove h8g8"]
+## infinite then quit
+  in: ["position startpos","go infinite","quit"]
+  out: ["info depth 5 score cp 55 nodes 25621 time 3100 nps 8265 pv g1f3"] res:continue,continue,quit
+## infinite no position
+  in: ["position fen bad","go infinite","stop"]
+  out: ["info string position refused: bad fen: FEN must have 6 fields, found 1","bestmove 0000"]
+## two go same pos
+  in: ["position startpos moves e2e4","go depth 3","go depth 3"]
+  out: ["info depth 3 score cp 0 nodes 715 time 40 nps 17875 pv e7e5","bestmove e7e5","info depth 3 score cp 0 nodes 715 time 40 nps 17875 pv e7e5","bestmove e7e5"]
+## checkmated position
+  in: ["position fen 7k/6Q1/6K1/8/8/8/8/8 b - - 0 1","go movetime 100"]
+  out: ["bestmove 0000"]
+## promotion out
+  in: ["position fen 8/P6k/8/8/8/8/8/K7 w - - 0 1","go depth 3"]
+  out: ["info depth 3 score cp 1028 nodes 149 time 40 nps 3725 pv a7a8q","bestmove a7a8q"]
+## promo input upper
+  in: ["position fen 8/P6k/8/8/8/8/8/K7 w - - 0 1 moves a7a8Q","go depth 1"]
+  out: ["info depth 1 score cp -975 nodes 3 time 20 nps 150 pv h7g7","bestmove h7g7"]
+## position no args
+  in: ["position"]
+  out: ["info string position refused: expected startpos or fen <fields>"]
+## position startpos junk
+  in: ["position startpos junk"]
+  out: ["info string position refused: expected startpos or fen <fields>"]
+## position fen extra fields
+  in: ["position fen 7k/8/6K1/8/8/8/8/R7 b - - 1 1 extra","go depth 1"]
+  out: ["info string position refused: bad fen: FEN must have 6 fields, found 7","bestmove 0000"]
+## position fen 4 fields
+  in: ["position fen 7k/8/6K1/8/8/8/8/R7 b -","go depth 1"]
+  out: ["info string position refused: bad fen: FEN must have 6 fields, found 3","bestmove 0000"]
+## tabs & spaces
+  in: ["  isready\t","\tuci  "]
+  out: ["readyok","id name skytalix","id author Olger Oeselg","uciok"]
+## UCI uppercase
+  in: ["UCI","Quit"]
+  out: []
+## ctrl in go
+  in: ["position startpos","go depth \u0001\u001b[31m"]
+  out: ["info string go depth needs an integer >= 1, got [31m; ignored","info depth 5 score cp 55 nodes 25621 time 3100 nps 8265 pv g1f3","bestmove g1f3"]
+## unicode spaces
+  in: ["position startpos","go depth 1"]
+  out: ["info depth 1 score cp 69 nodes 21 time 20 nps 1050 pv e2e4","bestmove e2e4"]
+## huge depth
+  in: ["position startpos","go depth 99999999999999999999"]
+  out: ["info string go depth needs an integer >= 1, got 99999999999999999999; ignored","info depth 5 score cp 55 nodes 25621 time 3100 nps 8265 pv g1f3","bestmove g1f3"]
+## mate big
+  in: ["position startpos","go mate 1000000"]
+  out: ["info depth 5 score cp 55 nodes 25621 time 3100 nps 8265 pv g1f3","bestmove g1f3"]
+## nodes 1 kiwipete
+  in: ["position fen r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1","go nodes 1"]
+  out: ["info depth 1 score cp 166 nodes 602 time 20 nps 30100 pv e2a6","bestmove e2a6"]
+## quit with args
+  in: ["quit now"]
+  out: [] res:quit
+## position refused keeps old? then go
+  in: ["position startpos","position fen x","go depth 1"]
+  out: ["info string position refused: bad fen: FEN must have 6 fields, found 1","bestmove 0000"]
+## moves with e1g1 castle
+  in: ["position fen r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1 moves e1g1 e8c8","go depth 1"]
+  out: ["info depth 1 score cp 53 nodes 26 time 20 nps 1300 pv f1f7","bestmove f1f7"]
