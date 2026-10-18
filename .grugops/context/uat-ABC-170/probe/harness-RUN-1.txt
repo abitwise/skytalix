@@ -1,0 +1,409 @@
+ok   S1 startpos 5v chooseMove absent: tip d4 e2e4 0 n=2050 t=6v | today d4 e2e4 0 n=2050 t=6v
+ok   S1 startpos 5v chooseMove undefined: tip d4 e2e4 0 n=2050 t=6v | today d4 e2e4 0 n=2050 t=6v
+ok   S1 startpos 5v chooseMove huge: tip d4 e2e4 0 n=2050 t=6v | today d4 e2e4 0 n=2050 t=6v
+ok   S1 startpos 5v chooseMove infinite: tip d4 e2e4 0 n=2050 t=6v | today d4 e2e4 0 n=2050 t=6v
+ok   S1 startpos 5v chooseMoveWithoutReductions absent: tip d3 e2e4 66 n=2069 t=6v | today d3 e2e4 66 n=2069 t=6v
+ok   S1 startpos 5v chooseMoveWithoutReductions undefined: tip d3 e2e4 66 n=2069 t=6v | today d3 e2e4 66 n=2069 t=6v
+ok   S1 startpos 5v chooseMoveWithoutReductions huge: tip d3 e2e4 66 n=2069 t=6v | today d3 e2e4 66 n=2069 t=6v
+ok   S1 startpos 5v chooseMoveWithoutReductions infinite: tip d3 e2e4 66 n=2069 t=6v | today d3 e2e4 66 n=2069 t=6v
+ok   S1 startpos 5v chooseMoveWithoutPvsOrReductions absent: tip d3 e2e4 66 n=2068 t=6v | today d3 e2e4 66 n=2068 t=6v
+ok   S1 startpos 5v chooseMoveWithoutPvsOrReductions undefined: tip d3 e2e4 66 n=2068 t=6v | today d3 e2e4 66 n=2068 t=6v
+ok   S1 startpos 5v chooseMoveWithoutPvsOrReductions huge: tip d3 e2e4 66 n=2068 t=6v | today d3 e2e4 66 n=2068 t=6v
+ok   S1 startpos 5v chooseMoveWithoutPvsOrReductions infinite: tip d3 e2e4 66 n=2068 t=6v | today d3 e2e4 66 n=2068 t=6v
+ok   S1 startpos 50v chooseMove absent: tip d6 d2d4 52 n=45077 t=51v | today d6 d2d4 52 n=45077 t=51v
+ok   S1 startpos 50v chooseMove undefined: tip d6 d2d4 52 n=45077 t=51v | today d6 d2d4 52 n=45077 t=51v
+ok   S1 startpos 50v chooseMove huge: tip d6 d2d4 52 n=45077 t=51v | today d6 d2d4 52 n=45077 t=51v
+ok   S1 startpos 50v chooseMove infinite: tip d6 d2d4 52 n=45077 t=51v | today d6 d2d4 52 n=45077 t=51v
+ok   S1 startpos 50v chooseMoveWithoutReductions absent: tip d5 d2d4 58 n=46101 t=51v | today d5 d2d4 58 n=46101 t=51v
+ok   S1 startpos 50v chooseMoveWithoutReductions undefined: tip d5 d2d4 58 n=46101 t=51v | today d5 d2d4 58 n=46101 t=51v
+ok   S1 startpos 50v chooseMoveWithoutReductions huge: tip d5 d2d4 58 n=46101 t=51v | today d5 d2d4 58 n=46101 t=51v
+ok   S1 startpos 50v chooseMoveWithoutReductions infinite: tip d5 d2d4 58 n=46101 t=51v | today d5 d2d4 58 n=46101 t=51v
+ok   S1 startpos 50v chooseMoveWithoutPvsOrReductions absent: tip d5 d2d4 58 n=46100 t=51v | today d5 d2d4 58 n=46100 t=51v
+ok   S1 startpos 50v chooseMoveWithoutPvsOrReductions undefined: tip d5 d2d4 58 n=46100 t=51v | today d5 d2d4 58 n=46100 t=51v
+ok   S1 startpos 50v chooseMoveWithoutPvsOrReductions huge: tip d5 d2d4 58 n=46100 t=51v | today d5 d2d4 58 n=46100 t=51v
+ok   S1 startpos 50v chooseMoveWithoutPvsOrReductions infinite: tip d5 d2d4 58 n=46100 t=51v | today d5 d2d4 58 n=46100 t=51v
+ok   S1 kiwipete 5v chooseMove absent: tip d2 e2a6 109 n=3674 t=6v | today d2 e2a6 109 n=3674 t=6v
+ok   S1 kiwipete 5v chooseMove undefined: tip d2 e2a6 109 n=3674 t=6v | today d2 e2a6 109 n=3674 t=6v
+ok   S1 kiwipete 5v chooseMove huge: tip d2 e2a6 109 n=3674 t=6v | today d2 e2a6 109 n=3674 t=6v
+ok   S1 kiwipete 5v chooseMove infinite: tip d2 e2a6 109 n=3674 t=6v | today d2 e2a6 109 n=3674 t=6v
+ok   S1 kiwipete 5v chooseMoveWithoutReductions absent: tip d2 e2a6 109 n=3674 t=6v | today d2 e2a6 109 n=3674 t=6v
+ok   S1 kiwipete 5v chooseMoveWithoutReductions undefined: tip d2 e2a6 109 n=3674 t=6v | today d2 e2a6 109 n=3674 t=6v
+ok   S1 kiwipete 5v chooseMoveWithoutReductions huge: tip d2 e2a6 109 n=3674 t=6v | today d2 e2a6 109 n=3674 t=6v
+ok   S1 kiwipete 5v chooseMoveWithoutReductions infinite: tip d2 e2a6 109 n=3674 t=6v | today d2 e2a6 109 n=3674 t=6v
+ok   S1 kiwipete 5v chooseMoveWithoutPvsOrReductions absent: tip d2 e2a6 109 n=3674 t=6v | today d2 e2a6 109 n=3674 t=6v
+ok   S1 kiwipete 5v chooseMoveWithoutPvsOrReductions undefined: tip d2 e2a6 109 n=3674 t=6v | today d2 e2a6 109 n=3674 t=6v
+ok   S1 kiwipete 5v chooseMoveWithoutPvsOrReductions huge: tip d2 e2a6 109 n=3674 t=6v | today d2 e2a6 109 n=3674 t=6v
+ok   S1 kiwipete 5v chooseMoveWithoutPvsOrReductions infinite: tip d2 e2a6 109 n=3674 t=6v | today d2 e2a6 109 n=3674 t=6v
+ok   S1 kiwipete 50v chooseMove absent: tip d4 e2a6 70 n=47706 t=51v | today d4 e2a6 70 n=47706 t=51v
+ok   S1 kiwipete 50v chooseMove undefined: tip d4 e2a6 70 n=47706 t=51v | today d4 e2a6 70 n=47706 t=51v
+ok   S1 kiwipete 50v chooseMove huge: tip d4 e2a6 70 n=47706 t=51v | today d4 e2a6 70 n=47706 t=51v
+ok   S1 kiwipete 50v chooseMove infinite: tip d4 e2a6 70 n=47706 t=51v | today d4 e2a6 70 n=47706 t=51v
+ok   S1 kiwipete 50v chooseMoveWithoutReductions absent: tip d4 e2a6 70 n=47706 t=51v | today d4 e2a6 70 n=47706 t=51v
+ok   S1 kiwipete 50v chooseMoveWithoutReductions undefined: tip d4 e2a6 70 n=47706 t=51v | today d4 e2a6 70 n=47706 t=51v
+ok   S1 kiwipete 50v chooseMoveWithoutReductions huge: tip d4 e2a6 70 n=47706 t=51v | today d4 e2a6 70 n=47706 t=51v
+ok   S1 kiwipete 50v chooseMoveWithoutReductions infinite: tip d4 e2a6 70 n=47706 t=51v | today d4 e2a6 70 n=47706 t=51v
+ok   S1 kiwipete 50v chooseMoveWithoutPvsOrReductions absent: tip d4 e2a6 70 n=47706 t=51v | today d4 e2a6 70 n=47706 t=51v
+ok   S1 kiwipete 50v chooseMoveWithoutPvsOrReductions undefined: tip d4 e2a6 70 n=47706 t=51v | today d4 e2a6 70 n=47706 t=51v
+ok   S1 kiwipete 50v chooseMoveWithoutPvsOrReductions huge: tip d4 e2a6 70 n=47706 t=51v | today d4 e2a6 70 n=47706 t=51v
+ok   S1 kiwipete 50v chooseMoveWithoutPvsOrReductions infinite: tip d4 e2a6 70 n=47706 t=51v | today d4 e2a6 70 n=47706 t=51v
+ok   S1 position-3 5v chooseMove absent: tip d4 b4f4 113 n=1043 t=6v | today d4 b4f4 113 n=1043 t=6v
+ok   S1 position-3 5v chooseMove undefined: tip d4 b4f4 113 n=1043 t=6v | today d4 b4f4 113 n=1043 t=6v
+ok   S1 position-3 5v chooseMove huge: tip d4 b4f4 113 n=1043 t=6v | today d4 b4f4 113 n=1043 t=6v
+ok   S1 position-3 5v chooseMove infinite: tip d4 b4f4 113 n=1043 t=6v | today d4 b4f4 113 n=1043 t=6v
+ok   S1 position-3 5v chooseMoveWithoutReductions absent: tip d4 b4f4 113 n=1043 t=6v | today d4 b4f4 113 n=1043 t=6v
+ok   S1 position-3 5v chooseMoveWithoutReductions undefined: tip d4 b4f4 113 n=1043 t=6v | today d4 b4f4 113 n=1043 t=6v
+ok   S1 position-3 5v chooseMoveWithoutReductions huge: tip d4 b4f4 113 n=1043 t=6v | today d4 b4f4 113 n=1043 t=6v
+ok   S1 position-3 5v chooseMoveWithoutReductions infinite: tip d4 b4f4 113 n=1043 t=6v | today d4 b4f4 113 n=1043 t=6v
+ok   S1 position-3 5v chooseMoveWithoutPvsOrReductions absent: tip d4 b4f4 113 n=1086 t=6v | today d4 b4f4 113 n=1086 t=6v
+ok   S1 position-3 5v chooseMoveWithoutPvsOrReductions undefined: tip d4 b4f4 113 n=1086 t=6v | today d4 b4f4 113 n=1086 t=6v
+ok   S1 position-3 5v chooseMoveWithoutPvsOrReductions huge: tip d4 b4f4 113 n=1086 t=6v | today d4 b4f4 113 n=1086 t=6v
+ok   S1 position-3 5v chooseMoveWithoutPvsOrReductions infinite: tip d4 b4f4 113 n=1086 t=6v | today d4 b4f4 113 n=1086 t=6v
+ok   S1 position-3 50v chooseMove absent: tip d7 b4f4 48 n=44046 t=51v | today d7 b4f4 48 n=44046 t=51v
+ok   S1 position-3 50v chooseMove undefined: tip d7 b4f4 48 n=44046 t=51v | today d7 b4f4 48 n=44046 t=51v
+ok   S1 position-3 50v chooseMove huge: tip d7 b4f4 48 n=44046 t=51v | today d7 b4f4 48 n=44046 t=51v
+ok   S1 position-3 50v chooseMove infinite: tip d7 b4f4 48 n=44046 t=51v | today d7 b4f4 48 n=44046 t=51v
+ok   S1 position-3 50v chooseMoveWithoutReductions absent: tip d7 b4f4 62 n=44955 t=51v | today d7 b4f4 62 n=44955 t=51v
+ok   S1 position-3 50v chooseMoveWithoutReductions undefined: tip d7 b4f4 62 n=44955 t=51v | today d7 b4f4 62 n=44955 t=51v
+ok   S1 position-3 50v chooseMoveWithoutReductions huge: tip d7 b4f4 62 n=44955 t=51v | today d7 b4f4 62 n=44955 t=51v
+ok   S1 position-3 50v chooseMoveWithoutReductions infinite: tip d7 b4f4 62 n=44955 t=51v | today d7 b4f4 62 n=44955 t=51v
+ok   S1 position-3 50v chooseMoveWithoutPvsOrReductions absent: tip d6 b4f4 72 n=45070 t=51v | today d6 b4f4 72 n=45070 t=51v
+ok   S1 position-3 50v chooseMoveWithoutPvsOrReductions undefined: tip d6 b4f4 72 n=45070 t=51v | today d6 b4f4 72 n=45070 t=51v
+ok   S1 position-3 50v chooseMoveWithoutPvsOrReductions huge: tip d6 b4f4 72 n=45070 t=51v | today d6 b4f4 72 n=45070 t=51v
+ok   S1 position-3 50v chooseMoveWithoutPvsOrReductions infinite: tip d6 b4f4 72 n=45070 t=51v | today d6 b4f4 72 n=45070 t=51v
+ok   S1 position-4 5v chooseMove absent: tip d2 d2d4 -366 n=4556 t=6v | today d2 d2d4 -366 n=4556 t=6v
+ok   S1 position-4 5v chooseMove undefined: tip d2 d2d4 -366 n=4556 t=6v | today d2 d2d4 -366 n=4556 t=6v
+ok   S1 position-4 5v chooseMove huge: tip d2 d2d4 -366 n=4556 t=6v | today d2 d2d4 -366 n=4556 t=6v
+ok   S1 position-4 5v chooseMove infinite: tip d2 d2d4 -366 n=4556 t=6v | today d2 d2d4 -366 n=4556 t=6v
+ok   S1 position-4 5v chooseMoveWithoutReductions absent: tip d2 d2d4 -366 n=4556 t=6v | today d2 d2d4 -366 n=4556 t=6v
+ok   S1 position-4 5v chooseMoveWithoutReductions undefined: tip d2 d2d4 -366 n=4556 t=6v | today d2 d2d4 -366 n=4556 t=6v
+ok   S1 position-4 5v chooseMoveWithoutReductions huge: tip d2 d2d4 -366 n=4556 t=6v | today d2 d2d4 -366 n=4556 t=6v
+ok   S1 position-4 5v chooseMoveWithoutReductions infinite: tip d2 d2d4 -366 n=4556 t=6v | today d2 d2d4 -366 n=4556 t=6v
+ok   S1 position-4 5v chooseMoveWithoutPvsOrReductions absent: tip d2 d2d4 -366 n=4189 t=6v | today d2 d2d4 -366 n=4189 t=6v
+ok   S1 position-4 5v chooseMoveWithoutPvsOrReductions undefined: tip d2 d2d4 -366 n=4189 t=6v | today d2 d2d4 -366 n=4189 t=6v
+ok   S1 position-4 5v chooseMoveWithoutPvsOrReductions huge: tip d2 d2d4 -366 n=4189 t=6v | today d2 d2d4 -366 n=4189 t=6v
+ok   S1 position-4 5v chooseMoveWithoutPvsOrReductions infinite: tip d2 d2d4 -366 n=4189 t=6v | today d2 d2d4 -366 n=4189 t=6v
+ok   S1 position-4 50v chooseMove absent: tip d6 c4c5 -456 n=46540 t=51v | today d6 c4c5 -456 n=46540 t=51v
+ok   S1 position-4 50v chooseMove undefined: tip d6 c4c5 -456 n=46540 t=51v | today d6 c4c5 -456 n=46540 t=51v
+ok   S1 position-4 50v chooseMove huge: tip d6 c4c5 -456 n=46540 t=51v | today d6 c4c5 -456 n=46540 t=51v
+ok   S1 position-4 50v chooseMove infinite: tip d6 c4c5 -456 n=46540 t=51v | today d6 c4c5 -456 n=46540 t=51v
+ok   S1 position-4 50v chooseMoveWithoutReductions absent: tip d5 c4c5 -456 n=47564 t=51v | today d5 c4c5 -456 n=47564 t=51v
+ok   S1 position-4 50v chooseMoveWithoutReductions undefined: tip d5 c4c5 -456 n=47564 t=51v | today d5 c4c5 -456 n=47564 t=51v
+ok   S1 position-4 50v chooseMoveWithoutReductions huge: tip d5 c4c5 -456 n=47564 t=51v | today d5 c4c5 -456 n=47564 t=51v
+ok   S1 position-4 50v chooseMoveWithoutReductions infinite: tip d5 c4c5 -456 n=47564 t=51v | today d5 c4c5 -456 n=47564 t=51v
+ok   S1 position-4 50v chooseMoveWithoutPvsOrReductions absent: tip d5 c4c5 -456 n=47197 t=51v | today d5 c4c5 -456 n=47197 t=51v
+ok   S1 position-4 50v chooseMoveWithoutPvsOrReductions undefined: tip d5 c4c5 -456 n=47197 t=51v | today d5 c4c5 -456 n=47197 t=51v
+ok   S1 position-4 50v chooseMoveWithoutPvsOrReductions huge: tip d5 c4c5 -456 n=47197 t=51v | today d5 c4c5 -456 n=47197 t=51v
+ok   S1 position-4 50v chooseMoveWithoutPvsOrReductions infinite: tip d5 c4c5 -456 n=47197 t=51v | today d5 c4c5 -456 n=47197 t=51v
+ok   S1 position-5 5v chooseMove absent: tip d3 d7c8q 578 n=2364 t=6v | today d3 d7c8q 578 n=2364 t=6v
+ok   S1 position-5 5v chooseMove undefined: tip d3 d7c8q 578 n=2364 t=6v | today d3 d7c8q 578 n=2364 t=6v
+ok   S1 position-5 5v chooseMove huge: tip d3 d7c8q 578 n=2364 t=6v | today d3 d7c8q 578 n=2364 t=6v
+ok   S1 position-5 5v chooseMove infinite: tip d3 d7c8q 578 n=2364 t=6v | today d3 d7c8q 578 n=2364 t=6v
+ok   S1 position-5 5v chooseMoveWithoutReductions absent: tip d3 d7c8q 578 n=2364 t=6v | today d3 d7c8q 578 n=2364 t=6v
+ok   S1 position-5 5v chooseMoveWithoutReductions undefined: tip d3 d7c8q 578 n=2364 t=6v | today d3 d7c8q 578 n=2364 t=6v
+ok   S1 position-5 5v chooseMoveWithoutReductions huge: tip d3 d7c8q 578 n=2364 t=6v | today d3 d7c8q 578 n=2364 t=6v
+ok   S1 position-5 5v chooseMoveWithoutReductions infinite: tip d3 d7c8q 578 n=2364 t=6v | today d3 d7c8q 578 n=2364 t=6v
+ok   S1 position-5 5v chooseMoveWithoutPvsOrReductions absent: tip d3 d7c8q 578 n=2364 t=6v | today d3 d7c8q 578 n=2364 t=6v
+ok   S1 position-5 5v chooseMoveWithoutPvsOrReductions undefined: tip d3 d7c8q 578 n=2364 t=6v | today d3 d7c8q 578 n=2364 t=6v
+ok   S1 position-5 5v chooseMoveWithoutPvsOrReductions huge: tip d3 d7c8q 578 n=2364 t=6v | today d3 d7c8q 578 n=2364 t=6v
+ok   S1 position-5 5v chooseMoveWithoutPvsOrReductions infinite: tip d3 d7c8q 578 n=2364 t=6v | today d3 d7c8q 578 n=2364 t=6v
+ok   S1 position-5 50v chooseMove absent: tip d5 d7c8q 578 n=46144 t=51v | today d5 d7c8q 578 n=46144 t=51v
+ok   S1 position-5 50v chooseMove undefined: tip d5 d7c8q 578 n=46144 t=51v | today d5 d7c8q 578 n=46144 t=51v
+ok   S1 position-5 50v chooseMove huge: tip d5 d7c8q 578 n=46144 t=51v | today d5 d7c8q 578 n=46144 t=51v
+ok   S1 position-5 50v chooseMove infinite: tip d5 d7c8q 578 n=46144 t=51v | today d5 d7c8q 578 n=46144 t=51v
+ok   S1 position-5 50v chooseMoveWithoutReductions absent: tip d4 d7c8q 529 n=47168 t=51v | today d4 d7c8q 529 n=47168 t=51v
+ok   S1 position-5 50v chooseMoveWithoutReductions undefined: tip d4 d7c8q 529 n=47168 t=51v | today d4 d7c8q 529 n=47168 t=51v
+ok   S1 position-5 50v chooseMoveWithoutReductions huge: tip d4 d7c8q 529 n=47168 t=51v | today d4 d7c8q 529 n=47168 t=51v
+ok   S1 position-5 50v chooseMoveWithoutReductions infinite: tip d4 d7c8q 529 n=47168 t=51v | today d4 d7c8q 529 n=47168 t=51v
+ok   S1 position-5 50v chooseMoveWithoutPvsOrReductions absent: tip d4 d7c8q 529 n=47168 t=51v | today d4 d7c8q 529 n=47168 t=51v
+ok   S1 position-5 50v chooseMoveWithoutPvsOrReductions undefined: tip d4 d7c8q 529 n=47168 t=51v | today d4 d7c8q 529 n=47168 t=51v
+ok   S1 position-5 50v chooseMoveWithoutPvsOrReductions huge: tip d4 d7c8q 529 n=47168 t=51v | today d4 d7c8q 529 n=47168 t=51v
+ok   S1 position-5 50v chooseMoveWithoutPvsOrReductions infinite: tip d4 d7c8q 529 n=47168 t=51v | today d4 d7c8q 529 n=47168 t=51v
+ok   S1 position-6 5v chooseMove absent: tip d1 g5e3 9 n=4761 t=6v | today d1 g5e3 9 n=4761 t=6v
+ok   S1 position-6 5v chooseMove undefined: tip d1 g5e3 9 n=4761 t=6v | today d1 g5e3 9 n=4761 t=6v
+ok   S1 position-6 5v chooseMove huge: tip d1 g5e3 9 n=4761 t=6v | today d1 g5e3 9 n=4761 t=6v
+ok   S1 position-6 5v chooseMove infinite: tip d1 g5e3 9 n=4761 t=6v | today d1 g5e3 9 n=4761 t=6v
+ok   S1 position-6 5v chooseMoveWithoutReductions absent: tip d1 g5e3 9 n=4761 t=6v | today d1 g5e3 9 n=4761 t=6v
+ok   S1 position-6 5v chooseMoveWithoutReductions undefined: tip d1 g5e3 9 n=4761 t=6v | today d1 g5e3 9 n=4761 t=6v
+ok   S1 position-6 5v chooseMoveWithoutReductions huge: tip d1 g5e3 9 n=4761 t=6v | today d1 g5e3 9 n=4761 t=6v
+ok   S1 position-6 5v chooseMoveWithoutReductions infinite: tip d1 g5e3 9 n=4761 t=6v | today d1 g5e3 9 n=4761 t=6v
+ok   S1 position-6 5v chooseMoveWithoutPvsOrReductions absent: tip d1 g5e3 9 n=4527 t=6v | today d1 g5e3 9 n=4527 t=6v
+ok   S1 position-6 5v chooseMoveWithoutPvsOrReductions undefined: tip d1 g5e3 9 n=4527 t=6v | today d1 g5e3 9 n=4527 t=6v
+ok   S1 position-6 5v chooseMoveWithoutPvsOrReductions huge: tip d1 g5e3 9 n=4527 t=6v | today d1 g5e3 9 n=4527 t=6v
+ok   S1 position-6 5v chooseMoveWithoutPvsOrReductions infinite: tip d1 g5e3 9 n=4527 t=6v | today d1 g5e3 9 n=4527 t=6v
+ok   S1 position-6 50v chooseMove absent: tip d5 c3d5 92 n=46745 t=51v | today d5 c3d5 92 n=46745 t=51v
+ok   S1 position-6 50v chooseMove undefined: tip d5 c3d5 92 n=46745 t=51v | today d5 c3d5 92 n=46745 t=51v
+ok   S1 position-6 50v chooseMove huge: tip d5 c3d5 92 n=46745 t=51v | today d5 c3d5 92 n=46745 t=51v
+ok   S1 position-6 50v chooseMove infinite: tip d5 c3d5 92 n=46745 t=51v | today d5 c3d5 92 n=46745 t=51v
+ok   S1 position-6 50v chooseMoveWithoutReductions absent: tip d4 c3d5 84 n=47769 t=51v | today d4 c3d5 84 n=47769 t=51v
+ok   S1 position-6 50v chooseMoveWithoutReductions undefined: tip d4 c3d5 84 n=47769 t=51v | today d4 c3d5 84 n=47769 t=51v
+ok   S1 position-6 50v chooseMoveWithoutReductions huge: tip d4 c3d5 84 n=47769 t=51v | today d4 c3d5 84 n=47769 t=51v
+ok   S1 position-6 50v chooseMoveWithoutReductions infinite: tip d4 c3d5 84 n=47769 t=51v | today d4 c3d5 84 n=47769 t=51v
+ok   S1 position-6 50v chooseMoveWithoutPvsOrReductions absent: tip d4 c3d5 84 n=47535 t=51v | today d4 c3d5 84 n=47535 t=51v
+ok   S1 position-6 50v chooseMoveWithoutPvsOrReductions undefined: tip d4 c3d5 84 n=47535 t=51v | today d4 c3d5 84 n=47535 t=51v
+ok   S1 position-6 50v chooseMoveWithoutPvsOrReductions huge: tip d4 c3d5 84 n=47535 t=51v | today d4 c3d5 84 n=47535 t=51v
+ok   S1 position-6 50v chooseMoveWithoutPvsOrReductions infinite: tip d4 c3d5 84 n=47535 t=51v | today d4 c3d5 84 n=47535 t=51v
+ok   S1 kq-corner 5v chooseMove absent: tip d4 b1b2 29997 n=1655 t=6v | today d4 b1b2 29997 n=1655 t=6v
+ok   S1 kq-corner 5v chooseMove undefined: tip d4 b1b2 29997 n=1655 t=6v | today d4 b1b2 29997 n=1655 t=6v
+ok   S1 kq-corner 5v chooseMove huge: tip d4 b1b2 29997 n=1655 t=6v | today d4 b1b2 29997 n=1655 t=6v
+ok   S1 kq-corner 5v chooseMove infinite: tip d4 b1b2 29997 n=1655 t=6v | today d4 b1b2 29997 n=1655 t=6v
+ok   S1 kq-corner 5v chooseMoveWithoutReductions absent: tip d4 b1b2 29997 n=1655 t=6v | today d4 b1b2 29997 n=1655 t=6v
+ok   S1 kq-corner 5v chooseMoveWithoutReductions undefined: tip d4 b1b2 29997 n=1655 t=6v | today d4 b1b2 29997 n=1655 t=6v
+ok   S1 kq-corner 5v chooseMoveWithoutReductions huge: tip d4 b1b2 29997 n=1655 t=6v | today d4 b1b2 29997 n=1655 t=6v
+ok   S1 kq-corner 5v chooseMoveWithoutReductions infinite: tip d4 b1b2 29997 n=1655 t=6v | today d4 b1b2 29997 n=1655 t=6v
+ok   S1 kq-corner 5v chooseMoveWithoutPvsOrReductions absent: tip d4 b1b2 29997 n=1629 t=6v | today d4 b1b2 29997 n=1629 t=6v
+ok   S1 kq-corner 5v chooseMoveWithoutPvsOrReductions undefined: tip d4 b1b2 29997 n=1629 t=6v | today d4 b1b2 29997 n=1629 t=6v
+ok   S1 kq-corner 5v chooseMoveWithoutPvsOrReductions huge: tip d4 b1b2 29997 n=1629 t=6v | today d4 b1b2 29997 n=1629 t=6v
+ok   S1 kq-corner 5v chooseMoveWithoutPvsOrReductions infinite: tip d4 b1b2 29997 n=1629 t=6v | today d4 b1b2 29997 n=1629 t=6v
+ok   S1 kq-corner 50v chooseMove absent: tip d7 b1b2 29997 n=44058 t=51v | today d7 b1b2 29997 n=44058 t=51v
+ok   S1 kq-corner 50v chooseMove undefined: tip d7 b1b2 29997 n=44058 t=51v | today d7 b1b2 29997 n=44058 t=51v
+ok   S1 kq-corner 50v chooseMove huge: tip d7 b1b2 29997 n=44058 t=51v | today d7 b1b2 29997 n=44058 t=51v
+ok   S1 kq-corner 50v chooseMove infinite: tip d7 b1b2 29997 n=44058 t=51v | today d7 b1b2 29997 n=44058 t=51v
+ok   S1 kq-corner 50v chooseMoveWithoutReductions absent: tip d6 b1b2 29997 n=45082 t=51v | today d6 b1b2 29997 n=45082 t=51v
+ok   S1 kq-corner 50v chooseMoveWithoutReductions undefined: tip d6 b1b2 29997 n=45082 t=51v | today d6 b1b2 29997 n=45082 t=51v
+ok   S1 kq-corner 50v chooseMoveWithoutReductions huge: tip d6 b1b2 29997 n=45082 t=51v | today d6 b1b2 29997 n=45082 t=51v
+ok   S1 kq-corner 50v chooseMoveWithoutReductions infinite: tip d6 b1b2 29997 n=45082 t=51v | today d6 b1b2 29997 n=45082 t=51v
+ok   S1 kq-corner 50v chooseMoveWithoutPvsOrReductions absent: tip d6 b1b2 29997 n=45080 t=51v | today d6 b1b2 29997 n=45080 t=51v
+ok   S1 kq-corner 50v chooseMoveWithoutPvsOrReductions undefined: tip d6 b1b2 29997 n=45080 t=51v | today d6 b1b2 29997 n=45080 t=51v
+ok   S1 kq-corner 50v chooseMoveWithoutPvsOrReductions huge: tip d6 b1b2 29997 n=45080 t=51v | today d6 b1b2 29997 n=45080 t=51v
+ok   S1 kq-corner 50v chooseMoveWithoutPvsOrReductions infinite: tip d6 b1b2 29997 n=45080 t=51v | today d6 b1b2 29997 n=45080 t=51v
+ok   S1 kr-corner 5v chooseMove absent: tip d4 b1d1 29997 n=1044 t=6v | today d4 b1d1 29997 n=1044 t=6v
+ok   S1 kr-corner 5v chooseMove undefined: tip d4 b1d1 29997 n=1044 t=6v | today d4 b1d1 29997 n=1044 t=6v
+ok   S1 kr-corner 5v chooseMove huge: tip d4 b1d1 29997 n=1044 t=6v | today d4 b1d1 29997 n=1044 t=6v
+ok   S1 kr-corner 5v chooseMove infinite: tip d4 b1d1 29997 n=1044 t=6v | today d4 b1d1 29997 n=1044 t=6v
+ok   S1 kr-corner 5v chooseMoveWithoutReductions absent: tip d4 b1d1 29997 n=1044 t=6v | today d4 b1d1 29997 n=1044 t=6v
+ok   S1 kr-corner 5v chooseMoveWithoutReductions undefined: tip d4 b1d1 29997 n=1044 t=6v | today d4 b1d1 29997 n=1044 t=6v
+ok   S1 kr-corner 5v chooseMoveWithoutReductions huge: tip d4 b1d1 29997 n=1044 t=6v | today d4 b1d1 29997 n=1044 t=6v
+ok   S1 kr-corner 5v chooseMoveWithoutReductions infinite: tip d4 b1d1 29997 n=1044 t=6v | today d4 b1d1 29997 n=1044 t=6v
+ok   S1 kr-corner 5v chooseMoveWithoutPvsOrReductions absent: tip d4 b1d1 29997 n=1041 t=6v | today d4 b1d1 29997 n=1041 t=6v
+ok   S1 kr-corner 5v chooseMoveWithoutPvsOrReductions undefined: tip d4 b1d1 29997 n=1041 t=6v | today d4 b1d1 29997 n=1041 t=6v
+ok   S1 kr-corner 5v chooseMoveWithoutPvsOrReductions huge: tip d4 b1d1 29997 n=1041 t=6v | today d4 b1d1 29997 n=1041 t=6v
+ok   S1 kr-corner 5v chooseMoveWithoutPvsOrReductions infinite: tip d4 b1d1 29997 n=1041 t=6v | today d4 b1d1 29997 n=1041 t=6v
+ok   S1 kr-corner 50v chooseMove absent: tip d8 b1d1 29997 n=43028 t=51v | today d8 b1d1 29997 n=43028 t=51v
+ok   S1 kr-corner 50v chooseMove undefined: tip d8 b1d1 29997 n=43028 t=51v | today d8 b1d1 29997 n=43028 t=51v
+ok   S1 kr-corner 50v chooseMove huge: tip d8 b1d1 29997 n=43028 t=51v | today d8 b1d1 29997 n=43028 t=51v
+ok   S1 kr-corner 50v chooseMove infinite: tip d8 b1d1 29997 n=43028 t=51v | today d8 b1d1 29997 n=43028 t=51v
+ok   S1 kr-corner 50v chooseMoveWithoutReductions absent: tip d7 b1d1 29997 n=44052 t=51v | today d7 b1d1 29997 n=44052 t=51v
+ok   S1 kr-corner 50v chooseMoveWithoutReductions undefined: tip d7 b1d1 29997 n=44052 t=51v | today d7 b1d1 29997 n=44052 t=51v
+ok   S1 kr-corner 50v chooseMoveWithoutReductions huge: tip d7 b1d1 29997 n=44052 t=51v | today d7 b1d1 29997 n=44052 t=51v
+ok   S1 kr-corner 50v chooseMoveWithoutReductions infinite: tip d7 b1d1 29997 n=44052 t=51v | today d7 b1d1 29997 n=44052 t=51v
+ok   S1 kr-corner 50v chooseMoveWithoutPvsOrReductions absent: tip d7 b1d1 29997 n=44049 t=51v | today d7 b1d1 29997 n=44049 t=51v
+ok   S1 kr-corner 50v chooseMoveWithoutPvsOrReductions undefined: tip d7 b1d1 29997 n=44049 t=51v | today d7 b1d1 29997 n=44049 t=51v
+ok   S1 kr-corner 50v chooseMoveWithoutPvsOrReductions huge: tip d7 b1d1 29997 n=44049 t=51v | today d7 b1d1 29997 n=44049 t=51v
+ok   S1 kr-corner 50v chooseMoveWithoutPvsOrReductions infinite: tip d7 b1d1 29997 n=44049 t=51v | today d7 b1d1 29997 n=44049 t=51v
+ok   S1 kqk-h8 5v chooseMove absent: tip d4 g1e3 29997 n=1636 t=6v | today d4 g1e3 29997 n=1636 t=6v
+ok   S1 kqk-h8 5v chooseMove undefined: tip d4 g1e3 29997 n=1636 t=6v | today d4 g1e3 29997 n=1636 t=6v
+ok   S1 kqk-h8 5v chooseMove huge: tip d4 g1e3 29997 n=1636 t=6v | today d4 g1e3 29997 n=1636 t=6v
+ok   S1 kqk-h8 5v chooseMove infinite: tip d4 g1e3 29997 n=1636 t=6v | today d4 g1e3 29997 n=1636 t=6v
+ok   S1 kqk-h8 5v chooseMoveWithoutReductions absent: tip d4 g1e3 29997 n=1636 t=6v | today d4 g1e3 29997 n=1636 t=6v
+ok   S1 kqk-h8 5v chooseMoveWithoutReductions undefined: tip d4 g1e3 29997 n=1636 t=6v | today d4 g1e3 29997 n=1636 t=6v
+ok   S1 kqk-h8 5v chooseMoveWithoutReductions huge: tip d4 g1e3 29997 n=1636 t=6v | today d4 g1e3 29997 n=1636 t=6v
+ok   S1 kqk-h8 5v chooseMoveWithoutReductions infinite: tip d4 g1e3 29997 n=1636 t=6v | today d4 g1e3 29997 n=1636 t=6v
+ok   S1 kqk-h8 5v chooseMoveWithoutPvsOrReductions absent: tip d4 g1e3 29997 n=1629 t=6v | today d4 g1e3 29997 n=1629 t=6v
+ok   S1 kqk-h8 5v chooseMoveWithoutPvsOrReductions undefined: tip d4 g1e3 29997 n=1629 t=6v | today d4 g1e3 29997 n=1629 t=6v
+ok   S1 kqk-h8 5v chooseMoveWithoutPvsOrReductions huge: tip d4 g1e3 29997 n=1629 t=6v | today d4 g1e3 29997 n=1629 t=6v
+ok   S1 kqk-h8 5v chooseMoveWithoutPvsOrReductions infinite: tip d4 g1e3 29997 n=1629 t=6v | today d4 g1e3 29997 n=1629 t=6v
+ok   S1 kqk-h8 50v chooseMove absent: tip d7 g1e3 29997 n=44058 t=51v | today d7 g1e3 29997 n=44058 t=51v
+ok   S1 kqk-h8 50v chooseMove undefined: tip d7 g1e3 29997 n=44058 t=51v | today d7 g1e3 29997 n=44058 t=51v
+ok   S1 kqk-h8 50v chooseMove huge: tip d7 g1e3 29997 n=44058 t=51v | today d7 g1e3 29997 n=44058 t=51v
+ok   S1 kqk-h8 50v chooseMove infinite: tip d7 g1e3 29997 n=44058 t=51v | today d7 g1e3 29997 n=44058 t=51v
+ok   S1 kqk-h8 50v chooseMoveWithoutReductions absent: tip d6 g1e3 29997 n=45082 t=51v | today d6 g1e3 29997 n=45082 t=51v
+ok   S1 kqk-h8 50v chooseMoveWithoutReductions undefined: tip d6 g1e3 29997 n=45082 t=51v | today d6 g1e3 29997 n=45082 t=51v
+ok   S1 kqk-h8 50v chooseMoveWithoutReductions huge: tip d6 g1e3 29997 n=45082 t=51v | today d6 g1e3 29997 n=45082 t=51v
+ok   S1 kqk-h8 50v chooseMoveWithoutReductions infinite: tip d6 g1e3 29997 n=45082 t=51v | today d6 g1e3 29997 n=45082 t=51v
+ok   S1 kqk-h8 50v chooseMoveWithoutPvsOrReductions absent: tip d6 g1e3 29997 n=45080 t=51v | today d6 g1e3 29997 n=45080 t=51v
+ok   S1 kqk-h8 50v chooseMoveWithoutPvsOrReductions undefined: tip d6 g1e3 29997 n=45080 t=51v | today d6 g1e3 29997 n=45080 t=51v
+ok   S1 kqk-h8 50v chooseMoveWithoutPvsOrReductions huge: tip d6 g1e3 29997 n=45080 t=51v | today d6 g1e3 29997 n=45080 t=51v
+ok   S1 kqk-h8 50v chooseMoveWithoutPvsOrReductions infinite: tip d6 g1e3 29997 n=45080 t=51v | today d6 g1e3 29997 n=45080 t=51v
+ok   S1 kp-vs-k 5v chooseMove absent: tip d4 e1f2 141 n=1032 t=6v | today d4 e1f2 141 n=1032 t=6v
+ok   S1 kp-vs-k 5v chooseMove undefined: tip d4 e1f2 141 n=1032 t=6v | today d4 e1f2 141 n=1032 t=6v
+ok   S1 kp-vs-k 5v chooseMove huge: tip d4 e1f2 141 n=1032 t=6v | today d4 e1f2 141 n=1032 t=6v
+ok   S1 kp-vs-k 5v chooseMove infinite: tip d4 e1f2 141 n=1032 t=6v | today d4 e1f2 141 n=1032 t=6v
+ok   S1 kp-vs-k 5v chooseMoveWithoutReductions absent: tip d4 e1f2 141 n=1032 t=6v | today d4 e1f2 141 n=1032 t=6v
+ok   S1 kp-vs-k 5v chooseMoveWithoutReductions undefined: tip d4 e1f2 141 n=1032 t=6v | today d4 e1f2 141 n=1032 t=6v
+ok   S1 kp-vs-k 5v chooseMoveWithoutReductions huge: tip d4 e1f2 141 n=1032 t=6v | today d4 e1f2 141 n=1032 t=6v
+ok   S1 kp-vs-k 5v chooseMoveWithoutReductions infinite: tip d4 e1f2 141 n=1032 t=6v | today d4 e1f2 141 n=1032 t=6v
+ok   S1 kp-vs-k 5v chooseMoveWithoutPvsOrReductions absent: tip d4 e1f2 141 n=1031 t=6v | today d4 e1f2 141 n=1031 t=6v
+ok   S1 kp-vs-k 5v chooseMoveWithoutPvsOrReductions undefined: tip d4 e1f2 141 n=1031 t=6v | today d4 e1f2 141 n=1031 t=6v
+ok   S1 kp-vs-k 5v chooseMoveWithoutPvsOrReductions huge: tip d4 e1f2 141 n=1031 t=6v | today d4 e1f2 141 n=1031 t=6v
+ok   S1 kp-vs-k 5v chooseMoveWithoutPvsOrReductions infinite: tip d4 e1f2 141 n=1031 t=6v | today d4 e1f2 141 n=1031 t=6v
+ok   S1 kp-vs-k 50v chooseMove absent: tip d9 e1f1 127 n=41992 t=51v | today d9 e1f1 127 n=41992 t=51v
+ok   S1 kp-vs-k 50v chooseMove undefined: tip d9 e1f1 127 n=41992 t=51v | today d9 e1f1 127 n=41992 t=51v
+ok   S1 kp-vs-k 50v chooseMove huge: tip d9 e1f1 127 n=41992 t=51v | today d9 e1f1 127 n=41992 t=51v
+ok   S1 kp-vs-k 50v chooseMove infinite: tip d9 e1f1 127 n=41992 t=51v | today d9 e1f1 127 n=41992 t=51v
+ok   S1 kp-vs-k 50v chooseMoveWithoutReductions absent: tip d10 e1f1 122 n=40968 t=51v | today d10 e1f1 122 n=40968 t=51v
+ok   S1 kp-vs-k 50v chooseMoveWithoutReductions undefined: tip d10 e1f1 122 n=40968 t=51v | today d10 e1f1 122 n=40968 t=51v
+ok   S1 kp-vs-k 50v chooseMoveWithoutReductions huge: tip d10 e1f1 122 n=40968 t=51v | today d10 e1f1 122 n=40968 t=51v
+ok   S1 kp-vs-k 50v chooseMoveWithoutReductions infinite: tip d10 e1f1 122 n=40968 t=51v | today d10 e1f1 122 n=40968 t=51v
+ok   S1 kp-vs-k 50v chooseMoveWithoutPvsOrReductions absent: tip d9 e1f1 130 n=41991 t=51v | today d9 e1f1 130 n=41991 t=51v
+ok   S1 kp-vs-k 50v chooseMoveWithoutPvsOrReductions undefined: tip d9 e1f1 130 n=41991 t=51v | today d9 e1f1 130 n=41991 t=51v
+ok   S1 kp-vs-k 50v chooseMoveWithoutPvsOrReductions huge: tip d9 e1f1 130 n=41991 t=51v | today d9 e1f1 130 n=41991 t=51v
+ok   S1 kp-vs-k 50v chooseMoveWithoutPvsOrReductions infinite: tip d9 e1f1 130 n=41991 t=51v | today d9 e1f1 130 n=41991 t=51v
+ok   S1 krk-a-file 5v chooseMove absent: tip d4 b1b7 622 n=1041 t=6v | today d4 b1b7 622 n=1041 t=6v
+ok   S1 krk-a-file 5v chooseMove undefined: tip d4 b1b7 622 n=1041 t=6v | today d4 b1b7 622 n=1041 t=6v
+ok   S1 krk-a-file 5v chooseMove huge: tip d4 b1b7 622 n=1041 t=6v | today d4 b1b7 622 n=1041 t=6v
+ok   S1 krk-a-file 5v chooseMove infinite: tip d4 b1b7 622 n=1041 t=6v | today d4 b1b7 622 n=1041 t=6v
+ok   S1 krk-a-file 5v chooseMoveWithoutReductions absent: tip d4 b1b7 622 n=1041 t=6v | today d4 b1b7 622 n=1041 t=6v
+ok   S1 krk-a-file 5v chooseMoveWithoutReductions undefined: tip d4 b1b7 622 n=1041 t=6v | today d4 b1b7 622 n=1041 t=6v
+ok   S1 krk-a-file 5v chooseMoveWithoutReductions huge: tip d4 b1b7 622 n=1041 t=6v | today d4 b1b7 622 n=1041 t=6v
+ok   S1 krk-a-file 5v chooseMoveWithoutReductions infinite: tip d4 b1b7 622 n=1041 t=6v | today d4 b1b7 622 n=1041 t=6v
+ok   S1 krk-a-file 5v chooseMoveWithoutPvsOrReductions absent: tip d4 b1b7 622 n=1039 t=6v | today d4 b1b7 622 n=1039 t=6v
+ok   S1 krk-a-file 5v chooseMoveWithoutPvsOrReductions undefined: tip d4 b1b7 622 n=1039 t=6v | today d4 b1b7 622 n=1039 t=6v
+ok   S1 krk-a-file 5v chooseMoveWithoutPvsOrReductions huge: tip d4 b1b7 622 n=1039 t=6v | today d4 b1b7 622 n=1039 t=6v
+ok   S1 krk-a-file 5v chooseMoveWithoutPvsOrReductions infinite: tip d4 b1b7 622 n=1039 t=6v | today d4 b1b7 622 n=1039 t=6v
+ok   S1 krk-a-file 50v chooseMove absent: tip d8 b1b5 622 n=43025 t=51v | today d8 b1b5 622 n=43025 t=51v
+ok   S1 krk-a-file 50v chooseMove undefined: tip d8 b1b5 622 n=43025 t=51v | today d8 b1b5 622 n=43025 t=51v
+ok   S1 krk-a-file 50v chooseMove huge: tip d8 b1b5 622 n=43025 t=51v | today d8 b1b5 622 n=43025 t=51v
+ok   S1 krk-a-file 50v chooseMove infinite: tip d8 b1b5 622 n=43025 t=51v | today d8 b1b5 622 n=43025 t=51v
+ok   S1 krk-a-file 50v chooseMoveWithoutReductions absent: tip d8 b1b5 617 n=43025 t=51v | today d8 b1b5 617 n=43025 t=51v
+ok   S1 krk-a-file 50v chooseMoveWithoutReductions undefined: tip d8 b1b5 617 n=43025 t=51v | today d8 b1b5 617 n=43025 t=51v
+ok   S1 krk-a-file 50v chooseMoveWithoutReductions huge: tip d8 b1b5 617 n=43025 t=51v | today d8 b1b5 617 n=43025 t=51v
+ok   S1 krk-a-file 50v chooseMoveWithoutReductions infinite: tip d8 b1b5 617 n=43025 t=51v | today d8 b1b5 617 n=43025 t=51v
+ok   S1 krk-a-file 50v chooseMoveWithoutPvsOrReductions absent: tip d8 b1b5 617 n=43023 t=51v | today d8 b1b5 617 n=43023 t=51v
+ok   S1 krk-a-file 50v chooseMoveWithoutPvsOrReductions undefined: tip d8 b1b5 617 n=43023 t=51v | today d8 b1b5 617 n=43023 t=51v
+ok   S1 krk-a-file 50v chooseMoveWithoutPvsOrReductions huge: tip d8 b1b5 617 n=43023 t=51v | today d8 b1b5 617 n=43023 t=51v
+ok   S1 krk-a-file 50v chooseMoveWithoutPvsOrReductions infinite: tip d8 b1b5 617 n=43023 t=51v | today d8 b1b5 617 n=43023 t=51v
+ok   S1 pawn-race 5v chooseMove absent: tip d5 b2b4 53 n=318 t=6v | today d5 b2b4 53 n=318 t=6v
+ok   S1 pawn-race 5v chooseMove undefined: tip d5 b2b4 53 n=318 t=6v | today d5 b2b4 53 n=318 t=6v
+ok   S1 pawn-race 5v chooseMove huge: tip d5 b2b4 53 n=318 t=6v | today d5 b2b4 53 n=318 t=6v
+ok   S1 pawn-race 5v chooseMove infinite: tip d5 b2b4 53 n=318 t=6v | today d5 b2b4 53 n=318 t=6v
+ok   S1 pawn-race 5v chooseMoveWithoutReductions absent: tip d5 b2b4 53 n=372 t=6v | today d5 b2b4 53 n=372 t=6v
+ok   S1 pawn-race 5v chooseMoveWithoutReductions undefined: tip d5 b2b4 53 n=372 t=6v | today d5 b2b4 53 n=372 t=6v
+ok   S1 pawn-race 5v chooseMoveWithoutReductions huge: tip d5 b2b4 53 n=372 t=6v | today d5 b2b4 53 n=372 t=6v
+ok   S1 pawn-race 5v chooseMoveWithoutReductions infinite: tip d5 b2b4 53 n=372 t=6v | today d5 b2b4 53 n=372 t=6v
+ok   S1 pawn-race 5v chooseMoveWithoutPvsOrReductions absent: tip d5 b2b4 53 n=377 t=6v | today d5 b2b4 53 n=377 t=6v
+ok   S1 pawn-race 5v chooseMoveWithoutPvsOrReductions undefined: tip d5 b2b4 53 n=377 t=6v | today d5 b2b4 53 n=377 t=6v
+ok   S1 pawn-race 5v chooseMoveWithoutPvsOrReductions huge: tip d5 b2b4 53 n=377 t=6v | today d5 b2b4 53 n=377 t=6v
+ok   S1 pawn-race 5v chooseMoveWithoutPvsOrReductions infinite: tip d5 b2b4 53 n=377 t=6v | today d5 b2b4 53 n=377 t=6v
+ok   S1 pawn-race 50v chooseMove absent: tip d12 b2b4 137 n=38918 t=51v | today d12 b2b4 137 n=38918 t=51v
+ok   S1 pawn-race 50v chooseMove undefined: tip d12 b2b4 137 n=38918 t=51v | today d12 b2b4 137 n=38918 t=51v
+ok   S1 pawn-race 50v chooseMove huge: tip d12 b2b4 137 n=38918 t=51v | today d12 b2b4 137 n=38918 t=51v
+ok   S1 pawn-race 50v chooseMove infinite: tip d12 b2b4 137 n=38918 t=51v | today d12 b2b4 137 n=38918 t=51v
+ok   S1 pawn-race 50v chooseMoveWithoutReductions absent: tip d13 b2b4 175 n=37894 t=51v | today d13 b2b4 175 n=37894 t=51v
+ok   S1 pawn-race 50v chooseMoveWithoutReductions undefined: tip d13 b2b4 175 n=37894 t=51v | today d13 b2b4 175 n=37894 t=51v
+ok   S1 pawn-race 50v chooseMoveWithoutReductions huge: tip d13 b2b4 175 n=37894 t=51v | today d13 b2b4 175 n=37894 t=51v
+ok   S1 pawn-race 50v chooseMoveWithoutReductions infinite: tip d13 b2b4 175 n=37894 t=51v | today d13 b2b4 175 n=37894 t=51v
+ok   S1 pawn-race 50v chooseMoveWithoutPvsOrReductions absent: tip d14 b2b4 177 n=37837 t=51v | today d14 b2b4 177 n=37837 t=51v
+ok   S1 pawn-race 50v chooseMoveWithoutPvsOrReductions undefined: tip d14 b2b4 177 n=37837 t=51v | today d14 b2b4 177 n=37837 t=51v
+ok   S1 pawn-race 50v chooseMoveWithoutPvsOrReductions huge: tip d14 b2b4 177 n=37837 t=51v | today d14 b2b4 177 n=37837 t=51v
+ok   S1 pawn-race 50v chooseMoveWithoutPvsOrReductions infinite: tip d14 b2b4 177 n=37837 t=51v | today d14 b2b4 177 n=37837 t=51v
+ok   S2 level 1 seed 1 startpos: tip engine e2e4 d1 n=21 | today engine e2e4 d1 n=21
+ok   S2 level 1 seed 1 kiwipete: tip blunder d5e6 d1 n=31889 | today blunder d5e6 d1 n=31889
+ok   S2 level 1 seed 1 kp-vs-k: tip engine e2e3 d1 n=8 | today engine e2e3 d1 n=8
+ok   S2 level 1 seed 2 startpos: tip engine e2e4 d1 n=21 | today engine e2e4 d1 n=21
+ok   S2 level 1 seed 2 kiwipete: tip blunder d5e6 d1 n=31889 | today blunder d5e6 d1 n=31889
+ok   S2 level 1 seed 2 kp-vs-k: tip blunder e1f1 d1 n=44 | today blunder e1f1 d1 n=44
+ok   S2 level 1 seed 3 startpos: tip engine e2e4 d1 n=21 | today engine e2e4 d1 n=21
+ok   S2 level 1 seed 3 kiwipete: tip blunder d5e6 d1 n=31889 | today blunder d5e6 d1 n=31889
+ok   S2 level 1 seed 3 kp-vs-k: tip engine e2e3 d1 n=8 | today engine e2e3 d1 n=8
+ok   S2 level 2 seed 1 startpos: tip engine e2e4 d4 n=2050 | today engine e2e4 d4 n=2050
+ok   S2 level 2 seed 1 kiwipete: tip blunder d5e6 d1 n=31889 | today blunder d5e6 d1 n=31889
+ok   S2 level 2 seed 1 kp-vs-k: tip engine e1f2 d4 n=1032 | today engine e1f2 d4 n=1032
+ok   S2 level 2 seed 2 startpos: tip engine e2e4 d4 n=2050 | today engine e2e4 d4 n=2050
+ok   S2 level 2 seed 2 kiwipete: tip engine e2a6 d2 n=3674 | today engine e2a6 d2 n=3674
+ok   S2 level 2 seed 2 kp-vs-k: tip engine e1f2 d4 n=1032 | today engine e1f2 d4 n=1032
+ok   S2 level 2 seed 3 startpos: tip engine e2e4 d4 n=2050 | today engine e2e4 d4 n=2050
+ok   S2 level 2 seed 3 kiwipete: tip blunder d5e6 d1 n=31889 | today blunder d5e6 d1 n=31889
+ok   S2 level 2 seed 3 kp-vs-k: tip engine e1f2 d4 n=1032 | today engine e1f2 d4 n=1032
+ok   S2 level 3 seed 1 startpos: tip engine g1f3 d5 n=25621 | today engine g1f3 d5 n=25621
+ok   S2 level 3 seed 1 kiwipete: tip engine e2a6 d4 n=27226 | today engine e2a6 d4 n=27226
+ok   S2 level 3 seed 1 kp-vs-k: tip engine e1f2 d8 n=22536 | today engine e1f2 d8 n=22536
+ok   S2 level 3 seed 2 startpos: tip engine g1f3 d5 n=25621 | today engine g1f3 d5 n=25621
+ok   S2 level 3 seed 2 kiwipete: tip engine e2a6 d4 n=27226 | today engine e2a6 d4 n=27226
+ok   S2 level 3 seed 2 kp-vs-k: tip engine e1f2 d8 n=22536 | today engine e1f2 d8 n=22536
+ok   S2 level 3 seed 3 startpos: tip engine g1f3 d5 n=25621 | today engine g1f3 d5 n=25621
+ok   S2 level 3 seed 3 kiwipete: tip engine e2a6 d4 n=27226 | today engine e2a6 d4 n=27226
+ok   S2 level 3 seed 3 kp-vs-k: tip engine e1f2 d8 n=22536 | today engine e1f2 d8 n=22536
+ok   S2 level 4 seed 1 startpos: tip engine g1f3 d5 n=35861 | today engine g1f3 d5 n=35861
+ok   S2 level 4 seed 1 kiwipete: tip engine e2a6 d4 n=37466 | today engine e2a6 d4 n=37466
+ok   S2 level 4 seed 1 kp-vs-k: tip engine e1f1 d9 n=31752 | today engine e1f1 d9 n=31752
+ok   S2 level 4 seed 2 startpos: tip engine g1f3 d5 n=35861 | today engine g1f3 d5 n=35861
+ok   S2 level 4 seed 2 kiwipete: tip engine e2a6 d4 n=37466 | today engine e2a6 d4 n=37466
+ok   S2 level 4 seed 2 kp-vs-k: tip engine e1f1 d9 n=31752 | today engine e1f1 d9 n=31752
+ok   S2 level 4 seed 3 startpos: tip engine g1f3 d5 n=35861 | today engine g1f3 d5 n=35861
+ok   S2 level 4 seed 3 kiwipete: tip engine e2a6 d4 n=37466 | today engine e2a6 d4 n=37466
+ok   S2 level 4 seed 3 kp-vs-k: tip engine e1f1 d9 n=31752 | today engine e1f1 d9 n=31752
+ok   S2 level 5 seed 1 startpos: tip engine g1f3 d5 n=40981 | today engine g1f3 d5 n=40981
+ok   S2 level 5 seed 1 kiwipete: tip engine e2a6 d4 n=42586 | today engine e2a6 d4 n=42586
+ok   S2 level 5 seed 1 kp-vs-k: tip engine e1f1 d9 n=36872 | today engine e1f1 d9 n=36872
+ok   S2 level 5 seed 2 startpos: tip engine g1f3 d5 n=40981 | today engine g1f3 d5 n=40981
+ok   S2 level 5 seed 2 kiwipete: tip engine e2a6 d4 n=42586 | today engine e2a6 d4 n=42586
+ok   S2 level 5 seed 2 kp-vs-k: tip engine e1f1 d9 n=36872 | today engine e1f1 d9 n=36872
+ok   S2 level 5 seed 3 startpos: tip engine g1f3 d5 n=40981 | today engine g1f3 d5 n=40981
+ok   S2 level 5 seed 3 kiwipete: tip engine e2a6 d4 n=42586 | today engine e2a6 d4 n=42586
+ok   S2 level 5 seed 3 kp-vs-k: tip engine e1f1 d9 n=36872 | today engine e1f1 d9 n=36872
+ok   S2 engine seam startpos 20v: tip g1f3 | today g1f3
+ok   S2 engine seam kiwipete 20v: tip e2a6 | today e2a6
+ok   S2 engine seam position-4 20v: tip c4c5 | today c4c5
+ok   S2 engine seam kp-vs-k 20v: tip e1f2 | today e1f2
+ok   S3 A1 fixture is a real stop: unlimited kp-vs-k 10v reaches d7 e1f2 130 n=3962 t=11v (needs d>=6)
+ok   S3 A1 maxDepth 3: d3 e1f2 151 n=147 t=4v | search(p,3) e1f2 151
+ok   S3 A1 maxDepth 1: d1 e2e3 153 n=8 t=2v, legal true
+ok   S3 startpos 50v maxDepth 1: d1 e2e4 69 n=21 t=2v (expect d1; unlimited d6 d2d4 52 n=45077 t=51v)
+ok   S3 startpos 50v maxDepth 2: d2 e2e4 0 n=117 t=3v (expect d2; unlimited d6 d2d4 52 n=45077 t=51v)
+ok   S3 startpos 50v maxDepth 3: d3 e2e4 66 n=655 t=4v (expect d3; unlimited d6 d2d4 52 n=45077 t=51v)
+ok   S3 startpos 50v maxDepth 4: d4 e2e4 0 n=2050 t=6v (expect d4; unlimited d6 d2d4 52 n=45077 t=51v)
+ok   S3 startpos 50v maxDepth 5: d5 g1f3 55 n=9706 t=15v (expect d5; unlimited d6 d2d4 52 n=45077 t=51v)
+ok   S3 startpos 50v maxDepth 6: d6 d2d4 52 n=42397 t=48v (expect d6; unlimited d6 d2d4 52 n=45077 t=51v)
+ok   S3 startpos 50v maxDepth 7: d6 d2d4 52 n=45077 t=51v (expect d6; unlimited d6 d2d4 52 n=45077 t=51v)
+ok   S3 startpos 50v maxDepth 8: d6 d2d4 52 n=45077 t=51v (expect d6; unlimited d6 d2d4 52 n=45077 t=51v)
+ok   S3 kiwipete 50v maxDepth 1: d1 e2a6 166 n=602 t=2v (expect d1; unlimited d4 e2a6 70 n=47706 t=51v)
+ok   S3 kiwipete 50v maxDepth 2: d2 e2a6 109 n=2538 t=4v (expect d2; unlimited d4 e2a6 70 n=47706 t=51v)
+ok   S3 kiwipete 50v maxDepth 3: d3 e2a6 70 n=9119 t=12v (expect d3; unlimited d4 e2a6 70 n=47706 t=51v)
+ok   S3 kiwipete 50v maxDepth 4: d4 e2a6 70 n=26733 t=30v (expect d4; unlimited d4 e2a6 70 n=47706 t=51v)
+ok   S3 kiwipete 50v maxDepth 5: d4 e2a6 70 n=47706 t=51v (expect d4; unlimited d4 e2a6 70 n=47706 t=51v)
+ok   S3 kiwipete 50v maxDepth 6: d4 e2a6 70 n=47706 t=51v (expect d4; unlimited d4 e2a6 70 n=47706 t=51v)
+ok   S3 kiwipete 50v maxDepth 7: d4 e2a6 70 n=47706 t=51v (expect d4; unlimited d4 e2a6 70 n=47706 t=51v)
+ok   S3 kiwipete 50v maxDepth 8: d4 e2a6 70 n=47706 t=51v (expect d4; unlimited d4 e2a6 70 n=47706 t=51v)
+ok   S3 position-3 50v maxDepth 1: d1 b4f4 95 n=14 t=2v (expect d1; unlimited d7 b4f4 48 n=44046 t=51v)
+ok   S3 position-3 50v maxDepth 2: d2 b4f4 108 n=97 t=3v (expect d2; unlimited d7 b4f4 48 n=44046 t=51v)
+ok   S3 position-3 50v maxDepth 3: d3 b4f4 110 n=351 t=4v (expect d3; unlimited d7 b4f4 48 n=44046 t=51v)
+ok   S3 position-3 50v maxDepth 4: d4 b4f4 113 n=1043 t=6v (expect d4; unlimited d7 b4f4 48 n=44046 t=51v)
+ok   S3 position-3 50v maxDepth 5: d5 b4f4 105 n=2367 t=8v (expect d5; unlimited d7 b4f4 48 n=44046 t=51v)
+ok   S3 position-3 50v maxDepth 6: d6 b4f4 72 n=6614 t=13v (expect d6; unlimited d7 b4f4 48 n=44046 t=51v)
+ok   S3 position-3 50v maxDepth 7: d7 b4f4 48 n=23130 t=30v (expect d7; unlimited d7 b4f4 48 n=44046 t=51v)
+ok   S3 position-3 50v maxDepth 8: d7 b4f4 48 n=44046 t=51v (expect d7; unlimited d7 b4f4 48 n=44046 t=51v)
+ok   S3 kp-vs-k 50v maxDepth 1: d1 e2e3 153 n=8 t=2v (expect d1; unlimited d9 e1f1 127 n=41992 t=51v)
+ok   S3 kp-vs-k 50v maxDepth 2: d2 e2e3 133 n=25 t=3v (expect d2; unlimited d9 e1f1 127 n=41992 t=51v)
+ok   S3 kp-vs-k 50v maxDepth 3: d3 e1f2 151 n=147 t=4v (expect d3; unlimited d9 e1f1 127 n=41992 t=51v)
+ok   S3 kp-vs-k 50v maxDepth 4: d4 e1f2 141 n=264 t=5v (expect d4; unlimited d9 e1f1 127 n=41992 t=51v)
+ok   S3 kp-vs-k 50v maxDepth 5: d5 e1d1 145 n=1835 t=7v (expect d5; unlimited d9 e1f1 127 n=41992 t=51v)
+ok   S3 kp-vs-k 50v maxDepth 6: d6 e1f2 127 n=2716 t=9v (expect d6; unlimited d9 e1f1 127 n=41992 t=51v)
+ok   S3 kp-vs-k 50v maxDepth 7: d7 e1f2 130 n=3962 t=11v (expect d7; unlimited d9 e1f1 127 n=41992 t=51v)
+ok   S3 kp-vs-k 50v maxDepth 8: d8 e1f2 130 n=7377 t=16v (expect d8; unlimited d9 e1f1 127 n=41992 t=51v)
+ok   S4 A2 kiwipete maxNodes 20000: d3 e2a6 70 n=20058 t=23v (bound <= 21024)
+ok   S4 A2 discard, search(p,3) reference: e2a6 70
+ok   S4 A2 discard, maxDepth 3 oracle: d3 e2a6 70 n=9119 t=12v (node-limited run visited more: it entered and dropped the next depth)
+ok   S4 A2 maxNodes 1: d1 e2a6 166 n=602 t=2v, legal true
+ok   S4 startpos maxNodes 5000: d4 e2e4 0 n=5141 t=10v (bound <= 6024); maxDepth 4 oracle e2e4 0
+ok   S4 startpos maxNodes 20000: d5 g1f3 55 n=20501 t=26v (bound <= 21024); maxDepth 5 oracle g1f3 55
+ok   S4 startpos maxNodes 60000: d6 d2d4 52 n=60437 t=66v (bound <= 61024); maxDepth 6 oracle d2d4 52
+ok   S4 kiwipete maxNodes 5000: d2 e2a6 109 n=5722 t=8v (bound <= 6024); maxDepth 2 oracle e2a6 109
+ok   S4 kiwipete maxNodes 20000: d3 e2a6 70 n=20058 t=23v (bound <= 21024); maxDepth 3 oracle e2a6 70
+ok   S4 kiwipete maxNodes 60000: d4 e2a6 70 n=61018 t=64v (bound <= 61024); maxDepth 4 oracle e2a6 70
+ok   S4 position-3 maxNodes 5000: d5 b4f4 105 n=5134 t=11v (bound <= 6024); maxDepth 5 oracle b4f4 105
+ok   S4 position-3 maxNodes 20000: d6 b4f4 72 n=20494 t=27v (bound <= 21024); maxDepth 6 oracle b4f4 72
+ok   S4 position-3 maxNodes 60000: d7 b4f4 48 n=60430 t=67v (bound <= 61024); maxDepth 7 oracle b4f4 48
+ok   S4 kp-vs-k maxNodes 5000: d7 e1f2 130 n=5128 t=13v (bound <= 6024); maxDepth 7 oracle e1f2 130
+ok   S4 kp-vs-k maxNodes 20000: d8 e1f2 130 n=20488 t=29v (bound <= 21024); maxDepth 8 oracle e1f2 130
+ok   S4 kp-vs-k maxNodes 60000: d10 e1d1 127 n=60424 t=70v (bound <= 61024); maxDepth 10 oracle e1d1 127
+ok   S5 clock first, kp-vs-k 5v + maxDepth 50 + maxNodes 1e9: d4 e1f2 141 n=1032 t=6v | unlimited d4 e1f2 141 n=1032 t=6v
+ok   S5 clock first, startpos 5v + maxDepth 50 + maxNodes 1e9: d4 e2e4 0 n=2050 t=6v | unlimited d4 e2e4 0 n=2050 t=6v
+ok   S5 clock first, kiwipete 5v + maxDepth 50 + maxNodes 1e9: d2 e2a6 109 n=3674 t=6v | unlimited d2 e2a6 109 n=3674 t=6v
+ok   S5 depth first, kp-vs-k 10v maxDepth 3: d3 e1f2 151 n=147 t=4v | unlimited d7 e1f2 130 n=3962 t=11v
+ok   S5 nodes first, kiwipete 5000v maxNodes 20000: d3 e2a6 70 n=20058 t=23v (returns before 5000v)
+ok   S5 both, depth tighter: maxDepth 2 + maxNodes 1e7 d2 e2a6 109 n=2538 t=4v | maxDepth 2 alone d2 e2a6 109 n=2538 t=4v
+ok   S5 both, nodes tighter: maxDepth 10 + maxNodes 3000 d2 e2a6 109 n=3674 t=6v | maxNodes 3000 alone d2 e2a6 109 n=3674 t=6v
+ok   S5 ceiling, budget Infinity + {"maxDepth":1000}: 4 clock reads | 4 without
+ok   S5 ceiling, budget Infinity + {"maxNodes":9007199254740991}: 4 clock reads | 4 without
+ok   S5 ceiling, budget Infinity + {"maxDepth":1000,"maxNodes":9007199254740991}: 4 clock reads | 4 without
+ok   S6 seam kiwipete {"maxDepth":2}: seam e2a6 | chooseMove d2 e2a6 109 n=2538 t=4v
+ok   S6 seam kp-vs-k {"maxDepth":3}: seam e1f2 | chooseMove d3 e1f2 151 n=147 t=4v
+ok   S6 seam kiwipete {"maxNodes":20000}: seam e2a6 | chooseMove d3 e2a6 70 n=20058 t=23v
+
+S1: PASS (288 ok, 0 failed)
+S2: PASS (49 ok, 0 failed)
+S3: PASS (35 ok, 0 failed)
+S4: PASS (16 ok, 0 failed)
+S5: PASS (10 ok, 0 failed)
+S6: PASS (3 ok, 0 failed)
+engine calls: 553

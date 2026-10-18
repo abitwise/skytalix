@@ -1,0 +1,52 @@
+# Harness negative controls (scratch copies of the tip src/ only; the worktree's src/ was never edited)
+# Worktree src/engine.ts md5 before and after: 3ce3a2511b20f64e2d15a495b9bba6dc
+
+C1  loop header 'iteration <= (options.maxDepth' -> 'iteration < (options.maxDepth'  (maxDepth off by one)
+C2  countNode: drop '|| budget.nodes >= budget.maxNodes'  (maxNodes never aborts mid-iteration)
+C3  deepen: add 'if (options.maxNodes === undefined) now();' after clearTable()  (an extra clock read on the no-limit path only)
+C4  'maxNodes: options.maxNodes ?? 60_000'  (a hidden node default, QE-170-b's M08c)
+
+== C1
+S1: PASS (288 ok, 0 failed)
+S2: PASS (49 ok, 0 failed)
+S3: FAIL (13 ok, 22 failed)
+S4: FAIL (3 ok, 13 failed)
+S5: FAIL (8 ok, 2 failed)
+S6: PASS (3 ok, 0 failed)
+first failing lines:
+FAIL S3 A1 maxDepth 3: d2 e2e3 133 n=25 t=3v | search(p,3) e1f2 151
+FAIL S3 startpos 50v maxDepth 2: d1 e2e4 69 n=21 t=2v (expect d2; unlimited d6 d2d4 52 n=45077 t=51v)
+FAIL S3 startpos 50v maxDepth 3: d2 e2e4 0 n=117 t=3v (expect d3; unlimited d6 d2d4 52 n=45077 t=51v)
+
+== C2
+S1: PASS (288 ok, 0 failed)
+S2: PASS (49 ok, 0 failed)
+S3: PASS (35 ok, 0 failed)
+S4: FAIL (2 ok, 14 failed)
+S5: PASS (10 ok, 0 failed)
+S6: PASS (3 ok, 0 failed)
+first failing lines:
+FAIL S4 A2 kiwipete maxNodes 20000: d4 e2a6 70 n=26733 t=30v (bound <= 21024)
+FAIL S4 A2 discard, maxDepth 4 oracle: d4 e2a6 70 n=26733 t=30v (node-limited run visited more: it entered and dropped the next depth)
+FAIL S4 startpos maxNodes 5000: d5 g1f3 55 n=9706 t=15v (bound <= 6024); maxDepth 5 oracle g1f3 55
+
+== C3
+S1: FAIL (144 ok, 144 failed)
+S2: FAIL (4 ok, 45 failed)
+S3: PASS (35 ok, 0 failed)
+S4: PASS (16 ok, 0 failed)
+S5: FAIL (4 ok, 6 failed)
+S6: PASS (3 ok, 0 failed)
+first failing lines:
+FAIL S1 startpos 5v chooseMove absent: tip d3 e2e4 66 n=1045 t=6v | today d4 e2e4 0 n=2050 t=6v
+FAIL S1 startpos 5v chooseMove undefined: tip d3 e2e4 66 n=1045 t=6v | today d4 e2e4 0 n=2050 t=6v
+FAIL S1 startpos 5v chooseMoveWithoutReductions absent: tip d3 e2e4 66 n=1045 t=6v | today d3 e2e4 66 n=2069 t=6v
+
+== C4
+S1: PASS (288 ok, 0 failed)
+S2: PASS (49 ok, 0 failed)
+S3: PASS (35 ok, 0 failed)
+S4: PASS (16 ok, 0 failed)
+S5: PASS (10 ok, 0 failed)
+S6: PASS (3 ok, 0 failed)
+first failing lines:
