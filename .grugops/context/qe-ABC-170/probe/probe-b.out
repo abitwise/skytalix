@@ -1,0 +1,88 @@
+== B1 maxDepth edge values (kp-vs-k, 10 ms, tick 1; unlimited reaches 7) ==
+0 d1 n8 e2 e2e3 153 true
+-1 d1 n8 e2 e2e3 153 true
+null d1 n8 e2 e2e3 153 true
+null d1 n8 e2 e2e3 153 true
+0.5 d1 n8 e2 e2e3 153 true
+1 d1 n8 e2 e2e3 153 true
+1.5 d1 n8 e2 e2e3 153 true
+2.5 d2 n25 e3 e2e3 133 true
+3 d3 n147 e4 e1f2 151 true
+3.999 d3 n147 e4 e1f2 151 true
+7 d7 n3962 e11 e1f2 130 true
+8 d7 n3962 e11 e1f2 130 true
+null d7 n3962 e11 e1f2 130 true
+1000000000 d7 n3962 e11 e1f2 130 true
+"3" d3 n147 e4 e1f2 151 true
+null d7 n3962 e11 e1f2 130 true
+== B2 maxNodes edge values (kiwipete, 5000 ms, tick 1) ==
+0 d1 n602 e2 e2a6 166 true
+-1 d1 n602 e2 e2a6 166 true
+null d1 n602 e2 e2a6 166 true
+null d1 n602 e2 e2a6 166 true
+1 d1 n602 e2 e2a6 166 true
+0.5 d1 n602 e2 e2a6 166 true
+1023 d1 n1626 e3 e2a6 166 true
+1024 d1 n1626 e3 e2a6 166 true
+1025 d1 n1626 e3 e2a6 166 true
+3000 d2 n3674 e6 e2a6 109 true
+null d8 n5112410 e5001 e2a6 -22 true
+"20000" d3 n20058 e23 e2a6 70 true
+null d8 n5112410 e5001 e2a6 -22 true
+== B3 limit + tiny budget (startpos and kp-vs-k) ==
+rnbqkbnr/ppp budget NaN free d1 n21 e2 e2e4 69 md1:ok md2:ok md3:ok mn1:d1 mn600:d1 mn2000:d1
+rnbqkbnr/ppp budget -1 free d1 n21 e2 e2e4 69 md1:ok md2:ok md3:ok mn1:d1 mn600:d1 mn2000:d1
+rnbqkbnr/ppp budget 0 free d1 n21 e2 e2e4 69 md1:ok md2:ok md3:ok mn1:d1 mn600:d1 mn2000:d1
+rnbqkbnr/ppp budget 1 free d1 n21 e2 e2e4 69 md1:ok md2:ok md3:ok mn1:d1 mn600:d1 mn2000:d1
+rnbqkbnr/ppp budget 2 free d2 n117 e3 e2e4 0 md1:ok md2:ok md3:ok mn1:d1 mn600:d2 mn2000:d2
+rnbqkbnr/ppp budget 3 free d3 n655 e4 e2e4 66 md1:ok md2:ok md3:ok mn1:d1 mn600:d3 mn2000:d3
+rnbqkbnr/ppp budget 5 free d4 n2050 e6 e2e4 0 md1:ok md2:ok md3:ok mn1:d1 mn600:d3 mn2000:d4
+8/8/8/4k3/8/ budget NaN free d1 n8 e2 e2e3 153 md1:ok md2:ok md3:ok mn1:d1 mn600:d1 mn2000:d1
+8/8/8/4k3/8/ budget -1 free d1 n8 e2 e2e3 153 md1:ok md2:ok md3:ok mn1:d1 mn600:d1 mn2000:d1
+8/8/8/4k3/8/ budget 0 free d1 n8 e2 e2e3 153 md1:ok md2:ok md3:ok mn1:d1 mn600:d1 mn2000:d1
+8/8/8/4k3/8/ budget 1 free d1 n8 e2 e2e3 153 md1:ok md2:ok md3:ok mn1:d1 mn600:d1 mn2000:d1
+8/8/8/4k3/8/ budget 2 free d2 n25 e3 e2e3 133 md1:ok md2:ok md3:ok mn1:d1 mn600:d2 mn2000:d2
+8/8/8/4k3/8/ budget 3 free d3 n147 e4 e1f2 151 md1:ok md2:ok md3:ok mn1:d1 mn600:d3 mn2000:d3
+8/8/8/4k3/8/ budget 5 free d4 n1032 e6 e1f2 141 md1:ok md2:ok md3:ok mn1:d1 mn600:d4 mn2000:d4
+r3k2r/p1ppqp budget NaN free d1 n602 e2 e2a6 166 md1:ok md2:ok md3:ok mn1:d1 mn600:d1 mn2000:d1
+r3k2r/p1ppqp budget -1 free d1 n602 e2 e2a6 166 md1:ok md2:ok md3:ok mn1:d1 mn600:d1 mn2000:d1
+r3k2r/p1ppqp budget 0 free d1 n602 e2 e2a6 166 md1:ok md2:ok md3:ok mn1:d1 mn600:d1 mn2000:d1
+r3k2r/p1ppqp budget 1 free d1 n602 e2 e2a6 166 md1:ok md2:ok md3:ok mn1:d1 mn600:d1 mn2000:d1
+r3k2r/p1ppqp budget 2 free d1 n1626 e3 e2a6 166 md1:ok md1-NOT-IDENTICAL md2:ok md3:ok mn1:d1 mn600:d1 mn2000:d1
+r3k2r/p1ppqp budget 3 free d2 n2538 e4 e2a6 109 md1:ok md2:ok md3:ok mn1:d1 mn600:d1 mn2000:d2
+r3k2r/p1ppqp budget 5 free d2 n3674 e6 e2a6 109 md1:ok md2:ok md2-NOT-IDENTICAL md3:ok mn1:d1 mn600:d1 mn2000:d2
+== B4 maxNodes sweep: bound, discard identity, monotone, FEN restored, quiescence aborts ==
+r3k2r/p1ppqp mn 1 d1 n602 e2 e2a6 166 qAbort 0 fullAbort 0 n1 602
+r3k2r/p1ppqp mn 20000 d3 n20058 e23 e2a6 70 qAbort 1 fullAbort 0 n1 602
+r4rk1/1pp1qp mn 1 d1 n665 e2 g5e3 9 qAbort 0 fullAbort 0 n1 665
+r4rk1/1pp1qp mn 20000 d3 n20121 e23 c3d5 84 qAbort 1 fullAbort 0 n1 665
+rnbqkbnr/ppp mn 1 d1 n21 e2 e2e4 69 qAbort 0 fullAbort 0 n1 21
+SEARCH-DIFF rnbqkbnr/p d 2 d2 n117 e3 e2e4 0 search g1f3 0
+SEARCH-DIFF rnbqkbnr/p d 3 d3 n655 e4 e2e4 66 search b1c3 66
+SEARCH-DIFF rnbqkbnr/p d 3 d3 n1045 e5 e2e4 66 search b1c3 66
+SEARCH-DIFF rnbqkbnr/p d 3 d3 n1045 e5 e2e4 66 search b1c3 66
+SEARCH-DIFF rnbqkbnr/p d 3 d3 n1045 e5 e2e4 66 search b1c3 66
+SEARCH-DIFF rnbqkbnr/p d 4 d4 n2050 e6 e2e4 0 search b1c3 61
+SEARCH-DIFF rnbqkbnr/p d 4 d4 n3093 e8 e2e4 0 search b1c3 61
+SEARCH-DIFF rnbqkbnr/p d 4 d4 n4117 e9 e2e4 0 search b1c3 61
+SEARCH-DIFF rnbqkbnr/p d 4 d4 n6165 e11 e2e4 0 search b1c3 61
+SEARCH-DIFF rnbqkbnr/p d 4 d4 n8213 e13 e2e4 0 search b1c3 61
+rnbqkbnr/ppp mn 20000 d5 n20501 e26 g1f3 55 qAbort 0 fullAbort 1 n1 21
+SEARCH-DIFF rnbqkbnr/p d 6 d6 n65557 e71 d2d4 52 search e2e4 34
+SEARCH-DIFF rnbqkbnr/p d 6 d6 n90133 e95 d2d4 52 search e2e4 34
+8/2p5/3p4/KP mn 1 d1 n14 e2 b4f4 95 qAbort 0 fullAbort 0 n1 14
+8/2p5/3p4/KP mn 20000 d6 n20494 e27 b4f4 72 qAbort 0 fullAbort 1 n1 14
+r3k2r/Pppp1p mn 1 d1 n1484 e2 c4c5 -307 qAbort 0 fullAbort 0 n1 1484
+r3k2r/Pppp1p mn 20000 d5 n20940 e25 c4c5 -456 qAbort 1 fullAbort 0 n1 1484
+8/8/8/4k3/8/ mn 1 d1 n8 e2 e2e3 153 qAbort 0 fullAbort 0 n1 8
+SEARCH-DIFF 8/8/8/4k3/ d 5 d5 n2056 e8 e1d1 145 search e1f2 150
+SEARCH-DIFF 8/8/8/4k3/ d 6 d6 n3080 e10 e1f2 127 search e2e3 143
+SEARCH-DIFF 8/8/8/4k3/ d 7 d7 n4104 e12 e1f2 130 search e1f1 130
+SEARCH-DIFF 8/8/8/4k3/ d 7 d7 n6152 e14 e1f2 130 search e1f1 130
+SEARCH-DIFF 8/8/8/4k3/ d 8 d8 n8200 e17 e1f2 130 search e1f1 130
+SEARCH-DIFF 8/8/8/4k3/ d 8 d8 n12296 e21 e1f2 130 search e1f1 130
+SEARCH-DIFF 8/8/8/4k3/ d 8 d8 n20488 e29 e1f2 130 search e1f1 130
+8/8/8/4k3/8/ mn 20000 d8 n20488 e29 e1f2 130 qAbort 0 fullAbort 1 n1 8
+SEARCH-DIFF 8/8/8/4k3/ d 8 d8 n27656 e36 e1f2 130 search e1f1 130
+SEARCH-DIFF 8/8/8/4k3/ d 9 d9 n40968 e50 e1f1 127 search e1f1 130
+{"rows":102,"boundBad":0,"discardBad":0,"searchBad":21,"monoBad":0,"fenBad":0,"legalBad":0,"abortsInQuiescence":30,"abortsInFullWidth":48}

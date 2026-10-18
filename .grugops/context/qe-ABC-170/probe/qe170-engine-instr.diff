@@ -1,0 +1,25 @@
+--- src/engine.ts@64b07741
++++ src/qe170-engine-instr.ts
+@@ -221,11 +221,12 @@
+  * One node visited: count it, and every `NODES_PER_CLOCK_CHECK` nodes consult the clock. The
+  * abort check sits at the NODE — full-width and quiescence nodes alike — never at the iteration.
+  */
++export const QE = { inQ: false, abortInQ: 0, abortInFull: 0 };
+ function countNode(budget: Budget): void {
+   budget.nodes++;
+   if (budget.nodes >= budget.nextCheck) {
+     budget.nextCheck = budget.nodes + NODES_PER_CLOCK_CHECK;
+-    if (budget.now() >= budget.deadline || budget.nodes >= budget.maxNodes) throw ABORTED;
++    if (budget.now() >= budget.deadline || budget.nodes >= budget.maxNodes) { if (!QE.inQ) QE.abortInFull++; throw ABORTED; }
+   }
+ }
+ 
+@@ -483,7 +484,7 @@
+     nodes: 0,
+     // Disarmed for the first iteration: depth 1 always completes, so a move always exists.
+     nextCheck: Number.POSITIVE_INFINITY,
+-    visit: () => countNode(budget),
++    visit: () => { QE.inQ = true; try { countNode(budget); } catch (e) { if (e === ABORTED) QE.abortInQ++; throw e; } finally { QE.inQ = false; } },
+     killers: new KillerTable(),
+     keys: new BigUint64Array(KEY_ARRAY_CAPACITY + 1),
+     ...heuristics,
