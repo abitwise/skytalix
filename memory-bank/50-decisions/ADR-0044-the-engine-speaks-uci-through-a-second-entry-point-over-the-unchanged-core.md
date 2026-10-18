@@ -1,3 +1,7 @@
+---
+kind: adr
+id: ADR-0044
+---
 # ADR-0044: The engine speaks UCI as `skytalix`, a second entry point with a book, levels and `go depth`/`nodes`, and one small engine edit
 
 *The file name keeps its first slug ("over the unchanged core") so that existing references still
@@ -5,7 +9,14 @@ resolve. Since the 2026-10-18 revision that slug is no longer true: see § Revis
 
 ## Status
 
-**proposed** — 2026-10-18 by Architect/Design (task `wave-2026-09-25`, subtask `arch-engine-research`).
+**accepted** 2026-10-18 by Olger Oeselg (owner), verbatim "accept the revised ADR-0044 and EPIC-007" (note
+`.grugops/context/wave-2026-09-25/notes/20261018T113000Z-orchestrator-decision-owner-word-engine-private-adr0044-epic007-accepted-c3e81a57.md`).
+Owner menu: licence → private ("let's keep private for now"); Q14 → keep `npm run chess`; Q15 → moot
+("picked private"). It is accepted as revised, with D13 rewritten to private at acceptance (subtask
+`arch-adr0044-accept`). § Revision — private lists the changes. Tickets enter `Ready` on it only as far
+as `Ready`'s WIP limit allows.
+
+Previously **proposed** — 2026-10-18 by Architect/Design (task `wave-2026-09-25`, subtask `arch-engine-research`).
 **Revised 2026-10-18** by Architect/Design (subtask `arch-engine-revise`) against the owner's answers to
 Q1–Q11. It is still **proposed**. **The owner must accept the revision.** Nothing is built because of this
 ADR, and no ticket may enter `Ready` on it until he accepts it.
@@ -31,7 +42,8 @@ second `A4` check. It is still **proposed**. § Revision — licence lists the c
   - repo-fit map (what we have, what is missing) — `…/20261018T074300Z-architect-design-observation-repo-fit-map-what-uci-needs-against-what-src-has-7b2e4d18.md`;
   - the first hop's decision — `…/20261018T074400Z-architect-design-decision-adr-0044-proposed-uci-v1-shape-and-the-owner-questions-c5d07e91.md`;
   - this revision's decision and repo-fit facts — `.grugops/context/arch-engine-revise/notes/20261018T095000Z-architect-design-decision-adr-0044-revised-book-levels-go-limits-skytalix-artifact-gpl-e4a7c912.md`;
-  - the licence evaluation, with primary sources — `.grugops/context/arch-licence-eval/notes/20261018T101627Z-architect-design-decision-agpl-3-0-or-later-tables-credited-kit-files-stay-mit-15c4fd4e.md`.
+  - the licence evaluation, with primary sources — `.grugops/context/arch-licence-eval/notes/20261018T101627Z-architect-design-decision-agpl-3-0-or-later-tables-credited-kit-files-stay-mit-15c4fd4e.md`;
+  - the acceptance and the private D13 — `.grugops/context/arch-adr0044-accept/notes/20261018T103417Z-architect-design-decision-adr-0044-accepted-d13-private-unlicensed-tables-attributed-fe0a5538.md`.
 
 ## Revision — 2026-10-18 (the owner's answers to Q1–Q11)
 
@@ -55,6 +67,17 @@ second `A4` check. It is still **proposed**. § Revision — licence lists the c
 | L2 | Q13: **"rename yes"** | D8 and D13: the package, the repository and the terminal game become `skytalix`, delivered by `ABC-172`. The directory and remote rename is the owner's step. It supersedes R8's "not renamed". New **Q14** (`npm run chess`) |
 | L3 | BA/PM's finding, relayed by the Orchestrator | D12: the `A4` amendment touches **two** checks, not one. The second pins the deepening-loop header word for word |
 | L4 | consequence of L1 | New **Q15**: the owner confirms the licence findings and supplies the kit's MIT notice. It blocks `ABC-169` only |
+
+## Revision — private, 2026-10-18 (the owner's acceptance; subtask `arch-adr0044-accept`)
+
+| # | owner's answer or reading | what changed in this ADR |
+|---|---|---|
+| P1 | *"License: let's keep private for now"* | **D13 rewritten.** The engine is private, all rights reserved: `"private": true`, `"license": "UNLICENSED"`, no `LICENSE` file. It supersedes L1. The AGPL evaluation stays in D13 as a dated "considered, not chosen" record |
+| P2 | the four kit files | They keep their MIT notice. MIT permits use in a private repository |
+| P3 | the tables (the Orchestrator's default reading; the owner may correct it) | They stay as they are, with an attribution comment in the `src/evaluate.ts` header. Re-deriving our own values is a precondition for any distribution of the engine to third parties |
+| P4 | *"Q14: keep it"*; *"Q15: picked private"* | Q14 answered: `npm run chess` keeps its name. Q15 is moot |
+| P5 | consequence of P1 | The AGPL "Source" link advice (D13, evaluation item 4) is withdrawn |
+| P6 | consequence of P1 | `ABC-169` is re-scoped to declaring private (Consequences) |
 
 ## Context
 
@@ -403,19 +426,75 @@ that backend can run.
   - A value that is not a positive integer drops that token, with one `info string`.
   - `searchmoves` is ignored, with one `info string` (D6).
 
-### D13. Licence and name (Q8, Q9, Q12, Q13; revised 2026-10-18 by `arch-licence-eval`)
+### D13. Licence and name (Q8, Q9, Q12–Q15; rewritten to private on 2026-10-18 at acceptance, subtask `arch-adr0044-accept`)
 
-*This is a licence evaluation by an engineering role. It is not legal advice. The owner makes the final
+*This records the owner's licence decision. It was written by an engineering role and is not legal
+advice.* The owner's word is in the note
+`.grugops/context/wave-2026-09-25/notes/20261018T113000Z-orchestrator-decision-owner-word-engine-private-adr0044-epic007-accepted-c3e81a57.md`.
+
+- **Name (Q9, Q13, Q14).** `id name skytalix`, `id author Olger Oeselg`, and the `bin` is `skytalix`. The
+  owner answered Q13 *"rename yes"* (note `…6b2d90f1`). The npm package, the repository and the
+  terminal game's text become `skytalix`, delivered by ticket `ABC-172`. Renaming the repository
+  directory or a git remote is the owner's own step, because humans hold the repository. **Q14 is
+  answered: `npm run chess` keeps its name** (*"Q14: keep it"*).
+- **Licence: private, all rights reserved.** The owner's words: *"License: let's keep private for
+  now"*. This supersedes the GPL-3.0 reading (R7) and the `AGPL-3.0-or-later` evaluation (L1).
+  - `package.json` keeps `"private": true` and gains `"license": "UNLICENSED"`. That is npm's value for a
+    package that grants nobody the right to use it.
+  - The repository gets **no `LICENSE` file** and no `NOTICE` file.
+  - `ABC-169`, re-scoped to declaring private, makes the `package.json` edit and adds the comment
+    below. This ADR edits no file.
+  - "For now" is the owner's qualifier. Opening the licence later is a new owner decision. It reopens
+    this D13, and the evaluation kept below is where that starts.
+- **The four grugops kit files keep their MIT notice.** They are `reference-check.js`,
+  `test-skip-integrity.js`, `uat-spec-integrity.js` and `host-protection.js` in `tools/grugops/`. MIT
+  permits use in a private repository, so they stay MIT and are not relicensed.
+  - At `main` `50e081fc` none of the four carries the MIT text, and the installed kit ships no licence
+    file. So the exact notice is `UNKNOWN - verify`. Supplying it is the kit's job, and it blocks
+    nothing.
+  - The other seven files in `tools/grugops/` are this project's own work, and they are private like
+    `src/`.
+- **The Michniewski tables stay as they are.** These are `PIECE_VALUE` and the six piece-square tables
+  in `src/evaluate.ts`. `ABC-169` adds this attribution comment to that file's header:
+
+  > `PIECE_VALUE` and the six piece-square tables are the values of Tomasz Michniewski's "Simplified
+  > Evaluation Function", first posted to the Polish chess-programming list progszach and published at
+  > <https://www.chessprogramming.org/Simplified_Evaluation_Function> under CC BY-SA 3.0
+  > (<https://creativecommons.org/licenses/by-sa/3.0/>). The values are unchanged. The layout, the king
+  > value of 0 and all code are ours.
+
+  - **Why that is enough while the engine is private.** This is the Orchestrator's default reading,
+    because the owner said nothing about the tables, and the owner may correct it. The engine is not
+    distributed. It runs on the owner's own machine or backend, as a child process over stdio. So it
+    does not share the CC BY-SA material. Whether a web player's moves reaching the engine could count
+    as sharing is `UNKNOWN - verify`.
+  - **A precondition for any distribution to third parties: re-derive our own values first.**
+    Distribution means that a copy of the engine reaches someone other than the owner. Examples are a
+    browser or Worker bundle, a published binary, `npm publish`, and a `dist/` or a clone handed to
+    someone else. Re-deriving re-tunes the engine and moves the evaluation, puzzle and level pins. So it
+    is its own ticket, and that ticket is cut only on the owner's word.
+- **The CC0 and public-domain parts need nothing.** The opening book, `seededRandom` (mulberry32) and
+  `splitmix64` stay as they are. `data/opening-book/ATTRIBUTION.md` already records the book's
+  provenance. Item 3 of the evaluation below has the terms.
+- **Withdrawn: the AGPL "Source" link advice.** Item 4 of the evaluation below advised a "Source" link
+  on the web UI's about page, pointing to a public copy of `skytalix`. That advice served AGPL § 13
+  only. A private engine offers no source, so the web UI carries no such link.
+- **The web project's licence is its own.** It spawns `skytalix` over stdio (D8) and does not bundle it.
+  A bundle would be a distribution, and the precondition above would apply.
+
+#### Considered, not chosen: the `AGPL-3.0-or-later` evaluation (2026-10-18, subtask `arch-licence-eval`)
+
+*This is kept as a dated record. The owner chose private on 2026-10-18 (note `…c3e81a57`), so nothing in
+this subsection binds. Where it says that `ABC-169` adds a `LICENSE`, a `NOTICE`, an AGPL identifier or
+a kit MIT notice, that no longer holds. Its "Source" link advice (item 4) is withdrawn. It is the starting
+point if the owner later opens the licence.*
+
+*This was a licence evaluation by an engineering role. It is not legal advice. The owner makes the final
 call, and any conclusion marked `UNKNOWN - verify` needs a lawyer or the rights holder to settle it.*
 The evidence, with primary sources, is in the note
 `.grugops/context/arch-licence-eval/notes/20261018T101627Z-architect-design-decision-agpl-3-0-or-later-tables-credited-kit-files-stay-mit-15c4fd4e.md`.
 
-- **Name (Q9, Q13).** `id name skytalix`, `id author Olger Oeselg`, and the `bin` is `skytalix`. The
-  owner answered Q13 *"rename yes"* (note `…6b2d90f1`). The npm package, the repository and the
-  terminal game's text become `skytalix`, delivered by ticket `ABC-172`. Renaming the repository
-  directory or a git remote is the owner's own step, because humans hold the repository. Whether
-  `npm run chess` keeps its script name is open as **Q14**. The default is to keep it.
-- **Licence (Q8 superseded by Q12).** **`AGPL-3.0-or-later`** for the whole repository. The only
+- **Licence (Q8 superseded by Q12), as evaluated.** **`AGPL-3.0-or-later`** for the whole repository. The only
   exceptions are the grugops kit's files, which stay MIT (item 2 below). The owner's words: *"AGPL v3
   if possible"*. The evaluation finds it possible. `ABC-169` adds the `LICENSE` text,
   `"license": "AGPL-3.0-or-later"` in `package.json`, and the `NOTICE` file below. No `LICENSE` file
@@ -514,7 +593,8 @@ Estonia. All three items have a fallback (CC0 § 3, or Vigna's permission senten
   stdio. The FSF's FAQ: *"pipes, sockets and command-line arguments are communication mechanisms
   normally used between two separate programs"*. It is reached only if the two are combined into one
   program. A JavaScript import of the engine, or a Worker bundle built from `src/`, would do that.
-- **Plain-language consequence for the owner.** Your web project can use any licence, as long as it
+- **Plain-language consequence for the owner.** *(The "Source" link advice in this bullet is withdrawn,
+  2026-10-18: the engine is private.)* Your web project can use any licence, as long as it
   only spawns the engine. For your own engine code you owe nothing under § 13. The only possible duty
   comes through the tables, and only under the unlikely reading above. Close it with one habit: put a
   "Source" link on the web UI's about page. It points to a public copy of the exact `skytalix` version
@@ -580,8 +660,9 @@ That matters only if someone chooses v4, and the owner, as copyright holder, can
     `R3` does not fire.
   - **`src/engine.ts` is edited** (D12): two optional fields. **The "core unchanged" claim of the first
     version is withdrawn** for this file only.
-  - Config: `tsconfig.build.json` (new); `package.json` `build`, `uci` and `bin`; `LICENSE`, `NOTICE`,
-    `"license": "AGPL-3.0-or-later"`, the kit's MIT notice and the `src/evaluate.ts` credit (`ABC-169`).
+  - Config: `tsconfig.build.json` (new); `package.json` `build`, `uci` and `bin`; `"license": "UNLICENSED"`
+    and the `src/evaluate.ts` attribution comment (`ABC-169`, re-scoped to declaring private). There is
+    no `LICENSE` file and no `NOTICE` file (D13).
 - **Gates.**
   - The ticket that builds `src/uci.ts` fires `ADR-0036` (b1) (`process.`, `node:readline`, and the
     import of the capability holder `book-file.ts`) and routes through `In Security/NFR`.
@@ -591,7 +672,7 @@ That matters only if someone chooses v4, and the owner, as copyright holder, can
   - The `build` gate now emits `dist/` (D8).
 - **For BA/PM's plan (a suggestion, not a ticket cut):** the engine edit fits its own XS ticket ahead of
   the session ticket, because it is a core module with its own pins. The build line and `bin` fit with
-  the entry-point ticket (`ABC-168`). `ABC-169` (licence) enters v1, gated by Q15. The rename is
+  the entry-point ticket (`ABC-168`). `ABC-169` (declaring private) enters v1. Q15 is moot. The rename is
   `ABC-172`.
 - **NFRs** (the catalog is **not** edited by this proposal; Security/NFR places rows at acceptance):
   - `NFR-004` binds the UCI entry point unchanged, held by the existing clamp. D12 only shortens.
@@ -622,7 +703,8 @@ That matters only if someone chooses v4, and the owner, as copyright holder, can
 - **Docs owed at build time:** `npm run uci` and the new `npm run build` meaning in `AGENTS.md`
   § Commands (the Scribe), and `memory-bank/30-architecture.md`.
 - **Distribution is unchanged** (`ADR-0018`): a clone, built locally. Publishing, or a single executable,
-  is that ADR's revisit trigger, and neither is decided here.
+  is that ADR's revisit trigger, and neither is decided here. Any distribution of the engine to third
+  parties also needs our own evaluation values first (D13).
 
 ## Rollback
 
@@ -656,8 +738,17 @@ That matters only if someone chooses v4, and the owner, as copyright holder, can
 
 | # | question | answer | where it landed |
 |---|---|---|---|
-| Q12 | The licence's scope | **AGPL v3 "if possible"**; the kit is MIT; evaluate the tables | D13 (evaluated: possible) |
+| Q12 | The licence's scope | **AGPL v3 "if possible"**; the kit is MIT; evaluate the tables. *Superseded by `…c3e81a57`: private* | D13 (evaluated: possible; not chosen) |
 | Q13 | Rename to `skytalix`? | **yes** | D8, D13, `ABC-172` |
+
+### Answered on 2026-10-18 at acceptance (the Orchestrator's note `…c3e81a57`)
+
+| # | question | answer | where it landed |
+|---|---|---|---|
+| Q12 | The licence's scope | **private, all rights reserved** (*"let's keep private for now"*). It supersedes AGPL v3. The kit files stay MIT, and the tables stay as they are with an attribution comment | D13 |
+| Q13 | Rename to `skytalix`? | **yes**, unchanged | D8, D13, `ABC-172` |
+| Q14 | Does `npm run chess` keep its name? | **keep it** | D13 |
+| Q15 | The licence findings | **moot** (*"picked private"*). (a) the tables stay, and re-deriving is a precondition for distribution; (b) the kit supplies the MIT notice text, and it blocks nothing; (c) no AGPL variant | D13 |
 
 ### Raised by the first revision (now answered above; kept for the record)
 
@@ -675,7 +766,7 @@ That matters only if someone chooses v4, and the owner, as copyright holder, can
   as is for v1.** A rename touches `AGENTS.md`, `ADR-0018`'s clone instructions and every `npm run chess`
   reference, and buys the engine nothing.
 
-### New, raised by the licence revision (kept to two)
+### Raised by the licence revision (now answered above; kept for the record)
 
 - **Q14. `npm run chess`.** Does the script keep its name after the rename? **Default: keep it.** It is a
   command, not a brand, and renaming it touches `AGENTS.md` and the `cli.test.ts` script pins.
