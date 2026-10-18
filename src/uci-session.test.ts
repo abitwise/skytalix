@@ -201,22 +201,31 @@ describe("ABC-167 A5 — the D4 time rule, read from the info line's time", () =
     });
   }
 
-  /** QE-167-b/c: G below the 3 000 ms cap, step 1, bound G <= time <= G + 2. */
-  const pinned: ReadonlyArray<readonly [string, string, string, number]> = [
-    ["A5-b1", "position startpos", "go wtime 2000 btime 2000 winc 1000 binc 0", 600],
-    ["A5-b2", "position startpos moves e2e4", "go wtime 2000 btime 2000 winc 1000 binc 0", 100],
-    ["A5-b3", "position startpos", "go wtime 1000 btime 1000 movestogo 5", 200],
-    ["A5-b4", "position startpos", "go wtime 1000 btime 1000 movetime 300", 300],
-    ["A5-b5", "position startpos", "go movetime 300 wtime 60000 btime 60000", 300],
-    ["A5-c1", "position startpos", "go wtime 100 btime 100 winc 1000 binc 1000", 50],
+  /**
+   * QE-167-b/c, steps per bapm-amend2-ABC-167: the coarsest step s in {1, 10, 100} for which
+   * every wrong build the row names (G = W) falls outside G <= time <= G + 2s, i.e. |W - G| > 2s.
+   */
+  const pinned: ReadonlyArray<readonly [string, string, string, number, number]> = [
+    ["A5-b1", "position startpos", "go wtime 2000 btime 2000 winc 1000 binc 0", 600, 100],
+    [
+      "A5-b2",
+      "position startpos moves e2e4",
+      "go wtime 2000 btime 2000 winc 1000 binc 0",
+      100,
+      100,
+    ],
+    ["A5-b3", "position startpos", "go wtime 1000 btime 1000 movestogo 5", 200, 10],
+    ["A5-b4", "position startpos", "go wtime 1000 btime 1000 movetime 300", 300, 100],
+    ["A5-b5", "position startpos", "go movetime 300 wtime 60000 btime 60000", 300, 100],
+    ["A5-c1", "position startpos", "go wtime 100 btime 100 winc 1000 binc 1000", 50, 10],
   ];
-  for (const [row, position, go, budget] of pinned) {
-    it(`${row}: ${position}, ${go} -> ${budget} ms (within 2 x 1 ms)`, () => {
-      const { out } = talk([position, go], 1);
+  for (const [row, position, go, budget, step] of pinned) {
+    it(`${row}: ${position}, ${go} -> ${budget} ms (within 2 x ${step} ms)`, () => {
+      const { out } = talk([position, go], step);
       expect(out).toHaveLength(2);
       const { time } = parseInfo(out[0]);
       expect(time).toBeGreaterThanOrEqual(budget);
-      expect(time).toBeLessThanOrEqual(budget + 2);
+      expect(time).toBeLessThanOrEqual(budget + 2 * step);
     });
   }
 });
@@ -393,8 +402,8 @@ describe("ABC-167 A7 — the D12 limits", () => {
   }
 
   it("A7-f1: a keyword is never a value (go depth movetime 100)", () => {
-    const { perLine } = talk(["position startpos", "go depth movetime 100"], 1);
-    expect(expectWarnedSearch(perLine[1], 100, 102)).toContain("depth");
+    const { perLine } = talk(["position startpos", "go depth movetime 100"], 100);
+    expect(expectWarnedSearch(perLine[1], 100, 100 + 2 * 100)).toContain("depth");
   });
 
   it("A7-f2: go movetime with no value searches as a bare go", () => {
@@ -403,14 +412,15 @@ describe("ABC-167 A7 — the D12 limits", () => {
   });
 
   it("A7-f3: go movetime 1e2 and movestogo 0 are dropped with one info string", () => {
-    expectWarnedSearch(talk(["position startpos", "go movetime 1e2"], 1).perLine[1], 3_000, 3_002);
-    const { perLine } = talk(["position startpos", "go wtime 1000 btime 1000 movestogo 0"], 1);
-    expectWarnedSearch(perLine[1], 50, 52);
+    const bare = talk(["position startpos", "go movetime 1e2"], 100).perLine[1];
+    expectWarnedSearch(bare, 3_000, 3_000 + 2 * 100);
+    const { perLine } = talk(["position startpos", "go wtime 1000 btime 1000 movestogo 0"], 100);
+    expectWarnedSearch(perLine[1], 50, 50 + 2 * 100);
   });
 
   it("A7-h1: searchmoves stops at the next go keyword, so movetime is honoured", () => {
-    const { perLine } = talk(["position startpos", "go searchmoves e2e4 d2d4 movetime 100"], 1);
-    expectWarnedSearch(perLine[1], 100, 102);
+    const { perLine } = talk(["position startpos", "go searchmoves e2e4 d2d4 movetime 100"], 100);
+    expectWarnedSearch(perLine[1], 100, 100 + 2 * 100);
   });
 });
 
