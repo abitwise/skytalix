@@ -350,6 +350,13 @@ was in progress in the same worktree. Every figure below is Security/NFR's recor
    directly and **never through `npm test`**: that script's 60 s bound (`ABC-122`, `run-bounded.js`) would
    end it. This is the harness as `ABC-085` built it. `src/ladder.test.ts` already accepts
    `LADDER_DEEP=verdict` (`stepForMode`) and plays `ladderPlan`'s order, 3v4 and 4v5 first.
+   - **Noted 2026-10-19 (`arch-ABC-166-a5`, records only, no decision changes):** run it with
+     `--reporter=verbose`, as `LADDER_DEEP=verdict npx vitest run src/ladder.test.ts --reporter=verbose`.
+     vitest 4.1.11's default reporter drops a passing test's `console.log`, so run 1 (`d73c4d6c`) passed
+     17/17 with no `LADDER` line and no score (`…75f37904`). The flag changes output only, so the same games
+     are played. A re-take under the staleness rule uses this form.
+   - **Executed 2026-10-19:** run 2 used this form and is the route's reading (`ABC-146` `A5`,
+     `.grugops/context/abc146-verdict/notes/…4c1d8e27`, commit `e68a4327`).
 2. **Route N's code move is not built.** The first addendum's item 1 (the move to `tools/ladder/`, the `node`
    entry, the two include globs and the refusal of `LADDER_DEEP=verdict` under vitest) is not built. Its
    item 2 (the equivalence check between runners) is moot, because only one runner plays the games.
