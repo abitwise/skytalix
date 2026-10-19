@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — `ABC-173` delivered (`840ebbf7`) → In Review; `qe-ABC-173` dispatched (A9 + N8-LANE only in a quiet window). In flight: `uat-ABC-171`, `qe-ABC-173`._
 _Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — owner word (`…2b7f4c88`): R-171-1 ACCEPTED; ABC-171 UAT by QE → `uat-ABC-171` dispatched. In flight: `ticket-to-pr-ABC-173` (resumed), `uat-ABC-171`._
 _Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — `secnfr-ABC-171` PASS_WITH_RISKS → `ABC-171` Ready for UAT. Owner owed: R-171-1 (merge with N8-LANE owed) and ABC-171 UAT route. In flight: `ticket-to-pr-ABC-173` (resumed)._
 _Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — `ticket-to-pr-ABC-173` STOPPED at A7 (`affee860`): both coverage lanes red on first capped run (3 × 5 s timeouts in ABC-170 A3 / ABC-167 A5, no OOM), green 2/2 on re-run. Owner word (`…6e1d9b47`): lighten the rows, keep the cap. SE resumed on the branch. In flight: `ticket-to-pr-ABC-173` (resumed), `secnfr-ABC-171`._
@@ -863,8 +864,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-173] Cap this repo's vitest at 2 busy executors and a 2048 MiB summed heap limit, in every AGENTS.md lane  (owner: BA/PM, size: S, priority: P1, epic: —, since: 2026-10-19, DoR 9/10; cut in `bapm-cut-ABC-173` (`5e9a1214`) from owner word `…c4a8e1f6`. Waits: owner Q1–Q4; ADR-0008 addendum (Architect) before SE.) **2026-10-19: owner answered Q1–Q4 (`…e7d2a915`): Σ heap ≤ 2048 MiB; 2 executors one core each; all lanes; ask on breach. Architect `arch-ABC-173-adr0008` dispatched.** **2026-10-19: ADR-0008 addendum ACCEPTED (`…9f3b6e20`) → DoR 10/10 → In Development; SE `ticket-to-pr-ABC-173` dispatched.**
+## In Development (WIP 0/3)
 
 
 
@@ -892,7 +892,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-173] Cap this repo's vitest at 2 busy executors and a 2048 MiB summed heap limit, in every AGENTS.md lane  (owner: BA/PM, size: S, priority: P1, epic: —, since: 2026-10-19, DoR 9/10; cut in `bapm-cut-ABC-173` (`5e9a1214`) from owner word `…c4a8e1f6`. Waits: owner Q1–Q4; ADR-0008 addendum (Architect) before SE.) **2026-10-19: owner answered Q1–Q4 (`…e7d2a915`): Σ heap ≤ 2048 MiB; 2 executors one core each; all lanes; ask on breach. Architect `arch-ABC-173-adr0008` dispatched.** **2026-10-19: ADR-0008 addendum ACCEPTED (`…9f3b6e20`) → DoR 10/10 → In Development; SE `ticket-to-pr-ABC-173` dispatched.** **2026-10-19: delivered `840ebbf7` (every lane green as spelled incl. coverage ×2; 11 armed reds; max live workers 4; no OOM; ABC-170 A3 step 1→5 and ABC-167 A5 movetime 100 step 1→10 on owner word; 0 production lines) → In Review; QE dispatched.**
 
 
 
