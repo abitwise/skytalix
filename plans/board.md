@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — `qe2-ABC-171` PASS (`5dee231c`) → `ABC-171` In Security/NFR; `secnfr-ABC-171` dispatched. New INFO QE2-171-g → ABC-174 (A8 pin line drift). In flight: `ticket-to-pr-ABC-173`, `secnfr-ABC-171`._
 _Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — owner accepted the ADR-0008 addendum (`…9f3b6e20`; two sizes, every run) → `ABC-173` In Development, SE `ticket-to-pr-ABC-173` dispatched. ABC-171 rows done (`5dee231c`) → `qe2-ABC-171` dispatched. In flight: `ticket-to-pr-ABC-173`, `qe2-ABC-171`._
 _Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — `bapm-adr0045-cut` merged (records only; gates green 59/1915): ADR-0045 ACCEPTED + folds; ABC-174, ABC-175 → Backlog (DoR 10/10); ABC-171 A8 reworded + A13a–d. **A0 is already stale on main** (package.json, engine.ts, evaluate.ts since eb216351) → a width-1 A0 re-take is owed before ABC-175. Recommended order: ABC-171 → ABC-173 → ABC-174 → QE → A0 re-take → ABC-175 → ABC-174 UAT. Next free id: ABC-176. In flight: `arch-ABC-173-adr0008`._
 _Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — owner word (`…1a9c7f42`): ADR-0045 ACCEPTED (default → level 5; rates 0.1/0.05 at 3/4); verdict re-take before ABC-174 UAT; add QE-171-a..d rows. BA/PM `bapm-adr0045-cut` dispatched (ADR status + folds, cut ABC-174/175, amend ABC-171 A8). In flight: `arch-ABC-173-adr0008`, `bapm-adr0045-cut`._
@@ -888,8 +889,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
-- [ABC-171] UCI session offers `OwnBook` and `Skill Level` 1–5  (owner: BA/PM, size: S, priority: P1, epic: EPIC-007, since: 2026-10-18, DoR 10/10. Waits: after ABC-167.) **2026-10-19: owner word "pull ABC-171" → In Development; SE `ticket-to-pr-ABC-171` dispatched.** **2026-10-19: delivered `9ae31679` (code `b6afd021`), A1–A12 MET, 59/1945; N8-LANE owed → In Review; QE dispatched.** **2026-10-19: `qe-ABC-171` PASS_WITH_GAPS (A1–A12 MET; 94 mutants 73/21; 59/1945; NFR-004 max 4 600 virtual ms; N8-LANE OWED); QE-171-a..d LOW (one row each), -e INFO → ABC-168, -f INFO. Owner owed: add rows or accept.** **2026-10-19: rows hop `5dee231c` (A8, A13a–d; 7/7 mutants killed; 59/1962) → `qe2-ABC-171` dispatched.**
+## In Review (WIP 0/3)
 
 
 
@@ -913,7 +913,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Security/NFR (WIP 0/2)
+## In Security/NFR (WIP 1/2)
+- [ABC-171] UCI session offers `OwnBook` and `Skill Level` 1–5  (owner: BA/PM, size: S, priority: P1, epic: EPIC-007, since: 2026-10-18, DoR 10/10. Waits: after ABC-167.) **2026-10-19: owner word "pull ABC-171" → In Development; SE `ticket-to-pr-ABC-171` dispatched.** **2026-10-19: delivered `9ae31679` (code `b6afd021`), A1–A12 MET, 59/1945; N8-LANE owed → In Review; QE dispatched.** **2026-10-19: `qe-ABC-171` PASS_WITH_GAPS (A1–A12 MET; 94 mutants 73/21; 59/1945; NFR-004 max 4 600 virtual ms; N8-LANE OWED); QE-171-a..d LOW (one row each), -e INFO → ABC-168, -f INFO. Owner owed: add rows or accept.** **2026-10-19: rows hop `5dee231c` (A8, A13a–d; 7/7 mutants killed; 59/1962) → `qe2-ABC-171` dispatched.** **2026-10-19: `qe2-ABC-171` PASS (QE-171-a..d CLOSED, -e/-f ACCEPTED; 94 mutants 80/14, all ruled; 59/1962; N8-LANE OWED) → In Security/NFR; `secnfr-ABC-171` dispatched.**
 
 
 

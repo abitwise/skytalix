@@ -1,0 +1,47 @@
+{
+ "host": "MacBook-Air.local",
+ "start": "2026-10-19T12:41:50.136Z",
+ "secs": 180,
+ "polls": 181,
+ "foreignPolls": 181,
+ "kinds": {
+  "platform": 362,
+  "vitest": 160,
+  "grugops-kit": 18
+ },
+ "firstForeign": [
+  {
+   "at": "0",
+   "lines": [
+    "40997 /opt/homebrew/Cellar/node/26.11.1/bin/node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/product-template/template/dist/main-worker.js",
+    "50110 /opt/homebrew/Cellar/node/26.11.1/bin/node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/product-template/template/dist/main-worker.js",
+    "67641 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792231794650-h7eh23.sh 2>/dev/null || true && shopt -u extglob "
+   ]
+  },
+  {
+   "at": "1",
+   "lines": [
+    "40997 /opt/homebrew/Cellar/node/26.11.1/bin/node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/product-template/template/dist/main-worker.js",
+    "50110 /opt/homebrew/Cellar/node/26.11.1/bin/node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/product-template/template/dist/main-worker.js"
+   ]
+  }
+ ],
+ "lastForeign": {
+  "at": "180",
+  "lines": [
+   "40997 /opt/homebrew/Cellar/node/26.11.1/bin/node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/product-template/template/dist/main-worker.js",
+   "50110 /opt/homebrew/Cellar/node/26.11.1/bin/node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/product-template/template/dist/main-worker.js",
+   "79257 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791887893172-wwcykn.sh 2>/dev/null || true && shopt -u extglob ",
+   "79272 npm exec vitest run --exclude **/scripts/e2e/** --reporter=json --outputFile=/var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T//grugops-261019-ktd/after.js",
+   "79306 node /Users/olgeroeselg/Projects/public/grugops/node_modules/.bin/vitest run --exclude **/scripts/e2e/** --reporter=json --outputFile=/var/folders/y3/c2tx",
+   "79368 /opt/homebrew/Cellar/node/26.11.1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/public/grugops/node_modules/vitest/sup",
+   "79436 node /Users/olgeroeselg/Projects/public/grugops/scripts/check-diff-disposition.js"
+  ]
+ },
+ "load1": {
+  "first": "5.58",
+  "min": "3.67",
+  "max": "6.41",
+  "last": "3.67"
+ }
+}
