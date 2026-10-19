@@ -6,11 +6,36 @@ id: ADR-0045
 
 ## Status
 
-**proposed** 2026-10-19 by Architect/Design (task `wave-2026-09-25`, subtask `arch-levels-recut`). The owner's word of
+**accepted** 2026-10-19 by Olger Oeselg (owner), as proposed. The owner's menu answers, verbatim (note
+`.grugops/context/wave-2026-09-25/notes/20261019T130500Z-orchestrator-decision-owner-word-adr0045-accepted-q1-q3-abc171-rows-1a9c7f42.md`,
+a transcription, not a stamp):
+- **Q1:** "Default = level 5 (Recommended)". D1 and D2 stand. This overturns `ABC-101` ruling 2, which was his to
+  overturn.
+- **Q2:** "Yes, 0.1 / 0.05 (Recommended)". The rates at levels 3 and 4 stand.
+- **Q3:** "Verdict before UAT; add rows (Recommended)". D6.4's recommended tree stands: the re-take runs on the build's
+  QE-passed branch, overnight at width 1, before his UAT word.
+
+Recorded by BA/PM (task `wave-2026-09-25`, subtask `bapm-adr0045-cut`). This hop ran nothing and timed nothing.
+
+- **Id correction (fold line).** `ABC-173` was already taken when this ADR was written: it is the vitest cap ticket
+  (owner word `…c4a8e1f6`). **Every `ABC-173` in this ADR that names the re-cut build reads `ABC-174`.** The re-take
+  of D6 is its own `XS` ticket, **`ABC-175`**. The body below is kept as written.
+- **Folds made at acceptance (BA/PM, 2026-10-19):** `ABC-087` `A1`; `ABC-101` ruling 2, `A2` and `A8′`;
+  `ADR-0044` D11's `default 3` (and D3's option line); and an `ABC-085` § Dependencies line marking the 2026-10-19
+  verdict STALE on `ABC-174`'s merge. Each page carries a dated fold line. The folds are records. The code they
+  describe changes only at `ABC-174`'s merge.
+- **Routed, not edited here:**
+  - `AGENTS.md` line 59 ("level 3 (≤3 s/move)") → **the Scribe**, within the 24 576 B budget, landing with
+    `ABC-174`;
+  - the `plans/nfr-catalog.md` `NFR-004` lines that name the old table: `AR-NFR004-A`'s "level 3 =
+    `DEFAULT_BUDGET_MS`" (now level 5), and `:1364`'s "Levels 4 and 5 (4 000 / 4 500 ms)" (now 1 000 / 0.05 and
+    3 000 / 0, and the hardest level of `ABC-087` `A5` reads at 3 000 ms) → **Security/NFR**, at `ABC-174`'s gate.
+
+Previously **proposed** 2026-10-19 by Architect/Design (task `wave-2026-09-25`, subtask `arch-levels-recut`). The owner's word of
 2026-10-19 asked for it: ADR-0038 owner menu (b), *"Re-cut the levels (Recommended)"* (note
 `.grugops/context/wave-2026-09-25/notes/20261019T111500Z-orchestrator-decision-owner-word-abc087-recut-levels-b2e6d4a9.md`).
-**Owner acceptance owed.** No agent moves an ADR to `accepted`. Nothing is built because of this ADR until it is
-accepted and BA/PM cuts `ABC-173` (§ Consequences).
+~~**Owner acceptance owed.** No agent moves an ADR to `accepted`. Nothing is built because of this ADR until it is
+accepted and BA/PM cuts `ABC-173` (§ Consequences).~~ *(Met 2026-10-19: accepted above; the build is `ABC-174`.)*
 
 - **What it amends on acceptance, each named:**
   - `ABC-101` ruling 2, "the default is `3` — the middle, NOT the strongest". The page reserves this to the

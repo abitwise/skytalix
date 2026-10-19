@@ -52,6 +52,12 @@ feature: —
 > p(1−q)/(1−pq). The levels 3/4/5 risk is named on `ABC-085`. **DoR 10/10, unchanged.** What the
 > Engineer re-runs is in § Delivery. Reasoning: `.grugops/context/rule-abc087-cost/notes/`.
 
+> **Folded 2026-10-19 by BA/PM** (task `wave-2026-09-25`, subtask `bapm-adr0045-cut`) from `ADR-0045`, **accepted by
+> the owner 2026-10-19** (note `…1a9c7f42`, Q1 "Default = level 5"). **`A1`'s vocabulary moves: default = `5`,
+> which is also hardest.** The table's values move with it (`ADR-0045` D1). The mechanism this page delivered is
+> unchanged (`ADR-0045` D3), and `A6` holds as written, because `LEVELS[5]` is `{ 3000, 0 }`. This ticket stays
+> `Done`. The change is built by **`ABC-174`**. Until `ABC-174` merges, the merged code still reads default = `3`.
+
 ## Problem
 
 *User*: the beginner who loses every game, and the club player who wins every game.
@@ -137,8 +143,10 @@ decided there or here)*:
   level table with **≥ 3** entries, each carrying a budget and a blunder rate, and with **default**,
   **easiest** and **hardest** identified by name. *(Vocabulary fixed 2026-10-10.)* The table is
   keyed by the ordinals `ABC-101` publishes: **integers `1`–`5`, weakest to strongest**. **easiest =
-  `1`, default = `3`, hardest = `5`.** `EPIC-006` reads the table by those integers and attaches no
-  meaning to them (`ABC-101`, `RISK-002`).
+  `1`, ~~default = `3`~~, hardest = `5`.** `EPIC-006` reads the table by those integers and attaches no
+  meaning to them (`ABC-101`, `RISK-002`). *(Folded 2026-10-19, `ADR-0045` D2, accepted: **default = `5`**, which is
+  the hardest, so easiest = `1` and default = hardest = `5`. `LEVELS[DEFAULT_LEVEL]` is still
+  `{ DEFAULT_BUDGET_MS, 0 }`, so `A6` is unchanged. In force from `ABC-174`'s merge.)*
 - **`A2` (the budget reaches the engine).** **Given** each level, **when** a move is requested,
   **then** the wall clock used matches that level's budget within **±20%**, and **no level ever
   exceeds 5 s** (`NFR-004`). *(Folded 2026-10-10, `ADR-0032`.)* The runs include **at least one blunder move at

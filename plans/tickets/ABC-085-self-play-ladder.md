@@ -189,6 +189,14 @@ at least 90%."*
   - **Staleness rule.** A verdict is **STALE** after any merge that touches `PUZZLE_DEEP`'s engine
     trigger list, `src/levels.ts` or `src/virtual-clock.ts`. Re-taking it is the Orchestrator's to
     schedule. **It is not a gate on that merge.**
+    - **The 2026-10-19 verdict goes STALE on `ABC-174`'s merge** *(folded 2026-10-19 by BA/PM, subtask
+      `bapm-adr0045-cut`, from `ADR-0045`, accepted, note `…1a9c7f42`)*. The verdict is `ABC-146` § `A5` reading
+      2026-10-19: run 2 at `d73c4d6c`, with `A1` 1v5 100/100 MET and `A2` 3v4 6.5/20 RED, 4v5 10/20 RED, 2v3 20/20 MET
+      and 1v2 18/20 MET (`.grugops/context/abc146-verdict/notes/…4c1d8e27`). `ABC-174` edits `src/levels.ts`, which is on
+      this rule's list, and every pair contains a changed level (`ADR-0045` D6.1). So **no figure of that reading
+      is quoted for the new table, and no pair carries over.** The re-take is **`ABC-175`**: the full 180 games on
+      `ABC-174`'s QE-passed branch before the owner's UAT word (owner Q3). Until `ABC-174` merges, the reading
+      describes `main`'s table as it stands.
   - **Split trigger, pre-registered.** Suppose the build passes QE on `A3`–`A6` (short mode) while
     `ABC-083` is still unmerged. Then the Orchestrator may split `A1`/`A2`'s verdict run into its own
     `XS` ticket: the run plus the report, at step 4, on the tree decision 6 names. This ticket then

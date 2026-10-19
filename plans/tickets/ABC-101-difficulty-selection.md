@@ -20,6 +20,11 @@ feature: —
 > plus a blunder rate"*). `EPIC-004` is being decomposed in parallel; **it is depended on BY NAME AND
 > BY BEHAVIOUR below and by no ticket id**, because its ids do not exist yet and a guessed id is
 > worse than an unresolved one.
+>
+> **Folded 2026-10-19 by BA/PM** (task `wave-2026-09-25`, subtask `bapm-adr0045-cut`). **The owner overturned ruling 2**
+> by accepting `ADR-0045` (note `…1a9c7f42`, Q1 "Default = level 5 (Recommended)"). The default is now `5`, the
+> top, and it plays as the old default did (`LEVELS[5]` = `{ 3000, 0 }`). Ruling 2, `A2` and `A8′` carry dated fold
+> lines. The flag, the set `1`–`5`, ruling 3 and the boundary are unchanged. The code and pins move with **`ABC-174`**.
 
 ## Problem
 
@@ -64,12 +69,17 @@ that does it.
    valid, so the set contains at least three and is numeric. Five gives a beginner rung, a club rung
    and three between. **Cheap to change** — the criteria below read the set off one exported
    constant, so moving to 3 or 8 edits one array and no test.
-2. **The default, when the flag is absent, is `3` — the middle, NOT the strongest.** Read off
+2. ***OVERTURNED 2026-10-19 by the owner (fold below).*** ~~**The default, when the flag is absent, is `3` — the
+   middle, NOT the strongest.**~~ Read off
    `NFR-004` rather than preferred: it bars *"≤ 3 s at **default** difficulty; hard ceiling **5 s** at
    **any** difficulty"*. **Two different bars have content only if some level is slower than the
    default**, so the default cannot be the maximum. *(The counter-argument, recorded: `EPIC-004`'s
    user value calls club strength the product, which argues for defaulting to the top. It loses to a
-   ratified NFR row, and it is the owner's to overturn.)*
+   ratified NFR row, and it is the owner's to overturn.)* *(Folded 2026-10-19: `ADR-0045` accepted, note
+   `…1a9c7f42`, Q1. **The default, when the flag is absent, is `5`, the strongest.** It is still the shipped engine at 3 s
+   (`LEVELS[5]` = `{ DEFAULT_BUDGET_MS, 0 }`). The ruling's reason no longer holds on the new table: `NFR-004`'s 3 s
+   bar binds the default and its 5 s bar binds the engine's clamp, which applies whatever a caller passes
+   (`ADR-0045` D2). The recorded counter-argument ("club strength is the product") is the one taken.)*
 3. **The level is fixed for the session.** Chosen once at startup, never changed mid-game; there is
    **no `difficulty` session command** and none is cut. *(A mid-session change would mean the engine's
    strength changes between two plies of one game, which no epic asks for — coding rule 5.)*
@@ -130,10 +140,12 @@ guessed here in any form.**
   runs, **then** both return `ok: true` with the same `{ colour: "black", difficulty: 3 }`.
   *(`EPIC-006` acceptance criterion 4's exact command line, and the reversed order, because a
   positional implementation passes one and fails the other.)*
-- **`A2` (the default is 3 and is asserted as a value, not as a spelling).** **Given** an empty
+- **`A2` (the default is ~~3~~ *5, 2026-10-19* and is asserted as a value, not as a spelling).** **Given** an empty
   argv, **then** the resolved difficulty equals the exported default constant **and** that constant
-  equals the middle element of the exported level set. *(Ruling 2 made mechanical: a build that
-  defaults to the maximum fails.)*
+  equals ~~the middle element of the exported level set~~. *(Ruling 2 made mechanical: a build that
+  defaults to the maximum fails.)* *(Folded 2026-10-19, ruling 2 overturned, `ADR-0045` D2: **the default is `5`**,
+  and the constant equals the **maximum** element of the exported level set and `HARDEST_LEVEL`. A build that
+  defaults to anything below the maximum fails. Built and re-pinned by `ABC-174` `A2`, `src/cli.test.ts:3602-3610`.)*
 - **`A3` (the accepted set is closed — every level in, everything else out).** **Given** each member
   of the exported level set, **then** `ok: true`. **Given** `0`, `6`, `-1`, `3.5`, `three`, and a
   bare `--difficulty` at the end of the line, **then** each returns `ok: false` with the offending
@@ -176,9 +188,12 @@ guessed here in any form.**
     for `N` is asked for a move, **then** it returns the move `createLevel(LEVELS[N], { seed: s, now })`
     returns on the same position. This is asserted for every `N`, on at least one position where level `1`'s
     first draw blunders.
-  - **Given** no `--difficulty`, the root builds level `DEFAULT_LEVEL` (3), and
+  - **Given** no `--difficulty`, the root builds level `DEFAULT_LEVEL` (3; *5 from 2026-10-19, `ADR-0045` D2, built
+    by `ABC-174`*), and
     `LEVELS[DEFAULT_LEVEL]` equals `{ budgetMs: DEFAULT_BUDGET_MS, blunderRate: 0 }` by value. So a session
-    started without the flag plays as it does today.
+    started without the flag plays as it does today. *(Folded 2026-10-19: this clause holds unchanged at level 5,
+    because `LEVELS[5]` is `{ DEFAULT_BUDGET_MS, 0 }`. Only the ordinal moves. The byte-identity clause below names
+    `src/levels.ts`, and it applied to this ticket's diff only. `ABC-174` edits `src/levels.ts` under its own fence.)*
   - The table is read only with `Object.hasOwn(LEVELS, level)` (§ Security, forward note).
   - **`src/turn-loop.ts`, `src/engine.ts`, `src/levels.ts`, `src/search*.ts` and `src/evaluate*.ts` are
     byte-identical**, and `EngineSeam` is unchanged.
