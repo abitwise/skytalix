@@ -15,6 +15,12 @@ vitest the engine runs about 4.3x slower per node, with the same node count. See
 end. Decisions 1–4 and 6, and decision 5 for the short mode and the default lane, stay **accepted** as
 written.
 
+**Addendum 2, 2026-10-17 (the last section of this file; it governs over the first addendum for the verdict
+mode's runner): the verdict runs inside vitest, as `LADDER_DEEP=verdict npx vitest run src/ladder.test.ts`.**
+`ABC-146` `A0` read `F_hi` 1.006 ≤ 1.30, so the owner's route rule of 2026-10-12 picks route V. The first
+addendum's code move (route N) is not built; it stays the accepted fallback. No owner acceptance is owed: the
+addendum records his own pre-registered rule applied to a reading. **The verdict's result is not yet known.**
+
 Previously **proposed** 2026-10-10 by Architect/Design (task `wave-2026-09-25`, subtask `design-ABC-085`, Workflow 02
 In Design hop and Workflow 07). It is D4, owed to `ABC-085`'s DoR item 4 by BA/PM's re-score
 (`20261010T172705Z-ba-pm-decision-p1-backlog-two-in-design-two-backlog-0e4da324`).
@@ -193,7 +199,7 @@ Only `src/fen.ts` moved (`ABC-010`), and the corpus still parses.
 - **Decision 1** reopens only if a level is redefined as something other than a budget plus a rate.
 - Nothing in code depends on this ADR beyond two constants and one environment variable in a test file.
 
-## ADDENDUM 2026-10-11 (PROPOSED; owner acceptance owed): the verdict mode runs the same harness under plain `node`, not inside vitest. The vitest runner costs ~4.3x per node and plays the same games
+## ADDENDUM 2026-10-11 (ACCEPTED 2026-10-11, § Status; its route is not built, see addendum 2): the verdict mode runs the same harness under plain `node`, not inside vitest. The vitest runner costs ~4.3x per node and plays the same games
 
 Written by Architect/Design (task `wave-2026-09-25`, subtask `design-abc085-verdict-cost`), on the wave tip
 `8639effb`. **No timing was taken at this hop.** A QE hop and an Engineer hop were running. Every figure is
@@ -232,7 +238,7 @@ the Engineer's recorded reading, or arithmetic on it:
     play, and **it does not trigger the Rollback**.
   - The plain-`node` 5.5 ms is inside the band. **Step 4 stands.**
 
-### Decision 5, amended (PROPOSED). Only the verdict mode moves
+### Decision 5, amended (ACCEPTED 2026-10-11; not built, see addendum 2). Only the verdict mode moves
 
 1. **The verdict mode runs under plain `node`, from a tool outside `src/`.** The shape is `ADR-0037` D1(g)'s
    precedent (`tools/opening-book/compile.ts`): it imports `src/` read-only, runs on demand, and is not
@@ -305,3 +311,101 @@ the Engineer's recorded reading, or arithmetic on it:
 Delete `tools/ladder/`'s entry, and let `src/ladder.test.ts` define `LADDER_DEEP=verdict` again. The core
 module can stay where it is, because nothing in `src/` production depends on it. The verdict then costs
 ~44 h again.
+
+## ADDENDUM 2, 2026-10-17: the verdict runs inside vitest (route V). `A0` read the factor at about 1, so the first addendum's code move is not built
+
+Written by Architect/Design (task `wave-2026-09-25`, subtask `arch-ABC-146-a7`, `ABC-146` `A7`), on branch
+`grugops/ABC-146-ladder-verdict` at `c639a220`. **No test, timing or build was run at this hop.** A verdict run
+was in progress in the same worktree. Every figure below is Security/NFR's recorded reading:
+- the pre-registration `.grugops/context/secnfr-ABC-146-a0/notes/…107ff1bf` (commit `1e2cae9f`, before the
+  first graded run);
+- the reading `.grugops/context/secnfr-ABC-146-a0/notes/…f1558f02` (commit `c639a220`).
+
+### Context: why the first addendum's premise is gone
+
+- The first addendum moved the verdict out of vitest because the engine cost **~4.35x per node** there
+  (`…70684a78`). `ADR-0041` names vite's module runner as the cause. `ABC-152` turned that runner off
+  (`vitest.config.ts` `experimental.viteModuleRunner: false`, merged `7a920ca5`).
+- **The owner's word, 2026-10-12** ("Re-measure, then vitest", transcription `…19019ec0`, not a stamp): take
+  one paired re-reading of the factor first. If the run inside vitest fits the accepted 7–13 h band, the
+  verdict runs there with no new code. Otherwise it falls back to plain `node`, as accepted. `ABC-146` `A0`
+  fixed the rule: **route V iff `F_hi` ≤ 1.30** (10 h × `F_hi` ≤ 13 h). The worst of the five pairs decides,
+  which is the owner's reading as relayed in `…107ff1bf`.
+- **`A0`'s reading (`…f1558f02`, at `c639a220`).** The workload was `chooseMove(start, 4 000 ms,
+  virtualClock(120))`, run as 5 interleaved pairs, one call per fresh process, at width 1. The vitest arm
+  used the repository's own `vitest.config.ts`, unedited.
+  - **10 of 10 node counts were equal: 29 717.** The result digest `398995d95a12e6e6` was the same on all 10.
+  - The pair ratios (vitest ÷ node) were 0.920, 0.946, 1.006, 1.004 and 0.954. **The median `F` is 0.954 and
+    `F_hi` is 1.006.**
+  - node v26.11.1, vitest 4.1.11. load1 4.92–5.01, thermal level 0, on battery. These were recorded, not
+    gated.
+  - **`F_hi` 1.006 ≤ 1.30, so the route is V.** The in-vitest projection is 10 h × 1.006 ≈ 10.1 h. That is
+    arithmetic on `A0`, not a reading of any verdict run.
+  - `A0`'s own limit: the call is short (~190–206 ms), so the pair spread is mostly noise. The rule's
+    margin of 0.29 is far wider than that spread.
+
+### Decision 5, amended again. Only the verdict mode's runner moves back
+
+1. **The verdict runs inside vitest, as `LADDER_DEEP=verdict npx vitest run src/ladder.test.ts`.** It is run
+   directly and **never through `npm test`**: that script's 60 s bound (`ABC-122`, `run-bounded.js`) would
+   end it. This is the harness as `ABC-085` built it. `src/ladder.test.ts` already accepts
+   `LADDER_DEEP=verdict` (`stepForMode`) and plays `ladderPlan`'s order, 3v4 and 4v5 first.
+   - **Noted 2026-10-19 (`arch-ABC-166-a5`, records only, no decision changes):** run it with
+     `--reporter=verbose`, as `LADDER_DEEP=verdict npx vitest run src/ladder.test.ts --reporter=verbose`.
+     vitest 4.1.11's default reporter drops a passing test's `console.log`, so run 1 (`d73c4d6c`) passed
+     17/17 with no `LADDER` line and no score (`…75f37904`). The flag changes output only, so the same games
+     are played. A re-take under the staleness rule uses this form.
+   - **Executed 2026-10-19:** run 2 used this form and is the route's reading (`ABC-146` `A5`,
+     `.grugops/context/abc146-verdict/notes/…4c1d8e27`, commit `e68a4327`).
+2. **Route N's code move is not built.** The first addendum's item 1 (the move to `tools/ladder/`, the `node`
+   entry, the two include globs and the refusal of `LADDER_DEEP=verdict` under vitest) is not built. Its
+   item 2 (the equivalence check between runners) is moot, because only one runner plays the games.
+   `ABC-146` `A1`–`A4` are cancelled on this route (the ticket's route table). **Zero lines change under
+   `src/`, `tools/`, `vitest.config.ts` and `package*.json`.**
+3. **The report names the runner and its version.** The first addendum's item 3 stands. On this route the
+   runner is vitest, and the versions are read with `npx vitest --version` and `node --version`. The report
+   also names the commit, the step (4), the seeds, the game counts, the wall time and load1. A wall time from
+   one runner is never compared with one from the other.
+4. **Scheduling stands unchanged** (the first addendum's item 4). The verdict is one serial background
+   process, on the Orchestrator's schedule, once per verdict. It never overlaps a no-other-hop window, and
+   the pairs never run as parallel processes. `ADR-0040`'s worker cap (`maxWorkers: 2`) applies, because the
+   run is inside vitest.
+5. **Unchanged:** decisions 1–4 and 6, step 4, the game counts (100 for `A1` and 20 for each `A2` pair: 180
+   games), the seeds, the claim policy, the ply cap, and the rule that `A1`/`A2` are printed and never
+   asserted. A verdict at one step is never quoted as a verdict at another (decision 4).
+
+**What this addendum does not say.** **The verdict's result is not yet known.** No score, MET, RED or wall
+time of the verdict run is quoted here or anywhere in this ADR. Those numbers belong to the verdict's report,
+and to `ABC-146` `A5`.
+
+### Alternatives (this addendum)
+
+| option | ruling | why |
+|---|---|---|
+| **(V) the verdict inside vitest, no new code** | **chosen** | the owner's rule, applied to `A0`: `F_hi` 1.006 ≤ 1.30 |
+| (N) build the first addendum's route anyway | not built; kept as the fallback | at a factor of about 1, the move, the entry, the globs and the refusal buy no core-hours. Building them would be work that the reading shows has no payoff |
+| reading the rule on the median `F` (0.954) | not needed | either statistic picks V. The rule was fixed on `F_hi` before the run, and it is read on `F_hi` |
+
+### Consequences (this addendum)
+
+- **`ABC-146`'s route table applies, route V.** `A5` and `A6` stand, with this command. `A6` on this route:
+  `git diff --name-only <base> -- src/ tools/ vitest.config.ts package.json` is empty. `A7` is this
+  addendum together with the two headings above, which no longer say PROPOSED.
+- **The first addendum's cost table is history.** Its "inside vitest ~43.5 h" row was priced on the 4.35x
+  factor, which `A0` no longer reads.
+- **`NFR-008`, the default lane:** unchanged. The default lane plays 0 ladder games, and no file is added.
+- **`AGENTS.md`'s ladder lane comment** still says the verdict is not run in vitest (~44 h) and that its route
+  is plain `node`. That is now stale. The Scribe rewrites it; this hop does not edit `AGENTS.md` (`ABC-146` §
+  Out of scope).
+- **`A0` goes stale before the verdict starts** if a merge changes `vitest.config.ts`, the node or vitest
+  version, or `PUZZLE_DEEP`'s engine trigger list (the ticket's staleness rule). The verdict itself goes
+  stale under decision 6.
+
+### Rollback (this addendum)
+
+- **If the vitest run exits non-zero before 180 of 180 games terminate and replay legally** (a crash, not a
+  red score), no score is quoted from it. The owner's word does not cover that case. The Orchestrator takes it
+  to the owner, with route N, the first addendum as accepted, named as the next step.
+- **If `A0` is re-taken and reads `F_hi` > 1.30**, route N applies, and the first addendum is built as
+  written.
+- Nothing in code depends on this addendum. Reverting it changes records only.

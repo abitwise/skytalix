@@ -369,3 +369,22 @@ Folded here from the Orchestrator's follow-up list (item 13 of `bapm-cut-followu
 | 10 | no major unresolved blocker | ✅ the route is the owner's, and he has given it |
 
 **Recommended: `Backlog → Ready`.** Column moves are the Orchestrator's.
+
+### A5 reading, 2026-10-19 (ABC-166 run 2; Orchestrator)
+
+Run 2 (`raw/verdict-run2.out.txt`, commit `d73c4d6c`) passed 17/17, with 5 pair lines and 180 game lines. ABC-166 A2 holds. The full reading and the figure-by-figure citations are in `.grugops/context/abc146-verdict/notes/…4c1d8e27`.
+
+- **ABC-085 A1:** 1v5 100/100, **MET**.
+- **ABC-085 A2:**
+  - 3v4 6.5/20 (32.5 %), **RED**;
+  - 4v5 10/20 (50 %), **RED**;
+  - 2v3 20/20, MET;
+  - 1v2 18/20, MET.
+- **Digests:**
+  - 1v5 `c984a0c9a380b064`;
+  - 3v4 `9667ad6328f603ab`;
+  - 4v5 `57d6676d5d9090e4`;
+  - 2v3 `bcbbdf2b129dd4e0`;
+  - 1v2 `324e957853bfa9f3`.
+- **Wall:** 40 823 s on a shared host.
+- **Next:** the REDs go to ABC-087, as real scores rather than delivery defects.

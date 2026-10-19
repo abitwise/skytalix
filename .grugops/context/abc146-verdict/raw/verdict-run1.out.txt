@@ -1,0 +1,9 @@
+
+ RUN  v4.1.11 /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-ABC-146
+
+
+ Test Files  1 passed (1)
+      Tests  17 passed (17)
+   Start at  22:13:38
+   Duration  38201.85s (transform 0ms, setup 0ms, import 67ms, tests 38201.44s, environment 0ms)
+

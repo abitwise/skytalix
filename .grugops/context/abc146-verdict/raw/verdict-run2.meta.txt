@@ -1,0 +1,10 @@
+commit d73c4d6cfa0af0504d0585abd95e5abf1562b2f4
+start 2026-10-18T21:20:13Z
+load1 { 8.25 8.18 9.21 }
+v26.11.1
+vitest/4.1.11 darwin-arm64 node-v26.11.1
+power-start Now drawing from 'AC Power'
+lid-start   |   "AppleClamshellState" = No
+end 2026-10-19T08:40:36Z exit 0
+power-end Now drawing from 'AC Power'
+lid-end   |   "AppleClamshellState" = No
