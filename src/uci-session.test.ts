@@ -291,6 +291,14 @@ describe("ABC-167 A6 — infinite waits for stop", () => {
     });
   }
 
+  it("A6-j1: a refused position writes the held bestmove first, then its info string", () => {
+    const { perLine } = talk(["position startpos", "go infinite", "position fen nonsense"], 100);
+    const lines = perLine[2] as string[];
+    expect(lines).toHaveLength(2);
+    expect(lines[0]).toMatch(/^bestmove [a-h][1-8][a-h][1-8]$/);
+    expect(lines[1]).toMatch(/^info string position refused: /);
+  });
+
   it("A6-e4: quit writes the held bestmove and returns quit", () => {
     const { perLine, results } = talk(["position startpos", "go infinite", "quit"], 100);
     expect(results[2]).toBe("quit");
@@ -422,6 +430,57 @@ describe("ABC-167 A7 — the D12 limits", () => {
     const { perLine } = talk(["position startpos", "go searchmoves e2e4 d2d4 movetime 100"], 100);
     expectWarnedSearch(perLine[1], 100, 100 + 2 * 100);
   });
+
+  /** QE-167-i: the keyword rule for every group and every following keyword, step 100. */
+  it("A7-i1: go movetime depth 3 -> one info string naming movetime, then depth 3", () => {
+    const { perLine } = talk(["position startpos", "go movetime depth 3"], 100);
+    const lines = perLine[1] as string[];
+    expect(lines).toHaveLength(3);
+    expect(lines[0]).toMatch(/^info string go movetime .*nothing/);
+    const info = parseInfo(lines[1]);
+    expect(info.depth).toBe(3);
+    expect(lines[2]).toBe(`bestmove ${info.move}`);
+  });
+
+  it("A7-i2: go wtime 1000 btime 1000 movestogo movetime 300 -> 300 ms", () => {
+    const { perLine } = talk(
+      ["position startpos", "go wtime 1000 btime 1000 movestogo movetime 300"],
+      100,
+    );
+    expect(expectWarnedSearch(perLine[1], 300, 300 + 2 * 100)).toMatch(/movestogo .*nothing/);
+  });
+
+  it("A7-i3: go wtime 1000 btime 1000 depth winc 1000 -> 550 ms", () => {
+    const { perLine } = talk(
+      ["position startpos", "go wtime 1000 btime 1000 depth winc 1000"],
+      100,
+    );
+    expect(expectWarnedSearch(perLine[1], 550, 550 + 2 * 100)).toMatch(/depth .*nothing/);
+  });
+
+  it("A7-i4: go searchmoves e2e4 depth 3 -> searchmoves stops at depth, so depth 3", () => {
+    const { perLine } = talk(["position startpos", "go searchmoves e2e4 depth 3"], 100);
+    const lines = perLine[1] as string[];
+    expect(lines).toHaveLength(3);
+    expect(lines[0]).toMatch(/^info string searchmoves/);
+    const info = parseInfo(lines[1]);
+    expect(info.depth).toBe(3);
+    expect(lines[2]).toBe(`bestmove ${info.move}`);
+  });
+
+  for (const [row, go] of [
+    ["A7-i5", "go depth infinite"],
+    ["A7-i6", "go searchmoves e2e4 infinite"],
+  ] as const) {
+    it(`${row}: ${go} holds the bestmove until stop`, () => {
+      const { perLine } = talk(["position startpos", go, "stop"], 100);
+      const searched = perLine[1] as string[];
+      expect(searched).toHaveLength(2);
+      expect(searched[0]).toMatch(/^info string /);
+      const info = parseInfo(searched[1]);
+      expect(perLine[2]).toEqual([`bestmove ${info.move}`]);
+    });
+  }
 });
 
 describe("ABC-167 A8 — mate scores", () => {
