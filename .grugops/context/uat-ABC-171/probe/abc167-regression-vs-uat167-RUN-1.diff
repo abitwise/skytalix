@@ -1,0 +1,36 @@
+4c4
+< PASS S1 uci: writes exactly ["id name skytalix","id author Olger Oeselg","uciok"] | ["id name skytalix","id author Olger Oeselg","uciok"]
+---
+> PASS S1 uci: writes exactly ["id name skytalix","id author Olger Oeselg","option name OwnBook type check default true","option name Skill Level type spin default 3 min 1 max 5","uciok"] | ["id name skytalix","id author Olger Oeselg","option name OwnBook type check default true","option name Skill Level type spin default 3 min 1 max 5","uciok"]
+26c26
+< OBS  S1 uci writes no option lines: OwnBook and Skill Level are ABC-171's
+---
+> OBS  S1 uci writes ABC-171's two option lines (ABC-171 S10 edit 3)
+30c30
+< PASS S2 3+2 on step 100 uci: writes exactly ["id name skytalix","id author Olger Oeselg","uciok"] | ["id name skytalix","id author Olger Oeselg","uciok"]
+---
+> PASS S2 3+2 on step 100 uci: writes exactly ["id name skytalix","id author Olger Oeselg","option name OwnBook type check default true","option name Skill Level type spin default 3 min 1 max 5","uciok"] | ["id name skytalix","id author Olger Oeselg","option name OwnBook type check default true","option name Skill Level type spin default 3 min 1 max 5","uciok"]
+38c38
+< PASS S2 3+2 on step 100 uci: writes exactly ["id name skytalix","id author Olger Oeselg","uciok"] | ["id name skytalix","id author Olger Oeselg","uciok"]
+---
+> PASS S2 3+2 on step 100 uci: writes exactly ["id name skytalix","id author Olger Oeselg","option name OwnBook type check default true","option name Skill Level type spin default 3 min 1 max 5","uciok"] | ["id name skytalix","id author Olger Oeselg","option name OwnBook type check default true","option name Skill Level type spin default 3 min 1 max 5","uciok"]
+713c713
+< PASS S2 10+0.1 on step 10 uci: writes exactly ["id name skytalix","id author Olger Oeselg","uciok"] | ["id name skytalix","id author Olger Oeselg","uciok"]
+---
+> PASS S2 10+0.1 on step 10 uci: writes exactly ["id name skytalix","id author Olger Oeselg","option name OwnBook type check default true","option name Skill Level type spin default 3 min 1 max 5","uciok"] | ["id name skytalix","id author Olger Oeselg","option name OwnBook type check default true","option name Skill Level type spin default 3 min 1 max 5","uciok"]
+721c721
+< PASS S2 10+0.1 on step 10 uci: writes exactly ["id name skytalix","id author Olger Oeselg","uciok"] | ["id name skytalix","id author Olger Oeselg","uciok"]
+---
+> PASS S2 10+0.1 on step 10 uci: writes exactly ["id name skytalix","id author Olger Oeselg","option name OwnBook type check default true","option name Skill Level type spin default 3 min 1 max 5","uciok"] | ["id name skytalix","id author Olger Oeselg","option name OwnBook type check default true","option name Skill Level type spin default 3 min 1 max 5","uciok"]
+2443c2443
+< PASS S12 10+0.1 on step 10, replayed uci: writes exactly ["id name skytalix","id author Olger Oeselg","uciok"] | ["id name skytalix","id author Olger Oeselg","uciok"]
+---
+> PASS S12 10+0.1 on step 10, replayed uci: writes exactly ["id name skytalix","id author Olger Oeselg","option name OwnBook type check default true","option name Skill Level type spin default 3 min 1 max 5","uciok"] | ["id name skytalix","id author Olger Oeselg","option name OwnBook type check default true","option name Skill Level type spin default 3 min 1 max 5","uciok"]
+2451c2451
+< PASS S12 10+0.1 on step 10, replayed uci: writes exactly ["id name skytalix","id author Olger Oeselg","uciok"] | ["id name skytalix","id author Olger Oeselg","uciok"]
+---
+> PASS S12 10+0.1 on step 10, replayed uci: writes exactly ["id name skytalix","id author Olger Oeselg","option name OwnBook type check default true","option name Skill Level type spin default 3 min 1 max 5","uciok"] | ["id name skytalix","id author Olger Oeselg","option name OwnBook type check default true","option name Skill Level type spin default 3 min 1 max 5","uciok"]
+2909c2909
+< PASS S13 all 648 lines start with id/option/uciok/readyok/info/bestmove | []
+---
+> PASS S13 all 666 lines start with id/option/uciok/readyok/info/bestmove | []
