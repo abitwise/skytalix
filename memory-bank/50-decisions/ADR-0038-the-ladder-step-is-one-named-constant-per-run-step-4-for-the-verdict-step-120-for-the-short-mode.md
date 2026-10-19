@@ -409,3 +409,28 @@ and to `ABC-146` `A5`.
 - **If `A0` is re-taken and reads `F_hi` > 1.30**, route N applies, and the first addendum is built as
   written.
 - Nothing in code depends on this addendum. Reverting it changes records only.
+
+## ADDENDUM 3, 2026-10-20: decision 5.1's command carries the ONE-FILE heap flag under `ABC-173`'s cap
+
+Written by Architect/Design (task `wave-2026-09-25`, subtask `arch-ABC-175-heap`), at `main` = `397af71f`. **Records
+only.** No test, timing or build was run. This is forward-only: addendum 2 is not edited, and decision 5.1's runner
+and `--reporter=verbose` stand.
+
+- **The guard.** From `ABC-173` (`ADR-0008` § ADDENDUM 2026-10-19), `heap-guard.js` refuses any vitest run whose
+  heap is above its shape's row. Addendum 2's form therefore exits 1 on any tree that carries the cap. This was read
+  at `A0` by `secnfr-ABC-174-a0`, note `…e4b8d062`.
+- **On such a tree, the route-V verdict command is:**
+
+  ```
+  caffeinate -i env LADDER_DEEP=verdict NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/ladder.test.ts --reporter=verbose
+  ```
+
+  (`caffeinate -i env` is `ADR-0045` D6.3's wrapper.)
+  - **Flag 400 is the ONE-FILE row (496 MiB).** It is the `AGENTS.md` ladder lane's token, and it is used exactly.
+- **`A0` binds the flag.** Route V's `F_hi` 1.047 (`ed88329c`) was read with the vitest arm at this flag (C1).
+  - The heap flag joins the staleness rule ("A0 goes stale before the verdict starts if …") as a command input.
+  - A verdict at another flag means an `A0` re-take or route N, as in addendum 2 § Rollback.
+- **The pre-flight probe carries the same prefix.** Its exact form, and the out-of-memory ruling (`UNKNOWN - verify`,
+  no pre-probe required, an OOM is `ABC-175` `A4`), are in `ADR-0045` § ADDENDUM 2026-10-20.
+- **Unchanged:** decisions 1–4 and 6, step 4, the 180 games, and `ADR-0040`'s `maxWorkers: 2`. Nothing in code
+  depends on this addendum.

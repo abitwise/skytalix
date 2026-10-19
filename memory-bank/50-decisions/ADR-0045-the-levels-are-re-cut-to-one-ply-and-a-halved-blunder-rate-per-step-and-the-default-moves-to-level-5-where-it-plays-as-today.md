@@ -362,3 +362,65 @@ Each lever the brief names, with its predicted effect and its evidence.
 - **Q3. Run the verdict on `ABC-173`'s QE-passed branch before your UAT word (recommended), or after the merge?**
   - Either way it is ~5.5 h (estimate) of one core, on the Orchestrator's overnight schedule, with every width-1
     window held until it ends.
+
+## ADDENDUM 2026-10-20 — D6.3's command and D6.5's probe carry the ONE-FILE heap flag (`ABC-173` is on the run tree)
+
+Written by Architect/Design (task `wave-2026-09-25`, subtask `arch-ABC-175-heap`), at `main` = `397af71f`. **Records
+only.** No lane was run and no timing was taken. The run tree `grugops/ABC-174` @ `f6b63c1c` was read with
+`git show` only. This is a forward-only addendum: nothing above it is edited. D6.1, D6.2, D6.4, D6.6, D6.7 and D6.8
+stand.
+
+**Input.** `secnfr-ABC-174-a0` read it on the `A0` smoke (note `…e4b8d062`). On the run tree, `ABC-173`'s guard
+(`vitest.config.ts` `globalSetup` → `tools/grugops/heap-guard.js`) refuses an unprefixed one-file run, which exits 1
+with no test run. D6.3's command and D6.5's `-t "3v4"` probe carry no prefix, so both are refused.
+
+### D6.3, amended: the verdict command
+
+```
+caffeinate -i env LADDER_DEEP=verdict NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/ladder.test.ts --reporter=verbose
+```
+
+- **Flag 400 is the ONE-FILE row**, which reads 496 MiB of `heap_size_limit` (`ADR-0008` § ADDENDUM 2026-10-19,
+  Ruling 2). It is used **exactly**: not lower, and not higher.
+  - `src/ladder.test.ts` is one file, so the guard picks ONE-FILE.
+  - The value is `heap-guard.js` `FLAGS_MIB.oneFile`.
+- **It is the `AGENTS.md` ladder lane's token, in the same place** (`LADDER_DEEP=… NODE_OPTIONS=--max-old-space-size=400 npx …`).
+  It is one unquoted token. A row change moves `heap-guard.js`, `AGENTS.md` and this command together.
+- **`A0` binds it.** Route V rests on `F_hi` 1.047, which `A0` read with its vitest arm at this flag (C1,
+  `secnfr-ABC-174-a0`, `ed88329c`).
+  - The flag is therefore an `A0` staleness input. `ABC-175` `A2`'s meta file records it through the verbatim
+    command.
+  - At any other flag, `A0` did not read the runner, which means an `A0` re-take or route N (`ADR-0038` addendum 2
+    § Rollback).
+  - A lower flag passes the guard but is ruled out here. A higher one is refused by the guard, and raising a row is
+    the owner's call (`ABC-173` Q4).
+- **The `env` assignment replaces any ambient `NODE_OPTIONS`.** The run is still direct, and never through `npm test`.
+- **Budget.** The main process and 1 worker make 992 MiB. The ladder's only children are `git` (`src/ladder.test.ts:300-301`).
+  They are not Node, so they are not counted. That is within the ONE-FILE Σ of 1984 MiB.
+
+### D6.5, amended: the probe, and the `A0` in force
+
+- **The probe:**
+  `LADDER_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/ladder.test.ts --reporter=verbose -t "3v4" > <scratch>.txt 2>&1`
+  must exit 0 and print its `LADDER` lines. It uses the same flag as D6.3, so it runs the verdict's configuration, and
+  it is the cap's admission check.
+- **The `A0` in force is `ed88329c`.** That is the records-only commit on `f6b63c1c`, which is equivalent for the
+  stale-list. It supersedes `eb216351`. Its staleness values are in `.grugops/queue/done/secnfr-ABC-174-a0.md`
+  § New staleness inputs, and the `ABC-175` page carries them.
+
+### Out-of-memory risk on the night (not closed)
+
+- **Whether 180 step-4 games fit in 496 MiB is `UNKNOWN - verify`.**
+  - **Structurally, the heap does not grow with the number of games.** `src/transposition.ts` allocates its table
+    once at a fixed size, and `clearTable()` only zero-fills it after that.
+  - **Read green at 496 MiB:** `LADDER_DEEP=1` 18/18, and `A0`'s five 29 717-node searches.
+  - **Not read:** any step-4 game under the cap.
+- **No pre-probe is required.** A step-4 probe can only be verdict-mode games, which would play part of the one
+  pre-registered shot early. So it is the owner's word only (`OQ-175-H1` in `.grugops/queue/done/arch-ABC-175-heap.md`).
+- **An OOM on the night is `ABC-175` `A4`:** no score, the owner decides, route N is named, there is no restart, and
+  no row is raised (`ABC-173` Q4).
+
+### Rollback
+
+This addendum is records only. Reverting it restores the unprefixed text, which the guard refuses on any tree that
+carries `ABC-173`.
