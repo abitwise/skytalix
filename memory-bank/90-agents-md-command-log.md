@@ -713,3 +713,18 @@ No lane printed a heap out-of-memory error or a guard refusal. The two coverage 
 re-sized (his Q4); cause `UNKNOWN - verify`. They were 5 s per-test timeouts in rows that read the wall clock, while
 another hop ran mutation tests on the same host (load1 4.5-6.4). The base tree `68bbf33f`, uncapped, read 1915 passed in
 2 of 2 runs of `npx vitest run --coverage` in a scratch copy.
+
+**Resumed 2026-10-19 on the owner's word** (`…6e1d9b47`: "Lighten the rows, keep cap"). Rows, flags and the 5 s timeout
+are unchanged. The coverage-timeout rows moved to coarser virtual-clock steps (`48842a1f`): `ABC-170 A3` x6 from step 1
+to step 5, and `ABC-167 A5` "movetime 100" from step 1 to step 10. Every command was then re-run exactly as spelled
+(counts only, no timing):
+
+| command | exit | counts |
+|---|---:|---|
+| `npm test` | 0 | 59 files, 1920 passed; `last-run.json` `success: true`; skip count 0; integrity `No findings.` |
+| Coverage, run 1 / run 2 | 0 / 0 | 1920 / 1920 passed |
+| Coverage (`src/` only), run 1 / run 2 | 0 / 0 | 1920 / 1920 passed |
+| every `*_DEEP` line and single file | 0 each | PERFT 32, SEARCH search 57 / transposition 40 / quiescence 37 / pvs-lmr 29, ENGINE engine 60 / levels 28 / transposition 26, INPUT 34, ZOBRIST 33, PUZZLE 18, CLI 11, LADDER short 18, `src/fen.test.ts` 82 |
+
+Both coverage lines also went green once more each in the peak-`heapUsed` observation pass (the same command with
+`--import=<peak.mjs>` added to `NODE_OPTIONS`). No lane printed an out-of-memory error.
