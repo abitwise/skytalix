@@ -7,8 +7,9 @@
 // the root depth guard reverted) STALLED the gate instead of failing it.
 //
 // WIRED IN since `ABC-122` `A4`. `package.json`'s `test` script runs every `npm test` through it:
-//   "test": "node tools/grugops/run-bounded.js 60000 vitest run --reporter=default --reporter=./tools/grugops/result-file-reporter.js --outputFile.json=.test-results/last-run.json"
-// and `src/cli.test.ts`'s `SCRIPTS_AT_HEAD` pins that line. At `ABC-122`'s delivery it gave 47
+//   "test": "NODE_OPTIONS=--max-old-space-size=128 node tools/grugops/run-bounded.js 60000 vitest run --reporter=default --reporter=./tools/grugops/result-file-reporter.js --outputFile.json=.test-results/last-run.json"
+// and `src/cli.test.ts`'s `SCRIPTS_AT_HEAD` pins that line. The `NODE_OPTIONS` prefix is `ABC-173`'s heap
+// ceiling (ADR-0008 addendum 2026-10-19): the wrapper, vitest and every env-inheriting child read it. At `ABC-122`'s delivery it gave 47
 // files and 1446 tests green. Against the reverted root depth guard it gave exit 124 at 60.23 s.
 //
 // THE BOUND FOR `npm test`, 60000 ms, and the reading behind it (`A4`: at least 5x the median

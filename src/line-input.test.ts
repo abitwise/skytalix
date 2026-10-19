@@ -74,8 +74,11 @@
  * not become, a second gate nobody runs.
  *
  * The one thing the deep lane holds that the default lane cannot is the RETENTION BOUND, and it
- * needs a second flag: `INPUT_DEEP=1 NODE_OPTIONS=--expose-gc npx vitest run src/line-input.test.ts`.
- * Without `--expose-gc` that row is NOT DEFINED — it does not skip, and it does not silently pass.
+ * needs a second flag: `INPUT_DEEP=1 NODE_OPTIONS="--expose-gc --max-old-space-size=400" npx vitest run
+ * src/line-input.test.ts`. Without `--expose-gc` that row is NOT DEFINED — it does not skip, and it
+ * does not silently pass. Both flags ride ONE quoted value (`ABC-173`, `ADR-0008` addendum
+ * 2026-10-19): a second `NODE_OPTIONS=` would replace the first, and without the heap flag
+ * `tools/grugops/heap-guard.js` refuses the run.
  */
 import { readFileSync } from "node:fs";
 import { PassThrough } from "node:stream";
