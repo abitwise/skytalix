@@ -10,7 +10,7 @@ import { makeMove } from "./apply.ts";
 import { type BookProbe, createBookProbe } from "./book.ts";
 import { parseFen } from "./fen.ts";
 import { isInCheck, legalMoves } from "./legal.ts";
-import { LEVELS, seededRandom } from "./levels.ts";
+import { createLevel, LEVELS, seededRandom } from "./levels.ts";
 import type { Move } from "./moves.ts";
 import { type Position, squareName } from "./position.ts";
 import { MATE_SCORE } from "./search.ts";
@@ -873,9 +873,14 @@ describe("ABC-171 A7 — the blunder path", () => {
   });
 });
 
-describe("ABC-171 A8 — no reseed", () => {
+/** The levels that blunder (`LEVELS[n].blunderRate > 0`), read from the table, not by number. */
+const BLUNDER_LEVELS = (Object.keys(LEVELS) as `${keyof typeof LEVELS}`[])
+  .map((key) => Number(key) as keyof typeof LEVELS)
+  .filter((n) => LEVELS[n].blunderRate > 0);
+
+describe("ABC-171 A8 — no reseed, and one draw per blunder-level search", () => {
   it("ucinewgame draws 0 times; each level-1 go draws exactly one seed; level 3 draws none", () => {
-    const { send, draws } = rig({ k: 1, stepMs: 10 });
+    const { send, draws } = rig({ k: 1 });
     send("setoption name Skill Level value 1");
     send("ucinewgame");
     expect(draws.count).toBe(0);
@@ -889,6 +894,18 @@ describe("ABC-171 A8 — no reseed", () => {
     send("setoption name Skill Level value 3");
     send("go movetime 100");
     expect(draws.count).toBe(2);
+  });
+
+  it("every blunder level's searched go draws exactly one seed (a book hit draws 0: A13b)", () => {
+    expect(BLUNDER_LEVELS.length).toBeGreaterThan(0);
+    const { send, draws } = rig({ k: 1 });
+    send("position startpos");
+    for (const [index, level] of BLUNDER_LEVELS.entries()) {
+      send(`setoption name Skill Level value ${level}`);
+      const lines = send("go movetime 1000");
+      expect(lines.at(-1)).toMatch(/^bestmove [a-h][1-8][a-h][1-8]/);
+      expect(draws.count).toBe(index + 1);
+    }
   });
 });
 
@@ -927,6 +944,100 @@ describe("ABC-171 A10 — infinite with a book hit", () => {
     expect(send("go infinite")).toEqual(["info string book"]);
     expect(send("stop")).toEqual(["bestmove e2e4"]);
     expect(send("stop")).toEqual([]);
+  });
+});
+
+// `A13` (the QE-171-a..d rows, added 2026-10-19). Step 100 wherever a search runs.
+
+/** `A13a`'s oracle: level 1's move from the start position under `seed`, on a fresh step-100 clock. */
+function levelOneOracle(seed: number): string {
+  const choice = createLevel(
+    { budgetMs: 100, blunderRate: LEVELS[1].blunderRate },
+    { seed, now: virtualClock(100) },
+  )(parseFen(START_FEN));
+  if (choice === null) throw new Error("test setup: the start position has a legal move");
+  return coordinateOf(choice.move);
+}
+
+describe("ABC-171 A13a — the seed oracle floor(random() * 2^32) (QE-171-a)", () => {
+  const ks = [1, 2, 3, 4, 5, 6, 7, 8];
+  const oracle = ks.map((k) => levelOneOracle(Math.floor(seededRandom(k)() * 2 ** 32)));
+
+  it("non-vacuous: the oracle's moves are not all equal over k = 1..8", () => {
+    expect(new Set(oracle).size).toBeGreaterThan(1);
+  });
+
+  it("non-vacuous: on some k the 2^16 seed gives a different move from the oracle's", () => {
+    const scaled = ks.map((k) => levelOneOracle(Math.floor(seededRandom(k)() * 2 ** 16)));
+    expect(scaled.some((move, index) => move !== oracle[index])).toBe(true);
+  });
+
+  for (const [index, k] of ks.entries()) {
+    it(`seededRandom(${k}): level 1's bestmove equals the oracle's`, () => {
+      const { send } = rig({ k });
+      send("setoption name Skill Level value 1");
+      send("position startpos");
+      const lines = send("go movetime 1000");
+      expect(lines).toHaveLength(2);
+      const info = parseLevelInfo(lines[0]);
+      expect(lines[1]).toBe(`bestmove ${info.move}`);
+      expect(info.move).toBe(oracle[index]);
+    });
+  }
+});
+
+describe("ABC-171 A13b — a book hit at a blunder level draws 0 seeds (QE-171-b)", () => {
+  it("precondition: at least one level blunders", () => {
+    expect(BLUNDER_LEVELS.length).toBeGreaterThan(0);
+  });
+
+  for (const level of BLUNDER_LEVELS) {
+    it(`level ${level}: exactly info string book, bestmove e2e4; no search; random drawn 0 times`, () => {
+      const { send, out, draws } = rig({ k: 1, read: START_BOOK });
+      expect(send(`setoption name Skill Level value ${level}`)).toEqual([]);
+      send("position startpos");
+      expect(send("go movetime 1000")).toEqual(["info string book", "bestmove e2e4"]);
+      expect(out.some((line) => line.startsWith("info depth"))).toBe(false);
+      expect(draws.count).toBe(0);
+    });
+  }
+});
+
+describe("ABC-171 A13c — the dropped-limit line names nodes and mate, as one line (QE-171-c)", () => {
+  /** Level 1 on the start position: the lines `go` writes, with the level line and bestmove checked. */
+  function droppedLines(go: string): string {
+    const { send } = rig({ k: 1 });
+    send("setoption name Skill Level value 1");
+    send("position startpos");
+    const lines = send(go);
+    expect(lines).toHaveLength(3);
+    expect(lines.filter((line) => line.startsWith("info string "))).toHaveLength(1);
+    expect(lines[0]).toMatch(/^info string /);
+    expect(lines[1]).not.toContain(" score ");
+    const info = parseLevelInfo(lines[1]);
+    expect(lines[2]).toBe(`bestmove ${info.move}`);
+    return lines[0] as string;
+  }
+
+  it("go nodes 100: one info string naming nodes, a level info line, a bestmove", () => {
+    expect(droppedLines("go nodes 100")).toMatch(/\bnodes\b/);
+  });
+
+  it("go depth 3 nodes 100 mate 2: exactly one info string naming depth, nodes and mate", () => {
+    const line = droppedLines("go depth 3 nodes 100 mate 2");
+    for (const token of ["depth", "nodes", "mate"])
+      expect(line).toMatch(new RegExp(`\\b${token}\\b`));
+  });
+});
+
+describe("ABC-171 A13d — an invalid OwnBook keeps true (QE-171-d)", () => {
+  it("OwnBook value maybe on a fresh session: one info string, then the book still answers", () => {
+    const { send } = rig({ read: START_BOOK });
+    const written = send("setoption name OwnBook value maybe");
+    expect(written).toHaveLength(1);
+    expect(written[0]).toMatch(/^info string /);
+    send("position startpos");
+    expect(send("go movetime 1000")).toEqual(["info string book", "bestmove e2e4"]);
   });
 });
 
