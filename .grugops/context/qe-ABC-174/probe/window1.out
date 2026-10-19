@@ -1,0 +1,34 @@
+before: procs      494 load { 4.29 10.94 22.48 } 2026-10-19T19:18:13Z
+{
+ "host": "Mac.lan",
+ "start": "2026-10-19T19:18:13.698Z",
+ "secs": 180,
+ "polls": 181,
+ "foreignPolls": 181,
+ "kinds": {
+  "hop": 181,
+  "platform": 1
+ },
+ "firstForeign": [
+  {
+   "at": "0",
+   "lines": [
+    "42115 tee -a /Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.grugops/context/qe-ABC-174/probe/window1.out"
+   ]
+  }
+ ],
+ "lastForeign": {
+  "at": "180",
+  "lines": [
+   "42115 tee -a /Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.grugops/context/qe-ABC-174/probe/window1.out"
+  ]
+ },
+ "load1": {
+  "first": "4.29",
+  "min": "2.58",
+  "max": "4.29",
+  "last": "2.65"
+ }
+}
+rc 1
+after: procs      507 load { 2.65 7.17 18.69 } 2026-10-19T19:21:14Z

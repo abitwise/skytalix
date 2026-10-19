@@ -1,0 +1,22 @@
+M01	src/levels.ts	s/budgetMs: 100, blunderRate: 0.4/budgetMs: 110, blunderRate: 0.4/	table: level 1 budget 100 -> 110
+M02	src/levels.ts	s/budgetMs: 180, blunderRate: 0.2/budgetMs: 200, blunderRate: 0.2/	table: level 2 budget 180 -> 200
+M03	src/levels.ts	s/budgetMs: 330, blunderRate: 0.1/budgetMs: 330, blunderRate: 0/	table: level 3 rate 0.1 -> 0
+M04	src/levels.ts	s/budgetMs: 1_000, blunderRate: 0.05/budgetMs: 1_000, blunderRate: 0/	table: level 4 rate 0.05 -> 0 (page armed red)
+M05	src/levels.ts	s/budgetMs: 1_000, blunderRate: 0.05/budgetMs: 1_000, blunderRate: 0.1/	table: level 4 rate 0.05 -> 0.1
+M06	src/levels.ts	s/budgetMs: 330, blunderRate: 0.1/budgetMs: 330, blunderRate: 0.2/	table: level 3 rate 0.1 -> 0.2
+M07	src/levels.ts	s/budgetMs: 1_000, blunderRate: 0.05/budgetMs: 900, blunderRate: 0.05/	table: level 4 budget 1000 -> 900
+M08	src/levels.ts	s/budgetMs: 3_000, blunderRate: 0 })/budgetMs: 3_500, blunderRate: 0 })/	table: level 5 budget 3000 -> 3500
+M09	src/levels.ts	s/budgetMs: 3_000, blunderRate: 0 })/budgetMs: 3_000, blunderRate: 0.01 })/	table: level 5 rate 0 -> 0.01
+M10	src/levels.ts	s/DEFAULT_LEVEL = 5/DEFAULT_LEVEL = 4/	DEFAULT_LEVEL 5 -> 4
+M11	src/levels.ts	s/DEFAULT_LEVEL = 5/DEFAULT_LEVEL = 3/	DEFAULT_LEVEL 5 -> 3 (page armed red)
+M12	src/cli-options.ts	s/DEFAULT_DIFFICULTY: Difficulty = 5/DEFAULT_DIFFICULTY: Difficulty = 4/	DEFAULT_DIFFICULTY 5 -> 4
+M13	src/cli-options.ts	s/DEFAULT_DIFFICULTY: Difficulty = 5/DEFAULT_DIFFICULTY: Difficulty = 3/	DEFAULT_DIFFICULTY 5 -> 3
+M14	src/cli-options.ts	s/let difficulty = DEFAULT_DIFFICULTY/let difficulty: Difficulty = 3/	parser seeds difficulty 3 (constant left 5)
+M15	src/uci-session.ts	s/default ${DEFAULT_LEVEL} min 1/default 3 min 1/	UCI option literal default 3 (page armed red)
+M16	src/uci-session.ts	s/default ${DEFAULT_LEVEL} min 1/default ${DEFAULT_LEVEL - 1} min 1/	UCI option default DEFAULT_LEVEL-1
+M17	src/uci-session.ts	s/let skill: keyof typeof LEVELS = DEFAULT_LEVEL;/let skill: keyof typeof LEVELS = 3;/	UCI session starts at skill 3 (option line still 5)
+M18	src/levels.ts	s/chooseMove(position, { budgetMs: level.budgetMs, now })/chooseMove(position, { budgetMs: level.budgetMs + 300, now })/	createLevel: engine path budget +300 ms
+M19	src/levels.ts	s/chooseMove(position, { budgetMs: level.budgetMs, now })/chooseMove(position, { budgetMs: level.budgetMs * 1.4, now })/	createLevel: engine path budget x1.4
+M20	src/levels.ts	s/chooseMove(position, { budgetMs: level.budgetMs, now })/chooseMove(position, { budgetMs: level.budgetMs - 1, now })/	createLevel: engine path budget -1 ms
+M21	src/levels.ts	s/budgetMs: 330, blunderRate: 0.1/budgetMs: 330, blunderRate: 0.05/	table: level 3 rate 0.1 -> 0.05 (= level 4's)
+M22	src/levels.ts	s/budgetMs: 180, blunderRate: 0.2/budgetMs: 180, blunderRate: 0.4/	table: level 2 rate 0.2 -> 0.4 (= level 1's)

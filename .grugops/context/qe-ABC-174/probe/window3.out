@@ -1,0 +1,19 @@
+before: procs      501 load { 4.88 5.84 15.69 } 2026-10-19T19:24:32Z
+{
+ "host": "Mac.lan",
+ "start": "2026-10-19T19:24:32.475Z",
+ "secs": 180,
+ "polls": 181,
+ "foreignPolls": 0,
+ "kinds": {},
+ "firstForeign": [],
+ "distinct": [],
+ "load1": {
+  "first": "4.88",
+  "min": "2.39",
+  "max": "4.88",
+  "last": "2.43"
+ }
+}
+rc 0
+after: procs      493 load { 2.43 4.33 13.18 } 2026-10-19T19:27:32Z

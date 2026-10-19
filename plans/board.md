@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — `qe-ABC-174` PASS_WITH_GAPS → `ABC-174` In Security/NFR. QE-174-b MEDIUM: full default lane `npm test` 10.01 s median vs NFR-008 10 s (first full-lane reading since the ABC-173 cap; this ticket's N8-LANE share MET). Dispatched `secnfr-ABC-174` (NFR-004/005, QE-174-b ruling, NFR-004 catalog lines) and `scribe-ABC-174` (AGENTS.md:59 on the branch). Then A0 re-take, ABC-175, UAT. In flight: `secnfr-ABC-174`, `scribe-ABC-174`._
 _Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — owner word "continue with ABC-174" → resumed. Host rebooted (479 procs, load falling); QE `qe-ABC-174` dispatched from `be6a5599`: gate re-check, A6 deep lanes, mutants, A3 step-1000 ruling, NFR-008 only in a quiet window. In flight: `qe-ABC-174`._
 _Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — `ticket-to-pr-ABC-174` delivered `be6a5599` (A1–A5, A7, A8 met; A6 QE's; gates green 1987/1987) → In Review. **PAUSED by owner ("pause work, save progress").** On resume: verify gates, dispatch `qe-ABC-174` (A6 deep lanes + NFR-008; host hit its per-user process limit ~21:40 +0300), then A0 re-take, ABC-175, UAT. Owed at gate: Scribe AGENTS.md l.59; Security/NFR NFR-004 lines. Open: SE's A3 step 1000 (not 10/100) for Orchestrator/QE review. In flight: none._
 _Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — owner pulled ABC-174 ("continue with ABC-174") → In Development; SE `ticket-to-pr-ABC-174` dispatched from `bd480c99` (worktree `../wt-ABC-174`). In flight: `ticket-to-pr-ABC-174`._
@@ -742,7 +743,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
     ## In Development (WIP 1/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
-    ## In Review (WIP 1/3)
+    ## In Review (WIP 0/3)
     - [ABC-012] Portfolio FX conversion  (PR: #41, QE: running)
 
   BOARD <-> TICKET CONTRACT: each ticket file (`plans/tickets/<prefix>-xxx.md`) carries a
@@ -900,8 +901,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
-- [ABC-174] Re-cut the level table per ADR-0045 (data only); default → level 5, plays as today  (owner: software-engineer, size: S, priority: P1, epic: EPIC-004, since: 2026-10-19, DoR 10/10; cut in `bapm-adr0045-cut` (`5a387687`). Waits: ABC-171 merged; recommended after ABC-173.) **2026-10-19: ABC-171 merged → unblocked (waits on the owner's pull).** **2026-10-19: owner pulled (“continue with ABC-174”) → In Development; `ticket-to-pr-ABC-174` dispatched from `bd480c99`.** **2026-10-19: delivered `be6a5599` (gates green 1987/1987, CLI_DEEP 11, PERFT_DEEP 32, skips 0) → In Review. PAUSED by owner before `qe-ABC-174` dispatch.**
+## In Review (WIP 0/3)
 
 
 
@@ -925,7 +925,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Security/NFR (WIP 0/2)
+## In Security/NFR (WIP 1/2)
+- [ABC-174] Re-cut the level table per ADR-0045 (data only); default → level 5, plays as today  (owner: software-engineer, size: S, priority: P1, epic: EPIC-004, since: 2026-10-19, DoR 10/10; cut in `bapm-adr0045-cut` (`5a387687`). Waits: ABC-171 merged; recommended after ABC-173.) **2026-10-19: ABC-171 merged → unblocked (waits on the owner's pull).** **2026-10-19: owner pulled (“continue with ABC-174”) → In Development; `ticket-to-pr-ABC-174` dispatched from `bd480c99`.** **2026-10-19: delivered `be6a5599` (gates green 1987/1987, CLI_DEEP 11, PERFT_DEEP 32, skips 0) → In Review. PAUSED by owner before `qe-ABC-174` dispatch.** **2026-10-19: resumed on owner word; `qe-ABC-174` PASS_WITH_GAPS (gates green after reboot 1987/1987; A6 ENGINE_DEEP 35/35 incl. ABC-087 A5 max 3007 ms, LADDER_DEEP short 18/18; 22/22 mutants killed; A3 step 1000 KEPT; N8-LANE MET +0.115 s CPU; QE-174-b MEDIUM full-lane `npm test` 10.01 s vs NFR-008 10 s; -a LOW; -c..-f INFO) → In Security/NFR; `secnfr-ABC-174` + `scribe-ABC-174` dispatched.**
 
 
 

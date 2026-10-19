@@ -1,0 +1,19 @@
+round	cond	wall	user	sys	cpu	par	files	tests	failed	skipped	load1_before	load1_after	foreign_vitest	speed_limit	power	gap_s	utc	status	thermal_before	thermal_after	foreign_after	power_after
+0	H	9.78	24.8	1.78	26.58	2.718	59	1987	0	0	5.28	5.41	0	none	Battery Power	0	2026-10-19T20:05:53.353Z	ok	0	0	0	Battery Power
+0	H2	10.01	25.17	1.79	26.96	2.693	59	1987	0	0	5.41	5.76	0	none	Battery Power	0	2026-10-19T20:06:03.345Z	ok	0	0	0	Battery Power
+1	H2	9.77	25.34	1.75	27.09	2.773	59	1987	0	0	5.76	5.72	0	none	Battery Power	0	2026-10-19T20:06:13.561Z	ok	0	0	0	Battery Power
+1	H	10.02	25.97	1.82	27.79	2.773	59	1987	0	0	5.72	5.47	0	none	Battery Power	0	2026-10-19T20:06:23.539Z	ok	0	0	0	Battery Power
+2	H	9.82	25.49	1.77	27.26	2.776	59	1987	0	0	5.47	5.57	0	none	Battery Power	0	2026-10-19T20:06:33.767Z	ok	0	0	0	Battery Power
+2	H2	10.05	25.68	1.77	27.45	2.731	59	1987	0	0	5.57	5.33	0	none	Battery Power	0	2026-10-19T20:06:43.798Z	ok	0	0	0	Battery Power
+3	H2	9.82	25.42	1.74	27.16	2.766	59	1987	0	0	5.33	5.21	0	none	Battery Power	0	2026-10-19T20:06:54.062Z	ok	0	0	0	Battery Power
+3	H	9.91	25.79	1.76	27.55	2.78	59	1987	0	0	5.21	5.25	0	none	Battery Power	0	2026-10-19T20:07:04.095Z	ok	0	0	0	Battery Power
+4	H	9.94	25.59	1.76	27.35	2.752	59	1987	0	0	5.25	10.45	0	none	Battery Power	0	2026-10-19T20:07:14.211Z	ok	0	0	0	Battery Power
+4	H2	10.08	25.73	1.75	27.48	2.726	59	1987	0	0	10.45	9.55	0	none	Battery Power	0	2026-10-19T20:07:24.363Z	ok	0	0	0	Battery Power
+5	H2	9.82	25.41	1.74	27.15	2.765	59	1987	0	0	9.55	8.99	0	none	Battery Power	0	2026-10-19T20:07:34.655Z	ok	0	0	0	Battery Power
+5	H	9.96	25.79	1.76	27.55	2.766	59	1987	0	0	8.99	8.39	0	none	Battery Power	0	2026-10-19T20:07:44.684Z	ok	0	0	0	Battery Power
+6	H	9.9	25.56	1.74	27.3	2.758	59	1987	0	0	8.39	7.56	0	none	Battery Power	0	2026-10-19T20:07:54.851Z	ok	0	0	0	Battery Power
+6	H2	10.02	25.58	1.78	27.36	2.731	59	1987	0	0	7.56	6.79	0	none	Battery Power	0	2026-10-19T20:08:04.960Z	ok	0	0	0	Battery Power
+7	H2	9.91	25.66	1.77	27.43	2.768	59	1987	0	0	6.79	6.2	0	none	Battery Power	0	2026-10-19T20:08:15.193Z	ok	0	0	0	Battery Power
+7	H	10.01	25.94	1.78	27.72	2.769	59	1987	0	0	6.2	5.71	0	none	Battery Power	0	2026-10-19T20:08:25.313Z	ok	0	0	0	Battery Power
+8	H	10	25.74	1.78	27.52	2.752	59	1987	0	0	5.71	5.69	0	none	Battery Power	0	2026-10-19T20:08:35.529Z	ok	0	0	0	Battery Power
+8	H2	10.07	25.81	1.79	27.6	2.741	59	1987	0	0	5.69	5.65	0	none	Battery Power	0	2026-10-19T20:08:45.745Z	ok	0	0	0	Battery Power

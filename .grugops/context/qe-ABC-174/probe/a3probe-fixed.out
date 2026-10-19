@@ -1,0 +1,27 @@
+THIRTY 30
+step 1000 (1000.0)	budget 2000	rate 0	equal s1 0 s87 0	RED	ref depths 3	35 ms
+step 1000 (1000.0)	budget 2500	rate 0	equal s1 30 s87 30	green	ref depths 3	47 ms
+step 1000 (1000.0)	budget 2900	rate 0	equal s1 30 s87 30	green	ref depths 3	47 ms
+step 1000 (1000.0)	budget 2990	rate 0	equal s1 30 s87 30	green	ref depths 3	47 ms
+step 1000 (1000.0)	budget 2999	rate 0	equal s1 30 s87 30	green	ref depths 3	46 ms
+step 1000 (1000.0)	budget 3000	rate 0	equal s1 30 s87 30	green	ref depths 3	46 ms
+step 1000 (1000.0)	budget 3000	rate 0.01	equal s1 30 s87 30	green	ref depths 3	48 ms
+step 1000 (1000.0)	budget 3000	rate 0.05	equal s1 30 s87 0	RED	ref depths 3	43 ms
+step 1000 (1000.0)	budget 3001	rate 0	equal s1 0 s87 0	RED	ref depths 3	86 ms
+step 1000 (1000.0)	budget 3010	rate 0	equal s1 0 s87 0	RED	ref depths 3	86 ms
+step 1000 (1000.0)	budget 3100	rate 0	equal s1 0 s87 0	RED	ref depths 3	83 ms
+step 1000 (1000.0)	budget 3500	rate 0	equal s1 0 s87 0	RED	ref depths 3	82 ms
+step 1000 (1000.0)	budget 4500	rate 0	equal s1 0 s87 0	RED	ref depths 3	158 ms
+step 700  (700.0)	budget 2000	rate 0	equal s1 0 s87 0	RED	ref depths 4/5	103 ms
+step 700  (700.0)	budget 2500	rate 0	equal s1 0 s87 0	RED	ref depths 4/5	140 ms
+step 700  (700.0)	budget 2900	rate 0	equal s1 30 s87 30	green	ref depths 4/5	212 ms
+step 700  (700.0)	budget 2990	rate 0	equal s1 30 s87 30	green	ref depths 4/5	212 ms
+step 700  (700.0)	budget 2999	rate 0	equal s1 30 s87 30	green	ref depths 4/5	213 ms
+step 700  (700.0)	budget 3000	rate 0	equal s1 30 s87 30	green	ref depths 4/5	214 ms
+step 700  (700.0)	budget 3000	rate 0.01	equal s1 30 s87 30	green	ref depths 4/5	212 ms
+step 700  (700.0)	budget 3000	rate 0.05	equal s1 30 s87 0	RED	ref depths 4/5	153 ms
+step 700  (700.0)	budget 3001	rate 0	equal s1 30 s87 30	green	ref depths 4/5	214 ms
+step 700  (700.0)	budget 3010	rate 0	equal s1 30 s87 30	green	ref depths 4/5	219 ms
+step 700  (700.0)	budget 3100	rate 0	equal s1 30 s87 30	green	ref depths 4/5	215 ms
+step 700  (700.0)	budget 3500	rate 0	equal s1 30 s87 30	green	ref depths 4/5	211 ms
+step 700  (700.0)	budget 4500	rate 0	equal s1 0 s87 0	RED	ref depths 4/5	353 ms

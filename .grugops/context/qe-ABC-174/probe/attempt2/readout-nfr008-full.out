@@ -1,0 +1,26 @@
+0 H cpu 26.95 wall 9.83 files 59 tests 1987 load1 3.64 -> 4.01 round0
+0 H2 cpu 27.07 wall 10.02 files 59 tests 1987 load1 4.01 -> 3.85 round0
+1 H2 cpu 27.32 wall 9.84 files 59 tests 1987 load1 3.85 -> 3.88 ok
+1 H cpu 27.5 wall 9.91 files 59 tests 1987 load1 3.88 -> 3.59 ok
+2 H cpu 27.68 wall 9.97 files 59 tests 1987 load1 3.59 -> 3.57 ok
+2 H2 cpu 27.84 wall 10.17 files 59 tests 1987 load1 3.57 -> 3.48 ok
+3 H2 cpu 27.48 wall 9.95 files 59 tests 1987 load1 3.48 -> 3.41 ok
+3 H cpu 27.84 wall 10.04 files 59 tests 1987 load1 3.41 -> 3.5 ok
+4 H cpu 27.36 wall 9.85 files 59 tests 1987 load1 3.5 -> 3.2 ok
+4 H2 cpu 27.75 wall 10.13 files 59 tests 1987 load1 3.1 -> 3.16 ok
+5 H2 cpu 27.91 wall 10.05 files 59 tests 1987 load1 3.16 -> 4.24 ok
+5 H cpu 28.35 wall 10.28 files 59 tests 1987 load1 4.24 -> 4.49 ok
+6 H cpu 27.71 wall 9.98 files 59 tests 1987 load1 4.49 -> 4.42 ok
+6 H2 cpu 27.83 wall 10.18 files 59 tests 1987 load1 4.42 -> 4.28 ok
+7 H2 cpu 27.76 wall 9.96 files 59 tests 1987 load1 4.28 -> 4.33 ok
+7 H cpu 27.8 wall 10.04 files 59 tests 1987 load1 4.33 -> 5.08 ok
+8 H cpu 27.75 wall 10.05 files 59 tests 1987 load1 5.08 -> 6.01 ok
+8 H2 cpu 28.81 wall 10.99 files 59 tests 1987 load1 6.01 -> 7.79 ok
+scored 8 [1, 2, 3, 4, 5, 6, 7, 8]
+[cpu] n=8 k=2 H median 27.730 s (range 27.36-28.35); H2 median 27.795 s
+  twin H2-H sorted: -0.44, -0.36, -0.18, -0.04, +0.12, +0.16, +0.39, +1.06; median +0.040 s; sign +4/-4 p 1.000; R 0.390 s
+[wall] n=8 k=2 H median 10.010 s (range 9.85-10.28); H2 median 10.090 s
+  twin H2-H sorted: -0.23, -0.09, -0.08, -0.07, +0.20, +0.20, +0.28, +0.94; median +0.065 s; sign +4/-4 p 1.000; R 0.280 s
+admissible (A1: |twin cpu median| 0.040 s <= max(1.5 % of H cpu = 0.416 s, 1 tick); sign p > 0.05): True
+load1 before each scored run: 3.10-6.01; all <= 8: True
+A9 STATE at 10 s wall: NOT MET (wall median 10.01 s, R 0.28 s; CPU median 27.73 s reported)

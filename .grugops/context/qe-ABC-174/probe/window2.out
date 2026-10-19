@@ -1,0 +1,44 @@
+before: procs      499 load { 3.48 7.20 18.56 } 2026-10-19T19:21:24Z
+{
+ "host": "Mac.lan",
+ "start": "2026-10-19T19:21:25.036Z",
+ "secs": 180,
+ "polls": 181,
+ "foreignPolls": 40,
+ "kinds": {
+  "vitest": 196
+ },
+ "firstForeign": [
+  {
+   "at": "2",
+   "lines": [
+    "44455 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792437217402-hfzedr.sh 2>/dev/null || true && shopt -u extglob "
+   ]
+  }
+ ],
+ "lastForeign": {
+  "at": "41",
+  "lines": [
+   "44455 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792437217402-hfzedr.sh 2>/dev/null || true && shopt -u extglob ",
+   "44460 timeout 900 npx vitest run scripts/validate.test.ts scripts/check-audit-register.test.ts scripts/check-public-docs-vocabulary.test.ts scripts/generate-gua",
+   "44462 npm exec vitest run scripts/validate.test.ts scripts/check-audit-register.test.ts scripts/check-public-docs-vocabulary.test.ts scripts/generate-guarantees",
+   "44546 node /Users/olgeroeselg/Projects/public/grugops/node_modules/.bin/vitest run scripts/validate.test.ts scripts/check-audit-register.test.ts scripts/check-p",
+   "49230 /opt/homebrew/Cellar/node/26.11.1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/public/grugops/node_modules/vitest/sup"
+  ]
+ },
+ "distinct": [
+  "/opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792437217402-hfzedr.sh 2>/dev/null || true && shopt -u extglob 2>/dev",
+  "timeout 900 npx vitest run scripts/validate.test.ts scripts/check-audit-register.test.ts scripts/check-public-docs-vocabulary.test.ts scripts/generate-guarantee",
+  "npm exec vitest run scripts/validate.test.ts scripts/check-audit-register.test.ts scripts/check-public-docs-vocabulary.test.ts scripts/generate-guarantees.test.",
+  "node /Users/olgeroeselg/Projects/public/grugops/node_modules/.bin/vitest run scripts/validate.test.ts scripts/check-audit-register.test.ts scripts/check-public-",
+  "/opt/homebrew/Cellar/node/26.11.1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/public/grugops/node_modules/vitest/suppress-"
+ ],
+ "load1": {
+  "first": "3.48",
+  "min": "3.14",
+  "max": "4.93",
+  "last": "4.26"
+ }
+}
+rc 1
+after: procs      498 load { 4.26 5.76 15.78 } 2026-10-19T19:24:25Z

@@ -1,0 +1,19 @@
+before: procs      427 load { 4.05 5.16 4.82 } 2026-10-19T20:09:38Z
+{
+ "host": "MacBook-Air.local",
+ "start": "2026-10-19T20:09:38.758Z",
+ "secs": 180,
+ "polls": 181,
+ "foreignPolls": 0,
+ "kinds": {},
+ "firstForeign": [],
+ "distinct": [],
+ "load1": {
+  "first": "4.05",
+  "min": "2.12",
+  "max": "4.05",
+  "last": "2.12"
+ }
+}
+rc 0
+after: procs      429 load { 2.12 3.86 4.34 } 2026-10-19T20:12:39Z

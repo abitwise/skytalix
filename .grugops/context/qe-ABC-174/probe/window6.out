@@ -1,0 +1,36 @@
+before: procs      467 load { 2.93 3.60 4.67 } 2026-10-19T19:56:26Z
+{
+ "host": "MacBook-Air.local",
+ "start": "2026-10-19T19:56:26.617Z",
+ "secs": 180,
+ "polls": 181,
+ "foreignPolls": 1,
+ "kinds": {
+  "platform": 1
+ },
+ "firstForeign": [
+  {
+   "at": "3",
+   "lines": [
+    "25221 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792436883899-bb65ys.sh 2>/dev/null || true && shopt -u extglob "
+   ]
+  }
+ ],
+ "lastForeign": {
+  "at": "3",
+  "lines": [
+   "25221 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792436883899-bb65ys.sh 2>/dev/null || true && shopt -u extglob "
+  ]
+ },
+ "distinct": [
+  "/opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792436883899-bb65ys.sh 2>/dev/null || true && shopt -u extglob 2>/dev"
+ ],
+ "load1": {
+  "first": "2.93",
+  "min": "2.01",
+  "max": "3.60",
+  "last": "2.22"
+ }
+}
+rc 1
+after: procs      467 load { 2.22 2.99 4.21 } 2026-10-19T19:59:27Z

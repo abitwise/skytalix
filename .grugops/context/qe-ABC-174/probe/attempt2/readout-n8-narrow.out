@@ -1,0 +1,67 @@
+expected counts (round 0): {'B': (7, 327), 'T': (7, 327), 'H': (7, 343)}
+round	cond	cpu	wall	files	tests	load_b	load_a	foreign_b	foreign_a	therm	power	sampler_bad	status	kept
+0	B	15.33	6.7	7	327	2.12	2.43	0	0	0->0	Battery Power	0	ok	round0
+0	T	15.33	6.55	7	327	2.43	2.75	0	0	0->0	Battery Power	0	ok	round0
+0	H	15.57	6.63	7	343	2.75	2.77	0	0	0->0	Battery Power	0	ok	round0
+1	T	15.21	6.51	7	327	2.77	2.79	0	0	0->0	Battery Power	0	ok	ok
+1	H	15.44	6.55	7	343	2.79	2.98	0	0	0->0	Battery Power	0	ok	ok
+1	B	15.28	6.48	7	327	2.98	3.38	0	0	0->0	Battery Power	0	ok	ok
+2	H	15.46	6.56	7	343	3.38	3.35	0	0	0->0	Battery Power	0	ok	ok
+2	B	15.39	6.55	7	327	3.35	3.59	0	0	0->0	Battery Power	0	ok	ok
+2	T	15.23	6.49	7	327	3.59	3.55	0	0	0->0	Battery Power	0	ok	ok
+3	B	15.28	6.51	7	327	3.55	3.5	0	0	0->0	Battery Power	0	ok	ok
+3	T	15.38	11.49	7	327	3.5	3.54	0	0	0->0	Battery Power	0	ok	ok
+3	H	15.74	6.98	7	343	3.54	3.57	0	0	0->0	Battery Power	0	ok	ok
+4	T	15.37	6.51	7	327	3.57	4.09	0	0	0->0	Battery Power	0	ok	ok
+4	H	15.42	6.52	7	343	4.09	3.85	0	0	0->0	Battery Power	0	ok	ok
+4	B	15.26	6.47	7	327	3.85	4.02	0	0	0->0	Battery Power	0	ok	ok
+5	H	15.42	6.51	7	343	4.02	4.26	0	0	0->0	Battery Power	0	ok	ok
+5	B	15.4	6.58	7	327	4.26	4.22	0	0	0->0	Battery Power	0	ok	ok
+5	T	15.39	6.51	7	327	4.22	4.13	0	0	0->0	Battery Power	0	ok	ok
+6	B	15.45	6.52	7	327	4.13	4.2	0	0	0->0	Battery Power	0	ok	ok
+6	T	15.23	6.48	7	327	4.2	3.93	0	0	0->0	Battery Power	0	ok	ok
+6	H	15.37	6.51	7	343	3.93	3.94	0	0	0->0	Battery Power	0	ok	ok
+7	T	15.25	6.49	7	327	3.94	3.86	0	0	0->0	Battery Power	0	ok	ok
+7	H	15.45	6.63	7	343	3.86	3.73	0	0	0->0	Battery Power	0	ok	ok
+7	B	15.28	6.5	7	327	3.73	3.99	0	0	0->0	Battery Power	0	ok	ok
+8	H	15.41	6.53	7	343	3.99	3.84	0	0	0->0	Battery Power	0	ok	ok
+8	B	15.37	6.58	7	327	3.84	3.61	0	0	0->0	Battery Power	0	ok	ok
+8	T	15.34	6.49	7	327	3.61	3.64	0	0	0->0	Battery Power	0	ok	ok
+
+bracket log per lane round (sampler row at/before the first run's start | at/after the last run's end):
+round	before_utc	load1	user_procs	foreign	|	after_utc	load1	user_procs	foreign
+0	none	-	-	-	|	2026-10-19T20:13:04.610Z	2.79	423	0
+1	2026-10-19T20:12:59.610Z	2.77	423	0	|	2026-10-19T20:13:24.618Z	3.35	423	0
+2	2026-10-19T20:13:19.617Z	3.38	423	0	|	2026-10-19T20:13:44.628Z	3.50	421	0
+3	2026-10-19T20:13:39.626Z	3.55	422	0	|	2026-10-19T20:14:09.644Z	4.09	422	0
+4	2026-10-19T20:14:04.638Z	3.57	424	0	|	2026-10-19T20:14:29.646Z	4.26	422	0
+5	2026-10-19T20:14:24.643Z	4.02	425	0	|	2026-10-19T20:14:49.655Z	4.20	425	0
+6	2026-10-19T20:14:44.648Z	4.13	425	0	|	2026-10-19T20:15:09.660Z	3.86	422	0
+7	2026-10-19T20:15:04.654Z	3.94	424	0	|	2026-10-19T20:15:29.670Z	3.91	424	0
+8	2026-10-19T20:15:24.670Z	3.99	423	0	|	2026-10-19T20:15:49.687Z	3.75	422	0
+
+cpu == user + sys (centiseconds) on every row: True
+scored rounds 8 [1, 2, 3, 4, 5, 6, 7, 8]; discarded rounds []
+load1 before each scored run: 2.77-4.26
+
+[CPU user+sys] n=8 k=2
+  B median 15.325 s; H median 15.430 s; T median 15.295 s
+  twin T-B sorted: -0.220, -0.160, -0.070, -0.030, -0.030, -0.010, +0.100, +0.110
+  twin median -0.030 s (-0.196 % of B); limit max(1.5 % = 229.88 ms, one tick 10 ms) = 229.88 ms
+  sign on non-zero deltas: +2 / -6 (zeros 0, dropped): two-sided p 0.289  [old convention, not used: 2/8, p 0.289]
+  R 0.160 s -> ADMISSIBLE (A1) True
+  treatment H-B sorted: -0.080, +0.020, +0.040, +0.070, +0.160, +0.160, +0.170, +0.460
+  treatment median +0.115 s, interval x(2)..x(7) = +0.020..+0.170
+
+  per-set F = 2.452 s (provisional 16 % of this window B CPU median); 650 ms >= F: False
+  resolves 650 ms (R <= b): True; lower end x(k) +0.020 s > b: False; median +0.115 s <= b: True
+  STATE at 650 ms CPU: MET
+
+[wall] n=8 k=2
+  B median 6.515 s; H median 6.540 s; T median 6.500 s
+  twin T-B sorted: -0.090, -0.070, -0.060, -0.040, -0.010, +0.030, +0.040, +4.980
+  twin median -0.025 s (-0.384 % of B); limit max(1.5 % = 97.73 ms, one tick 10 ms) = 97.73 ms
+  sign on non-zero deltas: +3 / -5 (zeros 0, dropped): two-sided p 0.727  [old convention, not used: 3/8, p 0.727]
+  R 0.070 s -> ADMISSIBLE (A1) True
+  treatment H-B sorted: -0.070, -0.050, -0.010, +0.010, +0.050, +0.070, +0.130, +0.470
+  treatment median +0.030 s, interval x(2)..x(7) = -0.050..+0.130

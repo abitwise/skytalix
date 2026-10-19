@@ -1,0 +1,137 @@
+M01	rc 1	failed 2/1987	table: level 1 budget 100 -> 110
+    levels.test.ts > ABC-174 A1 — the table is ADR-0045 D1's deep-equals D1, and the table and each entry are frozen
+    levels.test.ts > ABC-174 A7 — the time budget, from the data (NFR-004; ADR-0038 decision 3) the verdict's step 4 is admitted: 4 <= LEVELS[1].budgetMs / 10, which is 1
+M02	rc 1	failed 1/1987	table: level 2 budget 180 -> 200
+    levels.test.ts > ABC-174 A1 — the table is ADR-0045 D1's deep-equals D1, and the table and each entry are frozen
+M03	rc 1	failed 3/1986	table: level 3 rate 0.1 -> 0
+    levels.test.ts > A1 — the level table orders the table weakest to strongest: budgets never fall, rates never rise
+    levels.test.ts > ABC-174 A1 — the table is ADR-0045 D1's deep-equals D1, and the table and each entry are frozen
+    uci-session.test.ts > ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12) at skill 3, go depth 3: one info string naming depth, a level line with no score
+M04	rc 1	failed 2/1986	table: level 4 rate 0.05 -> 0 (page armed red)
+    levels.test.ts > ABC-174 A1 — the table is ADR-0045 D1's deep-equals D1, and the table and each entry are frozen
+    uci-session.test.ts > ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12) at skill 4, go depth 3: one info string naming depth, a level line with no score
+M05	rc 1	failed 1/1987	table: level 4 rate 0.05 -> 0.1
+    levels.test.ts > ABC-174 A1 — the table is ADR-0045 D1's deep-equals D1, and the table and each entry are frozen
+M06	rc 1	failed 1/1987	table: level 3 rate 0.1 -> 0.2
+    levels.test.ts > ABC-174 A1 — the table is ADR-0045 D1's deep-equals D1, and the table and each entry are frozen
+M07	rc 1	failed 1/1987	table: level 4 budget 1000 -> 900
+    levels.test.ts > ABC-174 A1 — the table is ADR-0045 D1's deep-equals D1, and the table and each entry are frozen
+M08	rc 1	failed 15/1987	table: level 5 budget 3000 -> 3500
+    cli.test.ts > ABC-101 — --difficulty selects a level, and the played engine is that level A8′ — no flag builds `DEFAULT_LEVEL`, which IS the shipped engine at `DEFAUL
+    engine.test.ts > ABC-086 A5 — the virtual clock stays off the shipped path (i′) the shipped construction passes no clock, and its default level is the shipped engine
+    levels.test.ts > ABC-174 A1 — the table is ADR-0045 D1's deep-equals D1, and the table and each entry are frozen
+    levels.test.ts > ABC-174 A2 — the default is the top [EASIEST, DEFAULT, HARDEST] is [1, 5, 5], and the default is { DEFAULT_BUDGET_MS, 0 }
+    levels.test.ts > ABC-174 A7 — the time budget, from the data (NFR-004; ADR-0038 decision 3) clause A: the default's budget is DEFAULT_BUDGET_MS, which is 3 000
+    levels.test.ts > ABC-174 A7 — the time budget, from the data (NFR-004; ADR-0038 decision 3) clause B: the largest budget over 1..5 is 3 000, below HARD_CEILING_MS (5 
+    levels.test.ts > A6 — the default level has the 3 s budget (`NFR-004`), the engine's own `DEFAULT_BUDGET_MS`
+    uci-session.test.ts > ABC-167 A5 — the D4 time rule, read from the info line's time capped by the default level 5: go wtime 60000 btime 60000 winc 1000 binc 1000 -> 3
+    uci-session.test.ts > ABC-167 A5 — the D4 time rule, read from the info line's time a bare go: go -> 3000 ms (within 2 x 100 ms)
+    uci-session.test.ts > ABC-167 A6 — infinite waits for stop A6-d1: go ponder holds at the capped ceiling; ponderhit releases once
+    uci-session.test.ts > ABC-167 A7 — the D12 limits A7-f2: go movetime with no value searches as a bare go
+    uci-session.test.ts > ABC-167 A7 — the D12 limits A7-f3: go movetime 1e2 and movestogo 0 are dropped with one info string
+M09	rc 1	failed 52/1988	table: level 5 rate 0 -> 0.01
+    cli.test.ts > ABC-101 — --difficulty selects a level, and the played engine is that level A8′ — no flag builds `DEFAULT_LEVEL`, which IS the shipped engine at `DEFAUL
+    engine.test.ts > ABC-086 A5 — the virtual clock stays off the shipped path (i′) the shipped construction passes no clock, and its default level is the shipped engine
+    levels.test.ts > ABC-174 A1 — the table is ADR-0045 D1's deep-equals D1, and the table and each entry are frozen
+    levels.test.ts > ABC-174 A2 — the default is the top [EASIEST, DEFAULT, HARDEST] is [1, 5, 5], and the default is { DEFAULT_BUDGET_MS, 0 }
+    levels.test.ts > A6 — the default level never blunders, so `NFR-005`'s reading on `chooseMove` at 3 s IS this level's reading
+    uci-session.test.ts > ABC-167 A3 — a move from a position writes one info line then one bestmove, the same legal move
+    uci-session.test.ts > ABC-167 A3 — a move from a position A3-h1: nps = round(N x 1000 / max(1, T))
+    uci-session.test.ts > ABC-167 A4 — bad input holds no position A4-a2: an echoed control character in a go value is dropped from the info string
+    uci-session.test.ts > ABC-167 A5 — the D4 time rule, read from the info line's time movetime 100: go movetime 100 -> 100 ms (within 2 x 10 ms)
+    uci-session.test.ts > ABC-167 A5 — the D4 time rule, read from the info line's time white reads wtime: go wtime 1000 btime 9000 -> 50 ms (within 2 x 1 ms)
+    uci-session.test.ts > ABC-167 A5 — the D4 time rule, read from the info line's time black reads btime: go wtime 1000 btime 9000 -> 450 ms (within 2 x 10 ms)
+    uci-session.test.ts > ABC-167 A5 — the D4 time rule, read from the info line's time a short clock: go wtime 40 btime 40 -> 1 ms (within 2 x 1 ms)
+M10	rc 1	failed 62/1987	DEFAULT_LEVEL 5 -> 4
+    cli.test.ts > ABC-101 — --difficulty selects a level, and the played engine is that level A2 — the default is a VALUE: the exported constant, the maximum of the level
+    cli.test.ts > ABC-101 — --difficulty selects a level, and the played engine is that level ABC-174 A2/A3 — no flag resolves difficulty 5, the hardest level, which is `
+    cli.test.ts > ABC-101 — --difficulty selects a level, and the played engine is that level A8′ — the seam built for each level moves exactly as `createLevel` does, on 
+    cli.test.ts > ABC-101 — --difficulty selects a level, and the played engine is that level A8′ — no flag builds `DEFAULT_LEVEL`, which IS the shipped engine at `DEFAUL
+    engine.test.ts > ABC-086 A5 — the virtual clock stays off the shipped path (i′) the shipped construction passes no clock, and its default level is the shipped engine
+    levels.test.ts > A1 — the level table is keyed 1-5, weakest to strongest, easiest 1, default 5, hardest 5 (ADR-0045 D2)
+    levels.test.ts > ABC-174 A2 — the default is the top [EASIEST, DEFAULT, HARDEST] is [1, 5, 5], and the default is { DEFAULT_BUDGET_MS, 0 }
+    levels.test.ts > ABC-174 A3 — the default plays as today: chooseMove at 3 000 ms, the old level 3 move, depth and nodes are equal on 30 of 30 positions, for each of t
+    levels.test.ts > ABC-174 A7 — the time budget, from the data (NFR-004; ADR-0038 decision 3) clause A: the default's budget is DEFAULT_BUDGET_MS, which is 3 000
+    levels.test.ts > A6 — the default level has the 3 s budget (`NFR-004`), the engine's own `DEFAULT_BUDGET_MS`
+    levels.test.ts > A6 — the default level never blunders, so `NFR-005`'s reading on `chooseMove` at 3 s IS this level's reading
+    levels.test.ts > A6 — the default level at rate 0 returns `chooseMove`'s move, depth, nodes and elapsed on the same clock
+M11	rc 1	failed 62/1987	DEFAULT_LEVEL 5 -> 3 (page armed red)
+    cli.test.ts > ABC-101 — --difficulty selects a level, and the played engine is that level A2 — the default is a VALUE: the exported constant, the maximum of the level
+    cli.test.ts > ABC-101 — --difficulty selects a level, and the played engine is that level ABC-174 A2/A3 — no flag resolves difficulty 5, the hardest level, which is `
+    cli.test.ts > ABC-101 — --difficulty selects a level, and the played engine is that level A8′ — the seam built for each level moves exactly as `createLevel` does, on 
+    cli.test.ts > ABC-101 — --difficulty selects a level, and the played engine is that level A8′ — no flag builds `DEFAULT_LEVEL`, which IS the shipped engine at `DEFAUL
+    engine.test.ts > ABC-086 A5 — the virtual clock stays off the shipped path (i′) the shipped construction passes no clock, and its default level is the shipped engine
+    levels.test.ts > A1 — the level table is keyed 1-5, weakest to strongest, easiest 1, default 5, hardest 5 (ADR-0045 D2)
+    levels.test.ts > ABC-174 A2 — the default is the top [EASIEST, DEFAULT, HARDEST] is [1, 5, 5], and the default is { DEFAULT_BUDGET_MS, 0 }
+    levels.test.ts > ABC-174 A3 — the default plays as today: chooseMove at 3 000 ms, the old level 3 move, depth and nodes are equal on 30 of 30 positions, for each of t
+    levels.test.ts > ABC-174 A7 — the time budget, from the data (NFR-004; ADR-0038 decision 3) clause A: the default's budget is DEFAULT_BUDGET_MS, which is 3 000
+    levels.test.ts > A6 — the default level has the 3 s budget (`NFR-004`), the engine's own `DEFAULT_BUDGET_MS`
+    levels.test.ts > A6 — the default level never blunders, so `NFR-005`'s reading on `chooseMove` at 3 s IS this level's reading
+    levels.test.ts > A6 — the default level at rate 0 returns `chooseMove`'s move, depth, nodes and elapsed on the same clock
+M12	rc 1	failed 6/1987	DEFAULT_DIFFICULTY 5 -> 4
+    cli.test.ts > ABC-042 — the accepted set is closed ABC-061 A2 — the five deterministic accepted argvs are pinned by WHAT THEY RESOLVE TO
+    cli.test.ts > ABC-042 — the accepted set is closed ABC-061 A3 — `--colour random` is pinned as a PAIR, whichever side the coin lands
+    cli.test.ts > ABC-101 — --difficulty selects a level, and the played engine is that level A2 — the default is a VALUE: the exported constant, the maximum of the level
+    cli.test.ts > ABC-101 — --difficulty selects a level, and the played engine is that level ABC-174 A2/A3 — no flag resolves difficulty 5, the hardest level, which is `
+    cli.test.ts > ABC-101 — --difficulty selects a level, and the played engine is that level A8′ — no flag builds `DEFAULT_LEVEL`, which IS the shipped engine at `DEFAUL
+    engine.test.ts > ABC-086 A5 — the virtual clock stays off the shipped path (i′) the shipped construction passes no clock, and its default level is the shipped engine
+M13	rc 1	failed 6/1987	DEFAULT_DIFFICULTY 5 -> 3
+    cli.test.ts > ABC-042 — the accepted set is closed ABC-061 A2 — the five deterministic accepted argvs are pinned by WHAT THEY RESOLVE TO
+    cli.test.ts > ABC-042 — the accepted set is closed ABC-061 A3 — `--colour random` is pinned as a PAIR, whichever side the coin lands
+    cli.test.ts > ABC-101 — --difficulty selects a level, and the played engine is that level A2 — the default is a VALUE: the exported constant, the maximum of the level
+    cli.test.ts > ABC-101 — --difficulty selects a level, and the played engine is that level ABC-174 A2/A3 — no flag resolves difficulty 5, the hardest level, which is `
+    cli.test.ts > ABC-101 — --difficulty selects a level, and the played engine is that level A8′ — no flag builds `DEFAULT_LEVEL`, which IS the shipped engine at `DEFAUL
+    engine.test.ts > ABC-086 A5 — the virtual clock stays off the shipped path (i′) the shipped construction passes no clock, and its default level is the shipped engine
+M14	rc 1	failed 6/1987	parser seeds difficulty 3 (constant left 5)
+    cli.test.ts > ABC-042 — the accepted set is closed ABC-061 A2 — the five deterministic accepted argvs are pinned by WHAT THEY RESOLVE TO
+    cli.test.ts > ABC-042 — the accepted set is closed ABC-061 A3 — `--colour random` is pinned as a PAIR, whichever side the coin lands
+    cli.test.ts > ABC-101 — --difficulty selects a level, and the played engine is that level A2 — the default is a VALUE: the exported constant, the maximum of the level
+    cli.test.ts > ABC-101 — --difficulty selects a level, and the played engine is that level ABC-174 A2/A3 — no flag resolves difficulty 5, the hardest level, which is `
+    cli.test.ts > ABC-101 — --difficulty selects a level, and the played engine is that level A8′ — no flag builds `DEFAULT_LEVEL`, which IS the shipped engine at `DEFAUL
+    engine.test.ts > ABC-086 A5 — the virtual clock stays off the shipped path (i′) the shipped construction passes no clock, and its default level is the shipped engine
+M15	rc 1	failed 4/1987	UCI option literal default 3 (page armed red)
+    uci-session.test.ts > ABC-167 A1-A2 — handshake and ready A1: uci writes id name, id author, then (ABC-171 A1) the two option lines, then uciok
+    uci-session.test.ts > ABC-171 A1 — the option lines uci writes exactly 5 lines, the two options after the id lines and before uciok
+    uci-session.test.ts > ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12) the Skill Level line's default is DEFAULT_LEVEL, built from the constant
+    uci-session.test.ts > ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12) the Skill Level line is literally default 5 min 1 max 5
+M16	rc 1	failed 4/1987	UCI option default DEFAULT_LEVEL-1
+    uci-session.test.ts > ABC-167 A1-A2 — handshake and ready A1: uci writes id name, id author, then (ABC-171 A1) the two option lines, then uciok
+    uci-session.test.ts > ABC-171 A1 — the option lines uci writes exactly 5 lines, the two options after the id lines and before uciok
+    uci-session.test.ts > ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12) the Skill Level line's default is DEFAULT_LEVEL, built from the constant
+    uci-session.test.ts > ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12) the Skill Level line is literally default 5 min 1 max 5
+M17	rc 1	failed 46/1987	UCI session starts at skill 3 (option line still 5)
+    uci-session.test.ts > ABC-167 A3 — a move from a position writes one info line then one bestmove, the same legal move
+    uci-session.test.ts > ABC-167 A3 — a move from a position A3-h1: nps = round(N x 1000 / max(1, T))
+    uci-session.test.ts > ABC-167 A4 — bad input holds no position A4-a2: an echoed control character in a go value is dropped from the info string
+    uci-session.test.ts > ABC-167 A5 — the D4 time rule, read from the info line's time movetime 100: go movetime 100 -> 100 ms (within 2 x 10 ms)
+    uci-session.test.ts > ABC-167 A5 — the D4 time rule, read from the info line's time white reads wtime: go wtime 1000 btime 9000 -> 50 ms (within 2 x 1 ms)
+    uci-session.test.ts > ABC-167 A5 — the D4 time rule, read from the info line's time black reads btime: go wtime 1000 btime 9000 -> 450 ms (within 2 x 10 ms)
+    uci-session.test.ts > ABC-167 A5 — the D4 time rule, read from the info line's time a short clock: go wtime 40 btime 40 -> 1 ms (within 2 x 1 ms)
+    uci-session.test.ts > ABC-167 A5 — the D4 time rule, read from the info line's time capped by the default level 5: go wtime 60000 btime 60000 winc 1000 binc 1000 -> 3
+    uci-session.test.ts > ABC-167 A5 — the D4 time rule, read from the info line's time a bare go: go -> 3000 ms (within 2 x 100 ms)
+    uci-session.test.ts > ABC-167 A5 — the D4 time rule, read from the info line's time A5-b1: position startpos, go wtime 2000 btime 2000 winc 1000 binc 0 -> 600 ms (wit
+    uci-session.test.ts > ABC-167 A5 — the D4 time rule, read from the info line's time A5-b2: position startpos moves e2e4, go wtime 2000 btime 2000 winc 1000 binc 0 -> 
+    uci-session.test.ts > ABC-167 A5 — the D4 time rule, read from the info line's time A5-b3: position startpos, go wtime 1000 btime 1000 movestogo 5 -> 200 ms (within 2
+M18	rc 1	failed 11/1987	createLevel: engine path budget +300 ms
+    levels.test.ts > ABC-174 A3 — the default plays as today: chooseMove at 3 000 ms, the old level 3 move, depth and nodes are equal on 30 of 30 positions, for each of t
+    levels.test.ts > A6 — the default level at rate 0 returns `chooseMove`'s move, depth, nodes and elapsed on the same clock
+    levels.test.ts > QE-087-a — the seed never reaches the engine (ADR-0027 d1) every call is `{ budgetMs, now }`; the engine path gets the level budget for any seed
+    uci-session.test.ts > ABC-171 A2 — setoption setoption name skill level value 1 (lower case) writes nothing and sets level 1
+    uci-session.test.ts > ABC-171 A2 — setoption Skill Level value 0: one info string, the old value (1) kept
+    uci-session.test.ts > ABC-171 A2 — setoption Skill Level value 6: one info string, the old value (1) kept
+    uci-session.test.ts > ABC-171 A2 — setoption Skill Level value 2.5: one info string, the old value (1) kept
+    uci-session.test.ts > ABC-171 A2 — setoption Skill Level value x: one info string, the old value (1) kept
+    uci-session.test.ts > ABC-171 A2 — setoption Skill Level value constructor: one info string, the old value (1) kept
+    uci-session.test.ts > ABC-171 A6 — a level change is observable (EPIC-007 M7) level 1: go wtime 60000 btime 60000 winc 1000 binc 1000 -> 100 ms (within 2 x 100 ms)
+    uci-session.test.ts > ABC-171 A6 — a level change is observable (EPIC-007 M7) level 3: go wtime 60000 btime 60000 winc 1000 binc 1000 -> 330 ms (within 2 x 100 ms)
+M19	rc 1	failed 4/1987	createLevel: engine path budget x1.4
+    levels.test.ts > ABC-174 A3 — the default plays as today: chooseMove at 3 000 ms, the old level 3 move, depth and nodes are equal on 30 of 30 positions, for each of t
+    levels.test.ts > A6 — the default level at rate 0 returns `chooseMove`'s move, depth, nodes and elapsed on the same clock
+    levels.test.ts > QE-087-a — the seed never reaches the engine (ADR-0027 d1) every call is `{ budgetMs, now }`; the engine path gets the level budget for any seed
+    uci-session.test.ts > ABC-171 A6 — a level change is observable (EPIC-007 M7) level 3: go wtime 60000 btime 60000 winc 1000 binc 1000 -> 330 ms (within 2 x 100 ms)
+M20	rc 1	failed 1/1987	createLevel: engine path budget -1 ms
+    levels.test.ts > QE-087-a — the seed never reaches the engine (ADR-0027 d1) every call is `{ budgetMs, now }`; the engine path gets the level budget for any seed
+M21	rc 1	failed 1/1987	table: level 3 rate 0.1 -> 0.05 (= level 4's)
+    levels.test.ts > ABC-174 A1 — the table is ADR-0045 D1's deep-equals D1, and the table and each entry are frozen
+M22	rc 1	failed 1/1987	table: level 2 rate 0.2 -> 0.4 (= level 1's)
+    levels.test.ts > ABC-174 A1 — the table is ADR-0045 D1's deep-equals D1, and the table and each entry are frozen
