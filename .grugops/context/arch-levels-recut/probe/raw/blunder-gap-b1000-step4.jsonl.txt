@@ -1,0 +1,51 @@
+# 2026-10-19T11:31:46Z commit 398603fa node v26.11.1 load: { 42.44 27.30 21.23 }
+{"name":"startpos","budgetMs":1000,"step":4,"kind":"blunder","moves":20,"best":54,"played":52,"gap":2,"depth":4}
+{"name":"startpos child 3","budgetMs":1000,"step":4,"kind":"blunder","moves":20,"best":0,"played":-4,"gap":4,"depth":5}
+{"name":"startpos child 7","budgetMs":1000,"step":4,"kind":"blunder","moves":20,"best":89,"played":79,"gap":10,"depth":4}
+{"name":"startpos child 11","budgetMs":1000,"step":4,"kind":"blunder","moves":20,"best":0,"played":-3,"gap":3,"depth":4}
+{"name":"startpos child 15","budgetMs":1000,"step":4,"kind":"blunder","moves":20,"best":76,"played":75,"gap":1,"depth":4}
+{"name":"startpos child 19","budgetMs":1000,"step":4,"kind":"blunder","moves":20,"best":51,"played":48,"gap":3,"depth":4}
+{"name":"kiwipete","budgetMs":1000,"step":4,"kind":"blunder","moves":48,"best":109,"played":56,"gap":53,"depth":2}
+{"name":"kiwipete child 2","budgetMs":1000,"step":4,"kind":"blunder","moves":43,"best":229,"played":152,"gap":77,"depth":3}
+{"name":"kiwipete child 6","budgetMs":1000,"step":4,"kind":"blunder","moves":43,"best":246,"played":71,"gap":175,"depth":3}
+{"name":"kiwipete child 10","budgetMs":1000,"step":4,"kind":"blunder","moves":43,"best":179,"played":156,"gap":23,"depth":3}
+{"name":"kiwipete child 14","budgetMs":1000,"step":4,"kind":"blunder","moves":43,"best":97,"played":77,"gap":20,"depth":2}
+{"name":"kiwipete child 18","budgetMs":1000,"step":4,"kind":"blunder","moves":36,"best":-70,"played":-93,"gap":23,"depth":3}
+{"name":"kiwipete child 22","budgetMs":1000,"step":4,"kind":"blunder","moves":42,"best":233,"played":77,"gap":156,"depth":2}
+{"name":"kiwipete child 26","budgetMs":1000,"step":4,"kind":"blunder","moves":42,"best":115,"played":2,"gap":113,"depth":3}
+{"name":"kiwipete child 30","budgetMs":1000,"step":4,"kind":"blunder","moves":39,"best":559,"played":555,"gap":4,"depth":4}
+{"name":"kiwipete child 34","budgetMs":1000,"step":4,"kind":"blunder","moves":42,"best":832,"played":800,"gap":32,"depth":2}
+{"name":"kiwipete child 38","budgetMs":1000,"step":4,"kind":"blunder","moves":46,"best":-18,"played":-74,"gap":56,"depth":3}
+{"name":"kiwipete child 42","budgetMs":1000,"step":4,"kind":"blunder","moves":41,"best":225,"played":215,"gap":10,"depth":3}
+{"name":"kiwipete child 46","budgetMs":1000,"step":4,"kind":"blunder","moves":43,"best":233,"played":217,"gap":16,"depth":2}
+{"name":"position-3","budgetMs":1000,"step":4,"kind":"blunder","moves":14,"best":48,"played":41,"gap":7,"depth":6}
+{"name":"position-3 child 1","budgetMs":1000,"step":4,"kind":"blunder","moves":16,"best":25,"played":23,"gap":2,"depth":6}
+{"name":"position-3 child 5","budgetMs":1000,"step":4,"kind":"blunder","moves":15,"best":47,"played":24,"gap":23,"depth":7}
+{"name":"position-3 child 9","budgetMs":1000,"step":4,"kind":"blunder","moves":15,"best":52,"played":-1,"gap":53,"depth":7}
+{"name":"position-3 child 13","budgetMs":1000,"step":4,"kind":"blunder","moves":15,"best":10,"played":6,"gap":4,"depth":6}
+{"name":"position-4","budgetMs":1000,"step":4,"kind":"blunder","moves":6,"best":-456,"played":-569,"gap":113,"depth":4}
+{"name":"position-4 child 2","budgetMs":1000,"step":4,"kind":"blunder","moves":43,"best":491,"played":414,"gap":77,"depth":2}
+{"name":"position-5","budgetMs":1000,"step":4,"kind":"blunder","moves":44,"best":578,"played":529,"gap":49,"depth":3}
+{"name":"position-5 child 3","budgetMs":1000,"step":4,"kind":"blunder","moves":34,"best":328,"played":190,"gap":138,"depth":3}
+{"name":"position-5 child 7","budgetMs":1000,"step":4,"kind":"blunder","moves":31,"best":561,"played":168,"gap":393,"depth":3}
+{"name":"position-5 child 11","budgetMs":1000,"step":4,"kind":"blunder","moves":35,"best":749,"played":312,"gap":437,"depth":3}
+{"name":"position-5 child 15","budgetMs":1000,"step":4,"kind":"blunder","moves":34,"best":753,"played":683,"gap":70,"depth":4}
+{"name":"position-5 child 19","budgetMs":1000,"step":4,"kind":"blunder","moves":34,"best":347,"played":235,"gap":112,"depth":3}
+{"name":"position-5 child 23","budgetMs":1000,"step":4,"kind":"blunder","moves":34,"best":336,"played":208,"gap":128,"depth":3}
+{"name":"position-5 child 27","budgetMs":1000,"step":4,"kind":"blunder","moves":34,"best":407,"played":267,"gap":140,"depth":3}
+{"name":"position-5 child 31","budgetMs":1000,"step":4,"kind":"blunder","moves":34,"best":351,"played":185,"gap":166,"depth":3}
+{"name":"position-5 child 35","budgetMs":1000,"step":4,"kind":"blunder","moves":34,"best":681,"played":255,"gap":426,"depth":3}
+{"name":"position-5 child 39","budgetMs":1000,"step":4,"kind":"blunder","moves":31,"best":-578,"played":-581,"gap":3,"depth":4}
+{"name":"position-5 child 43","budgetMs":1000,"step":4,"kind":"blunder","moves":34,"best":-52,"played":-241,"gap":189,"depth":3}
+{"name":"position-6","budgetMs":1000,"step":4,"kind":"blunder","moves":46,"best":84,"played":-1,"gap":85,"depth":2}
+{"name":"position-6 child 2","budgetMs":1000,"step":4,"kind":"blunder","moves":46,"best":100,"played":15,"gap":85,"depth":2}
+{"name":"position-6 child 6","budgetMs":1000,"step":4,"kind":"blunder","moves":46,"best":144,"played":-6,"gap":150,"depth":2}
+{"name":"position-6 child 10","budgetMs":1000,"step":4,"kind":"blunder","moves":46,"best":107,"played":22,"gap":85,"depth":2}
+{"name":"position-6 child 14","budgetMs":1000,"step":4,"kind":"blunder","moves":46,"best":78,"played":13,"gap":65,"depth":2}
+{"name":"position-6 child 18","budgetMs":1000,"step":4,"kind":"blunder","moves":46,"best":104,"played":18,"gap":86,"depth":2}
+{"name":"position-6 child 22","budgetMs":1000,"step":4,"kind":"blunder","moves":46,"best":102,"played":31,"gap":71,"depth":3}
+{"name":"position-6 child 26","budgetMs":1000,"step":4,"kind":"blunder","moves":45,"best":150,"played":79,"gap":71,"depth":2}
+{"name":"position-6 child 30","budgetMs":1000,"step":4,"kind":"blunder","moves":47,"best":595,"played":14,"gap":581,"depth":2}
+{"name":"position-6 child 34","budgetMs":1000,"step":4,"kind":"blunder","moves":4,"best":292,"played":215,"gap":77,"depth":5}
+{"name":"position-6 child 38","budgetMs":1000,"step":4,"kind":"blunder","moves":46,"best":116,"played":13,"gap":103,"depth":2}
+{"name":"position-6 child 42","budgetMs":1000,"step":4,"kind":"blunder","moves":48,"best":340,"played":254,"gap":86,"depth":2}
