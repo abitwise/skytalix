@@ -19,7 +19,11 @@
  * This file brings its own spawn and follows that file's discipline by reading it, not importing it:
  * argument-array form, no shell, a fixed argv, a fixed stdin script, a `timeout`, and a loud throw on
  * `child.error`. The child gets an EMPTY environment, so nothing outside this file — no secret, and
- * no `NODE_OPTIONS=--import=…` that would slip a double in — reaches it.
+ * no `NODE_OPTIONS=--import=…` that would slip a double in — reaches it. ONE TOKEN CROSSES, and it
+ * goes in argv, not the environment (`ABC-173`, `ADR-0008` § ADDENDUM 2026-10-19 Ruling 3): the
+ * last `--max-old-space-size=<digits>` in this worker's own `NODE_OPTIONS`, the lane's heap ceiling,
+ * put BEFORE the entry point (after it, the product would read it as its own argument). Only that
+ * token; `NODE_OPTIONS` itself never reaches the child, and with no token in it this file throws.
  *
  * `A3`: NO ASSERTION NAMES A MOVE, A SCORE, A DEPTH OR A NODE COUNT. The opponent is
  * non-deterministic; every assertion is on a property the real search cannot legally violate. The
@@ -56,7 +60,7 @@ import {
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, inject, it } from "vitest";
 import { makeMove } from "./apply.ts";
 import { createBookProbe } from "./book.ts";
 import { HARD_CEILING_MS } from "./engine.ts";
@@ -90,6 +94,35 @@ const COPIED_FILE = "package.json";
  */
 const CHILD_ARGS: readonly string[] = ["--colour", "black", "--ascii"];
 const CHILD_ENV: Readonly<Record<string, string>> = {};
+
+/** `ABC-173`: the row `tools/grugops/heap-guard.js` provides to every worker (`project.provide`). */
+declare module "vitest" {
+  interface ProvidedContext {
+    heapRowMiB: number;
+  }
+}
+
+/**
+ * `ABC-173` — the lane's heap ceiling as ONE node option for a child whose environment is empty:
+ * the LAST `--max-old-space-size=<digits>` token in this worker's own `NODE_OPTIONS`, which is the
+ * lane's value as vitest copies it into the worker. The parent's value and not a literal, so the
+ * child carries exactly its parent's row in either shape. Absent, it throws: a child of this lane
+ * never runs at Node's default heap.
+ */
+const heapToken = (): string => {
+  const tokens = (process.env.NODE_OPTIONS ?? "").match(
+    /(?:^|\s)(--max-old-space-size=\d+)(?=\s|$)/g,
+  );
+  const last = tokens?.at(-1)?.trim();
+  if (last === undefined)
+    throw new Error(
+      "no --max-old-space-size=<digits> in NODE_OPTIONS: run this lane as AGENTS.md spells it (ABC-173)",
+    );
+  return last;
+};
+
+/** Every child of this file starts `node <heapToken> …`: the one argv construction, both callers. */
+const nodeArgv = (rest: readonly string[]): string[] => [heapToken(), ...rest];
 
 /**
  * A new temporary directory holding the book-absent copy. The caller removes EXACTLY the returned
@@ -185,12 +218,12 @@ interface RealChild {
   readonly wallMs: number;
 }
 
-const spawnReal = (
-  root: string,
-  script: string,
-  args: readonly string[] = CHILD_ARGS,
-): RealChild => {
-  const argv = [entryPointIn(root), ...args];
+const spawnReal = (root: string, script: string, args: readonly string[] = CHILD_ARGS): RealChild =>
+  spawnNode(root, [entryPointIn(root), ...args], script);
+
+/** The file's one spawn: `node` with `nodeArgv(rest)`, `CHILD_ENV`, a fixed stdin, a bound. */
+const spawnNode = (root: string, rest: readonly string[], script: string): RealChild => {
+  const argv = nodeArgv(rest);
   const started = performance.now();
   const child = spawnSync(process.execPath, argv, {
     cwd: root,
@@ -493,6 +526,30 @@ if (RUN_DEEP) {
       expect(levelled.stdout.trimEnd().endsWith(QUIT_NOTICE)).toBe(true);
       expect(levelled.status).toBe(0);
       expect(levelled.signal).toBeNull();
+    });
+  });
+
+  describe("ABC-173 — CLI_DEEP: the child's heap ceiling, read in the child", () => {
+    it("A6 — a child built as this lane builds its children reports heap_size_limit at most the admitted row", () => {
+      const row = inject("heapRowMiB");
+      if (typeof row !== "number")
+        throw new Error("no heapRowMiB: tools/grugops/heap-guard.js did not run as globalSetup");
+      // The same construction as the real children: `nodeArgv`, `CHILD_ENV`, the copy as cwd. Only
+      // the entry point differs, because the product does not print its own heap limit.
+      const probe = spawnNode(
+        copy,
+        [
+          "-e",
+          "process.stdout.write(String(require('node:v8').getHeapStatistics().heap_size_limit))",
+        ],
+        "",
+      );
+      expect(probe.status, probe.stderr).toBe(0);
+      expect(probe.stdout).toMatch(/^[1-9]\d*$/);
+      expect(
+        Number(probe.stdout),
+        `CLI_DEEP child heap_size_limit vs row ${row} MiB`,
+      ).toBeLessThanOrEqual(row * 1024 * 1024);
     });
   });
 }

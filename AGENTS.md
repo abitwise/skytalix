@@ -66,7 +66,7 @@ Real commands only, with flags, preferring fast single-file variants. If a comma
   exactly one such slot (`ABC-071`) and a comment that closes inside it (`ABC-067`).
   Full receipts (RUN dates, byte-exact before/after the `--` trap): `memory-bank/90-agents-md-command-log.md` § "Dev / run". -->
 - Perft harness (move-gen correctness + nodes/sec, ABC-006): `npm run perft`
-- Perft deep counts (opt-in slow suite): `PERFT_DEEP=1 npx vitest run src/perft.test.ts`
+- Perft deep counts (opt-in slow suite): `PERFT_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/perft.test.ts`
 - Spike benchmark (throwaway, ABC-008): `npm run spike:perft [depth]`
 - Regenerate the opening book (ABC-093): `node tools/opening-book/compile.ts <dir>` <!-- RUN 2026-10-10:
   exit 0, 0.4 s; rewrites `data/opening-book/book.json` IN PLACE, `cmp` 0 against the committed file.
@@ -81,8 +81,7 @@ Full RUN receipts for every command below (dates, exit codes, counts, traps): `m
 waiting shell's own command line and never exits. Wait on the PID you started or the tool's
 completion notification; if a pattern is unavoidable, bracket one character (`[v]itest`).
 
-- Test (all): `npm test` <!-- `node tools/grugops/run-bounded.js 60000 vitest run` (ABC-122). RUN
-  2026-10-12: exit 0, 57 files, 1775 tests. A hung lane exits 124 at the 60 s bound — stop
+- Test (all): `npm test` <!-- `node tools/grugops/run-bounded.js 60000 vitest run` (ABC-122). A hung lane exits 124 at the 60 s bound — stop
   with Ctrl-C/SIGTERM, never SIGKILL (R1: can orphan a hung vitest). `*_DEEP` lanes below run via
   `npx vitest run` directly, never through `npm test`. -->
 - Worker cap (ABC-144, ADR-0040 addendum 2): `vitest.config.ts` `test.maxWorkers: 2`, pinned by value in
@@ -91,32 +90,26 @@ completion notification; if a pattern is unavoidable, bracket one character (`[v
   nothing on 4.x). Runner off (ABC-152): `test.experimental.viteModuleRunner: false`, pinned.
   `RISK-ABC152-NEGWORKERS`: a negative `VITEST_MAX_WORKERS` makes `npm test` exit 0 having run nothing
   (result file: `success` false, `testResults` 0).
-- Search deep lane (opt-in, ABC-077): `SEARCH_DEEP=1 npx vitest run src/search.test.ts` <!-- exit 0,
-  41 passed (28 default), 23.0 s. Unset: NOT DEFINED, not skipped (gate skip-count stays 0). Run at
+- Search deep lane (opt-in, ABC-077): `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/search.test.ts` <!-- Unset: NOT DEFINED, not skipped (gate skip-count stays 0). Run at
   QE and after any src/search.ts change. -->
-- Engine deep lane (opt-in, ABC-078): `ENGINE_DEEP=1 npx vitest run src/engine.test.ts` <!-- RUN 2026-10-10:
-  exit 0, 46 passed (33 default), ~5 min (292-319 s), not 100 s. Wall-clock cases + 300-run
+- Engine deep lane (opt-in, ABC-078): `ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/engine.test.ts` <!-- Wall-clock cases + 300-run
   virtual-clock cases; the default lane uses an injected clock. Run after any src/engine.ts or
   src/virtual-clock.ts change. -->
-- Levels deep lane (ABC-087, `src/levels.test.ts`): `ENGINE_DEEP=1 npx vitest run src/levels.test.ts`
-  <!-- RUN 2026-10-10: exit 0, 28 passed (22 default), 202-225 s (A5: 135 s).
-  Holds A4's evidence (ENDGAMES 204 + perft/puzzles 242 moves), A2 on a virtual clock, A3 (31
+- Levels deep lane (ABC-087, `src/levels.test.ts`): `ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/levels.test.ts`
+  <!-- Holds A4's evidence (ENDGAMES 204 + perft/puzzles 242 moves), A2 on a virtual clock, A3 (31
   vs 54 of 58). Run after any src/levels.ts, src/engine.ts or src/virtual-clock.ts change. -->
-- Input-seam deep lane (opt-in, ABC-037): `INPUT_DEEP=1 NODE_OPTIONS=--expose-gc npx vitest run src/line-input.test.ts`
-  <!-- RUN 2026-09-26: exit 0, 34 passed — 34 is the whole lane; 33 = NODE_OPTIONS dropped,
+- Input-seam deep lane (opt-in, ABC-037): `INPUT_DEEP=1 NODE_OPTIONS="--expose-gc --max-old-space-size=400" npx vitest run src/line-input.test.ts`
+  <!-- 34 is the whole lane; 33 = NODE_OPTIONS dropped,
   retention guard did not run (exits 0 either way). TRAP: never assert this guard on heapUsed —
   blind to an unflattened rope (0.00 vs 32.00 MiB via process.memoryUsage().external after gc(),
   which is NOT blind). Run after any src/line-input.ts change. -->
-- Transposition deep lanes (ABC-081, `src/transposition.test.ts`): `SEARCH_DEEP=1 npx vitest run
-  src/transposition.test.ts` <!-- exit 0, 40 passed (25 default), 47.7 s --> and `ENGINE_DEEP=1 npx
-  vitest run src/transposition.test.ts` <!-- exit 0, 26 passed (25 default), 4.8 s -->
-- Zobrist deep lane (ABC-075): `ZOBRIST_DEEP=1 npx vitest run src/zobrist.test.ts` <!-- exit 0,
-  33 passed (32 default), 37.0 s -->
-- Quiescence deep lane (ABC-079): `SEARCH_DEEP=1 npx vitest run src/quiescence.test.ts` <!-- exit 0,
-  37 passed (29 default), 1.8 s -->
-- Puzzle suite, strength gate (opt-in, ABC-084): `PUZZLE_DEEP=1 npx vitest run src/puzzle-suite.test.ts`
-  <!-- RUN 2026-10-12: exit 0, 18 passed (12 default), ~6 s (printed wall 4 s); ABC-127 A7 reads <= 90 / 45 s,
-  never asserted, 300 s hang guards. Baseline `src/puzzle-suite.baseline.json` (54/58, budget 25,
+- Transposition deep lanes (ABC-081, `src/transposition.test.ts`): `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run
+  src/transposition.test.ts` and `ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx
+  vitest run src/transposition.test.ts`
+- Zobrist deep lane (ABC-075): `ZOBRIST_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/zobrist.test.ts`
+- Quiescence deep lane (ABC-079): `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/quiescence.test.ts`
+- Puzzle suite, strength gate (opt-in, ABC-084): `PUZZLE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/puzzle-suite.test.ts`
+  <!-- Baseline `src/puzzle-suite.baseline.json` (54/58, budget 25,
   step 1). TRIGGER (owner, option B, 2026-10-09): QE runs it during review when the change touches
   engine code (`src/engine.ts`, `src/search*.ts`, `src/evaluate*.ts`, `src/quiescence.ts`,
   `src/transposition.ts`, move ordering). red = QE FAIL. Not a `quality.mandatory_gates` entry. The baseline moves only in its
@@ -124,24 +117,23 @@ completion notification; if a pattern is unavoidable, bracket one character (`[v
   commit); raising it is QE's, lowering it needs the owner's word. `PUZZLE_DEEP=weakened` is the
   red demonstration: exits 1 by design, gate row red (15/58), A3 green; the exit code alone is not
   the reading. -->
-- PVS/LMR deep lane (ABC-121, `src/search.pvs-lmr.test.ts`): `SEARCH_DEEP=1 npx vitest run
-  src/search.pvs-lmr.test.ts` <!-- exit 0, 29 passed (20 default; 0.6 s). Deep 926.2 s wall,
-  cited from UAT (`uat-run-ABC-121#77854a65`), not re-run (over 10 min). Run after any PVS/LMR
+- PVS/LMR deep lane (ABC-121, `src/search.pvs-lmr.test.ts`): `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run
+  src/search.pvs-lmr.test.ts` <!-- Run after any PVS/LMR
   change to src/search.ts or src/engine.ts. -->
-- Real-engine CLI lane (opt-in, ABC-119): `CLI_DEEP=1 npx vitest run src/cli.real-engine.test.ts`
-  <!-- RUN 2026-10-10: exit 0, 7 passed (1 default), 6.4 s; two real children of
+- Real-engine CLI lane (opt-in, ABC-119): `CLI_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/cli.real-engine.test.ts`
+  <!-- Two real children of
   `node src/cli.ts --colour black --ascii`. Unset: NOT DEFINED, not skipped. Run at QE and after
   any src/cli.ts or src/engine.ts change. -->
-- Self-play ladder lane (opt-in, ABC-085, ADR-0038): `LADDER_DEEP=1 npx vitest run src/ladder.test.ts`
-  <!-- RUN 2026-10-11: exit 0, 14 passed (9 default), 848 s, loaded host. Short mode, step 120:
+- Self-play ladder lane (opt-in, ABC-085, ADR-0038): `LADDER_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/ladder.test.ts`
+  <!-- Short mode, step 120:
   claims A3/A4/A5 only, never A1/A2. `-t "3v4"` re-runs one pair. Unset is the only off:
   `LADDER_DEEP=` and `=0` fail at load (QE-085-e). Unset: NOT DEFINED, not skipped. The A1/A2
   verdict is not run here (~44 h in vitest): its route is ABC-146's (plain node, ADR-0038 addendum). -->
-- Test (single file): `npx vitest run <path>`
-- Coverage: `npx vitest run --coverage` <!-- exit 0, 99.43 % lines over LOADED files only (4.x: no `coverage.all`). Not in
+- Test (single file): `NODE_OPTIONS=--max-old-space-size=400 npx vitest run <path>`
+- Coverage: `NODE_OPTIONS=--max-old-space-size=128 npx vitest run --coverage` <!-- exit 0, 99.43 % lines over LOADED files only (4.x: no `coverage.all`). Not in
   `quality.mandatory_gates` — a measurement, not a gate. TRAP: `src/cli.ts`'s tests SPAWN it as a
   child and v8 coverage does not cross a process boundary, so it reads uncovered while tested. -->
-- Coverage (`src/` only — the other denominator; neither is agreed): `npx vitest run --coverage --coverage.include='src/**'` <!-- exit 0, 95.55 % lines -->
+- Coverage (`src/` only — the other denominator; neither is agreed): `NODE_OPTIONS=--max-old-space-size=128 npx vitest run --coverage --coverage.include='src/**'` <!-- exit 0, 95.55 % lines -->
 
 ### Acceptance
 
@@ -149,7 +141,7 @@ completion notification; if a pattern is unavoidable, bracket one character (`[v
 
 ### Test integrity
 
-- Skip-count capture: `npx vitest run --reporter=json 2>/dev/null | jq '.numPendingTests + .numTodoTests'` <!-- verified: returns an integer (0 with no tests). Undeterminable → `UNKNOWN - verify`, never a silent 0. -->
+- Skip-count capture: `NODE_OPTIONS=--max-old-space-size=128 npx vitest run --reporter=json 2>/dev/null | jq '.numPendingTests + .numTodoTests'` <!-- verified: returns an integer (0 with no tests). Undeterminable → `UNKNOWN - verify`, never a silent 0. -->
 
 - Test-integrity check (the gate's step): `node tools/grugops/test-skip-integrity.js .grugops/test-skips.md --skip-count <N>` <!-- verified: `No findings.`, exit 0, at skip count 0. `.grugops/test-skips.md` is HUMAN-OWNED — an agent may READ and RUN this, never write a row into it. -->
 

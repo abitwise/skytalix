@@ -100,12 +100,27 @@ import type { ViteUserConfig } from "vitest/config";
  * absent (ignored on 4.x, still forbidden). A test that needs a fresh module or a spy on a
  * module namespace uses the addendum's forms (`vi.mock(p, { spy: true })`, a query-string
  * import), never `vi.resetModules()`, which returns the same instance with the runner off.
+ *
+ * -------------------------------------------------------------------------------------------
+ * `globalSetup` below is the V8 heap ceiling's GUARD, not its setting (`ABC-173`, `ADR-0008`
+ * § ADDENDUM 2026-10-19, accepted by the owner): every vitest run keeps Σ `heap_size_limit` <= 2048
+ * MiB over the isolates it has live at once. The limit is set on the COMMAND, as
+ * `NODE_OPTIONS=--max-old-space-size=<flag>` (`package.json` `test` / `test:watch`, every vitest
+ * line in `AGENTS.md`), because vitest 4.1.11 gives a worker no `resourceLimits` and Node refuses a
+ * heap flag in a Worker's `execArgv`: main and workers share one process-wide value. Two rows, by
+ * the run's file count: SUITE (2+ files) flag 128 -> 224 MiB x 9 isolates; ONE-FILE flag 400 ->
+ * 496 MiB x 4. `tools/grugops/heap-guard.js` reads the limit in the main process and THROWS above
+ * the row, so a command typed without its prefix exits 1 and runs nothing; it hands the row to the
+ * workers as `inject("heapRowMiB")`. The key is a path string, so the `ABC-144 A7` / `ABC-152 V3`
+ * import of this file still loads nothing at run time. Never raise a row here or there without the
+ * owner's word: an out-of-memory lane goes to him (his Q4).
  */
 export default {
   test: {
     pool: "threads",
     maxWorkers: 2,
     experimental: { viteModuleRunner: false },
+    globalSetup: ["./tools/grugops/heap-guard.js"],
     /**
      * Vitest's default `exclude` is REPLACED, not extended, when you set this key - so the
      * stock entries (`node_modules`, `dist`, `.idea`, `.git`, `.cache`) are repeated here by

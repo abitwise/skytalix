@@ -32,9 +32,12 @@
 import { spawnSync } from "node:child_process";
 import { lstatSync, readdirSync, readFileSync } from "node:fs";
 import { createRequire } from "node:module";
+import { getHeapStatistics } from "node:v8";
+import { isMainThread } from "node:worker_threads";
 import type * as Ts from "typescript";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, inject, it, vi } from "vitest";
 import type { ViteUserConfig } from "vitest/config";
+import heapGuardSetup, { admit, FLAGS_MIB, ROWS_MIB } from "../tools/grugops/heap-guard.js";
 import { createBookProbe } from "./book.ts";
 import {
   ACCEPTED_ARGUMENTS,
@@ -60,6 +63,13 @@ import { renderResultScreen } from "./result-screen.ts";
 import { renderStatusPanel, STATUS_ROWS } from "./status-panel.ts";
 import { INPUT_ENDED_NOTICE, QUIT_NOTICE, type TerminalReason } from "./turn-loop.ts";
 import { virtualClock } from "./virtual-clock.ts";
+
+/** `ABC-173`: the row `tools/grugops/heap-guard.js` provides to every worker (`project.provide`). */
+declare module "vitest" {
+  interface ProvidedContext {
+    heapRowMiB: number;
+  }
+}
 
 vi.mock("./glyph-mode.ts", { spy: true });
 
@@ -919,6 +929,20 @@ export function withBook(_probe, _inner) {
    * has no capturable output for another row to assert over.
    */
   unwritableStdout: unwritableStdout(),
+
+  /**
+   * `ABC-173` `A6` — THE HEAP PROBE, and the only child here that is not the product. It is spawned
+   * through `childOf` like every other child, so it gets exactly `childOf`'s construction: the
+   * worker's environment, inherited (so the lane's `NODE_OPTIONS=--max-old-space-size=<flag>`), and
+   * no node option of its own. It prints its `heap_size_limit` in bytes; `ABC-173`'s block asserts
+   * that is at most `inject("heapRowMiB")`. `productArgv` is `[]` because no product argv exists:
+   * `[]` resolves `ok`, so `ABC-066`'s refusal derivation leaves it out, which is correct.
+   */
+  heapProbe: childOf(
+    process.execPath,
+    ["-e", "process.stdout.write(String(require('node:v8').getHeapStatistics().heap_size_limit))"],
+    [],
+  ),
 } as const;
 
 // ---------------------------------------------------------------------------------------------
@@ -1776,8 +1800,11 @@ describe("ABC-042 — the shape of what was delivered", () => {
     ];
     const SCRIPTS_AT_HEAD = {
       typecheck: "tsc --noEmit",
-      test: "node tools/grugops/run-bounded.js 60000 vitest run --reporter=default --reporter=./tools/grugops/result-file-reporter.js --outputFile.json=.test-results/last-run.json",
-      "test:watch": "vitest",
+      // RE-PINNED AT `ABC-173` (`ADR-0008` addendum 2026-10-19): `test` and `test:watch` gain the
+      // SUITE heap prefix and nothing else. Still a byte pin, so `ABC-144` `A7`'s "the CLI-flag route
+      // is closed by `A10`" holds; `ABC-173` `A3` checks the flag against `heap-guard.js`'s export.
+      test: "NODE_OPTIONS=--max-old-space-size=128 node tools/grugops/run-bounded.js 60000 vitest run --reporter=default --reporter=./tools/grugops/result-file-reporter.js --outputFile.json=.test-results/last-run.json",
+      "test:watch": "NODE_OPTIONS=--max-old-space-size=128 vitest",
       lint: "biome check .",
       "lint:fix": "biome check --write .",
       format: "biome format --write",
@@ -1864,7 +1891,7 @@ describe("ABC-042 — the shape of what was delivered", () => {
     expect(child.status).not.toBe(0);
   });
 
-  it("N8-LANE — this file spawns TWENTY-SEVEN children and no more", () => {
+  it("N8-LANE — this file spawns TWENTY-EIGHT children and no more", () => {
     // The budget, pinned mechanically. Every child is spawned once at module scope; a later hop
     // that adds one has to change this number and say why.
     //
@@ -1938,16 +1965,22 @@ describe("ABC-042 — the shape of what was delivered", () => {
     // `N8-SPAWN` figure; the two children are reported to the lane measurement on that ticket,
     // not netted.
     //
-    // TWENTY-SEVEN IS A CEILING, NOT A TARGET.
+    // TWENTY-SEVEN UNTIL `ABC-173`, which adds ONE, named by its page (`A6`) and ruled by `ADR-0008`
+    // § ADDENDUM 2026-10-19 (`N8_SPAWN` 27 -> 28): `heapProbe`, a child built exactly as every other
+    // `childOf` child is (inherited environment, no node option of its own), that prints its own
+    // `heap_size_limit` so the lane's heap ceiling is read WHERE IT APPLIES, in a child. Its cost is
+    // QE's to read (`N8-LANE`, before merge), not this hop's: no timing was taken here.
     //
-    // WRITTEN AS `17 + 7 + 1 + 2` AND NOT AS ITS VALUE. At `17 + 6` the form was FORCED: `A6`'s
+    // TWENTY-EIGHT IS A CEILING, NOT A TARGET.
+    //
+    // WRITTEN AS `17 + 7 + 1 + 2 + 1` AND NOT AS ITS VALUE. At `17 + 6` the form was FORCED: `A6`'s
     // `ADR-0009` clause 9a row bars any literal equal to a frame's height from this file's
     // executable code, the frame is 23 rows, and the budget was 23 children — two unrelated numbers
     // that happened to be equal, so a literal would have redded `A6`. AT 24 THE COLLISION WAS GONE
     // and the form is now a choice, kept because the derivation says what the value cannot: WHICH
     // ticket bought WHICH children. A hop that "tidies" it to a literal reds nothing today and loses
     // that, and the next raise may collide again.
-    const N8_SPAWN = 17 + 7 + 1 + 2;
+    const N8_SPAWN = 17 + 7 + 1 + 2 + 1;
     expect(spawned).toBe(N8_SPAWN);
     expect(Object.keys(CHILDREN)).toHaveLength(N8_SPAWN);
     // THE PIN ABOVE IS SELF-REFERENTIAL: `spawned` counts only children made through `childOf`, so
@@ -1984,8 +2017,8 @@ describe("ABC-042 — the shape of what was delivered", () => {
     // shadows one, also red (iii) — loud, never silent. THE BOUND IT KEEPS: a module name that is not
     // a literal (computed or concatenated) is not seen, and neither is a literal that is not a call's
     // FIRST argument — `getBuiltinModule.call(process, …)`, `Reflect.apply(req, undefined, […])`
-    // (`QE-138-b`). One load and one parse per run of this file,
-    // both here. The load is `createRequire`, not an ESM `import`: under vitest the `import` measured
+    // (`QE-138-b`). One load and one parse of THIS file per run,
+    // both here (`ABC-173`'s block re-requires the same cached module and parses other files). The load is `createRequire`, not an ESM `import`: under vitest the `import` measured
     // ~205 ms CPU against ~85 ms (`ABC-133` `A4`).
     const ts: typeof Ts = createRequire(import.meta.url)("typescript");
     const view = ts.createSourceFile(
@@ -3573,6 +3606,404 @@ describe("ABC-152 V3 — the lane runs src/ without vite's module runner (ADR-00
     const { default: lane } = await import("../vitest.config.ts");
     const test: NonNullable<ViteUserConfig["test"]> = lane.test ?? {};
     expect(test.experimental?.viteModuleRunner).toBe(false);
+  });
+});
+
+// ---------------------------------------------------------------------------------------------
+// `ABC-173` — the V8 heap ceiling, read WHERE IT APPLIES (`ADR-0008` § ADDENDUM 2026-10-19,
+// accepted by the owner). The limit is set on the lane command (`NODE_OPTIONS=--max-old-space-size`)
+// and `tools/grugops/heap-guard.js` refuses a run above its row in the MAIN process (`A5`); the rows
+// below read it in a WORKER (`A4`) and in a CHILD (`A6`), against the row the guard admitted this
+// run under (`inject("heapRowMiB")`), never a re-derived one. No row asserts a machine-dependent
+// figure other than the table's ceilings. `C2` and `A3` are static: in process, no spawn.
+// ---------------------------------------------------------------------------------------------
+
+const MIB = 1024 * 1024;
+
+/** The row `heap-guard.js` admitted this run under. Throws when the guard never ran. */
+const admittedRowMiB = (): number => {
+  const row = inject("heapRowMiB");
+  if (typeof row !== "number")
+    throw new Error("no heapRowMiB: tools/grugops/heap-guard.js did not run as globalSetup");
+  return row;
+};
+
+/** The asynchronous `node:child_process` forms `C2` bars, and the synchronous ones it counts. */
+const ASYNC_CHILD_FORMS: ReadonlySet<string> = new Set(["spawn", "exec", "execFile", "fork"]);
+const SYNC_CHILD_FORMS: ReadonlySet<string> = new Set(["spawnSync", "execFileSync", "execSync"]);
+
+interface ChildCall {
+  readonly file: string;
+  /** The `node:child_process` export the call resolves to. */
+  readonly form: string;
+  readonly call: Ts.CallExpression;
+  readonly view: Ts.SourceFile;
+}
+
+/**
+ * Every call in `source` whose callee resolves to a `node:child_process` export through a static
+ * import: a named binding (`spawnSync(…)`, `alias(…)` for `{ spawnSync as alias }`) or a member of
+ * a namespace / default binding (`cp.spawn(…)`). Over the TypeScript parser's view, so a comment or
+ * a string cannot red a correct file and cannot hide a real call. THE BOUND IT KEEPS: a module that
+ * is reached by `require`, by a dynamic `import()` or through a mock factory's `importOriginal` is
+ * not seen (`src/glyph-mode.nfr.test.ts` holds one such factory; it SPIES on `spawn` and calls
+ * nothing), and neither is a binding passed on as a value and called elsewhere.
+ */
+const childCallsIn = (ts: typeof Ts, file: string, source: string): ChildCall[] => {
+  const view = ts.createSourceFile(file, source, ts.ScriptTarget.Latest, true);
+  const named = new Map<string, string>();
+  const namespaces = new Set<string>();
+  for (const statement of view.statements) {
+    if (!ts.isImportDeclaration(statement)) continue;
+    const specifier = statement.moduleSpecifier;
+    if (!ts.isStringLiteral(specifier) || !/^(node:)?child_process$/.test(specifier.text)) continue;
+    const clause = statement.importClause;
+    if (clause?.name !== undefined) namespaces.add(clause.name.text);
+    const bindings = clause?.namedBindings;
+    if (bindings !== undefined && ts.isNamespaceImport(bindings))
+      namespaces.add(bindings.name.text);
+    if (bindings !== undefined && ts.isNamedImports(bindings)) {
+      for (const { propertyName, name } of bindings.elements) {
+        named.set(name.text, (propertyName ?? name).text);
+      }
+    }
+  }
+  const calls: ChildCall[] = [];
+  const visit = (node: Ts.Node): void => {
+    if (ts.isCallExpression(node)) {
+      const callee = node.expression;
+      const form =
+        ts.isIdentifier(callee) && named.has(callee.text)
+          ? named.get(callee.text)
+          : ts.isPropertyAccessExpression(callee) &&
+              ts.isIdentifier(callee.expression) &&
+              namespaces.has(callee.expression.text)
+            ? callee.name.text
+            : undefined;
+      if (form !== undefined) calls.push({ file, form, call: node, view });
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(view);
+  return calls;
+};
+
+/**
+ * Spelled through a `const`, as bar 1's list does: the `N8-LANE` row counts any call whose FIRST
+ * argument is that literal, and `includes` loads nothing (`ABC-138` `A4`).
+ */
+const CHILD_PROCESS_NAME = "child_process";
+
+/** Every `src/**` test file that names `child_process` at all: a static import cannot avoid it. */
+const childCallsInTestSources = (ts: typeof Ts): ChildCall[] =>
+  (readdirSync(SOURCE_DIRECTORY, { recursive: true }) as string[])
+    .filter((file) => file.endsWith(".test.ts"))
+    .sort()
+    .map((file) => [file, sourceOf(file)] as const)
+    .filter(([, source]) => source.includes(CHILD_PROCESS_NAME))
+    .flatMap(([file, source]) => childCallsIn(ts, file, source));
+
+interface LaneCommand {
+  /** The backticked command, whitespace collapsed. */
+  readonly text: string;
+  readonly shape: keyof typeof FLAGS_MIB;
+  /** Every `NODE_OPTIONS=` value in the command's leading assignments, quotes removed. */
+  readonly nodeOptions: readonly string[];
+}
+
+/**
+ * Every vitest command `AGENTS.md` spells: each backticked span OUTSIDE an HTML comment that runs
+ * `npx vitest`. Its shape is the guard's: ONE-FILE when it names exactly one `*.test.ts` file or the
+ * `<path>` placeholder, SUITE otherwise.
+ */
+const vitestCommandsIn = (agents: string): LaneCommand[] =>
+  [...agents.replace(/<!--[\s\S]*?-->/g, "").matchAll(/`([^`]*)`/g)]
+    .map((match) => (match[1] as string).replace(/\s+/g, " ").trim())
+    .filter((text) => /(^|\s)npx vitest(\s|$)/.test(text))
+    .map((text) => {
+      const lead = /^((?:[A-Z_]+=(?:"[^"]*"|\S*) )*)npx vitest/.exec(text)?.[1] ?? "";
+      const nodeOptions = [...lead.matchAll(/(?:^| )NODE_OPTIONS=("[^"]*"|\S*)/g)].map((m) =>
+        (m[1] as string).replace(/^"|"$/g, ""),
+      );
+      const files = text.match(/\S+\.test\.ts\b/g) ?? [];
+      const oneFile = files.length === 1 || text.includes("<path>");
+      return { text, shape: oneFile ? "oneFile" : "suite", nodeOptions };
+    });
+
+/** What is wrong with one command's heap flag, or `undefined` when it carries exactly its shape's. */
+const heapFlagFaultOf = (command: LaneCommand): string | undefined => {
+  if (command.nodeOptions.length !== 1)
+    return `${command.nodeOptions.length} NODE_OPTIONS assignments before npx vitest, not 1`;
+  const heap = (command.nodeOptions[0] as string)
+    .split(/\s+/)
+    .filter((token) => token.startsWith("--max-old-space-size="));
+  const wanted = `--max-old-space-size=${FLAGS_MIB[command.shape]}`;
+  if (heap.length !== 1 || heap[0] !== wanted)
+    return `heap flags ${JSON.stringify(heap)}, not [${JSON.stringify(wanted)}] (${command.shape})`;
+  return undefined;
+};
+
+/**
+ * `A6 (static)`: what makes a test's `node` child NOT inherit `childOf`'s construction. A heap flag
+ * in its argv (`-` or `_` between the words: Node reads both), an `env` key in its options (by its
+ * name, so a quoted key counts), or a spread in either, which can carry both unseen (`QE-173-b`).
+ * Throws when the argv or the options are not literals: this check must never pass by being unable
+ * to look.
+ */
+const childConstructionFaultsOf = (ts: typeof Ts, { file, call, view }: ChildCall): string[] => {
+  const [, argv, options] = call.arguments;
+  if (argv === undefined || !ts.isArrayLiteralExpression(argv))
+    throw new Error(`${file}: the child's argv is not an array literal; this row cannot look`);
+  if (options === undefined || !ts.isObjectLiteralExpression(options))
+    throw new Error(`${file}: the child's options are not an object literal; this row cannot look`);
+  const faults: string[] = [];
+  if (argv.elements.some((element) => ts.isSpreadElement(element))) faults.push("a spread in argv");
+  if (/max[-_]old[-_]space[-_]size|max[-_]heap[-_]size/.test(argv.getText(view)))
+    faults.push("a heap flag in argv");
+  for (const property of options.properties) {
+    if (ts.isSpreadAssignment(property)) {
+      faults.push("a spread in options");
+      continue;
+    }
+    const name = property.name;
+    const key =
+      name === undefined
+        ? undefined
+        : ts.isIdentifier(name) ||
+            ts.isStringLiteral(name) ||
+            ts.isNoSubstitutionTemplateLiteral(name)
+          ? name.text
+          : ts.isComputedPropertyName(name) && ts.isStringLiteralLike(name.expression)
+            ? name.expression.text
+            : name.getText(view);
+    if (key === "env") faults.push("an env key in options");
+  }
+  return faults;
+};
+
+describe("ABC-173 — every vitest run carries the V8 heap ceiling, read where it applies (ADR-0008 addendum 2026-10-19)", () => {
+  it("A4 — in a worker, heap_size_limit is at most the admitted row", () => {
+    const row = admittedRowMiB();
+    // Non-vacuity: this row runs in a WORKER, so it cannot be the main process's reading, and the
+    // row is one the guard actually holds.
+    expect(isMainThread, "A4 ran on the main thread").toBe(false);
+    expect(Object.values(ROWS_MIB)).toContain(row);
+    expect(
+      getHeapStatistics().heap_size_limit,
+      `worker heap_size_limit vs row ${row} MiB`,
+    ).toBeLessThanOrEqual(row * MIB);
+  });
+
+  // `A5` IN PROCESS (`QE-173-a`): the guard's decision, `admit`, called with a fake project (its
+  // `getPaths()` reads a `this`, as vitest's does) and a fake `heap_size_limit`. The rows pin the
+  // table's values, the shape choice, the comparison and the provided row, none of which a lane run
+  // at its own flag can tell apart from a wrong build.
+  const guardProject = (paths: unknown) => {
+    const provided: [string, unknown][] = [];
+    const state =
+      paths === undefined
+        ? {}
+        : {
+            paths,
+            getPaths(this: { paths: unknown }) {
+              return this.paths;
+            },
+          };
+    return {
+      project: {
+        vitest: { state },
+        provide: (...entry: [string, unknown]) => provided.push(entry),
+      },
+      provided,
+    };
+  };
+  const filesOf = (count: number): string[] =>
+    Array.from({ length: count }, (_, index) => `src/f${index}.test.ts`);
+  const limitOf = (bytes: number) => ({ heap_size_limit: bytes });
+
+  it("A5 — ROWS_MIB and FLAGS_MIB are the addendum's table, and each row times its live isolates is at most 2048 MiB", () => {
+    expect({ ...ROWS_MIB }).toEqual({ suite: 224, oneFile: 496 });
+    expect({ ...FLAGS_MIB }).toEqual({ suite: 128, oneFile: 400 });
+    expect(Object.isFrozen(ROWS_MIB) && Object.isFrozen(FLAGS_MIB)).toBe(true);
+    expect(9 * ROWS_MIB.suite, "SUITE: 9 live isolates").toBe(2016);
+    expect(4 * ROWS_MIB.oneFile, "ONE-FILE: 4 live isolates").toBe(1984);
+    expect(9 * ROWS_MIB.suite).toBeLessThanOrEqual(2048);
+    expect(4 * ROWS_MIB.oneFile).toBeLessThanOrEqual(2048);
+  });
+
+  it("A5 — the guard's shape: 1 file is ONE-FILE, 2 or more is SUITE, and the row provided is the row chosen", () => {
+    for (const [count, row] of [
+      [1, 496],
+      [2, 224],
+      [3, 224],
+      [120, 224],
+    ] as const) {
+      // At the row exactly, and far below it: the provided row is the shape's, never the limit's.
+      for (const limitMiB of [row, 64]) {
+        const { project, provided } = guardProject(filesOf(count));
+        expect(
+          () => admit(project, limitOf(limitMiB * MIB)),
+          `${count} files at ${limitMiB} MiB`,
+        ).not.toThrow();
+        expect(provided, `${count} files at ${limitMiB} MiB`).toEqual([["heapRowMiB", row]]);
+      }
+    }
+  });
+
+  it("A5 — the guard's comparison: a limit equal to the row is admitted; one MiB or one byte above it is refused, and nothing is provided", () => {
+    for (const [count, row, flag] of [
+      [1, 496, 400],
+      [2, 224, 128],
+      [120, 224, 128],
+    ] as const) {
+      for (const bytes of [(row + 1) * MIB, row * MIB + 1]) {
+        const { project, provided } = guardProject(filesOf(count));
+        expect(() => admit(project, limitOf(bytes)), `${count} files at ${bytes} B`).toThrow(
+          new RegExp(`heap-guard: refused[\\s\\S]*NODE_OPTIONS=--max-old-space-size=${flag}`),
+        );
+        expect(provided, `${count} files at ${bytes} B`).toEqual([]);
+      }
+    }
+    // The unprefixed command: Node's own default here is far above both rows.
+    expect(() => admit(guardProject(filesOf(1)).project, limitOf(4192 * MIB))).toThrow(/refused/);
+  });
+
+  it("A5 — the guard cannot look, so it refuses: 0 files, no getPaths, no project, a count that is not one", () => {
+    for (const [what, project, message] of [
+      ["0 files", guardProject([]).project, /resolved 0 test files/],
+      ["no count", guardProject({}).project, /resolved undefined test files/],
+      ["no getPaths", guardProject(undefined).project, /getPaths\(\) is gone/],
+      ["no vitest", { provide: () => {} }, /getPaths\(\) is gone/],
+      ["no project", undefined, /getPaths\(\) is gone/],
+    ] as const) {
+      expect(() => admit(project, limitOf(64 * MIB)), what).toThrow(message);
+    }
+    // And `setup` itself never decides off the main thread, where this row runs.
+    expect(isMainThread).toBe(false);
+    expect(() => heapGuardSetup(guardProject(filesOf(1)).project)).toThrow(/off the main thread/);
+  });
+
+  it("A6 — a child built by childOf reports heap_size_limit at most the admitted row", () => {
+    const row = admittedRowMiB();
+    const child = CHILDREN.heapProbe;
+    expect(child.status, child.stderr).toBe(0);
+    // Non-vacuity: the child printed a positive integer, so a silent or crashed probe cannot pass.
+    expect(child.stdout).toMatch(/^[1-9]\d*$/);
+    expect(
+      Number(child.stdout),
+      `childOf child heap_size_limit vs row ${row} MiB`,
+    ).toBeLessThanOrEqual(row * MIB);
+  });
+
+  it("A6 (static) — the history-pane and transposition children inherit childOf's construction: no env key, no heap flag", () => {
+    // THEIR CHILDREN ARE NOT RE-SPAWNED HERE: each costs a real search or a frame probe. What makes
+    // `heapProbe`'s reading theirs is that they are built the same way — the worker's environment
+    // inherited, no node option of their own — and that is a property of their source.
+    const ts: typeof Ts = createRequire(import.meta.url)("typescript");
+    const calls = childCallsInTestSources(ts).filter(({ file }) =>
+      ["history-pane.nfr.test.ts", "transposition.test.ts"].includes(file),
+    );
+    expect(calls.map(({ file, form }) => `${file} ${form}`)).toEqual([
+      "history-pane.nfr.test.ts spawnSync",
+      "transposition.test.ts spawnSync",
+    ]);
+    // THE CHECK IS WATCHED LOSING ITS EVIDENCE FIRST, in memory (`QE-173-b`): a clean call has no
+    // fault, and each planted construction (a dash or an underscore heap flag, which Node accepts
+    // alike; an `env` key, quoted or not; an `env` through a spread) has exactly one.
+    const planted = childCallsIn(
+      ts,
+      "planted.test.ts",
+      `import { spawnSync } from "node:child_process";
+spawnSync(process.execPath, ["-e", "x"], { encoding: "utf8" });
+spawnSync(process.execPath, ["--max-old-space-size=4000", "-e", "x"], { encoding: "utf8" });
+spawnSync(process.execPath, ["--max_old_space_size=4000", "-e", "x"], { encoding: "utf8" });
+spawnSync(process.execPath, ["-e", "x"], { encoding: "utf8", env: {} });
+spawnSync(process.execPath, ["-e", "x"], { encoding: "utf8", "env": {} });
+spawnSync(process.execPath, ["-e", "x"], { encoding: "utf8", ...{ env: {} } });`,
+    );
+    expect(planted.map((child) => childConstructionFaultsOf(ts, child).length)).toEqual([
+      0, 1, 1, 1, 1, 1,
+    ]);
+
+    for (const child of calls) {
+      expect(childConstructionFaultsOf(ts, child), `${child.file} construction`).toEqual([]);
+    }
+  });
+
+  it("C2 — no src test file calls an asynchronous child_process form; at least four synchronous call sites exist", () => {
+    const ts: typeof Ts = createRequire(import.meta.url)("typescript");
+    // THE SCANNER IS WATCHED LOSING ITS EVIDENCE FIRST, in memory: a named, a renamed and a
+    // namespace `spawn(` are each found, and a spy that only references `spawn` is not a call.
+    const planted = childCallsIn(
+      ts,
+      "planted.test.ts",
+      `import { spawn, execFile as run } from "node:child_process";
+import * as cp from "child_process";
+spawn("a"); run("b"); cp.fork("c"); vi.fn(spawn);`,
+    );
+    expect(planted.map(({ form }) => form)).toEqual(["spawn", "execFile", "fork"]);
+
+    const calls = childCallsInTestSources(ts);
+    const asynchronous = calls
+      .filter(({ form }) => ASYNC_CHILD_FORMS.has(form))
+      .map(({ file, form }) => `${file} ${form}`);
+    expect(asynchronous, "asynchronous child_process calls in src/**/*.test.ts").toEqual([]);
+    const synchronous = calls.filter(({ form }) => SYNC_CHILD_FORMS.has(form));
+    expect(synchronous.length, "synchronous child_process call sites").toBeGreaterThanOrEqual(4);
+  });
+
+  it("A3 — every vitest command in AGENTS.md carries its shape's heap flag, and the flags are heap-guard.js's", () => {
+    // THE PARSER IS WATCHED LOSING ITS EVIDENCE FIRST, in memory: a bare line, a SUITE flag on a
+    // one-file line, and a second `NODE_OPTIONS=` (the `INPUT_DEEP` collision) each red.
+    const faults = vitestCommandsIn(
+      "`X_DEEP=1 npx vitest run src/a.test.ts` `NODE_OPTIONS=--max-old-space-size=128 npx vitest run src/a.test.ts` " +
+        "`NODE_OPTIONS=--expose-gc NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/a.test.ts`",
+    ).map(heapFlagFaultOf);
+    expect(faults.filter((fault) => fault !== undefined)).toHaveLength(3);
+
+    const commands = vitestCommandsIn(readFileSync(`${REPOSITORY}AGENTS.md`, "utf8"));
+    expect(
+      commands
+        .map((command) => [command.text, heapFlagFaultOf(command)])
+        .filter(([, fault]) => fault),
+      "AGENTS.md vitest commands without exactly their shape's heap flag",
+    ).toEqual([]);
+    // Non-vacuity: the lanes the page names are all among them, and so are both shapes.
+    expect(commands.length, "vitest commands found in AGENTS.md").toBeGreaterThanOrEqual(17);
+    for (const lane of [
+      "PERFT",
+      "SEARCH",
+      "ENGINE",
+      "INPUT",
+      "ZOBRIST",
+      "PUZZLE",
+      "CLI",
+      "LADDER",
+    ]) {
+      expect(
+        commands.some(({ text }) => text.startsWith(`${lane}_DEEP=1 `)),
+        `${lane}_DEEP's line`,
+      ).toBe(true);
+    }
+    expect(commands.filter(({ shape }) => shape === "suite").length).toBeGreaterThanOrEqual(3);
+    // `INPUT_DEEP` needs `--expose-gc` too, so both flags ride ONE value: a second assignment would
+    // replace the first (ADR-0008 addendum Ruling 3).
+    const input = commands.filter(({ text }) => text.startsWith("INPUT_DEEP=1 "));
+    expect(input).toHaveLength(1);
+    expect((input[0]?.nodeOptions[0] ?? "").split(/\s+/)).toContain("--expose-gc");
+
+    // `npm test` and `npm run test:watch` carry the SUITE flag through the script (byte-pinned by
+    // `ABC-042` `A10`; read here against the guard's own export).
+    const scripts = (
+      JSON.parse(readFileSync(`${REPOSITORY}package.json`, "utf8")) as {
+        scripts: Record<string, string>;
+      }
+    ).scripts;
+    for (const name of ["test", "test:watch"]) {
+      expect(scripts[name], `scripts.${name}`).toMatch(
+        new RegExp(`^NODE_OPTIONS=--max-old-space-size=${FLAGS_MIB.suite} `),
+      );
+    }
   });
 });
 

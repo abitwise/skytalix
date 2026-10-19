@@ -654,3 +654,77 @@ Checked and left unchanged: the test-integrity row already states the full form,
 `node tools/grugops/test-skip-integrity.js .grugops/test-skips.md --skip-count <N>` (`<N>` is the count; the bare
 `--skip-count 0` form exits 2), so item 4 of the brief needed no edit. The `Dev / run` slot and the guards on it
 (`ABC-065`, `ABC-067`, `ABC-071`) were not touched.
+
+
+## `ticket-to-pr-ABC-173` pass, 2026-10-19 (`ABC-173`, the V8 heap ceiling; branch `grugops/ABC-173` from `68bbf33f`)
+
+Software Engineer, task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-173`, ruled by `ADR-0008` § ADDENDUM 2026-10-19
+(accepted by the owner). Every vitest command in `AGENTS.md` gains its shape's prefix: ONE-FILE
+`NODE_OPTIONS=--max-old-space-size=400` (14 lines), SUITE `NODE_OPTIONS=--max-old-space-size=128` (2 coverage lines + the
+skip-count capture), and `INPUT_DEEP` one quoted value `NODE_OPTIONS="--expose-gc --max-old-space-size=400"`. Without the
+prefix `tools/grugops/heap-guard.js` refuses the run (exit 1, no test runs).
+
+`AGENTS.md` 24,576 B -> **24,343 B** (budget 24,576 B, `ABC-109` `A5`; headroom 0 -> **233 B**). The prefixes cost **+635 B**
+(16 x 38 B + 27 B for `INPUT_DEEP`). **-868 B** of RUN-receipt comment text left `AGENTS.md`, quoted verbatim below (JSON
+strings, `\n` = the line break it had). Directives, traps and "Run after" lines stayed. The `Dev / run` slot was not
+touched. One word moved case: "two real children" -> "Two real children" (0 B).
+
+- **Test (all)** (-48 B, old -> new): "RUN\n  2026-10-12: exit 0, 57 files, 1775 tests." -> ""
+- **Search deep lane** (-42 B, old -> new): "<!-- exit 0,\n  41 passed (28 default), 23.0 s. Unset:" -> "<!-- Unset:"
+- **Engine deep lane** (-81 B, old -> new): "<!-- RUN 2026-10-10:\n  exit 0, 46 passed (33 default), ~5 min (292-319 s), not 100 s. Wall-clock" -> "<!-- Wall-clock"
+- **Levels deep lane** (-73 B, old -> new): "<!-- RUN 2026-10-10: exit 0, 28 passed (22 default), 202-225 s (A5: 135 s).\n  Holds" -> "<!-- Holds"
+- **Input-seam deep lane** (-38 B, old -> new): "<!-- RUN 2026-09-26: exit 0, 34 passed \u2014 34 is" -> "<!-- 34 is"
+- **Transposition deep lanes (SEARCH_DEEP)** (-48 B, old -> new): "<!-- exit 0, 40 passed (25 default), 47.7 s -->" -> ""
+- **Transposition deep lanes (ENGINE_DEEP)** (-47 B, old -> new): "<!-- exit 0, 26 passed (25 default), 4.8 s -->" -> ""
+- **Zobrist deep lane** (-50 B, old -> new): "<!-- exit 0,\n  33 passed (32 default), 37.0 s -->" -> ""
+- **Quiescence deep lane** (-49 B, old -> new): "<!-- exit 0,\n  37 passed (29 default), 1.8 s -->" -> ""
+- **Puzzle suite** (-141 B, old -> new): "<!-- RUN 2026-10-12: exit 0, 18 passed (12 default), ~6 s (printed wall 4 s); ABC-127 A7 reads <= 90 / 45 s,\n  never asserted, 300 s hang guards. Baseline" -> "<!-- Baseline"
+- **PVS/LMR deep lane** (-131 B, old -> new): "<!-- exit 0, 29 passed (20 default; 0.6 s). Deep 926.2 s wall,\n  cited from UAT (`uat-run-ABC-121#77854a65`), not re-run (over 10 min). Run after" -> "<!-- Run after"
+- **Real-engine CLI lane** (-53 B, old -> new): "<!-- RUN 2026-10-10: exit 0, 7 passed (1 default), 6.4 s; two real children" -> "<!-- Two real children"
+- **Self-play ladder lane** (-67 B, old -> new): "<!-- RUN 2026-10-11: exit 0, 14 passed (9 default), 848 s, loaded host. Short mode" -> "<!-- Short mode"
+
+(-48 -42 -81 -73 -38 -48 -47 -50 -49 -141 -131 -53 -67 = -868; +635; net -233; `wc -c AGENTS.md` = 24,343.)
+
+**Receipts at the cap, RUN 2026-10-19** (worktree `../wt-ABC-173`, node v26.11.1, vitest 4.1.11; each command exactly as
+`AGENTS.md` now spells it; counts and exit codes only, NO timing taken):
+
+| command | exit | counts |
+|---|---:|---|
+| `npm test` | 0 | 59 files, 1920 passed; `last-run.json` `success: true`, `exitCode` 0 |
+| skip-count capture | 0 | 0 |
+| `PERFT_DEEP` | 0 | 32 passed |
+| `SEARCH_DEEP` `search.test.ts` | 0 | 57 passed |
+| `ENGINE_DEEP` `engine.test.ts` | 0 | 60 passed |
+| `ENGINE_DEEP` `levels.test.ts` | 0 | 28 passed |
+| `INPUT_DEEP` | 0 | 34 passed |
+| `SEARCH_DEEP` `transposition.test.ts` | 0 | 40 passed |
+| `ENGINE_DEEP` `transposition.test.ts` | 0 | 26 passed |
+| `ZOBRIST_DEEP` | 0 | 33 passed |
+| `SEARCH_DEEP` `quiescence.test.ts` | 0 | 37 passed |
+| `PUZZLE_DEEP` | 0 | 18 passed |
+| `SEARCH_DEEP` `search.pvs-lmr.test.ts` | 0 | 29 passed |
+| `CLI_DEEP` | 0 | 11 passed (10 + `ABC-173` `A6`'s probe) |
+| `LADDER_DEEP` (short mode) | 0 | 18 passed |
+| Test (single file), `<path>` = `src/fen.test.ts` | 0 | 82 passed |
+| Coverage | **1**, then 0, 0 | first run: 1917 passed, **3 failed** (`Test timed out in 5000ms`: 2 in `src/engine.test.ts` `ABC-170 A3`, 1 in `src/uci-session.test.ts` `ABC-167 A5`); re-runs 1920 passed |
+| Coverage (`src/` only) | **1**, then 0, 0 | first run: 1919 passed, **1 failed** (`Test timed out in 5000ms`, `src/engine.test.ts` `ABC-170 A3`); re-runs 1920 passed |
+
+No lane printed a heap out-of-memory error or a guard refusal. The two coverage reds are reported to the owner, not
+re-sized (his Q4); cause `UNKNOWN - verify`. They were 5 s per-test timeouts in rows that read the wall clock, while
+another hop ran mutation tests on the same host (load1 4.5-6.4). The base tree `68bbf33f`, uncapped, read 1915 passed in
+2 of 2 runs of `npx vitest run --coverage` in a scratch copy.
+
+**Resumed 2026-10-19 on the owner's word** (`…6e1d9b47`: "Lighten the rows, keep cap"). Rows, flags and the 5 s timeout
+are unchanged. The coverage-timeout rows moved to coarser virtual-clock steps (`48842a1f`): `ABC-170 A3` x6 from step 1
+to step 5, and `ABC-167 A5` "movetime 100" from step 1 to step 10. Every command was then re-run exactly as spelled
+(counts only, no timing):
+
+| command | exit | counts |
+|---|---:|---|
+| `npm test` | 0 | 59 files, 1920 passed; `last-run.json` `success: true`; skip count 0; integrity `No findings.` |
+| Coverage, run 1 / run 2 | 0 / 0 | 1920 / 1920 passed |
+| Coverage (`src/` only), run 1 / run 2 | 0 / 0 | 1920 / 1920 passed |
+| every `*_DEEP` line and single file | 0 each | PERFT 32, SEARCH search 57 / transposition 40 / quiescence 37 / pvs-lmr 29, ENGINE engine 60 / levels 28 / transposition 26, INPUT 34, ZOBRIST 33, PUZZLE 18, CLI 11, LADDER short 18, `src/fen.test.ts` 82 |
+
+Both coverage lines also went green once more each in the peak-`heapUsed` observation pass (the same command with
+`--import=<peak.mjs>` added to `NODE_OPTIONS`). No lane printed an out-of-memory error.
