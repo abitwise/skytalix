@@ -1,0 +1,51 @@
+## imports src/uci-session.ts @5dee231c
+17:import { makeMove } from "./apply.ts";
+18:import type { BookProbe } from "./book.ts";
+19:import { parseCoordinateMove } from "./coordinate-move.ts";
+20:import { type Clock, chooseMove, type EngineChoice, HARD_CEILING_MS } from "./engine.ts";
+21:import { parseFen } from "./fen.ts";
+22:import { createLevel, DEFAULT_LEVEL, LEVELS } from "./levels.ts";
+23:import { BISHOP, KNIGHT, type Position, QUEEN, ROOK, squareName } from "./position.ts";
+24:import { MATE_SCORE } from "./search.ts";
+25:import { MATE_FLOOR } from "./transposition.ts";
+## imports src/uci-session.test.ts
+7:import { readFileSync } from "node:fs";
+8:import { describe, expect, it } from "vitest";
+9:import { makeMove } from "./apply.ts";
+10:import { type BookProbe, createBookProbe } from "./book.ts";
+11:import { parseFen } from "./fen.ts";
+12:import { isInCheck, legalMoves } from "./legal.ts";
+13:import { createLevel, LEVELS, seededRandom } from "./levels.ts";
+14:import type { Move } from "./moves.ts";
+15:import { type Position, squareName } from "./position.ts";
+16:import { MATE_SCORE } from "./search.ts";
+17:import { createUciSession, type UciSessionOptions } from "./uci-session.ts";
+18:import { virtualClock } from "./virtual-clock.ts";
+19:import { zobristKey } from "./zobrist.ts";
+## spawn/child_process in test
+83:  const match = INFO_LINE.exec(line ?? "");
+636:  const match = LEVEL_INFO.exec(line ?? "");
+1059:    "spawn",
+1060:    "exec(",
+## R-167-1 grep, added src lines 55a1e223...5dee231c
+164:+  for (const value of ["0", "6", "2.5", "x", "constructor"]) {
+## same, src/uci-session.ts only
+exit 1
+## whole file src/uci-session.ts
+exit 1
+## bracket reads in src/uci-session.ts
+76:  return `${squareName(move.from)}${squareName(move.to)}${PROMOTION_LETTERS[move.promotion] ?? ""}`;
+163:    const next = tokens[index + 1];
+168:    const keyword = tokens[index] as string;
+172:      while (index + 1 < tokens.length && !GO_KEYWORDS.has(tokens[index + 1] as string)) index++;
+198:      else clock[keyword] = value;
+212:  const time = clock[blackToMove ? "btime" : "wtime"];
+216:    const increment = clock[blackToMove ? "binc" : "winc"] ?? 0;
+280:    const level = LEVELS[skill];
+## hasOwn / skill
+252:  let skill: keyof typeof LEVELS = DEFAULT_LEVEL;
+280:    const level = LEVELS[skill];
+292:        info(`skill level ${skill} ignores go ${request.limits.join(", ")}; searching on time`);
+334:    } else if (name === "skill level") {
+336:      if (Object.hasOwn(LEVELS, value)) skill = Number(value) as keyof typeof LEVELS;
+337:      else info(`Skill Level takes an integer 1-5, got ${got}; kept ${skill}`);

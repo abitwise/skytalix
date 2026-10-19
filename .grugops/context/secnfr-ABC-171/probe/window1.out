@@ -1,0 +1,57 @@
+{
+ "host": "MacBook-Air.local",
+ "start": "2026-10-19T13:13:15.586Z",
+ "secs": 180,
+ "polls": 181,
+ "foreignPolls": 181,
+ "kinds": {
+  "vitest": 887,
+  "platform": 362,
+  "grugops-kit": 15
+ },
+ "firstForeign": [
+  {
+   "at": "0",
+   "lines": [
+    "10804 /opt/homebrew/Cellar/node/26.11.1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/public/grugops/node_modules/vitest/sup",
+    "11729 npm exec vitest run --coverage --coverage.include=src/**     ",
+    "11824 node /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-ABC-173/node_modules/.bin/vitest run --coverage --coverage.include=src/**",
+    "40997 /opt/homebrew/Cellar/node/26.11.1/bin/node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/product-template/template/dist/main-worker.js",
+    "50110 /opt/homebrew/Cellar/node/26.11.1/bin/node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/product-template/template/dist/main-worker.js",
+    "79257 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791887893172-wwcykn.sh 2>/dev/null || true && shopt -u extglob ",
+    "79272 npm exec vitest run --exclude **/scripts/e2e/** --reporter=json --outputFile=/var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T//grugops-261019-ktd/after.js",
+    "79306 node /Users/olgeroeselg/Projects/public/grugops/node_modules/.bin/vitest run --exclude **/scripts/e2e/** --reporter=json --outputFile=/var/folders/y3/c2tx"
+   ]
+  },
+  {
+   "at": "1",
+   "lines": [
+    "10804 /opt/homebrew/Cellar/node/26.11.1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/public/grugops/node_modules/vitest/sup",
+    "11729 npm exec vitest run --coverage --coverage.include=src/**     ",
+    "11824 node /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-ABC-173/node_modules/.bin/vitest run --coverage --coverage.include=src/**",
+    "40997 /opt/homebrew/Cellar/node/26.11.1/bin/node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/product-template/template/dist/main-worker.js",
+    "50110 /opt/homebrew/Cellar/node/26.11.1/bin/node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/product-template/template/dist/main-worker.js",
+    "79257 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791887893172-wwcykn.sh 2>/dev/null || true && shopt -u extglob ",
+    "79272 npm exec vitest run --exclude **/scripts/e2e/** --reporter=json --outputFile=/var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T//grugops-261019-ktd/after.js",
+    "79306 node /Users/olgeroeselg/Projects/public/grugops/node_modules/.bin/vitest run --exclude **/scripts/e2e/** --reporter=json --outputFile=/var/folders/y3/c2tx"
+   ]
+  }
+ ],
+ "lastForeign": {
+  "at": "181",
+  "lines": [
+   "40095 /opt/homebrew/Cellar/node/26.11.1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/public/grugops/node_modules/vitest/sup",
+   "40997 /opt/homebrew/Cellar/node/26.11.1/bin/node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/product-template/template/dist/main-worker.js",
+   "50110 /opt/homebrew/Cellar/node/26.11.1/bin/node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/product-template/template/dist/main-worker.js",
+   "79257 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791887893172-wwcykn.sh 2>/dev/null || true && shopt -u extglob ",
+   "79272 npm exec vitest run --exclude **/scripts/e2e/** --reporter=json --outputFile=/var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T//grugops-261019-ktd/after.js",
+   "79306 node /Users/olgeroeselg/Projects/public/grugops/node_modules/.bin/vitest run --exclude **/scripts/e2e/** --reporter=json --outputFile=/var/folders/y3/c2tx"
+  ]
+ },
+ "load1": {
+  "first": "6.64",
+  "min": "4.48",
+  "max": "7.19",
+  "last": "4.48"
+ }
+}
