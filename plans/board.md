@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — owner word (`…2b7f4c88`): R-171-1 ACCEPTED; ABC-171 UAT by QE → `uat-ABC-171` dispatched. In flight: `ticket-to-pr-ABC-173` (resumed), `uat-ABC-171`._
 _Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — `secnfr-ABC-171` PASS_WITH_RISKS → `ABC-171` Ready for UAT. Owner owed: R-171-1 (merge with N8-LANE owed) and ABC-171 UAT route. In flight: `ticket-to-pr-ABC-173` (resumed)._
 _Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — `ticket-to-pr-ABC-173` STOPPED at A7 (`affee860`): both coverage lanes red on first capped run (3 × 5 s timeouts in ABC-170 A3 / ABC-167 A5, no OOM), green 2/2 on re-run. Owner word (`…6e1d9b47`): lighten the rows, keep the cap. SE resumed on the branch. In flight: `ticket-to-pr-ABC-173` (resumed), `secnfr-ABC-171`._
 _Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — `qe2-ABC-171` PASS (`5dee231c`) → `ABC-171` In Security/NFR; `secnfr-ABC-171` dispatched. New INFO QE2-171-g → ABC-174 (A8 pin line drift). In flight: `ticket-to-pr-ABC-173`, `secnfr-ABC-171`._
