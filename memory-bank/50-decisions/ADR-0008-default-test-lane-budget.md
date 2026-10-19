@@ -312,7 +312,7 @@ byte-identical, and `NFR-001`–`NFR-008` byte-identical with no target, bar or 
 
 ## ADDENDUM 2026-10-19 — every vitest run carries a V8 heap ceiling (Σ `heap_size_limit` ≤ 2048 MiB at peak concurrency), sized by the run's shape, set on the lane command and refused at run start without it (`ABC-173`)
 
-**Status of this addendum: PROPOSED.** The owner must accept it. Architect/Design, task `wave-2026-09-25`, subtask
+**Status of this addendum: ACCEPTED 2026-10-19** by Olger Oeselg (owner): OQ1 "Accept, two sizes (Recommended)", OQ2 read as counting shutting-down workers (the two-size design rests on it), OQ3 "Yes, every run (Recommended)" — note `.grugops/context/wave-2026-09-25/notes/…9f3b6e20`. Was PROPOSED. Architect/Design, task `wave-2026-09-25`, subtask
 `arch-ABC-173-adr0008`, at `main` = `3468f054`.
 - Nothing above is edited. Decision 7 (isolation stays on) and the `pool: "threads"` adoption are unchanged.
 - This hop changed no byte under `src/`, and none in `vitest.config.ts`, `package.json` or `AGENTS.md`.
