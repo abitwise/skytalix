@@ -1,0 +1,71 @@
+# UAT ABC-167 negative controls. Each control is a scratch copy of 660a0d50's src/ (in the session scratchpad,
+# never in the worktree), with ONE edit to src/uci-session.ts, run through the same harness:
+#   node uat-harness.ts <scratch copy>
+# A control is CAUGHT when at least one check FAILs. The tree under test was not touched (md5 b05800c2... before
+# and after). Virtual clocks only; no wall-clock reading.
+#
+# id | the one edit                                                            | caught? | by
+# C1 | printableOf keeps C0/DEL: `if (code < 0) continue;`                     | CAUGHT  | S8 (3), S13 (1)
+# C2 | `position` no longer releases a held bestmove                           | CAUGHT  | S7 (3), S13 (1)
+# C3 | no level-3 cap: `budgetMs: budget` (only the engine's 5 000 clamp)      | CAUGHT  | S2, S4, S5, S6, S8 (165 checks)
+# C4 | black reads `clock.winc` (M06)                                          | CAUGHT  | S5 (1): "black takes binc, not winc"
+# C5 | the promotion letter dropped from the move text                         | CAUGHT  | S3 (1): the a7 position answers "a7a8"
+# C6 | `go ponder` does not hold (M12)                                         | CAUGHT  | S6 (4)
+# C7 | MOVE_OVERHEAD_MS = 0 (M02)                                              | CAUGHT  | S5 (1): "movestogo 1" reads 1010, not 950-970
+# C8 | `quit` no longer releases a held bestmove (A6-e4)                       | CAUGHT  | S7 (1), S13 (1)
+#
+# Thin spots, said plainly: C4, C5 and C7 are each caught by ONE check. S2's games use equal increments, so they
+# cannot see C4. C5 is seen only because the engine chooses to promote in one position. C7 binds only where t - 50
+# is the smaller term. The lane's A5-b1/b2 (M06), A5-c1 (M02) rows pin C4 and C7 as well.
+#
+# The raw control output follows.
+C1 exit=0 printable filter removed (M29)
+FAIL S8 742/745
+FAIL S13 2/3
+TOTAL 2872/2876 checks; 11/13 scenarios PASS
+FAIL S8 refused "position startpos moves e2e4\u001b[31m": printable
+FAIL S8 refused "position startpos moves e2e4\u001b[31m": echoes the input, ESC removed | info string position refused: illegal move e2e4[31m
+FAIL S8 "go depth \u001b[31m": printable
+C2 exit=0 position does not release a held bestmove (A6-e2)
+FAIL S7 43/46
+FAIL S13 2/3
+TOTAL 2872/2876 checks; 11/13 scenarios PASS
+FAIL S7 position startpos while held: writes exactly ["bestmove h8g8"] | []
+FAIL S7 then stop: writes exactly [] | ["bestmove h8g8"]
+FAIL S7 a refused position while held: bestmove first, then one info string | ["info string position refused: bad fen: placement must have 8 ranks separated by \"/\", fou
+C3 exit=0 no level-3 cap (D4.2): budget goes to the engine clamp
+FAIL S2 1022/1142
+FAIL S4 92/93
+FAIL S5 143/153
+FAIL S6 34/36
+FAIL S8 713/745
+TOTAL 2711/2876 checks; 8/13 scenarios PASS
+FAIL S4 go depth 5 on Kiwipete: time within the 3 000 ms cap (+2 steps) | time 5100
+FAIL S5 fixed 10 s per move (capped): time within the 3 000 ms cap (+2 steps) | time 5100
+FAIL S5 fixed 10 s per move (capped): time in [G, G+2*step] = [3000, 3200] | time 5100
+C4 exit=0 black takes white's increment (M06)
+FAIL S5 152/153
+TOTAL 2875/2876 checks; 12/13 scenarios PASS
+FAIL S5 black takes binc, not winc: time in [G, G+2*step] = [100, 120] | time 610
+C5 exit=0 promotion letter dropped from the move text
+FAIL S3 90/91
+TOTAL 2875/2876 checks; 12/13 scenarios PASS
+FAIL S3 the engine to move with a promotion on: bestmove legal in the GUI's position | a7a8
+C6 exit=0 go ponder does not hold (M12)
+FAIL S6 32/36
+TOTAL 2872/2876 checks; 12/13 scenarios PASS
+FAIL S6 go ponder writes the info line and no bestmove | ["info depth 5 score cp 55 nodes 25621 time 3100 nps 8265 pv g1f3","bestmove g1f3"]
+FAIL S6 ponderhit: writes exactly ["bestmove g1f3"] | []
+FAIL S6 go ponder with clocks holds too | ["info depth 5 score cp 52 nodes 25629 time 3100 nps 8267 pv g1f3","bestmove g1f3"]
+C7 exit=0 move overhead 0 (M02)
+FAIL S5 152/153
+TOTAL 2875/2876 checks; 12/13 scenarios PASS
+FAIL S5 one move to the control (overhead binds): time in [G, G+2*step] = [950, 970] | time 1010
+C8 exit=0 quit drops a held bestmove (A6-e4)
+FAIL S7 45/46
+FAIL S13 2/3
+TOTAL 2874/2876 checks; 11/13 scenarios PASS
+FAIL S7 quit while held: writes exactly ["bestmove h8g8"] | []
+FAIL S13 one bestmove per go across the run (277 go, 276 bestmove)
+
+[exited with code 0]
