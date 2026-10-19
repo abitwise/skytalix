@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — `secnfr-ABC-167` PASS_WITH_RISKS (`660a0d50`; NFR-004 MET; R-167-1, R-167-2 LOW) → `ABC-167` Ready for UAT. Owner owed: R-167-2 (merge with N8-LANE owed) and ABC-167 UAT. ABC-166 A5 records done (`1524297a`, `d93e247b` on `grugops/ABC-146-ladder-verdict`); `qe-ABC-146-166` next. In flight: none._
 _Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — `ticket-to-pr-ABC-167-i` done (`660a0d50`, +7 rows, 6/6 mutants killed; gates green 59/1915, CLI_DEEP 10/10, PERFT_DEEP 32/32) → QE-167-i/-j closed. `secnfr-ABC-167` resumed at `660a0d50`. In flight: `secnfr-ABC-167`._
 _Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — ABC-166 verdict run 2 ended 08:40:36Z exit 0: 17/17, 5 PAIR / 180 GAME, A2 HOLDS. ABC-146 A5 read (`e68a4327` on `grugops/ABC-146-ladder-verdict`, note `…4c1d8e27`): ABC-085 A1 MET (1v5 100/100); A2 RED on 3v4 (6.5/20) and 4v5 (10/20), MET on 2v3 (20/20) and 1v2 (18/20). REDs → ABC-087. Width 1 released; `ticket-to-pr-ABC-167-i` dispatched. Owed: ABC-166 A5 records (Architect line, Scribe ruling), QE, merge of ABC-146 + ABC-166. In flight: `ticket-to-pr-ABC-167-i`._
 _Updated: 2026-10-18 by the Orchestrator (task `wave-2026-09-25`) — owner word "add the QE-167-i tests" (`…9e4b2c71`) → `ticket-to-pr-ABC-167-i` queued (tests only), HELD until the ABC-166 verdict run ends (width 1). Order after the run: `ticket-to-pr-ABC-167-i`, then `secnfr-ABC-167` resumes. In flight: verdict run 2 only._
@@ -899,8 +900,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Security/NFR (WIP 1/2)
-- [ABC-167] `src/uci-session.ts`: capability-free UCI session, D4 time rule, D12 `go` limits  (owner: BA/PM, size: S, priority: P1, epic: EPIC-007, since: 2026-10-18, DoR 10/10. Waits: after ABC-170.) **2026-10-18: owner word "Pull ABC-167" → In Development; SE `ticket-to-pr-ABC-167` dispatched.** **2026-10-18: delivered `4dbbfbd8` (code `3dd0db1b`), A1–A12 MET, 59/1888; N8-LANE delta owed → In Review. QE waits for the end of ABC-166's width-1 run.** **2026-10-19: `qe2-ABC-167` PASS_WITH_GAPS at `6922f772` (QE-167-a..f, -h closed; -g → Security/NFR; new -i LOW, -j INFO; N8-LANE OWED) → In Security/NFR.**
+## In Security/NFR (WIP 0/2)
 
 
 
@@ -915,7 +915,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## Ready for UAT (WIP 0/4)
+## Ready for UAT (WIP 1/4)
+- [ABC-167] `src/uci-session.ts`: capability-free UCI session, D4 time rule, D12 `go` limits  (owner: BA/PM, size: S, priority: P1, epic: EPIC-007, since: 2026-10-18, DoR 10/10. Waits: after ABC-170.) **2026-10-18: owner word "Pull ABC-167" → In Development; SE `ticket-to-pr-ABC-167` dispatched.** **2026-10-18: delivered `4dbbfbd8` (code `3dd0db1b`), A1–A12 MET, 59/1888; N8-LANE delta owed → In Review. QE waits for the end of ABC-166's width-1 run.** **2026-10-19: `qe2-ABC-167` PASS_WITH_GAPS at `6922f772` (QE-167-a..f, -h closed; -g → Security/NFR; new -i LOW, -j INFO; N8-LANE OWED) → In Security/NFR.** **2026-10-19: `secnfr-ABC-167` PASS_WITH_RISKS at `660a0d50` (no required fix; R-167-1 LOW bracket-access accepted, carried to ABC-171/168 gates; R-167-2 LOW N8-LANE OWED — needs the owner's word) → Ready for UAT. Owner owed: R-167-2 word and UAT.**
 
 
 

@@ -1,0 +1,7 @@
+go movetime 9x400 => info depth 5 score cp 55 nodes 25621 time 3100
+go wtime 9x400 btime 9x400 => info depth 5 score cp 55 nodes 25621 time 3100
+go wtime 9x400 btime 1 winc -9x400 binc 0 => info depth 1 score cp 69 nodes 21 time 200
+go movetime -5 => info depth 1 score cp 69 nodes 21 time 200
+go wtime 999999999 btime 999999999 winc 999999999 binc 999999999 movestogo 1 => info depth 5 score cp 55 nodes 25621 time 3100
+go infinite => info depth 5 score cp 55 nodes 25621 time 3100
+go ponder wtime 9x400 => info depth 5 score cp 55 nodes 25621 time 3100
