@@ -1,0 +1,37 @@
+{
+ "host": "MacBook-Air.local",
+ "start": "2026-10-19T14:45:40.744Z",
+ "secs": 180,
+ "polls": 181,
+ "foreignPolls": 181,
+ "kinds": {
+  "hop": 362,
+  "platform": 362
+ },
+ "firstForeign": [
+  {
+   "at": "0",
+   "lines": [
+    " 2125 node /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-uat-ABC-171/.grugops/context/uat-ABC-171/probe/uat-harness.ts /private/tmp/claude-501/-Users-ol",
+    "27410 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792231794650-h7eh23.sh 2>/dev/null || true && shopt -u extglob ",
+    "40997 /opt/homebrew/Cellar/node/26.11.1/bin/node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/product-template/template/dist/main-worker.js",
+    "50110 /opt/homebrew/Cellar/node/26.11.1/bin/node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/product-template/template/dist/main-worker.js"
+   ]
+  }
+ ],
+ "lastForeign": {
+  "at": "181",
+  "lines": [
+   " 7652 node /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-uat-ABC-171/.grugops/context/uat-ABC-171/probe/uat-harness.ts /private/tmp/claude-501/-Users-ol",
+   "27410 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792231794650-h7eh23.sh 2>/dev/null || true && shopt -u extglob ",
+   "40997 /opt/homebrew/Cellar/node/26.11.1/bin/node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/product-template/template/dist/main-worker.js",
+   "50110 /opt/homebrew/Cellar/node/26.11.1/bin/node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/product-template/template/dist/main-worker.js"
+  ]
+ },
+ "load1": {
+  "first": "2.44",
+  "min": "2.41",
+  "max": "3.50",
+  "last": "3.01"
+ }
+}

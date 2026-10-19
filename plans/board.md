@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — `qe-ABC-173` PASS_WITH_GAPS (every lane green at the cap; mutants 54/44/10; QE-173-a MEDIUM guard rows/shape unpinned; -b LOW; -c..-g INFO; A9 + N8-LANE OWED; waiver confirmed). SE `ticket-to-pr-ABC-173-fix` dispatched (test-only, QE-173-a/b). In flight: `uat-ABC-171`, `ticket-to-pr-ABC-173-fix`._
 _Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — `ABC-173` delivered (`840ebbf7`) → In Review; `qe-ABC-173` dispatched (A9 + N8-LANE only in a quiet window). In flight: `uat-ABC-171`, `qe-ABC-173`._
 _Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — owner word (`…2b7f4c88`): R-171-1 ACCEPTED; ABC-171 UAT by QE → `uat-ABC-171` dispatched. In flight: `ticket-to-pr-ABC-173` (resumed), `uat-ABC-171`._
 _Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — `secnfr-ABC-171` PASS_WITH_RISKS → `ABC-171` Ready for UAT. Owner owed: R-171-1 (merge with N8-LANE owed) and ABC-171 UAT route. In flight: `ticket-to-pr-ABC-173` (resumed)._
