@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — `ticket-to-pr-ABC-174` delivered `be6a5599` (A1–A5, A7, A8 met; A6 QE's; gates green 1987/1987) → In Review. **PAUSED by owner ("pause work, save progress").** On resume: verify gates, dispatch `qe-ABC-174` (A6 deep lanes + NFR-008; host hit its per-user process limit ~21:40 +0300), then A0 re-take, ABC-175, UAT. Owed at gate: Scribe AGENTS.md l.59; Security/NFR NFR-004 lines. Open: SE's A3 step 1000 (not 10/100) for Orchestrator/QE review. In flight: none._
 _Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — owner pulled ABC-174 ("continue with ABC-174") → In Development; SE `ticket-to-pr-ABC-174` dispatched from `bd480c99` (worktree `../wt-ABC-174`). In flight: `ticket-to-pr-ABC-174`._
 _Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — `ABC-171` → Done (UAT ACCEPTED, merged `94f85341`); `ABC-173` → Done (merged `03859f2e`, UAT WAIVED; QE-173-g every lane green on combined tree, 1971/1971, 0 OOM; R-173-1/-2 owed). Catalog: NFR-010 placed (`2ce60fde`). ABC-176 → Backlog. ABC-174 unblocked. Owed readings: R-167-2, R-171-1, R-173-1, R-173-2 (first quiet window; R-167-2/R-171-1 to be catalogued). In flight: none. Next free id: ABC-177._
 _Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — `secnfr-ABC-173` PASS_WITH_RISKS. Owner owed: R-173-1/R-173-2 (merge with A9 + N8-LANE owed), SEC-173-1, ABC-171 UAT word. In flight: none._
@@ -870,8 +871,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-174] Re-cut the level table per ADR-0045 (data only); default → level 5, plays as today  (owner: software-engineer, size: S, priority: P1, epic: EPIC-004, since: 2026-10-19, DoR 10/10; cut in `bapm-adr0045-cut` (`5a387687`). Waits: ABC-171 merged; recommended after ABC-173.) **2026-10-19: ABC-171 merged → unblocked (waits on the owner's pull).** **2026-10-19: owner pulled (“continue with ABC-174”) → In Development; `ticket-to-pr-ABC-174` dispatched from `bd480c99`.**
+## In Development (WIP 0/3)
 
 
 
@@ -899,7 +899,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-174] Re-cut the level table per ADR-0045 (data only); default → level 5, plays as today  (owner: software-engineer, size: S, priority: P1, epic: EPIC-004, since: 2026-10-19, DoR 10/10; cut in `bapm-adr0045-cut` (`5a387687`). Waits: ABC-171 merged; recommended after ABC-173.) **2026-10-19: ABC-171 merged → unblocked (waits on the owner's pull).** **2026-10-19: owner pulled (“continue with ABC-174”) → In Development; `ticket-to-pr-ABC-174` dispatched from `bd480c99`.** **2026-10-19: delivered `be6a5599` (gates green 1987/1987, CLI_DEEP 11, PERFT_DEEP 32, skips 0) → In Review. PAUSED by owner before `qe-ABC-174` dispatch.**
 
 
 
