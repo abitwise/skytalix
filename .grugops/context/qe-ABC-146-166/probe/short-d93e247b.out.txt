@@ -1,0 +1,72 @@
+
+ RUN  v4.1.11 /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-qe-ABC-146-166
+
+stdout | src/ladder.test.ts > ABC-085 ladder — short mode, step 120 (LADDER_DEEP=1) > 3v4: level 4 vs level 3, 4 games, short mode, step 120
+LADDER GAME {"mode":"short mode, step 120","pair":"3v4","seed":1,"white":4,"black":3,"plies":105,"result":"draw","reason":"threefold-repetition (claimed)","wallS":11.3}
+LADDER GAME {"mode":"short mode, step 120","pair":"3v4","seed":1,"white":3,"black":4,"plies":120,"result":"draw","reason":"threefold-repetition (claimed)","wallS":14.4}
+LADDER GAME {"mode":"short mode, step 120","pair":"3v4","seed":2,"white":4,"black":3,"plies":121,"result":"white-wins","reason":"checkmate","wallS":12.4}
+LADDER GAME {"mode":"short mode, step 120","pair":"3v4","seed":2,"white":3,"black":4,"plies":97,"result":"draw","reason":"threefold-repetition (claimed)","wallS":14.6}
+LADDER PAIR {"mode":"short mode, step 120","criterion":"none — short mode, step 120 is never A2","pair":"3v4","stronger":4,"commit":"d93e247b9d23c21ee15bcec1e5ed9f870963eafb","step":120,"seeds":"1..2, both colours each","games":4,"stronger_w_d_l":[1,3,0],"score":"2.5/4","scorePct":62.5,"bar":"> 50%","verdict":"not graded (short mode)","claimedDraws":3,"reasons":{"threefold-repetition (claimed)":3,"checkmate":1},"digest":"4746fe1a608cddeb","wallS":52.7,"load1":[6.21,5.96]}
+
+ ✓ src/ladder.test.ts > ABC-085 ladder — the step is one named constant per run (test note 6) > LADDER_DEEP=1 is the short step 120, =verdict the verdict step 4, anything else refused 1ms
+ ✓ src/ladder.test.ts > ABC-085 ladder — the step is one named constant per run (test note 6) > both sides read the run's one step, each on its own clock instance 1ms
+ ✓ src/ladder.test.ts > ABC-085 ladder — the step is one named constant per run (test note 6) > refuses, before any move, a side handed a different step or a step not named 0ms
+ ✓ src/ladder.test.ts > ABC-085 ladder — the claim policy and the ply cap (A3, test notes 2 and 7) > a threefold repetition ends as 'threefold-repetition (claimed)' at the first offer 6ms
+ ✓ src/ladder.test.ts > ABC-085 ladder — the claim policy and the ply cap (A3, test notes 2 and 7) > a fifty-move draw ends as 'fifty-move (claimed)' at the first offer 0ms
+ ✓ src/ladder.test.ts > ABC-085 ladder — the claim policy and the ply cap (A3, test notes 2 and 7) > a game at the ply cap is an ERROR with no score, never a draw 1ms
+ ✓ src/ladder.test.ts > ABC-085 ladder — the claim policy and the ply cap (A3, test notes 2 and 7) > scores win 1, draw 0.5, loss 0 for the named level, from either chair 0ms
+ ✓ src/ladder.test.ts > ABC-085 ladder — the claim policy and the ply cap (A3, test notes 2 and 7) > A4's replay check refuses an illegal move and a move played past an ending 1ms
+ ✓ src/ladder.test.ts > ABC-085 ladder — the run's constants and its report arithmetic (A1, A2, A5, A6) > the game counts, the ply cap and the run plan are the stated constants 0ms
+ ✓ src/ladder.test.ts > ABC-085 ladder — the run's constants and its report arithmetic (A1, A2, A5, A6) > every level is built from its LEVELS entry itself — budgets are never scaled 0ms
+ ✓ src/ladder.test.ts > ABC-085 ladder — the run's constants and its report arithmetic (A1, A2, A5, A6) > each seed is played in both chairs, stronger white first: half the games as white 1ms
+ ✓ src/ladder.test.ts > ABC-085 ladder — the run's constants and its report arithmetic (A1, A2, A5, A6) > the pair's score, W-D-L, claimed draws and MET/RED are for the stronger level 0ms
+ ✓ src/ladder.test.ts > ABC-085 ladder — short mode, step 120 (LADDER_DEEP=1) > 3v4: level 4 vs level 3, 4 games, short mode, step 120 52821ms
+stdout | src/ladder.test.ts > ABC-085 ladder — short mode, step 120 (LADDER_DEEP=1) > 4v5: level 5 vs level 4, 4 games, short mode, step 120
+LADDER GAME {"mode":"short mode, step 120","pair":"4v5","seed":1,"white":5,"black":4,"plies":151,"result":"draw","reason":"threefold-repetition (claimed)","wallS":22.1}
+LADDER GAME {"mode":"short mode, step 120","pair":"4v5","seed":1,"white":4,"black":5,"plies":133,"result":"white-wins","reason":"checkmate","wallS":25.2}
+LADDER GAME {"mode":"short mode, step 120","pair":"4v5","seed":2,"white":5,"black":4,"plies":89,"result":"draw","reason":"threefold-repetition (claimed)","wallS":18.7}
+LADDER GAME {"mode":"short mode, step 120","pair":"4v5","seed":2,"white":4,"black":5,"plies":149,"result":"draw","reason":"threefold-repetition (claimed)","wallS":25.9}
+LADDER PAIR {"mode":"short mode, step 120","criterion":"none — short mode, step 120 is never A2","pair":"4v5","stronger":5,"commit":"d93e247b9d23c21ee15bcec1e5ed9f870963eafb","step":120,"seeds":"1..2, both colours each","games":4,"stronger_w_d_l":[0,3,1],"score":"1.5/4","scorePct":37.5,"bar":"> 50%","verdict":"not graded (short mode)","claimedDraws":3,"reasons":{"threefold-repetition (claimed)":3,"checkmate":1},"digest":"203539233b1dd412","wallS":91.9,"load1":[5.96,7.14]}
+
+ ✓ src/ladder.test.ts > ABC-085 ladder — short mode, step 120 (LADDER_DEEP=1) > 4v5: level 5 vs level 4, 4 games, short mode, step 120 91896ms
+stdout | src/ladder.test.ts > ABC-085 ladder — short mode, step 120 (LADDER_DEEP=1) > 2v3: level 3 vs level 2, 4 games, short mode, step 120
+LADDER GAME {"mode":"short mode, step 120","pair":"2v3","seed":1,"white":3,"black":2,"plies":53,"result":"draw","reason":"threefold-repetition (claimed)","wallS":4}
+LADDER GAME {"mode":"short mode, step 120","pair":"2v3","seed":1,"white":2,"black":3,"plies":82,"result":"black-wins","reason":"checkmate","wallS":5.1}
+LADDER GAME {"mode":"short mode, step 120","pair":"2v3","seed":2,"white":3,"black":2,"plies":63,"result":"white-wins","reason":"checkmate","wallS":4.6}
+LADDER GAME {"mode":"short mode, step 120","pair":"2v3","seed":2,"white":2,"black":3,"plies":60,"result":"black-wins","reason":"checkmate","wallS":4}
+LADDER PAIR {"mode":"short mode, step 120","criterion":"none — short mode, step 120 is never A2","pair":"2v3","stronger":3,"commit":"d93e247b9d23c21ee15bcec1e5ed9f870963eafb","step":120,"seeds":"1..2, both colours each","games":4,"stronger_w_d_l":[3,1,0],"score":"3.5/4","scorePct":87.5,"bar":"> 50%","verdict":"not graded (short mode)","claimedDraws":1,"reasons":{"threefold-repetition (claimed)":1,"checkmate":3},"digest":"ec1321f31505a90a","wallS":17.7,"load1":[7.14,7.47]}
+
+ ✓ src/ladder.test.ts > ABC-085 ladder — short mode, step 120 (LADDER_DEEP=1) > 2v3: level 3 vs level 2, 4 games, short mode, step 120 17779ms
+stdout | src/ladder.test.ts > ABC-085 ladder — short mode, step 120 (LADDER_DEEP=1) > 1v2: level 2 vs level 1, 4 games, short mode, step 120
+LADDER GAME {"mode":"short mode, step 120","pair":"1v2","seed":1,"white":2,"black":1,"plies":42,"result":"draw","reason":"threefold-repetition (claimed)","wallS":0.8}
+LADDER GAME {"mode":"short mode, step 120","pair":"1v2","seed":1,"white":1,"black":2,"plies":82,"result":"black-wins","reason":"checkmate","wallS":1.1}
+LADDER GAME {"mode":"short mode, step 120","pair":"1v2","seed":2,"white":2,"black":1,"plies":119,"result":"white-wins","reason":"checkmate","wallS":1.4}
+LADDER GAME {"mode":"short mode, step 120","pair":"1v2","seed":2,"white":1,"black":2,"plies":108,"result":"black-wins","reason":"checkmate","wallS":1.6}
+LADDER PAIR {"mode":"short mode, step 120","criterion":"none — short mode, step 120 is never A2","pair":"1v2","stronger":2,"commit":"d93e247b9d23c21ee15bcec1e5ed9f870963eafb","step":120,"seeds":"1..2, both colours each","games":4,"stronger_w_d_l":[3,1,0],"score":"3.5/4","scorePct":87.5,"bar":"> 50%","verdict":"not graded (short mode)","claimedDraws":1,"reasons":{"threefold-repetition (claimed)":1,"checkmate":3},"digest":"96f413b64bb8db34","wallS":4.9,"load1":[7.47,7.35]}
+
+ ✓ src/ladder.test.ts > ABC-085 ladder — short mode, step 120 (LADDER_DEEP=1) > 1v2: level 2 vs level 1, 4 games, short mode, step 120 4903ms
+stdout | src/ladder.test.ts > ABC-085 ladder — short mode, step 120 (LADDER_DEEP=1) > 1v5: level 5 vs level 1, 10 games, short mode, step 120
+LADDER GAME {"mode":"short mode, step 120","pair":"1v5","seed":1,"white":5,"black":1,"plies":41,"result":"white-wins","reason":"checkmate","wallS":4.4}
+LADDER GAME {"mode":"short mode, step 120","pair":"1v5","seed":1,"white":1,"black":5,"plies":40,"result":"black-wins","reason":"checkmate","wallS":3.6}
+LADDER GAME {"mode":"short mode, step 120","pair":"1v5","seed":2,"white":5,"black":1,"plies":65,"result":"white-wins","reason":"checkmate","wallS":7.5}
+LADDER GAME {"mode":"short mode, step 120","pair":"1v5","seed":2,"white":1,"black":5,"plies":74,"result":"black-wins","reason":"checkmate","wallS":9.7}
+LADDER GAME {"mode":"short mode, step 120","pair":"1v5","seed":3,"white":5,"black":1,"plies":31,"result":"white-wins","reason":"checkmate","wallS":3.5}
+LADDER GAME {"mode":"short mode, step 120","pair":"1v5","seed":3,"white":1,"black":5,"plies":50,"result":"black-wins","reason":"checkmate","wallS":6.7}
+LADDER GAME {"mode":"short mode, step 120","pair":"1v5","seed":4,"white":5,"black":1,"plies":41,"result":"white-wins","reason":"checkmate","wallS":5}
+LADDER GAME {"mode":"short mode, step 120","pair":"1v5","seed":4,"white":1,"black":5,"plies":60,"result":"black-wins","reason":"checkmate","wallS":7.8}
+LADDER GAME {"mode":"short mode, step 120","pair":"1v5","seed":5,"white":5,"black":1,"plies":63,"result":"white-wins","reason":"checkmate","wallS":9.9}
+LADDER GAME {"mode":"short mode, step 120","pair":"1v5","seed":5,"white":1,"black":5,"plies":46,"result":"black-wins","reason":"checkmate","wallS":6}
+LADDER PAIR {"mode":"short mode, step 120","criterion":"none — short mode, step 120 is never A1","pair":"1v5","stronger":5,"commit":"d93e247b9d23c21ee15bcec1e5ed9f870963eafb","step":120,"seeds":"1..5, both colours each","games":10,"stronger_w_d_l":[10,0,0],"score":"10/10","scorePct":100,"bar":">= 90%","verdict":"not graded (short mode)","claimedDraws":0,"reasons":{"checkmate":10},"digest":"e37280a7cb840919","wallS":64.2,"load1":[7.35,7.2]}
+
+ ✓ src/ladder.test.ts > ABC-085 ladder — short mode, step 120 (LADDER_DEEP=1) > 1v5: level 5 vs level 1, 10 games, short mode, step 120 64207ms
+stdout | src/ladder.test.ts > ABC-085 ladder — short mode, step 120 (LADDER_DEEP=1) > A5 1v2 reproduces: same move lists, same score, 4 games twice
+LADDER A5 {"mode":"short mode, step 120","digest":"96f413b64bb8db34"}
+
+ ✓ src/ladder.test.ts > ABC-085 ladder — short mode, step 120 (LADDER_DEEP=1) > A5 1v2 reproduces: same move lists, same score, 4 games twice 13172ms
+
+ Test Files  1 passed (1)
+      Tests  18 passed (18)
+   Start at  12:03:25
+   Duration  245.02s (transform 0ms, setup 0ms, import 135ms, tests 244.80s, environment 0ms)
+
+exit=0
