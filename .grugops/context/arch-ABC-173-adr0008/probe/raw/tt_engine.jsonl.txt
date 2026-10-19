@@ -1,0 +1,9 @@
+{"ev":"start","pid":53760,"ppid":53271,"tid":0,"kind":"/opt/homebrew/bin/npx","mib":224}
+{"ev":"start","pid":53800,"ppid":53760,"tid":0,"kind":"nm/.bin/vitest","mib":224}
+{"ev":"W+","id":"53800:1"}
+{"ev":"start","pid":53800,"ppid":53760,"tid":1,"kind":"worker","mib":224}
+{"ev":"start","pid":53832,"ppid":53800,"tid":0,"kind":"-e","mib":224}
+{"ev":"end","pid":53832,"tid":0,"kind":"-e"}
+{"ev":"W-","id":"53800:1"}
+{"ev":"end","pid":53800,"tid":0,"kind":"nm/.bin/vitest"}
+{"ev":"end","pid":53760,"tid":0,"kind":"/opt/homebrew/bin/npx"}
