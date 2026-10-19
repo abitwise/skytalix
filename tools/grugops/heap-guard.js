@@ -39,8 +39,10 @@ export const FLAGS_MIB = Object.freeze({ suite: 128, oneFile: 400 });
 
 const MIB = 1024 * 1024;
 
-export default function setup(project) {
-  if (!isMainThread) throw new Error("heap-guard: globalSetup ran off the main thread; it cannot read the main process's limit there");
+// `admit` is the whole decision (shape, row, comparison, provide), with the heap statistics passed
+// in, so `src/cli.test.ts`'s `ABC-173` `A5` rows can call it in a worker with fake file counts and
+// fake limits (`QE-173-a`). `setup` adds only the main-thread check and the real reading.
+export function admit(project, heapStatistics) {
   const getPaths = project?.vitest?.state?.getPaths;
   if (typeof getPaths !== "function") throw new Error("heap-guard: project.vitest.state.getPaths() is gone; re-read RISK-ABC173-STATE");
   const files = getPaths.call(project.vitest.state).length;
@@ -49,7 +51,7 @@ export default function setup(project) {
   const shape = files === 1 ? "oneFile" : "suite";
   const row = ROWS_MIB[shape];
   const flag = FLAGS_MIB[shape];
-  const limitMiB = v8.getHeapStatistics().heap_size_limit / MIB;
+  const limitMiB = heapStatistics.heap_size_limit / MIB;
   if (limitMiB > row) {
     throw new Error(
       `heap-guard: refused. This run's V8 heap_size_limit is ${limitMiB} MiB, above the ${shape === "suite" ? "SUITE" : "ONE-FILE"} row of ${row} MiB ` +
@@ -58,4 +60,9 @@ export default function setup(project) {
     );
   }
   project.provide("heapRowMiB", row);
+}
+
+export default function setup(project) {
+  if (!isMainThread) throw new Error("heap-guard: globalSetup ran off the main thread; it cannot read the main process's limit there");
+  admit(project, v8.getHeapStatistics());
 }
