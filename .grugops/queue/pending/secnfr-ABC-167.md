@@ -3,7 +3,7 @@ subtask: secnfr-ABC-167
 role: security-nfr
 ticket: ABC-167
 page: plans/tickets/ABC-167-a-capability-free-uci-session-answers-the-d3-commands-with-the-d4-time-rule-and-the-go-limits.md
-branch: grugops/ABC-167 @ 6922f772
+branch: grugops/ABC-167 @ 660a0d50 (was 6922f772; +7 QE-167-i/j test rows, src/uci-session.ts unchanged)
 ref: .grugops/context/secnfr-ABC-167/
 ---
 
@@ -21,11 +21,11 @@ Read these first:
    - **REQUIRED FIX**, with the exact check.
    Think about what the session is: it is capability-free per D2, and ABC-168's entry point is the only place that gets I/O. The other triggers, (a) through (d), are "not triggered" on the page. Confirm them against the tip.
 2. **NFR-004.** Confirm that no budget above 3 000 ms leaves the session. Use the A5 rows; do not take a timing reading.
-3. **NFR-008 N8-LANE delta.** This is a timing reading. Take it **only** in a foreground-verified quiet window: 180 s with no foreign `vitest` and no `oeselg-labs/platform` process, recording host and load1, measured at base `e286526d` against tip `6922f772`. Otherwise record it as **OWED**, and say whether merge can carry it as an accepted residual. **Never estimate it.**
+3. **NFR-008 N8-LANE delta.** This is a timing reading. Take it **only** in a foreground-verified quiet window: 180 s with no foreign `vitest` and no `oeselg-labs/platform` process, recording host and load1, measured at base `e286526d` against tip `660a0d50`. Otherwise record it as **OWED**, and say whether merge can carry it as an accepted residual. **Never estimate it.**
 4. **QE-167-i (LOW).** Give a one-line view: does it carry any security or NFR weight? (QE-167-i is untested keyword-boundary rows; one example is `go depth infinite` not holding under a wrong build.)
 
 ## Fences
-- Work in a scratch detached worktree: `git worktree add --detach ../wt-secnfr-ABC-167 6922f772`. Remove it at the end.
+- Work in a scratch detached worktree: the existing scratch `../wt-secnfr-ABC-167` (left from the stopped start; run `git checkout --detach 660a0d50` there). Remove it at the end.
 - Do **not** touch:
   - `src/`
   - `plans/board.md`
