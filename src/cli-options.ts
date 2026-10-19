@@ -67,8 +67,8 @@ const [ASCII, UNICODE, COLOUR, WHITE, BLACK, RANDOM, DIFFICULTY, ...DIFFICULTY_V
 /** A difficulty level: a plain ordinal, `1` weakest to `5` strongest. */
 export type Difficulty = 1 | 2 | 3 | 4 | 5;
 
-/** The level when `--difficulty` is absent: the middle of the set, never the top (ruling 2). */
-export const DEFAULT_DIFFICULTY: Difficulty = 3;
+/** The level when `--difficulty` is absent: the top of the set (`ADR-0045` D2, over ruling 2). */
+export const DEFAULT_DIFFICULTY: Difficulty = 5;
 
 /** `--colour`'s three value words, in the table's order. It introduces no literal of its own. */
 const COLOUR_VALUES = [WHITE, BLACK, RANDOM] as const;

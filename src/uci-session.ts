@@ -346,7 +346,7 @@ export function createUciSession(options: UciSessionOptions): UciSession {
           write("id name skytalix");
           write("id author Olger Oeselg");
           write("option name OwnBook type check default true");
-          write("option name Skill Level type spin default 3 min 1 max 5");
+          write(`option name Skill Level type spin default ${DEFAULT_LEVEL} min 1 max 5`);
           write("uciok");
           break;
         case "isready":
