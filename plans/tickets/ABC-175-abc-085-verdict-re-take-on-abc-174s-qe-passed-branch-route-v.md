@@ -1,7 +1,7 @@
 ---
 id: ABC-175
 title: "ABC-085 verdict re-take on ABC-174's QE-passed branch (route V)"
-status: backlog
+status: ready
 column: Backlog
 size: XS
 priority: P1
@@ -15,6 +15,11 @@ feature: —
 > (`.grugops/context/wave-2026-09-25/notes/20261019T130500Z-orchestrator-decision-owner-word-adr0045-accepted-q1-q3-abc171-rows-1a9c7f42.md`,
 > a transcription, not a stamp), Q3: *"Verdict before UAT; add rows (Recommended)"*. The plan is `ADR-0045` D6,
 > accepted. The template is `ABC-166`. **This hop ran nothing and timed nothing.**
+>
+> **Amended 2026-10-20 by BA/PM** (`bapm-ABC-175-heap`, records only, ran nothing):
+> - § Scope 2 and `A1`'s probe now carry the heap prefix, copied verbatim from the Architect's `arch-ABC-175-heap`.
+> - `A1`'s `A0` inputs moved to the re-take `ed88329c`, and the old "STALE" bullet is kept as dated history.
+> - An out-of-memory line was added (§ Security / NFR triggers), and the DoR was re-scored at 10/10.
 
 ## Problem
 
@@ -34,7 +39,13 @@ no code.
 2. **One run**, started by the Orchestrator overnight, in the background, serially, at width 1. The run tree is a
    worktree at **`ABC-174`'s QE-passed commit**. Route V (`ADR-0038` addendum 2), from the root of the run tree:
 
-   `caffeinate -i env LADDER_DEEP=verdict npx vitest run src/ladder.test.ts --reporter=verbose`
+   `caffeinate -i env LADDER_DEEP=verdict NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/ladder.test.ts --reporter=verbose`
+
+   *Amended 2026-10-20 (`bapm-ABC-175-heap`).* The command now carries the heap prefix. It is copied verbatim from
+   the Architect's ruling `arch-ABC-175-heap` (H1–H5; `ADR-0045` § ADDENDUM 2026-10-20; `ADR-0038` § ADDENDUM 3).
+   The run tree carries `ABC-173`'s heap guard, which refuses an unprefixed one-file run: exit 1, and no test runs
+   (`…e4b8d062`). The flag is exactly **400** (ONE-FILE, 496 MiB), the same as the `AGENTS.md` ladder lane. It is
+   bound by `A0`'s vitest arm (C1), so it is not changed on the night (`A1`).
 
    stdout and stderr go to `.grugops/context/abc175-verdict/raw/verdict.out.txt` (`.txt`, because `*.log` is
    git-ignored). **`verdict.meta.txt` beside it records the command verbatim**, plus everything `A2` lists. That closes
@@ -72,27 +83,43 @@ says so before the start.
 
 - **`A1` (pre-flight; all of it passes before the start, or the run does not start).** **Given** the run tree, **when**
   the Orchestrator checks it on the night, **then**:
-  - **`A0` is current.** `A0` is `ABC-146`'s route reading, and its staleness inputs are `…f1558f02` § Staleness
-    inputs. With `<A0>` as the commit of the `A0` reading in force, this command prints **nothing**:
+  - **`A0` is current.** The `A0` reading in force is **`secnfr-ABC-174-a0`'s re-take, commit `ed88329c`**
+    (records only, on the run tree `f6b63c1c`, branch `grugops/secnfr-ABC-174-a0`): route **V**, `F_hi` **1.047**
+    ≤ 1.30. Its staleness inputs are `…c7a3e915` § Staleness inputs at the run tree `f6b63c1c`, which supersedes
+    `ABC-146`'s `…f1558f02`. With **`<A0>` = `ed88329c`**, this command prints **nothing**:
     `git diff --name-only <A0> HEAD -- vitest.config.ts package.json package-lock.json src/engine.ts 'src/search*.ts' 'src/evaluate*.ts' src/quiescence.ts src/transposition.ts src/ladder.test.ts`
+    - If the scratch branch is not kept, `<A0>` = `f6b63c1c`. Its tree differs from `ed88329c` only under
+      `.grugops/context/secnfr-ABC-174-a0/` (`secnfr-ABC-174-a0` § Result).
     - **`src/levels.ts` is not on this list.** It changes by design, and `A0` does not read it (D6.5).
-    - `node --version` and `npx vitest --version` print the versions the `A0` reading records (v26.11.1, and
-      `vitest/4.1.11 darwin-arm64 node-v26.11.1`, at `eb216351`).
-    - `md5 -q vitest.config.ts` and `md5 -q src/ladder.test.ts` equal the `A0` reading's values (`2d2b6379…` and
-      `bba67b75…` at `eb216351`).
-    - **Measured at this cut: `A0` is already STALE on `main` `6fc32150`**, before `ABC-173` or `ABC-174` touch
-      anything. Against `eb216351`, the command prints `package.json` (`ABC-169`'s `"license"` field), `src/engine.ts`
-      (`ABC-170`'s optional `maxDepth` / `maxNodes`) and `src/evaluate.ts` (`ABC-169`'s attribution comment). **So
-      `A0` is re-taken before this run** (`ABC-146`'s rule; Security/NFR, at width 1, on the run tree), **or the
-      owner names route N.** BA/PM does not waive it. `ADR-0045` D6.5's "`A0` stays current" does not hold on
-      today's `main`.
+    - `node --version` prints **`v26.11.1`**, and `npx vitest --version` prints
+      **`vitest/4.1.11 darwin-arm64 node-v26.11.1`** (the values at `ed88329c`).
+    - `md5 -q vitest.config.ts` prints **`326bc5ca578a29c48102e0192b4bfe5a`** (`ABC-173`'s heap guard, `affee860`),
+      and `md5 -q src/ladder.test.ts` prints **`bba67b75565b4f4a2e8d231e8bcd6b2e`** (unchanged, 17 verdict rows).
+      These are the values at `ed88329c`. They **replace the `eb216351` values** (`vitest.config.ts` `2d2b6379…`;
+      `src/ladder.test.ts` `bba67b75…`, unchanged).
+    - *History (written at the cut 2026-10-19; closed 2026-10-20 by BA/PM `bapm-ABC-175-heap`).* At the cut, `A0`
+      (`eb216351`) was **STALE on `main` `6fc32150`**. Against `eb216351`, the command printed `package.json`
+      (`ABC-169`'s `"license"`), `src/engine.ts` (`ABC-170`'s `maxDepth` / `maxNodes`) and `src/evaluate.ts`
+      (`ABC-169`'s comment). So `A0` was owed a re-take, or the owner's route-N word. **The re-take is done:**
+      `secnfr-ABC-174-a0`, `done_at` 2026-10-19T22:37Z, width 1, on `f6b63c1c` under `ABC-173`'s cap. 10/10 node
+      counts were equal (29 717); median `F` 0.978; `F_hi` 1.047, so **route V**. The stale-list run against
+      `ed88329c` in `../wt-ABC-174` (HEAD `f6b63c1c`) printed nothing (`.grugops/queue/done/secnfr-ABC-174-a0.md`).
+      The checks above still run **on the night**. A re-take does not replace them.
   - **`src/` is the build QE passed.** `git status --porcelain -- src` is empty, and
     `git diff --name-only <ABC-174 QE-passed commit> HEAD -- src` is empty.
   - **The flag prints, through the same redirect.**
-    `LADDER_DEEP=1 npx vitest run src/ladder.test.ts --reporter=verbose -t "3v4" > <scratch>.txt 2>&1` exits **0**.
-    It has exactly **4** lines containing `LADDER GAME {` and exactly **1** containing `LADDER PAIR {`, and that line
-    reads `"pair":"3v4"`. This is short mode, so it gives counts only, and nothing in it is quoted as `A1` or `A2`.
-    It runs under whatever vitest configuration the run tree carries, including `ABC-173`'s cap if it has merged.
+    `LADDER_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/ladder.test.ts --reporter=verbose -t "3v4" > <scratch>.txt 2>&1`
+    exits **0**. It has exactly **4** lines containing `LADDER GAME {` and exactly **1** containing `LADDER PAIR {`,
+    and that line reads `"pair":"3v4"`. This is short mode, so it gives counts only, and nothing in it is quoted as
+    `A1` or `A2`.
+    - It runs under the run tree's vitest configuration, which carries `ABC-173`'s heap guard (`f6b63c1c`). Its flag
+      is the verdict's flag (`arch-ABC-175-heap` H4), so its exit 0 is also the cap's admission check for the night.
+      `heap-guard: refused …` with exit 1 stops the night before the start.
+    - *Amended 2026-10-20:* the heap prefix was added, copied verbatim from `arch-ABC-175-heap`.
+  - **The flag is the one `A0` read.** Both commands carry exactly `NODE_OPTIONS=--max-old-space-size=400`. `A0`'s
+    vitest arm read route V at that flag (C1, 496 MiB; `arch-ABC-175-heap` H3). A run at any other flag is a
+    configuration `A0` did not read. That needs an `A0` re-take or route N, and the owner decides. `A2`'s verbatim
+    command in `verdict.meta.txt` records the flag.
   - **The host.** `pmset -g batt` prints `Now drawing from 'AC Power'` on its first line.
     `ioreg -r -k AppleClamshellState -d 4 | grep AppleClamshellState` prints `= No` (the lid is open;
     `caffeinate -i` does not stop lid sleep). Both go into the meta file at the start and again at the end.
@@ -170,7 +197,8 @@ merges to `main` before `ABC-174` branches, so the run tree carries the cap.** I
 ## Dependencies
 
 - **`ABC-174`'s QE pass** (the run tree). This ticket is its pre-UAT evidence.
-- **`A0`'s re-take** (Security/NFR, width 1), or the owner's route-N word (`A1`).
+- **`A0`'s re-take** (Security/NFR, width 1), or the owner's route-N word (`A1`). **Met 2026-10-19T22:37Z:**
+  `ed88329c`, route V, `F_hi` 1.047 (`secnfr-ABC-174-a0`). `A1` still re-checks it on the night.
 - **The Orchestrator's overnight slot**, with width 1 held.
 - **`ABC-173`:** order recommended above.
 
@@ -180,6 +208,21 @@ merges to `main` before `ABC-174` branches, so the run tree carries the cap.** I
 - **Cost:** one core for one night. **Estimate (D6.6, not timed):** about 5.5 h, in the range 3.5–7.5 h. Run 2 took
   40 823 s (11.3 h) on the old table. No wall figure is a bar: the games are a function of node counts only.
 - **Security:** not triggered. There is no input path, network, dependency or code change.
+- **Heap (`NFR-010`, `ADR-0008` addendum; added 2026-10-20).** The run tree carries `ABC-173`'s heap guard. The
+  verdict and the `A1` probe each run one file, so each runs under the ONE-FILE row. The flag is exactly `400`, so
+  `heap_size_limit` is **496 MiB** per isolate. The main process and 1 worker sum to **992 MiB**, within the 1984 MiB
+  row (`arch-ABC-175-heap` H1, H6). Without the prefix, the guard exits 1 and no test runs (`…e4b8d062`).
+  - **Whether 180 verdict games fit in 496 MiB is `UNKNOWN - verify`.** No step-4 game has run under the cap. The
+    Architect's structural read is that heap does not build up across games, but that was not run.
+  - **This page schedules no out-of-memory pre-probe.** Whether to run one is owner question **`OQ-175-H1`**
+    (`arch-ABC-175-heap`). The Architect recommends none. A verdict-mode `-t "3v4"` pre-probe would show 3v4 verdict
+    scores before the one shot, which § Pre-registration forbids without his word.
+  - **Out of memory on the night.** If the probe or the run fails with a heap out-of-memory error, `A4` applies: no
+    score, and nothing is restarted. The Orchestrator takes it to the owner, who decides under **`ABC-173` Q4**
+    whether the limit goes up or the lane is fixed. Neither moves without his word.
+    - The report says whether `verdict.out.txt` contains `heap out of memory` or `Worker exited unexpectedly`. The
+      second is the out-of-memory signature `PUZZLE_DEEP` shows (`ADR-0008` addendum).
+    - 1v5 runs last and is the longest pair, so an out-of-memory error there costs the most.
 
 ## Test notes
 
@@ -198,7 +241,28 @@ no code and no new bar. Every bar is `ABC-085`'s.
 
 ## Definition of Ready
 
-BA/PM, 2026-10-19, at `main` `6fc32150`. **Result: 10 of 10.**
+### Re-score: BA/PM, 2026-10-20 (`bapm-ABC-175-heap`), at `main` `a76b006e`. **Result: 10 of 10.**
+
+The re-score covers three changes: the heap prefix on both commands, copied verbatim from `arch-ABC-175-heap`; the
+`A0` re-take recorded as done (`ed88329c`); and the out-of-memory line (§ Security / NFR triggers).
+
+| # | item | verdict |
+|---|---|---|
+| 1 | problem clear | **✅** unchanged |
+| 2 | scope and out-of-scope clear | **✅** one run with one exact command (§ Scope 2). Code, route N, tuning, a second shot and an out-of-memory pre-probe without the owner's word are fenced off |
+| 3 | INVEST-shaped | **✅** unchanged. Testable by counts |
+| 4 | acceptance testable and measurable | **✅** both commands are exact and carry `--max-old-space-size=400`. `A0`'s inputs are concrete: `<A0>` = `ed88329c`, md5s `326bc5ca…` / `bba67b75…`, `v26.11.1`, `vitest/4.1.11`. The flag must equal `A0`'s. Probe: 4 + 1 lines, exit 0. Run: 17/17, 5 and 180. MET/RED against ≥ 90 % and > 50 % |
+| 5 | dependencies known | **✅** `ABC-174` QE passed (`be6a5599`; run tree `f6b63c1c`). **`A0` re-take met** (`ed88329c`, route V). `ABC-173` is on the run tree, so the recommended order holds. The heap command is ruled (`arch-ABC-175-heap`). The overnight slot and the owner's go for the night are the Orchestrator's to get |
+| 6 | security/NFR triggers with a measurable target | **✅** 0 default-lane games; ~5.5 h estimate labelled; heap ONE-FILE 496 MiB per isolate, Σ 992 MiB ≤ 1984 MiB (`NFR-010`). Whether the games fit is `UNKNOWN - verify` and routed to the owner. Security not triggered |
+| 7 | test notes present | **✅** three |
+| 8 | size assigned | **✅** `XS`. The prefix adds no work |
+| 9 | priority assigned | **✅** `P1` |
+| 10 | no major unresolved blocker | **✅** The command blocker (`…e4b8d062`) is closed by `arch-ABC-175-heap`, and `A0` is met. Two items remain open, and neither blocks: `OQ-175-H1` (whether to run a pre-probe) has a recommended default that needs no new word, and an out-of-memory error on the night is the owner's under `ABC-173` Q4 (`A4`) |
+
+**Recommended: `Backlog → Ready` now.** The 2026-10-19 trigger, "when `ABC-174` enters QE", has passed: `ABC-174`
+is Ready for UAT. The night then waits on the owner's go and width 1. Column moves are the Orchestrator's.
+
+### Score at the cut (superseded by the re-score above): BA/PM, 2026-10-19, at `main` `6fc32150`. **Result: 10 of 10.**
 
 | # | item | verdict |
 |---|---|---|
