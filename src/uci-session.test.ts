@@ -177,7 +177,7 @@ describe("ABC-167 A4 — bad input holds no position", () => {
   });
 
   it("A4-a2: an echoed control character in a go value is dropped from the info string", () => {
-    const { perLine } = talk(["position startpos", "go depth \x1b[31m"]);
+    const { perLine } = talk(["position startpos", "go depth \x1b[31m"], 100);
     const lines = perLine[1] as string[];
     expect(lines).toHaveLength(3);
     expect(lines[0]).toMatch(/^info string /);
@@ -516,7 +516,7 @@ describe("ABC-167 A8 — mate scores", () => {
   it("being mated next move reports score mate -1", () => {
     const position = parseFen(MATED_NEXT);
     expect(legalMoves(position).map(coordinateOf)).toEqual(["h8g8"]); // test note 3: derived
-    const { out } = talk([`position fen ${MATED_NEXT}`, "go movetime 500"]);
+    const { out } = talk([`position fen ${MATED_NEXT}`, "go movetime 500"], 100);
     expect(parseInfo(out[0]).score).toBe("mate -1");
   });
 

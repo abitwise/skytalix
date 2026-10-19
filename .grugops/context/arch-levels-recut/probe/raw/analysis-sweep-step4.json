@@ -1,0 +1,362 @@
+{
+ "positions": 50,
+ "step": 4,
+ "kCapped": [],
+ "depthByBudget": {
+  "40": {
+   "median": 3,
+   "min": 2,
+   "max": 5
+  },
+  "50": {
+   "median": 3,
+   "min": 2,
+   "max": 6
+  },
+  "100": {
+   "median": 5,
+   "min": 3,
+   "max": 7
+  },
+  "150": {
+   "median": 5,
+   "min": 3,
+   "max": 7
+  },
+  "170": {
+   "median": 5,
+   "min": 3,
+   "max": 7
+  },
+  "180": {
+   "median": 5,
+   "min": 3,
+   "max": 7
+  },
+  "220": {
+   "median": 5,
+   "min": 3,
+   "max": 8
+  },
+  "300": {
+   "median": 5,
+   "min": 3,
+   "max": 8
+  },
+  "330": {
+   "median": 5,
+   "min": 4,
+   "max": 8
+  },
+  "500": {
+   "median": 6,
+   "min": 5,
+   "max": 9
+  },
+  "700": {
+   "median": 6,
+   "min": 5,
+   "max": 9
+  },
+  "1000": {
+   "median": 7,
+   "min": 5,
+   "max": 10
+  },
+  "1500": {
+   "median": 7,
+   "min": 6,
+   "max": 10
+  },
+  "1700": {
+   "median": 7,
+   "min": 6,
+   "max": 10
+  },
+  "2000": {
+   "median": 7,
+   "min": 6,
+   "max": 10
+  },
+  "3000": {
+   "median": 8,
+   "min": 7,
+   "max": 11
+  },
+  "4000": {
+   "median": 8,
+   "min": 7,
+   "max": 11
+  },
+  "4500": {
+   "median": 8,
+   "min": 7,
+   "max": 11
+  },
+  "5000": {
+   "median": 8,
+   "min": 7,
+   "max": 11
+  }
+ },
+ "plyCost": {
+  "samples": 148,
+  "p25": 2.3,
+  "median": 2.67,
+  "p75": 3.1
+ },
+ "pairs": [
+  {
+   "label": "today 3v4",
+   "budgets": [
+    3000,
+    4000
+   ],
+   "ratio": 1.33,
+   "strongerDeeper": 7,
+   "sameDepth": 43,
+   "shallower": 0,
+   "moveDiffers": 1,
+   "meanPlyGain": 0.14
+  },
+  {
+   "label": "today 4v5",
+   "budgets": [
+    4000,
+    4500
+   ],
+   "ratio": 1.13,
+   "strongerDeeper": 3,
+   "sameDepth": 47,
+   "shallower": 0,
+   "moveDiffers": 1,
+   "meanPlyGain": 0.06
+  },
+  {
+   "label": "today 3v5",
+   "budgets": [
+    3000,
+    4500
+   ],
+   "ratio": 1.5,
+   "strongerDeeper": 10,
+   "sameDepth": 40,
+   "shallower": 0,
+   "moveDiffers": 2,
+   "meanPlyGain": 0.2
+  },
+  {
+   "label": "3000 v 5000",
+   "budgets": [
+    3000,
+    5000
+   ],
+   "ratio": 1.67,
+   "strongerDeeper": 18,
+   "sameDepth": 32,
+   "shallower": 0,
+   "moveDiffers": 2,
+   "meanPlyGain": 0.36
+  },
+  {
+   "label": "T 3v4 (500 v 1500)",
+   "budgets": [
+    500,
+    1500
+   ],
+   "ratio": 3,
+   "strongerDeeper": 47,
+   "sameDepth": 3,
+   "shallower": 0,
+   "moveDiffers": 5,
+   "meanPlyGain": 1.04
+  },
+  {
+   "label": "T 4v5 (1500 v 4500)",
+   "budgets": [
+    1500,
+    4500
+   ],
+   "ratio": 3,
+   "strongerDeeper": 48,
+   "sameDepth": 2,
+   "shallower": 0,
+   "moveDiffers": 5,
+   "meanPlyGain": 1.04
+  },
+  {
+   "label": "T 2v3 time (220 v 500)",
+   "budgets": [
+    220,
+    500
+   ],
+   "ratio": 2.27,
+   "strongerDeeper": 31,
+   "sameDepth": 19,
+   "shallower": 0,
+   "moveDiffers": 3,
+   "meanPlyGain": 0.72
+  },
+  {
+   "label": "T 1v2 time (100 v 220)",
+   "budgets": [
+    100,
+    220
+   ],
+   "ratio": 2.2,
+   "strongerDeeper": 45,
+   "sameDepth": 5,
+   "shallower": 0,
+   "moveDiffers": 10,
+   "meanPlyGain": 1
+  },
+  {
+   "label": "today 2v3 time (500 v 3000)",
+   "budgets": [
+    500,
+    3000
+   ],
+   "ratio": 6,
+   "strongerDeeper": 50,
+   "sameDepth": 0,
+   "shallower": 0,
+   "moveDiffers": 7,
+   "meanPlyGain": 1.88
+  },
+  {
+   "label": "today 1v2 time (100 v 500)",
+   "budgets": [
+    100,
+    500
+   ],
+   "ratio": 5,
+   "strongerDeeper": 50,
+   "sameDepth": 0,
+   "shallower": 0,
+   "moveDiffers": 9,
+   "meanPlyGain": 1.72
+  },
+  {
+   "label": "1000 v 3000",
+   "budgets": [
+    1000,
+    3000
+   ],
+   "ratio": 3,
+   "strongerDeeper": 49,
+   "sameDepth": 1,
+   "shallower": 0,
+   "moveDiffers": 5,
+   "meanPlyGain": 1.08
+  },
+  {
+   "label": "700 v 2000",
+   "budgets": [
+    700,
+    2000
+   ],
+   "ratio": 2.86,
+   "strongerDeeper": 48,
+   "sameDepth": 2,
+   "shallower": 0,
+   "moveDiffers": 5,
+   "meanPlyGain": 1.04
+  },
+  {
+   "label": "1500 v 3000",
+   "budgets": [
+    1500,
+    3000
+   ],
+   "ratio": 2,
+   "strongerDeeper": 42,
+   "sameDepth": 8,
+   "shallower": 0,
+   "moveDiffers": 3,
+   "meanPlyGain": 0.84
+  },
+  {
+   "label": "P 2v3 time (500 v 500)",
+   "budgets": [
+    500,
+    500
+   ],
+   "ratio": 1,
+   "strongerDeeper": 0,
+   "sameDepth": 50,
+   "shallower": 0,
+   "moveDiffers": 0,
+   "meanPlyGain": 0
+  },
+  {
+   "label": "S 4v5 (1000 v 3000)",
+   "budgets": [
+    1000,
+    3000
+   ],
+   "ratio": 3,
+   "strongerDeeper": 49,
+   "sameDepth": 1,
+   "shallower": 0,
+   "moveDiffers": 5,
+   "meanPlyGain": 1.08
+  },
+  {
+   "label": "S 3v4 (330 v 1000)",
+   "budgets": [
+    330,
+    1000
+   ],
+   "ratio": 3.03,
+   "strongerDeeper": 49,
+   "sameDepth": 1,
+   "shallower": 0,
+   "moveDiffers": 3,
+   "meanPlyGain": 1.06
+  },
+  {
+   "label": "S 2v3 (180 v 330)",
+   "budgets": [
+    180,
+    330
+   ],
+   "ratio": 1.83,
+   "strongerDeeper": 30,
+   "sameDepth": 20,
+   "shallower": 0,
+   "moveDiffers": 5,
+   "meanPlyGain": 0.64
+  },
+  {
+   "label": "S 1v2 (100 v 180)",
+   "budgets": [
+    100,
+    180
+   ],
+   "ratio": 1.8,
+   "strongerDeeper": 39,
+   "sameDepth": 11,
+   "shallower": 0,
+   "moveDiffers": 8,
+   "meanPlyGain": 0.82
+  },
+  {
+   "label": "S 1v5 (100 v 3000)",
+   "budgets": [
+    100,
+    3000
+   ],
+   "ratio": 30,
+   "strongerDeeper": 50,
+   "sameDepth": 0,
+   "shallower": 0,
+   "moveDiffers": 9,
+   "meanPlyGain": 3.6
+  }
+ ],
+ "check": {
+  "total": 60,
+  "agree": 60,
+  "faults": []
+ }
+}

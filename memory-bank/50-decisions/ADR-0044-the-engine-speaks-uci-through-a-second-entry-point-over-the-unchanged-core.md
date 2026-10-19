@@ -9,6 +9,12 @@ resolve. Since the 2026-10-18 revision that slug is no longer true: see § Revis
 
 ## Status
 
+> **Amended 2026-10-19 by `ADR-0045` (accepted by the owner, note `…1a9c7f42`; folded by BA/PM, subtask
+> `bapm-adr0045-cut`).** D11's `default 3` and D3's option line now read `default 5`: the `default` is
+> `DEFAULT_LEVEL`, which `ADR-0045` D2 moves from 3 to 5, and `LEVELS[5]` is `{ 3000, 0 }`, the shipped engine at
+> 3 s, as level 3 was. D11's path rule is unchanged and chosen by data: rate 0 is level 5 only, and levels 1–4 take
+> `createLevel`. Effective at `ABC-174`'s merge. No other decision here moves.
+
 **accepted** 2026-10-18 by Olger Oeselg (owner), verbatim "accept the revised ADR-0044 and EPIC-007" (note
 `.grugops/context/wave-2026-09-25/notes/20261018T113000Z-orchestrator-decision-owner-word-engine-private-adr0044-epic007-accepted-c3e81a57.md`).
 Owner menu: licence → private ("let's keep private for now"); Q14 → keep `npm run chess`; Q15 → moot
@@ -181,7 +187,7 @@ budget. There is no `info` line, and no way to read `stop` while `chooseMove` ho
 
 | GUI → engine | engine does |
 |---|---|
-| `uci` | `id name skytalix`, `id author Olger Oeselg`, `option name OwnBook type check default true`, `option name Skill Level type spin default 3 min 1 max 5`, `uciok` |
+| `uci` | `id name skytalix`, `id author Olger Oeselg`, `option name OwnBook type check default true`, `option name Skill Level type spin default 3 min 1 max 5` *(2026-10-19, `ADR-0045`: `default 5`, read from `DEFAULT_LEVEL`)*, `uciok` |
 | `setoption name <id> [value <x>]` | `<id>` is the text between `name` and `value`, matched **case-insensitively** (the spec says option names *"should not be case sensitive and can inlude spaces"*). `OwnBook`: `true` or `false`. `Skill Level`: an integer from 1 to 5, looked up by an own key (`Object.hasOwn(LEVELS, n)`, the `level-seam.ts` rule). An invalid value keeps the old value and writes one `info string`. **Any other name is ignored**, which covers the options Lichess's provider sets unconditionally (`UCI_AnalyseMode`, `UCI_Chess960`, `Threads`, `Hash`, `MultiPV`) |
 | `isready` | the first time with `OwnBook` on, it warms the book (D10). Then `readyok` |
 | `ucinewgame` | sets the position back to the start. It does not reset the options, reload the book or reseed anything (D10, D11). The table is already cleared per search (`ADR-0025`) |
@@ -251,7 +257,7 @@ one of these triggers fires:
 | honouring `searchmoves` | a named user. It would need a root-move filter in `src/engine.ts` |
 | `info` per iteration, `currmove`, `seldepth`, a pv longer than one move | needs a per-iteration hook in `src/engine.ts` (a GUI shows only the final line in v1) |
 | game-history repetition seen by the search | an `ADR-0002` clause 3 amendment. Today's terminal game has the same gap |
-| `depth`/`nodes`/`mate` at a level with a blunder rate (1, 2) | an edit to `src/levels.ts` to forward the limits. Not wanted for v1 (D11) |
+| `depth`/`nodes`/`mate` at a level with a blunder rate (1, 2; *1–4 from `ABC-174`, `ADR-0045`*) | an edit to `src/levels.ts` to forward the limits. Not wanted for v1 (D11) |
 | Chess960, CECP, `go perft`, any server, a bundler, a Web Worker bundle or a WASM build in this repo | rejected below, or belongs to the web project (D8) |
 
 ### D7. The terminal UI is unchanged
@@ -352,16 +358,18 @@ that backend can run.
 
 - **`option name Skill Level type spin default 3 min 1 max 5`.** The values are `src/levels.ts`'s ordinals,
   and `default 3` is `DEFAULT_LEVEL`, the terminal game's default (the shipped engine at 3 s, no
-  blunders). **No Elo is claimed.** `UCI_LimitStrength` / `UCI_Elo` is rejected (Alternatives).
+  blunders). *(Folded 2026-10-19, `ADR-0045` D2/D4: **`default 5`**. The `default` is `DEFAULT_LEVEL`, now 5, and it
+  is still the shipped engine at 3 s with no blunders. The session reads it from `DEFAULT_LEVEL` rather than a
+  literal (`ABC-174`).)* **No Elo is claimed.** `UCI_LimitStrength` / `UCI_Elo` is rejected (Alternatives).
 - **With the `go` time.** The budget is `min(G, LEVELS[skill].budgetMs)` (D4). The level is a cap on
   effort and the GUI's clock is a cap on time, so the smaller one binds. Level 1 thinks at most 100 ms
   even with plenty of time on the clock. Any level thinks less when the clock is short. The engine still
   clamps at `HARD_CEILING_MS`.
 - **Two paths, chosen by the level's data, not its number:**
-  - **`blunderRate` is 0** (levels 3, 4, 5 today): the session calls `chooseMove(position, { budgetMs, now,
+  - **`blunderRate` is 0** (levels 3, 4, 5 today; *level 5 only from `ABC-174`, `ADR-0045` D4*): the session calls `chooseMove(position, { budgetMs, now,
     maxDepth, maxNodes })` directly. That is what `createLevel` does for a rate of 0, so it is the same
     move, and D12's limits apply.
-  - **`blunderRate` is above 0** (levels 1, 2): the session calls
+  - **`blunderRate` is above 0** (levels 1, 2; *levels 1–4 from `ABC-174`, `ADR-0045` D4*): the session calls
     `createLevel({ budgetMs, blunderRate }, { seed, now })(position)`, with `budgetMs` already the
     minimum above. `createLevel` takes no depth or node limit, so `depth`, `nodes` and `mate` are
     ignored here, with one `info string`. Forwarding them would edit `src/levels.ts` (D6).
@@ -694,7 +702,8 @@ That matters only if someone chooses v4, and the owner, as copyright holder, can
   - A GUI that pings during a search waits up to one budget (D5).
   - Game-history repetitions are invisible to the search (D6).
   - Analysis is capped at 5 s per `go` (Q3), and by the level's budget.
-  - At levels 1 and 2, `depth`/`nodes`/`mate` are ignored and no score is sent (D11).
+  - At levels 1 and 2, `depth`/`nodes`/`mate` are ignored and no score is sent (D11). *(2026-10-19, `ADR-0045` D4:
+    levels 1–4 from `ABC-174`.)*
   - A book move ignores the `go` limits (D10).
   - `go mate N` is a depth approximation (D12).
   - `dist/` relies on the clone's `data/` beside it for the book (D8).

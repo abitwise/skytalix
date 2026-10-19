@@ -1,0 +1,83 @@
+P1 level 1 | go | time 200 | budget 100
+P1 level 1 | go movetime 100000 | time 200 | budget 100
+P1 level 1 | go wtime 600000 btime 600000 | time 200 | budget 100
+P1 level 1 | go depth 99 | time 200 | budget 100
+P1 level 1 | go infinite | time 200 | budget 100
+P1 level 2 | go | time 600 | budget 500
+P1 level 2 | go movetime 100000 | time 600 | budget 500
+P1 level 2 | go wtime 600000 btime 600000 | time 600 | budget 500
+P1 level 2 | go depth 99 | time 600 | budget 500
+P1 level 2 | go infinite | time 600 | budget 500
+P1 level 3 | go | time 3100 | budget 3000
+P1 level 3 | go movetime 100000 | time 3100 | budget 3000
+P1 level 3 | go wtime 600000 btime 600000 | time 3100 | budget 3000
+P1 level 3 | go depth 99 | time 3100 | budget 3000
+P1 level 3 | go infinite | time 3100 | budget 3000
+P1 level 4 | go | time 4100 | budget 4000
+P1 level 4 | go movetime 100000 | time 4100 | budget 4000
+P1 level 4 | go wtime 600000 btime 600000 | time 4100 | budget 4000
+P1 level 4 | go depth 99 | time 4100 | budget 4000
+P1 level 4 | go infinite | time 4100 | budget 4000
+P1 level 5 | go | time 4600 | budget 4500
+P1 level 5 | go movetime 100000 | time 4600 | budget 4500
+P1 level 5 | go wtime 600000 btime 600000 | time 4600 | budget 4500
+P1 level 5 | go depth 99 | time 4600 | budget 4500
+P1 level 5 | go infinite | time 4600 | budget 4500
+P1 max time over all rows 4600; HARD_CEILING_MS 5000
+ ✓ src/qe171-probe.test.ts > P1 NFR-004 on the virtual clock: the highest budget the session can pass > every level x every unbounded go: time <= level budget + 2 steps, and < HARD_CEILING_MS 6954ms
+P2 k=1 session bestmove e2e4,bestmove e2a6 | oracle bestmove e2e4,bestmove e2a6
+P2 k=2 session bestmove b1c3,bestmove e2a6 | oracle bestmove b1c3,bestmove e2a6
+P2 k=3 session bestmove e2e4,bestmove e2a6 | oracle bestmove e2e4,bestmove e2a6
+P2 k=4 session bestmove b1c3,bestmove d5e6 | oracle bestmove b1c3,bestmove d5e6
+P2 k=5 session bestmove e2e4,bestmove e2a6 | oracle bestmove e2e4,bestmove e2a6
+P2 k=6 session bestmove b1c3,bestmove e2a6 | oracle bestmove b1c3,bestmove e2a6
+P2 k=7 session bestmove b1c3,bestmove e2a6 | oracle bestmove b1c3,bestmove e2a6
+P2 k=8 session bestmove e2e4,bestmove e2a6 | oracle bestmove e2e4,bestmove e2a6
+ ✓ src/qe171-probe.test.ts > P2 the per-go seed oracle (D11: seed = floor(random() * 2^32), a fresh level per go) > level-1 session bestmoves equal createLevel driven by the same draws 2501ms
+P3 lines ["info string book","bestmove e2e4"] draws 0
+P4 go nodes 100 -> ["info string skill level 1 ignores go nodes; searching on time","info depth 4 nodes 6165 time 110 pv e2e4","bestmove e2e4"]
+P4 go mate 2 -> ["info string skill level 1 ignores go mate; searching on time","info depth 4 nodes 6165 time 110 pv e2e4","bestmove e2e4"]
+ ✓ src/qe171-probe.test.ts > P3 a book hit at a blunder level > lines and random draws 1ms
+ ✓ src/qe171-probe.test.ts > P4 dropped limits at level 1 > go nodes 100 83ms
+ ✓ src/qe171-probe.test.ts > P4 dropped limits at level 1 > go mate 2 75ms
+P4 go depth 3 nodes 100 mate 2 -> ["info string skill level 1 ignores go depth, nodes, mate; searching on time","info depth 4 nodes 6165 time 110 pv e2e4","bestmove e2e4"]
+P4 go depth x -> ["info string go depth needs an integer >= 1, got x; ignored","info depth 4 nodes 6165 time 110 pv e2e4","bestmove e2e4"]
+ ✓ src/qe171-probe.test.ts > P4 dropped limits at level 1 > go depth 3 nodes 100 mate 2 72ms
+ ✓ src/qe171-probe.test.ts > P4 dropped limits at level 1 > go depth x 67ms
+P4 go depth 3 depth 4 -> ["info string skill level 1 ignores go depth; searching on time","info depth 4 nodes 6165 time 110 pv e2e4","bestmove e2e4"]
+P5 "setoption name OwnBook value TRUE" -> ["info string OwnBook takes true or false, got TRUE; kept true"] | then go time 3100
+ ✓ src/qe171-probe.test.ts > P4 dropped limits at level 1 > go depth 3 depth 4 67ms
+ ✓ src/qe171-probe.test.ts > P5 setoption edges > setoption name OwnBook value TRUE 272ms
+P5 "setoption name OwnBook" -> ["info string OwnBook takes true or false, got nothing; kept true"] | then go time 3100
+ ✓ src/qe171-probe.test.ts > P5 setoption edges > setoption name OwnBook 299ms
+P5 "setoption name OwnBook value" -> ["info string OwnBook takes true or false, got nothing; kept true"] | then go time 3100
+ ✓ src/qe171-probe.test.ts > P5 setoption edges > setoption name OwnBook value 300ms
+P5 "setoption name Skill Level value 1 2" -> ["info string Skill Level takes an integer 1-5, got 1 2; kept 3"] | then go time 3100
+ ✓ src/qe171-probe.test.ts > P5 setoption edges > setoption name Skill Level value 1 2 300ms
+P5 "setoption name Skill Level value 01" -> ["info string Skill Level takes an integer 1-5, got 01; kept 3"] | then go time 3100
+ ✓ src/qe171-probe.test.ts > P5 setoption edges > setoption name Skill Level value 01 397ms
+P5 "setoption name Skill Level value 1.0" -> ["info string Skill Level takes an integer 1-5, got 1.0; kept 3"] | then go time 3100
+ ✓ src/qe171-probe.test.ts > P5 setoption edges > setoption name Skill Level value 1.0 322ms
+P5 "setoption name Skill Level value __proto__" -> ["info string Skill Level takes an integer 1-5, got __proto__; kept 3"] | then go time 3100
+ ✓ src/qe171-probe.test.ts > P5 setoption edges > setoption name Skill Level value __proto__ 292ms
+P5 "setoption name Skill Level value toString" -> ["info string Skill Level takes an integer 1-5, got toString; kept 3"] | then go time 3100
+ ✓ src/qe171-probe.test.ts > P5 setoption edges > setoption name Skill Level value toString 435ms
+P5 "setoption name  SKILL   LEVEL  value 5" -> [] | then go time 3600
+ ✓ src/qe171-probe.test.ts > P5 setoption edges > setoption name  SKILL   LEVEL  value 5 355ms
+P5 "setoption name Skill Level value  5 " -> [] | then go time 3600
+ ✓ src/qe171-probe.test.ts > P5 setoption edges > setoption name Skill Level value  5  418ms
+P5 "setoption name OwnBook value true false" -> ["info string OwnBook takes true or false, got true false; kept true"] | then go time 3100
+ ✓ src/qe171-probe.test.ts > P5 setoption edges > setoption name OwnBook value true false 580ms
+P5 "setoption Skill Level value 1" -> [] | then go time 3100
+ ✓ src/qe171-probe.test.ts > P5 setoption edges > setoption Skill Level value 1 329ms
+P5 "setoption name Skill value 1" -> [] | then go time 3100
+ ✓ src/qe171-probe.test.ts > P5 setoption edges > setoption name Skill value 1 324ms
+P6 warns ["opening book could not be read; playing on without it"] | session lines ["readyok","info depth 1 score cp 69 nodes 21 time 200 nps 105 pv e2e4","bestmove e2e4"]
+P7 off ["info depth 2 score cp 0 nodes 117 time 300 nps 390 pv e2e4","bestmove e2e4"] reads 0 | on ["info string book","bestmove e2e4"] reads 1
+P8 level 2 -> ["info depth 4 nodes 2050 time 600 pv e2e4","bestmove e2e4"]
+P8 level 4 -> ["info depth 5 score cp 55 nodes 30741 time 3600 nps 8539 pv g1f3","bestmove g1f3"]
+ ✓ src/qe171-probe.test.ts > P6 a bad book: the warning text and where it goes > read throws 1ms
+ ✓ src/qe171-probe.test.ts > P7 OwnBook toggled mid-session > off: search, 0 reads; on: book hit, 1 read 2ms
+ ✓ src/qe171-probe.test.ts > P8 A6 at levels 2 and 4 > level 2 23ms
+ ✓ src/qe171-probe.test.ts > P8 A6 at levels 2 and 4 > level 4 343ms
+      Tests  25 passed (25)

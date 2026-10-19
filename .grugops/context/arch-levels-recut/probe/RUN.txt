@@ -1,0 +1,38 @@
+Architect/Design probe, subtask arch-levels-recut (ADR-0045, PROPOSED), task wave-2026-09-25.
+Tree: 398603fa (main tip at dispatch), worktree ../wt-arch-levels-recut. src/ unmodified; nothing under src/ was
+written. The probes import src/ read-only, as design-ABC-085/probe/ladder-step.mjs did.
+Node v26.11.1, plain `node` (not vitest). VIRTUAL CLOCK ONLY: every reading below is a count (reads, depth, move,
+centipawns). No wall-clock figure is recorded or quoted. The host was shared (load1 is in each raw file's header
+line, logged, never a bar).
+
+Corpus: BA/PM's 50-position set (buildCorpus, every non-"child" entry plus every 4th index), the set ADR-0038's
+probe and ABC-085's named-risk table used. ABC-146's A0 workload is one position (the start position); this
+probe takes the 50 so that the counts are comparable with ABC-085's table.
+
+1. depth-ladder.mjs sweep 4  -> raw/sweep-step4.jsonl.txt (50 lines, one per position)
+   For k = 1.. : chooseMove(position, { budgetMs: 5000, maxDepth: k, now: counting virtual clock, step 4 }).
+   maxDepth is ABC-170's merged optional field; absent fields are node-for-node today's engine (ADR-0044 D12).
+   Rule (header of the script): iteration k completes at budget b iff (T_k - 3) * 4 < b, T_k = reads of the
+   maxDepth = k call. So one sweep gives the exact depth AND move for every budget <= 5000 at step 4.
+2. depth-ladder.mjs check 4  -> raw/check-step4.jsonl.txt
+   Direct chooseMove(position, { budgetMs: b, now: virtualClock(4) }), b in {100, 170, 500, 1500, 4500}, first
+   12 positions. analyze.mjs compares with the sweep's prediction: 60 / 60 agree on depth and move.
+3. analyze.mjs sweep raw/sweep-step4.jsonl.txt raw/check-step4.jsonl.txt -> raw/analysis-sweep-step4.json
+   Depth by budget, cost of one more ply (reads ratio, iterations with >= 25 reads, k <= 12), per pair:
+   positions where the stronger budget completes a deeper iteration, positions where the move differs.
+4. blunder-gap.mjs <b> 4 for b in 220, 330, 500, 1000, 3000 -> raw/blunder-gap-b<b>-step4.jsonl.txt
+   createLevel({ budgetMs: b, blunderRate: 0.999999 }) (levels.test.ts's always-fire fixture rate): the ADR-0032
+   construction, unmodified. Gap = best score - played (strict second-best) score, by the level's own search.
+   analyze.mjs gap <file> summarises it (printed below; not saved separately).
+
+Readings (step 4, 50 positions):
+- One more ply costs 2.67x reads (median; p25 2.30, p75 3.10; 148 samples).
+- Today's pairs: 3000 v 4000 deeper on 7/50 (mean +0.14 ply), move differs 1/50. 4000 v 4500 deeper on 3/50
+  (+0.06), move 1/50. 3000 v 4500: 10/50 (+0.20). 3000 v 5000 (the ceiling): 18/50 (+0.36), move 2/50.
+- 3x steps: 1000 v 3000 deeper 49/50 (+1.08), 330 v 1000 49/50 (+1.06), 500 v 1500 47/50 (+1.04),
+  1500 v 4500 48/50 (+1.04). Move differs 3-5/50.
+- Below: 180 v 330 30/50 (+0.64), 100 v 180 39/50 (+0.82), 100 v 3000 50/50 (+3.60). 500 v 500: 0/50.
+- Median depth at step 4: 100 ms 5, 180 ms 5, 330 ms 5, 500 ms 6, 1000 ms 7, 1500 ms 7, 3000 ms 8, 4500 ms 8.
+- Blunder gap, cp (p25 / median / p75 / >=100 of 50): 220 ms 14/71/104/13; 330 ms 25/71/93/12;
+  500 ms 20/69/85/11; 1000 ms 16/71/113/16; 3000 ms 34/86/147/18. Every position had >= 3 distinct scores
+  (kind "blunder" 50/50 at each budget).

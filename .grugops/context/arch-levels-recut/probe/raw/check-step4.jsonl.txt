@@ -1,0 +1,61 @@
+# 2026-10-19T11:43:15Z commit 398603fa node v26.11.1 load: { 5.08 9.67 14.60 }
+{"name":"startpos","b":100,"step":4,"move":"6-37","depth":5,"nodes":20501}
+{"name":"startpos","b":170,"step":4,"move":"6-37","depth":5,"nodes":38933}
+{"name":"startpos","b":500,"step":4,"move":"19-51","depth":7,"nodes":120853}
+{"name":"startpos","b":1500,"step":4,"move":"19-51","depth":7,"nodes":376853}
+{"name":"startpos","b":4500,"step":4,"move":"6-37","depth":8,"nodes":1143829}
+{"name":"startpos child 3","b":100,"step":4,"move":"99-67","depth":5,"nodes":20506}
+{"name":"startpos child 3","b":170,"step":4,"move":"99-67","depth":6,"nodes":37914}
+{"name":"startpos child 3","b":500,"step":4,"move":"99-67","depth":7,"nodes":120964}
+{"name":"startpos child 3","b":1500,"step":4,"move":"99-67","depth":8,"nodes":375834}
+{"name":"startpos child 3","b":4500,"step":4,"move":"99-67","depth":9,"nodes":1142810}
+{"name":"startpos child 7","b":100,"step":4,"move":"100-84","depth":5,"nodes":20509}
+{"name":"startpos child 7","b":170,"step":4,"move":"100-84","depth":5,"nodes":38941}
+{"name":"startpos child 7","b":500,"step":4,"move":"99-67","depth":6,"nodes":121885}
+{"name":"startpos child 7","b":1500,"step":4,"move":"100-84","depth":7,"nodes":376861}
+{"name":"startpos child 7","b":4500,"step":4,"move":"118-85","depth":8,"nodes":1143837}
+{"name":"startpos child 11","b":100,"step":4,"move":"99-67","depth":5,"nodes":20506}
+{"name":"startpos child 11","b":170,"step":4,"move":"99-67","depth":5,"nodes":38938}
+{"name":"startpos child 11","b":500,"step":4,"move":"99-67","depth":6,"nodes":121882}
+{"name":"startpos child 11","b":1500,"step":4,"move":"99-67","depth":7,"nodes":376858}
+{"name":"startpos child 11","b":4500,"step":4,"move":"99-67","depth":8,"nodes":1143834}
+{"name":"startpos child 15","b":100,"step":4,"move":"99-67","depth":5,"nodes":20506}
+{"name":"startpos child 15","b":170,"step":4,"move":"99-67","depth":6,"nodes":37914}
+{"name":"startpos child 15","b":500,"step":4,"move":"99-67","depth":7,"nodes":120858}
+{"name":"startpos child 15","b":1500,"step":4,"move":"113-82","depth":8,"nodes":375834}
+{"name":"startpos child 15","b":4500,"step":4,"move":"113-82","depth":9,"nodes":1142810}
+{"name":"startpos child 19","b":100,"step":4,"move":"118-85","depth":5,"nodes":20505}
+{"name":"startpos child 19","b":170,"step":4,"move":"118-85","depth":6,"nodes":37913}
+{"name":"startpos child 19","b":500,"step":4,"move":"118-85","depth":7,"nodes":120857}
+{"name":"startpos child 19","b":1500,"step":4,"move":"118-85","depth":7,"nodes":376857}
+{"name":"startpos child 19","b":4500,"step":4,"move":"99-67","depth":9,"nodes":1142809}
+{"name":"kiwipete","b":100,"step":4,"move":"20-80","depth":3,"nodes":23130}
+{"name":"kiwipete","b":170,"step":4,"move":"20-80","depth":4,"nodes":40538}
+{"name":"kiwipete","b":500,"step":4,"move":"20-80","depth":5,"nodes":123482}
+{"name":"kiwipete","b":1500,"step":4,"move":"20-80","depth":6,"nodes":378458}
+{"name":"kiwipete","b":4500,"step":4,"move":"20-80","depth":7,"nodes":1145434}
+{"name":"kiwipete child 2","b":100,"step":4,"move":"49-34","depth":3,"nodes":23166}
+{"name":"kiwipete child 2","b":170,"step":4,"move":"80-20","depth":4,"nodes":40574}
+{"name":"kiwipete child 2","b":500,"step":4,"move":"49-34","depth":5,"nodes":123518}
+{"name":"kiwipete child 2","b":1500,"step":4,"move":"84-67","depth":6,"nodes":378494}
+{"name":"kiwipete child 2","b":4500,"step":4,"move":"84-67","depth":7,"nodes":1145470}
+{"name":"kiwipete child 6","b":100,"step":4,"move":"49-34","depth":3,"nodes":23085}
+{"name":"kiwipete child 6","b":170,"step":4,"move":"49-34","depth":4,"nodes":40493}
+{"name":"kiwipete child 6","b":500,"step":4,"move":"49-34","depth":5,"nodes":123437}
+{"name":"kiwipete child 6","b":1500,"step":4,"move":"49-34","depth":6,"nodes":378413}
+{"name":"kiwipete child 6","b":4500,"step":4,"move":"49-34","depth":7,"nodes":1145389}
+{"name":"kiwipete child 10","b":100,"step":4,"move":"39-22","depth":3,"nodes":23588}
+{"name":"kiwipete child 10","b":170,"step":4,"move":"49-34","depth":4,"nodes":40996}
+{"name":"kiwipete child 10","b":500,"step":4,"move":"49-34","depth":5,"nodes":123940}
+{"name":"kiwipete child 10","b":1500,"step":4,"move":"49-34","depth":6,"nodes":378916}
+{"name":"kiwipete child 10","b":4500,"step":4,"move":"49-34","depth":7,"nodes":1145892}
+{"name":"kiwipete child 14","b":100,"step":4,"move":"49-34","depth":3,"nodes":23250}
+{"name":"kiwipete child 14","b":170,"step":4,"move":"49-34","depth":3,"nodes":41682}
+{"name":"kiwipete child 14","b":500,"step":4,"move":"80-20","depth":5,"nodes":123602}
+{"name":"kiwipete child 14","b":1500,"step":4,"move":"49-34","depth":6,"nodes":378578}
+{"name":"kiwipete child 14","b":4500,"step":4,"move":"49-34","depth":7,"nodes":1145554}
+{"name":"kiwipete child 18","b":100,"step":4,"move":"49-34","depth":3,"nodes":22664}
+{"name":"kiwipete child 18","b":170,"step":4,"move":"84-67","depth":4,"nodes":40072}
+{"name":"kiwipete child 18","b":500,"step":4,"move":"49-34","depth":5,"nodes":123016}
+{"name":"kiwipete child 18","b":1500,"step":4,"move":"49-34","depth":6,"nodes":377992}
+{"name":"kiwipete child 18","b":4500,"step":4,"move":"49-34","depth":7,"nodes":1144968}
