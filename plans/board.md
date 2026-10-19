@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — owner chose ADR-0038 menu (b) "Re-cut the levels" (`…b2e6d4a9`) → Architect `arch-levels-recut` dispatched (records only). `ABC-171` delivered (`9ae31679`, A1–A12 MET, 59/1945, CLI_DEEP 10/10, PERFT_DEEP 32/32) → In Review; QE `qe-ABC-171` dispatched. In flight: `arch-levels-recut`, `qe-ABC-171`._
 _Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — owner word "pull ABC-171, continue ABC-087" → `ABC-171` In Development; SE `ticket-to-pr-ABC-171` dispatched. ABC-087 (Done) carries ABC-085's RED finding (3v4, 4v5); the owner's ADR-0038 menu choice (b) re-cut levels 4/5 or (c) scope the ladder to level 3 is asked. In flight: `ticket-to-pr-ABC-171`._
 _Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — owner word "accept" (`…8f1b3a6d`) → `ABC-167` merged (`faac9e99`, UAT pack `dd16e900`; gates green 59/1915, CLI_DEEP 10/10, PERFT_DEEP 32/32; qe-hop-integrity covered) → Done. ABC-171 unblocked (waits on the owner's pull). Owner owed: Scribe AGENTS.md ladder comment, ABC-087. In flight: none._
 _Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — `uat-ABC-167` (QE-conducted) 13/13 scenarios, 2876/2876 checks at `660a0d50`, 0 defects (`395cf655` on `grugops/uat-ABC-167`); owner word owed for ABC-167. `ABC-166` → Done (QE-166-a accepted; QE-166-d pointer `…3acddd34`, integrity covered). In flight: none._
@@ -850,8 +851,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-171] UCI session offers `OwnBook` and `Skill Level` 1–5  (owner: BA/PM, size: S, priority: P1, epic: EPIC-007, since: 2026-10-18, DoR 10/10. Waits: after ABC-167.) **2026-10-19: owner word "pull ABC-171" → In Development; SE `ticket-to-pr-ABC-171` dispatched.**
+## In Development (WIP 0/3)
 
 
 
@@ -879,7 +879,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-171] UCI session offers `OwnBook` and `Skill Level` 1–5  (owner: BA/PM, size: S, priority: P1, epic: EPIC-007, since: 2026-10-18, DoR 10/10. Waits: after ABC-167.) **2026-10-19: owner word "pull ABC-171" → In Development; SE `ticket-to-pr-ABC-171` dispatched.** **2026-10-19: delivered `9ae31679` (code `b6afd021`), A1–A12 MET, 59/1945; N8-LANE owed → In Review; QE dispatched.**
 
 
 
