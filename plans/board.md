@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — owner accepted the ADR-0008 addendum (`…9f3b6e20`; two sizes, every run) → `ABC-173` In Development, SE `ticket-to-pr-ABC-173` dispatched. ABC-171 rows done (`5dee231c`) → `qe2-ABC-171` dispatched. In flight: `ticket-to-pr-ABC-173`, `qe2-ABC-171`._
 _Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — `bapm-adr0045-cut` merged (records only; gates green 59/1915): ADR-0045 ACCEPTED + folds; ABC-174, ABC-175 → Backlog (DoR 10/10); ABC-171 A8 reworded + A13a–d. **A0 is already stale on main** (package.json, engine.ts, evaluate.ts since eb216351) → a width-1 A0 re-take is owed before ABC-175. Recommended order: ABC-171 → ABC-173 → ABC-174 → QE → A0 re-take → ABC-175 → ABC-174 UAT. Next free id: ABC-176. In flight: `arch-ABC-173-adr0008`._
 _Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — owner word (`…1a9c7f42`): ADR-0045 ACCEPTED (default → level 5; rates 0.1/0.05 at 3/4); verdict re-take before ABC-174 UAT; add QE-171-a..d rows. BA/PM `bapm-adr0045-cut` dispatched (ADR status + folds, cut ABC-174/175, amend ABC-171 A8). In flight: `arch-ABC-173-adr0008`, `bapm-adr0045-cut`._
 _Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — merged `fix-ABC-167-a4a2-step` (main lane green again, 59/1915, CLI_DEEP 10/10, PERFT_DEEP 32/32) and `arch-levels-recut` (ADR-0045 PROPOSED: LEVELS 100/0.4, 180/0.2, 330/0.1, 1000/0.05, 3000/0; DEFAULT_LEVEL 3→5; owner Q1–Q3 owed; build ticket ABC-174, re-take ABC-175). `qe-ABC-171` PASS_WITH_GAPS. ABC-173 owner Q1–Q4 answered; `arch-ABC-173-adr0008` dispatched. In flight: `arch-ABC-173-adr0008`._
@@ -807,7 +808,6 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Backlog (WIP unlimited)
 - [ABC-174] Re-cut the level table per ADR-0045 (data only); default → level 5, plays as today  (owner: BA/PM, size: S, priority: P1, epic: EPIC-004, since: 2026-10-19, DoR 10/10; cut in `bapm-adr0045-cut` (`5a387687`). Waits: ABC-171 merged; recommended after ABC-173.)
 - [ABC-175] ABC-085 verdict re-take on ABC-174's QE-passed branch (route V), one shot  (owner: BA/PM, size: XS, priority: P1, epic: EPIC-004, since: 2026-10-19, DoR 10/10; cut in `bapm-adr0045-cut` (`5a387687`). Waits: ABC-174 in QE; A0 re-take (stale on main: package.json, src/engine.ts, src/evaluate.ts since eb216351) at width 1; owner's night.)
-- [ABC-173] Cap this repo's vitest at 2 busy executors and a 2048 MiB summed heap limit, in every AGENTS.md lane  (owner: BA/PM, size: S, priority: P1, epic: —, since: 2026-10-19, DoR 9/10; cut in `bapm-cut-ABC-173` (`5e9a1214`) from owner word `…c4a8e1f6`. Waits: owner Q1–Q4; ADR-0008 addendum (Architect) before SE.) **2026-10-19: owner answered Q1–Q4 (`…e7d2a915`): Σ heap ≤ 2048 MiB; 2 executors one core each; all lanes; ask on breach. Architect `arch-ABC-173-adr0008` dispatched.**
 - [ABC-161] Three `src/cli.test.ts` rows that a wrong build passes: a level rebuilt on every move, a `/m` regex that accepts `3\n`, and an `AGENTS.md` slot that drops a level  (BA/PM, XS, P3, epic: EPIC-006, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from QE-101-a, SEC-101-a, QE-101-b. Waits: after ABC-096 merges (shares `src/cli.test.ts`); then → Ready.)
 - [ABC-164] `AGENTS.md` sits at exactly its 24,576-byte budget, and two of its receipts carry test counts that every test-adding ticket makes stale (`CLI_DEEP` 7, `Test (all)` 57 / 1775)  (BA/PM, XS, P3, epic: —, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from AGENTS.md receipts. Waits: after ABC-096 merges (test counts move); then → Ready.)
 
@@ -859,7 +859,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+- [ABC-173] Cap this repo's vitest at 2 busy executors and a 2048 MiB summed heap limit, in every AGENTS.md lane  (owner: BA/PM, size: S, priority: P1, epic: —, since: 2026-10-19, DoR 9/10; cut in `bapm-cut-ABC-173` (`5e9a1214`) from owner word `…c4a8e1f6`. Waits: owner Q1–Q4; ADR-0008 addendum (Architect) before SE.) **2026-10-19: owner answered Q1–Q4 (`…e7d2a915`): Σ heap ≤ 2048 MiB; 2 executors one core each; all lanes; ask on breach. Architect `arch-ABC-173-adr0008` dispatched.** **2026-10-19: ADR-0008 addendum ACCEPTED (`…9f3b6e20`) → DoR 10/10 → In Development; SE `ticket-to-pr-ABC-173` dispatched.**
 
 
 
@@ -888,7 +889,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 ## In Review (WIP 1/3)
-- [ABC-171] UCI session offers `OwnBook` and `Skill Level` 1–5  (owner: BA/PM, size: S, priority: P1, epic: EPIC-007, since: 2026-10-18, DoR 10/10. Waits: after ABC-167.) **2026-10-19: owner word "pull ABC-171" → In Development; SE `ticket-to-pr-ABC-171` dispatched.** **2026-10-19: delivered `9ae31679` (code `b6afd021`), A1–A12 MET, 59/1945; N8-LANE owed → In Review; QE dispatched.** **2026-10-19: `qe-ABC-171` PASS_WITH_GAPS (A1–A12 MET; 94 mutants 73/21; 59/1945; NFR-004 max 4 600 virtual ms; N8-LANE OWED); QE-171-a..d LOW (one row each), -e INFO → ABC-168, -f INFO. Owner owed: add rows or accept.**
+- [ABC-171] UCI session offers `OwnBook` and `Skill Level` 1–5  (owner: BA/PM, size: S, priority: P1, epic: EPIC-007, since: 2026-10-18, DoR 10/10. Waits: after ABC-167.) **2026-10-19: owner word "pull ABC-171" → In Development; SE `ticket-to-pr-ABC-171` dispatched.** **2026-10-19: delivered `9ae31679` (code `b6afd021`), A1–A12 MET, 59/1945; N8-LANE owed → In Review; QE dispatched.** **2026-10-19: `qe-ABC-171` PASS_WITH_GAPS (A1–A12 MET; 94 mutants 73/21; 59/1945; NFR-004 max 4 600 virtual ms; N8-LANE OWED); QE-171-a..d LOW (one row each), -e INFO → ABC-168, -f INFO. Owner owed: add rows or accept.** **2026-10-19: rows hop `5dee231c` (A8, A13a–d; 7/7 mutants killed; 59/1962) → `qe2-ABC-171` dispatched.**
 
 
 
