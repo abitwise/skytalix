@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — `secnfr-ABC-174` PASS_WITH_RISKS → `ABC-174` Ready for UAT (tip `f6b63c1c`). Owner owed: R-174-1 (full lane 10.01 s vs 10 s; options a–d, (a) recommended), ABC-175 night run, then UAT word. Owed before merge: one default-lane run on `f6b63c1c` (AGENTS.md guards), SEC-174-1 + NFR-008 first verdict in catalog, the held catalog patch. Next: A0 re-take (width 1) → ABC-175. In flight: none._
 _Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — `scribe-ABC-174` done: `f6b63c1c` on `grugops/ABC-174` (AGENTS.md:59 "level 3" → "level 5 (≤3 s/move, ADR-0045)"; 24 353 B / 24 576). AGENTS.md guard rows (ABC-065/109/059) owed one default-lane run on `f6b63c1c` — held until `secnfr-ABC-174` ends (no lane run under its window). In flight: `secnfr-ABC-174`._
 _Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — `qe-ABC-174` PASS_WITH_GAPS → `ABC-174` In Security/NFR. QE-174-b MEDIUM: full default lane `npm test` 10.01 s median vs NFR-008 10 s (first full-lane reading since the ABC-173 cap; this ticket's N8-LANE share MET). Dispatched `secnfr-ABC-174` (NFR-004/005, QE-174-b ruling, NFR-004 catalog lines) and `scribe-ABC-174` (AGENTS.md:59 on the branch). Then A0 re-take, ABC-175, UAT. In flight: `secnfr-ABC-174`, `scribe-ABC-174`._
 _Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — owner word "continue with ABC-174" → resumed. Host rebooted (479 procs, load falling); QE `qe-ABC-174` dispatched from `be6a5599`: gate re-check, A6 deep lanes, mutants, A3 step-1000 ruling, NFR-008 only in a quiet window. In flight: `qe-ABC-174`._
@@ -926,8 +927,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Security/NFR (WIP 1/2)
-- [ABC-174] Re-cut the level table per ADR-0045 (data only); default → level 5, plays as today  (owner: software-engineer, size: S, priority: P1, epic: EPIC-004, since: 2026-10-19, DoR 10/10; cut in `bapm-adr0045-cut` (`5a387687`). Waits: ABC-171 merged; recommended after ABC-173.) **2026-10-19: ABC-171 merged → unblocked (waits on the owner's pull).** **2026-10-19: owner pulled (“continue with ABC-174”) → In Development; `ticket-to-pr-ABC-174` dispatched from `bd480c99`.** **2026-10-19: delivered `be6a5599` (gates green 1987/1987, CLI_DEEP 11, PERFT_DEEP 32, skips 0) → In Review. PAUSED by owner before `qe-ABC-174` dispatch.** **2026-10-19: resumed on owner word; `qe-ABC-174` PASS_WITH_GAPS (gates green after reboot 1987/1987; A6 ENGINE_DEEP 35/35 incl. ABC-087 A5 max 3007 ms, LADDER_DEEP short 18/18; 22/22 mutants killed; A3 step 1000 KEPT; N8-LANE MET +0.115 s CPU; QE-174-b MEDIUM full-lane `npm test` 10.01 s vs NFR-008 10 s; -a LOW; -c..-f INFO) → In Security/NFR; `secnfr-ABC-174` + `scribe-ABC-174` dispatched.**
+## In Security/NFR (WIP 0/2)
 
 
 
@@ -942,7 +942,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## Ready for UAT (WIP 0/4)
+## Ready for UAT (WIP 1/4)
+- [ABC-174] Re-cut the level table per ADR-0045 (data only); default → level 5, plays as today  (owner: software-engineer, size: S, priority: P1, epic: EPIC-004, since: 2026-10-19, DoR 10/10; cut in `bapm-adr0045-cut` (`5a387687`). Waits: ABC-171 merged; recommended after ABC-173.) **2026-10-19: ABC-171 merged → unblocked (waits on the owner's pull).** **2026-10-19: owner pulled (“continue with ABC-174”) → In Development; `ticket-to-pr-ABC-174` dispatched from `bd480c99`.** **2026-10-19: delivered `be6a5599` (gates green 1987/1987, CLI_DEEP 11, PERFT_DEEP 32, skips 0) → In Review. PAUSED by owner before `qe-ABC-174` dispatch.** **2026-10-19: resumed on owner word; `qe-ABC-174` PASS_WITH_GAPS (gates green after reboot 1987/1987; A6 ENGINE_DEEP 35/35 incl. ABC-087 A5 max 3007 ms, LADDER_DEEP short 18/18; 22/22 mutants killed; A3 step 1000 KEPT; N8-LANE MET +0.115 s CPU; QE-174-b MEDIUM full-lane `npm test` 10.01 s vs NFR-008 10 s; -a LOW; -c..-f INFO) → In Security/NFR; `secnfr-ABC-174` + `scribe-ABC-174` dispatched.** **2026-10-19: `secnfr-ABC-174` PASS_WITH_RISKS (no code fix; NFR-004 A/B MET, AR-NFR004-A re-accepted; NFR-005/010 unaffected; R-174-1 MEDIUM proposed — `npm test` 10.010 s vs NFR-008 10 s, not attributable, owner word owed before merge; R-173-1 stays open; SEC-174-1 LOW catalog :1405 owed at merge; catalog patch held at `.grugops/context/secnfr-ABC-174/nfr-catalog-abc174-at-merge.patch`, applies at merge) → Ready for UAT. Scribe `f6b63c1c`. UAT word waits on ABC-175.**
 
 
 
