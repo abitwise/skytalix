@@ -175,7 +175,7 @@ describe("ABC-167 A5 — the D4 time rule, read from the info line's time", () =
    * one more, so `G <= time <= G + 2s`.
    */
   const rows: ReadonlyArray<readonly [string, string, number, number]> = [
-    ["movetime 100", `position fen ${START_FEN}`, 100, 1],
+    ["movetime 100", `position fen ${START_FEN}`, 100, 10], // step 10: ABC-173, owner 2026-10-19
     ["white reads wtime", "position startpos", 50, 1],
     ["black reads btime", "position startpos moves e2e4", 450, 10],
     ["a short clock", "position startpos", 1, 1],
