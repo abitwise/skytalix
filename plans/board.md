@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — `ticket-to-pr-ABC-173-fix` done (`9c97dd23`) → `ABC-173` In Security/NFR; `secnfr-ABC-173` dispatched (A9 + N8-LANE only in a quiet window; two oeselg-labs/platform node processes have run all day). Owner owed: ABC-171 UAT word. In flight: `secnfr-ABC-173`._
 _Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — `uat-ABC-171` (QE-conducted) 11/11 scenarios 4061/4061 + ABC-167 regression 13/13 2876/2876 at `5dee231c`, 0 defects (`cc49bf0e` on `grugops/uat-ABC-171`); owner word owed for ABC-171. In flight: `ticket-to-pr-ABC-173-fix`._
 _Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — `qe-ABC-173` PASS_WITH_GAPS (every lane green at the cap; mutants 54/44/10; QE-173-a MEDIUM guard rows/shape unpinned; -b LOW; -c..-g INFO; A9 + N8-LANE OWED; waiver confirmed). SE `ticket-to-pr-ABC-173-fix` dispatched (test-only, QE-173-a/b). In flight: `uat-ABC-171`, `ticket-to-pr-ABC-173-fix`._
 _Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — `ABC-173` delivered (`840ebbf7`) → In Review; `qe-ABC-173` dispatched (A9 + N8-LANE only in a quiet window). In flight: `uat-ABC-171`, `qe-ABC-173`._
@@ -894,8 +895,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
-- [ABC-173] Cap this repo's vitest at 2 busy executors and a 2048 MiB summed heap limit, in every AGENTS.md lane  (owner: BA/PM, size: S, priority: P1, epic: —, since: 2026-10-19, DoR 9/10; cut in `bapm-cut-ABC-173` (`5e9a1214`) from owner word `…c4a8e1f6`. Waits: owner Q1–Q4; ADR-0008 addendum (Architect) before SE.) **2026-10-19: owner answered Q1–Q4 (`…e7d2a915`): Σ heap ≤ 2048 MiB; 2 executors one core each; all lanes; ask on breach. Architect `arch-ABC-173-adr0008` dispatched.** **2026-10-19: ADR-0008 addendum ACCEPTED (`…9f3b6e20`) → DoR 10/10 → In Development; SE `ticket-to-pr-ABC-173` dispatched.** **2026-10-19: delivered `840ebbf7` (every lane green as spelled incl. coverage ×2; 11 armed reds; max live workers 4; no OOM; ABC-170 A3 step 1→5 and ABC-167 A5 movetime 100 step 1→10 on owner word; 0 production lines) → In Review; QE dispatched.**
+## In Review (WIP 0/3)
 
 
 
@@ -919,7 +919,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Security/NFR (WIP 0/2)
+## In Security/NFR (WIP 1/2)
+- [ABC-173] Cap this repo's vitest at 2 busy executors and a 2048 MiB summed heap limit, in every AGENTS.md lane  (owner: BA/PM, size: S, priority: P1, epic: —, since: 2026-10-19, DoR 9/10; cut in `bapm-cut-ABC-173` (`5e9a1214`) from owner word `…c4a8e1f6`. Waits: owner Q1–Q4; ADR-0008 addendum (Architect) before SE.) **2026-10-19: owner answered Q1–Q4 (`…e7d2a915`): Σ heap ≤ 2048 MiB; 2 executors one core each; all lanes; ask on breach. Architect `arch-ABC-173-adr0008` dispatched.** **2026-10-19: ADR-0008 addendum ACCEPTED (`…9f3b6e20`) → DoR 10/10 → In Development; SE `ticket-to-pr-ABC-173` dispatched.** **2026-10-19: delivered `840ebbf7` (every lane green as spelled incl. coverage ×2; 11 armed reds; max live workers 4; no OOM; ABC-170 A3 step 1→5 and ABC-167 A5 movetime 100 step 1→10 on owner word; 0 production lines) → In Review; QE dispatched.** **2026-10-19: fix `9c97dd23` closes QE-173-a/b (18/18 guard + A6 mutants killed; 59/1924) → In Security/NFR; `secnfr-ABC-173` dispatched.**
 
 
 
