@@ -1,0 +1,128 @@
+# UAT ABC-171 negative controls. Each control is a scratch copy of 5dee231c's src/ and data/ (in the session
+# scratchpad, never in the worktree), with ONE edit to src/uci-session.ts, run through the same harness:
+#   node uat-harness.ts <scratch copy>
+# A control is CAUGHT when at least one check FAILs. The tree under test was not touched (md5 0d63103d... before
+# and after). Virtual clocks only; no wall-clock reading. Check totals differ between controls because a failed
+# shape check skips the checks that depend on it.
+#
+# id  | the one edit                                                                 | caught? | by (failing checks)
+# C1  | setoption names matched case-sensitively (no toLowerCase)                    | CAUGHT  | S2 S3 S4 S5 S6 S7 S8 S9 (540)
+# C2  | the book only at rate-0 levels (QE S25)                                      | CAUGHT  | S3 (36), S5 (2), S7 (5)
+# C3  | OwnBook off still warms the book                                             | CAUGHT  | S2 (17), S3 (1), S4 (10)
+# C4  | a seed drawn on every go, book hits and rate-0 levels included               | CAUGHT  | S3 S6 S7 S8 S9 (103)
+# C5  | ucinewgame draws a seed                                                      | CAUGHT  | S8 (9)
+# C6  | the level does not cap G (D11)                                               | CAUGHT  | S1 S2 S6 S7 S8 (127)
+# C7  | no dropped-limit info string at levels 1-2                                   | CAUGHT  | S6 (114)
+# C8  | go infinite on a book hit does not hold                                      | CAUGHT  | S7 (14)
+# C9  | an invalid OwnBook value sets false (QE S12)                                 | CAUGHT  | S2 (39)
+# C10 | the seed is floor(random() * 2^16) (QE S33)                                  | CAUGHT  | S6 (6)
+# C11 | Skill Level by integer range, not own key (QE S07; page ruling f4)           | CAUGHT  | S2 (12)
+# C12 | uci advertises "default 5" while the session starts at 3                     | CAUGHT  | S1 (3), S4 (8), S9 (4)
+# C13 | warm() on every isready (no `warmed` latch)                                  | missed  | none: the probe's own memo holds read at 1
+#
+# Thin spots, said plainly:
+# - C5, C7, C8, C9, C10 and C11 are each caught by ONE scenario. C10 by 6 checks only (the S6 seed oracle): a 2^16
+#   seed changes the move on few (k, go) pairs. The lane's A13a row pins it too (QE S33).
+# - C12 is caught by the exact `uci` line checks, not by S1's "the advertised default is what plays", which compares
+#   with a fixed 3. A build that moved both to 5 together (ABC-174) would FAIL S0 instead, by design.
+# - C13 is an equivalent mutant from the outside (QE's S45/S47 reading): the probe reads its bytes once whatever
+#   warms it. It is listed to show what the harness cannot see, not as a gap in ABC-171.
+#
+# The raw control output follows: each control's per-scenario FAIL lines and summary, then its first 3 FAIL checks.
+C1 exit=0
+FAIL S2 424/556
+FAIL S3 424/425
+FAIL S4 201/229
+FAIL S5 855/882
+FAIL S6 963/1277
+FAIL S7 43/49
+FAIL S8 15/25
+FAIL S9 316/338
+TOTAL 3273/3813 checks; 3/11 scenarios PASS
+FAIL S2   -> plays at level 1
+FAIL S2   -> plays at level 2
+FAIL S2   -> plays at level 4
+C2 exit=0
+FAIL S3 389/425
+FAIL S5 880/882
+FAIL S7 44/49
+TOTAL 4022/4065 checks; 8/11 scenarios PASS
+FAIL S3 f3, level 1, go depth x on a hit: 1 bad-token info string(s), then the book line, then bestmove e2e4 | ["info string go depth needs an integer >= 1, got x; ignored","info depth 4 nodes 6165 time 110 pv e2e4","bestmove e2e4"]
+FAIL S3 f3, level 1, go depth x on a hit: no "ignores" line and 0 seeds (the book comes before the level) | draws 1
+FAIL S3 f3, level 1, go depth 3 on a hit: 0 bad-token info string(s), then the book line, then bestmove e2e4 | ["info string skill level 1 ignores go depth; searching on time","info depth 4 nodes 6165 time 110 pv e2e4","bestmove e2e4"]
+C3 exit=0
+FAIL S2 571/588
+FAIL S3 424/425
+FAIL S4 237/247
+TOTAL 4033/4061 checks; 8/11 scenarios PASS
+FAIL S2   -> the book was never read | reads 1
+FAIL S2   -> the book was never read | reads 1
+FAIL S2   -> the book was never read | reads 1
+C4 exit=0
+FAIL S3 380/425
+FAIL S6 1278/1317
+FAIL S7 45/49
+FAIL S8 16/27
+FAIL S9 358/362
+TOTAL 3826/3929 checks; 6/11 scenarios PASS
+FAIL S3 f3, level 3, go movetime x on a hit: no "ignores" line and 0 seeds (the book comes before the level) | draws 1
+FAIL S3 f3, level 3, go depth 0 nodes x on a hit: no "ignores" line and 0 seeds (the book comes before the level) | draws 1
+FAIL S3 f3, level 3, go searchmoves e2e4 d2d4 on a hit: no "ignores" line and 0 seeds (the book comes before the level) | draws 1
+C5 exit=0
+FAIL S8 18/27
+TOTAL 4040/4049 checks; 10/11 scenarios PASS
+FAIL S8 level 1: ucinewgame draws 0 (still 1) | draws 2
+FAIL S8 level 1: three more ucinewgame and an isready draw 0 (still 1) | draws 4
+FAIL S8 level 1: the next go draws 1 (now 2) | draws 5
+C6 exit=0
+FAIL S1 16/17
+FAIL S2 507/588
+FAIL S6 1275/1317
+FAIL S7 47/49
+FAIL S8 26/27
+TOTAL 3946/4073 checks; 6/11 scenarios PASS
+FAIL S1 the advertised Skill Level default (3) is the level a fresh session plays
+FAIL S2   -> plays at level 1
+FAIL S2   -> plays at level 2
+C7 exit=0
+FAIL S6 1163/1277
+TOTAL 3907/4021 checks; 10/11 scenarios PASS
+FAIL S6 level 1, go depth 3: exactly 3 lines | ["info depth 4 nodes 6165 time 110 pv e2e4","bestmove e2e4"]
+FAIL S6 level 1, go depth 3: exactly one info string, first, naming depth | info depth 4 nodes 6165 time 110 pv e2e4
+FAIL S6 level 1, go depth 3: exactly 2 lines | ["bestmove e2e4"]
+C8 exit=0
+FAIL S7 35/49
+TOTAL 4047/4061 checks; 10/11 scenarios PASS
+FAIL S7 go infinite on a book hit: writes exactly ["info string book"] | ["info string book","bestmove e2e4"]
+FAIL S7 stop: writes exactly ["bestmove e2e4"] | []
+FAIL S7 go ponder on a book hit: writes exactly ["info string book"] | ["info string book","bestmove e2e4"]
+C9 exit=0
+FAIL S2 549/588
+TOTAL 4022/4061 checks; 10/11 scenarios PASS
+FAIL S2 OwnBook value "maybe", from true: true kept, the book still answers: exactly ["info string book", "bestmove M"] | ["info depth 6 score cp 52 nodes 96277 time 1010 nps 95324 pv d2d4","bestmove d2d4"]
+FAIL S2 OwnBook value "maybe", from true: true kept, the book still answers: no info depth line | ["info depth 6 score cp 52 nodes 96277 time 1010 nps 95324 pv d2d4","bestmove d2d4"]
+FAIL S2 OwnBook value "maybe", from true: true kept, the book still answers: the book move is one of ["e2e4"] and legal | d2d4
+C10 exit=0
+FAIL S6 1311/1317
+TOTAL 3959/3965 checks; 10/11 scenarios PASS
+FAIL S6 level 1 blunder draw, step 1: move, depth, nodes and time equal the level module's | d2d4 d6 n96277 t101 vs d2d4 d3 n3052 t103
+FAIL S6 level 1 blunder draw, step 10: move, depth, nodes and time equal the level module's | e2e4 d4 n6165 t110 vs b1c3 d1 n523 t810
+FAIL S6 level 2 blunder draw, step 1: move, depth, nodes and time equal the level module's | g1f3 d8 n503829 t501 vs b1c3 d5 n353803 t503
+C11 exit=0
+FAIL S2 576/588
+TOTAL 4049/4061 checks; 10/11 scenarios PASS
+FAIL S2 Skill Level value "01", from 3: exactly one info string | []
+FAIL S2 Skill Level value "01", from 3: level 3 kept
+FAIL S2 Skill Level value "1.0", from 3: exactly one info string | []
+C12 exit=0
+FAIL S1 14/17
+FAIL S4 239/247
+FAIL S9 490/494
+TOTAL 4046/4061 checks; 8/11 scenarios PASS
+FAIL S1 uci: writes exactly ["id name skytalix","id author Olger Oeselg","option name OwnBook type check default true","option name Skill Level type spin default 3 min 1 max 5","uciok"] | ["id name skytalix","id author Olger Oeselg","option
+FAIL S1 a second uci: writes exactly ["id name skytalix","id author Olger Oeselg","option name OwnBook type check default true","option name Skill Level type spin default 3 min 1 max 5","uciok"] | ["id name skytalix","id author Olger Oeselg
+FAIL S1 uci after changing both options still shows the defaults: writes exactly ["id name skytalix","id author Olger Oeselg","option name OwnBook type check default true","option name Skill Level type spin default 3 min 1 max 5","uciok"] |
+C13 exit=0
+TOTAL 4061/4061 checks; 11/11 scenarios PASS
+
+[the controls ran on scratch copies; each exited 0 because the harness reports FAILs, it does not exit on them]

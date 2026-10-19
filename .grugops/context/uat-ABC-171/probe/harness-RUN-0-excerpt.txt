@@ -1,0 +1,17 @@
+# UAT ABC-171 RUN-0 (the first run, at 5dee231c): its FAIL lines and summary, kept as a disclosure.
+# Both causes were mine (fixture / assumption), not the engine's; see the run note. RUN-1 fixes both, and adds one block of
+# 10 checks (S3, QE-171-f f3: bad go tokens on a book hit), written after RUN-0 for the owner's checklist row 2. Nothing else.
+#  1. S0's transposition fixture: my second move order (g1f3 b8c6 e2e4 e7e5) ends on a double pawn push, so it
+#     sets an en-passant square and has a different Zobrist key. The S0 precondition caught it; the 3 S3 FAILs follow from it.
+#  2. S6 'not the engine-path move': nothing promises a blunder differs from the engine move. At step 1 both are d2d4.
+#     The session still matched the level module exactly (move, depth, nodes, time). Now an OBS line.
+FAIL S0 the transposition fixture reaches the same book key by two move orders | 63e6a47b4274f26a a163c133e1862d0a
+FAIL S3 a transposed move order hits the entry: exactly ["info string book", "bestmove M"] | ["info depth 3 score cp 52 nodes 7197 time 110 nps 65427 pv b1c3","bestmove b1c3"]
+FAIL S3 a transposed move order hits the entry: no info depth line | ["info depth 3 score cp 52 nodes 7197 time 110 nps 65427 pv b1c3","bestmove b1c3"]
+FAIL S3 a transposed move order hits the entry: the book move is one of ["f1b5"] and legal | b1c3
+FAIL S6 level 1 blunder draw, step 1: not the engine-path move
+FAIL S0 11/12
+FAIL S3 412/415
+FAIL S6 1320/1321
+TOTAL 4050/4055 checks; 8/11 scenarios PASS
+engine work: 503 answers checked, 672 go lines; 0 child processes; no wall-clock reading
