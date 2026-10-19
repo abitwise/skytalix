@@ -1,0 +1,10 @@
+# secnfr-ABC-173: AGENTS.md skip-count capture typed WITHOUT its NODE_OPTIONS prefix, detached worktree at 9c97dd23, 2026-10-19T15:16:27Z
+$ npx vitest run --reporter=json 2>/dev/null | jq '.numPendingTests + .numTodoTests'
+0
+exit (jq, last in pipe): 0
+$ same, fields:
+{"numTotalTests":0,"numPendingTests":0,"numTodoTests":0,"success":false}
+$ same, stderr head:
+Error: heap-guard: refused. This run's V8 heap_size_limit is 4192 MiB, above the SUITE row of 224 MiB (59 test files; ABC-173, ADR-0008 addendum 2026-10-19). Prefix the command with NODE_OPTIONS=--max-old-space-size=128, as AGENTS.md spells it.
+$ as spelled (prefix 128):
+{"numTotalTests":1924,"numPendingTests":0,"numTodoTests":0,"success":true}

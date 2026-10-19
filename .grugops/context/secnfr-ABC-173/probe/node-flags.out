@@ -1,0 +1,7 @@
+# secnfr-ABC-173: Node duplicate/mixed heap-flag behaviour, node v26.11.1, 2026-10-19T15:16:27Z
+NODE_OPTIONS="--max-old-space-size=128 --max-old-space-size=400"  main MiB=496
+NODE_OPTIONS="--max-old-space-size=400 --max-old-space-size=128"  main MiB=224
+NODE_OPTIONS="--max-old-space-size=4000 --max_old_space_size=100" main MiB=196
+NODE_OPTIONS="--max_old_space_size=100 --max-old-space-size=400"  main MiB=496
+# CLI_DEEP construction (heapToken regex verbatim, env {}), mixed spelling:
+main MiB 196 token --max-old-space-size=4000 child MiB 4096 child <= 496 MiB row: false

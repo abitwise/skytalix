@@ -1,0 +1,32 @@
+{
+ "host": "MacBook-Air.local",
+ "start": "2026-10-19T15:07:37.305Z",
+ "secs": 180,
+ "polls": 181,
+ "foreignPolls": 181,
+ "kinds": {
+  "platform": 362
+ },
+ "firstForeign": [
+  {
+   "at": "0",
+   "lines": [
+    "40997 /opt/homebrew/Cellar/node/26.11.1/bin/node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/product-template/template/dist/main-worker.js",
+    "50110 /opt/homebrew/Cellar/node/26.11.1/bin/node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/product-template/template/dist/main-worker.js"
+   ]
+  }
+ ],
+ "lastForeign": {
+  "at": "181",
+  "lines": [
+   "40997 /opt/homebrew/Cellar/node/26.11.1/bin/node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/product-template/template/dist/main-worker.js",
+   "50110 /opt/homebrew/Cellar/node/26.11.1/bin/node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/product-template/template/dist/main-worker.js"
+  ]
+ },
+ "load1": {
+  "first": "2.55",
+  "min": "2.08",
+  "max": "2.85",
+  "last": "2.08"
+ }
+}

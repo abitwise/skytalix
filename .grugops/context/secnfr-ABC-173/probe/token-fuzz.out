@@ -1,0 +1,17 @@
+"--max-old-space-size=128"                                     -> "--max-old-space-size=128"
+"--expose-gc --max-old-space-size=400"                         -> "--max-old-space-size=400"
+"--max-old-space-size=128;--import=evil.mjs"                   -> undefined
+"--max-old-space-size=128$(touch x)"                           -> undefined
+"--max-old-space-size=128 --import=./evil.mjs"                 -> "--max-old-space-size=128"
+"--import=./evil.mjs--max-old-space-size=128"                  -> undefined
+"--max-old-space-size=128\n--require=evil"                     -> "--max-old-space-size=128"
+"\t--max-old-space-size=99 --require=x"                        -> "--max-old-space-size=99"
+"--max-old-space-size=١٢٣"                                     -> undefined
+"--max-old-space-size=12a"                                     -> undefined
+"--max-old-space-size="                                        -> undefined
+"\"--max-old-space-size=4000\""                                -> undefined
+"--max_old_space_size=4000"                                    -> undefined
+"--max-old-space-size=128 --max-old-space-size=999999999999"   -> "--max-old-space-size=999999999999"
+"x--max-old-space-size=5"                                      -> undefined
+"--max-old-space-size=128 --import=e"                          -> "--max-old-space-size=128"
+checked 200016 strings, 567 yielded a token, 0 unsafe tokens
