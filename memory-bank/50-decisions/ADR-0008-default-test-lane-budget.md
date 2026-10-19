@@ -6,7 +6,7 @@
 session: *"ratify NFR-008 at 3s wall / 13s CPU"*. Both the *shape* and the *level* (3 s wall /
 13 s CPU) now stand; the `PROVISIONAL` marker is discharged and the level is no longer pending.
 
-**Addendum 2026-10-19 — PROPOSED, owner acceptance owed** (`ABC-173`, Architect/Design, subtask
+**Addendum 2026-10-19 — ACCEPTED 2026-10-19 by Olger Oeselg (owner), note `…9f3b6e20`; was PROPOSED** (`ABC-173`, Architect/Design, subtask
 `arch-ABC-173-adr0008`). It adds a memory ceiling to the lane: Σ `heap_size_limit` ≤ 2048 MiB at peak
 concurrency, in two lane shapes. It is carried by the lane command and refused at run start without it. See
 `§ ADDENDUM 2026-10-19` at the end of this file. Decisions 1–8 and the 2026-08-13 addendum are unchanged.
