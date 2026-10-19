@@ -1,0 +1,7 @@
+{"ev":"start","pid":53568,"ppid":53271,"tid":0,"kind":"/opt/homebrew/bin/npx","mib":224}
+{"ev":"start","pid":53595,"ppid":53568,"tid":0,"kind":"nm/.bin/vitest","mib":224}
+{"ev":"W+","id":"53595:1"}
+{"ev":"start","pid":53595,"ppid":53568,"tid":1,"kind":"worker","mib":224}
+{"ev":"W-","id":"53595:1"}
+{"ev":"end","pid":53595,"tid":0,"kind":"nm/.bin/vitest"}
+{"ev":"end","pid":53568,"tid":0,"kind":"/opt/homebrew/bin/npx"}

@@ -1,0 +1,68 @@
+arch-ABC-173-adr0008 — scratch probes, 2026-10-19. COUNTS, EXIT CODES AND HEAP LIMITS ONLY. NO TIMING READINGS.
+
+Machine: Apple M3 (8 cores), Darwin 25.5.0, node v26.11.1, npm 11.20.0, vitest 4.1.11 (node_modules of main @ 3468f054).
+Tree: `git archive 3468f054` into a scratch dir outside the repo, `node_modules` symlinked to main's, `git init` so
+git-reading rows can run. The repository and its worktrees were not run. The vitest stdout files (*.out) are NOT
+kept here because they print durations; only the counts below were copied out of them.
+
+------------------------------------------------------------------------------------------------------
+1. Node: flag -> heap_size_limit (MiB), `node --max-old-space-size=F -e <read v8.getHeapStatistics()>`
+   200->296 224->320 240->336 245->341 248->344 250->346 256->352 280->376 300->396 320->416 341->437 400->496
+   no flag -> 4192.   heap_size_limit = F + 96 on this stack, every reading.
+   128 -> 224 (read in sections 2-4).
+   `--max-heap-size=224` (argv or NODE_OPTIONS) -> exactly 224. Accepted in NODE_OPTIONS on v26.11.1.
+   NODE_OPTIONS=--max-old-space-size=128 plus argv --max-old-space-size=400 -> 496 (argv wins).
+
+2. Worker threads (node -e, worker_threads.Worker):
+   argv --max-old-space-size=128, Worker execArgv []                  -> worker 224 (process-wide flag)
+   NODE_OPTIONS=--max-old-space-size=240 / =256, execArgv default     -> worker 336 / 352
+   Worker execArgv ["--max-old-space-size=128"]                       -> throws ERR_WORKER_INVALID_EXEC_ARGV
+   Worker resourceLimits { maxOldGenerationSizeMb: 128 }              -> worker 224 (works in Node; vitest never passes it)
+   `grep -rl resourceLimits node_modules/vitest/dist`                 -> 0 files
+   spawnSync(process.execPath, ["--max-old-space-size=128", "-e", ...], { env: {} }) -> child 224
+
+3. Isolate census — pre.mjs preloaded via NODE_OPTIONS=--import (main thread, every worker, every child that
+   inherits env); main thread wraps worker_threads.Worker (W+ at construction, W- on its 'exit' event).
+   analyze2.mjs replays the event order (order only, no clock) and counts the live set.
+   "lane-npm" = the lane's own npm/npx client. "child" = any Node process started under a worker.
+   W- is delivered on the main loop after the thread stops, so the worker count is an UPPER bound.
+
+   run                                   flag  result                         live max by kind                 peak (excl. lane npm)
+   npm test (default lane)               240   exit 0, 59 files, 1915 passed  wrapper 1 main 1 worker 4 child 2  6 = wrapper+main+2w+2c
+   npm test (default lane)               128   exit 0, 59 files, 1915 passed  wrapper 1 main 1 worker 4 child 2  6 = wrapper+main+2w+2c
+     both runs: 59 worker starts, 29 Node child starts (27 childOf children, one of which is `npm run chess`
+     = npm + node src/cli.ts; plus the history-pane probe child). Every isolate read the run's single value.
+   PUZZLE_DEEP=1 src/puzzle-suite        128   exit 1, "Worker exited unexpectedly", no Tests line
+   SEARCH_DEEP=1 src/quiescence          128   exit 0, 37 passed               main 1 worker 1                 2
+   ENGINE_DEEP=1 src/transposition       128   exit 0, 26 passed               main 1 worker 1 child 1         3
+   INPUT_DEEP=1 + --expose-gc            128   exit 0, 34 passed               main 1 worker 1                 2
+   INPUT_DEEP=1, no --expose-gc          128   exit 0, 33 passed (the known 34/33 trap still reads)
+   CLI_DEEP=1 (scratch edit: argv flag)  128   exit 0, 10 passed               main 1 worker 1 (children env {}: no preload, not seen)
+   ZOBRIST_DEEP=1                        128   exit 0, 33 passed               main 1 worker 1                 2
+   SEARCH_DEEP=1 src/transposition       128   exit 0, 40 passed               main 1 worker 1                 2
+   Raw event logs: raw/*.jsonl.txt (pid, threadId, kind, MiB — no times). Summary: raw/analysis.txt.
+
+4. PUZZLE_DEEP bracket, no preload (`PUZZLE_DEEP=1 NODE_OPTIONS=--max-old-space-size=F npx vitest run src/puzzle-suite.test.ts`):
+   F unset (4192) exit 0, 18 passed | 128 (224) exit 1, worker exited unexpectedly | 160 (256) exit 0, 18 passed
+   196 (292) exit 0, 18 passed | 240 (336) exit 0, 18 passed | 400 (496) exit 0, 18 passed | 900 (996) exit 0, 18 passed
+   The cause at 224 is UNKNOWN - verify; the heap limit is the only variable that changed (2 of 2 runs red at 128).
+
+5. Other lanes at the proposed rows:
+   `npx vitest run --coverage` at 128 (224): exit 0, 1915 passed, 59 files (guard probe: files=59).
+   SEARCH_DEEP=1 src/search.test.ts at 400 (496): exit 0, 57 passed.
+   PERFT_DEEP=1 src/perft.test.ts at 400 (496): exit 0, 32 passed.
+   NOT RUN here (left to the SE's A7): ENGINE_DEEP engine.test.ts and levels.test.ts, LADDER_DEEP, SEARCH_DEEP pvs-lmr.
+
+6. globalSetup (heap-guard.probe.js, wired as `globalSetup` in the scratch copy's vitest.config.ts only):
+   runs with isMainThread = true, in the vitest main pid; reads heap_size_limit there (224 / 496 / 4192).
+   project.vitest.state.getPaths().length = 1 for `src/fen.test.ts`, 5 for the filter `src/search`, 59 for the suite.
+   A throw in setup -> exit 1 and no test runs ("Unhandled Error").
+   project.provide("heapRowMiB", row) -> inject("heapRowMiB") in a worker test reads it:
+     1 file at 400: row 496, worker 496, pass. 2 files at 400: row 224, worker 496, 2 of 2 FAIL (armed red).
+     2 files at 128: row 224, worker 224, 2 passed.
+
+7. .npmrc route, read not run: npm 11.20.0 @npmcli/config/lib/set-envs.js:102-104 sets env.NODE_OPTIONS =
+   the `node-options` config for every npm command (run AND exec/npx), REPLACING any NODE_OPTIONS in the caller's env.
+   `NODE_OPTIONS=--max-old-space-size=128 npx tsc --noEmit` -> FATAL "JavaScript heap out of memory", exit 134.
+
+8. Node config file: `node --help` on v26.11.1 lists only --experimental-config-file / --experimental-default-config-file.
