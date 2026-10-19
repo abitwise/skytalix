@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — owner pulled ABC-174 ("continue with ABC-174") → In Development; SE `ticket-to-pr-ABC-174` dispatched from `bd480c99` (worktree `../wt-ABC-174`). In flight: `ticket-to-pr-ABC-174`._
 _Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — `ABC-171` → Done (UAT ACCEPTED, merged `94f85341`); `ABC-173` → Done (merged `03859f2e`, UAT WAIVED; QE-173-g every lane green on combined tree, 1971/1971, 0 OOM; R-173-1/-2 owed). Catalog: NFR-010 placed (`2ce60fde`). ABC-176 → Backlog. ABC-174 unblocked. Owed readings: R-167-2, R-171-1, R-173-1, R-173-2 (first quiet window; R-167-2/R-171-1 to be catalogued). In flight: none. Next free id: ABC-177._
 _Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — `secnfr-ABC-173` PASS_WITH_RISKS. Owner owed: R-173-1/R-173-2 (merge with A9 + N8-LANE owed), SEC-173-1, ABC-171 UAT word. In flight: none._
 _Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — `ticket-to-pr-ABC-173-fix` done (`9c97dd23`) → `ABC-173` In Security/NFR; `secnfr-ABC-173` dispatched (A9 + N8-LANE only in a quiet window; two oeselg-labs/platform node processes have run all day). Owner owed: ABC-171 UAT word. In flight: `secnfr-ABC-173`._
@@ -817,7 +818,6 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 ## Backlog (WIP unlimited)
 - [ABC-176] A heap-guard-refused run never reads as a clean skip count or a quiet result file  (owner: BA/PM, size: XS, priority: P3, epic: —, since: 2026-10-19, DoR 10/10; cut in `bapm-cut-ABC-176` (`30504eed`) from SEC-173-1 + QE-173-d, owner word `…5c8d2f71`.)
-- [ABC-174] Re-cut the level table per ADR-0045 (data only); default → level 5, plays as today  (owner: BA/PM, size: S, priority: P1, epic: EPIC-004, since: 2026-10-19, DoR 10/10; cut in `bapm-adr0045-cut` (`5a387687`). Waits: ABC-171 merged; recommended after ABC-173.) **2026-10-19: ABC-171 merged → unblocked (waits on the owner's pull).**
 - [ABC-175] ABC-085 verdict re-take on ABC-174's QE-passed branch (route V), one shot  (owner: BA/PM, size: XS, priority: P1, epic: EPIC-004, since: 2026-10-19, DoR 10/10; cut in `bapm-adr0045-cut` (`5a387687`). Waits: ABC-174 in QE; A0 re-take (stale on main: package.json, src/engine.ts, src/evaluate.ts since eb216351) at width 1; owner's night.)
 - [ABC-161] Three `src/cli.test.ts` rows that a wrong build passes: a level rebuilt on every move, a `/m` regex that accepts `3\n`, and an `AGENTS.md` slot that drops a level  (BA/PM, XS, P3, epic: EPIC-006, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from QE-101-a, SEC-101-a, QE-101-b. Waits: after ABC-096 merges (shares `src/cli.test.ts`); then → Ready.)
 - [ABC-164] `AGENTS.md` sits at exactly its 24,576-byte budget, and two of its receipts carry test counts that every test-adding ticket makes stale (`CLI_DEEP` 7, `Test (all)` 57 / 1775)  (BA/PM, XS, P3, epic: —, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from AGENTS.md receipts. Waits: after ABC-096 merges (test counts move); then → Ready.)
@@ -870,7 +870,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+- [ABC-174] Re-cut the level table per ADR-0045 (data only); default → level 5, plays as today  (owner: software-engineer, size: S, priority: P1, epic: EPIC-004, since: 2026-10-19, DoR 10/10; cut in `bapm-adr0045-cut` (`5a387687`). Waits: ABC-171 merged; recommended after ABC-173.) **2026-10-19: ABC-171 merged → unblocked (waits on the owner's pull).** **2026-10-19: owner pulled (“continue with ABC-174”) → In Development; `ticket-to-pr-ABC-174` dispatched from `bd480c99`.**
 
 
 
