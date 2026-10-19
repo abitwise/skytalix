@@ -5,18 +5,21 @@
  * reads time only through the injected `now` (`ADR-0027`), so the whole protocol is testable on a
  * virtual clock. The entry point that binds the real streams and the real clock is `ABC-168`'s.
  *
- * In this ticket the strength is fixed at `DEFAULT_LEVEL` (rate 0, so `chooseMove` is called
- * directly) and there is no book and no option. `ABC-171` adds `random`, `book` and the options.
+ * `ABC-171` (`ADR-0044` D3, D10, D11) adds the two options. `OwnBook` (default on) probes the
+ * injected `book` before any search. `Skill Level` (1-5, default `DEFAULT_LEVEL`) caps the budget
+ * at its level's, and a level with a blunder rate plays through `createLevel`, seeded per `go` from
+ * the injected `random`.
  *
  * ONE THREAD (`ADR-0044` D5). `go` searches to its budget inside `handleLine`, so a `stop` that
  * arrives later finds the search already finished; `infinite` and `ponder` only HOLD the answer.
  */
 
 import { makeMove } from "./apply.ts";
+import type { BookProbe } from "./book.ts";
 import { parseCoordinateMove } from "./coordinate-move.ts";
 import { type Clock, chooseMove, type EngineChoice, HARD_CEILING_MS } from "./engine.ts";
 import { parseFen } from "./fen.ts";
-import { DEFAULT_LEVEL, LEVELS } from "./levels.ts";
+import { createLevel, DEFAULT_LEVEL, LEVELS } from "./levels.ts";
 import { BISHOP, KNIGHT, type Position, QUEEN, ROOK, squareName } from "./position.ts";
 import { MATE_SCORE } from "./search.ts";
 import { MATE_FLOOR } from "./transposition.ts";
@@ -26,6 +29,10 @@ export interface UciSessionOptions {
   readonly write: (line: string) => void;
   /** The `Clock` handed to the engine; a test injects a virtual one. */
   readonly now: Clock;
+  /** Values in [0, 1). Draws one blunder seed per `go` at a level with a blunder rate (D11). */
+  readonly random: () => number;
+  /** The opening book (D10). Never called while `OwnBook` is off. */
+  readonly book: BookProbe;
 }
 
 export interface UciSession {
@@ -129,9 +136,12 @@ function parsePosition(tokens: readonly string[]): Position | string {
 }
 
 interface GoRequest {
+  /** D4.1's `G`, before the level caps it. */
   readonly budgetMs: number;
   readonly maxDepth: number | undefined;
   readonly maxNodes: number | undefined;
+  /** The accepted `depth` / `nodes` / `mate` keywords, in input order. */
+  readonly limits: readonly string[];
   readonly hold: boolean;
 }
 
@@ -145,6 +155,7 @@ function parseGo(
   let depth: number | undefined;
   let nodes: number | undefined;
   let mate: number | undefined;
+  const limits: string[] = [];
   let hold = false;
 
   /** QE-167-f: a keyword is never a value. A keyword with no value leaves the next token unread. */
@@ -166,9 +177,12 @@ function parseGo(
       const value = positiveInteger(text);
       if (value === undefined) {
         warn(`go ${keyword} needs an integer >= 1, got ${text ?? "nothing"}; ignored`);
-      } else if (keyword === "depth") depth = value;
-      else if (keyword === "nodes") nodes = value;
-      else mate = value;
+      } else {
+        if (!limits.includes(keyword)) limits.push(keyword);
+        if (keyword === "depth") depth = value;
+        else if (keyword === "nodes") nodes = value;
+        else mate = value;
+      }
     } else if (
       keyword === "movetime" ||
       keyword === "wtime" ||
@@ -209,18 +223,40 @@ function parseGo(
   const maxDepth =
     depth === undefined ? mateDepth : mateDepth === undefined ? depth : Math.min(depth, mateDepth);
 
-  // D4.2: the level caps it. The engine still clamps at `HARD_CEILING_MS` (D4.4).
+  return { budgetMs: budget, maxDepth, maxNodes: nodes, limits, hold };
+}
+
+/**
+ * `setoption name <id> [value <x>]` (D3): the id is the text between `name` and `value`, lower
+ * cased for the case-insensitive match. The value is the text after `value`, or `""` without one.
+ */
+function parseSetOption(tokens: readonly string[]): { name: string; value: string } {
+  const nameAt = tokens.indexOf("name");
+  if (nameAt === -1) return { name: "", value: "" };
+  const valueAt = tokens.indexOf("value", nameAt + 1);
+  const end = valueAt === -1 ? tokens.length : valueAt;
   return {
-    budgetMs: Math.min(budget, LEVELS[DEFAULT_LEVEL].budgetMs),
-    maxDepth,
-    maxNodes: nodes,
-    hold,
+    name: tokens
+      .slice(nameAt + 1, end)
+      .join(" ")
+      .toLowerCase(),
+    value: valueAt === -1 ? "" : tokens.slice(valueAt + 1).join(" "),
   };
 }
 
 export function createUciSession(options: UciSessionOptions): UciSession {
-  const { write, now } = options;
+  const { write, now, random, book } = options;
   const info = (message: string): void => write(`info string ${printableOf(message)}`);
+
+  let ownBook = true;
+  let skill: keyof typeof LEVELS = DEFAULT_LEVEL;
+  /** D10: the book is read once per process, at the first `isready` with `OwnBook` on, or at `go`. */
+  let warmed = false;
+  const warm = (): void => {
+    if (warmed || !ownBook) return;
+    warmed = true;
+    book.openingName(parseFen(START_FEN));
+  };
 
   let position: Position | null = parseFen(START_FEN);
   /**
@@ -240,10 +276,36 @@ export function createUciSession(options: UciSessionOptions): UciSession {
     // One `bestmove` per `go`: an answer still held is released before the next search.
     release();
     const request = parseGo(tokens, position?.blackToMove ?? false, info);
+    // D4.2 / D11: the level caps G. The engine still clamps at `HARD_CEILING_MS` (D4.4).
+    const level = LEVELS[skill];
+    const budgetMs = Math.min(request.budgetMs, level.budgetMs);
     let answer = "bestmove 0000";
-    if (position !== null) {
+    // D10: the book before any search, on the position after the moves.
+    warm();
+    const booked = ownBook && position !== null ? book.bookMove(position) : undefined;
+    if (booked !== undefined) {
+      info("book");
+      answer = `bestmove ${coordinateOf(booked)}`;
+    } else if (position !== null && level.blunderRate > 0) {
+      // D11: a fresh level per `go`, seeded from the injected `random`; it takes no depth limit.
+      if (request.limits.length > 0) {
+        info(`skill level ${skill} ignores go ${request.limits.join(", ")}; searching on time`);
+      }
+      const seed = Math.floor(random() * 2 ** 32);
+      const choice = createLevel(
+        { budgetMs, blunderRate: level.blunderRate },
+        { seed, now },
+      )(position);
+      if (choice !== null) {
+        const move = coordinateOf(choice.move);
+        write(
+          `info depth ${choice.depth} nodes ${choice.nodes} time ${choice.elapsedMs} pv ${move}`,
+        );
+        answer = `bestmove ${move}`;
+      }
+    } else if (position !== null) {
       const choice = chooseMove(position, {
-        budgetMs: request.budgetMs,
+        budgetMs,
         now,
         ...(request.maxDepth === undefined ? {} : { maxDepth: request.maxDepth }),
         ...(request.maxNodes === undefined ? {} : { maxNodes: request.maxNodes }),
@@ -262,6 +324,20 @@ export function createUciSession(options: UciSessionOptions): UciSession {
     else write(answer);
   };
 
+  /** D3: an invalid value keeps the old one, with one `info string`; any other name is ignored. */
+  const setOption = (tokens: readonly string[]): void => {
+    const { name, value } = parseSetOption(tokens);
+    const got = value === "" ? "nothing" : value;
+    if (name === "ownbook") {
+      if (value === "true" || value === "false") ownBook = value === "true";
+      else info(`OwnBook takes true or false, got ${got}; kept ${ownBook}`);
+    } else if (name === "skill level") {
+      // An own key only (the `level-seam.ts` rule), so no inherited key ever selects a level.
+      if (Object.hasOwn(LEVELS, value)) skill = Number(value) as keyof typeof LEVELS;
+      else info(`Skill Level takes an integer 1-5, got ${got}; kept ${skill}`);
+    }
+  };
+
   return {
     handleLine(line: string): "continue" | "quit" {
       const tokens = line.trim().split(/\s+/);
@@ -269,10 +345,16 @@ export function createUciSession(options: UciSessionOptions): UciSession {
         case "uci":
           write("id name skytalix");
           write("id author Olger Oeselg");
+          write("option name OwnBook type check default true");
+          write("option name Skill Level type spin default 3 min 1 max 5");
           write("uciok");
           break;
         case "isready":
+          warm();
           write("readyok");
+          break;
+        case "setoption":
+          setOption(tokens);
           break;
         case "ucinewgame":
           release();
@@ -298,7 +380,7 @@ export function createUciSession(options: UciSessionOptions): UciSession {
           release();
           return "quit";
         default:
-        // `setoption`, `debug`, `register`, an empty line and anything unknown: ignored (D3).
+        // `debug`, `register`, an empty line and anything unknown: ignored (D3).
       }
       return "continue";
     },

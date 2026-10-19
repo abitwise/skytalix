@@ -6,13 +6,17 @@
 
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
+import { makeMove } from "./apply.ts";
+import { type BookProbe, createBookProbe } from "./book.ts";
 import { parseFen } from "./fen.ts";
 import { isInCheck, legalMoves } from "./legal.ts";
+import { createLevel, LEVELS, seededRandom } from "./levels.ts";
 import type { Move } from "./moves.ts";
-import { squareName } from "./position.ts";
+import { type Position, squareName } from "./position.ts";
 import { MATE_SCORE } from "./search.ts";
-import { createUciSession } from "./uci-session.ts";
+import { createUciSession, type UciSessionOptions } from "./uci-session.ts";
 import { virtualClock } from "./virtual-clock.ts";
+import { zobristKey } from "./zobrist.ts";
 
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const KIWIPETE = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1";
@@ -30,10 +34,29 @@ interface Dialogue {
   readonly perLine: string[][];
 }
 
+/** `ABC-094` format-1 bytes over the given entries, built in memory (`ABC-171` test note 1). */
+function bookBytes(positions: Record<string, unknown>): Uint8Array {
+  return new TextEncoder().encode(JSON.stringify({ format: 1, maxPly: 12, positions }));
+}
+
+/**
+ * `ABC-171` gave the session `random` and `book`. The `ABC-167` rows get a real probe over an
+ * empty, valid book (never a hit, never a warning) and a seeded `random` that level 3 never calls,
+ * so each of those rows reads exactly as it did before.
+ */
+function emptyBook(): BookProbe {
+  return createBookProbe({ read: () => bookBytes({}), warn: () => {}, random: seededRandom(1) });
+}
+
 /** Test note 1: lines in, lines out. One session per script, on its own ticking clock. */
 function dialogue(lines: readonly string[], stepMs = 10): Dialogue {
   const out: string[] = [];
-  const session = createUciSession({ write: (line) => out.push(line), now: virtualClock(stepMs) });
+  const session = createUciSession({
+    write: (line) => out.push(line),
+    now: virtualClock(stepMs),
+    random: seededRandom(1),
+    book: emptyBook(),
+  });
   const perLine: string[][] = [];
   const results = lines.map((line) => {
     const before = out.length;
@@ -90,8 +113,14 @@ function expectPrintable(line: string | undefined): void {
 }
 
 describe("ABC-167 A1-A2 — handshake and ready", () => {
-  it("A1: uci writes exactly id name, id author, uciok", () => {
-    expect(talk(["uci"]).out).toEqual(["id name skytalix", "id author Olger Oeselg", "uciok"]);
+  it("A1: uci writes id name, id author, then (ABC-171 A1) the two option lines, then uciok", () => {
+    expect(talk(["uci"]).out).toEqual([
+      "id name skytalix",
+      "id author Olger Oeselg",
+      "option name OwnBook type check default true",
+      "option name Skill Level type spin default 3 min 1 max 5",
+      "uciok",
+    ]);
   });
 
   it("A2: isready writes exactly readyok", () => {
@@ -524,6 +553,500 @@ describe("ABC-167 A10 — quit", () => {
     const { out, results } = talk(["isready", "quit"]);
     expect(results).toEqual(["continue", "quit"]);
     expect(out).toEqual(["readyok"]);
+  });
+});
+
+// ---------------------------------------------------------------------------------------------
+// ABC-171 — `OwnBook` and `Skill Level` (`ADR-0044` D3, D10, D11). Every row below drives
+// `handleLine` on a ticking virtual clock, with `random = seededRandom(k)` behind a call counter
+// and a REAL `createBookProbe` over in-memory bytes behind a `read` counter (test note 1).
+// ---------------------------------------------------------------------------------------------
+
+/** The level path's info line (D3): no score, no nps. */
+const LEVEL_INFO = /^info depth (\d+) nodes (\d+) time (\d+) pv ([a-h][1-8][a-h][1-8][qrbn]?)$/;
+
+const hexKey = (position: Position): string => zobristKey(position).toString(16).padStart(16, "0");
+
+function afterMoves(fen: string, moves: readonly string[]): Position {
+  const position = parseFen(fen);
+  for (const text of moves) {
+    const move = legalMoves(position).find((m) => coordinateOf(m) === text);
+    if (move === undefined) throw new Error(`test setup: ${text} is not legal`);
+    makeMove(position, move);
+  }
+  return position;
+}
+
+/** `A3`'s book: the start position holds the single reply `e2e4`. */
+const START_BOOK = (): Uint8Array =>
+  bookBytes({ [hexKey(parseFen(START_FEN))]: { m: [["e2e4", 1]] } });
+
+/** The `go` of `A6`: G = 60000 / 20 + 1000 / 2 = 3500 ms. */
+const GO_G3500 = "go wtime 60000 btime 60000 winc 1000 binc 1000";
+
+/** D11's seed rule, re-derived here: the first blunder draw of the `n`th `go` under `seededRandom(k)`. */
+function firstDraws(k: number, n: number): number[] {
+  const random = seededRandom(k);
+  return Array.from({ length: n }, () => seededRandom(Math.floor(random() * 2 ** 32))());
+}
+
+interface RigOptions {
+  readonly stepMs?: number;
+  readonly k?: number;
+  readonly read?: () => Uint8Array;
+}
+
+/** One session with counted `random` draws, counted book reads and recorded book warnings. */
+function rig({ stepMs = 100, k = 1, read = () => bookBytes({}) }: RigOptions = {}) {
+  const out: string[] = [];
+  const warnings: string[] = [];
+  const reads = { count: 0 };
+  const draws = { count: 0 };
+  const generator = seededRandom(k);
+  const options: UciSessionOptions = {
+    write: (line) => out.push(line),
+    now: virtualClock(stepMs),
+    random: () => {
+      draws.count++;
+      return generator();
+    },
+    book: createBookProbe({
+      read: () => {
+        reads.count++;
+        return read();
+      },
+      warn: (message) => warnings.push(message),
+      random: seededRandom(7),
+    }),
+  };
+  const session = createUciSession(options);
+  /** The lines this one input line wrote. */
+  const send = (line: string): string[] => {
+    const before = out.length;
+    const result = session.handleLine(line);
+    expect(result).toBe(line === "quit" ? "quit" : "continue");
+    const written = out.slice(before);
+    everyLine.push(...written);
+    return written;
+  };
+  return { out, warnings, reads, draws, send };
+}
+
+function parseLevelInfo(line: string | undefined) {
+  const match = LEVEL_INFO.exec(line ?? "");
+  expect(match, `not a level info line: ${line}`).not.toBeNull();
+  const m = match as RegExpExecArray;
+  return { depth: Number(m[1]), nodes: Number(m[2]), time: Number(m[3]), move: m[4] as string };
+}
+
+/** `A6`'s reading: the info line's `time` for `GO_G3500` from the start position, step 100. */
+function levelTime(send: (line: string) => string[], level: number): number {
+  send("position startpos");
+  const lines = send(GO_G3500);
+  expect(lines).toHaveLength(2);
+  const info = level <= 2 ? parseLevelInfo(lines[0]) : parseInfo(lines[0]);
+  expect(lines[1]).toBe(`bestmove ${info.move}`);
+  return info.time;
+}
+
+/** `ABC-167` `A5`'s bound for step `s` (test note 3): `G <= time <= G + 2s`. */
+function expectWithin(time: number, budget: number, step = 100): void {
+  expect(time).toBeGreaterThanOrEqual(budget);
+  expect(time).toBeLessThanOrEqual(budget + 2 * step);
+}
+
+describe("ABC-171 A1 — the option lines", () => {
+  it("uci writes exactly 5 lines, the two options after the id lines and before uciok", () => {
+    const { send } = rig();
+    expect(send("uci")).toEqual([
+      "id name skytalix",
+      "id author Olger Oeselg",
+      "option name OwnBook type check default true",
+      "option name Skill Level type spin default 3 min 1 max 5",
+      "uciok",
+    ]);
+  });
+});
+
+describe("ABC-171 A2 — setoption", () => {
+  it("precondition: under seededRandom(1) the first level-1 go takes the engine path", () => {
+    expect(firstDraws(1, 1)[0]).toBeGreaterThanOrEqual(LEVELS[1].blunderRate);
+  });
+
+  it("setoption name skill level value 1 (lower case) writes nothing and sets level 1", () => {
+    const { send } = rig({ k: 1 });
+    expect(send("setoption name skill level value 1")).toEqual([]);
+    expectWithin(levelTime(send, 1), 100);
+  });
+
+  it("setoption name OwnBook value false writes nothing (A4 holds afterwards, in A4)", () => {
+    const { send } = rig({ read: START_BOOK });
+    expect(send("setoption name OwnBook value false")).toEqual([]);
+  });
+
+  for (const value of ["0", "6", "2.5", "x", "constructor"]) {
+    it(`Skill Level value ${value}: one info string, the old value (1) kept`, () => {
+      const { send } = rig({ k: 1 });
+      expect(send("setoption name Skill Level value 1")).toEqual([]);
+      const written = send(`setoption name Skill Level value ${value}`);
+      expect(written).toHaveLength(1);
+      expect(written[0]).toMatch(/^info string /);
+      expectWithin(levelTime(send, 1), 100);
+    });
+  }
+
+  it("OwnBook value maybe: one info string, the old value (false) kept", () => {
+    const { send, reads } = rig({ read: START_BOOK });
+    expect(send("setoption name OwnBook value false")).toEqual([]);
+    const written = send("setoption name OwnBook value maybe");
+    expect(written).toHaveLength(1);
+    expect(written[0]).toMatch(/^info string /);
+    send("position startpos");
+    const lines = send("go movetime 1000");
+    expect(lines).toHaveLength(2);
+    parseInfo(lines[0]);
+    expect(reads.count).toBe(0);
+  });
+
+  it("setoption name Hash value 64 writes nothing and changes nothing", () => {
+    const booked = rig({ read: START_BOOK });
+    expect(booked.send("setoption name Hash value 64")).toEqual([]);
+    booked.send("position startpos");
+    expect(booked.send("go movetime 1000")).toEqual(["info string book", "bestmove e2e4"]);
+
+    const level = rig();
+    expect(level.send("setoption name Hash value 64")).toEqual([]);
+    expectWithin(levelTime(level.send, 3), 3_000); // still the default level 3
+  });
+});
+
+describe("ABC-171 A3 — a book hit (EPIC-007 M6)", () => {
+  it("position startpos, go movetime 1000 -> exactly info string book, bestmove e2e4", () => {
+    const { send, out } = rig({ read: START_BOOK });
+    expect(send("position startpos")).toEqual([]);
+    expect(send("go movetime 1000")).toEqual(["info string book", "bestmove e2e4"]);
+    expect(out.some((line) => line.startsWith("info depth"))).toBe(false);
+  });
+
+  it("position fen <the start FEN> hits the same entry (keyed by position, not move list)", () => {
+    const { send } = rig({ read: START_BOOK });
+    expect(send(`position fen ${START_FEN}`)).toEqual([]);
+    expect(send("go movetime 1000")).toEqual(["info string book", "bestmove e2e4"]);
+  });
+
+  it("the position after the moves is probed (D10)", () => {
+    const afterE4 = hexKey(afterMoves(START_FEN, ["e2e4"]));
+    const { send } = rig({ read: () => bookBytes({ [afterE4]: { m: [["e7e5", 1]] } }) });
+    send("position startpos moves e2e4");
+    expect(send("go movetime 1000")).toEqual(["info string book", "bestmove e7e5"]);
+  });
+});
+
+describe("ABC-171 A4 — OwnBook off", () => {
+  it("OwnBook false before isready/go: a search, no book line, read called 0 times", () => {
+    const { send, out, reads } = rig({ read: START_BOOK });
+    send("uci");
+    send("setoption name OwnBook value false");
+    expect(send("isready")).toEqual(["readyok"]);
+    send("position startpos");
+    const lines = send("go movetime 1000");
+    expect(lines).toHaveLength(2);
+    const info = parseInfo(lines[0]);
+    expect(lines[1]).toBe(`bestmove ${info.move}`);
+    send("ucinewgame");
+    send("isready");
+    expect(out).not.toContain("info string book");
+    expect(reads.count).toBe(0);
+  });
+});
+
+describe("ABC-171 A5 — the book is read once, and at the right time", () => {
+  it("0 after uci, 1 after the first isready, still 1 after isready, go and ucinewgame", () => {
+    const { send, reads } = rig({ read: START_BOOK });
+    send("uci");
+    expect(reads.count).toBe(0);
+    send("isready");
+    expect(reads.count).toBe(1);
+    for (const line of ["isready", "position startpos", "go movetime 1000", "ucinewgame"]) {
+      send(line);
+    }
+    send("isready");
+    send("go movetime 1000");
+    expect(reads.count).toBe(1);
+  });
+
+  it("a session that never gets isready reads at the first go", () => {
+    const { send, reads } = rig({ read: START_BOOK });
+    send("uci");
+    send("position startpos");
+    expect(reads.count).toBe(0);
+    expect(send("go movetime 1000")).toEqual(["info string book", "bestmove e2e4"]);
+    expect(reads.count).toBe(1);
+  });
+
+  it("the first isready WITH OwnBook on reads; one with it off does not", () => {
+    const { send, reads } = rig({ read: START_BOOK });
+    send("setoption name OwnBook value false");
+    send("isready");
+    expect(reads.count).toBe(0);
+    send("setoption name ownbook value true");
+    send("isready");
+    expect(reads.count).toBe(1);
+  });
+});
+
+describe("ABC-171 A6 — a level change is observable (EPIC-007 M7)", () => {
+  // G = 3500. Budget min(G, LEVELS[skill].budgetMs), step 100, ABC-167 A5's bound.
+  for (const [level, budget] of [
+    [1, 100],
+    [3, 3_000],
+    [5, 3_500],
+  ] as const) {
+    it(`level ${level}: ${GO_G3500} -> ${budget} ms (within 2 x 100 ms)`, () => {
+      if (level === 1) expect(firstDraws(1, 1)[0]).toBeGreaterThanOrEqual(LEVELS[1].blunderRate);
+      const { send } = rig({ k: 1 });
+      expect(send(`setoption name Skill Level value ${level}`)).toEqual([]);
+      expectWithin(levelTime(send, level), budget);
+    });
+  }
+});
+
+describe("ABC-171 A7 — the blunder path", () => {
+  const goes = [
+    "position startpos",
+    "go movetime 1000",
+    "position startpos moves e2e4 e7e5",
+    "go movetime 1000",
+    `position fen ${KIWIPETE}`,
+    "go movetime 1000",
+  ];
+
+  /** The bestmove sequence of level 1 under `seededRandom(k)`, each go's info line checked. */
+  function levelOneMoves(k: number): string[] {
+    const { send } = rig({ k, stepMs: 10 });
+    send("setoption name Skill Level value 1");
+    const moves: string[] = [];
+    for (const line of goes) {
+      const written = send(line);
+      if (!line.startsWith("go")) continue;
+      expect(written).toHaveLength(2);
+      expect(written[0]).not.toContain(" score ");
+      const info = parseLevelInfo(written[0]);
+      expect(written[1]).toBe(`bestmove ${info.move}`);
+      moves.push(info.move);
+    }
+    return moves;
+  }
+
+  it("precondition: seededRandom(2)'s three gos take both paths (blunder, engine, engine)", () => {
+    const draws = firstDraws(2, 3);
+    expect(draws.some((d) => d < LEVELS[1].blunderRate)).toBe(true);
+    expect(draws.some((d) => d >= LEVELS[1].blunderRate)).toBe(true);
+  });
+
+  it("two sessions on the same seededRandom(k) write the same bestmove sequence", () => {
+    const first = levelOneMoves(2);
+    expect(first).toHaveLength(3);
+    expect(levelOneMoves(2)).toEqual(first);
+    expect(levelOneMoves(3)).toHaveLength(3); // a different k may differ; nothing asserted on it
+  });
+
+  it("go depth 3 at level 1: one info string naming the dropped limit, then a bestmove", () => {
+    const { send } = rig({ k: 1, stepMs: 10 });
+    send("setoption name Skill Level value 1");
+    send("position startpos");
+    const lines = send("go depth 3");
+    expect(lines).toHaveLength(3);
+    expect(lines[0]).toMatch(/^info string .*depth/);
+    const info = parseLevelInfo(lines[1]);
+    expect(lines[2]).toBe(`bestmove ${info.move}`);
+    expect(legalFrom(START_FEN)).toContain(info.move);
+  });
+
+  it("go depth 3 at level 3 reports depth 3 (ABC-167 A7)", () => {
+    const { send } = rig({ stepMs: 50 });
+    send("setoption name Skill Level value 3");
+    send("position startpos");
+    const lines = send("go depth 3");
+    expect(lines).toHaveLength(2);
+    expect(parseInfo(lines[0]).depth).toBe(3);
+  });
+});
+
+/** The levels that blunder (`LEVELS[n].blunderRate > 0`), read from the table, not by number. */
+const BLUNDER_LEVELS = (Object.keys(LEVELS) as `${keyof typeof LEVELS}`[])
+  .map((key) => Number(key) as keyof typeof LEVELS)
+  .filter((n) => LEVELS[n].blunderRate > 0);
+
+describe("ABC-171 A8 — no reseed, and one draw per blunder-level search", () => {
+  it("ucinewgame draws 0 times; each level-1 go draws exactly one seed; level 3 draws none", () => {
+    const { send, draws } = rig({ k: 1 });
+    send("setoption name Skill Level value 1");
+    send("ucinewgame");
+    expect(draws.count).toBe(0);
+    send("position startpos");
+    send("go movetime 1000");
+    expect(draws.count).toBe(1);
+    send("ucinewgame");
+    expect(draws.count).toBe(1);
+    send("go movetime 1000");
+    expect(draws.count).toBe(2);
+    send("setoption name Skill Level value 3");
+    send("go movetime 100");
+    expect(draws.count).toBe(2);
+  });
+
+  it("every blunder level's searched go draws exactly one seed (a book hit draws 0: A13b)", () => {
+    expect(BLUNDER_LEVELS.length).toBeGreaterThan(0);
+    const { send, draws } = rig({ k: 1 });
+    send("position startpos");
+    for (const [index, level] of BLUNDER_LEVELS.entries()) {
+      send(`setoption name Skill Level value ${level}`);
+      const lines = send("go movetime 1000");
+      expect(lines.at(-1)).toMatch(/^bestmove [a-h][1-8][a-h][1-8]/);
+      expect(draws.count).toBe(index + 1);
+    }
+  });
+});
+
+describe("ABC-171 A9 — a bad book", () => {
+  const bad: ReadonlyArray<readonly [string, () => Uint8Array]> = [
+    [
+      "read throws",
+      () => {
+        throw new Error("ENOENT");
+      },
+    ],
+    ["bytes that are not the schema", () => new TextEncoder().encode('{"format":2}')],
+  ];
+  for (const [name, read] of bad) {
+    it(`${name}: three gos each write one legal bestmove, never throw, warn exactly once`, () => {
+      const { send, warnings } = rig({ read });
+      for (let i = 0; i < 3; i++) {
+        let written: string[] = [];
+        expect(() => {
+          send("position startpos");
+          written = send("go movetime 100");
+        }).not.toThrow();
+        const bestmoves = written.filter((line) => line.startsWith("bestmove "));
+        expect(bestmoves).toHaveLength(1);
+        expect(legalFrom(START_FEN)).toContain((bestmoves[0] as string).slice("bestmove ".length));
+      }
+      expect(warnings).toHaveLength(1);
+    });
+  }
+});
+
+describe("ABC-171 A10 — infinite with a book hit", () => {
+  it("go infinite writes info string book and holds bestmove until stop", () => {
+    const { send } = rig({ read: START_BOOK });
+    send("position startpos");
+    expect(send("go infinite")).toEqual(["info string book"]);
+    expect(send("stop")).toEqual(["bestmove e2e4"]);
+    expect(send("stop")).toEqual([]);
+  });
+});
+
+// `A13` (the QE-171-a..d rows, added 2026-10-19). Step 100 wherever a search runs.
+
+/** `A13a`'s oracle: level 1's move from the start position under `seed`, on a fresh step-100 clock. */
+function levelOneOracle(seed: number): string {
+  const choice = createLevel(
+    { budgetMs: 100, blunderRate: LEVELS[1].blunderRate },
+    { seed, now: virtualClock(100) },
+  )(parseFen(START_FEN));
+  if (choice === null) throw new Error("test setup: the start position has a legal move");
+  return coordinateOf(choice.move);
+}
+
+describe("ABC-171 A13a — the seed oracle floor(random() * 2^32) (QE-171-a)", () => {
+  const ks = [1, 2, 3, 4, 5, 6, 7, 8];
+  const oracle = ks.map((k) => levelOneOracle(Math.floor(seededRandom(k)() * 2 ** 32)));
+
+  it("non-vacuous: the oracle's moves are not all equal over k = 1..8", () => {
+    expect(new Set(oracle).size).toBeGreaterThan(1);
+  });
+
+  it("non-vacuous: on some k the 2^16 seed gives a different move from the oracle's", () => {
+    const scaled = ks.map((k) => levelOneOracle(Math.floor(seededRandom(k)() * 2 ** 16)));
+    expect(scaled.some((move, index) => move !== oracle[index])).toBe(true);
+  });
+
+  for (const [index, k] of ks.entries()) {
+    it(`seededRandom(${k}): level 1's bestmove equals the oracle's`, () => {
+      const { send } = rig({ k });
+      send("setoption name Skill Level value 1");
+      send("position startpos");
+      const lines = send("go movetime 1000");
+      expect(lines).toHaveLength(2);
+      const info = parseLevelInfo(lines[0]);
+      expect(lines[1]).toBe(`bestmove ${info.move}`);
+      expect(info.move).toBe(oracle[index]);
+    });
+  }
+});
+
+describe("ABC-171 A13b — a book hit at a blunder level draws 0 seeds (QE-171-b)", () => {
+  it("precondition: at least one level blunders", () => {
+    expect(BLUNDER_LEVELS.length).toBeGreaterThan(0);
+  });
+
+  for (const level of BLUNDER_LEVELS) {
+    it(`level ${level}: exactly info string book, bestmove e2e4; no search; random drawn 0 times`, () => {
+      const { send, out, draws } = rig({ k: 1, read: START_BOOK });
+      expect(send(`setoption name Skill Level value ${level}`)).toEqual([]);
+      send("position startpos");
+      expect(send("go movetime 1000")).toEqual(["info string book", "bestmove e2e4"]);
+      expect(out.some((line) => line.startsWith("info depth"))).toBe(false);
+      expect(draws.count).toBe(0);
+    });
+  }
+});
+
+describe("ABC-171 A13c — the dropped-limit line names nodes and mate, as one line (QE-171-c)", () => {
+  /** Level 1 on the start position: the lines `go` writes, with the level line and bestmove checked. */
+  function droppedLines(go: string): string {
+    const { send } = rig({ k: 1 });
+    send("setoption name Skill Level value 1");
+    send("position startpos");
+    const lines = send(go);
+    expect(lines).toHaveLength(3);
+    expect(lines.filter((line) => line.startsWith("info string "))).toHaveLength(1);
+    expect(lines[0]).toMatch(/^info string /);
+    expect(lines[1]).not.toContain(" score ");
+    const info = parseLevelInfo(lines[1]);
+    expect(lines[2]).toBe(`bestmove ${info.move}`);
+    return lines[0] as string;
+  }
+
+  it("go nodes 100: one info string naming nodes, a level info line, a bestmove", () => {
+    expect(droppedLines("go nodes 100")).toMatch(/\bnodes\b/);
+  });
+
+  it("go depth 3 nodes 100 mate 2: exactly one info string naming depth, nodes and mate", () => {
+    const line = droppedLines("go depth 3 nodes 100 mate 2");
+    for (const token of ["depth", "nodes", "mate"])
+      expect(line).toMatch(new RegExp(`\\b${token}\\b`));
+  });
+});
+
+describe("ABC-171 A13d — an invalid OwnBook keeps true (QE-171-d)", () => {
+  it("OwnBook value maybe on a fresh session: one info string, then the book still answers", () => {
+    const { send } = rig({ read: START_BOOK });
+    const written = send("setoption name OwnBook value maybe");
+    expect(written).toHaveLength(1);
+    expect(written[0]).toMatch(/^info string /);
+    send("position startpos");
+    expect(send("go movetime 1000")).toEqual(["info string book", "bestmove e2e4"]);
+  });
+});
+
+describe("ABC-171 A11 — book.ts is a type-only import", () => {
+  const source = readFileSync(new URL("./uci-session.ts", import.meta.url), "utf8");
+  it("every import from ./book.ts is import type", () => {
+    const lines = source.split("\n").filter((line) => /["']\.\/book\.ts["']/.test(line));
+    expect(lines.length).toBeGreaterThan(0);
+    for (const line of lines) expect(line).toMatch(/^import type \{[^}]*\} from "\.\/book\.ts";$/);
   });
 });
 
