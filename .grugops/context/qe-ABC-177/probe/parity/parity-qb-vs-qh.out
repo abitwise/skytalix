@@ -1,0 +1,18 @@
+qh: control exit=0 ran=15; mutants 145; odd none
+same id set: true
+U2 SAME  A6-e1: a new go writes the held bestmove first; two bestmoves in all | qb: 167-M13 167-M15 167-M16 167-M46 171-S28 167-M45b 174-M09 174-M10 174-M11 174-M17 H1 H2
+U4 SAME  A6-e4: quit writes the held bestmove and returns quit | qb: 167-M16 167-M37 171-N03 171-S28 H1
+U5 SAME  A6-e5: isready, an unknown line and setoption leave the bestmove held | qb: 167-M16 171-N10 171-N11b 171-N12 171-S15 H1
+U3 SAME  A6-j1: a refused position writes the held bestmove first, then its info string | qb: 167-M16 171-N01 171-N09 171-N17 171-S28 H1
+U1 SAME  go infinite holds the bestmove until ponderhit; a second ponderhit writes nothing | qb: 167-M13 167-M14 167-M16 H1 H2
+U1 SAME  go infinite holds the bestmove until stop; a second stop writes nothing | qb: 167-M13 167-M16 H1 H2
+U6 SAME  A7-i5: go depth infinite holds the bestmove until stop | qb: 167-M16 167-M24 167-M46 171-N04 171-N05 171-N13 171-S28 167-M45b 174-M09 174-M10 174-M11 174-M17 H1
+U6 SAME  A7-i6: go searchmoves e2e4 infinite holds the bestmove until stop | qb: 167-M16 167-M22 167-M23 167-M46 171-N13 171-S28 167-M45b 174-M09 174-M10 174-M11 174-M17 H1
+U7 SAME  go depth 0: one info string, the token dropped, one bestmove | qb: 167-M19 167-M24 167-M46 171-S28 167-M45b 174-M09 174-M10 174-M11 174-M17
+U7 SAME  go depth 2.5: one info string, the token dropped, one bestmove | qb: 167-M20 167-M24 167-M46 171-S28 167-M45b 174-M09 174-M10 174-M11 174-M17
+U7 SAME  go depth: one info string, the token dropped, one bestmove | qb: 167-M24 167-M46 171-S28 167-M45b 174-M09 174-M10 174-M11 174-M17
+U7 SAME  go mate 0: one info string, the token dropped, one bestmove | qb: 167-M19 167-M24 167-M46 171-S28 167-M45b 174-M09 174-M10 174-M11 174-M17
+U7 SAME  go nodes -5: one info string, the token dropped, one bestmove | qb: 167-M24 167-M46 171-S28 167-M45b 174-M09 174-M10 174-M11 174-M17
+U7 SAME  go nodes x: one info string, the token dropped, one bestmove | qb: 167-M24 167-M46 171-S28 167-M45b 174-M09 174-M10 174-M11 174-M17
+U8 SAME  two sessions on the same seededRandom(k) write the same bestmove sequence | qb: 167-M46 171-S01 171-S04 171-S37 171-S40 167-M45a
+per-unit parity: {"U2":true,"U4":true,"U5":true,"U3":true,"U1":true,"U6":true,"U7":true,"U8":true}

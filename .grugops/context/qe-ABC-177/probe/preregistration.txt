@@ -1,0 +1,23 @@
+qe-ABC-177 timing pre-registration. Written 2026-10-20T19:05:53Z, BEFORE any window, any arm build and any reading.
+
+Instruments (copies; sha256 prefixes): lane174.mjs e2074cdbeedd (byte copy of qe-ABC-174's), sampler174.mjs 83409bc0e70b,
+readout174.py f528540fa110, readout-nfr008-174.py c95343f82f7c (byte copies). window.mjs = qe-ABC-174's with ONE change:
+its own-line exclusion names qe-ABC-177/probe/window.mjs.
+
+Admissibility, on top of each readout's own rules (owner word bfdc97e5, OQ-177-1 = YES, AC only):
+ P1. Before any arm runs: pmset -g batt must read 'AC Power'. If not, no run starts; the reading is OWED.
+ P2. Every scored run's lane174 'power' AND 'power_after' column must read 'AC Power'. A round with any other value
+     is discarded like a foreign round. n must still be 8 (readouts' rule), else VOID -> OWED. (powercheck.py)
+ P3. Foreground window.mjs 180 s, 1 s polls, 0 foreign polls, immediately before the driver starts; the sampler runs beside
+     the arms; a foreign sample inside a run discards its round (readouts' rule).
+ P4. load1 <= 8 before every scored run (readouts' rule). User process count and load1 are logged per sampler row.
+ P5. Nothing is estimated. A missing reading is OWED.
+
+N8-LANE (A8): ONE-FILE set src/uci-session.test.ts; CMD = env NODE_OPTIONS=--max-old-space-size=400 npx vitest run
+ src/uci-session.test.ts + the lane174 reporters; B = git archive ff1e375f, T = cp -R B (diff -r clean), H = git archive
+ f81bf03c; CONDS B,T,H; 9 rounds, round 0 discarded, rotated, GAP 0; F = 16pct (provisional; UNKNOWN - verify);
+ readout174.py default mode (B, T, H read the same count, 126).
+NFR-008 (A9-A11): npm test as spelled; arms B, T (ff1e375f) and H, H2 (f81bf03c), each its own npm ci, no shared/symlinked
+ node_modules; CONDS B,T,H,H2, BASE B, TWIN T; readout-nfr008-174.py on H/H2 (its BASE=H, TWIN=H2 shape) for the
+ NFR-008 state and H2-H twin R; B/T twin R and H-B wall/CPU medians with intervals from lane174's own summary over the
+ same TSV. R-173-1 / R-173-2 not read.

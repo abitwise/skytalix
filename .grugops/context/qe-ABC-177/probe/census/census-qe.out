@@ -1,0 +1,17 @@
+same row names in census: true 126
+U2	25642	676	-24966	fewer	> A6-e1: a new go writes the held bestmove first; two bestmoves in all
+U4	25621	655	-24966	fewer	> A6-e4: quit writes the held bestmove and returns quit
+U5	25621	655	-24966	fewer	> A6-e5: isready, an unknown line and setoption leave the bestmove held
+U3	25621	655	-24966	fewer	> A6-j1: a refused position writes the held bestmove first, then its info string
+U1	76863	655	-76208	fewer	> go infinite holds the bestmove until ponderhit; a second ponderhit writes nothing
+U1	76863	655	-76208	fewer	> go infinite holds the bestmove until stop; a second stop writes nothing
+U6	25621	655	-24966	fewer	A7-i5: go depth infinite holds the bestmove until stop
+U6	25621	655	-24966	fewer	A7-i6: go searchmoves e2e4 infinite holds the bestmove until stop
+U7	25621	655	-24966	fewer	go depth 0: one info string, the token dropped, one bestmove
+U7	25621	655	-24966	fewer	go depth 2.5: one info string, the token dropped, one bestmove
+U7	25621	655	-24966	fewer	go depth: one info string, the token dropped, one bestmove
+U7	25621	655	-24966	fewer	go mate 0: one info string, the token dropped, one bestmove
+U7	25621	655	-24966	fewer	go nodes -5: one info string, the token dropped, one bestmove
+U7	25621	655	-24966	fewer	go nodes x: one info string, the token dropped, one bestmove
+U8	75207	34247	-40960	fewer	two sessions on the same seededRandom(k) write the same bestmove sequence
+sum	536406	43438	-492968 | non-unit rows changed: 0

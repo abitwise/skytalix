@@ -1,0 +1,5 @@
+
+> cli-chess@0.0.0 lint
+> biome check .
+
+Checked 116 files in 170ms. No fixes applied.
