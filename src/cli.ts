@@ -24,7 +24,7 @@
  * "helpfully" pre-reads a line here would hang. It is constructed, passed, and never invoked.
  *
  * THE OPPONENT IS THE LEVEL THE HUMAN CHOSE (`ABC-101`) — `createLevelSeam(difficulty, …)` over
- * `ABC-087`'s `LEVELS`, behind `ABC-095`'s book. With no `--difficulty` it is level 3, which is the
+ * `ABC-087`'s `LEVELS`, behind `ABC-095`'s book. With no `--difficulty` it is level 5, which is the
  * merged engine at `DEFAULT_BUDGET_MS` with no blunders, so a session without the flag plays as it
  * did. No new number here (`ADR-0013`: no placeholder opponent ships).
  *

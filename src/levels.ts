@@ -34,21 +34,23 @@ export interface Level {
  * The level table, keyed by the ordinals `ABC-101` publishes: integers 1-5, weakest to
  * strongest. `EPIC-006` reads it by those integers and attaches no meaning to them.
  *
- * The default (3) is the shipped engine at `NFR-004`'s 3 s, never blundering, so `NFR-005`'s
- * reading on `chooseMove` at 3 s is this level's reading. Above it only the budget grows, and the
- * hardest stays under `HARD_CEILING_MS`. Below it the budget falls and the blunders start. No
- * level claims an Elo number; `ABC-085` proves the ordering, and these values are not tuned to it.
+ * `ADR-0045` D1-D2: the default (5) is the hardest, and it is the shipped engine at `NFR-004`'s
+ * 3 s, never blundering, so `NFR-005`'s reading on `chooseMove` at 3 s is this level's reading.
+ * Each step down costs time (about one ply at the top two steps, about two-thirds of one at the
+ * bottom two) and doubles the blunder rate.
+ * No level reaches `HARD_CEILING_MS`. No level claims an Elo number; `ABC-085` proves the
+ * ordering, and these values are not tuned to it.
  */
 export const LEVELS: Readonly<Record<1 | 2 | 3 | 4 | 5, Level>> = Object.freeze({
   1: Object.freeze({ budgetMs: 100, blunderRate: 0.4 }),
-  2: Object.freeze({ budgetMs: 500, blunderRate: 0.2 }),
-  3: Object.freeze({ budgetMs: 3_000, blunderRate: 0 }),
-  4: Object.freeze({ budgetMs: 4_000, blunderRate: 0 }),
-  5: Object.freeze({ budgetMs: 4_500, blunderRate: 0 }),
+  2: Object.freeze({ budgetMs: 180, blunderRate: 0.2 }),
+  3: Object.freeze({ budgetMs: 330, blunderRate: 0.1 }),
+  4: Object.freeze({ budgetMs: 1_000, blunderRate: 0.05 }),
+  5: Object.freeze({ budgetMs: 3_000, blunderRate: 0 }),
 });
 
 export const EASIEST_LEVEL = 1;
-export const DEFAULT_LEVEL = 3;
+export const DEFAULT_LEVEL = 5;
 export const HARDEST_LEVEL = 5;
 
 /**

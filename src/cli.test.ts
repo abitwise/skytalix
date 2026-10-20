@@ -54,7 +54,7 @@ import { type GameHistory, gameStatusOf, newGame, playMove } from "./history.ts"
 import { HISTORY_ROWS, renderHistory } from "./history-pane.ts";
 import { legalMoves } from "./legal.ts";
 import { createLevelSeam } from "./level-seam.ts";
-import { createLevel, DEFAULT_LEVEL, LEVELS } from "./levels.ts";
+import { createLevel, DEFAULT_LEVEL, HARDEST_LEVEL, LEVELS } from "./levels.ts";
 import { PROMPT } from "./line-input.ts";
 import { squareName } from "./position.ts";
 import { type GlyphMode, type Orientation, renderBoard } from "./render.ts";
@@ -1340,7 +1340,7 @@ describe("ABC-042 — the accepted set is closed", () => {
           colour: "white",
           orientation: "white-bottom",
           flags: { ascii: false, unicode: false },
-          difficulty: 3,
+          difficulty: 5,
         },
       ],
       [
@@ -1349,7 +1349,7 @@ describe("ABC-042 — the accepted set is closed", () => {
           colour: "white",
           orientation: "white-bottom",
           flags: { ascii: true, unicode: false },
-          difficulty: 3,
+          difficulty: 5,
         },
       ],
       [
@@ -1358,7 +1358,7 @@ describe("ABC-042 — the accepted set is closed", () => {
           colour: "white",
           orientation: "white-bottom",
           flags: { ascii: false, unicode: true },
-          difficulty: 3,
+          difficulty: 5,
         },
       ],
       [
@@ -1367,7 +1367,7 @@ describe("ABC-042 — the accepted set is closed", () => {
           colour: "white",
           orientation: "white-bottom",
           flags: { ascii: false, unicode: false },
-          difficulty: 3,
+          difficulty: 5,
         },
       ],
       [
@@ -1376,7 +1376,7 @@ describe("ABC-042 — the accepted set is closed", () => {
           colour: "black",
           orientation: "black-bottom",
           flags: { ascii: false, unicode: false },
-          difficulty: 3,
+          difficulty: 5,
         },
       ],
     ];
@@ -1401,13 +1401,13 @@ describe("ABC-042 — the accepted set is closed", () => {
         colour: "white",
         orientation: "white-bottom",
         flags: { ascii: false, unicode: false },
-        difficulty: 3,
+        difficulty: 5,
       },
       black: {
         colour: "black",
         orientation: "black-bottom",
         flags: { ascii: false, unicode: false },
-        difficulty: 3,
+        difficulty: 5,
       },
     };
 
@@ -4030,13 +4030,19 @@ describe("ABC-101 — --difficulty selects a level, and the played engine is tha
     expect(reversed).toEqual(forward);
   });
 
-  it("A2 — the default is a VALUE: the exported constant, the middle of the level set, `DEFAULT_LEVEL`", () => {
+  it("A2 — the default is a VALUE: the exported constant, the maximum of the level set, `DEFAULT_LEVEL`", () => {
     const levels = LEVEL_WORDS.map(Number).sort((a, b) => a - b);
 
     expect(optionsOf([]).difficulty).toBe(DEFAULT_DIFFICULTY);
-    expect(DEFAULT_DIFFICULTY).toBe(levels[(levels.length - 1) / 2]);
-    // Not the top: `NFR-004`'s two bars have content only if some level is slower (ruling 2).
-    expect(DEFAULT_DIFFICULTY).toBeLessThan(Math.max(...levels));
+    expect(DEFAULT_DIFFICULTY).toBe(Math.max(...levels));
+    // The top: ruling 2 is overturned (ADR-0045 D2, owner Q1); a default below the maximum reds.
+    expect(DEFAULT_DIFFICULTY).toBe(HARDEST_LEVEL);
+    expect(DEFAULT_DIFFICULTY).toBe(DEFAULT_LEVEL);
+  });
+
+  it("ABC-174 A2/A3 — no flag resolves difficulty 5, the hardest level, which is `DEFAULT_LEVEL`", () => {
+    expect(optionsOf([]).difficulty).toBe(5);
+    expect(DEFAULT_DIFFICULTY).toBe(5);
     expect(DEFAULT_DIFFICULTY).toBe(DEFAULT_LEVEL);
   });
 
@@ -4131,8 +4137,8 @@ describe("ABC-101 — --difficulty selects a level, and the played engine is tha
       expect(history.position).toEqual(parseFen(START_FEN));
     }
 
-    // NON-VACUITY: on this position and seed, level 1 blunders and level 3 does not, and they
-    // choose different moves — so a seam that ignored the level would red above.
+    // NON-VACUITY: on this position and seed, level 1 blunders and the default level does not, and
+    // they choose different moves — so a seam that ignored the level would red above.
     const easiest = createLevel(LEVELS[1], { seed: SEED, now: clockFor("1") })(parseFen(START_FEN));
     expect(easiest?.kind).toBe("blunder");
     expect(played["1"]).not.toBe(played[String(DEFAULT_LEVEL)]);
