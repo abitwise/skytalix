@@ -263,14 +263,16 @@ describe("ABC-167 A5 — the D4 time rule, read from the info line's time", () =
 describe("ABC-167 A6 — infinite waits for stop", () => {
   for (const release of ["stop", "ponderhit"]) {
     it(`go infinite holds the bestmove until ${release}; a second ${release} writes nothing`, () => {
-      const held = talk(["position startpos", "go infinite"], 100).out;
-      expect(held.filter((line) => line.startsWith("bestmove"))).toEqual([]);
-      const { out } = talk(["position startpos", "go infinite", release], 100);
-      const bestmoves = out.filter((line) => line.startsWith("bestmove"));
+      // ABC-177 (ADR-0046 D2a): one dialogue; the two it replaced were exact prefixes of it.
+      const { perLine } = talk(["position startpos", "go infinite", release, release], 1_000);
+      for (const held of perLine.slice(0, 2)) {
+        expect(held.filter((line) => line.startsWith("bestmove"))).toEqual([]);
+      }
+      const released = perLine[2] as string[];
+      const bestmoves = released.filter((line) => line.startsWith("bestmove"));
       expect(bestmoves).toHaveLength(1);
-      expect(out.at(-1)).toBe(bestmoves[0]);
-      const twice = talk(["position startpos", "go infinite", release, release], 100).out;
-      expect(twice).toEqual(out);
+      expect(released.at(-1)).toBe(bestmoves[0]);
+      expect(perLine[3]).toEqual([]);
     });
   }
 
@@ -291,7 +293,7 @@ describe("ABC-167 A6 — infinite waits for stop", () => {
   it("A6-e1: a new go writes the held bestmove first; two bestmoves in all", () => {
     const { out, perLine } = talk(
       ["position startpos", "go infinite", "go movetime 100", "stop"],
-      100,
+      1_000,
     );
     const lines = perLine[2] as string[];
     expect(lines).toHaveLength(3);
@@ -322,7 +324,7 @@ describe("ABC-167 A6 — infinite waits for stop", () => {
   }
 
   it("A6-j1: a refused position writes the held bestmove first, then its info string", () => {
-    const { perLine } = talk(["position startpos", "go infinite", "position fen nonsense"], 100);
+    const { perLine } = talk(["position startpos", "go infinite", "position fen nonsense"], 1_000);
     const lines = perLine[2] as string[];
     expect(lines).toHaveLength(2);
     expect(lines[0]).toMatch(/^bestmove [a-h][1-8][a-h][1-8]$/);
@@ -330,7 +332,7 @@ describe("ABC-167 A6 — infinite waits for stop", () => {
   });
 
   it("A6-e4: quit writes the held bestmove and returns quit", () => {
-    const { perLine, results } = talk(["position startpos", "go infinite", "quit"], 100);
+    const { perLine, results } = talk(["position startpos", "go infinite", "quit"], 1_000);
     expect(results[2]).toBe("quit");
     expect(perLine[2]).toHaveLength(1);
     expect(perLine[2]?.[0]).toMatch(/^bestmove [a-h][1-8][a-h][1-8]$/);
@@ -346,7 +348,7 @@ describe("ABC-167 A6 — infinite waits for stop", () => {
         "setoption name Hash value 64",
         "stop",
       ],
-      100,
+      1_000,
     );
     expect(perLine[2]).toEqual(["readyok"]);
     expect(perLine[3]).toEqual([]);
@@ -406,7 +408,7 @@ describe("ABC-167 A7 — the D12 limits", () => {
     "go depth",
   ]) {
     it(`${go}: one info string, the token dropped, one bestmove`, () => {
-      const { out } = talk(["position startpos", go], 100);
+      const { out } = talk(["position startpos", go], 1_000);
       expect(out).toHaveLength(3);
       expect(out[0]).toMatch(/^info string /);
       const info = parseInfo(out[1]);
@@ -503,7 +505,7 @@ describe("ABC-167 A7 — the D12 limits", () => {
     ["A7-i6", "go searchmoves e2e4 infinite"],
   ] as const) {
     it(`${row}: ${go} holds the bestmove until stop`, () => {
-      const { perLine } = talk(["position startpos", go, "stop"], 100);
+      const { perLine } = talk(["position startpos", go, "stop"], 1_000);
       const searched = perLine[1] as string[];
       expect(searched).toHaveLength(2);
       expect(searched[0]).toMatch(/^info string /);
@@ -828,7 +830,7 @@ describe("ABC-171 A7 — the blunder path", () => {
 
   /** The bestmove sequence of level 1 under `seededRandom(k)`, each go's info line checked. */
   function levelOneMoves(k: number): string[] {
-    const { send } = rig({ k, stepMs: 10 });
+    const { send } = rig({ k, stepMs: 100 });
     send("setoption name Skill Level value 1");
     const moves: string[] = [];
     for (const line of goes) {
