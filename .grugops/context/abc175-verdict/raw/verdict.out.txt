@@ -1,0 +1,221 @@
+
+ RUN  v4.1.11 /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-ABC-175
+
+stdout | src/ladder.test.ts > ABC-085 ladder — verdict mode, step 4 (LADDER_DEEP=verdict) > 3v4: level 4 vs level 3, 20 games, verdict mode, step 4
+LADDER GAME {"mode":"verdict mode, step 4","pair":"3v4","seed":1,"white":4,"black":3,"plies":67,"result":"white-wins","reason":"checkmate","wallS":47.1}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"3v4","seed":1,"white":3,"black":4,"plies":74,"result":"black-wins","reason":"checkmate","wallS":45}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"3v4","seed":2,"white":4,"black":3,"plies":143,"result":"white-wins","reason":"checkmate","wallS":88.9}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"3v4","seed":2,"white":3,"black":4,"plies":91,"result":"draw","reason":"threefold-repetition (claimed)","wallS":56.2}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"3v4","seed":3,"white":4,"black":3,"plies":100,"result":"draw","reason":"threefold-repetition (claimed)","wallS":76.9}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"3v4","seed":3,"white":3,"black":4,"plies":102,"result":"black-wins","reason":"checkmate","wallS":68.5}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"3v4","seed":4,"white":4,"black":3,"plies":79,"result":"white-wins","reason":"checkmate","wallS":57.5}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"3v4","seed":4,"white":3,"black":4,"plies":94,"result":"black-wins","reason":"checkmate","wallS":58.4}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"3v4","seed":5,"white":4,"black":3,"plies":109,"result":"white-wins","reason":"checkmate","wallS":75.6}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"3v4","seed":5,"white":3,"black":4,"plies":134,"result":"black-wins","reason":"checkmate","wallS":94.4}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"3v4","seed":6,"white":4,"black":3,"plies":176,"result":"draw","reason":"threefold-repetition (claimed)","wallS":101}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"3v4","seed":6,"white":3,"black":4,"plies":44,"result":"black-wins","reason":"checkmate","wallS":24.9}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"3v4","seed":7,"white":4,"black":3,"plies":103,"result":"white-wins","reason":"checkmate","wallS":77.5}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"3v4","seed":7,"white":3,"black":4,"plies":112,"result":"black-wins","reason":"checkmate","wallS":71.1}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"3v4","seed":8,"white":4,"black":3,"plies":75,"result":"white-wins","reason":"checkmate","wallS":50.9}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"3v4","seed":8,"white":3,"black":4,"plies":114,"result":"black-wins","reason":"checkmate","wallS":67.6}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"3v4","seed":9,"white":4,"black":3,"plies":127,"result":"white-wins","reason":"checkmate","wallS":84.3}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"3v4","seed":9,"white":3,"black":4,"plies":92,"result":"black-wins","reason":"checkmate","wallS":58.5}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"3v4","seed":10,"white":4,"black":3,"plies":137,"result":"white-wins","reason":"checkmate","wallS":82.8}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"3v4","seed":10,"white":3,"black":4,"plies":110,"result":"black-wins","reason":"checkmate","wallS":84.5}
+LADDER PAIR {"mode":"verdict mode, step 4","criterion":"A2","pair":"3v4","stronger":4,"commit":"f6b63c1c92839ae29ea385fc03bab49aebc49b0c","step":4,"seeds":"1..10, both colours each","games":20,"stronger_w_d_l":[17,3,0],"score":"18.5/20","scorePct":92.5,"bar":"> 50%","verdict":"MET","claimedDraws":3,"reasons":{"checkmate":17,"threefold-repetition (claimed)":3},"digest":"2f110c17be79972c","wallS":1371.4,"load1":[3.35,4.56]}
+
+ ✓ src/ladder.test.ts > ABC-085 ladder — the step is one named constant per run (test note 6) > LADDER_DEEP=1 is the short step 120, =verdict the verdict step 4, anything else refused 1ms
+ ✓ src/ladder.test.ts > ABC-085 ladder — the step is one named constant per run (test note 6) > both sides read the run's one step, each on its own clock instance 0ms
+ ✓ src/ladder.test.ts > ABC-085 ladder — the step is one named constant per run (test note 6) > refuses, before any move, a side handed a different step or a step not named 0ms
+ ✓ src/ladder.test.ts > ABC-085 ladder — the claim policy and the ply cap (A3, test notes 2 and 7) > a threefold repetition ends as 'threefold-repetition (claimed)' at the first offer 4ms
+ ✓ src/ladder.test.ts > ABC-085 ladder — the claim policy and the ply cap (A3, test notes 2 and 7) > a fifty-move draw ends as 'fifty-move (claimed)' at the first offer 0ms
+ ✓ src/ladder.test.ts > ABC-085 ladder — the claim policy and the ply cap (A3, test notes 2 and 7) > a game at the ply cap is an ERROR with no score, never a draw 1ms
+ ✓ src/ladder.test.ts > ABC-085 ladder — the claim policy and the ply cap (A3, test notes 2 and 7) > scores win 1, draw 0.5, loss 0 for the named level, from either chair 0ms
+ ✓ src/ladder.test.ts > ABC-085 ladder — the claim policy and the ply cap (A3, test notes 2 and 7) > A4's replay check refuses an illegal move and a move played past an ending 1ms
+ ✓ src/ladder.test.ts > ABC-085 ladder — the run's constants and its report arithmetic (A1, A2, A5, A6) > the game counts, the ply cap and the run plan are the stated constants 0ms
+ ✓ src/ladder.test.ts > ABC-085 ladder — the run's constants and its report arithmetic (A1, A2, A5, A6) > every level is built from its LEVELS entry itself — budgets are never scaled 0ms
+ ✓ src/ladder.test.ts > ABC-085 ladder — the run's constants and its report arithmetic (A1, A2, A5, A6) > each seed is played in both chairs, stronger white first: half the games as white 1ms
+ ✓ src/ladder.test.ts > ABC-085 ladder — the run's constants and its report arithmetic (A1, A2, A5, A6) > the pair's score, W-D-L, claimed draws and MET/RED are for the stronger level 0ms
+ ✓ src/ladder.test.ts > ABC-085 ladder — verdict mode, step 4 (LADDER_DEEP=verdict) > 3v4: level 4 vs level 3, 20 games, verdict mode, step 4 1371426ms
+stdout | src/ladder.test.ts > ABC-085 ladder — verdict mode, step 4 (LADDER_DEEP=verdict) > 4v5: level 5 vs level 4, 20 games, verdict mode, step 4
+LADDER GAME {"mode":"verdict mode, step 4","pair":"4v5","seed":1,"white":5,"black":4,"plies":105,"result":"draw","reason":"threefold-repetition (claimed)","wallS":255.9}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"4v5","seed":1,"white":4,"black":5,"plies":96,"result":"draw","reason":"threefold-repetition (claimed)","wallS":194.4}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"4v5","seed":2,"white":5,"black":4,"plies":89,"result":"draw","reason":"threefold-repetition (claimed)","wallS":230}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"4v5","seed":2,"white":4,"black":5,"plies":86,"result":"draw","reason":"threefold-repetition (claimed)","wallS":197.3}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"4v5","seed":3,"white":5,"black":4,"plies":99,"result":"white-wins","reason":"checkmate","wallS":245.7}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"4v5","seed":3,"white":4,"black":5,"plies":112,"result":"black-wins","reason":"checkmate","wallS":217.6}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"4v5","seed":4,"white":5,"black":4,"plies":89,"result":"white-wins","reason":"checkmate","wallS":185.4}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"4v5","seed":4,"white":4,"black":5,"plies":126,"result":"draw","reason":"threefold-repetition (claimed)","wallS":242.4}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"4v5","seed":5,"white":5,"black":4,"plies":113,"result":"white-wins","reason":"checkmate","wallS":238.9}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"4v5","seed":5,"white":4,"black":5,"plies":103,"result":"draw","reason":"threefold-repetition (claimed)","wallS":224.6}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"4v5","seed":6,"white":5,"black":4,"plies":170,"result":"draw","reason":"threefold-repetition (claimed)","wallS":348.6}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"4v5","seed":6,"white":4,"black":5,"plies":180,"result":"black-wins","reason":"checkmate","wallS":380.7}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"4v5","seed":7,"white":5,"black":4,"plies":97,"result":"draw","reason":"threefold-repetition (claimed)","wallS":209.2}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"4v5","seed":7,"white":4,"black":5,"plies":104,"result":"black-wins","reason":"checkmate","wallS":241.2}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"4v5","seed":8,"white":5,"black":4,"plies":103,"result":"white-wins","reason":"checkmate","wallS":210.1}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"4v5","seed":8,"white":4,"black":5,"plies":137,"result":"white-wins","reason":"checkmate","wallS":284.7}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"4v5","seed":9,"white":5,"black":4,"plies":81,"result":"white-wins","reason":"checkmate","wallS":193.7}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"4v5","seed":9,"white":4,"black":5,"plies":150,"result":"black-wins","reason":"checkmate","wallS":312.6}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"4v5","seed":10,"white":5,"black":4,"plies":74,"result":"draw","reason":"threefold-repetition (claimed)","wallS":177.8}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"4v5","seed":10,"white":4,"black":5,"plies":135,"result":"draw","reason":"insufficient-material","wallS":280.2}
+LADDER PAIR {"mode":"verdict mode, step 4","criterion":"A2","pair":"4v5","stronger":5,"commit":"f6b63c1c92839ae29ea385fc03bab49aebc49b0c","step":4,"seeds":"1..10, both colours each","games":20,"stronger_w_d_l":[9,10,1],"score":"14/20","scorePct":70,"bar":"> 50%","verdict":"MET","claimedDraws":9,"reasons":{"threefold-repetition (claimed)":9,"checkmate":10,"insufficient-material":1},"digest":"5dc1ee9dd47c8ba0","wallS":4871.2,"load1":[4.56,3.14]}
+
+ ✓ src/ladder.test.ts > ABC-085 ladder — verdict mode, step 4 (LADDER_DEEP=verdict) > 4v5: level 5 vs level 4, 20 games, verdict mode, step 4 4871302ms
+stdout | src/ladder.test.ts > ABC-085 ladder — verdict mode, step 4 (LADDER_DEEP=verdict) > 2v3: level 3 vs level 2, 20 games, verdict mode, step 4
+LADDER GAME {"mode":"verdict mode, step 4","pair":"2v3","seed":1,"white":3,"black":2,"plies":146,"result":"black-wins","reason":"checkmate","wallS":29.6}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"2v3","seed":1,"white":2,"black":3,"plies":114,"result":"black-wins","reason":"checkmate","wallS":21.1}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"2v3","seed":2,"white":3,"black":2,"plies":61,"result":"white-wins","reason":"checkmate","wallS":14.5}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"2v3","seed":2,"white":2,"black":3,"plies":84,"result":"black-wins","reason":"checkmate","wallS":18.6}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"2v3","seed":3,"white":3,"black":2,"plies":87,"result":"white-wins","reason":"checkmate","wallS":22.2}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"2v3","seed":3,"white":2,"black":3,"plies":80,"result":"black-wins","reason":"checkmate","wallS":20.9}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"2v3","seed":4,"white":3,"black":2,"plies":69,"result":"white-wins","reason":"checkmate","wallS":16.6}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"2v3","seed":4,"white":2,"black":3,"plies":88,"result":"black-wins","reason":"checkmate","wallS":19.1}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"2v3","seed":5,"white":3,"black":2,"plies":73,"result":"white-wins","reason":"checkmate","wallS":17}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"2v3","seed":5,"white":2,"black":3,"plies":67,"result":"white-wins","reason":"checkmate","wallS":17}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"2v3","seed":6,"white":3,"black":2,"plies":119,"result":"white-wins","reason":"checkmate","wallS":29.2}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"2v3","seed":6,"white":2,"black":3,"plies":116,"result":"black-wins","reason":"checkmate","wallS":27.8}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"2v3","seed":7,"white":3,"black":2,"plies":95,"result":"white-wins","reason":"checkmate","wallS":26.1}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"2v3","seed":7,"white":2,"black":3,"plies":90,"result":"black-wins","reason":"checkmate","wallS":21}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"2v3","seed":8,"white":3,"black":2,"plies":93,"result":"white-wins","reason":"checkmate","wallS":23.5}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"2v3","seed":8,"white":2,"black":3,"plies":112,"result":"black-wins","reason":"checkmate","wallS":27.6}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"2v3","seed":9,"white":3,"black":2,"plies":61,"result":"white-wins","reason":"checkmate","wallS":15.6}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"2v3","seed":9,"white":2,"black":3,"plies":148,"result":"black-wins","reason":"checkmate","wallS":34}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"2v3","seed":10,"white":3,"black":2,"plies":74,"result":"draw","reason":"threefold-repetition (claimed)","wallS":19.8}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"2v3","seed":10,"white":2,"black":3,"plies":104,"result":"black-wins","reason":"checkmate","wallS":21.4}
+LADDER PAIR {"mode":"verdict mode, step 4","criterion":"A2","pair":"2v3","stronger":3,"commit":"f6b63c1c92839ae29ea385fc03bab49aebc49b0c","step":4,"seeds":"1..10, both colours each","games":20,"stronger_w_d_l":[17,1,2],"score":"17.5/20","scorePct":87.5,"bar":"> 50%","verdict":"MET","claimedDraws":1,"reasons":{"checkmate":19,"threefold-repetition (claimed)":1},"digest":"b90ed2eec7c02cd6","wallS":442.5,"load1":[3.14,3.5]}
+
+ ✓ src/ladder.test.ts > ABC-085 ladder — verdict mode, step 4 (LADDER_DEEP=verdict) > 2v3: level 3 vs level 2, 20 games, verdict mode, step 4 442517ms
+stdout | src/ladder.test.ts > ABC-085 ladder — verdict mode, step 4 (LADDER_DEEP=verdict) > 1v2: level 2 vs level 1, 20 games, verdict mode, step 4
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v2","seed":1,"white":2,"black":1,"plies":155,"result":"white-wins","reason":"checkmate","wallS":14.9}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v2","seed":1,"white":1,"black":2,"plies":76,"result":"black-wins","reason":"checkmate","wallS":8.2}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v2","seed":2,"white":2,"black":1,"plies":123,"result":"white-wins","reason":"checkmate","wallS":12.3}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v2","seed":2,"white":1,"black":2,"plies":137,"result":"white-wins","reason":"checkmate","wallS":11.7}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v2","seed":3,"white":2,"black":1,"plies":99,"result":"white-wins","reason":"checkmate","wallS":12.9}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v2","seed":3,"white":1,"black":2,"plies":72,"result":"black-wins","reason":"checkmate","wallS":8.6}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v2","seed":4,"white":2,"black":1,"plies":87,"result":"white-wins","reason":"checkmate","wallS":8.6}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v2","seed":4,"white":1,"black":2,"plies":76,"result":"black-wins","reason":"checkmate","wallS":8.4}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v2","seed":5,"white":2,"black":1,"plies":151,"result":"white-wins","reason":"checkmate","wallS":14.2}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v2","seed":5,"white":1,"black":2,"plies":94,"result":"black-wins","reason":"checkmate","wallS":9.2}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v2","seed":6,"white":2,"black":1,"plies":167,"result":"white-wins","reason":"checkmate","wallS":16.5}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v2","seed":6,"white":1,"black":2,"plies":78,"result":"black-wins","reason":"checkmate","wallS":8.3}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v2","seed":7,"white":2,"black":1,"plies":97,"result":"white-wins","reason":"checkmate","wallS":9.9}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v2","seed":7,"white":1,"black":2,"plies":93,"result":"white-wins","reason":"checkmate","wallS":9.4}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v2","seed":8,"white":2,"black":1,"plies":51,"result":"white-wins","reason":"checkmate","wallS":5.6}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v2","seed":8,"white":1,"black":2,"plies":52,"result":"black-wins","reason":"checkmate","wallS":6}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v2","seed":9,"white":2,"black":1,"plies":125,"result":"white-wins","reason":"checkmate","wallS":14.2}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v2","seed":9,"white":1,"black":2,"plies":54,"result":"black-wins","reason":"checkmate","wallS":5.8}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v2","seed":10,"white":2,"black":1,"plies":63,"result":"white-wins","reason":"checkmate","wallS":6.8}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v2","seed":10,"white":1,"black":2,"plies":84,"result":"black-wins","reason":"checkmate","wallS":8.4}
+LADDER PAIR {"mode":"verdict mode, step 4","criterion":"A2","pair":"1v2","stronger":2,"commit":"f6b63c1c92839ae29ea385fc03bab49aebc49b0c","step":4,"seeds":"1..10, both colours each","games":20,"stronger_w_d_l":[18,0,2],"score":"18/20","scorePct":90,"bar":"> 50%","verdict":"MET","claimedDraws":0,"reasons":{"checkmate":20},"digest":"fbeb0b72b0824762","wallS":199.8,"load1":[3.5,2.7]}
+
+ ✓ src/ladder.test.ts > ABC-085 ladder — verdict mode, step 4 (LADDER_DEEP=verdict) > 1v2: level 2 vs level 1, 20 games, verdict mode, step 4 199829ms
+stdout | src/ladder.test.ts > ABC-085 ladder — verdict mode, step 4 (LADDER_DEEP=verdict) > 1v5: level 5 vs level 1, 100 games, verdict mode, step 4
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":1,"white":5,"black":1,"plies":39,"result":"white-wins","reason":"checkmate","wallS":71.9}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":1,"white":1,"black":5,"plies":66,"result":"black-wins","reason":"checkmate","wallS":115.3}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":2,"white":5,"black":1,"plies":89,"result":"white-wins","reason":"checkmate","wallS":154.6}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":2,"white":1,"black":5,"plies":68,"result":"black-wins","reason":"checkmate","wallS":114.8}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":3,"white":5,"black":1,"plies":63,"result":"white-wins","reason":"checkmate","wallS":111.8}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":3,"white":1,"black":5,"plies":72,"result":"black-wins","reason":"checkmate","wallS":138.3}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":4,"white":5,"black":1,"plies":77,"result":"white-wins","reason":"checkmate","wallS":128.5}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":4,"white":1,"black":5,"plies":104,"result":"black-wins","reason":"checkmate","wallS":164.3}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":5,"white":5,"black":1,"plies":47,"result":"white-wins","reason":"checkmate","wallS":89.4}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":5,"white":1,"black":5,"plies":78,"result":"black-wins","reason":"checkmate","wallS":123.2}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":6,"white":5,"black":1,"plies":69,"result":"white-wins","reason":"checkmate","wallS":102.6}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":6,"white":1,"black":5,"plies":56,"result":"black-wins","reason":"checkmate","wallS":96.9}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":7,"white":5,"black":1,"plies":91,"result":"white-wins","reason":"checkmate","wallS":167}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":7,"white":1,"black":5,"plies":74,"result":"black-wins","reason":"checkmate","wallS":121.2}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":8,"white":5,"black":1,"plies":73,"result":"white-wins","reason":"checkmate","wallS":117.8}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":8,"white":1,"black":5,"plies":74,"result":"black-wins","reason":"checkmate","wallS":131.6}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":9,"white":5,"black":1,"plies":47,"result":"white-wins","reason":"checkmate","wallS":80.7}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":9,"white":1,"black":5,"plies":60,"result":"black-wins","reason":"checkmate","wallS":101.2}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":10,"white":5,"black":1,"plies":69,"result":"white-wins","reason":"checkmate","wallS":120.9}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":10,"white":1,"black":5,"plies":50,"result":"black-wins","reason":"checkmate","wallS":83.4}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":11,"white":5,"black":1,"plies":83,"result":"white-wins","reason":"checkmate","wallS":145.5}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":11,"white":1,"black":5,"plies":84,"result":"black-wins","reason":"checkmate","wallS":140.3}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":12,"white":5,"black":1,"plies":103,"result":"white-wins","reason":"checkmate","wallS":165.1}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":12,"white":1,"black":5,"plies":70,"result":"black-wins","reason":"checkmate","wallS":122.3}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":13,"white":5,"black":1,"plies":55,"result":"white-wins","reason":"checkmate","wallS":91.6}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":13,"white":1,"black":5,"plies":60,"result":"black-wins","reason":"checkmate","wallS":101.2}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":14,"white":5,"black":1,"plies":77,"result":"white-wins","reason":"checkmate","wallS":137.2}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":14,"white":1,"black":5,"plies":56,"result":"black-wins","reason":"checkmate","wallS":99.2}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":15,"white":5,"black":1,"plies":85,"result":"white-wins","reason":"checkmate","wallS":140.1}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":15,"white":1,"black":5,"plies":72,"result":"black-wins","reason":"checkmate","wallS":119.2}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":16,"white":5,"black":1,"plies":81,"result":"white-wins","reason":"checkmate","wallS":133.3}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":16,"white":1,"black":5,"plies":80,"result":"black-wins","reason":"checkmate","wallS":120.8}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":17,"white":5,"black":1,"plies":57,"result":"white-wins","reason":"checkmate","wallS":94.7}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":17,"white":1,"black":5,"plies":70,"result":"black-wins","reason":"checkmate","wallS":123.7}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":18,"white":5,"black":1,"plies":33,"result":"white-wins","reason":"checkmate","wallS":55.2}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":18,"white":1,"black":5,"plies":48,"result":"black-wins","reason":"checkmate","wallS":85.1}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":19,"white":5,"black":1,"plies":43,"result":"white-wins","reason":"checkmate","wallS":76.2}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":19,"white":1,"black":5,"plies":76,"result":"black-wins","reason":"checkmate","wallS":120.5}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":20,"white":5,"black":1,"plies":53,"result":"white-wins","reason":"checkmate","wallS":97}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":20,"white":1,"black":5,"plies":44,"result":"black-wins","reason":"checkmate","wallS":70.7}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":21,"white":5,"black":1,"plies":53,"result":"white-wins","reason":"checkmate","wallS":95.7}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":21,"white":1,"black":5,"plies":56,"result":"black-wins","reason":"checkmate","wallS":101.4}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":22,"white":5,"black":1,"plies":69,"result":"white-wins","reason":"checkmate","wallS":128.2}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":22,"white":1,"black":5,"plies":36,"result":"black-wins","reason":"checkmate","wallS":57.3}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":23,"white":5,"black":1,"plies":51,"result":"white-wins","reason":"checkmate","wallS":102.2}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":23,"white":1,"black":5,"plies":46,"result":"black-wins","reason":"checkmate","wallS":74.4}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":24,"white":5,"black":1,"plies":61,"result":"white-wins","reason":"checkmate","wallS":108}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":24,"white":1,"black":5,"plies":90,"result":"black-wins","reason":"checkmate","wallS":134.9}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":25,"white":5,"black":1,"plies":35,"result":"white-wins","reason":"checkmate","wallS":64.9}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":25,"white":1,"black":5,"plies":80,"result":"black-wins","reason":"checkmate","wallS":132.9}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":26,"white":5,"black":1,"plies":85,"result":"white-wins","reason":"checkmate","wallS":141.7}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":26,"white":1,"black":5,"plies":58,"result":"black-wins","reason":"checkmate","wallS":104.1}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":27,"white":5,"black":1,"plies":59,"result":"white-wins","reason":"checkmate","wallS":109.7}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":27,"white":1,"black":5,"plies":60,"result":"black-wins","reason":"checkmate","wallS":100.3}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":28,"white":5,"black":1,"plies":79,"result":"white-wins","reason":"checkmate","wallS":140.1}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":28,"white":1,"black":5,"plies":84,"result":"black-wins","reason":"checkmate","wallS":137.8}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":29,"white":5,"black":1,"plies":71,"result":"white-wins","reason":"checkmate","wallS":119.7}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":29,"white":1,"black":5,"plies":66,"result":"black-wins","reason":"checkmate","wallS":115.1}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":30,"white":5,"black":1,"plies":69,"result":"white-wins","reason":"checkmate","wallS":126.6}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":30,"white":1,"black":5,"plies":50,"result":"black-wins","reason":"checkmate","wallS":81.7}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":31,"white":5,"black":1,"plies":51,"result":"white-wins","reason":"checkmate","wallS":78.5}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":31,"white":1,"black":5,"plies":88,"result":"black-wins","reason":"checkmate","wallS":129.8}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":32,"white":5,"black":1,"plies":57,"result":"white-wins","reason":"checkmate","wallS":114.7}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":32,"white":1,"black":5,"plies":74,"result":"black-wins","reason":"checkmate","wallS":142.5}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":33,"white":5,"black":1,"plies":77,"result":"white-wins","reason":"checkmate","wallS":156.3}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":33,"white":1,"black":5,"plies":52,"result":"black-wins","reason":"checkmate","wallS":97.1}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":34,"white":5,"black":1,"plies":71,"result":"white-wins","reason":"checkmate","wallS":141.8}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":34,"white":1,"black":5,"plies":58,"result":"black-wins","reason":"checkmate","wallS":106}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":35,"white":5,"black":1,"plies":39,"result":"white-wins","reason":"checkmate","wallS":86.1}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":35,"white":1,"black":5,"plies":66,"result":"black-wins","reason":"checkmate","wallS":148.5}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":36,"white":5,"black":1,"plies":45,"result":"white-wins","reason":"checkmate","wallS":86.3}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":36,"white":1,"black":5,"plies":54,"result":"black-wins","reason":"checkmate","wallS":97.3}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":37,"white":5,"black":1,"plies":43,"result":"white-wins","reason":"checkmate","wallS":83.6}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":37,"white":1,"black":5,"plies":68,"result":"black-wins","reason":"checkmate","wallS":194}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":38,"white":5,"black":1,"plies":73,"result":"white-wins","reason":"checkmate","wallS":149.9}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":38,"white":1,"black":5,"plies":58,"result":"black-wins","reason":"checkmate","wallS":88.4}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":39,"white":5,"black":1,"plies":39,"result":"white-wins","reason":"checkmate","wallS":81.5}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":39,"white":1,"black":5,"plies":48,"result":"black-wins","reason":"checkmate","wallS":89.5}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":40,"white":5,"black":1,"plies":61,"result":"white-wins","reason":"checkmate","wallS":112.2}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":40,"white":1,"black":5,"plies":86,"result":"black-wins","reason":"checkmate","wallS":143.4}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":41,"white":5,"black":1,"plies":57,"result":"white-wins","reason":"checkmate","wallS":107.4}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":41,"white":1,"black":5,"plies":44,"result":"black-wins","reason":"checkmate","wallS":73.3}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":42,"white":5,"black":1,"plies":31,"result":"white-wins","reason":"checkmate","wallS":52.6}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":42,"white":1,"black":5,"plies":112,"result":"black-wins","reason":"checkmate","wallS":173}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":43,"white":5,"black":1,"plies":61,"result":"white-wins","reason":"checkmate","wallS":116.7}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":43,"white":1,"black":5,"plies":62,"result":"black-wins","reason":"checkmate","wallS":112.6}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":44,"white":5,"black":1,"plies":37,"result":"white-wins","reason":"checkmate","wallS":65.1}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":44,"white":1,"black":5,"plies":40,"result":"black-wins","reason":"checkmate","wallS":62.9}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":45,"white":5,"black":1,"plies":63,"result":"white-wins","reason":"checkmate","wallS":124.5}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":45,"white":1,"black":5,"plies":50,"result":"black-wins","reason":"checkmate","wallS":87.9}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":46,"white":5,"black":1,"plies":53,"result":"white-wins","reason":"checkmate","wallS":94.1}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":46,"white":1,"black":5,"plies":94,"result":"black-wins","reason":"checkmate","wallS":138.6}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":47,"white":5,"black":1,"plies":59,"result":"white-wins","reason":"checkmate","wallS":104.3}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":47,"white":1,"black":5,"plies":74,"result":"black-wins","reason":"checkmate","wallS":116.7}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":48,"white":5,"black":1,"plies":69,"result":"white-wins","reason":"checkmate","wallS":137}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":48,"white":1,"black":5,"plies":56,"result":"black-wins","reason":"checkmate","wallS":98.1}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":49,"white":5,"black":1,"plies":65,"result":"white-wins","reason":"checkmate","wallS":116.4}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":49,"white":1,"black":5,"plies":68,"result":"black-wins","reason":"checkmate","wallS":121}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":50,"white":5,"black":1,"plies":51,"result":"white-wins","reason":"checkmate","wallS":115.8}
+LADDER GAME {"mode":"verdict mode, step 4","pair":"1v5","seed":50,"white":1,"black":5,"plies":92,"result":"black-wins","reason":"checkmate","wallS":155.3}
+LADDER PAIR {"mode":"verdict mode, step 4","criterion":"A1","pair":"1v5","stronger":5,"commit":"f6b63c1c92839ae29ea385fc03bab49aebc49b0c","step":4,"seeds":"1..50, both colours each","games":100,"stronger_w_d_l":[100,0,0],"score":"100/100","scorePct":100,"bar":">= 90%","verdict":"MET","claimedDraws":0,"reasons":{"checkmate":100},"digest":"132387138dcbb9a7","wallS":11251.6,"load1":[2.7,4.97]}
+
+ ✓ src/ladder.test.ts > ABC-085 ladder — verdict mode, step 4 (LADDER_DEEP=verdict) > 1v5: level 5 vs level 1, 100 games, verdict mode, step 4 11251772ms
+
+ Test Files  1 passed (1)
+      Tests  17 passed (17)
+   Start at  10:45:12
+   Duration  18137.10s (transform 0ms, setup 0ms, import 65ms, tests 18136.86s, environment 0ms)
+

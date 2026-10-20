@@ -1,0 +1,15 @@
+command: caffeinate -i env LADDER_DEEP=verdict NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/ladder.test.ts --reporter=verbose
+cwd: /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-ABC-175 (worktree ../wt-ABC-175, branch grugops/ABC-175)
+commit: f6b63c1c92839ae29ea385fc03bab49aebc49b0c
+a0: ed88329c (route V, F_hi 1.047)
+start: 2026-10-20T07:45:11Z
+load1_start: 3.47
+node: v26.11.1
+vitest: vitest/4.1.11 darwin-arm64 node-v26.11.1
+power_start: Now drawing from 'AC Power'
+lid_start: No
+preflight: exit 0; 4 LADDER GAME, 1 LADDER PAIR "3v4" (raw/preflight-3v4.txt)
+end: 2026-10-20T12:47:29Z
+exit: 0
+power_end: Now drawing from 'AC Power'
+lid_end: No
