@@ -1,0 +1,21 @@
+// ABC-177 A7 census: instrument deepen's return + per-test hooks in a scratch copy; nodes only.
+import { readFileSync, writeFileSync, rmSync } from "node:fs";
+import { spawnSync } from "node:child_process";
+const [tree, label] = process.argv.slice(2);
+const eng = `${tree}/src/engine.ts`, tst = `${tree}/src/uci-session.test.ts`;
+let e = readFileSync(eng, "utf8");
+const anchor = "  return {\n    move: best.move,\n    score: best.score,\n    depth: reached,\n    nodes: budget.nodes,";
+if (e.split(anchor).length !== 2) throw new Error("engine anchor");
+writeFileSync(eng, e.replace(anchor, "  (globalThis as any).__n177 = ((globalThis as any).__n177 ?? 0) + budget.nodes;\n" + anchor));
+let t = readFileSync(tst, "utf8");
+const imp = 'import { describe, expect, it } from "vitest";';
+if (t.split(imp).length !== 2) throw new Error("test anchor");
+const out = `${process.cwd()}/census-${label}.tsv`; rmSync(out, { force: true });
+t = t.replace(imp, `import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { appendFileSync as __a } from "node:fs";
+let __c = 0;
+beforeEach(() => { __c = (globalThis as any).__n177 ?? 0; });
+afterEach(() => { __a(${JSON.stringify(out)}, \`\${expect.getState().currentTestName}\\t\${((globalThis as any).__n177 ?? 0) - __c}\\n\`); });`);
+writeFileSync(tst, t);
+const r = spawnSync(process.execPath, ["node_modules/vitest/vitest.mjs", "run", "src/uci-session.test.ts"], { cwd: tree, encoding: "utf8", env: { ...process.env, NODE_OPTIONS: "--max-old-space-size=400" } });
+console.log("exit", r.status, (r.stdout.match(/Tests .*/) ?? [""])[0]);

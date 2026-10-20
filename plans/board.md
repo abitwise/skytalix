@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-20 by the Orchestrator (task `wave-2026-09-25`) — `ticket-to-pr-ABC-177` delivered `f81bf03c` → `ABC-177` In Review; QE `qe-ABC-177` dispatched (parity re-check; U8/U1–U7 step grading; N8-LANE + full-lane twin on AC, quiet window). In flight: `qe-ABC-177`._
 _Updated: 2026-10-20 by the Orchestrator (task `wave-2026-09-25`) — owner word "start yes": `ABC-177` → In Development, SE `ticket-to-pr-ABC-177` dispatched; OQ-177-1 = YES (NFR-008 readings on AC power from now; catalog fold owed to Security/NFR). In flight: `ticket-to-pr-ABC-177`._
 _Updated: 2026-10-20 by the Orchestrator (task `wave-2026-09-25`) — `bapm-cut-ABC-177` merged (records only): ADR-0046 ACCEPTED; `ABC-177` → Ready (DoR 10/10, S, P1, EPIC-007). Owner owed: pull ABC-177; OQ-177-1 (AC power for NFR-008 readings, before A9). Next free id: ABC-178. In flight: none._
 _Updated: 2026-10-20 by the Orchestrator (task `wave-2026-09-25`) — owner word "accept" → ADR-0046 ACCEPTED; BA/PM `bapm-cut-ABC-177` dispatched (ADR status + cut ABC-177). Owner owed: AC-power rule for NFR-008 readings. In flight: `bapm-cut-ABC-177`._
@@ -887,8 +888,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-177] `npm test` back under NFR-008's 10 s (ADR-0046; test-only, `src/uci-session.test.ts`)  (owner: software-engineer, size: S, priority: P1, epic: EPIC-007, since: 2026-10-20, DoR 10/10; cut in `bapm-cut-ABC-177`. Step 1000 allowed for U1–U7 (H/L), not U8 (H′). Discharges R-174-1 at ≤ 10 s. Waits: owner's pull; OQ-177-1 (AC power) owed before QE's A9 full-lane twin.) **2026-10-20: owner pulled ("start yes") → In Development; `ticket-to-pr-ABC-177` dispatched. OQ-177-1 = YES (AC power for NFR-008 readings).**
+## In Development (WIP 0/3)
 
 
 
@@ -916,7 +916,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-177] `npm test` back under NFR-008's 10 s (ADR-0046; test-only, `src/uci-session.test.ts`)  (owner: software-engineer, size: S, priority: P1, epic: EPIC-007, since: 2026-10-20, DoR 10/10; cut in `bapm-cut-ABC-177`. Step 1000 allowed for U1–U7 (H/L), not U8 (H′). Discharges R-174-1 at ≤ 10 s. Waits: owner's pull; OQ-177-1 (AC power) owed before QE's A9 full-lane twin.) **2026-10-20: owner pulled ("start yes") → In Development; `ticket-to-pr-ABC-177` dispatched. OQ-177-1 = YES (AC power for NFR-008 readings).** **2026-10-20: delivered `f81bf03c` (test-only, +16/−14; A1–A5, A7, A12 MET; 126 rows, parity 15/15 rows, census 536 406 → 43 438 nodes; gates 1987/1987, CLI_DEEP 11, PERFT_DEEP 32; waiver applies) → In Review; `qe-ABC-177` dispatched (A6 re-check, A8–A11 timing on AC).**
 
 
 

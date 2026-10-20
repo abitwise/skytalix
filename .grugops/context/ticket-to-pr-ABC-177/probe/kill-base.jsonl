@@ -1,0 +1,146 @@
+{"id":"CONTROL","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"167-M01","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"167-M02","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"167-M03","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"167-M04","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"167-M05","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"167-M06","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"167-M08","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"167-M09","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"167-M10","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"167-M11","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"167-M12","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"167-M13","exit":1,"ran":15,"failed":["ABC-167 A6 — infinite waits for stop A6-e1: a new go writes the held bestmove first; two bestmoves in all","ABC-167 A6 — infinite waits for stop go infinite holds the bestmove until ponderhit; a second ponderhit writes nothing","ABC-167 A6 — infinite waits for stop go infinite holds the bestmove until stop; a second stop writes nothing"],"note":""}
+{"id":"167-M14","exit":1,"ran":15,"failed":["ABC-167 A6 — infinite waits for stop go infinite holds the bestmove until ponderhit; a second ponderhit writes nothing"],"note":""}
+{"id":"167-M15","exit":1,"ran":15,"failed":["ABC-167 A6 — infinite waits for stop A6-e1: a new go writes the held bestmove first; two bestmoves in all"],"note":""}
+{"id":"167-M16","exit":1,"ran":15,"failed":["ABC-167 A6 — infinite waits for stop A6-e1: a new go writes the held bestmove first; two bestmoves in all","ABC-167 A6 — infinite waits for stop A6-e4: quit writes the held bestmove and returns quit","ABC-167 A6 — infinite waits for stop A6-e5: isready, an unknown line and setoption leave the bestmove held","ABC-167 A6 — infinite waits for stop A6-j1: a refused position writes the held bestmove first, then its info string","ABC-167 A6 — infinite waits for stop go infinite holds the bestmove until ponderhit; a second ponderhit writes nothing","ABC-167 A6 — infinite waits for stop go infinite holds the bestmove until stop; a second stop writes nothing","ABC-167 A7 — the D12 limits A7-i5: go depth infinite holds the bestmove until stop","ABC-167 A7 — the D12 limits A7-i6: go searchmoves e2e4 infinite holds the bestmove until stop"],"note":""}
+{"id":"167-M17","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"167-M18","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"167-M19","exit":1,"ran":15,"failed":["ABC-167 A7 — the D12 limits go depth 0: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go mate 0: one info string, the token dropped, one bestmove"],"note":""}
+{"id":"167-M20","exit":1,"ran":15,"failed":["ABC-167 A7 — the D12 limits go depth 2.5: one info string, the token dropped, one bestmove"],"note":""}
+{"id":"167-M21","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"167-M22","exit":1,"ran":15,"failed":["ABC-167 A7 — the D12 limits A7-i6: go searchmoves e2e4 infinite holds the bestmove until stop"],"note":""}
+{"id":"167-M23","exit":1,"ran":15,"failed":["ABC-167 A7 — the D12 limits A7-i6: go searchmoves e2e4 infinite holds the bestmove until stop"],"note":""}
+{"id":"167-M24","exit":1,"ran":15,"failed":["ABC-167 A7 — the D12 limits A7-i5: go depth infinite holds the bestmove until stop","ABC-167 A7 — the D12 limits go depth 0: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go depth 2.5: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go depth: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go mate 0: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go nodes -5: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go nodes x: one info string, the token dropped, one bestmove"],"note":""}
+{"id":"167-M25","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"167-M26","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"167-M27","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"167-M28","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"167-M29","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"167-M30","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"167-M31","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"167-M32","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"167-M33","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"167-M34","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"167-M35","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"167-M36","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"167-M37","exit":1,"ran":15,"failed":["ABC-167 A6 — infinite waits for stop A6-e4: quit writes the held bestmove and returns quit"],"note":""}
+{"id":"167-M38","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"167-M39","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"167-M40","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"167-M41","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"167-M42","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"167-M43","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"167-M44","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"167-M46","exit":1,"ran":15,"failed":["ABC-167 A6 — infinite waits for stop A6-e1: a new go writes the held bestmove first; two bestmoves in all","ABC-167 A7 — the D12 limits A7-i5: go depth infinite holds the bestmove until stop","ABC-167 A7 — the D12 limits A7-i6: go searchmoves e2e4 infinite holds the bestmove until stop","ABC-167 A7 — the D12 limits go depth 0: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go depth 2.5: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go depth: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go mate 0: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go nodes -5: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go nodes x: one info string, the token dropped, one bestmove","ABC-171 A7 — the blunder path two sessions on the same seededRandom(k) write the same bestmove sequence"],"note":""}
+{"id":"167-M47","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"167-M48","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"167-M49","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"167-M50","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"167-M51","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-N01","exit":1,"ran":15,"failed":["ABC-167 A6 — infinite waits for stop A6-j1: a refused position writes the held bestmove first, then its info string"],"note":""}
+{"id":"171-N02","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-N03","exit":1,"ran":15,"failed":["ABC-167 A6 — infinite waits for stop A6-e4: quit writes the held bestmove and returns quit"],"note":""}
+{"id":"171-N04","exit":1,"ran":15,"failed":["ABC-167 A7 — the D12 limits A7-i5: go depth infinite holds the bestmove until stop"],"note":""}
+{"id":"171-N05","exit":1,"ran":15,"failed":["ABC-167 A7 — the D12 limits A7-i5: go depth infinite holds the bestmove until stop"],"note":""}
+{"id":"171-N06","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-N07","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-N08","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-N09","exit":1,"ran":15,"failed":["ABC-167 A6 — infinite waits for stop A6-j1: a refused position writes the held bestmove first, then its info string"],"note":""}
+{"id":"171-N10","exit":1,"ran":15,"failed":["ABC-167 A6 — infinite waits for stop A6-e5: isready, an unknown line and setoption leave the bestmove held"],"note":""}
+{"id":"171-N11b","exit":1,"ran":15,"failed":["ABC-167 A6 — infinite waits for stop A6-e5: isready, an unknown line and setoption leave the bestmove held"],"note":""}
+{"id":"171-N12","exit":1,"ran":15,"failed":["ABC-167 A6 — infinite waits for stop A6-e5: isready, an unknown line and setoption leave the bestmove held"],"note":""}
+{"id":"171-N13","exit":1,"ran":15,"failed":["ABC-167 A7 — the D12 limits A7-i5: go depth infinite holds the bestmove until stop","ABC-167 A7 — the D12 limits A7-i6: go searchmoves e2e4 infinite holds the bestmove until stop"],"note":""}
+{"id":"171-N14","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-N15","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-N16","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-N17","exit":1,"ran":15,"failed":["ABC-167 A6 — infinite waits for stop A6-j1: a refused position writes the held bestmove first, then its info string"],"note":""}
+{"id":"171-N18","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-N19","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-N20","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-N21","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S01","exit":1,"ran":15,"failed":["ABC-171 A7 — the blunder path two sessions on the same seededRandom(k) write the same bestmove sequence"],"note":""}
+{"id":"171-S02","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S03","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S04","exit":1,"ran":15,"failed":["ABC-171 A7 — the blunder path two sessions on the same seededRandom(k) write the same bestmove sequence"],"note":""}
+{"id":"171-S05","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S06","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S07","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S08","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S09","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S10","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S10b","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S11","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S12","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S12b","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S13","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S14","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S15","exit":1,"ran":15,"failed":["ABC-167 A6 — infinite waits for stop A6-e5: isready, an unknown line and setoption leave the bestmove held"],"note":""}
+{"id":"171-S16","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S17","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S18","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S19","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S20","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S21","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S22","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S23","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S24","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S25","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S26","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S27","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S28","exit":1,"ran":15,"failed":["ABC-167 A6 — infinite waits for stop A6-e1: a new go writes the held bestmove first; two bestmoves in all","ABC-167 A6 — infinite waits for stop A6-e4: quit writes the held bestmove and returns quit","ABC-167 A6 — infinite waits for stop A6-j1: a refused position writes the held bestmove first, then its info string","ABC-167 A7 — the D12 limits A7-i5: go depth infinite holds the bestmove until stop","ABC-167 A7 — the D12 limits A7-i6: go searchmoves e2e4 infinite holds the bestmove until stop","ABC-167 A7 — the D12 limits go depth 0: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go depth 2.5: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go depth: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go mate 0: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go nodes -5: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go nodes x: one info string, the token dropped, one bestmove"],"note":""}
+{"id":"171-S29","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S30","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S31","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S32","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S33","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S34","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S35","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S36","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S37","exit":1,"ran":15,"failed":["ABC-171 A7 — the blunder path two sessions on the same seededRandom(k) write the same bestmove sequence"],"note":""}
+{"id":"171-S38","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S39","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S40","exit":1,"ran":15,"failed":["ABC-171 A7 — the blunder path two sessions on the same seededRandom(k) write the same bestmove sequence"],"note":""}
+{"id":"171-S41","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S43","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S44","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S45","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S46","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S47","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"171-S48","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"167-M45a","exit":1,"ran":15,"failed":["ABC-171 A7 — the blunder path two sessions on the same seededRandom(k) write the same bestmove sequence"],"note":""}
+{"id":"167-M45b","exit":1,"ran":15,"failed":["ABC-167 A6 — infinite waits for stop A6-e1: a new go writes the held bestmove first; two bestmoves in all","ABC-167 A7 — the D12 limits A7-i5: go depth infinite holds the bestmove until stop","ABC-167 A7 — the D12 limits A7-i6: go searchmoves e2e4 infinite holds the bestmove until stop","ABC-167 A7 — the D12 limits go depth 0: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go depth 2.5: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go depth: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go mate 0: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go nodes -5: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go nodes x: one info string, the token dropped, one bestmove"],"note":""}
+{"id":"174-M01","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"174-M02","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"174-M03","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"174-M04","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"174-M05","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"174-M06","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"174-M07","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"174-M08","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"174-M09","exit":1,"ran":15,"failed":["ABC-167 A6 — infinite waits for stop A6-e1: a new go writes the held bestmove first; two bestmoves in all","ABC-167 A7 — the D12 limits A7-i5: go depth infinite holds the bestmove until stop","ABC-167 A7 — the D12 limits A7-i6: go searchmoves e2e4 infinite holds the bestmove until stop","ABC-167 A7 — the D12 limits go depth 0: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go depth 2.5: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go depth: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go mate 0: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go nodes -5: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go nodes x: one info string, the token dropped, one bestmove"],"note":""}
+{"id":"174-M10","exit":1,"ran":15,"failed":["ABC-167 A6 — infinite waits for stop A6-e1: a new go writes the held bestmove first; two bestmoves in all","ABC-167 A7 — the D12 limits A7-i5: go depth infinite holds the bestmove until stop","ABC-167 A7 — the D12 limits A7-i6: go searchmoves e2e4 infinite holds the bestmove until stop","ABC-167 A7 — the D12 limits go depth 0: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go depth 2.5: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go depth: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go mate 0: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go nodes -5: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go nodes x: one info string, the token dropped, one bestmove"],"note":""}
+{"id":"174-M11","exit":1,"ran":15,"failed":["ABC-167 A6 — infinite waits for stop A6-e1: a new go writes the held bestmove first; two bestmoves in all","ABC-167 A7 — the D12 limits A7-i5: go depth infinite holds the bestmove until stop","ABC-167 A7 — the D12 limits A7-i6: go searchmoves e2e4 infinite holds the bestmove until stop","ABC-167 A7 — the D12 limits go depth 0: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go depth 2.5: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go depth: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go mate 0: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go nodes -5: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go nodes x: one info string, the token dropped, one bestmove"],"note":""}
+{"id":"174-M12","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"174-M13","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"174-M14","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"174-M15","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"174-M16","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"174-M17","exit":1,"ran":15,"failed":["ABC-167 A6 — infinite waits for stop A6-e1: a new go writes the held bestmove first; two bestmoves in all","ABC-167 A7 — the D12 limits A7-i5: go depth infinite holds the bestmove until stop","ABC-167 A7 — the D12 limits A7-i6: go searchmoves e2e4 infinite holds the bestmove until stop","ABC-167 A7 — the D12 limits go depth 0: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go depth 2.5: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go depth: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go mate 0: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go nodes -5: one info string, the token dropped, one bestmove","ABC-167 A7 — the D12 limits go nodes x: one info string, the token dropped, one bestmove"],"note":""}
+{"id":"174-M18","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"174-M19","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"174-M20","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"174-M21","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"174-M22","exit":0,"ran":15,"failed":[],"note":""}
+{"id":"H1","exit":1,"ran":15,"failed":["ABC-167 A6 — infinite waits for stop A6-e1: a new go writes the held bestmove first; two bestmoves in all","ABC-167 A6 — infinite waits for stop A6-e4: quit writes the held bestmove and returns quit","ABC-167 A6 — infinite waits for stop A6-e5: isready, an unknown line and setoption leave the bestmove held","ABC-167 A6 — infinite waits for stop A6-j1: a refused position writes the held bestmove first, then its info string","ABC-167 A6 — infinite waits for stop go infinite holds the bestmove until ponderhit; a second ponderhit writes nothing","ABC-167 A6 — infinite waits for stop go infinite holds the bestmove until stop; a second stop writes nothing","ABC-167 A7 — the D12 limits A7-i5: go depth infinite holds the bestmove until stop","ABC-167 A7 — the D12 limits A7-i6: go searchmoves e2e4 infinite holds the bestmove until stop"],"note":""}
+{"id":"H2","exit":1,"ran":15,"failed":["ABC-167 A6 — infinite waits for stop A6-e1: a new go writes the held bestmove first; two bestmoves in all","ABC-167 A6 — infinite waits for stop go infinite holds the bestmove until ponderhit; a second ponderhit writes nothing","ABC-167 A6 — infinite waits for stop go infinite holds the bestmove until stop; a second stop writes nothing"],"note":""}
