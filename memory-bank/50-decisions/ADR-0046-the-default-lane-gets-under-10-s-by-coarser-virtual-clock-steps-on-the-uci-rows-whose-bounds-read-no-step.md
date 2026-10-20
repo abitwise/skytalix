@@ -2,6 +2,12 @@
 
 ## Status
 
+**ACCEPTED** 2026-10-20 by Olger Oeselg (owner), as proposed. Owner word, verbatim *"accept"*, given to the question
+"Accept ADR-0046?" (`.grugops/context/wave-2026-09-25/notes/20261020T142000Z-orchestrator-decision-9fc95cac.md`, a
+transcription, not a stamp). Recorded by BA/PM (subtask `bapm-cut-ABC-177`). The text below is as proposed; where it
+says the ticket is not cut or the step-set word is owed, this line wins: `ABC-177` is cut and the D2(b) word is given
+on its page.
+
 **proposed**, 2026-10-20, by Architect/Design (task `arch-lane-under-10s`). This ADR is the remedy that `R-174-1`
 option (a) asked for. The owner accepted (a) at `…bdff4d33`.
 
