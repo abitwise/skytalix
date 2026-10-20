@@ -1,8 +1,8 @@
 ---
 id: ABC-177
 title: "`npm test` back under NFR-008's 10 s (ADR-0046)"
-status: ready
-column: Backlog
+status: in-development
+column: In Development
 size: S
 priority: P1
 epic: EPIC-007
