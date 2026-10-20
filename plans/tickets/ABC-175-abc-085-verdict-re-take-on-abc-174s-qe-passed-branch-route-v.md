@@ -1,7 +1,7 @@
 ---
 id: ABC-175
 title: "ABC-085 verdict re-take on ABC-174's QE-passed branch (route V)"
-status: in-development
+status: done
 column: Backlog
 size: XS
 priority: P1
