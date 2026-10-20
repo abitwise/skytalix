@@ -1,0 +1,29 @@
+  2142 ms  34.2% n= 22  ABC-167 A7 — the D12 limits
+  1770 ms  28.2% n= 10  ABC-167 A6 — infinite waits for stop
+   944 ms  15.1% n= 12  ABC-167 A5 — the D4 time rule, read from the info line's time
+   425 ms   6.8% n=  4  ABC-171 A7 — the blunder path
+   193 ms   3.1% n=  6  ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12)
+   181 ms   2.9% n= 10  ABC-171 A2 — setoption
+   174 ms   2.8% n=  3  ABC-171 A6 — a level change is observable (EPIC-007 M7)
+   149 ms   2.4% n=  6  ABC-167 A4 — bad input holds no position
+    98 ms   1.6% n=  2  ABC-167 A3 — a move from a position
+    72 ms   1.2% n=  3  ABC-167 A9 — ignored and reset
+    49 ms   0.8% n=  1  ABC-171 A4 — OwnBook off
+    43 ms   0.7% n=  2  ABC-171 A8 — no reseed, and one draw per blunder-level search
+    21 ms   0.3% n= 10  ABC-171 A13a — the seed oracle floor(random() * 2^32) (QE-171-a)
+     2 ms   0.0% n= 11  ABC-167 A11 — capability-free, and M4
+     2 ms   0.0% n=  2  ABC-171 A9 — a bad book
+     1 ms   0.0% n=  2  ABC-167 A8 — mate scores
+     1 ms   0.0% n=  2  ABC-167 A1-A2 — handshake and ready
+     1 ms   0.0% n=  3  ABC-171 A3 — a book hit (EPIC-007 M6)
+     1 ms   0.0% n=  3  ABC-171 A5 — the book is read once, and at the right time
+     1 ms   0.0% n=  2  ABC-171 A13c — the dropped-limit line names nodes and mate, as one line (QE-171-c)
+     0 ms   0.0% n=  5  ABC-171 A13b — a book hit at a blunder level draws 0 seeds (QE-171-b)
+     0 ms   0.0% n=  1  ABC-167 A10 — quit
+     0 ms   0.0% n=  1  ABC-171 A1 — the option lines
+     0 ms   0.0% n=  1  ABC-171 A10 — infinite with a book hit
+     0 ms   0.0% n=  1  ABC-171 A11 — book.ts is a type-only import
+     0 ms   0.0% n=  1  ABC-171 A13d — an invalid OwnBook keeps true (QE-171-d)
+total 6270
+rows >=100ms: n=29 sum=5557
+rows <20ms: n=84 sum=123

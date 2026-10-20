@@ -1,0 +1,48 @@
+   39  ABC-167 A5 — t :: movetime 100: go movetime 100 -> 100 ms (within 2 x 10 ms)
+  260  ABC-167 A5 — t :: white reads wtime: go wtime 1000 btime 9000 -> 50 ms (within 2 x 1 ms)
+  238  ABC-167 A5 — t :: black reads btime: go wtime 1000 btime 9000 -> 450 ms (within 2 x 10 ms)
+    0  ABC-167 A5 — t :: a short clock: go wtime 40 btime 40 -> 1 ms (within 2 x 1 ms)
+  145  ABC-167 A5 — t :: capped by the default level 5: go wtime 60000 btime 60000 winc 1000 binc 1000 -> 3000 ms (within 2 x
+  144  ABC-167 A5 — t :: a bare go: go -> 3000 ms (within 2 x 100 ms)
+   12  ABC-167 A5 — t :: A5-b1: position startpos, go wtime 2000 btime 2000 winc 1000 binc 0 -> 600 ms (within 2 x 100 ms)
+    0  ABC-167 A5 — t :: A5-b2: position startpos moves e2e4, go wtime 2000 btime 2000 winc 1000 binc 0 -> 100 ms (within 2 x
+   85  ABC-167 A5 — t :: A5-b3: position startpos, go wtime 1000 btime 1000 movestogo 5 -> 200 ms (within 2 x 10 ms)
+    4  ABC-167 A5 — t :: A5-b4: position startpos, go wtime 1000 btime 1000 movetime 300 -> 300 ms (within 2 x 100 ms)
+    4  ABC-167 A5 — t :: A5-b5: position startpos, go movetime 300 wtime 60000 btime 60000 -> 300 ms (within 2 x 100 ms)
+   12  ABC-167 A5 — t :: A5-c1: position startpos, go wtime 100 btime 100 winc 1000 binc 1000 -> 50 ms (within 2 x 10 ms)
+  463  ABC-167 A6 — i :: go infinite holds the bestmove until stop; a second stop writes nothing
+  445  ABC-167 A6 — i :: go infinite holds the bestmove until ponderhit; a second ponderhit writes nothing
+    0  ABC-167 A6 — i :: a stop with nothing held writes nothing
+  161  ABC-167 A6 — i :: A6-d1: go ponder holds at the capped ceiling; ponderhit releases once
+  151  ABC-167 A6 — i :: A6-e1: a new go writes the held bestmove first; two bestmoves in all
+   48  ABC-167 A6 — i :: A6-e2: position startpos writes the held bestmove first, in the position it searched
+   50  ABC-167 A6 — i :: A6-e3: ucinewgame writes the held bestmove first, in the position it searched
+  147  ABC-167 A6 — i :: A6-j1: a refused position writes the held bestmove first, then its info string
+  153  ABC-167 A6 — i :: A6-e4: quit writes the held bestmove and returns quit
+  152  ABC-167 A6 — i :: A6-e5: isready, an unknown line and setoption leave the bestmove held
+  329  ABC-167 A7 — t :: go depth 3 reports depth 3 on a clock where an unlimited go reaches depth >= 5
+  116  ABC-167 A7 — t :: go nodes 20000 -> nodes <= 21 024, unless depth 1 alone took more
+    1  ABC-167 A7 — t :: QE-170-g: a tiny go nodes 1 still writes one info line and a legal depth-1 bestmove
+    6  ABC-167 A7 — t :: go mate 2 on the smothered mate -> score mate 2 and bestmove d5g8
+    4  ABC-167 A7 — t :: go depth 3 mate 5 -> depth 3 (the smaller one wins)
+  153  ABC-167 A7 — t :: go depth 0: one info string, the token dropped, one bestmove
+  148  ABC-167 A7 — t :: go nodes x: one info string, the token dropped, one bestmove
+  147  ABC-167 A7 — t :: go depth 2.5: one info string, the token dropped, one bestmove
+  146  ABC-167 A7 — t :: go mate 0: one info string, the token dropped, one bestmove
+  147  ABC-167 A7 — t :: go nodes -5: one info string, the token dropped, one bestmove
+  148  ABC-167 A7 — t :: go depth: one info string, the token dropped, one bestmove
+  172  ABC-167 A7 — t :: go movetime 1000 searchmoves e2e4 -> one info string, all moves searched
+    0  ABC-167 A7 — t :: A7-f1: a keyword is never a value (go depth movetime 100)
+  148  ABC-167 A7 — t :: A7-f2: go movetime with no value searches as a bare go
+  150  ABC-167 A7 — t :: A7-f3: go movetime 1e2 and movestogo 0 are dropped with one info string
+    0  ABC-167 A7 — t :: A7-h1: searchmoves stops at the next go keyword, so movetime is honoured
+    4  ABC-167 A7 — t :: A7-i1: go movetime depth 3 -> one info string naming movetime, then depth 3
+    4  ABC-167 A7 — t :: A7-i2: go wtime 1000 btime 1000 movestogo movetime 300 -> 300 ms
+   12  ABC-167 A7 — t :: A7-i3: go wtime 1000 btime 1000 depth winc 1000 -> 550 ms
+    4  ABC-167 A7 — t :: A7-i4: go searchmoves e2e4 depth 3 -> searchmoves stops at depth, so depth 3
+  151  ABC-167 A7 — t :: A7-i5: go depth infinite holds the bestmove until stop
+  152  ABC-167 A7 — t :: A7-i6: go searchmoves e2e4 infinite holds the bestmove until stop
+    0  ABC-171 A7 — t :: precondition: seededRandom(2)'s three gos take both paths (blunder, engine, engine)
+  385  ABC-171 A7 — t :: two sessions on the same seededRandom(k) write the same bestmove sequence
+   36  ABC-171 A7 — t :: go depth 3 at level 1: one info string naming the dropped limit, then a bestmove
+    4  ABC-171 A7 — t :: go depth 3 at level 5 reports depth 3 (ABC-167 A7; level 3 now drops the limit)
