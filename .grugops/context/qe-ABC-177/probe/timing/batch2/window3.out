@@ -1,0 +1,42 @@
+{
+ "host": "MacBook-Air.local",
+ "start": "2026-10-20T21:39:37.750Z",
+ "secs": 180,
+ "polls": 181,
+ "foreignPolls": 4,
+ "kinds": {
+  "platform": 9
+ },
+ "firstForeign": [
+  {
+   "at": "69",
+   "lines": [
+    "92481 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792444948463-z7qhyz.sh 2>/dev/null || true && shopt -u extglob "
+   ]
+  }
+ ],
+ "lastForeign": {
+  "at": "175",
+  "lines": [
+   "97699 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792444948463-z7qhyz.sh 2>/dev/null || true && shopt -u extglob ",
+   "97715 bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-suite --dummy-flag /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/h",
+   "97735 bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-file --dummy-flag 1 /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/"
+  ]
+ },
+ "distinct": [
+  "shopt -u extglob 2>/dev/null || true && { \\builtin unalias -- 'unsetenv'; \\builtin unset -f -- 'unsetenv'; } >/dev/null 2>&1 || true && eval 'cd /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos; cat workflows/.github/workflows/smoke-deploy.yml | head -300; gh run list --repo abitwise/proof-jobs --workflow ci.yml --branch main --limit 3' < /dev/null && pwd -P >| /tmp/claude-5206-cwd",
+  "ab; git fetch origin -q && git switch -c phase8/08-06-tenant-egress origin/main 2>&1 | tail -1; git rev-parse HEAD; ls charts/tenant/tests/fixtures; cat charts/tenant/tests/fixtures/skeleton-sample.yaml; cat charts/tenant/templates/namespace.yaml | head -40; git -C .. rev-parse HEAD 2>/dev/null; cd ..; git -C repos/homelab rev-parse --absolute-git-dir' < /dev/null && pwd -P >| /tmp/claude-f3e7-cwd",
+  "espace: \"smoke-a--b-c\"$'\"'\"'\\012}\\012\\012@test \"chart egress: only proof-jobs turns the flag on\" {\\012  grep -qE '\"'\"'^      egressPolicy: true$'\"'\"' \"$ROOT/tenants/proof-jobs.yaml\"\\012  run bash -c '\"'\"'grep -lE \"egressPolicy: true\" \"$1\"/tenants/*.yaml | wc -l | tr -d \" \"'\"'\"' _ \"$ROOT\"\\012  [ \"$output\" = 1 ]\\012}\\012EOF\\012bats tests/egress.bats 2>&1 | tail -30' && pwd -P >| /tmp/claude-0332-cwd",
+  "bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-suite --dummy-flag /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/tests/egress.bats",
+  "bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-file --dummy-flag 1 /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/tests/egress.bats /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/bats-run-4mCP4X/test_list_file.txt",
+  "bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-test --dummy-flag /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/tests/egress.bats test_chart_egress-3a_the_default_render_has_no_NetworkPolicy_and_no_proxy_variable 12 12 1",
+  "012  v=$(awk '\"'\"'/^    noProxy: / { print $2 }'\"'\"' \"$ROOT/charts/tenant/values.yaml\")\\012  [ -n \"$v\" ]\\012  printf '\"'\"'%s\\\\n'\"'\"' \"$RENDERED\" | grep -Fq \"value: \\\\\"$v\\\\\"\"\\012  run bash -c '\"'\"'printf \"%s\\\\n\" \"$1\" | grep -c \"value: \\\\\"enforced\\\\\"\"'\"'\"' _ \"$RENDERED\"'\"'\"''\"'\"''\"'\"')\\012open(p,'\"'\"'w'\"'\"').write(s)\\012EOF\\012bats tests/egress.bats 2>&1 | tail -12' && pwd -P >| /tmp/claude-5d3f-cwd",
+  "bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-file --dummy-flag 1 /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/tests/egress.bats /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/bats-run-wUvEKW/test_list_file.txt"
+ ],
+ "load1": {
+  "first": "2.69",
+  "min": "2.09",
+  "max": "3.47",
+  "last": "3.26"
+ }
+}

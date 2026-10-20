@@ -1,0 +1,52 @@
+{
+ "host": "MacBook-Air.local",
+ "start": "2026-10-20T21:15:04.204Z",
+ "secs": 180,
+ "polls": 181,
+ "foreignPolls": 30,
+ "kinds": {
+  "platform": 50
+ },
+ "firstForeign": [
+  {
+   "at": "42",
+   "lines": [
+    "41928 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792444948463-z7qhyz.sh 2>/dev/null || true && shopt -u extglob "
+   ]
+  }
+ ],
+ "lastForeign": {
+  "at": "180",
+  "lines": [
+   "46966 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792444948463-z7qhyz.sh 2>/dev/null || true && shopt -u extglob ",
+   "47681 bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-suite --dummy-flag /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/h",
+   "49616 bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-file --dummy-flag 5 /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/",
+   "49667 bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-test --dummy-flag /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/ho",
+   "49687 bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-test --dummy-flag /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/ho",
+   "49688 /bin/bash /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/bootstrap/install-k3s.sh",
+   "49689 /bin/bash /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/bootstrap/install-k3s.sh"
+  ]
+ },
+ "distinct": [
+  " true && eval 'cd /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab && cat infrastructure/configs/kustomization.yaml && ls infrastructure/configs infrastructure/configs/observability && cat scripts/probe.sh && cat scripts/lib/images.sh && docker info >/dev/null 2>&1 && echo DOCKER_OK; kubectl --context oeselg-lab get ns | head -30' < /dev/null && pwd -P >| /tmp/claude-660a-cwd",
+  "lg-labs/platform/repos/homelab && git fetch origin -q && git switch -c phase8/08-05-egress-proxy origin/main 2>&1 | tail -1; curl -s '\"'\"'https://hub.docker.com/v2/repositories/ubuntu/squid/tags?page_size=50&ordering=last_updated'\"'\"' | jq -r '\"'\"'.results[] | [.name, .last_updated, (.images|map(.architecture)|unique|join(\",\"))] | @tsv'\"'\"' | head -50' < /dev/null && pwd -P >| /tmp/claude-a274-cwd",
+  "g/squid:uid=13,gid=13 --tmpfs /var/cache/squid:uid=13,gid=13 --tmpfs /tmp:uid=13,gid=13 -v \"$PWD/squid.conf:/etc/squid-egress/squid.conf:ro\" -v \"$PWD/allowlist.txt:/etc/squid-egress/allowlist.txt:ro\")\\012docker run --rm \"${common[@]}\" --entrypoint squid \"$REF\" -k parse -f /etc/squid-egress/squid.conf 2>&1 | tail -15; echo \"parse exit=${PIPESTATUS[0]}\"' < /dev/null && pwd -P >| /tmp/claude-012c-cwd",
+  "\"'%{http_connect}'\"'\"' https://productionresultssa3.blob.core.windows.net/\\012t \"IPv4 literal public github\" '\"'\"'%{http_connect}'\"'\"' -k https://140.82.112.5/\\012t \"IPv6 literal ::1\" '\"'\"'%{http_connect}'\"'\"' -k '\"'\"'https://[::1]/'\"'\"'\\012t \"localhost\" '\"'\"'%{http_connect}'\"'\"' -k https://localhost/\\012echo ---; docker logs egress-s7 2>&1 | tail -20' < /dev/null && pwd -P >| /tmp/claude-8969-cwd",
+  ">/dev/null; sleep 3\\012P=http://127.0.0.1:3128\\012for u in https://api.github.com/zen https://www.kernel.org/; do curl -sS -o /dev/null -w '\"'\"'%{http_connect} '\"'\"' --max-time 20 --proxy $P $u 2>&1 | tail -c 80; echo \"exit=$?\"; done\\012docker logs egress-s7 2>&1 | grep -ci pinger; docker rm -f egress-s7 >/dev/null; docker ps -a --filter name=egress-s7 -q | wc -l' && pwd -P >| /tmp/claude-449b-cwd",
+  "geroeselg/Projects/private/oeselg-labs/platform/repos/homelab && scripts/check-secrets.sh 2>&1 | tail -3; scripts/render-check.sh 2>&1 | tail -5; bats tests 2>&1 | tail -4; grep -c '\"'\"'http_access deny all'\"'\"' infrastructure/configs/egress-proxy/squid.conf; grep -cE '\"'\"'@sha256:[0-9a-f]{64}'\"'\"' infrastructure/configs/egress-proxy/egress-proxy.yaml' < /dev/null && pwd -P >| /tmp/claude-9314-cwd",
+  "repos/homelab/tests/pin-scan.bats /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/tests/probe.bats /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/tests/restore-drill.bats /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/tests/seal-secret.bats /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/tests/verify.bats",
+  "bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-file --dummy-flag 1 /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/tests/backup.bats /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/bats-run-9J7NQh/test_list_file.txt",
+  "bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-file --dummy-flag 3 /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/tests/chart.bats /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/bats-run-9J7NQh/test_list_file.txt",
+  "bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-test --dummy-flag /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/tests/chart.bats test_runner-3a_the_runner_container_is_pinned_by_digest-2c_non-2droot-2c_drops_ALL_and_mounts_no_hostPath_or_socket 41 22 1",
+  "bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-file --dummy-flag 4 /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/tests/check-secrets.bats /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/bats-run-9J7NQh/test_list_file.txt",
+  "bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-file --dummy-flag 5 /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/tests/install-k3s.bats /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/bats-run-9J7NQh/test_list_file.txt",
+  "bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-test --dummy-flag /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/tests/install-k3s.bats test_preflight-3a_every_problem_is_reported_at_once-2c_exit_2-2c_nothing_written 65 3 1",
+  "/bin/bash /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/bootstrap/install-k3s.sh"
+ ],
+ "load1": {
+  "first": "3.01",
+  "min": "2.51",
+  "max": "3.62",
+  "last": "3.19"
+ }
+}

@@ -3,7 +3,7 @@ subtask: bapm-rule-QE-177-ab
 role: ba-pm
 tickets: [ABC-177]
 ref: .grugops/context/bapm-rule-QE-177-ab/
-held: until qe-ABC-177-timing ends (width 1)
+held: released 2026-10-21 (qe-ABC-177-timing ended)
 ---
 
 # BA/PM: rule on QE-177-a and QE-177-b (records only)

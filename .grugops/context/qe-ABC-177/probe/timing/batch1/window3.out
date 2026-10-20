@@ -1,0 +1,57 @@
+{
+ "host": "MacBook-Air.local",
+ "start": "2026-10-20T21:21:05.373Z",
+ "secs": 180,
+ "polls": 181,
+ "foreignPolls": 162,
+ "kinds": {
+  "platform": 271
+ },
+ "firstForeign": [
+  {
+   "at": "0",
+   "lines": [
+    "10651 bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-file --dummy-flag 14 /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos",
+    "25268 bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-test --dummy-flag /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/ho",
+    "25280 bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-test --dummy-flag /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/ho",
+    "25281 /bin/bash /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/scripts/verify.sh",
+    "95077 bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-suite --dummy-flag /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/h"
+   ]
+  }
+ ],
+ "lastForeign": {
+  "at": "181",
+  "lines": [
+   "46833 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792444948463-z7qhyz.sh 2>/dev/null || true && shopt -u extglob "
+  ]
+ },
+ "distinct": [
+  "bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-file --dummy-flag 14 /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/tests/verify.bats /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/bats-run-79w3ZZ/test_list_file.txt",
+  "bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-test --dummy-flag /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/tests/verify.bats test_fail_seaweedfs-3a_a_HelmRelease_that_is_not_Ready_fails_only_the_seaweedfs_row 204 15 1",
+  "/bin/bash /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/scripts/verify.sh",
+  "repos/homelab/tests/pin-scan.bats /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/tests/probe.bats /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/tests/restore-drill.bats /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/tests/seal-secret.bats /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/tests/verify.bats",
+  "bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-test --dummy-flag /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/tests/verify.bats test_fail_seaweedfs-3a_an_unsigned_S3_GET_that_is_not_refused_with_403_fails_the_row 205 16 1",
+  "bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-test --dummy-flag /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/tests/verify.bats test_fail_keycloak-3a_a_CR_that_is_not_Ready_fails_only_the_keycloak_row 206 17 1",
+  "bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-test --dummy-flag /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/tests/verify.bats test_fail_keycloak-3a_a_Ready_CR_whose_-2fhealth-2fready_answers_503_fails_the_row 207 18 1",
+  "bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-test --dummy-flag /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/tests/verify.bats test_fail_issuer-2dallowlist-3a_a_publicly_reachable_-2fadmin-2f_fails_only_that_row 208 19 1",
+  "bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-test --dummy-flag /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/tests/verify.bats test_fail_issuer-2dallowlist-3a_a_publicly_reachable_master_realm_fails_only_that_row 209 20 1",
+  "bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-test --dummy-flag /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/tests/verify.bats test_fail_tenant_s3-3a_anything_but_200_200_204_fails_only_that_tenant-27s_s3_row 210 21 1",
+  "bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-test --dummy-flag /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/tests/verify.bats test_fail_tenant_issuer-3a_a_pod_that_sees_another_issuer_fails_only_that_tenant-27s_issuer_row 211 22 1",
+  "bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-test --dummy-flag /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/tests/verify.bats test_fail_tenant_issuer-3a_a_Mac-2dside_discovery_document_with_the_wrong_issuer_fails_the_row 212 23 1",
+  "bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-test --dummy-flag /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/tests/verify.bats test_backup-3a_FAIL_when_lab-2dpg_has_no_completed_Backup_-28an_older_failed_one_does_not_count-29 214 25 1",
+  "bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-test --dummy-flag /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/tests/verify.bats test_backup-3a_FAIL_naming_the_age_when_the_newest_completed_Backup_stopped_27_hours_ago 215 26 1",
+  "bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-test --dummy-flag /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/tests/verify.bats test_backup-3a_FAIL_when_ContinuousArchiving_is_False_or_absent-2c_even_with_a_fresh_Backup 216 27 1",
+  "bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-test --dummy-flag /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/tests/verify.bats test_backup-3a_FAIL_cannot_read_Backups_when_the_kubectl_read_fails-2c_and_the_other_rows_still_print 217 28 1",
+  "12- Nothing uses the proxy yet; tenant runners are wired in 08-06.\\012\\012Proven locally in Docker (read-only, non-root) before this PR: api.github.com 200, www.kernel.org 403, 192.168.1.112:6443 403, api.github.com:8443 403, plain HTTP 403, codeload.github.com 200.\\012\\012🤖 Generated with [Claude Code](https://claude.com/claude-code)\\012EOF\\012)\" 2>&1 | tail -1' && pwd -P >| /tmp/claude-fe5b-cwd",
+  "shopt -u extglob 2>/dev/null || true && { \\builtin unalias -- 'unsetenv'; \\builtin unset -f -- 'unsetenv'; } >/dev/null 2>&1 || true && eval 'cd /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab && gh pr checks 49 --repo abitwise/homelab --watch --fail-fast 2>&1 | tail -15' < /dev/null && pwd -P >| /tmp/claude-8216-cwd",
+  "| true && { \\builtin unalias -- 'unsetenv'; \\builtin unset -f -- 'unsetenv'; } >/dev/null 2>&1 || true && eval 'cd /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab && gh pr checks 49 --repo abitwise/homelab 2>&1 | awk '\"'\"'{print $1,$2}'\"'\"' | sort -u; gh pr merge 49 --repo abitwise/homelab --squash --delete-branch 2>&1 | tail -5' < /dev/null && pwd -P >| /tmp/claude-b2fe-cwd",
+  " true && { \\builtin unalias -- 'unsetenv'; \\builtin unset -f -- 'unsetenv'; } >/dev/null 2>&1 || true && eval 'cd /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab && gh pr view 49 --repo abitwise/homelab --json state,mergedAt,mergeCommit -q '\"'\"'.state+\" \"+(.mergedAt//\"\")+\" \"+(.mergeCommit.oid//\"\")'\"'\"'; git branch --show-current' < /dev/null && pwd -P >| /tmp/claude-2bd8-cwd",
+  "roeselg/Projects/private/oeselg-labs/platform/repos/homelab && git switch -q main && git pull -q --ff-only && git log --oneline -1 && git branch -D phase8/08-05-egress-proxy -q 2>&1; flux --context oeselg-lab reconcile kustomization configs --with-source 2>&1 | tail -4; kubectl --context oeselg-lab -n egress-proxy get deploy,pod,svc,networkpolicy 2>&1' < /dev/null && pwd -P >| /tmp/claude-e86e-cwd"
+ ],
+ "load1": {
+  "first": "3.68",
+  "min": "2.08",
+  "max": "3.71",
+  "last": "2.30"
+ }
+}
