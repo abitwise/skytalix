@@ -367,3 +367,5 @@ Column moves after `Ready` are the Orchestrator's.
 - The Orchestrator records both closes. Per ADR-0036 § S1 (iv), the stand-in retires at merge.
 
 UAT waived (0 `src/` lines); a waiver is not a signature. The `In Review` exit is the Orchestrator's.
+
+> **2026-10-21, BA/PM (`bapm-rule-QE-195`, at `main` `219e8e33`): the QE gaps are ruled** (`.grugops/context/bapm-rule-QE-195/notes/`). `QE-195-a` is **CUT → `ABC-196`** (Ready, XS, P3; harness-only). Each `TW` row fails, naming its row and limb, when its plant stops reading as expected on limbs 2/3. Measured at cut: a `src/cli.ts`-only refactor, QE's D2 and a dropped `leak()` line each leave this harness at rc 0, `25 of 25`. `QE-195-b` and `QE-195-c` are agreed INFO, with no action. This page's cut text and `## QE` section are unchanged.
