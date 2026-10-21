@@ -1,8 +1,8 @@
 ---
 id: ABC-192
 title: "Nothing pins the stream `setup` hands the heap guard, and a vitest bump re-runs no capture arm (QE-176-a, QE-176-b)"
-status: in-review
-column: In Review
+status: done
+column: Done
 size: XS
 priority: P3
 epic: —
@@ -170,3 +170,33 @@ BA/PM, 2026-10-21 at `03ac8bc4`. **Result: 10 of 10.**
 | 10 | no major unresolved blocker | **✅** none. The `ABC-189` merge being clean is `UNKNOWN - verify`, and the row is in a different block |
 
 Column moves after `Ready` are the Orchestrator's.
+
+## QE
+
+**QE/E2E, 2026-10-21 (subtask `qe-ABC-192`). Verdict: PASS_WITH_GAPS** (`QE-192-a` LOW, `QE-192-b`/`-c`/`-d` INFO;
+0 blocking; none against a criterion). Run at `grugops/qe-ABC-192` merge `bfccd564` (tip `b5b8b0f9` + main `ec5c42d7`).
+Mutants ran in a scratch copy outside the repository (full `node_modules` copy, private `TMPDIR`), each restored and
+checked with `cmp`. No timing taken. Notes: `.grugops/context/qe-ABC-192/notes/` (`…observation-dfdea161` criteria,
+`…observation-5eac2736` mutants, `…observation-25aa4be6` gates, `…decision-21079de0` verdict).
+
+- **A1 met.** The row passes on the merged file. M4 and M4b each turn exactly A1 red, in the one-file run and in
+  `npm test` (1993/1994, `success` false). Three test-side weakenings each red the in-memory plant table.
+- **A2 met.** On a bump to 4.1.12, A2 alone is red, one-file and in `npm test`, and the message carries the four
+  items in order. 4.2.0, 5.0.0, a prerelease, a downgrade, and a missing or empty version are red too.
+- **A3 met.** `src/cli.test.ts` 95/95, with `N8-LANE` (28) and `ABC-173` `C2` green. The diff removes 0 lines and adds no
+  child or timing call.
+- **A4 met.** The diff is `src/cli.test.ts` plus the SE's notes. Gates: lint 0, typecheck 0, build 0. `npm test` 59
+  files / 1994 passed, `last-run.json` `success` true. Skip count 0 → `No findings.`. The waiver form prints nothing.
+  `AGENTS.md` is byte-identical from base to tip (15,797 B).
+- **UAT waived** (0 production lines). The AR-191-GITENV stand-in prints nothing. A waiver is not a signature.
+- **Gaps:**
+  - **`QE-192-a` LOW:** `try { guard(…) } catch {}` in `setup` survives the row, lint and the suite. The line still
+    reaches stdout, but a prefix-less run is not stopped (1994 tests ran at 4192 MiB). That is against ABC-173, not
+    QE-176-a. A possible closure: the call must be a direct statement of `setup`'s body.
+  - **`QE-192-b` INFO:** shadowing `process` inside `setup` survives every gate, and the capture prints `0`. It takes
+    a deliberate edit. Recommend accept.
+  - **`QE-192-c` INFO:** the row fails closed on behaviour-equivalent refactors of the call site.
+  - **`QE-192-d` INFO:** a bump of `@vitest/coverage-v8` alone, or of the lockfile before reinstall, stays green.
+    A lockfile reader would be weaker than the SE's `node_modules` read.
+
+> **2026-10-21, BA/PM (`bapm-rule-QE-192`, at `main` `7a2ec8bc`): the QE gaps are ruled** (`.grugops/context/bapm-rule-QE-192/notes/`). `QE-192-a` is **CUT → `ABC-194`** (Ready, XS, P3): the check also requires a direct statement and no `return` in `setup`. `QE-192-b`, `-c` and `-d` are **ACCEPTED**, each with an owner and a reopen trigger. This page's cut text is unchanged.

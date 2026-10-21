@@ -4163,6 +4163,104 @@ describe("ABC-176 — a heap-guard refusal is named on stdout and handed to vite
 });
 
 // ---------------------------------------------------------------------------------------------
+// `ABC-192` — the two holes `ABC-176`'s rows left (`QE-176-a`, `QE-176-b`). In process: no child, no
+// timing (`NFR-008`, `N8_SPAWN` stays 28). Every `ABC-176` row hands `guard` a stub stream, so the
+// stream `setup` really passes is read here, through the parser (`ABC-133`). The order the capture
+// arm relies on is vitest-internal, so a vitest bump turns a row red and names what to re-run.
+// ---------------------------------------------------------------------------------------------
+
+describe("ABC-192 — setup hands the guard process.stdout, and a vitest bump names its re-run list", () => {
+  /**
+   * What is wrong with `setup`'s call to `guard` in `source`, or `undefined` when there is exactly
+   * one default-exported `setup` holding exactly one `guard(…)` call whose third argument is
+   * `process.stdout`. Over the TypeScript parser's view, so a comment or a string cannot red a
+   * correct file and cannot hide a wrong call.
+   */
+  const guardStreamFaultOf = (ts: typeof Ts, source: string): string | undefined => {
+    const view = ts.createSourceFile("heap-guard.js", source, ts.ScriptTarget.Latest, true);
+    const setups = view.statements.filter(
+      (statement): statement is Ts.FunctionDeclaration =>
+        ts.isFunctionDeclaration(statement) &&
+        statement.name?.text === "setup" &&
+        (statement.modifiers ?? []).some(({ kind }) => kind === ts.SyntaxKind.ExportKeyword) &&
+        (statement.modifiers ?? []).some(({ kind }) => kind === ts.SyntaxKind.DefaultKeyword),
+    );
+    if (setups.length !== 1) return `${setups.length} default-exported setup functions, not 1`;
+    const calls: Ts.CallExpression[] = [];
+    const visit = (node: Ts.Node): void => {
+      if (
+        ts.isCallExpression(node) &&
+        ts.isIdentifier(node.expression) &&
+        node.expression.text === "guard"
+      )
+        calls.push(node);
+      ts.forEachChild(node, visit);
+    };
+    visit(setups[0] as Ts.FunctionDeclaration);
+    if (calls.length !== 1) return `${calls.length} guard(…) calls in setup, not 1`;
+    const args = (calls[0] as Ts.CallExpression).arguments;
+    const stream = args[2];
+    const isStdout =
+      args.length === 3 &&
+      stream !== undefined &&
+      ts.isPropertyAccessExpression(stream) &&
+      ts.isIdentifier(stream.expression) &&
+      stream.expression.text === "process" &&
+      stream.name.text === "stdout";
+    return isStdout
+      ? undefined
+      : `guard(…)'s arguments are [${args.map((arg) => arg.getText(view)).join(", ")}], not (…, …, process.stdout)`;
+  };
+
+  it("A1 — setup's one guard(…) call passes process.stdout (QE-176-a)", () => {
+    const ts: typeof Ts = createRequire(import.meta.url)("typescript");
+    // THE CHECK IS WATCHED LOSING ITS EVIDENCE FIRST, in memory: a clean setup has no fault, and a
+    // planted process.stderr, a planted no-op stream, a setup with no guard call (only a comment
+    // naming one) and a setup with two calls each have one.
+    const plantedSetup = (body: string): string =>
+      `import v8 from "node:v8";\nexport function guard(project, heapStatistics, out) {}\nexport default function setup(project) {\n${body}\n}\n`;
+    const real = "guard(project, v8.getHeapStatistics(), process.stdout);";
+    expect(
+      [
+        real,
+        "guard(project, v8.getHeapStatistics(), process.stderr);",
+        "guard(project, v8.getHeapStatistics(), { write() {} });",
+        "// guard(project, v8.getHeapStatistics(), process.stdout);",
+        `${real}\n${real}`,
+      ].map((body) => guardStreamFaultOf(ts, plantedSetup(body)) !== undefined),
+    ).toEqual([false, true, true, true, true]);
+
+    const source = readFileSync(`${REPOSITORY}tools/grugops/heap-guard.js`, "utf8");
+    const fault = guardStreamFaultOf(ts, source);
+    expect(fault, `tools/grugops/heap-guard.js setup → guard: ${fault}`).toBeUndefined();
+  });
+
+  // THE VITEST VERSION THE `ABC-176` CAPTURE ARM WAS LAST READ ON. Change this literal ONLY after a
+  // hop has re-run every item of `BUMP_RERUN_LIST` on the installed version, and record the reason
+  // and that hop's readings in a note. Never change it just to turn the row green.
+  const CAPTURE_ARM_READ_ON_VITEST = "4.1.11";
+
+  const BUMP_RERUN_LIST = [
+    "the installed vitest is not the version ABC-176's capture arm was last read on (ABC-192, QE-176-b). Before re-pinning, re-run:",
+    "(1) the ABC-176 capture arm: AGENTS.md's skip-count line with its NODE_OPTIONS prefix removed, on the SUITE and ONE-FILE shapes. Raw stdout line 1 must begin `heap-guard: refused.` with the JSON report after it; the capture must print no integer and the pipe must exit non-zero; test-skip-integrity.js must read `Skip count was not provided`, exit 1. The green arm (as spelled) must still print exactly one integer;",
+    "(2) the reporter header's seven rows in tools/grugops/result-file-reporter.js (ABC-149's six + `refused`);",
+    "(3) re-read RISK-ABC173-STATE (project.vitest.state.getPaths and catchError) and RISK-ABC143-01;",
+    "(4) then re-pin CAPTURE_ARM_READ_ON_VITEST with the reason and the hop's readings, never silently.",
+  ].join("\n");
+
+  it("A2 — the installed vitest is the version the capture arm was last read on (QE-176-b)", () => {
+    const installed = (
+      JSON.parse(readFileSync(`${REPOSITORY}node_modules/vitest/package.json`, "utf8")) as {
+        version: unknown;
+      }
+    ).version;
+    // Non-vacuity: a version string was read, so a missing or empty field cannot pass.
+    expect(installed).toMatch(/^\d+\.\d+\.\d+/);
+    expect(installed, BUMP_RERUN_LIST).toBe(CAPTURE_ARM_READ_ON_VITEST);
+  });
+});
+
+// ---------------------------------------------------------------------------------------------
 // `ABC-101` — `--difficulty <level>`. In process: no new child, no new file (`NFR-008`). `A10`, the
 // real child, is a `CLI_DEEP` row in `src/cli.real-engine.test.ts`. `A4` and `A8` are struck.
 // ---------------------------------------------------------------------------------------------
