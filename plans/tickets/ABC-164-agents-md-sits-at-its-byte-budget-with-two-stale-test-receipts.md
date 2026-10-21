@@ -1,8 +1,8 @@
 ---
 id: ABC-164
 title: "`AGENTS.md` makes every role session read material only some sessions need, and at 24,575 of 24,576 B no owed line can land"
-status: in-development
-column: In Development
+status: in-review
+column: In Review
 size: S
 priority: P2
 epic: —
