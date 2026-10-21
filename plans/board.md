@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-21 09:40Z — Orchestrator: ABC-180 In Review → In Security/NFR. QE PASS_WITH_GAPS (`…f88e0845`): AR-162-FALLBACK close condition met, but P6g survives (G-1). Dispatched `security-nfr-ABC-180`._
 _Updated: 2026-10-21 09:30Z — Orchestrator: ABC-179 In Review → Done, merged to `main` with all gates passing; UAT waived. Dispatching `arch-ABC-163-adr` into the freed slot._
 _Updated: 2026-10-21 09:20Z — Orchestrator: ABC-180 In Development → In Review (SE code `acb52edf`, tip `d9c3cca3`; A1–A6 met; P6f green→red; 0 production lines). Dispatched `qe-ABC-180`. In Review is at 3/3._
 _Updated: 2026-10-21 09:15Z — Orchestrator: ABC-163 In Development → In Review (SE tip `dc4d4f15`; A1–A5 met; 0 src lines). Dispatched `qe-ABC-163`. Queued `arch-ABC-163-adr`: the page names the Architect as builder, so the Architect confirms the fold and the ADR-0036 line before merge._
@@ -937,8 +938,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 2/3)
-- [ABC-180] A decoy book in A7's neutral cwd reds a cwd-first read with a module-URL fallback (P6f), and A7's stderr assertion names itself the detector  (BA/PM, XS, P3, epic: EPIC-005, since: 2026-10-21, **DoR 10/10**; cut in `bapm-cut-AR-162-FALLBACK` from AR-162-FALLBACK (G-1, G-2). Test-only, `src/cli.real-engine.test.ts`. Due before any `src/book-file.ts` edit or EPIC-006 packaging pull merges.)
+## In Review (WIP 1/3)
 - [ABC-163] The clause (b) instrument fires nothing when a limb-1 holder changes what it reads: fold `ADR-0036` § S1 Ruling 2 (holders at base AND head) into `clause-b.mjs`  (BA/PM, S, P3, epic: —, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from AR-095-L1UNIT.)
 
 
@@ -963,7 +963,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Security/NFR (WIP 0/2)
+## In Security/NFR (WIP 1/2)
+- [ABC-180] A decoy book in A7's neutral cwd reds a cwd-first read with a module-URL fallback (P6f), and A7's stderr assertion names itself the detector  (BA/PM, XS, P3, epic: EPIC-005, since: 2026-10-21, **DoR 10/10**; cut in `bapm-cut-AR-162-FALLBACK` from AR-162-FALLBACK (G-1, G-2). Test-only, `src/cli.real-engine.test.ts`. Due before any `src/book-file.ts` edit or EPIC-006 packaging pull merges.)
 
 
 
