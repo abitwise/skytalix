@@ -276,3 +276,38 @@ BA/PM, 2026-10-21, re-score after the audit and the owner's Option A. **Result: 
 | 10 | no major unresolved blocker | **✅** the open budget-constant decision is outside this ticket |
 
 Column moves past `Ready` are the Orchestrator's. Owner of the build: **the AGENTS.md Scribe**, then QE.
+
+## QE
+
+QE/E2E, 2026-10-21, subtask `qe-ABC-164`, branch `grugops/qe-ABC-164` (from `3971302c`; code tip `e82a3798`, base `49dc490c`). **Verdict: PASS_WITH_GAPS**, with 0 blocking, 1 LOW and 8 INFO gaps. Notes are in `.grugops/context/qe-ABC-164/notes/`: criteria `…2593d786`, A4 `…71f134f6`, gates `…5177d77f`, role sessions `…be05dcb3`, break attempts `…89fca9e3`, verdict `…47cae669`.
+
+- **Criteria.** QE read every criterion with its own scripts on joined text before opening the Scribe's notes.
+  - **A1** 24,575 → 15,606 B (7.74 edits at 24,576).
+  - **A2** all five headings 0, all four references 0, one `<!--` in § Test, all 20 canaries 0 (every base count matches this page), rule S held.
+  - **A3** every heading matches 1, all 6 pointers present, the lane table has 15 rows.
+  - **A5** all present.
+  - **A6** O1, O2 and O3 landed, and each is true against its source.
+  - **A7** `git diff --name-only` lists the 5 files at the code tip, with 0 `src/` lines and the budget constant at `24_576`.
+  - **All MET.**
+- **A4, read strictly.** 182 removed lines: 140 found word for word, 6 split (command stays, comment found), 28 blank, **8 misses**. Seven are this page's named kinds: O3, two re-pointed references, four pointers. The eighth is the O1 insertion splitting one line, and both halves stay in AGENTS.md. 0 words lost. The old O3 sentence is quoted in the `90` entry.
+- **Gates** at the code tree (`3971302c` differs from `e82a3798` only by two context notes):
+  - lint 0, typecheck 0, build 0;
+  - `npm test` 59 / 1987, `last-run.json` `success: true`;
+  - the `-t "AGENTS.md"` run: the ABC-042, 059, 065, 067, 071, 109 and 173 rows green;
+  - `vitestCommandsIn` gives 17, set-equal to base, with one `PERFT_DEEP=1`; no new backticked `npx vitest`;
+  - skip-count 0, skip-integrity `--skip-count 0` "No findings.".
+- **Role sessions.** Each start read drops from 24,575 B to 15,606 B. Nothing is unreachable.
+  - The SE needs no second document on start. It needs `90` § On-demand commands only before changing a lane-guarded file.
+  - QE needs that table on every hop. The puzzle rule "red = QE FAIL" is two hops away.
+  - The Orchestrator needs `45` on most hops.
+- **UAT waiver.** The measurement in AGENTS.md's form prints nothing (0 production lines), so the waiver holds. A waiver is not a signature.
+- **Gaps:**
+  - `QE-164-a` (LOW): two claims in `90` that this pass made false. § Dev / run says "`AGENTS.md` carries the rules in the slot's own comment", and § Regenerate the opening book says "`AGENTS.md` carries the line and one fact". The preamble's "keeps each command line" is also out of date. A records-only Scribe amend fixes all three.
+  - `QE-164-b`: the A4 miss list in `90` leaves out the O1 line split and lists the QE-hop comment, which is found whole in `40`.
+  - `QE-164-c`: the O1 row on this page says "the main checkout's". AGENTS.md says "the checkout you work in", which is the correct rule.
+  - `QE-164-d`: 8 live memory-bank citations still name `AGENTS.md` § <moved heading>. Each resolves in one hop.
+  - `QE-164-e`: the per-role cost above.
+  - `QE-164-f`: at the branch tip, A7's file list is 7 (the 5 files plus 2 Scribe context notes).
+  - `QE-164-g`: the ABC-173 pin is `>= 17`, not `== 17`.
+  - `QE-164-h`: the comment at `src/cli.test.ts:2242` says 13 closers; there are now 8.
+  - `QE-164-i`: the Scribe's note says "Seven operative bullets"; there are 6.
