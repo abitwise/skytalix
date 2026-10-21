@@ -1,8 +1,8 @@
 ---
 id: ABC-181
 title: "`status-panel.nfr.test.ts`'s header says the `vi.mock` own-file lesson is \"recorded in the catalog\". The catalog does not hold it; `gameend.nfr.test.ts`'s header does (QE-179-a)"
-status: in-review
-column: In Review
+status: done
+column: Done
 size: XS
 priority: P3
 epic: EPIC-002
@@ -144,3 +144,36 @@ BA/PM, 2026-10-21. **Result: 10 of 10.**
 | 10 | no major unresolved blocker | **✅** none |
 
 Column moves after `Ready` are the Orchestrator's.
+
+## QE
+
+QE/E2E, 2026-10-21 (subtask `qe-ABC-181`). I reviewed tip `18b3c993` (code `8f8c88b3`) against base `19abbdb1` and ran every
+reading myself in `../wt-qe-ABC-181`. I read the header, `src/gameend.nfr.test.ts` and the catalog before opening the SE's
+notes. The detail is in `.grugops/context/qe-ABC-181/notes/`, with the verdict in `…decision-a1787c4d` and the gap in
+`…observation-5c4f264a`.
+
+**Verdict: PASS_WITH_GAPS.** All three criteria are MET. The one gap is INFO and is not against a criterion.
+
+- **`A1`:** the page command prints nothing at the tip. At `59fc9215` it prints the "recorded in the catalog" sentence.
+  `grep -c` gives 0 at the tip and 1 at base. On the QE read, one header sentence still mentions the catalog (and `:6` is
+  the file's only `catalog` hit): "A count and not a clock … (see `plans/nfr-catalog.md` for that move)". It quotes
+  nothing. It credits the catalog only with the move, which the catalog holds at `:25` and `:49` ("OFF THE CLOCK AND ONTO
+  A COUNT"). `:25` also ties `ABC-016` `A13` to "zero timing sensitivity". MET.
+- **`A2`:** the new `:12` names `src/gameend.nfr.test.ts` and "that file's own header". That file's `/** */` header
+  (`:1-17`) holds the lesson at `:11-13` ("hoisted to file scope … re-route the module graph"), and the file is unchanged.
+  The wording makes no new claim. MET.
+- **`A3`:** `git diff --name-only 19abbdb1 8f8c88b3` gives only `src/status-panel.nfr.test.ts`. The tip adds only the 3 SE
+  notes. There is one hunk, `@@ -12 +12 @@`, inside the header (`*/` at `:13`). Parsed with `removeComments`, base and tip
+  print identically. A planted code token changes that print and a planted comment does not, so the result is not vacuous.
+  The one-file run (heap 400) passes 6 of 6. MET.
+- **Gates (tip):** lint, typecheck and build exit 0. `npm test` exits 0 (59 files, 1987/1987), and `last-run.json` reads
+  `success: true`, 0 pending, 0 todo. Base counts were measured by QE at `19abbdb1` in a temporary worktree: 59 files and
+  1987 tests, which is equal. Skip count is 0, and integrity reports `No findings.`. `CLI_DEEP` 11/11 and `PERFT_DEEP`
+  32/32. No timing was taken.
+- **Gap:**
+  - `QE-181-a` (INFO, records only): `## Out of scope` cites the "A count and not a clock" sentence at `:3-7`. `:3` is the
+    blank ` *` line. The sentence spans `:4-6` and its paragraph `:4-8`. The fence held, because the sentence is
+    byte-identical. No route.
+- **UAT waiver reading (AGENTS.md's form, `.snap` not filtered):**
+  `git diff --name-only 8f8c88b3~1 8f8c88b3 | grep -v '\.test\.ts$' | grep '^src/'` is **empty**, and so is the same read at
+  `18b3c993`. No `.snap` changed. Applying the waiver is the Orchestrator's job.
