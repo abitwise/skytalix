@@ -1,0 +1,32 @@
+qe-ABC-177-timing-2 pre-registration. Written 2026-10-21T05:58:00Z, BEFORE any timing-2 arm build, window or reading.
+It extends ../preregistration.txt (unchanged; its instruments verified by sha256 today: lane174 e2074cdbeedd, sampler174 83409bc0e70b,
+readout174 f528540fa110, readout-nfr008-174 c95343f82f7c, window 83af1a013dd0, powercheck a64369300b3e, timing/run.sh da435e757fb0;
+timing/SHA256SUMS all OK) with the owner amendment b87c35b6 (2026-10-21 ~05:55Z), owner-delegated "recommended option" choices below.
+
+New files (sha256 prefixes):
+6f44786ba6c9  run-amended.sh
+10a6e19be741  readout174a.py
+b0236f4623db  readout-nfr008-174a.py
+9e3bbe8c1888  perrun.py
+
+Environment: NODE_OPTIONS=--max-old-space-size=400 exported to the driver (dispatcher rule). N8's CMD already sets it; npm test's
+script sets its own --max-old-space-size=128 for its vitest child, so the measured commands are unchanged ("npm test as spelled").
+The driver is launched from a scratchpad launcher so no ancestor command line matches the instruments' foreign regex.
+
+Branch rule:
+ R. A 180 s foreground pre-sample with the registered window.mjs. If it reads 0 foreign polls: run timing/run.sh n8, then full, AS IS.
+    If run.sh's first window then fails, it is stopped (its own processes only) and that stage goes to branch A ("don't wait").
+ A. Otherwise (foreign present): timing2/run-amended.sh n8 r1, then full r1. Window admitted on AC every 5 s poll + P1 before/after
+    + load1 <= 8 every poll; foreign polls recorded, not gating.
+Grading readout: in R, the registered readouts. In A, the amended copies (foreign/sampler logged, not discarded); the registered
+ readouts' output on the same TSV is reported beside them as the strict view. Status, counts, thermal and n = 8 rules are unchanged:
+ a VOID stays VOID.
+Re-run rule (b87c35b6): if full-stage H median wall > 9.2 s and any foreign load is recorded in that stage (perrun.py foreign_samples
+ > 0, or lane174 foreign_vitest/foreign_after > 0, on any run), run full once more (r2, fresh window); the LOWER H median wall stands,
+ with its whole readout set. A VOID stage may be re-run once inside the bound. No other re-run.
+Bound: 60 min from the first window start; power off AC at any check -> stop, OWED. Nothing is estimated (P5).
+Grades: A8 = readout174(a) STATE at 650 ms CPU. A9 = protocol as run (arms, own npm ci, instruments, load1, power per run).
+ A10 (i) readout-nfr008(a) H median wall and state; (ii) H-B wall/cpu medians + intervals from lane174's summary (all rounds >= 1, as
+ ../preregistration.txt says); (iii) B/T twin R from lane174's summary, H/H2 twin R from readout-nfr008(a).
+ A11: H median wall <= 9.2 s MET; > 9.2 s and <= 10 s -> O3 note (Architect/BA/PM); > 10 s -> owner.
+R-174-1: QE reports the discharge condition (NFR-008 MET on H); Security/NFR owns the ruling.

@@ -1,0 +1,20 @@
+0 H cpu 29.79 wall 10.52 files 59 tests 1987 load1 4.35 -> 5.12 round0
+0 H2 cpu 30.13 wall 10.68 files 59 tests 1987 load1 5.12 -> 5.32 round0
+1 H cpu 31.46 wall 10.74 files 59 tests 1987 load1 5.46 -> 5.39 ok
+1 H2 cpu 31.31 wall 10.57 files 59 tests 1987 load1 5.39 -> 5.57 ok
+2 H cpu 31.24 wall 10.6 files 59 tests 1987 load1 5.6 -> 5.58 ok
+2 H2 cpu 31.14 wall 10.57 files 59 tests 1987 load1 5.58 -> 5.86 ok
+3 H2 cpu 31.46 wall 10.64 files 59 tests 1987 load1 8.72 -> 8.3 ok
+3 H cpu 31.36 wall 10.62 files 59 tests 1987 load1 7.76 -> 7.49 DISCARD:thermal
+4 H cpu 30.92 wall 10.44 files 59 tests 1987 load1 7.23 -> 6.73 DISCARD:thermal
+4 H2 cpu 31.51 wall 10.72 files 59 tests 1987 load1 6.73 -> 6.93 DISCARD:thermal
+5 H cpu 31.12 wall 10.7 files 59 tests 1987 load1 6.71 -> 6.4 DISCARD:thermal
+5 H2 cpu 31.12 wall 10.62 files 59 tests 1987 load1 6.4 -> 6.51 DISCARD:thermal
+6 H cpu 31.11 wall 10.64 files 59 tests 1987 load1 7.57 -> 7.17 DISCARD:thermal
+6 H2 cpu 31.16 wall 10.66 files 59 tests 1987 load1 7.17 -> 7.96 DISCARD:thermal
+7 H2 cpu 31.11 wall 10.59 files 59 tests 1987 load1 7.54 -> 7.6 DISCARD:thermal
+7 H cpu 31.49 wall 10.81 files 59 tests 1987 load1 7.09 -> 6.93 DISCARD:thermal
+8 H cpu 31.22 wall 10.69 files 59 tests 1987 load1 6.34 -> 6.53 DISCARD:thermal
+8 H2 cpu 30.88 wall 10.6 files 59 tests 1987 load1 6.53 -> 6.61 DISCARD:thermal
+scored 2 [1, 2]
+WINDOW STATE: VOID

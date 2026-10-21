@@ -1,0 +1,67 @@
+expected counts (round 0): {'B': (1, 126), 'T': (1, 126), 'H': (1, 126)}
+round	cond	cpu	wall	files	tests	load_b	load_a	foreign_b	foreign_a	therm	power	sampler_bad	status	kept
+0	B	7.04	7.18	1	126	2.19	2.26	0	5	0->0	AC Power	2	ok	round0
+0	T	7.07	7.28	1	126	2.26	2.45	5	5	0->0	AC Power	3	ok	round0
+0	H	4.25	4.25	1	126	2.45	2.58	5	5	0->0	AC Power	3	ok	round0
+1	T	7.07	6.63	1	126	2.58	2.85	5	5	0->0	AC Power	4	ok	ok
+1	H	4.31	3.86	1	126	2.85	2.94	5	5	0->0	AC Power	3	ok	ok
+1	B	7.1	6.65	1	126	2.94	2.95	5	5	0->0	AC Power	3	ok	ok
+2	H	4.27	3.85	1	126	2.95	2.95	5	5	0->0	AC Power	3	ok	ok
+2	B	7.12	6.69	1	126	2.95	3.98	5	5	0->0	AC Power	3	ok	ok
+2	T	7.12	6.69	1	126	3.98	4.06	5	5	0->0	AC Power	3	ok	ok
+3	B	7.07	6.65	1	126	4.06	4.06	5	5	0->0	AC Power	3	ok	ok
+3	T	7.1	6.66	1	126	4.06	4.19	5	5	0->0	AC Power	3	ok	ok
+3	H	4.26	3.84	1	126	4.19	4.01	5	5	0->0	AC Power	3	ok	ok
+4	T	7.04	6.6	1	126	4.01	3.85	5	5	0->0	AC Power	3	ok	ok
+4	H	4.28	3.83	1	126	3.85	3.7	5	5	0->0	AC Power	3	ok	ok
+4	B	7.11	6.69	1	126	3.7	3.89	5	5	0->0	AC Power	4	ok	ok
+5	H	4.25	3.82	1	126	3.89	3.9	5	5	0->0	AC Power	2	ok	ok
+5	B	7.07	6.61	1	126	3.9	3.74	5	5	0->0	AC Power	3	ok	ok
+5	T	6.96	6.51	1	126	3.74	4.11	5	0	0->0	AC Power	1	ok	ok
+6	B	6.89	6.44	1	126	4.11	4.02	0	0	0->0	AC Power	0	ok	ok
+6	T	6.92	6.51	1	126	4.02	3.86	0	5	0->0	AC Power	2	ok	ok
+6	H	4.29	3.86	1	126	3.86	3.87	5	5	0->0	AC Power	3	ok	ok
+7	T	7.07	6.61	1	126	3.87	3.8	5	5	0->0	AC Power	3	ok	ok
+7	H	4.26	3.83	1	126	3.8	3.74	5	5	0->0	AC Power	3	ok	ok
+7	B	7.1	6.69	1	126	3.74	3.79	5	5	0->0	AC Power	3	ok	ok
+8	H	4.31	3.86	1	126	3.79	3.79	5	5	0->0	AC Power	3	ok	ok
+8	B	7.13	6.68	1	126	3.79	3.82	5	5	0->0	AC Power	3	ok	ok
+8	T	7.09	6.67	1	126	3.82	3.67	5	5	0->0	AC Power	4	ok	ok
+
+bracket log per lane round (sampler row at/before the first run's start | at/after the last run's end):
+round	before_utc	load1	user_procs	foreign	|	after_utc	load1	user_procs	foreign
+0	none	-	-	-	|	2026-10-21T06:05:48.140Z	2.58	440	5
+1	2026-10-21T06:05:43.137Z	2.45	438	5	|	2026-10-21T06:06:08.148Z	2.95	440	5
+2	2026-10-21T06:06:03.145Z	2.95	441	5	|	2026-10-21T06:06:23.153Z	4.06	438	5
+3	2026-10-21T06:06:23.153Z	4.06	438	5	|	2026-10-21T06:06:43.159Z	4.01	440	5
+4	2026-10-21T06:06:38.157Z	4.19	447	5	|	2026-10-21T06:07:03.166Z	3.90	438	5
+5	2026-10-21T06:06:58.162Z	3.89	440	5	|	2026-10-21T06:07:18.164Z	4.11	431	0
+6	2026-10-21T06:07:13.163Z	3.68	431	0	|	2026-10-21T06:07:38.181Z	3.80	439	5
+7	2026-10-21T06:07:33.173Z	3.87	438	5	|	2026-10-21T06:07:53.184Z	3.79	439	5
+8	2026-10-21T06:07:48.180Z	3.60	440	5	|	2026-10-21T06:08:13.185Z	3.70	443	5
+
+cpu == user + sys (centiseconds) on every row: True
+scored rounds 8 [1, 2, 3, 4, 5, 6, 7, 8]; discarded rounds []
+load1 before each scored run: 2.58-4.19
+
+[CPU user+sys] n=8 k=2
+  B median 7.100 s; H median 4.275 s; T median 7.070 s
+  twin T-B sorted: -0.110, -0.070, -0.040, -0.030, -0.030, +0.000, +0.030, +0.030
+  twin median -0.030 s (-0.423 % of B); limit max(1.5 % = 106.50 ms, one tick 10 ms) = 106.50 ms
+  sign on non-zero deltas: +2 / -5 (zeros 1, dropped): two-sided p 0.453  [old convention, not used: 2/8, p 0.289]
+  R 0.070 s -> ADMISSIBLE (A1) True
+  treatment H-B sorted: -2.850, -2.840, -2.830, -2.820, -2.820, -2.810, -2.790, -2.600
+  treatment median -2.820 s, interval x(2)..x(7) = -2.840..-2.790
+
+  per-set F = 1.136 s (provisional 16 % of this window B CPU median); 650 ms >= F: False
+  resolves 650 ms (R <= b): True; lower end x(k) -2.840 s > b: False; median -2.820 s <= b: True
+  STATE at 650 ms CPU: MET
+
+[wall] n=8 k=2
+  B median 6.665 s; H median 3.845 s; T median 6.620 s
+  twin T-B sorted: -0.100, -0.090, -0.080, -0.020, -0.010, +0.000, +0.010, +0.070
+  twin median -0.015 s (-0.225 % of B); limit max(1.5 % = 99.98 ms, one tick 10 ms) = 99.98 ms
+  sign on non-zero deltas: +2 / -5 (zeros 1, dropped): two-sided p 0.453  [old convention, not used: 2/8, p 0.289]
+  R 0.090 s -> ADMISSIBLE (A1) True
+  treatment H-B sorted: -2.860, -2.860, -2.840, -2.820, -2.810, -2.790, -2.790, -2.580
+  treatment median -2.815 s, interval x(2)..x(7) = -2.860..-2.790

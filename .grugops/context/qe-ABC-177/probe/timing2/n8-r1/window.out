@@ -1,0 +1,43 @@
+{
+ "host": "MacBook-Air.local",
+ "start": "2026-10-21T06:02:21.933Z",
+ "secs": 180,
+ "polls": 181,
+ "foreignPolls": 108,
+ "kinds": {
+  "vitest": 508
+ },
+ "firstForeign": [
+  {
+   "at": "40",
+   "lines": [
+    "50981 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792444886511-0yjvn6.sh 2>/dev/null || true && shopt -u extglob "
+   ]
+  }
+ ],
+ "lastForeign": {
+  "at": "163",
+  "lines": [
+   "53004 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792444886511-0yjvn6.sh 2>/dev/null || true && shopt -u extglob ",
+   "53013 npm exec vitest run install/mode-census.test.ts scripts/check-foundation-guards.test.ts     ",
+   "53014 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792444886511-0yjvn6.sh 2>/dev/null || true && shopt -u extglob ",
+   "53049 node /Users/olgeroeselg/Projects/public/grugops/node_modules/.bin/vitest run install/mode-census.test.ts scripts/check-foundation-guards.test.ts",
+   "68427 /opt/homebrew/Cellar/node/26.11.1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/public/grugops/node_modules/vitest/sup"
+  ]
+ },
+ "distinct": [
+  "shopt -u extglob 2>/dev/null || true && { \\builtin unalias -- 'unsetenv'; \\builtin unset -f -- 'unsetenv'; } >/dev/null 2>&1 || true && eval 'npm run build 2>&1 | tail -3 && npm run typecheck 2>&1 | tail -5 && npx vitest run scripts/state-path-scan.test.ts 2>&1 | grep -E '\"'\"'×|Tests |Test Files|AssertionError|Error'\"'\"' | head -20' < /dev/null && pwd -P >| /tmp/claude-98e9-cwd",
+  "npm exec vitest run scripts/state-path-scan.test.ts    ",
+  "node /Users/olgeroeselg/Projects/public/grugops/node_modules/.bin/vitest run scripts/state-path-scan.test.ts",
+  "/opt/homebrew/Cellar/node/26.11.1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/public/grugops/node_modules/vitest/suppress-warnings.cjs --conditions node --conditions development --max-old-space-size=1024 /Users/olgeroeselg/Projects/public/grugops/node_modules/vitest/dist/workers/forks.js",
+  "set -f -- 'unsetenv'; } >/dev/null 2>&1 || true && eval 'ls scripts/*.test.ts | wc -l; (git ls-files '\"'\"'*.ts'\"'\"'; echo scripts/state-path-scan.ts) | sort -u | grep -vE '\"'\"'\\.test\\.ts$|\\.d\\.ts$'\"'\"' | wc -l; npx vitest run install/mode-census.test.ts scripts/check-foundation-guards.test.ts 2>&1 | grep -E '\"'\"'×|Tests |AssertionError'\"'\"' | head -20' < /dev/null && pwd -P >| /tmp/claude-f0ed-cwd",
+  "npm exec vitest run install/mode-census.test.ts scripts/check-foundation-guards.test.ts     ",
+  "node /Users/olgeroeselg/Projects/public/grugops/node_modules/.bin/vitest run install/mode-census.test.ts scripts/check-foundation-guards.test.ts"
+ ],
+ "load1": {
+  "first": "2.38",
+  "min": "2.09",
+  "max": "3.02",
+  "last": "2.21"
+ }
+}

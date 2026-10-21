@@ -1,0 +1,42 @@
+{
+ "host": "MacBook-Air.local",
+ "start": "2026-10-21T06:22:17.237Z",
+ "secs": 180,
+ "polls": 181,
+ "foreignPolls": 181,
+ "kinds": {
+  "vitest": 724
+ },
+ "firstForeign": [
+  {
+   "at": "0",
+   "lines": [
+    " 9848 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792444886511-0yjvn6.sh 2>/dev/null || true && shopt -u extglob ",
+    "11289 npm exec vitest run --exclude **/scripts/e2e/**     ",
+    "11315 node /Users/olgeroeselg/Projects/public/grugops/node_modules/.bin/vitest run --exclude **/scripts/e2e/**",
+    "23753 /opt/homebrew/Cellar/node/26.11.1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/public/grugops/node_modules/vitest/sup"
+   ]
+  }
+ ],
+ "lastForeign": {
+  "at": "181",
+  "lines": [
+   " 9848 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792444886511-0yjvn6.sh 2>/dev/null || true && shopt -u extglob ",
+   "11289 npm exec vitest run --exclude **/scripts/e2e/**     ",
+   "11315 node /Users/olgeroeselg/Projects/public/grugops/node_modules/.bin/vitest run --exclude **/scripts/e2e/**",
+   "41188 /opt/homebrew/Cellar/node/26.11.1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/public/grugops/node_modules/vitest/sup"
+  ]
+ },
+ "distinct": [
+  "resh_exit=$?; npx vitest run --exclude '\"'\"'**/scripts/e2e/**'\"'\"' > /private/tmp/claude-501/-Users-olgeroeselg-Projects-public-grugops/00f419dd-b581-4528-bdb3-b92c2575f8c0/scratchpad/full-run.log 2>&1; echo \"full_exit=$?\" >> /private/tmp/claude-501/-Users-olgeroeselg-Projects-public-grugops/00f419dd-b581-4528-bdb3-b92c2575f8c0/scratchpad/full-run.log' < /dev/null && pwd -P >| /tmp/claude-cc55-cwd",
+  "npm exec vitest run --exclude **/scripts/e2e/**     ",
+  "node /Users/olgeroeselg/Projects/public/grugops/node_modules/.bin/vitest run --exclude **/scripts/e2e/**",
+  "/opt/homebrew/Cellar/node/26.11.1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/public/grugops/node_modules/vitest/suppress-warnings.cjs --conditions node --conditions development --max-old-space-size=1024 /Users/olgeroeselg/Projects/public/grugops/node_modules/vitest/dist/workers/forks.js"
+ ],
+ "load1": {
+  "first": "3.68",
+  "min": "2.97",
+  "max": "3.92",
+  "last": "3.63"
+ }
+}
