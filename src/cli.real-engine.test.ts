@@ -450,15 +450,22 @@ if (RUN_DEEP) {
      * decoy book file that is not the delivered book (`ABC-180`).
      */
     let neutral: string;
+    /**
+     * `ABC-183`: whether the decoy existed on the line before `booked` spawned. A7's own decoy checks
+     * run after the child has ended, so only this capture sees the order (`AR-162-FALLBACK`).
+     */
+    let decoyBeforeBooked: boolean;
     const QUIT_TWICE = `${QUIT_NOTICE}\n${QUIT_NOTICE}\n`;
     const OPENING = "e2e4";
 
     beforeAll(() => {
       neutral = mkdtempSync(join(tmpdir(), "abc162-neutral-cwd-"));
       // `ABC-180`: the decoy. Not UTF-8 JSON, so any read of it is refused with one fixed warning.
+      // `ABC-183`: this write MUST come before the `booked` spawn, or a cwd-first read finds nothing.
       mkdirSync(dirname(join(neutral, BOOK_PATH)), { recursive: true });
       writeFileSync(join(neutral, BOOK_PATH), "ABC-180 decoy: not an opening book\n");
       bookless = spawnReal(copy, QUIT_TWICE);
+      decoyBeforeBooked = existsSync(join(neutral, BOOK_PATH));
       booked = spawnReal(REPOSITORY, `${OPENING}\n`, ["--colour", "white", "--ascii"], neutral);
     }, 4 * HANG_GUARD_MS);
 
@@ -490,6 +497,10 @@ if (RUN_DEEP) {
       expect(join(neutral, "/"), "A7's working directory").not.toBe(join(REPOSITORY, "/"));
       const decoy = join(neutral, BOOK_PATH);
       expect(existsSync(decoy), "the decoy in A7's working directory").toBe(true);
+      expect(
+        decoyBeforeBooked,
+        "AR-162-FALLBACK: the decoy must exist before the booked child spawns, or the detector is disarmed",
+      ).toBe(true);
       // Keeps the decoy from becoming a book: a valid book would read silently (`ABC-180`).
       expect(
         () => JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(readFileSync(decoy))),

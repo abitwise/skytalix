@@ -702,3 +702,27 @@ here. **Result: PASS_WITH_RISKS**, with no required security fixes. The change h
   - **Fix:** fire on a per-file rise in the limb's AST occurrence count.
   - **Closes when** QE's uncomment plant fires on every limb.
 - **Unchanged:** `AR-095-READ` (LOW, Security/NFR) and `AR-180-VALIDATED` (LOW, the Orchestrator).
+
+**2026-10-21, Security/NFR: `AR-180-VALIDATED` is CLOSED. QE-183-a is opened as the new `AR-183-CWDARG`.**
+This is subtask `security-nfr-ABC-183`, on `ABC-183` at QE tip `3ab055f4` (SE `c4c6d36e`, code `7bd2b54f`). The
+notes are in `.grugops/context/security-nfr-ABC-183/notes/` (`…41f70925` decision, `…d5fd47e1` readings) and are not
+restated here. **Result: PASS_WITH_RISKS**, with no required fixes. The change is test-only, +11/−0 in
+`src/cli.real-engine.test.ts`, with 0 production lines.
+- **`AR-180-VALIDATED`: closed as written.**
+  - Part (i) was met at `ABC-163`'s merge (`…8d0de2f4`).
+  - Part (ii): QE read TMO + P6f green on the base test and red at the new `A7` assertion on the head test
+    (`…5e544b3e`).
+  - G-1 (P6g) stays the designed, untested family. Its control is Ruling 2 (now mechanical) plus S3 item 2.
+- **`AR-183-CWDARG` (LOW; owner the Orchestrator): new, not an extension.** Dropping `booked`'s `neutral` argument
+  runs the child from the tree root. Under P6f the lane then stays 11/11 green, because `A7` asserts the variable,
+  not the child's working directory. The gap predates this change (`ABC-162`) and does not block this merge.
+  - **Fix (BA/PM, XS P3 cut now, test-only):** `RealChild` carries the `cwd` it spawned with, and `A7` asserts
+    `booked.cwd` is `neutral`, with a labelled message. It adds 0 spawns and 0 tests. Measured in scratch: it reds
+    TCWD + P6f, and the P6f kill holds.
+  - **Promotion trigger:** the same as `AR-180-VALIDATED`'s (`ABC-168` fires it). When it fires, raise the ticket to
+    P2; the fix is owed before that ticket merges, and the gate reads the launch path for a cwd book read. Any
+    ticket that edits `A7`, `spawnReal`, `spawnNode` or `RealChild` first carries the fix instead.
+  - **Closes when** the fix lands and QE reads TCWD + P6f red at head.
+- **QE-183-b (TMOC): INFO, accepted.** There is no record and no cut. `ABC-183` A1's `grep -B1` stays a QE read at
+  any hop that edits `A7`'s `beforeAll`.
+- **Unchanged:** `AR-095-READ` (LOW, Security/NFR), `AR-163-DELONLY` and `AR-163-UNCOMMENT`.
