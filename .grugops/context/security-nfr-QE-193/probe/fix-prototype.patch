@@ -1,0 +1,31 @@
+--- <repo>/.grugops/context/design-F-072-1/probe/clause-b.mjs	2026-10-21 21:22:46
++++ <scratch>/snfr193/ref/clause-b.fix.mjs	2026-10-21 21:32:55
+@@ -208,11 +208,14 @@
+   const removed = new Map();
+   let file = null;
+   let old = null;
++  let hdr = false;
+   const quoted = new Set(); // ABC-193: a path git still prints C-quoted ("…"), as git printed it, a/ or b/ dropped
+   for (const line of git("diff", "-U0", "--no-renames", "--text", "--no-textconv", "--no-ext-diff", "--no-color", "--src-prefix=a/", "--dst-prefix=b/", b, h, "--", "src").split("\n")) {
+-    if (/^(?:---|\+\+\+) "/.test(line)) quoted.add(line.slice(4).replace(/^"[ab]\//, '"'));
+-    if (line.startsWith("--- ")) {
+-      const p = line.slice(4);
++    if (line.startsWith("diff --git ")) hdr = true;
++    else if (line.startsWith("@@")) hdr = false;
++    if (hdr && /^(?:---|\+\+\+) "/.test(line)) quoted.add(line.slice(4).replace(/^"[ab]\//, '"'));
++    if (hdr && line.startsWith("--- ")) {
++      const p = line.slice(4).replace(/^([^"].*)\t$/, "$1");
+       old = p === "/dev/null" ? null : p.replace(/^a\//, "");
+       if (old && !isProduction(old)) old = null;
+     }
+@@ -220,8 +223,8 @@
+       const m = /^@@ -\d+(?:,(\d+))? /.exec(line);
+       removed.set(old, (removed.get(old) ?? 0) + (m[1] === undefined ? 1 : Number(m[1])));
+     }
+-    if (line.startsWith("+++ ")) {
+-      const p = line.slice(4);
++    if (hdr && line.startsWith("+++ ")) {
++      const p = line.slice(4).replace(/^([^"].*)\t$/, "$1");
+       file = p === "/dev/null" ? null : p.replace(/^b\//, "");
+       if (file && !isProduction(file)) file = null;
+       if (file) out.set(file, out.get(file) ?? new Set());

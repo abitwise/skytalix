@@ -1,0 +1,204 @@
+=== PP-TPL  (aa86a1a1..7f69fe5f)
+  L1 head limb 1: does not fire
+  L1 base limb 1: does not fire
+  L1 fix  limb 1: does not fire
+  L2 head limb 2: does not fire
+      diff aa86a1a1..7f69fe5f = aa86a1a1..7f69fe5f; production files changed: 1
+  L2 base limb 2: does not fire
+  L2 fix  limb 2: FIRES
+   fix:      diff aa86a1a1..7f69fe5f = aa86a1a1..7f69fe5f; production files changed: 1
+   fix:      src/fen.ts:351  const u = process.env.FEN_URL ?? "";
+  L3 head limb 3: does not fire
+      diff aa86a1a1..7f69fe5f = aa86a1a1..7f69fe5f; production files changed: 1
+  L3 base limb 3: does not fire
+  L3 fix  limb 3: FIRES
+   fix:      diff aa86a1a1..7f69fe5f = aa86a1a1..7f69fe5f; production files changed: 1
+   fix:      src/fen.ts:352  return (await fetch(u)).text();
+  stand-in:
+    | +++ promoted pieces
+  stand-in end
+=== PP-CMT  (aa86a1a1..a2cbf4ee)
+  L1 head limb 1: does not fire
+  L1 base limb 1: does not fire
+  L1 fix  limb 1: does not fire
+  L2 head limb 2: does not fire
+      diff aa86a1a1..a2cbf4ee = aa86a1a1..a2cbf4ee; production files changed: 1
+  L2 base limb 2: does not fire
+  L2 fix  limb 2: FIRES
+   fix:      diff aa86a1a1..a2cbf4ee = aa86a1a1..a2cbf4ee; production files changed: 1
+   fix:      src/fen.ts:351  const u = process.env.FEN_URL ?? "";
+  L3 head limb 3: does not fire
+      diff aa86a1a1..a2cbf4ee = aa86a1a1..a2cbf4ee; production files changed: 1
+  L3 base limb 3: does not fire
+  L3 fix  limb 3: FIRES
+   fix:      diff aa86a1a1..a2cbf4ee = aa86a1a1..a2cbf4ee; production files changed: 1
+   fix:      src/fen.ts:352  return (await fetch(u)).text();
+  stand-in:
+    | +++ promoted pieces
+  stand-in end
+=== PP-CTL  (aa86a1a1..f330ac67)
+  L1 head limb 1: does not fire
+  L1 base limb 1: does not fire
+  L1 fix  limb 1: does not fire
+  L2 head limb 2: FIRES
+      diff aa86a1a1..f330ac67 = aa86a1a1..f330ac67; production files changed: 1
+      src/fen.ts:351  const u = process.env.FEN_URL ?? "";
+  L2 base limb 2: FIRES
+  L2 fix  limb 2: FIRES
+   fix:      diff aa86a1a1..f330ac67 = aa86a1a1..f330ac67; production files changed: 1
+   fix:      src/fen.ts:351  const u = process.env.FEN_URL ?? "";
+  L3 head limb 3: FIRES
+      diff aa86a1a1..f330ac67 = aa86a1a1..f330ac67; production files changed: 1
+      src/fen.ts:352  return (await fetch(u)).text();
+  L3 base limb 3: FIRES
+  L3 fix  limb 3: FIRES
+   fix:      diff aa86a1a1..f330ac67 = aa86a1a1..f330ac67; production files changed: 1
+   fix:      src/fen.ts:352  return (await fetch(u)).text();
+  stand-in:
+  stand-in end
+=== PP-REDIR  (aa86a1a1..c4dca2a1)
+  L1 head limb 1: does not fire
+  L1 base limb 1: does not fire
+  L1 fix  limb 1: does not fire
+  L2 head limb 2: does not fire
+      diff aa86a1a1..c4dca2a1 = aa86a1a1..c4dca2a1; production files changed: 2
+  L2 base limb 2: does not fire
+  L2 fix  limb 2: FIRES
+   fix:      diff aa86a1a1..c4dca2a1 = aa86a1a1..c4dca2a1; production files changed: 1
+   fix:      src/fen.ts:351  const u = process.env.FEN_URL ?? "";
+  L3 head limb 3: does not fire
+      diff aa86a1a1..c4dca2a1 = aa86a1a1..c4dca2a1; production files changed: 2
+  L3 base limb 3: does not fire
+  L3 fix  limb 3: FIRES
+   fix:      diff aa86a1a1..c4dca2a1 = aa86a1a1..c4dca2a1; production files changed: 1
+   fix:      src/fen.ts:352  return (await fetch(u)).text();
+  stand-in:
+    | +++ b/src/glyph-mode.ts
+  stand-in end
+=== PP-L1  (aa86a1a1..6cd8e6e5)
+  L1 head limb 1: FIRES
+  L1 base limb 1: FIRES
+  L1 fix  limb 1: FIRES
+  L2 head limb 2: does not fire
+      diff aa86a1a1..6cd8e6e5 = aa86a1a1..6cd8e6e5; production files changed: 1
+  L2 base limb 2: does not fire
+  L2 fix  limb 2: does not fire
+   fix:      diff aa86a1a1..6cd8e6e5 = aa86a1a1..6cd8e6e5; production files changed: 1
+  L3 head limb 3: does not fire
+      diff aa86a1a1..6cd8e6e5 = aa86a1a1..6cd8e6e5; production files changed: 1
+  L3 base limb 3: does not fire
+  L3 fix  limb 3: does not fire
+   fix:      diff aa86a1a1..6cd8e6e5 = aa86a1a1..6cd8e6e5; production files changed: 1
+  stand-in:
+    | +++ promoted pieces
+  stand-in end
+=== PP-EDIT  (aa86a1a1..4cbfe383)
+  L1 head limb 1: does not fire
+  L1 base limb 1: does not fire
+  L1 fix  limb 1: does not fire
+  L2 head limb 2: does not fire
+      diff aa86a1a1..4cbfe383 = aa86a1a1..4cbfe383; production files changed: 1
+  L2 base limb 2: does not fire
+  L2 fix  limb 2: FIRES
+   fix:      diff aa86a1a1..4cbfe383 = aa86a1a1..4cbfe383; production files changed: 1
+   fix:      src/cli.ts:142  const resolution = resolveOptions(process.argv.slice(1));
+  L3 head limb 3: does not fire
+      diff aa86a1a1..4cbfe383 = aa86a1a1..4cbfe383; production files changed: 1
+  L3 base limb 3: does not fire
+  L3 fix  limb 3: does not fire
+   fix:      diff aa86a1a1..4cbfe383 = aa86a1a1..4cbfe383; production files changed: 1
+  stand-in:
+    | +++ promoted pieces
+  stand-in end
+=== RA-PLUS  (aa86a1a1..30e01e38)
+  L1 head limb 1: FIRES (disputed: unresolved, the fail-safe)
+  L1 base limb 1: does not fire
+  L1 fix  limb 1: does not fire
+  L2 head limb 2: FIRES (disputed: unresolved, the fail-safe)
+      diff aa86a1a1..30e01e38 = aa86a1a1..30e01e38; production files changed: 1
+      "quoted" note (C-quoted by git; not read)
+  L2 base limb 2: does not fire
+  L2 fix  limb 2: FIRES
+   fix:      diff aa86a1a1..30e01e38 = aa86a1a1..30e01e38; production files changed: 1
+   fix:      src/fen.ts:351  const u = process.env.FEN_URL ?? "";
+  L3 head limb 3: FIRES (disputed: unresolved, the fail-safe)
+      diff aa86a1a1..30e01e38 = aa86a1a1..30e01e38; production files changed: 1
+      "quoted" note (C-quoted by git; not read)
+  L3 base limb 3: does not fire
+  L3 fix  limb 3: FIRES
+   fix:      diff aa86a1a1..30e01e38 = aa86a1a1..30e01e38; production files changed: 1
+   fix:      src/fen.ts:352  return (await fetch(u)).text();
+  stand-in:
+    | +++ "quoted" note
+  stand-in end
+=== SP-N5  (2858db4d..942e547a)
+  L1 head limb 1: does not fire
+  L1 base limb 1: does not fire
+  L1 fix  limb 1: FIRES
+  L2 head limb 2: does not fire
+      diff 2858db4d..942e547a = 2858db4d..942e547a; production files changed: 0
+  L2 base limb 2: does not fire
+  L2 fix  limb 2: FIRES
+   fix:      diff 2858db4d..942e547a = 2858db4d..942e547a; production files changed: 1
+  L3 head limb 3: does not fire
+      diff 2858db4d..942e547a = 2858db4d..942e547a; production files changed: 0
+  L3 base limb 3: does not fire
+  L3 fix  limb 3: FIRES
+   fix:      diff 2858db4d..942e547a = 2858db4d..942e547a; production files changed: 1
+  stand-in:
+    | --- a/src/q t.ts	
+    | +++ b/src/q t.ts	
+  stand-in end
+=== SP-N4  (aa86a1a1..d0ff7432)
+  L1 head limb 1: does not fire
+  L1 base limb 1: does not fire
+  L1 fix  limb 1: FIRES
+  L2 head limb 2: does not fire
+      diff aa86a1a1..d0ff7432 = aa86a1a1..d0ff7432; production files changed: 0
+  L2 base limb 2: does not fire
+  L2 fix  limb 2: FIRES
+   fix:      diff aa86a1a1..d0ff7432 = aa86a1a1..d0ff7432; production files changed: 1
+  L3 head limb 3: does not fire
+      diff aa86a1a1..d0ff7432 = aa86a1a1..d0ff7432; production files changed: 0
+  L3 base limb 3: does not fire
+  L3 fix  limb 3: does not fire
+   fix:      diff aa86a1a1..d0ff7432 = aa86a1a1..d0ff7432; production files changed: 1
+  stand-in:
+    | +++ b/src/w t.ts	
+  stand-in end
+=== waiver form on SP-N5 / PP-TPL
+src/q t.ts$
+src/fen.ts
+=== raw headers SP-N5
+--- a/src/q t.ts^I$
++++ b/src/q t.ts^I$
+=== raw PP-TPL lines
+3:--- a/src/fen.ts
+4:+++ b/src/fen.ts
+5:@@ -12,0 +13,5 @@
+7:+++ promoted pieces
+11:@@ -343,0 +349,5 @@ export function toFen(position: Position): string {
+=== stand-in under GIT_DIFF_OPTS=--unified=5 on PP-TPL / PP-CTL
+TPL:
++++ promoted pieces
+CTL:
+fix L3 TPL:   limb 3: FIRES
+=== route check
+no color/diff keys
+=== space+quote and tab names (head instrument, limb 2)
+--- /dev/null$
++++ "b/src/a \"b.ts"^I$
+--- /dev/null$
++++ "b/src/c\td.ts"$
+      "src/a \"b.ts"^I (C-quoted by git; not read)$
+      "src/c\td.ts" (C-quoted by git; not read)$
+  limb 2: FIRES (disputed: unresolved, the fail-safe)$
+=== instrument limb 1 on SP-N5 (baseline names the new holder, verdict silent)
+  (b1) Ruling 2 (ADR-0036 § S1, the holder file): holders 1 at <base>, 2 at <head>; holder files with changed lines (+ or -): 0
+  baseline at <head>, STATE (recorded, not a trigger): 42 production files; 2 hold this limb in code (src/book-file.ts, src/q t.ts); 5 by raw word hit
+  limb 1: does not fire
+=== stand-in over main history (first-parent commits touching src, and root..tip)
+commits: 174; hits: 0
+root..tip lines: 0
+=== route check
+no color/diff keys in clone
