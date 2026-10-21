@@ -19,6 +19,17 @@ Orchestrator pre-check, 2026-10-21 ~05:43Z:
 
 The 180 s pre-sample result is in `.grugops/queue/claimed/qe-ABC-177-timing-2/` once claimed.
 
+## Owner amendment (2026-10-21 ~05:55Z, note `…b87c35b6`) — READ FIRST, overrides the window rule below
+- Foreign sessions no longer block the window; the owner has throttled them. Prefer a foreign-free window if one opens, but don't wait for one.
+- Still required:
+  - AC on every sample;
+  - load1 ≤ 8;
+  - base and head arms interleaved;
+  - record per run: power, load1, foreign process count and commands.
+- If head reads over 9.2 s with foreign load recorded, re-run that pair once; the lower reading stands. Escalation is unchanged.
+- The owner has delegated: wherever a decision is needed, take the recommended option and record it.
+- Pre-check 05:43–05:50Z: AC 24/24, load1 1.96–3.20. The bursts were a grugops-kit Claude session running vitest.
+
 ## Read first
 - `.grugops/queue/done/qe-ABC-177-timing.md` for attempt 2 and its result.
 - Notes `…dbd4875c` and `…51e0ae25`. The second has the arm rebuild recipe.
