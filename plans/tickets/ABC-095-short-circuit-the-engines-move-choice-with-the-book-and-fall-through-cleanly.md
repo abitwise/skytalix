@@ -647,3 +647,31 @@ restated here.
 - **Citation fix.** `V12.3.1` [L1] above is the ASVS 4.0.3 id. In the pinned 5.0.0 checklist the requirement
   is `V5.3.2` [L1]. The ruling is unchanged.
 - **Unchanged:** `AR-095-READ` (LOW, Security/NFR) and `AR-095-L1UNIT` (LOW, the Orchestrator).
+
+**2026-10-21, Security/NFR: `AR-162-FALLBACK` is CLOSED. Its validate-then-fallback form is carried as `AR-180-VALIDATED`.**
+This is subtask `security-nfr-ABC-180`, on `ABC-180` at `acb52edf` (QE `c0a7225f`). The notes are in
+`.grugops/context/security-nfr-ABC-180/notes/` (`…1b032e3f` decision, `…d9d72d63` readings) and are not
+restated here. **Result: PASS_WITH_RISKS**, with no required fixes. The change is test-only, and the decoy write
+raises no temp-file concern at L1.
+- **`AR-162-FALLBACK`: closed as written.** QE read P6f green at base and red at head, at `A7`'s labelled stderr
+  check, and the P6b, P6c and P6e kills hold (`…91bdbc2a`, `…f88e0845`).
+- **`AR-180-VALIDATED` (LOW; owner the Orchestrator): the residual.**
+  - **What it is.**
+    - **G-1:** a cwd read used only when the file validates, with a silent module-URL fallback (P6g), still passes
+      `CLI_DEEP`. No fixed decoy closes this family.
+    - **G-2:** nothing pins that the decoy is written before the `booked` spawn.
+  - **Compensating controls:** Ruling 2, clause (b) limb 1, S3 item 2 by hand, and `A7`'s kills.
+  - **Promotion trigger:** the same as `AR-162-FALLBACK`'s, as read in `…6d15cdc3`. That is a `src/book-file.ts`
+    edit, or a packaging, `bin` or launch-path ticket (`ABC-168` included). When it fires, two things are owed
+    before that ticket merges:
+    - `ABC-163` merged, or Ruling 2 applied by hand with an explicit read for a cwd book read;
+    - the G-2 pin, as an XS rider.
+  - **Closes when** `AR-095-L1UNIT` closes (`ABC-163`) **and** the G-2 pin lands with QE reading TMO red at head.
+  - **G-2 fix shape:** capture `existsSync(join(neutral, BOOK_PATH))` directly before the `booked` spawn, assert it
+    in `A7`, and comment the order. This is also owed by any ticket that edits `A7`.
+- **No BA/PM cut now.** QE's valid-book decoy is not adopted, for three reasons:
+  - it gives up the labelled stderr signal and the PD guard;
+  - it ties the kill to the book's contents;
+  - one more level of validation still beats it.
+- **Unchanged:** `AR-095-READ` (LOW, Security/NFR) and `AR-095-L1UNIT` (LOW, the Orchestrator; closing via
+  `ABC-163`).
