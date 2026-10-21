@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-21 by Orchestrator — `ABC-186` In Development → In Review (SE `9943e5f4`); QE `qe-ABC-186` dispatched. In Review 1/3._
 _Updated: 2026-10-21 by Orchestrator — owner: Option A for the AGENTS.md split, ABC-164 stays P2, start ABC-186 (`…18e4ada0`). `ABC-186` Ready → In Development (1/3), SE `ticket-to-pr-ABC-186`; BA/PM `bapm-fold-A-ABC-164` writes Option A into ABC-164. Ready 1/8 → 0/8._
 _Updated: 2026-10-21 by BA/PM (`bapm-rule-QE-165`, records only) — QE-165-a/-b ruled at `main` `3d36999b` (`…1636e62c`, readings `…411b3032`). Cut `ABC-186` (Ready, XS, P3, DoR 10/10): the trace table ends at `:496` (blank line + HTML comment), so 632 of 690 rows render as paragraph text (`marked` 59 `<tr>`); re-head above `:629` with copies of `:436`/`:437`, drop blank lines `:740`/`:742` (measured: 2 tables, 692/692 `<tr>`), and fold QE-165-b (note `:371–376` removed, `:364` marked history, renderer sentence replaced; forward rule gains the blank-line sentence and `A1-fragments`). `ABC-185` kept separate, ordered after: Ready → Backlog, waits `ABC-186` merged, DoR 10/10 re-scored (+`A6`); owner may still close it once the table renders. QE-165-c/-d INFO, not cut. Ready 1/8.
 _Updated: 2026-10-21 by BA/PM (`bapm-rescope-ABC-164`, records only) — `ABC-164` re-scoped at `main` `3d36999b` on the owner's direction (`…c6bf41be`): its two counts are already gone and the four rule strings present, so the old A1–A5 hold at base. New problem: `AGENTS.md` is 24,575 of 24,576 B (1 B, 0.0 edits) and holds on-demand text every session reads. Now `S`, `P2` (trigger fired), DoR 8/10, stays Backlog: A1 ≤ 18,432 B; A2/A3 on-demand blocks out and reachable in one pointer; A4 nothing lost; A5 rule strings survive; A6 owed lines O1–O3 landed; A7 17 vitest commands, Dev/run slot, 0 `src/` lines, budget constant unchanged. Items 2/4 wait on `scribe-audit-agents-md`'s split table. ABC-146's `node` line ruled moot (route V); QE-159-f's line already landed (`8187ee19`). Backlog and Ready counts unchanged._
@@ -941,8 +942,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-186] The trace table stops rendering at `plans/traceability.md:496`, so 632 of its 690 rows render as paragraph text, and the table's note still carries a counting rule that disagrees with its own command  (BA/PM, XS, P3, epic: —, since: 2026-10-21, **DoR 10/10**; cut in `bapm-rule-QE-165` from QE-165-a (MEDIUM) + QE-165-b (LOW); records only, one file; racing rule: merge `main` before QE and merge, short append freeze at merge. Pull before `ABC-185`.) **Pulled 2026-10-21** Ready → In Development on owner go, SE `ticket-to-pr-ABC-186`.
+## In Development (WIP 0/3)
 
 
 
@@ -970,7 +970,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-186] The trace table stops rendering at `plans/traceability.md:496`, so 632 of its 690 rows render as paragraph text, and the table's note still carries a counting rule that disagrees with its own command  (BA/PM, XS, P3, epic: —, since: 2026-10-21, **DoR 10/10**; cut in `bapm-rule-QE-165` from QE-165-a (MEDIUM) + QE-165-b (LOW); records only, one file; racing rule: merge `main` before QE and merge, short append freeze at merge. Pull before `ABC-185`.) **Pulled 2026-10-21** Ready → In Development on owner go, SE `ticket-to-pr-ABC-186`. SE tip `9943e5f4` (code `50d54d53`): A1 `4 3` → `2 0`, 696 of 696 rows render in 2 tables; gates green 59/1987; QE `qe-ABC-186`.
 
 
 
