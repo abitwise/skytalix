@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-21 by Orchestrator — owner go "pull next 2": `ABC-168` (P1) and `ABC-172` (P2) Backlog → In Development (2/3). ABC-168 SE started (width 3 with qe-ABC-185, qe-ABC-187); ABC-172 SE queued for the next free slot._
 _Updated: 2026-10-21 by Orchestrator — `ABC-187` In Development → In Review (tip `9578481f`); QE `qe-ABC-187` dispatched. In Development 0/3, In Review 2/3._
 _Updated: 2026-10-21 by Orchestrator — `ABC-185` In Development → In Review (SE `3d166e01`); QE `qe-ABC-185` dispatched. In Development 1/3, In Review 1/3._
 _Updated: 2026-10-21 by Orchestrator — `ABC-187` Ready → In Development (2/3), SE `ticket-to-pr-ABC-187`; `AGENTS.md:7` folded in (Scribe on the same branch, then QE). Ready 1/8 → 0/8._
@@ -931,8 +932,6 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [EPIC-005] Opening book  (owner: BA/PM, **size: M — corrected from `S`; the cutter stopped at `M` deliberately, refusing the M→XL/M→L precedent as "a pattern, not evidence", since `L` would claim the book is the size of `EPIC-004`'s whole engine**, priority: P1, since: 2026-07-22, **DECOMPOSED 2026-08-16 into `ABC-092`…`ABC-096`. The WORK is pullable today — 4 of 5 tickets need nothing from `EPIC-004` — but the VALUE is not deliverable until `EPIC-004` lands; collapsing those two is how a board lies.** `EPIC-001`'s dependency verified DISCHARGED by reading the tree, not the front matter; `ABC-095` is the only hard blocker. Largest ticket `M`, no `SPLIT_REQUIRED`)
 - [EPIC-006] Game session and packaging  (owner: BA/PM, **size: XL — corrected from `L`; 9 tickets / 20 points across both halves, ~1.5x the 13 `L` was assigned, and it hit that ceiling BEFORE distribution was priced**, priority: P1, since: 2026-07-22, **BOTH HALVES NOW CUT: the runnable half `ABC-041`…`ABC-046` (2026-08-13) and the second half `ABC-100`…`ABC-102` (2026-08-16) — only THREE tickets, because the scope of packaging is a FUNCTION of a distribution channel nobody has chosen.** `ABC-100` cuts the DECISION, never the ANSWER: a superseding ADR per `ADR-0007` `D5`, on the owner's word, verbatim and dated. **Acceptance criterion 1 (`npx <package>`) remains unmeetable by any ticket. Recommendation NOT taken, standing for the owner: this should probably be two epics** — the halves share no dependency in either direction and their blockers differ in kind)
 - [EPIC-007] The engine speaks UCI, so a chess UI can play against it  (owner: BA/PM, size: M, priority: P1, since: 2026-10-18, **ACCEPTED 2026-10-18 (owner, `…c3e81a57`); private/UNLICENSED; Q12–Q15 answered; ABC-167..172 cut, DoR 10/10, next free id ABC-173** (lifts the UCI half of EPIC-004's non-goal; EPIC-004 not yet edited); proposed in `bapm-engine-plan` (`4a98860c`). Tickets RESERVED, no page cut: ABC-167 (S, session) → ABC-168 (XS, entry point, In Security/NFR); ABC-169 (XS, licence, outside v1, on Q8). Waits: the owner's answers to Q1–Q11 ("accept recommendations" suffices) and ADR-0044 acceptance.)
-- [ABC-168] `skytalix`: `src/uci.ts`, `dist/uci.js` + `bin`, opt-in real-child lane, M1/M2/M8(a)/M9 at UAT  (owner: BA/PM, size: S, priority: P1, epic: EPIC-007, since: 2026-10-18, DoR 10/10; In Security/NFR on (b1)+(a). Waits: after ABC-171; owner installs cutechess-cli + En Croissant before UAT.)
-- [ABC-172] Rename package and in-repo names to `skytalix`; directory and remote are owner steps  (owner: BA/PM, size: XS, priority: P2, epic: EPIC-007, since: 2026-10-18, DoR 10/10; clause (a) Security/NFR hop. Waits: Q14 default = keep `npm run chess`.)
 
 ## Ready (WIP 0/8)
 
@@ -950,7 +949,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 2/3)
+- [ABC-168] `skytalix`: `src/uci.ts`, `dist/uci.js` + `bin`, opt-in real-child lane, M1/M2/M8(a)/M9 at UAT  (owner: BA/PM, size: S, priority: P1, epic: EPIC-007, since: 2026-10-18, DoR 10/10; In Security/NFR on (b1)+(a). Waits: after ABC-171; owner installs cutechess-cli + En Croissant before UAT.) **Pulled 2026-10-21** Backlog → In Development on owner go (pull next 2); deps met (ABC-171 `25162735`); SE `ticket-to-pr-ABC-168`; Scribe (Scope 5), QE, Security/NFR (Ruling 2, launch path) and owner UAT follow.
+- [ABC-172] Rename package and in-repo names to `skytalix`; directory and remote are owner steps  (owner: BA/PM, size: XS, priority: P2, epic: EPIC-007, since: 2026-10-18, DoR 10/10; clause (a) Security/NFR hop. Waits: Q14 default = keep `npm run chess`.) **Pulled 2026-10-21** Backlog → In Development on owner go (pull next 2); SE `ticket-to-pr-ABC-172` queued for the next free agent slot (width 3 held), after ABC-187 merges.
 
 
 
