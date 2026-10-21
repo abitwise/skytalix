@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-21 09:30Z — Orchestrator: `scribe-agents-md-2026-10-21` merged to `main` with gates passing. AGENTS.md now locates the sealed-note writer and states the 400/128 heap rule; the real-engine lane comment carries no count. 24,554 / 24,576 B._
 _Updated: 2026-10-21 09:20Z — Orchestrator: ABC-162 In Review → In Security/NFR (QE PASS_WITH_GAPS `…68554c31`; P6b killed; P6f survives as G-1). Dispatched `security-nfr-ABC-162` (AR-095-CWD ruling) and `scribe-agents-md-2026-10-21`._
 _Updated: 2026-10-21 09:05Z — Orchestrator: ABC-159 In Review → Done, merged to `main` with all gates passing; UAT waived. QE-159-a (san header over-claims) and the other gaps sent to BA/PM (`bapm-rule-QE-159`)._
 _Updated: 2026-10-21 08:55Z — Orchestrator: ABC-160 In Review → Done, merged to `main` with all gates passing; UAT waived (0 production lines); QE-160-a accepted per the page's Out of scope._
