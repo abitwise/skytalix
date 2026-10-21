@@ -1,8 +1,8 @@
 ---
 id: ABC-186
 title: "The trace table stops rendering at `plans/traceability.md:496`, so 632 of its 690 rows render as paragraph text, and the table's note still carries a counting rule that disagrees with its own command"
-status: in-review
-column: In Review
+status: done
+column: Done
 size: XS
 priority: P3
 epic: —
@@ -167,3 +167,21 @@ BA/PM, 2026-10-21 at `3d36999b`. **Result: 10 of 10.**
 
 Column moves are the Orchestrator's. Owner: **the Orchestrator** (routes the build to the Software Engineer), then
 QE.
+
+## QE
+
+QE/E2E, 2026-10-21, subtask `qe-ABC-186`, branch `grugops/qe-ABC-186` (from `9943e5f4`). **Verdict: PASS_WITH_GAPS**, with 0 blocking and 4 INFO gaps. Notes are in `.grugops/context/qe-ABC-186/notes/`: criteria `…8515e0a0`, gates `…f3984558`, break attempts `…2bc29fd0`, verdict `…8c01b4ee`.
+
+- **Merge.** `main` `60d72e66` merged in as `fb04f495`, no conflict. `main`'s rows are kept verbatim. Every criterion below was run there and at the code tip `50d54d53`.
+- **A1** `4 3` → `2 0`. **A2** (`marked` 15.0.12, `-o`) 2 tables, 697 `<tr` = 699 `|` lines − 2 delimiters, 0 outside a table. **A3** outside the note: −2 empty lines (`:740`, `:742`), +2 lines byte-equal to the header and delimiter, between the blank line after the comment and `| ABC-057 |`. **A4** the same 86 names. **A5** `0 0 0 1 1 1`, and the three lines are byte-kept. **A6** the command is byte-equal to the one on this page, and the paragraph names a blank line and an HTML comment. **A7** only `plans/traceability.md`. **All MET.**
+- **The SE's base reading of 60 `<tr` is confirmed.** At `a3e6f2a7` there are 59 table rows plus 1 `<tr` outside a table. That one is the literal `<tr>` in row `ABC-186 (BA/PM)`, which became raw HTML while the row was paragraph text. At the merge it renders as `&lt;tr&gt;` in a cell.
+- **Gates** (the code trees are byte-equal to `50d54d53`):
+  - lint 0, typecheck 0, build 0;
+  - `npm test` 59 / 1987, `last-run.json` `success: true`;
+  - skip-integrity `--skip-count 0` "No findings."
+- **UAT waiver.** AGENTS.md's measurement is empty (0 production lines), so the waiver holds. A waiver is not a signature.
+- **Gaps:**
+  - `QE-186-a`: this page puts the escape-aware split at `:355`; at `3d36999b` it is `:354`.
+  - `QE-186-b`: a row indented 1–3 spaces still renders as a table row, but none of the `^|` checks can see it.
+  - `QE-186-c`: `cmark-gfm` and GitHub are not tried, `UNKNOWN - verify`.
+  - `QE-186-d`: the note's earlier sentence "This note names no row." is literally untrue (it means "none as malformed"), and it is out of scope here.
