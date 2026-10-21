@@ -4,7 +4,7 @@ role: software-engineer
 tickets: [ABC-172]
 branch: grugops/ABC-172 (from main @ the main tip at your start); worktree ../wt-ABC-172
 ref: .grugops/context/ticket-to-pr-ABC-172/
-width: queued — starts at the next free slot, after ABC-187 merges (both edit AGENTS.md and src/cli.test.ts)
+width: 3 (beside ticket-to-pr-ABC-168 and qe-ABC-187)
 ---
 
 # SE: ABC-172: rename the package and every in-repo name to `skytalix`; the directory and the remote are owner steps. Owner go (pull next, 2026-10-21)
@@ -19,6 +19,7 @@ width: queued — starts at the next free slot, after ABC-187 merges (both edit 
 - Edits to `AGENTS.md` are the Scribe's unless the page assigns them to you; if the page assigns them to you, keep the byte count ≤ 18,432.
 
 ## Do
+- **ABC-187 (in QE now) edits `AGENTS.md:7` and `src/cli.test.ts` (`:2242`, `:2483-2484`) and may merge during your hop.** Before you finish, merge the current `main` into your branch (a merge, not a rebase), resolve by keeping both changes, and re-run every criterion and gate at that merge. Report the merge sha.
 - Create the worktree `../wt-ABC-172` on `grugops/ABC-172` from the current `main`. A `node_modules` symlink is fine; remove it before you finish if it isn't ignored.
 - Read every criterion at base first. Implement exactly the page's scope.
 - Gates on the tip: lint, typecheck, build; `npm test` + `last-run.json` success (counts equal base); skip-integrity `--skip-count 0`; `CLI_DEEP` (6 children with `--reporter=verbose`) and `PERFT_DEEP`. Heap 400 one-file, 128 multi-file. No timing.
