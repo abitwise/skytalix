@@ -4,7 +4,7 @@
 
 This repo runs a file-based agent factory for software delivery. One Orchestrator (the head grug) routes work through the full lifecycle; a few single-job grug agents execute within hard limits. The role is the intelligence. The workflow is the guardrail. The shared verified context is the memory. The board is the state. The gate is the backpressure. Humans decide; agents execute.
 
-**Byte budget: this file targets ≤ 24,576 B.** Why, and the size of every pass: the preamble and the last entry of `memory-bank/90-agents-md-command-log.md`.
+**Byte budget: this file targets ≤ 18,432 B.** Why, and the size of every pass: the preamble and the last entry of `memory-bank/90-agents-md-command-log.md`.
 
 ## How to work here
 
