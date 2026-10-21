@@ -73,8 +73,7 @@ What the readings say:
 
 ## Discarded runs (recorded, not graded)
 - **Where the foreign runners came from.** Every one seen was from
-  `/Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared` (`pnpm exec vitest run
-  --project integration …`).
+  `<private-repo>` (`<foreign: vitest>`).
   - That is another project's session, not the `public/grugops` one the subtask named.
   - This hop did not touch it.
 - **Three runs were discarded** for a foreign runner during or after the run. Each was re-taken once

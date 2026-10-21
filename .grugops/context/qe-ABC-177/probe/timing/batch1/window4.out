@@ -11,31 +11,31 @@
   {
    "at": "0",
    "lines": [
-    "46833 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792444948463-z7qhyz.sh 2>/dev/null || true && shopt -u extglob "
+    "46833 <foreign: shell>"
    ]
   }
  ],
  "lastForeign": {
   "at": "161",
   "lines": [
-   "54500 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792444948463-z7qhyz.sh 2>/dev/null || true && shopt -u extglob ",
-   "55505 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792444948463-z7qhyz.sh 2>/dev/null || true && shopt -u extglob ",
-   "55513 bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-suite --dummy-flag /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/h",
-   "55533 bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-file --dummy-flag 1 /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/"
+   "54500 <foreign: shell>",
+   "55505 <foreign: shell>",
+   "55513 <foreign: bats>",
+   "55533 <foreign: bats>"
   ]
  },
  "distinct": [
-  "roeselg/Projects/private/oeselg-labs/platform/repos/homelab && git switch -q main && git pull -q --ff-only && git log --oneline -1 && git branch -D phase8/08-05-egress-proxy -q 2>&1; flux --context oeselg-lab reconcile kustomization configs --with-source 2>&1 | tail -4; kubectl --context oeselg-lab -n egress-proxy get deploy,pod,svc,networkpolicy 2>&1' < /dev/null && pwd -P >| /tmp/claude-e86e-cwd",
-  "\"\"; echo \"probe rc=$?\"\\012echo \"--- unlabelled, arc-runners\"\\012scripts/probe.sh --context oeselg-lab --namespace arc-runners --image \"$CURL_IMAGE\" --run-as 100 -- sh -c \"curl -sS -o /dev/null -w '\"'\"'%{http_connect}'\"'\"' --max-time 10 --proxy http://egress-proxy.egress-proxy.svc:3128 https://api.github.com/zen; echo \\\" exit=\\$?\\\"\"; echo \"probe rc=$?\"' < /dev/null && pwd -P >| /tmp/claude-6f24-cwd",
-  "100 -- sh -c '\"'\"'curl -sS -o /dev/null -w \"%{http_connect}\\n\" --max-time 15 --proxy http://egress-proxy.egress-proxy.svc:3128 https://api.github.com/zen; echo exit=$?; getent hosts egress-proxy.egress-proxy.svc || nslookup egress-proxy.egress-proxy.svc 2>&1 | tail -3'\"'\"'; kubectl --context oeselg-lab -n egress-proxy logs deploy/egress-proxy --tail=5' < /dev/null && pwd -P >| /tmp/claude-77eb-cwd",
-  "ab --namespace arc-runners --image \"$CURL_IMAGE\" --run-as 100 -- sh -c '\"'\"'for i in 1 2 3 4 5 6 7 8 9 10 11 12; do c=$(curl -sS -o /dev/null -w \"%{http_connect}\" --max-time 5 --proxy http://egress-proxy.egress-proxy.svc:3128 https://api.github.com/zen 2>&1 | tail -c 60); printf \"t=%s %s\\n\" \"$i\" \"$c\"; case \"$c\" in 200) break;; esac; sleep 2; done'\"'\"'' < /dev/null && pwd -P >| /tmp/claude-b775-cwd",
-  "t /private/tmp/claude-501/-Users-olgeroeselg-Projects-private-oeselg-labs-platform/8ad735cb-c045-40d5-a10f-d83160e80f8f/scratchpad/ep.sh)\"\\012echo \"--- logs\"; kubectl --context oeselg-lab -n egress-proxy logs deploy/egress-proxy --tail=40 | grep -v transaction-end | tail -8\\012kubectl --context oeselg-lab get pods -A -l oeselg.tech/probe=true --no-headers | wc -l' && pwd -P >| /tmp/claude-fa35-cwd",
-  "-qE '\"'\"'^  - name: egress-proxy-config$'\"'\"' \"$DIR/kustomization.yaml\"\\012  grep -qE '\"'\"'^      - squid\\.conf$'\"'\"' \"$DIR/kustomization.yaml\"\\012  grep -qE '\"'\"'^      - allowlist\\.txt$'\"'\"' \"$DIR/kustomization.yaml\"\\012  grep -qE '\"'\"'^  - egress-proxy$'\"'\"' \"$ROOT/infrastructure/configs/kustomization.yaml\"\\012}\\012EOF\\012bats tests/egress.bats 2>&1 | tail -30' && pwd -P >| /tmp/claude-29b2-cwd",
-  "bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-suite --dummy-flag /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/tests/egress.bats",
-  "bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-file --dummy-flag 1 /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/tests/egress.bats /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/bats-run-3SwEZV/test_list_file.txt",
-  "'\"'\"'^not ok'\"'\"'; git checkout -- infrastructure/configs/egress-proxy/allowlist.txt\\012sed -i.bak '\"'\"'s/^http_access deny to_private$//'\"'\"' infrastructure/configs/egress-proxy/squid.conf; bats tests/egress.bats 2>&1 | grep '\"'\"'^not ok'\"'\"'; mv infrastructure/configs/egress-proxy/squid.conf.bak infrastructure/configs/egress-proxy/squid.conf; git status --short' && pwd -P >| /tmp/claude-7246-cwd",
-  "bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-file --dummy-flag 1 /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/tests/egress.bats /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/bats-run-lgDCne/test_list_file.txt",
-  "bash /opt/homebrew/Cellar/bats-core/1.14.0/libexec/bats-core/bats-exec-file --dummy-flag 1 /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/tests/egress.bats /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/bats-run-QPrtAg/test_list_file.txt"
+  "<foreign: kubectl>",
+  "<foreign: curl>",
+  "<foreign: kubectl>",
+  "<foreign: curl>",
+  "<foreign: kubectl>",
+  "<foreign: bats>",
+  "<foreign: bats>",
+  "<foreign: bats>",
+  "<foreign: bats>",
+  "<foreign: bats>",
+  "<foreign: bats>"
  ],
  "load1": {
   "first": "2.30",

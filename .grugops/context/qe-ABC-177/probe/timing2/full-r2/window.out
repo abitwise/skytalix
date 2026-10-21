@@ -11,27 +11,27 @@
   {
    "at": "0",
    "lines": [
-    " 9848 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792444886511-0yjvn6.sh 2>/dev/null || true && shopt -u extglob ",
-    "11289 npm exec vitest run --exclude **/scripts/e2e/**     ",
-    "11315 node /Users/olgeroeselg/Projects/public/grugops/node_modules/.bin/vitest run --exclude **/scripts/e2e/**",
-    "23753 /opt/homebrew/Cellar/node/26.11.1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/public/grugops/node_modules/vitest/sup"
+    " 9848 <foreign: shell>",
+    "11289 <foreign: vitest>",
+    "11315 <foreign: vitest>",
+    "23753 <foreign: vitest>"
    ]
   }
  ],
  "lastForeign": {
   "at": "181",
   "lines": [
-   " 9848 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792444886511-0yjvn6.sh 2>/dev/null || true && shopt -u extglob ",
-   "11289 npm exec vitest run --exclude **/scripts/e2e/**     ",
-   "11315 node /Users/olgeroeselg/Projects/public/grugops/node_modules/.bin/vitest run --exclude **/scripts/e2e/**",
-   "41188 /opt/homebrew/Cellar/node/26.11.1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/public/grugops/node_modules/vitest/sup"
+   " 9848 <foreign: shell>",
+   "11289 <foreign: vitest>",
+   "11315 <foreign: vitest>",
+   "41188 <foreign: vitest>"
   ]
  },
  "distinct": [
-  "resh_exit=$?; npx vitest run --exclude '\"'\"'**/scripts/e2e/**'\"'\"' > /private/tmp/claude-501/-Users-olgeroeselg-Projects-public-grugops/00f419dd-b581-4528-bdb3-b92c2575f8c0/scratchpad/full-run.log 2>&1; echo \"full_exit=$?\" >> /private/tmp/claude-501/-Users-olgeroeselg-Projects-public-grugops/00f419dd-b581-4528-bdb3-b92c2575f8c0/scratchpad/full-run.log' < /dev/null && pwd -P >| /tmp/claude-cc55-cwd",
-  "npm exec vitest run --exclude **/scripts/e2e/**     ",
-  "node /Users/olgeroeselg/Projects/public/grugops/node_modules/.bin/vitest run --exclude **/scripts/e2e/**",
-  "/opt/homebrew/Cellar/node/26.11.1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/public/grugops/node_modules/vitest/suppress-warnings.cjs --conditions node --conditions development --max-old-space-size=1024 /Users/olgeroeselg/Projects/public/grugops/node_modules/vitest/dist/workers/forks.js"
+  "<foreign: vitest>",
+  "<foreign: vitest>",
+  "<foreign: vitest>",
+  "<foreign: vitest>"
  ],
  "load1": {
   "first": "3.68",

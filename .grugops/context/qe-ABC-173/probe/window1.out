@@ -12,9 +12,9 @@
   {
    "at": "0",
    "lines": [
-    "27410 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792231794650-h7eh23.sh 2>/dev/null || true && shopt -u extglob ",
-    "40997 /opt/homebrew/Cellar/node/26.11.1/bin/node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/product-template/template/dist/main-worker.js",
-    "50110 /opt/homebrew/Cellar/node/26.11.1/bin/node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/product-template/template/dist/main-worker.js",
+    "27410 <foreign: shell>",
+    "40997 <foreign: node>",
+    "50110 <foreign: node>",
     "91050 node /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-uat-ABC-171/.grugops/context/uat-ABC-171/probe/uat-harness.ts /private/tmp/claude-501/-Users-ol"
    ]
   }
@@ -22,9 +22,9 @@
  "lastForeign": {
   "at": "181",
   "lines": [
-   "27410 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792231794650-h7eh23.sh 2>/dev/null || true && shopt -u extglob ",
-   "40997 /opt/homebrew/Cellar/node/26.11.1/bin/node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/product-template/template/dist/main-worker.js",
-   "50110 /opt/homebrew/Cellar/node/26.11.1/bin/node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/product-template/template/dist/main-worker.js",
+   "27410 <foreign: shell>",
+   "40997 <foreign: node>",
+   "50110 <foreign: node>",
    "96631 node /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-uat-ABC-171/.grugops/context/uat-ABC-171/probe/uat-harness.ts /private/tmp/claude-501/-Users-ol"
   ]
  },

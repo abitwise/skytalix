@@ -8,6 +8,8 @@
 # Launches `go177.sh amd full <runid>` (registered timing2 driver run-amended.sh, unchanged) once every poll has been OK
 # for a span >= 60 s. Off-AC or any failed condition resets the span and keeps waiting. Deadline passed -> exit 5 (OWED).
 # Runs from a scratchpad copy so no ancestor command line matches the instruments' foreign regex.
+# qe-redact-SEC-177-1 (2026-10-21, SEC-177-1): gate-<runid>-cmds.txt holds utc / count / class (vitest) for each poll
+# that saw a full-suite vitest, never the command line. Every gate condition and the gate TSV are unchanged.
 DL=$1; RUNID=$2
 SP=/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/c759514b-0b67-4176-b897-647bcb7478de/scratchpad
 L=$SP/t177/gate-$RUNID.tsv; C=$SP/t177/gate-$RUNID-cmds.txt
@@ -22,7 +24,7 @@ while [ $(date +%s) -lt $DL ]; do
   vl=$(grep -c 'vites[t]' $SP/t177/.ps)
   fs=$(grep 'vites[t] run' $SP/t177/.ps | grep -v -E '\.(test|spec)\.[cm]?[jt]sx?( |$)' | grep -v '/t177/')
   nfs=$(printf '%s' "$fs" | grep -c .)
-  [ "$nfs" -gt 0 ] && printf '%s\n' "$utc $fs" >> $C
+  [ "$nfs" -gt 0 ] && printf '%s\t%s\t%s\n' "$utc" "$nfs" "vitest" >> $C  # SEC-177-1: count + CLASS only, never the command line
   ok=0
   if [ "$nfs" = 0 ] && [ "$th" = 0 ] && [ "$pw" = "AC Power" ] && awk -v m=$l1 'BEGIN{exit !(m<=8)}'; then ok=1; fi
   if [ $ok = 1 ]; then [ $since = 0 ] && since=$now; span=$((now-since)); else since=0; span=0; fi

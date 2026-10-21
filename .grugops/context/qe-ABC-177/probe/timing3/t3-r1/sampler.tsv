@@ -32,7 +32,7 @@ utc	load1	user_procs	foreign	lines
 2026-10-21T06:48:20.830Z	6.16	447	0	
 2026-10-21T06:48:25.838Z	5.91	447	0	
 2026-10-21T06:48:30.835Z	6.56	445	0	
-2026-10-21T06:48:35.845Z	6.67	450	2	41933 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792444948463-z7qhyz.sh 2>/dev/null || true && sho | 41934 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792444948463-z7qhyz.sh 2>/dev/null || true && sho
+2026-10-21T06:48:35.845Z	6.67	450	2	41933 <foreign: shell> | 41934 <foreign: shell>
 2026-10-21T06:48:40.838Z	6.70	446	0	
 2026-10-21T06:48:45.856Z	6.56	454	0	
 2026-10-21T06:48:50.829Z	6.28	443	0	

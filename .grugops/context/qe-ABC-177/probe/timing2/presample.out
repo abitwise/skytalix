@@ -11,25 +11,25 @@
   {
    "at": "128",
    "lines": [
-    "45981 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792444886511-0yjvn6.sh 2>/dev/null || true && shopt -u extglob "
+    "45981 <foreign: shell>"
    ]
   }
  ],
  "lastForeign": {
   "at": "148",
   "lines": [
-   "47262 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792444886511-0yjvn6.sh 2>/dev/null || true && shopt -u extglob ",
-   "47264 npm exec vitest run scripts/state-path-scan.test.ts --reporter=tap-flat     ",
-   "47291 node /Users/olgeroeselg/Projects/public/grugops/node_modules/.bin/vitest run scripts/state-path-scan.test.ts --reporter=tap-flat",
-   "47292 /opt/homebrew/Cellar/node/26.11.1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/public/grugops/node_modules/vitest/sup"
+   "47262 <foreign: shell>",
+   "47264 <foreign: vitest>",
+   "47291 <foreign: vitest>",
+   "47292 <foreign: vitest>"
   ]
  },
  "distinct": [
-  "2c2575f8c0/scratchpad/red.tap 2>&1; echo exit=$?; grep -cE '\"'\"'^not ok'\"'\"' /private/tmp/claude-501/-Users-olgeroeselg-Projects-public-grugops/00f419dd-b581-4528-bdb3-b92c2575f8c0/scratchpad/red.tap; grep -E '\"'\"'^(not ok|ok)'\"'\"' /private/tmp/claude-501/-Users-olgeroeselg-Projects-public-grugops/00f419dd-b581-4528-bdb3-b92c2575f8c0/scratchpad/red.tap | head -40' && pwd -P >| /tmp/claude-311a-cwd",
-  "npm exec vitest run scripts/state-path-scan.test.ts --reporter=tap-flat     ",
-  "node /Users/olgeroeselg/Projects/public/grugops/node_modules/.bin/vitest run scripts/state-path-scan.test.ts --reporter=tap-flat",
-  "/opt/homebrew/Cellar/node/26.11.1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/public/grugops/node_modules/vitest/suppress-warnings.cjs --conditions node --conditions development --max-old-space-size=1024 /Users/olgeroeselg/Projects/public/grugops/node_modules/vitest/dist/workers/forks.js",
-  "o be 1)\"};\\012fs.writeFileSync(\".planning/phases/36-state-layout-authority-path-move-and-protection/tdd-evidence/36-01-task3-red.json\",JSON.stringify(rec,null,2)+\"\\n\");'\"'\"'\\012node ~/.claude/gsd-core/bin/gsd-tools.cjs check tdd-red-evidence .planning/phases/36-state-layout-authority-path-move-and-protection/tdd-evidence/36-01-task3-red.json --raw 2>&1 | head -20' && pwd -P >| /tmp/claude-4a13-cwd"
+  "<foreign: other>",
+  "<foreign: vitest>",
+  "<foreign: vitest>",
+  "<foreign: vitest>",
+  "<foreign: other>"
  ],
  "load1": {
   "first": "3.42",

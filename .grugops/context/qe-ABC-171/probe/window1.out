@@ -13,41 +13,41 @@
   {
    "at": "0",
    "lines": [
-    "25024 /opt/homebrew/Cellar/node/26.11.1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/public/grugops/node_modules/vitest/sup",
-    "26515 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791887893172-wwcykn.sh 2>/dev/null || true && shopt -u extglob ",
-    "26524 npm exec vitest run --exclude **/scripts/e2e/** --reporter=json --outputFile=/var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T//grugops-261019-i3g/after.js",
-    "26668 node /Users/olgeroeselg/Projects/public/grugops/node_modules/.bin/vitest run --exclude **/scripts/e2e/** --reporter=json --outputFile=/var/folders/y3/c2tx",
-    "40997 /opt/homebrew/Cellar/node/26.11.1/bin/node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/product-template/template/dist/main-worker.js",
-    "50110 /opt/homebrew/Cellar/node/26.11.1/bin/node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/product-template/template/dist/main-worker.js"
+    "25024 <foreign: vitest>",
+    "26515 <foreign: shell>",
+    "26524 <foreign: vitest>",
+    "26668 <foreign: vitest>",
+    "40997 <foreign: node>",
+    "50110 <foreign: node>"
    ]
   },
   {
    "at": "1",
    "lines": [
-    "25024 /opt/homebrew/Cellar/node/26.11.1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/public/grugops/node_modules/vitest/sup",
-    "26515 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791887893172-wwcykn.sh 2>/dev/null || true && shopt -u extglob ",
-    "26524 npm exec vitest run --exclude **/scripts/e2e/** --reporter=json --outputFile=/var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T//grugops-261019-i3g/after.js",
-    "26668 node /Users/olgeroeselg/Projects/public/grugops/node_modules/.bin/vitest run --exclude **/scripts/e2e/** --reporter=json --outputFile=/var/folders/y3/c2tx",
-    "40997 /opt/homebrew/Cellar/node/26.11.1/bin/node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/product-template/template/dist/main-worker.js",
-    "50110 /opt/homebrew/Cellar/node/26.11.1/bin/node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/product-template/template/dist/main-worker.js"
+    "25024 <foreign: vitest>",
+    "26515 <foreign: shell>",
+    "26524 <foreign: vitest>",
+    "26668 <foreign: vitest>",
+    "40997 <foreign: node>",
+    "50110 <foreign: node>"
    ]
   }
  ],
  "lastForeign": {
   "at": "181",
   "lines": [
-   "26515 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791887893172-wwcykn.sh 2>/dev/null || true && shopt -u extglob ",
-   "26524 npm exec vitest run --exclude **/scripts/e2e/** --reporter=json --outputFile=/var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T//grugops-261019-i3g/after.js",
-   "26668 node /Users/olgeroeselg/Projects/public/grugops/node_modules/.bin/vitest run --exclude **/scripts/e2e/** --reporter=json --outputFile=/var/folders/y3/c2tx",
-   "40997 /opt/homebrew/Cellar/node/26.11.1/bin/node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/product-template/template/dist/main-worker.js",
-   "50110 /opt/homebrew/Cellar/node/26.11.1/bin/node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/product-template/template/dist/main-worker.js",
-   "56492 sh -c trap 'if [ \"$?\" -eq 130 ]; then trap - INT; kill -s INT $$; fi; trap \"trap - INT; kill -s INT $$\" INT' INT; vitest run --exclude '**/*.docker.test.t",
-   "56523 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/product-template/scaffolder/node_modules/.bin/../.pnpm/vitest@5.0.3_@types+node@26.6.4",
-   "56565 /opt/homebrew/Cellar/node/26.11.1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/pro",
-   "56566 /opt/homebrew/Cellar/node/26.11.1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/pro",
-   "67861 /opt/homebrew/Cellar/node/26.11.1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/public/grugops/node_modules/vitest/sup",
-   "88106 /opt/homebrew/Cellar/node/26.11.1/bin/node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/product-template/scaffolder/src/cli.ts create ac",
-   "88229 /opt/homebrew/Cellar/node/26.11.1/bin/node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/product-template/scaffolder/src/cli.ts create ac"
+   "26515 <foreign: shell>",
+   "26524 <foreign: vitest>",
+   "26668 <foreign: vitest>",
+   "40997 <foreign: node>",
+   "50110 <foreign: node>",
+   "56492 <foreign: vitest>",
+   "56523 <foreign: vitest>",
+   "56565 <foreign: node>",
+   "56566 <foreign: node>",
+   "67861 <foreign: vitest>",
+   "88106 <foreign: node>",
+   "88229 <foreign: node>"
   ]
  },
  "load1": {

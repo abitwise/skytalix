@@ -86,6 +86,6 @@ QE-116-a and QE-116-b are both inherited from the ticket's own `C2` paragraph. T
   foreign runner stayed present but idle (0.0 % CPU) from 05:57:30Z to about 06:02Z, and the harness gave
   up by design. In the second window, two r0 warm-up attempts were discarded. In both windows every
   foreign process was `pnpm exec vitest` (vitest 5.0.3) under
-  `/Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared`, run from another Claude Code
+  `<private-repo>`, run from another Claude Code
   session's shell. **This repo was at width 1, but the host was not exclusive.**
 - **Residual limit.** A foreign runner that lives less than about 1 s inside a run can be missed.

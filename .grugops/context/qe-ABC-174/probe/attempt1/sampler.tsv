@@ -12,7 +12,7 @@ utc	load1	user_procs	foreign	lines
 2026-10-19T20:03:44.955Z	4.46	407	0	
 2026-10-19T20:03:49.965Z	4.34	411	0	
 2026-10-19T20:03:54.961Z	11.52	427	0	
-2026-10-19T20:03:59.962Z	11.16	442	1	42162 /Applications/iTerm.app/Contents/XPCServices/pidinfo.xpc/Contents/MacOS/pidinfo --git-state /Users/olgeroeselg/Projects/private/oeselg-labs/
+2026-10-19T20:03:59.962Z	11.16	442	1	42162 <foreign: other>
 2026-10-19T20:04:04.962Z	11.47	438	0	
 2026-10-19T20:04:09.971Z	11.03	438	0	
 2026-10-19T20:04:14.966Z	11.11	438	0	

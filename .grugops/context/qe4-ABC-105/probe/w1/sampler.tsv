@@ -10,6 +10,6 @@ utc	load1	thermal	power	foreign_runner	platform	foreign_cmds
 2026-10-12T10:12:25Z	5.20	0	AC Power	0	0	
 2026-10-12T10:12:30Z	4.87	0	AC Power	0	0	
 2026-10-12T10:12:35Z	5.28	0	AC Power	0	0	
-2026-10-12T10:12:41Z	5.25	0	AC Power	1	0	/opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-|
-2026-10-12T10:12:46Z	5.07	0	AC Power	3	0	/opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-|npm exec vitest run --exclude **/scripts/e2e/** install/opencode-permission.test.ts instal|/opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-|node /Users/olgeroeselg/Projects/public/grugops/node_modules/.bin/vitest run --exclude **/|
-2026-10-12T10:12:51Z	4.74	0	AC Power	5	0	/opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-|npm exec vitest run --exclude **/scripts/e2e/** install/opencode-permission.test.ts instal|/opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-|node /Users/olgeroeselg/Projects/public/grugops/node_modules/.bin/vitest run --exclude **/|/opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require |
+2026-10-12T10:12:41Z	5.25	0	AC Power	1	0	<foreign: shell>|
+2026-10-12T10:12:46Z	5.07	0	AC Power	3	0	<foreign: shell>|<foreign: vitest>|<foreign: shell>|<foreign: vitest>|
+2026-10-12T10:12:51Z	4.74	0	AC Power	5	0	<foreign: shell>|<foreign: vitest>|<foreign: shell>|<foreign: vitest>|<foreign: node>|
