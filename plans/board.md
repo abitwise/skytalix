@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-21 09:20Z — Orchestrator: ABC-180 In Development → In Review (SE code `acb52edf`, tip `d9c3cca3`; A1–A6 met; P6f green→red; 0 production lines). Dispatched `qe-ABC-180`. In Review is at 3/3._
 _Updated: 2026-10-21 09:15Z — Orchestrator: ABC-163 In Development → In Review (SE tip `dc4d4f15`; A1–A5 met; 0 src lines). Dispatched `qe-ABC-163`. Queued `arch-ABC-163-adr`: the page names the Architect as builder, so the Architect confirms the fold and the ADR-0036 line before merge._
 _Updated: 2026-10-21 09:10Z — Orchestrator: ABC-179 In Development → In Review (SE code `dd131b71`, tip `a7d64e07`; A1, A3 grep and A4 met; A2/A3 reads owed to QE; all gates green; 0 production lines). Dispatched `qe-ABC-179`._
 _Updated: 2026-10-21 08:55Z — Orchestrator (owner: "continue with ABC-180, ABC-179 and ABC-163"): all three Ready → In Development and dispatched. Two superseded notes holding foreign captures deleted (owner yes, `…d9aa42b9`). `scribe-snapshot-rule` queued (owner yes; needs a free slot)._
@@ -907,36 +908,36 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
+## In Development (WIP 0/3)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## In Review (WIP 3/3)
 - [ABC-180] A decoy book in A7's neutral cwd reds a cwd-first read with a module-URL fallback (P6f), and A7's stderr assertion names itself the detector  (BA/PM, XS, P3, epic: EPIC-005, since: 2026-10-21, **DoR 10/10**; cut in `bapm-cut-AR-162-FALLBACK` from AR-162-FALLBACK (G-1, G-2). Test-only, `src/cli.real-engine.test.ts`. Due before any `src/book-file.ts` edit or EPIC-006 packaging pull merges.)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## In Review (WIP 2/3)
 - [ABC-163] The clause (b) instrument fires nothing when a limb-1 holder changes what it reads: fold `ADR-0036` § S1 Ruling 2 (holders at base AND head) into `clause-b.mjs`  (BA/PM, S, P3, epic: —, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from AR-095-L1UNIT.)
 - [ABC-179] Three test comments say what their source does not: san's unqualified "a timing bar cannot fail", two headers quoting `plans/nfr-catalog.md` for words it does not hold, and `cli.test.ts` citing `history-pane.nfr.test.ts:329` for a line at `:390`  (BA/PM, XS, P3, epic: EPIC-002, since: 2026-10-21, **DoR 10/10**; cut in `bapm-rule-QE-159` from QE-159-a/-d/-e. Comment lines only; disjoint from ABC-161/ABC-168's `cli.test.ts` hunks.)
 
