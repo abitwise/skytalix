@@ -2239,7 +2239,7 @@ describe("ABC-065 — AGENTS.md's `Dev / run` slot is reachable and its option l
     // are LOUD and both are exercised below: an absent or duplicated label reds on the count above,
     // and a slot whose comment does not close before the next list item throws here. The protection
     // claimed is the protection delivered — the earlier wording claimed a never-closes branch that
-    // `end < 0` could not reach, since `AGENTS.md` carries 13 further closers after this slot's own.
+    // `end < 0` could not reach, since `AGENTS.md` carries 8 further closers after this slot's own.
     if (end < 0 || (nextItem >= 0 && nextItem < end))
       throw new Error(
         "AGENTS.md's `- Dev / run:` slot comment does not close before the next list item",
@@ -2480,8 +2480,8 @@ describe("ABC-059 — every claim AGENTS.md makes about `Dev / run` agrees with 
 });
 
 describe("ABC-109 — AGENTS.md stays inside its byte budget", () => {
-  /** `ABC-109` `A1`'s target: a quarter under the inherited 32,768 B reader cap, which truncates silently from the tail. */
-  const AGENTS_MD_BUDGET_BYTES = 24_576;
+  /** The owner's ceiling (`ABC-187`, decision `…cba9c8eb`): 18,432 B, so the `ABC-164` cut cannot regrow unflagged. */
+  const AGENTS_MD_BUDGET_BYTES = 18_432;
 
   it("A5 — AGENTS.md's size on disk, in BYTES, is at most the budget", () => {
     // Bytes, not characters (`## Test notes` 1): no encoding, so `.length` is the `wc -c` figure.
