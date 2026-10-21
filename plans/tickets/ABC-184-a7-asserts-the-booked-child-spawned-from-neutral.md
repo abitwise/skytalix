@@ -195,3 +195,35 @@ BA/PM, 2026-10-21. **Result: 10 of 10.**
 | 10 | no major unresolved blocker | **✅** None. Typecheck of the shape is `UNKNOWN - verify`, and the mandatory gates read it |
 
 Column moves after `Ready` are the Orchestrator's.
+
+## QE
+
+**QE (qe-e2e), 2026-10-21: PASS_WITH_GAPS** on `grugops/ABC-184` @ `c6f80c81` (code `442d1e57`, base `5277babd`).
+`A1`–`A5` are MET on QE's own readings and re-plants. Evidence is in `.grugops/context/qe-ABC-184/notes/`:
+`…86f4cd19` (the A3 matrix), `…ccffd570` (what `booked.cwd` pins and what survives it), `…83a92ac8` (the criteria
+and gates), `…d00d3329` (the artifacts) and `…7b9ef6a7` (the verdict).
+
+- **`AR-183-CWDARG` close condition: MET.**
+  - TCWD + P6f is base 11/11 green and head 10/11, with A7 red at `:504`:
+    `AR-183-CWDARG: the booked child must spawn from neutral, or the detector runs from the tree root and is disarmed`.
+  - TCWD alone reds the head test the same way.
+  - P6f reds both tests at the stderr detector, and TMO + P6f reds both at `AR-162-FALLBACK`. The clean build is
+    11/11 on both.
+  - QE's P6f sha256 is `afeab577…`. TCWD and TMO are byte-identical to QE-183's.
+  - The Orchestrator records the close.
+- **Gates on `c6f80c81`:**
+  - lint, typecheck and build. Typecheck now has a measured negative control: with the record removed it fails
+    with `TS2741`;
+  - `npm test` 59 / 1987, equal to base as QE read it, with `last-run.json` reading success;
+  - skip-integrity with `--skip-count 0`;
+  - `CLI_DEEP` 11/11 (6 children);
+  - `PERFT_DEEP` 32/32.
+
+  All are green.
+- **UAT waiver:** measured in the AGENTS.md form, unfiltered. The result is empty: 0 production lines and no `.snap`.
+- **Gaps (all INFO):**
+  - **`QE-184-a`:** a one-line edit to `spawnSync`'s `cwd` option inside `spawnNode`, aimed at the neutral child,
+    survives P6f. This is this page's named residual. It costs one line, not a "two-place helper edit".
+  - **`QE-184-b`:** a forged record on the `booked` line (`{ ...spawnReal(…), cwd: neutral }`) survives P6f.
+  - **`QE-184-c`:** in an agent session, vitest hides the `[CLI_DEEP]` lines unless `--reporter=verbose` or
+    `--silent=false` is passed. Several variables switch this on, not `CLAUDECODE` alone.
