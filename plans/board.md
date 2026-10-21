@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-21 by Orchestrator — `ABC-193` In Development → In Review (Architect tip `3d734fa1`: A2 red on exactly the 7 rows, A4 20 of 20, A6 by hand met; 59/1992; waiver and GITENV stand-in empty); QE `qe-ABC-193` dispatched beside `qe-ABC-192`. In Development 0/3, In Review 2/3._
 _Updated: 2026-10-21 by Orchestrator — `ABC-192` In Development → In Review (SE tip `b5b8b0f9`: A1–A4 met on SE readings, M4/M4b/version bump each red; 59/1994; waiver and GITENV stand-in empty); QE `qe-ABC-192` dispatched. In Development 1/3, In Review 1/3._
 _Updated: 2026-10-21 by Orchestrator — `scribe-waiver-quotepath` merged (gates green 59/1992; `AGENTS.md` 15,821 B): the owner's UAT waiver measurement now reads `git -c core.quotePath=false diff --name-only …` (AR-191-QUOTEPATH waiver half). In flight: `ticket-to-pr-ABC-192`, `arch-build-ABC-193`._
 _Updated: 2026-10-21 by Orchestrator — owner go (`…717a2219`): `ABC-192` (SE `ticket-to-pr-ABC-192`) and `ABC-193` (Architect `arch-build-ABC-193`) Ready → In Development; Scribe `scribe-waiver-quotepath` puts `-c core.quotePath=false` into the owner's waiver form. Width 3. 47 merged worktrees removed (no `--force`); `wt-ABC-168`/`wt-qe-ABC-168` kept. GITENV stand-in empty. Ready 2/8 → 0/8, In Development 0/3 → 2/3._
@@ -846,7 +847,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   one hop at pull, when it checks `Ready for Dev`'s exit at that moment; the row records the pull.
 
   HEADING FORMAT (spec §6.1): each column is an H2 heading carrying its live/limit WIP count,
-  e.g. `## In Development (WIP 1/3)` — the left number is how many tickets are in the column
+  e.g. `## In Development (WIP 0/3)` — the left number is how many tickets are in the column
   now, the right number is the limit from config. Unlimited columns read `(WIP unlimited)`;
   Blocked is visible and time-tracked (no WIP limit) and reads `(visible, time-tracked)`.
   INVARIANT: the column H2 headings and the rows of the `## Columns` table are the same 13 names in the
@@ -856,10 +857,10 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 1/3)
+    ## In Development (WIP 0/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
-    ## In Review (WIP 1/3)
+    ## In Review (WIP 2/3)
     - [ABC-012] Portfolio FX conversion  (PR: #41, QE: running)
 
   BOARD <-> TICKET CONTRACT: each ticket file (`plans/tickets/<prefix>-xxx.md`) carries a
@@ -981,8 +982,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-193] Git config or environment can blind clause (b)'s one diff call, and a production file whose name git quotes goes unseen (AR-191-GITENV + AR-191-QUOTEPATH fix)  (owner: architect-design, size: XS, priority: P3, epic: —, since: 2026-10-21, in dev 2026-10-21 (Architect `arch-build-ABC-193`), DoR 10/10; cut in `bapm-cut-AR-191`. Builder Architect/Design. Four files (`clause-b.mjs`, `r2-mutants.sh`, its `.out.txt`, `ADR-0036`); 0 `src/` lines. Gates no merge; the Orchestrator's GITENV stand-in and the QUOTEPATH dispute-line rule run until it lands. QE reads A2–A4 to close AR-191-GITENV, and QU/QE2/A6 for QUOTEPATH's instrument half. The `AGENTS.md` waiver form is owed outside it.)
+## In Development (WIP 0/3)
 
 
 
@@ -1010,8 +1010,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
+## In Review (WIP 2/3)
 - [ABC-192] Nothing pins the stream `setup` hands the heap guard, and a vitest bump re-runs no capture arm (QE-176-a, QE-176-b)  (owner: software-engineer, size: XS, priority: P3, epic: —, since: 2026-10-21, in dev 2026-10-21 (SE `ticket-to-pr-ABC-192`, tip `b5b8b0f9`), in review 2026-10-21 (QE `qe-ABC-192`), DoR 10/10; cut in `bapm-rule-QE-176`. Test-only, `src/cli.test.ts`: a parser-view row (`setup` passes `process.stdout`) and a vitest-version row whose red names the re-run list. 0 children, `tools/` and `AGENTS.md` untouched. Gates no merge. Overlaps `ABC-189` in the same file, in a different block.)
+- [ABC-193] Git config or environment can blind clause (b)'s one diff call, and a production file whose name git quotes goes unseen (AR-191-GITENV + AR-191-QUOTEPATH fix)  (owner: architect-design, size: XS, priority: P3, epic: —, since: 2026-10-21, in dev 2026-10-21 (Architect `arch-build-ABC-193`, tip `3d734fa1`), in review 2026-10-21 (QE `qe-ABC-193`), DoR 10/10; cut in `bapm-cut-AR-191`. Builder Architect/Design. Four files (`clause-b.mjs`, `r2-mutants.sh`, its `.out.txt`, `ADR-0036`); 0 `src/` lines. Gates no merge; the Orchestrator's GITENV stand-in and the QUOTEPATH dispute-line rule run until it lands. QE reads A2–A4 to close AR-191-GITENV, and QU/QE2/A6 for QUOTEPATH's instrument half. The `AGENTS.md` waiver form is owed outside it.)
 
 
 
