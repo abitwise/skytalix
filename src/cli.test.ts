@@ -2308,10 +2308,24 @@ describe("ABC-065 — AGENTS.md's `Dev / run` slot is reachable and its option l
     // BOTH WAYS — a documented option that does not exist and an accepted option nobody documented
     // are the two directions `A4` names, and set equality is red in each.
     expect([...documented].sort()).toEqual([...acceptedOptions].sort());
-    // `A3`'s last clause: each value word appears in the slot. Derived, never transcribed.
-    for (const value of acceptedValues) {
-      expect(slot, `documented value ${value}`).toContain(value);
+    // `A3`'s last clause, SET-EQUAL per option (`ABC-161`, `QE-101-b`): each digit and `black` also
+    // occur elsewhere in the slot, so a `toContain` was blind to a dropped or added word. An option's
+    // accepted values are the value words the resolver takes after it — derived, never transcribed.
+    // Its documented list is the `|`-joined run after it; `-- --colour black` is an example, not a list.
+    const valuedOptions = acceptedOptions.filter((option) =>
+      acceptedValues.some((value) => resolveOptions([option, value]).ok),
+    );
+    const listed = new Set<string>();
+    for (const option of valuedOptions) {
+      const accepted = acceptedValues.filter((value) => resolveOptions([option, value]).ok);
+      const lists = [...slot.matchAll(new RegExp(`${option} (\\w+(?:\\|\\w+)+)`, "g"))];
+      expect(lists.length, `documented value lists after ${option}`).toBe(1);
+      const values = (lists[0]?.[1] ?? "").split("|");
+      expect([...values].sort(), `documented values of ${option}`).toEqual([...accepted].sort());
+      for (const value of accepted) listed.add(value);
     }
+    // Every value word belongs to some documented list, as the old per-word check required.
+    expect([...listed].sort()).toEqual([...acceptedValues].sort());
   });
 
   /** What the locator did with a fixture, as a string: the failure's REASON, or that there was none. */
@@ -4053,6 +4067,7 @@ describe("ABC-101 — --difficulty selects a level, and the played engine is tha
 
     // `0`/`6` are the boundary pair; `3.0`, `+3`, `03` are what a `Number(token)` range check
     // accepts (`## Test notes` 1); `constructor`/`__proto__` are the prototype keys of the table.
+    // `3\n` is what a `/m`-flagged regex or a `.trim()` accepts (`ABC-161`, `SEC-101-a`).
     const refusedValues = [
       "0",
       "6",
@@ -4064,6 +4079,7 @@ describe("ABC-101 — --difficulty selects a level, and the played engine is tha
       "03",
       "",
       " 3",
+      "3\n",
       "constructor",
       "__proto__",
     ];
@@ -4125,8 +4141,10 @@ describe("ABC-101 — --difficulty selects a level, and the played engine is tha
       const reference = createLevel(level, { seed: SEED, now: clockFor(word) });
       const seam = createLevelSeam(Number(word), { seed: SEED, now: clockFor(word) });
       const history = startGame();
-      // Twice on one instance: the seam keeps the level's own generator across calls.
-      for (let call = 0; call < 2; call++) {
+      // Three times on one instance: the seam keeps the level's own generator across calls. Seed 7
+      // draws 0.0117, 0.0620, 0.9769, so a per-move rebuild at ANY blunder level (1-4) decides
+      // differently from the kept generator by call 2, without leaning on one level's rate (`ABC-161`).
+      for (let call = 0; call < 3; call++) {
         const expected = reference(parseFen(START_FEN));
         expect(expected, `createLevel at level ${word}`).not.toBeNull();
         const move = await seam(history);
