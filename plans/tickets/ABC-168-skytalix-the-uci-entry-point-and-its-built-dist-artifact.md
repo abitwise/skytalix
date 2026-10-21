@@ -1,8 +1,8 @@
 ---
 id: ABC-168
 title: "`skytalix`: the entry point `src/uci.ts`, the built `dist/uci.js` with its `bin`, one opt-in real-child lane, and the cutechess and GUI play-tests at UAT"
-status: in-review
-column: In Review
+status: in-security-nfr
+column: In Security/NFR
 size: S
 priority: P1
 epic: EPIC-007
