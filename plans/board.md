@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-21 08:55Z — Orchestrator (owner: "continue with ABC-180, ABC-179 and ABC-163"): all three Ready → In Development and dispatched. Two superseded notes holding foreign captures deleted (owner yes, `…d9aa42b9`). `scribe-snapshot-rule` queued (owner yes; needs a free slot)._
 _Updated: 2026-10-21 by BA/PM (`bapm-cut-AR-162-FALLBACK`, records only) — AR-162-FALLBACK's G-1/G-2 cut as `ABC-180` (Ready, XS, P3, EPIC-005, DoR 10/10): a non-book decoy at `data/opening-book/book.json` in A7's neutral cwd reds P6f; A7's stderr assertion is labelled as the AR-095-CWD/AR-162-FALLBACK detector. Closes AR-162-FALLBACK when QE reads the P6f row red at head. Promotion trigger as Security/NFR ruled; two trigger readings (EPIC-006 scope; ABC-168) routed to the Orchestrator on the page. Next free id: ABC-181._
 _Updated: 2026-10-21 09:45Z — Orchestrator: ABC-162 In Security/NFR → Done, merged to `main` with all gates passing; UAT waived. AR-095-CWD closed; AR-162-FALLBACK opened (LOW, Orchestrator-owned; promotes on any `src/book-file.ts` edit or on EPIC-006 being cut or pulled)._
 _Updated: 2026-10-21 by BA/PM (`bapm-rule-QE-159`, records only) — QE-159-a/-d/-e → `ABC-179` (Ready, XS, P3, DoR 10/10, comment lines in four test files); QE-159-b: heap prefix written into ABC-161/ABC-164 criteria and an erratum on ABC-159; QE-159-c accepted; QE-159-f ruled (AGENTS.md's measurement is the reference; the owner's .snap rule is applied by the Orchestrator, not filtered out) and routed to the Orchestrator for a Scribe line; QE-159-g closed by `scribe-agents-md-2026-10-21` (merged `0297e802`). Next free id: ABC-180._
@@ -887,11 +888,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [ABC-168] `skytalix`: `src/uci.ts`, `dist/uci.js` + `bin`, opt-in real-child lane, M1/M2/M8(a)/M9 at UAT  (owner: BA/PM, size: S, priority: P1, epic: EPIC-007, since: 2026-10-18, DoR 10/10; In Security/NFR on (b1)+(a). Waits: after ABC-171; owner installs cutechess-cli + En Croissant before UAT.)
 - [ABC-172] Rename package and in-repo names to `skytalix`; directory and remote are owner steps  (owner: BA/PM, size: XS, priority: P2, epic: EPIC-007, since: 2026-10-18, DoR 10/10; clause (a) Security/NFR hop. Waits: Q14 default = keep `npm run chess`.)
 
-## Ready (WIP 4/8)
-- [ABC-163] The clause (b) instrument fires nothing when a limb-1 holder changes what it reads: fold `ADR-0036` § S1 Ruling 2 (holders at base AND head) into `clause-b.mjs`  (BA/PM, S, P3, epic: —, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from AR-095-L1UNIT.)
+## Ready (WIP 1/8)
 - [ABC-165] Ten `plans/traceability.md` rows do not split into the table's ten columns, the paragraph that lists the known malformations names a different set, and a `plans/metrics.md` header runs into the next  (BA/PM, S, P3, epic: —, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from QE-156-a + QE-040-c.)
-- [ABC-179] Three test comments say what their source does not: san's unqualified "a timing bar cannot fail", two headers quoting `plans/nfr-catalog.md` for words it does not hold, and `cli.test.ts` citing `history-pane.nfr.test.ts:329` for a line at `:390`  (BA/PM, XS, P3, epic: EPIC-002, since: 2026-10-21, **DoR 10/10**; cut in `bapm-rule-QE-159` from QE-159-a/-d/-e. Comment lines only; disjoint from ABC-161/ABC-168's `cli.test.ts` hunks.)
-- [ABC-180] A decoy book in A7's neutral cwd reds a cwd-first read with a module-URL fallback (P6f), and A7's stderr assertion names itself the detector  (BA/PM, XS, P3, epic: EPIC-005, since: 2026-10-21, **DoR 10/10**; cut in `bapm-cut-AR-162-FALLBACK` from AR-162-FALLBACK (G-1, G-2). Test-only, `src/cli.real-engine.test.ts`. Due before any `src/book-file.ts` edit or EPIC-006 packaging pull merges.)
 
 
 
@@ -907,7 +905,10 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 3/3)
+- [ABC-180] A decoy book in A7's neutral cwd reds a cwd-first read with a module-URL fallback (P6f), and A7's stderr assertion names itself the detector  (BA/PM, XS, P3, epic: EPIC-005, since: 2026-10-21, **DoR 10/10**; cut in `bapm-cut-AR-162-FALLBACK` from AR-162-FALLBACK (G-1, G-2). Test-only, `src/cli.real-engine.test.ts`. Due before any `src/book-file.ts` edit or EPIC-006 packaging pull merges.)
+- [ABC-179] Three test comments say what their source does not: san's unqualified "a timing bar cannot fail", two headers quoting `plans/nfr-catalog.md` for words it does not hold, and `cli.test.ts` citing `history-pane.nfr.test.ts:329` for a line at `:390`  (BA/PM, XS, P3, epic: EPIC-002, since: 2026-10-21, **DoR 10/10**; cut in `bapm-rule-QE-159` from QE-159-a/-d/-e. Comment lines only; disjoint from ABC-161/ABC-168's `cli.test.ts` hunks.)
+- [ABC-163] The clause (b) instrument fires nothing when a limb-1 holder changes what it reads: fold `ADR-0036` § S1 Ruling 2 (holders at base AND head) into `clause-b.mjs`  (BA/PM, S, P3, epic: —, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from AR-095-L1UNIT.)
 
 
 

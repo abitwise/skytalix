@@ -1,7 +1,7 @@
 ---
 id: ABC-179
 title: "Three test comments say what their source does not: san's unqualified \"a timing bar cannot fail\", two headers that quote `plans/nfr-catalog.md` for words it does not hold, and `cli.test.ts` pointing at `history-pane.nfr.test.ts:329` for a line at `:390` (QE-159-a, -d, -e)"
-status: ready
+status: in-development
 column: Ready
 size: XS
 priority: P3
