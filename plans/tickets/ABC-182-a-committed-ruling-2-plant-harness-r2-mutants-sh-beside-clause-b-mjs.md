@@ -1,8 +1,8 @@
 ---
 id: ABC-182
 title: "A committed Ruling 2 plant harness, `r2-mutants.sh`, beside `clause-b.mjs`, so the next instrument edit re-runs `ADR-0036` § S1 Ruling 2's plants instead of rebuilding them by hand (ABC-163 G-4)"
-status: ready
-column: Ready
+status: in-development
+column: In Development
 size: XS
 priority: P3
 epic: —

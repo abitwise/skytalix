@@ -1,8 +1,8 @@
 ---
 id: ABC-183
 title: "`A7` pins that its decoy book is written before the `booked` child spawns, so moving the write after the spawn (TMO) no longer lets P6f pass `CLI_DEEP` (`AR-180-VALIDATED` G-2)"
-status: ready
-column: Ready
+status: in-development
+column: In Development
 size: XS
 priority: P3
 epic: EPIC-005
