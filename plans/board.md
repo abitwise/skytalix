@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-21 by Orchestrator — `ABC-172` In Review → In Security/NFR (QE PASS_WITH_GAPS `8af64abc`); clause (a) hop dispatched. In Review 1/3, In Security/NFR 1/2._
 _Updated: 2026-10-21 by Orchestrator — `ABC-172` In Development → In Review (SE `2eaf1a1c`); QE `qe-ABC-172` dispatched. In Development 0/3, In Review 2/3, Blocked: ABC-168._
 _Updated: 2026-10-21 by Orchestrator — `ABC-168` In Development → Blocked (ADR-0044 D8 vs A7: type-only import emits `turn-loop.js`); Architect `arch-ABC-168-D8` dispatched. In Development 1/3._
 _Updated: 2026-10-21 by Orchestrator — `ticket-to-pr-ABC-172` started (slot freed by ABC-185's merge; width 3 with ticket-to-pr-ABC-168 and qe-ABC-187)._
@@ -981,8 +982,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 2/3)
-- [ABC-172] Rename package and in-repo names to `skytalix`; directory and remote are owner steps  (owner: BA/PM, size: XS, priority: P2, epic: EPIC-007, since: 2026-10-18, DoR 10/10; clause (a) Security/NFR hop. Waits: Q14 default = keep `npm run chess`.) **Pulled 2026-10-21** Backlog → In Development on owner go (pull next 2); SE `ticket-to-pr-ABC-172` started when `qe-ABC-185` closed (width 3); merges `main` before finishing, since ABC-187 may land mid-hop. SE tip `2eaf1a1c` (code `0bddbb43`: `package.json` + lock names → `skytalix`; a regenerated lock's extra `license` line removed by hand to meet A2 — QE rules); gates green 59/1987; QE `qe-ABC-172`, then the clause (a) Security/NFR hop.
+## In Review (WIP 1/3)
 - [ABC-187] The `AGENTS.md` byte guard still allows 24,576 B, so the 8,970 B `ABC-164` cut can grow back with no test going red  (BA/PM, XS, P2, epic: —, since: 2026-10-21, **DoR 10/10**; cut in `bapm-cut-guard-18432` on owner decision `…cba9c8eb`; `src/cli.test.ts` `:2484` constant, `:2483` JSDoc, `:2242` closer count 13 → 8 (QE-164-h); 0 production lines, UAT waiver expected. SE then QE. Owed outside its fence: `AGENTS.md:7` Scribe line, byte-neutral.) **Pulled 2026-10-21** Ready → In Development on owner decision `…cba9c8eb`, SE `ticket-to-pr-ABC-187`; the `AGENTS.md:7` line is folded in as a Scribe hop on this branch after the SE commit. SE `494f7862` + Scribe `65ee533d` (tip `9578481f`): guard 18,432, JSDoc and closer count fixed, `AGENTS.md:7` → 18,432 (15,606 B unchanged); gates green 59/1987; QE `qe-ABC-187`.
 
 
@@ -1007,7 +1007,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Security/NFR (WIP 0/2)
+## In Security/NFR (WIP 1/2)
+- [ABC-172] Rename package and in-repo names to `skytalix`; directory and remote are owner steps  (owner: BA/PM, size: XS, priority: P2, epic: EPIC-007, since: 2026-10-18, DoR 10/10; clause (a) Security/NFR hop. Waits: Q14 default = keep `npm run chess`.) **Pulled 2026-10-21** Backlog → In Development on owner go (pull next 2); SE `ticket-to-pr-ABC-172` started when `qe-ABC-185` closed (width 3); merges `main` before finishing, since ABC-187 may land mid-hop. SE tip `2eaf1a1c` (code `0bddbb43`: `package.json` + lock names → `skytalix`; a regenerated lock's extra `license` line removed by hand to meet A2 — QE rules); gates green 59/1987; QE `qe-ABC-172`, then the clause (a) Security/NFR hop. QE PASS_WITH_GAPS `8af64abc` (main merged `a0dc4135`; QE-172-a LOW: lock lacks ABC-169's license line, A2 governs; -b/-c INFO); Security/NFR `security-nfr-ABC-172` (clause (a)).
 
 
 
