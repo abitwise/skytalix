@@ -72,7 +72,7 @@ const WORD = { 1: /node:|from\s*["'][^."'\/]|import\(\s*["'`][^."'`\/]/, 2: /\bp
 const CALLS = new Set(["spawn", "spawnSync", "exec", "execSync", "execFile", "execFileSync", "fork", "fetch", "eval", "Function", "WebSocket"]);
 const CHILD_PROCESS = new Set(["node:child_process", "child_process"]);
 
-const git = (...args) => execFileSync("git", args, { encoding: "utf8", maxBuffer: 256 << 20 });
+const git = (...args) => execFileSync("git", ["-c", "core.quotePath=false", ...args], { encoding: "utf8", maxBuffer: 256 << 20 });
 const short = (rev) => git("rev-parse", "--short=8", rev).trim();
 const isProduction = (f) => f.startsWith("src/") && /\.[mc]?[jt]s$/.test(f) && !/\.test\.[mc]?[jt]s$/.test(f) && !/\.d\.[mc]?ts$/.test(f);
 const productionFiles = (rev) =>
@@ -208,7 +208,9 @@ function changedLines(b, h) {
   const removed = new Map();
   let file = null;
   let old = null;
-  for (const line of git("diff", "-U0", "--no-renames", "--text", "--no-textconv", b, h, "--", "src").split("\n")) {
+  const quoted = new Set(); // ABC-193: a path git still prints C-quoted ("…"), as git printed it, a/ or b/ dropped
+  for (const line of git("diff", "-U0", "--no-renames", "--text", "--no-textconv", "--no-ext-diff", "--no-color", "--src-prefix=a/", "--dst-prefix=b/", b, h, "--", "src").split("\n")) {
+    if (/^(?:---|\+\+\+) "/.test(line)) quoted.add(line.slice(4).replace(/^"[ab]\//, '"'));
     if (line.startsWith("--- ")) {
       const p = line.slice(4);
       old = p === "/dev/null" ? null : p.replace(/^a\//, "");
@@ -230,12 +232,12 @@ function changedLines(b, h) {
       for (let i = 0; i < count; i++) out.get(file).add(start + i);
     }
   }
-  return { added: out, removed };
+  return { added: out, removed, quoted };
 }
 
 const B = analyse(base);
 const H = analyse(head);
-const { added, removed } = changedLines(base, head);
+const { added, removed, quoted } = changedLines(base, head);
 const holders = H.files.filter((f) => H.per.get(f).occ[limb].length > 0);
 const holderSet = new Set(holders);
 
@@ -271,6 +273,7 @@ for (const f of H.files) {
     if (!before.has(t)) newEdges.push([f, t]);
   }
 }
+for (const q of quoted) unresolved.push(`${q} (C-quoted by git; not read)`); // ABC-193: a dispute, never dropped
 const b2 = [];
 for (const [f, t] of newEdges) {
   const reached = [...closure(H, t)].filter((x) => holderSet.has(x));
