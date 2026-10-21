@@ -1795,6 +1795,7 @@ describe("ABC-042 — the shape of what was delivered", () => {
       "type",
       "description",
       "engines",
+      "bin",
       "scripts",
       "devDependencies",
     ];
@@ -1808,13 +1809,14 @@ describe("ABC-042 — the shape of what was delivered", () => {
       lint: "biome check .",
       "lint:fix": "biome check --write .",
       format: "biome format --write",
-      build: "tsc --noEmit",
+      build: "tsc -p tsconfig.build.json",
+      uci: "node src/uci.ts",
       perft: "node src/perft-bench.ts",
       "spike:perft": "node spike/perft-bench.ts",
     };
 
     expect(Object.keys(packaged).sort()).toEqual([...AT_HEAD].sort());
-    for (const reserved of ["bin", "main", "files", "publishConfig", "dependencies"]) {
+    for (const reserved of ["main", "files", "publishConfig", "dependencies"]) {
       expect(packaged, `package.json gained ${reserved}`).not.toHaveProperty(reserved);
     }
     expect(packaged.private).toBe(true);
