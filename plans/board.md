@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-21 08:35Z — Orchestrator: ABC-160 In Development → In Review (SE tip `1d2fd467`; A1–A3 met; all gates green; 0 production lines). Dispatched `qe-ABC-160`._
 _Updated: 2026-10-21 08:25Z — Orchestrator: `qe-redact-SEC-177-1` merged (`ba1814d7`), freeing a slot. ABC-159 Ready → In Development, dispatched as `ticket-to-pr-ABC-159`._
 _Updated: 2026-10-21 08:00Z — Orchestrator (owner: "go, start ABC-160, ABC-162 and ABC-159"): ABC-160 and ABC-162 Ready → In Development, dispatched as `ticket-to-pr-ABC-160` and `-162`. ABC-159 is queued; it is pulled when `qe-redact-SEC-177-1` ends, because width is capped at 3._
 _Updated: 2026-10-21 07:40Z — Orchestrator: ABC-177 In Security/NFR → Done (UAT waived, test-only), merged to `main` with all gates passing; R-174-1 discharged. ABC-178 stays in Backlog: Architect `…74d39535` recommends a clean, owner-quiet re-read before its gate; BA/PM to rule._
@@ -895,9 +896,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 3/3)
+## In Development (WIP 2/3)
 - [ABC-159] Four `*.nfr.test.ts` headers carry a running tally of `plans/nfr-catalog.md` in words (three times, five times now, the sixth, twice), and the tallies disagree with each other  (BA/PM, XS, P3, epic: EPIC-002, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from QE-030-a. Waits: after ABC-096 merges (shares `src/history-pane.nfr.test.ts`); then → Ready.) **2026-10-17: its blocker, ABC-096's merge, discharged at `b20eb451` → Ready (fills Ready to 8/8). ABC-161 and ABC-164 are also unblocked but stay in Backlog: Ready is at its WIP limit.**
-- [ABC-160] The book compiler's sha256 test never offers an expected hash that differs only in its FIRST character, so a check that compares a suffix passes it  (BA/PM, XS, P3, epic: EPIC-005, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from QE-155-a.)
 - [ABC-162] `ABC-095` `A7`'s real-engine child runs from the tree root, so a build that reads the book relative to the working directory passes `CLI_DEEP`  (BA/PM, XS, P3, epic: EPIC-005, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from AR-095-CWD.)
 
 
@@ -926,7 +926,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-160] The book compiler's sha256 test never offers an expected hash that differs only in its FIRST character, so a check that compares a suffix passes it  (BA/PM, XS, P3, epic: EPIC-005, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from QE-155-a.)
 
 
 
