@@ -1,8 +1,8 @@
 ---
 id: ABC-172
 title: "Rename the npm package and every in-repo name from `cli-chess` to `skytalix`; the directory and any remote are owner steps"
-status: in-security-nfr
-column: In Security/NFR
+status: done
+column: Done
 size: XS
 priority: P2
 epic: EPIC-007
@@ -147,3 +147,21 @@ BA/PM, 2026-10-18, at `main` `a10e09c2`. **Result: 10 of 10.** Re-scored 2026-10
 
 **Recommended: → `Ready`, as far as Ready's WIP limit (8) allows. It is `P2`, so it yields a slot to the `P1` tickets.**
 Column moves are the Orchestrator's.
+
+## QE
+
+**`qe-ABC-172`, 2026-10-21. Verdict: PASS_WITH_GAPS (1 LOW, 2 INFO, 0 blocking).** Branch `grugops/qe-ABC-172`, from the tip
+`2eaf1a1c`. I merged `main` `41f5b366` at **`a0dc4135`** with no conflict; no manifest or `src/` path came in. Every criterion was run
+at that merge before the SE's notes were opened. Notes are under `.grugops/context/qe-ABC-172/`.
+
+- **A1 MET:** `"skytalix"`. **A2 MET:** both lock names are `skytalix`; the lock diff is 2/2, both `name`; `npm ci` rc 0 in a real install.
+- **A3 MET:** the page's grep prints nothing. **A5 MET** at the code commit `0bddbb43` (2 manifests; `src/` empty).
+- **A4 MET:** lint, typecheck and build 0. `npm test` 59 files, 1987/1987, success true, equal to base (re-run at `3e617b26`). Skip count 0,
+  integrity `No findings.`. `CLI_DEEP` 11/11 (6 children); `PERFT_DEEP` 32/32. `npm run chess` starts the game, rc 0.
+- **Lock ruling:** `A2` governs. Regenerating the **base** lock (old name) already adds `packages[""].license`, so that line is
+  ABC-169's drift, not this rename. The delivered lock is the regenerated one minus that line; no version moved. The line lands
+  separately (with ABC-168's lock change, or as a one-line chore), not here.
+- **No name left behind:** every remaining `cli-chess` is a decision record, dated history, or the directory (owner's step). `npm run chess` was kept (Q14).
+- **Gaps:** QE-172-a (LOW) lock license drift; QE-172-b (INFO) `A5` at the notes tip also lists the SE's context notes;
+  QE-172-c (INFO) ADR-0018's table has no dated rename line (the Architect's record).
+- **UAT WAIVED** (0 production lines, AGENTS.md form empty at `0bddbb43`). Next: the `ABC-041` (a) security short hop.
