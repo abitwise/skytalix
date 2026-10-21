@@ -726,3 +726,24 @@ restated here. **Result: PASS_WITH_RISKS**, with no required fixes. The change i
 - **QE-183-b (TMOC): INFO, accepted.** There is no record and no cut. `ABC-183` A1's `grep -B1` stays a QE read at
   any hop that edits `A7`'s `beforeAll`.
 - **Unchanged:** `AR-095-READ` (LOW, Security/NFR), `AR-163-DELONLY` and `AR-163-UNCOMMENT`.
+
+**2026-10-21, Security/NFR: `AR-183-CWDARG` is CLOSED as written, effective at `ABC-184`'s merge. No residual is carried as a risk.**
+This is subtask `security-nfr-ABC-184`, on `ABC-184` at QE tip `2c65403b` (SE `c6f80c81`, code `442d1e57`). The
+notes are in `.grugops/context/security-nfr-ABC-184/notes/` (`…2fe79772` decision, `…5a43b236` readings) and are not
+restated here. **Result: PASS_WITH_RISKS**, with no required fixes. The change is test-only, +7/−0 in
+`src/cli.real-engine.test.ts`, with 0 production lines.
+- **`AR-183-CWDARG`: closed as written.** QE read TCWD + P6f green on the base test and red at A7 `:504`
+  (`AR-183-CWDARG`) on the head test (`…86f4cd19`). I re-read that cell with byte-identical plants and got the same
+  result. The close takes effect when the fix lands on `main`. Its promotion trigger on `ABC-168` lapses with it.
+  Ruling 2 and S3 item 2 stand on their own.
+- **QE-184-a (TSPWN): INFO, accepted, owner the Orchestrator. No record and no cut.** A one-line edit to the
+  `spawnSync` `cwd` option inside `spawnNode`, aimed at the neutral child by its `mkdtemp` prefix, survives P6f. It is
+  the page's named residual. The page's "two-place" wording is wrong: it is one line, and the Orchestrator adds a
+  one-line erratum to the page. A QE read stays owed at any hop that edits `spawnNode`: the `spawnSync` option and the
+  returned `cwd` must be the same unmodified parameter.
+- **QE-184-b (TFORGE): INFO, accepted.** It is a forged input on the `booked` line.
+- **QE-184-c: routed to the Orchestrator.** Any brief that counts `CLI_DEEP` children names `--reporter=verbose` and
+  a floor of at least 1. Read with the default reporter, an agent session prints 0 at both base and head, and a
+  0 = 0 match is not a reading.
+- **Unchanged:** `AR-095-READ` (LOW, Security/NFR), `AR-163-DELONLY` (LOW, the Orchestrator) and `AR-163-UNCOMMENT`
+  (LOW, Architect/Design).
