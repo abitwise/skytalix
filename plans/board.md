@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-21 by Orchestrator — `ABC-184` In Review → In Security/NFR (QE PASS_WITH_GAPS `2c65403b`: AR-183-CWDARG close row read met). In Review 1/3, In Security/NFR 1/2._
 _Updated: 2026-10-21 by Orchestrator — `ABC-165` In Development → In Review (SE `893e9fd1`); QE `qe-ABC-165` dispatched beside `qe-ABC-184`. In Review 2/3._
 _Updated: 2026-10-21 by Orchestrator — owner go: `ABC-165` (re-cut) Ready → In Development (1/3), SE `ticket-to-pr-ABC-165`, beside `qe-ABC-184`. Forward 10-cell trace row rule adopted (`…34da66ba`). `ABC-185` (M) held in Ready pending owner call. Ready 2/8 → 1/8._
 _Updated: 2026-10-21 by BA/PM (`bapm-rescope-ABC-165`, records only) — `ABC-165` re-cut at `main` `5277babd`: its own A1 printed 96 rows (7×38, 6×36, 5×8, 11×6, 9×6, 13×1, 2×1); 97 at `2b6b10b9` (`:1242` `ABC-184`, 5 cells, appended during this cut). Kept in `ABC-165` (Ready, S, P3, DoR 10/10 re-scored): the original 10 rows + `ABC-157 (QE)` (all 7 rows that hide text past the tenth column), the note rewritten with the GFM count and the forward row rule, one blank line above the header (it follows a blockquote line; render effect UNKNOWN - verify), the metrics line. Split out as `ABC-185` (Ready, M, P3, DoR 10/10): the other 85 short rows + `:1242` (9 layouts; words visible, wrong headers). Forward rule: every appended trace row fills the 10 columns in header order (`—` for empty, `\|` for a literal pipe, `<br>` to join), and the Orchestrator appends only if A1's output is unchanged by the append. Ready 1/8 → 2/8. Next free id: ABC-186._
@@ -962,9 +963,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 2/3)
+## In Review (WIP 1/3)
 - [ABC-165] Eleven `plans/traceability.md` rows do not split into ten columns (seven of them hide text), the malformation paragraph names a different set and states no row rule, the table header follows a blockquote line, and a `plans/metrics.md` header runs into the next  (BA/PM, S, P3, epic: —, since: 2026-10-17, **DoR 10/10**, re-scored 2026-10-21; cut in `bapm-cut-followups` (merged `4487ad31`) from QE-156-a + QE-040-c; re-cut in `bapm-rescope-ABC-165` at `5277babd` after its A1 printed 96 rows: keeps the 10 + `ABC-157 (QE)`, writes the forward row rule into the trace's note, adds a blank line above the header; the other rows are `ABC-185`.) **Pulled 2026-10-21** Ready → In Development on owner go (re-cut, DoR 10/10), SE `ticket-to-pr-ABC-165`. SE tip `893e9fd1` (code `49fce033`): A1 97 → 86 (the 11 out; the rest are ABC-185), 11 of 11 rows word-equal; gates green 59/1987; QE `qe-ABC-165`.
-- [ABC-184] `RealChild` records the `cwd` it spawned with, and A7 asserts `booked.cwd` is `neutral`, so dropping `booked`'s cwd argument (TCWD) no longer lets P6f pass `CLI_DEEP`  (BA/PM, XS, P3, epic: EPIC-005, since: 2026-10-21, **DoR 10/10**; cut in `bapm-cut-AR-183-CWDARG` from AR-183-CWDARG (QE-183-a; Security/NFR `…41f70925`, owner record `…bc2b06ce`). Test-only, `src/cli.real-engine.test.ts`. Closes AR-183-CWDARG. Owed before ABC-168 or any `src/book-file.ts` edit merges; → P2 when that trigger fires.) **Pulled 2026-10-21** Ready → In Development on owner go, SE `ticket-to-pr-ABC-184`. SE tip `c6f80c81` (code `442d1e57`, +7/−0, TCWD + P6f base green / head red on SE readings); QE `qe-ABC-184`.
 
 
 
@@ -988,7 +988,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Security/NFR (WIP 0/2)
+## In Security/NFR (WIP 1/2)
+- [ABC-184] `RealChild` records the `cwd` it spawned with, and A7 asserts `booked.cwd` is `neutral`, so dropping `booked`'s cwd argument (TCWD) no longer lets P6f pass `CLI_DEEP`  (BA/PM, XS, P3, epic: EPIC-005, since: 2026-10-21, **DoR 10/10**; cut in `bapm-cut-AR-183-CWDARG` from AR-183-CWDARG (QE-183-a; Security/NFR `…41f70925`, owner record `…bc2b06ce`). Test-only, `src/cli.real-engine.test.ts`. Closes AR-183-CWDARG. Owed before ABC-168 or any `src/book-file.ts` edit merges; → P2 when that trigger fires.) **Pulled 2026-10-21** Ready → In Development on owner go, SE `ticket-to-pr-ABC-184`. SE tip `c6f80c81` (code `442d1e57`, +7/−0, TCWD + P6f base green / head red on SE readings); QE `qe-ABC-184`. QE PASS_WITH_GAPS `2c65403b` (TCWD + P6f base green / head red; QE-184-a/-b/-c INFO); Security/NFR `security-nfr-ABC-184`.
 
 
 
