@@ -1,8 +1,8 @@
 ---
 id: ABC-185
 title: "85 hop and merge rows appended to `plans/traceability.md` since 2026-10-17 carry 5, 6, 7 or 9 cells, so their text renders under the wrong headers"
-status: in-development
-column: In Development
+status: in-review
+column: In Review
 size: M
 priority: P3
 epic: —
