@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-21 10:15Z — Orchestrator: ABC-163 In Security/NFR → Done, merged to `main` with all gates passing; UAT waived. AR-095-L1UNIT closed; AR-163-DELONLY and AR-163-UNCOMMENT opened; AR-180-VALIDATED part (i) met (`…8d0de2f4`)._
 _Updated: 2026-10-21 10:00Z — Orchestrator: ABC-163 In Review → In Security/NFR (QE PASS_WITH_GAPS `…8a60d7c8`; A1–A5 met; deletion-only gap G-1). Dispatched `security-nfr-ABC-163` and `arch-ABC-163-adr-text` (ADR wording, G-3, G-4)._
 _Updated: 2026-10-21 09:55Z — Orchestrator: ABC-180 In Security/NFR → Done, merged to `main` with all gates passing; UAT waived. AR-162-FALLBACK closed; AR-180-VALIDATED opened (`…73eb06c5`). Before ABC-168 merges, two things are owed: ABC-163 merged and the G-2 pin rider._
 _Updated: 2026-10-21 09:50Z — Orchestrator: `scribe-snapshot-rule` merged to `main` with gates passing. AGENTS.md now carries the owner's snapshot-only waiver clause (`…be910aa8`, grant `…d9aa42b9`), and the unfiltered waiver measurement is the reference. 24,560 / 24,576 B._
@@ -965,8 +966,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Security/NFR (WIP 1/2)
-- [ABC-163] The clause (b) instrument fires nothing when a limb-1 holder changes what it reads: fold `ADR-0036` § S1 Ruling 2 (holders at base AND head) into `clause-b.mjs`  (BA/PM, S, P3, epic: —, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from AR-095-L1UNIT.)
+## In Security/NFR (WIP 0/2)
 
 
 
@@ -1002,6 +1002,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+- [ABC-163] The clause (b) instrument fires nothing when a limb-1 holder changes what it reads: fold `ADR-0036` § S1 Ruling 2 (holders at base AND head) into `clause-b.mjs`  (BA/PM, S, P3, epic: —, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from AR-095-L1UNIT.) **DONE 2026-10-21:** merged after all gates passed. QE PASS_WITH_GAPS (`…8a60d7c8`). Architect confirmed the fold (`…c3568326`) and ADR-0036 § S1 text (`569a384c`). Security/NFR PASS_WITH_RISKS (`…3e4b4a08`): AR-095-L1UNIT closed; AR-163-DELONLY and AR-163-UNCOMMENT opened (LOW). UAT waived (0 src lines).
 - [ABC-180] A decoy book in A7's neutral cwd reds a cwd-first read with a module-URL fallback (P6f), and A7's stderr assertion names itself the detector  (BA/PM, XS, P3, epic: EPIC-005, since: 2026-10-21, **DoR 10/10**; cut in `bapm-cut-AR-162-FALLBACK` from AR-162-FALLBACK (G-1, G-2). Test-only, `src/cli.real-engine.test.ts`. Due before any `src/book-file.ts` edit or EPIC-006 packaging pull merges.) **DONE 2026-10-21:** merged after all gates passed. QE PASS_WITH_GAPS (`…f88e0845`). Security/NFR PASS_WITH_RISKS (`…1b032e3f`): AR-162-FALLBACK closed; AR-180-VALIDATED opened (LOW, Orchestrator; ABC-168 fires it). UAT waived (test-only).
 - [ABC-179] Three test comments say what their source does not: san's unqualified "a timing bar cannot fail", two headers quoting `plans/nfr-catalog.md` for words it does not hold, and `cli.test.ts` citing `history-pane.nfr.test.ts:329` for a line at `:390`  (BA/PM, XS, P3, epic: EPIC-002, since: 2026-10-21, **DoR 10/10**; cut in `bapm-rule-QE-159` from QE-159-a/-d/-e. Comment lines only; disjoint from ABC-161/ABC-168's `cli.test.ts` hunks.) **DONE 2026-10-21:** merged after all gates passed. QE PASS_WITH_GAPS (`…5603b830`); QE-179-a (INFO: status-panel `vi.mock` lesson "recorded in the catalog" not found) goes to the next BA/PM hop. UAT waived (comments only).
 - [ABC-162] `ABC-095` `A7`'s real-engine child runs from the tree root, so a build that reads the book relative to the working directory passes `CLI_DEEP`  (BA/PM, XS, P3, epic: EPIC-005, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from AR-095-CWD.) **DONE 2026-10-21:** merged after all gates passed. QE PASS_WITH_GAPS (`…68554c31`). Security/NFR PASS_WITH_RISKS (`…06c147db`): AR-095-CWD closed; AR-162-FALLBACK (LOW, Orchestrator) opened for P6f; G-1/G-2 → BA/PM XS cut. UAT waived (test-only).

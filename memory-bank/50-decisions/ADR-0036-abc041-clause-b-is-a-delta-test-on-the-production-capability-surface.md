@@ -431,3 +431,41 @@ changes.**
   false "fires". The fold owed under `AR-095-L1UNIT` should include this case as a plant that does not
   fire.
 - **`AR-095-L1UNIT` is still open.** `clause-b.mjs` is unchanged since `341da4c1`.
+
+#### Ruling 2 folded — 2026-10-21 (`ABC-163`)
+
+Commit `87d3897d` edits `.grugops/context/design-F-072-1/probe/clause-b.mjs` **in place**, so the canonical
+pointer above is unchanged. Readings taken before it reproduce from that file at `341da4c1`. For limb 1, (b1) now also
+fires on any `+` line, comments included, in a production file that holds limb 1 at `<base>` or `<head>`. The output
+prints "fired by Ruling 2". With no holder at either end, Ruling 2 adds nothing and runs no pathspec diff. Limbs 2
+and 3 print byte-identical output. Limb 1 prints one added line, `(b1) Ruling 2 …`, plus one indented line for each
+holder file it names.
+- **Byte comparisons.** The record harnesses take the instrument path as an argument. A byte comparison with a
+  pre-fold record runs them on the `341da4c1` copy.
+- **Re-runs on this copy.** The harnesses that `grep '(b1)'` also match the Ruling 2 line, so their limb-1 rows split
+  in two. Grep `(b1) capability` for the old row. Plants F5, F6 and S10 move from `L3` to `L1 L3` by design, because
+  each edits a file that holds limb 1. The recorded outputs are not edited.
+
+**One case the by-hand method caught and the fold does not.** A file that holds limb 1 at `<base>` or `<head>` and is
+touched only by deleted lines has no `+` line, so Ruling 2 does not fire. The by-hand `--name-only` listed it.
+- **QE's plants** (`qe-ABC-163`, `G-1`). A holder's guard line deleted, its import line deleted, or the holder renamed
+  with its import dropped. Ruling 2 fires on none of the three. The by-hand check fired on all three.
+- **Today's holder** takes no parameter and reads one fixed path in one line, so no deletion can widen what it reads.
+- **When the case becomes live** (`AR-163-DELONLY`'s trigger): a limb-1 holder gains a guard, with or without a
+  parameter; a parameter or caller-supplied value reaches the read; a read spans more than one line; or a second
+  limb-1 holder appears. Owed before that ticket merges: Ruling 2 widens to any changed line, `+` or `−`, and the
+  instrument drops its `!lines.size` skip. Until then the Orchestrator runs the by-hand `--name-only` check.
+- **Pre-existing, not from this fold** (`AR-163-UNCOMMENT`, LOW, owner Architect/Design; QE's `G-2`). Deleting the
+  comment delimiters around an import makes a new holder with no `+` line. Nothing fires on it, before or after this
+  commit. The same blind spot holds on every limb. It becomes live when a production block comment holds limb code
+  that would compile without its delimiters.
+- Security/NFR accepted the risk as `AR-163-DELONLY`: LOW, latent; owner the Orchestrator, fix by Architect/Design
+  (`security-nfr-ABC-163`).
+
+**The by-hand Ruling 2 check is no longer needed once this commit is on `main`, until `AR-163-DELONLY`'s trigger
+fires without its fix.** QE read `A1`–`A3` MET with its own
+plants (`qe-ABC-163`, PASS_WITH_GAPS at `dc4d4f15`), so `AR-095-L1UNIT` closes when this commit merges. The
+Orchestrator records the close. Until then the Orchestrator keeps the by-hand check, holders at both ends.
+`AR-180-VALIDATED` names this merge in its close condition. Readings: `.grugops/context/ticket-to-pr-ABC-163/notes/`,
+`.grugops/context/qe-ABC-163/notes/`, `.grugops/context/arch-ABC-163-adr/notes/` and
+`.grugops/context/arch-ABC-163-adr-text/notes/`.
