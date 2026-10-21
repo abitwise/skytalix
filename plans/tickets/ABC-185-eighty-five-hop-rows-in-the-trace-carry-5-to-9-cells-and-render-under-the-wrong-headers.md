@@ -194,3 +194,5 @@ scripts. Line numbers are the same at base `bf6fc623` and at the merge. Notes ar
   word-order fragments. QE-185-c: `branch<br>—` in Code at `:1190` and `:1194`, cosmetic. QE-185-d: the A4 (c) map is one of two equal readings at `:1192`
   and `:1198`.
 - **Short freeze** from `6273bed2`. If `main` moves before the merge, merge it again and re-run `A1-cells` and `A1-fragments`.
+- **Re-merge:** `main` moved to `d42f6a3b` during this hop (2 ten-cell `ABC-187` rows, no `src/`). I merged it at **`262defb7`** with no conflict
+  and the tail verbatim. A1–A6 and the gates were re-run there with the same results: `|` lines 710 = 710, 708 `<tr`, 59 / 1987, skip-count 0. **The freeze runs from `262defb7`.**
