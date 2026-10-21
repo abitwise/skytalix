@@ -113,3 +113,32 @@ BA/PM, 2026-10-17. **Result: 10 of 10.**
 | 10 | no major unresolved blocker | **✅** none |
 
 Column moves are the Orchestrator's. Owner of the build: **Architect/Design** (the instrument's owner), then QE.
+
+## QE (qe-e2e, 2026-10-21): **PASS_WITH_GAPS** at tip `dc4d4f15` (base `ccccc6bb`; OLD instrument `341da4c1`, NEW `87d3897d`)
+
+QE's own readings, taken in `../wt-qe-ABC-163` and in scratch repositories built from `git archive` of `dc4d4f15` and `1671f24f`, outside the repository. The SE's readings were opened only after these were taken, and they agree. Notes: `.grugops/context/qe-ABC-163/notes/`, ids `…5e2bf05e` (A1–A5), `…7f56f339` (edge plants), `…47186969` (regression and consumers), `…7a3267d0` (gates, waiver, lint) and `…8a60d7c8` (verdict).
+
+| criterion | grade | reading |
+|---|---|---|
+| `A1` | MET | P2b and P2c: NEW limb 1 **FIRES**, `(b1) Ruling 2` naming `src/book-file.ts`, 2 of 2, on both archives; OLD does not fire |
+| `A2` | MET | comment-only edit (`book-file.ts:3`): NEW FIRES, OLD does not |
+| `A3` | MET | QE's pair `f00038ef^1..f00038ef` (`ABC-083`; `evaluate.ts` +137): `no limb-1 holder at <base> or <head>; adds nothing`, verdict = OLD; same on 6 more pairs. A git shim shows OLD and NEW make identical calls (79 = 79), the one diff being `-U0 --no-renames … -- src` |
+| `A4` | MET | both recorded pairs equal the record: verdicts, (b1) `book-file.ts:13`, (b2) `cli.ts -> book-file.ts`, L2 `cli.ts:177`, holders 4, Ruling 2 adds `book-file.ts` / nothing |
+| `A5` | MET | `ADR-0036` § S1 dated line names `87d3897d`; `git diff --numstat ccccc6bb dc4d4f15 -- src/` empty |
+
+**Regression:** limbs 2 and 3 are byte-identical OLD vs NEW on 26 real pairs (the SE's 9 included) and on 17 plants. The limb-1 verdict is equal on 26/26 pairs. **Edges:** a holder only at `<head>` fires (already by (b1)). A holder only at `<base>` fires by Ruling 2 alone. A rename is a delete plus an add under `--no-renames`: the new path fires when it holds at `<head>`, and a rename that drops the import fires nothing (the safe direction).
+
+**Gates on the tip:** lint, typecheck and build rc 0; `npm test` 59 files / 1987 tests, `last-run.json` `success: true`; skip count 0, skip-integrity `--skip-count 0` `No findings.`; `CLI_DEEP` 11/11; `PERFT_DEEP` 32/32. **UAT waiver** (AGENTS.md form, no `.snap` filter): empty for `87d3897d`, `d8c073e2`, `dc4d4f15` and the range, so it holds.
+
+**Gaps (non-blocking; `block_on: high`):**
+- **G-1 (proposed LOW, latent):** a deletion-only edit to a limb-1 holder fires nothing. The plants: a guard line dropped, so the holder reads any path; the import line dropped; a rename that drops the import.
+  - The by-hand check that § S1 now retires fired on all three. The instrument follows Ruling 2's words ("a `+` line").
+  - MEDIUM at the first holder with a guard or a multi-line read. Route: Security/NFR, then Architect/Design.
+- **G-2 (LOW, pre-existing, every limb):** deleting only the `/*` and `*/` lines around an import creates a holder with no `+` line, and nothing fires. Route: Security/NFR, with G-1.
+- **G-3 (LOW):** the harnesses `mutants.sh`, `f-mutants.sh` and `sec-mutants.sh` grep `(b1)`, so all 32 limb-1 rows split across two lines.
+  - F5, F6 and S10 gain `L1` by design; clause (b) verdicts are unchanged.
+  - `fixtures.sh` gains a field. No live gate parses the output, and recorded readings keep their meaning.
+  - Route: Architect/Design.
+- **G-4 (LOW):** `biome.json` excludes `.grugops/`, so the instrument is neither linted nor tested. The Ruling 2 code adds 0 diagnostics (measured in scratch), and the plants are not committed as a runnable script. Route: Architect/Design.
+
+**Security:** `AR-095-L1UNIT`'s close condition is met: `clause-b.mjs` fires on a `+` line in a limb-1 holder, with both S1 plants read by QE. G-1 is a new residual for Security/NFR, not a re-open. The next column is `In Security/NFR`, alongside `arch-ABC-163-adr`. Column moves are the Orchestrator's.
