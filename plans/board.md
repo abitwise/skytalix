@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-21 by Orchestrator — `ABC-187` Ready → In Development (2/3), SE `ticket-to-pr-ABC-187`; `AGENTS.md:7` folded in (Scribe on the same branch, then QE). Ready 1/8 → 0/8._
 _Updated: 2026-10-21 by BA/PM (`bapm-cut-guard-18432`, records only) — owner's guard call (`…cba9c8eb`) cut as `ABC-187` (Ready, XS, P2, DoR 10/10): `AGENTS_MD_BUDGET_BYTES` 24,576 → 18,432 in `src/cli.test.ts` (3 lines incl. QE-164-h's stale closer count), 18,433 B reds at head (measured on scratch). Owed outside its fence: `AGENTS.md:7` still says ≤ 24,576 B, a byte-neutral Scribe line; same-branch or own hop is the Orchestrator's call. Ready 0/8 → 1/8._
 _Updated: 2026-10-21 by Orchestrator — owner: guard → 18,432 B (BA/PM `bapm-cut-guard-18432` cuts ABC-187), do ABC-185, Scribe amends `90` (QE-164-a) (`…cba9c8eb`). `ABC-185` Backlog → In Development (1/3), SE `ticket-to-pr-ABC-185`. Width 3._
 _Updated: 2026-10-21 by Orchestrator — `ABC-164` In Review → Done (merged; `AGENTS.md` now 15,606 B). Owed: Scribe amend of `90` (QE-164-a). Open owner calls: lower the 24,576 B guard; ABC-185._
@@ -931,8 +932,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [ABC-168] `skytalix`: `src/uci.ts`, `dist/uci.js` + `bin`, opt-in real-child lane, M1/M2/M8(a)/M9 at UAT  (owner: BA/PM, size: S, priority: P1, epic: EPIC-007, since: 2026-10-18, DoR 10/10; In Security/NFR on (b1)+(a). Waits: after ABC-171; owner installs cutechess-cli + En Croissant before UAT.)
 - [ABC-172] Rename package and in-repo names to `skytalix`; directory and remote are owner steps  (owner: BA/PM, size: XS, priority: P2, epic: EPIC-007, since: 2026-10-18, DoR 10/10; clause (a) Security/NFR hop. Waits: Q14 default = keep `npm run chess`.)
 
-## Ready (WIP 1/8)
-- [ABC-187] The `AGENTS.md` byte guard still allows 24,576 B, so the 8,970 B `ABC-164` cut can grow back with no test going red  (BA/PM, XS, P2, epic: —, since: 2026-10-21, **DoR 10/10**; cut in `bapm-cut-guard-18432` on owner decision `…cba9c8eb`; `src/cli.test.ts` `:2484` constant, `:2483` JSDoc, `:2242` closer count 13 → 8 (QE-164-h); 0 production lines, UAT waiver expected. SE then QE. Owed outside its fence: `AGENTS.md:7` Scribe line, byte-neutral.)
+## Ready (WIP 0/8)
 
 
 
@@ -948,7 +948,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
+## In Development (WIP 2/3)
+- [ABC-187] The `AGENTS.md` byte guard still allows 24,576 B, so the 8,970 B `ABC-164` cut can grow back with no test going red  (BA/PM, XS, P2, epic: —, since: 2026-10-21, **DoR 10/10**; cut in `bapm-cut-guard-18432` on owner decision `…cba9c8eb`; `src/cli.test.ts` `:2484` constant, `:2483` JSDoc, `:2242` closer count 13 → 8 (QE-164-h); 0 production lines, UAT waiver expected. SE then QE. Owed outside its fence: `AGENTS.md:7` Scribe line, byte-neutral.) **Pulled 2026-10-21** Ready → In Development on owner decision `…cba9c8eb`, SE `ticket-to-pr-ABC-187`; the `AGENTS.md:7` line is folded in as a Scribe hop on this branch after the SE commit.
 - [ABC-185] 85 hop and merge rows appended to `plans/traceability.md` since 2026-10-17 carry 5, 6, 7 or 9 cells, so their text renders under the wrong headers  (BA/PM, M, P3, epic: —, since: 2026-10-21, **DoR 10/10**, re-scored 2026-10-21 in `bapm-rule-QE-165`; split from `ABC-165` in `bapm-rescope-ABC-165`; 86 at `3d36999b` (`:1143–1253`). Waits: `ABC-186` merged (today these rows render as paragraph text, QE-165-a); then → Ready. Owner may close as won't-do once the table renders.) **Pulled 2026-10-21** Backlog → In Development on owner go (`…cba9c8eb`), SE `ticket-to-pr-ABC-185`.
 
 

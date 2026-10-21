@@ -1,8 +1,8 @@
 ---
 id: ABC-187
 title: "The `AGENTS.md` byte guard still allows 24,576 B, so the 8,970 B `ABC-164` cut can grow back with no test going red"
-status: ready
-column: Ready
+status: in-development
+column: In Development
 size: XS
 priority: P2
 epic: —
