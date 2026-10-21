@@ -28,3 +28,18 @@ width: 2 (beside arch-build-ABC-195; disjoint files)
 ## Publish
 - Seal notes with the plugin writer (`installPath` of `grugops@grugops` in `~/.claude/plugins/installed_plugins.json` → `scripts/context-io.js` `admitAndAppend`). **Pass your worktree as the context root explicitly** — never the plugin dir. Take every `at` from `date -u` (UTC). Include a `kind: decision`. Notes are append-only: never delete one; a wrong note gets a superseding note. `artifact-ref` needs a §14 gate run, so record artifacts as `observation`. Task `ticket-to-pr-ABC-194`.
 - Trace row (forward 10-cell rule): `| {ticket} ({hop}) | {what} | {EPIC or —} | {F or —} | {NFR/ADR/AR/finding ids or —} | {branch @ sha<br>files or —} | {gates/test counts or —} | {UAT verdict/waiver or —} | {release tag or —} | {column move or verdict} |` — exactly 10 cells, as a plain table line (not in backticks). Put it in your done record (`.grugops/queue/done/<subtask>.md` + `.claim.md`, main's tree, uncommitted); the Orchestrator appends it.
+
+## Result
+
+**Done, no stop.** Branch `grugops/ABC-194` @ `fcf47534` (code `5e0839fd`, notes `fcf47534`), worktree `../wt-ABC-194`, from main `99d07d32` (main unmoved at end). Diff vs main: `src/cli.test.ts` (+30 −4) + 3 notes. 0 production lines; no push, merge or force.
+
+- **Scope:** `guardStreamFaultOf` adds (1) a direct-statement check (the call's parent is an `ExpressionStatement` whose parent is setup's body) and (2) a no-`return` check (none outside `isFunctionLike` nodes). Faults name the condition and the SyntaxKind chain. The plant table goes 5 → 9; expected `[false,true,true,true,true,true,true,true,true]`.
+- **A1:** base one-file `-t "ABC-192"` exit 0, 2 passed.
+- **A2 / red-first** (scratch copy outside the repo, full node_modules copy, private TMPDIR, cmp 0 on every restore): try/catch, `if (!HEAP_GUARD_OFF)`, `if (HEAP_GUARD_OFF) return;`, `.then` deferral, M4, M4b → one-file 1 and npm test 1, with only ABC-192 > A1 red. The uncalled arrow, `if (false)`, `return;` and labelled break → one-file 1 (only A1); npm test 1 with A1 + ABC-173 A4/A6. Each fault names its condition.
+- **A3:** direct check dropped → plant assertion red (3 entries); return check dropped → red (1 entry); both dropped → received `[F,T,T,T,T,F,F,F,F]`, the merged reading.
+- **A4:** N8_SPAWN = 28 unchanged; 0 child-call lines added; ABC-173 C2 green; no timing.
+- **A5:** lint/typecheck/build 0; npm test 0, 59 / 1994 passed, 0 failed; last-run.json success true; skip count 0 → `No findings.` exit 0. The UAT waiver form printed nothing; the AR-193-HUNKHDR stand-in printed nothing; AGENTS.md byte-identical (15,821 B).
+- **Notes** (`.grugops/context/ticket-to-pr-ABC-194/notes/`): decision `20261021T195640Z-software-engineer-decision-aac5545f`; observations `…-observation-4566f46a` (red-first + A3) and `…-observation-cfa3d51f` (tip gates).
+- **Open:** the ABC-189 textual overlap in src/cli.test.ts is `UNKNOWN - verify` at merge (different block). A QE hop is owed.
+
+| ABC-194 (SE) | guardStreamFaultOf requires a direct-statement guard(…) call and no return in setup; plant table 5→9 (QE-192-a) | — | — | QE-192-a, QE-192-c, ADR-0008, NFR-008, AR-193-HUNKHDR | grugops/ABC-194 @ fcf47534<br>src/cli.test.ts | lint/typecheck/build 0; npm test 59/1994; skip 0, No findings. | waiver: 0 production lines (form empty) | — | In Development → In Review |
