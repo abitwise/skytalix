@@ -1,8 +1,8 @@
 ---
 id: ABC-185
 title: "85 hop and merge rows appended to `plans/traceability.md` since 2026-10-17 carry 5, 6, 7 or 9 cells, so their text renders under the wrong headers"
-status: in-development
-column: In Development
+status: done
+column: Done
 size: M
 priority: P3
 epic: —
@@ -169,3 +169,30 @@ BA/PM, 2026-10-21 at `5277babd`. **Result: 10 of 10.** Re-scored 2026-10-21 at `
 
 Column moves are the Orchestrator's. Owner: **the Orchestrator** (routes the build to the Software Engineer), then
 QE.
+
+## QE
+
+**`qe-ABC-185`, 2026-10-21. Verdict: PASS_WITH_GAPS (4 INFO, 0 blocking).** Branch `grugops/qe-ABC-185`, from the tip `3d166e01`.
+I merged `main` `a78c353a` at **`6273bed2`** with no conflict; `main`'s tail rows are kept verbatim. Every criterion was run at that merge with QE's own
+scripts. Line numbers are the same at base `bf6fc623` and at the merge. Notes are under `.grugops/context/qe-ABC-185/`.
+
+- **A1 MET:** `A1-cells` prints 86 at base and at `main`, and `[]` at `745c6225` and `6273bed2`.
+- **A2 MET:** QE found the source rows itself (short at base). Exactly 86 lines changed, and they are those rows. Paired by
+  Ticket cell and order, 86 of 86 are equal after the strip.
+- **A3 MET:** `|` lines are 705 = 705 (base → code) and 708 = 708 (`main` → merge).
+- **A4:** (a) MET, 86/86 byte-equal. (b) MET: each row aligned back to its source cells; 3 exceptions (`:1239`, `:1244`, `:1250`),
+  all named; 0 unexplained. (c) The SE's map matches QE's on 84/86 rows. At `:1192` and `:1198` a trailing bare `—` reads as UAT or Status, and both render
+  the same. (d) **MET:** `marked` 15.0.12 `--gfm -o` gives 2 tables and 706 `<tr`, each row with 10 cells. QE read 14 rows (seed 185): one per layout,
+  `:1152 :1191 :1174 :1156 :1189 :1180 :1176 :1198 :1207`, then `:1142 :1190 :1194 :1226 :1250`. That is 140 cells, 0 avoidably misplaced.
+- **Rulings:** the SE's 3 named exceptions and the other word-order placements (`:1145 :1146 :1155 :1160 :1176 :1177
+  :1180 :1187–:1189 :1198 :1229 :1231`, and the mixed EPIC/ADR cells) are accepted. For each, no order-keeping map is better,
+  and a better one would need a word move, which is out of scope.
+- **A5 MET:** one file excluding `.grugops/`; in `-U0`, removed = the 86 sources and added = the 86 repairs. **A6 MET:** `2 0` at base, code, `main` and merge.
+- **Gates** (code tree identical to `745c6225`): lint, typecheck and build 0. `npm test` 59 / 1987, and `last-run.json` shows success, 0 failed / pending / todo.
+  Skip-count 0: `No findings.` UAT waiver reading empty (0 production lines).
+- **Gaps:** QE-185-a: 5 branch references outside Code, all forced, all named (`:1177`, `:1180` are missed by A4 (b)'s regex). QE-185-b: other
+  word-order fragments. QE-185-c: `branch<br>—` in Code at `:1190` and `:1194`, cosmetic. QE-185-d: the A4 (c) map is one of two equal readings at `:1192`
+  and `:1198`.
+- **Short freeze** from `6273bed2`. If `main` moves before the merge, merge it again and re-run `A1-cells` and `A1-fragments`.
+- **Re-merge:** `main` moved to `d42f6a3b` during this hop (2 ten-cell `ABC-187` rows, no `src/`). I merged it at **`262defb7`** with no conflict
+  and the tail verbatim. A1–A6 and the gates were re-run there with the same results: `|` lines 710 = 710, 708 `<tr`, 59 / 1987, skip-count 0. **The freeze runs from `262defb7`.**
