@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-21 by Orchestrator — BA/PM `bapm-rule-QE-194` (`…54e03439`): QE-194-a/-b/-c/-d all accepted, no ticket cut (QE-194-a folded into QE-192-b's diff-reading owner rule; -b's two plants into QE-192-c's). Next free id stays ABC-196._
 _Updated: 2026-10-21 by Orchestrator — `ABC-194` In Review → Done (merged; QE PASS_WITH_GAPS `…ac075665`; gates green 59/1994, CLI_DEEP 11/11, PERFT_DEEP 32/32; UAT waived). QE-194-a (LOW proposed: an off-switch on the guard's inputs) and -b/-c/-d (INFO) to BA/PM `bapm-rule-QE-194`. In Review 1/3._
 _Updated: 2026-10-21 by Orchestrator — `ABC-195` In Development → In Review (Architect tip `f9709ed8`: base red as the page's table, each half short, 25 of 25; 59/1994; waiver and HUNKHDR stand-in empty); QE `qe-ABC-195` dispatched beside `qe-ABC-194`. In Development 0/3, In Review 2/3._
 _Updated: 2026-10-21 by Orchestrator — `ABC-194` In Development → In Review (SE tip `fcf47534`: A1–A5 met on SE readings, all 10 builds red; 59/1994; waiver and HUNKHDR stand-in empty); QE `qe-ABC-194` dispatched. In Development 1/3, In Review 1/3._

@@ -188,3 +188,5 @@ Column moves after `Ready` are the Orchestrator's.
 - **QE-194-d (INFO).** The fail-closed side grows as the page expects (`QE-192-c`): a block, `void`, `|| 0`, a comma or a `return;` after the call each red A1.
 
 UAT waived (0 production lines); a waiver is not a signature. The `In Review` exit is the Orchestrator's.
+
+> **2026-10-21, BA/PM (`bapm-rule-QE-194`, at `main` `0d05f252`): the QE gaps are ruled** (`.grugops/context/bapm-rule-QE-194/notes/`). Nothing is cut and no ticket is opened. `QE-194-a` is **ACCEPTED** under `QE-192-b`'s precedent. A switch keyed on a file, `argv`, `globalThis` or another file is beyond any parser check of this file, and the check parses `heap-guard.js` only. Its owner rule is folded into `QE-192-b`'s: QE reads every `heap-guard.js` diff, and every diff that adds a `globalSetup` or preload, for a switch on the guard's inputs or decision. `QE-194-b` is **ACCEPTED**, and its two plants are folded into `QE-192-c`'s owner rule. `QE-194-c` and `-d` are **ACCEPTED**. Each gap has an owner and a reopen trigger. This page's cut text and `## QE` section are unchanged.
