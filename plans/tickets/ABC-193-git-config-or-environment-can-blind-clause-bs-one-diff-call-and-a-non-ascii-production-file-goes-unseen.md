@@ -326,3 +326,25 @@ BA/PM, 2026-10-21 at `05f764cb`. **Result: 10 of 10.**
 | 10 | no major unresolved blocker | **✅** none. Whether `AR-191-QUOTEPATH` closes whole or carries its waiver half is the Orchestrator's record, and it does not block the build |
 
 Column moves after `Ready` are the Orchestrator's.
+
+## QE
+
+**QE, 2026-10-21, on `grugops/qe-ABC-193`.** Verdict: **PASS_WITH_GAPS.** A1–A9 are met by my own runs. There are 0 blocking gaps and none is against a criterion. Readings and the gap register: `.grugops/context/qe-ABC-193/notes/`.
+
+- **Merges.** `main` `a4561a26` was merged at `f33eb318`, and every criterion was run there. `main` then moved to `c4bce2b1` (`ABC-192` merged), so I merged again at `0222d54d` and re-ran A1–A7, the gates and my own routes there. Both merges gave the same results with plant ids masked.
+- **A2.** Base's instrument (`d3abb847…`) exits 1, with `MISMATCH: G-COLOR G-EXT G-ENV G-DRV G-PFX QU QE2` and DIFFER on exactly their 14 limbs. The 12 old rows and `ADD` read `ok`/`identical`.
+- **A3.** Each part-removed copy reads exactly the page's red set. Without `--src-prefix=a/` the run exits 0, and A6's `PFX-X1` reads `1 + line, 0 - lines`.
+- **A4/A5.** The run exits 0, 20 of 20. The 12 old rows are byte-identical to base's (83 lines). The clone holds no route afterwards, and the repository is unchanged. `ADD`, the five route rows, `QU` and `QE2` each print `(b1) capability: 1` and `2 + lines, 0 - lines`, with `src/qé.ts` unquoted. Limb 3 fires on all of them except `QU`.
+- **A6.** `PFX-X1` at head reads `1 + line, 3 - lines`; base reads `production files changed: 0` and does not fire. `CQ1`, `CQT` and `CQ2` fire (disputed) on limbs 1 and 3 at head, and base and the no-(c) copy are silent. `CQS` does not fire, and no line names `q"t`.
+- **A7.** 87 calls on head, all 87 beginning `-c core.quotePath=false`, and 87 on base. Exactly one `diff` call, with the page's argv.
+- **A8.** 34 `+` lines and 0 `−`. The block is dated 2026-10-21 and sits after the `ABC-191` block, and it is consistent with `63eadabe`.
+- **A9.** At `0222d54d`: lint, typecheck and build exit 0. `npm test` gives 59/1994 with `success` true, the same as `ABC-192`'s merge. The skip count is 0, and the integrity check prints `No findings.` `biome.json` is unchanged.
+- **Waiver.** The owner's form prints nothing over the range, for each commit and for each merge. **Stand-in:** it prints nothing in my shell and worktree.
+- **AR-191-GITENV:** the close condition is met.
+- **AR-191-QUOTEPATH:** the instrument half's close condition is met. `QE-193-a` is a sibling that the close term does not reach.
+- **Gaps** (all predate this ticket, and all are outside its fence):
+  - `QE-193-a`: a production file with a space in its name is unseen. git appends a TAB to its `---`/`+++` header.
+  - `QE-193-b`: an added line starting `++ ` blinds limbs 2 and 3 in later hunks of the same file.
+  - `QE-193-c`: `GIT_DIFF_OPTS` overrides `-U0`, which inflates the counts (fail-safe).
+  - `QE-193-d`: ADR (v) says the waiver form is owed, but it is on `main` since `4f81850c`.
+  - `QE-193-e`: a C-quoted non-production path also disputes (fail-safe).
