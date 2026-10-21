@@ -58,6 +58,7 @@ this table names.
 | Puzzle suite, strength gate (opt-in, ABC-084) | TRIGGER (owner, option B, 2026-10-09): QE runs it during review when the change touches engine code (`src/engine.ts`, `src/search*.ts`, `src/evaluate*.ts`, `src/quiescence.ts`, `src/transposition.ts`, move ordering). | § "Puzzle-suite strength gate" |
 | PVS/LMR deep lane (ABC-121, `src/search.pvs-lmr.test.ts`) | Run after any PVS/LMR change to src/search.ts or src/engine.ts. | § "PVS/LMR deep lane" |
 | Real-engine CLI lane (opt-in, ABC-119) | Run at QE and after any src/cli.ts or src/engine.ts change. | § "Real-engine CLI lane" |
+| Real-engine UCI lane (opt-in, ABC-168) | Run at QE and after any change to `src/uci.ts`, `src/uci-session.ts`, `src/book-file.ts` or `src/engine.ts`. Unset: NOT DEFINED, not skipped. | § "Real-engine UCI lane" |
 | Self-play ladder lane (opt-in, ABC-085, ADR-0038) | — | § "Self-play ladder lane" |
 | Coverage | — | § "Coverage — `npx vitest run --coverage`" |
 | Coverage (`src/` only — the other denominator; neither is agreed) | — | § "Coverage (`src/` only) — `npx vitest run --coverage --coverage.include='src/**'`" |
@@ -490,6 +491,41 @@ children counted from `[CLI_DEEP]` lines need `--reporter=verbose` (or `--silent
 Vitest's agent mode hides a passing test's console output, and `CLAUDECODE` alone is not the switch. With the flag
 the count is at least 1 (6 children at the `ABC-184` branch tip `c6f80c81`, QE's reading).
 
+## UCI entry point (`ABC-168`) — `npm run uci`
+
+Added to `AGENTS.md` § Development by `ABC-168` (Scribe task `scribe-ABC-168`, 2026-10-21, branch `grugops/ABC-168`). Its comment in
+`AGENTS.md` is one line; this is the rest. `scripts.uci` is `node src/uci.ts`: the engine speaks UCI on stdin and stdout, with
+the real book file (`src/book-file.ts`). Exit `0` on `quit` or end of input, `1` if any command-line argument is given, `70` on an
+exception. It is NOT the `Dev / run` slot: that slot stays the one script that runs `src/cli.ts` (`npm run chess`), and the
+`ABC-042`, `ABC-059`, `ABC-065` and `ABC-071` pins in `src/cli.test.ts` read `AGENTS.md` for exactly one such slot, so this line has its own label and never says `Dev / run`.
+The delivered artifact is `dist/uci.js` (`bin.skytalix`), made by `npm run build`; see § "Build (use sparingly)".
+
+## Real-engine UCI lane (`ABC-168`, `src/uci.real-engine.test.ts`) — `UCI_DEEP=1 npx vitest run src/uci.real-engine.test.ts`
+
+Added to `AGENTS.md` § Test by `ABC-168` (Scribe task `scribe-ABC-168`, 2026-10-21), in the `ABC-119` form. The lane's own header
+comment holds the full design; this entry is the comment that `AGENTS.md` does not carry.
+
+**What it holds.** ONE real child of `node src/uci.ts` plays one scripted GUI dialogue (`ADR-0044` D9): `uci`, `isready`, `position
+startpos`, `go movetime 1000` with the book on (`info string book`, then a legal `bestmove`), the same with `setoption name OwnBook
+value false` (an `info depth` line, no `info string book`), then `quit`. Every stdout line is checked against `EPIC-007` M4's keyword
+set; the child exits `0` with nothing on stderr. It spawns with `spawnSync` (`ABC-173` `C2`), an EMPTY child environment, and the
+heap flag crossing in argv only. No assertion names a move. Gated with `if (RUN_DEEP) { describe(...) }`; `describe.runIf` /
+`it.skipIf` / `.skip` are never used, so **unset is NOT DEFINED, not skipped**, and the gate's skip count stays 0. One default-lane
+test spawns nothing and can fail.
+
+**Not here.** `A6`'s three reply latencies: a synchronous child returns its whole output at exit, so no per-reply time can be read,
+and `C2` bars the asynchronous form. The wall time the lane prints is labelled "not an A6 reading". `A7` (the built `dist/uci.js`)
+and `A8`-`A10` are by hand, at the build hop and at UAT.
+
+**Trigger.** Run at QE and after any change to `src/uci.ts`, `src/uci-session.ts`, `src/book-file.ts` or `src/engine.ts`.
+
+**Receipt.** 2026-10-21, Scribe hop on the `ABC-168` branch (tip before this hop `2ed5469a`): exit 0, **5 passed** (1 default + 4 deep).
+COUNT YOUR RUN: 5 is the whole lane, 1 is the default lane. No timing taken.
+
+**The `ABC-173` `A3` parser.** `vitestCommandsIn(AGENTS.md)` (`src/cli.test.ts`) counts one backticked span per `npx vitest` command
+outside HTML comments; the new line is one span, ONE-FILE shape, one `NODE_OPTIONS=` with the `400` flag. The count went 17 -> 18, and
+its floor is `>= 17`.
+
 ## Self-play ladder lane (`ABC-085`, ADR-0038) — `LADDER_DEEP=1 npx vitest run src/ladder.test.ts`
 
 The short-mode lane line stays in `AGENTS.md` § Test. Its comment, moved from `AGENTS.md` by `ABC-164` (2026-10-21), word for
@@ -598,9 +634,13 @@ command.
 
 ## Build (use sparingly) — `npm run build`
 
-Currently `tsc --noEmit`: the project is type-checked but emits nothing, because nothing is
+Since `ABC-168` (2026-10-21): `tsc -p tsconfig.build.json`, which emits `dist/` (`ADR-0044` D8). The engine artifact is `dist/uci.js`,
+the target of `bin.skytalix`; `dist/` is git-ignored and may hold type-only emits. The `typecheck` gate (`tsc --noEmit`) still
+covers the whole tree, so the build gate no longer repeats it.
+
+Before `ABC-168` (kept so it is not lost): "Currently `tsc --noEmit`: the project is type-checked but emits nothing, because nothing is
 published until `EPIC-006` packaging. Honest naming — this is a typecheck wearing the build slot's
-name, not a real bundle.
+name, not a real bundle."
 
 ## E2E
 
@@ -943,3 +983,14 @@ after `ABC-164`; the sentences below were the only ones changed, besides the `QE
 
 `QE-164-b`: in the `scribe-ABC-164` pass, the miss list now has four kinds (the `O1` line split added) and no longer counts the QE-hop comment
 (found whole in `40-contributing.md`). The Reader's "one-line summary" clause was changed with its sentence because the same split made it false.
+
+## `scribe-ABC-168` pass, 2026-10-21 (`ABC-168` Scope 5; branch `grugops/ABC-168` from `2ed5469a`)
+
+AGENTS.md Scribe, task `scribe-ABC-168`. Two files: `AGENTS.md` and this file. Zero `src/` and `plans/` lines.
+
+**Added to `AGENTS.md`.** One `npm run uci` line (§ Development, own label, never `Dev / run`); one lane line, `UCI_DEEP=1 NODE_OPTIONS=--max-old-space-size=400
+npx vitest run src/uci.real-engine.test.ts` (§ Test, one backticked command, so `vitestCommandsIn` counts 18 against its `>= 17`); `npm run build`'s comment now
+says `tsc -p tsconfig.build.json` -> `dist/`. **Added here.** The lane's comment and trigger ("Unset: NOT DEFINED, not skipped") in § "On-demand commands" and in
+§ "Real-engine UCI lane"; § "UCI entry point"; § "Build (use sparingly)" rewritten with the old text kept.
+
+**Bytes.** `AGENTS.md` 15,606 B -> **16,090 B** (+484 B). Ceiling 18,432 B (`ABC-187`'s guard, not yet merged): 2,342 B headroom. Today's guard, 24,576 B: 8,486 B.
