@@ -1,8 +1,8 @@
 ---
 id: ABC-194
 title: "A try/catch or an off-switch around `setup`'s guard call lets an uncapped run through, and the ABC-192 row stays green (QE-192-a)"
-status: ready
-column: Ready
+status: in-development
+column: In Development
 size: XS
 priority: P3
 epic: —

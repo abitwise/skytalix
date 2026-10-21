@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-21 by Orchestrator — owner go: `ABC-194` (SE `ticket-to-pr-ABC-194`) and `ABC-195` (Architect `arch-build-ABC-195`) Ready → In Development, width 2, disjoint files. HUNKHDR stand-in empty. Ready 2/8 → 0/8, In Development 0/3 → 2/3._
 _Updated: 2026-10-21 by BA/PM (`bapm-cut-AR-193`, records only) — `AR-193-HUNKHDR` + `AR-193-SPACEPATH` fix cut (Security/NFR `…5719a86d`; owner record `…73e94c9f`). `ABC-195` (Ready, XS, P3, DoR 10/10; builder Architect/Design; gates no merge; 0 `src/` lines). Clause (b)'s `changedLines` reads `---`/`+++` (and the C-quoted test) as headers only between `diff --git ` and that file's first `@@`, and drops one trailing TAB from an unquoted header path. `r2-mutants.sh` gains `PP-TPL`, `PP-REDIR`, `RA-PLUS`, `PP-EDIT` and `SP-N5` (25 rows), each compared on limbs 2/3 with `341da4c1` on a control twin (`341da4c1` is blind on all five plants), plus a Ruling 2 list parse that reads a spaced name (today's reads `src/q@<head>`) and a plant check; `ADR-0036` § S1 gets a dated block retiring the HUNKHDR stand-in and stating block (i)'s scope exactly (`QE-193-c`). Measured on a scratch prototype at `65bc4375`: base red is exactly `MISMATCH: RA-PLUS SP-N5` and 9 limb diffs; without the TAB strip only `SP-N5` is red, without the header window only the four `++ ` rows; head 25/25 with the 20 rows byte-identical to base (139 lines). `GIT_DIFF_OPTS` rider not taken (fail-safe; fenced). Ready 1/8 → 2/8. Next free id: ABC-196._
 _Updated: 2026-10-21 by Orchestrator — Security/NFR `security-nfr-QE-193` PASS_WITH_RISKS (`…5719a86d`): AR-193-HUNKHDR (LOW with stand-in; MEDIUM without) and AR-193-SPACEPATH (LOW latent) recorded (`…73e94c9f`); HUNKHDR stand-in runs at every routing and merge until the fix lands. BA/PM `bapm-cut-AR-193` cuts the fix (next free id ABC-195)._
 _Updated: 2026-10-21 by Orchestrator — `ABC-193` In Review → Done (merged; QE PASS_WITH_GAPS `…69c93667`; gates green 59/1994, CLI_DEEP 11/11, PERFT_DEEP 32/32; UAT waived). AR-191-GITENV and AR-191-QUOTEPATH closed; GITENV stand-in retired (`…f61be5db`). Pre-existing QE-193-b (MEDIUM proposed: a `++ ` added line hides later hunks) and QE-193-a (LOW: paths with a space) to Security/NFR `security-nfr-QE-193`. In Review 0/3._
@@ -852,7 +853,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   one hop at pull, when it checks `Ready for Dev`'s exit at that moment; the row records the pull.
 
   HEADING FORMAT (spec §6.1): each column is an H2 heading carrying its live/limit WIP count,
-  e.g. `## In Development (WIP 0/3)` — the left number is how many tickets are in the column
+  e.g. `## In Development (WIP 2/3)` — the left number is how many tickets are in the column
   now, the right number is the limit from config. Unlimited columns read `(WIP unlimited)`;
   Blocked is visible and time-tracked (no WIP limit) and reads `(visible, time-tracked)`.
   INVARIANT: the column H2 headings and the rows of the `## Columns` table are the same 13 names in the
@@ -862,7 +863,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 0/3)
+    ## In Development (WIP 2/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
     ## In Review (WIP 0/3)
@@ -971,9 +972,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [EPIC-006] Game session and packaging  (owner: BA/PM, **size: XL — corrected from `L`; 9 tickets / 20 points across both halves, ~1.5x the 13 `L` was assigned, and it hit that ceiling BEFORE distribution was priced**, priority: P1, since: 2026-07-22, **BOTH HALVES NOW CUT: the runnable half `ABC-041`…`ABC-046` (2026-08-13) and the second half `ABC-100`…`ABC-102` (2026-08-16) — only THREE tickets, because the scope of packaging is a FUNCTION of a distribution channel nobody has chosen.** `ABC-100` cuts the DECISION, never the ANSWER: a superseding ADR per `ADR-0007` `D5`, on the owner's word, verbatim and dated. **Acceptance criterion 1 (`npx <package>`) remains unmeetable by any ticket. Recommendation NOT taken, standing for the owner: this should probably be two epics** — the halves share no dependency in either direction and their blockers differ in kind)
 - [EPIC-007] The engine speaks UCI, so a chess UI can play against it  (owner: BA/PM, size: M, priority: P1, since: 2026-10-18, **ACCEPTED 2026-10-18 (owner, `…c3e81a57`); private/UNLICENSED; Q12–Q15 answered; ABC-167..172 cut, DoR 10/10, next free id ABC-173** (lifts the UCI half of EPIC-004's non-goal; EPIC-004 not yet edited); proposed in `bapm-engine-plan` (`4a98860c`). Tickets RESERVED, no page cut: ABC-167 (S, session) → ABC-168 (XS, entry point, In Security/NFR); ABC-169 (XS, licence, outside v1, on Q8). Waits: the owner's answers to Q1–Q11 ("accept recommendations" suffices) and ADR-0044 acceptance.)
 
-## Ready (WIP 2/8)
-- [ABC-194] A try/catch or an off-switch around `setup`'s guard call lets an uncapped run through, and the ABC-192 row stays green (QE-192-a)  (owner: software-engineer, size: XS, priority: P3, epic: —, since: 2026-10-21, DoR 10/10; cut in `bapm-rule-QE-192`. Test-only, `src/cli.test.ts`: `guardStreamFaultOf` also requires a direct statement and no `return` in `setup`, and the plant table grows from 5 to 9 entries. Tests stay 1994, 0 children, `tools/` and `AGENTS.md` untouched. Gates no merge. Overlaps `ABC-189` in the same file, in a different block.)
-- [ABC-195] An added line starting `++ ` hides the later hunks of its file from clause (b), and a production file whose name holds a space goes unseen (AR-193-HUNKHDR + AR-193-SPACEPATH fix)  (owner: architect-design, size: XS, priority: P3, epic: —, since: 2026-10-21, DoR 10/10; cut in `bapm-cut-AR-193`. Builder Architect/Design. Four files (`clause-b.mjs`, `r2-mutants.sh`, its `.out.txt`, `ADR-0036`); 0 `src/` lines. Gates no merge; the Orchestrator's HUNKHDR stand-in runs until it lands. QE reads PP-TPL/PP-EDIT/PP-REDIR/RA-PLUS (20 rows unchanged) to close AR-193-HUNKHDR, and SP-N5 to close AR-193-SPACEPATH. `GIT_DIFF_OPTS` rider not taken.)
+## Ready (WIP 0/8)
 
 
 
@@ -989,7 +988,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 2/3)
+- [ABC-194] A try/catch or an off-switch around `setup`'s guard call lets an uncapped run through, and the ABC-192 row stays green (QE-192-a)  (owner: software-engineer, size: XS, priority: P3, epic: —, since: 2026-10-21, in dev 2026-10-21 (SE `ticket-to-pr-ABC-194`), DoR 10/10; cut in `bapm-rule-QE-192`. Test-only, `src/cli.test.ts`: `guardStreamFaultOf` also requires a direct statement and no `return` in `setup`, and the plant table grows from 5 to 9 entries. Tests stay 1994, 0 children, `tools/` and `AGENTS.md` untouched. Gates no merge. Overlaps `ABC-189` in the same file, in a different block.)
+- [ABC-195] An added line starting `++ ` hides the later hunks of its file from clause (b), and a production file whose name holds a space goes unseen (AR-193-HUNKHDR + AR-193-SPACEPATH fix)  (owner: architect-design, size: XS, priority: P3, epic: —, since: 2026-10-21, in dev 2026-10-21 (Architect `arch-build-ABC-195`), DoR 10/10; cut in `bapm-cut-AR-193`. Builder Architect/Design. Four files (`clause-b.mjs`, `r2-mutants.sh`, its `.out.txt`, `ADR-0036`); 0 `src/` lines. Gates no merge; the Orchestrator's HUNKHDR stand-in runs until it lands. QE reads PP-TPL/PP-EDIT/PP-REDIR/RA-PLUS (20 rows unchanged) to close AR-193-HUNKHDR, and SP-N5 to close AR-193-SPACEPATH. `GIT_DIFF_OPTS` rider not taken.)
 
 
 
