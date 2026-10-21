@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-21 09:20Z — Orchestrator: ABC-162 In Review → In Security/NFR (QE PASS_WITH_GAPS `…68554c31`; P6b killed; P6f survives as G-1). Dispatched `security-nfr-ABC-162` (AR-095-CWD ruling) and `scribe-agents-md-2026-10-21`._
 _Updated: 2026-10-21 09:05Z — Orchestrator: ABC-159 In Review → Done, merged to `main` with all gates passing; UAT waived. QE-159-a (san header over-claims) and the other gaps sent to BA/PM (`bapm-rule-QE-159`)._
 _Updated: 2026-10-21 08:55Z — Orchestrator: ABC-160 In Review → Done, merged to `main` with all gates passing; UAT waived (0 production lines); QE-160-a accepted per the page's Out of scope._
 _Updated: 2026-10-21 08:45Z — Orchestrator: ABC-159 In Development → In Review (SE tip `3c505abe`; A1, A2, A4 met; A3 owed to QE; all gates green; 0 production lines). Dispatched `qe-ABC-159`. In Review is at 3/3._
@@ -928,32 +929,32 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
+## In Review (WIP 0/3)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## In Security/NFR (WIP 1/2)
 - [ABC-162] `ABC-095` `A7`'s real-engine child runs from the tree root, so a build that reads the book relative to the working directory passes `CLI_DEEP`  (BA/PM, XS, P3, epic: EPIC-005, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from AR-095-CWD.)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## In Security/NFR (WIP 0/2)
 
 
 
