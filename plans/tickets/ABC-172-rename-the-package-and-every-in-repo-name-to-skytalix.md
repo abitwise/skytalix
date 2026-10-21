@@ -1,8 +1,8 @@
 ---
 id: ABC-172
 title: "Rename the npm package and every in-repo name from `cli-chess` to `skytalix`; the directory and any remote are owner steps"
-status: in-development
-column: In Development
+status: in-review
+column: In Review
 size: XS
 priority: P2
 epic: EPIC-007
