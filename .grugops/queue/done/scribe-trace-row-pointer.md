@@ -25,3 +25,16 @@ BA/PM set a forward rule (`…d2b9bf09`, adopted by the Orchestrator `…34da66b
 - **Trace row: exactly 10 cells, in header order** (rule `…d2b9bf09`):
   `| Scribe (trace-row pointer) | {what this hop did, one line} | {EPIC-nnn or —} | {F-nnn or —} | {NFR, ADR, AR and finding ids, or —} | {branch @ sha<br>files touched, or —} | {gates and test counts, or —} | {UAT verdict or waiver, or —} | {release tag, or —} | {column move or verdict} |`
   `—` for an empty cell; a literal `|` is `\|`, inside code spans too.
+
+## Result
+
+- Branch: `grugops/scribe-trace-row-pointer` (worktree `../wt-scribe-trace-row`), from main `054627a9`.
+- Tip: `45426615519bf2dec5200b69241604a409e7a524` (`edf85a40` = the `AGENTS.md` change, `45426615` = the observation note on top).
+- Change: `AGENTS.md:181` -> `- Traceability: `plans/traceability.md` (10 cells/row)`. Numstat 1/1; nothing else touched.
+- Bytes: 24,560 before -> 24,575 after, budget 24,576 (`src/cli.test.ts` ABC-109 A5). Headroom 1 B.
+- Gates on the tip: lint, typecheck, build clean; `npm test` 59 files / 1987 tests, `last-run.json` success true; skip-integrity `--skip-count 0` no findings.
+- Note: `.grugops/context/scribe-trace-row-pointer/` observation `20261021T124210Z-agents-md-scribe-observation-93c87929`.
+
+Trace row (10 cells; for the Orchestrator to append, `plans/` is fenced from me):
+
+`| Scribe (trace-row pointer) | AGENTS.md Traceability line points at the 10-cell trace row rule (+15 B) | — | — | ABC-109 budget | grugops/scribe-trace-row-pointer @ 45426615<br>AGENTS.md | lint/typecheck/build clean; npm test 59 files / 1987; skip-integrity 0; AGENTS.md 24,575 of 24,576 B | — | — | done, awaiting merge |`

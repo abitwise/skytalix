@@ -178,7 +178,7 @@ files directly via built-in type stripping, so there is no bundler or transpile 
 
 - Board: `plans/board.md`
 - Cadence + WIP: `.grugops/factory.config.json`
-- Traceability: `plans/traceability.md`
+- Traceability: `plans/traceability.md` (10 cells/row)
 
 ## Process rules (this project)
 
