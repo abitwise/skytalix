@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-21 by BA/PM (`bapm-cut-AR-183-CWDARG`, records only) — AR-183-CWDARG (QE-183-a, Security/NFR `…41f70925`, owner record `…bc2b06ce`) cut as `ABC-184` (Ready, XS, P3, EPIC-005, DoR 10/10): `RealChild` records the `cwd` it spawned with, and A7 asserts `booked.cwd` is `neutral`, labelled AR-183-CWDARG; test-only, `src/cli.real-engine.test.ts`, 0 spawns/tests. Closes AR-183-CWDARG when QE reads TCWD + P6f base green / head red at the new assertion. Owed before ABC-168 merges (→ P2 when it is pulled); superseded if an earlier ticket edits A7 or the spawn helpers. Ready 1/8 → 2/8. Next free id: ABC-185._
 _Updated: 2026-10-21 by Orchestrator — owner go: `ABC-161` Backlog → In Development (1/3; DoR 10/10 from 2026-10-17 stands, page line refs stale and flagged in the brief); BA/PM `bapm-cut-AR-183-CWDARG` dispatched to cut `ABC-184` (AR-183-CWDARG fix). Width 2._
 _Updated: 2026-10-21 by Orchestrator — `ABC-182` In Review → Done (merged; QE PASS_WITH_GAPS, QE-182-a LOW carried to the next `r2-mutants.sh` edit). In Development 0/3, In Review 0/3, In Security/NFR 0/2._
 _Updated: 2026-10-21 by Orchestrator — `ABC-183` In Security/NFR → Done (merged). AR-180-VALIDATED closed; AR-183-CWDARG opened (LOW; fix cut owed from BA/PM, due before ABC-168 merges). In Security/NFR 0/2._
@@ -906,8 +907,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [ABC-168] `skytalix`: `src/uci.ts`, `dist/uci.js` + `bin`, opt-in real-child lane, M1/M2/M8(a)/M9 at UAT  (owner: BA/PM, size: S, priority: P1, epic: EPIC-007, since: 2026-10-18, DoR 10/10; In Security/NFR on (b1)+(a). Waits: after ABC-171; owner installs cutechess-cli + En Croissant before UAT.)
 - [ABC-172] Rename package and in-repo names to `skytalix`; directory and remote are owner steps  (owner: BA/PM, size: XS, priority: P2, epic: EPIC-007, since: 2026-10-18, DoR 10/10; clause (a) Security/NFR hop. Waits: Q14 default = keep `npm run chess`.)
 
-## Ready (WIP 1/8)
+## Ready (WIP 2/8)
 - [ABC-165] Ten `plans/traceability.md` rows do not split into the table's ten columns, the paragraph that lists the known malformations names a different set, and a `plans/metrics.md` header runs into the next  (BA/PM, S, P3, epic: —, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from QE-156-a + QE-040-c.)
+- [ABC-184] `RealChild` records the `cwd` it spawned with, and A7 asserts `booked.cwd` is `neutral`, so dropping `booked`'s cwd argument (TCWD) no longer lets P6f pass `CLI_DEEP`  (BA/PM, XS, P3, epic: EPIC-005, since: 2026-10-21, **DoR 10/10**; cut in `bapm-cut-AR-183-CWDARG` from AR-183-CWDARG (QE-183-a; Security/NFR `…41f70925`, owner record `…bc2b06ce`). Test-only, `src/cli.real-engine.test.ts`. Closes AR-183-CWDARG. Owed before ABC-168 or any `src/book-file.ts` edit merges; → P2 when that trigger fires.)
 
 
 
