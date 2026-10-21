@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-21 by Orchestrator — `ABC-164` Ready → In Development (1/3), Scribe `scribe-ABC-164` (owner: Option A, P2). Ready 1/8 → 0/8._
 _Updated: 2026-10-21 by BA/PM (`bapm-fold-A-ABC-164`, records only) — owner Option A (`…18e4ada0`) folded into `ABC-164`: the audit split (`…ffbb746f`/`…38d2af93`) is written into Scope and A2/A3. 26 keep, 10 split, 3 move; targets `memory-bank/45-standing-rulings.md` (new), `90-agents-md-command-log.md` and `40-contributing.md`, plus an `00-index.md` row. Two corrections to the audit: C1, `PERFT_DEEP` stays (it is one of the 17; ABC-173 A3 needs it); C2, Safety rules stays whole (a fixed keep). S/P2 hold. DoR 8/10 → 10/10: `ABC-164` Backlog → Ready. Ready 0/8 → 1/8. The budget constant (24,576) stays; lowering it is still the owner's open call._
 _Updated: 2026-10-21 by Orchestrator — `ABC-186` In Development → In Review (SE `9943e5f4`); QE `qe-ABC-186` dispatched. In Review 1/3._
 _Updated: 2026-10-21 by Orchestrator — owner: Option A for the AGENTS.md split, ABC-164 stays P2, start ABC-186 (`…18e4ada0`). `ABC-186` Ready → In Development (1/3), SE `ticket-to-pr-ABC-186`; BA/PM `bapm-fold-A-ABC-164` writes Option A into ABC-164. Ready 1/8 → 0/8._
@@ -926,8 +927,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [ABC-168] `skytalix`: `src/uci.ts`, `dist/uci.js` + `bin`, opt-in real-child lane, M1/M2/M8(a)/M9 at UAT  (owner: BA/PM, size: S, priority: P1, epic: EPIC-007, since: 2026-10-18, DoR 10/10; In Security/NFR on (b1)+(a). Waits: after ABC-171; owner installs cutechess-cli + En Croissant before UAT.)
 - [ABC-172] Rename package and in-repo names to `skytalix`; directory and remote are owner steps  (owner: BA/PM, size: XS, priority: P2, epic: EPIC-007, since: 2026-10-18, DoR 10/10; clause (a) Security/NFR hop. Waits: Q14 default = keep `npm run chess`.)
 
-## Ready (WIP 1/8)
-- [ABC-164] `AGENTS.md` makes every role session read material only some sessions need, and at 24,575 of 24,576 B no owed line can land  (BA/PM, **S, P2**, epic: —, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from AGENTS.md receipts. **2026-10-21 re-scoped in `bapm-rescope-ABC-164`** (`…45c39699`) on the owner's direction `…c6bf41be`: the old count criteria are met at base; now AGENTS.md keeps what every role session needs and moves the rest behind one-pointer links. Target ≤ 18,432 B (≥ 5.3 edits at 1,159 B/edit). Owed lines O1 `contextRoot` pointer, O2 QE-184-c `--reporter=verbose`, O3 ladder route-V correction (`…6a2f9d03`) land here. Fixed keeps: all 17 vitest commands (ABC-173 A3), the Dev/run slot, the 12 rules. P3 → P2: the promotion trigger fired. **2026-10-21 Option A folded in `bapm-fold-A-ABC-164`** (owner `…18e4ada0`): the audit split for 39 blocks is written in. 26 keep, 10 split, 3 move, to `memory-bank/45-standing-rulings.md` (new), `90-agents-md-command-log.md` and `40-contributing.md`, with an `00-index.md` row. Corrections: C1, the `PERFT_DEEP` line stays (moving it reds ABC-173 A3); C2, Safety rules stays whole. A2/A3 now name headings, 20 canaries and 6 pointers. Target ≤ 18,432 B (expected ~15,000). Budget constant stays 24,576; lowering it is an open owner decision. DoR 10/10 → Ready. Builder: AGENTS.md Scribe, then QE.)
+## Ready (WIP 0/8)
 
 
 
@@ -943,7 +943,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+- [ABC-164] `AGENTS.md` makes every role session read material only some sessions need, and at 24,575 of 24,576 B no owed line can land  (BA/PM, **S, P2**, epic: —, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from AGENTS.md receipts. **2026-10-21 re-scoped in `bapm-rescope-ABC-164`** (`…45c39699`) on the owner's direction `…c6bf41be`: the old count criteria are met at base; now AGENTS.md keeps what every role session needs and moves the rest behind one-pointer links. Target ≤ 18,432 B (≥ 5.3 edits at 1,159 B/edit). Owed lines O1 `contextRoot` pointer, O2 QE-184-c `--reporter=verbose`, O3 ladder route-V correction (`…6a2f9d03`) land here. Fixed keeps: all 17 vitest commands (ABC-173 A3), the Dev/run slot, the 12 rules. P3 → P2: the promotion trigger fired. **2026-10-21 Option A folded in `bapm-fold-A-ABC-164`** (owner `…18e4ada0`): the audit split for 39 blocks is written in. 26 keep, 10 split, 3 move, to `memory-bank/45-standing-rulings.md` (new), `90-agents-md-command-log.md` and `40-contributing.md`, with an `00-index.md` row. Corrections: C1, the `PERFT_DEEP` line stays (moving it reds ABC-173 A3); C2, Safety rules stays whole. A2/A3 now name headings, 20 canaries and 6 pointers. Target ≤ 18,432 B (expected ~15,000). Budget constant stays 24,576; lowering it is an open owner decision. DoR 10/10 → Ready. Builder: AGENTS.md Scribe, then QE.) **Pulled 2026-10-21** Ready → In Development on owner go (Option A), Scribe `scribe-ABC-164`.
 
 
 
