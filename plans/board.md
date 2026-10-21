@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-21 by Orchestrator — `ABC-188` In Review → In Security/NFR (QE `da348a79`: AR-163-DELONLY close condition met); short Security/NFR read dispatched._
 _Updated: 2026-10-21 by Orchestrator — `ABC-188` In Development → In Review (tip `66d6a2f1`); QE `qe-ABC-188` dispatched._
 _Updated: 2026-10-21 by Orchestrator — `ABC-188` Ready → In Development (ABC-168's merge is held on it), Architect `arch-build-ABC-188`. Ready 1/8 → 0/8._
 _Updated: 2026-10-21 by BA/PM (`bapm-cut-ABC-168-followups`, records only) — ABC-168's three follow-ups cut (Security/NFR `…75a45be0`, owner record `…e37f4a1a`). `ABC-188` (Ready, S, P2, DoR 10/10; the AR-163-DELONLY fix, due before ABC-168 merges): clause (b) limb 1 fires on any changed line, `+` or `−`, in a limb-1 holder, including a holder deleted or renamed at `<head>`. The `!lines.size` skip alone does not cover that case (measured on a scratch prototype: REN stays silent). `r2-mutants.sh` G1 rows flip, and G1B, UNC1 and REN are added (10 rows). QE-182-a is folded in, and `ADR-0036` § S1 gets a dated block. Base red is exactly 5 rows; D1 and D2 FIRE (measured). AR-163-UNCOMMENT stays separate: limb 1 is covered by UNC1, and its trigger has not fired. `ABC-189` (Backlog, XS, P3, EPIC-007, DoR 10/10; waits ABC-168 merged): AR-168-BINPIN, one `bin` value assertion in ABC-042 A10, red on (iv-b)/(iv-a) (measured on `6d27dc9e`). `ABC-190` (Backlog, XS, P3, EPIC-007, DoR 10/10; waits ABC-168 merged): lock regeneration, numstat `4 0` (measured), clause (a) hop owed. Ready 0/8 → 1/8. Next free id: ABC-191._
@@ -995,8 +996,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
-- [ABC-188] A deletion-only edit to a limb-1 holder fires nothing on clause (b), and ABC-168 adds the second holder (AR-163-DELONLY fix)  (owner: BA/PM, size: S, priority: P2, epic: —, since: 2026-10-21, DoR 10/10; cut in `bapm-cut-ABC-168-followups`. **Due before ABC-168 merges** (its merge is held on this). Builder Architect/Design. 0 `src/` lines; QE reads A2–A7 to close AR-163-DELONLY.) **Pulled 2026-10-21** Ready → In Development (on ABC-168's merge path), Architect `arch-build-ABC-188`. Architect build `66d6a2f1` (instrument `d722a6b6`, harness `98487c1e`, ADR block `eb097a7b`); gates green 59/1987; QE `qe-ABC-188` (its read closes AR-163-DELONLY).
+## In Review (WIP 0/3)
 
 
 
@@ -1020,7 +1020,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Security/NFR (WIP 0/2)
+## In Security/NFR (WIP 1/2)
+- [ABC-188] A deletion-only edit to a limb-1 holder fires nothing on clause (b), and ABC-168 adds the second holder (AR-163-DELONLY fix)  (owner: BA/PM, size: S, priority: P2, epic: —, since: 2026-10-21, DoR 10/10; cut in `bapm-cut-ABC-168-followups`. **Due before ABC-168 merges** (its merge is held on this). Builder Architect/Design. 0 `src/` lines; QE reads A2–A7 to close AR-163-DELONLY.) **Pulled 2026-10-21** Ready → In Development (on ABC-168's merge path), Architect `arch-build-ABC-188`. Architect build `66d6a2f1` (instrument `d722a6b6`, harness `98487c1e`, ADR block `eb097a7b`); gates green 59/1987; QE `qe-ABC-188` (its read closes AR-163-DELONLY). QE PASS_WITH_GAPS `da348a79` (AR-163-DELONLY close condition MET; QE-188-a LOW: a NUL byte makes a holder binary and blinds every limb; -b INFO); Security/NFR `security-nfr-ABC-188`.
 
 
 
