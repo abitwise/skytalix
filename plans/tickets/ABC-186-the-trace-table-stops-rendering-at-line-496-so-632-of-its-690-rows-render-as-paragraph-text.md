@@ -1,8 +1,8 @@
 ---
 id: ABC-186
 title: "The trace table stops rendering at `plans/traceability.md:496`, so 632 of its 690 rows render as paragraph text, and the table's note still carries a counting rule that disagrees with its own command"
-status: ready
-column: Ready
+status: in-development
+column: In Development
 size: XS
 priority: P3
 epic: —
