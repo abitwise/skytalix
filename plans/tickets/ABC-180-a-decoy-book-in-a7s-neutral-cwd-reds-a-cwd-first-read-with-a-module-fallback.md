@@ -221,3 +221,23 @@ BA/PM, 2026-10-21. **Result: 10 of 10.**
 | 10 | no major unresolved blocker | **✅** none. The trigger readings do not block the build |
 
 Column moves after `Ready` are the Orchestrator's.
+
+## QE
+
+**QE (qe-e2e), 2026-10-21: PASS_WITH_GAPS** on `grugops/ABC-180` @ `acb52edf` (notes `d9c3cca3`). `A1`–`A6` MET on
+QE's own readings and re-plants. Evidence: `.grugops/context/qe-ABC-180/notes/` (`…9caa5ead` criteria, `…91bdbc2a`
+plant matrix, `…b571ef5f` gates, `…f88e0845` verdict).
+
+- **`AR-162-FALLBACK` close condition: MET.** P6f is base 11/11 green and head 10/11, red `A7` at the labelled stderr
+  check (`:534`). P6b, P6c and P6e stay red at head. PD reds at the does-not-parse check (`:497`). The Orchestrator
+  records the close.
+- **Gates (tip):** lint, typecheck and build rc 0. `npm test` 59/1987 (= base), `last-run.json` success, skips 0,
+  skip-integrity `No findings.`. `CLI_DEEP` 11/11, `PERFT_DEEP` 32/32.
+- **UAT waiver:** `git diff --name-only acb52edf~1 acb52edf | grep -v '\.test\.ts$' | grep '^src/'` is empty; no
+  `.snap` changes.
+- **Gaps:**
+  - **G-1 (LOW):** P6g survives at head. It uses the cwd file only if it parses, and otherwise falls back silently.
+    A valid decoy whose only reply is `b7b5` killed it in scratch, at a cost. Route: Security/NFR.
+  - **G-2 (LOW):** nothing pins that the decoy is written before the spawn (TMO survives under P6f). Route:
+    Security/NFR.
+  - **G-3 (INFO):** P6i, a cwd override at another path, survives. No action.
