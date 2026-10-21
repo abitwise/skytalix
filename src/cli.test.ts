@@ -37,7 +37,7 @@ import { isMainThread } from "node:worker_threads";
 import type * as Ts from "typescript";
 import { describe, expect, inject, it, vi } from "vitest";
 import type { ViteUserConfig } from "vitest/config";
-import heapGuardSetup, { admit, FLAGS_MIB, ROWS_MIB } from "../tools/grugops/heap-guard.js";
+import heapGuardSetup, { admit, FLAGS_MIB, guard, ROWS_MIB } from "../tools/grugops/heap-guard.js";
 import { createBookProbe } from "./book.ts";
 import {
   ACCEPTED_ARGUMENTS,
@@ -4018,6 +4018,147 @@ spawn("a"); run("b"); cp.fork("c"); vi.fn(spawn);`,
         new RegExp(`^NODE_OPTIONS=--max-old-space-size=${FLAGS_MIB.suite} `),
       );
     }
+  });
+});
+
+// ---------------------------------------------------------------------------------------------
+// `ABC-176` — a run the heap guard refuses never reads as a clean skip count or a quiet result file
+// (`SEC-173-1`, `QE-173-d`). In process: `guard` called with a stub project, a stub stream and a fake
+// limit, as `ABC-173` `A5` calls `admit`. The real arms (`AGENTS.md`'s skip-count line and `npm test`
+// with their prefix removed) spawn a refused vitest and are the hop's readings, not rows here.
+// ---------------------------------------------------------------------------------------------
+
+describe("ABC-176 — a heap-guard refusal is named on stdout and handed to vitest as an unhandled error", () => {
+  /** The integer a skip-count capture would trust (`A1`). */
+  const INTEGER_LINE = /^\s*-?\d+\s*$/m;
+
+  const stubRun = (paths: unknown, withCatchError = true) => {
+    const caught: [unknown, string][] = [];
+    const provided: [string, unknown][] = [];
+    const written: string[] = [];
+    const state: Record<string, unknown> = {};
+    if (paths !== undefined) {
+      state.paths = paths;
+      state.getPaths = function (this: { paths: unknown }) {
+        return this.paths;
+      };
+    }
+    if (withCatchError)
+      state.catchError = (error: unknown, type: string) => caught.push([error, type]);
+    return {
+      project: {
+        vitest: { state },
+        provide: (...entry: [string, unknown]) => provided.push(entry),
+      },
+      out: { write: (chunk: string) => written.push(chunk) },
+      caught,
+      provided,
+      written,
+    };
+  };
+  const files = (count: number): string[] =>
+    Array.from({ length: count }, (_, index) => `src/f${index}.test.ts`);
+  /** Node's own default here: the limit an unprefixed command runs at. */
+  const UNPREFIXED = { heap_size_limit: 4192 * MIB };
+
+  /** Runs `guard` expecting a throw, and returns what it threw. */
+  const thrownBy = (run: ReturnType<typeof stubRun>, limit = UNPREFIXED): Error => {
+    let thrown: unknown;
+    try {
+      guard(run.project, limit, run.out);
+    } catch (error) {
+      thrown = error;
+    }
+    if (!(thrown instanceof Error))
+      throw new Error(`guard did not throw an Error: ${String(thrown)}`);
+    return thrown;
+  };
+
+  it("A1/A2 — a refusal is written to stdout as ONE line, the thrown message verbatim, that no JSON reader parses and that holds no integer", () => {
+    for (const [count, flag] of [
+      [59, FLAGS_MIB.suite],
+      [1, FLAGS_MIB.oneFile],
+    ] as const) {
+      const run = stubRun(files(count));
+      const thrown = thrownBy(run);
+      // The message comes from the thrown error: the shape and the flag differ between the two.
+      expect(thrown.message).toMatch(
+        new RegExp(`^heap-guard: refused[\\s\\S]*NODE_OPTIONS=--max-old-space-size=${flag}`),
+      );
+      expect(run.written, `${count} files`).toEqual([`${thrown.message}\n`]);
+      // What makes `… 2>/dev/null | jq '.numPendingTests + .numTodoTests'` print nothing: the first
+      // thing on stdout is not JSON, so jq stops at it, before vitest's JSON report.
+      const line = run.written[0] as string;
+      expect(() => JSON.parse(line), "the stdout line parses as JSON").toThrow();
+      expect(line).not.toMatch(INTEGER_LINE);
+      expect(run.provided).toEqual([]);
+    }
+  });
+
+  it("A3 — the thrown error itself, not a copy or a fixed string, is handed to vitest's catchError", () => {
+    const run = stubRun(files(59));
+    const thrown = thrownBy(run);
+    expect(thrown.message).toMatch(/^heap-guard: refused/);
+    expect(run.caught).toEqual([[thrown, "Heap Guard Refusal"]]);
+    expect(run.caught[0]?.[0], "the error handed to catchError is the thrown one").toBe(thrown);
+  });
+
+  it("A3 — a 'cannot look' throw is named the same way: on stdout and to catchError, verbatim", () => {
+    for (const [what, run, message] of [
+      [
+        "no getPaths",
+        stubRun(undefined),
+        /^heap-guard: project\.vitest\.state\.getPaths\(\) is gone/,
+      ],
+      ["0 files", stubRun([]), /^heap-guard: the run resolved 0 test files/],
+    ] as const) {
+      const thrown = thrownBy(run, { heap_size_limit: 64 * MIB });
+      expect(thrown.message, what).toMatch(message);
+      expect(run.written, what).toEqual([`${thrown.message}\n`]);
+      expect(
+        run.caught.map(([error]) => error),
+        what,
+      ).toEqual([thrown]);
+    }
+    // No `catchError` (or no project at all): the refusal still throws its own error, and still
+    // writes its line; only the result file loses the name (the header's stated limit).
+    const bare = stubRun(files(59), false);
+    expect(thrownBy(bare).message).toMatch(/^heap-guard: refused/);
+    expect(bare.written).toHaveLength(1);
+    const written: string[] = [];
+    expect(() =>
+      guard(undefined, UNPREFIXED, { write: (chunk: string) => written.push(chunk) }),
+    ).toThrow(/getPaths\(\) is gone/);
+    expect(written).toHaveLength(1);
+  });
+
+  it("non-vacuity — an admitted run writes nothing, hands vitest nothing, and provides its row", () => {
+    for (const [count, row] of [
+      [59, ROWS_MIB.suite],
+      [1, ROWS_MIB.oneFile],
+    ] as const) {
+      const run = stubRun(files(count));
+      expect(() => guard(run.project, { heap_size_limit: row * MIB }, run.out)).not.toThrow();
+      expect(run.written).toEqual([]);
+      expect(run.caught).toEqual([]);
+      expect(run.provided).toEqual([["heapRowMiB", row]]);
+    }
+  });
+
+  it("A4 — the reporter header keeps its six ABC-149 plant rows and adds the refusal as a seventh", () => {
+    const header = readFileSync(`${REPOSITORY}tools/grugops/result-file-reporter.js`, "utf8");
+    const rows = [...header.matchAll(/^\/\/ {3}([a-z][a-z ]*):/gm)].map((match) => match[1]);
+    expect(rows).toEqual([
+      "green",
+      "unhandled",
+      "hang",
+      "suite",
+      "assertion",
+      "exit code only",
+      "refused",
+    ]);
+    // The seventh row's query line is the `error` arm carrying the guard's own message.
+    expect(header).toMatch(/`error {2}heap-guard: refused\./);
   });
 });
 
