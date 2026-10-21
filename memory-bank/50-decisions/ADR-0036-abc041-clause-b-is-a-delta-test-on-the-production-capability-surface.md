@@ -451,13 +451,19 @@ touched only by deleted lines has no `+` line, so Ruling 2 does not fire. The by
 - **QE's plants** (`qe-ABC-163`, `G-1`). A holder's guard line deleted, its import line deleted, or the holder renamed
   with its import dropped. Ruling 2 fires on none of the three. The by-hand check fired on all three.
 - **Today's holder** takes no parameter and reads one fixed path in one line, so no deletion can widen what it reads.
-- **When the case becomes live:** at the first limb-1 holder with a guard, or with a read whose path is built over
-  more than one line, and at § S1's re-armed § Decision 3 trigger.
-- **Pre-existing, not from this fold** (`G-2`). Deleting the comment delimiters around an import makes a new holder
-  with no `+` line. Nothing fires on it, before or after this commit. The same blind spot holds on every limb.
-- Security/NFR rules the risk.
+- **When the case becomes live** (`AR-163-DELONLY`'s trigger): a limb-1 holder gains a guard, with or without a
+  parameter; a parameter or caller-supplied value reaches the read; a read spans more than one line; or a second
+  limb-1 holder appears. Owed before that ticket merges: Ruling 2 widens to any changed line, `+` or `−`, and the
+  instrument drops its `!lines.size` skip. Until then the Orchestrator runs the by-hand `--name-only` check.
+- **Pre-existing, not from this fold** (`AR-163-UNCOMMENT`, LOW, owner Architect/Design; QE's `G-2`). Deleting the
+  comment delimiters around an import makes a new holder with no `+` line. Nothing fires on it, before or after this
+  commit. The same blind spot holds on every limb. It becomes live when a production block comment holds limb code
+  that would compile without its delimiters.
+- Security/NFR accepted the risk as `AR-163-DELONLY`: LOW, latent; owner the Orchestrator, fix by Architect/Design
+  (`security-nfr-ABC-163`).
 
-**The by-hand Ruling 2 check is no longer needed once this commit is on `main`.** QE read `A1`–`A3` MET with its own
+**The by-hand Ruling 2 check is no longer needed once this commit is on `main`, until `AR-163-DELONLY`'s trigger
+fires without its fix.** QE read `A1`–`A3` MET with its own
 plants (`qe-ABC-163`, PASS_WITH_GAPS at `dc4d4f15`), so `AR-095-L1UNIT` closes when this commit merges. The
 Orchestrator records the close. Until then the Orchestrator keeps the by-hand check, holders at both ends.
 `AR-180-VALIDATED` names this merge in its close condition. Readings: `.grugops/context/ticket-to-pr-ABC-163/notes/`,
