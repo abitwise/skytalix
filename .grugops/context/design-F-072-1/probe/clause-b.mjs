@@ -208,11 +208,14 @@ function changedLines(b, h) {
   const removed = new Map();
   let file = null;
   let old = null;
+  let header = false; // ABC-195: true from a `diff --git ` line to that file's first `@@`; a hunk line is never a header
   const quoted = new Set(); // ABC-193: a path git still prints C-quoted ("…"), as git printed it, a/ or b/ dropped
   for (const line of git("diff", "-U0", "--no-renames", "--text", "--no-textconv", "--no-ext-diff", "--no-color", "--src-prefix=a/", "--dst-prefix=b/", b, h, "--", "src").split("\n")) {
-    if (/^(?:---|\+\+\+) "/.test(line)) quoted.add(line.slice(4).replace(/^"[ab]\//, '"'));
-    if (line.startsWith("--- ")) {
-      const p = line.slice(4);
+    if (line.startsWith("diff --git ")) header = true;
+    else if (line.startsWith("@@")) header = false;
+    if (header && /^(?:---|\+\+\+) "/.test(line)) quoted.add(line.slice(4).replace(/^"[ab]\//, '"'));
+    if (header && line.startsWith("--- ")) {
+      const p = line.slice(4).replace(/^([^"].*)\t$/, "$1"); // ABC-195: git ends an unquoted path holding a space with a TAB
       old = p === "/dev/null" ? null : p.replace(/^a\//, "");
       if (old && !isProduction(old)) old = null;
     }
@@ -220,8 +223,8 @@ function changedLines(b, h) {
       const m = /^@@ -\d+(?:,(\d+))? /.exec(line);
       removed.set(old, (removed.get(old) ?? 0) + (m[1] === undefined ? 1 : Number(m[1])));
     }
-    if (line.startsWith("+++ ")) {
-      const p = line.slice(4);
+    if (header && line.startsWith("+++ ")) {
+      const p = line.slice(4).replace(/^([^"].*)\t$/, "$1");
       file = p === "/dev/null" ? null : p.replace(/^b\//, "");
       if (file && !isProduction(file)) file = null;
       if (file) out.set(file, out.get(file) ?? new Set());
