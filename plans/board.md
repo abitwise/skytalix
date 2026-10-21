@@ -1,4 +1,6 @@
 # Board
+_Updated: 2026-10-21 by Orchestrator — `ABC-172` In Development → In Review (SE `2eaf1a1c`); QE `qe-ABC-172` dispatched. In Development 0/3, In Review 2/3, Blocked: ABC-168._
+_Updated: 2026-10-21 by Orchestrator — `ABC-168` In Development → Blocked (ADR-0044 D8 vs A7: type-only import emits `turn-loop.js`); Architect `arch-ABC-168-D8` dispatched. In Development 1/3._
 _Updated: 2026-10-21 by Orchestrator — `ticket-to-pr-ABC-172` started (slot freed by ABC-185's merge; width 3 with ticket-to-pr-ABC-168 and qe-ABC-187)._
 _Updated: 2026-10-21 by Orchestrator — `ABC-185` In Review → Done (merged). The trace has 0 malformed rows and renders as 2 tables. In Review 1/3._
 _Updated: 2026-10-21 by Orchestrator — owner go "pull next 2": `ABC-168` (P1) and `ABC-172` (P2) Backlog → In Development (2/3). ABC-168 SE started (width 3 with qe-ABC-185, qe-ABC-187); ABC-172 SE queued for the next free slot._
@@ -951,9 +953,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 2/3)
-- [ABC-168] `skytalix`: `src/uci.ts`, `dist/uci.js` + `bin`, opt-in real-child lane, M1/M2/M8(a)/M9 at UAT  (owner: BA/PM, size: S, priority: P1, epic: EPIC-007, since: 2026-10-18, DoR 10/10; In Security/NFR on (b1)+(a). Waits: after ABC-171; owner installs cutechess-cli + En Croissant before UAT.) **Pulled 2026-10-21** Backlog → In Development on owner go (pull next 2); deps met (ABC-171 `25162735`); SE `ticket-to-pr-ABC-168`; Scribe (Scope 5), QE, Security/NFR (Ruling 2, launch path) and owner UAT follow.
-- [ABC-172] Rename package and in-repo names to `skytalix`; directory and remote are owner steps  (owner: BA/PM, size: XS, priority: P2, epic: EPIC-007, since: 2026-10-18, DoR 10/10; clause (a) Security/NFR hop. Waits: Q14 default = keep `npm run chess`.) **Pulled 2026-10-21** Backlog → In Development on owner go (pull next 2); SE `ticket-to-pr-ABC-172` started when `qe-ABC-185` closed (width 3); merges `main` before finishing, since ABC-187 may land mid-hop.
+## In Development (WIP 0/3)
 
 
 
@@ -981,7 +981,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
+## In Review (WIP 2/3)
+- [ABC-172] Rename package and in-repo names to `skytalix`; directory and remote are owner steps  (owner: BA/PM, size: XS, priority: P2, epic: EPIC-007, since: 2026-10-18, DoR 10/10; clause (a) Security/NFR hop. Waits: Q14 default = keep `npm run chess`.) **Pulled 2026-10-21** Backlog → In Development on owner go (pull next 2); SE `ticket-to-pr-ABC-172` started when `qe-ABC-185` closed (width 3); merges `main` before finishing, since ABC-187 may land mid-hop. SE tip `2eaf1a1c` (code `0bddbb43`: `package.json` + lock names → `skytalix`; a regenerated lock's extra `license` line removed by hand to meet A2 — QE rules); gates green 59/1987; QE `qe-ABC-172`, then the clause (a) Security/NFR hop.
 - [ABC-187] The `AGENTS.md` byte guard still allows 24,576 B, so the 8,970 B `ABC-164` cut can grow back with no test going red  (BA/PM, XS, P2, epic: —, since: 2026-10-21, **DoR 10/10**; cut in `bapm-cut-guard-18432` on owner decision `…cba9c8eb`; `src/cli.test.ts` `:2484` constant, `:2483` JSDoc, `:2242` closer count 13 → 8 (QE-164-h); 0 production lines, UAT waiver expected. SE then QE. Owed outside its fence: `AGENTS.md:7` Scribe line, byte-neutral.) **Pulled 2026-10-21** Ready → In Development on owner decision `…cba9c8eb`, SE `ticket-to-pr-ABC-187`; the `AGENTS.md:7` line is folded in as a Scribe hop on this branch after the SE commit. SE `494f7862` + Scribe `65ee533d` (tip `9578481f`): guard 18,432, JSDoc and closer count fixed, `AGENTS.md:7` → 18,432 (15,606 B unchanged); gates green 59/1987; QE `qe-ABC-187`.
 
 
@@ -1259,6 +1260,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [ABC-142] `npm test` keeps the failing test's name on disk when the console is truncated  (BA/PM, XS, P2, since: 2026-10-10, DoR 10/10; cut from QE-141-a + QE-093-e, two unnamed one-test flakes) **2026-10-10: cut → Ready → Ready for Dev → pulled → In Development (pass-through); build `ticket-to-pr-ABC-142`; zero `src/` expected.** **2026-10-10: engineer STOPPED pre-code — premise stale: `src/cli.test.ts:1665–1686` (ABC-042 A10) pins `scripts.test`; A5 forbade the one test line. Orchestrator routes option 1 (update the pin, zero production lines) → BA/PM amend `bapm-amend-abc142-2026-10-10`, then the build resumes.** **2026-10-10: A5 amended (merged `a559ca34`, DoR 10/10; new A6 keeps the pin exact) → build resumed.** **2026-10-10: BUILT `41abc389`/`ab8d0088`: A1–A6 met; 53/1680; `.test-results/last-run.json` names the failing test even through `| tail -3`. One deviation: vitest adds one console line (`JSON report written to …`) — Orchestrator reads it as acceptable IF no console consumer breaks (QE to verify) → In Review, QE `qe-ABC-142`.** **2026-10-10: QE PASS_WITH_GAPS (`8b0685de`; no console consumer breaks — the extra `JSON report written to …` line is ACCEPTED by the Orchestrator) → merged `addbc328` → Done (UAT WAIVED: test-only `src/`). Follow-ups next session (BA/PM): QE-142-a MEDIUM (unhandled error → exit 1 but file says success), QE-142-b/c LOW.**
 
 ## Blocked (visible, time-tracked)
+- [ABC-168] `skytalix`: `src/uci.ts`, `dist/uci.js` + `bin`, opt-in real-child lane, M1/M2/M8(a)/M9 at UAT  (owner: BA/PM, size: S, priority: P1, epic: EPIC-007, since: 2026-10-18, DoR 10/10; In Security/NFR on (b1)+(a). Waits: after ABC-171; owner installs cutechess-cli + En Croissant before UAT.) **Pulled 2026-10-21** Backlog → In Development on owner go (pull next 2); deps met (ABC-171 `25162735`); SE `ticket-to-pr-ABC-168`; Scribe (Scope 5), QE, Security/NFR (Ruling 2, launch path) and owner UAT follow. **BLOCKED 2026-10-21 13:54Z:** SE stopped before code (`…98aa0957`): A7 ("no `turn-loop.js` in `dist/`") cannot hold under `ADR-0044` D8 — a type-only import (`src/engine.ts:97`) makes tsc emit `turn-loop.js` and three more; D8 also lacks `"include": []`. WIP kept as a patch on `grugops/ABC-168` @ `2f02d158`. Architect `arch-ABC-168-D8` rules; BA/PM then amends A7.
 
 
 _2026-09-24: ONE ticket blocked — `ABC-074` (no non-M3 machine). `ABC-079` left Blocked on its oracle ruling (`b324cb6`). The line below is the prior state, kept for the record._
