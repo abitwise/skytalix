@@ -4,6 +4,8 @@
 // `.grugops/context/design-ABC-072/probe/clause-b.mjs` (ABC-072's record, kept unchanged) with
 // Security/NFR's `secnfr-ABC-072/probe/limb-ruling.patch` applied, plus the Architect's deltas marked
 // `F-072-1` below. Old readings stay reproducible from the old path.
+// ABC-163 (2026-10-21) folds ADR-0036 § S1 Ruling 2 in place, marked `ABC-163` below. Readings taken before
+// it stay reproducible from this file at `341da4c1` (`git show 341da4c1:<this path>`).
 //
 // Usage, from the repository root:
 //   node .grugops/context/design-F-072-1/probe/clause-b.mjs <base> <head> 1   # non-local import
@@ -32,6 +34,10 @@
 // someone disputes falls under the fail-safe (`AR-072-WORDHIT`).
 //
 // (b1) fires when an occurrence of the limb has any line on a `+` line of `git diff -U0 --no-renames`.
+//      ABC-163, Ruling 2 (ADR-0036 § S1), limb 1 only: (b1) also fires on any `+` line, comments included, in
+//      a production file that holds limb 1 in code at <base> or at <head>. With no holder at either end it
+//      adds nothing. It reads the same diff as above and never runs a pathspec diff, so an empty holder set
+//      cannot widen to every changed file.
 // (b2) fires when a production file gains a RUNTIME import edge (value or bare; `import type` and
 //      `export type` are not edges) to a local module whose runtime closure at <head>, the module
 //      itself included, holds the limb in executable code.
@@ -258,16 +264,32 @@ for (const [f, t] of newEdges) {
 
 const rawFiles = H.files.filter((f) => WORD[limb].test(H.per.get(f).text));
 const changed = [...added.keys()].filter((f) => H.per.has(f) || B.per.has(f));
-const fires = b1.length > 0 || b2.length > 0 || unresolved.length > 0;
+// ABC-163: Ruling 2 — for limb 1, the (b1) unit is the holder file, holders taken at <base> and at <head>.
+const baseHolders = B.files.filter((f) => B.per.get(f).occ[limb].length > 0);
+const ruling2 = [];
+if (limb === 1) {
+  for (const [file, lines] of added) {
+    const atBase = baseHolders.includes(file);
+    if (!lines.size || !(atBase || holderSet.has(file))) continue;
+    const at = [atBase && "<base>", holderSet.has(file) && "<head>"].filter(Boolean).join(" and ");
+    ruling2.push(`${file}  (fired by Ruling 2: ${lines.size} + line${lines.size === 1 ? "" : "s"}; holds limb 1 at ${at})`);
+  }
+}
+
+const fires = b1.length > 0 || ruling2.length > 0 || b2.length > 0 || unresolved.length > 0;
 const list = (xs) => xs.map((x) => `      ${x}`).join("\n");
 
 console.log(`ADR-0036 clause (b), limb ${limb} of 3: ${NAME[limb]}`);
 console.log(`  diff ${base}..${head} = ${short(base)}..${short(head)}; production files changed: ${changed.length}${changed.length ? `\n${list(changed)}` : ""}`);
 console.log(`  COUNTS ${UNIT[limb]} (TypeScript AST; comments and strings are not code). Word hits are LISTED, never counted.`);
 console.log(`  (b1) capability lines added or changed: ${b1.length}${b1.length ? `\n${list(b1)}` : ""}`);
+if (limb === 1) {
+  if (!baseHolders.length && !holders.length) console.log("  (b1) Ruling 2 (ADR-0036 § S1, the holder file): no limb-1 holder at <base> or <head>; adds nothing");
+  else console.log(`  (b1) Ruling 2 (ADR-0036 § S1, the holder file): holders ${baseHolders.length} at <base>, ${holders.length} at <head>; holder files with + lines: ${ruling2.length}${ruling2.length ? `\n${list(ruling2)}` : ""}`);
+}
 console.log(`  (b2) new runtime import edges: ${newEdges.length}; reaching a holder of this limb at <head>: ${b2.length}${b2.length ? `\n${list(b2)}` : ""}`);
 if (newEdges.length > b2.length) console.log(`       edges reaching no holder: ${newEdges.filter(([f, t]) => !b2.some((x) => x.startsWith(`${f} -> ${t} `))).map(([f, t]) => `${f} -> ${t}`).join("; ")}`);
 if (unresolved.length) console.log(`       unresolved, listed (a dispute -> the fail-safe): ${unresolved.length}\n${list(unresolved)}`);
 console.log(`  word hits on added lines, not counted: ${words.length}${words.length ? `\n${list(words)}` : ""}`);
 console.log(`  baseline at <head>, STATE (recorded, not a trigger): ${H.files.length} production files; ${holders.length} hold this limb in code${holders.length ? ` (${holders.join(", ")})` : ""}; ${rawFiles.length} by raw word hit`);
-console.log(`  limb ${limb}: ${!fires ? "does not fire" : b1.length || b2.length ? "FIRES" : "FIRES (disputed: unresolved, the fail-safe)"}`);
+console.log(`  limb ${limb}: ${!fires ? "does not fire" : b1.length || ruling2.length || b2.length ? "FIRES" : "FIRES (disputed: unresolved, the fail-safe)"}`);
