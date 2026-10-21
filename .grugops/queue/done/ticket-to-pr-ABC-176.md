@@ -37,3 +37,22 @@ width: 3 (beside arch-build-ABC-191 and bapm-epic007-confirm; disjoint files)
 ## Publish
 - Seal notes with the plugin writer (`installPath` of `grugops@grugops` in `~/.claude/plugins/installed_plugins.json` → `scripts/context-io.js` `admitAndAppend`). **Pass your worktree (or, for records-only hops, this repo root) as the context root explicitly** — never the plugin dir. Take every `at` from `date -u` (UTC, never local time). Include a `kind: decision`. `artifact-ref` needs a §14 gate run, so record artifacts as `observation`. Task `ticket-to-pr-ABC-176`.
 - Trace row (forward 10-cell rule): `| {ticket} ({hop}) | {what} | {EPIC or —} | {F or —} | {NFR/ADR/AR/finding ids or —} | {branch @ sha<br>files or —} | {gates/test counts or —} | {UAT verdict/waiver or —} | {release tag or —} | {column move or verdict} |` — exactly 10 cells, `—` for empty, `\|` for a literal pipe. Put it in your done record; the Orchestrator appends it.
+
+## Result
+
+**Implemented; no stop.** Software Engineer, 2026-10-21T16:26:37Z. Branch `grugops/ABC-176`, worktree `../wt-ABC-176`, base `01836fff`, code `ffd53f41`, tip `bfe1ff4a` (the notes). Not pushed, not merged, no `--force`.
+
+- **Base readings held** (no ABC-161-style stop). A1/A2's refusal arm printed `0`, rc 0, and the gate read `No findings.`. A3's file had `unhandledErrors` [] and the query printed only `run    exited exitCode=1`. AGENTS.md is at `:105`/`:72` and 15,606 B. ABC-173 A3 counts 17.
+- **A2 is feasible**, so option (b) stands and nothing returns to BA/PM. `heap-guard.js` `guard()` wraps `admit`. On any throw it writes the message verbatim as one stdout line, then hands the thrown error to `project.vitest.state.catchError`, then re-throws. jq stops at the non-JSON first line: empty stdout, rc 5. The reporter's code is unchanged. Its header gains the seventh plant row `refused`.
+- **A1**: SUITE and ONE-FILE refusal arms print empty stdout with rc 5. The gate reads `Skip count was not provided` with rc 1. Green arm: `0`, rc 0, `No findings.`.
+- **A3**: `unhandledErrors[].message` is the guard's message verbatim. The query prints `error  heap-guard: refused. …` and `run    exited exitCode=1`. Green: no field entry, no line.
+- **A4**: all seven rows matched by content in a scratch copy outside the repo, with a private TMPDIR.
+- **A5**: NOT read here. The proposed AGENTS.md text is in decision `20261021T162606Z-software-engineer-decision-af9fc531` (+191 B, to 15,797 / 18,432; A3 count still 17). The Scribe applies it on this branch, and A5 is read after that.
+- **Gates (tip):** lint, typecheck and build exit 0. `npm test` exit 0, `last-run.json` `success` true, 1992/1992 = base 1987 + 5. Skip-integrity `--skip-count 0`: `No findings.`. Mutants on the new rows: 5 of 5 killed.
+- **Waiver:** both measurements print nothing. Zero production lines; UAT is waived (not a signature).
+- **Notes** (`.grugops/context/ticket-to-pr-ABC-176/notes/`): decisions `…af9fc531` (AGENTS.md text) and `…d7694ffa` (design); observations `…fe51adb4` (base reds), `…ccdc3b9f` (tip arms, rows, gates, mutants, waiver) and `…74594565` (residuals: RISK-ABC173-STATE widens via `catchError`; stdout ordering; the refusal printed 3x).
+- **Fences:** none breached. No change to package.json, vitest.config.ts, test-skip-integrity.js, production src, AGENTS.md, plans/, memory-bank/ or .grugops/test-skips.md. The node_modules symlink is ignored (`.git/info/exclude`) and was kept for QE.
+
+### Trace row
+
+| ABC-176 (ticket-to-pr) | heap-guard refusal named on stdout (skip-count jq reads no integer, old text too) and in last-run.json `unhandledErrors`; reporter header seventh plant row `refused`; 5 test rows; AGENTS.md text proposed (Scribe) | — | — | SEC-173-1, QE-173-d, QE-173-f, RISK-ABC173-STATE, ABC-149 | grugops/ABC-176 @ bfe1ff4a (code ffd53f41)<br>tools/grugops/heap-guard.js, tools/grugops/result-file-reporter.js, src/cli.test.ts | lint/typecheck/build 0; npm test 1992/1992 (base 1987 + 5); skips 0, No findings.; 7/7 ABC-149 rows; mutants 5/5 | UAT waived (0 production lines; not a signature) | — | In Development → In Review (A5 owed after the Scribe applies AGENTS.md) |

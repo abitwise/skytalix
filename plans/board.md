@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-21 by Orchestrator — `ABC-176` SE hop closed (tip `bfe1ff4a`, code `ffd53f41`; A1–A4 met on SE readings, A2 feasible so option (b) stands; 1992/1992; waiver and `--numstat` empty). Scribe `scribe-ABC-176` applies the two `AGENTS.md` comments on the branch (A5); then QE._
 _Updated: 2026-10-21 by Orchestrator — `ABC-191` In Development → In Review (Architect tip `797a238b`; A2 red / A4 green on builder readings; gates 59/1987; waiver and `--numstat` empty); QE `qe-ABC-191` dispatched. In Development 1/3, In Review 1/3._
 _Updated: 2026-10-21 by BA/PM (`bapm-epic007-confirm`, records only) — owner record `…4ab163ef`: `EPIC-007` M9 now reads "`dist/uci.js` loads no `turn-loop.js`, as `A7` measures"; M3's "how it is read" cell and `RISK-EPIC007-05` name `ABC-168`'s QE probe (test note 6). On `ABC-168`, both confirmations are marked met (QE/UAT may read `A7` as M9's proof; `A6` may be cited as M3's proof). Fallbacks (b) and route (1) are not taken. `A8`–`A10` stay with the owner. No card moves._
 _Updated: 2026-10-21 by Orchestrator — owner go (`…4ab163ef`, `…193e08fb`): `ABC-191` Ready → In Development (Architect `arch-build-ABC-191`), `ABC-176` Backlog → In Development (SE `ticket-to-pr-ABC-176`); BA/PM `bapm-epic007-confirm` writes the confirmed M9 and M3/RISK-EPIC007-05 rewordings into EPIC-007. Width 3. AR-1 re-stated on the owner's approval (no Release Manager hop). ABC-168 UAT A8–A10 stays with the owner (no cutechess-cli or En Croissant on this host). Ready 1/8 → 0/8, In Development 0/3 → 2/3._
@@ -973,7 +974,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 ## In Development (WIP 1/3)
-- [ABC-176] A heap-guard-refused run never reads as a clean skip count or a quiet result file  (owner: BA/PM, size: XS, priority: P3, epic: —, since: 2026-10-19, in dev 2026-10-21 (SE `ticket-to-pr-ABC-176`; page facts from 2026-10-19 flagged in the brief), DoR 10/10; cut in `bapm-cut-ABC-176` (`30504eed`) from SEC-173-1 + QE-173-d, owner word `…5c8d2f71`.)
+- [ABC-176] A heap-guard-refused run never reads as a clean skip count or a quiet result file  (owner: BA/PM, size: XS, priority: P3, epic: —, since: 2026-10-19, in dev 2026-10-21 (SE `ticket-to-pr-ABC-176` tip `bfe1ff4a`, then Scribe `scribe-ABC-176` on the branch; page facts from 2026-10-19 flagged in the brief), DoR 10/10; cut in `bapm-cut-ABC-176` (`30504eed`) from SEC-173-1 + QE-173-d, owner word `…5c8d2f71`.)
 
 
 
