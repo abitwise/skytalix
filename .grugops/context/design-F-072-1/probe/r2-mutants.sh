@@ -1,6 +1,6 @@
 #!/bin/bash
 # ABC-182: the committed Ruling 2 plants (ADR-0036 § S1 Ruling 2, folded into clause-b.mjs by ABC-163, widened to
-# `+` and `-` lines by ABC-188). Ten plants, each with its EXPECTED limb-1 verdict printed beside the ACTUAL one
+# `+` and `-` lines by ABC-188). Twelve plants, each with its EXPECTED limb-1 verdict printed beside the ACTUAL one
 # (Architect `…34e592ac`; bodies as QE `…7f56f339`, G1B as Security/NFR's G-1b `…3b895278` § 2).
 # Same harness shape as f-mutants.sh: plants live in a `git clone --shared` under <scratch-dir>; the repository is
 # never written.
@@ -10,15 +10,22 @@
 #   `limb 1:` verdict line, never from a bare `(b1)` grep (Architect decision 2, G-3). A row compares the verdict and
 #   the Ruling 2 file list (`file@ends`); NOH also needs `adds nothing` whenever a `(b1) Ruling 2` line is printed.
 #   Each Ruling 2 file line is also printed whole (`R2 file`), with its `+` and `-` counts (ABC-188).
-# Limbs 2 and 3 of every plant are compared byte for byte with the 341da4c1 instrument. The script makes that copy
-#   itself: `git -C <repo> show 341da4c1:<instrument path>` into <scratch-dir>/r2-mutants-ref/, beside a
-#   node_modules/typescript symlink to the typescript that <clause-b.mjs>'s own directory resolves.
+# Limbs 2 and 3 of every plant but BIN-NUL and BIN-ATTR are compared byte for byte with the 341da4c1 instrument on the
+#   same plant. The script makes that copy itself: `git -C <repo> show 341da4c1:<instrument path>` into
+#   <scratch-dir>/r2-mutants-ref/, beside a node_modules/typescript symlink to the typescript that <clause-b.mjs>'s own
+#   directory resolves.
+# BIN-NUL and BIN-ATTR (ABC-191, AR-188-BINARY) are X1's edit plus a mark that makes git treat the holder as binary: a
+#   NUL byte in its JSDoc, or a committed `.gitattributes` `src/** -diff`, run checked out. 341da4c1 is blind to both,
+#   so their limbs 2 and 3 are compared with 341da4c1's output on X1 instead, taken at X1's row with X1 checked out (a
+#   checked-out `-diff` line blinds every run in the tree), with the plant ids masked in the `diff <base>..<head> = …`
+#   line and nowhere else.
 # Each plant names the files it edits. `mk` refuses it (exit 2, naming the plant) unless `git diff --name-only` of the
 #   plant is exactly those files, so a plant that applies only in part never runs under its full label (QE-182-a).
 # Exit 0: every row as expected and limbs 2 and 3 identical. Exit 1: names each mismatched plant (limb 1) and each
 #   differing plant and limb (2, 3). Exit 2: usage, or a plant did not apply to <tip> exactly as named.
 # G1-IMP, G1-GRD, G1B, UNC1 and REN are deletion-only in a limb-1 holder (`AR-163-DELONLY`, closed by ABC-188): each
-#   FIRES on the instrument from ABC-188, and none fires on the one before it.
+#   FIRES on the instrument from ABC-188, and none fires on the one before it. BIN-NUL and BIN-ATTR each FIRE on the
+#   instrument from ABC-191 (its diff reads `--text --no-textconv`), and neither fires on the one before it.
 set -e
 [ $# -eq 4 ] && [ -f "$4" ] || { echo "usage: r2-mutants.sh <repo> <tip> <scratch-dir> <absolute path to clause-b.mjs>" >&2; exit 2; }
 REPO=$1; TIP=$2; mkdir -p "$3"; SC=$(cd "$3" && pwd); X=$SC/r2-mutants-clone; R=$SC/r2-mutants-ref; S=$4
@@ -38,9 +45,13 @@ mk() { local p=$1 got want; shift; git add -A >/dev/null
   [ "$got" = "$want" ] || { echo "plant $p did not apply at $(git rev-parse --short=8 HEAD): changed [$got], names [$want]" >&2; exit 2; }
   git commit -qm "$p"; git rev-parse --short=8 HEAD; }
 ed() { perl -0pi -e "$2" "$1"; }   # one in-place edit; mk checks the plant's file list
-BAD=""; DIFF=""
-# row <plant> <base> <head> <expected verdict> <expected Ruling 2 files, or -> <note>
-row() { local o v r2 fl got want l a b lo
+BAD=""; DIFF=""; XR=()
+# mask: the plant ids in the `diff <base>..<head> = …` line only (ABC-191).
+mask() { sed -E '/^  diff /s/\.\.[0-9a-f]+/..<plant>/g'; }
+# row <plant> <base> <head> <expected verdict> <expected Ruling 2 files, or -> <note> [X1]
+#   X1's row keeps 341da4c1's limbs 2 and 3 on X1, masked, in XR. With the last argument X1, limbs 2 and 3 are
+#   compared with that, masked, instead of with 341da4c1 on the same plant (BIN-NUL, BIN-ATTR).
+row() { local o v r2 fl got want l a b lo ro rn
   o=$(node "$S" "$2" "$3" 1)
   v=$(grep -E '^  limb 1: ' <<<"$o" | sed 's/^  limb 1: //')
   r2=$(grep -F '  (b1) Ruling 2 ' <<<"$o" | sed 's/^[^:]*: //' || true)
@@ -52,8 +63,11 @@ row() { local o v r2 fl got want l a b lo
   printf '        (b1) capability: %s | (b1) Ruling 2: %s\n' "$(grep -F '  (b1) capability ' <<<"$o" | sed 's/.*: //')" "${r2:-(no such line)}"
   awk '/^  \(b1\) Ruling 2 /{f=1;next} f&&/^      /{sub(/^ +/,""); print "        R2 file      " $0; next} {f=0}' <<<"$o"
   for l in 2 3; do lo=$(node "$S" "$2" "$3" $l)
-    if [ "$lo" = "$(node "$O" "$2" "$3" $l)" ]; then b=identical; else b=DIFFERS; DIFF="$DIFF $1:limb$l"; fi
-    printf '        L%s vs %s: %s (limb %s: %s)\n' $l $REF $b $l "$(grep -E '^  limb ' <<<"$lo" | sed 's/^  limb [0-9]: //')"
+    if [ "${7:-}" = X1 ]; then lo=$(mask <<<"$lo"); ro=${XR[$l]}; rn="$REF on X1, plant ids masked"
+    else ro=$(node "$O" "$2" "$3" $l); rn=$REF; fi
+    if [ "$1" = X1 ]; then XR[$l]=$(mask <<<"$ro"); fi
+    if [ "$lo" = "$ro" ]; then b=identical; else b=DIFFERS; DIFF="$DIFF $1:limb$l"; fi
+    printf '        L%s vs %s: %s (limb %s: %s)\n' $l "$rn" $b $l "$(grep -E '^  limb ' <<<"$lo" | sed 's/^  limb [0-9]: //')"
   done; }
 # P2b: the holder's read becomes "/etc/passwd".
 ed $H 's|readFileSync\(new URL\("../data/opening-book/book.json", import.meta.url\)\)|readFileSync("/etc/passwd")|'
@@ -94,7 +108,15 @@ mv $H src/book-reader.ts
 ed src/book-reader.ts 's|import \{ readFileSync \} from "node:fs";\n\n||; s|return readFileSync\([^\n]*\);|return new Uint8Array(0);|'
 ed src/cli.ts 's|from "\./book-file\.ts";|from "./book-reader.ts";|'
 M=$(mk REN $H src/book-reader.ts src/cli.ts); row REN $T $M FIRES "src/book-file.ts@<base>" "AR-163-DELONLY: holder renamed away, import dropped"; git reset -q --hard $T
-[ -z "$BAD" ] && [ -z "$DIFF" ] && { echo "r2-mutants: 10 of 10 limb-1 rows as expected; limbs 2 and 3 identical to $REF on 10 of 10"; exit 0; }
+# BIN-NUL (AR-188-BINARY, QE Q11c): X1's edit, plus one NUL byte in the holder's JSDoc, so git reads it as binary.
+ed $H 's|import \{ readFileSync \} from "node:fs";\n\n||; s|return readFileSync\([^\n]*\);|return new Uint8Array(0);|; s|^ \* `ABC-095`| * \x00`ABC-095`|m'
+M=$(mk BIN-NUL $H); row BIN-NUL $T $M FIRES "src/book-file.ts@<base>" "AR-188-BINARY: X1 plus a NUL byte in the JSDoc" X1; git reset -q --hard $T
+# BIN-ATTR (AR-188-BINARY, Security/NFR plant 2): X1's edit, plus a committed `.gitattributes` `src/** -diff`, run with
+#   the plant checked out so the attribute applies. The reset removes it.
+ed $H 's|import \{ readFileSync \} from "node:fs";\n\n||; s|return readFileSync\([^\n]*\);|return new Uint8Array(0);|'
+printf 'src/** -diff\n' > .gitattributes
+M=$(mk BIN-ATTR $H .gitattributes); row BIN-ATTR $T $M FIRES "src/book-file.ts@<base>" "AR-188-BINARY: X1 plus .gitattributes src/** -diff" X1; git reset -q --hard $T
+[ -z "$BAD" ] && [ -z "$DIFF" ] && { echo "r2-mutants: 12 of 12 limb-1 rows as expected; limbs 2 and 3 identical to $REF on the same plant on 10 of 10, and to $REF on X1 (plant ids masked) on BIN-NUL and BIN-ATTR"; exit 0; }
 [ -n "$BAD" ] && echo "r2-mutants: limb 1 MISMATCH:$BAD"
-[ -n "$DIFF" ] && echo "r2-mutants: limbs 2/3 DIFFER from $REF:$DIFF"
+[ -n "$DIFF" ] && echo "r2-mutants: limbs 2/3 DIFFER from $REF (on the same plant; on X1 for BIN-NUL and BIN-ATTR):$DIFF"
 exit 1

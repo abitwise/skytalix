@@ -494,3 +494,25 @@ unchanged. Readings taken before it reproduce from that file at `87d3897d`.
 
 **Rollback.** Revert `d722a6b6`. `AR-163-DELONLY` re-opens at MEDIUM while a second holder stands, and the by-hand check
 returns. Readings: `.grugops/context/arch-build-ABC-188/notes/`.
+
+#### Binary-flagged files read as text — 2026-10-21 (`ABC-191`)
+
+Accepted by Security/NFR at `ABC-188`'s gate as `AR-188-BINARY` (`.grugops/context/security-nfr-ABC-188/notes/…decision-f5843a71`
+§ 3, from QE's `QE-188-a`). Commit `11245e3d` edits `.grugops/context/design-F-072-1/probe/clause-b.mjs` **in place**,
+so the canonical pointer above is unchanged. Readings taken before it reproduce from that file at `d722a6b6`.
+- **(i) The instrument's one diff call reads `--text --no-textconv`.** So a production file git treats as binary (a NUL
+  byte, or a `-diff` attribute from any attributes source) shows its changed lines on every limb, and a textconv driver
+  no longer changes the line map. Measured: a NUL byte in the holder's JSDoc, a committed `.gitattributes`
+  `src/** -diff`, and the same line in `.git/info/attributes` each blinded every limb before this commit. A
+  `diff=<driver>` with a configured `textconv` changed the `+`/`−` counts. No limb's unit changes, and Ruling 2 is
+  untouched.
+- **(ii) The Orchestrator's `--numstat` stand-in** (`git diff --numstat <base> <head> -- src | awk '$1=="-"'`, owner
+  record `…orchestrator-decision-9f5ca4b4`) **retires when this merges.**
+- **(iii) `AR-188-BINARY` closes on QE's read of `ABC-191`'s `A2`–`A7`.** The Orchestrator records the close.
+
+**Harness.** `r2-mutants.sh` has 12 rows. `BIN-NUL` and `BIN-ATTR` (X1's edit plus each mark) FIRE, and neither fires on
+the instrument before this commit. `341da4c1` is blind to both marks, so on those two rows limbs 2 and 3 are compared
+with `341da4c1`'s output on X1, plant ids masked. The other 10 rows keep the byte comparison on the same plant.
+
+**Rollback.** Revert `11245e3d`, and the `--numstat` stand-in returns at every routing and merge. Readings:
+`.grugops/context/arch-build-ABC-191/notes/` and `.grugops/context/bapm-cut-AR-188-BINARY/notes/`.

@@ -1,8 +1,8 @@
 ---
 id: ABC-191
 title: "A production file git treats as binary hides every changed line from clause (b) (the `AR-188-BINARY` fix)"
-status: in-review
-column: In Review
+status: done
+column: Done
 size: XS
 priority: P3
 epic: —
@@ -229,3 +229,39 @@ BA/PM, 2026-10-21 at `1ee70c63`. **Result: 10 of 10.**
 | 10 | no major unresolved blocker | **✅** none. Which checkout the Orchestrator routes from stays `UNKNOWN - verify` (`…534bddbb` § 3), but `--text` covers every attributes source, so the answer no longer matters once this lands |
 
 Column moves after `Ready` are the Orchestrator's.
+
+## QE
+
+**QE/E2E, 2026-10-21 (`qe-ABC-191`): PASS_WITH_GAPS** (`QE-191-a` LOW, `QE-191-b` INFO, `QE-191-c` INFO; 0 blocking;
+none against a criterion). Branch `grugops/qe-ABC-191`, from the tip `797a238b`, with `main` `cde60d03` merged at
+**`e0bc26fe`**. QE ran every criterion there itself before reading the Architect's notes, and those notes agree on each
+one.
+
+| | result |
+|---|---|
+| A1 | MET: the 4 Scope files plus the Architect's 2 notes (ignored per `QE-182-d`). The waiver form prints nothing over the range and per commit; `--numstat … \| awk '$1=="-"'` prints nothing |
+| A2 | MET: base instrument, rc 1, `limb 1 MISMATCH: BIN-NUL BIN-ATTR`, `DIFFER` on exactly the four binary limbs; 10 rows `ok`, 20 `identical` |
+| A3 | MET: `--no-textconv` only reads as A2; `--text` only is rc 0, and `TXC` reads 6/12 on it |
+| A4 | MET: rc 0, 12 of 12, 22 `identical`. The 10 rows are byte-identical to base's output; status, `HEAD` and 50 refs unchanged; a re-run is byte-identical |
+| A5 | MET: `BIN-NUL` 2/4, `BIN-ATTR` 1/3 |
+| A6 | MET: `TXC` head FIRES 1/3, base 6/12; limbs 2/3 equal `341da4c1` on X1, masked |
+| A7 | MET: 87 git calls on head and on base; one `diff -U0 --no-renames --text --no-textconv … -- src`; one `execFileSync` with an argv and no shell |
+| A8 | MET: 22 `+` / 0 `−`, dated, after the `ABC-188` block; (i)–(iii) and the rollback are consistent with the code |
+| A9 | MET: lint, typecheck and build rc 0. `npm test` 59 / 1987, `last-run.json` success. Skip count 0, `No findings.` `biome.json` unchanged |
+
+- **`AR-188-BINARY`'s close condition is MET.** Both plants fire at head and are silent on base's instrument, and
+  each flag alone falls short. QE's 14 own binary plants (7 NUL placements, 5 more attribute sources including
+  `.git/info/attributes` and `core.attributesFile` in a scratch clone, a `binary` driver, and textconv) fire on limb 1
+  at head; two of them fire on limbs 2 and 3. The Orchestrator records the close. The `--numstat` stand-in retires at
+  merge, per (ii), and it covered nothing the instrument now misses.
+- **`QE-191-a` (LOW; Security/NFR rates it).** An external diff driver (`diff=<drv>` plus `diff.<drv>.command`, or
+  `GIT_EXTERNAL_DIFF`), `color.diff=always` and `diff.srcPrefix` each still blind every limb, on head and on base.
+  Each needs the operator's own config or environment, and none is set on this host. The stand-in never caught them
+  either. This is beyond `AR-188-BINARY`'s term.
+- **`QE-191-b` (INFO).** A production file with a non-ASCII name is quoted by git and goes unseen. Once a production
+  file imports it, the fail-safe fires.
+- **`QE-191-c` (INFO; the `R-188-b` class).** `BIN-NUL` does not assert that its NUL applied. Read its count as 2/4 on
+  every re-run.
+- **UAT: waived** (0 production lines). A waiver is not a signature. No timing was taken.
+- **Notes:** `.grugops/context/qe-ABC-191/notes/` (`…993a870d` A1–A9, `…87c9f67b` plants, `…9bc0b262` gaps,
+  `…b2a5673a` artifacts, decision `…16ba4076`).
