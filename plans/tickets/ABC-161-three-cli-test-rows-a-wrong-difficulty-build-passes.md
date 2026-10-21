@@ -182,3 +182,25 @@ BA/PM, re-scored 2026-10-21 (`bapm-rework-ABC-161`) at `main` `afc8d43a`. **Resu
 | 10 | no major unresolved blocker | **✅** none; fix 1 is shown meetable on a scratch prototype |
 
 Column moves are the Orchestrator's, except `Backlog → Ready`, which is BA/PM's (made 2026-10-21).
+
+## QE
+
+**QE/E2E, 2026-10-21 (`qe-ABC-161`, verdict `…decision-cd61c6fd`). Result: PASS_WITH_GAPS.**
+
+QE reviewed `grugops/ABC-161` at tip `5e755bcb` (code `ee1818bb`) against base `35788fd4`. QE did its own plants in scratch, outside the repository, before opening the SE's notes. The SE's notes agree cell for cell.
+
+| criterion | grade | QE's reading (whole default lane, heap 128) |
+|---|---|---|
+| `A1` | MET | P11-L1, L2, L3 green → red, 3 of 3, at `A8′` "level N, call 2". P11 and P11-L4 red on both. Non-vacuity block kept and green |
+| `A2` | MET | S2c green → red at `ABC-101` `A3`. `resolveOptions(["--difficulty", "3\n"])` is refused with `offending: ["3\n"]` |
+| `A3` | MET | P9a–P9e green → red, 5 of 5, at `ABC-065` `A3`. The real `AGENTS.md` is green |
+| `A4` | MET (on intent) | Outside `.grugops/context/` the diff is only `src/cli.test.ts`. Every hunk is in the three named rows. 59 / 1987 = base, skips 0, `CLI_DEEP` 11/11 |
+
+- **Fix 1's comment** checks out against `seededRandom(7)`: the draws are 0.011705, 0.061958, 0.976908. A rebuild at levels 1–3 first differs at call index 2, and at level 4 at index 1.
+- **Gates on the tip:** lint, typecheck and build exit 0. `npm test` 59/1987, and `last-run.json` reads success. The skip count is 0 and skip-integrity is clean. `PERFT_DEEP` 32/32.
+- **UAT waiver:** the reading is empty in AGENTS.md's form, with `.snap` not filtered.
+- **Gaps (none blocks):**
+  - `QE-161-a` (LOW): fix 3's `|`-list capture stops at the first non-word character. Six scratch survivors, such as `…5|+3` and `random-ish`.
+  - `QE-161-b`..`e` (INFO): spaced, slashed or single-value lists red loudly; the last line's comment wording; A4's literal file list; and fix 1's residual rate window (0.0117, 0.9769].
+
+Details: `.grugops/context/qe-ABC-161/`.
