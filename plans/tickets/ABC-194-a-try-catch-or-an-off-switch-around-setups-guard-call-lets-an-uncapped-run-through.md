@@ -170,3 +170,21 @@ BA/PM, 2026-10-21 at `7a2ec8bc`. **Result: 10 of 10.**
 | 10 | no major unresolved blocker | **✅** none. A clean `ABC-189` merge is `UNKNOWN - verify`; the edits are in different blocks |
 
 Column moves after `Ready` are the Orchestrator's.
+
+## QE
+
+**QE/E2E, 2026-10-21 (subtask `qe-ABC-194`), at `grugops/qe-ABC-194` merge `0fd86eb4` (tip `fcf47534`, code `5e0839fd`, base `99d07d32`, `main` `5427f807` merged, no conflict). Verdict: PASS_WITH_GAPS.** Every criterion was read by my own runs before I opened the SE's notes. Mutants ran in two scratch copies outside the repository (`git archive` + full `cp -R` of `node_modules`, private `TMPDIR`, `HEAP_GUARD_OFF` unset for every vitest run); each file was restored and `cmp`-checked. No run was made uncapped, and no timing was taken.
+
+- **A1 MET.** One-file `-t "ABC-192"` at 400: exit 0, 2 passed. Base's `if (!isMainThread) throw …` stays allowed (0 returns, direct statement).
+- **A2 MET.** Builds 1–4, M4 and M4b each exit 1 with only `ABC-192 > A1` red in the `-t` one-file run, and the fault names the condition (`TryStatement`, `IfStatement`, `1 return statement(s) (return;)`, `ArrowFunction`, the `process.stderr` / `{ write() {} }` arguments). In `npm test`, builds 1–3, M4 and M4b give 1993/1994 with only A1 red; build 4 gives 1991/1994 (A1 + `ABC-173` A4/A6).
+- **A3 MET.** The row reads the 9-entry array. Dropping the direct check, the no-return check or the `parent !== body` half each reds the plant assertion.
+- **A4 MET.** `N8_SPAWN` = 17+7+1+2+1 = 28; `N8-LANE` and `ABC-173` `C2` pass; the diff adds no child call and no timing.
+- **A5 MET.** `main...tip` lists `src/cli.test.ts` + 3 SE notes. Lint, typecheck and build exit 0. `npm test` exits 0 with 59/1994, and `last-run.json` reads `success` true. Skip count 0 → `No findings.`. The waiver and the `AR-193-HUNKHDR` stand-in print nothing. `AGENTS.md` is 15,821 B and unchanged.
+
+**Gap register** (0 blocking; none against a criterion):
+- **QE-194-a (LOW proposed).** An off-switch on the guard's *inputs* passes the tightened check and every gate: an env-gated heap-statistics argument, an env-gated `v8.getHeapStatistics` patch in `setup` or at module top, a default parameter (lint-red as spelled), or an env early `return` inside `guard`. With the variable unset each is base-identical (59/1994); with it set, the call admits an uncapped heap. This is the same class and deliberateness as builds 2 and 3. Owner: BA/PM rules, Security/NFR rates.
+- **QE-194-b (INFO).** The plant table pins neither the return walk's descent nor the `ExpressionStatement` half. Each weakening leaves the row green and lets build 3 or `do { break; } while (guard(…))` back.
+- **QE-194-c (INFO).** `process.exit(0)` or a never-settling `await` before the call: `npm test` exits 0 with no test run. Only `last-run.json` (`success` false, `runState` `exited`) catches it. Nothing runs uncapped.
+- **QE-194-d (INFO).** The fail-closed side grows as the page expects (`QE-192-c`): a block, `void`, `|| 0`, a comma or a `return;` after the call each red A1.
+
+UAT waived (0 production lines); a waiver is not a signature. The `In Review` exit is the Orchestrator's.
