@@ -155,3 +155,38 @@ BA/PM, 2026-10-21 at `bf6fc623`. **Result: 10 of 10.**
 
 Column moves are the Orchestrator's. Owner: **the Orchestrator** (routes the build to the Software Engineer), then
 QE.
+
+## QE
+
+**`qe-ABC-187`, 2026-10-21. Verdict: PASS_WITH_GAPS (1 LOW, 2 INFO, 0 blocking).** Branch `grugops/qe-ABC-187`, from the
+tip `9578481f`. I merged `main` `8918b07a` at **`4890782a`**, with no conflict. Its `src/` and `AGENTS.md` are byte-equal to
+`bf6fc623`, so "base" below is `main`. Every criterion was run at that merge by QE's own scripts, before I read the SE's
+and Scribe's notes. Notes are in `.grugops/context/qe-ABC-187/`.
+
+- **A1 MET:** the forbidden grep prints `2` → `0`. The constant line prints `0` → `1`. The `:2483` JSDoc names `ABC-187` and `…cba9c8eb`.
+- **A2 MET** (scratch `git archive` exports outside the repo, `-t "ABC-109"`, heap 400):
+  - base @ 18,433 B: `1 passed`.
+  - head @ 18,433 B: `1 failed`, with the page's exact message.
+  - head @ 18,432 B and with the real file: `1 passed`.
+  - A multibyte pad (18,433 B, 16,923 chars) also reds, so the guard counts bytes.
+- **A3 MET:**
+  - `npm test` exit 0, 59 files / 1987 tests; `last-run.json` `success: true`, 0 failed / pending / todo.
+  - skip-count 0: "No findings.".
+  - `wc -c AGENTS.md` 15,606.
+- **A4 MET in AGENTS.md's reference form, not as written:**
+  - The page's pathspec prints `src/cli.test.ts`. Without `:(glob)`, `src/**/*.test.ts` never matches a top-level `src/*.test.ts` file.
+  - `git diff --name-only main...HEAD | grep -v '\.test\.ts$' | grep '^src/'` prints nothing. So does the delivered range. 0 production lines, so the UAT waiver applies (QE-187-b).
+- **A5 MET:**
+  - The page's script prints 8. A line count gives the same: own closer `:60`, then 8 more through `:130`.
+  - The comment says 8; `carries 13 further closers` prints `1` → `0`.
+- **A6 MET (folded-in clause):**
+  - Only `src/cli.test.ts` (3/3, hunks `:2242` and `:2483`–`:2484`) and `AGENTS.md` (1/1, `:7`) are listed.
+  - `wc -c` is 15,606 on both sides. `targets ≤ 18,432 B` prints `1`.
+- **Gates:** lint, typecheck and build exit 0. No timing taken.
+
+**Gap register**
+- **QE-187-a LOW:** `grugops/ABC-168` (unmerged) has 9 closers after the slot. It merges cleanly with this branch, so the
+  `:2242` comment would say 8 against 9 with nothing red (QE-164-h again). Whichever of the two merges second re-runs
+  A5's script and fixes or drops the number.
+- **QE-187-b INFO:** A4's command on this page is defective as written (pathspec `**/` without `:(glob)`). Measure in AGENTS.md's form (QE-159-f).
+- **QE-187-c INFO:** the JSDoc's "cannot regrow unflagged" is true of the 8,970 B cut. By design, up to 2,826 B of regrowth stays unflagged. No action.
