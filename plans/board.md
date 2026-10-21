@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-21 by Orchestrator — `ABC-183` In Review → In Security/NFR (QE PASS_WITH_GAPS `3ab055f4`: AR-180-VALIDATED part (ii) read met; QE-183-a LOW and QE-183-b INFO need a ruling). In Review 1/3, In Security/NFR 1/2._
 _Updated: 2026-10-21 by Orchestrator — `ABC-181` In Review → Done (merged; QE PASS_WITH_GAPS, QE-181-a INFO no route; UAT waived). In Review 2/3._
 _Updated: 2026-10-21 by Orchestrator — `ABC-182` In Development → In Review (SE `a7adaf21`: `r2-mutants.sh` + `.out.txt`, 7 of 7 as expected on the folded instrument, `341da4c1` red on exactly P2b/P2c/CMT/X1; gates green; waiver empty); QE `qe-ABC-182` dispatched. In Development 0/3, In Review 3/3._
 _Updated: 2026-10-21 by Orchestrator — `ABC-183` In Development → In Review (SE `c4c6d36e`: capture + labelled assertion + order comment; TMO + P6f base green / head red on SE readings; gates green; waiver empty); QE `qe-ABC-183` dispatched for the independent re-plant._
@@ -948,9 +949,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 2/3)
+## In Review (WIP 1/3)
 - [ABC-182] A committed Ruling 2 plant harness, `r2-mutants.sh`, beside `clause-b.mjs`  (BA/PM, XS, P3, epic: —, pulled 2026-10-21, SE `ticket-to-pr-ABC-182`, **DoR 10/10**; cut in `bapm-cut-2026-10-21b` from ABC-163 G-4 (Architect `…34e592ac`). 0 `src/` lines; `.grugops/context/design-F-072-1/probe/` only. Owed before any `clause-b.mjs` edit merges (AR-163-DELONLY / AR-163-UNCOMMENT fixes); → P2 when one is pulled.; SE tip `a7adaf21`, QE `qe-ABC-182`)
-- [ABC-183] A7 pins that its decoy book is written before the `booked` spawn, so TMO no longer lets P6f pass `CLI_DEEP`  (BA/PM, XS, P3, epic: EPIC-005, pulled 2026-10-21, SE `ticket-to-pr-ABC-183`, **DoR 10/10**; cut in `bapm-cut-2026-10-21b` from AR-180-VALIDATED G-2 (Security/NFR `…1b032e3f`, owner record `…73eb06c5`). Test-only, `src/cli.real-engine.test.ts`. Closes AR-180-VALIDATED (part (i) met at ABC-163's merge). Owed before ABC-168 or any `src/book-file.ts` edit merges; → P2 when that trigger fires.; SE tip `c4c6d36e`, QE `qe-ABC-183`)
 
 
 
@@ -974,7 +974,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Security/NFR (WIP 0/2)
+## In Security/NFR (WIP 1/2)
+- [ABC-183] A7 pins that its decoy book is written before the `booked` spawn, so TMO no longer lets P6f pass `CLI_DEEP`  (BA/PM, XS, P3, epic: EPIC-005, pulled 2026-10-21, SE `ticket-to-pr-ABC-183`, **DoR 10/10**; cut in `bapm-cut-2026-10-21b` from AR-180-VALIDATED G-2 (Security/NFR `…1b032e3f`, owner record `…73eb06c5`). Test-only, `src/cli.real-engine.test.ts`. Closes AR-180-VALIDATED (part (i) met at ABC-163's merge). Owed before ABC-168 or any `src/book-file.ts` edit merges; → P2 when that trigger fires.; SE tip `c4c6d36e`, QE `qe-ABC-183`; QE PASS_WITH_GAPS `3ab055f4` (TMO + P6f base green / head red; QE-183-a LOW, QE-183-b INFO); Security/NFR `security-nfr-ABC-183`)
 
 
 
