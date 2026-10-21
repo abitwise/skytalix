@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-21 08:00Z — Orchestrator (owner: "go, start ABC-160, ABC-162 and ABC-159"): ABC-160 and ABC-162 Ready → In Development, dispatched as `ticket-to-pr-ABC-160` and `-162`. ABC-159 is queued; it is pulled when `qe-redact-SEC-177-1` ends, because width is capped at 3._
 _Updated: 2026-10-21 07:40Z — Orchestrator: ABC-177 In Security/NFR → Done (UAT waived, test-only), merged to `main` with all gates passing; R-174-1 discharged. ABC-178 stays in Backlog: Architect `…74d39535` recommends a clean, owner-quiet re-read before its gate; BA/PM to rule._
 _Updated: 2026-10-21 07:20Z — Orchestrator: ABC-177 In Review → In Security/NFR. The QE timing found NFR-008 MET at 9.395 s on `f81bf03c`, flagged warm host 5/8 under the ABC-177-only thermal rule `…31ab7d2d`. A11 missed the 9.2 s target, so O3 goes to Architect. Dispatched: `security-nfr-ABC-177` and `arch-O3-ABC-177` (width 2)._
 _Updated: 2026-10-21 by the Orchestrator (task `wave-2026-09-25`) — `bapm-rule-QE-177-ab` merged (records only): QE-177-a/-b → `ABC-178` (Backlog, XS, P2, DoR 9/10, waits on ABC-177 merge + A10 ≤ 9.2 s); QE-177-c accepted (U8 stays at 100). Next free id: ABC-179. Owner owed: pause the `oeselg-labs/platform` session for the ABC-177 timing window. In flight: none._
@@ -875,9 +876,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [ABC-168] `skytalix`: `src/uci.ts`, `dist/uci.js` + `bin`, opt-in real-child lane, M1/M2/M8(a)/M9 at UAT  (owner: BA/PM, size: S, priority: P1, epic: EPIC-007, since: 2026-10-18, DoR 10/10; In Security/NFR on (b1)+(a). Waits: after ABC-171; owner installs cutechess-cli + En Croissant before UAT.)
 - [ABC-172] Rename package and in-repo names to `skytalix`; directory and remote are owner steps  (owner: BA/PM, size: XS, priority: P2, epic: EPIC-007, since: 2026-10-18, DoR 10/10; clause (a) Security/NFR hop. Waits: Q14 default = keep `npm run chess`.)
 
-## Ready (WIP 5/8)
-- [ABC-160] The book compiler's sha256 test never offers an expected hash that differs only in its FIRST character, so a check that compares a suffix passes it  (BA/PM, XS, P3, epic: EPIC-005, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from QE-155-a.)
-- [ABC-162] `ABC-095` `A7`'s real-engine child runs from the tree root, so a build that reads the book relative to the working directory passes `CLI_DEEP`  (BA/PM, XS, P3, epic: EPIC-005, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from AR-095-CWD.)
+## Ready (WIP 3/8)
 - [ABC-163] The clause (b) instrument fires nothing when a limb-1 holder changes what it reads: fold `ADR-0036` § S1 Ruling 2 (holders at base AND head) into `clause-b.mjs`  (BA/PM, S, P3, epic: —, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from AR-095-L1UNIT.)
 - [ABC-165] Ten `plans/traceability.md` rows do not split into the table's ten columns, the paragraph that lists the known malformations names a different set, and a `plans/metrics.md` header runs into the next  (BA/PM, S, P3, epic: —, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from QE-156-a + QE-040-c.)
 - [ABC-159] Four `*.nfr.test.ts` headers carry a running tally of `plans/nfr-catalog.md` in words (three times, five times now, the sixth, twice), and the tallies disagree with each other  (BA/PM, XS, P3, epic: EPIC-002, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from QE-030-a. Waits: after ABC-096 merges (shares `src/history-pane.nfr.test.ts`); then → Ready.) **2026-10-17: its blocker, ABC-096's merge, discharged at `b20eb451` → Ready (fills Ready to 8/8). ABC-161 and ABC-164 are also unblocked but stay in Backlog: Ready is at its WIP limit.**
@@ -896,7 +895,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 2/3)
+- [ABC-160] The book compiler's sha256 test never offers an expected hash that differs only in its FIRST character, so a check that compares a suffix passes it  (BA/PM, XS, P3, epic: EPIC-005, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from QE-155-a.)
+- [ABC-162] `ABC-095` `A7`'s real-engine child runs from the tree root, so a build that reads the book relative to the working directory passes `CLI_DEEP`  (BA/PM, XS, P3, epic: EPIC-005, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from AR-095-CWD.)
 
 
 

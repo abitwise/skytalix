@@ -1,7 +1,7 @@
 ---
 id: ABC-160
 title: "The book compiler's sha256 test never offers an expected hash that differs only in its FIRST character, so a check that compares a suffix passes it"
-status: backlog
+status: in-development
 column: Backlog
 size: XS
 priority: P3
