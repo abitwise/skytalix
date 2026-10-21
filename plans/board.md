@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-21 by Orchestrator — `ABC-184` In Development → In Review (SE `c6f80c81`; gates green 59/1987; waiver empty); QE `qe-ABC-184` dispatched._
 _Updated: 2026-10-21 by Orchestrator — owner go: `ABC-184` Ready → In Development (1/3), SE `ticket-to-pr-ABC-184`. `ABC-165` NOT pulled: its own A1 prints 96 rows at main (page: 10), mostly 6/7-cell hop rows appended since the cut; BA/PM `bapm-rescope-ABC-165` dispatched to set a forward row rule and re-cut. Ready 2/8 → 1/8._
 _Updated: 2026-10-21 by Orchestrator — `ABC-161` In Review → Done (merged; QE PASS_WITH_GAPS, QE-161-a LOW carried). In Development 0/3, In Review 0/3._
 _Updated: 2026-10-21 by Orchestrator — `ABC-161` In Development → In Review (SE `5e755bcb`: three rows sharpened, 11 plants base vs head as the page states, gates green 59/1987, waiver empty); QE `qe-ABC-161` dispatched._
@@ -930,8 +931,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-184] `RealChild` records the `cwd` it spawned with, and A7 asserts `booked.cwd` is `neutral`, so dropping `booked`'s cwd argument (TCWD) no longer lets P6f pass `CLI_DEEP`  (BA/PM, XS, P3, epic: EPIC-005, since: 2026-10-21, **DoR 10/10**; cut in `bapm-cut-AR-183-CWDARG` from AR-183-CWDARG (QE-183-a; Security/NFR `…41f70925`, owner record `…bc2b06ce`). Test-only, `src/cli.real-engine.test.ts`. Closes AR-183-CWDARG. Owed before ABC-168 or any `src/book-file.ts` edit merges; → P2 when that trigger fires.) **Pulled 2026-10-21** Ready → In Development on owner go, SE `ticket-to-pr-ABC-184`.
+## In Development (WIP 0/3)
 
 
 
@@ -959,7 +959,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-184] `RealChild` records the `cwd` it spawned with, and A7 asserts `booked.cwd` is `neutral`, so dropping `booked`'s cwd argument (TCWD) no longer lets P6f pass `CLI_DEEP`  (BA/PM, XS, P3, epic: EPIC-005, since: 2026-10-21, **DoR 10/10**; cut in `bapm-cut-AR-183-CWDARG` from AR-183-CWDARG (QE-183-a; Security/NFR `…41f70925`, owner record `…bc2b06ce`). Test-only, `src/cli.real-engine.test.ts`. Closes AR-183-CWDARG. Owed before ABC-168 or any `src/book-file.ts` edit merges; → P2 when that trigger fires.) **Pulled 2026-10-21** Ready → In Development on owner go, SE `ticket-to-pr-ABC-184`. SE tip `c6f80c81` (code `442d1e57`, +7/−0, TCWD + P6f base green / head red on SE readings); QE `qe-ABC-184`.
 
 
 
