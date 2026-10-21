@@ -5,9 +5,9 @@ _Created 2026-09-26 by the AGENTS.md Scribe (task `scribe-abc109-restructure`, `
 This file is the extraction target the ticket named as available raw material: the long
 `<!-- RUN … -->` provenance comments that sat inline after each command slot in `AGENTS.md` §
 Commands, moved here **verbatim in substance** (comment delimiters dropped, wording unchanged) so no
-directive, trap or measurement is lost — only relocated. `AGENTS.md` keeps each command line plus the
-single most load-bearing fact (exit code / count / timing) and a pointer to the matching section
-below.
+directive, trap or measurement is lost — only relocated. Since `ABC-164` (2026-10-21) `AGENTS.md` keeps each
+command line except the three listed in § "On-demand commands" below, carries a fact only in the comments of the
+`Dev / run` and `npm test` slots, and points here; every other command's comment is in its section below.
 
 Moved from `AGENTS.md` § Mission by `ABC-164` (2026-10-21), word for word: the sentence that followed "**Byte budget: this file targets ≤ 24,576 B.**"
 
@@ -17,9 +17,9 @@ repository — and its overflow is silent and eats the file from the tail (`ABC-
 
 **Reader:** the `AGENTS.md` Scribe, before adding or amending any Commands-section line (so a new
 receipt is appended in the right place and stale receipts are visible together); any role that needs
-the full history behind a command's exit code beyond the one-line summary `AGENTS.md` carries inline.
-Not read on every hop — `AGENTS.md` § Commands is the one-line-per-command index every role reads;
-this file is its footnoted detail. Since `ABC-164` it is also read by QE (lane triggers, the lane table and
+the full history behind a command's exit code beyond the little `AGENTS.md` carries inline (see the preamble).
+Not read on every hop — `AGENTS.md` § Commands is the command index every role reads (every command line but
+the three in § "On-demand commands"); this file holds the comments and receipts behind it. Since `ABC-164` it is also read by QE (lane triggers, the lane table and
 the traps behind them, from § "On-demand commands") and by the Software Engineer (a lane's section, before
 changing the file that lane guards).
 
@@ -99,8 +99,8 @@ as unavailable", so "There is no `--help`." reds `A3` (QE's `N16`); write that s
 duplicate reds wherever it sits) and a comment that closes before the next top-level list item
 (`ABC-067`). The guard was NOT loosened — QE's ruling at `ABC-065` (ticket `ABC-069`'s fence) was "the cost of
 the coupling is a diagnosable false red once; the cost of relaxing it is a silent pass forever", and
-`ABC-069` documents the cost instead of removing it. `AGENTS.md`
-carries the rules in the slot's own comment; this entry is their receipt.
+`ABC-069` documents the cost instead of removing it. Since `ABC-164` the slot's own comment in
+`AGENTS.md` carries only a pointer here; the rules are in the "WRITING RULES" paragraph below, and this entry is their receipt.
 
 Moved from `AGENTS.md` § Commands by `ABC-164` (2026-10-21), word for word, comment delimiters dropped:
 
@@ -128,7 +128,8 @@ TRAPS, read from `tools/opening-book/compile.ts` (lines 139-146) and run:
 - The compiler pins `SOURCE_COMMIT` in its own source; it does not re-check the five sha256 values at
   compile time (`QE-093-b`, LOW). A different upstream commit in `<dir>` compiles without complaint.
   Moving to a newer commit means editing `SOURCE_COMMIT` and `ATTRIBUTION.md` together.
-- Source files are not checked in. `AGENTS.md` carries the line and one fact; the URLs and hashes stay in
+- Source files are not checked in. Since `ABC-164` `AGENTS.md` carries neither the command line nor this comment, only a
+  pointer to § "On-demand commands" (where the line is); the URLs and hashes stay in
   `ATTRIBUTION.md` (single source, not restated).
 
 UPDATE 2026-10-12 (`ABC-145`, `scribe-lines-2026-10-12`): the third TRAP above ("it does not re-check the five
@@ -909,17 +910,36 @@ covers a worktree hop as well as the main checkout). `O2`: § "Real-engine CLI l
 collapsed, comment delimiters dropped), found in the union of `45`, this file and `40-contributing.md`. A removed run that is a
 command line plus its comment is not found whole by construction (the command line stays in `AGENTS.md`), so the check was also
 run on the removed words that the added lines do not carry (token alignment per hunk). Result: every moved comment, command line
-and governance section is found word for word. **Misses: three kinds, none of them lost meaning.**
+and governance section is found word for word. **Misses: four kinds, none of them lost meaning.** (Corrected 2026-10-21, `scribe-amend-90`,
+from QE's `QE-164-b`: this list said three kinds and named the QE-hop comment; see the end of item 3 and item 4.)
 1. The `O3` rewording. Old sentence, kept here so it is not lost:
    "The A1/A2 verdict is not run here (~44 h in vitest): its route is ABC-146's (plain node, ADR-0038 addendum)."
 2. The re-pointed references. Old text, in `AGENTS.md` § Safety rules: "see `## Branching model`", "see `## Test and UAT
    authority`" and "See `## Deployment posture`" (now `memory-bank/45-standing-rulings.md` § ...). `45` holds each of those
    headings verbatim.
 3. Lines replaced by pointers: the `Dev / run` slot's receipts lead ("Full receipts (RUN dates, ...)" is now "Writing rules for this slot and
-   full receipts (RUN dates, ...)"); the worker-cap bullet's "1..2" (now "1..2." before its pointer); the QE-hop comment (replaced
-   by a pointer; the comment itself is in `40-contributing.md`); the budget sentence's pointer.
+   full receipts (RUN dates, ...)"); the worker-cap bullet's "1..2" (now "1..2." before its pointer); the budget sentence's pointer.
+   The QE-hop comment is not a miss: QE found it whole in `40-contributing.md` § Conventions (`QE-164-b`).
+4. The `O1` insertion split one line of the note-writer blockquote in `AGENTS.md` (the `installed_plugins.json` line);
+   both halves are still in `AGENTS.md`, so nothing is lost (`QE-164-b`).
 
 **Gates on the tip** (worktree `../wt-ABC-164`, no timing taken): lint exit 0, typecheck exit 0, build exit 0; `npm test` exit 0, 59
 files, 1987 tests (equal to base), `.test-results/last-run.json` `success` true; the `ABC-042`, `ABC-059`, `ABC-065`, `ABC-067`,
 `ABC-071`, `ABC-109` and `ABC-173` rows all green; `test-skip-integrity.js --skip-count 0`: `No findings.` UAT waiver form
 (`git diff --name-only <tip>~1 <tip> | grep -v '\.test\.ts$' | grep '^src/'`): prints nothing.
+
+## `scribe-amend-90` pass, 2026-10-21 (`QE-164-a`, `QE-164-b`; owner go `…cba9c8eb`; branch `grugops/scribe-amend-90` from `bf6fc623`)
+
+AGENTS.md Scribe, task `scribe-amend-90`. Records only: this file alone; no `AGENTS.md`, `src/` or `plans/` line changed. QE's verdict on
+`ABC-164` (`…47cae669`) found that the split left present-tense sentences here that it had made false. Each was made true for the layout
+after `ABC-164`; the sentences below were the only ones changed, besides the `QE-164-b` correction in the `scribe-ABC-164` pass.
+
+| where | before | after |
+|---|---|---|
+| preamble | "`AGENTS.md` keeps each command line plus the single most load-bearing fact (exit code / count / timing) and a pointer to the matching section below." | Since `ABC-164`, `AGENTS.md` keeps each command line except the three in § "On-demand commands", a fact only in the `Dev / run` and `npm test` comments, and a pointer here. |
+| Reader | "beyond the one-line summary `AGENTS.md` carries inline … the one-line-per-command index every role reads; this file is its footnoted detail." | "beyond the little `AGENTS.md` carries inline … the command index every role reads (every command line but the three in § "On-demand commands"); this file holds the comments and receipts behind it." |
+| § Dev / run | "`AGENTS.md` carries the rules in the slot's own comment; this entry is their receipt." | The slot's comment carries only a pointer here; the rules are in the "WRITING RULES" paragraph below; this entry is their receipt. |
+| § Regenerate the opening book | "`AGENTS.md` carries the line and one fact" | `AGENTS.md` carries neither the line nor this comment, only a pointer to § "On-demand commands". |
+
+`QE-164-b`: in the `scribe-ABC-164` pass, the miss list now has four kinds (the `O1` line split added) and no longer counts the QE-hop comment
+(found whole in `40-contributing.md`). The Reader's "one-line summary" clause was changed with its sentence because the same split made it false.
