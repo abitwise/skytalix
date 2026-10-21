@@ -469,3 +469,28 @@ Orchestrator records the close. Until then the Orchestrator keeps the by-hand ch
 `AR-180-VALIDATED` names this merge in its close condition. Readings: `.grugops/context/ticket-to-pr-ABC-163/notes/`,
 `.grugops/context/qe-ABC-163/notes/`, `.grugops/context/arch-ABC-163-adr/notes/` and
 `.grugops/context/arch-ABC-163-adr-text/notes/`.
+
+#### Ruling 2 widened — 2026-10-21 (`ABC-188`)
+
+Worded by Security/NFR at `ABC-168`'s gate (`.grugops/context/security-nfr-ABC-168/notes/…decision-75a45be0` § 2),
+when `AR-163-DELONLY`'s trigger (iv) fired: `ABC-168` makes `src/uci.ts` a second limb-1 holder. Commit `d722a6b6`
+folds it into `.grugops/context/design-F-072-1/probe/clause-b.mjs` **in place**, so the canonical pointer above is
+unchanged. Readings taken before it reproduce from that file at `87d3897d`.
+- **(i) The unit.** For limb 1, (b1) fires on any changed line, `+` or `−`, comments included, in a production file
+  that holds limb 1 in code at `<base>` or `<head>`. This replaces "a `+` line" in Ruling 2. Limbs 2 and 3 are
+  unchanged.
+- **(ii) A holder deleted or renamed away at `<head>` counts.** It held limb 1 at `<base>`, and under
+  `git diff -U0 --no-renames` every line of it is a `−` line.
+- **(iii) The empty case is kept.** With no holder at either end, Ruling 2 adds nothing and runs no pathspec diff.
+- **(iv) The by-hand `--name-only` check retires when this merges.**
+- **(v) `AR-163-DELONLY` closes on QE's read of `ABC-188`'s `A2`–`A7`** (D1 and D2 included). The Orchestrator
+  records the close.
+- **(vi) `UNC1` covers `AR-163-UNCOMMENT` on limb 1 only**, because the uncommented file is a holder at `<head>`. On
+  limbs 2 and 3 the risk stays open, LOW, owner Architect/Design.
+
+**Output.** Each file line under `(b1) Ruling 2` prints its `+` and `-` counts, and the head line counts
+`holder files with changed lines (+ or -)`. Limbs 2 and 3 print byte-identical output to `341da4c1` on all 10 plants of
+`r2-mutants.sh`, where `G1-IMP` and `G1-GRD` flip to FIRES by design and `G1B`, `UNC1` and `REN` are added.
+
+**Rollback.** Revert `d722a6b6`. `AR-163-DELONLY` re-opens at MEDIUM while a second holder stands, and the by-hand check
+returns. Readings: `.grugops/context/arch-build-ABC-188/notes/`.
