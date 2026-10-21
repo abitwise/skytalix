@@ -1,13 +1,19 @@
 ---
-subtask: ticket-to-pr-ABC-168
+subtask: ticket-to-pr-ABC-168b
 role: software-engineer
 tickets: [ABC-168]
-branch: grugops/ABC-168 (from main @ the main tip at your start); worktree ../wt-ABC-168
-ref: .grugops/context/ticket-to-pr-ABC-168/
-width: 3 (beside qe-ABC-185 and qe-ABC-187)
+branch: grugops/ABC-168 (holds the first hop's notes and WIP patch at 2f02d158; merge the current main into it first, local only); worktree ../wt-ABC-168
+ref: .grugops/context/ticket-to-pr-ABC-168b/
+width: 3 (beside security-nfr-ABC-172 and qe-ABC-187)
 ---
 
 # SE: ABC-168 `skytalix`: `src/uci.ts`, the `dist/uci.js` artifact + `bin`, one opt-in real-child lane, and the four `ABC-042` A10 pin edits. Owner go (pull next, 2026-10-21)
+
+## Second hop (resume)
+- The first hop stopped correctly on `A7` vs `ADR-0044` D8. The Architect ruled option (a) (`ADR-0044` § Addendum 2026-10-21, `816b9082`; notes `…ce80739a`, `…618fccad`), and BA/PM amended the page (`fc0cefac`; `…60a66fbb`, `…7667bcc5`; DoR 10/10). Build to the page **as it now stands**: `A7` reads what `dist/uci.js` loads; the four type-only emits may be present; `grep -l 'import(' dist/*.js` prints nothing; the away-from-clone run follows `rm -f` of the four; D8 has `"include": []`.
+- Resume from your WIP patch (`.grugops/context/ticket-to-pr-ABC-168/wip-ABC-168-uci-entry-point.patch` on the branch). Merge the current `main` into `grugops/ABC-168` first (a merge, not a rebase).
+- **EPIC-007 M9's rewording awaits the owner's confirmation.** It does not block the build; it gates QE and UAT reading `A7`. Do not edit `EPIC-007`.
+- **Use `git mv`/`cp` only inside your worktree.** The first hop's stray `mv` put two files in the main checkout; never write outside `../wt-ABC-168` except the done record.
 
 ## Read first
 - The ticket page `plans/tickets/ABC-168-skytalix-the-uci-entry-point-and-its-built-dist-artifact.md`: every criterion, § Scope 1–6, § Out of scope, § Dependencies; `ADR-0044` (D2, D8, D9), `ADR-0011` clause 4, `ADR-0016`, `EPIC-007`.
@@ -33,7 +39,8 @@ width: 3 (beside qe-ABC-185 and qe-ABC-187)
 - Never touch `plans/`, `memory-bank/`, other worktrees. Commit on `grugops/ABC-168` only. Never push or merge. Touch no process you did not start.
 
 ## Publish
-- Seal notes with the plugin writer (`installPath` of `grugops@grugops` in `~/.claude/plugins/installed_plugins.json` → `scripts/context-io.js` `admitAndAppend`, task `ticket-to-pr-ABC-168`). **Pass your worktree as the context root explicitly.** Take every `at` from `date -u`. Write notes inside your worktree; include a `kind: decision`.
-- Write `.grugops/queue/done/ticket-to-pr-ABC-168.md` (brief + `## Result`: tip, per-criterion results, the lane flag and trigger for the Scribe, gates, waiver) and `.claim.md`, uncommitted on main.
+- Seal notes with the plugin writer (`installPath` of `grugops@grugops` in `~/.claude/plugins/installed_plugins.json` → `scripts/context-io.js` `admitAndAppend`, task `ticket-to-pr-ABC-168b`). **Pass your worktree as the context root explicitly.** Take every `at` from `date -u`. Write notes inside your worktree; include a `kind: decision`.
+- Write `.grugops/queue/done/ticket-to-pr-ABC-168b.md` (brief + `## Result`: tip, per-criterion results, the lane flag and trigger for the Scribe, gates, waiver) and `.claim.md`, uncommitted on main.
 - **Trace row: exactly 10 cells, in header order**; do NOT append it yourself:
   `| {ticket} ({hop}) | {what this hop did, one line} | {EPIC-nnn or —} | {F-nnn or —} | {NFR, ADR, AR and finding ids, or —} | {branch @ sha<br>files touched, or —} | {gates and test counts, or —} | {UAT verdict or waiver, or —} | {release tag, or —} | {column move or verdict} |`
+

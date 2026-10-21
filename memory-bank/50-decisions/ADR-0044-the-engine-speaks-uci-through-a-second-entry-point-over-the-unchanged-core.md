@@ -15,6 +15,10 @@ resolve. Since the 2026-10-18 revision that slug is no longer true: see § Revis
 > 3 s, as level 3 was. D11's path rule is unchanged and chosen by data: rate 0 is level 5 only, and levels 1–4 take
 > `createLevel`. Effective at `ABC-174`'s merge. No other decision here moves.
 
+> **Addendum 2026-10-21 (Architect/Design, subtask `arch-ABC-168-D8`).** D8's emit sentence is corrected, and D8 gains
+> `"include": []`. `dist/` holds what `uci.ts` imports, type-only imports included. The fence is on what `dist/uci.js`
+> **loads**, not on what is emitted. See § Addendum — D8's emit set. No other decision here moves.
+
 **accepted** 2026-10-18 by Olger Oeselg (owner), verbatim "accept the revised ADR-0044 and EPIC-007" (note
 `.grugops/context/wave-2026-09-25/notes/20261018T113000Z-orchestrator-decision-owner-word-engine-private-adr0044-epic007-accepted-c3e81a57.md`).
 Owner menu: licence → private ("let's keep private for now"); Q14 → keep `npm run chess`; Q15 → moot
@@ -84,6 +88,76 @@ second `A4` check. It is still **proposed**. § Revision — licence lists the c
 | P4 | *"Q14: keep it"*; *"Q15: picked private"* | Q14 answered: `npm run chess` keeps its name. Q15 is moot |
 | P5 | consequence of P1 | The AGPL "Source" link advice (D13, evaluation item 4) is withdrawn |
 | P6 | consequence of P1 | `ABC-169` is re-scoped to declaring private (Consequences) |
+
+## Addendum — 2026-10-21: D8's emit set and its `include` (subtask `arch-ABC-168-D8`)
+
+**Why.** The SE stopped `ABC-168` before any commit (decision `…98aa0957`, readings `…319de31a`, on
+`grugops/ABC-168` @ `2f02d158`). D8 says `files: ["src/uci.ts"]` *"emits only `uci.ts` and what it imports … No test
+file and no terminal-only module is emitted."* The second half is false, and the ticket's `A7` and `EPIC-007` M9
+inherited it as *"`dist/` holds no `turn-loop.js`"*.
+
+**Measured** (this hop, scratch extract of `main` `41f5b366` with the SE's WIP patch applied, tsc 5.9.3, Node v26.11.1;
+evidence in note `…5a20f1f5`, ruling `…ce80739a`, page changes `…618fccad`, all in `.grugops/context/arch-ABC-168-D8/`):
+
+- `src/engine.ts:97` has `import type { EngineSeam } from "./turn-loop.ts"` (since `ABC-078`). tsc puts every file a
+  type-only import reaches into the program, and it emits every file in the program. So `npm run build` emits **22** files.
+  These include `turn-loop.js`, `history.js`, `frame.js` and `render.js`.
+- `verbatimModuleSyntax` (already in `tsconfig.json`) erases every `import type`. So the relative import specifiers
+  left in the emitted JavaScript are the runtime edges. The static runtime closure from `dist/uci.js` is **18** files,
+  and none of the four is in it. `dist/` has no dynamic `import(`.
+- **Run without them:** a copy of `dist/` with those four deleted runs the D8 away-from-clone dialogue unchanged:
+  `uciok`, one book warning, `readyok`, a `bestmove`, exit 0. **Negative control:** a copy with `search.js` deleted
+  fails at start with `ERR_MODULE_NOT_FOUND`. An ES module resolves every static import before any code runs, so a
+  file the program depends on cannot be missing silently.
+- The four carry no capability. `process.` appears in them only inside comments, and there is no `node:` import,
+  `Math.random` or `Date.now`.
+- **D8 as written does not build.** With `extends` and no `include`, the base `include` (`spike/`, `tools/`,
+  `vitest.config.ts`) is inherited. The build exits 1 (TS5055 and TS6059) and emits test files. `"include": []` fixes
+  it: exit 0, and no `*.test.js`, `cli.js` or `line-input.js` is emitted.
+
+**Ruling: option (a).** `dist/` may hold type-only emits. The fence is on what `dist/uci.js` **loads**.
+
+- **D8, read as amended:**
+  - `tsconfig.build.json` also sets `"include": []`, so `files` alone roots the program.
+  - It emits `uci.ts` and every file its imports reach, **type-only imports included**, flat in `dist/`.
+  - No test file is emitted. `cli.js` and `line-input.js` are not emitted.
+  - A terminal-only module may be emitted when the closure reaches it only as a type (today `turn-loop.js`, and through
+    it `history.js`, `frame.js` and `render.js`). Nothing loads it.
+  - The guarantee is that the runtime closure of `dist/uci.js` holds no terminal-only module and no test file.
+- **How it is measured** (for `ABC-168` `A7` and `EPIC-007` M9; QE runs it in its own fresh clone):
+  1. **The run test:** in the away-from-clone copy (`cp -R dist <scratch>/d`), run
+     `rm -f <scratch>/d/turn-loop.js <scratch>/d/history.js <scratch>/d/frame.js <scratch>/d/render.js` before the
+     dialogue. The dialogue still writes exactly one book warning and a legal `bestmove`, and exits **0**.
+  2. **No late load:** `grep -l 'import(' dist/*.js` prints nothing.
+  3. **The always-absent files still hold:** `dist/` has no `*.test.js`, `cli.js` or `line-input.js`.
+
+  These checks are hand readings at the build hop and at UAT, like the rest of `A7`. They add no new vitest file and no
+  tool.
+
+**Rejected:**
+
+| # | option | why |
+|---|---|---|
+| (b) | Move `EngineSeam` out of `src/turn-loop.ts` into a types-only module | `EngineSeam`'s parameter is `GameHistory`, so the new module still imports `history.ts` as a type, and `history.js` is still emitted. It removes only 3 of the 4 files. It edits `turn-loop.ts`, which is on D2's "no edit" list that `ABC-168` `A11` reads. It edits `engine.ts` a second time, after `ABC-170` used D12's one engine edit. It adds a production module to `ADR-0011` clause 1's census. It is also fragile: the next type-only import into the closure re-breaks a presence check. It costs the core-unchanged promise to delete inert files |
+| (c1) | `noResolve` with an explicit `files` list of the 18 | Measured: exit **2**. Imports that are not listed stop resolving (`engine.ts:97` TS2307, `node:fs`, `node:readline`), and the `build` gate goes red. A hand-kept list of 18 files would also rot |
+| (c2) | A post-build prune (`&& rm …` or a prune script) | A second build step and a list that rots. It changes the `build` value that `ABC-168` Scope 6 edit 3 pins, and it adds a tool. It removes about 43 KB of inert, git-ignored, unpublished JavaScript. That is gold plate |
+| (c3) | A per-file transpile through the TypeScript API (`isolatedModules` is already on) | A hand-written build script around the compiler. Alternative 18's no-new-toolchain reason applies |
+
+**What this costs.**
+
+- **The core-unchanged promise:** nothing. No `src/` file moves. D2's "no edit" list stands, and so does `ABC-170`'s one
+  engine edit.
+- **`ADR-0011`:** clause 4 holds, because `uci.ts` still exports nothing and it is the only entry point in the closure.
+  Clause 1's census and clause 3's licence set are over `src/`, and `dist/` is neither.
+- **`ADR-0036` (b1):** it reads the `src/` diff, which is unchanged.
+- **The UAT readings:** `A8`–`A10` run the same `dist/uci.js`, and its loaded code is the same.
+- **The weakness:** about 43 KB of dead `.js` in a git-ignored `dist/`. Accepted.
+
+**Revisit trigger:** `npm publish`, a `files` allow-list or any packaging of `dist/` for third parties (D8 "Out of v1";
+`ADR-0018`). At that point, what ships matters more than what loads, and (c2) or (b) is re-priced.
+
+**Rollback:** remove this addendum and restore `A7`'s presence wording. That makes `ABC-168` unmeetable again
+unless (b) is taken.
 
 ## Context
 

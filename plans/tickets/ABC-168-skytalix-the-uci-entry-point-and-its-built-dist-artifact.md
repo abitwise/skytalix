@@ -11,6 +11,22 @@ feature: —
 
 # ABC-168 — the program a backend or GUI launches: stdin and stdout, the book file, a build, and the proof that standard tools can play it
 
+> **Amended 2026-10-21 by BA/PM** (subtask `bapm-amend-ABC-168`, at `main` `9035e9be`), records only. The SE stopped
+> before any code (`…98aa0957`, on `grugops/ABC-168` @ `2f02d158`). `src/engine.ts:97` has a type-only import of
+> `./turn-loop.ts`, so tsc emits `turn-loop.js`, `history.js`, `frame.js` and `render.js`, and `A7` bullet 2 could not
+> hold. **Ruling: option (a)**, `ADR-0044` § Addendum — 2026-10-21 (`816b9082`; notes `…5a20f1f5` readings,
+> `…ce80739a` ruling, `…618fccad` page text, in `.grugops/context/arch-ABC-168-D8/notes/`). `dist/` may hold those
+> type-only emits. `A7` fences what `dist/uci.js` **loads**. D8 gains `"include": []`. Five places changed, each
+> worded as `…618fccad` gives: Scope 2, `A7` bullet 2, `A7`'s away-from-clone bullet, Out of scope, and Test note 4.
+> Nothing else moved: Scope 6, `A12`, size `S` and `P1` are unchanged.
+>
+> **This depends on the owner.** `A7` now differs from `EPIC-007` M9 as accepted on 2026-10-18 (*"`dist/` holds no
+> `*.test.js`, no `cli.js` and no `turn-loop.js`"*). This hop did not edit M9. The Orchestrator is asking the owner to
+> confirm M9's rewording to *"`dist/uci.js` loads no `turn-loop.js`, as `A7` measures"*. Until he confirms, QE and UAT
+> do not read `A7` as M9's proof. The SE's restart does not wait on it (`…ce80739a` item 6). **If he declines,** the
+> fallback is option (b): move `EngineSeam` out of `src/turn-loop.ts`. That takes another `ADR-0044` amendment, since
+> it edits a D2 no-edit file. This page is then re-cut, and `A7` goes back to presence wording.
+
 > **Amended 2026-10-18 by BA/PM** (subtask `bapm-ABC-169-rescope`, at `main` `692770d6`), before any build. This
 > ticket would have hit the same blocker that stopped `ABC-169` (`.grugops/queue/done/ticket-to-pr-ABC-169.md`).
 > `src/cli.test.ts:1759` (`ABC-042` `A10`) pins `package.json` key by key. Scope 2's `bin`, `build` and `uci` each
@@ -49,7 +65,8 @@ plays. This ticket is also where `EPIC-007`'s value proof is read (M1, M2, M8(a)
    (`ADR-0016`). It composes `Date.now`, `Math.random` and one
    `createBookProbe({ read: readBookFile, warn, random: Math.random })`, where `warn` writes `info string <message>`.
    Exit codes: `0` on `quit` or end of input, `1` if any command-line argument is given, and `70` on an exception.
-2. **The artifact (D8).** `tsconfig.build.json` as D8 specifies. `package.json`: `"build": "tsc -p tsconfig.build.json"`,
+2. **The artifact (D8).** `tsconfig.build.json` as D8 specifies, with `"include": []` (`ADR-0044` § Addendum
+   2026-10-21; amended 2026-10-21). `package.json`: `"build": "tsc -p tsconfig.build.json"`,
    `"uci": "node src/uci.ts"` and `"bin": { "skytalix": "dist/uci.js" }`. `"private": true` stays.
 3. **One opt-in real-child lane** (`ADR-0044` D9, the `ABC-119` precedent). One scripted dialogue against the real child,
    under an env flag. Unset means NOT DEFINED. The flag's name is the engineer's, recorded in `AGENTS.md`.
@@ -72,7 +89,9 @@ plays. This ticket is also where `EPIC-007`'s value proof is read (M1, M2, M8(a)
 
 ## Out of scope
 
-- Any edit to `src/uci-session.ts` beyond what composition needs (none is expected), or to any core file.
+- Any edit to `src/uci-session.ts` beyond what composition needs (none is expected), or to any core file, including
+  moving `EngineSeam` out of `src/turn-loop.ts`; and any prune of `dist/` (`ADR-0044` § Addendum 2026-10-21: `dist/`
+  may hold type-only emits) (amended 2026-10-21).
 - `npm publish`, a `prepare` script, install from a git URL, a native binary, a bundler, a Web Worker build
   (`ADR-0044` D8).
 - The web backend and its router (the web project's).
@@ -96,14 +115,18 @@ plays. This ticket is also where `EPIC-007`'s value proof is read (M1, M2, M8(a)
   spawn → `uciok` ≤ **2 s**; the first `isready` → `readyok`, book load included, ≤ **1 000 ms**; a later idle `isready`
   → `readyok` ≤ **100 ms**. Security/NFR places these as candidate row (i) and may change the numbers. A miss is
   reported, not trimmed.
-- **`A7` (the artifact, `EPIC-007` M9).** In a fresh clone at the tip:
+- **`A7` (the artifact, `EPIC-007` M9; amended 2026-10-21, `ADR-0044` § Addendum 2026-10-21; its M9 link waits on
+  the owner's confirmation, see the top of the page).** In a fresh clone at the tip:
   - `npm ci && npm run build` exits **0** and creates `dist/uci.js`, whose first line is `#!/usr/bin/env node`;
-  - `dist/` holds no `*.test.js`, and no `cli.js`, `turn-loop.js` or `line-input.js`;
+  - `dist/` holds no `*.test.js`, `cli.js` or `line-input.js`; `turn-loop.js`, `history.js`, `frame.js` and
+    `render.js` may be present as type-only emits and are not loaded (the away-from-clone bullet below);
+    `grep -l 'import(' dist/*.js` prints nothing;
   - `printf 'uci\nquit\n' | node dist/uci.js` writes `id name skytalix` … `uciok` and exits **0**;
   - after `npm link`, `printf 'uci\nquit\n' | skytalix` writes the same;
   - `git check-ignore dist/uci.js` prints `dist/uci.js`, and `npm run typecheck` still checks the whole tree and exits
     **0**;
-  - **away from the clone:** after `cp -R dist <scratch>/d`,
+  - **away from the clone:** after `cp -R dist <scratch>/d`, and after
+    `rm -f <scratch>/d/turn-loop.js <scratch>/d/history.js <scratch>/d/frame.js <scratch>/d/render.js`,
     `printf 'uci\nisready\nposition startpos\ngo movetime 100\nquit\n' | node <scratch>/d/uci.js` writes exactly one
     `info string` warning about the book, then a legal `bestmove`, and exits **0**.
 - **`A8` (UAT, `EPIC-007` M1).** `cutechess-cli`, 6 games against the artifact from the six perft FENs, `proto=uci`,
@@ -136,6 +159,8 @@ plays. This ticket is also where `EPIC-007`'s value proof is read (M1, M2, M8(a)
 - **`src/cli.test.ts`'s `AT_HEAD` is shared with `ABC-169`** (amended 2026-10-18). `ABC-169` adds `"license"` and
   this ticket adds `"bin"`. Whichever merges later rebases and keeps both.
 - **Gate: met.** The owner accepted the revised `ADR-0044` and `EPIC-007` on 2026-10-18 (`…c3e81a57`).
+- **The owner confirms `EPIC-007` M9's rewording** (amended 2026-10-21). This gates QE and UAT reading `A7`. It does
+  not gate development. If he declines, the fallback is option (b), as stated at the top of the page.
 
 ## Security / NFR triggers
 
@@ -159,7 +184,9 @@ plays. This ticket is also where `EPIC-007`'s value proof is read (M1, M2, M8(a)
 2. **`A8`–`A10` are UAT readings, not vitest rows.** They are host tools on the owner's Mac.
 3. **No strength is claimed** from `A8` or `A9`. They are protocol and time safety.
 4. **QE re-runs `A7` in its own fresh clone**, because a build that only works in the engineer's tree is the failure it
-   exists to catch.
+   exists to catch. That re-run includes the away-from-clone run with the four type-only emits removed by `rm -f`, and
+   the `grep -l 'import(' dist/*.js` check (amended 2026-10-21). A static ESM import that is missing fails at link
+   time with `ERR_MODULE_NOT_FOUND`, so a pass shows the four are not loaded (`…5a20f1f5` has the negative control).
 5. **The pins on `package.json` and `AGENTS.md` (amended 2026-10-18, read at `main` `692770d6`).** Only the first
    needs an edit:
    - `src/cli.test.ts:1759` (`ABC-042` `A10`): the key list, the script values, the reserved keys and the added
@@ -189,20 +216,21 @@ plays. This ticket is also where `EPIC-007`'s value proof is read (M1, M2, M8(a)
 BA/PM, 2026-10-18, at `main` `a10e09c2`. **Result: 10 of 10.** Re-scored 2026-10-18 at `main` `50e081fc` (subtask
 `bapm-epic007-accept`). It was 9 of 10 at the cut, with item 10 open until the owner accepted. Re-read 2026-10-18 at
 `main` `692770d6` (subtask `bapm-ABC-169-rescope`): Scope 6, `A11`, `A12` and test note 5 were added. Items 2, 4 and 7
-still hold. **Still 10 of 10.**
+still hold. **Still 10 of 10.** Re-scored 2026-10-21 at `main` `9035e9be` (subtask `bapm-amend-ABC-168`), after
+the D8 ruling. Items 2, 4, 5, 7 and 10 were re-read. **Still 10 of 10. `Blocked` → `Ready`.**
 
 | # | item | verdict |
 |---|---|---|
 | 1 | problem clear | **✅** no process, no build, and `.ts` cannot be run from `node_modules` |
-| 2 | scope and out-of-scope clear | **✅** named files; publish, binary, bundler and backend fenced off |
+| 2 | scope and out-of-scope clear | **✅** named files; publish, binary, bundler and backend fenced off. 2026-10-21: sharper. `"include": []` is named, and moving `EngineSeam` and pruning `dist/` are fenced off |
 | 3 | INVEST-shaped | **✅** the only ticket with a capability; its value is the play-test |
-| 4 | acceptance testable and measurable | **✅** exit codes 0 / 1 / 70; 2 s, 1 000 ms, 100 ms; 0 / 0 / 0 over 6 games; depth ≤ 4 |
-| 5 | dependencies known | **✅** `ABC-171`; host tools; `package.json` shared |
+| 4 | acceptance testable and measurable | **✅** exit codes 0 / 1 / 70; 2 s, 1 000 ms, 100 ms; 0 / 0 / 0 over 6 games; depth ≤ 4. 2026-10-21: `A7` is still binary. The `rm -f` run must exit 0, a loaded file that is missing fails visibly (`ERR_MODULE_NOT_FOUND`), and the `import(` grep must print nothing |
+| 5 | dependencies known | **✅** `ABC-171` (merged `25162735`); host tools; `package.json` shared; 2026-10-21: the owner's M9 confirmation, which gates QE and UAT only |
 | 6 | security/NFR triggers with a measurable target | **✅** (b1) and (a) fire; three candidate rows with numbers |
-| 7 | test notes present | **✅** four |
+| 7 | test notes present | **✅** five; note 4 now carries the `rm -f` run and the `import(` grep |
 | 8 | size assigned | **✅** `S` |
 | 9 | priority assigned | **✅** `P1` |
-| 10 | no major unresolved blocker (owner acceptance) | **✅** the owner accepted the revised `ADR-0044` and `EPIC-007` on 2026-10-18 (`…c3e81a57`) |
+| 10 | no major unresolved blocker | **✅** the owner accepted the revised `ADR-0044` and `EPIC-007` on 2026-10-18 (`…c3e81a57`). 2026-10-21: the D8 block is ruled (`ADR-0044` § Addendum). The open M9 confirmation gates QE and UAT reading `A7`, not the build (`…ce80739a` item 6). Its fallback (b) is named on this page |
 
-**Recommended: → `Ready` after `ABC-171`, as far as Ready's WIP limit (8) allows.** Column moves are the
-Orchestrator's.
+**Recommended (2026-10-21): `Blocked` → `Ready`.** `ABC-171` is merged. The SE may resume from the WIP patch on
+`grugops/ABC-168` @ `2f02d158`, which already has `"include": []`. The pull is the Orchestrator's.
