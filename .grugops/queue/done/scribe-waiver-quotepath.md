@@ -26,3 +26,20 @@ width: 3 (beside ticket-to-pr-ABC-192 and arch-build-ABC-193)
 ## Publish
 - Seal notes with the plugin writer (`installPath` of `grugops@grugops` in `~/.claude/plugins/installed_plugins.json` → `scripts/context-io.js` `admitAndAppend`). **Pass your worktree as the context root explicitly** — never the plugin dir. Take every `at` from `date -u` (UTC). Include a `kind: decision`. Notes are append-only: never delete one; a wrong note gets a superseding note. `artifact-ref` needs a §14 gate run, so record artifacts as `observation`. Task `scribe-waiver-quotepath`.
 - Trace row (forward 10-cell rule): `| {ticket} ({hop}) | {what} | {EPIC or —} | {F or —} | {NFR/ADR/AR/finding ids or —} | {branch @ sha<br>files or —} | {gates/test counts or —} | {UAT verdict/waiver or —} | {release tag or —} | {column move or verdict} |` — exactly 10 cells, as a plain table line (not in backticks). Put it in your done record (`.grugops/queue/done/<subtask>.md` + `.claim.md`, main's tree, uncommitted); the Orchestrator appends it.
+
+## Result
+
+Done. The UAT waiver measurement now reads `git -c core.quotePath=false diff --name-only <delivered>~1 <delivered> | grep -v '\.test\.ts$' | grep '^src/'` in both places; nothing else in the rule changed.
+
+- Branch `grugops/scribe-waiver-quotepath` from `47a3c9a1`, worktree `../wt-scribe-waiver-quotepath`. Content commit `6fe742c3b0e16731ed0a89995e79acdea2639c2e` (3 files); tip `e24865d946c3dbe25659c4ca91c2f1d3721de554` (adds only the 3 notes). Not pushed, not merged.
+- `AGENTS.md:150` and `memory-bank/45-standing-rulings.md:67`: before `` `git diff --name-only <delivered>~1 <delivered> | …` ``, after `` `git -c core.quotePath=false diff --name-only <delivered>~1 <delivered> | …` ``.
+- `memory-bank/90-agents-md-command-log.md`: one new pass section appended (its rule is per-change logging).
+- `wc -c AGENTS.md`: 15,797 -> **15,821** (+24; the brief expected +22, the inserted text is 24 bytes). Limit 18,432. `npx vitest` backticked text count unchanged (17).
+- Scratch demonstration (own `.git`, private `HOME`/`TMPDIR`, no config set): commit adding `src/qé.ts` — old form prints nothing (rc 1), new form prints `src/qé.ts` (rc 0); test-only commit adding `src/a.test.ts` — both print nothing.
+- Gates on `6fe742c3`: lint 0, typecheck 0, build 0, `npm test` 59 files / 1992 tests passed, `.test-results/last-run.json` `success: true`; skip-count capture as spelled = 0; `test-skip-integrity.js` "No findings." exit 0. No timing.
+- Notes (task `scribe-waiver-quotepath`, sealed with `admitAndAppend`, context root `<worktree>/.grugops/context`): `20261021T173615Z-agents-md-scribe-decision-aaad8f92` (decision), `20261021T173616Z-agents-md-scribe-observation-3ef78615` (demonstration), `20261021T173618Z-agents-md-scribe-observation-b1f4ad97` (gates).
+- Stops / fence breaches: none. No git config set, no push/merge/force, only the two lines plus the log row.
+
+### Trace row (10 cells)
+
+| AR-191-QUOTEPATH waiver half (Scribe) | the UAT waiver measurement in AGENTS.md:150 and memory-bank/45-standing-rulings.md:67 gains `-c core.quotePath=false`; nothing else in the rule changes; command-log pass appended | — | — | AR-191-QUOTEPATH, QE-191-b; notes …717a2219, …7c1f3590, …aaad8f92, …3ef78615, …b1f4ad97 | grugops/scribe-waiver-quotepath @ e24865d9 (content 6fe742c3)<br>AGENTS.md, memory-bank/45-standing-rulings.md, memory-bank/90-agents-md-command-log.md | lint 0, typecheck 0, build 0, npm test 59 files / 1992 tests, last-run success, skip-count 0, test-skip-integrity No findings; AGENTS.md 15,821 B | — (0 src/ lines; waiver form unchanged in effect; scratch: old form misses src/qé.ts, new form prints it) | — | Scribe hop done; branch awaits the Orchestrator's merge |
