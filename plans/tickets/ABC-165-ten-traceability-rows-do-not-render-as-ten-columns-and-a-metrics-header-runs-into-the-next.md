@@ -1,8 +1,8 @@
 ---
 id: ABC-165
 title: "Eleven `plans/traceability.md` rows do not split into ten columns (seven of them hide text), the malformation paragraph names a different set and states no row rule, the table header follows a blockquote line, and a `plans/metrics.md` header runs into the next"
-status: in-review
-column: In Review
+status: done
+column: Done
 size: S
 priority: P3
 epic: —
@@ -185,3 +185,62 @@ against the file). **Result: 10 of 10.**
 
 Column moves are the Orchestrator's. Owner: **the Orchestrator** (routes the build to the Software Engineer), then
 QE.
+
+## QE
+
+**QE (qe-e2e), 2026-10-21: PASS_WITH_GAPS** on `grugops/ABC-165` @ `893e9fd1` (code `49fce033`, base `9af98210`).
+The QE branch `grugops/qe-ABC-165` merges `main` @ `c22894bf` at `b19d4114`, with no conflict. `A1`–`A7` are MET at the
+code commit and again at that merge, on QE's own scripts. The evidence is in `.grugops/context/qe-ABC-165/notes/`:
+`…b3a03d95` (the criteria and the merge), `…62837fbe` (the column mapping), `…482f15f6` (the render reading),
+`…1c1151ee` (the gates, the waiver and the scripts) and `…892cc883` (the verdict and gap register).
+
+- **`A1`:** `A1-cells` prints 97 at base and 86 at the code commit and at the merge. Exactly the 11 named cells leave
+  (multiset difference), and none is added. The 86 left are all short rows (5, 6, 7 or 9 cells) at `:1143–1253`.
+  That is `ABC-185`'s `:1132–1242` shifted by 11. A second, cmark-style splitter agrees with `A1`'s on all 687 rows.
+- **`A2`:** 11 rows changed (counted by line multiset, base against code), 11 of 11 equal after the strip. Each edit
+  is minimal: 5 `\` inserts (`ABC-065` 1, `ABC-066` 3, `ABC-109 (UAT)` 1), 4 `| ` deletes (the QE rows), and `|`
+  or `— |` inserts in the two Scribe rows, `ABC-094 (accepted)` and `ABC-150 (design)`.
+  **Column mapping, graded row by row: 11 of 11 correct.** 0 cell boundaries are misplaced. Every leftover
+  oddity is fixed by word order, which `A2` forbids moving:
+  - `ABC-150 (design)`: the NFR and ADR ids sit in Status;
+  - the Scribe rows: the branch sits in Status;
+  - `ABC-094 (accepted)`: the gates sit in Title;
+  - `ABC-065` and `ABC-066`: the Release cell is empty, not `—`, as it was at base.
+- **`A3`:** 685 `|` lines at base and at the code commit. At the merge there are 687: the 2 extra are `main`'s own
+  appends (`ABC-165 (SE)` and `ABC-184 (QE)`, 10 cells each), verbatim at `:1256–1257`.
+- **`A4`:** (a) the note's command, copied out and run, prints the same 86 as `A1`; (b) the template is
+  byte-equal to `…d2b9bf09` and splits into 10; (c) the new lines name no row, only `ABC-165` and `ABC-185` as
+  tickets; (d) `0`.
+- **`A5`:** `:435` is empty. **`A6`:** `metrics.md:3` is empty, and no other line changed.
+- **`A7` (ruled MET):** the code commit lists exactly the 2 files. The tip's 3 extra paths are the SE's sealed notes,
+  which Workflow 16 requires. The criterion scores the delivery commit excluding `.grugops/`, as ruled for
+  `ABC-065`'s `A6`.
+- **Render (offline, `marked` 15.0.12 from the npx cache, GFM on; `cmark-gfm` not installed):**
+  - The table now starts outside the blockquote. At base, lazy continuation pulled it inside, so Scope 3 is
+    confirmed.
+  - The two metrics `_Updated:` lines are now separate paragraphs.
+- **Gates** on the code tip and again at the merge: lint, typecheck and build exit 0; `npm test` 59 / 1987 with
+  `last-run.json` success (0 failed, 0 pending, 0 todo); skip-integrity `--skip-count 0` gives `No findings.`.
+  No timing taken.
+- **UAT waiver:** `git diff --name-only 49fce033~1 49fce033 | grep -v '\.test\.ts$' | grep '^src/'` is empty. So is
+  the same over `893e9fd1~1..893e9fd1` and `9af98210..893e9fd1`. The waiver applies: a waiver, not a signature.
+- **Gaps:**
+  - **`QE-165-a` MEDIUM (BA/PM).** The rendered table ends at the blank line `:496`; an HTML comment follows at
+    `:497–627`. From `:629` to the end, all 627 `|` lines render as paragraph text, not table rows. That is the GFM
+    rule (a table needs a header and a delimiter row, and a blank line ends it), measured with `marked`.
+    - This covers all 11 rows repaired here and all 86 of `ABC-185`'s.
+    - Every word of each of the 11 rows renders, at base and at head, so no text was hidden.
+    - `A1`–`A7` measure the raw source and are met. The page's "text hidden" premise and the "read by column"
+      value do not hold in a renderer for these rows until the table is joined again.
+    - This bears on whether `ABC-185` is worth an `M` hop.
+  - **`QE-165-b` LOW (BA/PM).** The note still has two counting rules that disagree:
+    - `:371-372` (eleven `|`, plain `.split('|')` must give 10) and the new escape-aware rule at `:377-388`;
+    - by the `:372` rule, 21 well-formed rows count as malformed, including the 3 this hop escaped;
+    - `:364` ("every row gives 10") and `:369` ("no renderer") are stale.
+
+    Scope 2 kept `:370-376`.
+  - **`QE-165-c` INFO.** `A1`'s splitter departs from GFM on a cell that ends in an escaped backslash (`\\|`) and on
+    a row that ends `||`: it counts 9 where GFM counts 10. There are 0 such rows today. It is now the appender's
+    check.
+  - **`QE-165-d` INFO.** The SE's note says the paragraph became 13 lines; the diff shows 12
+    (`@@ -377,2 +377,12`).
