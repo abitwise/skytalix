@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-21 by Orchestrator — `ABC-161` In Development → In Review (SE `5e755bcb`: three rows sharpened, 11 plants base vs head as the page states, gates green 59/1987, waiver empty); QE `qe-ABC-161` dispatched._
 _Updated: 2026-10-21 by Orchestrator — `ABC-161` Ready → In Development (re-worded by BA/PM `bapm-rework-ABC-161`, DoR 10/10); SE `ticket-to-pr-ABC-161b`. Ready 3/8 → 2/8, In Development 1/3._
 _Updated: 2026-10-21 by BA/PM (`bapm-rework-ABC-161`, records only) — `ABC-161` re-worded at `main` `afc8d43a` after the SE stop (`…67e9ccc1`): fix 1 kept and re-aimed at levels 1–3 (A1 = P11-L1..L3 base green → head red; the level-4 catch rests on `ABC-174`'s table), A3 = P9a–P9e 5 of 5, A2 unchanged, stale pointers refreshed. QE-101-a stays open. DoR 10/10: Backlog → Ready. Ready 2/8 → 3/8 (`…decision-b0020834`)._
 _Updated: 2026-10-21 by Orchestrator — `ABC-161` In Development → Backlog: SE stopped before any code; A1 and A3 no longer hold at today's base. BA/PM `bapm-rework-ABC-161` dispatched to re-word and re-score. In Development 0/3._
@@ -928,8 +929,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-161] Three `src/cli.test.ts` rows that a wrong build passes: a level rebuilt on every move, a `/m` regex that accepts `3\n`, and an `AGENTS.md` slot that drops a level  (BA/PM, XS, P3, epic: EPIC-006, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from QE-101-a, SEC-101-a, QE-101-b. Waits: after ABC-096 merges (shares `src/cli.test.ts`); then → Ready.; its ABC-096 wait discharged at `b20eb451`. **Pulled 2026-10-21** Backlog → In Development on owner go, SE `ticket-to-pr-ABC-161`) **2026-10-21: SE stopped before code (`…67e9ccc1`): A1 and A3 not meetable at `69610c5b` (P11 already red on base via ABC-174; P9d now green on base via `f6b63c1c`). Back to Backlog, DoR re-score owed; BA/PM `bapm-rework-ABC-161`.** **2026-10-21: BA/PM re-worded (`bapm-rework-ABC-161`, `…decision-b0020834`, readings `…observation-8425f6db` at `afc8d43a`): fix 1 KEPT, re-aimed per level (A1: P11-L1..L3 green on base → red on head, 3 of 3; P11/P11-L4 red on both; measured option `call < 3` at seed 7); A3: P9a–P9e green on base → red on head, 5 of 5; A2 unchanged; pointers refreshed (59/1987; ABC-096 discharged; ABC-168 disjoint). QE-101-a stays open (closes on A1). Promotion trigger + `LEVELS` rate re-cut. DoR 10/10 → Ready.** **Re-pulled 2026-10-21** Ready → In Development, SE `ticket-to-pr-ABC-161b`.
+## In Development (WIP 0/3)
 
 
 
@@ -957,7 +957,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-161] Three `src/cli.test.ts` rows that a wrong build passes: a level rebuilt on every move, a `/m` regex that accepts `3\n`, and an `AGENTS.md` slot that drops a level  (BA/PM, XS, P3, epic: EPIC-006, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from QE-101-a, SEC-101-a, QE-101-b. Waits: after ABC-096 merges (shares `src/cli.test.ts`); then → Ready.; its ABC-096 wait discharged at `b20eb451`. **Pulled 2026-10-21** Backlog → In Development on owner go, SE `ticket-to-pr-ABC-161`) **2026-10-21: SE stopped before code (`…67e9ccc1`): A1 and A3 not meetable at `69610c5b` (P11 already red on base via ABC-174; P9d now green on base via `f6b63c1c`). Back to Backlog, DoR re-score owed; BA/PM `bapm-rework-ABC-161`.** **2026-10-21: BA/PM re-worded (`bapm-rework-ABC-161`, `…decision-b0020834`, readings `…observation-8425f6db` at `afc8d43a`): fix 1 KEPT, re-aimed per level (A1: P11-L1..L3 green on base → red on head, 3 of 3; P11/P11-L4 red on both; measured option `call < 3` at seed 7); A3: P9a–P9e green on base → red on head, 5 of 5; A2 unchanged; pointers refreshed (59/1987; ABC-096 discharged; ABC-168 disjoint). QE-101-a stays open (closes on A1). Promotion trigger + `LEVELS` rate re-cut. DoR 10/10 → Ready.** **Re-pulled 2026-10-21** Ready → In Development, SE `ticket-to-pr-ABC-161b`. SE tip `5e755bcb` (code `ee1818bb`); QE `qe-ABC-161`.
 
 
 
