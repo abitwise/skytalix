@@ -1,7 +1,7 @@
 ---
 id: ABC-179
 title: "Three test comments say what their source does not: san's unqualified \"a timing bar cannot fail\", two headers that quote `plans/nfr-catalog.md` for words it does not hold, and `cli.test.ts` pointing at `history-pane.nfr.test.ts:329` for a line at `:390` (QE-159-a, -d, -e)"
-status: in-development
+status: done
 column: Ready
 size: XS
 priority: P3
@@ -156,3 +156,35 @@ BA/PM, 2026-10-21. **Result: 10 of 10.**
 | 10 | no major unresolved blocker | **✅** none |
 
 Column moves after `Ready` are the Orchestrator's.
+
+## QE
+
+QE/E2E, 2026-10-21 (subtask `qe-ABC-179`). I reviewed tip `a7d64e07` (code `dd131b71`) against base `ccccc6bb` and ran every
+reading myself in `../wt-qe-ABC-179`. I read the four comments and the catalog before opening the SE's notes. The detail
+is in `.grugops/context/qe-ABC-179/notes/`, with the verdict in `…decision-5603b830` and the gaps in `…observation-42fba2a4`.
+
+**Verdict: PASS_WITH_GAPS.** All four criteria are MET. Both gaps are INFO, and neither blocks.
+
+- **`A1`:** the page command prints nothing at the tip. At base it prints the san sentence. MET.
+- **`A2`:** the command prints nothing at the tip. At base it prints the status-panel and history-pane sentences. On the QE
+  read, none of the three sentences that name the catalog holds a quoted span. San's attributions are at `plans/nfr-catalog.md`
+  `:555-556` ("held by nothing in the repo") and `:552-554` with `:558` (the count). The two headers credit the catalog
+  only with the move, at `:25` and `:49` ("OFF THE CLOCK AND ONTO A COUNT"). Their headroom figures are their own, and
+  their sources are `ABC-016`'s page `:365` (20x) and `ABC-017`'s page `:771`. MET.
+- **`A3`:** the grep exits 1. The pointer's prefix, `expect(runtimeImporters).toEqual(`, reaches the equality at `:390`
+  first, and the `R5` pin at `:511` second. MET.
+- **`A4`:** the diff is exactly the four files, at 2/2 and 3/3 (`cli.test.ts` 3/3, net 0). Every changed line is inside
+  the header `/** */` block or is a `//` line inside `A12`. Parsed with `removeComments`, all 98 `src/*.ts` files print
+  identically at base and tip. A planted one-token change shows a difference, so that result is not vacuous. The per-file
+  counts (heap 128, same worktree) are byte-identical: 59 files, 1987 tests, 0 skips. MET.
+- **Gates (tip):** lint, typecheck, build and `npm test` exit 0 (1987/1987), and `last-run.json` reads `success: true`.
+  Skip count 0, and integrity reports `No findings.`. `CLI_DEEP` 11/11 and `PERFT_DEEP` 32/32.
+- **Gaps:**
+  - `QE-179-a` (INFO, pre-existing, outside this ticket's scope): status-panel `:10-12` says the `vi.mock`
+    file-scope lesson is "recorded in the catalog". I did not find it there. It is the same class as `QE-159-d`. Route:
+    BA/PM.
+  - `QE-179-b` (INFO): the pointer's `…` means a verbatim search for the whole span finds nothing, so the search key is
+    the prefix. No route.
+- **UAT waiver reading (AGENTS.md's form, `.snap` not filtered):**
+  `git diff --name-only dd131b71~1 dd131b71 | grep -v '\.test\.ts$' | grep '^src/'` is **empty**. No `.snap` changed.
+  Applying the waiver is the Orchestrator's job.

@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-21 09:30Z — Orchestrator: ABC-179 In Review → Done, merged to `main` with all gates passing; UAT waived. Dispatching `arch-ABC-163-adr` into the freed slot._
 _Updated: 2026-10-21 09:20Z — Orchestrator: ABC-180 In Development → In Review (SE code `acb52edf`, tip `d9c3cca3`; A1–A6 met; P6f green→red; 0 production lines). Dispatched `qe-ABC-180`. In Review is at 3/3._
 _Updated: 2026-10-21 09:15Z — Orchestrator: ABC-163 In Development → In Review (SE tip `dc4d4f15`; A1–A5 met; 0 src lines). Dispatched `qe-ABC-163`. Queued `arch-ABC-163-adr`: the page names the Architect as builder, so the Architect confirms the fold and the ADR-0036 line before merge._
 _Updated: 2026-10-21 09:10Z — Orchestrator: ABC-179 In Development → In Review (SE code `dd131b71`, tip `a7d64e07`; A1, A3 grep and A4 met; A2/A3 reads owed to QE; all gates green; 0 production lines). Dispatched `qe-ABC-179`._
@@ -936,10 +937,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 3/3)
+## In Review (WIP 2/3)
 - [ABC-180] A decoy book in A7's neutral cwd reds a cwd-first read with a module-URL fallback (P6f), and A7's stderr assertion names itself the detector  (BA/PM, XS, P3, epic: EPIC-005, since: 2026-10-21, **DoR 10/10**; cut in `bapm-cut-AR-162-FALLBACK` from AR-162-FALLBACK (G-1, G-2). Test-only, `src/cli.real-engine.test.ts`. Due before any `src/book-file.ts` edit or EPIC-006 packaging pull merges.)
 - [ABC-163] The clause (b) instrument fires nothing when a limb-1 holder changes what it reads: fold `ADR-0036` § S1 Ruling 2 (holders at base AND head) into `clause-b.mjs`  (BA/PM, S, P3, epic: —, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from AR-095-L1UNIT.)
-- [ABC-179] Three test comments say what their source does not: san's unqualified "a timing bar cannot fail", two headers quoting `plans/nfr-catalog.md` for words it does not hold, and `cli.test.ts` citing `history-pane.nfr.test.ts:329` for a line at `:390`  (BA/PM, XS, P3, epic: EPIC-002, since: 2026-10-21, **DoR 10/10**; cut in `bapm-rule-QE-159` from QE-159-a/-d/-e. Comment lines only; disjoint from ABC-161/ABC-168's `cli.test.ts` hunks.)
 
 
 
@@ -999,6 +999,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+- [ABC-179] Three test comments say what their source does not: san's unqualified "a timing bar cannot fail", two headers quoting `plans/nfr-catalog.md` for words it does not hold, and `cli.test.ts` citing `history-pane.nfr.test.ts:329` for a line at `:390`  (BA/PM, XS, P3, epic: EPIC-002, since: 2026-10-21, **DoR 10/10**; cut in `bapm-rule-QE-159` from QE-159-a/-d/-e. Comment lines only; disjoint from ABC-161/ABC-168's `cli.test.ts` hunks.) **DONE 2026-10-21:** merged after all gates passed. QE PASS_WITH_GAPS (`…5603b830`); QE-179-a (INFO: status-panel `vi.mock` lesson "recorded in the catalog" not found) goes to the next BA/PM hop. UAT waived (comments only).
 - [ABC-162] `ABC-095` `A7`'s real-engine child runs from the tree root, so a build that reads the book relative to the working directory passes `CLI_DEEP`  (BA/PM, XS, P3, epic: EPIC-005, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from AR-095-CWD.) **DONE 2026-10-21:** merged after all gates passed. QE PASS_WITH_GAPS (`…68554c31`). Security/NFR PASS_WITH_RISKS (`…06c147db`): AR-095-CWD closed; AR-162-FALLBACK (LOW, Orchestrator) opened for P6f; G-1/G-2 → BA/PM XS cut. UAT waived (test-only).
 - [ABC-159] Four `*.nfr.test.ts` headers carry a running tally of `plans/nfr-catalog.md` in words (three times, five times now, the sixth, twice), and the tallies disagree with each other  (BA/PM, XS, P3, epic: EPIC-002, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from QE-030-a. Waits: after ABC-096 merges (shares `src/history-pane.nfr.test.ts`); then → Ready.) **2026-10-17: its blocker, ABC-096's merge, discharged at `b20eb451` → Ready (fills Ready to 8/8). ABC-161 and ABC-164 are also unblocked but stay in Backlog: Ready is at its WIP limit.** **DONE 2026-10-21:** merged after all gates passed. QE PASS_WITH_GAPS (`…10545147`); gaps QE-159-a..g sent to BA/PM. UAT waived (header comments only).
 - [ABC-160] The book compiler's sha256 test never offers an expected hash that differs only in its FIRST character, so a check that compares a suffix passes it  (BA/PM, XS, P3, epic: EPIC-005, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from QE-155-a.) **DONE 2026-10-21:** merged after all gates passed. QE PASS_WITH_GAPS (`…1500918a`), 3 INFO gaps, QE-155-a closed. UAT waived (0 production lines).

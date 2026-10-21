@@ -1828,9 +1828,9 @@ describe("ABC-042 — the shape of what was delivered", () => {
   });
 
   it("A12 — the licence gained exactly the entry point, and the guard still equals", () => {
-    // The merged equality at `src/history-pane.nfr.test.ts:329` is what actually holds this; this
-    // row asserts the BOUND `A12` puts on the edit — one element, and the array is still a
-    // two-name list rather than a widened one.
+    // The merged equality `expect(runtimeImporters).toEqual(…)` in `src/history-pane.nfr.test.ts`
+    // is what actually holds this; this row asserts the BOUND `A12` puts on the edit — one element,
+    // and the array is still a two-name list rather than a widened one.
     const probe = sourceOf("history-pane.nfr.test.ts");
     const declared = probe.match(/const LICENSED_DRIVERS: readonly string\[\] = \[([^\]]*)\]/);
     if (declared === null) throw new Error("no LICENSED_DRIVERS list in the probe");
