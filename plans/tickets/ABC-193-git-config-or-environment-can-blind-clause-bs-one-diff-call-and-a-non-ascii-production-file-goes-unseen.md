@@ -1,8 +1,8 @@
 ---
 id: ABC-193
 title: "Git config or environment can blind clause (b)'s one diff call, and a production file whose name git quotes goes unseen (the `AR-191-GITENV` and `AR-191-QUOTEPATH` fix)"
-status: ready
-column: Ready
+status: in-development
+column: In Development
 size: XS
 priority: P3
 epic: —

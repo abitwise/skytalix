@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-21 by Orchestrator — owner go (`…717a2219`): `ABC-192` (SE `ticket-to-pr-ABC-192`) and `ABC-193` (Architect `arch-build-ABC-193`) Ready → In Development; Scribe `scribe-waiver-quotepath` puts `-c core.quotePath=false` into the owner's waiver form. Width 3. 47 merged worktrees removed (no `--force`); `wt-ABC-168`/`wt-qe-ABC-168` kept. GITENV stand-in empty. Ready 2/8 → 0/8, In Development 0/3 → 2/3._
 _Updated: 2026-10-21 by BA/PM (`bapm-cut-AR-191`, records only) — `AR-191-GITENV`'s fix cut, with `AR-191-QUOTEPATH` folded in (Security/NFR `…7c1f3590`; owner record `…eb401873`). `ABC-193` (Ready, XS, P3, DoR 10/10; builder Architect/Design; gates no merge; 0 `src/` lines). Clause (b)'s one diff call gains `--no-ext-diff --no-color --src-prefix=a/ --dst-prefix=b/`, every instrument git call reads `-c core.quotePath=false`, and a path git still C-quotes FIRES (disputed). `r2-mutants.sh` gains `ADD` (control) plus `G-COLOR`, `G-EXT`, `G-ENV`, `G-DRV`, `G-PFX`, `QU` and `QE2` (20 rows), with clone-local routes; `ADR-0036` § S1 gets a dated block retiring the GITENV stand-in. Base red is exactly 7 rows and 14 limb diffs, and each flag's red set is measured on a scratch prototype. Measured at cut: Security's C-quoted clause does not hold with the flag alone (`src/q"t.ts` is silent), so it is a criterion (`A6`). `AR-191-QUOTEPATH` has no close term in the ruling: the page reads it as the instrument half closing on QE's read, with the `AGENTS.md` waiver form owed outside the fence (the owner's text). Ready 1/8 → 2/8. Next free id: ABC-194._
 _Updated: 2026-10-21 by BA/PM (`bapm-rule-QE-176`, records only) — `ABC-176`'s QE gaps ruled (`…75bc28e0`). **QE-176-a + QE-176-b CUT → `ABC-192`** (Ready, XS, P3, DoR 10/10; test-only, `src/cli.test.ts`). It adds one parser-view row pinning `setup`'s `guard(…, process.stdout)`; M4 and a no-op stream go red (prototyped at `03ac8bc4`). It also adds one row pinning installed `vitest` 4.1.11, whose red message is the bump re-run list (capture arm, 7 reporter rows, the two RISK re-reads). `tools/`, `AGENTS.md` and new children are fenced (`N8_SPAWN` stays 28). **QE-176-c ACCEPTED** (`ABC-149` design; the seven hop-run rows kill both mutants). **QE-176-d:** dated erratum on `ABC-176` (A5 budget 18,432; A2 feasible; `bapm-cut-ABC-176` notes unsealed, sealed pointer published). Ready 0/8 → 1/8. Next free id: ABC-193._
 _Updated: 2026-10-21 by Orchestrator — `ABC-176` In Review → Done (merged; QE PASS_WITH_GAPS `…75bc28e0`; gates green 59/1992, skip capture as spelled 0 / refused arm prints nothing, CLI_DEEP 11/11, PERFT_DEEP 32/32; UAT waived; `AGENTS.md` 15,797 B). QE-176-a/-b (LOW) and -c/-d (INFO) to BA/PM `bapm-rule-QE-176`. In Review 0/3._
@@ -843,7 +844,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   one hop at pull, when it checks `Ready for Dev`'s exit at that moment; the row records the pull.
 
   HEADING FORMAT (spec §6.1): each column is an H2 heading carrying its live/limit WIP count,
-  e.g. `## In Development (WIP 0/3)` — the left number is how many tickets are in the column
+  e.g. `## In Development (WIP 2/3)` — the left number is how many tickets are in the column
   now, the right number is the limit from config. Unlimited columns read `(WIP unlimited)`;
   Blocked is visible and time-tracked (no WIP limit) and reads `(visible, time-tracked)`.
   INVARIANT: the column H2 headings and the rows of the `## Columns` table are the same 13 names in the
@@ -853,7 +854,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 0/3)
+    ## In Development (WIP 2/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
     ## In Review (WIP 0/3)
@@ -962,9 +963,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [EPIC-006] Game session and packaging  (owner: BA/PM, **size: XL — corrected from `L`; 9 tickets / 20 points across both halves, ~1.5x the 13 `L` was assigned, and it hit that ceiling BEFORE distribution was priced**, priority: P1, since: 2026-07-22, **BOTH HALVES NOW CUT: the runnable half `ABC-041`…`ABC-046` (2026-08-13) and the second half `ABC-100`…`ABC-102` (2026-08-16) — only THREE tickets, because the scope of packaging is a FUNCTION of a distribution channel nobody has chosen.** `ABC-100` cuts the DECISION, never the ANSWER: a superseding ADR per `ADR-0007` `D5`, on the owner's word, verbatim and dated. **Acceptance criterion 1 (`npx <package>`) remains unmeetable by any ticket. Recommendation NOT taken, standing for the owner: this should probably be two epics** — the halves share no dependency in either direction and their blockers differ in kind)
 - [EPIC-007] The engine speaks UCI, so a chess UI can play against it  (owner: BA/PM, size: M, priority: P1, since: 2026-10-18, **ACCEPTED 2026-10-18 (owner, `…c3e81a57`); private/UNLICENSED; Q12–Q15 answered; ABC-167..172 cut, DoR 10/10, next free id ABC-173** (lifts the UCI half of EPIC-004's non-goal; EPIC-004 not yet edited); proposed in `bapm-engine-plan` (`4a98860c`). Tickets RESERVED, no page cut: ABC-167 (S, session) → ABC-168 (XS, entry point, In Security/NFR); ABC-169 (XS, licence, outside v1, on Q8). Waits: the owner's answers to Q1–Q11 ("accept recommendations" suffices) and ADR-0044 acceptance.)
 
-## Ready (WIP 2/8)
-- [ABC-192] Nothing pins the stream `setup` hands the heap guard, and a vitest bump re-runs no capture arm (QE-176-a, QE-176-b)  (owner: software-engineer, size: XS, priority: P3, epic: —, since: 2026-10-21, DoR 10/10; cut in `bapm-rule-QE-176`. Test-only, `src/cli.test.ts`: a parser-view row (`setup` passes `process.stdout`) and a vitest-version row whose red names the re-run list. 0 children, `tools/` and `AGENTS.md` untouched. Gates no merge. Overlaps `ABC-189` in the same file, in a different block.)
-- [ABC-193] Git config or environment can blind clause (b)'s one diff call, and a production file whose name git quotes goes unseen (AR-191-GITENV + AR-191-QUOTEPATH fix)  (owner: architect-design, size: XS, priority: P3, epic: —, since: 2026-10-21, DoR 10/10; cut in `bapm-cut-AR-191`. Builder Architect/Design. Four files (`clause-b.mjs`, `r2-mutants.sh`, its `.out.txt`, `ADR-0036`); 0 `src/` lines. Gates no merge; the Orchestrator's GITENV stand-in and the QUOTEPATH dispute-line rule run until it lands. QE reads A2–A4 to close AR-191-GITENV, and QU/QE2/A6 for QUOTEPATH's instrument half. The `AGENTS.md` waiver form is owed outside it.)
+## Ready (WIP 0/8)
 
 
 
@@ -980,7 +979,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 2/3)
+- [ABC-192] Nothing pins the stream `setup` hands the heap guard, and a vitest bump re-runs no capture arm (QE-176-a, QE-176-b)  (owner: software-engineer, size: XS, priority: P3, epic: —, since: 2026-10-21, in dev 2026-10-21 (SE `ticket-to-pr-ABC-192`), DoR 10/10; cut in `bapm-rule-QE-176`. Test-only, `src/cli.test.ts`: a parser-view row (`setup` passes `process.stdout`) and a vitest-version row whose red names the re-run list. 0 children, `tools/` and `AGENTS.md` untouched. Gates no merge. Overlaps `ABC-189` in the same file, in a different block.)
+- [ABC-193] Git config or environment can blind clause (b)'s one diff call, and a production file whose name git quotes goes unseen (AR-191-GITENV + AR-191-QUOTEPATH fix)  (owner: architect-design, size: XS, priority: P3, epic: —, since: 2026-10-21, in dev 2026-10-21 (Architect `arch-build-ABC-193`), DoR 10/10; cut in `bapm-cut-AR-191`. Builder Architect/Design. Four files (`clause-b.mjs`, `r2-mutants.sh`, its `.out.txt`, `ADR-0036`); 0 `src/` lines. Gates no merge; the Orchestrator's GITENV stand-in and the QUOTEPATH dispute-line rule run until it lands. QE reads A2–A4 to close AR-191-GITENV, and QU/QE2/A6 for QUOTEPATH's instrument half. The `AGENTS.md` waiver form is owed outside it.)
 
 
 
