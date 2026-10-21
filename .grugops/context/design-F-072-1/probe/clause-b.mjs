@@ -208,7 +208,7 @@ function changedLines(b, h) {
   const removed = new Map();
   let file = null;
   let old = null;
-  for (const line of git("diff", "-U0", "--no-renames", b, h, "--", "src").split("\n")) {
+  for (const line of git("diff", "-U0", "--no-renames", "--text", "--no-textconv", b, h, "--", "src").split("\n")) {
     if (line.startsWith("--- ")) {
       const p = line.slice(4);
       old = p === "/dev/null" ? null : p.replace(/^a\//, "");
