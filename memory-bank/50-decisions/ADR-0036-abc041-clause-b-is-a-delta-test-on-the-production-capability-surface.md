@@ -431,3 +431,12 @@ changes.**
   false "fires". The fold owed under `AR-095-L1UNIT` should include this case as a plant that does not
   fire.
 - **`AR-095-L1UNIT` is still open.** `clause-b.mjs` is unchanged since `341da4c1`.
+
+#### Ruling 2 folded — 2026-10-21 (`ABC-163`)
+
+Commit `87d3897d` edits `.grugops/context/design-F-072-1/probe/clause-b.mjs` **in place**, so the canonical
+pointer above is unchanged. Readings taken before it reproduce from that file at `341da4c1`. For limb 1, (b1) now also
+fires on any `+` line, comments included, in a file that holds limb 1 at `<base>` or `<head>`. The output prints
+"fired by Ruling 2". With no holder at either end, Ruling 2 adds nothing and runs no pathspec diff. Limbs 2 and 3
+print byte-identical output. **The by-hand Ruling 2 check is no longer needed.** `AR-095-L1UNIT` closes when QE reads
+`A1`–`A3` with the plants (readings: `.grugops/context/ticket-to-pr-ABC-163/notes/`).
