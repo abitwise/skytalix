@@ -11,16 +11,16 @@
   {
    "at": "0",
    "lines": [
-    "40997 /opt/homebrew/Cellar/node/26.11.1/bin/node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/product-template/template/dist/main-worker.js",
-    "50110 /opt/homebrew/Cellar/node/26.11.1/bin/node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/product-template/template/dist/main-worker.js"
+    "40997 <foreign: node>",
+    "50110 <foreign: node>"
    ]
   }
  ],
  "lastForeign": {
   "at": "181",
   "lines": [
-   "40997 /opt/homebrew/Cellar/node/26.11.1/bin/node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/product-template/template/dist/main-worker.js",
-   "50110 /opt/homebrew/Cellar/node/26.11.1/bin/node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/product-template/template/dist/main-worker.js"
+   "40997 <foreign: node>",
+   "50110 <foreign: node>"
   ]
  },
  "load1": {

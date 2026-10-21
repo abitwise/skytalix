@@ -11,42 +11,42 @@
   {
    "at": "0",
    "lines": [
-    "80007 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792444948463-z7qhyz.sh 2>/dev/null || true && shopt -u extglob "
+    "80007 <foreign: shell>"
    ]
   }
  ],
  "lastForeign": {
   "at": "112",
   "lines": [
-   "80862 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792444948463-z7qhyz.sh 2>/dev/null || true && shopt -u extglob ",
-   "85346 bash /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/scripts/probe.sh --context oeselg-lab --namespace seaweedfs --image chrislusf/"
+   "80862 <foreign: shell>",
+   "85346 <foreign: shell>"
   ]
  },
  "distinct": [
-  "'cd /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab && gh pr checks 50 --repo abitwise/homelab 2>&1 | awk '\"'\"'{print $1,$2}'\"'\"' | sort -u; gh pr merge 50 --repo abitwise/homelab --squash --delete-branch 2>&1 | tail -3; gh pr view 50 --repo abitwise/homelab --json state,mergeCommit -q '\"'\"'.state+\" \"+(.mergeCommit.oid//\"\")'\"'\"'' < /dev/null && pwd -P >| /tmp/claude-dcbb-cwd",
-  "e && { \\builtin unalias -- 'unsetenv'; \\builtin unset -f -- 'unsetenv'; } >/dev/null 2>&1 || true && eval 'cd /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab && git switch -q main && git pull -q --ff-only && git log --oneline -1 && git branch -D phase8/08-05-egress-verify -q; scripts/verify.sh --only egress-proxy; echo \"exit=$?\"' < /dev/null && pwd -P >| /tmp/claude-b3c9-cwd",
-  "tps://api.github.com/zen 2>/dev/null || true)\\012d=$(curl -s -o /dev/null -w '%{http_connect}' --max-time 15 --proxy \"$P\" https://www.kernel.org/ 2>/dev/null || true)\\012p=$(curl -s -o /dev/null -w '%{http_connect}' --max-time 15 --proxy \"$P\" -k https://192.168.1.112:6443/ 2>/dev/null || true)\\012printf 'allowed=%s denied=%s private=%s\\n' \"$a\" \"$d\" \"$p\" sh http://egress-proxy.egress-proxy.svc:3128",
-  "roeselg/Projects/private/oeselg-labs/platform/repos/homelab && S=/private/tmp/claude-501/-Users-olgeroeselg-Projects-private-oeselg-labs-platform/8ad735cb-c045-40d5-a10f-d83160e80f8f/scratchpad; scripts/verify.sh > $S/full.out 2>&1; echo \"exit=$?\"; cat $S/full.out; kubectl --context oeselg-lab get pods -A -l oeselg.tech/probe=true --no-headers | wc -l' < /dev/null && pwd -P >| /tmp/claude-701e-cwd",
-  "bash /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/scripts/probe.sh --context oeselg-lab --namespace lab-verify --image curlimages/curl:8.23.0@sha256:a134550be58ab783810e613ae96fd253c38f7bdd16d9bf9be350700c7a29ac06 --run-as 100 -- curl -sS -o /dev/null -w %{http_code} --max-time 10 http://cloudflared-metrics.cloudflared.svc:2000/ready",
-  "bash /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/scripts/probe.sh --context oeselg-lab --namespace lab-verify --image curlimages/curl:8.23.0@sha256:a134550be58ab783810e613ae96fd253c38f7bdd16d9bf9be350700c7a29ac06 --run-as 100 -- curl -sS -o /dev/null -w %{http_code} --max-time 10 http://keycloak-service.keycloak.svc:9000/health/ready",
-  "bash /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/scripts/probe.sh --context oeselg-lab --namespace lab-verify --image curlimages/curl:8.23.0@sha256:a134550be58ab783810e613ae96fd253c38f7bdd16d9bf9be350700c7a29ac06 --run-as 100 -- curl -sS -o /dev/null -w %{http_code} --max-time 10 http://seaweedfs-all-in-one.seaweedfs.svc:8333/",
-  "9bf9be350700c7a29ac06 --run-as 100 -- sh -c curl -fsS --max-time 10 http://otel-collector.observability.svc:8888/metrics | awk '\\012  /^otelcol_receiver_accepted_spans/ { a += $NF }\\012  /^otelcol_receiver_accepted_metric_points/ { m += $NF }\\012  /^otelcol_receiver_accepted_log_records/ { l += $NF }\\012  /^otelcol_exporter_send_failed/ { f += $NF }\\012  END { printf \"%d %d %d %d\\n\", a, m, l, f }'",
-  "rm/repos/homelab/scripts/probe.sh --context oeselg-lab --namespace lab-verify --image ghcr.io/open-telemetry/opentelemetry-collector-contrib/telemetrygen:v0.162.0@sha256:5350f77dbc914034321dc7629058e141996c8dc2cdde076d281e573efee1a67e --run-as 65532 -- /telemetrygen traces --traces 1 --otlp-http --otlp-insecure --otlp-endpoint otel-collector.observability.svc:4318 --service verify-1792532210-21026",
-  "/repos/homelab/scripts/probe.sh --context oeselg-lab --namespace lab-verify --image ghcr.io/open-telemetry/opentelemetry-collector-contrib/telemetrygen:v0.162.0@sha256:5350f77dbc914034321dc7629058e141996c8dc2cdde076d281e573efee1a67e --run-as 65532 -- /telemetrygen metrics --metrics 1 --otlp-http --otlp-insecure --otlp-endpoint otel-collector.observability.svc:4318 --service verify-1792532210-21026",
-  "atform/repos/homelab/scripts/probe.sh --context oeselg-lab --namespace lab-verify --image ghcr.io/open-telemetry/opentelemetry-collector-contrib/telemetrygen:v0.162.0@sha256:5350f77dbc914034321dc7629058e141996c8dc2cdde076d281e573efee1a67e --run-as 65532 -- /telemetrygen logs --logs 1 --otlp-http --otlp-insecure --otlp-endpoint otel-collector.observability.svc:4318 --service verify-1792532210-21026",
-  "-max-time 10 -G http://lgtm.observability.svc:3100/loki/api/v1/query_range \\\\012      --data-urlencode \"query={service_name=\\\"$R\\\"}\" --data-urlencode since=1h 2>/dev/null \\\\012      | grep -q '\"result\":\\[{' && l=1\\012  fi\\012  [ \"$t$p$l\" = 111 ] && break\\012  [ \"$(date +%s)\" -ge \"$end\" ] && break\\012  sleep 3\\012done\\012printf 'trace=%s metric=%s log=%s\\n' \"$t\" \"$p\" \"$l\" sh verify-1792532210-21026",
-  "bash /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/scripts/probe.sh --context oeselg-lab --namespace smoke-proof-jobs --image ghcr.io/cloudnative-pg/postgresql:18.6-system-trixie@sha256:5efb66993894055f0aa50bd94337c6c4ff2e2129f4d433c527151aebbf283fb0 --run-as 26 --env-from-secret smoke-env -- sh -c PGSSLMODE=disable psql \"$DATABASE_URL\" -tAc \"select 1\"",
-  " /tmp/o -w '%{http_code}' --max-time 20 --aws-sigv4 aws:amz:us-east-1:s3 \\\\012    --user \"$S3_ACCESS_KEY_ID:$S3_SECRET_ACCESS_KEY\" -H 'x-amz-content-sha256: UNSIGNED-PAYLOAD' \"$@\" \"$u\"\\012}\\012a=$(s -X PUT --data-binary \"verify $1\")\\012b=$(s)\\012body=$(cat /tmp/o)\\012d=$(s -X DELETE)\\012printf '%s %s %s\\n' \"$a\" \"$b\" \"$d\"\\012[ \"$body\" = \"verify $1\" ] || echo BODY-MISMATCH sh verify-1792532210-21026",
-  "jects/private/oeselg-labs/platform/repos/homelab/scripts/probe.sh --context oeselg-lab --namespace smoke-proof-jobs --image curlimages/curl:8.23.0@sha256:a134550be58ab783810e613ae96fd253c38f7bdd16d9bf9be350700c7a29ac06 --run-as 100 --env-from-configmap smoke-config -- sh -c curl -fsS --max-time 20 \"$OIDC_ISSUER_URL/.well-known/openid-configuration\" \\\\012  | sed -n 's/.*\"issuer\":\"\\([^\"]*\\)\".*/\\1/p'",
-  "Projects/private/oeselg-labs/platform/repos/homelab/scripts/probe.sh --context oeselg-lab --namespace smoke-proof-jobs --image node:26-slim@sha256:193fe51b64e77981119c98c2002c9e32a70e2f006fb4d25068ce0558998917f0 --run-as 1000 --env-from-configmap smoke-config -- node -e fetch(process.env.OIDC_ISSUER_URL + \"/.well-known/openid-configuration\").then((r) => r.json()).then((j) => console.log(j.issuer))",
-  "bash /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/scripts/probe.sh --context oeselg-lab --namespace smoke-proof-sample --image ghcr.io/cloudnative-pg/postgresql:18.6-system-trixie@sha256:5efb66993894055f0aa50bd94337c6c4ff2e2129f4d433c527151aebbf283fb0 --run-as 26 --env-from-secret smoke-env -- sh -c PGSSLMODE=disable psql \"$DATABASE_URL\" -tAc \"select 1\"",
-  "cts/private/oeselg-labs/platform/repos/homelab/scripts/probe.sh --context oeselg-lab --namespace smoke-proof-sample --image curlimages/curl:8.23.0@sha256:a134550be58ab783810e613ae96fd253c38f7bdd16d9bf9be350700c7a29ac06 --run-as 100 --env-from-configmap smoke-config -- sh -c curl -fsS --max-time 20 \"$OIDC_ISSUER_URL/.well-known/openid-configuration\" \\\\012  | sed -n 's/.*\"issuer\":\"\\([^\"]*\\)\".*/\\1/p'",
-  "ojects/private/oeselg-labs/platform/repos/homelab/scripts/probe.sh --context oeselg-lab --namespace smoke-proof-sample --image node:26-slim@sha256:193fe51b64e77981119c98c2002c9e32a70e2f006fb4d25068ce0558998917f0 --run-as 1000 --env-from-configmap smoke-config -- node -e fetch(process.env.OIDC_ISSUER_URL + \"/.well-known/openid-configuration\").then((r) => r.json()).then((j) => console.log(j.issuer))",
-  "bash /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab/scripts/probe.sh --context oeselg-lab --namespace smoke-skeleton-sample --image ghcr.io/cloudnative-pg/postgresql:18.6-system-trixie@sha256:5efb66993894055f0aa50bd94337c6c4ff2e2129f4d433c527151aebbf283fb0 --run-as 26 --env-from-secret smoke-env -- sh -c PGSSLMODE=disable psql \"$DATABASE_URL\" -tAc \"select 1\"",
-  "/private/oeselg-labs/platform/repos/homelab/scripts/probe.sh --context oeselg-lab --namespace smoke-skeleton-sample --image curlimages/curl:8.23.0@sha256:a134550be58ab783810e613ae96fd253c38f7bdd16d9bf9be350700c7a29ac06 --run-as 100 --env-from-configmap smoke-config -- sh -c curl -fsS --max-time 20 \"$OIDC_ISSUER_URL/.well-known/openid-configuration\" \\\\012  | sed -n 's/.*\"issuer\":\"\\([^\"]*\\)\".*/\\1/p'",
-  "cts/private/oeselg-labs/platform/repos/homelab/scripts/probe.sh --context oeselg-lab --namespace smoke-skeleton-sample --image node:26-slim@sha256:193fe51b64e77981119c98c2002c9e32a70e2f006fb4d25068ce0558998917f0 --run-as 1000 --env-from-configmap smoke-config -- node -e fetch(process.env.OIDC_ISSUER_URL + \"/.well-known/openid-configuration\").then((r) => r.json()).then((j) => console.log(j.issuer))",
-  "om-secret keycloak-bootstrap-admin -- sh -c K=/opt/keycloak/bin/kcadm.sh\\012$K config credentials --config /tmp/kc.cfg --server http://keycloak-service.keycloak.svc:8080 \\\\012  --realm master --user \"$username\" --password \"$password\" >/dev/null || exit 1\\012out=$($K get realms --config /tmp/kc.cfg --fields realm) || exit 1\\012printf '%s\\n' \"$out\" | sed -n 's/.*\"realm\" *: *\"\\([^\"]*\\)\".*/realm=\\1/p'",
-  "latform/repos/homelab/scripts/probe.sh --context oeselg-lab --namespace seaweedfs --image chrislusf/seaweedfs:4.48@sha256:4e61d15fd35994cb1e43e1e553dff106794841fd9a99ade2fc8c8bfce4d7872d --run-as 1000 -- sh -c printf 's3.bucket.list\\n' | weed shell -master=\"$1\" -filer=\"$2\" 2>&1 | awk '/size:/ { print \"bucket=\" $1 }' sh seaweedfs-all-in-one.seaweedfs.svc:9333 seaweedfs-all-in-one.seaweedfs.svc:8888"
+  "<foreign: other>",
+  "<foreign: other>",
+  "<foreign: curl>",
+  "<foreign: kubectl>",
+  "<foreign: curl>",
+  "<foreign: curl>",
+  "<foreign: curl>",
+  "<foreign: curl>",
+  "<foreign: other>",
+  "<foreign: other>",
+  "<foreign: other>",
+  "<foreign: other>",
+  "<foreign: shell>",
+  "<foreign: other>",
+  "<foreign: curl>",
+  "<foreign: other>",
+  "<foreign: shell>",
+  "<foreign: curl>",
+  "<foreign: other>",
+  "<foreign: shell>",
+  "<foreign: curl>",
+  "<foreign: other>",
+  "<foreign: other>",
+  "<foreign: other>"
  ],
  "load1": {
   "first": "2.65",

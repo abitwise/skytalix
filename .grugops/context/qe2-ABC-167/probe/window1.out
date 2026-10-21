@@ -11,20 +11,20 @@
   {
    "at": "1",
    "lines": [
-    "91174 /Applications/iTerm.app/Contents/XPCServices/pidinfo.xpc/Contents/MacOS/pidinfo --git-state /Users/olgeroeselg/Projects/private/oeselg-labs/platform 4 1"
+    "91174 <foreign: other>"
    ]
   },
   {
    "at": "2",
    "lines": [
-    "91174 /Applications/iTerm.app/Contents/XPCServices/pidinfo.xpc/Contents/MacOS/pidinfo --git-state /Users/olgeroeselg/Projects/private/oeselg-labs/platform 4 1"
+    "91174 <foreign: other>"
    ]
   }
  ],
  "lastForeign": {
   "at": "83",
   "lines": [
-   "94088 /Applications/iTerm.app/Contents/XPCServices/pidinfo.xpc/Contents/MacOS/pidinfo --git-state /Users/olgeroeselg/Projects/private/oeselg-labs/platform 4 1"
+   "94088 <foreign: other>"
   ]
  },
  "load1": {

@@ -11,37 +11,37 @@
   {
    "at": "0",
    "lines": [
-    "86171 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792444886511-0yjvn6.sh 2>/dev/null || true && shopt -u extglob ",
-    "86174 npm exec vitest run install/mode-census.test.ts scripts/check-foundation-guards.test.ts scripts/state-path-scan.test.ts      ",
-    "86175 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792444886511-0yjvn6.sh 2>/dev/null || true && shopt -u extglob ",
-    "86258 node /Users/olgeroeselg/Projects/public/grugops/node_modules/.bin/vitest run install/mode-census.test.ts scripts/check-foundation-guards.test.ts scripts/s",
-    "86261 /opt/homebrew/Cellar/node/26.11.1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/public/grugops/node_modules/vitest/sup"
+    "86171 <foreign: shell>",
+    "86174 <foreign: vitest>",
+    "86175 <foreign: shell>",
+    "86258 <foreign: vitest>",
+    "86261 <foreign: vitest>"
    ]
   }
  ],
  "lastForeign": {
   "at": "181",
   "lines": [
-   " 9848 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792444886511-0yjvn6.sh 2>/dev/null || true && shopt -u extglob ",
-   "11289 npm exec vitest run --exclude **/scripts/e2e/**     ",
-   "11315 node /Users/olgeroeselg/Projects/public/grugops/node_modules/.bin/vitest run --exclude **/scripts/e2e/**",
-   "63632 /opt/homebrew/Cellar/node/26.11.1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/public/grugops/node_modules/vitest/sup"
+   " 9848 <foreign: shell>",
+   "11289 <foreign: vitest>",
+   "11315 <foreign: vitest>",
+   "63632 <foreign: vitest>"
   ]
  },
  "distinct": [
-  "ined;\\012      // both pins move in one commit for the same reason.\\012    ).toBe(64);'\"'\"''\"'\"''\"'\"')\\012EOF\\012git add -N scripts/state-path-scan.ts scripts/state-path-scan.js 2>/dev/null; npx vitest run install/mode-census.test.ts scripts/check-foundation-guards.test.ts scripts/state-path-scan.test.ts 2>&1 | grep -E '\"'\"'×|Tests |AssertionError'\"'\"' | head -20' && pwd -P >| /tmp/claude-822f-cwd",
-  "npm exec vitest run install/mode-census.test.ts scripts/check-foundation-guards.test.ts scripts/state-path-scan.test.ts      ",
-  "node /Users/olgeroeselg/Projects/public/grugops/node_modules/.bin/vitest run install/mode-census.test.ts scripts/check-foundation-guards.test.ts scripts/state-path-scan.test.ts",
-  "/opt/homebrew/Cellar/node/26.11.1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/public/grugops/node_modules/vitest/suppress-warnings.cjs --conditions node --conditions development --max-old-space-size=1024 /Users/olgeroeselg/Projects/public/grugops/node_modules/vitest/dist/workers/forks.js",
-  " (D-15);\\012  named .planning/ exclusion (D-11); latin1 reads of git ls-files; exit 0/1/2\\012- pins re-derived with dated reasons: SCRIPTS_TEST_FILE_COUNT 73->74, NON_TEST_MODULE_COUNT\\012  99->100, TRIPWIRE_MODULES 73->74, scripts-scoped reader 63->64 (and 63*3 -> 64*3)\\012\\012Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\" && git rev-parse --short HEAD' && pwd -P >| /tmp/claude-69c7-cwd",
-  "npm exec vitest run scripts/state-path-scan.test.ts install/mode-census.test.ts     ",
-  "node /Users/olgeroeselg/Projects/public/grugops/node_modules/.bin/vitest run scripts/state-path-scan.test.ts install/mode-census.test.ts",
-  "st.ts install/mode-census.test.ts install/message-references.test.ts scripts/state-path-scan.test.ts 2>&1 | grep -E '\"'\"'Tests |Test Files|×'\"'\"'; npm run freshness 2>&1 | tail -3; echo fresh=$?; for s in check-foundation-guards check-nul-bytes check-uat-oracles; do node scripts/$s.js >/dev/null 2>&1; echo \"$s exit=$?\"; done; git branch --show-current' < /dev/null && pwd -P >| /tmp/claude-7e7a-cwd",
-  "npm exec vitest run install/installer-prune.test.ts install/uninstall-removal.test.ts install/state-layout.test.ts install/path-spelling-census.test.ts install/mode-census.test.ts install/message-references.test.ts scripts/state-path-scan.test.ts          ",
-  "node /Users/olgeroeselg/Projects/public/grugops/node_modules/.bin/vitest run install/installer-prune.test.ts install/uninstall-removal.test.ts install/state-layout.test.ts install/path-spelling-census.test.ts install/mode-census.test.ts install/message-references.test.ts scripts/state-path-scan.test.ts",
-  "resh_exit=$?; npx vitest run --exclude '\"'\"'**/scripts/e2e/**'\"'\"' > /private/tmp/claude-501/-Users-olgeroeselg-Projects-public-grugops/00f419dd-b581-4528-bdb3-b92c2575f8c0/scratchpad/full-run.log 2>&1; echo \"full_exit=$?\" >> /private/tmp/claude-501/-Users-olgeroeselg-Projects-public-grugops/00f419dd-b581-4528-bdb3-b92c2575f8c0/scratchpad/full-run.log' < /dev/null && pwd -P >| /tmp/claude-cc55-cwd",
-  "npm exec vitest run --exclude **/scripts/e2e/**     ",
-  "node /Users/olgeroeselg/Projects/public/grugops/node_modules/.bin/vitest run --exclude **/scripts/e2e/**"
+  "<foreign: vitest>",
+  "<foreign: vitest>",
+  "<foreign: vitest>",
+  "<foreign: vitest>",
+  "<foreign: other>",
+  "<foreign: vitest>",
+  "<foreign: vitest>",
+  "<foreign: other>",
+  "<foreign: vitest>",
+  "<foreign: vitest>",
+  "<foreign: vitest>",
+  "<foreign: vitest>",
+  "<foreign: vitest>"
  ],
  "load1": {
   "first": "3.57",

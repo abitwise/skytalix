@@ -12,18 +12,18 @@ before: procs      467 load { 2.93 3.60 4.67 } 2026-10-19T19:56:26Z
   {
    "at": "3",
    "lines": [
-    "25221 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792436883899-bb65ys.sh 2>/dev/null || true && shopt -u extglob "
+    "25221 <foreign: shell>"
    ]
   }
  ],
  "lastForeign": {
   "at": "3",
   "lines": [
-   "25221 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792436883899-bb65ys.sh 2>/dev/null || true && shopt -u extglob "
+   "25221 <foreign: shell>"
   ]
  },
  "distinct": [
-  "/opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792436883899-bb65ys.sh 2>/dev/null || true && shopt -u extglob 2>/dev"
+  "<foreign: shell>"
  ],
  "load1": {
   "first": "2.93",

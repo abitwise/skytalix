@@ -23,8 +23,8 @@ Hand-authored and unsealed. Nothing was timed and nothing was estimated.
   2026-10-18T21:06:00Z for 180 s, with 181 one-second polls.
   - **Foreign vitest:** none in the window. One had been running about 13 minutes earlier, during the gate run
     (`Projects/public/grugops`, `vitest run --exclude **/scripts/e2e/**`).
-  - **`oeselg-labs/platform`:** present in 22 of 181 polls, up to second 83. Each time it was iTerm's `pidinfo
-    --git-state /Users/olgeroeselg/Projects/private/oeselg-labs/platform`. That is a terminal open in that repo, so
+  - **`oeselg-labs/platform`:** present in 22 of 181 polls, up to second 83. Each time it was iTerm's
+    `<foreign: other>`, naming `<private-repo>`. That is a terminal open in that repo, so
     the window fails the brief's test. I did not explain it away.
   - **Load:** load1 was 6.21–14.29 (first 13.95, last 10.57). That is above `NFR-008`'s load1 ≤ 8 for most of the
     window, so even a quiet process list would not have given an admissible reading.

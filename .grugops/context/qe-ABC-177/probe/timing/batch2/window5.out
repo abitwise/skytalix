@@ -11,21 +11,21 @@
   {
    "at": "0",
    "lines": [
-    "58330 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792444948463-z7qhyz.sh 2>/dev/null || true && shopt -u extglob "
+    "58330 <foreign: shell>"
    ]
   }
  ],
  "lastForeign": {
   "at": "181",
   "lines": [
-   "63822 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792444948463-z7qhyz.sh 2>/dev/null || true && shopt -u extglob "
+   "63822 <foreign: shell>"
   ]
  },
  "distinct": [
-  "shopt -u extglob 2>/dev/null || true && { \\builtin unalias -- 'unsetenv'; \\builtin unset -f -- 'unsetenv'; } >/dev/null 2>&1 || true && eval 'cd /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab; gh pr checks 51 --repo abitwise/homelab --watch --fail-fast 2>&1 | tail -8' < /dev/null && pwd -P >| /tmp/claude-2247-cwd",
-  ">/dev/null || true && { \\builtin unalias -- 'unsetenv'; \\builtin unset -f -- 'unsetenv'; } >/dev/null 2>&1 || true && eval 'cd /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab; gh pr checks 51 --repo abitwise/homelab 2>&1 | awk '\"'\"'{print $1,$2}'\"'\"'; gh pr merge 51 --repo abitwise/homelab --squash --delete-branch 2>&1 | tail -3' < /dev/null && pwd -P >| /tmp/claude-624d-cwd",
-  "ias -- 'unsetenv'; \\builtin unset -f -- 'unsetenv'; } >/dev/null 2>&1 || true && eval 'cd /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/homelab; gh pr view 51 --repo abitwise/homelab --json state,mergeCommit --jq '\"'\"'.state, .mergeCommit.oid'\"'\"'; git switch main 2>&1 | tail -1; git pull --ff-only 2>&1 | tail -2; git log --oneline -2' < /dev/null && pwd -P >| /tmp/claude-b5b0-cwd",
-  "ontext oeselg-lab reconcile source git flux-system 2>&1 | tail -2; flux --context oeselg-lab reconcile kustomization tenants --with-source 2>&1 | tail -3; flux --context oeselg-lab reconcile helmrelease tenant-proof-jobs -n flux-system 2>&1 | tail -3; sleep 5; flux --context oeselg-lab reconcile helmrelease arc-proof-jobs -n flux-system 2>&1 | tail -3' < /dev/null && pwd -P >| /tmp/claude-49fe-cwd"
+  "<foreign: other>",
+  "<foreign: other>",
+  "<foreign: other>",
+  "<foreign: kubectl>"
  ],
  "load1": {
   "first": "2.66",

@@ -13,10 +13,10 @@ uptime:  8:25  up 9 days, 10:37, 12 users, load averages: 3.48 3.94 4.15
 env VITEST_ vars: 0
 2026-10-12T05:25:28Z initial idle 60s
 2026-10-12T05:26:28Z WAIT foreign runner present:
-52506   node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_yaml@2.9.1_/node_modules/vitest/vitest.mjs run --project integration packages/auth/test/pg-store
-52471   /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalias -- 'unsetenv'; \builtin unset -f -- 'unsetenv'; } >/dev/null 2>&1 || true && eval 'cd /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared && time pnpm exec vitest run --project integration packages/auth/test/pg-store 2>&1 | grep -E "✓|✗|×|FAIL|Tests|passed|failed" | head -40' < /dev/null && pwd -P >| /tmp/claude-5e65-cwd
-52475   pnpm exec vitest run --project integration packages/auth/test/pg-store
-52477   /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalias -- 'unsetenv'; \builtin unset -f -- 'unsetenv'; } >/dev/null 2>&1 || true && eval 'cd /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared && time pnpm exec vitest run --project integration packages/auth/test/pg-store 2>&1 | grep -E "✓|✗|×|FAIL|Tests|passed|failed" | head -40' < /dev/null && pwd -P >| /tmp/claude-5e65-cwd
-52537   /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_yaml@2.9.1_/node_modules/vitest/suppress-warnings.cjs --conditions node --conditions development /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_yaml@2.9.1_/node_modules/vitest/dist/workers/forks.js
-52490   /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project integration packages/auth/test/pg-store
+52506   <foreign: vitest>
+52471   <foreign: vitest>
+52475   <foreign: vitest>
+52477   <foreign: vitest>
+52537   <foreign: vitest>
+52490   <foreign: vitest>
 2026-10-12T05:26:38Z foreign runner gone; idling 20s

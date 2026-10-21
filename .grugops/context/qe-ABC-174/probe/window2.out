@@ -12,26 +12,26 @@ before: procs      499 load { 3.48 7.20 18.56 } 2026-10-19T19:21:24Z
   {
    "at": "2",
    "lines": [
-    "44455 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792437217402-hfzedr.sh 2>/dev/null || true && shopt -u extglob "
+    "44455 <foreign: shell>"
    ]
   }
  ],
  "lastForeign": {
   "at": "41",
   "lines": [
-   "44455 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792437217402-hfzedr.sh 2>/dev/null || true && shopt -u extglob ",
-   "44460 timeout 900 npx vitest run scripts/validate.test.ts scripts/check-audit-register.test.ts scripts/check-public-docs-vocabulary.test.ts scripts/generate-gua",
-   "44462 npm exec vitest run scripts/validate.test.ts scripts/check-audit-register.test.ts scripts/check-public-docs-vocabulary.test.ts scripts/generate-guarantees",
-   "44546 node /Users/olgeroeselg/Projects/public/grugops/node_modules/.bin/vitest run scripts/validate.test.ts scripts/check-audit-register.test.ts scripts/check-p",
-   "49230 /opt/homebrew/Cellar/node/26.11.1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/public/grugops/node_modules/vitest/sup"
+   "44455 <foreign: shell>",
+   "44460 <foreign: vitest>",
+   "44462 <foreign: vitest>",
+   "44546 <foreign: vitest>",
+   "49230 <foreign: vitest>"
   ]
  },
  "distinct": [
-  "/opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792437217402-hfzedr.sh 2>/dev/null || true && shopt -u extglob 2>/dev",
-  "timeout 900 npx vitest run scripts/validate.test.ts scripts/check-audit-register.test.ts scripts/check-public-docs-vocabulary.test.ts scripts/generate-guarantee",
-  "npm exec vitest run scripts/validate.test.ts scripts/check-audit-register.test.ts scripts/check-public-docs-vocabulary.test.ts scripts/generate-guarantees.test.",
-  "node /Users/olgeroeselg/Projects/public/grugops/node_modules/.bin/vitest run scripts/validate.test.ts scripts/check-audit-register.test.ts scripts/check-public-",
-  "/opt/homebrew/Cellar/node/26.11.1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/public/grugops/node_modules/vitest/suppress-"
+  "<foreign: shell>",
+  "<foreign: vitest>",
+  "<foreign: vitest>",
+  "<foreign: vitest>",
+  "<foreign: vitest>"
  ],
  "load1": {
   "first": "3.48",
