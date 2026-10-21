@@ -1,0 +1,5 @@
+QB  (base->QB: cli.ts gains import of new src/qé.ts): L1 limb 1: FIRES (disputed: unresolved, the fail-safe)
+QE2 (QB->QE2: the reached src/qé.ts gains node:fs + fetch): L1 limb 1: does not fire; L3 limb 3: does not fire
+QE2 with core.quotePath=false (env):                  L1 limb 1: FIRES
+waiver form on QE2 (AGENTS.md, verbatim pipe): [] (empty = waiver applies)
+raw --name-only on QE2: "src/q\303\251.ts"
