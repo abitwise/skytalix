@@ -1,7 +1,7 @@
 ---
 id: ABC-162
 title: "`ABC-095` `A7`'s real-engine child runs from the tree root, so a build that reads the book relative to the working directory passes `CLI_DEEP`"
-status: in-development
+status: done
 column: Backlog
 size: XS
 priority: P3
@@ -105,3 +105,26 @@ BA/PM, 2026-10-17. **Result: 10 of 10.**
 | 10 | no major unresolved blocker | **✅** none |
 
 Column moves are the Orchestrator's.
+
+## QE (qe-e2e, 2026-10-21): **PASS_WITH_GAPS** at tip `3d05e230` (base `51503331`)
+
+QE's own readings, taken in `../wt-qe-ABC-162` and in scratch copies outside the repository. The SE's readings were not used. Notes: `.grugops/context/qe-ABC-162/notes/`, ids `…865e9bc6` (criteria and gates), `…567002e7` (plant matrix), `…df4fc9ed` (temp directories), `…315eb7f0` (AGENTS.md leftover) and `…68554c31` (verdict).
+
+| criterion | grade | reading |
+|---|---|---|
+| `A1` | MET | A7's cwd is `…/T/abc162-neutral-cwd-…` (not the tree root, no `data/`); `CLI_DEEP` 11/11; A7 stderr 0 B, exit 0 |
+| `A2` | MET | P6b: base test 11/11 green, head test 10/11 with the only red `A7` at the stderr check, `opening book could not be read; playing on without it`. P6c (`process.cwd()` resolve) and P6e (walk up from cwd) also go green → red |
+| `A3` | MET | every `mkdtemp` return is removed by that exact path (traced), after green, after P6b red, and when `beforeAll` throws; 0 lane-made entries left |
+| `A4` | MET | one file changed; production-`src/` grep empty; `npm test` 59 files / 1987 tests at base and tip, 0 skips; `CLI_DEEP` 11 = base; 6 children = base |
+
+**Gates on the tip:** lint, typecheck and build rc 0; `npm test` rc 0 with `last-run.json` `success: true`; skip-integrity `--skip-count 0` `No findings.`; `CLI_DEEP` 11/11; `PERFT_DEEP` 32/32. **UAT waiver:** the measured non-test `src/` list is empty, so the change is test-only.
+
+**Gaps (non-blocking):**
+- **G-1 (LOW):** a cwd-first read with a module-URL fallback (P6f) still passes, because A7's cwd is empty.
+  - Measured in scratch: a decoy `data/opening-book/book.json` inside the same neutral cwd reds P6b and P6f and keeps the clean build green, with 0 new spawns.
+  - Route: Security/NFR, for the `AR-095-CWD` close ruling, then BA/PM.
+- **G-2 (LOW):** the kill rests on the single stderr assertion, because the engine's searched reply to 1. e4 is itself a book entry.
+- **G-3 (INFO):** the kill assumes `os.tmpdir()` lies outside the tree.
+- **G-4 (LOW, pre-existing):** `AGENTS.md:123-126` "Two real children" is stale; the lane starts 6. Route: the Scribe.
+
+**Security:** `AR-095-CWD`'s close condition (QE reads `A2` with the plant) is met for P6b. Whether the P6f form stays open as a narrower residual is Security/NFR's call. Column moves are the Orchestrator's.

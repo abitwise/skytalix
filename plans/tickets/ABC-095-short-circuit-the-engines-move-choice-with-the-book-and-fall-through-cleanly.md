@@ -629,3 +629,21 @@ PASS_WITH_RISKS.** The notes are in `.grugops/context/secnfr-ABC-095-s3/notes/` 
 - **Owed by BA/PM:** test note 4 and `ABC-119` § Amendment, to the corrected copy rule; the
   `AR-095-CWD` fix, as an amendment to `A7`'s Given or as a follow-up.
 - **Next:** `Ready for UAT` (the Orchestrator's move). The owner's UAT word is owed.
+
+**2026-10-21, Security/NFR: `AR-095-CWD` is CLOSED. Its fallback form is carried as `AR-162-FALLBACK`.**
+This is subtask `security-nfr-ABC-162`, on `ABC-162` at `3d05e230` (QE `91f18689`). The notes are in
+`.grugops/context/security-nfr-ABC-162/notes/` (`…06c147db` decision, `…3ea2c883` readings) and are not
+restated here.
+- **`AR-095-CWD`: closed as written.** QE read P6b green at base and red at head, on `A7`'s stderr check
+  (`…68554c31`). P6c and P6e red too.
+- **`AR-162-FALLBACK` (LOW; owner the Orchestrator): the residual.** A cwd-first read with a module-URL
+  fallback (P6f) still passes `CLI_DEEP`, because `A7`'s cwd is empty.
+  - **Compensating controls:** `ADR-0036` Ruling 2 and S3 item 2 by hand.
+  - **Closes when** a `CLI_DEEP` row reds P6f, read by QE with the plant.
+  - **Promotion trigger:** a ticket that edits `src/book-file.ts`, or `EPIC-006` being cut or pulled.
+    Either makes the fix owed before that merge.
+  - **Fix:** one XS P3 test-only BA/PM cut. A non-book decoy goes at `data/opening-book/book.json` in `A7`'s
+    neutral cwd, with `A1`/`A2` reworded. `A7`'s stderr assertion gets a label naming it the detector (QE's G-2).
+- **Citation fix.** `V12.3.1` [L1] above is the ASVS 4.0.3 id. In the pinned 5.0.0 checklist the requirement
+  is `V5.3.2` [L1]. The ruling is unchanged.
+- **Unchanged:** `AR-095-READ` (LOW, Security/NFR) and `AR-095-L1UNIT` (LOW, the Orchestrator).

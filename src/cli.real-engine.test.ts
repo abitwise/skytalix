@@ -44,7 +44,10 @@
  *     search. The warning on stderr is the LEAK DETECTOR (`A3`(iv)): if it is missing, the child read
  *     a book.
  * No hook, no `--import` and no double: the bytes are the delivered ones. The book-PRESENT real
- * session is `ABC-095` `A7`'s row, which runs the repository's own entry point.
+ * session is `ABC-095` `A7`'s row, which runs the repository's own entry point FROM A NEUTRAL
+ * WORKING DIRECTORY (`ABC-162`, closing `AR-095-CWD`): a fresh `mkdtemp` directory with no `data/`,
+ * removed by its exact path. A build that read the book relative to the working directory would
+ * find nothing there, warn, and red `A7` on stderr. Every other child keeps its tree root as cwd.
  */
 
 import { spawnSync } from "node:child_process";
@@ -135,7 +138,10 @@ const makeBookAbsentCopy = (): string => {
   return root;
 };
 
-/** The only removal in this file: the path `mkdtemp` returned, passed through untouched. */
+/**
+ * The only removal in this file: the path `mkdtemp` returned, passed through untouched. It removes
+ * the book-absent copies and `A7`'s neutral working directory (`ABC-162`).
+ */
 const removeCopy = (root: string): void => rmSync(root, { recursive: true, force: true });
 
 const entryPointIn = (root: string): string => join(root, COPIED_DIRECTORY, "cli.ts");
@@ -218,15 +224,20 @@ interface RealChild {
   readonly wallMs: number;
 }
 
-const spawnReal = (root: string, script: string, args: readonly string[] = CHILD_ARGS): RealChild =>
-  spawnNode(root, [entryPointIn(root), ...args], script);
+/** The entry point under `root`, run with `cwd` as its working directory (the tree root unless named). */
+const spawnReal = (
+  root: string,
+  script: string,
+  args: readonly string[] = CHILD_ARGS,
+  cwd: string = root,
+): RealChild => spawnNode(cwd, [entryPointIn(root), ...args], script);
 
 /** The file's one spawn: `node` with `nodeArgv(rest)`, `CHILD_ENV`, a fixed stdin, a bound. */
-const spawnNode = (root: string, rest: readonly string[], script: string): RealChild => {
+const spawnNode = (cwd: string, rest: readonly string[], script: string): RealChild => {
   const argv = nodeArgv(rest);
   const started = performance.now();
   const child = spawnSync(process.execPath, argv, {
-    cwd: root,
+    cwd,
     encoding: "utf8",
     env: CHILD_ENV,
     input: script,
@@ -238,7 +249,7 @@ const spawnNode = (root: string, rest: readonly string[], script: string): RealC
     throw new Error(`child ${process.execPath} ${argv.join(" ")} failed: ${child.error}`);
   // `A1`'s record: the command verbatim and the measured wall, on every run of this lane.
   console.log(
-    `[CLI_DEEP] (cwd ${root}) ${process.execPath} ${argv.join(" ")} <<< ${JSON.stringify(script)} — ` +
+    `[CLI_DEEP] (cwd ${cwd}) ${process.execPath} ${argv.join(" ")} <<< ${JSON.stringify(script)} — ` +
       `wall ${wallMs.toFixed(0)} ms, exit ${child.status}, signal ${child.signal}`,
   );
   return {
@@ -424,15 +435,25 @@ if (RUN_DEEP) {
   describe("ABC-095 — CLI_DEEP: the book in a real session", () => {
     /** `A5`'s stream half: the book-absent copy, the engine's ply, then `quit` twice. */
     let bookless: RealChild;
-    /** `A7`: the REPOSITORY's entry point, book present; the human plays `e2e4`, then input ends. */
+    /**
+     * `A7`: the REPOSITORY's entry point, book present; the human plays `e2e4`, then input ends. It
+     * runs from `neutral`, not from the tree root (`ABC-162`).
+     */
     let booked: RealChild;
+    /** `A7`'s working directory: a fresh, empty `mkdtemp` directory, removed by its exact path. */
+    let neutral: string;
     const QUIT_TWICE = `${QUIT_NOTICE}\n${QUIT_NOTICE}\n`;
     const OPENING = "e2e4";
 
     beforeAll(() => {
+      neutral = mkdtempSync(join(tmpdir(), "abc162-neutral-cwd-"));
       bookless = spawnReal(copy, QUIT_TWICE);
-      booked = spawnReal(REPOSITORY, `${OPENING}\n`, ["--colour", "white", "--ascii"]);
+      booked = spawnReal(REPOSITORY, `${OPENING}\n`, ["--colour", "white", "--ascii"], neutral);
     }, 4 * HANG_GUARD_MS);
+
+    afterAll(() => {
+      if (neutral !== undefined) removeCopy(neutral);
+    });
 
     it("A5 (stream half) — the one warning goes to stderr exactly once, 0 bytes of it to stdout, and the child exits 0 on quit", () => {
       // NON-VACUITY: the engine reached its ply (the probe is asked only then), and the session
@@ -452,6 +473,12 @@ if (RUN_DEEP) {
     it("A7 — a real session consults the book: the reply to 1. e4 is one of the book's entries for that position", () => {
       // NON-VACUITY: this child runs the repository's own tree, where the book IS present.
       expect(existsSync(join(REPOSITORY, BOOK_PATH))).toBe(true);
+      // `ABC-162`: from a working directory that is not the tree root and holds no `data/`, so only
+      // a read resolved from the module's own URL finds the book (`AR-095-CWD`).
+      expect(join(neutral, "/"), "A7's working directory").not.toBe(join(REPOSITORY, "/"));
+      expect(existsSync(join(neutral, "data")), "a data/ entry in A7's working directory").toBe(
+        false,
+      );
       const frames = framesOf(booked.stdout);
       expect(frames).toHaveLength(3);
       const [, afterHuman, afterEngine] = frames as [Frame, Frame, Frame];
