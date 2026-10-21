@@ -1,8 +1,8 @@
 ---
 id: ABC-188
 title: "A deletion-only edit to a limb-1 holder fires nothing on clause (b), and `ABC-168` makes `src/uci.ts` the second holder (the `AR-163-DELONLY` fix, owed before `ABC-168` merges)"
-status: in-security-nfr
-column: In Security/NFR
+status: done
+column: Done
 size: S
 priority: P2
 epic: —
@@ -250,3 +250,40 @@ BA/PM, 2026-10-21 at `96dc3fa3`. **Result: 10 of 10.**
 | 10 | no major unresolved blocker | **✅** none. The deleted-holder case (b) follows Security/NFR's own words; if the Architect reads the ruling more narrowly, it goes back to Security/NFR before the build |
 
 Column moves after `Ready` are the Orchestrator's.
+
+## QE
+
+**QE/E2E, 2026-10-21 (`qe-ABC-188`): PASS_WITH_GAPS** (`QE-188-a` LOW, `QE-188-b` INFO; 0 blocking). Branch
+`grugops/qe-ABC-188`, from the tip `66d6a2f1`, with `main` `2c29a603` merged at **`85b462f0`**. QE ran every criterion
+there itself, before reading the Architect's notes, and those notes agree on each one.
+
+| | result |
+|---|---|
+| A1 | MET: the 4 Scope files plus the Architect's 2 notes (ignored per `QE-182-d`). The waiver form prints nothing over the range and per commit |
+| A2 | MET: base instrument, rc 1, `limb 1 MISMATCH: G1-IMP G1-GRD G1B UNC1 REN`, 0 `DIFFER` |
+| A3 | MET: skip-only copy, rc 1, `limb 1 MISMATCH: REN`, 0 `DIFFER` |
+| A4 | MET: rc 0, 10 of 10 rows, limbs 2/3 identical 10 of 10. Status, `HEAD` and 46 refs unchanged |
+| A5 | MET: G1-IMP 0/1, G1B 0/1, REN `src/book-file.ts` 0/17, P2b 1/1 |
+| A6 | MET: at `b71f8902`, D1 FIRES `src/uci.ts` 0/1 and D2 FIRES 0/4, both `<base> and <head>`. Limbs 2/3 match `341da4c1`. Base instrument: does not fire |
+| A7 | MET: drift `a090f354` (P2c's `cli.ts` edit does not apply), rc 2, stderr names `P2c` |
+| A8 | MET: 25 `+` / 0 `−`. The block is dated, sits after `ABC-163`, and states (i)–(vi) consistently with the code. (iv) goes past the instrument's cover for binary-flagged files (`QE-188-a`) |
+| A9 | MET: lint, typecheck and build rc 0. `npm test` 59 / 1987, `last-run.json` success. Skip-count 0, `No findings.` `biome.json` unchanged |
+
+- **`AR-163-DELONLY`'s close condition is MET.** G-1b (G1B) and the import-line drop (G1-IMP) fire, as do UNC1, D1 and
+  D2, and the empty case adds nothing. The Orchestrator records the close.
+- **QE's 17 own plants:**
+  - Every deleted, moved, renamed (also to `.test.ts` and `.d.ts`), truncated and blank-line-only holder edit fires, on
+    `src/book-file.ts` and `src/uci.ts`.
+  - The non-holder and caller-line controls do not fire.
+  - Limbs 2/3 match `341da4c1` on every plant.
+  - Limb 1's output outside the Ruling 2 block equals base on all 29.
+  - A git shim shows one diff call, `-- src`.
+- **`QE-188-a` (LOW; Security/NFR rates it, Architect/Design fixes it).** One NUL byte in a holder's comment makes git
+  treat the file as binary. The instrument then sees no changed line on any limb, which was already true before this
+  ticket. `biome` and `tsc` pass. `--name-only` lists the file, and (iv) retires that check. **Interim, for the
+  Orchestrator:** `git diff --numstat <base> <head> -- src | awk '$1=="-"'` must print nothing.
+- **`QE-188-b` (INFO).** A plant whose two edits are in one file, with only one applied, exits 1 (MISMATCH), not 2.
+  Check the plant's diff before blaming the instrument.
+- **UAT: waived** (0 production lines). A waiver is not a signature. No timing was taken.
+- **Notes:** `.grugops/context/qe-ABC-188/notes/` (`…8ea32c43`, `…b2674938`, `…36ec80ab`, `…0b73ec04`, decision
+  `…bfbbb83f`).

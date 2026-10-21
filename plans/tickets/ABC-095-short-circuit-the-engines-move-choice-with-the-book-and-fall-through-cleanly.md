@@ -747,3 +747,26 @@ restated here. **Result: PASS_WITH_RISKS**, with no required fixes. The change i
   0 = 0 match is not a reading.
 - **Unchanged:** `AR-095-READ` (LOW, Security/NFR), `AR-163-DELONLY` (LOW, the Orchestrator) and `AR-163-UNCOMMENT`
   (LOW, Architect/Design).
+
+**2026-10-21, Security/NFR: `AR-163-DELONLY` closes at `ABC-188`'s merge. QE-188-a is opened as the new `AR-188-BINARY`.**
+This is subtask `security-nfr-ABC-188`, a records read on `ABC-188` at QE tip `da348a79` (merge `85b462f0`, code
+`d722a6b6`, ADR `eb097a7b`). The notes are in `.grugops/context/security-nfr-ABC-188/notes/` (`…f5843a71` decision,
+`…534bddbb` readings) and are not restated here. **Result: PASS_WITH_RISKS**, with no required fixes. The change has
+0 `src/` lines.
+- **`AR-163-DELONLY`: closed as written, effective at the merge.** QE read `A2`–`A7` (`…bfbbb83f`): G1B, G1-IMP and
+  D1/D2 on `src/uci.ts` FIRE, and the empty case adds nothing. The `ADR-0036` § S1 block dated 2026-10-21 states the
+  widened ruling, consistent with `…75a45be0` § 2. The Orchestrator records the close. `ABC-168`'s hold lifts once
+  `ABC-188` is on `main`.
+- **`AR-163-UNCOMMENT`:** limb 1 is covered at the merge (UNC1). Limbs 2/3 stay open, LOW, owner Architect/Design.
+- **`AR-188-BINARY` (LOW; owner the Orchestrator; fix by Architect/Design).** A production file that git diffs as
+  binary hides every changed line from every limb. That happens with one NUL byte, or with a checked-out
+  `.gitattributes` `-diff` line on clean text. It is pre-existing, and it can hide an added capability import.
+  - **Why LOW:** 0 binary production files and no `.gitattributes` at `main` or `b71f8902`. It is MEDIUM without the
+    interim control.
+  - **Interim control, from now until the fix:** at every routing, `git diff --numstat <base> <head> -- src | awk
+    '$1=="-"'` prints nothing, run in the same checkout as the instrument. Any listed file routes here by hand. That
+    is what keeps § S1 (iv)'s retirement of the `--name-only` check safe.
+  - **Fix (BA/PM cuts it now, XS, P3):** the one diff call reads `--text --no-textconv`, and the harness gains a NUL
+    plant and a `-diff` plant.
+  - **Closes when** QE reads both firing at head.
+- **Unchanged:** `AR-095-READ` (LOW, Security/NFR).
