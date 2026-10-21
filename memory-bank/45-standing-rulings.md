@@ -64,7 +64,7 @@ that human.
 
 **2026-08-17 — a ticket whose delivered diff carries ZERO PRODUCTION LINES has UAT WAIVED, standing.**
 `Ready for UAT` → `Done`, no UAT run. Measured from git, never asserted:
-`git diff --name-only <delivered>~1 <delivered> | grep -v '\.test\.ts$' | grep '^src/'` must be
+`git -c core.quotePath=false diff --name-only <delivered>~1 <delivered> | grep -v '\.test\.ts$' | grep '^src/'` must be
 **empty** — any production line and the rule does not apply. This unfiltered form is the reference
 measurement; no brief may add a `__snapshots__` filter. **Snapshot-only exception (owner,
 2026-10-17):** if it lists only `src/__snapshots__/*.snap`, the waiver holds only if the

@@ -1,8 +1,8 @@
 ---
 id: ABC-192
 title: "Nothing pins the stream `setup` hands the heap guard, and a vitest bump re-runs no capture arm (QE-176-a, QE-176-b)"
-status: in-development
-column: In Development
+status: in-review
+column: In Review
 size: XS
 priority: P3
 epic: —

@@ -952,3 +952,13 @@ AGENTS.md Scribe, task `scribe-ABC-176`. Two comment edits in `AGENTS.md`, both 
 |---|---|---:|
 | `Test (all)` comment | the quoted wrapper gains its `NODE_OPTIONS=--max-old-space-size=128` prefix (`QE-173-f`: it was quoted without it) | +38 |
 | skip-count comment | adds: "Run it as spelled: quotes without its prefix (before `ABC-173`) are history; refused by the heap guard, they print no integer and exit non-zero (`ABC-176`)." The skip-count command is unchanged | +153 |
+
+## `scribe-waiver-quotepath` pass, 2026-10-21 (`AR-191-QUOTEPATH`, waiver half; owner go; branch `grugops/scribe-waiver-quotepath` from `47a3c9a1`)
+
+AGENTS.md Scribe, task `scribe-waiver-quotepath`. One rule line in `AGENTS.md` (§ Safety rules, the 2026-08-17 UAT-waiver bullet) and its twin in `memory-bank/45-standing-rulings.md`; no command slot changed, no new backticked `npx vitest` text (`ABC-173` `A3` still counts 17). 15,797 -> **15,821 B** (+24; budget 18,432, `ABC-187`).
+
+| where | before | after |
+|---|---|---|
+| `AGENTS.md` waiver bullet; `45-standing-rulings.md` waiver paragraph | `git diff --name-only <delivered>~1 <delivered> \| grep -v '\.test\.ts$' \| grep '^src/'` | `git -c core.quotePath=false diff --name-only <delivered>~1 <delivered> \| grep -v '\.test\.ts$' \| grep '^src/'` |
+
+Why: git quotes a non-ASCII path (`"src/q\303\251.ts"`), so the `grep '^src/'` stage dropped it and the measurement read empty on a production change. Demonstrated in a scratch clone outside the repository: on a commit adding `src/qé.ts` the old form prints nothing, the new form prints `src/qé.ts`; on a test-only commit both print nothing. Every other word of the rule is unchanged (unfiltered reference form, snapshot exception, "a waiver is not a signature", the three overrides).
