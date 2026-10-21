@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-21 by Orchestrator — `ABC-176` In Development → In Review (Scribe tip `37b8debc`: `AGENTS.md` 15,606 → 15,797 B, A3 count 17; 1992/1992; waiver and `--numstat` empty); QE `qe-ABC-176` dispatched beside `qe-ABC-191`. In Development 0/3, In Review 2/3. Scribe self-reported deleting two uncommitted mis-filed notes before re-publishing (append-only deviation, recorded)._
 _Updated: 2026-10-21 by Orchestrator — `ABC-176` SE hop closed (tip `bfe1ff4a`, code `ffd53f41`; A1–A4 met on SE readings, A2 feasible so option (b) stands; 1992/1992; waiver and `--numstat` empty). Scribe `scribe-ABC-176` applies the two `AGENTS.md` comments on the branch (A5); then QE._
 _Updated: 2026-10-21 by Orchestrator — `ABC-191` In Development → In Review (Architect tip `797a238b`; A2 red / A4 green on builder readings; gates 59/1987; waiver and `--numstat` empty); QE `qe-ABC-191` dispatched. In Development 1/3, In Review 1/3._
 _Updated: 2026-10-21 by BA/PM (`bapm-epic007-confirm`, records only) — owner record `…4ab163ef`: `EPIC-007` M9 now reads "`dist/uci.js` loads no `turn-loop.js`, as `A7` measures"; M3's "how it is read" cell and `RISK-EPIC007-05` name `ABC-168`'s QE probe (test note 6). On `ABC-168`, both confirmations are marked met (QE/UAT may read `A7` as M9's proof; `A6` may be cited as M3's proof). Fallbacks (b) and route (1) are not taken. `A8`–`A10` stay with the owner. No card moves._
@@ -838,7 +839,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   one hop at pull, when it checks `Ready for Dev`'s exit at that moment; the row records the pull.
 
   HEADING FORMAT (spec §6.1): each column is an H2 heading carrying its live/limit WIP count,
-  e.g. `## In Development (WIP 1/3)` — the left number is how many tickets are in the column
+  e.g. `## In Development (WIP 0/3)` — the left number is how many tickets are in the column
   now, the right number is the limit from config. Unlimited columns read `(WIP unlimited)`;
   Blocked is visible and time-tracked (no WIP limit) and reads `(visible, time-tracked)`.
   INVARIANT: the column H2 headings and the rows of the `## Columns` table are the same 13 names in the
@@ -848,10 +849,10 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 1/3)
+    ## In Development (WIP 0/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
-    ## In Review (WIP 1/3)
+    ## In Review (WIP 2/3)
     - [ABC-012] Portfolio FX conversion  (PR: #41, QE: running)
 
   BOARD <-> TICKET CONTRACT: each ticket file (`plans/tickets/<prefix>-xxx.md`) carries a
@@ -973,8 +974,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-176] A heap-guard-refused run never reads as a clean skip count or a quiet result file  (owner: BA/PM, size: XS, priority: P3, epic: —, since: 2026-10-19, in dev 2026-10-21 (SE `ticket-to-pr-ABC-176` tip `bfe1ff4a`, then Scribe `scribe-ABC-176` on the branch; page facts from 2026-10-19 flagged in the brief), DoR 10/10; cut in `bapm-cut-ABC-176` (`30504eed`) from SEC-173-1 + QE-173-d, owner word `…5c8d2f71`.)
+## In Development (WIP 0/3)
 
 
 
@@ -1002,8 +1002,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
+## In Review (WIP 2/3)
 - [ABC-191] A production file git treats as binary hides every changed line from clause (b) (AR-188-BINARY fix)  (owner: BA/PM, size: XS, priority: P3, epic: —, since: 2026-10-21, in dev 2026-10-21 (Architect `arch-build-ABC-191`, tip `797a238b`), in review 2026-10-21 (QE `qe-ABC-191`), DoR 10/10; cut in `bapm-cut-AR-188-BINARY`. Builder Architect/Design. Gates no merge; the Orchestrator's `--numstat` stand-in runs until it lands. 0 `src/` lines; QE reads A2–A7 to close AR-188-BINARY.)
+- [ABC-176] A heap-guard-refused run never reads as a clean skip count or a quiet result file  (owner: BA/PM, size: XS, priority: P3, epic: —, since: 2026-10-19, in dev 2026-10-21 (SE `ticket-to-pr-ABC-176` tip `bfe1ff4a`, then Scribe `scribe-ABC-176` on the branch, tip `37b8debc`; in review 2026-10-21, QE `qe-ABC-176`; page facts from 2026-10-19 flagged in the brief), DoR 10/10; cut in `bapm-cut-ABC-176` (`30504eed`) from SEC-173-1 + QE-173-d, owner word `…5c8d2f71`.)
 
 
 

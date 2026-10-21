@@ -1,8 +1,8 @@
 ---
 id: ABC-176
 title: "A run the heap guard refuses never reads as a clean skip count or a quiet result file"
-status: in-development
-column: In Development
+status: in-review
+column: In Review
 size: XS
 priority: P3
 epic: —
