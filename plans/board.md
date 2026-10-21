@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-21 07:20Z — Orchestrator: ABC-177 In Review → In Security/NFR. The QE timing found NFR-008 MET at 9.395 s on `f81bf03c`, flagged warm host 5/8 under the ABC-177-only thermal rule `…31ab7d2d`. A11 missed the 9.2 s target, so O3 goes to Architect. Dispatched: `security-nfr-ABC-177` and `arch-O3-ABC-177` (width 2)._
 _Updated: 2026-10-21 by the Orchestrator (task `wave-2026-09-25`) — `bapm-rule-QE-177-ab` merged (records only): QE-177-a/-b → `ABC-178` (Backlog, XS, P2, DoR 9/10, waits on ABC-177 merge + A10 ≤ 9.2 s); QE-177-c accepted (U8 stays at 100). Next free id: ABC-179. Owner owed: pause the `oeselg-labs/platform` session for the ABC-177 timing window. In flight: none._
 _Updated: 2026-10-21 by the Orchestrator (task `wave-2026-09-25`) — `qe-ABC-177-timing` OWED (12/12 windows failed on a foreign `oeselg-labs/platform` session; AC ok). Width 1 released → `bapm-rule-QE-177-ab` dispatched. Owner owed: pause the platform session for a ~30–40 min timing window. In flight: `bapm-rule-QE-177-ab`._
 _Updated: 2026-10-21 by the Orchestrator (task `wave-2026-09-25`) — owner word "BA/PM can rule on QE-177-a and -b" → `bapm-rule-QE-177-ab` queued, HELD until `qe-ABC-177-timing` ends (width 1, quiet window). In flight: `qe-ABC-177-timing`._
@@ -922,32 +923,32 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
+## In Review (WIP 0/3)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## In Security/NFR (WIP 1/2)
 - [ABC-177] `npm test` back under NFR-008's 10 s (ADR-0046; test-only, `src/uci-session.test.ts`)  (owner: software-engineer, size: S, priority: P1, epic: EPIC-007, since: 2026-10-20, DoR 10/10; cut in `bapm-cut-ABC-177`. Step 1000 allowed for U1–U7 (H/L), not U8 (H′). Discharges R-174-1 at ≤ 10 s. Waits: owner's pull; OQ-177-1 (AC power) owed before QE's A9 full-lane twin.) **2026-10-20: owner pulled ("start yes") → In Development; `ticket-to-pr-ABC-177` dispatched. OQ-177-1 = YES (AC power for NFR-008 readings).** **2026-10-20: delivered `f81bf03c` (test-only, +16/−14; A1–A5, A7, A12 MET; 126 rows, parity 15/15 rows, census 536 406 → 43 438 nodes; gates 1987/1987, CLI_DEEP 11, PERFT_DEEP 32; waiver applies) → In Review; `qe-ABC-177` dispatched (A6 re-check, A8–A11 timing on AC).** **2026-10-20: `qe-ABC-177` PASS_WITH_GAPS on A1–A7, A12 (parity re-confirmed 15/15; census reproduced); **A8–A11 OWED — host on battery all hop (owner AC rule) and foreign platform vitest running**. QE-177-g MEDIUM (timing owed); -a, -b LOW (cross-session `held`, U7 dropped-token budget band) for BA/PM; -c..-f INFO. Stays In Review until the timing hop.** **2026-10-21: `qe-ABC-177-timing` A8–A11 OWED again — AC held, but 12/12 quiet windows failed on another Claude session's `oeselg-labs/platform` homelab work; 0 runs. Needs AC + that session idle (owner's call).**
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## In Security/NFR (WIP 0/2)
 
 
 

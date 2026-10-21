@@ -1,0 +1,31 @@
+qe-ABC-177-timing-3 pre-registration ADDENDUM. Written 2026-10-21T07:11Z, BEFORE readout-nfr008-174b.py was run on any data.
+It extends preregistration-timing3.txt (978a3c11d8c5, unchanged).
+
+Trigger: owner amendment 2, note 31ab7d2d (owner word ~06:55Z; commit 97ef5027 at 07:08:15Z). QE saw it at about 07:09Z, after
+both stages had run (t3-r1 06:42-06:52Z, t3-r2 06:54-07:04Z) and after QE had sealed the VOID grading (notes 277060fc,
+845268c1, d5e170ec, f43a53f5, written 07:08:22Z; their `at` stamps 07:12:00-07:13:30Z run ahead of the wall clock).
+For ABC-177 A9-A11 ONLY: rounds with thermal pressure >= 1 are kept and logged, not discarded; the reading is flagged
+"warm host (thermal >= 1 in k/8 rounds)"; head <= 9.2 s -> A10 MET (flagged); 9.2-10 s -> O3 note; > 10 s or any other fail ->
+NOT MET / OWED and back to the owner. No further in-hop rule changes. Everything else unchanged (AC, load1 <= 8, interleaved
+arms, one void-stage re-run, never estimate).
+
+DISCLOSURE: before this addendum QE had already seen both stages' per-run rows (nfr008-full.tsv; the amended readouts print every
+H/H2 wall) and lane174's own all-rounds summary for t3-r1 (H median wall 9.39 s over rounds 1-8). The rule change is the
+owner's, not QE's. The only QE choices are fixed below, and the re-run/selection rule was registered at 06:38:58Z.
+
+Instrument: readout-nfr008-174b.py, sha256 464d97c6fa2e = ../timing2/readout-nfr008-174a.py with ONE rule change (the thermal
+discard is logged, not discarded) plus additive output (per-row thermal; "warm host (thermal >= 1 in k/n rounds)", a round
+being warm when its H or H2 run read thermal_before or thermal_after != 0). Every other rule is unchanged: status, counts,
+n = 8, k, R, A1 admissibility, load1 <= 8 on every scored run (else NOT APPLICABLE), the 10 s bound.
+Applied to the existing, unchanged nfr008-full-HH2.tsv + sampler.tsv of BOTH stages. Output: t3-r*/readout-nfr008-full-b.out.
+No new stage is run: the one re-run was used (t3-r2).
+
+Stage selection (registered 06:38:58Z, unchanged): if both stages read, the LOWER H median wall stands with its whole readout
+set. A stage "reads" when 174b prints an A9 STATE of MET, NOT MET or UNRESOLVED (n = 8, admissible, load1 <= 8 on scored runs).
+If only one reads, it stands; if neither reads, A9-A11 stay OWED.
+Grades on the standing stage (timing-2 grading, unchanged): A9 = protocol as run. A10 (i) 174b H median wall + state; (ii) H-B
+wall/cpu medians + intervals from lane174's own summary of that stage (rounds 1-8, which now matches the kept-thermal rule);
+(iii) B/T twin R from lane174's summary, H/H2 twin R from 174b. A11 per 31ab7d2d: H median wall <= 9.2 s MET (flagged warm);
+> 9.2 and <= 10 s -> O3 note (Architect/BA/PM); > 10 s -> owner. NFR-008 = 174b state on H, flagged warm, ABC-177 only.
+R-174-1: QE reports the discharge condition. 31ab7d2d calls this rule "not a catalog/NFR-008 rule change; no precedent", so
+whether a warm-flagged reading discharges R-174-1 is for Security/NFR to rule.
