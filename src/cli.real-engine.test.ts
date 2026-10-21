@@ -45,9 +45,12 @@
  *     a book.
  * No hook, no `--import` and no double: the bytes are the delivered ones. The book-PRESENT real
  * session is `ABC-095` `A7`'s row, which runs the repository's own entry point FROM A NEUTRAL
- * WORKING DIRECTORY (`ABC-162`, closing `AR-095-CWD`): a fresh `mkdtemp` directory with no `data/`,
- * removed by its exact path. A build that read the book relative to the working directory would
- * find nothing there, warn, and red `A7` on stderr. Every other child keeps its tree root as cwd.
+ * WORKING DIRECTORY (`ABC-162`, closing `AR-095-CWD`): a fresh `mkdtemp` directory, removed by its
+ * exact path, that holds a DECOY at `data/opening-book/book.json` — bytes that are not UTF-8 JSON and
+ * not the delivered book (`ABC-180`, closing `AR-162-FALLBACK`). Only a read resolved from the
+ * module's own URL finds the book. A build that read the book relative to the working directory —
+ * first, only, or as a fallback — would read the decoy, warn, and red `A7` on stderr. Every other
+ * child keeps its tree root as cwd.
  */
 
 import { spawnSync } from "node:child_process";
@@ -56,13 +59,15 @@ import {
   cpSync,
   existsSync,
   lstatSync,
+  mkdirSync,
   mkdtempSync,
   readdirSync,
   readFileSync,
   rmSync,
+  writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import { afterAll, beforeAll, describe, expect, inject, it } from "vitest";
 import { makeMove } from "./apply.ts";
 import { createBookProbe } from "./book.ts";
@@ -440,13 +445,19 @@ if (RUN_DEEP) {
      * runs from `neutral`, not from the tree root (`ABC-162`).
      */
     let booked: RealChild;
-    /** `A7`'s working directory: a fresh, empty `mkdtemp` directory, removed by its exact path. */
+    /**
+     * `A7`'s working directory: a fresh `mkdtemp` directory, removed by its exact path, holding a
+     * decoy book file that is not the delivered book (`ABC-180`).
+     */
     let neutral: string;
     const QUIT_TWICE = `${QUIT_NOTICE}\n${QUIT_NOTICE}\n`;
     const OPENING = "e2e4";
 
     beforeAll(() => {
       neutral = mkdtempSync(join(tmpdir(), "abc162-neutral-cwd-"));
+      // `ABC-180`: the decoy. Not UTF-8 JSON, so any read of it is refused with one fixed warning.
+      mkdirSync(dirname(join(neutral, BOOK_PATH)), { recursive: true });
+      writeFileSync(join(neutral, BOOK_PATH), "ABC-180 decoy: not an opening book\n");
       bookless = spawnReal(copy, QUIT_TWICE);
       booked = spawnReal(REPOSITORY, `${OPENING}\n`, ["--colour", "white", "--ascii"], neutral);
     }, 4 * HANG_GUARD_MS);
@@ -473,12 +484,21 @@ if (RUN_DEEP) {
     it("A7 — a real session consults the book: the reply to 1. e4 is one of the book's entries for that position", () => {
       // NON-VACUITY: this child runs the repository's own tree, where the book IS present.
       expect(existsSync(join(REPOSITORY, BOOK_PATH))).toBe(true);
-      // `ABC-162`: from a working directory that is not the tree root and holds no `data/`, so only
-      // a read resolved from the module's own URL finds the book (`AR-095-CWD`).
+      // `ABC-162`, `ABC-180`: from a working directory that is not the tree root and holds a decoy
+      // book file that is not the delivered book, so only a read resolved from the module's own URL
+      // finds the book (`AR-095-CWD`, `AR-162-FALLBACK`).
       expect(join(neutral, "/"), "A7's working directory").not.toBe(join(REPOSITORY, "/"));
-      expect(existsSync(join(neutral, "data")), "a data/ entry in A7's working directory").toBe(
-        false,
-      );
+      const decoy = join(neutral, BOOK_PATH);
+      expect(existsSync(decoy), "the decoy in A7's working directory").toBe(true);
+      // Keeps the decoy from becoming a book: a valid book would read silently (`ABC-180`).
+      expect(
+        () => JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(readFileSync(decoy))),
+        "the decoy parses as UTF-8 JSON",
+      ).toThrow();
+      expect(
+        readFileSync(decoy).equals(readFileSync(join(REPOSITORY, BOOK_PATH))),
+        "the decoy is the delivered book",
+      ).toBe(false);
       const frames = framesOf(booked.stdout);
       expect(frames).toHaveLength(3);
       const [, afterHuman, afterEngine] = frames as [Frame, Frame, Frame];
@@ -507,7 +527,11 @@ if (RUN_DEEP) {
       expect(entries).toContain(`${squareName(reply.from)}${squareName(reply.to)}`);
 
       // The book was read: no warning, nothing on stderr, a normal end.
-      expect(booked.stderr).toBe("");
+      // THE AR-095-CWD / AR-162-FALLBACK DETECTOR: a cwd read meets the decoy and warns here.
+      expect(
+        booked.stderr,
+        "AR-095-CWD / AR-162-FALLBACK detector: stderr must be empty, or the book was read from the working directory",
+      ).toBe("");
       expect(booked.status).toBe(0);
     });
   });
