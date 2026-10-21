@@ -1,8 +1,8 @@
 ---
 id: ABC-161
 title: "Three `src/cli.test.ts` rows that a wrong build passes: a level rebuilt on every move, a `/m` regex that accepts `3\\n`, and an `AGENTS.md` slot that drops a level"
-status: backlog
-column: Backlog
+status: in-development
+column: In Development
 size: XS
 priority: P3
 epic: EPIC-006

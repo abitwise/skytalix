@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-21 by Orchestrator — owner go: `ABC-161` Backlog → In Development (1/3; DoR 10/10 from 2026-10-17 stands, page line refs stale and flagged in the brief); BA/PM `bapm-cut-AR-183-CWDARG` dispatched to cut `ABC-184` (AR-183-CWDARG fix). Width 2._
 _Updated: 2026-10-21 by Orchestrator — `ABC-182` In Review → Done (merged; QE PASS_WITH_GAPS, QE-182-a LOW carried to the next `r2-mutants.sh` edit). In Development 0/3, In Review 0/3, In Security/NFR 0/2._
 _Updated: 2026-10-21 by Orchestrator — `ABC-183` In Security/NFR → Done (merged). AR-180-VALIDATED closed; AR-183-CWDARG opened (LOW; fix cut owed from BA/PM, due before ABC-168 merges). In Security/NFR 0/2._
 _Updated: 2026-10-21 by Orchestrator — `ABC-183` In Review → In Security/NFR (QE PASS_WITH_GAPS `3ab055f4`: AR-180-VALIDATED part (ii) read met; QE-183-a LOW and QE-183-b INFO need a ruling). In Review 1/3, In Security/NFR 1/2._
@@ -876,7 +877,6 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Backlog (WIP unlimited)
 - [ABC-178] Two additive UCI rows restore the kills ABC-177 dropped (QE-177-a cross-session `held`, QE-177-b dropped-token budget band)  (owner: software-engineer, size: XS, priority: P2, epic: EPIC-007, since: 2026-10-21, DoR 9/10; cut in `bapm-rule-QE-177-ab`. Waits: ABC-177 merged and its A10 read ≤ 9.2 s on AC. QE-177-c accepted as is.)
 - [ABC-176] A heap-guard-refused run never reads as a clean skip count or a quiet result file  (owner: BA/PM, size: XS, priority: P3, epic: —, since: 2026-10-19, DoR 10/10; cut in `bapm-cut-ABC-176` (`30504eed`) from SEC-173-1 + QE-173-d, owner word `…5c8d2f71`.)
-- [ABC-161] Three `src/cli.test.ts` rows that a wrong build passes: a level rebuilt on every move, a `/m` regex that accepts `3\n`, and an `AGENTS.md` slot that drops a level  (BA/PM, XS, P3, epic: EPIC-006, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from QE-101-a, SEC-101-a, QE-101-b. Waits: after ABC-096 merges (shares `src/cli.test.ts`); then → Ready.)
 - [ABC-164] `AGENTS.md` sits at exactly its 24,576-byte budget, and two of its receipts carry test counts that every test-adding ticket makes stale (`CLI_DEEP` 7, `Test (all)` 57 / 1775)  (BA/PM, XS, P3, epic: —, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from AGENTS.md receipts. Waits: after ABC-096 merges (test counts move); then → Ready.)
 
 
@@ -923,7 +923,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+- [ABC-161] Three `src/cli.test.ts` rows that a wrong build passes: a level rebuilt on every move, a `/m` regex that accepts `3\n`, and an `AGENTS.md` slot that drops a level  (BA/PM, XS, P3, epic: EPIC-006, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from QE-101-a, SEC-101-a, QE-101-b. Waits: after ABC-096 merges (shares `src/cli.test.ts`); then → Ready.; its ABC-096 wait discharged at `b20eb451`. **Pulled 2026-10-21** Backlog → In Development on owner go, SE `ticket-to-pr-ABC-161`)
 
 
 
