@@ -9,6 +9,7 @@
 # Limb 1 is read from the `(b1) capability` line, the `(b1) Ruling 2` line and the files listed under it, and the
 #   `limb 1:` verdict line, never from a bare `(b1)` grep (Architect decision 2, G-3). A row compares the verdict and
 #   the Ruling 2 file list (`file@ends`); NOH also needs `adds nothing` whenever a `(b1) Ruling 2` line is printed.
+#   Each Ruling 2 file line is also printed whole (`R2 file`), with its `+` and `-` counts (ABC-188).
 # Limbs 2 and 3 of every plant are compared byte for byte with the 341da4c1 instrument. The script makes that copy
 #   itself: `git -C <repo> show 341da4c1:<instrument path>` into <scratch-dir>/r2-mutants-ref/, beside a
 #   node_modules/typescript symlink to the typescript that <clause-b.mjs>'s own directory resolves.
@@ -49,6 +50,7 @@ row() { local o v r2 fl got want l a b lo
   if [ "$got" = "$want" ] && { [ "$1" != NOH ] || [ -z "$r2" ] || [[ "$r2" == *"adds nothing" ]]; }; then a=ok; else a=MISMATCH; BAD="$BAD $1"; fi
   printf '%-7s %s..%s  %s\n        L1 expected  %s\n        L1 actual    %s   %s\n' "$1" "$2" "$3" "$6" "$want" "$got" "$a"
   printf '        (b1) capability: %s | (b1) Ruling 2: %s\n' "$(grep -F '  (b1) capability ' <<<"$o" | sed 's/.*: //')" "${r2:-(no such line)}"
+  awk '/^  \(b1\) Ruling 2 /{f=1;next} f&&/^      /{sub(/^ +/,""); print "        R2 file      " $0; next} {f=0}' <<<"$o"
   for l in 2 3; do lo=$(node "$S" "$2" "$3" $l)
     if [ "$lo" = "$(node "$O" "$2" "$3" $l)" ]; then b=identical; else b=DIFFERS; DIFF="$DIFF $1:limb$l"; fi
     printf '        L%s vs %s: %s (limb %s: %s)\n' $l $REF $b $l "$(grep -E '^  limb ' <<<"$lo" | sed 's/^  limb [0-9]: //')"
