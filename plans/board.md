@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-21 by Orchestrator — owner go: BA/PM `bapm-rule-QE-165` (QE-165-a/-b, ABC-185's fate) and Scribe `scribe-trace-row-pointer` (10-cell pointer in `AGENTS.md`) dispatched, width 2. Stray notes in the plugin cache deleted on owner word._
 _Updated: 2026-10-21 by Orchestrator — `ABC-165` In Review → Done (merged; QE PASS_WITH_GAPS). QE-165-a (MEDIUM: rows after `:496` render as paragraph text, not table) and QE-165-b (LOW) await BA/PM; ABC-185 held in Ready pending that and the owner's call._
 _Updated: 2026-10-21 by Orchestrator — `ABC-184` In Security/NFR → Done (merged). AR-183-CWDARG closed; the book-read risk chain owes ABC-168 nothing further. In Security/NFR 0/2._
 _Updated: 2026-10-21 by Orchestrator — `ABC-184` In Review → In Security/NFR (QE PASS_WITH_GAPS `2c65403b`: AR-183-CWDARG close row read met). In Review 1/3, In Security/NFR 1/2._
