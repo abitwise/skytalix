@@ -163,3 +163,28 @@ BA/PM, 2026-10-21. **Result: 10 of 10.**
 | 10 | no major unresolved blocker | **✅** none |
 
 Column moves after `Ready` are the Orchestrator's.
+
+## QE
+
+**QE (qe-e2e), 2026-10-21: PASS_WITH_GAPS** on `grugops/ABC-183` @ `c4c6d36e` (code `7bd2b54f`). `A1`–`A5` are MET on
+QE's own readings and re-plants. Evidence is in `.grugops/context/qe-ABC-183/notes/`: `…5e544b3e` (the A4 matrix),
+`…a1cbb8a6` (the criteria and gates), `…cbd50a13` (the survivors), `…0b0c7f61` (the artifacts) and `…be7c2c82` (the
+verdict).
+
+- **`AR-180-VALIDATED` part (ii): MET.** TMO + P6f is base 11/11 green, and head 10/11 with A7 red at `:503` with
+  `AR-162-FALLBACK: the decoy must exist before the booked child spawns…`. TMO alone reds at head the same way. P6f
+  reds both tests at the stderr detector, and the clean build is 11/11 on both. QE's P6f sha256 is `0b016daf…`
+  (the same bytes as on `ABC-180`).
+- **Gates on `c4c6d36e`:**
+  - lint, typecheck and build;
+  - `npm test` 59 / 1987, with `last-run.json` reading success;
+  - skip-integrity with `--skip-count 0`;
+  - `CLI_DEEP` 11/11 (6 children);
+  - `PERFT_DEEP` 32/32.
+
+  All are green.
+- **UAT waiver:** measured in the AGENTS.md form, unfiltered. The result is empty: 0 production lines and no `.snap`.
+- **Gaps:**
+  - **`QE-183-a` (LOW, pre-existing since `ABC-162`, out of scope):** if `booked`'s `neutral` cwd argument is
+    dropped, the detector is disarmed under P6f. A7 asserts the variable, not the child's cwd.
+  - **`QE-183-b` (INFO):** if the capture moves together with the write, only A1's static grep catches it.
