@@ -4174,7 +4174,10 @@ describe("ABC-192 — setup hands the guard process.stdout, and a vitest bump na
    * What is wrong with `setup`'s call to `guard` in `source`, or `undefined` when there is exactly
    * one default-exported `setup` holding exactly one `guard(…)` call whose third argument is
    * `process.stdout`. Over the TypeScript parser's view, so a comment or a string cannot red a
-   * correct file and cannot hide a wrong call.
+   * correct file and cannot hide a wrong call. `ABC-194` (`QE-192-a`): the call must also be on
+   * `setup`'s path — the whole expression of a statement that is a direct child of `setup`'s body
+   * (not in a `try`, `if`, block, label, arrow, callback or larger expression), and `setup` holds no
+   * `return` outside nested functions. A `throw` stays allowed: it refuses, it does not bypass.
    */
   const guardStreamFaultOf = (ts: typeof Ts, source: string): string | undefined => {
     const view = ts.createSourceFile("heap-guard.js", source, ts.ScriptTarget.Latest, true);
@@ -4198,7 +4201,25 @@ describe("ABC-192 — setup hands the guard process.stdout, and a vitest bump na
     };
     visit(setups[0] as Ts.FunctionDeclaration);
     if (calls.length !== 1) return `${calls.length} guard(…) calls in setup, not 1`;
-    const args = (calls[0] as Ts.CallExpression).arguments;
+    const call = calls[0] as Ts.CallExpression;
+    const body = (setups[0] as Ts.FunctionDeclaration).body;
+    const statement = call.parent;
+    if (!ts.isExpressionStatement(statement) || statement.parent !== body) {
+      const path: string[] = [];
+      for (let node = call.parent; node !== undefined && node !== body; node = node.parent)
+        path.push(ts.SyntaxKind[node.kind]);
+      return `guard(…) is not a direct statement of setup's body: it sits in ${path.join(" < ")} < setup's body`;
+    }
+    const returns: Ts.ReturnStatement[] = [];
+    const visitReturns = (node: Ts.Node): void => {
+      if (ts.isFunctionLike(node)) return;
+      if (ts.isReturnStatement(node)) returns.push(node);
+      ts.forEachChild(node, visitReturns);
+    };
+    if (body !== undefined) ts.forEachChild(body, visitReturns);
+    if (returns.length !== 0)
+      return `${returns.length} return statement(s) in setup (${returns.map((ret) => ret.getText(view)).join(", ")}), not 0: setup can leave before or around its guard(…) call`;
+    const args = call.arguments;
     const stream = args[2];
     const isStdout =
       args.length === 3 &&
@@ -4216,7 +4237,8 @@ describe("ABC-192 — setup hands the guard process.stdout, and a vitest bump na
     const ts: typeof Ts = createRequire(import.meta.url)("typescript");
     // THE CHECK IS WATCHED LOSING ITS EVIDENCE FIRST, in memory: a clean setup has no fault, and a
     // planted process.stderr, a planted no-op stream, a setup with no guard call (only a comment
-    // naming one) and a setup with two calls each have one.
+    // naming one) and a setup with two calls each have one. `ABC-194` (`QE-192-a`): so do the real
+    // call in a swallowing try/catch, behind `if (false)`, in an uncalled arrow, and after `return;`.
     const plantedSetup = (body: string): string =>
       `import v8 from "node:v8";\nexport function guard(project, heapStatistics, out) {}\nexport default function setup(project) {\n${body}\n}\n`;
     const real = "guard(project, v8.getHeapStatistics(), process.stdout);";
@@ -4227,8 +4249,12 @@ describe("ABC-192 — setup hands the guard process.stdout, and a vitest bump na
         "guard(project, v8.getHeapStatistics(), { write() {} });",
         "// guard(project, v8.getHeapStatistics(), process.stdout);",
         `${real}\n${real}`,
+        `try {\n${real}\n} catch {}`,
+        `if (false) ${real}`,
+        `const later = () => ${real}`,
+        `return;\n${real}`,
       ].map((body) => guardStreamFaultOf(ts, plantedSetup(body)) !== undefined),
-    ).toEqual([false, true, true, true, true]);
+    ).toEqual([false, true, true, true, true, true, true, true, true]);
 
     const source = readFileSync(`${REPOSITORY}tools/grugops/heap-guard.js`, "utf8");
     const fault = guardStreamFaultOf(ts, source);
