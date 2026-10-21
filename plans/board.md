@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-21 by Orchestrator — `ABC-192` In Review → Done (merged; QE PASS_WITH_GAPS `…21079de0`; gates green 59/1994, CLI_DEEP 11/11, PERFT_DEEP 32/32; UAT waived). QE-192-a (LOW: a try/catch around the guard call survives) and -b/-c/-d (INFO) to BA/PM `bapm-rule-QE-192`. In Review 1/3._
 _Updated: 2026-10-21 by Orchestrator — `ABC-193` In Development → In Review (Architect tip `3d734fa1`: A2 red on exactly the 7 rows, A4 20 of 20, A6 by hand met; 59/1992; waiver and GITENV stand-in empty); QE `qe-ABC-193` dispatched beside `qe-ABC-192`. In Development 0/3, In Review 2/3._
 _Updated: 2026-10-21 by Orchestrator — `ABC-192` In Development → In Review (SE tip `b5b8b0f9`: A1–A4 met on SE readings, M4/M4b/version bump each red; 59/1994; waiver and GITENV stand-in empty); QE `qe-ABC-192` dispatched. In Development 1/3, In Review 1/3._
 _Updated: 2026-10-21 by Orchestrator — `scribe-waiver-quotepath` merged (gates green 59/1992; `AGENTS.md` 15,821 B): the owner's UAT waiver measurement now reads `git -c core.quotePath=false diff --name-only …` (AR-191-QUOTEPATH waiver half). In flight: `ticket-to-pr-ABC-192`, `arch-build-ABC-193`._
@@ -860,7 +861,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
     ## In Development (WIP 0/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
-    ## In Review (WIP 2/3)
+    ## In Review (WIP 1/3)
     - [ABC-012] Portfolio FX conversion  (PR: #41, QE: running)
 
   BOARD <-> TICKET CONTRACT: each ticket file (`plans/tickets/<prefix>-xxx.md`) carries a
@@ -1010,8 +1011,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 2/3)
-- [ABC-192] Nothing pins the stream `setup` hands the heap guard, and a vitest bump re-runs no capture arm (QE-176-a, QE-176-b)  (owner: software-engineer, size: XS, priority: P3, epic: —, since: 2026-10-21, in dev 2026-10-21 (SE `ticket-to-pr-ABC-192`, tip `b5b8b0f9`), in review 2026-10-21 (QE `qe-ABC-192`), DoR 10/10; cut in `bapm-rule-QE-176`. Test-only, `src/cli.test.ts`: a parser-view row (`setup` passes `process.stdout`) and a vitest-version row whose red names the re-run list. 0 children, `tools/` and `AGENTS.md` untouched. Gates no merge. Overlaps `ABC-189` in the same file, in a different block.)
+## In Review (WIP 1/3)
 - [ABC-193] Git config or environment can blind clause (b)'s one diff call, and a production file whose name git quotes goes unseen (AR-191-GITENV + AR-191-QUOTEPATH fix)  (owner: architect-design, size: XS, priority: P3, epic: —, since: 2026-10-21, in dev 2026-10-21 (Architect `arch-build-ABC-193`, tip `3d734fa1`), in review 2026-10-21 (QE `qe-ABC-193`), DoR 10/10; cut in `bapm-cut-AR-191`. Builder Architect/Design. Four files (`clause-b.mjs`, `r2-mutants.sh`, its `.out.txt`, `ADR-0036`); 0 `src/` lines. Gates no merge; the Orchestrator's GITENV stand-in and the QUOTEPATH dispute-line rule run until it lands. QE reads A2–A4 to close AR-191-GITENV, and QU/QE2/A6 for QUOTEPATH's instrument half. The `AGENTS.md` waiver form is owed outside it.)
 
 
@@ -1073,6 +1073,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+- [ABC-192] Nothing pins the stream `setup` hands the heap guard, and a vitest bump re-runs no capture arm (QE-176-a, QE-176-b)  (owner: software-engineer, size: XS, priority: P3, epic: —, since: 2026-10-21, in dev 2026-10-21 (SE `ticket-to-pr-ABC-192`, tip `b5b8b0f9`), in review 2026-10-21 (QE `qe-ABC-192` PASS_WITH_GAPS `a530222a`), done 2026-10-21 (merged), DoR 10/10; cut in `bapm-rule-QE-176`. Test-only, `src/cli.test.ts`: a parser-view row (`setup` passes `process.stdout`) and a vitest-version row whose red names the re-run list. 0 children, `tools/` and `AGENTS.md` untouched. Gates no merge. Overlaps `ABC-189` in the same file, in a different block.)
 - [ABC-176] A heap-guard-refused run never reads as a clean skip count or a quiet result file  (owner: BA/PM, size: XS, priority: P3, epic: —, since: 2026-10-19, in dev 2026-10-21 (SE `ticket-to-pr-ABC-176` tip `bfe1ff4a`, then Scribe `scribe-ABC-176` on the branch, tip `37b8debc`; in review 2026-10-21, QE `qe-ABC-176` PASS_WITH_GAPS `168b2907`; done 2026-10-21 (merged); page facts from 2026-10-19 flagged in the brief), DoR 10/10; cut in `bapm-cut-ABC-176` (`30504eed`) from SEC-173-1 + QE-173-d, owner word `…5c8d2f71`.)
 - [ABC-191] A production file git treats as binary hides every changed line from clause (b) (AR-188-BINARY fix)  (owner: BA/PM, size: XS, priority: P3, epic: —, since: 2026-10-21, in dev 2026-10-21 (Architect `arch-build-ABC-191`, tip `797a238b`), in review 2026-10-21 (QE `qe-ABC-191` PASS_WITH_GAPS `b5ac124d`), done 2026-10-21 (merged; AR-188-BINARY closed), DoR 10/10; cut in `bapm-cut-AR-188-BINARY`. Builder Architect/Design. Gates no merge; the Orchestrator's `--numstat` stand-in runs until it lands. 0 `src/` lines; QE reads A2–A7 to close AR-188-BINARY.)
 - [ABC-188] A deletion-only edit to a limb-1 holder fires nothing on clause (b), and ABC-168 adds the second holder (AR-163-DELONLY fix)  (owner: BA/PM, size: S, priority: P2, epic: —, since: 2026-10-21, DoR 10/10; cut in `bapm-cut-ABC-168-followups`. **Due before ABC-168 merges** (its merge is held on this). Builder Architect/Design. 0 `src/` lines; QE reads A2–A7 to close AR-163-DELONLY.) **Pulled 2026-10-21** Ready → In Development (on ABC-168's merge path), Architect `arch-build-ABC-188`. Architect build `66d6a2f1` (instrument `d722a6b6`, harness `98487c1e`, ADR block `eb097a7b`); gates green 59/1987; QE `qe-ABC-188` (its read closes AR-163-DELONLY). QE PASS_WITH_GAPS `da348a79` (AR-163-DELONLY close condition MET; QE-188-a LOW: a NUL byte makes a holder binary and blinds every limb; -b INFO); Security/NFR `security-nfr-ABC-188`. **DONE 2026-10-21:** merged after all gates passed (npm test 1987, skip 0, CLI_DEEP 11/11, PERFT_DEEP 32/32; `--numstat` binary check empty). QE PASS_WITH_GAPS (`…bfbbb83f`); Security/NFR PASS_WITH_RISKS (`…f5843a71`): **AR-163-DELONLY CLOSED**; AR-188-BINARY opened (LOW; fix cut by BA/PM). UAT waived (0 production lines).
