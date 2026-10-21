@@ -1,7 +1,7 @@
 ---
 id: ABC-177
 title: "`npm test` back under NFR-008's 10 s (ADR-0046)"
-status: in-development
+status: done
 column: In Development
 size: S
 priority: P1
