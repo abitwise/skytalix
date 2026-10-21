@@ -16,6 +16,11 @@ The owner delegated decisions on ABC-177 to the recommended option (`…b87c35b6
 - A8 is MET and is not repeated.
 - The thermal rule is **not** relaxed: discarding rounds with thermal pressure above 0 stays as registered.
 
+## Owner amendment (2026-10-21 ~06:50Z, note `…f8cd47ba`), which overrides the start gate below
+- Foreign test runs are OK, including the grugops full suite: the owner has capped each one to 1–2 cores. **Don't wait for them to go idle.** Log each run's count and command.
+- Still required: AC, load1 ≤ 8, interleaved arms.
+- The thermal rule is unchanged. If the stage goes void on thermal, mark it OWED and the Orchestrator takes it to the owner.
+
 ## Read first
 - `.grugops/queue/done/qe-ABC-177-timing-2.md`.
 - Notes `…24f216bf`, `…4263d981`, `…ef316298`, `…92bb0293`.

@@ -1,0 +1,34 @@
+qe-ABC-177-timing-3 pre-registration. Written 2026-10-21T06:39Z, AFTER the four arm builds (06:36:58-06:37:02Z) and BEFORE any
+start gate poll, window or reading. Extends ../timing2/preregistration-timing2.txt and ../preregistration.txt (both unchanged).
+
+Verified by sha256 today (06:36Z): timing2/SHA256SUMS 44/44 OK; timing/SHA256SUMS OK; registered instruments lane174 e2074cdbeedd,
+sampler174 83409bc0e70b, readout174 f528540fa110, readout-nfr008-174 c95343f82f7c, window 83af1a013dd0, powercheck a64369300b3e,
+timing/run.sh da435e757fb0; timing2 run-amended.sh 6f44786ba6c9, readout174a 10a6e19be741, readout-nfr008-174a b0236f4623db,
+perrun 9e3bbe8c1888; launcher timing2/go177.sh 850dc337f350 (run from a byte-identical scratchpad copy).
+
+Scope (brief qe-ABC-177-timing-3, owner-delegated recommended option of 92bb0293): the FULL stage only (A9-A11). A8 is MET and
+is not repeated. The thermal rule is NOT relaxed: a round with thermal_before or thermal_after != 0 is discarded as registered.
+
+Arms: B, T = git archive ff1e375f; H, H2 = git archive f81bf03c; each its own `npm ci` (npm 11.20.0, node v26.11.1, flags
+--no-audit --no-fund; npm's allowScripts default did NOT run esbuild's postinstall / fsevents' install script, logged in
+npmci-*.log). No node_modules symlink; vitest 4.1.11 in every arm; src/uci-session.test.ts e5108838 (B, T) / a12f818e (H, H2).
+Round 0 file/test counts are the arm smoke check (expected 59 / 1987 per arm, as timing-2).
+
+New file: gate3.sh 34822376dc21, a derivative of timing2/wait177.sh: the start gate + cool-down watcher. It decides only WHEN a
+stage starts, never a reading. 5 s polls; OK = no full-suite vitest (a `vitest run` command line with no *.test.* / *.spec.*
+token; single-file runs and workers logged, not blocking, per b87c35b6) AND thermalpressurelevel 0 AND 'AC Power' AND load1 <= 8;
+launches `go177.sh amd full <runid>` once every poll has been OK across a span >= 60 s. The stage then runs
+timing2/run-amended.sh full UNCHANGED (its own 180 s window: AC every poll, load1 <= 8 every poll, foreign recorded).
+
+Runs: t3-r1 first. Re-run (ONE, per timing-2's rule): if t3-r1 is VOID, or its H median wall > 9.2 s with any foreign load
+recorded in the stage, run t3-r2 behind a fresh gate3.sh; if both read, the LOWER H median wall stands with its whole readout
+set. No other re-run.
+Bound: no stage starts after 2026-10-21T08:37:00Z (epoch 1792571820; ~120 min from the hop start 06:36:34Z). A gate that does
+not open by then -> OWED. Off-AC inside a stage -> run-amended.sh's own rules (VOID / OWED). Nothing is estimated.
+
+Grading (unchanged from timing-2): readout-nfr008-174a.py is the grading view; the registered strict readout is reported beside.
+ A9 = protocol as run. A10 (i) readout-nfr008(a) H median wall + state; (ii) H-B wall/cpu medians + intervals from lane174's
+ summary; (iii) B/T twin R from lane174's summary, H/H2 twin R from readout-nfr008(a). A11: H median wall <= 9.2 s MET;
+ > 9.2 s and <= 10 s -> O3 note (Architect/BA/PM); > 10 s -> owner. NFR-008 = readout-nfr008(a) state on H.
+R-174-1: QE reports the discharge condition (NFR-008 MET on H); Security/NFR owns the ruling.
+Self-hygiene: while a stage runs, no command line of this hop contains the instruments' foreign regex terms.
