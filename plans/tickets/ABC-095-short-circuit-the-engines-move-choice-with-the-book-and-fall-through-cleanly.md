@@ -675,3 +675,30 @@ raises no temp-file concern at L1.
   - one more level of validation still beats it.
 - **Unchanged:** `AR-095-READ` (LOW, Security/NFR) and `AR-095-L1UNIT` (LOW, the Orchestrator; closing via
   `ABC-163`).
+
+**2026-10-21, Security/NFR: `AR-095-L1UNIT` closes at the `ABC-163` merge. The fold's deletion-only gap is carried
+as `AR-163-DELONLY`, and the pre-existing uncomment gap as `AR-163-UNCOMMENT`.** This is subtask
+`security-nfr-ABC-163`, on `ABC-163` at QE tip `2270c8fa` (SE `dc4d4f15`, instrument `87d3897d`). The notes are in
+`.grugops/context/security-nfr-ABC-163/notes/` (`…3e4b4a08` decision, `…3b895278` readings) and are not restated
+here. **Result: PASS_WITH_RISKS**, with no required security fixes. The change has 0 `src/` lines.
+- **`AR-095-L1UNIT`: closes as written when `ABC-163` merges.** QE read `A1` (P2b, P2c), `A2` and `A3` with its own
+  plants (`…8a60d7c8`). The Orchestrator records the close. This meets `AR-180-VALIDATED`'s close part (i). Part (ii),
+  the G-2 pin, is still owed, so `AR-180-VALIDATED` stays open.
+- **`AR-163-DELONLY` (LOW; owner the Orchestrator; fix by Architect/Design).** An edit that only deletes lines in a
+  limb-1 holder fires nothing.
+  - **Why LOW:** today's holder cannot be widened by deletion.
+  - **Trigger:** a limb-1 holder gains a guard (with or without a parameter, `AR-095-READ`'s cap included), a
+    parameter, or a multi-line read, or a second limb-1 holder appears. Each of these routes itself through Ruling 2.
+  - **When it fires, owed before that ticket merges:** Ruling 2's unit widens to any changed line, `+` or `−`, and the
+    instrument fix of about 3 lines lands, read by QE. Until it lands, the Orchestrator runs the by-hand
+    `--name-only` check.
+  - **Closes when** the instrument fires on a deletion-only holder edit, read by QE with the no-parameter guard-drop
+    plant and the import-line drop.
+- **`AR-163-UNCOMMENT` (LOW; owner Architect/Design).** Deleting only the `/*` and `*/` around limb code fires nothing,
+  on every limb. It predates `ABC-163`.
+  - **Today:** no such block exists in production `src/`.
+  - **Trigger:** limb code inside a block comment, seen in a gate's word-hit list or in the tree. The gate then treats
+    the file as fired, and either the commented code is removed or the fix lands before that ticket merges.
+  - **Fix:** fire on a per-file rise in the limb's AST occurrence count.
+  - **Closes when** QE's uncomment plant fires on every limb.
+- **Unchanged:** `AR-095-READ` (LOW, Security/NFR) and `AR-180-VALIDATED` (LOW, the Orchestrator).
