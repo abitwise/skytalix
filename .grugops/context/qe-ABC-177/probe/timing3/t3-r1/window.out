@@ -1,0 +1,44 @@
+{
+ "host": "MacBook-Air.local",
+ "start": "2026-10-21T06:42:39.413Z",
+ "secs": 180,
+ "polls": 181,
+ "foreignPolls": 20,
+ "kinds": {
+  "vitest": 100
+ },
+ "firstForeign": [
+  {
+   "at": "0",
+   "lines": [
+    "21499 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792444886511-0yjvn6.sh 2>/dev/null || true && shopt -u extglob ",
+    "21502 npm exec vitest run install/agents-record.test.ts    ",
+    "21503 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792444886511-0yjvn6.sh 2>/dev/null || true && shopt -u extglob ",
+    "21613 node /Users/olgeroeselg/Projects/public/grugops/node_modules/.bin/vitest run install/agents-record.test.ts",
+    "21614 /opt/homebrew/Cellar/node/26.11.1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/public/grugops/node_modules/vitest/sup"
+   ]
+  }
+ ],
+ "lastForeign": {
+  "at": "19",
+  "lines": [
+   "21499 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792444886511-0yjvn6.sh 2>/dev/null || true && shopt -u extglob ",
+   "21502 npm exec vitest run install/agents-record.test.ts    ",
+   "21503 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792444886511-0yjvn6.sh 2>/dev/null || true && shopt -u extglob ",
+   "21613 node /Users/olgeroeselg/Projects/public/grugops/node_modules/.bin/vitest run install/agents-record.test.ts",
+   "21614 /opt/homebrew/Cellar/node/26.11.1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/public/grugops/node_modules/vitest/sup"
+  ]
+ },
+ "distinct": [
+  "ensus sites in both binaries.'\"'\"','\"'\"'  // every product module and found census sites in both binaries.'\"'\"')]:\\012    assert s.count(old)==1, old; s=s.replace(old,new)\\012open(p,'\"'\"'w'\"'\"').write(s)\\012EOF\\012grep -n '\"'\"'nine product'\"'\"' install/agents-record.test.ts; npx vitest run install/agents-record.test.ts 2>&1 | grep -E '\"'\"'Tests |Test Files|×'\"'\"'' && pwd -P >| /tmp/claude-6473-cwd",
+  "npm exec vitest run install/agents-record.test.ts    ",
+  "node /Users/olgeroeselg/Projects/public/grugops/node_modules/.bin/vitest run install/agents-record.test.ts",
+  "/opt/homebrew/Cellar/node/26.11.1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/public/grugops/node_modules/vitest/suppress-warnings.cjs --conditions node --conditions development --max-old-space-size=1024 /Users/olgeroeselg/Projects/public/grugops/node_modules/vitest/dist/workers/forks.js"
+ ],
+ "load1": {
+  "first": "3.80",
+  "min": "1.87",
+  "max": "3.80",
+  "last": "1.87"
+ }
+}

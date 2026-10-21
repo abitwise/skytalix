@@ -21,6 +21,12 @@ The owner delegated decisions on ABC-177 to the recommended option (`…b87c35b6
 - Still required: AC, load1 ≤ 8, interleaved arms.
 - The thermal rule is unchanged. If the stage goes void on thermal, mark it OWED and the Orchestrator takes it to the owner.
 
+## Owner amendment 2 (2026-10-21 ~06:55Z, note `…31ab7d2d`), which overrides the thermal rule (ABC-177 only)
+- Rounds with thermal pressure of 1 or more are **kept and logged**, not discarded.
+- Flag the reading "warm host (thermal ≥ 1 in k/8 rounds)" in the verdict and in the trace row.
+- If head is ≤ 9.2 s, A10 is MET (flagged).
+- If head is over 10 s, or the stage fails any other way, mark it NOT MET or OWED and hand it back. The owner will then stop the other sessions.
+
 ## Read first
 - `.grugops/queue/done/qe-ABC-177-timing-2.md`.
 - Notes `…24f216bf`, `…4263d981`, `…ef316298`, `…92bb0293`.

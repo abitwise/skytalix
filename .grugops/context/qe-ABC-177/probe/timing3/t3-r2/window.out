@@ -1,0 +1,54 @@
+{
+ "host": "MacBook-Air.local",
+ "start": "2026-10-21T06:54:12.284Z",
+ "secs": 180,
+ "polls": 181,
+ "foreignPolls": 157,
+ "kinds": {
+  "vitest": 1137
+ },
+ "firstForeign": [
+  {
+   "at": "0",
+   "lines": [
+    "63573 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792444886511-0yjvn6.sh 2>/dev/null || true && shopt -u extglob ",
+    "63574 npm exec vitest run install/installer-never-installed.test.ts install/installer-write-set.test.ts install/host-entries.test.ts install/ledger-provenance.t",
+    "63575 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792444886511-0yjvn6.sh 2>/dev/null || true && shopt -u extglob ",
+    "63603 node /Users/olgeroeselg/Projects/public/grugops/node_modules/.bin/vitest run install/installer-never-installed.test.ts install/installer-write-set.test.ts",
+    "63876 /opt/homebrew/Cellar/node/26.11.1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/public/grugops/node_modules/vitest/sup"
+   ]
+  }
+ ],
+ "lastForeign": {
+  "at": "180",
+  "lines": [
+   "87289 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792444886511-0yjvn6.sh 2>/dev/null || true && shopt -u extglob ",
+   "87302 npm exec vitest run scripts/check-banned-claims.test.ts scripts/check-imperative-lexicon.test.ts scripts/validate.test.ts scripts/check-foundation-guards.",
+   "87394 node /Users/olgeroeselg/Projects/public/grugops/node_modules/.bin/vitest run scripts/check-banned-claims.test.ts scripts/check-imperative-lexicon.test.ts ",
+   "87396 /opt/homebrew/Cellar/node/26.11.1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/public/grugops/node_modules/vitest/sup"
+  ]
+ },
+ "distinct": [
+  "& eval 'npx vitest run install/installer-never-installed.test.ts install/installer-write-set.test.ts install/host-entries.test.ts install/ledger-provenance.test.ts install/record-truth.test.ts scripts/board-corpus.test.ts scripts/check-imperative-lexicon.test.ts scripts/board-model.test.ts 2>&1 | grep -E '\"'\"'FAIL|✗|×|Test Files|Tests '\"'\"' | head -40' < /dev/null && pwd -P >| /tmp/claude-bb2d-cwd",
+  "npm exec vitest run install/installer-never-installed.test.ts install/installer-write-set.test.ts install/host-entries.test.ts install/ledger-provenance.test.ts install/record-truth.test.ts scripts/board-corpus.test.ts scripts/check-imperative-lexicon.test.ts scripts/board-model.test.ts           ",
+  "node /Users/olgeroeselg/Projects/public/grugops/node_modules/.bin/vitest run install/installer-never-installed.test.ts install/installer-write-set.test.ts install/host-entries.test.ts install/ledger-provenance.test.ts install/record-truth.test.ts scripts/board-corpus.test.ts scripts/check-imperative-lexicon.test.ts scripts/board-model.test.ts",
+  "/opt/homebrew/Cellar/node/26.11.1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/public/grugops/node_modules/vitest/suppress-warnings.cjs --conditions node --conditions development --max-old-space-size=1024 /Users/olgeroeselg/Projects/public/grugops/node_modules/vitest/dist/workers/forks.js",
+  "shopt -u extglob 2>/dev/null || true && { \\builtin unalias -- 'unsetenv'; \\builtin unset -f -- 'unsetenv'; } >/dev/null 2>&1 || true && eval 'timeout 500 npx vitest run install/install.test.ts -t \"two-root\" 2>&1 | grep -E '\"'\"'FAIL|×|Test Files|Tests |AssertionError|Error'\"'\"' | head -40' < /dev/null && pwd -P >| /tmp/claude-8024-cwd",
+  "timeout 500 npx vitest run install/install.test.ts -t two-root",
+  "npm exec vitest run install/install.test.ts -t two-root      ",
+  "node /Users/olgeroeselg/Projects/public/grugops/node_modules/.bin/vitest run install/install.test.ts -t two-root",
+  "shopt -u extglob 2>/dev/null || true && { \\builtin unalias -- 'unsetenv'; \\builtin unset -f -- 'unsetenv'; } >/dev/null 2>&1 || true && eval 'timeout 300 npx vitest run install/install.test.ts -t \"LAYOUT-01\" --reporter=verbose 2>&1 | grep -E '\"'\"'✓|×|Test Files|Tests '\"'\"' | head -20' < /dev/null && pwd -P >| /tmp/claude-e755-cwd",
+  "timeout 300 npx vitest run install/install.test.ts -t LAYOUT-01 --reporter=verbose",
+  "npm exec vitest run install/install.test.ts -t LAYOUT-01 --reporter=verbose       ",
+  "node /Users/olgeroeselg/Projects/public/grugops/node_modules/.bin/vitest run install/install.test.ts -t LAYOUT-01 --reporter=verbose",
+  "context-io.test.ts scripts/board-oracle.test.ts scripts/check-claim-anchors.test.ts scripts/state-path-scan.test.ts install/state-layout.test.ts scripts/board-corpus.test.ts scripts/board-model.test.ts > /private/tmp/claude-501/-Users-olgeroeselg-Projects-public-grugops/00f419dd-b581-4528-bdb3-b92c2575f8c0/scratchpad/scripts-tests.out 2>&1; echo rc=$?' < /dev/null && pwd -P >| /tmp/claude-9c2c-cwd",
+  "s scripts/check-imperative-lexicon.test.ts scripts/validate.test.ts scripts/check-foundation-guards.test.ts scripts/check-diff-disposition.test.ts scripts/frontmatter.test.ts scripts/context-io.test.ts scripts/board-oracle.test.ts scripts/check-claim-anchors.test.ts scripts/state-path-scan.test.ts install/state-layout.test.ts scripts/board-corpus.test.ts scripts/board-model.test.ts                ",
+  "ed-claims.test.ts scripts/check-imperative-lexicon.test.ts scripts/validate.test.ts scripts/check-foundation-guards.test.ts scripts/check-diff-disposition.test.ts scripts/frontmatter.test.ts scripts/context-io.test.ts scripts/board-oracle.test.ts scripts/check-claim-anchors.test.ts scripts/state-path-scan.test.ts install/state-layout.test.ts scripts/board-corpus.test.ts scripts/board-model.test.ts"
+ ],
+ "load1": {
+  "first": "3.90",
+  "min": "3.83",
+  "max": "5.20",
+  "last": "4.44"
+ }
+}

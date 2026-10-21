@@ -1,0 +1,20 @@
+0 H cpu 28.92 wall 10.1 files 59 tests 1987 load1 4.73 -> 5.62 round0
+0 H2 cpu 29.32 wall 10.06 files 59 tests 1987 load1 5.62 -> 5.53 round0
+1 H cpu 29.39 wall 10.12 files 59 tests 1987 load1 5.83 -> 5.7 DISCARD:foreign,thermal,sampler
+1 H2 cpu 29.93 wall 10.36 files 59 tests 1987 load1 5.7 -> 6.52 DISCARD:foreign,thermal,sampler
+2 H cpu 31.75 wall 11.47 files 59 tests 1987 load1 6.58 -> 9.09 DISCARD:foreign,thermal,sampler
+2 H2 cpu 30.76 wall 11.03 files 59 tests 1987 load1 9.09 -> 8.46 DISCARD:foreign,thermal,sampler
+3 H2 cpu 30.07 wall 10.37 files 59 tests 1987 load1 7.86 -> 7.43 DISCARD:foreign,thermal,sampler
+3 H cpu 32.82 wall 11.4 files 59 tests 1987 load1 7.51 -> 7.29 DISCARD:foreign,thermal,sampler
+4 H cpu 33.32 wall 11.54 files 59 tests 1987 load1 7.03 -> 6.87 DISCARD:foreign,thermal,sampler
+4 H2 cpu 32.51 wall 11.18 files 59 tests 1987 load1 6.87 -> 6.52 DISCARD:foreign,thermal,sampler
+5 H cpu 34.34 wall 13.04 files 59 tests 1987 load1 6.6 -> 6.83 DISCARD:foreign,thermal,sampler
+5 H2 cpu 30.47 wall 10.45 files 59 tests 1987 load1 6.83 -> 6.48 DISCARD:foreign,thermal
+6 H cpu 31.12 wall 10.62 files 59 tests 1987 load1 6.25 -> 6.29 DISCARD:foreign,thermal
+6 H2 cpu 31.15 wall 10.73 files 59 tests 1987 load1 6.29 -> 6.41 DISCARD:foreign,thermal
+7 H2 cpu 31.39 wall 10.78 files 59 tests 1987 load1 6.65 -> 6.24 DISCARD:foreign,thermal
+7 H cpu 31.27 wall 10.7 files 59 tests 1987 load1 6.21 -> 6.01 DISCARD:foreign,thermal
+8 H cpu 29.55 wall 10.19 files 59 tests 1987 load1 5.4 -> 5.88 DISCARD:foreign,thermal
+8 H2 cpu 31.41 wall 10.75 files 59 tests 1987 load1 5.88 -> 5.9 DISCARD:foreign,thermal
+scored 0 []
+WINDOW STATE: VOID

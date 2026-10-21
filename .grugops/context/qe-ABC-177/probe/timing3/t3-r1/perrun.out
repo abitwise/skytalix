@@ -1,0 +1,41 @@
+round	cond	wall	cpu	power	power_after	load1_before	load1_after	fv_before	fv_after	samples	foreign_samples	foreign_max	foreign_cmds
+0	B	10.38	26.48	AC Power	AC Power	1.8	2.37	0	0	3	0	0	-
+0	T	10.35	26.56	AC Power	AC Power	2.37	2.56	0	0	4	0	0	-
+0	H	9.02	24.42	AC Power	AC Power	2.56	2.84	0	0	4	0	0	-
+0	H2	9.07	24.38	AC Power	AC Power	2.84	3.17	0	0	3	0	0	-
+1	T	10.43	28.57	AC Power	AC Power	3.17	3.75	0	0	5	0	0	-
+1	H	9.06	26.33	AC Power	AC Power	3.75	4.01	0	0	3	0	0	-
+1	H2	9.15	26.48	AC Power	AC Power	4.01	4.74	0	0	4	0	0	-
+1	B	10.63	29.72	AC Power	AC Power	4.74	4.79	0	0	4	0	0	-
+2	H	9.26	26.59	AC Power	AC Power	4.79	4.51	0	0	4	0	0	-
+2	H2	9.44	27.19	AC Power	AC Power	4.51	4.58	0	0	4	0	0	-
+2	B	10.87	30.17	AC Power	AC Power	4.58	4.48	0	0	4	0	0	-
+2	T	10.8	29.85	AC Power	AC Power	4.48	6.83	0	0	4	0	0	-
+3	H2	9.38	26.6	AC Power	AC Power	6.83	7.2	0	0	4	0	0	-
+3	B	11.13	30.78	AC Power	AC Power	7.2	6.56	0	0	4	0	0	-
+3	T	10.7	29.88	AC Power	AC Power	6.56	6.16	0	0	4	0	0	-
+3	H	9.44	26.97	AC Power	AC Power	6.16	6.56	0	0	4	0	0	-
+4	B	10.84	30.55	AC Power	AC Power	6.56	6.7	0	0	4	1	2	/opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792444948463-z7qhyz.sh 2>/dev
+4	T	10.86	29.7	AC Power	AC Power	6.7	6.28	0	0	4	1	2	/opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792444948463-z7qhyz.sh 2>/dev
+4	H	9.21	26.37	AC Power	AC Power	6.28	6.15	0	0	4	0	0	-
+4	H2	9.14	26.44	AC Power	AC Power	6.15	5.75	0	0	4	0	0	-
+5	T	10.8	29.99	AC Power	AC Power	5.75	5.63	0	0	4	0	0	-
+5	H	9.35	26.86	AC Power	AC Power	5.63	5.61	0	0	4	0	0	-
+5	H2	9.6	27.39	AC Power	AC Power	5.61	6.41	0	0	4	0	0	-
+5	B	10.81	30.2	AC Power	AC Power	6.41	6.44	0	0	4	0	0	-
+6	H	9.45	27.06	AC Power	AC Power	6.44	6.32	0	0	4	0	0	-
+6	H2	9.56	27.66	AC Power	AC Power	6.32	6.33	0	0	4	0	0	-
+6	B	10.99	30.62	AC Power	AC Power	6.33	5.9	0	0	5	0	0	-
+6	T	11.05	30.71	AC Power	AC Power	5.9	5.84	0	0	4	0	0	-
+7	H2	9.14	26.42	AC Power	AC Power	5.84	5.72	0	0	4	0	0	-
+7	B	11.29	31.03	AC Power	AC Power	5.72	6.8	0	0	4	0	0	-
+7	T	11.01	30.51	AC Power	AC Power	6.8	6.6	0	0	4	0	0	-
+7	H	9.55	27.4	AC Power	AC Power	6.6	6.59	0	0	4	0	0	-
+8	B	11.23	30.8	AC Power	AC Power	6.59	6.42	0	0	5	0	0	-
+8	T	11.16	30.38	AC Power	AC Power	6.42	7.28	0	0	4	0	0	-
+8	H	9.52	27.01	AC Power	AC Power	7.28	7.17	0	0	4	0	0	-
+8	H2	11.28	31.36	AC Power	AC Power	7.17	7.16	0	0	4	0	0	-
+
+runs 36; sampler rows 75; sampler rows foreign 1; load1 sampler range 1.98-7.57; user_procs 440-473
+distinct foreign commands (runs touched):
+  2	/opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1792444948463-z7qhyz.sh 2>/dev/null || true && sho
