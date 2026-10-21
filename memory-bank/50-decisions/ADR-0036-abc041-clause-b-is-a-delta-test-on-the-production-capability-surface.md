@@ -550,3 +550,46 @@ environment. The 12 earlier rows print what they printed before.
 
 **Rollback.** Revert `63eadabe`, and the GITENV stand-in and the `AR-191-QUOTEPATH` dispute-line rule return at every
 routing and merge. Readings: `.grugops/context/arch-build-ABC-193/notes/` and `.grugops/context/bapm-cut-AR-191/notes/`.
+
+#### Hunk lines and spaced names no longer steer clause (b)'s line map — 2026-10-21 (`ABC-195`)
+
+Accepted by Security/NFR at `QE-193-a`/`QE-193-b` as `AR-193-SPACEPATH` and `AR-193-HUNKHDR`
+(`.grugops/context/security-nfr-QE-193/notes/…decision-5719a86d` § 1–3; owner record `…orchestrator-decision-73e94c9f`).
+Commit `0dfd17b3` edits `.grugops/context/design-F-072-1/probe/clause-b.mjs` **in place**, inside `changedLines` only,
+so the canonical pointer above is unchanged. Readings taken before it reproduce from that file at `63eadabe`.
+- **(i) The header window.** `changedLines` reads a `---`/`+++` line, and the C-quoted test, as a header only between a
+  `diff --git ` line and that file's first `@@`. So an added line whose text starts `++ ` (printed `+++ …` under `-U0`)
+  or a removed one starting `-- ` is a hunk line, and no longer changes the file that later hunks count against.
+  Measured: `PP-TPL` (a `++ ` template line, then a later hunk with a `process.env` read and a `fetch`) and `PP-REDIR`
+  now fire limbs 2 and 3, and `PP-EDIT` (an in-place edit of a `process` read in a limb-2 holder, which § Decision 2
+  counts) fires limb 2; none did before this commit. `PP-REDIR` (`++ b/src/glyph-mode.ts`) names only the real file
+  (`production files changed: 1`, not 2). `RA-PLUS` (`++ "quoted" note`) raises no dispute, so `R-193-a` is gone, and
+  fires on its real lines. A removed `-- ` line no longer drops its file's later `-` counts (QE's `PM`: Ruling 2 reads
+  `2 - lines`, not 1).
+- **(ii) The TAB.** An unquoted header path (one not starting `"`) drops one trailing TAB; a C-quoted path is left as git
+  printed it. git adds the TAB only to a name holding a space, and C-quotes any name holding a real TAB, so this is
+  unambiguous. A production file whose name holds a space is read like any other: `SP-N5` (a reached `src/q t.ts`
+  gaining a `node:fs` import, a `process.env` read and a `fetch`) fires limbs 1, 2 and 3, Ruling 2 naming `src/q t.ts`;
+  before this commit it fired none.
+- **(iii) Block (i) of the `ABC-193` block, its scope stated exactly (`QE-193-c`).** Its flags and `-c
+  core.quotePath=false` cover colour, an external diff, a diff driver's `command`, prefixes and quoting.
+  `GIT_DIFF_OPTS` still changes what the instrument reads: it overrides `-U0`, so hunks carry context lines and the
+  `+`/`−` counts rise. That can only raise a verdict. The instrument does not clear it.
+- **(iv) The stand-in retires.** The Orchestrator's HUNKHDR stand-in (owner record `…73e94c9f`) **retires when this
+  merges**:
+  `git -c core.quotePath=false diff -U0 --no-renames --text --no-textconv --no-ext-diff --no-color --src-prefix=a/ --dst-prefix=b/ <base> <head> -- src | awk '/^diff --git /{h=0} /^@@/{h=1} /^(\+\+\+|---) / && (h || /\t$/)'`
+- **(v) `AR-193-HUNKHDR` closes on QE's read of `PP-TPL`, `PP-EDIT`, `PP-REDIR` and `RA-PLUS`** as in `ABC-195`'s
+  `A2`/`A4`, with the 20 earlier rows unchanged; **`AR-193-SPACEPATH` closes on QE's read of `SP-N5`.** The
+  Orchestrator records both closes.
+
+No limb's unit changes, and Ruling 2 is untouched. **Harness.** `r2-mutants.sh` has 25 rows. `PP-TPL`, `PP-REDIR`,
+`RA-PLUS`, `PP-EDIT` and `SP-N5` are Security/NFR's plants. `341da4c1` reads them as the instrument before this commit
+does (blind), so each compares limbs 2 and 3 with `341da4c1` on its twin: the same plant with the `++` as `x`, or the
+same two commits with `src/q-t.ts`, read back as `src/q t.ts`, the pair ids of the `  diff` line masked. A plant check
+exits 2 unless the stand-in's awk prints at least one line on each plant's diff and none on its twin's. The Ruling 2
+file list splits a name at the two spaces before `(fired by Ruling 2:`. The 20 earlier rows print what they printed
+before.
+
+**Rollback.** Revert `0dfd17b3`, and the HUNKHDR stand-in and the `AR-193-SPACEPATH` trigger rule (a `src/` path
+holding whitespace routes by hand as fired on every limb) return at every routing and merge. Readings:
+`.grugops/context/arch-build-ABC-195/notes/` and `.grugops/context/bapm-cut-AR-193/notes/`.

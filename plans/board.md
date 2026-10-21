@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-21 by Orchestrator — `ABC-195` In Review → Done (merged; QE PASS_WITH_GAPS `…f36a06c3`; gates green 59/1994, CLI_DEEP 11/11, PERFT_DEEP 32/32; UAT waived). AR-193-HUNKHDR and AR-193-SPACEPATH closed; the HUNKHDR stand-in retires — no clause (b) stand-in remains. QE-195-a (LOW proposed: PP-EDIT anchor drift goes unseen) to BA/PM `bapm-rule-QE-195`. In Review 0/3._
 _Updated: 2026-10-21 by Orchestrator — BA/PM `bapm-rule-QE-194` (`…54e03439`): QE-194-a/-b/-c/-d all accepted, no ticket cut (QE-194-a folded into QE-192-b's diff-reading owner rule; -b's two plants into QE-192-c's). Next free id stays ABC-196._
 _Updated: 2026-10-21 by Orchestrator — `ABC-194` In Review → Done (merged; QE PASS_WITH_GAPS `…ac075665`; gates green 59/1994, CLI_DEEP 11/11, PERFT_DEEP 32/32; UAT waived). QE-194-a (LOW proposed: an off-switch on the guard's inputs) and -b/-c/-d (INFO) to BA/PM `bapm-rule-QE-194`. In Review 1/3._
 _Updated: 2026-10-21 by Orchestrator — `ABC-195` In Development → In Review (Architect tip `f9709ed8`: base red as the page's table, each half short, 25 of 25; 59/1994; waiver and HUNKHDR stand-in empty); QE `qe-ABC-195` dispatched beside `qe-ABC-194`. In Development 0/3, In Review 2/3._
@@ -870,7 +871,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
     ## In Development (WIP 0/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
-    ## In Review (WIP 1/3)
+    ## In Review (WIP 0/3)
     - [ABC-012] Portfolio FX conversion  (PR: #41, QE: running)
 
   BOARD <-> TICKET CONTRACT: each ticket file (`plans/tickets/<prefix>-xxx.md`) carries a
@@ -1020,8 +1021,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
-- [ABC-195] An added line starting `++ ` hides the later hunks of its file from clause (b), and a production file whose name holds a space goes unseen (AR-193-HUNKHDR + AR-193-SPACEPATH fix)  (owner: architect-design, size: XS, priority: P3, epic: —, since: 2026-10-21, in dev 2026-10-21 (Architect `arch-build-ABC-195`, tip `f9709ed8`), in review 2026-10-21 (QE `qe-ABC-195`), DoR 10/10; cut in `bapm-cut-AR-193`. Builder Architect/Design. Four files (`clause-b.mjs`, `r2-mutants.sh`, its `.out.txt`, `ADR-0036`); 0 `src/` lines. Gates no merge; the Orchestrator's HUNKHDR stand-in runs until it lands. QE reads PP-TPL/PP-EDIT/PP-REDIR/RA-PLUS (20 rows unchanged) to close AR-193-HUNKHDR, and SP-N5 to close AR-193-SPACEPATH. `GIT_DIFF_OPTS` rider not taken.)
+## In Review (WIP 0/3)
 
 
 
@@ -1082,6 +1082,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+- [ABC-195] An added line starting `++ ` hides the later hunks of its file from clause (b), and a production file whose name holds a space goes unseen (AR-193-HUNKHDR + AR-193-SPACEPATH fix)  (owner: architect-design, size: XS, priority: P3, epic: —, since: 2026-10-21, in dev 2026-10-21 (Architect `arch-build-ABC-195`, tip `f9709ed8`), in review 2026-10-21 (QE `qe-ABC-195` PASS_WITH_GAPS `78a52b1c`), done 2026-10-21 (merged; AR-193-HUNKHDR and AR-193-SPACEPATH closed), DoR 10/10; cut in `bapm-cut-AR-193`. Builder Architect/Design. Four files (`clause-b.mjs`, `r2-mutants.sh`, its `.out.txt`, `ADR-0036`); 0 `src/` lines. Gates no merge; the Orchestrator's HUNKHDR stand-in runs until it lands. QE reads PP-TPL/PP-EDIT/PP-REDIR/RA-PLUS (20 rows unchanged) to close AR-193-HUNKHDR, and SP-N5 to close AR-193-SPACEPATH. `GIT_DIFF_OPTS` rider not taken.)
 - [ABC-194] A try/catch or an off-switch around `setup`'s guard call lets an uncapped run through, and the ABC-192 row stays green (QE-192-a)  (owner: software-engineer, size: XS, priority: P3, epic: —, since: 2026-10-21, in dev 2026-10-21 (SE `ticket-to-pr-ABC-194`, tip `fcf47534`), in review 2026-10-21 (QE `qe-ABC-194` PASS_WITH_GAPS `2c8abacf`), done 2026-10-21 (merged), DoR 10/10; cut in `bapm-rule-QE-192`. Test-only, `src/cli.test.ts`: `guardStreamFaultOf` also requires a direct statement and no `return` in `setup`, and the plant table grows from 5 to 9 entries. Tests stay 1994, 0 children, `tools/` and `AGENTS.md` untouched. Gates no merge. Overlaps `ABC-189` in the same file, in a different block.)
 - [ABC-193] Git config or environment can blind clause (b)'s one diff call, and a production file whose name git quotes goes unseen (AR-191-GITENV + AR-191-QUOTEPATH fix)  (owner: architect-design, size: XS, priority: P3, epic: —, since: 2026-10-21, in dev 2026-10-21 (Architect `arch-build-ABC-193`, tip `3d734fa1`), in review 2026-10-21 (QE `qe-ABC-193` PASS_WITH_GAPS `d20a70d5`), done 2026-10-21 (merged; AR-191-GITENV and AR-191-QUOTEPATH closed), DoR 10/10; cut in `bapm-cut-AR-191`. Builder Architect/Design. Four files (`clause-b.mjs`, `r2-mutants.sh`, its `.out.txt`, `ADR-0036`); 0 `src/` lines. Gates no merge; the Orchestrator's GITENV stand-in and the QUOTEPATH dispute-line rule run until it lands. QE reads A2–A4 to close AR-191-GITENV, and QU/QE2/A6 for QUOTEPATH's instrument half. The `AGENTS.md` waiver form is owed outside it.)
 - [ABC-192] Nothing pins the stream `setup` hands the heap guard, and a vitest bump re-runs no capture arm (QE-176-a, QE-176-b)  (owner: software-engineer, size: XS, priority: P3, epic: —, since: 2026-10-21, in dev 2026-10-21 (SE `ticket-to-pr-ABC-192`, tip `b5b8b0f9`), in review 2026-10-21 (QE `qe-ABC-192` PASS_WITH_GAPS `a530222a`), done 2026-10-21 (merged), DoR 10/10; cut in `bapm-rule-QE-176`. Test-only, `src/cli.test.ts`: a parser-view row (`setup` passes `process.stdout`) and a vitest-version row whose red names the re-run list. 0 children, `tools/` and `AGENTS.md` untouched. Gates no merge. Overlaps `ABC-189` in the same file, in a different block.)
