@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-21 09:50Z — Orchestrator: `scribe-snapshot-rule` merged to `main` with gates passing. AGENTS.md now carries the owner's snapshot-only waiver clause (`…be910aa8`, grant `…d9aa42b9`), and the unfiltered waiver measurement is the reference. 24,560 / 24,576 B._
 _Updated: 2026-10-21 09:40Z — Orchestrator: ABC-180 In Review → In Security/NFR. QE PASS_WITH_GAPS (`…f88e0845`): AR-162-FALLBACK close condition met, but P6g survives (G-1). Dispatched `security-nfr-ABC-180`._
 _Updated: 2026-10-21 09:30Z — Orchestrator: ABC-179 In Review → Done, merged to `main` with all gates passing; UAT waived. Dispatching `arch-ABC-163-adr` into the freed slot._
 _Updated: 2026-10-21 09:20Z — Orchestrator: ABC-180 In Development → In Review (SE code `acb52edf`, tip `d9c3cca3`; A1–A6 met; P6f green→red; 0 production lines). Dispatched `qe-ABC-180`. In Review is at 3/3._
