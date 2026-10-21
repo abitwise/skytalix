@@ -9,7 +9,7 @@
  *
  * It lives in its own file because a `vi.mock` factory is hoisted to file scope: putting it in
  * `status-panel.test.ts` would re-route the module graph for every test there to buy these. That
- * is `src/gameend.nfr.test.ts`'s lesson, recorded in the catalog and followed here.
+ * is `src/gameend.nfr.test.ts`'s lesson, written in that file's own header and followed here.
  */
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
