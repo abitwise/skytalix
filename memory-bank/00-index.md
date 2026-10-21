@@ -70,8 +70,9 @@ _Updated: 2026-08-12 by Architect/Design (task `arch-audit-2026-08-12`, subtask 
 | `20-product.md` | product context: users, value, scope |
 | `30-architecture.md` | architecture, system patterns, tech context |
 | `40-contributing.md` | how to contribute and the project conventions |
+| `45-standing-rulings.md` | the owner's standing rulings in full: process rules, branching, test and UAT, QE, deployment (moved from `AGENTS.md`, `ABC-164`, 2026-10-21) |
 | `50-decisions/` | architecture decision records (ADRs); see `ADR-template.md` |
 | `60-progress.md` | running plan-of-record: what works, what's left, known issues |
 | `70-runbook.md` | how to operate, deploy, and roll back in production |
 | `80-glossary.md` | shorthand, acronyms, domain terms |
-| `90-agents-md-command-log.md` | `AGENTS.md` § Commands' full RUN receipts (`ABC-109`, 2026-09-26) |
+| `90-agents-md-command-log.md` | `AGENTS.md` § Commands' full RUN receipts (`ABC-109`, 2026-09-26), the on-demand commands and the lane triggers and traps (`ABC-164`, 2026-10-21) |
