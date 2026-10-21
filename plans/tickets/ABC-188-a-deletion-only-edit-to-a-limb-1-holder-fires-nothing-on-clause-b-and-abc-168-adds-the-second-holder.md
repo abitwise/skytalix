@@ -1,8 +1,8 @@
 ---
 id: ABC-188
 title: "A deletion-only edit to a limb-1 holder fires nothing on clause (b), and `ABC-168` makes `src/uci.ts` the second holder (the `AR-163-DELONLY` fix, owed before `ABC-168` merges)"
-status: ready
-column: Ready
+status: in-development
+column: In Development
 size: S
 priority: P2
 epic: —
