@@ -38,8 +38,6 @@ Roles pull the shared verified context they need and publish their work output a
 
 ## Kit vs state
 
-Clear voice — this is a resolution and safety rule, not a joke.
-
 - `agent-factory/…` = **KIT** — read-only, resolved from the kit root; NEVER written.
 - `plans/`, `memory-bank/`, `.grugops/` = **STATE** — read/write in THIS repo.
 - Roles read and write the shared verified context only via Workflow 16 (`agent-factory/workflows/16-context-read-write.md`) — referenced, never restated.
@@ -235,41 +233,41 @@ admissible, so a UAT result is a `decision`/`observation`, never a stamp.
 
 **2026-08-16 — the owner's word in session IS the `In UAT` signature.** Offered his word, a
 self-written file, or a redefinition of the exit; chose his word, and a green agent report does NOT
-count as his acceptance (`ABC-065`, `ABC-066` accepted this way). **NOT a kit override** — it
+count as his acceptance. **NOT a kit override** — it
 satisfies `agent-factory/workflows/06-uat-pack.md`'s named-human-signoff requirement; the owner IS
 that human.
 
 **2026-08-17 — a ticket whose delivered diff carries ZERO PRODUCTION LINES has UAT WAIVED, standing.**
 `Ready for UAT` → `Done`, no UAT run. Measured from git, never asserted:
 `git diff --name-only <delivered>~1 <delivered> | grep -v '\.test\.ts$' | grep '^src/'` must be
-**empty** — any production line and the rule does not apply. **A waiver is not a signature:** `Done`
+**empty** — any production line and the rule does not apply. This unfiltered form is the reference
+measurement; no brief may add a `__snapshots__` filter. **Snapshot-only exception (owner,
+2026-10-17):** if it lists only `src/__snapshots__/*.snap`, the waiver holds only if the
+Orchestrator reads every changed `.snap` and records that in the Done note; any change the
+criteria do not explain voids it and UAT goes to the owner. **A waiver is not a signature:** `Done`
 here means merged and gated, never human-accepted. Composes with, does not supersede, 2026-08-16.
 **This IS a kit override — the third** (with the branching model and the deployment posture); the
-kit's UAT stage is unconditional. Close-out: `ABC-063` by his named word, `ABC-064` by the rule
-applied to a measurement.
+kit's UAT stage is unconditional.
 
 **Two misreadings to refuse in advance:** an agent still may **not** self-sign — the ruling is the
 owner's word signs, never a green report; and the recorded acceptance is an agent's
-**transcription** of that word (`human_admission` is still `off`, no `human:<name>` stamp exists),
-never a stamp.
+**transcription** of that word, never a stamp.
 
 Scope is the `In UAT` exit signature only — `quality.gate_enforcement` stays `blocking`,
-`production_requires_human_confirmation` stays `true`. Authority: `memory-bank/60-progress.md` §§
-"Standing directive — deploy is ALLOWED and NOT NEEDED... 2026-08-15.", "...the owner's word in
-session IS the `In UAT` signature. 2026-08-16." and "...ZERO PRODUCTION LINES has its UAT WAIVED,
-standing. 2026-08-17." — pointers, not the text.
+`production_requires_human_confirmation` stays `true`. Authority: `memory-bank/60-progress.md`, the
+"Standing directive" §§ of 2026-08-15, -16 and -17 — pointers, not the text. The exception: owner
+word `…be910aa8` (`wave-2026-09-25`); grant to amend this override `…d9aa42b9` (`qe-redact-SEC-177-1`).
 
 ## QE validation authority
 
 **Every ticket gets a `qe-e2e` hop and QE's recorded verdict before leaving `In Review`; none reaches
 `Done` without one.** Owner's, 2026-08-17, standing and revocable.
 
-**Forward-only.** `ABC-068`, `ABC-061`–`ABC-064` were gated and merged with no QE hop and stay closed
-(no retro pass); the residual exposure is named: +435/−11 lines of `src/cli.test.ts` assertions
-never reviewed by QE.
+**Forward-only.** `ABC-068`, `ABC-061`–`ABC-064` merged with no QE hop and stay closed, no retro
+pass (exposure: +435/−11 lines of `src/cli.test.ts` assertions QE never reviewed).
 
 **QE is NOT UAT** — conflating them is what let QE go missing for five tickets. The zero-production-
-lines waiver (`## Test and UAT authority`) waives UAT only, completely unamended; a test-only ticket
+lines waiver (`## Test and UAT authority`) waives UAT only; a test-only ticket
 still gets QE, and the 2026-08-16 signature ruling stands unamended too.
 
 **NOT a kit override** — `agent-factory/workflows/04-ticket-to-pr.md` step 5 already required this
