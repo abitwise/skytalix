@@ -16,6 +16,14 @@ feature: —
 > with `QE-173-d`. Sources: `SEC-173-1` (`.grugops/context/secnfr-ABC-173/notes/…f3757b98`, `probe/skipzero.out`),
 > `QE-173-d` (`.grugops/context/qe-ABC-173/notes/…e81b5c27`). Records only. This hop ran no vitest and no timing.
 
+> **Erratum 2026-10-21 by BA/PM (`bapm-rule-QE-176`, `QE-176-d`); the text below stays as cut.** (1) `A5`'s
+> "≤ 24,576 B" is superseded by `ABC-187`'s 18,432 B (`AGENTS_MD_BUDGET_BYTES`); `A5` holds at 15,797 B (QE
+> `…be90087e`). (2) `A2`'s "`UNKNOWN - verify`" is settled: feasible on vitest 4.1.11 (SE `…d7694ffa`, QE
+> `…be90087e`), so option (b) stands. (3) The two `bapm-cut-ABC-176` notes cited above (`…6d2a8f30`, `…9b4e1c07`) are
+> hand-authored and `sealed: false`, so `readContext` returns neither. This page is the authoritative text, and a
+> sealed pointer to them is in `bapm-rule-QE-176`. (4) `QE-176-a`/`-b` are cut to `ABC-192`, and `QE-176-c` is
+> accepted.
+
 ## Problem
 
 *User*: every agent hop (and the owner) that runs the test-integrity gate step or reads `npm test`'s result file.
