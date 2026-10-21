@@ -198,3 +198,5 @@ checked with `cmp`. No timing taken. Notes: `.grugops/context/qe-ABC-192/notes/`
   - **`QE-192-c` INFO:** the row fails closed on behaviour-equivalent refactors of the call site.
   - **`QE-192-d` INFO:** a bump of `@vitest/coverage-v8` alone, or of the lockfile before reinstall, stays green.
     A lockfile reader would be weaker than the SE's `node_modules` read.
+
+> **2026-10-21, BA/PM (`bapm-rule-QE-192`, at `main` `7a2ec8bc`): the QE gaps are ruled** (`.grugops/context/bapm-rule-QE-192/notes/`). `QE-192-a` is **CUT → `ABC-194`** (Ready, XS, P3): the check also requires a direct statement and no `return` in `setup`. `QE-192-b`, `-c` and `-d` are **ACCEPTED**, each with an owner and a reopen trigger. This page's cut text is unchanged.
