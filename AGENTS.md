@@ -69,7 +69,7 @@ Perft, the opening-book regeneration, each lane's trigger and trap, and the cove
 waiting shell's own command line and never exits. Wait on the PID you started or the tool's
 completion notification; if a pattern is unavoidable, bracket one character (`[v]itest`).
 
-- Test (all): `npm test` <!-- `node tools/grugops/run-bounded.js 60000 vitest run` (ABC-122). A hung lane exits 124 at the 60 s bound — stop
+- Test (all): `npm test` <!-- `NODE_OPTIONS=--max-old-space-size=128 node tools/grugops/run-bounded.js 60000 vitest run` (ABC-122). A hung lane exits 124 at the 60 s bound — stop
   with Ctrl-C/SIGTERM, never SIGKILL (R1: can orphan a hung vitest). `*_DEEP` lanes below run via
   `npx vitest run` directly, never through `npm test`. -->
 - Heap flag (ABC-173): `--max-old-space-size=400` is for ONE-file vitest runs only. Whole-suite or
@@ -102,7 +102,7 @@ completion notification; if a pattern is unavoidable, bracket one character (`[v
 
 ### Test integrity
 
-- Skip-count capture: `NODE_OPTIONS=--max-old-space-size=128 npx vitest run --reporter=json 2>/dev/null | jq '.numPendingTests + .numTodoTests'` <!-- verified: returns an integer (0 with no tests). Undeterminable → `UNKNOWN - verify`, never a silent 0. -->
+- Skip-count capture: `NODE_OPTIONS=--max-old-space-size=128 npx vitest run --reporter=json 2>/dev/null | jq '.numPendingTests + .numTodoTests'` <!-- verified: returns an integer (0 with no tests). Undeterminable → `UNKNOWN - verify`, never a silent 0. Run it as spelled: quotes without its prefix (before ABC-173) are history; refused by the heap guard, they print no integer and exit non-zero (ABC-176). -->
 
 - Test-integrity check (the gate's step): `node tools/grugops/test-skip-integrity.js .grugops/test-skips.md --skip-count <N>` <!-- verified: `No findings.`, exit 0, at skip count 0. `.grugops/test-skips.md` is HUMAN-OWNED — an agent may READ and RUN this, never write a row into it. -->
 

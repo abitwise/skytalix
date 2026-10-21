@@ -943,3 +943,12 @@ after `ABC-164`; the sentences below were the only ones changed, besides the `QE
 
 `QE-164-b`: in the `scribe-ABC-164` pass, the miss list now has four kinds (the `O1` line split added) and no longer counts the QE-hop comment
 (found whole in `40-contributing.md`). The Reader's "one-line summary" clause was changed with its sentence because the same split made it false.
+
+## `scribe-ABC-176` pass, 2026-10-21 (`ABC-176` `A5`; branch `grugops/ABC-176`, SE code `ffd53f41`)
+
+AGENTS.md Scribe, task `scribe-ABC-176`. Two comment edits in `AGENTS.md`, both inside HTML comments, no command line changed, no new backticked `npx vitest` text (`ABC-173` `A3` still counts 17). 15,606 -> **15,797 B** (+191; budget 18,432, `ABC-187`).
+
+| where | change | bytes |
+|---|---|---:|
+| `Test (all)` comment | the quoted wrapper gains its `NODE_OPTIONS=--max-old-space-size=128` prefix (`QE-173-f`: it was quoted without it) | +38 |
+| skip-count comment | adds: "Run it as spelled: quotes without its prefix (before `ABC-173`) are history; refused by the heap guard, they print no integer and exit non-zero (`ABC-176`)." The skip-count command is unchanged | +153 |

@@ -30,6 +30,20 @@
 // `RISK-ABC173-STATE`: `project.vitest.state.getPaths()` is a public getter, not documented as stable.
 // When it is missing or reads 0 files this throws, because a guard must never pass by being unable to
 // look.
+//
+// A REFUSAL IS NAMED WHERE ITS READERS LOOK (`ABC-176`, `SEC-173-1`, `QE-173-d`). `guard` wraps
+// `admit`: whatever `admit` throws (a refusal, or a "cannot look" throw) is, BEFORE it is re-thrown,
+//   1. written verbatim as one line to STDOUT. A skip-count capture pipes vitest's stdout into `jq`
+//      with stderr discarded (`npx vitest run --reporter=json 2>/dev/null | jq …`, with or without
+//      its prefix). This line comes before the JSON report, so `jq` fails to parse it, prints
+//      nothing and exits non-zero: no `0` that reads as a clean count. It relies on the guard
+//      running (globalSetup) before the JSON reporter writes (`onTestRunEnd`), on one stream;
+//   2. handed to vitest as an unhandled error (`project.vitest.state.catchError`, the call vitest's
+//      own pool makes). vitest passes it to every reporter's `onTestRunEnd`, so `npm test`'s
+//      `.test-results/last-run.json` carries it as `unhandledErrors[].message`, and the READ IT
+//      query in `result-file-reporter.js` prints it on its `error` line. When `catchError` is
+//      missing the refusal still throws (and still writes 1.): only the file loses its name.
+// The green path does neither: an admitted run writes nothing and records nothing.
 
 import v8 from "node:v8";
 import { isMainThread } from "node:worker_threads";
@@ -62,7 +76,20 @@ export function admit(project, heapStatistics) {
   project.provide("heapRowMiB", row);
 }
 
+// `guard` is `admit` plus the naming above, with the output stream passed in, so `src/cli.test.ts`'s
+// `ABC-176` rows can call it in a worker with a stub project and a stub stream.
+export function guard(project, heapStatistics, out) {
+  try {
+    admit(project, heapStatistics);
+  } catch (error) {
+    out.write(`${String(error?.message ?? error)}\n`);
+    const state = project?.vitest?.state;
+    if (typeof state?.catchError === "function") state.catchError(error, "Heap Guard Refusal");
+    throw error;
+  }
+}
+
 export default function setup(project) {
   if (!isMainThread) throw new Error("heap-guard: globalSetup ran off the main thread; it cannot read the main process's limit there");
-  admit(project, v8.getHeapStatistics());
+  guard(project, v8.getHeapStatistics(), process.stdout);
 }

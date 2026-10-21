@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-21 by Orchestrator — `ABC-176` In Review → Done (merged; QE PASS_WITH_GAPS `…75bc28e0`; gates green 59/1992, skip capture as spelled 0 / refused arm prints nothing, CLI_DEEP 11/11, PERFT_DEEP 32/32; UAT waived; `AGENTS.md` 15,797 B). QE-176-a/-b (LOW) and -c/-d (INFO) to BA/PM `bapm-rule-QE-176`. In Review 0/3._
 _Updated: 2026-10-21 by Orchestrator — `ABC-191` In Review → Done (merged; QE PASS_WITH_GAPS `…16ba4076`; gates green 59/1987, CLI_DEEP 11/11, PERFT_DEEP 32/32; UAT waived). AR-188-BINARY closed; the `--numstat` stand-in retires (`…7f7588a5`). QE-191-a (LOW) to Security/NFR `security-nfr-QE-191-a`. In Review 1/3._
 _Updated: 2026-10-21 by Orchestrator — `ABC-176` In Development → In Review (Scribe tip `37b8debc`: `AGENTS.md` 15,606 → 15,797 B, A3 count 17; 1992/1992; waiver and `--numstat` empty); QE `qe-ABC-176` dispatched beside `qe-ABC-191`. In Development 0/3, In Review 2/3. Scribe self-reported deleting two uncommitted mis-filed notes before re-publishing (append-only deviation, recorded)._
 _Updated: 2026-10-21 by Orchestrator — `ABC-176` SE hop closed (tip `bfe1ff4a`, code `ffd53f41`; A1–A4 met on SE readings, A2 feasible so option (b) stands; 1992/1992; waiver and `--numstat` empty). Scribe `scribe-ABC-176` applies the two `AGENTS.md` comments on the branch (A5); then QE._
@@ -853,7 +854,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
     ## In Development (WIP 0/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
-    ## In Review (WIP 1/3)
+    ## In Review (WIP 0/3)
     - [ABC-012] Portfolio FX conversion  (PR: #41, QE: running)
 
   BOARD <-> TICKET CONTRACT: each ticket file (`plans/tickets/<prefix>-xxx.md`) carries a
@@ -1003,8 +1004,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
-- [ABC-176] A heap-guard-refused run never reads as a clean skip count or a quiet result file  (owner: BA/PM, size: XS, priority: P3, epic: —, since: 2026-10-19, in dev 2026-10-21 (SE `ticket-to-pr-ABC-176` tip `bfe1ff4a`, then Scribe `scribe-ABC-176` on the branch, tip `37b8debc`; in review 2026-10-21, QE `qe-ABC-176`; page facts from 2026-10-19 flagged in the brief), DoR 10/10; cut in `bapm-cut-ABC-176` (`30504eed`) from SEC-173-1 + QE-173-d, owner word `…5c8d2f71`.)
+## In Review (WIP 0/3)
 
 
 
@@ -1065,6 +1065,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+- [ABC-176] A heap-guard-refused run never reads as a clean skip count or a quiet result file  (owner: BA/PM, size: XS, priority: P3, epic: —, since: 2026-10-19, in dev 2026-10-21 (SE `ticket-to-pr-ABC-176` tip `bfe1ff4a`, then Scribe `scribe-ABC-176` on the branch, tip `37b8debc`; in review 2026-10-21, QE `qe-ABC-176` PASS_WITH_GAPS `168b2907`; done 2026-10-21 (merged); page facts from 2026-10-19 flagged in the brief), DoR 10/10; cut in `bapm-cut-ABC-176` (`30504eed`) from SEC-173-1 + QE-173-d, owner word `…5c8d2f71`.)
 - [ABC-191] A production file git treats as binary hides every changed line from clause (b) (AR-188-BINARY fix)  (owner: BA/PM, size: XS, priority: P3, epic: —, since: 2026-10-21, in dev 2026-10-21 (Architect `arch-build-ABC-191`, tip `797a238b`), in review 2026-10-21 (QE `qe-ABC-191` PASS_WITH_GAPS `b5ac124d`), done 2026-10-21 (merged; AR-188-BINARY closed), DoR 10/10; cut in `bapm-cut-AR-188-BINARY`. Builder Architect/Design. Gates no merge; the Orchestrator's `--numstat` stand-in runs until it lands. 0 `src/` lines; QE reads A2–A7 to close AR-188-BINARY.)
 - [ABC-188] A deletion-only edit to a limb-1 holder fires nothing on clause (b), and ABC-168 adds the second holder (AR-163-DELONLY fix)  (owner: BA/PM, size: S, priority: P2, epic: —, since: 2026-10-21, DoR 10/10; cut in `bapm-cut-ABC-168-followups`. **Due before ABC-168 merges** (its merge is held on this). Builder Architect/Design. 0 `src/` lines; QE reads A2–A7 to close AR-163-DELONLY.) **Pulled 2026-10-21** Ready → In Development (on ABC-168's merge path), Architect `arch-build-ABC-188`. Architect build `66d6a2f1` (instrument `d722a6b6`, harness `98487c1e`, ADR block `eb097a7b`); gates green 59/1987; QE `qe-ABC-188` (its read closes AR-163-DELONLY). QE PASS_WITH_GAPS `da348a79` (AR-163-DELONLY close condition MET; QE-188-a LOW: a NUL byte makes a holder binary and blinds every limb; -b INFO); Security/NFR `security-nfr-ABC-188`. **DONE 2026-10-21:** merged after all gates passed (npm test 1987, skip 0, CLI_DEEP 11/11, PERFT_DEEP 32/32; `--numstat` binary check empty). QE PASS_WITH_GAPS (`…bfbbb83f`); Security/NFR PASS_WITH_RISKS (`…f5843a71`): **AR-163-DELONLY CLOSED**; AR-188-BINARY opened (LOW; fix cut by BA/PM). UAT waived (0 production lines).
 - [ABC-187] The `AGENTS.md` byte guard still allows 24,576 B, so the 8,970 B `ABC-164` cut can grow back with no test going red  (BA/PM, XS, P2, epic: —, since: 2026-10-21, **DoR 10/10**; cut in `bapm-cut-guard-18432` on owner decision `…cba9c8eb`; `src/cli.test.ts` `:2484` constant, `:2483` JSDoc, `:2242` closer count 13 → 8 (QE-164-h); 0 production lines, UAT waiver expected. SE then QE. Owed outside its fence: `AGENTS.md:7` Scribe line, byte-neutral.) **Pulled 2026-10-21** Ready → In Development on owner decision `…cba9c8eb`, SE `ticket-to-pr-ABC-187`; the `AGENTS.md:7` line is folded in as a Scribe hop on this branch after the SE commit. SE `494f7862` + Scribe `65ee533d` (tip `9578481f`): guard 18,432, JSDoc and closer count fixed, `AGENTS.md:7` → 18,432 (15,606 B unchanged); gates green 59/1987; QE `qe-ABC-187`. **DONE 2026-10-21:** merged after all gates passed (npm test 1987, skip 0, CLI_DEEP 11/11, PERFT_DEEP 32/32). Guard 18,432 B; `AGENTS.md:7` matches. QE PASS_WITH_GAPS (`fe59772b`): QE-187-a LOW → ABC-168 owes the closer count; -b erratum on the page; -c INFO. UAT waived (0 production lines).
