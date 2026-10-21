@@ -14,8 +14,9 @@
  * hardware and belong to the Security/NFR gate's out-of-tree measurement at `P60`, which is what
  * `A21` asks for. This file is the guard underneath that measurement, not a substitute for it.
  *
- * A MEASUREMENT IS NOT A GUARD — `plans/nfr-catalog.md` records that lesson twice, both times after
- * a behaviour-equivalent mutation left the whole suite green. The same hole is open here: every one
+ * A MEASUREMENT IS NOT A GUARD — `plans/nfr-catalog.md` records that lesson, learned where a
+ * behaviour-equivalent mutation left the whole suite green: a timing bar cannot fail on the
+ * regression it exists to catch, so the guard is a count. The same hole is open here: every one
  * of the rows in `san.test.ts` is blind to how often `toSan` generates. A build that ignored the
  * supplied `legal` list and regenerated, or one that ran the mate test on every move instead of
  * only on a checking one, returns byte-identical strings for all of them. These assertions are the

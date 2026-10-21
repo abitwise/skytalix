@@ -1,7 +1,7 @@
 ---
 id: ABC-159
 title: "Four `*.nfr.test.ts` headers carry a running tally of `plans/nfr-catalog.md` in words (three times, five times now, the sixth, twice), and the tallies disagree with each other"
-status: in-development
+status: done
 column: Backlog
 size: XS
 priority: P3
@@ -116,3 +116,36 @@ BA/PM, 2026-10-17. **Result: 10 of 10.**
 | 10 | no major unresolved blocker | **✅** none; the pull order is a dependency, not a blocker |
 
 Column moves are the Orchestrator's.
+
+## QE
+
+QE/E2E, 2026-10-21 (subtask `qe-ABC-159`). Reviewed tip `3c505abe` against base `4ab5b453` and re-ran every reading
+myself in `../wt-qe-ABC-159`. I graded A3 before opening the SE's decision note. The detail is in
+`.grugops/context/qe-ABC-159/notes/`, with the verdict in `…decision-10545147` and the gaps in `…observation-a1580e88`.
+
+**Verdict: PASS_WITH_GAPS.** All four criteria are MET, and no gap blocks.
+
+- **`A1`:** the verbatim search prints nothing at the tip. At base it prints the three sites. MET.
+- **`A2`:** exit 1 at the tip. At base it prints `src/turn-loop.nfr.test.ts:9`. MET.
+- **`A3`:** each of the four sentences says the bar is a count because a timing bar cannot fail on its
+  regression. No count or ordinal of the catalog is left, and that includes "each time", "each after" and "both
+  times", which a wider joined-text probe checks (`probe/wide-tally.cjs`). MET. See `QE-159-a` on san.
+- **`A4`:** the diff is exactly the four files, every hunk is inside the `/** */` header, and the bytes after
+  each header are identical. The per-file counts are byte-identical at base and tip (59 files, 1987 tests), and
+  skips are 0. They were read at `NODE_OPTIONS=--max-old-space-size=128`, because the bare command is refused by
+  the heap guard (`QE-159-b`). The SE's per-file 400 listings match byte for byte. MET.
+- **Gates (tip):** lint, typecheck, build and `npm test` exit 0 (1987/1987), and `last-run.json` reads
+  `success: true`. Skip count 0, and integrity reports `No findings.`. `CLI_DEEP` 11/11 and `PERFT_DEEP` 32/32.
+- **Gaps:**
+  - **`QE-159-a` (LOW):** san's new clause, "a timing bar cannot fail on the regression it exists to catch",
+    drops the Scope's "small headroom" qualifier. It is also tied to a catalog lesson ("a measurement is not a
+    guard") that does not say it.
+  - **`QE-159-b` (LOW):** A4's command as written is refused by `ABC-173`'s heap guard and needs the 128 prefix.
+  - `QE-159-c` (INFO): there is no standing guard against a tally coming back, and A1's regex is narrower than
+    the class.
+  - `QE-159-d` (INFO): "the lesson `plans/nfr-catalog.md` records: …" reads as a quote of words the catalog does
+    not hold.
+  - Outside the ticket: `QE-159-e`/`f`/`g` (INFO).
+- **UAT waiver reading:** `git diff --name-only 4ab5b453...3c505abe -- src | grep -vE '\.test\.ts$|__snapshots__'`
+  is **empty**. So is AGENTS.md's form, `git diff --name-only 3c505abe~1 3c505abe | grep -v '\.test\.ts$' | grep '^src/'`.
+  Applying the waiver is the Orchestrator's job.

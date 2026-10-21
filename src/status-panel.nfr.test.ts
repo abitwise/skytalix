@@ -1,9 +1,9 @@
 /**
  * ABC-016 `A13` — the panel derives nothing, as a spied CALL COUNT.
  *
- * A count and not a clock, and the reason is this project's own record: `plans/nfr-catalog.md` has
- * moved a bar off the clock and onto a count three times, each after a timing bar with an order of
- * magnitude of headroom could not fail on the regression it existed to catch. This is the test that
+ * A count and not a clock, and the reason is the lesson `plans/nfr-catalog.md` records: a timing bar
+ * with an order of magnitude of headroom cannot fail on the regression it exists to catch, so the
+ * bar moves off the clock and onto a count. This is the test that
  * fails if anybody puts the repetition derive back inside the panel — at zero timing sensitivity —
  * and no assertion here reads a wall clock.
  *

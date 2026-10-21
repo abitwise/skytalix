@@ -1,0 +1,2 @@
+heap-guard: refused. This run's V8 heap_size_limit is 4192 MiB, above the SUITE row of 224 MiB (59 test files; ABC-173, ADR-0008 addendum 2026-10-19)
+exit 1; numTotalTests 0
