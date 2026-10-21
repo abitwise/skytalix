@@ -333,6 +333,24 @@ describe("ABC-145 — the source bytes are checked against pinned sha256 values 
       own,
     ]);
     expect(existsSync(nearOut)).toBe(false);
+
+    // ABC-160: the fixture unaltered; the first file's expected hash differs only in its FIRST hex
+    // char (moved to the next hex digit, modulo 16), so a check that compares a suffix passes it.
+    const first = SOURCE_FILES[0];
+    const ownFirst = expected[first];
+    const nextFirstHex = ((Number.parseInt(ownFirst.charAt(0), 16) + 1) % 16).toString(16);
+    const firstMiss = { ...expected, [first]: `${nextFirstHex}${ownFirst.slice(1)}` };
+    const firstOut = join(scratch, "abc145-first-char.json");
+    let firstRefusal = "";
+    try {
+      checkThenWriteBook(dir, firstOut, "0".repeat(40), firstMiss);
+    } catch (error) {
+      firstRefusal = (error as Error).message;
+    }
+    expect(
+      [first, firstMiss[first], ownFirst].filter((part) => firstRefusal.includes(part)),
+    ).toEqual([first, firstMiss[first], ownFirst]);
+    expect(existsSync(firstOut)).toBe(false);
   });
 
   it("A3 — each SOURCE_SHA256 value sits on ATTRIBUTION.md's table row for its own file", () => {

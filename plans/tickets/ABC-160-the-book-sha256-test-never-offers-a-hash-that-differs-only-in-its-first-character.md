@@ -1,7 +1,7 @@
 ---
 id: ABC-160
 title: "The book compiler's sha256 test never offers an expected hash that differs only in its FIRST character, so a check that compares a suffix passes it"
-status: in-development
+status: done
 column: Backlog
 size: XS
 priority: P3
@@ -108,3 +108,32 @@ BA/PM, 2026-10-17. **Result: 10 of 10.**
 | 10 | no major unresolved blocker | **✅** none |
 
 Column moves are the Orchestrator's.
+
+## QE
+
+QE/E2E, 2026-10-21 (subtask `qe-ABC-160`). Reviewed tip `1d2fd467` against base `51503331`. QE re-planted every
+mutant in a scratch copy outside the repository. The detail is in `.grugops/context/qe-ABC-160/notes/` (verdict
+`…1500918a`). Those notes are sealed by `context-io.js` `admitAndAppend`. **No timing reading was taken.**
+
+**Verdict: PASS_WITH_GAPS.** `A1`–`A3` are MET on QE's own readings. All 16 match the SE's, compared only after
+QE's runs.
+
+- **`A1`:** `a.tsv`'s near-miss (`4ff4c0b1…` → `5ff4c0b1…`, sharing 63 of 64 chars) is refused with 3 of 3, and
+  the fresh output is absent. A no-op near-miss (`T-NOOPFIRST`) fails loud. MET.
+- **`A2`:** `Q-SUFFIX8` and `Q-SKIP8` are green on base and red on head. The killer is the new 3-of-3 at
+  `book.test.ts:352`. `Q-PREFIX`, `M05`, `M-SWAP` and `M06` are red on both. `Q-CASE` is green on both. The
+  unmutated head is green. MET.
+- **`A3`:** one path and 0 new files. One hunk, `+336,18`, inside the `A1/A2` `it` (`:274`–`:354`).
+  `compile.ts` and `book.json` are `cmp` 0. 0 spawns. 59 files and 1987 tests at base and at head, with 0
+  pending and 0 todo. MET.
+- **Gates (tip):** lint, typecheck, build and `npm test` exit 0. `last-run.json` reads `success: true`. Integrity
+  at `--skip-count 0` gives `No findings.` `CLI_DEEP` passes 11/11 and `PERFT_DEEP` 32/32, with 0 skipped.
+- **Closed:** `QE-155-a`. The narrowest suffix compare, `Q-SKIP1` (which drops only the first char), also goes
+  green → red.
+- **Gaps (all INFO, none blocking):**
+  - `QE-160-a` (BA/PM): arbitrary-subset compares still pass (`Q-MID`, `Q-ENDS`, `Q-SPARE-AE`). They are fenced
+    out under *Out of scope*. Accept, with the same promotion trigger.
+  - `QE-160-b` (Orchestrator): the `npm test` script sets its own 128 heap, overriding a `400` prefix.
+  - `QE-160-c` (Orchestrator): the SE's notes are unsealed, while QE's are sealed by the plugin-cache writer.
+- **UAT waiver reading:** `git diff --name-only 51503331...1d2fd467 | grep -v '\.test\.ts$' | grep '^src/'` is
+  **empty**. The waiver applies by its rule. Applying it is the Orchestrator's.
