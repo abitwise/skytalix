@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-21 09:10Z — Orchestrator: ABC-179 In Development → In Review (SE code `dd131b71`, tip `a7d64e07`; A1, A3 grep and A4 met; A2/A3 reads owed to QE; all gates green; 0 production lines). Dispatched `qe-ABC-179`._
 _Updated: 2026-10-21 08:55Z — Orchestrator (owner: "continue with ABC-180, ABC-179 and ABC-163"): all three Ready → In Development and dispatched. Two superseded notes holding foreign captures deleted (owner yes, `…d9aa42b9`). `scribe-snapshot-rule` queued (owner yes; needs a free slot)._
 _Updated: 2026-10-21 by BA/PM (`bapm-cut-AR-162-FALLBACK`, records only) — AR-162-FALLBACK's G-1/G-2 cut as `ABC-180` (Ready, XS, P3, EPIC-005, DoR 10/10): a non-book decoy at `data/opening-book/book.json` in A7's neutral cwd reds P6f; A7's stderr assertion is labelled as the AR-095-CWD/AR-162-FALLBACK detector. Closes AR-162-FALLBACK when QE reads the P6f row red at head. Promotion trigger as Security/NFR ruled; two trigger readings (EPIC-006 scope; ABC-168) routed to the Orchestrator on the page. Next free id: ABC-181._
 _Updated: 2026-10-21 09:45Z — Orchestrator: ABC-162 In Security/NFR → Done, merged to `main` with all gates passing; UAT waived. AR-095-CWD closed; AR-162-FALLBACK opened (LOW, Orchestrator-owned; promotes on any `src/book-file.ts` edit or on EPIC-006 being cut or pulled)._
@@ -905,9 +906,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 3/3)
+## In Development (WIP 2/3)
 - [ABC-180] A decoy book in A7's neutral cwd reds a cwd-first read with a module-URL fallback (P6f), and A7's stderr assertion names itself the detector  (BA/PM, XS, P3, epic: EPIC-005, since: 2026-10-21, **DoR 10/10**; cut in `bapm-cut-AR-162-FALLBACK` from AR-162-FALLBACK (G-1, G-2). Test-only, `src/cli.real-engine.test.ts`. Due before any `src/book-file.ts` edit or EPIC-006 packaging pull merges.)
-- [ABC-179] Three test comments say what their source does not: san's unqualified "a timing bar cannot fail", two headers quoting `plans/nfr-catalog.md` for words it does not hold, and `cli.test.ts` citing `history-pane.nfr.test.ts:329` for a line at `:390`  (BA/PM, XS, P3, epic: EPIC-002, since: 2026-10-21, **DoR 10/10**; cut in `bapm-rule-QE-159` from QE-159-a/-d/-e. Comment lines only; disjoint from ABC-161/ABC-168's `cli.test.ts` hunks.)
 - [ABC-163] The clause (b) instrument fires nothing when a limb-1 holder changes what it reads: fold `ADR-0036` § S1 Ruling 2 (holders at base AND head) into `clause-b.mjs`  (BA/PM, S, P3, epic: —, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from AR-095-L1UNIT.)
 
 
@@ -936,7 +936,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-179] Three test comments say what their source does not: san's unqualified "a timing bar cannot fail", two headers quoting `plans/nfr-catalog.md` for words it does not hold, and `cli.test.ts` citing `history-pane.nfr.test.ts:329` for a line at `:390`  (BA/PM, XS, P3, epic: EPIC-002, since: 2026-10-21, **DoR 10/10**; cut in `bapm-rule-QE-159` from QE-159-a/-d/-e. Comment lines only; disjoint from ABC-161/ABC-168's `cli.test.ts` hunks.)
 
 
 
