@@ -1,8 +1,8 @@
 ---
 id: ABC-165
 title: "Eleven `plans/traceability.md` rows do not split into ten columns (seven of them hide text), the malformation paragraph names a different set and states no row rule, the table header follows a blockquote line, and a `plans/metrics.md` header runs into the next"
-status: in-development
-column: In Development
+status: in-review
+column: In Review
 size: S
 priority: P3
 epic: —
