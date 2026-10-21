@@ -9,11 +9,19 @@ directive, trap or measurement is lost — only relocated. `AGENTS.md` keeps eac
 single most load-bearing fact (exit code / count / timing) and a pointer to the matching section
 below.
 
+Moved from `AGENTS.md` § Mission by `ABC-164` (2026-10-21), word for word: the sentence that followed "**Byte budget: this file targets ≤ 24,576 B.**"
+
+The 32,768-byte reader cap it guards against is
+**inherited** — sourced from the AGENTS.md Scribe's 2026-08-19 observation, not measured in this
+repository — and its overflow is silent and eats the file from the tail (`ABC-109`).
+
 **Reader:** the `AGENTS.md` Scribe, before adding or amending any Commands-section line (so a new
 receipt is appended in the right place and stale receipts are visible together); any role that needs
 the full history behind a command's exit code beyond the one-line summary `AGENTS.md` carries inline.
 Not read on every hop — `AGENTS.md` § Commands is the one-line-per-command index every role reads;
-this file is its footnoted detail.
+this file is its footnoted detail. Since `ABC-164` it is also read by QE (lane triggers, the lane table and
+the traps behind them, from § "On-demand commands") and by the Software Engineer (a lane's section, before
+changing the file that lane guards).
 
 _Reconciled 2026-10-10 by the AGENTS.md Scribe (task `scribe-command-log-2026-10-10`) against `git log
 -- AGENTS.md` since this file's last touch (`ea68a2d8`, 2026-09-26): four commits, each with its entry
@@ -22,6 +30,40 @@ below and a row in § "Reconciliation ledger, 2026-10-10" at the end._
 _Headroom pass 2026-10-10 by the AGENTS.md Scribe (task `scribe-headroom-2026-10-10`), after `ABC-087`
 merged (`25f6d92d`): stale counts refreshed at the wave tip `5d55cc48`, the Levels deep lane given its
 entry, two prose cuts to `AGENTS.md`. See § "Headroom pass, 2026-10-10" at the end._
+
+## On-demand commands
+
+Commands and lane triggers that one role or one trigger needs, so `AGENTS.md` does not make every session read them. Moved from
+`AGENTS.md` by `ABC-164` (2026-10-21); the command lines are word for word.
+
+- Perft harness (move-gen correctness + nodes/sec, ABC-006): `npm run perft`
+- Spike benchmark (throwaway, ABC-008): `npm run spike:perft [depth]`
+- Regenerate the opening book (ABC-093): `node tools/opening-book/compile.ts <dir>`
+
+The opening-book command's RUN comment is in § "Regenerate the opening book" below. The `PERFT_DEEP` line stays in `AGENTS.md`
+(`ABC-173` `A3` parses it there). Every other lane keeps its command line in `AGENTS.md` § Test; its comment is in the heading
+this table names.
+
+| Lane, as `AGENTS.md` § Test spells it | Who runs it, after which change | Heading in this file holding its text |
+|---|---|---|
+| Perft deep counts (opt-in slow suite) | — | — |
+| Search deep lane (opt-in, ABC-077) | Run at QE and after any src/search.ts change. | § "Search deep lane" |
+| Engine deep lane (opt-in, ABC-078) | Run after any src/engine.ts or src/virtual-clock.ts change. | § "Engine deep lane" |
+| Levels deep lane (ABC-087, `src/levels.test.ts`) | Run after any src/levels.ts, src/engine.ts or src/virtual-clock.ts change. | § "Levels deep lane" |
+| Input-seam deep lane (opt-in, ABC-037) | Run after any src/line-input.ts change. | § "Input-seam deep lane" |
+| Transposition deep lanes (ABC-081, `src/transposition.test.ts`), the `SEARCH_DEEP=1` line | — | § "Transposition deep lanes" |
+| Transposition deep lanes (ABC-081, `src/transposition.test.ts`), the `ENGINE_DEEP=1` line | — | § "Transposition deep lanes" |
+| Zobrist deep lane (ABC-075) | — | § "Zobrist deep lane" |
+| Quiescence deep lane (ABC-079) | — | § "Quiescence deep lane" |
+| Puzzle suite, strength gate (opt-in, ABC-084) | TRIGGER (owner, option B, 2026-10-09): QE runs it during review when the change touches engine code (`src/engine.ts`, `src/search*.ts`, `src/evaluate*.ts`, `src/quiescence.ts`, `src/transposition.ts`, move ordering). | § "Puzzle-suite strength gate" |
+| PVS/LMR deep lane (ABC-121, `src/search.pvs-lmr.test.ts`) | Run after any PVS/LMR change to src/search.ts or src/engine.ts. | § "PVS/LMR deep lane" |
+| Real-engine CLI lane (opt-in, ABC-119) | Run at QE and after any src/cli.ts or src/engine.ts change. | § "Real-engine CLI lane" |
+| Self-play ladder lane (opt-in, ABC-085, ADR-0038) | — | § "Self-play ladder lane" |
+| Coverage | — | § "Coverage — `npx vitest run --coverage`" |
+| Coverage (`src/` only — the other denominator; neither is agreed) | — | § "Coverage (`src/` only) — `npx vitest run --coverage --coverage.include='src/**'`" |
+
+How to read it: column 2 is copied from the lane's moved comment, or `—` when that comment held no trigger. Column 3 is the
+heading in this file with the lane's text, or `—` when it has none.
 
 ## Dev / run — `npm run chess`
 
@@ -60,6 +102,14 @@ the coupling is a diagnosable false red once; the cost of relaxing it is a silen
 `ABC-069` documents the cost instead of removing it. `AGENTS.md`
 carries the rules in the slot's own comment; this entry is their receipt.
 
+Moved from `AGENTS.md` § Commands by `ABC-164` (2026-10-21), word for word, comment delimiters dropped:
+
+WRITING RULES for this slot, enforced by
+  `ABC-065`'s block in `src/cli.test.ts`: (1) keep the invocation inside backticks - the guard
+  reads to the first backtick after it; (2) name an option here only if the program accepts it,
+  even to say it does not - write that sentence elsewhere in `AGENTS.md`. The same block requires
+  exactly one such slot (`ABC-071`) and a comment that closes inside it (`ABC-067`).
+
 ## Regenerate the opening book (`ABC-093`) — `node tools/opening-book/compile.ts <dir>`
 
 RUN 2026-10-10, `scribe-book-regen-2026-10-10`, wave tip `39d87491`. The five source files were fetched
@@ -93,6 +143,13 @@ b.tsv: sha256 is 1a104c25…e951, expected 1d5ed134…f623`; one byte flipped in
 `c.tsv` and both hashes; `e.tsv` missing, exit 1 (`ENOENT`); an extra `f.tsv`, exit 0, ignored (only the five
 `SOURCE_FILES` are read). Exit 1 on a refusal is Node's status for an uncaught `throw`, not a deliberate code
 (`QE-145-e`: the base compiler also exits 1 on the appended-byte copy, so only the hash text tells the two apart).
+
+Moved from `AGENTS.md` § Commands by `ABC-164` (2026-10-21), word for word, comment delimiters dropped:
+
+RUN 2026-10-10:
+  exit 0, 0.4 s; rewrites `data/opening-book/book.json` IN PLACE, `cmp` 0 against the committed file.
+  `<dir>` = the five source files `a.tsv`..`e.tsv` fetched OUTSIDE the repo at the pinned CC0 commit
+  (URLs, sha256: `data/opening-book/ATTRIBUTION.md`). No `<dir>`: usage, exit 1. Wrong sha256: refused, exit 1, nothing written (ABC-145).
 
 ## Test (all) — `npm test`
 
@@ -137,6 +194,19 @@ hops shared the host). `AGENTS.md` now reads 56/1743 and carries no time figure;
 `ABC-145`'s two tests in `tools/opening-book/book.test.ts` (QE: base 56/1741, head 56/1743). `ABC-148`,
 `ABC-117` and `ABC-116` added no tests. Moving figure: ... -> 53/1680 -> 56/1741 -> 56/1743.
 
+## Vitest worker cap and module runner
+
+The cap itself (`test.maxWorkers: 2`, never raise it, env may only lower it) stays in `AGENTS.md` § Test. The rest of that
+bullet, moved from `AGENTS.md` § Test by `ABC-164` (2026-10-21), word for word, starting at the parenthesis that followed
+"`VITEST_MAX_WORKERS` 1..2":
+
+(`VITEST_MAX_THREADS` is read by
+  nothing on 4.x). Runner off (ABC-152): `test.experimental.viteModuleRunner: false`, pinned.
+  `RISK-ABC152-NEGWORKERS`: a negative `VITEST_MAX_WORKERS` makes `npm test` exit 0 having run nothing
+  (result file: `success` false, `testResults` 0).
+
+The `ABC-152` pass at the end of this file holds the receipts for the runner and the risk.
+
 ## Search deep lane (`ABC-077`) — `SEARCH_DEEP=1 npx vitest run src/search.test.ts`
 
 RUN 2026-08-17 at the `ABC-077` branch tip: exit 0, 41 passed (28 in the default lane), 23.0 s.
@@ -145,6 +215,11 @@ same shape as `PERFT_DEEP`. It holds the expensive REPETITIONS of A1–A7 (the d
 the six perft positions, A2's own kiwipete-depth-3 case, the 204-position broad corpus, and the
 depth-7 mate-in-2-vs-mate-in-4 case); every criterion is also answered in the default lane. Run it at
 the QE hop and after any change to `src/search.ts`.
+
+Moved from `AGENTS.md` § Commands by `ABC-164` (2026-10-21), word for word, comment delimiters dropped:
+
+Unset: NOT DEFINED, not skipped (gate skip-count stays 0). Run at
+  QE and after any src/search.ts change.
 
 ## Engine deep lane (`ABC-078`) — `ENGINE_DEEP=1 npx vitest run src/engine.test.ts`
 
@@ -175,6 +250,12 @@ RE-MEASURED 2026-10-10 (`scribe-headroom-2026-10-10`, wave tip `5d55cc48`, load1
 at end, i.e. a LOADED machine): exit 0, **46 passed (33 default), 310.93 s**. That sits inside the
 292-319 s range `AGENTS.md` carries, so the time stays; the count correction (45 -> 46 passed, 32 -> 33
 default) that was owed above is now made in `AGENTS.md`, and its RUN date moves to 2026-10-10.
+
+Moved from `AGENTS.md` § Commands by `ABC-164` (2026-10-21), word for word, comment delimiters dropped:
+
+Wall-clock cases + 300-run
+  virtual-clock cases; the default lane uses an injected clock. Run after any src/engine.ts or
+  src/virtual-clock.ts change.
 
 ## Levels deep lane (`ABC-087`, `src/levels.test.ts`) — `ENGINE_DEEP=1 npx vitest run src/levels.test.ts`
 
@@ -208,6 +289,11 @@ APPLIED 2026-10-10, `scribe-receipts-2026-10-10` (the former OWED paragraph): `A
 `A3` easiest **35/58**, default **54/58**. 213 s sits inside "202-225 s", so that range stands. The old
 "35-36" collapses to "35": the "36" was a 62-row reading, and `A3` is wall-clock-dependent either way.
 
+Moved from `AGENTS.md` § Commands by `ABC-164` (2026-10-21), word for word, comment delimiters dropped:
+
+Holds A4's evidence (ENDGAMES 204 + perft/puzzles 242 moves), A2 on a virtual clock, A3 (31
+  vs 54 of 58). Run after any src/levels.ts, src/engine.ts or src/virtual-clock.ts change.
+
 ## Input-seam deep lane (`ABC-037`) — `INPUT_DEEP=1 NODE_OPTIONS=--expose-gc npx vitest run src/line-input.test.ts`
 
 RUN 2026-08-19 at `298bb95`: exit 0, 33 passed, 0.28 s. RE-MEASURED 2026-09-26 in this worktree: exit
@@ -234,6 +320,13 @@ tree) — which is why `--expose-gc` is in the command. Numbers and the guard it
 `.grugops/context/quality-gate-ABC-037-qe-2026-08-19/notes/` and its `repair-ABC-037-2026-08-19/`
 sibling, not restated here. The rule this cost us: never ship a memory guard you have not watched go
 RED.
+
+Moved from `AGENTS.md` § Commands by `ABC-164` (2026-10-21), word for word, comment delimiters dropped:
+
+34 is the whole lane; 33 = NODE_OPTIONS dropped,
+  retention guard did not run (exits 0 either way). TRAP: never assert this guard on heapUsed —
+  blind to an unflattened rope (0.00 vs 32.00 MiB via process.memoryUsage().external after gc(),
+  which is NOT blind). Run after any src/line-input.ts change.
 
 ## Transposition deep lanes (`ABC-081`, `src/transposition.test.ts`)
 
@@ -275,6 +368,11 @@ Only `src/search.pvs-lmr.test.ts` moved rows under `ABC-121` — `src/search.tes
 software-engineer's `…9bdce84b` decision moved two of four proposed rows into this file's
 `SEARCH_DEEP` gate and kept two default; the ledger proof is `…17a0830d`), so their deep lanes above
 are unchanged and were not re-run for this entry.
+
+Moved from `AGENTS.md` § Commands by `ABC-164` (2026-10-21), word for word, comment delimiters dropped:
+
+Run after any PVS/LMR
+  change to src/search.ts or src/engine.ts.
 
 ## Puzzle-suite strength gate (`ABC-084`, `ABC-127`) — `PUZZLE_DEEP=1 npx vitest run src/puzzle-suite.test.ts`
 
@@ -332,6 +430,17 @@ readings: mate in 3 seed 24 (black Q+N against P), seed 234 (white Q+R against P
 `R1` / `AR-PUZZLE-EDGE` — at 4% fewer readings the budget edge goes red — which is a fact about the
 engine's budget margin, not a `PUZZLE_DEEP` command fact.
 
+Moved from `AGENTS.md` § Commands by `ABC-164` (2026-10-21), word for word, comment delimiters dropped:
+
+Baseline `src/puzzle-suite.baseline.json` (54/58, budget 25,
+  step 1). TRIGGER (owner, option B, 2026-10-09): QE runs it during review when the change touches
+  engine code (`src/engine.ts`, `src/search*.ts`, `src/evaluate*.ts`, `src/quiescence.ts`,
+  `src/transposition.ts`, move ordering). red = QE FAIL. Not a `quality.mandatory_gates` entry. The baseline moves only in its
+  own commit with a stated reason, never with an engine change (no trigger-list file in that
+  commit); raising it is QE's, lowering it needs the owner's word. `PUZZLE_DEEP=weakened` is the
+  red demonstration: exits 1 by design, gate row red (15/58), A3 green; the exit code alone is not
+  the reading.
+
 ## Real-engine CLI lane (`ABC-119`, `src/cli.real-engine.test.ts`) — `CLI_DEEP=1 npx vitest run src/cli.real-engine.test.ts`
 
 Added to `AGENTS.md` by `46c986f7` (2026-10-10; Scribe branch `grugops/scribe-ABC-119-lane`, from
@@ -368,6 +477,37 @@ Still owed elsewhere, not here: `NFR-008`'s variable list (six names missing, `C
 Architect/Design's. Notes: `.grugops/context/scribe-ABC-119-lane/notes/…61a7510f`,
 `qe-ABC-119/`, `ticket-to-pr-ABC-119-r2/` (`…75c1c46a` for the lane shape).
 
+Moved from `AGENTS.md` § Commands by `ABC-164` (2026-10-21), word for word, comment delimiters dropped:
+
+Real children of
+  `node src/cli.ts --colour black --ascii` (count: the test file). Unset: NOT DEFINED, not
+  skipped. Run at QE and after any src/cli.ts or src/engine.ts change.
+
+Counting the lane's children (owed line O2 of `ABC-164`; QE-184-c, QE verdict `…7b9ef6a7`, Orchestrator `…9fd3189b`):
+children counted from `[CLI_DEEP]` lines need `--reporter=verbose` (or `--silent=false`) in an agent session, as in
+`CLI_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/cli.real-engine.test.ts --reporter=verbose`.
+Vitest's agent mode hides a passing test's console output, and `CLAUDECODE` alone is not the switch. With the flag
+the count is at least 1 (6 children at the `ABC-184` branch tip `c6f80c81`, QE's reading).
+
+## Self-play ladder lane (`ABC-085`, ADR-0038) — `LADDER_DEEP=1 npx vitest run src/ladder.test.ts`
+
+The short-mode lane line stays in `AGENTS.md` § Test. Its comment, moved from `AGENTS.md` by `ABC-164` (2026-10-21), word for
+word, comment delimiters dropped, up to the sentence on the A1/A2 verdict:
+
+Short mode, step 120:
+  claims A3/A4/A5 only, never A1/A2. `-t "3v4"` re-runs one pair. Unset is the only off:
+  `LADDER_DEEP=` and `=0` fail at load (QE-085-e). Unset: NOT DEFINED, not skipped.
+
+**The A1/A2 verdict (owed line O3 of `ABC-164`, reworded; the old sentence is quoted in the `ABC-164` entry at the end of this
+file).** It runs inside vitest, as route V of `ADR-0038` addendum 2 (2026-10-17):
+`LADDER_DEEP=verdict NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/ladder.test.ts --reporter=verbose`. It takes
+hours: run 2 took 40,823 s wall on a shared host. Run 2's reading is the Orchestrator's note `…4c1d8e27`
+(`.grugops/context/abc146-verdict/notes/`). `--reporter=verbose` is part of the command: vitest 4.1.11's default reporter drops
+the `console.log` of a passing test, so without it no `LADDER` score line prints (run 1 passed 17/17 and gave no score;
+`ADR-0038` addendum 2, Architect `…b7e2c915`). The `NODE_OPTIONS` heap flag is the one-file shape's (`ABC-173`, Architect
+`…7c31d5e8`). The first addendum's code move (route N) is not built; it stays the accepted fallback. Ruling to move this text:
+Orchestrator `…6a2f9d03`.
+
 ## Coverage — `npx vitest run --coverage`
 
 RUN 2026-08-15 at `daa20c4` (this hop changed no code): exit 0, 856/856 on 30 files.
@@ -377,6 +517,12 @@ you. Figures, and which denominator decides whether this project meets `quality.
 (`0.8`), are in `.grugops/context/owner-grants-2026-08-15/notes/` — read them before quoting a
 number. TRAP from that note: `src/cli.ts`'s tests SPAWN it as a child process and v8 coverage does
 not cross a process boundary, so it reads uncovered while being thoroughly tested.
+
+Moved from `AGENTS.md` § Commands by `ABC-164` (2026-10-21), word for word, comment delimiters dropped:
+
+LOADED files only (4.x: no `coverage.all`). Not in
+  `quality.mandatory_gates` — a measurement, not a gate. TRAP: `src/cli.ts`'s tests SPAWN it as a
+  child and v8 coverage does not cross a process boundary, so it reads uncovered while tested.
 
 ## Coverage (`src/` only) — `npx vitest run --coverage --coverage.include='src/**'`
 
@@ -728,3 +874,52 @@ to step 5, and `ABC-167 A5` "movetime 100" from step 1 to step 10. Every command
 
 Both coverage lines also went green once more each in the peak-`heapUsed` observation pass (the same command with
 `--import=<peak.mjs>` added to `NODE_OPTIONS`). No lane printed an out-of-memory error.
+
+## `scribe-ABC-164` pass, 2026-10-21 (`ABC-164`, the owner's Option A split; branch `grugops/ABC-164` from `49dc490c`)
+
+AGENTS.md Scribe, task `scribe-ABC-164`. Zero `src/` lines; five files: `AGENTS.md`, this file, `memory-bank/45-standing-rulings.md`
+(new), `memory-bank/40-contributing.md`, `memory-bank/00-index.md`. The split is the ticket page's table (39 blocks: 26 kept whole,
+10 split, 3 moved), with corrections C1 (the `PERFT_DEEP` line stays) and C2 (`## Safety rules` stays whole).
+
+**Bytes.** `AGENTS.md` 24,575 B -> **15,606 B** (-8,969 B; 373 -> 216 lines), `A1` ceiling 18,432 B. Headroom against the unchanged
+24,576 B budget constant (`ABC-109`): **8,970 B = 7.74 edits** at 1,159 B/edit (the page asks for at least 5.3). Against the 18,432 B
+ceiling: 2,826 B (2.44 edits). Base was 1 B (0.0 edits). `vitestCommandsIn(AGENTS.md)` returns 17, among them one `PERFT_DEEP=1`
+line, as at base.
+
+**Where each moved block went.**
+
+| block | now in `AGENTS.md` | moved to |
+|---|---|---|
+| `B02` budget paragraph | the bold budget sentence and a pointer to this file's preamble | the reader-cap sentence, this file's preamble |
+| `B10` slot WRITING RULES | the slot's own pointer line (to § "Dev / run") | § "Dev / run" |
+| `B11` perft lines | the `PERFT_DEEP=1` line | `npm run perft`, `npm run spike:perft [depth]`: § "On-demand commands" |
+| `B12` book regeneration | nothing | command line: § "On-demand commands"; RUN comment: § "Regenerate the opening book" |
+| `B17` worker cap | the cap, never raise, env may only lower, and a pointer | the rest: § "Vitest worker cap and module runner" (new) |
+| `B18` 11 lane bullets | label and command, no comment | each lane's comment: that lane's section; the ladder's: § "Self-play ladder lane" (new); the table: § "On-demand commands" |
+| `B20` coverage x2 | both command lines | the comment: § "Coverage — `npx vitest run --coverage`" |
+| `B23` QE-hop | the command line and a pointer | the comment: `40-contributing.md` § Conventions |
+| `B30`-`B34` five governance sections | `## Standing rulings`: a pointer line and the operative sentences, each verbatim in `45` | `memory-bank/45-standing-rulings.md`, same five headings, verbatim |
+| `B35` Safety rules | whole; three `## X` references re-pointed to `45` | the three references' old text is in `45` as headings |
+
+**Owed lines.** `O1`: `contextRoot` pointer in the note-writer blockquote (`AGENTS.md`; worded for the checkout you work in, so it
+covers a worktree hop as well as the main checkout). `O2`: § "Real-engine CLI lane". `O3`: § "Self-play ladder lane" only;
+`AGENTS.md` carries no `LADDER_DEEP=verdict`.
+
+**`A4` (nothing lost), measured with `git diff -U0 49dc490c -- AGENTS.md`**, each removed run joined (newlines to spaces, spaces
+collapsed, comment delimiters dropped), found in the union of `45`, this file and `40-contributing.md`. A removed run that is a
+command line plus its comment is not found whole by construction (the command line stays in `AGENTS.md`), so the check was also
+run on the removed words that the added lines do not carry (token alignment per hunk). Result: every moved comment, command line
+and governance section is found word for word. **Misses: three kinds, none of them lost meaning.**
+1. The `O3` rewording. Old sentence, kept here so it is not lost:
+   "The A1/A2 verdict is not run here (~44 h in vitest): its route is ABC-146's (plain node, ADR-0038 addendum)."
+2. The re-pointed references. Old text, in `AGENTS.md` § Safety rules: "see `## Branching model`", "see `## Test and UAT
+   authority`" and "See `## Deployment posture`" (now `memory-bank/45-standing-rulings.md` § ...). `45` holds each of those
+   headings verbatim.
+3. Lines replaced by pointers: the `Dev / run` slot's receipts lead ("Full receipts (RUN dates, ...)" is now "Writing rules for this slot and
+   full receipts (RUN dates, ...)"); the worker-cap bullet's "1..2" (now "1..2." before its pointer); the QE-hop comment (replaced
+   by a pointer; the comment itself is in `40-contributing.md`); the budget sentence's pointer.
+
+**Gates on the tip** (worktree `../wt-ABC-164`, no timing taken): lint exit 0, typecheck exit 0, build exit 0; `npm test` exit 0, 59
+files, 1987 tests (equal to base), `.test-results/last-run.json` `success` true; the `ABC-042`, `ABC-059`, `ABC-065`, `ABC-067`,
+`ABC-071`, `ABC-109` and `ABC-173` rows all green; `test-skip-integrity.js --skip-count 0`: `No findings.` UAT waiver form
+(`git diff --name-only <tip>~1 <tip> | grep -v '\.test\.ts$' | grep '^src/'`): prints nothing.

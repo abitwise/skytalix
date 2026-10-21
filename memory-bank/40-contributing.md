@@ -28,6 +28,12 @@ does not catch a forged one. A pre-build QE note satisfies it as well as a post-
 pre-build re-check in `qe-recheck-ABC-105` already meets all four conditions for `ABC-105` itself. The tool
 prints the covering note's path so that the human at the `Done` exit can see which note it was.
 
+Moved from `AGENTS.md` § Commands (the QE-hop check's comment) by `ABC-164` (2026-10-21), word for word, comment delimiters
+dropped:
+
+exit 0 clean / 1 finding / 2 cannot run;
+  `--json`. Orchestrator runs `--ticket` at every move to `Done`.
+
 ## Branch and review flow
 
 ## Definition of done
