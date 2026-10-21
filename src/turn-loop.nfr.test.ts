@@ -5,8 +5,9 @@
  * concession. Re-derived at the 2026-08-11 refinement and measured: at 120 plies one derive per ply
  * is 48.34 µs and **two derives is 93.58 µs, which MEETS the ≤ 100 µs bar at 0.94x**. A timing bar
  * with 2x headroom cannot resolve a 2x error, so the bar it exists to enforce — *derive once per ply,
- * not once per call site* — is unenforceable by a clock and is enforced here by a spy. It is the
- * sixth bar on this project to move off a clock and onto a count.
+ * not once per call site* — is unenforceable by a clock and is enforced here by a spy. It is a
+ * count and not a clock because a timing bar with that little headroom cannot fail on the
+ * regression it exists to catch.
  *
  * WALL-CLOCK COST IS ASSERTED NOWHERE IN THIS SUITE, exactly as merged `gameend.nfr.test.ts` states
  * for its own bars: it is machine-dependent, and `A17`'s instrument is an out-of-tree harness in its

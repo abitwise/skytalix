@@ -2,9 +2,9 @@
  * `ABC-017`'s `A11` — the pane derives NOTHING, as a permanent structural guard, and the third and
  * binding part of `A12`'s cost bar.
  *
- * A COUNT, NOT A CLOCK, and the reason is this project's own record: `plans/nfr-catalog.md` has moved
- * a bar off the clock and onto a count five times now, each time because a timing bar with a factor
- * of two of headroom cannot fail on the regression it exists to catch. The ticket measures the same
+ * A COUNT, NOT A CLOCK, and the reason is the lesson `plans/nfr-catalog.md` records: a timing bar
+ * with a factor of two of headroom cannot fail on the regression it exists to catch, so the bar
+ * moves off the clock and onto a count. The ticket measures the same
  * thing from the other side — the UNBOUNDED model costs 95 / 382 / 1,192 µs at 40 / 120 / 300 plies
  * and is caught by the absolute and the ratio with room to spare, while a build that reintroduces
  * the repetition derive or reaches for `takeBack` is caught by NEITHER at any length. `A12`'s parts
