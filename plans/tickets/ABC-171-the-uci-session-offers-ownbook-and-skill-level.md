@@ -1,8 +1,8 @@
 ---
 id: ABC-171
 title: "The UCI session offers `OwnBook` (default on) and `Skill Level` 1–5 (default 3), over the existing book probe and `LEVELS`"
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: S
 priority: P1
 epic: EPIC-007
@@ -10,6 +10,14 @@ feature: —
 ---
 
 # ABC-171 — two UCI options, both requested by the owner, wired to code that already exists
+
+> **Erratum 2026-10-21 by BA/PM** (subtask `bapm-rule-QE-168`, at `main` `f0cb1b92`), records only. This closes QE-168-d
+> (`qe-ABC-168`, note `…7547ac22`). `ADR-0045` D2 and D4 (accepted 2026-10-19) moved `DEFAULT_LEVEL` from 3 to 5.
+> `ABC-174` delivered that at merge `8522609d`. So the `uci` reply now reads
+> `option name Skill Level type spin default 5 min 1 max 5`. The value comes from `DEFAULT_LEVEL`
+> (`src/uci-session.ts:349`). Scope 2 and `A1` below say `default 3`, and so does the title. Those are the words as
+> accepted and merged at `25162735`, and they are kept as history. Each one now carries a dated fold. Anything that cites
+> "`ABC-171` `A1`'s 5 lines" (for example `ABC-168` `A2`) reads `default 5`. No behaviour, test or DoR changes.
 
 > **Accepted 2026-10-18 by the owner** (BA/PM, subtask `bapm-epic007-accept`). Owner word, verbatim
 > (`.grugops/context/wave-2026-09-25/notes/20261018T113000Z-orchestrator-decision-owner-word-engine-private-adr0044-epic007-accepted-c3e81a57.md`,
@@ -49,6 +57,7 @@ game does. No new engine code is written. `createBookProbe` (`src/book.ts`) and 
    (a `BookProbe`, imported as a type only). This is `ADR-0044` D2's full shape.
 2. **`uci`** also writes `option name OwnBook type check default true` and
    `option name Skill Level type spin default 3 min 1 max 5`, after the `id` lines and before `uciok`.
+   *(2026-10-21 erratum: since `ABC-174` (`ADR-0045` D2/D4) this is `default 5`, read from `DEFAULT_LEVEL`.)*
 3. **`setoption`** per D3: the name is matched case-insensitively. `OwnBook` takes `true` or `false`. `Skill Level`
    takes an integer 1–5, looked up by own key (`Object.hasOwn(LEVELS, n)`). An invalid value keeps the old value and
    writes one `info string`. Any other name is ignored.
@@ -75,6 +84,7 @@ Every row drives `handleLine` on a ticking virtual clock, with `random = seededR
 
 - **`A1` (the option lines).** `uci` writes exactly 5 lines, in order: `id name skytalix`, `id author Olger Oeselg`,
   `option name OwnBook type check default true`, `option name Skill Level type spin default 3 min 1 max 5`, `uciok`.
+  *(2026-10-21 erratum: since `ABC-174` (`ADR-0045` D2/D4) the fourth line reads `default 5`, from `DEFAULT_LEVEL`.)*
 - **`A2` (`setoption`).**
   - `setoption name skill level value 1` (lower case) sets level 1, as `A6` observes. It writes nothing.
   - `setoption name OwnBook value false` writes nothing, and `A4` holds afterwards.

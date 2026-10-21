@@ -11,6 +11,17 @@ feature: —
 
 # ABC-168 — the program a backend or GUI launches: stdin and stdout, the book file, a build, and the proof that standard tools can play it
 
+> **Amended 2026-10-21 by BA/PM** (subtask `bapm-rule-QE-168`, at `main` `f0cb1b92`), records only. This rules QE's
+> QE-168-a and QE-168-d (`qe-ABC-168`, notes `…7547ac22` and `…1c648c1a` on `grugops/qe-ABC-168` @ `7e831392`).
+> **QE-168-a: `A12` is amended, and nothing is moved.** The Scribe's Scope 5 hop (`a347902b`) also changed
+> `memory-bank/90-agents-md-command-log.md`. It added one table row, the sections "UCI entry point" and "Real-engine
+> UCI lane", and the new `npm run build` text. That follows the `ABC-164` layout (merged `1ce736af`, before the base
+> `c98509b3`), which keeps lane comments out of `AGENTS.md`. This page was cut before that layout existed, so `A12`
+> did not name the file. Scope 5 and `A12` now name it. **`A12` is met at `b71f8902`.** The diff lists exactly the
+> seven named files, `src/cli.test.ts` is 4/2, `package-lock.json` is unchanged, and the `90` diff holds only
+> Scope 5's entries (+53 / −2). **QE-168-d** is ruled on the `ABC-171` page (a dated fold line). QE-168-b and
+> QE-168-c belong to Security/NFR and are not ruled here. Size `S`, `P1` and the column are unchanged.
+
 > **Amended 2026-10-21 by BA/PM** (subtask `bapm-rule-ABC-168-A6`, at `main` `6d840c0d`), records only. The SE built
 > Scope 1–3 and 6 on `grugops/ABC-168` @ `2ed5469a` and stopped on `A6` only. Notes are in
 > `.grugops/context/ticket-to-pr-ABC-168b/notes/`: `…c7c0a672` (the build), `…a4721906` (the `A6` stop) and
@@ -98,7 +109,9 @@ plays. This ticket is also where `EPIC-007`'s value proof is read (M1, M2, M8(a)
 4. **UAT readings:** `EPIC-007` M1, M2, M8(a) and M9, on the owner's Mac.
 5. **`AGENTS.md`** (the Scribe, at build time): an `npm run uci` line, the new meaning of `npm run build`, and the lane
    flag. `AGENTS.md` is at its 24 576-byte budget (`wc -c` at `a10e09c2`), so the edit is net ≤ 0 B or rides with
-   `ABC-164`.
+   `ABC-164`. *(Amended 2026-10-21 for QE-168-a: `ABC-164` merged at `1ce736af`, before this ticket's base
+   `c98509b3`. Its layout keeps a label and a command in `AGENTS.md` and moves each lane's comment and receipts to
+   `memory-bank/90-agents-md-command-log.md`. So Scope 5 also writes that file's entries for these three lines.)*
 6. **`src/cli.test.ts`, `ABC-042` `A10`'s pin only (amended 2026-10-18).** There are exactly four edits, each written
    literally:
    1. add the element `"bin",` to `AT_HEAD` (`:1766-1775`);
@@ -181,11 +194,13 @@ plays. This ticket is also where `EPIC-007`'s value proof is read (M1, M2, M8(a)
   `src/cli.test.ts`. `npm run chess` still starts the terminal game. **The pin is still armed:** with the
   `package.json` `bin` key taken out (the test file as at the tip), `ABC-042` `A10` is red, and it is the only red
   row. This is one reading in the hop record, not a new test.
-- **`A12` (fences, amended 2026-10-18).** `git diff --name-only <base> <tip>` lists only `src/uci.ts`, the real-child
-  test file, `tsconfig.build.json`, `package.json`, `AGENTS.md` and `src/cli.test.ts`.
-  `git diff --numstat <base> <tip> -- src/cli.test.ts` shows 4 lines added and 2 removed, which are Scope 6's four
-  edits. `package-lock.json` is unchanged (no dependency is added). Records under `.grugops/context/` are not
-  delivery files and are not counted. That includes `A6`'s probe (amended 2026-10-21).
+- **`A12` (fences, amended 2026-10-18; amended 2026-10-21 for QE-168-a).** `git diff --name-only <base> <tip>` lists
+  only `src/uci.ts`, the real-child test file, `tsconfig.build.json`, `package.json`, `AGENTS.md`,
+  `memory-bank/90-agents-md-command-log.md` and `src/cli.test.ts`. The command-log file may hold only Scope 5's
+  entries (the `ABC-164` layout, see Scope 5). `git diff --numstat <base> <tip> -- src/cli.test.ts` shows 4 lines
+  added and 2 removed, which are Scope 6's four edits. `package-lock.json` is unchanged (no dependency is added).
+  Records under `.grugops/context/` are not delivery files and are not counted. That includes `A6`'s probe (amended
+  2026-10-21).
 
 ## Dependencies
 
@@ -273,7 +288,9 @@ still hold. **Still 10 of 10.** Re-scored 2026-10-21 at `main` `9035e9be` (subta
 the D8 ruling. Items 2, 4, 5, 7 and 10 were re-read. **Still 10 of 10. `Blocked` → `Ready`.** Re-scored 2026-10-21
 at `main` `6d840c0d` (subtask `bapm-rule-ABC-168-A6`), after the `A6` ruling. Items 4, 5, 6, 7 and 10 were re-read.
 **Still 10 of 10.** The column is not moved by this hop. The card stays `In Development` until the Scribe's Scope 5
-lands, and that move is the Orchestrator's.
+lands, and that move is the Orchestrator's. Re-read 2026-10-21 at `main` `f0cb1b92` (subtask `bapm-rule-QE-168`),
+after QE-168-a. Items 2 and 4 were re-read: Scope 5 and `A12` now name the command-log file, and `A12` is still a
+binary file-list check. **Still 10 of 10.** No column move.
 
 | # | item | verdict |
 |---|---|---|

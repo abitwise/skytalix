@@ -2,7 +2,7 @@
 id: ABC-174
 title: "Re-cut the level table per ADR-0045 (data only); the default moves to level 5 and plays as today"
 status: done
-column: Backlog
+column: Done
 size: S
 priority: P1
 epic: EPIC-004
