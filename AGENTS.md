@@ -26,15 +26,15 @@ Roles pull the shared verified context they need and publish their work output a
 - Workflows:  `agent-factory/workflows/`
 - Checklists: `agent-factory/checklists/`
 
-> **No `finding` is admissible on this install.** `scripts/context-io.ts`, `scripts/claim.js` and
-> `mcp__grugops__propose_note` are absent from this repository and from the kit, and
-> `context.human_admission` is `off`, so no `§14-gate#<id>` verdict can be emitted. Record results as
-> `claim` / `observation` / `decision` / `artifact-ref`, hand-authored per
-> `agent-factory/contracts/context-note.md`, and take the queue claim by hand: `mkdir -p
-> .grugops/queue/claimed` for the parent, then a **bare** `mkdir` (no `-p`) of the task directory —
-> that bare `mkdir` is the atomic act. Restoring the writer is an install-level fix
-> (`node install/install.js --check`) escalated to the owner, not a ticket.
-> **Do not re-derive this; do not invent a stamp.**
+> **No `finding` is admissible on this install:** `context.human_admission` is `off`, so no
+> `§14-gate#<id>` verdict can be emitted. Record results as `claim` / `observation` / `decision` /
+> `artifact-ref` per `agent-factory/contracts/context-note.md`.
+> **Seal every note with the sanctioned writer:** a hand-authored note reads back `unsealed`. It is
+> `scripts/context-io.js` (`admitAndAppend`, `readContext`) in the installed grugops plugin, with
+> `claim.js` beside it (`claimTask`, `transition`). Find the plugin: `installPath` of `grugops@grugops`
+> in `~/.claude/plugins/installed_plugins.json`. The Orchestrator also has
+> `mcp__plugin_grugops_grugops__propose_note`. A bare `mkdir` (no `-p`) of
+> `.grugops/queue/claimed/<task>` is the atomic claim act. **Do not re-derive this; do not invent a stamp.**
 
 ## Kit vs state
 
@@ -84,6 +84,8 @@ completion notification; if a pattern is unavoidable, bracket one character (`[v
 - Test (all): `npm test` <!-- `node tools/grugops/run-bounded.js 60000 vitest run` (ABC-122). A hung lane exits 124 at the 60 s bound — stop
   with Ctrl-C/SIGTERM, never SIGKILL (R1: can orphan a hung vitest). `*_DEEP` lanes below run via
   `npx vitest run` directly, never through `npm test`. -->
+- Heap flag (ABC-173): `--max-old-space-size=400` is for ONE-file vitest runs only. Whole-suite or
+  multi-file runs use 128, as `npm test` sets itself; the heap guard refuses 400 there.
 - Worker cap (ABC-144, ADR-0040 addendum 2): `vitest.config.ts` `test.maxWorkers: 2`, pinned by value in
   `src/cli.test.ts`; `isolate` stays on; no `projects`/`poolOptions`. Never raise it or pass a higher
   `--maxWorkers`; env may only lower it: `VITEST_MAX_WORKERS` 1..2 (`VITEST_MAX_THREADS` is read by
@@ -121,19 +123,19 @@ completion notification; if a pattern is unavoidable, bracket one character (`[v
   src/search.pvs-lmr.test.ts` <!-- Run after any PVS/LMR
   change to src/search.ts or src/engine.ts. -->
 - Real-engine CLI lane (opt-in, ABC-119): `CLI_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/cli.real-engine.test.ts`
-  <!-- Two real children of
-  `node src/cli.ts --colour black --ascii`. Unset: NOT DEFINED, not skipped. Run at QE and after
-  any src/cli.ts or src/engine.ts change. -->
+  <!-- Real children of
+  `node src/cli.ts --colour black --ascii` (count: the test file). Unset: NOT DEFINED, not
+  skipped. Run at QE and after any src/cli.ts or src/engine.ts change. -->
 - Self-play ladder lane (opt-in, ABC-085, ADR-0038): `LADDER_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/ladder.test.ts`
   <!-- Short mode, step 120:
   claims A3/A4/A5 only, never A1/A2. `-t "3v4"` re-runs one pair. Unset is the only off:
   `LADDER_DEEP=` and `=0` fail at load (QE-085-e). Unset: NOT DEFINED, not skipped. The A1/A2
   verdict is not run here (~44 h in vitest): its route is ABC-146's (plain node, ADR-0038 addendum). -->
 - Test (single file): `NODE_OPTIONS=--max-old-space-size=400 npx vitest run <path>`
-- Coverage: `NODE_OPTIONS=--max-old-space-size=128 npx vitest run --coverage` <!-- exit 0, 99.43 % lines over LOADED files only (4.x: no `coverage.all`). Not in
+- Coverage: `NODE_OPTIONS=--max-old-space-size=128 npx vitest run --coverage` <!-- LOADED files only (4.x: no `coverage.all`). Not in
   `quality.mandatory_gates` — a measurement, not a gate. TRAP: `src/cli.ts`'s tests SPAWN it as a
   child and v8 coverage does not cross a process boundary, so it reads uncovered while tested. -->
-- Coverage (`src/` only — the other denominator; neither is agreed): `NODE_OPTIONS=--max-old-space-size=128 npx vitest run --coverage --coverage.include='src/**'` <!-- exit 0, 95.55 % lines -->
+- Coverage (`src/` only — the other denominator; neither is agreed): `NODE_OPTIONS=--max-old-space-size=128 npx vitest run --coverage --coverage.include='src/**'`
 
 ### Acceptance
 
