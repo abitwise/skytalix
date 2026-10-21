@@ -1,0 +1,44 @@
+tip 19abbdb1; instrument sha256 ad47a564d17e2076; reference 341da4c1 sha256 433d0c5052559b18
+P2b     19abbdb1..b7c78d43  read becomes /etc/passwd
+        L1 expected  FIRES; R2 src/book-file.ts@<base> and <head>
+        L1 actual    FIRES; R2 src/book-file.ts@<base> and <head>   ok
+        (b1) capability: 0 | (b1) Ruling 2: holders 1 at <base>, 1 at <head>; holder files with + lines: 1
+        L2 vs 341da4c1: identical (limb 2: does not fire)
+        L3 vs 341da4c1: identical (limb 3: does not fire)
+P2c     19abbdb1..91475824  path: string, from cli.ts options
+        L1 expected  FIRES; R2 src/book-file.ts@<base> and <head>
+        L1 actual    FIRES; R2 src/book-file.ts@<base> and <head>   ok
+        (b1) capability: 0 | (b1) Ruling 2: holders 1 at <base>, 1 at <head>; holder files with + lines: 1
+        L2 vs 341da4c1: identical (limb 2: does not fire)
+        L3 vs 341da4c1: identical (limb 3: does not fire)
+CMT     19abbdb1..9b2f9db5  comment line only
+        L1 expected  FIRES; R2 src/book-file.ts@<base> and <head>
+        L1 actual    FIRES; R2 src/book-file.ts@<base> and <head>   ok
+        (b1) capability: 0 | (b1) Ruling 2: holders 1 at <base>, 1 at <head>; holder files with + lines: 1
+        L2 vs 341da4c1: identical (limb 2: does not fire)
+        L3 vs 341da4c1: identical (limb 3: does not fire)
+X1      19abbdb1..cc51534d  holder at <base> only
+        L1 expected  FIRES; R2 src/book-file.ts@<base>
+        L1 actual    FIRES; R2 src/book-file.ts@<base>   ok
+        (b1) capability: 0 | (b1) Ruling 2: holders 1 at <base>, 0 at <head>; holder files with + lines: 1
+        L2 vs 341da4c1: identical (limb 2: does not fire)
+        L3 vs 341da4c1: identical (limb 3: does not fire)
+NOH     619abc14..4384d303  + line in src/fen.ts, no holder
+        L1 expected  does not fire; R2 -
+        L1 actual    does not fire; R2 -   ok
+        (b1) capability: 0 | (b1) Ruling 2: no limb-1 holder at <base> or <head>; adds nothing
+        L2 vs 341da4c1: identical (limb 2: does not fire)
+        L3 vs 341da4c1: identical (limb 3: does not fire)
+G1-IMP  19abbdb1..4bfa6bf1  AR-163-DELONLY gap: import line deleted only
+        L1 expected  does not fire; R2 -
+        L1 actual    does not fire; R2 -   ok
+        (b1) capability: 0 | (b1) Ruling 2: holders 1 at <base>, 0 at <head>; holder files with + lines: 0
+        L2 vs 341da4c1: identical (limb 2: does not fire)
+        L3 vs 341da4c1: identical (limb 3: does not fire)
+G1-GRD  7913b406..832bde69  AR-163-DELONLY gap: guard line deleted only
+        L1 expected  does not fire; R2 -
+        L1 actual    does not fire; R2 -   ok
+        (b1) capability: 0 | (b1) Ruling 2: holders 1 at <base>, 1 at <head>; holder files with + lines: 0
+        L2 vs 341da4c1: identical (limb 2: does not fire)
+        L3 vs 341da4c1: identical (limb 3: does not fire)
+r2-mutants: 7 of 7 limb-1 rows as expected; limbs 2 and 3 identical to 341da4c1 on 7 of 7
