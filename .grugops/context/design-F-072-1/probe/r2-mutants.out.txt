@@ -1,26 +1,26 @@
-tip 11245e3d; instrument sha256 d3abb8478f9e372e; reference 341da4c1 sha256 433d0c5052559b18
-P2b     11245e3d..94e5f809  read becomes /etc/passwd
+tip 63eadabe; instrument sha256 2c0c1985e6607110; reference 341da4c1 sha256 433d0c5052559b18
+P2b     63eadabe..08282e7f  read becomes /etc/passwd
         L1 expected  FIRES; R2 src/book-file.ts@<base> and <head>
         L1 actual    FIRES; R2 src/book-file.ts@<base> and <head>   ok
         (b1) capability: 0 | (b1) Ruling 2: holders 1 at <base>, 1 at <head>; holder files with changed lines (+ or -): 1
         R2 file      src/book-file.ts  (fired by Ruling 2: 1 + line, 1 - line; holds limb 1 at <base> and <head>)
         L2 vs 341da4c1: identical (limb 2: does not fire)
         L3 vs 341da4c1: identical (limb 3: does not fire)
-P2c     11245e3d..194ae45b  path: string, from cli.ts options
+P2c     63eadabe..ad07efc5  path: string, from cli.ts options
         L1 expected  FIRES; R2 src/book-file.ts@<base> and <head>
         L1 actual    FIRES; R2 src/book-file.ts@<base> and <head>   ok
         (b1) capability: 0 | (b1) Ruling 2: holders 1 at <base>, 1 at <head>; holder files with changed lines (+ or -): 1
         R2 file      src/book-file.ts  (fired by Ruling 2: 2 + lines, 2 - lines; holds limb 1 at <base> and <head>)
         L2 vs 341da4c1: identical (limb 2: does not fire)
         L3 vs 341da4c1: identical (limb 3: does not fire)
-CMT     11245e3d..4aeef396  comment line only
+CMT     63eadabe..51781aba  comment line only
         L1 expected  FIRES; R2 src/book-file.ts@<base> and <head>
         L1 actual    FIRES; R2 src/book-file.ts@<base> and <head>   ok
         (b1) capability: 0 | (b1) Ruling 2: holders 1 at <base>, 1 at <head>; holder files with changed lines (+ or -): 1
         R2 file      src/book-file.ts  (fired by Ruling 2: 1 + line, 1 - line; holds limb 1 at <base> and <head>)
         L2 vs 341da4c1: identical (limb 2: does not fire)
         L3 vs 341da4c1: identical (limb 3: does not fire)
-X1      11245e3d..3f21b6fd  holder at <base> only
+X1      63eadabe..57037b33  holder at <base> only
         L1 expected  FIRES; R2 src/book-file.ts@<base>
         L1 actual    FIRES; R2 src/book-file.ts@<base>   ok
         (b1) capability: 0 | (b1) Ruling 2: holders 1 at <base>, 0 at <head>; holder files with changed lines (+ or -): 1
@@ -33,53 +33,109 @@ NOH     619abc14..4384d303  + line in src/fen.ts, no holder
         (b1) capability: 0 | (b1) Ruling 2: no limb-1 holder at <base> or <head>; adds nothing
         L2 vs 341da4c1: identical (limb 2: does not fire)
         L3 vs 341da4c1: identical (limb 3: does not fire)
-G1-IMP  11245e3d..272bfc6d  AR-163-DELONLY: import line deleted only
+G1-IMP  63eadabe..02f37e3b  AR-163-DELONLY: import line deleted only
         L1 expected  FIRES; R2 src/book-file.ts@<base>
         L1 actual    FIRES; R2 src/book-file.ts@<base>   ok
         (b1) capability: 0 | (b1) Ruling 2: holders 1 at <base>, 0 at <head>; holder files with changed lines (+ or -): 1
         R2 file      src/book-file.ts  (fired by Ruling 2: 0 + lines, 1 - line; holds limb 1 at <base>)
         L2 vs 341da4c1: identical (limb 2: does not fire)
         L3 vs 341da4c1: identical (limb 3: does not fire)
-G1-GRD  94497e43..e5556f8b  AR-163-DELONLY: guard line deleted only
+G1-GRD  db2576d1..1766521c  AR-163-DELONLY: guard line deleted only
         L1 expected  FIRES; R2 src/book-file.ts@<base> and <head>
         L1 actual    FIRES; R2 src/book-file.ts@<base> and <head>   ok
         (b1) capability: 0 | (b1) Ruling 2: holders 1 at <base>, 1 at <head>; holder files with changed lines (+ or -): 1
         R2 file      src/book-file.ts  (fired by Ruling 2: 0 + lines, 1 - line; holds limb 1 at <base> and <head>)
         L2 vs 341da4c1: identical (limb 2: does not fire)
         L3 vs 341da4c1: identical (limb 3: does not fire)
-G1B     3606dd8a..c904bbc9  AR-163-DELONLY: no-parameter guard deleted only
+G1B     3867cac2..b9632d38  AR-163-DELONLY: no-parameter guard deleted only
         L1 expected  FIRES; R2 src/book-file.ts@<base> and <head>
         L1 actual    FIRES; R2 src/book-file.ts@<base> and <head>   ok
         (b1) capability: 0 | (b1) Ruling 2: holders 1 at <base>, 1 at <head>; holder files with changed lines (+ or -): 1
         R2 file      src/book-file.ts  (fired by Ruling 2: 0 + lines, 1 - line; holds limb 1 at <base> and <head>)
         L2 vs 341da4c1: identical (limb 2: does not fire)
         L3 vs 341da4c1: identical (limb 3: does not fire)
-UNC1    74614264..c0ebaf1a  AR-163-DELONLY: comment delimiters deleted only
+UNC1    a291d93f..3c0b867f  AR-163-DELONLY: comment delimiters deleted only
         L1 expected  FIRES; R2 src/book.ts@<head>
         L1 actual    FIRES; R2 src/book.ts@<head>   ok
         (b1) capability: 0 | (b1) Ruling 2: holders 1 at <base>, 2 at <head>; holder files with changed lines (+ or -): 1
         R2 file      src/book.ts  (fired by Ruling 2: 0 + lines, 2 - lines; holds limb 1 at <head>)
         L2 vs 341da4c1: identical (limb 2: does not fire)
         L3 vs 341da4c1: identical (limb 3: does not fire)
-REN     11245e3d..5901e9a6  AR-163-DELONLY: holder renamed away, import dropped
+REN     63eadabe..702c0fdf  AR-163-DELONLY: holder renamed away, import dropped
         L1 expected  FIRES; R2 src/book-file.ts@<base>
         L1 actual    FIRES; R2 src/book-file.ts@<base>   ok
         (b1) capability: 0 | (b1) Ruling 2: holders 1 at <base>, 0 at <head>; holder files with changed lines (+ or -): 1
         R2 file      src/book-file.ts  (fired by Ruling 2: 0 + lines, 17 - lines; holds limb 1 at <base>)
         L2 vs 341da4c1: identical (limb 2: does not fire)
         L3 vs 341da4c1: identical (limb 3: does not fire)
-BIN-NUL 11245e3d..8e0795d0  AR-188-BINARY: X1 plus a NUL byte in the JSDoc
+BIN-NUL 63eadabe..97699713  AR-188-BINARY: X1 plus a NUL byte in the JSDoc
         L1 expected  FIRES; R2 src/book-file.ts@<base>
         L1 actual    FIRES; R2 src/book-file.ts@<base>   ok
         (b1) capability: 0 | (b1) Ruling 2: holders 1 at <base>, 0 at <head>; holder files with changed lines (+ or -): 1
         R2 file      src/book-file.ts  (fired by Ruling 2: 2 + lines, 4 - lines; holds limb 1 at <base>)
         L2 vs 341da4c1 on X1, plant ids masked: identical (limb 2: does not fire)
         L3 vs 341da4c1 on X1, plant ids masked: identical (limb 3: does not fire)
-BIN-ATTR 11245e3d..2474a1c1  AR-188-BINARY: X1 plus .gitattributes src/** -diff
+BIN-ATTR 63eadabe..91ce0732  AR-188-BINARY: X1 plus .gitattributes src/** -diff
         L1 expected  FIRES; R2 src/book-file.ts@<base>
         L1 actual    FIRES; R2 src/book-file.ts@<base>   ok
         (b1) capability: 0 | (b1) Ruling 2: holders 1 at <base>, 0 at <head>; holder files with changed lines (+ or -): 1
         R2 file      src/book-file.ts  (fired by Ruling 2: 1 + line, 3 - lines; holds limb 1 at <base>)
         L2 vs 341da4c1 on X1, plant ids masked: identical (limb 2: does not fire)
         L3 vs 341da4c1 on X1, plant ids masked: identical (limb 3: does not fire)
-r2-mutants: 12 of 12 limb-1 rows as expected; limbs 2 and 3 identical to 341da4c1 on the same plant on 10 of 10, and to 341da4c1 on X1 (plant ids masked) on BIN-NUL and BIN-ATTR
+ADD     63eadabe..846f704b  src/fen.ts gains node:fs + fetch; no route
+        L1 expected  FIRES; R2 src/fen.ts@<head>
+        L1 actual    FIRES; R2 src/fen.ts@<head>   ok
+        (b1) capability: 1 | (b1) Ruling 2: holders 1 at <base>, 2 at <head>; holder files with changed lines (+ or -): 1
+        R2 file      src/fen.ts  (fired by Ruling 2: 2 + lines, 0 - lines; holds limb 1 at <head>)
+        L2 vs 341da4c1: identical (limb 2: does not fire)
+        L3 vs 341da4c1: identical (limb 3: FIRES)
+G-COLOR 63eadabe..846f704b  ADD's plant; route color.diff=always
+        L1 expected  FIRES; R2 src/fen.ts@<head>
+        L1 actual    FIRES; R2 src/fen.ts@<head>   ok
+        (b1) capability: 1 | (b1) Ruling 2: holders 1 at <base>, 2 at <head>; holder files with changed lines (+ or -): 1
+        R2 file      src/fen.ts  (fired by Ruling 2: 2 + lines, 0 - lines; holds limb 1 at <head>)
+        L2 vs 341da4c1, route off: identical (limb 2: does not fire)
+        L3 vs 341da4c1, route off: identical (limb 3: FIRES)
+G-EXT   63eadabe..846f704b  ADD's plant; route diff.external = a script that prints nothing
+        L1 expected  FIRES; R2 src/fen.ts@<head>
+        L1 actual    FIRES; R2 src/fen.ts@<head>   ok
+        (b1) capability: 1 | (b1) Ruling 2: holders 1 at <base>, 2 at <head>; holder files with changed lines (+ or -): 1
+        R2 file      src/fen.ts  (fired by Ruling 2: 2 + lines, 0 - lines; holds limb 1 at <head>)
+        L2 vs 341da4c1, route off: identical (limb 2: does not fire)
+        L3 vs 341da4c1, route off: identical (limb 3: FIRES)
+G-ENV   63eadabe..846f704b  ADD's plant; route GIT_EXTERNAL_DIFF = the same script
+        L1 expected  FIRES; R2 src/fen.ts@<head>
+        L1 actual    FIRES; R2 src/fen.ts@<head>   ok
+        (b1) capability: 1 | (b1) Ruling 2: holders 1 at <base>, 2 at <head>; holder files with changed lines (+ or -): 1
+        R2 file      src/fen.ts  (fired by Ruling 2: 2 + lines, 0 - lines; holds limb 1 at <head>)
+        L2 vs 341da4c1, route off: identical (limb 2: does not fire)
+        L3 vs 341da4c1, route off: identical (limb 3: FIRES)
+G-DRV   63eadabe..846f704b  ADD's plant; route diff.ext.command = the same script, .git/info/attributes src/** diff=ext
+        L1 expected  FIRES; R2 src/fen.ts@<head>
+        L1 actual    FIRES; R2 src/fen.ts@<head>   ok
+        (b1) capability: 1 | (b1) Ruling 2: holders 1 at <base>, 2 at <head>; holder files with changed lines (+ or -): 1
+        R2 file      src/fen.ts  (fired by Ruling 2: 2 + lines, 0 - lines; holds limb 1 at <head>)
+        L2 vs 341da4c1, route off: identical (limb 2: does not fire)
+        L3 vs 341da4c1, route off: identical (limb 3: FIRES)
+G-PFX   63eadabe..846f704b  ADD's plant; route diff.srcPrefix=x/, diff.dstPrefix=y/
+        L1 expected  FIRES; R2 src/fen.ts@<head>
+        L1 actual    FIRES; R2 src/fen.ts@<head>   ok
+        (b1) capability: 1 | (b1) Ruling 2: holders 1 at <base>, 2 at <head>; holder files with changed lines (+ or -): 1
+        R2 file      src/fen.ts  (fired by Ruling 2: 2 + lines, 0 - lines; holds limb 1 at <head>)
+        L2 vs 341da4c1, route off: identical (limb 2: does not fire)
+        L3 vs 341da4c1, route off: identical (limb 3: FIRES)
+QU      63eadabe..2df799df  new unreached src/qé.ts with node:fs
+        L1 expected  FIRES; R2 src/qé.ts@<head>
+        L1 actual    FIRES; R2 src/qé.ts@<head>   ok
+        (b1) capability: 1 | (b1) Ruling 2: holders 1 at <base>, 2 at <head>; holder files with changed lines (+ or -): 1
+        R2 file      src/qé.ts  (fired by Ruling 2: 2 + lines, 0 - lines; holds limb 1 at <head>)
+        L2 vs 341da4c1 with core.quotePath=false in its environment: identical (limb 2: does not fire)
+        L3 vs 341da4c1 with core.quotePath=false in its environment: identical (limb 3: does not fire)
+QE2     7aa0f9ed..bef7b338  reached src/qé.ts gains node:fs + fetch
+        L1 expected  FIRES; R2 src/qé.ts@<head>
+        L1 actual    FIRES; R2 src/qé.ts@<head>   ok
+        (b1) capability: 1 | (b1) Ruling 2: holders 1 at <base>, 2 at <head>; holder files with changed lines (+ or -): 1
+        R2 file      src/qé.ts  (fired by Ruling 2: 2 + lines, 0 - lines; holds limb 1 at <head>)
+        L2 vs 341da4c1 with core.quotePath=false in its environment: identical (limb 2: does not fire)
+        L3 vs 341da4c1 with core.quotePath=false in its environment: identical (limb 3: FIRES)
+r2-mutants: 20 of 20 limb-1 rows as expected; limbs 2 and 3 identical to 341da4c1 on the same plant on 11 of 11, on the same plant with the route off on G-COLOR G-EXT G-ENV G-DRV G-PFX, with core.quotePath=false in its environment on QU and QE2, and on X1 (plant ids masked) on BIN-NUL and BIN-ATTR

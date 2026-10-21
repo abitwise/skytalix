@@ -516,3 +516,37 @@ with `341da4c1`'s output on X1, plant ids masked. The other 10 rows keep the byt
 
 **Rollback.** Revert `11245e3d`, and the `--numstat` stand-in returns at every routing and merge. Readings:
 `.grugops/context/arch-build-ABC-191/notes/` and `.grugops/context/bapm-cut-AR-188-BINARY/notes/`.
+
+#### Git config, environment and quoted names no longer steer clause (b) — 2026-10-21 (`ABC-193`)
+
+Accepted by Security/NFR at `QE-191-a` as `AR-191-GITENV` and `AR-191-QUOTEPATH`
+(`.grugops/context/security-nfr-QE-191-a/notes/…decision-7c1f3590` § 2–3; owner record `…orchestrator-decision-eb401873`).
+Commit `63eadabe` edits `.grugops/context/design-F-072-1/probe/clause-b.mjs` **in place**, so the canonical pointer
+above is unchanged. Readings taken before it reproduce from that file at `11245e3d`.
+- **(i) The instrument ignores git config and environment.** The one diff call reads `--no-ext-diff --no-color
+  --src-prefix=a/ --dst-prefix=b/`, and every git call reads `-c core.quotePath=false`. So git config or environment
+  in any checkout or worktree (colour, an external diff, a diff driver's `command`, prefixes) no longer changes what the
+  instrument reads. A production file whose name holds a non-ASCII byte is read like any other. Measured: each of
+  `color.diff=always`, `diff.external`, `GIT_EXTERNAL_DIFF`, `diff.ext.command` with `.git/info/attributes`
+  `src/** diff=ext`, and `diff.srcPrefix`/`dstPrefix` made the instrument before this commit read
+  `production files changed: 0` and `does not fire` on a widening (a `node:fs` import plus a `fetch` call).
+- **(ii) Quoted paths are disputes.** A path the diff still prints C-quoted (git quotes a name holding `"`, `\`, a tab
+  or a newline even with `core.quotePath=false`) makes the limb FIRE (disputed). The unresolved line names the path as
+  git printed it, `"src/q\"t.ts" (C-quoted by git; not read)`. A C-quoted file the pair does not change adds nothing.
+- **(iii) The stand-in retires.** The Orchestrator's GITENV stand-in (`git config --get-regexp
+  '^(color\.(ui|diff)|diff\.(external|srcprefix|dstprefix)|diff\..+\.command)$' | grep -v -E
+  '^color\.(ui|diff) (auto|true|false|never)$'; printenv GIT_EXTERNAL_DIFF`, owner record `…eb401873`) **retires when
+  this merges.**
+- **(iv) `AR-191-GITENV` closes on QE's read of `ABC-193`'s `A2`–`A4`.** The Orchestrator records the close.
+- **(v) `AR-191-QUOTEPATH`'s instrument half closes on QE's read of `QU`, `QE2` and `A6`'s C-quoted plants.** The
+  `AGENTS.md` waiver form stays owed as the owner's text.
+
+No limb's unit changes, and Ruling 2 is untouched. **Harness.** `r2-mutants.sh` has 20 rows. `ADD` (a control with no
+route), the five route rows on `ADD`'s plant (`G-COLOR`, `G-EXT`, `G-ENV`, `G-DRV`, `G-PFX`), `QU` and `QE2` FIRE; on the
+instrument before this commit only `ADD` fires. A route is set in the harness's scratch clone (or one run's
+environment) around the head instrument's runs only, so the route rows compare limbs 2 and 3 with `341da4c1` on the
+same plant with the route off; `QU` and `QE2` compare with `341da4c1` run with `core.quotePath=false` in its
+environment. The 12 earlier rows print what they printed before.
+
+**Rollback.** Revert `63eadabe`, and the GITENV stand-in and the `AR-191-QUOTEPATH` dispute-line rule return at every
+routing and merge. Readings: `.grugops/context/arch-build-ABC-193/notes/` and `.grugops/context/bapm-cut-AR-191/notes/`.
