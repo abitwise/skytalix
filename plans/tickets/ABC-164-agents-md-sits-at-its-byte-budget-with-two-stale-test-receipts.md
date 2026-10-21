@@ -55,8 +55,10 @@ feature: —
 - **`A3` (the rules survive).** Each of these strings is still in `AGENTS.md`, checked on joined text: `exits 124`,
   `never SIGKILL`, `NOT DEFINED, not skipped`, `Run at QE`. Each occurs at least once at `1671f24f`.
 - **`A4` (the receipts are true).** The command log's new receipts equal a run at the tip:
-  `CLI_DEEP=1 npx vitest run src/cli.real-engine.test.ts` (count, exit) and `npm test` (files, tests, exit). They are
-  read, not copied from this page.
+  `CLI_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/cli.real-engine.test.ts` (count, exit) and
+  `npm test` (files, tests, exit). They are read, not copied from this page.
+  *(Heap prefix added 2026-10-21 by BA/PM, `bapm-rule-QE-159` ruling `QE-159-b`: `ABC-173`'s heap guard refuses the
+  bare command. The criterion is unchanged.)*
 - **`A5` (fences).** `git diff --name-only <base>` lists exactly `AGENTS.md` and
   `memory-bank/90-agents-md-command-log.md`. `npm test` is green, with the `ABC-065` and `ABC-109` rows included.
 

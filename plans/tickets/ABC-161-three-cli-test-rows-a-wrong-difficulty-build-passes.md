@@ -70,8 +70,9 @@ Each plant goes in a scratch copy outside the repository. The lane is the whole 
 - **`A4` (fences).**
   - `git diff --name-only <base>` lists exactly `src/cli.test.ts`. The production-`src/` grep is empty.
   - Every changed line lies inside the three named `it` blocks.
-  - `npm test`: the file count and the test count equal base, and skips are **0**. `CLI_DEEP=1 npx vitest run
-    src/cli.real-engine.test.ts` is green.
+  - `npm test`: the file count and the test count equal base, and skips are **0**. `CLI_DEEP=1 NODE_OPTIONS=--max-old-space-size=400
+    npx vitest run src/cli.real-engine.test.ts` is green. *(Heap prefix added 2026-10-21 by BA/PM, `bapm-rule-QE-159`
+    ruling `QE-159-b`: `ABC-173`'s heap guard refuses the bare command. The criterion is unchanged.)*
 
 ## Dependencies
 

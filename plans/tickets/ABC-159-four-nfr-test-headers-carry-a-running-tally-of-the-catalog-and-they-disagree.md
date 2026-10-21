@@ -75,6 +75,11 @@ were written, and no reader can tell which, if any, is true today. That is the d
     `npx vitest run --reporter=json | jq -r '.testResults[] | "\(.assertionResults|length) \(.name)"' | sort -k2`.
     Skips are **0**.
 
+  > **Erratum 2026-10-21 (BA/PM, `bapm-rule-QE-159`, ruling `QE-159-b`).** This command, run as written, is refused
+  > by `ABC-173`'s heap guard (exit 1, 0 tests). `ABC-173` came after this page was cut. The intended reading is the
+  > same command with `NODE_OPTIONS=--max-old-space-size=128` in front, which is how QE read `A4` MET. The verdict
+  > stands. Only the command text was stale.
+
 ## Dependencies
 
 - **`ABC-096` (`In Development`) edits `src/history-pane.nfr.test.ts`** (`ADR-0043`'s code fence). **Branch from a
