@@ -227,6 +227,8 @@ interface RealChild {
   readonly stderr: string;
   /** Spawn to exit, measured around the blocking call — an upper bound on the engine's reply. */
   readonly wallMs: number;
+  /** The `cwd` argument handed to `spawnSync`, verbatim: not a `realpath`, not read from the child. */
+  readonly cwd: string;
 }
 
 /** The entry point under `root`, run with `cwd` as its working directory (the tree root unless named). */
@@ -263,6 +265,7 @@ const spawnNode = (cwd: string, rest: readonly string[], script: string): RealCh
     stdout: child.stdout,
     stderr: child.stderr,
     wallMs,
+    cwd,
   };
 };
 
@@ -495,6 +498,10 @@ if (RUN_DEEP) {
       // book file that is not the delivered book, so only a read resolved from the module's own URL
       // finds the book (`AR-095-CWD`, `AR-162-FALLBACK`).
       expect(join(neutral, "/"), "A7's working directory").not.toBe(join(REPOSITORY, "/"));
+      expect(
+        booked.cwd,
+        "AR-183-CWDARG: the booked child must spawn from neutral, or the detector runs from the tree root and is disarmed",
+      ).toBe(neutral);
       const decoy = join(neutral, BOOK_PATH);
       expect(existsSync(decoy), "the decoy in A7's working directory").toBe(true);
       expect(
