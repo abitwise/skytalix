@@ -1212,46 +1212,4 @@ _Updated: 2026-08-19 by BA/PM (task `cut-agents-md-cap-2026-08-19`, Workflow 07)
 | ABC-179 (merge) | QE-159-a, -d, -e | main (merge of grugops/qe-ABC-179 @ 2873e1ed over SE dd131b71) | src/{san,status-panel,history-pane}.nfr.test.ts, src/cli.test.ts (comments only) | Gates on merge: lint/typecheck/build OK; npm test 1987/1987; skip 0; CLI_DEEP 11/11; PERFT_DEEP 32/32 | DONE; UAT waived (0 production lines, no .snap); QE-179-a → next BA/PM hop; QE-179-b no route |
 | ABC-180 (QE) | A7's neutral cwd holds a non-JSON decoy book; P6f base green → head red at the labelled stderr check; P6b/c/e reds hold; PD red at the parse check; qe-ABC-180 …f88e0845 | AR-162-FALLBACK (G-1, G-2 of ABC-162) | grugops/ABC-180 @ acb52edf (notes d9c3cca3; base ccccc6bb); QE grugops/qe-ABC-180 @ c0a7225f | src/cli.real-engine.test.ts (test-only; 0 production lines) | lint/typecheck/build rc 0; npm test 59/1987 = base, 0 skips; skip-integrity 0; CLI_DEEP 11/11; PERFT_DEEP 32/32; UAT waiver: non-test src list empty, no .snap | QE PASS_WITH_GAPS: A1–A6 MET; AR-162-FALLBACK close condition met; G-1 P6g validated-override survives (Security/NFR), G-2 decoy order unpinned, G-3 info |
 | ABC-163 (Architect fold review) | AR-095-L1UNIT, ADR-0036 § S1 Ruling 2; Security/NFR …b65b11b7 | grugops/ABC-163 @ dc4d4f15 (code 87d3897d, ADR d8c073e2) | — (records only) | Architect arch-ABC-163-adr: code read at 87d3897d; scratch plants on 1671f24f: P2b NEW FIRES (Ruling 2, base and head), D1 and D2 (deletion-only) NEW does not fire while by hand lists the file; L2/L3 byte-identical | fidelity YES (union base ∪ head; owner accepts the SE-built fold); ADR line accurate, retires by hand once on main, 4 precisions owed (text in …a7d9c818); AR-095-L1UNIT closes on QE A1–A3 + merge, Orchestrator records; QE result absent at ruling | notes …a76b1b2e, …c3568326, …a7d9c818, …c7df0411 |
----
-subtask: scribe-snapshot-rule
-role: agents-md-scribe
-ref: .grugops/context/scribe-snapshot-rule/
-width: queued; dispatched when a slot frees
----
-
-# AGENTS.md Scribe: add the owner's snapshot-waiver clause (QE-159-f)
-
-**Owner grant** (`…d9aa42b9`, 2026-10-21): amend the **third kit-override paragraph**. The override count stays three.
-
-## Do
-- Add the clause from the owner's 2026-10-17 rule (`…be910aa8`): a snapshot-only `src/` change keeps the UAT waiver only if the Orchestrator reads every changed `.snap` and records that in the Done note. Find the exact owner text in `…be910aa8` and the BA/PM ruling `…99559726`.
-- Make AGENTS.md's waiver measurement the stated reference, with no `__snapshots__` filter.
-- **Budget:** 24,576 bytes (now 24,554). Trim stale prose to fit and say what you trimmed. Don't touch the 12 rules or the merge-authority text.
-- **Where to work:** branch `grugops/scribe-snapshot-rule`, worktree `../wt-scribe-snapshot`. Write the notes inside the worktree. Run `src/cli.test.ts -t "AGENTS.md"` as a one-file run at 400.
-
-## Fences
-- `AGENTS.md` and notes only. Never push or merge.
-
-## Publish
-- Seal the notes with the plugin writer (task `scribe-snapshot-rule`).
-- Write `.grugops/queue/done/scribe-snapshot-rule.md` (brief + `## Result` + trace row) and `.claim.md`, uncommitted on main.
-
-## Result
-
-**DONE.** Branch `grugops/scribe-snapshot-rule`, worktree `../wt-scribe-snapshot`, tip `6e64861c` (AGENTS.md edit `8187ee19`, notes `6e64861c`). Nothing pushed or merged. Base `7240156d`.
-Notes (sealed via `admitAndAppend`, `findings: []`), in the worktree under `.grugops/context/scribe-snapshot-rule/notes/`:
-20261021T092243Z-agents-md-scribe-decision-42f5eecb` and `20261021T092243Z-agents-md-scribe-observation-310c268d`.
-
-- **Change** (`## Test and UAT authority`, third kit-override paragraph only; count stays three):
-  - The existing `git diff --name-only … | grep -v '\.test\.ts$' | grep '^src/'` is stated as the unfiltered reference measurement; no brief may add a `__snapshots__` filter.
-  - Snapshot-only exception (owner 2026-10-17, `…be910aa8`): if it lists only `src/__snapshots__/*.snap`, the waiver holds only if the Orchestrator reads every changed `.snap` and records that in the Done note; any change the criteria do not explain voids it and UAT goes to the owner.
-  - Authority line points at `…be910aa8` and the grant `…d9aa42b9`.
-- **Bytes:** 24,554 -> 24,560 (budget 24,576, 16 B headroom).
-- **Trimmed (stale prose):** the `Close-out: ABC-063 … ABC-064` sentence; `(ABC-065, ABC-066 accepted this way)`; the `human_admission … stamp` parenthetical in "Two misreadings"; the three quoted section titles in the Test/UAT Authority line (now "Standing directive" §§ of 2026-08-15/-16/-17); QE "Forward-only" reworded shorter; QE "completely unamended" dropped; Kit-vs-state "Clear voice — … not a joke." line.
-- **Untouched:** the 12 rules, merge-authority text, the Dev / run slot.
-- **Check:** `NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/cli.test.ts -t "AGENTS.md"`, one file: 8 passed, 80 skipped by filter, exit 0. Full suite not run (not asked).
-- **Claim note:** `claimed/scribe-snapshot-rule/` was an empty directory (no `claim.md`, brief still in `pending/`); this hop wrote `.claim.md` here and moved the brief to `done/`, removing the empty claim directory.
-- **For the Orchestrator at merge:** `AGENTS.md` is the only file changed; ABC-163's and other in-flight branches do not touch it. `plans/traceability.md` not edited by this hop.
-
-### Trace row (for the Orchestrator to append to `plans/traceability.md`)
 | QE-159-f | AGENTS.md carries the owner's snapshot-only waiver clause (third kit override; unfiltered measurement is the reference) | EPIC-002 | — | — | AGENTS.md `## Test and UAT authority` (8187ee19, branch grugops/scribe-snapshot-rule) | `src/cli.test.ts -t "AGENTS.md"` 8/8 at 400; 24,560 B ≤ 24,576 | waiver applies (docs only, 0 src lines) | — | Branch ready for gate and merge |
