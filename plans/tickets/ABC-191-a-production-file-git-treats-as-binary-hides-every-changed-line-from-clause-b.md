@@ -1,8 +1,8 @@
 ---
 id: ABC-191
 title: "A production file git treats as binary hides every changed line from clause (b) (the `AR-188-BINARY` fix)"
-status: ready
-column: Ready
+status: in-development
+column: In Development
 size: XS
 priority: P3
 epic: —

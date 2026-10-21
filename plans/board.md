@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-21 by Orchestrator — owner go (`…4ab163ef`, `…193e08fb`): `ABC-191` Ready → In Development (Architect `arch-build-ABC-191`), `ABC-176` Backlog → In Development (SE `ticket-to-pr-ABC-176`); BA/PM `bapm-epic007-confirm` writes the confirmed M9 and M3/RISK-EPIC007-05 rewordings into EPIC-007. Width 3. AR-1 re-stated on the owner's approval (no Release Manager hop). ABC-168 UAT A8–A10 stays with the owner (no cutechess-cli or En Croissant on this host). Ready 1/8 → 0/8, In Development 0/3 → 2/3._
 _Updated: 2026-10-21 by BA/PM (`bapm-cut-AR-188-BINARY`, records only) — `AR-188-BINARY`'s fix cut (Security/NFR `…f5843a71`; owner record `…9f5ca4b4`). `ABC-191` (Ready, XS, P3, DoR 10/10; builder Architect/Design; gates no merge): clause (b)'s one diff call reads `--text --no-textconv`; `r2-mutants.sh` gains `BIN-NUL` and `BIN-ATTR` (both FIRE on limb 1), with their limbs 2/3 compared with `341da4c1` on X1, because `341da4c1` is blind to both; `ADR-0036` § S1 gets a dated block retiring the `--numstat` stand-in. Base red is exactly those 2 rows; each flag alone falls short (measured on a scratch prototype). `.git/info/attributes` `-diff` is a third blinding route (measured; the same flag covers it). Ready 0/8 → 1/8. Next free id: ABC-192._
 _Updated: 2026-10-21 by Orchestrator — `ABC-188` → Done (merged). AR-163-DELONLY closed; ABC-168's merge hold lifted. AR-188-BINARY opened (LOW, `--numstat` stand-in); BA/PM `bapm-cut-AR-188-BINARY` cuts its fix._
 _Updated: 2026-10-21 by Orchestrator — `ABC-188` In Review → In Security/NFR (QE `da348a79`: AR-163-DELONLY close condition met); short Security/NFR read dispatched._
@@ -925,7 +926,6 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 ## Backlog (WIP unlimited)
 - [ABC-178] Two additive UCI rows restore the kills ABC-177 dropped (QE-177-a cross-session `held`, QE-177-b dropped-token budget band)  (owner: software-engineer, size: XS, priority: P2, epic: EPIC-007, since: 2026-10-21, DoR 9/10; cut in `bapm-rule-QE-177-ab`. Waits: ABC-177 merged and its A10 read ≤ 9.2 s on AC. QE-177-c accepted as is.)
-- [ABC-176] A heap-guard-refused run never reads as a clean skip count or a quiet result file  (owner: BA/PM, size: XS, priority: P3, epic: —, since: 2026-10-19, DoR 10/10; cut in `bapm-cut-ABC-176` (`30504eed`) from SEC-173-1 + QE-173-d, owner word `…5c8d2f71`.)
 - [ABC-189] Nothing pins the value of `package.json` `bin`, so `bin` → `src/uci.ts` passes every test (AR-168-BINPIN)  (owner: BA/PM, size: XS, priority: P3, epic: EPIC-007, since: 2026-10-21, DoR 10/10; cut in `bapm-cut-ABC-168-followups`. Waits: ABC-168 merged. Owed before any ticket merges that packages `dist/`, makes a backend depend on `skytalix`, or edits `bin` (then P2). Test-only, one assertion in ABC-042 A10.)
 - [ABC-190] The lock root lacks the `license` and `bin` that `package.json` carries (QE-172-a + ABC-168's `bin`)  (owner: BA/PM, size: XS, priority: P3, epic: EPIC-007, since: 2026-10-21, DoR 10/10; cut in `bapm-cut-ABC-168-followups`. Waits: ABC-168 merged. `npm install --package-lock-only --ignore-scripts`, numstat `4 0`; clause (a) hop owed.)
 
@@ -954,8 +954,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [EPIC-006] Game session and packaging  (owner: BA/PM, **size: XL — corrected from `L`; 9 tickets / 20 points across both halves, ~1.5x the 13 `L` was assigned, and it hit that ceiling BEFORE distribution was priced**, priority: P1, since: 2026-07-22, **BOTH HALVES NOW CUT: the runnable half `ABC-041`…`ABC-046` (2026-08-13) and the second half `ABC-100`…`ABC-102` (2026-08-16) — only THREE tickets, because the scope of packaging is a FUNCTION of a distribution channel nobody has chosen.** `ABC-100` cuts the DECISION, never the ANSWER: a superseding ADR per `ADR-0007` `D5`, on the owner's word, verbatim and dated. **Acceptance criterion 1 (`npx <package>`) remains unmeetable by any ticket. Recommendation NOT taken, standing for the owner: this should probably be two epics** — the halves share no dependency in either direction and their blockers differ in kind)
 - [EPIC-007] The engine speaks UCI, so a chess UI can play against it  (owner: BA/PM, size: M, priority: P1, since: 2026-10-18, **ACCEPTED 2026-10-18 (owner, `…c3e81a57`); private/UNLICENSED; Q12–Q15 answered; ABC-167..172 cut, DoR 10/10, next free id ABC-173** (lifts the UCI half of EPIC-004's non-goal; EPIC-004 not yet edited); proposed in `bapm-engine-plan` (`4a98860c`). Tickets RESERVED, no page cut: ABC-167 (S, session) → ABC-168 (XS, entry point, In Security/NFR); ABC-169 (XS, licence, outside v1, on Q8). Waits: the owner's answers to Q1–Q11 ("accept recommendations" suffices) and ADR-0044 acceptance.)
 
-## Ready (WIP 1/8)
-- [ABC-191] A production file git treats as binary hides every changed line from clause (b) (AR-188-BINARY fix)  (owner: BA/PM, size: XS, priority: P3, epic: —, since: 2026-10-21, DoR 10/10; cut in `bapm-cut-AR-188-BINARY`. Builder Architect/Design. Gates no merge; the Orchestrator's `--numstat` stand-in runs until it lands. 0 `src/` lines; QE reads A2–A7 to close AR-188-BINARY.)
+## Ready (WIP 0/8)
 
 
 
@@ -971,7 +970,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 2/3)
+- [ABC-191] A production file git treats as binary hides every changed line from clause (b) (AR-188-BINARY fix)  (owner: BA/PM, size: XS, priority: P3, epic: —, since: 2026-10-21, in dev 2026-10-21 (Architect `arch-build-ABC-191`), DoR 10/10; cut in `bapm-cut-AR-188-BINARY`. Builder Architect/Design. Gates no merge; the Orchestrator's `--numstat` stand-in runs until it lands. 0 `src/` lines; QE reads A2–A7 to close AR-188-BINARY.)
+- [ABC-176] A heap-guard-refused run never reads as a clean skip count or a quiet result file  (owner: BA/PM, size: XS, priority: P3, epic: —, since: 2026-10-19, in dev 2026-10-21 (SE `ticket-to-pr-ABC-176`; page facts from 2026-10-19 flagged in the brief), DoR 10/10; cut in `bapm-cut-ABC-176` (`30504eed`) from SEC-173-1 + QE-173-d, owner word `…5c8d2f71`.)
 
 
 
