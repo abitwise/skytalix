@@ -1,8 +1,8 @@
 ---
 id: ABC-185
 title: "85 hop and merge rows appended to `plans/traceability.md` since 2026-10-17 carry 5, 6, 7 or 9 cells, so their text renders under the wrong headers"
-status: ready
-column: Ready
+status: backlog
+column: Backlog
 size: M
 priority: P3
 epic: —
@@ -17,6 +17,14 @@ feature: —
 > `(Security/NFR)`, Engineer and Architect hops) and `(merge)` rows. Each hop chose its own cell layout. The
 > forward row rule (`bapm-rescope-ABC-165` decision `…d2b9bf09`, and `ABC-165` Scope 2) stops new ones. This ticket repairs
 > the ones already there.
+
+> **Re-ruled 2026-10-21 by BA/PM** (subtask `bapm-rule-QE-165`, at `main` `3d36999b`) after QE-165-a
+> (`qe-ABC-165` `…482f15f6`). **The pain below does not hold today.** These rows sit after the table's end at
+> `:496` (blank line, then an HTML comment), so they render as paragraph text, not under any header. It holds once
+> `ABC-186` joins the table back (repeated header above `:629`, blank lines `:740` and `:742` removed). Then
+> every word shows, but under the wrong header. **So this ticket waits on `ABC-186` merged** (Backlog until then).
+> The owner may still close it as won't-do once the table renders. At `3d36999b` `A1-cells` prints 86 names: the
+> 85 below plus `ABC-184` (`:1253`). Line numbers below are at `5277babd`; add 11 for `3d36999b`.
 
 ## Problem
 
@@ -96,14 +104,18 @@ split into 10.
 - **`A5` (fences).** `git diff --name-only main...HEAD` lists exactly `plans/traceability.md`. In
   `git diff -U0 main...HEAD`, the removed lines are exactly the N source rows. The added lines are exactly their N
   repairs, plus the hop's own appended row if it was told to append one.
+- **`A6` (the table still renders).** At the merged tip, `ABC-186`'s `A1-fragments` prints `2 0`. A tail merge that
+  leaves a blank line between rows fails here.
 
 ## Dependencies
 
 - **Pull precondition: the forward row rule is in force.** The Orchestrator writes the 10-column template into its
   briefs and checks each append (decision `…d2b9bf09`; split `…e9a6c68a`; readings `…50929881`). Without it, each hop during the repair adds
   rows Scope 1 must chase. This is an Orchestrator action, not a ticket.
-- **`ABC-165`: not blocking.** It touches `:377-378`, `:424-425` and rows up to `:1121`; this ticket touches `:1132`
-  onward. They may run in either order or side by side. `A1` holds in either order.
+- **`ABC-165`: merged** (`17f64ea4`). `A1` must print `[]`.
+- **`ABC-186`: pull after it merges.** The lines don't overlap (it edits `:349–396` and `:628–742`; this ticket edits
+  `:1143` onward at `3d36999b`), so it does not block the build. It blocks the value: until the table renders, a
+  re-celled row looks the same as a short one, and `A4 (d)` has no rendered headers to read against.
 - **How this hop avoids racing with the Orchestrator's appends.** These rows run to the table's last line, where the
   Orchestrator appends, so:
   1. Branch from the latest `main`.
@@ -121,7 +133,8 @@ split into 10.
 
 1. **Read `A1`, `A2`, `A4 (a)`, `A4 (b)` and `A5` with scripts, not by eye.** The 85 rows hold 44,682 characters;
    the longest is 1,483.
-2. **`A4 (d)` is a reading, not a script.** QE names the rows it read.
+2. **`A4 (d)` is a reading, not a script.** QE names the rows it read, and reads them in a GFM render (`marked`
+   15.0.12, as `qe-ABC-165` did), not in the raw source.
 3. **Gates:** lint, typecheck, build, `npm test`. A QE hop is owed. The UAT waiver is expected (0 production lines).
 
 ## Size and priority
@@ -133,25 +146,26 @@ script-checked.
 
 **`P3`:** every word of these rows already shows in a renderer, just under the wrong header, and this project
 renders nothing (local only). That is lower value than `ABC-165`, whose rows hide text. **Not `P2`:** no gate or
-test reads the trace's columns. Pull it after `ABC-165`, or close it as won't-do if the owner judges an `M` hop not
-worth misplaced-but-visible text. The forward rule alone stops the growth either way.
+test reads the trace's columns. Pull it after `ABC-186` merges, or close it as won't-do if the owner judges an `M`
+hop not worth misplaced-but-visible text. The forward rule alone stops the growth either way.
 
 ## Definition of Ready
 
-BA/PM, 2026-10-21 at `5277babd`. **Result: 10 of 10.**
+BA/PM, 2026-10-21 at `5277babd`. **Result: 10 of 10.** Re-scored 2026-10-21 at `3d36999b` (`bapm-rule-QE-165`):
+**10 of 10**, rows 1, 4, 5 and 10 re-read below. Placed in **Backlog**, waiting on `ABC-186`.
 
 | # | item | verdict |
 |---|---|---|
-| 1 | problem clear | **✅** 85 rows listed by line in 9 layouts; their text renders under the wrong headers |
+| 1 | problem clear | **✅** 85 (+1) rows listed by line in 9 layouts; once `ABC-186` merges, their text renders under the wrong headers (today: paragraph text, QE-165-a) |
 | 2 | scope and out-of-scope clear | **✅** re-cell the 85 (plus extras at the tip, expected 0); no word changes; `ABC-165`'s 11, the note and the metrics line excluded |
 | 3 | INVEST-shaped | **✅** independent of `ABC-165` (disjoint lines; `A1` holds in either order) |
-| 4 | acceptance testable and measurable | **✅** a printed list that is a subset of 11 named cells or `[]`; N of N equal; equal row count; 0 unexplained branch cells; at least 14 rows read with 0 misplaced cells; one file in the diff |
-| 5 | dependencies known | **✅** forward rule in force before pull (Orchestrator); `ABC-165` not blocking; merge `main` at the tip and a short freeze at merge |
+| 4 | acceptance testable and measurable | **✅** `[]` (`ABC-165` merged); N of N equal; equal row count; 0 unexplained branch cells; at least 14 rows read in a render with 0 misplaced cells; one file in the diff; `A1-fragments` `2 0` |
+| 5 | dependencies known | **✅** forward rule in force (Orchestrator, since 2026-10-21); `ABC-165` merged; pull after `ABC-186` merges; merge `main` at the tip and a short freeze at merge |
 | 6 | security/NFR triggers with a measurable target | **✅** not triggered |
 | 7 | test notes present | **✅** three |
 | 8 | size assigned | **✅** `M` |
 | 9 | priority assigned | **✅** `P3` |
-| 10 | no major unresolved blocker | **✅** none; the pull precondition is the Orchestrator's own action |
+| 10 | no major unresolved blocker | **✅** none outside the factory: the one wait is `ABC-186`, a Ready `XS` |
 
 Column moves are the Orchestrator's. Owner: **the Orchestrator** (routes the build to the Software Engineer), then
 QE.
