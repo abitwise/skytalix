@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-21 by Orchestrator — `ABC-181` In Development → In Review (SE `18b3c993`: one header sentence, gates green, waiver empty); QE `qe-ABC-181` dispatched._
 _Updated: 2026-10-21 by Orchestrator — pulled `ABC-183`, `ABC-182`, `ABC-181` Ready → In Development (3/3, width 3, disjoint files; owner go). SE hops `ticket-to-pr-ABC-18{1,2,3}`. Ready 4/8 → 1/8. Stale `pending/qe-ABC-159.md` removed (its done record exists)._
 _Updated: 2026-10-21 by BA/PM (`bapm-cut-2026-10-21b`, records only) — three XS P3 cuts, all Ready, DoR 10/10. `ABC-181` (EPIC-002; QE-179-a ruled CUT, not folded or accepted): `status-panel.nfr.test.ts`'s header stops crediting the catalog with `gameend.nfr.test.ts`'s `vi.mock` lesson; one comment sentence. `ABC-182` (ABC-163 G-4, Architect `…34e592ac`): commit `r2-mutants.sh` + `.out.txt` beside `clause-b.mjs`, 7 plants; exit 0 on main's instrument (= `87d3897d`), nonzero on `341da4c1`; due before any `clause-b.mjs` edit merges. `ABC-183` (AR-180-VALIDATED G-2, Security/NFR `…1b032e3f`): A7 captures the decoy's existence on the line before the `booked` spawn and asserts it, labelled AR-162-FALLBACK; closes AR-180-VALIDATED when QE reads TMO + P6f red at head; owed before ABC-168 merges, so pull it first. Ready 1/8 → 4/8. Next free id: ABC-184._
 _Updated: 2026-10-21 10:15Z — Orchestrator: ABC-163 In Security/NFR → Done, merged to `main` with all gates passing; UAT waived. AR-095-L1UNIT closed; AR-163-DELONLY and AR-163-UNCOMMENT opened; AR-180-VALIDATED part (i) met (`…8d0de2f4`)._
@@ -916,10 +917,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 3/3)
+## In Development (WIP 2/3)
 - [ABC-183] A7 pins that its decoy book is written before the `booked` spawn, so TMO no longer lets P6f pass `CLI_DEEP`  (BA/PM, XS, P3, epic: EPIC-005, pulled 2026-10-21, SE `ticket-to-pr-ABC-183`, **DoR 10/10**; cut in `bapm-cut-2026-10-21b` from AR-180-VALIDATED G-2 (Security/NFR `…1b032e3f`, owner record `…73eb06c5`). Test-only, `src/cli.real-engine.test.ts`. Closes AR-180-VALIDATED (part (i) met at ABC-163's merge). Owed before ABC-168 or any `src/book-file.ts` edit merges; → P2 when that trigger fires.)
 - [ABC-182] A committed Ruling 2 plant harness, `r2-mutants.sh`, beside `clause-b.mjs`  (BA/PM, XS, P3, epic: —, pulled 2026-10-21, SE `ticket-to-pr-ABC-182`, **DoR 10/10**; cut in `bapm-cut-2026-10-21b` from ABC-163 G-4 (Architect `…34e592ac`). 0 `src/` lines; `.grugops/context/design-F-072-1/probe/` only. Owed before any `clause-b.mjs` edit merges (AR-163-DELONLY / AR-163-UNCOMMENT fixes); → P2 when one is pulled.)
-- [ABC-181] `status-panel.nfr.test.ts`'s header credits the catalog with `gameend.nfr.test.ts`'s `vi.mock` lesson, which the catalog does not hold  (BA/PM, XS, P3, epic: EPIC-002, pulled 2026-10-21, SE `ticket-to-pr-ABC-181`, **DoR 10/10**; cut in `bapm-cut-2026-10-21b` from QE-179-a. One comment sentence, one file.)
 
 
 
@@ -947,7 +947,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-181] `status-panel.nfr.test.ts`'s header credits the catalog with `gameend.nfr.test.ts`'s `vi.mock` lesson, which the catalog does not hold  (BA/PM, XS, P3, epic: EPIC-002, pulled 2026-10-21, SE `ticket-to-pr-ABC-181`, **DoR 10/10**; cut in `bapm-cut-2026-10-21b` from QE-179-a. One comment sentence, one file.; SE tip `18b3c993`, QE `qe-ABC-181`)
 
 
 

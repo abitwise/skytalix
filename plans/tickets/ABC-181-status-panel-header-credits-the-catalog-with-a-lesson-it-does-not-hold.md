@@ -1,8 +1,8 @@
 ---
 id: ABC-181
 title: "`status-panel.nfr.test.ts`'s header says the `vi.mock` own-file lesson is \"recorded in the catalog\". The catalog does not hold it; `gameend.nfr.test.ts`'s header does (QE-179-a)"
-status: in-development
-column: In Development
+status: in-review
+column: In Review
 size: XS
 priority: P3
 epic: EPIC-002
