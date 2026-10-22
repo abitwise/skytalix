@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-22 21:50Z by Orchestrator — owner: "go forward with the project". Merged `scribe-owner-delegation` (`1987efbc`; gates 60/1995). `ABC-199` Ready → In Development (SE, merges after ABC-178). `bapm-next-slice` dispatched: reconcile record drift, find what's left per epic, cut the next product slice. ABC-178's timing hop waits on a quiet host (now on battery, with a foreign vitest running). Ready 0/8, In Development 1/3._
 _Updated: 2026-10-22 18:05Z by Orchestrator — `rm-restate-AR-1-premise` merged: AR-1 is re-stated in full (`…edd18e94`, supersedes `…901f43b6`; checks 1–8 as expected; 3 pairs LOW in context). ABC-056's P1 items are met, and the package-file merge hold is lifted (`…b935fad8`). Queue empty. Waiting on: ABC-178's B7/B8 quiet-host timing hop (the owner's window), with ABC-199 held behind it._
 _Updated: 2026-10-22 17:58Z by Orchestrator — `security-nfr-AR-1-premise` merged (PASS_WITH_RISKS, `…7d7b76ec`): AR-1's reason holds with the `bin`/`dist/` in scope; all 3 pairs LOW in context; ABC-056's P1 `bin` trigger fired, so `rm-restate-AR-1-premise` (P1) is dispatched. No ticket touching `package.json`, `tsconfig.build.json` or `dist/` merges until it lands (`…32c61052`)._
 _Updated: 2026-10-22 17:50Z by Orchestrator — `bapm-rule-QE-198` merged: QE-198-a cut → `ABC-199` (Ready, XS, P3, DoR 10/10), QE-198-b INFO; the interim re-run rule on those two rows holds until ABC-199 merges. **`ABC-199` is held in Ready** until ABC-178's B7/B8 timing hop is done. Both edit `src/uci-session.test.ts`, and a build would load the host the timing hop needs quiet. Ready 1/8. Next free id ABC-200._
@@ -879,7 +880,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   one hop at pull, when it checks `Ready for Dev`'s exit at that moment; the row records the pull.
 
   HEADING FORMAT (spec §6.1): each column is an H2 heading carrying its live/limit WIP count,
-  e.g. `## In Development (WIP 0/3)` — the left number is how many tickets are in the column
+  e.g. `## In Development (WIP 1/3)` — the left number is how many tickets are in the column
   now, the right number is the limit from config. Unlimited columns read `(WIP unlimited)`;
   Blocked is visible and time-tracked (no WIP limit) and reads `(visible, time-tracked)`.
   INVARIANT: the column H2 headings and the rows of the `## Columns` table are the same 13 names in the
@@ -889,7 +890,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 0/3)
+    ## In Development (WIP 1/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
     ## In Review (WIP 0/3)
@@ -996,8 +997,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [EPIC-006] Game session and packaging  (owner: BA/PM, **size: XL — corrected from `L`; 9 tickets / 20 points across both halves, ~1.5x the 13 `L` was assigned, and it hit that ceiling BEFORE distribution was priced**, priority: P1, since: 2026-07-22, **BOTH HALVES NOW CUT: the runnable half `ABC-041`…`ABC-046` (2026-08-13) and the second half `ABC-100`…`ABC-102` (2026-08-16) — only THREE tickets, because the scope of packaging is a FUNCTION of a distribution channel nobody has chosen.** `ABC-100` cuts the DECISION, never the ANSWER: a superseding ADR per `ADR-0007` `D5`, on the owner's word, verbatim and dated. **Acceptance criterion 1 (`npx <package>`) remains unmeetable by any ticket. Recommendation NOT taken, standing for the owner: this should probably be two epics** — the halves share no dependency in either direction and their blockers differ in kind)
 - [EPIC-007] The engine speaks UCI, so a chess UI can play against it  (owner: BA/PM, size: M, priority: P1, since: 2026-10-18, **ACCEPTED 2026-10-18 (owner, `…c3e81a57`); private/UNLICENSED; Q12–Q15 answered; ABC-167..172 cut, DoR 10/10, next free id ABC-173** (lifts the UCI half of EPIC-004's non-goal; EPIC-004 not yet edited); proposed in `bapm-engine-plan` (`4a98860c`). Tickets RESERVED, no page cut: ABC-167 (S, session) → ABC-168 (XS, entry point, In Security/NFR); ABC-169 (XS, licence, outside v1, on Q8). Waits: the owner's answers to Q1–Q11 ("accept recommendations" suffices) and ADR-0044 acceptance.)
 
-## Ready (WIP 1/8)
-- [ABC-199] Two coverage-heavy rows time out at vitest's 5 s default under load: lighten them and keep the timeout (QE-198-a)  (owner: software-engineer, size: XS, priority: P3, epic: EPIC-007, since: 2026-10-22, DoR 10/10; cut in `bapm-rule-QE-198`. Test-only, two `describe` blocks in two files: `ABC-170 A2` `MAX_NODES` lowered, `ABC-167 A7` row 1's unlimited `go` at step 100. Node census ≤ 60 % of base per row; K1–K4 red at the tip when red at base; no `timeout` on any `+` line; pre-registered fallback keeps a row that cannot hold its kills. Merges after `ABC-178`. `N8-LANE` reading owed only if Security/NFR rules it (≤ 650 ms CPU). UAT waiver expected.)
+## Ready (WIP 0/8)
 
 
 
@@ -1013,7 +1013,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+- [ABC-199] Two coverage-heavy rows time out at vitest's 5 s default under load: lighten them and keep the timeout (QE-198-a)  (owner: software-engineer, size: XS, priority: P3, epic: EPIC-007, since: 2026-10-22, DoR 10/10; cut in `bapm-rule-QE-198`. Test-only, two `describe` blocks in two files: `ABC-170 A2` `MAX_NODES` lowered, `ABC-167 A7` row 1's unlimited `go` at step 100. Node census ≤ 60 % of base per row; K1–K4 red at the tip when red at base; no `timeout` on any `+` line; pre-registered fallback keeps a row that cannot hold its kills. Merges after `ABC-178`. `N8-LANE` reading owed only if Security/NFR rules it (≤ 650 ms CPU). UAT waiver expected.) **2026-10-22: pulled by the Orchestrator → In Development (`ticket-to-pr-ABC-199`). It merges only after ABC-178, so the timing hop reads a tree without it. The hold is narrowed to the merge: the host is on battery with a foreign vitest running, so no timing reading is possible now anyway.**
 
 
 
