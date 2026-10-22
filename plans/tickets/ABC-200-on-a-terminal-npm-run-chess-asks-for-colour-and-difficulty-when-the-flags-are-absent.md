@@ -1,8 +1,8 @@
 ---
 id: ABC-200
 title: "On a terminal, `npm run chess` asks for colour and difficulty before the first board when their flags are absent (EPIC-006 G6)"
-status: in-design
-column: In Design
+status: in-development
+column: In Development
 size: M
 priority: P2
 epic: EPIC-006
@@ -22,6 +22,13 @@ feature: —
 > recorded it on 2026-08-16. `ABC-101` § Out of scope left it to BA/PM at the next refinement.
 > `memory-bank/60-progress.md` § Known UNCUT work, item 3, calls it cuttable today. It is in the epic's scope,
 > so this cut adds no requirement.
+>
+> **Design ruled 2026-10-22 by Architect/Design** (task `arch-design-ABC-200`, records only, at `main` `9c54df47`).
+> Notes: `.grugops/context/arch-design-ABC-200/notes/` (`…f612277c` the ruling, `…0d7cbff3` the pins and prototype).
+> - **The shape:** one line reader per stream, so the questions and the game share `ABC-037`'s queue.
+> - **No ADR is new, changed or reversed**, so there is no owner STOP.
+> - **Build to `## Build notes` below.** No acceptance criterion moved. Two statements on this page are
+>   corrected in place, each marked *Corrected 2026-10-22 (Architect/Design)*.
 
 ## Problem
 
@@ -108,6 +115,10 @@ The rows run on in-memory streams whose `isTTY` is set by the test. `A8` is the 
   matched exactly after trim and lower-casing. The echo is filtered, and the 1 024 line cap holds. `ADR-0036`
   clause (b1) is expected to fire, because `src/cli.ts` gains `process.stdin.isTTY` and `process.stdout.isTTY`
   reads. **A Security/NFR hop is owed.** `ABC-041` clause (a) does not fire, because `package.json` is not touched.
+  - *Corrected 2026-10-22 (Architect/Design):* under the ruled wiring, `src/cli.ts` reads no `isTTY`. The
+    questions module reads `isTTY` off the stream objects it is handed. (b1) still **fires**, on two `cli.ts`
+    lines: the moved `const sink = process.stdout;` and the new `const stdin = process.stdin;`. So the
+    Security/NFR hop is still owed. Neither new module holds a limb, so `ADR-0036` § 3's trigger does not fire.
 
 ## Test notes
 
@@ -121,6 +132,11 @@ The rows run on in-memory streams whose `isTTY` is set by the test. `A8` is the 
 4. `A8` is a hand reading, recorded raw. No pty library becomes a dependency.
 5. UAT: the diff has production lines, so the waiver does not apply. QE's verdict against `A1`–`A9` signs UAT
    under the owner's delegation (`…5aaf7cec`, item 2).
+6. *Added 2026-10-22 (Architect/Design):*
+   - **`A7`:** drive it with the **real** `createLineInputSeam` over the same stream the questions read, with
+     the input written in one `write`.
+   - **Plant P6:** give each caller a private reader, with no per-source sharing. It reds `A7`. The scratch
+     prototype measured the game's first read as `eof` under P6, against `e5` under the shared reader.
 
 ## Size and priority
 
@@ -128,6 +144,12 @@ The rows run on in-memory streams whose `isTTY` is set by the test. `A8` is the 
   Architect/Design ruling first, then QE (with a pty reading) and Security/NFR. Splitting colour from difficulty was
   considered and refused: both share the same reader hand-off, and two tickets would double the design, QE and
   Security hops for about 10 lines. `ABC-101` also ruled a difficulty-only prompt inconsistent.
+  - *Corrected 2026-10-22 (Architect/Design):* the size stays `M`, but the file count grows.
+    - **New:** 2 production modules (`src/line-reader.ts`, which is a move of about 95 lines out of
+      `src/line-input.ts`, and `src/startup-questions.ts`) and 1 test file.
+    - **Edited:** 3 production modules (`src/cli.ts` about 15–20 lines, `src/cli-options.ts`, and a slimmer
+      `src/line-input.ts`) and 1 test file (`src/line-input.test.ts`, guards only).
+    - **`NFR-008`:** still +1 test file.
 - **Priority `P2`.** It is user-visible and fills the last uncut item in `EPIC-006`'s scope. Nothing is broken: the
   flags work today, so it is not `P1`.
 
@@ -142,6 +164,86 @@ The rows run on in-memory streams whose `isTTY` is set by the test. `A8` is the 
 - **Merge order.** It merges after `ABC-178`'s B7/B8 timing hop, so that reading sees a tree without the new test
   file. It touches no file that `ABC-178`, `ABC-197` or `ABC-199` touch.
 - **Builder:** Software Engineer, after the Architect's ruling. Then QE, then Security/NFR.
+
+## Build notes (Architect/Design ruling, 2026-10-22)
+
+The full ruling is `.grugops/context/arch-design-ABC-200/notes/20261022T191404Z-architect-design-decision-f612277c.md`.
+The pins it keeps are listed in `…0d7cbff3`. In short:
+
+1. **One line reader per stream.**
+   - **The move:** `ABC-037`'s line state machine moves out of `src/line-input.ts` into a new
+     `src/line-reader.ts`, unchanged in behaviour. That covers the decoder, the partial line, the over-cap
+     flag, the overshoot queue, the single `waiting` slot, the `end` listener attached once, and pause
+     between reads.
+   - **The export:** `lineReaderOf(source)`. A module-level `WeakMap` memoizes it, so one source always gets
+     one reader.
+   - **Re-exports:** `MAX_LINE_LENGTH` and `LineSource` move with it, and `line-input.ts` re-exports both.
+   - **The seam:** `createLineInputSeam` keeps its signature, its per-seam command resolver and its prompt,
+     and reads through `lineReaderOf(source)`.
+   - **Why a new module:** `cli.test.ts`'s `inputSeamThrows` child substitutes `./line-input.ts` with a double
+     that exports only `createLineInputSeam`. A new import from `line-input.ts` fails at link time and reds
+     that child (measured).
+2. **The questions go in `src/startup-questions.ts`.** The name must not start with `cli`: `A9` pins the `cli*`
+   list.
+   - **Shape:** one export, for example `askAbsentOptions(parsed, { source, output })`. It returns
+     `{ options } | null`, where `null` means input ended at a question.
+   - **When it asks:** only when `source.isTTY === true && output.isTTY === true`. Otherwise it makes 0 reads
+     and 0 writes and never calls `lineReaderOf`.
+   - **It reaches for nothing:** no `process`, no Node builtin, no error listener (`ADR-0016` clause 3), no
+     cursor control, no `try`.
+   - **Runtime imports:** only `./line-reader.ts` and `./cli-options.ts`. Never `./line-input.ts`, never
+     `./history.ts`.
+   - **Answers:**
+     - **Colour:** trim and lower-case, then exact membership in `COLOUR_VALUES`.
+     - **Difficulty:** trim, then exact membership in `DIFFICULTY_VALUES`.
+     - **Empty line:** `white` or `DEFAULT_DIFFICULTY`, imported and never re-spelled.
+     - **Over-cap line:** a wrong answer with an empty echo.
+     - **Echo filter:** the module's own copy of the C0/`U+007F` filter. `printableOf` stays in `cli.ts`,
+       because `numbersIn("cli.ts")` pins its bounds.
+3. **`src/cli-options.ts` changes additively.**
+   - The ok branch of `Resolution` gains `absent: { colour: boolean; difficulty: boolean }`, **beside**
+     `options`. `ResolvedOptions` does not change, because `.options` is compared whole.
+   - Export `COLOUR_VALUES`, `DIFFICULTY_VALUES` and `ColourValue`.
+   - The coin and the orientation rule move into one exported pure function, for example `optionsFor(colour,
+     flags, difficulty)`, which `resolveOptions` also calls.
+   - **Keep:**
+     - no new number literal and no new string literal;
+     - no `process`;
+     - no code word matching `A7`'s `/depth|ply|…|budget/i`. It is a substring match, so `apply`, `reply`
+       and `supply` red it;
+     - exact equality only. `toLowerCase` stays in the questions module.
+4. **The `src/cli.ts` wiring, which keeps every `cli.test.ts` pin (`A6`: 0 edited lines).**
+   1. `const parsed = resolveOptions(process.argv.slice(2));` The usage path is unchanged apart from the name.
+   2. `const sink = process.stdout;` then `const stdin = process.stdin;`
+   3. The `EPIPE` arm, now calling `stdin.destroy()`. It is installed **before** the questions see the handle.
+   4. `try {`
+   5. `const resolution = await askAbsentOptions(parsed, { source: stdin, output: sink });`
+   6. `if (resolution === null) return;`
+   7. `const { colour, orientation, flags, difficulty } = resolution.options;`
+   8. Then everything as today, including `input: createLineInputSeam({ source: process.stdin, output: sink })`
+      written literally.
+
+   **Pin accounting:**
+   - `process` still occurs 10 times, with the same list.
+   - `process.stdin` occurs twice, `process.stdout` once, and `resolveOptions(` once.
+   - `difficulty` occurs twice in code, and `sink.write(` once.
+   - No new numbers.
+
+   **Side effect:** a defect thrown before the loop now exits `70`, not as an unhandled rejection.
+5. **`A9` holds by order.** The book probe and the glyph-mode session are built after the questions return.
+6. **Tests.**
+   - **New file `src/startup-questions.test.ts`:** in-memory `PassThrough` streams with the test setting
+     `isTTY`, 0 spawns, and injection rather than `vi.spyOn` (`ADR-0042`).
+   - **`A7`** uses the real `createLineInputSeam` (test note 6).
+   - **`A9`** is a source-order row over `cli.ts`.
+   - **`src/line-input.test.ts`:** its import-set row gains `./line-reader.ts`, and its code bars must scan
+     `line-reader.ts` too.
+7. **Residual risks, all LOW.**
+   - **The shared `waiting` slot:** sequential by R4's `await`. The trigger is any new caller of
+     `lineReaderOf`.
+   - **`EPIPE` during a question:** unreachable, because stdout is a TTY there.
+   - **Ctrl-D at a question on a real terminal:** that the process exits promptly is `UNKNOWN - verify`.
+     QE could add it to the `A8` reading; that is a suggestion, not a criterion.
 
 ## Owner questions
 
