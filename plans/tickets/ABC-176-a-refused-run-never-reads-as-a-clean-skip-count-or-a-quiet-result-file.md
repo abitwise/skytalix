@@ -1,8 +1,8 @@
 ---
 id: ABC-176
 title: "A run the heap guard refuses never reads as a clean skip count or a quiet result file"
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: XS
 priority: P3
 epic: —
@@ -15,6 +15,14 @@ feature: —
 > `.grugops/context/wave-2026-09-25/notes/…5c8d2f71`: *SEC-173-1: "Cut a small follow-up (Recommended)"*, together
 > with `QE-173-d`. Sources: `SEC-173-1` (`.grugops/context/secnfr-ABC-173/notes/…f3757b98`, `probe/skipzero.out`),
 > `QE-173-d` (`.grugops/context/qe-ABC-173/notes/…e81b5c27`). Records only. This hop ran no vitest and no timing.
+
+> **Erratum 2026-10-21 by BA/PM (`bapm-rule-QE-176`, `QE-176-d`); the text below stays as cut.** (1) `A5`'s
+> "≤ 24,576 B" is superseded by `ABC-187`'s 18,432 B (`AGENTS_MD_BUDGET_BYTES`); `A5` holds at 15,797 B (QE
+> `…be90087e`). (2) `A2`'s "`UNKNOWN - verify`" is settled: feasible on vitest 4.1.11 (SE `…d7694ffa`, QE
+> `…be90087e`), so option (b) stands. (3) The two `bapm-cut-ABC-176` notes cited above (`…6d2a8f30`, `…9b4e1c07`) are
+> hand-authored and `sealed: false`, so `readContext` returns neither. This page is the authoritative text, and a
+> sealed pointer to them is in `bapm-rule-QE-176`. (4) `QE-176-a`/`-b` are cut to `ABC-192`, and `QE-176-c` is
+> accepted.
 
 ## Problem
 
@@ -125,3 +133,14 @@ The **refusal arm** is the `AGENTS.md` command with its `NODE_OPTIONS=…` prefi
 
 **XS, P3.** The work is two `tools/grugops/` files at most, two `AGENTS.md` comment or command edits, and about four
 test rows, plus the seven reporter rows that QE re-runs.
+
+## QE
+
+**`qe-ABC-176`, 2026-10-21: PASS_WITH_GAPS.** Branch `grugops/qe-ABC-176`, QE merge `57bb2180` (tip `37b8debc` + main `331c7d18`).
+Notes are in `.grugops/context/qe-ABC-176/`: criteria `…be90087e`, mutants `…fbdf5a60`, ordering `…c9b3023e`, gates `…c83116a5`, verdict `…75bc28e0`.
+
+- **A1-A5 met**, read with my own runs before I opened the SE's and Scribe's notes. The refusal arm (SUITE, ONE-FILE, and the A2 old string) gives empty stdout, pipe exit 5, and the gate prints `Skip count was not provided`, exit 1. The green arm (both shapes) prints `0`, exit 0, and `No findings.`. All seven reporter rows (six `ABC-149` + `refused`) match by content in a scratch copy outside the repository. Three different refusals carry three different thrown messages, and the "cannot look" throw is named at integration level. A5: 15,797 B <= 18,432; 17 commands at tip and base; the A4 regex matches the live messages; the skip-count command is byte-identical; the `90-…` row is consistent.
+- **Mutants:** 8 run, all killed by the arms. The suite misses 3: the reporter fixed string and the query without its `run` arm (`ABC-149` design, rows-only), and `setup` passing `process.stderr` (QE-176-a: full suite 59/1992 green while the capture prints `0`).
+- **Ordering:** the guard line came before the JSON in 46/46 runs (direct, under `run-bounded.js`, with a slow consumer; both shapes). It holds by vitest 4.1.11's internal order on one `process.stdout`. It is pinned by no row (QE-176-b).
+- **Gates:** lint, typecheck and build exit 0. `npm test` 59/1992, `success` true. Skip count 0, `No findings.`. UAT waived (0 production lines; the waiver and `--numstat` commands print nothing). The waiver is not a signature.
+- **Gaps:** QE-176-a (LOW), QE-176-b (LOW), QE-176-c (INFO), QE-176-d (INFO: A5's 24,576 superseded by 18,432; A2 now feasible; `bapm-cut-ABC-176` notes are unsealed). None blocks.

@@ -37,7 +37,7 @@ import { isMainThread } from "node:worker_threads";
 import type * as Ts from "typescript";
 import { describe, expect, inject, it, vi } from "vitest";
 import type { ViteUserConfig } from "vitest/config";
-import heapGuardSetup, { admit, FLAGS_MIB, ROWS_MIB } from "../tools/grugops/heap-guard.js";
+import heapGuardSetup, { admit, FLAGS_MIB, guard, ROWS_MIB } from "../tools/grugops/heap-guard.js";
 import { createBookProbe } from "./book.ts";
 import {
   ACCEPTED_ARGUMENTS,
@@ -2241,7 +2241,7 @@ describe("ABC-065 — AGENTS.md's `Dev / run` slot is reachable and its option l
     // are LOUD and both are exercised below: an absent or duplicated label reds on the count above,
     // and a slot whose comment does not close before the next list item throws here. The protection
     // claimed is the protection delivered — the earlier wording claimed a never-closes branch that
-    // `end < 0` could not reach, since `AGENTS.md` carries 13 further closers after this slot's own.
+    // `end < 0` could not reach, since `AGENTS.md` carries 8 further closers after this slot's own.
     if (end < 0 || (nextItem >= 0 && nextItem < end))
       throw new Error(
         "AGENTS.md's `- Dev / run:` slot comment does not close before the next list item",
@@ -2482,8 +2482,8 @@ describe("ABC-059 — every claim AGENTS.md makes about `Dev / run` agrees with 
 });
 
 describe("ABC-109 — AGENTS.md stays inside its byte budget", () => {
-  /** `ABC-109` `A1`'s target: a quarter under the inherited 32,768 B reader cap, which truncates silently from the tail. */
-  const AGENTS_MD_BUDGET_BYTES = 24_576;
+  /** The owner's ceiling (`ABC-187`, decision `…cba9c8eb`): 18,432 B, so the `ABC-164` cut cannot regrow unflagged. */
+  const AGENTS_MD_BUDGET_BYTES = 18_432;
 
   it("A5 — AGENTS.md's size on disk, in BYTES, is at most the budget", () => {
     // Bytes, not characters (`## Test notes` 1): no encoding, so `.length` is the `wc -c` figure.
@@ -4020,6 +4020,271 @@ spawn("a"); run("b"); cp.fork("c"); vi.fn(spawn);`,
         new RegExp(`^NODE_OPTIONS=--max-old-space-size=${FLAGS_MIB.suite} `),
       );
     }
+  });
+});
+
+// ---------------------------------------------------------------------------------------------
+// `ABC-176` — a run the heap guard refuses never reads as a clean skip count or a quiet result file
+// (`SEC-173-1`, `QE-173-d`). In process: `guard` called with a stub project, a stub stream and a fake
+// limit, as `ABC-173` `A5` calls `admit`. The real arms (`AGENTS.md`'s skip-count line and `npm test`
+// with their prefix removed) spawn a refused vitest and are the hop's readings, not rows here.
+// ---------------------------------------------------------------------------------------------
+
+describe("ABC-176 — a heap-guard refusal is named on stdout and handed to vitest as an unhandled error", () => {
+  /** The integer a skip-count capture would trust (`A1`). */
+  const INTEGER_LINE = /^\s*-?\d+\s*$/m;
+
+  const stubRun = (paths: unknown, withCatchError = true) => {
+    const caught: [unknown, string][] = [];
+    const provided: [string, unknown][] = [];
+    const written: string[] = [];
+    const state: Record<string, unknown> = {};
+    if (paths !== undefined) {
+      state.paths = paths;
+      state.getPaths = function (this: { paths: unknown }) {
+        return this.paths;
+      };
+    }
+    if (withCatchError)
+      state.catchError = (error: unknown, type: string) => caught.push([error, type]);
+    return {
+      project: {
+        vitest: { state },
+        provide: (...entry: [string, unknown]) => provided.push(entry),
+      },
+      out: { write: (chunk: string) => written.push(chunk) },
+      caught,
+      provided,
+      written,
+    };
+  };
+  const files = (count: number): string[] =>
+    Array.from({ length: count }, (_, index) => `src/f${index}.test.ts`);
+  /** Node's own default here: the limit an unprefixed command runs at. */
+  const UNPREFIXED = { heap_size_limit: 4192 * MIB };
+
+  /** Runs `guard` expecting a throw, and returns what it threw. */
+  const thrownBy = (run: ReturnType<typeof stubRun>, limit = UNPREFIXED): Error => {
+    let thrown: unknown;
+    try {
+      guard(run.project, limit, run.out);
+    } catch (error) {
+      thrown = error;
+    }
+    if (!(thrown instanceof Error))
+      throw new Error(`guard did not throw an Error: ${String(thrown)}`);
+    return thrown;
+  };
+
+  it("A1/A2 — a refusal is written to stdout as ONE line, the thrown message verbatim, that no JSON reader parses and that holds no integer", () => {
+    for (const [count, flag] of [
+      [59, FLAGS_MIB.suite],
+      [1, FLAGS_MIB.oneFile],
+    ] as const) {
+      const run = stubRun(files(count));
+      const thrown = thrownBy(run);
+      // The message comes from the thrown error: the shape and the flag differ between the two.
+      expect(thrown.message).toMatch(
+        new RegExp(`^heap-guard: refused[\\s\\S]*NODE_OPTIONS=--max-old-space-size=${flag}`),
+      );
+      expect(run.written, `${count} files`).toEqual([`${thrown.message}\n`]);
+      // What makes `… 2>/dev/null | jq '.numPendingTests + .numTodoTests'` print nothing: the first
+      // thing on stdout is not JSON, so jq stops at it, before vitest's JSON report.
+      const line = run.written[0] as string;
+      expect(() => JSON.parse(line), "the stdout line parses as JSON").toThrow();
+      expect(line).not.toMatch(INTEGER_LINE);
+      expect(run.provided).toEqual([]);
+    }
+  });
+
+  it("A3 — the thrown error itself, not a copy or a fixed string, is handed to vitest's catchError", () => {
+    const run = stubRun(files(59));
+    const thrown = thrownBy(run);
+    expect(thrown.message).toMatch(/^heap-guard: refused/);
+    expect(run.caught).toEqual([[thrown, "Heap Guard Refusal"]]);
+    expect(run.caught[0]?.[0], "the error handed to catchError is the thrown one").toBe(thrown);
+  });
+
+  it("A3 — a 'cannot look' throw is named the same way: on stdout and to catchError, verbatim", () => {
+    for (const [what, run, message] of [
+      [
+        "no getPaths",
+        stubRun(undefined),
+        /^heap-guard: project\.vitest\.state\.getPaths\(\) is gone/,
+      ],
+      ["0 files", stubRun([]), /^heap-guard: the run resolved 0 test files/],
+    ] as const) {
+      const thrown = thrownBy(run, { heap_size_limit: 64 * MIB });
+      expect(thrown.message, what).toMatch(message);
+      expect(run.written, what).toEqual([`${thrown.message}\n`]);
+      expect(
+        run.caught.map(([error]) => error),
+        what,
+      ).toEqual([thrown]);
+    }
+    // No `catchError` (or no project at all): the refusal still throws its own error, and still
+    // writes its line; only the result file loses the name (the header's stated limit).
+    const bare = stubRun(files(59), false);
+    expect(thrownBy(bare).message).toMatch(/^heap-guard: refused/);
+    expect(bare.written).toHaveLength(1);
+    const written: string[] = [];
+    expect(() =>
+      guard(undefined, UNPREFIXED, { write: (chunk: string) => written.push(chunk) }),
+    ).toThrow(/getPaths\(\) is gone/);
+    expect(written).toHaveLength(1);
+  });
+
+  it("non-vacuity — an admitted run writes nothing, hands vitest nothing, and provides its row", () => {
+    for (const [count, row] of [
+      [59, ROWS_MIB.suite],
+      [1, ROWS_MIB.oneFile],
+    ] as const) {
+      const run = stubRun(files(count));
+      expect(() => guard(run.project, { heap_size_limit: row * MIB }, run.out)).not.toThrow();
+      expect(run.written).toEqual([]);
+      expect(run.caught).toEqual([]);
+      expect(run.provided).toEqual([["heapRowMiB", row]]);
+    }
+  });
+
+  it("A4 — the reporter header keeps its six ABC-149 plant rows and adds the refusal as a seventh", () => {
+    const header = readFileSync(`${REPOSITORY}tools/grugops/result-file-reporter.js`, "utf8");
+    const rows = [...header.matchAll(/^\/\/ {3}([a-z][a-z ]*):/gm)].map((match) => match[1]);
+    expect(rows).toEqual([
+      "green",
+      "unhandled",
+      "hang",
+      "suite",
+      "assertion",
+      "exit code only",
+      "refused",
+    ]);
+    // The seventh row's query line is the `error` arm carrying the guard's own message.
+    expect(header).toMatch(/`error {2}heap-guard: refused\./);
+  });
+});
+
+// ---------------------------------------------------------------------------------------------
+// `ABC-192` — the two holes `ABC-176`'s rows left (`QE-176-a`, `QE-176-b`). In process: no child, no
+// timing (`NFR-008`, `N8_SPAWN` stays 28). Every `ABC-176` row hands `guard` a stub stream, so the
+// stream `setup` really passes is read here, through the parser (`ABC-133`). The order the capture
+// arm relies on is vitest-internal, so a vitest bump turns a row red and names what to re-run.
+// ---------------------------------------------------------------------------------------------
+
+describe("ABC-192 — setup hands the guard process.stdout, and a vitest bump names its re-run list", () => {
+  /**
+   * What is wrong with `setup`'s call to `guard` in `source`, or `undefined` when there is exactly
+   * one default-exported `setup` holding exactly one `guard(…)` call whose third argument is
+   * `process.stdout`. Over the TypeScript parser's view, so a comment or a string cannot red a
+   * correct file and cannot hide a wrong call. `ABC-194` (`QE-192-a`): the call must also be on
+   * `setup`'s path — the whole expression of a statement that is a direct child of `setup`'s body
+   * (not in a `try`, `if`, block, label, arrow, callback or larger expression), and `setup` holds no
+   * `return` outside nested functions. A `throw` stays allowed: it refuses, it does not bypass.
+   */
+  const guardStreamFaultOf = (ts: typeof Ts, source: string): string | undefined => {
+    const view = ts.createSourceFile("heap-guard.js", source, ts.ScriptTarget.Latest, true);
+    const setups = view.statements.filter(
+      (statement): statement is Ts.FunctionDeclaration =>
+        ts.isFunctionDeclaration(statement) &&
+        statement.name?.text === "setup" &&
+        (statement.modifiers ?? []).some(({ kind }) => kind === ts.SyntaxKind.ExportKeyword) &&
+        (statement.modifiers ?? []).some(({ kind }) => kind === ts.SyntaxKind.DefaultKeyword),
+    );
+    if (setups.length !== 1) return `${setups.length} default-exported setup functions, not 1`;
+    const calls: Ts.CallExpression[] = [];
+    const visit = (node: Ts.Node): void => {
+      if (
+        ts.isCallExpression(node) &&
+        ts.isIdentifier(node.expression) &&
+        node.expression.text === "guard"
+      )
+        calls.push(node);
+      ts.forEachChild(node, visit);
+    };
+    visit(setups[0] as Ts.FunctionDeclaration);
+    if (calls.length !== 1) return `${calls.length} guard(…) calls in setup, not 1`;
+    const call = calls[0] as Ts.CallExpression;
+    const body = (setups[0] as Ts.FunctionDeclaration).body;
+    const statement = call.parent;
+    if (!ts.isExpressionStatement(statement) || statement.parent !== body) {
+      const path: string[] = [];
+      for (let node = call.parent; node !== undefined && node !== body; node = node.parent)
+        path.push(ts.SyntaxKind[node.kind]);
+      return `guard(…) is not a direct statement of setup's body: it sits in ${path.join(" < ")} < setup's body`;
+    }
+    const returns: Ts.ReturnStatement[] = [];
+    const visitReturns = (node: Ts.Node): void => {
+      if (ts.isFunctionLike(node)) return;
+      if (ts.isReturnStatement(node)) returns.push(node);
+      ts.forEachChild(node, visitReturns);
+    };
+    if (body !== undefined) ts.forEachChild(body, visitReturns);
+    if (returns.length !== 0)
+      return `${returns.length} return statement(s) in setup (${returns.map((ret) => ret.getText(view)).join(", ")}), not 0: setup can leave before or around its guard(…) call`;
+    const args = call.arguments;
+    const stream = args[2];
+    const isStdout =
+      args.length === 3 &&
+      stream !== undefined &&
+      ts.isPropertyAccessExpression(stream) &&
+      ts.isIdentifier(stream.expression) &&
+      stream.expression.text === "process" &&
+      stream.name.text === "stdout";
+    return isStdout
+      ? undefined
+      : `guard(…)'s arguments are [${args.map((arg) => arg.getText(view)).join(", ")}], not (…, …, process.stdout)`;
+  };
+
+  it("A1 — setup's one guard(…) call passes process.stdout (QE-176-a)", () => {
+    const ts: typeof Ts = createRequire(import.meta.url)("typescript");
+    // THE CHECK IS WATCHED LOSING ITS EVIDENCE FIRST, in memory: a clean setup has no fault, and a
+    // planted process.stderr, a planted no-op stream, a setup with no guard call (only a comment
+    // naming one) and a setup with two calls each have one. `ABC-194` (`QE-192-a`): so do the real
+    // call in a swallowing try/catch, behind `if (false)`, in an uncalled arrow, and after `return;`.
+    const plantedSetup = (body: string): string =>
+      `import v8 from "node:v8";\nexport function guard(project, heapStatistics, out) {}\nexport default function setup(project) {\n${body}\n}\n`;
+    const real = "guard(project, v8.getHeapStatistics(), process.stdout);";
+    expect(
+      [
+        real,
+        "guard(project, v8.getHeapStatistics(), process.stderr);",
+        "guard(project, v8.getHeapStatistics(), { write() {} });",
+        "// guard(project, v8.getHeapStatistics(), process.stdout);",
+        `${real}\n${real}`,
+        `try {\n${real}\n} catch {}`,
+        `if (false) ${real}`,
+        `const later = () => ${real}`,
+        `return;\n${real}`,
+      ].map((body) => guardStreamFaultOf(ts, plantedSetup(body)) !== undefined),
+    ).toEqual([false, true, true, true, true, true, true, true, true]);
+
+    const source = readFileSync(`${REPOSITORY}tools/grugops/heap-guard.js`, "utf8");
+    const fault = guardStreamFaultOf(ts, source);
+    expect(fault, `tools/grugops/heap-guard.js setup → guard: ${fault}`).toBeUndefined();
+  });
+
+  // THE VITEST VERSION THE `ABC-176` CAPTURE ARM WAS LAST READ ON. Change this literal ONLY after a
+  // hop has re-run every item of `BUMP_RERUN_LIST` on the installed version, and record the reason
+  // and that hop's readings in a note. Never change it just to turn the row green.
+  const CAPTURE_ARM_READ_ON_VITEST = "4.1.11";
+
+  const BUMP_RERUN_LIST = [
+    "the installed vitest is not the version ABC-176's capture arm was last read on (ABC-192, QE-176-b). Before re-pinning, re-run:",
+    "(1) the ABC-176 capture arm: AGENTS.md's skip-count line with its NODE_OPTIONS prefix removed, on the SUITE and ONE-FILE shapes. Raw stdout line 1 must begin `heap-guard: refused.` with the JSON report after it; the capture must print no integer and the pipe must exit non-zero; test-skip-integrity.js must read `Skip count was not provided`, exit 1. The green arm (as spelled) must still print exactly one integer;",
+    "(2) the reporter header's seven rows in tools/grugops/result-file-reporter.js (ABC-149's six + `refused`);",
+    "(3) re-read RISK-ABC173-STATE (project.vitest.state.getPaths and catchError) and RISK-ABC143-01;",
+    "(4) then re-pin CAPTURE_ARM_READ_ON_VITEST with the reason and the hop's readings, never silently.",
+  ].join("\n");
+
+  it("A2 — the installed vitest is the version the capture arm was last read on (QE-176-b)", () => {
+    const installed = (
+      JSON.parse(readFileSync(`${REPOSITORY}node_modules/vitest/package.json`, "utf8")) as {
+        version: unknown;
+      }
+    ).version;
+    // Non-vacuity: a version string was read, so a missing or empty field cannot pass.
+    expect(installed).toMatch(/^\d+\.\d+\.\d+/);
+    expect(installed, BUMP_RERUN_LIST).toBe(CAPTURE_ARM_READ_ON_VITEST);
   });
 });
 

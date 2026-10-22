@@ -469,3 +469,127 @@ Orchestrator records the close. Until then the Orchestrator keeps the by-hand ch
 `AR-180-VALIDATED` names this merge in its close condition. Readings: `.grugops/context/ticket-to-pr-ABC-163/notes/`,
 `.grugops/context/qe-ABC-163/notes/`, `.grugops/context/arch-ABC-163-adr/notes/` and
 `.grugops/context/arch-ABC-163-adr-text/notes/`.
+
+#### Ruling 2 widened — 2026-10-21 (`ABC-188`)
+
+Worded by Security/NFR at `ABC-168`'s gate (`.grugops/context/security-nfr-ABC-168/notes/…decision-75a45be0` § 2),
+when `AR-163-DELONLY`'s trigger (iv) fired: `ABC-168` makes `src/uci.ts` a second limb-1 holder. Commit `d722a6b6`
+folds it into `.grugops/context/design-F-072-1/probe/clause-b.mjs` **in place**, so the canonical pointer above is
+unchanged. Readings taken before it reproduce from that file at `87d3897d`.
+- **(i) The unit.** For limb 1, (b1) fires on any changed line, `+` or `−`, comments included, in a production file
+  that holds limb 1 in code at `<base>` or `<head>`. This replaces "a `+` line" in Ruling 2. Limbs 2 and 3 are
+  unchanged.
+- **(ii) A holder deleted or renamed away at `<head>` counts.** It held limb 1 at `<base>`, and under
+  `git diff -U0 --no-renames` every line of it is a `−` line.
+- **(iii) The empty case is kept.** With no holder at either end, Ruling 2 adds nothing and runs no pathspec diff.
+- **(iv) The by-hand `--name-only` check retires when this merges.**
+- **(v) `AR-163-DELONLY` closes on QE's read of `ABC-188`'s `A2`–`A7`** (D1 and D2 included). The Orchestrator
+  records the close.
+- **(vi) `UNC1` covers `AR-163-UNCOMMENT` on limb 1 only**, because the uncommented file is a holder at `<head>`. On
+  limbs 2 and 3 the risk stays open, LOW, owner Architect/Design.
+
+**Output.** Each file line under `(b1) Ruling 2` prints its `+` and `-` counts, and the head line counts
+`holder files with changed lines (+ or -)`. Limbs 2 and 3 print byte-identical output to `341da4c1` on all 10 plants of
+`r2-mutants.sh`, where `G1-IMP` and `G1-GRD` flip to FIRES by design and `G1B`, `UNC1` and `REN` are added.
+
+**Rollback.** Revert `d722a6b6`. `AR-163-DELONLY` re-opens at MEDIUM while a second holder stands, and the by-hand check
+returns. Readings: `.grugops/context/arch-build-ABC-188/notes/`.
+
+#### Binary-flagged files read as text — 2026-10-21 (`ABC-191`)
+
+Accepted by Security/NFR at `ABC-188`'s gate as `AR-188-BINARY` (`.grugops/context/security-nfr-ABC-188/notes/…decision-f5843a71`
+§ 3, from QE's `QE-188-a`). Commit `11245e3d` edits `.grugops/context/design-F-072-1/probe/clause-b.mjs` **in place**,
+so the canonical pointer above is unchanged. Readings taken before it reproduce from that file at `d722a6b6`.
+- **(i) The instrument's one diff call reads `--text --no-textconv`.** So a production file git treats as binary (a NUL
+  byte, or a `-diff` attribute from any attributes source) shows its changed lines on every limb, and a textconv driver
+  no longer changes the line map. Measured: a NUL byte in the holder's JSDoc, a committed `.gitattributes`
+  `src/** -diff`, and the same line in `.git/info/attributes` each blinded every limb before this commit. A
+  `diff=<driver>` with a configured `textconv` changed the `+`/`−` counts. No limb's unit changes, and Ruling 2 is
+  untouched.
+- **(ii) The Orchestrator's `--numstat` stand-in** (`git diff --numstat <base> <head> -- src | awk '$1=="-"'`, owner
+  record `…orchestrator-decision-9f5ca4b4`) **retires when this merges.**
+- **(iii) `AR-188-BINARY` closes on QE's read of `ABC-191`'s `A2`–`A7`.** The Orchestrator records the close.
+
+**Harness.** `r2-mutants.sh` has 12 rows. `BIN-NUL` and `BIN-ATTR` (X1's edit plus each mark) FIRE, and neither fires on
+the instrument before this commit. `341da4c1` is blind to both marks, so on those two rows limbs 2 and 3 are compared
+with `341da4c1`'s output on X1, plant ids masked. The other 10 rows keep the byte comparison on the same plant.
+
+**Rollback.** Revert `11245e3d`, and the `--numstat` stand-in returns at every routing and merge. Readings:
+`.grugops/context/arch-build-ABC-191/notes/` and `.grugops/context/bapm-cut-AR-188-BINARY/notes/`.
+
+#### Git config, environment and quoted names no longer steer clause (b) — 2026-10-21 (`ABC-193`)
+
+Accepted by Security/NFR at `QE-191-a` as `AR-191-GITENV` and `AR-191-QUOTEPATH`
+(`.grugops/context/security-nfr-QE-191-a/notes/…decision-7c1f3590` § 2–3; owner record `…orchestrator-decision-eb401873`).
+Commit `63eadabe` edits `.grugops/context/design-F-072-1/probe/clause-b.mjs` **in place**, so the canonical pointer
+above is unchanged. Readings taken before it reproduce from that file at `11245e3d`.
+- **(i) The instrument ignores git config and environment.** The one diff call reads `--no-ext-diff --no-color
+  --src-prefix=a/ --dst-prefix=b/`, and every git call reads `-c core.quotePath=false`. So git config or environment
+  in any checkout or worktree (colour, an external diff, a diff driver's `command`, prefixes) no longer changes what the
+  instrument reads. A production file whose name holds a non-ASCII byte is read like any other. Measured: each of
+  `color.diff=always`, `diff.external`, `GIT_EXTERNAL_DIFF`, `diff.ext.command` with `.git/info/attributes`
+  `src/** diff=ext`, and `diff.srcPrefix`/`dstPrefix` made the instrument before this commit read
+  `production files changed: 0` and `does not fire` on a widening (a `node:fs` import plus a `fetch` call).
+- **(ii) Quoted paths are disputes.** A path the diff still prints C-quoted (git quotes a name holding `"`, `\`, a tab
+  or a newline even with `core.quotePath=false`) makes the limb FIRE (disputed). The unresolved line names the path as
+  git printed it, `"src/q\"t.ts" (C-quoted by git; not read)`. A C-quoted file the pair does not change adds nothing.
+- **(iii) The stand-in retires.** The Orchestrator's GITENV stand-in (`git config --get-regexp
+  '^(color\.(ui|diff)|diff\.(external|srcprefix|dstprefix)|diff\..+\.command)$' | grep -v -E
+  '^color\.(ui|diff) (auto|true|false|never)$'; printenv GIT_EXTERNAL_DIFF`, owner record `…eb401873`) **retires when
+  this merges.**
+- **(iv) `AR-191-GITENV` closes on QE's read of `ABC-193`'s `A2`–`A4`.** The Orchestrator records the close.
+- **(v) `AR-191-QUOTEPATH`'s instrument half closes on QE's read of `QU`, `QE2` and `A6`'s C-quoted plants.** The
+  `AGENTS.md` waiver form stays owed as the owner's text.
+
+No limb's unit changes, and Ruling 2 is untouched. **Harness.** `r2-mutants.sh` has 20 rows. `ADD` (a control with no
+route), the five route rows on `ADD`'s plant (`G-COLOR`, `G-EXT`, `G-ENV`, `G-DRV`, `G-PFX`), `QU` and `QE2` FIRE; on the
+instrument before this commit only `ADD` fires. A route is set in the harness's scratch clone (or one run's
+environment) around the head instrument's runs only, so the route rows compare limbs 2 and 3 with `341da4c1` on the
+same plant with the route off; `QU` and `QE2` compare with `341da4c1` run with `core.quotePath=false` in its
+environment. The 12 earlier rows print what they printed before.
+
+**Rollback.** Revert `63eadabe`, and the GITENV stand-in and the `AR-191-QUOTEPATH` dispute-line rule return at every
+routing and merge. Readings: `.grugops/context/arch-build-ABC-193/notes/` and `.grugops/context/bapm-cut-AR-191/notes/`.
+
+#### Hunk lines and spaced names no longer steer clause (b)'s line map — 2026-10-21 (`ABC-195`)
+
+Accepted by Security/NFR at `QE-193-a`/`QE-193-b` as `AR-193-SPACEPATH` and `AR-193-HUNKHDR`
+(`.grugops/context/security-nfr-QE-193/notes/…decision-5719a86d` § 1–3; owner record `…orchestrator-decision-73e94c9f`).
+Commit `0dfd17b3` edits `.grugops/context/design-F-072-1/probe/clause-b.mjs` **in place**, inside `changedLines` only,
+so the canonical pointer above is unchanged. Readings taken before it reproduce from that file at `63eadabe`.
+- **(i) The header window.** `changedLines` reads a `---`/`+++` line, and the C-quoted test, as a header only between a
+  `diff --git ` line and that file's first `@@`. So an added line whose text starts `++ ` (printed `+++ …` under `-U0`)
+  or a removed one starting `-- ` is a hunk line, and no longer changes the file that later hunks count against.
+  Measured: `PP-TPL` (a `++ ` template line, then a later hunk with a `process.env` read and a `fetch`) and `PP-REDIR`
+  now fire limbs 2 and 3, and `PP-EDIT` (an in-place edit of a `process` read in a limb-2 holder, which § Decision 2
+  counts) fires limb 2; none did before this commit. `PP-REDIR` (`++ b/src/glyph-mode.ts`) names only the real file
+  (`production files changed: 1`, not 2). `RA-PLUS` (`++ "quoted" note`) raises no dispute, so `R-193-a` is gone, and
+  fires on its real lines. A removed `-- ` line no longer drops its file's later `-` counts (QE's `PM`: Ruling 2 reads
+  `2 - lines`, not 1).
+- **(ii) The TAB.** An unquoted header path (one not starting `"`) drops one trailing TAB; a C-quoted path is left as git
+  printed it. git adds the TAB only to a name holding a space, and C-quotes any name holding a real TAB, so this is
+  unambiguous. A production file whose name holds a space is read like any other: `SP-N5` (a reached `src/q t.ts`
+  gaining a `node:fs` import, a `process.env` read and a `fetch`) fires limbs 1, 2 and 3, Ruling 2 naming `src/q t.ts`;
+  before this commit it fired none.
+- **(iii) Block (i) of the `ABC-193` block, its scope stated exactly (`QE-193-c`).** Its flags and `-c
+  core.quotePath=false` cover colour, an external diff, a diff driver's `command`, prefixes and quoting.
+  `GIT_DIFF_OPTS` still changes what the instrument reads: it overrides `-U0`, so hunks carry context lines and the
+  `+`/`−` counts rise. That can only raise a verdict. The instrument does not clear it.
+- **(iv) The stand-in retires.** The Orchestrator's HUNKHDR stand-in (owner record `…73e94c9f`) **retires when this
+  merges**:
+  `git -c core.quotePath=false diff -U0 --no-renames --text --no-textconv --no-ext-diff --no-color --src-prefix=a/ --dst-prefix=b/ <base> <head> -- src | awk '/^diff --git /{h=0} /^@@/{h=1} /^(\+\+\+|---) / && (h || /\t$/)'`
+- **(v) `AR-193-HUNKHDR` closes on QE's read of `PP-TPL`, `PP-EDIT`, `PP-REDIR` and `RA-PLUS`** as in `ABC-195`'s
+  `A2`/`A4`, with the 20 earlier rows unchanged; **`AR-193-SPACEPATH` closes on QE's read of `SP-N5`.** The
+  Orchestrator records both closes.
+
+No limb's unit changes, and Ruling 2 is untouched. **Harness.** `r2-mutants.sh` has 25 rows. `PP-TPL`, `PP-REDIR`,
+`RA-PLUS`, `PP-EDIT` and `SP-N5` are Security/NFR's plants. `341da4c1` reads them as the instrument before this commit
+does (blind), so each compares limbs 2 and 3 with `341da4c1` on its twin: the same plant with the `++` as `x`, or the
+same two commits with `src/q-t.ts`, read back as `src/q t.ts`, the pair ids of the `  diff` line masked. A plant check
+exits 2 unless the stand-in's awk prints at least one line on each plant's diff and none on its twin's. The Ruling 2
+file list splits a name at the two spaces before `(fired by Ruling 2:`. The 20 earlier rows print what they printed
+before.
+
+**Rollback.** Revert `0dfd17b3`, and the HUNKHDR stand-in and the `AR-193-SPACEPATH` trigger rule (a `src/` path
+holding whitespace routes by hand as fired on every limb) return at every routing and merge. Readings:
+`.grugops/context/arch-build-ABC-195/notes/` and `.grugops/context/bapm-cut-AR-193/notes/`.

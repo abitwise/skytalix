@@ -6,6 +6,8 @@
 // `F-072-1` below. Old readings stay reproducible from the old path.
 // ABC-163 (2026-10-21) folds ADR-0036 § S1 Ruling 2 in place, marked `ABC-163` below. Readings taken before
 // it stay reproducible from this file at `341da4c1` (`git show 341da4c1:<this path>`).
+// ABC-188 (2026-10-21) widens Ruling 2 to `+` and `-` lines, marked `ABC-188` below. Readings taken before it stay
+// reproducible from this file at `87d3897d`.
 //
 // Usage, from the repository root:
 //   node .grugops/context/design-F-072-1/probe/clause-b.mjs <base> <head> 1   # non-local import
@@ -34,9 +36,10 @@
 // someone disputes falls under the fail-safe (`AR-072-WORDHIT`).
 //
 // (b1) fires when an occurrence of the limb has any line on a `+` line of `git diff -U0 --no-renames`.
-//      ABC-163, Ruling 2 (ADR-0036 § S1), limb 1 only: (b1) also fires on any `+` line, comments included, in
-//      a production file that holds limb 1 in code at <base> or at <head>. With no holder at either end it
-//      adds nothing. It reads the same diff as above and never runs a pathspec diff, so an empty holder set
+//      ABC-163, Ruling 2 (ADR-0036 § S1), limb 1 only: (b1) also fires on any changed line, `+` or `-` (ABC-188),
+//      comments included, in a production file that holds limb 1 in code at <base> or at <head>. A holder
+//      deleted or renamed away at <head> counts: all its lines are `-`. With no holder at either end it adds
+//      nothing. It reads the same diff as above and never runs a pathspec diff, so an empty holder set
 //      cannot widen to every changed file.
 // (b2) fires when a production file gains a RUNTIME import edge (value or bare; `import type` and
 //      `export type` are not edges) to a local module whose runtime closure at <head>, the module
@@ -69,7 +72,7 @@ const WORD = { 1: /node:|from\s*["'][^."'\/]|import\(\s*["'`][^."'`\/]/, 2: /\bp
 const CALLS = new Set(["spawn", "spawnSync", "exec", "execSync", "execFile", "execFileSync", "fork", "fetch", "eval", "Function", "WebSocket"]);
 const CHILD_PROCESS = new Set(["node:child_process", "child_process"]);
 
-const git = (...args) => execFileSync("git", args, { encoding: "utf8", maxBuffer: 256 << 20 });
+const git = (...args) => execFileSync("git", ["-c", "core.quotePath=false", ...args], { encoding: "utf8", maxBuffer: 256 << 20 });
 const short = (rev) => git("rev-parse", "--short=8", rev).trim();
 const isProduction = (f) => f.startsWith("src/") && /\.[mc]?[jt]s$/.test(f) && !/\.test\.[mc]?[jt]s$/.test(f) && !/\.d\.[mc]?ts$/.test(f);
 const productionFiles = (rev) =>
@@ -199,12 +202,29 @@ function closure(an, start) {
 }
 
 // Added line numbers per production file, from the hunk headers of a zero-context diff.
-function addedLines(b, h) {
+// ABC-188: and the count of deleted lines per production file at <base>, from the same headers.
+function changedLines(b, h) {
   const out = new Map();
+  const removed = new Map();
   let file = null;
-  for (const line of git("diff", "-U0", "--no-renames", b, h, "--", "src").split("\n")) {
-    if (line.startsWith("+++ ")) {
-      const p = line.slice(4);
+  let old = null;
+  let header = false; // ABC-195: true from a `diff --git ` line to that file's first `@@`; a hunk line is never a header
+  const quoted = new Set(); // ABC-193: a path git still prints C-quoted ("…"), as git printed it, a/ or b/ dropped
+  for (const line of git("diff", "-U0", "--no-renames", "--text", "--no-textconv", "--no-ext-diff", "--no-color", "--src-prefix=a/", "--dst-prefix=b/", b, h, "--", "src").split("\n")) {
+    if (line.startsWith("diff --git ")) header = true;
+    else if (line.startsWith("@@")) header = false;
+    if (header && /^(?:---|\+\+\+) "/.test(line)) quoted.add(line.slice(4).replace(/^"[ab]\//, '"'));
+    if (header && line.startsWith("--- ")) {
+      const p = line.slice(4).replace(/^([^"].*)\t$/, "$1"); // ABC-195: git ends an unquoted path holding a space with a TAB
+      old = p === "/dev/null" ? null : p.replace(/^a\//, "");
+      if (old && !isProduction(old)) old = null;
+    }
+    if (old && line.startsWith("@@")) {
+      const m = /^@@ -\d+(?:,(\d+))? /.exec(line);
+      removed.set(old, (removed.get(old) ?? 0) + (m[1] === undefined ? 1 : Number(m[1])));
+    }
+    if (header && line.startsWith("+++ ")) {
+      const p = line.slice(4).replace(/^([^"].*)\t$/, "$1");
       file = p === "/dev/null" ? null : p.replace(/^b\//, "");
       if (file && !isProduction(file)) file = null;
       if (file) out.set(file, out.get(file) ?? new Set());
@@ -215,12 +235,12 @@ function addedLines(b, h) {
       for (let i = 0; i < count; i++) out.get(file).add(start + i);
     }
   }
-  return out;
+  return { added: out, removed, quoted };
 }
 
 const B = analyse(base);
 const H = analyse(head);
-const added = addedLines(base, head);
+const { added, removed, quoted } = changedLines(base, head);
 const holders = H.files.filter((f) => H.per.get(f).occ[limb].length > 0);
 const holderSet = new Set(holders);
 
@@ -256,6 +276,7 @@ for (const f of H.files) {
     if (!before.has(t)) newEdges.push([f, t]);
   }
 }
+for (const q of quoted) unresolved.push(`${q} (C-quoted by git; not read)`); // ABC-193: a dispute, never dropped
 const b2 = [];
 for (const [f, t] of newEdges) {
   const reached = [...closure(H, t)].filter((x) => holderSet.has(x));
@@ -268,11 +289,14 @@ const changed = [...added.keys()].filter((f) => H.per.has(f) || B.per.has(f));
 const baseHolders = B.files.filter((f) => B.per.get(f).occ[limb].length > 0);
 const ruling2 = [];
 if (limb === 1) {
-  for (const [file, lines] of added) {
+  // ABC-188: every file with a changed line, `+` or `-`; a file deleted at <head> is only in `removed`.
+  for (const file of new Set([...added.keys(), ...removed.keys()])) {
     const atBase = baseHolders.includes(file);
-    if (!lines.size || !(atBase || holderSet.has(file))) continue;
+    if (!(atBase || holderSet.has(file))) continue;
     const at = [atBase && "<base>", holderSet.has(file) && "<head>"].filter(Boolean).join(" and ");
-    ruling2.push(`${file}  (fired by Ruling 2: ${lines.size} + line${lines.size === 1 ? "" : "s"}; holds limb 1 at ${at})`);
+    const plus = added.get(file)?.size ?? 0;
+    const minus = removed.get(file) ?? 0;
+    ruling2.push(`${file}  (fired by Ruling 2: ${plus} + line${plus === 1 ? "" : "s"}, ${minus} - line${minus === 1 ? "" : "s"}; holds limb 1 at ${at})`);
   }
 }
 
@@ -285,7 +309,7 @@ console.log(`  COUNTS ${UNIT[limb]} (TypeScript AST; comments and strings are no
 console.log(`  (b1) capability lines added or changed: ${b1.length}${b1.length ? `\n${list(b1)}` : ""}`);
 if (limb === 1) {
   if (!baseHolders.length && !holders.length) console.log("  (b1) Ruling 2 (ADR-0036 § S1, the holder file): no limb-1 holder at <base> or <head>; adds nothing");
-  else console.log(`  (b1) Ruling 2 (ADR-0036 § S1, the holder file): holders ${baseHolders.length} at <base>, ${holders.length} at <head>; holder files with + lines: ${ruling2.length}${ruling2.length ? `\n${list(ruling2)}` : ""}`);
+  else console.log(`  (b1) Ruling 2 (ADR-0036 § S1, the holder file): holders ${baseHolders.length} at <base>, ${holders.length} at <head>; holder files with changed lines (+ or -): ${ruling2.length}${ruling2.length ? `\n${list(ruling2)}` : ""}`);
 }
 console.log(`  (b2) new runtime import edges: ${newEdges.length}; reaching a holder of this limb at <head>: ${b2.length}${b2.length ? `\n${list(b2)}` : ""}`);
 if (newEdges.length > b2.length) console.log(`       edges reaching no holder: ${newEdges.filter(([f, t]) => !b2.some((x) => x.startsWith(`${f} -> ${t} `))).map(([f, t]) => `${f} -> ${t}`).join("; ")}`);

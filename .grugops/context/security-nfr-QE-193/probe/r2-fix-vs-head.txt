@@ -1,0 +1,6 @@
+# r2-mutants.sh <repo> aa86a1a1 <scratch> <fix prototype>  (rc 0)
+r2-mutants: 20 of 20 limb-1 rows as expected; limbs 2 and 3 identical to 341da4c1 on the same plant on 11 of 11, on the same plant with the route off on G-COLOR G-EXT G-ENV G-DRV G-PFX, with core.quotePath=false in its environment on QU and QE2, and on X1 (plant ids masked) on BIN-NUL and BIN-ATTR
+# r2-mutants.sh <repo> aa86a1a1 <scratch> <main's clause-b.mjs>  (rc 0)
+r2-mutants: 20 of 20 limb-1 rows as expected; limbs 2 and 3 identical to 341da4c1 on the same plant on 11 of 11, on the same plant with the route off on G-COLOR G-EXT G-ENV G-DRV G-PFX, with core.quotePath=false in its environment on QU and QE2, and on X1 (plant ids masked) on BIN-NUL and BIN-ATTR
+# diff of the two outputs minus line 1 (instrument sha line): empty
+       0

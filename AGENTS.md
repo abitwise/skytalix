@@ -4,7 +4,7 @@
 
 This repo runs a file-based agent factory for software delivery. One Orchestrator (the head grug) routes work through the full lifecycle; a few single-job grug agents execute within hard limits. The role is the intelligence. The workflow is the guardrail. The shared verified context is the memory. The board is the state. The gate is the backpressure. Humans decide; agents execute.
 
-**Byte budget: this file targets ≤ 24,576 B.** Why, and the size of every pass: the preamble and the last entry of `memory-bank/90-agents-md-command-log.md`.
+**Byte budget: this file targets ≤ 18,432 B.** Why, and the size of every pass: the preamble and the last entry of `memory-bank/90-agents-md-command-log.md`.
 
 ## How to work here
 
@@ -70,7 +70,7 @@ Perft, the opening-book regeneration, each lane's trigger and trap, and the cove
 waiting shell's own command line and never exits. Wait on the PID you started or the tool's
 completion notification; if a pattern is unavoidable, bracket one character (`[v]itest`).
 
-- Test (all): `npm test` <!-- `node tools/grugops/run-bounded.js 60000 vitest run` (ABC-122). A hung lane exits 124 at the 60 s bound — stop
+- Test (all): `npm test` <!-- `NODE_OPTIONS=--max-old-space-size=128 node tools/grugops/run-bounded.js 60000 vitest run` (ABC-122). A hung lane exits 124 at the 60 s bound — stop
   with Ctrl-C/SIGTERM, never SIGKILL (R1: can orphan a hung vitest). `*_DEEP` lanes below run via
   `npx vitest run` directly, never through `npm test`. -->
 - Heap flag (ABC-173): `--max-old-space-size=400` is for ONE-file vitest runs only. Whole-suite or
@@ -104,7 +104,7 @@ completion notification; if a pattern is unavoidable, bracket one character (`[v
 
 ### Test integrity
 
-- Skip-count capture: `NODE_OPTIONS=--max-old-space-size=128 npx vitest run --reporter=json 2>/dev/null | jq '.numPendingTests + .numTodoTests'` <!-- verified: returns an integer (0 with no tests). Undeterminable → `UNKNOWN - verify`, never a silent 0. -->
+- Skip-count capture: `NODE_OPTIONS=--max-old-space-size=128 npx vitest run --reporter=json 2>/dev/null | jq '.numPendingTests + .numTodoTests'` <!-- verified: returns an integer (0 with no tests). Undeterminable → `UNKNOWN - verify`, never a silent 0. Run it as spelled: quotes without its prefix (before ABC-173) are history; refused by the heap guard, they print no integer and exit non-zero (ABC-176). -->
 
 - Test-integrity check (the gate's step): `node tools/grugops/test-skip-integrity.js .grugops/test-skips.md --skip-count <N>` <!-- verified: `No findings.`, exit 0, at skip count 0. `.grugops/test-skips.md` is HUMAN-OWNED — an agent may READ and RUN this, never write a row into it. -->
 
@@ -149,7 +149,7 @@ The owner's rulings, in full with their evidence: `memory-bank/45-standing-rulin
 - Criteria review happens at the `Ready for Dev` exit, not at a gate. Ticket prose has a size budget; overflow goes to context notes.
 - Merge to `main` in THIS project is allowed once all tests pass and the ticket is done, never before. The commit-side branch guard in `agent-factory/_commit-convention.md` still holds: commit on `grugops/<task>`, never `main` directly.
 - 2026-08-16 — the owner's word in session IS the `In UAT` signature. Offered his word, a self-written file, or a redefinition of the exit; chose his word, and a green agent report does NOT count as his acceptance.
-- 2026-08-17 — a ticket whose delivered diff carries ZERO PRODUCTION LINES has UAT WAIVED, standing. `git diff --name-only <delivered>~1 <delivered> | grep -v '\.test\.ts$' | grep '^src/'` must be **empty** — any production line and the rule does not apply. This unfiltered form is the reference measurement; no brief may add a `__snapshots__` filter. Snapshot-only exception (owner, 2026-10-17): if it lists only `src/__snapshots__/*.snap`, the waiver holds only if the Orchestrator reads every changed `.snap` and records that in the Done note; any change the criteria do not explain voids it and UAT goes to the owner. A waiver is not a signature: `Done` here means merged and gated, never human-accepted.
+- 2026-08-17 — a ticket whose delivered diff carries ZERO PRODUCTION LINES has UAT WAIVED, standing. `git -c core.quotePath=false diff --name-only <delivered>~1 <delivered> | grep -v '\.test\.ts$' | grep '^src/'` must be **empty** — any production line and the rule does not apply. This unfiltered form is the reference measurement; no brief may add a `__snapshots__` filter. Snapshot-only exception (owner, 2026-10-17): if it lists only `src/__snapshots__/*.snap`, the waiver holds only if the Orchestrator reads every changed `.snap` and records that in the Done note; any change the criteria do not explain voids it and UAT goes to the owner. A waiver is not a signature: `Done` here means merged and gated, never human-accepted.
 - Every ticket gets a `qe-e2e` hop and QE's recorded verdict before leaving `In Review`; none reaches `Done` without one. This project's kit overrides remain THREE: the branching model, the deployment posture, and the zero-production-lines UAT waiver. A reader who counts four is wrong.
 - This project deploys nowhere; it runs locally, from source. `production_requires_human_confirmation` stays `true` — the grant deliberately did not flip it; moving it is the owner's word, never an inference from the grant.
 

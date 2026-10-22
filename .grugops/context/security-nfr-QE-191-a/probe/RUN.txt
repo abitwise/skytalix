@@ -1,0 +1,12 @@
+security-nfr-QE-191-a — what was run, from where. 2026-10-21, git 2.56.0, Node from PATH, macOS (Apple Silicon).
+All plants live in a `git clone --shared --no-checkout` of the repository under the session scratchpad, with a private
+HOME, TMPDIR and GIT_CONFIG_GLOBAL and GIT_CONFIG_NOSYSTEM=1. The repository, its git config and its worktrees were
+never written. Instrument: `git show 837e8b22:.grugops/context/design-F-072-1/probe/clause-b.mjs` ("cur"), and the
+same file with the one diff call's argv gaining `--no-ext-diff --no-color --src-prefix=a/ --dst-prefix=b/` ("fix").
+
+  bash probe.sh  <repo> 837e8b22 <scratch>/run   -> probe.out.txt   routes R0-R14 on X1 (QE's narrowing) and ADD (a widening)
+  bash probe2.sh <scratch>/run                    -> probe2.out.txt  committed `.gitattributes` diff=ext: which checkout; QU
+  bash probe3.sh <scratch>/run                    -> probe3.out.txt  QE-191-b: a reached non-ASCII file edited later; waiver pipe
+  standin.sh, per route                           -> standin.out.txt the interim one-liner; REAL REPO line = main checkout today
+  (inline, not scripted) a linked worktree of the scratch clone runs `git config color.diff always`; the clone's main
+  checkout then reads it from file:.git/config and the instrument on ADD prints "limb 1: does not fire".

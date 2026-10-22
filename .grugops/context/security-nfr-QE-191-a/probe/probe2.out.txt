@@ -1,0 +1,6 @@
+head be923407 (ADD + committed src/** diff=ext); ext command configured
+R5c base checked out (no .gitattributes in tree): L1 cur=limb 1: FIRES fix=limb 1: FIRES; L3 cur=limb 3: FIRES
+R5d head checked out (.gitattributes in tree):    L1 cur=limb 1: does not fire fix=limb 1: FIRES; L3 cur=limb 3: does not fire fix=limb 3: FIRES
+R5e head checked out, NO ext command:             L1 cur=limb 1: FIRES
+QU  src/qé.ts unreached: L1 cur=limb 1: does not fire; with -c core.quotePath=false in env: L1 cur=limb 1: FIRES
+clone config clean

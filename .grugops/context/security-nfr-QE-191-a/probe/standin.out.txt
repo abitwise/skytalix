@@ -1,0 +1,12 @@
+R0 control: []
+R1: [color.diff always ]
+R2: [color.ui always ]
+color.ui auto (benign): []
+R3: [diff.external /x ]
+R4: [/x ]
+R5 diff.Ext.Drv.command: [diff.Ext.Drv.command /x ]
+R6: [diff.srcprefix x/ ]
+R6b: [diff.dstprefix y/ ]
+R12: [color.diff always ]
+GIT_CONFIG_PARAMETERS color.ui: [color.ui always ]
+clone config clean

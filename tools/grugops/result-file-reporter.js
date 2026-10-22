@@ -33,9 +33,10 @@
 //   - Only `npm test` uses this file. `vitest.config.ts` is untouched, so a direct `npx vitest run`
 //     (the `*_DEEP` lanes) writes nothing.
 //
-// REGRESSION PLANTS (`ABC-149`). Re-run all six rows when a hop changes this file, the `test` script
-// in `package.json`, or the installed `vitest` / `@vitest/*` version. It is not a per-diff gate: one
-// pass is six `npm test` runs. Plant in a scratch copy OUTSIDE the repository, never in a worktree;
+// REGRESSION PLANTS (`ABC-149`; the seventh, `refused`, is `ABC-176`'s). Re-run all seven rows when
+// a hop changes this file, `tools/grugops/heap-guard.js`, the `test` script in `package.json`, or the
+// installed `vitest` / `@vitest/*` version. It is not a per-diff gate: one pass is seven `npm test`
+// runs. Plant in a scratch copy OUTSIDE the repository, never in a worktree;
 // which test file takes the plant is the hop's choice. Read every file with `jq` or `node -e`, and
 // run the READ IT query above on it. A row passes only when its exit code, its file fields AND its
 // query lines all match, the lines compared BY CONTENT (in any order). A line count alone is not a
@@ -62,6 +63,14 @@
 //   exit code only: no plant; run `npm test -- --coverage --coverage.thresholds.lines=100`. Exit 1.
 //     `success` false, `exitCode` 1, AND `numFailedTests` 0, `numFailedTestSuites` 0,
 //     `unhandledErrors` empty. Query: exactly `run    exited exitCode=1`.
+//   refused: no plant (`ABC-176`); run the `test` script with its `NODE_OPTIONS=…` prefix removed
+//     (`node tools/grugops/run-bounded.js 60000 vitest run …`, `node_modules/.bin` on `PATH`), so
+//     `heap-guard.js` refuses it. Exit 1. `success` false, `exitCode` 1, `numTotalTests` 0, and
+//     `unhandledErrors[].message` is the guard's thrown message verbatim (it begins
+//     `heap-guard: refused.`; the guard hands it to vitest's `catchError`). Query:
+//     `error  heap-guard: refused. …` (that whole message) and `run    exited exitCode=1`.
+// A heap-guard refusal (and a guard "cannot look" throw) is an unhandled error by construction, so
+// it is named by the `error` arm and the `unhandledErrors` field above; this file reads nothing new.
 // The exit-code-only row is the one red where the exit code alone decides `success`; every other
 // red also fails vitest's verdict or carries an unhandled error. It proves the exit-code check ONLY
 // WHILE all four of its fields hold. If lines coverage ever reaches 100 %, the command exits 0 and
