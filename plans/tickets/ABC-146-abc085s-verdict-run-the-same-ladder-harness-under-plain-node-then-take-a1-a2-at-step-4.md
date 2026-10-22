@@ -1,8 +1,8 @@
 ---
 id: ABC-146
 title: "`ABC-085`'s verdict: run the same ladder harness under plain `node`, prove by digest that it plays the same games, then take `A1`/`A2` at step 4 on a tree with `ABC-083`"
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: XS
 priority: P1
 epic: EPIC-004

@@ -1,8 +1,8 @@
 ---
 id: ABC-144
 title: "`npm test` chokes the MacBook Air M3 — cut the default lane's CPU and cap the cores it holds, and let the wall rise only to a number the owner accepts"
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: M
 priority: P1
 epic: —

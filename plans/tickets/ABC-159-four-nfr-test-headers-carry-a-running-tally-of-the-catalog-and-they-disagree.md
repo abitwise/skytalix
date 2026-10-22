@@ -2,7 +2,7 @@
 id: ABC-159
 title: "Four `*.nfr.test.ts` headers carry a running tally of `plans/nfr-catalog.md` in words (three times, five times now, the sixth, twice), and the tallies disagree with each other"
 status: done
-column: Backlog
+column: Done
 size: XS
 priority: P3
 epic: EPIC-002

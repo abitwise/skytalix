@@ -1,8 +1,8 @@
 ---
 id: ABC-167
 title: "`src/uci-session.ts`: a capability-free UCI session that answers the `ADR-0044` D3 commands, with the D4 time rule and the D12 `go` limits"
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: S
 priority: P1
 epic: EPIC-007

@@ -1,8 +1,8 @@
 ---
 id: ABC-173
 title: "Cap this repo's vitest at 2 CPU cores and a 2 GB heap ceiling, applied (not just configured) in every lane"
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: S
 priority: P1
 epic: —

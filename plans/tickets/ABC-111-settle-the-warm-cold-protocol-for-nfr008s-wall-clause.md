@@ -1,8 +1,8 @@
 ---
 id: ABC-111
 title: Settle the warm/cold measurement protocol for `NFR-008`'s wall clause — a verdict that flips with the cache is not a verdict
-status: backlog
-column: Backlog
+status: dropped
+column: Done
 size: M
 priority: P3
 epic: —

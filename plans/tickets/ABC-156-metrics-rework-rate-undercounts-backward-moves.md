@@ -1,8 +1,8 @@
 ---
 id: ABC-156
 title: "plans/metrics.md's Rework-rate row says 13 backward moves; the source has 15 — ABC-017 and ABC-019 are each one short"
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: XS
 priority: P3
 epic: —

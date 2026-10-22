@@ -2,7 +2,7 @@
 id: ABC-180
 title: "`A7`'s neutral working directory holds a decoy book that is not a book, so a cwd-first read with a module-URL fallback (P6f) reds `CLI_DEEP`, and `A7`'s stderr assertion names itself the detector (`AR-162-FALLBACK`: G-1, G-2)"
 status: done
-column: Ready
+column: Done
 size: XS
 priority: P3
 epic: EPIC-005

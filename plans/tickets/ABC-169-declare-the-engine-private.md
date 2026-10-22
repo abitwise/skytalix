@@ -1,8 +1,8 @@
 ---
 id: ABC-169
 title: "Declare the engine private: `\"license\": \"UNLICENSED\"` next to `\"private\": true` in `package.json`, and the Michniewski credit comment in the `src/evaluate.ts` header"
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: XS
 priority: P1
 epic: EPIC-007
