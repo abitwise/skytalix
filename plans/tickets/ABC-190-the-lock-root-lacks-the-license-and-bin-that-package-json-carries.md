@@ -125,8 +125,11 @@ BA/PM hop, because the DoR stands.
 
 ## QE
 
-**QE/E2E, 2026-10-22 (subtask `qe-ABC-190`), at `grugops/qe-ABC-190`, branched at the tip `d79f4684` (lock commit `15766056`; base `823a9885`). Verdict: PASS.**
-- **Merge.** `git merge main` printed `Already up to date`, because `main` is the base `823a9885`, which holds `ABC-168`. So there is no merge commit, and every reading is at `d79f4684`. `main` did not move its lock.
+**QE/E2E, 2026-10-22 (subtask `qe-ABC-190`), at `grugops/qe-ABC-190` merge `8c74547e` (`main` `d12831c6` into the tip `d79f4684`; lock commit `15766056`; base `823a9885`). Verdict: PASS.**
+- **Merges.**
+  - At first `git merge main` printed `Already up to date`, because `main` was the base `823a9885`, which holds `ABC-168`. The readings below were first taken at `d79f4684`.
+  - `main` then moved to `d12831c6`. That change touches only `.grugops/`, `plans/` and this page's frontmatter, with 0 lines in `package*.json`, `src/` or `tools/`. I merged it at `8c74547e` with no conflict.
+  - At `8c74547e` A1, A2, the waiver and every gate reproduce. The lock is `cmp`-equal to the base regeneration, and a re-run of the regeneration is a no-op.
 - **How.** I read every criterion from my own runs before I opened the SE's `…723e5ad8`, `…a451fa4c` and `…c86e3c83`. Those notes agree on every shared number. I re-read A1 and A2 under an empty global git config with `GIT_CONFIG_NOSYSTEM=1`, and they are identical. npm 11.20.0, node v26.11.1. No timing.
 
 - **A1 MET.** `4	0	package-lock.json`. The 4 added lines are `"license": "UNLICENSED",` and the 3-line `"bin": { "skytalix": "dist/uci.js" },`, under `packages[""]`. They match `package.json`, which is unchanged.
@@ -154,4 +157,6 @@ Notes (`qe-ABC-190`):
 - `20261022T153005Z-qe-e2e-observation-c7e30f83`: A1–A3;
 - `…observation-6e8cf84f`: regeneration, audit and readers;
 - `…observation-b413b9cd`: gates;
-- `…decision-66c6c9d0`: the verdict.
+- `…decision-66c6c9d0`: the verdict at `d79f4684` (superseded);
+- `20261022T153220Z-qe-e2e-observation-1021eac0`: the re-merge at `8c74547e`;
+- `…decision-d21b9a3a`: the verdict at `8c74547e`, superseding `66c6c9d0`.
