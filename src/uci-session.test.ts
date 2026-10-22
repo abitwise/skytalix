@@ -285,6 +285,8 @@ describe("ABC-167 A6 — infinite waits for stop", () => {
     const held = talk(["position startpos", "go infinite"], 1_000);
     expect(held.out.filter((line) => line.startsWith("bestmove"))).toEqual([]);
     expect(talk(["stop", "ponderhit"]).out).toEqual([]);
+    // QE-178-b: re-read session 1 after session 2 ran; a fresh session's release must not reach it.
+    expect(held.out.filter((line) => line.startsWith("bestmove"))).toEqual([]);
   });
 
   it("A6-d1: go ponder holds at the capped ceiling; ponderhit releases once", () => {
