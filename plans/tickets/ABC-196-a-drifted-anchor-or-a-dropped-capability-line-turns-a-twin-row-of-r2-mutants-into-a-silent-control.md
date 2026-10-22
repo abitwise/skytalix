@@ -203,10 +203,14 @@ Column moves after `Ready` are the Orchestrator's.
 
 ## QE
 
-**QE/E2E, 2026-10-22 (subtask `qe-ABC-196`), at `grugops/qe-ABC-196` merge `0492a007` (tip `0492a007`; harness `6d15460b`; base `a7857e0b`). Verdict: PASS_WITH_GAPS.**
-- **Merge.** `git merge main` reported `Already up to date`: `main` is `a7857e0b`, the branch's base. So the merge sha is the tip.
+**QE/E2E, 2026-10-22 (subtask `qe-ABC-196`), at `grugops/qe-ABC-196` merge `35a2d708` (`main` `5d3832ef` into tip `0492a007`; harness `6d15460b`; base `a7857e0b`). Verdict: PASS_WITH_GAPS.**
+- **Merges.**
+  - At first `git merge main` reported `Already up to date` (`main` was `a7857e0b`, the base), and the criteria below were read at `0492a007`.
+  - `main` then moved to `5d3832ef`: ABC-168 merged, bringing a new production file `src/uci.ts`. I merged it at `35a2d708` with no conflict.
+  - At `35a2d708` I re-ran the gates and 19 harness runs (A2–A6, E1/E2/E4, R and R3 rebuilt on that tip). All reproduce.
+  - The head output moves only in the Ruling 2 holder counts (+1, `src/uci.ts`), on base's and the fix's harness alike. Base and fix are still byte-equal (lines 2–140 `1b87c526f22b01c7`).
 - **How.** I read every criterion from my own runs before I opened the Architect's `…7cd5d10a`/`…d955ee60`. Those notes agree on every shared number, and my harness copies hash the same as theirs.
-- **Environment.** Every run went through one wrapper: private `HOME`, `TMPDIR` and `GIT_CONFIG_GLOBAL` (an empty file), `GIT_CONFIG_NOSYSTEM=1`, with `GIT_DIFF_OPTS` and `GIT_EXTERNAL_DIFF` unset. `<repo>` was a full scratch clone with its own `.git`. 27 harness runs; no timing.
+- **Environment.** Every run went through one wrapper: private `HOME`, `TMPDIR` and `GIT_CONFIG_GLOBAL` (an empty file), `GIT_CONFIG_NOSYSTEM=1`, with `GIT_DIFF_OPTS` and `GIT_EXTERNAL_DIFF` unset. `<repo>` was a full scratch clone with its own `.git`. 46 harness runs; no timing.
 
 - **A1 MET.** `main...HEAD` lists `r2-mutants.sh` plus the 2 Architect notes. The waiver prints nothing.
 - **A2 MET.** Base's harness exits 0 at `25 of 25` on D2, at R (scratch `521eac8a`) and on L. For D2 and R, PP-EDIT reads `L2 … identical (limb 2: does not fire)`. For L, PP-TPL, PP-REDIR and RA-PLUS read `does not fire` on limbs 2 and 3.
@@ -216,7 +220,7 @@ Column moves after `Ready` are the Orchestrator's.
 - **A6 MET.** D1, D3, D4 and D5 each exit 2, naming PP-TPL, SP-N5, PP-TPL and PP-EDIT.
 - **A7 MET.**
   - Lint, typecheck and build exit 0.
-  - `npm test` exits 0 at 59 files / 1994 tests (= base), and `last-run.json` reads `success` true.
+  - `npm test` exits 0 at 59 files / 1994 tests (= base) at `0492a007`, and at 60 files / 1995 tests (= `main` after ABC-168) at `35a2d708`. `last-run.json` reads `success` true at both.
   - The skip count as spelled is `0` → `No findings.` `biome.json` is unchanged.
 
 **Own drifts:**
@@ -225,7 +229,7 @@ Column moves after `Ready` are the Orchestrator's.
   - E2, a row's expectation pair dropped: red, naming `SP-N5:limb2 SP-N5:limb3`.
   - E4, leak() without `fetch`: red, naming the three `:limb3` only.
 - **"Which line fires" is constructible (`QE-196-a`).**
-  - The drift is R3, scratch `3d26dff8`. It is a `src/cli.ts`-only refactor: `main` becomes an arrow `const`, and `printableOf` moves below it. tsc is 0, biome is clean, and 59 / 1994 pass, so it would merge.
+  - The drift is R3, scratch `3d26dff8` (and R3' `36f19186` at the merge). It is a `src/cli.ts`-only refactor: `main` becomes an arrow `const`, and `printableOf` moves below it. tsc is 0, biome is clean, and 59 / 1994 (60 / 1995 at the merge) pass, so it would merge.
   - It puts `pe`'s template below the argv read. The fixed harness exits 0 at `25 of 25`.
   - With the pre-`ABC-195` instrument, `PP-EDIT:limb2` is no longer named (9 → 8 limbs). PP-EDIT keeps reading FIRES, on a line the broken instrument also reads.
   - The other three `++` rows still discriminate.
@@ -238,4 +242,4 @@ Column moves after `Ready` are the Orchestrator's.
 - `QE-196-b` (INFO). For PP-TPL, PP-REDIR and RA-PLUS the limit is reachable only by a harness edit; SP-N5 was not reached. → record.
 - `QE-196-c` (INFO). The exit-1 header line runs 188 characters, and `Exit 0:` does not name the new list. The header promises nothing it does not check. → none.
 
-**`QE-195-a`: close condition met.** UAT waived (0 `src/` lines; a waiver is not a signature). Notes: `.grugops/context/qe-ABC-196/notes/` (`…observation-a8e8fbc8` criteria, `…observation-7e6804d4` drifts, `…observation-143f86d8` gates and artifacts, `…decision-fd211043` verdict).
+**`QE-195-a`: close condition met.** UAT waived (0 `src/` lines; a waiver is not a signature). Notes: `.grugops/context/qe-ABC-196/notes/` (`…observation-a8e8fbc8` criteria, `…observation-7e6804d4` drifts, `…observation-143f86d8` gates and artifacts, `…observation-c6b997d0` the re-merge, and `…decision-df052eb2` the verdict, which supersedes `…decision-fd211043`).
