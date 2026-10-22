@@ -1,8 +1,8 @@
 ---
 id: ABC-189
 title: "Nothing pins the value of `package.json` `bin`, so `bin` pointing at `src/uci.ts` passes every test (`AR-168-BINPIN`)"
-status: in-development
-column: In Development
+status: in-review
+column: In Review
 size: XS
 priority: P3
 epic: EPIC-007
