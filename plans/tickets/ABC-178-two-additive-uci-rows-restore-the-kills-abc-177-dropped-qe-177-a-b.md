@@ -11,6 +11,39 @@ feature: —
 
 # ABC-178: add one cross-session hold row and one dropped-token time row to `src/uci-session.test.ts`. Test-only, additive, one file
 
+> **2026-10-22 15:25Z, BA/PM, QE-178 ruling** (task `bapm-rule-QE-178`, records only, at `main` `823a9885`). Notes:
+> `.grugops/context/bapm-rule-QE-178/notes/` (decision `…1f4936b2`, readings `…34bf730b`). QE verdict: `…1ad5f522`,
+> PASS_WITH_GAPS at merge `80493be0`. Authority: the owner's delegation `…5aaf7cec`. This hop ran no vitest, took no timing and
+> ran no probe. **This block supersedes the blocks below wherever they differ.** B7/B8 (QE-178-c/-d) are the Orchestrator's
+> and are not ruled here.
+>
+> | gap | ruling | why |
+> |---|---|---|
+> | **QE-178-b** (QP1c: a fresh session's `stop` releases the other session's hold into the holder's own output) | **FOLD into this ticket** | It is R1's own claim ("not released by a fresh session"), and B1 never said when to read session 1. One added assertion kills it, searches 0 nodes and keeps QP1/QP1a red (QE scratch, `gp-r1recheck-file.jsonl`). The ticket is waiting In Review for its timing hop anyway, so the fold costs no extra timing. A cut would cost a whole ticket cycle for one line. `ABC-197` would tie it to an unrelated ≤ 9.2 s reading |
+> | **QE-178-a** (QP1b: a hold leaks only after a session's second hold) | **ACCEPT, no ticket** | Not a regression (it survives before `ABC-177`, at base and at the tip). Production runs one session per process (`src/uci.ts:76`). The family has no end (a count of 2, then 3, ponder against infinite, …). A two-hold row costs ≈ 1 310 nodes ≈ +0.004 s wall (estimate) against `NFR-008` headroom that is `UNKNOWN - verify` today. **Reopen if:** production runs more than one UCI session per module instance; `uci-session.ts` gains state that counts holds or carries a hold across a `go`; or a QP1b-shaped leak is seen live |
+> | **QE-178-e** (INFO) | **corrected here** | Measured: lane **1 995 → 1 996**. `main` has changed no `src/`, config or lane file since `5d3832ef` (`git diff --name-only 5d3832ef 823a9885` lists only `.grugops/` and `plans/`) |
+>
+> **Criteria amended by the fold.** The base is still `main` without R1: `43e4996f` today, and `main`'s code has not moved
+> since. Every other criterion stands as the re-rule block below states it.
+> - **B1, added limb:** after session 2 has run, R1 reads session 1's output (`held.out`, the same array, not a new session)
+>   **again**, and it still holds no line starting `bestmove`. The first check, before session 2, stays.
+> - **B3:** one file; no `-` line against the base. Hunks add only R1, its re-check line, and comment lines citing
+>   `ABC-178`, `QE-177-a` or `QE-178-b`. The blank separator stays inside "additive only" (QE `…65ce53ef`).
+> - **B4:** unchanged in shape (no new row): file 126 → **127**, lane **1 995 → 1 996**, and the difference is R1's name alone.
+> - **B5:** R1 = 655 nodes, and the tip's census sum reads the same as QE's tip reading (608 965 at `80493be0`). The re-check
+>   searches nothing.
+> - **B6, added row:** QE's `QP1c` entry, byte-copied from `gp-qe178.mjs` (`grugops/qe-ABC-178` @ `d781e5e5`, sha256
+>   `12c0b8db…`): **red on R1 in the file run, and ≥ 1 red in the whole lane at the tip**. QP0 0 red, QP1 red on R1 (as
+>   now). QP1a and QP1b are reported, not graded (QP1b is expected to survive: QE-178-a is accepted).
+> - **B7/B8:** unchanged, still OWED. The timing hop reads the final (folded) tip. The QE re-read (B1, B3–B6, B9) runs
+>   **before** that hop, never inside its window.
+> - **Test notes, added:** watch the re-check go red under QP1c (R1's first check stays green), then revert.
+>
+> **Size `XS`, priority `P2`: unchanged.** One added line in one file. **DoR re-scored: 10/10** (item 4 now reads
+> "session 1 still holds no `bestmove` after session 2; QP1c red"; item 10: nothing blocks the re-build). **Recommended (the
+> Orchestrator's move):** In Review → In Development for the re-build, then a QE re-read, then the owed timing hop.
+> `ABC-197` is not changed. No ticket is cut, and the next free id stays ABC-198.
+
 > **Re-ruled 2026-10-22 by BA/PM** (task `bapm-rerule-ABC-178`, records only, at `main` `a7857e0b`). This follows the
 > owner's word of 2026-10-22, *"ABC-178, go ahead, send to BA/PM"*, as transcribed in `uat-ABC-168` `…0b63d92f`.
 > That is a transcription, not a stamp. Notes: `.grugops/context/bapm-rerule-ABC-178/notes/`. **This block
