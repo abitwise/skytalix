@@ -1,8 +1,8 @@
 ---
 id: ABC-152
 title: "Upgrade vitest 3.2.7 → 4.1 and run `src/` without the module runner (`viteModuleRunner: false`): cut the lane's CPU with every mock and spy guard still armed and the result file still telling the truth"
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: L
 priority: P1
 epic: —

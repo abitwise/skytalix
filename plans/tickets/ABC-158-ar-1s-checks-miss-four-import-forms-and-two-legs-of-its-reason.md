@@ -1,8 +1,8 @@
 ---
 id: ABC-158
 title: "`AR-1`'s recorded checks miss four ways code reaches the runtime path, and pin neither \"no loader flag\" nor \"no non-dev dependency\""
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: XS
 priority: P3
 epic: —

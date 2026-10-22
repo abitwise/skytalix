@@ -1,8 +1,8 @@
 ---
 id: ABC-166
 title: "Re-run `ABC-146`'s verdict with `--reporter=verbose`, overnight: run 1 passed 17/17 in 10.6 h, but the default reporter dropped every `LADDER` line, so no score exists"
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: XS
 priority: P1
 epic: EPIC-004

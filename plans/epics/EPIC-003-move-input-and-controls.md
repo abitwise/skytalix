@@ -1,8 +1,8 @@
 ---
 id: EPIC-003
 title: Move input and controls
-status: backlog
-column: Backlog
+status: done
+column: Done
 priority: P0
 size: XL
 owner: BA/PM

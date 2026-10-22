@@ -1,8 +1,8 @@
 ---
 id: ABC-148
 title: "The binder-count comment and the `ABC-113` page call four `[:=]`-free forms the open remainder, but `tsc` already closes two of them"
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: XS
 priority: P3
 epic: EPIC-006

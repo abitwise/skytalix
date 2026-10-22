@@ -1,8 +1,8 @@
 ---
 id: ABC-056
 title: `AR-1`'s accepted-risk override has drifted — its stated reason covers `brace-expansion` only, and two of today's three advisories are `nanoid` and `postcss`
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: XS
 priority: P2
 epic: —

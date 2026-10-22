@@ -1,8 +1,8 @@
 ---
 id: ABC-105
 title: Nothing observes the QE hop — a ticket can reach `Done` with no QE note and no one notices
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: M
 priority: P2
 epic: —

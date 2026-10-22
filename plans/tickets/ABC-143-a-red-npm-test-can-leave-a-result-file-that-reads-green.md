@@ -1,8 +1,8 @@
 ---
 id: ABC-143
 title: A red `npm test` can leave a result file that reads green — an unhandled error (exit 1) and a timeout (exit 124) both do
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: S
 priority: P2
 epic: —

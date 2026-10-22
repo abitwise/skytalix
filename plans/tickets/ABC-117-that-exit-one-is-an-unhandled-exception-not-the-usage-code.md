@@ -1,8 +1,8 @@
 ---
 id: ABC-117
 title: The record says a failed non-`EPIPE` stdout write exits `1` = `USAGE_EXIT_CODE` — it does not, and the fix a future hop would reach for cannot work
-status: ready
-column: Ready
+status: done
+column: Done
 size: XS
 priority: P2
 epic: EPIC-006

@@ -10,6 +10,12 @@ owner: BA/PM
 
 # EPIC-006 — Game session and packaging
 
+> **2026-10-22, BA/PM (`bapm-next-slice`, at `main` `08d42d01`): the startup prompt (gap `G6`) is cut as
+> `ABC-200`** (Ready, M, P2). It is the last uncut line of § Scope. Still open on this epic after it: acceptance 1
+> and `NFR-007` have no recorded reading on a fresh clone (search-bounded), and the negotiable slice waits on
+> play-test evidence, as written. Acceptance 2–4 are met on `ABC-102`, `ABC-044` and `ABC-101`. Front matter is
+> unchanged: the board card and this page both say Backlog, and closing the epic is a card move.
+
 > **PRIORITY RAISED `P2` → `P1` on 2026-08-12 by BA/PM** (task `post-abc030-2026-08-12`, subtask
 > `refinement-post-abc030`, Workflow 07). **NOT DECOMPOSED at that hop, deliberately — see
 > `## Why this epic was not decomposed on 2026-08-12` below.** The board row is the Orchestrator's to
