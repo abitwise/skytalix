@@ -1013,3 +1013,15 @@ AGENTS.md Scribe, task `scribe-waiver-quotepath`. One rule line in `AGENTS.md` (
 | `AGENTS.md` waiver bullet; `45-standing-rulings.md` waiver paragraph | `git diff --name-only <delivered>~1 <delivered> \| grep -v '\.test\.ts$' \| grep '^src/'` | `git -c core.quotePath=false diff --name-only <delivered>~1 <delivered> \| grep -v '\.test\.ts$' \| grep '^src/'` |
 
 Why: git quotes a non-ASCII path (`"src/q\303\251.ts"`), so the `grep '^src/'` stage dropped it and the measurement read empty on a production change. Demonstrated in a scratch clone outside the repository: on a commit adding `src/qé.ts` the old form prints nothing, the new form prints `src/qé.ts`; on a test-only commit both print nothing. Every other word of the rule is unchanged (unfiltered reference form, snapshot exception, "a waiver is not a signature", the three overrides).
+
+## `scribe-owner-delegation` pass, 2026-10-22 (owner delegation, Orchestrator decision `…5aaf7cec`; branch `grugops/scribe-owner-delegation` from `43e4996f`)
+
+AGENTS.md Scribe, task `scribe-owner-delegation`. Three files: `AGENTS.md`, `memory-bank/45-standing-rulings.md` and this file. Zero `src/` and `plans/` lines. No command slot changed, no new backticked `npx vitest` text, no new `-->` closer: `ABC-187` `A5`'s script still prints **9** (the `src/cli.test.ts` comment says 9). `AGENTS.md` 16,305 -> **16,669 B** (+364; budget 18,432, headroom 1,763).
+
+| where | change |
+|---|---|
+| `AGENTS.md` § Standing rulings | the 2026-08-16 bullet ("the owner's word in session IS the `In UAT` signature") replaced by one 2026-10-22 bullet: QE's recorded verdict signs `In UAT`, recorded as a `decision`; what stays the owner's; what is unchanged |
+| `AGENTS.md` § Standing rulings, snapshot exception | "UAT goes to the owner" -> "UAT runs (signed per 2026-10-22)" |
+| `45-standing-rulings.md` § Test and UAT authority | 2026-08-16 paragraph marked SUPERSEDED in place (text kept); new 2026-10-22 ruling after it; "Two misreadings" rewritten; snapshot exception and Authority line follow; § QE validation authority: "2026-08-16 signature ruling" -> "`In UAT` signature ruling (2026-10-22)" |
+
+Why: the owner's 2026-10-22 words (verbatim in the ruling) delegate delivery decisions to the Orchestrator and say to trust QE's results, so no agent should block on a human `In UAT` signature. Read as the decision note reads them, neither widened nor narrowed. Left as they were: the zero-production-lines waiver, "A waiver is not a signature", the three kit overrides, `production_requires_human_confirmation` `true`.
