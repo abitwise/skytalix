@@ -334,3 +334,25 @@ is **10/10 with no re-cut**. The Orchestrator then moves it `Backlog → Ready`.
 ## Trace row (for the Orchestrator to append; this hop is fenced off `plans/traceability.md`)
 
 `| ABC-178 (B1–B9) | QE-177-a, QE-177-b (QE …02deb2e2); BA/PM …7c41e9a2; EPIC-007 / ABC-167 A6, A7 | — (Backlog, DoR 9/10; after ABC-177 merges) | src/uci-session.test.ts (+2 rows, additive) | — | — |`
+
+## QE
+
+**QE/E2E, 2026-10-22 (subtask `qe-ABC-178`), at `grugops/qe-ABC-178` merge `80493be0` (tip `efaa0a76`, base `43e4996f`, `main` `5d3832ef` merged, no conflict). Verdict: PASS_WITH_GAPS.** I read B1, B3–B5 and B9 with my own runs before I opened the SE's notes. Probes and plants ran only in scratch copies outside the repository; each production file was restored and compared. Notes: `.grugops/context/qe-ABC-178/notes/` (verdict `…1ad5f522`).
+
+- **B1 MET.** Session 1 searches 655 nodes and writes no `bestmove`. Session 2 is a fresh `talk`, and its `out` is `[]`.
+- **B3 MET.** One file, 0 `-` lines, 7 `+` lines. The one blank separator line is inside "additive only" (`…65ce53ef`): it carries no token, and all 40 `it` blocks in the file are blank-separated.
+- **B4 MET.** File 126 → 127; lane 1 995 → 1 996 (`ABC-168` moved the base); the difference is R1's name alone; 0 skipped.
+- **B5 MET.** R1 = 655 nodes; every other row unchanged.
+- **B6 MET.** `gp.mjs` byte copy: QP0 0 red; QP1 0/1 995 at base, 1/1 996 at the tip (R1 alone). QE's variants: R1 kills QP1a (ponderhit-only leak). QP1b (leak after a second hold) and QP1c (release into the holder's stream) survive the whole lane, as they did before `ABC-177`.
+- **B7 OWED.** Three windows failed on foreign vitest polls (2, 71, 1); no B7 stage ran before the 15:15Z deadline.
+- **B8 OWED.** One admitted window (0 foreign polls, AC). The stage reads NOT APPLICABLE under `174b`: load1 9.03 > 8 before scored round 7 H, while the owner's other session ran vitest. Warm 5/8. Instrument medians from that stage are not readings. `NFR-008` NOT READ; `ABC-197`'s input not produced.
+- **B9 MET.** Lint, typecheck, build, `npm test` 60/1 996 (`success` true), skip count 0 → `No findings.`, `UCI_DEEP` 5/5, M4 sweep green and still kills M4.
+
+**Gap register** (0 blocking as QE reads this page; severities proposed):
+- **QE-178-a (LOW).** QP1b survives the lane. Route: BA/PM — accept, or a test-only row later (same file as `ABC-197`).
+- **QE-178-b (LOW).** QP1c survives the lane: R1 reads session 1 before session 2 runs. One re-check assertion kills it (scratch). Route: BA/PM — accept, or a one-line follow-up.
+- **QE-178-c (MEDIUM).** B7 OWED. Route: Orchestrator — a timing hop at width 1 with the owner's session paused (P2).
+- **QE-178-d (MEDIUM).** B8 OWED; `NFR-008` stays at t3-r1's 9.395 s on `f81bf03c`. Route: the same timing hop; it can read `main` after a merge (H = `main` + R1). Security/NFR rules on the state.
+- **QE-178-e (INFO).** The page's 1 994 → 1 995 predates `ABC-168`; measured 1 995 → 1 996.
+
+UAT waived (0 production lines); a waiver is not a signature. The `In Review` exit is the Orchestrator's.

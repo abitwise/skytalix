@@ -1,0 +1,126 @@
+ABC-167 A1-A2 — handshake and ready A1: uci writes id name, id author, then (ABC-171 A1) the two option lines, then uciok
+ABC-167 A1-A2 — handshake and ready A2: isready writes exactly readyok
+ABC-167 A10 — quit handleLine("quit") returns "quit" and writes nothing
+ABC-167 A11 — capability-free, and M4 A11-g1: imports none of the fenced modules, in any import form or quote
+ABC-167 A11 — capability-free, and M4 every line written in every row starts with an M4 prefix
+ABC-167 A11 — capability-free, and M4 holds no Date.now
+ABC-167 A11 — capability-free, and M4 holds no eval(
+ABC-167 A11 — capability-free, and M4 holds no exec(
+ABC-167 A11 — capability-free, and M4 holds no fetch(
+ABC-167 A11 — capability-free, and M4 holds no from "node:
+ABC-167 A11 — capability-free, and M4 holds no Math.random
+ABC-167 A11 — capability-free, and M4 holds no new Function
+ABC-167 A11 — capability-free, and M4 holds no process.
+ABC-167 A11 — capability-free, and M4 holds no spawn
+ABC-167 A3 — a move from a position A3-h1: nps = round(N x 1000 / max(1, T))
+ABC-167 A3 — a move from a position writes one info line then one bestmove, the same legal move
+ABC-167 A4 — bad input holds no position a control character in a refused FEN is filtered from the info string
+ABC-167 A4 — bad input holds no position a held stalemate answers go with bestmove 0000
+ABC-167 A4 — bad input holds no position A4-a1: an echoed control character is dropped from the info string
+ABC-167 A4 — bad input holds no position A4-a2: an echoed control character in a go value is dropped from the info string
+ABC-167 A4 — bad input holds no position position fen 8/8/8 w - - 0 1: one printable info string, then go answers bestmove 0000
+ABC-167 A4 — bad input holds no position position startpos moves e2e5: one printable info string, then go answers bestmove 0000
+ABC-167 A5 — the D4 time rule, read from the info line's time a bare go: go -> 3000 ms (within 2 x 100 ms)
+ABC-167 A5 — the D4 time rule, read from the info line's time a short clock: go wtime 40 btime 40 -> 1 ms (within 2 x 1 ms)
+ABC-167 A5 — the D4 time rule, read from the info line's time A5-b1: position startpos, go wtime 2000 btime 2000 winc 1000 binc 0 -> 600 ms (within 2 x 100 ms)
+ABC-167 A5 — the D4 time rule, read from the info line's time A5-b2: position startpos moves e2e4, go wtime 2000 btime 2000 winc 1000 binc 0 -> 100 ms (within 2 x 100 ms)
+ABC-167 A5 — the D4 time rule, read from the info line's time A5-b3: position startpos, go wtime 1000 btime 1000 movestogo 5 -> 200 ms (within 2 x 10 ms)
+ABC-167 A5 — the D4 time rule, read from the info line's time A5-b4: position startpos, go wtime 1000 btime 1000 movetime 300 -> 300 ms (within 2 x 100 ms)
+ABC-167 A5 — the D4 time rule, read from the info line's time A5-b5: position startpos, go movetime 300 wtime 60000 btime 60000 -> 300 ms (within 2 x 100 ms)
+ABC-167 A5 — the D4 time rule, read from the info line's time A5-c1: position startpos, go wtime 100 btime 100 winc 1000 binc 1000 -> 50 ms (within 2 x 10 ms)
+ABC-167 A5 — the D4 time rule, read from the info line's time black reads btime: go wtime 1000 btime 9000 -> 450 ms (within 2 x 10 ms)
+ABC-167 A5 — the D4 time rule, read from the info line's time capped by the default level 5: go wtime 60000 btime 60000 winc 1000 binc 1000 -> 3000 ms (within 2 x 100 ms)
+ABC-167 A5 — the D4 time rule, read from the info line's time movetime 100: go movetime 100 -> 100 ms (within 2 x 10 ms)
+ABC-167 A5 — the D4 time rule, read from the info line's time white reads wtime: go wtime 1000 btime 9000 -> 50 ms (within 2 x 1 ms)
+ABC-167 A6 — infinite waits for stop a stop with nothing held writes nothing
+ABC-167 A6 — infinite waits for stop A6-d1: go ponder holds at the capped ceiling; ponderhit releases once
+ABC-167 A6 — infinite waits for stop A6-e1: a new go writes the held bestmove first; two bestmoves in all
+ABC-167 A6 — infinite waits for stop A6-e2: position startpos writes the held bestmove first, in the position it searched
+ABC-167 A6 — infinite waits for stop A6-e3: ucinewgame writes the held bestmove first, in the position it searched
+ABC-167 A6 — infinite waits for stop A6-e4: quit writes the held bestmove and returns quit
+ABC-167 A6 — infinite waits for stop A6-e5: isready, an unknown line and setoption leave the bestmove held
+ABC-167 A6 — infinite waits for stop A6-j1: a refused position writes the held bestmove first, then its info string
+ABC-167 A6 — infinite waits for stop go infinite holds the bestmove until ponderhit; a second ponderhit writes nothing
+ABC-167 A6 — infinite waits for stop go infinite holds the bestmove until stop; a second stop writes nothing
+ABC-167 A7 — the D12 limits A7-f1: a keyword is never a value (go depth movetime 100)
+ABC-167 A7 — the D12 limits A7-f2: go movetime with no value searches as a bare go
+ABC-167 A7 — the D12 limits A7-f3: go movetime 1e2 and movestogo 0 are dropped with one info string
+ABC-167 A7 — the D12 limits A7-h1: searchmoves stops at the next go keyword, so movetime is honoured
+ABC-167 A7 — the D12 limits A7-i1: go movetime depth 3 -> one info string naming movetime, then depth 3
+ABC-167 A7 — the D12 limits A7-i2: go wtime 1000 btime 1000 movestogo movetime 300 -> 300 ms
+ABC-167 A7 — the D12 limits A7-i3: go wtime 1000 btime 1000 depth winc 1000 -> 550 ms
+ABC-167 A7 — the D12 limits A7-i4: go searchmoves e2e4 depth 3 -> searchmoves stops at depth, so depth 3
+ABC-167 A7 — the D12 limits A7-i5: go depth infinite holds the bestmove until stop
+ABC-167 A7 — the D12 limits A7-i6: go searchmoves e2e4 infinite holds the bestmove until stop
+ABC-167 A7 — the D12 limits go depth 0: one info string, the token dropped, one bestmove
+ABC-167 A7 — the D12 limits go depth 2.5: one info string, the token dropped, one bestmove
+ABC-167 A7 — the D12 limits go depth 3 mate 5 -> depth 3 (the smaller one wins)
+ABC-167 A7 — the D12 limits go depth 3 reports depth 3 on a clock where an unlimited go reaches depth >= 5
+ABC-167 A7 — the D12 limits go depth: one info string, the token dropped, one bestmove
+ABC-167 A7 — the D12 limits go mate 0: one info string, the token dropped, one bestmove
+ABC-167 A7 — the D12 limits go mate 2 on the smothered mate -> score mate 2 and bestmove d5g8
+ABC-167 A7 — the D12 limits go movetime 1000 searchmoves e2e4 -> one info string, all moves searched
+ABC-167 A7 — the D12 limits go nodes -5: one info string, the token dropped, one bestmove
+ABC-167 A7 — the D12 limits go nodes 20000 -> nodes <= 21 024, unless depth 1 alone took more
+ABC-167 A7 — the D12 limits go nodes x: one info string, the token dropped, one bestmove
+ABC-167 A7 — the D12 limits QE-170-g: a tiny go nodes 1 still writes one info line and a legal depth-1 bestmove
+ABC-167 A8 — mate scores being mated next move reports score mate -1
+ABC-167 A8 — mate scores M = ceil((MATE_SCORE - |score|) / 2) is the rule both rows read
+ABC-167 A9 — ignored and reset A9-h1: a new session with no position line starts at the start position
+ABC-167 A9 — ignored and reset setoption, debug, register, an unknown command and an empty line write nothing
+ABC-167 A9 — ignored and reset ucinewgame sets the position back to the start
+ABC-171 A1 — the option lines uci writes exactly 5 lines, the two options after the id lines and before uciok
+ABC-171 A10 — infinite with a book hit go infinite writes info string book and holds bestmove until stop
+ABC-171 A11 — book.ts is a type-only import every import from ./book.ts is import type
+ABC-171 A13a — the seed oracle floor(random() * 2^32) (QE-171-a) non-vacuous: on some k the 2^16 seed gives a different move from the oracle's
+ABC-171 A13a — the seed oracle floor(random() * 2^32) (QE-171-a) non-vacuous: the oracle's moves are not all equal over k = 1..8
+ABC-171 A13a — the seed oracle floor(random() * 2^32) (QE-171-a) seededRandom(1): level 1's bestmove equals the oracle's
+ABC-171 A13a — the seed oracle floor(random() * 2^32) (QE-171-a) seededRandom(2): level 1's bestmove equals the oracle's
+ABC-171 A13a — the seed oracle floor(random() * 2^32) (QE-171-a) seededRandom(3): level 1's bestmove equals the oracle's
+ABC-171 A13a — the seed oracle floor(random() * 2^32) (QE-171-a) seededRandom(4): level 1's bestmove equals the oracle's
+ABC-171 A13a — the seed oracle floor(random() * 2^32) (QE-171-a) seededRandom(5): level 1's bestmove equals the oracle's
+ABC-171 A13a — the seed oracle floor(random() * 2^32) (QE-171-a) seededRandom(6): level 1's bestmove equals the oracle's
+ABC-171 A13a — the seed oracle floor(random() * 2^32) (QE-171-a) seededRandom(7): level 1's bestmove equals the oracle's
+ABC-171 A13a — the seed oracle floor(random() * 2^32) (QE-171-a) seededRandom(8): level 1's bestmove equals the oracle's
+ABC-171 A13b — a book hit at a blunder level draws 0 seeds (QE-171-b) level 1: exactly info string book, bestmove e2e4; no search; random drawn 0 times
+ABC-171 A13b — a book hit at a blunder level draws 0 seeds (QE-171-b) level 2: exactly info string book, bestmove e2e4; no search; random drawn 0 times
+ABC-171 A13b — a book hit at a blunder level draws 0 seeds (QE-171-b) level 3: exactly info string book, bestmove e2e4; no search; random drawn 0 times
+ABC-171 A13b — a book hit at a blunder level draws 0 seeds (QE-171-b) level 4: exactly info string book, bestmove e2e4; no search; random drawn 0 times
+ABC-171 A13b — a book hit at a blunder level draws 0 seeds (QE-171-b) precondition: at least one level blunders
+ABC-171 A13c — the dropped-limit line names nodes and mate, as one line (QE-171-c) go depth 3 nodes 100 mate 2: exactly one info string naming depth, nodes and mate
+ABC-171 A13c — the dropped-limit line names nodes and mate, as one line (QE-171-c) go nodes 100: one info string naming nodes, a level info line, a bestmove
+ABC-171 A13d — an invalid OwnBook keeps true (QE-171-d) OwnBook value maybe on a fresh session: one info string, then the book still answers
+ABC-171 A2 — setoption OwnBook value maybe: one info string, the old value (false) kept
+ABC-171 A2 — setoption precondition: under seededRandom(1) the first level-1 go takes the engine path
+ABC-171 A2 — setoption setoption name Hash value 64 writes nothing and changes nothing
+ABC-171 A2 — setoption setoption name OwnBook value false writes nothing (A4 holds afterwards, in A4)
+ABC-171 A2 — setoption setoption name skill level value 1 (lower case) writes nothing and sets level 1
+ABC-171 A2 — setoption Skill Level value 0: one info string, the old value (1) kept
+ABC-171 A2 — setoption Skill Level value 2.5: one info string, the old value (1) kept
+ABC-171 A2 — setoption Skill Level value 6: one info string, the old value (1) kept
+ABC-171 A2 — setoption Skill Level value constructor: one info string, the old value (1) kept
+ABC-171 A2 — setoption Skill Level value x: one info string, the old value (1) kept
+ABC-171 A3 — a book hit (EPIC-007 M6) position fen <the start FEN> hits the same entry (keyed by position, not move list)
+ABC-171 A3 — a book hit (EPIC-007 M6) position startpos, go movetime 1000 -> exactly info string book, bestmove e2e4
+ABC-171 A3 — a book hit (EPIC-007 M6) the position after the moves is probed (D10)
+ABC-171 A4 — OwnBook off OwnBook false before isready/go: a search, no book line, read called 0 times
+ABC-171 A5 — the book is read once, and at the right time 0 after uci, 1 after the first isready, still 1 after isready, go and ucinewgame
+ABC-171 A5 — the book is read once, and at the right time a session that never gets isready reads at the first go
+ABC-171 A5 — the book is read once, and at the right time the first isready WITH OwnBook on reads; one with it off does not
+ABC-171 A6 — a level change is observable (EPIC-007 M7) level 1: go wtime 60000 btime 60000 winc 1000 binc 1000 -> 100 ms (within 2 x 100 ms)
+ABC-171 A6 — a level change is observable (EPIC-007 M7) level 3: go wtime 60000 btime 60000 winc 1000 binc 1000 -> 330 ms (within 2 x 100 ms)
+ABC-171 A6 — a level change is observable (EPIC-007 M7) level 5: go wtime 60000 btime 60000 winc 1000 binc 1000 -> 3000 ms (within 2 x 100 ms)
+ABC-171 A7 — the blunder path go depth 3 at level 1: one info string naming the dropped limit, then a bestmove
+ABC-171 A7 — the blunder path go depth 3 at level 5 reports depth 3 (ABC-167 A7; level 3 now drops the limit)
+ABC-171 A7 — the blunder path precondition: seededRandom(2)'s three gos take both paths (blunder, engine, engine)
+ABC-171 A7 — the blunder path two sessions on the same seededRandom(k) write the same bestmove sequence
+ABC-171 A8 — no reseed, and one draw per blunder-level search every blunder level's searched go draws exactly one seed (a book hit draws 0: A13b)
+ABC-171 A8 — no reseed, and one draw per blunder-level search ucinewgame draws 0 times; each level-1 go draws exactly one seed; level 5 draws none
+ABC-171 A9 — a bad book bytes that are not the schema: three gos each write one legal bestmove, never throw, warn exactly once
+ABC-171 A9 — a bad book read throws: three gos each write one legal bestmove, never throw, warn exactly once
+ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12) at skill 3, go depth 3: one info string naming depth, a level line with no score, bestmove
+ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12) at skill 4, go depth 3: one info string naming depth, a level line with no score, bestmove
+ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12) at the default, a bare go takes the chooseMove path: score, and time within 3 000 ms
+ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12) at the default, go depth 3 reports depth 3 (D12)
+ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12) the Skill Level line is literally default 5 min 1 max 5
+ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12) the Skill Level line's default is DEFAULT_LEVEL, built from the constant

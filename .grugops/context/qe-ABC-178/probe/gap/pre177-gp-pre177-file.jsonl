@@ -1,0 +1,5 @@
+{"id":"QP0","exit":0,"s":"10.5","total":126,"failed":[],"passed":126,"skipped":0,"what":"control (no change)"}
+{"id":"QP1","exit":1,"s":"9.5","total":126,"failed":["src/uci-session.test.ts :: ABC-167 A6 — infinite waits for stop go infinite holds the bestmove until stop; a second stop writes nothing","src/uci-session.test.ts :: ABC-167 A6 — infinite waits for stop go infinite holds the bestmove until ponderhit; a second ponderhit writes nothing"],"passed":124,"skipped":0,"what":"fold attack: `held` hoisted to module scope (cross-session state)"}
+{"id":"QP1a","exit":0,"s":"9.9","total":126,"failed":[],"passed":126,"skipped":0,"what":"qe-ABC-178 variant: a hold leaks across sessions only through ponderhit (module-scope copy, cleared on a real release)"}
+{"id":"QP1b","exit":0,"s":"10.2","total":126,"failed":[],"passed":126,"skipped":0,"what":"qe-ABC-178 variant: a hold leaks across sessions only after a session's second go infinite/ponder hold"}
+{"id":"QP1c","exit":0,"s":"9.9","total":126,"failed":[],"passed":126,"skipped":0,"what":"qe-ABC-178 variant: a fresh session's stop/ponderhit releases the other session's hold into the HOLDER's stream"}

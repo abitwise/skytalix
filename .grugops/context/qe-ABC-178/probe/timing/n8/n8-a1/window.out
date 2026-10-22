@@ -1,0 +1,36 @@
+{
+ "host": "MacBook-Air.local",
+ "start": "2026-10-22T14:46:07.173Z",
+ "secs": 180,
+ "polls": 181,
+ "foreignPolls": 2,
+ "kinds": {
+  "vitest": 4
+ },
+ "classes": {
+  "vitest": 4
+ },
+ "firstForeign": [
+  {
+   "at": "115",
+   "n": 3,
+   "classes": {
+    "vitest": 3
+   }
+  }
+ ],
+ "lastForeign": {
+  "at": "127",
+  "n": 1,
+  "classes": {
+   "vitest": 1
+  }
+ },
+ "distinct": 4,
+ "load1": {
+  "first": "3.16",
+  "min": "2.05",
+  "max": "3.16",
+  "last": "2.92"
+ }
+}

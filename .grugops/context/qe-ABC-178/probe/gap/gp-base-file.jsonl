@@ -1,0 +1,2 @@
+{"id":"QP0","exit":0,"s":"4.3","total":126,"failed":[],"passed":126,"skipped":0,"what":"control (no change)"}
+{"id":"QP1","exit":0,"s":"3.8","total":126,"failed":[],"passed":126,"skipped":0,"what":"fold attack: `held` hoisted to module scope (cross-session state)"}
