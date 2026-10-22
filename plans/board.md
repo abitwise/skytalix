@@ -1,6 +1,8 @@
 # Board
+_Updated: 2026-10-22 19:20Z by Orchestrator — `arch-design-ABC-200` merged (`…f612277c`, no ADR change). `ABC-200` In Design → In Development (SE `ticket-to-pr-ABC-200`). In Design 0/2, In Development 1/3, In Review 1/3._
 _Updated: 2026-10-22 19:15Z by Orchestrator — `security-nfr-ABC-199` merged: ABC-199's A8 is not owed. NFR-003's prompt half corrected (latency still UNKNOWN); NFR-006 corrected to MET (book 34.0 % of its cap)._
 _Updated: 2026-10-22 19:20Z by Orchestrator — `ABC-199` built (`8c0c5c81`) → In Review; `qe-ABC-199` and `security-nfr-ABC-199` dispatched beside `arch-design-ABC-200` (width 3/3). In Development 0/3, In Review 2/3._
+_Updated: 2026-10-22 19:15Z (UTC, `date -u`) by Architect/Design (`arch-design-ABC-200`, records only, at `main` `9c54df47`) — **ABC-200 design ruled, no STOP** (no ADR new, changed or reversed). One line reader per stream (`src/line-reader.ts`, memoized per source), the questions in `src/startup-questions.ts` on that reader, before the loop, inside every `cli.test.ts` pin; page build notes amended. Ready for the SE. The column move is the Orchestrator's (`…f612277c`)._
 _Updated: 2026-10-22 19:10Z by Orchestrator — `bapm-next-slice` merged: 45 drifted pages fixed; ABC-150 ruled done. EPIC-003, 004 and 005 → Done (all acceptance lines met). EPIC-006 is open (ABC-200, AC1/NFR-007 reading). EPIC-007 is open (M1, M2, M8(a): an owner question). `ABC-200` Ready → In Design (`arch-design-ABC-200`). Ready 0/8, In Design 1/2, In Development 1/3 (`…de0099fa`). Next free id ABC-201._
 _Updated: 2026-10-22 18:57Z (UTC, `date -u`) by BA/PM (`bapm-next-slice`, records only, at `main` `08d42d01`) — **record drift reconciled to this board** (the column record per `ABC-052` option A): 45 ticket pages' front matter now matches their `## Done` card and a merge on `main` — 35 `status`+`column` → `done`/`Done`, 2 → `dropped`/`Done` (`ABC-052` `da7ba9aa`, `ABC-111` `d18d0074`), 8 `column` only. **Left as ambiguous, not guessed:** `ABC-150` (Done here, but only its diagnosis merged and its lever went to `ABC-152`; `done` or `dropped` is a ruling), and `EPIC-003`–`006` (page and card both say Backlog; closing an epic is a card move). Recommended: close `EPIC-003`, `EPIC-004`, `EPIC-005` (every acceptance line met on Done tickets); keep `EPIC-006` open (G6, plus no fresh-clone `NFR-007` reading); keep `EPIC-007` open on M1, M2 and M8(a), which are owner-accepted but not tool-read (owner question). **Next slice cut: `ABC-200`** (Ready, M, P2, `EPIC-006`, DoR 10/10; Architect/Design ruling first, then SE): on a terminal, with a flag absent, `npm run chess` asks for colour and difficulty before the first board; Enter keeps white and level 5; pipes are byte-identical; merges after ABC-178's timing hop. The `## Ready` header count is the Orchestrator's; it should read 1/8. Next free id: ABC-201._
 _Updated: 2026-10-22 21:50Z by Orchestrator — owner: "go forward with the project". Merged `scribe-owner-delegation` (`1987efbc`; gates 60/1995). `ABC-199` Ready → In Development (SE, merges after ABC-178). `bapm-next-slice` dispatched: reconcile record drift, find what's left per epic, cut the next product slice. ABC-178's timing hop waits on a quiet host (now on battery, with a foreign vitest running). Ready 0/8, In Development 1/3._
@@ -884,7 +886,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   one hop at pull, when it checks `Ready for Dev`'s exit at that moment; the row records the pull.
 
   HEADING FORMAT (spec §6.1): each column is an H2 heading carrying its live/limit WIP count,
-  e.g. `## In Development (WIP 0/3)` — the left number is how many tickets are in the column
+  e.g. `## In Development (WIP 1/3)` — the left number is how many tickets are in the column
   now, the right number is the limit from config. Unlimited columns read `(WIP unlimited)`;
   Blocked is visible and time-tracked (no WIP limit) and reads `(visible, time-tracked)`.
   INVARIANT: the column H2 headings and the rows of the `## Columns` table are the same 13 names in the
@@ -894,7 +896,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 0/3)
+    ## In Development (WIP 1/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
     ## In Review (WIP 0/3)
@@ -1008,14 +1010,14 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## In Analysis (WIP 0/2)
 
 
-## In Design (WIP 1/2)
-- [ABC-200] On a terminal, `npm run chess` asks for colour and difficulty before the first board when their flags are absent (EPIC-006 G6)  (owner: software-engineer, after an Architect/Design ruling, size: M, priority: P2, epic: EPIC-006, since: 2026-10-22, DoR 10/10; cut in `bapm-next-slice`. Asked only when stdin and stdout are TTYs and that flag is absent: colour first (`white`/`black`/`random`, Enter = white), then difficulty (`1`–`5`, Enter = 5). A wrong answer gets one teaching line and the question again; end of input exits 0 with no frame; a pipe is byte-identical to base (`src/cli.test.ts` and `src/cli.real-engine.test.ts` unedited); typed-ahead lines are neither lost nor stolen; 0 book reads before the first question. QE pty hand reading (`A8`). Security/NFR hop owed ((b1) on the `isTTY` reads). `NFR-008` +1 file, ≤ 0.05 s estimated. Architect STOP to the owner if the stdin shape needs a new or changed ADR. Merges after ABC-178's B7/B8 timing hop.) **2026-10-22: Ready → In Design; `arch-design-ABC-200` (Architect rules on stdin sharing; STOP to the owner if an ADR changes). It merges after ABC-178's timing hop.**
+## In Design (WIP 0/2)
 
 
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+- [ABC-200] On a terminal, `npm run chess` asks for colour and difficulty before the first board when their flags are absent (EPIC-006 G6)  (owner: software-engineer, after an Architect/Design ruling, size: M, priority: P2, epic: EPIC-006, since: 2026-10-22, DoR 10/10; cut in `bapm-next-slice`. Asked only when stdin and stdout are TTYs and that flag is absent: colour first (`white`/`black`/`random`, Enter = white), then difficulty (`1`–`5`, Enter = 5). A wrong answer gets one teaching line and the question again; end of input exits 0 with no frame; a pipe is byte-identical to base (`src/cli.test.ts` and `src/cli.real-engine.test.ts` unedited); typed-ahead lines are neither lost nor stolen; 0 book reads before the first question. QE pty hand reading (`A8`). Security/NFR hop owed ((b1) on the `isTTY` reads). `NFR-008` +1 file, ≤ 0.05 s estimated. Architect STOP to the owner if the stdin shape needs a new or changed ADR. Merges after ABC-178's B7/B8 timing hop.) **2026-10-22: Ready → In Design; `arch-design-ABC-200` (Architect rules on stdin sharing; STOP to the owner if an ADR changes). It merges after ABC-178's timing hop.** **2026-10-22: Architect ruled with no STOP and no ADR change (`…f612277c`): a shared per-stream line reader (`src/line-reader.ts`) plus `src/startup-questions.ts`, prototype checked. In Design → In Development (`ticket-to-pr-ABC-200`); merges after ABC-178.**
 
 
 
