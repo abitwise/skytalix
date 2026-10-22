@@ -1,8 +1,8 @@
 ---
 id: ABC-198
 title: "Four new dev-only advisory pairs sit on `@vitest/mocker` 4.1.11 and `vite` 7.3.6, and an in-range, lock-only bump clears them (AR-1 registry drift)"
-status: in-development
-column: In Development
+status: in-review
+column: In Review
 size: XS
 priority: P2
 epic: —
