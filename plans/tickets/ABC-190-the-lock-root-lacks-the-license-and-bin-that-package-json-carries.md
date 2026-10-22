@@ -1,8 +1,8 @@
 ---
 id: ABC-190
 title: "The lock root lacks the `license` and `bin` that `package.json` carries, so the next `npm install` drops 4 lines into someone else's diff (QE-172-a + `ABC-168`'s `bin`)"
-status: backlog
-column: Backlog
+status: ready
+column: Ready
 size: XS
 priority: P3
 epic: EPIC-007
