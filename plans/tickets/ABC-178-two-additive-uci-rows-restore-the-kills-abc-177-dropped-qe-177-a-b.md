@@ -1,8 +1,8 @@
 ---
 id: ABC-178
 title: "One additive UCI row restores the cross-session hold kill `ABC-177` dropped (QE-177-a). R2 (QE-177-b) moved to `ABC-197` on 2026-10-22"
-status: in-development
-column: In Development
+status: in-review
+column: In Review
 size: XS
 priority: P2
 epic: EPIC-007
