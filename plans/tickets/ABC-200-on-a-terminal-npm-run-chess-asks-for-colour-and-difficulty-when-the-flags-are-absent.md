@@ -1,8 +1,8 @@
 ---
 id: ABC-200
 title: "On a terminal, `npm run chess` asks for colour and difficulty before the first board when their flags are absent (EPIC-006 G6)"
-status: in-development
-column: In Development
+status: in-review
+column: In Review
 size: M
 priority: P2
 epic: EPIC-006
