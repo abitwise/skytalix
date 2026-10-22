@@ -122,3 +122,41 @@ merged.
 
 BA/PM moves it **Backlog → Ready** when `ABC-168` merges. The Orchestrator may do so on that merge without another
 BA/PM hop, because the DoR stands.
+
+## QE
+
+**QE/E2E, 2026-10-22 (subtask `qe-ABC-190`), at `grugops/qe-ABC-190` merge `8c74547e` (`main` `d12831c6` into the tip `d79f4684`; lock commit `15766056`; base `823a9885`). Verdict: PASS.**
+- **Merges.**
+  - At first `git merge main` printed `Already up to date`, because `main` was the base `823a9885`, which holds `ABC-168`. The readings below were first taken at `d79f4684`.
+  - `main` then moved to `d12831c6`. That change touches only `.grugops/`, `plans/` and this page's frontmatter, with 0 lines in `package*.json`, `src/` or `tools/`. I merged it at `8c74547e` with no conflict.
+  - At `8c74547e` A1, A2, the waiver and every gate reproduce. The lock is `cmp`-equal to the base regeneration, and a re-run of the regeneration is a no-op.
+- **How.** I read every criterion from my own runs before I opened the SE's `…723e5ad8`, `…a451fa4c` and `…c86e3c83`. Those notes agree on every shared number. I re-read A1 and A2 under an empty global git config with `GIT_CONFIG_NOSYSTEM=1`, and they are identical. npm 11.20.0, node v26.11.1. No timing.
+
+- **A1 MET.** `4	0	package-lock.json`. The 4 added lines are `"license": "UNLICENSED",` and the 3-line `"bin": { "skytalix": "dist/uci.js" },`, under `packages[""]`. They match `package.json`, which is unchanged.
+- **A2 MET.**
+  - The `version`/`resolved`/`integrity` grep prints `0`.
+  - Apart from `.grugops/`, the only file is `package-lock.json`. `15766056` touches it alone.
+  - Structurally: 123 `packages` entries at base and at the tip, with the same keys. Only `packages[""]` differs, and only by `license` and `bin`.
+- **A3 MET.** On a fresh clone of the tip:
+  - `npm ci --ignore-scripts` exits 0 and the status is empty.
+  - The regeneration re-run is a no-op. A plain `npm install`, and `npm ci` with scripts on, are no-ops too.
+- **A4 MET.**
+  - lint (119 files), typecheck and build exit 0.
+  - `npm test` exits 0 at 60 files / 1995 tests. That equals base (fresh clone), with the same file and test names. `last-run.json` reads `success` true.
+  - The skip count as spelled is `0` → `No findings.`
+  - The waiver form prints nothing.
+- **Regeneration reproduced.** On a fresh clone of base, the page's command gives `4	0`, and the result is `cmp`-equal to the tip's lock (sha256 `6ffeccdf…f40f`). npm 10.9.9 also leaves the tip's lock unchanged.
+- **Audit.** `npm audit --json` gives 7 at base and 7 at the tip (4 moderate, 3 high), and the vulnerabilities objects are JSON-equal. AR-1 is the Release Manager's.
+- **Lock readers.** Nothing in `src/` or `tools/` reads the lock; the only hit is one doc comment, `src/san.suffix.hardening.test.ts:35`. The `package.json` readers read an unchanged file, so this change cannot turn a test red.
+
+**Gap register:** none.
+
+**QE-172-a:** `…216ceb43` Ruling 2's close condition is met on this branch: the lock diff is exactly the root `license` line plus the `bin` block, with `+4 -0`, no resolution move, and `npm ci` exiting 0. It closes on merge (the Orchestrator's), after the clause (a) Security/NFR hop.
+
+Notes (`qe-ABC-190`):
+- `20261022T153005Z-qe-e2e-observation-c7e30f83`: A1–A3;
+- `…observation-6e8cf84f`: regeneration, audit and readers;
+- `…observation-b413b9cd`: gates;
+- `…decision-66c6c9d0`: the verdict at `d79f4684` (superseded);
+- `20261022T153220Z-qe-e2e-observation-1021eac0`: the re-merge at `8c74547e`;
+- `…decision-d21b9a3a`: the verdict at `8c74547e`, superseding `66c6c9d0`.
