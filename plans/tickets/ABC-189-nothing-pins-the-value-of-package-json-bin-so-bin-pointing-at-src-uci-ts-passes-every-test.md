@@ -202,3 +202,14 @@ UAT is waived: 0 production lines.
   - A consumer's install reads `package.json`, so no install effect is known (`UNKNOWN - verify`).
   - It is outside this ticket's fence, and nothing is owed.
 - The verdict is unchanged, **PASS_WITH_GAPS**: decision `…b2012318` supersedes `…449bc365`. The observation is `…340a360e`.
+
+**BA/PM ruling, 2026-10-22 (`bapm-rule-QE-189`; decision `…9d0dc304`, readings `…7fe603e7`; records only).**
+- **`QE-189-a`: ACCEPTED, no ticket.** No consumer of `dist/` exists, and the fold target is gone (`AR-168-BINPIN` is closed, and there is no packaging ticket).
+  - Measured: four build-config plants leave `bin` dangling with every gate green. They are `outDir`, `rootDir`, `files`, and a base `emitDeclarationOnly`. A static pin of `tsconfig.build.json` would catch the first three only.
+  - A dangling `bin` installs silently, then fails at the first launch with rc 127.
+  - **Rule:** any ticket touching `tsconfig.build.json`, the base `compilerOptions`, `bin` or `scripts.build` carries one criterion. After `npm run build`, every `bin` path exists and starts with `#!/usr/bin/env node`.
+  - **Reopen:**
+    - (R1) a ticket packaging `dist/` or making a backend depend on `skytalix` carries the installed-launch check: pack, install into an empty consumer, and `.bin/skytalix` answers `uciok` with rc 0;
+    - (R2) a dangling `bin` is seen on `main`;
+    - (R3) a second `bin` command, or a second `files` entry.
+- **`QE-189-b`, `QE-189-c`: agreed INFO.** For c, it is measured that the lock is not in the `npm pack` tarball, and that `npm install --package-lock-only` rewrites a drifted root `bin`.
