@@ -1,8 +1,8 @@
 ---
 id: ABC-154
 title: "The QE-hop detector's test has no positive control on its whole-tree read — a `readNotes` that drops notes only when unfiltered stays green"
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: XS
 priority: P3
 epic: —

@@ -1,8 +1,8 @@
 ---
 id: ABC-149
 title: "The result-file reporter's exit-code check is pinned by no plant, and its read query's `run` arm by no file. Write the regression plant set where a reporter change will meet it"
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: XS
 priority: P3
 epic: —

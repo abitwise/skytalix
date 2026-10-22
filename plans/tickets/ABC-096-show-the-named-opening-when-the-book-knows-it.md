@@ -1,8 +1,8 @@
 ---
 id: ABC-096
 title: Show the name of the opening being played when the book knows it — inside the existing frame's row identity, and with book-supplied text treated as untrusted
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: S
 priority: P3
 epic: EPIC-005

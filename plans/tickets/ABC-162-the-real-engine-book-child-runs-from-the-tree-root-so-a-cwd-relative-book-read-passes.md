@@ -2,7 +2,7 @@
 id: ABC-162
 title: "`ABC-095` `A7`'s real-engine child runs from the tree root, so a build that reads the book relative to the working directory passes `CLI_DEEP`"
 status: done
-column: Backlog
+column: Done
 size: XS
 priority: P3
 epic: EPIC-005

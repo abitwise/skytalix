@@ -1,8 +1,8 @@
 ---
 id: ABC-153
 title: "The book compiler's sha256 test alters only `a.tsv`, and the fixture's other four files share one hash — a check limited to the first file passes it"
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: XS
 priority: P3
 epic: EPIC-005

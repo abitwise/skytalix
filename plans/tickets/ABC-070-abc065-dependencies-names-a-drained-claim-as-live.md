@@ -1,8 +1,8 @@
 ---
 id: ABC-070
 title: `ABC-065` § Dependencies still says `AGENTS.md` "IS CLAIMED RIGHT NOW BY ANOTHER HOP" and that the ticket must not be pulled — it was pulled, built and merged, and the same page's DoR row 10 records the claim as drained
-status: ready
-column: Ready
+status: done
+column: Done
 size: XS
 priority: P3
 epic: —
