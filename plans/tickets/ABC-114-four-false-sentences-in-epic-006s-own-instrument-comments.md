@@ -1,8 +1,8 @@
 ---
 id: ABC-114
 title: Four false sentences ship in `EPIC-006`'s own instrument comments — the guards are right and their narration is not
-status: ready
-column: Ready
+status: done
+column: Done
 size: XS
 priority: P2
 epic: EPIC-006

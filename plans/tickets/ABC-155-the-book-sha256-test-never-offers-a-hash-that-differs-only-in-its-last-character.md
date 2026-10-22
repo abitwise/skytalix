@@ -1,8 +1,8 @@
 ---
 id: ABC-155
 title: "The book compiler's sha256 test never offers an expected hash that differs only in its last character — a check that compares a prefix passes it"
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: XS
 priority: P3
 epic: EPIC-005

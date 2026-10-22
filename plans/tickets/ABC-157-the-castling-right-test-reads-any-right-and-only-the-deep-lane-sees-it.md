@@ -1,8 +1,8 @@
 ---
 id: ABC-157
 title: "The castling right test can be weakened to read ANY right: a build that castles on the other wing's or the opponent's right passes the whole default lane"
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: XS
 priority: P2
 epic: EPIC-001

@@ -1,8 +1,8 @@
 ---
 id: ABC-151
 title: "Heat: the owner picks 2 test workers. Lower the lane's cap 3 → 2, re-pin it by value, and read the wall and the heat at k = 2"
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: S
 priority: P1
 epic: —
