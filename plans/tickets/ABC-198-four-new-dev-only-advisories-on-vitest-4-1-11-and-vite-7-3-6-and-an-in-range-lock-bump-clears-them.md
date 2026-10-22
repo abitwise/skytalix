@@ -209,3 +209,35 @@ BA/PM, 2026-10-22 at `5aaf09ac`. **Result: 10 of 10 → Ready.**
 | 8 | size assigned | **✅** `XS` |
 | 9 | priority assigned | **✅** `P2` |
 | 10 | no major unresolved blocker | **✅** none; the registry-moved and re-run-fail cases are stop-and-hand-back |
+
+## QE
+
+**QE/E2E, 2026-10-22, `qe-ABC-198`. Result: PASS_WITH_GAPS.**
+- Branch `grugops/qe-ABC-198`, worktree `../wt-qe-ABC-198`. It was cut at the tip `ef1d5ebc`, and `main` `fbb967f2` was merged in at **`24f32527`** (no conflicts; `main` had moved `.grugops/` and `plans/` only).
+- Notes: `.grugops/context/qe-ABC-198/notes/`. They are the observations `…430a0941` (A1–A3), `…0751bfeb` (the A2 intermittent), `…1478c7fc` (`QE-198-b`), `…feb20104` (A7) and `…8f2ab7fe` (A4–A6), and the decision `…0b183705`.
+- Every reading is my own run, on fresh clones or my worktree, taken before I opened the SE's notes. Those notes agree on every shared number.
+
+| criterion | result | reading |
+|---|---|---|
+| `A1` | **met** | `53	53	package-lock.json`, nothing for `package.json`; 20 version lines; 123 entries at both ends, exactly the 10 packages, only pins inside them, one `^4.1.11` peer; every `resolved` on registry.npmjs.org |
+| `A2` | **met** | base 13 rows − the 7 pairs and 3 via rows = head's 3 (nanoid, postcss, source-map-js), with nothing added; `{moderate 1, high 2, total 3}`; `--omit=dev` 0 |
+| `A3` | **met** | `npm ci` rc 0 with a clean status; `npm ls` 4.1.12/4.1.12/4.1.12/7.3.7; the Scope 1 command plus a plain lock-only install leave no diff |
+| `A4` | **met** | literal back to 4.1.11 → exactly ABC-192 A2 red (1/1994), `BUMP_RERUN_LIST` printed; only `1 1 src/cli.test.ts`; items (1)–(3) re-read on 4.1.12 |
+| `A5` | **met** | lint, typecheck, build 0; `npm test` 60/1995, names byte-equal to base; skips `0` → `No findings.`; CLI_DEEP 11, UCI_DEEP 5, PERFT_DEEP 32; the waiver prints nothing |
+| `A6` | **met** | fresh `last-run.json` with `success` true; a planted assertion reads `success: false` and is named by the query; the seven header rows are present |
+| `A7` | **met** | **0** listening sockets in a plain `npm test` (3 runs; a `listen`/`bind` interposer in every node process plus an `lsof` backstop); the planted `listen(0, "127.0.0.1")` reads **1** |
+
+**The `ABC-170 A2` intermittent is a pre-existing flake, not 4.1.12.**
+- The row is deterministic (injected clock, node budget, the table cleared per call). Its one wall-time dependency is vitest's 5 000 ms default per-test bound. It costs about 160 ms plain and about 1.0–1.6 s under coverage.
+- At the default bound it read **0/73 at base and 0/73 at head**, at load1 2.9–12.1.
+- Starved of CPU, the same row goes red **3/3 at base (4.1.11)** and 3/3 at head. Both fail it with the same `Test timed out` message.
+- `ABC-167 A7` timed out the same way at base under concurrent load.
+
+**Gaps:**
+- `QE-198-a`: LOW, proposed. The coverage-mode timeout flake on `ABC-170 A2` and `ABC-167 A7`. Route: BA/PM, to lighten the row (as `ABC-173` did) or pin a per-row timeout.
+- `QE-198-b`: LOW/INFO. `@vitest/mocker` 4.1.12 makes coverage-mode CPU about 5 % heavier, bisected; there is no shift without coverage, and the mechanism is `UNKNOWN - verify`. Not a timing claim.
+- `QE-198-c`: INFO. A7's interposer cannot reach one shell-launched CLI child; it is covered by the backstop and a static read.
+- `QE-198-d`: INFO. The coverage form always exits 1, so classify it by `numFailedTests`. The scratchpad is shared across hops.
+- None is against a criterion.
+
+**Next:** `In Review` → `In Security/NFR` (A8). UAT is waived by measurement (0 production lines); that is not a signature.
