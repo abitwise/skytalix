@@ -241,3 +241,13 @@ BA/PM, 2026-10-22 at `5aaf09ac`. **Result: 10 of 10 → Ready.**
 - None is against a criterion.
 
 **Next:** `In Review` → `In Security/NFR` (A8). UAT is waived by measurement (0 production lines); that is not a signature.
+
+**2026-10-22, BA/PM ruling on `QE-198-a` and `QE-198-b`** (task `bapm-rule-QE-198`, records only, at `main` `147f8c82`;
+decision `…479ce351`, observation `…1563f813`). **`QE-198-a` is CUT → `ABC-199`** (Ready, XS, P3, DoR 10/10). It
+lightens `ABC-170 A2`'s shared `MAX_NODES` and moves `ABC-167 A7` row 1's unlimited `go` from step 50 to 100, each to
+≤ 60 % of its base node census with its kills K1–K4 and its precondition kept. No timeout is added: the owner ruled
+"the per-test timeout is not raised" (`…6e1d9b47`), and these rows have the profile his word covers. It merges after
+`ABC-178`. Until then, a `Test timed out in 5000ms` red on those rows, in a coverage form or at load1 > 8, that passes
+on re-run with no other red, is a re-run and not a FAIL. **`QE-198-b` is INFO**, not routed to the Architect: no
+criterion or NFR pins coverage-mode CPU, and the cause is upstream. It reopens on a coverage-lane budget, or on a
+coverage-mode timeout of a row with a base margin under 4×. No NFR bound, level or requirement moved.
