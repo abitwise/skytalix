@@ -370,6 +370,27 @@ is **10/10 with no re-cut**. The Orchestrator then moves it `Backlog → Ready`.
 
 ## QE
 
+**QE/E2E re-read, 2026-10-22 (subtask `qe-ABC-178b`), after the QE-178-b fold, at `grugops/qe-ABC-178` merges `fb00ad68` (tip `0036e5c6`) and `7b87e5de` (`main` `66fd8e1b`). Both are merges, with no conflict. Base `43e4996f`. Verdict: PASS_WITH_GAPS. QE-178-b closes.** This was a non-timing re-read. I read the amended B1, B3–B6 and B9 with my own runs before I opened the SE's `ticket-to-pr-ABC-178b` notes. Probes and plants ran only in scratch copies, and every production file was restored and compared. Notes: `.grugops/context/qe-ABC-178b/notes/` (verdict `…d72f02f0`). This block supersedes the 15:17Z block below where they differ.
+
+- **B1 MET.** Before session 2, session 1 has 0 `bestmove`. Session 2 is a fresh session with `out` `[]`. After session 2, the same `held.out` still has 0 `bestmove`.
+- **B3 MET.** One file, 0 `-` lines. One hunk of 9 `+` lines: R1, its re-check and comments citing `ABC-178`/`QE-177-a`/`QE-178-b`, plus the blank separator. Against `efaa0a76` the change is +2.
+- **B4 MET.** The file goes 126 → 127 and the lane 1 995 → 1 996. The difference is R1's name alone, with 0 skipped.
+- **B5 MET.** R1 = 655 and the sum is 608 965. The sorted census is `cmp`-equal to QE's `census-H.tsv`.
+- **B6 MET.** `gp-qe178.mjs` (`d781e5e5`, `12c0b8db…`), byte copy. QP0 has 0 red. QP1, QP1a and QP1c are red on R1 alone (file 1/127, lane 1/1 996). QP1c goes red at the re-check (`289:68`) and survives the pre-fold file. QP1b survives (reported only). QE's own variants:
+  - **QP1e** releases on a fresh session's construction. Only the re-check kills it.
+  - **QP1d** releases on a fresh session's `position`/`go`/`ucinewgame`. It survives everywhere, base included → QE-178-f.
+- **B7, B8 OWED** (unchanged; no timing taken).
+- **B9 MET.** Lint, typecheck and build exit 0. `npm test` 60/1 996, `success` true. Skip count 0 → `No findings.` `UCI_DEEP` 5/5. The M4 sweep is green, and the plant still reds it (13/127).
+
+**Gap register.**
+- **QE-178-a:** ACCEPTED by BA/PM.
+- **QE-178-b:** **CLOSED**.
+- **QE-178-c (MEDIUM, B7)** and **QE-178-d (MEDIUM, B8):** OWED, carried forward unchanged to the quiet-host timing hop.
+- **QE-178-e:** CLOSED (corrected).
+- **QE-178-f (LOW, new):** QP1d survives because R1's session 2 sends only `stop` and `ponderhit`. It is not a regression, and production runs one session per process. Route: BA/PM. Accept it, or change one line so that session 2 reads `talk(["stop", "ponderhit", "position startpos", "ucinewgame"])`. In scratch that line kills QP1d at 0 extra nodes and keeps every other kill.
+
+UAT is waived: the waiver form printed nothing at the tip and at both merges. A waiver is not a signature. The `In Review` exit is the Orchestrator's, and B7/B8 still hold it.
+
 **QE/E2E, 2026-10-22 (subtask `qe-ABC-178`), at `grugops/qe-ABC-178` merge `80493be0` (tip `efaa0a76`, base `43e4996f`, `main` `5d3832ef` merged, no conflict). Verdict: PASS_WITH_GAPS.** I read B1, B3–B5 and B9 with my own runs before I opened the SE's notes. Probes and plants ran only in scratch copies outside the repository; each production file was restored and compared. Notes: `.grugops/context/qe-ABC-178/notes/` (verdict `…1ad5f522`).
 
 - **B1 MET.** Session 1 searches 655 nodes and writes no `bestmove`. Session 2 is a fresh `talk`, and its `out` is `[]`.

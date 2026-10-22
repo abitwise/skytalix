@@ -1,0 +1,4 @@
+session1 out (check 1): ["info depth 3 score cp 66 nodes 655 time 4000 nps 164 pv e2e4"] results: continue,continue
+session2 out: [] same object as session1.out: false
+session1 out (re-check, same array): ["info depth 3 score cp 66 nodes 655 time 4000 nps 164 pv e2e4"] length 1 -> 1 bestmove lines: 0
+session1 after its own stop: ["info depth 3 score cp 66 nodes 655 time 4000 nps 164 pv e2e4","bestmove e2e4"]
