@@ -195,3 +195,10 @@ UAT is waived: 0 production lines.
 - The gates reproduce: lint, typecheck and build give rc 0; 60/60 and 1995/1995; `success` true; skip count `0`, `No findings.`; the waiver form is empty.
 - On an export of `2022a8d8`, `(iv-b)` and `(iv-a)` are red on `:1823`.
 - The verdict is unchanged: decision `…449bc365` supersedes `…1067b881`. The observation is `…d91bb60e`.
+
+**Second re-merge.** `main` moved to `11fc8c9c`: ABC-190 merged, and the lock root gained `license` and `bin`. I merged it at **`32c20d02`**, clean.
+- The gates and A2 reproduce: 60/60 and 1995/1995; skip count `0`, `No findings.`; closers `9`; the waiver form is empty; `(iv-b)` and `(iv-a)` are red on `:1823`.
+- **`QE-189-c` (INFO).** The lock root's `bin` is unpinned: `package-lock.json` alone → `src/uci.ts` passes 60/1995.
+  - A consumer's install reads `package.json`, so no install effect is known (`UNKNOWN - verify`).
+  - It is outside this ticket's fence, and nothing is owed.
+- The verdict is unchanged, **PASS_WITH_GAPS**: decision `…b2012318` supersedes `…449bc365`. The observation is `…340a360e`.
