@@ -21,6 +21,8 @@ feature: —
 > The readings measured for this cut are in `.grugops/context/bapm-rule-QE-195/notes/`. They were taken on a scratch
 > clone outside the repository (its own `.git`, private `HOME`/`TMPDIR`/`GIT_CONFIG_GLOBAL`, `GIT_CONFIG_NOSYSTEM=1`)
 > with a scratch harness prototype, which is not a design.
+>
+> **2026-10-22, BA/PM (`bapm-rule-QE-196`, at `main` `7c312c42`): QE's gaps are ruled** (`.grugops/context/bapm-rule-QE-196/notes/`; QE `…df052eb2`). `QE-196-a` is **ACCEPTED, no ticket**. A `src/cli.ts`-only refactor (R3) narrows PP-EDIT; it does not kill it. PP-TPL, PP-REDIR and RA-PLUS still cover `AR-193-HUNKHDR`, and only a harness edit silences them. The header states the limit. One standing acceptance rule covers it: any hop that edits `clause-b.mjs` or a `TW` row reads the harness under the pre-`ABC-195` instrument (`99d07d32`), names every `TW` limb its base names (9 today), and re-anchors a dropped row in the same diff. `QE-196-b`/`-c` are agreed INFO, no action. This page's merge is not gated by the ruling; next free id stays ABC-198.
 
 ## Problem
 

@@ -1,8 +1,8 @@
 ---
 id: ABC-095
 title: Put the book in front of the engine's move choice — a book hit skips the search entirely, and leaving book falls through to the search with nothing visible to the player
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: M
 priority: P1
 epic: EPIC-005
