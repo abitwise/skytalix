@@ -1,8 +1,8 @@
 ---
 id: ABC-150
 title: "vitest runs the engine ~5x slower than plain `node`: find why, then cut the default lane's CPU by ≥ 15 % on top of `ADR-0040`'s 3 workers, with isolation kept"
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: M
 priority: P1
 epic: —

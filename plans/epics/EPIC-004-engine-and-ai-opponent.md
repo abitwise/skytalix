@@ -1,8 +1,8 @@
 ---
 id: EPIC-004
 title: Engine and AI opponent
-status: backlog
-column: Backlog
+status: done
+column: Done
 priority: P0
 size: L
 owner: BA/PM

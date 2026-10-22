@@ -1,8 +1,8 @@
 ---
 id: EPIC-005
 title: Opening book
-status: backlog
-column: Backlog
+status: done
+column: Done
 priority: P1
 size: S
 owner: BA/PM
