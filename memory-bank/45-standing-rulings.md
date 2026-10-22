@@ -154,3 +154,36 @@ release machinery was added or removed.
 (`agent-factory/workflows/12-release.md` step 3; `agent-factory/roles/release-manager.md`) — read-only, cannot carry a project override.
 `.grugops/factory.config.json`, `ADR-0007` and `memory-bank/` win here; the human-confirmation
 requirement stands unchanged.
+
+## Dated entries (2026-10-22)
+
+Carried here by the Scribe so a reader of `memory-bank/` finds them. Each entry points at its note and does not restate it;
+the note is the authority. Notes live at `.grugops/context/<task>/notes/`.
+
+**2026-10-22 — ABC-189's reopen trigger R1 (packaging).** Cut the installed-launch check (pack, install into an empty
+consumer, `.bin/skytalix` answers `uciok`) as part of any ticket that packages `dist/` for anyone or makes a backend depend
+on `skytalix`. `AR-168-BINPIN`'s trigger list closed with ABC-189, so R1 lives only on ABC-189's page and in the note. R2 and
+R3 are in the same note. Authority: BA/PM `…9d0dc304` (`bapm-rule-QE-189`). It composes with `## Deployment posture`'s
+revisit trigger `EPIC-006`; it moves nothing there.
+
+**2026-10-22 — process rule: a `bin`, a build output or a runtime dependency owes an AR-1 premise re-read before Done.**
+Any ticket that adds one of the three. It is a project step the kit does not carry (the same shape as `## Process rules`).
+It fired late once: ABC-168 changed three recorded premise checks and no re-read followed the merge. Authority: Orchestrator
+`…1b62e80b` (`rm-restate-AR-1`); the lifted merge hold and the standing of this rule: `…b935fad8` (`rm-restate-AR-1-premise`).
+
+**2026-10-22 — AR-1 is read from one note, and pair lists replace counts.** Read AR-1 from the Release Manager's
+`…edd18e94` (`rm-restate-AR-1-premise`) alone: it supersedes `…901f43b6` and folds `…130fb9a3` in content. Its reopen
+trigger (3) says to compare the sorted (package, advisory) pair list with a literal `diff`; a matching total or severity
+count is not evidence that the advisory set is quiet. Checks 1–8 are in that note's § 3.
+
+**2026-10-22 — interim re-run rule for `QE-198-a`, ends when ABC-199 merges.** Until then, a red `Test timed out in 5000ms`
+on `ABC-170 A2` row 1 or 2, or on `ABC-167 A7` row 1, is a re-run on a quieter host and not a FAIL, only when the note's
+three conditions all hold. Any other red on those rows is real. After ABC-199 merges, a timeout red on a lightened row
+goes to BA/PM as a defect. The owner's 2026-10-19 ruling that the per-test timeout is not raised stands. Authority: BA/PM
+`…479ce351` (`bapm-rule-QE-198`). At this entry's date ABC-199 has not merged; whoever merges it retires this entry.
+
+### Pending for the Release Manager (not done here)
+
+- AR-1 check 4 must be spelled with `command diff`. It is fail-safe
+  today. Apply it at the next touch of AR-1's record. Source: Orchestrator `…e459881c` (`security-nfr-ABC-200`). The AR-1 record
+  (`…edd18e94`) is sealed and was not edited.

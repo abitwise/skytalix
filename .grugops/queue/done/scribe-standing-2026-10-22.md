@@ -21,3 +21,14 @@ width: 1
 
 ## Publish
 - Seal notes via the plugin writer (task `scribe-standing-2026-10-22`), `at` from `date -u`, with a `kind: decision`. Write `## Result` plus a trace row into this brief in main's queue, then move it and its `claim.md` to `done/`.
+
+## Result
+- Branch `grugops/scribe-standing-2026-10-22`, commit `86d3837c`, worktree `../wt-scribe-standing-2026-10-22`. Not merged, not pushed.
+- `memory-bank/45-standing-rulings.md` +33 lines (10,725 -> 13,421 B): new section `## Dated entries (2026-10-22)` with four dated entries (ABC-189 R1 `…9d0dc304`; AR-1 premise re-read process rule `…1b62e80b`; AR-1 read from `…edd18e94` alone with pair-list diff; QE-198-a interim re-run rule `…479ce351`, which is in the brief's inputs but not its Do list) and one "Pending for the Release Manager" item (AR-1 check 4 `command diff`, `…e459881c`). The AR-1 record was not edited.
+- `AGENTS.md`: unchanged (16,669 B of 18,432 B). No line is false because of these notes; no test run owed.
+- Found, not changed: § Deployment posture of the rulings file still says "no `bin`/`main`/`exports`/`files`"; false for `bin` since ABC-168. Orchestrator to route (ADR-0007 is Architect/Design's).
+- Notes (decision): `20261022T201857Z-agents-md-scribe-decision-a3aef2d3`, `20261022T201857Z-agents-md-scribe-decision-f1c2cf37`, sealed by `admitAndAppend`, in `.grugops/context/scribe-standing-2026-10-22/notes/` on the branch.
+- Claim: bare `mkdir` of `claimed/scribe-standing-2026-10-22/` (no `claim.js` in the repo), 2026-10-22T20:18:09Z.
+
+## Trace row
+| 2026-10-22 | scribe-standing-2026-10-22 | memory-bank/45-standing-rulings.md (dated entries); AGENTS.md unchanged | notes `…a3aef2d3`, `…f1c2cf37` | commit `86d3837c` on `grugops/scribe-standing-2026-10-22` | no tests owed (docs only) | not merged |
