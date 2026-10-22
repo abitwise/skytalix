@@ -202,3 +202,46 @@ BA/PM, 2026-10-21 at `219e8e33`. **Result: 10 of 10.**
 | 10 | no major unresolved blocker | **✅** none. Whether the 20 earlier rows have a like hole is `UNKNOWN - verify` and fenced; it does not block this |
 
 Column moves after `Ready` are the Orchestrator's.
+
+## QE
+
+**QE/E2E, 2026-10-22 (subtask `qe-ABC-196`), at `grugops/qe-ABC-196` merge `35a2d708` (`main` `5d3832ef` into tip `0492a007`; harness `6d15460b`; base `a7857e0b`). Verdict: PASS_WITH_GAPS.**
+- **Merges.**
+  - At first `git merge main` reported `Already up to date` (`main` was `a7857e0b`, the base), and the criteria below were read at `0492a007`.
+  - `main` then moved to `5d3832ef`: ABC-168 merged, bringing a new production file `src/uci.ts`. I merged it at `35a2d708` with no conflict.
+  - At `35a2d708` I re-ran the gates and 19 harness runs (A2–A6, E1/E2/E4, R and R3 rebuilt on that tip). All reproduce.
+  - The head output moves only in the Ruling 2 holder counts (+1, `src/uci.ts`), on base's and the fix's harness alike. Base and fix are still byte-equal (lines 2–140 `1b87c526f22b01c7`).
+- **How.** I read every criterion from my own runs before I opened the Architect's `…7cd5d10a`/`…d955ee60`. Those notes agree on every shared number, and my harness copies hash the same as theirs.
+- **Environment.** Every run went through one wrapper: private `HOME`, `TMPDIR` and `GIT_CONFIG_GLOBAL` (an empty file), `GIT_CONFIG_NOSYSTEM=1`, with `GIT_DIFF_OPTS` and `GIT_EXTERNAL_DIFF` unset. `<repo>` was a full scratch clone with its own `.git`. 46 harness runs; no timing.
+
+- **A1 MET.** `main...HEAD` lists `r2-mutants.sh` plus the 2 Architect notes. The waiver prints nothing.
+- **A2 MET.** Base's harness exits 0 at `25 of 25` on D2, at R (scratch `521eac8a`) and on L. For D2 and R, PP-EDIT reads `L2 … identical (limb 2: does not fire)`. For L, PP-TPL, PP-REDIR and RA-PLUS read `does not fire` on limbs 2 and 3.
+- **A3 MET.** The fix exits 1 on each. Line 177 alone differs from base's, and it names `PP-EDIT:limb2` (D2, R) or the six limbs of PP-TPL, PP-REDIR and RA-PLUS (L). No other row is named.
+- **A4 MET.** At base: rc 0, `25 of 25`, 177 lines, `cmp` byte-equal to base's harness. Lines 2–140 hash to `a00519f3ddcc2ca2` on both. At `0dfd17b3` the fix's output equals the committed `r2-mutants.out.txt`.
+- **A5 MET.** With the pre-`ABC-195` instrument (`2c0c1985e6607110`): rc 1, `limb 1 MISMATCH: RA-PLUS SP-N5`, and a DIFFER line identical to base's (the 9 limbs). One added line names the same 9.
+- **A6 MET.** D1, D3, D4 and D5 each exit 2, naming PP-TPL, SP-N5, PP-TPL and PP-EDIT.
+- **A7 MET.**
+  - Lint, typecheck and build exit 0.
+  - `npm test` exits 0 at 59 files / 1994 tests (= base) at `0492a007`, and at 60 files / 1995 tests (= `main` after ABC-168) at `35a2d708`. `last-run.json` reads `success` true at both.
+  - The skip count as spelled is `0` → `No findings.` `biome.json` is unchanged.
+
+**Own drifts:**
+- **The guard reads exactly.**
+  - E1, a wrong expectation word: red, naming `PP-TPL:limb3`.
+  - E2, a row's expectation pair dropped: red, naming `SP-N5:limb2 SP-N5:limb3`.
+  - E4, leak() without `fetch`: red, naming the three `:limb3` only.
+- **"Which line fires" is constructible (`QE-196-a`).**
+  - The drift is R3, scratch `3d26dff8` (and R3' `36f19186` at the merge). It is a `src/cli.ts`-only refactor: `main` becomes an arrow `const`, and `printableOf` moves below it. tsc is 0, biome is clean, and 59 / 1994 (60 / 1995 at the merge) pass, so it would merge.
+  - It puts `pe`'s template below the argv read. The fixed harness exits 0 at `25 of 25`.
+  - With the pre-`ABC-195` instrument, `PP-EDIT:limb2` is no longer named (9 → 8 limbs). PP-EDIT keeps reading FIRES, on a line the broken instrument also reads.
+  - The other three `++` rows still discriminate.
+- **For the other rows (`QE-196-b`).**
+  - For PP-TPL, the same limit needs a harness edit (W2).
+  - I could not make SP-N5 silent: W3 stays DIFFER through the changed-file list.
+
+**Gap register** (none blocks, none is against a criterion):
+- `QE-196-a` (LOW, proposed). The verdict-word-only limit lets a mergeable `src/cli.ts`-only refactor take PP-EDIT's part of `AR-193-HUNKHDR` out silently. → BA/PM: record, or cut an XS harness hop. One shape: each `TW` row requires the pre-`ABC-195` instrument not to read it as expected. Another: the plant check also requires the row's limb 2 line after the stand-in line.
+- `QE-196-b` (INFO). For PP-TPL, PP-REDIR and RA-PLUS the limit is reachable only by a harness edit; SP-N5 was not reached. → record.
+- `QE-196-c` (INFO). The exit-1 header line runs 188 characters, and `Exit 0:` does not name the new list. The header promises nothing it does not check. → none.
+
+**`QE-195-a`: close condition met.** UAT waived (0 `src/` lines; a waiver is not a signature). Notes: `.grugops/context/qe-ABC-196/notes/` (`…observation-a8e8fbc8` criteria, `…observation-7e6804d4` drifts, `…observation-143f86d8` gates and artifacts, `…observation-c6b997d0` the re-merge, and `…decision-df052eb2` the verdict, which supersedes `…decision-fd211043`).
