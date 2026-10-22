@@ -29,6 +29,16 @@ feature: —
 > - **No ADR is new, changed or reversed**, so there is no owner STOP.
 > - **Build to `## Build notes` below.** No acceptance criterion moved. Two statements on this page are
 >   corrected in place, each marked *Corrected 2026-10-22 (Architect/Design)*.
+>
+> **Follow-ups ruled 2026-10-22 by BA/PM** (task `bapm-cut-ABC-200-followups`, records only, at `main` `3bee4bdd`).
+> The ruling is in `.grugops/context/bapm-cut-ABC-200-followups/notes/`. No acceptance criterion moved.
+> - **`QE-200-a` (LOW): accepted, not cut.** The one unread link is a single statement, `cli.ts` L184–186, which
+>   takes `.options` from the questions' result. Text pins hold it, and the realistic regression is already red.
+>   No behavioural row fits an XS, test-only ticket inside the accepted ADRs.
+> - **`AR-200-C1ECHO` (LOW): left accepted. `QE-200-d` (INFO): no ticket.** Both ride along with the next ticket
+>   that edits either `printableOf` or the questions' end-of-input path.
+> - **Record corrected:** the (b1) line list, as a dated erratum under `## NFR triggers`.
+> - **Cut:** `ABC-201`, the fresh-clone reading of `EPIC-006` acceptance 1 and `NFR-007`.
 
 ## Problem
 
@@ -119,6 +129,16 @@ The rows run on in-memory streams whose `isTTY` is set by the test. `A8` is the 
     questions module reads `isTTY` off the stream objects it is handed. (b1) still **fires**, on two `cli.ts`
     lines: the moved `const sink = process.stdout;` and the new `const stdin = process.stdin;`. So the
     Security/NFR hop is still owed. Neither new module holds a limb, so `ADR-0036` § 3's trigger does not fire.
+  - *Erratum 2026-10-22 (BA/PM, `bapm-cut-ABC-200-followups`), from Security/NFR `…08e4152e` § 1 and the
+    Orchestrator's `…e459881c`. The verdict is unchanged; only the line list was wrong.* (b1) fires, on limb 2 only,
+    on **three** `src/cli.ts` lines at code `1efd2cee` (tip `0a07df04`):
+    - **L150:** `const parsed = resolveOptions(process.argv.slice(2));`, the same argv read with its binding renamed;
+    - **L167:** `const stdin = process.stdin;`, new;
+    - **L200:** `warn: (line) => process.stderr.write(…)`, moved into the `try` byte for byte.
+
+    **`const sink = process.stdout;` is unchanged** (L154 at base `bd745ac9`, L164 at the tip). Its line number
+    moved, but the line did not. It is not a (b1) line. The sentence above and `…f612277c` that call it "moved" are
+    superseded by this list.
 
 ## Test notes
 
