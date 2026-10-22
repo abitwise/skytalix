@@ -31,3 +31,48 @@ width: 2 (beside qe-ABC-196, which runs vitest in ../wt-qe-ABC-196)
 ## Publish
 - Seal notes with the plugin writer (`installPath` of `grugops@grugops` in `~/.claude/plugins/installed_plugins.json` → `scripts/context-io.js` `admitAndAppend`, task `qe-ABC-178`). **Pass your worktree's `.grugops/context` as the context root explicitly.** Take every `at` from `date -u` (UTC). Include a `kind: decision`. Append-only; record artifacts as `observation`.
 - Trace row (forward 10-cell rule): `| {ticket} ({hop}) | {what} | {EPIC or —} | {F or —} | {NFR/ADR/AR/finding ids or —} | {branch @ sha<br>files or —} | {gates/test counts or —} | {UAT verdict/waiver or —} | {release tag or —} | {column move or verdict} |`, exactly 10 cells, as a plain table line. Write your done record as `.grugops/queue/done/qe-ABC-178.md` (this brief plus `## Result`) and `.claim.md` in main's tree, uncommitted. Leave this pending file and the claim directory alone.
+
+## Result
+
+**PASS_WITH_GAPS.** Branch `grugops/qe-ABC-178` in `../wt-qe-ABC-178`. **Merge `80493be0`** = tip `efaa0a76` + `main` `5d3832ef` (a merge, no conflict). Commits on top: `fe37f538` (notes, probe, `## QE`) and `d781e5e5` (probe logs as `*.log.txt`, because `.gitignore` ignores `*.log`). Not pushed, not merged into `main`, no `--force`.
+
+Notes, sealed with `admitAndAppend` under `../wt-qe-ABC-178/.grugops/context/qe-ABC-178/notes/`:
+- `…211beb42`: the 30-minute report (cause: this host's other load);
+- `…140515b9`: B1, B3–B5, B9;
+- `…65ce53ef` (decision): the B3 ruling;
+- `…f910b911`: B6;
+- `…5a813d2a`: artifacts;
+- `…0d723663`: B7/B8 timing;
+- `…1ad5f522` (decision): the verdict and the gap register;
+- `…a5642821`, superseded by `…89763e2c`: the `*.log.txt` rename.
+
+### Per criterion
+| crit | result |
+|---|---|
+| B1 | **MET.** Session 1: 655 nodes, no `bestmove`. Session 2: a fresh `talk`, `out` `[]` |
+| B3 | **MET.** 1 file, 0 `-` lines. **The blank separator is inside "additive only":** it carries no token, git's hunk edge is arbitrary, and all 40 `it` blocks in the file are blank-separated |
+| B4 | **MET.** File 126 → 127, lane 1 995 → 1 996, the difference is R1 alone, 0 skipped |
+| B5 | **MET.** R1 655 nodes; the other 126 rows are unchanged |
+| B6 | **MET.** `gp.mjs` byte copy: QP0 0 red; QP1 0/1 995 at base, 1/1 996 at the tip (R1 alone). QE variants: **QP1a** (ponderhit-only leak) is killed by R1. **QP1b** (leak after a session's second hold) and **QP1c** (release into the holder's stream) survive the whole lane at base and tip, and the pre-`ABC-177` file too |
+| B7 | **OWED.** Three windows failed on foreign vitest polls only (2, 71, 1; load1 ≤ 4.56, AC, thermal 0 at start) |
+| B8 | **OWED.** 5 windows, 1 admitted (`full-g2a1`, 15:04:38Z, 0 foreign polls, AC 37/37). Its stage: 36 runs, all AC. `174b`: scored 8, warm 5/8, H/H2 twin admissible, **NOT APPLICABLE** (load1 9.03 > 8 before scored round 7 H, while the owner's session ran 5 vitest processes). Strict 174 VOID, 174a VOID. Median printed by the instrument: H 9.790 s; **not a reading**. `NFR-008` NOT READ |
+| B9 | **MET.** Lint, typecheck, build exit 0; `npm test` 60/1 996, `success` true; skip count 0 → `No findings.`; `UCI_DEEP` 5/5; the M4 sweep is green and the plant reds it |
+
+UAT waiver form: empty for `efaa0a76~1..efaa0a76` and for the merge. **UAT waived.**
+
+### Gap register
+| id | sev | route |
+|---|---|---|
+| QE-178-a | LOW | QP1b survives → BA/PM: accept, or a test-only row later (same file as ABC-197) |
+| QE-178-b | LOW | QP1c survives; one re-check of session 1 after session 2 kills it (scratch) → BA/PM: accept, or a one-line follow-up |
+| QE-178-c | MEDIUM | B7 OWED → Orchestrator: a timing hop at width 1 with the owner's session paused (P2) |
+| QE-178-d | MEDIUM | B8 OWED; ABC-197's input not produced; NFR-008 stays at 9.395 s (`f81bf03c`) → the same timing hop (it can read `main` after a merge, H = `main` + R1); Security/NFR rules on the state |
+| QE-178-e | INFO | The page's 1 994 → 1 995 predates ABC-168; measured 1 995 → 1 996 → none |
+
+**Timing blockers, plainly.** From 14:30 to 14:45Z, `qe-ABC-196`'s parallel mutant clones kept load1 over 8. After 14:50Z, the owner's session (`Projects/public/grugops`) ran vitest bursts every few minutes. Gate: 259 polls; a vitest process on 101, load1 > 8 on 96, AC on all. Disclosed: QE's own plant run fell in the first, already-failed window. Addendum 1 (15:03Z, before any lane ran) let B8 go before B7.
+
+### Gates at the merge
+lint 0; typecheck 0; build 0; `npm test` 60 files / 1 996 passed / 0 failed / 0 skipped; skip capture 0; integrity `No findings.`; `UCI_DEEP` 1 file / 5 passed. Heap 128 multi-file, 400 one-file.
+
+### Trace row
+| ABC-178 (qe-ABC-178) | QE gate on R1 (QE-177-a's kill): B1, B3–B6, B9 MET; B7/B8 OWED | EPIC-007 | — | QE-178-a, QE-178-b (LOW); QE-178-c, QE-178-d (MEDIUM); QE-178-e (INFO); NFR-008 NOT READ; N8-LANE not read | grugops/qe-ABC-178 @ d781e5e5 (merge 80493be0; tip efaa0a76)<br>.grugops/context/qe-ABC-178/; ABC-178 page § QE | lint/typecheck/build green; npm test 1996/1996; file 127; skips 0; UCI_DEEP 5/5; QP1 0/1995 base → 1/1996 tip; R1 655 nodes | UAT waived (0 production lines) | — | PASS_WITH_GAPS; recommend In Review → In Security/NFR, timing hop queued |
