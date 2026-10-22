@@ -1820,6 +1820,7 @@ describe("ABC-042 — the shape of what was delivered", () => {
       expect(packaged, `package.json gained ${reserved}`).not.toHaveProperty(reserved);
     }
     expect(packaged.private).toBe(true);
+    expect(packaged.bin, "package.json bin (AR-168-BINPIN)").toEqual({ skytalix: "dist/uci.js" });
 
     const scripts = packaged.scripts as Record<string, string>;
     for (const [name, command] of Object.entries(SCRIPTS_AT_HEAD)) {
