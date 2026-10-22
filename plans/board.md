@@ -1032,9 +1032,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 2/3)
+## In Review (WIP 1/3)
 - [ABC-189] Nothing pins the value of `package.json` `bin`, so `bin` → `src/uci.ts` passes every test (AR-168-BINPIN)  (owner: BA/PM, size: XS, priority: P3, epic: EPIC-007, since: 2026-10-21, DoR 10/10; cut in `bapm-cut-ABC-168-followups`. Waits: ABC-168 merged. Owed before any ticket merges that packages `dist/`, makes a backend depend on `skytalix`, or edits `bin` (then P2). Test-only, one assertion in ABC-042 A10.) **2026-10-22: ABC-168 merged (`513c0211`) → Ready.** **2026-10-22: pulled by the Orchestrator (delegation `…5aaf7cec`) → In Development; `ticket-to-pr-ABC-189`.** **2026-10-22: built `grugops/ABC-189` @ `91883f94` (one line, `src/cli.test.ts`; A1–A4 met on the SE's read; red-first `src/uci.ts` and `dist/cli.js` both red at the tip only; closer count 9; gates 60/1995) → In Review; `qe-ABC-189`.**
-- [ABC-190] The lock root lacks the `license` and `bin` that `package.json` carries (QE-172-a + ABC-168's `bin`)  (owner: BA/PM, size: XS, priority: P3, epic: EPIC-007, since: 2026-10-21, DoR 10/10; cut in `bapm-cut-ABC-168-followups`. Waits: ABC-168 merged. `npm install --package-lock-only --ignore-scripts`, numstat `4 0`; clause (a) hop owed.) **2026-10-22: ABC-168 merged (`513c0211`) → Ready.** **2026-10-22: pulled by the Orchestrator (delegation `…5aaf7cec`) → In Development; `ticket-to-pr-ABC-190`; Security/NFR clause (a) hop follows.** **2026-10-22: built `grugops/ABC-190` @ `d79f4684` (lock `15766056`, numstat `4 0`, root `license` + `bin` only; audit unchanged 7; `npm ci` clean on a fresh clone; gates 60/1995) → In Review; `qe-ABC-190`, then Security/NFR clause (a).**
 
 
 
@@ -1058,7 +1057,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Security/NFR (WIP 0/2)
+## In Security/NFR (WIP 1/2)
+- [ABC-190] The lock root lacks the `license` and `bin` that `package.json` carries (QE-172-a + ABC-168's `bin`)  (owner: BA/PM, size: XS, priority: P3, epic: EPIC-007, since: 2026-10-21, DoR 10/10; cut in `bapm-cut-ABC-168-followups`. Waits: ABC-168 merged. `npm install --package-lock-only --ignore-scripts`, numstat `4 0`; clause (a) hop owed.) **2026-10-22: ABC-168 merged (`513c0211`) → Ready.** **2026-10-22: pulled by the Orchestrator (delegation `…5aaf7cec`) → In Development; `ticket-to-pr-ABC-190`; Security/NFR clause (a) hop follows.** **2026-10-22: built `grugops/ABC-190` @ `d79f4684` (lock `15766056`, numstat `4 0`, root `license` + `bin` only; audit unchanged 7; `npm ci` clean on a fresh clone; gates 60/1995) → In Review; `qe-ABC-190`, then Security/NFR clause (a).** **2026-10-22: QE PASS, empty gap register (`grugops/qe-ABC-190` @ `a0b42688`, merge `8c74547e`; `…d21b9a3a`; regeneration byte-equal, sha256 `6ffeccdf…`; audit 7 = 7; QE-172-a close condition met). → In Security/NFR; `security-nfr-ABC-190` (clause (a)).**
 
 
 
