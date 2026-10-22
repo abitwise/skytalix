@@ -59,6 +59,7 @@ Real commands only, with flags, preferring fast single-file variants. If a comma
   session, 1 refused command line, 70 internal error.
   Writing rules for this slot and full receipts (RUN dates, byte-exact before/after the `--` trap): `memory-bank/90-agents-md-command-log.md` § "Dev / run". -->
 - Perft deep counts (opt-in slow suite): `PERFT_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/perft.test.ts`
+- UCI engine entry (ABC-168): `npm run uci` <!-- `node src/uci.ts`: reads UCI on stdin, writes UCI on stdout; exit 0 on `quit` or end of input, 1 on any argument, 70 on an exception. Receipts: `memory-bank/90-agents-md-command-log.md` § "UCI entry point". -->
 
 ### Test
 
@@ -91,6 +92,7 @@ completion notification; if a pattern is unavoidable, bracket one character (`[v
 - PVS/LMR deep lane (ABC-121, `src/search.pvs-lmr.test.ts`): `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run
   src/search.pvs-lmr.test.ts`
 - Real-engine CLI lane (opt-in, ABC-119): `CLI_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/cli.real-engine.test.ts`
+- Real-engine UCI lane (opt-in, ABC-168): `UCI_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/uci.real-engine.test.ts`
 - Self-play ladder lane (opt-in, ABC-085, ADR-0038): `LADDER_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/ladder.test.ts`
 - Test (single file): `NODE_OPTIONS=--max-old-space-size=400 npx vitest run <path>`
 - Coverage: `NODE_OPTIONS=--max-old-space-size=128 npx vitest run --coverage`
@@ -121,7 +123,7 @@ completion notification; if a pattern is unavoidable, bracket one character (`[v
 
 ### Build
 
-- Build (use sparingly): `npm run build` <!-- `tsc --noEmit`: a typecheck; nothing published until EPIC-006. -->
+- Build (use sparingly): `npm run build` <!-- `tsc -p tsconfig.build.json` -> `dist/` (ABC-168, ADR-0044 D8): the engine artifact, `dist/uci.js`; the `typecheck` gate still covers the whole tree. -->
 - Docs build / link-check: `UNKNOWN - verify`
 - Clean / reset: `UNKNOWN - verify`
 

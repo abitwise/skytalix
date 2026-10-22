@@ -1,8 +1,8 @@
 ---
 id: ABC-178
-title: "Two additive UCI rows restore the two default-lane kills `ABC-177` dropped (QE-177-a, QE-177-b)"
-status: backlog
-column: Backlog
+title: "One additive UCI row restores the cross-session hold kill `ABC-177` dropped (QE-177-a). R2 (QE-177-b) moved to `ABC-197` on 2026-10-22"
+status: in-review
+column: In Review
 size: XS
 priority: P2
 epic: EPIC-007
@@ -10,6 +10,113 @@ feature: —
 ---
 
 # ABC-178: add one cross-session hold row and one dropped-token time row to `src/uci-session.test.ts`. Test-only, additive, one file
+
+> **Re-ruled 2026-10-22 by BA/PM** (task `bapm-rerule-ABC-178`, records only, at `main` `a7857e0b`). This follows the
+> owner's word of 2026-10-22, *"ABC-178, go ahead, send to BA/PM"*, as transcribed in `uat-ABC-168` `…0b63d92f`.
+> That is a transcription, not a stamp. Notes: `.grugops/context/bapm-rerule-ABC-178/notes/`. **This block
+> supersedes the text below wherever they differ. The text below is kept as the record of the 2026-10-20 cut.**
+> This hop ran no lane, took no timing and ran no probe. Every figure below is a published reading or arithmetic
+> on one.
+>
+> **Why a re-rule.** § Dependencies said: if `ABC-177`'s A10 reads > 9.2 s, R2 waits, BA/PM re-rules R2 before
+> any pull, and R1 can go alone. `ABC-177` merged (`4debc07d`) on **9.395 s** (QE t3-r1 on `f81bf03c`; Security/NFR
+> `…b4d5793f`: MET, warm-flagged 5/8, strict view VOID, AC). That is over 9.2 s, so the clause fired. Tranche 2
+> (O3) was **not** opened (Architect `…ee7527cc`), so there is no "tranche 2 measured headroom". The ruling uses
+> the published reading only.
+>
+> **Headroom arithmetic (published readings; every row cost is an estimate):**
+>
+> | quantity | value | source |
+> |---|---:|---|
+> | `NFR-008` bound W | 10.000 s | catalog |
+> | H median wall at `f81bf03c` | 9.395 s (x(2)..x(7) 9.21..9.52; max 9.55) | `…4bb78960` |
+> | twin wall R (H/H2) | 0.250 s | `…b4d5793f` |
+> | headroom to W | **0.605 s** (≈ 2.4 R) | 10.000 − 9.395 |
+> | against `ADR-0046` D4's 9.2 s | **−0.195 s** (over) | 9.2 − 9.395 |
+> | R2 ≈ 25 621 nodes ≈ 150 ms in-thread | **≈ +0.075 s wall**, ≈ 12 % of the headroom, 2.5 × `ABC-174`'s +0.03 s | page § NFR, 2-slot model |
+> | R1 ≈ 655 nodes ≈ 4 ms in-thread | **≈ +0.002 s wall**, ≈ 0.3 % of the headroom | same |
+> | after R1 + R2 (estimate) | ≈ 9.47 s, headroom ≈ 0.53 s (≈ 2.1 R) | arithmetic |
+> | after R1 alone (estimate) | ≈ 9.40 s, headroom ≈ 0.60 s | arithmetic |
+>
+> **The 9.395 s is not today's lane.** Since `4debc07d`, 14 merges changed lane inputs (`src/cli.test.ts` +307
+> lines, `src/cli.real-engine.test.ts`, `tools/opening-book/book.test.ts`, `tools/grugops/heap-guard.js`,
+> `result-file-reporter.js`, four `*.nfr.test.ts` headers, `package.json`). The lane went from 1 987 to 1 994 tests.
+> None of them was timed. **Today's full-lane wall on `main` is `UNKNOWN - verify`.** The Architect's rebased
+> estimate of 8.4–8.6 s (`…e8b4d26d` § 2) is an estimate, not a reading. `src/uci-session.test.ts` is unchanged since
+> `4debc07d` (126 tests).
+>
+> **Ruling R1: it goes alone, now.** It costs about 0.3 % of the headroom and reads no clock. The Architect
+> agrees: "Headroom gives no reason to hold R1" (`…74d39535`). `ABC-178` is narrowed to R1.
+>
+> **Ruling R2: deferred, not dropped. It is cut to `ABC-197` (Backlog, XS, P3), with its shape unchanged** (step
+> 100, `3 000 ≤ time ≤ 3 200`). Step 100 is still the only step in `ADR-0046`'s set that gives a band under
+> 1 000 ms, so a cheaper shape would not restore the kill. Why it is not kept at 0.605 s of headroom:
+> - **The fork was registered before the reading.** Keeping R2 now would move this page's own gate after the reading
+>   missed it. That is the habit the 9.2 s target exists to stop (Architect `…74d39535`).
+> - **Today's headroom is unread** (above). The only reading is warm-flagged, its strict view is VOID, and it was taken
+>   on a lane that 14 later merges have changed.
+> - **R2 buys a LOW band** (1 000 ms → 100 ms on one warn path; no user-visible behaviour). Its price is about 12 % of
+>   the lane's measured margin, with no lever ready behind it (O3 is MEDIUM risk and unopened).
+> - **Not dropped:** the reading that would justify a drop is not shown to be real (Architect `…74d39535`). `ABC-197`'s
+>   pull condition is an admissible full-lane reading ≤ 9.2 s. `ABC-178`'s own B8 below is meant to produce one.
+>   **Cost of the split, stated:** if that reading is ≤ 9.2 s, `ABC-197` needs its own B7/B8 timing hop later.
+>
+> **Criteria changed by this re-rule:**
+> - **Scope:** R1 only. R2's row, its B2, its QP6 probes and its test notes 3–4 move to `ABC-197`.
+> - **B1:** unchanged.
+> - **B2:** removed from this ticket (now `ABC-197` A1).
+> - **B3:** every hunk adds only R1 and comment lines citing `ABC-178` or `QE-177-a`. One file, no `-` line.
+> - **B4:** `src/uci-session.test.ts` reports N at base (126 at `main` today) and **N + 1** at the tip. The name
+>   difference is exactly R1's name. The lane total at the tip is **the base total + 1** (1 994 → 1 995 if `main` has
+>   not moved; `ABC-168`'s merge would move it).
+> - **B5:** R1 only, ≤ 1 000 nodes.
+> - **B6:** rows QP0 and QP1 only. QP0 is green and 0 red. QP1 is red on R1 and gives ≥ 1 red on the whole lane at the
+>   tip.
+> - **B7:** the bound stands (charge ≤ 650 ms CPU). H−B is expected at about +4 ms in-thread, below the set's
+>   floor. It is reported, not resolved.
+> - **B8:** `NFR-008` R-1 median wall ≤ 10 s, as written, **plus**:
+>   - **all four arms (B/T, H/H2) are required**, as at `ABC-177` A9. This reading doubles as the Architect's clean
+>     owner-quiet re-read (`…ee7527cc`). It reports the B and H medians with their intervals, and each twin's
+>     admissibility;
+>   - **H ≤ 9.2 s** (admissible): this is the input `ABC-197`'s DoR item 10 waits on;
+>   - **9.2 s < H ≤ 10 s:** O3 routes per the Architect (`…ee7527cc`), and `ABC-197` waits for tranche 2's reading;
+>   - **H > 10 s:** the owner (`ADR-0035` D6). R1 alone (≈ +0.002 s) cannot plausibly cause it.
+> - **B9:** unchanged.
+> - **Test notes:** note 1 runs QP1 against R1 only. Notes 3 and 4 move to `ABC-197`. Notes 2, 5 and 6 stand.
+> - **NFR triggers:** R1 ≈ 4 ms in-thread, ≈ +0.002 s wall (estimate). `NFR-008` ≤ 10 s and `N8-LANE` ≤ 650 ms stand.
+>
+> **Preconditions on QE's timing hop (B7/B8). They are the owner's call, and they do not block the build (B1–B6, B9):**
+> - **P1, AC power** on every scored run (`…bfdc97e5`);
+> - **P2, owner-quiet:** the owner pauses his other sessions (`oeselg-labs/platform`). Twelve of twelve windows failed
+>   without that (`qe-ABC-177-timing`);
+> - **P3, the thermal rule for this reading**, still open from the Architect's question (`…74d39535`). Under the strict
+>   registered rule, four of four full stages VOIDed on this host. **Recommended (the Architect's):** "thermal kept and
+>   flagged" for this reading only, comparable with t3-r1. A cooled-state protocol costs about 1 h per stage, and
+>   Architect/Design must re-register it first.
+>
+> `FIX-177-1` (the sampler crash) is already folded (`qe-redact-SEC-177-1` `…dae138b1`).
+>
+> **Size `XS`, priority `P2`.** Both are unchanged: it restores a kill our own change dropped, at negligible cost.
+>
+> **Dependencies now:** `ABC-177` merged ✅ (`4debc07d`). A10 read ✅ (9.395 s; the fork fired and is resolved by this
+> re-rule). P1–P3 come before QE's timing hop. `ABC-197` follows this ticket in the same file.
+>
+> **Definition of Ready, re-scored 2026-10-22: 10 of 10 → `Ready`.**
+>
+> | # | item | verdict |
+> |---|---|---|
+> | 1 | problem clear | ✅ QE-177-a: QP1 survives the whole lane at `f81bf03c` (QE `…02deb2e2`) |
+> | 2 | scope and out-of-scope clear | ✅ one additive row in one file. R2 is out, in `ABC-197` |
+> | 3 | INVEST-shaped | ✅ independent of `ABC-197` (which follows it), small, testable through QP1 |
+> | 4 | acceptance testable and measurable | ✅ an empty `out`; no `-` line; N + 1 rows; ≤ 1 000 nodes; QP0/QP1 red/green; ≤ 650 ms CPU; ≤ 10 s on AC, four arms |
+> | 5 | dependencies known | ✅ `ABC-177` merged; the fork is resolved; P1–P3 are named with their owner |
+> | 6 | security/NFR triggers with a measurable target | ✅ `NFR-008` ≤ 10 s; `N8-LANE` ≤ 650 ms CPU; ≈ +0.002 s wall estimated; security not triggered |
+> | 7 | test notes present | ✅ notes 1, 2, 5, 6 |
+> | 8 | size assigned | ✅ `XS` |
+> | 9 | priority assigned | ✅ `P2` |
+> | 10 | no major unresolved blocker | ✅ nothing blocks the pull or the build. P1–P3 are gate-time preconditions owed by the owner, as `ABC-177`'s OQ-177-1 was owed before its A9 |
+>
+> Column moves after `Ready` are the Orchestrator's. The pull is the owner's.
 
 > **Cut 2026-10-20 by BA/PM** (task `wave-2026-09-25`, subtask `bapm-rule-QE-177-ab`), at `main` `e6be5106`. This
 > cut follows the owner's word of 2026-10-21, *"yes, BA/PM can rule on QE-177-a and -b"*, as the Orchestrator

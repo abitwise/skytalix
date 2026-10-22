@@ -1795,6 +1795,7 @@ describe("ABC-042 — the shape of what was delivered", () => {
       "type",
       "description",
       "engines",
+      "bin",
       "scripts",
       "devDependencies",
     ];
@@ -1808,13 +1809,14 @@ describe("ABC-042 — the shape of what was delivered", () => {
       lint: "biome check .",
       "lint:fix": "biome check --write .",
       format: "biome format --write",
-      build: "tsc --noEmit",
+      build: "tsc -p tsconfig.build.json",
+      uci: "node src/uci.ts",
       perft: "node src/perft-bench.ts",
       "spike:perft": "node spike/perft-bench.ts",
     };
 
     expect(Object.keys(packaged).sort()).toEqual([...AT_HEAD].sort());
-    for (const reserved of ["bin", "main", "files", "publishConfig", "dependencies"]) {
+    for (const reserved of ["main", "files", "publishConfig", "dependencies"]) {
       expect(packaged, `package.json gained ${reserved}`).not.toHaveProperty(reserved);
     }
     expect(packaged.private).toBe(true);
@@ -2239,7 +2241,7 @@ describe("ABC-065 — AGENTS.md's `Dev / run` slot is reachable and its option l
     // are LOUD and both are exercised below: an absent or duplicated label reds on the count above,
     // and a slot whose comment does not close before the next list item throws here. The protection
     // claimed is the protection delivered — the earlier wording claimed a never-closes branch that
-    // `end < 0` could not reach, since `AGENTS.md` carries 8 further closers after this slot's own.
+    // `end < 0` could not reach, since `AGENTS.md` carries 9 further closers after this slot's own.
     if (end < 0 || (nextItem >= 0 && nextItem < end))
       throw new Error(
         "AGENTS.md's `- Dev / run:` slot comment does not close before the next list item",

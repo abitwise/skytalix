@@ -1,8 +1,8 @@
 ---
 id: ABC-196
 title: "A drifted anchor or a dropped capability line turns a twin-referenced row of `r2-mutants.sh` into a silent control, and the harness still reads 25 of 25 (QE-195-a)"
-status: ready
-column: Ready
+status: in-review
+column: In Review
 size: XS
 priority: P3
 epic: —
