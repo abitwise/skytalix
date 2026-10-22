@@ -190,3 +190,8 @@ BA/PM hop, because the DoR stands.
 - It closes when a human merges `grugops/ABC-189` into `main`, and the Orchestrator records it.
 
 UAT is waived: 0 production lines.
+
+**Re-merge.** `main` moved to `66fd8e1b` during the hop, carrying records only (`.grugops/`, `plans/`). I merged it at **`2022a8d8`**, clean.
+- The gates reproduce: lint, typecheck and build give rc 0; 60/60 and 1995/1995; `success` true; skip count `0`, `No findings.`; the waiver form is empty.
+- On an export of `2022a8d8`, `(iv-b)` and `(iv-a)` are red on `:1823`.
+- The verdict is unchanged: decision `…449bc365` supersedes `…1067b881`. The observation is `…d91bb60e`.
