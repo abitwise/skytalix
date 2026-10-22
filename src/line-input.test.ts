@@ -28,7 +28,7 @@
  *      early or late.
  *   3. `fs.writeSync` — NOT seen by any runtime spy either, and mocking `node:fs` would cost a
  *      hoisted `vi.mock` this ticket's lane cannot spend. Closed by layer 2: the module's import
- *      set is asserted to be EXACTLY four relative project modules, so there is no `fs` binding.
+ *      set is asserted to be EXACTLY five relative project modules, so there is no `fs` binding.
  *   4. a `globalThis` flag — seen at RUNTIME by a key-set diff across a full exercise, AND by
  *      layer 3's token scan.
  *   5. the module's own legitimate write — seen directly: the injected `PromptOutput` records every
@@ -38,8 +38,8 @@
  *   layer 1 — RUNTIME spies: the injected output, the loop's `FrameSink` counted only while the
  *             seam is on the stack, `console.*`, `process.stdout.write` / `process.stderr.write`,
  *             and a `globalThis` key diff.
- *   layer 2 — the module's IMPORT SET, extracted from the delivered file: exactly four relative
- *             project modules. Zero Node builtins, zero packages. This is what makes "the module
+ *   layer 2 — the module's IMPORT SET, extracted from the delivered file: exactly five relative
+ *             project modules (`ABC-200` added `./line-reader.ts`). Zero Node builtins, zero packages. This is what makes "the module
  *             cannot reach a stream it was not handed" a fact rather than a hope.
  *   layer 3 — a TOKEN SCAN over the delivered file with comments stripped: `process`, `console`,
  *             `globalThis`, `eval`, `Function`, `require`, dynamic `import(`, `child_process`,
@@ -521,9 +521,12 @@ describe("ABC-037 — the production InputSeam", () => {
     });
 
     it("contains no `try` and no `catch` at all — the ruling as a property of the file", () => {
-      const code = deliveredCode();
-      expect(code).not.toMatch(/\btry\b/);
-      expect(code).not.toMatch(/\bcatch\b/);
+      // `ABC-200` moved the reader into `src/line-reader.ts`; the ruling holds over both files.
+      for (const file of DELIVERED_FILES) {
+        const code = deliveredCode(file);
+        expect(code, file).not.toMatch(/\btry\b/);
+        expect(code, file).not.toMatch(/\bcatch\b/);
+      }
     });
   });
 
@@ -639,7 +642,6 @@ describe("ABC-037 — the production InputSeam", () => {
 
   describe("security bar 1 — the read line is data, never code", () => {
     it("contains zero occurrences of eval, Function, require, dynamic import, shell or child_process", () => {
-      const code = deliveredCode();
       for (const banned of [
         /\beval\b/,
         /\bFunction\b/,
@@ -657,17 +659,24 @@ describe("ABC-037 — the production InputSeam", () => {
         /\bglobalThis\b/,
         /\bBuffer\b/,
       ]) {
-        expect(code, `banned token ${banned} present in the delivered module`).not.toMatch(banned);
+        // `ABC-200`: the moved reader is scanned too, so the moved code keeps its guards.
+        for (const file of DELIVERED_FILES) {
+          expect(
+            deliveredCode(file),
+            `banned token ${banned} present in the delivered module ${file}`,
+          ).not.toMatch(banned);
+        }
       }
     });
 
-    it("imports exactly four relative project modules and no Node builtin and no package", () => {
+    it("imports exactly five relative project modules and no Node builtin and no package", () => {
       const specifiers = [...deliveredCode().matchAll(/from\s+"([^"]+)"/g)].map(
         (match) => match[1] as string,
       );
       expect([...specifiers].sort()).toEqual([
         "./command-input.ts",
         "./history.ts",
+        "./line-reader.ts",
         "./move-input.ts",
         "./turn-loop.ts",
       ]);
@@ -946,6 +955,9 @@ describe("ABC-037 — the production InputSeam", () => {
   }
 });
 
+/** The seam and, since `ABC-200`, the reader it reads through. Both carry the code bars. */
+const DELIVERED_FILES = ["./line-input.ts", "./line-reader.ts"] as const;
+
 /**
  * The delivered module's own bytes, with comments stripped.
  *
@@ -954,7 +966,7 @@ describe("ABC-037 — the production InputSeam", () => {
  * by the next engineer rather than fixed. Stripped, the scan reads CODE, which is the only thing it
  * was ever meant to read.
  */
-function deliveredCode(): string {
-  const text = readFileSync(new URL("./line-input.ts", import.meta.url), "utf8");
+function deliveredCode(file = "./line-input.ts"): string {
+  const text = readFileSync(new URL(file, import.meta.url), "utf8");
   return text.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*$/gm, "");
 }
