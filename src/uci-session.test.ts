@@ -280,6 +280,13 @@ describe("ABC-167 A6 — infinite waits for stop", () => {
     expect(talk(["stop", "ponderhit"]).out).toEqual([]);
   });
 
+  // ABC-178 R1 (QE-177-a): two `talk`s, two sessions. Session 1 is left holding, never released.
+  it("ABC-178 R1: a hold left in one session is not released by a fresh session", () => {
+    const held = talk(["position startpos", "go infinite"], 1_000);
+    expect(held.out.filter((line) => line.startsWith("bestmove"))).toEqual([]);
+    expect(talk(["stop", "ponderhit"]).out).toEqual([]);
+  });
+
   it("A6-d1: go ponder holds at the capped ceiling; ponderhit releases once", () => {
     const { perLine } = talk(["position startpos", "go ponder", "ponderhit", "ponderhit"], 100);
     expect(perLine[1]).toHaveLength(1);
