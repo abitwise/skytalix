@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-23 20:40Z by Orchestrator (orch-2026-10-23ag) — ABC-203 built (`5900d100`) → In Review; `qe-ABC-203` dispatched. `bapm-cut-engine-strength` still running. In Review 1/3, width 2/3._
 _Updated: 2026-10-23 20:35Z by Orchestrator (orch-2026-10-23af) — owner word `…7feb0553`: ADR-0047 accepted → ABC-203 In Development (SE); all 8 engine-improvement proposals accepted → `bapm-cut-engine-strength` (BA/PM). In Development 1/3, width 2/3._
 _Updated: 2026-10-23 20:15Z by Orchestrator (orch-2026-10-23ae) — merged `arch-analyse-game-1` (`…f1771bb3`): report `memory-bank/analysis/2026-10-23-game-1.md`, annotated PGN `plans/uat/EPIC-006-game-1.annotated.pgn`. Engine-strength proposals are the owner's call; nothing cut. ABC-203 still held on ADR-0047 (owner). Width 0/3._
 _Updated: 2026-10-23 19:56Z by Orchestrator (orch-2026-10-23ad) — ABC-203 design done but needs NEW ADR-0047 (first file write) → owner acceptance owed (`…3898cd9a`); branch not merged. `arch-analyse-game-1` still running._
@@ -922,7 +923,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   one hop at pull, when it checks `Ready for Dev`'s exit at that moment; the row records the pull.
 
   HEADING FORMAT (spec §6.1): each column is an H2 heading carrying its live/limit WIP count,
-  e.g. `## In Development (WIP 1/3)` — the left number is how many tickets are in the column
+  e.g. `## In Development (WIP 0/3)` — the left number is how many tickets are in the column
   now, the right number is the limit from config. Unlimited columns read `(WIP unlimited)`;
   Blocked is visible and time-tracked (no WIP limit) and reads `(visible, time-tracked)`.
   INVARIANT: the column H2 headings and the rows of the `## Columns` table are the same 13 names in the
@@ -932,11 +933,11 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 1/3)
-- [ABC-203] At game end, `npm run chess` writes the game as a standard PGN file under `games/`  (owner: software-engineer, after an Architect/Design ruling, size: M, priority: P1, epic: EPIC-006, since: 2026-10-23, DoR 10/10; cut in `bapm-cut-pgn-export` (`…0c2867c1`). Owner word `…715b9cbf`: PGN export in scope. Automatic, once, when the loop returns a reason (8 outcomes + 2 faults); none on quit/EOF/usage/internal error. `games/skytalix-YYYYMMDD-HHMMSS.pgn` under cwd, exclusive create -2..-99, 10 tags, toSan movetext, A7 byte match to game 1. Security/NFR hop owed (first file write, ADR-0036 b1/b2). Next free ABC-204) **2026-10-23: Ready → In Design (`arch-design-ABC-203`).** **2026-10-23: design ruled (`grugops/arch-design-ABC-203` @ `738a3c9f`, `…e6de1e00`): 3 modules (`src/pgn.ts` pure, `src/pgn-file.ts` sole fs holder, wiring in `cli.ts`), test children run from a temp cwd, clock read once in `cli.ts`. It needs a NEW ADR-0047 → HELD for the owner (delegation item 3; `…3898cd9a`). Not merged; stays In Design.** **2026-10-23: owner accepted ADR-0047 (`…7feb0553`); design merged. In Design → In Development (`ticket-to-pr-ABC-203`, SE).**
+    ## In Development (WIP 0/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
-    ## In Review (WIP 0/3)
+    ## In Review (WIP 1/3)
+- [ABC-203] At game end, `npm run chess` writes the game as a standard PGN file under `games/`  (owner: software-engineer, after an Architect/Design ruling, size: M, priority: P1, epic: EPIC-006, since: 2026-10-23, DoR 10/10; cut in `bapm-cut-pgn-export` (`…0c2867c1`). Owner word `…715b9cbf`: PGN export in scope. Automatic, once, when the loop returns a reason (8 outcomes + 2 faults); none on quit/EOF/usage/internal error. `games/skytalix-YYYYMMDD-HHMMSS.pgn` under cwd, exclusive create -2..-99, 10 tags, toSan movetext, A7 byte match to game 1. Security/NFR hop owed (first file write, ADR-0036 b1/b2). Next free ABC-204) **2026-10-23: Ready → In Design (`arch-design-ABC-203`).** **2026-10-23: design ruled (`grugops/arch-design-ABC-203` @ `738a3c9f`, `…e6de1e00`): 3 modules (`src/pgn.ts` pure, `src/pgn-file.ts` sole fs holder, wiring in `cli.ts`), test children run from a temp cwd, clock read once in `cli.ts`. It needs a NEW ADR-0047 → HELD for the owner (delegation item 3; `…3898cd9a`). Not merged; stays In Design.** **2026-10-23: owner accepted ADR-0047 (`…7feb0553`); design merged. In Design → In Development (`ticket-to-pr-ABC-203`, SE).** **2026-10-23: built `5900d100` (`…b1c5b861`): A1–A12, A14 MET on SE readings; 62/2038; CLI_DEEP 11/11; tree clean. → In Review (`qe-ABC-203`: A10 via CLI, A13, ≤ 50 ms write, pin audit).**
     - [ABC-012] Portfolio FX conversion  (PR: #41, QE: running)
 
   BOARD <-> TICKET CONTRACT: each ticket file (`plans/tickets/<prefix>-xxx.md`) carries a
