@@ -156,3 +156,163 @@ describe("A6 — purity: evaluation leaves the position byte-identical", () => {
     }
   });
 });
+
+/**
+ * ABC-205 — king safety scaled by the enemy queen, and the tapered king square (§ Design ruling;
+ * `ADR-0031` addendum 2026-10-24). Every relation compares two positions that differ only as
+ * stated, scored from White's side with White to move. `BASE_*` figures are the pre-ABC-205
+ * evaluator's readings, measured on `main` `f47b3429`; a criterion that asks for "strictly more
+ * than on base" compares against them.
+ */
+const toRook = (fen: string): string => fen.replace("q", "r");
+const drop = (intact: string, broken: string): number => score(intact) - score(broken);
+
+const G1_BASE = "r1bq1rk1/pp2bppp/2n1pn2/3p4/3P4/2NBPN2/PP3PPP/R1BQ1RK1 w - - 0 1";
+const E1_BASE = "r1bqk2r/pp2bppp/2n1pn2/3p4/8/2NBPN2/PP1P1PPP/R1BQK2R w KQkq - 0 1";
+
+/** `A1`: [label, shelter intact, shelter broken]; Black's queen on d8 (its rook twin: `toRook`). */
+const A1_PAIRS: readonly (readonly [string, string, string])[] = [
+  [
+    "castled g1: g2 missing",
+    G1_BASE,
+    "r1bq1rk1/pp2bppp/2n1pn2/3p4/3P4/2NBPN2/PP3P1P/R1BQ1RK1 w - - 0 1",
+  ],
+  [
+    "castled g1: g-pawn on g4, equal material",
+    G1_BASE,
+    "r1bq1rk1/pp2bppp/2n1pn2/3p4/3P2P1/2NBPN2/PP3P1P/R1BQ1RK1 w - - 0 1",
+  ],
+  [
+    "castled g1: f2 missing, f half-open",
+    G1_BASE,
+    "r1bq1rk1/pp2bppp/2n1pn2/3p4/3P4/2NBPN2/PP4PP/R1BQ1RK1 w - - 0 1",
+  ],
+  [
+    "castled g1: h-pawn on h4",
+    G1_BASE,
+    "r1bq1rk1/pp2bppp/2n1pn2/3p4/3P3P/2NBPN2/PP3PP1/R1BQ1RK1 w - - 0 1",
+  ],
+  [
+    "uncastled e1: d-pawn gone, d half-open",
+    E1_BASE,
+    "r1bqk2r/pp2bppp/2n1pn2/3p4/8/2NBPN2/PP3PPP/R1BQK2R w KQkq - 0 1",
+  ],
+  [
+    "uncastled e1: e-pawn gone, e open",
+    "r1bqk2r/pp1nbppp/2n5/3p4/8/2NBPN2/PP1P1PPP/R1BQK2R w KQkq - 0 1",
+    "r1bqk2r/pp1nbppp/2n5/3p4/8/2NB1N2/PP1P1PPP/R1BQK2R w KQkq - 0 1",
+  ],
+  [
+    "uncastled e1: f-pawn on f4",
+    E1_BASE,
+    "r1bqk2r/pp2bppp/2n1pn2/3p4/5P2/2NBPN2/PP1P2PP/R1BQK2R w KQkq - 0 1",
+  ],
+  [
+    "uncastled e1: d-pawn on d4, equal material",
+    "r1bqk2r/pp2bppp/2n1pn2/8/8/2NBPN2/PP1P1PPP/R1BQK2R w KQkq - 0 1",
+    "r1bqk2r/pp2bppp/2n1pn2/8/3P4/2NBPN2/PP3PPP/R1BQK2R w KQkq - 0 1",
+  ],
+];
+
+/** `A2`: a pawn ending (phase 0), king e4 against g1; a full middlegame (phase 24), g1 against e2. */
+const ENDING_KING_E4 = "k7/5ppp/8/8/4K3/8/PPP5/8 w - - 0 1";
+const ENDING_KING_G1 = "k7/5ppp/8/8/8/8/PPP5/6K1 w - - 0 1";
+const MIDDLEGAME_KING_E2 = "r1bq1rk1/pp2bppp/2n1pn2/3p4/3P4/2NBPN2/PP2KPPP/R1BQ1R2 w - - 0 1";
+
+/** `A3`: king b1, a/b/c/d pawns home, against the c- and d-files open; queens on. */
+const A3_QUEENS_ONLY = [
+  "3q3k/pppp1ppp/8/8/8/8/PPPP4/1K1Q4 w - - 0 1",
+  "3q3k/pp3ppp/8/8/8/8/PP6/1K1Q4 w - - 0 1",
+] as const;
+const A3_FULL = [
+  "r1bq1rk1/pppnbppp/4pn2/8/8/2N1PN2/PPPPBPPP/1KBRQ2R w - - 0 1",
+  "r1bq1rk1/pp1nbppp/4pn2/8/8/2N1PN2/PP2BPPP/1KBRQ2R w - - 0 1",
+] as const;
+const BASE_A3_QUEENS_ONLY_DROP = 31;
+const BASE_A3_FULL_DROP = 87;
+
+/** `A3b`: queenless middlegame (phase 12), king g1, the g-pawn on g2 against g4 (equal material). */
+const A3B = [
+  "r1b2rk1/pp2bppp/2n1pn2/8/8/2NBPN2/PP3PPP/R1B2RK1 w - - 0 1",
+  "r1b2rk1/pp2bppp/2n1pn2/8/6P1/2NBPN2/PP3P1P/R1B2RK1 w - - 0 1",
+] as const;
+const BASE_A3B_DROP = 21;
+
+/** `A4`: ≥ 15 new mirror positions for ABC-205, queens on and off, both colours to move. */
+const ABC205_POSITIONS: readonly string[] = [
+  ...new Set(
+    A1_PAIRS.flatMap(([, intact, broken]) => [intact, broken, toRook(intact), toRook(broken)]),
+  ),
+  ENDING_KING_E4,
+  ENDING_KING_G1,
+  MIDDLEGAME_KING_E2,
+  ...A3_QUEENS_ONLY,
+  ...A3_FULL,
+  ...A3B,
+  "k7/5ppp/8/8/4K3/8/PPP5/8 b - - 0 1",
+  "r1bq1rk1/pp2bppp/2n1pn2/3p4/3P4/2NBPN2/PP3P1P/R1BQ1RK1 b - - 0 1",
+  "2kr3r/pp3ppp/8/8/8/8/PP3PPP/2KR3R b - - 0 1",
+  "q3k3/8/8/8/8/8/3PPP2/4K2Q w - - 0 1",
+];
+
+describe("ABC-205 A1 — the exposure penalty is larger while the enemy queen is on", () => {
+  it("covers ≥ 6 pairs in ≥ 2 king placements (castled g1, uncastled e1)", () => {
+    expect(A1_PAIRS.length).toBeGreaterThanOrEqual(6);
+    expect(A1_PAIRS.filter(([label]) => label.startsWith("castled g1")).length).toBeGreaterThan(0);
+    expect(A1_PAIRS.filter(([label]) => label.startsWith("uncastled e1")).length).toBeGreaterThan(
+      0,
+    );
+  });
+
+  it.each(A1_PAIRS)(
+    "%s: intact − broken is strictly larger with the queen than with a rook on d8",
+    (_label, intact, broken) => {
+      expect(drop(intact, broken)).toBeGreaterThan(drop(toRook(intact), toRook(broken)));
+    },
+  );
+});
+
+describe("ABC-205 A2 — the king square is tapered by phase", () => {
+  it("in a pawn ending, a king on e4 scores strictly higher than on g1", () => {
+    expect(score(ENDING_KING_E4)).toBeGreaterThan(score(ENDING_KING_G1));
+  });
+
+  it("in a full middlegame with both queens on, the king on g1 behind f2/g2/h2 scores strictly higher than on e2", () => {
+    expect(score(G1_BASE)).toBeGreaterThan(score(MIDDLEGAME_KING_E2));
+  });
+});
+
+describe("ABC-205 A3 — no castled bonus without shelter", () => {
+  it("b1 with the c- and d-files open scores strictly lower, by strictly more than on base (queens only)", () => {
+    const [home, open] = A3_QUEENS_ONLY;
+    expect(score(open)).toBeLessThan(score(home));
+    expect(drop(home, open)).toBeGreaterThan(BASE_A3_QUEENS_ONLY_DROP);
+  });
+
+  it("the same in a full middlegame with both queens on", () => {
+    const [home, open] = A3_FULL;
+    expect(score(open)).toBeLessThan(score(home));
+    expect(drop(home, open)).toBeGreaterThan(BASE_A3_FULL_DROP);
+  });
+
+  it("A3b: queenless, g1 with the g-pawn on g4 drops strictly more than on base (the gate's own row)", () => {
+    const [intact, broken] = A3B;
+    expect(drop(intact, broken)).toBeGreaterThan(BASE_A3B_DROP);
+  });
+});
+
+describe("ABC-205 A4 — mirror exact over ABC-083's corpus plus ≥ 15 new positions, queens on and off", () => {
+  it("adds at least 15 new positions", () => {
+    expect(ABC205_POSITIONS.length).toBeGreaterThanOrEqual(15);
+  });
+
+  it("scores every mirrored pair exactly equal", () => {
+    const corpus = [
+      ...kingCorpus(),
+      ...ABC205_POSITIONS.map((fen) => ({ name: fen, position: parseFen(fen) })),
+    ];
+    for (const { name, position } of corpus) {
+      expect(evaluate(mirrorPosition(position)), name).toBe(evaluate(position));
+    }
+  });
+});
