@@ -1,0 +1,51 @@
+security-nfr-timing-2026-10-23, part (2): ABC-201 A1-A4 pre-registration. Written 2026-10-23T07:47:36Z, BEFORE the clone, the
+install, any start-gate poll and any timed launch. Security/NFR is the builder (ABC-201 § Dependencies).
+Host: MacBook-Air.local (Apple M3 Mac15,13, 8 cores, 16 GiB), macOS 26.7.1 (Darwin 25.6.0),
+node v26.11.1, npm 11.20.0, git version 2.56.0. Width 1, the owner's quiet window. Part (1) finished at 07:44:47Z (N8-LANE MET).
+
+Sha S = c91445e30c38f26566593b6131122c34fbf32798 (the brief). main is now 1d5316e0 = S + records only (diff S..1d5316e0 touches
+.grugops/, plans/ only; no src/, tools/, data/, package*.json), so the reading also holds for main 1d5316e0.
+Pre-checks done before this file (no timing figure printed or read; NOT in the clone, so the clone's first launch stays first):
+  - a git archive copy of S, stdin /dev/null: exit 0, stderr 0 bytes, frame 0 = 23 newlines then "> input ended" (precheck/).
+  - the same copy, printf 'e4\n': exit 0, last move-list row "   1. e4      e5", "input ended" once (precheck/a2-shape-archive.stdout).
+    It only fixed the readout's parser; the graded A2 is the clone's run.
+  - install scripts (ABC-201 § NFR triggers), ruled ACCEPTABLE, no STOP: esbuild 0.28.1 postinstall "node install.js" checks the
+    platform binary and can only fall back to the lock-pinned @esbuild/darwin-arm64 0.28.1 (sha512 in the lock) from
+    registry.npmjs.org; fsevents 2.3.3 has no install/preinstall/postinstall script and no binding.gyp (it ships fsevents.node).
+    Exactly what a user's install runs. No flag substitutes for it.
+
+Driver run201.sh (sha256 below), order fixed:
+  1. st() pre-clone. git clone <main's checkout path> <attempt>/clone (local path; no git remote exists, ADR-0018 D3), then
+     checkout --detach S. Record HEAD, origin/main, git status --porcelain (expected empty).
+  2. A1: in the clone, npm install with NO flags; npm_config_cache=<attempt>/npm-cache (created empty) and
+     npm_config_userconfig=<attempt>/empty-npmrc (0 bytes); NODE_OPTIONS unset. Graded: exit 0. Reported: /usr/bin/time -p wall,
+     the "added N packages" line, git status --porcelain afterwards (any line goes to the Orchestrator as an observation).
+     The same cache/userconfig env stays set for A2 and A3.
+  3. Start gate (the brief's preconditions, every 5 s): AC Power, load1 <= 8, 0 [v]itest processes; thermal recorded, not gating;
+     60 s of OK polls opens it. Deadline: if A3 has not started by 2026-10-23T10:30:00Z -> UNRESOLVED with the readings.
+  4. A3: 10 fresh children, one after another, of nfr007-201.mjs (derivative of …8d3f6c15's nfr007-run.mjs, series (b): spawn
+     measured outside the child, no hook; diffs = its header's D1-D4): npm run --silent chess -- --colour white --difficulty 5,
+     stdin a pipe ended after frame 0. Child 1 IS the first launch after the install; it counts and is also reported alone.
+     st() before every child (power, load1, thermal, vitest). Frame 0 whole = N newlines on stdout, N pinned from child 1's raw
+     output (newlines before the first "> " line; expected 23); every child's frame0Ms is re-derived from its chunk marks at N.
+     States: MET = all 10 reached frame 0 and the max < 2000 ms; NOT MET = any child >= 2000 ms; UNRESOLVED = a child never
+     reached frame 0, or the host not held (not AC, load1 > 8 or a vitest on any st line pre-a3..post-a3). Thermal kept, flagged.
+     Report min / median / max, the first launch, and (reported only) the series without child 1. UNRESOLVED is never written MET.
+  5. A2 (after A3, so that A3's child 1 is the first launch): printf 'e4\n' | npm run --silent chess -- --colour white
+     --difficulty 5 in the clone. MET = exit 0, stderr 0 bytes, the last frame's move-list rows hold exactly 2 plies, "input
+     ended" exactly once and after that frame. The move list is quoted raw from the run.
+  6. Readout: python3 -I readout201.py <attempt>. Raw stdout of A2 and of A3 child 1 kept with sha256.
+Re-run: at most ONE whole attempt (fresh clone, fresh empty cache), only if A1 fails for a named non-code cause (for example the
+registry is unreachable) or A3 reads UNRESOLVED. A re-run stands alone. A NOT MET is never re-run.
+STOP (brief, ADR-0018 Decision 3): A3 NOT MET -> the revisit trigger fires; stop and report it to the owner via the Orchestrator.
+A4 (records, after the readings): one dated insertion in the NFR-007 row of plans/nfr-catalog.md (state, min/median/max, n, S,
+machine, cites …8d3f6c15); the < 2 s bar, denominator and every other row byte-identical (the nine NFR-00[1-9] rows hashed
+before and after, plus NFR-010/011); one dated line on EPIC-006's page (acceptance 1 MET/NOT MET with S); one ## Reading on
+the ABC-201 page; no src/, tools/ or package*.json change.
+876f44778870bc666051682e206353d7bb616951ca70108644eaf14da13238fd  run201.sh
+b46d8ee22dcaaec53406fb5d413962b6109fc5bd95f9b6549ba82ac82de291bb  readout201.py
+d3940487c808eb594ef0280468e549da0580bcb8d0c24eadb2fce1a98cc48414  inst/nfr007-201.mjs
+a8f2e5644638a9b95d5cff4932efa72013f268b777f830fa725a1f90c476fdd8  inst/nfr007-run.mjs
+96a13b85f6f4e83132196b6b039e55b52165fbcc48f718f192e6c33d02dac93d  precheck/a2-shape-archive.stdout
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  precheck/precheck-err.txt
+4e7ace1164fb5b241696a06ab7c826dab1e4621fc8d6d24994f180017bb1e6ac  precheck/precheck-out.txt

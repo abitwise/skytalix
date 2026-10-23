@@ -285,3 +285,46 @@ BA/PM, 2026-10-22, at `main` `08d42d01`. **Result: 10 of 10. `Ready`.**
 | 8 | size assigned | ✅ `M` |
 | 9 | priority assigned | ✅ `P2`, argued |
 | 10 | no major unresolved blocker | ✅ the design question has an owner and a stop rule; no owner word is needed |
+
+## N8-LANE reading (Security/NFR, 2026-10-23)
+
+Task `security-nfr-timing-2026-10-23`, part 1. It is the reading owed before merge by `…08e4152e` § 3, taken as that section
+spells it. The pre-registration is `c9dd9d1f`, committed before any poll. The evidence is in
+`.grugops/context/security-nfr-timing-2026-10-23/` (`probe/p1/`).
+
+**Trees:**
+- **The merge:** `grugops/sec-timing-ABC-200` = `grugops/qe-ABC-200` `55618845` with `main` `1d5316e0` merged in (a merge, no
+  conflict), giving merge `5bf1e3d6`. `1d5316e0` is `c91445e3` plus records only.
+- **Correctness at the merge:** `npm test` exit 0, `last-run.json` `success: true`, 61 files / 2 018 tests.
+
+**Arms** (out of tree, each with its own `npm ci --ignore-scripts`, all on vitest 4.1.12):
+- **B:** `1d5316e0`, with a one-assertion placeholder at `src/startup-questions.test.ts`.
+- **T:** the same, built separately. `diff -r` against B is clean.
+- **H:** `5bf1e3d6`.
+
+**The set** (resolved at HEAD): `src/startup-questions.test.ts` and `src/line-input.test.ts`, plus `vitest related` on the five
+changed sources. That gives 5 files: `cli.real-engine.test.ts`, `cli.test.ts`, `engine.test.ts`, `line-input.test.ts` and
+`startup-questions.test.ts`. B and T run 174 tests; H runs 195.
+
+**Run:** 9 interleaved rounds with the order rotated. Round 0 was discarded, leaving 8 scored. The command was
+`NODE_OPTIONS=--max-old-space-size=128 npx vitest run <set>`, and CPU came from `/usr/bin/time -p`.
+
+**Preconditions:**
+- **The gate:** 60 s of OK polls (AC, load1 ≤ 8, 0 vitest).
+- **The window:** 180 s with 0 foreign polls, and AC on all 37 polls (load1 max 3.10).
+- **Every run:** AC on all 27, thermal 0 → 0, load1 2.72–3.68, 0 foreign.
+
+| | reading |
+|---|---|
+| **H − B CPU** (the charge) | **+0.030 s**, interval [−0.010, +0.060], sign 6/8 |
+| twin T − B CPU | −0.005 s (−0.06 % of B 8.225 s), sign 4+/4−, p 1.000: **admissible**; **R 0.050 s** |
+| H − B wall | −0.020 s [−0.070, +0.050], reported only |
+| **state at 650 ms CPU** | **MET** (R ≤ b and the median ≤ b), in the grading view (thermal kept and flagged; 0 thermal runs), the 174a view and the strict 174 view |
+
+- **Accounts:** the floor is charged by count (1 file) to the floor account. `N8-SPAWN` takes 0.
+- **The provisional F (16 %, 1.316 s) is above the bound:**
+  - It does not change the state. F is a cut-time rule, and the state test does not read it.
+  - This window's twin (R 0.050 s) is the set's first admissible reading.
+  - Re-reading F is Architect/Design's job, as with `R-178-1`.
+- **The full-lane `NFR-008` reading is not owed before merge.** `N8-LANE` is MET, so the published headroom (0.990 s, `…d0c770b5`)
+  is spent by an estimate, as the catalog says, until the next full-lane window.

@@ -170,3 +170,39 @@ BA/PM, 2026-10-22, at `main` `3bee4bdd`. **Result: 10 of 10. `Ready`.**
 | 8 | size assigned | ✅ `XS` |
 | 9 | priority assigned | ✅ `P3`, argued |
 | 10 | no major unresolved blocker | ✅ the quiet host is a queue position, not a blocker; a NOT MET has a pre-registered route |
+
+## Reading
+
+Security/NFR, 2026-10-23 (task `security-nfr-timing-2026-10-23`, part 2), the builder. The pre-registration is `52c15f56`, committed
+before the clone. The evidence is in `.grugops/context/security-nfr-timing-2026-10-23/` (`probe/p2/`).
+
+**Machine:** Apple M3 (Mac15,13), Darwin 25.6.0 (macOS 26.7.1), node v26.11.1, npm 11.20.0, git 2.56.0.
+**Sha S:** `c91445e3`. `main` is now `1d5316e0`, which is S plus records only (no `src/`, `tools/`, `data/` or `package*.json`
+change), so the reading also holds there.
+
+**Preconditions, logged at every step:**
+- **Every step** (pre-clone, pre-install, post-install, pre-A3, each of the 10 children, post-A3 and post-A2): AC, thermal 0,
+  0 vitest, load1 1.84–2.48.
+- **The start gate:** 13 polls over 61 s, all OK.
+
+| criterion | reading | state |
+|---|---|---|
+| `A1` (the clone installs) | `npm install` exit 0, with no flags, the cache empty before and the user config 0 bytes. Reported: 1.87 s wall, `added 66 packages, and audited 67 packages in 2s`; `git status --porcelain` empty before and after. | **MET** |
+| `A2` (a playable game starts) | exit 0; stderr 0 bytes (no missing-book warning); the last frame's move list reads `   1. e4      e5` (2 plies: `e4`, then the engine's `e5`); `input ended` exactly once, after that frame | **MET** |
+| `A3` (`NFR-007`, < 2 000 ms) | Frame 0 is 23 newlines, pinned from child 1. 10 children: min 188.3 / median 192.6 / **max 220.9 ms**. The **first launch after the install (child 1) was 220.9 ms**, the max. Without child 1, reported only: 188.3 / 192.2 / 201.4 ms. Every child exited 0 with 0 stderr bytes. | **MET** |
+| `A4` (the records) | One dated insertion in the `NFR-007` `Verified by` cell. The `Target` cell hashes the same before and after (`9f245333…`). The other ten `NFR-` rows are byte-identical, each hashed individually. Removing the insertion gives back the old file exactly. One dated line on `EPIC-006`. This section. No `src/`, `tools/` or `package*.json` change. | **MET** |
+
+- **Raw output kept** (sha256):
+  - `A2` stdout: `96a13b85f6f4…`.
+  - `A3` child 1 stdout: `4e7ace1164fb…`.
+- **The instrument:** `…8d3f6c15`'s `nfr007-run.mjs`, series (b), via the derivative `nfr007-201.mjs` (`d3940487c808…`). It changes the
+  argv and the stdin close, ends stdin after frame 0, logs the chunk marks and drops the hook path.
+- **Install scripts, ruled acceptable, no STOP:** npm 11.20.0 printed `2 packages have install scripts not yet covered by
+  allowScripts` (`esbuild@0.28.1`, `fsevents@2.3.3`). This matches `…daf38cf7`'s record that npm 11.20.0 runs neither script. The
+  game needs neither: `npm run chess` is `node src/cli.ts`, with no runtime dependency.
+- **`npm audit`** (in the clone, after the readings): 3 dev-only advisories, which are exactly AR-1's approved pairs (`nanoid`
+  GHSA-2v37-7h3g-55p8, `postcss` GHSA-fxqj-rqcc-2cmp, `source-map-js` GHSA-68fv-2mgg-jv7q). `--omit=dev` finds 0. No new risk.
+- **Not read:**
+  - a page-cache-cold launch (`AR-096-DISKCOLD` stays);
+  - another machine or Node major (the "nothing else installed" half of acceptance 1 stays `UNKNOWN - verify` beyond this host).
+- **`ADR-0018` Decision 3's revisit trigger does not fire:** `A3` is MET.

@@ -1,0 +1,1 @@
+JSON report written to /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/7311fff4-c502-4aa9-80bc-0bf8723c1183/scratchpad/sectime/p1/n8/arms/B/.test-results/last-run.json
