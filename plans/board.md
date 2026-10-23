@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-24 by Orchestrator (orch-2026-10-24z) — ABC-205 code had landed on main via the arch-rule records merge (a20ae77f; `…c3d204a5`); src restored to 06ff83d7. ABC-205 stays In Development; its real merge must revert the restore. Timing hop NOT started: a foreign vitest (owner's other repo) is running._
 _Updated: 2026-10-24 by Orchestrator (orch-2026-10-24y) — ABC-205 STOP ruled; two owner words owed. Board idle → `qe-timing-ABC-203` dispatched ALONE (AC). The S1 SE edit waits until the alone runs are done._
 _Updated: 2026-10-24 by Orchestrator (orch-2026-10-24x) — ABC-213 built; stays In Development until In Review frees (3/3: ABC-212, ABC-204, ABC-206). Width 1/3 (arch-rule-ABC-205-stop)._
 _Updated: 2026-10-24 by Orchestrator (orch-2026-10-24w) — ABC-213 design merged → In Development (SE). Width 2/3 (arch-rule-ABC-205-stop, ticket-to-pr-ABC-213). Alone queue waits for both._
