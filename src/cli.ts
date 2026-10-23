@@ -74,6 +74,12 @@
  * `EPIPE` arm is installed before either is handed on; the questions sit inside the one `try`, so a
  * defect thrown by them or by anything built before the loop exits `70` too.
  *
+ * `ABC-203` (`ADR-0047`) — A GAME THAT REACHED AN OUTCOME IS WRITTEN AS PGN under `games/`, after
+ * the result screen. This module reads the clock once (`startedAt`, just before the loop), gates on
+ * `outcome.reason !== null`, and writes the one result line: `PGN saved: <path>` on the sink, or
+ * `PGN not saved: <CODE>` on stderr. The file itself belongs to `src/pgn-file.ts`, the only module
+ * that writes one; no argv token and no environment value reaches its path.
+ *
  * THERE IS NO EXPORTED START POSITION UNDER `src/` — measured; every test file defines its own
  * `START_FEN` — so the literal below is held here rather than promoted into a merged module, which
  * would be a change this ticket is not licensed to make.
@@ -87,6 +93,8 @@ import { beginGlyphModeSession } from "./glyph-mode.ts";
 import { newGame } from "./history.ts";
 import { createLevelSeam } from "./level-seam.ts";
 import { createLineInputSeam } from "./line-input.ts";
+import { formatPgn } from "./pgn.ts";
+import { writePgnFile } from "./pgn-file.ts";
 import { makeRenderSeam } from "./render-seam.ts";
 import { renderResultScreen } from "./result-screen.ts";
 import { askAbsentOptions } from "./startup-questions.ts";
@@ -201,6 +209,9 @@ async function main(): Promise<void> {
       random: Math.random,
     });
 
+    // `ABC-203` (`ADR-0047` D6) — the session's one clock reading, taken when the game starts. It
+    // names the PGN file and gives its `Date` tag; nothing touches the filesystem before the loop.
+    const startedAt = new Date();
     const outcome = await runTurnLoop({
       history,
       humanColour: colour,
@@ -223,6 +234,16 @@ async function main(): Promise<void> {
     // would double-report.
     const screen = renderResultScreen(outcome, history);
     if (screen.length > 0) sink.write(`${screen.join("\n")}\n`);
+
+    // `ABC-203` — A GAME THAT REACHED AN OUTCOME IS KEPT, after the screen, once. `quit` and end of
+    // input (`reason === null`) write nothing. A failed write does not touch the game: one line on
+    // stderr carrying only the errno code, and the exit code stays the loop's (`ADR-0047` D5).
+    if (outcome.reason !== null) {
+      const text = formatPgn(outcome, history, { startedAt, difficulty, humanColour: colour });
+      const saved = writePgnFile(startedAt, text);
+      if (saved.ok) sink.write(`PGN saved: ${saved.path}\n`);
+      else process.stderr.write(`PGN not saved: ${saved.code}\n`);
+    }
 
     // VERBATIM, and the assignment is the rule rather than a formality: `LoopOutcome.exitCode` is
     // typed `0` and only `0`, so a build that computed an exit code from `reason` would be inventing

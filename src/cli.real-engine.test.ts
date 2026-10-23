@@ -50,7 +50,10 @@
  * not the delivered book (`ABC-180`, closing `AR-162-FALLBACK`). Only a read resolved from the
  * module's own URL finds the book. A build that read the book relative to the working directory —
  * first, only, or as a fallback — would read the decoy, warn, and red `A7` on stderr. Every other
- * child keeps its tree root as cwd.
+ * child keeps its tree root as cwd, and that root is the book-absent copy, itself a `mkdtemp`
+ * directory: no child of this lane runs with the repository as its working directory, so none can
+ * write `games/` into it (`ABC-203`, `ADR-0047` D7). Each ends on end of input or `quit`, so none
+ * reaches an outcome or writes a PGN file at all.
  */
 
 import { spawnSync } from "node:child_process";

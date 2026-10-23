@@ -1,0 +1,14 @@
+import { spawnSync } from "node:child_process";
+import { mkdtempSync, readdirSync, readFileSync, rmSync } from "node:fs";
+import { join } from "node:path";
+const [W, scratch] = process.argv.slice(2);
+const hook = `data:text/javascript,${encodeURIComponent(`import { registerHooks } from "node:module";
+registerHooks({ load(url, context, nextLoad) { if (!url.endsWith("/src/book-engine.ts")) return nextLoad(url, context);
+return { format: "module", shortCircuit: true, source: ${JSON.stringify(`import { legalMoves } from "./legal.ts";
+import { squareName } from "./position.ts";
+export function withBook() { const s = ["e7e5", "d7d5"]; let p = 0; return async (h) => { const w = s[p++]; const m = legalMoves(h.position).find((c) => squareName(c.from) + squareName(c.to) === w); if (!m) throw new Error("no " + w); return m; }; }`)} }; } });`)}`;
+const cwd = mkdtempSync(join(scratch, "renew-"));
+const r = spawnSync(process.execPath, ["--import", hook, join(W, "src/cli.ts"), "--colour", "white", "--difficulty", "2"], { cwd, input: "e4\nnew\nd4\nresign\n", encoding: "utf8", env: { PATH: process.env.PATH } });
+console.log("exit", r.status, "stderr", JSON.stringify(r.stderr), "last", JSON.stringify(r.stdout.split("\n").slice(-6)));
+const files = readdirSync(join(cwd, "games")); console.log(files); console.log(readFileSync(join(cwd, "games", files[0]), "utf8").split("\n\n")[1]);
+rmSync(cwd, { recursive: true, force: true });

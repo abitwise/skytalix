@@ -1,0 +1,19 @@
+[Event "?"]
+[Site "?"]
+[Date "2026.10.23"]
+[Round "1"]
+[White "a"]
+[Black "b"]
+[Result "1-0"]
+[ECO "A05"]
+[GameDuration "00:00:00"]
+[GameEndTime "2026-10-23T23:57:07.001 GMT+3"]
+[GameStartTime "2026-10-23T23:57:06.969 GMT+3"]
+[Opening "Reti Opening"]
+[PlyCount "7"]
+[Termination "time forfeit"]
+[TimeControl "0.02/move"]
+
+1. Nf3 {book} Nf6 {book} 2. Ng1 {book} Ng8 {book} 3. Nf3 {book} Nf6 {book}
+4. Ng1 {book, Black loses on time} 1-0
+

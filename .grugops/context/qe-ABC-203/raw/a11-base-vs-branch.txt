@@ -1,0 +1,65 @@
+== resignAfterPlies: ["skytalix-20261023-234243.pgn"]
+[Event "skytalix CLI game"]
+[Site "?"]
+[Date "2026.10.23"]
+[Round "-"]
+[White "Human"]
+[Black "skytalix (difficulty 4)"]
+[Result "0-1"]
+[Termination "normal"]
+[Difficulty "4"]
+[HumanColour "white"]
+
+1. e4 e5 {Black wins by resignation.} 0-1
+
+== engineMatesHuman: ["skytalix-20261023-234244.pgn"]
+[Event "skytalix CLI game"]
+[Site "?"]
+[Date "2026.10.23"]
+[Round "-"]
+[White "Human"]
+[Black "skytalix (difficulty 5)"]
+[Result "0-1"]
+[Termination "normal"]
+[Difficulty "5"]
+[HumanColour "white"]
+
+1. f3 e5 2. g4 Qh4# {Black wins by checkmate.} 0-1
+
+== humanMatesEngine: ["skytalix-20261023-234244.pgn"]
+[Event "skytalix CLI game"]
+[Site "?"]
+[Date "2026.10.23"]
+[Round "-"]
+[White "skytalix (difficulty 3)"]
+[Black "Human"]
+[Result "0-1"]
+[Termination "normal"]
+[Difficulty "3"]
+[HumanColour "black"]
+
+1. f3 e5 2. g4 Qh4# {Black wins by checkmate.} 0-1
+
+== engineThrows: ["skytalix-20261023-234244.pgn"]
+[Event "skytalix CLI game"]
+[Site "?"]
+[Date "2026.10.23"]
+[Round "-"]
+[White "Human"]
+[Black "skytalix (difficulty 1)"]
+[Result "*"]
+[Termination "unterminated"]
+[Difficulty "1"]
+[HumanColour "white"]
+
+1. e4 {The game did not finish: the engine threw an error. That is a bug in
+this program, not a chess outcome.} *
+
+┌─────────┬────────────────────┬───────┬───────────────────────────┬──────────┬─────────────┬───────┬────────────────┐
+│ (index) │ name               │ exit  │ stdoutIsBasePlusSavedLine │ stderrEq │ stderrEmpty │ files │ savedNamesFile │
+├─────────┼────────────────────┼───────┼───────────────────────────┼──────────┼─────────────┼───────┼────────────────┤
+│ 0       │ 'resignAfterPlies' │ '0/0' │ true                      │ true     │ true        │ 1     │ true           │
+│ 1       │ 'engineMatesHuman' │ '0/0' │ true                      │ true     │ true        │ 1     │ true           │
+│ 2       │ 'humanMatesEngine' │ '0/0' │ true                      │ true     │ true        │ 1     │ true           │
+│ 3       │ 'engineThrows'     │ '0/0' │ true                      │ true     │ true        │ 1     │ true           │
+└─────────┴────────────────────┴───────┴───────────────────────────┴──────────┴─────────────┴───────┴────────────────┘

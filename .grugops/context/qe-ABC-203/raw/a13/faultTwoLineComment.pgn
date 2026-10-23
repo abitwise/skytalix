@@ -1,0 +1,13 @@
+[Event "skytalix CLI game"]
+[Site "?"]
+[Date "2026.10.23"]
+[Round "-"]
+[White "Human"]
+[Black "skytalix (difficulty 2)"]
+[Result "*"]
+[Termination "unterminated"]
+[Difficulty "2"]
+[HumanColour "white"]
+
+1. e4 e5 2. Nf3 {The game did not finish: the engine returned a move that was
+not its to play. That is a bug in this program, not a chess outcome.} *
