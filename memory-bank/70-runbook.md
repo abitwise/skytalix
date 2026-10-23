@@ -8,6 +8,8 @@ pointer correction. § Deploy carries its own dated brackets._
 _Updated: 2026-10-23 by Architect/Design (task `arch-runbook-deploy-holder`), on `main` `ad9655fc`. § Deploy
 and § On-call say who holds deploy. Both now carry a dated correction to the owner's directive of
 2026-08-15. The old wording stays in place above each correction._
+_Updated: 2026-10-24 by Architect/Design (task `arch-runbook-ABC-212`), on `grugops/scribe-ABC-212`
+`2ba55ea7`. § Operate names levels 1–7 (`ABC-212` A11). The old wording is kept in a dated bracket._
 
 <!--
   FORMAT — read before you fill this in. (clear voice; this is a technical file, not a role prompt.)
@@ -33,12 +35,20 @@ instance or database. There are two local programs. Both run from source in a cl
 The clone is the channel, per `ADR-0018`.
 
 - **The game: `npm run chess`.** This runs `node src/cli.ts` (`ABC-042`).
-  - Flags: `--colour white|black|random`, `--difficulty 1|2|3|4|5` (default 5, `ADR-0045`), and
+  - Flags: `--colour white|black|random`, `--difficulty 1|2|3|4|5|6|7` (default 5, `ADR-0045`), and
     `--ascii` or `--unicode`.
+  - Levels run from `1` (weakest) to `7` (strongest). Since `ABC-212`, the default 5 is no longer the
+    hardest level. Level 5 thinks up to 3 s a move, level 6 thinks 5 s and level 7 thinks 30 s. Their
+    hard ceilings are 7 s and 32 s, per the `NFR-004` text the owner accepts (`ADR-0045` § AMENDMENT
+    2026-10-24). At level 7, expect about half a minute with no output on each engine move.
   - Pass flags after `--`, as in `npm run chess -- --colour black`. `AGENTS.md` § Commands
     "Dev / run" explains why.
   - On a terminal, `ABC-200` asks for each flag the command line left out, colour first, before the
-    first board: `colour (white|black|random) [white]: ` then `difficulty (1|2|3|4|5) [5]: `.
+    first board: `colour (white|black|random) [white]: ` then `difficulty (1|2|3|4|5|6|7) [5]: `.
+  - **[CHANGED 2026-10-24 (`arch-runbook-ABC-212`, `ABC-212` A11), checked on `grugops/scribe-ABC-212`
+    `2ba55ea7` against `src/cli-options.ts`, `src/levels.ts` and `src/startup-questions.ts`.** The old
+    wording was `--difficulty 1|2|3|4|5` (default 5, `ADR-0045`) and the prompt
+    `difficulty (1|2|3|4|5) [5]: `. Level 5 was the hardest level then.]
   - Enter keeps the default in brackets. A wrong answer is named, and the same question is asked
     again. End of input at a question ends the session with exit 0.
   - With stdin or stdout not a terminal, nothing is asked and the defaults apply.
