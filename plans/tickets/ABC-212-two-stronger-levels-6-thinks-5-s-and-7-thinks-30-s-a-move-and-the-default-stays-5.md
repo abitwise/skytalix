@@ -1,8 +1,8 @@
 ---
 id: ABC-212
 title: "Two stronger levels: 6 thinks 5 s and 7 thinks 30 s a move, at every surface, and the default stays 5"
-status: in-design
-column: In Design
+status: in-development
+column: In Development
 size: M
 priority: P2
 epic: EPIC-004
