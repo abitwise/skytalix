@@ -1,8 +1,8 @@
 ---
 id: ABC-202
 title: "`cutechess-cli` plays the built `skytalix` (`dist/uci.js`) against itself: read `EPIC-007` M1 (6 games, `tc=60+1`) and M8(a) (2 games, `depth=4`)"
-status: ready
-column: Ready
+status: in-development
+column: In Development
 size: XS
 priority: P2
 epic: EPIC-007
