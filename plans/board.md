@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-23 21:00Z by Orchestrator (orch-2026-10-23aj) — ABC-204 design merged → In Development (SE). Width 3/3 (qe-ABC-203, security-nfr-public-repo, ticket-to-pr-ABC-204)._
 _Updated: 2026-10-23 20:45Z by Orchestrator (orch-2026-10-23ai) — owner made the repo public (github.com/abitwise/skytalix; `…59df15ce`). `security-nfr-public-repo` (exposure review: secrets in history, personal data, licence) dispatched. Posture ADR to be drafted as PROPOSED after it. Width 3/3._
 _Updated: 2026-10-23 20:50Z by Orchestrator (orch-2026-10-23ah) — EPIC-008 (engine strength) + ABC-204..211 cut by BA/PM (`…8c3b2f47`). ABC-204 (rating harness) → In Design; ABC-205/206 Ready; 207–211 Backlog. Owner Q1 (Elo target) and Q2 (machine-time windows) open, non-blocking. Ready 2/8, In Design 1/2, In Review 1/3, width 2/3._
 _Updated: 2026-10-23 20:40Z by Orchestrator (orch-2026-10-23ag) — ABC-203 built (`5900d100`) → In Review; `qe-ABC-203` dispatched. `bapm-cut-engine-strength` still running. In Review 1/3, width 2/3._
@@ -449,7 +450,7 @@ _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-137` 
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-138` → `In Review` (`7e5c9c74`); QE `qe-ABC-138` dispatched._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-010` pulled `Ready for Dev` → `In Development`._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-055` → `Done` (UAT WAIVED; board now renders all 13 columns). FORMAT comment: In UAT added to the skippable columns (waiver path) and the Orchestrator's Ready → Ready for Dev → In Development pass-through at pull stated (QE-055-b/c)._
-_Updated: 2026-10-10 by the Software Engineer (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-055`) — `ABC-055` built: `## In Analysis (WIP 0/2)` and `## In Design (WIP 1/2)` added between `Ready` and `Ready for Dev` (13 headings = 13 table rows); the FORMAT comment now names the dial `.grugops/factory.config.json`, the four skippable columns and the heading/table invariant. No ticket row moved; `ABC-055` stays in `In Development` (A4), so the `In Review` move is left for the close-out._
+_Updated: 2026-10-10 by the Software Engineer (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-055`) — `ABC-055` built: `## In Analysis (WIP 0/2)` and `## In Design (WIP 0/2)` added between `Ready` and `Ready for Dev` (13 headings = 13 table rows); the FORMAT comment now names the dial `.grugops/factory.config.json`, the four skippable columns and the heading/table invariant. No ticket row moved; `ABC-055` stays in `In Development` (A4), so the `In Review` move is left for the close-out._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-137` → `In Review` (`455a0846`); QE `qe-ABC-137` dispatched._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — BA/PM `bapm-abc010-qe129a-2026-10-10` merged (`7d62038a`): `ABC-010` Backlog → `Ready for Dev` (10/10); new `ABC-139` → `Ready`; `ABC-137` pulled → `In Development`._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-055` → `In Review` (`86926927`), QE dispatched; board writes resumed. BA/PM `bapm-cuts-r5c-f1331-2026-10-10` merged (`4bc53b0a`): new `ABC-137` → `Ready`; new `ABC-138` → `Ready` → pulled → `In Development`._
@@ -925,7 +926,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   one hop at pull, when it checks `Ready for Dev`'s exit at that moment; the row records the pull.
 
   HEADING FORMAT (spec §6.1): each column is an H2 heading carrying its live/limit WIP count,
-  e.g. `## In Development (WIP 0/3)` — the left number is how many tickets are in the column
+  e.g. `## In Development (WIP 1/3)` — the left number is how many tickets are in the column
   now, the right number is the limit from config. Unlimited columns read `(WIP unlimited)`;
   Blocked is visible and time-tracked (no WIP limit) and reads `(visible, time-tracked)`.
   INVARIANT: the column H2 headings and the rows of the `## Columns` table are the same 13 names in the
@@ -935,7 +936,8 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 0/3)
+    ## In Development (WIP 1/3)
+- [ABC-204] Rating harness: cutechess-cli plays the built skytalix against Stockfish UCI_LimitStrength (R) and against its own base (D), outside npm test  (owner: software-engineer, after an Architect/Design ruling; readings by QE, size: M, priority: P2, epic: EPIC-008, since: 2026-10-23, DoR 10/10; `…8c3b2f47`. tools/rating only, 0 lane files (NFR-008 untouched); baseline R (25–75 % band, E frozen), A/A D (100 games, interval contains 0), wall ruling R ≤ 10 h, D ≤ 8 h (D budget ≥ 1 000 ms if needed). No ADR, no Security/NFR hop. Width 1 for readings) **2026-10-23: pulled Ready → In Design (`arch-design-ABC-204`).** **2026-10-23: design ruled (`…13faedbc`, no ADR); biome line + E-step nodded by the Orchestrator. In Design → In Development (`ticket-to-pr-ABC-204`).**
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
     ## In Review (WIP 1/3)
@@ -1056,8 +1058,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## In Analysis (WIP 0/2)
 
 
-## In Design (WIP 1/2)
-- [ABC-204] Rating harness: cutechess-cli plays the built skytalix against Stockfish UCI_LimitStrength (R) and against its own base (D), outside npm test  (owner: software-engineer, after an Architect/Design ruling; readings by QE, size: M, priority: P2, epic: EPIC-008, since: 2026-10-23, DoR 10/10; `…8c3b2f47`. tools/rating only, 0 lane files (NFR-008 untouched); baseline R (25–75 % band, E frozen), A/A D (100 games, interval contains 0), wall ruling R ≤ 10 h, D ≤ 8 h (D budget ≥ 1 000 ms if needed). No ADR, no Security/NFR hop. Width 1 for readings) **2026-10-23: pulled Ready → In Design (`arch-design-ABC-204`).**
+## In Design (WIP 0/2)
 
 
 ## Ready for Dev (WIP 0/6)
