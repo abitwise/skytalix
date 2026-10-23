@@ -1,0 +1,2 @@
+# arch-design-ABC-204 — context
+Ticket: plans/tickets/ABC-204-a-rating-harness-plays-skytalix-against-stockfish-uci-limitstrength-and-against-its-base-in-cutechess-cli-outside-npm-test.md (five Architect questions on the page). Epic: plans/epics/EPIC-008-*.md (readings R/D, ship rules S1/S2, gates G1–G11). BA/PM …81e021ac, …8c3b2f47. Host tools: cutechess-cli /Users/olgeroeselg/Projects/others/cutechess/cutechess/build/cutechess-cli (1.5.1, pinned in ABC-202), stockfish /opt/homebrew/bin/stockfish (19). Prior cutechess run: .grugops/context/qe-read-ABC-202/raw/run.sh.
