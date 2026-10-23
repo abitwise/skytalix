@@ -1,0 +1,2 @@
+# qe-ABC-212 — context
+Ticket: plans/tickets/ABC-212-two-stronger-levels-6-thinks-5-s-and-7-thinks-30-s-a-move-and-the-default-stays-5.md (A3, A4 ENGINE_DEEP, A10 pty at level 7, A15; amendment § 2026-10-24). Build: grugops/scribe-ABC-212 @ 2ba55ea7 (contains grugops/ABC-212 @ 73339912). SE notes …e4a87583, …f2d7bc56, …93ffdad9, …12d21099; Scribe …35329b73, …0011c18e. ADR-0045 amendment; NFR-004 owner text …2c6fa3b1.
