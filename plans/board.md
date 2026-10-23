@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-23 08:35Z by Orchestrator — `bapm-rerule-ABC-197-A5` merged. `ABC-197` In Development → In Review (`qe-ABC-197`, non-timing). In Development 0/3, In Review 1/3._
 _Updated: 2026-10-23 08:23Z by BA/PM (`bapm-rerule-ABC-197-A5`, records only; `…4df5ef95`) — `ABC-197` A5 re-ruled. The SE's claims are verified from `src/` and in scratch (`…9712ad09`). **QP6-2900 → QP6-2800**: R2 kills G ≤ 2 800 only, and 2 800 reds R2 alone; the base survives it. **QP6-3300 dropped** as equivalent by design: the level cap clips G to ≤ 3 000. A1 is unchanged, so **no re-build**. Problem erratum: the band is 2 × step, so it went 200 → 2 000 ms, not 100 → 1 000; "upper side pinned" is struck. The cost line is refreshed: ≈ 7.6 % of 0.990 s. DoR 10/10. No owner question. No column moved._
 _Updated: 2026-10-23 08:30Z by Orchestrator — `ABC-197` built (`20e397c8`); A5 needs a re-rule (2 of its 4 plants cannot go red), so `bapm-rerule-ABC-197-A5` is dispatched. The SE's notes are copied into main's context. In Development 1/3._
 _Updated: 2026-10-23 08:30Z by Orchestrator — `ABC-201` → Done (QE `…02ef046d`). EPIC-006 AC1 and NFR-007 MET; EPIC-006 stays open only for save/resume and PGN export (play-testing). The quiet window is released. `ticket-to-pr-ABC-197` (SE) starts now. In Review 0/3, In Development 1/3._
@@ -901,7 +902,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   one hop at pull, when it checks `Ready for Dev`'s exit at that moment; the row records the pull.
 
   HEADING FORMAT (spec §6.1): each column is an H2 heading carrying its live/limit WIP count,
-  e.g. `## In Development (WIP 1/3)` — the left number is how many tickets are in the column
+  e.g. `## In Development (WIP 0/3)` — the left number is how many tickets are in the column
   now, the right number is the limit from config. Unlimited columns read `(WIP unlimited)`;
   Blocked is visible and time-tracked (no WIP limit) and reads `(visible, time-tracked)`.
   INVARIANT: the column H2 headings and the rows of the `## Columns` table are the same 13 names in the
@@ -911,10 +912,10 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 1/3)
+    ## In Development (WIP 0/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
-    ## In Review (WIP 0/3)
+    ## In Review (WIP 1/3)
     - [ABC-012] Portfolio FX conversion  (PR: #41, QE: running)
 
   BOARD <-> TICKET CONTRACT: each ticket file (`plans/tickets/<prefix>-xxx.md`) carries a
@@ -1030,8 +1031,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-197] One step-100 UCI row restores the 100 ms dropped-token budget band ABC-177 widened to 1 000 ms (QE-177-b; R2 cut from ABC-178)  (owner: software-engineer, size: XS, priority: P3, epic: EPIC-007, since: 2026-10-22, DoR 9/10; cut in `bapm-rerule-ABC-178`. Test-only, one additive row in `src/uci-session.test.ts`, step 100, `3 000 ≤ time ≤ 3 200`. Waits: ABC-178 merged, and an admissible full-lane NFR-008 reading of `main` ≤ 9.2 s (QE, at ABC-178's B8; owner-quiet, AC). 9.2–10 s → waits for O3/tranche 2's reading; > 10 s → owner, drop R2.) **2026-10-23: pull trigger true (B on vitest 4.1.12 = 8.985 s ≤ 9.2 s, `…25efab27`) → Ready. R-178-1: the Architect re-reads F before its timing hop is pre-registered (`…8c94d901`).** **2026-10-23: the Architect ruled F = 0.070 s for `src/uci-session.test.ts` (`…578a9290`); the cut check passes; R-178-1 met. Pulled Ready → In Development (`ticket-to-pr-ABC-197`). A6/A7 go to a later quiet-host QE timing hop.** **2026-10-23: built `grugops/ABC-197` @ `20e397c8` (+11 lines in one file; A1–A4 met on SE readings; R2 alone red on QP6-2500; gates 61/2019, UCI_DEEP 5; `…3c9e5d2b`). A5 cannot be met as written: QP6-3300 is unkillable (level budget clip) and QP6-2900 reads time 3000 (`…ba08acdc`). → BA/PM `bapm-rerule-ABC-197-A5`; stays In Development until it is ruled.**
+## In Development (WIP 0/3)
 
 
 
@@ -1059,7 +1059,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-197] One step-100 UCI row restores the 100 ms dropped-token budget band ABC-177 widened to 1 000 ms (QE-177-b; R2 cut from ABC-178)  (owner: software-engineer, size: XS, priority: P3, epic: EPIC-007, since: 2026-10-22, DoR 9/10; cut in `bapm-rerule-ABC-178`. Test-only, one additive row in `src/uci-session.test.ts`, step 100, `3 000 ≤ time ≤ 3 200`. Waits: ABC-178 merged, and an admissible full-lane NFR-008 reading of `main` ≤ 9.2 s (QE, at ABC-178's B8; owner-quiet, AC). 9.2–10 s → waits for O3/tranche 2's reading; > 10 s → owner, drop R2.) **2026-10-23: pull trigger true (B on vitest 4.1.12 = 8.985 s ≤ 9.2 s, `…25efab27`) → Ready. R-178-1: the Architect re-reads F before its timing hop is pre-registered (`…8c94d901`).** **2026-10-23: the Architect ruled F = 0.070 s for `src/uci-session.test.ts` (`…578a9290`); the cut check passes; R-178-1 met. Pulled Ready → In Development (`ticket-to-pr-ABC-197`). A6/A7 go to a later quiet-host QE timing hop.** **2026-10-23: built `grugops/ABC-197` @ `20e397c8` (+11 lines in one file; A1–A4 met on SE readings; R2 alone red on QP6-2500; gates 61/2019, UCI_DEEP 5; `…3c9e5d2b`). A5 cannot be met as written: QP6-3300 is unkillable (level budget clip) and QP6-2900 reads time 3000 (`…ba08acdc`). → BA/PM `bapm-rerule-ABC-197-A5`; stays In Development until it is ruled.** **2026-10-23: BA/PM re-ruled A5 (`…4df5ef95`): QP6-2900 becomes QP6-2800 (R2 alone red), QP6-3300 is dropped as unkillable (the level cap), A1 is unchanged, DoR 10/10, no re-build. Moved In Development → In Review (`qe-ABC-197`: A1–A5 and A8). A6/A7 go to a later quiet-host hop.**
 
 
 
