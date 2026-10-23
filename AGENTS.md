@@ -53,8 +53,8 @@ Real commands only, with flags, preferring fast single-file variants. If a comma
 ### Development
 
 - Dev / run: `npm run chess` <!-- prints the board and plays a game against the engine, default
-  level 5 (≤3 s/move, ADR-0045). Options: `--colour white|black|random`, `--difficulty 1|2|3|4|5`, `--ascii`,
-  `--unicode`. Pass an option AFTER `--`: `npm run chess -- --colour black` — the separator is
+  level 5 (≤3 s/move, ADR-0045; no longer the hardest: levels 6 and 7 think 5 s and 30 s a move). Options:
+  `--colour white|black|random`, `--difficulty 1|2|3|4|5|6|7`, `--ascii`, `--unicode`. Pass an option AFTER `--`: `npm run chess -- --colour black` — the separator is
   load-bearing; without it npm eats the flag name (npm 11.20.0): a value-less flag (`--ascii`) is
   dropped and the game runs with defaults, exit 0; a value flag leaves its value behind as a stray
   argument and the CLI refuses it, exit 1. On a terminal, colour then difficulty are asked for

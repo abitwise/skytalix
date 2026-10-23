@@ -1054,3 +1054,14 @@ AGENTS.md Scribe, task `scribe-drift-2026-10-23`. Three files: `AGENTS.md`, `mem
 | `45-standing-rulings.md` § Deployment posture | dated correction after the "no `bin`/`main`/`exports`/`files`" sentence (text kept); no ruling changes |
 
 Why: `ABC-200` merged the questions without the slot saying so; and the `--` receipt was measured only with `--ascii`. Both were re-run today, see § Dev / run.
+
+## `scribe-ABC-212` pass, 2026-10-24 (`ABC-212` `A11`; BA/PM `U3` ruling `…26b36292`; branch `grugops/scribe-ABC-212` from `grugops/ABC-212` `73339912`)
+
+AGENTS.md Scribe, task `scribe-ABC-212`. Two files: `AGENTS.md` and this file. Zero `src/`, `plans/` and `package*.json` lines. No command slot changed, no new `-->` closer (`ABC-187` `A5`'s count stays 9). `AGENTS.md` 17,010 -> **17,079 B** (+69; budget 18,432).
+
+| where | change |
+|---|---|
+| `AGENTS.md` `Dev / run` slot comment | `--difficulty 1\|2\|3\|4\|5` -> `--difficulty 1\|2\|3\|4\|5\|6\|7`, the one list, no second list, no new `--` token; the default-level clause now reads "default level 5 (≤3 s/move, ADR-0045; no longer the hardest: levels 6 and 7 think 5 s and 30 s a move)" |
+| this file § Dev / run | not touched; its 2026-08-14 "complete set" line is dated history (text kept) |
+
+Why: `ABC-212` added levels 6 and 7 (`LEVELS[6]` 5 000 ms, `LEVELS[7]` 30 000 ms; default 5 unchanged). The `ABC-065` `A3` row (`src/cli.test.ts`, "the documented option list EQUALS the accepted set") reds on the old list; it needs exactly one `--difficulty` value list in the slot and no extra `--`-prefixed token, which the new line keeps. Measured on this branch: `npm test` 62 files, 2,057 tests, 0 failed (the `A3` row green; before this line it was the one red); lint clean.
