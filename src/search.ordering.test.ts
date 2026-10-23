@@ -433,11 +433,15 @@ describe("A4 — each heuristic's node count, and the delete rule", () => {
    * RE-MEASURED at `ABC-083` (king safety and mobility, the same reason): 9 319 / 3 286 / 2 429
    * became 8 887 / 4 419 / 3 871, read by `.grugops/context/ticket-to-pr-ABC-083/probe/rows.ts`
    * on base and build. The killers now earn 12% here, not 26%.
+   *
+   * RE-MEASURED at `ABC-205` (queen-scaled king safety, tapered king square, the same reason):
+   * 8 887 / 4 419 / 3 871 became 8 095 / 4 722 / 3 993, read by a node script on base and build.
+   * `A3`'s standing guard above reads 3 993 / 8 095 = 49.33%, under its 65% level.
    */
-  it("position-6 at depth 2: none 8 887, MVV-LVA 4 419, + killers 3 871", () => {
-    expect(none("position-6", 2).nodes).toBe(8_887);
-    expect(mvvLva("position-6", 2).nodes).toBe(4_419);
-    expect(full("position-6", 2).nodes).toBe(3_871);
+  it("position-6 at depth 2: none 8 095, MVV-LVA 4 722, + killers 3 993", () => {
+    expect(none("position-6", 2).nodes).toBe(8_095);
+    expect(mvvLva("position-6", 2).nodes).toBe(4_722);
+    expect(full("position-6", 2).nodes).toBe(3_993);
   });
 
   /**
@@ -634,8 +638,11 @@ describe("G1 — chooseMove records a killer only on a beta cutoff", () => {
    *
    * RE-MEASURED at `ABC-083` (king safety and mobility): depth 3 in 354 nodes (`probe/rows.ts`,
    * base 360), and `N3`, re-planted on that build, reads 350 (`probe/mutants.mjs`).
+   *
+   * RE-MEASURED at `ABC-205` (queen-scaled king safety, tapered king square): depth 3 in 349 nodes
+   * (base 354), and `N3`, re-planted on that build, reads 351 — the pin still tells the two apart.
    */
-  it("position-3 at 3 injected ticks: depth 3 in exactly 354 nodes", () => {
+  it("position-3 at 3 injected ticks: depth 3 in exactly 349 nodes", () => {
     // The pre-`ABC-121` engine since `ABC-121` (`ADR-0026` decision 4); the pin is unchanged.
     let ticks = 0;
     const choice = chooseMoveWithoutPvsOrReductions(parseFen(fenOf("position-3")), {
@@ -643,6 +650,6 @@ describe("G1 — chooseMove records a killer only on a beta cutoff", () => {
       now: () => ticks++,
     }) as { depth: number; nodes: number };
     expect(choice.depth).toBe(3);
-    expect(choice.nodes).toBe(354);
+    expect(choice.nodes).toBe(349);
   });
 });
