@@ -1,0 +1,7 @@
+2026-10-23T13:32:58Z before-M1 load1=5.19 thermal=0 power=AC_Power foreign_vitest_procs=2
+2026-10-23T13:32:58Z M1 start
+2026-10-23T13:33:03Z M1 end rc=1 wall_s=5
+2026-10-23T13:33:03Z after-M1 load1=4.85 thermal=0 power=AC_Power foreign_vitest_procs=2
+2026-10-23T13:33:03Z M8a start
+2026-10-23T13:33:08Z M8a end rc=1 wall_s=5
+2026-10-23T13:33:08Z after-M8a load1=5.75 thermal=0 power=AC_Power foreign_vitest_procs=2
