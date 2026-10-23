@@ -279,3 +279,86 @@ feature: difficulty levels (ABC-087 mechanism, ABC-101 selection, ABC-171 Skill 
 | 10 | no major unresolved blocker | ✅ the owner's word sets the levels; the text acceptance is a gate before the SE pull, not a blocker to design |
 
 **DoR 10/10. Ready → In Design** (Architect/Design: § Design owed), then the owner's acceptance, then In Development.
+
+## Design ruling (Architect/Design, 2026-10-24)
+
+Task `arch-design-ABC-212`, at `main` `5717edec`. Records plus light probes: virtual clock only, scratch tree with
+`HARD_CEILING_MS` set to 32 000. No wall-clock figure was taken. The inputs were the owner's `…2c6fa3b1` and BA/PM's
+`…44bee405` and `…78d4532b`. The `ADR-0045` amendment is written to the owner's accepted points (§ AMENDMENT 2026-10-24
+in the ADR). It has no departure, so the STOP did not fire. No new ADR was written.
+
+**1. Clamp shape: (i), one absolute clamp. `HARD_CEILING_MS` 5 000 → 32 000.**
+- Each level's ceiling is held by its budget: `LEVELS[L].budgetMs ≤ ceiling(L)`, with a margin of at least 2 000 ms at
+  every level. `A5`'s data row pins it.
+- `ceiling(L)` is a test-local literal table in `src/levels.test.ts`, taken from `NFR-004`: 5 000 at levels 1–5, then
+  7 000 and 32 000. It is not a production export.
+- (ii), a ceiling per level, is rejected. It needs a third `Level` field or an `EngineOptions` field, and either one
+  is a departure from the points (`ADR-0045` § AMENDMENT A3).
+- The one line in `src/engine.ts` is `:129`, plus its comments.
+
+**2. UCI bare `go`: zero code change at `src/uci-session.ts:211`.**
+- `G = HARD_CEILING_MS` (now 32 000) is capped by `min(G, LEVELS[skill].budgetMs)` to the level's budget at every
+  level.
+- Probe, step 1 000: bare `go` gave 4 000 at level 5, 6 000 at 6 and 31 000 at 7. `movetime 60000` gave 31 000 and
+  `movetime 1000` gave 2 000. `wtime 600000` gave 31 000. `go depth 3` at 7 stopped at depth 3 with a score.
+- Control, with the clamp at 5 000: level 7 gave 6 000 (P2).
+- The session reads `max` from `HARDEST_LEVEL`, as it already reads `default` from `DEFAULT_LEVEL`. The "takes an
+  integer" text reads `EASIEST_LEVEL`–`HARDEST_LEVEL`. The byte pins still say `max 7` and `1-7`.
+
+**3. OQ-212-3 / `ADR-0044` D5: the latency is accepted at levels 6–7. The worker is not owed first, and the
+pre-registered split is not taken. `A9` stays in this ticket.**
+- The reasons and the cutechess source read are in `ADR-0045` § AMENDMENT A4.
+- The cutechess read: pings only between moves, and a 15 s `IdleTimeout` after a mid-search `stop`. A `stop` comes
+  only at a game end or when pondering.
+- Other GUIs are `UNKNOWN - verify`.
+- The worker is built when pondering is wanted, or when a GUI the owner uses is shown to stall at levels 6–7.
+- `A11` keeps the runbook to its named lines, so the latency is documented in `src/uci-session.ts`'s header (scope 6)
+  and in the `ADR-0044` D5 fold.
+
+**4. Pins (`A13`). The list stands, with these rulings and four additions.** The additions are interaction 12 below,
+licensed by this ruling.
+- **As listed, made exact:**
+  - `src/engine.test.ts:644` → `32_000`.
+  - In the `RF-1` block, `STEP_MS = 2_500` → `HARD_CEILING_MS / 2`. 32 000 is not a multiple of 2 500, so `:651` reds
+    at 35 000 > 34 500 (probe). The ratio is kept, so the reading count and cost stay as today. With that one edit,
+    `:647`–`:662` are green at 32 000, and a no-clamp plant reds 3 of them (probe).
+  - `src/levels.test.ts:293`–`:296` becomes `A5`'s data row: `budgetMs ≤ ceiling(L)` over 1..7, `budgetMs < 5 000`
+    over 1..5, and `HARD_CEILING_MS === 32 000`.
+  - `:627` reads `LEVELS[5]`, and its bound at `:639` is `5 000`, not `HARD_CEILING_MS`.
+  - `HANG_GUARD_MS` in both real-engine files → `20_000`.
+- **Added:**
+  - `src/levels.test.ts:405`–`:413` (R1) → a fixture of `2 * HARD_CEILING_MS` and `step = HARD_CEILING_MS / 20`. As
+    written at 32 000 it goes vacuous: a removed level clamp stays green (probe). Refixed, that plant reds (68 800 >
+    38 400), and the row passes in 5 ms.
+  - `src/levels.test.ts:601` (`A2` deep, "never more than 5 s") → `ceiling(id)`.
+  - `src/cli.real-engine.test.ts:408` (`A3(ii)`, the whole CLI child) → `5 000`, because the child plays level 5.
+    Untouched, it silently loosens to 32 s.
+  - The comments that go with these rows.
+- **They move with no edit:**
+  - `src/engine.test.ts:1268` `LONG_MS`: the 6 000 nodes still bind first;
+  - every `src/uci-session.test.ts` row: 128/128 green at 32 000 in the probe;
+  - `src/ladder.test.ts` and `src/search.ts`: not edited.
+
+**5. Interactions (BA/PM `…44bee405` lists 11; this hop adds the 12th):**
+
+| # | ruling |
+|---|---|
+| 1 | Dissolved. No level's budget reaches its ceiling or the clamp. The catalog bullet is retired at the gate (Security/NFR) |
+| 2 | Closed by 1 and 2 above. P2 reds `A4` and `A9` |
+| 3 | Accepted, with no worker and no split (3 above) |
+| 4 | BA/PM's erratum on the `ABC-204` page at the merge: "level 5's ceiling (5 000)". The numbers do not change |
+| 5 | Agreed, and `:639` is made exact (4 above) |
+| 6 | Agreed (`A13`) |
+| 7 | Agreed. The `RF-1` step scales with the clamp, so the default-lane cost does not grow. `A4` runs at width 1, never during an `EPIC-008` reading |
+| 8 | Owed: Security/NFR, plain `node`. Expected flat (`ADR-0025`), `UNKNOWN - verify` |
+| 9 | The guard stays. `src/search.ts` is not edited (`ADR-0045` D3). `A4` logs the depth, and ≥ 100 goes to Architect/Design. The comment is folded at the next `search.ts` ticket |
+| 10 | One line plus comments in `src/engine.ts`. Whichever merges second rebases. Value-identical at 1–5 (`min(b, 32 000) = min(b, 5 000)` for b ≤ 3 000) |
+| 11 | The Orchestrator's (the board) |
+| 12 | **New:** four ceiling readers outside `A13` (`levels.test.ts` R1 and `:601`, `cli.real-engine.test.ts:408`, and the `RF-1` step) would go red, or go vacuous, or loosen. They are licensed in 4 above |
+
+**Next move:**
+- The Orchestrator merges these records and reports the `ADR-0045` amendment to the owner (veto open).
+- Then `In Design` → `Ready for Dev`, and the SE pulls `ABC-212`.
+- Then QE: `A4` in `ENGINE_DEEP` at width 1, and `A3`/`A10` by hand.
+- Then Security/NFR at the gate: the `NFR-004` catalog text and mechanism line, `NFR-009` at 30 s, and `N8-LANE`.
+- BA/PM at the merge: the `ADR-0044` fold lines and the `ABC-204` erratum.
