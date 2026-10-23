@@ -214,11 +214,12 @@ BA/PM, 2026-10-23, at `main` `55a8f4ef`. **Result: 10 of 10. `Ready`.**
     unchanged.
   - **The full depth-3 expansion runs behind `ENGINE_DEEP=1`.** Plain node takes about 11 s, and vitest costs about
     5x that (`ADR-0041`).
-- **The count guards (lane, spied), the `NFR-001` "count, not time" precedent.** In `src/gameend.nfr.test.ts`,
-  beside its `legal.ts` spies:
-  - `leafEndReason` calls `legalMoves` 0 times, `hasLegalMove` exactly once, and `zobristKey` 0 times.
-  - In the file that owns each function, `quiesce` calls `legalMoves` 0 times, and `lateMoveReduction` calls
-    `makeMove` 0 times on a `FLAG_NONE` move.
+- **The count guards (lane, spied), the `NFR-001` "count, not time" precedent.** All three go in
+  `src/gameend.nfr.test.ts`, beside its `legal.ts` spies, plus a pass-through `apply.ts` spy:
+  - `leafEndReason` calls `legalMoves` 0 times, `hasLegalMove` exactly once, and `zobristKey` 0 times;
+  - `quiesce` calls `legalMoves` 0 times;
+  - `lateMoveReduction` calls `makeMove` 0 times on a `FLAG_NONE` move.
+  - They sit in one file so that this ticket never edits a file `ABC-205` re-pins (merge order, below).
   - A reintroduced generation is invisible to every value row. These rows are what catch it.
 - **`A1` (review time, two trees, not a lane row).** This is a differential run in plain `node` over the branch and
   **its merge base on `main`**, outside the repository (the `NFR-001` gate precedent).
@@ -280,12 +281,19 @@ BA/PM, 2026-10-23, at `main` `55a8f4ef`. **Result: 10 of 10. `Ready`.**
 - **The files.**
   - `ABC-212` (In Development) edits `src/engine.ts` at `HARD_CEILING_MS` (`:129`) and its comments, plus
     `levels`, `cli-options`, `cli`, `uci-session` and their tests.
-  - `ABC-205` (build queued) edits `src/evaluate.ts` and `src/evaluate.king-mobility.test.ts` only.
+  - `ABC-205` (build claimed) edits `src/evaluate.ts` and `src/evaluate.king-mobility.test.ts`. It also re-pins 11
+    lane rows in `transposition`, `search.ordering`, `search.pvs-lmr`, `engine` and `quiescence` `.test.ts` (its
+    § Design ruling).
   - This ticket edits `src/engine.ts` at its `gameend` import (`:75`) and `leafScore` (`:238–249`). It also edits
     `search`, `quiescence`, `legal`, `gameend` and their tests. **It does not edit `src/engine.test.ts`**, which
     `ABC-212`'s pins edit.
-  - The only shared file is `src/engine.ts`, in disjoint hunks, so a three-way merge takes it with no conflict.
-    Nothing is shared with `ABC-205`.
+  - **This ticket's test edits stay out of all five files `ABC-205` re-pins, and out of `engine.test.ts`.** Its rows
+    go only into `legal.test.ts`, `gameend.test.ts` and `gameend.nfr.test.ts`.
+  - The only shared file is `src/engine.ts` with `ABC-212`, in disjoint hunks, so a three-way merge takes it with no
+    conflict. **No file is shared with `ABC-205`.**
+  - **Semantic coupling with `ABC-205` remains.** Its re-pinned node counts are read on its own base. If this ticket
+    lands first, `ABC-205`'s re-pins still hold, because this change is value-identical and node-identical. The
+    reverse also holds: `A1` is read against whichever base is merged into.
 - **The order: `ABC-212` → `ABC-206` → `ABC-205`.**
   - `ABC-212` is furthest along.
   - `ABC-205` waits on `OD-205-1`.
