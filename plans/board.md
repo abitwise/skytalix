@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-23 by Orchestrator (orch-2026-10-23n) — owner word `…d3681daa`: EPIC-007 M2 closed on acceptance (`bapm-close-EPIC-007-M2`, BA/PM, records only); ADR-0007 dated `bin` note approved (`arch-adr0007-bin-note`, Architect, records only); `checkpoints.sign_off_acceptance: "notify"` written to config. Width 2/3. EPIC-007 stays open (M1, M8(a))._
 _Updated: 2026-10-23 by Orchestrator (orch-2026-10-23m) — `security-nfr-ABC-197` PASS (`…fccf9d20`). `ABC-197` → Done (gates green 61/2019, UCI_DEEP 5/5; UAT waived). In Security/NFR 0/2, In Review 0/3, Ready 0/8, In Development 0/3._
 _Updated: 2026-10-23 by Orchestrator (orch-2026-10-23l) — `qe-timing-ABC-197`: A6 MET, A7 MET (H 8.935 s), PASS_WITH_GAPS (`…9dc058a9`). The quiet window is released. `ABC-197` In Review → In Security/NFR (`security-nfr-ABC-197`, records only). In Review 0/3, In Security/NFR 1/2._
 _Updated 2026-10-23 (orch-2026-10-23k): qe-timing-ABC-197 (A6/A7) dispatched ALONE in the owner's quiet window; ABC-197 stays In Review 1/3._
