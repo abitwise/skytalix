@@ -10,6 +10,8 @@ owner: BA/PM
 
 # EPIC-006 — Game session and packaging
 
+> **2026-10-24, BA/PM (`bapm-cut-levels-6-7`, at `main` `6c0ab29e`): `ABC-203`'s follow-up is cut as `ABC-213`** (Ready, XS, P3). It guards the cleanup unlink in `src/pgn-file.ts` so that the first error code is reported (`AR-203-UNLINK`, `QE-203-c`). It also pins "no partial file" (`QE-203-b`) and the double fault, with 0 `N8-SPAWN` charge. `QE-203-a` stays the accepted residual `AR-203-LANEGAP` (a), with a ride-along trigger. `SEC-203-a` is agreed: the writer child is uncharged, and the `ABC-203` page's spawn erratum is owed at the next BA/PM hold of that page.
+
 > **2026-10-23, BA/PM (`bapm-cut-pgn-export`, at `main` `f4eec73d`): PGN export moved from negotiable to IN SCOPE on
 > the owner's word, and it is cut as `ABC-203`** (Ready, M, P1). The owner said: *"Yes record PGN file export as a
 > feature, since it allows to analyze games"* (Orchestrator transcription `…715b9cbf`, item 1; play-test log game 1,
