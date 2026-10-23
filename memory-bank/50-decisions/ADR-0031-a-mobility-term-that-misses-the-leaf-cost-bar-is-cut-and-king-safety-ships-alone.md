@@ -8,6 +8,8 @@ id: ADR-0031
 
 **accepted** 2026-10-10 by the owner. Owner (Olger Oeselg), 2026-10-10, verbatim: *"accept ADR-0030, ADR-0031, ADR-0032, ADR-0034 with (b) at 0.8x"*
 
+**Addendum 2026-10-24 (`ABC-205`): PROPOSED.** See § Addendum at the end. The decisions below are unchanged by it.
+
 Was: **proposed** 2026-10-10 by Architect/Design (task `wave-2026-09-25`, subtask `ruling-abc083-abc087`). It rules
 question **R1** of BA/PM's re-score (`20261010T081343Z-ba-pm-decision-…-973fd389`), which gates `ABC-083`'s
 `Ready`. **Owner acceptance owed.** No agent moves an ADR to `accepted`.
@@ -127,3 +129,85 @@ perft roots, in ns per call:
 
 Edit this file. Nothing is built on it. If the owner prefers (ii), `ABC-083` stays stopped on an `A5` miss
 until he re-derives the leaf budget. The page then needs no change: its `A5` already stops.
+
+## Addendum 2026-10-24 (`ABC-205`): king safety scales with the enemy queen, and the king square is tapered
+
+### Status
+
+**PROPOSED** 2026-10-24 by Architect/Design (task `arch-design-ABC-205`). The owner accepted the proposal
+(`…7feb0553` item 2), and that acceptance is the go-ahead for building it. **Acceptance of this TEXT is the
+owner's.** The Orchestrator reports it to him. Decisions 1–5 above are unchanged. `A5`'s 1,100 ns (`EPIC-008`
+`G2`) does not move, and `ADR-0003` is not reopened.
+
+### Context
+
+- In game 1, the king-exposure term moved 35 cp when 13.d4 opened the d-file in front of the e1 king. Stockfish
+  moved about 360 cp (`memory-bank/analysis/2026-10-23-game-1.md`).
+- The term has no queen or phase dependence, and the king table pays the castled bonus on c1/b1 whatever the files
+  say. `ABC-083` kept both untapered "by decision". `ABC-205` overrides that.
+- Probes and numbers: `ABC-205` § Design ruling, and `.grugops/context/arch-design-ABC-205/notes/`.
+
+### Decision
+
+- **A1. Queen scale.**
+  - Each king's exposure penalty (`ABC-083`'s shelter and file terms, values unchanged) is multiplied by **3**
+    while the enemy has at least one queen, and by 1 otherwise.
+  - Queenless scores are unchanged.
+  - The term's ceiling is 3 × 105 = 315 cp, which stays below a minor piece.
+- **A2. Tapered king square.**
+  - Phase = Σ (N 1, B 1, R 2, Q 4) over both sides, clamped to 24.
+  - Each king scores `((mg × phase + eg × (24 − phase)) / 24) | 0`.
+  - mg is the existing king table, unchanged.
+  - eg is **this project's own** table, `40 − 15 × (Manhattan distance to d4/e4/d5/e5)`. No new third-party values
+    are added (`…28633db0`, `ADR-0044` D13).
+- **A3. No castled bonus without shelter.**
+  - A positive middlegame king-table value is paid only while none of the king's shelter files is missing.
+  - "Missing" uses the shelter test `kingExposure` uses: one definition.
+  - The endgame half is not gated.
+- **A4. The contract is unchanged:**
+  - pure, stateless, integer, negamax-signed and mirror-exact;
+  - one board walk, which also gathers the queen flags and the phase;
+  - no `Move` objects, no new export or door, and no cross-call state (decision 2's forbidden shortcuts still
+    apply).
+- **A5. Stops.**
+  - Over 1,100 ns (read under decision 3), or a `G6` miss, is a STOP to Architect/Design.
+  - The PR note then carries scale-only and taper-only readings from the same session.
+  - The Engineer drops neither term on his own, and nothing is re-derived (decision 4).
+- **A6. One level, for the owner's word (`OD-205-1`).**
+  - The probe reads `ABC-079` `A5`'s position-6 depth-1 quiescence multiplier at 10.96x against its 10x level.
+  - That level already carries `ADR-0024` decision 3's headroom, so `ADR-0028` decision 4 makes this a stop.
+  - **Ruled not a defect.** The queen scale alone reproduces it (11.02x), and the taper alone does not (9.26x). Base
+    reads 9.19x over a 47-node denominator.
+  - **Proposed:** that one cell becomes 1.5 × the build's reading, rounded down (about 16x). This is `ADR-0039`
+    decision 3's pattern, under `ADR-0028` decision 1's three checks on the build. Every other cell stays
+    byte-identical.
+  - If the owner declines, the queen scale does not ship, and `ABC-205` stops to BA/PM.
+
+### Alternatives
+
+- **×4. Rejected.** It also turned the three game-1 moves, but its ceiling (420 cp) outweighs a minor piece.
+- **A queenless factor below 1, or exposure tapered by phase. Rejected.** Either would break `G3`:
+  `ABC-083` `A2`/`A3`'s equal-material rows are pawn endings.
+- **Michniewski's king endgame table. Rejected.** It would add CC BY-SA values while the licence moves to
+  Apache-2.0.
+- **A graded castled bonus** (bonus × sheltered files / zone files). **Rejected:** more arithmetic, and no evidence
+  that it plays better.
+- **A king-zone attacker term.** Not cut (`EPIC-008` § Out of scope).
+
+### Consequences
+
+- **Probe numbers (not readings, loaded host):**
+  - evaluation +57 to +103 ns (781–798 against 678–741 ns);
+  - position-6 nodes to depth 7 +8.8 %;
+  - depth ≥ 6 on all 16 3-s runs.
+- **`G6`'s "≥ base" on position-6 is the likeliest stop.**
+- **Eleven default-lane rows move:**
+  - pins are re-pinned;
+  - two fixtures are re-found under `ADR-0028` decision 2;
+  - one level goes to `OD-205-1`.
+- **Ship rule.** It ships only on `EPIC-008` `S1` (a D reading of GAIN).
+- **Licence interaction.** A later re-derivation of `KING_TABLE` changes values, but not these forms.
+
+### Rollback
+
+Revert the build commit. This addendum is text. If the owner rejects it, `ABC-205` goes back to BA/PM.
