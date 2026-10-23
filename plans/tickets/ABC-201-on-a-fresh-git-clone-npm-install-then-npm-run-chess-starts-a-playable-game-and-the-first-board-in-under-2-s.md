@@ -206,3 +206,29 @@ change), so the reading also holds there.
   - a page-cache-cold launch (`AR-096-DISKCOLD` stays);
   - another machine or Node major (the "nothing else installed" half of acceptance 1 stays `UNKNOWN - verify` beyond this host).
 - **`ADR-0018` Decision 3's revisit trigger does not fire:** `A3` is MET.
+
+## QE
+
+QE/E2E, 2026-10-23 (task `qe-ABC-201`). **Verdict: PASS_WITH_GAPS**, with 5 INFO gaps and none blocking. The notes are in
+`.grugops/context/qe-ABC-201/notes/`. QE re-read the raw files in `probe/p2/` before it opened Security/NFR's notes. It had
+already read the `## Reading` section above, as part of this page.
+
+| criterion | recorded at `c91445e3`, re-read from the raw files | QE's own fresh clone at `c0585331` (`main` with `ABC-200`) |
+|---|---|---|
+| `A1` | MET: rc 0, 66 packages, 1.87 s, status empty | MET: rc 0, 66 packages, 1.76 s, status empty, cache and user config empty |
+| `A2` | MET: exit 0, 0 stderr bytes, `1. e4 e5`, `input ended` ×1 | MET: exit 0, 0 stderr bytes, `1. e4 c5`, `input ended` ×1 |
+| `A3` | MET: 188.3 / 192.6 / **220.9** ms; child 1 = 220.9; n 10 | MET: 196.0 / 204.3 / **227.2** ms; child 1 = 227.2; n 10; AC, load1 3.39, thermal 0, 0 vitest |
+| `A4` | MET: one cell insertion; every other `NFR-` line byte-identical; one EPIC-006 block; 0 `src/`, `tools/`, `data/` or `package*.json` lines | not re-taken (records only) |
+
+- **The 23-newline pin holds with `ABC-200` merged.** Child 1's stdout (`4e7ace1164fb…`) is byte-identical to the
+  pre-`ABC-200` child 1, and so are all 10 children. On a pipe with no flags, 0 questions are written, and the output
+  equals the recorded `A2` (`96a13b85f6f4…`) byte-for-byte (`ABC-200` `A6`).
+- **The instrument is the same copy:** `nfr007-201.mjs` `d3940487c808…` and `readout201.py` `b46d8ee22dca…`. The driver
+  `qe201.sh` (`3921fc07…`) is `run201.sh` with the paths, the sha, a bounded gate and one untimed no-flags probe changed.
+- **Gaps** (all INFO):
+  - `QE-201-a`: the engine's reply is a per-session book draw (ADR-0037 D3), so the quoted `1. e4 e5` is a sample, not a pin.
+  - `QE-201-b`: the records cite only `c91445e3`, from before `ABC-200`. QE's reading covers `c0585331`.
+  - `QE-201-c`: QE's series ran about 12 ms slower at a higher load1. This is reported only and not attributed.
+  - `QE-201-d`: the hash `9f245333…` covers the row's first three cells, not the Target cell alone. The claim holds.
+  - `QE-201-e`: the same M3 was used for both readings, the host-bounded half of acceptance 1 is unchanged, and `AR-096-DISKCOLD` stands.
+- **UAT:** waived (0 production lines). The card move and `EPIC-006`'s closure are the Orchestrator's.
