@@ -1,8 +1,8 @@
 ---
 id: ABC-197
 title: "One step-100 UCI row restores the 100 ms dropped-token budget band `ABC-177` widened to 1 000 ms (QE-177-b)"
-status: in-development
-column: In Development
+status: in-review
+column: In Review
 size: XS
 priority: P3
 epic: EPIC-007
@@ -31,6 +31,26 @@ Before `ABC-177`, the six U7 rows (step 100, `time ≥ 3 000`) caught any G on t
 that path was ever pinned.
 
 *Value:* the 100 ms band comes back, and the upper side gets pinned too, for an estimated **≈ +0.075 s of lane wall**.
+
+> **Erratum 2026-10-23, BA/PM (`bapm-rerule-ABC-197-A5`, `…4df5ef95`), records only.** The band figures above, in the
+> title and in § Scope are off by a factor of two. The value is unchanged in kind, and no bound moves. The slip came
+> from QE `…02deb2e2` and was carried into this page.
+> - **The rule (read from `src/`, confirmed in scratch).** The virtual clock returns its reading and then adds the
+>   step `s`. `chooseMove` stops at the first reading ≥ G and reads once more for `elapsedMs`. So
+>   `time = (⌈G/s⌉ + 1) · s` for the capped G, and a `time ≥ 3 000` row is blind on **(3 000 − 2s, 3 000)**. The band
+>   is **twice the step**, not the step.
+> - **Step 100** (U7 before `ABC-177`, and R2): red for **G ≤ 2 800 only**. G 2 801 and G 2 900 read 3 000 and pass.
+>   The band is **200 ms**. "Caught any G at or below 2 900 ms" reads **"at or below 2 800 ms"**.
+> - **Step 1 000** (U7 since `ABC-177`): red for **G ≤ 1 000 only**. G 2 000 reads 3 000 and passes. "Catch only G at
+>   or below 2 000 ms" reads **"at or below 1 000 ms"**. The band grew from **200 ms to 2 000 ms**, not from 100 ms to
+>   1 000 ms. The title's "100 ms … 1 000 ms" reads "200 ms … 2 000 ms".
+> - **§ Scope's "the band equals the step"** reads "the band is twice the step". Its conclusion holds: any step above
+>   100 leaves a band wider than the one at base.
+> - **Value.** R2 gives back the base's 200 ms band. **"The upper side gets pinned too" is struck.** On this path, G
+>   above 3 000 is clipped by `go`'s `Math.min(request.budgetMs, level.budgetMs)`, and no level allows more than
+>   3 000. So no upper-side wrong G on the path is observable. The only observable upper-side defect is a broken cap,
+>   and 16 rows at base already red it (a skipped cap reds R2 and 16 others, 17/128). R2's `≤ 3 200` stays as the house
+>   `G ≤ time ≤ G + 2s` shape (A1 unchanged). It adds no new kill.
 
 ## Scope
 
@@ -80,7 +100,7 @@ One file: `src/uci-session.test.ts`. **One new row. The diff only adds lines.**
 
 **Gate (QE, then Security/NFR)**
 
-- **`A5` (the kill comes back).** **Given** QE's `qe-ABC-177/probe/gap/gp.mjs`, byte-copied, plus two variants added to
+- **`A5` (the kill comes back).** **Given** QE's `qe-ABC-177/probe/gap/gp.mjs`, byte-copied, plus one variant added to
   a scratch copy before any tip run and recorded in the gate report, **when** each wrong build is applied to
   production at the tip, **then**:
 
@@ -88,8 +108,20 @@ One file: `src/uci-session.test.ts`. **One new row. The diff only adds lines.**
   |---|---|---|---|
   | QP0 | none | green | 0 red |
   | **QP6** | G = 2 500 on the dropped-token path | **red** | **≥ 1 red** |
-  | **QP6-2900** | 2 900 in place of 2 500 | **red** | ≥ 1 red |
-  | **QP6-3300** | 3 300 in place of 2 500 | **red** | ≥ 1 red |
+  | **QP6-2800** | 2 800 in place of 2 500 | **red** | ≥ 1 red |
+
+  > **Re-ruled 2026-10-23, BA/PM (`bapm-rerule-ABC-197-A5`, `…4df5ef95`).** As cut, the table had four probes. Two
+  > could not go red under A1, through no fault in the build (SE `…ba08acdc`, verified from `src/` and in scratch).
+  > A1 does not move, and R2 is not re-built.
+  > - **`QP6-2900` → `QP6-2800`.** G 2 900 reads `time 3000`, inside the band A1's `≥ 3 000` leaves (Problem
+  >   erratum). G 2 800 is the largest whole-ms G that R2 catches. It reads 2 900 and reds R2 alone in the file
+  >   (1/128), and the base file survives it (127/127). The variant is QP6's two edits with `2_800` in place of `2_500`.
+  > - **`QP6-3300` dropped as equivalent by design.** `go` caps G with `Math.min(request.budgetMs, level.budgetMs)`,
+  >   and no level exceeds 3 000 (`levels.ts`). So any G ≥ 3 000 on this path searches exactly as the correct build
+  >   does: `time 3100`, 25 621 nodes, `bestmove g1f3`. No row on any level can kill it. It is not replaced. A
+  >   skipped cap does red R2, but 16 rows at base red it too, so it shows no kill R2 adds.
+  > - **Accepted residual:** G in (2 800, 3 000) on this path stays blind. That is the same 200 ms band U7 had at
+  >   step 100 before `ABC-177`.
 
 - **`A6` (`N8-LANE`, one-file set).** As `ABC-177` A8 (`lane174.mjs` byte copy, 9 rounds, round 0 discarded, rotated,
   GAP 0, k = 2, CPU from `/usr/bin/time -p`), with B = `git archive` of the base and H = `git archive` of the tip:
@@ -121,7 +153,8 @@ One file: `src/uci-session.test.ts`. **One new row. The diff only adds lines.**
 - **`N8-LANE`:** ≤ **650 ms CPU** on the ONE-FILE set (A6).
 - **Cost estimate (not a reading):** 25 621 nodes, ≈ 150 ms in-thread (the U7 rows read 146–153 ms at step 100,
   `arch-lane-under-10s/probe/uci-rows.out`). That is ≈ **+0.075 s of wall** under `ADR-0046` D3's 2-slot model, about
-  12 % of the 0.605 s published headroom at `f81bf03c`.
+  **7.6 % of the 0.990 s published headroom** at `00f77f26` (Security/NFR `…d0c770b5`; refreshed 2026-10-23 by BA/PM
+  from "12 % of the 0.605 s at `f81bf03c`"). The estimate itself is unchanged.
 - **Security:** not triggered. Test-only, no input surface. `NFR-010`/heap caps untouched.
 
 ## Test notes
@@ -182,3 +215,15 @@ BA/PM, 2026-10-22, at `main` `a7857e0b`. **Result: 9 of 10. Stays in `Backlog`.*
 
 **Recommended:** keep it in `Backlog`. When `ABC-178` merges and an admissible reading of `main` is ≤ 9.2 s, item
 10 flips with no re-cut. The Orchestrator then moves it `Backlog → Ready`.
+
+> **DoR re-check 2026-10-23, BA/PM (`bapm-rerule-ABC-197-A5`, at `main` `01bf3b8d`): 10 of 10.**
+> - **Item 10 is ✅.** It flipped as pre-registered, and the Orchestrator moved the ticket to `Ready` at 07:40Z
+>   (`…8c94d901`). `ABC-178` merged (`564b408d`), and B's full lane on `main` reads 8.985 s ≤ 9.2 s
+>   (QE `…39e59d96`).
+> - **Item 1 is ✅ with the erratum.** The band grew from 200 ms to 2 000 ms.
+> - **Items 3 and 4 are ✅, on three probes, not four.** Each probe now has a known, reachable outcome at the built
+>   tip: QP0 green, QP6 red, QP6-2800 red.
+> - **Item 6 is ✅.** The headroom is now 0.990 s, and the estimate is ≈ 7.6 % of it.
+> - The other items are unchanged. No bound, level or requirement moved, so there is no owner question.
+> - **No re-build.** R2 at `20e397c8` already meets the re-ruled A5 in scratch. Its comment says "U7's 1 000 band", which
+>   reads 2 000 by the erratum. That is a comment only, and it is not worth a re-build.
