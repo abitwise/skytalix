@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-23 20:35Z by Orchestrator (orch-2026-10-23af) — owner word `…7feb0553`: ADR-0047 accepted → ABC-203 In Development (SE); all 8 engine-improvement proposals accepted → `bapm-cut-engine-strength` (BA/PM). In Development 1/3, width 2/3._
 _Updated: 2026-10-23 20:15Z by Orchestrator (orch-2026-10-23ae) — merged `arch-analyse-game-1` (`…f1771bb3`): report `memory-bank/analysis/2026-10-23-game-1.md`, annotated PGN `plans/uat/EPIC-006-game-1.annotated.pgn`. Engine-strength proposals are the owner's call; nothing cut. ABC-203 still held on ADR-0047 (owner). Width 0/3._
 _Updated: 2026-10-23 19:56Z by Orchestrator (orch-2026-10-23ad) — ABC-203 design done but needs NEW ADR-0047 (first file write) → owner acceptance owed (`…3898cd9a`); branch not merged. `arch-analyse-game-1` still running._
 _Updated: 2026-10-23 by Orchestrator (orch-2026-10-23ac) — `ABC-203` (PGN at game end; M, P1) cut by BA/PM (`…0c2867c1`) and pulled into In Design: `arch-design-ABC-203` (Architect). `arch-analyse-game-1` still running. In Design 1/2, width 2/3._
@@ -445,7 +446,7 @@ _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-137` 
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-138` → `In Review` (`7e5c9c74`); QE `qe-ABC-138` dispatched._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-010` pulled `Ready for Dev` → `In Development`._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-055` → `Done` (UAT WAIVED; board now renders all 13 columns). FORMAT comment: In UAT added to the skippable columns (waiver path) and the Orchestrator's Ready → Ready for Dev → In Development pass-through at pull stated (QE-055-b/c)._
-_Updated: 2026-10-10 by the Software Engineer (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-055`) — `ABC-055` built: `## In Analysis (WIP 0/2)` and `## In Design (WIP 1/2)` added between `Ready` and `Ready for Dev` (13 headings = 13 table rows); the FORMAT comment now names the dial `.grugops/factory.config.json`, the four skippable columns and the heading/table invariant. No ticket row moved; `ABC-055` stays in `In Development` (A4), so the `In Review` move is left for the close-out._
+_Updated: 2026-10-10 by the Software Engineer (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-055`) — `ABC-055` built: `## In Analysis (WIP 0/2)` and `## In Design (WIP 0/2)` added between `Ready` and `Ready for Dev` (13 headings = 13 table rows); the FORMAT comment now names the dial `.grugops/factory.config.json`, the four skippable columns and the heading/table invariant. No ticket row moved; `ABC-055` stays in `In Development` (A4), so the `In Review` move is left for the close-out._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-137` → `In Review` (`455a0846`); QE `qe-ABC-137` dispatched._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — BA/PM `bapm-abc010-qe129a-2026-10-10` merged (`7d62038a`): `ABC-010` Backlog → `Ready for Dev` (10/10); new `ABC-139` → `Ready`; `ABC-137` pulled → `In Development`._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-055` → `In Review` (`86926927`), QE dispatched; board writes resumed. BA/PM `bapm-cuts-r5c-f1331-2026-10-10` merged (`4bc53b0a`): new `ABC-137` → `Ready`; new `ABC-138` → `Ready` → pulled → `In Development`._
@@ -921,7 +922,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   one hop at pull, when it checks `Ready for Dev`'s exit at that moment; the row records the pull.
 
   HEADING FORMAT (spec §6.1): each column is an H2 heading carrying its live/limit WIP count,
-  e.g. `## In Development (WIP 0/3)` — the left number is how many tickets are in the column
+  e.g. `## In Development (WIP 1/3)` — the left number is how many tickets are in the column
   now, the right number is the limit from config. Unlimited columns read `(WIP unlimited)`;
   Blocked is visible and time-tracked (no WIP limit) and reads `(visible, time-tracked)`.
   INVARIANT: the column H2 headings and the rows of the `## Columns` table are the same 13 names in the
@@ -931,7 +932,8 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 0/3)
+    ## In Development (WIP 1/3)
+- [ABC-203] At game end, `npm run chess` writes the game as a standard PGN file under `games/`  (owner: software-engineer, after an Architect/Design ruling, size: M, priority: P1, epic: EPIC-006, since: 2026-10-23, DoR 10/10; cut in `bapm-cut-pgn-export` (`…0c2867c1`). Owner word `…715b9cbf`: PGN export in scope. Automatic, once, when the loop returns a reason (8 outcomes + 2 faults); none on quit/EOF/usage/internal error. `games/skytalix-YYYYMMDD-HHMMSS.pgn` under cwd, exclusive create -2..-99, 10 tags, toSan movetext, A7 byte match to game 1. Security/NFR hop owed (first file write, ADR-0036 b1/b2). Next free ABC-204) **2026-10-23: Ready → In Design (`arch-design-ABC-203`).** **2026-10-23: design ruled (`grugops/arch-design-ABC-203` @ `738a3c9f`, `…e6de1e00`): 3 modules (`src/pgn.ts` pure, `src/pgn-file.ts` sole fs holder, wiring in `cli.ts`), test children run from a temp cwd, clock read once in `cli.ts`. It needs a NEW ADR-0047 → HELD for the owner (delegation item 3; `…3898cd9a`). Not merged; stays In Design.** **2026-10-23: owner accepted ADR-0047 (`…7feb0553`); design merged. In Design → In Development (`ticket-to-pr-ABC-203`, SE).**
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
     ## In Review (WIP 0/3)
@@ -1043,8 +1045,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## In Analysis (WIP 0/2)
 
 
-## In Design (WIP 1/2)
-- [ABC-203] At game end, `npm run chess` writes the game as a standard PGN file under `games/`  (owner: software-engineer, after an Architect/Design ruling, size: M, priority: P1, epic: EPIC-006, since: 2026-10-23, DoR 10/10; cut in `bapm-cut-pgn-export` (`…0c2867c1`). Owner word `…715b9cbf`: PGN export in scope. Automatic, once, when the loop returns a reason (8 outcomes + 2 faults); none on quit/EOF/usage/internal error. `games/skytalix-YYYYMMDD-HHMMSS.pgn` under cwd, exclusive create -2..-99, 10 tags, toSan movetext, A7 byte match to game 1. Security/NFR hop owed (first file write, ADR-0036 b1/b2). Next free ABC-204) **2026-10-23: Ready → In Design (`arch-design-ABC-203`).** **2026-10-23: design ruled (`grugops/arch-design-ABC-203` @ `738a3c9f`, `…e6de1e00`): 3 modules (`src/pgn.ts` pure, `src/pgn-file.ts` sole fs holder, wiring in `cli.ts`), test children run from a temp cwd, clock read once in `cli.ts`. It needs a NEW ADR-0047 → HELD for the owner (delegation item 3; `…3898cd9a`). Not merged; stays In Design.**
+## In Design (WIP 0/2)
 
 
 ## Ready for Dev (WIP 0/6)

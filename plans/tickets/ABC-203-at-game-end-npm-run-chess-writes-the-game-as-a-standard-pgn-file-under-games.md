@@ -1,8 +1,8 @@
 ---
 id: ABC-203
 title: "At game end, `npm run chess` writes the game as a standard PGN file under `games/` (EPIC-006, PGN export)"
-status: in-design
-column: In Design
+status: in-development
+column: In Development
 size: M
 priority: P1
 epic: EPIC-006
@@ -288,3 +288,143 @@ BA/PM, 2026-10-23, at `main` `f4eec73d`. **Result: 10 of 10. `Ready`.**
 | 8 | size assigned | ✅ `M` |
 | 9 | priority assigned | ✅ `P1`, argued |
 | 10 | no major unresolved blocker | ✅ the design questions have an owner and a stop rule; no owner word is needed |
+
+## Design ruling
+
+**2026-10-23, Architect/Design** (subtask `arch-design-ABC-203`, branch `grugops/arch-design-ABC-203` from `main`
+`06fabb18`). Records only: no `src/`, test, `package*.json` or `.gitignore` edit. The decision is
+`memory-bank/50-decisions/ADR-0047-a-finished-game-is-written-under-games-by-exclusive-create-from-one-fs-holder-whose-path-only-a-date-reaches.md`
+(**accepted**, new, reverses nothing). Notes: `.grugops/context/arch-design-ABC-203/notes/`. **The STOP did not
+fire.** Scope, acceptance and test notes above are unchanged, except the one `A14` clarification in item 2.
+
+### 1. Module shape
+
+- **`src/pgn.ts` (new, pure).** It exports two functions.
+  - `pgnStamp(startedAt: Date)` returns `{ stem, date }`: `skytalix-YYYYMMDD-HHMMSS` and `YYYY.MM.DD`. It uses the
+    local getters (`getFullYear`, `getMonth() + 1`, `getDate`, `getHours`, `getMinutes`, `getSeconds`),
+    zero-padded. It never calls `toISOString` (UTC), `toLocale*` or `Intl` (locale digits can be non-ASCII).
+  - `formatPgn(outcome, history, game)` returns the whole file text. `game` is
+    `{ startedAt, difficulty, humanColour }`. It is total over the ten non-null reasons. The caller gates on
+    `outcome.reason !== null`, which is the same guard as the screen's zero rows.
+  - It does its own replay: `parseFen(history.initialFen)`, then `toSan` before each `makeMove`, with `N.`
+    from the replayed position's `fullmoveNumber`. It does not reuse the screen's move rows. PGN export format
+    and the screen are two reasons to change, and `A6`/`A7` pin the PGN side.
+  - `history.ts` and `turn-loop.ts` are `import type` only, as in `src/result-screen.ts`. `ADR-0002` clause 4's
+    licence equality (`LICENSED_DRIVERS` in `src/history-pane.nfr.test.ts`) does not move.
+- **The headline reaches the comment through an export.** `src/result-screen.ts` exports its existing `headline`
+  function (under a name the SE picks, for example `resultHeadline`). `renderResultScreen` keeps calling it, so its
+  rows do not change (`A14`). `pgn.ts` joins the returned rows with one space. Reading the rows back off
+  `renderResultScreen` was refused, because it couples the record to the screen's leading blank row. The SE
+  updates `result-screen.ts`'s header sentence "only `src/cli.ts` imports it": `pgn.ts` becomes a second
+  importer. Neither is on the frame path, whose root is `render-seam.ts` (`ADR-0029`).
+- **`src/pgn-file.ts` (new, the `node:fs` holder, `ADR-0036` limb 1).** Its whole contract, stated in its header
+  as `book-file.ts` states its own:
+  - one `node:fs` import, one export `writePgnFile(startedAt: Date, text: string)`, no `process.` reference,
+    nothing written to stdout or stderr;
+  - the name comes from `pgnStamp(startedAt).stem` inside the holder, so **only a `Date` reaches the path**;
+  - `mkdirSync("games", { recursive: true })`, then each candidate opened with flag `"wx"`: the stem, then
+    `-2` to `-99`. `EEXIST` moves on, and after `-99` the result is `EEXIST`;
+  - all bytes written to the open descriptor (`writeFileSync(fd, text)`), then `closeSync`. If either fails,
+    `unlinkSync` that one path (this call created it), then report;
+  - it returns `{ ok: true, path: "games/<name>" } | { ok: false, code }`. Only an error whose `code` matches
+    `^E[A-Z0-9]+$` becomes `{ ok: false, code }`. Any other throw is rethrown as a defect.
+- **`src/cli.ts` wiring** (about 10 lines, inside the existing `try`):
+  - `const startedAt = new Date();` once, directly before `runTurnLoop(` (item 3);
+  - after the screen's write: `if (outcome.reason !== null)`, build the text, call the holder once, then write
+    `PGN saved: <path>\n` on `sink`, or `PGN not saved: <code>\n` on `process.stderr`;
+  - `difficulty` and `colour` are the values `resolution.options` already gives (`colour` is already resolved
+    from `random`).
+- **A throw from `pgn.ts` or a non-errno throw from the holder** reaches the one session `catch`. The process then
+  prints `INTERNAL_ERROR` after the result screen and exits `70`. The SE keeps it that way: it is a defect, and
+  `[D31]`'s rule already covers a defect. `A10` covers only errno failures.
+
+### 2. Keeping the tree clean under `npm test`
+
+- **The seam is the child's working directory.** The production path is the literal `games`, relative to the
+  process working directory. No argv token and no environment value reaches it (`book-file.ts` precedent, and
+  scope's out-of-scope list).
+- **`src/cli.test.ts`.** Its one `spawnSync` site (`childOf`) runs every child that executes `ENTRY_POINT`
+  directly, `/bin/sh` wrappers included, with a module-scope `mkdtemp` directory as `cwd`. An `afterAll` removes it
+  with `rmSync` on the exact path `mkdtemp` returned. Both the entry point (`ENTRY_POINT`) and the hooks (`data:`
+  URLs) are absolute, so nothing else in a child changes. `npmRun` keeps `REPOSITORY`, because npm resolves the
+  package from its `cwd`. It ends by end of input (stdin `""`), so it writes nothing.
+- **The guard (0 spawns).** One row asserts that no child whose `cwd` is `REPOSITORY` has `PGN saved:` or
+  `PGN not saved:` on stdout or stderr. A second row asserts that the neutral directory's `games/` holds exactly as
+  many files as there are children that printed `PGN saved:`. A future child that reaches an outcome from the
+  repository reds the first row.
+- **`N8-SPAWN` is unchanged.** No child is added. The children that reach an outcome (`mate`, `resigns`, the engine
+  faults and any other) gain `A11`'s line in their pins. The line is matched by
+  `^PGN saved: games/skytalix-\d{8}-\d{6}(-\d{1,2})?\.pgn$`, because several children share one directory and one
+  second.
+- **`src/cli.real-engine.test.ts` (opt-in `CLI_DEEP`).** Its children already run from a `mkdtemp` copy or the
+  `ABC-162` neutral directory, and `games/` lands there and is removed with them. Any child left with the repository
+  as `cwd` gets the same guard row. If one reaches an outcome, it moves to the neutral directory. The header's
+  "every other child keeps its tree root as cwd" is updated to say so.
+- **The writer's own tests** (`A8`–`A10`) cannot run in-process. The holder writes relative to the working
+  directory, and the lane runs `pool: "threads"` (`vitest.config.ts`), where `process.chdir` throws
+  `ERR_WORKER_UNSUPPORTED_OPERATION` (measured at this hop). The new test file therefore holds **one** spawned
+  child. It is `node --input-type=module -e <script>` with a fresh `mkdtemp` directory as `cwd`, removed by exact
+  path. The script imports the holder by absolute URL and runs every `A8`–`A10` case in its own subdirectory
+  (the main thread may `chdir`). It prints one JSON line, and the test asserts on it. The child follows
+  `src/cli.test.ts`'s discipline: argument array, no shell, empty environment, a `timeout`, a loud throw on
+  `child.error`. Giving the holder a directory parameter for tests was refused: a caller path would reach the
+  write (`ADR-0047` alternative 1).
+- **`.gitignore` gains `games/`** (scope row 3). That is the backstop for a human's own games, not for tests.
+- **`A14` clarification.** `A14` licenses pin edits "only where a child reaches an outcome". One more class must
+  move, and this ruling licenses it: **source-reading rows on `src/cli.ts` that count what this ticket adds.** The
+  known one is `A9`'s `process` census in `src/cli.test.ts` (about L1699–1734). It gains a fourth
+  `process.stderr`, and `\bprocess\b` goes from 10 to 11, with a dated reason line in the form the row already uses.
+  The source-order rows in `src/startup-questions.test.ts` (`A9`, the `askAbsentOptions(` ordering) stay green
+  as they are. Any other red is a STOP for the SE, back to this role. BA/PM may fold this sentence into `A14`.
+
+### 3. The clock seam
+
+- **One reading, in the composition root.** `const startedAt = new Date();` appears exactly once in `src/cli.ts`.
+  It comes after the questions and the book probe, and directly before `runTurnLoop(`. That is the precedent of
+  `src/uci.ts`, which binds `Date.now` at its root. `cli.ts` imports no virtual clock (`ABC-086` `A5` (ii) stays
+  green).
+- **The `Date` is the seam.** The pure `pgnStamp` and the holder both take it as a parameter. Tests construct it
+  with the local-time constructor, `new Date(2026, 9, 23, 14, 5, 9)`. Its local getters read back the same fields
+  in any time zone, as measured under `TZ` +14 and −10. **No `TZ` setting is needed** (test note 3), provided a
+  test avoids a daylight-saving gap hour.
+- **`A12`'s check is a source-order row** of the form `startup-questions.test.ts` already uses. In `cli.ts`, the
+  index of `new Date(` is above `runTurnLoop(`, and `writePgnFile(` and `formatPgn(` are below
+  `renderResultScreen(`. Plant P6 reds it.
+- **Known and accepted:** after `new`, the stamp is still the session's start, not the restarted game's. Scope
+  row 4 says "when the game starts, just before the loop starts", and there is one loop per session. That reading
+  is kept.
+
+### 4. ADR
+
+**Needed, and written: `ADR-0047`, accepted, new.** The CLI's first file write, its path rule, exclusive create,
+errno-only reporting and the test working-directory rule are choices a maintainer would need the *why* for.
+It **reverses nothing**: `ADR-0007`, `ADR-0018`, `ADR-0011` clause 4, `ADR-0002` clause 4, `ADR-0029`,
+`ADR-0016` and `ADR-0021` do not move, and `ADR-0036` fires as designed. **The STOP did not fire.**
+
+### What Security/NFR must check (the hop is owed, after QE)
+
+1. **`ADR-0036` clause (b), on the delivered pair**, with the canonical instrument
+   (`.grugops/context/design-F-072-1/probe/clause-b.mjs`):
+   - limb 1 (b1) fires on `src/pgn-file.ts` (the import, and Ruling 2's whole holder file);
+   - (b2) fires on `cli.ts -> pgn-file.ts`. `cli.ts -> pgn.ts` and `pgn.ts -> result-screen.ts` reach no holder;
+   - limb 2 (b1) fires on `cli.ts`'s new `process.stderr`. Limb 3 stays silent.
+2. **§ Decision 3 re-arms twice**: `pgn-file.ts` is the **sixth** holder (5 at `06fabb18`), and it is the first
+   holder that exports a function taking a caller value that reaches a capability. Rule whether (b2) needs a
+   call-graph reach. This role's input: **no**. The holder has one importer, and that edge already fires. A new call
+   over it can pass another `Date` or other text, never a path byte.
+3. **The `games` symbolic link.** Measured: a `games` link to a directory is followed, and the file lands in the
+   target. A dangling `games` link gives `ENOENT`, and a link at the file name gives `EEXIST`. Rule whether to
+   accept or refuse with `lstat`. This role's input: **accept, LOW**. Planting a link in the clone needs write access
+   to the clone, which already runs code through `src/`. The create stays exclusive and the bytes are product-made.
+4. **ASVS L1 V12 (file handling)**: 0 user-controlled path bytes (only a `Date` reaches the path), exclusive
+   create, no partial file, stderr carrying only `^PGN not saved: E[A-Z0-9]+$`. Check that no message text and no
+   stack can leak through D5's rethrow, which prints only `INTERNAL_ERROR`.
+5. **NFRs:** the ≤ 50 ms write reading (QE takes it). `NFR-007` and `NFR-002` are unchanged by `A12`. `NFR-008`
+   gains +1 file and **1** spawn (the writer's child, item 2), not the page's estimated 0. `N8-SPAWN` in
+   `src/cli.test.ts` is unchanged. Rule whether an `N8-LANE` reading is owed. `plans/nfr-catalog.md` is not edited here (fence). Security/NFR places any row.
+
+### Next move
+
+**`In Design` → `Ready for Dev`**, then `In Development` with the Software Engineer on `ADR-0047` and items 1–3.
+The SE runs the default lane before handing to QE (`A1`–`A13`, plants P1–P7). Then Security/NFR checks the five
+items above. Merge order with `arch-analyse-game-1`: none forced.
