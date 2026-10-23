@@ -1,0 +1,2 @@
+# arch-runbook-deploy-holder — context
+Architect STOP …b9dc8455: 70-runbook.md § Deploy (line ~61) and § On-call (~105) say a human / the owner holds deploy. Orchestrator ruling …(this hop's orch note): not a new governance call — the owner already decided it on 2026-08-15 (60-progress.md § 'Standing directive — deploy is ALLOWED and NOT NEEDED…', read by 45-standing-rulings.md:142-148). The runbook is stale against a recorded ruling.

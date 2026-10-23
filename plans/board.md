@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-23 by Orchestrator (orch-2026-10-23x) — merged `arch-runbook-operate` (`…b9dc8455`). Its STOP (who holds deploy) ruled drift against the owner's 2026-08-15 directive, not a new call → `arch-runbook-deploy-holder` (Architect). `scribe-drift-2026-10-23` (Scribe): ABC-200 questions in AGENTS.md, the `--` wording, 45-standing-rulings "no bin". Width 2/3, records only._
 _Updated: 2026-10-23 by Orchestrator (orch-2026-10-23w) — merged `arch-adr0018-bin-note` (`…5ffd0ca7`: ADR-0018 dated note, channel unchanged, STOP not fired; runbook § Deploy corrected). `arch-runbook-operate` (Architect, records only) queued for the stale § Operate. Width 1/3._
 _Updated: 2026-10-23 by Orchestrator (orch-2026-10-23u) — merged `uat-EPIC-006-playtest`: `plans/uat/EPIC-006-play-test-guide.md` (5 games / ≥ 2 sittings, log table, decision rule). EPIC-006 waits on the owner's filled log. Width 0/3._
 _Updated: 2026-10-23 by Orchestrator (orch-2026-10-23t) — owner asked for a play-test guide; `uat-EPIC-006-playtest` (UAT Planner, records only) writes `plans/uat/EPIC-006-play-test-guide.md` for EPIC-006 § Negotiable slice. Width 1/3._
