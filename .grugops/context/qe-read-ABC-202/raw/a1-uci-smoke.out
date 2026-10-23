@@ -1,0 +1,5 @@
+id name skytalix
+id author Olger Oeselg
+option name OwnBook type check default true
+option name Skill Level type spin default 5 min 1 max 5
+uciok

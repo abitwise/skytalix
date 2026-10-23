@@ -1,0 +1,963 @@
+2 >skytalix-a(0): uci
+3 >skytalix-b(1): uci
+72 <skytalix-b(1): id name skytalix
+72 <skytalix-a(0): id name skytalix
+72 <skytalix-b(1): id author Olger Oeselg
+72 <skytalix-a(0): id author Olger Oeselg
+72 <skytalix-a(0): option name OwnBook type check default true
+72 <skytalix-b(1): option name OwnBook type check default true
+72 <skytalix-b(1): option name Skill Level type spin default 5 min 1 max 5
+72 <skytalix-b(1): uciok
+72 >skytalix-b(1): isready
+72 <skytalix-a(0): option name Skill Level type spin default 5 min 1 max 5
+72 <skytalix-a(0): uciok
+72 >skytalix-a(0): isready
+81 <skytalix-b(1): readyok
+81 <skytalix-a(0): readyok
+Started game 1 of 2 (skytalix-a vs skytalix-b)
+82 >skytalix-a(0): debug on
+82 >skytalix-a(0): ucinewgame
+82 >skytalix-a(0): position startpos
+82 >skytalix-b(1): debug on
+82 >skytalix-b(1): ucinewgame
+82 >skytalix-b(1): position startpos
+82 >skytalix-a(0): isready
+83 <skytalix-a(0): readyok
+84 >skytalix-a(0): go depth 4
+84 <skytalix-a(0): info string book
+84 <skytalix-a(0): bestmove d2d4
+84 >skytalix-b(1): position startpos moves d2d4
+84 >skytalix-b(1): isready
+85 <skytalix-b(1): readyok
+85 >skytalix-b(1): go depth 4
+85 <skytalix-b(1): info string book
+85 <skytalix-b(1): bestmove g7g6
+85 >skytalix-a(0): position startpos moves d2d4 g7g6
+85 >skytalix-a(0): isready
+86 <skytalix-a(0): readyok
+86 >skytalix-a(0): go depth 4
+86 <skytalix-a(0): info string book
+86 <skytalix-a(0): bestmove c2c4
+86 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4
+86 >skytalix-b(1): isready
+87 <skytalix-b(1): readyok
+87 >skytalix-b(1): go depth 4
+87 <skytalix-b(1): info string book
+87 <skytalix-b(1): bestmove f8g7
+87 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7
+87 >skytalix-a(0): isready
+88 <skytalix-a(0): readyok
+88 >skytalix-a(0): go depth 4
+88 <skytalix-a(0): info string book
+88 <skytalix-a(0): bestmove b1c3
+88 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3
+88 >skytalix-b(1): isready
+89 <skytalix-b(1): readyok
+89 >skytalix-b(1): go depth 4
+90 <skytalix-b(1): info string book
+90 <skytalix-b(1): bestmove d7d6
+90 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6
+90 >skytalix-a(0): isready
+91 <skytalix-a(0): readyok
+91 >skytalix-a(0): go depth 4
+91 <skytalix-a(0): info string book
+91 <skytalix-a(0): bestmove e2e4
+91 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4
+91 >skytalix-b(1): isready
+92 <skytalix-b(1): readyok
+92 >skytalix-b(1): go depth 4
+92 <skytalix-b(1): info string book
+92 <skytalix-b(1): bestmove f7f5
+92 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5
+92 >skytalix-a(0): isready
+92 <skytalix-a(0): readyok
+92 >skytalix-a(0): go depth 4
+172 <skytalix-a(0): info depth 4 score cp 109 nodes 11702 time 79 nps 148127 pv g1f3
+172 <skytalix-a(0): bestmove g1f3
+172 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3
+172 >skytalix-b(1): isready
+173 <skytalix-b(1): readyok
+173 >skytalix-b(1): go depth 4
+248 <skytalix-b(1): info depth 4 score cp -117 nodes 12180 time 74 nps 164595 pv b8c6
+248 <skytalix-b(1): bestmove b8c6
+248 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6
+248 >skytalix-a(0): isready
+248 <skytalix-a(0): readyok
+248 >skytalix-a(0): go depth 4
+317 <skytalix-a(0): info depth 4 score cp 93 nodes 12468 time 69 nps 180696 pv c1f4
+317 <skytalix-a(0): bestmove c1f4
+317 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4
+317 >skytalix-b(1): isready
+317 <skytalix-b(1): readyok
+317 >skytalix-b(1): go depth 4
+428 <skytalix-b(1): info depth 4 score cp -95 nodes 22151 time 110 nps 201373 pv g8f6
+428 <skytalix-b(1): bestmove g8f6
+428 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6
+428 >skytalix-a(0): isready
+428 <skytalix-a(0): readyok
+428 >skytalix-a(0): go depth 4
+523 <skytalix-a(0): info depth 4 score cp 95 nodes 18960 time 95 nps 199579 pv e4e5
+523 <skytalix-a(0): bestmove e4e5
+523 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5
+523 >skytalix-b(1): isready
+523 <skytalix-b(1): readyok
+523 >skytalix-b(1): go depth 4
+668 <skytalix-b(1): info depth 4 score cp -61 nodes 31992 time 145 nps 220634 pv f6h5
+668 <skytalix-b(1): bestmove f6h5
+668 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5
+668 >skytalix-a(0): isready
+668 <skytalix-a(0): readyok
+668 >skytalix-a(0): go depth 4
+767 <skytalix-a(0): info depth 4 score cp 59 nodes 21281 time 99 nps 214960 pv d1d2
+767 <skytalix-a(0): bestmove d1d2
+767 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2
+767 >skytalix-b(1): isready
+767 <skytalix-b(1): readyok
+767 >skytalix-b(1): go depth 4
+958 <skytalix-b(1): info depth 4 score cp -59 nodes 44835 time 191 nps 234738 pv e8g8
+958 <skytalix-b(1): bestmove e8g8
+958 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8
+958 >skytalix-a(0): isready
+958 <skytalix-a(0): readyok
+958 >skytalix-a(0): go depth 4
+1039 <skytalix-a(0): info depth 4 score cp 51 nodes 18732 time 81 nps 231259 pv e1c1
+1039 <skytalix-a(0): bestmove e1c1
+1039 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1
+1039 >skytalix-b(1): isready
+1039 <skytalix-b(1): readyok
+1039 >skytalix-b(1): go depth 4
+1162 <skytalix-b(1): info depth 4 score cp -59 nodes 28384 time 122 nps 232656 pv h5f4
+1162 <skytalix-b(1): bestmove h5f4
+1162 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4
+1162 >skytalix-a(0): isready
+1162 <skytalix-a(0): readyok
+1162 >skytalix-a(0): go depth 4
+1196 <skytalix-a(0): info depth 4 score cp 57 nodes 7472 time 34 nps 219765 pv d2f4
+1196 <skytalix-a(0): bestmove d2f4
+1196 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4
+1196 >skytalix-b(1): isready
+1196 <skytalix-b(1): readyok
+1196 >skytalix-b(1): go depth 4
+1309 <skytalix-b(1): info depth 4 score cp -74 nodes 24047 time 113 nps 212805 pv c8e6
+1309 <skytalix-b(1): bestmove c8e6
+1309 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6
+1309 >skytalix-a(0): isready
+1309 <skytalix-a(0): readyok
+1309 >skytalix-a(0): go depth 4
+1381 <skytalix-a(0): info depth 4 score cp 89 nodes 15063 time 72 nps 209208 pv c1b1
+1381 <skytalix-a(0): bestmove c1b1
+1381 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1
+1381 >skytalix-b(1): isready
+1381 <skytalix-b(1): readyok
+1381 >skytalix-b(1): go depth 4
+1562 <skytalix-b(1): info depth 4 score cp -89 nodes 41591 time 181 nps 229785 pv d8d7
+1562 <skytalix-b(1): bestmove d8d7
+1562 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7
+1562 >skytalix-a(0): isready
+1562 <skytalix-a(0): readyok
+1562 >skytalix-a(0): go depth 4
+1720 <skytalix-a(0): info depth 4 score cp 127 nodes 33992 time 158 nps 215139 pv d4d5
+1720 <skytalix-a(0): bestmove d4d5
+1720 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5
+1720 >skytalix-b(1): isready
+1720 <skytalix-b(1): readyok
+1720 >skytalix-b(1): go depth 4
+1765 <skytalix-b(1): info depth 4 score cp -127 nodes 9831 time 45 nps 218467 pv d6e5
+1765 <skytalix-b(1): bestmove d6e5
+1765 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5
+1765 >skytalix-a(0): isready
+1765 <skytalix-a(0): readyok
+1765 >skytalix-a(0): go depth 4
+1828 <skytalix-a(0): info depth 4 score cp 127 nodes 13321 time 63 nps 211444 pv f4d2
+1828 <skytalix-a(0): bestmove f4d2
+1828 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2
+1828 >skytalix-b(1): isready
+1828 <skytalix-b(1): readyok
+1828 >skytalix-b(1): go depth 4
+1868 <skytalix-b(1): info depth 4 score cp -152 nodes 6459 time 38 nps 169974 pv c6d4
+1868 <skytalix-b(1): bestmove c6d4
+1868 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4
+1868 >skytalix-a(0): isready
+1872 <skytalix-a(0): readyok
+1872 >skytalix-a(0): go depth 4
+1932 <skytalix-a(0): info depth 4 score cp 144 nodes 9010 time 62 nps 145323 pv d5e6
+1932 <skytalix-a(0): bestmove d5e6
+1932 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6
+1932 >skytalix-b(1): isready
+1933 <skytalix-b(1): readyok
+1933 >skytalix-b(1): go depth 4
+1974 <skytalix-b(1): info depth 4 score cp -180 nodes 8079 time 41 nps 197049 pv d7e6
+1974 <skytalix-b(1): bestmove d7e6
+1974 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6
+1974 >skytalix-a(0): isready
+1974 <skytalix-a(0): readyok
+1974 >skytalix-a(0): go depth 4
+2045 <skytalix-a(0): info depth 4 score cp 149 nodes 13172 time 71 nps 185521 pv d2e3
+2045 <skytalix-a(0): bestmove d2e3
+2045 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3
+2045 >skytalix-b(1): isready
+2046 <skytalix-b(1): readyok
+2046 >skytalix-b(1): go depth 4
+2147 <skytalix-b(1): info depth 4 score cp -152 nodes 15717 time 101 nps 155614 pv f5f4
+2340 <skytalix-b(1): bestmove f5f4
+2340 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4
+2340 >skytalix-a(0): isready
+2340 <skytalix-a(0): readyok
+2340 >skytalix-a(0): go depth 4
+2340 <skytalix-a(0): info depth 4 score cp 148 nodes 9053 time 54 nps 167648 pv e3e4
+2340 <skytalix-a(0): bestmove e3e4
+2340 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4
+2340 >skytalix-b(1): isready
+2340 <skytalix-b(1): readyok
+2340 >skytalix-b(1): go depth 4
+2340 <skytalix-b(1): info depth 4 score cp -172 nodes 16140 time 97 nps 166392 pv d4f3
+2340 <skytalix-b(1): bestmove d4f3
+2340 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3
+2340 >skytalix-a(0): isready
+2340 <skytalix-a(0): readyok
+2340 >skytalix-a(0): go depth 4
+2374 <skytalix-a(0): info depth 4 score cp 162 nodes 13710 time 75 nps 182800 pv e4f3
+2374 <skytalix-a(0): bestmove e4f3
+2374 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3
+2374 >skytalix-b(1): isready
+2375 <skytalix-b(1): readyok
+2375 >skytalix-b(1): go depth 4
+2463 <skytalix-b(1): info depth 4 score cp -189 nodes 11181 time 89 nps 125629 pv a8b8
+2463 <skytalix-b(1): bestmove a8b8
+2463 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8
+2463 >skytalix-a(0): isready
+2463 <skytalix-a(0): readyok
+2463 >skytalix-a(0): go depth 4
+2602 <skytalix-a(0): info depth 4 score cp 194 nodes 23079 time 139 nps 166036 pv f3d5
+2602 <skytalix-a(0): bestmove f3d5
+2602 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5
+2602 >skytalix-b(1): isready
+2602 <skytalix-b(1): readyok
+2602 >skytalix-b(1): go depth 4
+2617 <skytalix-b(1): info depth 4 score cp -194 nodes 2339 time 14 nps 167071 pv f8f6
+2617 <skytalix-b(1): bestmove f8f6
+2617 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6
+2617 >skytalix-a(0): isready
+2617 <skytalix-a(0): readyok
+2617 >skytalix-a(0): go depth 4
+2671 <skytalix-a(0): info depth 4 score cp 304 nodes 9405 time 53 nps 177453 pv c3e4
+2671 <skytalix-a(0): bestmove c3e4
+2671 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4
+2671 >skytalix-b(1): isready
+2672 <skytalix-b(1): readyok
+2672 >skytalix-b(1): go depth 4
+2683 <skytalix-b(1): info depth 4 score cp -304 nodes 1455 time 11 nps 132273 pv e6d5
+2683 <skytalix-b(1): bestmove e6d5
+2683 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5
+2683 >skytalix-a(0): isready
+2683 <skytalix-a(0): readyok
+2683 >skytalix-a(0): go depth 4
+2691 <skytalix-a(0): info depth 4 score cp 291 nodes 1297 time 8 nps 162125 pv e4f6
+2691 <skytalix-a(0): bestmove e4f6
+2691 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6
+2691 >skytalix-b(1): isready
+2692 <skytalix-b(1): readyok
+2692 >skytalix-b(1): go depth 4
+2698 <skytalix-b(1): info depth 4 score cp -331 nodes 1059 time 6 nps 176500 pv g7f6
+2698 <skytalix-b(1): bestmove g7f6
+2698 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6
+2698 >skytalix-a(0): isready
+2698 <skytalix-a(0): readyok
+2701 >skytalix-a(0): go depth 4
+2706 <skytalix-a(0): info depth 4 score cp 314 nodes 1258 time 7 nps 179714 pv c4d5
+2706 <skytalix-a(0): bestmove c4d5
+2706 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5
+2706 >skytalix-b(1): isready
+2707 <skytalix-b(1): readyok
+2707 >skytalix-b(1): go depth 4
+2729 <skytalix-b(1): info depth 4 score cp -314 nodes 3000 time 21 nps 142857 pv f6h4
+2729 <skytalix-b(1): bestmove f6h4
+2729 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4
+2729 >skytalix-a(0): isready
+2730 <skytalix-a(0): readyok
+2730 >skytalix-a(0): go depth 4
+2748 <skytalix-a(0): info depth 4 score cp 336 nodes 3404 time 18 nps 189111 pv d1d2
+2748 <skytalix-a(0): bestmove d1d2
+2748 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2
+2748 >skytalix-b(1): isready
+2748 <skytalix-b(1): readyok
+2748 >skytalix-b(1): go depth 4
+2775 <skytalix-b(1): info depth 4 score cp -334 nodes 4652 time 26 nps 178923 pv b8d8
+2775 <skytalix-b(1): bestmove b8d8
+2775 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8
+2775 >skytalix-a(0): isready
+2775 <skytalix-a(0): readyok
+2775 >skytalix-a(0): go depth 4
+2814 <skytalix-a(0): info depth 4 score cp 356 nodes 7766 time 39 nps 199128 pv d2c2
+2814 <skytalix-a(0): bestmove d2c2
+2814 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2
+2814 >skytalix-b(1): isready
+2816 <skytalix-b(1): readyok
+2816 >skytalix-b(1): go depth 4
+2851 <skytalix-b(1): info depth 4 score cp -340 nodes 7084 time 36 nps 196778 pv e7e6
+2851 <skytalix-b(1): bestmove e7e6
+2851 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6
+2851 >skytalix-a(0): isready
+2852 <skytalix-a(0): readyok
+2852 >skytalix-a(0): go depth 4
+2877 <skytalix-a(0): info depth 4 score cp 418 nodes 5300 time 25 nps 212000 pv g2g3
+2877 <skytalix-a(0): bestmove g2g3
+2877 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3
+2877 >skytalix-b(1): isready
+2878 <skytalix-b(1): readyok
+2878 >skytalix-b(1): go depth 4
+2914 <skytalix-b(1): info depth 4 score cp -383 nodes 4530 time 28 nps 161786 pv h4f6
+2914 <skytalix-b(1): bestmove h4f6
+2914 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6
+2915 >skytalix-a(0): isready
+2920 <skytalix-a(0): readyok
+2920 >skytalix-a(0): go depth 4
+2970 <skytalix-a(0): info depth 4 score cp 383 nodes 5054 time 50 nps 101080 pv d5e6
+2970 <skytalix-a(0): bestmove d5e6
+2970 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6
+2970 >skytalix-b(1): isready
+2970 <skytalix-b(1): readyok
+2970 >skytalix-b(1): go depth 4
+2992 <skytalix-b(1): info depth 4 score cp -383 nodes 4226 time 21 nps 201238 pv d8d1
+2992 <skytalix-b(1): bestmove d8d1
+2992 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1
+2992 >skytalix-a(0): isready
+2992 <skytalix-a(0): readyok
+2992 >skytalix-a(0): go depth 4
+2993 <skytalix-a(0): info depth 4 score cp 373 nodes 271 time 1 nps 271000 pv c2c1
+2993 <skytalix-a(0): bestmove c2c1
+2993 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1
+2994 >skytalix-b(1): isready
+2994 <skytalix-b(1): readyok
+2994 >skytalix-b(1): go depth 4
+3008 <skytalix-b(1): info depth 4 score cp -424 nodes 2999 time 14 nps 214214 pv d1c1
+3008 <skytalix-b(1): bestmove d1c1
+3008 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1
+3008 >skytalix-a(0): isready
+3009 <skytalix-a(0): readyok
+3009 >skytalix-a(0): go depth 4
+3010 <skytalix-a(0): info depth 4 score cp 411 nodes 433 time 2 nps 216500 pv b1c1
+3011 <skytalix-a(0): bestmove b1c1
+3011 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1
+3011 >skytalix-b(1): isready
+3011 <skytalix-b(1): readyok
+3011 >skytalix-b(1): go depth 4
+3023 <skytalix-b(1): info depth 4 score cp -449 nodes 2705 time 12 nps 225417 pv f6e7
+3023 <skytalix-b(1): bestmove f6e7
+3023 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7
+3023 >skytalix-a(0): isready
+3023 <skytalix-a(0): readyok
+3024 >skytalix-a(0): go depth 4
+3038 <skytalix-a(0): info depth 4 score cp 449 nodes 3155 time 15 nps 210333 pv c1b1
+3038 <skytalix-a(0): bestmove c1b1
+3038 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1
+3038 >skytalix-b(1): isready
+3039 <skytalix-b(1): readyok
+3039 >skytalix-b(1): go depth 4
+3052 <skytalix-b(1): info depth 4 score cp -452 nodes 2830 time 13 nps 217692 pv f4f3
+3052 <skytalix-b(1): bestmove f4f3
+3052 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3
+3052 >skytalix-a(0): isready
+3052 <skytalix-a(0): readyok
+3052 >skytalix-a(0): go depth 4
+3065 <skytalix-a(0): info depth 4 score cp 484 nodes 2833 time 13 nps 217923 pv f1d3
+3065 <skytalix-a(0): bestmove f1d3
+3065 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3
+3065 >skytalix-b(1): isready
+3066 <skytalix-b(1): readyok
+3066 >skytalix-b(1): go depth 4
+3081 <skytalix-b(1): info depth 4 score cp -484 nodes 3107 time 15 nps 207133 pv e7c5
+3081 <skytalix-b(1): bestmove e7c5
+3081 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5
+3081 >skytalix-a(0): isready
+3081 <skytalix-a(0): readyok
+3081 >skytalix-a(0): go depth 4
+3109 <skytalix-a(0): info depth 4 score cp 573 nodes 6889 time 28 nps 246036 pv h1f1
+3109 <skytalix-a(0): bestmove h1f1
+3109 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1
+3109 >skytalix-b(1): isready
+3110 <skytalix-b(1): readyok
+3110 >skytalix-b(1): go depth 4
+3128 <skytalix-b(1): info depth 4 score cp -573 nodes 4177 time 18 nps 232056 pv g6g5
+3128 <skytalix-b(1): bestmove g6g5
+3128 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5
+3128 >skytalix-a(0): isready
+3129 <skytalix-a(0): readyok
+3129 >skytalix-a(0): go depth 4
+3158 <skytalix-a(0): info depth 4 score cp 590 nodes 7442 time 29 nps 256621 pv g3g4
+3158 <skytalix-a(0): bestmove g3g4
+3158 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4
+3158 >skytalix-b(1): isready
+3159 <skytalix-b(1): readyok
+3159 >skytalix-b(1): go depth 4
+3174 <skytalix-b(1): info depth 4 score cp -590 nodes 3838 time 15 nps 255867 pv h7h6
+3174 <skytalix-b(1): bestmove h7h6
+3174 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6
+3174 >skytalix-a(0): isready
+3175 <skytalix-a(0): readyok
+3175 >skytalix-a(0): go depth 4
+3188 <skytalix-a(0): info depth 4 score cp 610 nodes 3128 time 13 nps 240615 pv d3e4
+3188 <skytalix-a(0): bestmove d3e4
+3188 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4
+3188 >skytalix-b(1): isready
+3189 <skytalix-b(1): readyok
+3189 >skytalix-b(1): go depth 4
+3203 <skytalix-b(1): info depth 4 score cp -615 nodes 3381 time 14 nps 241500 pv b7b5
+3203 <skytalix-b(1): bestmove b7b5
+3203 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5
+3203 >skytalix-a(0): isready
+3204 <skytalix-a(0): readyok
+3204 >skytalix-a(0): go depth 4
+3224 <skytalix-a(0): info depth 4 score cp 616 nodes 4602 time 20 nps 230100 pv e4f3
+3224 <skytalix-a(0): bestmove e4f3
+3224 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5 e4f3
+3224 >skytalix-b(1): isready
+3224 <skytalix-b(1): readyok
+3224 >skytalix-b(1): go depth 4
+3233 <skytalix-b(1): info depth 4 score cp -630 nodes 1942 time 9 nps 215778 pv g8h8
+3233 <skytalix-b(1): bestmove g8h8
+3233 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5 e4f3 g8h8
+3233 >skytalix-a(0): isready
+3234 <skytalix-a(0): readyok
+3234 >skytalix-a(0): go depth 4
+3248 <skytalix-a(0): info depth 4 score cp 637 nodes 3166 time 14 nps 226143 pv f3e4
+3248 <skytalix-a(0): bestmove f3e4
+3248 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5 e4f3 g8h8 f3e4
+3248 >skytalix-b(1): isready
+3248 <skytalix-b(1): readyok
+3248 >skytalix-b(1): go depth 4
+3255 <skytalix-b(1): info depth 4 score cp -637 nodes 1469 time 7 nps 209857 pv b5b4
+3255 <skytalix-b(1): bestmove b5b4
+3255 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5 e4f3 g8h8 f3e4 b5b4
+3255 >skytalix-a(0): isready
+3255 <skytalix-a(0): readyok
+3255 >skytalix-a(0): go depth 4
+3271 <skytalix-a(0): info depth 4 score cp 654 nodes 3668 time 16 nps 229250 pv b1a1
+3271 <skytalix-a(0): bestmove b1a1
+3271 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5 e4f3 g8h8 f3e4 b5b4 b1a1
+3271 >skytalix-b(1): isready
+3272 <skytalix-b(1): readyok
+3272 >skytalix-b(1): go depth 4
+3277 <skytalix-b(1): info depth 4 score cp -654 nodes 1428 time 5 nps 285600 pv a7a6
+3277 <skytalix-b(1): bestmove a7a6
+3277 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5 e4f3 g8h8 f3e4 b5b4 b1a1 a7a6
+3277 >skytalix-a(0): isready
+3278 <skytalix-a(0): readyok
+3278 >skytalix-a(0): go depth 4
+3291 <skytalix-a(0): info depth 4 score cp 654 nodes 3195 time 13 nps 245769 pv h2h3
+3291 <skytalix-a(0): bestmove h2h3
+3291 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5 e4f3 g8h8 f3e4 b5b4 b1a1 a7a6 h2h3
+3291 >skytalix-b(1): isready
+3291 <skytalix-b(1): readyok
+3291 >skytalix-b(1): go depth 4
+3296 <skytalix-b(1): info depth 4 score cp -654 nodes 1255 time 5 nps 251000 pv h8g7
+3296 <skytalix-b(1): bestmove h8g7
+3296 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5 e4f3 g8h8 f3e4 b5b4 b1a1 a7a6 h2h3 h8g7
+3296 >skytalix-a(0): isready
+3297 <skytalix-a(0): readyok
+3297 >skytalix-a(0): go depth 4
+3308 <skytalix-a(0): info depth 4 score cp 654 nodes 2632 time 11 nps 239273 pv f1c1
+3308 <skytalix-a(0): bestmove f1c1
+3308 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5 e4f3 g8h8 f3e4 b5b4 b1a1 a7a6 h2h3 h8g7 f1c1
+3308 >skytalix-b(1): isready
+3308 <skytalix-b(1): readyok
+3308 >skytalix-b(1): go depth 4
+3318 <skytalix-b(1): info depth 4 score cp -654 nodes 2492 time 10 nps 249200 pv c5b6
+3318 <skytalix-b(1): bestmove c5b6
+3318 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5 e4f3 g8h8 f3e4 b5b4 b1a1 a7a6 h2h3 h8g7 f1c1 c5b6
+3318 >skytalix-a(0): isready
+3318 <skytalix-a(0): readyok
+3318 >skytalix-a(0): go depth 4
+3338 <skytalix-a(0): info depth 4 score cp 648 nodes 5230 time 20 nps 261500 pv c1c4
+3338 <skytalix-a(0): bestmove c1c4
+3338 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5 e4f3 g8h8 f3e4 b5b4 b1a1 a7a6 h2h3 h8g7 f1c1 c5b6 c1c4
+3338 >skytalix-b(1): isready
+3339 <skytalix-b(1): readyok
+3339 >skytalix-b(1): go depth 4
+3349 <skytalix-b(1): info depth 4 score cp -659 nodes 2607 time 10 nps 260700 pv a6a5
+3349 <skytalix-b(1): bestmove a6a5
+3349 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5 e4f3 g8h8 f3e4 b5b4 b1a1 a7a6 h2h3 h8g7 f1c1 c5b6 c1c4 a6a5
+3349 >skytalix-a(0): isready
+3350 <skytalix-a(0): readyok
+3350 >skytalix-a(0): go depth 4
+3368 <skytalix-a(0): info depth 4 score cp 655 nodes 5196 time 18 nps 288667 pv c4c1
+3368 <skytalix-a(0): bestmove c4c1
+3368 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5 e4f3 g8h8 f3e4 b5b4 b1a1 a7a6 h2h3 h8g7 f1c1 c5b6 c1c4 a6a5 c4c1
+3368 >skytalix-b(1): isready
+3369 <skytalix-b(1): readyok
+3369 >skytalix-b(1): go depth 4
+3384 <skytalix-b(1): info depth 4 score cp -653 nodes 3862 time 15 nps 257467 pv g7f6
+3384 <skytalix-b(1): bestmove g7f6
+3384 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5 e4f3 g8h8 f3e4 b5b4 b1a1 a7a6 h2h3 h8g7 f1c1 c5b6 c1c4 a6a5 c4c1 g7f6
+3384 >skytalix-a(0): isready
+3385 <skytalix-a(0): readyok
+3385 >skytalix-a(0): go depth 4
+3400 <skytalix-a(0): info depth 4 score cp 664 nodes 4397 time 15 nps 293133 pv e4f5
+3403 <skytalix-a(0): bestmove e4f5
+3403 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5 e4f3 g8h8 f3e4 b5b4 b1a1 a7a6 h2h3 h8g7 f1c1 c5b6 c1c4 a6a5 c4c1 g7f6 e4f5
+3403 >skytalix-b(1): isready
+3403 <skytalix-b(1): readyok
+3403 >skytalix-b(1): go depth 4
+3411 <skytalix-b(1): info depth 4 score cp -659 nodes 2511 time 9 nps 279000 pv f6g7
+3411 <skytalix-b(1): bestmove f6g7
+3411 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5 e4f3 g8h8 f3e4 b5b4 b1a1 a7a6 h2h3 h8g7 f1c1 c5b6 c1c4 a6a5 c4c1 g7f6 e4f5 f6g7
+3411 >skytalix-a(0): isready
+3411 <skytalix-a(0): readyok
+3411 >skytalix-a(0): go depth 4
+3424 <skytalix-a(0): info depth 4 score cp 672 nodes 3199 time 12 nps 266583 pv c1c2
+3424 <skytalix-a(0): bestmove c1c2
+3424 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5 e4f3 g8h8 f3e4 b5b4 b1a1 a7a6 h2h3 h8g7 f1c1 c5b6 c1c4 a6a5 c4c1 g7f6 e4f5 f6g7 c1c2
+3424 >skytalix-b(1): isready
+3424 <skytalix-b(1): readyok
+3424 >skytalix-b(1): go depth 4
+3433 <skytalix-b(1): info depth 4 score cp -639 nodes 2448 time 9 nps 272000 pv a5a4
+3433 <skytalix-b(1): bestmove a5a4
+3433 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5 e4f3 g8h8 f3e4 b5b4 b1a1 a7a6 h2h3 h8g7 f1c1 c5b6 c1c4 a6a5 c4c1 g7f6 e4f5 f6g7 c1c2 a5a4
+3433 >skytalix-a(0): isready
+3434 <skytalix-a(0): readyok
+3434 >skytalix-a(0): go depth 4
+3445 <skytalix-a(0): info depth 4 score cp 653 nodes 3107 time 10 nps 310700 pv c2c4
+3445 <skytalix-a(0): bestmove c2c4
+3445 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5 e4f3 g8h8 f3e4 b5b4 b1a1 a7a6 h2h3 h8g7 f1c1 c5b6 c1c4 a6a5 c4c1 g7f6 e4f5 f6g7 c1c2 a5a4 c2c4
+3445 >skytalix-b(1): isready
+3445 <skytalix-b(1): readyok
+3445 >skytalix-b(1): go depth 4
+3455 <skytalix-b(1): info depth 4 score cp -633 nodes 2613 time 9 nps 290333 pv a4a3
+3455 <skytalix-b(1): bestmove a4a3
+3455 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5 e4f3 g8h8 f3e4 b5b4 b1a1 a7a6 h2h3 h8g7 f1c1 c5b6 c1c4 a6a5 c4c1 g7f6 e4f5 f6g7 c1c2 a5a4 c2c4 a4a3
+3455 >skytalix-a(0): isready
+3455 <skytalix-a(0): readyok
+3455 >skytalix-a(0): go depth 4
+3461 <skytalix-a(0): info depth 4 score cp 640 nodes 1739 time 6 nps 289833 pv b2a3
+3461 <skytalix-a(0): bestmove b2a3
+3461 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5 e4f3 g8h8 f3e4 b5b4 b1a1 a7a6 h2h3 h8g7 f1c1 c5b6 c1c4 a6a5 c4c1 g7f6 e4f5 f6g7 c1c2 a5a4 c2c4 a4a3 b2a3
+3461 >skytalix-b(1): isready
+3462 <skytalix-b(1): readyok
+3462 >skytalix-b(1): go depth 4
+3467 <skytalix-b(1): info depth 4 score cp -603 nodes 1494 time 5 nps 298800 pv b4a3
+3467 <skytalix-b(1): bestmove b4a3
+3467 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5 e4f3 g8h8 f3e4 b5b4 b1a1 a7a6 h2h3 h8g7 f1c1 c5b6 c1c4 a6a5 c4c1 g7f6 e4f5 f6g7 c1c2 a5a4 c2c4 a4a3 b2a3 b4a3
+3467 >skytalix-a(0): isready
+3468 <skytalix-a(0): readyok
+3468 >skytalix-a(0): go depth 4
+3474 <skytalix-a(0): info depth 4 score cp 603 nodes 1806 time 6 nps 301000 pv e6e7
+3474 <skytalix-a(0): bestmove e6e7
+3474 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5 e4f3 g8h8 f3e4 b5b4 b1a1 a7a6 h2h3 h8g7 f1c1 c5b6 c1c4 a6a5 c4c1 g7f6 e4f5 f6g7 c1c2 a5a4 c2c4 a4a3 b2a3 b4a3 e6e7
+3474 >skytalix-b(1): isready
+3475 <skytalix-b(1): readyok
+3475 >skytalix-b(1): go depth 4
+3480 <skytalix-b(1): info depth 4 score cp -502 nodes 1420 time 5 nps 284000 pv g7f7
+3481 <skytalix-b(1): bestmove g7f7
+3481 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5 e4f3 g8h8 f3e4 b5b4 b1a1 a7a6 h2h3 h8g7 f1c1 c5b6 c1c4 a6a5 c4c1 g7f6 e4f5 f6g7 c1c2 a5a4 c2c4 a4a3 b2a3 b4a3 e6e7 g7f7
+3481 >skytalix-a(0): isready
+3481 <skytalix-a(0): readyok
+3481 >skytalix-a(0): go depth 4
+3493 <skytalix-a(0): info depth 4 score cp 472 nodes 3275 time 12 nps 272917 pv h3h4
+3493 <skytalix-a(0): bestmove h3h4
+3493 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5 e4f3 g8h8 f3e4 b5b4 b1a1 a7a6 h2h3 h8g7 f1c1 c5b6 c1c4 a6a5 c4c1 g7f6 e4f5 f6g7 c1c2 a5a4 c2c4 a4a3 b2a3 b4a3 e6e7 g7f7 h3h4
+3493 >skytalix-b(1): isready
+3493 <skytalix-b(1): readyok
+3493 >skytalix-b(1): go depth 4
+3500 <skytalix-b(1): info depth 4 score cp -424 nodes 1717 time 7 nps 245286 pv g5h4
+3500 <skytalix-b(1): bestmove g5h4
+3500 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5 e4f3 g8h8 f3e4 b5b4 b1a1 a7a6 h2h3 h8g7 f1c1 c5b6 c1c4 a6a5 c4c1 g7f6 e4f5 f6g7 c1c2 a5a4 c2c4 a4a3 b2a3 b4a3 e6e7 g7f7 h3h4 g5h4
+3500 >skytalix-a(0): isready
+3500 <skytalix-a(0): readyok
+3500 >skytalix-a(0): go depth 4
+3510 <skytalix-a(0): info depth 4 score cp 400 nodes 2736 time 10 nps 273600 pv f2f4
+3510 <skytalix-a(0): bestmove f2f4
+3510 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5 e4f3 g8h8 f3e4 b5b4 b1a1 a7a6 h2h3 h8g7 f1c1 c5b6 c1c4 a6a5 c4c1 g7f6 e4f5 f6g7 c1c2 a5a4 c2c4 a4a3 b2a3 b4a3 e6e7 g7f7 h3h4 g5h4 f2f4
+3510 >skytalix-b(1): isready
+3510 <skytalix-b(1): readyok
+3510 >skytalix-b(1): go depth 4
+3515 <skytalix-b(1): info depth 4 score cp -400 nodes 1241 time 5 nps 248200 pv e5f4
+3515 <skytalix-b(1): bestmove e5f4
+3515 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5 e4f3 g8h8 f3e4 b5b4 b1a1 a7a6 h2h3 h8g7 f1c1 c5b6 c1c4 a6a5 c4c1 g7f6 e4f5 f6g7 c1c2 a5a4 c2c4 a4a3 b2a3 b4a3 e6e7 g7f7 h3h4 g5h4 f2f4 e5f4
+3515 >skytalix-a(0): isready
+3516 <skytalix-a(0): readyok
+3516 >skytalix-a(0): go depth 4
+3525 <skytalix-a(0): info depth 4 score cp 440 nodes 2274 time 9 nps 252667 pv c4e4
+3525 <skytalix-a(0): bestmove c4e4
+3525 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5 e4f3 g8h8 f3e4 b5b4 b1a1 a7a6 h2h3 h8g7 f1c1 c5b6 c1c4 a6a5 c4c1 g7f6 e4f5 f6g7 c1c2 a5a4 c2c4 a4a3 b2a3 b4a3 e6e7 g7f7 h3h4 g5h4 f2f4 e5f4 c4e4
+3525 >skytalix-b(1): isready
+3525 <skytalix-b(1): readyok
+3525 >skytalix-b(1): go depth 4
+3533 <skytalix-b(1): info depth 4 score cp -739 nodes 1707 time 7 nps 243857 pv b6d4
+3533 <skytalix-b(1): bestmove b6d4
+3533 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5 e4f3 g8h8 f3e4 b5b4 b1a1 a7a6 h2h3 h8g7 f1c1 c5b6 c1c4 a6a5 c4c1 g7f6 e4f5 f6g7 c1c2 a5a4 c2c4 a4a3 b2a3 b4a3 e6e7 g7f7 h3h4 g5h4 f2f4 e5f4 c4e4 b6d4
+3533 >skytalix-a(0): isready
+3534 <skytalix-a(0): readyok
+3534 >skytalix-a(0): go depth 4
+3535 <skytalix-a(0): info depth 4 score cp 739 nodes 436 time 1 nps 436000 pv a1b1
+3535 <skytalix-a(0): bestmove a1b1
+3535 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5 e4f3 g8h8 f3e4 b5b4 b1a1 a7a6 h2h3 h8g7 f1c1 c5b6 c1c4 a6a5 c4c1 g7f6 e4f5 f6g7 c1c2 a5a4 c2c4 a4a3 b2a3 b4a3 e6e7 g7f7 h3h4 g5h4 f2f4 e5f4 c4e4 b6d4 a1b1
+3535 >skytalix-b(1): isready
+3536 <skytalix-b(1): readyok
+3536 >skytalix-b(1): go depth 4
+3539 <skytalix-b(1): info depth 4 score cp -844 nodes 861 time 3 nps 287000 pv d4e5
+3539 <skytalix-b(1): bestmove d4e5
+3539 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5 e4f3 g8h8 f3e4 b5b4 b1a1 a7a6 h2h3 h8g7 f1c1 c5b6 c1c4 a6a5 c4c1 g7f6 e4f5 f6g7 c1c2 a5a4 c2c4 a4a3 b2a3 b4a3 e6e7 g7f7 h3h4 g5h4 f2f4 e5f4 c4e4 b6d4 a1b1 d4e5
+3539 >skytalix-a(0): isready
+3540 <skytalix-a(0): readyok
+3540 >skytalix-a(0): go depth 4
+3545 <skytalix-a(0): info depth 4 score cp 818 nodes 1420 time 5 nps 284000 pv e4e5
+3545 <skytalix-a(0): bestmove e4e5
+3545 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5 e4f3 g8h8 f3e4 b5b4 b1a1 a7a6 h2h3 h8g7 f1c1 c5b6 c1c4 a6a5 c4c1 g7f6 e4f5 f6g7 c1c2 a5a4 c2c4 a4a3 b2a3 b4a3 e6e7 g7f7 h3h4 g5h4 f2f4 e5f4 c4e4 b6d4 a1b1 d4e5 e4e5
+3545 >skytalix-b(1): isready
+3546 <skytalix-b(1): readyok
+3546 >skytalix-b(1): go depth 4
+3548 <skytalix-b(1): info depth 4 score cp -1435 nodes 652 time 2 nps 326000 pv f4f3
+3548 <skytalix-b(1): bestmove f4f3
+3548 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5 e4f3 g8h8 f3e4 b5b4 b1a1 a7a6 h2h3 h8g7 f1c1 c5b6 c1c4 a6a5 c4c1 g7f6 e4f5 f6g7 c1c2 a5a4 c2c4 a4a3 b2a3 b4a3 e6e7 g7f7 h3h4 g5h4 f2f4 e5f4 c4e4 b6d4 a1b1 d4e5 e4e5 f4f3
+3548 >skytalix-a(0): isready
+3548 <skytalix-a(0): readyok
+3548 >skytalix-a(0): go depth 4
+3557 <skytalix-a(0): info depth 4 score cp 1600 nodes 2247 time 9 nps 249667 pv e7e8q
+3557 <skytalix-a(0): bestmove e7e8q
+3557 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5 e4f3 g8h8 f3e4 b5b4 b1a1 a7a6 h2h3 h8g7 f1c1 c5b6 c1c4 a6a5 c4c1 g7f6 e4f5 f6g7 c1c2 a5a4 c2c4 a4a3 b2a3 b4a3 e6e7 g7f7 h3h4 g5h4 f2f4 e5f4 c4e4 b6d4 a1b1 d4e5 e4e5 f4f3 e7e8q
+3557 >skytalix-b(1): isready
+3558 <skytalix-b(1): readyok
+3558 >skytalix-b(1): go depth 4
+3560 <skytalix-b(1): info depth 4 score mate -2 nodes 571 time 2 nps 285500 pv f7g7
+3560 <skytalix-b(1): bestmove f7g7
+3560 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5 e4f3 g8h8 f3e4 b5b4 b1a1 a7a6 h2h3 h8g7 f1c1 c5b6 c1c4 a6a5 c4c1 g7f6 e4f5 f6g7 c1c2 a5a4 c2c4 a4a3 b2a3 b4a3 e6e7 g7f7 h3h4 g5h4 f2f4 e5f4 c4e4 b6d4 a1b1 d4e5 e4e5 f4f3 e7e8q f7g7
+3560 >skytalix-a(0): isready
+3561 <skytalix-a(0): readyok
+3561 >skytalix-a(0): go depth 4
+3580 <skytalix-a(0): info depth 4 score mate 2 nodes 4874 time 18 nps 270778 pv e8g6
+3580 <skytalix-a(0): bestmove e8g6
+3580 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5 e4f3 g8h8 f3e4 b5b4 b1a1 a7a6 h2h3 h8g7 f1c1 c5b6 c1c4 a6a5 c4c1 g7f6 e4f5 f6g7 c1c2 a5a4 c2c4 a4a3 b2a3 b4a3 e6e7 g7f7 h3h4 g5h4 f2f4 e5f4 c4e4 b6d4 a1b1 d4e5 e4e5 f4f3 e7e8q f7g7 e8g6
+3580 >skytalix-b(1): isready
+3580 <skytalix-b(1): readyok
+3580 >skytalix-b(1): go depth 4
+3581 <skytalix-b(1): info depth 4 score mate -1 nodes 400 time 1 nps 400000 pv g7h8
+3582 <skytalix-b(1): bestmove g7h8
+3582 >skytalix-a(0): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5 e4f3 g8h8 f3e4 b5b4 b1a1 a7a6 h2h3 h8g7 f1c1 c5b6 c1c4 a6a5 c4c1 g7f6 e4f5 f6g7 c1c2 a5a4 c2c4 a4a3 b2a3 b4a3 e6e7 g7f7 h3h4 g5h4 f2f4 e5f4 c4e4 b6d4 a1b1 d4e5 e4e5 f4f3 e7e8q f7g7 e8g6 g7h8
+3582 >skytalix-a(0): isready
+3582 <skytalix-a(0): readyok
+3582 >skytalix-a(0): go depth 4
+3596 <skytalix-a(0): info depth 4 score mate 1 nodes 3882 time 14 nps 277286 pv e5e8
+3596 <skytalix-a(0): bestmove e5e8
+3596 >skytalix-b(1): position startpos moves d2d4 g7g6 c2c4 f8g7 b1c3 d7d6 e2e4 f7f5 g1f3 b8c6 c1f4 g8f6 e4e5 f6h5 d1d2 e8g8 e1c1 h5f4 d2f4 c8e6 c1b1 d8d7 d4d5 d6e5 f4d2 c6d4 d5e6 d7e6 d2e3 f5f4 e3e4 d4f3 e4f3 a8b8 f3d5 f8f6 c3e4 e6d5 e4f6 g7f6 c4d5 f6h4 d1d2 b8d8 d2c2 e7e6 g2g3 h4f6 d5e6 d8d1 c2c1 d1c1 b1c1 f6e7 c1b1 f4f3 f1d3 e7c5 h1f1 g6g5 g3g4 h7h6 d3e4 b7b5 e4f3 g8h8 f3e4 b5b4 b1a1 a7a6 h2h3 h8g7 f1c1 c5b6 c1c4 a6a5 c4c1 g7f6 e4f5 f6g7 c1c2 a5a4 c2c4 a4a3 b2a3 b4a3 e6e7 g7f7 h3h4 g5h4 f2f4 e5f4 c4e4 b6d4 a1b1 d4e5 e4e5 f4f3 e7e8q f7g7 e8g6 g7h8 e5e8
+3596 >skytalix-a(0): isready
+3596 >skytalix-b(1): isready
+3596 <skytalix-a(0): readyok
+3597 <skytalix-b(1): readyok
+Finished game 1 (skytalix-a vs skytalix-b): 1-0 {White mates}
+Score of skytalix-a vs skytalix-b: 1 - 0 - 0  [1.000] 1
+Started game 2 of 2 (skytalix-b vs skytalix-a)
+3597 >skytalix-b(1): debug on
+3597 >skytalix-b(1): ucinewgame
+3597 >skytalix-b(1): position startpos
+3597 >skytalix-a(0): debug on
+3597 >skytalix-a(0): ucinewgame
+3597 >skytalix-a(0): position startpos
+3597 >skytalix-b(1): isready
+3597 <skytalix-b(1): readyok
+3597 >skytalix-b(1): go depth 4
+3598 <skytalix-b(1): info string book
+3598 <skytalix-b(1): bestmove d2d4
+3598 >skytalix-a(0): position startpos moves d2d4
+3598 >skytalix-a(0): isready
+3598 <skytalix-a(0): readyok
+3598 >skytalix-a(0): go depth 4
+3598 <skytalix-a(0): info string book
+3598 <skytalix-a(0): bestmove g8f6
+3598 >skytalix-b(1): position startpos moves d2d4 g8f6
+3598 >skytalix-b(1): isready
+3598 <skytalix-b(1): readyok
+3598 >skytalix-b(1): go depth 4
+3598 <skytalix-b(1): info string book
+3598 <skytalix-b(1): bestmove c2c4
+3598 >skytalix-a(0): position startpos moves d2d4 g8f6 c2c4
+3598 >skytalix-a(0): isready
+3598 <skytalix-a(0): readyok
+3598 >skytalix-a(0): go depth 4
+3598 <skytalix-a(0): info string book
+3598 <skytalix-a(0): bestmove g7g6
+3598 >skytalix-b(1): position startpos moves d2d4 g8f6 c2c4 g7g6
+3598 >skytalix-b(1): isready
+3598 <skytalix-b(1): readyok
+3598 >skytalix-b(1): go depth 4
+3598 <skytalix-b(1): info string book
+3598 <skytalix-b(1): bestmove b1c3
+3598 >skytalix-a(0): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3
+3598 >skytalix-a(0): isready
+3598 <skytalix-a(0): readyok
+3598 >skytalix-a(0): go depth 4
+3598 <skytalix-a(0): info string book
+3598 <skytalix-a(0): bestmove d7d5
+3598 >skytalix-b(1): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5
+3598 >skytalix-b(1): isready
+3598 <skytalix-b(1): readyok
+3598 >skytalix-b(1): go depth 4
+3598 <skytalix-b(1): info string book
+3598 <skytalix-b(1): bestmove g1f3
+3598 >skytalix-a(0): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3
+3598 >skytalix-a(0): isready
+3598 <skytalix-a(0): readyok
+3598 >skytalix-a(0): go depth 4
+3598 <skytalix-a(0): info string book
+3598 <skytalix-a(0): bestmove f8g7
+3598 >skytalix-b(1): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7
+3598 >skytalix-b(1): isready
+3598 <skytalix-b(1): readyok
+3599 >skytalix-b(1): go depth 4
+3599 <skytalix-b(1): info string book
+3599 <skytalix-b(1): bestmove d1b3
+3599 >skytalix-a(0): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3
+3599 >skytalix-a(0): isready
+3599 <skytalix-a(0): readyok
+3599 >skytalix-a(0): go depth 4
+3599 <skytalix-a(0): info string book
+3599 <skytalix-a(0): bestmove d5c4
+3599 >skytalix-b(1): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3 d5c4
+3599 >skytalix-b(1): isready
+3599 <skytalix-b(1): readyok
+3599 >skytalix-b(1): go depth 4
+3599 <skytalix-b(1): info string book
+3599 <skytalix-b(1): bestmove b3c4
+3599 >skytalix-a(0): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3 d5c4 b3c4
+3599 >skytalix-a(0): isready
+3599 <skytalix-a(0): readyok
+3599 >skytalix-a(0): go depth 4
+3599 <skytalix-a(0): info string book
+3599 <skytalix-a(0): bestmove e8g8
+3599 >skytalix-b(1): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3 d5c4 b3c4 e8g8
+3599 >skytalix-b(1): isready
+3599 <skytalix-b(1): readyok
+3599 >skytalix-b(1): go depth 4
+3737 <skytalix-b(1): info depth 4 score cp 80 nodes 24769 time 138 nps 179486 pv e2e4
+3737 <skytalix-b(1): bestmove e2e4
+3737 >skytalix-a(0): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3 d5c4 b3c4 e8g8 e2e4
+3737 >skytalix-a(0): isready
+3737 <skytalix-a(0): readyok
+3737 >skytalix-a(0): go depth 4
+3886 <skytalix-a(0): info depth 4 score cp -60 nodes 28670 time 149 nps 192416 pv c8g4
+3886 <skytalix-a(0): bestmove c8g4
+3886 >skytalix-b(1): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3 d5c4 b3c4 e8g8 e2e4 c8g4
+3886 >skytalix-b(1): isready
+3887 <skytalix-b(1): readyok
+3887 >skytalix-b(1): go depth 4
+3972 <skytalix-b(1): info depth 4 score cp 90 nodes 17186 time 85 nps 202188 pv e4e5
+3972 <skytalix-b(1): bestmove e4e5
+3972 >skytalix-a(0): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3 d5c4 b3c4 e8g8 e2e4 c8g4 e4e5
+3972 >skytalix-a(0): isready
+3973 <skytalix-a(0): readyok
+3973 >skytalix-a(0): go depth 4
+4050 <skytalix-a(0): info depth 4 score cp -79 nodes 15280 time 76 nps 201053 pv f6d7
+4050 <skytalix-a(0): bestmove f6d7
+4050 >skytalix-b(1): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3 d5c4 b3c4 e8g8 e2e4 c8g4 e4e5 f6d7
+4050 >skytalix-b(1): isready
+4050 <skytalix-b(1): readyok
+4050 >skytalix-b(1): go depth 4
+4181 <skytalix-b(1): info depth 4 score cp 49 nodes 25237 time 131 nps 192649 pv f1e2
+4181 <skytalix-b(1): bestmove f1e2
+4181 >skytalix-a(0): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3 d5c4 b3c4 e8g8 e2e4 c8g4 e4e5 f6d7 f1e2
+4181 >skytalix-a(0): isready
+4181 <skytalix-a(0): readyok
+4181 >skytalix-a(0): go depth 4
+4301 <skytalix-a(0): info depth 4 score cp -48 nodes 23332 time 120 nps 194433 pv b8c6
+4301 <skytalix-a(0): bestmove b8c6
+4301 >skytalix-b(1): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3 d5c4 b3c4 e8g8 e2e4 c8g4 e4e5 f6d7 f1e2 b8c6
+4301 >skytalix-b(1): isready
+4301 <skytalix-b(1): readyok
+4301 >skytalix-b(1): go depth 4
+4415 <skytalix-b(1): info depth 4 score cp 48 nodes 22410 time 114 nps 196579 pv e1g1
+4415 <skytalix-b(1): bestmove e1g1
+4415 >skytalix-a(0): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3 d5c4 b3c4 e8g8 e2e4 c8g4 e4e5 f6d7 f1e2 b8c6 e1g1
+4415 >skytalix-a(0): isready
+4415 <skytalix-a(0): readyok
+4415 >skytalix-a(0): go depth 4
+4571 <skytalix-a(0): info depth 4 score cp -48 nodes 34021 time 156 nps 218083 pv d7b6
+4571 <skytalix-a(0): bestmove d7b6
+4571 >skytalix-b(1): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3 d5c4 b3c4 e8g8 e2e4 c8g4 e4e5 f6d7 f1e2 b8c6 e1g1 d7b6
+4571 >skytalix-b(1): isready
+4571 <skytalix-b(1): readyok
+4571 >skytalix-b(1): go depth 4
+4621 <skytalix-b(1): info depth 4 score cp 48 nodes 10048 time 50 nps 200960 pv c4c5
+4621 <skytalix-b(1): bestmove c4c5
+4621 >skytalix-a(0): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3 d5c4 b3c4 e8g8 e2e4 c8g4 e4e5 f6d7 f1e2 b8c6 e1g1 d7b6 c4c5
+4621 >skytalix-a(0): isready
+4622 <skytalix-a(0): readyok
+4622 >skytalix-a(0): go depth 4
+4871 <skytalix-a(0): info depth 4 score cp -48 nodes 48127 time 249 nps 193281 pv g4f3
+4872 <skytalix-a(0): bestmove g4f3
+4872 >skytalix-b(1): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3 d5c4 b3c4 e8g8 e2e4 c8g4 e4e5 f6d7 f1e2 b8c6 e1g1 d7b6 c4c5 g4f3
+4872 >skytalix-b(1): isready
+4872 <skytalix-b(1): readyok
+4872 >skytalix-b(1): go depth 4
+4923 <skytalix-b(1): info depth 4 score cp 48 nodes 10168 time 51 nps 199373 pv e2f3
+4923 <skytalix-b(1): bestmove e2f3
+4923 >skytalix-a(0): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3 d5c4 b3c4 e8g8 e2e4 c8g4 e4e5 f6d7 f1e2 b8c6 e1g1 d7b6 c4c5 g4f3 e2f3
+4923 >skytalix-a(0): isready
+4923 <skytalix-a(0): readyok
+4923 >skytalix-a(0): go depth 4
+4972 <skytalix-a(0): info depth 4 score cp -48 nodes 9222 time 49 nps 188204 pv d8d4
+4972 <skytalix-a(0): bestmove d8d4
+4972 >skytalix-b(1): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3 d5c4 b3c4 e8g8 e2e4 c8g4 e4e5 f6d7 f1e2 b8c6 e1g1 d7b6 c4c5 g4f3 e2f3 d8d4
+4972 >skytalix-b(1): isready
+4972 <skytalix-b(1): readyok
+4972 >skytalix-b(1): go depth 4
+5017 <skytalix-b(1): info depth 4 score cp 39 nodes 7043 time 44 nps 160068 pv c5d4
+5017 <skytalix-b(1): bestmove c5d4
+5017 >skytalix-a(0): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3 d5c4 b3c4 e8g8 e2e4 c8g4 e4e5 f6d7 f1e2 b8c6 e1g1 d7b6 c4c5 g4f3 e2f3 d8d4 c5d4
+5017 >skytalix-a(0): isready
+5018 <skytalix-a(0): readyok
+5018 >skytalix-a(0): go depth 4
+5050 <skytalix-a(0): info depth 4 score cp 54 nodes 4896 time 32 nps 153000 pv c6d4
+5050 <skytalix-a(0): bestmove c6d4
+5050 >skytalix-b(1): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3 d5c4 b3c4 e8g8 e2e4 c8g4 e4e5 f6d7 f1e2 b8c6 e1g1 d7b6 c4c5 g4f3 e2f3 d8d4 c5d4 c6d4
+5050 >skytalix-b(1): isready
+5050 <skytalix-b(1): readyok
+5050 >skytalix-b(1): go depth 4
+5066 <skytalix-b(1): info depth 4 score cp -54 nodes 2768 time 16 nps 173000 pv f3b7
+5066 <skytalix-b(1): bestmove f3b7
+5066 >skytalix-a(0): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3 d5c4 b3c4 e8g8 e2e4 c8g4 e4e5 f6d7 f1e2 b8c6 e1g1 d7b6 c4c5 g4f3 e2f3 d8d4 c5d4 c6d4 f3b7
+5066 >skytalix-a(0): isready
+5066 <skytalix-a(0): readyok
+5066 >skytalix-a(0): go depth 4
+5096 <skytalix-a(0): info depth 4 score cp 40 nodes 6816 time 30 nps 227200 pv a8b8
+5096 <skytalix-a(0): bestmove a8b8
+5096 >skytalix-b(1): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3 d5c4 b3c4 e8g8 e2e4 c8g4 e4e5 f6d7 f1e2 b8c6 e1g1 d7b6 c4c5 g4f3 e2f3 d8d4 c5d4 c6d4 f3b7 a8b8
+5096 >skytalix-b(1): isready
+5096 <skytalix-b(1): readyok
+5097 >skytalix-b(1): go depth 4
+5130 <skytalix-b(1): info depth 4 score cp -49 nodes 5599 time 33 nps 169667 pv b7e4
+5130 <skytalix-b(1): bestmove b7e4
+5130 >skytalix-a(0): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3 d5c4 b3c4 e8g8 e2e4 c8g4 e4e5 f6d7 f1e2 b8c6 e1g1 d7b6 c4c5 g4f3 e2f3 d8d4 c5d4 c6d4 f3b7 a8b8 b7e4
+5130 >skytalix-a(0): isready
+5130 <skytalix-a(0): readyok
+5130 >skytalix-a(0): go depth 4
+5195 <skytalix-a(0): info depth 4 score cp 36 nodes 11113 time 65 nps 170969 pv g7e5
+5195 <skytalix-a(0): bestmove g7e5
+5195 >skytalix-b(1): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3 d5c4 b3c4 e8g8 e2e4 c8g4 e4e5 f6d7 f1e2 b8c6 e1g1 d7b6 c4c5 g4f3 e2f3 d8d4 c5d4 c6d4 f3b7 a8b8 b7e4 g7e5
+5195 >skytalix-b(1): isready
+5195 <skytalix-b(1): readyok
+5195 >skytalix-b(1): go depth 4
+5276 <skytalix-b(1): info depth 4 score cp -60 nodes 13796 time 81 nps 170321 pv f1e1
+5276 <skytalix-b(1): bestmove f1e1
+5276 >skytalix-a(0): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3 d5c4 b3c4 e8g8 e2e4 c8g4 e4e5 f6d7 f1e2 b8c6 e1g1 d7b6 c4c5 g4f3 e2f3 d8d4 c5d4 c6d4 f3b7 a8b8 b7e4 g7e5 f1e1
+5276 >skytalix-a(0): isready
+5276 <skytalix-a(0): readyok
+5276 >skytalix-a(0): go depth 4
+5383 <skytalix-a(0): info depth 4 score cp 64 nodes 20277 time 107 nps 189505 pv d4e6
+5383 <skytalix-a(0): bestmove d4e6
+5383 >skytalix-b(1): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3 d5c4 b3c4 e8g8 e2e4 c8g4 e4e5 f6d7 f1e2 b8c6 e1g1 d7b6 c4c5 g4f3 e2f3 d8d4 c5d4 c6d4 f3b7 a8b8 b7e4 g7e5 f1e1 d4e6
+5383 >skytalix-b(1): isready
+5384 <skytalix-b(1): readyok
+5384 >skytalix-b(1): go depth 4
+5473 <skytalix-b(1): info depth 4 score cp -85 nodes 16978 time 89 nps 190764 pv c1h6
+5473 <skytalix-b(1): bestmove c1h6
+5473 >skytalix-a(0): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3 d5c4 b3c4 e8g8 e2e4 c8g4 e4e5 f6d7 f1e2 b8c6 e1g1 d7b6 c4c5 g4f3 e2f3 d8d4 c5d4 c6d4 f3b7 a8b8 b7e4 g7e5 f1e1 d4e6 c1h6
+5473 >skytalix-a(0): isready
+5473 <skytalix-a(0): readyok
+5473 >skytalix-a(0): go depth 4
+5540 <skytalix-a(0): info depth 4 score cp 85 nodes 14927 time 67 nps 222791 pv f8d8
+5540 <skytalix-a(0): bestmove f8d8
+5541 >skytalix-b(1): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3 d5c4 b3c4 e8g8 e2e4 c8g4 e4e5 f6d7 f1e2 b8c6 e1g1 d7b6 c4c5 g4f3 e2f3 d8d4 c5d4 c6d4 f3b7 a8b8 b7e4 g7e5 f1e1 d4e6 c1h6 f8d8
+5541 >skytalix-b(1): isready
+5541 <skytalix-b(1): readyok
+5541 >skytalix-b(1): go depth 4
+5640 <skytalix-b(1): info depth 4 score cp -89 nodes 17335 time 99 nps 175101 pv a1d1
+5640 <skytalix-b(1): bestmove a1d1
+5640 >skytalix-a(0): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3 d5c4 b3c4 e8g8 e2e4 c8g4 e4e5 f6d7 f1e2 b8c6 e1g1 d7b6 c4c5 g4f3 e2f3 d8d4 c5d4 c6d4 f3b7 a8b8 b7e4 g7e5 f1e1 d4e6 c1h6 f8d8 a1d1
+5640 >skytalix-a(0): isready
+5641 <skytalix-a(0): readyok
+5641 >skytalix-a(0): go depth 4
+5712 <skytalix-a(0): info depth 4 score cp 99 nodes 13029 time 71 nps 183507 pv b6c4
+5712 <skytalix-a(0): bestmove b6c4
+5712 >skytalix-b(1): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3 d5c4 b3c4 e8g8 e2e4 c8g4 e4e5 f6d7 f1e2 b8c6 e1g1 d7b6 c4c5 g4f3 e2f3 d8d4 c5d4 c6d4 f3b7 a8b8 b7e4 g7e5 f1e1 d4e6 c1h6 f8d8 a1d1 b6c4
+5712 >skytalix-b(1): isready
+5712 <skytalix-b(1): readyok
+5712 >skytalix-b(1): go depth 4
+5783 <skytalix-b(1): info depth 4 score cp -44 nodes 11319 time 70 nps 161700 pv e4d5
+5783 <skytalix-b(1): bestmove e4d5
+5783 >skytalix-a(0): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3 d5c4 b3c4 e8g8 e2e4 c8g4 e4e5 f6d7 f1e2 b8c6 e1g1 d7b6 c4c5 g4f3 e2f3 d8d4 c5d4 c6d4 f3b7 a8b8 b7e4 g7e5 f1e1 d4e6 c1h6 f8d8 a1d1 b6c4 e4d5
+5783 >skytalix-a(0): isready
+5783 <skytalix-a(0): readyok
+5783 >skytalix-a(0): go depth 4
+5840 <skytalix-a(0): info depth 4 score cp 44 nodes 11815 time 57 nps 207281 pv c4b2
+5840 <skytalix-a(0): bestmove c4b2
+5840 >skytalix-b(1): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3 d5c4 b3c4 e8g8 e2e4 c8g4 e4e5 f6d7 f1e2 b8c6 e1g1 d7b6 c4c5 g4f3 e2f3 d8d4 c5d4 c6d4 f3b7 a8b8 b7e4 g7e5 f1e1 d4e6 c1h6 f8d8 a1d1 b6c4 e4d5 c4b2
+5840 >skytalix-b(1): isready
+5841 <skytalix-b(1): readyok
+5841 >skytalix-b(1): go depth 4
+5879 <skytalix-b(1): info depth 4 score cp -56 nodes 7842 time 38 nps 206368 pv e1e5
+5879 <skytalix-b(1): bestmove e1e5
+5879 >skytalix-a(0): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3 d5c4 b3c4 e8g8 e2e4 c8g4 e4e5 f6d7 f1e2 b8c6 e1g1 d7b6 c4c5 g4f3 e2f3 d8d4 c5d4 c6d4 f3b7 a8b8 b7e4 g7e5 f1e1 d4e6 c1h6 f8d8 a1d1 b6c4 e4d5 c4b2 e1e5
+5879 >skytalix-a(0): isready
+5879 <skytalix-a(0): readyok
+5879 >skytalix-a(0): go depth 4
+5902 <skytalix-a(0): info depth 4 score cp 19 nodes 4613 time 23 nps 200565 pv b2d1
+5902 <skytalix-a(0): bestmove b2d1
+5902 >skytalix-b(1): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3 d5c4 b3c4 e8g8 e2e4 c8g4 e4e5 f6d7 f1e2 b8c6 e1g1 d7b6 c4c5 g4f3 e2f3 d8d4 c5d4 c6d4 f3b7 a8b8 b7e4 g7e5 f1e1 d4e6 c1h6 f8d8 a1d1 b6c4 e4d5 c4b2 e1e5 b2d1
+5902 >skytalix-b(1): isready
+5902 <skytalix-b(1): readyok
+5902 >skytalix-b(1): go depth 4
+5944 <skytalix-b(1): info depth 4 score cp -16 nodes 7848 time 42 nps 186857 pv c3d1
+5944 <skytalix-b(1): bestmove c3d1
+5944 >skytalix-a(0): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3 d5c4 b3c4 e8g8 e2e4 c8g4 e4e5 f6d7 f1e2 b8c6 e1g1 d7b6 c4c5 g4f3 e2f3 d8d4 c5d4 c6d4 f3b7 a8b8 b7e4 g7e5 f1e1 d4e6 c1h6 f8d8 a1d1 b6c4 e4d5 c4b2 e1e5 b2d1 c3d1
+5944 >skytalix-a(0): isready
+5945 <skytalix-a(0): readyok
+5945 >skytalix-a(0): go depth 4
+5997 <skytalix-a(0): info depth 4 score cp 193 nodes 9972 time 52 nps 191769 pv b8b1
+5997 <skytalix-a(0): bestmove b8b1
+5997 >skytalix-b(1): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3 d5c4 b3c4 e8g8 e2e4 c8g4 e4e5 f6d7 f1e2 b8c6 e1g1 d7b6 c4c5 g4f3 e2f3 d8d4 c5d4 c6d4 f3b7 a8b8 b7e4 g7e5 f1e1 d4e6 c1h6 f8d8 a1d1 b6c4 e4d5 c4b2 e1e5 b2d1 c3d1 b8b1
+5997 >skytalix-b(1): isready
+5997 <skytalix-b(1): readyok
+5997 >skytalix-b(1): go depth 4
+6012 <skytalix-b(1): info depth 4 score cp -193 nodes 2599 time 15 nps 173267 pv d5f3
+6012 <skytalix-b(1): bestmove d5f3
+6012 >skytalix-a(0): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3 d5c4 b3c4 e8g8 e2e4 c8g4 e4e5 f6d7 f1e2 b8c6 e1g1 d7b6 c4c5 g4f3 e2f3 d8d4 c5d4 c6d4 f3b7 a8b8 b7e4 g7e5 f1e1 d4e6 c1h6 f8d8 a1d1 b6c4 e4d5 c4b2 e1e5 b2d1 c3d1 b8b1 d5f3
+6012 >skytalix-a(0): isready
+6012 <skytalix-a(0): readyok
+6012 >skytalix-a(0): go depth 4
+6036 <skytalix-a(0): info depth 4 score cp 729 nodes 5182 time 24 nps 215917 pv b1d1
+6036 <skytalix-a(0): bestmove b1d1
+6037 >skytalix-b(1): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3 d5c4 b3c4 e8g8 e2e4 c8g4 e4e5 f6d7 f1e2 b8c6 e1g1 d7b6 c4c5 g4f3 e2f3 d8d4 c5d4 c6d4 f3b7 a8b8 b7e4 g7e5 f1e1 d4e6 c1h6 f8d8 a1d1 b6c4 e4d5 c4b2 e1e5 b2d1 c3d1 b8b1 d5f3 b1d1
+6037 >skytalix-b(1): isready
+6037 <skytalix-b(1): readyok
+6037 >skytalix-b(1): go depth 4
+6038 <skytalix-b(1): info depth 4 score mate -2 nodes 230 time 1 nps 230000 pv f3d1
+6038 <skytalix-b(1): bestmove f3d1
+6038 >skytalix-a(0): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3 d5c4 b3c4 e8g8 e2e4 c8g4 e4e5 f6d7 f1e2 b8c6 e1g1 d7b6 c4c5 g4f3 e2f3 d8d4 c5d4 c6d4 f3b7 a8b8 b7e4 g7e5 f1e1 d4e6 c1h6 f8d8 a1d1 b6c4 e4d5 c4b2 e1e5 b2d1 c3d1 b8b1 d5f3 b1d1 f3d1
+6038 >skytalix-a(0): isready
+6039 <skytalix-a(0): readyok
+6039 >skytalix-a(0): go depth 4
+6049 <skytalix-a(0): info depth 4 score mate 2 nodes 2116 time 9 nps 235111 pv d8d1
+6049 <skytalix-a(0): bestmove d8d1
+6049 >skytalix-b(1): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3 d5c4 b3c4 e8g8 e2e4 c8g4 e4e5 f6d7 f1e2 b8c6 e1g1 d7b6 c4c5 g4f3 e2f3 d8d4 c5d4 c6d4 f3b7 a8b8 b7e4 g7e5 f1e1 d4e6 c1h6 f8d8 a1d1 b6c4 e4d5 c4b2 e1e5 b2d1 c3d1 b8b1 d5f3 b1d1 f3d1 d8d1
+6049 >skytalix-b(1): isready
+6049 <skytalix-b(1): readyok
+6049 >skytalix-b(1): go depth 4
+6050 <skytalix-b(1): info depth 4 score mate -1 nodes 160 time 1 nps 160000 pv e5e1
+6050 <skytalix-b(1): bestmove e5e1
+6050 >skytalix-a(0): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3 d5c4 b3c4 e8g8 e2e4 c8g4 e4e5 f6d7 f1e2 b8c6 e1g1 d7b6 c4c5 g4f3 e2f3 d8d4 c5d4 c6d4 f3b7 a8b8 b7e4 g7e5 f1e1 d4e6 c1h6 f8d8 a1d1 b6c4 e4d5 c4b2 e1e5 b2d1 c3d1 b8b1 d5f3 b1d1 f3d1 d8d1 e5e1
+6050 >skytalix-a(0): isready
+6050 <skytalix-a(0): readyok
+6050 >skytalix-a(0): go depth 4
+6056 <skytalix-a(0): info depth 4 score mate 1 nodes 1461 time 6 nps 243500 pv d1e1
+6056 <skytalix-a(0): bestmove d1e1
+6056 >skytalix-b(1): position startpos moves d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 g1f3 f8g7 d1b3 d5c4 b3c4 e8g8 e2e4 c8g4 e4e5 f6d7 f1e2 b8c6 e1g1 d7b6 c4c5 g4f3 e2f3 d8d4 c5d4 c6d4 f3b7 a8b8 b7e4 g7e5 f1e1 d4e6 c1h6 f8d8 a1d1 b6c4 e4d5 c4b2 e1e5 b2d1 c3d1 b8b1 d5f3 b1d1 f3d1 d8d1 e5e1 d1e1
+6056 >skytalix-b(1): isready
+6056 >skytalix-a(0): isready
+6056 <skytalix-a(0): readyok
+6057 <skytalix-b(1): readyok
+Finished game 2 (skytalix-b vs skytalix-a): 0-1 {Black mates}
+Score of skytalix-a vs skytalix-b: 2 - 0 - 0  [1.000] 2
+...      skytalix-a playing White: 1 - 0 - 0  [1.000] 1
+...      skytalix-a playing Black: 1 - 0 - 0  [1.000] 1
+...      White vs Black: 1 - 1 - 0  [0.500] 2
+Elo difference: inf +/- nan, LOS: 92.1 %, DrawRatio: 0.0 %
+SPRT: llr 0 (0.0%), lbound -inf, ubound inf
+
+Player: skytalix-a
+   "Win: Black mates": 1
+   "Win: White mates": 1
+Player: skytalix-b
+   "Loss: Black mates": 1
+   "Loss: White mates": 1
+Finished match
+6057 >skytalix-b(1): quit
+6057 >skytalix-a(0): quit

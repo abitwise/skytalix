@@ -60,6 +60,12 @@ owner: BA/PM
 > AC and width 1 are required. The owner's quiet window is asked for only if a forfeit, stall or disconnect happens
 > on a host that was not quiet.
 
+> **2026-10-23, QE/E2E (task `qe-read-ABC-202`, `ABC-202` § Reading, at `main` `e5c5c2a5`): M1 MET, M8(a) MET.**
+> `cutechess-cli` 1.5.1 played the built `dist/uci.js`. M1 had 6/6 pass texts, with 0 illegal moves, 0 forfeits,
+> 0 disconnects and 0 stalls. M8(a) had 2/2 pass texts, with every searched move at final depth 4 (131/131).
+> **`RISK-EPIC007-01` did not show up.** There were 0 `isready` pings during a search, and the closest clock was 13.3 s.
+> One spelling was corrected in-hop: `-debug` → `-debug all`. Verdict note: `…632c11f1`.
+
 _Updated: 2026-10-18 by BA/PM (task `wave-2026-09-25`, subtask `bapm-engine-revise`). **Revised against the owner's
 answers to Q1–Q11, and then to Q12 and Q13 (owner word `…6b2d90f1`, which arrived during this hop).** Still PROPOSED:
 the owner must accept this revision and the revised `ADR-0044`. Six ticket pages are cut in `Backlog` as proposals, and

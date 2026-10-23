@@ -333,3 +333,70 @@ BA/PM, 2026-10-23, at `main` `84a59ed6`. **Result: 10 of 10. `Ready`.**
 | 8 | size assigned | ✅ `XS` |
 | 9 | priority assigned | ✅ `P2`, argued |
 | 10 | no major unresolved blocker | ✅ the tool is installed. AC is an environment fact, and a quiet window is owed only on the fallback |
+
+## Reading
+
+> **QE/E2E addendum, 2026-10-23T13:31–13:53Z** (task `qe-read-ABC-202`, branch `grugops/qe-read-ABC-202`). Agent-run,
+> with no human gate. Notes: `.grugops/context/qe-read-ABC-202/notes/` (`…8a2be50b` setup and A1/A2, `…202e80c8` M1,
+> `…81066c23` M8(a), `…632c11f1` verdict). Raw files and `SHA256SUMS`: `.grugops/context/qe-read-ABC-202/raw/`.
+
+- **S = `e5c5c2a5`.** `git diff --stat 84a59ed6 e5c5c2a5 -- src data package.json package-lock.json tsconfig.build.json`
+  is empty.
+- **Machine:** Apple M3, Darwin 25.6.0, macOS 26.7.1 (25G241), `node` `/opt/homebrew/bin/node` `v26.11.1`,
+  `cutechess-cli 1.5.1` (Qt 6.12.0). The binary sha256 `fb4fc2aa…6e1c` equals the pin.
+- **Host log (`raw/host.log`).** AC throughout.
+  - M1 games 1–4: thermal 1–2, a foreign `vitest` from another repo, load1 ≤ 7.85. **Not quiet.**
+  - M1 games 5–6 and M8(a): thermal 0, no foreign `vitest`, load1 2.84–4.31.
+  - No FAIL-class result occurred, so the non-quiet stretch is immaterial, and no quiet-window re-run is owed.
+- **The A2 spelling correction: `-debug` → `-debug all`, in both commands.** Attempt 1 ran exactly the pinned block.
+  Both runs exited rc 1 within 5 s, before any engine started, with `Warning: Empty value for option "-debug"`.
+  - **Source (`5e84232b`).** A bare `-debug` is stored as `QVariant(true)` (`projects/cli/src/matchparser.cpp:135–138`).
+    `main.cpp:482–487` then accepts only `all` or a null value. Under Qt 6, `QVariant(true)` is not null, so the bare
+    flag cannot work in this build.
+  - **Why it stays inside the measure.** `all` also sends UCI `debug on`, which skytalix ignores (`src/uci-session.ts:383`,
+    D3). The engine's output is byte-identical with and without it (`raw/debugcheck-*.out`). No `tc`, option, opening
+    or `go` changed, so this is not a STOP.
+  - Each run was re-run once with the correction. The script that ran is `raw/run.sh` (sha256 `6562e145…`). Attempt 1's
+    script and output are kept as `raw/attempt1-*`.
+- **A1: MET.** `npm ci` and `npm run build` rc 0. `dist/uci.js` sha256 `877e9595746aead5019a2e604da2ef0021e2d688168b275d809e572fe8a9b98d`.
+  The smoke run exits 0 with `id name skytalix` and `uciok`. Option lines:
+  - `option name OwnBook type check default true`
+  - `option name Skill Level type spin default 5 min 1 max 5`
+- **A2: MET (after the correction).**
+  - M1: 6 `Finished game` lines and 6 PGN games. Each game takes the next EPD line, and every `[FEN]` tag equals its
+    line (game 1 is the startpos FEN). All 493 `go` lines carry `wtime`, `btime`, `winc 1000` and `binc 1000`. First:
+    `go wtime 61000 btime 61000 winc 1000 binc 1000`.
+  - M8(a): 2 and 2. Game 1 White and game 2 Black are both `skytalix-a`, and both games start from startpos. All 151 `go`
+    lines are exactly `go depth 4`.
+  - 0 `setoption` lines were sent in either run.
+- **A3 (M1): MET.** Run 13:34:08–13:50:56Z, 1008 s.
+
+  | game | W / B | line | result {text} | plies | wall s | min clock ms |
+  |---|---|---|---|---|---|---|
+  | 1 | a / b | startpos | 1-0 {White mates} | 127 | 222.6 | 13292 |
+  | 2 | b / a | Kiwipete | 1/2-1/2 {Draw by 3-fold repetition} | 68 | 151.6 | 19737 |
+  | 3 | a / b | pos 3 | 1/2-1/2 {Draw by 3-fold repetition} | 55 | 131.2 | 23262 |
+  | 4 | b / a | pos 4 | 1-0 {White mates} | 51 | 124.4 | 24689 |
+  | 5 | a / b | pos 5 | 1/2-1/2 {Draw by 3-fold repetition} | 91 | 182.9 | 15241 |
+  | 6 | b / a | pos 6 | 1-0 {White mates} | 101 | 195.2 | 14042 |
+
+  - 0 illegal moves, 0 time forfeits, 0 disconnects, 0 stalls, 0 unknown texts.
+  - 0 `isready` lines were sent while a `go` was unanswered.
+  - All four `stderr` files are 0 bytes.
+  - The watchdog (a bash poll loop) did not fire.
+- **A4 (M8(a)): MET.** Run 13:50:56–13:51:06Z, 10 s.
+  - Game 1 (a / b): 1-0 {White mates}, 103 plies, 8 book moves, 95 searched.
+  - Game 2 (b / a): 0-1 {Black mates}, 48 plies, 12 book moves, 36 searched.
+  - Histogram of final depths: `{4: 131}`. No searched move lacks a depth line.
+  - 0 `ignores go depth` lines.
+- **Verdict per measure:**
+  - **M1: MET.**
+  - **M8(a): MET.**
+  - **`RISK-EPIC007-01`: did not show up.**
+  - § Failure route: nothing fires.
+- **INFO gaps:**
+  - `QE-202-a`: the pinned block and the row (ii) catalog hop should carry `-debug all`.
+  - `QE-202-b`: `debug on` is sent, and the engine ignores it.
+  - `QE-202-c`: `tc=60+1` sends 61 000 ms on move 1, which is cutechess's own convention.
+  - `QE-202-d`: EPIC-007's M1 row text is stale ("Skill Level 3", "ABC-168's context"). It is BA/PM's to refresh.
+- **UAT:** waived (0 production lines). The Orchestrator rules the card and EPIC-007 (`…5aaf7cec`).
