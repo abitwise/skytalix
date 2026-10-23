@@ -6,12 +6,13 @@ id: ADR-0047
 
 ## Status
 
-**accepted**, 2026-10-23, by Architect/Design (subtask `arch-design-ABC-203`), for `ABC-203`.
+**accepted by the owner**, 2026-10-23 (owner, verbatim: *"1. accept"*; Orchestrator transcription `…7feb0553`). Drafted by Architect/Design (subtask `arch-design-ABC-203`), for `ABC-203`.
 
-- **Why this role accepts it.** The owner's standing directive of 2026-08-03 lets this role ratify an
-  architecture decision. His delegation of 2026-10-22 (`…5aaf7cec`, item 3) sends only a reversal of
-  an accepted ADR to him. This ADR reverses none (§ Consequences, "What does not move").
-- **The owner may veto it.** The product calls under it (automatic write, `quit` writes nothing) are
+- **Correction 2026-10-23 (Orchestrator, `…3898cd9a`).** As first written, this section said the role
+  could accept the ADR itself because the delegation (`…5aaf7cec`, item 3) sends "only a reversal" to the
+  owner. Item 3 also names **a new ADR** as the owner's. The ADR was held, put to the owner, and accepted
+  by him. Superseded text: "**accepted**, 2026-10-23, by Architect/Design … This ADR reverses none."
+- **Product calls.** The product calls under it (automatic write, `quit` writes nothing) are
   BA/PM's, on the `ABC-203` page, and are cheap to reverse before the build.
 - **Evidence:** `.grugops/context/arch-design-ABC-203/notes/` and the `## Design ruling` section on
   `plans/tickets/ABC-203-at-game-end-npm-run-chess-writes-the-game-as-a-standard-pgn-file-under-games.md`.
