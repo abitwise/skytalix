@@ -1,0 +1,53 @@
+[Event "EPIC-006 play-test, game 1"]
+[Site "Owner's Mac (skytalix CLI vs Apple Chess, moves relayed by the owner)"]
+[Date "2026.10.23"]
+[Round "1"]
+[White "skytalix (cli-chess-example, difficulty 5)"]
+[Black "Apple Chess"]
+[Result "0-1"]
+[Termination "normal"]
+[Annotator "Architect/Design (arch-analyse-game-1): Stockfish 19, depth 20, 1 thread, 128 MB hash; evals in pawns from White's side; NAG thresholds ?! >= 50 cp, ? >= 100 cp, ?? >= 300 cp loss, evals capped at +/-10"]
+
+1. c4 { [%eval 0.22] skytalix book move. } c5 { [%eval 0.29] } 2. Nc3
+{ [%eval 0.25] skytalix book move. } Nf6 { [%eval 0.28] } 3. Nf3 { [%eval 0.25]
+skytalix book move. } b6 { [%eval 0.58] } 4. Qa4?! { [%eval -0.06] Inaccuracy
+(loss 72 cp). Stockfish 19 d20 prefers e4 (0.66). } ( 4. e4 Nc6 5. d4 cxd4 6.
+Nxd4 Bb7 7. Bf4 Nxd4 ) e6 { [%eval -0.12] } 5. d3 { [%eval -0.08] } Be7
+{ [%eval -0.10] } 6. Bf4 { [%eval -0.28] } Bb7 { [%eval -0.19] } 7. e4
+{ [%eval -0.47] } O-O { [%eval -0.48] } 8. e5? { [%eval -1.85] Mistake (loss
+144 cp). Stockfish 19 d20 prefers Be2 (-0.41). } ( 8. Be2 Nc6 9. O-O Nh5 10.
+Be3 Qc7 11. g3 f5 ) Nh5 { [%eval -2.02] } 9. Be3 { [%eval -1.92] } d6?!
+{ [%eval -1.08] Inaccuracy (loss 88 cp). Stockfish 19 d20 prefers Bxf3 (-1.96).
+} ( 9... Bxf3 10. gxf3 Bg5 11. O-O-O Nc6 12. h4 Bf4 13. Ne2 ) 10. Ne4?
+{ [%eval -3.16] Mistake (loss 217 cp). Stockfish 19 d20 prefers Be2 (-0.99). }
+( 10. Be2 Nc6 11. Nd2 g6 12. exd6 Qxd6 13. Bxh5 gxh5 ) dxe5 { [%eval -3.37] }
+11. Nxe5 { [%eval -3.35] } Bf6 { [%eval -2.78] } 12. Nxf6+ { [%eval -2.68] }
+Qxf6 { [%eval -2.93] } 13. d4?? { [%eval -6.32] Blunder (loss 360 cp).
+Stockfish 19 d20 prefers Ng4 (-2.72). } ( 13. Ng4 Qxb2 14. Qd1 Nf6 15. Rb1 Qc3+
+16. Bd2 Qd4 ) cxd4 { [%eval -6.32] } 14. Bxd4 { [%eval -6.51] } Qf4
+{ [%eval -5.96] } 15. Bc3?! { [%eval -6.86] Inaccuracy (loss 55 cp). Stockfish
+19 d20 prefers Qd1 (-6.31). } ( 15. Qd1 Qe4+ 16. Qe2 Qxd4 17. Rd1 Qh4 18. g3
+Qe7 ) Qe4+ { [%eval -6.53] } 16. Kd2 { [%eval -6.51] } Rd8+ { [%eval -6.60] }
+17. Kc1? { [%eval -6.93] Mistake (loss 114 cp). Stockfish 19 d20 prefers Nd3
+(-5.79). } ( 17. Nd3 Nf4 18. Qc2 Nc6 19. Rd1 Qxc4 20. Kc1 Nd5 ) Qf4+
+{ [%eval -6.86] } 18. Kb1?! { [%eval -7.38] Inaccuracy (loss 56 cp). Stockfish
+19 d20 prefers Kc2 (-6.82). } ( 18. Kc2 Qxf2+ 19. Kb3 Na6 20. Ka3 Nc5 21. Qb4
+Nf4 ) Be4+ { [%eval -6.79] } 19. Bd3 { [%eval -6.72] } Bxd3+ { [%eval -6.74] }
+20. Nxd3 { [%eval -6.65] } Qf5 { [%eval -6.77] } 21. Rd1?! { [%eval -7.02]
+Inaccuracy (loss 57 cp). Stockfish 19 d20 prefers Kc1 (-6.45). } ( 21. Kc1 Qxd3
+22. Rd1 Qxd1+ 23. Qxd1 Rxd1+ 24. Kxd1 Nf6 ) Nf4 { [%eval -7.03] } 22. Qb5?!
+{ [%eval -7.46] Inaccuracy (loss 78 cp). Stockfish 19 d20 prefers a3 (-6.68). }
+( 22. a3 Nxd3 23. Ka2 Nd7 24. Rd2 N3c5 25. Qc2 Ne4 ) Qg6 { [%eval -7.60] } 23.
+a3 { [%eval -7.26] } Nxd3 { [%eval -7.68] } 24. Ka2 { [%eval -7.39] } Nd7
+{ [%eval -7.23] } 25. Qc6 { [%eval -7.07] } N7c5 { [%eval -7.51] } 26. f4?!
+{ [%eval -7.85] Inaccuracy (loss 65 cp). Stockfish 19 d20 prefers Rd2 (-7.20).
+} ( 26. Rd2 Qe4 27. Qxe4 Nxe4 28. Re2 Nxc3+ 29. bxc3 Nf4 ) Rac8 { [%eval -7.77]
+} 27. Qf3 { [%eval -7.82] } Qe4?! { [%eval -7.13] Inaccuracy (loss 63 cp).
+Stockfish 19 d20 prefers Na4 (-7.76). } ( 27... Na4 28. f5 Nxc3+ 29. bxc3 Qxf5
+30. Qxf5 exf5 31. a4 ) 28. b3 { [%eval -7.61] } Na4 { [%eval -8.68] } 29. Bd2?
+{ [%eval -17.63] Mistake (loss 129 cp). Stockfish 19 d20 prefers Bb2 (-8.71). }
+( 29. Bb2 Qxf3 30. gxf3 Naxb2 31. Rd2 Nc1+ 32. Kxb2 Rxd2+ ) Rxc4 { [%eval #-8]
+} 30. Kb1 { [%eval -13.56] } Rc3 { [%eval #-6] } 31. Ra2 { [%eval #-5] } Rxb3+
+{ [%eval #-5] } 32. Rb2 { [%eval #-4] } Rxb2+ { [%eval #-4] } 33. Ka1
+{ [%eval #-3] } Qc4 { [%eval #-3] } 34. Qd5 { [%eval #-2] } Ra2+ { [%eval #-2]
+} 35. Kb1 { [%eval #-1] } Qc2# { [%eval #-1] } 0-1
