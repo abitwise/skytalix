@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-24 by Orchestrator (orch-2026-10-24d) — ABC-204 built → In Review. Alone-when-idle order: `qe-timing-ABC-203` (N8-LANE) then `qe-ABC-204` (long readings, hours). `bapm-cut-levels-6-7` dispatched now (records only) beside `security-nfr-public-repo`._
 _Updated: 2026-10-24 by Orchestrator (orch-2026-10-24c) — ABC-203 Security PASS_WITH_RISKS; N8-LANE timing hop queued (runs alone once the board idles). `bapm-cut-levels-6-7` now also cuts the ABC-203 follow-up._
 _Updated: 2026-10-24 by Orchestrator (orch-2026-10-24b) — owner `…e44d2903`: EPIC-008 target +100 (Q1), readings whenever idle (Q2); new difficulty levels 6 (5 s) and 7 (≤ 30 s) → `bapm-cut-levels-6-7` queued for the next free slot (width 3/3). NFR-004 ceiling and ADR-0045 move by the owner's word; texts go back to him._
 _Updated: 2026-10-24 by Orchestrator (orch-2026-10-24a) — ABC-203 QE PASS_WITH_GAPS → In Security/NFR. Width 3/3 (security-nfr-public-repo, ticket-to-pr-ABC-204, security-nfr-ABC-203)._
@@ -929,7 +930,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   one hop at pull, when it checks `Ready for Dev`'s exit at that moment; the row records the pull.
 
   HEADING FORMAT (spec §6.1): each column is an H2 heading carrying its live/limit WIP count,
-  e.g. `## In Development (WIP 1/3)` — the left number is how many tickets are in the column
+  e.g. `## In Development (WIP 0/3)` — the left number is how many tickets are in the column
   now, the right number is the limit from config. Unlimited columns read `(WIP unlimited)`;
   Blocked is visible and time-tracked (no WIP limit) and reads `(visible, time-tracked)`.
   INVARIANT: the column H2 headings and the rows of the `## Columns` table are the same 13 names in the
@@ -939,11 +940,11 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 1/3)
-- [ABC-204] Rating harness: cutechess-cli plays the built skytalix against Stockfish UCI_LimitStrength (R) and against its own base (D), outside npm test  (owner: software-engineer, after an Architect/Design ruling; readings by QE, size: M, priority: P2, epic: EPIC-008, since: 2026-10-23, DoR 10/10; `…8c3b2f47`. tools/rating only, 0 lane files (NFR-008 untouched); baseline R (25–75 % band, E frozen), A/A D (100 games, interval contains 0), wall ruling R ≤ 10 h, D ≤ 8 h (D budget ≥ 1 000 ms if needed). No ADR, no Security/NFR hop. Width 1 for readings) **2026-10-23: pulled Ready → In Design (`arch-design-ABC-204`).** **2026-10-23: design ruled (`…13faedbc`, no ADR); biome line + E-step nodded by the Orchestrator. In Design → In Development (`ticket-to-pr-ABC-204`).**
+    ## In Development (WIP 0/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
-    ## In Review (WIP 0/3)
+    ## In Review (WIP 1/3)
+- [ABC-204] Rating harness: cutechess-cli plays the built skytalix against Stockfish UCI_LimitStrength (R) and against its own base (D), outside npm test  (owner: software-engineer, after an Architect/Design ruling; readings by QE, size: M, priority: P2, epic: EPIC-008, since: 2026-10-23, DoR 10/10; `…8c3b2f47`. tools/rating only, 0 lane files (NFR-008 untouched); baseline R (25–75 % band, E frozen), A/A D (100 games, interval contains 0), wall ruling R ≤ 10 h, D ≤ 8 h (D budget ≥ 1 000 ms if needed). No ADR, no Security/NFR hop. Width 1 for readings) **2026-10-23: pulled Ready → In Design (`arch-design-ABC-204`).** **2026-10-23: design ruled (`…13faedbc`, no ADR); biome line + E-step nodded by the Orchestrator. In Design → In Development (`ticket-to-pr-ABC-204`).** **2026-10-24: built `0e88c5df` (`…f0a579a0`): harness under `tools/rating/`, openings sha = pin, smoke R/D 0 faults, lane unchanged. → In Review (`qe-ABC-204`: baseline R, A/A D, A5 wall; alone when idle).**
     - [ABC-012] Portfolio FX conversion  (PR: #41, QE: running)
 
   BOARD <-> TICKET CONTRACT: each ticket file (`plans/tickets/<prefix>-xxx.md`) carries a
