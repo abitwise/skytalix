@@ -134,6 +134,14 @@ remote, and no release has ever been cut. A CLI entry point exists since `ABC-04
 `npm run chess`) but changes none of this — it runs `src/cli.ts` from source, in place. **Runnable
 is not deployable**: `package.json` is `private: true`, no `bin`/`main`/`exports`/`files`.
 
+**Correction 2026-10-23: the `bin` half of that sentence is wrong since `ABC-168`.** (The sentence above stays as written, as
+dated history.) `package.json` has had `"bin": {"skytalix": "dist/uci.js"}` since `ABC-168` (merged `513c0211`, 2026-10-22). Read on
+`main` `ad9655fc`, `jq -c '[.private, .bin, has("main"), has("exports"), has("files")]' package.json` prints
+`[true,{"skytalix":"dist/uci.js"},false,false,false]`: `private: true` stands, and there is still no `main`, `exports` or `files`. The
+target `dist/uci.js` is built locally (`npm run build`), git-ignored and not published. **No ruling changes:** the posture, its
+revisit trigger `EPIC-006` and the three kit overrides stand. Authority: the owner-approved dated notes on `ADR-0007` (decision
+`…0f003634`) and `ADR-0018` (decision `…5ffd0ca7`), both "no clause amended".
+
 **Present posture, explicitly revisitable** — owner said "currently"/"for now" (2026-08-06); revisit
 trigger `EPIC-006` (packaging) decides HOW it is eventually distributed (npm, binary, `git clone` —
 undecided). Ruling, evidence, what's preserved for that day:
