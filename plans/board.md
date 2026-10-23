@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-23 13:45Z by Orchestrator (orch-2026-10-23q) — `ABC-202` cut by BA/PM (XS, P2, DoR 10/10; `…d9f46c46`) and pulled straight to In Development; `qe-read-ABC-202` (QE, cutechess-cli M1 + M8(a)) runs ALONE, ~30–60 min. In Development 1/3, Ready 0/8._
 _Updated: 2026-10-23 13:20Z by Orchestrator (orch-2026-10-23p) — owner built `cutechess-cli` 1.5.1 at `~/Projects/others/cutechess/cutechess/build/cutechess-cli` (not on PATH; trigger ruled met, `…7ea41eea`). `bapm-cut-EPIC-007-M1-M8a` (BA/PM, records only) cuts the XS agent-run QE reading ticket for M1 and M8(a). Width 1/3._
 _Updated: 2026-10-23 by Orchestrator (orch-2026-10-23o) — merged `bapm-close-EPIC-007-M2` (`…b5f65536`: M2 closed by acceptance, not read; M1/M8(a) open, trigger = `cutechess-cli` on host) and `arch-adr0007-bin-note` (`…0f003634`: dated note, D2 executable leg fired, posture unchanged; STOP did not fire). Follow-ups: ADR-0018 has the same stale "no bin" wording (owner); `70-runbook.md` § Deploy says "nothing … built". Width 0/3._
 _Updated: 2026-10-23 by Orchestrator (orch-2026-10-23n) — owner word `…d3681daa`: EPIC-007 M2 closed on acceptance (`bapm-close-EPIC-007-M2`, BA/PM, records only); ADR-0007 dated `bin` note approved (`arch-adr0007-bin-note`, Architect, records only); `checkpoints.sign_off_acceptance: "notify"` written to config. Width 2/3. EPIC-007 stays open (M1, M8(a))._
@@ -909,7 +910,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   one hop at pull, when it checks `Ready for Dev`'s exit at that moment; the row records the pull.
 
   HEADING FORMAT (spec §6.1): each column is an H2 heading carrying its live/limit WIP count,
-  e.g. `## In Development (WIP 0/3)` — the left number is how many tickets are in the column
+  e.g. `## In Development (WIP 1/3)` — the left number is how many tickets are in the column
   now, the right number is the limit from config. Unlimited columns read `(WIP unlimited)`;
   Blocked is visible and time-tracked (no WIP limit) and reads `(visible, time-tracked)`.
   INVARIANT: the column H2 headings and the rows of the `## Columns` table are the same 13 names in the
@@ -919,7 +920,8 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 0/3)
+    ## In Development (WIP 1/3)
+- [ABC-202] cutechess-cli plays the built skytalix against itself: read EPIC-007 M1 (6 games, tc=60+1) and M8(a) (2 games, depth=4)  (owner: qe-e2e, size: XS, priority: P2, epic: EPIC-007, since: 2026-10-23, DoR 10/10; cut in `bapm-cut-EPIC-007-M1-M8a` (`…d9f46c46`). Agent-run, no human gate, UAT waived (0 production lines). AC and width 1 required; owner quiet window only if a fault lands on a non-quiet host.) **2026-10-23: pulled Ready → In Development; `qe-read-ABC-202` dispatched alone.**
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
     ## In Review (WIP 0/3)
