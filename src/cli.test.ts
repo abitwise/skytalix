@@ -4362,14 +4362,15 @@ describe("ABC-101 — --difficulty selects a level, and the played engine is tha
     expect(reversed).toEqual(forward);
   });
 
-  it("A2 — the default is a VALUE: the exported constant, the maximum of the level set, `DEFAULT_LEVEL`", () => {
+  it("A2 — the default is a VALUE: the exported constant, `DEFAULT_LEVEL`, below the maximum", () => {
     const levels = LEVEL_WORDS.map(Number).sort((a, b) => a - b);
 
     expect(optionsOf([]).difficulty).toBe(DEFAULT_DIFFICULTY);
-    expect(DEFAULT_DIFFICULTY).toBe(Math.max(...levels));
-    // The top: ruling 2 is overturned (ADR-0045 D2, owner Q1); a default below the maximum reds.
-    expect(DEFAULT_DIFFICULTY).toBe(HARDEST_LEVEL);
+    // `ABC-212` (`ADR-0045` § AMENDMENT A2): levels 6 and 7 sit above the default, so the default
+    // is no longer the maximum of the level set; it is `DEFAULT_LEVEL`, and the hardest is 7.
     expect(DEFAULT_DIFFICULTY).toBe(DEFAULT_LEVEL);
+    expect(DEFAULT_DIFFICULTY).toBeLessThan(Math.max(...levels));
+    expect(Math.max(...levels)).toBe(HARDEST_LEVEL);
   });
 
   it("ABC-174 A2/A3 — no flag resolves difficulty 5, the hardest level, which is `DEFAULT_LEVEL`", () => {
@@ -4383,12 +4384,13 @@ describe("ABC-101 — --difficulty selects a level, and the played engine is tha
       expect(optionsOf(["--difficulty", word]).difficulty, `level ${word}`).toBe(Number(word));
     }
 
-    // `0`/`6` are the boundary pair; `3.0`, `+3`, `03` are what a `Number(token)` range check
-    // accepts (`## Test notes` 1); `constructor`/`__proto__` are the prototype keys of the table.
-    // `3\n` is what a `/m`-flagged regex or a `.trim()` accepts (`ABC-161`, `SEC-101-a`).
+    // `0`/`8` are the boundary pair (`ABC-212` A6: it was `0`/`6`); `3.0`, `+3`, `03` are what a
+    // `Number(token)` range check accepts (`## Test notes` 1); `constructor`/`__proto__` are the
+    // prototype keys of the table. `3\n` is what a `/m`-flagged regex or a `.trim()` accepts
+    // (`ABC-161`, `SEC-101-a`).
     const refusedValues = [
       "0",
-      "6",
+      "8",
       "-1",
       "3.5",
       "three",
@@ -4437,6 +4439,23 @@ describe("ABC-101 — --difficulty selects a level, and the played engine is tha
       expect(invocations, `advertised --difficulty ${word}`).toContainEqual(["--difficulty", word]);
       expect(optionsOf(["--difficulty", word]).difficulty).toBe(Number(word));
     }
+  });
+
+  it("ABC-212 A6 — `--difficulty 6` and `7` resolve, and a bare flag names 1|2|3|4|5|6|7", () => {
+    expect(optionsOf(["--difficulty", "6"]).difficulty).toBe(6);
+    expect(optionsOf(["--difficulty", "7"]).difficulty).toBe(7);
+    expect(resolveOptions(["--difficulty"])).toEqual({
+      ok: false,
+      problem: "--difficulty needs one of 1|2|3|4|5|6|7",
+      offending: ["--difficulty"],
+    });
+  });
+
+  it("ABC-212 A7 — the usage line is byte-exact, read off the existing refusal child", () => {
+    // 0 new spawns (`A12`): the same child `A5` above reads.
+    expect(usageLineOf(CHILDREN.badColour.stderr)).toBe(
+      "usage: npm run chess -- [--colour white|black|random] [--difficulty 1|2|3|4|5|6|7] [--ascii | --unicode]",
+    );
   });
 
   it("A7 — NO DEPTH, NO CLOCK, NO NODES in the resolver's code, and the field is a plain ordinal", () => {

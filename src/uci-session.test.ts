@@ -10,7 +10,7 @@ import { makeMove } from "./apply.ts";
 import { type BookProbe, createBookProbe } from "./book.ts";
 import { parseFen } from "./fen.ts";
 import { isInCheck, legalMoves } from "./legal.ts";
-import { createLevel, DEFAULT_LEVEL, LEVELS, seededRandom } from "./levels.ts";
+import { createLevel, DEFAULT_LEVEL, HARDEST_LEVEL, LEVELS, seededRandom } from "./levels.ts";
 import type { Move } from "./moves.ts";
 import { type Position, squareName } from "./position.ts";
 import { MATE_SCORE } from "./search.ts";
@@ -119,7 +119,7 @@ describe("ABC-167 A1-A2 — handshake and ready", () => {
       "id name skytalix",
       "id author Olger Oeselg",
       "option name OwnBook type check default true",
-      "option name Skill Level type spin default 5 min 1 max 5",
+      "option name Skill Level type spin default 5 min 1 max 7",
       "uciok",
     ]);
   });
@@ -692,7 +692,7 @@ describe("ABC-171 A1 — the option lines", () => {
       "id name skytalix",
       "id author Olger Oeselg",
       "option name OwnBook type check default true",
-      "option name Skill Level type spin default 5 min 1 max 5",
+      "option name Skill Level type spin default 5 min 1 max 7",
       "uciok",
     ]);
   });
@@ -947,13 +947,13 @@ describe("ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12)", ()
   it("the Skill Level line's default is DEFAULT_LEVEL, built from the constant", () => {
     const { send } = rig();
     expect(send("uci")).toContain(
-      `option name Skill Level type spin default ${DEFAULT_LEVEL} min 1 max 5`,
+      `option name Skill Level type spin default ${DEFAULT_LEVEL} min 1 max 7`,
     );
   });
 
-  it("the Skill Level line is literally default 5 min 1 max 5", () => {
+  it("the Skill Level line is literally default 5 min 1 max 7", () => {
     const { send } = rig();
-    expect(send("uci")).toContain("option name Skill Level type spin default 5 min 1 max 5");
+    expect(send("uci")).toContain("option name Skill Level type spin default 5 min 1 max 7");
   });
 
   it("at the default, a bare go takes the chooseMove path: score, and time within 3 000 ms", () => {
@@ -988,6 +988,79 @@ describe("ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12)", ()
       const info = parseLevelInfo(lines[1]);
       expect(lines[2]).toBe(`bestmove ${info.move}`);
       expect(legalFrom(START_FEN)).toContain(info.move);
+    });
+  }
+});
+
+// ---------------------------------------------------------------------------------------------
+// `ABC-212` A9 (`ADR-0045` § AMENDMENT A4) — `Skill Level` 6 and 7. Every search here runs on the
+// virtual clock at step = G ÷ 30 (`A12`: no level-6 or level-7 search on the real clock in this
+// lane), and every time is read against `ABC-167` `A5`'s bound, G <= time <= G + 2 · step.
+// ---------------------------------------------------------------------------------------------
+
+describe("ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path", () => {
+  /** One fresh session at `level`, step G ÷ 30; the info line of `go` from the start position. */
+  const searchAt = (level: 6 | 7, go: string, expectedG: number) => {
+    const step = Math.floor(expectedG / 30);
+    const { send, draws } = rig({ stepMs: step });
+    expect(send(`setoption name Skill Level value ${level}`)).toEqual([]);
+    send("position startpos");
+    const lines = send(go);
+    expect(lines).toHaveLength(2);
+    // D11: rate 0 is `chooseMove` with a score, and draws no seed.
+    expect(lines[0]).toContain(" score ");
+    const info = parseInfo(lines[0]);
+    expect(lines[1]).toBe(`bestmove ${info.move}`);
+    expect(draws.count).toBe(0);
+    return { info, step };
+  };
+
+  it("uci lists Skill Level default 5 min 1 max 7, max read from HARDEST_LEVEL", () => {
+    const { send } = rig();
+    expect(send("uci")).toContain("option name Skill Level type spin default 5 min 1 max 7");
+    expect(HARDEST_LEVEL).toBe(7);
+  });
+
+  it("setoption name Skill Level value 7 sets 7: a bare go searches 30 000 ms", () => {
+    const { info, step } = searchAt(7, "go", 30_000);
+    expectWithin(info.time, 30_000, step);
+  });
+
+  it("a bare go at 6 searches 5 000 ms", () => {
+    const { info, step } = searchAt(6, "go", 5_000);
+    expectWithin(info.time, 5_000, step);
+  });
+
+  it("go movetime 60000 at 7 searches 30 000 (the level caps G)", () => {
+    const { info, step } = searchAt(7, "go movetime 60000", 30_000);
+    expectWithin(info.time, 30_000, step);
+  });
+
+  it("go movetime 1000 at 7 searches 1 000 (G caps the level)", () => {
+    const { info, step } = searchAt(7, "go movetime 1000", 1_000);
+    expectWithin(info.time, 1_000, step);
+  });
+
+  it("go wtime 600000 btime 600000 at 7 searches min(600 000 ÷ 20, 30 000) = 30 000", () => {
+    const { info, step } = searchAt(7, "go wtime 600000 btime 600000", 30_000);
+    expectWithin(info.time, 30_000, step);
+  });
+
+  it("go depth 3 at 7 stops at depth 3 (D12: rate 0), and the info line carries a score", () => {
+    const { info } = searchAt(7, "go depth 3", 30_000);
+    expect(info.depth).toBe(3);
+  });
+
+  for (const value of ["0", "8"]) {
+    it(`Skill Level value ${value} at 7 keeps 7, with the 1-7 info string`, () => {
+      const { send } = rig({ stepMs: 1_000 });
+      expect(send("setoption name Skill Level value 7")).toEqual([]);
+      expect(send(`setoption name Skill Level value ${value}`)).toEqual([
+        `info string Skill Level takes an integer 1-7, got ${value}; kept 7`,
+      ]);
+      send("position startpos");
+      const lines = send("go");
+      expectWithin(parseInfo(lines[0]).time, 30_000, 1_000);
     });
   }
 });
