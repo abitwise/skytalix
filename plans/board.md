@@ -1,4 +1,5 @@
 # Board
+_Updated 2026-10-23 (orch-2026-10-23k): qe-timing-ABC-197 (A6/A7) dispatched ALONE in the owner's quiet window; ABC-197 stays In Review 1/3._
 _Updated: 2026-10-23 08:40Z by Orchestrator — `qe-ABC-197` PASS_WITH_GAPS (non-timing). ABC-197 waits only on A6/A7 (quiet host, owner window)._
 _Updated: 2026-10-23 08:35Z by Orchestrator — `bapm-rerule-ABC-197-A5` merged. `ABC-197` In Development → In Review (`qe-ABC-197`, non-timing). In Development 0/3, In Review 1/3._
 _Updated: 2026-10-23 08:23Z by BA/PM (`bapm-rerule-ABC-197-A5`, records only; `…4df5ef95`) — `ABC-197` A5 re-ruled. The SE's claims are verified from `src/` and in scratch (`…9712ad09`). **QP6-2900 → QP6-2800**: R2 kills G ≤ 2 800 only, and 2 800 reds R2 alone; the base survives it. **QP6-3300 dropped** as equivalent by design: the level cap clips G to ≤ 3 000. A1 is unchanged, so **no re-build**. Problem erratum: the band is 2 × step, so it went 200 → 2 000 ms, not 100 → 1 000; "upper side pinned" is struck. The cost line is refreshed: ≈ 7.6 % of 0.990 s. DoR 10/10. No owner question. No column moved._
