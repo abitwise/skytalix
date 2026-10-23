@@ -1,0 +1,2 @@
+2026-10-23T10:16:52Z power='AC Power' load1=3.04 thermal=0 vitest_procs=0 note=pre-launch-manual
+2026-10-23T10:33:29Z power='AC Power' load1=3.48 thermal=0 vitest_procs=0 note=post-gate-manual

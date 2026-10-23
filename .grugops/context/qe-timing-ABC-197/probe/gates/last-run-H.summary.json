@@ -1,0 +1,13 @@
+{
+ "success": true,
+ "numTotalTestSuites": 451,
+ "numTotalTests": 2019,
+ "numPassedTests": 2019,
+ "numFailedTests": 0,
+ "numPendingTests": 0,
+ "numTodoTests": 0,
+ "files": 61,
+ "fileStatuses": [
+  "passed"
+ ]
+}

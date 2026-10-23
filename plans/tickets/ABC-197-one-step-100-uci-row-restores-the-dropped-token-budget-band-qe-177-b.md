@@ -271,3 +271,21 @@ are owed** to the quiet-host timing hop. The Orchestrator moves the board.
   - `QE-197-e`: the `nodes`/`mate`-only drop path is out of scope.
 - **UAT:** waived. Zero production lines, and the form is empty. A waiver is not a signature.
 - **Not claimed:** no timing, no `N8-LANE` reading and no `NFR-008` reading.
+
+**2026-10-23, QE/E2E (`qe-timing-ABC-197`): A6 MET, A7 MET. Overall ABC-197 QE verdict: PASS_WITH_GAPS** (all eight
+criteria MET; `QE-197-a` to `-e` are INFO and none blocks). No owner route fires. The Orchestrator moves the board.
+
+- **Where it ran:** branch `grugops/qe-timing-ABC-197` from `1f2aa4b0`, no merge needed. H = `git archive 1f2aa4b0`,
+  B = `git archive 051d557a`, with QE's own `npm ci` per arm (vitest 4.1.12). Correctness at H first: lint, typecheck
+  and build 0; `npm test` 61 / 2 019, success true; UCI_DEEP 5 / 5.
+- **Preconditions** (`…13c7935f`): AC on every check (26 gate polls, 32 host polls, 74 window power polls, 63 runs).
+  load1 ≤ 8 on every scored run (max 5.15). 0 foreign vitest at every check, and both windows had 0 foreign polls on
+  their first try. Thermal 0 throughout.
+- **A6** (`…c12590b6`, F = 0.070 s): the charge is H−B CPU **+0.125 s [+0.120, +0.160] ≤ 650 ms**, MET in 174a and
+  strict 174. H−B wall is +0.130 s [+0.090, +0.140]. The twin's R is 0.040 s CPU / 0.070 s wall (admissible), the set's
+  third reading.
+- **A7** (`…fc6590fe`): **H 8.935 s [8.68, 9.11] ≤ 10 s**; B 8.815 s [8.66, 8.92]. H−B wall +0.090 s [+0.010, +0.200].
+  Both twins are admissible, 0/8 rounds were warm, and AC held on 36/36 runs.
+- **Notes:** `.grugops/context/qe-timing-ABC-197/notes/`. The verdict is `…9dc058a9`; artifacts are `…b4a96d77`; the
+  probe is in `.grugops/context/qe-timing-ABC-197/probe/`.
+- **UAT:** waived. Zero production lines. A waiver is not a signature.

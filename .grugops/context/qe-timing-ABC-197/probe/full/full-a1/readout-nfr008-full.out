@@ -1,0 +1,26 @@
+0 H cpu 24.53 wall 9.14 files 61 tests 2019 load1 2.32 -> 2.59 round0
+0 H2 cpu 24.82 wall 9.19 files 61 tests 2019 load1 2.59 -> 2.88 round0
+1 H cpu 24.83 wall 8.68 files 61 tests 2019 load1 3.38 -> 3.57 ok
+1 H2 cpu 25.1 wall 8.67 files 61 tests 2019 load1 3.57 -> 3.6 ok
+2 H cpu 25.06 wall 8.63 files 61 tests 2019 load1 3.44 -> 3.61 ok
+2 H2 cpu 25.22 wall 8.74 files 61 tests 2019 load1 3.61 -> 3.75 ok
+3 H2 cpu 25.49 wall 8.8 files 61 tests 2019 load1 4.01 -> 3.92 ok
+3 H cpu 25.71 wall 8.94 files 61 tests 2019 load1 3.9 -> 4.08 ok
+4 H cpu 25.74 wall 8.89 files 61 tests 2019 load1 3.95 -> 3.88 ok
+4 H2 cpu 25.76 wall 8.92 files 61 tests 2019 load1 3.88 -> 5.15 ok
+5 H cpu 26 wall 8.93 files 61 tests 2019 load1 4.97 -> 4.97 ok
+5 H2 cpu 25.77 wall 8.9 files 61 tests 2019 load1 4.97 -> 4.84 ok
+6 H cpu 25.97 wall 8.95 files 61 tests 2019 load1 4.71 -> 4.92 ok
+6 H2 cpu 25.82 wall 8.94 files 61 tests 2019 load1 4.92 -> 5.03 ok
+7 H2 cpu 26.34 wall 9.05 files 61 tests 2019 load1 5.01 -> 4.87 ok
+7 H cpu 26.24 wall 9.13 files 61 tests 2019 load1 4.83 -> 4.85 ok
+8 H cpu 26.16 wall 9.11 files 61 tests 2019 load1 4.8 -> 4.85 ok
+8 H2 cpu 25.89 wall 9.01 files 61 tests 2019 load1 4.85 -> 4.95 ok
+scored 8 [1, 2, 3, 4, 5, 6, 7, 8]
+[cpu] n=8 k=2 H median 25.855 s (range 24.83-26.24); H2 median 25.765 s
+  twin H2-H sorted: -0.27, -0.23, -0.22, -0.15, +0.02, +0.10, +0.16, +0.27; median -0.065 s; sign +4/-4 p 1.000; R 0.230 s
+[wall] n=8 k=2 H median 8.935 s (range 8.63-9.13); H2 median 8.910 s
+  twin H2-H sorted: -0.14, -0.10, -0.08, -0.03, -0.01, -0.01, +0.03, +0.11; median -0.020 s; sign +2/-6 p 0.289; R 0.100 s
+admissible (A1: |twin cpu median| 0.065 s <= max(1.5 % of H cpu = 0.388 s, 1 tick); sign p > 0.05): True
+load1 before each scored run: 3.38-5.01; all <= 8: True
+A9 STATE at 10 s wall: MET (wall median 8.94 s, R 0.10 s; CPU median 25.86 s reported)
