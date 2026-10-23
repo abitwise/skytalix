@@ -4,6 +4,9 @@
   "cadence": "kanban",
   "autonomy": "pr",
   "bdd": "lean",
+  "checkpoints": {
+    "sign_off_acceptance": "notify"
+  },
   "id_prefix": "ABC",
   "repo_strategy": "mono",
   "default_stack": {
