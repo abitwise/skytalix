@@ -2,6 +2,9 @@
 _Updated: 2026-08-06 by Architect/Design (task `refinement-deploy-posture-2026-08-06`) — **first
 fill**; this file was the shipped empty template until today. It is short because there is genuinely
 almost nothing to operate, and every "none" below was measured against the repo rather than assumed._
+_Updated: 2026-10-23 by Architect/Design (task `arch-runbook-operate`), verified on `main` `4ddae2c8`.
+§ Operate was rewritten and the old text is kept below the new text as dated history. § Roll back got a
+pointer correction. § Deploy carries its own dated brackets._
 
 <!--
   FORMAT — read before you fill this in. (clear voice; this is a technical file, not a role prompt.)
@@ -19,6 +22,40 @@ almost nothing to operate, and every "none" below was measured against the repo 
 
 ## Operate
 
+**[REWRITTEN 2026-10-23 (`arch-runbook-operate`), verified on `main` `4ddae2c8`.** The 2026-08-06
+text below this bracket said the game could not be run. That stopped being true at `ABC-042`.]**
+
+**There is still nothing running to operate.** There is no service, daemon, scheduled job, hosted
+instance or database. There are two local programs. Both run from source in a clone on Node >= 22.
+The clone is the channel, per `ADR-0018`.
+
+- **The game: `npm run chess`.** This runs `node src/cli.ts` (`ABC-042`).
+  - Flags: `--colour white|black|random`, `--difficulty 1|2|3|4|5` (default 5, `ADR-0045`), and
+    `--ascii` or `--unicode`.
+  - Pass flags after `--`, as in `npm run chess -- --colour black`. `AGENTS.md` § Commands
+    "Dev / run" explains why.
+  - On a terminal, `ABC-200` asks for each flag the command line left out, colour first, before the
+    first board: `colour (white|black|random) [white]: ` then `difficulty (1|2|3|4|5) [5]: `.
+  - Enter keeps the default in brackets. A wrong answer is named, and the same question is asked
+    again. End of input at a question ends the session with exit 0.
+  - With stdin or stdout not a terminal, nothing is asked and the defaults apply.
+  - In the game, `help` lists the commands.
+  - Exit codes: 0 for a normal end, 1 for a refused command line (the usage line goes to stderr),
+    70 for an internal error.
+- **The UCI engine, `skytalix`: `npm run uci`.** This runs `node src/uci.ts` (`ABC-168`, `ADR-0044`).
+  - It speaks UCI on stdin and stdout, for a GUI or a tester. It takes no arguments.
+  - Exit codes: 0 on `quit` or end of input, 1 for any argument (the usage line goes to stderr),
+    70 for an exception.
+  - `npm run build` (`tsc -p tsconfig.build.json`) emits `dist/uci.js`. That file is the target of
+    `package.json`'s `bin` `skytalix`. `dist/` is git-ignored. Nothing is installed or published;
+    see § Deploy.
+
+**Development and verification commands live in `AGENTS.md` § Commands and are not copied here.** That
+covers install, `npm test`, the opt-in `*_DEEP` lanes, lint, typecheck, build and perft. Their receipts
+are in `memory-bank/90-agents-md-command-log.md`.
+
+**[Dated history: the 2026-08-06 text, superseded by the bracket above. It is not current.]**
+
 **There is nothing running to operate.** No service, no daemon, no scheduled job, no hosted
 instance, no database. The product is a single-player terminal chess game in one local process, and
 that process does not exist yet — only the rules core is built.
@@ -32,6 +69,9 @@ What *can* be executed today is development and verification only: install, test
 build, and the perft harness. **Those commands live in `AGENTS.md` § Commands and are deliberately
 not duplicated here** — that file is their single source, and every command in it was run before it
 was recorded there.
+
+**[End of the 2026-08-06 history. The paragraph below is still current. Both programs are local
+processes, started by a person at a terminal or by a GUI on the same machine.]**
 
 Monitoring, alerting, log aggregation, dashboards, SLO burn-rate: **none exist**, and none is owed
 while nothing runs anywhere but a terminal a developer opened.
@@ -91,6 +131,11 @@ no data store — therefore no state to restore, no migration to reverse, and no
 The only reversal available today is a **source** reversal: `git revert` on a `grugops/<task>`
 branch with the gates re-run, per `AGENTS.md` § Branching model. That is ordinary development, not a
 rollback procedure, and it must not be recorded here as one.
+
+**[CORRECTED 2026-10-23 (`arch-runbook-operate`).** `AGENTS.md` has had no § Branching model since
+`e82a3798` (`ABC-164`, 2026-10-21). That section moved word for word to
+`memory-bank/45-standing-rulings.md` § Branching model, which `AGENTS.md` § Standing rulings points
+at. Read the pointer above as that file.]**
 
 A real rollback procedure becomes owed the moment `EPIC-006` produces a distributed artifact: a
 published version can be superseded or withdrawn, and that will need writing down in this section.
