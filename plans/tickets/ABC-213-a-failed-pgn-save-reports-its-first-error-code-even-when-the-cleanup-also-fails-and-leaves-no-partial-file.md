@@ -1,8 +1,8 @@
 ---
 id: ABC-213
 title: "A failed PGN save reports its first error code even when the cleanup also fails, and a single fault leaves no partial file: guard the cleanup unlink and pin both"
-status: in-design
-column: In Design
+status: in-development
+column: In Development
 size: XS
 priority: P3
 epic: EPIC-006

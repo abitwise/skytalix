@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-24 by Orchestrator (orch-2026-10-24w) — ABC-213 design merged → In Development (SE). Width 2/3 (arch-rule-ABC-205-stop, ticket-to-pr-ABC-213). Alone queue waits for both._
 _Updated: 2026-10-24 by Orchestrator (orch-2026-10-24v) — ABC-206 built → In Review (3/3). Alone-when-idle: qe-timing-ABC-203 → qe-ABC-212 → qe-ABC-206 → qe-ABC-204 (hours)._
 _Updated: 2026-10-24 by Orchestrator (orch-2026-10-24u) — ABC-213 → In Design. Ready 0/8. Width 3/3 (SE-206, arch-rule-ABC-205-stop, arch-design-ABC-213). Alone-when-idle queue unchanged._
 _Updated: 2026-10-24 by Orchestrator (orch-2026-10-24s) — ABC-205 SE STOP → Architect ruling. Width 3/3 (SE-206, arch-runbook-ABC-212, arch-rule-ABC-205-stop)._
@@ -1075,14 +1076,14 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## In Analysis (WIP 0/2)
 
 
-## In Design (WIP 1/2)
-- [ABC-213] A failed PGN save reports its first error code even when the cleanup also fails, and a single fault leaves no partial file  (owner: software-engineer, after one Architect/Design question (rig under ADR-0015), size: XS, priority: P3, epic: EPIC-006, since: 2026-10-24, DoR 10/10; cut in \`bapm-cut-levels-6-7\` (\`…44bee405\`) from Security/NFR \`…eaaa1133\` § 5. Guard the cleanup unlinkSync in src/pgn-file.ts; double fault → { ok: false, first code }; single fault → 0 files; non-errno still rethrown; plants X1/X3/X4/X5; QE unlinkfault.mjs red→green (exit 70 → 0, \`PGN not saved: EFBIG\`). Closes AR-203-UNLINK + AR-203-LANEGAP (b); QE-203-a stays residual. N8-SPAWN 0. ADR-0036 Ruling 2 → In Security/NFR. Pull after qe-timing-ABC-203) **2026-10-24: pulled Ready → In Design (`arch-design-ABC-213`).**
+## In Design (WIP 0/2)
 
 
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
+## In Development (WIP 2/3)
+- [ABC-213] A failed PGN save reports its first error code even when the cleanup also fails, and a single fault leaves no partial file  (owner: software-engineer, after one Architect/Design question (rig under ADR-0015), size: XS, priority: P3, epic: EPIC-006, since: 2026-10-24, DoR 10/10; cut in \`bapm-cut-levels-6-7\` (\`…44bee405\`) from Security/NFR \`…eaaa1133\` § 5. Guard the cleanup unlinkSync in src/pgn-file.ts; double fault → { ok: false, first code }; single fault → 0 files; non-errno still rethrown; plants X1/X3/X4/X5; QE unlinkfault.mjs red→green (exit 70 → 0, \`PGN not saved: EFBIG\`). Closes AR-203-UNLINK + AR-203-LANEGAP (b); QE-203-a stays residual. N8-SPAWN 0. ADR-0036 Ruling 2 → In Security/NFR. Pull after qe-timing-ABC-203) **2026-10-24: pulled Ready → In Design (`arch-design-ABC-213`).** **2026-10-24: design ruled (`…d7ce173f`): rig (b′), in-process fs double in the existing test file, 0 spawns/files. → In Development (`ticket-to-pr-ABC-213`).**
 - [ABC-205] King safety bites while the enemy queen is on, and the king table is tapered  (owner: software-engineer, after Architect/Design (ADR-0031 addendum → owner when written), size: M, priority: P2, epic: EPIC-008, since: 2026-10-23, DoR 10/10; `…8c3b2f47`. Strict relations (queen scale ≥ 6 pairs, taper, no castled bonus without shelter); G2 ≤ 1 100 ns, G6 depth ≥ 6 and ≥ base, G1 ≥ 54/58; D: S1 GAIN. D waits on ABC-204) **2026-10-24: owner "pull ready tickets" → Ready → In Design (`arch-design-ABC-205`).** **2026-10-24: design ruled (`…1fb6e1bc`): exposure ×3 while the enemy queen is on (cap 315 cp), tapered king table with our own endgame half, no castled bonus without shelter; ADR-0031 addendum PROPOSED; OD-205-1 (quiescence multiplier cell) owed before merge. → In Development (`ticket-to-pr-ABC-205`).** **2026-10-24: built `4f650a45` (`…18a6a03c`): relations/mutants green, G1 55/58, G2 ~700 ns; 10/11 rows re-pinned; STOP on 3 deep rows (S1 TT fixture depth, S2/S3 PVS drift 79 > 75 cp) → `arch-rule-ABC-205-stop`. OD-205-1 cell reads 10.96x (owner).**
 
 
