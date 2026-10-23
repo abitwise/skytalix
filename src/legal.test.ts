@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { makeMove, unmakeMove } from "./apply.ts";
 import { parseFenGrammarOnly as parseFen, toFen } from "./fen.ts";
-import { hasLegalEnPassant, isInCheck, legalMoves } from "./legal.ts";
+import { hasLegalEnPassant, hasLegalMove, isInCheck, legalMoves } from "./legal.ts";
 import { FLAG_EN_PASSANT, generateMoves, isSquareAttackedBy } from "./moves.ts";
 import { BLACK, KING, type Position, parseSquareName } from "./position.ts";
 
@@ -400,4 +400,63 @@ describe("hasLegalEnPassant — ABC-011 QE the guards name a piece, not a side",
       expect(fullState(position), fen).toBe(before);
     },
   );
+});
+
+// ---------------------------------------------------------------------------
+// ABC-206 A2 — each faster piece equals the expression it replaces. The lane walks every perft
+// FEN to depth 1, plus the terminal and clock FENs; `ENGINE_DEEP=1` walks the same roots to
+// depth 3, as the ticket's A2 reads (plain node: ~11 s; vitest costs several times that).
+// ---------------------------------------------------------------------------
+
+const RUN_DEEP = process.env.ENGINE_DEEP === "1";
+
+/** The terminal and clock FENs A2 adds to the perft roots. */
+const A2_TERMINAL_FENS: ReadonlyArray<readonly [name: string, fen: string]> = [
+  ["checkmate", "4Q2k/6pp/8/8/8/8/8/6K1 b - - 100 80"],
+  ["stalemate, thin", "7k/5K2/5N2/8/8/8/8/8 b - - 0 1"],
+  ["stalemate, queen", "k7/8/1K6/8/8/8/8/2Q5 b - - 0 1"],
+  ["insufficient material", "4k3/8/8/8/8/8/8/4K3 w - - 0 1"],
+  ["seventy-five moves", "r3k3/8/8/8/8/8/8/4K2R w - - 150 120"],
+  ["fifty-move claim, in progress", "r3k3/8/8/8/8/8/8/4K2R w - - 100 120"],
+];
+
+/**
+ * Calls `check` on every position reachable from each A2 root in up to `depth` legal moves, root
+ * included, after asserting nothing of its own. The walk plays and takes back in place, and
+ * asserts the full state is unchanged after every `check`. Returns how many positions it saw.
+ */
+function walkA2(depth: number, check: (position: Position, where: string) => void): number {
+  let seen = 0;
+  const walk = (position: Position, where: string, left: number): void => {
+    const before = fullState(position);
+    check(position, where);
+    expect(fullState(position), where).toBe(before);
+    seen++;
+    if (left === 0) return;
+    for (const move of legalMoves(position)) {
+      const undo = makeMove(position, move);
+      walk(position, `${where} ${move.from}-${move.to}`, left - 1);
+      unmakeMove(position, move, undo);
+    }
+  };
+  for (const [name, fen] of [...PERFT_POSITIONS, ...A2_TERMINAL_FENS]) {
+    walk(parseFen(fen), name, depth);
+  }
+  return seen;
+}
+
+describe("ABC-206 A2 — the faster pieces equal what they replace", () => {
+  const hasLegalMoveRow = (depth: number) => () => {
+    const seen = walkA2(depth, (position, where) => {
+      const want = legalMoves(position).length > 0;
+      expect(hasLegalMove(position), where).toBe(want);
+    });
+    expect(seen).toBeGreaterThan(depth === 1 ? 200 : 200_000); // the denominator, asserted
+  };
+
+  it("hasLegalMove(p) === legalMoves(p).length > 0, and p is unchanged", hasLegalMoveRow(1));
+
+  if (RUN_DEEP) {
+    it("hasLegalMove, to depth 3 [deep, ENGINE_DEEP=1]", hasLegalMoveRow(3), 600_000);
+  }
 });

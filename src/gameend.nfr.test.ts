@@ -21,7 +21,11 @@ import { parseFen } from "./fen.ts";
 
 vi.mock("./legal.ts", async (importOriginal) => {
   const actual = await importOriginal<typeof import("./legal.ts")>();
-  return { ...actual, legalMoves: vi.fn(actual.legalMoves) };
+  return {
+    ...actual,
+    legalMoves: vi.fn(actual.legalMoves),
+    hasLegalMove: vi.fn(actual.hasLegalMove),
+  };
 });
 
 vi.mock("./zobrist.ts", async (importOriginal) => {
@@ -29,8 +33,8 @@ vi.mock("./zobrist.ts", async (importOriginal) => {
   return { ...actual, zobristKey: vi.fn(actual.zobristKey) };
 });
 
-import { gameStatus } from "./gameend.ts";
-import { legalMoves } from "./legal.ts";
+import { gameStatus, leafEndReason } from "./gameend.ts";
+import { hasLegalMove, legalMoves } from "./legal.ts";
 import { zobristKey } from "./zobrist.ts";
 
 /** The G-1 position: a legal, ordinary board that every state below is a clock/counts edit of. */
@@ -110,5 +114,31 @@ describe("NFR-001 — gameStatus stays cheap at a search leaf (call counts, spie
       reason: "insufficient-material",
     });
     expect(zobristKey).toHaveBeenCalledTimes(0);
+  });
+});
+
+// ABC-206: the search leaf no longer calls `gameStatus`. These guards hold the leaf's own cost —
+// a reintroduced generation or key read changes no value, so no value row would see it.
+describe("ABC-206 — the search leaf's game-end check stays cheap (call counts, spied)", () => {
+  beforeEach(() => vi.clearAllMocks());
+
+  it("leafEndReason never builds the move list or reads a key: hasLegalMove exactly once", () => {
+    const shapes: [string, string][] = [
+      ["in progress", G1_FEN],
+      ["clock at 100, in progress", "6k1/5ppp/8/b7/8/8/5PPP/4R1K1 w - - 100 1"],
+      ["automatic 75-move", "6k1/5ppp/8/b7/8/8/5PPP/4R1K1 w - - 150 1"],
+      ["checkmate", "4Q2k/6pp/8/8/8/8/8/6K1 b - - 100 80"],
+      ["stalemate", "7k/5K2/5N2/8/8/8/8/8 b - - 0 1"],
+      ["thin material", "4k3/8/8/8/8/8/8/4K3 w - - 0 1"],
+    ];
+
+    for (const [shape, fen] of shapes) {
+      const position = parseFen(fen);
+      vi.clearAllMocks();
+      leafEndReason(position);
+      expect(legalMoves, shape).toHaveBeenCalledTimes(0);
+      expect(hasLegalMove, shape).toHaveBeenCalledTimes(1);
+      expect(zobristKey, shape).toHaveBeenCalledTimes(0);
+    }
   });
 });

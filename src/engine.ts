@@ -72,7 +72,7 @@
  */
 
 import { makeMove, unmakeMove } from "./apply.ts";
-import { gameStatus } from "./gameend.ts";
+import { leafEndReason } from "./gameend.ts";
 import { isInCheck, legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
 import type { Position } from "./position.ts";
@@ -242,9 +242,9 @@ function leafScore(
   beta: number,
   budget: Budget,
 ): number {
-  const status = gameStatus(position);
-  if (status.result === "in-progress") return quiesce(position, alpha, beta, 0, budget.visit);
-  if (status.reason === "checkmate") return 0 - (MATE_SCORE - ply);
+  const reason = leafEndReason(position);
+  if (reason === null) return quiesce(position, alpha, beta, 0, budget.visit);
+  if (reason === "checkmate") return 0 - (MATE_SCORE - ply);
   return 0;
 }
 

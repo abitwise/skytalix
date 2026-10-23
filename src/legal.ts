@@ -54,6 +54,26 @@ export function legalMoves(position: Position): Move[] {
   return legal;
 }
 
+/**
+ * True when the side to move has at least one legal move: `legalMoves(position).length > 0`,
+ * by the same make/test/unmake filter, but it stops at the first legal move instead of building
+ * the list. A search leaf only needs to know whether the list is empty (ABC-206). The position is
+ * unchanged on return.
+ */
+export function hasLegalMove(position: Position): boolean {
+  const moverIsBlack = position.blackToMove;
+
+  for (const move of generateMoves(position)) {
+    const undo = makeMove(position, move);
+    const kingSquare = kingSquareOf(position, moverIsBlack);
+    const legal = !isSquareAttackedBy(position, kingSquare, !moverIsBlack);
+    unmakeMove(position, move, undo);
+    if (legal) return true;
+  }
+
+  return false;
+}
+
 /** The two neighbouring files a pawn can capture from — the same pair moves.ts steps over. */
 const EP_CAPTURE_SIDES = [-1, 1] as const;
 
