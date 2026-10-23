@@ -1,8 +1,8 @@
 ---
 id: ABC-203
 title: "At game end, `npm run chess` writes the game as a standard PGN file under `games/` (EPIC-006, PGN export)"
-status: in-review
-column: In Review
+status: in-security-nfr
+column: In Security/NFR
 size: M
 priority: P1
 epic: EPIC-006
