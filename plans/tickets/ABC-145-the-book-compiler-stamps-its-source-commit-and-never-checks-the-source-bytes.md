@@ -1,8 +1,8 @@
 ---
 id: ABC-145
 title: "The opening-book compiler stamps `source.commit` into `book.json` and never checks the source bytes — pin the five sha256 values and refuse a mismatch"
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: XS
 priority: P3
 epic: EPIC-005

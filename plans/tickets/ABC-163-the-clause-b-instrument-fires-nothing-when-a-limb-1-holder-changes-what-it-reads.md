@@ -2,7 +2,7 @@
 id: ABC-163
 title: "The clause (b) instrument fires nothing when a limb-1 holder changes what it reads: fold `ADR-0036` § S1 Ruling 2 (holders at base AND head) into `clause-b.mjs`"
 status: done
-column: Backlog
+column: Done
 size: S
 priority: P3
 epic: —

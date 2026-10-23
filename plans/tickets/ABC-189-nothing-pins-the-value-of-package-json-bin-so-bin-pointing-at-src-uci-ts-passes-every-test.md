@@ -1,8 +1,8 @@
 ---
 id: ABC-189
 title: "Nothing pins the value of `package.json` `bin`, so `bin` pointing at `src/uci.ts` passes every test (`AR-168-BINPIN`)"
-status: in-review
-column: In Review
+status: done
+column: Done
 size: XS
 priority: P3
 epic: EPIC-007
@@ -140,3 +140,76 @@ merged.
 
 BA/PM moves it **Backlog → Ready** when `ABC-168` merges. The Orchestrator may do so on that merge without another
 BA/PM hop, because the DoR stands.
+
+## QE
+
+**QE/E2E, 2026-10-22, `qe-ABC-189`. Result: PASS_WITH_GAPS.**
+- Branch `grugops/qe-ABC-189`, worktree `../wt-qe-ABC-189`, branched at the tip `91883f94`.
+- `git merge main` (`823a9885`) gave `Already up to date`, so the merge sha is `91883f94`.
+- Notes: `.grugops/context/qe-ABC-189/notes/20261022T153720Z-qe-e2e-*`. They are the observations `…186419ff`, `…dac2aa03`, `…f3106f00` and `…c55e148e`, and the decision `…1067b881`.
+- Every reading below is my own run, taken before I opened the SE's notes. Those notes agree on every shared number.
+
+| criterion | result | reading |
+|---|---|---|
+| `A1` | **met** | `AR-168-BINPIN` 1 / `skytalix: "dist/uci.js"` 1 at head; 0 / 0 at base; line `:1823` under `expect(packaged.private).toBe(true);` |
+| `A2` | **met** | real green; `(iv-b)` and `(iv-a)` `1 failed` at head with the page's exact message; all three `1 passed` at base. Same with symlinked and copied `node_modules` |
+| `A3` | **met** | `npm test` 60/60, 1995/1995 at head and at base; `success: true`; skip count `0` → `No findings.` |
+| `A4` | **met** | only `src/cli.test.ts` (numstat `1 0`) beside the SE's notes; the waiver form prints nothing |
+
+**Own plants (A2, head / base, `-t "A10 — package.json"`):**
+- Red on the pin at head and green at base:
+  - bare string `"dist/uci.js"`
+  - an extra second key
+  - `{}`
+  - `./dist/uci.js`
+  - `skytalix-uci`
+  - `Skytalix`
+  - `dist/uci.ts`
+  - a trailing space
+  - `dist\uci.js`
+  - an array
+  - a duplicate key with the real value first
+- `bin` removed is red at both, on the key list (`:1818`).
+- A duplicate key with the real value last is green at both. JSON.parse and npm both read `dist/uci.js` there.
+- On `(iv-b)` the whole suite gives 1 failed / 1994 passed. The only red is A10.
+
+**Other checks:**
+- Lint, typecheck and build give rc 0, and `dist/uci.js` carries a shebang.
+- ABC-187 A5's closer count is `9`, and `:2245` says 9.
+- `AGENTS_MD_BUDGET_BYTES = 18_432` is unchanged, and `AGENTS.md` is byte-equal.
+
+**Gaps:**
+- **`QE-189-a` (LOW, proposed, not against a criterion).** The pin fixes `bin`'s string, not its target.
+  - The plant: `tsconfig.build.json` `outDir` → `build`.
+  - It passes lint, typecheck, build and 60/1995, while `bin` names a `dist/uci.js` the build no longer emits.
+  - Route: BA/PM. Either it goes onto AR-168-BINPIN's trigger list (the packaging ticket owes "build emits what `bin` names"), or an XS pin of `outDir`/`files`.
+- **`QE-189-b` (INFO).** Three spellings that npm 11.20.0 normalizes to the real value go red: a bare string, `./`, and a backslash. That is the safe direction, and no action is needed.
+
+**AR-168-BINPIN.** The close is "the pin lands and QE reads it red on (iv-b)".
+- The QE red read is done.
+- It closes when a human merges `grugops/ABC-189` into `main`, and the Orchestrator records it.
+
+UAT is waived: 0 production lines.
+
+**Re-merge.** `main` moved to `66fd8e1b` during the hop, carrying records only (`.grugops/`, `plans/`). I merged it at **`2022a8d8`**, clean.
+- The gates reproduce: lint, typecheck and build give rc 0; 60/60 and 1995/1995; `success` true; skip count `0`, `No findings.`; the waiver form is empty.
+- On an export of `2022a8d8`, `(iv-b)` and `(iv-a)` are red on `:1823`.
+- The verdict is unchanged: decision `…449bc365` supersedes `…1067b881`. The observation is `…d91bb60e`.
+
+**Second re-merge.** `main` moved to `11fc8c9c`: ABC-190 merged, and the lock root gained `license` and `bin`. I merged it at **`32c20d02`**, clean.
+- The gates and A2 reproduce: 60/60 and 1995/1995; skip count `0`, `No findings.`; closers `9`; the waiver form is empty; `(iv-b)` and `(iv-a)` are red on `:1823`.
+- **`QE-189-c` (INFO).** The lock root's `bin` is unpinned: `package-lock.json` alone → `src/uci.ts` passes 60/1995.
+  - A consumer's install reads `package.json`, so no install effect is known (`UNKNOWN - verify`).
+  - It is outside this ticket's fence, and nothing is owed.
+- The verdict is unchanged, **PASS_WITH_GAPS**: decision `…b2012318` supersedes `…449bc365`. The observation is `…340a360e`.
+
+**BA/PM ruling, 2026-10-22 (`bapm-rule-QE-189`; decision `…9d0dc304`, readings `…7fe603e7`; records only).**
+- **`QE-189-a`: ACCEPTED, no ticket.** No consumer of `dist/` exists, and the fold target is gone (`AR-168-BINPIN` is closed, and there is no packaging ticket).
+  - Measured: four build-config plants leave `bin` dangling with every gate green. They are `outDir`, `rootDir`, `files`, and a base `emitDeclarationOnly`. A static pin of `tsconfig.build.json` would catch the first three only.
+  - A dangling `bin` installs silently, then fails at the first launch with rc 127.
+  - **Rule:** any ticket touching `tsconfig.build.json`, the base `compilerOptions`, `bin` or `scripts.build` carries one criterion. After `npm run build`, every `bin` path exists and starts with `#!/usr/bin/env node`.
+  - **Reopen:**
+    - (R1) a ticket packaging `dist/` or making a backend depend on `skytalix` carries the installed-launch check: pack, install into an empty consumer, and `.bin/skytalix` answers `uciok` with rc 0;
+    - (R2) a dangling `bin` is seen on `main`;
+    - (R3) a second `bin` command, or a second `files` entry.
+- **`QE-189-b`, `QE-189-c`: agreed INFO.** For c, it is measured that the lock is not in the `npm pack` tarball, and that `npm install --package-lock-only` rewrites a drifted root `bin`.

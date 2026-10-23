@@ -55,6 +55,10 @@ One file: `src/uci-session.test.ts`. **One new row. The diff only adds lines.**
 ## Acceptance criteria
 
 **The base** is `main` at the commit that merges `ABC-178`. **The tip** is `ABC-197`'s delivered commit.
+> **2026-10-22, BA/PM (`bapm-rule-QE-198`, `…479ce351`):** `ABC-199` also edits `src/uci-session.test.ts` (`ABC-167
+> A7` row 1's step), and it may merge after `ABC-178` and before this ticket. If it does, the base for A2/A3 is `main`
+> at this ticket's own branch point, so `ABC-199`'s lines are not read as `-` lines here. Nothing else on this page
+> moves.
 
 **Build (Software Engineer)**
 

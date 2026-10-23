@@ -1,8 +1,8 @@
 ---
 id: ABC-085
 title: Self-play ladder — hardest scores ≥ 90% against easiest over 100 games
-status: in-design
-column: In Design
+status: done
+column: Done
 size: M
 priority: P1
 epic: EPIC-004

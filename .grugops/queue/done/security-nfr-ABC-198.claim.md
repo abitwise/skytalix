@@ -1,0 +1,12 @@
+---
+by: security-nfr (claude-opus-5-5)
+task: security-nfr-ABC-198
+done_at: 2026-10-22T16:11:25Z
+branch: grugops/ABC-198 (read only)
+base: 4952425a
+tip: ef1d5ebc
+lock: a42f4bbb
+result: PASS, no required fix, no finding, no accepted risk added by ABC-198. Clause (a) confirmed (10 packages, in range, registry only, integrity 10/10 MATCH, no new install script or bin). Audit 7 pairs + 3 via rows removed, nothing added; tip 3 pairs all in AR-1 approved set. Releases normal upstream patch backports. AR-1 re-stated by the Release Manager on the 3-pair set after merge; interim accept …e4ef897b ends at merge. NFR-008 wall time UNKNOWN - verify (next quiet-host timing hop). Notes fbe0c143, 0f626230 sealed, uncommitted. npm only in scratch clones.
+---
+
+| ABC-198 (security-nfr-ABC-198) | Security/NFR clause (a) hop (A8) on the in-range lock bump: lock diff read (53 53; 123 entries both ends, 0 added/removed, exactly 10 differ: vitest family 4.1.11 → 4.1.12, vite 7.3.6 → 7.3.7; only version/resolved/integrity + in-family pins; all resolved on registry.npmjs.org; no new hasInstallScript or bin); integrity vs registry 10/10; audit pair by pair; supply-chain read; clause (c) on the one test literal | EPIC-007 | — | clause (a) CONFIRMED, no finding; audit base 13 rows (total 7) → tip 3 pairs (total 3), minus exactly 7 pairs + 3 via rows, nothing added, --omit=dev 0; tip 3 pairs (nanoid GHSA-2v37, postcss GHSA-fxqj, source-map-js GHSA-68fv) all in AR-1 approved set …193e08fb; releases normal upstream patch backports (trusted publishing, SLSA provenance, same maintainers; vite 7.3.7 2 sigs like its batch siblings, verified); clause (c) not fired; V15.1.1, V15.2.1 [L1] met under AR-1; NFR-008 wall time UNKNOWN - verify (next quiet-host timing hop); notes fbe0c143, 0f626230 | grugops/ABC-198 @ ef1d5ebc (lock a42f4bbb; base 4952425a) read only; QE merge 24f32527 same lock<br>.grugops/context/security-nfr-ABC-198/ (2 notes), uncommitted | scratch clones base/tip/regen, scratch npm cache: npm ci --ignore-scripts rc 0 clean x2; .bin identical (11); regen cmp-equal (5d48a904…); npm view dist.integrity + dist.tarball MATCH 10/10; npm audit signatures 66/66 verified x2; npm audit pairs comm -23 = 7 + 3 via, comm -13 empty; no timing | UAT waiver expected (0 production lines; QE confirms) | — | Security/NFR PASS: no required fix; In Security/NFR → Ready for UAT (Orchestrator); AR-1 re-stated by Release Manager on 3-pair set after merge, interim accept …e4ef897b ends at merge; QE A7 non-zero routes back before merge |

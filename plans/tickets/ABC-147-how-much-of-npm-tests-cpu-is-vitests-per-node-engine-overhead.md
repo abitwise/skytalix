@@ -1,8 +1,8 @@
 ---
 id: ABC-147
 title: "How much of `npm test`'s ~27 s of CPU is vitest's ~4.35x per-node engine overhead? Read it before anyone builds a lever"
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: XS
 priority: P2
 epic: —

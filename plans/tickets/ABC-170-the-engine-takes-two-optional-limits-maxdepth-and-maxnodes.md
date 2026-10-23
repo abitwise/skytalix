@@ -1,8 +1,8 @@
 ---
 id: ABC-170
 title: "`src/engine.ts` takes two optional limits, `maxDepth` and `maxNodes`; absent, it is today's engine node for node"
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: XS
 priority: P1
 epic: EPIC-007

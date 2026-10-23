@@ -1,8 +1,8 @@
 ---
 id: ABC-030
 title: The four `*.nfr.test.ts` justification comments cite a LIVE count of a sibling file — two are already stale, and the two that hold are one commit from joining them
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: XS
 priority: P3
 epic: EPIC-002

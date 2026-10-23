@@ -1,8 +1,8 @@
 ---
 id: ABC-101
 title: Difficulty — the user-facing selection only; the engine budget behind it is EPIC-004's
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: M
 priority: P2
 epic: EPIC-006

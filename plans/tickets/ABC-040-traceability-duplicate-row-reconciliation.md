@@ -1,8 +1,8 @@
 ---
 id: ABC-040
 title: The duplicate ABC-028 / ABC-029 rows in plans/traceability.md — one pair is a lossless delete, the other is a 2404-byte merge, and three hops deferred both on a reason that fits only one
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: S
 priority: P2
 epic: —

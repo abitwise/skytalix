@@ -10,6 +10,18 @@ owner: BA/PM
 
 # EPIC-006 — Game session and packaging
 
+> **2026-10-22, BA/PM (`bapm-next-slice`, at `main` `08d42d01`): the startup prompt (gap `G6`) is cut as
+> `ABC-200`** (Ready, M, P2). It is the last uncut line of § Scope. Still open on this epic after it: acceptance 1
+> and `NFR-007` have no recorded reading on a fresh clone (search-bounded), and the negotiable slice waits on
+> play-test evidence, as written. Acceptance 2–4 are met on `ABC-102`, `ABC-044` and `ABC-101`. Front matter is
+> unchanged: the board card and this page both say Backlog, and closing the epic is a card move.
+
+> **2026-10-22, BA/PM (`bapm-cut-ABC-200-followups`, at `main` `3bee4bdd`): the reading of acceptance 1 and `NFR-007`
+> is cut as `ABC-201`** (Ready, XS, P3, Security/NFR builds). It runs on a quiet host after `ABC-178`'s timing hop.
+> **Record corrected:** `NFR-007` already has one end-to-end reading, Security/NFR's `…8d3f6c15` (2026-10-17): 222.1 ms
+> max to frame 0, n = 10, Apple M3, MET. That reading used a `git archive` copy, not a clone after `npm install`, and
+> the catalog row never cited it. Acceptance 1 has no reading. Nothing on this page changes otherwise.
+
 > **PRIORITY RAISED `P2` → `P1` on 2026-08-12 by BA/PM** (task `post-abc030-2026-08-12`, subtask
 > `refinement-post-abc030`, Workflow 07). **NOT DECOMPOSED at that hop, deliberately — see
 > `## Why this epic was not decomposed on 2026-08-12` below.** The board row is the Orchestrator's to

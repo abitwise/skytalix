@@ -1820,6 +1820,7 @@ describe("ABC-042 — the shape of what was delivered", () => {
       expect(packaged, `package.json gained ${reserved}`).not.toHaveProperty(reserved);
     }
     expect(packaged.private).toBe(true);
+    expect(packaged.bin, "package.json bin (AR-168-BINPIN)").toEqual({ skytalix: "dist/uci.js" });
 
     const scripts = packaged.scripts as Record<string, string>;
     for (const [name, command] of Object.entries(SCRIPTS_AT_HEAD)) {
@@ -4266,7 +4267,7 @@ describe("ABC-192 — setup hands the guard process.stdout, and a vitest bump na
   // THE VITEST VERSION THE `ABC-176` CAPTURE ARM WAS LAST READ ON. Change this literal ONLY after a
   // hop has re-run every item of `BUMP_RERUN_LIST` on the installed version, and record the reason
   // and that hop's readings in a note. Never change it just to turn the row green.
-  const CAPTURE_ARM_READ_ON_VITEST = "4.1.11";
+  const CAPTURE_ARM_READ_ON_VITEST = "4.1.12";
 
   const BUMP_RERUN_LIST = [
     "the installed vitest is not the version ABC-176's capture arm was last read on (ABC-192, QE-176-b). Before re-pinning, re-run:",

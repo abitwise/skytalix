@@ -1,8 +1,8 @@
 ---
 id: ABC-052
 title: The traceability `Status` column goes stale on every merge — 12 of 27 `Done` tickets today, and it grew by exactly two this morning
-status: backlog
-column: Backlog
+status: dropped
+column: Done
 size: S
 priority: P2
 epic: —

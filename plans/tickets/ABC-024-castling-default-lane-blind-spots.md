@@ -1,8 +1,8 @@
 ---
 id: ABC-024
 title: castling guards protected only by the opt-in deep lane — the `empty` corridor on black, and the right test off its default scalars
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: S
 priority: P2
 epic: EPIC-001

@@ -1,8 +1,8 @@
 ---
 id: ABC-039
 title: The backward-move ordinal series is uncitable — a false FIRST that is LIVE on the board, and a double-booked SECOND
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: S
 priority: P2
 epic: —
