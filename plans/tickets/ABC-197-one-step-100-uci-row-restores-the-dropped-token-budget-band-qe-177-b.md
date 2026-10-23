@@ -101,6 +101,20 @@ One file: `src/uci-session.test.ts`. **One new row. The diff only adds lines.**
 - **`A8` (gates).** Lint, typecheck, unit and build green; default lane 0 skips; `ABC-167` A11's M4 sweep row green and
   still killing M4.
 
+> **2026-10-23, Architect/Design (`arch-floor-reread`, `…578a9290`), records only. `A6`'s bound passes the cut
+> check. No criterion, bound or estimate on this page moves.**
+> - **The per-set `F` of `src/uci-session.test.ts` (ONE-FILE) is 0.070 s CPU / 0.090 s wall.** It is the larger R of
+>   the set's two admissible twins: `ABC-177` A8 (vitest 4.1.11) read 0.070 / 0.090 s, and `ABC-178` B7 (4.1.12) read
+>   0.030 / 0.050 s. The vitest 4.1.11 → 4.1.12 bump does not start a new series. This replaces the provisional
+>   0.654 s (`R-178-1`).
+> - **Cut check:** `A6`'s 650 ms CPU ≥ `F` 0.070 s (≈ 9.3×), so the bound is not refused. `A6` sets no wall bound,
+>   and `A7`'s 10 s is `NFR-008`'s own level, not a per-ticket bound.
+> - **For `A6`'s pre-registration:** name `F` = 0.070 s and pass it to the readout in place of `16pct`
+>   (`readout174a.py <dir> n8-lane 0.070 changed`). With `16pct` the readout prints a provisional ≈ 0.66 s and
+>   `650 ms >= F: False` again.
+> - If `A6`'s twin is admissible, it is the set's third reading, and from then on the median of the three most recent
+>   Rs governs `F`. `A6`'s grade does not wait on that.
+
 ## NFR triggers
 
 - **`NFR-008`** (R-1): `npm test` median wall **≤ 10 s** at load1 ≤ 8, on AC (A7).
