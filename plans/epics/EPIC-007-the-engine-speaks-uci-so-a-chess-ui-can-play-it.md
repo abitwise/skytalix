@@ -52,6 +52,14 @@ owner: BA/PM
 > _Updated: 2026-10-23 by BA/PM (task `bapm-close-EPIC-007-M2`), at `main` `2d962400`. Where the M2 row or a risk
 > below still says M2 waits on a reading, this box wins._
 
+> **2026-10-23, BA/PM (task `bapm-cut-EPIC-007-M1-M8a`, at `main` `84a59ed6`): the trigger fired, and M1 and M8(a) are
+> cut as `ABC-202`** (`Ready`, `XS`, `P2`, DoR 10/10; QE/E2E reads them, agent-run, with no human gate). The owner
+> built `cutechess-cli` 1.5.1 (`…7ea41eea`), and `ABC-202` pins its absolute path, the flag spellings, the six-line
+> EPD file and `tc=inf depth=4` (sent as `go depth 4`). The raw files land under the QE task's context, not
+> `ABC-168`'s. "Default options" is read at `Skill Level` 5 (`ADR-0045` D4); M1's "Skill Level 3" predates that ADR.
+> AC and width 1 are required. The owner's quiet window is asked for only if a forfeit, stall or disconnect happens
+> on a host that was not quiet.
+
 _Updated: 2026-10-18 by BA/PM (task `wave-2026-09-25`, subtask `bapm-engine-revise`). **Revised against the owner's
 answers to Q1–Q11, and then to Q12 and Q13 (owner word `…6b2d90f1`, which arrived during this hop).** Still PROPOSED:
 the owner must accept this revision and the revised `ADR-0044`. Six ticket pages are cut in `Backlog` as proposals, and
