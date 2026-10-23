@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-24 by Orchestrator (orch-2026-10-24u) — ABC-213 → In Design. Ready 0/8. Width 3/3 (SE-206, arch-rule-ABC-205-stop, arch-design-ABC-213). Alone-when-idle queue unchanged._
 _Updated: 2026-10-24 by Orchestrator (orch-2026-10-24s) — ABC-205 SE STOP → Architect ruling. Width 3/3 (SE-206, arch-runbook-ABC-212, arch-rule-ABC-205-stop)._
 _Updated: 2026-10-24 by Orchestrator (orch-2026-10-24r) — board repair: four cards (ABC-204/205/206/212) had been inserted under the indented EXAMPLE headings in the board's comment block by an over-broad replace; moved to the live columns; example lines restored. In Development 2/3 (205, 206), In Review 2/3 (212, 204), In Security/NFR 1/2 (203)._
 _Updated: 2026-10-24 by Orchestrator (orch-2026-10-24q) — ABC-212 → In Review. Alone-when-idle queue: qe-timing-ABC-203, qe-ABC-212 (ENGINE_DEEP), qe-ABC-204 (hours). All need AC. Width 3/3 (SE-205, SE-206, arch-runbook-ABC-212)._
@@ -1063,8 +1064,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 - [EPIC-006] Game session and packaging  (owner: BA/PM, **size: XL — corrected from `L`; 9 tickets / 20 points across both halves, ~1.5x the 13 `L` was assigned, and it hit that ceiling BEFORE distribution was priced**, priority: P1, since: 2026-07-22, **BOTH HALVES NOW CUT: the runnable half `ABC-041`…`ABC-046` (2026-08-13) and the second half `ABC-100`…`ABC-102` (2026-08-16) — only THREE tickets, because the scope of packaging is a FUNCTION of a distribution channel nobody has chosen.** `ABC-100` cuts the DECISION, never the ANSWER: a superseding ADR per `ADR-0007` `D5`, on the owner's word, verbatim and dated. **Acceptance criterion 1 (`npx <package>`) remains unmeetable by any ticket. Recommendation NOT taken, standing for the owner: this should probably be two epics** — the halves share no dependency in either direction and their blockers differ in kind)
 
-## Ready (WIP 1/8)
-- [ABC-213] A failed PGN save reports its first error code even when the cleanup also fails, and a single fault leaves no partial file  (owner: software-engineer, after one Architect/Design question (rig under ADR-0015), size: XS, priority: P3, epic: EPIC-006, since: 2026-10-24, DoR 10/10; cut in \`bapm-cut-levels-6-7\` (\`…44bee405\`) from Security/NFR \`…eaaa1133\` § 5. Guard the cleanup unlinkSync in src/pgn-file.ts; double fault → { ok: false, first code }; single fault → 0 files; non-errno still rethrown; plants X1/X3/X4/X5; QE unlinkfault.mjs red→green (exit 70 → 0, \`PGN not saved: EFBIG\`). Closes AR-203-UNLINK + AR-203-LANEGAP (b); QE-203-a stays residual. N8-SPAWN 0. ADR-0036 Ruling 2 → In Security/NFR. Pull after qe-timing-ABC-203)
+## Ready (WIP 0/8)
 
 
 
@@ -1074,7 +1074,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## In Analysis (WIP 0/2)
 
 
-## In Design (WIP 0/2)
+## In Design (WIP 1/2)
+- [ABC-213] A failed PGN save reports its first error code even when the cleanup also fails, and a single fault leaves no partial file  (owner: software-engineer, after one Architect/Design question (rig under ADR-0015), size: XS, priority: P3, epic: EPIC-006, since: 2026-10-24, DoR 10/10; cut in \`bapm-cut-levels-6-7\` (\`…44bee405\`) from Security/NFR \`…eaaa1133\` § 5. Guard the cleanup unlinkSync in src/pgn-file.ts; double fault → { ok: false, first code }; single fault → 0 files; non-errno still rethrown; plants X1/X3/X4/X5; QE unlinkfault.mjs red→green (exit 70 → 0, \`PGN not saved: EFBIG\`). Closes AR-203-UNLINK + AR-203-LANEGAP (b); QE-203-a stays residual. N8-SPAWN 0. ADR-0036 Ruling 2 → In Security/NFR. Pull after qe-timing-ABC-203) **2026-10-24: pulled Ready → In Design (`arch-design-ABC-213`).**
 
 
 ## Ready for Dev (WIP 0/6)
