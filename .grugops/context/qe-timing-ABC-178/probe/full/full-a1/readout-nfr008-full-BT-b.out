@@ -1,0 +1,27 @@
+0 H cpu 24.57 wall 9.53 files 60 tests 1995 load1 2.73 -> 2.69 round0 thermal 0 -> 0
+0 H2 cpu 24.61 wall 9.4 files 60 tests 1995 load1 2.69 -> 2.67 round0 thermal 0 -> 0
+1 H2 cpu 26.02 wall 9.41 files 60 tests 1995 load1 4.1 -> 4.38 ok thermal 0 -> 0
+1 H cpu 25.09 wall 8.73 files 60 tests 1995 load1 4.14 -> 4.34 ok thermal 0 -> 0
+2 H cpu 25.22 wall 8.76 files 60 tests 1995 load1 4.16 -> 4.15 ok thermal 0 -> 0
+2 H2 cpu 25.27 wall 8.82 files 60 tests 1995 load1 3.97 -> 3.98 ok thermal 0 -> 0
+3 H cpu 25.63 wall 8.98 files 60 tests 1995 load1 3.9 -> 4.31 ok thermal 0 -> 0
+3 H2 cpu 25.4 wall 8.93 files 60 tests 1995 load1 4.31 -> 4.35 ok thermal 0 -> 0
+4 H cpu 25.39 wall 8.8 files 60 tests 1995 load1 4.62 -> 4.49 ok thermal 0 -> 0
+4 H2 cpu 25.77 wall 8.99 files 60 tests 1995 load1 4.49 -> 4.67 ok thermal 0 -> 0
+5 H2 cpu 26.08 wall 9.09 files 60 tests 1995 load1 5.32 -> 5.5 ok thermal 0 -> 0
+5 H cpu 25.91 wall 8.99 files 60 tests 1995 load1 5.61 -> 7.88 ok thermal 0 -> 0
+6 H cpu 25.51 wall 9 files 60 tests 1995 load1 7.03 -> 7.9 ok thermal 0 -> 0
+6 H2 cpu 25.81 wall 8.97 files 60 tests 1995 load1 7.9 -> 7.23 ok thermal 0 -> 0
+7 H cpu 25.72 wall 9.01 files 60 tests 1995 load1 6.97 -> 6.6 ok thermal 0 -> 0
+7 H2 cpu 26.07 wall 9.07 files 60 tests 1995 load1 6.6 -> 6.12 ok thermal 0 -> 0
+8 H cpu 25.91 wall 9.03 files 60 tests 1995 load1 6.04 -> 5.58 ok thermal 0 -> 0
+8 H2 cpu 26.08 wall 9.07 files 60 tests 1995 load1 5.58 -> 7.33 ok thermal 0 -> 0
+scored 8 [1, 2, 3, 4, 5, 6, 7, 8]
+warm host (thermal >= 1 in 0/8 rounds): []
+[cpu] n=8 k=2 H median 25.570 s (range 25.09-25.91); H2 median 25.915 s
+  twin H2-H sorted: -0.23, +0.05, +0.17, +0.17, +0.30, +0.35, +0.38, +0.93; median +0.235 s; sign +7/-1 p 0.070; R 0.380 s
+[wall] n=8 k=2 H median 8.985 s (range 8.73-9.03); H2 median 9.030 s
+  twin H2-H sorted: -0.05, -0.03, +0.04, +0.06, +0.06, +0.10, +0.19, +0.68; median +0.060 s; sign +6/-2 p 0.289; R 0.190 s
+admissible (A1: |twin cpu median| 0.235 s <= max(1.5 % of H cpu = 0.384 s, 1 tick); sign p > 0.05): True
+load1 before each scored run: 3.90-7.90; all <= 8: True
+A9 STATE at 10 s wall: MET (wall median 8.98 s, R 0.19 s; CPU median 25.57 s reported)

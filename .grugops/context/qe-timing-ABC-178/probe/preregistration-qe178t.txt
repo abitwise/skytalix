@@ -1,0 +1,53 @@
+qe-timing-ABC-178 timing pre-registration (B7, B8). Written 2026-10-23T06:59:25Z, AFTER the arm builds and the correctness check,
+BEFORE any start-gate poll, scored window or reading. Host: Mac.lan (8 cores, 16 GiB; the earlier hop's host read
+MacBook-Air.local). node v26.11.1, npm 11.20.0. Width 1: the brief says the owner paused his other session; no other hop runs.
+
+Trees. Worktree ../wt-qe-timing-ABC-178 on grugops/qe-timing-ABC-178, from grugops/qe-ABC-178 2aeeabda. main a93c1e72 merged in
+(a merge, no conflict): MERGE 00f77f26 (parents 2aeeabda, a93c1e72). Against main the merge differs in src/uci-session.test.ts
+(+9, R1 and its re-check, = tip 0036e5c6's lines), the ABC-178 page and qe-ABC-178* context only. Own npm ci --ignore-scripts:
+vitest 4.1.12. Correctness at the merge (before any timing): lint 0 (119 files), typecheck 0, build 0, npm test 0 with
+last-run.json success true, 60 files / 1996 passed / 0 failed / 0 pending / 0 todo; UCI_DEEP real-engine 5/5.
+
+Base choice. The brief: "B is git archive of main at the merge base". B = a93c1e72, main as merged (the merge's main parent).
+git merge-base 2aeeabda a93c1e72 is 66fd8e1b, which carries the vitest 4.1.11 lock; it cannot give "B's median on vitest 4.1.12",
+and the page's base is "main without R1". a93c1e72 is that, on 4.1.12.
+
+Arms (git archive; own npm ci --ignore-scripts --no-audit --no-fund; no symlink; vitest 4.1.12 in every arm):
+  n8/B = a93c1e72; n8/T = cp -R n8/B (command diff -r: clean); n8/H = 00f77f26.   (ABC-177 A8's arm shape)
+  full/B, full/T = a93c1e72; full/H, full/H2 = 00f77f26; each its own npm ci.       (ABC-177 A9's arm shape)
+  src/uci-session.test.ts: B/T a12f818e (126 rows), H/H2 85896340 (127 rows).
+Instruments (byte copies; cmp-equal to qe-ABC-177/probe and to qe-ABC-178/probe/timing/inst): lane174 e2074cdbeedd,
+sampler174 6295540c2e58, window af83ea0c1d1e, readout174 f528540fa110, readout174a 10a6e19be741,
+readout-nfr008-174 c95343f82f7c, -174a b0236f4623db, -174b 464d97c6fa2e,
+powercheck a64369300b3e, perrun 9e3bbe8c1888.
+Derivatives: run178t.sh d168f2e7e5b4 (of run178.sh: T1 path, T2 vitest_procs logged), gate178t.sh db5d97e2f5f5 (of gate178.sh:
+G1 path, G2 n8 first at thermal 0, G3 re-run rule below), hostpoll178t.sh b10cbfd2f33b (logs only), go178t.sh 771b62e8dbd3
+(launcher). Their diffs against the originals are only the changes their headers list.
+
+Preconditions (brief): AC Power; load1 <= 8; no foreign vitest; thermal kept and flagged. Checked:
+  - start gate, every 5 s: OK = zero [v]itest processes on the host, 'AC Power', load1 <= 8; a 60 s OK span opens it. Thermal
+    gates only n8's start (thermal 0). Every poll is logged (gate.tsv).
+  - pre-window / post-window / post-lane: power, load1, thermal, vitest_procs, user_procs (run178t st()).
+  - window: window.mjs 180 s, 1 s polls; plus 5 s power/load1 polls. Admitted only with AC on every poll, load1 <= 8 on every
+    poll and foreignPolls == 0. Not admitted -> not scored; the gate waits again.
+  - per run: lane174 logs power, power_after, load1 before/after, foreign vitest before/after, thermal before/after, speed limit.
+    powercheck: a not-AC run means the stage does not read (P1, owner bfdc97e5).
+Deadline: no stage starts after 2026-10-23T09:00:00Z (epoch 1792746000). A stage not read by then -> UNRESOLVED with the readings.
+Re-run: at most ONE per stage, and only when the stage did not read (n8: 174a VOID or INADMISSIBLE, or a not-AC run; full: 174b
+VOID, NOT APPLICABLE or INADMISSIBLE, or a not-AC run). A re-run stands alone; there is no choosing between two readings.
+
+B7 (N8-LANE, ONE-FILE src/uci-session.test.ts; ABC-177 A8): lane174 CONDS=B,T,H BASE=B TWIN=T ROUNDS=9 GAP=0, k=2, round 0
+discarded, rotated; CMD env NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/uci-session.test.ts + lane174's reporters;
+CPU from /usr/bin/time -p. Grading view readout174a.py <dir> n8-lane 16pct changed (R4: H's own round-0 count, 127). Strict
+readout174 beside. MET = "STATE at 650 ms CPU: MET". H-B CPU and wall medians with intervals from lane174's own summary
+(rounds 1-8). Thermal: 174a discards thermal rounds (A8 as registered); the gate starts n8 only at thermal 0; each round's thermal
+is reported. Expected H-B about +4 ms in-thread, below the set's floor: reported, not resolved (page).
+B8 (NFR-008 R-1, full lane, npm test as spelled; ABC-177 A9): lane174 CONDS=B,T,H,H2 BASE=B TWIN=T ROUNDS=9 GAP=0, k=2.
+Grading view readout-nfr008-174b.py on the H/H2 extract (thermal kept and flagged; foreign logged). Strict 174 and 174a beside.
+H's R-1 median wall and state from 174b. Routes (page): H <= 9.2 s -> ABC-197's DoR-10 input; 9.2 < H <= 10 s -> NFR-008 MET,
+O3 per Architect ee7527cc; H > 10 s -> owner (ADR-0035 D6), and this hop stops there.
+B's full-lane median on vitest 4.1.12 (QE reporting view, registered now): (a) lane174's own summary B median wall, rounds 1-8;
+(b) readout-nfr008-174b.py on the B/T extract with the labels mapped B->H, T->H2 (file nfr008-full-BT-as-HH2.tsv); its median is
+B's, its twin is B/T. H-B wall and CPU medians with intervals, and the B/T twin, from lane174's own summary.
+Self-hygiene: while a stage runs, no command of this hop names vitest, a wt- worktree path or a context probe path; this agent
+starts no other work while the gate runs.

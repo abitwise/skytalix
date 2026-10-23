@@ -1,0 +1,12 @@
+# nfr008-full summary: n = 8 scored rounds, round 0 discarded, 0 harness errors
+B	cpu 26.99	wall 9.39	par 2.865	load1 6.13	load1>8 1/8	files 60	tests 1995
+T	cpu 28.87	wall 9.98	par 2.875	load1 6.20	load1>8 1/8	files 60	tests 1995
+  T-B cpu	median 0.990 (3.67 % of base cpu)	sign 7/8	k 2	interval [0.060, 1.930]	R 1.930
+  T-B wall	median 0.255	sign 5/8	k 2	interval [-0.180, 0.790]	R 0.790
+H	cpu 28.11	wall 9.79	par 2.890	load1 6.71	load1>8 1/8	files 60	tests 1996
+  H-B cpu	median 0.575 (2.13 % of base cpu)	sign 6/8	k 2	interval [-1.720, 3.340]	R 3.340
+  H-B wall	median 0.360	sign 6/8	k 2	interval [-0.790, 1.000]	R 1.000
+H2	cpu 27.00	wall 9.29	par 2.883	load1 6.29	load1>8 1/8	files 60	tests 1996
+  H2-B cpu	median 0.290 (1.07 % of base cpu)	sign 6/8	k 2	interval [-1.770, 2.770]	R 2.770
+  H2-B wall	median 0.080	sign 6/8	k 2	interval [-0.630, 0.990]	R 0.990
+twin R: cpu 1.930 s, wall 0.790 s. Admissible = twin cpu median <= 1.5 % of base with sign at chance (ADR-0035 d1).

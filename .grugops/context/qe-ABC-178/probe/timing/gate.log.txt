@@ -1,0 +1,35 @@
+gate open at 2026-10-22T14:32:45Z (span 62s, thermal 1); launching full full-a1
+pre-window power 'AC Power' load1 7.17 user_procs 457 thermal 1 2026-10-22T14:32:45Z
+window rc 1 foreignPolls 32
+window power polls 36 AC 36 load1_max 13.68
+WINDOW NOT ADMITTED (AC/load1/foreign); not run
+run178 full full-a1 rc 4 at 2026-10-22T14:35:47Z
+gate open at 2026-10-22T14:46:06Z (span 61s, thermal 0); launching n8 n8-a1
+pre-window power 'AC Power' load1 3.16 user_procs 387 thermal 0 2026-10-22T14:46:07Z
+window rc 1 foreignPolls 2
+window power polls 37 AC 37 load1_max 3.16
+WINDOW NOT ADMITTED (AC/load1/foreign); not run
+run178 n8 n8-a1 rc 4 at 2026-10-22T14:49:13Z
+gate open at 2026-10-22T14:50:55Z (span 61s, thermal 0); launching n8 n8-a2
+pre-window power 'AC Power' load1 2.73 user_procs 400 thermal 0 2026-10-22T14:50:56Z
+window rc 1 foreignPolls 71
+window power polls 37 AC 37 load1_max 3.56
+WINDOW NOT ADMITTED (AC/load1/foreign); not run
+run178 n8 n8-a2 rc 4 at 2026-10-22T14:54:02Z
+gate open at 2026-10-22T14:59:50Z (span 61s, thermal 0); launching n8 n8-a3
+pre-window power 'AC Power' load1 3.99 user_procs 406 thermal 0 2026-10-22T14:59:50Z
+window rc 1 foreignPolls 1
+window power polls 36 AC 36 load1_max 4.56
+WINDOW NOT ADMITTED (AC/load1/foreign); not run
+run178 n8 n8-a3 rc 4 at 2026-10-22T15:02:52Z
+--- gate restart 2026-10-22T15:03:32Z
+gate open at 2026-10-22T15:04:38Z (span 62s, thermal 0); launching full full-g2a1
+pre-window power 'AC Power' load1 2.40 user_procs 406 thermal 0 2026-10-22T15:04:38Z
+window rc 0 foreignPolls 0
+window power polls 37 AC 37 load1_max 3.04
+post-window power 'AC Power' load1 2.11 user_procs 410 thermal 0 2026-10-22T15:07:44Z
+lane rc 0
+post-lane power 'AC Power' load1 7.24 user_procs 422 thermal 2 2026-10-22T15:13:55Z
+done full full-g2a1
+run178 full full-g2a1 rc 0 at 2026-10-22T15:13:56Z
+DEADLINE 2026-10-22T15:15:00Z passed; n8 done=0 runs=0; full done=1 runs=1

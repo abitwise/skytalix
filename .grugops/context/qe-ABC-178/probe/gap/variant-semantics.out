@@ -1,0 +1,16 @@
+== QP1
+R1 shape:        s1 bestmoves before=0 after=0  s2 out=["bestmove e2e4"]
+two-hold shape:  s1 bestmoves before=1 after=1  s2 out=["bestmove e2e4"]
+
+== QP1a
+R1 shape:        s1 bestmoves before=0 after=0  s2 out=["bestmove e2e4"]
+two-hold shape:  s1 bestmoves before=1 after=1  s2 out=["bestmove e2e4"]
+
+== QP1b
+R1 shape:        s1 bestmoves before=0 after=0  s2 out=[]
+two-hold shape:  s1 bestmoves before=1 after=1  s2 out=["bestmove e2e4"]
+
+== QP1c
+R1 shape:        s1 bestmoves before=0 after=1  s2 out=[]
+two-hold shape:  s1 bestmoves before=1 after=2  s2 out=[]
+

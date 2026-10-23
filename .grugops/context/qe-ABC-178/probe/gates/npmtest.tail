@@ -1,0 +1,8 @@
+ ✓ src/perft.test.ts (24 tests) 265ms
+ ✓ src/search.capacity.test.ts (1 test) 19ms
+
+ Test Files  60 passed (60)
+      Tests  1996 passed (1996)
+   Start at  17:25:45
+   Duration  15.58s (transform 0ms, setup 0ms, import 11.37s, tests 13.77s, environment 9ms)
+

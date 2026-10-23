@@ -1,0 +1,4 @@
+{"id":"QP0","exit":0,"s":"4.3","total":126,"failed":[],"passed":126,"skipped":0,"what":"control (no change)"}
+{"id":"QP1c","exit":0,"s":"3.6","total":126,"failed":[],"passed":126,"skipped":0,"what":"qe-ABC-178 variant: a fresh session's stop/ponderhit releases the other session's hold into the HOLDER's stream"}
+{"id":"QP1d","exit":0,"s":"3.6","total":126,"failed":[],"passed":126,"skipped":0,"what":"qe-ABC-178b variant: a fresh session's position/go/ucinewgame (not stop/ponderhit) releases the other session's hold into the HOLDER's stream"}
+{"id":"QP1e","exit":0,"s":"3.6","total":126,"failed":[],"passed":126,"skipped":0,"what":"qe-ABC-178b variant: constructing a fresh session releases the other session's hold into the HOLDER's stream (no keyword)"}

@@ -1,0 +1,3 @@
+QP1d exit=0 13.8s total=1996 failed=0 
+QP1e exit=1 10.2s total=1996 failed=1 
+    src/uci-session.test.ts :: ABC-167 A6 — infinite waits for stop ABC-178 R1: a hold left in one session is not released by a fresh session

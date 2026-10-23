@@ -1,0 +1,20 @@
+gate open at 2026-10-23T07:00:33Z (span 62s, thermal 0); launching n8 n8-a1
+pre-window power 'AC Power' load1 2.66 user_procs 462 thermal 0 vitest_procs 0 2026-10-23T07:00:33Z
+window rc 0 foreignPolls 0
+window power polls 37 AC 37 load1_max 2.66
+post-window power 'AC Power' load1 1.95 user_procs 465 thermal 0 vitest_procs 0 2026-10-23T07:03:39Z
+lane rc 0
+post-lane power 'AC Power' load1 3.22 user_procs 467 thermal 0 vitest_procs 0 2026-10-23T07:05:34Z
+done n8 n8-a1
+run178 n8 n8-a1 rc 0 at 2026-10-23T07:05:34Z
+gate open at 2026-10-23T07:06:41Z (span 62s, thermal 0); launching full full-a1
+pre-window power 'AC Power' load1 2.69 user_procs 466 thermal 0 vitest_procs 0 2026-10-23T07:06:41Z
+window rc 0 foreignPolls 0
+window power polls 36 AC 36 load1_max 3.00
+post-window power 'AC Power' load1 2.73 user_procs 467 thermal 0 vitest_procs 0 2026-10-23T07:09:43Z
+lane rc 0
+post-lane power 'AC Power' load1 5.79 user_procs 429 thermal 0 vitest_procs 0 2026-10-23T07:15:22Z
+done full full-a1
+run178 full full-a1 rc 0 at 2026-10-23T07:15:22Z
+all stages done 2026-10-23T07:15:27Z
+gate rc 0 at 2026-10-23T07:15:27Z

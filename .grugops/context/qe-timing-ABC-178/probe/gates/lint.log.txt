@@ -1,0 +1,5 @@
+
+> skytalix@0.0.0 lint
+> biome check .
+
+Checked 119 files in 136ms. No fixes applied.

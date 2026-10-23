@@ -1,0 +1,67 @@
+expected counts (round 0): {'B': (1, 126), 'T': (1, 126), 'H': (1, 127)}
+round	cond	cpu	wall	files	tests	load_b	load_a	foreign_b	foreign_a	therm	power	sampler_bad	status	kept
+0	B	4.11	4.58	1	126	1.95	1.95	0	0	0->0	AC Power	0	ok	round0
+0	T	4.16	4.38	1	126	1.95	1.95	0	0	0->0	AC Power	0	ok	round0
+0	H	4.13	4.44	1	127	1.95	5	0	0	0->0	AC Power	0	ok	round0
+1	T	4.08	3.69	1	126	5	4.84	0	0	0->0	AC Power	0	ok	ok
+1	H	4.09	3.67	1	127	4.84	4.61	0	0	0->0	AC Power	0	ok	ok
+1	B	4.07	3.73	1	126	4.61	4.4	0	0	0->0	AC Power	0	ok	ok
+2	H	4.1	3.69	1	127	4.4	4.4	0	0	0->0	AC Power	0	ok	ok
+2	B	4.09	3.71	1	126	4.29	4.29	0	0	0->0	AC Power	0	ok	ok
+2	T	4.1	3.76	1	126	4.29	4.1	0	0	0->0	AC Power	0	ok	ok
+3	B	4.08	3.71	1	126	4.1	4.18	0	0	0->0	AC Power	0	ok	ok
+3	T	4.09	3.7	1	126	4.18	4	0	0	0->0	AC Power	0	ok	ok
+3	H	4.1	3.74	1	127	4	4	0	0	0->0	AC Power	0	ok	ok
+4	T	4.09	3.71	1	126	4	3.92	0	0	0->0	AC Power	0	ok	ok
+4	H	4.06	3.68	1	127	3.92	3.85	0	0	0->0	AC Power	0	ok	ok
+4	B	4.09	3.82	1	126	3.85	4.02	0	0	0->0	AC Power	0	ok	ok
+5	H	4.08	3.7	1	127	4.02	3.86	0	0	0->0	AC Power	0	ok	ok
+5	B	4.06	3.71	1	126	3.86	3.86	0	0	0->0	AC Power	0	ok	ok
+5	T	4.1	3.77	1	126	3.86	3.95	0	0	0->0	AC Power	0	ok	ok
+6	B	4.11	3.71	1	126	3.95	4.03	0	0	0->0	AC Power	0	ok	ok
+6	T	4.07	3.7	1	126	4.03	3.95	0	0	0->0	AC Power	0	ok	ok
+6	H	4.1	3.73	1	127	3.95	3.79	0	0	0->0	AC Power	0	ok	ok
+7	T	4.08	3.7	1	126	3.79	3.79	0	0	0->0	AC Power	0	ok	ok
+7	H	4.12	3.71	1	127	3.79	3.73	0	0	0->0	AC Power	0	ok	ok
+7	B	4.11	3.72	1	126	3.73	3.67	0	0	0->0	AC Power	0	ok	ok
+8	H	4.1	3.7	1	127	3.67	3.54	0	0	0->0	AC Power	0	ok	ok
+8	B	4.1	3.7	1	126	3.54	3.54	0	0	0->0	AC Power	0	ok	ok
+8	T	4.11	3.72	1	126	3.54	3.41	0	0	0->0	AC Power	0	ok	ok
+
+bracket log per lane round (sampler row at/before the first run's start | at/after the last run's end):
+round	before_utc	load1	user_procs	foreign	|	after_utc	load1	user_procs	foreign
+0	none	-	-	-	|	2026-10-23T07:03:55.051Z	4.84	466	0
+1	2026-10-23T07:03:50.049Z	5.00	465	0	|	2026-10-23T07:04:10.057Z	4.29	465	0
+2	2026-10-23T07:04:05.055Z	4.40	466	0	|	2026-10-23T07:04:20.062Z	4.18	465	0
+3	2026-10-23T07:04:15.059Z	4.10	465	0	|	2026-10-23T07:04:30.065Z	3.92	465	0
+4	2026-10-23T07:04:25.063Z	4.00	465	0	|	2026-10-23T07:04:45.071Z	3.86	466	0
+5	2026-10-23T07:04:40.069Z	4.02	465	0	|	2026-10-23T07:04:55.075Z	4.03	466	0
+6	2026-10-23T07:04:50.073Z	3.95	466	0	|	2026-10-23T07:05:05.079Z	3.79	463	0
+7	2026-10-23T07:05:05.079Z	3.79	463	0	|	2026-10-23T07:05:20.085Z	3.54	467	0
+8	2026-10-23T07:05:15.083Z	3.67	467	0	|	2026-10-23T07:05:30.090Z	3.22	463	0
+
+cpu == user + sys (centiseconds) on every row: True
+scored rounds 8 [1, 2, 3, 4, 5, 6, 7, 8]; discarded rounds []
+load1 before each scored run: 3.54-5.00
+
+[CPU user+sys] n=8 k=2
+  B median 4.090 s; H median 4.100 s; T median 4.090 s
+  twin T-B sorted: -0.040, -0.030, +0.000, +0.010, +0.010, +0.010, +0.010, +0.040
+  twin median +0.010 s (+0.244 % of B); limit max(1.5 % = 61.35 ms, one tick 10 ms) = 61.35 ms
+  sign on non-zero deltas: +5 / -2 (zeros 1, dropped): two-sided p 0.453  [old convention, not used: 5/8, p 0.727]
+  R 0.030 s -> ADMISSIBLE (A1) True
+  treatment H-B sorted: -0.030, -0.010, +0.000, +0.010, +0.010, +0.020, +0.020, +0.020
+  treatment median +0.010 s, interval x(2)..x(7) = -0.010..+0.020
+
+  per-set F = 0.654 s (provisional 16 % of this window B CPU median); 650 ms >= F: False
+  resolves 650 ms (R <= b): True; lower end x(k) -0.010 s > b: False; median +0.010 s <= b: True
+  STATE at 650 ms CPU: MET
+
+[wall] n=8 k=2
+  B median 3.710 s; H median 3.700 s; T median 3.705 s
+  twin T-B sorted: -0.110, -0.040, -0.020, -0.010, -0.010, +0.020, +0.050, +0.060
+  twin median -0.010 s (-0.270 % of B); limit max(1.5 % = 55.65 ms, one tick 10 ms) = 55.65 ms
+  sign on non-zero deltas: +3 / -5 (zeros 0, dropped): two-sided p 0.727  [old convention, not used: 3/8, p 0.727]
+  R 0.050 s -> ADMISSIBLE (A1) True
+  treatment H-B sorted: -0.140, -0.060, -0.020, -0.010, -0.010, +0.000, +0.020, +0.030
+  treatment median -0.010 s, interval x(2)..x(7) = -0.060..+0.020

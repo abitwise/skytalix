@@ -1,0 +1,2 @@
+{"id":"QP0","exit":0,"s":"12.7","total":1996,"failed":[],"passed":1996,"skipped":0,"what":"control (no change)"}
+{"id":"QP1","exit":1,"s":"15.8","total":1996,"failed":["src/uci-session.test.ts :: ABC-167 A6 — infinite waits for stop ABC-178 R1: a hold left in one session is not released by a fresh session"],"passed":1995,"skipped":0,"what":"fold attack: `held` hoisted to module scope (cross-session state)"}
