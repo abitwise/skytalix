@@ -9,6 +9,7 @@ id: ADR-0031
 **accepted** 2026-10-10 by the owner. Owner (Olger Oeselg), 2026-10-10, verbatim: *"accept ADR-0030, ADR-0031, ADR-0032, ADR-0034 with (b) at 0.8x"*
 
 **Addendum 2026-10-24 (`ABC-205`): PROPOSED.** See § Addendum at the end. The decisions below are unchanged by it.
+It carries two owner words, `OD-205-1` (`A6`) and `OD-205-2` (`A7`, added after the build's STOP).
 
 Was: **proposed** 2026-10-10 by Architect/Design (task `wave-2026-09-25`, subtask `ruling-abc083-abc087`). It rules
 question **R1** of BA/PM's re-score (`20261010T081343Z-ba-pm-decision-…-973fd389`), which gates `ABC-083`'s
@@ -182,6 +183,18 @@ owner's.** The Orchestrator reports it to him. Decisions 1–5 above are unchang
     decision 3's pattern, under `ADR-0028` decision 1's three checks on the build. Every other cell stays
     byte-identical.
   - If the owner declines, the queen scale does not ship, and `ABC-205` stops to BA/PM.
+- **A7. A second level, for the owner's word (`OD-205-2`).** *(added 2026-10-24, task `arch-rule-ABC-205-stop`,
+  after the build's STOP)*
+  - The build reads `ABC-121` `A1`'s depth-5 drift maximum at **79 cp against its 75 cp level**, in both recursions,
+    on position-6/e2d2. The 95 % clause holds (96.79 % / 97.33 %).
+  - The level was set with measured headroom (75 against 45 cp). So `ADR-0028` decision 3 does not reach it, and
+    decision 4 makes the red a stop. The level is `ADR-0026` decision 9's text.
+  - **Ruled not a defect.** The shelter gate (`A3`) alone reproduces it at 87 cp, and the blend alone does not
+    (55 cp). The queen scale alone reds the same bar on another position (107 cp). The bar's mutant `early` stays
+    red on the 95 % clause.
+  - **Proposed:** the maximum becomes ⌊1.5 × 79⌋ = **118 cp**, in both recursions. Nothing else in decision 9
+    moves. The text is `ADR-0026` § Proposed amendment 2026-10-24.
+  - If the owner declines, neither term ships alone, and `ABC-205` stops to BA/PM.
 
 ### Alternatives
 
@@ -205,6 +218,8 @@ owner's.** The Orchestrator reports it to him. Decisions 1–5 above are unchang
   - pins are re-pinned;
   - two fixtures are re-found under `ADR-0028` decision 2;
   - one level goes to `OD-205-1`.
+- **The build's STOP added one deep-lane level (`OD-205-2`, `A7`).** It also re-pins one deep row by `maxDepth`
+  (`ABC-205` § Addendum 2026-10-24).
 - **Ship rule.** It ships only on `EPIC-008` `S1` (a D reading of GAIN).
 - **Licence interaction.** A later re-derivation of `KING_TABLE` changes values, but not these forms.
 
