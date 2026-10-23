@@ -20,21 +20,84 @@
  * THE CLOCK is the local-time `Date` constructor, never `TZ`: its local getters read back the same
  * fields in any time zone (measured at the ruling under `TZ` +14 and -10), and 14:05:09 is in no
  * daylight-saving gap.
+ *
+ * `ABC-213` (`A1`-`A3`) runs IN PROCESS against a call-through `node:fs` double: the ticket's
+ * `## Design ruling`, rig (b′). `ADR-0015`'s rule governs "a module substitution inside a spawned
+ * child"; this is not a child, and no product source is replaced: the holder runs whole, and the
+ * substituted module is the platform's, whose errno contract is published. The double doubles only
+ * the holder's five bindings. Unarmed it passes through and throws on a relative path, so nothing
+ * here can write into the repository. Armed, it re-roots relative paths under the row's `mkdtemp`
+ * (D3's working directory, since `pool: "threads"` forbids `chdir`) and injects the row's faults.
+ * The spawned writer child above does not see it.
  */
 import { spawnSync } from "node:child_process";
-import { mkdtempSync, readFileSync, rmSync } from "node:fs";
+import * as nodeFs from "node:fs";
+import { mkdtempSync, readdirSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { afterAll, describe, expect, it } from "vitest";
+import { afterAll, afterEach, describe, expect, it, vi } from "vitest";
 import { makeMove } from "./apply.ts";
 import { parseFen, toFen } from "./fen.ts";
 import { type GameHistory, newGame, playMove } from "./history.ts";
 import { legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
 import { formatPgn, pgnStamp } from "./pgn.ts";
+import { writePgnFile } from "./pgn-file.ts";
 import { resultHeadline } from "./result-screen.ts";
 import { parseSan } from "./san.ts";
 import type { FinalResult, LoopOutcome, TerminalReason } from "./turn-loop.ts";
+
+/** `ABC-213`'s fault state. `"no-code"` throws an `Error` with no `code` (a defect, `A3`). */
+const fault = vi.hoisted(() => ({
+  root: "",
+  write: undefined as string | undefined,
+  close: undefined as string | undefined,
+  unlink: undefined as string | undefined,
+  bytesBeforeWriteFault: 0,
+  unlinkCalls: 0,
+}));
+
+vi.mock("node:fs", async (importOriginal) => {
+  const fs = await importOriginal<typeof import("node:fs")>();
+  const { isAbsolute, join: joinPath } = await import("node:path");
+  const at = (path: string): string => {
+    if (isAbsolute(path)) return path;
+    if (fault.root === "")
+      throw new Error(
+        `ABC-213 double: unarmed relative path "${path}" would land in the repository`,
+      );
+    return joinPath(fault.root, path);
+  };
+  const failure = (code: string): Error =>
+    code === "no-code"
+      ? new Error("ABC-213 defect, no code")
+      : Object.assign(new Error(code), { code });
+  const doubled = {
+    mkdirSync: ((path: string, options?: object) =>
+      fs.mkdirSync(at(path), options)) as typeof fs.mkdirSync,
+    openSync: ((path: string, flags: string, mode?: number) =>
+      fs.openSync(at(path), flags, mode)) as typeof fs.openSync,
+    writeFileSync: ((target: number | string, data: string, options?: object) => {
+      if (typeof target === "number" && fault.write !== undefined) {
+        fault.bytesBeforeWriteFault += fs.writeSync(target, "x");
+        throw failure(fault.write);
+      }
+      return fs.writeFileSync(typeof target === "number" ? target : at(target), data, options);
+    }) as typeof fs.writeFileSync,
+    closeSync: ((descriptor: number) => {
+      fs.closeSync(descriptor);
+      if (fault.close !== undefined) throw failure(fault.close);
+    }) as typeof fs.closeSync,
+    unlinkSync: ((path: string) => {
+      fault.unlinkCalls++;
+      if (fault.unlink !== undefined) throw failure(fault.unlink);
+      return fs.unlinkSync(at(path));
+    }) as typeof fs.unlinkSync,
+  };
+  // The canary's marker rides on each doubled function: the namespace keeps the real export names.
+  for (const binding of Object.values(doubled)) Object.assign(binding, { abc213Double: true });
+  return { ...fs, ...doubled, default: { ...fs, ...doubled } };
+});
 
 /** Every test file in this suite declares its own. */
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -414,6 +477,67 @@ process.stdout.write(JSON.stringify({ out, text: TEXT, uid: process.getuid() }) 
       if (run.result.ok) throw new Error("the write succeeded");
       expect(`PGN not saved: ${run.result.code}`).toMatch(/^PGN not saved: E[A-Z0-9]+$/);
     }
+  });
+});
+
+describe("ABC-213 — a failed save reports its first code; a single fault leaves no partial file (A1–A3)", () => {
+  const TEXT = '[Event "x"]\n\n1. e4 *\n';
+  /** The holder's five bindings on this file's own `node:fs` namespace all carry the double's marker. */
+  const doubled = (): boolean =>
+    [
+      nodeFs.mkdirSync,
+      nodeFs.openSync,
+      nodeFs.writeFileSync,
+      nodeFs.closeSync,
+      nodeFs.unlinkSync,
+    ].every((binding) => (binding as unknown as { abc213Double?: boolean }).abc213Double === true);
+
+  const arm = (faults: { write?: string; close?: string; unlink?: string }): string => {
+    if (!doubled()) throw new Error("ABC-213 canary: node:fs is not the double; refusing to write");
+    fault.root = mkdtempSync(join(tmpdir(), "abc213-"));
+    Object.assign(fault, { ...faults, bytesBeforeWriteFault: 0, unlinkCalls: 0 });
+    return fault.root;
+  };
+  afterEach(() => {
+    if (fault.root !== "") rmSync(fault.root, { recursive: true, force: true });
+    Object.assign(fault, { root: "", write: undefined, close: undefined, unlink: undefined });
+  });
+  const gamesIn = (root: string): string[] => readdirSync(join(root, "games"));
+
+  it("canary — this file's node:fs is the double, and unarmed it refuses a relative path", () => {
+    expect(doubled()).toBe(true);
+    expect(fault.root).toBe("");
+    expect(() => writePgnFile(STARTED_AT, TEXT)).toThrow(/unarmed relative path "games"/);
+  });
+
+  it("A1 — the write fails with W and the cleanup unlink with U: { ok: false, code: W }, nothing thrown", () => {
+    arm({ write: "EFBIG", unlink: "EACCES" });
+    expect(writePgnFile(STARTED_AT, TEXT)).toEqual({ ok: false, code: "EFBIG" });
+    expect(fault.unlinkCalls, "the cleanup was attempted").toBe(1);
+  });
+
+  it("A1 — the close fails with C and the cleanup unlink with U: { ok: false, code: C }", () => {
+    arm({ close: "EIO", unlink: "EACCES" });
+    expect(writePgnFile(STARTED_AT, TEXT)).toEqual({ ok: false, code: "EIO" });
+    expect(fault.unlinkCalls, "the cleanup was attempted").toBe(1);
+  });
+
+  it("A2 — the write fails after a byte reached the file, the unlink succeeds: W, and games/ holds 0 files", () => {
+    const root = arm({ write: "EFBIG" });
+    expect(writePgnFile(STARTED_AT, TEXT)).toEqual({ ok: false, code: "EFBIG" });
+    expect(fault.bytesBeforeWriteFault, "a byte reached the file").toBe(1);
+    expect(gamesIn(root)).toEqual([]);
+  });
+
+  it("A2 — the close fails after the whole text was written, the unlink succeeds: C, and games/ holds 0 files", () => {
+    const root = arm({ close: "EIO" });
+    expect(writePgnFile(STARTED_AT, TEXT)).toEqual({ ok: false, code: "EIO" });
+    expect(gamesIn(root)).toEqual([]);
+  });
+
+  it("A3 — an unlink throw with no errno code leaves writePgnFile (a defect is not swallowed)", () => {
+    arm({ write: "EFBIG", unlink: "no-code" });
+    expect(() => writePgnFile(STARTED_AT, TEXT)).toThrow("ABC-213 defect, no code");
   });
 });
 
