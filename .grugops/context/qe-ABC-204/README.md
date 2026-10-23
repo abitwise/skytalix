@@ -1,0 +1,2 @@
+# qe-ABC-204 — context
+Ticket: plans/tickets/ABC-204-a-rating-harness-plays-skytalix-against-stockfish-uci-limitstrength-and-against-its-base-in-cutechess-cli-outside-npm-test.md (A4–A7, ## Design ruling). Build: grugops/ABC-204 @ 0e88c5df (../wt-ABC-204); SE notes …74a2bc03, …f0a579a0 (state is printed, exit code is not the state; +/- nan at tiny n; D 3000 ms not smoke-run; QE-owned checks listed). Architect …13faedbc. Epic EPIC-008 (target +100, owner …e44d2903).
