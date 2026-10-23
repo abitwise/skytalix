@@ -6,6 +6,11 @@ id: ADR-0045
 
 ## Status
 
+> **Amended 2026-10-24: levels 6 and 7 (`ABC-212`).** Accepted by the owner (`…2c6fa3b1`) on the listed points.
+> The text was written by Architect/Design (task `arch-design-ABC-212`) to those points and is reported to the owner
+> when it lands, with his veto open. See § AMENDMENT 2026-10-24 at the end. D1, D2, D4 and the Consequences move
+> there. D3 holds except for the clamp's value, D5 and D6 are not changed, and nothing above that section is edited.
+
 **accepted** 2026-10-19 by Olger Oeselg (owner), as proposed. The owner's menu answers, verbatim (note
 `.grugops/context/wave-2026-09-25/notes/20261019T130500Z-orchestrator-decision-owner-word-adr0045-accepted-q1-q3-abc171-rows-1a9c7f42.md`,
 a transcription, not a stamp):
@@ -424,3 +429,158 @@ caffeinate -i env LADDER_DEEP=verdict NODE_OPTIONS=--max-old-space-size=400 npx 
 
 This addendum is records only. Reverting it restores the unprefixed text, which the guard refuses on any tree that
 carries `ABC-173`.
+
+## AMENDMENT 2026-10-24 — levels 6 (5 s) and 7 (30 s) above the default; the clamp moves to 32 s (`ABC-212`)
+
+**Status: accepted by the owner (`…2c6fa3b1`), on the listed points.** The owner's word is
+`.grugops/context/owner-word-2026-10-23/notes/20261023T215000Z-orchestrator-decision-2c6fa3b1.md`, item 2, a
+transcription and not a stamp. The text was written by Architect/Design (task `arch-design-ABC-212`) at `main`
+`5717edec`, and it is reported to the owner when it lands, with his veto open. Any departure from the points goes back
+to him. This amendment has none.
+
+The ask is the owner's word `…e44d2903`, item 3: *"6 - allow to think 5 seconds and 7 - allow to think up to 30
+seconds, to squeeze maximum out"*. BA/PM cut it as `ABC-212` (`…44bee405`, `…78d4532b`). This is a forward-only
+amendment: nothing above it is edited.
+
+**Evidence.** Light probes in this hop's scratch tree (`main` `5717edec`, with `HARD_CEILING_MS` set to 32 000 and,
+where stated, `LEVELS[6]`/`[7]` added). The virtual clock was used only, and no wall-clock figure was taken. The
+note is `arch-design-ABC-212` (observation).
+
+### A1 (D1). The table grows by two rows
+
+| level | `budgetMs` | `blunderRate` | step from the level below |
+|---:|---:|---:|---|
+| 1–5 | unchanged (100/0.4, 180/0.2, 330/0.1, 1 000/0.05, 3 000/0) | | as D1 |
+| 6 | **5 000** | **0** | 1.67x time, rate 0 → 0 |
+| 7 (hardest) | **30 000** | **0** | 6x time, rate 0 → 0 |
+
+- **D1's "every adjacent pair differs by more than time alone" no longer holds for 5v6 and 6v7.** All three levels
+  have rate 0, so each of those two steps is time alone. The sentence stays true for 1v2 through 4v5.
+- The ordering row still holds over 1..7: budgets never fall, rates never rise, and each step improves one of the two.
+- **Level 6 plays almost like level 5.** At 3 000 v 5 000 ms, § Context measured +0.36 ply, deeper on 18 of 50
+  positions, with a different move on 2 of 50. It is kept at 5 s on the owner's own number (OQ-212-1), to be
+  revisited with harness data. Level 7 is predicted at about +2.3 ply over level 5 (2.67x per ply). That figure is
+  `UNKNOWN - verify` until `ABC-212` `A15` reads it.
+
+### A2 (D2). The default stays 5, and the hardest is 7
+
+- **`DEFAULT_LEVEL` stays 5, `HARDEST_LEVEL` becomes 7, and `EASIEST_LEVEL` stays 1.**
+  - `LEVELS[DEFAULT_LEVEL]` is still `{ DEFAULT_BUDGET_MS, 0 }` = `{ 3000, 0 }`.
+  - `DEFAULT_DIFFICULTY` still equals `DEFAULT_LEVEL`.
+  - `ABC-101` `A8′` and `NFR-005`'s referent do not move.
+- **Retired, on the owner's word:**
+  - "`DEFAULT_LEVEL = HARDEST_LEVEL = 5`";
+  - "the default is called the hardest";
+  - "there is no level above it";
+  - D2's "the 5 s bar binds the mechanism … but no level reaches it". Under A3 below, no level's budget reaches its own
+    ceiling or the clamp.
+
+### A3 (D3). The mechanism does not change. `src/engine.ts` changes at the clamp's value only
+
+- `Level` stays `{ budgetMs, blunderRate }` ("a budget and a blunder rate, and nothing else").
+- These do not change: `createLevel`, `blunder`, `seededRandom`, `src/search.ts` and `src/virtual-clock.ts`.
+- There is no `maxDepth`, no `maxNodes` and no ceiling on a level.
+- **The clamp keeps its shape (one absolute clamp, `RF-1`). `HARD_CEILING_MS` goes from 5 000 to 32 000**, the
+  largest per-level ceiling in `NFR-004`'s accepted text.
+  - The name and the export stay, and so do `deepen`'s `Math.min(options.budgetMs, HARD_CEILING_MS)` and the level
+    layer's blunder clamp.
+  - **Each level's own ceiling is held by its data:** `LEVELS[L].budgetMs ≤ ceiling(L)` for L = 1..7, with
+    `ceiling(L) − budget ≥ 2 000 ms` at every level (2 000 at 5, 6 and 7, more below).
+  - `AR-NFR004-A`'s ≤ 31 ms overshoot sits inside that margin. The `ABC-212` `A5` data row pins this.
+- **Rejected: a ceiling per level.** It would need one of two changes. Each departs from the points, and each would go
+  back to the owner:
+  - a third `Level` field, which reopens D3's pin, `ABC-174` `A4`'s keys row and `ADR-0038` decision 1;
+  - an `EngineOptions` ceiling field, which reopens `ADR-0027` decision 3.
+  It also buys nothing that the data row does not already hold.
+- **What the value move changes.** `NFR-004` clause B's "whatever a caller passes" now bounds a raw `chooseMove` call
+  at 32 s, not 5 s.
+  - Every surface derives its budget from a level: the CLI through `createLevel`, and UCI as
+    `min(G, LEVELS[skill].budgetMs)`. So no surface can start a level-L search above ceiling(L).
+  - That is why clause B is written per level.
+- `src/search.ts:110`'s `KEY_ARRAY_CAPACITY` comment says "`NFR-004`'s 5 s ceiling". It goes stale and is not edited
+  here, because `src/search.ts` does not change. `ABC-212` `A4` logs the maximum completed depth at 30 s. A value of
+  100 or more goes to Architect/Design. The comment is folded at the next ticket that edits `src/search.ts`.
+
+### A4 (D4). UCI `Skill Level` reads the same table, up to 7
+
+- **`option name Skill Level type spin default 5 min 1 max 7`.** `default` is `DEFAULT_LEVEL` and `max` is
+  `HARDEST_LEVEL`, both read from the data.
+- **D11's two paths are still chosen by data.** Rate 0 is now levels 5, 6 and 7. They call `chooseMove` with D12's
+  limits and send a score. Rate above 0 is levels 1–4, through `createLevel`, as before.
+- **A `go` with no time token searches the level's budget.**
+  - `ADR-0044` D4.1's `G = HARD_CEILING_MS` line stays as code (`src/uci-session.ts:211`). D4.2's cap,
+    `min(G, LEVELS[skill].budgetMs)`, turns it into the level's budget at every level, because every budget is at or
+    below the clamp.
+  - Probe, at a virtual step of 1 000:
+    - a bare `go` searched 4 000 at level 5, 6 000 at 6 and 31 000 at 7;
+    - `go movetime 60000` at 7 searched 31 000, and `go movetime 1000` searched 2 000;
+    - `go wtime 600000 btime 600000` at 7 searched 31 000;
+    - `go depth 3` at 7 stopped at depth 3 with a score.
+    Each is within `G ≤ time ≤ G + 2·step`.
+  - Control: with the clamp left at 5 000, level 7 searched 6 000 (`ABC-212` plant P2).
+- **The `ADR-0044` folds this brings.** BA/PM adds them as dated lines on `ADR-0044` at `ABC-212`'s merge, the
+  precedent set by this ADR's own folds:
+  - **D4.1:** "with no time token, `G` is `HARD_CEILING_MS`, which D4.2 caps to the level's budget". A bare `go`
+    searches the level's budget at every level.
+  - **D4.4:** the engine clamps every budget at `HARD_CEILING_MS`, now 32 000. Each level's `NFR-004` ceiling is held
+    by its budget (A3).
+  - **D11:** `max 7`. Rate 0 is levels 5–7, and rate above 0 is levels 1–4.
+  - **D5:** `isready` and `stop` during a search are answered at most one budget late: about 5 s at levels 1–5, 7 s at
+    6 and 32 s at 7. Accepted (below). No worker.
+  - The D6 row "`depth`/`nodes`/`mate` at a level with a blunder rate (1–4)" is unchanged.
+- **D5's first worker trigger ("the owner lifts the 5 s ceiling for UCI") fired. Ruled: the latency is accepted at
+  levels 6–7, and the worker is not owed first** (OQ-212-3, delegated by the owner).
+  - The stall is bounded at ceiling(L), and one `bestmove` per `go` still holds.
+  - Under a GUI clock, the search ends within the GUI's own `G`.
+  - A source read of cutechess (`chessengine.cpp` / `.h`) shows how one GUI behaves:
+    - it pings only between moves, never during a search;
+    - after a `stop` sent mid-search it kills the engine after `IdleTimeout` (default 15 000 ms);
+    - it sends that `stop` at a game end or when pondering, not in timed play.
+    So level 6 (≤ 7 s) fits, and level 7 (≤ 32 s) does not, if such a `stop` comes.
+  - Other GUIs are `UNKNOWN - verify`.
+  - The worker also stays out because it would add a file that `dist/uci.js` loads, which reopens D8's fence
+    (§ Addendum 2026-10-21).
+  - **The worker stays pre-designed.** It is built when pondering is wanted, or when a GUI the owner uses is shown to
+    stall or forfeit at levels 6–7.
+  - **`ABC-212`'s pre-registered split is not taken.** The UCI rows stay in `ABC-212`.
+
+### A5 (D6, `ADR-0038`). The ladder does not change
+
+- Levels 6–7 stay outside the self-play ladder. `src/ladder.test.ts`, its pair plan and its `[1, 2, 3, 4, 5]` loop are
+  not edited. No 5v6 or 6v7 verdict is owed (OQ-212-4).
+- The 2026-10 verdict's "hardest" stays level 5, as verdicted (`ABC-085` `A1`, `EPIC-004`).
+- `ADR-0038`'s decisions are untouched. Decision 1 reopens only if a level stops being a budget plus a rate, and it has
+  not.
+
+### Consequences
+
+- **`NFR-004`, accepted text (OD-212-1 (a)):** *"Engine returns a move in ≤ 3 s at default difficulty (level 5); hard
+  ceiling per level: 5 s at levels 1–5, 7 s at level 6, 32 s at level 7 (a level above 5 gets its budget + 2 s)."*
+  Security/NFR places it in `plans/nfr-catalog.md` at `ABC-212`'s gate, with the mechanism line from A3.
+- **`AR-NFR004-A`:**
+  - its "the hardest level is the default, so clause A covers it" is retired. The hardest level (7) is covered by
+    clause B per level.
+  - The catalog's "if a level's budget ever reaches `HARD_CEILING_MS` …" no longer fires. Level 6's 5 000 is 2 000
+    under its own ceiling of 7 000, and 30 000 is under the 32 000 clamp.
+- **`NFR-005`:** unchanged. Its referent is level 5 at 3 s, with level 5's 5 s ceiling.
+- **`NFR-009`:** re-read at 30 s by Security/NFR (`ABC-212`: ≤ 16 MiB, growth ≤ 1 MiB). The table is allocated once
+  (`ADR-0025`), so a flat reading is expected. That is `UNKNOWN - verify`.
+- **`NFR-008`:** per `ABC-212` `A12`, with 0 files and 0 spawns. The value move keeps the default-lane `RF-1` rows at
+  their reading count when the step scales with the clamp (`ABC-212` § Design ruling).
+- **`ADR-0044` D5:** the latency above is accepted, with no worker.
+- **`EPIC-008`:** value-identical at levels 1–5.
+  - `min(budget, 32 000)` equals `min(budget, 5 000)` for every budget up to 3 000.
+  - In the probe, every `src/uci-session.test.ts` row (128) passed at 32 000.
+  - `G9` holds as BA/PM re-read it.
+- **`ABC-204`:** its derivation line "`HARD_CEILING_MS` (5 000)" gets BA/PM's dated erratum at the merge. It now reads
+  "level 5's ceiling (5 000)", and the numbers do not change.
+
+### Rollback
+
+A data revert:
+- remove the two `LEVELS` entries;
+- `HARDEST_LEVEL` 7 → 5;
+- `HARD_CEILING_MS` 32 000 → 5 000.
+
+The pins that `ABC-212`'s list licenses, the `ADR-0044` fold lines and the `NFR-004` catalog text go back with them.
+No mechanism code is involved. Levels 1–5 never moved, so no verdict goes STALE.
