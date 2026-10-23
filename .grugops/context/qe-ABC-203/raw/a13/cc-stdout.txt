@@ -1,0 +1,13 @@
+Started game 1 of 1 (sfW vs sfB)
+Finished game 1 (sfW vs sfB): 0-1 {Black mates}
+Score of sfW vs sfB: 0 - 1 - 0  [0.000] 1
+...      sfW playing White: 0 - 1 - 0  [0.000] 1
+...      White vs Black: 0 - 1 - 0  [0.000] 1
+Elo difference: -inf +/- nan, LOS: 15.9 %, DrawRatio: 0.0 %
+SPRT: llr 0 (0.0%), lbound -inf, ubound inf
+
+Player: sfW
+   "Loss: Black mates": 1
+Player: sfB
+   "Win: Black mates": 1
+Finished match

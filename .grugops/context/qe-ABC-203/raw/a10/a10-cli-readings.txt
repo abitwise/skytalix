@@ -1,0 +1,25 @@
+# A10 through the CLI: node src/cli.ts --colour white --difficulty 1 <<< 'resign', each in its own scratch cwd
+ok exit=0 stdout_bytes=562 stderr=
+file exit=0 stdout_bytes=516 stderr=PGN not saved: EEXIST|
+ro exit=0 stdout_bytes=516 stderr=PGN not saved: EACCES|
+full exit=0 stdout_bytes=516 stderr=PGN not saved: EEXIST|
+file/ro/full stdout == ok stdout minus its final 'PGN saved:' line: yes (cmp)
+file: games stays a 9-byte regular file, mtime 978300000 unchanged; ro: games/ holds 0 entries; full: 495 pre-made names before and after, all 0 bytes
+
+# EFBIG after the open (RLIMIT_FSIZE=100, SIGXFSZ ignored)
+exit 0
+stderr b'PGN not saved: EFBIG\n'
+stdout == success minus saved line: True
+games/ entries: []
+# same, X1 plant (unlinkSync removed): a 100-byte partial file remains (see qe note)
+
+# double fault (write EFBIG + unlink EACCES, injected via resolve hook)
+exit 70
+stdout tail ["> ","Black wins by resignation.","",""]
+stderr "internal error: a bug ended this session, and it is not a chess outcome\n"
+games/ [ 'skytalix-20261024-000155.pgn' ]
+# control (write EFBIG only)
+exit 0
+stdout tail ["> ","Black wins by resignation.","",""]
+stderr "PGN not saved: EFBIG\n"
+games/ []

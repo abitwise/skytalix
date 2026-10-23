@@ -1,0 +1,19 @@
+[Event "?"]
+[Site "?"]
+[Date "2026.10.23"]
+[Round "1"]
+[White "a"]
+[Black "b"]
+[Result "1/2-1/2"]
+[ECO "C42"]
+[GameDuration "00:00:00"]
+[GameEndTime "2026-10-23T23:57:06.639 GMT+3"]
+[GameStartTime "2026-10-23T23:57:06.606 GMT+3"]
+[Opening "Petrov's defense"]
+[PlyCount "4"]
+[Termination "adjudication"]
+[TimeControl "0.02/move"]
+
+1. e4 {book} e5 {book} 2. Nf3 {book}
+Nf6 {-0.38/8 0.020s, Draw by adjudication: maximal game length} 1/2-1/2
+

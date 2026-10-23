@@ -30,12 +30,14 @@
  */
 
 import { spawnSync } from "node:child_process";
-import { lstatSync, readdirSync, readFileSync } from "node:fs";
+import { lstatSync, mkdtempSync, readdirSync, readFileSync, rmSync } from "node:fs";
 import { createRequire } from "node:module";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { getHeapStatistics } from "node:v8";
 import { isMainThread } from "node:worker_threads";
 import type * as Ts from "typescript";
-import { describe, expect, inject, it, vi } from "vitest";
+import { afterAll, describe, expect, inject, it, vi } from "vitest";
 import type { ViteUserConfig } from "vitest/config";
 import heapGuardSetup, { admit, FLAGS_MIB, guard, ROWS_MIB } from "../tools/grugops/heap-guard.js";
 import { createBookProbe } from "./book.ts";
@@ -76,6 +78,18 @@ vi.mock("./glyph-mode.ts", { spy: true });
 const SOURCE_DIRECTORY = new URL(".", import.meta.url).pathname;
 const REPOSITORY = new URL("..", import.meta.url).pathname;
 const ENTRY_POINT = new URL("cli.ts", import.meta.url).pathname;
+
+/**
+ * `ABC-203` (`ADR-0047` D7) — THE CHILDREN'S WORKING DIRECTORY. A session that reaches an outcome
+ * writes `games/<name>.pgn` relative to its working directory, so a child run from the repository
+ * would write into the tree on every lane. Every child runs from this one fresh `mkdtemp` directory
+ * instead, `/bin/sh` wrappers included: `ENTRY_POINT` and the hooks (`data:` URLs) are absolute, so
+ * nothing else in a child moves. The one exception is `npm`, which resolves the package from its
+ * working directory and ends on end of input, so it writes nothing (the `ABC-203` guard rows below
+ * prove both halves). Removed by the exact path `mkdtemp` returned.
+ */
+const NEUTRAL_CWD = mkdtempSync(join(tmpdir(), "abc203-neutral-cwd-"));
+afterAll(() => rmSync(NEUTRAL_CWD, { recursive: true, force: true }));
 
 /**
  * `ABC-096` — the reference frames' book. The children read the shipped book through `src/cli.ts`,
@@ -342,6 +356,8 @@ interface Child {
    * the exact blindness this field exists to end.
    */
   readonly productArgv: readonly string[];
+  /** `ABC-203` — the `cwd` handed to `spawnSync`, verbatim, so the guard rows can read it. */
+  readonly cwd: string;
 }
 
 /**
@@ -408,11 +424,12 @@ const childOf = (
   options: ChildOptions = {},
 ): Child => {
   spawned++;
+  const cwd = command === "npm" ? REPOSITORY : NEUTRAL_CWD;
   const child = spawnSync(
     command,
     options.hook === undefined ? [...args] : ["--import", options.hook, ...args],
     {
-      cwd: REPOSITORY,
+      cwd,
       encoding: "utf8",
       input: options.input ?? "",
       stdio: ["pipe", "pipe", "pipe"],
@@ -441,6 +458,7 @@ const childOf = (
     stderr: child.stderr,
     union: `${child.stdout}${child.stderr}`,
     productArgv,
+    cwd,
   };
 };
 
@@ -589,6 +607,27 @@ const productStatusOf = (child: Child): number => {
  */
 const productExitOf = (child: Child): number | null =>
   /^NODE_EXIT=/m.test(child.stdout) ? productStatusOf(child) : child.status;
+
+/**
+ * `ABC-203` `A11` — the line a session that reached an outcome adds after the result screen. The
+ * suffix is optional because the children share one directory and can share one second.
+ */
+const SAVED_LINE = /^PGN saved: games\/skytalix-\d{8}-\d{6}(-\d{1,2})?\.pgn$/;
+
+/**
+ * The child's stdout WITHOUT its final `PGN saved:` line — what base wrote for the same game.
+ * Throws when the last line is not that line: a row reading the screen must not pass on a stream
+ * that lost the line, or that wrote something after it.
+ */
+const beforeSavedLine = (child: Child): string => {
+  const lines = child.stdout.split("\n");
+  const last = lines[lines.length - 2];
+  if (lines[lines.length - 1] !== "" || last === undefined || !SAVED_LINE.test(last))
+    throw new Error(
+      `the stream does not end with one PGN saved line: ${JSON.stringify(lines.slice(-3))}`,
+    );
+  return child.stdout.slice(0, child.stdout.length - last.length - 1);
+};
 
 // ---------------------------------------------------------------------------------------------
 // THE SUBSTITUTION RIG (`ABC-043` `A2`/`A5`, ruled and measured by BA/PM at
@@ -1704,6 +1743,7 @@ describe("ABC-042 — the shape of what was delivered", () => {
       "process.stderr",
       "process.stderr",
       "process.stderr",
+      "process.stderr",
       "process.stdin",
       "process.stdin",
       "process.stdout",
@@ -1731,7 +1771,11 @@ describe("ABC-042 — the shape of what was delivered", () => {
     // `process.stderr`, in the probe's `warn` sink bound at the root (`ADR-0037` § Addendum R1/R2).
     // It is acquired here, in the entry point, which is what `A9` asks; the probe and the holder
     // module that reads the book name no handle. The two existing stderr writes are unchanged.
-    expect(entry.match(/\bprocess\b/g)).toHaveLength(10);
+    //
+    // TEN UNTIL `ABC-203` (2026-10-23), and the eleventh is the PGN file's one failure line: a FOURTH
+    // `process.stderr`, `PGN not saved: <CODE>` (`ADR-0047` D5), licensed by that ticket's design
+    // ruling (`A14` clarification). The holder module that writes the file names no handle.
+    expect(entry.match(/\bprocess\b/g)).toHaveLength(11);
     // `globalThis` is asserted here as well as on `A2`'s row, for a different reason: there it is
     // about publishing a binding, here about acquiring an ambient one. `globalThis["process"].argv`
     // — `X8`'s own spelling in the `ABC-041` re-gate — is caught today ONLY by `A2`'s row, so `A9`
@@ -3208,7 +3252,8 @@ describe("ABC-044 — the result screen reaches the player", () => {
 
     // IT ENDS WITH THE SCREEN, byte for byte. `slice` rather than `endsWith` so a mismatch prints
     // the two strings instead of `false`.
-    expect(child.stdout.slice(-written.length)).toBe(written);
+    // `ABC-203` (`A11`): base's stream, then exactly one `PGN saved:` line and nothing after it.
+    expect(beforeSavedLine(child).slice(-written.length)).toBe(written);
 
     // AFTER THE FINAL FRAME'S LAST ROW, and asserted from both sides. (i) the screen begins past the
     // last row of the last frame; (ii) NOTHING frame-shaped follows it — a build that wrote the
@@ -3233,11 +3278,15 @@ describe("ABC-044 — the result screen reaches the player", () => {
     expect(child.status).toBe(0);
   });
 
-  it("A6 — the screen is ONE write, and it is the only thing the entry point writes to the sink", () => {
+  it("A6 — the screen is ONE write, and the only other thing the entry point writes to the sink is ABC-203's saved line", () => {
     // "In one write" is not observable from outside a pipe, so it is asserted where it is decided:
-    // the entry point has exactly one `sink.write` call site, guarded on a non-empty screen. A build
-    // that wrote row by row would interleave with nothing today and would be a different contract.
-    expect(entry.match(/sink\.write\(/g)).toHaveLength(1);
+    // the entry point has exactly one `sink.write` call site for the screen, guarded on a non-empty
+    // screen. A build that wrote row by row would interleave with nothing today and would be a
+    // different contract. ONE UNTIL `ABC-203` (2026-10-23): the second call site is the one
+    // `PGN saved: <path>` line after the screen (`A11`), licensed by that ticket's design ruling
+    // (`A14` clarification), and it is named here so a third cannot arrive unseen.
+    expect(entry.match(/sink\.write\(/g)).toHaveLength(2);
+    expect(entry.match(/sink\.write\(`PGN saved: /g)).toHaveLength(1);
     expect(entry).toMatch(/renderResultScreen\(outcome,\s*history\)/);
   });
 
@@ -3290,7 +3339,8 @@ describe("ABC-045 — `resign` reaches the screen as reason 8", () => {
       playedOut(PLIES),
     );
     const written = `${screen.join("\n")}\n`;
-    expect(child.stdout.slice(-written.length)).toBe(written);
+    // `ABC-203` (`A11`): base's stream, then exactly one `PGN saved:` line and nothing after it.
+    expect(beforeSavedLine(child).slice(-written.length)).toBe(written);
     // And the two words the criterion names, so the row cannot pass on an empty screen.
     expect(written).toContain("resignation");
     expect(written).toContain("Black wins");
@@ -4438,7 +4488,13 @@ describe("ABC-101 — --difficulty selects a level, and the played engine is tha
     const entry = executableCodeOf("cli.ts");
     expect(entry).toMatch(/const \{[^}]*\bdifficulty\b[^}]*\} = resolution\.options;/);
     // Read once, used once: the usage line's `--difficulty` is string text and is blanked first.
-    expect(withoutStringText(entry).match(/\bdifficulty\b/g)).toHaveLength(2);
+    // TWO UNTIL `ABC-203` (2026-10-23): the same field also reaches the PGN file's `Difficulty` tag,
+    // through `formatPgn`'s game argument and nowhere else (that ticket's design ruling, `A14`
+    // clarification). It is named here so a fourth use cannot arrive unseen.
+    expect(withoutStringText(entry).match(/\bdifficulty\b/g)).toHaveLength(3);
+    expect(entry).toMatch(
+      /formatPgn\(outcome, history, \{ startedAt, difficulty, humanColour: colour \}\)/,
+    );
   });
 
   it("A8′ — the table is read only by an OWN key: everything else is refused (Security forward note)", () => {
@@ -4447,6 +4503,54 @@ describe("ABC-101 — --difficulty selects a level, and the played engine is tha
       expect(() => createLevelSeam(key as number, { seed: 1 }), `level ${String(key)}`).toThrow(
         RangeError,
       );
+    }
+  });
+});
+
+// ---------------------------------------------------------------------------------------------
+// `ABC-203` (`ADR-0047` D7) — the tree stays clean under `npm test`, and the saved line reaches the
+// human after the screen. 0 spawns: the rows read the children above.
+// ---------------------------------------------------------------------------------------------
+
+describe("ABC-203 — PGN export through the delivered entry point", () => {
+  const ALL = Object.entries(CHILDREN) as [string, Child][];
+  const PGN_LINE = /PGN (not )?saved:/;
+
+  it("guard — no child whose working directory is the repository prints a PGN line", () => {
+    const fromRepository = ALL.filter(([, child]) => child.cwd === REPOSITORY);
+    // Non-vacuity: `npmRun` is that child, and it is the only one.
+    expect(fromRepository.map(([name]) => name)).toEqual(["npmRun"]);
+    for (const [name, child] of fromRepository) expect(child.union, name).not.toMatch(PGN_LINE);
+  });
+
+  it("guard — the neutral directory's games/ holds exactly one file per child that printed PGN saved", () => {
+    const saved = ALL.filter(([, child]) => /^PGN saved: /m.test(child.stdout));
+    const files = readdirSync(join(NEUTRAL_CWD, "games")).sort();
+    expect(files).toHaveLength(saved.length);
+    const named = saved.map(
+      ([, child]) => (/^PGN saved: games\/(.*)$/m.exec(child.stdout) as RegExpExecArray)[1],
+    );
+    expect([...named].sort()).toEqual(files);
+  });
+
+  it("A1/A2/A3 — exactly the children that reach an outcome save one file each; every other ending saves none", () => {
+    const saved = ALL.filter(([, child]) => PGN_LINE.test(child.union)).map(([name]) => name);
+    // mate (checkmate), resigns (resignation) and the two engine faults. `quits`, the end-of-input
+    // children, the refused command lines and `inputSeamThrows` (exit 70) print nothing.
+    expect(saved.sort()).toEqual(["engineForeign", "engineThrows", "mate", "resigns"]);
+    for (const name of saved) {
+      const child = CHILDREN[name as keyof typeof CHILDREN];
+      expect(child.stdout.match(/PGN saved:/g), name).toHaveLength(1);
+    }
+  });
+
+  it("A11 — after a successful write, stdout is base's stream plus one final saved line, stderr is empty, exit 0", () => {
+    for (const name of ["mate", "resigns", "engineThrows", "engineForeign"] as const) {
+      const child = CHILDREN[name];
+      expect(child.status, name).toBe(0);
+      expect(child.stderr, name).toBe("");
+      // The screen is the line before: `beforeSavedLine` throws unless the saved line is last.
+      expect(beforeSavedLine(child).endsWith("\n"), name).toBe(true);
     }
   });
 });
