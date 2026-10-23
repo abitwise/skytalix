@@ -1,0 +1,29 @@
+== M1
+Finished game lines: 6; pgn games: 6
+first go raw: (76, '>', 'skytalix-a', 'go wtime 61000 btime 61000 winc 1000 binc 1000')
+one Finished line raw: Finished game 1 (skytalix-a vs skytalix-b): 1-0 {White mates}
+game 1: skytalix-a(W) vs skytalix-b(B) result 1-0 {White mates} -> PASS; plies 127; wall 222.6 s; min own clock ms W=13292 B=13475; isready-during-go 0; FEN tag ok True ('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'); first position: position startpos
+game 2: skytalix-b(W) vs skytalix-a(B) result 1/2-1/2 {Draw by 3-fold repetition} -> PASS; plies 68; wall 151.6 s; min own clock ms W=19737 B=19740; isready-during-go 0; FEN tag ok True ('r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1'); first position: position fen r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBP
+game 3: skytalix-a(W) vs skytalix-b(B) result 1/2-1/2 {Draw by 3-fold repetition} -> PASS; plies 55; wall 131.2 s; min own clock ms W=23262 B=23962; isready-during-go 0; FEN tag ok True ('8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1'); first position: position fen 8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1
+game 4: skytalix-b(W) vs skytalix-a(B) result 1-0 {White mates} -> PASS; plies 51; wall 124.4 s; min own clock ms W=24689 B=25459; isready-during-go 0; FEN tag ok True ('r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1'); first position: position fen r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R
+game 5: skytalix-a(W) vs skytalix-b(B) result 1/2-1/2 {Draw by 3-fold repetition} -> PASS; plies 91; wall 182.9 s; min own clock ms W=15241 B=15512; isready-during-go 0; FEN tag ok True ('rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8'); first position: position fen rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R 
+game 6: skytalix-b(W) vs skytalix-a(B) result 1-0 {White mates} -> PASS; plies 101; wall 195.2 s; min own clock ms W=14042 B=14264; isready-during-go 0; FEN tag ok True ('r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10'); first position: position fen r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/
+go lines not carrying wtime/btime/winc 1000/binc 1000: 0 []
+setoption lines sent: 0; naming OwnBook/Skill Level: 0
+non-PASS games: 0
+== M8(a)
+Finished game lines: 2; pgn games: 2
+first go raw: (84, '>', 'skytalix-a', 'go depth 4')
+one Finished line raw: Finished game 1 (skytalix-a vs skytalix-b): 1-0 {White mates}
+game1 White=skytalix-a game2 Black=skytalix-a; FEN tags: [None, None]; SetUp: [None, None]
+"ignores go depth" lines: 0
+game 1: skytalix-a(W) vs skytalix-b(B) result 1-0 {White mates} -> PASS; plies 103; wall 3.5 s; book 8 searched 95 searched-without-depth 0 depth>4 0
+game 2: skytalix-b(W) vs skytalix-a(B) result 0-1 {Black mates} -> PASS; plies 48; wall 2.5 s; book 12 searched 36 searched-without-depth 0 depth>4 0
+go lines not exactly "go depth 4": 0 []
+setoption lines sent: 0; naming OwnBook/Skill Level: 0
+final-depth histogram: {4: 131}
+== stderr
+  m1-a.stderr: 0 bytes
+  m1-b.stderr: 0 bytes
+  m8a-a.stderr: 0 bytes
+  m8a-b.stderr: 0 bytes

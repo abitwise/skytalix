@@ -1,0 +1,30 @@
+2026-10-23T13:34:07Z before-M1 load1=4.73 thermal=0 power=AC_Power foreign_vitest_procs=2
+2026-10-23T13:34:08Z M1 start
+2026-10-23T13:35:08Z M1 periodic load1=5.03 thermal=0 power=AC_Power foreign_vitest_procs=2
+2026-10-23T13:36:08Z M1 periodic load1=5.03 thermal=0 power=AC_Power foreign_vitest_procs=2
+2026-10-23T13:37:08Z M1 periodic load1=7.85 thermal=1 power=AC_Power foreign_vitest_procs=2
+2026-10-23T13:37:53Z M1 after-game-1 load1=6.51 thermal=1 power=AC_Power foreign_vitest_procs=2
+2026-10-23T13:38:53Z M1 periodic load1=4.85 thermal=1 power=AC_Power foreign_vitest_procs=2
+2026-10-23T13:39:54Z M1 periodic load1=5.51 thermal=1 power=AC_Power foreign_vitest_procs=2
+2026-10-23T13:40:24Z M1 after-game-2 load1=5.33 thermal=1 power=AC_Power foreign_vitest_procs=2
+2026-10-23T13:41:24Z M1 periodic load1=5.05 thermal=2 power=AC_Power foreign_vitest_procs=2
+2026-10-23T13:42:24Z M1 periodic load1=3.52 thermal=1 power=AC_Power foreign_vitest_procs=0
+2026-10-23T13:42:34Z M1 after-game-3 load1=3.69 thermal=1 power=AC_Power foreign_vitest_procs=2
+2026-10-23T13:43:34Z M1 periodic load1=3.80 thermal=1 power=AC_Power foreign_vitest_procs=0
+2026-10-23T13:44:35Z M1 periodic load1=3.84 thermal=1 power=AC_Power foreign_vitest_procs=2
+2026-10-23T13:44:40Z M1 after-game-4 load1=3.69 thermal=1 power=AC_Power foreign_vitest_procs=0
+2026-10-23T13:45:40Z M1 periodic load1=3.36 thermal=1 power=AC_Power foreign_vitest_procs=0
+2026-10-23T13:46:40Z M1 periodic load1=3.20 thermal=0 power=AC_Power foreign_vitest_procs=0
+2026-10-23T13:47:40Z M1 periodic load1=4.20 thermal=0 power=AC_Power foreign_vitest_procs=0
+2026-10-23T13:47:45Z M1 after-game-5 load1=4.11 thermal=0 power=AC_Power foreign_vitest_procs=0
+2026-10-23T13:48:45Z M1 periodic load1=3.51 thermal=0 power=AC_Power foreign_vitest_procs=0
+2026-10-23T13:49:46Z M1 periodic load1=3.00 thermal=0 power=AC_Power foreign_vitest_procs=0
+2026-10-23T13:50:46Z M1 periodic load1=3.00 thermal=0 power=AC_Power foreign_vitest_procs=0
+2026-10-23T13:50:56Z M1 after-game-6 load1=2.84 thermal=0 power=AC_Power foreign_vitest_procs=0
+2026-10-23T13:50:56Z M1 end rc=0 wall_s=1008
+2026-10-23T13:50:56Z after-M1 load1=2.84 thermal=0 power=AC_Power foreign_vitest_procs=0
+2026-10-23T13:50:56Z M8a start
+2026-10-23T13:51:01Z M8a after-game-1 load1=2.85 thermal=0 power=AC_Power foreign_vitest_procs=0
+2026-10-23T13:51:06Z M8a after-game-2 load1=4.31 thermal=0 power=AC_Power foreign_vitest_procs=0
+2026-10-23T13:51:06Z M8a end rc=0 wall_s=10
+2026-10-23T13:51:06Z after-M8a load1=4.31 thermal=0 power=AC_Power foreign_vitest_procs=0
