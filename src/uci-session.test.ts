@@ -433,6 +433,17 @@ describe("ABC-167 A7 — the D12 limits", () => {
     });
   }
 
+  // ABC-197 R2 (QE-177-b): step 100 pins the dropped-token G to [3 000, 3 200], not U7's 1 000 band.
+  it("ABC-197 R2: go depth 0 on step 100 searches G = 3 000, time in [3 000, 3 200]", () => {
+    const { out } = talk(["position startpos", "go depth 0"], 100);
+    expect(out).toHaveLength(3);
+    expect(out[0]).toMatch(/^info string /);
+    const info = parseInfo(out[1]);
+    expect(info.time).toBeGreaterThanOrEqual(3_000);
+    expect(info.time).toBeLessThanOrEqual(3_200);
+    expect(out[2]).toBe(`bestmove ${info.move}`);
+  });
+
   it("go movetime 1000 searchmoves e2e4 -> one info string, all moves searched", () => {
     const { out } = talk(["position startpos", "go movetime 1000 searchmoves e2e4"], 50);
     expect(out).toHaveLength(3);

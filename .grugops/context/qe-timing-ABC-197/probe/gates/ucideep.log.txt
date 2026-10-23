@@ -1,0 +1,9 @@
+
+ RUN  v4.1.12 /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-qe-timing-ABC-197
+
+
+ Test Files  1 passed (1)
+      Tests  5 passed (5)
+   Start at  13:14:33
+   Duration  1.19s (transform 0ms, setup 0ms, import 35ms, tests 1.11s, environment 0ms)
+

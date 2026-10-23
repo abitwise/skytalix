@@ -1,0 +1,50 @@
+qe-timing-ABC-197 timing pre-registration (A6, A7). Written 2026-10-23T10:16:43Z, AFTER the arm builds and the correctness check, BEFORE any
+start-gate poll, scored window or reading. Host: MacBook-Air.local (8 cores, 16 GiB). node v26.11.1, npm 11.20.0.
+Width 1: the brief says the owner paused his other sessions; no other hop runs.
+
+Trees. Worktree ../wt-qe-timing-ABC-197 on grugops/qe-timing-ABC-197, cut from grugops/qe-ABC-197 1f2aa4b0 (no merge: the brief's
+check holds; git diff --stat 1f2aa4b0 main -- src package.json package-lock.json shows only src/uci-session.test.ts 11 deletions,
+R2's reverse). Outside plans/.grugops/memory-bank, 051d557a..1f2aa4b0 differs only in src/uci-session.test.ts (+11), and 051d557a
+equals main 79751ae0 there. Own npm ci --ignore-scripts: vitest 4.1.12. Correctness at H (before any timing): lint 0 (122 files),
+typecheck 0, build 0, npm test 0 with last-run.json success true, 61 files / 2019 passed / 0 failed / 0 pending / 0 todo;
+UCI_DEEP real-engine 5/5.
+
+Arms (git archive; own npm ci --ignore-scripts --no-audit --no-fund; no symlink; vitest 4.1.12 in every arm):
+  n8/B = 051d557a; n8/T = cp -R n8/B (command diff -r: clean, 0 bytes); n8/H = 1f2aa4b0.          (ABC-177 A8's arm shape)
+  full/B, full/T = 051d557a; full/H, full/H2 = 1f2aa4b0; each its own npm ci.                     (ABC-177 A9's arm shape)
+  src/uci-session.test.ts blob: B/T 362b9acc (127 rows at qe-ABC-197), H/H2 ddef74d9 (128 rows).
+Instruments (byte copies; cmp-equal to qe-timing-ABC-178/probe/inst and to its SHA256SUMS; lane174 cmp-equal to qe-ABC-177/probe):
+  lane174 e2074cdbeedd, sampler174 6295540c2e58, window af83ea0c1d1e, readout174 f528540fa110, readout174a 10a6e19be741,
+  readout-nfr008-174 c95343f82f7c, -174a b0236f4623db, -174b 464d97c6fa2e, powercheck a64369300b3e, perrun 9e3bbe8c1888.
+Derivatives: run197t.sh 26923649c4b1, gate197t.sh 440abf312082, hostpoll197t.sh 604f900d1186, go197t.sh 952e54459dbd.
+  run197t.sh of run178t.sh: U1 path, U2 n8 readouts take F = 0.070 in place of 16pct (Architect 578a9290). gate197t.sh,
+  hostpoll197t.sh, go197t.sh: path/launch target only. Their diffs against orig/ are only the changes their headers list.
+
+Preconditions (brief): AC Power; load1 <= 8; no foreign vitest; thermal kept and flagged. Checked:
+  - start gate, every 5 s: OK = zero [v]itest processes on the host, 'AC Power', load1 <= 8; a 60 s OK span opens it. Thermal
+    gates only n8's start (thermal 0). Every poll is logged (gate.tsv). Host poller every 30 s beside it (hostpoll.tsv).
+  - pre-window / post-window / post-lane: power, load1, thermal, vitest_procs, user_procs (run197t st()).
+  - window: window.mjs 180 s, 1 s polls; plus 5 s power/load1 polls. Admitted only with AC on every poll, load1 <= 8 on every
+    poll and foreignPolls == 0. Not admitted -> not scored; the gate waits again.
+  - per run: lane174 logs power, power_after, load1 before/after, foreign vitest before/after, thermal before/after, speed limit.
+    powercheck: a not-AC run means the stage does not read (owner bfdc97e5).
+Deadline: no stage starts after 2026-10-23T12:30:00Z (epoch 1792758600). A stage not read by then -> UNRESOLVED with the readings.
+Re-run: at most ONE per stage, and only when the stage did not read (n8: 174a VOID or INADMISSIBLE, or a not-AC run; full: 174b
+VOID, NOT APPLICABLE or INADMISSIBLE, or a not-AC run). A re-run stands alone; there is no choosing between two readings.
+
+A6 (N8-LANE, ONE-FILE src/uci-session.test.ts; ABC-177 A8): lane174 CONDS=B,T,H BASE=B TWIN=T ROUNDS=9 GAP=0, k=2, round 0
+discarded, rotated; CMD env NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/uci-session.test.ts + lane174's reporters;
+CPU = user+sys from /usr/bin/time -p. Grading view: readout174a.py <dir> n8-lane 0.070 changed (F = 0.070 s, Architect 578a9290;
+R4: H's own round-0 count, expected 128 vs B/T 127). Strict readout174 (same args) beside. MET = "STATE at 650 ms CPU: MET".
+H-B CPU and wall medians with intervals x(2)..x(7) from the 174a readout (rounds 1-8), lane174 summary beside. The twin's R
+(T-B, CPU and wall, with A1 admissibility) is reported as the set's third reading; F's re-rule is the Architect's, not graded here.
+Expected H-B about +150 ms CPU in-thread (page); reported against the reading, not a criterion.
+A7 (NFR-008 R-1, full lane, npm test as spelled; ABC-177 A9): lane174 CONDS=B,T,H,H2 BASE=B TWIN=T ROUNDS=9 GAP=0, k=2. Grading
+view: readout-nfr008-174b.py on the H/H2 extract (thermal kept and flagged; foreign logged). Strict 174 and 174a beside. H's R-1
+median wall and state from 174b; MET = "A9 STATE at 10 s wall: MET". B's R-1 median wall: (a) lane174 summary B median wall,
+rounds 1-8; (b) readout-nfr008-174b.py on the B/T extract relabelled B->H, T->H2 (nfr008-full-BT-as-HH2.tsv). H-B wall/CPU
+medians with intervals and both twins' R from the lane174 summary.
+Routes: H <= 10 s -> A7 MET (NFR-008 state is Security/NFR's). H > 10 s -> owner (ADR-0035 D6; page fallback: drop R2, accept
+QE-177-b); this hop reports it plainly and stops there.
+Self-hygiene: while a stage runs, no command of this hop names vitest, a wt- worktree path or a context probe path; this agent
+starts no other work while the gate runs. Status reads during the run touch only this scratch dir.
