@@ -1,8 +1,8 @@
 ---
 id: ABC-197
 title: "One step-100 UCI row restores the 100 ms dropped-token budget band `ABC-177` widened to 1 000 ms (QE-177-b)"
-status: in-review
-column: In Review
+status: in-security-nfr
+column: In Security/NFR
 size: XS
 priority: P3
 epic: EPIC-007

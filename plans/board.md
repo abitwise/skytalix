@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-23 by Orchestrator (orch-2026-10-23l) — `qe-timing-ABC-197`: A6 MET, A7 MET (H 8.935 s), PASS_WITH_GAPS (`…9dc058a9`). The quiet window is released. `ABC-197` In Review → In Security/NFR (`security-nfr-ABC-197`, records only). In Review 0/3, In Security/NFR 1/2._
 _Updated 2026-10-23 (orch-2026-10-23k): qe-timing-ABC-197 (A6/A7) dispatched ALONE in the owner's quiet window; ABC-197 stays In Review 1/3._
 _Updated: 2026-10-23 08:40Z by Orchestrator — `qe-ABC-197` PASS_WITH_GAPS (non-timing). ABC-197 waits only on A6/A7 (quiet host, owner window)._
 _Updated: 2026-10-23 08:35Z by Orchestrator — `bapm-rerule-ABC-197-A5` merged. `ABC-197` In Development → In Review (`qe-ABC-197`, non-timing). In Development 0/3, In Review 1/3._
@@ -917,7 +918,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
     ## In Development (WIP 0/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
-    ## In Review (WIP 1/3)
+    ## In Review (WIP 0/3)
     - [ABC-012] Portfolio FX conversion  (PR: #41, QE: running)
 
   BOARD <-> TICKET CONTRACT: each ticket file (`plans/tickets/<prefix>-xxx.md`) carries a
@@ -1061,8 +1062,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
-- [ABC-197] One step-100 UCI row restores the 100 ms dropped-token budget band ABC-177 widened to 1 000 ms (QE-177-b; R2 cut from ABC-178)  (owner: software-engineer, size: XS, priority: P3, epic: EPIC-007, since: 2026-10-22, DoR 9/10; cut in `bapm-rerule-ABC-178`. Test-only, one additive row in `src/uci-session.test.ts`, step 100, `3 000 ≤ time ≤ 3 200`. Waits: ABC-178 merged, and an admissible full-lane NFR-008 reading of `main` ≤ 9.2 s (QE, at ABC-178's B8; owner-quiet, AC). 9.2–10 s → waits for O3/tranche 2's reading; > 10 s → owner, drop R2.) **2026-10-23: pull trigger true (B on vitest 4.1.12 = 8.985 s ≤ 9.2 s, `…25efab27`) → Ready. R-178-1: the Architect re-reads F before its timing hop is pre-registered (`…8c94d901`).** **2026-10-23: the Architect ruled F = 0.070 s for `src/uci-session.test.ts` (`…578a9290`); the cut check passes; R-178-1 met. Pulled Ready → In Development (`ticket-to-pr-ABC-197`). A6/A7 go to a later quiet-host QE timing hop.** **2026-10-23: built `grugops/ABC-197` @ `20e397c8` (+11 lines in one file; A1–A4 met on SE readings; R2 alone red on QP6-2500; gates 61/2019, UCI_DEEP 5; `…3c9e5d2b`). A5 cannot be met as written: QP6-3300 is unkillable (level budget clip) and QP6-2900 reads time 3000 (`…ba08acdc`). → BA/PM `bapm-rerule-ABC-197-A5`; stays In Development until it is ruled.** **2026-10-23: BA/PM re-ruled A5 (`…4df5ef95`): QP6-2900 becomes QP6-2800 (R2 alone red), QP6-3300 is dropped as unkillable (the level cap), A1 is unchanged, DoR 10/10, no re-build. Moved In Development → In Review (`qe-ABC-197`: A1–A5 and A8). A6/A7 go to a later quiet-host hop.** **2026-10-23: QE PASS_WITH_GAPS on A1–A5 and A8 (`grugops/qe-ABC-197` @ `1f2aa4b0`, merge `82a3f153`; `…479b5c68`): census R2 = 25 621 nodes; QP6 and QP6-2800 red on R2 alone (file and lane); clock rule confirmed (blind band = 2 × step); gates 61/2019, UCI_DEEP 5. QE-197-a to -e are INFO and accepted. A6/A7 are owed to a quiet-host timing hop, waiting for the owner's window.**
+## In Review (WIP 0/3)
 
 
 
@@ -1086,7 +1086,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Security/NFR (WIP 0/2)
+## In Security/NFR (WIP 1/2)
+- [ABC-197] One step-100 UCI row restores the 100 ms dropped-token budget band ABC-177 widened to 1 000 ms (QE-177-b; R2 cut from ABC-178)  (owner: software-engineer, size: XS, priority: P3, epic: EPIC-007, since: 2026-10-22, DoR 9/10; cut in `bapm-rerule-ABC-178`. Test-only, one additive row in `src/uci-session.test.ts`, step 100, `3 000 ≤ time ≤ 3 200`. Waits: ABC-178 merged, and an admissible full-lane NFR-008 reading of `main` ≤ 9.2 s (QE, at ABC-178's B8; owner-quiet, AC). 9.2–10 s → waits for O3/tranche 2's reading; > 10 s → owner, drop R2.) **2026-10-23: pull trigger true (B on vitest 4.1.12 = 8.985 s ≤ 9.2 s, `…25efab27`) → Ready. R-178-1: the Architect re-reads F before its timing hop is pre-registered (`…8c94d901`).** **2026-10-23: the Architect ruled F = 0.070 s for `src/uci-session.test.ts` (`…578a9290`); the cut check passes; R-178-1 met. Pulled Ready → In Development (`ticket-to-pr-ABC-197`). A6/A7 go to a later quiet-host QE timing hop.** **2026-10-23: built `grugops/ABC-197` @ `20e397c8` (+11 lines in one file; A1–A4 met on SE readings; R2 alone red on QP6-2500; gates 61/2019, UCI_DEEP 5; `…3c9e5d2b`). A5 cannot be met as written: QP6-3300 is unkillable (level budget clip) and QP6-2900 reads time 3000 (`…ba08acdc`). → BA/PM `bapm-rerule-ABC-197-A5`; stays In Development until it is ruled.** **2026-10-23: BA/PM re-ruled A5 (`…4df5ef95`): QP6-2900 becomes QP6-2800 (R2 alone red), QP6-3300 is dropped as unkillable (the level cap), A1 is unchanged, DoR 10/10, no re-build. Moved In Development → In Review (`qe-ABC-197`: A1–A5 and A8). A6/A7 go to a later quiet-host hop.** **2026-10-23: QE PASS_WITH_GAPS on A1–A5 and A8 (`grugops/qe-ABC-197` @ `1f2aa4b0`, merge `82a3f153`; `…479b5c68`): census R2 = 25 621 nodes; QP6 and QP6-2800 red on R2 alone (file and lane); clock rule confirmed (blind band = 2 × step); gates 61/2019, UCI_DEEP 5. QE-197-a to -e are INFO and accepted. A6/A7 are owed to a quiet-host timing hop, waiting for the owner's window.** **2026-10-23: quiet-host timing hop (`grugops/qe-timing-ABC-197` @ `11b745e3`; `…9dc058a9`): A6 MET (H−B CPU +0.125 s [+0.120, +0.160] ≤ 650 ms, F 0.070 s; twin R 0.040 s); A7 MET (H 8.935 s [8.68, 9.11], B 8.815 s; AC on all runs, 0 foreign, thermal 0). Overall PASS_WITH_GAPS; UAT waived. → In Security/NFR (`security-nfr-ABC-197`, the NFR-008 state ruling).**
 
 
 
