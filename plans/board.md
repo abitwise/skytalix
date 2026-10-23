@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-23 20:15Z by Orchestrator (orch-2026-10-23ae) — merged `arch-analyse-game-1` (`…f1771bb3`): report `memory-bank/analysis/2026-10-23-game-1.md`, annotated PGN `plans/uat/EPIC-006-game-1.annotated.pgn`. Engine-strength proposals are the owner's call; nothing cut. ABC-203 still held on ADR-0047 (owner). Width 0/3._
 _Updated: 2026-10-23 19:56Z by Orchestrator (orch-2026-10-23ad) — ABC-203 design done but needs NEW ADR-0047 (first file write) → owner acceptance owed (`…3898cd9a`); branch not merged. `arch-analyse-game-1` still running._
 _Updated: 2026-10-23 by Orchestrator (orch-2026-10-23ac) — `ABC-203` (PGN at game end; M, P1) cut by BA/PM (`…0c2867c1`) and pulled into In Design: `arch-design-ABC-203` (Architect). `arch-analyse-game-1` still running. In Design 1/2, width 2/3._
 _Updated: 2026-10-23 19:45Z by Orchestrator (orch-2026-10-23ab) — owner word `…715b9cbf`: **PGN export IN scope** (EPIC-006) → `bapm-cut-pgn-export` (BA/PM); game 1 analysis → `arch-analyse-game-1` (Architect, Stockfish 19 installed as a host tool). Game 1 PGN hand-made at `plans/uat/EPIC-006-game-1.pgn` (replayed legal). Width 2/3._
