@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-24 by Orchestrator (orch-2026-10-24b) — owner `…e44d2903`: EPIC-008 target +100 (Q1), readings whenever idle (Q2); new difficulty levels 6 (5 s) and 7 (≤ 30 s) → `bapm-cut-levels-6-7` queued for the next free slot (width 3/3). NFR-004 ceiling and ADR-0045 move by the owner's word; texts go back to him._
 _Updated: 2026-10-24 by Orchestrator (orch-2026-10-24a) — ABC-203 QE PASS_WITH_GAPS → In Security/NFR. Width 3/3 (security-nfr-public-repo, ticket-to-pr-ABC-204, security-nfr-ABC-203)._
 _Updated: 2026-10-23 21:00Z by Orchestrator (orch-2026-10-23aj) — ABC-204 design merged → In Development (SE). Width 3/3 (qe-ABC-203, security-nfr-public-repo, ticket-to-pr-ABC-204)._
 _Updated: 2026-10-23 20:45Z by Orchestrator (orch-2026-10-23ai) — owner made the repo public (github.com/abitwise/skytalix; `…59df15ce`). `security-nfr-public-repo` (exposure review: secrets in history, personal data, licence) dispatched. Posture ADR to be drafted as PROPOSED after it. Width 3/3._
