@@ -1,8 +1,8 @@
 ---
 id: ABC-204
 title: "Rating harness: `cutechess-cli` plays the built `skytalix` against Stockfish `UCI_LimitStrength` (R) and against its own base (D), outside `npm test`"
-status: ready
-column: Ready
+status: in-design
+column: In Design
 size: M
 priority: P2
 epic: EPIC-008
