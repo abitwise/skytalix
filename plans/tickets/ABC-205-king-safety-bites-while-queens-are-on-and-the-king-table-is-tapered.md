@@ -1,8 +1,8 @@
 ---
 id: ABC-205
 title: "King safety bites while the enemy queen is on, and the king table is tapered, so a centre king in an opening position costs what it should"
-status: ready
-column: Ready
+status: in-design
+column: In Design
 size: M
 priority: P2
 epic: EPIC-008
