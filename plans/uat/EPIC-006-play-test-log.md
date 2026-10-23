@@ -4,7 +4,7 @@ Protocol: `plans/uat/EPIC-006-play-test-guide.md`. Each row is the owner's word,
 
 | # | Date | Colour | Level | Ended (finished/abandoned) | Move # if abandoned | Why (time / bored / losing / bug / other) | Would I have saved and come back? (y/n) | Want this game as a PGN file? (y/n) | Bugs or annoyances |
 |---|------|--------|-------|----------------------------|---------------------|-------------------------------------------|------------------------------------------|-------------------------------------|--------------------|
-| 1 | 2026-10-23 | black (`--colour black`; the owner relayed Apple Chess's moves as Black, skytalix played White) | 5 | finished — "Black wins by checkmate", move 35 (skytalix lost) | — | — | n/a (finished) | **y** — owner, 2026-10-23: "i would like to have PGN file, then i can analyse it" | none reported |
+| 1 | 2026-10-23 | black (`--colour black`; the owner relayed Apple Chess's moves as Black, skytalix played White; Apple Chess set to "Computer thinks 2 seconds per move", felt like 5–6 s) | 5 | finished — "Black wins by checkmate", move 35 (skytalix lost) | — | — | n/a (finished) | **y** — owner, 2026-10-23: "i would like to have PGN file, then i can analyse it" | none reported |
 
 ## Game 1 — move list as printed by the game (owner's paste, 2026-10-23)
 
