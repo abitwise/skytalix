@@ -75,6 +75,28 @@ Nothing was measured. Notes are in `.grugops/context/design-ABC-105-lane/notes/`
 
 Nothing was measured. Notes are in `.grugops/context/design-ABC-154-close/notes/`.
 
+**Per-set floors, 2026-10-23** (`arch-floor-reread`, `R-178-1`). This applies decision 3's amendment and the series rule
+of `ADR-0042` ruling 6 and `ADR-0040` decision 4: a series breaks when a change moves per-file cost or file queueing.
+- **`src/uci-session.test.ts` (ONE-FILE, heap 400): `F` = 0.070 s CPU / 0.090 s wall.** It has two admissible twins, so
+  the largest R governs: `ABC-177` A8 (vitest 4.1.11) read 0.070 / 0.090 s, and `ABC-178` B7 (4.1.12) read
+  0.030 / 0.050 s. This replaces the provisional 16 % (0.654 s at B7). From the third admissible reading on, the median
+  of the three most recent governs.
+  - **The 4.1.11 → 4.1.12 patch bump (`ABC-198`) does not start a new series.** `vitest.config.ts` is identical between
+    the two bases, so the runner mode, pool, `maxWorkers` and isolation are unchanged. QE's paired bisect
+    (`…1478c7fc`) reads no shift without coverage, and `N8-LANE` arms run without coverage. The new-series answer
+    (0.030 s) is the smaller `F`, so this ruling is the stricter of the two at a cut.
+  - **The content change between the readings is no break either.** `ABC-177` cut the file's base CPU from 7.10 s to
+    4.09 s. `F` is keyed by set, and decision 3's own table reads one set across bases.
+- **`ABC-200`'s 5-file set** (`src/cli.real-engine.test.ts src/cli.test.ts src/engine.test.ts src/line-input.test.ts
+  src/startup-questions.test.ts`, heap 128, 4.1.12): **`F` = 0.050 s CPU / 0.050 s wall.** It is the set's first
+  admissible reading (`…f636dfd0`), which replaces the provisional 1.316 s outright. No window is owed for it.
+- **Cut checks.** 650 ms CPU is at or above both floors. `ABC-197` `A6` is not refused.
+- Every figure was recomputed from the committed per-run TSVs (sha256 `43117fbaa2fb`, `6b5e0392983d`, `f5764cd4f2d6`) in
+  integer centiseconds, and each agrees with the published figure.
+
+No decision is changed and nothing was measured. Notes are in `.grugops/context/arch-floor-reread/notes/`
+(`…8ccdcfaa`, `…578a9290`).
+
 Previously `proposed` — 2026-10-10, by Architect/Design (task `wave-2026-09-25`, subtask `ruling-timing-protocol`),
 the owner of `NFR-008`'s protocol, its floor account and its spawn account. It rules `QE-119-a` (MEDIUM,
 QE at `ABC-119`) and the `NFR-008` clause state that has been unruled since `ADR-0019` trigger (a) fired.

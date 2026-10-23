@@ -1,4 +1,6 @@
 # Board
+_Updated: 2026-10-23 08:20Z by Orchestrator — `arch-floor-reread` merged (F ruled, no new series; R-178-1 met). `ABC-197` Ready → In Development (SE). Ready 0/8, In Development 1/3, In Review 1/3._
+_Updated: 2026-10-23 08:03Z by Architect/Design — `arch-floor-reread` (records only, no runs): per-set F re-read (R-178-1). `src/uci-session.test.ts` F = 0.070 s CPU / 0.090 s wall; vitest 4.1.11 → 4.1.12 is not a new series. `ABC-200`'s 5-file set F = 0.050 s / 0.050 s. `ABC-197` A6 650 ms passes the cut check, no bound moves (`…578a9290`). No column moved._
 _Updated: 2026-10-23 08:10Z by Orchestrator — `ABC-200` → Done (merged `c0585331`; N8-LANE MET; gates green 61/2018). `ABC-201` read MET by Security/NFR and moved Ready → In Review (`qe-ABC-201`). `arch-floor-reread` dispatched (R-178-1 F, for ABC-197). In Review 1/3, Ready 1/8._
 _Updated: 2026-10-23 07:40Z by Orchestrator — `ABC-178` → Done (merged `564b408d`) and `ABC-199` → Done (merged `c91445e3`), gates green on main 60/1996. `ABC-197` Backlog → Ready (trigger true; F re-read first, R-178-1). `security-nfr-timing-2026-10-23` dispatched ALONE: ABC-200 N8-LANE, then the ABC-201 fresh-clone reading. In Review 1/3, In Security/NFR 0/2, Ready 2/8 (`…8c94d901`)._
 _Updated: 2026-10-23 07:25Z by Orchestrator — ABC-178 B7 and B8 MET on a quiet host (`…39e59d96`). `ABC-178` In Review → In Security/NFR (`security-nfr-ABC-178`, records only). B's full lane on vitest 4.1.12 reads 8.985 s, which is ≤ 9.2 s, so ABC-197's pull trigger is true. In Review 2/3, In Security/NFR 1/2._
@@ -896,7 +898,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   one hop at pull, when it checks `Ready for Dev`'s exit at that moment; the row records the pull.
 
   HEADING FORMAT (spec §6.1): each column is an H2 heading carrying its live/limit WIP count,
-  e.g. `## In Development (WIP 0/3)` — the left number is how many tickets are in the column
+  e.g. `## In Development (WIP 1/3)` — the left number is how many tickets are in the column
   now, the right number is the limit from config. Unlimited columns read `(WIP unlimited)`;
   Blocked is visible and time-tracked (no WIP limit) and reads `(visible, time-tracked)`.
   INVARIANT: the column H2 headings and the rows of the `## Columns` table are the same 13 names in the
@@ -906,7 +908,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 0/3)
+    ## In Development (WIP 1/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
     ## In Review (WIP 0/3)
@@ -1009,8 +1011,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [EPIC-006] Game session and packaging  (owner: BA/PM, **size: XL — corrected from `L`; 9 tickets / 20 points across both halves, ~1.5x the 13 `L` was assigned, and it hit that ceiling BEFORE distribution was priced**, priority: P1, since: 2026-07-22, **BOTH HALVES NOW CUT: the runnable half `ABC-041`…`ABC-046` (2026-08-13) and the second half `ABC-100`…`ABC-102` (2026-08-16) — only THREE tickets, because the scope of packaging is a FUNCTION of a distribution channel nobody has chosen.** `ABC-100` cuts the DECISION, never the ANSWER: a superseding ADR per `ADR-0007` `D5`, on the owner's word, verbatim and dated. **Acceptance criterion 1 (`npx <package>`) remains unmeetable by any ticket. Recommendation NOT taken, standing for the owner: this should probably be two epics** — the halves share no dependency in either direction and their blockers differ in kind)
 - [EPIC-007] The engine speaks UCI, so a chess UI can play against it  (owner: BA/PM, size: M, priority: P1, since: 2026-10-18, **ACCEPTED 2026-10-18 (owner, `…c3e81a57`); private/UNLICENSED; Q12–Q15 answered; ABC-167..172 cut, DoR 10/10, next free id ABC-173** (lifts the UCI half of EPIC-004's non-goal; EPIC-004 not yet edited); proposed in `bapm-engine-plan` (`4a98860c`). Tickets RESERVED, no page cut: ABC-167 (S, session) → ABC-168 (XS, entry point, In Security/NFR); ABC-169 (XS, licence, outside v1, on Q8). Waits: the owner's answers to Q1–Q11 ("accept recommendations" suffices) and ADR-0044 acceptance.)
 
-## Ready (WIP 1/8)
-- [ABC-197] One step-100 UCI row restores the 100 ms dropped-token budget band ABC-177 widened to 1 000 ms (QE-177-b; R2 cut from ABC-178)  (owner: software-engineer, size: XS, priority: P3, epic: EPIC-007, since: 2026-10-22, DoR 9/10; cut in `bapm-rerule-ABC-178`. Test-only, one additive row in `src/uci-session.test.ts`, step 100, `3 000 ≤ time ≤ 3 200`. Waits: ABC-178 merged, and an admissible full-lane NFR-008 reading of `main` ≤ 9.2 s (QE, at ABC-178's B8; owner-quiet, AC). 9.2–10 s → waits for O3/tranche 2's reading; > 10 s → owner, drop R2.) **2026-10-23: pull trigger true (B on vitest 4.1.12 = 8.985 s ≤ 9.2 s, `…25efab27`) → Ready. R-178-1: the Architect re-reads F before its timing hop is pre-registered (`…8c94d901`).**
+## Ready (WIP 0/8)
 
 
 
@@ -1026,7 +1027,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+- [ABC-197] One step-100 UCI row restores the 100 ms dropped-token budget band ABC-177 widened to 1 000 ms (QE-177-b; R2 cut from ABC-178)  (owner: software-engineer, size: XS, priority: P3, epic: EPIC-007, since: 2026-10-22, DoR 9/10; cut in `bapm-rerule-ABC-178`. Test-only, one additive row in `src/uci-session.test.ts`, step 100, `3 000 ≤ time ≤ 3 200`. Waits: ABC-178 merged, and an admissible full-lane NFR-008 reading of `main` ≤ 9.2 s (QE, at ABC-178's B8; owner-quiet, AC). 9.2–10 s → waits for O3/tranche 2's reading; > 10 s → owner, drop R2.) **2026-10-23: pull trigger true (B on vitest 4.1.12 = 8.985 s ≤ 9.2 s, `…25efab27`) → Ready. R-178-1: the Architect re-reads F before its timing hop is pre-registered (`…8c94d901`).** **2026-10-23: the Architect ruled F = 0.070 s for `src/uci-session.test.ts` (`…578a9290`); the cut check passes; R-178-1 met. Pulled Ready → In Development (`ticket-to-pr-ABC-197`). A6/A7 go to a later quiet-host QE timing hop.**
 
 
 
