@@ -328,3 +328,39 @@ changed sources. That gives 5 files: `cli.real-engine.test.ts`, `cli.test.ts`, `
   - Re-reading F is Architect/Design's job, as with `R-178-1`.
 - **The full-lane `NFR-008` reading is not owed before merge.** `N8-LANE` is MET, so the published headroom (0.990 s, `…d0c770b5`)
   is spent by an estimate, as the catalog says, until the next full-lane window.
+
+## QE
+
+**2026-10-22, QE/E2E (`qe-ABC-200`): PASS_WITH_GAPS** (decision `…b8aa74fb`). No gap blocks. Under the owner delegation (`…5aaf7cec`) this verdict signs UAT. QE releases `In Review`; the Orchestrator moves the board.
+
+- **Where it ran:** merge `d062d60e` (tip `0a07df04` plus `main` `be70482f`), base `bd745ac9`. QE's own worktree, `node_modules` and scratch. The verdict was formed before the SE's notes were opened.
+- **Notes:** `.grugops/context/qe-ABC-200/notes/`:
+  - criteria and plants `…0bce441b`
+  - gates `…7d19b107`
+  - A8 reading `…97b2d4d9`
+  - A8 raw transcripts `…9c82cf61`
+  - gaps `…843719f4`
+  - verdict `…b8aa74fb`
+- **A1–A7, A9 MET** on QE's own runs. P1–P6 each red on the row the test notes name. QE's extra plants P2 (difficulty), Q2o, Q2i, Q3 and Q4 are also red.
+- **A8 MET on a real pseudo-terminal.** It was driven by `expect` + `script -q`, and case 7 by GNU `screen` with `hardcopy`. All eight cases were read, plus `--colour black` alone and `--difficulty 2` alone.
+  - `black`, `1`: the engine moved first as White.
+  - Two empty lines: the human plays White.
+  - The pasted `e5` was played after the engine's first move.
+  - Ctrl-D at either question: exit 0, no frame, no stack trace.
+  - The first frame replaces the question lines on the rendered screen.
+  - Pipes: no question, and the output is byte-identical to base.
+- **Deviation** (an empty answer keeps `parsed.options`): the behaviour is identical and in line with the ruling ("never re-spelled"). Accepted.
+- **Gates at the merge:**
+  - lint, typecheck and build 0; `dist/` holds no new module;
+  - `npm test` 61 / 2 017 (base 60 / 1 995, run for real), success true;
+  - skips 0, `No findings.`;
+  - CLI_DEEP 11, UCI_DEEP 5, PERFT_DEEP 32, INPUT_DEEP 34.
+- **Gaps:**
+  - `QE-200-a` (LOW): the entry point's use of the answered options is held by text pins only (plant Q1b is green). The pty and a probe show it works.
+  - `QE-200-b`: A9's row is source order (plant P5b is green); a probe shows 1 book read, after the answers.
+  - `QE-200-c`: a 1 025-character line cannot be submitted at a macOS terminal (`MAX_CANON` 1 024).
+  - `QE-200-d`: EOF at a question writes no newline.
+  - `QE-200-e`: `line-reader.ts`'s import set is not pinned.
+  - `QE-200-f`: merge after ABC-178 and ABC-199, then re-gate.
+  - `QE-200-g`: QE's merge commit subject is git's default.
+- **No timing claims** and no `NFR-008` or `N8-LANE` reading.

@@ -71,10 +71,16 @@ export type Difficulty = 1 | 2 | 3 | 4 | 5;
 export const DEFAULT_DIFFICULTY: Difficulty = 5;
 
 /** `--colour`'s three value words, in the table's order. It introduces no literal of its own. */
-const COLOUR_VALUES = [WHITE, BLACK, RANDOM] as const;
+export const COLOUR_VALUES = [WHITE, BLACK, RANDOM] as const;
 
 /** What `--colour` may say. `random` is one of them on the command line and nowhere after it. */
-type ColourValue = (typeof COLOUR_VALUES)[number];
+export type ColourValue = (typeof COLOUR_VALUES)[number];
+
+/**
+ * `ABC-200` — the two value sets are exported so the startup questions accept exactly what the flags
+ * accept, by the same exact equality, with no second spelling of any word.
+ */
+export { DIFFICULTY_VALUES };
 
 /** What the human plays, after `random` has been resolved. `random` is not one of these. */
 export type Colour = typeof WHITE | typeof BLACK;
@@ -103,8 +109,17 @@ export interface UsageError {
   readonly offending: readonly string[];
 }
 
+/**
+ * `ABC-200` — `absent` says which of the two questioned flags the command line left out. It sits
+ * BESIDE `options` and never inside it: `ResolvedOptions` is what the entry point composes with,
+ * and it is compared whole.
+ */
 export type Resolution =
-  | { readonly ok: true; readonly options: ResolvedOptions }
+  | {
+      readonly ok: true;
+      readonly options: ResolvedOptions;
+      readonly absent: { readonly colour: boolean; readonly difficulty: boolean };
+    }
   | ({ readonly ok: false } & UsageError);
 
 const UNRECOGNISED = "unrecognised argument";
@@ -122,6 +137,25 @@ const reject = (problem: string, ...offending: readonly string[]): Resolution =>
 const coin = (): Colour => (Math.random() < 0.5 ? WHITE : BLACK);
 
 /**
+ * The options for one colour word, one glyph choice and one level: `random` is resolved by the coin
+ * and the orientation follows the colour. `ABC-200` — the startup questions build their result here
+ * too, so an answered `random` is the same coin and the same orientation rule as `--colour random`.
+ */
+export function optionsFor(
+  colour: ColourValue,
+  flags: GlyphFlags,
+  difficulty: Difficulty,
+): ResolvedOptions {
+  const resolved = colour === RANDOM ? coin() : colour;
+  return {
+    colour: resolved,
+    orientation: resolved === WHITE ? "white-bottom" : "black-bottom",
+    flags,
+    difficulty,
+  };
+}
+
+/**
  * Resolve one command line. Pure, total, and the EXCLUSIVE validator of the argument vector (ASVS
  * **V2.2.2 [L1]**): the entry point reads it once, hands it here, and branches on nothing after.
  */
@@ -130,6 +164,8 @@ export function resolveOptions(argv: readonly string[]): Resolution {
   let ascii = false;
   let unicode = false;
   let difficulty = DEFAULT_DIFFICULTY;
+  let colourAbsent = true;
+  let difficultyAbsent = true;
 
   for (let index = 0; index < argv.length; index++) {
     const token = argv[index] as string;
@@ -149,6 +185,7 @@ export function resolveOptions(argv: readonly string[]): Resolution {
       // the command line simply stops. Either way the message names a token the human typed.
       if (value === undefined) return reject(MISSING_VALUE, next ?? token);
       colour = value;
+      colourAbsent = false;
       index++;
       continue;
     }
@@ -158,6 +195,7 @@ export function resolveOptions(argv: readonly string[]): Resolution {
       const value = DIFFICULTY_VALUES.find((candidate) => candidate === next);
       if (value === undefined) return reject(MISSING_DIFFICULTY, next ?? token);
       difficulty = Number(value) as Difficulty;
+      difficultyAbsent = false;
       index++;
       continue;
     }
@@ -172,15 +210,9 @@ export function resolveOptions(argv: readonly string[]): Resolution {
   // place: nothing here decides a mode, and `selectGlyphMode` is not called on this path.
   if (ascii && unicode) return reject(CONFLICTING_FLAGS, ASCII, UNICODE);
 
-  const resolved = colour === RANDOM ? coin() : colour;
-
   return {
     ok: true,
-    options: {
-      colour: resolved,
-      orientation: resolved === WHITE ? "white-bottom" : "black-bottom",
-      flags: { ascii, unicode },
-      difficulty,
-    },
+    options: optionsFor(colour, { ascii, unicode }, difficulty),
+    absent: { colour: colourAbsent, difficulty: difficultyAbsent },
   };
 }

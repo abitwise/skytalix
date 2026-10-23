@@ -42,9 +42,10 @@
  * `process.stderr` or `process.stdin`, and `process.stdout` is passed onward twice — as the loop's
  * `FrameSink` and as the prompt's `PromptOutput`, the two shapes merged code accepts (`A9`). It is
  * read ONCE, into `sink`, so this module still names the handle a single time. `process.stdin` is
- * `ABC-043`'s addition and it is passed only as `createLineInputSeam`'s `LineSource`: the reader
- * imports no Node builtin and reaches for nothing, by its own header, and this is where the stream
- * it reads is supplied. Nothing below this file writes on either output channel.
+ * `ABC-043`'s addition and it is passed only as a `LineSource` — to `createLineInputSeam` and, since
+ * `ABC-200`, to the startup questions, which share one reader over it: neither imports a Node
+ * builtin or reaches for anything, by their own headers, and this is where the stream they read is
+ * supplied. Nothing below this file writes on either output channel.
  *
  * THE REJECTION PATH IS STDERR, WHICH IS THIS ENGINEER'S CHOICE UNDER `A6`'s EXPLICIT LICENCE, and
  * the consequence Architect/Design attached to that choice is honoured above: the handle is acquired
@@ -63,6 +64,16 @@
  * session height from the first frame's own `.length` and this module supplies neither a height nor
  * a count.
  *
+ * `ABC-200` — ON A TERMINAL, AN ABSENT FLAG IS ASKED FOR, before anything else is built: the glyph
+ * mode, the history and the book probe all come after the questions return (`A9`). The questions
+ * decide for themselves whether both handles are terminals, so this module reads no `isTTY`, and
+ * they read `process.stdin` through the SAME reader the input seam reads through afterwards, so the
+ * seam still starts at the next unread line (`A7`). They are awaited before the loop starts, which
+ * keeps `G6`'s single-caller precondition. End of input at a question returns with no assignment —
+ * exit `0`, no frame, no result screen. Both handles are now read before the questions, so the
+ * `EPIPE` arm is installed before either is handed on; the questions sit inside the one `try`, so a
+ * defect thrown by them or by anything built before the loop exits `70` too.
+ *
  * THERE IS NO EXPORTED START POSITION UNDER `src/` — measured; every test file defines its own
  * `START_FEN` — so the literal below is held here rather than promoted into a merged module, which
  * would be a change this ticket is not licensed to make.
@@ -78,6 +89,7 @@ import { createLevelSeam } from "./level-seam.ts";
 import { createLineInputSeam } from "./line-input.ts";
 import { makeRenderSeam } from "./render-seam.ts";
 import { renderResultScreen } from "./result-screen.ts";
+import { askAbsentOptions } from "./startup-questions.ts";
 import { runTurnLoop } from "./turn-loop.ts";
 
 /** The standard start position, in the spelling every test file in this repository uses. */
@@ -135,11 +147,11 @@ function printableOf(text: string): string {
 }
 
 async function main(): Promise<void> {
-  const resolution = resolveOptions(process.argv.slice(2));
+  const parsed = resolveOptions(process.argv.slice(2));
 
-  if (!resolution.ok) {
+  if (!parsed.ok) {
     process.stderr.write(
-      `${resolution.problem}: ${resolution.offending.map(printableOf).join(" ")}\n${USAGE}\n`,
+      `${parsed.problem}: ${parsed.offending.map(printableOf).join(" ")}\n${USAGE}\n`,
     );
     // NOT `process.exit()`. On macOS a pipe is an asynchronous stream, and exiting on the spot
     // truncates what was just written — the message the human is meant to read.
@@ -147,15 +159,16 @@ async function main(): Promise<void> {
     return;
   }
 
-  const { colour, orientation, flags, difficulty } = resolution.options;
-  const mode = beginGlyphModeSession(flags)();
   // Read ONCE and passed twice: the loop's `FrameSink` and the prompt's `PromptOutput` are two
   // shapes over one handle, and `A9`'s "acquired once, in the entry point" is about the acquisition.
   const sink = process.stdout;
+  // `ABC-200` — the questions' source. The same object the input seam is handed below, so the arm's
+  // destroy and the seam's end of input are one stream's (`ADR-0016` clause 6).
+  const stdin = process.stdin;
   // `ABC-115` / `ADR-0016` clauses 3-4. WHOEVER ACQUIRES A STREAM OWNS ITS ERROR POLICY, so the arm
   // is installed HERE — before the handle is handed on — and never at any of the five write sites.
   // `EPIPE` means the reader went away: not this product's failure, so nothing is written and the
-  // session ENDS (`process.stdin.destroy()` drives the delivered end-of-input transition, whose
+  // session ENDS (`stdin.destroy()` drives the delivered end-of-input transition, whose
   // `LoopOutcome.exitCode` is 0 and flows through the ONE existing assignment below — no second
   // exit-status site). A BARE SWALLOW IS THE MEASURED WRONG FIX: it passes the silence and the
   // status and leaves the game running into a dead pipe, which is what `A9` exists to red.
@@ -163,25 +176,31 @@ async function main(): Promise<void> {
   // as it does today rather than being absorbed by a listener installed for something else.
   sink.on("error", (error) => {
     if ((error as NodeJS.ErrnoException).code !== "EPIPE") throw error;
-    process.stdin.destroy();
-  });
-  // HELD RATHER THAN PASSED ANONYMOUSLY (`ABC-044`). The result screen is a pure function of the
-  // loop's `LoopOutcome` AND of the game that was played, so the entry point is the one place that
-  // holds both once the loop has returned. It is still the merged factory's own value and it is
-  // still constructed exactly once — `ABC-043` `A1`'s row is pinned on this line now.
-  const history = newGame(START_FEN);
-  // `ABC-095` — the opening book in front of the engine (`ADR-0037` § Addendum R1, D3). The probe's
-  // three effects are bound here and nowhere else: the bytes from the holder module, the one warning
-  // to stderr (stdout is the board), and the session's randomness. `ABC-096` (`ADR-0043` D1): the
-  // same probe is handed to the render seam, for the opening name, so the file is read just before
-  // the first frame, by that frame's lookup, and never again.
-  const book = createBookProbe({
-    read: readBookFile,
-    warn: (line) => process.stderr.write(`${line}\n`),
-    random: Math.random,
+    stdin.destroy();
   });
 
   try {
+    // `ABC-200` — BEFORE the glyph mode, the history and the book (`A9`). Not a TTY: 0 reads.
+    const resolution = await askAbsentOptions(parsed, { source: stdin, output: sink });
+    if (resolution === null) return;
+    const { colour, orientation, flags, difficulty } = resolution.options;
+    const mode = beginGlyphModeSession(flags)();
+    // HELD RATHER THAN PASSED ANONYMOUSLY (`ABC-044`). The result screen is a pure function of the
+    // loop's `LoopOutcome` AND of the game that was played, so the entry point is the one place that
+    // holds both once the loop has returned. It is still the merged factory's own value and it is
+    // still constructed exactly once — `ABC-043` `A1`'s row is pinned on this line now.
+    const history = newGame(START_FEN);
+    // `ABC-095` — the opening book in front of the engine (`ADR-0037` § Addendum R1, D3). The probe's
+    // three effects are bound here and nowhere else: the bytes from the holder module, the one warning
+    // to stderr (stdout is the board), and the session's randomness. `ABC-096` (`ADR-0043` D1): the
+    // same probe is handed to the render seam, for the opening name, so the file is read just before
+    // the first frame, by that frame's lookup, and never again.
+    const book = createBookProbe({
+      read: readBookFile,
+      warn: (line) => process.stderr.write(`${line}\n`),
+      random: Math.random,
+    });
+
     const outcome = await runTurnLoop({
       history,
       humanColour: colour,
