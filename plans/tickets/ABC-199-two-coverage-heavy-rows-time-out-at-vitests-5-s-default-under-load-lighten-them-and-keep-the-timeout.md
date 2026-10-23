@@ -1,8 +1,8 @@
 ---
 id: ABC-199
 title: "Two coverage-heavy rows time out at vitest's 5 s default under load: lighten them and keep the timeout (QE-198-a)"
-status: in-review
-column: In Review
+status: done
+column: Done
 size: XS
 priority: P3
 epic: EPIC-007
