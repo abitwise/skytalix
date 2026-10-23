@@ -94,6 +94,14 @@ R=<the QE task's context>/raw      # every raw file of this reading lands here
   > "$R/m8a.out" 2>&1
 ```
 
+> **Erratum 2026-10-23 (Security/NFR, subtask `security-nfr-ABC-202`, `QE-202-a`).** The block above is kept as it was
+> cut, but it is not the command that ran. In both commands, `-debug` is **`-debug all`**. A bare `-debug` makes
+> `cutechess-cli` 1.5.1 (Qt 6) exit before any engine starts (§ Reading, A2). The operative command block is
+> `.grugops/context/qe-read-ABC-202/raw/run.sh`, sha256
+> `6562e145c5e02361869df082ae22746f7beac04c756b51bc1785a417c1964fd9`. `NFR-012` (`ADR-0044` candidate row (ii)) cites
+> that file, not this block. The `-debug` row of the table below reads the same way. `all` also sends UCI `debug on`,
+> which the engine ignores (`QE-202-b`).
+
 **Why each flag, and what is deliberately absent:**
 
 | flag | why |
