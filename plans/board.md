@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-23 20:45Z by Orchestrator (orch-2026-10-23ai) — owner made the repo public (github.com/abitwise/skytalix; `…59df15ce`). `security-nfr-public-repo` (exposure review: secrets in history, personal data, licence) dispatched. Posture ADR to be drafted as PROPOSED after it. Width 3/3._
 _Updated: 2026-10-23 20:50Z by Orchestrator (orch-2026-10-23ah) — EPIC-008 (engine strength) + ABC-204..211 cut by BA/PM (`…8c3b2f47`). ABC-204 (rating harness) → In Design; ABC-205/206 Ready; 207–211 Backlog. Owner Q1 (Elo target) and Q2 (machine-time windows) open, non-blocking. Ready 2/8, In Design 1/2, In Review 1/3, width 2/3._
 _Updated: 2026-10-23 20:40Z by Orchestrator (orch-2026-10-23ag) — ABC-203 built (`5900d100`) → In Review; `qe-ABC-203` dispatched. `bapm-cut-engine-strength` still running. In Review 1/3, width 2/3._
 _Updated: 2026-10-23 20:35Z by Orchestrator (orch-2026-10-23af) — owner word `…7feb0553`: ADR-0047 accepted → ABC-203 In Development (SE); all 8 engine-improvement proposals accepted → `bapm-cut-engine-strength` (BA/PM). In Development 1/3, width 2/3._
