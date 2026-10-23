@@ -74,6 +74,15 @@ npm start works for now"* (Olger Oeselg, in session, 2026-09-19). The channel is
 `ADR-0007` clause 5 only. Nothing is published, built or deployed; there is still no git remote, so
 today the clone path is realised only on the author's machine. Everything else in this file stands.]**
 
+**[CORRECTED 2026-10-23 (`arch-adr0018-bin-note`, approved by the owner `…366ebd9e`).** The bracket
+above says *"Nothing is published, built or deployed"*. "Built" stopped being true at `ABC-168` (merged
+`513c0211`, 2026-10-22). Read it as: **nothing is published or deployed; the UCI engine artifact is
+built locally.** `npm run build` is now `tsc -p tsconfig.build.json`. It emits `dist/uci.js`, which
+`package.json`'s `bin` (`skytalix`) points at. `dist/` is git-ignored and never committed, and the
+package is still `"private": true`, so nothing ships anywhere. The 2026-08-06 bullet above (*"no `main`,
+`exports` or `bin`; the build is `tsc --noEmit` and emits nothing"*) is dated history in the same way.
+The channel is unchanged. See `ADR-0018` § Note 2026-10-23 and `ADR-0044` D8.]**
+
 ## Roll back
 
 **Nothing is deployed, so there is nothing to roll back.** No released artifact, no running instance,

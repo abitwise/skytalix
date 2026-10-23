@@ -6,6 +6,10 @@ id: ADR-0018
 
 ## Status
 
+**Note 2026-10-23** (`arch-adr0018-bin-note`, approved by the owner `…366ebd9e`). The package has had a
+`bin` since `ABC-168`. That fired the "exposes an executable" leg of `D2`. The channel did not move. See
+`§ Note 2026-10-23` at the end of this file. No clause is amended.
+
 **accepted** — 2026-09-19 by Architect/Design at task `owner-rulings-2026-09-19`, subtask
 `ruling-abc100-distribution` (Workflow 07), delivering `ABC-100`, under the project owner's standing
 directive of 2026-08-03 recorded in `memory-bank/60-progress.md` § "Standing directive — who decides".
@@ -196,3 +200,63 @@ the same rows. Each row is checkable without trusting this file. `D2` and `D7` a
 
 **No `D8` was added.** The revisit triggers in Decision 3 are owner-driven events, not measurements,
 and the one that is measurable (`D3`) already has a row. One channel, one table.
+
+## § Note 2026-10-23: a `bin` since ABC-168
+
+Written by Architect/Design (subtask `arch-adr0018-bin-note`). The owner approved it in session on
+2026-10-23 (note `…366ebd9e`): *"approve the ADR-0018 note"*. This is a dated note on an accepted ADR.
+It records the same fact as `ADR-0007` § Note 2026-10-23 (ruling `…0f003634`). **No clause is amended,
+no falsifier row is edited, and the channel is unchanged.** Notes for this hop are in
+`.grugops/context/arch-adr0018-bin-note/`.
+
+**The fact, read on `main` `7fa33c0c`.**
+- `package.json` has `"bin": { "skytalix": "dist/uci.js" }`. `jq -c '[.private, .bin, has("main"),
+  has("exports"), has("files")]' package.json` prints `[true,{"skytalix":"dist/uci.js"},false,false,false]`.
+- The `bin` arrived in `825b21d1` (`ABC-168`, 2026-10-21). It was merged to `main` at `513c0211` on
+  2026-10-22. `git log -G'"bin"' -- package.json` names only that commit, so the value has not changed since.
+- The target is built, not tracked. `build` is `tsc -p tsconfig.build.json`, which emits `src/uci.ts` and
+  its imports into `dist/`. `dist/` is git-ignored, and no file under it is tracked.
+- The design is `ADR-0044` D8, which the owner accepted on 2026-10-18. D8 says: *"This stays inside
+  `ADR-0007` and `ADR-0018`. It is local and built from a clone, and nothing is published."* It lists
+  `npm publish` and install from a git URL as out of v1.
+
+**What it changes in this file.**
+- **`D2`: the "exposes an executable" leg FIRED at `513c0211`. The "publishable" leg did not.**
+  `"private": true` stands, and there is no `main`, `exports` or `files` key.
+- These readings are no longer true. They stay as written, as dated history:
+  - Context row 2 (*"no `bin`, `main`, `exports` or `files`"*, 2026-09-19);
+  - Context row 5 (*"emits nothing; no `dist/`"*) and the *"no emit step"* in row 7;
+  - Decision 1 (*"no `dist/` is emitted, no `bin` is added"*);
+  - the chosen row of the Alternatives table (*"none"* for keys, *"nothing"* for the build).
+- `D2`'s sentence says a `bin` means *"either the npm/`npx` option being taken silently or `ADR-0007`
+  `D2`'s original firing condition"*. Neither happened silently. The `npx` option needs a remote, and
+  `D3` holds. `ADR-0044` D8 said in an owner-accepted ADR that the `bin` stays inside this file.
+  `ADR-0007` recorded its own `D2` firing in its note of the same date.
+- **The channel in Decision 1 holds. I re-read it at this hop:**
+  - `npm run chess` is still `node src/cli.ts`. That line has not changed since `e1403550` (`ABC-042`).
+    The terminal game needs no build.
+  - The `bin` is the UCI engine's entry, for a GUI or a separate backend to spawn. It runs from a clone
+    after `npm run build`, or from the `PATH` after `npm link` in that clone (`ADR-0044` D8).
+  - `D1`: 0 deploy artifacts, and no YAML file in the tree or tracked. `.github/` holds only
+    `copilot-instructions.md`.
+  - `D3`: `git remote -v` prints 0 lines.
+  - `D4`: `plans/releases/` holds only `.gitkeep`.
+  - `D7`: `production_requires_human_confirmation` is `true`. `default_stack.deploy` is
+    `none-local-only` and `environments` is `["local"]`.
+- Decision 1's *"No package is published"* still holds. Its *"no binary is built"* holds if "binary"
+  means a native executable: `dist/uci.js` is plain JavaScript from `tsc` (`ADR-0044` D8).
+
+**Why this is a note and not a new ADR.** The channel is how a user gets and starts the game: clone,
+`npm install`, `npm run chess`. The `bin` does not change any of those steps. It adds a local executable
+for the engine. The owner ruled "no clause is amended, the channel is unchanged" (`…366ebd9e`).
+
+**How to read `D2` from now on.** The row is not edited. Check it against this note's reading,
+`[true,{"skytalix":"dist/uci.js"},false,false,false]`. Any other value fires `D2` again: a changed or
+second `bin`, a `main`, `exports` or `files` key, or `"private"` removed. This is the same baseline as
+`ADR-0007`'s `D2`, and AR-1's check 3 reads the same line (Release Manager `…edd18e94`). A `start` alias
+is still not a `D2` event.
+
+**Triggers that need a superseding ADR, not a note (cited, not restated).** Decision 3's revisit triggers
+stand. `ADR-0044`'s revisit trigger is on the same ground: `npm publish`, a `files` allow-list, or
+packaging `dist/` for third parties. D8 also leaves install from a git URL out of v1. Under `D5`, each of
+these needs a new ADR, and that ADR is the owner's call.
