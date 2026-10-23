@@ -247,12 +247,12 @@ describe("ABC-200 — the startup questions", () => {
       expect([...written].filter((c) => c < " " || c === "\x7f")).toEqual([]);
     });
 
-    it("difficulty `6`, `0`, `03` and a 1 025-character line are each one rejection, then the question again", async () => {
+    it("difficulty `8`, `0`, `03` and a 1 025-character line are each one rejection, then the question again", async () => {
       const source = sourceOf(true);
       const output = outputOf(true);
       const asked = askAbsentOptions(parsedOf(["--colour", "white"]), { source, output });
       const overCap = "3".repeat(MAX_LINE_LENGTH + 1);
-      source.write(`6\n0\n03\n${overCap}\n4\n`);
+      source.write(`8\n0\n03\n${overCap}\n4\n`);
 
       const result = await asked;
       expect(kindsOf(output)).toEqual([
@@ -271,7 +271,7 @@ describe("ABC-200 — the startup questions", () => {
         expect(rejection).toContain(LEVELS);
         expect(rejection.split("\n")).toHaveLength(2);
       }
-      expect(rejections[0]).toContain('"6"');
+      expect(rejections[0]).toContain('"8"');
       expect(rejections[1]).toContain('"0"');
       expect(rejections[2]).toContain('"03"');
       // Over the cap the reader keeps no text, so the echo is empty and the line is never written.

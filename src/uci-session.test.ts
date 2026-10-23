@@ -714,7 +714,7 @@ describe("ABC-171 A2 — setoption", () => {
     expect(send("setoption name OwnBook value false")).toEqual([]);
   });
 
-  for (const value of ["0", "6", "2.5", "x", "constructor"]) {
+  for (const value of ["0", "8", "2.5", "x", "constructor"]) {
     it(`Skill Level value ${value}: one info string, the old value (1) kept`, () => {
       const { send } = rig({ k: 1 });
       expect(send("setoption name Skill Level value 1")).toEqual([]);

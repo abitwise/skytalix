@@ -248,6 +248,8 @@ describe("ABC-174 A1 — the table is ADR-0045 D1's", () => {
       3: { budgetMs: 330, blunderRate: 0.1 },
       4: { budgetMs: 1_000, blunderRate: 0.05 },
       5: { budgetMs: 3_000, blunderRate: 0 },
+      6: { budgetMs: 5_000, blunderRate: 0 },
+      7: { budgetMs: 30_000, blunderRate: 0 },
     });
     expect(Object.isFrozen(LEVELS)).toBe(true);
     for (const id of [1, 2, 3, 4, 5] as const) expect(Object.isFrozen(LEVELS[id])).toBe(true);

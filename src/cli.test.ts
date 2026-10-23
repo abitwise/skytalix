@@ -1335,9 +1335,9 @@ describe("ABC-042 — the accepted set is closed", () => {
   const TABLE_FLAGS = ["--ascii", "--unicode"] as const;
   const TABLE_COLOUR = "--colour";
   const TABLE_VALUES = ["white", "black", "random"] as const;
-  /** `ABC-101`'s rows: `--difficulty` and its five level words, ruling 1. */
+  /** `ABC-101`'s rows: `--difficulty` and its seven level words, ruling 1. */
   const TABLE_DIFFICULTY = "--difficulty";
-  const TABLE_LEVELS = ["1", "2", "3", "4", "5"] as const;
+  const TABLE_LEVELS = ["1", "2", "3", "4", "5", "6", "7"] as const;
   const TABLE = [...TABLE_FLAGS, TABLE_COLOUR, ...TABLE_VALUES, TABLE_DIFFICULTY, ...TABLE_LEVELS];
 
   it("A6(i) — the exported enumeration EQUALS the table, element for element, both ways", () => {
@@ -1819,9 +1819,9 @@ describe("ABC-042 — the shape of what was delivered", () => {
     // `ABC-101` adds `32`, the exponent of the level's seed `Math.floor(Math.random() * 2 ** 32)`
     // (`ADR-0037` D3); its base reuses `2`. Seven now, and still none is a count of rows.
     expect(numbersIn("cli.ts")).toEqual(["0", "0x20", "0x7f", "1", "2", "32", "70"]);
-    // `0` starts the scan, `1` steps over `--colour`'s value, `0.5` is a fair coin. `ABC-101`: `1`-`5`
-    // are the `Difficulty` ordinals and `3` is also the default level — none is a count of rows.
-    expect(numbersIn("cli-options.ts")).toEqual(["0", "0.5", "1", "2", "3", "4", "5"]);
+    // `0` starts the scan, `1` steps over `--colour`'s value, `0.5` is a fair coin. `ABC-101`: `1`-`7`
+    // are the `Difficulty` ordinals and `5` is also the default level — none is a count of rows.
+    expect(numbersIn("cli-options.ts")).toEqual(["0", "0.5", "1", "2", "3", "4", "5", "6", "7"]);
   });
 
   it("A10 — package.json gains exactly one scripts key and nothing else", () => {
@@ -4462,7 +4462,7 @@ describe("ABC-101 — --difficulty selects a level, and the played engine is tha
     // `RISK-002`: this layer gives a level no meaning. Over CODE: prose hits are `## Test notes` 4's.
     const code = executableCodeOf("cli-options.ts");
     expect(code.match(/depth|ply|millisecond|\bms\b|nodes?\/sec|budget/gi) ?? []).toEqual([]);
-    expect(code).toMatch(/export type Difficulty = 1 \| 2 \| 3 \| 4 \| 5;/);
+    expect(code).toMatch(/export type Difficulty = 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7;/);
     expect(code).toMatch(/readonly difficulty: Difficulty;/);
   });
 
@@ -4518,7 +4518,7 @@ describe("ABC-101 — --difficulty selects a level, and the played engine is tha
 
   it("A8′ — the table is read only by an OWN key: everything else is refused (Security forward note)", () => {
     expect(executableCodeOf("level-seam.ts")).toMatch(/Object\.hasOwn\(LEVELS, level\)/);
-    for (const key of [0, 6, 3.5, Number.NaN, "constructor", "__proto__", "toString"]) {
+    for (const key of [0, 8, 3.5, Number.NaN, "constructor", "__proto__", "toString"]) {
       expect(() => createLevelSeam(key as number, { seed: 1 }), `level ${String(key)}`).toThrow(
         RangeError,
       );
