@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-23 by Orchestrator (orch-2026-10-23ac) — `ABC-203` (PGN at game end; M, P1) cut by BA/PM (`…0c2867c1`) and pulled into In Design: `arch-design-ABC-203` (Architect). `arch-analyse-game-1` still running. In Design 1/2, width 2/3._
 _Updated: 2026-10-23 19:45Z by Orchestrator (orch-2026-10-23ab) — owner word `…715b9cbf`: **PGN export IN scope** (EPIC-006) → `bapm-cut-pgn-export` (BA/PM); game 1 analysis → `arch-analyse-game-1` (Architect, Stockfish 19 installed as a host tool). Game 1 PGN hand-made at `plans/uat/EPIC-006-game-1.pgn` (replayed legal). Width 2/3._
 _Updated: 2026-10-23 by Orchestrator (orch-2026-10-23y) — merged `arch-runbook-deploy-holder` (`…a71ea004`) and `scribe-drift-2026-10-23` (`…1ae3b551`, `…7274b204`). Records drift cleared. Board: only EPIC-006 open (owner play-test, guide `plans/uat/EPIC-006-play-test-guide.md`). Width 0/3._
 _Updated: 2026-10-23 by Orchestrator (orch-2026-10-23x) — merged `arch-runbook-operate` (`…b9dc8455`). Its STOP (who holds deploy) ruled drift against the owner's 2026-08-15 directive, not a new call → `arch-runbook-deploy-holder` (Architect). `scribe-drift-2026-10-23` (Scribe): ABC-200 questions in AGENTS.md, the `--` wording, 45-standing-rulings "no bin". Width 2/3, records only._
@@ -442,7 +443,7 @@ _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-137` 
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-138` → `In Review` (`7e5c9c74`); QE `qe-ABC-138` dispatched._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-010` pulled `Ready for Dev` → `In Development`._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-055` → `Done` (UAT WAIVED; board now renders all 13 columns). FORMAT comment: In UAT added to the skippable columns (waiver path) and the Orchestrator's Ready → Ready for Dev → In Development pass-through at pull stated (QE-055-b/c)._
-_Updated: 2026-10-10 by the Software Engineer (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-055`) — `ABC-055` built: `## In Analysis (WIP 0/2)` and `## In Design (WIP 0/2)` added between `Ready` and `Ready for Dev` (13 headings = 13 table rows); the FORMAT comment now names the dial `.grugops/factory.config.json`, the four skippable columns and the heading/table invariant. No ticket row moved; `ABC-055` stays in `In Development` (A4), so the `In Review` move is left for the close-out._
+_Updated: 2026-10-10 by the Software Engineer (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-055`) — `ABC-055` built: `## In Analysis (WIP 0/2)` and `## In Design (WIP 1/2)` added between `Ready` and `Ready for Dev` (13 headings = 13 table rows); the FORMAT comment now names the dial `.grugops/factory.config.json`, the four skippable columns and the heading/table invariant. No ticket row moved; `ABC-055` stays in `In Development` (A4), so the `In Review` move is left for the close-out._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-137` → `In Review` (`455a0846`); QE `qe-ABC-137` dispatched._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — BA/PM `bapm-abc010-qe129a-2026-10-10` merged (`7d62038a`): `ABC-010` Backlog → `Ready for Dev` (10/10); new `ABC-139` → `Ready`; `ABC-137` pulled → `In Development`._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-055` → `In Review` (`86926927`), QE dispatched; board writes resumed. BA/PM `bapm-cuts-r5c-f1331-2026-10-10` merged (`4bc53b0a`): new `ABC-137` → `Ready`; new `ABC-138` → `Ready` → pulled → `In Development`._
@@ -1040,7 +1041,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## In Analysis (WIP 0/2)
 
 
-## In Design (WIP 0/2)
+## In Design (WIP 1/2)
+- [ABC-203] At game end, `npm run chess` writes the game as a standard PGN file under `games/`  (owner: software-engineer, after an Architect/Design ruling, size: M, priority: P1, epic: EPIC-006, since: 2026-10-23, DoR 10/10; cut in `bapm-cut-pgn-export` (`…0c2867c1`). Owner word `…715b9cbf`: PGN export in scope. Automatic, once, when the loop returns a reason (8 outcomes + 2 faults); none on quit/EOF/usage/internal error. `games/skytalix-YYYYMMDD-HHMMSS.pgn` under cwd, exclusive create -2..-99, 10 tags, toSan movetext, A7 byte match to game 1. Security/NFR hop owed (first file write, ADR-0036 b1/b2). Next free ABC-204) **2026-10-23: Ready → In Design (`arch-design-ABC-203`).**
 
 
 ## Ready for Dev (WIP 0/6)
