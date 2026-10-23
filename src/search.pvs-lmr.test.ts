@@ -411,13 +411,6 @@ describe("A3 — both recursions route every reduction through the predicate, su
  * BOTH shapes: position-3 after 1. Rb3 Rd5, white to move. At depth 4, fixed and deepened alike,
  * PVS alone and the correct PVS+LMR read 19 with b3f3; `noLmrResearch` and `noResearch` read 8
  * with b3h3. One position now serves both rows.
- *
- * RE-MEASURED at `ABC-205` (queen-scaled king safety, tapered king square), NOT re-found: the
- * fixture still bites both variants in BOTH shapes, so only the pinned value moves, 19 → −7. At
- * depth 4, PVS alone and the correct PVS+LMR read −7 with b3f3, fixed and deepened alike;
- * `noLmrResearch` and `noResearch` read −13 with b3h3 fixed and −8 with b3c3 deepened. Read by
- * `ABC-083`'s `a4engine.ts` and `lmr-ref.ts` re-run on the build, after `lmr-ref.ts` reproduced
- * `search()`, `searchWithoutReductions` and `searchWithoutPvsOrReductions` score and nodes there.
  */
 const A4_FEN = "8/2p5/3p4/KP1r4/5p1k/1R6/4P1P1/8 w - - 2 2";
 const A4_DEPTH = 4;
@@ -481,7 +474,7 @@ describe("A4 — the reduced move fails high at a null-window node, is re-search
     ).toBeGreaterThan(0);
     expect(shipped.score).toBe(reference.score);
     expect(label(shipped.move as Move)).toBe(label(reference.move as Move));
-    expect([shipped.score, label(shipped.move as Move)]).toEqual([-7, "b3f3"]);
+    expect([shipped.score, label(shipped.move as Move)]).toEqual([19, "b3f3"]);
   });
 
   it("chooseMove(): the same, deepened to depth 4 in the engine's own recursion", () => {
@@ -498,7 +491,7 @@ describe("A4 — the reduced move fails high at a null-window node, is re-search
     ).toBeGreaterThan(0);
     expect(shipped.score).toBe(reference.score);
     expect(label(shipped.move)).toBe(label(reference.move));
-    expect([shipped.score, label(shipped.move)]).toEqual([-7, "b3f3"]);
+    expect([shipped.score, label(shipped.move)]).toEqual([19, "b3f3"]);
   });
 });
 
