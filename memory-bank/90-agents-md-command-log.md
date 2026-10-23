@@ -87,6 +87,23 @@ keeps the flag: `npm run chess --ascii` (RUN 2026-08-15 at `4e9ed1d`, npm 11.7.0
 config "--ascii"` on stderr, runs `node src/cli.ts` with NO arguments, prints the DEFAULT board and
 exits 0 — the option is silently discarded and stdout looks like success.
 
+CORRECTED 2026-10-23 (`scribe-drift-2026-10-23`; the paragraph above stays as the 2026-08-15 receipt). "Without it npm
+keeps the flag" and "silently discarded" are true only for a flag with no value. RUN 2026-10-23 on `main` `ad9655fc`,
+npm 11.20.0, node v26.11.1, stdin `</dev/null`: `npm run chess --ascii` warns `Unknown cli config "--ascii"` and runs
+`node src/cli.ts` with NO arguments, prints the default board, exit 0. `npm run chess --colour black` warns
+`"black" is being parsed as a normal command line argument` and `Unknown cli config "--colour"`, runs `node src/cli.ts black`,
+prints `unrecognised argument: black` and the usage line, exit 1. `npm run chess -- --colour black` prints the black-bottom
+board, exit 0. So npm eats the flag NAME; a value is left behind as a stray argument and the CLI refuses it.
+
+STARTUP QUESTIONS (`ABC-200`, `src/startup-questions.ts`, `src/cli.ts`). On a terminal, a flag the command line left out is
+asked for before the first frame: `colour (white|black|random) [white]: ` first, then `difficulty (1|2|3|4|5) [5]: `. Enter keeps
+the default; a wrong answer prints `"<typed>" is not one of <accepted>` and asks again; end of input at a question ends the session
+with exit 0 and no board. It asks only when stdin AND stdout are both terminals (`isTTY === true`): otherwise 0 reads and 0 writes,
+so a pipe or `</dev/null` behaves as before. A flag on the command line skips its own question; both flags skip both. RUN 2026-10-23
+on a pseudo-terminal: `npm run chess` showed both questions (answers `black`, `3`) and then the board; `npm run chess -- --colour white
+--difficulty 2` showed no question; `npm run chess -- --colour white` asked only the difficulty; Ctrl-D at the colour question exited 0;
+`npm run chess </dev/null` asked nothing, printed the board and exited 0.
+
 WRITING RULES for this slot (`ABC-069`, commit `6117a2a4`, 2026-10-10; comment-only, `AGENTS.md`
 23,464 -> 23,879 B, collected option set unchanged at three tokens, 0 files under `src/`, guard not
 touched). `ABC-065`'s block in `src/cli.test.ts` reads the slot's RAW text, so it binds how the slot
@@ -1025,3 +1042,15 @@ AGENTS.md Scribe, task `scribe-owner-delegation`. Three files: `AGENTS.md`, `mem
 | `45-standing-rulings.md` § Test and UAT authority | 2026-08-16 paragraph marked SUPERSEDED in place (text kept); new 2026-10-22 ruling after it; "Two misreadings" rewritten; snapshot exception and Authority line follow; § QE validation authority: "2026-08-16 signature ruling" -> "`In UAT` signature ruling (2026-10-22)" |
 
 Why: the owner's 2026-10-22 words (verbatim in the ruling) delegate delivery decisions to the Orchestrator and say to trust QE's results, so no agent should block on a human `In UAT` signature. Read as the decision note reads them, neither widened nor narrowed. Left as they were: the zero-production-lines waiver, "A waiver is not a signature", the three kit overrides, `production_requires_human_confirmation` `true`.
+
+## `scribe-drift-2026-10-23` pass, 2026-10-23 (ABC-200 startup questions; the `--` wording; `main` `ad9655fc`)
+
+AGENTS.md Scribe, task `scribe-drift-2026-10-23`. Three files: `AGENTS.md`, `memory-bank/45-standing-rulings.md` and this file. Zero `src/`, `plans/` and `package*.json` lines. No command slot changed, no new `-->` closer (`ABC-187` `A5`'s count stays 9). `AGENTS.md` 16,669 -> **17,010 B** (+341; budget 18,432).
+
+| where | change |
+|---|---|
+| `AGENTS.md` `Dev / run` slot comment | "without it npm silently drops the flag and runs with defaults" -> npm eats the flag name: a value-less flag is dropped (exit 0), a value flag leaves its value as a stray argument and the CLI refuses it (exit 1); adds the startup questions (terminal only, a flag skips its question) |
+| this file § Dev / run | dated CORRECTED paragraph and STARTUP QUESTIONS paragraph after the 2026-08-15 `--` receipt (the old text kept) |
+| `45-standing-rulings.md` § Deployment posture | dated correction after the "no `bin`/`main`/`exports`/`files`" sentence (text kept); no ruling changes |
+
+Why: `ABC-200` merged the questions without the slot saying so; and the `--` receipt was measured only with `--ascii`. Both were re-run today, see § Dev / run.
