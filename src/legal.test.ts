@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { makeMove, unmakeMove } from "./apply.ts";
 import { parseFenGrammarOnly as parseFen, toFen } from "./fen.ts";
-import { hasLegalEnPassant, hasLegalMove, isInCheck, legalMoves } from "./legal.ts";
+import { hasLegalEnPassant, hasLegalMove, isInCheck, legalCaptures, legalMoves } from "./legal.ts";
 import { FLAG_EN_PASSANT, generateMoves, isSquareAttackedBy } from "./moves.ts";
-import { BLACK, KING, type Position, parseSquareName } from "./position.ts";
+import { BLACK, EMPTY, KING, type Position, parseSquareName } from "./position.ts";
 
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
@@ -458,5 +458,26 @@ describe("ABC-206 A2 — the faster pieces equal what they replace", () => {
 
   if (RUN_DEEP) {
     it("hasLegalMove, to depth 3 [deep, ENGINE_DEEP=1]", hasLegalMoveRow(3), 600_000);
+  }
+
+  const legalCapturesRow = (depth: number) => () => {
+    let captures = 0;
+    walkA2(depth, (position, where) => {
+      const want = legalMoves(position).filter((move) => move.captured !== EMPTY);
+      const got = legalCaptures(position);
+      // The same list in the same ORDER: quiescence's stable sort keeps generation order.
+      expect(got, where).toEqual(want);
+      captures += got.length;
+    });
+    expect(captures).toBeGreaterThan(depth === 1 ? 500 : 1_000_000); // the denominator, asserted
+  };
+
+  it(
+    "legalCaptures(p) is legalMoves(p).filter(capture), as the same ordered list",
+    legalCapturesRow(1),
+  );
+
+  if (RUN_DEEP) {
+    it("legalCaptures, to depth 3 [deep, ENGINE_DEEP=1]", legalCapturesRow(3), 600_000);
   }
 });

@@ -74,6 +74,28 @@ export function hasLegalMove(position: Position): boolean {
   return false;
 }
 
+/**
+ * The legal captures for the side to move: the same list, in the same order, as
+ * `legalMoves(position).filter((move) => move.captured !== EMPTY)`. It skips a non-capture
+ * before playing it, so only captures pay the make/test/unmake check. Two order-preserving
+ * filters commute, so the order is generation order, which quiescence's stable sort depends on
+ * (ABC-206). The position is unchanged on return.
+ */
+export function legalCaptures(position: Position): Move[] {
+  const moverIsBlack = position.blackToMove;
+  const captures: Move[] = [];
+
+  for (const move of generateMoves(position)) {
+    if (move.captured === EMPTY) continue;
+    const undo = makeMove(position, move);
+    const kingSquare = kingSquareOf(position, moverIsBlack);
+    if (!isSquareAttackedBy(position, kingSquare, !moverIsBlack)) captures.push(move);
+    unmakeMove(position, move, undo);
+  }
+
+  return captures;
+}
+
 /** The two neighbouring files a pawn can capture from — the same pair moves.ts steps over. */
 const EP_CAPTURE_SIDES = [-1, 1] as const;
 

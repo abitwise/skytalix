@@ -25,6 +25,7 @@ vi.mock("./legal.ts", async (importOriginal) => {
     ...actual,
     legalMoves: vi.fn(actual.legalMoves),
     hasLegalMove: vi.fn(actual.hasLegalMove),
+    legalCaptures: vi.fn(actual.legalCaptures),
   };
 });
 
@@ -34,7 +35,8 @@ vi.mock("./zobrist.ts", async (importOriginal) => {
 });
 
 import { gameStatus, leafEndReason } from "./gameend.ts";
-import { hasLegalMove, legalMoves } from "./legal.ts";
+import { hasLegalMove, legalCaptures, legalMoves } from "./legal.ts";
+import { quiesce } from "./quiescence.ts";
 import { zobristKey } from "./zobrist.ts";
 
 /** The G-1 position: a legal, ordinary board that every state below is a clock/counts edit of. */
@@ -140,5 +142,18 @@ describe("ABC-206 — the search leaf's game-end check stays cheap (call counts,
       expect(hasLegalMove, shape).toHaveBeenCalledTimes(1);
       expect(zobristKey, shape).toHaveBeenCalledTimes(0);
     }
+  });
+
+  it("quiesce never builds the full move list: captures come from legalCaptures", () => {
+    // kiwipete with a full window: no stand-pat cut at the leaf, so the capture search expands.
+    const position = parseFen(
+      "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1",
+    );
+    let visited = 0;
+    quiesce(position, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY, 0, () => visited++);
+
+    expect(visited).toBeGreaterThan(0); // the capture search ran, so the zero below is earned
+    expect(legalCaptures).toHaveBeenCalled();
+    expect(legalMoves).toHaveBeenCalledTimes(0);
   });
 });
