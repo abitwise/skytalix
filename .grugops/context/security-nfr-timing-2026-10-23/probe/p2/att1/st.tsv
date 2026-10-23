@@ -1,0 +1,16 @@
+pre-clone	2026-10-23T07:47:41Z	power 'AC Power'	load1 2.48	thermal 0	vitest_procs 0
+pre-install	2026-10-23T07:47:43Z	power 'AC Power'	load1 2.36	thermal 0	vitest_procs 0
+post-install	2026-10-23T07:47:46Z	power 'AC Power'	load1 2.36	thermal 0	vitest_procs 0
+pre-a3	2026-10-23T07:48:48Z	power 'AC Power'	load1 1.84	thermal 0	vitest_procs 0
+a3-child-1	2026-10-23T07:48:48Z	power 'AC Power'	load1 1.84	thermal 0	vitest_procs 0
+a3-child-2	2026-10-23T07:48:48Z	power 'AC Power'	load1 1.85	thermal 0	vitest_procs 0
+a3-child-3	2026-10-23T07:48:48Z	power 'AC Power'	load1 1.85	thermal 0	vitest_procs 0
+a3-child-4	2026-10-23T07:48:49Z	power 'AC Power'	load1 1.85	thermal 0	vitest_procs 0
+a3-child-5	2026-10-23T07:48:49Z	power 'AC Power'	load1 1.85	thermal 0	vitest_procs 0
+a3-child-6	2026-10-23T07:48:49Z	power 'AC Power'	load1 1.85	thermal 0	vitest_procs 0
+a3-child-7	2026-10-23T07:48:49Z	power 'AC Power'	load1 1.85	thermal 0	vitest_procs 0
+a3-child-8	2026-10-23T07:48:50Z	power 'AC Power'	load1 1.85	thermal 0	vitest_procs 0
+a3-child-9	2026-10-23T07:48:50Z	power 'AC Power'	load1 1.85	thermal 0	vitest_procs 0
+a3-child-10	2026-10-23T07:48:50Z	power 'AC Power'	load1 1.85	thermal 0	vitest_procs 0
+post-a3	2026-10-23T07:48:51Z	power 'AC Power'	load1 1.85	thermal 0	vitest_procs 0
+post-a2	2026-10-23T07:48:51Z	power 'AC Power'	load1 1.85	thermal 0	vitest_procs 0

@@ -1,0 +1,3 @@
+clone HEAD c91445e30c38f26566593b6131122c34fbf32798; origin main 1d5316e0105ec71e6e0430817c0a4fdb87db310a; remote origin	/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example (fetch)
+status lines before install: 0
+cache entries before install: 0; userconfig bytes: 0

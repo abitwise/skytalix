@@ -22,6 +22,13 @@ owner: BA/PM
 > max to frame 0, n = 10, Apple M3, MET. That reading used a `git archive` copy, not a clone after `npm install`, and
 > the catalog row never cited it. Acceptance 1 has no reading. Nothing on this page changes otherwise.
 
+> **2026-10-23, Security/NFR (`security-nfr-timing-2026-10-23`, `ABC-201`): acceptance 1 is MET at `c91445e3`.**
+> The reading used a fresh `git clone` of `main`, then `npm install` with no flags, an empty npm cache and an empty user config (exit 0). Then
+> `printf 'e4\n' | npm run --silent chess -- --colour white --difficulty 5` gave exit 0 with 0 stderr bytes. The last
+> move list read `1. e4      e5` (2 plies), and `input ended` was printed once, after that frame. `NFR-007` is MET: 220.9 ms max to frame 0, n = 10,
+> first launch counted. Apple M3, node v26.11.1, npm 11.20.0. The "nothing else installed" half stays `UNKNOWN - verify` beyond this host.
+> Closing the epic is the Orchestrator's card move.
+
 > **PRIORITY RAISED `P2` → `P1` on 2026-08-12 by BA/PM** (task `post-abc030-2026-08-12`, subtask
 > `refinement-post-abc030`, Workflow 07). **NOT DECOMPOSED at that hop, deliberately — see
 > `## Why this epic was not decomposed on 2026-08-12` below.** The board row is the Orchestrator's to

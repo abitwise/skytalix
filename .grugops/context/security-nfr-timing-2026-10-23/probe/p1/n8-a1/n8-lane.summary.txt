@@ -1,0 +1,9 @@
+# n8-lane summary: n = 8 scored rounds, round 0 discarded, 0 harness errors
+B	cpu 8.23	wall 4.39	par 1.877	load1 3.24	load1>8 0/8	files 5	tests 174
+T	cpu 8.23	wall 4.39	par 1.869	load1 3.23	load1>8 0/8	files 5	tests 174
+  T-B cpu	median -0.005 (-0.06 % of base cpu)	sign 4/8	k 2	interval [-0.050, 0.040]	R 0.050
+  T-B wall	median 0.010	sign 5/8	k 2	interval [-0.050, 0.040]	R 0.050
+H	cpu 8.25	wall 4.37	par 1.885	load1 3.35	load1>8 0/8	files 5	tests 195
+  H-B cpu	median 0.030 (0.36 % of base cpu)	sign 6/8	k 2	interval [-0.010, 0.060]	R 0.060
+  H-B wall	median -0.020	sign 4/8	k 2	interval [-0.070, 0.050]	R 0.070
+twin R: cpu 0.050 s, wall 0.050 s. Admissible = twin cpu median <= 1.5 % of base with sign at chance (ADR-0035 d1).
