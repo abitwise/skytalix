@@ -17,7 +17,7 @@
  * "Simplified Evaluation Function", first posted to the Polish chess-programming list progszach
  * and published at <https://www.chessprogramming.org/Simplified_Evaluation_Function> under
  * CC BY-SA 3.0 (<https://creativecommons.org/licenses/by-sa/3.0/>). The values are unchanged.
- * The layout, the king value of 0 and all code are ours.
+ * The layout, the king value of 0 and all code are ours. The king endgame table is this project's own.
  */
 
 import {
@@ -31,6 +31,7 @@ import {
   PAWN,
   type Position,
   pieceType,
+  QUEEN,
   ROOK,
   rankOf,
 } from "./position.ts";
@@ -55,7 +56,8 @@ const PIECE_VALUE: readonly number[] = [
  * layout below is the board as printed, a8 top-left. Black reads the same table with the rank
  * flipped, which is what makes the mirror exact and A1's symmetry property meaningful.
  *
- * Deliberately small and hand-written, as the ticket asks. No tapering, no endgame variants.
+ * Deliberately small and hand-written, as the ticket asks. Only the king's square is tapered
+ * (ABC-205 § Design ruling; ADR-0031 addendum 2026-10-24): see KING_ENDGAME_TABLE below.
  */
 // biome-ignore format: an 8x8 board is only readable as 8 rows of 8
 const PAWN_TABLE: readonly number[] = [
@@ -129,6 +131,30 @@ const KING_TABLE: readonly number[] = [
    20, 30, 10,  0,  0, 10, 30, 20,
 ];
 
+/**
+ * ABC-205's endgame half of the king's square, this project's own (no third-party values):
+ * 40 - 15 x m, where m is the Manhattan distance to the nearest of d4, e4, d5 and e5. Same layout
+ * as the tables above. KING_TABLE is the middlegame half; `kingSquare` blends the two by phase.
+ */
+// biome-ignore format: an 8x8 board is only readable as 8 rows of 8
+const KING_ENDGAME_TABLE: readonly number[] = [
+  -50,-35,-20, -5, -5,-20,-35,-50,
+  -35,-20, -5, 10, 10, -5,-20,-35,
+  -20, -5, 10, 25, 25, 10, -5,-20,
+   -5, 10, 25, 40, 40, 25, 10, -5,
+   -5, 10, 25, 40, 40, 25, 10, -5,
+  -20, -5, 10, 25, 25, 10, -5,-20,
+  -35,-20, -5, 10, 10, -5,-20,-35,
+  -50,-35,-20, -5, -5,-20,-35,-50,
+];
+
+/**
+ * ABC-205's game phase: N 1, B 1, R 2, Q 4 over both sides, indexed by `pieceType`, clamped to
+ * PHASE_MAX (24 at the start position, 0 in a pawn ending).
+ */
+const PHASE_WEIGHT: readonly number[] = [0, 0, 1, 1, 2, 4, 0];
+const PHASE_MAX = 24;
+
 /** Indexed by `pieceType`, exactly like PIECE_VALUE. Index 0 is EMPTY and is never read. */
 const PIECE_SQUARE_TABLE: readonly (readonly number[])[] = [
   PAWN_TABLE, // EMPTY — never read; keeps the index aligned with pieceType
@@ -184,11 +210,14 @@ export function isPassedPawn(board: Uint8Array, square: number): boolean {
  * ABC-083's king safety, in centipawns, per file of the king's own file and the files either side
  * of it (two files for a king on the a- or h-file). SHELTER: no own pawn one or two ranks ahead
  * of the king on that file. FILE_HALF_OPEN: no own pawn anywhere on the file, an enemy pawn on it.
- * FILE_OPEN: no pawn of either colour on the file. Untapered by decision (the page's § Out of scope).
+ * FILE_OPEN: no pawn of either colour on the file. The whole penalty is multiplied by
+ * KING_EXPOSURE_QUEEN_SCALE while the ENEMY has a queen, by 1 otherwise (ABC-205 § Design ruling;
+ * ADR-0031 addendum 2026-10-24), so queenless scores are ABC-083's. Ceiling 3 x 105 = 315 cp.
  */
 const KING_SHELTER_MISSING_PENALTY = 15;
 const KING_FILE_HALF_OPEN_PENALTY = 10;
 const KING_FILE_OPEN_PENALTY = 20;
+const KING_EXPOSURE_QUEEN_SCALE = 3;
 
 /**
  * ABC-083's mobility: centipawns per square a non-pawn piece reaches (empty, or holding an enemy
@@ -242,30 +271,46 @@ function squaresReached(board: Uint8Array, square: number, piece: number): numbe
 }
 
 /**
- * The king-safety penalty for the king on `king` (positive = worse for that king's side).
- * `ownPawn`/`enemyPawn` are the two coloured pawn codes and `step` is the king's forward
- * direction in ranks (+1 white, -1 black), which is what makes the term mirror-exact.
+ * How many of the king's shelter files (its own file and the files either side) have no own pawn
+ * one or two ranks ahead of the king. `step` is the king's forward direction in ranks (+1 white,
+ * -1 black), which is what makes it mirror-exact. The one shelter test: `kingExposure` charges it
+ * and `kingSquare` gates the castled bonus on it, from one call per king.
+ */
+function shelterMissing(board: Uint8Array, king: number, ownPawn: number, step: number): number {
+  const kingFile = fileOf(king);
+  const shelterRank1 = rankOf(king) + step;
+  const shelterRank2 = shelterRank1 + step;
+  const fromFile = kingFile === 0 ? 0 : kingFile - 1;
+  const toFile = kingFile === 7 ? 7 : kingFile + 1;
+  let missing = 0;
+
+  for (let file = fromFile; file <= toFile; file++) {
+    const sheltered =
+      (shelterRank1 >= 0 && shelterRank1 <= 7 && board[shelterRank1 * 16 + file] === ownPawn) ||
+      (shelterRank2 >= 0 && shelterRank2 <= 7 && board[shelterRank2 * 16 + file] === ownPawn);
+    if (!sheltered) missing++;
+  }
+  return missing;
+}
+
+/**
+ * The king-safety penalty for the king on `king` (positive = worse for that king's side), before
+ * the queen scale. `missing` is `shelterMissing` for this king; `ownPawn`/`enemyPawn` are the two
+ * coloured pawn codes.
  */
 function kingExposure(
   board: Uint8Array,
   king: number,
   ownPawn: number,
   enemyPawn: number,
-  step: number,
+  missing: number,
 ): number {
   const kingFile = fileOf(king);
-  const shelterRank1 = rankOf(king) + step;
-  const shelterRank2 = shelterRank1 + step;
   const fromFile = kingFile === 0 ? 0 : kingFile - 1;
   const toFile = kingFile === 7 ? 7 : kingFile + 1;
-  let penalty = 0;
+  let penalty = missing * KING_SHELTER_MISSING_PENALTY;
 
   for (let file = fromFile; file <= toFile; file++) {
-    const sheltered =
-      (shelterRank1 >= 0 && shelterRank1 <= 7 && board[shelterRank1 * 16 + file] === ownPawn) ||
-      (shelterRank2 >= 0 && shelterRank2 <= 7 && board[shelterRank2 * 16 + file] === ownPawn);
-    if (!sheltered) penalty += KING_SHELTER_MISSING_PENALTY;
-
     let own = false;
     let enemy = false;
     for (let rank = 1; rank <= 6; rank++) {
@@ -277,6 +322,21 @@ function kingExposure(
   }
 
   return penalty;
+}
+
+/**
+ * ABC-205's tapered king square, from that king's side's point of view: the middlegame half
+ * (KING_TABLE) and the endgame half (KING_ENDGAME_TABLE) blended by `phase`. In the middlegame
+ * half a positive (castled or corner) value counts only while the shelter is intact (`missing`
+ * is 0). `| 0` truncates toward zero and never yields -0; both kings use it the same way, so the
+ * mirror stays exact.
+ */
+function kingSquare(king: number, black: boolean, missing: number, phase: number): number {
+  const tableIndex = (black ? rankOf(king) : 7 - rankOf(king)) * 8 + fileOf(king);
+  const table = KING_TABLE[tableIndex] as number;
+  const middlegame = table > 0 && missing > 0 ? 0 : table;
+  const endgame = KING_ENDGAME_TABLE[tableIndex] as number;
+  return ((middlegame * phase + endgame * (PHASE_MAX - phase)) / PHASE_MAX) | 0;
 }
 
 /** The files either side of `file`, as a bitmask over files a..h (bit 0 = a). */
@@ -334,6 +394,9 @@ function whiteMinusBlack(position: Position, mobilityWeight: number): number {
   let mobility = 0;
   let whiteKing = -1;
   let blackKing = -1;
+  let phase = 0;
+  let whiteQueen = false;
+  let blackQueen = false;
 
   for (let rank = 7; rank >= 0; rank--) {
     for (let file = 0; file < 8; file++) {
@@ -343,30 +406,45 @@ function whiteMinusBlack(position: Position, mobilityWeight: number): number {
 
       const type = pieceType(piece);
       const black = isBlack(piece);
-      // White reads the table rank-8-first; black reads the same table with the rank flipped.
-      const tableIndex = (black ? rank : 7 - rank) * 8 + file;
-      const value =
-        (PIECE_VALUE[type] as number) +
-        ((PIECE_SQUARE_TABLE[type] as readonly number[])[tableIndex] as number);
+      phase += PHASE_WEIGHT[type] as number;
+      if (type === QUEEN) {
+        if (black) blackQueen = true;
+        else whiteQueen = true;
+      }
+      // The king's square is scored after the walk (`kingSquare`), when phase and shelter are known.
+      if (type === KING) {
+        if (black) blackKing = square;
+        else whiteKing = square;
+      } else {
+        // White reads the table rank-8-first; black reads the same table with the rank flipped.
+        const tableIndex = (black ? rank : 7 - rank) * 8 + file;
+        const value =
+          (PIECE_VALUE[type] as number) +
+          ((PIECE_SQUARE_TABLE[type] as readonly number[])[tableIndex] as number);
 
-      score += black ? -value : value;
+        score += black ? -value : value;
+      }
 
       if (type === PAWN) continue;
       const reached = squaresReached(board, square, piece);
       mobility += black ? -reached : reached;
-      if (type === KING) {
-        if (black) blackKing = square;
-        else whiteKing = square;
-      }
     }
   }
 
   const mobilityScore = Math.max(-MOBILITY_CAP, Math.min(MOBILITY_CAP, mobilityWeight * mobility));
+  if (phase > PHASE_MAX) phase = PHASE_MAX;
+  const whiteMissing = shelterMissing(board, whiteKing, PAWN, 1);
+  const blackMissing = shelterMissing(board, blackKing, BLACK_PAWN, -1);
   const kingSafety =
-    kingExposure(board, blackKing, BLACK_PAWN, PAWN, -1) -
-    kingExposure(board, whiteKing, PAWN, BLACK_PAWN, 1);
+    kingExposure(board, blackKing, BLACK_PAWN, PAWN, blackMissing) *
+      (whiteQueen ? KING_EXPOSURE_QUEEN_SCALE : 1) -
+    kingExposure(board, whiteKing, PAWN, BLACK_PAWN, whiteMissing) *
+      (blackQueen ? KING_EXPOSURE_QUEEN_SCALE : 1);
+  const kings =
+    kingSquare(whiteKing, false, whiteMissing, phase) -
+    kingSquare(blackKing, true, blackMissing, phase);
 
-  return score + pawnStructure(board) + kingSafety + mobilityScore;
+  return score + kings + pawnStructure(board) + kingSafety + mobilityScore;
 }
 
 /**
