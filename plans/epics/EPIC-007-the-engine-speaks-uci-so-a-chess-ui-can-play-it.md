@@ -1,9 +1,9 @@
 ---
 id: EPIC-007
 title: The engine speaks UCI as `skytalix`, so a chess UI can play against it
-status: accepted
+status: done
 accepted: 2026-10-18, owner (note `…c3e81a57`)
-column: Backlog
+column: Done
 priority: P1
 size: M
 owner: BA/PM
