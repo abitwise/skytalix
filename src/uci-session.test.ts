@@ -280,6 +280,15 @@ describe("ABC-167 A6 — infinite waits for stop", () => {
     expect(talk(["stop", "ponderhit"]).out).toEqual([]);
   });
 
+  // ABC-178 R1 (QE-177-a): two `talk`s, two sessions. Session 1 is left holding, never released.
+  it("ABC-178 R1: a hold left in one session is not released by a fresh session", () => {
+    const held = talk(["position startpos", "go infinite"], 1_000);
+    expect(held.out.filter((line) => line.startsWith("bestmove"))).toEqual([]);
+    expect(talk(["stop", "ponderhit"]).out).toEqual([]);
+    // QE-178-b: re-read session 1 after session 2 ran; a fresh session's release must not reach it.
+    expect(held.out.filter((line) => line.startsWith("bestmove"))).toEqual([]);
+  });
+
   it("A6-d1: go ponder holds at the capped ceiling; ponderhit releases once", () => {
     const { perLine } = talk(["position startpos", "go ponder", "ponderhit", "ponderhit"], 100);
     expect(perLine[1]).toHaveLength(1);
@@ -360,7 +369,14 @@ describe("ABC-167 A6 — infinite waits for stop", () => {
 
 describe("ABC-167 A7 — the D12 limits", () => {
   it("go depth 3 reports depth 3 on a clock where an unlimited go reaches depth >= 5", () => {
-    const free = parseInfo(talk(["position startpos", "go"], 50).out[0]);
+    // THE UNLIMITED `go` ON A 100 MS STEP SINCE `ABC-199` (`QE-198-a`; owner, 2026-10-19,
+    // `…6e1d9b47`: "Lighten the rows, keep cap"). On step 50 it searched depth 6 on 55 317 nodes,
+    // the heaviest row in the suite, and it timed out at the 5 s default under coverage and load.
+    // Step 100 is in `ADR-0046`'s set, and this row is its class C (the step is a precondition):
+    // on step 100 the unlimited `go` still reaches depth 5, on 25 621 nodes, so the floor stays 5.
+    // `go depth 3` keeps step 50. Ignoring `depth`, or searching to depth + 1, still reds the row
+    // (scratch census and plants, ABC-199).
+    const free = parseInfo(talk(["position startpos", "go"], 100).out[0]);
     expect(free.depth).toBeGreaterThanOrEqual(5);
     const capped = talk(["position startpos", "go depth 3"], 50).out;
     expect(capped).toHaveLength(2);

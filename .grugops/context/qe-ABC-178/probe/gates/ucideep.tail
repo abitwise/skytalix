@@ -1,0 +1,8 @@
+ RUN  v4.1.11 /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-qe-ABC-178
+
+
+ Test Files  1 passed (1)
+      Tests  5 passed (5)
+   Start at  17:26:18
+   Duration  1.32s (transform 0ms, setup 0ms, import 59ms, tests 1.18s, environment 0ms)
+

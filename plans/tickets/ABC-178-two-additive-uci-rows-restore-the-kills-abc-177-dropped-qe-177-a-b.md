@@ -1,8 +1,8 @@
 ---
 id: ABC-178
 title: "One additive UCI row restores the cross-session hold kill `ABC-177` dropped (QE-177-a). R2 (QE-177-b) moved to `ABC-197` on 2026-10-22"
-status: in-review
-column: In Review
+status: done
+column: Done
 size: XS
 priority: P2
 epic: EPIC-007
@@ -367,3 +367,72 @@ is **10/10 with no re-cut**. The Orchestrator then moves it `Backlog → Ready`.
 ## Trace row (for the Orchestrator to append; this hop is fenced off `plans/traceability.md`)
 
 `| ABC-178 (B1–B9) | QE-177-a, QE-177-b (QE …02deb2e2); BA/PM …7c41e9a2; EPIC-007 / ABC-167 A6, A7 | — (Backlog, DoR 9/10; after ABC-177 merges) | src/uci-session.test.ts (+2 rows, additive) | — | — |`
+
+## QE
+
+**QE/E2E timing hop, 2026-10-23 (subtask `qe-timing-ABC-178`), quiet host, vitest 4.1.12. The hop ran alone, and the owner paused his other session. Merge `00f77f26` = `grugops/qe-ABC-178` `2aeeabda` + `main` `a93c1e72` (a merge, no conflict). B = `main` `a93c1e72`; H = `00f77f26`. Verdict: B7 MET, B8 MET; overall PASS_WITH_GAPS. QE-178-c and QE-178-d close.** Notes: `.grugops/context/qe-timing-ABC-178/notes/` (verdict `…39e59d96`). This block supersedes the blocks below where they differ.
+
+- **Preconditions** (`…22b92995`):
+  - The host read `AC Power` at every gate poll, every window poll and on all 63 runs.
+  - Every scored run read load1 ≤ 8. The highest reading was 7.90, from the lane's own load.
+  - Foreign vitest: 0 at every check. Both 180 s windows read 0 foreign polls on their first try.
+  - Thermal read 0 throughout, so nothing needed flagging.
+- **Correctness at the merge** (`…f9ed376d`): lint, typecheck and build exit 0. `npm test` ran 60 files / 1 996 tests with `success` true. `UCI_DEEP` passed 5/5.
+- **B7 MET** (`…03c392fc`; `ABC-177` A8 protocol, T = `cp -R B`):
+  - The charge, H−B CPU, is **+0.010 s [−0.010, +0.020]**, within ≤ 650 ms. H−B wall is −0.010 s [−0.060, +0.020].
+  - Both 174a and the strict 174 print `STATE at 650 ms CPU: MET`.
+  - The provisional F (0.654 s) is above 650 ms. This is disclosed, and the readout still resolves.
+- **B8 MET** (`…25efab27`; `ABC-177` A9 protocol, all four arms, each with its own `npm ci`):
+  - **H's R-1 median wall is 9.010 s [8.86, 9.03]**, within ≤ 10 s and also ≤ 9.2 s. 174b, 174a and 174 all read MET, with 0/8 rounds warm.
+  - H2 reads 8.935 s, and the H/H2 twin is admissible.
+  - **B (`main`, vitest 4.1.12) reads 8.985 s [8.76, 9.01].** T reads 9.030 s. The B/T twin is admissible: 0.92 %, with sign p 0.070.
+  - H−B wall is +0.035 s [−0.100, +0.230].
+  - Routes: `ABC-197`'s DoR item 10 now has its input, and its pull trigger (≤ 9.2 s) reads true on `main`. Nothing goes to the owner.
+- **B1, B3–B6, B9** stand on `…d72f02f0`; neither `src/uci-session.test.ts` nor production has changed since.
+- **Gaps:**
+  - QE-178-a (LOW) and QE-178-f (LOW) are ACCEPTED and still survive. They are why the grade is PASS_WITH_GAPS.
+  - QE-178-b, -c, -d and -e are CLOSED.
+  - No gap blocks.
+- **UAT:** waived. A waiver is not a signature.
+- **Next:** `NFR-008`'s state is Security/NFR's to rule. The board move is the Orchestrator's.
+
+**QE/E2E re-read, 2026-10-22 (subtask `qe-ABC-178b`), after the QE-178-b fold, at `grugops/qe-ABC-178` merges `fb00ad68` (tip `0036e5c6`) and `7b87e5de` (`main` `66fd8e1b`). Both are merges, with no conflict. Base `43e4996f`. Verdict: PASS_WITH_GAPS. QE-178-b closes.** This was a non-timing re-read. I read the amended B1, B3–B6 and B9 with my own runs before I opened the SE's `ticket-to-pr-ABC-178b` notes. Probes and plants ran only in scratch copies, and every production file was restored and compared. Notes: `.grugops/context/qe-ABC-178b/notes/` (verdict `…d72f02f0`). This block supersedes the 15:17Z block below where they differ.
+
+- **B1 MET.** Before session 2, session 1 has 0 `bestmove`. Session 2 is a fresh session with `out` `[]`. After session 2, the same `held.out` still has 0 `bestmove`.
+- **B3 MET.** One file, 0 `-` lines. One hunk of 9 `+` lines: R1, its re-check and comments citing `ABC-178`/`QE-177-a`/`QE-178-b`, plus the blank separator. Against `efaa0a76` the change is +2.
+- **B4 MET.** The file goes 126 → 127 and the lane 1 995 → 1 996. The difference is R1's name alone, with 0 skipped.
+- **B5 MET.** R1 = 655 and the sum is 608 965. The sorted census is `cmp`-equal to QE's `census-H.tsv`.
+- **B6 MET.** `gp-qe178.mjs` (`d781e5e5`, `12c0b8db…`), byte copy. QP0 has 0 red. QP1, QP1a and QP1c are red on R1 alone (file 1/127, lane 1/1 996). QP1c goes red at the re-check (`289:68`) and survives the pre-fold file. QP1b survives (reported only). QE's own variants:
+  - **QP1e** releases on a fresh session's construction. Only the re-check kills it.
+  - **QP1d** releases on a fresh session's `position`/`go`/`ucinewgame`. It survives everywhere, base included → QE-178-f.
+- **B7, B8 OWED** (unchanged; no timing taken).
+- **B9 MET.** Lint, typecheck and build exit 0. `npm test` 60/1 996, `success` true. Skip count 0 → `No findings.` `UCI_DEEP` 5/5. The M4 sweep is green, and the plant still reds it (13/127).
+
+**Gap register.**
+- **QE-178-a:** ACCEPTED by BA/PM.
+- **QE-178-b:** **CLOSED**.
+- **QE-178-c (MEDIUM, B7)** and **QE-178-d (MEDIUM, B8):** OWED, carried forward unchanged to the quiet-host timing hop.
+- **QE-178-e:** CLOSED (corrected).
+- **QE-178-f (LOW, new):** QP1d survives because R1's session 2 sends only `stop` and `ponderhit`. It is not a regression, and production runs one session per process. Route: BA/PM. Accept it, or change one line so that session 2 reads `talk(["stop", "ponderhit", "position startpos", "ucinewgame"])`. In scratch that line kills QP1d at 0 extra nodes and keeps every other kill.
+
+UAT is waived: the waiver form printed nothing at the tip and at both merges. A waiver is not a signature. The `In Review` exit is the Orchestrator's, and B7/B8 still hold it.
+
+**QE/E2E, 2026-10-22 (subtask `qe-ABC-178`), at `grugops/qe-ABC-178` merge `80493be0` (tip `efaa0a76`, base `43e4996f`, `main` `5d3832ef` merged, no conflict). Verdict: PASS_WITH_GAPS.** I read B1, B3–B5 and B9 with my own runs before I opened the SE's notes. Probes and plants ran only in scratch copies outside the repository; each production file was restored and compared. Notes: `.grugops/context/qe-ABC-178/notes/` (verdict `…1ad5f522`).
+
+- **B1 MET.** Session 1 searches 655 nodes and writes no `bestmove`. Session 2 is a fresh `talk`, and its `out` is `[]`.
+- **B3 MET.** One file, 0 `-` lines, 7 `+` lines. The one blank separator line is inside "additive only" (`…65ce53ef`): it carries no token, and all 40 `it` blocks in the file are blank-separated.
+- **B4 MET.** File 126 → 127; lane 1 995 → 1 996 (`ABC-168` moved the base); the difference is R1's name alone; 0 skipped.
+- **B5 MET.** R1 = 655 nodes; every other row unchanged.
+- **B6 MET.** `gp.mjs` byte copy: QP0 0 red; QP1 0/1 995 at base, 1/1 996 at the tip (R1 alone). QE's variants: R1 kills QP1a (ponderhit-only leak). QP1b (leak after a second hold) and QP1c (release into the holder's stream) survive the whole lane, as they did before `ABC-177`.
+- **B7 OWED.** Three windows failed on foreign vitest polls (2, 71, 1); no B7 stage ran before the 15:15Z deadline.
+- **B8 OWED.** One admitted window (0 foreign polls, AC). The stage reads NOT APPLICABLE under `174b`: load1 9.03 > 8 before scored round 7 H, while the owner's other session ran vitest. Warm 5/8. Instrument medians from that stage are not readings. `NFR-008` NOT READ; `ABC-197`'s input not produced.
+- **B9 MET.** Lint, typecheck, build, `npm test` 60/1 996 (`success` true), skip count 0 → `No findings.`, `UCI_DEEP` 5/5, M4 sweep green and still kills M4.
+
+**Gap register** (0 blocking as QE reads this page; severities proposed):
+- **QE-178-a (LOW).** QP1b survives the lane. Route: BA/PM — accept, or a test-only row later (same file as `ABC-197`).
+- **QE-178-b (LOW).** QP1c survives the lane: R1 reads session 1 before session 2 runs. One re-check assertion kills it (scratch). Route: BA/PM — accept, or a one-line follow-up.
+- **QE-178-c (MEDIUM).** B7 OWED. Route: Orchestrator — a timing hop at width 1 with the owner's session paused (P2).
+- **QE-178-d (MEDIUM).** B8 OWED; `NFR-008` stays at t3-r1's 9.395 s on `f81bf03c`. Route: the same timing hop; it can read `main` after a merge (H = `main` + R1). Security/NFR rules on the state.
+- **QE-178-e (INFO).** The page's 1 994 → 1 995 predates `ABC-168`; measured 1 995 → 1 996.
+
+UAT waived (0 production lines); a waiver is not a signature. The `In Review` exit is the Orchestrator's.

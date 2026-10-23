@@ -1,0 +1,2 @@
+287a288
+>     expect(held.out.filter((line) => line.startsWith("bestmove"))).toEqual([]);

@@ -1,0 +1,1 @@
+{"id":"QP1d","exit":0,"s":"9.1","total":1995,"failed":[],"passed":1995,"skipped":0,"what":"qe-ABC-178b variant: a fresh session's position/go/ucinewgame (not stop/ponderhit) releases the other session's hold into the HOLDER's stream"}

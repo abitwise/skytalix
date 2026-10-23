@@ -1,0 +1,16 @@
+== QP0
+R1 shape (s2: stop, ponderhit)   s1 bestmoves before=0 after=0  s2 out=[]
+s2: position startpos            s1 bestmoves before=0 after=0  s2 out=[]
+s2: constructed, no lines        s1 bestmoves before=0 after=0  s2 out=[]
+== QP1c
+R1 shape (s2: stop, ponderhit)   s1 bestmoves before=0 after=1  s2 out=[]
+s2: position startpos            s1 bestmoves before=0 after=0  s2 out=[]
+s2: constructed, no lines        s1 bestmoves before=0 after=0  s2 out=[]
+== QP1d
+R1 shape (s2: stop, ponderhit)   s1 bestmoves before=0 after=0  s2 out=[]
+s2: position startpos            s1 bestmoves before=0 after=1  s2 out=[]
+s2: constructed, no lines        s1 bestmoves before=0 after=0  s2 out=[]
+== QP1e
+R1 shape (s2: stop, ponderhit)   s1 bestmoves before=0 after=1  s2 out=[]
+s2: position startpos            s1 bestmoves before=0 after=1  s2 out=[]
+s2: constructed, no lines        s1 bestmoves before=0 after=1  s2 out=[]

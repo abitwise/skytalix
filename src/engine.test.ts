@@ -1266,7 +1266,14 @@ describe("ABC-170 A2 — maxNodes aborts, and the last COMPLETED iteration is pl
   const kiwipete = () => parseFen(fenOf("kiwipete"));
   /** The ceiling, on a 1 ms step: about 5 000 consultations, so the clock never binds first. */
   const LONG_MS = HARD_CEILING_MS;
-  const MAX_NODES = 20_000;
+  // ON 6 000 NODES SINCE `ABC-199` (`QE-198-a`; owner, 2026-10-19, `…6e1d9b47`: "Lighten the
+  // rows, keep cap"). On 20 000 the abort landed in depth 4 and row 2's three searches ran
+  // 35 759 nodes, and the row timed out at the 5 s default under coverage and load. On 6 000 the
+  // abort lands at 6 746 nodes, inside depth 3 (d = 2, depth 2 completes at 2 538, depth 1 at
+  // 602), and the three run 11 221 nodes. A build that ignores `maxNodes` reds row 1. A build that
+  // plays the aborted iteration's best-so-far move and score reds row 2 here; on 20 000 it did
+  // not, because that partial equalled depth 3's result (scratch census and plants, ABC-199).
+  const MAX_NODES = 6_000;
   const choice = () =>
     chooseMove(kiwipete(), {
       budgetMs: LONG_MS,

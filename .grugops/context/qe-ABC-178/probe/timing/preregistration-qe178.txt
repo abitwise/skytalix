@@ -1,0 +1,37 @@
+qe-ABC-178 timing pre-registration (B7, B8). Written 2026-10-22T14:30:46Z, AFTER the arm builds and BEFORE any start-gate poll,
+window or reading. Host: MacBook-Air.local. node v26.11.1, npm 11.20.0.
+
+Arms (each its own git archive + its own npm ci --no-audit --no-fund; no node_modules symlink; vitest 4.1.11 in every arm):
+  n8/{B,T} and full/{B,T} = git archive 43e4996f (main's src at the tip's base; src/uci-session.test.ts a12f818e, 126 rows)
+  n8/H and full/{H,H2}   = git archive 80493be0 (qe merge = tip efaa0a76 + main 5d3832ef; src/uci-session.test.ts 1a57e382, 127 rows)
+Instruments: byte copies of qe-ABC-177/probe (as of main 5d3832ef) in inst/: lane174 e2074cdbeedd, sampler174 6295540c2e58
+(FIX-177-1/SEC-177-1 version), window af83ea0c1d1e (SEC-177-1 version), readout174 f528540fa110, readout-nfr008-174 c95343f82f7c,
+powercheck a64369300b3e, readout174a 10a6e19be741, readout-nfr008-174a b0236f4623db, perrun 9e3bbe8c1888, readout-nfr008-174b
+464d97c6fa2e. Derivatives: run178.sh (of timing2/run-amended.sh; changes C1-C4 in its header), gate178.sh (of timing3/gate3.sh).
+
+Start gate (gate178.sh): 5 s polls; OK = zero vitest processes on the host (any origin), AC, load1 <= 8; a 60 s OK span opens it.
+Thermal gates only B7's start (thermal 0). Window: window.mjs 180 s foreground; admitted only with every power poll AC, every
+load1 <= 8 and foreignPolls == 0 (page B8). Not admitted -> not a run; the gate waits again. Deadline: no stage starts after
+2026-10-22T15:15:00Z (epoch 1792682100; about 60 min from the hop start 14:15Z, per the brief). A stage not run by then -> OWED.
+Re-run: at most ONE per stage, only if its grading readout prints VOID. If both read, the LOWER H median (B8) / the first (B7) stands.
+
+B7 (N8-LANE, ONE-FILE src/uci-session.test.ts): lane174 CONDS=B,T,H ROUNDS=9 GAP=0 k=2, round 0 discarded, CPU from
+/usr/bin/time -p; CMD exactly timing2's n8 CMD (NODE_OPTIONS 400). Grading view: readout174a.py <dir> n8-lane 16pct changed
+(registered rules: thermal rounds discarded; foreign/sampler logged). Strict readout174.py reported beside.
+  MET: STATE at 650 ms CPU = MET. H-B CPU and wall medians with intervals reported (expected about +4 ms, below the floor).
+B8 (NFR-008 R-1, full lane, npm test as spelled): lane174 CONDS=B,T,H,H2 ROUNDS=9 GAP=0 k=2.
+  Grading view: readout-nfr008-174b.py (thermal kept and flagged, Orchestrator 5aaf7cec, this reading only; foreign during the
+  lane logged, not discarded, as 174a/174b; flagged wherever reported). Strict 174 and 174a reported beside.
+  B and H medians with intervals and the B/T twin from lane174's own summary (rounds 1-8); H/H2 twin and A1 admissibility from 174b.
+  Routes (page): H <= 9.2 s -> the ABC-197 DoR-10 input; 9.2 < H <= 10 s -> NFR-008 MET, O3 route (Architect ee7527cc);
+  H > 10 s -> owner (ADR-0035 D6). NOT APPLICABLE / VOID / INADMISSIBLE -> OWED.
+Self-hygiene: while a stage runs, no command of this hop names the instruments' foreign terms (vitest, the wt- worktrees,
+a context probe path).
+
+ADDENDUM 1, written 2026-10-22T15:03:23Z, before any stage lane has run (no reading exists: attempts full-a1, n8-a1, n8-a2 and
+n8-a3 were all windows not admitted; see gate.log). One change to gate178.sh's ORDER only: from now on the full stage (B8)
+is picked first whenever the gate opens, and n8 (B7) only after full is done. Reason: about 12 min remain before the
+registered 15:15:00Z start deadline, so at most one stage can plausibly start; B8 is the reading ABC-197's DoR item 10 and the
+Architect's re-read (ee7527cc) wait on. Every condition (vitest 0, AC, load1 <= 8, 60 s span, 0 foreign window polls), the
+deadline, the re-run rule and every readout are unchanged. The gate was stopped between polls (15:03Z) and restarted.
+  (Restarted gate's run ids carry -g2aN so they never collide with the first gate's -aN ids.)

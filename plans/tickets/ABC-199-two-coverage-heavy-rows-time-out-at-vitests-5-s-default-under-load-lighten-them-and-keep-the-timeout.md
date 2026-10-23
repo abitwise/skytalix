@@ -1,8 +1,8 @@
 ---
 id: ABC-199
 title: "Two coverage-heavy rows time out at vitest's 5 s default under load: lighten them and keep the timeout (QE-198-a)"
-status: in-review
-column: In Review
+status: done
+column: Done
 size: XS
 priority: P3
 epic: EPIC-007
@@ -189,3 +189,34 @@ BA/PM, 2026-10-22, at `main` `147f8c82`. **Result: 10 of 10. `Ready`.**
 | 8 | size assigned | ✅ `XS` |
 | 9 | priority assigned | ✅ `P3`, argued |
 | 10 | no major unresolved blocker | ✅ `ABC-178`'s merge orders the merge, not the build. The fallback (A4) is pre-registered |
+
+## QE
+
+**2026-10-22, QE/E2E (`qe-ABC-199`): PASS_WITH_GAPS.** Every gap is INFO and none blocks. QE releases `In Review` → `In Security/NFR`, where A8 is owed. The Orchestrator moves the board.
+
+- **Where it ran:** merge `d4b2536e` (tip `8c0c5c81` plus `main` `8bd75e46`), base `08d42d01`, QE's own worktree, node_modules and scratch.
+- **Notes:** `.grugops/context/qe-ABC-199/notes/`:
+  - census `…b763e8a0`
+  - plants `…658d4ad2`
+  - A5/A6 `…7ab55568`
+  - gaps `…1593ea77`
+  - verdict `…be6588e4`
+- **A1 MET:** N 6 000; d = 2; 6 746 > 2 538; row 2 census 35 759 → 11 221 (31.4 %).
+- **A2 MET:** step 100; free depth 5, so the floor stays 5; census 55 972 → 26 276 (46.9 %).
+- **A3 MET:** QE's K1, K2, K3 and K4 are red at base and at the tip. K1 is QE's own shape: the partial is played and the aborted depth is reported.
+- **A4:** the fallback was not taken, and the readings justify that.
+- **A5 MET:** only the two files changed; hunks sit inside both blocks; names are equal; `timeout` count in `src/` is 0.
+- **A6 MET:**
+  - lint, typecheck and build 0;
+  - `npm test` 60 / 1 995 = base, success true;
+  - skips 0, `No findings.`;
+  - coverage, 2 forms × 2 runs: 0 failed;
+  - ENGINE_DEEP 60, UCI_DEEP 5.
+- **Gaps:**
+  - `QE-199-a`: `ABC-178` is not on `main` yet. The trial merge is clean; merge after it lands and re-gate.
+  - `QE-199-b`: d ≥ 2 is not asserted.
+  - `QE-199-c`: the A7 floor margin is now 0 plies, and the row fails closed.
+  - `QE-199-d`: K1's kill depends on the plant's shape. Move-only survives at both ends.
+  - `QE-199-e`: A5's `timeout` wording also matches 2 prose lines in the notes.
+- **UAT:** waived. Zero production lines, and the form is empty. A waiver is not a signature.
+- **Not claimed:** no timing and no `NFR-008` reading.

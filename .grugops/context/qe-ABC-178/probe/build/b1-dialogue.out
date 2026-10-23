@@ -1,0 +1,3 @@
+session1 out: ["info depth 3 score cp 66 nodes 655 time 4000 nps 164 pv e2e4"] results: continue,continue
+session2 out: []
+session1 after its own stop: ["info depth 3 score cp 66 nodes 655 time 4000 nps 164 pv e2e4","bestmove e2e4"]

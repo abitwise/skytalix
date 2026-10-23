@@ -1,0 +1,49 @@
+# nfr008-full: npm test | conds B,T,H,H2 | rounds 9 | gap 0s -> /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/7311fff4-c502-4aa9-80bc-0bf8723c1183/scratchpad/q178/t178/full/nfr008-full.tsv
+0 B cpu 25.3 wall 9.65 par 2.622 60 1995 load1 2.11 foreign 0 limit none therm 0->0 ok
+0 T cpu 25.85 wall 9.82 par 2.632 60 1995 load1 2.4 foreign 0 limit none therm 0->0 ok
+0 H cpu 26.88 wall 10.34 par 2.6 60 1996 load1 8.01 foreign 0 limit none therm 0->0 ok
+0 H2 cpu 25.36 wall 9.61 par 2.639 60 1996 load1 8.14 foreign 0 limit none therm 0->0 ok
+1 T cpu 25.94 wall 8.81 par 2.944 60 1995 load1 7.75 foreign 0 limit none therm 0->0 ok
+1 H cpu 29.04 wall 9.99 par 2.907 60 1996 load1 7.1 foreign 0 limit none therm 0->0 ok
+1 H2 cpu 26.26 wall 9.2 par 2.854 60 1996 load1 7.75 foreign 0 limit none therm 0->0 ok
+1 B cpu 25.7 wall 8.99 par 2.859 60 1995 load1 7.1 foreign 0 limit none therm 0->0 ok
+2 H cpu 26.72 wall 9.41 par 2.84 60 1996 load1 6.86 foreign 0 limit none therm 0->0 ok
+2 H2 cpu 26.86 wall 9.28 par 2.894 60 1996 load1 6.95 foreign 0 limit none therm 0->0 ok
+2 B cpu 26.47 wall 9.22 par 2.871 60 1995 load1 6.43 foreign 0 limit none therm 0->0 ok
+2 T cpu 26.53 wall 9.22 par 2.877 60 1995 load1 6.2 foreign 0 limit none therm 0->0 ok
+3 H2 cpu 26.51 wall 9.2 par 2.882 60 1996 load1 6.19 foreign 0 limit none therm 0->0 ok
+3 B cpu 26.35 wall 9.1 par 2.896 60 1995 load1 5.86 foreign 0 limit none therm 0->0 ok
+3 T cpu 26.68 wall 9.33 par 2.86 60 1995 load1 5.89 foreign 0 limit none therm 0->0 ok
+3 H cpu 27.18 wall 9.63 par 2.822 60 1996 load1 5.59 foreign 0 limit none therm 0->0 ok
+4 B cpu 27.29 wall 9.56 par 2.855 60 1995 load1 5.5 foreign 1 limit none therm 0->0 ok
+4 T cpu 28.98 wall 10 par 2.898 60 1995 load1 6.2 foreign 0 limit none therm 0->0 ok
+4 H cpu 29.92 wall 10.37 par 2.885 60 1996 load1 6.56 foreign 1 limit none therm 0->0 ok
+4 H2 cpu 30.06 wall 10.55 par 2.849 60 1996 load1 6.38 foreign 5 limit none therm 0->1 ok
+5 T cpu 31.3 wall 11.3 par 2.77 60 1995 load1 6.18 foreign 5 limit none therm 1->1 ok
+5 H cpu 27.02 wall 9.33 par 2.896 60 1996 load1 6.08 foreign 0 limit none therm 1->1 ok
+5 H2 cpu 26.89 wall 9.24 par 2.91 60 1996 load1 5.77 foreign 0 limit none therm 1->1 ok
+5 B cpu 26.7 wall 9.23 par 2.893 60 1995 load1 5.55 foreign 0 limit none therm 1->1 ok
+6 H cpu 27.07 wall 9.23 par 2.933 60 1996 load1 5.55 foreign 0 limit none therm 1->1 ok
+6 H2 cpu 27.11 wall 9.3 par 2.915 60 1996 load1 5.6 foreign 0 limit none therm 1->1 ok
+6 B cpu 29.32 wall 10.37 par 2.827 60 1995 load1 5.34 foreign 0 limit none therm 1->1 ok
+6 T cpu 31.25 wall 11.16 par 2.8 60 1995 load1 5.21 foreign 5 limit none therm 1->1 ok
+7 H2 cpu 33.23 wall 11.78 par 2.821 60 1996 load1 5.67 foreign 5 limit none therm 1->1 ok
+7 B cpu 29.27 wall 10.48 par 2.793 60 1995 load1 6.41 foreign 5 limit none therm 1->2 ok
+7 T cpu 30.92 wall 10.76 par 2.874 60 1995 load1 9.76 foreign 5 limit none therm 2->2 ok
+7 H cpu 33.33 wall 11.94 par 2.791 60 1996 load1 9.03 foreign 5 limit none therm 2->2 ok
+8 B cpu 30.92 wall 10.74 par 2.879 60 1995 load1 8.06 foreign 5 limit none therm 2->2 ok
+8 T cpu 28.75 wall 9.97 par 2.884 60 1995 load1 7.9 foreign 0 limit none therm 2->2 ok
+8 H cpu 29.2 wall 9.95 par 2.935 60 1996 load1 7.61 foreign 0 limit none therm 2->2 ok
+8 H2 cpu 29.15 wall 10.11 par 2.883 60 1996 load1 8.25 foreign 0 limit none therm 2->2 ok
+# nfr008-full summary: n = 8 scored rounds, round 0 discarded, 0 harness errors
+B	cpu 26.99	wall 9.39	par 2.865	load1 6.13	load1>8 1/8	files 60	tests 1995
+T	cpu 28.87	wall 9.98	par 2.875	load1 6.20	load1>8 1/8	files 60	tests 1995
+  T-B cpu	median 0.990 (3.67 % of base cpu)	sign 7/8	k 2	interval [0.060, 1.930]	R 1.930
+  T-B wall	median 0.255	sign 5/8	k 2	interval [-0.180, 0.790]	R 0.790
+H	cpu 28.11	wall 9.79	par 2.890	load1 6.71	load1>8 1/8	files 60	tests 1996
+  H-B cpu	median 0.575 (2.13 % of base cpu)	sign 6/8	k 2	interval [-1.720, 3.340]	R 3.340
+  H-B wall	median 0.360	sign 6/8	k 2	interval [-0.790, 1.000]	R 1.000
+H2	cpu 27.00	wall 9.29	par 2.883	load1 6.29	load1>8 1/8	files 60	tests 1996
+  H2-B cpu	median 0.290 (1.07 % of base cpu)	sign 6/8	k 2	interval [-1.770, 2.770]	R 2.770
+  H2-B wall	median 0.080	sign 6/8	k 2	interval [-0.630, 0.990]	R 0.990
+twin R: cpu 1.930 s, wall 0.790 s. Admissible = twin cpu median <= 1.5 % of base with sign at chance (ADR-0035 d1).

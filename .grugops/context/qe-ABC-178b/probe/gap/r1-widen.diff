@@ -1,0 +1,7 @@
+diff --git a/src/uci-session.test.ts b/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/7311fff4-c502-4aa9-80bc-0bf8723c1183/scratchpad/Hv/src/uci-session.test.ts
+index 0f059b1..d55657e 100644
+--- a/src/uci-session.test.ts
++++ b/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/7311fff4-c502-4aa9-80bc-0bf8723c1183/scratchpad/Hv/src/uci-session.test.ts
+@@ -287 +287 @@ describe("ABC-167 A6 — infinite waits for stop", () => {
+-    expect(talk(["stop", "ponderhit"]).out).toEqual([]);
++    expect(talk(["stop", "ponderhit", "position startpos", "ucinewgame"]).out).toEqual([]);
