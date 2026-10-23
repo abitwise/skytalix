@@ -1,0 +1,10 @@
+games is a regular file, mkdir recursive: EEXIST
+games is a regular file, open wx: ENOTDIR
+games 0555, mkdir recursive: ok
+games 0555, open wx: EACCES
+last component dangling symlink, open wx: EEXIST
+games symlink to dir, mkdir recursive: ok
+games symlink to dir, open wx: ok landed in elsewhere: [ 'x.pgn' ]
+games dangling symlink, mkdir recursive: ENOENT
+absent games, mkdir recursive: ok true
+local-ctor getters: 2026 10 23 14 5 9
