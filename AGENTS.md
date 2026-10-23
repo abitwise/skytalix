@@ -55,8 +55,11 @@ Real commands only, with flags, preferring fast single-file variants. If a comma
 - Dev / run: `npm run chess` <!-- prints the board and plays a game against the engine, default
   level 5 (≤3 s/move, ADR-0045). Options: `--colour white|black|random`, `--difficulty 1|2|3|4|5`, `--ascii`,
   `--unicode`. Pass an option AFTER `--`: `npm run chess -- --colour black` — the separator is
-  load-bearing; without it npm silently drops the flag and runs with defaults. Exit 0 normal
-  session, 1 refused command line, 70 internal error.
+  load-bearing; without it npm eats the flag name (npm 11.20.0): a value-less flag (`--ascii`) is
+  dropped and the game runs with defaults, exit 0; a value flag leaves its value behind as a stray
+  argument and the CLI refuses it, exit 1. On a terminal, colour then difficulty are asked for
+  when their flag is absent (Enter keeps the default; ABC-200); a flag skips its question, and a
+  non-terminal stdin skips both. Exit 0 normal session, 1 refused command line, 70 internal error.
   Writing rules for this slot and full receipts (RUN dates, byte-exact before/after the `--` trap): `memory-bank/90-agents-md-command-log.md` § "Dev / run". -->
 - Perft deep counts (opt-in slow suite): `PERFT_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/perft.test.ts`
 - UCI engine entry (ABC-168): `npm run uci` <!-- `node src/uci.ts`: reads UCI on stdin, writes UCI on stdout; exit 0 on `quit` or end of input, 1 on any argument, 70 on an exception. Receipts: `memory-bank/90-agents-md-command-log.md` § "UCI entry point". -->
