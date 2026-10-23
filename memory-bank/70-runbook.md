@@ -5,6 +5,9 @@ almost nothing to operate, and every "none" below was measured against the repo 
 _Updated: 2026-10-23 by Architect/Design (task `arch-runbook-operate`), verified on `main` `4ddae2c8`.
 § Operate was rewritten and the old text is kept below the new text as dated history. § Roll back got a
 pointer correction. § Deploy carries its own dated brackets._
+_Updated: 2026-10-23 by Architect/Design (task `arch-runbook-deploy-holder`), on `main` `ad9655fc`. § Deploy
+and § On-call say who holds deploy. Both now carry a dated correction to the owner's directive of
+2026-08-15. The old wording stays in place above each correction._
 
 <!--
   FORMAT — read before you fill this in. (clear voice; this is a technical file, not a role prompt.)
@@ -103,6 +106,23 @@ place; nothing is shipped to it, and there is no environment to promote *between
 - **Merge approval is not deploy approval.** The owner's standing merge directive of 2026-08-06
   (`memory-bank/60-progress.md`) says so in as many words: *"DEPLOY IS NOT INCLUDED."*
 
+**[CORRECTED 2026-10-23 (`arch-runbook-deploy-holder`).** The two bullets above are older than the
+owner's directive of 2026-08-15. The Orchestrator ruled the gap drift against that recorded
+directive, not a new governance call. The authority is `memory-bank/60-progress.md` § "Standing
+directive — deploy is ALLOWED and NOT NEEDED; merge, test and UAT are the agent's, per ticket.
+2026-08-15." It quotes the owner verbatim: *"I allow you to deploy, but this project does not need to
+be deployed, it is local for now until completed, mark that down."* Read the bullets this way:
+
+- **"a human holds deploy" is no longer true. The agent may deploy, and no deploy is needed.** The
+  directive says: *"What moved is who holds the deploy key, not where anything runs."* Nothing runs
+  anywhere but locally: *"it is local for now until completed"*.
+- **"`production_requires_human_confirmation` is `true`" still holds.** The directive says:
+  *"`production_requires_human_confirmation` is STILL `true`. THIS ENTRY DID NOT FLIP IT."* A human
+  confirms anything production. Only the owner's explicit word moves the flag; the grant does not.
+- **"DEPLOY IS NOT INCLUDED" is retired.** The directive's table marks that 2026-08-06 limit *"RETIRED
+  by grant 1 — deploy is now allowed (and not needed)"*. Merge approval is still not deploy approval,
+  because they are two separate grants. `ADR-0007` clause 4 was amended the same way on 2026-08-15.]**
+
 **How this project will eventually be distributed is UNDECIDED** — npm, a standalone binary, a
 `git clone` — and that is `EPIC-006`'s question, not this file's. When `EPIC-006` answers it, this
 section is the first place that has to change.
@@ -152,6 +172,13 @@ recorded elsewhere:
   owner's. Which decisions are delegated to which role, and which are not, is recorded in
   `memory-bank/60-progress.md` under its standing-directive sections — that file is the authority,
   this is a pointer.
+
+  **[CORRECTED 2026-10-23 (`arch-runbook-deploy-holder`).** "holds deploy" in the bullet above is
+  older than the owner's directive of 2026-08-15, in the same file. In the owner's words: *"I allow
+  you to deploy, but this project does not need to be deployed, it is local for now until completed"*.
+  Read the bullet as: **the owner holds the product decisions; the agent may deploy; no deploy is
+  needed; nothing runs anywhere but locally.** `production_requires_human_confirmation` stays `true`.
+  A human confirms anything production. See § Deploy's 2026-10-23 bracket for the quoted ruling.]**
 - **A blocked work item** escalates after `blocked_escalation_days` (`2`) through `plans/board.md`'s
   Blocked column, not through this file.
 
