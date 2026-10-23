@@ -1,9 +1,9 @@
 ---
 id: EPIC-007
 title: The engine speaks UCI as `skytalix`, so a chess UI can play against it
-status: accepted
+status: done
 accepted: 2026-10-18, owner (note `…c3e81a57`)
-column: Backlog
+column: Done
 priority: P1
 size: M
 owner: BA/PM
@@ -65,6 +65,47 @@ owner: BA/PM
 > 0 disconnects and 0 stalls. M8(a) had 2/2 pass texts, with every searched move at final depth 4 (131/131).
 > **`RISK-EPIC007-01` did not show up.** There were 0 `isready` pings during a search, and the closest clock was 13.3 s.
 > One spelling was corrected in-hop: `-debug` → `-debug all`. Verdict note: `…632c11f1`.
+
+> **CLOSE STATUS, 2026-10-23, BA/PM (task `bapm-close-EPIC-007`, at `main` `a2d7dda7`). All 11 measures are
+> settled: ten are MET and M2 is closed by acceptance. None is NOT MET. BA/PM recommends that the Orchestrator close
+> EPIC-007.** This box changes neither `status` nor `column`; the card move is the Orchestrator's. All 13 tickets with
+> `epic: EPIC-007` are `Done`.
+>
+> | # | state | evidence |
+> |---|---|---|
+> | M1 | **MET** | `ABC-202`, QE `qe-read-ABC-202` (`…202e80c8`, verdict `…632c11f1`): 6/6 games end in a pass text, with 0 illegal moves, 0 forfeits, 0 disconnects and 0 stalls; the closest clock was 13.29 s. Read at default options, which is `Skill Level` 5 (row amended below for QE-202-d) |
+> | M2 | **CLOSED BY ACCEPTANCE, not read** | Owner word `…d3681daa`, on his acceptance of `ABC-168` `A8`–`A10` (`…0b63d92f`); BA/PM `…b5f65536`. No agent observed a game, and M2 rests on the owner's word alone |
+> | M3 | **MET** | `ABC-168` `A6`, one QE probe run: 86.1 / 6.9 / 0.2 ms against 2 000 / 1 000 / 100 ms (`qe-ABC-168` `…1b96c204`). The owner confirmed `A6` as M3's proof (`…4ab163ef`). Placed as `NFR-011` (Security/NFR `…75a45be0`) |
+> | M4 | **MET** | The every-line prefix rows: `ABC-167` `A11` (QE `…c02ebd96`, owner UAT `…8f1b3a6d`), `ABC-171` `A11` (QE `…d60ef4d9`, owner UAT `…5c8d2f71`) and `ABC-168` `A5` in the `UCI_DEEP` lane (`…7547ac22`). Candidate row (iii) was ruled not placed because the default lane already pins it (`plans/nfr-catalog.md` § `NFR-011`) |
+> | M5 | **MET** | `ABC-170` `A3` identity sweep and the `A4`-only amendment (QE `…09d90757`, owner UAT `…3b8d51e6`). `ABC-168` `A11`: the `ADR-0044` D2 no-edit list is unchanged (`…7547ac22`). `ABC-167` `A12` fences. **Read plainly:** "`src/cli*.test.ts` … unedited" holds for every behaviour row. EPIC-007 changed `src/cli.test.ts` in four commits and nowhere else in those suites: `ABC-042` `A10`'s manifest-key pin gained `license` (`ABC-169` Scope 4, `344a4128`) and `bin` (`ABC-168` Scope 6, `825b21d1`; its value in `ABC-189`, `deb555d2`), and one comment count went from 8 to 9 (`243c2fdf`). Each is named on an accepted ticket page (`ABC-168` `A11` names Scope 6's four edits) |
+> | M6 | **MET** | `ABC-171` `A3`, `A4`, `A9` (QE `…d60ef4d9`, owner UAT `…5c8d2f71`) and `ABC-168` `A5` through the real file (`…7547ac22`) |
+> | M7 | **MET, at `ADR-0045`'s table** | `ABC-171` `A6` rows on `main`: 100 / 330 / 3 000 ms at levels 1 / 3 / 5. Its `A2` rows keep the old level on 0, 6, 2.5, `x` and `constructor`. `uci` reads `default 5`. The owner accepted `ADR-0045` (`…1a9c7f42`) and `ABC-174`'s UAT (`…ecff6698`). Row folded below |
+> | M8 | **MET** | (a) `ABC-202` (`…81066c23`, `…632c11f1`): 2/2 games end in a pass text, 151/151 `go depth 4`, every searched move at final depth 4 (131/131). (b) `ABC-167` `A7` rows `go depth 3`, `go nodes 20000` and `go mate 2` → `d5g8` (QE `…c02ebd96`, owner UAT `…8f1b3a6d`), and `ABC-170` (QE `…09d90757`, owner UAT `…3b8d51e6`) |
+> | M9 | **MET** | `ABC-168` `A7` on a fresh clone (`…7547ac22`); the owner confirmed `A7` as M9's proof (`…4ab163ef`). `ABC-202` `A1` re-read `npm ci && npm run build` on a fresh clone at `e5c5c2a5`, rc 0 (`…8a2be50b`). **The owner's own repeat at UAT is not recorded.** Under his delegation (`…5aaf7cec` item 2), UAT is signed by the QE verdict |
+> | M10 | **MET** | `ABC-169` `A1`–`A4` (QE `…bb7a6593`, merged `60227f06`, UAT waived by the `A3` measurement). Re-read at `a2d7dda7` by this hop: `"private": true, "license": "UNLICENSED"`; 0 tracked `LICENSE`, `NOTICE` or `COPYING`; the credit is at `src/evaluate.ts:16-19`, in the first comment block |
+> | M11 | **MET** | `ABC-172` (QE `…933d8f15`, Security/NFR `…216ceb43`); `ABC-190` regenerated the lock. Re-read at `a2d7dda7` by this hop: `npm pkg get name` is `"skytalix"`, both lock `name` fields are `skytalix`, and 0 tracked files outside `plans/`, `memory-bank/` and `.grugops/` name `cli-chess`. `npm ci` rc 0 on a fresh clone (`…8a2be50b`) |
+>
+> - **`RISK-EPIC007-01` did not show up** in 8 games (`…632c11f1`). It stays the named trigger for the worker, because the
+>   web UI's backend has not met the engine yet.
+> - **`RISK-EPIC007-02` has ended**, and is marked so below.
+> - **Folded at this hop (records only; no target, bar or ADR moved):**
+>   - **M1, for QE-202-d:** `Skill Level` 5, and the raw files under `qe-read-ABC-202`.
+>   - **M8(a):** the same raw-file location and `-debug all`.
+>   - **M7 and § v1 — in:** `ADR-0045`'s default and budgets. `ADR-0045` named its folds for `ADR-0044` D11 and
+>     `ABC-171`, but not for this page.
+>   - **Elsewhere on this page:** where it still says `default 3`, or that only levels 1 and 2 ignore `go depth`,
+>     `nodes` and `mate`, `ADR-0045` D2 and D4 win. The default is 5, and levels 1–4 ignore those limits.
+>   - Each fold corrects the record to what the owner already accepted, so none is an owner question
+>     (`…5aaf7cec` item 3).
+> - **Open, none of them holds a measure:**
+>   - QE-202-a/-b/-c (INFO).
+>   - Placing `ADR-0044` candidate row (ii) in the catalog is Security/NFR's, in its parallel hop `security-nfr-ABC-202`.
+>   - M3's QE notes (`…1b96c204`, `…7547ac22`) live only on the unmerged branch `grugops/qe-ABC-168` @ `7e831392`.
+>     On `main` they are cited by `…75a45be0`, `…2fddb7fa` and `plans/traceability.md`. Whether to bring them onto
+>     `main` is the Orchestrator's call.
+>
+> _Updated: 2026-10-23 by BA/PM (task `bapm-close-EPIC-007`), at `main` `a2d7dda7`. Notes in
+> `.grugops/context/bapm-close-EPIC-007/notes/`: `…d01656cd` (the evidence read) and `…6b73e572` (the rulings)._
 
 _Updated: 2026-10-18 by BA/PM (task `wave-2026-09-25`, subtask `bapm-engine-revise`). **Revised against the owner's
 answers to Q1–Q11, and then to Q12 and Q13 (owner word `…6b2d90f1`, which arrived during this hop).** Still PROPOSED:
@@ -132,7 +173,7 @@ _Created: 2026-10-18 by BA/PM (subtask `bapm-engine-plan`, `4a98860c`), conditio
   Anything else is ignored.
 - **`go`:** `movetime`, clock plus increment (`movestogo` included), `infinite` held until `stop`, and **`depth`,
   `nodes` and `mate`** (D12). The D4 time rule applies. The 5 s ceiling (`NFR-004`) is unchanged.
-- **Options:** `OwnBook` (`check`, default `true`, D10) and `Skill Level` (`spin`, default 3, range 1–5, D11). No other
+- **Options:** `OwnBook` (`check`, default `true`, D10) and `Skill Level` (`spin`, default ~~3~~ 5, range 1–5, D11; *default folded 2026-10-23 to `ADR-0045` D2*). No other
   option is offered.
 - **One small engine edit:** two optional `EngineOptions` fields, `maxDepth` and `maxNodes` (D12). When they are absent,
   the engine is today's engine node for node.
@@ -170,14 +211,14 @@ in a clone after `npm ci && npm run build`, or `skytalix` after `npm link` in th
 
 | # | measure | target | how it is read |
 |---|---|---|---|
-| M1 | **Protocol and time safety in `cutechess-cli`** | 6 games against the artifact, one per perft FEN pinned in `src/perft.test.ts:21-52` (startpos, Kiwipete, positions 3–6, given as an EPD opening file). Engine against itself, `proto=uci`, `tc=60+1`, default options (book on, `Skill Level` 3). **0 illegal moves, 0 time forfeits, 0 disconnects or stalls.** Every game ends by a chess result or by cutechess adjudication | `cutechess-cli`'s per-game result lines plus the `-pgnout` file, kept as raw files under `ABC-168`'s context. The exact termination strings and flag spellings are `UNKNOWN - verify` and are pinned on the first run. The owner installs `cutechess-cli` (Q10) |
+| M1 | **Protocol and time safety in `cutechess-cli`** | 6 games against the artifact, one per perft FEN pinned in `src/perft.test.ts:21-52` (startpos, Kiwipete, positions 3–6, given as an EPD opening file). Engine against itself, `proto=uci`, `tc=60+1`, default options (book on, ~~`Skill Level` 3~~ `Skill Level` 5). **0 illegal moves, 0 time forfeits, 0 disconnects or stalls.** Every game ends by a chess result or by cutechess adjudication | `cutechess-cli`'s per-game result lines plus the `-pgnout` file, kept as raw files under ~~`ABC-168`'s context~~ `qe-read-ABC-202`'s context. The exact termination strings and flag spellings are `UNKNOWN - verify` and are pinned on the first run. The owner installs `cutechess-cli` (Q10). *(Amended 2026-10-23 by BA/PM, task `bapm-close-EPIC-007`, for QE-202-d (`…632c11f1`). "Default options" is read at `Skill Level` 5: `ADR-0045` D2 and D4 (owner-accepted 2026-10-19, `…1a9c7f42`) moved the default from 3 to 5, and level 5 is `{ 3 000 ms, rate 0 }`, which is the old level 3 exactly. The raw files are under `.grugops/context/qe-read-ABC-202/raw/`, and the spellings are pinned there (`run.sh`, with `-debug all`). The struck words are the row as accepted on 2026-10-18. No target moved.)* |
 | M2 | **A full human game in a desktop UCI GUI** | The owner plays one complete game against the artifact in **En Croissant**. It ends by mate, resignation or a draw, with no GUI error dialog and no engine time loss. The GUI lists `OwnBook` and `Skill Level` among the engine's options | The owner's word at `ABC-168`'s UAT, recorded as a transcription and never as a stamp (`AGENTS.md` § Test and UAT authority). Whether En Croissant shows engine options on a settings screen is `UNKNOWN - verify` at UAT. If it does not, the second sentence is read from M1's `-debug` log instead |
 | M3 | **Idle responsiveness** | From process start to `uciok` ≤ 2 s (no file is read before `uciok`). The **first** `isready` to `readyok`, book load included, ≤ 1 000 ms. Any later idle `isready` to `readyok` ≤ 100 ms. All three are **proposed** targets | One QE hand reading in `ABC-168`, by an async probe outside vitest (`ABC-168` test note 6), recording host and load1. Security/NFR places it as `ADR-0044` candidate row (i) and may change the numbers. The book-load cost on this host is `UNKNOWN - verify` until that probe reads it. *(Reworded 2026-10-21, owner-confirmed, `…4ab163ef`; superseded text: "The opt-in real-child lane in `ABC-168`" and "until that lane reads it")* |
 | M4 | **Stdout hygiene** | 100 % of stdout lines begin with an engine-to-GUI keyword: `id`, `option`, `uciok`, `readyok`, `info` or `bestmove` | The session tests (`ABC-167`, `ABC-171`) and the real-child lane (`ABC-168`). Candidate row (iii) |
 | M5 | **The terminal game is unchanged** | 0 changed lines in the `ADR-0044` D2 "no edit" list. In `src/engine.ts`, the one core file that is edited, every `src/engine.test.ts` pin outside the `A4` block stays unedited and green, `A3`'s identity sweep included. The existing `src/cli*.test.ts` and `src/levels.test.ts` suites pass unedited | `git diff --stat <base> <head>` on that list. `git diff <base> <head> -- src/engine.test.ts` shows changes only inside the `A4` `describe` and in new rows. The gate run |
 | M6 | **The opening book plays, and switching it off is observable** | From `position startpos`, `go movetime 1000` writes `info string book` and a `bestmove` that is a book move from `data/opening-book/book.json`. After `setoption name OwnBook value false`, the same `go` writes an `info depth …` line and no `info string book`. With the book file unreadable, every `go` still writes one `bestmove` (0 failures, exit code unchanged), after exactly one `info string` warning | The session tests (`ABC-171`, with a probe over in-memory bytes) and one run of the real-child lane against the artifact (`ABC-168`) |
-| M7 | **A `Skill Level` change is observable** | `uci` lists `option name Skill Level type spin default 3 min 1 max 5`. On the same virtual clock and position, the same `go wtime 60000 btime 60000 winc 1000 binc 1000` (G = 3 500 ms) is searched under a **100 ms** budget at level 1, **3 000 ms** at level 3 and **3 500 ms** at level 5, which is `min(G, level)`. `setoption name Skill Level value 9` keeps the old level and writes one `info string` | The session tests (`ABC-171`), read from the `info` line's `time` on the injected clock, so the numbers are exact and host-independent |
-| M8 | **`go depth`, `nodes` and `mate` are honoured** | (a) A `cutechess-cli` run of 2 games from startpos against the artifact, colours swapped, `depth=4`: both games end by a chess result or adjudication, with 0 illegal moves and 0 stalls, and every searched move's final `info` line reports `depth` ≤ 4. (b) `go depth 3` reports `depth 3`. `go nodes 20000` reports `nodes` ≤ 20 000 + 1 024, unless depth 1 alone took more. `go mate 2` on `5r1k/6pp/7N/3Q4/8/8/8/6K1 w - - 0 1` (the corpus's smothered mate, `src/puzzle-corpus.ts:128`) answers `bestmove d5g8` with `score mate 2` | (a) `cutechess-cli`'s `-debug` log, kept raw under `ABC-168`'s context. Whether `depth=4` with `tc=inf` is the right spelling is `UNKNOWN - verify`, pinned on the first run. (b) The engine rows (`ABC-170`) and the session tests (`ABC-167`), on the virtual clock |
+| M7 | **A `Skill Level` change is observable** | `uci` lists `option name Skill Level type spin default ~~3~~ 5 min 1 max 5`. On the same virtual clock and position, the same `go wtime 60000 btime 60000 winc 1000 binc 1000` (G = 3 500 ms) is searched under a **100 ms** budget at level 1, ~~**3 000 ms**~~ **330 ms** at level 3 and ~~**3 500 ms**~~ **3 000 ms** at level 5, which is `min(G, level)`. `setoption name Skill Level value 9` keeps the old level and writes one `info string`. *(Folded 2026-10-23 by BA/PM, task `bapm-close-EPIC-007`. `ADR-0045` D1, D2 and D4 (owner-accepted 2026-10-19, `…1a9c7f42`) re-cut the level table, and `ABC-174` delivered it (owner UAT `…ecff6698`). `ABC-171` `A6`'s rows on `main` read 100 / 330 / 3 000 ms. The struck values are the row as accepted on 2026-10-18. The measure, "a level change is observable", and the rule `min(G, level)` are unchanged.)* | The session tests (`ABC-171`), read from the `info` line's `time` on the injected clock, so the numbers are exact and host-independent |
+| M8 | **`go depth`, `nodes` and `mate` are honoured** | (a) A `cutechess-cli` run of 2 games from startpos against the artifact, colours swapped, `depth=4`: both games end by a chess result or adjudication, with 0 illegal moves and 0 stalls, and every searched move's final `info` line reports `depth` ≤ 4. (b) `go depth 3` reports `depth 3`. `go nodes 20000` reports `nodes` ≤ 20 000 + 1 024, unless depth 1 alone took more. `go mate 2` on `5r1k/6pp/7N/3Q4/8/8/8/6K1 w - - 0 1` (the corpus's smothered mate, `src/puzzle-corpus.ts:128`) answers `bestmove d5g8` with `score mate 2` | (a) `cutechess-cli`'s `-debug` log, kept raw under ~~`ABC-168`'s context~~ `qe-read-ABC-202`'s context. Whether `depth=4` with `tc=inf` is the right spelling is `UNKNOWN - verify`, pinned on the first run. *(Amended 2026-10-23 by BA/PM, task `bapm-close-EPIC-007`, with M1's fold. The raw files are under `.grugops/context/qe-read-ABC-202/raw/`. The flag is spelled `-debug all`, and `tc=inf depth=4` sends `go depth 4` (`…81066c23`). No target moved.)* (b) The engine rows (`ABC-170`) and the session tests (`ABC-167`), on the virtual clock |
 | M9 | **The artifact builds and runs from a clone** | In a fresh clone, `npm ci && npm run build` exits `0` and creates `dist/uci.js`. `dist/` holds no `*.test.js` and no `cli.js`, and `dist/uci.js` loads no `turn-loop.js`, as `A7` measures *(reworded 2026-10-21, owner-confirmed, `…4ab163ef`; superseded text: "`dist/` holds no `*.test.js`, no `cli.js` and no `turn-loop.js`")*. `printf 'uci\nquit\n' \| node dist/uci.js` prints `id name skytalix` … `uciok` and exits `0`. After `npm link`, `printf 'uci\nquit\n' \| skytalix` prints the same | `ABC-168`'s acceptance, run by the agent and repeated once by the owner at UAT |
 | M10 | **The engine is declared private (2026-10-18, private)** | `npm pkg get private license` prints `true` and `"UNLICENSED"` (as one JSON object: `"private": true`, `"license": "UNLICENSED"`). The first comment block of `src/evaluate.ts` credits Tomasz Michniewski's "Simplified Evaluation Function", with its chessprogramming.org URL and `CC BY-SA 3.0`, and the change is comment-only. No `LICENSE`, `NOTICE` or `COPYING` file is tracked. *Superseded target: an AGPL-3.0 `LICENSE` and SPDX id* | `ABC-169`'s acceptance (`A1`–`A4`) |
 | M11 | **The in-repo name is `skytalix`** | `npm pkg get name` prints `"skytalix"`. Both `name` fields in `package-lock.json` read `skytalix`, and `npm ci` exits `0`. Outside dated history, no live file names the package `cli-chess` | `ABC-172`'s acceptance |
@@ -318,7 +359,9 @@ ticket.
   they are `UNKNOWN - verify`, and EPIC-007 stays open. *(Reworded 2026-10-23, `bapm-close-EPIC-007-M2`, on the owner's
   word `…d3681daa`: M2 is closed by acceptance, not read, and `ABC-168`'s UAT was signed on 2026-10-22 (`…0b63d92f`).
   Superseded text: "M1, M2 and M8(a) cannot be read until the owner has installed `cutechess-cli` and En Croissant
-  (Q10 says he will). Until then they are `UNKNOWN - verify`, and `ABC-168`'s UAT waits.")*
+  (Q10 says he will). Until then they are `UNKNOWN - verify`, and `ABC-168`'s UAT waits.")* **Ended 2026-10-23**
+  (`bapm-close-EPIC-007`): the owner installed `cutechess-cli` 1.5.1 (`…7ea41eea`), and M1 and M8(a) read MET
+  (`…632c11f1`).
 - `RISK-EPIC007-03`: with the book off, or out of book at levels 3–5, the engine plays deterministically (`ADR-0027`
   d1), so engine-against-itself games can repeat. M1 starts from six different FENs, and the book (on by default)
   varies the startpos game.

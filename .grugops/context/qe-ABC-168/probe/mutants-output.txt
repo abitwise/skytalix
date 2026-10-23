@@ -1,0 +1,44 @@
+== BASE (no plant)
+  npm test rc=0 passed 1988/1988 failed 0
+  UCI_DEEP lane rc=0
+  A1: rc=1 stdout_bytes=0
+  A3 run 1: rcs=0 0 0 stderr_bytes=0 stack_lines=0
+  A3 run 2: rcs=0 0 0 stderr_bytes=0 stack_lines=0
+  A3 run 3: rcs=0 0 0 stderr_bytes=0 stack_lines=0
+  cli.test.ts rc=0  Tests 88 passed (88)
+== BASE + fault injection only (A4 live)
+  A4 live (fault injected): rc=70 stderr=[internal error: a bug ended this session|] stack_lines=0 readyok_after=0
+== M-i-a: EPIPE arm installed after the first line's writes
+  npm test rc=0 passed 1988/1988 failed 0
+  UCI_DEEP lane rc=0
+  A3 run 1: rcs=0 0 0 stderr_bytes=0 stack_lines=0
+  A3 run 2: rcs=0 0 0 stderr_bytes=0 stack_lines=0
+  A3 run 3: rcs=0 0 0 stderr_bytes=0 stack_lines=0
+== M-i-b: EPIPE arm removed
+  npm test rc=0 passed 1988/1988 failed 0
+  UCI_DEEP lane rc=0
+  A3 run 1: rcs=0 1 0 stderr_bytes=1388 stack_lines=13
+  A3 run 2: rcs=0 1 0 stderr_bytes=1388 stack_lines=13
+  A3 run 3: rcs=0 1 0 stderr_bytes=1388 stack_lines=13
+== M-ii: an argument accepted (argv > 3)
+  npm test rc=0 passed 1988/1988 failed 0
+  UCI_DEEP lane rc=0
+  A1: rc=0 stdout_bytes=0
+== M-iii: exception path exits 0
+  npm test rc=0 passed 1988/1988 failed 0
+  UCI_DEEP lane rc=0
+  A4 live (fault injected): rc=0 stderr=[internal error: a bug ended this session|] stack_lines=0 readyok_after=0
+== M-iv-a: bin -> dist/cli.js
+  cli.test.ts rc=0  Tests 88 passed (88)
+  build rc=0
+  npm link rc=0 bin -> 
+  skytalix: rc=127 first=[] stderr_head=[/Users/olgeroeselg/Projects/hacks/grugops-examples/wt-qe-ABC-168/.grugops/context/qe-ABC-168/probe/mutants.sh: line 23: skytalix: command not found]
+== M-iv-b: bin -> src/uci.ts
+  cli.test.ts rc=0  Tests 88 passed (88)
+  build rc=0
+  npm link rc=0 bin -> ../lib/node_modules/skytalix/src/uci.ts
+  skytalix: rc=0 first=[id name skytalix] stderr_head=[]
+== BASE link (control)
+  build rc=0
+  npm link rc=0 bin -> ../lib/node_modules/skytalix/dist/uci.js
+  skytalix: rc=0 first=[id name skytalix] stderr_head=[]

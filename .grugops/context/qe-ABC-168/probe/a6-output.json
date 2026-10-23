@@ -1,0 +1,42 @@
+{
+  "probe": "ABC-168 A6 (test note 6)",
+  "at_utc": "2026-10-21T14:23:01.743Z",
+  "host_chip": "Apple M3",
+  "node": "v26.11.1",
+  "load1_before_run": "3.85",
+  "vm_loadavg": "{ 3.85 3.43 3.35 }",
+  "tip_sha": "6d27dc9ecedd6732b2931ad967896304ebe9bd42",
+  "command": "/opt/homebrew/Cellar/node/26.11.1/bin/node /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-qe-ABC-168/src/uci.ts",
+  "cwd": "/Users/olgeroeselg/Projects/hacks/grugops-examples/wt-qe-ABC-168",
+  "readings": {
+    "R1": {
+      "ms": 86.1,
+      "target": 2000,
+      "verdict": "met"
+    },
+    "R2": {
+      "ms": 6.9,
+      "target": 1000,
+      "verdict": "met"
+    },
+    "R3": {
+      "ms": 0.2,
+      "target": 100,
+      "verdict": "met"
+    }
+  },
+  "child_exit": {
+    "code": 0,
+    "signal": null
+  },
+  "stdout": [
+    "86.0ms id name skytalix",
+    "86.1ms id author Olger Oeselg",
+    "86.1ms option name OwnBook type check default true",
+    "86.1ms option name Skill Level type spin default 5 min 1 max 5",
+    "86.1ms uciok",
+    "93.1ms readyok",
+    "93.4ms readyok"
+  ],
+  "stderr": ""
+}
