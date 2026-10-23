@@ -29,3 +29,16 @@ width: 1 (ALONE: the owner has paused his other sessions; no other hop runs)
 
 ## Publish
 - Seal notes via the plugin writer (task `qe-timing-ABC-197`), `at` from `date -u`, with a `kind: decision`. Write `## Result` plus a 10-cell trace row into this brief in main's queue, then move it and its `claim.md` to `done/`.
+
+## Result
+
+**qe-e2e, 2026-10-23, done. A6 MET, A7 MET; ABC-197 overall PASS_WITH_GAPS (no blocking gap; QE-197-a to -e INFO).** Branch `grugops/qe-timing-ABC-197` from `1f2aa4b0` (no merge; the brief's diff check holds), commit `11b745e3` (notes, probe, `## QE` addendum). Not pushed, not merged into `main`.
+- **Preconditions** (`…13c7935f`): AC on every check (26 gate polls, 32 host polls, 74 window power polls, 63 runs). load1 ≤ 8 on every scored run (max 5.15). 0 foreign vitest at every check, and both windows had 0 foreign polls on their first try. Thermal 0 throughout. No re-run was needed.
+- **Correctness at H `1f2aa4b0`:** lint, typecheck and build exit 0. `npm test` ran 61 files / 2 019 tests, `success` true. `UCI_DEEP` passed 5/5.
+- **A6** (`…c12590b6`, F = 0.070 s): charge H−B CPU **+0.125 s [+0.120, +0.160]** ≤ 650 ms. MET in 174a and in strict 174. H−B wall +0.130 s [+0.090, +0.140]. Twin R 0.040 s CPU / 0.070 s wall, admissible: the set's third reading (median of three 0.040 / 0.070 s; the F ruling is the Architect's).
+- **A7** (`…fc6590fe`): **H 8.935 s [8.68, 9.11] ≤ 10 s**; **B 8.815 s [8.66, 8.92]**. H−B wall +0.090 s [+0.010, +0.200]. Both twins admissible; 0/8 warm. No owner route (`ADR-0035` D6 does not fire).
+- **Verdict:** `…9dc058a9`. Recommended board move In Review → In Security/NFR (`NFR-008` state); the move is the Orchestrator's.
+
+| Ticket | Title | Epic | Feature | NFRs | Code (PR/files) | Tests | UAT | Release | Status |
+|---|---|---|---|---|---|---|---|---|---|
+| ABC-197 (qe-timing-ABC-197) | QE quiet-host timing: A6 MET (H−B CPU +0.125 s [+0.120, +0.160] ≤ 650 ms, F 0.070 s); A7 MET (H 8.935 s ≤ 10 s; B 8.815 s); overall PASS_WITH_GAPS; verdict …9dc058a9 | EPIC-007 | — | NFR-008 MET (H 8.935 s, 0/8 warm), N8-LANE MET | src/uci-session.test.ts (R2, test-only) at 1f2aa4b0; commit 11b745e3 on grugops/qe-timing-ABC-197 | lane 61 / 2 019 pass at 1f2aa4b0; A6/A7 under .grugops/context/qe-timing-ABC-197/probe | waived (0 production lines) | — | In Review → In Security/NFR recommended |
