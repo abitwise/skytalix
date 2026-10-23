@@ -1,0 +1,57 @@
+security-nfr-timing-2026-10-23, part (1): ABC-200 N8-LANE pre-registration. Written 2026-10-23T07:38:20Z, AFTER the arm builds and
+the correctness checks, BEFORE any start-gate poll, scored window or timed reading. No timing figure has been read by this hop.
+Host: MacBook-Air.local (Apple M3 Mac15,13, 8 cores, 16 GiB), macOS 26.7.1
+(Darwin 25.6.0), node v26.11.1, npm 11.20.0, git version 2.56.0. Width 1: the owner holds a quiet window; this agent runs nothing else.
+
+Spelling: my own …08e4152e § 3 (ADR-0035 D2; the catalog's N8-LANE bullets as amended 2026-10-12).
+Trees. Worktree ../wt-sec-timing-ABC-200 on grugops/sec-timing-ABC-200 from grugops/qe-ABC-200 55618845. main merged in (a merge,
+no conflict): MERGE 5bf1e3d6 (parents 55618845, 1d5316e0). main 1d5316e0 = c91445e3 + records only (lane-input diff
+c91445e3..1d5316e0 over src tools package*.json vitest.config.ts tsconfig*.json biome.json data: empty). Own npm ci --ignore-scripts:
+vitest 4.1.12. Correctness at the merge (before any timing): npm test rc 0, last-run.json success true, 61 files / 2018 tests,
+0 failed / 0 pending / 0 todo (expected 61 / 2018).
+
+The pair: <base> = the merge's main parent 1d5316e0 (lane inputs = c91445e3); HEAD = 5bf1e3d6.
+The set (resolved at HEAD): the new and edited test files (src/startup-questions.test.ts, src/line-input.test.ts) plus
+  NODE_OPTIONS=--max-old-space-size=128 npx vitest related --run src/cli.ts src/cli-options.ts src/line-input.ts src/line-reader.ts src/startup-questions.ts
+  -> 5 files: src/cli.real-engine.test.ts src/cli.test.ts src/engine.test.ts src/line-input.test.ts src/startup-questions.test.ts (195 tests at HEAD).
+  The union is those 5 files; the same 5 paths run in every arm.
+Arms (out of tree, each its own git archive + npm ci --ignore-scripts --no-audit --no-fund; vitest 4.1.12 in each):
+  B = git archive 1d5316e0 + placeholder at src/startup-questions.test.ts (inst/placeholder.test.ts, sha256 f730fdb27019, one
+      assertion; the qe-ABC-105/154 placeholder byte for byte);
+  T = the same, built separately (identity twin; command diff -r B T: clean, 0 bytes);
+  H = git archive 5bf1e3d6.
+  Correctness on the set (counts only, no timing read): B rc 0, 5 files / 174 tests; H rc 0, 5 files / 195 tests.
+  Set file sha256 (B | H): cli.real-engine a4dbb3085b18 | same; cli e5a139561b37 | same; engine 66b568c94b34 | same;
+  line-input e2b169e927ce | 060d50df9be5; startup-questions f730fdb27019 (placeholder) | 75ecbcfc765b.
+Instruments: byte copies of qe-timing-ABC-178/probe/inst (hashes equal to its registration): lane174 e2074cdbeedd,
+  sampler174 6295540c2e58, window af83ea0c1d1e, readout174 f528540fa110, readout174a 10a6e19be741, powercheck a64369300b3e,
+  perrun 9e3bbe8c1888. Derivatives (diffs only their headers' changes): readout200.py 4bdc47ae8082 (of 174a: T1 thermal kept and
+  flagged), run200.sh 16812d9bf8eb, gate200.sh a1f75277d613, hostpoll200.sh 9a2de7b37729, go200.sh 1cd5677d1ed6.
+
+Preconditions (brief; checked before EVERY scored window and recorded): AC power (pmset -g batt); load1 <= 8; no foreign vitest
+(pgrep -fl '[v]itest'); thermal recorded ("thermal kept and flagged").
+  - start gate, every 5 s: OK = 0 [v]itest processes, 'AC Power', load1 <= 8; 60 s of OK opens it. Thermal logged, not gating.
+  - pre-window / post-window / post-lane: power, load1, thermal, vitest_procs, user_procs (st()).
+  - window: window.mjs 180 s, 1 s polls, plus 5 s power/load1 polls. Admitted only with AC on every poll, load1 <= 8 on every poll
+    and foreignPolls == 0. Not admitted -> not scored; the gate waits again.
+  - per run: lane174 logs power before/after, load1 before/after, foreign vitest before/after, thermal before/after.
+Deadline: no stage starts after 2026-10-23T09:30:00Z. Not read by then -> UNRESOLVED with the readings.
+Re-run: at most ONE, only when the stage did not read (readout200 VOID or INADMISSIBLE, or powercheck finds a not-AC run). A re-run
+stands alone; there is no choosing between two readings.
+
+Measurement: lane174 CONDS=B,T,H BASE=B TWIN=T ROUNDS=9 GAP=0 (round 0 discarded; 8 scored interleaved rounds; order rotated;
+a fresh process per run); CMD env NODE_OPTIONS=--max-old-space-size=128 npx vitest run <the 5 files> + lane174's reporters; CPU =
+user + sys from /usr/bin/time -p.
+Statistic and grade: readout200.py <dir> n8-lane 16pct multi (grading view): median of paired H-B CPU deltas, the sign test on the
+non-zero deltas, interval x(k)..x(n+1-k) (k = 2 at n = 8); the twin T-B admissible when |median| <= max(1.5 % of B median, 0.010 s)
+and sign p > 0.05; R = the twin's spread; bar b = 0.650 s CPU. States: MET (admissible, R <= b, median <= b); NOT MET (lower end > b,
+or R <= b and median > b); UNRESOLVED (R > b, or inadmissible, or VOID after the re-run, or the deadline). UNRESOLVED is never written MET.
+F: this set has no recorded per-set F; "16pct" (provisional, ADR-0035 d3 amendment) is printed only; F is a cut-time rule and the
+state test does not read it. Beside it, reported only: readout174a (thermal discards) and readout174 (strict). If the grading view
+reads a state and 174a reads VOID because of a thermal round, the grading view stands and the thermal rounds are flagged.
+Accounts: the floor is charged by count (1 file) to the floor account; N8-SPAWN 0 (no criterion forces a spawn). The spawning suites
+(cli.test.ts, cli.real-engine.test.ts) are identical B to H; they cancel in the delta and widen R.
+Contingency (brief): NOT MET or UNRESOLVED -> a full-lane NFR-008 reading is owed before merge (headroom 0.990 s, …d0c770b5), taken in
+this window under the ABC-177 A9 protocol if the host still qualifies; that stage gets its own pre-registration addendum before its
+first poll. MET -> no full-lane reading is taken here.
+Self-hygiene: while a stage runs, no command of this hop names vitest, a wt- worktree path or a context probe path.
