@@ -1,0 +1,13 @@
+Started game 1 of 1 (a vs b)
+Finished game 1 (a vs b): 1-0 {Black loses on time}
+Score of a vs b: 1 - 0 - 0  [1.000] 1
+...      a playing White: 1 - 0 - 0  [1.000] 1
+...      White vs Black: 1 - 0 - 0  [1.000] 1
+Elo difference: inf +/- nan, LOS: 84.1 %, DrawRatio: 0.0 %
+SPRT: llr 0 (0.0%), lbound -inf, ubound inf
+
+Player: a
+   "Win: Black loses on time": 1
+Player: b
+   "Loss: Black loses on time": 1
+Finished match

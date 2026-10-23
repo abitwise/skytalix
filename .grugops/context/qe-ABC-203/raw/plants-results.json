@@ -1,0 +1,57 @@
+{
+ "P1_write_on_quit": {
+  "total": 114,
+  "failed": 9,
+  "red": [
+   "ABC-042 \u2014 a human can run it A1 \u2014 `npm run chess` writes the start position and exits 0",
+   "ABC-044 \u2014 the result screen reaches the player A4 \u2014 end of input writes ZERO BYTES for the screen: the notice is still the last thing said",
+   "ABC-046 \u2014 `quit` and `new` through the delivered entry point A2/A3 \u2014 quit / quit ends the session on `QUIT_NOTICE`, writes NO result screen, exit 0",
+   "ABC-046 \u2014 `quit` and `new` through the delivered entry point A1 \u2014 quit / EOF: a single `quit` asks and does NOT end the session; end-of-input does",
+   "ABC-115 \u2014 a reader that closes early ends the session quietly, at the right code A3 \u2014 the trigger is the RULE: any reader that closes before the session's last write",
+   "ABC-203 \u2014 PGN export through the delivered entry point guard \u2014 no child whose working directory is the repository prints a PGN line",
+   "ABC-203 \u2014 PGN export through the delivered entry point guard \u2014 the neutral directory's games/ holds exactly one file per child that printed PGN saved",
+   "ABC-203 \u2014 PGN export through the delivered entry point A1/A2/A3 \u2014 exactly the children that reach an outcome save one file each; every other ending saves none",
+   "ABC-203 \u2014 the wiring in src/cli.ts (A10, A11, A12) A12 \u2014 one clock reading before the loop; the PGN is built and written only after the result screen"
+  ],
+  "suiteErr": []
+ },
+ "P2_w_not_wx": {
+  "total": 114,
+  "failed": 3,
+  "red": [
+   "ABC-203 \u2014 PGN export through the delivered entry point guard \u2014 the neutral directory's games/ holds exactly one file per child that printed PGN saved",
+   "ABC-203 \u2014 the writer, from one spawned child (A8\u2013A10) A9 \u2014 never overwrite: -2, then -3; every pre-existing file keeps its bytes and its mtime",
+   "ABC-203 \u2014 the writer, from one spawned child (A8\u2013A10) A9 \u2014 all 99 names taken: EEXIST, no new file, nothing modified"
+  ],
+  "suiteErr": []
+ },
+ "P6_write_before_loop": {
+  "total": 114,
+  "failed": 2,
+  "red": [
+   "ABC-203 \u2014 PGN export through the delivered entry point guard \u2014 the neutral directory's games/ holds exactly one file per child that printed PGN saved",
+   "ABC-203 \u2014 the wiring in src/cli.ts (A10, A11, A12) A12 \u2014 one clock reading before the loop; the PGN is built and written only after the result screen"
+  ],
+  "suiteErr": []
+ },
+ "P7_message_not_code": {
+  "total": 114,
+  "failed": 1,
+  "red": [
+   "ABC-203 \u2014 the wiring in src/cli.ts (A10, A11, A12) A10/A11 \u2014 the saved line goes to stdout, the failure line to stderr carrying only the code"
+  ],
+  "suiteErr": []
+ },
+ "X1_no_unlink_on_failure": {
+  "total": 114,
+  "failed": 0,
+  "red": [],
+  "suiteErr": []
+ },
+ "X2_throw_after_failure_line": {
+  "total": 114,
+  "failed": 0,
+  "red": [],
+  "suiteErr": []
+ }
+}

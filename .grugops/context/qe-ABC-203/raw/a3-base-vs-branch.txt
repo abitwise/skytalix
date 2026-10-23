@@ -1,0 +1,11 @@
+┌─────────┬────────────────────────┬─────────┬──────────┬──────────┬─────────────┬────────────────────────────────────────────────────────────────┬──────────────┬─────────┐
+│ (index) │ name                   │ exit    │ stdoutEq │ stderrEq │ stdoutBytes │ stderrHead                                                     │ gamesCreated │ pgnLine │
+├─────────┼────────────────────────┼─────────┼──────────┼──────────┼─────────────┼────────────────────────────────────────────────────────────────┼──────────────┼─────────┤
+│ 0       │ 'quitAfterPlies'       │ '0/0'   │ true     │ true     │ 2989        │ ''                                                             │ false        │ false   │
+│ 1       │ 'eofAfterPlies'        │ '0/0'   │ true     │ true     │ 2487        │ ''                                                             │ false        │ false   │
+│ 2       │ 'eofAtStartupQuestion' │ '0/0'   │ true     │ true     │ 499         │ ''                                                             │ false        │ false   │
+│ 3       │ 'eofAtSecondQuestion'  │ '0/0'   │ true     │ true     │ 986         │ ''                                                             │ false        │ false   │
+│ 4       │ 'usageError'           │ '1/1'   │ true     │ true     │ 0           │ '--colour needs one of white|black|random: purple'             │ false        │ false   │
+│ 5       │ 'usageUnknownFlag'     │ '1/1'   │ true     │ true     │ 0           │ 'unrecognised argument: --pgn'                                 │ false        │ false   │
+│ 6       │ 'internalError'        │ '70/70' │ true     │ true     │ 485         │ 'internal error: a bug ended this session, and it is not a ch' │ false        │ false   │
+└─────────┴────────────────────────┴─────────┴──────────┴──────────┴─────────────┴────────────────────────────────────────────────────────────────┴──────────────┴─────────┘

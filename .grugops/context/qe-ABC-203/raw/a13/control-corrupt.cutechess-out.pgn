@@ -1,0 +1,23 @@
+[Event "?"]
+[Site "?"]
+[Date "2026.10.23"]
+[Round "1"]
+[White "sfW"]
+[Black "sfB"]
+[Result "0-1"]
+[ECO "B90"]
+[GameDuration "00:00:00"]
+[GameEndTime "2026-10-23T23:56:19.094 GMT+3"]
+[GameStartTime "2026-10-23T23:56:19.061 GMT+3"]
+[Opening "Sicilian"]
+[PlyCount "24"]
+[Termination "time forfeit"]
+[TimeControl "0.02/move"]
+[Variation "Najdorf, Byrne (English) attack"]
+
+1. e4 {book} c5 {book} 2. Nf3 {book} d6 {book} 3. d4 {book} cxd4 {book}
+4. Nxd4 {book} Nf6 {book} 5. Nc3 {book} a6 {book} 6. Be3 {book} Ng4 {book}
+7. Qf3 {book} Nxe3 {book} 8. Qxe3 {book} g6 {book} 9. Bc4 {book} Bg7 {book}
+10. O-O-O {book} Nc6 {book} 11. Nxc6 {book} bxc6 {book} 12. Kb1 {book}
+a5 {book, White loses on time} 0-1
+
