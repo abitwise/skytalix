@@ -27,6 +27,31 @@ owner: BA/PM
 > the text below still says AGPL-3.0, `LICENSE` or "pending `arch-licence-eval`", this box and the rows marked
 > **(2026-10-18, private)** win._
 
+> **M2 CLOSED BY ACCEPTANCE, NOT READ, 2026-10-23, by the owner.** Owner word, verbatim
+> (`.grugops/context/owner-word-2026-10-23/notes/20261023T105100Z-orchestrator-decision-d3681daa.md`, a transcription,
+> not a stamp): *"close M2 on EPIC-007, approve the ADR note and config line"*.
+>
+> - **M2 is closed on the owner's existing acceptance.** He accepted `ABC-168` `A8`–`A10` by his word on 2026-10-22
+>   (`…0b63d92f`). BA/PM recommended closing M2 on that acceptance (`…2fddb7fa`).
+> - **No agent observed a game.** No agent saw or recorded an En Croissant play-test. No transcript, PGN, `-pgnout` file
+>   or screenshot exists under any `ABC-168` context. En Croissant is not in `/Applications` on this host (re-checked
+>   2026-10-23). The GUI-options sentence of M2 was not read either, and its M1 `-debug` fallback never ran. M2 rests on
+>   the owner's word alone.
+> - **M1 and M8(a) stay open.** `which cutechess-cli` prints nothing on this host (re-checked 2026-10-23), so neither
+>   can be read. The owner's acceptance of `A8` and `A9` does not close them. They are the only check of
+>   `RISK-EPIC007-01` before the web UI's backend meets it.
+> - **Trigger:** `which cutechess-cli` prints a path on the owner's Mac. **Then** BA/PM cuts one `XS` QE reading ticket.
+>   An agent runs M1's 6 games and M8(a)'s 2 games, keeps the raw files, and pins the flag spellings. There is no human
+>   gate.
+> - **That ticket is not cut today.** No step of it can start before the install. A page cut now also owes a board card
+>   and a trace row, and both files are fenced at this hop. This box and the M1 and M8(a) rows already hold the targets
+>   and the trigger.
+> - **EPIC-007 stays open** on M1 and M8(a). Its `status` and `column` are unchanged; column moves are the
+>   Orchestrator's. `RISK-EPIC007-02` below is reworded to drop M2.
+>
+> _Updated: 2026-10-23 by BA/PM (task `bapm-close-EPIC-007-M2`), at `main` `2d962400`. Where the M2 row or a risk
+> below still says M2 waits on a reading, this box wins._
+
 _Updated: 2026-10-18 by BA/PM (task `wave-2026-09-25`, subtask `bapm-engine-revise`). **Revised against the owner's
 answers to Q1–Q11, and then to Q12 and Q13 (owner word `…6b2d90f1`, which arrived during this hop).** Still PROPOSED:
 the owner must accept this revision and the revised `ADR-0044`. Six ticket pages are cut in `Backlog` as proposals, and
@@ -275,8 +300,11 @@ ticket.
 
 - `RISK-EPIC007-01`: a GUI's handshake timeout or `isready` ping fires during a ≤ 5 s search (`ADR-0044` D5). It shows
   up as an M1 disconnect or an M2 error. It is the named trigger for the worker.
-- `RISK-EPIC007-02`: M1, M2 and M8(a) cannot be read until the owner has installed `cutechess-cli` and En Croissant
-  (Q10 says he will). Until then they are `UNKNOWN - verify`, and `ABC-168`'s UAT waits.
+- `RISK-EPIC007-02`: M1 and M8(a) cannot be read until `cutechess-cli` is installed on the owner's Mac. Until then
+  they are `UNKNOWN - verify`, and EPIC-007 stays open. *(Reworded 2026-10-23, `bapm-close-EPIC-007-M2`, on the owner's
+  word `…d3681daa`: M2 is closed by acceptance, not read, and `ABC-168`'s UAT was signed on 2026-10-22 (`…0b63d92f`).
+  Superseded text: "M1, M2 and M8(a) cannot be read until the owner has installed `cutechess-cli` and En Croissant
+  (Q10 says he will). Until then they are `UNKNOWN - verify`, and `ABC-168`'s UAT waits.")*
 - `RISK-EPIC007-03`: with the book off, or out of book at levels 3–5, the engine plays deterministically (`ADR-0027`
   d1), so engine-against-itself games can repeat. M1 starts from six different FENs, and the book (on by default)
   varies the startpos game.

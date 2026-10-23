@@ -11,6 +11,10 @@ id: ADR-0007
 **Pointer 2026-10-11** (`design-low-batch-2026-10-11`). How a gate reads `tools/grugops/host-protection.js`
 exit 2 while `D3` holds is in `§ Pointers 2026-10-11` at the end of this file. No clause is amended.
 
+**Note 2026-10-23** (`arch-adr0007-bin-note`, approved by the owner `…d3681daa`). The package has had a
+`bin` since `ABC-168`. That fired the "exposes an executable" leg of `D2`. The posture did not move. See
+`§ Note 2026-10-23` at the end of this file. No clause is amended.
+
 **accepted** — 2026-08-06 by Architect/Design at task `refinement-deploy-posture-2026-08-06`
 (subtask `architect-deploy-posture`), under the project owner's standing directive of 2026-08-03
 recorded in `memory-bank/60-progress.md` under **"Standing directive — who decides"**, which retired
@@ -432,3 +436,59 @@ fault.**
 - **Revisit trigger: `D3` fires** (a remote is added, as under `EPIC-006`). From then on exit 2 is a real
   `UNKNOWN - verify` for a human to resolve. The tool cites the grugops checkout's git-host checklist
   (`install/README.md` §5, which is not in this repository). The qualifier is dropped.
+
+## § Note 2026-10-23: a `bin` since ABC-168
+
+Written by Architect/Design (subtask `arch-adr0007-bin-note`). The owner approved it in session on
+2026-10-23 (note `…d3681daa`): *"approve the ADR note"*. This is a dated note on an accepted ADR. **No
+clause is amended, no falsifier row is edited, and the posture is unchanged.** Notes `…0f003634`
+(decision) and `…97e856c3` (observation) are in `.grugops/context/arch-adr0007-bin-note/`.
+
+**The fact, read on `main` `2d962400`.**
+- `package.json` has `"bin": { "skytalix": "dist/uci.js" }`. `jq -c '[.private, .bin, has("main"),
+  has("exports"), has("files")]' package.json` prints `[true,{"skytalix":"dist/uci.js"},false,false,false]`.
+- The `bin` arrived in `825b21d1` (`ABC-168`). It was merged to `main` at `513c0211` on 2026-10-22.
+  `git log -G'"bin"' -- package.json` names only that commit, so the value has not changed since.
+- The target is built, not tracked. `build` is `tsc -p tsconfig.build.json`, which emits `src/uci.ts`
+  and its imports into `dist/`. `dist/` is git-ignored, and no file under it is tracked. `src/uci.ts`
+  starts `#!/usr/bin/env node`.
+- The design is `ADR-0044` D8, which the owner accepted on 2026-10-18. A separate backend spawns the
+  engine. D8 says: *"This stays inside `ADR-0007` and `ADR-0018`. It is local and built from a clone,
+  and nothing is published."*
+
+**What it changes in this file.**
+- **`D2`: the "exposes an executable" leg FIRED at `513c0211`. The "publishable" leg did not.**
+  `"private": true` stands, and there is no `main`, `exports` or `files` key.
+- Context row 3 (*"no `bin` … exposes nothing to run"*) and row 6 (*"the build emits nothing and no
+  `dist/` exists"*) are readings from 2026-08-06. They are no longer true. They stay as written, as
+  dated history. The same applies to the `D2` reading in clause 4's block (2026-08-15).
+- **The posture in clause 1 holds. I re-read it at this hop:**
+  - `D1`: 0 deploy artifacts and no YAML file. `.github/` holds only `copilot-instructions.md`.
+  - `D3`: `git remote -v` prints 0 lines.
+  - `D4`: `plans/releases/` holds only `.gitkeep`.
+  - `default_stack.deploy` is `none-local-only` and `environments` is `["local"]`.
+  - `D7`: `production_requires_human_confirmation` is `true`.
+- The `bin` runs on the machine that cloned and built the repository. Nothing is published, and
+  nothing is deployed.
+
+**Why this is a note and not a new ADR.** A `bin` is a local executable. It is not a distribution
+channel and it is not a deploy. The publishable leg of `D2`, together with `D1`, `D3` and `D4`, would
+move the posture, and none of them fired. The owner ruled "not a reversal; no posture change"
+(`…d3681daa`).
+
+**How to read `D2` from now on.** The row is not edited. Check it against this note's reading,
+`[true,{"skytalix":"dist/uci.js"},false,false,false]`. Any other value fires `D2` again: a changed or
+second `bin`, a `main`, `exports` or `files` key, or `"private"` removed. AR-1's check 3 reads the same
+line (Release Manager `…edd18e94`).
+
+**Other triggers on the same ground, owned elsewhere (cited, not restated).**
+- `ADR-0044` D8's revisit trigger: `npm publish`, a `files` allow-list, or packaging `dist/` for third
+  parties. That needs a superseding ADR under `D5`, not a note.
+- `AR-168-BINPIN` (Security/NFR `…75a45be0`): any edit to the `bin`.
+- There is no `files` list, so a pack would carry the whole repository (Security/NFR `…7d7b76ec` § 6,
+  INFO; the owner is the Orchestrator).
+
+**Not edited here; follow-ups for the Orchestrator.** `ADR-0018` carries the same `D2` row under the same
+id. It also has the same out-of-date wording: Context row 2 says "no `bin`", and Decision 1 says "no
+`dist/` is emitted, no `bin` is added". `70-runbook.md` says "Nothing is published, built or deployed",
+and "built" is no longer true. The owner's approval covers only this file.
