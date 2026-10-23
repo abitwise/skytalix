@@ -1,8 +1,8 @@
 ---
 id: ABC-206
 title: "The search runs faster with identical answers: one legal-move generation per leaf, captures-only generation in quiescence, a gives-check test without make/unmake"
-status: in-design
-column: In Design
+status: in-development
+column: In Development
 size: M
 priority: P2
 epic: EPIC-008

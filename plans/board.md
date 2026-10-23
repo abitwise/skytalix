@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-24 by Orchestrator (orch-2026-10-24n) — ABC-206 design merged → In Development (3/3, at the cap). Width 3/3 (ticket-to-pr-ABC-205, bapm-amend-ABC-212, ticket-to-pr-ABC-206). ABC-213 waits for a design slot/width._
 _Updated: 2026-10-24 by Orchestrator (orch-2026-10-24m) — ABC-212 SE STOP (8 pins outside A13) → BA/PM amend. Width 3/3 (ticket-to-pr-ABC-205, arch-design-ABC-206, bapm-amend-ABC-212)._
 _Updated: 2026-10-24 by Orchestrator (orch-2026-10-24l) — ABC-205 design merged → In Development (SE). Owner owed before its merge: ADR-0031 addendum + OD-205-1. In Design 1/2 (ABC-206), In Development 2/3. Width 3/3._
 _Updated: 2026-10-24 by Orchestrator (orch-2026-10-24k) — ABC-214 (Apache-2.0) cut, Backlog until owner OD-214-1 (A carve-out / B re-derive). ABC-206 → In Design. Dispatching `ticket-to-pr-ABC-212` and `arch-design-ABC-206`. Width 3/3._
@@ -948,7 +949,8 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 2/3)
+    ## In Development (WIP 3/3)
+- [ABC-206] The search runs faster with identical answers (one generation per leaf, captures-only quiescence, gives-check without make/unmake)  (owner: software-engineer, size: M, priority: P2, epic: EPIC-008, since: 2026-10-23, DoR 10/10; `…8c3b2f47`. Node-equal identity sweep + clock-count equal; median time to depth 8 ≤ 0.85 × base on kiwipete and position-6 (plain node, n ≥ 7); NFR-001 leaf clause kept; D: S2 not LOSS. No ADR expected) **2026-10-24: pulled Ready → In Design (`arch-design-ABC-206`).** **2026-10-24: design ruled (`…e3ff760b`): one-stop leaf check, captures-only quiescence generation, cheap givesCheck for LMR; value-identical, no door; merge order 212 → 206 → 205. OD-206-1 (ADR-0003 clause 1 reading) to the owner before merge. → In Development (`ticket-to-pr-ABC-206`).**
 - [ABC-205] King safety bites while the enemy queen is on, and the king table is tapered  (owner: software-engineer, after Architect/Design (ADR-0031 addendum → owner when written), size: M, priority: P2, epic: EPIC-008, since: 2026-10-23, DoR 10/10; `…8c3b2f47`. Strict relations (queen scale ≥ 6 pairs, taper, no castled bonus without shelter); G2 ≤ 1 100 ns, G6 depth ≥ 6 and ≥ base, G1 ≥ 54/58; D: S1 GAIN. D waits on ABC-204) **2026-10-24: owner "pull ready tickets" → Ready → In Design (`arch-design-ABC-205`).** **2026-10-24: design ruled (`…1fb6e1bc`): exposure ×3 while the enemy queen is on (cap 315 cp), tapered king table with our own endgame half, no castled bonus without shelter; ADR-0031 addendum PROPOSED; OD-205-1 (quiescence multiplier cell) owed before merge. → In Development (`ticket-to-pr-ABC-205`).**
 - [ABC-212] Two stronger levels: 6 thinks 5 s and 7 thinks 30 s a move, at every surface, and the default stays 5  (owner: software-engineer, after Architect/Design (ADR-0045 amendment + ADR-0044 D4/D5/D11 folds) and the owner's acceptance of the NFR-004 text, size: M, priority: P2, epic: EPIC-004 (post-close addition), since: 2026-10-24, DoR 10/10; cut in \`bapm-cut-levels-6-7\` (\`…44bee405\`). Owner word \`…e44d2903\`. LEVELS 6 = 5 000/0, 7 = 30 000/0, HARDEST 7, default 5; "up to 30 s" = spends 30 s (no early stop). Flag/usage/question 1–7, Skill Level max 7, bare go = level budget. L6 5.0–7.0 s 30/30, L7 30–32 s 10/10 (ENGINE_DEEP); L1–5 identical 50/50; L7 depth ≥ L5 + 1. PROPOSED to owner: NFR-004 per-level ceiling (5/7/32 s). D5 worker trigger fires; UCI split pre-registered. 0 files, 0 spawns) **2026-10-24: owner "pull ready tickets" → Ready → In Design (`arch-design-ABC-212`).** **2026-10-24: design ruled (`…d2c68ace`): one clamp `HARD_CEILING_MS` 32 000, UCI unchanged, no worker split; ADR-0045 amended on the owner's points. → In Development (`ticket-to-pr-ABC-212`).** **2026-10-24: built `2dba7331` (`…e4a87583`); STOP: 8 existing rows (U1–U8) red outside A13, all spec consequences → `bapm-amend-ABC-212`, then a small SE fix hop + the Scribe's A11 line.**
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
@@ -1071,8 +1073,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## In Analysis (WIP 0/2)
 
 
-## In Design (WIP 1/2)
-- [ABC-206] The search runs faster with identical answers (one generation per leaf, captures-only quiescence, gives-check without make/unmake)  (owner: software-engineer, size: M, priority: P2, epic: EPIC-008, since: 2026-10-23, DoR 10/10; `…8c3b2f47`. Node-equal identity sweep + clock-count equal; median time to depth 8 ≤ 0.85 × base on kiwipete and position-6 (plain node, n ≥ 7); NFR-001 leaf clause kept; D: S2 not LOSS. No ADR expected) **2026-10-24: pulled Ready → In Design (`arch-design-ABC-206`).**
+## In Design (WIP 0/2)
 
 
 ## Ready for Dev (WIP 0/6)
