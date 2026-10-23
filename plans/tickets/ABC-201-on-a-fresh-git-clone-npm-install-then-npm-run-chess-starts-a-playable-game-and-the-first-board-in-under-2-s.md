@@ -1,8 +1,8 @@
 ---
 id: ABC-201
 title: "On a fresh `git clone`, `npm install` then `npm run chess` starts a playable game, and the first board arrives in < 2 s: take EPIC-006 AC1's and `NFR-007`'s reading"
-status: in-review
-column: In Review
+status: done
+column: Done
 size: XS
 priority: P3
 epic: EPIC-006
