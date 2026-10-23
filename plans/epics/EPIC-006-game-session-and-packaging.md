@@ -10,6 +10,15 @@ owner: BA/PM
 
 # EPIC-006 — Game session and packaging
 
+> **2026-10-23, BA/PM (`bapm-cut-pgn-export`, at `main` `f4eec73d`): PGN export moved from negotiable to IN SCOPE on
+> the owner's word, and it is cut as `ABC-203`** (Ready, M, P1). The owner said: *"Yes record PGN file export as a
+> feature, since it allows to analyze games"* (Orchestrator transcription `…715b9cbf`, item 1; play-test log game 1,
+> *"PGN wanted = y"*). The play-test rule in § Negotiable slice no longer gates it. **Save/resume is unchanged: it is
+> still negotiable and still waits on the play-test.** `ABC-203` writes one PGN file automatically when a game reaches
+> an outcome. Nothing is written on `quit` or end of input. The file goes under `games/` in the clone. An
+> Architect/Design ruling comes first, and a Security/NFR hop is owed (the CLI's first file write). Front matter is
+> unchanged, and the card move is the Orchestrator's.
+
 > **2026-10-22, BA/PM (`bapm-next-slice`, at `main` `08d42d01`): the startup prompt (gap `G6`) is cut as
 > `ABC-200`** (Ready, M, P2). It is the last uncut line of § Scope. Still open on this epic after it: acceptance 1
 > and `NFR-007` have no recorded reading on a fresh clone (search-bounded), and the negotiable slice waits on
@@ -172,6 +181,8 @@ values that are not chess outcomes at all** and must never be shown as one — `
    and `ABC-042` `A6` rejects it with a usage message rather than pretending.
 4. **Save / resume and PGN export — the epic's own negotiable slice**, and nothing has play-tested
    anything. Not cut, correctly.
+   **[AMENDED 2026-10-23 by BA/PM (`bapm-cut-pgn-export`)]: PGN export is in scope on the owner's word (`…715b9cbf`)
+   and is cut as `ABC-203`. Save/resume is still not cut and still waits on the play-test.**
 5. **Any change to `src/turn-loop.ts`.** Every seam this epic needs is already published on it. If
    `ABC-046`'s ruling goes the way that requires a new arm, **that is its own ticket** and it is
    Architect/Design's.
@@ -238,6 +249,10 @@ result screen at the end.
 Save/resume to a local file and PGN export are **negotiable**, not MVP. They are worth
 building only if play-testing shows people abandon games mid-way. Cut them first if this
 epic runs long.
+
+**[AMENDED 2026-10-23 by BA/PM (`bapm-cut-pgn-export`), on the owner's word (`…715b9cbf`)]: PGN export is no longer
+negotiable. It is IN SCOPE, for game analysis rather than abandonment, and it is cut as `ABC-203`. The paragraph above
+now governs save/resume only. That is still negotiable and still waits on the play-test (`plans/uat/EPIC-006-play-test-log.md`).**
 
 ## Acceptance (epic level)
 
