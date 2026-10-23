@@ -4,7 +4,7 @@ Protocol: `plans/uat/EPIC-006-play-test-guide.md`. Each row is the owner's word,
 
 | # | Date | Colour | Level | Ended (finished/abandoned) | Move # if abandoned | Why (time / bored / losing / bug / other) | Would I have saved and come back? (y/n) | Want this game as a PGN file? (y/n) | Bugs or annoyances |
 |---|------|--------|-------|----------------------------|---------------------|-------------------------------------------|------------------------------------------|-------------------------------------|--------------------|
-| 1 | 2026-10-23 | black (`--colour black`; the owner relayed Apple Chess's moves as Black, skytalix played White) | 5 | finished — "Black wins by checkmate", move 35 (skytalix lost) | — | — | n/a (finished) | _owner to answer_ (he copied the move list out by hand) | _owner to answer_ |
+| 1 | 2026-10-23 | black (`--colour black`; the owner relayed Apple Chess's moves as Black, skytalix played White) | 5 | finished — "Black wins by checkmate", move 35 (skytalix lost) | — | — | n/a (finished) | **y** — owner, 2026-10-23: "i would like to have PGN file, then i can analyse it" | none reported |
 
 ## Game 1 — move list as printed by the game (owner's paste, 2026-10-23)
 
@@ -19,5 +19,7 @@ Black wins by checkmate.
 26. f4 Rac8     27. Qf3 Qe4     28. b3 Na4      29. Bd2 Rxc4    30. Kb1 Rc3
 31. Ra2 Rxb3+   32. Rb2 Rxb2+   33. Ka1 Qc4     34. Qd5 Ra2+    35. Kb1 Qc2#
 ```
+
+Owner, 2026-10-23, on why game 1 was relayed: *"it was just easier right now to do one test like that as it is late"*; he wants to analyse the game (blunders on both sides, a rating, which parts of the algorithm could improve).
 
 Note: game 1 is engine-vs-engine with the owner relaying moves, not the owner playing naturally, so it says little about abandonment. It counts toward the variety rule (1 of ≥ 2 as black, 1 of ≥ 1 at level 4–5).
