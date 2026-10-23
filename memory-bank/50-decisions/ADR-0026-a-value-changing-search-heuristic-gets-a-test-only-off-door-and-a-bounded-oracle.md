@@ -29,6 +29,8 @@ amendments**. Owner's word, verbatim: *"4. accept"* (recorded in
   guard list (the drift and the mate floor overclaimed PVS window bugs). Each is marked
   *(amended 2026-09-26, `ruling-abc121-g6`)*. No other decision changes. The status stays
   **accepted**.
+- **Amendment 2026-10-24 (`ABC-205`, `OD-205-2`): PROPOSED.** See § Proposed amendment 2026-10-24 at the end.
+  Decision 9 stays as written until the owner accepts it.
 
 - It builds on `ADR-0024` decision 7 and `ADR-0025` decision 6 (the test-only door precedent and
   the ladder rule) and amends neither.
@@ -301,3 +303,53 @@ position one move away, and six endgames.
 - **To drop PVS too:** revert `ABC-121`. Every old row then points at a door identical to
   `search()`, so the rename can be reverted or left.
 - No stored data, format or dependency depends on this ADR.
+
+## Proposed amendment 2026-10-24 (`ABC-205`, `OD-205-2`): the depth-5 drift maximum, 75 → 118 cp
+
+### Status
+
+**PROPOSED** 2026-10-24 by Architect/Design (task `arch-rule-ABC-205-stop`). **Acceptance is the owner's**
+(`ADR-0028` decisions 4 and 5). The Orchestrator reports it with `OD-205-1`, through the `ADR-0031` addendum `A7`.
+Until he accepts, decision 9 reads as written, and `ABC-205`'s two drift rows stay red.
+
+### Context
+
+- `ABC-205` (king safety scaled by the enemy queen, a tapered king square, and a shelter gate on the castled bonus)
+  reads the depth-5 drift on the 190 at **96.79 % / 97.33 % within 25 cp, maximum 79 cp**, in both recursions.
+  Base reads 97.33 % / 97.86 % with a 51 cp maximum. The maximum is position-6/e2d2 on both, and it moves 51 → 79 cp.
+- Variants, maximum in both recursions: shelter gate alone 87 cp; blend alone 55 cp; queen scale alone 107 cp, on
+  position-5/h1f1.
+- History of the maximum: 45 cp at `ABC-121`'s build, 45 cp at `ABC-082`'s, 51 cp at `ABC-083`'s (and on base),
+  79 cp now.
+- Readings and the not-a-defect proofs: `ABC-205` § Addendum 2026-10-24 and
+  `.grugops/context/arch-rule-ABC-205-stop/notes/`.
+
+### Decision (proposed)
+
+1. **Decision 9's "none beyond 75 cp" becomes "none beyond 118 cp",** in both recursions. 118 is ⌊1.5 × 79⌋, which
+   is `ADR-0039` decision 3's pattern.
+2. **Nothing else in decision 9 moves.** That covers the ≥ 95 % within 25 cp clause, depth 5, the 190 corpus, the
+   mate floor and the report-only mate flips.
+3. **`ADR-0034` addendum decision 1's clean-lead bar follows,** because it is defined as this maximum. It reads
+   118 cp for later L re-finds only. No retained puzzle row changes (that addendum's decision 2).
+
+### Alternatives
+
+- **Re-tune the gate or the scale until the maximum passes. Rejected.** Decision 9 says not to chase the bar with
+  the build. Also, each term alone already reds it (87 and 107 cp).
+- **Drop the maximum and keep the 95 % clause. Rejected.** On the build's `chooseMove`, the maximum still reds
+  `early` at 198 cp, so it is not dead weight. A smaller change is enough.
+- **A lower new maximum, such as 100 cp. Not proposed.** No reading separates 100 from 118. The 1.5x rule is the
+  one the owner already uses (`ADR-0039`, `OD-205-1`).
+
+### Consequences
+
+- The maximum no longer separates `early` in the `search()` recursion: it reads 79 cp there, the same as the correct
+  build. `early` stays red on the 95 % clause in both recursions (93.05 % / 91.44 %). Its `chooseMove` maximum is
+  198 cp.
+- The next value-changing evaluation term meets 118 cp. That level then carries its headroom, so a red is again a
+  stop (`ADR-0028` decision 4).
+
+### Rollback
+
+Set the literal back to 75 and restore the two row titles. `ABC-205` then stops to BA/PM.
