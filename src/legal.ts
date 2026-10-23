@@ -16,7 +16,13 @@
  */
 
 import { makeMove, unmakeMove } from "./apply.ts";
-import { FLAG_EN_PASSANT, generateMoves, isSquareAttackedBy, type Move } from "./moves.ts";
+import {
+  FLAG_EN_PASSANT,
+  FLAG_NONE,
+  generateMoves,
+  isSquareAttackedBy,
+  type Move,
+} from "./moves.ts";
 import { BLACK, EMPTY, isOnBoard, KING, NO_SQUARE, PAWN, type Position } from "./position.ts";
 
 /**
@@ -94,6 +100,33 @@ export function legalCaptures(position: Position): Move[] {
   }
 
   return captures;
+}
+
+/**
+ * Does `move`, a legal move for the side to move, give check? The same answer as playing it,
+ * asking `isInCheck`, and taking it back (ABC-206). An unflagged move only moves one piece from
+ * `from` to `to`, and the attack test reads only the board, so for it the two board bytes are
+ * set, the enemy king's square is tested, and both bytes are put back. A castle, en-passant
+ * capture or promotion changes more than two squares, so it is played and taken back. The
+ * position is unchanged on return.
+ */
+export function givesCheck(position: Position, move: Move): boolean {
+  if (move.flags !== FLAG_NONE) {
+    const undo = makeMove(position, move);
+    const check = isInCheck(position);
+    unmakeMove(position, move, undo);
+    return check;
+  }
+
+  const moverIsBlack = position.blackToMove;
+  const board = position.board;
+  const captured = board[move.to] as number;
+  board[move.to] = move.piece;
+  board[move.from] = EMPTY;
+  const check = isSquareAttackedBy(position, kingSquareOf(position, !moverIsBlack), moverIsBlack);
+  board[move.from] = move.piece;
+  board[move.to] = captured;
+  return check;
 }
 
 /** The two neighbouring files a pawn can capture from — the same pair moves.ts steps over. */

@@ -29,14 +29,23 @@ vi.mock("./legal.ts", async (importOriginal) => {
   };
 });
 
+vi.mock("./apply.ts", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("./apply.ts")>();
+  return { ...actual, makeMove: vi.fn(actual.makeMove) };
+});
+
 vi.mock("./zobrist.ts", async (importOriginal) => {
   const actual = await importOriginal<typeof import("./zobrist.ts")>();
   return { ...actual, zobristKey: vi.fn(actual.zobristKey) };
 });
 
+import { makeMove } from "./apply.ts";
 import { gameStatus, leafEndReason } from "./gameend.ts";
 import { hasLegalMove, legalCaptures, legalMoves } from "./legal.ts";
+import { FLAG_NONE } from "./moves.ts";
+import { parseSquareName } from "./position.ts";
 import { quiesce } from "./quiescence.ts";
+import { lateMoveReduction } from "./search.ts";
 import { zobristKey } from "./zobrist.ts";
 
 /** The G-1 position: a legal, ordinary board that every state below is a clock/counts edit of. */
@@ -155,5 +164,25 @@ describe("ABC-206 — the search leaf's game-end check stays cheap (call counts,
     expect(visited).toBeGreaterThan(0); // the capture search ran, so the zero below is earned
     expect(legalCaptures).toHaveBeenCalled();
     expect(legalMoves).toHaveBeenCalledTimes(0);
+  });
+
+  it("lateMoveReduction never plays an unflagged move to learn whether it gives check", () => {
+    // G-1, White to move: Re8 is mate (it gives check), Rd1 is quiet. Both unflagged, both
+    // non-captures, at a node where every other condition for a reduction holds.
+    const position = parseFen(G1_FEN);
+    const move = (from: string, to: string) => {
+      const found = legalMoves(position).find(
+        (m) => m.from === parseSquareName(from) && m.to === parseSquareName(to),
+      );
+      if (found === undefined || found.flags !== FLAG_NONE) throw new Error(`${from}${to}`);
+      return found;
+    };
+    const check = move("e1", "e8");
+    const quiet = move("e1", "d1");
+    vi.clearAllMocks();
+
+    expect(lateMoveReduction(position, check, 3, 3, false)).toBe(0);
+    expect(lateMoveReduction(position, quiet, 3, 3, false)).toBe(1);
+    expect(makeMove).toHaveBeenCalledTimes(0);
   });
 });

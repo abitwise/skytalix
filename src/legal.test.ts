@@ -1,8 +1,15 @@
 import { describe, expect, it } from "vitest";
 import { makeMove, unmakeMove } from "./apply.ts";
 import { parseFenGrammarOnly as parseFen, toFen } from "./fen.ts";
-import { hasLegalEnPassant, hasLegalMove, isInCheck, legalCaptures, legalMoves } from "./legal.ts";
-import { FLAG_EN_PASSANT, generateMoves, isSquareAttackedBy } from "./moves.ts";
+import {
+  givesCheck,
+  hasLegalEnPassant,
+  hasLegalMove,
+  isInCheck,
+  legalCaptures,
+  legalMoves,
+} from "./legal.ts";
+import { FLAG_EN_PASSANT, FLAG_NONE, generateMoves, isSquareAttackedBy } from "./moves.ts";
 import { BLACK, EMPTY, KING, type Position, parseSquareName } from "./position.ts";
 
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -479,5 +486,43 @@ describe("ABC-206 A2 — the faster pieces equal what they replace", () => {
 
   if (RUN_DEEP) {
     it("legalCaptures, to depth 3 [deep, ENGINE_DEEP=1]", legalCapturesRow(3), 600_000);
+  }
+
+  /** Boards where a castle, a promotion and an en-passant capture each give check. */
+  const FLAGGED_CHECKS: ReadonlyArray<readonly [name: string, fen: string]> = [
+    ["castling gives check", "5k2/8/8/8/8/8/8/4K2R w K - 0 1"],
+    ["promotion gives check", "4k3/1P6/8/8/8/8/8/4K3 w - - 0 1"],
+    ["en passant gives check", "8/4k3/8/3pP3/8/8/8/4K3 w - d6 0 1"],
+  ];
+
+  const givesCheckRow = (depth: number) => () => {
+    let unflaggedChecks = 0;
+    let flaggedChecks = 0;
+    const checkEveryMove = (position: Position, where: string): void => {
+      for (const move of legalMoves(position)) {
+        const undo = makeMove(position, move);
+        const want = isInCheck(position);
+        unmakeMove(position, move, undo);
+        const before = fullState(position);
+        expect(givesCheck(position, move), `${where} ${move.from}-${move.to}`).toBe(want);
+        expect(fullState(position), `${where} ${move.from}-${move.to}`).toBe(before);
+        if (want && move.flags === FLAG_NONE) unflaggedChecks++;
+        if (want && move.flags !== FLAG_NONE) flaggedChecks++;
+      }
+    };
+    walkA2(depth, checkEveryMove);
+    for (const [name, fen] of FLAGGED_CHECKS) checkEveryMove(parseFen(fen), name);
+    // Both paths gave a check somewhere, so neither half of the answer is unread.
+    expect(unflaggedChecks).toBeGreaterThan(0);
+    expect(flaggedChecks).toBeGreaterThan(0);
+  };
+
+  it(
+    "givesCheck(p, m) equals make, isInCheck, unmake for every legal move, and p is unchanged",
+    givesCheckRow(1),
+  );
+
+  if (RUN_DEEP) {
+    it("givesCheck, to depth 3 [deep, ENGINE_DEEP=1]", givesCheckRow(3), 600_000);
   }
 });

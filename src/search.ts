@@ -62,7 +62,7 @@
 import { makeMove, unmakeMove } from "./apply.ts";
 import { evaluate } from "./evaluate.ts";
 import { leafEndReason } from "./gameend.ts";
-import { isInCheck, legalMoves } from "./legal.ts";
+import { givesCheck, isInCheck, legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
 import { EMPTY, type Position } from "./position.ts";
 import { mvvLvaKey, quiesce } from "./quiescence.ts";
@@ -246,8 +246,9 @@ const REDUCTION_MIN_INDEX = 3;
  * check; and the move does not give check. The tactical facts are derived HERE, from the position
  * and the move, and never supplied by the caller — so a recursion cannot mis-wire one of them.
  *
- * Pure: it decides and picks no move. It plays `move` on `position` to see whether it gives check
- * and takes it back, so the position is byte-identical on return.
+ * Pure: it decides and picks no move. It asks `givesCheck` whether `move` gives check, which
+ * answers without playing an unflagged move (`ABC-206`), so the position is byte-identical on
+ * return.
  */
 export function lateMoveReduction(
   position: Position,
@@ -259,10 +260,7 @@ export function lateMoveReduction(
   if (atRoot || depth < REDUCTION_MIN_DEPTH || index < REDUCTION_MIN_INDEX) return 0;
   if (move.captured !== EMPTY || move.promotion !== EMPTY) return 0;
   if (isInCheck(position)) return 0;
-  const undo = makeMove(position, move);
-  const givesCheck = isInCheck(position);
-  unmakeMove(position, move, undo);
-  return givesCheck ? 0 : 1;
+  return givesCheck(position, move) ? 0 : 1;
 }
 
 /** The move list in the order `switches.ordering` asks for, at `ply`. */
