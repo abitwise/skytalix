@@ -227,3 +227,47 @@ BA/PM, 2026-10-22, at `main` `a7857e0b`. **Result: 9 of 10. Stays in `Backlog`.*
 > - The other items are unchanged. No bound, level or requirement moved, so there is no owner question.
 > - **No re-build.** R2 at `20e397c8` already meets the re-ruled A5 in scratch. Its comment says "U7's 1 000 band", which
 >   reads 2 000 by the erratum. That is a comment only, and it is not worth a re-build.
+
+## QE
+
+**2026-10-23, QE/E2E (`qe-ABC-197`): PASS_WITH_GAPS for A1–A5 and A8.** Every gap is INFO and none blocks. **A6 and A7
+are owed** to the quiet-host timing hop. The Orchestrator moves the board.
+
+- **Where it ran:** merge `82a3f153` (tip `20e397c8` plus `main` `8804937e`, no code change from the tip), base
+  `051d557a`. QE's own worktree, `node_modules` and scratch.
+- **Notes:** `.grugops/context/qe-ABC-197/notes/`:
+  - A1–A4 `…f789357b`
+  - A5 and the clock rule `…34a8abc0`
+  - A8 `…5fc0dfac`
+  - gaps `…246cfd1c`
+  - verdict `…479b5c68`
+- **A1 MET:** R2 reads three lines: `info string …`, `time 3100` inside `[3 000, 3 200]`, and `bestmove g1f3`, the
+  info line's move.
+- **A2 MET:** one file; one hunk; 0 `-` lines; a citing comment, the row and one blank line (`QE-197-c`).
+- **A3 MET:** file 127 → 128 and lane 2 018 → 2 019, all passed, 0 skipped. Names as multisets: tip − base = {R2}.
+- **A4 MET:** R2 reads 25 621 nodes, ≤ 26 000. The other 127 rows are unchanged node for node.
+- **A5 MET**, as re-ruled (`gp.mjs` byte copy plus QP6-2800):
+
+  | probe | base file | base lane | tip file | tip lane |
+  |---|---|---|---|---|
+  | QP0 | 0 / 127 | 0 / 2 018 | 0 / 128 | 0 / 2 019 |
+  | QP6 | 0 / 127 | 0 / 2 018 | **1 / 128, R2** | **1 / 2 019, R2** |
+  | QP6-2800 | 0 / 127 | 0 / 2 018 | **1 / 128, R2** | **1 / 2 019, R2** |
+
+- **The clock rule holds.** `time = (⌈G/step⌉ + 1) · step` reads from `virtualClock` and `deepen`, and it matches
+  34 / 34 scan rows at steps 100 and 1 000. The band of a `≥ 3 000` row is 2 × step, as the erratum says.
+- **A8 MET:**
+  - lint, typecheck and build 0;
+  - `npm test` 61 / 2 019, success true;
+  - skips 0, `No findings.`;
+  - UCI_DEEP 5 / 5;
+  - the M4 sweep row is green, and it reds under the M4 plant.
+- **Gaps:**
+  - `QE-197-a`: the (2 800, 3 000) residual. Accepted by BA/PM.
+  - `QE-197-b`: R2's comment and title wording. The comment says "1 000 band", which reads 2 000. It also calls the
+    time window "G".
+  - `QE-197-c`: A2's hunk has a blank line.
+  - `QE-197-d`: the kill rests on R2 alone.
+  - `QE-197-e`: the `nodes`/`mate`-only drop path is out of scope.
+- **UAT:** waived. Zero production lines, and the form is empty. A waiver is not a signature.
+- **Not claimed:** no timing, no `N8-LANE` reading and no `NFR-008` reading.
