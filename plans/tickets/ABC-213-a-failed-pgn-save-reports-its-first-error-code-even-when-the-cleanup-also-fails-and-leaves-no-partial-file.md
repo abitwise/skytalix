@@ -150,3 +150,116 @@ Precedent: the `ABC-200` follow-up ruled a hook-faking child rig unlicensed unti
 | 10 | no major unresolved blocker | ✅ the rig question has a recommended answer and a fallback |
 
 **DoR 10/10. Ready → In Design** (one question), then SE → QE → In Security/NFR (Ruling 2).
+
+## Design ruling
+
+> **Architect/Design, 2026-10-24** (task `arch-design-ABC-213`, records plus light probes, at `main` `af4a934c`).
+> Notes: `.grugops/context/arch-design-ABC-213/notes/`. The probes ran on a scratch copy of `src/` in the session
+> scratchpad (`design213/`), never `src/`. **No accepted ADR is changed and none is proposed, so the owner STOP
+> does not fire.** The host was at load1 about 6, with other hops running, so no timing figure here is a reading.
+
+### The ruling: rig (b′), the `node:fs` double of rig (b), hosted in the existing `src/pgn.test.ts`. 0 spawns, 0 files
+
+| rig | `ADR-0015` | spawns | files | verdict |
+|---|---|---:|---:|---|
+| (a) hook in the writer child | **refused by the letter.** It is "a module substitution inside a spawned child", and `node:fs` fails (S): it is not a supplier at `runTurnLoop`'s bag (`src/cli.ts` imports no `node:fs`). Licensing it needs an addendum that scopes the rule to children that run the delivered composition, which is an accepted-ADR change (owner) | 0 | 0 | **not ruled.** Works mechanically (probe 1), but buys nothing (b′) does not |
+| (b) `vi.mock("node:fs")` in a new file | **outside the rule.** In-process, not a child. `ADR-0009` 9c holds: the double lives in a test file | 0 | +1 | **the fallback** (`N8-LANE` reading owed) |
+| **(b′) the same double, in `src/pgn.test.ts`** | **outside the rule**, as (b) | **0** | **0** | **RULED** |
+| (c) a new child with `--import` | refused by the letter, as (a) | +1 | 0 | not ruled |
+
+**Why (b′).**
+1. **It needs no ADR change.** `ADR-0015`'s rule is stated for "a module substitution inside a spawned child". An
+   in-process double is outside its letter. Standing practice confirms it: `src/engine.capacity.test.ts` and
+   `src/gameend.nfr.test.ts` substitute modules in-process that fail (S), and no hop has read `ADR-0015` onto them.
+2. **It does not walk round the fence.** `ADR-0015`'s reason for (S) is that a product module reached by a static
+   import has no contract: "its source IS its behaviour". Here no product source is replaced. The holder runs
+   byte-for-byte, and the substituted module is the platform's `node:fs`, which has a published contract: these
+   calls throw errno-coded errors. **(C) holds:** `EFBIG` on a write, `EIO` on a close and `EACCES` on an unlink are
+   all failures a real OS can give. **(N) holds** (BA/PM's): the rows assert `writePgnFile`'s results, not `node:fs`'s.
+3. **It is the cheapest rig on every axis:** 0 spawns, 0 files, and the writer child stays byte-identical. It also
+   matches the page's own Scope 2 ("in the existing `src/pgn.test.ts`") and `A7` (one `spawnSync` site).
+4. **Rig (a) is not proposed.** `ADR-0015` clause 2: "a widening bought to unblock a ticket is a precedent, not a
+   rule". Nothing here needs the widening. The addendum's case, should a later ticket need it, is in the decision note.
+
+### The double: what the SE builds (test code only)
+
+One hoisted `vi.mock("node:fs", importOriginal)` in `src/pgn.test.ts`, with `vi.hoisted` fault state.
+- **It spreads the real module and doubles only the holder's five bindings**: `mkdirSync`, `openSync`,
+  `writeFileSync`, `closeSync`, `unlinkSync`. The `default` export carries the same five. Every other binding the file
+  uses (`mkdtempSync`, `readFileSync`, `readdirSync`, `rmSync`) is the real one, so no existing row is re-routed. That
+  answers `src/gameend.nfr.test.ts`'s own-file reason ("would re-route the module graph for every test there").
+- **Unarmed, the five pass straight through**, and a **relative** path throws loudly. Nothing in this file may write
+  into the repository (`ADR-0047`'s first falsifier).
+- **Armed** (per row, by `beforeEach`/`afterEach` or inline):
+  - relative paths are re-rooted under the row's own `mkdtemp` directory. This stands in for `ADR-0047` D3's working
+    directory seam, because `pool: "threads"` forbids `chdir`. The directory is removed by the exact path `mkdtemp`
+    returned;
+  - a write fault writes **one real byte** to the open descriptor through the real `writeSync`, then throws
+    `{ code: W }`. That is `A2`'s "at least one byte reached the file", on the real disk;
+  - a close fault closes for real, then throws `{ code: C }`;
+  - an unlink fault throws `{ code: U }`, or, for `A3`, an `Error` with no `code`. Either way it removes nothing.
+- **A canary before the first armed call.** The double's namespace carries a marker. The rows assert that the file's
+  own `node:fs` namespace has it, so a mocking change in vitest goes red before any write can land outside the root.
+- **Rows** (a new `describe("ABC-213 — …")`): `A1` write W + unlink U, and close C + unlink U; `A2` write W, and
+  close C, each with `games/` read from the real root as `[]`; `A3` a codeless unlink throw leaves the call.
+- **The holder fix stays the SE's.** The probe used a 4-line guard: `try { unlinkSync(path) } catch (error) {
+  errnoOf(error); }`, then report `errnoOf(failure)`. It met `A1`–`A3`, and a codeless first failure still rethrows
+  (D5). The file header gains one paragraph that names this ruling and states why the double is outside `ADR-0015`.
+
+### Probe results (scratch copy at `af4a934c`; deterministic)
+
+1. **Rig (a)** (the writer child's `-e` script plus `registerHooks`, which swaps `node:fs` only for a `?fault` copy of
+   the holder): it works, and the real copy is unaffected.
+   - Base: `A1` throws `EACCES` (X3 red).
+   - Fix: all green.
+   - X1 leaves 1-byte and 21-byte files (`A2` red).
+   - X4 reports `EACCES` (`A1` red).
+   - X5 returns `EFBIG` for the codeless throw (`A3` red).
+2. **Rig (b)**, as a standalone file and **(b′)** hosted in a copy of `src/pgn.test.ts`, under the lane's own vitest
+   4.1.12 with `viteModuleRunner: false` and Node 26.11.1: `vi.mock("node:fs")` reaches the holder.
+
+   | holder variant | rows red (each host) | existing `pgn.test.ts` rows (b′) |
+   |---|---|---|
+   | base (= X3) | `A1` ×2 | 15/15 green |
+   | fix | none (6/6) | 15/15 green |
+   | X1 drop the unlink | `A2` ×2, `A3` | 15/15 green |
+   | X4 report U | `A1` ×2 | 15/15 green |
+   | X5 `catch {}` | `A3` | 15/15 green |
+
+   No `games/` landed in the copy's root or `src/`. **Every `A4` plant reds the row it names, in both hosts.**
+3. **Cost, indicative only** (load1 about 6, n = 5, one-file `vitest run`, process user+sys CPU):
+   - `src/pgn.test.ts` with no edit: median 1.35 s; with (b′) added: median 1.42 s, so about +0.07 s;
+   - the standalone (b) file alone: median 1.07 s. That cost is what (b′) avoids.
+
+### NFR impact
+
+- **`N8-SPAWN`: 0**, as BA/PM ruled.
+- **`N8-LANE`:** (b′) adds no file, no spawn and no in-child content. The writer child is byte-identical, so its
+  CPU growth is **0** against the page's 50 ms target. No `N8-LANE` reading is owed by the page's bars. The
+  in-process cost (about +0.07 s indicative) is reported for Security/NFR's look under `ADR-0036` Ruling 2, which
+  this ticket reaches anyway.
+- **`ADR-0036` limb 1:** unchanged, five calls. **ASVS:** no row.
+
+### `ADR-0047` D4 dated line (owed by Scope 3; drafted here, not written: this hop's fence excludes the ADR)
+
+> **2026-10-24, `ABC-213`.** A reading, not a change. On a double fault (the write or close fails, then the cleanup
+> unlink fails with an errno code), removal is best-effort. The result is the **first** failure's code (D5), and the
+> partial file may remain. A codeless unlink throw is a defect and is rethrown (D5). `A1`–`A3` run in-process against
+> a call-through `node:fs` double that re-roots relative paths (the `ABC-213` design ruling). `A8`–`A10` stay in the
+> writer child.
+
+It reverses nothing and adds no permission: D4 is silent on a failed removal, and D5 decides it. This role reads it
+as below the owner's bar (delegation `…5aaf7cec` item 3, which escalates a change or a reversal). **The
+Orchestrator confirms that reading when it routes the line.** If it reads the line as a change, the line goes to the
+owner as INFO before it is written.
+
+### Recommended next move (Orchestrator)
+
+1. Merge this records branch.
+2. Move ABC-213 `In Design` → `Ready for Dev`.
+3. Queue the SE (`ticket-to-pr-ABC-213`, (b′) as above) **after** `qe-timing-ABC-203` reports, as the page's
+   Dependencies say. Then QE runs the four plants and `A5` by hand, then `In Security/NFR` (Ruling 2 closes
+   `AR-203-UNLINK`).
+4. Route the D4 dated line to Architect/Design at the build's records step.
+5. **Fallback**, if the SE or QE finds the hosted mock disturbs a row: the same block in its own file (rig (b),
+   probed green). Its `N8-LANE` reading is then owed.
