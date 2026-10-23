@@ -1,0 +1,99 @@
+
+> skytalix@0.0.0 test
+> NODE_OPTIONS=--max-old-space-size=128 node tools/grugops/run-bounded.js 60000 vitest run --reporter=default --reporter=./tools/grugops/result-file-reporter.js --outputFile.json=.test-results/last-run.json
+
+
+ RUN  v4.1.12 /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-qe-timing-ABC-178
+
+ ✓ src/turn-loop.test.ts (63 tests) 48ms
+ ✓ src/moves.castling.hardening.test.ts (134 tests) 36ms
+ ✓ src/command-input.test.ts (188 tests) 42ms
+ ✓ src/engine.test.ts (47 tests) 796ms
+ ✓ src/frame.test.ts (34 tests) 29ms
+ ✓ src/history-pane.test.ts (26 tests) 66ms
+ ✓ src/history-pane.nfr.test.ts (12 tests) 117ms
+ ✓ src/cli.test.ts (95 tests) 269ms
+ ✓ src/render-seam.test.ts (28 tests) 52ms
+ ✓ src/line-input.test.ts (30 tests) 14ms
+ ✓ src/transposition.test.ts (25 tests) 145ms
+stdout | src/search.pvs-lmr.test.ts > A5 — search() visits fewer nodes than searchWithoutPvsOrReductions at depth 4 > position-3 at depth 4 — the default lane's standing guard
+ABC-121 A5 position-3 d4: 991 / 1325 = 74.8%
+
+ ✓ src/search.pvs-lmr.test.ts (20 tests) 101ms
+ ✓ src/search.ordering.test.ts (24 tests) 164ms
+stdout | src/levels.test.ts > A9 — different seeds actually differ > ≥ 5 seeds over the same ≥ 30 positions give ≥ 2 distinct blunder-decision sequences
+A9: 5 distinct sequences over 5 seeds
+
+ ✓ src/levels.test.ts (29 tests) 147ms
+ ✓ src/render.test.ts (30 tests) 23ms
+ ✓ src/uci-session.test.ts (127 tests) 3320ms
+     ✓ go depth 3 reports depth 3 on a clock where an unlimited go reaches depth >= 5  320ms
+ ✓ src/move-input.test.ts (50 tests) 12ms
+ ✓ src/search.test.ts (28 tests) 209ms
+ ✓ src/cli.real-engine.test.ts (1 test) 31ms
+ ✓ src/ladder.test.ts (13 tests) 10ms
+ ✓ src/san.qualifier.hardening.test.ts (20 tests) 72ms
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap reading, level 180x
+A5 kiwipete depth 1: 603 nodes with quiescence / 49 without = 12.31x
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap reading, level 10x
+A5 position-6 depth 1: 432 nodes with quiescence / 47 without = 9.19x
+
+ ✓ src/gameend.test.ts (45 tests) 12ms
+ ✓ src/quiescence.test.ts (29 tests) 79ms
+ ✓ src/san.parse.test.ts (30 tests) 10ms
+ ✓ src/status-panel.test.ts (29 tests) 11ms
+ ✓ src/zobrist.test.ts (32 tests) 124ms
+ ✓ src/legal.test.ts (31 tests) 11ms
+ ✓ src/puzzle-suite.test.ts (12 tests) 47ms
+ ✓ src/glyph-mode.test.ts (21 tests) 4ms
+ ✓ src/book.test.ts (35 tests) 107ms
+ ✓ src/apply.test.ts (24 tests) 9ms
+ ✓ src/result-screen.test.ts (13 tests) 11ms
+ ✓ src/history.test.ts (12 tests) 14ms
+stdout | tools/opening-book/book.test.ts > the delivered artifact (data/opening-book/book.json) > A2 — every book move is legal in its keyed position, over every entry
+ABC-093 A2: examined 5390 entries of 5390; 5825 moves; 0 illegal
+
+stdout | tools/opening-book/book.test.ts > the delivered artifact (data/opening-book/book.json) > A3 — the longest line is >= 8 plies and never deeper than maxPly (<= 12)
+ABC-093 A3: longest book line 12 plies; maxPly 12
+
+stdout | tools/opening-book/book.test.ts > the delivered artifact (data/opening-book/book.json) > A4 — after 1. e4 the book carries >= 3 distinct replies with non-zero weight
+ABC-093 A4: 19 weighted replies to 1. e4
+
+stdout | tools/opening-book/book.test.ts > the delivered artifact (data/opening-book/book.json) > A5 — NFR-006: the artifact on disk is <= 1,048,576 bytes
+ABC-093 A5: 356526 bytes of 1048576 (34.0%)
+
+ ✓ tools/opening-book/book.test.ts (19 tests) 25ms
+ ✓ src/rejection.test.ts (53 tests) 17ms
+ ✓ src/fen.test.ts (82 tests) 9ms
+ ✓ src/coordinate-move.test.ts (45 tests) 8ms
+ ✓ tools/grugops/qe-hop-integrity.test.ts (32 tests) 616ms
+     ✓ coverage() over EVERY real note (no --ticket folder filter) reads ABC-062 and ABC-073 as findings  373ms
+ ✓ src/san.test.ts (22 tests) 79ms
+ ✓ src/evaluate.pawns.test.ts (39 tests) 19ms
+ ✓ src/moves.test.ts (33 tests) 5ms
+ ✓ src/status-panel.nfr.test.ts (6 tests) 14ms
+ ✓ src/moves.enpassant.hardening.test.ts (120 tests) 35ms
+ ✓ src/moves.enpassant.test.ts (58 tests) 12ms
+ ✓ src/moves.castling.test.ts (33 tests) 7ms
+ ✓ src/uci.real-engine.test.ts (1 test) 2ms
+ ✓ src/san.suffix.hardening.test.ts (4 tests) 7ms
+ ✓ src/book-engine.test.ts (5 tests) 24ms
+ ✓ src/frame.overflow-bound.test.ts (25 tests) 11ms
+ ✓ src/zobrist.nfr.test.ts (3 tests) 3ms
+ ✓ src/evaluate.test.ts (21 tests) 10ms
+ ✓ src/glyph-mode.nfr.test.ts (3 tests) 2ms
+ ✓ src/turn-loop.nfr.test.ts (4 tests) 53ms
+ ✓ src/search.qe.test.ts (8 tests) 15ms
+ ✓ src/evaluate.king-mobility.test.ts (9 tests) 38ms
+ ✓ src/san.nfr.test.ts (5 tests) 2ms
+ ✓ src/gameend.nfr.test.ts (3 tests) 5ms
+ ✓ src/engine.capacity.test.ts (1 test) 59ms
+ ✓ src/perft.test.ts (24 tests) 132ms
+ ✓ src/search.capacity.test.ts (1 test) 10ms
+
+ Test Files  60 passed (60)
+      Tests  1996 passed (1996)
+   Start at  09:55:24
+   Duration  8.21s (transform 0ms, setup 0ms, import 6.18s, tests 7.36s, environment 3ms)
+

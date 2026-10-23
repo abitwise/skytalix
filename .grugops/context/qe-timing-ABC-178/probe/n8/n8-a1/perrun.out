@@ -1,0 +1,31 @@
+round	cond	wall	cpu	power	power_after	load1_before	load1_after	fv_before	fv_after	samples	foreign_samples	foreign_max	foreign_cmds
+0	B	4.58	4.11	AC Power	AC Power	1.95	1.95	0	0	1	0	0	-
+0	T	4.38	4.16	AC Power	AC Power	1.95	1.95	0	0	2	0	0	-
+0	H	4.44	4.13	AC Power	AC Power	1.95	5	0	0	3	0	0	-
+1	T	3.69	4.08	AC Power	AC Power	5	4.84	0	0	3	0	0	-
+1	H	3.67	4.09	AC Power	AC Power	4.84	4.61	0	0	3	0	0	-
+1	B	3.73	4.07	AC Power	AC Power	4.61	4.4	0	0	3	0	0	-
+2	H	3.69	4.1	AC Power	AC Power	4.4	4.4	0	0	2	0	0	-
+2	B	3.71	4.09	AC Power	AC Power	4.29	4.29	0	0	3	0	0	-
+2	T	3.76	4.1	AC Power	AC Power	4.29	4.1	0	0	3	0	0	-
+3	B	3.71	4.08	AC Power	AC Power	4.1	4.18	0	0	3	0	0	-
+3	T	3.7	4.09	AC Power	AC Power	4.18	4	0	0	3	0	0	-
+3	H	3.74	4.1	AC Power	AC Power	4	4	0	0	2	0	0	-
+4	T	3.71	4.09	AC Power	AC Power	4	3.92	0	0	3	0	0	-
+4	H	3.68	4.06	AC Power	AC Power	3.92	3.85	0	0	3	0	0	-
+4	B	3.82	4.09	AC Power	AC Power	3.85	4.02	0	0	3	0	0	-
+5	H	3.7	4.08	AC Power	AC Power	4.02	3.86	0	0	3	0	0	-
+5	B	3.71	4.06	AC Power	AC Power	3.86	3.86	0	0	2	0	0	-
+5	T	3.77	4.1	AC Power	AC Power	3.86	3.95	0	0	3	0	0	-
+6	B	3.71	4.11	AC Power	AC Power	3.95	4.03	0	0	3	0	0	-
+6	T	3.7	4.07	AC Power	AC Power	4.03	3.95	0	0	3	0	0	-
+6	H	3.73	4.1	AC Power	AC Power	3.95	3.79	0	0	2	0	0	-
+7	T	3.7	4.08	AC Power	AC Power	3.79	3.79	0	0	2	0	0	-
+7	H	3.71	4.12	AC Power	AC Power	3.79	3.73	0	0	3	0	0	-
+7	B	3.72	4.11	AC Power	AC Power	3.73	3.67	0	0	3	0	0	-
+8	H	3.7	4.1	AC Power	AC Power	3.67	3.54	0	0	3	0	0	-
+8	B	3.7	4.1	AC Power	AC Power	3.54	3.54	0	0	2	0	0	-
+8	T	3.72	4.11	AC Power	AC Power	3.54	3.41	0	0	3	0	0	-
+
+runs 27; sampler rows 22; sampler rows foreign 0; load1 sampler range 1.95-5.00; user_procs 463-467
+distinct foreign commands (runs touched):

@@ -1,0 +1,40 @@
+round	cond	wall	cpu	power	power_after	load1_before	load1_after	fv_before	fv_after	samples	foreign_samples	foreign_max	foreign_cmds
+0	B	9.53	24.57	AC Power	AC Power	2.73	2.69	0	0	2	0	0	-
+0	T	9.4	24.61	AC Power	AC Power	2.69	2.67	0	0	4	0	0	-
+0	H	9.62	24.65	AC Power	AC Power	2.67	3.55	0	0	4	0	0	-
+0	H2	9.61	24.83	AC Power	AC Power	3.55	4.1	0	0	4	0	0	-
+1	T	9.41	26.02	AC Power	AC Power	4.1	4.38	0	0	4	0	0	-
+1	H	9.03	25.89	AC Power	AC Power	4.38	4.35	0	0	4	0	0	-
+1	H2	8.9	25.33	AC Power	AC Power	4.35	4.14	0	0	4	0	0	-
+1	B	8.73	25.09	AC Power	AC Power	4.14	4.34	0	0	4	0	0	-
+2	H	8.8	24.92	AC Power	AC Power	4.34	4.38	0	0	3	0	0	-
+2	H2	8.81	25.26	AC Power	AC Power	4.38	4.16	0	0	3	0	0	-
+2	B	8.76	25.22	AC Power	AC Power	4.16	4.15	0	0	4	0	0	-
+2	T	8.82	25.27	AC Power	AC Power	3.97	3.98	0	0	4	0	0	-
+3	H2	8.8	25.23	AC Power	AC Power	3.98	3.9	0	0	4	0	0	-
+3	B	8.98	25.63	AC Power	AC Power	3.9	4.31	0	0	4	0	0	-
+3	T	8.93	25.4	AC Power	AC Power	4.31	4.35	0	0	3	0	0	-
+3	H	8.86	25.64	AC Power	AC Power	4.35	4.62	0	0	4	0	0	-
+4	B	8.8	25.39	AC Power	AC Power	4.62	4.49	0	0	4	0	0	-
+4	T	8.99	25.77	AC Power	AC Power	4.49	4.67	0	0	4	0	0	-
+4	H	9.03	25.46	AC Power	AC Power	4.67	5.28	0	0	4	0	0	-
+4	H2	8.95	25.56	AC Power	AC Power	5.28	5.32	0	0	4	0	0	-
+5	T	9.09	26.08	AC Power	AC Power	5.32	5.5	0	0	3	0	0	-
+5	H	9.02	25.67	AC Power	AC Power	5.5	5.48	0	0	4	0	0	-
+5	H2	8.92	25.73	AC Power	AC Power	5.48	5.61	0	0	4	0	0	-
+5	B	8.99	25.91	AC Power	AC Power	5.61	7.88	0	0	4	0	0	-
+6	H	8.9	25.54	AC Power	AC Power	7.88	7.21	0	0	4	0	0	-
+6	H2	9.06	26.01	AC Power	AC Power	7.21	7.03	0	0	4	0	0	-
+6	B	9	25.51	AC Power	AC Power	7.03	7.9	0	0	3	0	0	-
+6	T	8.97	25.81	AC Power	AC Power	7.9	7.23	0	0	4	0	0	-
+7	H2	9.02	25.89	AC Power	AC Power	7.23	6.97	0	0	4	0	0	-
+7	B	9.01	25.72	AC Power	AC Power	6.97	6.6	0	0	4	0	0	-
+7	T	9.07	26.07	AC Power	AC Power	6.6	6.12	0	0	4	0	0	-
+7	H	9.08	25.93	AC Power	AC Power	6.12	6.04	0	0	4	0	0	-
+8	B	9.03	25.91	AC Power	AC Power	6.04	5.58	0	0	4	0	0	-
+8	T	9.07	26.08	AC Power	AC Power	5.58	7.33	0	0	3	0	0	-
+8	H	9	25.81	AC Power	AC Power	7.33	6.98	0	0	4	0	0	-
+8	H2	9.04	25.89	AC Power	AC Power	6.98	6.66	0	0	4	0	0	-
+
+runs 36; sampler rows 67; sampler rows foreign 0; load1 sampler range 2.64-7.96; user_procs 426-483
+distinct foreign commands (runs touched):
