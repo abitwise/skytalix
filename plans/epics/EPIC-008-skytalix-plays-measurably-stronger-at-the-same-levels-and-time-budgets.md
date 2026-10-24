@@ -51,6 +51,9 @@ still hold only measured gains.
 - Seven engine changes, one per accepted proposal, each behind its own reading (`ABC-205` to `ABC-211`).
 - *2026-10-24 (BA/PM, `bapm-ABC-214-path-a`):* one provenance change, `ABC-215`. It re-derives the CC BY-SA 3.0
   values on the owner's path A (`…fb0468ff`) and is measured under S3.
+- *2026-10-24 (BA/PM, `bapm-cut-readme`):* one test-only follow-up, `ABC-217` (Ready, XS, P3). It moves `ABC-206`'s
+  `QE-206-a`/`-b` catches into the default lane and rewords two stale `gameStatus` texts. It carries `ABC-212`'s
+  `QE-212L-a` along. No engine value changes, so no reading or ship rule applies.
 - `src/evaluate.ts`, `src/engine.ts`, `src/search.ts`, `src/quiescence.ts`, `src/gameend.ts`, `src/transposition.ts`
   and `data/opening-book/` change, each only in the ticket that names it.
 
