@@ -9,6 +9,8 @@ width: 1 — ALONE (A4 timing, G6 depth-in-budget, perft rate). Dispatch only on
 
 # QE gate for ABC-206 (faster search, identical answers)
 
+> **Owner rule 2026-10-24 (`…4c3f7639`): ONE run.** No prior valid reading exists, so run once under the preconditions and write the result; it is final. No repeat on UNRESOLVED/NOT MET (grade it as the page says); the procedure's own defined steps (e.g. a pooled extension) are part of the one run.
+
 ## Do
 - Own worktree from `grugops/ABC-206`; merge current `main` first (report sha); own `npm ci`.
 - Re-run A1 at the tip against the merge base (SE probes are a start) and A2; re-plant the count-guard breakages. Then the timing items exactly as the page states: **A4** median time to depth 8 ≤ 0.85 × base on kiwipete and position-6 (plain node, n ≥ 7, interleaved), **G6** depth-in-budget (≥ 6 and ≥ base), **G1** `PUZZLE_DEEP`, perft as named. Preconditions per timed run: AC, load1 ≤ 8, no foreign vitest.
