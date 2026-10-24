@@ -2,7 +2,7 @@
   "name": "skytalix",
   "version": "0.0.0",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "type": "module",
   "description": "Command-line chess against a club-strength engine.",
   "engines": {
