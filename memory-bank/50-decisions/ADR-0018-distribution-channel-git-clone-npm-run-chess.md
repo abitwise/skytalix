@@ -6,6 +6,10 @@ id: ADR-0018
 
 ## Status
 
+**2026-10-24 (`ADR-0049` row 7; `ADR-0049` accepted by the owner, `…619938c5`).** Decision 3's third revisit
+trigger, *"a git remote appears"*, fired on 2026-10-23. `ADR-0049` is the superseding record it asks for. The
+channel is unchanged: `git clone`, `npm install`, `npm run chess`. See `§ Note 2026-10-24` at the end of this file.
+
 **Note 2026-10-23** (`arch-adr0018-bin-note`, approved by the owner `…366ebd9e`). The package has had a
 `bin` since `ABC-168`. That fired the "exposes an executable" leg of `D2`. The channel did not move. See
 `§ Note 2026-10-23` at the end of this file. No clause is amended.
@@ -135,6 +139,10 @@ including the ones the owner did not choose** (`ABC-100` `A3`, test note 2). The
 | **`npx` off a git URL** (`npx github:<owner>/cli-chess`) | **`bin` is mandatory** — `npx` has nothing to run without it — so `D2` fires; `private: true` may stay (it blocks publish only) | none if `bin` points at `src/cli.ts` and the consumer's Node strips types unflagged (`UNKNOWN - verify`, as for npm publish); otherwise an emitted `.js` | **YES** — there is no URL to `npx` without a remote | **no** | `npx <git-url>` → first board, and it clones + installs on first run, so the *"warm cache"* precondition is real again and the cold case is the slowest of the five | git host trust **plus** npm executing lifecycle scripts on fetch; it is the clone channel's surface with the registry channel's execution model. **The worst of both**, and it needs a `package.json` change this ticket forbids |
 | **"not yet"** (leave clause 5 undecided) | none | nothing | no | no | **unmeasurable** — the row stays `UNKNOWN - verify` with no denominator | none opened — **and none of the four documents that disagree get repaired**; `EPIC-006` criterion 1 stays unmeetable and every packaging ticket stays fiction. This is the cost the project has been paying since 2026-08-06 |
 
+*2026-10-24 (`ADR-0049` row 8):* the chosen row's *"realised only on the author's machine"* is no longer true.
+Since 2026-10-23 the repository has a public remote, so the channel is reachable by anyone. `D3` says to record
+this, not revert it. The row stays as dated history.
+
 **Why the chosen option is also the right rock, stated so it can be argued with.** It is the only
 option that costs **zero** `package.json` keys, **zero** emitted artifacts, **zero** accounts and
 **zero** new files, and it leaves `D1`, `D2` and `D4` exactly where `ADR-0007` measured them. Its one
@@ -260,3 +268,25 @@ is still not a `D2` event.
 stand. `ADR-0044`'s revisit trigger is on the same ground: `npm publish`, a `files` allow-list, or
 packaging `dist/` for third parties. D8 also leaves install from a git URL out of v1. Under `D5`, each of
 these needs a new ADR, and that ADR is the owner's call.
+
+## § Note 2026-10-24: `D3` fired; `ADR-0049` is the superseding record
+
+Written by Architect/Design (task `arch-accept-adr0049`), as `ADR-0049` § Records rows 9 and 10. The owner
+accepted `ADR-0049` in session on 2026-10-24 (note `…619938c5`, item 1): *"accept ADR-0049"*. **No clause is
+amended, no falsifier row is edited, and the channel is unchanged.**
+
+- **`D3` fired on 2026-10-23.** The owner added a git remote and made the repository public (`…59df15ce`). Read
+  at `main` `2a1a7c93`: `git remote -v` prints 2 lines, one remote. As `D3` says, this is expected evolution:
+  the channel now reaches anyone who clones. It falsifies the Alternatives sentence that row 8's line marks, and
+  nothing else.
+- **Decision 1 holds.** The channel is `git clone`, `npm install`, `npm run chess`. No package is published:
+  `"private": true` stands, with the one `bin` and no `main`, `exports` or `files`. `D1` and `D4` are unchanged
+  (no deploy artifact; `plans/releases/` holds only `.gitkeep`). `D7` reads `true`.
+- **`ADR-0049` is the `D5` superseding record** that Decision 3 asks for. It supersedes the posture text only.
+  The channel does not move.
+- **Row 10: `npx` from the git URL.** The 2026-10-23 note above says *"The `npx` option needs a remote, and `D3`
+  holds"*. That is no longer true: with a remote, `npx` from the git URL can be attempted. **It is not offered**
+  (`ADR-0049` decision 3). There is no `prepare` script, so `dist/uci.js` would be missing, and `ADR-0044` D8
+  keeps install from a git URL out of v1. Offering it needs its own ADR on the owner's word.
+- **How to read `D3` from now on.** The row is not edited. A remote is the expected state. `ADR-0049`'s
+  `P1`–`P5` are the live checks on the public posture.

@@ -108,7 +108,9 @@ Verified against the repository on 2026-08-06 rather than read off the config:
   `.github/workflows/`.
 - Nothing publishable: `package.json` is `private`, with no `main`, `exports` or `bin`; the build is
   `tsc --noEmit` and emits nothing.
-- Nowhere to push: the repo has **no git remote**.
+- Nowhere to push: the repo has **no git remote**. *2026-10-24 (`ADR-0049` row 31): no longer true. The
+  owner added a remote on 2026-10-23 and the repository is public. Pushing is the owner's; agents never push.
+  Still nothing is deployed.*
 - Nothing released: `plans/releases/` holds only `.gitkeep`.
 
 `.grugops/factory.config.json` now records this instead of implying a cluster: `default_stack.deploy`
@@ -152,6 +154,11 @@ npm start works for now"* (Olger Oeselg, in session, 2026-09-19). The channel is
 `ADR-0007` clause 5 only. Nothing is published, built or deployed; there is still no git remote, so
 today the clone path is realised only on the author's machine. Everything else in this file stands.]**
 
+*2026-10-24 (`ADR-0049` row 32):* the bracket above's *"there is still no git remote, so today the clone path is
+realised only on the author's machine"* is no longer true. The owner added a remote on 2026-10-23 and the
+repository is public, so anyone can take the clone path. The channel is unchanged (`ADR-0018` § Note
+2026-10-24).
+
 **[CORRECTED 2026-10-23 (`arch-adr0018-bin-note`, approved by the owner `…366ebd9e`).** The bracket
 above says *"Nothing is published, built or deployed"*. "Built" stopped being true at `ABC-168` (merged
 `513c0211`, 2026-10-22). Read it as: **nothing is published or deployed; the UCI engine artifact is
@@ -177,6 +184,11 @@ at. Read the pointer above as that file.]**
 
 A real rollback procedure becomes owed the moment `EPIC-006` produces a distributed artifact: a
 published version can be superseded or withdrawn, and that will need writing down in this section.
+
+*2026-10-24 (`ADR-0049` row 30, decision 7):* the source has been public since 2026-10-23, and public source
+cannot be recalled. Clones, forks and caches keep their copies. The owner can make the host repository private,
+which stops new clones and recalls nothing. That step is the owner's. A package's rollback procedure stays owed
+at `EPIC-006`.
 
 ## On-call and escalation
 

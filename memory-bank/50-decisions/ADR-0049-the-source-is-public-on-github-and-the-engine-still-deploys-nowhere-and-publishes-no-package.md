@@ -6,7 +6,22 @@ id: ADR-0049
 
 ## Status
 
-**PROPOSED** 2026-10-24 by Architect/Design (task `arch-public-posture-adr`, records only, at `main` `fb0a7703`).
+**ACCEPTED** 2026-10-24 by Olger Oeselg (owner), in session, verbatim *"accept ADR-0049"* (note
+`.grugops/context/owner-word-2026-10-24/notes/20261024T153400Z-orchestrator-decision-619938c5.md`, item 1).
+Recorded by Architect/Design (task `arch-accept-adr0049`, records only, at `main` `2a1a7c93`).
+
+- **The 14 Architect/Design rows of § Records are applied** (rows 2, 3, 4, 7, 8, 9, 10, 12, 15, 18, 30, 31, 32
+  and 33). The rows owned by BA/PM (20–24), the Scribe (28, 29, 35) and Security/NFR (34) are theirs to apply.
+- **Re-read at this hop** (read-only, at `2a1a7c93`): `git remote -v` prints 2 lines (one remote). `package.json`
+  reads `"private": true`, `"license": "Apache-2.0"`, the same `bin`, and no `main`, `exports`, `files` or
+  `prepare`. `.github/` holds only `copilot-instructions.md`. `plans/releases/` holds only `.gitkeep`. No YAML or
+  deploy file is tracked. The config values in decision 2 are unchanged.
+- **Decision 5's window has closed.** `ABC-214` merged at `59f50717`. The owner pushed `main` at `3497aad2`
+  (same note, item 2), which contains that merge, so the public tip reads `"license": "Apache-2.0"`.
+- **The owner reports GitHub checked** (same note, item 3). The only finding he named is a missing README, which
+  BA/PM cuts as a ticket. He gave no per-item values, so § Consequences' owner-side items are not restated here.
+
+Previously **PROPOSED** 2026-10-24 by Architect/Design (task `arch-public-posture-adr`, records only, at `main` `fb0a7703`).
 **Acceptance is the owner's.** This is a new ADR (`memory-bank/45-standing-rulings.md`, 2026-10-22). No agent
 moves it to accepted.
 
@@ -147,6 +162,10 @@ statement about today. Dispositions:
 Security/NFR's 28 items are rows 1–10, 12–16, 18–20, 26–34 and 36. Rows 11, 17, 21–25, 35 and 37 are added at
 this hop. Dated `_Updated` lines, `60-progress.md`, and Done tickets other than `ABC-169` are history and are not
 listed.
+
+*Applied 2026-10-24 (task `arch-accept-adr0049`):* the Architect/Design rows 2, 3, 4, 7, 8, 9, 10, 12, 15, 18 and
+30–33. Each carries "2026-10-24" and "`ADR-0049` row N" at its place. Rows 20–24 (BA/PM), 28, 29 and 35 (the
+Scribe) and 34 (Security/NFR) are not applied here.
 
 ## Alternatives
 

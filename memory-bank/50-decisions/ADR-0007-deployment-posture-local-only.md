@@ -15,6 +15,10 @@ exit 2 while `D3` holds is in `§ Pointers 2026-10-11` at the end of this file. 
 `bin` since `ABC-168`. That fired the "exposes an executable" leg of `D2`. The posture did not move. See
 `§ Note 2026-10-23` at the end of this file. No clause is amended.
 
+**Note 2026-10-24** (`arch-accept-adr0049`; `ADR-0049` accepted by the owner, `…619938c5`). `D3` fired on
+2026-10-23: the repository has a remote and is public. Clause 1 holds. `ADR-0049` is the `D5` superseding record
+for the posture text. See `§ Note 2026-10-24` at the end of this file. No clause is amended.
+
 **accepted** — 2026-08-06 by Architect/Design at task `refinement-deploy-posture-2026-08-06`
 (subtask `architect-deploy-posture`), under the project owner's standing directive of 2026-08-03
 recorded in `memory-bank/60-progress.md` under **"Standing directive — who decides"**, which retired
@@ -179,6 +183,9 @@ NOT an argument that any of it is dead.** Explicitly and permanently:
 > hop rather than inherited from 2026-08-06: `D1` zero deploy artifacts and still no YAML file of any
 > kind, `D2` `private: true` with no `bin` / `main` / `exports` / `files`, `D3` no git remote, `D4`
 > `plans/releases/` holds `.gitkeep` only. **UNCHANGED, and this is what stops you today.**
+>
+> *2026-10-24 (`ADR-0049` row 2):* the `D3` leg no longer holds. A git remote exists since 2026-10-23, and the
+> source is public. Fact A still holds through `D1`, `D4` and `"private": true`.
 >
 > **Fact B — PERMISSION. An agent may deploy.** Granted by the owner on 2026-08-15, dormant on
 > arrival, revocable by one sentence. **This stopped you before 2026-08-15. It does not stop you
@@ -409,6 +416,10 @@ changes character is when `EPIC-006` picks a distribution mechanism: at that poi
 Written by Architect/Design (task `wave-2026-09-25`, subtask `design-low-batch-2026-10-11`). **No clause
 is amended.** Note `…647fad5d`.
 
+*2026-10-24 (`ADR-0049` row 4, decision 6):* this section's revisit trigger has fired (`D3`, 2026-10-23). The
+qualifier "N/A in this posture: no git remote" is dropped. A gate now records exit 2 as a real `UNKNOWN - verify`
+for the owner, with the printed reason. The text below stays as dated history.
+
 **`host-protection.js` exit 2, while `D3` holds, means "could not run". It is neither a pass nor a
 fault.**
 - **The contract.** It is the tool's own header (`D-12`) and the kit's gate step 3. Exit 2 means
@@ -492,3 +503,24 @@ line (Release Manager `…edd18e94`).
 id. It also has the same out-of-date wording: Context row 2 says "no `bin`", and Decision 1 says "no
 `dist/` is emitted, no `bin` is added". `70-runbook.md` says "Nothing is published, built or deployed",
 and "built" is no longer true. The owner's approval covers only this file.
+
+## § Note 2026-10-24: `D3` fired; `ADR-0049` is the superseding record
+
+Written by Architect/Design (task `arch-accept-adr0049`), as `ADR-0049` § Records row 3. The owner accepted
+`ADR-0049` in session on 2026-10-24 (note `…619938c5`, item 1): *"accept ADR-0049"*. **No clause is amended and
+no falsifier row is edited.**
+
+- **`D3` fired on 2026-10-23.** The owner added a git remote and made the repository public (`…59df15ce`). Read
+  at `main` `2a1a7c93`: `git remote -v` prints 2 lines, one remote. The 2026-10-23 note above (*"`D3`: `git
+  remote -v` prints 0 lines"*) is a dated reading; this note supersedes it.
+- **Clause 1 holds.** This project deploys nowhere and runs locally, from source. Read at the same commit:
+  - `D1`: no deploy artifact and no tracked YAML file. `.github/` holds only `copilot-instructions.md`.
+  - `D2`: `"private": true`, the one `bin`, and no `main`, `exports` or `files`. Nothing is published.
+  - `D4`: `plans/releases/` holds only `.gitkeep`.
+  - `D7`: `production_requires_human_confirmation` is `true`. `default_stack.deploy` is `none-local-only` and
+    `environments` is `["local"]`.
+- **`ADR-0049` is the `D5` superseding record** for every posture statement that the repository is private, has
+  no remote, or is never distributed. It supersedes the posture text, not clause 1. Pushing stays the owner's.
+- **How to read `D3` from now on.** The row is not edited. A remote is the expected state. What `ADR-0049`
+  watches instead is its own `P1`–`P5`: a credential in a public ref, a publish, a deploy or release, an agent
+  push, and a record naming infrastructure.
