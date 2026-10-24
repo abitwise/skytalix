@@ -84,7 +84,7 @@ completion notification; if a pattern is unavoidable, bracket one character (`[v
   runner and the negative-value risk: `memory-bank/90-agents-md-command-log.md` § "Vitest worker cap and module runner".
 - Search deep lane (opt-in, ABC-077): `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/search.test.ts`
 - Engine deep lane (opt-in, ABC-078): `ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/engine.test.ts`
-- Levels deep lane (ABC-087, `src/levels.test.ts`): `ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/levels.test.ts`
+- Levels deep lane (ABC-087, `src/levels.test.ts`): `ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/levels.test.ts --reporter=verbose`
 - Input-seam deep lane (opt-in, ABC-037): `INPUT_DEEP=1 NODE_OPTIONS="--expose-gc --max-old-space-size=400" npx vitest run src/line-input.test.ts`
 - Transposition deep lanes (ABC-081, `src/transposition.test.ts`): `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run
   src/transposition.test.ts` and `ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx
