@@ -591,7 +591,8 @@ function reportAndBar(what: string, result: Drift): void {
   );
   expect(result.compared).toBeGreaterThanOrEqual(100);
   expect(result.within25).toBeGreaterThanOrEqual(0.95);
-  expect(result.max).toBeLessThanOrEqual(75);
+  // `OD-205-2` (owner, 2026-10-24; `ADR-0026` § amendment 2026-10-24): 75 → 118 cp, ⌊1.5 × 79⌋.
+  expect(result.max).toBeLessThanOrEqual(118);
 }
 
 /** Every mate-floor violation: a reference mate at `depth` that `search()` at `depth + 1` loses or lengthens. */
@@ -644,7 +645,7 @@ describe("A1 — the mate-rich corpus is frozen, and the mate floor holds one pl
 
 if (RUN_DEEP) {
   describe("A1 — bounded drift, search() against searchWithoutReductions and chooseMove against chooseMoveWithoutReductions [deep, SEARCH_DEEP=1]", () => {
-    it("search() at fixed depth 5 on the 190: >= 95% within 25 cp, none beyond 75 cp [deep, SEARCH_DEEP=1]", () => {
+    it("search() at fixed depth 5 on the 190: >= 95% within 25 cp, none beyond 118 cp [deep, SEARCH_DEEP=1]", () => {
       reportAndBar(
         "search() d5",
         drift(
@@ -655,7 +656,7 @@ if (RUN_DEEP) {
       );
     }, 600_000);
 
-    it("chooseMove iterated to depth 5 on the 190: >= 95% within 25 cp, none beyond 75 cp [deep, SEARCH_DEEP=1]", () => {
+    it("chooseMove iterated to depth 5 on the 190: >= 95% within 25 cp, none beyond 118 cp [deep, SEARCH_DEEP=1]", () => {
       reportAndBar(
         "chooseMove to d5",
         drift(
