@@ -18,7 +18,7 @@ width: 1 — ALONE, when the board is idle (owner …e44d2903); after qe-timing-
 - Verdict per criterion; the baseline R (with interval) is EPIC-008's M1 baseline.
 
 ## Fences
-- Only your worktree and `/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/7311fff4-c502-4aa9-80bc-0bf8723c1183/scratchpad/qe204/`; raw outputs committed under your context folder per A7 (.out.gz + PGN). No `src/`/`tools/` edits (findings only). Never push, force, amend or rebase; never merge into `main`; don't touch the remote.
+- Only your worktree and `<scratchpad>/qe204/`; raw outputs committed under your context folder per A7 (.out.gz + PGN). No `src/`/`tools/` edits (findings only). Never push, force, amend or rebase; never merge into `main`; don't touch the remote.
 
 ## Publish
 - Seal notes via the plugin writer (task `qe-ABC-204`), `at` from `date -u`, with a `kind: decision`. Write `## Result` plus a 10-cell trace row into this brief in main's queue, then move it and its `claim.md` to `done/`.

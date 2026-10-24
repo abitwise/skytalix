@@ -17,7 +17,7 @@ width: 1 — ALONE (A4 timing, G6 depth-in-budget, perft rate). Dispatch only on
 - Gates at your merge; verdict; UAT (value-identical — say whether the waiver form applies).
 
 ## Fences
-- Only your worktree and `/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/7311fff4-c502-4aa9-80bc-0bf8723c1183/scratchpad/qe206/`. Notes + dated `## QE` addendum on the page. No `src/` edits. Never push, force, amend or rebase; never merge into `main`; don't touch the remote.
+- Only your worktree and `<scratchpad>/qe206/`. Notes + dated `## QE` addendum on the page. No `src/` edits. Never push, force, amend or rebase; never merge into `main`; don't touch the remote.
 
 ## Publish
 - Seal notes (task `qe-ABC-206`), `at` from `date -u`, `kind: decision`. `## Result` + 10-cell trace row into this brief in main's queue, then move it and its `claim.md` to `done/`.
