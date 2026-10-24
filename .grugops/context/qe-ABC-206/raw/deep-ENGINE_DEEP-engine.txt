@@ -1,0 +1,82 @@
+
+ RUN  v4.1.12 ../wt-qe-ABC-206
+
+stdout | src/engine.test.ts > A1 — 30 positions at the default budget, on a real clock [deep, ENGINE_DEEP=1] > returns within the 5 s hard ceiling every time, and reports the worst case
+A1 worst case: position-5/b1c3 3002 ms at completed depth 9; over 3 s: 15/30
+
+ ✓ src/engine.test.ts > A2 — a budget far below one iteration's cost still returns a move, and stops near it > returns a legal move at a 50 ms budget in the middlegame position 1ms
+ ✓ src/engine.test.ts > A2 — a budget far below one iteration's cost still returns a move, and stops near it > stops within 2x the budget on the clock it was given 0ms
+ ✓ src/engine.test.ts > A2 — a budget far below one iteration's cost still returns a move, and stops near it > visits only a bounded number of nodes past the deadline — the in-recursion check 0ms
+ ✓ src/engine.test.ts > A3 — an aborted iteration's move is discarded, not returned > aborts INSIDE depth 3 — the run really did enter the iteration it discards 1ms
+ ✓ src/engine.test.ts > A3 — an aborted iteration's move is discarded, not returned > returns the completed depth-2 move, which is NOT the depth-3 move 1ms
+ ✓ src/engine.test.ts > A3 (identity) — the completed iteration equals search() in move AND score > agrees with search() on move and score across the mate/stalemate endgames 18ms
+ ✓ src/engine.test.ts > A4 — no fixed depth anywhere in the delivered engine > reads the delivered module — src/engine.ts, not nothing 0ms
+ ✓ src/engine.test.ts > A4 — no fixed depth anywhere in the delivered engine > exports the two entry points and the two named values, and nothing that takes a depth 0ms
+ ✓ src/engine.test.ts > A4 — no fixed depth anywhere in the delivered engine > takes a TIME budget, in milliseconds, and requires it 0ms
+ ✓ src/engine.test.ts > A4 — no fixed depth anywhere in the delivered engine > carries no depth default and no depth constant 0ms
+ ✓ src/engine.test.ts > A4 — no fixed depth anywhere in the delivered engine > is driven by the clock and not by a ceiling — the deepening loop has no constant upper bound 0ms
+ ✓ src/engine.test.ts > A4 — no fixed depth anywhere in the delivered engine > goes DEEPER than any small hard-coded ceiling would allow — the behavioural half 6ms
+ ✓ src/engine.test.ts > RF-1 — a budget above the hard ceiling is CAPPED at it, not honoured > names the ceiling as an exported constant 0ms
+ ✓ src/engine.test.ts > RF-1 — a budget above the hard ceiling is CAPPED at it, not honoured > stops at start + HARD_CEILING_MS when handed twice that budget 0ms
+ ✓ src/engine.test.ts > RF-1 — a budget above the hard ceiling is CAPPED at it, not honoured > makes any budget above the ceiling indistinguishable from the ceiling itself 1ms
+ ✓ src/engine.test.ts > RF-1 — a budget above the hard ceiling is CAPPED at it, not honoured > terminates on an infinite budget — the module's only unbounded path, closed 1ms
+ ✓ src/engine.test.ts > RF-1 — a budget above the hard ceiling is CAPPED at it, not honoured > leaves every degenerate budget exactly as it was — Math.min, not an if 0ms
+ ✓ src/engine.test.ts > A5 — the completed depth is monotonically non-decreasing in the budget > never goes shallower as the budget grows 0ms
+ ✓ src/engine.test.ts > A5 — the completed depth is monotonically non-decreasing in the budget > actually goes deeper somewhere across the three budgets 0ms
+ ✓ src/engine.test.ts > A6 — the implementation IS an EngineSeam, and runTurnLoop drives it > is assignable to EngineSeam and answers with a Promise<Move> 0ms
+ ✓ src/engine.test.ts > A6 — the implementation IS an EngineSeam, and runTurnLoop drives it > plays a scripted game to end-of-input with the loop driving it 2ms
+ ✓ src/engine.test.ts > A7 — a legal move comes back at a budget with nothing left in it > covers 200+ positions — the denominator, asserted rather than trusted 0ms
+ ✓ src/engine.test.ts > A7 — a legal move comes back at a budget with nothing left in it > returns a legal move in every one of them — never null, never a throw 0ms
+ ✓ src/engine.test.ts > A7 — a legal move comes back at a budget with nothing left in it > leaves every searched position byte-identical, aborted iteration or not 0ms
+ ✓ src/engine.test.ts > ABC-086 A1 — the same position, budget and fresh virtual clock choose the same move > is identical 2/2 on 15 positions, each completing root depth >= 2 — 30/30, 15/15 12ms
+ ✓ src/engine.test.ts > ABC-086 A5 — the virtual clock stays off the shipped path > (i′) the shipped construction passes no clock, and its default level is the shipped engine 1ms
+ ✓ src/engine.test.ts > ABC-086 A5 — the virtual clock stays off the shipped path > (ii) src/cli.ts does not import the virtual-clock module, directly or transitively 4ms
+ ✓ src/engine.test.ts > ABC-086 A6 — each virtual clock keeps its own state > keeps each clock's state in its own instance — a second clock starts at 0 0ms
+ ✓ src/engine.test.ts > ABC-086 A6 — each virtual clock keeps its own state > keeps each clock's own step — two live clocks at steps 1 and 0.5, read interleaved (ABC-125) 0ms
+ ✓ src/engine.test.ts > ABC-086 A7 — the step guard and the reading shape, asserted at the factory > throws on a step that is not finite or not greater than 0 — 5/5 0ms
+ ✓ src/engine.test.ts > ABC-086 A7 — the step guard and the reading shape, asserted at the factory > reads exactly 0, 0.5, 1 at a step of 0.5 0ms
+ ✓ src/engine.test.ts > ABC-086 A7 — the step guard and the reading shape, asserted at the factory > reads exactly 0, 1, 2 at a step of 1 0ms
+ ✓ src/engine.test.ts > ABC-086 A4 — the virtual-clock module reads no real clock and no entropy > carries no real-clock read and no entropy source 0ms
+ ✓ src/engine.test.ts > A1 — 30 positions at the default budget, on a real clock [deep, ENGINE_DEEP=1] > returns within the 5 s hard ceiling every time, and reports the worst case 90024ms
+stdout | src/engine.test.ts > NFR-005 — depth-in-budget, MEASURED and reported [deep, ENGINE_DEEP=1] > records the completed depth on kiwipete and position-6 at the 3 s budget
+NFR-005 kiwipete: completed depth 7, 1296986 nodes, 3002 ms
+NFR-005 position-6: completed depth 8, 1473177 nodes, 3001 ms
+
+ ✓ src/engine.test.ts > NFR-005 — depth-in-budget, MEASURED and reported [deep, ENGINE_DEEP=1] > records the completed depth on kiwipete and position-6 at the 3 s budget 6004ms
+ ✓ src/engine.test.ts > A5 — the fine-grained repetition, on a 100 ms step [deep, ENGINE_DEEP=1] > still never goes shallower as the budget grows, at a tenth of the lane's step 77ms
+ ✓ src/engine.test.ts > A3 (identity) — the full sweep, with breadth [deep, ENGINE_DEEP=1] > agrees with search() on move and score over the whole endgame corpus 195ms
+ ✓ src/engine.test.ts > A3 (identity) — the full sweep, with breadth [deep, ENGINE_DEEP=1] > agrees with search() on move and score over the six benchmark roots and their children 1789ms
+stdout | src/engine.test.ts > A2/A7 on the real clock [deep, ENGINE_DEEP=1] > A2 — a 50 ms budget returns inside 100 ms in the middlegame position
+A2 real clock: 50 ms at completed depth 3
+
+ ✓ src/engine.test.ts > A4 — the behavioural depth guard, further out [deep, ENGINE_DEEP=1] > keeps deepening well past any small ceiling on the sparse endgame 38ms
+ ✓ src/engine.test.ts > A3 — the depth-3 move the default lane carries as a literal [deep, ENGINE_DEEP=1] > computes search(A3_FEN, 3).move and confirms it is g4g5 4ms
+ ✓ src/engine.test.ts > A2/A7 on the real clock [deep, ENGINE_DEEP=1] > A2 — a 50 ms budget returns inside 100 ms in the middlegame position 51ms
+ ✓ src/engine.test.ts > A2/A7 on the real clock [deep, ENGINE_DEEP=1] > A7 — a 1 ms budget returns a legal move in every corpus position 288ms
+ ✓ src/engine.test.ts > ABC-086 A1 — 30 positions x 10 fresh virtual clocks: 300/300 [deep, ENGINE_DEEP=1] > completes root depth >= 4 on at least 15 of the 30 positions 1195ms
+ ✓ src/engine.test.ts > ABC-086 A1 — 30 positions x 10 fresh virtual clocks: 300/300 [deep, ENGINE_DEEP=1] > chooses the identical move in all 10 runs of every position — 300/300 11940ms
+stdout | src/engine.test.ts > ABC-086 A2 — the shipped wall clock: legal, depth reported [deep, ENGINE_DEEP=1] > returns a legal move in each of 10 runs at the default budget, and reports each depth
+ABC-086 A2 kiwipete x10 on the wall clock: e2a6@d7/3000ms e2a6@d7/3000ms e2a6@d7/3001ms e2a6@d7/3000ms e2a6@d7/3001ms e2a6@d7/3001ms e2a6@d7/3002ms e2a6@d7/3000ms e2a6@d7/3001ms e2a6@d7/3001ms
+
+ ✓ src/engine.test.ts > ABC-086 A6 — two engines on their own virtual clocks, interleaved [deep, ENGINE_DEEP=1] > each engine chooses 10/10 what it chooses alone 47ms
+ ✓ src/engine.test.ts > ABC-086 A2 — the shipped wall clock: legal, depth reported [deep, ENGINE_DEEP=1] > returns a legal move in each of 10 runs at the default budget, and reports each depth 30008ms
+ ✓ src/engine.test.ts > ABC-170 A1 — maxDepth stops deepening once that depth has completed > is a real stop: unlimited, the same budget completes depth 6 or more 5ms
+ ✓ src/engine.test.ts > ABC-170 A1 — maxDepth stops deepening once that depth has completed > reports depth 3 at maxDepth 3, with search(position, 3)'s move and score 1ms
+ ✓ src/engine.test.ts > ABC-170 A1 — maxDepth stops deepening once that depth has completed > reports depth 1 and a legal move at maxDepth 1 0ms
+ ✓ src/engine.test.ts > ABC-170 A2 — maxNodes aborts, and the last COMPLETED iteration is played > stops within one clock-check interval of the node budget 12ms
+ ✓ src/engine.test.ts > ABC-170 A2 — maxNodes aborts, and the last COMPLETED iteration is played > plays search(position, d)'s move and score at the reported depth d — the abort is discarded 19ms
+ ✓ src/engine.test.ts > ABC-170 A2 — maxNodes aborts, and the last COMPLETED iteration is played > still completes the first iteration at maxNodes 1: non-null, legal, depth 1 1ms
+ ✓ src/engine.test.ts > ABC-170 A3 — absent limits are today's engine, clock read for clock read > returns identical move, score, depth, nodes and elapsedMs on perft root startpos 28ms
+ ✓ src/engine.test.ts > ABC-170 A3 — absent limits are today's engine, clock read for clock read > returns identical move, score, depth, nodes and elapsedMs on perft root kiwipete 31ms
+ ✓ src/engine.test.ts > ABC-170 A3 — absent limits are today's engine, clock read for clock read > returns identical move, score, depth, nodes and elapsedMs on perft root position-3 16ms
+ ✓ src/engine.test.ts > ABC-170 A3 — absent limits are today's engine, clock read for clock read > returns identical move, score, depth, nodes and elapsedMs on perft root position-4 26ms
+ ✓ src/engine.test.ts > ABC-170 A3 — absent limits are today's engine, clock read for clock read > returns identical move, score, depth, nodes and elapsedMs on perft root position-5 30ms
+ ✓ src/engine.test.ts > ABC-170 A3 — absent limits are today's engine, clock read for clock read > returns identical move, score, depth, nodes and elapsedMs on perft root position-6 29ms
+ ✓ src/engine.test.ts > ABC-170 A5 — the limits only shorten; the ceiling still holds > on an infinite budget, maxDepth 1000 returns within the same consultation count 40ms
+ ✓ src/engine.test.ts > ABC-170 A5 — the limits only shorten; the ceiling still holds > at budgetMs 5, maxDepth 50 returns the same depth and move as no maxDepth 13ms
+
+ Test Files  1 passed (1)
+      Tests  60 passed (60)
+   Start at  16:55:55
+   Duration  142.21s (transform 0ms, setup 0ms, import 184ms, tests 141.96s, environment 0ms)
+

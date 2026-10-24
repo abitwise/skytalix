@@ -1,0 +1,129 @@
+
+ RUN  v4.1.12 <scratchpad>/qe206/plant
+
+ ❯ src/legal.test.ts (34 tests | 1 failed) 123ms
+     × legalCaptures(p) is legalMoves(p).filter(capture), as the same ordered list 5ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/legal.test.ts > ABC-206 A2 — the faster pieces equal what they replace > legalCaptures(p) is legalMoves(p).filter(capture), as the same ordered list
+AssertionError: kiwipete: expected [ { from: 68, to: 86, …(4) }, …(7) ] to deeply equal [ { from: 20, to: 80, …(4) }, …(7) ]
+
+- Expected
++ Received
+
+@@ -1,37 +1,29 @@
+  [
+    {
+-     "captured": 11,
++     "captured": 9,
+      "flags": 0,
+-     "from": 20,
+-     "piece": 3,
++     "from": 68,
++     "piece": 2,
+      "promotion": 0,
+-     "to": 80,
++     "to": 86,
+    },
+    {
+      "captured": 9,
+      "flags": 0,
+-     "from": 22,
+-     "piece": 1,
++     "from": 68,
++     "piece": 2,
+      "promotion": 0,
+-     "to": 39,
+-   },
+-   {
+-     "captured": 10,
+-     "flags": 0,
+-     "from": 37,
+-     "piece": 5,
+-     "promotion": 0,
+-     "to": 85,
++     "to": 99,
+    },
+    {
+      "captured": 9,
+      "flags": 0,
+-     "from": 37,
+-     "piece": 5,
++     "from": 68,
++     "piece": 2,
+      "promotion": 0,
+-     "to": 39,
++     "to": 101,
+    },
+    {
+      "captured": 9,
+      "flags": 0,
+      "from": 67,
+@@ -39,28 +31,36 @@
+      "promotion": 0,
+      "to": 84,
+    },
+    {
+      "captured": 9,
++     "flags": 0,
++     "from": 37,
++     "piece": 5,
++     "promotion": 0,
++     "to": 39,
++   },
++   {
++     "captured": 10,
+      "flags": 0,
+-     "from": 68,
+-     "piece": 2,
++     "from": 37,
++     "piece": 5,
+      "promotion": 0,
+-     "to": 101,
++     "to": 85,
+    },
+    {
+      "captured": 9,
+      "flags": 0,
+-     "from": 68,
+-     "piece": 2,
++     "from": 22,
++     "piece": 1,
+      "promotion": 0,
+-     "to": 99,
++     "to": 39,
+    },
+    {
+-     "captured": 9,
++     "captured": 11,
+      "flags": 0,
+-     "from": 68,
+-     "piece": 2,
++     "from": 20,
++     "piece": 3,
+      "promotion": 0,
+-     "to": 86,
++     "to": 80,
+    },
+  ]
+
+ ❯ src/legal.test.ts:476:26
+    474|       const got = legalCaptures(position);
+    475|       // The same list in the same ORDER: quiescence's stable sort kee…
+    476|       expect(got, where).toEqual(want);
+       |                          ^
+    477|       captures += got.length;
+    478|     });
+ ❯ walk src/legal.test.ts:439:5
+ ❯ walkA2 src/legal.test.ts:450:5
+ ❯ src/legal.test.ts:472:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 6 passed (7)
+      Tests  1 failed | 209 passed (210)
+   Start at  16:32:59
+   Duration  842ms (transform 0ms, setup 0ms, import 421ms, tests 859ms, environment 0ms)
+

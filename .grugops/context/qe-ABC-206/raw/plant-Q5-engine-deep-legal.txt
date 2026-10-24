@@ -1,0 +1,39 @@
+
+ RUN  v4.1.12 <scratchpad>/qe206/plant
+
+ ❯ src/legal.test.ts (37 tests | 1 failed) 18003ms
+     × givesCheck, to depth 3 [deep, ENGINE_DEEP=1] 5173ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/legal.test.ts > ABC-206 A2 — the faster pieces equal what they replace > givesCheck, to depth 3 [deep, ENGINE_DEEP=1]
+AssertionError: kiwipete 4-5 81-50 20-3 50-83: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ checkEveryMove src/legal.test.ts:507:80
+    505|         unmakeMove(position, move, undo);
+    506|         const before = fullState(position);
+    507|         expect(givesCheck(position, move), `${where} ${move.from}-${mo…
+       |                                                                                ^
+    508|         expect(fullState(position), `${where} ${move.from}-${move.to}`…
+    509|         if (want && move.flags === FLAG_NONE) unflaggedChecks++;
+ ❯ walk src/legal.test.ts:439:5
+ ❯ walk src/legal.test.ts:445:7
+ ❯ walk src/legal.test.ts:445:7
+ ❯ walk src/legal.test.ts:445:7
+ ❯ walkA2 src/legal.test.ts:450:5
+ ❯ src/legal.test.ts:513:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 36 passed (37)
+   Start at  16:36:56
+   Duration  18.10s (transform 0ms, setup 0ms, import 34ms, tests 18.00s, environment 0ms)
+

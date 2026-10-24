@@ -1,0 +1,26 @@
+
+ RUN  v4.1.12 <scratchpad>/qe206/plant
+
+ ❯ src/gameend.nfr.test.ts (6 tests | 1 failed) 25ms
+     × quiesce never builds the full move list: captures come from legalCaptures 19ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/gameend.nfr.test.ts > ABC-206 — the search leaf's game-end check stays cheap (call counts, spied) > quiesce never builds the full move list: captures come from legalCaptures
+AssertionError: expected "vi.fn()" to be called at least once
+ ❯ <anonymous> src/gameend.nfr.test.ts:165:27
+    163|
+    164|     expect(visited).toBeGreaterThan(0); // the capture search ran, so …
+    165|     expect(legalCaptures).toHaveBeenCalled();
+       |                           ^
+    166|     expect(legalMoves).toHaveBeenCalledTimes(0);
+    167|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 6 passed (7)
+      Tests  1 failed | 209 passed (210)
+   Start at  16:32:44
+   Duration  1.14s (transform 0ms, setup 0ms, import 570ms, tests 1.24s, environment 0ms)
+

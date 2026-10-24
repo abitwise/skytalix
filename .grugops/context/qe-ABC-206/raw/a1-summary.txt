@@ -1,0 +1,14 @@
+A1 differential, plain node, base main 872b03c1 vs head merge b8a30264 (scripts/a1.mjs)
+811e09c501db23657b37cb40c63ce2d4922dcfcebea3e07feb97ca4e18b22b49  a1-base.jsonl
+811e09c501db23657b37cb40c63ce2d4922dcfcebea3e07feb97ca4e18b22b49  a1-head.jsonl
+c7bc0826496876fdab991e219f17607fb53c7b866d778d9a1c0fad44dbaa635b  a1-plant-Q4.jsonl
+7668290046fce333af9cce1a996988275f6c89a9d726737d8defe46640899359  a1-plant-Q5.jsonl
+    7664 a1-base.jsonl
+    7664 a1-head.jsonl
+   15328 total
+cmp: base == head, byte-identical
+plant Q4 differs from base in 2564 rows; plant Q5 in 31 rows
+first 3 rows (head):
+{"name":"kq-corner","fn":"chooseMove","budgetMs":3,"move":"1-17-0-0","score":29997,"depth":3,"nodes":749,"reads":5,"pure":true}
+{"name":"kq-corner","fn":"chooseMoveWithoutReductions","budgetMs":3,"move":"1-17-0-0","score":29997,"depth":3,"nodes":749,"reads":5,"pure":true}
+{"name":"kq-corner","fn":"chooseMoveWithoutPvsOrReductions","budgetMs":3,"move":"1-17-0-0","score":29997,"depth":3,"nodes":723,"reads":5,"pure":true}

@@ -1,0 +1,1 @@
+{"built":{"hasLegalMove":true,"leafEndReason":true,"legalCaptures":true,"givesCheck":true},"depth":4,"positions":549900,"moves":10576436,"bad":0,"reasons":{"checkmate":262,"stalemate":1,"null":255027,"insufficient-material":1005,"seventy-five-move":293605}}

@@ -1,0 +1,2 @@
+OK 13:51:43Z ac=AC load1=3.22 vitest=0
+WINDOW g1 rc=0 wall=10s samples=      10 overlap=none

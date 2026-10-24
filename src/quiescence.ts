@@ -41,9 +41,9 @@
 
 import { makeMove, unmakeMove } from "./apply.ts";
 import { evaluate } from "./evaluate.ts";
-import { legalMoves } from "./legal.ts";
+import { legalCaptures } from "./legal.ts";
 import type { Move } from "./moves.ts";
-import { EMPTY, type Position, pieceType } from "./position.ts";
+import { type Position, pieceType } from "./position.ts";
 
 /**
  * Centipawn value per piece type for ORDERING only, indexed by `pieceType` like
@@ -104,10 +104,8 @@ export function quiesce(
   let best = standPat;
   if (best > alpha) alpha = best;
 
-  const captures: Move[] = [];
-  for (const move of legalMoves(position)) {
-    if (move.captured !== EMPTY) captures.push(move);
-  }
+  // The legal captures in generation order (ABC-206): only captures are tested for legality.
+  const captures = legalCaptures(position);
   // Stable sort: equal keys keep generation order, so the count is deterministic.
   captures.sort((a, b) => mvvLvaKey(b) - mvvLvaKey(a));
 

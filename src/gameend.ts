@@ -19,7 +19,7 @@
  * read that a caller passing no counts map never pays for at all.
  */
 
-import { isInCheck, legalMoves } from "./legal.ts";
+import { hasLegalMove, isInCheck, legalMoves } from "./legal.ts";
 import {
   BISHOP,
   fileOf,
@@ -169,4 +169,21 @@ export function gameStatus(
     reason: null,
     claimable: { by: position.blackToMove ? "black" : "white", draws },
   };
+}
+
+/**
+ * Why the game at a search leaf has ended, or `null` if it has not: exactly
+ * `gameStatus(position).reason` with no counts map, checked in the same order (ABC-206).
+ * Checkmate and stalemate first, then dead position by material, then seventy-five moves. The
+ * fifty-move claim and repetition are never terminal here, as with a bare `gameStatus` call;
+ * the search decides repetition off its own key array.
+ *
+ * It is cheaper than `gameStatus` because a leaf needs no list of moves: `hasLegalMove` stops at
+ * the first legal move, and no Zobrist key is read.
+ */
+export function leafEndReason(position: Position): EndReason | null {
+  if (!hasLegalMove(position)) return isInCheck(position) ? "checkmate" : "stalemate";
+  if (isInsufficientMaterial(position)) return "insufficient-material";
+  if (position.halfmoveClock >= SEVENTY_FIVE_MOVE_PLIES) return "seventy-five-move";
+  return null;
 }

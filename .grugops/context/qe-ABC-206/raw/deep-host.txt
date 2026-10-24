@@ -1,0 +1,4 @@
+OK 13:52:01Z ac=AC load1=3.61 vitest=0
+WINDOW deep rc=0 wall=376s samples=     351 overlap=13:55:19Z ac=AC load1=3.81 vitest=1
+13:55:20Z ac=AC load1=3.81 vitest=2
+13:55:21Z ac=AC load1=3.74 vitest=2

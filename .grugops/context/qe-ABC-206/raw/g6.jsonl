@@ -1,0 +1,12 @@
+{"round":1,"tree":"base","mode":"g6","pos":"kiwipete","ms":2999.8,"depth":7,"nodes":635482,"score":-22,"move":"20-80","at":"2026-10-24T13:50:11.019Z"}
+{"round":1,"tree":"head","mode":"g6","pos":"kiwipete","ms":3001.6,"depth":7,"nodes":1279578,"score":-22,"move":"20-80","at":"2026-10-24T13:50:14.116Z"}
+{"round":1,"tree":"base","mode":"g6","pos":"position-6","ms":2999.9,"depth":7,"nodes":680601,"score":75,"move":"34-67","at":"2026-10-24T13:50:17.266Z"}
+{"round":1,"tree":"head","mode":"g6","pos":"position-6","ms":2999.5,"depth":7,"nodes":1433241,"score":75,"move":"34-67","at":"2026-10-24T13:50:20.350Z"}
+{"round":2,"tree":"head","mode":"g6","pos":"kiwipete","ms":3000.1,"depth":7,"nodes":1287770,"score":-22,"move":"20-80","at":"2026-10-24T13:50:23.497Z"}
+{"round":2,"tree":"base","mode":"g6","pos":"kiwipete","ms":3003.6,"depth":7,"nodes":632410,"score":-22,"move":"20-80","at":"2026-10-24T13:50:26.587Z"}
+{"round":2,"tree":"head","mode":"g6","pos":"position-6","ms":3000.8,"depth":7,"nodes":1440409,"score":75,"move":"34-67","at":"2026-10-24T13:50:29.738Z"}
+{"round":2,"tree":"base","mode":"g6","pos":"position-6","ms":2999.7,"depth":7,"nodes":671385,"score":75,"move":"34-67","at":"2026-10-24T13:50:32.827Z"}
+{"round":3,"tree":"base","mode":"g6","pos":"kiwipete","ms":3001.9,"depth":7,"nodes":631386,"score":-22,"move":"20-80","at":"2026-10-24T13:50:35.991Z"}
+{"round":3,"tree":"head","mode":"g6","pos":"kiwipete","ms":3000.9,"depth":7,"nodes":1278554,"score":-22,"move":"20-80","at":"2026-10-24T13:50:39.081Z"}
+{"round":3,"tree":"base","mode":"g6","pos":"position-6","ms":3000,"depth":7,"nodes":682649,"score":75,"move":"34-67","at":"2026-10-24T13:50:42.236Z"}
+{"round":3,"tree":"head","mode":"g6","pos":"position-6","ms":3001.4,"depth":7,"nodes":1444505,"score":75,"move":"34-67","at":"2026-10-24T13:50:45.328Z"}

@@ -1,0 +1,15 @@
+king move discovers: flags 0 promo 0 oracle true givesCheck true
+pawn single push discovers: flags 0 promo 0 oracle true givesCheck true
+pawn double push discovers: flags 0 promo 0 oracle true givesCheck true
+en passant discovers on rank: flags 1 promo 0 oracle true givesCheck true
+castle gives check: flags 2 promo 0 oracle true givesCheck true
+promotion gives check: flags 4 promo 5 oracle true givesCheck true
+promotion gives check: flags 4 promo 4 oracle true givesCheck true
+promotion gives check: flags 4 promo 3 oracle false givesCheck false
+promotion gives check: flags 4 promo 2 oracle false givesCheck false
+capture-promotion gives check: flags 4 promo 5 oracle true givesCheck true
+capture-promotion gives check: flags 4 promo 4 oracle true givesCheck true
+capture-promotion gives check: flags 4 promo 3 oracle false givesCheck false
+capture-promotion gives check: flags 4 promo 2 oracle false givesCheck false
+knight capture gives check: flags 0 promo 0 oracle false givesCheck false
+bad 0

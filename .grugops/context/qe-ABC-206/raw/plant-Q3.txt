@@ -1,0 +1,26 @@
+
+ RUN  v4.1.12 <scratchpad>/qe206/plant
+
+ ❯ src/gameend.nfr.test.ts (6 tests | 1 failed) 12ms
+     × lateMoveReduction never plays an unflagged move to learn whether it gives check 3ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/gameend.nfr.test.ts > ABC-206 — the search leaf's game-end check stays cheap (call counts, spied) > lateMoveReduction never plays an unflagged move to learn whether it gives check
+AssertionError: expected "vi.fn()" to be called +0 times, but got 2 times
+ ❯ <anonymous> src/gameend.nfr.test.ts:186:22
+    184|     expect(lateMoveReduction(position, check, 3, 3, false)).toBe(0);
+    185|     expect(lateMoveReduction(position, quiet, 3, 3, false)).toBe(1);
+    186|     expect(makeMove).toHaveBeenCalledTimes(0);
+       |                      ^
+    187|   });
+    188| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 6 passed (7)
+      Tests  1 failed | 209 passed (210)
+   Start at  16:32:56
+   Duration  885ms (transform 0ms, setup 0ms, import 470ms, tests 800ms, environment 1ms)
+
