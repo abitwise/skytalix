@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-24 by Orchestrator (orch-2026-10-24au) — ABC-212 lane fix built (grugops/se-lane-ABC-212 @ 814b92a0; A9 rows 1 050–1 143 → 155–160 ms; npm test head 8.58–8.82 s) → In Review for `qe-lane-ABC-212` (short re-check). **In Review over cap (4/3), written reason:** ABC-204/206/205 sit there waiting only on alone timing windows, not review capacity; ABC-212 is a returning fix loop already QE-signed. Back to 3/3 at its merge. qe-ABC-206 ALONE after._
 _Updated: 2026-10-24 by Orchestrator (orch-2026-10-24at) — ABC-212 merge WITHDRAWN (unpushed 9475a5de dropped): npm test 10.34/10.81 s head vs 8.73/9.11 s base breaks NFR-008's 10 s (…550e067d). AR-212-LANE now a required fix → In Development; `se-lane-ABC-212` (A12 budget-read arm). Line kept on grugops/ABC-212-final @ 2079e0df. qe-ABC-206 ALONE waits._
 _Updated: 2026-10-24 by Orchestrator (orch-2026-10-24as) — ABC-212 Security/NFR PASS_WITH_RISKS (NFR-004 placed verbatim; AR-212-LANE MEDIUM, reading waived under the one-run rule, …ad1d2563) → Ready for UAT (QE-signed); merge with fold + runbook on green. Then qe-ABC-206 ALONE._
 _Updated: 2026-10-24 by Orchestrator (orch-2026-10-24ar) — qe-ABC-212 PASS_WITH_GAPS (merge d417b07c; L6 max 5 005 ms, L7 max 30 004 ms; UAT signed by QE; one-run reading ruled …55691ad1) → In Security/NFR (1/2). ABC-203 → Done (N8-LANE waived …1dc2eccc). ABC-205 → In Review (3/3; QE waits on ABC-204 Done). Width 3/3 records-only (security-nfr-ABC-212, bapm-fold-ABC-212, scribe-runbook-ABC-212); merge 212 on green; then qe-ABC-206 ALONE._
@@ -1099,36 +1100,36 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
+## In Development (WIP 0/3)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## In Review (WIP 4/3)
 - [ABC-212] Two stronger levels: 6 thinks 5 s and 7 thinks 30 s a move, at every surface, and the default stays 5  (owner: software-engineer, after Architect/Design (ADR-0045 amendment + ADR-0044 D4/D5/D11 folds) and the owner's acceptance of the NFR-004 text, size: M, priority: P2, epic: EPIC-004 (post-close addition), since: 2026-10-24, DoR 10/10; cut in \`bapm-cut-levels-6-7\` (\`…44bee405\`). Owner word \`…e44d2903\`. LEVELS 6 = 5 000/0, 7 = 30 000/0, HARDEST 7, default 5; "up to 30 s" = spends 30 s (no early stop). Flag/usage/question 1–7, Skill Level max 7, bare go = level budget. L6 5.0–7.0 s 30/30, L7 30–32 s 10/10 (ENGINE_DEEP); L1–5 identical 50/50; L7 depth ≥ L5 + 1. PROPOSED to owner: NFR-004 per-level ceiling (5/7/32 s). D5 worker trigger fires; UCI split pre-registered. 0 files, 0 spawns) **2026-10-24: owner "pull ready tickets" → Ready → In Design (`arch-design-ABC-212`).** **2026-10-24: design ruled (`…d2c68ace`): one clamp `HARD_CEILING_MS` 32 000, UCI unchanged, no worker split; ADR-0045 amended on the owner's points. → In Development (`ticket-to-pr-ABC-212`).** **2026-10-24: built `2dba7331` (`…e4a87583`); STOP: 8 existing rows (U1–U8) red outside A13, all spec consequences → `bapm-amend-ABC-212`, then a small SE fix hop + the Scribe's A11 line.** **2026-10-24: BA/PM licensed U1–U8 and re-worded A12 (`…26b36292`) → `ticket-to-pr-ABC-212b` (tests only), then the Scribe's A11 line on the same branch.** **2026-10-24: pins applied (`73339912`, `…12d21099`): 2 056/2 057, only U3 red as ruled → `scribe-ABC-212` (A11 line, branch off ABC-212).** **2026-10-24: A11 AGENTS.md line in (`grugops/scribe-ABC-212` @ `2ba55ea7`, 2 057/2 057). → In Review; runbook line (Architect) now; `qe-ABC-212` runs alone when idle + AC.**
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## In Review (WIP 3/3)
 - [ABC-205] King safety bites while the enemy queen is on, and the king table is tapered  (owner: software-engineer, after Architect/Design (ADR-0031 addendum → owner when written), size: M, priority: P2, epic: EPIC-008, since: 2026-10-23, DoR 10/10; `…8c3b2f47`. Strict relations (queen scale ≥ 6 pairs, taper, no castled bonus without shelter); G2 ≤ 1 100 ns, G6 depth ≥ 6 and ≥ base, G1 ≥ 54/58; D: S1 GAIN. D waits on ABC-204) **2026-10-24: owner "pull ready tickets" → Ready → In Design (`arch-design-ABC-205`).** **2026-10-24: design ruled (`…1fb6e1bc`): exposure ×3 while the enemy queen is on (cap 315 cp), tapered king table with our own endgame half, no castled bonus without shelter; ADR-0031 addendum PROPOSED; OD-205-1 (quiescence multiplier cell) owed before merge. → In Development (`ticket-to-pr-ABC-205`).** **2026-10-24: built `4f650a45` (`…18a6a03c`): relations/mutants green, G1 55/58, G2 ~700 ns; 10/11 rows re-pinned; STOP on 3 deep rows (S1 TT fixture depth, S2/S3 PVS drift 79 > 75 cp) → `arch-rule-ABC-205-stop`. OD-205-1 cell reads 10.96x (owner).** **2026-10-24: STOP ruled (`…3809d451`): S1 re-pin (maxDepth 10, frozen clock) allowed now; S2/S3 → owner OD-205-2 (ADR-0026 d9 drift max 75 → 118 cp, PROPOSED). Merge waits on OD-205-1 + OD-205-2 + the ADR-0031 addendum.**
 - [ABC-206] The search runs faster with identical answers (one generation per leaf, captures-only quiescence, gives-check without make/unmake)  (owner: software-engineer, size: M, priority: P2, epic: EPIC-008, since: 2026-10-23, DoR 10/10; `…8c3b2f47`. Node-equal identity sweep + clock-count equal; median time to depth 8 ≤ 0.85 × base on kiwipete and position-6 (plain node, n ≥ 7); NFR-001 leaf clause kept; D: S2 not LOSS. No ADR expected) **2026-10-24: pulled Ready → In Design (`arch-design-ABC-206`).** **2026-10-24: design ruled (`…e3ff760b`): one-stop leaf check, captures-only quiescence generation, cheap givesCheck for LMR; value-identical, no door; merge order 212 → 206 → 205. OD-206-1 (ADR-0003 clause 1 reading) to the owner before merge. → In Development (`ticket-to-pr-ABC-206`).** **2026-10-24: built `0d046948` (`…9ca0557a`): three value-identical commits, A1 5 706 rows byte-identical, A2 11.1M moves 0 mismatches; 2 045 pass. → In Review (`qe-ABC-206`, alone). Merge waits on OD-206-1.**
 - [ABC-204] Rating harness: cutechess-cli plays the built skytalix against Stockfish UCI_LimitStrength (R) and against its own base (D), outside npm test  (owner: software-engineer, after an Architect/Design ruling; readings by QE, size: M, priority: P2, epic: EPIC-008, since: 2026-10-23, DoR 10/10; `…8c3b2f47`. tools/rating only, 0 lane files (NFR-008 untouched); baseline R (25–75 % band, E frozen), A/A D (100 games, interval contains 0), wall ruling R ≤ 10 h, D ≤ 8 h (D budget ≥ 1 000 ms if needed). No ADR, no Security/NFR hop. Width 1 for readings) **2026-10-23: pulled Ready → In Design (`arch-design-ABC-204`).** **2026-10-23: design ruled (`…13faedbc`, no ADR); biome line + E-step nodded by the Orchestrator. In Design → In Development (`ticket-to-pr-ABC-204`).** **2026-10-24: built `0e88c5df` (`…f0a579a0`): harness under `tools/rating/`, openings sha = pin, smoke R/D 0 faults, lane unchanged. → In Review (`qe-ABC-204`: baseline R, A/A D, A5 wall; alone when idle).**
