@@ -263,3 +263,61 @@ owner as INFO before it is written.
 4. Route the D4 dated line to Architect/Design at the build's records step.
 5. **Fallback**, if the SE or QE finds the hosted mock disturbs a row: the same block in its own file (rig (b),
    probed green). Its `N8-LANE` reading is then owed.
+
+## QE addendum
+
+> **QE/E2E, 2026-10-24** (task `qe-ABC-213`). It ran on branch `grugops/ABC-213`, at **merge `3dc70e20`** (`e71c8901` +
+> `main` `adf6af38`, no conflict, and `main` brought no `src/`). It had its own `npm ci --ignore-scripts`, ran on Node
+> 26.11.1, made no `src/` edit and pushed nothing. Notes are in `.grugops/context/qe-ABC-213/notes/` and the
+> evidence is in `raw/`. **No timing reading was taken:** the host was on battery, with a sibling QE hop running.
+
+**Verdict: `PASS_WITH_GAPS`.** `A1`–`A7` are MET and no gap blocks. The findings are 1 LOW and 4 INFO.
+
+| # | reading at the merge |
+|---|---|
+| `A1` | both rows green: write `EFBIG` + unlink `EACCES` gives `EFBIG`, and close `EIO` + unlink `EACCES` gives `EIO`. The cleanup is attempted once. Nothing is thrown |
+| `A2` | both rows green: one real byte, then `EFBIG`, and the close `EIO` case. `games/` reads `[]` from the real root |
+| `A3` | green: a codeless unlink throw leaves `writePgnFile` |
+| `A4` | re-planted on a scratch copy, never `src/`. **X1** reds `A2` ×2 (and also `A1` ×2 and `A3`). **X3** reds `A1` ×2. **X4** reds `A1` ×2. **X5** reds `A3`. Every plant reds the row it names |
+| `A5` | base `dfaa4cdc`: exit 70, as recorded. Head: **exit 0**, with stderr exactly `PGN not saved: EFBIG\n`. Its full stdout equals the control's (sha256 `a2f144e4…`, 516 B, not just the tail). The control is unchanged: `EFBIG`, exit 0, 0 files |
+| `A6` | the `pgn-file.ts` diff is one hunk in the cleanup branch. It keeps 1 `node:fs` import with the same five bindings and 1 export. The only `process.`/`stdout`/`stderr` hits are header lines 6–7. `cli.ts` and `pgn.ts` have a 0-line diff to base and to `main` |
+| `A7` | 1 `spawnSync(` site, and the base file's only removed lines are two import lines. Every `ABC-203` row is green with its expected values unedited. The `cli.test.ts` guard "one file per child that printed PGN saved" is green |
+
+**Gates at `3dc70e20`:**
+- lint 0 (125 files), typecheck 0, build 0;
+- `npm test`: 62 files and 2044 passed, exit 0. `last-run.json` reads `success: true`, 2044/2044, pending 0, todo 0;
+- skips 0, and `test-skip-integrity.js` gives `No findings.`;
+- `qe-hop-integrity.js --ticket ABC-213` (its reading is in the verdict note).
+
+**Findings:**
+- **QE-213-a (LOW): `D4`'s "the one path this call created" is pinned only at the first candidate.** The plant
+  Q7 has the cleanup unlink `games/<stem>.pgn` instead of `path`, and the **whole lane stays green** (2044/2044). If a
+  single fault hit the `-2` candidate, that plant would delete the owner's earlier game and leave the partial file.
+  Head is correct. A probe row (in-process, on the same double, 0 spawns and 0 files) is green at head and red under
+  Q7. It is in `raw/probe-rows.ts`. Not blocking. Fold it into the next ticket that edits `pgn.test.ts` or
+  `pgn-file.ts`, or let Security/NFR rule it.
+- **QE-213-b (INFO):** a write-then-close double fault reports the first (write) code through `ABC-203`'s
+  `failure ??= error`. No row pins this. Plant Q6 (`=` in place of `??=`) is green across the whole lane, and a probe
+  row reds it.
+- **QE-213-c (INFO):** `D5`'s rethrow of a codeless *first* failure is not pinned. `A3` covers only a codeless
+  *unlink*. Plant Q8 (map a codeless failure to `EIO`) is green across the whole lane, and a probe row reds it.
+- **QE-213-d (INFO):** the header in `src/pgn-file.ts` (lines 15–16) still says the path "is removed", with no
+  condition. Since this ticket, removal is best-effort. `A6` kept the diff to the cleanup branch, so the fix rides
+  with the owed `ADR-0047` D4 dated line.
+- **QE-213-e (INFO):** on a double fault the partial file **stays** in `games/`, while the player sees
+  `PGN not saved: EFBIG`. In `A5` at head, `games/` holds 1 file. That is the ruled reading of D4 and D5, and it is
+  listed here so UAT sees it.
+
+**UAT:** the waiver does **not** apply. The reference measurement lists `src/pgn-file.ts`. This verdict
+(`PASS_WITH_GAPS`, no blocking gap) signs UAT under the delegation (`…5aaf7cec` item 2).
+
+**Owed, and not gaps:**
+- the writer child's CPU, median of 5 at base and at head (§ NFR triggers). The child is byte-identical, so the
+  growth is 0 by construction, but no reading has been taken;
+- the in-process cost of (b′) in `src/pgn.test.ts`, for Security/NFR under `ADR-0036` Ruling 2;
+- `qe-timing-ABC-203` reports before `ABC-213` merges (DoR row 5);
+- the `ADR-0047` D4 dated line (Architect/Design);
+- `CLI_DEEP` was not run: it is not in this brief, and `cli.ts` is byte-identical.
+
+**Next:** `In Review → In Security/NFR` (`ADR-0036` Ruling 2). That hop closes `AR-203-UNLINK`: X3 is red at base,
+and the fix is green at head.
