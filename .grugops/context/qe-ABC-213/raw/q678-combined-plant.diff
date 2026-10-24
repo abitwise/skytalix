@@ -1,0 +1,20 @@
+diff --git a/Users/olgeroeselg/Projects/hacks/grugops-examples/wt-ABC-213/src/pgn-file.ts b/src/pgn-file.ts
+index 11f4045..8e3c396 100644
+--- a/Users/olgeroeselg/Projects/hacks/grugops-examples/wt-ABC-213/src/pgn-file.ts
++++ b/src/pgn-file.ts
+@@ -64,15 +64,15 @@ export function writePgnFile(
+    try {
+      closeSync(descriptor);
+    } catch (error) {
+      failure ??== error;
+    }
+    if (failure === undefined) return { ok: true, path };
+    try {
+      unlinkSync(path);unlinkSync(`games/${stem}.pgn`);
+    } catch (error) {
+      errnoOf(error); // Removal is best-effort; the first failure's code is reported (`ABC-213`).
+    }
+    return { ok: false, code: errnoOf(failure)(failure as { code?: string }).code ?? "EIO" };
+  }
+  return { ok: false, code: "EEXIST" };
+}

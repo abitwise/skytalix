@@ -1,0 +1,80 @@
+{
+  "HEAD": {
+    "exit": 0,
+    "passed": 24,
+    "failed": 0,
+    "total": 24,
+    "red": []
+  },
+  "X1_drop_unlink": {
+    "exit": 1,
+    "passed": 18,
+    "failed": 6,
+    "total": 24,
+    "red": [
+      "A1 — the write fails with W and the cleanup unlink with U: { ok: false, code: W }, nothing thrown",
+      "A1 — the close fails with C and the cleanup unlink with U: { ok: false, code: C }",
+      "A2 — the write fails after a byte reached the file, the unlink succeeds: W, and games/ holds 0 files",
+      "A2 — the close fails after the whole text was written, the unlink succeeds: C, and games/ holds 0 files",
+      "A3 — an unlink throw with no errno code leaves writePgnFile (a defect is not swallowed)",
+      "QE probe Q7 — a fault at the -2 candidate removes that file and leaves the earlier game intact"
+    ]
+  },
+  "X3_unguarded_unlink": {
+    "exit": 1,
+    "passed": 22,
+    "failed": 2,
+    "total": 24,
+    "red": [
+      "A1 — the write fails with W and the cleanup unlink with U: { ok: false, code: W }, nothing thrown",
+      "A1 — the close fails with C and the cleanup unlink with U: { ok: false, code: C }"
+    ]
+  },
+  "X4_guard_reports_U": {
+    "exit": 1,
+    "passed": 22,
+    "failed": 2,
+    "total": 24,
+    "red": [
+      "A1 — the write fails with W and the cleanup unlink with U: { ok: false, code: W }, nothing thrown",
+      "A1 — the close fails with C and the cleanup unlink with U: { ok: false, code: C }"
+    ]
+  },
+  "X5_catch_all": {
+    "exit": 1,
+    "passed": 23,
+    "failed": 1,
+    "total": 24,
+    "red": [
+      "A3 — an unlink throw with no errno code leaves writePgnFile (a defect is not swallowed)"
+    ]
+  },
+  "Q6_close_overwrites_first": {
+    "exit": 1,
+    "passed": 23,
+    "failed": 1,
+    "total": 24,
+    "red": [
+      "QE probe Q6 — the write fails with W and the close with C: the FIRST code, W"
+    ]
+  },
+  "Q7_unlink_wrong_candidate": {
+    "exit": 1,
+    "passed": 23,
+    "failed": 1,
+    "total": 24,
+    "red": [
+      "QE probe Q7 — a fault at the -2 candidate removes that file and leaves the earlier game intact"
+    ]
+  },
+  "Q8_codeless_first_swallowed": {
+    "exit": 1,
+    "passed": 23,
+    "failed": 1,
+    "total": 24,
+    "red": [
+      "QE probe Q8 — a codeless write failure is a defect and leaves writePgnFile (D5)"
+    ]
+  },
+  "gamesInCopyRoot": false
+}
