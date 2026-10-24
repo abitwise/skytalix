@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-24 by Orchestrator (orch-2026-10-24as) — ABC-212 Security/NFR PASS_WITH_RISKS (NFR-004 placed verbatim; AR-212-LANE MEDIUM, reading waived under the one-run rule, …ad1d2563) → Ready for UAT (QE-signed); merge with fold + runbook on green. Then qe-ABC-206 ALONE._
 _Updated: 2026-10-24 by Orchestrator (orch-2026-10-24ar) — qe-ABC-212 PASS_WITH_GAPS (merge d417b07c; L6 max 5 005 ms, L7 max 30 004 ms; UAT signed by QE; one-run reading ruled …55691ad1) → In Security/NFR (1/2). ABC-203 → Done (N8-LANE waived …1dc2eccc). ABC-205 → In Review (3/3; QE waits on ABC-204 Done). Width 3/3 records-only (security-nfr-ABC-212, bapm-fold-ABC-212, scribe-runbook-ABC-212); merge 212 on green; then qe-ABC-206 ALONE._
 _Updated: 2026-10-24 by Orchestrator (orch-2026-10-24ap) — owner accepted ADR-0048 → ABC-214 MERGED (59f50717) → Done. ADR-0049 (public posture) PROPOSED → owner. Owner rule …4c3f7639: each pending timing run runs once, result final. Alone queue (AC now; waits for a quiet host): qe-ABC-212 → qe-ABC-206 → qe-ABC-204 → ABC-205 G6 + D._
 _Updated: 2026-10-24 by Orchestrator (orch-2026-10-24an) — ABC-213 MERGED (77032cda) → Done; ABC-203 N8-LANE + ABC-213 CPU readings waived (…1dc2eccc). Width 3/3 (arch-accept-adr0048+posture, bapm-epic007-licence-line, security-nfr-public-repo-redacted). Alone runs left: qe-ABC-212, qe-ABC-206, qe-ABC-204, ABC-205 D._
@@ -1152,23 +1153,23 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Security/NFR (WIP 1/2)
+## In Security/NFR (WIP 0/2)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Ready for UAT (WIP 1/4)
 - [ABC-212] Two stronger levels: 6 thinks 5 s and 7 thinks 30 s a move, at every surface, and the default stays 5  (owner: software-engineer, after Architect/Design (ADR-0045 amendment + ADR-0044 D4/D5/D11 folds) and the owner's acceptance of the NFR-004 text, size: M, priority: P2, epic: EPIC-004 (post-close addition), since: 2026-10-24, DoR 10/10; cut in \`bapm-cut-levels-6-7\` (\`…44bee405\`). Owner word \`…e44d2903\`. LEVELS 6 = 5 000/0, 7 = 30 000/0, HARDEST 7, default 5; "up to 30 s" = spends 30 s (no early stop). Flag/usage/question 1–7, Skill Level max 7, bare go = level budget. L6 5.0–7.0 s 30/30, L7 30–32 s 10/10 (ENGINE_DEEP); L1–5 identical 50/50; L7 depth ≥ L5 + 1. PROPOSED to owner: NFR-004 per-level ceiling (5/7/32 s). D5 worker trigger fires; UCI split pre-registered. 0 files, 0 spawns) **2026-10-24: owner "pull ready tickets" → Ready → In Design (`arch-design-ABC-212`).** **2026-10-24: design ruled (`…d2c68ace`): one clamp `HARD_CEILING_MS` 32 000, UCI unchanged, no worker split; ADR-0045 amended on the owner's points. → In Development (`ticket-to-pr-ABC-212`).** **2026-10-24: built `2dba7331` (`…e4a87583`); STOP: 8 existing rows (U1–U8) red outside A13, all spec consequences → `bapm-amend-ABC-212`, then a small SE fix hop + the Scribe's A11 line.** **2026-10-24: BA/PM licensed U1–U8 and re-worded A12 (`…26b36292`) → `ticket-to-pr-ABC-212b` (tests only), then the Scribe's A11 line on the same branch.** **2026-10-24: pins applied (`73339912`, `…12d21099`): 2 056/2 057, only U3 red as ruled → `scribe-ABC-212` (A11 line, branch off ABC-212).** **2026-10-24: A11 AGENTS.md line in (`grugops/scribe-ABC-212` @ `2ba55ea7`, 2 057/2 057). → In Review; runbook line (Architect) now; `qe-ABC-212` runs alone when idle + AC.**
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## Ready for UAT (WIP 0/4)
 
 
 
