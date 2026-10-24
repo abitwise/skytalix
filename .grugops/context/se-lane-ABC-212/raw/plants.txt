@@ -1,0 +1,40 @@
+# plants: each applied alone to a scratch copy of the head tree (never src/ of the worktree); vitest -t 'ABC-212 A9' on src/uci-session.test.ts
+# control (unplanted scratch copy): Tests 9 passed | 128 skipped (137)
+== L6-budget: red 1, green 8
+   RED   a bare go at 6 hands the engine 5 000 ms
+== P1-L7-budget: red 5, green 4
+   RED   setoption name Skill Level value 7 sets 7: a bare go searches 30 000 ms
+   RED   go movetime 60000 at 7 hands the engine 30 000 (the level caps G)
+   RED   go wtime 600000 btime 600000 at 7 hands the engine min(600 000 ÷ 20, 30 000) = 30 000
+   RED   Skill Level value 0 at 7 keeps 7, with the 1-7 info string
+   RED   Skill Level value 8 at 7 keeps 7, with the 1-7 info string
+== L7-rate: red 7, green 2
+   RED   setoption name Skill Level value 7 sets 7: a bare go searches 30 000 ms
+   RED   go movetime 60000 at 7 hands the engine 30 000 (the level caps G)
+   RED   go movetime 1000 at 7 hands the engine 1 000 (G caps the level)
+   RED   go wtime 600000 btime 600000 at 7 hands the engine min(600 000 ÷ 20, 30 000) = 30 000
+   RED   go depth 3 at 7 stops at depth 3 (D12: rate 0), and the info line carries a score
+   RED   Skill Level value 0 at 7 keeps 7, with the 1-7 info string
+   RED   Skill Level value 8 at 7 keeps 7, with the 1-7 info string
+== P2-clamp: red 3, green 6
+   RED   setoption name Skill Level value 7 sets 7: a bare go searches 30 000 ms
+   RED   Skill Level value 0 at 7 keeps 7, with the 1-7 info string
+   RED   Skill Level value 8 at 7 keeps 7, with the 1-7 info string
+== level-cap-off: red 5, green 4
+   RED   setoption name Skill Level value 7 sets 7: a bare go searches 30 000 ms
+   RED   a bare go at 6 hands the engine 5 000 ms
+   RED   go movetime 60000 at 7 hands the engine 30 000 (the level caps G)
+   RED   Skill Level value 0 at 7 keeps 7, with the 1-7 info string
+   RED   Skill Level value 8 at 7 keeps 7, with the 1-7 info string
+== G-cap-off: red 1, green 8
+   RED   go movetime 1000 at 7 hands the engine 1 000 (G caps the level)
+== movestogo-30: red 1, green 8
+   RED   go wtime 600000 btime 600000 at 7 hands the engine min(600 000 ÷ 20, 30 000) = 30 000
+== invalid-resets: red 2, green 7
+   RED   Skill Level value 0 at 7 keeps 7, with the 1-7 info string
+   RED   Skill Level value 8 at 7 keeps 7, with the 1-7 info string
+== msg-1-5: red 2, green 7
+   RED   Skill Level value 0 at 7 keeps 7, with the 1-7 info string
+   RED   Skill Level value 8 at 7 keeps 7, with the 1-7 info string
+== P3-max-5: red 1, green 8
+   RED   uci lists Skill Level default 5 min 1 max 7, max read from HARDEST_LEVEL
