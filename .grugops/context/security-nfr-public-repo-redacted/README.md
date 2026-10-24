@@ -1,0 +1,2 @@
+# security-nfr-public-repo-redacted — context
+Owner word: .grugops/context/owner-word-2026-10-24/notes/20261024T091000Z-orchestrator-decision-776bba9a.md (SEC-PUB-1 accepted on condition 'no creds'). Your earlier review: the held branch grugops/security-nfr-public-repo @ 5fd5ee65 (local only; restates homelab details; will never be merged) and main's uncommitted .grugops/queue/done/security-nfr-public-repo.md (its Result holds homelab detail).

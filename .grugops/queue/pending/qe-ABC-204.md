@@ -9,6 +9,8 @@ width: 1 — ALONE, when the board is idle (owner …e44d2903); after qe-timing-
 
 # QE gate + long readings for ABC-204 (rating harness)
 
+> **Owner rule 2026-10-24 (`…4c3f7639`): ONE run.** No prior valid reading exists, so run once under the preconditions and write the result; it is final. No repeat on UNRESOLVED/NOT MET (grade it as the page says); the procedure's own defined steps (e.g. a pooled extension) are part of the one run.
+
 ## Do
 - Own worktree from `grugops/ABC-204`, merge current `main` first (report sha), own `npm ci`.
 - Verify A1–A3 independently, then the long readings exactly as the page and Design ruling state: A5 first (D at 3 000 ms, concurrency 3 → median game wall → rule budget B), then A4 baseline R (200 games, E start 1650, the E′ rule, 25–75 % score band, Stockfish depth guard), then A6 A/A D (100 games, interval contains 0). Plus the QE-owned checks the SE listed (book-move counts, `[FEN]` colour pairs, go→bestmove gap stats reported not graded, gzip of .out).

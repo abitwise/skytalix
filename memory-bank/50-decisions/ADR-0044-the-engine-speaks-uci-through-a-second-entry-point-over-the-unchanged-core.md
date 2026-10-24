@@ -19,6 +19,13 @@ resolve. Since the 2026-10-18 revision that slug is no longer true: see § Revis
 > `"include": []`. `dist/` holds what `uci.ts` imports, type-only imports included. The fence is on what `dist/uci.js`
 > **loads**, not on what is emitted. See § Addendum — D8's emit set. No other decision here moves.
 
+> **Superseded in part 2026-10-24 by `ADR-0048` (accepted by the owner, note `…776bba9a`; recorded by
+> Architect/Design, task `arch-accept-adr0048`).** D13's licence reading (private, `UNLICENSED`, no `LICENSE` or
+> `NOTICE`, re-derive before distribution) gives way to Apache-2.0 with a CC BY-SA 3.0 carve-out of the evaluation
+> values (owner words `…28633db0`, `…fb0468ff`). The re-derivation is its own `EPIC-008` ticket. Effective at
+> `ABC-214`'s merge. D13's name bullet and its CC0 bullet stand. Its kit-file bullet stands: the files stay MIT.
+> No other decision here moves.
+
 **accepted** 2026-10-18 by Olger Oeselg (owner), verbatim "accept the revised ADR-0044 and EPIC-007" (note
 `.grugops/context/wave-2026-09-25/notes/20261018T113000Z-orchestrator-decision-owner-word-engine-private-adr0044-epic007-accepted-c3e81a57.md`).
 Owner menu: licence → private ("let's keep private for now"); Q14 → keep `npm run chess`; Q15 → moot
@@ -88,6 +95,7 @@ second `A4` check. It is still **proposed**. § Revision — licence lists the c
 | P4 | *"Q14: keep it"*; *"Q15: picked private"* | Q14 answered: `npm run chess` keeps its name. Q15 is moot |
 | P5 | consequence of P1 | The AGPL "Source" link advice (D13, evaluation item 4) is withdrawn |
 | P6 | consequence of P1 | `ABC-169` is re-scoped to declaring private (Consequences) |
+| P7 | 2026-10-24: `ADR-0048`: Apache-2.0 (`…28633db0`), path A (`…fb0468ff`); accepted `…776bba9a` | D13's licence reading is superseded by `ADR-0048`. The kit files stay MIT (P2 holds). `ABC-169` stays a Done ticket's dated reading. P1–P6 stay as history |
 
 ## Addendum — 2026-10-21: D8's emit set and its `include` (subtask `arch-ABC-168-D8`)
 
@@ -510,6 +518,9 @@ that backend can run.
 
 ### D13. Licence and name (Q8, Q9, Q12–Q15; rewritten to private on 2026-10-18 at acceptance, subtask `arch-adr0044-accept`)
 
+> *2026-10-24:* Licence reading superseded by `ADR-0048` (accepted 2026-10-24): Apache-2.0, the tables carved out,
+> re-derivation as its own ticket. The bullets below stay as history.
+
 *This records the owner's licence decision. It was written by an engineering role and is not legal
 advice.* The owner's word is in the note
 `.grugops/context/wave-2026-09-25/notes/20261018T113000Z-orchestrator-decision-owner-word-engine-private-adr0044-epic007-accepted-c3e81a57.md`.
@@ -533,7 +544,7 @@ advice.* The owner's word is in the note
   permits use in a private repository, so they stay MIT and are not relicensed.
   - At `main` `50e081fc` none of the four carries the MIT text, and the installed kit ships no licence
     file. So the exact notice is `UNKNOWN - verify`. Supplying it is the kit's job, and it blocks
-    nothing.
+    nothing. *2026-10-24: this `UNKNOWN - verify` is closed by `ADR-0048` decision 5.*
   - The other seven files in `tools/grugops/` are this project's own work, and they are private like
     `src/`.
 - **The Michniewski tables stay as they are.** These are `PIECE_VALUE` and the six piece-square tables
@@ -744,7 +755,8 @@ That matters only if someone chooses v4, and the owner, as copyright holder, can
     version is withdrawn** for this file only.
   - Config: `tsconfig.build.json` (new); `package.json` `build`, `uci` and `bin`; `"license": "UNLICENSED"`
     and the `src/evaluate.ts` attribution comment (`ABC-169`, re-scoped to declaring private). There is
-    no `LICENSE` file and no `NOTICE` file (D13).
+    no `LICENSE` file and no `NOTICE` file (D13). *2026-10-24: superseded by `ADR-0048`: `ABC-214` sets
+    `"license": "Apache-2.0"` and adds `LICENSE` and `NOTICE`.*
 - **Gates.**
   - The ticket that builds `src/uci.ts` fires `ADR-0036` (b1) (`process.`, `node:readline`, and the
     import of the capability holder `book-file.ts`) and routes through `In Security/NFR`.
@@ -787,7 +799,8 @@ That matters only if someone chooses v4, and the owner, as copyright holder, can
   § Commands (the Scribe), and `memory-bank/30-architecture.md`.
 - **Distribution is unchanged** (`ADR-0018`): a clone, built locally. Publishing, or a single executable,
   is that ADR's revisit trigger, and neither is decided here. Any distribution of the engine to third
-  parties also needs our own evaluation values first (D13).
+  parties also needs our own evaluation values first (D13). *2026-10-24: superseded by `ADR-0048` decision 7:
+  the carve-out covers the values now, and the re-derivation follows as its own ticket.*
 
 ## Rollback
 

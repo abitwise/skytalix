@@ -1,8 +1,8 @@
 ---
 id: ABC-214
-title: "The repository is licensed Apache-2.0: a verbatim `LICENSE`, a `NOTICE`, and `\"license\": \"Apache-2.0\"` in `package.json`, with the CC BY-SA 3.0 evaluation tables carved out (path A) or re-derived first (path B)"
-status: backlog
-column: Backlog
+title: "The repository is licensed Apache-2.0: a verbatim `LICENSE`, a `NOTICE`, and `\"license\": \"Apache-2.0\"` in `package.json`, with the CC BY-SA 3.0 evaluation tables carved out (path A)"
+status: ready
+column: Ready
 size: XS
 priority: P1
 epic: EPIC-007 (post-close addition)
@@ -18,9 +18,11 @@ adr: "the licence ADR (Architect/Design; supersedes ADR-0044 D13's private readi
 > from Security/NFR's licence note `…21dd2358` (task `security-nfr-public-repo`, LIC-PUB-1). That branch is held, and
 > this page copies nothing from it except licence facts.
 >
-> **The tables are the owner's A/B call (OD-214-1).** This page writes both paths and does not pick one. Every
-> criterion below is marked **[both]**, **[A]** or **[B]**. The owner's answer deletes the other path's rows by a
-> one-line BA/PM amendment. The ticket does not leave `Backlog` until that answer exists (§ Definition of Ready).
+> **Amended 2026-10-24 by BA/PM: path A** (task `bapm-ABC-214-path-a`, records only, at `main` `d4d49c5a`). The
+> owner answered OD-214-1 with *"accept your recommendations, other session paused"* (`owner-word-2026-10-24`
+> `…fb0468ff`, a transcription, not a stamp): path A. Every [B] row is deleted, and [both] and [A] stand unchanged.
+> `A7` was path B's, and its number is not reused. Item 8's re-derive ticket is cut as `ABC-215` (`EPIC-008`,
+> `Backlog`). DoR re-checked: 10/10 → `Ready` (§ Definition of Ready).
 >
 > *This is an engineering role's reading, not legal advice.* Every legal conclusion here is `UNKNOWN - verify`.
 
@@ -37,7 +39,7 @@ adr: "the licence ADR (Architect/Design; supersedes ADR-0044 D13's private readi
   - `ADR-0044` D13's precondition says *"re-derive our own values first"* before any distribution. Publication
     breached it (LIC-PUB-1, MEDIUM, owner-owned).
 - **Value:** the repository carries the licence its owner chose, in the form tools and readers recognise. The one
-  third-party, share-alike part is either declared outside that licence (A) or gone (B).
+  third-party, share-alike part is declared outside that licence (A), until `ABC-215` replaces it.
 
 ## Readings (at `main` `c487d89c`, this hop)
 
@@ -68,6 +70,11 @@ adr: "the licence ADR (Architect/Design; supersedes ADR-0044 D13's private readi
 - First commit: `49edb4f7`, 2026-07-22. The copyright year is 2026.
 - The kit's own `LICENSE` reads *"MIT License, Copyright (c) 2026 Olger Oeselg"*. It is the installed kit's file, read
   only.
+- **Re-read 2026-10-24 at `main` `d4d49c5a`** (`bapm-ABC-214-path-a`). `git diff --stat c487d89c d4d49c5a` over
+  `src/evaluate.ts`, `package.json`, `package-lock.json`, `src/cli.test.ts`, `src/line-input.test.ts`,
+  `src/cli.real-engine.test.ts`, `biome.json` and `tools/grugops` prints nothing. The seven arrays are still at
+  `:43`-`:121`, the `private` assertion is still at `:1866`, and no `LICENSE`, `NOTICE`, `COPYING` or `README` is
+  tracked. Every reading above holds, and so does `A5`'s base check.
 
 ## Scope
 
@@ -126,27 +133,13 @@ adr: "the licence ADR (Architect/Design; supersedes ADR-0044 D13's private readi
    > ` * this repository. They remain under CC BY-SA 3.0. See NOTICE.`
 
    No number, identifier or code line moves.
-8. **The later re-derive ticket is not cut here.** It is cut on the owner's word. It removes the `NOTICE` section in
-   item 6 and the header lines in item 7 in the same change as the new values. Its shape is § Path B, item 9.
-
-### [B] Path B: re-derive first, then license with no carve-out
-
-9. **A separate re-derive ticket comes first.** It is not cut on this page. It is cut on the owner's "B". Its known
-   shape:
-   - It is value-changing on `src/evaluate.ts`. It replaces `PIECE_VALUE` and the six tables with values that are our
-     own, and it removes the Michniewski credit.
-   - It belongs in `EPIC-008` and owes that epic's common gates: `G1` puzzles ≥ 54/58, `G2` ≤ 1 100 ns, `G3`
-     relations, `G6` depth ≥ 6 and ≥ base, `G9` levels.
-   - It needs a D reading at width 1. Its ship rule is an open point for that ticket. S1 (GAIN) does not fit a change
-     made for provenance, not strength. "Not LOSS" (S2-like) fits better. Changing it is an `EPIC-008` rule change.
-     Size: `M` at least, `UNKNOWN - verify` until it is cut.
-   - **It interacts with `ABC-205`** (In Design now, `arch-design-ABC-205`). See § Dependencies.
-10. **This ticket then builds on the re-derived base.** `NOTICE` is the common part only (item 5). `src/evaluate.ts`
-    is not in the diff.
+8. **The later re-derive ticket is `ABC-215`** (cut 2026-10-24 on the owner's word, `EPIC-008`, `Backlog`). It
+   removes the `NOTICE` section in item 6 and the header lines in item 7 in the same change as the new values. This
+   ticket does not wait for it.
 
 ## Out of scope
 
-- **Re-deriving the tables in this ticket.** Path A defers it, and path B puts it in its own ticket.
+- **Re-deriving the tables in this ticket.** Path A defers it to `ABC-215`.
 - **Rewriting public history.** Three older public versions of `src/evaluate.ts` carry the values without credit.
   Removing them needs a force push, which is the owner's call (LIC-PUB-1). This ticket changes the tip only.
 - **Moving the tables into their own file.** Security/NFR names that as a cleaner form of the carve-out under the
@@ -205,11 +198,6 @@ adr: "the licence ADR (Architect/Design; supersedes ADR-0044 D13's private readi
     byte-identical at `<base>` and `<tip>`.
 
   If either check fails, the change is not comment-only. The ticket stops and goes back to BA/PM.
-- **`A7` [B] (no carve-out).**
-  - **Pull precondition:** at `<base>`, `grep -c -i -E 'michniewski|by-sa' src/evaluate.ts` is `0`. That is the
-    re-derive ticket merged. If it is not `0`, the ticket is not pulled.
-  - At the tip, `grep -c -i -E 'michniewski|by-sa' NOTICE` is `0`.
-  - `git diff <base> <tip> -- src/evaluate.ts` is empty.
 - **`A8` [both] (the pin).**
   - `git diff --numstat <base> <tip> -- src/cli.test.ts` is `1 0`. That added line, trimmed, is Scope 4's line. It sits
     inside `ABC-042` `A10`'s `it(…)` block, directly after the `private` assertion.
@@ -217,8 +205,7 @@ adr: "the licence ADR (Architect/Design; supersedes ADR-0044 D13's private readi
     the tip), `A10` is red, and it is the only red row. This is one reading in the hop record, not a new test. The line
     is restored before the commit.
 - **`A9` [both] (fences).** `git diff --name-only <base> <tip>` lists exactly:
-  - **[A]** `LICENSE`, `NOTICE`, `package.json`, `package-lock.json`, `src/cli.test.ts`, `src/evaluate.ts`;
-  - **[B]** the same without `src/evaluate.ts`.
+  - **[A]** `LICENSE`, `NOTICE`, `package.json`, `package-lock.json`, `src/cli.test.ts`, `src/evaluate.ts`.
 
   `git diff <base> <tip> -- tools data` is empty.
 - **`A10` [both] (the gates).**
@@ -232,10 +219,7 @@ Apache-2.0. Whether GitHub's licence detection also reports the `NOTICE` carve-o
 
 ## Dependencies
 
-- **OD-214-1, the owner's A/B answer (blocking).** Proposed text for the Orchestrator to put to him:
-  *"The CC BY-SA evaluation tables under Apache-2.0: (A) license now and carve the tables out in NOTICE and the
-  evaluate.ts header, then re-derive later as its own ticket; or (B) re-derive first in an EPIC-008 ticket, then
-  license with no carve-out. The repository stays UNLICENSED until B's re-derive merges."*
+- **OD-214-1: answered 2026-10-24, path A** (`owner-word-2026-10-24` `…fb0468ff`). No longer blocking.
 - **The licence ADR (Architect/Design).** It supersedes `ADR-0044` D13's private reading and records Apache-2.0. Its
   drift list is in § Records drift. The owner accepts it **before this ticket merges**. While D13 stands accepted, it
   says *"no `LICENSE` file"*, and a merge would contradict it. The build does not wait for it. If its `NOTICE`
@@ -251,15 +235,18 @@ Apache-2.0. Whether GitHub's licence detection also reports the `NOTICE` carve-o
 
     **The `ABC-205` design hop should therefore name the source of every new king value.** The Orchestrator routes
     that point. This page cannot reach that hop.
-  - **[B]** Both tickets change values in the same file, so each merge makes the other's D reading stale. Only one D
-    reading runs at a time (width 1). Two orders exist. The choice is the owner's and the Orchestrator's.
-    - **Re-derive after `ABC-205`** (and after `ABC-207`, which waits on `ABC-205`): the re-derive also covers
-      `ABC-205`'s new king tables. The repository stays `UNLICENSED` behind `ABC-204`'s QE readings, the `ABC-205` build
-      and D reading, `ABC-207`, and then the re-derive build and D reading.
-    - **Re-derive before `ABC-205`:** `ABC-205`'s design reads today's king table (`src/evaluate.ts:121-130`). Its
-      ruling may need a re-read on the new base, and its D reading runs on that base.
-- **`ABC-207`** (Backlog, `src/evaluate.ts` mobility). The same rebase rule applies under A. Under B it is ordered as
-  above. Mobility values are not Michniewski's.
+
+    **Pre-read 2026-10-24** (`bapm-ABC-214-path-a`), for the stop above, at `grugops/ABC-205` `4f650a45` (built, not
+    merged). The design ruling (`…1fb6e1bc` item 2) keeps `KING_TABLE` unchanged as the middlegame half and adds
+    `KING_ENDGAME_TABLE`, "our own `40 − 15·m`; no Michniewski endgame table". The branch's header says *"The king
+    endgame table is this project's own."* **If that merges as built, the list stays the same seven names.**
+    `KING_ENDGAME_TABLE` does not join, and `KING_TABLE` does not leave. Header line `:20` then ends with that extra
+    sentence, and item 7's two lines still go directly after it. If `ABC-205` changes before its merge, this pre-read
+    no longer holds, and the stop goes to BA/PM as written.
+- **`ABC-207`** (Backlog, `src/evaluate.ts` mobility). The same rebase rule applies. Mobility values are not
+  Michniewski's.
+- **`ABC-215`** (Backlog, `EPIC-008`) depends on this ticket, not the other way round. It re-derives the values and
+  removes the carve-out (Scope 6 and 7) once this ticket has merged.
 - **`ABC-211`** (Backlog, a new opening-book source under `ADR-0023`). If its source is not CC0, `NOTICE` gains a
   section in that ticket.
 - **`package.json`:** no other open ticket edits it.
@@ -271,15 +258,14 @@ Apache-2.0. Whether GitHub's licence detection also reports the `NOTICE` carve-o
   no-personal-data checks.
 - **`ADR-0036` (b1) and (b2) do not fire.**
   - (b1) asks for an added or changed line of executable code in a production file. **[A]** `A6` proves there is
-    none. **[B]** No production file is in the diff.
+    none.
   - (b2) asks for a new runtime import edge, and none is added.
 - **(c) does not fire.** The one test edit (`A8`) adds one `expect` on an object the test already reads with
   `readFileSync`. It adds no import, call or capability. Read-only `node:fs` over the repository's own files is the
   clause's named precedent. `ABC-169` set the same reading for a one-line `AT_HEAD` edit.
-- **(d) blast radius:** **[A]** two files under `src/`, both named in `A9`. **[B]** one.
+- **(d) blast radius:** **[A]** two files under `src/`, both named in `A9`.
 - **NFRs: none move.** **[A]** By `A6`'s transpile identity, the emitted code is unchanged. Every evaluation, puzzle,
-  level and `EPIC-008` gate stays where it is. **[B]** No `src/` production file changes. The `N8-LANE` set is
-  unchanged: no test file is added.
+  level and `EPIC-008` gate stays where it is. The `N8-LANE` set is unchanged: no test file is added.
 
 ## UAT
 
@@ -288,8 +274,6 @@ Apache-2.0. Whether GitHub's licence detection also reports the `NOTICE` carve-o
 - **[A]** `src/evaluate.ts` is a production file in the diff, so the 2026-08-17 file-level grep is not empty. The
   owner's Q4 word (2026-10-10, `…5c8e2a17`) counts a diff of comment lines only as zero production lines. The waiver
   applies when `A6` holds. **If `A6` fails, UAT is owed, and the QE verdict signs it.**
-- **[B]** No production file under `src/` is in the diff. `src/cli.test.ts` is removed by the grep's
-  `grep -v '\.test\.ts$'`. The file-level grep is empty.
 - `LICENSE`, `NOTICE` and `package*.json` are not under `src/`. They have no effect on the waiver.
 
 ## Test notes
@@ -313,9 +297,9 @@ Listed for the ADR's supersession. This page edits none of them. Read at `main` 
 | # | where | what it says now | why it is now false |
 |---|---|---|---|
 | 1 | `ADR-0044` D13, `:522-530` | *"Licence: private, all rights reserved"*; `package.json` gains `"license": "UNLICENSED"`; *"The repository gets no `LICENSE` file and no `NOTICE` file"*; *"For now"* … *"Opening the licence later is a new owner decision. It reopens this D13"* | The owner opened it: Apache-2.0 (`…28633db0`). The ADR uses D13's own reopening clause |
-| 2 | `ADR-0044` D13, `:548-557` | The tables stay as they are because *"The engine is not distributed"*. *"A precondition for any distribution to third parties: re-derive our own values first"* (a clone handed to someone else counts) | The public repository is a distribution, and the precondition was breached (LIC-PUB-1). Path A replaces the precondition with a carve-out plus a later re-derive. Path B meets it before this ticket |
+| 2 | `ADR-0044` D13, `:548-557` | The tables stay as they are because *"The engine is not distributed"*. *"A precondition for any distribution to third parties: re-derive our own values first"* (a clone handed to someone else counts) | The public repository is a distribution, and the precondition was breached (LIC-PUB-1). Path A (`…fb0468ff`) replaces the precondition with a carve-out now plus a later re-derive, `ABC-215` |
 | 3 | `ADR-0044` D13, `:531-538` | The four kit files *"stay MIT"*. Their notice is `UNKNOWN - verify`. The other seven `tools/grugops/` files *"are private like `src/`"* | The kit's MIT line is now known (`Copyright (c) 2026 Olger Oeselg`, the kit's own `LICENSE`). The other seven fall under Apache-2.0 |
-| 4 | `ADR-0044` D13, `:561-565` | The withdrawn AGPL "Source" link, and *"The web project's licence is its own … A bundle would be a distribution, and the precondition above would apply"* | The precondition now reads per A or B |
+| 4 | `ADR-0044` D13, `:561-565` | The withdrawn AGPL "Source" link, and *"The web project's licence is its own … A bundle would be a distribution, and the precondition above would apply"* | The precondition now reads per path A: the carve-out, then `ABC-215` |
 | 5 | `ADR-0044` § Revision — private, P1/P2/P6 (`:85-90`), and § Owner questions Q12/Q15 (`:831`, `:834`) | Private, all rights reserved; Q15 moot | They stand as history. The ADR adds a dated row that supersedes them |
 | 6 | `ADR-0044` § Consequences, `:745-747` | Config: `"license": "UNLICENSED"` … *"There is no `LICENSE` file and no `NOTICE` file (D13)"* | `ABC-214` adds both |
 | 7 | `ADR-0044` § Consequences, `:789-790`, and § Rollback, `:800` | Distribution needs our own values first (D13). The licence is not rolled back with the engine | Unchanged in sense, but it points at the D13 rows above |
@@ -324,14 +308,14 @@ Listed for the ADR's supersession. This page edits none of them. Read at `main` 
 | 10 | `ABC-169` § Out of scope | *"A `LICENSE` file, a `NOTICE` file, an SPDX header, or any open-source licence. The owner chose private."* Re-deriving is a precondition for future distribution | It is superseded by the owner's word and `ABC-214` |
 | 11 | `EPIC-007` M10, `:223` | *"The engine is declared private"*: `npm pkg get private license` prints `"UNLICENSED"`. No `LICENSE`, `NOTICE` or `COPYING` is tracked | False at `ABC-214`'s tip. M10 was MET on `ABC-169` (`:85`). That reading stays dated history. The measure needs a superseding row, or a note that `ABC-214` replaces it |
 | 12 | `EPIC-007` acceptance box `:19-21`, § Scope `:182-186`, the ticket table `:240`, Q12 `:299`, the web project `:332` | *"The licence is private, all rights reserved"*; *"No `LICENSE` or `NOTICE` file is added"*; *"a private, all rights reserved program"* | The same supersession, plus one dated line |
-| 13 | `EPIC-007` `RISK-EPIC007-07`, `:382-386` | The tables rest on *"the engine not being distributed"*. The re-derive is cut *"only on the owner's word"* | It fired at publication. Its disposition is A or B |
+| 13 | `EPIC-007` `RISK-EPIC007-07`, `:382-386` | The tables rest on *"the engine not being distributed"*. The re-derive is cut *"only on the owner's word"* | It fired at publication. Its disposition is path A (`…fb0468ff`): the carve-out here, the re-derive in `ABC-215` |
 | 14 | **Also found:** `ADR-0023` `:60-63` | *"The repository has no licence of its own"* … *"all rights reserved"* (measured 2026-09-19) | It is a dated measurement. It now reads as history. The CC0 book needs nothing under Apache-2.0 |
 
 Not drift: `"private": true` stays true. `45-standing-rulings.md` `:135-140` and `ADR-0044` D8 `:359` stand. The
 "unlicensed" in `ADR-0011`, `ABC-029`, `ABC-057`, `ABC-136` and `ABC-137` means "outside the `ADR-0011` clause 3 import
 licence set", not the software licence. `ABC-190` is a Done ticket's dated reading.
 
-## Open questions (none blocks the build except OD-214-1)
+## Open questions (none blocks the build; OD-214-1 is answered, path A)
 
 - **OQ-214-2, the copyright line.** Default: `Copyright 2026 Olger Oeselg`, the form the kit's own `LICENSE` uses. How
   far copyright protects AI-assisted code is `UNKNOWN - verify` (legal). That does not change the line.
@@ -339,7 +323,7 @@ licence set", not the software licence. `ABC-190` is a Done ticket's dated readi
   copyrights, so folding them into Apache-2.0 is also open to him. That would drop one `NOTICE` section. The licence
   ADR rules it.
 - **OQ-214-4 (legal, not a criterion).** Under the Adaptation reading, does a `NOTICE` carve-out satisfy BY-SA 3.0
-  § 4(b)? `UNKNOWN - verify`, legal advice. Path B removes the question at the tip.
+  § 4(b)? `UNKNOWN - verify`, legal advice. `ABC-215` removes the question at its tip.
 
 ## Size and priority
 
@@ -352,26 +336,61 @@ broken for the owner, and nothing is deployed.
 
 ## Definition of Ready
 
-BA/PM, 2026-10-24, at `main` `c487d89c`. **Result: 9 of 10.**
+**Re-checked 2026-10-24 by BA/PM** (`bapm-ABC-214-path-a`, at `main` `d4d49c5a`, after OD-214-1 = path A).
+**Result: 10 of 10 → `Ready`.**
 
 | # | item | verdict |
 |---|---|---|
 | 1 | problem clear | **✅** public repository, no licence; the owner chose Apache-2.0; CC BY-SA tables in `src/evaluate.ts` |
-| 2 | scope and out-of-scope clear | **✅** six files under A, five under B; re-derive, history, table split, README, SPDX headers and kit outputs fenced off |
-| 3 | INVEST-shaped | **✅** small; testable by sha, numstat, grep and transpile; independent under A; under B it follows one named ticket |
-| 4 | acceptance testable and measurable | **✅** an exact sha and byte count; `1 1` numstats; named strings; a 0-count personal-data grep; transpile identity; an exact file list; an armed pin |
-| 5 | dependencies known | **✅** OD-214-1; the licence ADR before merge; `ABC-205`, `ABC-207` and `ABC-211` interactions stated per path |
+| 2 | scope and out-of-scope clear | **✅** six files (`A9`); the re-derive (`ABC-215`), history, table split, README, SPDX headers and kit outputs fenced off |
+| 3 | INVEST-shaped | **✅** small; testable by sha, numstat, grep and transpile; independent: it builds on `main` as it is, and `ABC-215` follows it, not the reverse |
+| 4 | acceptance testable and measurable | **✅** an exact sha and byte count; `1 1` numstats; named strings; a 0-count personal-data grep; transpile identity; an exact file list; an armed pin. `A7` (path B) is deleted |
+| 5 | dependencies known | **✅** OD-214-1 answered; the licence ADR before merge (Architect, in flight); `ABC-205` (with the pre-read of its built king tables), `ABC-207`, `ABC-211`; `ABC-215` follows |
 | 6 | security/NFR triggers with a measurable target | **✅** `ABC-041` (a) fires; (b1), (b2) and (c) do not, by `A6`/`A8`; no NFR moves |
 | 7 | test notes present | **✅** six |
 | 8 | size assigned | **✅** `XS` |
 | 9 | priority assigned | **✅** `P1` |
-| 10 | no major unresolved blocker | **❌** OD-214-1 is open. Path B also waits on a re-derive ticket that is not cut |
+| 10 | no major unresolved blocker | **✅** none blocks the build. The licence ADR gates the merge, not the build (§ Dependencies). An `ABC-205` merge first is handled by `A5`'s stop, and its answer is pre-read |
 
-**Recommended: stays in `Backlog`.** It is not "almost ready".
+Ready's WIP is 0/8 at `d4d49c5a`, so this makes 1/8. The board move is the Orchestrator's.
 
-- **On "A":** BA/PM deletes the [B] rows by a one-line amendment, and DoR becomes 10/10. → `Ready`. Ready's WIP is
-  2/8 at `c487d89c`.
-- **On "B":** BA/PM cuts the re-derive ticket into `EPIC-008`, and this page deletes its [A] rows. `ABC-214` becomes
-  10/10 and waits as `Blocked`, until that ticket merges (`A7`'s precondition).
+*History:* the cut's own check (2026-10-24, `bapm-cut-licence`, at `c487d89c`) was 9 of 10, with item 10 ❌ on the
+open OD-214-1. It recommended `Backlog` until the answer, and on "A" this amendment and 10/10.
 
-Column moves are the Orchestrator's.
+## QE addendum (2026-10-24, `qe-ABC-214`)
+
+**Verdict: `PASS_WITH_GAPS`.** No blocking gap. Base `c4acf49f`, tip `bb8d4432`. The hop merged `main`
+`adf6af38` (records only, no conflict) into the branch as `306f1083`, then ran its own `npm ci` (exit 0) there.
+No `src/` edit. Host on battery with a second QE hop running, so no timing was read. This ticket has no timing
+criterion.
+
+- **A1–A10: all hold** at the merge, re-run by this hop:
+  - A1: one JSON object, `private` true and `license` `Apache-2.0`; numstat `1 1`.
+  - A2: numstat `1 1` under `packages[""]`; the regenerated lock leaves the tree clean.
+  - A3: the sha matches the pin and `wc -c` is 11358. A fresh fetch today is byte-identical.
+  - A4 and A5: all strings are present, with 0 `@`, 0 `/Users/` and 0 non-ASCII. The carve-out names exactly the
+    seven identifiers, and the header block holds the three strings.
+  - A5 base check and A6: the transpile output is identical at `c487d89c`, base, tip and merge. The two added
+    lines are 21–22, inside the block that closes at 23.
+  - A9: exactly six files, base to tip and `main` to merge.
+  - A10: lint, typecheck and build 0; `npm test` 62 files, 2038/2038; skips 0, `No findings.`
+- **Plants re-run.**
+  - A8 armed: only the licence reverted, whole suite 1 red (ABC-042 A10, the ABC-214 message) and 2037 green.
+  - A1 spellings: `Apache 2.0`, `apache-2.0`, `Apache-2.0-only` and `Apache License 2.0` each turn the pin red.
+  - A6 (test note 1): the `*/` slip and the `*/x` slip each break both checks. Closing the block early with `//`
+    lines passes the transpile check and is caught only by the line-shape check, so both checks are needed. A
+    nudged table value breaks the transpile check.
+  - A5 base stop: it fires against `grugops/ABC-205` `f3e14a00`.
+  - A3: a dropped final newline and CRLF line ends each break the sha.
+  - A4: one `@` and one non-ASCII byte each turn the count to 1.
+- **QE-214-a, LOW (non-blocking).** The gate pins only `package.json`'s licence. One plant did four things: it
+  deleted `LICENSE` and `NOTICE`, reverted the lock's licence and dropped the two carve-out lines. `npm test` stayed
+  2038/2038 and lint stayed 0. This follows test note 6 (no new `it`). A3 to A6 are readings, not guards.
+- **QE-214-b, INFO.** `bb8d4432~1..bb8d4432` alone lists no `src/` file. Measure the waiver from base to tip or
+  from `main` to the merge. Both list `src/evaluate.ts`.
+- **QE-214-c, INFO.** `ABC-205` has moved from `4f650a45` to `f3e14a00`. Its `src/evaluate.ts` is unchanged, and
+  `KING_TABLE` is byte-equal to `c487d89c`, so ADR-0048 decision 4's pre-read holds.
+- **UAT:** "WAIVED (waived is not accepted)". The 2026-08-17 grep lists `src/evaluate.ts`, so the waiver rests on
+  the owner's Q4 (`…5c8e2a17`). Both of its checks hold (A6).
+- **Owed, not QE's:** the owner's acceptance of `ADR-0048` before merge. `ABC-041` (a) triggers the Security/NFR
+  hop. The owner checks the GitHub licence display after a push (`UNKNOWN - verify`).

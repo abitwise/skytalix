@@ -1,8 +1,8 @@
 ---
 id: ABC-212
 title: "Two stronger levels: 6 thinks 5 s and 7 thinks 30 s a move, at every surface, and the default stays 5"
-status: in-development
-column: In Development
+status: in-review
+column: In Review
 size: M
 priority: P2
 epic: EPIC-004
@@ -130,6 +130,8 @@ feature: difficulty levels (ABC-087 mechanism, ABC-101 selection, ABC-171 Skill 
 - **A12. Lane cost.** 0 new test files and 0 new spawned children. A default-lane row that searches at level 6 or 7
   runs on a virtual clock with **≤ 30 clock readings** per search, or reads the budget handed to the engine without
   searching. No level-6 or level-7 search runs on the real clock in the default lane, `CLI_DEEP` or `UCI_DEEP`.
+  - **Amended 2026-10-24** (`bapm-amend-ABC-212`): the "≤ 30 clock readings" clause is replaced. It cannot hold beside
+    `A9`. The text above stays as it was; the criterion that now applies is in § Amendment 2026-10-24, item 2.
 - **A13. Pin edits are licensed by this list, and only by it** (any other expectation that moves is out of class: stop
   to BA/PM):
   - `src/levels.test.ts`: the keys row (`:192`), `[1, 5, 5]` → `[1, 5, 7]` (`:193`, `:244`), `DEFAULT_LEVEL ===
@@ -144,6 +146,9 @@ feature: difficulty levels (ABC-087 mechanism, ABC-101 selection, ABC-171 Skill 
   - `src/cli.real-engine.test.ts:221` and `src/uci.real-engine.test.ts:79` (`HANG_GUARD_MS = 4 * HARD_CEILING_MS`)
     only if the constant's value moves, and then set so that their hang guards stay as they are today, at 20 s.
   - `src/ladder.test.ts` is **not** edited.
+  - **Amended 2026-10-24** (`bapm-amend-ABC-212`): the list grows by eight rows, `U1`–`U8`, each with its exact edit,
+    in § Amendment 2026-10-24, item 1. The list above is unchanged. Together with Design ruling 4, that amendment is
+    the full licence.
 - **A14. Plants** (pre-registered; each must red at least one row at head):
   - P1: `LEVELS[7].budgetMs` 3 000 → `A1`;
   - P2: the clamp left at 5 000 → `A4` level 7 and `A9` bare `go`;
@@ -362,3 +367,71 @@ licensed by this ruling.
 - Then QE: `A4` in `ENGINE_DEEP` at width 1, and `A3`/`A10` by hand.
 - Then Security/NFR at the gate: the `NFR-004` catalog text and mechanism line, `NFR-009` at 30 s, and `N8-LANE`.
 - BA/PM at the merge: the `ADR-0044` fold lines and the `ABC-204` erratum.
+
+## Amendment 2026-10-24 (BA/PM, `bapm-amend-ABC-212`): the SE's STOP ruled, `U1`–`U8` licensed, `A12` re-worded
+
+Records only, at `main` `268ff42a`, sealed 2026-10-23T22:13Z UTC. The rulings are in
+`.grugops/context/bapm-amend-ABC-212/notes/`. Inputs: the SE's STOP on `grugops/ABC-212` at `2dba7331`
+(`…93ffdad9`, `…e4a87583`, `…f2d7bc56`). This hop read each row at that tip and ran no test, probe or timing. `A12` and
+`A13` above keep their original text, and each carries a pointer to this block.
+
+**No requirement and no bound moves. No STOP.** The levels, budgets, ceilings, surfaces and `NFR-004`/`NFR-008`/
+`NFR-009` texts are as the owner accepted them. The routing: `A13` sends an out-of-list pin to BA/PM, and the SE's
+note addressed it to the Architect. This ruling is BA/PM's under `A13`. No Architect hop is owed for these rows.
+
+**1. `A13` grows by eight rows.** Each is a value-only consequence of the accepted spec: the level set is now 1–7,
+and the first refused integer above the top moves from 6 to 8 (`A6`'s boundary pair 0/6 → 0/8). No row's assertion
+changes kind, count or strength. The line numbers are at `2dba7331`. Comments that go with a row may be edited with it.
+
+| # | row (at `2dba7331`) | ruling | exact edit |
+|---|---|---|---|
+| U1 | `src/cli.test.ts:1338`–`:1340`, `ABC-042` `A6(i)`, `TABLE_LEVELS` | **licensed** | `["1", "2", "3", "4", "5"]` → `["1", "2", "3", "4", "5", "6", "7"]`. The comment at `:1338` changes "its five level words" → "its seven level words". The table stays a hand transcription and is not derived |
+| U2 | `src/cli.test.ts:1822`–`:1824`, `ABC-042` `A8`, `numbersIn("cli-options.ts")` | **licensed** | expected `["0", "0.5", "1", "2", "3", "4", "5"]` → `["0", "0.5", "1", "2", "3", "4", "5", "6", "7"]`. In the comment, `` `1`-`5` `` → `` `1`-`7` ``, and "`3` is also the default level" → "`5` is also the default level" (stale since `ADR-0045` D2). The new literals are only the type's `6 \| 7`, so the list says why each number is there |
+| U3 | `src/cli.test.ts:2331`, `ABC-065` `A3` (reads `AGENTS.md` "Dev / run") | **licensed, no test edit** | Goes green when `A11`'s `AGENTS.md` line lands. **The merge must carry both** (item 3) |
+| U4 | `src/cli.test.ts:4465`, `ABC-101` `A7` | **licensed** | regex `/export type Difficulty = 1 \| 2 \| 3 \| 4 \| 5;/` → `/export type Difficulty = 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7;/` (the raw page text is byte-exact. A rendered table drops the `\` before each `|`) |
+| U5 | `src/cli.test.ts:4521`, `ABC-101` `A8′` own-key list | **licensed** | `[0, 6, 3.5, …]` → `[0, 8, 3.5, …]`. 8 is the first integer above the table that is not an own key. That is the class 6 held at base |
+| U6 | `src/levels.test.ts:243`–`:251`, `ABC-174` `A1` deep-equal | **licensed** | After `5: { budgetMs: 3_000, blunderRate: 0 },` add `6: { budgetMs: 5_000, blunderRate: 0 },` and `7: { budgetMs: 30_000, blunderRate: 0 },`. The describe title may name `ADR-0045` § AMENDMENT A1. The frozen loop at `:253` stays at 1..5 (6 and 7 are pinned frozen at `:299`–`:300`) |
+| U7 | `src/startup-questions.test.ts:250`, `:255`, `:274`, `ABC-200` `A4` | **licensed** | `` `6` `` → `` `8` `` in the title (`:250`); the input `` `6\n0\n03\n…` `` → `` `8\n0\n03\n…` `` (`:255`); `'"6"'` → `'"8"'` (`:274`). The rejection count (4) and every other expectation stay |
+| U8 | `src/uci-session.test.ts:717`, `ABC-171` `A2` invalid values | **licensed** | `["0", "6", "2.5", "x", "constructor"]` → `["0", "8", "2.5", "x", "constructor"]` |
+
+Forward scan (read-only, at `2dba7331`): no other default-lane pin of this class remains. The scan covered `[1..5]`,
+`1 | … | 5`, `max 5` and `1-5`. The remaining hits are the licensed base-identity rows, the 1..5 frozen loop, and
+`src/ladder.test.ts`, which is not edited. `ENGINE_DEEP` was not run at the SE hop. A red there outside `A13`, Design
+ruling 4 and this list is the same class: stop to BA/PM.
+
+**2. `A12` re-worded (it contradicted `A9`).** `A9`'s step is G ÷ 30, and its bound is `time ≥ G`. Reaching G at that
+step takes at least 31 clock readings, so `A12`'s "≤ 30" could not hold. The SE measured 32 (bare `go` at 7,
+`movetime 60000`, `wtime 600000`), 33 (bare `go` at 6, `movetime 1000`) and 5 (`depth 3`) (`…f2d7bc56`). **`A9` stands
+as written, and `A12`'s count is rewritten to follow `A9`'s step.** `A12` now reads:
+
+> **A12. Lane cost.** 0 new test files and 0 new spawned children. A default-lane row that searches at level 6 or 7
+> does one of two things. It reads the budget handed to the engine without searching. Or it runs on a virtual clock
+> with a step no finer than `A9`'s, step = ⌊G ÷ 30⌋ ms, where G is the search's time bound. Such a search reads the
+> clock **at most ⌈G ÷ step⌉ + 3 times** (33 at a step of exactly G ÷ 30, 34 at a floored step). A search that stops
+> early, on depth or nodes, reads it fewer times. No level-6 or level-7 search runs on the real clock in the default
+> lane, `CLI_DEEP` or `UCI_DEEP`.
+
+- **Where + 3 comes from:** one reading at the start, plus the readings up to G, plus at most two steps past G under
+  `A9`'s `time ≤ G + 2·step`. Every measured row is within it: the caps are 33 at `G = 30 000` and 34 at
+  `G = 5 000` and `G = 1 000`.
+- **Why `A12` moves and not `A9`:** `A9`'s step and bound are `ABC-167` `A5`'s, which the lane already uses at levels
+  1–5. The cut meant `A12`'s 30 as that same coarseness (`…44bee405` item 7, "virtual-clock rows only, ≤ 30 readings
+  each") and miscounted it by the start reading and the two steps of slack. The other fix, keeping 30 and coarsening
+  `A9`'s step to about G ÷ 27, would widen `A9`'s tolerance and break its parity with `ABC-167` `A5`. That is rejected.
+- **No bound moves.** The difference is 2–4 virtual-clock readings per search, with no real time spent. `NFR-008`'s
+  bound and its `N8-LANE` ruling (Security/NFR) are untouched. The "≤ 30 readings" in § Definition of Ready row 6
+  reads as this item. The DoR stays 10/10.
+
+**3. U3 couples the merge to `A11`'s `AGENTS.md` line.** `ABC-065` `A3` reads the "Dev / run" slot. It requires
+**exactly one** `|`-joined value list after `--difficulty`, set-equal to the accepted words. So the Scribe's line must
+contain `--difficulty 1|2|3|4|5|6|7` once, with no second `--difficulty` run (for example, no separate
+`--difficulty 6|7`) and no new `--` option token. The prose "levels 6 and 7 think 5 s and 30 s a move" is fine.
+`ABC-212` is not merged with U3 red: the code and that line land in the same merge.
+
+**4. What happens next (for the Orchestrator):**
+- One SE follow-up hop on `grugops/ABC-212` makes the U1, U2 and U4–U8 edits exactly as above. It edits tests only,
+  with no production line and no other expectation.
+- `npm test` is then expected to show U3 as its only red until `A11`'s `AGENTS.md` line is on the tree that is
+  tested, and 0 red with it.
+- The rest stays as the page says: QE `A3`/`A4`/`A10`, Security/NFR `A15`/`NFR-009`/`N8-LANE`, the Architect's
+  runbook line, and BA/PM's `ADR-0044` fold lines and `ABC-204` erratum at the merge.

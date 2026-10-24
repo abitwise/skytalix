@@ -1,0 +1,2 @@
+# arch-design-ABC-213 — context
+Ticket: plans/tickets/ABC-213-a-failed-pgn-save-reports-its-first-error-code-even-when-the-cleanup-also-fails-and-leaves-no-partial-file.md (one design question: the test rig under ADR-0015 — (a) hook in the existing writer child, (b) vi.mock file, (c) new child). Security/NFR …eaaa1133 §5; QE's unlinkfault.mjs under .grugops/context/qe-ABC-203/raw/ (on main via the qe-ABC-203 merge lineage — check).
