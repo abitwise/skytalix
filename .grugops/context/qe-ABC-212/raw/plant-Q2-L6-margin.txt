@@ -1,0 +1,96 @@
+
+ RUN  v4.1.12 <scratch>/plant-tree
+
+ ❯ src/levels.test.ts (33 tests | 3 failed) 178ms
+     × deep-equals D1, and the table and each entry are frozen 8ms
+     × LEVELS[6] is { 5 000, 0 } and LEVELS[7] is { 30 000, 0 } 2ms
+     × clause B, per level (ABC-212 A5): budgetMs <= ceiling(L) over 1..7, < 5 000 over 1..5, clamp 32 000 0ms
+ ❯ src/uci-session.test.ts (137 tests | 1 failed) 4407ms
+     × a bare go at 6 searches 5 000 ms 173ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/levels.test.ts > ABC-174 A1 — the table is ADR-0045 D1's > deep-equals D1, and the table and each entry are frozen
+AssertionError: expected { '1': { budgetMs: 100, …(1) }, …(6) } to deeply equal { '1': { budgetMs: 100, …(1) }, …(6) }
+
+- Expected
++ Received
+
+@@ -19,11 +19,11 @@
+      "blunderRate": 0,
+      "budgetMs": 3000,
+    },
+    "6": {
+      "blunderRate": 0,
+-     "budgetMs": 5000,
++     "budgetMs": 5500,
+    },
+    "7": {
+      "blunderRate": 0,
+      "budgetMs": 30000,
+    },
+
+ ❯ <anonymous> src/levels.test.ts:245:20
+    243| describe("ABC-174 A1 — the table is ADR-0045 D1's", () => {
+    244|   it("deep-equals D1, and the table and each entry are frozen", () => {
+    245|     expect(LEVELS).toEqual({
+       |                    ^
+    246|       1: { budgetMs: 100, blunderRate: 0.4 },
+    247|       2: { budgetMs: 180, blunderRate: 0.2 },
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  src/levels.test.ts > ABC-212 A1 — levels 6 and 7 above the default (ADR-0045 § AMENDMENT A1-A2) > LEVELS[6] is { 5 000, 0 } and LEVELS[7] is { 30 000, 0 }
+AssertionError: expected { budgetMs: 5500, blunderRate: +0 } to deeply equal { budgetMs: 5000, blunderRate: +0 }
+
+- Expected
++ Received
+
+  {
+    "blunderRate": 0,
+-   "budgetMs": 5000,
++   "budgetMs": 5500,
+  }
+
+ ❯ <anonymous> src/levels.test.ts:270:23
+    268| describe("ABC-212 A1 — levels 6 and 7 above the default (ADR-0045 § AM…
+    269|   it("LEVELS[6] is { 5 000, 0 } and LEVELS[7] is { 30 000, 0 }", () =>…
+    270|     expect(LEVELS[6]).toEqual({ budgetMs: 5_000, blunderRate: 0 });
+       |                       ^
+    271|     expect(LEVELS[7]).toEqual({ budgetMs: 30_000, blunderRate: 0 });
+    272|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  src/levels.test.ts > ABC-174 A7 — the time budget, from the data (NFR-004; ADR-0038 decision 3) > clause B, per level (ABC-212 A5): budgetMs <= ceiling(L) over 1..7, < 5 000 over 1..5, clamp 32 000
+AssertionError: level 6: expected 1500 to be greater than or equal to 2000
+ ❯ <anonymous> src/levels.test.ts:354:70
+    352|     ([1, 2, 3, 4, 5, 6, 7] as const).forEach((id, i) => {
+    353|       expect(budgets[i], `level ${id}`).toBeLessThanOrEqual(CEILING_MS…
+    354|       expect(CEILING_MS[id] - (budgets[i] as number), `level ${id}`).t…
+       |                                                                      ^
+    355|     });
+    356|     for (const id of [1, 2, 3, 4, 5] as const) expect(LEVELS[id].budge…
+ ❯ <anonymous> src/levels.test.ts:352:38
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  src/uci-session.test.ts > ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path > a bare go at 6 searches 5 000 ms
+AssertionError: expected 5810 to be less than or equal to 5332
+ ❯ expectWithin src/uci-session.test.ts:685:16
+    683| function expectWithin(time: number, budget: number, step = 100): void {
+    684|   expect(time).toBeGreaterThanOrEqual(budget);
+    685|   expect(time).toBeLessThanOrEqual(budget + 2 * step);
+       |                ^
+    686| }
+    687|
+ ❯ src/uci-session.test.ts:1031:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  2 failed | 3 passed (5)
+      Tests  4 failed | 340 passed (344)
+   Start at  14:16:38
+   Duration  5.64s (transform 0ms, setup 0ms, import 4.39s, tests 5.62s, environment 0ms)
+

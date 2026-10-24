@@ -435,3 +435,63 @@ contain `--difficulty 1|2|3|4|5|6|7` once, with no second `--difficulty` run (fo
   tested, and 0 red with it.
 - The rest stays as the page says: QE `A3`/`A4`/`A10`, Security/NFR `A15`/`NFR-009`/`N8-LANE`, the Architect's
   runbook line, and BA/PM's `ADR-0044` fold lines and `ABC-204` erratum at the merge.
+
+## QE addendum
+
+> **QE/E2E, 2026-10-24** (task `qe-ABC-212`). It ran on branch `grugops/qe-ABC-212`, at **merge `d417b07c`**
+> (`c0508fe9` + `main` `7727400c`, no conflict). It had its own `npm ci`, ran on Node v26.11.1 on an Apple M3, made
+> no `src/` edit and pushed nothing. Notes are in `.grugops/context/qe-ABC-212/notes/` (`…f9560997` readings,
+> `…8b19f527` plants, `…e58d4635` verdict). The evidence is in `raw/`, with personal paths redacted. **One run
+> under the owner rule `…4c3f7639`.** Each timed window waited for the preconditions (AC, load1 ≤ 8, no foreign
+> vitest). Another session's vitest suite held them about 12 min before A4 and 22 min before the Ctrl-C step.
+
+**Verdict: `PASS_WITH_GAPS`.** `A1`–`A15` are MET and no gap blocks. The findings are 1 LOW and 3 INFO.
+
+| # | reading at the merge |
+|---|---|
+| `A1`, `A2`, `A5`–`A9` | green in `npm test` (62 files, 2066/2066); P1–P5, `RF-1` and R1 each red their rows (scratch copies, never `src/`) |
+| `A3` | levels 1–5 × 10 positions, seed 1, step = budget ÷ 30, plus `chooseMove` at 3 000: **60/60 identical** to base `c735577f` and to `main` `7727400c`. The instrument is sensitive: plants change 3–20 of 60 rows |
+| `A4` | real clock, one window per row. **Level 5:** 30/30, max 3 005 ms. **Level 6:** 30/30, 5 000–5 005 ms, max depth 13. **Level 7:** 10/10, 30 000–30 004 ms, max depth 10. Depth < 100, so no Architect notice. Two short foreign bursts fell in level-7 moves 7 and 9–10. They can only push toward overrun, and those moves read in band |
+| `A10` | real pty, `--difficulty 7`. The thinking frame came 1 ms after Enter. The out-of-book move (`Rh3` … `Nc6`) took **30 001 ms**. Ctrl-C 3 s into the search ended the process in **12 ms**. Level-6 and level-7 games wrote PGNs with `Difficulty "6"` / `"7"` |
+| `A11` | both files name `--difficulty 1\|2\|3\|4\|5\|6\|7`, default 5, and 6/7 at 5 s / 30 s. U3 is green |
+| `A12` | 0 new files and 0 new spawns; A9's bound implies the ⌈G ÷ step⌉ + 3 cap |
+| `A13` | every removed or changed test line maps to the list, Design ruling 4 or U1–U8. `ladder.test.ts` and `search.ts` are untouched |
+| `A14` | P1–P5 re-planted: each reds its row. QE plants Q1–Q6 (level-6 over the ceiling or under the margin, UCI cap removed, level-7 rate 0.01, usage or info text at 1–5) each red too |
+| `A15` | plain `node`, completed depth L5 / L6 / L7: **kiwipete 7 / 7 / 9, position-6 7 / 7 / 9**. Bar met: 9 ≥ 8 and 7 ≥ 7 |
+
+**Gates at `d417b07c`:**
+- lint 0 (125 files), typecheck 0, build 0;
+- `npm test`: 62 files and 2066/2066, rc 0. `last-run.json` reads `success: true`, pending 0, todo 0;
+- skips 0, and `test-skip-integrity.js` gives `No findings.`;
+- `CLI_DEEP` 11/11; `UCI_DEEP` 5/5;
+- `ENGINE_DEEP` levels lane 41/41 (a gate pass only, see QE-212-b);
+- `qe-hop-integrity.js --ticket ABC-212`: covered (qe-e2e).
+
+**Findings:**
+- **QE-212-a (LOW):** A4's log line (max ms and max depth, the `KEY_ARRAY_CAPACITY` tripwire) is not printed under the
+  documented lane command when output is not a terminal. Vitest's default reporter drops passing tests' console
+  lines, and `--reporter=verbose` shows them. Fix: the Scribe adds `--reporter=verbose` to the lane line, or a later
+  ticket asserts `max depth < 100` in the row. Not blocking.
+- **QE-212-b (INFO):** the host was not idle. The first whole-lane pass ran beside a foreign vitest and is a gate
+  pass, not the reading. The windows were then taken after waiting. The mid-window breaks are named per move with
+  their bias direction.
+- **QE-212-c (INFO):** the runbook's "with no output on each engine move" means "after the `thinking...` frame".
+- **QE-212-d (INFO):** A11's "no other line moves" is read as "no other content". The runbook's `_Updated_` line and
+  its dated bracket are the record convention.
+
+**UAT:** the waiver does **not** apply. The production files are `cli-options.ts`, `cli.ts`, `engine.ts`, `levels.ts`
+and `uci-session.ts`. This verdict (`PASS_WITH_GAPS`, no blocking gap) signs UAT under the delegation (`…5aaf7cec`
+item 2). For the owner to try by hand, with nothing waiting on it:
+- a level-7 game: about 30 s per out-of-book move, and Ctrl-C ends it at once;
+- the startup question with 6 or 7;
+- `--difficulty 8` is refused;
+- `Skill Level` 7 in a UCI GUI: `isready`/`stop` mid-search are answered up to ~32 s late;
+- the PGN tag `Difficulty "7"`.
+
+**Owed, and not gaps:**
+- Security/NFR places the `NFR-004` text (owner `…2c6fa3b1`; Architect `…d2c68ace` item 7). The branch's catalog row
+  still says 5 s at any difficulty. It also owes `AR-NFR004-A` at 32 000, `NFR-009` at 30 s, `N8-LANE` and
+  `ADR-0036` (b);
+- BA/PM owes the `ADR-0044` folds and the `ABC-204` erratum at the merge.
+
+**Next:** `In Review → In Security/NFR`.

@@ -1,0 +1,104 @@
+
+ RUN  v4.1.12 <scratch>/plant-tree
+
+ ❯ src/uci-session.test.ts (137 tests | 5 failed) 4381ms
+     × A1: uci writes id name, id author, then (ABC-171 A1) the two option lines, then uciok 3ms
+     × uci writes exactly 5 lines, the two options after the id lines and before uciok 0ms
+     × the Skill Level line's default is DEFAULT_LEVEL, built from the constant 1ms
+     × the Skill Level line is literally default 5 min 1 max 7 0ms
+     × uci lists Skill Level default 5 min 1 max 7, max read from HARDEST_LEVEL 0ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/uci-session.test.ts > ABC-167 A1-A2 — handshake and ready > A1: uci writes id name, id author, then (ABC-171 A1) the two option lines, then uciok
+AssertionError: expected [ 'id name skytalix', …(4) ] to deeply equal [ 'id name skytalix', …(4) ]
+
+- Expected
++ Received
+
+  [
+    "id name skytalix",
+    "id author Olger Oeselg",
+    "option name OwnBook type check default true",
+-   "option name Skill Level type spin default 5 min 1 max 7",
++   "option name Skill Level type spin default 5 min 1 max 5",
+    "uciok",
+  ]
+
+ ❯ src/uci-session.test.ts:118:31
+    116| describe("ABC-167 A1-A2 — handshake and ready", () => {
+    117|   it("A1: uci writes id name, id author, then (ABC-171 A1) the two opt…
+    118|     expect(talk(["uci"]).out).toEqual([
+       |                               ^
+    119|       "id name skytalix",
+    120|       "id author Olger Oeselg",
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  src/uci-session.test.ts > ABC-171 A1 — the option lines > uci writes exactly 5 lines, the two options after the id lines and before uciok
+AssertionError: expected [ 'id name skytalix', …(4) ] to deeply equal [ 'id name skytalix', …(4) ]
+
+- Expected
++ Received
+
+  [
+    "id name skytalix",
+    "id author Olger Oeselg",
+    "option name OwnBook type check default true",
+-   "option name Skill Level type spin default 5 min 1 max 7",
++   "option name Skill Level type spin default 5 min 1 max 5",
+    "uciok",
+  ]
+
+ ❯ src/uci-session.test.ts:691:25
+    689|   it("uci writes exactly 5 lines, the two options after the id lines a…
+    690|     const { send } = rig();
+    691|     expect(send("uci")).toEqual([
+       |                         ^
+    692|       "id name skytalix",
+    693|       "id author Olger Oeselg",
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  src/uci-session.test.ts > ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12) > the Skill Level line's default is DEFAULT_LEVEL, built from the constant
+AssertionError: expected [ 'id name skytalix', …(4) ] to include 'option name Skill Level type spin def…'
+ ❯ src/uci-session.test.ts:949:25
+    947|   it("the Skill Level line's default is DEFAULT_LEVEL, built from the …
+    948|     const { send } = rig();
+    949|     expect(send("uci")).toContain(
+       |                         ^
+    950|       `option name Skill Level type spin default ${DEFAULT_LEVEL} min …
+    951|     );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  src/uci-session.test.ts > ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12) > the Skill Level line is literally default 5 min 1 max 7
+AssertionError: expected [ 'id name skytalix', …(4) ] to include 'option name Skill Level type spin def…'
+ ❯ src/uci-session.test.ts:956:25
+    954|   it("the Skill Level line is literally default 5 min 1 max 7", () => {
+    955|     const { send } = rig();
+    956|     expect(send("uci")).toContain("option name Skill Level type spin d…
+       |                         ^
+    957|   });
+    958|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  src/uci-session.test.ts > ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path > uci lists Skill Level default 5 min 1 max 7, max read from HARDEST_LEVEL
+AssertionError: expected [ 'id name skytalix', …(4) ] to include 'option name Skill Level type spin def…'
+ ❯ src/uci-session.test.ts:1020:25
+    1018|   it("uci lists Skill Level default 5 min 1 max 7, max read from HARDE…
+    1019|     const { send } = rig();
+    1020|     expect(send("uci")).toContain("option name Skill Level type spin d…
+       |                         ^
+    1021|     expect(HARDEST_LEVEL).toBe(7);
+    1022|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+
+
+ Test Files  1 failed | 4 passed (5)
+      Tests  5 failed | 339 passed (344)
+   Start at  14:14:56
+   Duration  5.55s (transform 0ms, setup 0ms, import 4.34s, tests 5.56s, environment 0ms)
+

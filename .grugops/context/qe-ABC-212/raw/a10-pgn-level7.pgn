@@ -1,0 +1,12 @@
+[Event "skytalix CLI game"]
+[Site "?"]
+[Date "2026.10.24"]
+[Round "-"]
+[White "Human"]
+[Black "skytalix (difficulty 7)"]
+[Result "0-1"]
+[Termination "normal"]
+[Difficulty "7"]
+[HumanColour "white"]
+
+1. e4 e5 {Black wins by resignation.} 0-1

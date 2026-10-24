@@ -1,0 +1,403 @@
+
+ RUN  v4.1.12 <scratch>/plant-tree
+
+ ❯ src/cli.test.ts (101 tests | 8 failed) 292ms
+     × A6(i) — the exported enumeration EQUALS the table, element for element, both ways 16ms
+     × A6(i) — every documented spelling resolves in its legal argv position 1ms
+     × A1/A2/A3 — every refusal advertises the separator, and all it advertises resolves 1ms
+     × A3 — the documented option list EQUALS the accepted set, both ways, and names every value 1ms
+     × A3 — every level is in, and the boundary pair, the near-numbers and a bare flag are out 0ms
+     × A3 (extended) — the words `--difficulty` accepts EQUAL `Object.keys(LEVELS)`, both ways 0ms
+     × A5 — the usage line advertises --difficulty with every level, after the separator, and each form resolves 0ms
+     × ABC-212 A6 — `--difficulty 6` and `7` resolve, and a bare flag names 1|2|3|4|5|6|7 0ms
+ ❯ src/startup-questions.test.ts (26 tests | 11 failed) 15019ms
+       × asks colour then difficulty, writes nothing else before the second answer, and resolves black / 1 4ms
+       × ignores case and surrounding spaces on both answers (scope 2 and 3) 0ms
+       × two empty answers resolve exactly base's no-argument options 0ms
+       × with --colour black alone, exactly 1 question is written, and it is the difficulty question 0ms
+       × difficulty `8`, `0`, `03` and a 1 025-character line are each one rejection, then the question again 0ms
+       × at the difficulty question resolves null, and a held partial line is not an answer 0ms
+       × `black\n1\ne5\n` in one chunk: the questions take black and 1, and e5 is the game's first prompt after the engine's first move 1ms
+     × the question is byte-exact `difficulty (1|2|3|4|5|6|7) [5]: `, and Enter keeps 5 0ms
+     × `6` is accepted at the first asking 5003ms
+     × `7` is accepted at the first asking 5003ms
+     × `8` is one rejection naming it, then the question again, and `7` is then taken 5001ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 19 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/cli.test.ts > ABC-042 — the accepted set is closed > A6(i) — the exported enumeration EQUALS the table, element for element, both ways
+AssertionError: expected [ '--ascii', '--colour', …(10) ] to deeply equal [ '--ascii', '--colour', …(12) ]
+
+- Expected
++ Received
+
+@@ -6,11 +6,9 @@
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+-   "6",
+-   "7",
+    "black",
+    "random",
+    "white",
+  ]
+
+ ❯ <anonymous> src/cli.test.ts:1344:44
+    1342|
+    1343|   it("A6(i) — the exported enumeration EQUALS the table, element for e…
+    1344|     expect([...ACCEPTED_ARGUMENTS].sort()).toEqual([...TABLE].sort());
+       |                                            ^
+    1345|     expect(new Set(ACCEPTED_ARGUMENTS).size).toBe(ACCEPTED_ARGUMENTS.l…
+    1346|     expect(ACCEPTED_ARGUMENTS).toHaveLength(TABLE.length);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/19]⎯
+
+ FAIL  src/cli.test.ts > ABC-042 — the accepted set is closed > A6(i) — every documented spelling resolves in its legal argv position
+AssertionError: argv ["--difficulty","6"]: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ <anonymous> src/cli.test.ts:1359:71
+    1357|
+    1358|     for (const argv of accepted) {
+    1359|       expect(resolveOptions(argv).ok, `argv ${JSON.stringify(argv)}`).…
+       |                                                                       ^
+    1360|     }
+    1361|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/19]⎯
+
+ FAIL  src/cli.test.ts > ABC-066 — the usage line is a command the user can actually run > A1/A2/A3 — every refusal advertises the separator, and all it advertises resolves
+AssertionError: advertised argv ["--difficulty","6"]: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ <anonymous> src/cli.test.ts:2244:82
+    2242|     expect(invocations).toContainEqual([]);
+    2243|     for (const argv of invocations) {
+    2244|       expect(resolveOptions(argv).ok, `advertised argv ${JSON.stringif…
+       |                                                                                  ^
+    2245|     }
+    2246|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/19]⎯
+
+ FAIL  src/cli.test.ts > ABC-065 — AGENTS.md's `Dev / run` slot is reachable and its option list is the accepted set > A3 — the documented option list EQUALS the accepted set, both ways, and names every value
+AssertionError: documented values of --difficulty: expected [ '1', '2', '3', '4', '5', '6', '7' ] to deeply equal [ '1', '2', '3', '4', '5' ]
+
+- Expected
++ Received
+
+@@ -2,6 +2,8 @@
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
++   "6",
++   "7",
+  ]
+
+ ❯ <anonymous> src/cli.test.ts:2372:68
+    2370|       expect(lists.length, `documented value lists after ${option}`).t…
+    2371|       const values = (lists[0]?.[1] ?? "").split("|");
+    2372|       expect([...values].sort(), `documented values of ${option}`).toE…
+       |                                                                    ^
+    2373|       for (const value of accepted) listed.add(value);
+    2374|     }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/19]⎯
+
+ FAIL  src/cli.test.ts > ABC-101 — --difficulty selects a level, and the played engine is that level > A3 — every level is in, and the boundary pair, the near-numbers and a bare flag are out
+Error: refused: ["--difficulty","6"] (--difficulty needs one of 1|2|3|4|5|6|7)
+ ❯ optionsOf src/cli.test.ts:4354:31
+    4352|   const optionsOf = (argv: readonly string[]): ResolvedOptions => {
+    4353|     const resolution = resolveOptions(argv);
+    4354|     if (!resolution.ok) throw new Error(`refused: ${JSON.stringify(arg…
+       |                               ^
+    4355|     return resolution.options;
+    4356|   };
+ ❯ <anonymous> src/cli.test.ts:4385:14
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/19]⎯
+
+ FAIL  src/cli.test.ts > ABC-101 — --difficulty selects a level, and the played engine is that level > A3 (extended) — the words `--difficulty` accepts EQUAL `Object.keys(LEVELS)`, both ways
+AssertionError: expected [ '1', '2', '3', '4', '5' ] to deeply equal [ '1', '2', '3', '4', '5', '6', '7' ]
+
+- Expected
++ Received
+
+@@ -2,8 +2,6 @@
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+-   "6",
+-   "7",
+  ]
+
+ ❯ <anonymous> src/cli.test.ts:4429:34
+    4427|     // drift apart: a level added to one and not the other reds here.
+    4428|     const accepted = ACCEPTED_ARGUMENTS.filter((word) => resolveOption…
+    4429|     expect([...accepted].sort()).toEqual([...LEVEL_WORDS].sort());
+       |                                  ^
+    4430|   });
+    4431|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/19]⎯
+
+ FAIL  src/cli.test.ts > ABC-101 — --difficulty selects a level, and the played engine is that level > A5 — the usage line advertises --difficulty with every level, after the separator, and each form resolves
+Error: refused: ["--difficulty","6"] (--difficulty needs one of 1|2|3|4|5|6|7)
+ ❯ optionsOf src/cli.test.ts:4354:31
+    4352|   const optionsOf = (argv: readonly string[]): ResolvedOptions => {
+    4353|     const resolution = resolveOptions(argv);
+    4354|     if (!resolution.ok) throw new Error(`refused: ${JSON.stringify(arg…
+       |                               ^
+    4355|     return resolution.options;
+    4356|   };
+ ❯ <anonymous> src/cli.test.ts:4441:14
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/19]⎯
+
+ FAIL  src/cli.test.ts > ABC-101 — --difficulty selects a level, and the played engine is that level > ABC-212 A6 — `--difficulty 6` and `7` resolve, and a bare flag names 1|2|3|4|5|6|7
+Error: refused: ["--difficulty","6"] (--difficulty needs one of 1|2|3|4|5|6|7)
+ ❯ optionsOf src/cli.test.ts:4354:31
+    4352|   const optionsOf = (argv: readonly string[]): ResolvedOptions => {
+    4353|     const resolution = resolveOptions(argv);
+    4354|     if (!resolution.ok) throw new Error(`refused: ${JSON.stringify(arg…
+       |                               ^
+    4355|     return resolution.options;
+    4356|   };
+ ❯ <anonymous> src/cli.test.ts:4446:12
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/19]⎯
+
+ FAIL  src/startup-questions.test.ts > ABC-200 — the startup questions > A1 — both questions, both answered > asks colour then difficulty, writes nothing else before the second answer, and resolves black / 1
+AssertionError: expected [ 'colour', …(1) ] to deeply equal [ 'colour', 'difficulty' ]
+
+- Expected
++ Received
+
+  [
+    "colour",
+-   "difficulty",
++   "other:\"difficulty (1|2|3|4|5) [5]: \"",
+  ]
+
+ ❯ src/startup-questions.test.ts:101:31
+     99|       await tick();
+    100|       // Before the second answer: exactly the two questions, colour f…
+    101|       expect(kindsOf(output)).toEqual(["colour", "difficulty"]);
+       |                               ^
+    102|
+    103|       source.write("1\n");
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/19]⎯
+
+ FAIL  src/startup-questions.test.ts > ABC-200 — the startup questions > A1 — both questions, both answered > ignores case and surrounding spaces on both answers (scope 2 and 3)
+AssertionError: expected [ 'colour', …(1) ] to deeply equal [ 'colour', 'difficulty' ]
+
+- Expected
++ Received
+
+  [
+    "colour",
+-   "difficulty",
++   "other:\"difficulty (1|2|3|4|5) [5]: \"",
+  ]
+
+ ❯ src/startup-questions.test.ts:124:31
+    122|
+    123|       const result = await asked;
+    124|       expect(kindsOf(output)).toEqual(["colour", "difficulty"]);
+       |                               ^
+    125|       expect(result).toEqual({
+    126|         options: {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/19]⎯
+
+ FAIL  src/startup-questions.test.ts > ABC-200 — the startup questions > A2 — Enter keeps today's game > two empty answers resolve exactly base's no-argument options
+AssertionError: expected [ 'colour', …(1) ] to deeply equal [ 'colour', 'difficulty' ]
+
+- Expected
++ Received
+
+  [
+    "colour",
+-   "difficulty",
++   "other:\"difficulty (1|2|3|4|5) [5]: \"",
+  ]
+
+ ❯ src/startup-questions.test.ts:163:31
+    161|
+    162|       const result = await asked;
+    163|       expect(kindsOf(output)).toEqual(["colour", "difficulty"]);
+       |                               ^
+    164|       expect(result).toEqual({ options: BASE_OPTIONS });
+    165|       expect(result?.options).toEqual(parsedOf([]).options);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/19]⎯
+
+ FAIL  src/startup-questions.test.ts > ABC-200 — the startup questions > A3 — a flag skips its question > with --colour black alone, exactly 1 question is written, and it is the difficulty question
+AssertionError: expected [ Array(1) ] to deeply equal [ 'difficulty' ]
+
+- Expected
++ Received
+
+  [
+-   "difficulty",
++   "other:\"difficulty (1|2|3|4|5) [5]: \"",
+  ]
+
+ ❯ src/startup-questions.test.ts:199:31
+    197|
+    198|       const result = await asked;
+    199|       expect(kindsOf(output)).toEqual(["difficulty"]);
+       |                               ^
+    200|       expect(output.writes[0]).toContain("[5]");
+    201|       expect(result?.options).toMatchObject({ colour: "black", difficu…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/19]⎯
+
+ FAIL  src/startup-questions.test.ts > ABC-200 — the startup questions > A4 — a wrong answer teaches and asks again > difficulty `8`, `0`, `03` and a 1 025-character line are each one rejection, then the question again
+AssertionError: expected [ …(9) ] to deeply equal [ 'difficulty', 'rejection', …(7) ]
+
+- Expected
++ Received
+
+  [
+-   "difficulty",
++   "other:\"difficulty (1|2|3|4|5) [5]: \"",
+    "rejection",
+-   "difficulty",
++   "other:\"difficulty (1|2|3|4|5) [5]: \"",
+    "rejection",
+-   "difficulty",
++   "other:\"difficulty (1|2|3|4|5) [5]: \"",
+    "rejection",
+-   "difficulty",
++   "other:\"difficulty (1|2|3|4|5) [5]: \"",
+    "rejection",
+-   "difficulty",
++   "other:\"difficulty (1|2|3|4|5) [5]: \"",
+  ]
+
+ ❯ src/startup-questions.test.ts:258:31
+    256|
+    257|       const result = await asked;
+    258|       expect(kindsOf(output)).toEqual([
+       |                               ^
+    259|         "difficulty",
+    260|         "rejection",
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/19]⎯
+
+ FAIL  src/startup-questions.test.ts > ABC-200 — the startup questions > A5 — end of input at a question > at the difficulty question resolves null, and a held partial line is not an answer
+AssertionError: expected [ 'colour', …(1) ] to deeply equal [ 'colour', 'difficulty' ]
+
+- Expected
++ Received
+
+  [
+    "colour",
+-   "difficulty",
++   "other:\"difficulty (1|2|3|4|5) [5]: \"",
+  ]
+
+ ❯ src/startup-questions.test.ts:302:31
+    300|
+    301|       expect(await asked).toBeNull();
+    302|       expect(kindsOf(output)).toEqual(["colour", "difficulty"]);
+       |                               ^
+    303|     });
+    304|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/19]⎯
+
+ FAIL  src/startup-questions.test.ts > ABC-200 — the startup questions > A7 — no line is lost or stolen > `black\n1\ne5\n` in one chunk: the questions take black and 1, and e5 is the game's first prompt after the engine's first move
+AssertionError: expected [ 'colour', …(1) ] to deeply equal [ 'colour', 'difficulty' ]
+
+- Expected
++ Received
+
+  [
+    "colour",
+-   "difficulty",
++   "other:\"difficulty (1|2|3|4|5) [5]: \"",
+  ]
+
+ ❯ src/startup-questions.test.ts:396:43
+    394|       );
+    395|       expect(outcome).toMatchObject({ result: null, exitCode: 0 });
+    396|       expect(kindsOf(output).slice(0, 2)).toEqual(["colour", "difficul…
+       |                                           ^
+    397|       expect(output.writes.slice(2)).toEqual([PROMPT, PROMPT]);
+    398|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/19]⎯
+
+ FAIL  src/startup-questions.test.ts > ABC-212 A8 — the difficulty question offers levels 6 and 7, and Enter keeps 5 > the question is byte-exact `difficulty (1|2|3|4|5|6|7) [5]: `, and Enter keeps 5
+AssertionError: expected [ 'difficulty (1|2|3|4|5) [5]: ' ] to deeply equal [ 'difficulty (1|2|3|4|5|6|7) [5]: ' ]
+
+- Expected
++ Received
+
+  [
+-   "difficulty (1|2|3|4|5|6|7) [5]: ",
++   "difficulty (1|2|3|4|5) [5]: ",
+  ]
+
+ ❯ src/startup-questions.test.ts:467:27
+    465|   it("the question is byte-exact `difficulty (1|2|3|4|5|6|7) [5]: `, a…
+    466|     const { result, output } = await askDifficulty("\n");
+    467|     expect(output.writes).toEqual(["difficulty (1|2|3|4|5|6|7) [5]: "]…
+       |                           ^
+    468|     expect(result?.options.difficulty).toBe(5);
+    469|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/19]⎯
+
+ FAIL  src/startup-questions.test.ts > ABC-212 A8 — the difficulty question offers levels 6 and 7, and Enter keeps 5 > `6` is accepted at the first asking
+ FAIL  src/startup-questions.test.ts > ABC-212 A8 — the difficulty question offers levels 6 and 7, and Enter keeps 5 > `7` is accepted at the first asking
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/startup-questions.test.ts:472:5
+    470|
+    471|   for (const word of ["6", "7"]) {
+    472|     it(`\`${word}\` is accepted at the first asking`, async () => {
+       |     ^
+    473|       const { result, output } = await askDifficulty(`${word}\n`);
+    474|       expect(kindsOf(output)).toEqual(["difficulty"]);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/19]⎯
+
+ FAIL  src/startup-questions.test.ts > ABC-212 A8 — the difficulty question offers levels 6 and 7, and Enter keeps 5 > `8` is one rejection naming it, then the question again, and `7` is then taken
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/startup-questions.test.ts:479:3
+    477|   }
+    478|
+    479|   it("`8` is one rejection naming it, then the question again, and `7`…
+       |   ^
+    480|     const { result, output } = await askDifficulty("8\n7\n");
+    481|     expect(kindsOf(output)).toEqual(["difficulty", "rejection", "diffi…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/19]⎯
+
+
+ Test Files  2 failed | 3 passed (5)
+      Tests  19 failed | 325 passed (344)
+   Start at  14:15:31
+   Duration  19.83s (transform 0ms, setup 0ms, import 4.36s, tests 20.55s, environment 0ms)
+

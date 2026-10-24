@@ -1,0 +1,136 @@
+
+ RUN  v4.1.12 <scratch>/plant-tree
+
+ ❯ src/uci-session.test.ts (137 tests | 5 failed) 3636ms
+     × setoption name Skill Level value 7 sets 7: a bare go searches 30 000 ms 4ms
+     × go movetime 60000 at 7 searches 30 000 (the level caps G) 4ms
+     × go wtime 600000 btime 600000 at 7 searches min(600 000 ÷ 20, 30 000) = 30 000 4ms
+     × Skill Level value 0 at 7 keeps 7, with the 1-7 info string 4ms
+     × Skill Level value 8 at 7 keeps 7, with the 1-7 info string 4ms
+ ❯ src/levels.test.ts (33 tests | 3 failed) 161ms
+     × deep-equals D1, and the table and each entry are frozen 6ms
+     × LEVELS[6] is { 5 000, 0 } and LEVELS[7] is { 30 000, 0 } 0ms
+     × the ordering row holds over 1..7: budgets never fall, rates never rise, each step improves one 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 8 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/levels.test.ts > ABC-174 A1 — the table is ADR-0045 D1's > deep-equals D1, and the table and each entry are frozen
+AssertionError: expected { '1': { budgetMs: 100, …(1) }, …(6) } to deeply equal { '1': { budgetMs: 100, …(1) }, …(6) }
+
+- Expected
++ Received
+
+@@ -23,8 +23,8 @@
+      "blunderRate": 0,
+      "budgetMs": 5000,
+    },
+    "7": {
+      "blunderRate": 0,
+-     "budgetMs": 30000,
++     "budgetMs": 3000,
+    },
+  }
+
+ ❯ <anonymous> src/levels.test.ts:245:20
+    243| describe("ABC-174 A1 — the table is ADR-0045 D1's", () => {
+    244|   it("deep-equals D1, and the table and each entry are frozen", () => {
+    245|     expect(LEVELS).toEqual({
+       |                    ^
+    246|       1: { budgetMs: 100, blunderRate: 0.4 },
+    247|       2: { budgetMs: 180, blunderRate: 0.2 },
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/8]⎯
+
+ FAIL  src/levels.test.ts > ABC-212 A1 — levels 6 and 7 above the default (ADR-0045 § AMENDMENT A1-A2) > LEVELS[6] is { 5 000, 0 } and LEVELS[7] is { 30 000, 0 }
+AssertionError: expected { budgetMs: 3000, blunderRate: +0 } to deeply equal { budgetMs: 30000, blunderRate: +0 }
+
+- Expected
++ Received
+
+  {
+    "blunderRate": 0,
+-   "budgetMs": 30000,
++   "budgetMs": 3000,
+  }
+
+ ❯ <anonymous> src/levels.test.ts:271:23
+    269|   it("LEVELS[6] is { 5 000, 0 } and LEVELS[7] is { 30 000, 0 }", () =>…
+    270|     expect(LEVELS[6]).toEqual({ budgetMs: 5_000, blunderRate: 0 });
+    271|     expect(LEVELS[7]).toEqual({ budgetMs: 30_000, blunderRate: 0 });
+       |                       ^
+    272|   });
+    273|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/8]⎯
+
+ FAIL  src/levels.test.ts > ABC-212 A1 — levels 6 and 7 above the default (ADR-0045 § AMENDMENT A1-A2) > the ordering row holds over 1..7: budgets never fall, rates never rise, each step improves one
+AssertionError: expected 3000 to be greater than or equal to 5000
+ ❯ <anonymous> src/levels.test.ts:292:33
+    290|     for (let i = 1; i < ordered.length; i++) {
+    291|       const [weaker, stronger] = [ordered[i - 1] as Level, ordered[i] …
+    292|       expect(stronger.budgetMs).toBeGreaterThanOrEqual(weaker.budgetMs…
+       |                                 ^
+    293|       expect(stronger.blunderRate).toBeLessThanOrEqual(weaker.blunderR…
+    294|       expect(stronger.budgetMs > weaker.budgetMs || stronger.blunderRa…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/8]⎯
+
+ FAIL  src/uci-session.test.ts > ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path > setoption name Skill Level value 7 sets 7: a bare go searches 30 000 ms
+AssertionError: expected 4000 to be greater than or equal to 30000
+ ❯ expectWithin src/uci-session.test.ts:684:16
+    682| /** `ABC-167` `A5`'s bound for step `s` (test note 3): `G <= time <= G…
+    683| function expectWithin(time: number, budget: number, step = 100): void {
+    684|   expect(time).toBeGreaterThanOrEqual(budget);
+       |                ^
+    685|   expect(time).toBeLessThanOrEqual(budget + 2 * step);
+    686| }
+ ❯ src/uci-session.test.ts:1026:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/8]⎯
+
+ FAIL  src/uci-session.test.ts > ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path > go movetime 60000 at 7 searches 30 000 (the level caps G)
+AssertionError: expected 4000 to be greater than or equal to 30000
+ ❯ expectWithin src/uci-session.test.ts:684:16
+    682| /** `ABC-167` `A5`'s bound for step `s` (test note 3): `G <= time <= G…
+    683| function expectWithin(time: number, budget: number, step = 100): void {
+    684|   expect(time).toBeGreaterThanOrEqual(budget);
+       |                ^
+    685|   expect(time).toBeLessThanOrEqual(budget + 2 * step);
+    686| }
+ ❯ src/uci-session.test.ts:1036:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/8]⎯
+
+ FAIL  src/uci-session.test.ts > ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path > go wtime 600000 btime 600000 at 7 searches min(600 000 ÷ 20, 30 000) = 30 000
+AssertionError: expected 4000 to be greater than or equal to 30000
+ ❯ expectWithin src/uci-session.test.ts:684:16
+    682| /** `ABC-167` `A5`'s bound for step `s` (test note 3): `G <= time <= G…
+    683| function expectWithin(time: number, budget: number, step = 100): void {
+    684|   expect(time).toBeGreaterThanOrEqual(budget);
+       |                ^
+    685|   expect(time).toBeLessThanOrEqual(budget + 2 * step);
+    686| }
+ ❯ src/uci-session.test.ts:1046:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/8]⎯
+
+ FAIL  src/uci-session.test.ts > ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path > Skill Level value 0 at 7 keeps 7, with the 1-7 info string
+ FAIL  src/uci-session.test.ts > ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path > Skill Level value 8 at 7 keeps 7, with the 1-7 info string
+AssertionError: expected 4000 to be greater than or equal to 30000
+ ❯ expectWithin src/uci-session.test.ts:684:16
+    682| /** `ABC-167` `A5`'s bound for step `s` (test note 3): `G <= time <= G…
+    683| function expectWithin(time: number, budget: number, step = 100): void {
+    684|   expect(time).toBeGreaterThanOrEqual(budget);
+       |                ^
+    685|   expect(time).toBeLessThanOrEqual(budget + 2 * step);
+    686| }
+ ❯ src/uci-session.test.ts:1063:7
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/8]⎯
+
+
+ Test Files  2 failed | 3 passed (5)
+      Tests  8 failed | 336 passed (344)
+   Start at  14:14:35
+   Duration  5.37s (transform 0ms, setup 0ms, import 4.40s, tests 4.82s, environment 0ms)
+
