@@ -1,0 +1,13 @@
+ADR-0036 clause (b), limb 3 of 3: call to spawn / exec / fetch / eval / Function / WebSocket (child_process family included)
+  diff 7727400c..052ae3ad = 7727400c..052ae3ad; production files changed: 5
+      src/cli-options.ts
+      src/cli.ts
+      src/engine.ts
+      src/levels.ts
+      src/uci-session.ts
+  COUNTS call sites in code (TypeScript AST; comments and strings are not code). Word hits are LISTED, never counted.
+  (b1) capability lines added or changed: 0
+  (b2) new runtime import edges: 0; reaching a holder of this limb at <head>: 0
+  word hits on added lines, not counted: 0
+  baseline at <head>, STATE (recorded, not a trigger): 46 production files; 0 hold this limb in code; 6 by raw word hit
+  limb 3: does not fire
