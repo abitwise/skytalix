@@ -1,0 +1,9 @@
+
+ RUN  v4.1.12 <scratchpad>/qe206/plant
+
+
+ Test Files  7 passed (7)
+      Tests  210 passed (210)
+   Start at  16:33:02
+   Duration  865ms (transform 0ms, setup 0ms, import 421ms, tests 821ms, environment 0ms)
+

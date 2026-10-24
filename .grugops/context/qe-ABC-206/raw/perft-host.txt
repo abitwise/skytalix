@@ -1,0 +1,2 @@
+OK 13:50:45Z ac=AC load1=4.23 vitest=0
+WINDOW perft rc=0 wall=5s samples=       5 overlap=none

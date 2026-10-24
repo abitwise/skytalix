@@ -1,0 +1,30 @@
+WAIT 13:38:52Z ac=AC load1=3.76 vitest=2 <node> --experimental-import-meta-resolve
+WAIT 13:39:22Z ac=AC load1=3.36 vitest=2 <node> --experimental-import-meta-resolve
+WAIT 13:39:52Z ac=AC load1=2.61 vitest=2 <node> --experimental-import-meta-resolve
+WAIT 13:40:22Z ac=AC load1=3.23 vitest=2 <node> --experimental-import-meta-resolve
+WAIT 13:40:53Z ac=AC load1=3.06 vitest=2 <node> --experimental-import-meta-resolve
+WAIT 13:41:23Z ac=AC load1=4.00 vitest=2 <node> --experimental-import-meta-resolve
+WAIT 13:41:53Z ac=AC load1=4.15 vitest=2 <node> --experimental-import-meta-resolve
+WAIT 13:42:23Z ac=AC load1=4.47 vitest=2 <node> --experimental-import-meta-resolve
+WAIT 13:42:53Z ac=AC load1=4.45 vitest=2 <node> --experimental-import-meta-resolve
+WAIT 13:43:23Z ac=AC load1=3.63 vitest=2 node ~/Projects/public/grugops/node_modules/.bin/vitest
+WAIT 13:43:53Z ac=AC load1=4.04 vitest=2 node ~/Projects/public/grugops/node_modules/.bin/vitest
+WAIT 13:44:23Z ac=AC load1=3.44 vitest=2 node ~/Projects/public/grugops/node_modules/.bin/vitest
+WAIT 13:44:53Z ac=AC load1=4.25 vitest=2 node ~/Projects/public/grugops/node_modules/.bin/vitest
+WAIT 13:45:23Z ac=AC load1=3.68 vitest=2 node ~/Projects/public/grugops/node_modules/.bin/vitest
+WAIT 13:45:53Z ac=AC load1=3.50 vitest=2 <node> --experimental-import-meta-resolve
+OK 13:46:24Z ac=AC load1=3.66 vitest=0
+OK 13:46:37Z ac=AC load1=3.37 vitest=0
+OK 13:46:48Z ac=AC load1=3.46 vitest=0
+OK 13:47:01Z ac=AC load1=3.12 vitest=0
+OK 13:47:12Z ac=AC load1=3.02 vitest=0
+OK 13:47:25Z ac=AC load1=3.10 vitest=0
+OK 13:47:35Z ac=AC load1=3.33 vitest=0
+OK 13:47:48Z ac=AC load1=3.50 vitest=0
+OK 13:47:59Z ac=AC load1=3.19 vitest=0
+OK 13:48:12Z ac=AC load1=3.29 vitest=0
+OK 13:48:23Z ac=AC load1=3.47 vitest=0
+OK 13:48:36Z ac=AC load1=3.28 vitest=0
+OK 13:48:46Z ac=AC load1=3.08 vitest=0
+OK 13:48:59Z ac=AC load1=3.22 vitest=0
+DONE 13:49:10Z ac=AC load1=3.10 vitest=0

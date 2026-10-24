@@ -319,3 +319,56 @@ BA/PM, 2026-10-23, at `main` `55a8f4ef`. **Result: 10 of 10. `Ready`.**
 - **QE at the gate:** `A1` at the tip, `A4` (n ≥ 7, interleaved, plain `node`, width 1), `G6`, `G1`, perft, and `A6`
   (`ABC-204` Done).
 - **Security/NFR:** the `NFR-001` dated note only. No hop is owed.
+
+## QE addendum
+
+> **QE/E2E, 2026-10-24** (task `qe-ABC-206`). It ran on branch `grugops/qe-ABC-206`, at **merge `b8a30264`**
+> (`0d046948` + `main` `872b03c1`, no conflict). `A1` and every timing reading are against that merge base. It had its
+> own `npm ci`, ran plain `node` v26.11.1 on an Apple M3, made no `src/` edit and pushed nothing. Notes are in
+> `.grugops/context/qe-ABC-206/notes/` (`…737cbca8` readings, `…d18ef919` identity and plants, `…809cd42a` verdict).
+> The evidence is in `raw/` (`PREREG.txt` was written before any timed run), with personal paths redacted (`ADR-0049`
+> d4). **One run under the owner rule `…4c3f7639`.** Each window waited for AC, load1 ≤ 8 and no foreign vitest. A
+> foreign vitest held them 13:38–13:46Z before `A4`.
+
+**Verdict: `PASS_WITH_GAPS`.** `A1`–`A5` are MET. `A6` is not readable yet (`ABC-204` is not Done). The findings are 2
+LOW and 3 INFO, and none blocks.
+
+| # | reading at the merge |
+|---|---|
+| `A1` | 317 positions × (`chooseMove` and both doors at budgets 3/5/12/50 on `tickingClock(1)`; four `search*` functions at depths 1–3, plus 4 on the 14 roots): **7 664 rows, byte-identical** in move, score, depth, nodes, clock reads and purity. Depths reach 15, with 1 032 mate-scored rows. Plants change 31 and 2 564 rows |
+| `A2` | the SE's oracle at depth 3: 285 074 positions, **0 mismatches**. QE's 9 FENs at depth 4 (mate at clock 150, stalemate with K+B v K, discovered check by a king move, a pawn push and en passant, castle/promotion checks): 549 900 positions, **0 mismatches** |
+| `A3` | `G4`: the deep lanes are green (SEARCH_DEEP pvs-lmr 29, search 57, quiescence 37, transposition 40; ENGINE_DEEP transposition 26, legal 37, gameend 47, engine 60). The `search.ts`/`engine.ts` exports equal base. `G1`: **54/58 on base and head, all 58 rows identical in move, depth and nodes**. `G9`: `levels.ts` and `HARD_CEILING_MS` are untouched. perft counts equal base, at **5 049 330/s** |
+| `A4` | depth 8, plain `node`, n = 7 each, interleaved with alternating order. **kiwipete: 3 933 v 8 985 ms = 0.438. position-6: 3 028 v 7 230 ms = 0.419. MET.** Nodes, score and move are equal across trees in all 28 runs |
+| `A5` | `G6` at 3 s, n = 3 each: depth **7 = base 7** on both positions (about 2× nodes in budget). The new depth is 7. `G5`: lane green, and the clock reads are equal in `A1`. `G8`: `npm test` 7.50 s at load1 3.3 |
+| `A6` | **not read**: its Given (`ABC-204` Done) is false. Owed, with `G11` |
+
+**Gates at `b8a30264`:**
+- lint 0, typecheck 0, build 0;
+- `npm test`: 62 files and **2073/2073**, rc 0. `last-run.json` reads success true, pending 0, todo 0;
+- skips 0, and `test-skip-integrity.js` gives `No findings.`;
+- the SE's guard plants P1–P3 each red their row.
+
+**Findings:**
+- **QE-206-a (LOW):** the `givesCheck` lane row has no unflagged discovered-check fixture. A plant that misses every
+  discovered check stays green in all 210 rows of the seven touched lane files, node pins included. Only
+  `ENGINE_DEEP` and the review differentials catch it. Fix: add `8/8/8/8/R2K3k/8/8/8 w - - 0 1` (Kd4-d5) and
+  `8/7k/8/8/8/8/2P5/1B4K1 w - - 0 1` (c2-c3) to the lane row.
+- **QE-206-b (LOW):** the count guards see only calls that cross a module. `hasLegalMove` or `legalCaptures` rebuilt on
+  `legalMoves` inside `legal.ts` keeps the lane green. A `makeMove` count through the `apply.ts` spy would close it.
+- **QE-206-c (INFO):** on `position-6` the head reaches 99 % of depth 8's node count in 3 s. A later `G6` there may
+  read 8 by host noise alone.
+- **QE-206-d (INFO):** the host conditions are as above. The deep-lane gate pass overlapped a foreign vitest
+  13:55–13:58Z; it is a gate pass, not a reading.
+- **QE-206-e (INFO):** `src/gameend.ts:17` still calls `gameStatus` the leaf's check. This is doc-only, and the SE
+  flagged it.
+
+**UAT:** the waiver does **not** apply. The production files are `engine.ts`, `gameend.ts`, `legal.ts`, `quiescence.ts`
+and `search.ts`. This verdict signs UAT under `…5aaf7cec` item 2. The answers at a fixed depth are identical, so the
+play-test is about depth. For the owner by hand, with nothing waiting on it: a level-5 game still takes about 3 s per
+move.
+
+**Owed, and not gaps:**
+- `A6` and `G11` once `ABC-204` is Done (the Orchestrator rules whether the merge waits on them);
+- Security/NFR's dated `NFR-001` note (no hop).
+
+**Next:** the Orchestrator's call. No Security/NFR hop is owed by the page.

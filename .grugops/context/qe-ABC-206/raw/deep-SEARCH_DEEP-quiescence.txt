@@ -1,0 +1,67 @@
+
+ RUN  v4.1.12 ../wt-qe-ABC-206
+
+stdout | src/quiescence.test.ts > A1 — the losing capture is not chosen in >= 19 of 20, and the bare leaf is strictly worse > with quiescence the losing move is still avoided at depth 3 [deep, SEARCH_DEEP=1]
+A1 depth 3: losing capture chosen 0/24 with quiescence, 0/24 without
+
+ ✓ src/quiescence.test.ts > A2 — stand-pat is a lower bound on the quiescence value, never a replacement > king and pawn vs king: a quiet position's quiescence value IS the static evaluation, exactly 2ms
+ ✓ src/quiescence.test.ts > A2 — stand-pat is a lower bound on the quiescence value, never a replacement > the start position: a quiet position's quiescence value IS the static evaluation, exactly 0ms
+ ✓ src/quiescence.test.ts > A2 — stand-pat is a lower bound on the quiescence value, never a replacement > queen vs rook, nothing en prise: a quiet position's quiescence value IS the static evaluation, exactly 0ms
+ ✓ src/quiescence.test.ts > A2 — stand-pat is a lower bound on the quiescence value, never a replacement > rook vs rook, nothing en prise, black to move: a quiet position's quiescence value IS the static evaluation, exactly 0ms
+ ✓ src/quiescence.test.ts > A2 — stand-pat is a lower bound on the quiescence value, never a replacement > a hanging pawn makes the quiescence value STRICTLY greater than the static evaluation 0ms
+ ✓ src/quiescence.test.ts > A2 — stand-pat is a lower bound on the quiescence value, never a replacement > a DEFENDED pawn does not raise the value: the recapture is seen and the capture declined 0ms
+ ✓ src/quiescence.test.ts > A1 — the losing capture is not chosen in >= 19 of 20, and the bare leaf is strictly worse > carries at least 20 positions, none of them in check for the side to move 2ms
+ ✓ src/quiescence.test.ts > A1 — the losing capture is not chosen in >= 19 of 20, and the bare leaf is strictly worse > both arms at depth 1 — with quiescence the losing move is avoided, without it it is played 7ms
+ ✓ src/quiescence.test.ts > A1 — the losing capture is not chosen in >= 19 of 20, and the bare leaf is strictly worse > with quiescence the losing move is still avoided at depth 3 [deep, SEARCH_DEEP=1] 43ms
+ ✓ src/quiescence.test.ts > A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > returns on every one of 200+ positions, the capture-dense roots included, under the cap 5ms
+ ✓ src/quiescence.test.ts > A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > the cap BINDS on a runaway rig — twenty queens on alternating squares — and is not exceeded 13ms
+ ✓ src/quiescence.test.ts > A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > returns on the six roots and every one-ply child, under the cap [deep, SEARCH_DEEP=1] 72ms
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap reading, level 180x
+A5 kiwipete depth 1: 603 nodes with quiescence / 49 without = 12.31x
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap reading, level 10x
+A5 position-6 depth 1: 432 nodes with quiescence / 47 without = 9.19x
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 2, level 50x [deep, SEARCH_DEEP=1]
+A5 kiwipete depth 2: 1994 nodes with quiescence / 132 without = 15.11x
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 3, level 70x, and the oracle-checked answer 70 / e2a6 [deep, SEARCH_DEEP=1]
+A5 kiwipete depth 3: 9258 nodes with quiescence / 2265 without = 4.09x
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 2, level 42x [deep, SEARCH_DEEP=1]
+A5 position-6 depth 2: 3871 nodes with quiescence / 136 without = 28.46x
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 3, level 13x, and the oracle-checked answer 84 / c3d5 [deep, SEARCH_DEEP=1]
+A5 position-6 depth 3: 11443 nodes with quiescence / 2355 without = 4.86x
+
+ ✓ src/quiescence.test.ts > A4 — a position with no capture anywhere near the leaves scores exactly as before > bare kings at depth 1: same score, same move, same node count 0ms
+ ✓ src/quiescence.test.ts > A4 — a position with no capture anywhere near the leaves scores exactly as before > bare kings at depth 2: same score, same move, same node count 0ms
+ ✓ src/quiescence.test.ts > A4 — a position with no capture anywhere near the leaves scores exactly as before > bare kings at depth 3: same score, same move, same node count 0ms
+ ✓ src/quiescence.test.ts > A4 — a position with no capture anywhere near the leaves scores exactly as before > bare kings at depth 4: same score, same move, same node count 0ms
+ ✓ src/quiescence.test.ts > A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 1: same score, same move, same node count 0ms
+ ✓ src/quiescence.test.ts > A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 2: same score, same move, same node count 0ms
+ ✓ src/quiescence.test.ts > A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 3: same score, same move, same node count 0ms
+ ✓ src/quiescence.test.ts > A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 4: same score, same move, same node count 0ms
+ ✓ src/quiescence.test.ts > A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 1: same score, same move, same node count 0ms
+ ✓ src/quiescence.test.ts > A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 2: same score, same move, same node count 0ms
+ ✓ src/quiescence.test.ts > A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 3: same score, same move, same node count 0ms
+ ✓ src/quiescence.test.ts > A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 4: same score, same move, same node count 0ms
+ ✓ src/quiescence.test.ts > A4 — a position with no capture anywhere near the leaves scores exactly as before > the start position at depth 1: same score, same move, same node count 0ms
+ ✓ src/quiescence.test.ts > A4 — a position with no capture anywhere near the leaves scores exactly as before > the bare-leaf door IS the pre-quiescence build: position-6 at depth 2 reproduces its recorded fingerprint 1ms
+ ✓ src/quiescence.test.ts > A4 — a position with no capture anywhere near the leaves scores exactly as before > position-6 at depth 3 reproduces the recorded 2 355 nodes and c3d5 [deep, SEARCH_DEEP=1] 6ms
+ ✓ src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap reading, level 180x 1ms
+ ✓ src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap reading, level 10x 1ms
+ ✓ src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 2, level 50x [deep, SEARCH_DEEP=1] 4ms
+ ✓ src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 3, level 70x, and the oracle-checked answer 70 / e2a6 [deep, SEARCH_DEEP=1] 22ms
+ ✓ src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 2, level 42x [deep, SEARCH_DEEP=1] 7ms
+ ✓ src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 3, level 13x, and the oracle-checked answer 84 / c3d5 [deep, SEARCH_DEEP=1] 26ms
+ ✓ src/quiescence.test.ts > A6 — the searched position is unchanged on return > leaves every one of the 200+ corpus positions byte-identical after a quiescence search 0ms
+ ✓ src/quiescence.test.ts > A6 — the searched position is unchanged on return > leaves every hanging-piece position byte-identical after a depth-1 search, both arms 2ms
+ ✓ src/quiescence.test.ts > A6 — the searched position is unchanged on return > leaves the position byte-identical when the visitor THROWS mid-sequence — the engine's abort path 0ms
+ ✓ src/quiescence.test.ts > A6 — the searched position is unchanged on return > leaves the broad corpus byte-identical [deep, SEARCH_DEEP=1] 0ms
+
+ Test Files  1 passed (1)
+      Tests  37 passed (37)
+   Start at  16:53:35
+   Duration  303ms (transform 0ms, setup 0ms, import 37ms, tests 218ms, environment 0ms)
+
