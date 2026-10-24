@@ -1,0 +1,14 @@
+ADR-0036 clause (b), limb 1 of 3: non-local import (Node builtin, prefixed or not, or a package)
+  diff 7727400c..052ae3ad = 7727400c..052ae3ad; production files changed: 5
+      src/cli-options.ts
+      src/cli.ts
+      src/engine.ts
+      src/levels.ts
+      src/uci-session.ts
+  COUNTS import statements in code (TypeScript AST; comments and strings are not code). Word hits are LISTED, never counted.
+  (b1) capability lines added or changed: 0
+  (b1) Ruling 2 (ADR-0036 § S1, the holder file): holders 3 at <base>, 3 at <head>; holder files with changed lines (+ or -): 0
+  (b2) new runtime import edges: 0; reaching a holder of this limb at <head>: 0
+  word hits on added lines, not counted: 0
+  baseline at <head>, STATE (recorded, not a trigger): 46 production files; 3 hold this limb in code (src/book-file.ts, src/pgn-file.ts, src/uci.ts); 6 by raw word hit
+  limb 1: does not fire
