@@ -6,12 +6,17 @@
  * virtual clock. The entry point that binds the real streams and the real clock is `ABC-168`'s.
  *
  * `ABC-171` (`ADR-0044` D3, D10, D11) adds the two options. `OwnBook` (default on) probes the
- * injected `book` before any search. `Skill Level` (1-5, default `DEFAULT_LEVEL`) caps the budget
- * at its level's, and a level with a blunder rate plays through `createLevel`, seeded per `go` from
- * the injected `random`.
+ * injected `book` before any search. `Skill Level` (`EASIEST_LEVEL`-`HARDEST_LEVEL`, 1-7, default
+ * `DEFAULT_LEVEL`) caps the budget at its level's, and a level with a blunder rate plays through
+ * `createLevel`, seeded per `go` from the injected `random`. Levels 5-7 have rate 0 and take
+ * `chooseMove` with D12's limits (`ADR-0045` § AMENDMENT A4).
  *
  * ONE THREAD (`ADR-0044` D5). `go` searches to its budget inside `handleLine`, so a `stop` that
  * arrives later finds the search already finished; `infinite` and `ponder` only HOLD the answer.
+ * So `isready` and `stop` sent during a search are answered at most one budget late: about 5 s at
+ * levels 1-5, 7 s at 6 and 32 s at 7 (`ABC-212`). That latency is accepted, with no worker
+ * (`ADR-0045` § AMENDMENT A4): a GUI that times out on `isready` or `stop` mid-search should be
+ * used at level 5 or below.
  */
 
 import { makeMove } from "./apply.ts";
@@ -19,7 +24,7 @@ import type { BookProbe } from "./book.ts";
 import { parseCoordinateMove } from "./coordinate-move.ts";
 import { type Clock, chooseMove, type EngineChoice, HARD_CEILING_MS } from "./engine.ts";
 import { parseFen } from "./fen.ts";
-import { createLevel, DEFAULT_LEVEL, LEVELS } from "./levels.ts";
+import { createLevel, DEFAULT_LEVEL, EASIEST_LEVEL, HARDEST_LEVEL, LEVELS } from "./levels.ts";
 import { BISHOP, KNIGHT, type Position, QUEEN, ROOK, squareName } from "./position.ts";
 import { MATE_SCORE } from "./search.ts";
 import { MATE_FLOOR } from "./transposition.ts";
@@ -207,7 +212,8 @@ function parseGo(
     // Anything else is an unknown token, and the spec says to ignore it.
   }
 
-  // D4.1: the budget G.
+  // D4.1: the budget G. With no time token it is `HARD_CEILING_MS`, which D4.2's cap below turns
+  // into the level's own budget at every level (`ABC-212`: every budget is under the clamp).
   let budget: number = HARD_CEILING_MS;
   const time = clock[blackToMove ? "btime" : "wtime"];
   if (clock.movetime !== undefined) {
@@ -334,7 +340,10 @@ export function createUciSession(options: UciSessionOptions): UciSession {
     } else if (name === "skill level") {
       // An own key only (the `level-seam.ts` rule), so no inherited key ever selects a level.
       if (Object.hasOwn(LEVELS, value)) skill = Number(value) as keyof typeof LEVELS;
-      else info(`Skill Level takes an integer 1-5, got ${got}; kept ${skill}`);
+      else
+        info(
+          `Skill Level takes an integer ${EASIEST_LEVEL}-${HARDEST_LEVEL}, got ${got}; kept ${skill}`,
+        );
     }
   };
 
@@ -346,7 +355,9 @@ export function createUciSession(options: UciSessionOptions): UciSession {
           write("id name skytalix");
           write("id author Olger Oeselg");
           write("option name OwnBook type check default true");
-          write(`option name Skill Level type spin default ${DEFAULT_LEVEL} min 1 max 5`);
+          write(
+            `option name Skill Level type spin default ${DEFAULT_LEVEL} min ${EASIEST_LEVEL} max ${HARDEST_LEVEL}`,
+          );
           write("uciok");
           break;
         case "isready":

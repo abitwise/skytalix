@@ -18,6 +18,10 @@ feature: —
 > **Correction to the analysis.** § 6 item 2 says "`cutechess-cli` and `fastchess` are absent". That was true when
 > the analysis was written. The owner had already built `cutechess-cli` 1.5.1 (`…7ea41eea`), and `ABC-202` played 8
 > games with it. This hop re-read the binary: present, sha256 equal to the pin.
+>
+> **Erratum 2026-10-24 (BA/PM, task `bapm-fold-ABC-212`, at `ABC-212`'s merge; `ADR-0045` § Consequences).** Q1's
+> derivation line names "`HARD_CEILING_MS` (5 000)". From `ABC-212`, `HARD_CEILING_MS` is 32 000, so the line reads
+> "level 5's ceiling (5 000)". See Q1. No number, margin or rule on this page changes.
 
 ## Problem
 
@@ -175,8 +179,13 @@ and Stockfish 19 sha256 `dc2f18c3…251f`. Both equal `EPIC-008` § Dependencies
 - **Why 2 000.** 2 000 = `HARD_CEILING_MS` (5 000, `src/engine.ts:129`) − 3 000. A forfeit then fires only for a move
   over 5 s, which is a breach of `NFR-004` clause B and not a measurement artefact. The engine never sees the margin, so
   it changes nothing in play. The expected forfeit count is 0, because the engine overshoot is ≤ 31 ms
-  (`AR-NFR004-A`).
-- **The general rule** (it also covers the D budget, Q4): `timemargin` = 5 000 − budget, in ms.
+  (`AR-NFR004-A`). *(Erratum 2026-10-24, BA/PM, `bapm-fold-ABC-212`: for "`HARD_CEILING_MS` (5 000,
+  `src/engine.ts:129`)" read "level 5's ceiling (5 000, `NFR-004` clause B)". From `ABC-212`'s merge,
+  `HARD_CEILING_MS` is 32 000 (`ADR-0045` A3), and each level's ceiling is held by its budget. `skytalix` plays at
+  `Skill Level` 5, so 2 000 stands.)*
+- **The general rule** (it also covers the D budget, Q4): `timemargin` = 5 000 − budget, in ms. *(Erratum
+  2026-10-24: read as ceiling(level) − budget, which is 5 000 − budget at `Skill Level` 5 (`ABC-212`
+  § Dependencies). Unchanged.)*
 - **Rejected: a `tc` that holds G at 3 000.** `ADR-0044` D4 gives G = min(t/20 + i/2, t − 50), capped by the level.
   That reaches 3 000 only while the clock stays high, and the clock drifts by each move's overshoot. It has more moving
   parts and gives no better measure.

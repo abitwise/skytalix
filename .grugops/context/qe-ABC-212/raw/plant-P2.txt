@@ -1,0 +1,113 @@
+
+ RUN  v4.1.12 <scratch>/plant-tree
+
+ ❯ src/levels.test.ts (33 tests | 1 failed) 160ms
+     × clause B, per level (ABC-212 A5): budgetMs <= ceiling(L) over 1..7, < 5 000 over 1..5, clamp 32 000 5ms
+ ❯ src/engine.test.ts (47 tests | 1 failed) 632ms
+     × names the ceiling as an exported constant 2ms
+ ❯ src/uci-session.test.ts (137 tests | 5 failed) 3655ms
+     × setoption name Skill Level value 7 sets 7: a bare go searches 30 000 ms 12ms
+     × go movetime 60000 at 7 searches 30 000 (the level caps G) 12ms
+     × go wtime 600000 btime 600000 at 7 searches min(600 000 ÷ 20, 30 000) = 30 000 11ms
+     × Skill Level value 0 at 7 keeps 7, with the 1-7 info string 11ms
+     × Skill Level value 8 at 7 keeps 7, with the 1-7 info string 11ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/engine.test.ts > RF-1 — a budget above the hard ceiling is CAPPED at it, not honoured > names the ceiling as an exported constant
+AssertionError: expected 5000 to be 32000 // Object.is equality
+
+- Expected
++ Received
+
+- 32000
++ 5000
+
+ ❯ src/engine.test.ts:646:29
+    644|   it("names the ceiling as an exported constant", () => {
+    645|     // `ABC-212` (`ADR-0045` § AMENDMENT A3): the largest per-level ce…
+    646|     expect(HARD_CEILING_MS).toBe(32_000);
+       |                             ^
+    647|   });
+    648|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/7]⎯
+
+ FAIL  src/levels.test.ts > ABC-174 A7 — the time budget, from the data (NFR-004; ADR-0038 decision 3) > clause B, per level (ABC-212 A5): budgetMs <= ceiling(L) over 1..7, < 5 000 over 1..5, clamp 32 000
+AssertionError: expected 5000 to be 32000 // Object.is equality
+
+- Expected
++ Received
+
+- 32000
++ 5000
+
+ ❯ <anonymous> src/levels.test.ts:357:29
+    355|     });
+    356|     for (const id of [1, 2, 3, 4, 5] as const) expect(LEVELS[id].budge…
+    357|     expect(HARD_CEILING_MS).toBe(32_000);
+       |                             ^
+    358|     expect(Math.max(...Object.values(CEILING_MS))).toBe(HARD_CEILING_M…
+    359|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/7]⎯
+
+ FAIL  src/uci-session.test.ts > ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path > setoption name Skill Level value 7 sets 7: a bare go searches 30 000 ms
+AssertionError: expected 6000 to be greater than or equal to 30000
+ ❯ expectWithin src/uci-session.test.ts:684:16
+    682| /** `ABC-167` `A5`'s bound for step `s` (test note 3): `G <= time <= G…
+    683| function expectWithin(time: number, budget: number, step = 100): void {
+    684|   expect(time).toBeGreaterThanOrEqual(budget);
+       |                ^
+    685|   expect(time).toBeLessThanOrEqual(budget + 2 * step);
+    686| }
+ ❯ src/uci-session.test.ts:1026:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/7]⎯
+
+ FAIL  src/uci-session.test.ts > ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path > go movetime 60000 at 7 searches 30 000 (the level caps G)
+AssertionError: expected 6000 to be greater than or equal to 30000
+ ❯ expectWithin src/uci-session.test.ts:684:16
+    682| /** `ABC-167` `A5`'s bound for step `s` (test note 3): `G <= time <= G…
+    683| function expectWithin(time: number, budget: number, step = 100): void {
+    684|   expect(time).toBeGreaterThanOrEqual(budget);
+       |                ^
+    685|   expect(time).toBeLessThanOrEqual(budget + 2 * step);
+    686| }
+ ❯ src/uci-session.test.ts:1036:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/7]⎯
+
+ FAIL  src/uci-session.test.ts > ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path > go wtime 600000 btime 600000 at 7 searches min(600 000 ÷ 20, 30 000) = 30 000
+AssertionError: expected 6000 to be greater than or equal to 30000
+ ❯ expectWithin src/uci-session.test.ts:684:16
+    682| /** `ABC-167` `A5`'s bound for step `s` (test note 3): `G <= time <= G…
+    683| function expectWithin(time: number, budget: number, step = 100): void {
+    684|   expect(time).toBeGreaterThanOrEqual(budget);
+       |                ^
+    685|   expect(time).toBeLessThanOrEqual(budget + 2 * step);
+    686| }
+ ❯ src/uci-session.test.ts:1046:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/7]⎯
+
+ FAIL  src/uci-session.test.ts > ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path > Skill Level value 0 at 7 keeps 7, with the 1-7 info string
+ FAIL  src/uci-session.test.ts > ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path > Skill Level value 8 at 7 keeps 7, with the 1-7 info string
+AssertionError: expected 6000 to be greater than or equal to 30000
+ ❯ expectWithin src/uci-session.test.ts:684:16
+    682| /** `ABC-167` `A5`'s bound for step `s` (test note 3): `G <= time <= G…
+    683| function expectWithin(time: number, budget: number, step = 100): void {
+    684|   expect(time).toBeGreaterThanOrEqual(budget);
+       |                ^
+    685|   expect(time).toBeLessThanOrEqual(budget + 2 * step);
+    686| }
+ ❯ src/uci-session.test.ts:1063:7
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/7]⎯
+
+
+ Test Files  3 failed | 2 passed (5)
+      Tests  7 failed | 337 passed (344)
+   Start at  14:14:45
+   Duration  5.38s (transform 0ms, setup 0ms, import 4.28s, tests 4.72s, environment 0ms)
+

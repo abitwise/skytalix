@@ -1,0 +1,30 @@
+# qe-lane-ABC-212 gates at 814b92a0 (worktree ../wt-qe-lane-ABC-212, own npm ci --ignore-scripts, Node v26.11.1)
+lint: npm run lint -> rc 0; Checked 125 files in 157ms. No fixes applied.
+typecheck: npm run typecheck -> rc 0
+build: npm run build -> rc 0
+npm test -> rc 0; Test Files 62 passed (62); Tests 2066 passed (2066)
+  (Duration 8.46s is vitest's own figure for one gate run, with no foreign vitest live; it is NOT a timing reading and not the NFR-008 sentinel)
+.test-results/last-run.json: {"files":62,"total":2066,"passed":2066,"failed":0,"pending":0,"todo":0,"success":true}
+skips: NODE_OPTIONS=--max-old-space-size=128 npx vitest run --reporter=json 2>/dev/null | jq '.numPendingTests + .numTodoTests' -> 0
+integrity: node tools/grugops/test-skip-integrity.js .grugops/test-skips.md --skip-count 0 -> No findings. rc 0
+UCI_DEEP: UCI_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/uci.real-engine.test.ts -> rc 0; Tests 5 passed (5) (no Skill Level in that file: no level-6/7 search on the real clock)
+not run (brief): ENGINE_DEEP, CLI_DEEP, any real-clock timing
+
+# A13 / scope audit
+git diff --name-only 2079e0df 8c1d0e6c:
+src/uci-session.test.ts
+git diff --name-only 2079e0df 814b92a0 -- src (non-test): 0 files
+hunks (git diff -U0 2079e0df 814b92a0 -- src/uci-session.test.ts):
+@@ -8 +8 @@ import { readFileSync } from "node:fs";
+@@ -10,0 +11 @@ import { type BookProbe, createBookProbe } from "./book.ts";
+@@ -20,0 +22,7 @@ import { zobristKey } from "./zobrist.ts";
+@@ -996,3 +1004,8 @@ describe("ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12)", ()
+@@ -1001,0 +1015,6 @@ describe("ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 p
+@@ -1017,0 +1037,26 @@ describe("ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 p
+@@ -1029,3 +1074,4 @@ describe("ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 p
+@@ -1034,3 +1080,3 @@ describe("ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 p
+@@ -1039,3 +1085,3 @@ describe("ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 p
+@@ -1044,3 +1090,6 @@ describe("ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 p
+@@ -1056,4 +1105,7 @@ describe("ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 p
+@@ -1061,3 +1113 @@ describe("ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 p
+A9 block at head: banner 1003-1012, describe 1014-1116. Hunks 4-12 sit inside it; hunks 1-3 (lines 8, 11, 22-28) are file-top harness: the vitest import names, the chooseMove import, and the module-level vi.mock("./engine.ts", { spy: true }) with its doc comment. No expect( outside 1003-1116 changed.

@@ -26,6 +26,19 @@ resolve. Since the 2026-10-18 revision that slug is no longer true: see § Revis
 > `ABC-214`'s merge. D13's name bullet and its CC0 bullet stand. Its kit-file bullet stands: the files stay MIT.
 > No other decision here moves.
 
+> **Amended 2026-10-24 by `ADR-0045` § AMENDMENT 2026-10-24 (accepted by the owner, note `…2c6fa3b1`; folded by
+> BA/PM, task `bapm-fold-ABC-212`).** Levels 6 (5 000 ms) and 7 (30 000 ms) join the table at rate 0, the default
+> stays 5, and `HARD_CEILING_MS` moves from 5 000 to 32 000. Four decisions carry a dated fold line, worded as in
+> `ADR-0045` A4:
+> - D4.1: a bare `go` searches the level's budget;
+> - D4.4: the clamp is 32 000, and each level's `NFR-004` ceiling is held by its budget;
+> - D5: answers during a search are up to about 32 s late at level 7, accepted, with no worker;
+> - D11: `max 7`, and rate 0 is levels 5–7.
+>
+> Four lines that restate these facts get the same dated mark: D3's `uci` and `setoption` rows, and two
+> § Consequences lines. Effective at `ABC-212`'s merge. D6's row for levels 1–4 is unchanged. The history
+> sections (§ Revision, § Context, § Alternatives, § Owner questions) stand as written. No other decision here moves.
+
 **accepted** 2026-10-18 by Olger Oeselg (owner), verbatim "accept the revised ADR-0044 and EPIC-007" (note
 `.grugops/context/wave-2026-09-25/notes/20261018T113000Z-orchestrator-decision-owner-word-engine-private-adr0044-epic007-accepted-c3e81a57.md`).
 Owner menu: licence → private ("let's keep private for now"); Q14 → keep `npm run chess`; Q15 → moot
@@ -269,8 +282,8 @@ budget. There is no `info` line, and no way to read `stop` while `chooseMove` ho
 
 | GUI → engine | engine does |
 |---|---|
-| `uci` | `id name skytalix`, `id author Olger Oeselg`, `option name OwnBook type check default true`, `option name Skill Level type spin default 3 min 1 max 5` *(2026-10-19, `ADR-0045`: `default 5`, read from `DEFAULT_LEVEL`)*, `uciok` |
-| `setoption name <id> [value <x>]` | `<id>` is the text between `name` and `value`, matched **case-insensitively** (the spec says option names *"should not be case sensitive and can inlude spaces"*). `OwnBook`: `true` or `false`. `Skill Level`: an integer from 1 to 5, looked up by an own key (`Object.hasOwn(LEVELS, n)`, the `level-seam.ts` rule). An invalid value keeps the old value and writes one `info string`. **Any other name is ignored**, which covers the options Lichess's provider sets unconditionally (`UCI_AnalyseMode`, `UCI_Chess960`, `Threads`, `Hash`, `MultiPV`) |
+| `uci` | `id name skytalix`, `id author Olger Oeselg`, `option name OwnBook type check default true`, `option name Skill Level type spin default 3 min 1 max 5` *(2026-10-19, `ADR-0045`: `default 5`, read from `DEFAULT_LEVEL`)* *(2026-10-24, `ADR-0045` A4: `max 7`, read from `HARDEST_LEVEL`)*, `uciok` |
+| `setoption name <id> [value <x>]` | `<id>` is the text between `name` and `value`, matched **case-insensitively** (the spec says option names *"should not be case sensitive and can inlude spaces"*). `OwnBook`: `true` or `false`. `Skill Level`: an integer from 1 to 5 *(1 to 7 from `ABC-212`, `ADR-0045` A4)*, looked up by an own key (`Object.hasOwn(LEVELS, n)`, the `level-seam.ts` rule). An invalid value keeps the old value and writes one `info string`. **Any other name is ignored**, which covers the options Lichess's provider sets unconditionally (`UCI_AnalyseMode`, `UCI_Chess960`, `Threads`, `Hash`, `MultiPV`) |
 | `isready` | the first time with `OwnBook` on, it warms the book (D10). Then `readyok` |
 | `ucinewgame` | sets the position back to the start. It does not reset the options, reload the book or reseed anything (D10, D11). The table is already cleared per search (`ADR-0025`) |
 | `position startpos \| fen <6 fields> [moves m1 m2 …]` | parse it, then apply the moves through `parseCoordinateMove` and `makeMove`. If the FEN or any move is bad, the **whole command is refused**: no position is held, and one `info string` line names the fault (text filtered to printable characters, the `cli.ts` `printableOf` rule) |
@@ -303,13 +316,19 @@ budget. There is no `info` line, and no way to read `stop` while `chooseMove` ho
      increment / 2"* plus a 50 ms move overhead. The tuning belongs to the ticket and is measured, not
      argued here.
    - Otherwise (`infinite`, `ponder`, only `depth`/`nodes`/`mate`, or a bare `go`), `G` is
-     `HARD_CEILING_MS`.
+     `HARD_CEILING_MS`. *(Folded 2026-10-24, `ADR-0045` A4, `ABC-212`: with no time token, `G` is
+     `HARD_CEILING_MS`, now 32 000, which D4.2 caps to the level's budget. A bare `go` searches the level's budget
+     at every level, 1–7, because every budget is at or below the clamp. The code line is unchanged.)*
 2. **The level caps it.** The budget passed down is `min(G, LEVELS[skill].budgetMs)` (D11). A bare `go`
    at the default level is therefore 3 000 ms, which is `DEFAULT_BUDGET_MS`, the same as the first
    version of this ADR.
 3. **`infinite` or `ponder` holds the `bestmove` until `stop`.** The spec says *"Do not exit the search
    without being told so in this mode"*. The engine may stop thinking early. It may not answer early.
-4. **The engine clamps every budget at `HARD_CEILING_MS`** (`NFR-004` clause B, unchanged).
+4. **The engine clamps every budget at `HARD_CEILING_MS`** (`NFR-004` clause B, unchanged). *(Folded 2026-10-24,
+   `ADR-0045` A3/A4, `ABC-212`: one absolute clamp, `HARD_CEILING_MS` now 32 000. Each level's `NFR-004` ceiling
+   is held by its budget, at least 2 000 ms under it: 5 s at levels 1–5, 7 s at level 6, 32 s at level 7. Clause B
+   is now written per level, in the owner's accepted text (`ADR-0045` § Consequences), which Security/NFR places in
+   the catalog.)*
 
 ### D5. One thread, synchronous search. No worker in v1.
 
@@ -320,6 +339,9 @@ handled in order afterwards. The consequences are accepted and stated:
   *"should … immediately answer"*.
 - `stop` takes effect at most one budget late. A `stop` that arrives after the `bestmove` is ignored.
 - One `bestmove` per `go` always holds.
+- *(Folded 2026-10-24, `ADR-0045` A4, `ABC-212`: `isready` and `stop` during a search are answered at most one
+  budget late: about 5 s at levels 1–5, 7 s at level 6 and 32 s at level 7. Accepted, with no worker. One
+  `bestmove` per `go` still holds.)*
 
 **The upgrade is pre-designed and is not built.** The search would move to one `worker_threads` worker.
 The stop flag would be a `SharedArrayBuffer` slot, read through the engine's **existing** injected `now`
@@ -327,7 +349,10 @@ clock: `now = () => (stopped ? Infinity : Date.now())`. The clock is already con
 `NODES_PER_CLOCK_CHECK` nodes, so this needs no edit to `src/engine.ts` beyond D12's. Build it only when
 one of these triggers fires:
 
-- the owner lifts the 5 s ceiling for UCI (Q3 was answered "keep it");
+- the owner lifts the 5 s ceiling for UCI (Q3 was answered "keep it"); *(fired 2026-10-24 by `ABC-212`. Ruled
+  in `ADR-0045` A4 (OQ-212-3): the latency is accepted at levels 6–7, and the worker is not owed first. It stays
+  pre-designed, and it is built when pondering is wanted, or when a GUI the owner uses is shown to stall or forfeit
+  at levels 6–7.)*
 - pondering is wanted;
 - a target GUI is shown to time out on `isready` or `stop`.
 
@@ -442,13 +467,15 @@ that backend can run.
   and `default 3` is `DEFAULT_LEVEL`, the terminal game's default (the shipped engine at 3 s, no
   blunders). *(Folded 2026-10-19, `ADR-0045` D2/D4: **`default 5`**. The `default` is `DEFAULT_LEVEL`, now 5, and it
   is still the shipped engine at 3 s with no blunders. The session reads it from `DEFAULT_LEVEL` rather than a
-  literal (`ABC-174`).)* **No Elo is claimed.** `UCI_LimitStrength` / `UCI_Elo` is rejected (Alternatives).
+  literal (`ABC-174`).)* *(Folded 2026-10-24, `ADR-0045` A4, `ABC-212`: **`max 7`**, read from `HARDEST_LEVEL`.
+  The `default` stays 5. Rate 0 is levels 5–7, and rate above 0 is levels 1–4.)* **No Elo is claimed.**
+  `UCI_LimitStrength` / `UCI_Elo` is rejected (Alternatives).
 - **With the `go` time.** The budget is `min(G, LEVELS[skill].budgetMs)` (D4). The level is a cap on
   effort and the GUI's clock is a cap on time, so the smaller one binds. Level 1 thinks at most 100 ms
   even with plenty of time on the clock. Any level thinks less when the clock is short. The engine still
   clamps at `HARD_CEILING_MS`.
 - **Two paths, chosen by the level's data, not its number:**
-  - **`blunderRate` is 0** (levels 3, 4, 5 today; *level 5 only from `ABC-174`, `ADR-0045` D4*): the session calls `chooseMove(position, { budgetMs, now,
+  - **`blunderRate` is 0** (levels 3, 4, 5 today; *level 5 only from `ABC-174`, `ADR-0045` D4*; *levels 5–7 from `ABC-212`, `ADR-0045` A4*): the session calls `chooseMove(position, { budgetMs, now,
     maxDepth, maxNodes })` directly. That is what `createLevel` does for a rate of 0, so it is the same
     move, and D12's limits apply.
   - **`blunderRate` is above 0** (levels 1, 2; *levels 1–4 from `ABC-174`, `ADR-0045` D4*): the session calls
@@ -787,13 +814,15 @@ That matters only if someone chooses v4, and the owner, as copyright holder, can
 - **Known weaknesses, stated:**
   - A GUI that pings during a search waits up to one budget (D5).
   - Game-history repetitions are invisible to the search (D6).
-  - Analysis is capped at 5 s per `go` (Q3), and by the level's budget.
+  - Analysis is capped at 5 s per `go` (Q3), and by the level's budget. *(2026-10-24, `ADR-0045` A3/A4: the level's
+    budget binds, up to 30 s at level 7, under the 32 000 ms clamp. See D4.4's fold.)*
   - At levels 1 and 2, `depth`/`nodes`/`mate` are ignored and no score is sent (D11). *(2026-10-19, `ADR-0045` D4:
     levels 1–4 from `ABC-174`.)*
   - A book move ignores the `go` limits (D10).
   - `go mate N` is a depth approximation (D12).
   - `dist/` relies on the clone's `data/` beside it for the book (D8).
-  - With the book off, or out of book at levels 3–5, the engine plays deterministically
+  - With the book off, or out of book at levels 3–5 *(the rate-0 levels: level 5 only from `ABC-174`, levels 5–7 from
+    `ABC-212`, `ADR-0045` A4)*, the engine plays deterministically
     (`ADR-0027` d1).
 - **Docs owed at build time:** `npm run uci` and the new `npm run build` meaning in `AGENTS.md`
   § Commands (the Scribe), and `memory-bank/30-architecture.md`.
