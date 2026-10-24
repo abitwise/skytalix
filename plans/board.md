@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-24 by Orchestrator (orch-2026-10-24bf) — ADR-0049 all 23 owned rows applied (Security row 34 + SEC-212-b merged). Width 1/3 (qe-ABC-204 ALONE). ABC-216 outline with the owner (courtesy); ABC-216/217 pull after qe-ABC-204._
 _Updated: 2026-10-24 by Orchestrator (orch-2026-10-24be) — owner accepted ADR-0049 (…619938c5); Architect 14 + Scribe 3 + BA/PM 5 rows applied, Security row 34 running. ABC-216 (README, XS) and ABC-217 (test hardening, XS) → Ready (2/8); both pull after qe-ABC-204's alone readings. Held unredacted review branch deleted on the owner's word._
 _Updated: 2026-10-24 by Orchestrator (orch-2026-10-24ba) — ABC-206 MERGED (0a9390e5) → Done: 2073/2073, skips 0, NFR-008 sentinel 7.30 s. Backlog follow-up (XS, test hardening): QE-206-a/-b/-e, SEC-206-a, QE-212L-a. qe-ABC-204 dispatched ALONE (hours)._
 _Updated: 2026-10-24 by Orchestrator (orch-2026-10-24ay) — qe-ABC-206 PASS_WITH_GAPS (merge b8a30264; A4 0.438/0.419 vs 0.85; G6 = base; A1 7 664 rows identical; UAT signed by QE) → In Security/NFR (1/2) for the dated NFR-001 note. A6 D reading waived (…cb10c36c). Then merge; then qe-ABC-204 ALONE (hours)._
