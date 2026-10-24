@@ -34,6 +34,20 @@ owner: BA/PM
 > "private, all rights reserved", `UNLICENSED` and "no `LICENSE` or `NOTICE`" statement on this page. These are this
 > box, § v1 — in, the ticket table's `ABC-169` row, Q12 with its recorded precondition, and the web-project boundary.
 > Those texts stay as dated history (`ADR-0048` § Records drift, row 12).
+>
+> **2026-10-24, BA/PM (task `bapm-cut-readme`, at `main` `2a1a7c93`): `ADR-0049` § Records rows 20–24 are answered
+> here.** The owner accepted `ADR-0049` on 2026-10-24 (owner word `…619938c5`, a transcription, not a stamp). The
+> source has been public on GitHub since 2026-10-23 (decision 1). Each row's disposition is `ADR-0048`, and the
+> paragraph above plus the `RISK-EPIC007-07` line apply it:
+> - **Row 20** (M10 and this box): "private" on this page now means `"private": true`. npm refuses to publish, and
+>   no package, binary or `dist/` is published (decision 2). It no longer means "not shared". M10's MET reading
+>   stays, and `ABC-214` (merged `59f50717`) supersedes its target.
+> - **Rows 21–23** (Q12(a), the recorded precondition, the web-project boundary): the "not distributed" premise
+>   ended at publication. The precondition is answered by `ADR-0048` decision 7: carved out now (`ABC-214`),
+>   re-derived later (`ABC-215`).
+> - **Row 24** (`RISK-EPIC007-07`): fired and disposed, as its 2026-10-24 line says.
+>
+> No measure, status or column moves. The quoted texts stay as dated history.
 
 > **M2 CLOSED BY ACCEPTANCE, NOT READ, 2026-10-23, by the owner.** Owner word, verbatim
 > (`.grugops/context/owner-word-2026-10-23/notes/20261023T105100Z-orchestrator-decision-d3681daa.md`, a transcription,
