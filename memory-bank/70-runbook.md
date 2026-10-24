@@ -10,6 +10,9 @@ and § On-call say who holds deploy. Both now carry a dated correction to the ow
 2026-08-15. The old wording stays in place above each correction._
 _Updated: 2026-10-24 by Architect/Design (task `arch-runbook-ABC-212`), on `grugops/scribe-ABC-212`
 `2ba55ea7`. § Operate names levels 1–7 (`ABC-212` A11). The old wording is kept in a dated bracket._
+_Updated: 2026-10-24 by AGENTS.md Scribe (task `scribe-runbook-ABC-212`), on `grugops/qe-ABC-212`
+`052ae3ad`. § Operate says the `thinking...` line prints first (`QE-212-c`). The old wording is kept in a
+dated bracket._
 
 <!--
   FORMAT — read before you fill this in. (clear voice; this is a technical file, not a role prompt.)
@@ -40,7 +43,12 @@ The clone is the channel, per `ADR-0018`.
   - Levels run from `1` (weakest) to `7` (strongest). Since `ABC-212`, the default 5 is no longer the
     hardest level. Level 5 thinks up to 3 s a move, level 6 thinks 5 s and level 7 thinks 30 s. Their
     hard ceilings are 7 s and 32 s, per the `NFR-004` text the owner accepts (`ADR-0045` § AMENDMENT
-    2026-10-24). At level 7, expect about half a minute with no output on each engine move.
+    2026-10-24). At level 7, the `thinking...` line prints at once, then expect about half a minute with
+    no further output on each engine move.
+  - **[CHANGED 2026-10-24 (`scribe-runbook-ABC-212`, `QE-212-c`), checked against the QE reading
+    `qe-ABC-212/…f9560997` (A10: the thinking frame was drawn 1 ms after Enter, before the search).**
+    The old wording was "expect about half a minute with no output on each engine move". It read as
+    if nothing printed; only the output after the `thinking...` frame is silent.]
   - Pass flags after `--`, as in `npm run chess -- --colour black`. `AGENTS.md` § Commands
     "Dev / run" explains why.
   - On a terminal, `ABC-200` asks for each flag the command line left out, colour first, before the
