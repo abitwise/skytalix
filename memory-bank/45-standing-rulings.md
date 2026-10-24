@@ -48,6 +48,10 @@ the ticket is done, never before.
 merge" — left alone rather than faked; the merge authority lives in `memory-bank/60-progress.md`. No
 git remote, so `pr` has always meant "branch + gate": nothing is pushed, no PR opened.
 
+**Dated line 2026-10-24 (`ADR-0049` row 35):** the "No git remote" clause above is false since 2026-10-23 (a remote exists and the
+repository is public); the sentence stays as history. For agents, `pr` still means "branch + gate": pushing is the owner's, and agents
+never push, never force and never open a PR (`ADR-0049` decision 1).
+
 ## Test and UAT authority
 
 Running a ticket's tests and conducting its UAT are the agent's, standing since 2026-08-15 alongside
@@ -141,6 +145,22 @@ dated history.) `package.json` has had `"bin": {"skytalix": "dist/uci.js"}` sinc
 target `dist/uci.js` is built locally (`npm run build`), git-ignored and not published. **No ruling changes:** the posture, its
 revisit trigger `EPIC-006` and the three kit overrides stand. Authority: the owner-approved dated notes on `ADR-0007` (decision
 `…0f003634`) and `ADR-0018` (decision `…5ffd0ca7`), both "no clause amended".
+
+**Correction 2026-10-24 (`ADR-0049` rows 28 and 29): a git remote exists, and the source is public.** (The sentences above and
+below stay as written, as dated history.) Two statements in this section are overtaken:
+
+- *"No container, manifest, CI or git remote, and no release has ever been cut."* The **git remote** part is false since
+  2026-10-23: the owner added a remote and made the repository public on GitHub. `git remote -v` prints 2 lines (one remote). The
+  rest holds: no container, manifest or CI, and no release has been cut (`plans/releases/` holds `.gitkeep` only).
+- *"`EPIC-006` … decides HOW it is eventually distributed (npm, binary, `git clone` — undecided)"* (the "Present posture"
+  paragraph below). This has been stale since `ADR-0018`, which decided the channel: `git clone`, `npm install`,
+  `npm run chess`. That clone is now reachable by anyone. `EPIC-006` is still the trigger for any package or binary. `npx` from the
+  git URL is not offered (`ADR-0049` decision 3).
+
+**No ruling changes.** The project deploys nowhere and runs locally, from source; `"private": true` stands, so npm refuses `npm
+publish`; `default_stack.deploy` stays `none-local-only`, `environments` stays `["local"]`, and
+`production_requires_human_confirmation` stays `true`. Pushing stays the owner's. Authority: `ADR-0049`, accepted 2026-10-24 by the
+owner (owner word `…619938c5`, item 1); the rows are `ADR-0049` § Records rows 28 and 29.
 
 **Present posture, explicitly revisitable** — owner said "currently"/"for now" (2026-08-06); revisit
 trigger `EPIC-006` (packaging) decides HOW it is eventually distributed (npm, binary, `git clone` —
