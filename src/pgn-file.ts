@@ -67,7 +67,11 @@ export function writePgnFile(
       failure ??= error;
     }
     if (failure === undefined) return { ok: true, path };
-    unlinkSync(path);
+    try {
+      unlinkSync(path);
+    } catch (error) {
+      errnoOf(error); // Removal is best-effort; the first failure's code is reported (`ABC-213`).
+    }
     return { ok: false, code: errnoOf(failure) };
   }
   return { ok: false, code: "EEXIST" };

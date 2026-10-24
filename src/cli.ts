@@ -110,7 +110,7 @@ const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
  * printed. Do not tidy the separator away.
  */
 const USAGE =
-  "usage: npm run chess -- [--colour white|black|random] [--difficulty 1|2|3|4|5] [--ascii | --unicode]";
+  "usage: npm run chess -- [--colour white|black|random] [--difficulty 1|2|3|4|5|6|7] [--ascii | --unicode]";
 
 /** A refused command line is a failure, and the shell is told so. Nothing here calls `exit`. */
 const USAGE_EXIT_CODE = 1;

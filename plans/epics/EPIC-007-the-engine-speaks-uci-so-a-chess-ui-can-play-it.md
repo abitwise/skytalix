@@ -26,6 +26,14 @@ owner: BA/PM
 > _Updated: 2026-10-18 by BA/PM (task `wave-2026-09-25`, subtask `bapm-epic007-accept`), at `main` `50e081fc`. Where
 > the text below still says AGPL-3.0, `LICENSE` or "pending `arch-licence-eval`", this box and the rows marked
 > **(2026-10-18, private)** win._
+>
+> **2026-10-24, BA/PM (task `bapm-epic007-licence-line`, at `main` `fb0a7703`): the private reading is superseded by
+> `ADR-0048`** (owner-accepted 2026-10-24, owner word `…776bba9a`, a transcription, not a stamp). The repository is
+> Apache-2.0, and the CC BY-SA 3.0 evaluation tables are carved out in `NOTICE` and the `src/evaluate.ts` header (path A,
+> `…fb0468ff`). `ABC-214` builds it, and `ABC-215` (`EPIC-008`) re-derives the tables later. This covers every
+> "private, all rights reserved", `UNLICENSED` and "no `LICENSE` or `NOTICE`" statement on this page. These are this
+> box, § v1 — in, the ticket table's `ABC-169` row, Q12 with its recorded precondition, and the web-project boundary.
+> Those texts stay as dated history (`ADR-0048` § Records drift, row 12).
 
 > **M2 CLOSED BY ACCEPTANCE, NOT READ, 2026-10-23, by the owner.** Owner word, verbatim
 > (`.grugops/context/owner-word-2026-10-23/notes/20261023T105100Z-orchestrator-decision-d3681daa.md`, a transcription,
@@ -106,6 +114,17 @@ owner: BA/PM
 >
 > _Updated: 2026-10-23 by BA/PM (task `bapm-close-EPIC-007`), at `main` `a2d7dda7`. Notes in
 > `.grugops/context/bapm-close-EPIC-007/notes/`: `…d01656cd` (the evidence read) and `…6b73e572` (the rulings)._
+
+> **POST-CLOSE ADDITION, 2026-10-24, BA/PM (task `bapm-epic007-licence-line`, at `main` `fb0a7703`): `ABC-214`, "The
+> repository is licensed Apache-2.0" (path A), carries `epic: EPIC-007 (post-close addition)`.** It was cut on
+> 2026-10-24 (`bapm-cut-licence`, `…efbbb9ee`) on the owner's word `…28633db0`. It was amended to path A in
+> `bapm-ABC-214-path-a` (`…c8dc129c`).
+>
+> - **It reopens no measure.** It supersedes M10's target (row below), and M10's MET reading on `ABC-169` stays.
+> - **It does not reopen the epic.** `status` and `column` are unchanged. Column moves are the Orchestrator's.
+> - The close box's "all 13 tickets … are `Done`" was read at `a2d7dda7`, before `ABC-214` existed. It stays as
+>   dated history. `ABC-214` is the fourteenth ticket, and its state is on `plans/board.md`.
+> - Its re-derive follow-up, `ABC-215`, belongs to `EPIC-008`, not to this epic.
 
 _Updated: 2026-10-18 by BA/PM (task `wave-2026-09-25`, subtask `bapm-engine-revise`). **Revised against the owner's
 answers to Q1–Q11, and then to Q12 and Q13 (owner word `…6b2d90f1`, which arrived during this hop).** Still PROPOSED:
@@ -220,7 +239,7 @@ in a clone after `npm ci && npm run build`, or `skytalix` after `npm link` in th
 | M7 | **A `Skill Level` change is observable** | `uci` lists `option name Skill Level type spin default ~~3~~ 5 min 1 max 5`. On the same virtual clock and position, the same `go wtime 60000 btime 60000 winc 1000 binc 1000` (G = 3 500 ms) is searched under a **100 ms** budget at level 1, ~~**3 000 ms**~~ **330 ms** at level 3 and ~~**3 500 ms**~~ **3 000 ms** at level 5, which is `min(G, level)`. `setoption name Skill Level value 9` keeps the old level and writes one `info string`. *(Folded 2026-10-23 by BA/PM, task `bapm-close-EPIC-007`. `ADR-0045` D1, D2 and D4 (owner-accepted 2026-10-19, `…1a9c7f42`) re-cut the level table, and `ABC-174` delivered it (owner UAT `…ecff6698`). `ABC-171` `A6`'s rows on `main` read 100 / 330 / 3 000 ms. The struck values are the row as accepted on 2026-10-18. The measure, "a level change is observable", and the rule `min(G, level)` are unchanged.)* | The session tests (`ABC-171`), read from the `info` line's `time` on the injected clock, so the numbers are exact and host-independent |
 | M8 | **`go depth`, `nodes` and `mate` are honoured** | (a) A `cutechess-cli` run of 2 games from startpos against the artifact, colours swapped, `depth=4`: both games end by a chess result or adjudication, with 0 illegal moves and 0 stalls, and every searched move's final `info` line reports `depth` ≤ 4. (b) `go depth 3` reports `depth 3`. `go nodes 20000` reports `nodes` ≤ 20 000 + 1 024, unless depth 1 alone took more. `go mate 2` on `5r1k/6pp/7N/3Q4/8/8/8/6K1 w - - 0 1` (the corpus's smothered mate, `src/puzzle-corpus.ts:128`) answers `bestmove d5g8` with `score mate 2` | (a) `cutechess-cli`'s `-debug` log, kept raw under ~~`ABC-168`'s context~~ `qe-read-ABC-202`'s context. Whether `depth=4` with `tc=inf` is the right spelling is `UNKNOWN - verify`, pinned on the first run. *(Amended 2026-10-23 by BA/PM, task `bapm-close-EPIC-007`, with M1's fold. The raw files are under `.grugops/context/qe-read-ABC-202/raw/`. The flag is spelled `-debug all`, and `tc=inf depth=4` sends `go depth 4` (`…81066c23`). No target moved.)* (b) The engine rows (`ABC-170`) and the session tests (`ABC-167`), on the virtual clock |
 | M9 | **The artifact builds and runs from a clone** | In a fresh clone, `npm ci && npm run build` exits `0` and creates `dist/uci.js`. `dist/` holds no `*.test.js` and no `cli.js`, and `dist/uci.js` loads no `turn-loop.js`, as `A7` measures *(reworded 2026-10-21, owner-confirmed, `…4ab163ef`; superseded text: "`dist/` holds no `*.test.js`, no `cli.js` and no `turn-loop.js`")*. `printf 'uci\nquit\n' \| node dist/uci.js` prints `id name skytalix` … `uciok` and exits `0`. After `npm link`, `printf 'uci\nquit\n' \| skytalix` prints the same | `ABC-168`'s acceptance, run by the agent and repeated once by the owner at UAT |
-| M10 | **The engine is declared private (2026-10-18, private)** | `npm pkg get private license` prints `true` and `"UNLICENSED"` (as one JSON object: `"private": true`, `"license": "UNLICENSED"`). The first comment block of `src/evaluate.ts` credits Tomasz Michniewski's "Simplified Evaluation Function", with its chessprogramming.org URL and `CC BY-SA 3.0`, and the change is comment-only. No `LICENSE`, `NOTICE` or `COPYING` file is tracked. *Superseded target: an AGPL-3.0 `LICENSE` and SPDX id* | `ABC-169`'s acceptance (`A1`–`A4`) |
+| M10 | **The engine is declared private (2026-10-18, private)** | `npm pkg get private license` prints `true` and `"UNLICENSED"` (as one JSON object: `"private": true`, `"license": "UNLICENSED"`). The first comment block of `src/evaluate.ts` credits Tomasz Michniewski's "Simplified Evaluation Function", with its chessprogramming.org URL and `CC BY-SA 3.0`, and the change is comment-only. No `LICENSE`, `NOTICE` or `COPYING` file is tracked. *Superseded target: an AGPL-3.0 `LICENSE` and SPDX id* *(2026-10-24, BA/PM, task `bapm-epic007-licence-line`, `ADR-0048` row 11. M10 was MET on `ABC-169` (close box, read at `a2d7dda7`), and that reading stays. `ABC-214` supersedes this target under `ADR-0048` (owner-accepted 2026-10-24, `…776bba9a`). After it merges, `license` reads `"Apache-2.0"`, `LICENSE` and `NOTICE` are tracked, and `"private": true` stays. `ABC-214`'s own acceptance rows hold the new target, and M10 is not re-read.)* | `ABC-169`'s acceptance (`A1`–`A4`) |
 | M11 | **The in-repo name is `skytalix`** | `npm pkg get name` prints `"skytalix"`. Both `name` fields in `package-lock.json` read `skytalix`, and `npm ci` exits `0`. Outside dated history, no live file names the package `cli-chess` | `ABC-172`'s acceptance |
 
 M1 and M8(a) measure time and protocol safety (candidate row (ii)). They are **not** strength claims. No Elo is claimed
@@ -384,6 +403,11 @@ ticket.
   third parties (a browser bundle, a published binary), the values must first be re-derived as our own, which re-tunes
   the engine and moves the evaluation, puzzle, ladder and level pins. No ticket exists for it, and one is cut only on
   the owner's word (`…c3e81a57`). The tables-credit reading is the Orchestrator's default, and the owner may correct it.
+  **Fired; disposed 2026-10-24** (BA/PM, task `bapm-epic007-licence-line`, `ADR-0048` row 13). The "not distributed"
+  premise ended when the repository was published (`LIC-PUB-1`). The disposition is path A (owner `OD-214-1`,
+  `…fb0468ff`; `ADR-0048` owner-accepted, `…776bba9a`). `ABC-214` carves the tables out now in `NOTICE` and the
+  `src/evaluate.ts` header. `ABC-215` (`EPIC-008`) re-derives them later, as its own ticket (`ADR-0048` decision 7).
+  The text above stays as dated history.
 
 ## NFR triggers
 

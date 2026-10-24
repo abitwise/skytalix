@@ -1,0 +1,11 @@
+# indicator only (not an N8-LANE reading): per-test durations of the ABC-212 A9 rows from qe-ABC-212/raw/last-run.json at d417b07c
+     0.1 ms  ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path uci lists Skill Level default 5 min 1 max 7, max read from HARDEST_LEVEL
+   145.1 ms  ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path setoption name Skill Level value 7 sets 7: a bare go searches 30 000 ms
+   154.6 ms  ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path a bare go at 6 searches 5 000 ms
+   153.7 ms  ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path go movetime 60000 at 7 searches 30 000 (the level caps G)
+   160.8 ms  ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path go movetime 1000 at 7 searches 1 000 (G caps the level)
+   144.0 ms  ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path go wtime 600000 btime 600000 at 7 searches min(600 000 ÷ 20, 30 000) = 30 000
+     3.7 ms  ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path go depth 3 at 7 stops at depth 3 (D12: rate 0), and the info line carries a score
+   146.2 ms  ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path Skill Level value 0 at 7 keeps 7, with the 1-7 info string
+   145.2 ms  ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path Skill Level value 8 at 7 keeps 7, with the 1-7 info string
+sum 1053.5 ms

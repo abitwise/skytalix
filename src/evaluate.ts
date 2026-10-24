@@ -18,6 +18,8 @@
  * and published at <https://www.chessprogramming.org/Simplified_Evaluation_Function> under
  * CC BY-SA 3.0 (<https://creativecommons.org/licenses/by-sa/3.0/>). The values are unchanged.
  * The layout, the king value of 0 and all code are ours.
+ * These values are not licensed under the Apache License, Version 2.0 that covers the rest of
+ * this repository. They remain under CC BY-SA 3.0. See NOTICE.
  */
 
 import {

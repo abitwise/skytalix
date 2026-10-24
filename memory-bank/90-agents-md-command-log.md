@@ -298,6 +298,14 @@ passed (22 default), 224.95 s**; `A4` 39.7 % (80 blunders + 1 no-candidate / 204
 dependent, and are not gates; the gate is the exit code and 28 passed. COUNT YOUR RUN: 28 is the whole
 lane. Trigger: run it after any change to `src/levels.ts`, `src/engine.ts` or `src/virtual-clock.ts`.
 
+CORRECTED 2026-10-24 (`scribe-runbook-ABC-212`, `QE-212-a`, QE verdict `…e58d4635`, Orchestrator `…55691ad1`): the command
+in `AGENTS.md` now ends `--reporter=verbose`. With output going to a file, vitest 4.1.12's default reporter drops the
+`console.log` of a passing test, so the `ABC-212` `A4` lines (each level's max, "max depth N") did not print: the whole-file
+pass of 2026-10-24 printed none, and the per-row windows (`--reporter=verbose -t <row>`) printed them. The `KEY_ARRAY_CAPACITY`
+tripwire (depth >= 100, Architect notice) is read from those lines only. Same cause and same fix as the `CLI_DEEP` and
+`LADDER_DEEP` entries below. On a terminal: `UNKNOWN - verify` (not measured; the flag is harmless there). Not run in this pass
+(owner one-run rule `…4c3f7639`; the lane is 41 tests, ~555 s); the evidence is QE's two readings above.
+
 APPLIED 2026-10-10, `scribe-receipts-2026-10-10` (the former OWED paragraph): `ABC-131` merged
 (`231d1288`, UAT accepted by the owner) and changed the figures this entry quoted. `AGENTS.md` now says
 `A4` perft + puzzles **242 moves** (was 246) and `A3` **35 vs 54 of 58** (was 35-36 vs 58 of 62), per
@@ -1054,3 +1062,26 @@ AGENTS.md Scribe, task `scribe-drift-2026-10-23`. Three files: `AGENTS.md`, `mem
 | `45-standing-rulings.md` § Deployment posture | dated correction after the "no `bin`/`main`/`exports`/`files`" sentence (text kept); no ruling changes |
 
 Why: `ABC-200` merged the questions without the slot saying so; and the `--` receipt was measured only with `--ascii`. Both were re-run today, see § Dev / run.
+
+## `scribe-ABC-212` pass, 2026-10-24 (`ABC-212` `A11`; BA/PM `U3` ruling `…26b36292`; branch `grugops/scribe-ABC-212` from `grugops/ABC-212` `73339912`)
+
+AGENTS.md Scribe, task `scribe-ABC-212`. Two files: `AGENTS.md` and this file. Zero `src/`, `plans/` and `package*.json` lines. No command slot changed, no new `-->` closer (`ABC-187` `A5`'s count stays 9). `AGENTS.md` 17,010 -> **17,079 B** (+69; budget 18,432).
+
+| where | change |
+|---|---|
+| `AGENTS.md` `Dev / run` slot comment | `--difficulty 1\|2\|3\|4\|5` -> `--difficulty 1\|2\|3\|4\|5\|6\|7`, the one list, no second list, no new `--` token; the default-level clause now reads "default level 5 (≤3 s/move, ADR-0045; no longer the hardest: levels 6 and 7 think 5 s and 30 s a move)" |
+| this file § Dev / run | not touched; its 2026-08-14 "complete set" line is dated history (text kept) |
+
+Why: `ABC-212` added levels 6 and 7 (`LEVELS[6]` 5 000 ms, `LEVELS[7]` 30 000 ms; default 5 unchanged). The `ABC-065` `A3` row (`src/cli.test.ts`, "the documented option list EQUALS the accepted set") reds on the old list; it needs exactly one `--difficulty` value list in the slot and no extra `--`-prefixed token, which the new line keeps. Measured on this branch: `npm test` 62 files, 2,057 tests, 0 failed (the `A3` row green; before this line it was the one red); lint clean.
+
+## `scribe-runbook-ABC-212` pass, 2026-10-24 (`QE-212-a`, `QE-212-c`; Orchestrator `…55691ad1`; branch `grugops/scribe-runbook-ABC-212` from `grugops/qe-ABC-212` `052ae3ad`)
+
+AGENTS.md Scribe, task `scribe-runbook-ABC-212`. Three files: `AGENTS.md`, `memory-bank/70-runbook.md` and this file. Zero `src/`, `plans/` and `package*.json` lines. No new `-->` closer (`ABC-187` `A5`'s count unchanged). `AGENTS.md` 17,079 -> **17,098 B** (+19; budget 18,432). Nothing was run: no `ENGINE_DEEP`, no timing run.
+
+| where | before | after |
+|---|---|---|
+| `AGENTS.md` Levels deep lane line (`QE-212-a`) | `... npx vitest run src/levels.test.ts` | `... npx vitest run src/levels.test.ts --reporter=verbose` |
+| `70-runbook.md` § Operate, level-7 sentence (`QE-212-c`) | "At level 7, expect about half a minute with no output on each engine move." | "At level 7, the `thinking...` line prints at once, then expect about half a minute with no further output on each engine move." The old sentence is kept in a dated `[CHANGED]` bracket; the file gains one `_Updated_` header line |
+| this file § Levels deep lane | not touched since 2026-10-10 | dated CORRECTED paragraph after the trigger sentence |
+
+Why: (a) the runbook never restated the lane command; the command lives in `AGENTS.md` only, so the flag went there and the runbook gained no command line (it would be a second copy to drift). (b) QE read the CLI drawing the `thinking...` frame 1 ms after Enter, before the search (`A10`), so "no output" was untrue as written. The `QE-212-d` re-flow note needs nothing.

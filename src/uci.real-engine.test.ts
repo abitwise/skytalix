@@ -40,7 +40,6 @@ import { spawnSync } from "node:child_process";
 import { cpus, loadavg } from "node:os";
 import { beforeAll, describe, expect, it } from "vitest";
 import { parseCoordinateMove } from "./coordinate-move.ts";
-import { HARD_CEILING_MS } from "./engine.ts";
 import { parseFen } from "./fen.ts";
 
 const RUN_DEEP = process.env.UCI_DEEP === "1";
@@ -75,8 +74,11 @@ const M4_KEYWORDS: ReadonlySet<string> = new Set([
   "bestmove",
 ]);
 
-/** A HANG GUARD, NOT A CRITERION: the dialogue is one 1 s search, one book hit and start-up. */
-const HANG_GUARD_MS = 4 * HARD_CEILING_MS;
+/**
+ * A HANG GUARD, NOT A CRITERION: the dialogue is one 1 s search, one book hit and start-up.
+ * `ABC-212`: a literal 20 s, today's value, so it does not grow with `HARD_CEILING_MS` (32 000).
+ */
+const HANG_GUARD_MS = 20_000;
 
 /** `ABC-173`: the last `--max-old-space-size=<digits>` in this worker's `NODE_OPTIONS`, or a throw. */
 const heapToken = (): string => {

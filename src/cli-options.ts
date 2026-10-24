@@ -43,8 +43,9 @@ import type { Orientation } from "./render.ts";
  * three value words. THE ORDER IS LOAD-BEARING — the destructuring below names each element by
  * position, which is what keeps every accepted spelling written exactly once in this module.
  *
- * `ABC-101` adds `--difficulty` and its five value words, the ordinals `1`-`5`, weakest to
- * strongest (ruling 1). They are opaque here: this module gives a level no meaning (`RISK-002`).
+ * `ABC-101` adds `--difficulty` and its value words, the ordinals `1`-`7` (`ABC-212` adds `6` and
+ * `7`), weakest to strongest (ruling 1). They are opaque here: this module gives a level no
+ * meaning (`RISK-002`).
  */
 export const ACCEPTED_ARGUMENTS = [
   "--ascii",
@@ -59,15 +60,17 @@ export const ACCEPTED_ARGUMENTS = [
   "3",
   "4",
   "5",
+  "6",
+  "7",
 ] as const;
 
 const [ASCII, UNICODE, COLOUR, WHITE, BLACK, RANDOM, DIFFICULTY, ...DIFFICULTY_VALUES] =
   ACCEPTED_ARGUMENTS;
 
-/** A difficulty level: a plain ordinal, `1` weakest to `5` strongest. */
-export type Difficulty = 1 | 2 | 3 | 4 | 5;
+/** A difficulty level: a plain ordinal, `1` weakest to `7` strongest. */
+export type Difficulty = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
-/** The level when `--difficulty` is absent: the top of the set (`ADR-0045` D2, over ruling 2). */
+/** The level when `--difficulty` is absent: level 5 (`ADR-0045` D2; since `ABC-212`, below 6-7). */
 export const DEFAULT_DIFFICULTY: Difficulty = 5;
 
 /** `--colour`'s three value words, in the table's order. It introduces no literal of its own. */
@@ -124,7 +127,7 @@ export type Resolution =
 
 const UNRECOGNISED = "unrecognised argument";
 const MISSING_VALUE = "--colour needs one of white|black|random";
-const MISSING_DIFFICULTY = "--difficulty needs one of 1|2|3|4|5";
+const MISSING_DIFFICULTY = "--difficulty needs one of 1|2|3|4|5|6|7";
 const CONFLICTING_FLAGS = "--ascii and --unicode cannot be used together";
 
 const reject = (problem: string, ...offending: readonly string[]): Resolution => ({
@@ -191,7 +194,7 @@ export function resolveOptions(argv: readonly string[]): Resolution {
     }
     if (token === DIFFICULTY) {
       const next = argv[index + 1];
-      // The same exact-equality lookup as `--colour`: `0`, `6`, `03`, `+3` and `3.0` are not members.
+      // The same exact-equality lookup as `--colour`: `0`, `8`, `03`, `+3` and `3.0` are not members.
       const value = DIFFICULTY_VALUES.find((candidate) => candidate === next);
       if (value === undefined) return reject(MISSING_DIFFICULTY, next ?? token);
       difficulty = Number(value) as Difficulty;

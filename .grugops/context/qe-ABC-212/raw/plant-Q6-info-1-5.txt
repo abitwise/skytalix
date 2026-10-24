@@ -1,0 +1,57 @@
+
+ RUN  v4.1.12 <scratch>/plant-tree
+
+ ❯ src/uci-session.test.ts (137 tests | 2 failed) 4155ms
+     × Skill Level value 0 at 7 keeps 7, with the 1-7 info string 3ms
+     × Skill Level value 8 at 7 keeps 7, with the 1-7 info string 0ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/uci-session.test.ts > ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path > Skill Level value 0 at 7 keeps 7, with the 1-7 info string
+AssertionError: expected [ Array(1) ] to deeply equal [ Array(1) ]
+
+- Expected
++ Received
+
+  [
+-   "info string Skill Level takes an integer 1-7, got 0; kept 7",
++   "info string Skill Level takes an integer 1-5, got 0; kept 7",
+  ]
+
+ ❯ src/uci-session.test.ts:1058:65
+    1056|       const { send } = rig({ stepMs: 1_000 });
+    1057|       expect(send("setoption name Skill Level value 7")).toEqual([]);
+    1058|       expect(send(`setoption name Skill Level value ${value}`)).toEqua…
+       |                                                                 ^
+    1059|         `info string Skill Level takes an integer 1-7, got ${value}; k…
+    1060|       ]);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/uci-session.test.ts > ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path > Skill Level value 8 at 7 keeps 7, with the 1-7 info string
+AssertionError: expected [ Array(1) ] to deeply equal [ Array(1) ]
+
+- Expected
++ Received
+
+  [
+-   "info string Skill Level takes an integer 1-7, got 8; kept 7",
++   "info string Skill Level takes an integer 1-5, got 8; kept 7",
+  ]
+
+ ❯ src/uci-session.test.ts:1058:65
+    1056|       const { send } = rig({ stepMs: 1_000 });
+    1057|       expect(send("setoption name Skill Level value 7")).toEqual([]);
+    1058|       expect(send(`setoption name Skill Level value ${value}`)).toEqua…
+       |                                                                 ^
+    1059|         `info string Skill Level takes an integer 1-7, got ${value}; k…
+    1060|       ]);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed | 4 passed (5)
+      Tests  2 failed | 342 passed (344)
+   Start at  14:18:05
+   Duration  5.37s (transform 0ms, setup 0ms, import 4.41s, tests 5.33s, environment 0ms)
+

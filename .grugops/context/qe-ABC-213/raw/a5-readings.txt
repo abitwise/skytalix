@@ -1,0 +1,29 @@
+# A5 by hand, qe-ABC-213, 2026-10-24. Scripts: .grugops/context/qe-ABC-203/raw/scripts/unlinkfault{,-control}.mjs, unchanged.
+# base = git archive dfaa4cdc src data package.json into the scratchpad; head = ../wt-ABC-213 at merge 3dc70e20. Node 26.11.1.
+== base (dfaa4cdc, src+data+package.json) double fault
+exit 70
+stdout tail ["> ","Black wins by resignation.","",""]
+stderr "internal error: a bug ended this session, and it is not a chess outcome\n"
+games/ [ 'skytalix-20261024-113544.pgn' ]
+== base control
+exit 0
+stdout tail ["> ","Black wins by resignation.","",""]
+stderr "PGN not saved: EFBIG\n"
+games/ []
+== head double fault
+exit 0
+stdout tail ["> ","Black wins by resignation.","",""]
+stderr "PGN not saved: EFBIG\n"
+games/ [ 'skytalix-20261024-113530.pgn' ]
+== head control
+exit 0
+stdout tail ["> ","Black wins by resignation.","",""]
+stderr "PGN not saved: EFBIG\n"
+games/ []
+# full stdout, head: the two scripts with one added line printing sha256 + length of r.stdout
+== head unlinkfault-full
+exit 0
+stdout sha256 a2f144e461f189872240487e76ac1dc3a76cb9ee7c1ac73820ee0642cd173008 516
+== head unlinkfault-control-full
+exit 0
+stdout sha256 a2f144e461f189872240487e76ac1dc3a76cb9ee7c1ac73820ee0642cd173008 516

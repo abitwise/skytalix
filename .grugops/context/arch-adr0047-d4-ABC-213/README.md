@@ -1,0 +1,2 @@
+# arch-adr0047-d4-ABC-213 — context
+The ADR-0047 D4 dated line ruled a clarification at ABC-213's design (behaviour per D5, no decision moved; reported to the owner as INFO, veto open). Ticket: plans/tickets/ABC-213-a-failed-pgn-save-reports-its-first-error-code-even-when-the-cleanup-also-fails-and-leaves-no-partial-file.md. QE notes owe it (QE-213-d, owed item 4): ../wt-ABC-213/.grugops/context/qe-ABC-213/notes/.

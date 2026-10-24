@@ -597,8 +597,9 @@ describe("A4 — no fixed depth anywhere in the delivered engine", () => {
  */
 describe("RF-1 — a budget above the hard ceiling is CAPPED at it, not honoured", () => {
   /** A coarse step on purpose: three searches for the price of one, and the deadline is the
-   * subject here, not the depth. */
-  const STEP_MS = 2_500;
+   * subject here, not the depth. Half the ceiling (`ABC-212` § Design ruling 4): the ceiling stays
+   * a multiple of the step, and the reading count stays what it was at 5 000 / 2 500. */
+  const STEP_MS = HARD_CEILING_MS / 2;
 
   /**
    * A ticking clock WITH A FUSE, and the fuse is what makes this criterion reportable.
@@ -641,13 +642,14 @@ describe("RF-1 — a budget above the hard ceiling is CAPPED at it, not honoured
    */
 
   it("names the ceiling as an exported constant", () => {
-    expect(HARD_CEILING_MS).toBe(5_000);
+    // `ABC-212` (`ADR-0045` § AMENDMENT A3): the largest per-level ceiling in `NFR-004`.
+    expect(HARD_CEILING_MS).toBe(32_000);
   });
 
   it("stops at start + HARD_CEILING_MS when handed twice that budget", () => {
     // The deepening stops at the first reading at or past the deadline, and the return reading
     // is one step later — so the ceiling plus one step is the tightest true bound. Unclamped
-    // this run stops at 10 000 and returns 12 500, which is what reds here.
+    // this run stops at 64 000 and returns 80 000, which is what reds here.
     expect(run(2 * HARD_CEILING_MS).elapsedMs).toBeLessThanOrEqual(HARD_CEILING_MS + STEP_MS);
   });
 
@@ -663,7 +665,7 @@ describe("RF-1 — a budget above the hard ceiling is CAPPED at it, not honoured
   });
 
   it("leaves every degenerate budget exactly as it was — Math.min, not an if", () => {
-    // `Math.min(NaN, 5000)` is `NaN`, so both deadline comparisons stay false and depth 1 comes
+    // `Math.min(NaN, 32000)` is `NaN`, so both deadline comparisons stay false and depth 1 comes
     // back as before; 0 and negatives are already below the ceiling and are untouched. This is
     // the reason the fix is a `Math.min` and not a conditional.
     for (const budgetMs of [Number.NaN, 0, -1, -1e9]) {

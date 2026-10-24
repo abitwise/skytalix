@@ -1,0 +1,106 @@
+
+ RUN  v4.1.12 <scratch>/plant-tree
+
+ ❯ src/engine.test.ts (47 tests | 4 failed) 1326ms
+     × stops at start + HARD_CEILING_MS when handed twice that budget 7ms
+     × makes any budget above the ceiling indistinguishable from the ceiling itself 9ms
+     × terminates on an infinite budget — the module's only unbounded path, closed 348ms
+     × on an infinite budget, maxDepth 1000 returns within the same consultation count 349ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/engine.test.ts > RF-1 — a budget above the hard ceiling is CAPPED at it, not honoured > stops at start + HARD_CEILING_MS when handed twice that budget
+AssertionError: expected 80000 to be less than or equal to 48000
+ ❯ src/engine.test.ts:653:48
+    651|     // is one step later — so the ceiling plus one step is the tightes…
+    652|     // this run stops at 64 000 and returns 80 000, which is what reds…
+    653|     expect(run(2 * HARD_CEILING_MS).elapsedMs).toBeLessThanOrEqual(HAR…
+       |                                                ^
+    654|   });
+    655|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  src/engine.test.ts > RF-1 — a budget above the hard ceiling is CAPPED at it, not honoured > makes any budget above the ceiling indistinguishable from the ceiling itself
+AssertionError: expected { …(5) } to deeply equal { …(5) }
+
+- Expected
++ Received
+
+  {
+-   "depth": 2,
+-   "elapsedMs": 48000,
++   "depth": 3,
++   "elapsedMs": 80000,
+    "move": {
+      "captured": 0,
+      "flags": 0,
+      "from": 20,
+      "piece": 1,
+      "promotion": 0,
+      "to": 52,
+    },
+-   "nodes": 117,
+-   "score": 0,
++   "nodes": 1045,
++   "score": 66,
+  }
+
+ ❯ src/engine.test.ts:658:38
+    656|   it("makes any budget above the ceiling indistinguishable from the ce…
+    657|     // Not just "stops sooner" — the SAME search. Move, score, depth, …
+    658|     expect(run(2 * HARD_CEILING_MS)).toEqual(run(HARD_CEILING_MS));
+       |                                      ^
+    659|   });
+    660|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  src/engine.test.ts > RF-1 — a budget above the hard ceiling is CAPPED at it, not honoured > terminates on an infinite budget — the module's only unbounded path, closed
+Error: the clock was consulted 65 times: the deepening loop is unbounded, which is what removing the HARD_CEILING_MS clamp does to an infinite budget
+ ❯ Object.now src/engine.test.ts:620:15
+    618|       consultations++;
+    619|       if (consultations > maxConsultations) {
+    620|         throw new Error(
+       |               ^
+    621|           `the clock was consulted ${consultations} times: the deepeni…
+    622|             "which is what removing the HARD_CEILING_MS clamp does to …
+ ❯ countNode src/engine.ts:233:16
+ ❯ negamax src/engine.ts:275:3
+ ❯ searchMove src/engine.ts:351:9
+ ❯ negamax src/engine.ts:306:15
+ ❯ searchMove src/engine.ts:351:9
+ ❯ negamax src/engine.ts:306:15
+ ❯ searchMove src/engine.ts:351:9
+ ❯ negamax src/engine.ts:306:15
+ ❯ searchMove src/engine.ts:351:9
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  src/engine.test.ts > ABC-170 A5 — the limits only shorten; the ceiling still holds > on an infinite budget, maxDepth 1000 returns within the same consultation count
+Error: the clock was consulted 65 times: unbounded
+ ❯ Object.now src/engine.test.ts:1355:17
+    1353|         clock.consultations++;
+    1354|         if (clock.consultations > maxConsultations) {
+    1355|           throw new Error(`the clock was consulted ${clock.consultatio…
+       |                 ^
+    1356|         }
+    1357|         return tick();
+ ❯ countNode src/engine.ts:233:16
+ ❯ negamax src/engine.ts:275:3
+ ❯ searchMove src/engine.ts:351:9
+ ❯ negamax src/engine.ts:306:15
+ ❯ searchMove src/engine.ts:351:9
+ ❯ negamax src/engine.ts:306:15
+ ❯ searchMove src/engine.ts:351:9
+ ❯ negamax src/engine.ts:306:15
+ ❯ searchMove src/engine.ts:351:9
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  1 failed | 4 passed (5)
+      Tests  4 failed | 340 passed (344)
+   Start at  14:16:06
+   Duration  5.99s (transform 0ms, setup 0ms, import 4.43s, tests 6.17s, environment 0ms)
+

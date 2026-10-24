@@ -53,8 +53,8 @@ Real commands only, with flags, preferring fast single-file variants. If a comma
 ### Development
 
 - Dev / run: `npm run chess` <!-- prints the board and plays a game against the engine, default
-  level 5 (≤3 s/move, ADR-0045). Options: `--colour white|black|random`, `--difficulty 1|2|3|4|5`, `--ascii`,
-  `--unicode`. Pass an option AFTER `--`: `npm run chess -- --colour black` — the separator is
+  level 5 (≤3 s/move, ADR-0045; no longer the hardest: levels 6 and 7 think 5 s and 30 s a move). Options:
+  `--colour white|black|random`, `--difficulty 1|2|3|4|5|6|7`, `--ascii`, `--unicode`. Pass an option AFTER `--`: `npm run chess -- --colour black` — the separator is
   load-bearing; without it npm eats the flag name (npm 11.20.0): a value-less flag (`--ascii`) is
   dropped and the game runs with defaults, exit 0; a value flag leaves its value behind as a stray
   argument and the CLI refuses it, exit 1. On a terminal, colour then difficulty are asked for
@@ -84,7 +84,7 @@ completion notification; if a pattern is unavoidable, bracket one character (`[v
   runner and the negative-value risk: `memory-bank/90-agents-md-command-log.md` § "Vitest worker cap and module runner".
 - Search deep lane (opt-in, ABC-077): `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/search.test.ts`
 - Engine deep lane (opt-in, ABC-078): `ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/engine.test.ts`
-- Levels deep lane (ABC-087, `src/levels.test.ts`): `ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/levels.test.ts`
+- Levels deep lane (ABC-087, `src/levels.test.ts`): `ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/levels.test.ts --reporter=verbose`
 - Input-seam deep lane (opt-in, ABC-037): `INPUT_DEEP=1 NODE_OPTIONS="--expose-gc --max-old-space-size=400" npx vitest run src/line-input.test.ts`
 - Transposition deep lanes (ABC-081, `src/transposition.test.ts`): `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run
   src/transposition.test.ts` and `ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx

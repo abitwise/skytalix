@@ -1,0 +1,83 @@
+{
+  "HEAD": {
+    "exit": 0,
+    "passed": 21,
+    "failed": 0,
+    "total": 21,
+    "red": []
+  },
+  "X1_drop_unlink": {
+    "exit": 1,
+    "passed": 16,
+    "failed": 5,
+    "total": 21,
+    "red": [
+      "A1 — the write fails with W and the cleanup unlink with U: { ok: false, code: W }, nothing thrown",
+      "A1 — the close fails with C and the cleanup unlink with U: { ok: false, code: C }",
+      "A2 — the write fails after a byte reached the file, the unlink succeeds: W, and games/ holds 0 files",
+      "A2 — the close fails after the whole text was written, the unlink succeeds: C, and games/ holds 0 files",
+      "A3 — an unlink throw with no errno code leaves writePgnFile (a defect is not swallowed)"
+    ]
+  },
+  "X3_unguarded_unlink": {
+    "exit": 1,
+    "passed": 19,
+    "failed": 2,
+    "total": 21,
+    "red": [
+      "A1 — the write fails with W and the cleanup unlink with U: { ok: false, code: W }, nothing thrown",
+      "A1 — the close fails with C and the cleanup unlink with U: { ok: false, code: C }"
+    ]
+  },
+  "X4_guard_reports_U": {
+    "exit": 1,
+    "passed": 19,
+    "failed": 2,
+    "total": 21,
+    "red": [
+      "A1 — the write fails with W and the cleanup unlink with U: { ok: false, code: W }, nothing thrown",
+      "A1 — the close fails with C and the cleanup unlink with U: { ok: false, code: C }"
+    ]
+  },
+  "X5_catch_all": {
+    "exit": 1,
+    "passed": 20,
+    "failed": 1,
+    "total": 21,
+    "red": [
+      "A3 — an unlink throw with no errno code leaves writePgnFile (a defect is not swallowed)"
+    ]
+  },
+  "Q6_close_overwrites_first": {
+    "exit": 0,
+    "passed": 21,
+    "failed": 0,
+    "total": 21,
+    "red": []
+  },
+  "Q7_unlink_wrong_candidate": {
+    "exit": 0,
+    "passed": 21,
+    "failed": 0,
+    "total": 21,
+    "red": []
+  },
+  "Q8_codeless_first_swallowed": {
+    "exit": 0,
+    "passed": 21,
+    "failed": 0,
+    "total": 21,
+    "red": []
+  },
+  "Q9_cleanup_skipped_on_close_fault": {
+    "exit": 1,
+    "passed": 19,
+    "failed": 2,
+    "total": 21,
+    "red": [
+      "A1 — the close fails with C and the cleanup unlink with U: { ok: false, code: C }",
+      "A2 — the close fails after the whole text was written, the unlink succeeds: C, and games/ holds 0 files"
+    ]
+  },
+  "gamesInCopyRoot": false
+}

@@ -342,3 +342,106 @@ The candidate adds **11 reds in 5 files**:
   - move ABC-205 In Design → Ready for Dev → In Development (Software Engineer).
 - The build does not wait for the owner's answer. The merge does.
 - D runs after `ABC-204` is Done, alone when the board is idle.
+
+### Addendum 2026-10-24: the build's STOP (`S1`–`S3`), ruled
+
+> **Architect/Design, 2026-10-24** (task `arch-rule-ABC-205-stop`, records plus light probes, at `grugops/ABC-205`
+> `4f650a45`). The Engineer's STOP is in `…18a6a03c` and `…3050b787`. Notes:
+> `.grugops/context/arch-rule-ABC-205-stop/notes/`. The probes ran on scratch copies of `src/` (`rule205/`), never
+> `src/`. Base is the merge-base `f47b3429`. Every figure below is deterministic. The host was shared (load1 4–12),
+> and no timing is quoted.
+
+**Result.** `S1` is a re-pin, and it is this role's call. `S2` and `S3` are one level, and the level is the owner's:
+**`OD-205-2`**, PROPOSED in the `ADR-0031` addendum (`A7`) and in an `ADR-0026` amendment. The merge now waits on
+two owner words, `OD-205-1` and `OD-205-2`. He answers both in one reply.
+
+**2026-10-24, the owner's word** (`…fb0468ff`, verbatim *"accept your recommendations, other session paused"*): the `ADR-0031` addendum is ACCEPTED with `OD-205-1` (`A6`) and `OD-205-2` (`A7`), and `ADR-0026` decision 9 now reads 118 cp; neither owner word is owed any longer (recorded by Architect/Design, `arch-accept-owner-words-2026-10-24`).
+
+#### `S1`: transposition `A4`, the mate-reuse row (`SEARCH_DEEP`)
+
+- **What the probes found.** The row's depth was a node count in disguise. That was already known, and it is why
+  `ABC-121` split the row. The probes also show the row lost its search-level bite before this ticket:
+  - On base, the pre-`ABC-121` engine reaches depth 10 at 160–220 ticks. On the build it reaches depth 9 at 160–170
+    ticks and depth 10 at 180–220 ticks. Every reading is −29 992, which equals `searchWithoutTable` at depth 10.
+  - **The ±ply mutant** (drop the mate adjustment in `storeEntry` and `entryScore`) still reads **−29 992**. This
+    holds on base and on the build, at every budget from 40 to 400 ticks. The mutant still read −29 994, the bite,
+    at `ABC-081`'s `318c11ac`, `ABC-121`'s `5b5a0a36` and `ABC-082`'s `3858e3cf`. **The bite was lost at `ABC-083`'s
+    merge, `f00038ef`.**
+  - **The reuse the row is named for no longer happens.** An instrumented copy counts mate-score reads at a ply
+    other than the stored one. At 160 and 180 ticks there are 0 on base and 1 on the build, and that one read
+    changes no root score.
+- **No re-find is possible under `ADR-0028` decision 2.** The scan covered the 287 mate-corpus positions at depths
+  6–10, on a frozen clock. On base, the mutant changes no root score in any cell. On the build it changes one cell
+  (`8/7k/8/7K/8/8/8/R7 w - - 2 2`, depth 9). That fixture bites on the build only, so it does not meet decision 2's
+  "measured on base and branch".
+- **Ruling: re-pin the depth by `maxDepth`, not by ticks.**
+  - This is a value-only re-pin. No level moves.
+  - It ends the node-count dependence, which a re-budget to 180 ticks would keep.
+  - Every value pin stays: −29 992 is still `searchWithoutTable`'s depth-10 answer, on base and build, in both
+    recursions.
+  - The ±ply guarantee rests on the two default-lane table rows above it. Those rows red the mutant directly.
+- **The gap, recorded and not cut:** no search-level row has caught a mis-wired ply since `ABC-083`. The only
+  robust remedy is a constructed position, and that is a BA/PM candidate. `ABC-205` does not owe it.
+
+#### `S2`/`S3`: pvs-lmr `A1`, the depth-5 drift (both recursions)
+
+- **Reproduced exactly.** On base, `search()` reads 97.33 % within 25 cp and `chooseMove` reads 97.86 %; both have a
+  51 cp maximum. On the build they read 96.79 % and 97.33 %, and both have a **79 cp maximum** on position-6/e2d2
+  (56 → 135). Both runs give 0 mate flips.
+- **The taper's role, split.** Every variant below keeps scale 1 unless it says otherwise. Each figure is the maximum
+  in both recursions.
+  - blend only, no gate: **55 cp** (e2d2). Under the level.
+  - **shelter gate only, no blend: 87 cp** (e2d2). Over the level.
+  - blend and gate together, which is the "taper only" variant: 83 cp (e2d2).
+  - **queen scale only: 107 cp**, on a different position (position-5/h1f1, −42 → −149).
+  - So the gate drives the e2d2 red. The blend does not. The scale alone reds the bar too, on another position.
+- **Not a defect (`ADR-0028` decision 1, all three):**
+  1. The identity and oracle rows are green on the build, in every deep lane, and the oracle was re-run (`…3050b787`).
+     The `A1` mate floor is green.
+  2. The red comes from the term's own mechanism. The gate makes the castled bonus a step on one shelter pawn, and
+     the gate alone reproduces the red. The gate has no weight to vary, so the isolation is the proof.
+  3. The bar's own mutant is still red at any new maximum. `early` reds the 95 % clause on the build (93.05 % and
+     91.44 %), and its `chooseMove` maximum is 198 cp. In the build's `search()` its maximum is 79 cp, which equals
+     the correct build. So a maximum alone can no longer separate `early`. The 95 % clause still does.
+- **Not a fixture.** The 190 corpus is built by a rule, not chosen, and the row has no evaluator-margin label.
+- **Not this role's headroom.** The 75 cp level was set against a measured 45 cp, which is 1.67x headroom. So
+  `ADR-0028` decision 3 (a level set **without** measured headroom) does not reach it, and decision 4 makes the red a
+  stop. The level is also `ADR-0026` decision 9's text and `ABC-121` `A1`'s criterion, and the owner accepted both.
+  So it moves only on his word (decision 5).
+- **`OD-205-2` (owner, PROPOSED): the depth-5 drift maximum, 75 → 118 cp, in both recursions.**
+  - 118 is ⌊1.5 × 79⌋. That is `ADR-0039` decision 3's pattern, the same one `OD-205-1` uses.
+  - The 95 % within 25 cp clause, the depth, the corpus and the mate floor stay byte-identical.
+  - `ADR-0034` addendum decision 1 defines its clean-lead bar as this maximum. On acceptance it reads 118 cp for
+    **later** L re-finds only. No retained puzzle row changes (that addendum's decision 2).
+  - **If he declines,** neither term ships alone: the gate reads 87 cp and the scale reads 107 cp. `ABC-205` then
+    stops to BA/PM, and nothing is re-tuned to pass the bar (`ADR-0026` decision 9).
+
+#### The edits the Engineer may make on `grugops/ABC-205`
+
+1. **`S1`, now:** in `src/transposition.test.ts`, change the `A4` deep row (the `SEARCH_DEEP` block under "a mate
+   score is correct at every ply") as follows. Change nothing else.
+   - In both calls, replace `{ budgetMs: 160, now: () => ticks++ }` with
+     `{ budgetMs: 160, now: () => 0, maxDepth: 10 }`. Delete `ticks`.
+   - Change `expect(shipped.depth).toBeGreaterThanOrEqual(10)` to `expect(shipped.depth).toBe(10)`.
+   - Keep the other four `expect`s byte-identical.
+   - Rename the row to "reports the table-free mate distance at depth 10, before `ABC-121` and shipped
+     [deep, SEARCH_DEEP=1]".
+   - Rewrite the doc comment to the measured facts above, and cite this addendum. The facts are: depth by `maxDepth`;
+     the search-level ±ply bite lost at `f00038ef`; the two table rows carry the ±ply property; the
+     `ADR-0026` decision 7 split is kept.
+2. **`S2`/`S3`, only after the owner accepts `OD-205-2`:** in `src/search.pvs-lmr.test.ts`, change
+   `reportAndBar`'s `expect(result.max).toBeLessThanOrEqual(75)` to `118`. Change "none beyond 75 cp" to "none beyond
+   118 cp" in the two `A1` drift row titles. Add one comment line citing `OD-205-2`. Until then the two rows stay red
+   and untouched.
+3. **`OD-205-1`'s cell:** unchanged. The Engineer moves it only on the owner's word.
+4. Then re-run `SEARCH_DEEP` transposition and pvs-lmr, and report both drift lines and both mate-floor lines.
+
+#### Next move
+
+- **Orchestrator:**
+  - merge this records branch;
+  - report `OD-205-1` and `OD-205-2` to the owner together, with the `ADR-0031` addendum;
+  - hand edit 1 to the Software Engineer now.
+- The merge of `ABC-205` waits for both owner words. D waits as ruled.
+- **BA/PM (optional, not owed by `ABC-205`):** a constructed mate-reuse row that reds a mis-wired ply at the search
+  level.

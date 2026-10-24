@@ -1335,9 +1335,9 @@ describe("ABC-042 — the accepted set is closed", () => {
   const TABLE_FLAGS = ["--ascii", "--unicode"] as const;
   const TABLE_COLOUR = "--colour";
   const TABLE_VALUES = ["white", "black", "random"] as const;
-  /** `ABC-101`'s rows: `--difficulty` and its five level words, ruling 1. */
+  /** `ABC-101`'s rows: `--difficulty` and its seven level words, ruling 1. */
   const TABLE_DIFFICULTY = "--difficulty";
-  const TABLE_LEVELS = ["1", "2", "3", "4", "5"] as const;
+  const TABLE_LEVELS = ["1", "2", "3", "4", "5", "6", "7"] as const;
   const TABLE = [...TABLE_FLAGS, TABLE_COLOUR, ...TABLE_VALUES, TABLE_DIFFICULTY, ...TABLE_LEVELS];
 
   it("A6(i) — the exported enumeration EQUALS the table, element for element, both ways", () => {
@@ -1819,9 +1819,9 @@ describe("ABC-042 — the shape of what was delivered", () => {
     // `ABC-101` adds `32`, the exponent of the level's seed `Math.floor(Math.random() * 2 ** 32)`
     // (`ADR-0037` D3); its base reuses `2`. Seven now, and still none is a count of rows.
     expect(numbersIn("cli.ts")).toEqual(["0", "0x20", "0x7f", "1", "2", "32", "70"]);
-    // `0` starts the scan, `1` steps over `--colour`'s value, `0.5` is a fair coin. `ABC-101`: `1`-`5`
-    // are the `Difficulty` ordinals and `3` is also the default level — none is a count of rows.
-    expect(numbersIn("cli-options.ts")).toEqual(["0", "0.5", "1", "2", "3", "4", "5"]);
+    // `0` starts the scan, `1` steps over `--colour`'s value, `0.5` is a fair coin. `ABC-101`: `1`-`7`
+    // are the `Difficulty` ordinals and `5` is also the default level — none is a count of rows.
+    expect(numbersIn("cli-options.ts")).toEqual(["0", "0.5", "1", "2", "3", "4", "5", "6", "7"]);
   });
 
   it("A10 — package.json gains exactly one scripts key and nothing else", () => {
@@ -1864,6 +1864,7 @@ describe("ABC-042 — the shape of what was delivered", () => {
       expect(packaged, `package.json gained ${reserved}`).not.toHaveProperty(reserved);
     }
     expect(packaged.private).toBe(true);
+    expect(packaged.license, "package.json license (ABC-214)").toBe("Apache-2.0");
     expect(packaged.bin, "package.json bin (AR-168-BINPIN)").toEqual({ skytalix: "dist/uci.js" });
 
     const scripts = packaged.scripts as Record<string, string>;
@@ -4362,14 +4363,15 @@ describe("ABC-101 — --difficulty selects a level, and the played engine is tha
     expect(reversed).toEqual(forward);
   });
 
-  it("A2 — the default is a VALUE: the exported constant, the maximum of the level set, `DEFAULT_LEVEL`", () => {
+  it("A2 — the default is a VALUE: the exported constant, `DEFAULT_LEVEL`, below the maximum", () => {
     const levels = LEVEL_WORDS.map(Number).sort((a, b) => a - b);
 
     expect(optionsOf([]).difficulty).toBe(DEFAULT_DIFFICULTY);
-    expect(DEFAULT_DIFFICULTY).toBe(Math.max(...levels));
-    // The top: ruling 2 is overturned (ADR-0045 D2, owner Q1); a default below the maximum reds.
-    expect(DEFAULT_DIFFICULTY).toBe(HARDEST_LEVEL);
+    // `ABC-212` (`ADR-0045` § AMENDMENT A2): levels 6 and 7 sit above the default, so the default
+    // is no longer the maximum of the level set; it is `DEFAULT_LEVEL`, and the hardest is 7.
     expect(DEFAULT_DIFFICULTY).toBe(DEFAULT_LEVEL);
+    expect(DEFAULT_DIFFICULTY).toBeLessThan(Math.max(...levels));
+    expect(Math.max(...levels)).toBe(HARDEST_LEVEL);
   });
 
   it("ABC-174 A2/A3 — no flag resolves difficulty 5, the hardest level, which is `DEFAULT_LEVEL`", () => {
@@ -4383,12 +4385,13 @@ describe("ABC-101 — --difficulty selects a level, and the played engine is tha
       expect(optionsOf(["--difficulty", word]).difficulty, `level ${word}`).toBe(Number(word));
     }
 
-    // `0`/`6` are the boundary pair; `3.0`, `+3`, `03` are what a `Number(token)` range check
-    // accepts (`## Test notes` 1); `constructor`/`__proto__` are the prototype keys of the table.
-    // `3\n` is what a `/m`-flagged regex or a `.trim()` accepts (`ABC-161`, `SEC-101-a`).
+    // `0`/`8` are the boundary pair (`ABC-212` A6: it was `0`/`6`); `3.0`, `+3`, `03` are what a
+    // `Number(token)` range check accepts (`## Test notes` 1); `constructor`/`__proto__` are the
+    // prototype keys of the table. `3\n` is what a `/m`-flagged regex or a `.trim()` accepts
+    // (`ABC-161`, `SEC-101-a`).
     const refusedValues = [
       "0",
-      "6",
+      "8",
       "-1",
       "3.5",
       "three",
@@ -4439,11 +4442,28 @@ describe("ABC-101 — --difficulty selects a level, and the played engine is tha
     }
   });
 
+  it("ABC-212 A6 — `--difficulty 6` and `7` resolve, and a bare flag names 1|2|3|4|5|6|7", () => {
+    expect(optionsOf(["--difficulty", "6"]).difficulty).toBe(6);
+    expect(optionsOf(["--difficulty", "7"]).difficulty).toBe(7);
+    expect(resolveOptions(["--difficulty"])).toEqual({
+      ok: false,
+      problem: "--difficulty needs one of 1|2|3|4|5|6|7",
+      offending: ["--difficulty"],
+    });
+  });
+
+  it("ABC-212 A7 — the usage line is byte-exact, read off the existing refusal child", () => {
+    // 0 new spawns (`A12`): the same child `A5` above reads.
+    expect(usageLineOf(CHILDREN.badColour.stderr)).toBe(
+      "usage: npm run chess -- [--colour white|black|random] [--difficulty 1|2|3|4|5|6|7] [--ascii | --unicode]",
+    );
+  });
+
   it("A7 — NO DEPTH, NO CLOCK, NO NODES in the resolver's code, and the field is a plain ordinal", () => {
     // `RISK-002`: this layer gives a level no meaning. Over CODE: prose hits are `## Test notes` 4's.
     const code = executableCodeOf("cli-options.ts");
     expect(code.match(/depth|ply|millisecond|\bms\b|nodes?\/sec|budget/gi) ?? []).toEqual([]);
-    expect(code).toMatch(/export type Difficulty = 1 \| 2 \| 3 \| 4 \| 5;/);
+    expect(code).toMatch(/export type Difficulty = 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7;/);
     expect(code).toMatch(/readonly difficulty: Difficulty;/);
   });
 
@@ -4499,7 +4519,7 @@ describe("ABC-101 — --difficulty selects a level, and the played engine is tha
 
   it("A8′ — the table is read only by an OWN key: everything else is refused (Security forward note)", () => {
     expect(executableCodeOf("level-seam.ts")).toMatch(/Object\.hasOwn\(LEVELS, level\)/);
-    for (const key of [0, 6, 3.5, Number.NaN, "constructor", "__proto__", "toString"]) {
+    for (const key of [0, 8, 3.5, Number.NaN, "constructor", "__proto__", "toString"]) {
       expect(() => createLevelSeam(key as number, { seed: 1 }), `level ${String(key)}`).toThrow(
         RangeError,
       );

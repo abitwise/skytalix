@@ -33,7 +33,7 @@ import { type EngineSeam, type RenderSeam, runTurnLoop } from "./turn-loop.ts";
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
 const COLOURS = "white|black|random";
-const LEVELS = "1|2|3|4|5";
+const LEVELS = "1|2|3|4|5|6|7";
 
 /** One macrotask. Enough for a `resume()`d stream to deliver the chunks already in its buffer. */
 const tick = (): Promise<void> => new Promise<void>((resolve) => setImmediate(resolve));
@@ -247,12 +247,12 @@ describe("ABC-200 — the startup questions", () => {
       expect([...written].filter((c) => c < " " || c === "\x7f")).toEqual([]);
     });
 
-    it("difficulty `6`, `0`, `03` and a 1 025-character line are each one rejection, then the question again", async () => {
+    it("difficulty `8`, `0`, `03` and a 1 025-character line are each one rejection, then the question again", async () => {
       const source = sourceOf(true);
       const output = outputOf(true);
       const asked = askAbsentOptions(parsedOf(["--colour", "white"]), { source, output });
       const overCap = "3".repeat(MAX_LINE_LENGTH + 1);
-      source.write(`6\n0\n03\n${overCap}\n4\n`);
+      source.write(`8\n0\n03\n${overCap}\n4\n`);
 
       const result = await asked;
       expect(kindsOf(output)).toEqual([
@@ -271,7 +271,7 @@ describe("ABC-200 — the startup questions", () => {
         expect(rejection).toContain(LEVELS);
         expect(rejection.split("\n")).toHaveLength(2);
       }
-      expect(rejections[0]).toContain('"6"');
+      expect(rejections[0]).toContain('"8"');
       expect(rejections[1]).toContain('"0"');
       expect(rejections[2]).toContain('"03"');
       // Over the cap the reader keeps no text, so the echo is empty and the line is never written.
@@ -445,5 +445,42 @@ describe("ABC-200 — the startup questions", () => {
         expect(code, `${banned}`).not.toMatch(banned);
       }
     });
+  });
+});
+
+// ---------------------------------------------------------------------------------------------
+// `ABC-212` A8 — the difficulty question offers 1-7 (`ADR-0045` § AMENDMENT A1-A2); the default
+// stays 5. In process, on the injected streams: 0 new spawns (`A12`).
+// ---------------------------------------------------------------------------------------------
+
+describe("ABC-212 A8 — the difficulty question offers levels 6 and 7, and Enter keeps 5", () => {
+  const askDifficulty = async (answers: string) => {
+    const source = sourceOf(true);
+    const output = outputOf(true);
+    const asked = askAbsentOptions(parsedOf(["--colour", "white"]), { source, output });
+    source.write(answers);
+    return { result: await asked, output };
+  };
+
+  it("the question is byte-exact `difficulty (1|2|3|4|5|6|7) [5]: `, and Enter keeps 5", async () => {
+    const { result, output } = await askDifficulty("\n");
+    expect(output.writes).toEqual(["difficulty (1|2|3|4|5|6|7) [5]: "]);
+    expect(result?.options.difficulty).toBe(5);
+  });
+
+  for (const word of ["6", "7"]) {
+    it(`\`${word}\` is accepted at the first asking`, async () => {
+      const { result, output } = await askDifficulty(`${word}\n`);
+      expect(kindsOf(output)).toEqual(["difficulty"]);
+      expect(result?.options.difficulty).toBe(Number(word));
+    });
+  }
+
+  it("`8` is one rejection naming it, then the question again, and `7` is then taken", async () => {
+    const { result, output } = await askDifficulty("8\n7\n");
+    expect(kindsOf(output)).toEqual(["difficulty", "rejection", "difficulty"]);
+    expect(output.writes[1]).toContain('"8"');
+    expect(output.writes[1]).toContain(LEVELS);
+    expect(result?.options.difficulty).toBe(7);
   });
 });

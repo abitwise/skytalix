@@ -1,0 +1,174 @@
+[
+ {
+  "step": "precheck",
+  "tag": "session-start",
+  "rc": 0,
+  "line": "2026-10-24T12:02:57Z AC=1 load1=2.86 foreign_vitest=[] ok=1",
+  "t": 220968.307
+ },
+ {
+  "step": "precheck",
+  "tag": "before-h4",
+  "rc": 0,
+  "line": "2026-10-24T12:02:57Z AC=1 load1=2.87 foreign_vitest=[] ok=1",
+  "t": 220968.608
+ },
+ {
+  "step": "move",
+  "sent": "h4",
+  "ok": true,
+  "thinking_drawn": true,
+  "ms_enter_to_thinking": 1,
+  "ms_enter_to_prompt": 2,
+  "ms_thinking_to_prompt": 0,
+  "engine_last": "e5",
+  "t": 220968.61
+ },
+ {
+  "step": "precheck",
+  "tag": "before-Rh3",
+  "rc": 0,
+  "line": "2026-10-24T12:02:57Z AC=1 load1=2.87 foreign_vitest=[] ok=1",
+  "t": 220968.644
+ },
+ {
+  "step": "move",
+  "sent": "Rh3",
+  "ok": true,
+  "thinking_drawn": true,
+  "ms_enter_to_thinking": 1,
+  "ms_enter_to_prompt": 30001,
+  "ms_thinking_to_prompt": 30000,
+  "engine_last": "Nc6",
+  "t": 220998.644
+ },
+ {
+  "step": "measured",
+  "value": [
+   "Rh3",
+   30001
+  ],
+  "t": 220998.645
+ },
+ {
+  "step": "precheck",
+  "tag": "before-ctrl-c",
+  "rc": 0,
+  "line": "2026-10-24T12:25:59Z AC=1 load1=3.16 foreign_vitest=[] ok=1",
+  "t": 222350.289
+ },
+ {
+  "step": "ctrl-c",
+  "sent_move": "b3",
+  "thinking_seen": true,
+  "ms_in_search_before_key": 3012,
+  "ms_key_to_exit": 12,
+  "wait_status": 2,
+  "signaled": true,
+  "exit_code": null,
+  "cli_process_left": "",
+  "t": 222353.328
+ },
+ {
+  "step": "pgn",
+  "level": 6,
+  "ms_engine_reply": 2,
+  "engine_last": "e5",
+  "exit_code": 0,
+  "pgn_path": "games/skytalix-20261024-152602.pgn",
+  "tags": [
+   [
+    "Event",
+    "skytalix CLI game"
+   ],
+   [
+    "Site",
+    "?"
+   ],
+   [
+    "Date",
+    "2026.10.24"
+   ],
+   [
+    "Round",
+    "-"
+   ],
+   [
+    "White",
+    "Human"
+   ],
+   [
+    "Black",
+    "skytalix (difficulty 6)"
+   ],
+   [
+    "Result",
+    "0-1"
+   ],
+   [
+    "Termination",
+    "normal"
+   ],
+   [
+    "Difficulty",
+    "6"
+   ],
+   [
+    "HumanColour",
+    "white"
+   ]
+  ],
+  "t": 222353.564
+ },
+ {
+  "step": "pgn",
+  "level": 7,
+  "ms_engine_reply": 3,
+  "engine_last": "e5",
+  "exit_code": 0,
+  "pgn_path": "games/skytalix-20261024-152602-2.pgn",
+  "tags": [
+   [
+    "Event",
+    "skytalix CLI game"
+   ],
+   [
+    "Site",
+    "?"
+   ],
+   [
+    "Date",
+    "2026.10.24"
+   ],
+   [
+    "Round",
+    "-"
+   ],
+   [
+    "White",
+    "Human"
+   ],
+   [
+    "Black",
+    "skytalix (difficulty 7)"
+   ],
+   [
+    "Result",
+    "0-1"
+   ],
+   [
+    "Termination",
+    "normal"
+   ],
+   [
+    "Difficulty",
+    "7"
+   ],
+   [
+    "HumanColour",
+    "white"
+   ]
+  ],
+  "t": 222353.805
+ }
+]

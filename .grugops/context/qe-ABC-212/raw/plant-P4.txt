@@ -1,0 +1,393 @@
+
+ RUN  v4.1.12 <scratch>/plant-tree
+
+ ❯ src/engine.test.ts (47 tests | 1 failed) 721ms
+     × (i′) the shipped construction passes no clock, and its default level is the shipped engine 3ms
+ ❯ src/cli.test.ts (101 tests | 3 failed) 391ms
+     × A2 — the default is a VALUE: the exported constant, `DEFAULT_LEVEL`, below the maximum 13ms
+     × ABC-174 A2/A3 — no flag resolves difficulty 5, the hardest level, which is `DEFAULT_LEVEL` 0ms
+     × A8′ — no flag builds `DEFAULT_LEVEL`, which IS the shipped engine at `DEFAULT_BUDGET_MS` 0ms
+ ❯ src/levels.test.ts (33 tests | 5 failed) 125ms
+     × is keyed 1-7, weakest to strongest, easiest 1, default 5, hardest 7 (ADR-0045 A2) 5ms
+     × [EASIEST, DEFAULT, HARDEST] is [1, 5, 7], and the default is { DEFAULT_BUDGET_MS, 0 } 0ms
+     × move, depth and nodes are equal on 30 of 30 positions, for each of two seeds 26ms
+     × clause A: the default's budget is DEFAULT_BUDGET_MS, which is 3 000 0ms
+     × has the 3 s budget (`NFR-004`), the engine's own `DEFAULT_BUDGET_MS` 0ms
+ ❯ src/uci-session.test.ts (137 tests | 12 failed) 19750ms
+     × A1: uci writes id name, id author, then (ABC-171 A1) the two option lines, then uciok 3ms
+     × capped by the default level 5: go wtime 60000 btime 60000 winc 1000 binc 1000 -> 3000 ms (within 2 x 100 ms) 185ms
+     × a bare go: go -> 3000 ms (within 2 x 100 ms) 1738ms
+     × A6-d1: go ponder holds at the capped ceiling; ponderhit releases once 1706ms
+     × ABC-197 R2: go depth 0 on step 100 searches G = 3 000, time in [3 000, 3 200] 1683ms
+     × A7-f2: go movetime with no value searches as a bare go 1681ms
+     × A7-f3: go movetime 1e2 and movestogo 0 are dropped with one info string 1675ms
+     × uci writes exactly 5 lines, the two options after the id lines and before uciok 0ms
+     × setoption name Hash value 64 writes nothing and changes nothing 170ms
+     × the Skill Level line is literally default 5 min 1 max 7 0ms
+     × at the default, a bare go takes the chooseMove path: score, and time within 3 000 ms 1689ms
+     × uci lists Skill Level default 5 min 1 max 7, max read from HARDEST_LEVEL 0ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 21 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/cli.test.ts > ABC-101 — --difficulty selects a level, and the played engine is that level > A2 — the default is a VALUE: the exported constant, `DEFAULT_LEVEL`, below the maximum
+AssertionError: expected 5 to be 7 // Object.is equality
+
+- Expected
++ Received
+
+- 7
++ 5
+
+ ❯ <anonymous> src/cli.test.ts:4372:32
+    4370|     // `ABC-212` (`ADR-0045` § AMENDMENT A2): levels 6 and 7 sit above…
+    4371|     // is no longer the maximum of the level set; it is `DEFAULT_LEVEL…
+    4372|     expect(DEFAULT_DIFFICULTY).toBe(DEFAULT_LEVEL);
+       |                                ^
+    4373|     expect(DEFAULT_DIFFICULTY).toBeLessThan(Math.max(...levels));
+    4374|     expect(Math.max(...levels)).toBe(HARDEST_LEVEL);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/21]⎯
+
+ FAIL  src/cli.test.ts > ABC-101 — --difficulty selects a level, and the played engine is that level > ABC-174 A2/A3 — no flag resolves difficulty 5, the hardest level, which is `DEFAULT_LEVEL`
+AssertionError: expected 5 to be 7 // Object.is equality
+
+- Expected
++ Received
+
+- 7
++ 5
+
+ ❯ <anonymous> src/cli.test.ts:4380:32
+    4378|     expect(optionsOf([]).difficulty).toBe(5);
+    4379|     expect(DEFAULT_DIFFICULTY).toBe(5);
+    4380|     expect(DEFAULT_DIFFICULTY).toBe(DEFAULT_LEVEL);
+       |                                ^
+    4381|   });
+    4382|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/21]⎯
+
+ FAIL  src/cli.test.ts > ABC-101 — --difficulty selects a level, and the played engine is that level > A8′ — no flag builds `DEFAULT_LEVEL`, which IS the shipped engine at `DEFAULT_BUDGET_MS`
+AssertionError: expected 5 to be 7 // Object.is equality
+
+- Expected
++ Received
+
+- 7
++ 5
+
+ ❯ <anonymous> src/cli.test.ts:4504:38
+    4502|
+    4503|   it("A8′ — no flag builds `DEFAULT_LEVEL`, which IS the shipped engin…
+    4504|     expect(optionsOf([]).difficulty).toBe(DEFAULT_LEVEL);
+       |                                      ^
+    4505|     expect(LEVELS[DEFAULT_LEVEL]).toEqual({ budgetMs: DEFAULT_BUDGET_M…
+    4506|     // The root hands the resolver's field to the seam, and nothing el…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/21]⎯
+
+ FAIL  src/engine.test.ts > ABC-086 A5 — the virtual clock stays off the shipped path > (i′) the shipped construction passes no clock, and its default level is the shipped engine
+AssertionError: expected { budgetMs: 30000, blunderRate: +0 } to deeply equal { budgetMs: 3000, blunderRate: +0 }
+
+- Expected
++ Received
+
+  {
+    "blunderRate": 0,
+-   "budgetMs": 3000,
++   "budgetMs": 30000,
+  }
+
+ ❯ src/engine.test.ts:903:35
+    901|     expect(seamSource.match(/\bnow\b/g)).toBeNull();
+    902|     // 3. The default level is the shipped budget and never blunders.
+    903|     expect(LEVELS[DEFAULT_LEVEL]).toEqual({ budgetMs: DEFAULT_BUDGET_M…
+       |                                   ^
+    904|     // 4. No `--difficulty` resolves to that level.
+    905|     expect(resolveOptions([])).toMatchObject({ ok: true, options: { di…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/21]⎯
+
+ FAIL  src/levels.test.ts > A1 — the level table > is keyed 1-7, weakest to strongest, easiest 1, default 5, hardest 7 (ADR-0045 A2)
+AssertionError: expected [ 1, 7, 7 ] to deeply equal [ 1, 5, 7 ]
+
+- Expected
++ Received
+
+  [
+    1,
+-   5,
++   7,
+    7,
+  ]
+
+ ❯ <anonymous> src/levels.test.ts:208:59
+    206|   it("is keyed 1-7, weakest to strongest, easiest 1, default 5, hardes…
+    207|     expect(Object.keys(LEVELS)).toEqual(["1", "2", "3", "4", "5", "6",…
+    208|     expect([EASIEST_LEVEL, DEFAULT_LEVEL, HARDEST_LEVEL]).toEqual([1, …
+       |                                                           ^
+    209|   });
+    210|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/21]⎯
+
+ FAIL  src/levels.test.ts > ABC-174 A2 — the default is level 5 (ABC-212: no longer the top) > [EASIEST, DEFAULT, HARDEST] is [1, 5, 7], and the default is { DEFAULT_BUDGET_MS, 0 }
+AssertionError: expected [ 1, 7, 7 ] to deeply equal [ 1, 5, 7 ]
+
+- Expected
++ Received
+
+  [
+    1,
+-   5,
++   7,
+    7,
+  ]
+
+ ❯ <anonymous> src/levels.test.ts:261:59
+    259| describe("ABC-174 A2 — the default is level 5 (ABC-212: no longer the …
+    260|   it("[EASIEST, DEFAULT, HARDEST] is [1, 5, 7], and the default is { D…
+    261|     expect([EASIEST_LEVEL, DEFAULT_LEVEL, HARDEST_LEVEL]).toEqual([1, …
+       |                                                           ^
+    262|     expect(DEFAULT_LEVEL).toBe(5);
+    263|     expect(HARDEST_LEVEL).toBe(7);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/21]⎯
+
+ FAIL  src/levels.test.ts > ABC-174 A3 — the default plays as today: chooseMove at 3 000 ms, the old level 3 > move, depth and nodes are equal on 30 of 30 positions, for each of two seeds
+AssertionError: seed 1: expected [] to have a length of 30 but got +0
+
+- Expected
++ Received
+
+- 30
++ 0
+
+ ❯ <anonymous> src/levels.test.ts:328:37
+    326|         );
+    327|       });
+    328|       expect(equal, `seed ${seed}`).toHaveLength(30);
+       |                                     ^
+    329|     }
+    330|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/21]⎯
+
+ FAIL  src/levels.test.ts > ABC-174 A7 — the time budget, from the data (NFR-004; ADR-0038 decision 3) > clause A: the default's budget is DEFAULT_BUDGET_MS, which is 3 000
+AssertionError: expected 30000 to be 3000 // Object.is equality
+
+- Expected
++ Received
+
+- 3000
++ 30000
+
+ ❯ <anonymous> src/levels.test.ts:345:44
+    343|
+    344|   it("clause A: the default's budget is DEFAULT_BUDGET_MS, which is 3 …
+    345|     expect(LEVELS[DEFAULT_LEVEL].budgetMs).toBe(DEFAULT_BUDGET_MS);
+       |                                            ^
+    346|     expect(DEFAULT_BUDGET_MS).toBe(3_000);
+    347|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/21]⎯
+
+ FAIL  src/levels.test.ts > A6 — the default level > has the 3 s budget (`NFR-004`), the engine's own `DEFAULT_BUDGET_MS`
+AssertionError: expected 30000 to be 3000 // Object.is equality
+
+- Expected
++ Received
+
+- 3000
++ 30000
+
+ ❯ <anonymous> src/levels.test.ts:373:44
+    371| describe("A6 — the default level", () => {
+    372|   it("has the 3 s budget (`NFR-004`), the engine's own `DEFAULT_BUDGET…
+    373|     expect(LEVELS[DEFAULT_LEVEL].budgetMs).toBe(3_000);
+       |                                            ^
+    374|     expect(LEVELS[DEFAULT_LEVEL].budgetMs).toBe(DEFAULT_BUDGET_MS);
+    375|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/21]⎯
+
+ FAIL  src/uci-session.test.ts > ABC-167 A1-A2 — handshake and ready > A1: uci writes id name, id author, then (ABC-171 A1) the two option lines, then uciok
+AssertionError: expected [ 'id name skytalix', …(4) ] to deeply equal [ 'id name skytalix', …(4) ]
+
+- Expected
++ Received
+
+  [
+    "id name skytalix",
+    "id author Olger Oeselg",
+    "option name OwnBook type check default true",
+-   "option name Skill Level type spin default 5 min 1 max 7",
++   "option name Skill Level type spin default 7 min 1 max 7",
+    "uciok",
+  ]
+
+ ❯ src/uci-session.test.ts:118:31
+    116| describe("ABC-167 A1-A2 — handshake and ready", () => {
+    117|   it("A1: uci writes id name, id author, then (ABC-171 A1) the two opt…
+    118|     expect(talk(["uci"]).out).toEqual([
+       |                               ^
+    119|       "id name skytalix",
+    120|       "id author Olger Oeselg",
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/21]⎯
+
+ FAIL  src/uci-session.test.ts > ABC-167 A5 — the D4 time rule, read from the info line's time > capped by the default level 5: go wtime 60000 btime 60000 winc 1000 binc 1000 -> 3000 ms (within 2 x 100 ms)
+AssertionError: expected 3600 to be less than or equal to 3200
+ ❯ src/uci-session.test.ts:230:20
+    228|       const { time } = parseInfo(out[0]);
+    229|       expect(time).toBeGreaterThanOrEqual(budget);
+    230|       expect(time).toBeLessThanOrEqual(budget + 2 * step);
+       |                    ^
+    231|     });
+    232|   }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/21]⎯
+
+ FAIL  src/uci-session.test.ts > ABC-167 A5 — the D4 time rule, read from the info line's time > a bare go: go -> 3000 ms (within 2 x 100 ms)
+AssertionError: expected 30100 to be less than or equal to 3200
+ ❯ src/uci-session.test.ts:230:20
+    228|       const { time } = parseInfo(out[0]);
+    229|       expect(time).toBeGreaterThanOrEqual(budget);
+    230|       expect(time).toBeLessThanOrEqual(budget + 2 * step);
+       |                    ^
+    231|     });
+    232|   }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/21]⎯
+
+ FAIL  src/uci-session.test.ts > ABC-167 A6 — infinite waits for stop > A6-d1: go ponder holds at the capped ceiling; ponderhit releases once
+AssertionError: expected 30100 to be less than or equal to 3200
+ ❯ src/uci-session.test.ts:297:23
+    295|     const info = parseInfo(perLine[1]?.[0]);
+    296|     expect(info.time).toBeGreaterThanOrEqual(3_000);
+    297|     expect(info.time).toBeLessThanOrEqual(3_000 + 2 * 100);
+       |                       ^
+    298|     expect(perLine[2]).toEqual([`bestmove ${info.move}`]);
+    299|     expect(perLine[3]).toEqual([]);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/21]⎯
+
+ FAIL  src/uci-session.test.ts > ABC-167 A7 — the D12 limits > ABC-197 R2: go depth 0 on step 100 searches G = 3 000, time in [3 000, 3 200]
+AssertionError: expected 30100 to be less than or equal to 3200
+ ❯ src/uci-session.test.ts:443:23
+    441|     const info = parseInfo(out[1]);
+    442|     expect(info.time).toBeGreaterThanOrEqual(3_000);
+    443|     expect(info.time).toBeLessThanOrEqual(3_200);
+       |                       ^
+    444|     expect(out[2]).toBe(`bestmove ${info.move}`);
+    445|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/21]⎯
+
+ FAIL  src/uci-session.test.ts > ABC-167 A7 — the D12 limits > A7-f2: go movetime with no value searches as a bare go
+AssertionError: expected 30100 to be less than or equal to 3200
+ ❯ expectWarnedSearch src/uci-session.test.ts:466:23
+    464|     const info = parseInfo(written[1]);
+    465|     expect(info.time).toBeGreaterThanOrEqual(low);
+    466|     expect(info.time).toBeLessThanOrEqual(high);
+       |                       ^
+    467|     expect(written[2]).toBe(`bestmove ${info.move}`);
+    468|     return written[0] as string;
+ ❯ src/uci-session.test.ts:478:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/21]⎯
+
+ FAIL  src/uci-session.test.ts > ABC-167 A7 — the D12 limits > A7-f3: go movetime 1e2 and movestogo 0 are dropped with one info string
+AssertionError: expected 30100 to be less than or equal to 3200
+ ❯ expectWarnedSearch src/uci-session.test.ts:466:23
+    464|     const info = parseInfo(written[1]);
+    465|     expect(info.time).toBeGreaterThanOrEqual(low);
+    466|     expect(info.time).toBeLessThanOrEqual(high);
+       |                       ^
+    467|     expect(written[2]).toBe(`bestmove ${info.move}`);
+    468|     return written[0] as string;
+ ❯ src/uci-session.test.ts:483:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/21]⎯
+
+ FAIL  src/uci-session.test.ts > ABC-171 A1 — the option lines > uci writes exactly 5 lines, the two options after the id lines and before uciok
+AssertionError: expected [ 'id name skytalix', …(4) ] to deeply equal [ 'id name skytalix', …(4) ]
+
+- Expected
++ Received
+
+  [
+    "id name skytalix",
+    "id author Olger Oeselg",
+    "option name OwnBook type check default true",
+-   "option name Skill Level type spin default 5 min 1 max 7",
++   "option name Skill Level type spin default 7 min 1 max 7",
+    "uciok",
+  ]
+
+ ❯ src/uci-session.test.ts:691:25
+    689|   it("uci writes exactly 5 lines, the two options after the id lines a…
+    690|     const { send } = rig();
+    691|     expect(send("uci")).toEqual([
+       |                         ^
+    692|       "id name skytalix",
+    693|       "id author Olger Oeselg",
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/21]⎯
+
+ FAIL  src/uci-session.test.ts > ABC-171 A2 — setoption > setoption name Hash value 64 writes nothing and changes nothing
+AssertionError: expected 3600 to be less than or equal to 3200
+ ❯ expectWithin src/uci-session.test.ts:685:16
+    683| function expectWithin(time: number, budget: number, step = 100): void {
+    684|   expect(time).toBeGreaterThanOrEqual(budget);
+    685|   expect(time).toBeLessThanOrEqual(budget + 2 * step);
+       |                ^
+    686| }
+    687|
+ ❯ src/uci-session.test.ts:749:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/21]⎯
+
+ FAIL  src/uci-session.test.ts > ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12) > the Skill Level line is literally default 5 min 1 max 7
+AssertionError: expected [ 'id name skytalix', …(4) ] to include 'option name Skill Level type spin def…'
+ ❯ src/uci-session.test.ts:956:25
+    954|   it("the Skill Level line is literally default 5 min 1 max 7", () => {
+    955|     const { send } = rig();
+    956|     expect(send("uci")).toContain("option name Skill Level type spin d…
+       |                         ^
+    957|   });
+    958|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[19/21]⎯
+
+ FAIL  src/uci-session.test.ts > ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12) > at the default, a bare go takes the chooseMove path: score, and time within 3 000 ms
+AssertionError: expected 30100 to be less than or equal to 3200
+ ❯ expectWithin src/uci-session.test.ts:685:16
+    683| function expectWithin(time: number, budget: number, step = 100): void {
+    684|   expect(time).toBeGreaterThanOrEqual(budget);
+    685|   expect(time).toBeLessThanOrEqual(budget + 2 * step);
+       |                ^
+    686| }
+    687|
+ ❯ src/uci-session.test.ts:966:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[20/21]⎯
+
+ FAIL  src/uci-session.test.ts > ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path > uci lists Skill Level default 5 min 1 max 7, max read from HARDEST_LEVEL
+AssertionError: expected [ 'id name skytalix', …(4) ] to include 'option name Skill Level type spin def…'
+ ❯ src/uci-session.test.ts:1020:25
+    1018|   it("uci lists Skill Level default 5 min 1 max 7, max read from HARDE…
+    1019|     const { send } = rig();
+    1020|     expect(send("uci")).toContain("option name Skill Level type spin d…
+       |                         ^
+    1021|     expect(HARDEST_LEVEL).toBe(7);
+    1022|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[21/21]⎯
+
+
+ Test Files  4 failed | 1 passed (5)
+      Tests  21 failed | 323 passed (344)
+   Start at  14:15:06
+   Duration  19.88s (transform 0ms, setup 0ms, import 4.33s, tests 21.00s, environment 0ms)
+
