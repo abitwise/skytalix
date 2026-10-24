@@ -9,6 +9,8 @@ width: 1 — ALONE (ENGINE_DEEP real-clock A4 ~7.5 min; never beside another hop
 
 # QE gate for ABC-212 (levels 6–7)
 
+> **Owner rule 2026-10-24 (`…4c3f7639`): ONE run.** No prior valid reading exists, so run once under the preconditions and write the result; it is final. No repeat on UNRESOLVED/NOT MET (grade it as the page says); the procedure's own defined steps (e.g. a pooled extension) are part of the one run.
+
 ## Do
 - Own worktree from `grugops/arch-runbook-ABC-212` (`c0508fe9`); merge current `main` first (report sha); own `npm ci`.
 - Verify the SE's criteria independently (re-run load-bearing plants). Then: **A3** 50/50 identity at levels 1–5 vs base; **A4** `ENGINE_DEEP` levels lane (level 6 30/30 in 5.0–7.0 s, level 7 10/10 in 30–32 s, max depth logged; depth ≥ 100 → Architect); **A10** pty at level 7 (thinking frame, 30–32 s/move, Ctrl-C ends within 1 s); **A15** level-7 depth ≥ level-5 + 1 on kiwipete and position-6. Preconditions per timed run: AC, load1 ≤ 8, no foreign vitest.
