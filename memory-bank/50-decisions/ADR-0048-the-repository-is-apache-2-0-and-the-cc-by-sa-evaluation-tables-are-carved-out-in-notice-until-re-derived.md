@@ -6,7 +6,15 @@ id: ADR-0048
 
 ## Status
 
-**PROPOSED** 2026-10-24 by Architect/Design (task `arch-licence-adr`, records only, at `main` `d4d49c5a`).
+**ACCEPTED** 2026-10-24 by Olger Oeselg (owner), verbatim *"accept ADR-0048 ; keep grugops under MIT ; ok, if no
+creds."* (note `.grugops/context/owner-word-2026-10-24/notes/20261024T091000Z-orchestrator-decision-776bba9a.md`).
+Recorded by Architect/Design (task `arch-accept-adr0048`, records only, at `main` `fb0a7703`).
+
+- **OQ-214-3 is answered: the four kit files stay MIT** (decision 5's default). The built `NOTICE` does not change.
+- **The Architect/Design drift rows (1–7) are applied** in `ADR-0044` (§ Records drift). Rows 11–13 are BA/PM's.
+- **The `NOTICE` layout as built is adopted** (decision 3): one line break moved, words unchanged.
+
+Previously **PROPOSED** 2026-10-24 by Architect/Design (task `arch-licence-adr`, records only, at `main` `d4d49c5a`).
 **Acceptance is the owner's.** This is a new ADR (`memory-bank/45-standing-rulings.md`, 2026-10-22). No agent
 moves it to accepted.
 
@@ -32,8 +40,8 @@ moves it to accepted.
   `LIC-PUB-1`, MEDIUM, owner-owned). That branch is held, so it is cited for licence facts only:
   - The repository is public. `package.json` says `"license": "UNLICENSED"`, and no `LICENSE`, `NOTICE` or
     `COPYING` file is tracked.
-  - `PIECE_VALUE` and the six piece-square tables in `src/evaluate.ts` are Tomasz Michniewski's "Simplified
-    Evaluation Function" values, under CC BY-SA 3.0, credited in the file header.
+  - `PIECE_VALUE` and the six piece-square tables in `src/evaluate.ts` are Tomasz Michniewski's
+    "Simplified Evaluation Function" values, under CC BY-SA 3.0, credited in the file header.
   - **Collection reading** (values reproduced unchanged): CC BY-SA 3.0 § 4(a) forbids terms that restrict
     recipients' rights in the tables. Saying that the tables stay under CC BY-SA 3.0 answers it.
   - **Adaptation reading** (the changed layout and the king value of 0): § 4(b) needs BY-SA, a later version or
@@ -59,6 +67,10 @@ moves it to accepted.
 
    `ABC-214` Scope 5–7 gives the default wording, and **this ADR adopts it unchanged**. So `ABC-214` Scope 5's
    "the ADR's wording wins" changes nothing.
+   - *2026-10-24, at acceptance:* the built `NOTICE` breaks the line before the title, so `A5`'s string check
+     finds it: `…Tomasz Michniewski's` / `"Simplified Evaluation Function", published at` /
+     `https://www.chessprogramming.org/Simplified_Evaluation_Function` (`bb8d4432`, note `…e2623df7`). The words
+     are unchanged, and this ADR adopts that layout.
 4. **The carve-out names exactly seven identifiers:** `PIECE_VALUE`, `PAWN_TABLE`, `KNIGHT_TABLE`,
    `BISHOP_TABLE`, `ROOK_TABLE`, `QUEEN_TABLE` and `KING_TABLE`. The list stays the same if `ABC-205` merges.
    The source of every new king value in `ABC-205`'s build is below. It was read on `grugops/ABC-205` at `4f650a45`,
@@ -98,7 +110,8 @@ moves it to accepted.
      The installer writes them for this repository. The owner holds the kit's copyright, so licensing them under
      Apache-2.0 touches nobody else's rights.
    - **Folding the four kit files into Apache-2.0 too** (OQ-214-3) is open to the owner and **not recommended**.
-     It gains nothing today and changes one more `NOTICE` section.
+     It gains nothing today and changes one more `NOTICE` section. *Answered 2026-10-24: the owner kept them MIT
+     ("keep grugops under MIT", `…776bba9a`).*
 6. **The CC0 and public-domain parts need nothing**, as D13 already says: the opening book (`ADR-0023`,
    `data/opening-book/ATTRIBUTION.md`), mulberry32 and splitmix64. The perft positions and counts from the CPW
    "Perft Results" page are facts, probably unprotected (`UNKNOWN - verify`, INFO). `NOTICE` does not list them.
@@ -121,6 +134,9 @@ moves it to accepted.
 **Nothing here is edited before the owner accepts this ADR.** The one exception is a "PROPOSED" pointer added now
 to `ADR-0044` § Status. The edits below are made **on acceptance**, by the role named. Done tickets' dated
 readings are kept as history.
+
+*Applied 2026-10-24, on acceptance:* rows 1–7 by Architect/Design (task `arch-accept-adr0048`), and the
+`ADR-0044` § Status pointer is made final. Rows 11–13 are BA/PM's hop (task `bapm-epic007-licence-line`).
 
 | # | where | on acceptance | by |
 |---|---|---|---|
@@ -151,7 +167,8 @@ of the `ADR-0011` clause 3 licence set (`ADR-0011`, `ABC-029`, `ABC-057`, `ABC-1
   word, and path A's re-derivation makes it short-lived.
 - **Put `KING_ENDGAME_TABLE` on the list "to be safe".** Rejected. Its values are ours by rule (decision 4). It
   would also break `A5`'s exactly-seven check.
-- **Fold the four kit files into Apache-2.0.** Open to the owner. Not recommended (decision 5).
+- **Fold the four kit files into Apache-2.0.** Not recommended (decision 5). Not chosen: the owner kept them MIT
+  (`…776bba9a`).
 
 ## Consequences
 
@@ -174,5 +191,7 @@ of the `ADR-0011` clause 3 licence set (`ADR-0011`, `ABC-029`, `ABC-057`, `ABC-1
 
 - **Before acceptance:** mark this ADR `rejected`. Remove the "PROPOSED" pointer in `ADR-0044` § Status. Then
   `ABC-214` does not merge.
+- **After acceptance, before `ABC-214` merges:** on the owner's word, mark this ADR `superseded` and revert the
+  `arch-accept-adr0048` records commit, which restores the `ADR-0044` text. Then `ABC-214` does not merge.
 - **After `ABC-214` merges:** revert its commit, and mark this ADR `superseded` by whatever the owner chooses.
   Copies already received under Apache-2.0 keep their grant (Consequences).
