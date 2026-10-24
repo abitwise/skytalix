@@ -1,7 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { makeMove } from "./apply.ts";
+import { makeMove, unmakeMove } from "./apply.ts";
 import { parseFen } from "./fen.ts";
-import { type ClaimableDraw, type DrawClaims, type GameStatus, gameStatus } from "./gameend.ts";
+import {
+  type ClaimableDraw,
+  type DrawClaims,
+  type GameStatus,
+  gameStatus,
+  leafEndReason,
+} from "./gameend.ts";
 import { legalMoves } from "./legal.ts";
 import { EMPTY, PAWN, type Position, parseSquareName, pieceType } from "./position.ts";
 import { zobristKey } from "./zobrist.ts";
@@ -557,4 +563,75 @@ describe("fifty-move rule — the halfmove-clock boundary", () => {
     // ABC-020 (A4): 150 plies is 75 moves by EACH player — FIDE 9.6.2, and no claim is needed.
     expect(atClock(150)).toEqual({ result: "draw", reason: "seventy-five-move" });
   });
+});
+
+// ---------------------------------------------------------------------------
+// ABC-206 A2 — the search leaf's game-end answer equals a bare `gameStatus` call. The lane
+// walks the six perft FENs to depth 1, plus the terminal and clock FENs; `ENGINE_DEEP=1` walks
+// the same roots to depth 3, as the ticket's A2 reads.
+// ---------------------------------------------------------------------------
+
+const RUN_DEEP = process.env.ENGINE_DEEP === "1";
+
+const A2_FENS: ReadonlyArray<readonly [name: string, fen: string]> = [
+  ["start", START_FEN],
+  ["kiwipete", "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1"],
+  ["position-3", "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1"],
+  ["position-4", "r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1"],
+  ["position-5", "rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8"],
+  ["position-6", "r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10"],
+  ["checkmate", "4Q2k/6pp/8/8/8/8/8/6K1 b - - 100 80"],
+  ["stalemate, thin", "7k/5K2/5N2/8/8/8/8/8 b - - 0 1"],
+  ["stalemate, queen", "k7/8/1K6/8/8/8/8/2Q5 b - - 0 1"],
+  ["insufficient material", "4k3/8/8/8/8/8/8/4K3 w - - 0 1"],
+  ["seventy-five moves", "r3k3/8/8/8/8/8/8/4K2R w - - 150 120"],
+  ["fifty-move claim, in progress", "r3k3/8/8/8/8/8/8/4K2R w - - 100 120"],
+];
+
+/** Every field of a Position, the 128 board bytes included, as one comparable string. */
+const stateOf = (position: Position): string =>
+  [
+    position.board.join(","),
+    position.blackToMove,
+    position.castling,
+    position.epSquare,
+    position.halfmoveClock,
+    position.fullmoveNumber,
+  ].join("|");
+
+describe("ABC-206 A2 — leafEndReason(p) === gameStatus(p).reason", () => {
+  const leafRow = (depth: number) => () => {
+    const reasons = new Map<string, number>();
+    const walk = (position: Position, where: string, left: number): void => {
+      const before = stateOf(position);
+      const want = gameStatus(position).reason;
+      expect(leafEndReason(position), where).toBe(want);
+      expect(stateOf(position), where).toBe(before);
+      reasons.set(String(want), (reasons.get(String(want)) ?? 0) + 1);
+      if (left === 0) return;
+      for (const move of legalMoves(position)) {
+        const undo = makeMove(position, move);
+        walk(position, `${where} ${move.from}-${move.to}`, left - 1);
+        unmakeMove(position, move, undo);
+      }
+    };
+    for (const [name, fen] of A2_FENS) walk(parseFen(fen), name, depth);
+
+    // Every answer the leaf can give was reached, so no branch of it is unread.
+    for (const reason of [
+      "null",
+      "checkmate",
+      "stalemate",
+      "insufficient-material",
+      "seventy-five-move",
+    ]) {
+      expect(reasons.get(reason) ?? 0, reason).toBeGreaterThan(0);
+    }
+  };
+
+  it("on the perft roots to depth 1 and every terminal or clock FEN; p is unchanged", leafRow(1));
+
+  if (RUN_DEEP) {
+    it("to depth 3 [deep, ENGINE_DEEP=1]", leafRow(3), 600_000);
+  }
 });

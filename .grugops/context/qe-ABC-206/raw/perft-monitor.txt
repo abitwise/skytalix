@@ -1,0 +1,5 @@
+13:50:45Z ac=AC load1=4.23 vitest=0
+13:50:46Z ac=AC load1=4.05 vitest=0
+13:50:47Z ac=AC load1=4.05 vitest=0
+13:50:48Z ac=AC load1=4.05 vitest=0
+13:50:49Z ac=AC load1=4.05 vitest=0

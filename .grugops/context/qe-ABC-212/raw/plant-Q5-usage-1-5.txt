@@ -1,0 +1,120 @@
+
+ RUN  v4.1.12 <scratch>/plant-tree
+
+ ❯ src/cli.test.ts (101 tests | 3 failed) 298ms
+     × A1/A2/A3 — every refusal advertises the separator, and all it advertises resolves 14ms
+     × A5 — the usage line advertises --difficulty with every level, after the separator, and each form resolves 1ms
+     × ABC-212 A7 — the usage line is byte-exact, read off the existing refusal child 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/cli.test.ts > ABC-066 — the usage line is a command the user can actually run > A1/A2/A3 — every refusal advertises the separator, and all it advertises resolves
+AssertionError: expected [ '--ascii', '--colour', …(10) ] to deeply equal [ '--ascii', '--colour', …(12) ]
+
+- Expected
++ Received
+
+@@ -6,11 +6,9 @@
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+-   "6",
+-   "7",
+    "black",
+    "random",
+    "white",
+  ]
+
+ ❯ <anonymous> src/cli.test.ts:2251:53
+    2249|     // It is also what makes the six named forms present without trans…
+    2250|     // accepted token appears in some advertised invocation, and every…
+    2251|     expect([...new Set(invocations.flat())].sort()).toEqual([...ACCEPT…
+       |                                                     ^
+    2252|   });
+    2253| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/cli.test.ts > ABC-101 — --difficulty selects a level, and the played engine is that level > A5 — the usage line advertises --difficulty with every level, after the separator, and each form resolves
+AssertionError: advertised --difficulty 6: expected [ [], [ '--colour', 'white' ], …(9) ] to deep equally contain [ '--difficulty', '6' ]
+
+- Expected
++ Received
+
+  [
++   [],
++   [
++     "--colour",
++     "white",
++   ],
++   [
++     "--colour",
++     "black",
++   ],
++   [
++     "--colour",
++     "random",
++   ],
++   [
+      "--difficulty",
+-   "6",
++     "1",
++   ],
++   [
++     "--difficulty",
++     "2",
++   ],
++   [
++     "--difficulty",
++     "3",
++   ],
++   [
++     "--difficulty",
++     "4",
++   ],
++   [
++     "--difficulty",
++     "5",
++   ],
++   [
++     "--ascii",
++   ],
++   [
++     "--unicode",
++   ],
+  ]
+
+ ❯ <anonymous> src/cli.test.ts:4440:62
+    4438|     const invocations = invocationsAdvertisedBy(advertisedTextOf(line)…
+    4439|     for (const word of LEVEL_WORDS) {
+    4440|       expect(invocations, `advertised --difficulty ${word}`).toContain…
+       |                                                              ^
+    4441|       expect(optionsOf(["--difficulty", word]).difficulty).toBe(Number…
+    4442|     }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/cli.test.ts > ABC-101 — --difficulty selects a level, and the played engine is that level > ABC-212 A7 — the usage line is byte-exact, read off the existing refusal child
+AssertionError: expected 'usage: npm run chess -- [--colour whi…' to be 'usage: npm run chess -- [--colour whi…' // Object.is equality
+
+Expected: "usage: npm run chess -- [--colour white|black|random] [--difficulty 1|2|3|4|5|6|7] [--ascii | --unicode]"
+Received: "usage: npm run chess -- [--colour white|black|random] [--difficulty 1|2|3|4|5] [--ascii | --unicode]"
+
+ ❯ <anonymous> src/cli.test.ts:4457:52
+    4455|   it("ABC-212 A7 — the usage line is byte-exact, read off the existing…
+    4456|     // 0 new spawns (`A12`): the same child `A5` above reads.
+    4457|     expect(usageLineOf(CHILDREN.badColour.stderr)).toBe(
+       |                                                    ^
+    4458|       "usage: npm run chess -- [--colour white|black|random] [--diffic…
+    4459|     );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  1 failed | 4 passed (5)
+      Tests  3 failed | 341 passed (344)
+   Start at  14:17:54
+   Duration  5.62s (transform 0ms, setup 0ms, import 4.40s, tests 5.56s, environment 0ms)
+

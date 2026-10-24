@@ -1,0 +1,6 @@
+{"position":"kiwipete","level":5,"budgetMs":3000,"depth":7,"nodes":600666,"elapsedMs":3000,"wallMs":3000,"score":-22,"node":"v26.11.1"}
+{"position":"kiwipete","level":6,"budgetMs":5000,"depth":7,"nodes":982618,"elapsedMs":5003,"wallMs":5003,"score":-22,"node":"v26.11.1"}
+{"position":"kiwipete","level":7,"budgetMs":30000,"depth":9,"nodes":5688922,"elapsedMs":30001,"wallMs":30002,"score":-22,"node":"v26.11.1"}
+{"position":"position-6","level":5,"budgetMs":3000,"depth":7,"nodes":657049,"elapsedMs":3002,"wallMs":3002,"score":75,"node":"v26.11.1"}
+{"position":"position-6","level":6,"budgetMs":5000,"depth":7,"nodes":1056409,"elapsedMs":5004,"wallMs":5004,"score":75,"node":"v26.11.1"}
+{"position":"position-6","level":7,"budgetMs":30000,"depth":9,"nodes":6076057,"elapsedMs":30003,"wallMs":30004,"score":70,"node":"v26.11.1"}

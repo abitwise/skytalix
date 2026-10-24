@@ -50,7 +50,10 @@
  * not the delivered book (`ABC-180`, closing `AR-162-FALLBACK`). Only a read resolved from the
  * module's own URL finds the book. A build that read the book relative to the working directory —
  * first, only, or as a fallback — would read the decoy, warn, and red `A7` on stderr. Every other
- * child keeps its tree root as cwd.
+ * child keeps its tree root as cwd, and that root is the book-absent copy, itself a `mkdtemp`
+ * directory: no child of this lane runs with the repository as its working directory, so none can
+ * write `games/` into it (`ABC-203`, `ADR-0047` D7). Each ends on end of input or `quit`, so none
+ * reaches an outcome or writes a PGN file at all.
  */
 
 import { spawnSync } from "node:child_process";
@@ -71,7 +74,6 @@ import { dirname, join } from "node:path";
 import { afterAll, beforeAll, describe, expect, inject, it } from "vitest";
 import { makeMove } from "./apply.ts";
 import { createBookProbe } from "./book.ts";
-import { HARD_CEILING_MS } from "./engine.ts";
 import { parseFen, toFen } from "./fen.ts";
 import { legalMoves } from "./legal.ts";
 import { PROMPT } from "./line-input.ts";
@@ -212,10 +214,11 @@ const BOOK_ABSENT_WARNING = ((): string => {
 const occurrencesOf = (text: string, needle: string): number => text.split(needle).length - 1;
 
 /**
- * A HANG GUARD, NOT A CRITERION. Four times `A3`(ii)'s ceiling, so a slow child is a red ROW on
- * `HARD_CEILING_MS` and only a child that never returns reaches this.
+ * A HANG GUARD, NOT A CRITERION. Four times `A3`(ii)'s 5 s ceiling (level 5's, `NFR-004`), so a
+ * slow child is a red ROW on that ceiling and only a child that never returns reaches this.
+ * `ABC-212`: a literal, so the guard stays at 20 s when `HARD_CEILING_MS` moves to 32 000.
  */
-const HANG_GUARD_MS = 4 * HARD_CEILING_MS;
+const HANG_GUARD_MS = 20_000;
 
 /** `A1`'s floor: a reply faster than this means a double or a budget-less engine leaked in. */
 const REAL_SEARCH_FLOOR_MS = 1_000;
@@ -402,7 +405,9 @@ if (RUN_DEEP) {
     });
 
     it("A3(ii) — the whole child, spawn to exit, stays inside NFR-004's 5 s hard ceiling (clause B)", () => {
-      expect(played.wallMs).toBeLessThanOrEqual(HARD_CEILING_MS);
+      // The child plays level 5, whose ceiling is 5 000 (`ABC-212` § Design ruling 4). Read as
+      // `HARD_CEILING_MS` it would loosen silently to 32 s.
+      expect(played.wallMs).toBeLessThanOrEqual(5_000);
     });
 
     it("A3(iii) — the session advances: the side to move and the ply number both change", () => {

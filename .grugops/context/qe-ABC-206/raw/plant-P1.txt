@@ -1,0 +1,26 @@
+
+ RUN  v4.1.12 <scratchpad>/qe206/plant
+
+ ❯ src/gameend.nfr.test.ts (6 tests | 1 failed) 16ms
+     × leafEndReason never builds the move list or reads a key: hasLegalMove exactly once 3ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/gameend.nfr.test.ts > ABC-206 — the search leaf's game-end check stays cheap (call counts, spied) > leafEndReason never builds the move list or reads a key: hasLegalMove exactly once
+AssertionError: in progress: expected "vi.fn()" to be called +0 times, but got 1 times
+ ❯ <anonymous> src/gameend.nfr.test.ts:150:33
+    148|       vi.clearAllMocks();
+    149|       leafEndReason(position);
+    150|       expect(legalMoves, shape).toHaveBeenCalledTimes(0);
+       |                                 ^
+    151|       expect(hasLegalMove, shape).toHaveBeenCalledTimes(1);
+    152|       expect(zobristKey, shape).toHaveBeenCalledTimes(0);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 6 passed (7)
+      Tests  1 failed | 209 passed (210)
+   Start at  16:32:41
+   Duration  1.02s (transform 0ms, setup 0ms, import 465ms, tests 1.10s, environment 0ms)
+

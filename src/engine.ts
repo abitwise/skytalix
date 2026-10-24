@@ -41,15 +41,18 @@
  * and the breadth are load-bearing — a move-only comparison at one quiet position is blind to
  * exactly the drift a second copy produces (`ABC-078` QE, gap `G4`).
  *
- * THE BUDGET IS CLAMPED TO `HARD_CEILING_MS` (`RF-1`). `NFR-004`'s ceiling reads *"hard ceiling
- * 5 s AT ANY DIFFICULTY"*, and a ceiling that holds only when the caller chooses well is not a
- * ceiling on the engine — so it is honoured here, whatever a caller passes. Ruled at `ABC-078`'s
- * security/NFR gate (`plans/nfr-catalog.md`, `NFR-004` clause B): this module owns the MECHANISM,
- * `EPIC-006` owns the CHOOSING, and a ceiling is the bound every choice must land inside rather
- * than a choice. **The residual is stated and not hidden:** the clamp bounds the DEADLINE, not the
- * abort granularity, so a 10 s budget still returns at ~5 003 ms — accepted risk `AR-NFR004-A`,
- * same mechanism and same ≤ 31 ms bound as the ≤ 3 s clause. No safety margin is applied, because
- * a margin would make the sentence true by making `budgetMs` a lie.
+ * THE BUDGET IS CLAMPED TO `HARD_CEILING_MS` (`RF-1`). A ceiling that holds only when the caller
+ * chooses well is not a ceiling on the engine — so it is honoured here, whatever a caller passes.
+ * Ruled at `ABC-078`'s security/NFR gate (`plans/nfr-catalog.md`, `NFR-004` clause B): this module
+ * owns the MECHANISM, `EPIC-006` owns the CHOOSING, and a ceiling is the bound every choice must
+ * land inside rather than a choice. `ABC-212` (`ADR-0045` § AMENDMENT A3): `NFR-004`'s ceiling is
+ * per level (5 s at 1-5, 7 s at 6, 32 s at 7), and this ONE clamp sits at the largest of them,
+ * 32 000; each level's own ceiling is held by its budget, at least 2 s under it. So a raw call is
+ * bounded at 32 s, and every surface hands in a level-derived budget. **The residual is stated
+ * and not hidden:** the clamp bounds the DEADLINE, not the abort granularity, so a budget above
+ * it returns a few ms past 32 000 (measured at the old 5 000: ~5 003 ms) — accepted risk
+ * `AR-NFR004-A`, same mechanism and same ≤ 31 ms bound as the ≤ 3 s clause. No safety margin is
+ * applied, because a margin would make the sentence true by making `budgetMs` a lie.
  *
  * THE TRANSPOSITION TABLE AND IN-TREE REPETITION (`ABC-081`) are `src/search.ts`'s, node for node:
  * this call's own per-ply key array, seeded with the root's key, and the one table
@@ -72,7 +75,7 @@
  */
 
 import { makeMove, unmakeMove } from "./apply.ts";
-import { gameStatus } from "./gameend.ts";
+import { leafEndReason } from "./gameend.ts";
 import { isInCheck, legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
 import type { Position } from "./position.ts";
@@ -122,11 +125,13 @@ export type Clock = () => number;
 export const DEFAULT_BUDGET_MS = 3_000;
 
 /**
- * `NFR-004`'s hard ceiling, in milliseconds. A bound on the MECHANISM, not a difficulty:
- * `NFR-004` says the ceiling holds AT ANY DIFFICULTY, so it is honoured here whatever a caller
- * passes. `EPIC-006` chooses a budget; it does not choose the ceiling.
+ * `NFR-004`'s hard ceiling, in milliseconds: the largest per-level ceiling (32 s, level 7;
+ * `ADR-0045` § AMENDMENT A3). A bound on the MECHANISM, not a difficulty: it is honoured here
+ * whatever a caller passes. Each level's own, lower ceiling (5 s at 1-5, 7 s at 6) is held by
+ * that level's budget in `src/levels.ts`, not here. `EPIC-006` chooses a budget; it does not
+ * choose the ceiling.
  */
-export const HARD_CEILING_MS = 5_000;
+export const HARD_CEILING_MS = 32_000;
 
 /**
  * Nodes between clock consultations. A power of two, and a NODE count rather than a depth: the
@@ -242,9 +247,9 @@ function leafScore(
   beta: number,
   budget: Budget,
 ): number {
-  const status = gameStatus(position);
-  if (status.result === "in-progress") return quiesce(position, alpha, beta, 0, budget.visit);
-  if (status.reason === "checkmate") return 0 - (MATE_SCORE - ply);
+  const reason = leafEndReason(position);
+  if (reason === null) return quiesce(position, alpha, beta, 0, budget.visit);
+  if (reason === "checkmate") return 0 - (MATE_SCORE - ply);
   return 0;
 }
 

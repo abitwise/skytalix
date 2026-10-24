@@ -1,0 +1,43 @@
+illegal san: 'Rb8' in r1bqk2r/4ppbp/2pp2p1/p7/2B1P3/2N1Q3/PPP2PPP/1K1R3R w kq - 0 13 while parsing <Game at 0x1084674d0 ('skytalix (difficulty 1)' vs. 'Human', '2026.10.23' at '?')>
+== skytalix-20261023-234523.pgn
+ errors: 0 []
+ headers: {'Event': 'skytalix CLI game', 'Site': '?', 'Date': '2026.10.23', 'Round': '-', 'White': 'skytalix (difficulty 1)', 'Black': 'Human', 'Result': '0-1', 'Termination': 'normal', 'Difficulty': '1', 'HumanColour': 'black'}
+ plies: 54 final FEN: 6k1/4ppbp/3p2p1/7P/2b1P3/Pr6/1r1q1PP1/3K3R w - - 0 28
+ checkmate: True outcome: Outcome(termination=<Termination.CHECKMATE: 1>, winner=False)
+ comment on last node: 'Black wins by checkmate.'
+== corrupt.pgn
+ errors: 1 ["illegal san: 'Rb8' in r1bqk2r/4ppbp/2pp2p1/p7/2B1P3/2N1Q3/PPP2PPP/1K1R3R w kq - 0 13"]
+ headers: {'Event': 'skytalix CLI game', 'Site': '?', 'Date': '2026.10.23', 'Round': '-', 'White': 'skytalix (difficulty 1)', 'Black': 'Human', 'Result': '0-1', 'Termination': 'normal', 'Difficulty': '1', 'HumanColour': 'black'}
+ plies: 24 final FEN: r1bqk2r/4ppbp/2pp2p1/p7/2B1P3/2N1Q3/PPP2PPP/1K1R3R w kq - 0 13
+ checkmate: False outcome: None
+ comment on last node: ''
+== faultTwoLineComment.cc.pgn
+ errors: 0 []
+ headers: {'Event': '?', 'Site': '?', 'Date': '2026.10.23', 'Round': '1', 'White': 'a', 'Black': 'b', 'Result': '1/2-1/2', 'ECO': 'C42', 'GameDuration': '00:00:00', 'GameEndTime': '2026-10-23T23:57:06.639 GMT+3', 'GameStartTime': '2026-10-23T23:57:06.606 GMT+3', 'Opening': "Petrov's defense", 'PlyCount': '4', 'Termination': 'adjudication', 'TimeControl': '0.02/move'}
+ plies: 4 final FEN: rnbqkb1r/pppp1ppp/5n2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3
+ checkmate: False outcome: None
+ comment on last node: '-0.38/8 0.020s, Draw by adjudication: maximal game length'
+== faultTwoLineComment.pgn
+ errors: 0 []
+ headers: {'Event': 'skytalix CLI game', 'Site': '?', 'Date': '2026.10.23', 'Round': '-', 'White': 'Human', 'Black': 'skytalix (difficulty 2)', 'Result': '*', 'Termination': 'unterminated', 'Difficulty': '2', 'HumanColour': 'white'}
+ plies: 3 final FEN: rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2
+ checkmate: False outcome: None
+ comment on last node: 'The game did not finish: the engine returned a move that was\nnot its to play. That is a bug in this program, not a chess outcome.'
+== threefoldClaim.cc.pgn
+ errors: 0 []
+ headers: {'Event': '?', 'Site': '?', 'Date': '2026.10.23', 'Round': '1', 'White': 'a', 'Black': 'b', 'Result': '1-0', 'ECO': 'A05', 'GameDuration': '00:00:00', 'GameEndTime': '2026-10-23T23:57:07.001 GMT+3', 'GameStartTime': '2026-10-23T23:57:06.969 GMT+3', 'Opening': 'Reti Opening', 'PlyCount': '7', 'Termination': 'time forfeit', 'TimeControl': '0.02/move'}
+ plies: 7 final FEN: rnbqkb1r/pppppppp/5n2/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 7 4
+ checkmate: False outcome: None
+ comment on last node: 'book, Black loses on time'
+== threefoldClaim.pgn
+ errors: 0 []
+ headers: {'Event': 'skytalix CLI game', 'Site': '?', 'Date': '2026.10.23', 'Round': '-', 'White': 'Human', 'Black': 'skytalix (difficulty 2)', 'Result': '1/2-1/2', 'Termination': 'normal', 'Difficulty': '2', 'HumanColour': 'white'}
+ plies: 8 final FEN: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 8 5
+ checkmate: False outcome: None
+ comment on last node: 'Draw by threefold repetition,\nclaimed by the player to move under FIDE 9.2.'
+== zeroPlyResign.pgn
+ errors: 0 []
+ headers: {'Event': 'skytalix CLI game', 'Site': '?', 'Date': '2026.10.23', 'Round': '-', 'White': 'Human', 'Black': 'skytalix (difficulty 2)', 'Result': '0-1', 'Termination': 'normal', 'Difficulty': '2', 'HumanColour': 'white'}
+ plies: 0 final FEN: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
+ checkmate: False outcome: None
+ comment on last node: 'Black wins by resignation.'

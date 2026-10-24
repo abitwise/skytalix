@@ -5,18 +5,26 @@
  */
 
 import { readFileSync } from "node:fs";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { makeMove } from "./apply.ts";
 import { type BookProbe, createBookProbe } from "./book.ts";
+import { chooseMove } from "./engine.ts";
 import { parseFen } from "./fen.ts";
 import { isInCheck, legalMoves } from "./legal.ts";
-import { createLevel, DEFAULT_LEVEL, LEVELS, seededRandom } from "./levels.ts";
+import { createLevel, DEFAULT_LEVEL, HARDEST_LEVEL, LEVELS, seededRandom } from "./levels.ts";
 import type { Move } from "./moves.ts";
 import { type Position, squareName } from "./position.ts";
 import { MATE_SCORE } from "./search.ts";
 import { createUciSession, type UciSessionOptions } from "./uci-session.ts";
 import { virtualClock } from "./virtual-clock.ts";
 import { zobristKey } from "./zobrist.ts";
+
+/**
+ * `ABC-212` `A12`'s budget-read arm (`AR-212-LANE`). It CALLS THROUGH (`vi.mock(p, { spy: true })`,
+ * the `command-input.test.ts` precedent): no row's behaviour changes. Only the `ABC-212` A9 rows
+ * replace `chooseMove`, one row at a time, to read the budget a `go` hands the engine.
+ */
+vi.mock("./engine.ts", { spy: true });
 
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const KIWIPETE = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1";
@@ -119,7 +127,7 @@ describe("ABC-167 A1-A2 — handshake and ready", () => {
       "id name skytalix",
       "id author Olger Oeselg",
       "option name OwnBook type check default true",
-      "option name Skill Level type spin default 5 min 1 max 5",
+      "option name Skill Level type spin default 5 min 1 max 7",
       "uciok",
     ]);
   });
@@ -692,7 +700,7 @@ describe("ABC-171 A1 — the option lines", () => {
       "id name skytalix",
       "id author Olger Oeselg",
       "option name OwnBook type check default true",
-      "option name Skill Level type spin default 5 min 1 max 5",
+      "option name Skill Level type spin default 5 min 1 max 7",
       "uciok",
     ]);
   });
@@ -714,7 +722,7 @@ describe("ABC-171 A2 — setoption", () => {
     expect(send("setoption name OwnBook value false")).toEqual([]);
   });
 
-  for (const value of ["0", "6", "2.5", "x", "constructor"]) {
+  for (const value of ["0", "8", "2.5", "x", "constructor"]) {
     it(`Skill Level value ${value}: one info string, the old value (1) kept`, () => {
       const { send } = rig({ k: 1 });
       expect(send("setoption name Skill Level value 1")).toEqual([]);
@@ -947,13 +955,13 @@ describe("ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12)", ()
   it("the Skill Level line's default is DEFAULT_LEVEL, built from the constant", () => {
     const { send } = rig();
     expect(send("uci")).toContain(
-      `option name Skill Level type spin default ${DEFAULT_LEVEL} min 1 max 5`,
+      `option name Skill Level type spin default ${DEFAULT_LEVEL} min 1 max 7`,
     );
   });
 
-  it("the Skill Level line is literally default 5 min 1 max 5", () => {
+  it("the Skill Level line is literally default 5 min 1 max 7", () => {
     const { send } = rig();
-    expect(send("uci")).toContain("option name Skill Level type spin default 5 min 1 max 5");
+    expect(send("uci")).toContain("option name Skill Level type spin default 5 min 1 max 7");
   });
 
   it("at the default, a bare go takes the chooseMove path: score, and time within 3 000 ms", () => {
@@ -988,6 +996,121 @@ describe("ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12)", ()
       const info = parseLevelInfo(lines[1]);
       expect(lines[2]).toBe(`bestmove ${info.move}`);
       expect(legalFrom(START_FEN)).toContain(info.move);
+    });
+  }
+});
+
+// ---------------------------------------------------------------------------------------------
+// `ABC-212` A9 (`ADR-0045` § AMENDMENT A4) — `Skill Level` 6 and 7, under `A12`'s two arms
+// (§ Amendment 2026-10-24 item 2). No level-6 or level-7 search runs on the real clock here.
+// - SEARCH arm: the bare `go` at 7 runs the real engine on the virtual clock at step = G ÷ 30, read
+//   against `ABC-167` `A5`'s bound, G <= time <= G + 2 · step. It is the row that crosses the
+//   engine's own clamp (`HARD_CEILING_MS`), so it keeps the search. `go depth 3` stops at depth 3.
+// - BUDGET-READ arm (`AR-212-LANE`, `NFR-008`): every other row reads the budget `go` hands to
+//   `chooseMove` and does not search. That budget is exactly G; the time the engine then takes to
+//   honour a budget is `ABC-167` `A5`'s row, at levels 1-5 and at the bare `go` at 7 above.
+// ---------------------------------------------------------------------------------------------
+
+describe("ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path", () => {
+  // The budget-read rows replace `chooseMove` for one call; restore the call-through after each row
+  // so no stub can leak into a later row, even one that failed before its `go`.
+  afterEach(() => {
+    vi.mocked(chooseMove).mockReset();
+  });
+
+  /** One fresh session at `level`, step G ÷ 30; the info line of `go` from the start position. */
+  const searchAt = (level: 6 | 7, go: string, expectedG: number) => {
+    const step = Math.floor(expectedG / 30);
+    const { send, draws } = rig({ stepMs: step });
+    expect(send(`setoption name Skill Level value ${level}`)).toEqual([]);
+    send("position startpos");
+    const lines = send(go);
+    expect(lines).toHaveLength(2);
+    // D11: rate 0 is `chooseMove` with a score, and draws no seed.
+    expect(lines[0]).toContain(" score ");
+    const info = parseInfo(lines[0]);
+    expect(lines[1]).toBe(`bestmove ${info.move}`);
+    expect(draws.count).toBe(0);
+    return { info, step };
+  };
+
+  /**
+   * `A12`'s budget-read arm: the options `go` hands to `chooseMove`, with no search. The stub
+   * answers 1. e4 so the session still writes its info and bestmove lines from the engine's answer.
+   */
+  const budgetAt = (setup: readonly string[], go: string) => {
+    const { send, draws } = rig({ stepMs: 1_000 });
+    const handed: Array<{ budgetMs: number; maxDepth?: number; maxNodes?: number }> = [];
+    const e2e4 = legalMoves(parseFen(START_FEN)).find((m) => coordinateOf(m) === "e2e4") as Move;
+    vi.mocked(chooseMove).mockImplementation((_position, options) => {
+      handed.push({
+        budgetMs: options.budgetMs,
+        ...(options.maxDepth === undefined ? {} : { maxDepth: options.maxDepth }),
+        ...(options.maxNodes === undefined ? {} : { maxNodes: options.maxNodes }),
+      });
+      return { move: e2e4, score: 0, depth: 1, nodes: 1, elapsedMs: options.budgetMs };
+    });
+    const setupLines = setup.map((line) => send(line));
+    send("position startpos");
+    const lines = send(go);
+    // One engine call per `go`, on the rate-0 path: `chooseMove` itself, and no seed drawn (D11).
+    expect(handed).toHaveLength(1);
+    expect(draws.count).toBe(0);
+    expect(lines.at(-1)).toBe("bestmove e2e4");
+    return { handed: handed[0] as (typeof handed)[number], setupLines };
+  };
+
+  it("uci lists Skill Level default 5 min 1 max 7, max read from HARDEST_LEVEL", () => {
+    const { send } = rig();
+    expect(send("uci")).toContain("option name Skill Level type spin default 5 min 1 max 7");
+    expect(HARDEST_LEVEL).toBe(7);
+  });
+
+  it("setoption name Skill Level value 7 sets 7: a bare go searches 30 000 ms", () => {
+    const { info, step } = searchAt(7, "go", 30_000);
+    expectWithin(info.time, 30_000, step);
+  });
+
+  it("a bare go at 6 hands the engine 5 000 ms", () => {
+    const { handed, setupLines } = budgetAt(["setoption name Skill Level value 6"], "go");
+    expect(setupLines).toEqual([[]]);
+    expect(handed).toEqual({ budgetMs: 5_000 });
+  });
+
+  it("go movetime 60000 at 7 hands the engine 30 000 (the level caps G)", () => {
+    const { handed } = budgetAt(["setoption name Skill Level value 7"], "go movetime 60000");
+    expect(handed).toEqual({ budgetMs: 30_000 });
+  });
+
+  it("go movetime 1000 at 7 hands the engine 1 000 (G caps the level)", () => {
+    const { handed } = budgetAt(["setoption name Skill Level value 7"], "go movetime 1000");
+    expect(handed).toEqual({ budgetMs: 1_000 });
+  });
+
+  it("go wtime 600000 btime 600000 at 7 hands the engine min(600 000 ÷ 20, 30 000) = 30 000", () => {
+    const { handed } = budgetAt(
+      ["setoption name Skill Level value 7"],
+      "go wtime 600000 btime 600000",
+    );
+    expect(handed).toEqual({ budgetMs: 30_000 });
+  });
+
+  it("go depth 3 at 7 stops at depth 3 (D12: rate 0), and the info line carries a score", () => {
+    const { info } = searchAt(7, "go depth 3", 30_000);
+    expect(info.depth).toBe(3);
+  });
+
+  for (const value of ["0", "8"]) {
+    it(`Skill Level value ${value} at 7 keeps 7, with the 1-7 info string`, () => {
+      const { handed, setupLines } = budgetAt(
+        ["setoption name Skill Level value 7", `setoption name Skill Level value ${value}`],
+        "go",
+      );
+      expect(setupLines).toEqual([
+        [],
+        [`info string Skill Level takes an integer 1-7, got ${value}; kept 7`],
+      ]);
+      expect(handed).toEqual({ budgetMs: 30_000 });
     });
   }
 });

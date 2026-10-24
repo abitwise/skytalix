@@ -1,0 +1,125 @@
+# qe-lane-ABC-212 plants: each applied alone to a fresh git-archive copy of 814b92a0 (never src/ of the worktree), node_modules symlinked;
+# whole file run: NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/uci-session.test.ts --reporter=json (scratch <scratchpad>/qe212lane/)
+# Virtual clock throughout (the rig's virtualClock). No ENGINE_DEEP, no real-clock timing reading. Q1 puts movetime rows at levels 1-5 on the wall clock only by its own plant; A9's movetime rows at 7 are stubbed there, so no level-6/7 search ran on the real clock.
+# plant anchors (exact string, one match each): bin/plant.mjs in scratch
+#   P1      src/levels.ts       LEVELS[7].budgetMs 30_000 -> 3_000
+#   P2      src/engine.ts       HARD_CEILING_MS 32_000 -> 5_000
+#   P3      src/uci-session.ts  option line max ${HARDEST_LEVEL} -> max 5
+#   L6      src/levels.ts       LEVELS[6].budgetMs 5_000 -> 4_000
+#   L7rate  src/levels.ts       LEVELS[7].blunderRate 0 -> 0.01
+#   Q1      src/uci-session.ts  chooseMove call: now -> ...(tokens.includes("movetime") ? {} : { now })  (session clock dropped on the movetime shape only)
+#   Q2      src/uci-session.test.ts  the A9 describe's afterEach(mockReset) removed
+#   Q3      src/uci-session.test.ts  mockReset -> mockClear (keeps the stub implementation)
+== control
+control.json: total 137 passed 137 failed 0 pending 0
+== P1
+P1.json: total 137 passed 132 failed 5 pending 0
+   RED  [A9] setoption name Skill Level value 7 sets 7: a bare go searches 30 000 ms
+   RED  [A9] go movetime 60000 at 7 hands the engine 30 000 (the level caps G)
+   RED  [A9] go wtime 600000 btime 600000 at 7 hands the engine min(600 000 ÷ 20, 30 000) = 30 000
+   RED  [A9] Skill Level value 0 at 7 keeps 7, with the 1-7 info string
+   RED  [A9] Skill Level value 8 at 7 keeps 7, with the 1-7 info string
+== P2
+P2.json: total 137 passed 134 failed 3 pending 0
+   RED  [A9] setoption name Skill Level value 7 sets 7: a bare go searches 30 000 ms
+   RED  [A9] Skill Level value 0 at 7 keeps 7, with the 1-7 info string
+   RED  [A9] Skill Level value 8 at 7 keeps 7, with the 1-7 info string
+== P3
+P3.json: total 137 passed 132 failed 5 pending 0
+   RED  ABC-167 A1-A2 — handshake and ready A1: uci writes id name, id author, then (ABC-171 A1) the two option lines, then uciok
+   RED  ABC-171 A1 — the option lines uci writes exactly 5 lines, the two options after the id lines and before uciok
+   RED  ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12) the Skill Level line's default is DEFAULT_LEVEL, built from the constant
+   RED  ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12) the Skill Level line is literally default 5 min 1 max 7
+   RED  [A9] uci lists Skill Level default 5 min 1 max 7, max read from HARDEST_LEVEL
+== L6
+L6.json: total 137 passed 136 failed 1 pending 0
+   RED  [A9] a bare go at 6 hands the engine 5 000 ms
+== L7rate
+L7rate.json: total 138 passed 131 failed 7 pending 0
+   RED  [A9] setoption name Skill Level value 7 sets 7: a bare go searches 30 000 ms
+   RED  [A9] go movetime 60000 at 7 hands the engine 30 000 (the level caps G)
+   RED  [A9] go movetime 1000 at 7 hands the engine 1 000 (G caps the level)
+   RED  [A9] go wtime 600000 btime 600000 at 7 hands the engine min(600 000 ÷ 20, 30 000) = 30 000
+   RED  [A9] go depth 3 at 7 stops at depth 3 (D12: rate 0), and the info line carries a score
+   RED  [A9] Skill Level value 0 at 7 keeps 7, with the 1-7 info string
+   RED  [A9] Skill Level value 8 at 7 keeps 7, with the 1-7 info string
+== Q1nowMovetime
+Q1nowMovetime.json: total 137 passed 137 failed 0 pending 0
+== Q2noReset
+Q2noReset.json: total 137 passed 136 failed 1 pending 0
+   RED  [A9] go depth 3 at 7 stops at depth 3 (D12: rate 0), and the info line carries a score
+== Q3clear
+Q3clear.json: total 137 passed 136 failed 1 pending 0
+   RED  [A9] go depth 3 at 7 stops at depth 3 (D12: rate 0), and the info line carries a score
+
+# Leak probe: --sequence.shuffle --sequence.seed=N, whole file, guard in place (control) vs removed (Q2)
+shuf-control-1.json: total 137 passed 137 failed 0 pending 0
+shuf-noreset-1.json: total 137 passed 129 failed 8 pending 0
+   RED  ABC-167 A7 — the D12 limits go depth 3 reports depth 3 on a clock where an unlimited go reaches depth >= 5
+   RED  ABC-167 A7 — the D12 limits QE-170-g: a tiny go nodes 1 still writes one info line and a legal depth-1 bestmove
+   RED  ABC-167 A7 — the D12 limits go mate 2 on the smothered mate -> score mate 2 and bestmove d5g8
+   RED  ABC-167 A7 — the D12 limits go depth 3 mate 5 -> depth 3 (the smaller one wins)
+   RED  ABC-167 A7 — the D12 limits A7-i1: go movetime depth 3 -> one info string naming movetime, then depth 3
+   RED  ABC-167 A7 — the D12 limits A7-i4: go searchmoves e2e4 depth 3 -> searchmoves stops at depth, so depth 3
+   RED  ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12) at the default, go depth 3 reports depth 3 (D12)
+   RED  [A9] go depth 3 at 7 stops at depth 3 (D12: rate 0), and the info line carries a score
+shuf-control-2.json: total 137 passed 137 failed 0 pending 0
+shuf-noreset-2.json: total 137 passed 130 failed 7 pending 0
+   RED  ABC-167 A7 — the D12 limits go depth 3 reports depth 3 on a clock where an unlimited go reaches depth >= 5
+   RED  ABC-167 A7 — the D12 limits QE-170-g: a tiny go nodes 1 still writes one info line and a legal depth-1 bestmove
+   RED  ABC-167 A7 — the D12 limits go mate 2 on the smothered mate -> score mate 2 and bestmove d5g8
+   RED  ABC-167 A7 — the D12 limits go depth 3 mate 5 -> depth 3 (the smaller one wins)
+   RED  ABC-167 A7 — the D12 limits A7-i1: go movetime depth 3 -> one info string naming movetime, then depth 3
+   RED  ABC-167 A7 — the D12 limits A7-i4: go searchmoves e2e4 depth 3 -> searchmoves stops at depth, so depth 3
+   RED  [A9] go depth 3 at 7 stops at depth 3 (D12: rate 0), and the info line carries a score
+shuf-control-3.json: total 137 passed 137 failed 0 pending 0
+shuf-noreset-3.json: total 137 passed 130 failed 7 pending 0
+   RED  ABC-167 A7 — the D12 limits go depth 3 reports depth 3 on a clock where an unlimited go reaches depth >= 5
+   RED  ABC-167 A7 — the D12 limits QE-170-g: a tiny go nodes 1 still writes one info line and a legal depth-1 bestmove
+   RED  ABC-167 A7 — the D12 limits go mate 2 on the smothered mate -> score mate 2 and bestmove d5g8
+   RED  ABC-167 A7 — the D12 limits go depth 3 mate 5 -> depth 3 (the smaller one wins)
+   RED  ABC-167 A7 — the D12 limits A7-i1: go movetime depth 3 -> one info string naming movetime, then depth 3
+   RED  ABC-167 A7 — the D12 limits A7-i4: go searchmoves e2e4 depth 3 -> searchmoves stops at depth, so depth 3
+   RED  [A9] go depth 3 at 7 stops at depth 3 (D12: rate 0), and the info line carries a score
+shuf-control-4.json: total 137 passed 137 failed 0 pending 0
+shuf-noreset-4.json: total 137 passed 126 failed 11 pending 0
+   RED  ABC-167 A3 — a move from a position writes one info line then one bestmove, the same legal move
+   RED  ABC-167 A6 — infinite waits for stop A6-e2: position startpos writes the held bestmove first, in the position it searched
+   RED  ABC-167 A6 — infinite waits for stop A6-e3: ucinewgame writes the held bestmove first, in the position it searched
+   RED  ABC-167 A7 — the D12 limits go depth 3 reports depth 3 on a clock where an unlimited go reaches depth >= 5
+   RED  ABC-167 A7 — the D12 limits QE-170-g: a tiny go nodes 1 still writes one info line and a legal depth-1 bestmove
+   RED  ABC-167 A7 — the D12 limits go mate 2 on the smothered mate -> score mate 2 and bestmove d5g8
+   RED  ABC-167 A7 — the D12 limits go depth 3 mate 5 -> depth 3 (the smaller one wins)
+   RED  ABC-167 A7 — the D12 limits A7-i1: go movetime depth 3 -> one info string naming movetime, then depth 3
+   RED  ABC-167 A7 — the D12 limits A7-i4: go searchmoves e2e4 depth 3 -> searchmoves stops at depth, so depth 3
+   RED  ABC-171 A7 — the blunder path go depth 3 at level 5 reports depth 3 (ABC-167 A7; level 3 now drops the limit)
+   RED  [A9] go depth 3 at 7 stops at depth 3 (D12: rate 0), and the info line carries a score
+shuf-control-5.json: total 137 passed 137 failed 0 pending 0
+shuf-noreset-5.json: total 137 passed 123 failed 14 pending 0
+   RED  ABC-167 A3 — a move from a position writes one info line then one bestmove, the same legal move
+   RED  ABC-167 A4 — bad input holds no position a held stalemate answers go with bestmove 0000
+   RED  ABC-167 A6 — infinite waits for stop A6-e2: position startpos writes the held bestmove first, in the position it searched
+   RED  ABC-167 A6 — infinite waits for stop A6-e3: ucinewgame writes the held bestmove first, in the position it searched
+   RED  ABC-167 A7 — the D12 limits go depth 3 reports depth 3 on a clock where an unlimited go reaches depth >= 5
+   RED  ABC-167 A7 — the D12 limits QE-170-g: a tiny go nodes 1 still writes one info line and a legal depth-1 bestmove
+   RED  ABC-167 A7 — the D12 limits go mate 2 on the smothered mate -> score mate 2 and bestmove d5g8
+   RED  ABC-167 A7 — the D12 limits go depth 3 mate 5 -> depth 3 (the smaller one wins)
+   RED  ABC-167 A7 — the D12 limits A7-i1: go movetime depth 3 -> one info string naming movetime, then depth 3
+   RED  ABC-167 A7 — the D12 limits A7-i4: go searchmoves e2e4 depth 3 -> searchmoves stops at depth, so depth 3
+   RED  ABC-167 A8 — mate scores being mated next move reports score mate -1
+   RED  ABC-171 A7 — the blunder path go depth 3 at level 5 reports depth 3 (ABC-167 A7; level 3 now drops the limit)
+   RED  ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12) at the default, go depth 3 reports depth 3 (D12)
+   RED  [A9] go depth 3 at 7 stops at depth 3 (D12: rate 0), and the info line carries a score
+
+# Q4: A9 as written (the search-form rows of src/uci-session.test.ts at 2079e0df) run on the 814b92a0 tree (src/ byte-identical to 2079e0df apart from that file)
+# NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/uci-session.test.ts -t "ABC-212 A9" --reporter=verbose ; rc=0 ; per-row ms below are vitest's own and are not a timing reading
+ ✓ src/uci-session.test.ts > [A9] > uci lists Skill Level default 5 min 1 max 7, max read from HARDEST_LEVEL 1ms
+ ✓ src/uci-session.test.ts > [A9] > setoption name Skill Level value 7 sets 7: a bare go searches 30 000 ms 158ms
+ ✓ src/uci-session.test.ts > [A9] > a bare go at 6 searches 5 000 ms 151ms
+ ✓ src/uci-session.test.ts > [A9] > go movetime 60000 at 7 searches 30 000 (the level caps G) 146ms
+ ✓ src/uci-session.test.ts > [A9] > go movetime 1000 at 7 searches 1 000 (G caps the level) 153ms
+ ✓ src/uci-session.test.ts > [A9] > go wtime 600000 btime 600000 at 7 searches min(600 000 ÷ 20, 30 000) = 30 000 145ms
+ ✓ src/uci-session.test.ts > [A9] > go depth 3 at 7 stops at depth 3 (D12: rate 0), and the info line carries a score 4ms
+ ✓ src/uci-session.test.ts > [A9] > Skill Level value 0 at 7 keeps 7, with the 1-7 info string 143ms
+ ✓ src/uci-session.test.ts > [A9] > Skill Level value 8 at 7 keeps 7, with the 1-7 info string 141ms
+      Tests  9 passed | 128 skipped (137)

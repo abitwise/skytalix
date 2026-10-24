@@ -19,6 +19,16 @@ owner: BA/PM
 > to him when it lands, and moving an NFR bound stays his.
 >
 > **No Elo target is set here.** The owner gave none. One is proposed as owner question Q1, below.
+>
+> **Updated 2026-10-24 by BA/PM** (task `bapm-cut-levels-6-7`, records only, at `main` `6c0ab29e`). The owner's word
+> `owner-word-2026-10-23` `…e44d2903`: *"1. +100 target ok ; 2. run whenever idle ; I think we can add 2 more
+> difficulty settings …"*.
+> - **Q1 answered: M1's target is ≥ +100 Elo** (point estimate), with the 95 % interval above 0. See § Success
+>   measures.
+> - **Q2 answered: readings run whenever the board is idle,** one at a time, on AC, alone among agent hops (as
+>   `ABC-202` ran). No owner window is needed.
+> - **Levels 6 and 7 are not in this epic.** They are cut as `ABC-212` under `EPIC-004`'s levels line, because this
+>   epic holds the levels fixed. `G5` and `G9` are re-read below, and nothing else in this page moves.
 
 ## Problem
 
@@ -39,6 +49,8 @@ still hold only measured gains.
 
 - One rating harness under `tools/`, outside `npm test` (`ABC-204`).
 - Seven engine changes, one per accepted proposal, each behind its own reading (`ABC-205` to `ABC-211`).
+- *2026-10-24 (BA/PM, `bapm-ABC-214-path-a`):* one provenance change, `ABC-215`. It re-derives the CC BY-SA 3.0
+  values on the owner's path A (`…fb0468ff`) and is measured under S3.
 - `src/evaluate.ts`, `src/engine.ts`, `src/search.ts`, `src/quiescence.ts`, `src/gameend.ts`, `src/transposition.ts`
   and `data/opening-book/` change, each only in the ticket that names it.
 
@@ -46,6 +58,10 @@ still hold only measured gains.
 
 - **The levels and their budgets.** `src/levels.ts` `LEVELS`, `DEFAULT_LEVEL` and `HARD_CEILING_MS` stay byte-identical
   (gate `G9`). "The same levels and time budgets" is what this epic holds fixed.
+  - *2026-10-24 (BA/PM, `bapm-cut-levels-6-7`):* the owner's new levels 6 (5 s) and 7 (30 s) are `ABC-212`, under
+    `EPIC-004`. No ticket of this epic edits them. `ABC-212` is value-identical at levels 1–5 (its `A3`: 50 of 50
+    `(move, kind, depth, nodes)` equal to base), so its merge does **not** stale a D reading under § "When a D reading
+    goes stale". Its real-clock readings (about 8 min, width 1) never overlap a harness reading.
 - **A user-visible Elo.** The harness's number is a reading kept in the records. No level, option or screen claims an
   Elo (`src/levels.ts` header; `EPIC-007` § Success measures).
 - **Entering a rating list or a competition.** That means distributing the engine to third parties. It touches
@@ -89,6 +105,10 @@ own.
     goes back to BA/PM. BA/PM allows at most one re-tune round per ticket, then closes or re-cuts it.
 - **S2, for value-identical and data-only tickets (`ABC-206`, `ABC-211`).** The ticket meets its own mechanical bar,
   and its D reading is not LOSS.
+- **S3, for a provenance change (`ABC-215`).** *Added 2026-10-24 by BA/PM (`bapm-ABC-214-path-a`).* D is not LOSS.
+  A NEUTRAL with X < 0 gets the one extension (pooled), and it must still be not LOSS. LOSS is NOT MET, with at most
+  one re-tune round. This is a delivery call, flagged as cheap to reverse like S1. Why it is not S1 or S2:
+  `ABC-215` § Acceptance.
 
 **When a D reading goes stale.** A reading is valid against the base it was read on. A value-identical merge
 (`ABC-206`) or a records-only merge in between leaves it valid. A value-changing merge into `src/` or `data/` in
@@ -106,11 +126,11 @@ not favour either side. A FAIL-class fault on a host that is not quiet is UNRESO
 | `G2` | Complete evaluation cost | mean **≤ 1 100 ns** per call, with the base read in the same session | `ABC-083` `A5`; `ADR-0031`'s near-bar rule: a mean of 990–1 210 ns is read again in a second session in reverse order |
 | `G3` | Evaluation relations | `ABC-083` `A1` (mirror, exact equality), `A2`, `A3`, `A4` (mobility within **±100 cp**) and `A6` (purity, byte-identical) stay green | `src/evaluate*.test.ts` |
 | `G4` | Search identity and oracles | `ABC-078` `A3` identity sweep green. The `ADR-0026` bounded oracle is green. Every test-only door that exists before the ticket reproduces its pre-ticket search node for node | `src/engine.test.ts`, `src/search*.test.ts` |
-| `G5` | `NFR-004` | **≤ 3 s** a move at level 5; **5 s** hard ceiling at any level | the existing instruments, unchanged |
+| `G5` | `NFR-004` | **≤ 3 s** a move at level 5; **5 s** hard ceiling at any level. ***Re-read 2026-10-24:* 5 s at levels 1–5,** once the owner accepts `ABC-212`'s `NFR-004` text (OD-212-1). Level 5's bars do not move | the existing instruments, unchanged |
 | `G6` | `NFR-005` | `kiwipete` and `position-6` in plain `node` at 3 s: depth **≥ 6** (FAIL floor), depth 7 (WARN), and **≥ the base build's** completed depth, same machine, same session | catalog row; `ABC-083` `A7`'s non-regression rule |
 | `G7` | `NFR-009` | search-held memory **≤ 16 MiB**; growth **≤ 1 MiB** between a 1 s and a 3 s search | catalog row |
 | `G8` | `NFR-008` | `npm test` wall **≤ 10 s** at load1 ≤ 8 on the declared stack; the ticket's `N8-LANE` on its narrow set is reported | catalog row, `ADR-0035` |
-| `G9` | Levels and budgets | `src/levels.ts` `LEVELS`, `DEFAULT_LEVEL` and `HARD_CEILING_MS` byte-identical to base | `git diff` |
+| `G9` | Levels and budgets | `src/levels.ts` `LEVELS`, `DEFAULT_LEVEL` and `HARD_CEILING_MS` byte-identical to base. ***Re-read 2026-10-24 (owner `…e44d2903`; BA/PM `bapm-cut-levels-6-7`):* levels 1–5 byte-identical: `LEVELS[1..5]` and `DEFAULT_LEVEL` (5) unchanged, and level 5's ceiling is 5 000 ms. Levels 6–7, `HARDEST_LEVEL` and the clamp move only through `ABC-212`, and no ticket of this epic edits them** | `git diff` |
 | `G10` | A level the change reddens | ruled under `ADR-0028`: fixture first, then one headroom, then the owner. Catalog NFR levels never move under it | `ADR-0028` |
 | `G11` | Game-1 replay, **reported, not graded** | the level-5, 3 s choice at the five error positions (before 4.Qa4, 8.e5, 10.Ne4, 13.d4 and 17.Kc1), against base | the FENs replayed from `plans/uat/EPIC-006-game-1.pgn` |
 
@@ -118,8 +138,8 @@ not favour either side. A FAIL-class fault on a host that is not quiet is UNRESO
 
 | # | measure | target | how it is read |
 |---|---|---|---|
-| M1 | **Stronger on an external scale** | R at the epic's close minus R at its start (the `ABC-204` `A4` baseline): the difference's 95 % interval lies **above 0**. Its half-width is √(Y₁² + Y₂²) | two R readings with E, the openings and the pins unchanged, on this host. **The size of the gain is not set: owner question Q1** |
-| M2 | **Every shipped change was measured** | each merged ticket of this epic carries a D reading that meets its ship rule (S1 or S2) | the ticket's `## Reading` section and its QE note |
+| M1 | **Stronger on an external scale** | R at the epic's close minus R at its start (the `ABC-204` `A4` baseline): the difference's 95 % interval lies **above 0**. Its half-width is √(Y₁² + Y₂²) | two R readings with E, the openings and the pins unchanged, on this host. ~~**The size of the gain is not set: owner question Q1**~~ **2026-10-24, owner-set (Q1, `…e44d2903`): the point estimate (R at close − R at baseline) is ≥ +100 Elo, AND the interval lies above 0. Both must hold for MET** |
+| M2 | **Every shipped change was measured** | each merged ticket of this epic carries a D reading that meets its ship rule (S1 or S2; S3 for `ABC-215`, added 2026-10-24) | the ticket's `## Reading` section and its QE note |
 | M3 | **Nothing regressed** | `G1`, `G5`, `G6`, `G8` and `G9` green on `main` at close | the gates' own instruments |
 | M4 | **The owner's decisions stayed his** | 0 NFR bounds moved without his word. Every new or changed ADR of this epic was reported to him when it landed | the ADR pages and the owner-word notes |
 
@@ -135,6 +155,7 @@ not favour either side. A FAIL-class fault on a host that is not quiet is UNRESO
 | 6 | `ABC-209` | The transposition table is kept across the moves of one game | S | P3 | Backlog | `ABC-208` merged | **`ADR-0025` decision 4 amendment** | none planned. `G7` (`NFR-009` growth clause) is re-read |
 | 7 | `ABC-210` | Checks at the horizon: a check extension or checks in quiescence | M | P3 | Backlog | `ABC-209` merged | **reverses `ABC-079`'s recorded decision (`src/quiescence.ts:21-24`): an ADR, plus an `ADR-0026` door** | none planned |
 | 8 | `ABC-211` | The opening book goes deeper in the English lines | S | P3 | Backlog | a source ruling | **`ADR-0023` (source and licence): a new source is needed. Probed: the current CC0 source does not hold game 1's 3...b6. This touch point is not in the brief** | none planned. `NFR-006` is re-read |
+| 9 | `ABC-215` | The evaluation's material values and piece-square tables are our own, each made by a stated rule, and the CC BY-SA 3.0 carve-out leaves `NOTICE` and the header | L | P2 | Backlog | `ABC-214` merged; `ABC-205` Done or closed; `ABC-204` Done | none expected (values only). It ends the licence ADR's path-A carve-out. *Added 2026-10-24 (`bapm-ABC-214-path-a`), on the owner's word `…fb0468ff` (OD-214-1 = A). Its ship rule is S3* | none planned. `G2` and `G6` are re-read |
 
 **Why this order.**
 - The brief sets two places: the harness first, then king safety.
@@ -159,6 +180,9 @@ oracle and one timing bar. Each can land as its own value-identical commit.
     the smallest target that the two R readings can tell apart from "no change".
   - **Options:** (a) +100 as proposed; (b) another number; (c) no number, so M1's "interval above 0" is the only bar.
   - **Default without an answer: (c).** The epic runs, and nothing waits on this question.
+  - **ANSWERED 2026-10-24: (a), +100** (`…e44d2903`, *"+100 target ok"*). M1 now carries the number. The ±70 above is
+    an estimate. If the two R readings' combined half-width √(Y₁² + Y₂²) comes out above 100, a +100 point estimate
+    can still miss "above 0". Both conditions are read, and neither is relaxed without the owner.
 - **Q2 (machine time, an environment fact).**
   - **What the epic needs.** About 10 readings on your Mac, each unattended for several hours, on AC, alone among
     agent hops: 1 baseline R, 1 A/A check, about 7 D readings (plus any extensions) and 1 closing R. The exact hours
@@ -167,6 +191,8 @@ oracle and one timing bar. Each can land as its own value-identical commit.
   - **The question.** Should readings run only in windows you name (for example overnight), or whenever the board
     is otherwise idle?
   - **Default without an answer:** whenever the board is idle, at width 1, as `ABC-202` ran.
+  - **ANSWERED 2026-10-24: whenever idle** (`…e44d2903`, *"run whenever idle"*). That is the default as written: one
+    reading at a time, on AC, alone among agent hops, with the host log and watchdog. The Orchestrator schedules it.
 
 **Delivery calls, flagged as cheap to reverse (not questions):**
 - **The S1 ship rule:** a value-changing change that is not GAIN after one extension does not ship, even though you
@@ -189,7 +215,13 @@ oracle and one timing bar. Each can land as its own value-identical commit.
 
 - **`RISK-EPIC008-01`: one game is the only evidence for every proposal.** Mitigated by design: S1 ships only on GAIN.
 - **`RISK-EPIC008-02`: wall time.** At 3 s a move, a 400-game D reading may exceed a night. Mitigated by `ABC-204`
-  `A6`: a shorter D budget (≥ 1 000 ms, frozen) is allowed, and M1 stays at the full 3 s.
+  `A6`: a shorter D budget (≥ 1 000 ms, frozen) is allowed, and M1 stays at the full 3 s. *2026-10-24:* Q2 lets a
+  reading start whenever the board is idle, with no owner window. Other alone-when-idle work (`qe-timing-ABC-203`,
+  and `ABC-212`'s real-clock readings) queues behind or ahead of it, never beside it.
+- **`ABC-204`'s `timemargin` rule under `ABC-212`.** The rule "5 000 − budget" is read as "level 5's ceiling −
+  budget". Level 5's ceiling stays 5 000 ms under the proposed `NFR-004` text, so every pinned invocation is
+  unchanged. If the value of the clamp constant moves, BA/PM writes a dated erratum on `ABC-204`'s derivation line at
+  `ABC-212`'s merge.
 - **`RISK-EPIC008-03`: self-play overstates gains.** Mitigated by M1 being an R reading.
 - **`RISK-EPIC008-04`: an evaluation change moves cost or depth.** Covered by `G2` and `G6`. A miss stops to
   Architect/Design and is never re-derived (`ADR-0031`).

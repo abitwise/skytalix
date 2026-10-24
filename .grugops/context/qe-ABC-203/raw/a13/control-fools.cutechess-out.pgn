@@ -1,0 +1,17 @@
+[Event "?"]
+[Site "?"]
+[Date "2026.10.23"]
+[Round "1"]
+[White "sfW"]
+[Black "sfB"]
+[Result "0-1"]
+[ECO "A00"]
+[GameDuration "00:00:00"]
+[GameEndTime "2026-10-23T23:56:18.585 GMT+3"]
+[GameStartTime "2026-10-23T23:56:18.571 GMT+3"]
+[Opening "Gedult's Opening"]
+[PlyCount "4"]
+[TimeControl "0.02/move"]
+
+1. f3 {book} e5 {book} 2. g4 {book} Qh4# {+M1/245 0.007s, Black mates} 0-1
+

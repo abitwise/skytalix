@@ -1,0 +1,6 @@
+#!/bin/bash
+Q=<scratchpad>/qe206; W=../wt-qe-ABC-206
+$Q/scripts/window.sh g1 "cd $Q/base && PUZZLE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/puzzle-suite.test.ts --reporter=verbose > $Q/raw/g1-base.txt 2>&1; echo base-rc=\$? >> $Q/raw/g1-base.txt; cd $Q/head && PUZZLE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/puzzle-suite.test.ts --reporter=verbose > $Q/raw/g1-head.txt 2>&1; echo head-rc=\$? >> $Q/raw/g1-head.txt"
+$Q/scripts/window.sh npmtest "cd $W && s=\$(perl -MTime::HiRes=time -e 'printf \"%.3f\", time'); npm test > $Q/raw/gate-npm-test.txt 2>&1; rc=\$?; e=\$(perl -MTime::HiRes=time -e 'printf \"%.3f\", time'); echo \"npm-test rc=\$rc wall=\$(echo \"\$e - \$s\" | bc) s\" >> $Q/raw/gate-npm-test.txt; cp .test-results/last-run.json $Q/raw/last-run.json"
+$Q/scripts/window.sh deep "cd $W; for spec in 'SEARCH_DEEP src/search.pvs-lmr.test.ts' 'SEARCH_DEEP src/search.test.ts' 'SEARCH_DEEP src/quiescence.test.ts' 'SEARCH_DEEP src/transposition.test.ts' 'ENGINE_DEEP src/transposition.test.ts' 'ENGINE_DEEP src/legal.test.ts' 'ENGINE_DEEP src/gameend.test.ts' 'ENGINE_DEEP src/engine.test.ts'; do set -- \$spec; env \$1=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run \$2 --reporter=verbose > $Q/raw/deep-\$1-\$(basename \$2 .test.ts).txt 2>&1; echo \"\$1 \$2 rc=\$?\" >> $Q/raw/deep-summary.txt; done"
+echo ALL-DONE

@@ -1,0 +1,16 @@
+[Event "skytalix CLI game"]
+[Site "?"]
+[Date "2026.10.23"]
+[Round "-"]
+[White "skytalix (difficulty 1)"]
+[Black "Human"]
+[Result "0-1"]
+[Termination "normal"]
+[Difficulty "1"]
+[HumanColour "black"]
+
+1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 Ng4 7. Qf3 Nxe3 8.
+Qxe3 g6 9. Bc4 Bg7 10. O-O-O Nc6 11. Nxc6 bxc6 12. Kb1 a5 13. h3 Rb8 14. Qf3
+O-O 15. a3 Be6 16. Qd3 Bxc4 17. Qe3 a4 18. h4 c5 19. h5 Qb6 20. Nxa4 Qa5 21.
+Nxc5 Rxb2+ 22. Kc1 Rfb8 23. Nb3 Bxb3 24. Rd2 Bc4 25. Qb3 R8xb3 26. c3 Qxc3+ 27.
+Kd1 Qxd2# {Black wins by checkmate.} 0-1

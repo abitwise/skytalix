@@ -13,7 +13,8 @@
  * precedent for a non-frame write to the sink. It is therefore NOT on the frame path, by
  * `ADR-0029`'s membership rule: it is neither in the load closure of
  * `src/history-pane.nfr.test.ts`'s `COMPOSITION_ROOT` nor loaded by a frame call (of the production
- * modules, only `src/cli.ts` imports it).
+ * modules, only `src/cli.ts` and, since `ABC-203`, `src/pgn.ts` import it; neither is on the frame
+ * path).
  *
  * IT DERIVES NO GAME STATE. A pure function of `LoopOutcome` and `GameHistory`, returning rows.
  * `history.ts` is imported as a TYPE ONLY, so this module adds no runtime importer of it and
@@ -147,8 +148,11 @@ function moveList(history: GameHistory): readonly string[] {
   return pairs.map(rowFor);
 }
 
-/** The one line that says what happened — a chess outcome, or a fault that is not one. */
-function headline(outcome: LoopOutcome, reason: TerminalReason): readonly string[] {
+/**
+ * The one line that says what happened — a chess outcome, or a fault that is not one. Exported for
+ * `ABC-203` (`ADR-0047`): `src/pgn.ts` joins these rows into the PGN file's closing comment.
+ */
+export function resultHeadline(outcome: LoopOutcome, reason: TerminalReason): readonly string[] {
   if (reason === "engine-failure" || reason === "engine-threw")
     return [FAULT_LINE[reason], FAULT_NOTE];
 
@@ -169,5 +173,5 @@ export function renderResultScreen(outcome: LoopOutcome, history: GameHistory): 
 
   // The leading blank separates the screen from the final frame's last row — this is a write onto
   // the same stream, not a frame, and there is no writer between them to space it.
-  return ["", ...headline(outcome, outcome.reason), "", ...moveList(history)];
+  return ["", ...resultHeadline(outcome, outcome.reason), "", ...moveList(history)];
 }

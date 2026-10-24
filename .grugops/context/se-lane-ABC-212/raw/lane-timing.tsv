@@ -1,0 +1,19 @@
+# paired npm test timing, base 2079e0df vs head 8c1d0e6c; only src/uci-session.test.ts swapped in one worktree; ABBA order
+# clean = no foreign vitest seen before (waited until pgrep empty) or during (0.5 s samples); FOREIGN rows are discounted
+# file_ms = endTime - startTime of src/uci-session.test.ts in last-run.json; a9_sum_ms = sum of the 9 ABC-212 A9 per-test durations
+## round 1 (4 pairs)
+run	arm	clean	load1_before	duration_s	file_ms	a9_sum_ms	tests	success
+1	base	clean	4.13	9.09	4370	1050.5	2066/2066	true
+2	head	clean	4.64	8.74	3546	155.2	2066/2066	true
+3	head	clean	4.74	8.82	3615	155.8	2066/2066	true
+4	base	clean	9.38	9.33	4561	1086.4	2066/2066	true
+5	base	clean	8.84	9.38	4632	1143.0	2066/2066	true
+6	head	FOREIGN	7.08	9.54	3763	162.9	2066/2066	true
+7	head	FOREIGN	7.65	9.55	3917	174.2	2066/2066	true
+8	base	clean	6.04	9.10	4437	1115.5	2066/2066	true
+## round 2 (2 pairs)
+run	arm	clean	load1_before	duration_s	file_ms	a9_sum_ms	tests	success
+1	base	clean	4.80	9.07	4362	1056.0	2066/2066	true
+2	head	clean	4.99	8.58	3555	156.9	2066/2066	true
+3	head	clean	4.83	8.73	3624	159.9	2066/2066	true
+4	base	clean	4.85	9.26	4573	1098.1	2066/2066	true

@@ -1,0 +1,55 @@
+start 2026-10-24T11:47:03Z
+
+ RUN  v4.1.12 <worktree>
+
+stdout | src/levels.test.ts > ABC-212 A4 — levels 6 and 7 spend their budget, inside their ceiling, on the REAL clock [deep] > level 6: 30 of 30 moves take >= 5000 and <= 7000 ms
+ABC-212 A4 level 6: 30 moves, max 5005 ms, max depth 13: 5002,5005,5004,5001,5002,5001,5003,5000,5005,5002,5001,5002,5003,5001,5002,5000,5003,5002,5002,5002,5005,5003,5002,5001,5004,5005,5003,5003,5002,5003
+
+ ↓ src/levels.test.ts > A1 — the level table > is keyed 1-7, weakest to strongest, easiest 1, default 5, hardest 7 (ADR-0045 A2)
+ ↓ src/levels.test.ts > A1 — the level table > gives every level a budget and a blunder rate, and nothing else
+ ↓ src/levels.test.ts > A1 — the level table > orders the table weakest to strongest: budgets never fall, rates never rise
+ ↓ src/levels.test.ts > A1 — the level table > is frozen — data, not session state
+ ↓ src/levels.test.ts > ABC-174 A1 — the table is ADR-0045 D1's > deep-equals D1, and the table and each entry are frozen
+ ↓ src/levels.test.ts > ABC-174 A2 — the default is level 5 (ABC-212: no longer the top) > [EASIEST, DEFAULT, HARDEST] is [1, 5, 7], and the default is { DEFAULT_BUDGET_MS, 0 }
+ ↓ src/levels.test.ts > ABC-212 A1 — levels 6 and 7 above the default (ADR-0045 § AMENDMENT A1-A2) > LEVELS[6] is { 5 000, 0 } and LEVELS[7] is { 30 000, 0 }
+ ↓ src/levels.test.ts > ABC-212 A1 — levels 6 and 7 above the default (ADR-0045 § AMENDMENT A1-A2) > LEVELS[1..5] are base's, value for value
+ ↓ src/levels.test.ts > ABC-212 A1 — levels 6 and 7 above the default (ADR-0045 § AMENDMENT A1-A2) > the ordering row holds over 1..7: budgets never fall, rates never rise, each step improves one
+ ↓ src/levels.test.ts > ABC-212 A1 — levels 6 and 7 above the default (ADR-0045 § AMENDMENT A1-A2) > levels 6 and 7 are frozen
+ ↓ src/levels.test.ts > ABC-174 A3 — the default plays as today: chooseMove at 3 000 ms, the old level 3 > move, depth and nodes are equal on 30 of 30 positions, for each of two seeds
+ ↓ src/levels.test.ts > ABC-174 A4 — the mechanism's shape: a budget and a rate per level > every level's keys are exactly [blunderRate, budgetMs]
+ ↓ src/levels.test.ts > ABC-174 A7 — the time budget, from the data (NFR-004; ADR-0038 decision 3) > clause A: the default's budget is DEFAULT_BUDGET_MS, which is 3 000
+ ↓ src/levels.test.ts > ABC-174 A7 — the time budget, from the data (NFR-004; ADR-0038 decision 3) > clause B, per level (ABC-212 A5): budgetMs <= ceiling(L) over 1..7, < 5 000 over 1..5, clamp 32 000
+ ↓ src/levels.test.ts > ABC-174 A7 — the time budget, from the data (NFR-004; ADR-0038 decision 3) > the verdict's step 4 is admitted: 4 <= LEVELS[1].budgetMs / 10, which is 10
+ ↓ src/levels.test.ts > A6 — the default level > has the 3 s budget (`NFR-004`), the engine's own `DEFAULT_BUDGET_MS`
+ ↓ src/levels.test.ts > A6 — the default level > never blunders, so `NFR-005`'s reading on `chooseMove` at 3 s IS this level's reading
+ ↓ src/levels.test.ts > A6 — the default level > at rate 0 returns `chooseMove`'s move, depth, nodes and elapsed on the same clock
+ ↓ src/levels.test.ts > A4 — the easiest level over ≥ 200 moves > hands the borrowed position back byte-identical after a blunder
+ ↓ src/levels.test.ts > QE-087-a — the seed never reaches the engine (ADR-0027 d1) > every call is `{ budgetMs, now }`; the engine path gets the level budget for any seed
+ ↓ src/levels.test.ts > QE-087-b — the scored list is the engine's, not a self-consistent lie > each child's score is minus the real `chooseMove`'s depth-1 score on that child
+ ↓ src/levels.test.ts > Security/NFR R1 (QE-087-c) — the level clamps its own total to HARD_CEILING_MS > a blundering level at twice the ceiling spends at most the ceiling plus a few readings
+ ↓ src/levels.test.ts > the blunder path's edge cases (ADR-0032 decisions 1-2) > scores a mating child MATE_SCORE − 1, and the mate is not played as the second best
+ ↓ src/levels.test.ts > the blunder path's edge cases (ADR-0032 decisions 1-2) > scores a stalemating child 0
+ ↓ src/levels.test.ts > the blunder path's edge cases (ADR-0032 decisions 1-2) > returns null on a position with no legal move
+ ↓ src/levels.test.ts > the blunder path's edge cases (ADR-0032 decisions 1-2) > with a single legal move there is no candidate, and it is played
+ ↓ src/levels.test.ts > seededRandom — the generator > returns numbers in [0, 1), the same sequence for the same seed
+ ↓ src/levels.test.ts > seededRandom — the generator > rejects a seed that is not an integer (a NaN would silently collapse to one seed)
+ ↓ src/levels.test.ts > A9 — different seeds actually differ > ≥ 5 seeds over the same ≥ 30 positions give ≥ 2 distinct blunder-decision sequences
+ ↓ src/levels.test.ts > A7 — seeded, in deterministic mode > a fixed seed gives identical blunder decisions across runs
+ ↓ src/levels.test.ts > A10 — the seed is threaded, not global > two instances, different seeds, called A, B, A, B, … play as each alone: 10/10 each
+ ↓ src/levels.test.ts > A8 — the level module's boundary > does not import the virtual clock, the CLI, the turn loop or any I/O module
+ ↓ src/levels.test.ts > A8 — the level module's boundary > holds no argv parsing and no prompt
+ ↓ src/levels.test.ts > A4 — the easiest level over ≥ 200 moves [deep] > every move legal; rate ±5 pp; never the worst; the strict second-best [deep]
+ ↓ src/levels.test.ts > A4 — the easiest level over the perft corpus and the puzzles [deep] > every move legal; rate ±5 pp; never the worst; the strict second-best
+ ↓ src/levels.test.ts > A2 — the budget reaches the engine, ±20% on a fine virtual step [deep] > every level, on the shipped path, uses its budget ±20% and never more than its ceiling
+ ↓ src/levels.test.ts > A2 — the budget reaches the engine, ±20% on a fine virtual step [deep] > a blunder move at the easiest level uses the level budget ±20% (the clamped sum)
+ ↓ src/levels.test.ts > A5 — level 5, 30 positions, every move ≤ 5 s on the REAL clock [deep] > returns within 5 000 ms on 30/30
+ ✓ src/levels.test.ts > ABC-212 A4 — levels 6 and 7 spend their budget, inside their ceiling, on the REAL clock [deep] > level 6: 30 of 30 moves take >= 5000 and <= 7000 ms 150076ms
+ ↓ src/levels.test.ts > ABC-212 A4 — levels 6 and 7 spend their budget, inside their ceiling, on the REAL clock [deep] > level 7: 10 of 10 moves take >= 30000 and <= 32000 ms
+ ↓ src/levels.test.ts > A3 — the easiest level solves strictly fewer puzzles than the default [deep] > counts both on one run of the suite in the tree
+
+ Test Files  1 passed (1)
+      Tests  1 passed | 40 skipped (41)
+   Start at  14:47:03
+   Duration  150.20s (transform 0ms, setup 0ms, import 69ms, tests 150.08s, environment 0ms)
+
+rc=0 end 2026-10-24T11:49:34Z

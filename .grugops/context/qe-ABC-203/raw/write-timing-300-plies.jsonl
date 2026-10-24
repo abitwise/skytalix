@@ -1,0 +1,5 @@
+{"plies":300,"bytes":2134,"coldFormatMs":7.702,"coldWriteMs":0.688,"coldTotalMs":8.39,"warmMedianMs":2.738,"warmMaxMs":10.207}
+{"plies":300,"bytes":2134,"coldFormatMs":5.438,"coldWriteMs":0.384,"coldTotalMs":5.822,"warmMedianMs":2.154,"warmMaxMs":7.407}
+{"plies":300,"bytes":2134,"coldFormatMs":6.831,"coldWriteMs":0.368,"coldTotalMs":7.2,"warmMedianMs":2.449,"warmMaxMs":6.283}
+{"plies":300,"bytes":2134,"coldFormatMs":6.34,"coldWriteMs":0.592,"coldTotalMs":6.932,"warmMedianMs":2.475,"warmMaxMs":15.009}
+{"plies":300,"bytes":2134,"coldFormatMs":6.979,"coldWriteMs":0.872,"coldTotalMs":7.852,"warmMedianMs":2.424,"warmMaxMs":6.513}

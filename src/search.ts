@@ -61,8 +61,8 @@
 
 import { makeMove, unmakeMove } from "./apply.ts";
 import { evaluate } from "./evaluate.ts";
-import { gameStatus } from "./gameend.ts";
-import { isInCheck, legalMoves } from "./legal.ts";
+import { leafEndReason } from "./gameend.ts";
+import { givesCheck, isInCheck, legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
 import { EMPTY, type Position } from "./position.ts";
 import { mvvLvaKey, quiesce } from "./quiescence.ts";
@@ -246,8 +246,9 @@ const REDUCTION_MIN_INDEX = 3;
  * check; and the move does not give check. The tactical facts are derived HERE, from the position
  * and the move, and never supplied by the caller — so a recursion cannot mis-wire one of them.
  *
- * Pure: it decides and picks no move. It plays `move` on `position` to see whether it gives check
- * and takes it back, so the position is byte-identical on return.
+ * Pure: it decides and picks no move. It asks `givesCheck` whether `move` gives check, which
+ * answers without playing an unflagged move (`ABC-206`), so the position is byte-identical on
+ * return.
  */
 export function lateMoveReduction(
   position: Position,
@@ -259,10 +260,7 @@ export function lateMoveReduction(
   if (atRoot || depth < REDUCTION_MIN_DEPTH || index < REDUCTION_MIN_INDEX) return 0;
   if (move.captured !== EMPTY || move.promotion !== EMPTY) return 0;
   if (isInCheck(position)) return 0;
-  const undo = makeMove(position, move);
-  const givesCheck = isInCheck(position);
-  unmakeMove(position, move, undo);
-  return givesCheck ? 0 : 1;
+  return givesCheck(position, move) ? 0 : 1;
 }
 
 /** The move list in the order `switches.ordering` asks for, at `ply`. */
@@ -282,12 +280,12 @@ function ordered(
  * The score of a position the search will not look past: its game state decides it, and
  * otherwise the quiescence search does (or, with quiescence off, the static evaluation).
  *
- * `gameStatus` is called at leaves only, which is what `ADR-0002` keeps `positionCounts`
- * optional for — a bare call is legitimate here and costs one legal-move generation, the same
- * one an interior node pays for its own move list. It catches the drawn terminal states an
- * empty move list does not (dead position by material, the seventy-five-move rule) as well as
- * mate and stalemate. No counts map is passed: repetition is decided before this is reached,
- * off the search's own key array (`repeatsInPath`), never off the session's history.
+ * `leafEndReason` decides the game state: the same answer as a bare `gameStatus` call, without
+ * building the legal-move list (`ABC-206`); it stops at the first legal move. It catches the
+ * drawn terminal states an empty move list does not (dead position by material, the
+ * seventy-five-move rule) as well as mate and stalemate. No counts map is involved: repetition
+ * is decided before this is reached, off the search's own key array (`repeatsInPath`), never
+ * off the session's history.
  */
 function leafScore(
   position: Position,
@@ -297,13 +295,13 @@ function leafScore(
   switches: Switches,
   counter: NodeCounter,
 ): number {
-  const status = gameStatus(position);
-  if (status.result === "in-progress") {
+  const reason = leafEndReason(position);
+  if (reason === null) {
     if (!switches.quiescence) return evaluate(position);
     // Every capture node the quiescence search enters is a position visited, and is counted.
     return quiesce(position, alpha, beta, 0, () => counter.nodes++);
   }
-  if (status.reason === "checkmate") return 0 - (MATE_SCORE - ply);
+  if (reason === "checkmate") return 0 - (MATE_SCORE - ply);
   // Every other ended game is drawn: stalemate, dead position, seventy-five moves. Exactly 0,
   // and a literal 0 rather than a negated one, so it is never the `-0` that fails an exact
   // comparison (`evaluate` guards the same trap for the same reason).

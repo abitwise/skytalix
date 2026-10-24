@@ -1,0 +1,33 @@
+{
+ "budgets": [
+  3000,
+  30000
+ ],
+ "HARD_CEILING_MS": 32000,
+ "depths": [
+  7,
+  9
+ ],
+ "nodes": [
+  617050,
+  5690970
+ ],
+ "wallMs_informational_only": [
+  3000,
+  30002
+ ],
+ "a": {
+  "heapUsed": 9069088,
+  "arrayBuffers": 4332211
+ },
+ "b": {
+  "heapUsed": 8900720,
+  "arrayBuffers": 4332211
+ },
+ "deltaHeapUsedMiB": -0.1605682373046875,
+ "deltaArrayBuffersMiB": 0,
+ "staticBytes_table_plus_keys": 4195336,
+ "control_retainedMap_deltaHeapUsedMiB": 19.21843719482422,
+ "control_size": 200000,
+ "node": "v26.11.1"
+}

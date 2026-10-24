@@ -1,0 +1,17 @@
+qe-ABC-206 timing pre-registration (written before any timed run; one run per owner rule ...4c3f7639)
+Trees: base = main 872b03c1 (merge base of the QE merge), head = merge b8a30264. git archive into <scratchpad>/qe206/{base,head}.
+Runner: plain node v26.11.1, one fresh process per search; time = performance.now() around chooseMove only.
+Preconditions before each window: AC, load1 <= 8, no node.*vitest process. If not met: pause, poll every 30 s, up to 60 min.
+Monitor: 2 s samples of AC/load1/vitest-count during each window, kept in raw/.
+A4: chooseMove(pos, {budgetMs: HARD_CEILING_MS, maxDepth: 8}), real clock = wall time to complete depth 8 (iterations 1..8).
+    n = 7 per tree per position. Schedule: 7 rounds; each round runs kiwipete then position-6; within each position the pair
+    order alternates (round odd: base then head; round even: head then base). Every run must read depth 8 with identical nodes
+    across trees, else the run is void and reported. Graded: median(head) <= 0.85 * median(base) on BOTH positions.
+G6: chooseMove(pos, {budgetMs: DEFAULT_BUDGET_MS}) real clock. n = 3 per tree per position, same alternating schedule.
+    Graded on the median completed depth: >= 6 (FAIL floor), 7 (WARN level), and head >= base on both positions. All readings reported.
+perft: npm run perft (head tree, then base tree for reference), one each. Counts must equal; head rate >= 1 000 000 nodes/s.
+G1: PUZZLE_DEEP=1 vitest on puzzle-suite.test.ts, base then head, one each. Per-row move/depth/nodes compared; head >= 54/58.
+G8: npm test wall at the merge, one run, reported (catalog <= 10 s at load1 <= 8).
+Pair rule (A4, G6): preconditions checked before every base/head pair; monitor sampled every 1 s during the pair. If any sample
+inside a pair fails a precondition, that pair is VOID (not a reading), kept in the log, and the pair is taken after the precondition
+clears (a pause per the Orchestrator ruling ...55691ad1, not a repeat on result). If a precondition never clears within 60 min: UNRESOLVED.

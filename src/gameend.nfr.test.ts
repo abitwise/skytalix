@@ -21,7 +21,17 @@ import { parseFen } from "./fen.ts";
 
 vi.mock("./legal.ts", async (importOriginal) => {
   const actual = await importOriginal<typeof import("./legal.ts")>();
-  return { ...actual, legalMoves: vi.fn(actual.legalMoves) };
+  return {
+    ...actual,
+    legalMoves: vi.fn(actual.legalMoves),
+    hasLegalMove: vi.fn(actual.hasLegalMove),
+    legalCaptures: vi.fn(actual.legalCaptures),
+  };
+});
+
+vi.mock("./apply.ts", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("./apply.ts")>();
+  return { ...actual, makeMove: vi.fn(actual.makeMove) };
 });
 
 vi.mock("./zobrist.ts", async (importOriginal) => {
@@ -29,8 +39,13 @@ vi.mock("./zobrist.ts", async (importOriginal) => {
   return { ...actual, zobristKey: vi.fn(actual.zobristKey) };
 });
 
-import { gameStatus } from "./gameend.ts";
-import { legalMoves } from "./legal.ts";
+import { makeMove } from "./apply.ts";
+import { gameStatus, leafEndReason } from "./gameend.ts";
+import { hasLegalMove, legalCaptures, legalMoves } from "./legal.ts";
+import { FLAG_NONE } from "./moves.ts";
+import { parseSquareName } from "./position.ts";
+import { quiesce } from "./quiescence.ts";
+import { lateMoveReduction } from "./search.ts";
 import { zobristKey } from "./zobrist.ts";
 
 /** The G-1 position: a legal, ordinary board that every state below is a clock/counts edit of. */
@@ -110,5 +125,64 @@ describe("NFR-001 — gameStatus stays cheap at a search leaf (call counts, spie
       reason: "insufficient-material",
     });
     expect(zobristKey).toHaveBeenCalledTimes(0);
+  });
+});
+
+// ABC-206: the search leaf no longer calls `gameStatus`. These guards hold the leaf's own cost —
+// a reintroduced generation or key read changes no value, so no value row would see it.
+describe("ABC-206 — the search leaf's game-end check stays cheap (call counts, spied)", () => {
+  beforeEach(() => vi.clearAllMocks());
+
+  it("leafEndReason never builds the move list or reads a key: hasLegalMove exactly once", () => {
+    const shapes: [string, string][] = [
+      ["in progress", G1_FEN],
+      ["clock at 100, in progress", "6k1/5ppp/8/b7/8/8/5PPP/4R1K1 w - - 100 1"],
+      ["automatic 75-move", "6k1/5ppp/8/b7/8/8/5PPP/4R1K1 w - - 150 1"],
+      ["checkmate", "4Q2k/6pp/8/8/8/8/8/6K1 b - - 100 80"],
+      ["stalemate", "7k/5K2/5N2/8/8/8/8/8 b - - 0 1"],
+      ["thin material", "4k3/8/8/8/8/8/8/4K3 w - - 0 1"],
+    ];
+
+    for (const [shape, fen] of shapes) {
+      const position = parseFen(fen);
+      vi.clearAllMocks();
+      leafEndReason(position);
+      expect(legalMoves, shape).toHaveBeenCalledTimes(0);
+      expect(hasLegalMove, shape).toHaveBeenCalledTimes(1);
+      expect(zobristKey, shape).toHaveBeenCalledTimes(0);
+    }
+  });
+
+  it("quiesce never builds the full move list: captures come from legalCaptures", () => {
+    // kiwipete with a full window: no stand-pat cut at the leaf, so the capture search expands.
+    const position = parseFen(
+      "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1",
+    );
+    let visited = 0;
+    quiesce(position, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY, 0, () => visited++);
+
+    expect(visited).toBeGreaterThan(0); // the capture search ran, so the zero below is earned
+    expect(legalCaptures).toHaveBeenCalled();
+    expect(legalMoves).toHaveBeenCalledTimes(0);
+  });
+
+  it("lateMoveReduction never plays an unflagged move to learn whether it gives check", () => {
+    // G-1, White to move: Re8 is mate (it gives check), Rd1 is quiet. Both unflagged, both
+    // non-captures, at a node where every other condition for a reduction holds.
+    const position = parseFen(G1_FEN);
+    const move = (from: string, to: string) => {
+      const found = legalMoves(position).find(
+        (m) => m.from === parseSquareName(from) && m.to === parseSquareName(to),
+      );
+      if (found === undefined || found.flags !== FLAG_NONE) throw new Error(`${from}${to}`);
+      return found;
+    };
+    const check = move("e1", "e8");
+    const quiet = move("e1", "d1");
+    vi.clearAllMocks();
+
+    expect(lateMoveReduction(position, check, 3, 3, false)).toBe(0);
+    expect(lateMoveReduction(position, quiet, 3, 3, false)).toBe(1);
+    expect(makeMove).toHaveBeenCalledTimes(0);
   });
 });

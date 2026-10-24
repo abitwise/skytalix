@@ -57,6 +57,12 @@ and not the environment. Under `npm run chess` it is the package root.
   `-2` to `-99`. After `-99`, the result is `EEXIST`.
 - Write all bytes to the open descriptor, then close it.
 - If the write or the close fails, remove that one path (this call created it), then report.
+- **2026-10-24, `ABC-213` (`arch-adr0047-d4-ABC-213`).** A reading, not a change. On a double fault (the write or
+  the close fails, then the cleanup unlink fails with an errno code), removal is best-effort. The result is the
+  **first** failure's code (D5), and the partial file may remain. A codeless unlink throw is a defect and is
+  rethrown (D5). `ABC-213`'s `A1`–`A3` pin this, and `A2` pins the removal on a single fault. They run in-process
+  against a call-through `node:fs` double that re-roots relative paths (the `ABC-213` design ruling). `ABC-203`'s
+  `A8`–`A10` stay in the writer child.
 
 **D5. A failure is an errno code, and nothing else.** The holder returns
 `{ ok: true, path } | { ok: false, code }`. A caught error whose `code` matches `^E[A-Z0-9]+$` becomes

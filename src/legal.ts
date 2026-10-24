@@ -16,7 +16,13 @@
  */
 
 import { makeMove, unmakeMove } from "./apply.ts";
-import { FLAG_EN_PASSANT, generateMoves, isSquareAttackedBy, type Move } from "./moves.ts";
+import {
+  FLAG_EN_PASSANT,
+  FLAG_NONE,
+  generateMoves,
+  isSquareAttackedBy,
+  type Move,
+} from "./moves.ts";
 import { BLACK, EMPTY, isOnBoard, KING, NO_SQUARE, PAWN, type Position } from "./position.ts";
 
 /**
@@ -52,6 +58,75 @@ export function legalMoves(position: Position): Move[] {
   }
 
   return legal;
+}
+
+/**
+ * True when the side to move has at least one legal move: `legalMoves(position).length > 0`,
+ * by the same make/test/unmake filter, but it stops at the first legal move instead of building
+ * the list. A search leaf only needs to know whether the list is empty (ABC-206). The position is
+ * unchanged on return.
+ */
+export function hasLegalMove(position: Position): boolean {
+  const moverIsBlack = position.blackToMove;
+
+  for (const move of generateMoves(position)) {
+    const undo = makeMove(position, move);
+    const kingSquare = kingSquareOf(position, moverIsBlack);
+    const legal = !isSquareAttackedBy(position, kingSquare, !moverIsBlack);
+    unmakeMove(position, move, undo);
+    if (legal) return true;
+  }
+
+  return false;
+}
+
+/**
+ * The legal captures for the side to move: the same list, in the same order, as
+ * `legalMoves(position).filter((move) => move.captured !== EMPTY)`. It skips a non-capture
+ * before playing it, so only captures pay the make/test/unmake check. Two order-preserving
+ * filters commute, so the order is generation order, which quiescence's stable sort depends on
+ * (ABC-206). The position is unchanged on return.
+ */
+export function legalCaptures(position: Position): Move[] {
+  const moverIsBlack = position.blackToMove;
+  const captures: Move[] = [];
+
+  for (const move of generateMoves(position)) {
+    if (move.captured === EMPTY) continue;
+    const undo = makeMove(position, move);
+    const kingSquare = kingSquareOf(position, moverIsBlack);
+    if (!isSquareAttackedBy(position, kingSquare, !moverIsBlack)) captures.push(move);
+    unmakeMove(position, move, undo);
+  }
+
+  return captures;
+}
+
+/**
+ * Does `move`, a legal move for the side to move, give check? The same answer as playing it,
+ * asking `isInCheck`, and taking it back (ABC-206). An unflagged move only moves one piece from
+ * `from` to `to`, and the attack test reads only the board, so for it the two board bytes are
+ * set, the enemy king's square is tested, and both bytes are put back. A castle, en-passant
+ * capture or promotion changes more than two squares, so it is played and taken back. The
+ * position is unchanged on return.
+ */
+export function givesCheck(position: Position, move: Move): boolean {
+  if (move.flags !== FLAG_NONE) {
+    const undo = makeMove(position, move);
+    const check = isInCheck(position);
+    unmakeMove(position, move, undo);
+    return check;
+  }
+
+  const moverIsBlack = position.blackToMove;
+  const board = position.board;
+  const captured = board[move.to] as number;
+  board[move.to] = move.piece;
+  board[move.from] = EMPTY;
+  const check = isSquareAttackedBy(position, kingSquareOf(position, !moverIsBlack), moverIsBlack);
+  board[move.from] = move.piece;
+  board[move.to] = captured;
+  return check;
 }
 
 /** The two neighbouring files a pawn can capture from — the same pair moves.ts steps over. */

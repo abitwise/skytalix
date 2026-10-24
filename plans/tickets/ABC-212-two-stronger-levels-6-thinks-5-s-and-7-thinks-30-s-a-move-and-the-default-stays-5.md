@@ -1,0 +1,497 @@
+---
+id: ABC-212
+title: "Two stronger levels: 6 thinks 5 s and 7 thinks 30 s a move, at every surface, and the default stays 5"
+status: in-review
+column: In Review
+size: M
+priority: P2
+epic: EPIC-004
+feature: difficulty levels (ABC-087 mechanism, ABC-101 selection, ABC-171 Skill Level)
+---
+
+# ABC-212: levels 6 (5 s) and 7 (30 s), blunder rate 0, at every surface; the default stays 5
+
+> **Cut 2026-10-24 by BA/PM** (task `bapm-cut-levels-6-7`, records only, at `main` `6c0ab29e`). The rulings are in
+> `.grugops/context/bapm-cut-levels-6-7/notes/`. This hop ran no test, took no timing and ran no probe.
+>
+> **Owner word.** `owner-word-2026-10-23` `…e44d2903`, item 3, verbatim: *"I think we can add 2 more difficulty
+> settings: 6 - allow to think 5 seconds and 7 - allow to think up to 30 seconds, to squeeze maximum out."* It is a
+> requirement and scope word, and it moves bounds that are the owner's. **The `NFR-004` text and the `ADR-0045`
+> amendment go back to him as PROPOSED** (§ Owner decisions owed). Nothing in this page moves a bound by itself.
+>
+> **Why `EPIC-004` and not `EPIC-008`.** `EPIC-008` is "stronger **at the same levels and time budgets**". Its scope
+> holds the level table fixed (gate `G9`), and every one of its tickets ships on a level-5 reading. New levels belong
+> on the levels line: `EPIC-004`'s "difficulty levels that map to a search budget plus a blunder rate" (`ABC-087`).
+> `EPIC-004` stays Done. This is a post-close addition, and its acceptance criteria are not reopened (§ Dependencies).
+
+## Problem
+
+- **User:** the owner, who plays `npm run chess` and drives `skytalix` from a UCI GUI.
+- **Pain:** the hardest level is the default, level 5 at 3 s a move. Nothing lets him give the engine more time
+  when he wants its best play.
+- **Value:** two levels above the default that think longer, at 5 s and at 30 s a move, with no blunders. The same
+  engine searches deeper: about +0.36 ply at 5 s and about +2.3 ply at 30 s over level 5 (`ADR-0045` § Context: one
+  ply costs 2.67x the time; 3 000 v 5 000 ms was measured at +0.36 ply). The 30 s figure is a prediction,
+  `UNKNOWN - verify` (`A15` reads it).
+
+## "Up to 30 s": ruled
+
+- **Ruling: level 7's budget is 30 000 ms, and it is spent like every other level's.** The search deepens until the
+  budget runs out (`src/engine.ts` `deepen`), and the most it thinks is 30 s plus the ceiling margin.
+- **It thinks less only where every level already does.** A book move returns at once (`ABC-095`'s book wraps the
+  level seam). Under UCI, the GUI's `movetime` or clock caps the budget (`ADR-0044` D11: `min(G, level budget)`).
+- **No early stop is built here.** "Stop when the search is clearly done" has no number. The candidate rules (one
+  legal move; a proven forced mate) change the engine's mechanism, which `ADR-0045` D3 holds fixed. They would also
+  apply at levels 1–5 and change `EPIC-008`'s level-5 readings. It is offered to the owner as a follow-up, not cut
+  (§ Owner decisions owed, OQ-212-2). The ruling is cheap to reverse.
+
+## Scope
+
+1. **The table** (`src/levels.ts`): `LEVELS[6] = { budgetMs: 5 000, blunderRate: 0 }` and
+   `LEVELS[7] = { budgetMs: 30 000, blunderRate: 0 }`. `HARDEST_LEVEL` becomes 7. `EASIEST_LEVEL` stays 1 and
+   `DEFAULT_LEVEL` stays 5. `LEVELS[1..5]` do not change.
+2. **The ceiling.** The engine's clamp (`HARD_CEILING_MS`, `src/engine.ts:129`, `RF-1`) admits each level's ceiling
+   under the `NFR-004` text the owner accepts (proposed: 5 s at levels 1–5, 7 s at 6, 32 s at 7). The mechanism's
+   shape (one absolute clamp, or a ceiling per level) is Architect/Design's (§ Design owed).
+3. **The CLI flag** (`src/cli-options.ts`): `--difficulty` accepts `1`–`7`. The usage line and the missing-value
+   message name `1|2|3|4|5|6|7`.
+4. **The startup question** (`src/startup-questions.ts`, `ABC-200`): `difficulty (1|2|3|4|5|6|7) [5]: `.
+5. **UCI** (`src/uci-session.ts`): `option name Skill Level type spin default 5 min 1 max 7`. Levels 6 and 7 take the
+   rate-0 path (`chooseMove` with `ADR-0044` D12's limits, score line sent). A `go` with no time (bare, `infinite`,
+   `ponder`, depth, nodes or mate only) searches the level's budget.
+6. **In-code text:** the headers and comments that say "1-5", "no level reaches `HARD_CEILING_MS`" or "the default
+   is the hardest" (`src/levels.ts`, `src/engine.ts`, `src/uci-session.ts`, `src/cli-options.ts`, `src/cli.ts`).
+7. **Docs outside `src/`:** `AGENTS.md` "Dev / run" (the Scribe, within its 18 432 B budget) and
+   `memory-bank/70-runbook.md` § Operate (Architect/Design). Both land with the merge.
+
+## Out of scope
+
+- An early stop (OQ-212-2), a worker thread for UCI (`ADR-0044` D5; § Design owed decides if it is owed), pondering.
+- Any change to levels 1–5, to `DEFAULT_LEVEL`, to the blunder construction (`ADR-0032`) or to the search.
+- **The ladder.** Levels 6–7 do not join `ABC-085`'s self-play ladder. `src/ladder.test.ts`'s pair plan and its
+  `[1, 2, 3, 4, 5]` loop stay unchanged. No 5v6 or 6v7 verdict is pre-registered (OQ-212-4).
+- An Elo claim for any level (`src/levels.ts` header; `EPIC-007` § Success measures).
+- `EPIC-008`'s readings. They stay at `Skill Level` 5.
+
+## Acceptance criteria
+
+**The table and the default**
+- **A1.** **Given** `src/levels.ts`, **then** `Object.keys(LEVELS)` is `["1", …, "7"]`; `LEVELS[6]` is
+  `{ budgetMs: 5 000, blunderRate: 0 }` and `LEVELS[7]` is `{ budgetMs: 30 000, blunderRate: 0 }`; `LEVELS[1..5]` are
+  byte-identical to base (100/0.4, 180/0.2, 330/0.1, 1 000/0.05, 3 000/0); `[EASIEST_LEVEL, DEFAULT_LEVEL,
+  HARDEST_LEVEL]` is `[1, 5, 7]`; every level's keys are exactly `[blunderRate, budgetMs]`; the ordering row holds over
+  1..7 (budgets never fall, rates never rise, each step improves one of the two); the table and each entry are frozen.
+- **A2.** **Given** no `--difficulty` and no `Skill Level`, **then** the difficulty is 5 and the level is
+  `{ 3 000, 0 }`: `DEFAULT_DIFFICULTY === DEFAULT_LEVEL === 5`, and the UCI `default` is 5. `ABC-101` `A8′` ("a
+  session without the flag plays as it did") stays green with no edit to its expectations.
+- **A3. Levels 1–5 play exactly as before** (QE reading, not a lane row). For each level 1–5, on 10 positions of the
+  perft corpus (`spread`, every sixth), seed 1, virtual clock step = budget ÷ 30: `createLevel`'s `(move, kind, depth,
+  nodes)` at head equals base on **50 of 50**. Also `chooseMove` at 3 000 ms equals base on the same 10 positions.
+  This makes `ABC-212` value-identical for `EPIC-008`'s readings.
+
+**The time a move takes**
+- **A4. Real clock, `ENGINE_DEEP` levels lane only.**
+  - Level 6, 30 positions (`A5`'s set): every move takes **≥ 5 000 ms and ≤ 7 000 ms**, 30 of 30.
+  - Level 7, the first 10 of those positions: every move takes **≥ 30 000 ms and ≤ 32 000 ms**, 10 of 10.
+  - Level 5: the existing `A5` row reads `LEVELS[5]` by number (not `HARDEST_LEVEL`) and stays ≤ 5 000 ms on 30 of 30.
+  - The log prints each level's max and the max completed depth.
+- **A5. The clamp is still there** (virtual clock, default lane). `chooseMove` handed `Infinity`, or twice the
+  largest ceiling, returns at the largest ceiling of the accepted `NFR-004` text (32 000 ms as proposed) plus at most
+  one clock step, and equals the run at exactly that ceiling. No surface can start a level-L search with a budget above
+  ceiling(L): the data row asserts `LEVELS[L].budgetMs ≤ ceiling(L)` for L = 1..7, and `budgetMs < 5 000` for 1..5.
+
+**Every surface**
+- **A6. CLI flag.** `--difficulty 6` and `--difficulty 7` resolve to 6 and 7. The boundary pair moves from `0`/`6` to
+  `0`/`8`, and both are refused, together with today's near-number list (`-1`, `3.5`, `three`, `3.0`, `+3`, `03`, `""`,
+  `" 3"`, `"3\n"`, `constructor`, `__proto__`). The accepted words equal `Object.keys(LEVELS)` both ways. A bare flag
+  gives `--difficulty needs one of 1|2|3|4|5|6|7`.
+- **A7. Usage.** The usage line is byte-exact
+  `usage: npm run chess -- [--colour white|black|random] [--difficulty 1|2|3|4|5|6|7] [--ascii | --unicode]`, read
+  from the existing refusal child (0 new spawns), and each advertised form resolves.
+- **A8. Startup question.** On a terminal with the flag absent, the question is `difficulty (1|2|3|4|5|6|7) [5]: `.
+  `6` and `7` are accepted, `8` is named and the question is asked again, and Enter keeps 5.
+- **A9. UCI `Skill Level`.**
+  - `uci` lists `option name Skill Level type spin default 5 min 1 max 7`.
+  - `setoption name Skill Level value 7` sets 7. Values `0` and `8` keep the previous level with
+    `info string Skill Level takes an integer 1-7, got <x>; kept <n>`.
+  - Virtual clock, step = budget ÷ 30, `ABC-167` `A5`'s bound (`G ≤ time ≤ G + 2·step`):
+    - a bare `go` at 7 searches 30 000 ms, and at 6 it searches 5 000 ms;
+    - `go movetime 60000` at 7 searches 30 000; `go movetime 1000` at 7 searches 1 000;
+    - `go wtime 600000 btime 600000` at 7 searches `min(600 000 ÷ 20, 30 000)` = 30 000;
+    - `go depth 3` at 7 stops at depth 3 (D12 applies: rate 0), and the `info` line carries a score.
+  - At `Skill Level` 1–5, every existing UCI row passes with no edit to its expected values.
+- **A10. The wait at level 7, by hand** (QE, a real pty, `npm run chess -- --difficulty 7`). The engine-thinking
+  frame is drawn before the search. One engine move returns in **30–32 s**. Ctrl-C during the search ends the process
+  within **1 s** of the keypress. A game at level 6 or 7 still writes its PGN at the end (`ABC-203`).
+- **A11. Docs.** `AGENTS.md` "Dev / run" and `memory-bank/70-runbook.md` § Operate name `--difficulty
+  1|2|3|4|5|6|7`, default 5, and say that levels 6 and 7 think 5 s and 30 s a move. No other line of either file moves.
+
+**Value, cost and pins**
+- **A12. Lane cost.** 0 new test files and 0 new spawned children. A default-lane row that searches at level 6 or 7
+  runs on a virtual clock with **≤ 30 clock readings** per search, or reads the budget handed to the engine without
+  searching. No level-6 or level-7 search runs on the real clock in the default lane, `CLI_DEEP` or `UCI_DEEP`.
+  - **Amended 2026-10-24** (`bapm-amend-ABC-212`): the "≤ 30 clock readings" clause is replaced. It cannot hold beside
+    `A9`. The text above stays as it was; the criterion that now applies is in § Amendment 2026-10-24, item 2.
+- **A13. Pin edits are licensed by this list, and only by it** (any other expectation that moves is out of class: stop
+  to BA/PM):
+  - `src/levels.test.ts`: the keys row (`:192`), `[1, 5, 5]` → `[1, 5, 7]` (`:193`, `:244`), `DEFAULT_LEVEL ===
+    HARDEST_LEVEL` (`:245`) → `DEFAULT_LEVEL === 5` and `HARDEST_LEVEL === 7`, the `[1..5]` lists at `:279`, `:286`
+    and `:588`, the clause-B row (`:293`–`:296`) re-read against ceiling(L), and `A5` (`:627`) reading `LEVELS[5]`;
+  - `src/cli.test.ts`: `A2` (`:4365`–`:4372`), where the default is no longer the maximum and equals `DEFAULT_LEVEL`,
+    plus the refused `"6"` → `"8"` (`:4391`);
+  - `src/uci-session.test.ts`: the `max 5` lines (`:122`, `:695`, `:950`, `:954`–`:956`);
+  - `src/startup-questions.test.ts:36` (`LEVELS` text);
+  - `src/engine.test.ts`: `HARD_CEILING_MS` toBe `5_000` (`:644`), and the rows at `:647`–`:662` re-read at the
+    accepted value;
+  - `src/cli.real-engine.test.ts:221` and `src/uci.real-engine.test.ts:79` (`HANG_GUARD_MS = 4 * HARD_CEILING_MS`)
+    only if the constant's value moves, and then set so that their hang guards stay as they are today, at 20 s.
+  - `src/ladder.test.ts` is **not** edited.
+  - **Amended 2026-10-24** (`bapm-amend-ABC-212`): the list grows by eight rows, `U1`–`U8`, each with its exact edit,
+    in § Amendment 2026-10-24, item 1. The list above is unchanged. Together with Design ruling 4, that amendment is
+    the full licence.
+- **A14. Plants** (pre-registered; each must red at least one row at head):
+  - P1: `LEVELS[7].budgetMs` 3 000 → `A1`;
+  - P2: the clamp left at 5 000 → `A4` level 7 and `A9` bare `go`;
+  - P3: `Skill Level` `max 5` kept → `A9`;
+  - P4: `DEFAULT_LEVEL` 7 → `A2`;
+  - P5: `--difficulty` words kept at 1–5 → `A6`.
+- **A15. Value reading** (Security/NFR or QE, plain `node`, Apple M3, one session, `NFR-005`'s instrument):
+  completed depth on `kiwipete` and `position-6` at level 5 (3 000 ms), level 6 and level 7.
+  - **Bar:** level 7 ≥ level 5 + 1 on both positions, and level 6 ≥ level 5 on both.
+  - Reported: depths and nodes. A miss is a wiring or clamp defect until shown otherwise. It is a stop to BA/PM, not a
+    re-tune.
+
+## NFR triggers
+
+- **`NFR-004` (moves; owner).** The proposed text is in § Owner decisions owed. Readings: `A4` and `A5`. Security/NFR
+  rules the row and `AR-NFR004-A` at the gate. The catalog's "If a level's budget ever reaches `HARD_CEILING_MS`, the
+  ceiling residual becomes player-reachable" fires at level 6. Under the proposed text, the residual (≤ 31 ms) sits
+  inside a 2 000 ms margin.
+- **`NFR-005`: untouched.** Its referent is the default, level 5 at 3 s, with the 5 s ceiling. `A15` uses its
+  instrument and does not grade it.
+- **`NFR-008`:** `A12`. 0 files, 0 spawns. Security/NFR rules whether an `N8-LANE` reading is owed for edits only.
+- **`NFR-009` (re-read at 30 s; Security/NFR, plain `node`).** Search-held memory at level 7 **≤ 16 MiB**, and growth
+  between a 3 s and a 30 s search **≤ 1 MiB**. The table is allocated once (`ADR-0025`), so it is expected flat, but
+  that is `UNKNOWN - verify`. Over = stop to the owner through the Orchestrator.
+- **`NFR-011`, `NFR-012`: untouched.** `NFR-011` sends no `go`. `NFR-012` reads at default options (`Skill Level` 5).
+  At 6–7 under a clock, `G`'s formula is the same and the level only lowers it.
+- **`ADR-0044` D5, latency (fires).** One thread: `isready` and `stop` during a search are answered at most one
+  budget late. That is about 7 s at level 6 and about 32 s at level 7, against about 5 s today. D5's first worker
+  trigger, "the owner lifts the 5 s ceiling for UCI", fires. § Design owed rules it.
+- **`KEY_ARRAY_CAPACITY` (128):** `src/search.ts:110` says it is "sized far above any depth … in `NFR-004`'s 5 s
+  ceiling". The guard keeps a deeper search safe. `A4` logs the max completed depth at 30 s. If it is ≥ 100,
+  Architect/Design is told.
+- **Security (ASVS L1):** no new input class. The flag, answer and option are closed sets that grow by two words.
+  `ADR-0036` clause (b): no capability import is expected. Security/NFR confirms at the gate.
+
+## Test notes
+
+1. Default lane: unit rows only, on the virtual clock (`A12`), plus `A7`'s read of the existing refusal child.
+2. `ENGINE_DEEP` levels lane: `A4` adds about 2.5 min (level 6) plus 5 min (level 7) of wall. It runs at width 1 on a
+   quiet host, **never during an `EPIC-008` harness reading** (both are alone-when-idle work).
+3. `A3`, `A10` and `A15` are hand readings, recorded in QE's or Security/NFR's notes with raw files. `A3` runs the
+   base and head trees from `git archive` copies.
+4. UAT is owed: production lines change. The QE verdict signs it under the owner delegation (`…5aaf7cec` item 2). The
+   owner may play a level-7 game; nothing waits on it.
+
+## Size and priority
+
+- **Size: M.** Data plus five surfaces plus one clamp, about 13 pins, two deep-lane rows and three hand readings. It is
+  not split: the surfaces share one table and one set of pins, and a level that one surface offers and another refuses
+  is a defect. The pre-registered split is in § Design owed.
+- **Priority: P2.** It is the owner's own request. Nothing is broken without it, and `EPIC-008` (P2) is unaffected.
+
+## Dependencies
+
+- **Before the SE pull:** the owner accepts the `NFR-004` text and the `ADR-0045` amendment (Architect drafts it,
+  PROPOSED). Moving a bound is his.
+- **Files shared with `EPIC-008`:** `src/engine.ts` (`ABC-206`, `208`, `209`, `210`). `ABC-212` touches only the clamp
+  line there. Whichever merges second rebases. Under `EPIC-008`'s staleness rule, `ABC-212`'s merge is value-identical
+  at level 5 (`A3`), so it does not stale a D reading.
+- **`ABC-204`'s `timemargin` rule** ("5 000 − budget") is read as "ceiling(level) − budget". At `Skill Level` 5 that
+  is 5 000 − B, so it is unchanged. If the clamp constant's *value* moves, the `ABC-204` page's derivation line
+  ("`HARD_CEILING_MS` (5 000)") gets a dated erratum from BA/PM at this ticket's merge.
+- **`EPIC-004` / `ABC-085` `A1` vocabulary.** "The hardest difficulty" in `EPIC-004`'s acceptance and `ABC-085` `A1`
+  was verdicted as level 5 (1v5, `ADR-0045` D6). It stays read that way. No 1v7 verdict is owed.
+- **`ABC-087` `A5`** names "the hardest level". It is re-pinned to `LEVELS[5]` (`A4`), and levels 6–7 get their own rows.
+- No dependency on `ABC-203`'s merge state.
+
+## Design owed (Architect/Design, In Design first)
+
+1. **The `ADR-0045` amendment, PROPOSED** (points in § Owner decisions owed), with the clamp shape:
+   - **(i)** one absolute clamp at the largest ceiling, with each level's ceiling held by its budget;
+   - **(ii)** a ceiling per level, carried with the level, which reopens D3's "a budget and a rate, and nothing else".
+   - The criteria above hold under either.
+2. **`ADR-0044` folds:** D4.1 (`G` for a `go` with no time = the level's budget, not `HARD_CEILING_MS`), D4.4 (the
+   clamp), D11 (`max 7`, which levels take the rate-0 path), D5 (latency ~32 s).
+3. **D5's worker trigger fired: rule it.** Either accept the latency at 6–7 in `ADR-0044` (a GUI that times out on
+   `isready` or `stop` mid-search is told to stay at ≤ 5), or rule the worker owed first. **Pre-registered split:**
+   if the worker is owed first, `A9`'s rows move to a new ticket (next free id), `ABC-212` ships with `Skill Level`
+   `max 5`, and the CLI levels ship without waiting.
+
+## Owner decisions owed (PROPOSED, for the Orchestrator to put to the owner)
+
+**OD-212-1. The `NFR-004` text (blocks the SE pull).**
+- Today: *"Engine returns a move in **≤ 3 s** at default difficulty; **hard ceiling 5 s** at any difficulty"*.
+- **Proposed:** *"Engine returns a move in **≤ 3 s** at default difficulty (level 5); **hard ceiling per level: 5 s at
+  levels 1–5, 7 s at level 6, 32 s at level 7** (a level above 5 gets its budget + 2 s)."* With a dated line: amended
+  on the owner's word `…e44d2903`; levels 1–5 unchanged.
+- **Why + 2 s.** It is the margin level 5 has today (5 000 − 3 000). It is the same rule `ABC-204`'s harness uses for
+  `timemargin`. It holds the measured ≤ 31 ms overshoot (`AR-NFR004-A`) about 60 times over.
+- **Options:** (a) as proposed; (b) budget + 0.5 s (5.5 s, 30.5 s); (c) one ceiling of 32 s at every level, so that
+  levels 1–5 keep their 5 s by budget only and `NFR-005`'s "never exceeds the 5 s ceiling" needs a re-read.
+- **Recommended: (a).**
+
+**OD-212-2. The `ADR-0045` amendment points** (Architect writes the text; owner accepts):
+1. D1: the table grows by 6 = 5 000/0 and 7 = 30 000/0. "Every adjacent pair differs by more than time alone" stops
+   being true for 5v6 and 6v7 (rate 0 on all three).
+2. D2: `DEFAULT_LEVEL` stays 5, and `HARDEST_LEVEL` becomes 7. "`DEFAULT_LEVEL = HARDEST_LEVEL`", "the default is
+   called the hardest" and "there is no level above it" are retired. The owner's word overturns them.
+3. D3: the level mechanism is unchanged. `src/engine.ts` changes at the clamp only (`RF-1`'s value or shape).
+4. D4: `Skill Level` `max 7`; levels 6–7 take the rate-0 path; `G` with no time = the level's budget (with the
+   `ADR-0044` folds above).
+5. D6 / `ADR-0038`: levels 6–7 are outside the ladder; the 2026-10 verdict's "hardest" is level 5.
+6. Consequences: `NFR-004` as in OD-212-1; `AR-NFR004-A`'s "the hardest level is the default, so clause A covers it"
+   is retired; `NFR-005` unchanged; `NFR-009` re-read at 30 s; D5 latency.
+7. Rollback: a data revert of two entries, `HARDEST_LEVEL` and the clamp.
+
+**Questions that do not block (each has a default):**
+- **OQ-212-1. Level 6 at 5 s plays almost like level 5.** `ADR-0045` measured 3 000 v 5 000 ms: deeper on 18 of 50
+  positions, +0.36 ply, and a different move on 2 of 50. That is the "two levels are one engine" shape that `ADR-0045`
+  was cut to remove. Options: (a) keep 5 s, as you said; (b) 9 s (3x, about +1 ply; ceiling 11 s). **Default: (a).**
+- **OQ-212-2. "Up to 30 s"** is ruled as "spends 30 s" (§ "Up to 30 s"). Options: (a) as ruled; (b) a follow-up
+  ticket that stops early on one legal move or a proven mate. That is an engine mechanism change, so it needs an ADR
+  and an `EPIC-008` reading. **Default: (a).**
+- **OQ-212-3. Under UCI, a GUI may give up on the engine at 6–7** if it pings `isready` or sends `stop` mid-search
+  (the answer can come ~32 s late). Options: (a) accept, and use ≤ 5 in such GUIs; (b) build the worker first.
+  **Default: whatever Architect/Design rules under D5.**
+- **OQ-212-4. A measured ordering for 6 and 7** (ladder pairs 5v6, 6v7) costs an estimated ~10 h of host time.
+  **Default: none.**
+
+## Definition of Ready
+
+| # | check | state |
+|---|---|---|
+| 1 | problem clear | ✅ owner word `…e44d2903`; user, pain and value stated |
+| 2 | scope and out-of-scope | ✅ 7 scope items; early stop, worker, ladder and `EPIC-008` readings are out |
+| 3 | INVEST | ✅ independent of `EPIC-008` (value-identical at 1–5); M; split pre-registered |
+| 4 | testable, measurable acceptance | ✅ `A1`–`A15`: ms bounds, byte-exact texts, 50/50 identity, depth bar |
+| 5 | dependencies known | ✅ owner acceptance (OD-212-1/2) before SE; Architect first; `engine.ts` shared with 206/208/209/210 |
+| 6 | NFR triggers with targets | ✅ `NFR-004` per level; `NFR-009` ≤ 16 MiB / ≤ 1 MiB; `NFR-008` 0 files / 0 spawns / ≤ 30 readings |
+| 7 | test notes | ✅ 4 |
+| 8 | size | ✅ M |
+| 9 | priority | ✅ P2 |
+| 10 | no major unresolved blocker | ✅ the owner's word sets the levels; the text acceptance is a gate before the SE pull, not a blocker to design |
+
+**DoR 10/10. Ready → In Design** (Architect/Design: § Design owed), then the owner's acceptance, then In Development.
+
+## Design ruling (Architect/Design, 2026-10-24)
+
+Task `arch-design-ABC-212`, at `main` `5717edec`. Records plus light probes: virtual clock only, scratch tree with
+`HARD_CEILING_MS` set to 32 000. No wall-clock figure was taken. The inputs were the owner's `…2c6fa3b1` and BA/PM's
+`…44bee405` and `…78d4532b`. The `ADR-0045` amendment is written to the owner's accepted points (§ AMENDMENT 2026-10-24
+in the ADR). It has no departure, so the STOP did not fire. No new ADR was written.
+
+**1. Clamp shape: (i), one absolute clamp. `HARD_CEILING_MS` 5 000 → 32 000.**
+- Each level's ceiling is held by its budget: `LEVELS[L].budgetMs ≤ ceiling(L)`, with a margin of at least 2 000 ms at
+  every level. `A5`'s data row pins it.
+- `ceiling(L)` is a test-local literal table in `src/levels.test.ts`, taken from `NFR-004`: 5 000 at levels 1–5, then
+  7 000 and 32 000. It is not a production export.
+- (ii), a ceiling per level, is rejected. It needs a third `Level` field or an `EngineOptions` field, and either one
+  is a departure from the points (`ADR-0045` § AMENDMENT A3).
+- The one line in `src/engine.ts` is `:129`, plus its comments.
+
+**2. UCI bare `go`: zero code change at `src/uci-session.ts:211`.**
+- `G = HARD_CEILING_MS` (now 32 000) is capped by `min(G, LEVELS[skill].budgetMs)` to the level's budget at every
+  level.
+- Probe, step 1 000: bare `go` gave 4 000 at level 5, 6 000 at 6 and 31 000 at 7. `movetime 60000` gave 31 000 and
+  `movetime 1000` gave 2 000. `wtime 600000` gave 31 000. `go depth 3` at 7 stopped at depth 3 with a score.
+- Control, with the clamp at 5 000: level 7 gave 6 000 (P2).
+- The session reads `max` from `HARDEST_LEVEL`, as it already reads `default` from `DEFAULT_LEVEL`. The "takes an
+  integer" text reads `EASIEST_LEVEL`–`HARDEST_LEVEL`. The byte pins still say `max 7` and `1-7`.
+
+**3. OQ-212-3 / `ADR-0044` D5: the latency is accepted at levels 6–7. The worker is not owed first, and the
+pre-registered split is not taken. `A9` stays in this ticket.**
+- The reasons and the cutechess source read are in `ADR-0045` § AMENDMENT A4.
+- The cutechess read: pings only between moves, and a 15 s `IdleTimeout` after a mid-search `stop`. A `stop` comes
+  only at a game end or when pondering.
+- Other GUIs are `UNKNOWN - verify`.
+- The worker is built when pondering is wanted, or when a GUI the owner uses is shown to stall at levels 6–7.
+- `A11` keeps the runbook to its named lines, so the latency is documented in `src/uci-session.ts`'s header (scope 6)
+  and in the `ADR-0044` D5 fold.
+
+**4. Pins (`A13`). The list stands, with these rulings and four additions.** The additions are interaction 12 below,
+licensed by this ruling.
+- **As listed, made exact:**
+  - `src/engine.test.ts:644` → `32_000`.
+  - In the `RF-1` block, `STEP_MS = 2_500` → `HARD_CEILING_MS / 2`. 32 000 is not a multiple of 2 500, so `:651` reds
+    at 35 000 > 34 500 (probe). The ratio is kept, so the reading count and cost stay as today. With that one edit,
+    `:647`–`:662` are green at 32 000, and a no-clamp plant reds 3 of them (probe).
+  - `src/levels.test.ts:293`–`:296` becomes `A5`'s data row: `budgetMs ≤ ceiling(L)` over 1..7, `budgetMs < 5 000`
+    over 1..5, and `HARD_CEILING_MS === 32 000`.
+  - `:627` reads `LEVELS[5]`, and its bound at `:639` is `5 000`, not `HARD_CEILING_MS`.
+  - `HANG_GUARD_MS` in both real-engine files → `20_000`.
+- **Added:**
+  - `src/levels.test.ts:405`–`:413` (R1) → a fixture of `2 * HARD_CEILING_MS` and `step = HARD_CEILING_MS / 20`. As
+    written at 32 000 it goes vacuous: a removed level clamp stays green (probe). Refixed, that plant reds (68 800 >
+    38 400), and the row passes in 5 ms.
+  - `src/levels.test.ts:601` (`A2` deep, "never more than 5 s") → `ceiling(id)`.
+  - `src/cli.real-engine.test.ts:408` (`A3(ii)`, the whole CLI child) → `5 000`, because the child plays level 5.
+    Untouched, it silently loosens to 32 s.
+  - The comments that go with these rows.
+- **They move with no edit:**
+  - `src/engine.test.ts:1268` `LONG_MS`: the 6 000 nodes still bind first;
+  - every `src/uci-session.test.ts` row: 128/128 green at 32 000 in the probe;
+  - `src/ladder.test.ts` and `src/search.ts`: not edited.
+
+**5. Interactions (BA/PM `…44bee405` lists 11; this hop adds the 12th):**
+
+| # | ruling |
+|---|---|
+| 1 | Dissolved. No level's budget reaches its ceiling or the clamp. The catalog bullet is retired at the gate (Security/NFR) |
+| 2 | Closed by 1 and 2 above. P2 reds `A4` and `A9` |
+| 3 | Accepted, with no worker and no split (3 above) |
+| 4 | BA/PM's erratum on the `ABC-204` page at the merge: "level 5's ceiling (5 000)". The numbers do not change |
+| 5 | Agreed, and `:639` is made exact (4 above) |
+| 6 | Agreed (`A13`) |
+| 7 | Agreed. The `RF-1` step scales with the clamp, so the default-lane cost does not grow. `A4` runs at width 1, never during an `EPIC-008` reading |
+| 8 | Owed: Security/NFR, plain `node`. Expected flat (`ADR-0025`), `UNKNOWN - verify` |
+| 9 | The guard stays. `src/search.ts` is not edited (`ADR-0045` D3). `A4` logs the depth, and ≥ 100 goes to Architect/Design. The comment is folded at the next `search.ts` ticket |
+| 10 | One line plus comments in `src/engine.ts`. Whichever merges second rebases. Value-identical at 1–5 (`min(b, 32 000) = min(b, 5 000)` for b ≤ 3 000) |
+| 11 | The Orchestrator's (the board) |
+| 12 | **New:** four ceiling readers outside `A13` (`levels.test.ts` R1 and `:601`, `cli.real-engine.test.ts:408`, and the `RF-1` step) would go red, or go vacuous, or loosen. They are licensed in 4 above |
+
+**Next move:**
+- The Orchestrator merges these records and reports the `ADR-0045` amendment to the owner (veto open).
+- Then `In Design` → `Ready for Dev`, and the SE pulls `ABC-212`.
+- Then QE: `A4` in `ENGINE_DEEP` at width 1, and `A3`/`A10` by hand.
+- Then Security/NFR at the gate: the `NFR-004` catalog text and mechanism line, `NFR-009` at 30 s, and `N8-LANE`.
+- BA/PM at the merge: the `ADR-0044` fold lines and the `ABC-204` erratum.
+
+## Amendment 2026-10-24 (BA/PM, `bapm-amend-ABC-212`): the SE's STOP ruled, `U1`–`U8` licensed, `A12` re-worded
+
+Records only, at `main` `268ff42a`, sealed 2026-10-23T22:13Z UTC. The rulings are in
+`.grugops/context/bapm-amend-ABC-212/notes/`. Inputs: the SE's STOP on `grugops/ABC-212` at `2dba7331`
+(`…93ffdad9`, `…e4a87583`, `…f2d7bc56`). This hop read each row at that tip and ran no test, probe or timing. `A12` and
+`A13` above keep their original text, and each carries a pointer to this block.
+
+**No requirement and no bound moves. No STOP.** The levels, budgets, ceilings, surfaces and `NFR-004`/`NFR-008`/
+`NFR-009` texts are as the owner accepted them. The routing: `A13` sends an out-of-list pin to BA/PM, and the SE's
+note addressed it to the Architect. This ruling is BA/PM's under `A13`. No Architect hop is owed for these rows.
+
+**1. `A13` grows by eight rows.** Each is a value-only consequence of the accepted spec: the level set is now 1–7,
+and the first refused integer above the top moves from 6 to 8 (`A6`'s boundary pair 0/6 → 0/8). No row's assertion
+changes kind, count or strength. The line numbers are at `2dba7331`. Comments that go with a row may be edited with it.
+
+| # | row (at `2dba7331`) | ruling | exact edit |
+|---|---|---|---|
+| U1 | `src/cli.test.ts:1338`–`:1340`, `ABC-042` `A6(i)`, `TABLE_LEVELS` | **licensed** | `["1", "2", "3", "4", "5"]` → `["1", "2", "3", "4", "5", "6", "7"]`. The comment at `:1338` changes "its five level words" → "its seven level words". The table stays a hand transcription and is not derived |
+| U2 | `src/cli.test.ts:1822`–`:1824`, `ABC-042` `A8`, `numbersIn("cli-options.ts")` | **licensed** | expected `["0", "0.5", "1", "2", "3", "4", "5"]` → `["0", "0.5", "1", "2", "3", "4", "5", "6", "7"]`. In the comment, `` `1`-`5` `` → `` `1`-`7` ``, and "`3` is also the default level" → "`5` is also the default level" (stale since `ADR-0045` D2). The new literals are only the type's `6 \| 7`, so the list says why each number is there |
+| U3 | `src/cli.test.ts:2331`, `ABC-065` `A3` (reads `AGENTS.md` "Dev / run") | **licensed, no test edit** | Goes green when `A11`'s `AGENTS.md` line lands. **The merge must carry both** (item 3) |
+| U4 | `src/cli.test.ts:4465`, `ABC-101` `A7` | **licensed** | regex `/export type Difficulty = 1 \| 2 \| 3 \| 4 \| 5;/` → `/export type Difficulty = 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7;/` (the raw page text is byte-exact. A rendered table drops the `\` before each `|`) |
+| U5 | `src/cli.test.ts:4521`, `ABC-101` `A8′` own-key list | **licensed** | `[0, 6, 3.5, …]` → `[0, 8, 3.5, …]`. 8 is the first integer above the table that is not an own key. That is the class 6 held at base |
+| U6 | `src/levels.test.ts:243`–`:251`, `ABC-174` `A1` deep-equal | **licensed** | After `5: { budgetMs: 3_000, blunderRate: 0 },` add `6: { budgetMs: 5_000, blunderRate: 0 },` and `7: { budgetMs: 30_000, blunderRate: 0 },`. The describe title may name `ADR-0045` § AMENDMENT A1. The frozen loop at `:253` stays at 1..5 (6 and 7 are pinned frozen at `:299`–`:300`) |
+| U7 | `src/startup-questions.test.ts:250`, `:255`, `:274`, `ABC-200` `A4` | **licensed** | `` `6` `` → `` `8` `` in the title (`:250`); the input `` `6\n0\n03\n…` `` → `` `8\n0\n03\n…` `` (`:255`); `'"6"'` → `'"8"'` (`:274`). The rejection count (4) and every other expectation stay |
+| U8 | `src/uci-session.test.ts:717`, `ABC-171` `A2` invalid values | **licensed** | `["0", "6", "2.5", "x", "constructor"]` → `["0", "8", "2.5", "x", "constructor"]` |
+
+Forward scan (read-only, at `2dba7331`): no other default-lane pin of this class remains. The scan covered `[1..5]`,
+`1 | … | 5`, `max 5` and `1-5`. The remaining hits are the licensed base-identity rows, the 1..5 frozen loop, and
+`src/ladder.test.ts`, which is not edited. `ENGINE_DEEP` was not run at the SE hop. A red there outside `A13`, Design
+ruling 4 and this list is the same class: stop to BA/PM.
+
+**2. `A12` re-worded (it contradicted `A9`).** `A9`'s step is G ÷ 30, and its bound is `time ≥ G`. Reaching G at that
+step takes at least 31 clock readings, so `A12`'s "≤ 30" could not hold. The SE measured 32 (bare `go` at 7,
+`movetime 60000`, `wtime 600000`), 33 (bare `go` at 6, `movetime 1000`) and 5 (`depth 3`) (`…f2d7bc56`). **`A9` stands
+as written, and `A12`'s count is rewritten to follow `A9`'s step.** `A12` now reads:
+
+> **A12. Lane cost.** 0 new test files and 0 new spawned children. A default-lane row that searches at level 6 or 7
+> does one of two things. It reads the budget handed to the engine without searching. Or it runs on a virtual clock
+> with a step no finer than `A9`'s, step = ⌊G ÷ 30⌋ ms, where G is the search's time bound. Such a search reads the
+> clock **at most ⌈G ÷ step⌉ + 3 times** (33 at a step of exactly G ÷ 30, 34 at a floored step). A search that stops
+> early, on depth or nodes, reads it fewer times. No level-6 or level-7 search runs on the real clock in the default
+> lane, `CLI_DEEP` or `UCI_DEEP`.
+
+- **Where + 3 comes from:** one reading at the start, plus the readings up to G, plus at most two steps past G under
+  `A9`'s `time ≤ G + 2·step`. Every measured row is within it: the caps are 33 at `G = 30 000` and 34 at
+  `G = 5 000` and `G = 1 000`.
+- **Why `A12` moves and not `A9`:** `A9`'s step and bound are `ABC-167` `A5`'s, which the lane already uses at levels
+  1–5. The cut meant `A12`'s 30 as that same coarseness (`…44bee405` item 7, "virtual-clock rows only, ≤ 30 readings
+  each") and miscounted it by the start reading and the two steps of slack. The other fix, keeping 30 and coarsening
+  `A9`'s step to about G ÷ 27, would widen `A9`'s tolerance and break its parity with `ABC-167` `A5`. That is rejected.
+- **No bound moves.** The difference is 2–4 virtual-clock readings per search, with no real time spent. `NFR-008`'s
+  bound and its `N8-LANE` ruling (Security/NFR) are untouched. The "≤ 30 readings" in § Definition of Ready row 6
+  reads as this item. The DoR stays 10/10.
+
+**3. U3 couples the merge to `A11`'s `AGENTS.md` line.** `ABC-065` `A3` reads the "Dev / run" slot. It requires
+**exactly one** `|`-joined value list after `--difficulty`, set-equal to the accepted words. So the Scribe's line must
+contain `--difficulty 1|2|3|4|5|6|7` once, with no second `--difficulty` run (for example, no separate
+`--difficulty 6|7`) and no new `--` option token. The prose "levels 6 and 7 think 5 s and 30 s a move" is fine.
+`ABC-212` is not merged with U3 red: the code and that line land in the same merge.
+
+**4. What happens next (for the Orchestrator):**
+- One SE follow-up hop on `grugops/ABC-212` makes the U1, U2 and U4–U8 edits exactly as above. It edits tests only,
+  with no production line and no other expectation.
+- `npm test` is then expected to show U3 as its only red until `A11`'s `AGENTS.md` line is on the tree that is
+  tested, and 0 red with it.
+- The rest stays as the page says: QE `A3`/`A4`/`A10`, Security/NFR `A15`/`NFR-009`/`N8-LANE`, the Architect's
+  runbook line, and BA/PM's `ADR-0044` fold lines and `ABC-204` erratum at the merge.
+
+## QE addendum
+
+> **QE/E2E, 2026-10-24** (task `qe-ABC-212`). It ran on branch `grugops/qe-ABC-212`, at **merge `d417b07c`**
+> (`c0508fe9` + `main` `7727400c`, no conflict). It had its own `npm ci`, ran on Node v26.11.1 on an Apple M3, made
+> no `src/` edit and pushed nothing. Notes are in `.grugops/context/qe-ABC-212/notes/` (`…f9560997` readings,
+> `…8b19f527` plants, `…e58d4635` verdict). The evidence is in `raw/`, with personal paths redacted. **One run
+> under the owner rule `…4c3f7639`.** Each timed window waited for the preconditions (AC, load1 ≤ 8, no foreign
+> vitest). Another session's vitest suite held them about 12 min before A4 and 22 min before the Ctrl-C step.
+
+**Verdict: `PASS_WITH_GAPS`.** `A1`–`A15` are MET and no gap blocks. The findings are 1 LOW and 3 INFO.
+
+| # | reading at the merge |
+|---|---|
+| `A1`, `A2`, `A5`–`A9` | green in `npm test` (62 files, 2066/2066); P1–P5, `RF-1` and R1 each red their rows (scratch copies, never `src/`) |
+| `A3` | levels 1–5 × 10 positions, seed 1, step = budget ÷ 30, plus `chooseMove` at 3 000: **60/60 identical** to base `c735577f` and to `main` `7727400c`. The instrument is sensitive: plants change 3–20 of 60 rows |
+| `A4` | real clock, one window per row. **Level 5:** 30/30, max 3 005 ms. **Level 6:** 30/30, 5 000–5 005 ms, max depth 13. **Level 7:** 10/10, 30 000–30 004 ms, max depth 10. Depth < 100, so no Architect notice. Two short foreign bursts fell in level-7 moves 7 and 9–10. They can only push toward overrun, and those moves read in band |
+| `A10` | real pty, `--difficulty 7`. The thinking frame came 1 ms after Enter. The out-of-book move (`Rh3` … `Nc6`) took **30 001 ms**. Ctrl-C 3 s into the search ended the process in **12 ms**. Level-6 and level-7 games wrote PGNs with `Difficulty "6"` / `"7"` |
+| `A11` | both files name `--difficulty 1\|2\|3\|4\|5\|6\|7`, default 5, and 6/7 at 5 s / 30 s. U3 is green |
+| `A12` | 0 new files and 0 new spawns; A9's bound implies the ⌈G ÷ step⌉ + 3 cap |
+| `A13` | every removed or changed test line maps to the list, Design ruling 4 or U1–U8. `ladder.test.ts` and `search.ts` are untouched |
+| `A14` | P1–P5 re-planted: each reds its row. QE plants Q1–Q6 (level-6 over the ceiling or under the margin, UCI cap removed, level-7 rate 0.01, usage or info text at 1–5) each red too |
+| `A15` | plain `node`, completed depth L5 / L6 / L7: **kiwipete 7 / 7 / 9, position-6 7 / 7 / 9**. Bar met: 9 ≥ 8 and 7 ≥ 7 |
+
+**Gates at `d417b07c`:**
+- lint 0 (125 files), typecheck 0, build 0;
+- `npm test`: 62 files and 2066/2066, rc 0. `last-run.json` reads `success: true`, pending 0, todo 0;
+- skips 0, and `test-skip-integrity.js` gives `No findings.`;
+- `CLI_DEEP` 11/11; `UCI_DEEP` 5/5;
+- `ENGINE_DEEP` levels lane 41/41 (a gate pass only, see QE-212-b);
+- `qe-hop-integrity.js --ticket ABC-212`: covered (qe-e2e).
+
+**Findings:**
+- **QE-212-a (LOW):** A4's log line (max ms and max depth, the `KEY_ARRAY_CAPACITY` tripwire) is not printed under the
+  documented lane command when output is not a terminal. Vitest's default reporter drops passing tests' console
+  lines, and `--reporter=verbose` shows them. Fix: the Scribe adds `--reporter=verbose` to the lane line, or a later
+  ticket asserts `max depth < 100` in the row. Not blocking.
+- **QE-212-b (INFO):** the host was not idle. The first whole-lane pass ran beside a foreign vitest and is a gate
+  pass, not the reading. The windows were then taken after waiting. The mid-window breaks are named per move with
+  their bias direction.
+- **QE-212-c (INFO):** the runbook's "with no output on each engine move" means "after the `thinking...` frame".
+- **QE-212-d (INFO):** A11's "no other line moves" is read as "no other content". The runbook's `_Updated_` line and
+  its dated bracket are the record convention.
+
+**UAT:** the waiver does **not** apply. The production files are `cli-options.ts`, `cli.ts`, `engine.ts`, `levels.ts`
+and `uci-session.ts`. This verdict (`PASS_WITH_GAPS`, no blocking gap) signs UAT under the delegation (`…5aaf7cec`
+item 2). For the owner to try by hand, with nothing waiting on it:
+- a level-7 game: about 30 s per out-of-book move, and Ctrl-C ends it at once;
+- the startup question with 6 or 7;
+- `--difficulty 8` is refused;
+- `Skill Level` 7 in a UCI GUI: `isready`/`stop` mid-search are answered up to ~32 s late;
+- the PGN tag `Difficulty "7"`.
+
+**Owed, and not gaps:**
+- Security/NFR places the `NFR-004` text (owner `…2c6fa3b1`; Architect `…d2c68ace` item 7). The branch's catalog row
+  still says 5 s at any difficulty. It also owes `AR-NFR004-A` at 32 000, `NFR-009` at 30 s, `N8-LANE` and
+  `ADR-0036` (b);
+- BA/PM owes the `ADR-0044` folds and the `ABC-204` erratum at the merge.
+
+**Next:** `In Review → In Security/NFR`.

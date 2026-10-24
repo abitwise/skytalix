@@ -1,8 +1,8 @@
 ---
 id: ABC-203
 title: "At game end, `npm run chess` writes the game as a standard PGN file under `games/` (EPIC-006, PGN export)"
-status: in-review
-column: In Review
+status: in-security-nfr
+column: In Security/NFR
 size: M
 priority: P1
 epic: EPIC-006
@@ -428,3 +428,32 @@ It **reverses nothing**: `ADR-0007`, `ADR-0018`, `ADR-0011` clause 4, `ADR-0002`
 **`In Design` → `Ready for Dev`**, then `In Development` with the Software Engineer on `ADR-0047` and items 1–3.
 The SE runs the default lane before handing to QE (`A1`–`A13`, plants P1–P7). Then Security/NFR checks the five
 items above. Merge order with `arch-analyse-game-1`: none forced.
+
+## QE
+
+**2026-10-24, QE/E2E** (subtask `qe-ABC-203`, branch `grugops/qe-ABC-203`, merge `8fa09e14` = build `5900d100` +
+`main` `bcf9ce95`). Findings only: no `src/` edit. Notes: `.grugops/context/qe-ABC-203/notes/` (`…5b146b4b` per
+criterion and plants, `…1f3c2e3d` owed readings, `…2f8e789e` gates and pin audit, `…f28588e1` verdict). Raw:
+`.grugops/context/qe-ABC-203/raw/`.
+
+**Verdict: `PASS_WITH_GAPS`.** `A1`–`A14` are all MET, and it signs UAT under the owner's delegation (`…5aaf7cec`, item 2).
+
+| item | result |
+|---|---|
+| `A1`–`A12`, `A14` | MET. Lane rows re-read and re-run. Own base-vs-branch readings through the CLI: `A3` on 7 no-write paths (byte-identical, no `games/`), and `A11` on 4 outcome paths (base stdout + one saved line) |
+| `A10` via the CLI | MET. A `games` file gives `EEXIST`, a `0555` `games/` gives `EACCES`, and 99 taken names give `EEXIST`. In each case: one stderr line, screen bytes equal to the success run's minus its saved line, exit `0`, 0 new files. Extra: a failed write after the open (`EFBIG`) also leaves no partial file |
+| `A13` | MET. `npm run chess` in a clone, under a real pty: a 54-ply game ended by mate (`27...Qxd2#`), and `git status` was clean. **Readers pinned:** `cutechess-cli` 1.5.1 `-openings format=pgn` (0 warnings) and python-chess 1.11.2 (0 errors). Both give the screen's final position, `6k1/4ppbp/3p2p1/7P/2b1P3/Pr6/1r1q1PP1/3K3R w - - 0 28` |
+| write time at 300 plies | **max 8.39 ms of 5 cold runs** (bar 50 ms). Apple M3, Node 26.11.1 |
+| plants | P1, P2, P6 and P7 re-run and red. Extra X1 (no unlink) and X2 (exit 70 after a failed save) **pass the lane**: QE-203-b and -a |
+| pin audit | process 10→11, `sink.write` 1→2 and `difficulty` 2→3 each add exactly one hit, the ticket's own line. **All in `A14`'s ruled class**, so no finding |
+| gates | lint, typecheck and build 0. `npm test` 62 / 2038, `last-run.json` success. Skips 0, `No findings.` `CLI_DEEP` 11/11. Heap 128 / 400 |
+| tree | clean. No `games/` in the worktree or in `main`'s checkout |
+
+**Findings:**
+- **QE-203-a LOW (gap):** no lane row pins `A10` at the CLI.
+- **QE-203-b LOW (gap):** no lane row pins "no partial file".
+- **QE-203-c LOW:** a double fault (the write fails, then the cleanup `unlinkSync` fails) escapes as exit `70` and leaves the file. Reproduced by fault injection, and it goes against `ADR-0047` D5. Routed to Security/NFR.
+- **QE-203-d INFO:** the wrap can split `N.` from its move, and a comment can wrap across lines.
+- **QE-203-e INFO:** a `games` regular file reads `EEXIST`, the same code as "99 taken".
+
+**Next move:** `In Review` → `In Security/NFR`, with the ruling's five items plus QE-203-c.

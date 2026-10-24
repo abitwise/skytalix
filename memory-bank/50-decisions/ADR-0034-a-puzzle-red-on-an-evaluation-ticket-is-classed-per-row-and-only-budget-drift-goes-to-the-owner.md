@@ -308,6 +308,9 @@ Proposed by Architect/Design (task `wave-2026-09-25`, subtask `design-ABC-083-re
      and negate the score.
    - The best accepted move must lead the best other move by **more than 75 cp**. That is `ADR-0026`
      decision 9's ceiling: LMR's accepted drift cannot close a lead that is larger than its own bound.
+     *(Pointer 2026-10-24, `OD-205-2`: that ceiling is now 118 cp, `ADR-0026` § Proposed amendment 2026-10-24,
+     accepted. So this bar reads 118 cp for later L re-finds only. Decision 2's screen and retained rows do not
+     change.)*
    - At d, fixed-depth `search()` and the suite's call must both play an accepted move.
    - **Why ± 1:** an evaluation term moves the solving depth by one ply (decision 3's shallower class). Seed
      1917 is the case. It leads by 195 cp at d5, but only by 20 cp at d6.

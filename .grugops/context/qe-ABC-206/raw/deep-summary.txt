@@ -1,0 +1,8 @@
+SEARCH_DEEP src/search.pvs-lmr.test.ts rc=0
+SEARCH_DEEP src/search.test.ts rc=0
+SEARCH_DEEP src/quiescence.test.ts rc=0
+SEARCH_DEEP src/transposition.test.ts rc=0
+ENGINE_DEEP src/transposition.test.ts rc=0
+ENGINE_DEEP src/legal.test.ts rc=0
+ENGINE_DEEP src/gameend.test.ts rc=0
+ENGINE_DEEP src/engine.test.ts rc=0

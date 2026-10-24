@@ -1,0 +1,188 @@
+
+ RUN  v4.1.12 <scratch>/plant-tree
+
+ ❯ src/uci-session.test.ts (138 tests | 7 failed) 4621ms
+     × setoption name Skill Level value 7 sets 7: a bare go searches 30 000 ms 148ms
+     × go movetime 60000 at 7 searches 30 000 (the level caps G) 147ms
+     × go movetime 1000 at 7 searches 1 000 (G caps the level) 153ms
+     × go wtime 600000 btime 600000 at 7 searches min(600 000 ÷ 20, 30 000) = 30 000 146ms
+     × go depth 3 at 7 stops at depth 3 (D12: rate 0), and the info line carries a score 146ms
+     × Skill Level value 0 at 7 keeps 7, with the 1-7 info string 142ms
+     × Skill Level value 8 at 7 keeps 7, with the 1-7 info string 145ms
+ ❯ src/levels.test.ts (33 tests | 3 failed) 181ms
+     × deep-equals D1, and the table and each entry are frozen 6ms
+     × LEVELS[6] is { 5 000, 0 } and LEVELS[7] is { 30 000, 0 } 0ms
+     × the ordering row holds over 1..7: budgets never fall, rates never rise, each step improves one 4ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 10 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/levels.test.ts > ABC-174 A1 — the table is ADR-0045 D1's > deep-equals D1, and the table and each entry are frozen
+AssertionError: expected { '1': { budgetMs: 100, …(1) }, …(6) } to deeply equal { '1': { budgetMs: 100, …(1) }, …(6) }
+
+- Expected
++ Received
+
+@@ -22,9 +22,9 @@
+    "6": {
+      "blunderRate": 0,
+      "budgetMs": 5000,
+    },
+    "7": {
+-     "blunderRate": 0,
++     "blunderRate": 0.01,
+      "budgetMs": 30000,
+    },
+  }
+
+ ❯ <anonymous> src/levels.test.ts:245:20
+    243| describe("ABC-174 A1 — the table is ADR-0045 D1's", () => {
+    244|   it("deep-equals D1, and the table and each entry are frozen", () => {
+    245|     expect(LEVELS).toEqual({
+       |                    ^
+    246|       1: { budgetMs: 100, blunderRate: 0.4 },
+    247|       2: { budgetMs: 180, blunderRate: 0.2 },
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/10]⎯
+
+ FAIL  src/levels.test.ts > ABC-212 A1 — levels 6 and 7 above the default (ADR-0045 § AMENDMENT A1-A2) > LEVELS[6] is { 5 000, 0 } and LEVELS[7] is { 30 000, 0 }
+AssertionError: expected { budgetMs: 30000, blunderRate: 0.01 } to deeply equal { budgetMs: 30000, blunderRate: +0 }
+
+- Expected
++ Received
+
+  {
+-   "blunderRate": 0,
++   "blunderRate": 0.01,
+    "budgetMs": 30000,
+  }
+
+ ❯ <anonymous> src/levels.test.ts:271:23
+    269|   it("LEVELS[6] is { 5 000, 0 } and LEVELS[7] is { 30 000, 0 }", () =>…
+    270|     expect(LEVELS[6]).toEqual({ budgetMs: 5_000, blunderRate: 0 });
+    271|     expect(LEVELS[7]).toEqual({ budgetMs: 30_000, blunderRate: 0 });
+       |                       ^
+    272|   });
+    273|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/10]⎯
+
+ FAIL  src/levels.test.ts > ABC-212 A1 — levels 6 and 7 above the default (ADR-0045 § AMENDMENT A1-A2) > the ordering row holds over 1..7: budgets never fall, rates never rise, each step improves one
+AssertionError: expected 0.01 to be less than or equal to 0
+ ❯ <anonymous> src/levels.test.ts:293:36
+    291|       const [weaker, stronger] = [ordered[i - 1] as Level, ordered[i] …
+    292|       expect(stronger.budgetMs).toBeGreaterThanOrEqual(weaker.budgetMs…
+    293|       expect(stronger.blunderRate).toBeLessThanOrEqual(weaker.blunderR…
+       |                                    ^
+    294|       expect(stronger.budgetMs > weaker.budgetMs || stronger.blunderRa…
+    295|         true,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/10]⎯
+
+ FAIL  src/uci-session.test.ts > ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path > setoption name Skill Level value 7 sets 7: a bare go searches 30 000 ms
+AssertionError: expected 'info depth 5 nodes 25621 time 31000 p…' to contain ' score '
+
+Expected: " score "
+Received: "info depth 5 nodes 25621 time 31000 pv g1f3"
+
+ ❯ searchAt src/uci-session.test.ts:1011:22
+    1009|     expect(lines).toHaveLength(2);
+    1010|     // D11: rate 0 is `chooseMove` with a score, and draws no seed.
+    1011|     expect(lines[0]).toContain(" score ");
+       |                      ^
+    1012|     const info = parseInfo(lines[0]);
+    1013|     expect(lines[1]).toBe(`bestmove ${info.move}`);
+ ❯ src/uci-session.test.ts:1025:28
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/10]⎯
+
+ FAIL  src/uci-session.test.ts > ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path > go movetime 60000 at 7 searches 30 000 (the level caps G)
+AssertionError: expected 'info depth 5 nodes 25621 time 31000 p…' to contain ' score '
+
+Expected: " score "
+Received: "info depth 5 nodes 25621 time 31000 pv g1f3"
+
+ ❯ searchAt src/uci-session.test.ts:1011:22
+    1009|     expect(lines).toHaveLength(2);
+    1010|     // D11: rate 0 is `chooseMove` with a score, and draws no seed.
+    1011|     expect(lines[0]).toContain(" score ");
+       |                      ^
+    1012|     const info = parseInfo(lines[0]);
+    1013|     expect(lines[1]).toBe(`bestmove ${info.move}`);
+ ❯ src/uci-session.test.ts:1035:28
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/10]⎯
+
+ FAIL  src/uci-session.test.ts > ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path > go movetime 1000 at 7 searches 1 000 (G caps the level)
+AssertionError: expected 'info depth 5 nodes 26645 time 1056 pv…' to contain ' score '
+
+Expected: " score "
+Received: "info depth 5 nodes 26645 time 1056 pv g1f3"
+
+ ❯ searchAt src/uci-session.test.ts:1011:22
+    1009|     expect(lines).toHaveLength(2);
+    1010|     // D11: rate 0 is `chooseMove` with a score, and draws no seed.
+    1011|     expect(lines[0]).toContain(" score ");
+       |                      ^
+    1012|     const info = parseInfo(lines[0]);
+    1013|     expect(lines[1]).toBe(`bestmove ${info.move}`);
+ ❯ src/uci-session.test.ts:1040:28
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/10]⎯
+
+ FAIL  src/uci-session.test.ts > ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path > go wtime 600000 btime 600000 at 7 searches min(600 000 ÷ 20, 30 000) = 30 000
+AssertionError: expected 'info depth 5 nodes 25621 time 31000 p…' to contain ' score '
+
+Expected: " score "
+Received: "info depth 5 nodes 25621 time 31000 pv g1f3"
+
+ ❯ searchAt src/uci-session.test.ts:1011:22
+    1009|     expect(lines).toHaveLength(2);
+    1010|     // D11: rate 0 is `chooseMove` with a score, and draws no seed.
+    1011|     expect(lines[0]).toContain(" score ");
+       |                      ^
+    1012|     const info = parseInfo(lines[0]);
+    1013|     expect(lines[1]).toBe(`bestmove ${info.move}`);
+ ❯ src/uci-session.test.ts:1045:28
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/10]⎯
+
+ FAIL  src/uci-session.test.ts > ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path > go depth 3 at 7 stops at depth 3 (D12: rate 0), and the info line carries a score
+AssertionError: expected [ …(3) ] to have a length of 2 but got 3
+
+- Expected
++ Received
+
+- 2
++ 3
+
+ ❯ searchAt src/uci-session.test.ts:1009:19
+    1007|     send("position startpos");
+    1008|     const lines = send(go);
+    1009|     expect(lines).toHaveLength(2);
+       |                   ^
+    1010|     // D11: rate 0 is `chooseMove` with a score, and draws no seed.
+    1011|     expect(lines[0]).toContain(" score ");
+ ❯ src/uci-session.test.ts:1050:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/10]⎯
+
+ FAIL  src/uci-session.test.ts > ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path > Skill Level value 0 at 7 keeps 7, with the 1-7 info string
+ FAIL  src/uci-session.test.ts > ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path > Skill Level value 8 at 7 keeps 7, with the 1-7 info string
+AssertionError: not an info line: info depth 5 nodes 25621 time 31000 pv g1f3: expected null not to be null
+ ❯ parseInfo src/uci-session.test.ts:85:50
+     83| function parseInfo(line: string | undefined) {
+     84|   const match = INFO_LINE.exec(line ?? "");
+     85|   expect(match, `not an info line: ${line}`).not.toBeNull();
+       |                                                  ^
+     86|   const m = match as RegExpExecArray;
+     87|   return {
+ ❯ src/uci-session.test.ts:1063:20
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/10]⎯
+
+
+ Test Files  2 failed | 3 passed (5)
+      Tests  10 failed | 335 passed (345)
+   Start at  14:17:44
+   Duration  5.38s (transform 0ms, setup 0ms, import 4.41s, tests 5.83s, environment 0ms)
+

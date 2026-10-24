@@ -72,6 +72,21 @@ const label = (move: Move): string => `${squareName(move.from)}${squareName(move
 const easiest = LEVELS[EASIEST_LEVEL];
 
 /**
+ * `ceiling(L)`, from `NFR-004`'s accepted text (`ADR-0045` § AMENDMENT 2026-10-24, `ABC-212`
+ * § Design ruling 1): 5 s at levels 1-5, 7 s at 6, 32 s at 7. A TEST-LOCAL transcription, never
+ * a production export: the engine holds one clamp, and each level's ceiling is held by its budget.
+ */
+const CEILING_MS = {
+  1: 5_000,
+  2: 5_000,
+  3: 5_000,
+  4: 5_000,
+  5: 5_000,
+  6: 7_000,
+  7: 32_000,
+} as const satisfies Record<keyof typeof LEVELS, number>;
+
+/**
  * Each FEN, then every position one legal ply from it — `buildCorpus`'s shape — less any with no
  * legal move (a mate or stalemate one ply on).
  */
@@ -188,9 +203,9 @@ function assertA4(lane: string, fens: readonly string[], choices: readonly Level
 // ---------------------------------------------------------------------------
 
 describe("A1 — the level table", () => {
-  it("is keyed 1-5, weakest to strongest, easiest 1, default 5, hardest 5 (ADR-0045 D2)", () => {
-    expect(Object.keys(LEVELS)).toEqual(["1", "2", "3", "4", "5"]);
-    expect([EASIEST_LEVEL, DEFAULT_LEVEL, HARDEST_LEVEL]).toEqual([1, 5, 5]);
+  it("is keyed 1-7, weakest to strongest, easiest 1, default 5, hardest 7 (ADR-0045 A2)", () => {
+    expect(Object.keys(LEVELS)).toEqual(["1", "2", "3", "4", "5", "6", "7"]);
+    expect([EASIEST_LEVEL, DEFAULT_LEVEL, HARDEST_LEVEL]).toEqual([1, 5, 7]);
   });
 
   it("gives every level a budget and a blunder rate, and nothing else", () => {
@@ -233,17 +248,58 @@ describe("ABC-174 A1 — the table is ADR-0045 D1's", () => {
       3: { budgetMs: 330, blunderRate: 0.1 },
       4: { budgetMs: 1_000, blunderRate: 0.05 },
       5: { budgetMs: 3_000, blunderRate: 0 },
+      6: { budgetMs: 5_000, blunderRate: 0 },
+      7: { budgetMs: 30_000, blunderRate: 0 },
     });
     expect(Object.isFrozen(LEVELS)).toBe(true);
     for (const id of [1, 2, 3, 4, 5] as const) expect(Object.isFrozen(LEVELS[id])).toBe(true);
   });
 });
 
-describe("ABC-174 A2 — the default is the top", () => {
-  it("[EASIEST, DEFAULT, HARDEST] is [1, 5, 5], and the default is { DEFAULT_BUDGET_MS, 0 }", () => {
-    expect([EASIEST_LEVEL, DEFAULT_LEVEL, HARDEST_LEVEL]).toEqual([1, 5, 5]);
-    expect(DEFAULT_LEVEL).toBe(HARDEST_LEVEL);
+describe("ABC-174 A2 — the default is level 5 (ABC-212: no longer the top)", () => {
+  it("[EASIEST, DEFAULT, HARDEST] is [1, 5, 7], and the default is { DEFAULT_BUDGET_MS, 0 }", () => {
+    expect([EASIEST_LEVEL, DEFAULT_LEVEL, HARDEST_LEVEL]).toEqual([1, 5, 7]);
+    expect(DEFAULT_LEVEL).toBe(5);
+    expect(HARDEST_LEVEL).toBe(7);
     expect(LEVELS[DEFAULT_LEVEL]).toEqual({ budgetMs: DEFAULT_BUDGET_MS, blunderRate: 0 });
+  });
+});
+
+describe("ABC-212 A1 — levels 6 and 7 above the default (ADR-0045 § AMENDMENT A1-A2)", () => {
+  it("LEVELS[6] is { 5 000, 0 } and LEVELS[7] is { 30 000, 0 }", () => {
+    expect(LEVELS[6]).toEqual({ budgetMs: 5_000, blunderRate: 0 });
+    expect(LEVELS[7]).toEqual({ budgetMs: 30_000, blunderRate: 0 });
+  });
+
+  it("LEVELS[1..5] are base's, value for value", () => {
+    const base = [
+      [100, 0.4],
+      [180, 0.2],
+      [330, 0.1],
+      [1_000, 0.05],
+      [3_000, 0],
+    ];
+    ([1, 2, 3, 4, 5] as const).forEach((id, i) => {
+      const [budgetMs, blunderRate] = base[i] as [number, number];
+      expect(LEVELS[id], `level ${id}`).toEqual({ budgetMs, blunderRate });
+    });
+  });
+
+  it("the ordering row holds over 1..7: budgets never fall, rates never rise, each step improves one", () => {
+    const ordered = ([1, 2, 3, 4, 5, 6, 7] as const).map((id) => LEVELS[id]);
+    for (let i = 1; i < ordered.length; i++) {
+      const [weaker, stronger] = [ordered[i - 1] as Level, ordered[i] as Level];
+      expect(stronger.budgetMs).toBeGreaterThanOrEqual(weaker.budgetMs);
+      expect(stronger.blunderRate).toBeLessThanOrEqual(weaker.blunderRate);
+      expect(stronger.budgetMs > weaker.budgetMs || stronger.blunderRate < weaker.blunderRate).toBe(
+        true,
+      );
+    }
+  });
+
+  it("levels 6 and 7 are frozen", () => {
+    expect(Object.isFrozen(LEVELS[6])).toBe(true);
+    expect(Object.isFrozen(LEVELS[7])).toBe(true);
   });
 });
 
@@ -276,24 +332,30 @@ describe("ABC-174 A3 — the default plays as today: chooseMove at 3 000 ms, the
 
 describe("ABC-174 A4 — the mechanism's shape: a budget and a rate per level", () => {
   it("every level's keys are exactly [blunderRate, budgetMs]", () => {
-    for (const id of [1, 2, 3, 4, 5] as const) {
+    for (const id of [1, 2, 3, 4, 5, 6, 7] as const) {
       expect(Object.keys(LEVELS[id]).sort(), `level ${id}`).toEqual(["blunderRate", "budgetMs"]);
     }
   });
 });
 
 describe("ABC-174 A7 — the time budget, from the data (NFR-004; ADR-0038 decision 3)", () => {
-  const budgets = ([1, 2, 3, 4, 5] as const).map((id) => LEVELS[id].budgetMs);
+  const budgets = ([1, 2, 3, 4, 5, 6, 7] as const).map((id) => LEVELS[id].budgetMs);
 
   it("clause A: the default's budget is DEFAULT_BUDGET_MS, which is 3 000", () => {
     expect(LEVELS[DEFAULT_LEVEL].budgetMs).toBe(DEFAULT_BUDGET_MS);
     expect(DEFAULT_BUDGET_MS).toBe(3_000);
   });
 
-  it("clause B: the largest budget over 1..5 is 3 000, below HARD_CEILING_MS (5 000)", () => {
-    expect(Math.max(...budgets)).toBe(3_000);
-    expect(HARD_CEILING_MS).toBe(5_000);
-    for (const budget of budgets) expect(budget).toBeLessThan(HARD_CEILING_MS);
+  it("clause B, per level (ABC-212 A5): budgetMs <= ceiling(L) over 1..7, < 5 000 over 1..5, clamp 32 000", () => {
+    // `ADR-0045` § AMENDMENT A3: one clamp at the largest ceiling; each level's own ceiling is
+    // held by its budget, with at least 2 000 ms of margin.
+    ([1, 2, 3, 4, 5, 6, 7] as const).forEach((id, i) => {
+      expect(budgets[i], `level ${id}`).toBeLessThanOrEqual(CEILING_MS[id]);
+      expect(CEILING_MS[id] - (budgets[i] as number), `level ${id}`).toBeGreaterThanOrEqual(2_000);
+    });
+    for (const id of [1, 2, 3, 4, 5] as const) expect(LEVELS[id].budgetMs).toBeLessThan(5_000);
+    expect(HARD_CEILING_MS).toBe(32_000);
+    expect(Math.max(...Object.values(CEILING_MS))).toBe(HARD_CEILING_MS);
   });
 
   it("the verdict's step 4 is admitted: 4 <= LEVELS[1].budgetMs / 10, which is 10", () => {
@@ -403,11 +465,13 @@ describe("QE-087-b — the scored list is the engine's, not a self-consistent li
 });
 
 describe("Security/NFR R1 (QE-087-c) — the level clamps its own total to HARD_CEILING_MS", () => {
-  it("a blundering 20 s level spends at most the ceiling plus a few readings", () => {
-    // Five legal moves; `virtualClock(250)`. Measured: 5 750 with the clamp, 20 750 without.
+  it("a blundering level at twice the ceiling spends at most the ceiling plus a few readings", () => {
+    // Five legal moves. `ABC-212` § Design ruling 4: the fixture scales with the clamp (at a
+    // fixed 20 s it went vacuous once the clamp moved to 32 000). Probe: a removed level clamp
+    // reds this at 68 800 > 38 400.
     const fen = "6k1/8/8/8/8/8/1R6/6K1 b - - 0 1";
-    const step = 250;
-    const level: Level = { budgetMs: 20_000, blunderRate: 1 };
+    const step = HARD_CEILING_MS / 20;
+    const level: Level = { budgetMs: 2 * HARD_CEILING_MS, blunderRate: 1 };
     const choice = createLevel(level, { seed: 1, now: virtualClock(step) })(parseFen(fen));
     expect(choice?.kind).not.toBe("engine");
     expect(choice?.elapsedMs).toBeLessThanOrEqual(HARD_CEILING_MS + 4 * step);
@@ -584,8 +648,8 @@ if (RUN_DEEP) {
     const shippedStep = (level: Level): number => level.budgetMs / 50;
     const blunderStep = (level: Level): number => level.budgetMs / 300;
 
-    it("every level, on the shipped path, uses its budget ±20% and never more than 5 s", () => {
-      for (const id of [1, 2, 3, 4, 5] as const) {
+    it("every level, on the shipped path, uses its budget ±20% and never more than its ceiling", () => {
+      for (const id of [1, 2, 3, 4, 5, 6, 7] as const) {
         const level = LEVELS[id];
         // A seed whose first draw does not blunder, so this row reads the shipped path.
         const seed = [...Array(50).keys()].find((s) => seededRandom(s)() >= level.blunderRate);
@@ -598,7 +662,7 @@ if (RUN_DEEP) {
         expect(choice?.kind).toBe("engine");
         const elapsed = choice?.elapsedMs as number;
         expect(Math.abs(elapsed - level.budgetMs)).toBeLessThanOrEqual(level.budgetMs * 0.2);
-        expect(elapsed).toBeLessThanOrEqual(HARD_CEILING_MS);
+        expect(elapsed).toBeLessThanOrEqual(CEILING_MS[id]);
       }
     }, 300_000);
 
@@ -622,10 +686,12 @@ if (RUN_DEEP) {
     }, 300_000);
   });
 
-  describe("A5 — the hardest level, 30 positions, every move ≤ 5 s on the REAL clock [deep]", () => {
+  describe("A5 — level 5, 30 positions, every move ≤ 5 s on the REAL clock [deep]", () => {
     it("returns within 5 000 ms on 30/30", () => {
-      const hardest = LEVELS[HARDEST_LEVEL];
-      // The hardest level never blunders, so A5's blunder clause has nothing to cover.
+      // `ABC-212` A4: read by number. "The hardest" was level 5 when this row was written; it is
+      // now 7, which has its own rows below.
+      const hardest = LEVELS[5];
+      // Level 5 never blunders, so A5's blunder clause has nothing to cover.
       expect(hardest.blunderRate).toBe(0);
       const elapsed: number[] = [];
       for (const fen of spread.slice(0, 30)) {
@@ -636,8 +702,47 @@ if (RUN_DEEP) {
       }
       console.log(`A5: ${elapsed.length} moves, max ${Math.max(...elapsed)} ms: ${elapsed}`);
       expect(elapsed).toHaveLength(30);
-      expect(Math.max(...elapsed)).toBeLessThanOrEqual(HARD_CEILING_MS);
+      expect(Math.max(...elapsed)).toBeLessThanOrEqual(5_000);
     }, 300_000);
+  });
+
+  /**
+   * `ABC-212` A4: levels 6 and 7 on the REAL clock, `A5`'s positions. Each move spends its budget
+   * (no early stop, § "Up to 30 s") and stays inside its `NFR-004` ceiling. About 2.5 min and
+   * 5 min of wall: run at width 1 on a quiet host, never beside an `EPIC-008` reading. The log
+   * carries the max and the max completed depth (a depth of 100 or more goes to Architect/Design,
+   * `KEY_ARRAY_CAPACITY`).
+   */
+  describe("ABC-212 A4 — levels 6 and 7 spend their budget, inside their ceiling, on the REAL clock [deep]", () => {
+    for (const [id, count, timeout] of [
+      [6, 30, 300_000],
+      [7, 10, 420_000],
+    ] as const) {
+      it(
+        `level ${id}: ${count} of ${count} moves take >= ${LEVELS[id].budgetMs} and <= ${CEILING_MS[id]} ms`,
+        () => {
+          const level = LEVELS[id];
+          expect(level.blunderRate).toBe(0);
+          const elapsed: number[] = [];
+          const depths: number[] = [];
+          for (const fen of spread.slice(0, count)) {
+            const start = Date.now();
+            const choice = createLevel(level, { seed: 5 })(parseFen(fen));
+            elapsed.push(Date.now() - start);
+            expect(choice).not.toBeNull();
+            depths.push(choice?.depth as number);
+          }
+          console.log(
+            `ABC-212 A4 level ${id}: ${elapsed.length} moves, max ${Math.max(...elapsed)} ms, ` +
+              `max depth ${Math.max(...depths)}: ${elapsed}`,
+          );
+          expect(elapsed).toHaveLength(count);
+          expect(Math.min(...elapsed)).toBeGreaterThanOrEqual(level.budgetMs);
+          expect(Math.max(...elapsed)).toBeLessThanOrEqual(CEILING_MS[id]);
+        },
+        timeout,
+      );
+    }
   });
 
   describe("A3 — the easiest level solves strictly fewer puzzles than the default [deep]", () => {
