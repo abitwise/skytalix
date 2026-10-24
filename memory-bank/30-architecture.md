@@ -139,7 +139,9 @@ bullet below was RE-VERIFIED at this hop, 2026-08-12, and all five still hold:**
 - **Nothing publishable and nothing to run.** `package.json` is `private` with no `main`, `exports`
   or `bin` and no `start` script; the build emits nothing (`tsc --noEmit`, no `dist/`); `src/` has
   no entry module. `AGENTS.md` records `Dev / run: UNKNOWN - verify` for that reason.
-- **Nowhere to push.** The repo has no git remote.
+- **Nowhere to push.** The repo has no git remote. *2026-10-24 (`ADR-0049` row 33): no longer true. The
+  owner added a remote on 2026-10-23 and the source is public on GitHub. Pushing is the owner's. Nothing is
+  deployed, published or released (`50-decisions/ADR-0049`).*
 - **Nothing released.** `plans/releases/` holds only `.gitkeep`.
 
 The config says this rather than implying a cluster: `default_stack.deploy` is `none-local-only`

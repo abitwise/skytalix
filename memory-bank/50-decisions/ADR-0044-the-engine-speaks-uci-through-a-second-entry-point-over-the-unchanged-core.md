@@ -410,7 +410,8 @@ that backend can run.
   possible later without a fork. It would inject a `read` that returns book bytes the page fetched.
   Each of these is `ADR-0018`'s or `EPIC-006`'s revisit, and none is decided here.
 - **This stays inside `ADR-0007` and `ADR-0018`.** It is local and built from a clone, and nothing is
-  published. Where the backend is deployed is the web project's decision.
+  published. Where the backend is deployed is the web project's decision. *2026-10-24 (`ADR-0049` row 12):
+  the source is public since 2026-10-23 (`ADR-0049`). No package and no `dist/` is published.*
 
 ### D9. Tests (shape only; the tickets write them)
 
@@ -598,7 +599,9 @@ advice.* The owner's word is in the note
   provenance. Item 3 of the evaluation below has the terms.
 - **Withdrawn: the AGPL "Source" link advice.** Item 4 of the evaluation below advised a "Source" link
   on the web UI's about page, pointing to a public copy of `skytalix`. That advice served AGPL § 13
-  only. A private engine offers no source, so the web UI carries no such link.
+  only. A private engine offers no source, so the web UI carries no such link. *2026-10-24 (`ADR-0049` row
+  15): the source is public. The withdrawal stands, since Apache-2.0 has no network-source clause
+  (`UNKNOWN - verify`, an engineering reading, not legal advice).*
 - **The web project's licence is its own.** It spawns `skytalix` over stdio (D8) and does not bundle it.
   A bundle would be a distribution, and the precondition above would apply.
 
@@ -829,7 +832,8 @@ That matters only if someone chooses v4, and the owner, as copyright holder, can
 - **Distribution is unchanged** (`ADR-0018`): a clone, built locally. Publishing, or a single executable,
   is that ADR's revisit trigger, and neither is decided here. Any distribution of the engine to third
   parties also needs our own evaluation values first (D13). *2026-10-24: superseded by `ADR-0048` decision 7:
-  the carve-out covers the values now, and the re-derivation follows as its own ticket.*
+  the carve-out covers the values now, and the re-derivation follows as its own ticket.* *2026-10-24
+  (`ADR-0049` row 18): the clone is public since 2026-10-23; the channel is unchanged. See `ADR-0049`.*
 
 ## Rollback
 
