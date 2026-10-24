@@ -198,6 +198,7 @@ BA/PM, 2026-10-23, at `main` `55a8f4ef`. **Result: 10 of 10. `Ready`.**
    - **If the owner vetoes,** (ii) and (iii) are dropped under Scope item 4, and (i) is built as the rejected shape
      above, with no `src/legal.ts` edit. A second private legality test in another module is not an option: that is
      the duplication `ADR-0005` rejected.
+   - **2026-10-24, the owner's word** (`…fb0468ff`, verbatim *"accept your recommendations, other session paused"*): `OD-206-1`: no veto; the reading stands (recorded by Architect/Design, `arch-accept-owner-words-2026-10-24`).
 
 ### How identity is kept and proven
 

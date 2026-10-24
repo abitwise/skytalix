@@ -29,8 +29,12 @@ amendments**. Owner's word, verbatim: *"4. accept"* (recorded in
   guard list (the drift and the mate floor overclaimed PVS window bugs). Each is marked
   *(amended 2026-09-26, `ruling-abc121-g6`)*. No other decision changes. The status stays
   **accepted**.
-- **Amendment 2026-10-24 (`ABC-205`, `OD-205-2`): PROPOSED.** See § Proposed amendment 2026-10-24 at the end.
-  Decision 9 stays as written until the owner accepts it.
+- Amended 2026-10-24 at subtask `arch-accept-owner-words-2026-10-24`, on the owner's word (Olger Oeselg,
+  2026-10-24, verbatim: *"accept your recommendations, other session paused"*, recorded in
+  `20261024T105800Z-orchestrator-decision-fb0468ff`; `OD-205-2`). This is the amendment proposed in
+  § Proposed amendment 2026-10-24 (task `arch-rule-ABC-205-stop`), applied as proposed. The amended text is decision
+  9's drift maximum, 75 → 118 cp in both recursions, marked *(amended 2026-10-24, `OD-205-2`)*. No other decision
+  changes. The status stays **accepted**.
 
 - It builds on `ADR-0024` decision 7 and `ADR-0025` decision 6 (the test-only door precedent and
   the ladder rule) and amends neither.
@@ -181,7 +185,9 @@ position one move away, and six endgames.
      - `search()` vs `searchWithoutReductions` at a fixed depth 5;
      - `chooseMove` vs `chooseMoveWithoutReductions`, each iterated to depth 5.
      - The bars are `ABC-121` `A1`'s: at least 95% of non-mate positions within 25 cp, none
-       beyond 75 cp.
+       beyond 118 cp.
+     - *(amended 2026-10-24, `OD-205-2`)* The maximum was 75 cp, `ABC-121`'s level. It became 118 cp
+       (⌊1.5 × 79⌋, `ABC-205`'s reading) in both recursions. The 95% clause is unchanged.
      - *Why depth 5:* at depth 4 alone, an LMR with no re-search at all (`noResearch`) reads
        96.79% / 65 cp and stays green. Depth 5 reds it at 89.30% (`…7c1d05ab`).
    - **A one-extra-ply mate floor on the mate-rich corpus** (named below). For every position
@@ -304,11 +310,14 @@ position one move away, and six endgames.
   `search()`, so the rename can be reverted or left.
 - No stored data, format or dependency depends on this ADR.
 
-## Proposed amendment 2026-10-24 (`ABC-205`, `OD-205-2`): the depth-5 drift maximum, 75 → 118 cp
+## Proposed amendment 2026-10-24 (`ABC-205`, `OD-205-2`): the depth-5 drift maximum, 75 → 118 cp. ACCEPTED 2026-10-24 and applied
 
 ### Status
 
-**PROPOSED** 2026-10-24 by Architect/Design (task `arch-rule-ABC-205-stop`). **Acceptance is the owner's**
+**ACCEPTED** 2026-10-24 by the owner (`OD-205-2`, `…fb0468ff`) and applied into decision 9 as proposed (task
+`arch-accept-owner-words-2026-10-24`). The text below is kept as the amendment's record.
+
+Was: **PROPOSED** 2026-10-24 by Architect/Design (task `arch-rule-ABC-205-stop`). **Acceptance is the owner's**
 (`ADR-0028` decisions 4 and 5). The Orchestrator reports it with `OD-205-1`, through the `ADR-0031` addendum `A7`.
 Until he accepts, decision 9 reads as written, and `ABC-205`'s two drift rows stay red.
 
@@ -324,7 +333,7 @@ Until he accepts, decision 9 reads as written, and `ABC-205`'s two drift rows st
 - Readings and the not-a-defect proofs: `ABC-205` § Addendum 2026-10-24 and
   `.grugops/context/arch-rule-ABC-205-stop/notes/`.
 
-### Decision (proposed)
+### Decision (as proposed; applied 2026-10-24)
 
 1. **Decision 9's "none beyond 75 cp" becomes "none beyond 118 cp",** in both recursions. 118 is ⌊1.5 × 79⌋, which
    is `ADR-0039` decision 3's pattern.

@@ -8,8 +8,10 @@ id: ADR-0031
 
 **accepted** 2026-10-10 by the owner. Owner (Olger Oeselg), 2026-10-10, verbatim: *"accept ADR-0030, ADR-0031, ADR-0032, ADR-0034 with (b) at 0.8x"*
 
-**Addendum 2026-10-24 (`ABC-205`): PROPOSED.** See § Addendum at the end. The decisions below are unchanged by it.
-It carries two owner words, `OD-205-1` (`A6`) and `OD-205-2` (`A7`, added after the build's STOP).
+**Addendum 2026-10-24 (`ABC-205`): ACCEPTED** 2026-10-24 by the owner (Olger Oeselg), verbatim *"accept your
+recommendations, other session paused"* (Orchestrator transcription note
+`20261024T105800Z-orchestrator-decision-fb0468ff`). Both of its owner words are given: `OD-205-1` (`A6`) and
+`OD-205-2` (`A7`) are accepted. See § Addendum at the end. The decisions below are unchanged by it.
 
 Was: **proposed** 2026-10-10 by Architect/Design (task `wave-2026-09-25`, subtask `ruling-abc083-abc087`). It rules
 question **R1** of BA/PM's re-score (`20261010T081343Z-ba-pm-decision-…-973fd389`), which gates `ABC-083`'s
@@ -135,7 +137,11 @@ until he re-derives the leaf budget. The page then needs no change: its `A5` alr
 
 ### Status
 
-**PROPOSED** 2026-10-24 by Architect/Design (task `arch-design-ABC-205`). The owner accepted the proposal
+**ACCEPTED** 2026-10-24 by the owner, on this text with `A6` and `A7`: verbatim *"accept your recommendations,
+other session paused"* (`…fb0468ff`). `OD-205-1` and `OD-205-2` are accepted. Recorded by Architect/Design (task
+`arch-accept-owner-words-2026-10-24`).
+
+Was: **PROPOSED** 2026-10-24 by Architect/Design (task `arch-design-ABC-205`). The owner accepted the proposal
 (`…7feb0553` item 2), and that acceptance is the go-ahead for building it. **Acceptance of this TEXT is the
 owner's.** The Orchestrator reports it to him. Decisions 1–5 above are unchanged. `A5`'s 1,100 ns (`EPIC-008`
 `G2`) does not move, and `ADR-0003` is not reopened.
@@ -183,6 +189,7 @@ owner's.** The Orchestrator reports it to him. Decisions 1–5 above are unchang
     decision 3's pattern, under `ADR-0028` decision 1's three checks on the build. Every other cell stays
     byte-identical.
   - If the owner declines, the queen scale does not ship, and `ABC-205` stops to BA/PM.
+  - **Accepted 2026-10-24** (`OD-205-1`, `…fb0468ff`): the cell is ⌊1.5 × the build's reading⌋.
 - **A7. A second level, for the owner's word (`OD-205-2`).** *(added 2026-10-24, task `arch-rule-ABC-205-stop`,
   after the build's STOP)*
   - The build reads `ABC-121` `A1`'s depth-5 drift maximum at **79 cp against its 75 cp level**, in both recursions,
@@ -195,6 +202,7 @@ owner's.** The Orchestrator reports it to him. Decisions 1–5 above are unchang
   - **Proposed:** the maximum becomes ⌊1.5 × 79⌋ = **118 cp**, in both recursions. Nothing else in decision 9
     moves. The text is `ADR-0026` § Proposed amendment 2026-10-24.
   - If the owner declines, neither term ships alone, and `ABC-205` stops to BA/PM.
+  - **Accepted 2026-10-24** (`OD-205-2`, `…fb0468ff`): applied into `ADR-0026` decision 9 (§ Proposed amendment 2026-10-24, now accepted).
 
 ### Alternatives
 

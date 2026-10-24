@@ -355,6 +355,8 @@ The candidate adds **11 reds in 5 files**:
 **`OD-205-2`**, PROPOSED in the `ADR-0031` addendum (`A7`) and in an `ADR-0026` amendment. The merge now waits on
 two owner words, `OD-205-1` and `OD-205-2`. He answers both in one reply.
 
+**2026-10-24, the owner's word** (`…fb0468ff`, verbatim *"accept your recommendations, other session paused"*): the `ADR-0031` addendum is ACCEPTED with `OD-205-1` (`A6`) and `OD-205-2` (`A7`), and `ADR-0026` decision 9 now reads 118 cp; neither owner word is owed any longer (recorded by Architect/Design, `arch-accept-owner-words-2026-10-24`).
+
 #### `S1`: transposition `A4`, the mate-reuse row (`SEARCH_DEEP`)
 
 - **What the probes found.** The row's depth was a node count in disguise. That was already known, and it is why
