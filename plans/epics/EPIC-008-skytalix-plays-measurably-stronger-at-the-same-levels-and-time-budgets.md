@@ -49,6 +49,8 @@ still hold only measured gains.
 
 - One rating harness under `tools/`, outside `npm test` (`ABC-204`).
 - Seven engine changes, one per accepted proposal, each behind its own reading (`ABC-205` to `ABC-211`).
+- *2026-10-24 (BA/PM, `bapm-ABC-214-path-a`):* one provenance change, `ABC-215`. It re-derives the CC BY-SA 3.0
+  values on the owner's path A (`…fb0468ff`) and is measured under S3.
 - `src/evaluate.ts`, `src/engine.ts`, `src/search.ts`, `src/quiescence.ts`, `src/gameend.ts`, `src/transposition.ts`
   and `data/opening-book/` change, each only in the ticket that names it.
 
@@ -103,6 +105,10 @@ own.
     goes back to BA/PM. BA/PM allows at most one re-tune round per ticket, then closes or re-cuts it.
 - **S2, for value-identical and data-only tickets (`ABC-206`, `ABC-211`).** The ticket meets its own mechanical bar,
   and its D reading is not LOSS.
+- **S3, for a provenance change (`ABC-215`).** *Added 2026-10-24 by BA/PM (`bapm-ABC-214-path-a`).* D is not LOSS.
+  A NEUTRAL with X < 0 gets the one extension (pooled), and it must still be not LOSS. LOSS is NOT MET, with at most
+  one re-tune round. This is a delivery call, flagged as cheap to reverse like S1. Why it is not S1 or S2:
+  `ABC-215` § Acceptance.
 
 **When a D reading goes stale.** A reading is valid against the base it was read on. A value-identical merge
 (`ABC-206`) or a records-only merge in between leaves it valid. A value-changing merge into `src/` or `data/` in
@@ -133,7 +139,7 @@ not favour either side. A FAIL-class fault on a host that is not quiet is UNRESO
 | # | measure | target | how it is read |
 |---|---|---|---|
 | M1 | **Stronger on an external scale** | R at the epic's close minus R at its start (the `ABC-204` `A4` baseline): the difference's 95 % interval lies **above 0**. Its half-width is √(Y₁² + Y₂²) | two R readings with E, the openings and the pins unchanged, on this host. ~~**The size of the gain is not set: owner question Q1**~~ **2026-10-24, owner-set (Q1, `…e44d2903`): the point estimate (R at close − R at baseline) is ≥ +100 Elo, AND the interval lies above 0. Both must hold for MET** |
-| M2 | **Every shipped change was measured** | each merged ticket of this epic carries a D reading that meets its ship rule (S1 or S2) | the ticket's `## Reading` section and its QE note |
+| M2 | **Every shipped change was measured** | each merged ticket of this epic carries a D reading that meets its ship rule (S1 or S2; S3 for `ABC-215`, added 2026-10-24) | the ticket's `## Reading` section and its QE note |
 | M3 | **Nothing regressed** | `G1`, `G5`, `G6`, `G8` and `G9` green on `main` at close | the gates' own instruments |
 | M4 | **The owner's decisions stayed his** | 0 NFR bounds moved without his word. Every new or changed ADR of this epic was reported to him when it landed | the ADR pages and the owner-word notes |
 
@@ -149,6 +155,7 @@ not favour either side. A FAIL-class fault on a host that is not quiet is UNRESO
 | 6 | `ABC-209` | The transposition table is kept across the moves of one game | S | P3 | Backlog | `ABC-208` merged | **`ADR-0025` decision 4 amendment** | none planned. `G7` (`NFR-009` growth clause) is re-read |
 | 7 | `ABC-210` | Checks at the horizon: a check extension or checks in quiescence | M | P3 | Backlog | `ABC-209` merged | **reverses `ABC-079`'s recorded decision (`src/quiescence.ts:21-24`): an ADR, plus an `ADR-0026` door** | none planned |
 | 8 | `ABC-211` | The opening book goes deeper in the English lines | S | P3 | Backlog | a source ruling | **`ADR-0023` (source and licence): a new source is needed. Probed: the current CC0 source does not hold game 1's 3...b6. This touch point is not in the brief** | none planned. `NFR-006` is re-read |
+| 9 | `ABC-215` | The evaluation's material values and piece-square tables are our own, each made by a stated rule, and the CC BY-SA 3.0 carve-out leaves `NOTICE` and the header | L | P2 | Backlog | `ABC-214` merged; `ABC-205` Done or closed; `ABC-204` Done | none expected (values only). It ends the licence ADR's path-A carve-out. *Added 2026-10-24 (`bapm-ABC-214-path-a`), on the owner's word `…fb0468ff` (OD-214-1 = A). Its ship rule is S3* | none planned. `G2` and `G6` are re-read |
 
 **Why this order.**
 - The brief sets two places: the harness first, then king safety.

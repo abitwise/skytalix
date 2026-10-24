@@ -19,6 +19,10 @@ resolve. Since the 2026-10-18 revision that slug is no longer true: see § Revis
 > `"include": []`. `dist/` holds what `uci.ts` imports, type-only imports included. The fence is on what `dist/uci.js`
 > **loads**, not on what is emitted. See § Addendum — D8's emit set. No other decision here moves.
 
+> **Proposed 2026-10-24: `ADR-0048` (PROPOSED, task `arch-licence-adr`) would supersede D13's licence reading**
+> (private, `UNLICENSED`, no `LICENSE` or `NOTICE`, re-derive before distribution) with Apache-2.0 and a CC BY-SA 3.0
+> carve-out (owner words `…28633db0`, `…fb0468ff`). Until the owner accepts `ADR-0048`, D13 stands as written.
+
 **accepted** 2026-10-18 by Olger Oeselg (owner), verbatim "accept the revised ADR-0044 and EPIC-007" (note
 `.grugops/context/wave-2026-09-25/notes/20261018T113000Z-orchestrator-decision-owner-word-engine-private-adr0044-epic007-accepted-c3e81a57.md`).
 Owner menu: licence → private ("let's keep private for now"); Q14 → keep `npm run chess`; Q15 → moot
