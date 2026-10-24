@@ -19,3 +19,7 @@ width: 1 — ALONE. Dispatch only when no other agent hop runs (owner: readings 
 
 ## Publish
 - Seal notes via the plugin writer (task `qe-timing-ABC-203`), `at` from `date -u`, with a `kind: decision`. Write `## Result` plus a 10-cell trace row into this brief in main's queue, then move it and its `claim.md` to `done/`.
+
+## Result
+
+**WAIVED by the Orchestrator 2026-10-24** (note `…1dc2eccc`): test-lane wall-time reading, estimate ≤ 0.05 s vs NFR-008 headroom 1.065 s; LOW risk accepted; the next full-lane NFR-008 reading catches it. Not run.
