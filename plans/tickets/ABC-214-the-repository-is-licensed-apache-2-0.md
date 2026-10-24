@@ -356,3 +356,41 @@ Ready's WIP is 0/8 at `d4d49c5a`, so this makes 1/8. The board move is the Orche
 
 *History:* the cut's own check (2026-10-24, `bapm-cut-licence`, at `c487d89c`) was 9 of 10, with item 10 ❌ on the
 open OD-214-1. It recommended `Backlog` until the answer, and on "A" this amendment and 10/10.
+
+## QE addendum (2026-10-24, `qe-ABC-214`)
+
+**Verdict: `PASS_WITH_GAPS`.** No blocking gap. Base `c4acf49f`, tip `bb8d4432`. The hop merged `main`
+`adf6af38` (records only, no conflict) into the branch as `306f1083`, then ran its own `npm ci` (exit 0) there.
+No `src/` edit. Host on battery with a second QE hop running, so no timing was read. This ticket has no timing
+criterion.
+
+- **A1–A10: all hold** at the merge, re-run by this hop:
+  - A1: one JSON object, `private` true and `license` `Apache-2.0`; numstat `1 1`.
+  - A2: numstat `1 1` under `packages[""]`; the regenerated lock leaves the tree clean.
+  - A3: the sha matches the pin and `wc -c` is 11358. A fresh fetch today is byte-identical.
+  - A4 and A5: all strings are present, with 0 `@`, 0 `/Users/` and 0 non-ASCII. The carve-out names exactly the
+    seven identifiers, and the header block holds the three strings.
+  - A5 base check and A6: the transpile output is identical at `c487d89c`, base, tip and merge. The two added
+    lines are 21–22, inside the block that closes at 23.
+  - A9: exactly six files, base to tip and `main` to merge.
+  - A10: lint, typecheck and build 0; `npm test` 62 files, 2038/2038; skips 0, `No findings.`
+- **Plants re-run.**
+  - A8 armed: only the licence reverted, whole suite 1 red (ABC-042 A10, the ABC-214 message) and 2037 green.
+  - A1 spellings: `Apache 2.0`, `apache-2.0`, `Apache-2.0-only` and `Apache License 2.0` each turn the pin red.
+  - A6 (test note 1): the `*/` slip and the `*/x` slip each break both checks. Closing the block early with `//`
+    lines passes the transpile check and is caught only by the line-shape check, so both checks are needed. A
+    nudged table value breaks the transpile check.
+  - A5 base stop: it fires against `grugops/ABC-205` `f3e14a00`.
+  - A3: a dropped final newline and CRLF line ends each break the sha.
+  - A4: one `@` and one non-ASCII byte each turn the count to 1.
+- **QE-214-a, LOW (non-blocking).** The gate pins only `package.json`'s licence. One plant did four things: it
+  deleted `LICENSE` and `NOTICE`, reverted the lock's licence and dropped the two carve-out lines. `npm test` stayed
+  2038/2038 and lint stayed 0. This follows test note 6 (no new `it`). A3 to A6 are readings, not guards.
+- **QE-214-b, INFO.** `bb8d4432~1..bb8d4432` alone lists no `src/` file. Measure the waiver from base to tip or
+  from `main` to the merge. Both list `src/evaluate.ts`.
+- **QE-214-c, INFO.** `ABC-205` has moved from `4f650a45` to `f3e14a00`. Its `src/evaluate.ts` is unchanged, and
+  `KING_TABLE` is byte-equal to `c487d89c`, so ADR-0048 decision 4's pre-read holds.
+- **UAT:** "WAIVED (waived is not accepted)". The 2026-08-17 grep lists `src/evaluate.ts`, so the waiver rests on
+  the owner's Q4 (`…5c8e2a17`). Both of its checks hold (A6).
+- **Owed, not QE's:** the owner's acceptance of `ADR-0048` before merge. `ABC-041` (a) triggers the Security/NFR
+  hop. The owner checks the GitHub licence display after a push (`UNKNOWN - verify`).
