@@ -231,3 +231,234 @@ In Design first for the rules and the moved-pin probe (Test note 1). Only these 
 - **§ Size, read as of this move.** "BA/PM splits it before `Ready`" now means: if the design probe finds the moved
   set too wide for one build, the ticket returns from In Design to BA/PM. BA/PM splits it there, before Ready for Dev.
   The probe is a design hop, so it cannot run before `Ready`. The split order stays as written.
+
+## Design ruling
+
+> **Architect/Design, 2026-10-25** (task `arch-design-ABC-215`, records plus probes, at `main` `15f42dd2`). Notes:
+> `.grugops/context/arch-design-ABC-215/notes/`. The probes ran on scratch clones in `<scratchpad>/arch215/`
+> (`trees/base`, `trees/c2`, `trees/pv`, `trees/tb`), never on `src/`. Plain node v26.11.1. **No real-clock search
+> was run and no timing is quoted.** The real-clock rows of the deep lanes were filtered out by name. No `G6`, no
+> game, no D. Every count below is deterministic: a frozen clock, a fixed depth, or a virtual clock.
+> `src/` at `15f42dd2` is byte-identical to `d5690c5c`, the base `qe-ABC-205` read `G6` on. The base tree
+> reproduces that note's frozen-clock counts exactly.
+
+**Result.** One candidate, `c2`, made by seven stated rules. Every relation row is green, unedited. No level and no
+NFR bound moves. **16 pinned rows move in 5 files**, all by rules that already exist. `G1` reads 54/58 (= baseline).
+The frozen-clock pre-check predicts **`G6` MET**: position-6 needs **6.65 % fewer** nodes than base to complete
+depth 8. **Build it as one `L` ticket. Do not split** (§ Split, below). No ADR and no owner word is needed.
+One BA/PM scope line is owed before Ready for Dev: `README.md:84-86` (§ Fences).
+
+### The rules (one per array; the design did not start from the base numbers)
+
+Notation, all from WHITE's side (Black reads the rank flipped, as today): `R` is the rank counted from the piece's own
+side, 1 to 8. `e(f)` is the file's steps from the edge: a/h 0, b/g 1, c/f 2, d/e 3. `ring` is the square's steps from
+the board's edge, `min(e(f), min(R − 1, 8 − R))`, 0 to 3.
+
+| array | rule (its comment states this) | range | why |
+|---|---|---|---|
+| `PIECE_VALUE` | the classical scale P 1, N 3, B 3, R 5, Q 9 pawns, × 100, **plus 25 on each minor**: `[0, 100, 325, 325, 500, 900, 0]`. King 0 (reason unchanged) | — | The scale is the chess primers' convention, the same one `src/status-panel.ts` shows. The quarter pawn makes one minor outweigh three pawns. Bishop = knight: the bishop's wider reach is paid by mobility (`ABC-083`) |
+| `PAWN_TABLE` | `2 × e(f) × (R − 2)`; 0 on ranks 1 and 8 | 0 … 30 | A pawn gains as it advances, and more on the central files. Shelter is left to king safety (`ABC-083`), which already charges a missing shelter pawn |
+| `KNIGHT_TABLE` | `10 × n − 50`, n = the knight's moves from the square on an empty board (2 … 8) | −30 … 30 | A knight is worth its reach |
+| `BISHOP_TABLE` | `5 × (n − 9)`, n = the squares on its diagonals on an empty board (7 … 13); equal to `10 × ring − 10` | −10 … 20 | A bishop is worth its reach |
+| `ROOK_TABLE` | 20 on the rank `R = 7`, else 0 | 0 … 20 | The seventh rank. Open files are left to mobility, which counts a rook's reach along them |
+| `QUEEN_TABLE` | `5 × ring − 5` | −5 … 10 | A small pull to the centre. An early queen trip is `ABC-207`'s, not a table's |
+| `KING_TABLE` | `max(−50, −10 × d − 10 × (R − 1))`, d = file distance to the nearer of the b- and g-files | −50 … 0 | The castled squares b1 and g1 are home (0). Each file toward the centre and each rank up costs 10. Untapered, as today |
+
+- **Each rule is a formula over file, rank or reach** (Scope 2). The whole start position still scores exactly 0.
+- **How `c2` was reached, stated so that nobody reads it as tuned.** The first set, `c1`, used `(R − 2) × (2 + 2 e(f))`
+  for pawns and gave rooks +5 on the d- and e-files. It reddened two relation rows: `ABC-083` `A2`'s equal-material
+  g6/g2 row and `A4`'s premise "both rooks on squares their table scores 0". Under `A4` a relation red is a STOP. So
+  the design changed exactly those two rules and nothing else. The node counts were read only after `c2` was fixed.
+  No candidate was chosen by a count.
+- **Entries that differ from base:** `PIECE_VALUE` 2 of 7 (N, B). Pawn 46 of 64 (16 of the 18 equal cells are on ranks 1
+  and 8, which are never read). Knight 64 of 64. Bishop 18 of 64. Rook 20 of 64. Queen 27 of 64. King 50 of 64.
+  - The bishop and queen tables match base on many cells. Any ring rule lands there: border −10, then 0, then 10.
+  - *Engineering reading, not legal advice:* a stated ring or reach rule is a method, not the page's values. This is
+    `ADR-0048` decision 4's reading of `KING_ENDGAME_TABLE`, and it is `UNKNOWN - verify`.
+
+#### The values (`c2`, rank 8 first, as the file lays them out)
+
+```text
+PIECE_VALUE  0, 100, 325, 325, 500, 900, 0
+
+PAWN_TABLE
+   0,   0,   0,   0,   0,   0,   0,   0
+   0,  10,  20,  30,  30,  20,  10,   0
+   0,   8,  16,  24,  24,  16,   8,   0
+   0,   6,  12,  18,  18,  12,   6,   0
+   0,   4,   8,  12,  12,   8,   4,   0
+   0,   2,   4,   6,   6,   4,   2,   0
+   0,   0,   0,   0,   0,   0,   0,   0
+   0,   0,   0,   0,   0,   0,   0,   0
+
+KNIGHT_TABLE
+ -30, -20, -10, -10, -10, -10, -20, -30
+ -20, -10,  10,  10,  10,  10, -10, -20
+ -10,  10,  30,  30,  30,  30,  10, -10
+ -10,  10,  30,  30,  30,  30,  10, -10
+ -10,  10,  30,  30,  30,  30,  10, -10
+ -10,  10,  30,  30,  30,  30,  10, -10
+ -20, -10,  10,  10,  10,  10, -10, -20
+ -30, -20, -10, -10, -10, -10, -20, -30
+
+BISHOP_TABLE
+ -10, -10, -10, -10, -10, -10, -10, -10
+ -10,   0,   0,   0,   0,   0,   0, -10
+ -10,   0,  10,  10,  10,  10,   0, -10
+ -10,   0,  10,  20,  20,  10,   0, -10
+ -10,   0,  10,  20,  20,  10,   0, -10
+ -10,   0,  10,  10,  10,  10,   0, -10
+ -10,   0,   0,   0,   0,   0,   0, -10
+ -10, -10, -10, -10, -10, -10, -10, -10
+
+ROOK_TABLE
+   0,   0,   0,   0,   0,   0,   0,   0
+  20,  20,  20,  20,  20,  20,  20,  20
+   0,   0,   0,   0,   0,   0,   0,   0
+   0,   0,   0,   0,   0,   0,   0,   0
+   0,   0,   0,   0,   0,   0,   0,   0
+   0,   0,   0,   0,   0,   0,   0,   0
+   0,   0,   0,   0,   0,   0,   0,   0
+   0,   0,   0,   0,   0,   0,   0,   0
+
+QUEEN_TABLE
+  -5,  -5,  -5,  -5,  -5,  -5,  -5,  -5
+  -5,   0,   0,   0,   0,   0,   0,  -5
+  -5,   0,   5,   5,   5,   5,   0,  -5
+  -5,   0,   5,  10,  10,   5,   0,  -5
+  -5,   0,   5,  10,  10,   5,   0,  -5
+  -5,   0,   5,   5,   5,   5,   0,  -5
+  -5,   0,   0,   0,   0,   0,   0,  -5
+  -5,  -5,  -5,  -5,  -5,  -5,  -5,  -5
+
+KING_TABLE
+ -50, -50, -50, -50, -50, -50, -50, -50
+ -50, -50, -50, -50, -50, -50, -50, -50
+ -50, -50, -50, -50, -50, -50, -50, -50
+ -50, -40, -50, -50, -50, -50, -40, -50
+ -40, -30, -40, -50, -50, -40, -30, -40
+ -30, -20, -30, -40, -40, -30, -20, -30
+ -20, -10, -20, -30, -30, -20, -10, -20
+ -10,   0, -10, -20, -20, -10,   0, -10
+```
+
+### `A2`: how the test reaches the arrays
+
+- **Keep the seven arrays as 8×8 literals** under their rule comment. The hot path is unchanged: the same `readonly
+  number[]` lookups, with no load-time builder. So `G2` should not move. That is `UNKNOWN - verify` until QE reads it.
+- **One TEST-ONLY export** from `src/evaluate.ts`: an object that names the seven arrays (for example
+  `VALUE_TABLES_FOR_TEST`). This follows the `evaluateWithoutMobility` precedent. Production does not read it.
+- **The rebuild rows are appended to `src/evaluate.test.ts`**, `ABC-076`'s file that owns the tables. No new file
+  (`NFR-008`). The test imports only `./evaluate.ts`, so `ADR-0036` (c) does not fire.
+  - The test implements each rule on its own, by counting knight steps and diagonal squares on an 8×8 grid, and
+    asserts all 64 entries and every `pieceType` index.
+  - It asserts that the export's keys are exactly `A1`'s seven names.
+  - It asserts at least one entry per array differs from `<base>`. A literal of the base values in the test is enough.
+- **A mutant to show the row bites:** one cell changed by 1 in any table reddens the rebuild row.
+
+### The header and `NOTICE` (Scope 3; `ADR-0048` decision 7 already rules this, so no ADR is owed)
+
+- **`src/evaluate.ts`:** lines `:16`–`:22` (the credit sentence, "The values are unchanged…", and `ABC-214`'s two lines)
+  become one line: the values in `PIECE_VALUE` and the six piece-square tables are this project's own, each made by
+  the rule written above it.
+  - `:12`–`:14` ("HAND-TUNED and expected to move") stays true: the coefficients are hand-picked.
+  - `:57` ("Deliberately small and hand-written…") is reworded to point at the rules.
+- **`NOTICE`:** delete lines 7–15 (the `Evaluation values (CC BY-SA 3.0)` section and the blank line after it).
+  - The file is then **byte-equal to `ABC-214` Scope 5's common part**. That is a one-line check for the build
+    (`diff`).
+  - Line 5, "The parts listed below are not licensed under the License", stays: the kit files are still MIT.
+- **After the merge** (records only, not this build): one dated line on `ADR-0048` § Status, "decision 7 done by
+  `ABC-215` (`<merge sha>`)" (Architect/Design). The `LIC-PUB-1` and `OQ-214-4` dispositions are Security/NFR's, and
+  `LIC-PUB-1` is owned by the owner.
+
+### Fences: one scope gap, BA/PM's (before Ready for Dev)
+
+- **`README.md:84-86`** reads "…[NOTICE](NOTICE) lists them: the evaluation values in `src/evaluate.ts` (CC BY-SA 3.0)
+  and four grugops kit files (MIT)." `ABC-216` added that line after this page was cut. Once this ticket merges, the
+  line is false.
+- `A8` allows only `NOTICE`, `src/evaluate.ts` and tests. **BA/PM adds `README.md` to `A8`'s list**, limited to that
+  sentence ("…lists them: four grugops kit files (MIT)."), or opens a one-line follow-up that merges with this one.
+- `A3`'s greps cover only `src/evaluate.ts` and `NOTICE`. A tree-wide `git grep -i -E 'michniewski|by-sa'` outside
+  `.grugops/`, `plans/` and `memory-bank/` finds only those two files and `README.md`.
+
+### Rows the candidate moves (probed on `c2`; base clean)
+
+- **Base clone:** default lane 2 075 / 2 075 green. Deep lanes green, real-clock rows excluded.
+- **`c2`, default lane:** 13 reds in 4 files, 2 062 / 2 075 green. **None is a relation and none is a level.**
+- **`c2`, deep lanes (`SEARCH_DEEP`, `ENGINE_DEEP` with no real-clock rows, `PUZZLE_DEEP`):** the same rows, plus 3
+  deep pins in `quiescence.test.ts`.
+
+| # | row | before → after | kind | route |
+|---|---|---|---|---|
+| 1 | `engine.test.ts` `A3` (2 rows): budget 3 on a 1 ms tick must complete depth 2 and abort inside 3 | now completes depth 3 (score −64 → −2) | a fixture premise is lost | re-find under `ADR-0028` d2 (the `a3scan.ts` precedent, re-fixtured four times). The deep literal `g4g5` row stays green |
+| 2 | `search.ordering.test.ts` Scope "the fixture bites" (tie at depth 1) | unordered now also `g5e3` | a fixture premise is lost | re-find under `ADR-0028` d2 (the `tiescan.ts` precedent) |
+| 3 | `search.ordering.test.ts` `A4` position-6 d2 (and the row's other pins) | 8 887 → 10 371 | pinned values | re-pin, `before → after` in the hop note (`ABC-083` `A10` precedent) |
+| 4 | `search.ordering.test.ts` `A4` promotion-capture d3 | 262 → 232 | pinned value | re-pin |
+| 5 | `search.ordering.test.ts` `G1` position-3, 3 ticks | 354 → 342 | pinned value | re-pin |
+| 6 | `search.pvs-lmr.test.ts` `A4` (2 rows): a null-window reduced fail-high is re-searched | the property is lost (score 4 against 19; chooseMove: 0 re-searches) | a fixture premise is lost | re-find under `ADR-0028` d2 (`ABC-083` and `ABC-205` re-found this row too) |
+| 7 | `transposition.test.ts` `A1` knight-g1 (2 rows) | 894 → 939 | pinned values | re-pin |
+| 8 | `transposition.test.ts` `A1` position-3 nodes | 1 325 → 1 377 | pinned value | re-pin |
+| 9 | `transposition.test.ts` `A5` nodes; depth-3 score | 7 832 → 7 295; −488 → −485 | pinned values | re-pin |
+| 10 | `quiescence.test.ts` `A4` position-6 d3 bare-leaf nodes `[deep]` | 2 355 → 2 398 | pinned value | re-pin |
+| 11 | `quiescence.test.ts` `A5` `ORACLE_AT_DEPTH_3` kiwipete and position-6 `[deep]` | kiwipete 70 / e2a6 → **8 / e2a6**; position-6 84 / c3d5 → **85 / c3d5**. The oracle was re-run on `c2` (`searchWithoutPruning(p, 3)`) and equals `searchWithoutPvsOrReductions` and `search()` on score and move on both boards. The moves are unchanged | pinned values | re-pin **only by the oracle rule** (that file's comment) |
+
+- **Levels and gates on `c2`, read by the probe:**
+  - The six `ABC-079` `A5` multiplier cells (base → `c2`, level). Kiwipete: d1 12.31 → 17.92x (180), d2 15.11 →
+    20.48x (50), d3 4.09 → 3.51x (70). Position-6: d1 **9.19 → 8.96x (10)**, d2 28.46 → 23.36x (42), d3 4.86 → 5.20x (13).
+    All are under their level. The tightest cell gains headroom.
+  - `ADR-0026` d5 drift on the 190, both recursions: 97.86 % within 25 cp (base 97.33 / 97.86). The maximum is 63 cp
+    (base 51), at position-6/f3h4. That is under the row's 75 cp. There are 0 mate flips.
+  - `G1` puzzle suite (virtual clock): **54/58, baseline 54/58.** The same four mate-in-3 rows miss, two with a
+    different move.
+  - Relation margins (base → `c2`):
+    - `ABC-076` `A3`: 284 → 309 (window 250–400). `A4`: 80 → 70.
+    - `ABC-083` `A2` g6: 11 → 3. This is the tightest: it is green but thin. `A3` e5/f5: 5 → 14. `A4`: without
+      mobility 0 → 0, with mobility 60 → 60.
+    - `QE-G2`: −556 → −556. `QE-G3`: 851 → 858.
+- **Not run here:** the real-clock rows (`ENGINE_DEEP` engine × 6, levels × 4, transposition `A7`, pvs-lmr `A2`), `G2`,
+  `G5`, `G6`, `G8`, `G9`, `G11` and D. Those are the build's and QE's.
+
+### Frozen-clock pre-check (Test note 6; a count, not a reading)
+
+`chooseMove`, `now: () => 0`, `maxDepth: k`. Nodes to complete depth k:
+
+| tree | kiwipete d7 | kiwipete d8 | position-6 d7 | position-6 d8 |
+|---|---|---|---|---|
+| base (`15f42dd2` = `d5690c5c`) | 566 233 | 1 638 196 | 644 469 | 1 451 759 |
+| **`c2` (candidate)** | 609 900 (+7.71 %) | 1 735 339 (+5.93 %) | 586 333 (−9.02 %) | **1 355 149 (−6.65 %)** |
+| `pv` (`PIECE_VALUE` alone) | 573 147 (+1.22 %) | 1 655 163 (+1.04 %) | 648 480 (+0.62 %) | **1 483 000 (+2.15 %)** |
+| `tb` (the six tables alone) | 593 030 (+4.73 %) | 1 694 996 (+3.47 %) | 631 127 (−2.07 %) | 1 438 596 (−0.91 %) |
+
+- **The straddled depth is position-6 d8.** Base reached it in 3 of 5 runs and searched 1 444 505–1 457 817 nodes in
+  3 s (`qe-ABC-205` `…35de132c`). `c2` needs 1 355 149, which is **below base's lowest run by 6.2 %**.
+- **Kiwipete straddles nothing.** Base's runs (1.22–1.29 M nodes) complete depth 7 (need 566 k) and never depth 8
+  (need 1.64 M). `c2`'s depth-7 need, 610 k, is half of a run. Its depth-8 need, 1.74 M, is out of reach as before.
+- **Prediction: `G6` MET.** Kiwipete 7 = 7. Position-6 reaches 8 in every run, against base's median 8. This holds
+  while `c2`'s throughput cost stays below about 6 %. The eval code does not change, so a cost that large is
+  unlikely. It is `UNKNOWN - verify` until QE's real-clock reading. This is a prediction, not a grade.
+
+### Split: no
+
+- **One `L` build carries it.** The moved set is 16 rows in 5 files, against `ABC-205`'s 11 plus 3 deep. Every row
+  routes by an existing rule (re-pin, the `ADR-0028` d2 re-find, or the oracle rule), as `ABC-083` and `ABC-205` did.
+  No level, no NFR bound and no relation moves.
+- **The page's split would hurt.** `PIECE_VALUE` first, alone (`pv`), needs **2.15 % more** nodes than base at
+  position-6 d8. That predicts a `G6` miss on the first half. It would also cost a second D reading (6–12 h), and the
+  carve-out could not end until both halves merged. The material change moves only 3 rows on its own; the tables carry
+  the rest.
+- **So BA/PM need not split.** The ticket goes to Ready for Dev as it is, once the `README.md` scope line is settled.
+
+### Accepted and open
+
+- **ADR:** none. The values change and `ADR-0031`'s form does not. The carve-out's end is `ADR-0048` decision 7.
+- **Owner word:** none. No level moves. `QE-205-c` stays open and does not block: with no answer, `G6` is graded as
+  written, and `c2` is predicted to meet it.
+- **D and S3:** strength is not predicted. The rules were not tuned for it, and `A7` reads it.
+- **For the Engineer:** take the rules and the values from this section. Do not re-derive them. If a relation row
+  turns red on the build, that is a STOP to BA/PM, not a new rule.
+
+### Next move
+
+- **BA/PM:** the `README.md:84-86` line into `A8` (or a twin follow-up). This is records only.
+- **Orchestrator:** merge this records branch. After BA/PM's line, ABC-215 goes In Design → Ready for Dev → In
+  Development (Software Engineer), at width 1 against `ABC-207`.
