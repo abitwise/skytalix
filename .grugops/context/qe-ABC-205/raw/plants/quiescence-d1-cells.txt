@@ -1,0 +1,9 @@
+== base
+kiwipete d1: 603/49 = 12.31x
+position-6 d1: 432/47 = 9.19x
+== head
+kiwipete d1: 787/49 = 16.06x
+position-6 d1: 515/47 = 10.96x
+== m-scale1
+kiwipete d1: 603/49 = 12.31x
+position-6 d1: 435/47 = 9.26x

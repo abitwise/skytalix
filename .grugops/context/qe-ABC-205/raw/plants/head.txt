@@ -1,0 +1,9 @@
+
+ RUN  v4.1.12 <scratchpad>/qe205/trees/head
+
+
+ Test Files  1 passed (1)
+      Tests  25 passed (25)
+   Start at  05:50:22
+   Duration  127ms (transform 0ms, setup 0ms, import 37ms, tests 39ms, environment 0ms)
+

@@ -1,0 +1,12 @@
+[1;33mdiff --git a/head/src/evaluate.ts b/m-egmg/src/evaluate.ts[m
+[1;33mindex ccbcc4f..c94eafa 100644[m
+[1;33m--- a/head/src/evaluate.ts[m
+[1;33m+++ b/m-egmg/src/evaluate.ts[m
+[1;35m@@ -338,7 +338,7 @@[m [mfunction kingSquare(king: number, black: boolean, missing: number, phase: number[m
+  const tableIndex = (black ? rankOf(king) : 7 - rankOf(king)) * 8 + fileOf(king);[m
+  const table = KING_TABLE[tableIndex] as number;[m
+  const middlegame = table > 0 && missing > 0 ? 0 : table;[m
+  const endgame = [31mKING_ENDGAME_TABLE[tableIndex][m[32mKING_TABLE[tableIndex][m as number;
+  return ((middlegame * phase + endgame * (PHASE_MAX - phase)) / PHASE_MAX) | 0;[m
+}[m
+

@@ -1,0 +1,9 @@
+
+ RUN  v4.1.12 <scratchpad>/qe205/trees/m-scale1
+
+
+ Test Files  1 passed (1)
+      Tests  29 passed (29)
+   Start at  05:51:28
+   Duration  138ms (transform 0ms, setup 0ms, import 40ms, tests 49ms, environment 0ms)
+
