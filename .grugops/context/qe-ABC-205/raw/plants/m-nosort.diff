@@ -1,0 +1,12 @@
+[1;33mdiff --git a/head/src/quiescence.ts b/m-nosort/src/quiescence.ts[m
+[1;33mindex 1416b3e..56a2cdd 100644[m
+[1;33m--- a/head/src/quiescence.ts[m
+[1;33m+++ b/m-nosort/src/quiescence.ts[m
+[1;35m@@ -107,7 +107,7 @@[m [mexport function quiesce([m
+  // The legal captures in generation order (ABC-206): only captures are tested for legality.[m
+  const captures = legalCaptures(position);[m
+  // Stable sort: equal keys keep generation order, so the count is deterministic.[m
+  [31mcaptures.sort((a, b) => mvvLvaKey(b) - mvvLvaKey(a));[m[32m// QE plant: sort removed[m
+
+  for (const move of captures) {[m
+    const undo = makeMove(position, move);[m

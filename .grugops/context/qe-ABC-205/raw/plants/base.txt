@@ -1,0 +1,158 @@
+
+ RUN  v4.1.12 <scratchpad>/qe205/trees/base
+
+ ❯ src/evaluate.king-mobility.test.ts (25 tests | 12 failed) 42ms
+     × castled g1: g2 missing: intact − broken is strictly larger with the queen than with a rook on d8 1ms
+     × castled g1: g-pawn on g4, equal material: intact − broken is strictly larger with the queen than with a rook on d8 0ms
+     × castled g1: f2 missing, f half-open: intact − broken is strictly larger with the queen than with a rook on d8 0ms
+     × castled g1: h-pawn on h4: intact − broken is strictly larger with the queen than with a rook on d8 0ms
+     × uncastled e1: d-pawn gone, d half-open: intact − broken is strictly larger with the queen than with a rook on d8 0ms
+     × uncastled e1: e-pawn gone, e open: intact − broken is strictly larger with the queen than with a rook on d8 0ms
+     × uncastled e1: f-pawn on f4: intact − broken is strictly larger with the queen than with a rook on d8 0ms
+     × uncastled e1: d-pawn on d4, equal material: intact − broken is strictly larger with the queen than with a rook on d8 0ms
+     × in a pawn ending, a king on e4 scores strictly higher than on g1 0ms
+     × b1 with the c- and d-files open scores strictly lower, by strictly more than on base (queens only) 0ms
+     × the same in a full middlegame with both queens on 0ms
+     × A3b: queenless, g1 with the g-pawn on g4 drops strictly more than on base (the gate's own row) 0ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 12 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/evaluate.king-mobility.test.ts > ABC-205 A1 — the exposure penalty is larger while the enemy queen is on > castled g1: g2 missing: intact − broken is strictly larger with the queen than with a rook on d8
+AssertionError: expected 141 to be greater than 141
+ ❯ src/evaluate.king-mobility.test.ts:270:36
+    268|     "%s: intact − broken is strictly larger with the queen than with a…
+    269|     (_label, intact, broken) => {
+    270|       expect(drop(intact, broken)).toBeGreaterThan(drop(toRook(intact)…
+       |                                    ^
+    271|     },
+    272|   );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/12]⎯
+
+ FAIL  src/evaluate.king-mobility.test.ts > ABC-205 A1 — the exposure penalty is larger while the enemy queen is on > castled g1: g-pawn on g4, equal material: intact − broken is strictly larger with the queen than with a rook on d8
+ FAIL  src/evaluate.king-mobility.test.ts > ABC-205 A1 — the exposure penalty is larger while the enemy queen is on > uncastled e1: f-pawn on f4: intact − broken is strictly larger with the queen than with a rook on d8
+AssertionError: expected 21 to be greater than 21
+ ❯ src/evaluate.king-mobility.test.ts:270:36
+    268|     "%s: intact − broken is strictly larger with the queen than with a…
+    269|     (_label, intact, broken) => {
+    270|       expect(drop(intact, broken)).toBeGreaterThan(drop(toRook(intact)…
+       |                                    ^
+    271|     },
+    272|   );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/12]⎯
+
+ FAIL  src/evaluate.king-mobility.test.ts > ABC-205 A1 — the exposure penalty is larger while the enemy queen is on > castled g1: f2 missing, f half-open: intact − broken is strictly larger with the queen than with a rook on d8
+AssertionError: expected 127 to be greater than 127
+ ❯ src/evaluate.king-mobility.test.ts:270:36
+    268|     "%s: intact − broken is strictly larger with the queen than with a…
+    269|     (_label, intact, broken) => {
+    270|       expect(drop(intact, broken)).toBeGreaterThan(drop(toRook(intact)…
+       |                                    ^
+    271|     },
+    272|   );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/12]⎯
+
+ FAIL  src/evaluate.king-mobility.test.ts > ABC-205 A1 — the exposure penalty is larger while the enemy queen is on > castled g1: h-pawn on h4: intact − broken is strictly larger with the queen than with a rook on d8
+AssertionError: expected 16 to be greater than 16
+ ❯ src/evaluate.king-mobility.test.ts:270:36
+    268|     "%s: intact − broken is strictly larger with the queen than with a…
+    269|     (_label, intact, broken) => {
+    270|       expect(drop(intact, broken)).toBeGreaterThan(drop(toRook(intact)…
+       |                                    ^
+    271|     },
+    272|   );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/12]⎯
+
+ FAIL  src/evaluate.king-mobility.test.ts > ABC-205 A1 — the exposure penalty is larger while the enemy queen is on > uncastled e1: d-pawn gone, d half-open: intact − broken is strictly larger with the queen than with a rook on d8
+AssertionError: expected 89 to be greater than 89
+ ❯ src/evaluate.king-mobility.test.ts:270:36
+    268|     "%s: intact − broken is strictly larger with the queen than with a…
+    269|     (_label, intact, broken) => {
+    270|       expect(drop(intact, broken)).toBeGreaterThan(drop(toRook(intact)…
+       |                                    ^
+    271|     },
+    272|   );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/12]⎯
+
+ FAIL  src/evaluate.king-mobility.test.ts > ABC-205 A1 — the exposure penalty is larger while the enemy queen is on > uncastled e1: e-pawn gone, e open: intact − broken is strictly larger with the queen than with a rook on d8
+AssertionError: expected 135 to be greater than 135
+ ❯ src/evaluate.king-mobility.test.ts:270:36
+    268|     "%s: intact − broken is strictly larger with the queen than with a…
+    269|     (_label, intact, broken) => {
+    270|       expect(drop(intact, broken)).toBeGreaterThan(drop(toRook(intact)…
+       |                                    ^
+    271|     },
+    272|   );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/12]⎯
+
+ FAIL  src/evaluate.king-mobility.test.ts > ABC-205 A1 — the exposure penalty is larger while the enemy queen is on > uncastled e1: d-pawn on d4, equal material: intact − broken is strictly larger with the queen than with a rook on d8
+AssertionError: expected -41 to be greater than -41
+ ❯ src/evaluate.king-mobility.test.ts:270:36
+    268|     "%s: intact − broken is strictly larger with the queen than with a…
+    269|     (_label, intact, broken) => {
+    270|       expect(drop(intact, broken)).toBeGreaterThan(drop(toRook(intact)…
+       |                                    ^
+    271|     },
+    272|   );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/12]⎯
+
+ FAIL  src/evaluate.king-mobility.test.ts > ABC-205 A2 — the king square is tapered by phase > in a pawn ending, a king on e4 scores strictly higher than on g1
+AssertionError: expected -85 to be greater than -7
+ ❯ src/evaluate.king-mobility.test.ts:277:35
+    275| describe("ABC-205 A2 — the king square is tapered by phase", () => {
+    276|   it("in a pawn ending, a king on e4 scores strictly higher than on g1…
+    277|     expect(score(ENDING_KING_E4)).toBeGreaterThan(score(ENDING_KING_G1…
+       |                                   ^
+    278|   });
+    279|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/12]⎯
+
+ FAIL  src/evaluate.king-mobility.test.ts > ABC-205 A3 — no castled bonus without shelter > b1 with the c- and d-files open scores strictly lower, by strictly more than on base (queens only)
+AssertionError: expected 31 to be greater than 31
+ ❯ src/evaluate.king-mobility.test.ts:289:30
+    287|     const [home, open] = A3_QUEENS_ONLY;
+    288|     expect(score(open)).toBeLessThan(score(home));
+    289|     expect(drop(home, open)).toBeGreaterThan(BASE_A3_QUEENS_ONLY_DROP);
+       |                              ^
+    290|   });
+    291|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/12]⎯
+
+ FAIL  src/evaluate.king-mobility.test.ts > ABC-205 A3 — no castled bonus without shelter > the same in a full middlegame with both queens on
+AssertionError: expected 87 to be greater than 87
+ ❯ src/evaluate.king-mobility.test.ts:295:30
+    293|     const [home, open] = A3_FULL;
+    294|     expect(score(open)).toBeLessThan(score(home));
+    295|     expect(drop(home, open)).toBeGreaterThan(BASE_A3_FULL_DROP);
+       |                              ^
+    296|   });
+    297|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/12]⎯
+
+ FAIL  src/evaluate.king-mobility.test.ts > ABC-205 A3 — no castled bonus without shelter > A3b: queenless, g1 with the g-pawn on g4 drops strictly more than on base (the gate's own row)
+AssertionError: expected 21 to be greater than 21
+ ❯ src/evaluate.king-mobility.test.ts:300:34
+    298|   it("A3b: queenless, g1 with the g-pawn on g4 drops strictly more tha…
+    299|     const [intact, broken] = A3B;
+    300|     expect(drop(intact, broken)).toBeGreaterThan(BASE_A3B_DROP);
+       |                                  ^
+    301|   });
+    302| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/12]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  12 failed | 13 passed (25)
+   Start at  05:50:22
+   Duration  145ms (transform 0ms, setup 0ms, import 37ms, tests 42ms, environment 0ms)
+

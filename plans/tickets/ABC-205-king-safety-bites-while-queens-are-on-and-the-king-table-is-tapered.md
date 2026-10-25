@@ -445,3 +445,29 @@ two owner words, `OD-205-1` and `OD-205-2`. He answers both in one reply.
 - The merge of `ABC-205` waits for both owner words. D waits as ruled.
 - **BA/PM (optional, not owed by `ABC-205`):** a constructed mate-reuse row that reds a mis-wired ply at the search
   level.
+
+## Reading
+
+> **QE/E2E, 2026-10-25** (task `qe-ABC-205`, branch `grugops/qe-ABC-205` from `grugops/ABC-205-final` `b5d5cea5`;
+> base = its merge-base on `main`, `d5690c5c`). **One run under the owner's rule `…4c3f7639`.** Notes:
+> `.grugops/context/qe-ABC-205/notes/`. Raw files, `SHA256SUMS`, `PREREG.txt` and the scripts:
+> `.grugops/context/qe-ABC-205/raw/` (personal paths redacted, `ADR-0049` d4). `main` had moved to `c2775024`, and
+> `git diff d5690c5c..main -- src data tools` is empty, so the reading ran on `b5d5cea5` against `d5690c5c`.
+
+**Result: `G6` FAIL on `position-6`'s "≥ base" clause. STOP to Architect/Design (§ Design ruling, `A5`). D was not
+run** (§ How `S1` is proven: gates first, then D).
+
+| # | state | the reading |
+|---|---|---|
+| `A1` | **MET** | 8 pairs (4 castled g1, 4 uncastled e1), strict on all 8; base equal on all 8. Mutant scale = 1 reds the 4 e1 rows |
+| `A2` | **MET** | ending e4 65 > g1 −2 (base −85 < −7); middlegame g1 38 > e2 −33 (base 38 > −3). Mutant eg = mg reds the ending row |
+| `A3` | **MET** | drops 111 > 31 and 187 > 87 (base reads 31 and 87); `A3b` 40 > 21. Mutant gate-off reds `A3b` only |
+| `A4` | **MET** | `G3`: mirror exact over the corpus plus 37 new positions; `evaluate*` rows green. `G2`: the SE's reading reused under `…4c3f7639` (branch 700.7 / 700.5 ns, base 653.4 / 645.3 ns): `evaluate.ts` code and its one import are byte-identical to the trees it read |
+| `A5` | **FAIL (`G6`)** | `G6`, at 3 000 ms, plain node, 5 interleaved rounds per board per build, AC, load1 2.76–4.08, 0 foreign vitest: **kiwipete** base 7 7 7 7 7, head 7 7 7 7 7 (medians 7 = 7). **position-6** base **8 7 8 7 8** (median **8**), head 7 7 7 7 7 (median **7**). The depth-6 floor and the depth-7 WARN level hold. **"≥ base" fails on position-6.** `G1` 55/58 ≥ 54. `G4` green (`ENGINE_DEEP` engine 60/60). `G5`: every 3 s search returned in 2 999.8–3 001.8 ms. `G8`: `npm test` 7.23 s. `G9`: `src/levels.ts` byte-identical |
+| `A6` | **not read** | D not run: `G6` is a STOP, and the page orders gates before D. `G11` (reported): base Qa4, Be2, Be2, d4, Kc1; head **d3**, Be2, Be2, **Ng4**, Kc1 |
+| `A7` | **MET** | `ADR-0031` § Addendum 2026-10-24 states both forms and is ACCEPTED by the owner (`…fb0468ff`) |
+
+**Why `position-6` misses** (deterministic, a frozen clock, not a timing figure): completing depth 8 costs base
+1 451 759 nodes and head 1 522 790 (+4.9 %). Taper only reads 1 498 231 (+3.2 %), and scale only 1 450 539 (−0.1 %).
+In 3 s base searched 1.44–1.46 M nodes, so it sits on its depth-8 edge (3 of 5 runs). Head searched 1.41–1.43 M nodes
+and never reached 8.

@@ -1,0 +1,65 @@
+
+ RUN  v4.1.12 <scratchpad>/qe205/trees/m-scale1
+
+ ❯ src/evaluate.king-mobility.test.ts (25 tests | 4 failed) 41ms
+     × uncastled e1: d-pawn gone, d half-open: intact − broken is strictly larger with the queen than with a rook on d8 1ms
+     × uncastled e1: e-pawn gone, e open: intact − broken is strictly larger with the queen than with a rook on d8 0ms
+     × uncastled e1: f-pawn on f4: intact − broken is strictly larger with the queen than with a rook on d8 0ms
+     × uncastled e1: d-pawn on d4, equal material: intact − broken is strictly larger with the queen than with a rook on d8 0ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/evaluate.king-mobility.test.ts > ABC-205 A1 — the exposure penalty is larger while the enemy queen is on > uncastled e1: d-pawn gone, d half-open: intact − broken is strictly larger with the queen than with a rook on d8
+AssertionError: expected 89 to be greater than 89
+ ❯ src/evaluate.king-mobility.test.ts:270:36
+    268|     "%s: intact − broken is strictly larger with the queen than with a…
+    269|     (_label, intact, broken) => {
+    270|       expect(drop(intact, broken)).toBeGreaterThan(drop(toRook(intact)…
+       |                                    ^
+    271|     },
+    272|   );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  src/evaluate.king-mobility.test.ts > ABC-205 A1 — the exposure penalty is larger while the enemy queen is on > uncastled e1: e-pawn gone, e open: intact − broken is strictly larger with the queen than with a rook on d8
+AssertionError: expected 135 to be greater than 135
+ ❯ src/evaluate.king-mobility.test.ts:270:36
+    268|     "%s: intact − broken is strictly larger with the queen than with a…
+    269|     (_label, intact, broken) => {
+    270|       expect(drop(intact, broken)).toBeGreaterThan(drop(toRook(intact)…
+       |                                    ^
+    271|     },
+    272|   );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  src/evaluate.king-mobility.test.ts > ABC-205 A1 — the exposure penalty is larger while the enemy queen is on > uncastled e1: f-pawn on f4: intact − broken is strictly larger with the queen than with a rook on d8
+AssertionError: expected 21 to be greater than 21
+ ❯ src/evaluate.king-mobility.test.ts:270:36
+    268|     "%s: intact − broken is strictly larger with the queen than with a…
+    269|     (_label, intact, broken) => {
+    270|       expect(drop(intact, broken)).toBeGreaterThan(drop(toRook(intact)…
+       |                                    ^
+    271|     },
+    272|   );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  src/evaluate.king-mobility.test.ts > ABC-205 A1 — the exposure penalty is larger while the enemy queen is on > uncastled e1: d-pawn on d4, equal material: intact − broken is strictly larger with the queen than with a rook on d8
+AssertionError: expected -41 to be greater than -41
+ ❯ src/evaluate.king-mobility.test.ts:270:36
+    268|     "%s: intact − broken is strictly larger with the queen than with a…
+    269|     (_label, intact, broken) => {
+    270|       expect(drop(intact, broken)).toBeGreaterThan(drop(toRook(intact)…
+       |                                    ^
+    271|     },
+    272|   );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 21 passed (25)
+   Start at  05:50:23
+   Duration  132ms (transform 0ms, setup 0ms, import 37ms, tests 41ms, environment 0ms)
+

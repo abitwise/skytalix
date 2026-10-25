@@ -1,0 +1,12 @@
+[1;33mdiff --git a/head/src/evaluate.ts b/m-scaleonly/src/evaluate.ts[m
+[1;33mindex ccbcc4f..afd96d3 100644[m
+[1;33m--- a/head/src/evaluate.ts[m
+[1;33m+++ b/m-scaleonly/src/evaluate.ts[m
+[1;35m@@ -339,7 +339,7 @@[m [mfunction kingSquare(king: number, black: boolean, missing: number, phase: number[m
+  const table = KING_TABLE[tableIndex] as number;[m
+  const middlegame = table > 0 && missing > 0 ? 0 : table;[m
+  const endgame = KING_ENDGAME_TABLE[tableIndex] as number;[m
+  return [31m((middlegame * phase + endgame * (PHASE_MAX - phase)) / PHASE_MAX) | 0;[m[32mtable; // QE variant: scale only (untapered, ungated king square = base KING_TABLE)[m
+}[m
+
+/** The files either side of `file`, as a bitmask over files a..h (bit 0 = a). */[m

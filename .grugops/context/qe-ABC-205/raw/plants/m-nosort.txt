@@ -1,0 +1,29 @@
+
+ RUN  v4.1.12 <scratchpad>/qe205/trees/m-nosort
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap reading, level 16x
+A5 position-6 depth 1: 2453 nodes with quiescence / 47 without = 52.19x
+
+ ❯ src/quiescence.test.ts (29 tests | 1 failed) 73ms
+     × position-6 at depth 1 — the default lane's cheap reading, level 16x 5ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap reading, level 16x
+AssertionError: expected 52.191489361702125 to be less than or equal to 16
+ ❯ src/quiescence.test.ts:497:41
+    495|   for (const name of ["kiwipete", "position-6"]) {
+    496|     it(`${name} at depth 1 — the default lane's cheap reading, level $…
+    497|       expect(multiplier(name, 1).ratio).toBeLessThanOrEqual(stopLevel(…
+       |                                         ^
+    498|     });
+    499|   }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 28 passed (29)
+   Start at  05:51:20
+   Duration  178ms (transform 0ms, setup 0ms, import 42ms, tests 73ms, environment 0ms)
+
