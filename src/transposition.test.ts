@@ -188,29 +188,26 @@ describe("A4 — a mate score is correct at every ply the position is reached at
 
   if (RUN_SEARCH_DEEP) {
     /**
-     * The criterion in the search, where the table actually reuses a mate score at a second ply.
-     * With the cutoff taken only at the depth an entry was searched to, a fixed-depth search reuses
-     * an entry only at the ply it was stored at, so the reuse happens ACROSS the engine's
-     * iterations. On this rook ending, at 160 injected ticks (depth 10), iteration 6 stores a
-     * position whose side to move mates next move at ply 5, and iteration 10 cuts on it at ply 9.
-     * MEASURED at this ticket's build: the build reports −29 992 (mated at ply 8), which is
-     * `searchWithoutTable`'s own depth-10 answer (1 583 085 nodes). A table that drops the ±ply
-     * adjustment reports −29 994: a mate two plies SHORTER than there is. It was the only one of
-     * 182 endgame positions and four budgets where the dropped adjustment changed the answer, and
-     * the reused entry there is a mate-in-ONE position; no reused mate-in-2 entry changed a root
-     * score in that scan, so the mate-in-2 wording of the criterion is answered at the table, above.
+     * The criterion in the search, on this rook ending: both doors, pinned by DEPTH on a frozen
+     * clock, read the table-free mate distance. −29 992 (mated at ply 8) is `searchWithoutTable`'s
+     * own depth-10 answer, on `ABC-205`'s base and build alike.
      *
-     * SPLIT at `ABC-121`, as `ADR-0026` decision 7 names this row: the depth reached at 160 ticks is
-     * a node count in disguise, so the measurement above — depth 10, the door comparison — reads the
-     * pre-`ABC-121` engine, unchanged. The LITERAL stays on the shipped `chooseMove`, which now
-     * completes depth 11 at the same budget (fewer nodes per iteration) and still reads −29 992.
+     * RE-PINNED at `ABC-205` by `maxDepth`, not by ticks (Architect ruling, `ABC-205` § Addendum
+     * 2026-10-24, S1). Ticks are a node count in disguise: at 160 ticks the pre-`ABC-121` door
+     * reached depth 10 on base but depth 9 on the build (depth 10 at 180–220), all −29 992. Measured
+     * facts, not re-derived here: the ±ply mutant (the adjustment dropped in `storeEntry` and
+     * `entryScore`) reads −29 992 on base and build at every budget from 40 to 400 ticks. It last
+     * read −29 994 before `ABC-083`'s merge (`f00038ef`), so this row stopped biting there. A scan of
+     * the 287 mate-corpus positions at depths 6–10 found no fixture that bites on both base and
+     * build (`ADR-0028` decision 2). The ±ply guarantee rests on the two table rows above, which
+     * red that mutant directly; no search-level row checks the wiring (a BA/PM candidate).
      */
-    it("reports the table-free mate distance where the engine reuses a mate score at a second ply [deep, SEARCH_DEEP=1]", () => {
+    it("both doors at maxDepth 10 on a frozen clock read searchWithoutTable's depth-10 mate distance [deep, SEARCH_DEEP=1]", () => {
       const fen = "k7/8/8/K7/8/8/8/1R6 b - - 1 1";
-      let ticks = 0;
       const choice = chooseMoveWithoutPvsOrReductions(parseFen(fen), {
         budgetMs: 160,
-        now: () => ticks++,
+        now: () => 0,
+        maxDepth: 10,
       }) as {
         depth: number;
         score: number;
@@ -219,12 +216,11 @@ describe("A4 — a mate score is correct at every ply the position is reached at
       expect(choice.score).toBe(searchWithoutTable(parseFen(fen), 10).score);
       expect(choice.score).toBe(0 - (MATE_SCORE - 8));
 
-      ticks = 0;
-      const shipped = chooseMove(parseFen(fen), { budgetMs: 160, now: () => ticks++ }) as {
+      const shipped = chooseMove(parseFen(fen), { budgetMs: 160, now: () => 0, maxDepth: 10 }) as {
         depth: number;
         score: number;
       };
-      expect(shipped.depth).toBeGreaterThanOrEqual(10);
+      expect(shipped.depth).toBe(10);
       expect(shipped.score).toBe(0 - (MATE_SCORE - 8));
     }, 60_000);
   }

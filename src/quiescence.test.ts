@@ -426,10 +426,14 @@ describe("A5 — the node-count multiplier on kiwipete and position-6 is reporte
    * RE-LEVELLED at `ABC-083` on the owner's word (`ADR-0039` decision 3, accepted 2026-10-11):
    * position-6 depth 2 only, 26x → 42x, 1.5x the mobility build's 3 871 / 136 = 28.46x. Every other
    * cell is unchanged. Quiescence with its MVV-LVA sort removed reads 572.57x there, still red.
+   *
+   * RE-LEVELLED at `ABC-205` on the owner's word (`OD-205-1`, `ADR-0031` § Addendum `A6`, accepted
+   * 2026-10-24): position-6 depth 1 only, 10x → 16x, ⌊1.5x the build's 515 / 47 = 10.96x⌋. Every
+   * other cell is unchanged. The sort-removed mutant reads 52.19x there, still red.
    */
   const STOP_LEVEL: Readonly<Record<string, readonly number[]>> = {
     kiwipete: [Number.NaN, 180, 50, 70],
-    "position-6": [Number.NaN, 10, 42, 13],
+    "position-6": [Number.NaN, 16, 42, 13],
   };
   const stopLevel = (name: string, depth: number): number =>
     (STOP_LEVEL[name] as readonly number[])[depth] as number;
