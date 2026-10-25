@@ -133,7 +133,7 @@ not favour either side. A FAIL-class fault on a host that is not quiet is UNRESO
 | `G3` | Evaluation relations | `ABC-083` `A1` (mirror, exact equality), `A2`, `A3`, `A4` (mobility within **±100 cp**) and `A6` (purity, byte-identical) stay green | `src/evaluate*.test.ts` |
 | `G4` | Search identity and oracles | `ABC-078` `A3` identity sweep green. The `ADR-0026` bounded oracle is green. Every test-only door that exists before the ticket reproduces its pre-ticket search node for node | `src/engine.test.ts`, `src/search*.test.ts` |
 | `G5` | `NFR-004` | **≤ 3 s** a move at level 5; **5 s** hard ceiling at any level. ***Re-read 2026-10-24:* 5 s at levels 1–5,** once the owner accepts `ABC-212`'s `NFR-004` text (OD-212-1). Level 5's bars do not move | the existing instruments, unchanged |
-| `G6` | `NFR-005` | `kiwipete` and `position-6` in plain `node` at 3 s: depth **≥ 6** (FAIL floor), depth 7 (WARN), and **≥ the base build's** completed depth, same machine, same session | catalog row; `ABC-083` `A7`'s non-regression rule |
+| `G6` | `NFR-005` | `kiwipete` and `position-6` in plain `node` at 3 s: depth **≥ 6** (FAIL floor), depth 7 (WARN), and **≥ the base build's** completed depth, same machine, same session. ***How it is read, 2026-10-25* (BA/PM `bapm-epic008-g6-rule`, finding `QE-215-a`; a reading rule, no bound moves): 5 runs per board per build, interleaved; "≥ base" is graded by the median; any run below depth 6 FAILs.** In detail: 5 rounds, each a `kiwipete` pair and then a `position-6` pair, base first in odd rounds and head first in even rounds; one fresh process per search, `chooseMove` at 3 000 ms on the real clock, completed depth = `choice.depth`; "≥ base" = head's median completed depth ≥ base's, per board, on both boards; depth 7 WARN is reported; graded over all runs, with load1 recorded; QE pre-registers the reading before the first run. This is `ABC-205`'s "How `G6` is read", as `qe-ABC-205` and `qe-ABC-215` ran it. Whether "≥ base" is graded or only reported stays the owner's open question `QE-205-c`; until he answers, it is graded | catalog row; `ABC-083` `A7`'s non-regression rule |
 | `G7` | `NFR-009` | search-held memory **≤ 16 MiB**; growth **≤ 1 MiB** between a 1 s and a 3 s search | catalog row |
 | `G8` | `NFR-008` | `npm test` wall **≤ 10 s** at load1 ≤ 8 on the declared stack; the ticket's `N8-LANE` on its narrow set is reported | catalog row, `ADR-0035` |
 | `G9` | Levels and budgets | `src/levels.ts` `LEVELS`, `DEFAULT_LEVEL` and `HARD_CEILING_MS` byte-identical to base. ***Re-read 2026-10-24 (owner `…e44d2903`; BA/PM `bapm-cut-levels-6-7`):* levels 1–5 byte-identical: `LEVELS[1..5]` and `DEFAULT_LEVEL` (5) unchanged, and level 5's ceiling is 5 000 ms. Levels 6–7, `HARDEST_LEVEL` and the clamp move only through `ABC-212`, and no ticket of this epic edits them** | `git diff` |
@@ -159,6 +159,10 @@ not favour either side. A FAIL-class fault on a host that is not quiet is UNRESO
 >   was the largest measured cause of the loss in game 1 (721 of 1 428 cp).
 > - **`M2` and `M3`: untouched.** Nothing of `ABC-205` merged, so nothing shipped unmeasured, and no gate on `main`
 >   moved.
+>
+> **2026-10-25, `M2` (BA/PM, `bapm-epic008-g6-rule`):** `ABC-215` shipped measured. It merged as `5c91e2e4` with D
+> **NEUTRAL, X = +15.6 ± 23.8** (400 of 400 games, 0 faults): not LOSS, and X ≥ 0, so **S3 is met** without the extension
+> (QE `…c2c3540f`; Orchestrator `…ccf209d9`).
 
 ## Tickets (order is the pull order; the pages are under `plans/tickets/`)
 
@@ -183,6 +187,9 @@ not favour either side. A FAIL-class fault on a host that is not quiet is UNRESO
   (`ABC-215` § Dependencies);
 - each now carries a frozen-clock pre-check before its real-clock `G6` reading. It is a process step and moves no
   bound.
+
+*2026-10-25 (BA/PM, `bapm-epic008-g6-rule`):* row 9, `ABC-215`, is **Done**: merged `5c91e2e4`, D NEUTRAL +15.6 ± 23.8,
+S3 met (see `M2`). The row's cells are as cut.
 
 **Why this order.**
 - The brief sets two places: the harness first, then king safety.
