@@ -6,6 +6,11 @@ id: ADR-0048
 
 ## Status
 
+**2026-10-25 — the carve-out ended (decision 7 done by `ABC-215`, merged at `main` `5c91e2e4`).** The values are
+now made by rule. `NOTICE` and the `src/evaluate.ts` header no longer name CC BY-SA 3.0 (matches 0 and 0; base
+`cac2b4e9` had 5 and 4). Recorded by Architect/Design (task `arch-adr0048-status`), on QE `…c2c3540f` and
+Orchestrator `…ccf209d9`. Nothing else in this ADR moves.
+
 **ACCEPTED** 2026-10-24 by Olger Oeselg (owner), verbatim *"accept ADR-0048 ; keep grugops under MIT ; ok, if no
 creds."* (note `.grugops/context/owner-word-2026-10-24/notes/20261024T091000Z-orchestrator-decision-776bba9a.md`).
 Recorded by Architect/Design (task `arch-accept-adr0048`, records only, at `main` `fb0a7703`).
