@@ -137,6 +137,12 @@ until he re-derives the leaf budget. The page then needs no change: its `A5` alr
 
 ### Status
 
+**2026-10-25: accepted, not shipped.** Accepted 2026-10-24 by the owner (`…fb0468ff`); `ABC-205` closed unmerged
+under `EPIC-008` `S1` after the `G6` STOP (`A5`; position-6 median depth 7 against base's 8, QE `…234d9814`). The
+shelter gate (`A3`), not the blend, carries the depth-8 tree growth (+3.2 to +5.0 % on every gate-on variant), so no
+variant of these forms is predicted to clear "≥ base" (`…912bcb0d`; Orchestrator `…154f2ced`). The forms stay on
+`grugops/ABC-205-final` (`b5d5cea5`), unmerged; a re-open starts there.
+
 **ACCEPTED** 2026-10-24 by the owner, on this text with `A6` and `A7`: verbatim *"accept your recommendations,
 other session paused"* (`…fb0468ff`). `OD-205-1` and `OD-205-2` are accepted. Recorded by Architect/Design (task
 `arch-accept-owner-words-2026-10-24`).
