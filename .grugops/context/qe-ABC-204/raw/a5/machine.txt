@@ -1,0 +1,7 @@
+chip: Apple M3
+darwin: 25.6.0
+node: /opt/homebrew/Cellar/node/26.11.1/bin/node v26.11.1
+cutechess-cli: cutechess-cli 1.5.1 sha256 fb4fc2aa8d3457ccce2368446a080517be42be69a8a446765b9693833e766e1c = pin
+stockfish: id name Stockfish 19 sha256 dc2f18c34ae962dff591b66147d220ec06e61d756b93d8a4f5e04fd8e55c251f = pin
+openings: <worktree>/tools/rating/openings.epd sha256 0d7f7a72678cbf54c2c309dc5d664e7aac5de2c15bc54fe4247a437f51e82666
+harness: <worktree> at e546e12419b83c68f4f36cd32103ef9cd0560a1e
