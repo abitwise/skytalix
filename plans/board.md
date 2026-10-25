@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-25 by Orchestrator (orch-2026-10-25a) — qe-ABC-204 PASS_WITH_GAPS: M1 baseline R = 2 061.3 ± 50.3 at E 1 910; A5 UNRESOLVED final (battery stop 99/100), accepted LOW; QE-204-b MEDIUM fix before merge (se-fix-ABC-204). ABC-216 + ABC-217 Ready → In Development (2/3). Width 3/3. ABC-205 alone run after ABC-204 Done (…f9d109ea)._
 _Updated: 2026-10-24 by Orchestrator (orch-2026-10-24bf) — ADR-0049 all 23 owned rows applied (Security row 34 + SEC-212-b merged). Width 1/3 (qe-ABC-204 ALONE). ABC-216 outline with the owner (courtesy); ABC-216/217 pull after qe-ABC-204._
 _Updated: 2026-10-24 by Orchestrator (orch-2026-10-24be) — owner accepted ADR-0049 (…619938c5); Architect 14 + Scribe 3 + BA/PM 5 rows applied, Security row 34 running. ABC-216 (README, XS) and ABC-217 (test hardening, XS) → Ready (2/8); both pull after qe-ABC-204's alone readings. Held unredacted review branch deleted on the owner's word._
 _Updated: 2026-10-24 by Orchestrator (orch-2026-10-24ba) — ABC-206 MERGED (0a9390e5) → Done: 2073/2073, skips 0, NFR-008 sentinel 7.30 s. Backlog follow-up (XS, test hardening): QE-206-a/-b/-e, SEC-206-a, QE-212L-a. qe-ABC-204 dispatched ALONE (hours)._
@@ -1089,9 +1090,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 - [EPIC-006] Game session and packaging  (owner: BA/PM, **size: XL — corrected from `L`; 9 tickets / 20 points across both halves, ~1.5x the 13 `L` was assigned, and it hit that ceiling BEFORE distribution was priced**, priority: P1, since: 2026-07-22, **BOTH HALVES NOW CUT: the runnable half `ABC-041`…`ABC-046` (2026-08-13) and the second half `ABC-100`…`ABC-102` (2026-08-16) — only THREE tickets, because the scope of packaging is a FUNCTION of a distribution channel nobody has chosen.** `ABC-100` cuts the DECISION, never the ANSWER: a superseding ADR per `ADR-0007` `D5`, on the owner's word, verbatim and dated. **Acceptance criterion 1 (`npx <package>`) remains unmeetable by any ticket. Recommendation NOT taken, standing for the owner: this should probably be two epics** — the halves share no dependency in either direction and their blockers differ in kind)
 
-## Ready (WIP 2/8)
-- [ABC-216] A short README.md with an ASCII-art title tells a first-time visitor what skytalix is, how to play it, how to plug it into a UCI GUI, and its licence  (owner: software-engineer, size: XS, priority: P2, epic: EPIC-006, since: 2026-10-24, DoR 10/10 — Ready; cut in \`bapm-cut-readme\` (\`…50c55e37\`) on owner word \`…619938c5\` item 4. One file; ≤ 100 lines; art ≤ 12 lines × ≤ 80 cols, ASCII only; every command runs as written on a fresh clone; 0 publish path (ADR-0049 d3); LICENSE + NOTICE (ADR-0048); 0 paths/IPs/e-mails (ADR-0049 d4). No security hop; UAT waived by measurement; QE hop owed, A4 on a quiet host)
-- [ABC-217] Test hardening: the ABC-206 and ABC-212 guards also see a missed discovered check, an in-module rebuild on legalMoves, and a dropped session clock; two stale gameStatus texts reworded  (owner: software-engineer, size: XS, priority: P3, epic: EPIC-008, since: 2026-10-24, DoR 10/10 — Ready; cut in \`bapm-cut-readme\` (\`…50c55e37\`) from QE-206-a/-b/-e, SEC-206-a, QE-212L-a (\`…cb10c36c\`, \`…4cf9da50\`). 3 test files + gameend.ts comment-only (Q4 two checks); plants P-a, P-b1, P-b2, Q1 red; NFR-008 sentinel at merge. No security hop; UAT waived if A6 holds)
+## Ready (WIP 0/8)
 
 
 
@@ -1107,7 +1106,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 2/3)
+- [ABC-216] A short README.md with an ASCII-art title tells a first-time visitor what skytalix is, how to play it, how to plug it into a UCI GUI, and its licence  (owner: software-engineer, size: XS, priority: P2, epic: EPIC-006, since: 2026-10-24, DoR 10/10 — Ready; cut in \`bapm-cut-readme\` (\`…50c55e37\`) on owner word \`…619938c5\` item 4. One file; ≤ 100 lines; art ≤ 12 lines × ≤ 80 cols, ASCII only; every command runs as written on a fresh clone; 0 publish path (ADR-0049 d3); LICENSE + NOTICE (ADR-0048); 0 paths/IPs/e-mails (ADR-0049 d4). No security hop; UAT waived by measurement; QE hop owed, A4 on a quiet host)
+- [ABC-217] Test hardening: the ABC-206 and ABC-212 guards also see a missed discovered check, an in-module rebuild on legalMoves, and a dropped session clock; two stale gameStatus texts reworded  (owner: software-engineer, size: XS, priority: P3, epic: EPIC-008, since: 2026-10-24, DoR 10/10 — Ready; cut in \`bapm-cut-readme\` (\`…50c55e37\`) from QE-206-a/-b/-e, SEC-206-a, QE-212L-a (\`…cb10c36c\`, \`…4cf9da50\`). 3 test files + gameend.ts comment-only (Q4 two checks); plants P-a, P-b1, P-b2, Q1 red; NFR-008 sentinel at merge. No security hop; UAT waived if A6 holds)
 
 
 
