@@ -12,6 +12,10 @@ adr: "none expected: values change, and ADR-0031's form does not. The licence AD
 
 # ABC-215: re-derive the evaluation values, then remove the carve-out
 
+> **DONE 2026-10-25, merged to `main` as `5c91e2e4`.** BA/PM, task `bapm-epic008-g6-rule`. QE PASS at `7d4cea3e`
+> (`…c2c3540f`), which signs UAT; D NEUTRAL +15.6 ± 23.8, S3 met. The Orchestrator accepted and merged (`…ccf209d9`).
+> See § Reading.
+>
 > **Cut 2026-10-24 by BA/PM** (task `bapm-ABC-214-path-a`, records only, at `main` `d4d49c5a`). The owner's word is
 > `owner-word-2026-10-24` `…fb0468ff`: OD-214-1 = path A. Apache-2.0 now, the CC BY-SA 3.0 tables carved out, then
 > *"re-derive later as its own ticket (EPIC-008)"*. This is that ticket, as `ABC-214` Scope 8 describes it. It is
