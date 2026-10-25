@@ -361,3 +361,38 @@ and Stockfish 19 sha256 `dc2f18c3…251f`. Both equal `EPIC-008` § Dependencies
 - QE then runs `A4`, `A5` and `A6` at width 1, in the order `A5` → `A4`, or `A4` → `A5`. Either order works, because
   B is ruled from `A5`'s wall time.
 - Merging this records branch is the Orchestrator's.
+
+## Reading
+
+> **QE/E2E, 2026-10-24/25** (task `qe-ABC-204`, branch `grugops/qe-ABC-204`, merge `e546e124` = `0e88c5df` + `main`
+> `3497aad2`). **One run under the owner's rule `…4c3f7639`.** Notes: gate `…fbff3e18`, A5 `…1891d465`, A4 `…bfffcf4c`,
+> verdict `…b5f4d5a1` (`.grugops/context/qe-ABC-204/notes/`). Raw files,
+> `SHA256SUMS` and the scripts that ran: `.grugops/context/qe-ABC-204/raw/` (personal paths redacted, `ADR-0049` d4).
+
+**S** = `main` `3497aad2`. **Machine:** Apple M3 (4 performance + 4 efficiency cores), Darwin 25.6.0, node v26.11.1,
+`cutechess-cli 1.5.1`, `id name Stockfish 19`. The harness is `tools/rating/rating.ts` sha256 `d4b16e20…35fa`.
+
+| # | state | the reading |
+|---|---|---|
+| `A1` | **MET** | `cutechess-cli` `fb4fc2aa…6e1c` and Stockfish `dc2f18c3…251f`, both equal to `EPIC-008` § Dependencies |
+| `A2` | **MET** | Both modes ran from one command and wrote every listed file; the states printed right. Finding **QE-204-b (MEDIUM)**: the recorded "artifact sha256" is `dist/uci.js` only, which is the same at `8ccba739` and `3497aad2`, so it does not identify the build. **QE-204-a (LOW)**: an out dir that is a symlink into the checkout passes the guard |
+| `A3` | **MET** | Diff: `tools/rating/` + 1 line each in `tsconfig.json` and `biome.json`. 0 `*.test.*`. `npm test` 62 files = base (2073/2073). lint, typecheck and build 0; `dist/` has 22 files, 0 from `tools/` |
+| `A4` | **MET** | **Baseline R = 1 910 + 151.3 ± 50.3 = 2 061.3 ± 50.3** (`Elo difference: 151.3 +/- 50.3`), W/L/D 132/50/18, score 70.5 %. 200/200 games, 0 faults, 0 move-cap draws, depth guard 0 of 9 115 below 4. Run on a clean host: AC, no foreign vitest, load1 ≤ 7.62. The first run at E 1 650 scored 82.0 % (263.4 ± 61.8), so E moved once, to E′ = 1 910 |
+| `A5` | **UNRESOLVED** | **Stopped by a battery switch at 99 of 100 games** (17:40:24Z). 0 faults in 99. The tool printed no Elo line. QE's port of `elo.cpp`, on the tool's W/L/D 26/21/52, gives +17.6 ± 47.4, and the 57 games with no foreign-load overlap give 0.0 ± 61.5. Both contain 0. Not re-run (`…4c3f7639`) |
+| `A6` | **MET** | **R:** median game 131 s, 45.5 games/h at concurrency 2; 200 games took 4.40 h, within 10 h. **D:** median game 330 s at 3 000 ms, 31.4 games/h at concurrency 3; 400 games would take 12.2 h, over 8 h. **Ruled by Q4's rule: B = 1 500 ms**, `timemargin` 3 500 (400 games ≈ 6.1 h). 2 000 ms would need a median ≤ 324 s, and the median lies in [328.5, 330] s whatever game 100 took |
+
+**Frozen for `EPIC-008`** (from this reading on):
+- **R:** `UCI_Elo` **E = 1 910**, `st=0.5 timemargin=2000 restart=on`, `Threads 1`, `Hash 16`, `UCI_LimitStrength true`,
+  Ponder off. `skytalix` gets `st=3 timemargin=2000`. `-concurrency 2`.
+- **D:** **B = 1 500 ms**: `st=1.5 timemargin=3500` on both sides, `-concurrency 3`, `-rounds 200`.
+- **Both:** `openings.epd` sha256 `0d7f7a72…2666`, `order=sequential -repeat -games 2`, `-maxmoves 200` only, no
+  `-resign`, `-draw`, `-tb` or `-recover`. `cutechess-cli` and Stockfish at the sha256 values in `A1`.
+- **The rating is on Stockfish 19's `UCI_Elo` scale at E = 1 910, at this time control, on this host.** At E = 1 650
+  the same engine read 1 913.4 ± 61.8. The two anchors differ by 148 ± 80, so an R is comparable only at the same E
+  (QE-204-e). `M1` holds E fixed, so `M1` is not affected.
+
+> **QE/E2E addendum, 2026-10-25** (task `qe-fix-ABC-204`, notes `.grugops/context/qe-fix-ABC-204/notes/`): the readings
+> above ran with `tools/rating/rating.ts` sha256 `d4b16e20…35fa`. The merged harness is `rating.ts` `d6b2a988…b172` +
+> `tools/rating/dist-manifest.ts` `78b1528e…357f` (fix `2c8a84f2`: QE-204-b, a whole-`dist/` manifest and tree hash in
+> `artifacts.txt`; QE-204-a, the guard resolves the out dir's leaf). **The readings stand**: the change is
+> recording-only, and the play code paths are unchanged against `16c51d1c` (diff read).

@@ -1,0 +1,9 @@
+Elo difference: (no line)
+W/L/D: 26/21/52  score: 0.525  games: 99 of 100
+faults: 0  unclassified: 0  move-cap draws: 0
+skytalix.stderr: 0 bytes
+base.stderr: 0 bytes
+state: UNRESOLVED
+  - cutechess-cli exited null
+  - games: 99 finished, 99 in the PGN, 100 pinned
+  - no Elo or Score line in the .out

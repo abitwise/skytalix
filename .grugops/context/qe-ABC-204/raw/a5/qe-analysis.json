@@ -1,0 +1,160 @@
+{
+ "pgn_games": 99,
+ "started": 100,
+ "finished": 99,
+ "result_texts": {
+  "Draw by 3-fold repetition": 51,
+  "White mates": 32,
+  "Black mates": 15,
+  "Draw by insufficient mating material": 1
+ },
+ "fault_games": [],
+ "out_fault_lines": [],
+ "first_go_raw": {
+  "skytalix": "94 >skytalix(0): go movetime 3000",
+  "base": "95 >base(2): go movetime 3000"
+ },
+ "gaps": {
+  "skytalix": {
+   "budget_ms": 3000,
+   "searched_n": 5664,
+   "book_n": 104,
+   "median": 3001.0,
+   "max": 3026,
+   "over_3031": 0,
+   "over_3000": 4201,
+   "p99": 3006
+  },
+  "base": {
+   "budget_ms": 3000,
+   "searched_n": 5665,
+   "book_n": 105,
+   "median": 3001,
+   "max": 3029,
+   "over_3031": 0,
+   "over_3000": 4135,
+   "p99": 3005
+  }
+ },
+ "pgn_moves_without_comment": {
+  "skytalix": 102,
+  "base": 103
+ },
+ "fen_pairs": {
+  "rounds": 50,
+  "bad_rounds": [
+   50
+  ],
+  "incomplete_rounds": [
+   50
+  ],
+  "ep_square_dropped_by_cutechess_rounds": 14,
+  "started_2k-1_2k_swapped": true
+ },
+ "elo_all_qe": {
+  "n": 99,
+  "W": 26,
+  "L": 21,
+  "D": 52,
+  "score": 0.5252525252525253,
+  "X": 17.5621942796327,
+  "Y": 47.37562255915407,
+  "LOS": 76.7098545379078,
+  "draw_ratio": 52.525252525252526
+ },
+ "cutechess_elo_line_raw": null,
+ "cutechess_score_line_raw": "Score of skytalix vs base: 26 - 21 - 52  [0.525] 99",
+ "one_result_line_raw": "Finished game 1 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}",
+ "move_cap_draws": 0,
+ "wall": {
+  "median_game_s": 330,
+  "mean_game_s": 340.4848484848485,
+  "min": 114,
+  "max": 729,
+  "median_plies": 112,
+  "first_start": "2026-10-24T14:29:26.126000+00:00",
+  "last_end": "2026-10-24T17:38:20.472000+00:00",
+  "median_game_s_from_start_end_ms": 330.191,
+  "duration_tag_vs_start_end_max_abs_diff_s": 0.6559999999999491,
+  "match_span_s": 11334.346,
+  "games_per_hour_measured": 31.444249187381434
+ },
+ "samples": 1140,
+ "sampler": {
+  "load1_min": 2.79,
+  "load1_max": 13.5,
+  "load1_median": 5.775,
+  "power": [
+   "AC_Power",
+   "Battery_Power"
+  ],
+  "thermal": {
+   "0": 12,
+   "1": 556,
+   "2": 572
+  },
+  "vitest_samples": 412,
+  "load_gt8_samples": 151
+ },
+ "vitest_bursts": [
+  [
+   "2026-10-24T14:38:19+00:00",
+   "2026-10-24T14:38:49+00:00"
+  ],
+  [
+   "2026-10-24T14:39:49+00:00",
+   "2026-10-24T14:40:30+00:00"
+  ],
+  [
+   "2026-10-24T14:46:32+00:00",
+   "2026-10-24T15:39:57+00:00"
+  ],
+  [
+   "2026-10-24T15:54:45+00:00",
+   "2026-10-24T16:04:29+00:00"
+  ],
+  [
+   "2026-10-24T16:04:49+00:00",
+   "2026-10-24T16:08:51+00:00"
+  ]
+ ],
+ "overlap_games": 42,
+ "elo_clean_qe": {
+  "n": 57,
+  "W": 13,
+  "L": 13,
+  "D": 31,
+  "score": 0.5,
+  "X": -0.0,
+  "Y": 61.46253538497367,
+  "LOS": 50.0,
+  "draw_ratio": 54.3859649122807
+ },
+ "wall_clean_median_s": 330,
+ "wall_clean_median_s_ms": 330.191,
+ "overlap_game_rounds": [
+  2,
+  3,
+  4,
+  6,
+  7,
+  8,
+  9,
+  10,
+  11,
+  12,
+  13,
+  14,
+  15,
+  16,
+  17,
+  18,
+  22,
+  23,
+  24,
+  25,
+  26,
+  27
+ ],
+ "games_touching_load_gt8": 38
+}
