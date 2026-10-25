@@ -420,6 +420,10 @@ describe("A3 — both recursions route every reduction through the predicate, su
  * depth 4, PVS alone and the correct PVS+LMR read −7 with b3f3; `noLmrResearch` and `noResearch`
  * read −12 with b3h3. It does not bite at fixed depth, so the `search()` row keeps 1. Rb3 Rd5
  * (below).
+ *
+ * RE-PINNED at `ABC-207` (mobility weighted per piece, the early-queen term) for the `chooseMove`
+ * row: on 1. Rb3 Rc5 the deepened shape still re-searches a reduced fail-high at a null-window
+ * node, and the answer still equals the unreduced one. The pin −7 / b3f3 became −12 / b3h3.
  */
 const A4_FEN = "8/2p5/3p4/KPr5/5p1k/1R6/4P1P1/8 w - - 2 2";
 const A4_DEPTH = 4;
@@ -441,8 +445,14 @@ const A4_DEPTH = 4;
  * fixed depth 4 it still re-searches a reduced fail-high at a null-window node and still bites
  * both variants: PVS alone and the correct PVS+LMR read 4 with b3f3 (19 on base), and
  * `noLmrResearch` and `noResearch` read 0 with b3c3.
+ *
+ * RE-FOUND at `ABC-207` (mobility weighted per piece, the early-queen term; `ADR-0028` decision 2)
+ * for the `search()` row. On 1. Rb3 Rd5 the premise is lost: `search()` reads 10, the unreduced
+ * reference 2. The same probe (`a4scan.ts` at fixed depth 4, 467 positions, 2 hits on the build)
+ * found this one: position-3 after 1. Rb3 Kg5, white to move. At fixed depth 4, PVS alone and the
+ * correct PVS+LMR read −1 with b3c3; `noLmrResearch` and `noResearch` read −12 with g2g3.
  */
-const A4_SEARCH_FEN = "8/2p5/3p4/KP1r4/5p1k/1R6/4P1P1/8 w - - 2 2";
+const A4_SEARCH_FEN = "8/2p5/3p4/KP4kr/5p2/1R6/4P1P1/8 w - - 2 2";
 
 type Store = (typeof trace.stores)[number];
 
@@ -489,7 +499,7 @@ describe("A4 — the reduced move fails high at a null-window node, is re-search
     ).toBeGreaterThan(0);
     expect(shipped.score).toBe(reference.score);
     expect(label(shipped.move as Move)).toBe(label(reference.move as Move));
-    expect([shipped.score, label(shipped.move as Move)]).toEqual([4, "b3f3"]);
+    expect([shipped.score, label(shipped.move as Move)]).toEqual([-1, "b3c3"]);
   });
 
   it("chooseMove(): the same, deepened to depth 4 in the engine's own recursion", () => {
@@ -506,7 +516,7 @@ describe("A4 — the reduced move fails high at a null-window node, is re-search
     ).toBeGreaterThan(0);
     expect(shipped.score).toBe(reference.score);
     expect(label(shipped.move)).toBe(label(reference.move));
-    expect([shipped.score, label(shipped.move)]).toEqual([-7, "b3f3"]);
+    expect([shipped.score, label(shipped.move)]).toEqual([-12, "b3h3"]);
   });
 });
 

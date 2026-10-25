@@ -1,6 +1,6 @@
 /**
  * Static evaluation — material plus piece-square tables (ABC-076), plus pawn structure (ABC-082),
- * plus king safety and mobility (ABC-083).
+ * plus king safety and mobility (ABC-083), plus the early-queen term (ABC-207).
  *
  * One pure function: a position in, a centipawn score out, in the NEGAMAX convention —
  * positive is good for the SIDE TO MOVE, never "good for white". The search (ABC-077) can
@@ -27,6 +27,7 @@ import {
   PAWN,
   type Position,
   pieceType,
+  QUEEN,
   ROOK,
   rankOf,
 } from "./position.ts";
@@ -225,9 +226,24 @@ const KING_FILE_OPEN_PENALTY = 20;
  * piece) — the attack-map form of `ADR-0031` decision 2: counted on the board, no `Move` objects,
  * no make/unmake, pins and checks ignored. The total is clamped to `A4`'s ±100 cp, so mobility can
  * never outvote a minor piece.
+ *
+ * Weighted per piece type (ABC-207), indexed by `pieceType`. Rule: the minor pieces keep 4; a
+ * rook's square is worth half that and a queen's a quarter — the more squares a type reaches on an
+ * open board (N 8, B 13, R 14, Q 27), the less one more is worth to it. The king keeps 4 (out of
+ * scope).
  */
-const MOBILITY_WEIGHT = 4;
+const MOBILITY_WEIGHT: readonly number[] = [0, 0, 4, 4, 2, 1, 4];
+const NO_MOBILITY: readonly number[] = [0, 0, 0, 0, 0, 0, 0];
 const MOBILITY_CAP = 100;
+
+/**
+ * ABC-207's early-queen term: a quarter pawn, charged to a side whose queen has left its home
+ * square (d1 / d8) while at least 2 of its four minor pieces are still on theirs. Outside the
+ * mobility clamp. The condition is its own phase cut-off: no endgame has it.
+ */
+const EARLY_QUEEN_PENALTY = 25;
+const WHITE_QUEEN_HOME = 0x03;
+const BLACK_QUEEN_HOME = 0x73;
 
 const KNIGHT_STEPS: readonly number[] = [33, 31, 18, 14, -14, -18, -31, -33];
 const KING_STEPS: readonly number[] = [17, 16, 15, 1, -1, -15, -16, -17];
@@ -309,6 +325,19 @@ function kingExposure(
   return penalty;
 }
 
+/**
+ * How many of one side's four minor pieces stand on their home squares: the knights on b and g,
+ * the bishops on c and f, of the back rank starting at square `back` (0 white, 0x70 black).
+ */
+function minorsHome(board: Uint8Array, knight: number, bishop: number, back: number): number {
+  return (
+    (board[back + 1] === knight ? 1 : 0) +
+    (board[back + 6] === knight ? 1 : 0) +
+    (board[back + 2] === bishop ? 1 : 0) +
+    (board[back + 5] === bishop ? 1 : 0)
+  );
+}
+
 /** The files either side of `file`, as a bitmask over files a..h (bit 0 = a). */
 const adjacentFiles = (file: number): number => (((1 << file) << 1) | ((1 << file) >> 1)) & 0xff;
 
@@ -358,12 +387,14 @@ function pawnStructure(board: Uint8Array): number {
  * black's. Kept separate from the negamax flip so the sign convention lives in exactly one
  * place and the tables are read exactly once per piece.
  */
-function whiteMinusBlack(position: Position, mobilityWeight: number): number {
+function whiteMinusBlack(position: Position, mobilityWeight: readonly number[]): number {
   const board = position.board;
   let score = 0;
   let mobility = 0;
   let whiteKing = -1;
   let blackKing = -1;
+  let whiteQueenOut = false;
+  let blackQueenOut = false;
 
   for (let rank = 7; rank >= 0; rank--) {
     for (let file = 0; file < 8; file++) {
@@ -382,8 +413,12 @@ function whiteMinusBlack(position: Position, mobilityWeight: number): number {
       score += black ? -value : value;
 
       if (type === PAWN) continue;
-      const reached = squaresReached(board, square, piece);
+      const reached = squaresReached(board, square, piece) * (mobilityWeight[type] as number);
       mobility += black ? -reached : reached;
+      if (type === QUEEN) {
+        if (black) blackQueenOut ||= square !== BLACK_QUEEN_HOME;
+        else whiteQueenOut ||= square !== WHITE_QUEEN_HOME;
+      }
       if (type === KING) {
         if (black) blackKing = square;
         else whiteKing = square;
@@ -391,12 +426,18 @@ function whiteMinusBlack(position: Position, mobilityWeight: number): number {
     }
   }
 
-  const mobilityScore = Math.max(-MOBILITY_CAP, Math.min(MOBILITY_CAP, mobilityWeight * mobility));
+  const mobilityScore = Math.max(-MOBILITY_CAP, Math.min(MOBILITY_CAP, mobility));
   const kingSafety =
     kingExposure(board, blackKing, BLACK_PAWN, PAWN, -1) -
     kingExposure(board, whiteKing, PAWN, BLACK_PAWN, 1);
 
-  return score + pawnStructure(board) + kingSafety + mobilityScore;
+  const earlyQueen =
+    (whiteQueenOut && minorsHome(board, KNIGHT, BISHOP, 0) >= 2 ? EARLY_QUEEN_PENALTY : 0) -
+    (blackQueenOut && minorsHome(board, KNIGHT | BLACK, BISHOP | BLACK, 0x70) >= 2
+      ? EARLY_QUEEN_PENALTY
+      : 0);
+
+  return score + pawnStructure(board) + kingSafety + mobilityScore - earlyQueen;
 }
 
 /**
@@ -414,12 +455,12 @@ export function evaluate(position: Position): number {
 }
 
 /**
- * TEST-ONLY. `evaluate` with the mobility weight at 0 — every other term, the sign convention and
+ * TEST-ONLY. `evaluate` with every mobility weight at 0 — every other term, the sign convention and
  * the board walk unchanged — so `evaluate(p) - evaluateWithoutMobility(p)` is exactly the mobility
  * term, which is how `ABC-083` `A4` reads its ±100 cp bound. Nothing in production calls it (the
  * `searchWithout…` doors' precedent).
  */
 export function evaluateWithoutMobility(position: Position): number {
-  const score = whiteMinusBlack(position, 0);
+  const score = whiteMinusBlack(position, NO_MOBILITY);
   return position.blackToMove ? 0 - score : score;
 }

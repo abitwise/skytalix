@@ -445,11 +445,16 @@ describe("A4 — each heuristic's node count, and the delete rule", () => {
    * RE-PINNED at `ABC-215` (the evaluation values made by rule, the same reason): 8 887 / 4 419 /
    * 3 871 became 10 371 / 3 266 / 3 177, read by a node script on base and build. `A3`'s standing
    * guard above reads 3 177 / 10 371 = 30.63%, under its 65% level.
+   *
+   * RE-PINNED at `ABC-207` (mobility weighted per piece, the early-queen term): 10 371 / 3 266 /
+   * 3 177 became 11 220 / 1 317 / 1 317, read by a node script on base and build. The killers now
+   * earn 0 here at depth 2, so the "12%" above is stale; the delete rule is judged on depth 5
+   * (`SEARCH_DEEP`), which stays green. `A3`'s standing guard reads 1 317 / 11 220 = 11.74%.
    */
-  it("position-6 at depth 2: none 10 371, MVV-LVA 3 266, + killers 3 177", () => {
-    expect(none("position-6", 2).nodes).toBe(10_371);
-    expect(mvvLva("position-6", 2).nodes).toBe(3_266);
-    expect(full("position-6", 2).nodes).toBe(3_177);
+  it("position-6 at depth 2: none 11 220, MVV-LVA 1 317, + killers 1 317", () => {
+    expect(none("position-6", 2).nodes).toBe(11_220);
+    expect(mvvLva("position-6", 2).nodes).toBe(1_317);
+    expect(full("position-6", 2).nodes).toBe(1_317);
   });
 
   /**
@@ -652,8 +657,12 @@ describe("G1 — chooseMove records a killer only on a beta cutoff", () => {
    *
    * RE-PINNED at `ABC-215` (the evaluation values made by rule): depth 3 in 342 nodes (base 354),
    * and `N3`, re-planted on that build, reads 347 — the pin still tells the two apart.
+   *
+   * RE-PINNED at `ABC-207` (mobility weighted per piece, the early-queen term): depth 3 in 364
+   * nodes (base 342), and `N3`, re-planted on that build, reads 361 — the pin still tells the two
+   * apart.
    */
-  it("position-3 at 3 injected ticks: depth 3 in exactly 342 nodes", () => {
+  it("position-3 at 3 injected ticks: depth 3 in exactly 364 nodes", () => {
     // The pre-`ABC-121` engine since `ABC-121` (`ADR-0026` decision 4); the pin is unchanged.
     let ticks = 0;
     const choice = chooseMoveWithoutPvsOrReductions(parseFen(fenOf("position-3")), {
@@ -661,6 +670,6 @@ describe("G1 — chooseMove records a killer only on a beta cutoff", () => {
       now: () => ticks++,
     }) as { depth: number; nodes: number };
     expect(choice.depth).toBe(3);
-    expect(choice.nodes).toBe(342);
+    expect(choice.nodes).toBe(364);
   });
 });

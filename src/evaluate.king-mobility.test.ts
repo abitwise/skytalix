@@ -21,10 +21,10 @@ import {
   mirrorPosition,
   PERFT_POSITIONS,
 } from "./evaluate.mirror-corpus.ts";
-import { evaluate, evaluateWithoutMobility } from "./evaluate.ts";
+import { evaluate, evaluateWithoutMobility, VALUE_TABLES_FOR_TEST } from "./evaluate.ts";
 import { parseFen } from "./fen.ts";
 import { legalMoves } from "./legal.ts";
-import type { Position } from "./position.ts";
+import { type Position, QUEEN } from "./position.ts";
 
 /** `A2`: kingside castled, f2/g2/h2; the same with g2 removed; and g2 moved to g6 (equal material). */
 const SHELTERED = "6k1/5ppp/8/8/8/8/5PPP/6K1 w - - 0 1";
@@ -154,5 +154,124 @@ describe("A6 — purity: evaluation leaves the position byte-identical", () => {
       expect(evaluateWithoutMobility(position)).toBe(evaluateWithoutMobility(position));
       expect(position).toEqual(before);
     }
+  });
+});
+
+/**
+ * ABC-207 — per-piece mobility weights and the early-queen term. Relations, never totals.
+ *
+ * `A1`'s pairs: the piece on d4, kings on a8 and h1 (off every d4 line), and ONE white pawn that
+ * either blocks the last square of one of the piece's lines or stands just off it. No other piece's
+ * reach changes, so the mobility term of the pair differs by exactly one square of that piece.
+ */
+const A1_PAIRS: Record<string, { open: string; blocked: string }> = {
+  queen: { open: "k7/8/8/8/3Q4/7P/8/7K w - - 0 1", blocked: "k7/8/8/8/3Q3P/8/8/7K w - - 0 1" },
+  rook: { open: "k7/8/8/8/3R4/7P/8/7K w - - 0 1", blocked: "k7/8/8/8/3R3P/8/8/7K w - - 0 1" },
+  bishop: { open: "k7/8/P7/8/3B4/8/8/7K w - - 0 1", blocked: "k7/P7/8/8/3B4/8/8/7K w - - 0 1" },
+  knight: { open: "k7/4P3/8/8/3N4/8/8/7K w - - 0 1", blocked: "k7/8/4P3/8/3N4/8/8/7K w - - 0 1" },
+};
+
+/**
+ * `A2`'s three Qa4 / Qd1 pairs. Black's queen is home in the first two. a4 and d1 are both
+ * edge squares of `QUEEN_TABLE`, and the row below subtracts the table's own difference anyway.
+ */
+const A2_MINORS_HOME = {
+  out: "rnbqkbnr/pppp1ppp/8/4p3/Q7/2P5/PP1PPPPP/RNB1KBNR w KQkq - 0 3",
+  home: "rnbqkbnr/pppp1ppp/8/4p3/8/2P5/PP1PPPPP/RNBQKBNR w KQkq - 0 3",
+};
+const A2_MINORS_DEVELOPED = {
+  out: "rnbqkbnr/pppp1ppp/8/4p3/Q1B1P3/2NPBN2/PPP2PPP/R3K2R w KQkq - 0 6",
+  home: "rnbqkbnr/pppp1ppp/8/4p3/2B1P3/2NPBN2/PPP2PPP/R2QK2R w KQkq - 0 6",
+};
+const A2_NO_MINORS = {
+  out: "5k2/4q3/8/8/Q7/8/4P3/4K3 w - - 0 1",
+  home: "5k2/4q3/8/8/8/8/4P3/3QK3 w - - 0 1",
+};
+
+/**
+ * White's mobility is clamped at +100 while its queen is off home with both knights home: the
+ * early-queen term must stay OUTSIDE the clamp, so the mobility read here is exactly the cap.
+ */
+const CLAMPED_EARLY_QUEEN = "k7/pp6/8/8/2B1B3/3Q4/8/RN2K1NR w - - 0 1";
+
+/**
+ * `A3`'s new mirror positions: the pairs above, plus early queens of both colours, both colours
+ * to move, a queen off home with fewer than two minors home, and a second (promoted) queen.
+ */
+const ABC207_POSITIONS: readonly string[] = [
+  ...Object.values(A1_PAIRS).flatMap(({ open, blocked }) => [open, blocked]),
+  ...[A2_MINORS_HOME, A2_MINORS_DEVELOPED, A2_NO_MINORS].flatMap(({ out, home }) => [out, home]),
+  "rnb1kbnr/pppp1ppp/8/4p2q/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 1 3",
+  "rnb1kbnr/pppp1ppp/8/4p3/4P2q/5Q2/PPPP1PPP/RNB1KBNR b KQkq - 2 3",
+  "r1b1kbnr/pppp1ppp/2n5/4p1q1/4P3/2N2Q2/PPPP1PPP/R1B1KBNR w KQkq - 4 4",
+  "rnb1kb1r/pppp1ppp/5n2/4p2q/2B1P3/5Q2/PPPP1PPP/RNB1K1NR b KQkq - 3 4",
+  "r1b1k1nr/pppp1ppp/2n5/2b1p2q/2B1P3/2N2N2/PPPPQPPP/R1B1K2R w KQkq - 6 5",
+  "rnbqkbnr/ppp1pppp/8/3Q4/8/8/PPPP1PPP/RNB1KBNR b KQkq - 0 3",
+  "rnbqkbQr/ppppp2p/8/8/8/8/PPPPPP1P/RNBQKBNR b KQq - 0 5",
+  CLAMPED_EARLY_QUEEN,
+];
+
+const earlyQueenTerm = (pair: { out: string; home: string }): number => {
+  // The early-queen term alone: everything else in `evaluateWithoutMobility` is the same in the
+  // pair but the queen's square, and that square's table cells are taken back out here.
+  const cell = (square: number): number =>
+    VALUE_TABLES_FOR_TEST.QUEEN_TABLE[(7 - (square >> 4)) * 8 + (square & 7)] as number;
+  const out = parseFen(pair.out);
+  const queenSquare = out.board.indexOf(QUEEN);
+  const table = cell(queenSquare) - cell(0x03);
+  return evaluateWithoutMobility(out) - evaluateWithoutMobility(parseFen(pair.home)) - table;
+};
+
+describe("ABC-207 A1 — one more reachable square is worth strictly less to a queen than to N, B or R", () => {
+  const step = (piece: keyof typeof A1_PAIRS): number => {
+    const { open, blocked } = A1_PAIRS[piece] as { open: string; blocked: string };
+    const openTerm = mobilityTerm(parseFen(open));
+    const blockedTerm = mobilityTerm(parseFen(blocked));
+    // The clamp is out of play on both sides of every pair, so the step reads the weight.
+    expect(Math.abs(openTerm), open).toBeLessThan(100);
+    expect(Math.abs(blockedTerm), blocked).toBeLessThan(100);
+    return openTerm - blockedTerm;
+  };
+
+  it("each extra square counts for every piece, and least for the queen", () => {
+    const queen = step("queen");
+    expect(queen).toBeGreaterThan(0);
+    expect(queen).toBeLessThan(step("knight"));
+    expect(queen).toBeLessThan(step("bishop"));
+    expect(queen).toBeLessThan(step("rook"));
+  });
+});
+
+describe("ABC-207 A2 — a queen out before the minor pieces costs a little", () => {
+  it("Qa4 with both knights and both bishops home scores strictly lower than Qd1 (the criterion)", () => {
+    expect(score(A2_MINORS_HOME.out)).toBeLessThan(score(A2_MINORS_HOME.home));
+    // And the term itself, mobility taken out, is a charge.
+    expect(earlyQueenTerm(A2_MINORS_HOME)).toBeLessThan(0);
+  });
+
+  it("with all four white minors developed, the term contributes 0", () => {
+    expect(earlyQueenTerm(A2_MINORS_DEVELOPED)).toBe(0);
+  });
+
+  it("in an endgame with no minor pieces, the term contributes 0", () => {
+    expect(earlyQueenTerm(A2_NO_MINORS)).toBe(0);
+  });
+});
+
+describe("ABC-207 A3 — the mirror and the ±100 cp mobility bound hold on new positions", () => {
+  it("adds at least 10 new positions", () => {
+    expect(ABC207_POSITIONS.length).toBeGreaterThanOrEqual(10);
+  });
+
+  it("scores every mirrored pair exactly equal, and keeps the mobility term within ±100 cp", () => {
+    for (const fen of ABC207_POSITIONS) {
+      const position = parseFen(fen);
+      expect(evaluate(mirrorPosition(position)), fen).toBe(evaluate(position));
+      expect(Math.abs(mobilityTerm(position)), fen).toBeLessThanOrEqual(100);
+    }
+  });
+
+  it("the early-queen term sits outside the clamp: a clamped board reads exactly the cap", () => {
+    expect(mobilityTerm(parseFen(CLAMPED_EARLY_QUEEN))).toBe(100);
   });
 });

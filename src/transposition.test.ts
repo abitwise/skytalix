@@ -319,10 +319,13 @@ describe("the table — verified keys, always-replace, cutoffs only at the store
  * key row below and `zobrist.test.ts`'s castling-rights rows, as stated above.
  * RE-PINNED at `ABC-215` (the evaluation values made by rule): 894 became 939, both rows, table on
  * and off. Depth 5 now reads 939 twice as well; the guard is still the key row, as stated above.
+ * RE-PINNED at `ABC-207` (mobility weighted per piece, the early-queen term): 939 became 911,
+ * both rows, table on and off. Depth 5 reads 916 vs 911, so the subtrees differ again there; the
+ * guard is still the key row.
  */
 const KNIGHT_G1_PAIR = [
-  { name: "knight-g1 w K", fen: "4k3/8/8/8/8/8/8/4K1NR w K - 0 1", score: 939 },
-  { name: "knight-g1 w -", fen: "4k3/8/8/8/8/8/8/4K1NR w - - 0 1", score: 939 },
+  { name: "knight-g1 w K", fen: "4k3/8/8/8/8/8/8/4K1NR w K - 0 1", score: 911 },
+  { name: "knight-g1 w -", fen: "4k3/8/8/8/8/8/8/4K1NR w - - 0 1", score: 911 },
 ];
 
 describe("A1 — table-on and table-off scores are identical", () => {
@@ -367,14 +370,16 @@ describe("A1 — table-on and table-off scores are identical", () => {
    * RE-MEASURED at `ABC-082` (the pawn-structure term moves the tree): 1 319 and 1 474.
    * RE-MEASURED at `ABC-083` (king safety and mobility): 1 325 and 1 523 (`probe/rows.ts`).
    * RE-PINNED at `ABC-215` (the evaluation values made by rule): 1 377 and 1 533.
+   * RE-PINNED at `ABC-207` (mobility weighted per piece, the early-queen term): 1 377 and 1 533
+   * became 1 355 and 1 512.
    */
-  it("position-3 at depth 4 — the same score, and the work changes: 1 377 nodes with the table, 1 533 without", () => {
+  it("position-3 at depth 4 — the same score, and the work changes: 1 355 nodes with the table, 1 512 without", () => {
     // The pre-`ABC-121` search since `ABC-121` (`ADR-0026` decision 4); both pins are unchanged.
     const on = searchWithoutPvsOrReductions(parseFen(fenOf("position-3")), 4);
     const off = searchWithoutTable(parseFen(fenOf("position-3")), 4);
     expect(on.score).toBe(off.score);
-    expect(on.nodes).toBe(1_377);
-    expect(off.nodes).toBe(1_533);
+    expect(on.nodes).toBe(1_355);
+    expect(off.nodes).toBe(1_512);
   });
 });
 
@@ -498,7 +503,7 @@ describe("A5 — the only non-losing line repeats, and it scores exactly 0", () 
    * repetition's 0 to a path where it is not one). The node count is pinned too: it is the
    * cheapest detector of `search()` dropping the hash move, which changes no score here.
    */
-  it("search(), depth 4: the perpetual scores exactly 0 and is played — in 7 295 nodes", () => {
+  it("search(), depth 4: the perpetual scores exactly 0 and is played — in 7 629 nodes", () => {
     const result = search(parseFen(REPEATS_AT_PLY_4), 4);
     expect(result.score).toBe(0); // `toBe` is Object.is: a -0 fails here
     expect(label(result.move)).toBe("f7f8");
@@ -507,13 +512,17 @@ describe("A5 — the only non-losing line repeats, and it scores exactly 0", () 
     // RE-MEASURED at `ABC-082` (the pawn-structure term moves the tree): 7 241 became 7 251.
     // RE-MEASURED at `ABC-083` (king safety and mobility): 7 251 became 7 832 (`probe/rows.ts`).
     // RE-PINNED at `ABC-215` (the evaluation values made by rule): 7 832 became 7 295.
-    expect(searchWithoutPvsOrReductions(parseFen(REPEATS_AT_PLY_4), 4).nodes).toBe(7_295);
+    // RE-PINNED at `ABC-207` (mobility weighted per piece, the early-queen term): 7 295 became
+    // 7 629.
+    expect(searchWithoutPvsOrReductions(parseFen(REPEATS_AT_PLY_4), 4).nodes).toBe(7_629);
   });
 
   it("the fixture bites: at depth 3 the repetition is past the horizon, and the rook down shows", () => {
     // RE-MEASURED at `ABC-083` (king safety and mobility): −470 became −488 (`probe/rows.ts`).
     // RE-PINNED at `ABC-215` (the evaluation values made by rule): −488 became −485.
-    expect(search(parseFen(REPEATS_AT_PLY_4), 3).score).toBe(-485);
+    // RE-PINNED at `ABC-207` (mobility weighted per piece, the early-queen term): −485 became
+    // −498, still a rook down.
+    expect(search(parseFen(REPEATS_AT_PLY_4), 3).score).toBe(-498);
   });
 
   /**

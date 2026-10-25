@@ -399,15 +399,17 @@ describe("A4 — a position with no capture anywhere near the leaves scores exac
   });
 
   if (RUN_DEEP) {
-    it("position-6 at depth 3 reproduces the recorded 2 398 nodes and c3d5 [deep, SEARCH_DEEP=1]", () => {
+    it("position-6 at depth 3 reproduces the recorded 2 358 nodes and c3d5 [deep, SEARCH_DEEP=1]", () => {
       // 14 565 unordered; 2 273 ordered at ABC-080, the same move.
       // RE-MEASURED at ABC-083 (king safety and mobility move the bare leaf): 2 355, the same
       // move (`.grugops/context/ticket-to-pr-ABC-083/probe/rows.ts`, DEEP=1; base 2 273).
       // RE-PINNED at ABC-215 (the evaluation values made by rule move the bare leaf): 2 398, the
       // same move (a node script on base and build; base 2 355).
+      // RE-PINNED at ABC-207 (mobility weighted per piece, the early-queen term): 2 358, the same
+      // move (a node script on base and build; base 2 398).
       const result = searchWithoutQuiescence(parseFen(fenOf("position-6")), 3);
 
-      expect(result.nodes).toBe(2_398);
+      expect(result.nodes).toBe(2_358);
       expect(label(result.move)).toBe("c3d5");
     }, 30_000);
   }
@@ -463,10 +465,15 @@ describe("A5 — the node-count multiplier on kiwipete and position-6 is reporte
    * in plain node on the build, equals `searchWithoutPvsOrReductions` AND `search()` on score and
    * move on both boards — kiwipete 8 / e2a6 (was 70; 68 705 431 oracle nodes), position-6 85 / c3d5
    * (was 84; 12 929 308). The moves did not change.
+   *
+   * RE-PINNED at `ABC-207` (mobility weighted per piece, the early-queen term) by the same rule: the
+   * oracle, re-run in plain node on the build, equals `searchWithoutPvsOrReductions` AND `search()`
+   * on score and move on both boards — kiwipete 20 / e2a6 (was 8; 70 389 552 oracle nodes),
+   * position-6 78 / c3d5 (was 85; 14 332 220). The moves did not change.
    */
   const ORACLE_AT_DEPTH_3: Readonly<Record<string, { score: number; move: string }>> = {
-    kiwipete: { score: 8, move: "e2a6" },
-    "position-6": { score: 85, move: "c3d5" },
+    kiwipete: { score: 20, move: "e2a6" },
+    "position-6": { score: 78, move: "c3d5" },
   };
 
   /**
