@@ -390,3 +390,9 @@ and Stockfish 19 sha256 `dc2f18c3…251f`. Both equal `EPIC-008` § Dependencies
 - **The rating is on Stockfish 19's `UCI_Elo` scale at E = 1 910, at this time control, on this host.** At E = 1 650
   the same engine read 1 913.4 ± 61.8. The two anchors differ by 148 ± 80, so an R is comparable only at the same E
   (QE-204-e). `M1` holds E fixed, so `M1` is not affected.
+
+> **QE/E2E addendum, 2026-10-25** (task `qe-fix-ABC-204`, notes `.grugops/context/qe-fix-ABC-204/notes/`): the readings
+> above ran with `tools/rating/rating.ts` sha256 `d4b16e20…35fa`. The merged harness is `rating.ts` `d6b2a988…b172` +
+> `tools/rating/dist-manifest.ts` `78b1528e…357f` (fix `2c8a84f2`: QE-204-b, a whole-`dist/` manifest and tree hash in
+> `artifacts.txt`; QE-204-a, the guard resolves the out dir's leaf). **The readings stand**: the change is
+> recording-only, and the play code paths are unchanged against `16c51d1c` (diff read).
