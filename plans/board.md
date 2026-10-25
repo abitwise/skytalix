@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-25 by Orchestrator (orch-2026-10-25ab) — ABC-207 built (grugops/ABC-207 @ 5477df21; 2097/2097; 12 ruled rows; frozen-clock position-6 d8 −18.02 %) → In Review (1/3). `qe-ABC-207` dispatched ALONE (QE + G2 + G6 + D under S1, ~6 h, ~12 h with the one extension; battery allowed)._
 _Updated: 2026-10-25 by Orchestrator (orch-2026-10-25aa) — ADR-0048 status line merged (carve-out ended at 5c91e2e4). ABC-207 design ruled and merged (…a21b7cc9) → In Development (1/3); `ticket-to-pr-ABC-207` (no real-clock). Its QE + G2 + pre-check + G6 (n = 5, median) + D (S1) run ALONE after the build (…6eda769c)._
 _Updated: 2026-10-25 by Orchestrator (orch-2026-10-25z) — security-nfr-lic-pub-1 PASS_WITH_RISKS merged (…7522161b): OQ-214-4 closed (no CC BY-SA at the tip since 5c91e2e4); LIC-PUB-1 recommended "closed at the tip; history not rewritten" — owner's word owed; EPIC-008 § Dependencies home path → placeholder (ADR-0049 d4, tip only); NFR catalog stale "ten modules" line corrected (dated, no bound). Width 1/3 (Architect: arch-design-ABC-207)._
 _Updated: 2026-10-25 by Orchestrator (orch-2026-10-25x) — bapm-epic008-g6-rule merged: EPIC-008 G6 row carries its reading rule (5 interleaved runs per board per build, median, any run < 6 FAILs; no bound moved; QE-215-a closed); ABC-215 Done lines dated. Width 1/3 (Architect: arch-design-ABC-207)._
@@ -1120,8 +1121,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-207] Mobility is weighted per piece (queen lowest) and an early queen trip costs  (owner: software-engineer, size: S, priority: P3, epic: EPIC-008, since: 2026-10-23, DoR 9/10 — held until ABC-205 is Done; `…8c3b2f47`. ADR only if the ADR-0031 form changes; ±100 cp cap, ≤ 1 100 ns; D: S1) — DoR 10/10 — Ready 2026-10-25 (bapm-close-ABC-205, …84a05b3a): trigger met (ABC-205 closed under S1; ABC-204 Done); D base = own merge-base on main; one at a time with ABC-215 (default ABC-215 first); frozen-clock d7/d8 pre-check before the real-clock G6 reading (process, no bound). **2026-10-25: Ready → In Design (orch-2026-10-25w, …ccf209d9): `arch-design-ABC-207` (weights + queen term, moved-pin probe, frozen-clock d7/d8 counts; no real-clock). D base = main 5c91e2e4.** **2026-10-25: design ruled (…a21b7cc9): weights N/B 4, R 2, Q 1 (K 4, out of scope); early-queen 25 cp while ≥ 2 minors home; ADR-0031 d2 form kept; 12 rows move in 4 files (re-pin / ADR-0028 d2 / oracle), 0 levels, 0 bounds; frozen-clock position-6 d8 −18.02 % (G6 predicted MET, UNKNOWN - verify); S, no split. In Design → Ready for Dev → In Development (orch-2026-10-25aa, …6eda769c; ticket-to-pr-ABC-207).**
+## In Development (WIP 0/3)
 
 
 
@@ -1149,7 +1149,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-207] Mobility is weighted per piece (queen lowest) and an early queen trip costs  (owner: software-engineer, size: S, priority: P3, epic: EPIC-008, since: 2026-10-23, DoR 9/10 — held until ABC-205 is Done; `…8c3b2f47`. ADR only if the ADR-0031 form changes; ±100 cp cap, ≤ 1 100 ns; D: S1) — DoR 10/10 — Ready 2026-10-25 (bapm-close-ABC-205, …84a05b3a): trigger met (ABC-205 closed under S1; ABC-204 Done); D base = own merge-base on main; one at a time with ABC-215 (default ABC-215 first); frozen-clock d7/d8 pre-check before the real-clock G6 reading (process, no bound). **2026-10-25: Ready → In Design (orch-2026-10-25w, …ccf209d9): `arch-design-ABC-207` (weights + queen term, moved-pin probe, frozen-clock d7/d8 counts; no real-clock). D base = main 5c91e2e4.** **2026-10-25: design ruled (…a21b7cc9): weights N/B 4, R 2, Q 1 (K 4, out of scope); early-queen 25 cp while ≥ 2 minors home; ADR-0031 d2 form kept; 12 rows move in 4 files (re-pin / ADR-0028 d2 / oracle), 0 levels, 0 bounds; frozen-clock position-6 d8 −18.02 % (G6 predicted MET, UNKNOWN - verify); S, no split. In Design → Ready for Dev → In Development (orch-2026-10-25aa, …6eda769c; ticket-to-pr-ABC-207).** **2026-10-25: built (grugops/ABC-207 @ 5477df21; 2097/2097; 12 ruled rows moved as ruled; frozen-clock 8/8 equal) → In Review; `qe-ABC-207` ALONE.**
 
 
 
