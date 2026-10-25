@@ -8,8 +8,10 @@
  * R plays `skytalix` against Stockfish 19 at `UCI_LimitStrength` and `UCI_Elo` E (default 1650,
  * 100 rounds). D plays a candidate against a base (default 3 000 ms a move, 200 rounds). A round is
  * one opening played with both colours. Each artifact is built in a clone under <out-dir>, which
- * must be empty and outside this checkout. The Elo figure is `cutechess-cli`'s own result line;
- * this file computes no Elo. Runs on demand only, never in the test lane.
+ * must be empty and outside this checkout (resolved through any symlink). `artifacts.txt` records
+ * each side's whole `dist/`: a per-file sha256 manifest and its tree hash. The Elo figure is
+ * `cutechess-cli`'s own result line; this file computes no Elo. Runs on demand only, never in the
+ * test lane.
  */
 import { execFileSync, spawn } from "node:child_process";
 import { createHash } from "node:crypto";
@@ -29,6 +31,7 @@ import {
 import { loadavg, release } from "node:os";
 import { basename, dirname, join, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
+import { artifactRecord } from "./dist-manifest.ts";
 import { OPENINGS_SHA256 } from "./openings.ts";
 
 const CUTECHESS = "/Users/olgeroeselg/Projects/others/cutechess/cutechess/build/cutechess-cli";
@@ -121,11 +124,10 @@ async function buildArtifact(out: string, name: string, sha: string): Promise<st
   step("npm", ["ci"], clone);
   step("npm", ["run", "build"], clone);
   closeSync(log);
-  const uci = join(clone, "dist/uci.js");
-  const lines = await uciLines(process.execPath, [uci], clone);
+  const lines = await uciLines(process.execPath, [join(clone, "dist/uci.js")], clone);
   appendFileSync(
     join(out, "artifacts.txt"),
-    `${name} ${sha} dist/uci.js sha256 ${sha256File(uci)}\n${lines.map((l) => `  ${l}`).join("\n")}\n`,
+    `${artifactRecord(name, sha, join(clone, "dist"))}${lines.map((l) => `  ${l}\n`).join("")}`,
   );
   return clone;
 }
@@ -307,10 +309,13 @@ async function main(argv: string[]): Promise<void> {
     throw new Error(`--rounds ${rounds}: not a positive integer`);
 
   const out = resolve(positional.at(-1) as string);
-  const realOut = join(realpathSync(dirname(out)), basename(out));
-  if (realOut === REPO || realOut.startsWith(REPO + sep))
-    throw new Error(`${out} is inside ${REPO}`);
+  const inside = (real: string): void => {
+    if (real === REPO || real.startsWith(REPO + sep)) throw new Error(`${out} is inside ${REPO}`);
+  };
+  inside(join(realpathSync(dirname(out)), basename(out)));
   mkdirSync(out, { recursive: true });
+  // QE-204-a: the leaf itself may be a symlink into the checkout, so resolve it before any write.
+  inside(realpathSync(out));
   if (readdirSync(out).length > 0) throw new Error(`${out} is not empty`);
 
   // Pins: tools (A1, a difference is recorded, not a stop) and the openings (Q5, a stop).
