@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-25 by Orchestrator (orch-2026-10-25i) — ABC-217 QE PASS → MERGED (20c3b339); stays In Review until a clean NFR-008 sentinel (14.74 s under load discounted). Width 2/3 (qe-ABC-216, se-integrate-ABC-205)._
 _Updated: 2026-10-25 by Orchestrator (orch-2026-10-25f) — ABC-204 MERGED (7f94e4cc) → Done; EPIC-008 M1 baseline R = 2 061.3 ± 50.3 at E 1 910. In Review 3/3 (205, 216, 217). ABC-205 QE + G6 + D (alone) next, after qe-ABC-216/217. QE-204-h LOW in Backlog notes._
 _Updated: 2026-10-25 by Orchestrator (orch-2026-10-25d) — ABC-217 built (grugops/ABC-217 @ 5212a4bd; 2075/2075) → In Review; qe-ABC-217. **In Review over cap (4/3), written reason:** ABC-205 sits there waiting only for ABC-204 Done and its alone window, not review capacity; back to 3 when ABC-204 merges. Width 3/3 (qe-fix-ABC-204, qe-ABC-216, qe-ABC-217)._
 _Updated: 2026-10-25 by Orchestrator (orch-2026-10-25c) — ABC-216 README built (grugops/ABC-216 @ 16c14409; 86 lines, 7-line ASCII rook + wordmark) → In Review (3/3: 204, 205, 216); qe-ABC-216. Width 3/3 (ticket-to-pr-ABC-217, qe-fix-ABC-204, qe-ABC-216)._
