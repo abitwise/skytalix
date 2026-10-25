@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-25 by Orchestrator (orch-2026-10-25n) — ABC-205 integrated onto main (grugops/ABC-205-final @ b5d5cea5; pins held; sentinel 7.2 s). qe-ABC-205 dispatched ALONE (QE + G6 + D, ~6–12 h; battery allowed on the owner's word). The last timing run under …4c3f7639._
 _Updated: 2026-10-25 by Orchestrator (orch-2026-10-25m) — ABC-216 README MERGED (39b93505) → Done; ABC-217 → Done (sentinel 8.62 s under load ≤ 10 s). In Review 1/3 (ABC-205, integration hop running). Backlog notes: QE-204-h, QE-216-h._
 _Updated: 2026-10-25 by Orchestrator (orch-2026-10-25i) — ABC-217 QE PASS → MERGED (20c3b339); stays In Review until a clean NFR-008 sentinel (14.74 s under load discounted). Width 2/3 (qe-ABC-216, se-integrate-ABC-205)._
 _Updated: 2026-10-25 by Orchestrator (orch-2026-10-25f) — ABC-204 MERGED (7f94e4cc) → Done; EPIC-008 M1 baseline R = 2 061.3 ± 50.3 at E 1 910. In Review 3/3 (205, 216, 217). ABC-205 QE + G6 + D (alone) next, after qe-ABC-216/217. QE-204-h LOW in Backlog notes._
