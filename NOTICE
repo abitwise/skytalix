@@ -4,16 +4,6 @@ Copyright 2026 Olger Oeselg
 Licensed under the Apache License, Version 2.0 (the "License"); see the LICENSE file.
 The parts listed below are not licensed under the License.
 
-Evaluation values (CC BY-SA 3.0)
-  In src/evaluate.ts, PIECE_VALUE, PAWN_TABLE, KNIGHT_TABLE, BISHOP_TABLE, ROOK_TABLE,
-  QUEEN_TABLE and KING_TABLE hold the values of Tomasz Michniewski's
-  "Simplified Evaluation Function", published at
-  https://www.chessprogramming.org/Simplified_Evaluation_Function
-  under CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0/) by its contributors.
-  The values are unchanged. The layout and the king value of 0 are ours.
-  These values are not licensed under the Apache License, Version 2.0. They remain under
-  CC BY-SA 3.0. No endorsement by the author is implied.
-
 grugops kit files (MIT)
   tools/grugops/reference-check.js, tools/grugops/test-skip-integrity.js,
   tools/grugops/uat-spec-integrity.js and tools/grugops/host-protection.js come from the
