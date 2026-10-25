@@ -1,0 +1,31 @@
+
+ RUN  v4.1.12 <worktree>
+
+stdout | src/quiescence.test.ts > A1 — the losing capture is not chosen in >= 19 of 20, and the bare leaf is strictly worse > with quiescence the losing move is still avoided at depth 3 [deep, SEARCH_DEEP=1]
+A1 depth 3: losing capture chosen 0/24 with quiescence, 0/24 without
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap reading, level 180x
+A5 kiwipete depth 1: 787 nodes with quiescence / 49 without = 16.06x
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap reading, level 16x
+A5 position-6 depth 1: 515 nodes with quiescence / 47 without = 10.96x
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 2, level 50x [deep, SEARCH_DEEP=1]
+A5 kiwipete depth 2: 2909 nodes with quiescence / 132 without = 22.04x
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 3, level 70x, and the oracle-checked answer 40 / e2a6 [deep, SEARCH_DEEP=1]
+A5 kiwipete depth 3: 8991 nodes with quiescence / 2265 without = 3.97x
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 2, level 42x [deep, SEARCH_DEEP=1]
+A5 position-6 depth 2: 3993 nodes with quiescence / 136 without = 29.36x
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 3, level 13x, and the oracle-checked answer 160 / c3d5 [deep, SEARCH_DEEP=1]
+A5 position-6 depth 3: 11939 nodes with quiescence / 2315 without = 5.16x
+
+ ✓ src/quiescence.test.ts (37 tests) 246ms
+
+ Test Files  1 passed (1)
+      Tests  37 passed (37)
+   Start at  06:08:44
+   Duration  339ms (transform 0ms, setup 0ms, import 38ms, tests 246ms, environment 0ms)
+

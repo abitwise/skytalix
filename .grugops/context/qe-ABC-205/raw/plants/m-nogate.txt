@@ -1,0 +1,26 @@
+
+ RUN  v4.1.12 <scratchpad>/qe205/trees/m-nogate
+
+ ❯ src/evaluate.king-mobility.test.ts (25 tests | 1 failed) 41ms
+     × A3b: queenless, g1 with the g-pawn on g4 drops strictly more than on base (the gate's own row) 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/evaluate.king-mobility.test.ts > ABC-205 A3 — no castled bonus without shelter > A3b: queenless, g1 with the g-pawn on g4 drops strictly more than on base (the gate's own row)
+AssertionError: expected 21 to be greater than 21
+ ❯ src/evaluate.king-mobility.test.ts:300:34
+    298|   it("A3b: queenless, g1 with the g-pawn on g4 drops strictly more tha…
+    299|     const [intact, broken] = A3B;
+    300|     expect(drop(intact, broken)).toBeGreaterThan(BASE_A3B_DROP);
+       |                                  ^
+    301|   });
+    302| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 24 passed (25)
+   Start at  05:50:24
+   Duration  130ms (transform 0ms, setup 0ms, import 36ms, tests 41ms, environment 0ms)
+

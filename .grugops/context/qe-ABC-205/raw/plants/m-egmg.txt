@@ -1,0 +1,26 @@
+
+ RUN  v4.1.12 <scratchpad>/qe205/trees/m-egmg
+
+ ❯ src/evaluate.king-mobility.test.ts (25 tests | 1 failed) 41ms
+     × in a pawn ending, a king on e4 scores strictly higher than on g1 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/evaluate.king-mobility.test.ts > ABC-205 A2 — the king square is tapered by phase > in a pawn ending, a king on e4 scores strictly higher than on g1
+AssertionError: expected -85 to be greater than -7
+ ❯ src/evaluate.king-mobility.test.ts:277:35
+    275| describe("ABC-205 A2 — the king square is tapered by phase", () => {
+    276|   it("in a pawn ending, a king on e4 scores strictly higher than on g1…
+    277|     expect(score(ENDING_KING_E4)).toBeGreaterThan(score(ENDING_KING_G1…
+       |                                   ^
+    278|   });
+    279|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 24 passed (25)
+   Start at  05:50:23
+   Duration  132ms (transform 0ms, setup 0ms, import 38ms, tests 41ms, environment 0ms)
+
