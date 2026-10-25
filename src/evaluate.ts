@@ -13,13 +13,7 @@
  * piece outweighs the whole positional term; a centralised knight beats a knight at home),
  * never totals — the one exception being the start position, which is exactly 0 by symmetry.
  *
- * `PIECE_VALUE` and the six piece-square tables are the values of Tomasz Michniewski's
- * "Simplified Evaluation Function", first posted to the Polish chess-programming list progszach
- * and published at <https://www.chessprogramming.org/Simplified_Evaluation_Function> under
- * CC BY-SA 3.0 (<https://creativecommons.org/licenses/by-sa/3.0/>). The values are unchanged.
- * The layout, the king value of 0 and all code are ours.
- * These values are not licensed under the Apache License, Version 2.0 that covers the rest of
- * this repository. They remain under CC BY-SA 3.0. See NOTICE.
+ * `PIECE_VALUE` and the six tables are this project's own, each made by the rule written above it.
  */
 
 import {
@@ -41,12 +35,16 @@ import {
  * Centipawn value per piece type, indexed by `pieceType` (PAWN=1 … KING=6). Index 0 is EMPTY
  * and is never read. The king is 0: both sides always have exactly one, so any value cancels,
  * and a finite one would only invite a search to "win" it.
+ *
+ * Rule: the classical scale of the chess primers, P 1, N 3, B 3, R 5, Q 9 pawns, times 100, plus
+ * 25 on each minor piece, so that one minor outweighs three pawns. Bishop and knight are equal:
+ * the bishop's wider reach is paid by mobility (ABC-083).
  */
 const PIECE_VALUE: readonly number[] = [
   0, // EMPTY
   100, // PAWN
-  320, // KNIGHT
-  330, // BISHOP
+  325, // KNIGHT
+  325, // BISHOP
   500, // ROOK
   900, // QUEEN
   0, // KING
@@ -57,78 +55,93 @@ const PIECE_VALUE: readonly number[] = [
  * layout below is the board as printed, a8 top-left. Black reads the same table with the rank
  * flipped, which is what makes the mirror exact and A1's symmetry property meaningful.
  *
- * Deliberately small and hand-written, as the ticket asks. No tapering, no endgame variants.
+ * Each table is written out from the rule in its comment, a formula over file, rank or reach.
+ * No tapering, no endgame variants. In the rules, `R` is the rank counted from the piece's own
+ * side (1 … 8), `e` is the file's steps from the edge (a/h 0, b/g 1, c/f 2, d/e 3), and `ring`
+ * is the square's steps from the board's edge, `min(e, R - 1, 8 - R)` (0 … 3).
  */
+// Rule: `2 × e × (R − 2)`, and 0 on ranks 1 and 8. A pawn gains as it advances, more on the
+// central files. Shelter is left to king safety (ABC-083).
 // biome-ignore format: an 8x8 board is only readable as 8 rows of 8
 const PAWN_TABLE: readonly number[] = [
     0,  0,  0,  0,  0,  0,  0,  0,
-   50, 50, 50, 50, 50, 50, 50, 50,
-   10, 10, 20, 30, 30, 20, 10, 10,
-    5,  5, 10, 25, 25, 10,  5,  5,
-    0,  0,  0, 20, 20,  0,  0,  0,
-    5, -5,-10,  0,  0,-10, -5,  5,
-    5, 10, 10,-20,-20, 10, 10,  5,
+    0, 10, 20, 30, 30, 20, 10,  0,
+    0,  8, 16, 24, 24, 16,  8,  0,
+    0,  6, 12, 18, 18, 12,  6,  0,
+    0,  4,  8, 12, 12,  8,  4,  0,
+    0,  2,  4,  6,  6,  4,  2,  0,
+    0,  0,  0,  0,  0,  0,  0,  0,
     0,  0,  0,  0,  0,  0,  0,  0,
 ];
 
+// Rule: `10 × n − 50`, where n is the number of knight moves from the square on an empty board
+// (2 … 8). A knight is worth its reach.
 // biome-ignore format: an 8x8 board is only readable as 8 rows of 8
 const KNIGHT_TABLE: readonly number[] = [
-  -50,-40,-30,-30,-30,-30,-40,-50,
-  -40,-20,  0,  0,  0,  0,-20,-40,
-  -30,  0, 10, 15, 15, 10,  0,-30,
-  -30,  5, 15, 20, 20, 15,  5,-30,
-  -30,  0, 15, 20, 20, 15,  0,-30,
-  -30,  5, 10, 15, 15, 10,  5,-30,
-  -40,-20,  0,  5,  5,  0,-20,-40,
-  -50,-40,-30,-30,-30,-30,-40,-50,
+  -30,-20,-10,-10,-10,-10,-20,-30,
+  -20,-10, 10, 10, 10, 10,-10,-20,
+  -10, 10, 30, 30, 30, 30, 10,-10,
+  -10, 10, 30, 30, 30, 30, 10,-10,
+  -10, 10, 30, 30, 30, 30, 10,-10,
+  -10, 10, 30, 30, 30, 30, 10,-10,
+  -20,-10, 10, 10, 10, 10,-10,-20,
+  -30,-20,-10,-10,-10,-10,-20,-30,
 ];
 
+// Rule: `5 × (n − 9)`, where n is the number of squares on the square's diagonals on an empty
+// board (7 … 13); this equals `10 × ring − 10`. A bishop is worth its reach.
 // biome-ignore format: an 8x8 board is only readable as 8 rows of 8
 const BISHOP_TABLE: readonly number[] = [
-  -20,-10,-10,-10,-10,-10,-10,-20,
+  -10,-10,-10,-10,-10,-10,-10,-10,
   -10,  0,  0,  0,  0,  0,  0,-10,
-  -10,  0,  5, 10, 10,  5,  0,-10,
-  -10,  5,  5, 10, 10,  5,  5,-10,
   -10,  0, 10, 10, 10, 10,  0,-10,
-  -10, 10, 10, 10, 10, 10, 10,-10,
-  -10,  5,  0,  0,  0,  0,  5,-10,
-  -20,-10,-10,-10,-10,-10,-10,-20,
+  -10,  0, 10, 20, 20, 10,  0,-10,
+  -10,  0, 10, 20, 20, 10,  0,-10,
+  -10,  0, 10, 10, 10, 10,  0,-10,
+  -10,  0,  0,  0,  0,  0,  0,-10,
+  -10,-10,-10,-10,-10,-10,-10,-10,
 ];
 
+// Rule: 20 on the seventh rank (`R = 7`), else 0. Open files are left to mobility, which counts
+// a rook's reach along them.
 // biome-ignore format: an 8x8 board is only readable as 8 rows of 8
 const ROOK_TABLE: readonly number[] = [
     0,  0,  0,  0,  0,  0,  0,  0,
-    5, 10, 10, 10, 10, 10, 10,  5,
-   -5,  0,  0,  0,  0,  0,  0, -5,
-   -5,  0,  0,  0,  0,  0,  0, -5,
-   -5,  0,  0,  0,  0,  0,  0, -5,
-   -5,  0,  0,  0,  0,  0,  0, -5,
-   -5,  0,  0,  0,  0,  0,  0, -5,
-    0,  0,  0,  5,  5,  0,  0,  0,
+   20, 20, 20, 20, 20, 20, 20, 20,
+    0,  0,  0,  0,  0,  0,  0,  0,
+    0,  0,  0,  0,  0,  0,  0,  0,
+    0,  0,  0,  0,  0,  0,  0,  0,
+    0,  0,  0,  0,  0,  0,  0,  0,
+    0,  0,  0,  0,  0,  0,  0,  0,
+    0,  0,  0,  0,  0,  0,  0,  0,
 ];
 
+// Rule: `5 × ring − 5`. A small pull to the centre.
 // biome-ignore format: an 8x8 board is only readable as 8 rows of 8
 const QUEEN_TABLE: readonly number[] = [
-  -20,-10,-10, -5, -5,-10,-10,-20,
-  -10,  0,  0,  0,  0,  0,  0,-10,
-  -10,  0,  5,  5,  5,  5,  0,-10,
+   -5, -5, -5, -5, -5, -5, -5, -5,
+   -5,  0,  0,  0,  0,  0,  0, -5,
    -5,  0,  5,  5,  5,  5,  0, -5,
-    0,  0,  5,  5,  5,  5,  0, -5,
-  -10,  5,  5,  5,  5,  5,  0,-10,
-  -10,  0,  5,  0,  0,  0,  0,-10,
-  -20,-10,-10, -5, -5,-10,-10,-20,
+   -5,  0,  5, 10, 10,  5,  0, -5,
+   -5,  0,  5, 10, 10,  5,  0, -5,
+   -5,  0,  5,  5,  5,  5,  0, -5,
+   -5,  0,  0,  0,  0,  0,  0, -5,
+   -5, -5, -5, -5, -5, -5, -5, -5,
 ];
 
+// Rule: `max(−50, −10 × d − 10 × (R − 1))`, where d is the file distance to the nearer of the b-
+// and g-files. The castled squares b1 and g1 are home (0); each file toward the centre and each
+// rank up costs 10. Untapered.
 // biome-ignore format: an 8x8 board is only readable as 8 rows of 8
 const KING_TABLE: readonly number[] = [
-  -30,-40,-40,-50,-50,-40,-40,-30,
-  -30,-40,-40,-50,-50,-40,-40,-30,
-  -30,-40,-40,-50,-50,-40,-40,-30,
-  -30,-40,-40,-50,-50,-40,-40,-30,
-  -20,-30,-30,-40,-40,-30,-30,-20,
-  -10,-20,-20,-20,-20,-20,-20,-10,
-   20, 20,  0,  0,  0,  0, 20, 20,
-   20, 30, 10,  0,  0, 10, 30, 20,
+  -50,-50,-50,-50,-50,-50,-50,-50,
+  -50,-50,-50,-50,-50,-50,-50,-50,
+  -50,-50,-50,-50,-50,-50,-50,-50,
+  -50,-40,-50,-50,-50,-50,-40,-50,
+  -40,-30,-40,-50,-50,-40,-30,-40,
+  -30,-20,-30,-40,-40,-30,-20,-30,
+  -20,-10,-20,-30,-30,-20,-10,-20,
+  -10,  0,-10,-20,-20,-10,  0,-10,
 ];
 
 /** Indexed by `pieceType`, exactly like PIECE_VALUE. Index 0 is EMPTY and is never read. */
@@ -141,6 +154,21 @@ const PIECE_SQUARE_TABLE: readonly (readonly number[])[] = [
   QUEEN_TABLE,
   KING_TABLE,
 ];
+
+/**
+ * TEST-ONLY. The seven value arrays by name, so `ABC-215` `A2` can rebuild each one from the rule
+ * in its comment and compare every entry. Nothing in production reads it (the
+ * `evaluateWithoutMobility` precedent).
+ */
+export const VALUE_TABLES_FOR_TEST = {
+  PIECE_VALUE,
+  PAWN_TABLE,
+  KNIGHT_TABLE,
+  BISHOP_TABLE,
+  ROOK_TABLE,
+  QUEEN_TABLE,
+  KING_TABLE,
+} as const;
 
 /**
  * ABC-082's three pawn terms, in centipawns. The epic names exactly these three; backward pawns,

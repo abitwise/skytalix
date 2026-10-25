@@ -321,8 +321,16 @@ describe("A2 — a budget far below one iteration's cost still returns a move, a
  * after 1. g4 Nf6, `searchWithoutReductions` reads e2e3 at depths 1 and 2 (46 / 138 nodes) and
  * g4g5 at depth 3 (2 048), and only budget 3 on a 1 ms tick completes depth 2 and aborts inside
  * depth 3.
+ *
+ * RE-FIXTURED at `ABC-215` (the evaluation values made by rule; `ADR-0028` decision 2): after
+ * 1. g4 Nf6 the best move is g4g5 at depth 2 already (−64), and budget 3 completes depth 3 (−2),
+ * so the premise was gone. Same opening, same budget, same moves, found by `ABC-083`'s scan
+ * (`probe/a3scan.ts` above) re-run on base and build over 6 731 positions: after 1. g4 d6,
+ * `searchWithoutReductions` reads e2e3 at depths 1 and 2 (53 / 212 nodes) and g4g5 at depth 3
+ * (1 890), and only budget 3 on a 1 ms tick completes depth 2 (1 076 nodes) and aborts inside
+ * depth 3. On base that position read e2e4 at all three depths, and budget 3 completed depth 3.
  */
-const A3_FEN = "rnbqkb1r/pppppppp/5n2/8/6P1/8/PPPPPP1P/RNBQKBNR w KQkq - 1 2";
+const A3_FEN = "rnbqkbnr/ppp1pppp/3p4/8/6P1/8/PPPPPP1P/RNBQKBNR w KQkq - 0 2";
 
 describe("A3 — an aborted iteration's move is discarded, not returned", () => {
   const position = () => parseFen(A3_FEN);

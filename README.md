@@ -82,7 +82,6 @@ The full command list is in [AGENTS.md](AGENTS.md).
 ## Licence
 
 skytalix is licensed under Apache-2.0; see [LICENSE](LICENSE). Some parts are under other
-terms, and [NOTICE](NOTICE) lists them: the evaluation values in `src/evaluate.ts`
-(CC BY-SA 3.0) and four grugops kit files (MIT).
+terms, and [NOTICE](NOTICE) lists them: four grugops kit files (MIT).
 
 The title's letters use FIGlet's standard font.

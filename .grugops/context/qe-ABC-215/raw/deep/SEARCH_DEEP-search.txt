@@ -1,0 +1,13 @@
+
+ RUN  v4.1.12 <worktree>
+
+ ✓ src/search.test.ts (57 tests) 3809ms
+     ✓ kiwipete at depth 2 [deep, SEARCH_DEEP=1]  1475ms
+     ✓ position-6 at depth 2 [deep, SEARCH_DEEP=1]  352ms
+     ✓ leaves every perft root byte-identical at depth 2 and depth 3 [deep, SEARCH_DEEP=1]  550ms
+
+ Test Files  1 passed (1)
+      Tests  57 passed (57)
+   Start at  07:38:36
+   Duration  3.90s (transform 0ms, setup 0ms, import 37ms, tests 3.81s, environment 0ms)
+

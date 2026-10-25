@@ -355,25 +355,33 @@ describe("Scope — the engine orders its root exactly as search() does", () => 
    * `.grugops/context/ticket-to-pr-ABC-083/probe/tiescan.ts` (42 ties in 6 731 positions):
    * position-6 after 1. Rfc1 Bxe3, white to move. Bxe3 and Qxe3 both take the bishop and tie at
    * 373 at depth 1. Generation order tries Qxe3 first; MVV-LVA tries the bishop first.
+   *
+   * RE-FOUND at `ABC-215` (the evaluation values made by rule; `ADR-0028` decision 2): Bxe3 and
+   * Qxe3 no longer tie (both orders now read g5e3 at 372), so that position stopped biting. Same
+   * theme, found by `probe/tiescan.ts` above re-run on base and build (55 ties in 6 731 positions;
+   * three of them are two pieces taking the same piece): position-4 after 1. Bc5 Nb3, white to
+   * move. Bxb3 and Qxb3 both take the knight and tie at −221 at depth 1. Generation order tries
+   * Qxb3 first; MVV-LVA tries the bishop first. On base they did not tie (both orders read Qxb3 at
+   * −217). The engine row below moves with the fixture: its depth-1 move is search()'s, a4b3.
    */
-  const TIE_FEN = "r4rk1/1pp1qppp/p1np1n2/4p1B1/2B1P1b1/P1NPbN2/1PP1QPPP/R1R3K1 w - - 2 11";
+  const TIE_FEN = "r3k2r/Pppp1ppp/1b3nbN/1PB5/B1P1P3/qn3N2/Pp1P2PP/R2Q1RK1 w kq - 2 2";
 
   it("the fixture bites: ordered and unordered depth-1 searches break the tie differently", () => {
     const ordered = search(parseFen(TIE_FEN), 1);
     const unordered = searchWithoutOrdering(parseFen(TIE_FEN), 1);
-    expect(label(ordered.move as Move)).toBe("g5e3");
-    expect(label(unordered.move as Move)).toBe("e2e3");
+    expect(label(ordered.move as Move)).toBe("a4b3");
+    expect(label(unordered.move as Move)).toBe("d1b3");
     expect(ordered.score).toBe(unordered.score);
   });
 
-  it("chooseMove's completed depth-1 iteration returns search()'s move, g5e3", () => {
+  it("chooseMove's completed depth-1 iteration returns search()'s move, a4b3", () => {
     let ticks = 0;
     const choice = chooseMove(parseFen(TIE_FEN), { budgetMs: 1, now: () => ticks++ }) as {
       move: Move;
       depth: number;
     };
     expect(choice.depth).toBe(1);
-    expect(label(choice.move)).toBe("g5e3");
+    expect(label(choice.move)).toBe("a4b3");
   });
 });
 
@@ -433,11 +441,15 @@ describe("A4 — each heuristic's node count, and the delete rule", () => {
    * RE-MEASURED at `ABC-083` (king safety and mobility, the same reason): 9 319 / 3 286 / 2 429
    * became 8 887 / 4 419 / 3 871, read by `.grugops/context/ticket-to-pr-ABC-083/probe/rows.ts`
    * on base and build. The killers now earn 12% here, not 26%.
+   *
+   * RE-PINNED at `ABC-215` (the evaluation values made by rule, the same reason): 8 887 / 4 419 /
+   * 3 871 became 10 371 / 3 266 / 3 177, read by a node script on base and build. `A3`'s standing
+   * guard above reads 3 177 / 10 371 = 30.63%, under its 65% level.
    */
-  it("position-6 at depth 2: none 8 887, MVV-LVA 4 419, + killers 3 871", () => {
-    expect(none("position-6", 2).nodes).toBe(8_887);
-    expect(mvvLva("position-6", 2).nodes).toBe(4_419);
-    expect(full("position-6", 2).nodes).toBe(3_871);
+  it("position-6 at depth 2: none 10 371, MVV-LVA 3 266, + killers 3 177", () => {
+    expect(none("position-6", 2).nodes).toBe(10_371);
+    expect(mvvLva("position-6", 2).nodes).toBe(3_266);
+    expect(full("position-6", 2).nodes).toBe(3_177);
   });
 
   /**
@@ -452,10 +464,13 @@ describe("A4 — each heuristic's node count, and the delete rule", () => {
    * ledger at `ABC-081` re-ran the dropped-term mutant against this pin.
    *
    * RE-MEASURED at `ABC-083`: 262 (`probe/rows.ts`, base 261). The mobility term moves one leaf.
+   *
+   * RE-PINNED at `ABC-215` (the evaluation values made by rule): 232 (base 262). `M13`, the dropped
+   * promotion term, re-planted on that build, reads 252, so the pin still bites.
    */
-  it("the promotion-capture fixture at depth 3 visits 262 nodes (ABC-079 QE G4)", () => {
+  it("the promotion-capture fixture at depth 3 visits 232 nodes (ABC-079 QE G4)", () => {
     // The pre-`ABC-121` search since `ABC-121` (`ADR-0026` decision 4); the pin is unchanged.
-    expect(searchWithoutPvsOrReductions(parseFen(PROMOTION_CAPTURE_FEN), 3).nodes).toBe(262);
+    expect(searchWithoutPvsOrReductions(parseFen(PROMOTION_CAPTURE_FEN), 3).nodes).toBe(232);
   });
 
   if (RUN_DEEP) {
@@ -634,8 +649,11 @@ describe("G1 — chooseMove records a killer only on a beta cutoff", () => {
    *
    * RE-MEASURED at `ABC-083` (king safety and mobility): depth 3 in 354 nodes (`probe/rows.ts`,
    * base 360), and `N3`, re-planted on that build, reads 350 (`probe/mutants.mjs`).
+   *
+   * RE-PINNED at `ABC-215` (the evaluation values made by rule): depth 3 in 342 nodes (base 354),
+   * and `N3`, re-planted on that build, reads 347 — the pin still tells the two apart.
    */
-  it("position-3 at 3 injected ticks: depth 3 in exactly 354 nodes", () => {
+  it("position-3 at 3 injected ticks: depth 3 in exactly 342 nodes", () => {
     // The pre-`ABC-121` engine since `ABC-121` (`ADR-0026` decision 4); the pin is unchanged.
     let ticks = 0;
     const choice = chooseMoveWithoutPvsOrReductions(parseFen(fenOf("position-3")), {
@@ -643,6 +661,6 @@ describe("G1 — chooseMove records a killer only on a beta cutoff", () => {
       now: () => ticks++,
     }) as { depth: number; nodes: number };
     expect(choice.depth).toBe(3);
-    expect(choice.nodes).toBe(354);
+    expect(choice.nodes).toBe(342);
   });
 });

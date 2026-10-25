@@ -1,0 +1,29 @@
+
+ RUN  v4.1.12 <worktree>
+
+stdout | src/engine.test.ts > A1 — 30 positions at the default budget, on a real clock [deep, ENGINE_DEEP=1] > returns within the 5 s hard ceiling every time, and reports the worst case
+A1 worst case: position-4/d2d4 3002 ms at completed depth 8; over 3 s: 16/30
+
+stdout | src/engine.test.ts > NFR-005 — depth-in-budget, MEASURED and reported [deep, ENGINE_DEEP=1] > records the completed depth on kiwipete and position-6 at the 3 s budget
+NFR-005 kiwipete: completed depth 7, 1322861 nodes, 3000 ms
+NFR-005 position-6: completed depth 8, 1488482 nodes, 3002 ms
+
+stdout | src/engine.test.ts > A2/A7 on the real clock [deep, ENGINE_DEEP=1] > A2 — a 50 ms budget returns inside 100 ms in the middlegame position
+A2 real clock: 50 ms at completed depth 3
+
+stdout | src/engine.test.ts > ABC-086 A2 — the shipped wall clock: legal, depth reported [deep, ENGINE_DEEP=1] > returns a legal move in each of 10 runs at the default budget, and reports each depth
+ABC-086 A2 kiwipete x10 on the wall clock: e2a6@d7/3000ms e2a6@d7/3002ms e2a6@d7/3001ms e2a6@d7/3000ms e2a6@d7/3001ms e2a6@d7/3000ms e2a6@d7/3002ms e2a6@d7/3002ms e2a6@d7/3000ms e2a6@d7/3002ms
+
+ ✓ src/engine.test.ts (60 tests) 141242ms
+     ✓ returns within the 5 s hard ceiling every time, and reports the worst case  90021ms
+     ✓ records the completed depth on kiwipete and position-6 at the 3 s budget  6003ms
+     ✓ agrees with search() on move and score over the six benchmark roots and their children  1699ms
+     ✓ completes root depth >= 4 on at least 15 of the 30 positions  1137ms
+     ✓ chooses the identical move in all 10 runs of every position — 300/300  11387ms
+     ✓ returns a legal move in each of 10 runs at the default budget, and reports each depth  30012ms
+
+ Test Files  1 passed (1)
+      Tests  60 passed (60)
+   Start at  07:40:24
+   Duration  141.49s (transform 0ms, setup 0ms, import 189ms, tests 141.24s, environment 0ms)
+

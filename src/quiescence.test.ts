@@ -399,13 +399,15 @@ describe("A4 — a position with no capture anywhere near the leaves scores exac
   });
 
   if (RUN_DEEP) {
-    it("position-6 at depth 3 reproduces the recorded 2 355 nodes and c3d5 [deep, SEARCH_DEEP=1]", () => {
+    it("position-6 at depth 3 reproduces the recorded 2 398 nodes and c3d5 [deep, SEARCH_DEEP=1]", () => {
       // 14 565 unordered; 2 273 ordered at ABC-080, the same move.
       // RE-MEASURED at ABC-083 (king safety and mobility move the bare leaf): 2 355, the same
       // move (`.grugops/context/ticket-to-pr-ABC-083/probe/rows.ts`, DEEP=1; base 2 273).
+      // RE-PINNED at ABC-215 (the evaluation values made by rule move the bare leaf): 2 398, the
+      // same move (a node script on base and build; base 2 355).
       const result = searchWithoutQuiescence(parseFen(fenOf("position-6")), 3);
 
-      expect(result.nodes).toBe(2_355);
+      expect(result.nodes).toBe(2_398);
       expect(label(result.move)).toBe("c3d5");
     }, 30_000);
   }
@@ -456,10 +458,15 @@ describe("A5 — the node-count multiplier on kiwipete and position-6 is reporte
    * node on the build, equals `searchWithoutPvsOrReductions` AND `search()` on score and move on
    * both boards — kiwipete 70 / e2a6 (was 55; 398 s), position-6 84 / c3d5 (was 55; 63 s)
    * (`.grugops/context/ticket-to-pr-ABC-083/probe/oracle-branch.jsonl`). The moves did not change.
+   *
+   * RE-PINNED at `ABC-215` (the evaluation values made by rule) by the same rule: the oracle, re-run
+   * in plain node on the build, equals `searchWithoutPvsOrReductions` AND `search()` on score and
+   * move on both boards — kiwipete 8 / e2a6 (was 70; 68 705 431 oracle nodes), position-6 85 / c3d5
+   * (was 84; 12 929 308). The moves did not change.
    */
   const ORACLE_AT_DEPTH_3: Readonly<Record<string, { score: number; move: string }>> = {
-    kiwipete: { score: 70, move: "e2a6" },
-    "position-6": { score: 84, move: "c3d5" },
+    kiwipete: { score: 8, move: "e2a6" },
+    "position-6": { score: 85, move: "c3d5" },
   };
 
   /**

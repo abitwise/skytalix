@@ -1,0 +1,30 @@
+
+ RUN  v4.1.12 <worktree>
+
+stdout | src/search.ordering.test.ts > A3 — ordered search visits a small fraction of the unordered nodes > kiwipete at depth 4: <= 4% of the unordered nodes [deep, SEARCH_DEEP=1]
+ABC-080 A3 kiwipete d4: 23802 / 1404376 = 1.69%
+
+stdout | src/search.ordering.test.ts > A3 — ordered search visits a small fraction of the unordered nodes > position-6 at depth 4: <= 4% of the unordered nodes [deep, SEARCH_DEEP=1]
+ABC-080 A3 position-6 d4: 31721 / 1916580 = 1.66%
+
+stdout | src/search.ordering.test.ts > A4 — each heuristic's node count, and the delete rule > kiwipete at depths 4 and 5, per configuration; the delete rule on depth 5 [deep, SEARCH_DEEP=1]
+ABC-080 A4 kiwipete d4: none 1404376 / MVV-LVA 27725 / + killers 27658 / + hash move (ABC-081's table) 23802
+ABC-080 A4 kiwipete d5: none (not run in-suite, see the context notes) / MVV-LVA 210765 / + killers 197517 / + hash move (ABC-081's table) 163698
+
+stdout | src/search.ordering.test.ts > A4 — each heuristic's node count, and the delete rule > position-6 at depths 4 and 5, per configuration; the delete rule on depth 5 [deep, SEARCH_DEEP=1]
+ABC-080 A4 position-6 d4: none 1916580 / MVV-LVA 39026 / + killers 37961 / + hash move (ABC-081's table) 31721
+ABC-080 A4 position-6 d5: none (not run in-suite, see the context notes) / MVV-LVA 182388 / + killers 151210 / + hash move (ABC-081's table) 124362
+
+ ✓ src/search.ordering.test.ts (38 tests) 10347ms
+     ✓ kiwipete at depth 3 [deep, SEARCH_DEEP=1]  713ms
+     ✓ kiwipete at depth 4 [deep, SEARCH_DEEP=1]  2325ms
+     ✓ position-5 at depth 4 [deep, SEARCH_DEEP=1]  1430ms
+     ✓ position-6 at depth 4 [deep, SEARCH_DEEP=1]  3057ms
+     ✓ kiwipete at depths 4 and 5, per configuration; the delete rule on depth 5 [deep, SEARCH_DEEP=1]  1146ms
+     ✓ position-6 at depths 4 and 5, per configuration; the delete rule on depth 5 [deep, SEARCH_DEEP=1]  936ms
+
+ Test Files  1 passed (1)
+      Tests  38 passed (38)
+   Start at  07:38:40
+   Duration  10.47s (transform 0ms, setup 0ms, import 70ms, tests 10.35s, environment 0ms)
+

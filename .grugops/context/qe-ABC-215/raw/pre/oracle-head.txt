@@ -1,0 +1,6 @@
+{"pos":"position-6","oracle":[85,"c3d5",12929308],"pre121":[85,"c3d5"],"search":[85,"c3d5"],"equal":true}
+{"pos":"kiwipete","oracle":[8,"e2a6",68705431],"pre121":[8,"e2a6"],"search":[8,"e2a6"],"equal":true}
+
+real	1m59.216s
+user	1m58.961s
+sys	0m0.376s

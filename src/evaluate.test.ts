@@ -27,16 +27,23 @@ import {
   PERFT_POSITIONS,
   START_FEN,
 } from "./evaluate.mirror-corpus.ts";
-import { evaluate } from "./evaluate.ts";
+import { evaluate, VALUE_TABLES_FOR_TEST } from "./evaluate.ts";
 import { parseFen } from "./fen.ts";
 import { legalMoves } from "./legal.ts";
 import {
+  BISHOP,
   CASTLE_BK,
   CASTLE_BQ,
   CASTLE_WK,
   CASTLE_WQ,
+  EMPTY,
+  KING,
+  KNIGHT,
   NO_SQUARE,
+  PAWN,
   type Position,
+  QUEEN,
+  ROOK,
   squareAt,
 } from "./position.ts";
 
@@ -163,5 +170,172 @@ describe("ABC-076 A5 — purity", () => {
     expect(position.epSquare).toBe(before.epSquare);
     expect(position.halfmoveClock).toBe(before.halfmoveClock);
     expect(position.fullmoveNumber).toBe(before.fullmoveNumber);
+  });
+});
+
+/**
+ * ABC-215 A2 — every value array is made by the rule in its comment.
+ *
+ * Each rule is implemented here a second time, independently: knight steps and diagonal squares
+ * are COUNTED on an empty 8x8 grid, not copied from the comment's ranges. The rebuild is compared
+ * with the array over all 64 entries (every `pieceType` index for `PIECE_VALUE`). One cell moved
+ * by 1 in any table reddens its row.
+ *
+ * Table index `i` is rank-8-first, as the file lays the tables out: `i = 0` is a8, `i = 63` is h1.
+ * `R` is the rank from WHITE's side (1 … 8), `e` the file's steps from the edge (a/h 0 … d/e 3),
+ * `ring` the square's steps from the board's edge (0 … 3).
+ */
+describe("ABC-215 A2 — the value arrays are rebuilt from their stated rules", () => {
+  const R = (i: number): number => 8 - Math.floor(i / 8);
+  const col = (i: number): number => i % 8;
+  const e = (i: number): number => Math.min(col(i), 7 - col(i));
+  const ring = (i: number): number => Math.min(e(i), Math.min(R(i) - 1, 8 - R(i)));
+  const onBoard = (f: number, r: number): boolean => f >= 0 && f < 8 && r >= 1 && r <= 8;
+  // `+ 0` turns a rule's `-0` (the king's home squares: `-10 × 0 - 10 × 0`) into the literal's `0`.
+  const byRule = (rule: (i: number) => number): number[] =>
+    Array.from({ length: 64 }, (_, i) => rule(i) + 0);
+
+  const knightMoves = (i: number): number => {
+    const steps = [
+      [1, 2],
+      [2, 1],
+      [2, -1],
+      [1, -2],
+      [-1, -2],
+      [-2, -1],
+      [-2, 1],
+      [-1, 2],
+    ] as const;
+    return steps.filter(([df, dr]) => onBoard(col(i) + df, R(i) + dr)).length;
+  };
+  const diagonalSquares = (i: number): number => {
+    let n = 0;
+    for (const [df, dr] of [
+      [1, 1],
+      [1, -1],
+      [-1, 1],
+      [-1, -1],
+    ] as const) {
+      for (let k = 1; onBoard(col(i) + k * df, R(i) + k * dr); k++) n++;
+    }
+    return n;
+  };
+
+  const classicalPawns: Record<number, number> = {
+    [EMPTY]: 0,
+    [PAWN]: 1,
+    [KNIGHT]: 3,
+    [BISHOP]: 3,
+    [ROOK]: 5,
+    [QUEEN]: 9,
+    [KING]: 0,
+  };
+  const rebuilt = {
+    PIECE_VALUE: [EMPTY, PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING].map(
+      (type) =>
+        100 * (classicalPawns[type] as number) + (type === KNIGHT || type === BISHOP ? 25 : 0),
+    ),
+    PAWN_TABLE: byRule((i) => (R(i) === 1 || R(i) === 8 ? 0 : 2 * e(i) * (R(i) - 2))),
+    KNIGHT_TABLE: byRule((i) => 10 * knightMoves(i) - 50),
+    BISHOP_TABLE: byRule((i) => 5 * (diagonalSquares(i) - 9)),
+    ROOK_TABLE: byRule((i) => (R(i) === 7 ? 20 : 0)),
+    QUEEN_TABLE: byRule((i) => 5 * ring(i) - 5),
+    KING_TABLE: byRule((i) => {
+      const d = Math.min(Math.abs(col(i) - 1), Math.abs(col(i) - 6));
+      return Math.max(-50, -10 * d - 10 * (R(i) - 1));
+    }),
+  };
+
+  // The values at this ticket's base (`ec9331e2`), kept only to show each array moved.
+  // biome-ignore format: an 8x8 board is only readable as 8 rows of 8
+  const BASE: Record<string, readonly number[]> = {
+    PIECE_VALUE: [0, 100, 320, 330, 500, 900, 0],
+    PAWN_TABLE: [
+        0,  0,  0,  0,  0,  0,  0,  0,
+       50, 50, 50, 50, 50, 50, 50, 50,
+       10, 10, 20, 30, 30, 20, 10, 10,
+        5,  5, 10, 25, 25, 10,  5,  5,
+        0,  0,  0, 20, 20,  0,  0,  0,
+        5, -5,-10,  0,  0,-10, -5,  5,
+        5, 10, 10,-20,-20, 10, 10,  5,
+        0,  0,  0,  0,  0,  0,  0,  0,
+    ],
+    KNIGHT_TABLE: [
+      -50,-40,-30,-30,-30,-30,-40,-50,
+      -40,-20,  0,  0,  0,  0,-20,-40,
+      -30,  0, 10, 15, 15, 10,  0,-30,
+      -30,  5, 15, 20, 20, 15,  5,-30,
+      -30,  0, 15, 20, 20, 15,  0,-30,
+      -30,  5, 10, 15, 15, 10,  5,-30,
+      -40,-20,  0,  5,  5,  0,-20,-40,
+      -50,-40,-30,-30,-30,-30,-40,-50,
+    ],
+    BISHOP_TABLE: [
+      -20,-10,-10,-10,-10,-10,-10,-20,
+      -10,  0,  0,  0,  0,  0,  0,-10,
+      -10,  0,  5, 10, 10,  5,  0,-10,
+      -10,  5,  5, 10, 10,  5,  5,-10,
+      -10,  0, 10, 10, 10, 10,  0,-10,
+      -10, 10, 10, 10, 10, 10, 10,-10,
+      -10,  5,  0,  0,  0,  0,  5,-10,
+      -20,-10,-10,-10,-10,-10,-10,-20,
+    ],
+    ROOK_TABLE: [
+        0,  0,  0,  0,  0,  0,  0,  0,
+        5, 10, 10, 10, 10, 10, 10,  5,
+       -5,  0,  0,  0,  0,  0,  0, -5,
+       -5,  0,  0,  0,  0,  0,  0, -5,
+       -5,  0,  0,  0,  0,  0,  0, -5,
+       -5,  0,  0,  0,  0,  0,  0, -5,
+       -5,  0,  0,  0,  0,  0,  0, -5,
+        0,  0,  0,  5,  5,  0,  0,  0,
+    ],
+    QUEEN_TABLE: [
+      -20,-10,-10, -5, -5,-10,-10,-20,
+      -10,  0,  0,  0,  0,  0,  0,-10,
+      -10,  0,  5,  5,  5,  5,  0,-10,
+       -5,  0,  5,  5,  5,  5,  0, -5,
+        0,  0,  5,  5,  5,  5,  0, -5,
+      -10,  5,  5,  5,  5,  5,  0,-10,
+      -10,  0,  5,  0,  0,  0,  0,-10,
+      -20,-10,-10, -5, -5,-10,-10,-20,
+    ],
+    KING_TABLE: [
+      -30,-40,-40,-50,-50,-40,-40,-30,
+      -30,-40,-40,-50,-50,-40,-40,-30,
+      -30,-40,-40,-50,-50,-40,-40,-30,
+      -30,-40,-40,-50,-50,-40,-40,-30,
+      -20,-30,-30,-40,-40,-30,-30,-20,
+      -10,-20,-20,-20,-20,-20,-20,-10,
+       20, 20,  0,  0,  0,  0, 20, 20,
+       20, 30, 10,  0,  0, 10, 30, 20,
+    ],
+  };
+
+  const NAMES = [
+    "PIECE_VALUE",
+    "PAWN_TABLE",
+    "KNIGHT_TABLE",
+    "BISHOP_TABLE",
+    "ROOK_TABLE",
+    "QUEEN_TABLE",
+    "KING_TABLE",
+  ] as const;
+
+  it("names exactly the seven arrays the carve-out named", () => {
+    expect(Object.keys(VALUE_TABLES_FOR_TEST).sort()).toEqual([...NAMES].sort());
+  });
+
+  it.each(NAMES)("%s equals its rule over every entry", (name) => {
+    const actual = Array.from(VALUE_TABLES_FOR_TEST[name]);
+    expect(actual).toHaveLength(name === "PIECE_VALUE" ? 7 : 64);
+    expect(actual).toEqual(rebuilt[name]);
+  });
+
+  it.each(NAMES)("%s differs from the base values in at least one entry", (name) => {
+    const actual = VALUE_TABLES_FOR_TEST[name];
+    const base = BASE[name] as readonly number[];
+    expect(base).toHaveLength(actual.length);
+    expect(actual.some((value, i) => value !== base[i])).toBe(true);
   });
 });

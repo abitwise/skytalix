@@ -1,0 +1,4 @@
+base start=12:09:53 load1=2.83 rc=0  Tests 2075 passed (2075)  Duration 6.92s (transform 0ms, setup 0ms, import 6.23s, tests 4.75s, environment 3ms)  real 7.35
+head start=12:10:01 load1=3.40 rc=0  Tests 2090 passed (2090)  Duration 6.95s (transform 0ms, setup 0ms, import 6.19s, tests 4.78s, environment 3ms)  real 7.32
+head start=12:10:08 load1=3.60 rc=0  Tests 2090 passed (2090)  Duration 6.83s (transform 0ms, setup 0ms, import 6.22s, tests 4.61s, environment 3ms)  real 7.20
+base start=12:10:15 load1=4.15 rc=0  Tests 2075 passed (2075)  Duration 6.98s (transform 0ms, setup 0ms, import 6.26s, tests 4.83s, environment 3ms)  real 7.34
