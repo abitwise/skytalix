@@ -1,8 +1,8 @@
 ---
 id: ABC-205
 title: "King safety bites while the enemy queen is on, and the king table is tapered, so a centre king in an opening position costs what it should"
-status: in-development
-column: In Development
+status: dropped
+column: Done
 size: M
 priority: P2
 epic: EPIC-008
@@ -12,6 +12,10 @@ adr: "ADR-0031 addendum: route the text to the owner when it lands (…7feb0553)
 
 # ABC-205: king safety that bites while queens are on, and a tapered king table
 
+> **CLOSED UNMERGED 2026-10-25 under ship rule S1. Not delivered.** BA/PM, task `bapm-close-ABC-205`. `G6`'s
+> "≥ base" missed on `position-6`, D was not run and is not owed, and the forms stay on `grugops/ABC-205-final`.
+> See § Close.
+>
 > **Cut 2026-10-23 by BA/PM** (task `bapm-cut-engine-strength`, records only, at `main` `55a8f4ef`). Proposal 1 of
 > `…f1771bb3`; owner word `…7feb0553`.
 >
@@ -471,3 +475,34 @@ run** (§ How `S1` is proven: gates first, then D).
 1 451 759 nodes and head 1 522 790 (+4.9 %). Taper only reads 1 498 231 (+3.2 %), and scale only 1 450 539 (−0.1 %).
 In 3 s base searched 1.44–1.46 M nodes, so it sits on its depth-8 edge (3 of 5 runs). Head searched 1.41–1.43 M nodes
 and never reached 8.
+
+## Close
+
+> **BA/PM, 2026-10-25** (task `bapm-close-ABC-205`, records only, at `main` `bb9fd7ef`). Inputs: QE `…234d9814`,
+> Architect/Design `…912bcb0d` and `…00c6a18d`, and the Orchestrator's delivery call `…154f2ced` (`…5aaf7cec`; the
+> owner is told and his veto is open). Notes: `.grugops/context/bapm-close-ABC-205/notes/`.
+
+**Closed unmerged under S1.** S1 says that anything other than GAIN is NOT MET, and that BA/PM then "closes or re-cuts
+it". This ticket is closed.
+
+- **Why.** `A5` failed on `G6` only. On `position-6`, head's median depth was 7 and base's was 8 (base read 8 7 8 7 8).
+  The page grades a `G6` miss as a STOP, not a re-level. Under `…4c3f7639` that one reading is final.
+- **The one re-tune round S1 allows is not taken.** None of the 11 counted variants is predicted to clear "≥ base"
+  (`…00c6a18d`). A new reading would also need the owner's word beyond `…4c3f7639`.
+- **D (`A6`) was not run, and it is not owed.** No build ships, so there is nothing to measure. No owner exception is
+  asked for.
+- **What is kept.**
+  - The branch `grugops/ABC-205-final` at `b5d5cea5`: the forms, the relation rows and the re-pins. It is not merged and
+    not deleted.
+  - The failed attempt `…a44d9079`.
+  - The `ADR-0031` addendum. Architect/Design records its status as "accepted, not shipped" in its own hop.
+- **No revert of `7c9cd9b9` is owed.** `main`'s `src/`, `data/` and `tools/` equal base `d5690c5c`.
+- **The re-open path.**
+  - **The owner vetoes the close.** The page goes back to Blocked at In Review, and Architect/Design options 1 or 3
+    (`…912bcb0d`) apply on his word.
+  - **A later re-cut.** BA/PM cuts a new ticket from `b5d5cea5`. It owes its own `G6` and D on its own base, with the
+    frozen-clock pre-check first (as in `ABC-207` and `ABC-215`). It also owes whatever owner words option 1 names:
+    the `ADR-0031` `A2`/`A3` text and new real-clock runs.
+  - `b5d5cea5` itself is not re-read as it is (`…a44d9079`).
+- **Not touched here:** `NFR-005`, and `EPIC-008`'s `G6` text. The owner's forward question on "≥ base" (`QE-205-c`)
+  is open.

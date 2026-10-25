@@ -1,8 +1,8 @@
 ---
 id: ABC-215
 title: "The evaluation's material values and piece-square tables are our own, each made by a stated rule, and the CC BY-SA 3.0 carve-out leaves `NOTICE` and the `src/evaluate.ts` header"
-status: backlog
-column: Backlog
+status: ready
+column: Ready
 size: L
 priority: P2
 epic: EPIC-008
@@ -36,6 +36,9 @@ adr: "none expected: values change, and ADR-0031's form does not. The licence AD
 1. **Every array that `ABC-214`'s `NOTICE` carve-out names at this ticket's base is replaced** by values this project
    makes. At `d4d49c5a` that is the seven names above. If `ABC-205` merges as built (`4f650a45`), it is still those
    seven. `KING_TABLE` stays its middlegame half, and `KING_ENDGAME_TABLE` is already ours.
+   *2026-10-25 (BA/PM, `bapm-close-ABC-205`):* `ABC-205` was closed unmerged, so it never merges as built. At
+   `main` `bb9fd7ef`, `NOTICE` names the same seven arrays, and `KING_TABLE` is the whole king table, untapered.
+   `KING_ENDGAME_TABLE` is not on `main`. The list is still exactly what `A1` reads at `<base>`.
 2. **Each replaced array comes from a rule written in its own comment.** For a table, the rule is a formula over file,
    rank or distance. For `PIECE_VALUE`, it is a stated scale and its source. The rules and values are the design's
    (Architect/Design first, then the Engineer). The design does not start from the Michniewski numbers.
@@ -54,6 +57,9 @@ adr: "none expected: values change, and ADR-0031's form does not. The licence AD
   Michniewski's.
 - The constants of `ABC-082` (pawn structure), `ABC-083` and `ABC-205` (king safety, mobility, `KING_ENDGAME_TABLE`,
   phase). They are already ours.
+  *2026-10-25:* `ABC-205`'s constants (the queen scale, `KING_ENDGAME_TABLE` and the phase) are not on `main`,
+  because it was closed unmerged. `ABC-082`'s and `ABC-083`'s are. Tapering `KING_TABLE` stays out of scope: it is a
+  new form.
 - Tuning for strength. A GAIN is welcome, but it is not the goal (ship rule S3).
 - A new evaluation term, a new form (`ADR-0031`), tapering any other table, or moving the tables to their own file.
 - **Rewriting public history.** The values stay in older commits. Removing them needs a force push, which is the
@@ -137,6 +143,11 @@ tickets, and this one changes values. This is a BA/PM delivery call, flagged as 
 - `ABC-208`, `ABC-209` and `ABC-210` change values in other files (`src/engine.ts` and the search modules). Each
   merge stales the other's D reading in the same way. Width 1 orders them.
 - **Ready trigger:** `ABC-214` merged, `ABC-205` Done or closed, and `ABC-204` Done.
+- *2026-10-25 (BA/PM, `bapm-close-ABC-205`):* **the Ready trigger is met.**
+  - `ABC-214` is merged (`59f50717`). `A1`'s two counts read `1` and `1` at `main` `bb9fd7ef`.
+  - `ABC-205` was closed unmerged under S1 (`…154f2ced`; that page's § Close).
+  - `ABC-204` is Done (merged `7f94e4cc`).
+  - With no `ABC-205` merge, this ticket's D base is its own merge-base on `main` (`EPIC-008` § D).
 
 ## Security / NFR triggers
 
@@ -167,6 +178,18 @@ owner may play-test, but nothing waits on that.
 3. `A2`'s test lives in `src/evaluate*.test.ts` (default lane). Report `N8-LANE`.
 4. `A3`'s greps run on the tip's files, not on the diff.
 5. Readings run in the QE hop's scratch clone, on AC, alone (width 1), as for every `EPIC-008` ticket.
+6. **Frozen-clock pre-check (a process step, no bound).** *Added 2026-10-25 by BA/PM (`bapm-close-ABC-205`), from
+   Architect/Design `…912bcb0d`.*
+   - **When:** before this ticket's real-clock `G6` reading.
+   - **What QE reports:** the nodes each build needs to complete depths 7 and 8 on `kiwipete` and `position-6`
+     (`chooseMove`, `now: () => 0`, `maxDepth: k`), for base and head. That is 8 counts.
+   - **What a high count means.** Base "straddles" a depth when a build value-identical to base reached it in some,
+     but not all, of its last recorded 3 s `G6` runs. On `main` today that is `position-6` depth 8 (3 of 5 runs in
+     `qe-ABC-205`). If head needs more nodes than base at such a depth, a `G6` miss is predicted. QE then stops to
+     Architect/Design before the run, and the bar is not re-levelled.
+   - If no value-identical base reading exists, QE reports the counts and makes no prediction (`UNKNOWN - verify`).
+   - The pre-check grades nothing and moves no bound. `G6` is still read as written.
+   - The design probe (note 1) may report the same counts for its candidate values. That is not a reading.
 
 ## Size and priority
 
@@ -195,3 +218,16 @@ BA/PM, 2026-10-24, at `main` `d4d49c5a`. **Result: 9 of 10. `Backlog`** until th
 | 8 | size assigned | ✅ `L` |
 | 9 | priority assigned | ✅ `P2` |
 | 10 | no major unresolved blocker | ⏳ held by sequence: `ABC-214` is not merged yet (it is `Ready` today); `ABC-205` is In Development; `ABC-204` is In Review |
+
+**Re-scored 2026-10-25 by BA/PM** (task `bapm-close-ABC-205`, at `main` `bb9fd7ef`). **Result: 10 of 10. `Ready`**,
+In Design first for the rules and the moved-pin probe (Test note 1). Only these rows changed:
+
+| # | item | verdict |
+|---|---|---|
+| 5 | dependencies known | ✅ `ABC-214` merged. `ABC-204` Done. `ABC-205` closed. The D base is the ticket's own merge-base. `ABC-207` goes one at a time with this ticket |
+| 7 | test notes present | ✅ six (the frozen-clock pre-check added) |
+| 10 | no major unresolved blocker | ✅ the sequence hold is gone. The owner's forward question on `G6` "≥ base" (`QE-205-c`) is open. Without an answer, the default keeps `G6` graded as written, so it does not block |
+
+- **§ Size, read as of this move.** "BA/PM splits it before `Ready`" now means: if the design probe finds the moved
+  set too wide for one build, the ticket returns from In Design to BA/PM. BA/PM splits it there, before Ready for Dev.
+  The probe is a design hop, so it cannot run before `Ready`. The split order stays as written.

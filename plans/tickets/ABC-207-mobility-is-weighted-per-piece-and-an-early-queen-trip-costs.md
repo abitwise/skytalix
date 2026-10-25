@@ -1,8 +1,8 @@
 ---
 id: ABC-207
 title: "Mobility is weighted per piece, with the queen lowest per square, and an early queen trip before the minor pieces are out costs a little"
-status: backlog
-column: Backlog
+status: ready
+column: Ready
 size: S
 priority: P3
 epic: EPIC-008
@@ -25,6 +25,8 @@ adr: "none if ADR-0031 D2's attack-map form stays; a different form is an ADR-00
 - **Pain:**
   - 4.Qa4?! (72 cp): nothing in the evaluation penalises an early queen move or rewards development. Mobility pays
     every queen square the same 4 cp as a minor piece's square (`src/evaluate.ts:199`, `:355-356`).
+    *Re-read 2026-10-25 at `main` `bb9fd7ef`:* these lines are now `:201` and `:357-358`, because `ABC-214` added
+    two header lines. The text is unchanged.
   - Before 8.e5, mobility was 88 cp of a 148 cp static score, close to its 100 cp cap. A mobility-heavy score rewards
     space grabs.
 - **Evidence:** a probe with queen mobility at ¼ weight plus a centre-king term turned 4.Qa4 into 4.e4, which is
@@ -72,12 +74,30 @@ adr: "none if ADR-0031 D2's attack-map form stays; a different form is an ADR-00
 1. Relation rows go in `src/evaluate*.test.ts` (default lane). Report `N8-LANE`.
 2. `A1`'s pair must keep the clamp out of play, or the relation reads the clamp and not the weight.
 3. UAT is owed (production lines). The QE verdict signs it.
+4. **Frozen-clock pre-check (a process step, no bound).** *Added 2026-10-25 by BA/PM (`bapm-close-ABC-205`), from
+   Architect/Design `…912bcb0d`.*
+   - **When:** before this ticket's real-clock `G6` reading.
+   - **What QE reports:** the nodes each build needs to complete depths 7 and 8 on `kiwipete` and `position-6`
+     (`chooseMove`, `now: () => 0`, `maxDepth: k`), for base and head. That is 8 counts.
+   - **What a high count means.** Base "straddles" a depth when a build value-identical to base reached it in some,
+     but not all, of its last recorded 3 s `G6` runs. On `main` today that is `position-6` depth 8 (3 of 5 runs in
+     `qe-ABC-205`). If head needs more nodes than base at such a depth, a `G6` miss is predicted. QE then stops to
+     Architect/Design before the run, and the bar is not re-levelled.
+   - If no value-identical base reading exists, QE reports the counts and makes no prediction (`UNKNOWN - verify`).
+   - The pre-check grades nothing and moves no bound. `G6` is still read as written.
 
 ## Dependencies
 
 - **`ABC-205` merged.** It is the same file, and its merge is this ticket's D base.
 - `ABC-204` Done.
 - **Ready trigger:** `ABC-205` reaches Done, or BA/PM closes it under S1.
+- *2026-10-25 (BA/PM, `bapm-close-ABC-205`):* **the Ready trigger is met.**
+  - `ABC-205` was closed unmerged under S1 (`…154f2ced`; that page's § Close). Its code is not on `main`.
+  - `ABC-204` is Done (merged `7f94e4cc`).
+  - "`ABC-205` merged" above therefore reads as "closed". This ticket's D base is its own merge-base on `main`
+    (`EPIC-008` § D).
+  - `ABC-215` also edits `src/evaluate.ts`. Only one of the two is built and read at a time, and the Orchestrator
+    picks the order (`ABC-215` § Dependencies: by default, `ABC-215` goes first).
 
 ## Size and priority
 
@@ -100,3 +120,17 @@ BA/PM, 2026-10-23, at `main` `55a8f4ef`. **Result: 9 of 10. `Backlog`** until th
 | 8 | size assigned | ✅ `S` |
 | 9 | priority assigned | ✅ `P3` |
 | 10 | no major unresolved blocker | ⏳ held by sequence: `ABC-205` edits the same file, and its merge is the D base |
+
+**Re-scored 2026-10-25 by BA/PM** (task `bapm-close-ABC-205`, at `main` `bb9fd7ef`). **Result: 10 of 10. `Ready`.**
+Only these rows changed:
+
+| # | item | verdict |
+|---|---|---|
+| 3 | INVEST-shaped | ✅ now independent: `ABC-205` is closed, and its code is not on `main` |
+| 5 | dependencies known | ✅ `ABC-204` Done. `ABC-205` closed. The D base is the ticket's own merge-base. `ABC-215` goes one at a time with this ticket |
+| 7 | test notes present | ✅ four (the frozen-clock pre-check added) |
+| 10 | no major unresolved blocker | ✅ the sequence hold is gone. The owner's forward question on `G6` "≥ base" (`QE-205-c`) is open. Without an answer, the default keeps `G6` graded as written, so it does not block |
+
+- **Risk, recorded and not a blocker.** Architect/Design expects this ticket's evaluation cost to be higher than
+  `ABC-205`'s (`…912bcb0d`; `UNKNOWN - verify` until `G2` is read). With base on its `position-6` depth-8 edge, that
+  makes a "≥ base" miss likely. Test note 4 is meant to catch it before the reading is spent.
