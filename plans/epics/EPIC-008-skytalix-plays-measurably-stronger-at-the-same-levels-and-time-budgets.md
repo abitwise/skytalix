@@ -49,6 +49,9 @@ still hold only measured gains.
 
 - One rating harness under `tools/`, outside `npm test` (`ABC-204`).
 - Seven engine changes, one per accepted proposal, each behind its own reading (`ABC-205` to `ABC-211`).
+  - *2026-10-25 (BA/PM, `bapm-close-ABC-205`):* proposal 1 (`ABC-205`, king safety) is **not shipped**. It was
+    closed unmerged under S1, because `G6` "≥ base" missed on `position-6` (`…234d9814`, `…912bcb0d`, `…154f2ced`).
+    Six engine changes remain (`ABC-206` to `ABC-211`), and `ABC-206` is Done.
 - *2026-10-24 (BA/PM, `bapm-ABC-214-path-a`):* one provenance change, `ABC-215`. It re-derives the CC BY-SA 3.0
   values on the owner's path A (`…fb0468ff`) and is measured under S3.
 - *2026-10-24 (BA/PM, `bapm-cut-readme`):* one test-only follow-up, `ABC-217` (Ready, XS, P3). It moves `ABC-206`'s
@@ -149,6 +152,13 @@ not favour either side. A FAIL-class fault on a host that is not quiet is UNRESO
 > **2026-10-25, `M1` baseline (QE/E2E, `qe-ABC-204`, `ABC-204` `A4`):** R = **2 061.3 ± 50.3** on `main` `3497aad2`, at
 > `UCI_Elo` E = **1 910** (frozen), 200 games, 0 faults. The D budget is frozen at **B = 1 500 ms** (`A6`). See
 > `ABC-204` § Reading.
+>
+> **2026-10-25, after `ABC-205`'s close (BA/PM, `bapm-close-ABC-205`):**
+> - **`M1`: the baseline stands.** `3497aad2` never carried `ABC-205`'s code, and `main`'s `src/` and `data/` still
+>   equal `ABC-205`'s base `d5690c5c`. The closing R is read as planned. Proposal 1 is no longer a source for the +100. It
+>   was the largest measured cause of the loss in game 1 (721 of 1 428 cp).
+> - **`M2` and `M3`: untouched.** Nothing of `ABC-205` merged, so nothing shipped unmeasured, and no gate on `main`
+>   moved.
 
 ## Tickets (order is the pull order; the pages are under `plans/tickets/`)
 
@@ -163,6 +173,16 @@ not favour either side. A FAIL-class fault on a host that is not quiet is UNRESO
 | 7 | `ABC-210` | Checks at the horizon: a check extension or checks in quiescence | M | P3 | Backlog | `ABC-209` merged | **reverses `ABC-079`'s recorded decision (`src/quiescence.ts:21-24`): an ADR, plus an `ADR-0026` door** | none planned |
 | 8 | `ABC-211` | The opening book goes deeper in the English lines | S | P3 | Backlog | a source ruling | **`ADR-0023` (source and licence): a new source is needed. Probed: the current CC0 source does not hold game 1's 3...b6. This touch point is not in the brief** | none planned. `NFR-006` is re-read |
 | 9 | `ABC-215` | The evaluation's material values and piece-square tables are our own, each made by a stated rule, and the CC BY-SA 3.0 carve-out leaves `NOTICE` and the header | L | P2 | Backlog | `ABC-214` merged; `ABC-205` Done or closed; `ABC-204` Done | none expected (values only). It ends the licence ADR's path-A carve-out. *Added 2026-10-24 (`bapm-ABC-214-path-a`), on the owner's word `…fb0468ff` (OD-214-1 = A). Its ship rule is S3* | none planned. `G2` and `G6` are re-read |
+
+*2026-10-25 (BA/PM, `bapm-close-ABC-205`):* the table's columns are as cut. Today:
+- `ABC-205` is closed unmerged under S1 (not delivered);
+- `ABC-207`'s "`ABC-205` merged" and `ABC-215`'s "`ABC-205` Done or closed" both read as met by that close, and both
+  tickets are Ready;
+- the D base of each of the two is its own merge-base on `main`;
+- the two share `src/evaluate.ts`, so they are built and read one at a time, and the Orchestrator picks the order
+  (`ABC-215` § Dependencies);
+- each now carries a frozen-clock pre-check before its real-clock `G6` reading. It is a process step and moves no
+  bound.
 
 **Why this order.**
 - The brief sets two places: the harness first, then king safety.
