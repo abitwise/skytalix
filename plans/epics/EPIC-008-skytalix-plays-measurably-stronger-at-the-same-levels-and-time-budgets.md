@@ -236,9 +236,11 @@ oracle and one timing bar. Each can land as its own value-identical commit.
 
 ## Dependencies
 
-- `cutechess-cli` 1.5.1 at `/Users/olgeroeselg/Projects/others/cutechess/cutechess/build/cutechess-cli` (sha256
+- `cutechess-cli` 1.5.1 at `<local build dir>/cutechess-cli` (sha256
   `fb4fc2aa8d3457ccce2368446a080517be42be69a8a446765b9693833e766e1c`). Re-read 2026-10-23: present, and `--version`
-  prints `1.5.1`.
+  prints `1.5.1`. *[2026-10-25, Security/NFR (task `security-nfr-lic-pub-1`): the absolute host path is replaced by
+  a placeholder under `ADR-0049` decision 4. The version and sha256 are unchanged. Older versions of this page keep
+  the path as history.]*
 - Stockfish 19 at `/opt/homebrew/bin/stockfish` → `../Cellar/stockfish/19/bin/stockfish` (sha256
   `dc2f18c34ae962dff591b66147d220ec06e61d756b93d8a4f5e04fd8e55c251f`). Re-read 2026-10-23: it offers `UCI_LimitStrength`
   and `UCI_Elo` from 1320 to 3190.
