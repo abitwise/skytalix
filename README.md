@@ -8,11 +8,11 @@
 (_________)                  |___/
 ```
 
-Command-line chess against a club-strength engine.
+**skytalix**: command-line chess against a club-strength engine.
 
 ## Requirements
 
-Node.js 22 or later. npm comes with it.
+Node.js 22.18 or later. npm comes with it.
 
 ## Quick start
 
@@ -34,7 +34,7 @@ npm run chess -- --ascii
 
 | Option | Values |
 |---|---|
-| `--colour` | `white`, `black` or `random` |
+| `--colour` | `white` (default), `black` or `random` |
 | `--difficulty` | `1` to `7` (default `5`) |
 | `--ascii` | draw the pieces as letters |
 | `--unicode` | draw the pieces as chess symbols |
@@ -46,11 +46,11 @@ the commands, among them `moves`, `undo`, `resign` and `quit`.
 
 ## Levels
 
-Level 1 is the weakest, 7 the strongest, and 5 is the default. The engine's time per move:
+Level 1 is the weakest, 7 the strongest, and 5 is the default. The times are approximate:
 
 | Level | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
 |---|---|---|---|---|---|---|---|
-| About | 0.1 s | 0.2 s | 0.3 s | 1 s | 3 s | 5 s | 30 s |
+| Time per move | 0.1 s | 0.2 s | 0.3 s | 1 s | 3 s | 5 s | 30 s |
 
 ## Saved games
 
@@ -84,3 +84,5 @@ The full command list is in [AGENTS.md](AGENTS.md).
 skytalix is licensed under Apache-2.0; see [LICENSE](LICENSE). Some parts are under other
 terms, and [NOTICE](NOTICE) lists them: the evaluation values in `src/evaluate.ts`
 (CC BY-SA 3.0) and four grugops kit files (MIT).
+
+The title's letters use FIGlet's standard font.
