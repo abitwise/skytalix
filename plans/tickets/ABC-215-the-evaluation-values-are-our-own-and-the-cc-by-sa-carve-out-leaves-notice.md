@@ -49,6 +49,8 @@ adr: "none expected: values change, and ADR-0031's form does not. The licence AD
      this project's own and made by the rules below.
 
    `NOTICE`'s common part (`ABC-214` Scope 5) stays.
+   *2026-10-25 (BA/PM, `bapm-amend-ABC-215`):* the same change also corrects `README.md`'s licence sentence, which
+   names the CC BY-SA 3.0 values. Only that sentence changes (`A8`, as amended, and `A8a`).
 4. **Pins that the new values move** are re-pinned only under the rules that already exist (§ Acceptance `A5`).
 
 ## Out of scope
@@ -120,6 +122,47 @@ adr: "none expected: values change, and ADR-0031's form does not. The licence AD
     `src/__snapshots__/*` files that `A2` or `A5` explains.
   - `git diff <base> <tip> -- tools data src/levels.ts src/status-panel.ts` is empty.
 
+  > **Amended 2026-10-25 by BA/PM** (task `bapm-amend-ABC-215`, records only, at `main` `da480b78`). The text
+  > above is the old text, kept. It is superseded by the two bullets below, which add `README.md` and nothing else.
+  > The source is Architect/Design `arch-design-ABC-215` `…e04234f4` (§ Design ruling, § Fences).
+  > - **Why.** `README.md:84-86` (from `ABC-216`) says `NOTICE` lists "the evaluation values in
+  >   `src/evaluate.ts` (CC BY-SA 3.0)". Once Scope 3 lands, that is false. The old `A8` fenced `README.md` out, so
+  >   the build could not fix it.
+
+  - **`A8` (fences, as amended).**
+    - `git diff --name-only <base> <tip>` lists only `NOTICE`, `src/evaluate.ts`, **`README.md`**, and
+      `src/*.test.ts` or `src/__snapshots__/*` files that `A2` or `A5` explains.
+    - `git diff <base> <tip> -- tools data src/levels.ts src/status-panel.ts` is empty (unchanged).
+  - **`A8a` (the README's licence sentence, and only it).** At `da480b78`, lines 84–86 of `README.md` read:
+
+    ```text
+    skytalix is licensed under Apache-2.0; see [LICENSE](LICENSE). Some parts are under other
+    terms, and [NOTICE](NOTICE) lists them: the evaluation values in `src/evaluate.ts`
+    (CC BY-SA 3.0) and four grugops kit files (MIT).
+    ```
+
+    At the tip, the sentence reads exactly as below. Line 84 is unchanged, and lines 85–86 become one line:
+
+    ```text
+    skytalix is licensed under Apache-2.0; see [LICENSE](LICENSE). Some parts are under other
+    terms, and [NOTICE](NOTICE) lists them: four grugops kit files (MIT).
+    ```
+
+    Every other line of `README.md` is byte-equal to `<base>`. The checks:
+    - `git diff -U0 <base> <tip> -- README.md` has exactly one hunk, `@@ -85,2 +85 @@`. It removes the two old lines
+      85–86 and adds the one new line 85;
+    - `grep -c -i -E 'michniewski|by-sa|chessprogramming' README.md` is `0`;
+    - `grep -c 'four grugops kit files (MIT)' README.md` is `1`.
+
+    `ABC-216`'s acceptance still holds at the tip:
+    - `A7`: Apache-2.0 is named, `LICENSE` and `NOTICE` are linked, `NOTICE` is said to list parts under other terms,
+      and no sentence says that every file is Apache-2.0;
+    - `A2`: `wc -l < README.md` is 87 (≤ 100), and the `## ` heading count is unchanged (8);
+    - `A9`: `LICENSE` and `NOTICE` still resolve.
+
+    If `<base>` is later than `da480b78` and the sentence has moved, the hop note gives its lines at `<base>`, and the
+    result is still exactly the two lines above. If the sentence has changed or is gone, stop to BA/PM.
+
 **Ship rule S3 (new; for a provenance change; this ticket only).**
 - D is **not LOSS** (X + Y ≥ 0) on the 400 pinned games.
 - If D is NEUTRAL with X < 0, it gets `EPIC-008`'s one extension: 400 more games with the same pins, pooled, and the
@@ -157,6 +200,8 @@ tickets, and this one changes values. This is a BA/PM delivery call, flagged as 
   - (b2) does not fire: no new import edge with a limb.
   - (c): `A2`'s test may import only `./evaluate.ts`. If it adds a limb, (c) fires.
   - (d) blast radius: `src/evaluate.ts` plus the test files that `A8` lists.
+    *2026-10-25:* `A8`, as amended, adds one prose sentence in `README.md`. It is not code and adds no limb token,
+    so no trigger fires.
   - `NOTICE` is read by `A3`'s no-personal-data checks.
 - **NFRs:** `G2` (≤ 1 100 ns); `NFR-005` through `G6`; `NFR-004` (`G5`) and `NFR-008` (`G8`) are re-read. **Bounds
   moved: none planned.** One that has to move stops to the owner (`A5`).
@@ -231,6 +276,17 @@ In Design first for the rules and the moved-pin probe (Test note 1). Only these 
 - **§ Size, read as of this move.** "BA/PM splits it before `Ready`" now means: if the design probe finds the moved
   set too wide for one build, the ticket returns from In Design to BA/PM. BA/PM splits it there, before Ready for Dev.
   The probe is a design hop, so it cannot run before `Ready`. The split order stays as written.
+
+**Re-scored 2026-10-25 by BA/PM** (task `bapm-amend-ABC-215`, at `main` `da480b78`, after the design ruling).
+**Result: 10 of 10. In Design → Ready for Dev.** Only these rows changed:
+
+| # | item | verdict |
+|---|---|---|
+| 2 | scope and out-of-scope clear | ✅ the design's seven rules and values (§ Design ruling). Scope 3 also takes `README.md`'s licence sentence, only that sentence (`A8` amended, `A8a`). Nothing else is added |
+| 3 | INVEST-shaped | ✅ no split: the probe moves 16 rows in 5 files, all by existing rules. The page's split would predict a `G6` miss on its first half (`pv` +2.15 %) and cost a second D |
+| 4 | acceptance testable and measurable | ✅ `A8a`: one `-U0` hunk `@@ -85,2 +85 @@` with exact text, 0 `michniewski\|by-sa\|chessprogramming` hits in `README.md`, 1 kit-files hit, and `ABC-216` `A2`/`A7`/`A9` re-read at the tip |
+| 8 | size assigned | ✅ `L`, confirmed by the probe (one build) |
+| 10 | no major unresolved blocker | ✅ design ruled (`…e04234f4`), with no ADR and no owner word. The `README.md` gap is closed by `A8a`. `QE-205-c` is still open and does not block: `G6` is graded as written, and `c2` is predicted to meet it (`UNKNOWN - verify` until QE reads it) |
 
 ## Design ruling
 
