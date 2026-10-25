@@ -14,9 +14,9 @@
  * to move may just as well play on, and mate. The two arms of `GameStatus` make the mistake
  * unrepresentable rather than merely tested for.
  *
- * It is built to be cheap at a search leaf (NFR-001): it generates the legal moves ONCE and
- * reads their count, and the fivefold rule and the threefold claim share a single Zobrist key
- * read that a caller passing no counts map never pays for at all.
+ * It stays cheap (NFR-001), though the search leaf calls `leafEndReason` instead (ABC-206): it
+ * generates the legal moves ONCE and reads their count, and the fivefold rule and the threefold
+ * claim share a single Zobrist key read that a caller passing no counts map never pays for at all.
  */
 
 import { hasLegalMove, isInCheck, legalMoves } from "./legal.ts";

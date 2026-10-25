@@ -9,7 +9,13 @@ import {
   legalCaptures,
   legalMoves,
 } from "./legal.ts";
-import { FLAG_EN_PASSANT, FLAG_NONE, generateMoves, isSquareAttackedBy } from "./moves.ts";
+import {
+  FLAG_EN_PASSANT,
+  FLAG_NONE,
+  generateMoves,
+  isSquareAttackedBy,
+  type Move,
+} from "./moves.ts";
 import { BLACK, EMPTY, KING, type Position, parseSquareName } from "./position.ts";
 
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -495,6 +501,17 @@ describe("ABC-206 A2 — the faster pieces equal what they replace", () => {
     ["en passant gives check", "8/4k3/8/3pP3/8/8/8/4K3 w - d6 0 1"],
   ];
 
+  /**
+   * ABC-217 A1 (QE-206-a): boards where a plain, unflagged move gives a DISCOVERED check. The
+   * moved piece attacks nothing; the piece behind it does. No A2 root at depth 1 has one.
+   */
+  const DISCOVERED_CHECKS: ReadonlyArray<
+    readonly [name: string, fen: string, from: string, to: string]
+  > = [
+    ["Kd4-d5 uncovers the a4 rook", "8/8/8/8/R2K3k/8/8/8 w - - 0 1", "d4", "d5"],
+    ["c2-c3 uncovers the b1 bishop", "8/7k/8/8/8/8/2P5/1B4K1 w - - 0 1", "c2", "c3"],
+  ];
+
   const givesCheckRow = (depth: number) => () => {
     let unflaggedChecks = 0;
     let flaggedChecks = 0;
@@ -512,6 +529,19 @@ describe("ABC-206 A2 — the faster pieces equal what they replace", () => {
     };
     walkA2(depth, checkEveryMove);
     for (const [name, fen] of FLAGGED_CHECKS) checkEveryMove(parseFen(fen), name);
+    for (const [name, fen, from, to] of DISCOVERED_CHECKS) {
+      const position = parseFen(fen);
+      const move = legalMoves(position).find(
+        (m) => m.from === parseSquareName(from) && m.to === parseSquareName(to),
+      ) as Move;
+      expect(move, `${name}: ${from}-${to} is legal`).toBeDefined();
+      expect(move.flags, name).toBe(FLAG_NONE);
+      const undo = makeMove(position, move);
+      expect(isInCheck(position), `${name}: gives check`).toBe(true);
+      unmakeMove(position, move, undo);
+      expect(givesCheck(position, move), `${name}: givesCheck`).toBe(true);
+      checkEveryMove(position, name);
+    }
     // Both paths gave a check somewhere, so neither half of the answer is unread.
     expect(unflaggedChecks).toBeGreaterThan(0);
     expect(flaggedChecks).toBeGreaterThan(0);
