@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-25 by Orchestrator (orch-2026-10-25u) — ABC-215 design + A8 amendment merged; DoR 10/10 → In Development (1/3); `ticket-to-pr-ABC-215` (no real-clock). Its QE + G6 + D run ALONE after the build._
 _Updated: 2026-10-25 by Orchestrator (orch-2026-10-25s) — ABC-215 Ready → In Design (1/2); `arch-design-ABC-215` (rules + moved-pin probe + frozen-clock d7/d8 counts; no real-clock). Correction to orch-2026-10-25r: under the standing scope reading of …4c3f7639 (veto open), ABC-207 and ABC-215 each keep their own single reading; they do not wait on a new owner word, only on the open G6 "≥ base" question (default: graded)._
 _Updated: 2026-10-25 by Orchestrator (orch-2026-10-25r) — ABC-205 CLOSED unmerged under S1 → Done (dropped; owner veto open). ABC-215 and ABC-207 Backlog → Ready (2/8), DoR 10/10, frozen-clock pre-check added. In Review 0/3. Owner question open: G6 "≥ base" graded (default) or reported for 207/215. Each of 207/215 needs real-clock G6 + D readings — new runs beyond …4c3f7639's four, so they wait on the owner's word before their readings._
 _Updated: 2026-10-25 by Orchestrator (orch-2026-10-25p) — Architect ruled ABC-205's G6 STOP: no variant clears ≥ base → CLOSE unmerged under S1 (delivery call, owner veto open; D not owed) (…154f2ced). `bapm-close-ABC-205` + `arch-adr0031-status` (records). Forward question to the owner: keep G6 "≥ base" graded for ABC-207/215?_
@@ -1109,14 +1110,14 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## In Analysis (WIP 0/2)
 
 
-## In Design (WIP 1/2)
-- [ABC-215] The evaluation's material values and piece-square tables are our own, each made by a stated rule, and the CC BY-SA 3.0 carve-out leaves NOTICE and the src/evaluate.ts header  (owner: software-engineer, after Architect/Design (rules + moved-pin probe), size: L, priority: P2, epic: EPIC-008, since: 2026-10-24, DoR 10/10 — Ready 2026-10-25 (bapm-close-ABC-205, …84a05b3a), In Design first (rules + moved-pin probe): trigger met (ABC-214 merged 59f50717, A1 counts 1/1; ABC-205 closed under S1; ABC-204 Done); D base = own merge-base on main; one at a time with ABC-207; frozen-clock d7/d8 pre-check before the real-clock G6 reading (process, no bound); cut in `bapm-ABC-214-path-a` (`…c8dc129c`) on owner word `…fb0468ff`. Arrays = the carve-out's list at base (7 today); rule in comment + rebuild test; 0 michniewski/by-sa in evaluate.ts and NOTICE; relations unedited; pins only by ADR-0028 d2 / oracle / ADR-0034, ADR-0026 levels → STOP; G1 ≥ 54/58, G2 ≤ 1 100 ns, G5, G6, G8, G9, G10; D: S3 (not LOSS). No security hop expected; UAT owed (QE signs))
+## In Design (WIP 0/2)
 
 
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+- [ABC-215] The evaluation's material values and piece-square tables are our own, each made by a stated rule, and the CC BY-SA 3.0 carve-out leaves NOTICE and the src/evaluate.ts header  (owner: software-engineer, after Architect/Design (rules + moved-pin probe), size: L, priority: P2, epic: EPIC-008, since: 2026-10-24, DoR 10/10 — Ready 2026-10-25 (bapm-close-ABC-205, …84a05b3a), In Design first (rules + moved-pin probe): trigger met (ABC-214 merged 59f50717, A1 counts 1/1; ABC-205 closed under S1; ABC-204 Done); D base = own merge-base on main; one at a time with ABC-207; frozen-clock d7/d8 pre-check before the real-clock G6 reading (process, no bound); cut in `bapm-ABC-214-path-a` (`…c8dc129c`) on owner word `…fb0468ff`. Arrays = the carve-out's list at base (7 today); rule in comment + rebuild test; 0 michniewski/by-sa in evaluate.ts and NOTICE; relations unedited; pins only by ADR-0028 d2 / oracle / ADR-0034, ADR-0026 levels → STOP; G1 ≥ 54/58, G2 ≤ 1 100 ns, G5, G6, G8, G9, G10; D: S3 (not LOSS). No security hop expected; UAT owed (QE signs)) **2026-10-25: design ruled (…e04234f4): seven stated rules (c2), relations green, 16 pins move in 5 files; no level, no bound; G6 predicted MET (position-6 d8 −6.65 %, UNKNOWN - verify); one L, no split, no ADR, no owner word. BA/PM A8 amended (…fb4f7c9c): README licence sentence only. DoR 10/10 → Ready for Dev → In Development (ticket-to-pr-ABC-215).**
 
 
 
