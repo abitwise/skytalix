@@ -518,3 +518,25 @@ KING_TABLE
 - **BA/PM:** the `README.md:84-86` line into `A8` (or a twin follow-up). This is records only.
 - **Orchestrator:** merge this records branch. After BA/PM's line, ABC-215 goes In Design → Ready for Dev → In
   Development (Software Engineer), at width 1 against `ABC-207`.
+
+## Reading
+
+> **QE/E2E, 2026-10-25** (task `qe-ABC-215`, branch `grugops/qe-ABC-215`, merge `7d4cea3e` = `b778ab13` + `main`
+> `cac2b4e9`; base = merge-base `cac2b4e9`). **One run per reading under `…4c3f7639`** (scope `…1976d0e9`), pre-registered.
+> Notes: gate `…dc2c86cc`, pre-check/G2/G6/G11 `…a34270bf`, D `…0c9bab9a`, verdict `…c2c3540f`
+> (`.grugops/context/qe-ABC-215/notes/`). Raw files, `SHA256SUMS` and the scripts that ran: `.grugops/context/qe-ABC-215/raw/`
+> (personal paths redacted, `ADR-0049` d4).
+
+| # | state | the reading |
+|---|---|---|
+| `A1` | **MET** | at `cac2b4e9`: `NOTICE` section count 1, `See NOTICE` count 1; seven arrays named |
+| `A2` | **MET** | QE's own rebuild equals all seven arrays over every entry; differ counts 2/7, 46, 64, 18, 20, 27, 50 of 64; each one-cell mutant reds its own row; base values red 14 rows |
+| `A3` | **MET** | 0 hits in `src/evaluate.ts`, `NOTICE`, `README.md`; `NOTICE` byte-equal to `ABC-214` Scope 5's common part; `LICENSE`/`package*.json` diff empty |
+| `A4` | **MET** | no relation assertion edited; all relation rows, `QE-G2`, `QE-G3` green |
+| `A5` | **MET** | 16 moved rows = the ruling's set (cross-run both ways); oracle re-run: kiwipete 8/e2a6, position-6 85/c3d5; three companions keep their guards |
+| `A6` | **MET** | gates green, 2 090/2 090, skips `No findings.`; `G1` 54/58; `G2` head 642.6 / 641.2 ns (base 641.1 / 637.8); `G6` kiwipete 7 = 7, position-6 head 8 8 8 8 8 against base 7 7 8 7 7; `G8` 7.11 s; `G9` empty |
+| `A7` | **MET** | **D NEUTRAL, X = +15.6 ± 23.8** (W/L/D 107/89/204, 400/400, 0 faults, 0 vitest overlap); S3: not LOSS and X ≥ 0, no extension. `G11`: head d3 (4.Qa4), exd6 (10.Ne4); the other three agree with base |
+| `A8`/`A8a` | **MET** | product diff `NOTICE`, `README.md`, `src/evaluate.ts`, six test files; `README.md` one hunk `@@ -85,2 +85 @@` |
+
+**Pre-check (frozen clock, nodes to complete depth k):** base kiwipete d7 566 233 / d8 1 638 196, position-6 d7 644 469 / d8
+1 451 759; head 609 900 / 1 735 339, 586 333 / 1 355 149. **QE verdict: PASS. UAT signed by it (`…5aaf7cec` item 2).**

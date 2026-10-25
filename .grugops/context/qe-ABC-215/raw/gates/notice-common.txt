@@ -1,0 +1,10 @@
+skytalix
+Copyright 2026 Olger Oeselg
+
+Licensed under the Apache License, Version 2.0 (the "License"); see the LICENSE file.
+The parts listed below are not licensed under the License.
+
+grugops kit files (MIT)
+  tools/grugops/reference-check.js, tools/grugops/test-skip-integrity.js,
+  tools/grugops/uat-spec-integrity.js and tools/grugops/host-protection.js come from the
+  grugops kit. They are licensed under the MIT License, Copyright (c) 2026 Olger Oeselg.

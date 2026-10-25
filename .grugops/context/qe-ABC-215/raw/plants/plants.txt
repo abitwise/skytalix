@@ -1,0 +1,64 @@
+__baseline__	exit 0	BASELINE	0 rows	passed 181/181
+A2-PIECE_VALUE-knight+1	exit 1	RED	1 rows	passed 35/36
+   evaluate.test.ts > ABC-215 A2 — the value arrays are rebuilt from their stated rules PIECE_VALUE equals its rule over every entry :: AssertionError: expected [ +0, 100, 326, 325, 500, 900, +0 ] to deeply equal [ +0, 100, 325, 325, 500, 900, +0 ]
+A2-PAWN-a8+1	exit 1	RED	1 rows	passed 35/36
+   evaluate.test.ts > ABC-215 A2 — the value arrays are rebuilt from their stated rules PAWN_TABLE equals its rule over every entry :: AssertionError: expected [ Array(64) ] to deeply equal [ +0, +0, +0, +0, +0, +0, +0, …(57) ]
+A2-KNIGHT-a8+1	exit 1	RED	1 rows	passed 35/36
+   evaluate.test.ts > ABC-215 A2 — the value arrays are rebuilt from their stated rules KNIGHT_TABLE equals its rule over every entry :: AssertionError: expected [ -29, -20, -10, -10, -10, -10, …(58) ] to deeply equal [ -30, -20, -10, -10, -10, -10, …(58) ]
+A2-BISHOP-a8+1	exit 1	RED	1 rows	passed 35/36
+   evaluate.test.ts > ABC-215 A2 — the value arrays are rebuilt from their stated rules BISHOP_TABLE equals its rule over every entry :: AssertionError: expected [ -9, -10, -10, -10, -10, -10, …(58) ] to deeply equal [ -10, -10, -10, -10, -10, -10, …(58) ]
+A2-ROOK-a8+1	exit 1	RED	1 rows	passed 35/36
+   evaluate.test.ts > ABC-215 A2 — the value arrays are rebuilt from their stated rules ROOK_TABLE equals its rule over every entry :: AssertionError: expected [ Array(64) ] to deeply equal [ +0, +0, +0, +0, +0, +0, +0, …(57) ]
+A2-QUEEN-a8+1	exit 1	RED	1 rows	passed 35/36
+   evaluate.test.ts > ABC-215 A2 — the value arrays are rebuilt from their stated rules QUEEN_TABLE equals its rule over every entry :: AssertionError: expected [ -4, -5, -5, -5, -5, -5, -5, …(57) ] to deeply equal [ -5, -5, -5, -5, -5, -5, -5, …(57) ]
+A2-KING-a8+1	exit 1	RED	1 rows	passed 35/36
+   evaluate.test.ts > ABC-215 A2 — the value arrays are rebuilt from their stated rules KING_TABLE equals its rule over every entry :: AssertionError: expected [ -49, -50, -50, -50, -50, -50, …(58) ] to deeply equal [ -50, -50, -50, -50, -50, -50, …(58) ]
+N3	exit 1	RED	1 rows	passed 23/24
+   search.ordering.test.ts > G1 — chooseMove records a killer only on a beta cutoff position-3 at 3 injected ticks: depth 3 in exactly 342 nodes :: AssertionError: expected 347 to be 342 // Object.is equality
+M13	exit 1	RED	6 rows	passed 18/24
+   search.ordering.test.ts > the comparator — hash move, then MVV-LVA, then killers, then generation order orders a capturing promotion by its victim PLUS the piece it becomes (ABC-079 QE G4) :: AssertionError: expected 'd1d5' to be 'b7a85' // Object.is equality
+   search.ordering.test.ts > Scope — the engine orders its root exactly as search() does the fixture bites: ordered and unordered depth-1 searches break the tie differently :: AssertionError: expected 'd1b3' to be 'a4b3' // Object.is equality
+   search.ordering.test.ts > Scope — the engine orders its root exactly as search() does chooseMove's completed depth-1 iteration returns search()'s move, a4b3 :: AssertionError: expected 'd1b3' to be 'a4b3' // Object.is equality
+   search.ordering.test.ts > A4 — each heuristic's node count, and the delete rule position-6 at depth 2: none 10 371, MVV-LVA 3 266, + killers 3 177 :: AssertionError: expected 9719 to be 10371 // Object.is equality
+   search.ordering.test.ts > A4 — each heuristic's node count, and the delete rule the promotion-capture fixture at depth 3 visits 232 nodes (ABC-079 QE G4) :: AssertionError: expected 252 to be 232 // Object.is equality
+   search.ordering.test.ts > G1 — chooseMove records a killer only on a beta cutoff position-3 at 3 injected ticks: depth 3 in exactly 342 nodes :: AssertionError: expected 358 to be 342 // Object.is equality
+M11	exit 1	RED	2 rows	passed 22/24
+   search.ordering.test.ts > Scope — the engine orders its root exactly as search() does chooseMove's completed depth-1 iteration returns search()'s move, a4b3 :: AssertionError: expected 'd1b3' to be 'a4b3' // Object.is equality
+   search.ordering.test.ts > G1 — chooseMove records a killer only on a beta cutoff position-3 at 3 injected ticks: depth 3 in exactly 342 nodes :: AssertionError: expected 581 to be 342 // Object.is equality
+keepBestSoFar	exit 1	RED	3 rows	passed 44/47
+   engine.test.ts > A3 — an aborted iteration's move is discarded, not returned returns the completed depth-2 move, which is NOT the depth-3 move :: AssertionError: expected -28 to be -50 // Object.is equality
+   engine.test.ts > A3 (identity) — the completed iteration equals search() in move AND score agrees with search() on move and score across the mate/stalemate endgames :: AssertionError: expected [ Array(1) ] to deeply equal []
+   engine.test.ts > ABC-170 A2 — maxNodes aborts, and the last COMPLETED iteration is played plays search(position, d)'s move and score at the reported depth d — the abort is discarded :: AssertionError: expected 8 to be 30 // Object.is equality
+noLmrResearch	exit 1	RED	2 rows	passed 18/20
+   search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0
+   search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to depth 4 in the engine's own recursion :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0
+noResearch	exit 1	RED	2 rows	passed 18/20
+   search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0
+   search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to depth 4 in the engine's own recursion :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0
+noLmrResearch-search-only	exit 1	RED	1 rows	passed 19/20
+   search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0
+noLmrResearch-engine-only	exit 1	RED	1 rows	passed 19/20
+   search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to depth 4 in the engine's own recursion :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0
+noResearch-search-only	exit 1	RED	1 rows	passed 19/20
+   search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0
+noResearch-engine-only	exit 1	RED	1 rows	passed 19/20
+   search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to depth 4 in the engine's own recursion :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0
+discard-re-search-search-only	exit 1	RED	1 rows	passed 19/20
+   search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions :: AssertionError: expected +0 to be 4 // Object.is equality
+discard-re-search-engine-only	exit 1	RED	1 rows	passed 19/20
+   search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to depth 4 in the engine's own recursion :: AssertionError: expected -12 to be -7 // Object.is equality
+A2-base-values	exit 1	RED	14 rows	passed 22/36
+   evaluate.test.ts > ABC-215 A2 — the value arrays are rebuilt from their stated rules PIECE_VALUE equals its rule over every entry :: AssertionError: expected [ +0, 100, 320, 330, 500, 900, +0 ] to deeply equal [ +0, 100, 325, 325, 500, 900, +0 ]
+   evaluate.test.ts > ABC-215 A2 — the value arrays are rebuilt from their stated rules PAWN_TABLE equals its rule over every entry :: AssertionError: expected [ +0, +0, +0, +0, +0, +0, +0, …(57) ] to deeply equal [ +0, +0, +0, +0, +0, +0, +0, …(57) ]
+   evaluate.test.ts > ABC-215 A2 — the value arrays are rebuilt from their stated rules KNIGHT_TABLE equals its rule over every entry :: AssertionError: expected [ -50, -40, -30, -30, -30, -30, …(58) ] to deeply equal [ -30, -20, -10, -10, -10, -10, …(58) ]
+   evaluate.test.ts > ABC-215 A2 — the value arrays are rebuilt from their stated rules BISHOP_TABLE equals its rule over every entry :: AssertionError: expected [ -20, -10, -10, -10, -10, -10, …(58) ] to deeply equal [ -10, -10, -10, -10, -10, -10, …(58) ]
+   evaluate.test.ts > ABC-215 A2 — the value arrays are rebuilt from their stated rules ROOK_TABLE equals its rule over every entry :: AssertionError: expected [ +0, +0, +0, +0, +0, +0, +0, …(57) ] to deeply equal [ +0, +0, +0, +0, +0, +0, +0, …(57) ]
+   evaluate.test.ts > ABC-215 A2 — the value arrays are rebuilt from their stated rules QUEEN_TABLE equals its rule over every entry :: AssertionError: expected [ -20, -10, -10, -5, -5, -10, …(58) ] to deeply equal [ -5, -5, -5, -5, -5, -5, -5, …(57) ]
+   evaluate.test.ts > ABC-215 A2 — the value arrays are rebuilt from their stated rules KING_TABLE equals its rule over every entry :: AssertionError: expected [ -30, -40, -40, -50, -50, -40, …(58) ] to deeply equal [ -50, -50, -50, -50, -50, -50, …(58) ]
+   evaluate.test.ts > ABC-215 A2 — the value arrays are rebuilt from their stated rules PIECE_VALUE differs from the base values in at least one entry :: AssertionError: expected false to be true // Object.is equality
+   evaluate.test.ts > ABC-215 A2 — the value arrays are rebuilt from their stated rules PAWN_TABLE differs from the base values in at least one entry :: AssertionError: expected false to be true // Object.is equality
+   evaluate.test.ts > ABC-215 A2 — the value arrays are rebuilt from their stated rules KNIGHT_TABLE differs from the base values in at least one entry :: AssertionError: expected false to be true // Object.is equality
+   evaluate.test.ts > ABC-215 A2 — the value arrays are rebuilt from their stated rules BISHOP_TABLE differs from the base values in at least one entry :: AssertionError: expected false to be true // Object.is equality
+   evaluate.test.ts > ABC-215 A2 — the value arrays are rebuilt from their stated rules ROOK_TABLE differs from the base values in at least one entry :: AssertionError: expected false to be true // Object.is equality
+   evaluate.test.ts > ABC-215 A2 — the value arrays are rebuilt from their stated rules QUEEN_TABLE differs from the base values in at least one entry :: AssertionError: expected false to be true // Object.is equality
+   evaluate.test.ts > ABC-215 A2 — the value arrays are rebuilt from their stated rules KING_TABLE differs from the base values in at least one entry :: AssertionError: expected false to be true // Object.is equality

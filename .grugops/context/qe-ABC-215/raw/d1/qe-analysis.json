@@ -1,0 +1,112 @@
+{
+ "pgn_games": 400,
+ "started": 400,
+ "finished": 400,
+ "result_texts": {
+  "Draw by 3-fold repetition": 201,
+  "White mates": 100,
+  "Black mates": 96,
+  "Draw by insufficient mating material": 2,
+  "Draw by fifty moves rule": 1
+ },
+ "fault_games": [],
+ "out_fault_lines": [],
+ "first_go_raw": {
+  "skytalix": "94 >skytalix(0): go movetime 1500",
+  "base": "98 >base(5): go movetime 1500"
+ },
+ "gaps": {
+  "skytalix": {
+   "budget_ms": 1500,
+   "searched_n": 21606,
+   "book_n": 374,
+   "median": 1501.0,
+   "max": 1668,
+   "over_1531": 5,
+   "over_1500": 14986,
+   "p99": 1504
+  },
+  "base": {
+   "budget_ms": 1500,
+   "searched_n": 21604,
+   "book_n": 374,
+   "median": 1501.0,
+   "max": 1624,
+   "over_1531": 4,
+   "over_1500": 15028,
+   "p99": 1504
+  }
+ },
+ "pgn_moves_without_comment": {
+  "skytalix": 374,
+  "base": 374
+ },
+ "fen_pairs": {
+  "rounds": 200,
+  "bad_rounds": [],
+  "incomplete_rounds": [],
+  "ep_square_dropped_by_cutechess_rounds": 46,
+  "started_2k-1_2k_swapped": true
+ },
+ "elo_all_qe": {
+  "n": 400,
+  "W": 107,
+  "L": 89,
+  "D": 204,
+  "score": 0.5225,
+  "X": 15.645167545330544,
+  "Y": 23.836086751051774,
+  "LOS": 90.0728603156669,
+  "draw_ratio": 51.0
+ },
+ "cutechess_elo_line_raw": "Elo difference: 15.6 +/- 23.8, LOS: 90.1 %, DrawRatio: 51.0 %",
+ "cutechess_score_line_raw": "Score of skytalix vs base: 107 - 89 - 204  [0.522] 400",
+ "one_result_line_raw": "Finished game 3 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}",
+ "move_cap_draws": 0,
+ "wall": {
+  "median_game_s": 162.0,
+  "mean_game_s": 161.7925,
+  "min": 16,
+  "max": 398,
+  "median_plies": 109.5,
+  "first_start": "2026-10-25T06:07:32.475000+00:00",
+  "last_end": "2026-10-25T12:09:12.638000+00:00",
+  "median_game_s_from_start_end_ms": 162.1995,
+  "duration_tag_vs_start_end_max_abs_diff_s": 0.875,
+  "match_span_s": 21700.163,
+  "games_per_hour_measured": 66.35894854799017
+ },
+ "samples": 2156,
+ "sampler": {
+  "load1_min": 2.44,
+  "load1_max": 14.96,
+  "load1_median": 5.21,
+  "power": [
+   "AC_Power"
+  ],
+  "thermal": {
+   "0": 19,
+   "1": 1044,
+   "2": 1093
+  },
+  "vitest_samples": 0,
+  "load_gt8_samples": 10
+ },
+ "vitest_bursts": [],
+ "overlap_games": 0,
+ "elo_clean_qe": {
+  "n": 400,
+  "W": 107,
+  "L": 89,
+  "D": 204,
+  "score": 0.5225,
+  "X": 15.645167545330544,
+  "Y": 23.836086751051774,
+  "LOS": 90.0728603156669,
+  "draw_ratio": 51.0
+ },
+ "wall_clean_median_s": 162.0,
+ "wall_clean_median_s_ms": 162.1995,
+ "overlap_game_rounds": [],
+ "games_touching_load_gt8": 8
+}
