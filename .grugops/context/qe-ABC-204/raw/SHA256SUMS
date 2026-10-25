@@ -1,0 +1,12 @@
+adb1ee1296168db64c7c29a6d16158bc06ca581c9362de5fdb60ab71c6ebaadf  ./gates/build.log
+3a6652fea8a3a6251f401bfc0abd3597483b1039f25177a9bba62f942b762e15  ./gates/lint.log
+cb778a3b99c71570c8d2508c12b3fb743560eefd2222d901efe811dadd6aa1ff  ./gates/test.log
+3565f5c2931d96b302720f59c6b983c942e8b2dc9e3a919de12d68121ebd18a4  ./gates/typecheck.log
+3fb70f02b6018ae19bf69535f48ab23e1845f93d8e8c717f0a3878447e3750fa  ./gates/vitest-files-main.txt
+3fb70f02b6018ae19bf69535f48ab23e1845f93d8e8c717f0a3878447e3750fa  ./gates/vitest-files-merge.txt
+eae933501e03be36a91f8efeb293780648275de038e4a2f259e4ec2b7de4cf12  ./harness-sha256.txt
+00c92482451ad537214d396f903c0e1dd6c9c61db90112756fe2623cc30cf8db  ./PREREG.txt
+06f9a8f2a44f3f5b07de29322d26f701ab13806df06abf2379840fea0bf6b14b  ./qe-scripts/analyse.py
+034b4c0f57f5662abdaefce4d9d09d52af506a9cd00abe7e769e49036c87a557  ./qe-scripts/driver.sh
+de464807bdf3c59387c2f3d0cb6b88c36ec21b7832c39ea370b6b4d5e08fad93  ./qe-scripts/openings-check.mts
+2ed268fbcef4c07ba34d186d71d78852227e47945c058b3f32479df17ec7076d  ./qe-scripts/package.sh

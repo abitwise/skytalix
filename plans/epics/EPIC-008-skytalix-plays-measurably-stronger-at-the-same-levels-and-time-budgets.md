@@ -146,6 +146,10 @@ not favour either side. A FAIL-class fault on a host that is not quiet is UNRESO
 | M3 | **Nothing regressed** | `G1`, `G5`, `G6`, `G8` and `G9` green on `main` at close | the gates' own instruments |
 | M4 | **The owner's decisions stayed his** | 0 NFR bounds moved without his word. Every new or changed ADR of this epic was reported to him when it landed | the ADR pages and the owner-word notes |
 
+> **2026-10-25, `M1` baseline (QE/E2E, `qe-ABC-204`, `ABC-204` `A4`):** R = **2 061.3 ± 50.3** on `main` `3497aad2`, at
+> `UCI_Elo` E = **1 910** (frozen), 200 games, 0 faults. The D budget is frozen at **B = 1 500 ms** (`A6`). See
+> `ABC-204` § Reading.
+
 ## Tickets (order is the pull order; the pages are under `plans/tickets/`)
 
 | order | id | title | size | priority | column | depends on | ADR touch point (routed to the owner when written) | NFR bound moved? |

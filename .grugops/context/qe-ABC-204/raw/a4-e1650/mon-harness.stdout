@@ -1,0 +1,16 @@
+chip: Apple M3
+darwin: 25.6.0
+node: /opt/homebrew/Cellar/node/26.11.1/bin/node v26.11.1
+cutechess-cli: cutechess-cli 1.5.1 sha256 fb4fc2aa8d3457ccce2368446a080517be42be69a8a446765b9693833e766e1c = pin
+stockfish: id name Stockfish 19 sha256 dc2f18c34ae962dff591b66147d220ec06e61d756b93d8a4f5e04fd8e55c251f = pin
+openings: <worktree>/tools/rating/openings.epd sha256 0d7f7a72678cbf54c2c309dc5d664e7aac5de2c15bc54fe4247a437f51e82666
+harness: <worktree> at e546e12419b83c68f4f36cd32103ef9cd0560a1e
+Elo difference: 263.4 +/- 61.8, LOS: 100.0 %, DrawRatio: 4.0 %
+W/L/D: 160/32/8  score: 0.820  games: 200 of 200
+draw ratio: 4.0 %
+faults: 0  unclassified: 0  move-cap draws: 0
+skytalix.stderr: 0 bytes
+stockfish.stderr: 0 bytes
+stockfish depth guard: 0 of 8382 moves below depth 3
+state: rating E + X ± Y = 1650 + 263.4 ± 61.8 = 1913.4 ± 61.8
+
