@@ -42,8 +42,8 @@ vi.mock("./zobrist.ts", async (importOriginal) => {
 import { makeMove } from "./apply.ts";
 import { gameStatus, leafEndReason } from "./gameend.ts";
 import { hasLegalMove, legalCaptures, legalMoves } from "./legal.ts";
-import { FLAG_NONE } from "./moves.ts";
-import { parseSquareName } from "./position.ts";
+import { FLAG_NONE, generateMoves } from "./moves.ts";
+import { EMPTY, parseSquareName } from "./position.ts";
 import { quiesce } from "./quiescence.ts";
 import { lateMoveReduction } from "./search.ts";
 import { zobristKey } from "./zobrist.ts";
@@ -65,7 +65,7 @@ function countsFor(position: ReturnType<typeof parseFen>, occurrences: number) {
   return counts;
 }
 
-describe("NFR-001 — gameStatus stays cheap at a search leaf (call counts, spied)", () => {
+describe("NFR-001 — gameStatus stays cheap (call counts, spied)", () => {
   beforeEach(() => vi.clearAllMocks());
 
   it("generates the legal moves EXACTLY once, on every call shape", () => {
@@ -184,5 +184,29 @@ describe("ABC-206 — the search leaf's game-end check stays cheap (call counts,
     expect(lateMoveReduction(position, check, 3, 3, false)).toBe(0);
     expect(lateMoveReduction(position, quiet, 3, 3, false)).toBe(1);
     expect(makeMove).toHaveBeenCalledTimes(0);
+  });
+
+  // ABC-217 A2 (QE-206-b): the spies above see only cross-module calls, so a rebuild on
+  // `legalMoves` inside legal.ts would pass them. `makeMove` is cross-module from there.
+  it("hasLegalMove on the start position plays EXACTLY one move", () => {
+    const position = parseFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+    vi.clearAllMocks();
+
+    expect(hasLegalMove(position)).toBe(true);
+    expect(makeMove).toHaveBeenCalledTimes(1);
+  });
+
+  it("legalCaptures on kiwipete plays only the pseudo-legal captures", () => {
+    const position = parseFen(
+      "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1",
+    );
+    const pseudo = generateMoves(position);
+    const captures = pseudo.filter((move) => move.captured !== EMPTY).length;
+    expect(captures).toBeGreaterThan(0);
+    expect(captures).toBeLessThan(pseudo.length); // so a full-list rebuild plays more
+    vi.clearAllMocks();
+
+    legalCaptures(position);
+    expect(makeMove).toHaveBeenCalledTimes(captures);
   });
 });

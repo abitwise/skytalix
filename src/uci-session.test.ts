@@ -667,7 +667,7 @@ function rig({ stepMs = 100, k = 1, read = () => bookBytes({}) }: RigOptions = {
     everyLine.push(...written);
     return written;
   };
-  return { out, warnings, reads, draws, send };
+  return { out, warnings, reads, draws, send, now: options.now };
 }
 
 function parseLevelInfo(line: string | undefined) {
@@ -1039,10 +1039,12 @@ describe("ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 p
    * answers 1. e4 so the session still writes its info and bestmove lines from the engine's answer.
    */
   const budgetAt = (setup: readonly string[], go: string) => {
-    const { send, draws } = rig({ stepMs: 1_000 });
+    const { send, draws, now } = rig({ stepMs: 1_000 });
     const handed: Array<{ budgetMs: number; maxDepth?: number; maxNodes?: number }> = [];
+    const clocks: unknown[] = [];
     const e2e4 = legalMoves(parseFen(START_FEN)).find((m) => coordinateOf(m) === "e2e4") as Move;
     vi.mocked(chooseMove).mockImplementation((_position, options) => {
+      clocks.push(options.now);
       handed.push({
         budgetMs: options.budgetMs,
         ...(options.maxDepth === undefined ? {} : { maxDepth: options.maxDepth }),
@@ -1055,6 +1057,8 @@ describe("ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 p
     const lines = send(go);
     // One engine call per `go`, on the rate-0 path: `chooseMove` itself, and no seed drawn (D11).
     expect(handed).toHaveLength(1);
+    // ABC-217 A3 (QE-212L-a): the engine reads the session's one injected clock, on every shape.
+    expect(clocks[0]).toBe(now);
     expect(draws.count).toBe(0);
     expect(lines.at(-1)).toBe("bestmove e2e4");
     return { handed: handed[0] as (typeof handed)[number], setupLines };
