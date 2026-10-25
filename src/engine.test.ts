@@ -1236,8 +1236,17 @@ if (RUN_DEEP) {
  */
 const { search } = await import("./search.ts");
 
+/**
+ * RE-PICKED at `ABC-205` (`ADR-0028` decision 2: the fixture's property, one best move at depth 3,
+ * was lost). On `kp-vs-k` the build scores e1d2 and e2e3 equal at depth 3 (91), so the deepened
+ * engine and `search(position, 3)` broke the tie apart (e2e3 against e1d2). The row's claim is the
+ * `maxDepth` stop, not the move. This K+P v K neighbour has ONE best move at depth 3, e3e4, on
+ * base (by 7 cp) and on the build (by 15 cp), and reaches depth 7 unlimited on both.
+ */
+const ABC170_A1_FEN = "8/8/4k3/8/8/4P3/5K2/8 w - - 0 1";
+
 describe("ABC-170 A1 — maxDepth stops deepening once that depth has completed", () => {
-  const sparse = () => parseFen(endgameFen("kp-vs-k"));
+  const sparse = () => parseFen(ABC170_A1_FEN);
   const options = { budgetMs: 10, now: tickingClock(1) };
 
   it("is a real stop: unlimited, the same budget completes depth 6 or more", () => {
