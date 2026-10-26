@@ -55,6 +55,10 @@ still hold only measured gains.
   - *2026-10-26 (BA/PM, `bapm-s1-ABC-207`):* proposal 4 (`ABC-207`, per-piece mobility weights and the early-queen
     term) is **not shipped**. It was closed unmerged under S1, because D was LOSS: pooled over 800 games, −18.3 ±
     16.5 (`…cc744e8c`, `…243de4b1`). Four engine changes remain unbuilt (`ABC-208` to `ABC-211`), and `ABC-206` is Done.
+  - *2026-10-26 (BA/PM, `bapm-close-ABC-211`):* proposal 8 (`ABC-211`, the deeper English book) is **not shipped**. It
+    was closed undelivered on the owner's pick O0 (`…58bcd17c`): there is no new source, and the pinned source has no line
+    that reaches 3...b6 (`…7bb8daf1`). Three engine changes remain (`ABC-208` to `ABC-210`). The owner accepted
+    `ADR-0050`, and `ABC-208` is in its reading.
 - *2026-10-24 (BA/PM, `bapm-ABC-214-path-a`):* one provenance change, `ABC-215`. It re-derives the CC BY-SA 3.0
   values on the owner's path A (`…fb0468ff`) and is measured under S3.
 - *2026-10-24 (BA/PM, `bapm-cut-readme`):* one test-only follow-up, `ABC-217` (Ready, XS, P3). It moves `ABC-206`'s
@@ -213,6 +217,14 @@ S3 met (see `M2`). The row's cells are as cut.
 - **`ABC-211`**: not pullable. It waits on an Architect/Design source ruling (`ADR-0023`, then the owner), and no hop
   for it has been routed. It is data only and shares no file with the engine tickets, so the ruling can run beside them.
 - The closing `M1` R reading comes at the epic's close.
+
+*2026-10-26 (BA/PM, `bapm-close-ABC-211`), on the owner's word `…58bcd17c`:*
+- **Row 8, `ABC-211`, is closed undelivered (O0).** There is no new source, and `ADR-0023` is unchanged. The pinned source
+  cannot meet `A1` (`…7bb8daf1`). The row's cells are as cut.
+- **`ABC-208`:** the owner accepted `ADR-0050`, and the ALONE reading (`qe-ABC-208`) is running. Its merge waits on the
+  QE verdict under S1.
+- **`ABC-209` and `ABC-210`** stay chained. Each waits for its predecessor (`ABC-208`, then `ABC-209`) to reach Done
+  or to be closed under S1.
 
 **Why this order.**
 - The brief sets two places: the harness first, then king safety.

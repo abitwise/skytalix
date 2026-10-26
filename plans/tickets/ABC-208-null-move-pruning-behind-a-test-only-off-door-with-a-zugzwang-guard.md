@@ -7,7 +7,7 @@ size: M
 priority: P2
 epic: EPIC-008
 feature: —
-adr: "ADR-0050 (PROPOSED; acceptance is the owner's) plus an ADR-0026 off-door pair; the real-clock reading and the merge wait on his acceptance (…749ff988)"
+adr: "ADR-0050 (ACCEPTED by the owner 2026-10-26, …58bcd17c; in force on main at this ticket's merge) plus an ADR-0026 off-door pair"
 ---
 
 # ABC-208: null-move pruning
@@ -148,6 +148,9 @@ adr: "ADR-0050 (PROPOSED; acceptance is the owner's) plus an ADR-0026 off-door p
 - *2026-10-26 (BA/PM, `bapm-amend-ABC-208`):* **`ADR-0050` is PROPOSED, and accepting it is the owner's call.** The
   build may proceed. The real-clock reading (`G6` and `A5`'s D, ALONE) and the merge wait on his acceptance
   (`…d25ab770`, reading b; `…749ff988`). `A6`'s "the new ADR exists" is met by the file. Its status is the owner's.
+- *2026-10-26 (BA/PM, `bapm-close-ABC-211`):* **the owner accepted `ADR-0050`** (`…58bcd17c` item 1). It is in force on
+  `main` at this ticket's merge. The gate on the ALONE reading is met, and that reading (`qe-ABC-208`) is running. The QE
+  verdict still decides the merge. No criterion changes.
 
 ## Size and priority
 

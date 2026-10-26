@@ -1,8 +1,8 @@
 ---
 id: ABC-211
 title: "The opening book goes deeper in the English lines (1.c4), from a source the Architect rules, within NFR-006 and the ADR-0037 format"
-status: backlog
-column: Backlog
+status: dropped
+column: Done
 size: S
 priority: P3
 epic: EPIC-008
@@ -12,6 +12,10 @@ adr: "ADR-0023 (source and licence) if a new source is needed: not named in the 
 
 # ABC-211: a deeper English book
 
+> **CLOSED UNDELIVERED 2026-10-26 on the owner's pick O0. Not delivered.** BA/PM, task `bapm-close-ABC-211`. There is no
+> new source, and the pinned source has no line that reaches 3...b6, so `A1` cannot be met. Nothing was built, and
+> `main` is unchanged. See § Close.
+>
 > **Cut 2026-10-23 by BA/PM** (task `bapm-cut-engine-strength`, records only, at `main` `55a8f4ef`). Proposal 8 of
 > `…f1771bb3`; owner word `…7feb0553`.
 >
@@ -115,3 +119,27 @@ BA/PM, 2026-10-23, at `main` `55a8f4ef`. **Result: 9 of 10. `Backlog`** until th
     `NFR-007`'s re-read fires.
   - **O2 and O3:** lines our own engine or Stockfish generates. Not recommended.
 - **Ready trigger: NOT MET.** It waits on the owner's pick. Notes: `.grugops/context/arch-source-ABC-211/`.
+
+## Close
+
+> **BA/PM, 2026-10-26** (task `bapm-close-ABC-211`, records only, at `main` `ba74b71d`). Inputs: the owner's word as
+> transcribed by the Orchestrator (`owner-word-2026-10-26/…58bcd17c` item 2) and the Architect's source ruling
+> (`arch-source-ABC-211/…7bb8daf1`, read-backs `…a1ddd6fb`). Notes: `.grugops/context/bapm-close-ABC-211/notes/`.
+
+**Closed undelivered under the owner's O0.** His words: *"O0 for ABC-211"*. This is the owner's own pick, so there is
+no veto to leave open.
+
+- **Why it cannot be delivered.**
+  - **No new source.** Under O0, `ADR-0023` is unchanged, and its PROPOSED amendment is not taken. The Architect
+    records that on `ADR-0023`, in the `arch-accept-adr0050` hop.
+  - **The pinned source cannot meet `A1`.** 0 of the 3,865 rows of `lichess-org/chess-openings` `a6189a30` reach the
+    position after 1.c4 c5 2.Nc3 Nf6 3.Nf3 b6, at any ply and with transpositions. The upstream `master` is the pin, so
+    a re-pin adds nothing (`…a1ddd6fb` items 1–2).
+  - **The pain is gone at base.** `QE-207-f` (`…cc744e8c`): base already plays 4.d3 here (depth 8, +56), not 4.Qa4.
+- **What is kept.** Nothing was built. `data/opening-book/book.json` is still 356 526 B, and `data/` and `tools/` are
+  unchanged by this ticket. The source ruling stays on this page (§ Source ruling) and in `ADR-0023`.
+- **Not owed.** `A1`–`A5`, the D reading, the `NFR-006` and `NFR-007` re-reads, and UAT.
+- **The re-open path.** Only a new word from the owner picking another option (O1–O3) re-opens it. On O1, BA/PM cuts a new
+  ticket from § Source ruling, with size `M` and `A3` re-worded, after the Architect's `ADR-0037` D1 amendment. O2 and O3
+  each need their own ADR first.
+- **Not touched here:** `ADR-0023`, `ADR-0037`, `NFR-006`, `NFR-007`, and `EPIC-008`'s gate rows.
