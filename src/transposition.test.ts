@@ -795,20 +795,20 @@ describe("ABC-209 — the continuation rule (createGameTracker) and the holder (
 describe("ABC-209 A1 — a fresh game, and every call through the clear door, is today's engine", () => {
   it("a call with no token, and the first call with a new token, equal a call before any game", () => {
     const fen = fenOf("position-6");
-    const door = shape(chooseMove(parseFen(fen), fixed(4)));
+    const door = shape(chooseMove(parseFen(fen), fixed(3)));
 
     // A game through one token leaves its entries in the table.
     const track = createGameTracker();
     const position = parseFen(fen);
     const moves: string[] = [];
     for (let ply = 0; ply < 4; ply++) {
-      const choice = chooseMove(position, fixed(4, track(fen, moves))) as { move: Move };
+      const choice = chooseMove(position, fixed(3, track(fen, moves))) as { move: Move };
       makeMove(position, choice.move);
       moves.push(coordinate(choice.move));
     }
 
-    expect(shape(chooseMove(parseFen(fen), fixed(4)))).toEqual(door);
-    expect(shape(chooseMove(parseFen(fen), fixed(4, createGameTracker()(fen, []))))).toEqual(door);
+    expect(shape(chooseMove(parseFen(fen), fixed(3)))).toEqual(door);
+    expect(shape(chooseMove(parseFen(fen), fixed(3, createGameTracker()(fen, []))))).toEqual(door);
   });
 });
 
@@ -928,7 +928,7 @@ describe("ABC-209 A4 / A5 — the size is unchanged; the same calls give the sam
       const moves: string[] = [];
       const seenChoices: unknown[] = [];
       for (let ply = 0; ply < 4; ply++) {
-        const choice = chooseMove(position, fixed(4, track(fen, moves)));
+        const choice = chooseMove(position, fixed(3, track(fen, moves)));
         seenChoices.push(shape(choice));
         makeMove(position, (choice as { move: Move }).move);
         moves.push(coordinate((choice as { move: Move }).move));
