@@ -5,6 +5,9 @@ kind: adr
 
 ## Status
 
+*2026-10-26:* a **PROPOSED** amendment for `ABC-211` is at the end of this file. Acceptance is the owner's. Decisions
+1–5 stand unchanged until he answers.
+
 **accepted** — ratified by the project owner Olger Oeselg in session, 2026-09-19, verbatim: *"I ratify ADR-0023: the opening-book source is lichess-org/chess-openings under CC0 1.0."* Transcribed by the Orchestrator (`human_admission` is `off`; this is a hand-authored record of a human's word, not a stamp). `RISK-004` moved to *resolved* in the same commit (`A5`). `data/opening-book/ATTRIBUTION.md` (`A4`) is written by `ABC-093` at the moment it pins the upstream commit SHA — the file's own required content (the pinned SHA and read date) does not exist until the data is fetched, so writing it earlier would record a pin that was never made.
 
 **History — proposed** 2026-09-19 by Architect/Design at task `owner-rulings-2026-09-19`, subtask
@@ -209,3 +212,80 @@ are not sources for a static book at all.
 - **Detection row:** any `git clone` of this repository containing opening-book data while this ADR
   still reads `proposed` is a breach of `ABC-092` `A6` / `ABC-093` § Dependencies, and the data is
   removed before anything else happens.
+
+## Proposed amendment 2026-10-26 (`ABC-211`): a source for English lines past the named openings. PROPOSED
+
+### Status
+
+**PROPOSED** 2026-10-26 by Architect/Design (task `arch-source-ABC-211`, records only, at `main` `1df54ba6`).
+**Acceptance is the owner's.** A new or changed source and licence is his (`ABC-092`; `ADR-0012` § Status; standing
+ruling 2026-10-22). No agent picks an option. No byte of a new source is copied before he does.
+
+- **Default without an answer:** nothing changes. Decisions 1–5 stand, and `ABC-211` stays in Backlog, held.
+- **The answer that settles it:** one option id from the table below, e.g. *"ADR-0023 ABC-211: O0"*.
+
+### Context
+
+- `ABC-211` § Scope 1 asks for a source that holds English lines beyond the named openings, game 1's 3...b6 among
+  them. `A1`: the book holds ≥ 1 White move at the position after 1.c4 c5 2.Nc3 Nf6 3.Nf3 b6.
+- **No route inside this ADR.** Each was read at this hop, in a scratchpad outside the repo:
+  - **The pinned source cannot reach the position at any depth.** 3,865 rows, longest 36 plies. **0 rows** reach the
+    position at any ply, with transpositions included and no 12-ply cut. 8 rows pass the position after 3.Nf3. Black's
+    moves there are Nc6 (6), d5 (1) and e5 (1). 9 rows hold all six game-1 moves in another order, and none of them
+    reaches the position. So raising `maxPly` would not help either (that is `ADR-0037`'s, and `EPIC-005` `A3`'s).
+  - **The re-pin rule gives nothing.** The upstream `master` is the pinned commit `a6189a30`, committed 2026-10-06.
+    All five sha256 values equal the pins in `compile.ts`.
+  - **The shipped book is exactly compile(pin).** It is byte for byte the same, 356,526 B.
+- **The motivating move is gone at base.** `QE-207-f` (`qe-ABC-207`, `…cc744e8c` and `…dc779c4a`): since `ABC-215`,
+  `main`'s own search plays 4.d3 (depth 8, +56) at the game-1 position, not 4.Qa4?!. The page's pain was 4.Qa4 at
+  −72 cp. A book move there now saves think time. It no longer fixes a known bad move.
+- **The format holds one source.** `ADR-0037` D1(e) has `"source":{"repo","commit"}`, which is one object. A second
+  source cannot be recorded without changing that field, and `ABC-211` `A3` says "format unchanged".
+  - The player's reader, `src/book.ts:96`, reads only `format` and `positions`, and it refuses any `format` other
+    than 1. `source` is read only by `tools/opening-book/book.test.ts`.
+  - So a provenance change costs 0 `src/` lines, if `format` stays 1.
+
+### Options (each licence read 2026-10-26 on the licensor's own page)
+
+| id | option | licence | measured against `ABC-211` | what it would take | Architect's view |
+|---|---|---|---|---|---|
+| **O0** | **No new source.** This ADR is unchanged, and `ABC-211` is closed undelivered | — | — | BA/PM closes it (`status: dropped`, as `ABC-205`/`ABC-207`), with the owner's veto open. 0 bytes | **Recommended** |
+| **O1** | **Add `official-stockfish/books` `8moves_v3.pgn`** at commit `a804a97e709f40aa75a00f9d19e84915b7a3a45c` (repo HEAD, 2026-10-16; the file last changed 2019-12-16). Only lines whose first move is 1.c4 | `CC0-1.0`: the repo `LICENSE`, 7,048 B, title *"CC0 1.0 Universal"*. GitHub's licence API reads `CC0-1.0`. The waiver is decision 2's text | 34,700 lines of 16 plies, 4,192 of them starting 1.c4. 30 lines pass the game-1 position: e4 17, e3 5, d4 5, g3 3. The 1.c4-only subset has 16: e4 11, e3 3, d4 1, g3 1. **`A1` met.** Merged at ≤ 12 plies: **715,259 B** (68.2 % of `NFR-006`), with 5,390 → 14,504 entries. Positions in book from 1.c4 per ply (plies 1–12), base `1,9,22,32,41,50,49,52,50,40,31,0`, merged `1,12,56,144,275,480,716,998,1357,1741,2150,39`. All lines unfiltered: 2,527,629 B, which **fails** `NFR-006` | This amendment accepted. **An `ADR-0037` D1 amendment:** `source` becomes a list of two, and `format` stays 1. **A graft weight rule in D1(c):** an edge already in the book keeps its line count, and an edge only the new set adds gets weight 1 (below). `compile.ts` gains a PGN reader and a second sha256 pin. `ATTRIBUTION.md` gains a second section. **A scope change on `ABC-211`:** `A3`'s wording, and size S → M for the new parsing. **`NFR-007`'s re-read fires** (2.006x > 2x) | Workable, low value. The lines were chosen as balanced starts for engine testing, not as theory. Their quality as a repertoire is `UNKNOWN - verify` |
+| **O2** | **Lines generated offline by our own engine** (deterministic mode) | Our own output, Apache-2.0 (`ADR-0048`). No third-party bytes | At this position it adds nothing the shipped engine does not already find in 3 s (4.d3, above) | Its own ADR. `R6` above says a non-attributable line source is recorded as its own ADR. Plus the same `ADR-0037` change as O1, and a generator tool | Not recommended |
+| **O3** | **Lines generated offline by Stockfish 19** (the host's tool, already hashed in `ABC-202`) | The program is GPL-3.0. The FSF's GPL FAQ, entry "In what cases is the output of a GPL program covered by the GPL too?": *"The output of a program is not, in general, covered by the copyright on the code of the program."* That is an engineering reading. The legal reading is `UNKNOWN - verify`, and it is the owner's | Strong moves are likely. Not measured | Its own ADR, as O2. `ABC-093` `A1` (byte-identical rebuild) would then rest on a binary outside the repo, pinned by hash, with fixed nodes and 1 thread. Another maintainer cannot rebuild it without that binary | Not recommended |
+
+**Re-read and not proposed:**
+- **The Lichess open database.** Licence re-read 2026-10-26 on <https://database.lichess.org/>, verbatim: *"Database
+  exports are released under the Creative Commons CC0 license."* `R1`'s fitness rejection stands. It is an
+  aggregation over multi-gigabyte monthly files, and nobody can rebuild it without the same download.
+- **`bjbraams_chessdb_198350_lines.pgn`** (same repo, CC0 at the repo level). It has 54 lines through the position.
+  Its commit message reads *"biased (dbcn) and known from human master play"*. The terms of those upstream sources
+  are not stated on any page read. It fails on provenance, as `R4` did.
+- **The EPD sets** (`popularpos_lichess_v3.epd`, `noob_3moves.epd`). They hold the position, but an EPD row is a
+  position with no move. `popularpos_lichess_v3` holds 4 of its children (e3, g3, d3, b3), and any move taken from
+  that would be inferred. So neither is a line source.
+- **`R3` (Perfect 2023), `R5` (Wikipedia) and the ECO book.** Not re-read. Their rejections stand.
+
+### The graft rule (O1 only, recommended if O1 is chosen)
+
+- **What a naive line-count merge does.** It moves White's first move. 1.c4 goes from 202 of 3,865 rows (**5.2 %**)
+  to **54.5 %** of the root weight, and 1.e4 goes from 52.6 % to 25.2 %. That is a product change nobody asked for.
+- **The rule.** An edge already in the book keeps its line count. An edge that only the second source adds gets
+  weight 1. Every base root share is then unchanged (measured), and the game-1 position gets 4 moves of weight 1.
+- **The owner's veto.** He may veto this rule, as he may veto D1(c)'s policy.
+
+### Consequences
+
+- **O0:** no record moves except `ABC-211`'s close. `RISK-004` stays resolved. `NFR-006` and `NFR-007` are
+  untouched.
+- **O1:** this ADR's decision 1 reads "two sources". Decision 2 is unchanged, since both are CC0-1.0. Decision 3
+  gains a second attribution section. Decision 4's figure becomes the measured 715,259 B. `ADR-0048` decision 6 needs
+  nothing, because CC0 parts need no `NOTICE` line. Rollback is the existing one: delete the second section and
+  recompile from the TSVs alone.
+- **O2 and O3:** each is its own new ADR, written on the owner's word, and this amendment is withdrawn.
+
+### Rollback
+
+- **Before acceptance:** mark this section `withdrawn`. Nothing else was edited.
+- **After O1 ships:** remove the second source from `compile.ts` and `ATTRIBUTION.md`, and recompile.
+  `compile(pin)` is byte-identical to today's book (measured above).
