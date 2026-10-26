@@ -1,0 +1,8 @@
+qe-ABC-208 d1 overlap and load accounting (from mon/sampler.log, 10 s; analyse.py, load-free.py)
+samples 2097; AC throughout, battery 100 %; thermal 0/1/2 in 12/1021/1064 samples; load1 2.44-86.61, median 5.44.
+foreign vitest: 64 samples in 4 bursts 12:03:46Z-12:15:18Z, one process class: a test run of another repository on this host (class and count only, ADR-0049 d4). It started after d1's start (preconditions met at 06:28:37Z: load1 2.44, 0 vitest).
+  games meeting a burst (padded 10 s): 18, rounds 191-199. Without them (382 games): 112/68/202, X = +40.20 +/- 23.90 (GAIN).
+load1 > 8: 171 samples; games touching one: 78 (rounds 27-28, 39-44, 53-59, 64-66, 74-81, 85-87, 103-106, 124-125, 137-139, 191-199). Without them (322 games): 88/60/174, X = +30.29 +/- 25.72 (GAIN; X-Y = +4.57).
+  The load1 > 20 samples sit at 09:29:27Z-09:29:47Z (max 25.90) and 12:07:09Z-12:13Z inside the foreign burst (max 86.61).
+go->bestmove gaps over budget + 31 ms (1 531): skytalix 40 of 21 012 (max 3 717 ms), base 44 of 20 982 (max 3 327 ms); 65 of the 84 lie within 60 s of a load1 > 8 sample. Every gap is under the 5 000 ms limit (st=1.5 + timemargin 3 500): no time forfeit.
+Grade: all games GAIN (graded, as the page states); vitest-overlap-free GAIN; load-free GAIN. The grade does not depend on the overlap.

@@ -1,0 +1,56 @@
+
+ RUN  v4.1.12 <worktree>
+
+ ✓ src/gameend.test.ts > ABC-007 acceptance > reports checkmate and the winner from the fool's-mate position 1ms
+ ✓ src/gameend.test.ts > ABC-007 acceptance > reports stalemate as a draw when the side to move has no move and is not in check 0ms
+ ✓ src/gameend.test.ts > ABC-007 acceptance > makes threefold repetition claimable at the third occurrence, and draws at the fifth 2ms
+ ✓ src/gameend.test.ts > ABC-007 acceptance > does not report repetition for a position that is absent from the history 0ms
+ ✓ src/gameend.test.ts > ABC-007 acceptance > makes the fifty-move draw claimable by the side to move when the clock reaches 100 0ms
+ ✓ src/gameend.test.ts > ABC-007 acceptance > reports a draw by insufficient material for king versus king 0ms
+ ✓ src/gameend.test.ts > ABC-007 acceptance > does NOT draw king-and-bishop versus king-and-bishop on opposite colours 0ms
+ ✓ src/gameend.test.ts > ABC-007 acceptance > reports in-progress with no reason for a normal position 0ms
+ ✓ src/gameend.test.ts > ABC-020 acceptance > A1 — the third occurrence is White's to claim, and White plays the mate instead 0ms
+ ✓ src/gameend.test.ts > ABC-020 acceptance > A2 — the fifty-move twin is White's to claim, and White mates instead 0ms
+ ✓ src/gameend.test.ts > ABC-020 acceptance > A5 — the locked wall still terminates, on the 75-move backstop, with no claim made 2ms
+ ✓ src/gameend.test.ts > ABC-020 acceptance > A6 — checkmate still outranks the 75-move draw, not only the fifty-move claim 0ms
+ ✓ src/gameend.test.ts > ABC-020 acceptance > A7 — flip the side to move and the claim flips with it 0ms
+ ✓ src/gameend.test.ts > ABC-020 acceptance > A8 — a bare caller sees neither the fivefold draw nor the threefold claim 0ms
+ ✓ src/gameend.test.ts > the claimable set > reports both draws when both hold, threefold first 0ms
+ ✓ src/gameend.test.ts > the claimable set > offers no threefold claim at the second occurrence 0ms
+ ✓ src/gameend.test.ts > the claimable set > omits the claimable property entirely rather than carrying an empty one 0ms
+ ✓ src/gameend.test.ts > the claimable set > lets an automatic draw outrank a claim that holds at the same time 0ms
+ ✓ src/gameend.test.ts > QE review — the claim's asymmetry, the check order, and the coupling > gives the claim to Black when it is WHITE's move that makes the third occurrence 0ms
+ ✓ src/gameend.test.ts > QE review — the claim's asymmetry, the check order, and the coupling > decides no-legal-moves and thin material BEFORE the clock and the counts map 0ms
+ ✓ src/gameend.test.ts > QE review — the claim's asymmetry, the check order, and the coupling > terminates the locked wall on a second no-progress line, not just A5's first-quiet one 2ms
+ ✓ src/gameend.test.ts > QE review — the claim's asymmetry, the check order, and the coupling > still terminates the locked wall on a line that DOES capture — 150 plies per epoch 1ms
+ ✓ src/gameend.test.ts > QE review — the forbidden states are unrepresentable > cannot spell a claimable draw as a completed draw, or a claim without a claimant 0ms
+ ✓ src/gameend.test.ts > QE review — the forbidden states are unrepresentable > lets a consumer read the claim off the bare union with no narrowing 0ms
+ ✓ src/gameend.test.ts > insufficient material > draws K vs K 0ms
+ ✓ src/gameend.test.ts > insufficient material > draws K+N vs K 0ms
+ ✓ src/gameend.test.ts > insufficient material > draws K+B vs K 0ms
+ ✓ src/gameend.test.ts > insufficient material > draws K+B vs K+B same colour 0ms
+ ✓ src/gameend.test.ts > insufficient material > does not draw with a lone pawn (K+P vs K) 0ms
+ ✓ src/gameend.test.ts > insufficient material > does not draw with a rook (K+R vs K) 0ms
+ ✓ src/gameend.test.ts > insufficient material > does not draw with bishop vs knight, opposite armies 0ms
+ ✓ src/gameend.test.ts > ABC-007 QE edge probes > reports white-wins when White delivers mate (the colour mirror of fool's mate) 0ms
+ ✓ src/gameend.test.ts > ABC-007 QE edge probes > prefers checkmate over the fifty-move rule when both could apply 0ms
+ ✓ src/gameend.test.ts > dead by material (FIDE 5.2.2), across the combinations that decide it > draws KBB vs K, both bishops on one colour (b1, f1) 0ms
+ ✓ src/gameend.test.ts > dead by material (FIDE 5.2.2), across the combinations that decide it > draws KBB vs KB, all three bishops on one colour 0ms
+ ✓ src/gameend.test.ts > dead by material (FIDE 5.2.2), across the combinations that decide it > does not draw KNN vs K — unforceable, but mate is constructible 0ms
+ ✓ src/gameend.test.ts > dead by material (FIDE 5.2.2), across the combinations that decide it > does not draw KN vs KN 0ms
+ ✓ src/gameend.test.ts > dead by material (FIDE 5.2.2), across the combinations that decide it > does not draw KBN vs K — a forced mate 0ms
+ ✓ src/gameend.test.ts > dead by material (FIDE 5.2.2), across the combinations that decide it > does not draw KBB vs K on opposite colours (c1, f1) 0ms
+ ✓ src/gameend.test.ts > dead by material (FIDE 5.2.2), across the combinations that decide it > does not draw KBB on one colour vs KB on the other (f8) 0ms
+ ✓ src/gameend.test.ts > dead by material (FIDE 5.2.2), across the combinations that decide it > does not draw KQ vs K 0ms
+ ✓ src/gameend.test.ts > fifty-move rule — the halfmove-clock boundary > does not draw at 99 plies 0ms
+ ✓ src/gameend.test.ts > fifty-move rule — the halfmove-clock boundary > makes the draw claimable at exactly 100 plies 0ms
+ ✓ src/gameend.test.ts > fifty-move rule — the halfmove-clock boundary > is still only claimable at 149 plies, one ply short of the automatic draw 0ms
+ ✓ src/gameend.test.ts > fifty-move rule — the halfmove-clock boundary > draws automatically at 150 plies, the seventy-five-move backstop 0ms
+ ✓ src/gameend.test.ts > ABC-206 A2 — leafEndReason(p) === gameStatus(p).reason > on the perft roots to depth 1 and every terminal or clock FEN; p is unchanged 7ms
+ ✓ src/gameend.test.ts > ABC-206 A2 — leafEndReason(p) === gameStatus(p).reason > to depth 3 [deep, ENGINE_DEEP=1] 4988ms
+
+ Test Files  1 passed (1)
+      Tests  47 passed (47)
+   Start at  08:27:45
+   Duration  5.10s (transform 0ms, setup 0ms, import 35ms, tests 5.01s, environment 0ms)
+

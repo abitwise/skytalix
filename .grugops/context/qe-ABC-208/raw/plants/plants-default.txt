@@ -1,0 +1,14 @@
+none [default] 0 red / 2128 (10 s)
+engine-no-finally [default] 1 red / 2128 (9 s)
+    RED default search.null-move.test.ts :: QE-208-a — an abort inside a null move's subtree still hands the root back byte-identical position-6, readings 3 to 25: 0 mutated roots, and aborts landing inside a null subtree
+search-stale-null-key [default] 1 red / 2128 (9 s)
+    RED default search.null-move.test.ts :: QE-208-b — the null child's key is written: every table probe reads the key of the position it probes search() on position-6 at depth 6
+engine-stale-null-key [default] 1 red / 2128 (8 s)
+    RED default search.null-move.test.ts :: QE-208-b — the null child's key is written: every table probe reads the key of the position it probes chooseMove on position-6 deepened to 6
+door-on:searchWithoutPvsOrReductions [default] 1 red / 2128 (8 s)
+    RED default search.null-move.test.ts :: QE-208-c — every door's nullMove switch literal is false; only search() and chooseMove turn it on ./search.ts: each exported entry passes exactly one nullMove literal, and only the shipped one i
+door-on:searchWithoutTable [default] 1 red / 2128 (8 s)
+    RED default search.null-move.test.ts :: QE-208-c — every door's nullMove switch literal is false; only search() and chooseMove turn it on ./search.ts: each exported entry passes exactly one nullMove literal, and only the shipped one i
+door-on:chooseMoveWithoutPvsOrReductions [default] 1 red / 2128 (9 s)
+    RED default search.null-move.test.ts :: QE-208-c — every door's nullMove switch literal is false; only search() and chooseMove turn it on ./engine.ts: each exported entry passes exactly one nullMove literal, and only the shipped one i
+restored and verified equal to pristine

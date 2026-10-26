@@ -1,0 +1,61 @@
+
+ RUN  v4.1.12 <worktree>
+
+ ✓ src/search.ordering.test.ts > A2 — the ordered move list is a permutation of legalMoves, not a filter > covers 200+ positions — the denominator, asserted rather than trusted 1ms
+ ✓ src/search.ordering.test.ts > A2 — the ordered move list is a permutation of legalMoves, not a filter > returns the same moves, each exactly once, in every position and every variant 16ms
+ ✓ src/search.ordering.test.ts > A2 — the ordered move list is a permutation of legalMoves, not a filter > does not reorder or mutate the list it was handed 0ms
+ ✓ src/search.ordering.test.ts > the comparator — hash move, then MVV-LVA, then killers, then generation order > puts every capture and promotion ahead of every quiet move, most valuable victim first 0ms
+ ✓ src/search.ordering.test.ts > the comparator — hash move, then MVV-LVA, then killers, then generation order > keeps generation order among quiet moves with no killer — the sort is stable 0ms
+ ✓ src/search.ordering.test.ts > the comparator — hash move, then MVV-LVA, then killers, then generation order > puts the killers first among the quiet moves, most recent first, and after every capture 0ms
+ ✓ src/search.ordering.test.ts > the comparator — hash move, then MVV-LVA, then killers, then generation order > matches a killer by squares and promotion, not by object — killers come from siblings 0ms
+ ✓ src/search.ordering.test.ts > the comparator — hash move, then MVV-LVA, then killers, then generation order > puts the hash move before everything, captures included 0ms
+ ✓ src/search.ordering.test.ts > the comparator — hash move, then MVV-LVA, then killers, then generation order > orders a capturing promotion by its victim PLUS the piece it becomes (ABC-079 QE G4) 0ms
+ ✓ src/search.ordering.test.ts > KillerTable — two quiet killers per ply, most recent first > offers nothing at a ply where nothing was recorded 0ms
+ ✓ src/search.ordering.test.ts > KillerTable — two quiet killers per ply, most recent first > keeps the two most recent, newest first, and never the same move twice 0ms
+ ✓ src/search.ordering.test.ts > KillerTable — two quiet killers per ply, most recent first > keeps each ply's killers to that ply 0ms
+ ✓ src/search.ordering.test.ts > KillerTable — two quiet killers per ply, most recent first > does not record a capture or a promotion — MVV-LVA already orders those 0ms
+ ✓ src/search.ordering.test.ts > A1 — ordered and unordered scores are identical > startpos at depth 3 16ms
+ ✓ src/search.ordering.test.ts > A1 — ordered and unordered scores are identical > startpos at depth 4 [deep, SEARCH_DEEP=1] 74ms
+ ✓ src/search.ordering.test.ts > A1 — ordered and unordered scores are identical > kiwipete at depth 3 [deep, SEARCH_DEEP=1] 714ms
+ ✓ src/search.ordering.test.ts > A1 — ordered and unordered scores are identical > kiwipete at depth 4 [deep, SEARCH_DEEP=1] 2302ms
+ ✓ src/search.ordering.test.ts > A1 — ordered and unordered scores are identical > position-3 at depth 3 2ms
+ ✓ src/search.ordering.test.ts > A1 — ordered and unordered scores are identical > position-3 at depth 4 [deep, SEARCH_DEEP=1] 13ms
+ ✓ src/search.ordering.test.ts > A1 — ordered and unordered scores are identical > position-4 at depth 3 [deep, SEARCH_DEEP=1] 49ms
+ ✓ src/search.ordering.test.ts > A1 — ordered and unordered scores are identical > position-4 at depth 4 [deep, SEARCH_DEEP=1] 187ms
+ ✓ src/search.ordering.test.ts > A1 — ordered and unordered scores are identical > position-5 at depth 3 [deep, SEARCH_DEEP=1] 86ms
+ ✓ src/search.ordering.test.ts > A1 — ordered and unordered scores are identical > position-5 at depth 4 [deep, SEARCH_DEEP=1] 1423ms
+ ✓ src/search.ordering.test.ts > A1 — ordered and unordered scores are identical > position-6 at depth 3 [deep, SEARCH_DEEP=1] 253ms
+ ✓ src/search.ordering.test.ts > A1 — ordered and unordered scores are identical > position-6 at depth 4 [deep, SEARCH_DEEP=1] 3094ms
+stdout | src/search.ordering.test.ts > A3 — ordered search visits a small fraction of the unordered nodes > kiwipete at depth 4: <= 4% of the unordered nodes [deep, SEARCH_DEEP=1]
+ABC-080 A3 kiwipete d4: 23802 / 1404376 = 1.69%
+
+stdout | src/search.ordering.test.ts > A3 — ordered search visits a small fraction of the unordered nodes > position-6 at depth 4: <= 4% of the unordered nodes [deep, SEARCH_DEEP=1]
+ABC-080 A3 position-6 d4: 31721 / 1916580 = 1.66%
+
+stdout | src/search.ordering.test.ts > A4 — each heuristic's node count, and the delete rule > kiwipete at depths 4 and 5, per configuration; the delete rule on depth 5 [deep, SEARCH_DEEP=1]
+ABC-080 A4 kiwipete d4: none 1404376 / MVV-LVA 27725 / + killers 27658 / + hash move (ABC-081's table) 23802
+ABC-080 A4 kiwipete d5: none (not run in-suite, see the context notes) / MVV-LVA 210765 / + killers 197517 / + hash move (ABC-081's table) 163698
+
+ ✓ src/search.ordering.test.ts > Scope — the engine orders its root exactly as search() does > the fixture bites: ordered and unordered depth-1 searches break the tie differently 3ms
+ ✓ src/search.ordering.test.ts > Scope — the engine orders its root exactly as search() does > chooseMove's completed depth-1 iteration returns search()'s move, a4b3 2ms
+ ✓ src/search.ordering.test.ts > A3 — ordered search visits a small fraction of the unordered nodes > position-6 at depth 2 — the default lane's standing guard 22ms
+ ✓ src/search.ordering.test.ts > A3 — ordered search visits a small fraction of the unordered nodes > kiwipete at depth 4: <= 4% of the unordered nodes [deep, SEARCH_DEEP=1] 0ms
+ ✓ src/search.ordering.test.ts > A3 — ordered search visits a small fraction of the unordered nodes > position-6 at depth 4: <= 4% of the unordered nodes [deep, SEARCH_DEEP=1] 0ms
+ ✓ src/search.ordering.test.ts > A4 — each heuristic's node count, and the delete rule > position-6 at depth 2: none 10 371, MVV-LVA 3 266, + killers 3 177 6ms
+ ✓ src/search.ordering.test.ts > A4 — each heuristic's node count, and the delete rule > the promotion-capture fixture at depth 3 visits 232 nodes (ABC-079 QE G4) 1ms
+ ✓ src/search.ordering.test.ts > A4 — each heuristic's node count, and the delete rule > kiwipete at depths 4 and 5, per configuration; the delete rule on depth 5 [deep, SEARCH_DEEP=1] 1171ms
+stdout | src/search.ordering.test.ts > A4 — each heuristic's node count, and the delete rule > position-6 at depths 4 and 5, per configuration; the delete rule on depth 5 [deep, SEARCH_DEEP=1]
+ABC-080 A4 position-6 d4: none 1916580 / MVV-LVA 39026 / + killers 37961 / + hash move (ABC-081's table) 31721
+ABC-080 A4 position-6 d5: none (not run in-suite, see the context notes) / MVV-LVA 182388 / + killers 151210 / + hash move (ABC-081's table) 124362
+
+ ✓ src/search.ordering.test.ts > A4 — each heuristic's node count, and the delete rule > position-6 at depths 4 and 5, per configuration; the delete rule on depth 5 [deep, SEARCH_DEEP=1] 911ms
+ ✓ src/search.ordering.test.ts > A6 — a killer is offered only at the ply it was recorded at, and only in its own search > search(): every killer offered was recorded at that ply of that search, and killers ARE offered 4ms
+ ✓ src/search.ordering.test.ts > A6 — a killer is offered only at the ply it was recorded at, and only in its own search > search(): each search starts from its own, empty table 5ms
+ ✓ src/search.ordering.test.ts > A6 — a killer is offered only at the ply it was recorded at, and only in its own search > chooseMove(): one table per call, kept across its iterations, never across calls 5ms
+ ✓ src/search.ordering.test.ts > G1 — chooseMove records a killer only on a beta cutoff > position-3 at 3 injected ticks: depth 3 in exactly 342 nodes 1ms
+
+ Test Files  1 passed (1)
+      Tests  38 passed (38)
+   Start at  08:07:31
+   Duration  10.48s (transform 0ms, setup 0ms, import 65ms, tests 10.36s, environment 0ms)
+

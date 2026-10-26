@@ -1,0 +1,8 @@
+kiwipete d6: base 248056 (d6) head 309541 (d6) 24.8% head-door 248056 = base
+kiwipete d7: base 609900 (d7) head 590489 (d7) -3.2% head-door 609900 = base
+kiwipete d8: base 1735339 (d8) head 1259463 (d8) -27.4% head-door 1735339 = base
+kiwipete d9: base - head 2907475 (d9) % head-door -
+position-6 d6: base 180658 (d6) head 52265 (d6) -71.1% head-door 180658 = base
+position-6 d7: base 586333 (d7) head 180941 (d7) -69.1% head-door 586333 = base
+position-6 d8: base 1355149 (d8) head 355565 (d8) -73.8% head-door 1355149 = base
+position-6 d9: base - head 940109 (d9) % head-door -
