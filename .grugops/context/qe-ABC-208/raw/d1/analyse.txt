@@ -1,0 +1,25 @@
+pgn_games: 400
+started: 400
+finished: 400
+result_texts: {"Black mates": 85, "White mates": 103, "Draw by 3-fold repetition": 208, "Draw by insufficient mating material": 4}
+fault_games: []
+out_fault_lines: []
+first_go_raw: {"skytalix": "94 >skytalix(0): go movetime 1500", "base": "97 >base(1): go movetime 1500"}
+gaps: {"skytalix": {"budget_ms": 1500, "searched_n": 21012, "book_n": 371, "median": 1501.0, "max": 3717, "over_1531": 40, "over_1500": 14624, "p99": 1506}, "base": {"budget_ms": 1500, "searched_n": 20982, "book_n": 373, "median": 1501.0, "max": 3327, "over_1531": 44, "over_1500": 14934, "p99": 1506}}
+pgn_moves_without_comment: {"skytalix": 371, "base": 373}
+fen_pairs: {"rounds": 200, "bad_rounds": [], "incomplete_rounds": [], "ep_square_dropped_by_cutechess_rounds": 46, "started_2k-1_2k_swapped": true}
+elo_all_qe: {"n": 400, "W": 116, "L": 72, "D": 212, "score": 0.555, "X": 38.3731888566979, "Y": 23.32485157568076, "LOS": 99.93340815923392, "draw_ratio": 53.0}
+cutechess_elo_line_raw: "Elo difference: 38.4 +/- 23.3, LOS: 99.9 %, DrawRatio: 53.0 %"
+cutechess_score_line_raw: "Score of skytalix vs base: 116 - 72 - 212  [0.555] 400"
+one_result_line_raw: "Finished game 3 (skytalix vs base): 0-1 {Black mates}"
+move_cap_draws: 0
+wall: {"median_game_s": 157.0, "mean_game_s": 157.2975, "min": 16, "max": 345, "median_plies": 106.5, "first_start": "2026-10-26T06:28:50.930000+00:00", "last_end": "2026-10-26T12:20:49.851000+00:00", "median_game_s_from_start_end_ms": 157.4185, "duration_tag_vs_start_end_max_abs_diff_s": 0.9879999999999995, "match_span_s": 21118.921, "games_per_hour_measured": 68.18530170172994}
+samples: 2097
+sampler: {"load1_min": 2.44, "load1_max": 86.61, "load1_median": 5.44, "power": ["AC_Power"], "thermal": {"0": 12, "1": 1021, "2": 1064}, "vitest_samples": 64, "load_gt8_samples": 171}
+vitest_bursts: [["2026-10-26T12:03:46+00:00", "2026-10-26T12:03:46+00:00"], ["2026-10-26T12:04:27+00:00", "2026-10-26T12:13:36+00:00"], ["2026-10-26T12:13:57+00:00", "2026-10-26T12:13:57+00:00"], ["2026-10-26T12:14:17+00:00", "2026-10-26T12:15:18+00:00"]]
+overlap_games: 18
+elo_clean_qe: {"n": 382, "W": 112, "L": 68, "D": 202, "score": 0.5575916230366492, "X": 40.197159530025694, "Y": 23.899246628846534, "LOS": 99.94801662332277, "draw_ratio": 52.87958115183246}
+wall_clean_median_s: 156.0
+wall_clean_median_s_ms: 156.2015
+overlap_game_rounds: [191, 192, 193, 194, 195, 196, 197, 198, 199]
+games_touching_load_gt8: 78

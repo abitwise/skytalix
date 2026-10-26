@@ -1,0 +1,800 @@
+2026-10-26T06:28:51Z Started game 1 of 400 (skytalix vs base)
+2026-10-26T06:28:51Z Started game 2 of 400 (base vs skytalix)
+2026-10-26T06:28:51Z Started game 3 of 400 (skytalix vs base)
+2026-10-26T06:30:48Z Finished game 3 (skytalix vs base): 0-1 {Black mates}
+2026-10-26T06:30:48Z Started game 4 of 400 (base vs skytalix)
+2026-10-26T06:31:19Z Finished game 1 (skytalix vs base): 1-0 {White mates}
+2026-10-26T06:31:19Z Started game 5 of 400 (skytalix vs base)
+2026-10-26T06:32:04Z Finished game 2 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T06:32:04Z Started game 6 of 400 (base vs skytalix)
+2026-10-26T06:32:22Z Finished game 4 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T06:32:22Z Started game 7 of 400 (skytalix vs base)
+2026-10-26T06:33:27Z Finished game 5 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T06:33:27Z Started game 8 of 400 (base vs skytalix)
+2026-10-26T06:34:36Z Finished game 7 (skytalix vs base): 1-0 {White mates}
+2026-10-26T06:34:36Z Started game 9 of 400 (skytalix vs base)
+2026-10-26T06:34:58Z Finished game 6 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T06:34:59Z Started game 10 of 400 (base vs skytalix)
+2026-10-26T06:36:32Z Finished game 8 (base vs skytalix): 1-0 {White mates}
+2026-10-26T06:36:32Z Started game 11 of 400 (skytalix vs base)
+2026-10-26T06:37:59Z Finished game 9 (skytalix vs base): 0-1 {Black mates}
+2026-10-26T06:37:59Z Started game 12 of 400 (base vs skytalix)
+2026-10-26T06:38:35Z Finished game 10 (base vs skytalix): 1-0 {White mates}
+2026-10-26T06:38:35Z Started game 13 of 400 (skytalix vs base)
+2026-10-26T06:39:23Z Finished game 11 (skytalix vs base): 0-1 {Black mates}
+2026-10-26T06:39:23Z Started game 14 of 400 (base vs skytalix)
+2026-10-26T06:40:29Z Finished game 13 (skytalix vs base): 0-1 {Black mates}
+2026-10-26T06:40:29Z Finished game 12 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T06:40:29Z Started game 15 of 400 (skytalix vs base)
+2026-10-26T06:40:29Z Started game 16 of 400 (base vs skytalix)
+2026-10-26T06:41:22Z Finished game 14 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T06:41:22Z Started game 17 of 400 (skytalix vs base)
+2026-10-26T06:42:22Z Finished game 16 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T06:42:22Z Started game 18 of 400 (base vs skytalix)
+2026-10-26T06:43:47Z Finished game 15 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T06:43:48Z Started game 19 of 400 (skytalix vs base)
+2026-10-26T06:45:01Z Finished game 17 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T06:45:01Z Started game 20 of 400 (base vs skytalix)
+2026-10-26T06:45:28Z Finished game 18 (base vs skytalix): 1-0 {White mates}
+2026-10-26T06:45:28Z Started game 21 of 400 (skytalix vs base)
+2026-10-26T06:45:43Z Finished game 19 (skytalix vs base): 0-1 {Black mates}
+2026-10-26T06:45:43Z Started game 22 of 400 (base vs skytalix)
+2026-10-26T06:47:55Z Finished game 20 (base vs skytalix): 1-0 {White mates}
+2026-10-26T06:47:56Z Started game 23 of 400 (skytalix vs base)
+2026-10-26T06:47:58Z Finished game 21 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T06:47:59Z Started game 24 of 400 (base vs skytalix)
+2026-10-26T06:48:42Z Finished game 22 (base vs skytalix): 1-0 {White mates}
+2026-10-26T06:48:42Z Started game 25 of 400 (skytalix vs base)
+2026-10-26T06:49:24Z Finished game 23 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T06:49:24Z Started game 26 of 400 (base vs skytalix)
+2026-10-26T06:49:51Z Finished game 24 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T06:49:51Z Started game 27 of 400 (skytalix vs base)
+2026-10-26T06:51:32Z Finished game 26 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T06:51:32Z Started game 28 of 400 (base vs skytalix)
+2026-10-26T06:52:05Z Finished game 25 (skytalix vs base): 0-1 {Black mates}
+2026-10-26T06:52:05Z Started game 29 of 400 (skytalix vs base)
+2026-10-26T06:53:19Z Finished game 27 (skytalix vs base): 1-0 {White mates}
+2026-10-26T06:53:19Z Started game 30 of 400 (base vs skytalix)
+2026-10-26T06:54:16Z Finished game 29 (skytalix vs base): 1-0 {White mates}
+2026-10-26T06:54:16Z Finished game 28 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T06:54:16Z Started game 31 of 400 (skytalix vs base)
+2026-10-26T06:54:16Z Started game 32 of 400 (base vs skytalix)
+2026-10-26T06:56:49Z Finished game 32 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T06:56:49Z Started game 33 of 400 (skytalix vs base)
+2026-10-26T06:57:43Z Finished game 30 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T06:57:43Z Started game 34 of 400 (base vs skytalix)
+2026-10-26T06:58:21Z Finished game 31 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T06:58:21Z Started game 35 of 400 (skytalix vs base)
+2026-10-26T06:59:27Z Finished game 35 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T06:59:27Z Started game 36 of 400 (base vs skytalix)
+2026-10-26T06:59:58Z Finished game 34 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T06:59:58Z Started game 37 of 400 (skytalix vs base)
+2026-10-26T07:01:09Z Finished game 33 (skytalix vs base): 1-0 {White mates}
+2026-10-26T07:01:09Z Started game 38 of 400 (base vs skytalix)
+2026-10-26T07:01:50Z Finished game 37 (skytalix vs base): 0-1 {Black mates}
+2026-10-26T07:01:50Z Started game 39 of 400 (skytalix vs base)
+2026-10-26T07:01:54Z Finished game 36 (base vs skytalix): 1-0 {White mates}
+2026-10-26T07:01:54Z Started game 40 of 400 (base vs skytalix)
+2026-10-26T07:03:30Z Finished game 39 (skytalix vs base): 1-0 {White mates}
+2026-10-26T07:03:30Z Started game 41 of 400 (skytalix vs base)
+2026-10-26T07:03:32Z Finished game 38 (base vs skytalix): 1-0 {White mates}
+2026-10-26T07:03:32Z Started game 42 of 400 (base vs skytalix)
+2026-10-26T07:03:44Z Finished game 40 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T07:03:44Z Started game 43 of 400 (skytalix vs base)
+2026-10-26T07:05:04Z Finished game 43 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T07:05:04Z Started game 44 of 400 (base vs skytalix)
+2026-10-26T07:06:58Z Finished game 41 (skytalix vs base): 1-0 {White mates}
+2026-10-26T07:06:58Z Started game 45 of 400 (skytalix vs base)
+2026-10-26T07:08:16Z Finished game 44 (base vs skytalix): 1-0 {White mates}
+2026-10-26T07:08:16Z Started game 46 of 400 (base vs skytalix)
+2026-10-26T07:08:26Z Finished game 42 (base vs skytalix): 1-0 {White mates}
+2026-10-26T07:08:26Z Started game 47 of 400 (skytalix vs base)
+2026-10-26T07:09:10Z Finished game 45 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T07:09:10Z Started game 48 of 400 (base vs skytalix)
+2026-10-26T07:10:45Z Finished game 46 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T07:10:45Z Started game 49 of 400 (skytalix vs base)
+2026-10-26T07:10:51Z Finished game 47 (skytalix vs base): 1-0 {White mates}
+2026-10-26T07:10:51Z Started game 50 of 400 (base vs skytalix)
+2026-10-26T07:11:34Z Finished game 48 (base vs skytalix): 1-0 {White mates}
+2026-10-26T07:11:35Z Started game 51 of 400 (skytalix vs base)
+2026-10-26T07:11:36Z Finished game 49 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T07:11:36Z Started game 52 of 400 (base vs skytalix)
+2026-10-26T07:13:02Z Finished game 51 (skytalix vs base): 1-0 {White mates}
+2026-10-26T07:13:02Z Started game 53 of 400 (skytalix vs base)
+2026-10-26T07:13:26Z Finished game 52 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T07:13:26Z Started game 54 of 400 (base vs skytalix)
+2026-10-26T07:13:54Z Finished game 50 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T07:13:54Z Started game 55 of 400 (skytalix vs base)
+2026-10-26T07:15:09Z Finished game 54 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T07:15:10Z Started game 56 of 400 (base vs skytalix)
+2026-10-26T07:16:05Z Finished game 55 (skytalix vs base): 1-0 {White mates}
+2026-10-26T07:16:05Z Started game 57 of 400 (skytalix vs base)
+2026-10-26T07:16:26Z Finished game 53 (skytalix vs base): 1-0 {White mates}
+2026-10-26T07:16:26Z Started game 58 of 400 (base vs skytalix)
+2026-10-26T07:18:01Z Finished game 57 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T07:18:01Z Started game 59 of 400 (skytalix vs base)
+2026-10-26T07:18:32Z Finished game 56 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T07:18:32Z Started game 60 of 400 (base vs skytalix)
+2026-10-26T07:19:49Z Finished game 60 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T07:19:49Z Started game 61 of 400 (skytalix vs base)
+2026-10-26T07:19:58Z Finished game 58 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T07:19:58Z Started game 62 of 400 (base vs skytalix)
+2026-10-26T07:21:24Z Finished game 62 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T07:21:24Z Started game 63 of 400 (skytalix vs base)
+2026-10-26T07:21:34Z Finished game 59 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T07:21:34Z Started game 64 of 400 (base vs skytalix)
+2026-10-26T07:23:22Z Finished game 61 (skytalix vs base): 1-0 {White mates}
+2026-10-26T07:23:23Z Started game 65 of 400 (skytalix vs base)
+2026-10-26T07:23:39Z Finished game 65 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T07:23:39Z Started game 66 of 400 (base vs skytalix)
+2026-10-26T07:24:16Z Finished game 64 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T07:24:17Z Started game 67 of 400 (skytalix vs base)
+2026-10-26T07:24:24Z Finished game 63 (skytalix vs base): 1-0 {White mates}
+2026-10-26T07:24:24Z Started game 68 of 400 (base vs skytalix)
+2026-10-26T07:25:30Z Finished game 68 (base vs skytalix): 1-0 {White mates}
+2026-10-26T07:25:30Z Started game 69 of 400 (skytalix vs base)
+2026-10-26T07:25:42Z Finished game 66 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T07:25:42Z Started game 70 of 400 (base vs skytalix)
+2026-10-26T07:26:59Z Finished game 67 (skytalix vs base): 1-0 {White mates}
+2026-10-26T07:26:59Z Finished game 69 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T07:26:59Z Started game 71 of 400 (skytalix vs base)
+2026-10-26T07:26:59Z Started game 72 of 400 (base vs skytalix)
+2026-10-26T07:28:02Z Finished game 70 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T07:28:02Z Started game 73 of 400 (skytalix vs base)
+2026-10-26T07:28:41Z Finished game 72 (base vs skytalix): 1-0 {White mates}
+2026-10-26T07:28:41Z Started game 74 of 400 (base vs skytalix)
+2026-10-26T07:28:49Z Finished game 71 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T07:28:49Z Started game 75 of 400 (skytalix vs base)
+2026-10-26T07:29:22Z Finished game 73 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T07:29:22Z Started game 76 of 400 (base vs skytalix)
+2026-10-26T07:31:17Z Finished game 74 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T07:31:18Z Started game 77 of 400 (skytalix vs base)
+2026-10-26T07:32:01Z Finished game 75 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T07:32:01Z Started game 78 of 400 (base vs skytalix)
+2026-10-26T07:32:37Z Finished game 76 (base vs skytalix): 1-0 {White mates}
+2026-10-26T07:32:37Z Started game 79 of 400 (skytalix vs base)
+2026-10-26T07:34:06Z Finished game 78 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T07:34:06Z Started game 80 of 400 (base vs skytalix)
+2026-10-26T07:34:07Z Finished game 79 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T07:34:08Z Started game 81 of 400 (skytalix vs base)
+2026-10-26T07:35:18Z Finished game 77 (skytalix vs base): 1-0 {White mates}
+2026-10-26T07:35:18Z Started game 82 of 400 (base vs skytalix)
+2026-10-26T07:36:09Z Finished game 81 (skytalix vs base): 1-0 {White mates}
+2026-10-26T07:36:09Z Started game 83 of 400 (skytalix vs base)
+2026-10-26T07:37:27Z Finished game 80 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T07:37:27Z Started game 84 of 400 (base vs skytalix)
+2026-10-26T07:37:56Z Finished game 82 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T07:37:56Z Started game 85 of 400 (skytalix vs base)
+2026-10-26T07:38:49Z Finished game 83 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T07:38:50Z Started game 86 of 400 (base vs skytalix)
+2026-10-26T07:39:01Z Finished game 84 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T07:39:01Z Started game 87 of 400 (skytalix vs base)
+2026-10-26T07:39:49Z Finished game 85 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T07:39:49Z Started game 88 of 400 (base vs skytalix)
+2026-10-26T07:40:47Z Finished game 88 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T07:40:47Z Started game 89 of 400 (skytalix vs base)
+2026-10-26T07:41:54Z Finished game 87 (skytalix vs base): 1-0 {White mates}
+2026-10-26T07:41:54Z Started game 90 of 400 (base vs skytalix)
+2026-10-26T07:42:15Z Finished game 86 (base vs skytalix): 1-0 {White mates}
+2026-10-26T07:42:15Z Started game 91 of 400 (skytalix vs base)
+2026-10-26T07:42:18Z Finished game 89 (skytalix vs base): 1-0 {White mates}
+2026-10-26T07:42:18Z Started game 92 of 400 (base vs skytalix)
+2026-10-26T07:43:56Z Finished game 90 (base vs skytalix): 1-0 {White mates}
+2026-10-26T07:43:56Z Started game 93 of 400 (skytalix vs base)
+2026-10-26T07:43:59Z Finished game 91 (skytalix vs base): 1-0 {White mates}
+2026-10-26T07:43:59Z Started game 94 of 400 (base vs skytalix)
+2026-10-26T07:44:55Z Finished game 92 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T07:44:55Z Started game 95 of 400 (skytalix vs base)
+2026-10-26T07:45:43Z Finished game 93 (skytalix vs base): 1-0 {White mates}
+2026-10-26T07:45:43Z Started game 96 of 400 (base vs skytalix)
+2026-10-26T07:46:59Z Finished game 95 (skytalix vs base): 0-1 {Black mates}
+2026-10-26T07:46:59Z Started game 97 of 400 (skytalix vs base)
+2026-10-26T07:47:02Z Finished game 94 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T07:47:02Z Started game 98 of 400 (base vs skytalix)
+2026-10-26T07:47:37Z Finished game 96 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T07:47:37Z Started game 99 of 400 (skytalix vs base)
+2026-10-26T07:48:28Z Finished game 97 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T07:48:28Z Started game 100 of 400 (base vs skytalix)
+2026-10-26T07:49:52Z Finished game 98 (base vs skytalix): 1-0 {White mates}
+2026-10-26T07:49:52Z Started game 101 of 400 (skytalix vs base)
+2026-10-26T07:50:51Z Finished game 99 (skytalix vs base): 1-0 {White mates}
+2026-10-26T07:50:51Z Started game 102 of 400 (base vs skytalix)
+2026-10-26T07:50:58Z Finished game 100 (base vs skytalix): 1/2-1/2 {Draw by insufficient mating material}
+2026-10-26T07:50:59Z Started game 103 of 400 (skytalix vs base)
+2026-10-26T07:51:16Z Finished game 101 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T07:51:17Z Started game 104 of 400 (base vs skytalix)
+2026-10-26T07:53:35Z Finished game 104 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T07:53:35Z Started game 105 of 400 (skytalix vs base)
+2026-10-26T07:53:47Z Finished game 103 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T07:53:47Z Started game 106 of 400 (base vs skytalix)
+2026-10-26T07:53:50Z Finished game 102 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T07:53:50Z Started game 107 of 400 (skytalix vs base)
+2026-10-26T07:54:26Z Finished game 105 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T07:54:26Z Started game 108 of 400 (base vs skytalix)
+2026-10-26T07:56:21Z Finished game 107 (skytalix vs base): 1-0 {White mates}
+2026-10-26T07:56:22Z Started game 109 of 400 (skytalix vs base)
+2026-10-26T07:57:01Z Finished game 106 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T07:57:01Z Started game 110 of 400 (base vs skytalix)
+2026-10-26T07:57:25Z Finished game 108 (base vs skytalix): 1-0 {White mates}
+2026-10-26T07:57:25Z Started game 111 of 400 (skytalix vs base)
+2026-10-26T07:58:44Z Finished game 109 (skytalix vs base): 0-1 {Black mates}
+2026-10-26T07:58:44Z Started game 112 of 400 (base vs skytalix)
+2026-10-26T08:00:18Z Finished game 110 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T08:00:18Z Started game 113 of 400 (skytalix vs base)
+2026-10-26T08:01:15Z Finished game 111 (skytalix vs base): 1-0 {White mates}
+2026-10-26T08:01:15Z Started game 114 of 400 (base vs skytalix)
+2026-10-26T08:02:16Z Finished game 113 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T08:02:16Z Started game 115 of 400 (skytalix vs base)
+2026-10-26T08:03:15Z Finished game 112 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T08:03:15Z Started game 116 of 400 (base vs skytalix)
+2026-10-26T08:04:35Z Finished game 115 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T08:04:35Z Started game 117 of 400 (skytalix vs base)
+2026-10-26T08:04:50Z Finished game 114 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T08:04:50Z Started game 118 of 400 (base vs skytalix)
+2026-10-26T08:06:32Z Finished game 116 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T08:06:32Z Started game 119 of 400 (skytalix vs base)
+2026-10-26T08:07:34Z Finished game 118 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T08:07:34Z Started game 120 of 400 (base vs skytalix)
+2026-10-26T08:08:08Z Finished game 117 (skytalix vs base): 1-0 {White mates}
+2026-10-26T08:08:08Z Started game 121 of 400 (skytalix vs base)
+2026-10-26T08:08:56Z Finished game 119 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T08:08:56Z Started game 122 of 400 (base vs skytalix)
+2026-10-26T08:10:26Z Finished game 120 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T08:10:27Z Started game 123 of 400 (skytalix vs base)
+2026-10-26T08:11:48Z Finished game 121 (skytalix vs base): 1-0 {White mates}
+2026-10-26T08:11:48Z Started game 124 of 400 (base vs skytalix)
+2026-10-26T08:12:25Z Finished game 122 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T08:12:25Z Started game 125 of 400 (skytalix vs base)
+2026-10-26T08:12:27Z Finished game 123 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T08:12:27Z Started game 126 of 400 (base vs skytalix)
+2026-10-26T08:13:44Z Finished game 126 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T08:13:44Z Started game 127 of 400 (skytalix vs base)
+2026-10-26T08:14:35Z Finished game 124 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T08:14:35Z Started game 128 of 400 (base vs skytalix)
+2026-10-26T08:15:36Z Finished game 125 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T08:15:36Z Started game 129 of 400 (skytalix vs base)
+2026-10-26T08:17:33Z Finished game 127 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T08:17:34Z Started game 130 of 400 (base vs skytalix)
+2026-10-26T08:18:06Z Finished game 129 (skytalix vs base): 0-1 {Black mates}
+2026-10-26T08:18:06Z Started game 131 of 400 (skytalix vs base)
+2026-10-26T08:18:19Z Finished game 128 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T08:18:19Z Started game 132 of 400 (base vs skytalix)
+2026-10-26T08:19:05Z Finished game 130 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T08:19:05Z Started game 133 of 400 (skytalix vs base)
+2026-10-26T08:20:04Z Finished game 132 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T08:20:04Z Started game 134 of 400 (base vs skytalix)
+2026-10-26T08:20:40Z Finished game 131 (skytalix vs base): 1-0 {White mates}
+2026-10-26T08:20:40Z Started game 135 of 400 (skytalix vs base)
+2026-10-26T08:22:46Z Finished game 134 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T08:22:46Z Started game 136 of 400 (base vs skytalix)
+2026-10-26T08:23:10Z Finished game 133 (skytalix vs base): 1-0 {White mates}
+2026-10-26T08:23:10Z Started game 137 of 400 (skytalix vs base)
+2026-10-26T08:23:13Z Finished game 135 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T08:23:13Z Started game 138 of 400 (base vs skytalix)
+2026-10-26T08:25:07Z Finished game 137 (skytalix vs base): 1-0 {White mates}
+2026-10-26T08:25:08Z Started game 139 of 400 (skytalix vs base)
+2026-10-26T08:25:22Z Finished game 136 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T08:25:23Z Started game 140 of 400 (base vs skytalix)
+2026-10-26T08:26:48Z Finished game 138 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T08:26:48Z Started game 141 of 400 (skytalix vs base)
+2026-10-26T08:28:11Z Finished game 139 (skytalix vs base): 1-0 {White mates}
+2026-10-26T08:28:11Z Started game 142 of 400 (base vs skytalix)
+2026-10-26T08:28:48Z Finished game 140 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T08:28:48Z Started game 143 of 400 (skytalix vs base)
+2026-10-26T08:31:09Z Finished game 141 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T08:31:09Z Started game 144 of 400 (base vs skytalix)
+2026-10-26T08:31:13Z Finished game 143 (skytalix vs base): 0-1 {Black mates}
+2026-10-26T08:31:13Z Started game 145 of 400 (skytalix vs base)
+2026-10-26T08:31:25Z Finished game 142 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T08:31:25Z Started game 146 of 400 (base vs skytalix)
+2026-10-26T08:33:06Z Finished game 146 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T08:33:06Z Started game 147 of 400 (skytalix vs base)
+2026-10-26T08:33:22Z Finished game 145 (skytalix vs base): 0-1 {Black mates}
+2026-10-26T08:33:22Z Started game 148 of 400 (base vs skytalix)
+2026-10-26T08:35:10Z Finished game 148 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T08:35:10Z Started game 149 of 400 (skytalix vs base)
+2026-10-26T08:35:11Z Finished game 144 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T08:35:11Z Started game 150 of 400 (base vs skytalix)
+2026-10-26T08:35:48Z Finished game 147 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T08:35:48Z Started game 151 of 400 (skytalix vs base)
+2026-10-26T08:37:57Z Finished game 151 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T08:37:57Z Started game 152 of 400 (base vs skytalix)
+2026-10-26T08:38:32Z Finished game 149 (skytalix vs base): 0-1 {Black mates}
+2026-10-26T08:38:32Z Started game 153 of 400 (skytalix vs base)
+2026-10-26T08:39:48Z Finished game 150 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T08:39:48Z Started game 154 of 400 (base vs skytalix)
+2026-10-26T08:41:56Z Finished game 154 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T08:41:56Z Started game 155 of 400 (skytalix vs base)
+2026-10-26T08:41:56Z Finished game 153 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T08:41:56Z Started game 156 of 400 (base vs skytalix)
+2026-10-26T08:43:43Z Finished game 152 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T08:43:43Z Started game 157 of 400 (skytalix vs base)
+2026-10-26T08:44:47Z Finished game 155 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T08:44:47Z Started game 158 of 400 (base vs skytalix)
+2026-10-26T08:45:24Z Finished game 157 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T08:45:24Z Started game 159 of 400 (skytalix vs base)
+2026-10-26T08:46:05Z Finished game 158 (base vs skytalix): 1-0 {White mates}
+2026-10-26T08:46:05Z Started game 160 of 400 (base vs skytalix)
+2026-10-26T08:46:07Z Finished game 156 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T08:46:07Z Started game 161 of 400 (skytalix vs base)
+2026-10-26T08:47:20Z Finished game 159 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T08:47:20Z Started game 162 of 400 (base vs skytalix)
+2026-10-26T08:47:54Z Finished game 161 (skytalix vs base): 1-0 {White mates}
+2026-10-26T08:47:54Z Started game 163 of 400 (skytalix vs base)
+2026-10-26T08:48:51Z Finished game 160 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T08:48:51Z Started game 164 of 400 (base vs skytalix)
+2026-10-26T08:49:41Z Finished game 163 (skytalix vs base): 0-1 {Black mates}
+2026-10-26T08:49:41Z Started game 165 of 400 (skytalix vs base)
+2026-10-26T08:50:00Z Finished game 162 (base vs skytalix): 1-0 {White mates}
+2026-10-26T08:50:00Z Started game 166 of 400 (base vs skytalix)
+2026-10-26T08:50:36Z Finished game 164 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T08:50:36Z Started game 167 of 400 (skytalix vs base)
+2026-10-26T08:51:26Z Finished game 165 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T08:51:26Z Started game 168 of 400 (base vs skytalix)
+2026-10-26T08:51:44Z Finished game 166 (base vs skytalix): 1-0 {White mates}
+2026-10-26T08:51:44Z Started game 169 of 400 (skytalix vs base)
+2026-10-26T08:53:26Z Finished game 168 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T08:53:26Z Started game 170 of 400 (base vs skytalix)
+2026-10-26T08:53:53Z Finished game 167 (skytalix vs base): 1-0 {White mates}
+2026-10-26T08:53:53Z Started game 171 of 400 (skytalix vs base)
+2026-10-26T08:54:36Z Finished game 169 (skytalix vs base): 0-1 {Black mates}
+2026-10-26T08:54:36Z Started game 172 of 400 (base vs skytalix)
+2026-10-26T08:55:45Z Finished game 170 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T08:55:45Z Started game 173 of 400 (skytalix vs base)
+2026-10-26T08:56:10Z Finished game 171 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T08:56:10Z Started game 174 of 400 (base vs skytalix)
+2026-10-26T08:56:40Z Finished game 172 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T08:56:40Z Started game 175 of 400 (skytalix vs base)
+2026-10-26T08:56:47Z Finished game 174 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T08:56:47Z Started game 176 of 400 (base vs skytalix)
+2026-10-26T08:58:49Z Finished game 176 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T08:58:49Z Started game 177 of 400 (skytalix vs base)
+2026-10-26T08:59:12Z Finished game 173 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T08:59:12Z Started game 178 of 400 (base vs skytalix)
+2026-10-26T08:59:24Z Finished game 175 (skytalix vs base): 1-0 {White mates}
+2026-10-26T08:59:24Z Started game 179 of 400 (skytalix vs base)
+2026-10-26T09:01:56Z Finished game 179 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T09:01:56Z Started game 180 of 400 (base vs skytalix)
+2026-10-26T09:02:14Z Finished game 178 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T09:02:14Z Started game 181 of 400 (skytalix vs base)
+2026-10-26T09:03:04Z Finished game 181 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T09:03:04Z Started game 182 of 400 (base vs skytalix)
+2026-10-26T09:03:11Z Finished game 177 (skytalix vs base): 1-0 {White mates}
+2026-10-26T09:03:11Z Started game 183 of 400 (skytalix vs base)
+2026-10-26T09:05:05Z Finished game 180 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T09:05:05Z Started game 184 of 400 (base vs skytalix)
+2026-10-26T09:05:47Z Finished game 183 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T09:05:47Z Started game 185 of 400 (skytalix vs base)
+2026-10-26T09:06:35Z Finished game 182 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T09:06:36Z Started game 186 of 400 (base vs skytalix)
+2026-10-26T09:07:25Z Finished game 185 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T09:07:25Z Started game 187 of 400 (skytalix vs base)
+2026-10-26T09:08:25Z Finished game 184 (base vs skytalix): 1/2-1/2 {Draw by insufficient mating material}
+2026-10-26T09:08:25Z Started game 188 of 400 (base vs skytalix)
+2026-10-26T09:09:44Z Finished game 187 (skytalix vs base): 1-0 {White mates}
+2026-10-26T09:09:44Z Started game 189 of 400 (skytalix vs base)
+2026-10-26T09:10:00Z Finished game 186 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T09:10:00Z Started game 190 of 400 (base vs skytalix)
+2026-10-26T09:11:57Z Finished game 190 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T09:11:57Z Started game 191 of 400 (skytalix vs base)
+2026-10-26T09:12:24Z Finished game 188 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T09:12:24Z Started game 192 of 400 (base vs skytalix)
+2026-10-26T09:12:43Z Finished game 189 (skytalix vs base): 1-0 {White mates}
+2026-10-26T09:12:43Z Started game 193 of 400 (skytalix vs base)
+2026-10-26T09:15:05Z Finished game 192 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T09:15:05Z Started game 194 of 400 (base vs skytalix)
+2026-10-26T09:15:14Z Finished game 191 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T09:15:14Z Started game 195 of 400 (skytalix vs base)
+2026-10-26T09:15:59Z Finished game 193 (skytalix vs base): 0-1 {Black mates}
+2026-10-26T09:15:59Z Started game 196 of 400 (base vs skytalix)
+2026-10-26T09:17:57Z Finished game 196 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T09:17:57Z Started game 197 of 400 (skytalix vs base)
+2026-10-26T09:18:49Z Finished game 194 (base vs skytalix): 1-0 {White mates}
+2026-10-26T09:18:49Z Started game 198 of 400 (base vs skytalix)
+2026-10-26T09:20:37Z Finished game 195 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T09:20:37Z Started game 199 of 400 (skytalix vs base)
+2026-10-26T09:20:50Z Finished game 197 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T09:20:50Z Started game 200 of 400 (base vs skytalix)
+2026-10-26T09:21:07Z Finished game 198 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T09:21:07Z Started game 201 of 400 (skytalix vs base)
+2026-10-26T09:23:30Z Finished game 199 (skytalix vs base): 1-0 {White mates}
+2026-10-26T09:23:30Z Started game 202 of 400 (base vs skytalix)
+2026-10-26T09:24:01Z Finished game 200 (base vs skytalix): 1-0 {White mates}
+2026-10-26T09:24:01Z Started game 203 of 400 (skytalix vs base)
+2026-10-26T09:24:25Z Finished game 201 (skytalix vs base): 0-1 {Black mates}
+2026-10-26T09:24:26Z Started game 204 of 400 (base vs skytalix)
+2026-10-26T09:25:19Z Finished game 203 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T09:25:19Z Started game 205 of 400 (skytalix vs base)
+2026-10-26T09:27:20Z Finished game 202 (base vs skytalix): 1-0 {White mates}
+2026-10-26T09:27:20Z Started game 206 of 400 (base vs skytalix)
+2026-10-26T09:27:27Z Finished game 205 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T09:27:27Z Started game 207 of 400 (skytalix vs base)
+2026-10-26T09:27:42Z Finished game 204 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T09:27:42Z Started game 208 of 400 (base vs skytalix)
+2026-10-26T09:29:35Z Finished game 207 (skytalix vs base): 1-0 {White mates}
+2026-10-26T09:29:35Z Started game 209 of 400 (skytalix vs base)
+2026-10-26T09:30:04Z Finished game 208 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T09:30:04Z Started game 210 of 400 (base vs skytalix)
+2026-10-26T09:30:59Z Finished game 206 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T09:30:59Z Started game 211 of 400 (skytalix vs base)
+2026-10-26T09:31:58Z Finished game 209 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T09:31:58Z Started game 212 of 400 (base vs skytalix)
+2026-10-26T09:33:40Z Finished game 210 (base vs skytalix): 1-0 {White mates}
+2026-10-26T09:33:40Z Started game 213 of 400 (skytalix vs base)
+2026-10-26T09:33:50Z Finished game 211 (skytalix vs base): 0-1 {Black mates}
+2026-10-26T09:33:50Z Started game 214 of 400 (base vs skytalix)
+2026-10-26T09:34:34Z Finished game 212 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T09:34:35Z Started game 215 of 400 (skytalix vs base)
+2026-10-26T09:35:49Z Finished game 214 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T09:35:49Z Started game 216 of 400 (base vs skytalix)
+2026-10-26T09:37:21Z Finished game 215 (skytalix vs base): 0-1 {Black mates}
+2026-10-26T09:37:21Z Started game 217 of 400 (skytalix vs base)
+2026-10-26T09:37:48Z Finished game 213 (skytalix vs base): 1-0 {White mates}
+2026-10-26T09:37:48Z Started game 218 of 400 (base vs skytalix)
+2026-10-26T09:39:35Z Finished game 216 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T09:39:35Z Started game 219 of 400 (skytalix vs base)
+2026-10-26T09:40:55Z Finished game 218 (base vs skytalix): 1-0 {White mates}
+2026-10-26T09:40:55Z Started game 220 of 400 (base vs skytalix)
+2026-10-26T09:41:01Z Finished game 217 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T09:41:01Z Started game 221 of 400 (skytalix vs base)
+2026-10-26T09:43:13Z Finished game 220 (base vs skytalix): 1-0 {White mates}
+2026-10-26T09:43:13Z Started game 222 of 400 (base vs skytalix)
+2026-10-26T09:43:14Z Finished game 219 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T09:43:14Z Started game 223 of 400 (skytalix vs base)
+2026-10-26T09:43:34Z Finished game 221 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T09:43:34Z Started game 224 of 400 (base vs skytalix)
+2026-10-26T09:44:43Z Finished game 223 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T09:44:43Z Started game 225 of 400 (skytalix vs base)
+2026-10-26T09:45:27Z Finished game 224 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T09:45:27Z Started game 226 of 400 (base vs skytalix)
+2026-10-26T09:45:58Z Finished game 222 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T09:45:58Z Started game 227 of 400 (skytalix vs base)
+2026-10-26T09:46:37Z Finished game 225 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T09:46:37Z Started game 228 of 400 (base vs skytalix)
+2026-10-26T09:48:16Z Finished game 226 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T09:48:17Z Started game 229 of 400 (skytalix vs base)
+2026-10-26T09:48:30Z Finished game 228 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T09:48:30Z Started game 230 of 400 (base vs skytalix)
+2026-10-26T09:48:49Z Finished game 227 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T09:48:49Z Started game 231 of 400 (skytalix vs base)
+2026-10-26T09:50:24Z Finished game 230 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T09:50:24Z Started game 232 of 400 (base vs skytalix)
+2026-10-26T09:50:27Z Finished game 229 (skytalix vs base): 1-0 {White mates}
+2026-10-26T09:50:27Z Started game 233 of 400 (skytalix vs base)
+2026-10-26T09:51:33Z Finished game 233 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T09:51:33Z Started game 234 of 400 (base vs skytalix)
+2026-10-26T09:52:33Z Finished game 232 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T09:52:33Z Started game 235 of 400 (skytalix vs base)
+2026-10-26T09:52:54Z Finished game 231 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T09:52:54Z Started game 236 of 400 (base vs skytalix)
+2026-10-26T09:53:39Z Finished game 235 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T09:53:40Z Started game 237 of 400 (skytalix vs base)
+2026-10-26T09:54:19Z Finished game 234 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T09:54:19Z Started game 238 of 400 (base vs skytalix)
+2026-10-26T09:55:22Z Finished game 236 (base vs skytalix): 1-0 {White mates}
+2026-10-26T09:55:22Z Started game 239 of 400 (skytalix vs base)
+2026-10-26T09:56:14Z Finished game 237 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T09:56:14Z Started game 240 of 400 (base vs skytalix)
+2026-10-26T09:58:10Z Finished game 238 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T09:58:10Z Started game 241 of 400 (skytalix vs base)
+2026-10-26T09:58:37Z Finished game 239 (skytalix vs base): 1/2-1/2 {Draw by insufficient mating material}
+2026-10-26T09:58:37Z Started game 242 of 400 (base vs skytalix)
+2026-10-26T09:59:13Z Finished game 241 (skytalix vs base): 1-0 {White mates}
+2026-10-26T09:59:14Z Started game 243 of 400 (skytalix vs base)
+2026-10-26T09:59:19Z Finished game 240 (base vs skytalix): 1-0 {White mates}
+2026-10-26T09:59:19Z Started game 244 of 400 (base vs skytalix)
+2026-10-26T10:00:33Z Finished game 243 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T10:00:33Z Started game 245 of 400 (skytalix vs base)
+2026-10-26T10:01:42Z Finished game 242 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T10:01:42Z Started game 246 of 400 (base vs skytalix)
+2026-10-26T10:02:36Z Finished game 244 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T10:02:36Z Started game 247 of 400 (skytalix vs base)
+2026-10-26T10:03:28Z Finished game 245 (skytalix vs base): 1-0 {White mates}
+2026-10-26T10:03:28Z Started game 248 of 400 (base vs skytalix)
+2026-10-26T10:03:44Z Finished game 246 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T10:03:44Z Started game 249 of 400 (skytalix vs base)
+2026-10-26T10:04:35Z Finished game 249 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T10:04:35Z Started game 250 of 400 (base vs skytalix)
+2026-10-26T10:05:02Z Finished game 248 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T10:05:02Z Started game 251 of 400 (skytalix vs base)
+2026-10-26T10:05:45Z Finished game 247 (skytalix vs base): 1-0 {White mates}
+2026-10-26T10:05:45Z Started game 252 of 400 (base vs skytalix)
+2026-10-26T10:06:29Z Finished game 250 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T10:06:29Z Started game 253 of 400 (skytalix vs base)
+2026-10-26T10:08:01Z Finished game 252 (base vs skytalix): 1-0 {White mates}
+2026-10-26T10:08:01Z Started game 254 of 400 (base vs skytalix)
+2026-10-26T10:08:09Z Finished game 251 (skytalix vs base): 1-0 {White mates}
+2026-10-26T10:08:09Z Started game 255 of 400 (skytalix vs base)
+2026-10-26T10:09:44Z Finished game 254 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T10:09:44Z Started game 256 of 400 (base vs skytalix)
+2026-10-26T10:09:53Z Finished game 253 (skytalix vs base): 1-0 {White mates}
+2026-10-26T10:09:54Z Started game 257 of 400 (skytalix vs base)
+2026-10-26T10:11:36Z Finished game 255 (skytalix vs base): 0-1 {Black mates}
+2026-10-26T10:11:36Z Started game 258 of 400 (base vs skytalix)
+2026-10-26T10:12:25Z Finished game 257 (skytalix vs base): 0-1 {Black mates}
+2026-10-26T10:12:25Z Started game 259 of 400 (skytalix vs base)
+2026-10-26T10:12:51Z Finished game 256 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T10:12:51Z Started game 260 of 400 (base vs skytalix)
+2026-10-26T10:13:42Z Finished game 258 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T10:13:43Z Started game 261 of 400 (skytalix vs base)
+2026-10-26T10:15:35Z Finished game 260 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T10:15:35Z Started game 262 of 400 (base vs skytalix)
+2026-10-26T10:15:36Z Finished game 259 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T10:15:36Z Started game 263 of 400 (skytalix vs base)
+2026-10-26T10:16:37Z Finished game 261 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T10:16:37Z Started game 264 of 400 (base vs skytalix)
+2026-10-26T10:17:11Z Finished game 262 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T10:17:11Z Started game 265 of 400 (skytalix vs base)
+2026-10-26T10:17:27Z Finished game 265 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T10:17:28Z Started game 266 of 400 (base vs skytalix)
+2026-10-26T10:18:36Z Finished game 263 (skytalix vs base): 1-0 {White mates}
+2026-10-26T10:18:37Z Started game 267 of 400 (skytalix vs base)
+2026-10-26T10:19:58Z Finished game 267 (skytalix vs base): 1-0 {White mates}
+2026-10-26T10:19:58Z Started game 268 of 400 (base vs skytalix)
+2026-10-26T10:20:12Z Finished game 264 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T10:20:12Z Started game 269 of 400 (skytalix vs base)
+2026-10-26T10:20:16Z Finished game 266 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T10:20:16Z Started game 270 of 400 (base vs skytalix)
+2026-10-26T10:21:49Z Finished game 269 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T10:21:49Z Started game 271 of 400 (skytalix vs base)
+2026-10-26T10:22:36Z Finished game 270 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T10:22:36Z Started game 272 of 400 (base vs skytalix)
+2026-10-26T10:22:44Z Finished game 271 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T10:22:44Z Started game 273 of 400 (skytalix vs base)
+2026-10-26T10:23:36Z Finished game 268 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T10:23:36Z Started game 274 of 400 (base vs skytalix)
+2026-10-26T10:24:03Z Finished game 273 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T10:24:03Z Started game 275 of 400 (skytalix vs base)
+2026-10-26T10:24:18Z Finished game 272 (base vs skytalix): 1-0 {White mates}
+2026-10-26T10:24:18Z Started game 276 of 400 (base vs skytalix)
+2026-10-26T10:26:17Z Finished game 275 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T10:26:17Z Started game 277 of 400 (skytalix vs base)
+2026-10-26T10:26:24Z Finished game 274 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T10:26:24Z Started game 278 of 400 (base vs skytalix)
+2026-10-26T10:27:35Z Finished game 277 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T10:27:35Z Started game 279 of 400 (skytalix vs base)
+2026-10-26T10:28:06Z Finished game 276 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T10:28:06Z Started game 280 of 400 (base vs skytalix)
+2026-10-26T10:28:35Z Finished game 278 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T10:28:35Z Started game 281 of 400 (skytalix vs base)
+2026-10-26T10:29:45Z Finished game 279 (skytalix vs base): 1-0 {White mates}
+2026-10-26T10:29:45Z Started game 282 of 400 (base vs skytalix)
+2026-10-26T10:30:37Z Finished game 281 (skytalix vs base): 1-0 {White mates}
+2026-10-26T10:30:37Z Started game 283 of 400 (skytalix vs base)
+2026-10-26T10:30:49Z Finished game 280 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T10:30:49Z Started game 284 of 400 (base vs skytalix)
+2026-10-26T10:32:59Z Finished game 284 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T10:33:00Z Started game 285 of 400 (skytalix vs base)
+2026-10-26T10:33:19Z Finished game 283 (skytalix vs base): 0-1 {Black mates}
+2026-10-26T10:33:19Z Started game 286 of 400 (base vs skytalix)
+2026-10-26T10:33:21Z Finished game 282 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T10:33:21Z Started game 287 of 400 (skytalix vs base)
+2026-10-26T10:35:30Z Finished game 285 (skytalix vs base): 0-1 {Black mates}
+2026-10-26T10:35:30Z Started game 288 of 400 (base vs skytalix)
+2026-10-26T10:36:14Z Finished game 287 (skytalix vs base): 1-0 {White mates}
+2026-10-26T10:36:14Z Started game 289 of 400 (skytalix vs base)
+2026-10-26T10:36:27Z Finished game 288 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T10:36:27Z Started game 290 of 400 (base vs skytalix)
+2026-10-26T10:36:45Z Finished game 286 (base vs skytalix): 1-0 {White mates}
+2026-10-26T10:36:45Z Started game 291 of 400 (skytalix vs base)
+2026-10-26T10:38:13Z Finished game 289 (skytalix vs base): 1-0 {White mates}
+2026-10-26T10:38:13Z Started game 292 of 400 (base vs skytalix)
+2026-10-26T10:38:28Z Finished game 291 (skytalix vs base): 1-0 {White mates}
+2026-10-26T10:38:29Z Started game 293 of 400 (skytalix vs base)
+2026-10-26T10:39:18Z Finished game 290 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T10:39:18Z Started game 294 of 400 (base vs skytalix)
+2026-10-26T10:40:15Z Finished game 293 (skytalix vs base): 1-0 {White mates}
+2026-10-26T10:40:15Z Started game 295 of 400 (skytalix vs base)
+2026-10-26T10:40:49Z Finished game 292 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T10:40:49Z Started game 296 of 400 (base vs skytalix)
+2026-10-26T10:42:20Z Finished game 295 (skytalix vs base): 0-1 {Black mates}
+2026-10-26T10:42:20Z Started game 297 of 400 (skytalix vs base)
+2026-10-26T10:42:22Z Finished game 294 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T10:42:22Z Started game 298 of 400 (base vs skytalix)
+2026-10-26T10:42:43Z Finished game 296 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T10:42:43Z Started game 299 of 400 (skytalix vs base)
+2026-10-26T10:44:13Z Finished game 298 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T10:44:13Z Started game 300 of 400 (base vs skytalix)
+2026-10-26T10:44:34Z Finished game 297 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T10:44:34Z Started game 301 of 400 (skytalix vs base)
+2026-10-26T10:45:13Z Finished game 299 (skytalix vs base): 1-0 {White mates}
+2026-10-26T10:45:14Z Started game 302 of 400 (base vs skytalix)
+2026-10-26T10:46:52Z Finished game 300 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T10:46:52Z Started game 303 of 400 (skytalix vs base)
+2026-10-26T10:47:46Z Finished game 301 (skytalix vs base): 0-1 {Black mates}
+2026-10-26T10:47:46Z Started game 304 of 400 (base vs skytalix)
+2026-10-26T10:48:02Z Finished game 302 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T10:48:02Z Started game 305 of 400 (skytalix vs base)
+2026-10-26T10:49:46Z Finished game 305 (skytalix vs base): 1-0 {White mates}
+2026-10-26T10:49:46Z Started game 306 of 400 (base vs skytalix)
+2026-10-26T10:50:03Z Finished game 303 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T10:50:03Z Started game 307 of 400 (skytalix vs base)
+2026-10-26T10:50:25Z Finished game 304 (base vs skytalix): 1-0 {White mates}
+2026-10-26T10:50:26Z Started game 308 of 400 (base vs skytalix)
+2026-10-26T10:50:49Z Finished game 306 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T10:50:49Z Started game 309 of 400 (skytalix vs base)
+2026-10-26T10:52:35Z Finished game 307 (skytalix vs base): 1-0 {White mates}
+2026-10-26T10:52:35Z Started game 310 of 400 (base vs skytalix)
+2026-10-26T10:53:24Z Finished game 308 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T10:53:24Z Started game 311 of 400 (skytalix vs base)
+2026-10-26T10:54:39Z Finished game 309 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T10:54:39Z Started game 312 of 400 (base vs skytalix)
+2026-10-26T10:56:19Z Finished game 310 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T10:56:19Z Started game 313 of 400 (skytalix vs base)
+2026-10-26T10:57:14Z Finished game 311 (skytalix vs base): 1-0 {White mates}
+2026-10-26T10:57:14Z Started game 314 of 400 (base vs skytalix)
+2026-10-26T10:58:05Z Finished game 313 (skytalix vs base): 1-0 {White mates}
+2026-10-26T10:58:05Z Started game 315 of 400 (skytalix vs base)
+2026-10-26T10:58:42Z Finished game 312 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T10:58:42Z Started game 316 of 400 (base vs skytalix)
+2026-10-26T10:59:11Z Finished game 314 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T10:59:12Z Started game 317 of 400 (skytalix vs base)
+2026-10-26T11:00:05Z Finished game 316 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:00:05Z Started game 318 of 400 (base vs skytalix)
+2026-10-26T11:01:03Z Finished game 315 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:01:03Z Started game 319 of 400 (skytalix vs base)
+2026-10-26T11:02:27Z Finished game 317 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:02:27Z Started game 320 of 400 (base vs skytalix)
+2026-10-26T11:02:49Z Finished game 318 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T11:02:49Z Started game 321 of 400 (skytalix vs base)
+2026-10-26T11:03:27Z Finished game 319 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:03:27Z Started game 322 of 400 (base vs skytalix)
+2026-10-26T11:05:15Z Finished game 322 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:05:15Z Started game 323 of 400 (skytalix vs base)
+2026-10-26T11:05:20Z Finished game 320 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:05:20Z Started game 324 of 400 (base vs skytalix)
+2026-10-26T11:06:25Z Finished game 321 (skytalix vs base): 1-0 {White mates}
+2026-10-26T11:06:25Z Started game 325 of 400 (skytalix vs base)
+2026-10-26T11:07:15Z Finished game 323 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:07:16Z Started game 326 of 400 (base vs skytalix)
+2026-10-26T11:08:32Z Finished game 326 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:08:32Z Started game 327 of 400 (skytalix vs base)
+2026-10-26T11:09:40Z Finished game 325 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:09:40Z Started game 328 of 400 (base vs skytalix)
+2026-10-26T11:10:17Z Finished game 324 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:10:17Z Started game 329 of 400 (skytalix vs base)
+2026-10-26T11:12:05Z Finished game 329 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:12:05Z Started game 330 of 400 (base vs skytalix)
+2026-10-26T11:12:22Z Finished game 327 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:12:22Z Started game 331 of 400 (skytalix vs base)
+2026-10-26T11:13:24Z Finished game 328 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T11:13:24Z Started game 332 of 400 (base vs skytalix)
+2026-10-26T11:14:33Z Finished game 330 (base vs skytalix): 1-0 {White mates}
+2026-10-26T11:14:33Z Started game 333 of 400 (skytalix vs base)
+2026-10-26T11:15:07Z Finished game 331 (skytalix vs base): 1-0 {White mates}
+2026-10-26T11:15:08Z Started game 334 of 400 (base vs skytalix)
+2026-10-26T11:16:04Z Finished game 332 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:16:04Z Started game 335 of 400 (skytalix vs base)
+2026-10-26T11:16:56Z Finished game 334 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:16:56Z Started game 336 of 400 (base vs skytalix)
+2026-10-26T11:17:56Z Finished game 333 (skytalix vs base): 1-0 {White mates}
+2026-10-26T11:17:56Z Started game 337 of 400 (skytalix vs base)
+2026-10-26T11:18:37Z Finished game 335 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:18:37Z Started game 338 of 400 (base vs skytalix)
+2026-10-26T11:19:32Z Finished game 336 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:19:32Z Started game 339 of 400 (skytalix vs base)
+2026-10-26T11:20:57Z Finished game 337 (skytalix vs base): 1-0 {White mates}
+2026-10-26T11:20:57Z Started game 340 of 400 (base vs skytalix)
+2026-10-26T11:21:51Z Finished game 338 (base vs skytalix): 1-0 {White mates}
+2026-10-26T11:21:51Z Started game 341 of 400 (skytalix vs base)
+2026-10-26T11:22:41Z Finished game 339 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:22:41Z Started game 342 of 400 (base vs skytalix)
+2026-10-26T11:23:08Z Finished game 340 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T11:23:08Z Started game 343 of 400 (skytalix vs base)
+2026-10-26T11:24:57Z Finished game 341 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:24:57Z Started game 344 of 400 (base vs skytalix)
+2026-10-26T11:25:51Z Finished game 342 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:25:51Z Started game 345 of 400 (skytalix vs base)
+2026-10-26T11:27:06Z Finished game 343 (skytalix vs base): 0-1 {Black mates}
+2026-10-26T11:27:06Z Started game 346 of 400 (base vs skytalix)
+2026-10-26T11:28:48Z Finished game 345 (skytalix vs base): 0-1 {Black mates}
+2026-10-26T11:28:48Z Started game 347 of 400 (skytalix vs base)
+2026-10-26T11:28:59Z Finished game 344 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:28:59Z Started game 348 of 400 (base vs skytalix)
+2026-10-26T11:30:04Z Finished game 346 (base vs skytalix): 1-0 {White mates}
+2026-10-26T11:30:04Z Started game 349 of 400 (skytalix vs base)
+2026-10-26T11:31:30Z Finished game 347 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:31:30Z Started game 350 of 400 (base vs skytalix)
+2026-10-26T11:32:31Z Finished game 348 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T11:32:31Z Started game 351 of 400 (skytalix vs base)
+2026-10-26T11:33:26Z Finished game 349 (skytalix vs base): 0-1 {Black mates}
+2026-10-26T11:33:26Z Started game 352 of 400 (base vs skytalix)
+2026-10-26T11:34:40Z Finished game 351 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:34:40Z Started game 353 of 400 (skytalix vs base)
+2026-10-26T11:35:47Z Finished game 350 (base vs skytalix): 1-0 {White mates}
+2026-10-26T11:35:47Z Started game 354 of 400 (base vs skytalix)
+2026-10-26T11:38:04Z Finished game 353 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:38:04Z Started game 355 of 400 (skytalix vs base)
+2026-10-26T11:38:56Z Finished game 355 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:38:56Z Started game 356 of 400 (base vs skytalix)
+2026-10-26T11:39:11Z Finished game 352 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:39:11Z Started game 357 of 400 (skytalix vs base)
+2026-10-26T11:40:16Z Finished game 354 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:40:16Z Started game 358 of 400 (base vs skytalix)
+2026-10-26T11:40:52Z Finished game 357 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:40:52Z Started game 359 of 400 (skytalix vs base)
+2026-10-26T11:42:21Z Finished game 356 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:42:22Z Started game 360 of 400 (base vs skytalix)
+2026-10-26T11:42:27Z Finished game 359 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:42:27Z Started game 361 of 400 (skytalix vs base)
+2026-10-26T11:43:40Z Finished game 360 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T11:43:40Z Started game 362 of 400 (base vs skytalix)
+2026-10-26T11:44:45Z Finished game 358 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:44:45Z Started game 363 of 400 (skytalix vs base)
+2026-10-26T11:46:32Z Finished game 363 (skytalix vs base): 0-1 {Black mates}
+2026-10-26T11:46:32Z Started game 364 of 400 (base vs skytalix)
+2026-10-26T11:47:05Z Finished game 362 (base vs skytalix): 1-0 {White mates}
+2026-10-26T11:47:06Z Started game 365 of 400 (skytalix vs base)
+2026-10-26T11:47:12Z Finished game 361 (skytalix vs base): 1/2-1/2 {Draw by insufficient mating material}
+2026-10-26T11:47:12Z Started game 366 of 400 (base vs skytalix)
+2026-10-26T11:48:56Z Finished game 366 (base vs skytalix): 1-0 {White mates}
+2026-10-26T11:48:56Z Started game 367 of 400 (skytalix vs base)
+2026-10-26T11:50:13Z Finished game 364 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:50:13Z Started game 368 of 400 (base vs skytalix)
+2026-10-26T11:50:22Z Finished game 365 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:50:22Z Started game 369 of 400 (skytalix vs base)
+2026-10-26T11:51:07Z Finished game 367 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:51:07Z Started game 370 of 400 (base vs skytalix)
+2026-10-26T11:52:13Z Finished game 368 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:52:13Z Started game 371 of 400 (skytalix vs base)
+2026-10-26T11:53:08Z Finished game 370 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:53:09Z Started game 372 of 400 (base vs skytalix)
+2026-10-26T11:53:54Z Finished game 369 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:53:54Z Started game 373 of 400 (skytalix vs base)
+2026-10-26T11:54:45Z Finished game 373 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:54:46Z Started game 374 of 400 (base vs skytalix)
+2026-10-26T11:55:16Z Finished game 371 (skytalix vs base): 0-1 {Black mates}
+2026-10-26T11:55:17Z Started game 375 of 400 (skytalix vs base)
+2026-10-26T11:55:49Z Finished game 374 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T11:55:49Z Started game 376 of 400 (base vs skytalix)
+2026-10-26T11:56:36Z Finished game 372 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T11:56:36Z Started game 377 of 400 (skytalix vs base)
+2026-10-26T11:58:05Z Finished game 377 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:58:05Z Started game 378 of 400 (base vs skytalix)
+2026-10-26T11:58:15Z Finished game 376 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:58:15Z Started game 379 of 400 (skytalix vs base)
+2026-10-26T11:59:07Z Finished game 375 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T11:59:07Z Started game 380 of 400 (base vs skytalix)
+2026-10-26T12:00:19Z Finished game 378 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T12:00:19Z Started game 381 of 400 (skytalix vs base)
+2026-10-26T12:00:31Z Finished game 379 (skytalix vs base): 1-0 {White mates}
+2026-10-26T12:00:31Z Started game 382 of 400 (base vs skytalix)
+2026-10-26T12:01:44Z Finished game 380 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T12:01:45Z Started game 383 of 400 (skytalix vs base)
+2026-10-26T12:03:38Z Finished game 382 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T12:03:38Z Started game 384 of 400 (base vs skytalix)
+2026-10-26T12:04:55Z Finished game 381 (skytalix vs base): 0-1 {Black mates}
+2026-10-26T12:04:55Z Started game 385 of 400 (skytalix vs base)
+2026-10-26T12:05:23Z Finished game 384 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T12:05:23Z Started game 386 of 400 (base vs skytalix)
+2026-10-26T12:06:05Z Finished game 385 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T12:06:05Z Started game 387 of 400 (skytalix vs base)
+2026-10-26T12:06:06Z Finished game 383 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T12:06:06Z Started game 388 of 400 (base vs skytalix)
+2026-10-26T12:07:34Z Finished game 387 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T12:07:34Z Started game 389 of 400 (skytalix vs base)
+2026-10-26T12:08:24Z Finished game 388 (base vs skytalix): 1-0 {White mates}
+2026-10-26T12:08:24Z Started game 390 of 400 (base vs skytalix)
+2026-10-26T12:08:29Z Finished game 386 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T12:08:29Z Started game 391 of 400 (skytalix vs base)
+2026-10-26T12:09:59Z Finished game 389 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T12:10:00Z Started game 392 of 400 (base vs skytalix)
+2026-10-26T12:11:01Z Finished game 390 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T12:11:01Z Started game 393 of 400 (skytalix vs base)
+2026-10-26T12:11:33Z Finished game 391 (skytalix vs base): 1-0 {White mates}
+2026-10-26T12:11:33Z Started game 394 of 400 (base vs skytalix)
+2026-10-26T12:11:48Z Finished game 392 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T12:11:48Z Started game 395 of 400 (skytalix vs base)
+2026-10-26T12:14:41Z Finished game 394 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T12:14:41Z Started game 396 of 400 (base vs skytalix)
+2026-10-26T12:15:05Z Finished game 393 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T12:15:05Z Started game 397 of 400 (skytalix vs base)
+2026-10-26T12:15:22Z Finished game 395 (skytalix vs base): 0-1 {Black mates}
+2026-10-26T12:15:22Z Started game 398 of 400 (base vs skytalix)
+2026-10-26T12:17:42Z Finished game 396 (base vs skytalix): 0-1 {Black mates}
+2026-10-26T12:17:42Z Started game 399 of 400 (skytalix vs base)
+2026-10-26T12:18:12Z Finished game 398 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T12:18:12Z Started game 400 of 400 (base vs skytalix)
+2026-10-26T12:18:33Z Finished game 397 (skytalix vs base): 0-1 {Black mates}
+2026-10-26T12:19:39Z Finished game 400 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-26T12:20:49Z Finished game 399 (skytalix vs base): 1-0 {White mates}

@@ -1,0 +1,62 @@
+
+ RUN  v4.1.12 <worktree>
+
+ ✓ src/search.null-move.test.ts > the null move — makeNullMove / unmakeNullMove and zobristKeyAfterNullMove > passes: the side flips, the ep square clears, the halfmove clock is 0, fullmove moves as makeMove's 27ms
+ ✓ src/search.null-move.test.ts > the null move — makeNullMove / unmakeNullMove and zobristKeyAfterNullMove > unmakeNullMove leaves every position byte-identical 22ms
+ ✓ src/search.null-move.test.ts > the null move — makeNullMove / unmakeNullMove and zobristKeyAfterNullMove > zobristKeyAfterNullMove(zobristKey(before), undo) === zobristKey(after), ep square or not 2ms
+ ✓ src/search.null-move.test.ts > nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces > the allowed case, at the thresholds: depth 2, ply 1 -> 3 0ms
+ ✓ src/search.null-move.test.ts > nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces > far above them — still exactly 3: depth 20, ply 30 -> 3 0ms
+ ✓ src/search.null-move.test.ts > nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces > Black to move with three: depth 6, ply 3 -> 3 0ms
+ ✓ src/search.null-move.test.ts > nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces > a middlegame: depth 5, ply 2 -> 3 0ms
+ ✓ src/search.null-move.test.ts > nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces > the root: depth 6, ply 0 -> 0 0ms
+ ✓ src/search.null-move.test.ts > nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces > directly after a null move: depth 6, ply 3, after a null -> 0 0ms
+ ✓ src/search.null-move.test.ts > nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces > remaining depth 1, below 2: depth 1, ply 3 -> 0 0ms
+ ✓ src/search.null-move.test.ts > nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces > in check: depth 6, ply 3 -> 0 0ms
+ ✓ src/search.null-move.test.ts > nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces > two non-pawn pieces: depth 6, ply 3 -> 0 0ms
+ ✓ src/search.null-move.test.ts > nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces > the OTHER side has the three: depth 6, ply 3 -> 0 0ms
+ ✓ src/search.null-move.test.ts > nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces > pawns only: depth 6, ply 3 -> 0 0ms
+ ✓ src/search.null-move.test.ts > nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces > the fixtures bite: each board really is what its row says 0ms
+ ✓ src/search.null-move.test.ts > both recursions try the null move through the predicate, at null-window nodes, and return beta > ./search.ts: calls nullMoveReduction once, gates on alpha + 1 === beta, subtracts its value and returns beta 1ms
+ ✓ src/search.null-move.test.ts > both recursions try the null move through the predicate, at null-window nodes, and return beta > ./engine.ts: calls nullMoveReduction once, gates on alpha + 1 === beta, subtracts its value and returns beta 0ms
+ ✓ src/search.null-move.test.ts > the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn null move off, as every older door does > the doors take what search() and chooseMove take, and no depth on the engine side 0ms
+ ✓ src/search.null-move.test.ts > the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn null move off, as every older door does > search() makes null moves on position-6 at depth 4, and changes the work 74ms
+ ✓ src/search.null-move.test.ts > the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn null move off, as every older door does > chooseMove makes null moves on position-6 deepened to 4, and changes the work 85ms
+ ✓ src/search.null-move.test.ts > the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn null move off, as every older door does > searchWithoutNullMove makes no null move on position-6 at depth 4 41ms
+ ✓ src/search.null-move.test.ts > the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn null move off, as every older door does > searchWithoutReductions makes no null move on position-6 at depth 4 43ms
+ ✓ src/search.null-move.test.ts > the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn null move off, as every older door does > chooseMoveWithoutNullMove makes no null move on position-6 deepened to 4 52ms
+ ✓ src/search.null-move.test.ts > the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn null move off, as every older door does > chooseMoveWithoutReductions makes no null move on position-6 deepened to 4 53ms
+ ✓ src/search.null-move.test.ts > QE-208-c — every door's nullMove switch literal is false; only search() and chooseMove turn it on > ./search.ts: each exported entry passes exactly one nullMove literal, and only the shipped one is true 1ms
+ ✓ src/search.null-move.test.ts > QE-208-c — every door's nullMove switch literal is false; only search() and chooseMove turn it on > ./engine.ts: each exported entry passes exactly one nullMove literal, and only the shipped one is true 0ms
+ ✓ src/search.null-move.test.ts > QE-208-a — an abort inside a null move's subtree still hands the root back byte-identical > position-6, readings 3 to 25: 0 mutated roots, and aborts landing inside a null subtree 469ms
+ ✓ src/search.null-move.test.ts > QE-208-b — the null child's key is written: every table probe reads the key of the position it probes > search() on position-6 at depth 6 202ms
+ ✓ src/search.null-move.test.ts > QE-208-b — the null child's key is written: every table probe reads the key of the position it probes > chooseMove on position-6 deepened to 6 100ms
+ ✓ src/search.null-move.test.ts > A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth > seven rows, each with its source, at depths 8 to 12 0ms
+ ✓ src/search.null-move.test.ts > A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth > zugzwang.001: chooseMove on a frozen clock to depth 9 plays e1f1 137ms
+ ✓ src/search.null-move.test.ts > A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth > zugzwang.004: chooseMove on a frozen clock to depth 11 plays h3h4 [deep, SEARCH_DEEP=1] 1772ms
+ ✓ src/search.null-move.test.ts > A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth > zugzwang.005: chooseMove on a frozen clock to depth 12 plays f4d5 [deep, SEARCH_DEEP=1] 6474ms
+ ✓ src/search.null-move.test.ts > A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth > kpk-b6c6: chooseMove on a frozen clock to depth 8 plays b6c6 4ms
+ ✓ src/search.null-move.test.ts > A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth > kpk-c6d6: chooseMove on a frozen clock to depth 8 plays c6d6 4ms
+ ✓ src/search.null-move.test.ts > A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth > kpk-d6e6: chooseMove on a frozen clock to depth 8 plays d6e6 4ms
+ ✓ src/search.null-move.test.ts > A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth > kpk-e6f6: chooseMove on a frozen clock to depth 8 plays e6f6 3ms
+stdout | src/search.null-move.test.ts > A3 — bounded drift against the null-move-off doors, depth 5, the 190 [deep, SEARCH_DEEP=1] > search() against searchWithoutNullMove at fixed depth 5: >= 95% within 25 cp, none beyond 37 cp [deep, SEARCH_DEEP=1]
+ABC-208 A3 search() d5: 100.00% within 25 cp of 187, max 25 cp (position-5/e1f2: -228 -> -203); mate-status flips on the 190: 0 (a report, not a bar)
+
+ ✓ src/search.null-move.test.ts > A2 — the instrumented search makes 0 null moves in check, and 0 below three non-pawn pieces > search() to depth 4 and chooseMove deepened to 4: every null move is made out of check, with three or more pieces 262ms
+ ✓ src/search.null-move.test.ts > A2 — the instrumented search makes 0 null moves in check, and 0 below three non-pawn pieces > the in-check root really is in check, and its search still finds null-window nodes to pass at 12ms
+ ✓ src/search.null-move.test.ts > A2 — the instrumented search makes 0 null moves in check, and 0 below three non-pawn pieces > the pawn-only endgames: no null move at all, in either recursion, to depth 6 5ms
+ ✓ src/search.null-move.test.ts > A3 — bounded drift against the null-move-off doors, depth 5, the 190 [deep, SEARCH_DEEP=1] > the corpus is the 190 2ms
+stdout | src/search.null-move.test.ts > A3 — bounded drift against the null-move-off doors, depth 5, the 190 [deep, SEARCH_DEEP=1] > chooseMove against chooseMoveWithoutNullMove deepened to 5: >= 95% within 25 cp, none beyond 37 cp [deep, SEARCH_DEEP=1]
+ABC-208 A3 chooseMove to d5: 100.00% within 25 cp of 187, max 8 cp (position-6/f3d4: 565 -> 573); mate-status flips on the 190: 0 (a report, not a bar)
+
+ ✓ src/search.null-move.test.ts > A3 — bounded drift against the null-move-off doors, depth 5, the 190 [deep, SEARCH_DEEP=1] > search() against searchWithoutNullMove at fixed depth 5: >= 95% within 25 cp, none beyond 37 cp [deep, SEARCH_DEEP=1] 18597ms
+stdout | src/search.null-move.test.ts > A3 — the same-depth mate floor on the 287 [deep, SEARCH_DEEP=1] > every mate searchWithoutNullMove scores at depth 5, search() scores at depth 5: same sign, no longer [deep, SEARCH_DEEP=1]
+ABC-208 A3 mate floor d5 -> d5: 0 of 189 violated
+
+ ✓ src/search.null-move.test.ts > A3 — bounded drift against the null-move-off doors, depth 5, the 190 [deep, SEARCH_DEEP=1] > chooseMove against chooseMoveWithoutNullMove deepened to 5: >= 95% within 25 cp, none beyond 37 cp [deep, SEARCH_DEEP=1] 16516ms
+ ✓ src/search.null-move.test.ts > A3 — the same-depth mate floor on the 287 [deep, SEARCH_DEEP=1] > every mate searchWithoutNullMove scores at depth 5, search() scores at depth 5: same sign, no longer [deep, SEARCH_DEEP=1] 1090ms
+
+ Test Files  1 passed (1)
+      Tests  44 passed (44)
+   Start at  08:06:40
+   Duration  46.19s (transform 0ms, setup 0ms, import 74ms, tests 46.06s, environment 0ms)
+

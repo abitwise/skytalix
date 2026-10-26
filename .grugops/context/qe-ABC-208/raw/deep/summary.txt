@@ -1,0 +1,8 @@
+SEARCH_DEEP src/search.null-move.test.ts rc=0 start=06:06:39Z end=06:07:26Z load1={ 3.73 4.27 3.18 } ::  Tests 44 passed (44)
+SEARCH_DEEP src/search.test.ts rc=0 start=06:07:26Z end=06:07:30Z load1={ 3.67 4.25 3.18 } ::  Tests 57 passed (57)
+SEARCH_DEEP src/search.ordering.test.ts rc=0 start=06:07:30Z end=06:07:41Z load1={ 3.65 4.22 3.18 } ::  Tests 38 passed (38)
+SEARCH_DEEP src/transposition.test.ts rc=0 start=06:07:41Z end=06:07:47Z load1={ 3.59 4.20 3.18 } ::  Tests 40 passed (40)
+SEARCH_DEEP src/quiescence.test.ts rc=0 start=06:07:47Z end=06:07:47Z load1={ 3.59 4.20 3.18 } ::  Tests 37 passed (37)
+SEARCH_DEEP src/search.pvs-lmr.test.ts rc=0 start=06:07:47Z end=06:09:14Z load1={ 3.04 3.86 3.15 } ::  Tests 29 passed (29)
+PUZZLE_DEEP src/puzzle-suite.test.ts rc=0 start=06:09:14Z end=06:09:19Z load1={ 3.04 3.86 3.15 } ::  Tests 18 passed (18)
+DONE
