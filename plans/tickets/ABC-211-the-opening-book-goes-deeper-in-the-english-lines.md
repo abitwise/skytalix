@@ -102,3 +102,16 @@ BA/PM, 2026-10-23, at `main` `55a8f4ef`. **Result: 9 of 10. `Backlog`** until th
 | 8 | size assigned | ✅ `S` |
 | 9 | priority assigned | ✅ `P3` |
 | 10 | no major unresolved blocker | ⏳ **the source:** the current CC0 source does not hold 3...b6 (probed). A new source is an `ADR-0023` decision |
+
+## Source ruling (Architect/Design, 2026-10-26, task `arch-source-ABC-211`, at `main` `1df54ba6`)
+
+- **Not possible inside `ADR-0023`.** 0 of the pinned source's 3,865 rows reach the position after 3...b6 at any ply,
+  with transpositions included and no 12-ply cut. The upstream `master` is the pin, so a re-pin adds nothing.
+- **A PROPOSED `ADR-0023` amendment goes to the owner**, with options O0–O3 (`ADR-0023` § Proposed amendment
+  2026-10-26):
+  - **O0:** no new source, and this ticket closes. Recommended: `QE-207-f` found that base already plays 4.d3 here.
+  - **O1:** `official-stockfish/books` `8moves_v3.pgn`, CC0, 1.c4 lines only, with graft weights. `A1` is met at
+    715,259 B. O1 needs an `ADR-0037` D1 provenance change and a scope change here (`A3`'s wording, size S → M), and
+    `NFR-007`'s re-read fires.
+  - **O2 and O3:** lines our own engine or Stockfish generates. Not recommended.
+- **Ready trigger: NOT MET.** It waits on the owner's pick. Notes: `.grugops/context/arch-source-ABC-211/`.
