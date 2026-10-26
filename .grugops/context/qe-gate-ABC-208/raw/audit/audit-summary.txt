@@ -1,0 +1,9 @@
+bb default exit 0
+bb deep exit 0
+hh default exit 0
+hh deep exit 0
+bh default exit 1
+bh deep exit 1
+hb default exit 1
+hb deep exit 0
+DONE

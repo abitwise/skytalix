@@ -1,0 +1,17 @@
+== engine
+ ↓ src/engine.test.ts > ABC-086 A4 — the virtual-clock module reads no real clock and no entropy > carries no real-clock read and no entropy source
+ ↓ src/engine.test.ts > A1 — 30 positions at the default budget, on a real clock [deep, ENGINE_DEEP=1] > returns within the 5 s hard ceiling every time, and reports the worst case
+ ↓ src/engine.test.ts > NFR-005 — depth-in-budget, MEASURED and reported [deep, ENGINE_DEEP=1] > records the completed depth on kiwipete and position-6 at the 3 s budget
+ ↓ src/engine.test.ts > A2/A7 on the real clock [deep, ENGINE_DEEP=1] > A2 — a 50 ms budget returns inside 100 ms in the middlegame position
+ ↓ src/engine.test.ts > A2/A7 on the real clock [deep, ENGINE_DEEP=1] > A7 — a 1 ms budget returns a legal move in every corpus position
+ ↓ src/engine.test.ts > ABC-086 A2 — the shipped wall clock: legal, depth reported [deep, ENGINE_DEEP=1] > returns a legal move in each of 10 runs at the default budget, and reports each depth
+      Tests  54 passed | 6 skipped (60)
+== levels
+ ↓ src/levels.test.ts > A6 — the default level > never blunders, so `NFR-005`'s reading on `chooseMove` at 3 s IS this level's reading
+ ↓ src/levels.test.ts > A5 — level 5, 30 positions, every move ≤ 5 s on the REAL clock [deep] > returns within 5 000 ms on 30/30
+ ↓ src/levels.test.ts > ABC-212 A4 — levels 6 and 7 spend their budget, inside their ceiling, on the REAL clock [deep] > level 6: 30 of 30 moves take >= 5000 and <= 7000 ms
+ ↓ src/levels.test.ts > ABC-212 A4 — levels 6 and 7 spend their budget, inside their ceiling, on the REAL clock [deep] > level 7: 10 of 10 moves take >= 30000 and <= 32000 ms
+      Tests  37 passed | 4 skipped (41)
+== transposition
+ ↓ src/transposition.test.ts > A7 — the table holds a fixed 4 MiB, whatever the search > heapUsed and arrayBuffers each grow <= 1 MiB between a 1 s and a 3 s search [deep, ENGINE_DEEP=1]
+      Tests  25 passed | 1 skipped (26)

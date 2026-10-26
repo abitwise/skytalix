@@ -1,0 +1,6 @@
+MISSED	mate-in-3	b3c4	d5	n20508	mate in 3, seed 24: black Q+N against P
+MISSED	mate-in-3	d8h8	d5	n20518	mate in 3, seed 234: white Q+R against P
+MISSED	mate-in-3	a2h2	d5	n20517	mate in 3, seed 288: white Q+B against a bare king
+MISSED	mate-in-3	f1f5	d5	n20521	mate in 3, seed 580: white Q+B against a bare king
+PUZZLES shipped: solved 54/58, baseline 54/58, budget 25 step 1, wall 2.56 s
+      Tests  18 passed (18)

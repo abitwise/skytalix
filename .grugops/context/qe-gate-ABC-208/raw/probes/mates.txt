@@ -1,0 +1,4 @@
+corpora: 190 = 190, 287 = 287
+search() d5 vs searchWithoutNullMove d5, the 287: door mates 189; null-only mates 0; shorter 0; longer 0; lost 0; sign 0
+search() d5 vs searchWithoutNullMove d5, the 190: door mates 3; null-only mates 0; shorter 0; longer 0; lost 0; sign 0
+chooseMove d5 vs chooseMoveWithoutNullMove d5, the 287: door mates 190; null-only mates 0; shorter 0; longer 0; lost 0; sign 0

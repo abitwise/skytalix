@@ -1,0 +1,8 @@
+ABC-121 A1 chooseMove to d5: 97.86% within 25 cp of 187, max 63 cp (position-6/f3h4: 566 -> 629); mate-status flips on the 190: 0 (a report, not a bar)
+ABC-121 A1 mate floor d4 -> d5: 0 of 180 violated
+ABC-121 A1 search() d5: 97.86% within 25 cp of 187, max 63 cp (position-6/f3h4: 566 -> 629); mate-status flips on the 190: 0 (a report, not a bar)
+ABC-121 A2 kiwipete: cumulative nodes to depth 7 609900 (chooseMove) vs 2191755 (chooseMoveWithoutPvsOrReductions)
+ABC-121 A2 position-6: cumulative nodes to depth 7 586333 (chooseMove) vs 2575128 (chooseMoveWithoutPvsOrReductions)
+ABC-121 A5 kiwipete d4: 18079 / 23802 = 76.0%
+ABC-121 A5 position-3 d4: 1099 / 1377 = 79.8%
+ABC-121 A5 position-6 d4: 19403 / 31721 = 61.2%
