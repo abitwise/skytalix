@@ -651,6 +651,15 @@ describe("A6 — the per-ply key array is the search's own", () => {
 // A7 — the table's memory is a fixed bound (`NFR-009`), never a growing structure.
 // ---------------------------------------------------------------------------
 
+/**
+ * `NFR-009`'s child, for `A7` and `ABC-209` `A4` alike: `--expose-gc`, the worker's environment
+ * inherited, no heap flag of its own (`ABC-173` `A6`). One construction, so both readings share it.
+ */
+const gcChild = (script: string) =>
+  spawnSync(process.execPath, ["--expose-gc", "--input-type=module", "-e", script], {
+    encoding: "utf8",
+  });
+
 describe("A7 — the table holds a fixed 4 MiB, whatever the search", () => {
   const FOUR_MIB = 4 * 1024 * 1024;
 
@@ -690,13 +699,7 @@ describe("A7 — the table holds a fixed 4 MiB, whatever the search", () => {
         const three = chooseMove(parseFen(fen), { budgetMs: ${DEFAULT_BUDGET_MS} }); const b = read();
         console.log(JSON.stringify({ a, b, depths: [one.depth, three.depth] }));
       `;
-      const run = spawnSync(
-        process.execPath,
-        ["--expose-gc", "--input-type=module", "-e", script],
-        {
-          encoding: "utf8",
-        },
-      );
+      const run = gcChild(script);
       expect(run.status, run.stderr).toBe(0);
       const { a, b, depths } = JSON.parse(run.stdout.trim().split("\n").pop() as string) as {
         a: { heapUsed: number; arrayBuffers: number };
@@ -967,13 +970,7 @@ describe("ABC-209 A4 / A5 — the size is unchanged; the same calls give the sam
         }
         console.log(JSON.stringify({ a, b, table: tableByteLength() }));
       `;
-      const run = spawnSync(
-        process.execPath,
-        ["--expose-gc", "--input-type=module", "-e", script],
-        {
-          encoding: "utf8",
-        },
-      );
+      const run = gcChild(script);
       expect(run.status, run.stderr).toBe(0);
       const { a, b, table } = JSON.parse(run.stdout.trim().split("\n").pop() as string) as {
         a: { heapUsed: number; arrayBuffers: number };
