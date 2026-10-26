@@ -161,3 +161,99 @@ Design comes first. Only these rows changed:
 - **The ADR's status at merge has two readings.** (a) `…7feb0553` item 2's go-ahead plus the report is enough. (b) A
   new ADR is the owner's (`…5aaf7cec` item 3), so the merge waits on his acceptance, as the `ADR-0031` addendum did
   for `ABC-205`. The Orchestrator routes this when the text lands.
+
+## Design ruling
+
+> **Architect/Design, 2026-10-26** (task `arch-design-ABC-208`, records plus probes, at `main` `93d79b2d`). The ADR is
+> **`ADR-0050`, PROPOSED**: acceptance is the owner's, and the merge waits on it (`…d25ab770`). Notes:
+> `.grugops/context/arch-design-ABC-208/notes/`. The probes ran on scratch clones in `<scratchpad>/arch208/` (`base`;
+> `h`, the design with probe-only switches for variants; `hd`, the design with no switches), never on `src/`. Plain node
+> v26.11.1. **No real-clock search was run and no timing is quoted.** Real-clock deep rows were filtered out by name.
+> No `G6`, no game, no D. Every count below is deterministic.
+
+**Result.** Null move at null-window nodes, **R = 3**, no verification search. The guard is the page's four, with the
+material condition ruled stricter: **no null move when the side to move has fewer than three non-pawn pieces**. The doors
+are **`searchWithoutNullMove`** and **`chooseMoveWithoutNullMove`**. **2 rows go red, both export lists. No value pin, no
+level, no NFR bound and no `ADR-0026` level moves.** `G1` 54/58 (= baseline). `A2` 7/7. Frozen-clock position-6 d8 is
+**−73.8 %**; `G6` is predicted MET. **Size `M` holds; no split.**
+
+### The ruling, point by point (text and evidence: `ADR-0050`)
+
+| point | ruling | why, in one line |
+|---|---|---|
+| R | **3 plies**, from remaining depth 2 up. The null child is searched to `depth − 1 − 3` | fewest nodes of R = 2, 3 and adaptive; same `G1` and `A2`; drift similar |
+| verification | **none** | neither form tried recovered `zugzwang.004` or `.005`; both cost nodes |
+| where | **null-window nodes only** (`alpha + 1 === beta`), so `nullMove` implies `pvs` | PVS's frame, as LMR; a PV node never passes |
+| guard | not at the root; not after a null move; not in check; **not with fewer than three non-pawn pieces** for the side to move | floor guard: `G1` 50/58; two pieces: 53/58; three: 54/58, at no cost on the `G6` boards |
+| the cut | null score ≥ beta → return **beta**, no table store; the null move resets the halfmove clock | a mate after a pass is no mate; repetition never reaches across a pass |
+| rule | one pure exported predicate, `nullMoveReduction(position, depth, ply, afterNull)` → 3 or 0, which both recursions call | `ADR-0026` decision 6's contract |
+| doors | `searchWithoutNullMove(position, depth)`, `chooseMoveWithoutNullMove(position, options)`: the pre-ticket shipped path, node for node. Every older door turns null move off | `A1`; cross-build probe 222/222 cells node-equal (6 roots, 7 search doors at d1–4, 3 engine doors at d3/5/6) |
+| `ADR-0026` d9 | its LMR drift pair and mate floor re-point their shipped side to the new doors | they then read their pre-ticket values exactly: 118 cp measures LMR alone. **No bound move, no owner question** |
+| `A3` oracle | d5 on the 190, both recursions: ≥ 95 % within 25 cp, **none beyond 37 cp**; a **same-depth** mate floor at d5 on the 287 | measured 100 % / 25 cp, 100 % / 8 cp; mate floor 0 of 189 |
+| `A2` rows | 7 rows, each at its own fixed depth (8–12): `zugzwang.001`, `.004`, `.005` (CPW; keep non-pawn material) and four K+P v K opposition rows (tablebase-unique wins). Table in `ADR-0050` d9 | the no-guard variant scores 0/7, the floor guard 4/7, the two-piece guard 5/7 |
+| files | `src/search.ts`, `src/engine.ts`, plus `makeNullMove` / `unmakeNullMove` in `src/apply.ts` and `zobristKeyAfterNullMove` in `src/zobrist.ts` | mutation lives beside `makeMove`; the key is an O(1) delta (`ADR-0020` d3) |
+
+- **Not policed by the oracle, so pinned by rows:** R = 3, 4 and 5 give identical scores on the 190 at d5 and d6. Null
+  in check, a double null and a missing halfmove reset pass it too. The predicate's table, a source row and the
+  null-move unit rows catch them (`ADR-0050` Consequences). Returning the null score is a named blind spot (≤ 19 cp).
+- **`G7` is not owed:** nothing is held between nodes. **`NFR-004`:** the null subtree counts nodes and checks the clock
+  as anywhere else.
+
+### Moved-pin probe (`hd` against `main`'s tests)
+
+- **Base:** default lane 2 090 / 2 090. Deep lanes green (`PUZZLE_DEEP`; `SEARCH_DEEP` search, ordering,
+  transposition, quiescence, pvs-lmr; `ENGINE_DEEP` engine, levels, transposition; 10 real-clock rows filtered).
+- **`hd`:** default 2 088 / 2 090. Deep: the same two rows, nothing else.
+
+| # | row | change | route |
+|---|---|---|---|
+| 1 | `search.test.ts` `ABC-077` `A6` export list | + `searchWithoutNullMove`, `nullMoveReduction` | export-list growth (`ADR-0026` d2 precedent; `ADR-0050` d2) |
+| 2 | `engine.test.ts` `ABC-078` `A4` export list | + `chooseMoveWithoutNullMove` | the same |
+| 3–14 | `search.pvs-lmr.test.ts`, 12 rows whose shipped side is `search()` / `chooseMove`: the engine door bite; `A4` ×2; `A5` (the default guard and two deep rows); the mate floor ×2 (seeds, all 287); the d5 drift ×2; the `A2` companion ×2 | green on `hd` either way; the shipped side re-points to the new door, and every value stays | re-point (`ADR-0050` d4) |
+
+- **0 relations, 0 levels, 0 NFR bounds.** The multiplier cells, the `ABC-121` d5 drift (still 63 cp, unchanged) and
+  `G1` read as base.
+- **On `main` the drift rows' literal is 75 cp,** and their titles read 75. `ADR-0026` d9 reads 118 since `OD-205-2`:
+  the literal change rode `ABC-205`'s unmerged branch. The rows are stricter than the ADR, which is safe. Not
+  touched here; flagged for the Orchestrator.
+
+### Frozen-clock pre-check (Test note 4; a count, not a reading)
+
+`chooseMove`, `now: () => 0`, `maxDepth: k`; nodes to complete depth k.
+
+| board | base d7 | head d7 | base d8 | head d8 | head d9 |
+|---|---:|---:|---:|---:|---:|
+| kiwipete | 609 900 | 590 489 (−3.2 %) | 1 735 339 | 1 259 463 (**−27.4 %**) | 2 907 475 |
+| position-6 | 586 333 | 180 941 (−69.1 %) | 1 355 149 | 355 565 (**−73.8 %**) | 940 109 |
+
+- Base's counts equal `arch-design-ABC-207`'s base row (`…439d6f8c`). Head needs fewer nodes than base at both depths
+  on both boards, so **the pre-check does not stop the run.**
+- **`G6` prediction (for the record, `UNKNOWN - verify`):** on today's `src/` (value-identical to `qe-ABC-215`'s head,
+  `…a34270bf`), 3 s bought a median of 1 301 357 nodes on kiwipete (depth 7 ×5) and 1 466 978 on position-6 (depth 8
+  ×5). **Predicted MET on both boards:** head needs fewer nodes than base at every depth base completes.
+  - Position-6 should reach **9** while head's cost per node rises less than about 55 %.
+  - Kiwipete reaches 8 only if that cost rises less than about 3 % (1 259 463 against 1 301 357). Otherwise it stays
+    at 7, which equals base.
+
+  The null bookkeeping is a few compares, a board scan of at most 64 squares and two XORs at each null-window node. QE
+  reads it.
+
+### Size
+
+**`M` holds; no split.** About 150–200 production lines in four files: the predicate and guard, a null block and a door
+per recursion, the null move, and the key delta. The test work is the predicate table, the null-move unit rows, two door
+bites, 7 `A2` rows plus the instrument, 3 oracle rows, 12 re-points and 2 export lists. A split would ship a door with
+nothing behind it, and it would need a second D.
+
+### Owed by others
+
+- **Owner:** accept or decline `ADR-0050` (the Orchestrator reports it). Nothing else is his: no bound moves.
+- **BA/PM, page lines (no criterion changes):**
+  - Scope 2's fourth guard reads "fewer than three non-pawn pieces"; the page's floor is implied;
+  - `A2` "a fixed depth ≥ 8" reads per row (8–12), with the rows above;
+  - `A3`'s mate clause reads at the same depth, 5;
+  - `A1`'s "equal base's shipped search" is a cross-build comparison: QE runs it out of tree on the `ABC-078` `A3`
+    corpus at that sweep's budgets, as this probe did on 222 cells;
+  - Scope 1's files add `src/apply.ts` and `src/zobrist.ts`.
+- **Engineer:** the engine header's "null-move pruning … (none requested)" line (`src/engine.ts:73-74`) and
+  `src/search.ts`'s header (Scope 5).
