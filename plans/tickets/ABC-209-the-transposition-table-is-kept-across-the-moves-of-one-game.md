@@ -7,7 +7,7 @@ size: S
 priority: P3
 epic: EPIC-008
 feature: —
-adr: "ADR-0025 decision 4 amendment; route the text to the owner when it lands (…7feb0553)"
+adr: "ADR-0025 decision 4: a PROPOSED amendment (§ Proposed amendment 2026-10-26); acceptance is the owner's; the ALONE reading and the merge wait on it (…e496fc70 reading b)"
 ---
 
 # ABC-209: keep the transposition table across moves
@@ -43,8 +43,16 @@ adr: "ADR-0025 decision 4 amendment; route the text to the owner when it lands (
    - *2026-10-26 (BA/PM, `bapm-ready-ABC-209`):* the two entry paths are the CLI's game start (`src/cli.ts:200`,
      `newGame`) and the UCI session (`src/uci-session.ts:370`, `ucinewgame`; `:374`, `position`). Whether `search()`
      keeps its per-call clear is the amendment's call.
+   - *2026-10-26 (BA/PM, `bapm-amend-ABC-209`):* a third clear path is the CLI's in-game `new` (`ABC-046`,
+     `src/command-input.ts:123`, a take-back to the start). `A2`'s "CLI's new-game path" covers `new` as well as the
+     process start. `search()` keeps its clear; replacement is always-replace with no ageing (`ADR-0025` amendment).
 2. **A test-only clear door**, so deterministic-mode tests and the identity sweep that assume a fresh table get one.
+   - *2026-10-26 (BA/PM, `bapm-amend-ABC-209`):* the door is `chooseMove` and its three doors called **without a
+     `game` token** (`ADR-0025` amended d4 (b)). No new export is added, and `clearTable` stays exported.
 3. The `ADR-0025` amendment.
+   - *2026-10-26 (BA/PM, `bapm-amend-ABC-209`):* its form is a **PROPOSED amendment to `ADR-0025` decision 4**
+     (§ Proposed amendment 2026-10-26). Acceptance is the owner's. Reading (b) (`…e496fc70`): the build may proceed,
+     and the ALONE reading (`A6`) and the merge wait on his acceptance.
 
 ## Out of scope
 
@@ -59,11 +67,16 @@ adr: "ADR-0025 decision 4 amendment; route the text to the owner when it lands (
   non-continuing `position`.
 - **`A3` (kept when it should be).** **Given** two consecutive moves of one game, **then** the second search's first
   probe finds **≥ 1** entry stored by the first search. This is instrumented in a test only.
+  - *2026-10-26 (BA/PM, `bapm-amend-ABC-209`):* the Given is one instrumented pair, and QE picks a pair whose reply is
+    the stored hash move. The design probe found the root stored 19 times of 21. The bar stays ≥ 1.
 - **`A4` (`NFR-009`, `G7`).** The table's `byteLength` is unchanged at 4 MiB, and the total is ≤ 16 MiB. The growth
   clause stays ≤ 1 MiB between a 1 s and a 3 s search. **Added:** `heapUsed` after `gc()` moves ≤ 1 MiB between move 1
   and move 40 of one game.
   - *2026-10-26 (BA/PM, `bapm-ready-ABC-209`):* QE fixes the 40-move game and its budget before the first reading.
     The bar does not move, and growth over 1 MiB is a STOP (§ NFR triggers).
+  - *2026-10-26 (BA/PM, `bapm-amend-ABC-209`):* the 40-move row's shape: under `--expose-gc`, 40 engine searches
+    through one `game` token, read after `gc()` at search 1 and search 40. The bar is `heapUsed` ≤ 1 MiB, as written.
+    `arrayBuffers` is read at the same points; over 1 MiB there is the same `NFR-009` STOP, not a new bar.
 - **`A5` (existing gates).** `G1`, `G4` (with the clear door), `G5`, `G6`, `G8`, `G9`. Deterministic mode (`ADR-0027`):
   the same sequence of calls gives the same moves.
   - *2026-10-26 (BA/PM, `bapm-ready-ABC-209`):* `G1`: the diff touches `src/transposition.ts` and `src/engine.ts`, so
@@ -93,6 +106,8 @@ adr: "ADR-0025 decision 4 amendment; route the text to the owner when it lands (
 1. Find every test that assumes a fresh table and route it through the clear door. Do not loosen the test.
 2. `ADR-0032`'s blunder path scores root moves with the shipped engine. The design states whether the blunder path
    shares the table.
+   - *2026-10-26 (BA/PM, `bapm-amend-ABC-209`):* answered. The blunder path **does not share** the table: its
+     children carry no token (`ADR-0025` amendment, `ADR-0032` d1).
 3. UAT is owed (production lines). The QE verdict signs it.
 4. **Frozen-clock pre-check (a process step, no bound).** *Added 2026-10-26 by BA/PM (`bapm-ready-ABC-209`). It is the
    same step as `ABC-208` test note 4 (`…84a05b3a`).* Before the real-clock `G6` reading, QE reports, for base and
@@ -170,6 +185,17 @@ Design comes first. Only these rows changed:
     2026-09-26 errata. Each says the two roots never share a table because the table is cleared;
   - `ADR-0032`'s blunder path (test note 2);
   - the source comments at `src/engine.ts:57-62`, `src/search.ts:24-26` and `src/search.ts:594-597`.
+
+**Re-scored 2026-10-26 by BA/PM** (task `bapm-amend-ABC-209`, at `main` `82f799ce`, after the design ruling).
+**Result: 10 of 10. In Design → Ready for Dev.** No criterion's bar changed. Only these rows changed:
+
+| # | item | verdict |
+|---|---|---|
+| 2 | scope and out-of-scope clear | ✅ `new` is a third clear path; the door is "no token", no new export; the amendment's form is named |
+| 4 | acceptance testable and measurable | ✅ `A3`'s pair is chosen (reply = stored hash move); `A4`'s row is 40 searches through one token, `gc()` reads at 1 and 40 |
+| 7 | test notes present | ✅ five; test note 2 is answered (no sharing) |
+| 8 | size assigned | ✅ `S`, confirmed by the probe (about 45–65 production lines in five files; no split) |
+| 10 | no major unresolved blocker | ✅ the design is ruled (`…2e73dcd9`); `ADR-0025`'s amendment is PROPOSED, and under reading (b) the build may proceed. The ALONE reading and the merge wait on the owner. `QE-205-c` and `QE-207-g` stay open and do not block |
 
 ## Design ruling
 
