@@ -1,4 +1,5 @@
 # Architecture
+_Snapshot notice, 2026-10-26, by Architect/Design (task `arch-records-arch-snapshot`, Orchestrator `orch-2026-10-26l`): **the body of this page is the 2026-08-12 as-built snapshot plus dated corrections.** For any module, command or count, the current truth is the code on `main` plus `AGENTS.md`. A full as-built re-pass is planned for `EPIC-008` close._
 _Updated: 2026-09-19 by the Software Engineer (task `wave-2026-09-19`, subtask `ticket-to-pr-ABC-075`, Workflow 04) — **the two edits ADR-0020 said fall due when `ABC-075` lands, and nothing else:** the module-table row for `zobrist.ts` (it no longer imports `legal.ts`; `zobristKeyAfterMove` added; its depth is now `UNKNOWN - verify` — the table was NOT re-measured at this hop) and the transient-mutation paragraph (`zobristKey` is a pure read again; the two-threads foreclosure is discharged per ADR-0020). Every other line is byte-identical._
 _Updated: 2026-08-12 by Architect/Design (task `arch-audit-2026-08-12`, subtask `audit-architecture`,
 Workflow 07) — **REWRITTEN TO AS-BUILT.** The previous revision described the tree *after `EPIC-001`*
@@ -22,12 +23,17 @@ owns every why. Previously 2026-08-06 (deployment posture) and 2026-07-29 (as-bu
 A single-player terminal chess game running in one local process. No network, no database, no
 service boundary, **zero runtime dependencies** (`package.json` has no `dependencies` key at all —
 verified, not assumed). It is `private` with no `main`, `exports` or `bin`, so nothing is published
-and nothing imports this from outside.
+and nothing imports this from outside. *2026-10-26 (`ABC-168`): the `bin` part is no longer true. `package.json`
+has a `bin` (`skytalix`: `dist/uci.js`) since `ABC-168` (`825b21d1`), the same fact as the § Deployment posture line.
+Still true: `private`, no `main`, no `exports` and no `dependencies` key; nothing is published.*
 
 **Two epics are built and merged: `EPIC-001` (rules core) and `EPIC-002` (terminal board and game
 loop).** The renderer, the panels, the frame assembler/writer and the turn loop all exist.
 `EPIC-003` (input parser and commands), `EPIC-004` (engine search), `EPIC-005` (opening book) and
-`EPIC-006` (session and packaging) do not.
+`EPIC-006` (session and packaging) do not. *2026-10-26 (`EPIC-003`…`EPIC-008`): no longer true. Six epics are
+done: `EPIC-001` to `EPIC-005` and `EPIC-007` (`status: done` on each epic page, and each sits in the board's Done
+column). `EPIC-006` and `EPIC-008` are open (`status: backlog`). The code of `EPIC-003`…`EPIC-006` exists on `main`,
+for example `move-input.ts`, `search.ts`, `book.ts` and the `cli.ts` entry point.*
 
 **There is still no barrel and no entry module** — consumers deep-import a file by path, and
 `AGENTS.md` records `Dev / run` as `UNKNOWN - verify` because nothing starts a game. `EPIC-006`
@@ -40,7 +46,10 @@ since `ABC-042` (`e1403550`, 2026-08-15), and `src/uci.ts` (`npm run uci`) since
 
 **Seventeen production modules, flat in `src/`, one job each.** `src/` has no subdirectory holding
 a `.ts` file (its only subdirectory, `__snapshots__`, holds none). Level = longest import path,
-measured below.
+measured below. *2026-10-26: the count is no longer true. `main` has 46 non-test `.ts` files in `src/`, still flat
+(`__snapshots__` still holds no `.ts`). Three of them are TEST-ONLY corpora by their own headers
+(`evaluate.mirror-corpus.ts`, `puzzle-corpus.ts`, `search.mate-corpus.ts`), and `virtual-clock.ts` says no production
+module imports it. The table and the graph figures below were not re-measured; see the snapshot notice at the top.*
 
 | L | Module | Owns |
 |---|---|---|
