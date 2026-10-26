@@ -59,14 +59,38 @@ const RUN_DEEP = process.env.SEARCH_DEEP === "1";
  * whether that side was in check and how many non-pawn pieces it had. No production counter or hook
  * is added; both recursions import `makeNullMove` from `./apply.ts`, so both are observed.
  */
-const instrument = vi.hoisted(() => ({ on: false, made: [] as Position[] }));
+const instrument = vi.hoisted(() => ({ on: false, made: [] as Position[], open: 0 }));
 vi.mock("./apply.ts", async (importOriginal) => {
   const actual = await importOriginal<typeof import("./apply.ts")>();
   return {
     ...actual,
     makeNullMove: (position: Position) => {
       if (instrument.on) instrument.made.push(structuredClone(position));
+      instrument.open++;
       return actual.makeNullMove(position);
+    },
+    // `open` counts null moves made and not yet unmade: above 0, the search is inside a null
+    // move's subtree (QE-208-a).
+    unmakeNullMove: (position: Position, undo: Parameters<typeof actual.unmakeNullMove>[1]) => {
+      instrument.open--;
+      actual.unmakeNullMove(position, undo);
+    },
+  };
+});
+
+/**
+ * THE PROBE WATCH (QE-208-b): a call-through module mock of `src/transposition.ts`. With `watch`
+ * set, every `probeTable` call in either recursion hands its key to it first. No production hook
+ * is added.
+ */
+const probes = vi.hoisted(() => ({ watch: null as ((key: bigint) => void) | null }));
+vi.mock("./transposition.ts", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("./transposition.ts")>();
+  return {
+    ...actual,
+    probeTable: (key: bigint) => {
+      probes.watch?.(key);
+      return actual.probeTable(key);
     },
   };
 });
@@ -74,6 +98,8 @@ vi.mock("./apply.ts", async (importOriginal) => {
 afterEach(() => {
   instrument.on = false;
   instrument.made = [];
+  instrument.open = 0;
+  probes.watch = null;
 });
 
 /** The positions `run` made a null move in. */
@@ -365,10 +391,11 @@ describe("the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn
   });
 
   /**
-   * Only the doors with `pvs` on are listed. Every door older than `ABC-121` has `pvs` off: the
-   * root's beta is infinite, and without the null window every child inherits an infinite bound,
-   * so none of their nodes is a null-window node and the switch cannot show. Their `nullMove` is
-   * off all the same (`ADR-0050` decision 3), and `A1`'s cross-build run holds them node-equal.
+   * Only the doors with `pvs` on are listed. Every door older than `ABC-121` has `pvs` off, and a
+   * null-window node reaches it only when plain alpha-beta happens to give a width-1 window (rare,
+   * but not never: QE-208-c measured it). A behaviour row there would bite by chance. So their
+   * `nullMove` (off, `ADR-0050` decision 3) is pinned by the switch-literal source row below, and
+   * `A1`'s cross-build run holds them node-equal.
    */
   const SEARCH_DOORS = { searchWithoutNullMove, searchWithoutReductions };
   for (const [name, door] of Object.entries(SEARCH_DOORS)) {
@@ -383,6 +410,128 @@ describe("the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn
       expect(nullMovesDuring(() => deepenTo(door, fenOf("position-6"), 4))).toHaveLength(0);
     });
   }
+});
+
+describe("QE-208-c — every door's nullMove switch literal is false; only search() and chooseMove turn it on", () => {
+  const MODULES = [
+    {
+      path: "./search.ts",
+      call: "searchRoot(position, depth, {",
+      doors: {
+        search: "true",
+        searchWithoutNullMove: "false",
+        searchWithoutPruning: "false",
+        searchWithoutQuiescence: "false",
+        searchWithoutPruningOrQuiescence: "false",
+        searchWithoutOrdering: "false",
+        searchWithoutKillers: "false",
+        searchWithoutTable: "false",
+        searchWithoutReductions: "false",
+        searchWithoutPvsOrReductions: "false",
+      },
+    },
+    {
+      path: "./engine.ts",
+      call: "deepen(position, options, {",
+      doors: {
+        chooseMove: "true",
+        chooseMoveWithoutNullMove: "false",
+        chooseMoveWithoutReductions: "false",
+        chooseMoveWithoutPvsOrReductions: "false",
+      },
+    },
+  ];
+
+  for (const { path, call, doors } of MODULES) {
+    it(`${path}: each exported entry passes exactly one nullMove literal, and only the shipped one is true`, () => {
+      const flat = readFileSync(new URL(path, import.meta.url), "utf8").replace(/\s+/g, " ");
+      const found: Record<string, string> = {};
+      for (const chunk of flat.split("export function ").slice(1)) {
+        if (!chunk.includes(call)) continue;
+        const name = chunk.slice(0, chunk.indexOf("("));
+        const literals = [...chunk.matchAll(/nullMove: (true|false)\b/g)].map((m) => m[1]);
+        expect(literals, name).toHaveLength(1);
+        found[name] = literals[0] as string;
+      }
+      expect(found).toEqual(doors);
+    });
+  }
+});
+
+describe("QE-208-a — an abort inside a null move's subtree still hands the root back byte-identical", () => {
+  /**
+   * `chooseMove` on a VIRTUAL clock that reads 0 until its `at`-th reading and far past the
+   * deadline from then on. The clock is read at the start, before each iteration, and every
+   * `NODES_PER_CLOCK_CHECK` nodes inside one, so sweeping `at` aborts the search at a different
+   * node each time. The reading where it turns records whether a null move was open then.
+   * Iteration 2 tries no null move (`ABC-078` `A7`'s byte-identity row aborts there), so the sweep
+   * runs into iteration 3 and beyond.
+   */
+  const sweep = (fen: string, last: number) => {
+    const mutated: string[] = [];
+    let insideNull = 0;
+    for (let at = 3; at <= last; at++) {
+      const position = parseFen(fen);
+      const before = structuredClone(position);
+      instrument.open = 0;
+      let readings = 0;
+      const now = (): number => {
+        readings++;
+        if (readings === at && instrument.open > 0) insideNull++;
+        return readings >= at ? 1_000_000_000 : 0;
+      };
+      const choice = chooseMove(position, { budgetMs: 1_000, now });
+      if (choice === null) mutated.push(`at ${at}: null`);
+      if (position.blackToMove !== before.blackToMove) mutated.push(`at ${at}: side to move`);
+      else if (JSON.stringify(position) !== JSON.stringify(before)) mutated.push(`at ${at}`);
+    }
+    return { mutated, insideNull };
+  };
+
+  it("position-6, readings 3 to 25: 0 mutated roots, and aborts landing inside a null subtree", () => {
+    const { mutated, insideNull } = sweep(fenOf("position-6"), 25);
+    expect(mutated).toEqual([]);
+    expect(insideNull).toBeGreaterThanOrEqual(3); // not vacuous: the abort lands under a pass
+  });
+});
+
+describe("QE-208-b — the null child's key is written: every table probe reads the key of the position it probes", () => {
+  /**
+   * The search mutates the caller's position in place, so at every `probeTable` call that object
+   * IS the probed node, and its key must equal the probe's. Depth 6 is the least at which a null
+   * child is a full-width node of its own (remaining 6 - 1 - 1 - 3 = 1) and so probes the table;
+   * at depth 5 and below every null child is a quiescence leaf, which never probes.
+   */
+  const watch = (position: Position, run: () => unknown) => {
+    let underNull = 0;
+    const stale: string[] = [];
+    probes.watch = (key) => {
+      if (instrument.open > 0) underNull++;
+      if (key !== zobristKey(position) && stale.length < 5) stale.push(toFen(position));
+    };
+    try {
+      run();
+    } finally {
+      probes.watch = null;
+    }
+    return { underNull, stale };
+  };
+
+  it("search() on position-6 at depth 6", () => {
+    const position = parseFen(fenOf("position-6"));
+    const { underNull, stale } = watch(position, () => search(position, 6));
+    expect(stale).toEqual([]);
+    expect(underNull).toBeGreaterThan(0); // not vacuous: null children probe
+  });
+
+  it("chooseMove on position-6 deepened to 6", () => {
+    const position = parseFen(fenOf("position-6"));
+    const { underNull, stale } = watch(position, () =>
+      chooseMove(position, { budgetMs: 1_000, now: () => 0, maxDepth: 6 }),
+    );
+    expect(stale).toEqual([]);
+    expect(underNull).toBeGreaterThan(0); // not vacuous: null children probe
+  });
 });
 
 // ---------------------------------------------------------------------------
