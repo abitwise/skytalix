@@ -111,7 +111,9 @@ measured below.
 
 ## Tech context
 
-TypeScript on Node >= 22, ESM. Node type-strips `.ts` directly, so there is no bundler and no
+TypeScript on Node >= 22, ESM. *2026-10-26 (`QE-216-h`): the floor now reads Node >= 22.18, matching
+`package.json` `engines.node` since `ABC-216` (`39b93505`); 22.18.0 is where Node 22 type-strips by default
+(`50-decisions/ADR-0044`).* Node type-strips `.ts` directly, so there is no bundler and no
 transpile step; intra-repo imports carry explicit `.ts` extensions (`allowImportingTsExtensions`,
 `verbatimModuleSyntax`). Vitest for tests, Biome for lint and format. **There is no
 `vitest.config.ts`** — the runner runs on defaults, which is why `pool: "threads"` is a two-line
