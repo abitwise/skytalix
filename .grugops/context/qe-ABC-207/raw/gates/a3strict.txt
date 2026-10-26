@@ -1,0 +1,1 @@
+{"bothTerms":3514,"mirrorExact":3514,"withinBound":3514,"examples":["rnb1kbn1/1p1pp1pr/pqp2p1p/1N6/8/P4P1P/1PPPP1PR/R1BQKBN1 w Qq - 4 7","rnb1kbn1/1p1pp1pr/pqp2p1p/1N6/8/P4PPP/1PPPP2R/R1BQKBN1 b Qq - 0 7","rnb1kbn1/1p1pp1pr/pq3p1p/1Np5/8/P4PPP/1PPPP2R/R1BQKBN1 w Qq - 0 8"]}

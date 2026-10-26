@@ -1,0 +1,13 @@
+SEARCH_DEEP src/search.test.ts rc=0 start=12:54:43Z end=12:54:47Z load1={ 5.78 4.10 3.70 }
+SEARCH_DEEP src/search.ordering.test.ts rc=0 start=12:54:47Z end=12:54:59Z load1={ 5.36 4.06 3.70 }
+SEARCH_DEEP src/transposition.test.ts rc=0 start=12:54:59Z end=12:55:04Z load1={ 5.09 4.03 3.69 }
+SEARCH_DEEP src/quiescence.test.ts rc=0 start=12:55:04Z end=12:55:05Z load1={ 5.09 4.03 3.69 }
+SEARCH_DEEP src/search.pvs-lmr.test.ts rc=0 start=12:55:05Z end=12:56:28Z load1={ 3.19 3.65 3.57 }
+ENGINE_DEEP src/engine.test.ts rc=0 start=12:56:28Z end=12:58:50Z load1={ 3.27 3.50 3.51 }
+ENGINE_DEEP src/levels.test.ts rc=0 start=12:58:50Z end=13:07:56Z load1={ 2.88 3.00 3.18 }
+ENGINE_DEEP src/transposition.test.ts rc=0 start=13:07:56Z end=13:08:01Z load1={ 2.81 2.98 3.17 }
+ENGINE_DEEP src/search.pvs-lmr.test.ts rc=0 start=13:08:01Z end=13:08:38Z load1={ 3.31 3.05 3.19 }
+ENGINE_DEEP src/legal.test.ts rc=0 start=13:08:38Z end=13:10:37Z load1={ 3.75 3.37 3.29 }
+ENGINE_DEEP src/gameend.test.ts rc=0 start=13:10:37Z end=13:10:43Z load1={ 3.61 3.34 3.29 }
+PUZZLE_DEEP src/puzzle-suite.test.ts rc=0 start=13:10:43Z end=13:10:47Z load1={ 3.48 3.32 3.28 }
+DONE

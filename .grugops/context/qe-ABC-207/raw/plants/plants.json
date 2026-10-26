@@ -1,0 +1,396 @@
+{
+ "__baseline__": {
+  "exit": 0,
+  "passed": 91,
+  "total": 91,
+  "failed": [],
+  "beyondBaseline": [],
+  "ms": 671
+ },
+ "Q-weight-4 (base)": {
+  "exit": 1,
+  "passed": 89,
+  "total": 91,
+  "failed": [
+   "evaluate.king-mobility.test.ts > ABC-207 A1 — one more reachable square is worth strictly less to a queen than to N, B or R each extra square counts for every piece, and least for the queen :: AssertionError: k7/8/8/8/3Q4/7P/8/7K w - - 0 1: expected 100 to be less than 100",
+   "evaluate.king-mobility.test.ts > ABC-207 A2 — a queen out before the minor pieces costs a little Qa4 with both knights and both bishops home scores strictly lower than Qd1 (the criterion) :: AssertionError: expected 6 to be less than -29"
+  ],
+  "beyondBaseline": [
+   "evaluate.king-mobility.test.ts > ABC-207 A1 — one more reachable square is worth strictly less to a queen than to N, B or R each extra square counts for every piece, and least for the queen :: AssertionError: k7/8/8/8/3Q4/7P/8/7K w - - 0 1: expected 100 to be less than 100",
+   "evaluate.king-mobility.test.ts > ABC-207 A2 — a queen out before the minor pieces costs a little Qa4 with both knights and both bishops home scores strictly lower than Qd1 (the criterion) :: AssertionError: expected 6 to be less than -29"
+  ],
+  "ms": 557
+ },
+ "Q-weight-2 (= rook)": {
+  "exit": 1,
+  "passed": 89,
+  "total": 91,
+  "failed": [
+   "evaluate.king-mobility.test.ts > ABC-207 A1 — one more reachable square is worth strictly less to a queen than to N, B or R each extra square counts for every piece, and least for the queen :: AssertionError: expected 2 to be less than 2",
+   "evaluate.king-mobility.test.ts > ABC-207 A2 — a queen out before the minor pieces costs a little Qa4 with both knights and both bishops home scores strictly lower than Qd1 (the criterion) :: AssertionError: expected -20 to be less than -27"
+  ],
+  "beyondBaseline": [
+   "evaluate.king-mobility.test.ts > ABC-207 A1 — one more reachable square is worth strictly less to a queen than to N, B or R each extra square counts for every piece, and least for the queen :: AssertionError: expected 2 to be less than 2",
+   "evaluate.king-mobility.test.ts > ABC-207 A2 — a queen out before the minor pieces costs a little Qa4 with both knights and both bishops home scores strictly lower than Qd1 (the criterion) :: AssertionError: expected -20 to be less than -27"
+  ],
+  "ms": 558
+ },
+ "Q-weight-3 (> rook)": {
+  "exit": 1,
+  "passed": 89,
+  "total": 91,
+  "failed": [
+   "evaluate.king-mobility.test.ts > ABC-207 A1 — one more reachable square is worth strictly less to a queen than to N, B or R each extra square counts for every piece, and least for the queen :: AssertionError: expected 3 to be less than 2",
+   "evaluate.king-mobility.test.ts > ABC-207 A2 — a queen out before the minor pieces costs a little Qa4 with both knights and both bishops home scores strictly lower than Qd1 (the criterion) :: AssertionError: expected -7 to be less than -28"
+  ],
+  "beyondBaseline": [
+   "evaluate.king-mobility.test.ts > ABC-207 A1 — one more reachable square is worth strictly less to a queen than to N, B or R each extra square counts for every piece, and least for the queen :: AssertionError: expected 3 to be less than 2",
+   "evaluate.king-mobility.test.ts > ABC-207 A2 — a queen out before the minor pieces costs a little Qa4 with both knights and both bishops home scores strictly lower than Qd1 (the criterion) :: AssertionError: expected -7 to be less than -28"
+  ],
+  "ms": 553
+ },
+ "Q-weight-0": {
+  "exit": 1,
+  "passed": 89,
+  "total": 91,
+  "failed": [
+   "evaluate.king-mobility.test.ts > A4 — mobility: more moves score higher, and the term is bounded by ±100 cp never exceeds ±100 cp — on the four-queen rig and over the whole corpus, both colours to move :: AssertionError: expected 0 to be greater than 0",
+   "evaluate.king-mobility.test.ts > ABC-207 A1 — one more reachable square is worth strictly less to a queen than to N, B or R each extra square counts for every piece, and least for the queen :: AssertionError: expected 0 to be greater than 0"
+  ],
+  "beyondBaseline": [
+   "evaluate.king-mobility.test.ts > A4 — mobility: more moves score higher, and the term is bounded by ±100 cp never exceeds ±100 cp — on the four-queen rig and over the whole corpus, both colours to move :: AssertionError: expected 0 to be greater than 0",
+   "evaluate.king-mobility.test.ts > ABC-207 A1 — one more reachable square is worth strictly less to a queen than to N, B or R each extra square counts for every piece, and least for the queen :: AssertionError: expected 0 to be greater than 0"
+  ],
+  "ms": 566
+ },
+ "R-weight-1 (= queen)": {
+  "exit": 1,
+  "passed": 90,
+  "total": 91,
+  "failed": [
+   "evaluate.king-mobility.test.ts > ABC-207 A1 — one more reachable square is worth strictly less to a queen than to N, B or R each extra square counts for every piece, and least for the queen :: AssertionError: expected 1 to be less than 1"
+  ],
+  "beyondBaseline": [
+   "evaluate.king-mobility.test.ts > ABC-207 A1 — one more reachable square is worth strictly less to a queen than to N, B or R each extra square counts for every piece, and least for the queen :: AssertionError: expected 1 to be less than 1"
+  ],
+  "ms": 561
+ },
+ "N-weight-1 (= queen)": {
+  "exit": 1,
+  "passed": 90,
+  "total": 91,
+  "failed": [
+   "evaluate.king-mobility.test.ts > ABC-207 A1 — one more reachable square is worth strictly less to a queen than to N, B or R each extra square counts for every piece, and least for the queen :: AssertionError: expected 1 to be less than 1"
+  ],
+  "beyondBaseline": [
+   "evaluate.king-mobility.test.ts > ABC-207 A1 — one more reachable square is worth strictly less to a queen than to N, B or R each extra square counts for every piece, and least for the queen :: AssertionError: expected 1 to be less than 1"
+  ],
+  "ms": 556
+ },
+ "B-weight-1 (= queen)": {
+  "exit": 1,
+  "passed": 89,
+  "total": 91,
+  "failed": [
+   "evaluate.king-mobility.test.ts > ABC-207 A1 — one more reachable square is worth strictly less to a queen than to N, B or R each extra square counts for every piece, and least for the queen :: AssertionError: expected 1 to be less than 1",
+   "evaluate.king-mobility.test.ts > ABC-207 A3 — the mirror and the ±100 cp mobility bound hold on new positions the early-queen term sits outside the clamp: a clamped board reads exactly the cap :: AssertionError: expected 99 to be 100 // Object.is equality"
+  ],
+  "beyondBaseline": [
+   "evaluate.king-mobility.test.ts > ABC-207 A1 — one more reachable square is worth strictly less to a queen than to N, B or R each extra square counts for every piece, and least for the queen :: AssertionError: expected 1 to be less than 1",
+   "evaluate.king-mobility.test.ts > ABC-207 A3 — the mirror and the ±100 cp mobility bound hold on new positions the early-queen term sits outside the clamp: a clamped board reads exactly the cap :: AssertionError: expected 99 to be 100 // Object.is equality"
+  ],
+  "ms": 560
+ },
+ "NO_MOBILITY-not-zero": {
+  "exit": 1,
+  "passed": 85,
+  "total": 91,
+  "failed": [
+   "evaluate.king-mobility.test.ts > A4 — mobility: more moves score higher, and the term is bounded by ±100 cp white, with substantially more moves at equal material, scores strictly higher :: AssertionError: expected 32 to be +0 // Object.is equality",
+   "evaluate.king-mobility.test.ts > A4 — mobility: more moves score higher, and the term is bounded by ±100 cp never exceeds ±100 cp — on the four-queen rig and over the whole corpus, both colours to move :: AssertionError: expected 0 to be greater than 0",
+   "evaluate.king-mobility.test.ts > ABC-207 A1 — one more reachable square is worth strictly less to a queen than to N, B or R each extra square counts for every piece, and least for the queen :: AssertionError: expected 0 to be greater than 0",
+   "evaluate.king-mobility.test.ts > ABC-207 A2 — a queen out before the minor pieces costs a little with all four white minors developed, the term contributes 0 :: AssertionError: expected 11 to be +0 // Object.is equality",
+   "evaluate.king-mobility.test.ts > ABC-207 A2 — a queen out before the minor pieces costs a little in an endgame with no minor pieces, the term contributes 0 :: AssertionError: expected 12 to be +0 // Object.is equality",
+   "evaluate.king-mobility.test.ts > ABC-207 A3 — the mirror and the ±100 cp mobility bound hold on new positions the early-queen term sits outside the clamp: a clamped board reads exactly the cap :: AssertionError: expected +0 to be 100 // Object.is equality"
+  ],
+  "beyondBaseline": [
+   "evaluate.king-mobility.test.ts > A4 — mobility: more moves score higher, and the term is bounded by ±100 cp white, with substantially more moves at equal material, scores strictly higher :: AssertionError: expected 32 to be +0 // Object.is equality",
+   "evaluate.king-mobility.test.ts > A4 — mobility: more moves score higher, and the term is bounded by ±100 cp never exceeds ±100 cp — on the four-queen rig and over the whole corpus, both colours to move :: AssertionError: expected 0 to be greater than 0",
+   "evaluate.king-mobility.test.ts > ABC-207 A1 — one more reachable square is worth strictly less to a queen than to N, B or R each extra square counts for every piece, and least for the queen :: AssertionError: expected 0 to be greater than 0",
+   "evaluate.king-mobility.test.ts > ABC-207 A2 — a queen out before the minor pieces costs a little with all four white minors developed, the term contributes 0 :: AssertionError: expected 11 to be +0 // Object.is equality",
+   "evaluate.king-mobility.test.ts > ABC-207 A2 — a queen out before the minor pieces costs a little in an endgame with no minor pieces, the term contributes 0 :: AssertionError: expected 12 to be +0 // Object.is equality",
+   "evaluate.king-mobility.test.ts > ABC-207 A3 — the mirror and the ±100 cp mobility bound hold on new positions the early-queen term sits outside the clamp: a clamped board reads exactly the cap :: AssertionError: expected +0 to be 100 // Object.is equality"
+  ],
+  "ms": 569
+ },
+ "clamp-removed": {
+  "exit": 1,
+  "passed": 89,
+  "total": 91,
+  "failed": [
+   "evaluate.king-mobility.test.ts > ABC-207 A3 — the mirror and the ±100 cp mobility bound hold on new positions scores every mirrored pair exactly equal, and keeps the mobility term within ±100 cp :: AssertionError: k7/pp6/8/8/2B1B3/3Q4/8/RN2K1NR w - - 0 1: expected 147 to be less than or equal to 100",
+   "evaluate.king-mobility.test.ts > ABC-207 A3 — the mirror and the ±100 cp mobility bound hold on new positions the early-queen term sits outside the clamp: a clamped board reads exactly the cap :: AssertionError: expected 147 to be 100 // Object.is equality"
+  ],
+  "beyondBaseline": [
+   "evaluate.king-mobility.test.ts > ABC-207 A3 — the mirror and the ±100 cp mobility bound hold on new positions scores every mirrored pair exactly equal, and keeps the mobility term within ±100 cp :: AssertionError: k7/pp6/8/8/2B1B3/3Q4/8/RN2K1NR w - - 0 1: expected 147 to be less than or equal to 100",
+   "evaluate.king-mobility.test.ts > ABC-207 A3 — the mirror and the ±100 cp mobility bound hold on new positions the early-queen term sits outside the clamp: a clamped board reads exactly the cap :: AssertionError: expected 147 to be 100 // Object.is equality"
+  ],
+  "ms": 559
+ },
+ "term-0": {
+  "exit": 1,
+  "passed": 90,
+  "total": 91,
+  "failed": [
+   "evaluate.king-mobility.test.ts > ABC-207 A2 — a queen out before the minor pieces costs a little Qa4 with both knights and both bishops home scores strictly lower than Qd1 (the criterion) :: AssertionError: expected -8 to be less than -26"
+  ],
+  "beyondBaseline": [
+   "evaluate.king-mobility.test.ts > ABC-207 A2 — a queen out before the minor pieces costs a little Qa4 with both knights and both bishops home scores strictly lower than Qd1 (the criterion) :: AssertionError: expected -8 to be less than -26"
+  ],
+  "ms": 567
+ },
+ "term-20": {
+  "exit": 0,
+  "passed": 91,
+  "total": 91,
+  "failed": [],
+  "beyondBaseline": [],
+  "ms": 565
+ },
+ "term-sign-flipped": {
+  "exit": 1,
+  "passed": 90,
+  "total": 91,
+  "failed": [
+   "evaluate.king-mobility.test.ts > ABC-207 A2 — a queen out before the minor pieces costs a little Qa4 with both knights and both bishops home scores strictly lower than Qd1 (the criterion) :: AssertionError: expected 17 to be less than -26"
+  ],
+  "beyondBaseline": [
+   "evaluate.king-mobility.test.ts > ABC-207 A2 — a queen out before the minor pieces costs a little Qa4 with both knights and both bishops home scores strictly lower than Qd1 (the criterion) :: AssertionError: expected 17 to be less than -26"
+  ],
+  "ms": 552
+ },
+ "minors-condition-dropped": {
+  "exit": 1,
+  "passed": 89,
+  "total": 91,
+  "failed": [
+   "evaluate.king-mobility.test.ts > ABC-207 A2 — a queen out before the minor pieces costs a little with all four white minors developed, the term contributes 0 :: AssertionError: expected -25 to be +0 // Object.is equality",
+   "evaluate.king-mobility.test.ts > ABC-207 A2 — a queen out before the minor pieces costs a little in an endgame with no minor pieces, the term contributes 0 :: AssertionError: expected -25 to be +0 // Object.is equality"
+  ],
+  "beyondBaseline": [
+   "evaluate.king-mobility.test.ts > ABC-207 A2 — a queen out before the minor pieces costs a little with all four white minors developed, the term contributes 0 :: AssertionError: expected -25 to be +0 // Object.is equality",
+   "evaluate.king-mobility.test.ts > ABC-207 A2 — a queen out before the minor pieces costs a little in an endgame with no minor pieces, the term contributes 0 :: AssertionError: expected -25 to be +0 // Object.is equality"
+  ],
+  "ms": 559
+ },
+ "threshold>=1": {
+  "exit": 0,
+  "passed": 91,
+  "total": 91,
+  "failed": [],
+  "beyondBaseline": [],
+  "ms": 552
+ },
+ "threshold>=3": {
+  "exit": 0,
+  "passed": 91,
+  "total": 91,
+  "failed": [],
+  "beyondBaseline": [],
+  "ms": 549
+ },
+ "white-only": {
+  "exit": 1,
+  "passed": 87,
+  "total": 91,
+  "failed": [
+   "evaluate.king-mobility.test.ts > A1 — a position and its colour mirror score exactly equal, over ABC-076's 184 plus the king positions scores every mirrored pair exactly equal :: AssertionError: position-5 child 8: expected -96 to be -71 // Object.is equality",
+   "evaluate.king-mobility.test.ts > ABC-207 A3 — the mirror and the ±100 cp mobility bound hold on new positions scores every mirrored pair exactly equal, and keeps the mobility term within ±100 cp :: AssertionError: rnbqkbnr/pppp1ppp/8/4p3/Q7/2P5/PP1PPPPP/RNB1KBNR w KQkq - 0 3: expected -8 to be -33 // Object.is equality",
+   "evaluate.pawns.test.ts > A1 — a position and its colour mirror score exactly equal, over ABC-076's 184 plus the pawn structures scores every mirrored pair exactly equal :: AssertionError: position-5 child 8: expected -96 to be -71 // Object.is equality",
+   "evaluate.test.ts > ABC-076 A1 — a position and its colour-mirrored twin score exactly equal scores all 184 mirrored pairs equal :: AssertionError: position-5 child 8: expected -96 to be -71 // Object.is equality"
+  ],
+  "beyondBaseline": [
+   "evaluate.king-mobility.test.ts > A1 — a position and its colour mirror score exactly equal, over ABC-076's 184 plus the king positions scores every mirrored pair exactly equal :: AssertionError: position-5 child 8: expected -96 to be -71 // Object.is equality",
+   "evaluate.king-mobility.test.ts > ABC-207 A3 — the mirror and the ±100 cp mobility bound hold on new positions scores every mirrored pair exactly equal, and keeps the mobility term within ±100 cp :: AssertionError: rnbqkbnr/pppp1ppp/8/4p3/Q7/2P5/PP1PPPPP/RNB1KBNR w KQkq - 0 3: expected -8 to be -33 // Object.is equality",
+   "evaluate.pawns.test.ts > A1 — a position and its colour mirror score exactly equal, over ABC-076's 184 plus the pawn structures scores every mirrored pair exactly equal :: AssertionError: position-5 child 8: expected -96 to be -71 // Object.is equality",
+   "evaluate.test.ts > ABC-076 A1 — a position and its colour-mirrored twin score exactly equal scores all 184 mirrored pairs equal :: AssertionError: position-5 child 8: expected -96 to be -71 // Object.is equality"
+  ],
+  "ms": 557
+ },
+ "queen-home-e1/e8": {
+  "exit": 1,
+  "passed": 90,
+  "total": 91,
+  "failed": [
+   "evaluate.king-mobility.test.ts > ABC-207 A2 — a queen out before the minor pieces costs a little Qa4 with both knights and both bishops home scores strictly lower than Qd1 (the criterion) :: AssertionError: expected -8 to be less than -26"
+  ],
+  "beyondBaseline": [
+   "evaluate.king-mobility.test.ts > ABC-207 A2 — a queen out before the minor pieces costs a little Qa4 with both knights and both bishops home scores strictly lower than Qd1 (the criterion) :: AssertionError: expected -8 to be less than -26"
+  ],
+  "ms": 564
+ },
+ "minor-squares-swapped": {
+  "exit": 1,
+  "passed": 90,
+  "total": 91,
+  "failed": [
+   "evaluate.king-mobility.test.ts > ABC-207 A2 — a queen out before the minor pieces costs a little Qa4 with both knights and both bishops home scores strictly lower than Qd1 (the criterion) :: AssertionError: expected -8 to be less than -26"
+  ],
+  "beyondBaseline": [
+   "evaluate.king-mobility.test.ts > ABC-207 A2 — a queen out before the minor pieces costs a little Qa4 with both knights and both bishops home scores strictly lower than Qd1 (the criterion) :: AssertionError: expected -8 to be less than -26"
+  ],
+  "ms": 559
+ },
+ "term-inside-clamp": {
+  "exit": 1,
+  "passed": 89,
+  "total": 91,
+  "failed": [
+   "evaluate.king-mobility.test.ts > ABC-207 A3 — the mirror and the ±100 cp mobility bound hold on new positions scores every mirrored pair exactly equal, and keeps the mobility term within ±100 cp :: AssertionError: k7/pp6/8/8/2B1B3/3Q4/8/RN2K1NR w - - 0 1: expected 125 to be less than or equal to 100",
+   "evaluate.king-mobility.test.ts > ABC-207 A3 — the mirror and the ±100 cp mobility bound hold on new positions the early-queen term sits outside the clamp: a clamped board reads exactly the cap :: AssertionError: expected 125 to be 100 // Object.is equality"
+  ],
+  "beyondBaseline": [
+   "evaluate.king-mobility.test.ts > ABC-207 A3 — the mirror and the ±100 cp mobility bound hold on new positions scores every mirrored pair exactly equal, and keeps the mobility term within ±100 cp :: AssertionError: k7/pp6/8/8/2B1B3/3Q4/8/RN2K1NR w - - 0 1: expected 125 to be less than or equal to 100",
+   "evaluate.king-mobility.test.ts > ABC-207 A3 — the mirror and the ±100 cp mobility bound hold on new positions the early-queen term sits outside the clamp: a clamped board reads exactly the cap :: AssertionError: expected 125 to be 100 // Object.is equality"
+  ],
+  "ms": 555
+ },
+ "N3": {
+  "exit": 1,
+  "passed": 23,
+  "total": 24,
+  "failed": [
+   "search.ordering.test.ts > G1 — chooseMove records a killer only on a beta cutoff position-3 at 3 injected ticks: depth 3 in exactly 364 nodes :: AssertionError: expected 361 to be 364 // Object.is equality"
+  ],
+  "beyondBaseline": [
+   "search.ordering.test.ts > G1 — chooseMove records a killer only on a beta cutoff position-3 at 3 injected ticks: depth 3 in exactly 364 nodes :: AssertionError: expected 361 to be 364 // Object.is equality"
+  ],
+  "ms": 573
+ },
+ "noLmrResearch": {
+  "exit": 1,
+  "passed": 18,
+  "total": 20,
+  "failed": [
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0",
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to depth 4 in the engine's own recursion :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0"
+  ],
+  "beyondBaseline": [
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0",
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to depth 4 in the engine's own recursion :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0"
+  ],
+  "ms": 535
+ },
+ "noResearch": {
+  "exit": 1,
+  "passed": 18,
+  "total": 20,
+  "failed": [
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0",
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to depth 4 in the engine's own recursion :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0"
+  ],
+  "beyondBaseline": [
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0",
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to depth 4 in the engine's own recursion :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0"
+  ],
+  "ms": 533
+ },
+ "noLmrResearch-search-only": {
+  "exit": 1,
+  "passed": 19,
+  "total": 20,
+  "failed": [
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0"
+  ],
+  "beyondBaseline": [
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0"
+  ],
+  "ms": 531
+ },
+ "noLmrResearch-engine-only": {
+  "exit": 1,
+  "passed": 19,
+  "total": 20,
+  "failed": [
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to depth 4 in the engine's own recursion :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0"
+  ],
+  "beyondBaseline": [
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to depth 4 in the engine's own recursion :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0"
+  ],
+  "ms": 531
+ },
+ "noResearch-search-only": {
+  "exit": 1,
+  "passed": 19,
+  "total": 20,
+  "failed": [
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0"
+  ],
+  "beyondBaseline": [
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0"
+  ],
+  "ms": 522
+ },
+ "noResearch-engine-only": {
+  "exit": 1,
+  "passed": 19,
+  "total": 20,
+  "failed": [
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to depth 4 in the engine's own recursion :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0"
+  ],
+  "beyondBaseline": [
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to depth 4 in the engine's own recursion :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0"
+  ],
+  "ms": 534
+ },
+ "discard-re-search-search-only": {
+  "exit": 1,
+  "passed": 19,
+  "total": 20,
+  "failed": [
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions :: AssertionError: expected -12 to be -1 // Object.is equality"
+  ],
+  "beyondBaseline": [
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions :: AssertionError: expected -12 to be -1 // Object.is equality"
+  ],
+  "ms": 537
+ },
+ "discard-re-search-engine-only": {
+  "exit": 0,
+  "passed": 20,
+  "total": 20,
+  "failed": [],
+  "beyondBaseline": [],
+  "ms": 527
+ },
+ "base-evaluate": {
+  "exit": 1,
+  "passed": 179,
+  "total": 189,
+  "failed": [
+   "evaluate.king-mobility.test.ts > ABC-207 A1 — one more reachable square is worth strictly less to a queen than to N, B or R each extra square counts for every piece, and least for the queen :: AssertionError: k7/8/8/8/3Q4/7P/8/7K w - - 0 1: expected 100 to be less than 100",
+   "evaluate.king-mobility.test.ts > ABC-207 A2 — a queen out before the minor pieces costs a little Qa4 with both knights and both bishops home scores strictly lower than Qd1 (the criterion) :: AssertionError: expected 31 to be less than -29",
+   "search.ordering.test.ts > A4 — each heuristic's node count, and the delete rule position-6 at depth 2: none 11 220, MVV-LVA 1 317, + killers 1 317 :: AssertionError: expected 10371 to be 11220 // Object.is equality",
+   "search.ordering.test.ts > G1 — chooseMove records a killer only on a beta cutoff position-3 at 3 injected ticks: depth 3 in exactly 364 nodes :: AssertionError: expected 342 to be 364 // Object.is equality",
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to depth 4 in the engine's own recursion :: AssertionError: expected [ -7, 'b3f3' ] to deeply equal [ -12, 'b3h3' ]",
+   "transposition.test.ts > A1 — table-on and table-off scores are identical knight-g1 w K at depth 4 — G6: 911 with the table on and off :: AssertionError: expected 939 to be 911 // Object.is equality",
+   "transposition.test.ts > A1 — table-on and table-off scores are identical knight-g1 w - at depth 4 — G6: 911 with the table on and off :: AssertionError: expected 939 to be 911 // Object.is equality",
+   "transposition.test.ts > A1 — table-on and table-off scores are identical position-3 at depth 4 — the same score, and the work changes: 1 355 nodes with the table, 1 512 without :: AssertionError: expected 1377 to be 1355 // Object.is equality",
+   "transposition.test.ts > A5 — the only non-losing line repeats, and it scores exactly 0 search(), depth 4: the perpetual scores exactly 0 and is played — in 7 629 nodes :: AssertionError: expected 7295 to be 7629 // Object.is equality",
+   "transposition.test.ts > A5 — the only non-losing line repeats, and it scores exactly 0 the fixture bites: at depth 3 the repetition is past the horizon, and the rook down shows :: AssertionError: expected -485 to be -498 // Object.is equality"
+  ],
+  "beyondBaseline": [
+   "evaluate.king-mobility.test.ts > ABC-207 A1 — one more reachable square is worth strictly less to a queen than to N, B or R each extra square counts for every piece, and least for the queen :: AssertionError: k7/8/8/8/3Q4/7P/8/7K w - - 0 1: expected 100 to be less than 100",
+   "evaluate.king-mobility.test.ts > ABC-207 A2 — a queen out before the minor pieces costs a little Qa4 with both knights and both bishops home scores strictly lower than Qd1 (the criterion) :: AssertionError: expected 31 to be less than -29",
+   "search.ordering.test.ts > A4 — each heuristic's node count, and the delete rule position-6 at depth 2: none 11 220, MVV-LVA 1 317, + killers 1 317 :: AssertionError: expected 10371 to be 11220 // Object.is equality",
+   "search.ordering.test.ts > G1 — chooseMove records a killer only on a beta cutoff position-3 at 3 injected ticks: depth 3 in exactly 364 nodes :: AssertionError: expected 342 to be 364 // Object.is equality",
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to depth 4 in the engine's own recursion :: AssertionError: expected [ -7, 'b3f3' ] to deeply equal [ -12, 'b3h3' ]",
+   "transposition.test.ts > A1 — table-on and table-off scores are identical knight-g1 w K at depth 4 — G6: 911 with the table on and off :: AssertionError: expected 939 to be 911 // Object.is equality",
+   "transposition.test.ts > A1 — table-on and table-off scores are identical knight-g1 w - at depth 4 — G6: 911 with the table on and off :: AssertionError: expected 939 to be 911 // Object.is equality",
+   "transposition.test.ts > A1 — table-on and table-off scores are identical position-3 at depth 4 — the same score, and the work changes: 1 355 nodes with the table, 1 512 without :: AssertionError: expected 1377 to be 1355 // Object.is equality",
+   "transposition.test.ts > A5 — the only non-losing line repeats, and it scores exactly 0 search(), depth 4: the perpetual scores exactly 0 and is played — in 7 629 nodes :: AssertionError: expected 7295 to be 7629 // Object.is equality",
+   "transposition.test.ts > A5 — the only non-losing line repeats, and it scores exactly 0 the fixture bites: at depth 3 the repetition is past the horizon, and the rook down shows :: AssertionError: expected -485 to be -498 // Object.is equality"
+  ],
+  "ms": 877
+ }
+}

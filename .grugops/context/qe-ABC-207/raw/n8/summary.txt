@@ -1,0 +1,4 @@
+base start=00:45:37 load1=2.98 vitest=0 rc=0  Tests 2090 passed (2090)  Duration 7.34s (transform 0ms, setup 0ms, import 6.41s, tests 5.20s, environment 3ms) real 7.80
+head start=00:45:45 load1=3.21 vitest=0 rc=0  Tests 2097 passed (2097)  Duration 7.18s (transform 0ms, setup 0ms, import 6.41s, tests 4.99s, environment 3ms) real 7.56
+head start=00:45:52 load1=3.92 vitest=0 rc=0  Tests 2097 passed (2097)  Duration 7.22s (transform 0ms, setup 0ms, import 6.55s, tests 4.82s, environment 3ms) real 7.61
+base start=00:46:00 load1=3.92 vitest=0 rc=0  Tests 2090 passed (2090)  Duration 7.34s (transform 0ms, setup 0ms, import 6.65s, tests 5.04s, environment 3ms) real 7.74
