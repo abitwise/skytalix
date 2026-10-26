@@ -1,0 +1,4 @@
+2026-10-25T13:22:15Z wait poll=1 load1=3.21 power=AC_Power batt=100% vitest=0 thermal=0
+2026-10-25T13:22:15Z PRECONDITIONS-MET
+2026-10-25T13:22:15Z harness start: d 3d39c8ff 7020cca3 --budget-ms 1500 --rounds 200
+2026-10-25T19:02:01Z harness end rc=0
