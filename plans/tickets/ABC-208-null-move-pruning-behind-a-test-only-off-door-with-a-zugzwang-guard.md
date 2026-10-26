@@ -7,7 +7,7 @@ size: M
 priority: P2
 epic: EPIC-008
 feature: —
-adr: "NEW ADR (null-move pruning) plus an ADR-0026 off door; route the text to the owner when it lands (…7feb0553)"
+adr: "ADR-0050 (PROPOSED; acceptance is the owner's) plus an ADR-0026 off-door pair; the real-clock reading and the merge wait on his acceptance (…749ff988)"
 ---
 
 # ABC-208: null-move pruning
@@ -35,12 +35,19 @@ adr: "NEW ADR (null-move pruning) plus an ADR-0026 off door; route the text to t
 
 1. Null-move pruning in **both** recursions (`src/engine.ts`, `src/search.ts`), so the identity oracle still runs one
    algorithm (`ADR-0025` decision 6 precedent).
+   - *2026-10-26 (BA/PM, `bapm-amend-ABC-208`):* the files also include `src/apply.ts` (`makeNullMove` /
+     `unmakeNullMove`, beside `makeMove`) and `src/zobrist.ts` (`zobristKeyAfterNullMove`), per `ADR-0050` decision 7.
+     Neither file changes `A4`'s `G1` class B (`ADR-0050` Consequences).
 2. **A zugzwang guard.** No null move:
    - while in check;
    - at the root;
    - directly after another null move;
    - when the side to move has **no non-pawn material**.
    The reduction R and any verification search are the ADR's call.
+   - *2026-10-26 (BA/PM, `bapm-amend-ABC-208`):* the fourth guard reads **"fewer than three non-pawn pieces"**
+     (knights, bishops, rooks and queens) for the side to move, as `ADR-0050` decision 6 rules it. That implies the
+     floor above, because no non-pawn material means no null move, so `A2`'s second bullet stands as written. R is 3,
+     with no verification search (`ADR-0050` decisions 6 and 7).
 3. **An `ADR-0026` door.** Every test-only door that exists before this ticket turns null move off, so each one
    reproduces its pre-ticket search node for node (`ADR-0026` decision 3 pattern). One new door turns null move off
    on the shipped path.
@@ -58,15 +65,32 @@ adr: "NEW ADR (null-move pruning) plus an ADR-0026 off door; route the text to t
 - **`A1` (the door reproduces the pre-ticket engine).** **Given** the new off door, **then** on the `ABC-078` `A3`
   corpus at every depth that sweep reads, the move, the score and the nodes equal base's shipped search. Every
   pre-existing door is node-equal to its pre-ticket self.
+  - *2026-10-26 (BA/PM, `bapm-amend-ABC-208`):* both sentences compare two builds, head's doors against base's shipped
+    search and base's own doors. No single in-tree row can hold both, so QE runs `A1` out of tree, with a base tree and
+    a head tree, on the `ABC-078` `A3` corpus at that sweep's budgets. The design probe ran it this way on 222 cells
+    (`…bae20026`). The bar is unchanged: every cell is equal in move, score and nodes.
 - **`A2` (the zugzwang guard holds).**
   - **Given** **≥ 6** zugzwang positions where a null move would mislead (king-and-pawn endings and the classic
     mutual-zugzwang set), each with a proven best move recorded with its source, **when** the shipped engine searches
     each at a fixed depth ≥ 8, **then** it plays the recorded move in **all** of them.
   - **Given** a position in check, or one with no non-pawn material for the side to move, **then** the instrumented
     search makes **0** null moves there.
+  - *2026-10-26 (BA/PM, `bapm-amend-ABC-208`):* "a fixed depth ≥ 8" is read per row. Each row has its own fixed
+    depth, the one at which base solves it, from 8 to 12. The set is `ADR-0050` decision 9's seven rows:
+    `zugzwang.001` Rf1 d9, `.004` Qxh4 d11 and `.005` Nxd5 d12 (CPW), plus `kpk-b6c6` Kc6, `kpk-c6d6` Kd6, `kpk-d6e6`
+    Ke6 and `kpk-e6f6` Kf6, each at d8 (Lichess Syzygy). Following Test note 1, "proven … with its source" means
+    sourced, not hand-labelled. The four K+P rows are tablebase-unique wins. The CPW rows carry the suite's label,
+    which Stockfish 19 corroborates. `.005`'s label is the suite's best move and not a proven unique win, so even
+    without it six rows meet "≥ 6". All 7 must be played. The second bullet's instrument is a call-through mock of
+    `src/apply.ts` (`ADR-0050` decision 9).
 - **`A3` (bounded drift).** The ADR's bounded oracle is green: on the identity corpus at fixed depth, the shipped
   search's score stays within the ADR's stated bound of the door's score. Mate scores are found as **mate**, with
   distance ≤ the door's distance.
+  - *2026-10-26 (BA/PM, `bapm-amend-ABC-208`):* the mate clause is read at the same depth as the centipawn clause,
+    5, on both sides, with no extra ply. In the shape of `ADR-0026` decision 9 (Scope 4), it is the mate floor on the
+    287 mate-rich corpus: for every position the door scores as a mate at d5, `search()` at d5 scores a mate of the
+    same sign, no longer (`ADR-0050` decision 8). Mate-status flips on the 190, which holds 3 mates, are printed as a
+    report, as in `ADR-0026` decision 9. The centipawn bound is `ADR-0050` decision 8's. The bar is unchanged.
 - **`A4` (existing gates).**
   - `G1`: ≥ 54/58. The mate-in-2 and mate-in-3 rows are where null move bites; a red is classed per row under
     `ADR-0034`.
@@ -121,6 +145,9 @@ adr: "NEW ADR (null-move pruning) plus an ADR-0026 off door; route the text to t
     `0a9390e5`, `ABC-215` (`5c91e2e4`) changed values in `src/`, so the base carries its tables. `ABC-217` is
     test-only.
   - `ABC-209` and `ABC-210` wait on this ticket. `ABC-211` shares no file, but its reading cannot overlap this one.
+- *2026-10-26 (BA/PM, `bapm-amend-ABC-208`):* **`ADR-0050` is PROPOSED, and accepting it is the owner's call.** The
+  build may proceed. The real-clock reading (`G6` and `A5`'s D, ALONE) and the merge wait on his acceptance
+  (`…d25ab770`, reading b; `…749ff988`). `A6`'s "the new ADR exists" is met by the file. Its status is the owner's.
 
 ## Size and priority
 
@@ -161,6 +188,17 @@ Design comes first. Only these rows changed:
 - **The ADR's status at merge has two readings.** (a) `…7feb0553` item 2's go-ahead plus the report is enough. (b) A
   new ADR is the owner's (`…5aaf7cec` item 3), so the merge waits on his acceptance, as the `ADR-0031` addendum did
   for `ABC-205`. The Orchestrator routes this when the text lands.
+
+**Re-scored 2026-10-26 by BA/PM** (task `bapm-amend-ABC-208`, at `main` `5a7866f0`, after the design ruling).
+**Result: 10 of 10. In Design → Ready for Dev.** No criterion's bar changed. Only these rows changed:
+
+| # | item | verdict |
+|---|---|---|
+| 2 | scope and out-of-scope clear | ✅ the guard is now three non-pawn pieces, and Scope 1 adds `src/apply.ts` and `src/zobrist.ts`. R = 3 at null-window nodes, with no verification (`ADR-0050`) |
+| 3 | INVEST-shaped | ✅ the probe found no split: one `M` build, and a split would ship a door with nothing behind it and need a second D |
+| 4 | acceptance testable and measurable | ✅ `A1` runs out of tree, across builds. `A2` has seven named rows at per-row depths 8–12. `A3` is read at d5 with `ADR-0050` d8's bounds. `G7` is not owed, because nothing is held between nodes |
+| 8 | size assigned | ✅ `M`, confirmed by the probe (about 150–200 production lines in four files) |
+| 10 | no major unresolved blocker | ✅ the design is ruled (`…012b1053`), and the status at merge is routed: reading (b) (`…d25ab770`). `ADR-0050` is PROPOSED. The build may proceed. The real-clock reading and the merge wait on the owner (§ Dependencies). `QE-205-c` and `QE-207-g` stay open and do not block |
 
 ## Design ruling
 
