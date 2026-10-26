@@ -1,0 +1,15 @@
+2026-10-26T06:12:48Z N8-LANE start load1=7.08 power=AC_Power vitest=0
+2026-10-26T06:13:34Z N8-LANE end rc=0 load1=5.11
+2026-10-26T06:13:34Z ENGINE_DEEP src/engine.test.ts start load1=5.11 power=AC_Power vitest=0
+2026-10-26T06:15:55Z ENGINE_DEEP src/engine.test.ts end rc=0 load1=3.58 ::  Tests 60 passed (60)
+2026-10-26T06:15:56Z ENGINE_DEEP src/levels.test.ts start load1=3.58 power=AC_Power vitest=0
+2026-10-26T06:25:02Z ENGINE_DEEP src/levels.test.ts end rc=0 load1=3.18 ::  Tests 41 passed (41)
+2026-10-26T06:25:02Z ENGINE_DEEP src/transposition.test.ts start load1=3.18 power=AC_Power vitest=0
+2026-10-26T06:25:07Z ENGINE_DEEP src/transposition.test.ts end rc=0 load1=3.25 ::  Tests 26 passed (26)
+2026-10-26T06:25:07Z ENGINE_DEEP src/search.pvs-lmr.test.ts start load1=3.25 power=AC_Power vitest=0
+2026-10-26T06:25:44Z ENGINE_DEEP src/search.pvs-lmr.test.ts end rc=0 load1=3.34 ::  Tests 21 passed (21)
+2026-10-26T06:25:44Z ENGINE_DEEP src/legal.test.ts start load1=3.34 power=AC_Power vitest=0
+2026-10-26T06:27:45Z ENGINE_DEEP src/legal.test.ts end rc=0 load1=3.04 ::  Tests 37 passed (37)
+2026-10-26T06:27:45Z ENGINE_DEEP src/gameend.test.ts start load1=3.04 power=AC_Power vitest=0
+2026-10-26T06:27:50Z ENGINE_DEEP src/gameend.test.ts end rc=0 load1=3.12 ::  Tests 47 passed (47)
+2026-10-26T06:27:50Z end
