@@ -1,0 +1,28 @@
+bb default: 95 pass / 0 fail / 95
+bb deep: 29 pass / 0 fail / 29
+hh default: 95 pass / 0 fail / 95
+hh deep: 29 pass / 0 fail / 29
+bh default: 89 pass / 6 fail / 95
+  RED engine.test.ts :: A4 — no fixed depth anywhere in the delivered engine exports the two entry points and the two named values, and nothing that takes a depth
+  RED search.pvs-lmr.test.ts :: PVS identity — searchWithoutReductions scores what searchWithoutPvsOrReductions scores the engine doors bite: chooseMoveWithoutReductions is the unreduced engine, not chooseMove
+  RED search.pvs-lmr.test.ts :: A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions
+  RED search.pvs-lmr.test.ts :: A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to depth 4 in the engine's own recursion
+  RED search.pvs-lmr.test.ts :: A5 — search() visits fewer nodes than searchWithoutPvsOrReductions at depth 4 position-3 at depth 4 — the default lane's standing guard
+  RED search.test.ts :: A6 — no move is selected without a caller-supplied depth exports exactly the search core and nothing that picks a move on its own
+bh deep: 17 pass / 12 fail / 29
+  RED search.pvs-lmr.test.ts :: PVS identity — searchWithoutReductions scores what searchWithoutPvsOrReductions scores the engine doors bite: chooseMoveWithoutReductions is the unreduced engine, not chooseMove
+  RED search.pvs-lmr.test.ts :: A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions
+  RED search.pvs-lmr.test.ts :: A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to depth 4 in the engine's own recursion
+  RED search.pvs-lmr.test.ts :: A5 — search() visits fewer nodes than searchWithoutPvsOrReductions at depth 4 position-3 at depth 4 — the default lane's standing guard
+  RED search.pvs-lmr.test.ts :: A5 — search() visits fewer nodes than searchWithoutPvsOrReductions at depth 4 kiwipete at depth 4 — the criterion's own positions [deep, SEARCH_DEEP=1]
+  RED search.pvs-lmr.test.ts :: A5 — search() visits fewer nodes than searchWithoutPvsOrReductions at depth 4 position-6 at depth 4 — the criterion's own positions [deep, SEARCH_DEEP=1]
+  RED search.pvs-lmr.test.ts :: A1 — the mate-rich corpus is frozen, and the mate floor holds one ply deeper the seven seeds at depth 4 [deep, SEARCH_DEEP=1]
+  RED search.pvs-lmr.test.ts :: A1 — the mate-rich corpus is frozen, and the mate floor holds one ply deeper all 287: every mate searchWithoutReductions sees at depth 4, search() sees at depth 5, same sign, no longer [deep, SEARCH_DEEP=1]
+  RED search.pvs-lmr.test.ts :: A1 — bounded drift, search() against searchWithoutReductions and chooseMove against chooseMoveWithoutReductions [deep, SEARCH_DEEP=1] search() at fixed depth 5 on the 190: >= 95% within 25 cp, none beyond 75 cp [deep, SEARCH_DEEP=1]
+  RED search.pvs-lmr.test.ts :: A1 — bounded drift, search() against searchWithoutReductions and chooseMove against chooseMoveWithoutReductions [deep, SEARCH_DEEP=1] chooseMove iterated to depth 5 on the 190: >= 95% within 25 cp, none beyond 75 cp [deep, SEARCH_DEEP=1]
+  RED search.pvs-lmr.test.ts :: A2 — the clock-free companion: cumulative deepening nodes to depth 7 [deep, SEARCH_DEEP=1] kiwipete: chooseMove reaches depth 7 in fewer nodes than chooseMoveWithoutPvsOrReductions [deep, SEARCH_DEEP=1]
+  RED search.pvs-lmr.test.ts :: A2 — the clock-free companion: cumulative deepening nodes to depth 7 [deep, SEARCH_DEEP=1] position-6: chooseMove reaches depth 7 in fewer nodes than chooseMoveWithoutPvsOrReductions [deep, SEARCH_DEEP=1]
+hb default: 93 pass / 2 fail / 95
+  RED engine.test.ts :: A4 — no fixed depth anywhere in the delivered engine exports the two entry points and the two named values, and nothing that takes a depth
+  RED search.test.ts :: A6 — no move is selected without a caller-supplied depth exports exactly the search core and nothing that picks a move on its own
+hb deep: 29 pass / 0 fail / 29

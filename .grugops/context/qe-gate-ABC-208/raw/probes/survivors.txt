@@ -1,0 +1,5 @@
+p-sstale search: 661 cells (the 190 at d4+d5 / md5, the 287 at d5); node diffs 0; score-or-move diffs 0 []
+p-estale chooseMove: 471 cells (the 190 at d4+d5 / md5, the 287 at d5); node diffs 0; score-or-move diffs 0 []
+p-dpvsr searchWithoutPvsOrReductions: 661 cells (the 190 at d4+d5 / md5, the 287 at d5); node diffs 25; score-or-move diffs 0 []
+p-dtable searchWithoutTable: 661 cells (the 190 at d4+d5 / md5, the 287 at d5); node diffs 25; score-or-move diffs 0 []
+p-dcpvsr chooseMoveWithoutPvsOrReductions: 471 cells (the 190 at d4+d5 / md5, the 287 at d5); node diffs 9; score-or-move diffs 0 []

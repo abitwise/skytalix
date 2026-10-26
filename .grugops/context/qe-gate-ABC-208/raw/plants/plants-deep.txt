@@ -1,0 +1,32 @@
+return-null-score [deep] 2 red / 39 (50 s)
+    RED SEARCH_DEEP search.null-move.test.ts :: both recursions try the null move through the predicate, at null-window nodes, and return beta ./search.ts: calls nullMoveReduction once, gates on alpha + 1 === beta, subtracts its value and
+    RED SEARCH_DEEP search.null-move.test.ts :: both recursions try the null move through the predicate, at null-window nodes, and return beta ./engine.ts: calls nullMoveReduction once, gates on alpha + 1 === beta, subtracts its value and
+guard-2 [deep] 3 red / 39 (47 s)
+    RED SEARCH_DEEP search.null-move.test.ts :: nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces two non-pawn pieces: depth 6, ply 3 -> 0
+    RED SEARCH_DEEP search.null-move.test.ts :: A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth zugzwang.004: chooseMove on a frozen clock to depth 11 plays h3h4 [deep, SEARCH_DEEP=1]
+    RED SEARCH_DEEP search.null-move.test.ts :: A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth zugzwang.005: chooseMove on a frozen clock to depth 12 plays f4d5 [deep, SEARCH_DEEP=1]
+cut-without-search [deep] 4 red / 39 (47 s)
+    RED SEARCH_DEEP search.null-move.test.ts :: both recursions try the null move through the predicate, at null-window nodes, and return beta ./search.ts: calls nullMoveReduction once, gates on alpha + 1 === beta, subtracts its value and
+    RED SEARCH_DEEP search.null-move.test.ts :: both recursions try the null move through the predicate, at null-window nodes, and return beta ./engine.ts: calls nullMoveReduction once, gates on alpha + 1 === beta, subtracts its value and
+    RED SEARCH_DEEP search.null-move.test.ts :: A3 — bounded drift against the null-move-off doors, depth 5, the 190 [deep, SEARCH_DEEP=1] search() against searchWithoutNullMove at fixed depth 5: >= 95% within 25 cp, none beyond 37 cp [de
+    RED SEARCH_DEEP search.null-move.test.ts :: A3 — bounded drift against the null-move-off doors, depth 5, the 190 [deep, SEARCH_DEEP=1] chooseMove against chooseMoveWithoutNullMove deepened to 5: >= 95% within 25 cp, none beyond 37 cp 
+sign-error [deep] 4 red / 39 (55 s)
+    RED SEARCH_DEEP search.null-move.test.ts :: both recursions try the null move through the predicate, at null-window nodes, and return beta ./search.ts: calls nullMoveReduction once, gates on alpha + 1 === beta, subtracts its value and
+    RED SEARCH_DEEP search.null-move.test.ts :: both recursions try the null move through the predicate, at null-window nodes, and return beta ./engine.ts: calls nullMoveReduction once, gates on alpha + 1 === beta, subtracts its value and
+    RED SEARCH_DEEP search.null-move.test.ts :: A3 — bounded drift against the null-move-off doors, depth 5, the 190 [deep, SEARCH_DEEP=1] search() against searchWithoutNullMove at fixed depth 5: >= 95% within 25 cp, none beyond 37 cp [de
+    RED SEARCH_DEEP search.null-move.test.ts :: A3 — bounded drift against the null-move-off doors, depth 5, the 190 [deep, SEARCH_DEEP=1] chooseMove against chooseMoveWithoutNullMove deepened to 5: >= 95% within 25 cp, none beyond 37 cp 
+no-material-guard [deep] 13 red / 39 (43 s)
+    RED SEARCH_DEEP search.null-move.test.ts :: nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces two non-pawn pieces: depth 6, ply 3 -> 0
+    RED SEARCH_DEEP search.null-move.test.ts :: nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces the OTHER side has the three: depth 6, ply 3 -> 0
+    RED SEARCH_DEEP search.null-move.test.ts :: nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces pawns only: depth 6, ply 3 -> 0
+    RED SEARCH_DEEP search.null-move.test.ts :: A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth zugzwang.001: chooseMove on a frozen clock to depth 9 plays e1f1
+    RED SEARCH_DEEP search.null-move.test.ts :: A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth zugzwang.004: chooseMove on a frozen clock to depth 11 plays h3h4 [deep, SEARCH_DEEP=1]
+    RED SEARCH_DEEP search.null-move.test.ts :: A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth zugzwang.005: chooseMove on a frozen clock to depth 12 plays f4d5 [deep, SEARCH_DEEP=1]
+    RED SEARCH_DEEP search.null-move.test.ts :: A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth kpk-b6c6: chooseMove on a frozen clock to depth 8 plays b6c6
+    RED SEARCH_DEEP search.null-move.test.ts :: A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth kpk-c6d6: chooseMove on a frozen clock to depth 8 plays c6d6
+    RED SEARCH_DEEP search.null-move.test.ts :: A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth kpk-d6e6: chooseMove on a frozen clock to depth 8 plays d6e6
+    RED SEARCH_DEEP search.null-move.test.ts :: A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth kpk-e6f6: chooseMove on a frozen clock to depth 8 plays e6f6
+    RED SEARCH_DEEP search.null-move.test.ts :: A2 — the instrumented search makes 0 null moves in check, and 0 below three non-pawn pieces search() to depth 4 and chooseMove deepened to 4: every null move is made out of check, with three
+    RED SEARCH_DEEP search.null-move.test.ts :: A2 — the instrumented search makes 0 null moves in check, and 0 below three non-pawn pieces the pawn-only endgames: no null move at all, in either recursion, to depth 6
+    RED SEARCH_DEEP search.null-move.test.ts :: A3 — the same-depth mate floor on the 287 [deep, SEARCH_DEEP=1] every mate searchWithoutNullMove scores at depth 5, search() scores at depth 5: same sign, no longer [deep, SEARCH_DEEP=1]
+restored and verified equal to pristine
