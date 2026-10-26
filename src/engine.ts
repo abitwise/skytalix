@@ -56,10 +56,13 @@
  *
  * THE TRANSPOSITION TABLE AND IN-TREE REPETITION (`ABC-081`) are `src/search.ts`'s, node for node:
  * this call's own per-ply key array, seeded with the root's key, and the one table
- * (`src/transposition.ts`, `ADR-0025`), cleared at this call's entry and kept across its
- * iterations — so iteration `n`'s best moves are iteration `n + 1`'s hash moves, the root's
- * included. The session's history is not read: the seam hands in a `GameHistory` and only its
- * `position` is searched (`ADR-0002` clause 3).
+ * (`src/transposition.ts`, `ADR-0025`), kept across this call's iterations — so iteration `n`'s
+ * best moves are iteration `n + 1`'s hash moves, the root's included. At entry the table is
+ * cleared unless `options.game` is the token it holds (`ABC-209`, `ADR-0025` amended Decision 4):
+ * a call without a token clears, as every call did before, and that is the clear door every
+ * test and every door below goes through. The session's history is not read: the seam hands in a
+ * `GameHistory` and only its `position` is searched (`ADR-0002` clause 3); the caller's token
+ * says which game it continues.
  *
  * PRINCIPAL-VARIATION SEARCH AND LATE-MOVE REDUCTIONS (`ABC-121`, `ADR-0026`) are `src/search.ts`'s
  * too, in the same shape (`searchMove`), and the reduction is that module's ONE predicate,
@@ -98,8 +101,8 @@ import {
 import {
   BOUND_EXACT,
   boundOf,
-  clearTable,
   entryMove,
+  prepareTable,
   probeTable,
   storeEntry,
   tableCutoff,
@@ -179,6 +182,12 @@ export interface EngineOptions {
    * completes, so a tiny value still returns a depth-1 move.
    */
   readonly maxNodes?: number;
+  /**
+   * `ABC-209` (`ADR-0025` amended Decision 4 (a)): an opaque game token the search never reads.
+   * The table is kept from the previous call only when this is the token it holds; absent, the
+   * table is cleared at entry, as before. A `createGameTracker()` hands it out.
+   */
+  readonly game?: object;
 }
 
 export interface EngineChoice {
@@ -547,7 +556,7 @@ function deepen(
     ...heuristics,
   };
   budget.keys[0] = zobristKey(position);
-  clearTable();
+  prepareTable(options.game);
 
   const rootMoves = legalMoves(position);
   if (rootMoves.length === 0) return null;

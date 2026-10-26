@@ -14,16 +14,20 @@
  * `process.memoryUsage().arrayBuffers` to the byte. A 2^20 table (16 MiB) would break
  * `NFR-009`'s 16 MiB total on its own; re-levelling needs a measured need, not this constant.
  *
- * LIFETIME: ONE SEARCH (`ADR-0025` Decision 4). `clearTable` runs at every `search()` and every
- * `chooseMove` entry, so an entry spans the iterations of one move and never the next move.
- * Clearing zeroes the packed words only: a zero word is an empty slot, because every stored word
- * carries a non-zero bound.
+ * LIFETIME: ONE GAME, HELD BY A GAME TOKEN (`ADR-0025` Decision 4, as amended for `ABC-209`).
+ * `prepareTable(game)` runs at every `chooseMove` entry: it keeps the table only when `game` is the
+ * token the table already holds, and clears it otherwise. A call without a token clears, as before
+ * the amendment, and so does every `search()`, which also releases the holder. The token comes from
+ * a `createGameTracker()`, held by the CLI level seam and by the UCI session, and nothing else
+ * passes one. Clearing zeroes the packed words only: a zero word is an empty slot, because every
+ * stored word carries a non-zero bound.
  *
- * REPLACEMENT POLICY — ALWAYS REPLACE. A store overwrites whatever its slot held, whichever
- * position and whatever depth. The table lives for one move, so there is no stale generation to
- * age out, and the newest entry is the one the current iteration is about to want again. Stated
- * here because `ABC-081`'s Scope requires it stated in the delivered code; `ADR-0025` falsifier
- * `T2` is the measurement that would change it (or the size).
+ * REPLACEMENT POLICY — ALWAYS REPLACE, NO AGEING. A store overwrites whatever its slot held,
+ * whichever position and whatever depth. An entry kept from an earlier move of the game is never
+ * wrong, only possibly useless: it cuts only at its exact stored depth, verified against its full
+ * key. A generation would need bits the packed word lacks (17 + 2 + 13 = 32) or a new array. Stated
+ * here because `ABC-081`'s Scope requires it stated in the delivered code; `ADR-0025` falsifiers
+ * `T2` and `T5` are the measurements that would change it (or the size).
  *
  * MATE SCORES ARE STORED RELATIVE TO THE NODE AND RESTORED RELATIVE TO THE ROOT (`ADR-0025`
  * Decision 3, `ABC-081` `A4`). The search reports a mate `ply` plies from the root as
@@ -70,12 +74,15 @@ const DEPTH_SHIFT = 19;
 let keys: BigUint64Array | null = null;
 let words = new Uint32Array(0);
 let scores = new Int32Array(0);
+/** The game token the table's entries belong to, or `null` when they belong to no game. */
+let holder: object | null = null;
 
 /**
- * Empty the table for a new search, allocating it the first time. Called at every `search()` and
- * every `chooseMove` entry — nothing learned while choosing one move is offered to the next.
+ * Empty the table for a new search, allocating it the first time, and release the holder. Called
+ * at every `search()` entry and by `prepareTable` — nothing learned before it is offered after it.
  */
 export function clearTable(): void {
+  holder = null;
   if (keys === null) {
     keys = new BigUint64Array(TABLE_ENTRIES);
     words = new Uint32Array(TABLE_ENTRIES);
@@ -83,6 +90,38 @@ export function clearTable(): void {
     return;
   }
   words.fill(0);
+}
+
+/**
+ * Called at every `chooseMove` entry (`ADR-0025` amended Decision 4 (a)). Keeps the table when
+ * `game` is present and is its holder; otherwise clears it. The table then holds `game`.
+ */
+export function prepareTable(game: object | undefined): void {
+  if (game !== undefined && game === holder) return;
+  clearTable();
+  holder = game ?? null;
+}
+
+/**
+ * One game owner's continuation rule (`ADR-0025` amended Decision 4 (d)). The tracker returns the
+ * same token while each search continues the game: its start equals the previous search's, and the
+ * previous search's moves are a STRICT prefix of its own. Otherwise it returns a new token, and the
+ * table is cleared. It errs towards clearing: a clear is never wrong, only slower.
+ */
+export function createGameTracker(): (start: string, moves: readonly string[]) => object {
+  let token: object = {};
+  let lastStart: string | null = null;
+  let lastMoves: readonly string[] = [];
+  return (start, moves) => {
+    const continues =
+      start === lastStart &&
+      moves.length > lastMoves.length &&
+      lastMoves.every((move, index) => move === moves[index]);
+    if (!continues) token = {};
+    lastStart = start;
+    lastMoves = [...moves];
+    return token;
+  };
 }
 
 /** The bytes the table holds: fixed from its first allocation, 0 before it. `A7`'s reading. */

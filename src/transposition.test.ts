@@ -24,9 +24,13 @@
 import { spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { makeMove } from "./apply.ts";
 import { chooseMove, chooseMoveWithoutPvsOrReductions, DEFAULT_BUDGET_MS } from "./engine.ts";
 import { parseFen } from "./fen.ts";
+import { newGame, playMove, takeBack } from "./history.ts";
 import { legalMoves } from "./legal.ts";
+import { createLevelSeam } from "./level-seam.ts";
+import { seededRandom } from "./levels.ts";
 import type { Move } from "./moves.ts";
 import { EMPTY, squareName } from "./position.ts";
 import { QUIESCENCE_MAX_PLY } from "./quiescence.ts";
@@ -43,14 +47,18 @@ import {
   BOUND_UPPER,
   boundOf,
   clearTable,
+  createGameTracker,
   entryMove,
   MATE_FLOOR,
+  prepareTable,
   probeTable,
   storeEntry,
   TABLE_ENTRIES,
   tableByteLength,
   tableCutoff,
 } from "./transposition.ts";
+import { createUciSession } from "./uci-session.ts";
+import { virtualClock } from "./virtual-clock.ts";
 import { zobristKey } from "./zobrist.ts";
 
 const RUN_SEARCH_DEEP = process.env.SEARCH_DEEP === "1";
@@ -64,6 +72,10 @@ const seen = vi.hoisted(() => ({
   off: false,
   /** Called with the depth of every ROOT store: one per completed iteration or search. */
   onRootStore: null as ((depth: number) => void) | null,
+  /** `ABC-209` `A3`: armed at `null`, the next probe writes whether it hit. Idle at `undefined`. */
+  firstHit: undefined as boolean | null | undefined,
+  /** `ABC-209` `A2`: the nodes of the last `chooseMove` call, whoever made it. */
+  lastNodes: -1,
 }));
 vi.mock("./transposition.ts", async (importOriginal) => {
   const actual = await importOriginal<typeof import("./transposition.ts")>();
@@ -74,6 +86,7 @@ vi.mock("./transposition.ts", async (importOriginal) => {
       seen.probes++;
       const slot = actual.probeTable(key);
       if (slot !== -1) seen.hits++;
+      if (seen.firstHit === null) seen.firstHit = slot !== -1;
       return slot;
     },
     storeEntry: (...args: Parameters<typeof actual.storeEntry>) => {
@@ -83,9 +96,26 @@ vi.mock("./transposition.ts", async (importOriginal) => {
   };
 });
 
+/**
+ * `ABC-209` `A2`: `chooseMove` passed through unchanged, its node count kept, so a row can read the
+ * nodes of a search the CLI seam or the UCI session made. Every other row reads the real engine.
+ */
+vi.mock("./engine.ts", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("./engine.ts")>();
+  return {
+    ...actual,
+    chooseMove: (...args: Parameters<typeof actual.chooseMove>) => {
+      const choice = actual.chooseMove(...args);
+      seen.lastNodes = choice?.nodes ?? -1;
+      return choice;
+    },
+  };
+});
+
 afterEach(() => {
   seen.off = false;
   seen.onRootStore = null;
+  seen.firstHit = undefined;
   vi.unstubAllGlobals();
 });
 
@@ -680,6 +710,282 @@ describe("A7 — the table holds a fixed 4 MiB, whatever the search", () => {
           `${mib(b.heapUsed)} MiB, arrayBuffers ${mib(b.arrayBuffers)} MiB`,
       );
       const MIB = 1024 * 1024;
+      expect(b.heapUsed - a.heapUsed).toBeLessThanOrEqual(MIB);
+      expect(b.arrayBuffers - a.arrayBuffers).toBeLessThanOrEqual(MIB);
+      expect(b.arrayBuffers).toBeLessThanOrEqual(16 * MIB);
+    }, 60_000);
+  }
+});
+
+// ---------------------------------------------------------------------------
+// ABC-209 — the table lives one game, held by a game token (`ADR-0025` amended decision 4).
+// ---------------------------------------------------------------------------
+
+/** A move as the trackers key it: coordinates, the promotion's piece type appended when present. */
+const coordinate = (move: Move): string =>
+  `${squareName(move.from)}${squareName(move.to)}${move.promotion === EMPTY ? "" : move.promotion}`;
+
+/** A search on a frozen clock, stopped by depth: every count below is deterministic. */
+const fixed = (maxDepth: number, game?: object) => ({
+  budgetMs: DEFAULT_BUDGET_MS,
+  now: () => 0,
+  maxDepth,
+  ...(game === undefined ? {} : { game }),
+});
+
+/** The parts of a choice a node-for-node comparison reads. */
+const shape = (choice: ReturnType<typeof chooseMove>) =>
+  choice === null
+    ? null
+    : { move: label(choice.move), score: choice.score, depth: choice.depth, nodes: choice.nodes };
+
+describe("ABC-209 — the continuation rule (createGameTracker) and the holder (prepareTable)", () => {
+  const START = fenOf("startpos");
+
+  it("keeps the token while each search's moves strictly extend the previous search's", () => {
+    const track = createGameTracker();
+    const first = track(START, []);
+    expect(track(START, ["e2e4", "e7e5"])).toBe(first);
+    expect(track(START, ["e2e4", "e7e5", "g1f3"])).toBe(first);
+  });
+
+  it("gives a new token for an equal list, a shorter list, a different line or another start", () => {
+    const track = createGameTracker();
+    const a = track(START, ["e2e4"]);
+    const b = track(START, ["e2e4"]); // the same position searched again
+    expect(b).not.toBe(a);
+    const c = track(START, []); // a take-back, or `new`
+    expect(c).not.toBe(b);
+    track(START, ["e2e4", "e7e5"]);
+    expect(track(START, ["d2d4", "d7d5", "c2c4"])).not.toBe(c); // an unrelated line
+    const d = track(START, ["d2d4", "d7d5", "c2c4", "e7e6"]);
+    expect(track(fenOf("kiwipete"), ["d2d4", "d7d5", "c2c4", "e7e6", "g1f3"])).not.toBe(d);
+  });
+
+  it("clears unless the token is the holder; a call with no token, and search(), release it", () => {
+    const position = parseFen(fenOf("position-3"));
+    const key = zobristKey(position);
+    const game = {};
+    const fill = () => storeEntry(key, 1, BOUND_EXACT, 7, 0, legalMoves(position)[0] as Move);
+
+    prepareTable(game);
+    fill();
+    prepareTable(game); // the holder: kept
+    expect(probeTable(key)).not.toBe(-1);
+    prepareTable({}); // another game: cleared
+    expect(probeTable(key)).toBe(-1);
+
+    prepareTable(game);
+    fill();
+    prepareTable(undefined); // no token: cleared, holder released
+    prepareTable(game);
+    expect(probeTable(key)).toBe(-1);
+
+    fill();
+    search(position, 1); // search() clears and releases the holder
+    fill();
+    prepareTable(game);
+    expect(probeTable(key)).toBe(-1);
+  });
+});
+
+describe("ABC-209 A1 — a fresh game, and every call through the clear door, is today's engine", () => {
+  it("a call with no token, and the first call with a new token, equal a call before any game", () => {
+    const fen = fenOf("position-6");
+    const door = shape(chooseMove(parseFen(fen), fixed(4)));
+
+    // A game through one token leaves its entries in the table.
+    const track = createGameTracker();
+    const position = parseFen(fen);
+    const moves: string[] = [];
+    for (let ply = 0; ply < 4; ply++) {
+      const choice = chooseMove(position, fixed(4, track(fen, moves))) as { move: Move };
+      makeMove(position, choice.move);
+      moves.push(coordinate(choice.move));
+    }
+
+    expect(shape(chooseMove(parseFen(fen), fixed(4)))).toEqual(door);
+    expect(shape(chooseMove(parseFen(fen), fixed(4, createGameTracker()(fen, []))))).toEqual(door);
+  });
+});
+
+/** One UCI session on a virtual clock with `OwnBook` off; `say` returns the nodes of a search. */
+function uciSession() {
+  const out: string[] = [];
+  const session = createUciSession({
+    write: (line) => out.push(line),
+    now: virtualClock(10),
+    random: seededRandom(1),
+    book: { inBook: () => false, bookMove: () => undefined, openingName: () => undefined },
+  });
+  session.handleLine("setoption name OwnBook value false");
+  return {
+    /** Sends `lines`; returns the last `go`'s nodes and its `bestmove`. */
+    say(...lines: string[]): { nodes: number; bestmove: string } {
+      const before = out.length;
+      for (const line of lines) session.handleLine(line);
+      const written = out.slice(before);
+      const info = written.filter((line) => line.startsWith("info depth")).pop() as string;
+      const best = written.filter((line) => line.startsWith("bestmove")).pop() as string;
+      return {
+        nodes: Number(/ nodes (\d+)/.exec(info)?.[1]),
+        bestmove: best.split(" ")[1] as string,
+      };
+    },
+  };
+}
+
+const positionLine = (moves: readonly string[]): string =>
+  moves.length === 0 ? "position startpos" : `position startpos moves ${moves.join(" ")}`;
+
+describe("ABC-209 A2 — the first search of game B equals a fresh search, on every new-game path", () => {
+  /** Game A: 12 searches of self-play through one session. Returns the session and its moves. */
+  function gameA() {
+    const uci = uciSession();
+    const moves: string[] = [];
+    for (let ply = 0; ply < 12; ply++) {
+      moves.push(uci.say(positionLine(moves), "go depth 3").bestmove);
+    }
+    return { uci, moves };
+  }
+
+  it("UCI ucinewgame: game B's first position extends game A's last line, and still clears", () => {
+    const { uci, moves } = gameA();
+    // Without the new tracker at `ucinewgame`, this line would continue game A's token.
+    const b = uci.say("ucinewgame", positionLine(moves), "go depth 4");
+    const fresh = uciSession().say(positionLine(moves), "go depth 4");
+    expect(b).toEqual(fresh);
+  });
+
+  it("UCI position: a line that does not continue the previous search clears", () => {
+    const { uci } = gameA();
+    const b = uci.say(positionLine(["e2e4"]), "go depth 4");
+    const fresh = uciSession().say(positionLine(["e2e4"]), "go depth 4");
+    expect(b).toEqual(fresh);
+  });
+
+  it("CLI new: the same seam, after a game of 10 engine moves, searches as a fresh process", async () => {
+    const options = () => ({ seed: 1, now: virtualClock(500) });
+    const seam = createLevelSeam(5, options());
+    const history = newGame(fenOf("startpos"));
+    for (let move = 0; move < 10; move++) {
+      playMove(history, await seam(history));
+      playMove(history, legalMoves(history.position)[0] as Move); // the human's reply
+    }
+    takeBack(history, history.moves.length); // `new` (`ABC-046`): a take-back to the start
+    const b = { move: label(await seam(history)), nodes: seen.lastNodes };
+    const freshSeam = createLevelSeam(5, options());
+    const fresh = {
+      move: label(await freshSeam(newGame(fenOf("startpos")))),
+      nodes: seen.lastNodes,
+    };
+    expect(b).toEqual(fresh);
+  });
+});
+
+describe("ABC-209 A3 — two consecutive moves of one game: the second search finds the first's entry", () => {
+  it("the second search's first probe hits an entry the first search stored", () => {
+    const fen = fenOf("startpos");
+    const track = createGameTracker();
+    const position = parseFen(fen);
+    const first = chooseMove(position, fixed(5, track(fen, []))) as { move: Move };
+    makeMove(position, first.move);
+    // The reply is the stored hash move (the page's pair): the position after it was searched.
+    const slot = probeTable(zobristKey(position));
+    expect(slot).not.toBe(-1);
+    const reply = entryMove(slot, legalMoves(position)) as Move;
+    makeMove(position, reply);
+
+    const game = track(fen, [coordinate(first.move), coordinate(reply)]);
+    seen.firstHit = null;
+    chooseMove(position, fixed(5, game));
+    expect(seen.firstHit).toBe(true);
+  });
+});
+
+describe("ABC-209 A4 / A5 — the size is unchanged; the same calls give the same moves", () => {
+  it("the table is 4 MiB after a game's searches through one token", () => {
+    const fen = fenOf("kiwipete");
+    const track = createGameTracker();
+    const position = parseFen(fen);
+    const moves: string[] = [];
+    for (let ply = 0; ply < 3; ply++) {
+      const choice = chooseMove(position, fixed(3, track(fen, moves))) as { move: Move };
+      makeMove(position, choice.move);
+      moves.push(coordinate(choice.move));
+    }
+    expect(tableByteLength()).toBe(4 * 1024 * 1024);
+  });
+
+  it("ADR-0027: the same sequence of tokened calls gives the same moves and nodes", () => {
+    const fen = fenOf("position-6");
+    const play = () => {
+      const track = createGameTracker();
+      const position = parseFen(fen);
+      const moves: string[] = [];
+      const seenChoices: unknown[] = [];
+      for (let ply = 0; ply < 4; ply++) {
+        const choice = chooseMove(position, fixed(4, track(fen, moves)));
+        seenChoices.push(shape(choice));
+        makeMove(position, (choice as { move: Move }).move);
+        moves.push(coordinate((choice as { move: Move }).move));
+      }
+      return seenChoices;
+    };
+    expect(play()).toEqual(play());
+  });
+
+  if (RUN_ENGINE_DEEP) {
+    /**
+     * `A4`'s 40-move row (`NFR-009`), in the shape the page names: under `--expose-gc`, one game of
+     * 40 engine searches through one token, read after `gc()` at search 1 and search 40. The game
+     * is fixed here: self-play from the start position, depth 6 on a frozen clock, so the reading
+     * is deterministic and needs no wall clock. `heapUsed` is the graded bar (≤ 1 MiB);
+     * `arrayBuffers` is read at the same points, and over 1 MiB is the same `NFR-009` STOP.
+     */
+    it("heapUsed and arrayBuffers each move <= 1 MiB between search 1 and search 40 of one game [deep, ENGINE_DEEP=1]", () => {
+      const url = (path: string) => JSON.stringify(new URL(path, import.meta.url).href);
+      const script = `
+        const { chooseMove } = await import(${url("./engine.ts")});
+        const { parseFen } = await import(${url("./fen.ts")});
+        const { makeMove } = await import(${url("./apply.ts")});
+        const { squareName } = await import(${url("./position.ts")});
+        const { createGameTracker, tableByteLength } = await import(${url("./transposition.ts")});
+        const fen = ${JSON.stringify(fenOf("startpos"))};
+        const read = () => { gc(); gc(); const m = process.memoryUsage(); return { heapUsed: m.heapUsed, arrayBuffers: m.arrayBuffers }; };
+        const track = createGameTracker();
+        const position = parseFen(fen);
+        const moves = [];
+        let a;
+        let b;
+        for (let search = 1; search <= 40; search++) {
+          const choice = chooseMove(position, { budgetMs: 1000, now: () => 0, maxDepth: 6, game: track(fen, moves) });
+          makeMove(position, choice.move);
+          moves.push(squareName(choice.move.from) + squareName(choice.move.to) + (choice.move.promotion || ""));
+          if (search === 1) a = read();
+          if (search === 40) b = read();
+        }
+        console.log(JSON.stringify({ a, b, table: tableByteLength() }));
+      `;
+      const run = spawnSync(
+        process.execPath,
+        ["--expose-gc", "--input-type=module", "-e", script],
+        {
+          encoding: "utf8",
+        },
+      );
+      expect(run.status, run.stderr).toBe(0);
+      const { a, b, table } = JSON.parse(run.stdout.trim().split("\n").pop() as string) as {
+        a: { heapUsed: number; arrayBuffers: number };
+        b: { heapUsed: number; arrayBuffers: number };
+        table: number;
+      };
+      console.log(
+        `ABC-209 A4 / NFR-009, 40 searches, one token: heapUsed delta ${b.heapUsed - a.heapUsed} B, ` +
+          `arrayBuffers delta ${b.arrayBuffers - a.arrayBuffers} B, table ${table} B`,
+      );
+      const MIB = 1024 * 1024;
+      expect(table).toBe(4 * MIB);
       expect(b.heapUsed - a.heapUsed).toBeLessThanOrEqual(MIB);
       expect(b.arrayBuffers - a.arrayBuffers).toBeLessThanOrEqual(MIB);
       expect(b.arrayBuffers).toBeLessThanOrEqual(16 * MIB);

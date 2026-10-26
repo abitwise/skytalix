@@ -27,7 +27,7 @@ import { parseFen } from "./fen.ts";
 import { createLevel, DEFAULT_LEVEL, EASIEST_LEVEL, HARDEST_LEVEL, LEVELS } from "./levels.ts";
 import { BISHOP, KNIGHT, type Position, QUEEN, ROOK, squareName } from "./position.ts";
 import { MATE_SCORE } from "./search.ts";
-import { MATE_FLOOR } from "./transposition.ts";
+import { createGameTracker, MATE_FLOOR } from "./transposition.ts";
 
 export interface UciSessionOptions {
   /** Takes one output line, without its line terminator. */
@@ -266,6 +266,14 @@ export function createUciSession(options: UciSessionOptions): UciSession {
 
   let position: Position | null = parseFen(START_FEN);
   /**
+   * `ABC-209` (`ADR-0025` amended Decision 4 (d)): the session is the UCI game owner. Its tracker
+   * reads the accepted `position` line, start and moves as sent, and is replaced at `ucinewgame`;
+   * each search passes `track(start, moves)`, so a line that does not continue the previous
+   * search's clears the table.
+   */
+  let track = createGameTracker();
+  let gameLine: { start: string; moves: readonly string[] } = { start: "startpos", moves: [] };
+  /**
    * The `bestmove` line `go infinite` / `go ponder` holds. It is never dropped (QE-167-e): `stop`,
    * `ponderhit`, `go`, `position`, `ucinewgame` and `quit` write it first; other lines leave it held.
    */
@@ -298,10 +306,10 @@ export function createUciSession(options: UciSessionOptions): UciSession {
         info(`skill level ${skill} ignores go ${request.limits.join(", ")}; searching on time`);
       }
       const seed = Math.floor(random() * 2 ** 32);
-      const choice = createLevel(
-        { budgetMs, blunderRate: level.blunderRate },
-        { seed, now },
-      )(position);
+      const choice = createLevel({ budgetMs, blunderRate: level.blunderRate }, { seed, now })(
+        position,
+        track(gameLine.start, gameLine.moves),
+      );
       if (choice !== null) {
         const move = coordinateOf(choice.move);
         write(
@@ -313,6 +321,7 @@ export function createUciSession(options: UciSessionOptions): UciSession {
       const choice = chooseMove(position, {
         budgetMs,
         now,
+        game: track(gameLine.start, gameLine.moves),
         ...(request.maxDepth === undefined ? {} : { maxDepth: request.maxDepth }),
         ...(request.maxNodes === undefined ? {} : { maxNodes: request.maxNodes }),
       });
@@ -370,6 +379,8 @@ export function createUciSession(options: UciSessionOptions): UciSession {
         case "ucinewgame":
           release();
           position = parseFen(START_FEN);
+          track = createGameTracker();
+          gameLine = { start: "startpos", moves: [] };
           break;
         case "position": {
           release();
@@ -377,7 +388,14 @@ export function createUciSession(options: UciSessionOptions): UciSession {
           if (typeof parsed === "string") {
             position = null;
             info(`position refused: ${parsed}`);
-          } else position = parsed;
+          } else {
+            position = parsed;
+            const movesAt = tokens.indexOf("moves");
+            gameLine = {
+              start: tokens.slice(1, movesAt === -1 ? undefined : movesAt).join(" "),
+              moves: movesAt === -1 ? [] : tokens.slice(movesAt + 1),
+            };
+          }
           break;
         }
         case "go":

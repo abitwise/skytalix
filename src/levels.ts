@@ -115,16 +115,24 @@ export interface LevelOptions {
 /**
  * A level instance: its own generator and its own clock. `null` ONLY when the position has no
  * legal move. The borrowed position is byte-identical on return.
+ *
+ * `game` (`ABC-209`, `ADR-0025` amended Decision 4 (d)) is the caller's game token. It reaches
+ * `chooseMove` on the engine path only, and only when present; a blunder's children never carry
+ * it, so each child's score stays a function of that child alone (`ADR-0032` decision 1).
  */
 export function createLevel(
   level: Level,
   options: LevelOptions,
-): (position: Position) => LevelChoice | null {
+): (position: Position, game?: object) => LevelChoice | null {
   const random = seededRandom(options.seed);
   const now = options.now ?? Date.now;
-  return (position) => {
+  return (position, game) => {
     if (random() >= level.blunderRate) {
-      const choice = chooseMove(position, { budgetMs: level.budgetMs, now });
+      const choice = chooseMove(position, {
+        budgetMs: level.budgetMs,
+        now,
+        ...(game === undefined ? {} : { game }),
+      });
       if (choice === null) return null;
       const { move, depth, nodes, elapsedMs } = choice;
       return { move, kind: "engine", scored: null, depth, nodes, elapsedMs };
