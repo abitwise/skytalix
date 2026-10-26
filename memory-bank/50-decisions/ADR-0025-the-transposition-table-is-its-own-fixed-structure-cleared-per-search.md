@@ -6,9 +6,13 @@ id: ADR-0025
 
 ## Status
 
-*2026-10-26:* a **PROPOSED** amendment to decision 4 for `ABC-209` (the table lives one game, held by a game token)
-is at the end of this file. **Acceptance is the owner's.** Until he accepts it and `ABC-209` merges, decisions 1–7
-stand as written, decision 4 included. Recorded by Architect/Design (task `arch-design-ABC-209`).
+*2026-10-26:* the amendment to decision 4 for `ABC-209` (the table lives one game, held by a game token) at the end
+of this file is **ACCEPTED** by the owner (§ Proposed amendment 2026-10-26, Status). **It is in force on `main` at
+`ABC-209`'s merge.** Until then, decisions 1–7 stand on `main` as written, decision 4's clear-per-search included.
+Recorded by Architect/Design (task `arch-accept-adr0025-d4`, records only, at `main` `9857bd1c`).
+
+Previously: a **PROPOSED** amendment, acceptance the owner's. Recorded by Architect/Design (task
+`arch-design-ABC-209`).
 
 **accepted** 2026-09-25, on the owner's delegated word, verbatim *"ADR-0025 I trust your
 judgement there, select best option to move forward."* The Orchestrator selected the option
@@ -160,11 +164,28 @@ re-search ordering.
 | **T3** | 6 — both recursions, one algorithm | an identity-sweep SCORE mismatch between `chooseMove` and `search()` | `ABC-078` `A3`, as amended |
 | **T4** | 7 — capacity is not a budget | the capacity guard binding on a benchmark root within 3 s | log the deepest ply reached in `ENGINE_DEEP` |
 
-## Proposed amendment 2026-10-26 (`ABC-209`): the table lives one game, held by a game token. PROPOSED
+## Proposed amendment 2026-10-26 (`ABC-209`): the table lives one game, held by a game token. ACCEPTED
 
 ### Status
 
-**PROPOSED** 2026-10-26 by Architect/Design (task `arch-design-ABC-209`, records plus probes, at `main` `d0b1fff8`).
+**ACCEPTED** 2026-10-26 by Olger Oeselg (owner), verbatim *"1. yes; 2. A;"*, item 1 answering "accept the ADR-0025
+amendment" (note `.grugops/context/owner-word-2026-10-26b/notes/20261026T132424Z-orchestrator-decision-2ae5fc12.md`).
+He had been given the Orchestrator's forecast and lean to decline before he answered (`…388d6d51`, `…4e166e7b`).
+Recorded by Architect/Design (task `arch-accept-adr0025-d4`, records only, at `main` `9857bd1c`).
+
+- **ACCEPTED; in force on `main` at `ABC-209`'s merge.** Until then decision 4's clear-per-search stands on `main`.
+  At `9857bd1c`, `src/engine.ts:550` still calls `clearTable()` at `chooseMove` entry, and no `ABC-209` build commit
+  is on `main` (the `grugops/ABC-209` branch tip is `9857bd1c` itself). The QE verdict still decides that merge.
+- **Reading (b) is met:** the gate on the build, the ALONE reading (`A6`, D) and the merge is the owner's acceptance,
+  and he has given it.
+- **If `ABC-209` does not merge (S1 NOT MET),** a dated line here records "accepted, not in force on `main`", as
+  `ADR-0026` decision 9 does.
+- **Drift rows:** this amendment assigns none to Architect/Design, so none are applied. Owed by other roles, listed
+  only: the Software Engineer rewrites the source comments named in § Consequences at the build; BA/PM's `ABC-209`
+  page `adr:` line, already placed by task `bapm-records-owner-b` (merge `ff9358e4`). The `ADR-0026` d7 sentence and the `ADR-0006` errata stay true; no
+  edit. Nothing else in this ADR moves.
+
+Previously **PROPOSED** 2026-10-26 by Architect/Design (task `arch-design-ABC-209`, records plus probes, at `main` `d0b1fff8`).
 **Acceptance is the owner's** (`…5aaf7cec` item 3: changing an accepted ADR is his). Under `…7feb0553` item 2 the
 work has his go-ahead, and the Orchestrator reports this text to him when it lands. No agent marks it accepted.
 
@@ -185,7 +206,7 @@ work has his go-ahead, and the Orchestrator reports this text to him when it lan
 - Probes: `.grugops/context/arch-design-ABC-209/notes/` (the observation note). They ran on scratch clones of `main`
   `d0b1fff8`, never on `src/`. **No real-clock search was run, and no timing is quoted.**
 
-### Decision 4, as amended (in force only once accepted and merged)
+### Decision 4, as amended (accepted 2026-10-26; in force on `main` at `ABC-209`'s merge)
 
 4. **Lifetime: one game, held by a game token.**
    - The storage is allocated once per process, lazily on first use. *(Unchanged.)*
@@ -318,6 +339,6 @@ work has his go-ahead, and the Orchestrator reports this text to him when it lan
 
 ### Rollback
 
-- **Before acceptance:** mark this section `withdrawn`. Nothing else was edited.
+- **Before acceptance** (passed; accepted 2026-10-26): mark this section `withdrawn`. Nothing else was edited.
 - **After it ships:** `prepareTable(options.game)` becomes `clearTable()` again, and the two trackers and the
   optional field are deleted. About ten production lines; no data or format is involved.
