@@ -69,12 +69,18 @@
  * it; `chooseMoveWithoutReductions` keeps PVS and is the engine side of `A3`'s identity sweep and
  * of the bounded drift oracle. Neither takes a depth (`A4`).
  *
+ * NULL-MOVE PRUNING (`ABC-208`, `ADR-0050`) is `src/search.ts`'s too, at null-window nodes only,
+ * by that module's ONE predicate, `nullMoveReduction`, imported rather than copied. The clock is
+ * checked inside the null subtree as anywhere else (`NFR-004`). It changes the VALUE, so both doors
+ * above turn it off, and a third TEST-ONLY door, `chooseMoveWithoutNullMove`, is the pre-`ABC-208`
+ * `chooseMove`, node for node: the engine side of its bounded drift oracle. It takes no depth.
+ *
  * NOT HERE, each owned elsewhere: difficulty selection and how a level persists (`EPIC-006`), the
- * budget-to-level mapping (`ABC-087`), aspiration windows, null-move pruning and threading (none
- * requested; `ADR-0005` F6 leaves threading to Architect/Design).
+ * budget-to-level mapping (`ABC-087`), aspiration windows and threading (none requested;
+ * `ADR-0005` F6 leaves threading to Architect/Design).
  */
 
-import { makeMove, unmakeMove } from "./apply.ts";
+import { makeMove, makeNullMove, unmakeMove, unmakeNullMove } from "./apply.ts";
 import { leafEndReason } from "./gameend.ts";
 import { isInCheck, legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
@@ -85,6 +91,7 @@ import {
   KillerTable,
   lateMoveReduction,
   MATE_SCORE,
+  nullMoveReduction,
   orderMoves,
   repeatsInPath,
 } from "./search.ts";
@@ -98,7 +105,7 @@ import {
   tableCutoff,
 } from "./transposition.ts";
 import type { EngineSeam } from "./turn-loop.ts";
-import { zobristKey, zobristKeyAfterMove } from "./zobrist.ts";
+import { zobristKey, zobristKeyAfterMove, zobristKeyAfterNullMove } from "./zobrist.ts";
 
 /**
  * The game the seam is handed — named off `EngineSeam` rather than imported from
@@ -190,12 +197,17 @@ export interface EngineChoice {
 /** Thrown from inside the recursion when the budget is spent, caught by the deepening loop. */
 const ABORTED = Symbol("engine: the budget is spent");
 
-/** The two `ABC-121` switches, `src/search.ts`'s rule: on in `chooseMove`, off in its doors. */
+/**
+ * The `ABC-121` and `ABC-208` switches, `src/search.ts`'s rule: on in `chooseMove`, off in its
+ * doors.
+ */
 interface Heuristics {
   /** Principal-variation search: false on `chooseMoveWithoutPvsOrReductions` only. */
   readonly pvs: boolean;
-  /** Late-move reductions, inside PVS's frame: true on `chooseMove` only. */
+  /** Late-move reductions, inside PVS's frame: true on `chooseMove` and its null-move-off door. */
   readonly reductions: boolean;
+  /** Null-move pruning (`ABC-208`), at null-window nodes: true on `chooseMove` only. */
+  readonly nullMove: boolean;
 }
 
 /** The deepening loop's mutable state: the clock, the deadline, and when to consult again. */
@@ -262,7 +274,7 @@ function leafScore(
  * The made move is unmade in a `finally`, so an abort thrown anywhere in the subtree still
  * leaves the caller's position byte-identical. The turn loop BORROWS `history.position`
  * (`history.ts:39-44`) — a search that unwound without unmaking would hand the loop a board
- * several plies into a line nobody played.
+ * several plies into a line nobody played. The null move (`ABC-208`) is unmade the same way.
  */
 function negamax(
   position: Position,
@@ -271,6 +283,7 @@ function negamax(
   beta: number,
   ply: number,
   budget: Budget,
+  afterNull: boolean,
 ): number {
   countNode(budget);
 
@@ -285,6 +298,32 @@ function negamax(
   if (slot !== -1) {
     const settled = tableCutoff(slot, remaining, alpha, beta, ply);
     if (settled !== null) return settled;
+  }
+
+  if (budget.nullMove && alpha + 1 === beta) {
+    const nullReduction = nullMoveReduction(position, remaining, ply, afterNull);
+    if (nullReduction > 0) {
+      const nullUndo = makeNullMove(position);
+      let nullScore: number;
+      try {
+        keys[ply + 1] = zobristKeyAfterNullMove(key, nullUndo);
+        nullScore =
+          0 -
+          negamax(
+            position,
+            remaining - 1 - nullReduction,
+            0 - beta,
+            0 - beta + 1,
+            ply + 1,
+            budget,
+            true,
+          );
+      } finally {
+        unmakeNullMove(position, nullUndo);
+      }
+      // Beta, never the null score: a mate found after a pass is no mate. Nothing is stored.
+      if (nullScore >= beta) return beta;
+    }
   }
 
   const moves = legalMoves(position);
@@ -345,15 +384,16 @@ function searchMove(
 ): number {
   const child = ply + 1;
   if (index === 0 || !budget.pvs) {
-    return 0 - negamax(position, remaining - 1, 0 - beta, 0 - alpha, child, budget);
+    return 0 - negamax(position, remaining - 1, 0 - beta, 0 - alpha, child, budget, false);
   }
   let score =
-    0 - negamax(position, remaining - 1 - reduction, 0 - alpha - 1, 0 - alpha, child, budget);
+    0 -
+    negamax(position, remaining - 1 - reduction, 0 - alpha - 1, 0 - alpha, child, budget, false);
   if (score > alpha && reduction > 0) {
-    score = 0 - negamax(position, remaining - 1, 0 - alpha - 1, 0 - alpha, child, budget);
+    score = 0 - negamax(position, remaining - 1, 0 - alpha - 1, 0 - alpha, child, budget, false);
   }
   if (score > alpha && score < beta) {
-    score = 0 - negamax(position, remaining - 1, 0 - beta, 0 - alpha, child, budget);
+    score = 0 - negamax(position, remaining - 1, 0 - beta, 0 - alpha, child, budget, false);
   }
   return score;
 }
@@ -442,7 +482,20 @@ function runIteration(
  * The position is byte-identical on return, aborted iteration or not.
  */
 export function chooseMove(position: Position, options: EngineOptions): EngineChoice | null {
-  return deepen(position, options, { pvs: true, reductions: true });
+  return deepen(position, options, { pvs: true, reductions: true, nullMove: true });
+}
+
+/**
+ * TEST-ONLY. The pre-`ABC-208` `chooseMove`, node for node: null-move pruning off, everything else
+ * on — the engine side of `ABC-208`'s bounded drift oracle, and the shipped side of every
+ * `ABC-121` row that measures PVS and LMR alone (`ADR-0050` decisions 2 and 4). Not an engine
+ * option; nothing in production calls it.
+ */
+export function chooseMoveWithoutNullMove(
+  position: Position,
+  options: EngineOptions,
+): EngineChoice | null {
+  return deepen(position, options, { pvs: true, reductions: true, nullMove: false });
 }
 
 /**
@@ -455,7 +508,7 @@ export function chooseMoveWithoutReductions(
   position: Position,
   options: EngineOptions,
 ): EngineChoice | null {
-  return deepen(position, options, { pvs: true, reductions: false });
+  return deepen(position, options, { pvs: true, reductions: false, nullMove: false });
 }
 
 /**
@@ -467,10 +520,10 @@ export function chooseMoveWithoutPvsOrReductions(
   position: Position,
   options: EngineOptions,
 ): EngineChoice | null {
-  return deepen(position, options, { pvs: false, reductions: false });
+  return deepen(position, options, { pvs: false, reductions: false, nullMove: false });
 }
 
-/** The deepening loop behind `chooseMove` and its two doors, which differ in `heuristics` only. */
+/** The deepening loop behind `chooseMove` and its three doors; they differ in `heuristics` only. */
 function deepen(
   position: Position,
   options: EngineOptions,

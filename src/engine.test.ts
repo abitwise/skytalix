@@ -494,12 +494,14 @@ describe("A4 — no fixed depth anywhere in the delivered engine", () => {
 
   it("exports the two entry points and the two named values, and nothing that takes a depth", () => {
     // `ABC-121` added two TEST-ONLY doors of `chooseMove`'s own shape (`ADR-0026` decision 2):
-    // a position and options, a TIME budget, no depth.
+    // a position and options, a TIME budget, no depth. `ABC-208` added a third
+    // (`chooseMoveWithoutNullMove`, `ADR-0050` decision 2).
     expect(Object.keys(engineModule).sort()).toEqual([
       "DEFAULT_BUDGET_MS",
       "HARD_CEILING_MS",
       "NODES_PER_CLOCK_CHECK",
       "chooseMove",
+      "chooseMoveWithoutNullMove",
       "chooseMoveWithoutPvsOrReductions",
       "chooseMoveWithoutReductions",
       "createEngine",
@@ -509,6 +511,7 @@ describe("A4 — no fixed depth anywhere in the delivered engine", () => {
     expect(chooseMove.length).toBe(2);
     expect(chooseMoveWithoutReductions.length).toBe(2);
     expect(chooseMoveWithoutPvsOrReductions.length).toBe(2);
+    expect(engineModule.chooseMoveWithoutNullMove.length).toBe(2);
     expect(createEngine.length).toBe(1);
     expect(source).not.toMatch(/export function \w+\([^)]*depth/i);
   });
