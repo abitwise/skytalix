@@ -6,6 +6,14 @@ id: ADR-0050
 
 ## Status
 
+**2026-10-26: in force on `main` from merge `b5c67ab7`** (`ABC-208`, QE PASS `qe-ABC-208/…0477ac64` at `3a87f9d7`;
+merge recorded by Orchestrator `orch-2026-10-26q/…836cb92d`). Checked read-only: `git diff 3a87f9d7 b5c67ab7 -- src` is
+empty, so the code on `main` is the code QE measured. At `b5c67ab7` the null move is in `src/search.ts`, `src/engine.ts`,
+`src/apply.ts` (`makeNullMove` / `unmakeNullMove`) and `src/zobrist.ts` (`zobristKeyAfterNullMove`), and
+`grugops/ABC-208` `2e9eb9a7` is an ancestor of `main`. The "until then" sentence and the S1 NOT MET fallback below are
+discharged; no "not in force" line is owed. Recorded by Architect/Design (task `arch-adr0050-in-force`, records only).
+Nothing else in this ADR moves.
+
 **ACCEPTED** 2026-10-26 by Olger Oeselg (owner), verbatim *"accept ADR-0050, O0 for ABC-211, close LIC-PUB-1"* (note
 `.grugops/context/owner-word-2026-10-26/notes/20261026T055855Z-orchestrator-decision-58bcd17c.md`, item 1). This answers
 the 2026-10-26 report below. Recorded by Architect/Design (task `arch-accept-adr0050`, records only, at `main`
