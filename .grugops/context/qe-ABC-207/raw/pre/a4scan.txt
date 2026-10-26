@@ -1,0 +1,10 @@
+== a4scan d4 head 13:15:53Z
+{"name":"position-3/b4b3/h4g5","fen":"8/2p5/3p4/KP4kr/5p2/1R6/4P1P1/8 w - - 2 2","d":4,"correct":[-1,"b3c3",2467,5],"noLmrResearch":[-12,"g2g3"],"noResearch":[-12,"g2g3"],"ms":24}
+{"name":"position-3/a5a6/h5f5","fen":"8/2p5/K2p4/1P3r2/1R3p1k/8/4P1P1/8 w - - 2 2","d":4,"correct":[31,"b4c4",2472,5],"noLmrResearch":[4,"e2e3"],"noResearch":[4,"e2e3"],"ms":22}
+{"summary":"a4scan","depth":4,"scanned":467,"hits":2}
+== a4scan d4 base 13:16:19Z
+{"name":"position-3/b4e4/h5f5","fen":"8/2p5/3p4/KP3r2/4Rp1k/8/4P1P1/8 w - - 2 2","d":4,"correct":[15,"e4c4",3060,7],"noLmrResearch":[13,"e2e3"],"noResearch":[11,"e4c4"],"ms":22}
+{"name":"position-3/b4b3/h4g5","fen":"8/2p5/3p4/KP4kr/5p2/1R6/4P1P1/8 w - - 2 2","d":4,"correct":[-1,"b3c3",2567,6],"noLmrResearch":[-11,"g2g3"],"noResearch":[-11,"g2g3"],"ms":24}
+{"name":"position-3/b4b3/h5d5","fen":"8/2p5/3p4/KP1r4/5p1k/1R6/4P1P1/8 w - - 2 2","d":4,"correct":[4,"b3f3",2411,5],"noLmrResearch":[0,"b3c3"],"noResearch":[0,"b3c3"],"ms":20}
+{"name":"position-3/a5a6/h5f5","fen":"8/2p5/K2p4/1P3r2/1R3p1k/8/4P1P1/8 w - - 2 2","d":4,"correct":[35,"b4c4",2528,5],"noLmrResearch":[4,"e2e3"],"noResearch":[4,"e2e3"],"ms":23}
+{"summary":"a4scan","depth":4,"scanned":467,"hits":4}

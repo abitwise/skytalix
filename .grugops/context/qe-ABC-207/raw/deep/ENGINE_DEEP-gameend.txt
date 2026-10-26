@@ -1,0 +1,11 @@
+
+ RUN  v4.1.12 <worktree>
+
+ ✓ src/gameend.test.ts (47 tests) 4943ms
+     ✓ to depth 3 [deep, ENGINE_DEEP=1]  4924ms
+
+ Test Files  1 passed (1)
+      Tests  47 passed (47)
+   Start at  15:10:38
+   Duration  5.03s (transform 0ms, setup 0ms, import 34ms, tests 4.94s, environment 0ms)
+

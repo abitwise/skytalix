@@ -1,0 +1,38 @@
+2026-10-25T13:19:01Z G2 start
+2026-10-25T13:19:01Z g2 tree=base load1=3.18 power=AC_Power vitest=0
+2026-10-25T13:19:21Z g2 tree=head load1=3.40 power=AC_Power vitest=0
+2026-10-25T13:19:41Z g2 tree=head load1=3.14 power=AC_Power vitest=0
+2026-10-25T13:20:02Z g2 tree=base load1=3.56 power=AC_Power vitest=0
+2026-10-25T13:20:22Z G2 done; G6 start
+2026-10-25T13:20:22Z run round=1 pos=kiwipete tree=base load1=3.33 power=AC_Power vitest=0
+2026-10-25T13:20:25Z run round=1 pos=kiwipete tree=head load1=3.46 power=AC_Power vitest=0
+2026-10-25T13:20:28Z run round=1 pos=position-6 tree=base load1=3.34 power=AC_Power vitest=0
+2026-10-25T13:20:31Z run round=1 pos=position-6 tree=head load1=3.34 power=AC_Power vitest=0
+2026-10-25T13:20:35Z run round=2 pos=kiwipete tree=head load1=3.15 power=AC_Power vitest=0
+2026-10-25T13:20:38Z run round=2 pos=kiwipete tree=base load1=3.15 power=AC_Power vitest=0
+2026-10-25T13:20:41Z run round=2 pos=position-6 tree=head load1=3.06 power=AC_Power vitest=0
+2026-10-25T13:20:44Z run round=2 pos=position-6 tree=base load1=3.06 power=AC_Power vitest=0
+2026-10-25T13:20:47Z run round=3 pos=kiwipete tree=base load1=3.06 power=AC_Power vitest=0
+2026-10-25T13:20:50Z run round=3 pos=kiwipete tree=head load1=3.13 power=AC_Power vitest=0
+2026-10-25T13:20:53Z run round=3 pos=position-6 tree=base load1=3.04 power=AC_Power vitest=0
+2026-10-25T13:20:56Z run round=3 pos=position-6 tree=head load1=3.04 power=AC_Power vitest=0
+2026-10-25T13:21:00Z run round=4 pos=kiwipete tree=head load1=3.12 power=AC_Power vitest=0
+2026-10-25T13:21:03Z run round=4 pos=kiwipete tree=base load1=3.12 power=AC_Power vitest=0
+2026-10-25T13:21:06Z run round=4 pos=position-6 tree=head load1=3.19 power=AC_Power vitest=0
+2026-10-25T13:21:09Z run round=4 pos=position-6 tree=base load1=3.41 power=AC_Power vitest=0
+2026-10-25T13:21:12Z run round=5 pos=kiwipete tree=base load1=3.41 power=AC_Power vitest=0
+2026-10-25T13:21:15Z run round=5 pos=kiwipete tree=head load1=3.30 power=AC_Power vitest=0
+2026-10-25T13:21:18Z run round=5 pos=position-6 tree=base load1=3.11 power=AC_Power vitest=0
+2026-10-25T13:21:21Z run round=5 pos=position-6 tree=head load1=3.11 power=AC_Power vitest=0
+2026-10-25T13:21:24Z G6 done; G11 start
+2026-10-25T13:21:24Z g11 4.Qa4 tree=base load1=3.02 power=AC_Power vitest=0
+2026-10-25T13:21:28Z g11 4.Qa4 tree=head load1=3.02 power=AC_Power vitest=0
+2026-10-25T13:21:31Z g11 8.e5 tree=base load1=2.94 power=AC_Power vitest=0
+2026-10-25T13:21:34Z g11 8.e5 tree=head load1=3.11 power=AC_Power vitest=0
+2026-10-25T13:21:37Z g11 10.Ne4 tree=base load1=3.11 power=AC_Power vitest=0
+2026-10-25T13:21:40Z g11 10.Ne4 tree=head load1=3.18 power=AC_Power vitest=0
+2026-10-25T13:21:43Z g11 13.d4 tree=base load1=3.32 power=AC_Power vitest=0
+2026-10-25T13:21:46Z g11 13.d4 tree=head load1=3.32 power=AC_Power vitest=0
+2026-10-25T13:21:49Z g11 17.Kc1 tree=base load1=3.22 power=AC_Power vitest=0
+2026-10-25T13:21:53Z g11 17.Kc1 tree=head load1=3.22 power=AC_Power vitest=0
+2026-10-25T13:21:56Z end

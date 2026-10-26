@@ -1,0 +1,28 @@
+
+ RUN  v4.1.12 <worktree>
+
+stdout | src/search.pvs-lmr.test.ts > A5 — search() visits fewer nodes than searchWithoutPvsOrReductions at depth 4 > position-3 at depth 4 — the default lane's standing guard
+ABC-121 A5 position-3 d4: 1098 / 1355 = 81.0%
+
+stdout | src/search.pvs-lmr.test.ts > A2 — depth completed in the default budget on a real clock, REPORTED [deep, ENGINE_DEEP=1] > kiwipete and position-6, this build vs the pre-ABC-121 engine, three rounds, with load [deep, ENGINE_DEEP=1]
+ABC-121 A2 round 1 kiwipete chooseMove: depth 7, 1292937 nodes, 3000 ms, load1 2.81
+ABC-121 A2 round 1 kiwipete chooseMoveWithoutPvsOrReductions: depth 6, 1418889 nodes, 3002 ms, load1 2.81
+ABC-121 A2 round 1 position-6 chooseMove: depth 8, 1510596 nodes, 3001 ms, load1 2.74
+ABC-121 A2 round 1 position-6 chooseMoveWithoutPvsOrReductions: depth 6, 1543364 nodes, 3001 ms, load1 2.68
+ABC-121 A2 round 2 kiwipete chooseMove: depth 7, 1304201 nodes, 3001 ms, load1 2.68
+ABC-121 A2 round 2 kiwipete chooseMoveWithoutPvsOrReductions: depth 6, 1421961 nodes, 3001 ms, load1 2.71
+ABC-121 A2 round 2 position-6 chooseMove: depth 8, 1510596 nodes, 3001 ms, load1 2.71
+ABC-121 A2 round 2 position-6 chooseMoveWithoutPvsOrReductions: depth 6, 1541316 nodes, 3000 ms, load1 2.65
+ABC-121 A2 round 3 kiwipete chooseMove: depth 7, 1306249 nodes, 3001 ms, load1 2.52
+ABC-121 A2 round 3 kiwipete chooseMoveWithoutPvsOrReductions: depth 6, 1421961 nodes, 3002 ms, load1 2.52
+ABC-121 A2 round 3 position-6 chooseMove: depth 8, 1513668 nodes, 3000 ms, load1 2.56
+ABC-121 A2 round 3 position-6 chooseMoveWithoutPvsOrReductions: depth 6, 1545412 nodes, 3000 ms, load1 2.56
+
+ ✓ src/search.pvs-lmr.test.ts (21 tests) 36071ms
+     ✓ kiwipete and position-6, this build vs the pre-ABC-121 engine, three rounds, with load [deep, ENGINE_DEEP=1]  36010ms
+
+ Test Files  1 passed (1)
+      Tests  21 passed (21)
+   Start at  15:08:01
+   Duration  36.18s (transform 0ms, setup 0ms, import 55ms, tests 36.07s, environment 0ms)
+

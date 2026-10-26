@@ -1,0 +1,3 @@
+The lane collects 62 test files; git tracks 62.
+No findings.
+rc=0

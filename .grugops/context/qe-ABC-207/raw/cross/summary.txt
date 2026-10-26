@@ -1,0 +1,55 @@
+X1 default rc=1
+X1 SEARCH_DEEP quiescence rc=1
+X1 SEARCH_DEEP search.ordering rc=1
+X1 SEARCH_DEEP search.pvs-lmr rc=1
+X1 SEARCH_DEEP transposition rc=1
+X1 ENGINE_DEEP transposition rc=1
+X1 ENGINE_DEEP search.pvs-lmr rc=1
+X2 default rc=1
+X2 SEARCH_DEEP quiescence rc=1
+X2 SEARCH_DEEP search.ordering rc=1
+X2 SEARCH_DEEP search.pvs-lmr rc=1
+X2 SEARCH_DEEP transposition rc=1
+X2 ENGINE_DEEP transposition rc=1
+X2 ENGINE_DEEP search.pvs-lmr rc=1
+X1 ED-search.pvs-lmr passed 18 failed 2 total 21
+X1 ED-transposition passed 21 failed 5 total 26
+X1 SD-quiescence passed 34 failed 3 total 37
+X1 SD-search.ordering passed 36 failed 2 total 38
+X1 SD-search.pvs-lmr passed 27 failed 2 total 29
+X1 SD-transposition passed 35 failed 5 total 40
+X1 default passed 98 failed 9 total 107
+== X1: 12 distinct red rows
+   quiescence.test.ts > A4 — a position with no capture anywhere near the leaves scores exactly as before position-6 at depth 3 reproduces the recorded 2 398 nodes and c3d5 [deep, SEARCH_DEEP=1] || SD-quiescence :: AssertionError: expected 2358 to be 2398 // Object.is equality (lanes 1)
+   quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 kiwipete at depth 3, level 70x, and the oracle-checked answer 8 / e2a6 [deep, SEARCH_DEEP=1] || SD-quiescence :: AssertionError: expected 20 to be 8 // Object.is equality (lanes 1)
+   quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 position-6 at depth 3, level 13x, and the oracle-checked answer 85 / c3d5 [deep, SEARCH_DEEP=1] || SD-quiescence :: AssertionError: expected 78 to be 85 // Object.is equality (lanes 1)
+   search.ordering.test.ts > A4 — each heuristic's node count, and the delete rule position-6 at depth 2: none 10 371, MVV-LVA 3 266, + killers 3 177 || SD-search.ordering :: AssertionError: expected 11220 to be 10371 // Object.is equality (lanes 2)
+   search.ordering.test.ts > G1 — chooseMove records a killer only on a beta cutoff position-3 at 3 injected ticks: depth 3 in exactly 342 nodes || SD-search.ordering :: AssertionError: expected 364 to be 342 // Object.is equality (lanes 2)
+   search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to depth 4 in the engine's own recursion || ED-search.pvs-lmr :: AssertionError: expected [ -12, 'b3h3' ] to deeply equal [ -7, 'b3f3' ] (lanes 3)
+   search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions || ED-search.pvs-lmr :: AssertionError: expected 10 to be 2 // Object.is equality (lanes 3)
+   transposition.test.ts > A1 — table-on and table-off scores are identical knight-g1 w - at depth 4 — G6: 939 with the table on and off || ED-transposition :: AssertionError: expected 911 to be 939 // Object.is equality (lanes 3)
+   transposition.test.ts > A1 — table-on and table-off scores are identical knight-g1 w K at depth 4 — G6: 939 with the table on and off || ED-transposition :: AssertionError: expected 911 to be 939 // Object.is equality (lanes 3)
+   transposition.test.ts > A1 — table-on and table-off scores are identical position-3 at depth 4 — the same score, and the work changes: 1 377 nodes with the table, 1 533 without || ED-transposition :: AssertionError: expected 1355 to be 1377 // Object.is equality (lanes 3)
+   transposition.test.ts > A5 — the only non-losing line repeats, and it scores exactly 0 search(), depth 4: the perpetual scores exactly 0 and is played — in 7 295 nodes || ED-transposition :: AssertionError: expected 7629 to be 7295 // Object.is equality (lanes 3)
+   transposition.test.ts > A5 — the only non-losing line repeats, and it scores exactly 0 the fixture bites: at depth 3 the repetition is past the horizon, and the rook down shows || ED-transposition :: AssertionError: expected -498 to be -485 // Object.is equality (lanes 3)
+X2 ED-search.pvs-lmr passed 19 failed 1 total 21
+X2 ED-transposition passed 21 failed 5 total 26
+X2 SD-quiescence passed 34 failed 3 total 37
+X2 SD-search.ordering passed 36 failed 2 total 38
+X2 SD-search.pvs-lmr passed 28 failed 1 total 29
+X2 SD-transposition passed 35 failed 5 total 40
+X2 default passed 104 failed 10 total 114
+== X2: 13 distinct red rows
+   evaluate.king-mobility.test.ts > ABC-207 A1 — one more reachable square is worth strictly less to a queen than to N, B or R each extra square counts for every piece, and least for the queen || default :: AssertionError: k7/8/8/8/3Q4/7P/8/7K w - - 0 1: expected 100 to be less than 100 (lanes 1)
+   evaluate.king-mobility.test.ts > ABC-207 A2 — a queen out before the minor pieces costs a little Qa4 with both knights and both bishops home scores strictly lower than Qd1 (the criterion) || default :: AssertionError: expected 31 to be less than -29 (lanes 1)
+   quiescence.test.ts > A4 — a position with no capture anywhere near the leaves scores exactly as before position-6 at depth 3 reproduces the recorded 2 358 nodes and c3d5 [deep, SEARCH_DEEP=1] || SD-quiescence :: AssertionError: expected 2398 to be 2358 // Object.is equality (lanes 1)
+   quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 kiwipete at depth 3, level 70x, and the oracle-checked answer 20 / e2a6 [deep, SEARCH_DEEP=1] || SD-quiescence :: AssertionError: expected 8 to be 20 // Object.is equality (lanes 1)
+   quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 position-6 at depth 3, level 13x, and the oracle-checked answer 78 / c3d5 [deep, SEARCH_DEEP=1] || SD-quiescence :: AssertionError: expected 85 to be 78 // Object.is equality (lanes 1)
+   search.ordering.test.ts > A4 — each heuristic's node count, and the delete rule position-6 at depth 2: none 11 220, MVV-LVA 1 317, + killers 1 317 || SD-search.ordering :: AssertionError: expected 10371 to be 11220 // Object.is equality (lanes 2)
+   search.ordering.test.ts > G1 — chooseMove records a killer only on a beta cutoff position-3 at 3 injected ticks: depth 3 in exactly 364 nodes || SD-search.ordering :: AssertionError: expected 342 to be 364 // Object.is equality (lanes 2)
+   search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to depth 4 in the engine's own recursion || ED-search.pvs-lmr :: AssertionError: expected [ -7, 'b3f3' ] to deeply equal [ -12, 'b3h3' ] (lanes 3)
+   transposition.test.ts > A1 — table-on and table-off scores are identical knight-g1 w - at depth 4 — G6: 911 with the table on and off || ED-transposition :: AssertionError: expected 939 to be 911 // Object.is equality (lanes 3)
+   transposition.test.ts > A1 — table-on and table-off scores are identical knight-g1 w K at depth 4 — G6: 911 with the table on and off || ED-transposition :: AssertionError: expected 939 to be 911 // Object.is equality (lanes 3)
+   transposition.test.ts > A1 — table-on and table-off scores are identical position-3 at depth 4 — the same score, and the work changes: 1 355 nodes with the table, 1 512 without || ED-transposition :: AssertionError: expected 1377 to be 1355 // Object.is equality (lanes 3)
+   transposition.test.ts > A5 — the only non-losing line repeats, and it scores exactly 0 search(), depth 4: the perpetual scores exactly 0 and is played — in 7 629 nodes || ED-transposition :: AssertionError: expected 7295 to be 7629 // Object.is equality (lanes 3)
+   transposition.test.ts > A5 — the only non-losing line repeats, and it scores exactly 0 the fixture bites: at depth 3 the repetition is past the horizon, and the rook down shows || ED-transposition :: AssertionError: expected -485 to be -498 // Object.is equality (lanes 3)
