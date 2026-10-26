@@ -1,0 +1,13 @@
+
+ RUN  v4.1.12 <worktree>
+
+ ✓ src/legal.test.ts (37 tests) 119249ms
+     ✓ hasLegalMove, to depth 3 [deep, ENGINE_DEEP=1]  4956ms
+     ✓ legalCaptures, to depth 3 [deep, ENGINE_DEEP=1]  6444ms
+     ✓ givesCheck, to depth 3 [deep, ENGINE_DEEP=1]  107754ms
+
+ Test Files  1 passed (1)
+      Tests  37 passed (37)
+   Start at  15:08:38
+   Duration  119.34s (transform 0ms, setup 0ms, import 33ms, tests 119.25s, environment 0ms)
+

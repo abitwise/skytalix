@@ -1,0 +1,1 @@
+{"fensInFile":22,"unique":22,"termCharged":6,"weightsMatter":16,"both":5,"mirrorEqual":22}

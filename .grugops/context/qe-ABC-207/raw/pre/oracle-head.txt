@@ -1,0 +1,4 @@
+== oracle head 13:16:46Z
+{"pos":"position-6","oracle":[78,"c3d5",14332220],"pre121":[78,"c3d5"],"search":[78,"c3d5"],"equal":true}
+{"pos":"kiwipete","oracle":[20,"e2a6",70389552],"pre121":[20,"e2a6"],"search":[20,"e2a6"],"equal":true}
+end 13:18:50Z
