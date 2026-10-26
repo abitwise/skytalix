@@ -170,3 +170,90 @@ Design comes first. Only these rows changed:
     2026-09-26 errata. Each says the two roots never share a table because the table is cleared;
   - `ADR-0032`'s blunder path (test note 2);
   - the source comments at `src/engine.ts:57-62`, `src/search.ts:24-26` and `src/search.ts:594-597`.
+
+## Design ruling
+
+> **Architect/Design, 2026-10-26** (task `arch-design-ABC-209`, records plus probes, at `main` `d0b1fff8`). The ADR is
+> **a PROPOSED amendment to `ADR-0025` decision 4**, at the end of that file. Acceptance is the owner's. **Reading
+> (b)** (`…e496fc70`): the build may proceed, and the ALONE reading and the merge wait on his acceptance. Notes:
+> `.grugops/context/arch-design-ABC-209/notes/`. The probes ran on scratch clones in `<scratchpad>/arch209/`: `base`,
+> and `hd`, the design hardcoded. They never touched `src/`. Plain node v26.11.1. **No real-clock search was run, and
+> no timing is quoted.** Real-clock deep rows were filtered out by name. No `G2`, `G5`, `G6` or D. Every count below
+> is deterministic.
+
+**Result.** The table lives one game, held by an opaque **game token** (`EngineOptions.game?: object`). Without a
+token, every call clears as today. That is the clear door, and it needs no new export. The continuation rule is one
+pure tracker in `src/transposition.ts`, and the two game owners hold one each: the CLI level seam and the UCI
+session. **Size 4 MiB, unchanged; always-replace, no ageing.** **The moved-pin set is empty: 0 red rows and 0
+re-points. No value pin, relation, level or NFR bound moves.** **Size `S` holds; no split.**
+
+### The ruling, point by point (text: `ADR-0025` § Proposed amendment 2026-10-26)
+
+| point | ruling | why, in one line |
+|---|---|---|
+| form | **an amendment to `ADR-0025` decision 4**, PROPOSED | one clause changes; the ADR named it ("now, not forever"; § Rollback); cites to "Decision 4" stay live; `ADR-0026` / `ADR-0023` precedent |
+| lifetime | kept across one game's searches while the caller passes the **same token**; cleared at entry otherwise | the caller knows the game; the engine never guesses |
+| the door (Scope 2) | **`chooseMove` and its three doors without `game`** are the pre-ticket engine, node for node; `clearTable` stays exported | no new export, so no export-list row moves; `A1` holds by construction |
+| `search()` | **keeps its per-call clear**, which also releases the holder | the fixed-depth reference; `ADR-0026` d7 and `ADR-0006`'s errata stay true |
+| the rule | `prepareTable(game)` (clear unless `game` is the holder) and `createGameTracker()` (same token iff the same start and the previous search's moves are a **strict prefix**), both in `src/transposition.ts` | one rule, one place, both entry paths |
+| CLI | `src/level-seam.ts` holds a tracker. Its key is `history.initialFen` plus `history.moves`, formatted as coordinates | `new` (`ABC-046`) reuses the seam and the level instance, so a per-instance token would carry game A into game B |
+| UCI | the session holds a tracker over the accepted `position` line and replaces it at `ucinewgame`; `go` passes `track(start, moves)` | a non-continuing `position` and a re-searched position clear; `position fen` each move degrades to today's engine |
+| `createLevel` | its chooser takes `(position, game?)` and spreads `game` into `chooseMove` **only when present**, on the engine path | `QE-087-a`'s `{ budgetMs, now }` stays exact for every call without a token |
+| blunder path (test note 2) | **does not share the table**: its children carry no token | each child's score stays a function of that child alone (`ADR-0032` d1) |
+| ladder | unchanged: no token, so every call clears | two in-process sides never share a table |
+| size | **2^18 × 16 B = 4 MiB, unchanged**; no new array; the holder is one reference | `A4`; `NFR-009` |
+| replacement | **always replace, unchanged; no generation or ageing** | a stale entry is never wrong (exact depth, verified key), only useless; no free bits; `T5` is the falsifier |
+| `NFR-009` growth | QE's `A4` row: under `--expose-gc`, 40 engine searches through one token, `heapUsed` and `arrayBuffers` after `gc()` at search 1 and search 40. **≤ 1 MiB each; over is a STOP** | design record: `heapUsed` Δ 41 024 B, `arrayBuffers` Δ 0 B, table 4 194 304 B |
+
+**Clear lines re-cited at `main` `d0b1fff8`:** `src/engine.ts:550` `clearTable();` (becomes
+`prepareTable(options.game);`) and `src/search.ts:605` `if (switches.table) clearTable();` (unchanged). The entry paths
+are as the page cites: `src/cli.ts:200`, `src/uci-session.ts:370` / `:374`, and `src/levels.ts:127` / `:154`. A third
+entry path is added: the CLI's in-game `new` (`src/command-input.ts:123`, a take-back to the start).
+
+### Moved-pin probe (`hd` against `main`'s tests)
+
+- **Base:** default lane 2 128 / 2 128. Deep lanes green: `PUZZLE_DEEP`; `SEARCH_DEEP` (search, ordering, quiescence,
+  transposition, pvs-lmr, null-move); `ENGINE_DEEP` (engine, levels, transposition, pvs-lmr, gameend, legal). 12
+  real-clock rows were filtered by name.
+- **`hd`:** default 2 128 / 2 128. Deep: identical to base, file by file.
+- **0 rows move.** No test drives a token today, so the new behaviour is reached only by the rows `A1`–`A4` add.
+- A first prototype gave every level instance its own token. It read 1 red (`levels.test.ts` `QE-087-a`, the options
+  keys) and it broke the CLI's `new`. Both are fixed by the ruled shape.
+
+### Frozen-clock pre-check (test note 4; a count, not a reading)
+
+`chooseMove`, `now: () => 0`, `maxDepth: k`, one first search per fresh process.
+
+| board | base d7 | design d7 | base d8 | design d8 |
+|---|---|---|---|---|
+| kiwipete | 590 489 | 590 489 | 1 259 463 | 1 259 463 |
+| position-6 | 180 941 | 180 941 | 355 565 | 355 565 |
+
+8 of 8 are equal, as `A1` says they must be. With a first token they are equal as well. They also equal `ABC-208`'s
+head counts.
+
+### `A1` / `A2` probes (node counts; UCI `go depth 5` on a virtual clock, CLI level 5 on a virtual clock)
+
+- UCI, game A of 20 plies, then `ucinewgame` + `position startpos`: 2 535, which equals a fresh process (2 535).
+- UCI, game A, then `position startpos moves e2e4` (it does not continue): 4 417 = fresh 4 417.
+- UCI, game A, then the last searched position again: 30 155 = fresh 30 155. The kept search there read 25 731.
+- CLI, game A of 20 plies through one tracker (one token throughout), then `new`: a new token. 70 676 = fresh 70 676.
+
+### Second-move savings in one game (record only, not a reading)
+
+At fixed d7 with a frozen clock, the engine plays one side. The other side replies with the stored hash move and
+never touches the table, as a human does not.
+
+- **The second move costs 0.95× / 1.00× / 1.48× of fresh** (kiwipete / position-6 / start).
+- **Moves 2–8 cost 0.94× / 0.96× / 0.97×.**
+- Root hits: 7/7, 5/7 and 7/7.
+- When one token is kept across both sides (self-play), plies 2–10 cost 0.79× / 0.85× / 0.74×.
+
+The expected D effect is small (`UNKNOWN - verify`). D decides.
+
+### Size
+
+**`S` holds; no split.** About 45–65 production lines in five files: `src/transposition.ts`, `src/engine.ts`,
+`src/levels.ts`, `src/level-seam.ts` and `src/uci-session.ts`. On top of that come the comment rewrites the amendment
+lists and the `A1`–`A4` rows. The prototype's diff was +65/−9, comments included. A split would ship a token that
+nothing passes.
