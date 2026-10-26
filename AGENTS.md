@@ -94,6 +94,7 @@ completion notification; if a pattern is unavoidable, bracket one character (`[v
 - Puzzle suite, strength gate (opt-in, ABC-084): `PUZZLE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/puzzle-suite.test.ts`
 - PVS/LMR deep lane (ABC-121, `src/search.pvs-lmr.test.ts`): `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run
   src/search.pvs-lmr.test.ts`
+- Null-move deep lane (opt-in, ABC-208, door / zugzwang guard / oracle rows, 44 rows): `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/search.null-move.test.ts`
 - Real-engine CLI lane (opt-in, ABC-119): `CLI_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/cli.real-engine.test.ts`
 - Real-engine UCI lane (opt-in, ABC-168): `UCI_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/uci.real-engine.test.ts`
 - Self-play ladder lane (opt-in, ABC-085, ADR-0038): `LADDER_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/ladder.test.ts`
