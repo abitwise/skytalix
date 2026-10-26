@@ -1,8 +1,8 @@
 ---
 id: ABC-207
 title: "Mobility is weighted per piece, with the queen lowest per square, and an early queen trip before the minor pieces are out costs a little"
-status: ready
-column: Ready
+status: dropped
+column: Done
 size: S
 priority: P3
 epic: EPIC-008
@@ -12,6 +12,10 @@ adr: "none if ADR-0031 D2's attack-map form stays; a different form is an ADR-00
 
 # ABC-207: per-piece mobility weights and a small early-queen term
 
+> **CLOSED UNMERGED 2026-10-26 under ship rule S1. Not delivered.** BA/PM, task `bapm-s1-ABC-207`. D was LOSS
+> (pooled over 800 games, −18.3 ± 16.5). `A1`–`A4` were MET, `G6` included. S1's one re-tune round is not taken.
+> The code stays on `grugops/ABC-207` `5477df21`. See § Close.
+>
 > **Cut 2026-10-23 by BA/PM** (task `bapm-cut-engine-strength`, records only, at `main` `55a8f4ef`). Proposal 4 of
 > `…f1771bb3`; owner word `…7feb0553`.
 >
@@ -307,3 +311,41 @@ nodes than base to complete depth 8. **Size `S` holds. Do not split.** No owner 
 
 - **Orchestrator:** merge these records. Then In Design → Ready for Dev → In Development (Software Engineer), at width 1.
   Nothing else edits `src/evaluate.ts` in the meantime.
+
+## Close
+
+> **BA/PM, 2026-10-26** (task `bapm-s1-ABC-207`, records only, at `main` `23181cc2`). Inputs: QE `…cc744e8c`,
+> `…243de4b1` and `…138c1740` (`QE-207-a`, `-b`, `-c`, `-f`), and the Orchestrator's routing `…5c59d85e`. The call is a
+> delivery call under `…5aaf7cec`. The owner is told, and his veto is open. Notes: `.grugops/context/bapm-s1-ABC-207/notes/`.
+
+**Closed unmerged under S1.** S1 says that anything other than GAIN is NOT MET, and that BA/PM then "closes or re-cuts
+it". This ticket is closed.
+
+- **The reading.** `A5` NOT MET. d1 was NEUTRAL, −15.6 ± 22.8, so the one extension ran. d2 read −20.9 ± 23.8.
+  Pooled over 800 games (167/209/424), it is **−18.26 ± 16.49: LOSS**. Without the games that ran at load1 > 8, it is
+  −18.1 ± 16.8 over 770 games, the same grade. `A1`–`A4` were MET: `G6` 7 = 7 and 8 = 8, and `G2` was 660.7 / 661.7 ns.
+  Under `…4c3f7639` the reading is final.
+- **S1's one re-tune round is not taken, and no re-tune question goes to the owner.** Four reasons:
+  - **The distance.** GAIN after 800 games needs X above about +16.5. This build read −18.3, so a re-tune would have
+    to move it by about 35 Elo. The proposal was ranked low to medium gain (`P3`).
+  - **No variant is predicted to clear.** Both halves of the reading point the same way. The cause was not measured,
+    and neither was the split between the weights and the queen term (`…243de4b1`). A re-tune would be a guess.
+  - **The pain is gone at base (`QE-207-f`).** Since `ABC-215`, base already plays d3 before 4.Qa4. Head changed none
+    of the five `G11` choices.
+  - **The cost.** A new real-clock `G6` and D reading (6–12 h), plus a build and a QE hop. It is also a second
+    reading for this ticket, beyond `…4c3f7639`, so it would need the owner's word.
+- **What is kept.**
+  - `grugops/ABC-207` at `5477df21` (the build) and `grugops/qe-ABC-207` at `ab39b73f` (QE's records). Neither is
+    merged or deleted.
+  - The failed attempt `…243de4b1`. `5477df21` is not read again as it is.
+- **`main` is clean.** `git diff 7020cca3 23181cc2 -- src data tools` is empty, so no revert is owed.
+- **Not owed.** `QE-207-b` (the "≥ 2 minors home" row) and `QE-207-c` (the `engine.ts` re-search bite) matter only for a
+  build that ships. `QE-207-d` and `-e` are INFO.
+- **The re-open path.**
+  - **The owner vetoes the close.** The page goes back to Backlog (Blocked), and one re-tune round is cut on his word.
+    It owes its own pre-check, `G2`, `G6` and D under S1, plus `QE-207-b` and `-c`.
+  - **A later re-cut.** BA/PM cuts a new ticket from `5477df21`, with different values. Whether that counts as a new
+    ticket's single reading or a second reading of this one is the owner's reading of `…4c3f7639`. Until he says,
+    it is read as a second one.
+- **Not touched here:** `NFR-005`, `ADR-0031`, and `EPIC-008`'s gate rows. The owner's forward question on "≥ base"
+  (`QE-205-c`) is open.

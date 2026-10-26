@@ -52,6 +52,9 @@ still hold only measured gains.
   - *2026-10-25 (BA/PM, `bapm-close-ABC-205`):* proposal 1 (`ABC-205`, king safety) is **not shipped**. It was
     closed unmerged under S1, because `G6` "≥ base" missed on `position-6` (`…234d9814`, `…912bcb0d`, `…154f2ced`).
     Six engine changes remain (`ABC-206` to `ABC-211`), and `ABC-206` is Done.
+  - *2026-10-26 (BA/PM, `bapm-s1-ABC-207`):* proposal 4 (`ABC-207`, per-piece mobility weights and the early-queen
+    term) is **not shipped**. It was closed unmerged under S1, because D was LOSS: pooled over 800 games, −18.3 ±
+    16.5 (`…cc744e8c`, `…243de4b1`). Four engine changes remain unbuilt (`ABC-208` to `ABC-211`), and `ABC-206` is Done.
 - *2026-10-24 (BA/PM, `bapm-ABC-214-path-a`):* one provenance change, `ABC-215`. It re-derives the CC BY-SA 3.0
   values on the owner's path A (`…fb0468ff`) and is measured under S3.
 - *2026-10-24 (BA/PM, `bapm-cut-readme`):* one test-only follow-up, `ABC-217` (Ready, XS, P3). It moves `ABC-206`'s
@@ -163,6 +166,13 @@ not favour either side. A FAIL-class fault on a host that is not quiet is UNRESO
 > **2026-10-25, `M2` (BA/PM, `bapm-epic008-g6-rule`):** `ABC-215` shipped measured. It merged as `5c91e2e4` with D
 > **NEUTRAL, X = +15.6 ± 23.8** (400 of 400 games, 0 faults): not LOSS, and X ≥ 0, so **S3 is met** without the extension
 > (QE `…c2c3540f`; Orchestrator `…ccf209d9`).
+>
+> **2026-10-26, after `ABC-207`'s close (BA/PM, `bapm-s1-ABC-207`):**
+> - **`M1`: the baseline stands.** `ABC-207`'s code never reached `main`: `git diff 7020cca3 23181cc2 -- src data
+>   tools` is empty. Proposal 4 is no longer a source for the +100. The +100 now rests on `ABC-208` to `ABC-211`, on
+>   top of what has merged (`ABC-206`, value-identical, and `ABC-215`, D +15.6 ± 23.8).
+> - **`M2` and `M3`: untouched.** Nothing of `ABC-207` merged, so nothing shipped unmeasured, and no gate on `main`
+>   moved.
 
 ## Tickets (order is the pull order; the pages are under `plans/tickets/`)
 
@@ -190,6 +200,19 @@ not favour either side. A FAIL-class fault on a host that is not quiet is UNRESO
 
 *2026-10-25 (BA/PM, `bapm-epic008-g6-rule`):* row 9, `ABC-215`, is **Done**: merged `5c91e2e4`, D NEUTRAL +15.6 ± 23.8,
 S3 met (see `M2`). The row's cells are as cut.
+
+*2026-10-26 (BA/PM, `bapm-s1-ABC-207`):* row 4, `ABC-207`, is **closed unmerged under S1** (not delivered; that page's
+§ Close). The row's cells are as cut. The tickets that remain:
+- **`ABC-208`** (`M`, `P2`): its Ready trigger, "`ABC-206` reaches Done", has been met since 2026-10-24 (`0a9390e5`).
+  No record re-scored its DoR, so its row 10 sequence hold is out of date. One page cite has moved: `src/engine.ts:69-71`
+  is now `:73-74`, and the text is unchanged. **It is the one pullable ticket, once BA/PM re-scores its DoR on its
+  page.** That re-score is owed and is not done here. It goes In Design first (a new ADR and an `ADR-0026` door), and
+  it shares no file with `ABC-207`.
+- **`ABC-209`** and **`ABC-210`**: not pullable. Each waits for its predecessor (`ABC-208`, then `ABC-209`) to reach
+  Done or to be closed under S1.
+- **`ABC-211`**: not pullable. It waits on an Architect/Design source ruling (`ADR-0023`, then the owner), and no hop
+  for it has been routed. It is data only and shares no file with the engine tickets, so the ruling can run beside them.
+- The closing `M1` R reading comes at the epic's close.
 
 **Why this order.**
 - The brief sets two places: the harness first, then king safety.
