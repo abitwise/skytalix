@@ -1,13 +1,13 @@
 ---
 id: ABC-209
 title: "The transposition table is kept across the moves of one game and cleared at a new game, with its size unchanged"
-status: ready
-column: Ready
+status: in-development
+column: In Development
 size: S
 priority: P3
 epic: EPIC-008
 feature: —
-adr: "ADR-0025 decision 4: a PROPOSED amendment (§ Proposed amendment 2026-10-26); acceptance is the owner's; the ALONE reading and the merge wait on it (…e496fc70 reading b)"
+adr: "ADR-0025 decision 4 amendment of 2026-10-26: ACCEPTED by the owner 2026-10-26 (…2ae5fc12 item 1); in force on main at ABC-209's merge; the QE verdict still decides the merge"
 ---
 
 # ABC-209: keep the transposition table across moves
@@ -53,6 +53,12 @@ adr: "ADR-0025 decision 4: a PROPOSED amendment (§ Proposed amendment 2026-10-2
    - *2026-10-26 (BA/PM, `bapm-amend-ABC-209`):* its form is a **PROPOSED amendment to `ADR-0025` decision 4**
      (§ Proposed amendment 2026-10-26). Acceptance is the owner's. Reading (b) (`…e496fc70`): the build may proceed,
      and the ALONE reading (`A6`) and the merge wait on his acceptance.
+   - *2026-10-26 (BA/PM, `bapm-records-owner-b`):* the owner **ACCEPTED** the `ADR-0025` decision 4 amendment
+     (`owner-word-2026-10-26b` `…2ae5fc12`, item 1). The reading (b) gate on the build, the ALONE reading and the
+     merge is met; the QE verdict still decides the merge. It is in force on `main` at this ticket's merge; if `S1` is
+     NOT MET, a dated line records "accepted, not in force on main" (`ADR-0026` d9 precedent). Item 2 closes
+     `QE-205-c` (`G6` "≥ base" graded, option A; `EPIC-008` `G6` row), so this page's earlier "still open" lines are
+     history.
 
 ## Out of scope
 
