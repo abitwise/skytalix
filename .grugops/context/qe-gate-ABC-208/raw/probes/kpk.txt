@@ -1,0 +1,5 @@
+kpk-b6c6: root WIN; legal 6; winning ['b6c6']; recorded b6c6: ONLY WINNING MOVE
+kpk-c6d6: root WIN; legal 6; winning ['c6d6']; recorded c6d6: ONLY WINNING MOVE
+kpk-d6e6: root WIN; legal 6; winning ['d6e6']; recorded d6e6: ONLY WINNING MOVE
+kpk-e6f6: root WIN; legal 6; winning ['e6f6']; recorded e6f6: ONLY WINNING MOVE
+all four confirmed

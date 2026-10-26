@@ -1,0 +1,4 @@
+# node abort.mts <tree>: chooseMove, tickingClock(1), budgets 1..300 ms, kiwipete / position-4 / position-6 (900 calls)
+nofinally (head + engine null block unmade outside a finally): 438 of 900 aborted chooseMove calls left the position changed
+  first: kiwipete@10, @22, @27 -> r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 1 (side to move flipped)
+head (as delivered): 0 of 900 aborted chooseMove calls left the position changed
