@@ -57,14 +57,23 @@
  * re-search. The rule is ONE pure predicate, `lateMoveReduction`, which both recursions call and
  * whose returned plies they subtract. Reductions change the VALUE, so `search()` is held to
  * `searchWithoutReductions` by a bounded oracle, not an identity (`ADR-0026` decisions 6 and 9).
+ *
+ * NULL-MOVE PRUNING (ABC-208, `ADR-0050`) sits in the same frame, at null-window nodes only: the
+ * side to move passes (`makeNullMove`), and if the opponent, searched R plies shallower with the
+ * window `(-beta, -beta + 1)`, still cannot bring the score below beta, the node returns beta and
+ * stores nothing. The rule is ONE pure predicate, `nullMoveReduction`, which both recursions call:
+ * R is 3, and 0 at the root, directly after a null move, below remaining depth 2, in check, and
+ * when the side to move has fewer than three non-pawn pieces (the zugzwang guard). It changes the
+ * VALUE, so every door older than `ABC-208` turns it off, and `search()` is held to the TEST-ONLY
+ * door `searchWithoutNullMove`, the pre-`ABC-208` `search()`, by a bounded oracle (decision 8).
  */
 
-import { makeMove, unmakeMove } from "./apply.ts";
+import { makeMove, makeNullMove, unmakeMove, unmakeNullMove } from "./apply.ts";
 import { evaluate } from "./evaluate.ts";
 import { leafEndReason } from "./gameend.ts";
 import { givesCheck, isInCheck, legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
-import { EMPTY, type Position } from "./position.ts";
+import { EMPTY, isBlack, isOnBoard, KING, PAWN, type Position, pieceType } from "./position.ts";
 import { mvvLvaKey, quiesce } from "./quiescence.ts";
 import {
   BOUND_EXACT,
@@ -75,7 +84,7 @@ import {
   storeEntry,
   tableCutoff,
 } from "./transposition.ts";
-import { zobristKey, zobristKeyAfterMove } from "./zobrist.ts";
+import { zobristKey, zobristKeyAfterMove, zobristKeyAfterNullMove } from "./zobrist.ts";
 
 /**
  * The score of being checkmated AT THE ROOT, negated: a side mated `ply` plies from the root
@@ -220,16 +229,23 @@ interface Switches {
   readonly table: boolean;
   /**
    * Principal-variation search (`ABC-121`): the null window for every move after a node's first,
-   * and the full-window re-search on a fail-high. True on `search()` and
+   * and the full-window re-search on a fail-high. True on `search()`, `searchWithoutNullMove` and
    * `searchWithoutReductions`; false on every door older than `ABC-121` (`ADR-0026` decision 3),
    * and on the two unpruned doors because a null window IS a cutoff.
    */
   readonly pvs: boolean;
   /**
-   * Late-move reductions (`ABC-121`), by `lateMoveReduction`. True on `search()` only. They live
-   * inside PVS's null-window frame, so they act only where `pvs` is on (`ADR-0026` decision 1).
+   * Late-move reductions (`ABC-121`), by `lateMoveReduction`. True on `search()` and
+   * `searchWithoutNullMove`. They live inside PVS's null-window frame, so they act only where
+   * `pvs` is on (`ADR-0026` decision 1).
    */
   readonly reductions: boolean;
+  /**
+   * Null-move pruning (`ABC-208`), by `nullMoveReduction`. True on `search()` only. It is tried
+   * at null-window nodes only, inside PVS's frame, so it acts only where `pvs` is on (`ADR-0050`
+   * decision 1); every older door turns it off (decision 3).
+   */
+  readonly nullMove: boolean;
 }
 
 /** The least remaining depth, and the least 0-based index in the ordered list, a reduced move has. */
@@ -261,6 +277,44 @@ export function lateMoveReduction(
   if (move.captured !== EMPTY || move.promotion !== EMPTY) return 0;
   if (isInCheck(position)) return 0;
   return givesCheck(position, move) ? 0 : 1;
+}
+
+/** R, the least remaining depth a null move is tried at, and the zugzwang guard's piece count. */
+const NULL_MOVE_REDUCTION = 3;
+const NULL_MOVE_MIN_DEPTH = 2;
+const NULL_MOVE_MIN_PIECES = 3;
+
+/**
+ * THE null-move rule (`ABC-208`, `ADR-0050` decision 6): how many plies shallower than a normal
+ * child the null child of a node of remaining `depth` at `ply` is searched — R, 3 — or 0 for no
+ * null move. Both recursions call it and subtract exactly what it returns.
+ *
+ * 0 when any of these holds: the root (`ply` 0); the parent move was a null move (`afterNull`);
+ * remaining depth below 2; the side to move is in check; or the side to move has fewer than three
+ * non-pawn pieces (knights, bishops, rooks and queens) — the zugzwang guard, where a pass is most
+ * often the best move. Check and material are derived HERE, from the position, and never
+ * supplied by the caller. Pure: it reads the position and changes nothing.
+ */
+export function nullMoveReduction(
+  position: Position,
+  depth: number,
+  ply: number,
+  afterNull: boolean,
+): number {
+  if (ply === 0 || afterNull || depth < NULL_MOVE_MIN_DEPTH) return 0;
+  if (isInCheck(position)) return 0;
+  const board = position.board;
+  let pieces = 0;
+  for (let square = 0; square < 128; square++) {
+    if (!isOnBoard(square)) continue;
+    const piece = board[square] as number;
+    if (piece === EMPTY || isBlack(piece) !== position.blackToMove) continue;
+    const type = pieceType(piece);
+    if (type !== PAWN && type !== KING && ++pieces === NULL_MOVE_MIN_PIECES) {
+      return NULL_MOVE_REDUCTION;
+    }
+  }
+  return 0;
 }
 
 /** The move list in the order `switches.ordering` asks for, at `ply`. */
@@ -325,6 +379,10 @@ function leafScore(
  * `keys[ply]` is this node's Zobrist key, written by the parent. The order at entry is the
  * order of authority: a repetition is a draw whatever the table says, and the table is consulted
  * before any move is generated.
+ *
+ * `afterNull` is true only on the null move's child (`ABC-208`): the flag is an argument, so
+ * nothing is held between nodes. With `nullMove` on, a null-window node that the table did not
+ * settle first tries the pass, before any move is generated.
  */
 function negamax(
   position: Position,
@@ -336,6 +394,7 @@ function negamax(
   counter: NodeCounter,
   killers: KillerTable,
   keys: BigUint64Array,
+  afterNull: boolean,
 ): number {
   counter.nodes++;
 
@@ -351,6 +410,31 @@ function negamax(
   if (slot !== -1) {
     const settled = tableCutoff(slot, depth, alpha, beta, ply);
     if (settled !== null) return settled;
+  }
+
+  if (switches.nullMove && alpha + 1 === beta) {
+    const nullReduction = nullMoveReduction(position, depth, ply, afterNull);
+    if (nullReduction > 0) {
+      const nullUndo = makeNullMove(position);
+      keys[ply + 1] = zobristKeyAfterNullMove(key, nullUndo);
+      const nullScore =
+        0 -
+        negamax(
+          position,
+          depth - 1 - nullReduction,
+          0 - beta,
+          0 - beta + 1,
+          ply + 1,
+          switches,
+          counter,
+          killers,
+          keys,
+          true,
+        );
+      unmakeNullMove(position, nullUndo);
+      // Beta, never the null score: a mate found after a pass is no mate. Nothing is stored.
+      if (nullScore >= beta) return beta;
+    }
   }
 
   const moves = legalMoves(position);
@@ -436,7 +520,19 @@ function searchMove(
   const child = ply + 1;
   if (index === 0 || !switches.pvs) {
     return (
-      0 - negamax(position, depth - 1, 0 - beta, 0 - alpha, child, switches, counter, killers, keys)
+      0 -
+      negamax(
+        position,
+        depth - 1,
+        0 - beta,
+        0 - alpha,
+        child,
+        switches,
+        counter,
+        killers,
+        keys,
+        false,
+      )
     );
   }
   let score =
@@ -451,6 +547,7 @@ function searchMove(
       counter,
       killers,
       keys,
+      false,
     );
   if (score > alpha && reduction > 0) {
     score =
@@ -465,12 +562,24 @@ function searchMove(
         counter,
         killers,
         keys,
+        false,
       );
   }
   if (score > alpha && score < beta) {
     score =
       0 -
-      negamax(position, depth - 1, 0 - beta, 0 - alpha, child, switches, counter, killers, keys);
+      negamax(
+        position,
+        depth - 1,
+        0 - beta,
+        0 - alpha,
+        child,
+        switches,
+        counter,
+        killers,
+        keys,
+        false,
+      );
   }
   return score;
 }
@@ -564,6 +673,25 @@ export function search(position: Position, depth: number): SearchResult {
     table: true,
     pvs: true,
     reductions: true,
+    nullMove: true,
+  });
+}
+
+/**
+ * TEST-ONLY. The pre-`ABC-208` `search()`, node for node: null-move pruning off, everything else
+ * on. It is the reference `ABC-208`'s bounded drift oracle compares `search()` against, and the
+ * shipped side of every `ABC-121` row that measures PVS and LMR alone (`ADR-0050` decisions 2 and
+ * 4). Not an engine option; nothing in production calls it.
+ */
+export function searchWithoutNullMove(position: Position, depth: number): SearchResult {
+  return searchRoot(position, depth, {
+    prune: true,
+    quiescence: true,
+    ordering: "full",
+    table: true,
+    pvs: true,
+    reductions: true,
+    nullMove: false,
   });
 }
 
@@ -585,6 +713,7 @@ export function searchWithoutPruning(position: Position, depth: number): SearchR
     table: false,
     pvs: false,
     reductions: false,
+    nullMove: false,
   });
 }
 
@@ -604,6 +733,7 @@ export function searchWithoutQuiescence(position: Position, depth: number): Sear
     table: true,
     pvs: false,
     reductions: false,
+    nullMove: false,
   });
 }
 
@@ -625,6 +755,7 @@ export function searchWithoutPruningOrQuiescence(position: Position, depth: numb
     table: false,
     pvs: false,
     reductions: false,
+    nullMove: false,
   });
 }
 
@@ -642,6 +773,7 @@ export function searchWithoutOrdering(position: Position, depth: number): Search
     table: false,
     pvs: false,
     reductions: false,
+    nullMove: false,
   });
 }
 
@@ -658,6 +790,7 @@ export function searchWithoutKillers(position: Position, depth: number): SearchR
     table: false,
     pvs: false,
     reductions: false,
+    nullMove: false,
   });
 }
 
@@ -675,6 +808,7 @@ export function searchWithoutTable(position: Position, depth: number): SearchRes
     table: false,
     pvs: false,
     reductions: false,
+    nullMove: false,
   });
 }
 
@@ -692,6 +826,7 @@ export function searchWithoutReductions(position: Position, depth: number): Sear
     table: true,
     pvs: true,
     reductions: false,
+    nullMove: false,
   });
 }
 
@@ -709,5 +844,6 @@ export function searchWithoutPvsOrReductions(position: Position, depth: number):
     table: true,
     pvs: false,
     reductions: false,
+    nullMove: false,
   });
 }

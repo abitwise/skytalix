@@ -24,7 +24,7 @@
  * is deliberately avoided: a table that varied per run would make hashes unreproducible.
  */
 
-import type { UndoRecord } from "./apply.ts";
+import type { NullUndo, UndoRecord } from "./apply.ts";
 import { FLAG_CASTLE, FLAG_EN_PASSANT, type Move } from "./moves.ts";
 import {
   CASTLE_BK,
@@ -142,5 +142,18 @@ export function zobristKeyAfterMove(
   if (undo.epSquare !== NO_SQUARE) key ^= EP_FILE[fileOf(undo.epSquare)] as bigint;
   if (position.epSquare !== NO_SQUARE) key ^= EP_FILE[fileOf(position.epSquare)] as bigint;
 
+  return key;
+}
+
+/**
+ * The key of a position AFTER `makeNullMove` returned `undo`, derived from the key it had BEFORE
+ * (`ABC-208`, `ADR-0050` decision 7; the delta pattern of `ADR-0020` Decision 3). A null move
+ * moves no piece and changes no castling right: the side to move flips, and the en-passant file
+ * leaves if the position carried one. Invariant, asserted in `src/search.null-move.test.ts`:
+ *   zobristKeyAfterNullMove(zobristKey(before), undo) === zobristKey(after)
+ */
+export function zobristKeyAfterNullMove(keyBefore: bigint, undo: NullUndo): bigint {
+  let key = keyBefore ^ BLACK_TO_MOVE;
+  if (undo.epSquare !== NO_SQUARE) key ^= EP_FILE[fileOf(undo.epSquare)] as bigint;
   return key;
 }

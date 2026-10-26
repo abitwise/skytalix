@@ -163,3 +163,33 @@ export function unmakeMove(position: Position, move: Move, undo: UndoRecord): vo
   position.epSquare = undo.epSquare;
   position.halfmoveClock = undo.halfmoveClock;
 }
+
+/** The two position fields a null move overwrites and unmakeNullMove restores. */
+export interface NullUndo {
+  /** En-passant target before the null move. */
+  readonly epSquare: number;
+  /** Halfmove clock before the null move. */
+  readonly halfmoveClock: number;
+}
+
+/**
+ * The side to move passes (`ABC-208`, `ADR-0050` decision 7): no piece moves, the en-passant
+ * target clears, and the halfmove clock RESTARTS at 0, so the search's repetition scan never
+ * reaches back across a pass. The fullmove number moves as makeMove moves it.
+ */
+export function makeNullMove(position: Position): NullUndo {
+  const undo: NullUndo = { epSquare: position.epSquare, halfmoveClock: position.halfmoveClock };
+  position.epSquare = NO_SQUARE;
+  position.halfmoveClock = 0;
+  if (position.blackToMove) position.fullmoveNumber++;
+  position.blackToMove = !position.blackToMove;
+  return undo;
+}
+
+/** Reverses makeNullMove exactly. */
+export function unmakeNullMove(position: Position, undo: NullUndo): void {
+  position.blackToMove = !position.blackToMove;
+  if (position.blackToMove) position.fullmoveNumber--;
+  position.epSquare = undo.epSquare;
+  position.halfmoveClock = undo.halfmoveClock;
+}

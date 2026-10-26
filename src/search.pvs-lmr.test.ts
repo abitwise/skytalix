@@ -36,6 +36,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { makeMove, unmakeMove } from "./apply.ts";
 import {
   chooseMove,
+  chooseMoveWithoutNullMove,
   chooseMoveWithoutPvsOrReductions,
   chooseMoveWithoutReductions,
   DEFAULT_BUDGET_MS,
@@ -50,7 +51,7 @@ import { MATE_CORPUS, MATE_CORPUS_SEEDS } from "./search.mate-corpus.ts";
 import {
   lateMoveReduction,
   MATE_SCORE,
-  search,
+  searchWithoutNullMove,
   searchWithoutPvsOrReductions,
   searchWithoutReductions,
 } from "./search.ts";
@@ -219,10 +220,13 @@ describe("PVS identity — searchWithoutReductions scores what searchWithoutPvsO
    * and stay green (mutant `engine-door-withoutReductions-reduces` survived every lane before this
    * row). kp-vs-k deepened to depth 6: the reference scores what the pre-`ABC-121` engine scores,
    * and spends a different number of nodes from `chooseMove`.
+   *
+   * RE-POINTED at `ABC-208` (`ADR-0050` decision 4): the shipped side is
+   * `chooseMoveWithoutNullMove`, the pre-`ABC-208` `chooseMove`.
    */
   it("the engine doors bite: chooseMoveWithoutReductions is the unreduced engine, not chooseMove", () => {
     const fen = (ENDGAMES.find(({ name }) => name === "kp-vs-k") as { fen: string }).fen;
-    const shipped = deepenTo(chooseMove, parseFen(fen), 6);
+    const shipped = deepenTo(chooseMoveWithoutNullMove, parseFen(fen), 6);
     const unreduced = deepenTo(chooseMoveWithoutReductions, parseFen(fen), 6);
     const pre = deepenTo(chooseMoveWithoutPvsOrReductions, parseFen(fen), 6);
     expect(unreduced.score).toBe(pre.score);
@@ -475,10 +479,15 @@ function nullWindowReSearches(stores: readonly Store[]): string[] {
   return found;
 }
 
+/**
+ * RE-POINTED at `ABC-208` (`ADR-0050` decision 4): both rows read PVS and LMR alone, so
+ * their shipped side is the null-move-off door of its recursion, the pre-`ABC-208` `search()` and
+ * `chooseMove`. Every value is unchanged.
+ */
 describe("A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one", () => {
   it("search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions", () => {
     trace.on = true;
-    const shipped = search(parseFen(A4_SEARCH_FEN), A4_DEPTH);
+    const shipped = searchWithoutNullMove(parseFen(A4_SEARCH_FEN), A4_DEPTH);
     trace.on = false;
     const reSearches = nullWindowReSearches(trace.stores);
     const reference = searchWithoutReductions(parseFen(A4_SEARCH_FEN), A4_DEPTH);
@@ -494,7 +503,7 @@ describe("A4 — the reduced move fails high at a null-window node, is re-search
 
   it("chooseMove(): the same, deepened to depth 4 in the engine's own recursion", () => {
     trace.on = true;
-    const shipped = deepenTo(chooseMove, parseFen(A4_FEN), A4_DEPTH);
+    const shipped = deepenTo(chooseMoveWithoutNullMove, parseFen(A4_FEN), A4_DEPTH);
     trace.on = false;
     const reSearches = nullWindowReSearches(trace.stores);
     const reference = deepenTo(chooseMoveWithoutReductions, parseFen(A4_FEN), A4_DEPTH);
@@ -515,9 +524,13 @@ describe("A4 — the reduced move fails high at a null-window node, is re-search
 // ---------------------------------------------------------------------------
 
 describe("A5 — search() visits fewer nodes than searchWithoutPvsOrReductions at depth 4", () => {
-  /** `search()` nodes and `searchWithoutPvsOrReductions` nodes at depth 4, printed. */
+  /**
+   * `search()` nodes and `searchWithoutPvsOrReductions` nodes at depth 4, printed.
+   * RE-POINTED at `ABC-208` (`ADR-0050` decision 4): the shipped side is `searchWithoutNullMove`,
+   * the pre-`ABC-208` `search()`, for all three rows.
+   */
   const nodesAtDepth4 = (fen: string, name: string): { shipped: number; pre: number } => {
-    const shipped = search(parseFen(fen), 4).nodes;
+    const shipped = searchWithoutNullMove(parseFen(fen), 4).nodes;
     const pre = searchWithoutPvsOrReductions(parseFen(fen), 4).nodes;
     console.log(
       `ABC-121 A5 ${name} d4: ${shipped} / ${pre} = ${((100 * shipped) / pre).toFixed(1)}%`,
@@ -602,7 +615,12 @@ function reportAndBar(what: string, result: Drift): void {
   expect(result.max).toBeLessThanOrEqual(75);
 }
 
-/** Every mate-floor violation: a reference mate at `depth` that `search()` at `depth + 1` loses or lengthens. */
+/**
+ * Every mate-floor violation: a reference mate at `depth` that `search()` at `depth + 1` loses or
+ * lengthens. RE-POINTED at `ABC-208` (`ADR-0050` decision 4): the deeper side is
+ * `searchWithoutNullMove`, the pre-`ABC-208` `search()`, for both rows, so the floor still
+ * measures LMR alone.
+ */
 function mateFloor(
   fens: readonly string[],
   depth: number,
@@ -613,7 +631,7 @@ function mateFloor(
     const ref = searchWithoutReductions(parseFen(fen), depth).score;
     if (!isMate(ref)) continue;
     mates++;
-    const got = search(parseFen(fen), depth + 1).score;
+    const got = searchWithoutNullMove(parseFen(fen), depth + 1).score;
     // Same sign, and no longer: a mate n plies away reads MATE_SCORE - n, so "no longer" is |got| >= |ref|.
     if (!isMate(got) || Math.sign(got) !== Math.sign(ref) || Math.abs(got) < Math.abs(ref)) {
       violations.push(`${fen}: ${ref} at depth ${depth}, ${got} at depth ${depth + 1}`);
@@ -650,6 +668,11 @@ describe("A1 — the mate-rich corpus is frozen, and the mate floor holds one pl
   }
 });
 
+/**
+ * RE-POINTED at `ABC-208` (`ADR-0050` decision 4): the shipped side of both rows is the
+ * null-move-off door of its recursion, so the bars keep measuring LMR alone and read their
+ * pre-`ABC-208` values.
+ */
 if (RUN_DEEP) {
   describe("A1 — bounded drift, search() against searchWithoutReductions and chooseMove against chooseMoveWithoutReductions [deep, SEARCH_DEEP=1]", () => {
     it("search() at fixed depth 5 on the 190: >= 95% within 25 cp, none beyond 75 cp [deep, SEARCH_DEEP=1]", () => {
@@ -657,7 +680,7 @@ if (RUN_DEEP) {
         "search() d5",
         drift(
           corpus(),
-          (fen) => search(parseFen(fen), 5).score,
+          (fen) => searchWithoutNullMove(parseFen(fen), 5).score,
           (fen) => searchWithoutReductions(parseFen(fen), 5).score,
         ),
       );
@@ -668,7 +691,7 @@ if (RUN_DEEP) {
         "chooseMove to d5",
         drift(
           corpus(),
-          (fen) => deepenTo(chooseMove, parseFen(fen), 5).score,
+          (fen) => deepenTo(chooseMoveWithoutNullMove, parseFen(fen), 5).score,
           (fen) => deepenTo(chooseMoveWithoutReductions, parseFen(fen), 5).score,
         ),
       );
@@ -686,7 +709,8 @@ if (RUN_DEEP) {
     for (const name of ["kiwipete", "position-6"]) {
       it(`${name}: chooseMove reaches depth 7 in fewer nodes than chooseMoveWithoutPvsOrReductions [deep, SEARCH_DEEP=1]`, () => {
         const fen = (ROOTS.find((root) => root.name === name) as { fen: string }).fen;
-        const shipped = deepenTo(chooseMove, parseFen(fen), 7);
+        // RE-POINTED at `ABC-208` (`ADR-0050` decision 4): the shipped side is the door.
+        const shipped = deepenTo(chooseMoveWithoutNullMove, parseFen(fen), 7);
         const pre = deepenTo(chooseMoveWithoutPvsOrReductions, parseFen(fen), 7);
         console.log(
           `ABC-121 A2 ${name}: cumulative nodes to depth 7 ${shipped.nodes} (chooseMove) vs ` +
