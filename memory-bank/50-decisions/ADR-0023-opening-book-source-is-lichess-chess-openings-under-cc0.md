@@ -5,8 +5,8 @@ kind: adr
 
 ## Status
 
-*2026-10-26:* a **PROPOSED** amendment for `ABC-211` is at the end of this file. Acceptance is the owner's. Decisions
-1–5 stand unchanged until he answers.
+*2026-10-26:* the **PROPOSED** amendment for `ABC-211` at the end of this file is **not taken**. The owner picked O0
+(`…58bcd17c` item 2). Decisions 1–5 stand unchanged.
 
 **accepted** — ratified by the project owner Olger Oeselg in session, 2026-09-19, verbatim: *"I ratify ADR-0023: the opening-book source is lichess-org/chess-openings under CC0 1.0."* Transcribed by the Orchestrator (`human_admission` is `off`; this is a hand-authored record of a human's word, not a stamp). `RISK-004` moved to *resolved* in the same commit (`A5`). `data/opening-book/ATTRIBUTION.md` (`A4`) is written by `ABC-093` at the moment it pins the upstream commit SHA — the file's own required content (the pinned SHA and read date) does not exist until the data is fetched, so writing it earlier would record a pin that was never made.
 
@@ -216,6 +216,12 @@ are not sources for a static book at all.
 ## Proposed amendment 2026-10-26 (`ABC-211`): a source for English lines past the named openings. PROPOSED
 
 ### Status
+
+**2026-10-26: not taken; the owner picked O0.** He gave the verbatim word *"accept ADR-0050, O0 for ABC-211, close
+LIC-PUB-1"* (note `.grugops/context/owner-word-2026-10-26/notes/20261026T055855Z-orchestrator-decision-58bcd17c.md`,
+item 2). No new source is added. Decisions 1–5 above are unchanged and no byte is copied. BA/PM closes `ABC-211`
+undelivered (`status: dropped`). Recorded by Architect/Design (task `arch-accept-adr0050`, records only, at `main`
+`ba74b71d`). Nothing else in this section moves.
 
 **PROPOSED** 2026-10-26 by Architect/Design (task `arch-source-ABC-211`, records only, at `main` `1df54ba6`).
 **Acceptance is the owner's.** A new or changed source and licence is his (`ABC-092`; `ADR-0012` § Status; standing
