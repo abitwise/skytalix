@@ -6,11 +6,23 @@ id: ADR-0050
 
 ## Status
 
+**ACCEPTED** 2026-10-26 by Olger Oeselg (owner), verbatim *"accept ADR-0050, O0 for ABC-211, close LIC-PUB-1"* (note
+`.grugops/context/owner-word-2026-10-26/notes/20261026T055855Z-orchestrator-decision-58bcd17c.md`, item 1). This answers
+the 2026-10-26 report below. Recorded by Architect/Design (task `arch-accept-adr0050`, records only, at `main`
+`ba74b71d`).
+
+- **ACCEPTED; in force on `main` at `ABC-208`'s merge.** Until then the null move is not on `main`. At `ba74b71d`,
+  `src/search.ts`, `src/engine.ts` and `src/apply.ts` hold no null move, and `grugops/ABC-208` is not an ancestor of
+  `main`. The QE verdict still decides that merge.
+- **If `ABC-208` does not merge (S1 NOT MET),** a dated line here records "accepted, not in force on `main`", as
+  `ADR-0026` decision 9 does.
+- This ADR assigns no § Records or drift rows, so none are applied. Nothing else in this ADR moves.
+
 **2026-10-26: still PROPOSED; reported to the owner.** On 2026-10-26 the Orchestrator reported this text to the owner as
 a yes/no (`…749ff988`; carried in `…42479486`). No answer is recorded yet, so acceptance is still the owner's. Recorded by
 Architect/Design (task `arch-records-ADR-0050`), on QE `…8c4f3e57` (`QE-208-e`). Nothing else in this ADR moves.
 
-**PROPOSED** 2026-10-26 by Architect/Design (task `arch-design-ABC-208`). **Acceptance is the owner's** (`…5aaf7cec` item
+Previously **PROPOSED** 2026-10-26 by Architect/Design (task `arch-design-ABC-208`). **Acceptance is the owner's** (`…5aaf7cec` item
 3: a new ADR is his). The Orchestrator reports this text to him (`…7feb0553` item 2) and routes the merge to wait on his
 acceptance (`…d25ab770`, reading b). No agent marks it accepted.
 
