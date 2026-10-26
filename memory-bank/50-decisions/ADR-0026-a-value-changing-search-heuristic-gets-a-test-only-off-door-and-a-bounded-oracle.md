@@ -188,6 +188,11 @@ position one move away, and six endgames.
        beyond 118 cp.
      - *(amended 2026-10-24, `OD-205-2`)* The maximum was 75 cp, `ABC-121`'s level. It became 118 cp
        (⌊1.5 × 79⌋, `ABC-205`'s reading) in both recursions. The 95% clause is unchanged.
+     - **2026-10-26: accepted, not in force on `main`.** The 118 cp rode only `ABC-205`'s branch, which closed
+       unmerged (`grugops/ABC-205-final` `b5d5cea5`). On `main` (`42f33a7a`), the two `ABC-121` d5 drift rows
+       still assert ≤ 75 cp, through one shared literal in `src/search.pvs-lmr.test.ts`. The rows are stricter
+       than this text, so this is safe. This line moves no bound. Recorded by Architect/Design (task
+       `arch-records-ADR-0050`), on Orchestrator `…749ff988` and `…42479486`.
      - *Why depth 5:* at depth 4 alone, an LMR with no re-search at all (`noResearch`) reads
        96.79% / 65 cp and stays green. Depth 5 reds it at 89.30% (`…7c1d05ab`).
    - **A one-extra-ply mate floor on the mate-rich corpus** (named below). For every position

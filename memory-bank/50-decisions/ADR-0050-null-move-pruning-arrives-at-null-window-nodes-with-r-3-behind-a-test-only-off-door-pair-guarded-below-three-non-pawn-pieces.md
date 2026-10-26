@@ -6,6 +6,10 @@ id: ADR-0050
 
 ## Status
 
+**2026-10-26: still PROPOSED; reported to the owner.** On 2026-10-26 the Orchestrator reported this text to the owner as
+a yes/no (`…749ff988`; carried in `…42479486`). No answer is recorded yet, so acceptance is still the owner's. Recorded by
+Architect/Design (task `arch-records-ADR-0050`), on QE `…8c4f3e57` (`QE-208-e`). Nothing else in this ADR moves.
+
 **PROPOSED** 2026-10-26 by Architect/Design (task `arch-design-ABC-208`). **Acceptance is the owner's** (`…5aaf7cec` item
 3: a new ADR is his). The Orchestrator reports this text to him (`…7feb0553` item 2) and routes the merge to wait on his
 acceptance (`…d25ab770`, reading b). No agent marks it accepted.

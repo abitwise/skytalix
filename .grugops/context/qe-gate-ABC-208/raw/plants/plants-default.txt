@@ -1,0 +1,95 @@
+null-in-check [default] 2 red / 2123 (15 s)
+    RED search.null-move.test.ts :: nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces in check: depth 6, ply 3 -> 0
+    RED search.null-move.test.ts :: A2 — the instrumented search makes 0 null moves in check, and 0 below three non-pawn pieces search() to depth 4 and chooseMove deepened to 4: every null move is made out of check, with three or more pie
+double-null [default] 1 red / 2123 (15 s)
+    RED search.null-move.test.ts :: nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces directly after a null move: depth 6, ply 3, after a null -> 0
+return-null-score [default] 2 red / 2123 (15 s)
+    RED search.null-move.test.ts :: both recursions try the null move through the predicate, at null-window nodes, and return beta ./search.ts: calls nullMoveReduction once, gates on alpha + 1 === beta, subtracts its value and returns bet
+    RED search.null-move.test.ts :: both recursions try the null move through the predicate, at null-window nodes, and return beta ./engine.ts: calls nullMoveReduction once, gates on alpha + 1 === beta, subtracts its value and returns bet
+no-halfmove-reset [default] 1 red / 2123 (14 s)
+    RED search.null-move.test.ts :: the null move — makeNullMove / unmakeNullMove and zobristKeyAfterNullMove passes: the side flips, the ep square clears, the halfmove clock is 0, fullmove moves as makeMove's
+no-material-guard [default] 12 red / 2123 (14 s)
+    RED search.null-move.test.ts :: nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces two non-pawn pieces: depth 6, ply 3 -> 0
+    RED search.null-move.test.ts :: nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces the OTHER side has the three: depth 6, ply 3 -> 0
+    RED search.null-move.test.ts :: nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces pawns only: depth 6, ply 3 -> 0
+    RED search.null-move.test.ts :: A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth zugzwang.001: chooseMove on a frozen clock to depth 9 plays e1f1
+    RED search.null-move.test.ts :: A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth kpk-b6c6: chooseMove on a frozen clock to depth 8 plays b6c6
+    RED search.null-move.test.ts :: A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth kpk-c6d6: chooseMove on a frozen clock to depth 8 plays c6d6
+    RED search.null-move.test.ts :: A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth kpk-d6e6: chooseMove on a frozen clock to depth 8 plays d6e6
+    RED search.null-move.test.ts :: A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth kpk-e6f6: chooseMove on a frozen clock to depth 8 plays e6f6
+    RED search.null-move.test.ts :: A2 — the instrumented search makes 0 null moves in check, and 0 below three non-pawn pieces search() to depth 4 and chooseMove deepened to 4: every null move is made out of check, with three or more pie
+    RED search.null-move.test.ts :: A2 — the instrumented search makes 0 null moves in check, and 0 below three non-pawn pieces the pawn-only endgames: no null move at all, in either recursion, to depth 6
+    RED search.test.ts :: A3 — mate is found and the shorter mate preferred returns the mating move and a score above any non-mate score, at depth 4
+    RED transposition.test.ts :: A5 — the only non-losing line repeats, and it scores exactly 0 chooseMove(), 6 ticks: depth 4, the perpetual played and scored exactly 0
+guard-1 [default] 4 red / 2123 (14 s)
+    RED search.null-move.test.ts :: nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces two non-pawn pieces: depth 6, ply 3 -> 0
+    RED search.null-move.test.ts :: A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth zugzwang.001: chooseMove on a frozen clock to depth 9 plays e1f1
+    RED search.null-move.test.ts :: A2 — the instrumented search makes 0 null moves in check, and 0 below three non-pawn pieces search() to depth 4 and chooseMove deepened to 4: every null move is made out of check, with three or more pie
+    RED transposition.test.ts :: A5 — the only non-losing line repeats, and it scores exactly 0 chooseMove(), 6 ticks: depth 4, the perpetual played and scored exactly 0
+guard-2 [default] 2 red / 2123 (14 s)
+    RED search.null-move.test.ts :: nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces two non-pawn pieces: depth 6, ply 3 -> 0
+    RED transposition.test.ts :: A5 — the only non-losing line repeats, and it scores exactly 0 chooseMove(), 6 ticks: depth 4, the perpetual played and scored exactly 0
+guard-4 [default] 3 red / 2123 (14 s)
+    RED search.null-move.test.ts :: nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces the allowed case, at the thresholds: depth 2, ply 1 -> 3
+    RED search.null-move.test.ts :: nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces far above them — still exactly 3: depth 20, ply 30 -> 3
+    RED search.null-move.test.ts :: nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces Black to move with three: depth 6, ply 3 -> 3
+R-2 [default] 4 red / 2123 (14 s)
+    RED search.null-move.test.ts :: nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces the allowed case, at the thresholds: depth 2, ply 1 -> 3
+    RED search.null-move.test.ts :: nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces far above them — still exactly 3: depth 20, ply 30 -> 3
+    RED search.null-move.test.ts :: nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces Black to move with three: depth 6, ply 3 -> 3
+    RED search.null-move.test.ts :: nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces a middlegame: depth 5, ply 2 -> 3
+R-5 [default] 4 red / 2123 (13 s)
+    RED search.null-move.test.ts :: nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces the allowed case, at the thresholds: depth 2, ply 1 -> 3
+    RED search.null-move.test.ts :: nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces far above them — still exactly 3: depth 20, ply 30 -> 3
+    RED search.null-move.test.ts :: nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces Black to move with three: depth 6, ply 3 -> 3
+    RED search.null-move.test.ts :: nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces a middlegame: depth 5, ply 2 -> 3
+min-depth-3 [default] 1 red / 2123 (12 s)
+    RED search.null-move.test.ts :: nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces the allowed case, at the thresholds: depth 2, ply 1 -> 3
+null-everywhere-finite-beta [default] 2 red / 2123 (13 s)
+    RED search.null-move.test.ts :: both recursions try the null move through the predicate, at null-window nodes, and return beta ./search.ts: calls nullMoveReduction once, gates on alpha + 1 === beta, subtracts its value and returns bet
+    RED search.null-move.test.ts :: both recursions try the null move through the predicate, at null-window nodes, and return beta ./engine.ts: calls nullMoveReduction once, gates on alpha + 1 === beta, subtracts its value and returns bet
+cut-without-search [default] 5 red / 2123 (12 s)
+    RED engine.test.ts :: A3 — an aborted iteration's move is discarded, not returned aborts INSIDE depth 3 — the run really did enter the iteration it discards
+    RED engine.test.ts :: A3 — an aborted iteration's move is discarded, not returned returns the completed depth-2 move, which is NOT the depth-3 move
+    RED engine.test.ts :: ABC-170 A2 — maxNodes aborts, and the last COMPLETED iteration is played plays search(position, d)'s move and score at the reported depth d — the abort is discarded
+    RED search.null-move.test.ts :: both recursions try the null move through the predicate, at null-window nodes, and return beta ./search.ts: calls nullMoveReduction once, gates on alpha + 1 === beta, subtracts its value and returns bet
+    RED search.null-move.test.ts :: both recursions try the null move through the predicate, at null-window nodes, and return beta ./engine.ts: calls nullMoveReduction once, gates on alpha + 1 === beta, subtracts its value and returns bet
+sign-error [default] 2 red / 2123 (12 s)
+    RED search.null-move.test.ts :: both recursions try the null move through the predicate, at null-window nodes, and return beta ./search.ts: calls nullMoveReduction once, gates on alpha + 1 === beta, subtracts its value and returns bet
+    RED search.null-move.test.ts :: both recursions try the null move through the predicate, at null-window nodes, and return beta ./engine.ts: calls nullMoveReduction once, gates on alpha + 1 === beta, subtracts its value and returns bet
+key-without-ep [default] 1 red / 2123 (13 s)
+    RED search.null-move.test.ts :: the null move — makeNullMove / unmakeNullMove and zobristKeyAfterNullMove zobristKeyAfterNullMove(zobristKey(before), undo) === zobristKey(after), ep square or not
+engine-no-finally [default] 0 red / 2123 (12 s)
+search-stale-null-key [default] 0 red / 2123 (13 s)
+engine-stale-null-key [default] 0 red / 2123 (12 s)
+null-no-ep-clear [default] 2 red / 2123 (14 s)
+    RED search.null-move.test.ts :: the null move — makeNullMove / unmakeNullMove and zobristKeyAfterNullMove passes: the side flips, the ep square clears, the halfmove clock is 0, fullmove moves as makeMove's
+    RED search.null-move.test.ts :: the null move — makeNullMove / unmakeNullMove and zobristKeyAfterNullMove zobristKeyAfterNullMove(zobristKey(before), undo) === zobristKey(after), ep square or not
+null-no-fullmove [default] 2 red / 2123 (14 s)
+    RED search.null-move.test.ts :: the null move — makeNullMove / unmakeNullMove and zobristKeyAfterNullMove passes: the side flips, the ep square clears, the halfmove clock is 0, fullmove moves as makeMove's
+    RED search.null-move.test.ts :: the null move — makeNullMove / unmakeNullMove and zobristKeyAfterNullMove unmakeNullMove leaves every position byte-identical
+engine-R-2 [default] 1 red / 2123 (14 s)
+    RED search.null-move.test.ts :: both recursions try the null move through the predicate, at null-window nodes, and return beta ./engine.ts: calls nullMoveReduction once, gates on alpha + 1 === beta, subtracts its value and returns bet
+count-opponent [default] 5 red / 2123 (14 s)
+    RED search.null-move.test.ts :: nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces the allowed case, at the thresholds: depth 2, ply 1 -> 3
+    RED search.null-move.test.ts :: nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces far above them — still exactly 3: depth 20, ply 30 -> 3
+    RED search.null-move.test.ts :: nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces Black to move with three: depth 6, ply 3 -> 3
+    RED search.null-move.test.ts :: nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces two non-pawn pieces: depth 6, ply 3 -> 0
+    RED search.null-move.test.ts :: nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces the OTHER side has the three: depth 6, ply 3 -> 0
+engine-pv-nodes-too [default] 2 red / 2123 (14 s)
+    RED engine.capacity.test.ts :: ABC-122 A8: src/engine.ts's KEY_ARRAY_CAPACITY guard, reached through chooseMove() ends every line at ply 128 with a leaf's score once the deepening passes it: no node or key past it
+    RED search.null-move.test.ts :: both recursions try the null move through the predicate, at null-window nodes, and return beta ./engine.ts: calls nullMoveReduction once, gates on alpha + 1 === beta, subtracts its value and returns bet
+door-on:searchWithoutNullMove [default] 2 red / 2123 (14 s)
+    RED search.null-move.test.ts :: the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn null move off, as every older door does search() makes null moves on position-6 at depth 4, and changes the work
+    RED search.null-move.test.ts :: the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn null move off, as every older door does searchWithoutNullMove makes no null move on position-6 at depth 4
+door-on:searchWithoutReductions [default] 1 red / 2123 (12 s)
+    RED search.null-move.test.ts :: the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn null move off, as every older door does searchWithoutReductions makes no null move on position-6 at depth 4
+door-on:searchWithoutPvsOrReductions [default] 0 red / 2123 (12 s)
+door-on:searchWithoutTable [default] 0 red / 2123 (12 s)
+door-on:chooseMoveWithoutNullMove [default] 2 red / 2123 (12 s)
+    RED search.null-move.test.ts :: the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn null move off, as every older door does chooseMove makes null moves on position-6 deepened to 4, and changes the work
+    RED search.null-move.test.ts :: the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn null move off, as every older door does chooseMoveWithoutNullMove makes no null move on position-6 deepened to 4
+door-on:chooseMoveWithoutReductions [default] 1 red / 2123 (13 s)
+    RED search.null-move.test.ts :: the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn null move off, as every older door does chooseMoveWithoutReductions makes no null move on position-6 deepened to 4
+door-on:chooseMoveWithoutPvsOrReductions [default] 0 red / 2123 (13 s)
+restored and verified equal to pristine

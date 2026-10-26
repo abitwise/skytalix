@@ -136,7 +136,7 @@ completion notification; if a pattern is unavoidable, bracket one character (`[v
 
 ### Stack
 
-TypeScript on Node (>= 22), ESM. Vitest 4.1 (module runner off) for tests, Biome for lint + format. Node runs `.ts`
+TypeScript on Node (>= 22.18), ESM. Vitest 4.1 (module runner off) for tests, Biome for lint + format. Node runs `.ts`
 files directly via built-in type stripping, so there is no bundler or transpile step in dev.
 
 ## Delivery

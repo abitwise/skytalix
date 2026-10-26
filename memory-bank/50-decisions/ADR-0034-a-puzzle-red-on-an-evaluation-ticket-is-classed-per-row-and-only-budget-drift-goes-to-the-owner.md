@@ -311,6 +311,11 @@ Proposed by Architect/Design (task `wave-2026-09-25`, subtask `design-ABC-083-re
      *(Pointer 2026-10-24, `OD-205-2`: that ceiling is now 118 cp, `ADR-0026` § Proposed amendment 2026-10-24,
      accepted. So this bar reads 118 cp for later L re-finds only. Decision 2's screen and retained rows do not
      change.)*
+   - **2026-10-26: accepted, not in force on `main`.** The pointer's 118 cp rode only `ABC-205`'s branch, which
+     closed unmerged (`grugops/ABC-205-final` `b5d5cea5`). On `main` (`08b44f94`), the two `ABC-121` d5 drift
+     rows still assert ≤ 75 cp, through one shared literal in `src/search.pvs-lmr.test.ts`; `ADR-0026` decision
+     9 carries the same dated line. For this bar a larger ceiling is the stricter reading, the reverse of
+     `ADR-0026` d9. This line moves no bound. Recorded by Architect/Design (task `arch-records-housekeeping`).
    - At d, fixed-depth `search()` and the suite's call must both play an accepted move.
    - **Why ± 1:** an evaluation term moves the solving depth by one ply (decision 3's shallower class). Seed
      1917 is the case. It leads by 195 cp at d5, but only by 20 cp at d6.

@@ -1,0 +1,7 @@
+engine-no-finally [deepall] 0 red / 385 (192 s)
+search-stale-null-key [deepall] 0 red / 385 (179 s)
+engine-stale-null-key [deepall] 0 red / 385 (178 s)
+door-on:searchWithoutPvsOrReductions [deepall] 0 red / 385 (178 s)
+door-on:searchWithoutTable [deepall] 0 red / 385 (178 s)
+door-on:chooseMoveWithoutPvsOrReductions [deepall] 0 red / 385 (178 s)
+restored and verified equal to pristine

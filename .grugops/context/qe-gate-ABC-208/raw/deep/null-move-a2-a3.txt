@@ -1,0 +1,12 @@
+ ✓ src/search.null-move.test.ts > A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth > seven rows, each with its source, at depths 8 to 12 0ms
+ ✓ src/search.null-move.test.ts > A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth > zugzwang.001: chooseMove on a frozen clock to depth 9 plays e1f1 191ms
+ ✓ src/search.null-move.test.ts > A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth > zugzwang.004: chooseMove on a frozen clock to depth 11 plays h3h4 [deep, SEARCH_DEEP=1] 2254ms
+ ✓ src/search.null-move.test.ts > A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth > zugzwang.005: chooseMove on a frozen clock to depth 12 plays f4d5 [deep, SEARCH_DEEP=1] 8431ms
+ ✓ src/search.null-move.test.ts > A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth > kpk-b6c6: chooseMove on a frozen clock to depth 8 plays b6c6 4ms
+ ✓ src/search.null-move.test.ts > A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth > kpk-c6d6: chooseMove on a frozen clock to depth 8 plays c6d6 5ms
+ ✓ src/search.null-move.test.ts > A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth > kpk-d6e6: chooseMove on a frozen clock to depth 8 plays d6e6 5ms
+ ✓ src/search.null-move.test.ts > A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth > kpk-e6f6: chooseMove on a frozen clock to depth 8 plays e6f6 4ms
+ABC-208 A3 search() d5: 100.00% within 25 cp of 187, max 25 cp (position-5/e1f2: -228 -> -203); mate-status flips on the 190: 0 (a report, not a bar)
+ABC-208 A3 chooseMove to d5: 100.00% within 25 cp of 187, max 8 cp (position-6/f3d4: 565 -> 573); mate-status flips on the 190: 0 (a report, not a bar)
+ABC-208 A3 mate floor d5 -> d5: 0 of 189 violated
+      Tests  39 passed (39)

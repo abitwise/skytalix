@@ -1,0 +1,64 @@
+roots startpos done
+roots kiwipete done
+roots position-3 done
+roots position-4 done
+roots position-5 done
+roots position-6 done
+A1 (roots): 258/258 cells equal in move, score and nodes (engine: and depth)
+  search():searchWithoutNullMove: 24/24
+  searchWithoutPruning:searchWithoutPruning: 18/18
+  searchWithoutQuiescence:searchWithoutQuiescence: 24/24
+  searchWithoutPruningOrQuiescence:searchWithoutPruningOrQuiescence: 18/18
+  searchWithoutOrdering:searchWithoutOrdering: 24/24
+  searchWithoutKillers:searchWithoutKillers: 24/24
+  searchWithoutTable:searchWithoutTable: 24/24
+  searchWithoutReductions:searchWithoutReductions: 24/24
+  searchWithoutPvsOrReductions:searchWithoutPvsOrReductions: 24/24
+  chooseMove:chooseMoveWithoutNullMove: 18/18
+  chooseMoveWithoutReductions:chooseMoveWithoutReductions: 18/18
+  chooseMoveWithoutPvsOrReductions:chooseMoveWithoutPvsOrReductions: 18/18
+mismatches: 0
+unpruned-door cells skipped above depth 3: {"searchWithoutPruning":6,"searchWithoutPruningOrQuiescence":6}
+bite (head shipped differs from base shipped): search 10/24, engine 15/18
+  search roots:startpos:d1: SAME base 21 head 21 score 66/66
+  search roots:startpos:d2: SAME base 89 head 89 score 0/0
+  search roots:startpos:d3: DIFF base 880 head 415 score 66/66
+  search roots:startpos:d4: DIFF base 1301 head 426 score 56/56
+  engine roots:startpos:maxDepth3: DIFF base 637 head 214 score 66/66
+  engine roots:startpos:maxDepth5: DIFF base 5357 head 2535 score 38/38
+  engine roots:startpos:maxDepth6: DIFF base 28996 head 22778 score 27/0
+  search roots:kiwipete:d1: SAME base 878 head 878 score 97/97
+  search roots:kiwipete:d2: SAME base 2653 head 2653 score 30/30
+  search roots:kiwipete:d3: DIFF base 5828 head 6278 score 8/8
+  search roots:kiwipete:d4: DIFF base 18079 head 18522 score 8/8
+  engine roots:kiwipete:maxDepth3: DIFF base 9356 head 9806 score 8/8
+  engine roots:kiwipete:maxDepth5: DIFF base 74429 head 86891 score -3/-3
+  engine roots:kiwipete:maxDepth6: DIFF base 248056 head 309541 score -54/-54
+  search roots:position-3:d1: SAME base 15 head 15 score 105/105
+  search roots:position-3:d2: SAME base 73 head 73 score 108/108
+  search roots:position-3:d3: SAME base 336 head 336 score 120/120
+  search roots:position-3:d4: SAME base 1099 head 1099 score 124/124
+  engine roots:position-3:maxDepth3: SAME base 336 head 336 score 120/120
+  engine roots:position-3:maxDepth5: SAME base 2183 head 2183 score 116/116
+  engine roots:position-3:maxDepth6: SAME base 6154 head 6154 score 101/101
+  search roots:position-4:d1: SAME base 1279 head 1279 score -329/-329
+  search roots:position-4:d2: SAME base 1331 head 1331 score -360/-360
+  search roots:position-4:d3: DIFF base 7060 head 7065 score -339/-339
+  search roots:position-4:d4: DIFF base 8252 head 15114 score -411/-411
+  engine roots:position-4:maxDepth3: DIFF base 4669 head 4674 score -339/-339
+  engine roots:position-4:maxDepth5: DIFF base 18500 head 20503 score -459/-459
+  engine roots:position-4:maxDepth6: DIFF base 37570 head 40650 score -459/-459
+  search roots:position-5:d1: SAME base 65 head 65 score 569/569
+  search roots:position-5:d2: SAME base 385 head 385 score 569/569
+  search roots:position-5:d3: DIFF base 1917 head 1887 score 569/569
+  search roots:position-5:d4: DIFF base 8882 head 7666 score 520/520
+  engine roots:position-5:maxDepth3: DIFF base 2364 head 2334 score 569/569
+  engine roots:position-5:maxDepth5: DIFF base 20949 head 15052 score 548/548
+  engine roots:position-5:maxDepth6: DIFF base 83107 head 31245 score 503/503
+  search roots:position-6:d1: SAME base 611 head 611 score 14/14
+  search roots:position-6:d2: SAME base 4104 head 4104 score 85/85
+  search roots:position-6:d3: DIFF base 10504 head 9417 score 85/85
+  search roots:position-6:d4: DIFF base 19403 head 11688 score 85/85
+  engine roots:position-6:maxDepth3: DIFF base 7997 head 7354 score 85/85
+  engine roots:position-6:maxDepth5: DIFF base 38943 head 21208 score 91/91
+  engine roots:position-6:maxDepth6: DIFF base 180658 head 52265 score 87/87
