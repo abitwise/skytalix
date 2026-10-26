@@ -31,7 +31,10 @@ loop).** The renderer, the panels, the frame assembler/writer and the turn loop 
 
 **There is still no barrel and no entry module** — consumers deep-import a file by path, and
 `AGENTS.md` records `Dev / run` as `UNKNOWN - verify` because nothing starts a game. `EPIC-006`
-owns the first entry point; `ADR-0011` clause 4 already classifies what one is.
+owns the first entry point; `ADR-0011` clause 4 already classifies what one is. *2026-10-26 (`ABC-042`,
+`ABC-168`): the entry half is no longer true. `src/cli.ts` is the entry point that starts a game (`npm run chess`)
+since `ABC-042` (`e1403550`, 2026-08-15), and `src/uci.ts` (`npm run uci`) since `ABC-168` (`825b21d1`);
+`AGENTS.md` records `Dev / run` as `npm run chess`. The barrel half still holds: no `src/` module re-exports another.*
 
 ## Key components
 
@@ -117,8 +120,12 @@ TypeScript on Node >= 22, ESM. *2026-10-26 (`QE-216-h`): the floor now reads Nod
 transpile step; intra-repo imports carry explicit `.ts` extensions (`allowImportingTsExtensions`,
 `verbatimModuleSyntax`). Vitest for tests, Biome for lint and format. **There is no
 `vitest.config.ts`** — the runner runs on defaults, which is why `pool: "threads"` is a two-line
-change and why `ADR-0008` prices it as one. `npm run build` is `tsc --noEmit` — a typecheck, not an
-emit, because nothing is published until `EPIC-006`. `spike/perft-bench.ts` (`npm run spike:perft`)
+change and why `ADR-0008` prices it as one. *2026-10-26 (`ABC-026`): no longer true. `vitest.config.ts`
+exists since `ABC-026` (`acbddf43`, 2026-08-13), and it now also pins `test.maxWorkers: 2` (`ABC-144`,
+`50-decisions/ADR-0040` addendum 2).* `npm run build` is `tsc --noEmit` — a typecheck, not an
+emit, because nothing is published until `EPIC-006`. *2026-10-26 (`ABC-168`): no longer true. `npm run build`
+is `tsc -p tsconfig.build.json` and emits `dist/uci.js` since `ABC-168` (`825b21d1`, `50-decisions/ADR-0044`
+D8); `tsc --noEmit` is now `npm run typecheck`.* `spike/perft-bench.ts` (`npm run spike:perft`)
 is `ABC-008`'s throwaway harness and is not production. Commands live in `AGENTS.md`.
 
 **The default test lane has a ratified budget — `NFR-008` / `ADR-0008`, 3 s wall AND 13 s CPU** —
@@ -140,7 +147,11 @@ bullet below was RE-VERIFIED at this hop, 2026-08-12, and all five still hold:**
   no `.github/workflows/`.
 - **Nothing publishable and nothing to run.** `package.json` is `private` with no `main`, `exports`
   or `bin` and no `start` script; the build emits nothing (`tsc --noEmit`, no `dist/`); `src/` has
-  no entry module. `AGENTS.md` records `Dev / run: UNKNOWN - verify` for that reason.
+  no entry module. `AGENTS.md` records `Dev / run: UNKNOWN - verify` for that reason. *2026-10-26 (`ABC-042`,
+  `ABC-168`): no longer true in part. `npm run chess` runs `src/cli.ts` since `ABC-042` (`e1403550`), and
+  `npm run uci` runs `src/uci.ts`; `package.json` has a `bin` (`dist/uci.js`) and `npm run build` emits `dist/`
+  since `ABC-168` (`825b21d1`). `AGENTS.md` § Development lists both commands. Still true: `private`, no `main`,
+  `exports` or `start` script. Nothing is deployed, published or released.*
 - **Nowhere to push.** The repo has no git remote. *2026-10-24 (`ADR-0049` row 33): no longer true. The
   owner added a remote on 2026-10-23 and the source is public on GitHub. Pushing is the owner's. Nothing is
   deployed, published or released (`50-decisions/ADR-0049`).*
