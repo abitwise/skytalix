@@ -1,17 +1,22 @@
 ---
 id: ABC-210
 title: "Checks at the horizon: a check extension, or checks in the first quiescence ply, behind an ADR-0026 door and bounded in growth"
-status: ready
-column: Ready
+status: dropped
+column: Done
 size: M
 priority: P3
 epic: EPIC-008
 feature: —
-adr: "new ADR-0051 (PROPOSED 2026-10-27; acceptance is the owner's): form (a) at the horizon; it reverses no recorded decision (ADR-0024 d4 and src/quiescence.ts:21-24 stand), plus an ADR-0026 off-door pair (amended 2026-10-27, bapm-amend-ABC-210)"
+adr: "ADR-0051 (form (a) at the horizon plus an ADR-0026 off-door pair): ACCEPTED by the owner 2026-10-27 (…047d411f), with P2 (ADR-0050 d9, zugzwang.005 d12 → d13); NOT in force on main: ABC-210 closed unmerged under S1 on 2026-10-27, and P2 did not land (the ADRs' dated lines are the Architect's, arch-adr0051-not-in-force)"
 ---
 
 # ABC-210: checks at the horizon
 
+> **CLOSED UNMERGED 2026-10-27 under ship rule S1. Not delivered.** BA/PM, task `bapm-s1-ABC-210`. D was NEUTRAL
+> (pooled over 800 games, −4.8 ± 16.2), so S1 is NOT MET. `A1`–`A4` and `A6` were MET, `G6` and `G2` included. S1's
+> one re-tune round is not taken. The code stays on `grugops/ABC-210` `a96f36b0`. This was the epic's last engine
+> change. See § Close.
+>
 > **Cut 2026-10-23 by BA/PM** (task `bapm-cut-engine-strength`, records only, at `main` `55a8f4ef`). Proposal 7 of
 > `…f1771bb3`; owner word `…7feb0553`.
 >
@@ -123,6 +128,8 @@ adr: "new ADR-0051 (PROPOSED 2026-10-27; acceptance is the owner's): form (a) at
   - *2026-10-27 (BA/PM, `bapm-ready-ABC-210`):* one reading, final (`…4c3f7639`). The D budget is `ABC-204`'s frozen
     1 500 ms. Not GAIN after the one extension means not merged, as with `ABC-205`, `ABC-207` and `ABC-209`, each
     closed under S1. A re-tune reading needs the owner's word.
+  - *2026-10-27 (BA/PM, `bapm-s1-ABC-210`):* **NOT MET.** d1 NEUTRAL −1.7 ± 22.8, the one extension d2 NEUTRAL
+    −7.8 ± 23.0, pooled over 800 games NEUTRAL −4.78 ± 16.21 (`…b953e670`, `…86b45c13`). Not merged; § Close.
 - **`A6` (the ADR).** The ADR exists, states the form and the cap, and records that it was reported to the owner.
 
 ## NFR triggers
@@ -405,3 +412,59 @@ and P1 / P2 once routed. A split would ship a door with nothing behind it, and i
   - test note 3: the stop reads against "≥ base".
 - **Engineer:** `src/search.ts`'s and `src/engine.ts`'s headers gain the extension paragraph; `src/quiescence.ts:21-24`
   stays as written.
+
+## Close
+
+> **BA/PM, 2026-10-27** (task `bapm-s1-ABC-210`, records only, at `main` `06c1ecc8`). Inputs: QE `…b953e670`,
+> `…86b45c13`, `…e7597a78` (and `…8b5e45fd`, `…bd87e22e`; `QE-210-a` to `-d`), and the Orchestrator's routing
+> `…85e9c9b2`. The form follows `bapm-s1-ABC-209` (`…492fb6ce`). The call is a delivery call under `…5aaf7cec`. The
+> owner is told, and his veto is open. Notes: `.grugops/context/bapm-s1-ABC-210/notes/`.
+
+**Closed unmerged under S1.** S1 says that anything other than GAIN is NOT MET, and that BA/PM then "closes or re-cuts
+it". This ticket is closed.
+
+- **The reading.** `A5` NOT MET. d1 was NEUTRAL, −1.7 ± 22.8, so the one extension ran. d2 read −7.8 ± 23.0. Pooled
+  over 800 games (176/187/437), it is **−4.78 ± 16.21: NEUTRAL** (X − Y = −20.98). The grade is the same without the
+  games that overlapped a foreign test lane, without the games at load1 > 8, and split by power source (`QE-210-d`).
+  `A1`–`A4` and `A6` were MET: `A1` 6 156 of 6 156 cross-build cells, the pre-check 8 of 8 equal, `G6` MET against
+  "≥ base" (8 = 8, 9 = 9), `G2` MET, `G1` 54 of 58. Under `…4c3f7639` the reading is final.
+- **It was a fair test.** The candidate's built `dist/` carried the extension and the base's did not, and `G6` read the
+  change (head is not node-equal to base). No production-code defect was found. The idea was measured, and no gain
+  showed.
+- **S1's one re-tune round is not taken, and no re-tune question goes to the owner.** Four reasons:
+  - **No variant is predicted to clear.** The design probe already tried the knobs (`…c5d0e464`): caps 1, 2, 3 and
+    none count within 0.1 %, so the cap tunes nothing. +2 plies fails `A2`. An extension at every node in check fails
+    `A3` (1.69×) and reads `G1` 53/58. A PV-only form was close to a no-op and still moves P1. Form (b) reverses
+    `ADR-0024` d4 (the owner's) and reads `G1` 53/58. Each of these is a new design or a failed bar, not a re-tune.
+    In game 1 a check-extension probe changed none of the five errors (§ Problem).
+  - **Reading the same build again is barred.** `…86b45c13` says "do not retry as is", and `…4c3f7639` makes this
+    reading final. If the true effect were the −4.8 point estimate, a new 800-game reading would show GAIN about 1 time
+    in 180 (my arithmetic: X needs about +21 more, against a standard error of about 8.3).
+  - **The cost.** The two D halves took about 11.5 h (d1 5.7 h, d2 5.8 h), and the ALONE claim was held about 12.7 h.
+    A re-tune adds a build, an ADR change, a QE hop and a second real-clock reading beyond `…4c3f7639`, which needs the
+    owner's word.
+  - **`P3`, low value, and it holds the epic's close.** The closing `M1` R reading waits on this ticket (`EPIC-008`
+    § Tickets, the close path).
+- **What is kept.**
+  - `grugops/ABC-210` at `a96f36b0` (the build) and `grugops/qe-ABC-210` at `16032408` (QE's records, brought to `main`
+    by path only). Neither is merged or deleted.
+  - The failed attempt `…86b45c13`. `a96f36b0` is not read again as it is.
+- **`main` is clean.** `git diff a17d5945 06c1ecc8 -- src data tools` is empty, so no revert is owed. On `main`,
+  `zugzwang.005` stays at depth 12 and P1's fixture row stays at depth 3 (both moved only on the unmerged branch).
+- **`ADR-0051`:** accepted by the owner (`…047d411f`), and not in force on `main`. P2's `ADR-0050` d9 change did not
+  land. Both dated lines are the Architect's (`arch-adr0051-not-in-force`, as `ADR-0025` D4 and `ADR-0026` d9 did).
+  This page's `adr:` line says the same. The `AGENTS.md` check-extension lane line does not land (`…85e9c9b2` item 3).
+- **Not owed.** `QE-210-a` and `-c` are INFO. `QE-210-d` (host) does not change the grade. `QE-207-g` (the ALONE claim
+  TTL) is the Orchestrator's, and it recurred here.
+- **`QE-210-b` (LOW, closed as a blind spot), for any re-cut.** An extended node does not itself test the
+  dead-position or 75-move draws, and no row exercises that. QE found no value effect: a dead position cannot change
+  value, and 942 cells at clock 149 showed none. A value could move only at clock ≥ 150, the same class as every
+  interior node today, and D games never get there. A re-cut that extends at the horizon carries this line into its
+  test notes, with the decision (a row, or the blind spot stated again) left to its design hop.
+- **The re-open path.**
+  - **The owner vetoes the close.** The page goes back to Backlog (Blocked), and one re-tune round is cut on his
+    word. It names what changes (a form or a bar the probe has not already failed), and it owes its own pre-check,
+    `A1`–`A4`, `G2`, `G6`, D under S1 and the `QE-210-b` line. The epic's closing R reading then waits for its verdict.
+  - **A later re-cut.** BA/PM cuts a new ticket from `a96f36b0`. Whether that counts as a new ticket's single reading
+    or a second reading of this one is the owner's reading of `…4c3f7639`. Until he says, it is read as a second one.
+- **Not touched here:** `src/`, `NFR-005`, `ADR-0051`, `ADR-0050`, `AGENTS.md`, and `EPIC-008`'s gate rows.
