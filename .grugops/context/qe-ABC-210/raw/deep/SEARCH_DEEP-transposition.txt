@@ -1,0 +1,61 @@
+
+ RUN  v4.1.12 <worktree>
+
+ ✓ src/transposition.test.ts > A4 — a mate score is correct at every ply the position is reached at > a mate-in-2 stored at ply 1 reads MATE_SCORE - 4 at ply 1 and MATE_SCORE - 6 at ply 3 2ms
+ ✓ src/transposition.test.ts > A4 — a mate score is correct at every ply the position is reached at > a mated-in-2 stored at ply 2 reads -(MATE_SCORE - 6) at ply 2 and -(MATE_SCORE - 8) at ply 4 0ms
+ ✓ src/transposition.test.ts > A4 — a mate score is correct at every ply the position is reached at > leaves an ordinary score alone at every ply 0ms
+ ✓ src/transposition.test.ts > A4 — a mate score is correct at every ply the position is reached at > MATE_FLOOR sits below every mate score the search can report 0ms
+ ✓ src/transposition.test.ts > A4 — a mate score is correct at every ply the position is reached at > reports the table-free mate distance where the engine reuses a mate score at a second ply [deep, SEARCH_DEEP=1] 2394ms
+ ✓ src/transposition.test.ts > the table — verified keys, always-replace, cutoffs only at the stored depth > finds an entry by its own key, and not by another key that shares its slot 0ms
+ ✓ src/transposition.test.ts > the table — verified keys, always-replace, cutoffs only at the stored depth > always replaces: a second position in the slot evicts the first 0ms
+ ✓ src/transposition.test.ts > the table — verified keys, always-replace, cutoffs only at the stored depth > is empty after clearTable 0ms
+ ✓ src/transposition.test.ts > the table — verified keys, always-replace, cutoffs only at the stored depth > settles a node only at the depth the entry was searched to 0ms
+ ✓ src/transposition.test.ts > the table — verified keys, always-replace, cutoffs only at the stored depth > cuts on a lower bound only at or above beta, on an upper bound only at or below alpha 0ms
+ ✓ src/transposition.test.ts > the table — verified keys, always-replace, cutoffs only at the stored depth > classifies a fail-soft result against the window the node was entered with 0ms
+ ✓ src/transposition.test.ts > the table — verified keys, always-replace, cutoffs only at the stored depth > returns the stored best move from the node's own list, underpromotion kept distinct 0ms
+ ✓ src/transposition.test.ts > A1 — table-on and table-off scores are identical > startpos at depth 4 [deep, SEARCH_DEEP=1] 28ms
+ ✓ src/transposition.test.ts > A1 — table-on and table-off scores are identical > kiwipete at depth 4 [deep, SEARCH_DEEP=1] 132ms
+ ✓ src/transposition.test.ts > A1 — table-on and table-off scores are identical > position-4 at depth 4 [deep, SEARCH_DEEP=1] 50ms
+ ✓ src/transposition.test.ts > A1 — table-on and table-off scores are identical > position-5 at depth 4 [deep, SEARCH_DEEP=1] 54ms
+stdout | src/transposition.test.ts > A2 — the hit rate is reported and is at least 10% > kiwipete at depth 5 [deep, SEARCH_DEEP=1]
+ABC-081 A2 kiwipete: fixed depth 5 16.00%, iterative deepening to 5 39.58%
+
+ ✓ src/transposition.test.ts > A1 — table-on and table-off scores are identical > position-6 at depth 4 [deep, SEARCH_DEEP=1] 153ms
+ ✓ src/transposition.test.ts > A1 — table-on and table-off scores are identical > knight-g1 w K at depth 4 — G6: 939 with the table on and off 3ms
+ ✓ src/transposition.test.ts > A1 — table-on and table-off scores are identical > knight-g1 w - at depth 4 — G6: 939 with the table on and off 2ms
+ ✓ src/transposition.test.ts > A1 — table-on and table-off scores are identical > G6 bites: the knight-g1 pair keys differently — the subtrees differ, so they must 0ms
+ ✓ src/transposition.test.ts > A1 — table-on and table-off scores are identical > position-3 at depth 4 — the same score, and the work changes: 1 377 nodes with the table, 1 533 without 7ms
+ ✓ src/transposition.test.ts > A2 — the hit rate is reported and is at least 10% > position-3 at depth 4 — the default lane's standing guard 4ms
+stdout | src/transposition.test.ts > A2 — the hit rate is reported and is at least 10% > position-6 at depth 5 [deep, SEARCH_DEEP=1]
+ABC-081 A2 position-6: fixed depth 5 15.41%, iterative deepening to 5 40.65%
+
+ ✓ src/transposition.test.ts > A2 — the hit rate is reported and is at least 10% > kiwipete at depth 5 [deep, SEARCH_DEEP=1] 693ms
+stdout | src/transposition.test.ts > A3 — iterative deepening with the table visits <= 70% of the nodes it visits without > kiwipete deepened to depth 5: <= 70% [deep, SEARCH_DEEP=1]
+ABC-081 A3 kiwipete to depth 5: 144149 / 236622 = 60.92%
+
+ ✓ src/transposition.test.ts > A2 — the hit rate is reported and is at least 10% > position-6 at depth 5 [deep, SEARCH_DEEP=1] 505ms
+ ✓ src/transposition.test.ts > A3 — iterative deepening with the table visits <= 70% of the nodes it visits without > position-3 deepened to depth 4 — the default lane's standing guard 7ms
+stdout | src/transposition.test.ts > A3 — iterative deepening with the table visits <= 70% of the nodes it visits without > position-6 deepened to depth 5: <= 70% [deep, SEARCH_DEEP=1]
+ABC-081 A3 position-6 to depth 5: 110520 / 188793 = 58.54%
+
+ ✓ src/transposition.test.ts > A3 — iterative deepening with the table visits <= 70% of the nodes it visits without > kiwipete deepened to depth 5: <= 70% [deep, SEARCH_DEEP=1] 863ms
+ ✓ src/transposition.test.ts > A3 — iterative deepening with the table visits <= 70% of the nodes it visits without > position-6 deepened to depth 5: <= 70% [deep, SEARCH_DEEP=1] 644ms
+ ✓ src/transposition.test.ts > A5 — the only non-losing line repeats, and it scores exactly 0 > search(), depth 4: the perpetual scores exactly 0 and is played — in 7 295 nodes 26ms
+ ✓ src/transposition.test.ts > A5 — the only non-losing line repeats, and it scores exactly 0 > the fixture bites: at depth 2 the repetition is past the horizon, and the rook down shows 1ms
+ ✓ src/transposition.test.ts > A5 — the only non-losing line repeats, and it scores exactly 0 > chooseMove(), 6 ticks: depth 4, the perpetual played and scored exactly 0 6ms
+ ✓ src/transposition.test.ts > A5 — the only non-losing line repeats, and it scores exactly 0 > white to move, one move outside the cycle: the engine reaches depth 5 and scores 0 [deep, SEARCH_DEEP=1] 13ms
+ ✓ src/transposition.test.ts > A5 — the only non-losing line repeats, and it scores exactly 0 > white to move: 0 at depths 5 and 6, table on and off, and the saving move played [deep, SEARCH_DEEP=1] 203ms
+ ✓ src/transposition.test.ts > A5 — the only non-losing line repeats, and it scores exactly 0 > white to move: the fixture bites — at depth 4 the repetition is past the horizon and it loses [deep, SEARCH_DEEP=1] 6ms
+ ✓ src/transposition.test.ts > A5 — the only non-losing line repeats, and it scores exactly 0 > black to move: 0 at depths 5 and 6, table on and off, and the saving move played [deep, SEARCH_DEEP=1] 194ms
+ ✓ src/transposition.test.ts > A5 — the only non-losing line repeats, and it scores exactly 0 > black to move: the fixture bites — at depth 4 the repetition is past the horizon and it loses [deep, SEARCH_DEEP=1] 5ms
+ ✓ src/transposition.test.ts > A6 — the per-ply key array is the search's own > no delivered search module imports src/history.ts (ADR-0002 clause 3) 1ms
+ ✓ src/transposition.test.ts > A6 — the per-ply key array is the search's own > search() allocates ONE key array per call, whatever the depth and node count 3ms
+ ✓ src/transposition.test.ts > A6 — the per-ply key array is the search's own > chooseMove() allocates ONE key array per call, across all its iterations 1ms
+ ✓ src/transposition.test.ts > A7 — the table holds a fixed 4 MiB, whatever the search > is 2^18 slots of 16 bytes: exactly 4 MiB, before and after searches of any size 3ms
+ ✓ src/transposition.test.ts > A7 — the table holds a fixed 4 MiB, whatever the search > stays inside NFR-009's 16 MiB with the key array beside it 0ms
+
+ Test Files  1 passed (1)
+      Tests  40 passed (40)
+   Start at  09:01:43
+   Duration  6.16s (transform 0ms, setup 0ms, import 79ms, tests 6.00s, environment 0ms)
+

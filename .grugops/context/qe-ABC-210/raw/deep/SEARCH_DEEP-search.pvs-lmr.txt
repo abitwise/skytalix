@@ -1,0 +1,62 @@
+
+ RUN  v4.1.12 <worktree>
+
+ ✓ src/search.pvs-lmr.test.ts > PVS identity — searchWithoutReductions scores what searchWithoutPvsOrReductions scores > the corpus is the ruling's 190 positions 11ms
+ ✓ src/search.pvs-lmr.test.ts > PVS identity — searchWithoutReductions scores what searchWithoutPvsOrReductions scores > kp-vs-k at depth 4 — the default lane's standing guard 5ms
+ ✓ src/search.pvs-lmr.test.ts > PVS identity — searchWithoutReductions scores what searchWithoutPvsOrReductions scores > the default-lane guard bites: PVS really does change the work at depth 4 12ms
+ ✓ src/search.pvs-lmr.test.ts > PVS identity — searchWithoutReductions scores what searchWithoutPvsOrReductions scores > the engine doors bite: chooseMoveWithoutReductions is the unreduced engine, not chooseMove 13ms
+stdout | src/search.pvs-lmr.test.ts > A5 — search() visits fewer nodes than searchWithoutPvsOrReductions at depth 4 > position-3 at depth 4 — the default lane's standing guard
+ABC-121 A5 position-3 d4: 1099 / 1377 = 79.8%
+
+stdout | src/search.pvs-lmr.test.ts > A5 — search() visits fewer nodes than searchWithoutPvsOrReductions at depth 4 > kiwipete at depth 4 — the criterion's own positions [deep, SEARCH_DEEP=1]
+ABC-121 A5 kiwipete d4: 18079 / 23802 = 76.0%
+
+ ✓ src/search.pvs-lmr.test.ts > PVS identity — searchWithoutReductions scores what searchWithoutPvsOrReductions scores > all 190 positions at depth 4 [deep, SEARCH_DEEP=1] 15923ms
+ ✓ src/search.pvs-lmr.test.ts > A3 — lateMoveReduction: one ply for a late quiet move, and never for a move that must be searched > the allowed case, at the thresholds: g1h1 at depth 3, index 3 -> 1 0ms
+ ✓ src/search.pvs-lmr.test.ts > A3 — lateMoveReduction: one ply for a late quiet move, and never for a move that must be searched > the allowed case, far above them — still exactly one ply: g1h1 at depth 9, index 30 -> 1 0ms
+ ✓ src/search.pvs-lmr.test.ts > A3 — lateMoveReduction: one ply for a late quiet move, and never for a move that must be searched > a capture: a1a5 at depth 9, index 30 -> 0 0ms
+ ✓ src/search.pvs-lmr.test.ts > A3 — lateMoveReduction: one ply for a late quiet move, and never for a move that must be searched > a promotion: b7b82 at depth 9, index 30 -> 0 0ms
+ ✓ src/search.pvs-lmr.test.ts > A3 — lateMoveReduction: one ply for a late quiet move, and never for a move that must be searched > a checking move: a1e1 at depth 9, index 30 -> 0 0ms
+ ✓ src/search.pvs-lmr.test.ts > A3 — lateMoveReduction: one ply for a late quiet move, and never for a move that must be searched > a move made while in check: g1g2 at depth 9, index 30 -> 0 0ms
+ ✓ src/search.pvs-lmr.test.ts > A3 — lateMoveReduction: one ply for a late quiet move, and never for a move that must be searched > move index 2, below 3: g1h1 at depth 9, index 2 -> 0 0ms
+ ✓ src/search.pvs-lmr.test.ts > A3 — lateMoveReduction: one ply for a late quiet move, and never for a move that must be searched > remaining depth 2, below 3: g1h1 at depth 2, index 30 -> 0 0ms
+ ✓ src/search.pvs-lmr.test.ts > A3 — lateMoveReduction: one ply for a late quiet move, and never for a move that must be searched > the root: g1h1 at depth 9, index 30, root -> 0 0ms
+ ✓ src/search.pvs-lmr.test.ts > A3 — lateMoveReduction: one ply for a late quiet move, and never for a move that must be searched > the fixtures bite: each row's move really is what the row says it is 0ms
+ ✓ src/search.pvs-lmr.test.ts > A3 — both recursions route every reduction through the predicate, subtracting what it returns > ./search.ts: calls lateMoveReduction and subtracts its value, never a literal 1ms
+ ✓ src/search.pvs-lmr.test.ts > A3 — both recursions route every reduction through the predicate, subtracting what it returns > ./engine.ts: calls lateMoveReduction and subtracts its value, never a literal 0ms
+ ✓ src/search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one > search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions 10ms
+ ✓ src/search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one > chooseMove(): the same, deepened to depth 4 in the engine's own recursion 11ms
+ ✓ src/search.pvs-lmr.test.ts > A5 — search() visits fewer nodes than searchWithoutPvsOrReductions at depth 4 > position-3 at depth 4 — the default lane's standing guard 6ms
+stdout | src/search.pvs-lmr.test.ts > A5 — search() visits fewer nodes than searchWithoutPvsOrReductions at depth 4 > position-6 at depth 4 — the criterion's own positions [deep, SEARCH_DEEP=1]
+ABC-121 A5 position-6 d4: 19403 / 31721 = 61.2%
+
+ ✓ src/search.pvs-lmr.test.ts > A5 — search() visits fewer nodes than searchWithoutPvsOrReductions at depth 4 > kiwipete at depth 4 — the criterion's own positions [deep, SEARCH_DEEP=1] 100ms
+stdout | src/search.pvs-lmr.test.ts > A1 — the mate-rich corpus is frozen, and the mate floor holds one ply deeper > all 287: every mate searchWithoutReductions sees at depth 4, search() sees at depth 5, same sign, no longer [deep, SEARCH_DEEP=1]
+ABC-121 A1 mate floor d4 -> d5: 0 of 180 violated
+
+ ✓ src/search.pvs-lmr.test.ts > A5 — search() visits fewer nodes than searchWithoutPvsOrReductions at depth 4 > position-6 at depth 4 — the criterion's own positions [deep, SEARCH_DEEP=1] 116ms
+ ✓ src/search.pvs-lmr.test.ts > A1 — the mate-rich corpus is frozen, and the mate floor holds one ply deeper > src/search.mate-corpus.ts holds 287 positions, the seven seeds among them — the length pin 0ms
+ ✓ src/search.pvs-lmr.test.ts > A1 — the mate-rich corpus is frozen, and the mate floor holds one ply deeper > the seven seeds at depth 4 [deep, SEARCH_DEEP=1] 24ms
+stdout | src/search.pvs-lmr.test.ts > A1 — bounded drift, search() against searchWithoutReductions and chooseMove against chooseMoveWithoutReductions [deep, SEARCH_DEEP=1] > search() at fixed depth 5 on the 190: >= 95% within 25 cp, none beyond 75 cp [deep, SEARCH_DEEP=1]
+ABC-121 A1 search() d5: 97.86% within 25 cp of 187, max 63 cp (position-6/f3h4: 566 -> 629); mate-status flips on the 190: 0 (a report, not a bar)
+
+ ✓ src/search.pvs-lmr.test.ts > A1 — the mate-rich corpus is frozen, and the mate floor holds one ply deeper > all 287: every mate searchWithoutReductions sees at depth 4, search() sees at depth 5, same sign, no longer [deep, SEARCH_DEEP=1] 728ms
+stdout | src/search.pvs-lmr.test.ts > A1 — bounded drift, search() against searchWithoutReductions and chooseMove against chooseMoveWithoutReductions [deep, SEARCH_DEEP=1] > chooseMove iterated to depth 5 on the 190: >= 95% within 25 cp, none beyond 75 cp [deep, SEARCH_DEEP=1]
+ABC-121 A1 chooseMove to d5: 97.86% within 25 cp of 187, max 63 cp (position-6/f3h4: 566 -> 629); mate-status flips on the 190: 0 (a report, not a bar)
+
+ ✓ src/search.pvs-lmr.test.ts > A1 — bounded drift, search() against searchWithoutReductions and chooseMove against chooseMoveWithoutReductions [deep, SEARCH_DEEP=1] > search() at fixed depth 5 on the 190: >= 95% within 25 cp, none beyond 75 cp [deep, SEARCH_DEEP=1] 34847ms
+stdout | src/search.pvs-lmr.test.ts > A2 — the clock-free companion: cumulative deepening nodes to depth 7 [deep, SEARCH_DEEP=1] > kiwipete: chooseMove reaches depth 7 in fewer nodes than chooseMoveWithoutPvsOrReductions [deep, SEARCH_DEEP=1]
+ABC-121 A2 kiwipete: cumulative nodes to depth 7 609900 (chooseMove) vs 2191755 (chooseMoveWithoutPvsOrReductions)
+
+ ✓ src/search.pvs-lmr.test.ts > A1 — bounded drift, search() against searchWithoutReductions and chooseMove against chooseMoveWithoutReductions [deep, SEARCH_DEEP=1] > chooseMove iterated to depth 5 on the 190: >= 95% within 25 cp, none beyond 75 cp [deep, SEARCH_DEEP=1] 34470ms
+stdout | src/search.pvs-lmr.test.ts > A2 — the clock-free companion: cumulative deepening nodes to depth 7 [deep, SEARCH_DEEP=1] > position-6: chooseMove reaches depth 7 in fewer nodes than chooseMoveWithoutPvsOrReductions [deep, SEARCH_DEEP=1]
+ABC-121 A2 position-6: cumulative nodes to depth 7 586333 (chooseMove) vs 2575128 (chooseMoveWithoutPvsOrReductions)
+
+ ✓ src/search.pvs-lmr.test.ts > A2 — the clock-free companion: cumulative deepening nodes to depth 7 [deep, SEARCH_DEEP=1] > kiwipete: chooseMove reaches depth 7 in fewer nodes than chooseMoveWithoutPvsOrReductions [deep, SEARCH_DEEP=1] 7510ms
+ ✓ src/search.pvs-lmr.test.ts > A2 — the clock-free companion: cumulative deepening nodes to depth 7 [deep, SEARCH_DEEP=1] > position-6: chooseMove reaches depth 7 in fewer nodes than chooseMoveWithoutPvsOrReductions [deep, SEARCH_DEEP=1] 7528ms
+
+ Test Files  1 passed (1)
+      Tests  29 passed (29)
+   Start at  09:01:51
+   Duration  101.45s (transform 0ms, setup 0ms, import 67ms, tests 101.32s, environment 0ms)
+

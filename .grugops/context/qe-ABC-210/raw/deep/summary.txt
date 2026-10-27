@@ -1,0 +1,9 @@
+SEARCH_DEEP src/search.check-extension.test.ts rc=0 start=06:59:46Z end=07:00:21Z load1={ 7.56 7.59 6.46 } ::  Tests 43 passed (43)
+SEARCH_DEEP src/search.null-move.test.ts rc=0 start=07:00:21Z end=07:01:25Z load1={ 6.96 7.38 6.46 } ::  Tests 44 passed (44)
+SEARCH_DEEP src/search.test.ts rc=0 start=07:01:25Z end=07:01:30Z load1={ 6.96 7.38 6.47 } ::  Tests 57 passed (57)
+SEARCH_DEEP src/search.ordering.test.ts rc=0 start=07:01:30Z end=07:01:43Z load1={ 6.43 7.25 6.43 } ::  Tests 38 passed (38)
+SEARCH_DEEP src/transposition.test.ts rc=0 start=07:01:43Z end=07:01:50Z load1={ 6.53 7.24 6.44 } ::  Tests 40 passed (40)
+SEARCH_DEEP src/quiescence.test.ts rc=0 start=07:01:50Z end=07:01:51Z load1={ 6.53 7.24 6.44 } ::  Tests 37 passed (37)
+SEARCH_DEEP src/search.pvs-lmr.test.ts rc=0 start=07:01:51Z end=07:03:33Z load1={ 6.40 6.94 6.40 } ::  Tests 29 passed (29)
+PUZZLE_DEEP src/puzzle-suite.test.ts rc=0 start=07:03:33Z end=07:03:38Z load1={ 6.45 6.94 6.41 } ::  Tests 18 passed (18)
+DONE

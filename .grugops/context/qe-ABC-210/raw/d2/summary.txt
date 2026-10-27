@@ -1,0 +1,7 @@
+Elo difference: -7.8 +/- 23.0, LOS: 25.3 %, DrawRatio: 54.3 %
+W/L/D: 87/96/217  score: 0.489  games: 400 of 400
+draw ratio: 54.3 %
+faults: 0  unclassified: 0  move-cap draws: 0
+skytalix.stderr: 0 bytes
+base.stderr: 0 bytes
+state: NEUTRAL

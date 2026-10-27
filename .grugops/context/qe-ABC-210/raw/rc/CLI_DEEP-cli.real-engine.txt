@@ -1,0 +1,34 @@
+
+ RUN  v4.1.12 <worktree>
+
+stdout | src/cli.real-engine.test.ts > ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine
+[CLI_DEEP] (cwd /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/abc095-book-absent-vVcSzP) /opt/homebrew/Cellar/node/26.11.1/bin/node --max-old-space-size=400 /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/abc095-book-absent-vVcSzP/src/cli.ts --colour black --ascii <<< "" — wall 3111 ms, exit 0, signal null
+[CLI_DEEP] (cwd /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/abc095-book-absent-vVcSzP) /opt/homebrew/Cellar/node/26.11.1/bin/node --max-old-space-size=400 /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/abc095-book-absent-vVcSzP/src/cli.ts --colour black --ascii <<< "zz9\n" — wall 3111 ms, exit 0, signal null
+
+ ✓ src/cli.real-engine.test.ts > ABC-119 — the real-engine lane's child is the delivered composition (default lane; spawns nothing) > the deep child runs the delivered entry point with no --import, loader or hook, and an empty environment 31ms
+stdout | src/cli.real-engine.test.ts > ABC-095 — CLI_DEEP: the book in a real session
+[CLI_DEEP] (cwd /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/abc095-book-absent-vVcSzP) /opt/homebrew/Cellar/node/26.11.1/bin/node --max-old-space-size=400 /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/abc095-book-absent-vVcSzP/src/cli.ts --colour black --ascii <<< "quit\nquit\n" — wall 3109 ms, exit 0, signal null
+[CLI_DEEP] (cwd /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/abc162-neutral-cwd-DCH0V3) /opt/homebrew/Cellar/node/26.11.1/bin/node --max-old-space-size=400 <worktree>/src/cli.ts --colour white --ascii <<< "e2e4\n" — wall 107 ms, exit 0, signal null
+
+ ✓ src/cli.real-engine.test.ts > ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine > A1 — the real search answered: the child took at least 1 s and exited 0 0ms
+ ✓ src/cli.real-engine.test.ts > ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine > A3(i) — the reply is a legal move in the position it was played in, by the project's own generator 1ms
+ ✓ src/cli.real-engine.test.ts > ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine > A3(ii) — the whole child, spawn to exit, stays inside NFR-004's 5 s hard ceiling (clause B) 0ms
+ ✓ src/cli.real-engine.test.ts > ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine > A3(iii) — the session advances: the side to move and the ply number both change 0ms
+ ✓ src/cli.real-engine.test.ts > ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine > A3(iv) — no stack trace on stderr, and the exit code is 0, never 70 0ms
+ ✓ src/cli.real-engine.test.ts > ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine > A4 — an unreadable line against the real engine does not advance, carries a message, and the session continues 0ms
+stdout | src/cli.real-engine.test.ts > ABC-101 — CLI_DEEP: the chosen level plays a real session
+[CLI_DEEP] (cwd /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/abc095-book-absent-vVcSzP) /opt/homebrew/Cellar/node/26.11.1/bin/node --max-old-space-size=400 /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/abc095-book-absent-vVcSzP/src/cli.ts --colour black --difficulty 1 --ascii <<< "quit\nquit\n" — wall 198 ms, exit 0, signal null
+
+ ✓ src/cli.real-engine.test.ts > ABC-095 — CLI_DEEP: the book in a real session > A5 (stream half) — the one warning goes to stderr exactly once, 0 bytes of it to stdout, and the child exits 0 on quit 0ms
+ ✓ src/cli.real-engine.test.ts > ABC-095 — CLI_DEEP: the book in a real session > A7 — a real session consults the book: the reply to 1. e4 is one of the book's entries for that position 3ms
+stdout | src/cli.real-engine.test.ts > ABC-173 — CLI_DEEP: the child's heap ceiling, read in the child > A6 — a child built as this lane builds its children reports heap_size_limit at most the admitted row
+[CLI_DEEP] (cwd /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/abc095-book-absent-vVcSzP) /opt/homebrew/Cellar/node/26.11.1/bin/node --max-old-space-size=400 -e process.stdout.write(String(require('node:v8').getHeapStatistics().heap_size_limit)) <<< "" — wall 51 ms, exit 0, signal null
+
+ ✓ src/cli.real-engine.test.ts > ABC-101 — CLI_DEEP: the chosen level plays a real session > A10 — no prompt before the engine opens as white with a legal move, and the child exits 0 on quit 1ms
+ ✓ src/cli.real-engine.test.ts > ABC-173 — CLI_DEEP: the child's heap ceiling, read in the child > A6 — a child built as this lane builds its children reports heap_size_limit at most the admitted row 51ms
+
+ Test Files  1 passed (1)
+      Tests  11 passed (11)
+   Start at  09:53:49
+   Duration  9.85s (transform 0ms, setup 0ms, import 38ms, tests 9.77s, environment 0ms)
+

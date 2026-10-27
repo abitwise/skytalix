@@ -1,0 +1,32 @@
+corpus sizes: endgames+children 92, broad 209
+  endgames 25/92 cells so far 696
+  endgames 50/92 cells so far 1442
+  endgames 75/92 cells so far 2156
+  broad 25/209 cells so far 3144
+  broad 50/209 cells so far 3494
+  broad 75/209 cells so far 3846
+  broad 100/209 cells so far 4198
+  broad 125/209 cells so far 4548
+  broad 150/209 cells so far 4932
+  broad 175/209 cells so far 5302
+  broad 200/209 cells so far 5632
+depths read: {"endgames@3:d3":92,"endgames@5:d4":68,"endgames@5:d5":58,"broad@5:d3":83,"broad@5:d4":58,"broad@5:d2":87,"broad@5:d1":10,"broad@5:d5":1}
+A1 (sweep): 5772/5772 cells equal in move, score and nodes (engine: and depth)
+  chooseMove:chooseMoveWithoutCheckExtension: 393/393
+  chooseMoveWithoutNullMove:chooseMoveWithoutNullMove: 393/393
+  chooseMoveWithoutReductions:chooseMoveWithoutReductions: 393/393
+  chooseMoveWithoutPvsOrReductions:chooseMoveWithoutPvsOrReductions: 393/393
+  search():searchWithoutCheckExtension: 457/457
+  searchWithoutNullMove:searchWithoutNullMove: 457/457
+  searchWithoutPruning:searchWithoutPruning: 272/272
+  searchWithoutQuiescence:searchWithoutQuiescence: 457/457
+  searchWithoutPruningOrQuiescence:searchWithoutPruningOrQuiescence: 272/272
+  searchWithoutOrdering:searchWithoutOrdering: 457/457
+  searchWithoutKillers:searchWithoutKillers: 457/457
+  searchWithoutTable:searchWithoutTable: 457/457
+  searchWithoutReductions:searchWithoutReductions: 457/457
+  searchWithoutPvsOrReductions:searchWithoutPvsOrReductions: 457/457
+mismatches: 0
+unpruned-door cells skipped above depth 3: {"searchWithoutPruning":185,"searchWithoutPruningOrQuiescence":185}
+bite (head shipped differs from base shipped): search 303/457, engine 221/393
+rc=0
