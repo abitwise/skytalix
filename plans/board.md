@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-27 by Orchestrator (orch-2026-10-27b) — arch-adr0025-not-in-force merged (…aa96534c): ADR-0025 D4 amendment "accepted, not in force on main"; clear-per-search stands. Width 1/3 (bapm-s1-ABC-209)._
 _Updated: 2026-10-27 by Orchestrator (orch-2026-10-27a) — qe-ABC-209 FAIL on A6: S1 NOT MET (pooled 800 games NEUTRAL +8.69 ± 18.25; as forecast). NOT merged; ABC-209 In Review → Backlog, blocked on `bapm-s1-ABC-209` (default close unmerged). `arch-adr0025-not-in-force` (records). In Review 0/3. QE-209-a/b not owed unless re-opened; QE-209-f INFO (battery fell to 16 % mid-run). Width 2/3._
 _Updated: 2026-10-26 by Orchestrator (orch-2026-10-26z) — ABC-209 built (grugops/ABC-209 @ bb6cf451; 2138/2138) → In Review (1/3). `qe-ABC-209` dispatched ALONE: QE gate + readings in one hop (ADR already accepted), D under S1, ~6–12 h; battery allowed. Width 1/3._
 _Updated: 2026-10-26 by Orchestrator (orch-2026-10-26y) — arch-accept-adr0025-d4 merged (…e12dd4c5): ADR-0025 D4 amendment ACCEPTED, in force at ABC-209's merge. Width 1/3 (ticket-to-pr-ABC-209)._
