@@ -149,6 +149,10 @@ acceptance (`…d25ab770`, reading b). No agent marks it accepted.
      owner with `ADR-0051` (Olger Oeselg, verbatim *"yes, accept ADR-0051"*, `owner-word-2026-10-27/…047d411f` item 2).
      It takes effect at `ABC-210`'s merge. If `ABC-210` does not merge, it does not land and the row stays at 12. The
      table row above keeps its original depth for the record. Recorded by Architect/Design (task `arch-accept-adr0051`).
+     **2026-10-27: P2 did not land.** `ABC-210` was not merged: S1 NOT MET, pooled over 800 games NEUTRAL −4.78 ± 16.21
+     (QE `…b953e670`, Orchestrator `…85e9c9b2`). `zugzwang.005` stays at depth 12 on `main`, as the table row says
+     (`src/search.null-move.test.ts` reads `depth: 12` at `06c1ecc8`). `ADR-0051` is accepted, not in force on `main`.
+     Recorded by Architect/Design (task `arch-adr0051-not-in-force`).
    - The three CPW rows keep non-pawn material, so they test the material guard. Under decision 6 they are decided by
      the guard, not by R: no classic zugzwang row has three pieces on the defending side. R is judged by `A3` and `G1`.
    - Stockfish 19 at depth 26, run on its own and forced to score the recorded move, corroborates each CPW move: Rf1
