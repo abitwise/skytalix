@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-27 by Orchestrator (orch-2026-10-27i) — arch-accept-adr0051 merged (…e83d5703): ADR-0051 ACCEPTED (in force at ABC-210's merge); ADR-0050 d9 P2 line dated. `ticket-to-pr-ABC-210` building. Width 1/3._
 _Updated: 2026-10-27 by Orchestrator (orch-2026-10-27h) — owner YES (…047d411f): ADR-0051 accepted with P2. ABC-210 Ready for Dev → In Development (1/3): `ticket-to-pr-ABC-210` (SE build) + `arch-accept-adr0051` (records). Width 2/3._
 _Updated: 2026-10-27 by Orchestrator (orch-2026-10-27g) — bapm-amend-ABC-210 merged (…ae96d6d3): ABC-210 DoR 10/10 → Ready for Dev (1/6), build HELD on the owner's ADR-0051 + P2 yes/no. LOW carried: ABC-210 page front-matter stale (ready/Ready); page 407 lines (no written budget found). Width 0/3, idle on the owner._
 _Updated: 2026-10-27 by Orchestrator (orch-2026-10-27f) — arch-design-ABC-210 merged: ADR-0051 PROPOSED (check extension at the horizon) + P2 (zugzwang.005 d12 → d13, edits ADR-0050 d9) → owner as one yes/no; P1 accepted (mine); "≥ base − 1" struck; build held until his answer. `bapm-amend-ABC-210` routed (records). Width 1/3._
