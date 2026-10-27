@@ -7,7 +7,7 @@ size: M
 priority: P3
 epic: EPIC-008
 feature: —
-adr: "reverses ABC-079's recorded decision (src/quiescence.ts:21-24): an ADR plus an ADR-0026 door; route the text to the owner when it lands (…7feb0553)"
+adr: "new ADR-0051 (PROPOSED 2026-10-27; acceptance is the owner's): form (a) at the horizon; it reverses no recorded decision (ADR-0024 d4 and src/quiescence.ts:21-24 stand), plus an ADR-0026 off-door pair (amended 2026-10-27, bapm-amend-ABC-210)"
 ---
 
 # ABC-210: checks at the horizon
@@ -42,8 +42,12 @@ adr: "reverses ABC-079's recorded decision (src/quiescence.ts:21-24): an ADR plu
 1. **One of two forms, or both, as the Architect rules:**
    - **(a)** a check extension: +1 ply at a node in check, with a total extension cap per line;
    - **(b)** quiet checking moves searched in the **first** quiescence ply only.
+   - *2026-10-27 (BA/PM, `bapm-amend-ABC-210`):* **form (a) only, at a horizon node:** remaining depth ≤ 0 and the side
+     to move in check, +1 ply (`ADR-0051` d1–d2). Form (b) is not shipped.
 2. **An `ADR-0026` door:** every pre-existing door turns it off, and one new door turns it off on the shipped path.
 3. **A growth bound.** `QUIESCENCE_MAX_PLY` stays a runaway guard, and an extension cap is stated as a number.
+   - *2026-10-27 (BA/PM, `bapm-amend-ABC-210`):* the cap is **1 per line** (`CHECK_EXTENSION_MAX_PER_LINE`, `ADR-0051`
+     d3). `QUIESCENCE_MAX_PLY` (8) and `src/quiescence.ts` are untouched.
 4. The ADR.
 5. *2026-10-27 (BA/PM, `bapm-ready-ABC-210`):* the sites at `main` `3050d2b4`, after null move (`ABC-208`):
    - the frontier calls `quiesce` at `src/search.ts:356` and `src/engine.ts:263`; `QUIESCENCE_MAX_PLY` is
@@ -62,19 +66,39 @@ adr: "reverses ABC-079's recorded decision (src/quiescence.ts:21-24): an ADR plu
 
 - **`A1` (the door reproduces the pre-ticket engine).** The same as `ABC-208` `A1`: node-equal on the `ABC-078` `A3`
   corpus, with every pre-existing door node-equal to its pre-ticket self.
+  - *2026-10-27 (BA/PM, `bapm-amend-ABC-210`):* both sentences are **cross-build**: head's doors against base's shipped
+    path and base's doors. QE runs `A1` out of tree, as `ABC-208`'s was (the probe: 300/300 cells, `ADR-0051` d5).
 - **`A2` (it does what it says).**
   - **(a):** **Given** a position in check at the frontier, **then** the instrumented search goes one ply deeper there,
     and a line never gets more than the cap's extra plies.
-  - **(b):** **Given** a position whose only good move is a quiet check that wins material in the next quiescence ply,
-    **then** quiescence returns a score that reflects the win, where base stands pat.
+  - ~~**(b):** **Given** a position whose only good move is a quiet check that wins material in the next quiescence ply,
+    **then** quiescence returns a score that reflects the win, where base stands pat.~~ *Struck 2026-10-27 (BA/PM,
+    `bapm-amend-ABC-210`): form (b) is not shipped (Scope 1).*
   - At least 4 rows for each form shipped.
+  - *2026-10-27 (BA/PM, `bapm-amend-ABC-210`):* the (a) rows are **`ADR-0051` d8's**: the five horizon rows at depth 1
+    in both recursions (each plays the check; each door plays another move), the line-length instrument (the four roots
+    at depth 5 reach ply 6, never 7), and the cap row (depth 1 never reaches ply 3). Five rows meet "at least 4".
 - **`A3` (growth stays bounded).**
   - **Given** `kiwipete` and `position-6` at fixed depth 6, **then** nodes ≤ **1.5 × base**. The figure is BA/PM's bar,
     the `ADR-0024` decision 3 headroom precedent.
-  - **Given** the 3 s budget, **then** `G6`'s `NFR-005` levels hold: depth ≥ 6 (FAIL floor), 7 (WARN). `G6`'s "≥ base"
+  - **Given** the 3 s budget, **then** `G6`'s `NFR-005` levels hold: depth ≥ 6 (FAIL floor), 7 (WARN). ~~`G6`'s "≥ base"
     clause is relaxed to **≥ base − 1, for this ticket only**. That is BA/PM's ruling: an extension spends nominal depth
-    by design, and the D reading judges whether the trade pays.
+    by design, and the D reading judges whether the trade pays.~~ *Struck 2026-10-27 (BA/PM, `bapm-amend-ABC-210`):
+    `G6` reads **"≥ base"** (rule A), unrelaxed. The design is predicted to meet it on both boards (`UNKNOWN - verify`),
+    so the − 1 is not needed. Striking it tightens the bar, so no owner word is needed (`…828d5794`, `…75af453c`).*
   - **The depth-6 FAIL floor does not move.**
+  - *2026-10-27 (BA/PM, `bapm-amend-ABC-210`):* **"fixed depth 6" reads `search(position, 6).nodes` against
+    `searchWithoutCheckExtension(position, 6).nodes`** (`ADR-0051` d8). The door is base node for node (`A1`), so the
+    bar stays ≤ 1.5 × base with no cross-build. Probe: 1.054× kiwipete, 1.007× position-6.
+  - *2026-10-27 (BA/PM, `bapm-amend-ABC-210`):* **two oracle bars are added** (`ADR-0051` d7; both new, none loosened):
+    - **drift at depth 5, both recursions, on `ABC-121`'s 190:** `search()` against `searchWithoutCheckExtension` and
+      `chooseMove` against `chooseMoveWithoutCheckExtension`. At least **90 %** of non-mate positions are within
+      **25 cp**, and none is beyond **174 cp**. Probe: 93.58 % / 94.12 %, max 116. Mate-status flips are a report.
+    - **a same-depth mate floor on the 287:** wherever the door scores a mate at depth 5, `search()` at depth 5 scores
+      a mate of the same sign, no longer. Probe: 0 of 189.
+    - The 90 % is `ADR-0051`'s own, below the 95 % of `ADR-0026` d9 and `ADR-0050` d8. It is the owner's within his
+      yes/no on `ADR-0051` (`…75af453c`). `ADR-0026` d9's 118 cp and `ADR-0050`'s 37 cp keep measuring LMR and null
+      move alone (`ADR-0051` d6).
   - *2026-10-27 (BA/PM, `bapm-ready-ABC-210`):* `G6` is read by `EPIC-008`'s rule (`…8e51ba1e`): 5 interleaved runs
     per board per build, graded by the median, any run below depth 6 FAILs. "≥ base" stays a graded pass/fail rule
     on the owner's word (rule A, `…2ae5fc12` item 2; `QE-205-c` closed). Unlike `ABC-209`, this ticket changes values,
@@ -87,6 +111,8 @@ adr: "reverses ABC-079's recorded decision (src/quiescence.ts:21-24): an ADR plu
     the owner's (`…5aaf7cec` item 3) is the Orchestrator's to route. The design probe's d7/d8 counts (test note 3) show
     whether the clause is ever exercised; if head is predicted to meet "≥ base", the question is moot. Until it is
     answered, the page reads as written.
+    - *Answered 2026-10-27 (BA/PM, `bapm-amend-ABC-210`):* moot. Head is predicted to meet "≥ base" (`…c5d0e464`), and
+      the clause is struck above (`…75af453c`).
 - **`A4` (existing gates).** `G1` (mate rows may newly solve; raising the baseline is QE's), `G5`, `G8`, `G9`, and
   `G10` for any red.
   - *2026-10-27 (BA/PM, `bapm-ready-ABC-210`):* `G1`: the diff touches `src/search.ts`, `src/engine.ts` or
@@ -110,6 +136,9 @@ adr: "reverses ABC-079's recorded decision (src/quiescence.ts:21-24): an ADR plu
 ## Test notes
 
 1. Instrument the extension and quiescence depth in tests only. No production counter.
+   - *2026-10-27 (BA/PM, `bapm-amend-ABC-210`):* the instrument is call-through module spies on `src/apply.ts` (make and
+     unmake, null included) and `src/quiescence.ts` (`quiesce`). The line length at each qply-0 `quiesce` call is
+     replayed from the spies' global invocation order (`ADR-0051` d8).
 2. UAT is owed (production lines). The QE verdict signs it.
 3. **Frozen-clock pre-check (a process step, no bound).** *Added 2026-10-27 by BA/PM (`bapm-ready-ABC-210`), the same
    step as `ABC-208` test note 4 (`…84a05b3a`).* Before the real-clock `G6` reading, QE reports the nodes each build
@@ -118,6 +147,9 @@ adr: "reverses ABC-079's recorded decision (src/quiescence.ts:21-24): an ADR plu
    counts (`UNKNOWN - verify`). If head is predicted to miss the `G6` bar in force for this ticket at a depth base
    straddles at 3 s (that bar turns on the flagged "≥ base − 1" question under `A3`), QE stops to Architect/Design
    before the run. It grades nothing.
+   - *2026-10-27 (BA/PM, `bapm-amend-ABC-210`):* the stop reads against **"≥ base"**, since "≥ base − 1" is struck.
+     The design probe's counts are the reference (§ Design ruling): base 590 489 / 1 259 463 (kiwipete d7 / d8) and
+     180 941 / 355 565 (position-6). Base does not straddle a depth at 3 s (`…c5d0e464`).
 4. **The reading runs ALONE** (width 1, a quiet host; host power as the owner's word allows, see `QE-209-f`). `QE-207-g`
    (an ALONE claim can outlive `queue.stale_ttl_minutes`, 30) and `QE-209-f` (host power) are open as the
    Orchestrator's kit, config or host matters, and neither blocks this ticket.
@@ -134,6 +166,19 @@ adr: "reverses ABC-079's recorded decision (src/quiescence.ts:21-24): an ADR plu
     merge-base carries `ABC-208` (`b5c67ab7`) and not `ABC-209`. No commit since `b5c67ab7` touches `src/`, `data/`
     or `tools/`.
   - It is the epic's last engine change. The closing `M1` R reading comes after it.
+- *2026-10-27 (BA/PM, `bapm-amend-ABC-210`):* **`ADR-0051` is PROPOSED, and accepting it is the owner's call.** The
+  Orchestrator **holds the build** until he answers, as for `ABC-209`: the build has to move P2, an owner-held row
+  (`…75af453c`). The ALONE reading and the merge also wait on his acceptance.
+- *2026-10-27 (BA/PM, `bapm-amend-ABC-210`), **the moved-pin rulings** (§ Design ruling, P1 and P2):*
+  - **P1: accepted by the Orchestrator** (`…75af453c`, MEDIUM). In `transposition.test.ts`, `ABC-081` `A5` "the fixture
+    bites" is re-pinned from depth 3 (−485) to depth 2 (**−502**) on the shipped path (`ADR-0026` d7). The row tests
+    that its fixture bites, not engine strength. **QE re-plants the fixture bug at depth 2 and checks that the row goes
+    red.**
+  - **P2: waits on the owner.** `search.null-move.test.ts` `ABC-208` `A2` `zugzwang.005`, depth 12 → 13. This edits
+    accepted `ADR-0050` d9, so it is his. His answer comes with his answer on `ADR-0051`, as one yes/no.
+  - The other moved rows re-point to the new doors inside `ADR-0026` d4/d5 (accepted, `…75af453c`). Those are the 2
+    export lists, the 2 `QE-208-c` door maps and the `ABC-208` drift, mate-floor and "changes the work" rows. No level,
+    relation or NFR bound moves.
 
 ## Size and priority
 
@@ -192,6 +237,17 @@ Design comes first. Only these rows changed:
     (`…d25ab770`);
   - the design probe's frozen-clock d7/d8 counts, which feed test note 3 and the "≥ base − 1" question;
   - the source comment at `src/quiescence.ts:21-24` (form (b)).
+
+**Re-scored 2026-10-27 by BA/PM** (task `bapm-amend-ABC-210`, at `main` `5a9855b7`, after the design ruling). **Result:
+10 of 10. In Design → `Ready for Dev`, build held on the owner.** Only these rows changed:
+
+| # | item | verdict |
+|---|---|---|
+| 2 | scope and out-of-scope clear | ✅ form (a) at a horizon node in check, +1 ply; cap 1 per line; (b) not shipped; `src/quiescence.ts` untouched |
+| 4 | acceptance testable and measurable | ✅ `A1` cross-build (QE, out of tree); `A2` = `ADR-0051` d8's five rows, instrument and cap row; `A3` d6 against the door, "≥ base − 1" struck (`G6` "≥ base"), drift ≥ 90 % / 25 cp / max 174 cp, same-depth mate floor. No bar loosened beyond `ADR-0051` |
+| 7 | test notes present | ✅ four; note 1 names the instrument; note 3 stops against "≥ base" |
+| 8 | size assigned | ✅ `M`, confirmed by the probe (about 100–150 production lines in two files); no split |
+| 10 | no major unresolved blocker | ✅ design ruled (`…c5d0e464`); P1 ruled (`…75af453c`). One owner yes/no remains (`ADR-0051` + P2). It holds the pull into In Development, the ALONE reading and the merge, not the page. `QE-207-g`, `QE-209-f` open, not blocking |
 
 ## Design ruling
 
