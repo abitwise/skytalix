@@ -1,8 +1,8 @@
 ---
 id: ABC-208
 title: "Null-move pruning in both recursions, behind an ADR-0026 test-only off door, with a zugzwang guard and a bounded oracle"
-status: ready
-column: Ready
+status: done
+column: Done
 size: M
 priority: P2
 epic: EPIC-008
