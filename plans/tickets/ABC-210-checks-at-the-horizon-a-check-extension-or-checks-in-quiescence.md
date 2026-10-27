@@ -192,3 +192,160 @@ Design comes first. Only these rows changed:
     (`…d25ab770`);
   - the design probe's frozen-clock d7/d8 counts, which feed test note 3 and the "≥ base − 1" question;
   - the source comment at `src/quiescence.ts:21-24` (form (b)).
+
+## Design ruling
+
+> **Architect/Design, 2026-10-27** (task `arch-design-ABC-210`, records plus probes, at `main` `f0c50046`, whose
+> code is `b5c67ab7`'s). The ADR is **`ADR-0051`, PROPOSED**. Acceptance is the owner's; the build may proceed, and
+> the ALONE reading and the merge wait on it (`…828d5794`, reading b). Notes: `.grugops/context/arch-design-ABC-210/notes/`.
+> The probes ran on scratch clones in `<scratchpad>/arch210/`, never on `src/`: `base`; `h`, both forms with probe-only
+> switches; `hd`, the design with no switches; and five planted mutants. Plain node v26.11.1. **No real-clock search was
+> run and no timing is quoted.** Real-clock deep rows were filtered out by name. No `G2`, `G5`, `G6`, game or D. Every
+> count below is deterministic.
+
+**Result.** **Form (a), at the horizon only:** a full-width node whose remaining depth is ≤ 0 and whose side to move is
+in check is searched **one ply deeper, at most once per line**. Form (b) is not built, and `ADR-0024` decision 4 and
+`src/quiescence.ts:21-24` stand. The doors are **`searchWithoutCheckExtension`** and **`chooseMoveWithoutCheckExtension`**.
+`A1` 300/300 cells node-equal. `A3` at fixed depth 6: **1.054× / 1.007×**. `G1` 54/58 (= baseline). **`G6` is predicted
+MET against "≥ base", so the "≥ base − 1" clause can be struck.** **STOP to the Orchestrator: two shipped-path pins move
+(P1, P2) under every form probed.** No level, no relation and no NFR bound moves. **Size `M` holds; no split.**
+
+### The form: (a) at the horizon, and why
+
+- **It fixes the unsound case.** `quiesce` stands pat first even when the side to move is in check, so a check given on
+  the last full-width ply is scored as if the checked side could pass. At depth 1 the door misses five forks and skewers
+  (`A2` below); the design plays all five.
+- **It is the only form that meets `A3`** under the fixed-depth reading. An extension at every node in check (any cap)
+  costs position-6 1.69× at depth 6; nearly all of that is the interior extensions (319 of 1 583).
+- **It reverses no accepted ADR** and does not touch `src/quiescence.ts`, the shared leaf (`ADR-0024` d1). Form (b)
+  reverses `ADR-0024` d4, reads `G1` 53/58, loses `zugzwang.005` through depth 13, and needs a mate score, a ply and a
+  full move generation at each non-cut quiescence leaf (61 452 generations to kiwipete depth 8, unpriced by a frozen
+  clock).
+- **`G1` holds:** 54/58, base's four misses, no NEWLY line. The every-node form reads 53/58 (seed 1163).
+
+### The ruling, point by point (text and evidence: `ADR-0051`)
+
+| point | ruling | why, in one line |
+|---|---|---|
+| where | only at a **horizon** node: remaining depth ≤ 0, side to move in check | interior extensions cost the growth; the horizon is where the stand-pat error is |
+| how much, cap | **+1 ply; at most 1 per line** (`CHECK_EXTENSION_MAX_PER_LINE = 1`) | caps 1, 2, 3 and none count within 0.1 %; 1 is the simplest bound and the cap row reds "none" |
+| limits | a line is at most root depth + 1 full-width plies, inside `KEY_ARRAY_CAPACITY` 128 (`ADR-0025` d7); `QUIESCENCE_MAX_PLY` 8 unchanged | no ply budget is needed beyond the cap |
+| rule | one exported pure predicate, `checkExtensionPlies(position, depth, extensions)` → 1 or 0, called at node entry (after the repetition scan, before the leaf test and the probe) in both recursions; they add exactly its value | `ADR-0026` d6's contract: check is derived inside |
+| state | `extensions` is an argument, placed **before** `afterNull` | nothing held between nodes; `ABC-208`'s source row reads the null flag as the last argument |
+| null move | **confirmed: no null move in check** (`src/search.ts:305`, `ADR-0050` d6). An extended node has depth 1 < 2; a null child is never in check, so it is never extended | no predicate changes |
+| LMR | no reduction in check or for a checking move (`ADR-0026` d6); an extended node's depth 1 < 3 | no predicate changes |
+| table | an extended node probes and stores at depth 1, the depth it searched | — |
+| doors | `searchWithoutCheckExtension(position, depth)`, `chooseMoveWithoutCheckExtension(position, options)`: the pre-ticket shipped path with null move on, node for node; every older door turns the extension off (top rung) | `A1`: 300/300 cells (10 search doors at d1–6, 4 engine doors at d3/5/6, six roots) |
+| re-points | `ADR-0050`'s rows that compare the shipped path with a null-move door: the d5 drift ×2, the mate floor, "makes null moves … changes the work" ×2 | they then read their pre-ticket values: **37 cp keeps measuring null move alone; 118 cp (`ADR-0026` d9) is untouched** |
+| `A3` oracle | d5 on the 190, both recursions: **≥ 90 % within 25 cp, none beyond 174 cp**; a **same-depth** mate floor at d5 on the 287 | measured 93.58 % / 94.12 %, max 116 / 116; mate floor 0 of 189. 95 % fails the correct build: the heuristic is meant to move horizon values |
+| `A3` nodes | "fixed depth 6" reads `search(position, 6).nodes` against `searchWithoutCheckExtension(position, 6).nodes` (the door is base) | measured 1.054× kiwipete, 1.007× position-6 |
+| `A2` | five horizon rows at depth 1 (both recursions), the line-length instrument on four roots at 5, and the cross-check cap row (FENs in `ADR-0051` d8) | each door plays a different move; mutants below |
+| files | `src/search.ts`, `src/engine.ts` only | — |
+
+**Planted mutants** (each on its own scratch clone):
+
+| mutant | `A2` rows / instrument | cap row | `A3` nodes (pos-6 d6) | d5 drift (search / chooseMove) | mate floor | `G1` |
+|---|---|---|---|---|---|---|
+| design | green | green | 1.007× | 93.58 % / 94.12 %, 116 | 0/189 | 54 |
+| every node in check (cap 1) | green | green | **1.69×** | **87.17 % / 88.24 %**, 145 | 0 | **53** |
+| no cap | green | **red (ply 3)** | 1.007× | = design | 0 | — |
+| +2 plies | **red (ply 3 / 7)** | red | 1.44× | 91.98 % / 92.51 % | 0 | — |
+| dead switch | **red (ply 1 / 5)** | red | 1.000× | 100 % | 0 | — |
+| every horizon node, check or not | (out of memory) | — | **4.44×** | **56.68 % / 49.73 %** | 0 | — |
+
+- The oracle is a regression net: "no cap", "+2 plies" and a dead switch pass it. The predicate table, the `A2` rows and
+  the cap row catch them.
+
+### Moved-pin probe (`hd` against `main`'s tests)
+
+- **Base:** default lane 2 128 / 2 128. Deterministic deep lanes green (`PUZZLE_DEEP`; `SEARCH_DEEP` null-move,
+  quiescence, search, pvs-lmr, transposition, ordering; `ENGINE_DEEP` engine, gameend, legal, levels, pvs-lmr,
+  transposition; real-clock rows filtered by name).
+- **`hd`:** default 2 123 / 2 128; deep adds 3 more. 8 rows, plus 3 green-either-way re-points:
+
+| # | row | change | route |
+|---|---|---|---|
+| 1 | `search.test.ts` `ABC-077` `A6` export list | + `searchWithoutCheckExtension`, `checkExtensionPlies` | export-list growth (`ADR-0050` d2 precedent) |
+| 2 | `engine.test.ts` `ABC-078` `A4` export list | + `chooseMoveWithoutCheckExtension` | the same |
+| 3–4 | `search.null-move.test.ts` `QE-208-c` door maps (search.ts, engine.ts) | + the two doors, `nullMove: true` | door-map growth; title reads "only the shipped path and the `ABC-210` doors" |
+| 5–6 | `search.null-move.test.ts` `ABC-208` `A3` d5 drift ×2 (deep) | read 94.12 % against 95 %: they measure null move + extension | **re-point** the shipped side to the `ABC-210` door (`ADR-0051` d6) |
+| 7–9 | the same file: the `A3` mate floor (deep) and "makes null moves … changes the work" ×2 | green either way | re-point, the same |
+| **P1** | `transposition.test.ts` `ABC-081` `A5` "the fixture bites: at depth 3 …" (`:513-517`) | `search(…, 3).score` **−485 → 0** | **STOP.** Proposed: re-pin per `ADR-0026` d7 to depth 2, −502 (base and head both), where the repetition is still past the horizon |
+| **P2** | `search.null-move.test.ts` `ABC-208` `A2` `zugzwang.005` (`:572`, deep) | `chooseMove` to 12 plays **Ne2 (0), not Nxd5**; Nxd5 from 13 (59) | **STOP.** Proposed: the row's depth 12 → 13; that edits accepted `ADR-0050` d9's table, so it is the owner's, bundled with `ADR-0051` |
+
+- **P1 and P2 move under every form probed.** P1: every-node 0, PV-only 0, form (b) −511. P2: every-node Ne2 at 12
+  (Nxd5 at 13), form (b) Ne2 through 13; only PV-only keeps it, and PV-only moves P1. So no form avoids the STOP.
+- **0 levels, 0 relations, 0 NFR bounds, no `ADR-0026` level.** `G1`, the `ABC-121` rows and the `ABC-208` rows not
+  listed read as base.
+- The other six zugzwang/K+P rows (`zugzwang.001` d9, `.004` d11, four K+P d8) stay green.
+
+### Frozen-clock counts (test note 3; a count, not a reading)
+
+`chooseMove`, `now: () => 0`, `maxDepth: k`; nodes to complete depth k.
+
+| form | kiwipete d7 | kiwipete d8 | kiwipete d9 | position-6 d7 | position-6 d8 | position-6 d9 |
+|---|---:|---:|---:|---:|---:|---:|
+| base (`main`) | 590 489 | 1 259 463 | 2 907 475 | 180 941 | 355 565 | 940 109 |
+| **(a) horizon, cap 1 (the design)** | 610 577 (+3.4 %) | **1 302 377 (+3.4 %)** | 2 830 006 (−2.7 %) | 181 191 (+0.1 %) | 358 872 (+0.9 %) | **993 871 (+5.7 %)** |
+| (a) every node, cap 1 | 641 891 (+8.7 %) | 1 369 820 (+8.8 %) | 3 256 498 (+12.0 %) | 212 224 (+17.3 %) | 418 255 (+17.6 %) | 1 202 218 (+27.9 %) |
+| (a) every node, no cap | 683 366 (+15.7 %) | 1 449 940 (+15.1 %) | 3 470 023 (+19.3 %) | 219 621 (+21.4 %) | 438 514 (+23.3 %) | 1 435 732 (+52.7 %) |
+| (b) first-ply quiet checks | 605 140 (+2.5 %) | 1 327 228 (+5.4 %) | 3 083 740 (+6.1 %) | 190 443 (+5.3 %) | 376 904 (+6.0 %) | 990 916 (+5.4 %) |
+
+- Base equals `ADR-0050`'s head counts and `qe-ABC-209`'s pre-check. Base position-6 d10 needs 1 765 861.
+- Form (b) also makes a full move generation at 24 090 / 61 452 leaves (kiwipete d7 / d8) and 10 039 / 20 718 / 57 087
+  (position-6 d7 / d8 / d9).
+
+**Nodes at fixed depth 6 (`A3`, ≤ 1.5 × base):**
+
+| form | `search(…, 6)` kiwipete | `search(…, 6)` position-6 | `chooseMove` to 6 kiwipete | `chooseMove` to 6 position-6 |
+|---|---:|---:|---:|---:|
+| base | 237 007 | 109 912 | 309 541 | 52 265 |
+| **(a) horizon (design)** | 249 811 (**1.054×**) | 110 654 (**1.007×**) | 324 937 (1.050×) | 52 341 (1.001×) |
+| (a) every node, cap 1 | 271 653 (1.146×) | 185 584 (**1.689×, over**) | 343 711 (1.110×) | 58 478 (1.119×) |
+| (a) every node, no cap | 278 039 (1.173×) | 192 190 (**1.749×, over**) | 348 436 (1.126×) | 60 995 (1.167×) |
+| (a) PV nodes only | 245 336 (1.035×) | 141 047 (1.283×) | 311 101 (1.005×) | 52 244 (1.000×) |
+| (b) | 244 286 (1.031×) | 121 453 (1.105×) | 317 174 (1.025×) | 55 111 (1.054×) |
+
+### `G6` prediction against "≥ base" (rule A; `UNKNOWN - verify`)
+
+- Base on `main` read kiwipete **8** ×5 and position-6 **9** ×5 at 3 s, with medians of 1 572 717 – 1 574 765 and
+  1 645 154 nodes (`qe-ABC-209` `…7c874c4e`, `qe-ABC-208` `…3d6a4c99`). Base does not straddle a depth: kiwipete d9
+  needs 2.91 M, and position-6 d10 needs 1.77 M.
+- **The design is predicted to meet "≥ base" on both boards:**
+  - kiwipete reaches 8 (1 302 377 nodes) while head's cost per node rises less than about **20 %**;
+  - position-6 reaches 9 (993 871) while it rises less than about **65 %**.
+  - The added work is one `isInCheck` at each horizon node not yet extended (14.6 % of kiwipete's nodes to d8, 18.6 % of
+    position-6's to d9), plus 0.83 % / 0.97 % of nodes extended into a full move generation. That is far inside 20 %.
+- The other forms also predict "≥ base", with less margin on kiwipete: every node about 15 %; (b) about 18 %, before
+  its move generations are priced.
+- **So the page's "≥ base − 1" clause can be struck.** It is stricter, so no owner word is needed (`…828d5794`). No form
+  needed the − 1. The pre-check (test note 3) reads against "≥ base": head needs more nodes than base at d7 and d8 on
+  both boards, but stays inside base's 3 s counts at base's depths.
+
+### Size
+
+**`M` holds; no split.** About 100–150 production lines in two files: the predicate, the switch and argument, and a door
+per recursion. Tests: the predicate table, a source row, the `checkExtension` literal row, 5 `A2` rows plus the
+instrument and the cap row, the `A3` node row, 2 drift rows and the mate floor, 5 re-points, 2 export lists, 2 door maps,
+and P1 / P2 once routed. A split would ship a door with nothing behind it, and it would need a second D.
+
+### Owed by others
+
+- **Orchestrator: the STOP.** Route P1 (proposed: re-pin to depth 2, −502, under `ADR-0026` d7) and P2 (proposed:
+  depth 12 → 13, which edits accepted `ADR-0050` d9, so it is the owner's). The build should wait on that routing, since
+  both rows are in its lanes.
+- **Owner (one question, as `…828d5794` asks):** accept or decline `ADR-0051`, with P2's `ADR-0050` d9 depth change.
+  "≥ base − 1" is not part of it: it is struck as unneeded.
+- **BA/PM, page lines (criteria tightened or read, none loosened):**
+  - front-matter `adr:` reads "new `ADR-0051` (PROPOSED): form (a) at the horizon; it reverses no recorded decision";
+  - Scope 1: form (a) only, at a horizon node (remaining depth ≤ 0) in check; (b) is not shipped;
+  - Scope 3: the cap is 1 per line; `QUIESCENCE_MAX_PLY` and `src/quiescence.ts` are untouched;
+  - `A2`: the (a) rows are `ADR-0051` d8's (five horizon rows, the instrument, the cap row); the (b) bullet is struck;
+  - `A3`: "fixed depth 6" reads `search(position, 6)` against `searchWithoutCheckExtension`; **strike "≥ base − 1"**
+    (`G6` reads "≥ base", rule A); add the drift bars (≥ 90 % / 174 cp) and the same-depth mate floor;
+  - `A1`: a cross-build comparison QE runs out of tree, as `ABC-208`'s;
+  - test note 1: the instrument is call-through spies on `src/apply.ts` and `src/quiescence.ts`, replayed by invocation
+    order;
+  - test note 3: the stop reads against "≥ base".
+- **Engineer:** `src/search.ts`'s and `src/engine.ts`'s headers gain the extension paragraph; `src/quiescence.ts:21-24`
+  stays as written.
