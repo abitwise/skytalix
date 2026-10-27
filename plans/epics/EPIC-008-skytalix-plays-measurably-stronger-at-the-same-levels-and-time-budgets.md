@@ -63,6 +63,12 @@ still hold only measured gains.
     **not shipped**. It was closed unmerged under S1, because D was NEUTRAL after the one extension: pooled over 800
     games, +8.7 ± 18.3 (`…e32e0ee4`, `…0932c037`). One engine change remains unbuilt (`ABC-210`). `ABC-206` is Done,
     and `ABC-208` is Done (merged `b5c67ab7`).
+  - *2026-10-27 (BA/PM, `bapm-s1-ABC-210`):* proposal 7 (`ABC-210`, a check extension at the horizon) is **not
+    shipped**. It was closed unmerged under S1, because D was NEUTRAL after the one extension: pooled over 800 games,
+    −4.8 ± 16.2 (`…b953e670`, `…86b45c13`). **No engine change remains.** Of the seven, two shipped: `ABC-206` (the
+    speed-up, value-identical) and `ABC-208` (null move). Five did not: `ABC-205`, `207`, `209` and `210` under S1, and
+    `ABC-211` on the owner's O0. The provenance change `ABC-215` shipped under S3. The epic's close path is under
+    § Tickets.
 - *2026-10-24 (BA/PM, `bapm-ABC-214-path-a`):* one provenance change, `ABC-215`. It re-derives the CC BY-SA 3.0
   values on the owner's path A (`…fb0468ff`) and is measured under S3.
 - *2026-10-24 (BA/PM, `bapm-cut-readme`):* one test-only follow-up, `ABC-217` (Ready, XS, P3). It moves `ABC-206`'s
@@ -190,6 +196,19 @@ not favour either side. A FAIL-class fault on a host that is not quiet is UNRESO
 >   `main` moved.
 > - **`M2`, `ABC-208`** (recorded here, because no line on this page carried it): `ABC-208` shipped measured. It merged
 >   as `b5c67ab7` with D **GAIN, +38.4 ± 23.3** (400 games), so **S1 is met** without the extension (QE `…0477ac64`).
+>
+> **2026-10-27, after `ABC-210`'s close (BA/PM, `bapm-s1-ABC-210`):**
+> - **`M1`: the baseline stands.** `ABC-210`'s code never reached `main`: `git diff a17d5945 06c1ecc8 -- src data
+>   tools` is empty. Proposal 7 is no longer a source for the +100. **The +100 now rests only on what has merged:**
+>   `ABC-206` (value-identical, faster; its D was waived, `…cb10c36c`), `ABC-215` (D +15.6 ± 23.8) and `ABC-208`
+>   (D +38.4 ± 23.3). The closing R reading decides `M1`.
+> - **A forecast, not a measurement (`UNKNOWN - verify`):** the shipped D point estimates sum to about +54. D is
+>   self-play at 1 500 ms and R is against Stockfish at 3 000 ms, so the D figures do not add up into R, and `ABC-206`'s
+>   speed is unpriced. Still, the "≥ +100" clause looks unlikely to hold. If the closing R's Y is near the baseline's
+>   50.3, `M1`'s half-width is about 71, so "above 0" needs a gain of about +71 or more. Nothing here moves the bar
+>   (Q1, the owner's).
+> - **`M2` and `M3`: untouched by `ABC-210`.** Nothing of it merged, so nothing shipped unmeasured, and no gate on
+>   `main` moved.
 
 ## Tickets (order is the pull order; the pages are under `plans/tickets/`)
 
@@ -254,6 +273,44 @@ ticket that remains:
   - Then In Design first: an ADR that reverses `ABC-079`'s recorded decision, plus an `ADR-0026` door. The owner's
     acceptance gates the ALONE reading and the merge, as it did for `ABC-208` and `ABC-209` (reading (b)).
 - It is the epic's last engine change. The closing `M1` R reading comes after it, at the epic's close.
+
+*2026-10-27 (BA/PM, `bapm-s1-ABC-210`):* row 7, `ABC-210`, is **closed unmerged under S1** (not delivered; that page's
+§ Close). The row's cells are as cut. **No ticket of this epic is left to pull:** every row is Done or closed, and
+`ABC-217` (test-only) is Done. **The epic's close path**, in order. Nothing here runs it; the Orchestrator routes each
+step.
+1. **Orchestrator: land the close.** Merge this close (`bapm-s1-ABC-210`) and the Architect's
+   `arch-adr0051-not-in-force`. `ABC-210` goes to Done (dropped), and the trace row lands. The owner is told that
+   `ABC-207`, `ABC-209` and `ABC-210` are closed, with his vetoes open. A veto that comes before step 3 starts holds
+   step 3 until that one re-tune round has its QE verdict. Nothing else waits on the vetoes.
+2. **Architect/Design: the full re-pass of `memory-bank/30-architecture.md`** (the close item already on the card,
+   `orch-2026-10-26m`, `…cdc1fb61`). It is records only and reads the as-built code, which is now final for this epic.
+   It includes whether `virtual-clock.ts` counts as a production module (42 or 43 of 46, `UNKNOWN - verify`). It goes
+   before step 3, so that the reading runs ALONE and any finding lands before the close.
+3. **QE/E2E: the closing `M1` R reading, plus the `M3` gate reads, on one `main` sha** whose `src/` and `data/` equal
+   `b5c67ab7`'s (QE confirms it before the first game).
+   - **R by `ABC-204` `A4`'s protocol with every pin frozen** (`ABC-204` § Reading, "Frozen for `EPIC-008`"): E =
+     **1 910**, 200 games, `openings.epd` sequential with both colours, `skytalix` at `st=3`, Stockfish at its pins, and
+     `cutechess-cli` and Stockfish at the sha256 values in § Dependencies. **E does not move:** `A4`'s 25–75 % band and
+     its one E step belong to the baseline only, and `M1` needs E unchanged.
+   - **ALONE** (width 1), on AC, quiet host, host log and watchdog. QE pre-registers before the first game. It is one
+     run, and its written result is final (`…4c3f7639`). An UNRESOLVED result is reported, and a re-run is the owner's
+     word. About 4.4 h at `ABC-204` `A6`'s rate.
+   - **`M3`:** `G1`, `G5`, `G6`, `G8` and `G9` on the same sha, each by its own instrument. `G6`'s "≥ base" has no
+     candidate at close, so it reads `main` at close against the `M1` baseline sha `3497aad2`, by the `G6` row's rule (5
+     interleaved runs per board per build, the median, floor 6). That is BA/PM's reading of "nothing regressed", and no
+     bound moves.
+4. **BA/PM: grade `M1`–`M4` and write the epic's close.**
+   - **`M1`:** both clauses must hold (Q1, `…e44d2903`): the point estimate (R at close − 2 061.3) is **≥ +100**, and
+     the interval, half-width √(50.3² + Y₂²), lies **above 0**.
+   - **`M2`:** each merged ticket's ship rule: `ABC-208` S1 (GAIN), `ABC-215` S3, and `ABC-206` S2 read under its
+     waiver (`…cb10c36c`, accepted risk LOW, the Orchestrator's), which is stated as such. `ABC-204` and `ABC-217`
+     change no engine value and owe no D.
+   - **`M3`** from step 3. **`M4`:** 0 NFR bounds moved; each ADR of the epic was reported when it landed.
+   - The page's front-matter goes to Done, with `M1` MET or NOT MET. The stale front-matter on the Done pages is
+     synced in the same hop.
+   - **If `M1` is NOT MET, the epic still closes.** All eight proposals are spent, and none is left to re-tune here.
+     Whether more strength work follows is the owner's call (a new epic on his word). It is not cut here.
+5. **Orchestrator:** the board (`EPIC-008` → Done), the trace row, and the `M1` result to the owner.
 
 **Why this order.**
 - The brief sets two places: the harness first, then king safety.
