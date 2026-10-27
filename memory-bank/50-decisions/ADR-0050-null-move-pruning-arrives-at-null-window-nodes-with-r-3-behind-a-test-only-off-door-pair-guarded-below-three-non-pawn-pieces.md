@@ -144,6 +144,11 @@ acceptance (`…d25ab770`, reading b). No agent marks it accepted.
    | `kpk-d6e6` | `4k3/8/3K4/4P3/8/8/8/8 w - - 0 1` | Ke6 | 8 | the same |
    | `kpk-e6f6` | `5k2/8/4K3/5P2/8/8/8/8 w - - 0 1` | Kf6 | 8 | the same |
 
+   - **2026-10-27, amended (`ABC-210`, P2): `zugzwang.005`'s depth 12 → 13.** Under `ADR-0051`'s check extension,
+     `chooseMove` to depth 12 plays Ne2 and plays Nxd5 from depth 13 (`ADR-0051` Consequences, P2). Accepted by the
+     owner with `ADR-0051` (Olger Oeselg, verbatim *"yes, accept ADR-0051"*, `owner-word-2026-10-27/…047d411f` item 2).
+     It takes effect at `ABC-210`'s merge. If `ABC-210` does not merge, it does not land and the row stays at 12. The
+     table row above keeps its original depth for the record. Recorded by Architect/Design (task `arch-accept-adr0051`).
    - The three CPW rows keep non-pawn material, so they test the material guard. Under decision 6 they are decided by
      the guard, not by R: no classic zugzwang row has three pieces on the defending side. R is judged by `A3` and `G1`.
    - Stockfish 19 at depth 26, run on its own and forced to score the recorded move, corroborates each CPW move: Rf1

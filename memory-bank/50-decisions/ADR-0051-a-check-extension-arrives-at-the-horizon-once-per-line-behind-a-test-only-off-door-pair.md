@@ -6,7 +6,23 @@ id: ADR-0051
 
 ## Status
 
-**PROPOSED** 2026-10-27 by Architect/Design (task `arch-design-ABC-210`, records plus probes, at `main` `f0c50046`).
+**ACCEPTED** 2026-10-27 by Olger Oeselg (owner), verbatim *"yes, accept ADR-0051"* (note
+`.grugops/context/owner-word-2026-10-27/notes/20261027T062043Z-orchestrator-decision-047d411f.md`). He was answering
+the one bundled yes/no "accept ADR-0051, including the zugzwang test change?", so the yes covers this ADR, its oracle
+bars (decision 7) and P2's route. Recorded by Architect/Design (task `arch-accept-adr0051`, records only, at `main`
+`5dfd818c`).
+
+- **ACCEPTED; in force on `main` at `ABC-210`'s merge.** Until then the check extension is not on `main`. At
+  `5dfd818c`, `src/search.ts` and `src/engine.ts` hold no check extension, and `grugops/ABC-210` has no commit beyond
+  `main`. The QE verdict and S1 still decide that merge.
+- **If `ABC-210` does not merge (S1 NOT MET),** a dated line here records "accepted, not in force on `main`", as
+  `ADR-0026` decision 9 and `ADR-0025` decision 4 do. P2's depth change in `ADR-0050` decision 9 then does not land.
+- **P2** (`zugzwang.005`, depth 12 → 13) is recorded as a dated amendment line in `ADR-0050` decision 9; the original
+  table row stays. **P1** (the `ABC-081` `A5` re-pin to depth 2) was routed by the Orchestrator (`…75af453c`), not by
+  this ADR.
+- This ADR assigns no § Records or drift rows, so none are applied. Nothing else in this ADR moves.
+
+Previously **PROPOSED** 2026-10-27 by Architect/Design (task `arch-design-ABC-210`, records plus probes, at `main` `f0c50046`).
 **Acceptance is the owner's** (`…5aaf7cec` item 3: a new ADR is his). The Orchestrator reports this text to him
 (`…7feb0553` item 2). The design and the build may proceed; the ALONE reading and the merge wait on his acceptance
 (reading b: `…d25ab770`, `…828d5794`). No agent marks it accepted.
