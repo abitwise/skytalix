@@ -66,6 +66,18 @@
  * when the side to move has fewer than three non-pawn pieces (the zugzwang guard). It changes the
  * VALUE, so every door older than `ABC-208` turns it off, and `search()` is held to the TEST-ONLY
  * door `searchWithoutNullMove`, the pre-`ABC-208` `search()`, by a bounded oracle (decision 8).
+ *
+ * A CHECK EXTENSION AT THE HORIZON (ABC-210, `ADR-0051`): a full-width node whose remaining depth
+ * is 0 or less and whose side to move is in check is searched one ply deeper instead of being
+ * handed to `quiesce`, which would stand pat as if the checked side could pass. At most once per
+ * line (`CHECK_EXTENSION_MAX_PER_LINE`, 1), so a line is at most root depth + 1 full-width plies,
+ * inside `KEY_ARRAY_CAPACITY`; `QUIESCENCE_MAX_PLY` and `src/quiescence.ts` are unchanged. The
+ * rule is ONE pure predicate, `checkExtensionPlies`, which both recursions call at node entry,
+ * after the repetition scan and before the leaf test and the table probe; they add exactly what it
+ * returns to the remaining depth and to the line's count, `extensions`, an argument like
+ * `afterNull`. It changes the VALUE, so every door older than `ABC-210` turns it off, and
+ * `search()` is held to the TEST-ONLY door `searchWithoutCheckExtension`, the pre-`ABC-210`
+ * `search()`, by a bounded oracle (decision 7).
  */
 
 import { makeMove, makeNullMove, unmakeMove, unmakeNullMove } from "./apply.ts";
@@ -229,23 +241,28 @@ interface Switches {
   readonly table: boolean;
   /**
    * Principal-variation search (`ABC-121`): the null window for every move after a node's first,
-   * and the full-window re-search on a fail-high. True on `search()`, `searchWithoutNullMove` and
-   * `searchWithoutReductions`; false on every door older than `ABC-121` (`ADR-0026` decision 3),
+   * and the full-window re-search on a fail-high. True on `search()`,
+   * `searchWithoutCheckExtension`, `searchWithoutNullMove` and `searchWithoutReductions`; false on every door older than `ABC-121` (`ADR-0026` decision 3),
    * and on the two unpruned doors because a null window IS a cutoff.
    */
   readonly pvs: boolean;
   /**
-   * Late-move reductions (`ABC-121`), by `lateMoveReduction`. True on `search()` and
-   * `searchWithoutNullMove`. They live inside PVS's null-window frame, so they act only where
+   * Late-move reductions (`ABC-121`), by `lateMoveReduction`. True on `search()`,
+   * `searchWithoutCheckExtension` and `searchWithoutNullMove`. They live inside PVS's null-window frame, so they act only where
    * `pvs` is on (`ADR-0026` decision 1).
    */
   readonly reductions: boolean;
   /**
-   * Null-move pruning (`ABC-208`), by `nullMoveReduction`. True on `search()` only. It is tried
-   * at null-window nodes only, inside PVS's frame, so it acts only where `pvs` is on (`ADR-0050`
-   * decision 1); every older door turns it off (decision 3).
+   * Null-move pruning (`ABC-208`), by `nullMoveReduction`. True on `search()` and
+   * `searchWithoutCheckExtension`. It is tried at null-window nodes only, inside PVS's frame, so it
+   * acts only where `pvs` is on (`ADR-0050` decision 1); every older door turns it off (decision 3).
    */
   readonly nullMove: boolean;
+  /**
+   * The check extension at the horizon (`ABC-210`), by `checkExtensionPlies`. True on `search()`
+   * only; every older door turns it off (`ADR-0051` decision 5).
+   */
+  readonly checkExtension: boolean;
 }
 
 /** The least remaining depth, and the least 0-based index in the ordered list, a reduced move has. */
@@ -317,6 +334,24 @@ export function nullMoveReduction(
   return 0;
 }
 
+/** The most plies one line may be extended by `checkExtensionPlies` (`ADR-0051` decision 3). */
+const CHECK_EXTENSION_MAX_PER_LINE = 1;
+
+/**
+ * THE check-extension rule (`ABC-210`, `ADR-0051` decision 2): how many plies deeper a node of
+ * remaining `depth` is searched, 1 or 0, on a line already extended `extensions` times. Both
+ * recursions call it at node entry and add exactly what it returns to the depth and to the count.
+ *
+ * One ply when all three hold: the node is at the horizon (remaining depth 0 or less); the line has
+ * been extended fewer than `CHECK_EXTENSION_MAX_PER_LINE` times; and the side to move is in check.
+ * Check is derived HERE, from the position, and never supplied by the caller. Pure: it reads the
+ * position and changes nothing.
+ */
+export function checkExtensionPlies(position: Position, depth: number, extensions: number): number {
+  if (depth > 0 || extensions >= CHECK_EXTENSION_MAX_PER_LINE) return 0;
+  return isInCheck(position) ? 1 : 0;
+}
+
 /** The move list in the order `switches.ordering` asks for, at `ply`. */
 function ordered(
   moves: readonly Move[],
@@ -383,6 +418,10 @@ function leafScore(
  * `afterNull` is true only on the null move's child (`ABC-208`): the flag is an argument, so
  * nothing is held between nodes. With `nullMove` on, a null-window node that the table did not
  * settle first tries the pass, before any move is generated.
+ *
+ * `extensions` is how many plies this line has been extended so far (`ABC-210`), an argument for
+ * the same reason; every child, the null child included, is handed the node's count on. With
+ * `checkExtension` on, a horizon node in check is extended here, before the leaf test.
  */
 function negamax(
   position: Position,
@@ -394,12 +433,18 @@ function negamax(
   counter: NodeCounter,
   killers: KillerTable,
   keys: BigUint64Array,
+  extensions: number,
   afterNull: boolean,
 ): number {
   counter.nodes++;
 
   // In-tree repetition (`ABC-081` `A5`): EXACTLY 0, a literal, never a negated `-0`.
   if (repeatsInPath(keys, ply, position.halfmoveClock)) return 0;
+  if (switches.checkExtension) {
+    const extension = checkExtensionPlies(position, depth, extensions);
+    depth += extension;
+    extensions += extension;
+  }
   if (depth <= 0 || ply >= KEY_ARRAY_CAPACITY) {
     return leafScore(position, ply, alpha, beta, switches, counter);
   }
@@ -429,6 +474,7 @@ function negamax(
           counter,
           killers,
           keys,
+          extensions,
           true,
         );
       unmakeNullMove(position, nullUndo);
@@ -468,6 +514,7 @@ function negamax(
       counter,
       killers,
       keys,
+      extensions,
     );
     unmakeMove(position, move, undo);
     index++;
@@ -516,6 +563,7 @@ function searchMove(
   counter: NodeCounter,
   killers: KillerTable,
   keys: BigUint64Array,
+  extensions: number,
 ): number {
   const child = ply + 1;
   if (index === 0 || !switches.pvs) {
@@ -531,6 +579,7 @@ function searchMove(
         counter,
         killers,
         keys,
+        extensions,
         false,
       )
     );
@@ -547,6 +596,7 @@ function searchMove(
       counter,
       killers,
       keys,
+      extensions,
       false,
     );
   if (score > alpha && reduction > 0) {
@@ -562,6 +612,7 @@ function searchMove(
         counter,
         killers,
         keys,
+        extensions,
         false,
       );
   }
@@ -578,6 +629,7 @@ function searchMove(
         counter,
         killers,
         keys,
+        extensions,
         false,
       );
   }
@@ -645,6 +697,7 @@ function searchRoot(position: Position, depth: number, switches: Switches): Sear
       counter,
       killers,
       keys,
+      0,
     );
     unmakeMove(position, move, undo);
     index++;
@@ -674,6 +727,26 @@ export function search(position: Position, depth: number): SearchResult {
     pvs: true,
     reductions: true,
     nullMove: true,
+    checkExtension: true,
+  });
+}
+
+/**
+ * TEST-ONLY. The pre-`ABC-210` `search()`, node for node: the check extension off, everything else
+ * on, null move included. It is the reference `ABC-210`'s bounded drift oracle and node bound
+ * compare `search()` against, and the shipped side of every `ABC-208` row that measures null move
+ * alone (`ADR-0051` decisions 5 and 6). Not an engine option; nothing in production calls it.
+ */
+export function searchWithoutCheckExtension(position: Position, depth: number): SearchResult {
+  return searchRoot(position, depth, {
+    prune: true,
+    quiescence: true,
+    ordering: "full",
+    table: true,
+    pvs: true,
+    reductions: true,
+    nullMove: true,
+    checkExtension: false,
   });
 }
 
@@ -692,6 +765,7 @@ export function searchWithoutNullMove(position: Position, depth: number): Search
     pvs: true,
     reductions: true,
     nullMove: false,
+    checkExtension: false,
   });
 }
 
@@ -714,6 +788,7 @@ export function searchWithoutPruning(position: Position, depth: number): SearchR
     pvs: false,
     reductions: false,
     nullMove: false,
+    checkExtension: false,
   });
 }
 
@@ -734,6 +809,7 @@ export function searchWithoutQuiescence(position: Position, depth: number): Sear
     pvs: false,
     reductions: false,
     nullMove: false,
+    checkExtension: false,
   });
 }
 
@@ -756,6 +832,7 @@ export function searchWithoutPruningOrQuiescence(position: Position, depth: numb
     pvs: false,
     reductions: false,
     nullMove: false,
+    checkExtension: false,
   });
 }
 
@@ -774,6 +851,7 @@ export function searchWithoutOrdering(position: Position, depth: number): Search
     pvs: false,
     reductions: false,
     nullMove: false,
+    checkExtension: false,
   });
 }
 
@@ -791,6 +869,7 @@ export function searchWithoutKillers(position: Position, depth: number): SearchR
     pvs: false,
     reductions: false,
     nullMove: false,
+    checkExtension: false,
   });
 }
 
@@ -809,6 +888,7 @@ export function searchWithoutTable(position: Position, depth: number): SearchRes
     pvs: false,
     reductions: false,
     nullMove: false,
+    checkExtension: false,
   });
 }
 
@@ -827,6 +907,7 @@ export function searchWithoutReductions(position: Position, depth: number): Sear
     pvs: true,
     reductions: false,
     nullMove: false,
+    checkExtension: false,
   });
 }
 
@@ -845,5 +926,6 @@ export function searchWithoutPvsOrReductions(position: Position, depth: number):
     pvs: false,
     reductions: false,
     nullMove: false,
+    checkExtension: false,
   });
 }

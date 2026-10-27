@@ -16,6 +16,12 @@
  * depth-12 rows and `A3`'s oracle (the depth-5 drift in both recursions on the 190, and the mate
  * floor on the 287). Every deep row is deterministic: a fixed depth, or `chooseMove` on a frozen
  * clock with `maxDepth`. Unset, the deep cases are NOT DEFINED rather than skipped.
+ *
+ * `ABC-210` (`ADR-0051` decision 6): the check extension is on in `search()` and `chooseMove`, so
+ * every row here that compares the shipped path with a null-move door reads its shipped side off
+ * the check-extension doors, `searchWithoutCheckExtension` and `chooseMoveWithoutCheckExtension`,
+ * the pre-`ABC-210` shipped path: the d5 drift pair, the mate floor and the two "changes the work"
+ * rows. They read their pre-ticket figures, so 37 cp keeps measuring null move alone.
  */
 
 import { readFileSync } from "node:fs";
@@ -23,6 +29,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { makeMove, makeNullMove, unmakeMove, unmakeNullMove } from "./apply.ts";
 import {
   chooseMove,
+  chooseMoveWithoutCheckExtension,
   chooseMoveWithoutNullMove,
   chooseMoveWithoutReductions,
   type EngineChoice,
@@ -46,6 +53,7 @@ import {
   MATE_SCORE,
   nullMoveReduction,
   search,
+  searchWithoutCheckExtension,
   searchWithoutNullMove,
   searchWithoutReductions,
 } from "./search.ts";
@@ -372,20 +380,23 @@ describe("the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn
     expect(chooseMoveWithoutNullMove.length).toBe(2);
   });
 
-  it("search() makes null moves on position-6 at depth 4, and changes the work", () => {
+  // `ABC-210`: the shipped side reads the check-extension door, the pre-`ABC-210` `search()`.
+  it("searchWithoutCheckExtension makes null moves on position-6 at depth 4, and changes the work", () => {
     const fen = fenOf("position-6");
     let shipped = 0;
     expect(
-      nullMovesDuring(() => (shipped = search(parseFen(fen), 4).nodes)).length,
+      nullMovesDuring(() => (shipped = searchWithoutCheckExtension(parseFen(fen), 4).nodes)).length,
     ).toBeGreaterThan(0);
     expect(shipped).not.toBe(searchWithoutNullMove(parseFen(fen), 4).nodes);
   });
 
-  it("chooseMove makes null moves on position-6 deepened to 4, and changes the work", () => {
+  // `ABC-210`: the shipped side reads the check-extension door, the pre-`ABC-210` `chooseMove`.
+  it("chooseMoveWithoutCheckExtension makes null moves on position-6 deepened to 4, and changes the work", () => {
     const fen = fenOf("position-6");
     let shipped = 0;
     expect(
-      nullMovesDuring(() => (shipped = deepenTo(chooseMove, fen, 4).nodes)).length,
+      nullMovesDuring(() => (shipped = deepenTo(chooseMoveWithoutCheckExtension, fen, 4).nodes))
+        .length,
     ).toBeGreaterThan(0);
     expect(shipped).not.toBe(deepenTo(chooseMoveWithoutNullMove, fen, 4).nodes);
   });
@@ -412,13 +423,14 @@ describe("the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn
   }
 });
 
-describe("QE-208-c — every door's nullMove switch literal is false; only search() and chooseMove turn it on", () => {
+describe("QE-208-c — every door's nullMove switch literal is false; only the shipped path and the ABC-210 doors turn it on", () => {
   const MODULES = [
     {
       path: "./search.ts",
       call: "searchRoot(position, depth, {",
       doors: {
         search: "true",
+        searchWithoutCheckExtension: "true",
         searchWithoutNullMove: "false",
         searchWithoutPruning: "false",
         searchWithoutQuiescence: "false",
@@ -435,6 +447,7 @@ describe("QE-208-c — every door's nullMove switch literal is false; only searc
       call: "deepen(position, options, {",
       doors: {
         chooseMove: "true",
+        chooseMoveWithoutCheckExtension: "true",
         chooseMoveWithoutNullMove: "false",
         chooseMoveWithoutReductions: "false",
         chooseMoveWithoutPvsOrReductions: "false",
@@ -443,7 +456,7 @@ describe("QE-208-c — every door's nullMove switch literal is false; only searc
   ];
 
   for (const { path, call, doors } of MODULES) {
-    it(`${path}: each exported entry passes exactly one nullMove literal, and only the shipped one is true`, () => {
+    it(`${path}: each exported entry passes exactly one nullMove literal, and only the shipped one and its ABC-210 door are true`, () => {
       const flat = readFileSync(new URL(path, import.meta.url), "utf8").replace(/\s+/g, " ");
       const found: Record<string, string> = {};
       for (const chunk of flat.split("export function ").slice(1)) {
@@ -540,7 +553,9 @@ describe("QE-208-b — the null child's key is written: every table probe reads 
 // ---------------------------------------------------------------------------
 
 /**
- * `ADR-0050` decision 9's seven rows. Each depth is the one base solves the row at (8–12). The CPW
+ * `ADR-0050` decision 9's seven rows. Each depth is the one base solves the row at (8–12), but
+ * `zugzwang.005`'s, re-pinned 12 -> 13 at `ABC-210` (the owner's word, `…047d411f`): with the check
+ * extension on, `chooseMove` plays Ne2 to depth 12 and Nxd5 from 13. The CPW
  * rows keep non-pawn material and test the guard's size; the four K+P v K rows are opposition wins
  * where any pass misleads, and test that a side with no non-pawn piece never passes.
  */
@@ -572,7 +587,7 @@ const A2_ROWS: ReadonlyArray<{
     name: "zugzwang.005",
     fen: "8/8/1p1r1k2/p1pPN1p1/P3KnP1/1P6/8/3R4 b - - 0 1",
     move: "f4d5",
-    depth: 12,
+    depth: 13,
     source: 'CPW "Null Move Test-Positions" (the suite\'s best move)',
     deep: true,
   },
@@ -611,12 +626,12 @@ const A2_ROWS: ReadonlyArray<{
 ];
 
 describe("A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth", () => {
-  it("seven rows, each with its source, at depths 8 to 12", () => {
+  it("seven rows, each with its source, at depths 8 to 13", () => {
     expect(A2_ROWS).toHaveLength(7);
     for (const row of A2_ROWS) {
       expect(row.source.length, row.name).toBeGreaterThan(0);
       expect(row.depth, row.name).toBeGreaterThanOrEqual(8);
-      expect(row.depth, row.name).toBeLessThanOrEqual(12);
+      expect(row.depth, row.name).toBeLessThanOrEqual(13);
     }
   });
 
@@ -720,21 +735,22 @@ if (RUN_DEEP) {
       expect(corpus()).toHaveLength(190);
     });
 
-    it("search() against searchWithoutNullMove at fixed depth 5: >= 95% within 25 cp, none beyond 37 cp [deep, SEARCH_DEEP=1]", () => {
+    // `ABC-210`: the shipped side reads the check-extension doors, so the bar measures null move alone.
+    it("searchWithoutCheckExtension against searchWithoutNullMove at fixed depth 5: >= 95% within 25 cp, none beyond 37 cp [deep, SEARCH_DEEP=1]", () => {
       reportAndBar(
-        "search() d5",
+        "searchWithoutCheckExtension d5",
         drift(
-          (fen) => search(parseFen(fen), 5).score,
+          (fen) => searchWithoutCheckExtension(parseFen(fen), 5).score,
           (fen) => searchWithoutNullMove(parseFen(fen), 5).score,
         ),
       );
     }, 600_000);
 
-    it("chooseMove against chooseMoveWithoutNullMove deepened to 5: >= 95% within 25 cp, none beyond 37 cp [deep, SEARCH_DEEP=1]", () => {
+    it("chooseMoveWithoutCheckExtension against chooseMoveWithoutNullMove deepened to 5: >= 95% within 25 cp, none beyond 37 cp [deep, SEARCH_DEEP=1]", () => {
       reportAndBar(
-        "chooseMove to d5",
+        "chooseMoveWithoutCheckExtension to d5",
         drift(
-          (fen) => deepenTo(chooseMove, fen, 5).score,
+          (fen) => deepenTo(chooseMoveWithoutCheckExtension, fen, 5).score,
           (fen) => deepenTo(chooseMoveWithoutNullMove, fen, 5).score,
         ),
       );
@@ -742,14 +758,15 @@ if (RUN_DEEP) {
   });
 
   describe("A3 — the same-depth mate floor on the 287 [deep, SEARCH_DEEP=1]", () => {
-    it("every mate searchWithoutNullMove scores at depth 5, search() scores at depth 5: same sign, no longer [deep, SEARCH_DEEP=1]", () => {
+    // `ABC-210`: the shipped side reads the check-extension door, the pre-`ABC-210` `search()`.
+    it("every mate searchWithoutNullMove scores at depth 5, searchWithoutCheckExtension scores at depth 5: same sign, no longer [deep, SEARCH_DEEP=1]", () => {
       let mates = 0;
       const violations: string[] = [];
       for (const fen of MATE_CORPUS) {
         const ref = searchWithoutNullMove(parseFen(fen), 5).score;
         if (!isMate(ref)) continue;
         mates++;
-        const got = search(parseFen(fen), 5).score;
+        const got = searchWithoutCheckExtension(parseFen(fen), 5).score;
         // A mate n plies away reads MATE_SCORE - n, so "no longer" is |got| >= |ref|.
         if (!isMate(got) || Math.sign(got) !== Math.sign(ref) || Math.abs(got) < Math.abs(ref)) {
           violations.push(`${fen}: ${ref} without null move, ${got} with it, depth 5`);

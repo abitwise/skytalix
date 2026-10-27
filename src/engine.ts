@@ -75,6 +75,14 @@
  * above turn it off, and a third TEST-ONLY door, `chooseMoveWithoutNullMove`, is the pre-`ABC-208`
  * `chooseMove`, node for node: the engine side of its bounded drift oracle. It takes no depth.
  *
+ * THE CHECK EXTENSION AT THE HORIZON (`ABC-210`, `ADR-0051`) is `src/search.ts`'s too, by that
+ * module's ONE predicate, `checkExtensionPlies`, imported rather than copied, called at node entry
+ * after the repetition scan and before the leaf test, with the line's count, `extensions`, an
+ * argument like `afterNull`. An extended node counts and checks the clock like any other
+ * (`NFR-004`). It changes the VALUE, so every door above turns it off, and a fourth TEST-ONLY door,
+ * `chooseMoveWithoutCheckExtension`, is the pre-`ABC-210` `chooseMove`, node for node: the engine
+ * side of its bounded drift oracle. It takes no depth.
+ *
  * NOT HERE, each owned elsewhere: difficulty selection and how a level persists (`EPIC-006`), the
  * budget-to-level mapping (`ABC-087`), aspiration windows and threading (none requested;
  * `ADR-0005` F6 leaves threading to Architect/Design).
@@ -87,6 +95,7 @@ import type { Move } from "./moves.ts";
 import type { Position } from "./position.ts";
 import { type QuiescenceVisitor, quiesce } from "./quiescence.ts";
 import {
+  checkExtensionPlies,
   KEY_ARRAY_CAPACITY,
   KillerTable,
   lateMoveReduction,
@@ -198,16 +207,24 @@ export interface EngineChoice {
 const ABORTED = Symbol("engine: the budget is spent");
 
 /**
- * The `ABC-121` and `ABC-208` switches, `src/search.ts`'s rule: on in `chooseMove`, off in its
- * doors.
+ * The `ABC-121`, `ABC-208` and `ABC-210` switches, `src/search.ts`'s rule: on in `chooseMove`, off
+ * in its doors.
  */
 interface Heuristics {
   /** Principal-variation search: false on `chooseMoveWithoutPvsOrReductions` only. */
   readonly pvs: boolean;
-  /** Late-move reductions, inside PVS's frame: true on `chooseMove` and its null-move-off door. */
+  /**
+   * Late-move reductions, inside PVS's frame: true on `chooseMove`, its check-extension-off door
+   * and its null-move-off door.
+   */
   readonly reductions: boolean;
-  /** Null-move pruning (`ABC-208`), at null-window nodes: true on `chooseMove` only. */
+  /**
+   * Null-move pruning (`ABC-208`), at null-window nodes: true on `chooseMove` and its
+   * check-extension-off door.
+   */
   readonly nullMove: boolean;
+  /** The check extension at the horizon (`ABC-210`): true on `chooseMove` only. */
+  readonly checkExtension: boolean;
 }
 
 /** The deepening loop's mutable state: the clock, the deadline, and when to consult again. */
@@ -275,6 +292,7 @@ function leafScore(
  * leaves the caller's position byte-identical. The turn loop BORROWS `history.position`
  * (`history.ts:39-44`) — a search that unwound without unmaking would hand the loop a board
  * several plies into a line nobody played. The null move (`ABC-208`) is unmade the same way.
+ * `extensions` is the line's check-extension count (`ABC-210`), handed to every child.
  */
 function negamax(
   position: Position,
@@ -283,12 +301,18 @@ function negamax(
   beta: number,
   ply: number,
   budget: Budget,
+  extensions: number,
   afterNull: boolean,
 ): number {
   countNode(budget);
 
   const keys = budget.keys;
   if (repeatsInPath(keys, ply, position.halfmoveClock)) return 0;
+  if (budget.checkExtension) {
+    const extension = checkExtensionPlies(position, remaining, extensions);
+    remaining += extension;
+    extensions += extension;
+  }
   if (remaining <= 0 || ply >= KEY_ARRAY_CAPACITY) {
     return leafScore(position, ply, alpha, beta, budget);
   }
@@ -316,6 +340,7 @@ function negamax(
             0 - beta + 1,
             ply + 1,
             budget,
+            extensions,
             true,
           );
       } finally {
@@ -342,7 +367,17 @@ function negamax(
     let score: number;
     try {
       keys[ply + 1] = zobristKeyAfterMove(key, position, move, undo);
-      score = searchMove(position, remaining, alpha, beta, ply, index, reduction, budget);
+      score = searchMove(
+        position,
+        remaining,
+        alpha,
+        beta,
+        ply,
+        index,
+        reduction,
+        budget,
+        extensions,
+      );
     } finally {
       unmakeMove(position, move, undo);
     }
@@ -381,19 +416,34 @@ function searchMove(
   index: number,
   reduction: number,
   budget: Budget,
+  extensions: number,
 ): number {
   const child = ply + 1;
   if (index === 0 || !budget.pvs) {
-    return 0 - negamax(position, remaining - 1, 0 - beta, 0 - alpha, child, budget, false);
+    return (
+      0 - negamax(position, remaining - 1, 0 - beta, 0 - alpha, child, budget, extensions, false)
+    );
   }
   let score =
     0 -
-    negamax(position, remaining - 1 - reduction, 0 - alpha - 1, 0 - alpha, child, budget, false);
+    negamax(
+      position,
+      remaining - 1 - reduction,
+      0 - alpha - 1,
+      0 - alpha,
+      child,
+      budget,
+      extensions,
+      false,
+    );
   if (score > alpha && reduction > 0) {
-    score = 0 - negamax(position, remaining - 1, 0 - alpha - 1, 0 - alpha, child, budget, false);
+    score =
+      0 -
+      negamax(position, remaining - 1, 0 - alpha - 1, 0 - alpha, child, budget, extensions, false);
   }
   if (score > alpha && score < beta) {
-    score = 0 - negamax(position, remaining - 1, 0 - beta, 0 - alpha, child, budget, false);
+    score =
+      0 - negamax(position, remaining - 1, 0 - beta, 0 - alpha, child, budget, extensions, false);
   }
   return score;
 }
@@ -455,6 +505,7 @@ function runIteration(
         index,
         reduction,
         budget,
+        0,
       );
     } finally {
       unmakeMove(position, move, undo);
@@ -482,7 +533,30 @@ function runIteration(
  * The position is byte-identical on return, aborted iteration or not.
  */
 export function chooseMove(position: Position, options: EngineOptions): EngineChoice | null {
-  return deepen(position, options, { pvs: true, reductions: true, nullMove: true });
+  return deepen(position, options, {
+    pvs: true,
+    reductions: true,
+    nullMove: true,
+    checkExtension: true,
+  });
+}
+
+/**
+ * TEST-ONLY. The pre-`ABC-210` `chooseMove`, node for node: the check extension off, everything else
+ * on, null move included. It is the engine side of `ABC-210`'s bounded drift oracle, and the
+ * shipped side of every `ABC-208` row that measures null move alone (`ADR-0051` decisions 5 and 6).
+ * Not an engine option; nothing in production calls it.
+ */
+export function chooseMoveWithoutCheckExtension(
+  position: Position,
+  options: EngineOptions,
+): EngineChoice | null {
+  return deepen(position, options, {
+    pvs: true,
+    reductions: true,
+    nullMove: true,
+    checkExtension: false,
+  });
 }
 
 /**
@@ -495,7 +569,12 @@ export function chooseMoveWithoutNullMove(
   position: Position,
   options: EngineOptions,
 ): EngineChoice | null {
-  return deepen(position, options, { pvs: true, reductions: true, nullMove: false });
+  return deepen(position, options, {
+    pvs: true,
+    reductions: true,
+    nullMove: false,
+    checkExtension: false,
+  });
 }
 
 /**
@@ -508,7 +587,12 @@ export function chooseMoveWithoutReductions(
   position: Position,
   options: EngineOptions,
 ): EngineChoice | null {
-  return deepen(position, options, { pvs: true, reductions: false, nullMove: false });
+  return deepen(position, options, {
+    pvs: true,
+    reductions: false,
+    nullMove: false,
+    checkExtension: false,
+  });
 }
 
 /**
@@ -520,10 +604,15 @@ export function chooseMoveWithoutPvsOrReductions(
   position: Position,
   options: EngineOptions,
 ): EngineChoice | null {
-  return deepen(position, options, { pvs: false, reductions: false, nullMove: false });
+  return deepen(position, options, {
+    pvs: false,
+    reductions: false,
+    nullMove: false,
+    checkExtension: false,
+  });
 }
 
-/** The deepening loop behind `chooseMove` and its three doors; they differ in `heuristics` only. */
+/** The deepening loop behind `chooseMove` and its four doors; they differ in `heuristics` only. */
 function deepen(
   position: Position,
   options: EngineOptions,

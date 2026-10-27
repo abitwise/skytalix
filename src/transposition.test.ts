@@ -510,10 +510,13 @@ describe("A5 — the only non-losing line repeats, and it scores exactly 0", () 
     expect(searchWithoutPvsOrReductions(parseFen(REPEATS_AT_PLY_4), 4).nodes).toBe(7_295);
   });
 
-  it("the fixture bites: at depth 3 the repetition is past the horizon, and the rook down shows", () => {
+  it("the fixture bites: at depth 2 the repetition is past the horizon, and the rook down shows", () => {
     // RE-MEASURED at `ABC-083` (king safety and mobility): −470 became −488 (`probe/rows.ts`).
     // RE-PINNED at `ABC-215` (the evaluation values made by rule): −488 became −485.
-    expect(search(parseFen(REPEATS_AT_PLY_4), 3).score).toBe(-485);
+    // RE-PINNED at `ABC-210` (`ADR-0026` decision 7; Orchestrator `…75af453c`): depth 3, −485,
+    // became depth 2, −502. The check extension at the horizon extends the perpetual's checked
+    // horizon node onto the repetition, so at depth 3 it is no longer past the horizon (0).
+    expect(search(parseFen(REPEATS_AT_PLY_4), 2).score).toBe(-502);
   });
 
   /**
