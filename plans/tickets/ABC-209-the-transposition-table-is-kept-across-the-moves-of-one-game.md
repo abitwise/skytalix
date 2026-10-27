@@ -1,17 +1,21 @@
 ---
 id: ABC-209
 title: "The transposition table is kept across the moves of one game and cleared at a new game, with its size unchanged"
-status: in-development
-column: In Development
+status: dropped
+column: Done
 size: S
 priority: P3
 epic: EPIC-008
 feature: —
-adr: "ADR-0025 decision 4 amendment of 2026-10-26: ACCEPTED by the owner 2026-10-26 (…2ae5fc12 item 1); in force on main at ABC-209's merge; the QE verdict still decides the merge"
+adr: "ADR-0025 decision 4 amendment of 2026-10-26: ACCEPTED by the owner 2026-10-26 (…2ae5fc12 item 1); NOT in force on main: ABC-209 closed unmerged under S1 on 2026-10-27 (the ADR's dated line is the Architect's, arch-adr0025-not-in-force)"
 ---
 
 # ABC-209: keep the transposition table across moves
 
+> **CLOSED UNMERGED 2026-10-27 under ship rule S1. Not delivered.** BA/PM, task `bapm-s1-ABC-209`. D was NEUTRAL
+> (pooled over 800 games, +8.7 ± 18.3), so S1 is NOT MET. `A1`–`A5` and `A7` were MET, `G6` and `G2` included. S1's
+> one re-tune round is not taken. The code stays on `grugops/ABC-209` `bb6cf451`. See § Close.
+>
 > **Cut 2026-10-23 by BA/PM** (task `bapm-cut-engine-strength`, records only, at `main` `55a8f4ef`). Proposal 6 of
 > `…f1771bb3`; owner word `…7feb0553`.
 >
@@ -88,15 +92,22 @@ adr: "ADR-0025 decision 4 amendment of 2026-10-26: ACCEPTED by the owner 2026-10
   - *2026-10-26 (BA/PM, `bapm-ready-ABC-209`):* `G1`: the diff touches `src/transposition.ts` and `src/engine.ts`, so
     `ADR-0034` decision 2 gives it no drift class, and every missed row is class B.
   - *2026-10-26 (BA/PM, `bapm-ready-ABC-209`):* `G6` is read by `EPIC-008`'s rule (`…8e51ba1e`): 5 interleaved runs
-    per board per build, "≥ base" graded by the median, any run below depth 6 FAILs. `QE-205-c` is still open, so
-    "≥ base" is graded. Each `G6` run is one fresh process, so by `A1` head's search is node-equal to base's. `G6`
-    therefore reads timing noise, not this change. A miss is reported against `A1`. It is not read as a design
-    defect.
+    per board per build, "≥ base" graded by the median, any run below depth 6 FAILs. ~~`QE-205-c` is still open, so
+    "≥ base" is graded.~~ *Synced 2026-10-27 (BA/PM, `bapm-s1-ABC-209`):* "≥ base" is graded on the owner's word
+    (option A, `…2ae5fc12` item 2), and `QE-205-c` is closed. The rule and the bar are unchanged. Each `G6` run is
+    one fresh process, so by `A1` head's search is node-equal to base's. `G6` therefore reads timing noise, not this
+    change. A miss is reported against `A1`. It is not read as a design defect.
 - **`A6` (the reading).** **Given** `ABC-204` is Done, **then** D meets ship rule **S1**. The table persists only
   within a game, which is how cutechess plays (one process across games, with `ucinewgame`).
   - *2026-10-26 (BA/PM, `bapm-ready-ABC-209`):* there is one reading, and it is final (`…4c3f7639`). The D budget is
     `ABC-204`'s frozen 1 500 ms. If D is not a GAIN after the one extension, the ticket is not merged. A re-tune
     reading needs the owner's word.
+  - *2026-10-27 (BA/PM, `bapm-s1-ABC-209`), `QE-209-c`:* the sentence "one process across games, with `ucinewgame`"
+    is not how the harness plays. `ABC-204` pins `restart=on`, so cutechess starts one engine process per game (400
+    per reading), and each process gets one `ucinewgame`. The table still persisted across every move of its game,
+    which is what this criterion is about. D did exercise the change: 98.2 % (d1) and 98.3 % (d2) of the candidate's
+    searches kept the table, and 0 cleared mid-game (`…b3f525d2`). D does not exercise the `ucinewgame` clear path;
+    `A2` covers it. The text is corrected here, and the bar (S1) is unchanged.
 - **`A7` (the ADR).** The amendment exists and records that it was reported to the owner.
 
 ## NFR triggers
@@ -167,7 +178,7 @@ Design comes first. Only these rows changed:
 | 4 | acceptance testable and measurable | ✅ the criteria are unchanged. Dated reading lines add `G1` class B (`ADR-0034` d2), the `EPIC-008` `G6` rule, `A6` one reading, and QE fixing the `A4` game |
 | 5 | dependencies known | ✅ `ABC-208` and `ABC-204` are Done. The D base is its own merge-base on `main`, which carries `ABC-208` |
 | 7 | test notes present | ✅ five (the frozen-clock pre-check, and ALONE with `QE-207-g`) |
-| 10 | no major unresolved blocker | ✅ the sequence hold is gone. The amendment is In Design's work. `QE-205-c` (owner) and `QE-207-g` (kit) are open, and neither blocks |
+| 10 | no major unresolved blocker | ✅ the sequence hold is gone. The amendment is In Design's work. ~~`QE-205-c` (owner) and~~ `QE-207-g` (kit) ~~are~~ is open, and ~~neither blocks~~ it does not block. *Synced 2026-10-27 (`bapm-s1-ABC-209`): `QE-205-c` is closed (`…2ae5fc12` item 2)* |
 
 - **The `ADR-0025` decision 4 amendment is needed as written.** The change does not fit inside an accepted ADR:
   - decision 4 says "cleared at every `chooseMove` and every `search()` entry" and "It does not persist across moves";
@@ -201,7 +212,7 @@ Design comes first. Only these rows changed:
 | 4 | acceptance testable and measurable | ✅ `A3`'s pair is chosen (reply = stored hash move); `A4`'s row is 40 searches through one token, `gc()` reads at 1 and 40 |
 | 7 | test notes present | ✅ five; test note 2 is answered (no sharing) |
 | 8 | size assigned | ✅ `S`, confirmed by the probe (about 45–65 production lines in five files; no split) |
-| 10 | no major unresolved blocker | ✅ the design is ruled (`…2e73dcd9`); `ADR-0025`'s amendment is PROPOSED, and under reading (b) the build may proceed. The ALONE reading and the merge wait on the owner. `QE-205-c` and `QE-207-g` stay open and do not block |
+| 10 | no major unresolved blocker | ✅ the design is ruled (`…2e73dcd9`); `ADR-0025`'s amendment is PROPOSED, and under reading (b) the build may proceed. The ALONE reading and the merge wait on the owner. ~~`QE-205-c` and~~ `QE-207-g` ~~stay~~ stays open and ~~do~~ does not block. *Synced 2026-10-27 (`bapm-s1-ABC-209`): `QE-205-c` is closed (`…2ae5fc12` item 2)* |
 
 ## Design ruling
 
@@ -289,3 +300,51 @@ The expected D effect is small (`UNKNOWN - verify`). D decides.
 `src/levels.ts`, `src/level-seam.ts` and `src/uci-session.ts`. On top of that come the comment rewrites the amendment
 lists and the `A1`–`A4` rows. The prototype's diff was +65/−9, comments included. A split would ship a token that
 nothing passes.
+
+## Close
+
+> **BA/PM, 2026-10-27** (task `bapm-s1-ABC-209`, records only, at `main` `a5306773`). Inputs: QE `…e32e0ee4`,
+> `…0932c037` and `…b3f525d2` (`QE-209-a` to `-f`), and the Orchestrator's routing `…00f47145`. The form follows
+> `bapm-s1-ABC-207` (`…f249ca34`). The call is a delivery call under `…5aaf7cec`. The owner is told, and his veto is
+> open. Notes: `.grugops/context/bapm-s1-ABC-209/notes/`.
+
+**Closed unmerged under S1.** S1 says that anything other than GAIN is NOT MET, and that BA/PM then "closes or re-cuts
+it". This ticket is closed.
+
+- **The reading.** `A6` NOT MET. d1 was NEUTRAL, −0.9 ± 25.3, so the one extension ran. d2 read +18.3 ± 26.3. Pooled
+  over 800 games (240/220/340), it is **+8.69 ± 18.25: NEUTRAL** (X − Y = −9.56). The grade is the same without the
+  games that ran at load1 > 8, and it is the same split by power source. `A1`–`A5` and `A7` were MET: the pre-check
+  was 8 of 8 equal, `G6` and `G2` were MET, and `A4`'s 40-search row was within 1 MiB. Under `…4c3f7639` the reading
+  is final.
+- **It was a fair test.** One process per game, and 98.2 % / 98.3 % of the candidate's searches kept the table
+  (`QE-209-c`, above). No production-code defect was found. The idea was measured, and the gain was too small to see.
+- **S1's one re-tune round is not taken, and no re-tune question goes to the owner.** Four reasons:
+  - **No variant is predicted to clear.** The mechanism's ceiling is small: in the design probe, moves 2–8 cost
+    0.94–0.97× of fresh nodes (`…2e73dcd9`). The owner was told before his yes that D might well read NEUTRAL
+    (`…388d6d51`). The ADR's named next question, `T5` (a generation or depth-preferred replacement), changes what is
+    kept. No measurement says how much it adds (`UNKNOWN - verify`), and it changes `ADR-0025` again, which is the
+    owner's. That is a new design, not a re-tune.
+  - **Reading the same build again is barred.** `…0932c037` says "do not retry as is", and `…4c3f7639` makes this
+    reading final. Even if the true effect were the +8.7 point estimate, a new 800-game reading would show GAIN only
+    by chance: about 1 time in 7 (my arithmetic: X needs about +9.6 more, against a standard error of about 9.3).
+  - **The cost.** This reading took about 12.6 h ALONE (d1 6.18 h, d2 6.41 h). A re-tune adds a build, an ADR
+    amendment, a QE hop and a second real-clock reading beyond `…4c3f7639`, which needs the owner's word.
+  - **`P3`, low value, and it blocks the chain.** `ABC-210` waits on this ticket. Holding it for a re-tune holds
+    the epic's last engine change.
+- **What is kept.**
+  - `grugops/ABC-209` at `bb6cf451` (the build) and `grugops/qe-ABC-209` at `694aa3af` (QE's records). Neither is
+    merged or deleted.
+  - The failed attempt `…0932c037`. `bb6cf451` is not read again as it is.
+- **`main` is clean.** `git diff 64394974 a5306773 -- src data tools` is empty, so no revert is owed.
+- **`ADR-0025`'s decision 4 amendment:** accepted by the owner, and not in force on `main`. The ADR's dated line is the
+  Architect's (`arch-adr0025-not-in-force`, as `ADR-0026` d9 did). This page's `adr:` line says the same.
+- **Not owed.** `QE-209-a` (MEDIUM: one row per game owner) and `QE-209-b` (LOW: test note 2 pinned by no row) are
+  test gaps on code that does not ship. They travel with the ticket if it is re-opened or re-cut. `QE-209-d` and
+  `-e` are INFO. `QE-209-f` (host power) and `QE-207-g` (the ALONE claim TTL) are the Orchestrator's.
+- **The re-open path.**
+  - **The owner vetoes the close.** The page goes back to Backlog (Blocked), and one re-tune round is cut on his
+    word. It changes what is kept or how it is used (for example `T5`), and it owes its own pre-check, `G2`, `G6`, D
+    under S1, `QE-209-a` and `-b`. If `ABC-210` has merged by then, the D base moves with it.
+  - **A later re-cut.** BA/PM cuts a new ticket from `bb6cf451`. Whether that counts as a new ticket's single reading
+    or a second reading of this one is the owner's reading of `…4c3f7639`. Until he says, it is read as a second one.
+- **Not touched here:** `src/`, `NFR-005`, `NFR-009`, `ADR-0025`, and `EPIC-008`'s gate rows.
