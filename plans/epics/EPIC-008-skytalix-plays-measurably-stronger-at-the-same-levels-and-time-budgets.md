@@ -59,6 +59,10 @@ still hold only measured gains.
     was closed undelivered on the owner's pick O0 (`…58bcd17c`): there is no new source, and the pinned source has no line
     that reaches 3...b6 (`…7bb8daf1`). Three engine changes remain (`ABC-208` to `ABC-210`). The owner accepted
     `ADR-0050`, and `ABC-208` is in its reading.
+  - *2026-10-27 (BA/PM, `bapm-s1-ABC-209`):* proposal 6 (`ABC-209`, the transposition table kept across one game) is
+    **not shipped**. It was closed unmerged under S1, because D was NEUTRAL after the one extension: pooled over 800
+    games, +8.7 ± 18.3 (`…e32e0ee4`, `…0932c037`). One engine change remains unbuilt (`ABC-210`). `ABC-206` is Done,
+    and `ABC-208` is Done (merged `b5c67ab7`).
 - *2026-10-24 (BA/PM, `bapm-ABC-214-path-a`):* one provenance change, `ABC-215`. It re-derives the CC BY-SA 3.0
   values on the owner's path A (`…fb0468ff`) and is measured under S3.
 - *2026-10-24 (BA/PM, `bapm-cut-readme`):* one test-only follow-up, `ABC-217` (Ready, XS, P3). It moves `ABC-206`'s
@@ -177,6 +181,15 @@ not favour either side. A FAIL-class fault on a host that is not quiet is UNRESO
 >   top of what has merged (`ABC-206`, value-identical, and `ABC-215`, D +15.6 ± 23.8).
 > - **`M2` and `M3`: untouched.** Nothing of `ABC-207` merged, so nothing shipped unmeasured, and no gate on `main`
 >   moved.
+>
+> **2026-10-27, after `ABC-209`'s close (BA/PM, `bapm-s1-ABC-209`):**
+> - **`M1`: the baseline stands.** `ABC-209`'s code never reached `main`: `git diff 64394974 a5306773 -- src data
+>   tools` is empty. Proposal 6 is no longer a source for the +100. The +100 now rests on `ABC-210`, on top of what
+>   has merged (`ABC-206`, value-identical; `ABC-215`, D +15.6 ± 23.8; `ABC-208`, D +38.4 ± 23.3).
+> - **`M2` and `M3`: untouched by `ABC-209`.** Nothing of it merged, so nothing shipped unmeasured, and no gate on
+>   `main` moved.
+> - **`M2`, `ABC-208`** (recorded here, because no line on this page carried it): `ABC-208` shipped measured. It merged
+>   as `b5c67ab7` with D **GAIN, +38.4 ± 23.3** (400 games), so **S1 is met** without the extension (QE `…0477ac64`).
 
 ## Tickets (order is the pull order; the pages are under `plans/tickets/`)
 
@@ -225,6 +238,22 @@ S3 met (see `M2`). The row's cells are as cut.
   QE verdict under S1.
 - **`ABC-209` and `ABC-210`** stay chained. Each waits for its predecessor (`ABC-208`, then `ABC-209`) to reach Done
   or to be closed under S1.
+
+*2026-10-27 (BA/PM, `bapm-s1-ABC-209`):* row 5, `ABC-208`, is **Done** (merged `b5c67ab7`, D GAIN, S1 met; see `M2`).
+Row 6, `ABC-209`, is **closed unmerged under S1** (not delivered; that page's § Close). The rows' cells are as cut. The
+ticket that remains:
+- **`ABC-210`** (`M`, `P3`): **pullable once BA/PM re-scores its DoR.** Its Ready trigger, "`ABC-209` reaches Done, or
+  BA/PM closes it under S1", is met by this close once it is on `main`. Its row 10 sequence hold is out of date, and
+  no record re-scored it. The re-score is owed and is not done here. It needs:
+  - row 10: the hold is gone;
+  - rows 3 and 5: "`ABC-209` merged" reads as met by the close. The D base is its own merge-base on `main`, which
+    carries `ABC-208` and not `ABC-209`;
+  - a cite re-read: `src/quiescence.ts:21-24` holds at `a5306773` (same text);
+  - the reading lines its siblings carry: one reading, final (`…4c3f7639`); the frozen-clock pre-check; ALONE, with
+    `QE-207-g` and `QE-209-f` (host power).
+  - Then In Design first: an ADR that reverses `ABC-079`'s recorded decision, plus an `ADR-0026` door. The owner's
+    acceptance gates the ALONE reading and the merge, as it did for `ABC-208` and `ABC-209` (reading (b)).
+- It is the epic's last engine change. The closing `M1` R reading comes after it, at the epic's close.
 
 **Why this order.**
 - The brief sets two places: the harness first, then king safety.
