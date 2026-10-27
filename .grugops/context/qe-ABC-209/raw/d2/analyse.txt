@@ -1,0 +1,25 @@
+pgn_games: 400
+started: 400
+finished: 400
+result_texts: {"Black mates": 91, "Draw by 3-fold repetition": 156, "Draw by fifty moves rule": 1, "White mates": 148, "Draw by insufficient mating material": 4}
+fault_games: []
+out_fault_lines: []
+first_go_raw: {"skytalix": "131 >skytalix(0): go movetime 1500", "base": "133 >base(2): go movetime 1500"}
+gaps: {"skytalix": {"budget_ms": 1500, "searched_n": 22989, "book_n": 369, "median": 1501, "max": 1577, "over_1531": 2, "over_1500": 15672, "p99": 1504}, "base": {"budget_ms": 1500, "searched_n": 22974, "book_n": 363, "median": 1501.0, "max": 1579, "over_1531": 1, "over_1500": 15570, "p99": 1504}}
+pgn_moves_without_comment: {"skytalix": 369, "base": 363}
+fen_pairs: {"rounds": 200, "bad_rounds": [], "incomplete_rounds": [], "ep_square_dropped_by_cutechess_rounds": 46, "started_2k-1_2k_swapped": true}
+elo_all_qe: {"n": 400, "W": 130, "L": 109, "D": 161, "score": 0.52625, "X": 18.257154347038366, "Y": 26.34345448837151, "LOS": 91.28279679892081, "draw_ratio": 40.25}
+cutechess_elo_line_raw: "Elo difference: 18.3 +/- 26.3, LOS: 91.3 %, DrawRatio: 40.3 %"
+cutechess_score_line_raw: "Score of skytalix vs base: 130 - 109 - 161  [0.526] 400"
+one_result_line_raw: "Finished game 2 (base vs skytalix): 0-1 {Black mates}"
+move_cap_draws: 0
+wall: {"median_game_s": 168.0, "mean_game_s": 172.1225, "min": 58, "max": 381, "median_plies": 114.0, "first_start": "2026-10-26T20:52:56.984000+00:00", "last_end": "2026-10-27T03:17:05.634000+00:00", "median_game_s_from_start_end_ms": 168.21699999999998, "duration_tag_vs_start_end_max_abs_diff_s": 0.9200000000000159, "match_span_s": 23048.65, "games_per_hour_measured": 62.47654417937709}
+samples: 2289
+sampler: {"load1_min": 3.25, "load1_max": 10.87, "load1_median": 5.06, "power": ["AC_Power", "Battery_Power"], "thermal": {"1": 1131, "2": 1158}, "vitest_samples": 0, "load_gt8_samples": 24}
+vitest_bursts: []
+overlap_games: 0
+elo_clean_qe: {"n": 400, "W": 130, "L": 109, "D": 161, "score": 0.52625, "X": 18.257154347038366, "Y": 26.34345448837151, "LOS": 91.28279679892081, "draw_ratio": 40.25}
+wall_clean_median_s: 168.0
+wall_clean_median_s_ms: 168.21699999999998
+overlap_game_rounds: []
+games_touching_load_gt8: 10

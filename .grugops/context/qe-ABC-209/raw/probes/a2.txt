@@ -1,0 +1,11 @@
+UCI ucinewgame then position startpos: game-B {"nodes":2535,"depth":5,"bestmove":"b1c3"} fresh {"nodes":2535,"depth":5,"bestmove":"b1c3"} -> EQUAL (must equal) OK
+UCI ucinewgame then a line that extends game A: game-B {"nodes":4740,"depth":5,"bestmove":"d1f3"} fresh {"nodes":4740,"depth":5,"bestmove":"d1f3"} -> EQUAL (must equal) OK
+UCI non-continuing position (another start, unrelated line): game-B {"nodes":4417,"depth":5,"bestmove":"b8c6"} fresh {"nodes":4417,"depth":5,"bestmove":"b8c6"} -> EQUAL (must equal) OK
+UCI the same position searched again: game-B {"nodes":8874,"depth":5,"bestmove":"d2f3"} fresh {"nodes":8874,"depth":5,"bestmove":"d2f3"} -> EQUAL (must equal) OK
+UCI take-back (a shorter line, same start): game-B {"nodes":21580,"depth":5,"bestmove":"g2g4"} fresh {"nodes":21580,"depth":5,"bestmove":"g2g4"} -> EQUAL (must equal) OK
+UCI position fen of the current position (fen each move): game-B {"nodes":4740,"depth":5,"bestmove":"d1f3"} fresh {"nodes":4740,"depth":5,"bestmove":"d1f3"} -> EQUAL (must equal) OK
+UCI power control: the line continues game A: game-B {"nodes":4070,"depth":5,"bestmove":"d1f3"} fresh {"nodes":4740,"depth":5,"bestmove":"d1f3"} -> DIFFERS (power control: must differ) OK
+CLI new (same seam and level instance): game-B {"move":"b1c3","nodes":2068,"depth":4} fresh {"move":"b1c3","nodes":2068,"depth":4} -> EQUAL (must equal) OK
+CLI undo (two plies back): game-B {"move":"a2a4","nodes":4183,"depth":2} fresh {"move":"a2a4","nodes":4183,"depth":2} -> EQUAL (must equal) OK
+CLI power control: the game continues: game-B {"move":"c2c4","nodes":4240,"depth":2} fresh {"move":"c2c4","nodes":4308,"depth":2} -> DIFFERS (power control: must differ) OK
+A2 cases: 8 of 8 equal to a fresh process; power controls: 2 of 2 differ

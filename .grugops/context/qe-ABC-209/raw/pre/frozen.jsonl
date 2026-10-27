@@ -1,0 +1,16 @@
+{"tree":"base","board":"kiwipete","k":7,"variant":"none","depth":7,"nodes":590489,"score":-64}
+{"tree":"head","board":"kiwipete","k":7,"variant":"none","depth":7,"nodes":590489,"score":-64}
+{"tree":"head","board":"kiwipete","k":7,"variant":"token","depth":7,"nodes":590489,"score":-64}
+{"tree":"head-instr","board":"kiwipete","k":7,"variant":"none","depth":7,"nodes":590489,"score":-64}
+{"tree":"base","board":"kiwipete","k":8,"variant":"none","depth":8,"nodes":1259463,"score":-84}
+{"tree":"head","board":"kiwipete","k":8,"variant":"none","depth":8,"nodes":1259463,"score":-84}
+{"tree":"head","board":"kiwipete","k":8,"variant":"token","depth":8,"nodes":1259463,"score":-84}
+{"tree":"head-instr","board":"kiwipete","k":8,"variant":"none","depth":8,"nodes":1259463,"score":-84}
+{"tree":"base","board":"position-6","k":7,"variant":"none","depth":7,"nodes":180941,"score":78}
+{"tree":"head","board":"position-6","k":7,"variant":"none","depth":7,"nodes":180941,"score":78}
+{"tree":"head","board":"position-6","k":7,"variant":"token","depth":7,"nodes":180941,"score":78}
+{"tree":"head-instr","board":"position-6","k":7,"variant":"none","depth":7,"nodes":180941,"score":78}
+{"tree":"base","board":"position-6","k":8,"variant":"none","depth":8,"nodes":355565,"score":74}
+{"tree":"head","board":"position-6","k":8,"variant":"none","depth":8,"nodes":355565,"score":74}
+{"tree":"head","board":"position-6","k":8,"variant":"token","depth":8,"nodes":355565,"score":74}
+{"tree":"head-instr","board":"position-6","k":8,"variant":"none","depth":8,"nodes":355565,"score":74}

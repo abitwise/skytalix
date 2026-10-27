@@ -1,0 +1,4 @@
+2026-10-26T20:52:41Z wait poll=1 load1=3.25 power=Battery_Power batt=16% vitest=0 thermal=1
+2026-10-26T20:52:41Z PRECONDITIONS-MET
+2026-10-26T20:52:41Z harness start: d b5f46e86 64394974 --budget-ms 1500 --rounds 200
+2026-10-27T03:17:05Z harness end rc=0

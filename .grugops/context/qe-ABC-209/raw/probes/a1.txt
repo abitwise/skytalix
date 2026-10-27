@@ -1,0 +1,37 @@
+startpos chooseMove no-token after a tokened game: base {"move":"b1c3","score":38,"depth":5,"nodes":2535} head {"move":"b1c3","score":38,"depth":5,"nodes":2535} EQUAL
+startpos chooseMoveWithoutNullMove no-token after a tokened game: base {"move":"b1c3","score":38,"depth":5,"nodes":5357} head {"move":"b1c3","score":38,"depth":5,"nodes":5357} EQUAL
+startpos chooseMoveWithoutReductions no-token after a tokened game: base {"move":"b1c3","score":38,"depth":5,"nodes":15042} head {"move":"b1c3","score":38,"depth":5,"nodes":15042} EQUAL
+startpos chooseMoveWithoutPvsOrReductions no-token after a tokened game: base {"move":"b1c3","score":38,"depth":5,"nodes":17541} head {"move":"b1c3","score":38,"depth":5,"nodes":17541} EQUAL
+startpos chooseMove first call with a new token after a tokened game: base {"move":"b1c3","score":38,"depth":5,"nodes":2535} head {"move":"b1c3","score":38,"depth":5,"nodes":2535} EQUAL
+startpos control: same position re-searched (equal list -> new token): {"move":"b1c3","score":38,"depth":5,"nodes":2535} EQUAL (cleared, as ruled)
+kiwipete chooseMove no-token after a tokened game: base {"move":"e2a6","score":-3,"depth":5,"nodes":86891} head {"move":"e2a6","score":-3,"depth":5,"nodes":86891} EQUAL
+kiwipete chooseMoveWithoutNullMove no-token after a tokened game: base {"move":"e2a6","score":-3,"depth":5,"nodes":74429} head {"move":"e2a6","score":-3,"depth":5,"nodes":74429} EQUAL
+kiwipete chooseMoveWithoutReductions no-token after a tokened game: base {"move":"e2a6","score":-3,"depth":5,"nodes":108455} head {"move":"e2a6","score":-3,"depth":5,"nodes":108455} EQUAL
+kiwipete chooseMoveWithoutPvsOrReductions no-token after a tokened game: base {"move":"e2a6","score":-3,"depth":5,"nodes":144149} head {"move":"e2a6","score":-3,"depth":5,"nodes":144149} EQUAL
+kiwipete chooseMove first call with a new token after a tokened game: base {"move":"e2a6","score":-3,"depth":5,"nodes":86891} head {"move":"e2a6","score":-3,"depth":5,"nodes":86891} EQUAL
+kiwipete control: same position re-searched (equal list -> new token): {"move":"e2a6","score":-3,"depth":5,"nodes":86891} EQUAL (cleared, as ruled)
+position-3 chooseMove no-token after a tokened game: base {"move":"b4f4","score":116,"depth":5,"nodes":2183} head {"move":"b4f4","score":116,"depth":5,"nodes":2183} EQUAL
+position-3 chooseMoveWithoutNullMove no-token after a tokened game: base {"move":"b4f4","score":116,"depth":5,"nodes":2183} head {"move":"b4f4","score":116,"depth":5,"nodes":2183} EQUAL
+position-3 chooseMoveWithoutReductions no-token after a tokened game: base {"move":"b4f4","score":116,"depth":5,"nodes":3925} head {"move":"b4f4","score":116,"depth":5,"nodes":3925} EQUAL
+position-3 chooseMoveWithoutPvsOrReductions no-token after a tokened game: base {"move":"b4f4","score":116,"depth":5,"nodes":4196} head {"move":"b4f4","score":116,"depth":5,"nodes":4196} EQUAL
+position-3 chooseMove first call with a new token after a tokened game: base {"move":"b4f4","score":116,"depth":5,"nodes":2183} head {"move":"b4f4","score":116,"depth":5,"nodes":2183} EQUAL
+position-3 control: same position re-searched (equal list -> new token): {"move":"b4f4","score":116,"depth":5,"nodes":2183} EQUAL (cleared, as ruled)
+position-4 chooseMove no-token after a tokened game: base {"move":"c4c5","score":-459,"depth":5,"nodes":20503} head {"move":"c4c5","score":-459,"depth":5,"nodes":20503} EQUAL
+position-4 chooseMoveWithoutNullMove no-token after a tokened game: base {"move":"c4c5","score":-459,"depth":5,"nodes":18500} head {"move":"c4c5","score":-459,"depth":5,"nodes":18500} EQUAL
+position-4 chooseMoveWithoutReductions no-token after a tokened game: base {"move":"c4c5","score":-459,"depth":5,"nodes":28483} head {"move":"c4c5","score":-459,"depth":5,"nodes":28483} EQUAL
+position-4 chooseMoveWithoutPvsOrReductions no-token after a tokened game: base {"move":"c4c5","score":-459,"depth":5,"nodes":27799} head {"move":"c4c5","score":-459,"depth":5,"nodes":27799} EQUAL
+position-4 chooseMove first call with a new token after a tokened game: base {"move":"c4c5","score":-459,"depth":5,"nodes":20503} head {"move":"c4c5","score":-459,"depth":5,"nodes":20503} EQUAL
+position-4 control: same position re-searched (equal list -> new token): {"move":"c4c5","score":-459,"depth":5,"nodes":20503} EQUAL (cleared, as ruled)
+position-5 chooseMove no-token after a tokened game: base {"move":"d7c85","score":548,"depth":5,"nodes":15052} head {"move":"d7c85","score":548,"depth":5,"nodes":15052} EQUAL
+position-5 chooseMoveWithoutNullMove no-token after a tokened game: base {"move":"d7c85","score":548,"depth":5,"nodes":20949} head {"move":"d7c85","score":548,"depth":5,"nodes":20949} EQUAL
+position-5 chooseMoveWithoutReductions no-token after a tokened game: base {"move":"d7c85","score":548,"depth":5,"nodes":51770} head {"move":"d7c85","score":548,"depth":5,"nodes":51770} EQUAL
+position-5 chooseMoveWithoutPvsOrReductions no-token after a tokened game: base {"move":"d7c85","score":548,"depth":5,"nodes":51139} head {"move":"d7c85","score":548,"depth":5,"nodes":51139} EQUAL
+position-5 chooseMove first call with a new token after a tokened game: base {"move":"d7c85","score":548,"depth":5,"nodes":15052} head {"move":"d7c85","score":548,"depth":5,"nodes":15052} EQUAL
+position-5 control: same position re-searched (equal list -> new token): {"move":"d7c85","score":548,"depth":5,"nodes":15052} EQUAL (cleared, as ruled)
+position-6 chooseMove no-token after a tokened game: base {"move":"c3d5","score":91,"depth":5,"nodes":21208} head {"move":"c3d5","score":91,"depth":5,"nodes":21208} EQUAL
+position-6 chooseMoveWithoutNullMove no-token after a tokened game: base {"move":"c3d5","score":91,"depth":5,"nodes":38943} head {"move":"c3d5","score":91,"depth":5,"nodes":38943} EQUAL
+position-6 chooseMoveWithoutReductions no-token after a tokened game: base {"move":"c3d5","score":91,"depth":5,"nodes":91624} head {"move":"c3d5","score":91,"depth":5,"nodes":91624} EQUAL
+position-6 chooseMoveWithoutPvsOrReductions no-token after a tokened game: base {"move":"c3d5","score":91,"depth":5,"nodes":110520} head {"move":"c3d5","score":91,"depth":5,"nodes":110520} EQUAL
+position-6 chooseMove first call with a new token after a tokened game: base {"move":"c3d5","score":91,"depth":5,"nodes":21208} head {"move":"c3d5","score":91,"depth":5,"nodes":21208} EQUAL
+position-6 control: same position re-searched (equal list -> new token): {"move":"c3d5","score":91,"depth":5,"nodes":21208} EQUAL (cleared, as ruled)
+A1 cells: 30 of 30 equal (depth 5)

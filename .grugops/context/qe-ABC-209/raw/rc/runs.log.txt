@@ -1,0 +1,17 @@
+2026-10-26T14:26:08Z ENGINE_DEEP src/engine.test.ts start load1=4.08 power=AC_Power vitest=0
+2026-10-26T14:28:30Z ENGINE_DEEP src/engine.test.ts end rc=0 load1=2.94 ::  Tests 60 passed (60)
+2026-10-26T14:28:30Z ENGINE_DEEP src/levels.test.ts start load1=2.94 power=AC_Power vitest=0
+2026-10-26T14:37:36Z ENGINE_DEEP src/levels.test.ts end rc=0 load1=3.76 ::  Tests 41 passed (41)
+2026-10-26T14:37:36Z ENGINE_DEEP src/transposition.test.ts start load1=3.76 power=AC_Power vitest=0
+2026-10-26T14:37:45Z ENGINE_DEEP src/transposition.test.ts end rc=0 load1=3.80 ::  Tests 37 passed (37)
+2026-10-26T14:37:45Z ENGINE_DEEP src/search.pvs-lmr.test.ts start load1=3.80 power=AC_Power vitest=0
+2026-10-26T14:38:22Z ENGINE_DEEP src/search.pvs-lmr.test.ts end rc=0 load1=5.44 ::  Tests 21 passed (21)
+2026-10-26T14:38:22Z ENGINE_DEEP src/legal.test.ts start load1=5.44 power=AC_Power vitest=0
+2026-10-26T14:40:24Z ENGINE_DEEP src/legal.test.ts end rc=0 load1=3.49 ::  Tests 37 passed (37)
+2026-10-26T14:40:24Z ENGINE_DEEP src/gameend.test.ts start load1=3.49 power=AC_Power vitest=0
+2026-10-26T14:40:29Z ENGINE_DEEP src/gameend.test.ts end rc=0 load1=3.53 ::  Tests 47 passed (47)
+2026-10-26T14:40:29Z CLI_DEEP src/cli.real-engine.test.ts start load1=3.53 power=AC_Power vitest=0
+2026-10-26T14:40:40Z CLI_DEEP src/cli.real-engine.test.ts end rc=0 load1=3.38 ::  Tests 11 passed (11)
+2026-10-26T14:40:40Z UCI_DEEP src/uci.real-engine.test.ts start load1=3.38 power=AC_Power vitest=0
+2026-10-26T14:40:41Z UCI_DEEP src/uci.real-engine.test.ts end rc=0 load1=3.38 ::  Tests 5 passed (5)
+2026-10-26T14:40:41Z end

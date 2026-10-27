@@ -1,0 +1,24 @@
+{
+ "skytalix": {
+  "instances": 400,
+  "notOneGame": 0,
+  "searches": 22989,
+  "book": 369,
+  "kept": 22589,
+  "cleared": 400,
+  "firstOfGame": 400,
+  "midGameClears": 0
+ },
+ "base": {
+  "instances": 400,
+  "notOneGame": 0,
+  "searches": 22974,
+  "book": 363,
+  "kept": 22574,
+  "cleared": 400,
+  "firstOfGame": 400,
+  "midGameClears": 0
+ }
+}
+skytalix: 400 processes, 0 not exactly one game; 22989 searches (+369 book answers): 22589 keep the table (98.3 %), 400 clear (400 first-of-game, 0 mid-game)
+base: 400 processes, 0 not exactly one game; 22974 searches (+363 book answers): 22574 keep the table (98.3 %), 400 clear (400 first-of-game, 0 mid-game)

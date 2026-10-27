@@ -1,0 +1,3 @@
+d1 Score of skytalix vs base: 110 - 111 - 179  [0.499] 400 {"n": 400, "W": 110, "L": 111, "D": 179, "score": 0.4988, "X": -0.87, "Y": 25.32, "X-Y": -26.19, "X+Y": 24.45, "LOS": 47.3, "draw_ratio": 44.8, "state": "NEUTRAL"}
+d2 Score of skytalix vs base: 130 - 109 - 161  [0.526] 400 {"n": 400, "W": 130, "L": 109, "D": 161, "score": 0.5262, "X": 18.26, "Y": 26.34, "X-Y": -8.09, "X+Y": 44.6, "LOS": 91.3, "draw_ratio": 40.2, "state": "NEUTRAL"}
+pooled {"n": 800, "W": 240, "L": 220, "D": 340, "score": 0.5125, "X": 8.69, "Y": 18.25, "X-Y": -9.56, "X+Y": 26.94, "LOS": 82.4, "draw_ratio": 42.5, "state": "NEUTRAL"}
