@@ -6,10 +6,14 @@ id: ADR-0025
 
 ## Status
 
-*2026-10-26:* the amendment to decision 4 for `ABC-209` (the table lives one game, held by a game token) at the end
-of this file is **ACCEPTED** by the owner (§ Proposed amendment 2026-10-26, Status). **It is in force on `main` at
-`ABC-209`'s merge.** Until then, decisions 1–7 stand on `main` as written, decision 4's clear-per-search included.
-Recorded by Architect/Design (task `arch-accept-adr0025-d4`, records only, at `main` `9857bd1c`).
+*2026-10-27:* the amendment to decision 4 for `ABC-209` (the table lives one game, held by a game token) at the end
+of this file is **accepted, not in force on `main`**. `ABC-209`'s single reading was S1 NOT MET (pooled over 800 games
+NEUTRAL +8.69 ± 18.25), so the ticket was not merged. **Decisions 1–7 stand on `main` as written, decision 4's
+clear-per-search included.** Recorded by Architect/Design (task `arch-adr0025-not-in-force`, records only, at `main`
+`a5306773`), on Orchestrator `…00f47145` and QE `…e32e0ee4`.
+
+Previously (2026-10-26): the amendment **ACCEPTED** by the owner, in force on `main` at `ABC-209`'s merge. Recorded by
+Architect/Design (task `arch-accept-adr0025-d4`, records only, at `main` `9857bd1c`).
 
 Previously: a **PROPOSED** amendment, acceptance the owner's. Recorded by Architect/Design (task
 `arch-design-ABC-209`).
@@ -164,9 +168,17 @@ re-search ordering.
 | **T3** | 6 — both recursions, one algorithm | an identity-sweep SCORE mismatch between `chooseMove` and `search()` | `ABC-078` `A3`, as amended |
 | **T4** | 7 — capacity is not a budget | the capacity guard binding on a benchmark root within 3 s | log the deepest ply reached in `ENGINE_DEEP` |
 
-## Proposed amendment 2026-10-26 (`ABC-209`): the table lives one game, held by a game token. ACCEPTED
+## Proposed amendment 2026-10-26 (`ABC-209`): the table lives one game, held by a game token. ACCEPTED, not in force on `main`
 
 ### Status
+
+- **2026-10-27: accepted, not in force on `main`.** `ABC-209`'s one reading (`A6`, D under S1, final under
+  `…4c3f7639`) was NOT MET: d1 NEUTRAL −0.9 ± 25.3, the one extension d2 NEUTRAL +18.3 ± 26.3, pooled over 800 games
+  NEUTRAL +8.69 ± 18.25 (QE `…e32e0ee4`, failed attempt `…0932c037`, at merge `b5f46e86`). The ticket was not merged
+  (Orchestrator `…00f47145`); `grugops/ABC-209` `bb6cf451` is kept unmerged. On `main` (`a5306773`), `src/engine.ts:550`
+  still calls `clearTable()` at `chooseMove` entry, and `src/` has no `game` option, `prepareTable` or game tracker.
+  **Decision 4's clear-per-search stands on `main`.** `T1` holds by this reading. This line moves no code. Recorded by
+  Architect/Design (task `arch-adr0025-not-in-force`), the `ADR-0026` decision 9 form.
 
 **ACCEPTED** 2026-10-26 by Olger Oeselg (owner), verbatim *"1. yes; 2. A;"*, item 1 answering "accept the ADR-0025
 amendment" (note `.grugops/context/owner-word-2026-10-26b/notes/20261026T132424Z-orchestrator-decision-2ae5fc12.md`).
@@ -206,7 +218,7 @@ work has his go-ahead, and the Orchestrator reports this text to him when it lan
 - Probes: `.grugops/context/arch-design-ABC-209/notes/` (the observation note). They ran on scratch clones of `main`
   `d0b1fff8`, never on `src/`. **No real-clock search was run, and no timing is quoted.**
 
-### Decision 4, as amended (accepted 2026-10-26; in force on `main` at `ABC-209`'s merge)
+### Decision 4, as amended (accepted 2026-10-26; not in force on `main`, 2026-10-27: `ABC-209` not merged)
 
 4. **Lifetime: one game, held by a game token.**
    - The storage is allocated once per process, lazily on first use. *(Unchanged.)*
@@ -334,11 +346,11 @@ work has his go-ahead, and the Orchestrator reports this text to him when it lan
 
 | # | clause | what would falsify it | how to check |
 |---|---|---|---|
-| **T1** (re-read) | 4 — per-search lifetime is enough | **this amendment's D reading** (`A6`, S1). Not a GAIN → T1 holds, and the amendment is not in force | `ABC-209` `A6` |
+| **T1** (re-read) | 4 — per-search lifetime is enough | **this amendment's D reading** (`A6`, S1). Not a GAIN → T1 holds, and the amendment is not in force. *2026-10-27: read NEUTRAL; T1 holds* | `ABC-209` `A6` |
 | **T5** | 4 as amended — always-replace is enough across a game | the carried table's root-hit rate or D falling behind a generation-aged A/B | a later ticket; not owed now |
 
 ### Rollback
 
 - **Before acceptance** (passed; accepted 2026-10-26): mark this section `withdrawn`. Nothing else was edited.
-- **After it ships:** `prepareTable(options.game)` becomes `clearTable()` again, and the two trackers and the
+- **After it ships** (not reached: `ABC-209` was not merged, 2026-10-27; nothing to roll back on `main`): `prepareTable(options.game)` becomes `clearTable()` again, and the two trackers and the
   optional field are deleted. About ten production lines; no data or format is involved.
