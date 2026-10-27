@@ -6,7 +6,21 @@ id: ADR-0051
 
 ## Status
 
-**ACCEPTED** 2026-10-27 by Olger Oeselg (owner), verbatim *"yes, accept ADR-0051"* (note
+*2026-10-27:* **accepted, not in force on `main`.** `ABC-210`'s single reading (`A5`, D under S1, final under
+`…4c3f7639`) was S1 NOT MET: d1 NEUTRAL −1.7 ± 22.8, the one extension d2 NEUTRAL −7.8 ± 23.0, pooled over 800 games
+NEUTRAL −4.78 ± 16.21 (QE `…b953e670`, failed attempt `…86b45c13`, at merge `d71fc369`). The ticket was not merged
+(Orchestrator `…85e9c9b2`); `grugops/ABC-210` `a96f36b0` is kept unmerged. Recorded by Architect/Design (task
+`arch-adr0051-not-in-force`, records only, at `main` `06c1ecc8`), on Orchestrator `…85e9c9b2` and QE `…b953e670`, in the
+`ADR-0026` decision 9 / `ADR-0025` decision 4 form.
+
+- **No check extension on `main`.** At `06c1ecc8`, `src/search.ts` and `src/engine.ts` hold no check extension, and
+  `grugops/ABC-210` is not an ancestor of `main`. The leaf still hands a position in check to `quiesce`, as Context
+  describes. `ADR-0024` decision 4 was never amended and stands.
+- **P2 did not land:** `zugzwang.005` stays at depth 12 on `main` (`ADR-0050` decision 9, whose dated line says so).
+  P1 did not land either: the `ABC-081` `A5` row still reads −485 at depth 3.
+- This line moves no code. Decisions 1–8 stay as the accepted text; they describe a build that is not on `main`.
+
+Previously (2026-10-27): **ACCEPTED** by Olger Oeselg (owner), verbatim *"yes, accept ADR-0051"* (note
 `.grugops/context/owner-word-2026-10-27/notes/20261027T062043Z-orchestrator-decision-047d411f.md`). He was answering
 the one bundled yes/no "accept ADR-0051, including the zugzwang test change?", so the yes covers this ADR, its oracle
 bars (decision 7) and P2's route. Recorded by Architect/Design (task `arch-accept-adr0051`, records only, at `main`
@@ -198,3 +212,4 @@ Previously **PROPOSED** 2026-10-27 by Architect/Design (task `arch-design-ABC-21
   `search()` and `chooseMove`; they read the same values, because the doors were the pre-ticket search. Revert P1's and
   P2's re-pins to −485 at depth 3 and depth 12.
 - No stored data, format or dependency depends on this ADR.
+- *2026-10-27: not reached.* `ABC-210` was not merged, so nothing on `main` needs rolling back (§ Status).
