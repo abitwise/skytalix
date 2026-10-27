@@ -1,0 +1,17 @@
+
+ RUN  v4.1.12 <worktree>
+
+stdout | src/uci.real-engine.test.ts > ABC-168 — one real UCI dialogue against node src/uci.ts [deep, UCI_DEEP=1]
+UCI_DEEP child: spawn to exit 1103 ms (not an A6 reading); host Apple M3, node v26.11.1, load1 3.38
+
+ ✓ src/uci.real-engine.test.ts > ABC-168 — the UCI lane's child is the delivered entry point (default lane; spawns nothing) > the child runs src/uci.ts with only the heap token, no --import, loader or hook, and an empty environment 1ms
+ ✓ src/uci.real-engine.test.ts > ABC-168 — one real UCI dialogue against node src/uci.ts [deep, UCI_DEEP=1] > A5 (book on) — the output holds info string book, then a legal bestmove 1ms
+ ✓ src/uci.real-engine.test.ts > ABC-168 — one real UCI dialogue against node src/uci.ts [deep, UCI_DEEP=1] > A5 (book off) — after setoption OwnBook false before isready: an info depth line, no info string book, a legal bestmove 0ms
+ ✓ src/uci.real-engine.test.ts > ABC-168 — one real UCI dialogue against node src/uci.ts [deep, UCI_DEEP=1] > M4 — every stdout line begins with an engine-to-GUI keyword 0ms
+ ✓ src/uci.real-engine.test.ts > ABC-168 — one real UCI dialogue against node src/uci.ts [deep, UCI_DEEP=1] > quit — the child exits 0, by no signal, with nothing on stderr 0ms
+
+ Test Files  1 passed (1)
+      Tests  5 passed (5)
+   Start at  16:40:40
+   Duration  1.20s (transform 0ms, setup 0ms, import 32ms, tests 1.11s, environment 0ms)
+

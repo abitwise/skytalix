@@ -1,0 +1,7 @@
+UCI opening 1, reply hash (g8f6): kept=true first probe hit=true hits 2091/6630; nodes kept 38331 vs fresh 42465 (0.903x), bestmove b1c3 vs e4e5
+UCI opening 1, reply other (g6g5): kept=true first probe hit=true hits 2974/5795; nodes kept 35620 vs fresh 35620 (1.000x), bestmove c1g5 vs c1g5
+UCI opening 2, reply hash (b8c6): kept=true first probe hit=true hits 4138/10665; nodes kept 75170 vs fresh 79615 (0.944x), bestmove f1c4 vs f1c4
+UCI opening 2, reply other (b4b3): kept=true first probe hit=true hits 3999/9163; nodes kept 56657 vs fresh 56657 (1.000x), bestmove a2b3 vs a2b3
+CLI seam level 5 from the start, reply hash (b8c6): kept=true first probe hit=true hits 158/613; nodes kept 2070 vs fresh 2072
+CLI seam level 5 from the start, reply other (a7a6): kept=true first probe hit=true hits 162/700; nodes kept 2433 vs fresh 2439
+A3 (reply = the stored hash move): 3 of 3 pairs, the second search's first probe hits (bar >= 1 entry)

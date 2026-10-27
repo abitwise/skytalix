@@ -1,0 +1,5 @@
+export const EASIEST_LEVEL = 1;
+export const DEFAULT_LEVEL = 5;
+export const HARDEST_LEVEL = 7;
+export const DEFAULT_BUDGET_MS = 3_000;
+export const HARD_CEILING_MS = 32_000;
