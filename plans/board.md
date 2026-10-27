@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-27 by Orchestrator (orch-2026-10-27l) — arch-adr0051-not-in-force merged (…c32c79d0): ADR-0051 accepted, not in force on main; ADR-0050 d9 P2 did not land (zugzwang.005 stays d12). AGENTS.md: no check-extension line was ever added; nothing to remove. `bapm-s1-ABC-210` running. Width 1/3._
 _Updated: 2026-10-27 by Orchestrator (orch-2026-10-27k) — qe-ABC-210 FAIL on A5: S1 NOT MET (pooled 800 games NEUTRAL −4.78 ± 16.21). NOT merged; ABC-210 In Review → Backlog, blocked on `bapm-s1-ABC-210` (default close unmerged + EPIC-008 close path). `arch-adr0051-not-in-force` (records). In Review 0/3. QE-210-b LOW closed; QE-207-g recurred. Width 2/3._
 _Updated: 2026-10-27 by Orchestrator (orch-2026-10-27j) — ticket-to-pr-ABC-210 done (…8c4e8b4b): built, no STOP. ABC-210 In Development → In Review (1/3): `qe-ABC-210` (gate + ALONE readings, ~6–12 h; host on AC). Width 1/3, ALONE._
 _Updated: 2026-10-27 by Orchestrator (orch-2026-10-27i) — arch-accept-adr0051 merged (…e83d5703): ADR-0051 ACCEPTED (in force at ABC-210's merge); ADR-0050 d9 P2 line dated. `ticket-to-pr-ABC-210` building. Width 1/3._
