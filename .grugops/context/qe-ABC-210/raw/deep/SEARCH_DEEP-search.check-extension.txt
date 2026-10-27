@@ -1,0 +1,67 @@
+
+ RUN  v4.1.12 <worktree>
+
+ ✓ src/search.check-extension.test.ts > checkExtensionPlies — 1 at the horizon in check, once per line; 0 above it, at the cap, out of check > at the horizon, in check: depth 0, 0 extension(s) so far -> 1 1ms
+ ✓ src/search.check-extension.test.ts > checkExtensionPlies — 1 at the horizon in check, once per line; 0 above it, at the cap, out of check > Black in check at the horizon: depth 0, 0 extension(s) so far -> 1 0ms
+ ✓ src/search.check-extension.test.ts > checkExtensionPlies — 1 at the horizon in check, once per line; 0 above it, at the cap, out of check > below the horizon, in check: depth -1, 0 extension(s) so far -> 1 0ms
+ ✓ src/search.check-extension.test.ts > checkExtensionPlies — 1 at the horizon in check, once per line; 0 above it, at the cap, out of check > an interior node, in check: depth 1, 0 extension(s) so far -> 0 0ms
+ ✓ src/search.check-extension.test.ts > checkExtensionPlies — 1 at the horizon in check, once per line; 0 above it, at the cap, out of check > a deeper interior node: depth 4, 0 extension(s) so far -> 0 0ms
+ ✓ src/search.check-extension.test.ts > checkExtensionPlies — 1 at the horizon in check, once per line; 0 above it, at the cap, out of check > the line is at the cap: depth 0, 1 extension(s) so far -> 0 0ms
+ ✓ src/search.check-extension.test.ts > checkExtensionPlies — 1 at the horizon in check, once per line; 0 above it, at the cap, out of check > the line is past the cap: depth 0, 2 extension(s) so far -> 0 0ms
+ ✓ src/search.check-extension.test.ts > checkExtensionPlies — 1 at the horizon in check, once per line; 0 above it, at the cap, out of check > at the horizon, out of check: depth 0, 0 extension(s) so far -> 0 0ms
+ ✓ src/search.check-extension.test.ts > checkExtensionPlies — 1 at the horizon in check, once per line; 0 above it, at the cap, out of check > out of check, below the horizon: depth -1, 0 extension(s) so far -> 0 0ms
+ ✓ src/search.check-extension.test.ts > checkExtensionPlies — 1 at the horizon in check, once per line; 0 above it, at the cap, out of check > the fixtures bite: each board really is what its row says 0ms
+ ✓ src/search.check-extension.test.ts > both recursions extend through the predicate at node entry, after the repetition scan and before the leaf test > ./search.ts: calls checkExtensionPlies once, adds its value to the depth and the count, and passes the count on 1ms
+ ✓ src/search.check-extension.test.ts > both recursions extend through the predicate at node entry, after the repetition scan and before the leaf test > ./engine.ts: calls checkExtensionPlies once, adds its value to the depth and the count, and passes the count on 0ms
+ ✓ src/search.check-extension.test.ts > the switch — checkExtension is true on search() and chooseMove only, false on every door > ./search.ts: each exported entry passes exactly one checkExtension literal, and only the shipped one is true 1ms
+ ✓ src/search.check-extension.test.ts > the switch — checkExtension is true on search() and chooseMove only, false on every door > ./engine.ts: each exported entry passes exactly one checkExtension literal, and only the shipped one is true 0ms
+ ✓ src/search.check-extension.test.ts > the switch — checkExtension is true on search() and chooseMove only, false on every door > the doors take what search() and chooseMove take, and no depth on the engine side 0ms
+ ✓ src/search.check-extension.test.ts > A2 — at depth 1 the shipped search plays the check that wins one ply later; each door plays another move > five rows, each recorded check really gives check, and each door move is another legal move 1ms
+ ✓ src/search.check-extension.test.ts > A2 — at depth 1 the shipped search plays the check that wins one ply later; each door plays another move > knight fork K+R: search() at depth 1 plays b5c7; searchWithoutCheckExtension plays b5d6 2ms
+ ✓ src/search.check-extension.test.ts > A2 — at depth 1 the shipped search plays the check that wins one ply later; each door plays another move > knight fork K+R: chooseMove to depth 1 plays b5c7; chooseMoveWithoutCheckExtension plays b5d6 1ms
+ ✓ src/search.check-extension.test.ts > A2 — at depth 1 the shipped search plays the check that wins one ply later; each door plays another move > knight fork K+Q: search() at depth 1 plays e4f6; searchWithoutCheckExtension plays g1h1 1ms
+ ✓ src/search.check-extension.test.ts > A2 — at depth 1 the shipped search plays the check that wins one ply later; each door plays another move > knight fork K+Q: chooseMove to depth 1 plays e4f6; chooseMoveWithoutCheckExtension plays g1h1 2ms
+ ✓ src/search.check-extension.test.ts > A2 — at depth 1 the shipped search plays the check that wins one ply later; each door plays another move > bishop skewer K+Q: search() at depth 1 plays f1b5; searchWithoutCheckExtension plays f1d3 1ms
+ ✓ src/search.check-extension.test.ts > A2 — at depth 1 the shipped search plays the check that wins one ply later; each door plays another move > bishop skewer K+Q: chooseMove to depth 1 plays f1b5; chooseMoveWithoutCheckExtension plays f1d3 0ms
+ ✓ src/search.check-extension.test.ts > A2 — at depth 1 the shipped search plays the check that wins one ply later; each door plays another move > rook skewer K+R: search() at depth 1 plays b1h1; searchWithoutCheckExtension plays b1b7 0ms
+ ✓ src/search.check-extension.test.ts > A2 — at depth 1 the shipped search plays the check that wins one ply later; each door plays another move > rook skewer K+R: chooseMove to depth 1 plays b1h1; chooseMoveWithoutCheckExtension plays b1b7 0ms
+ ✓ src/search.check-extension.test.ts > A2 — at depth 1 the shipped search plays the check that wins one ply later; each door plays another move > knight fork K+R, Black: search() at depth 1 plays b4c2; searchWithoutCheckExtension plays b4c6 0ms
+ ✓ src/search.check-extension.test.ts > A2 — at depth 1 the shipped search plays the check that wins one ply later; each door plays another move > knight fork K+R, Black: chooseMove to depth 1 plays b4c2; chooseMoveWithoutCheckExtension plays b4c6 0ms
+ ✓ src/search.check-extension.test.ts > A2 — the instrument: depth 1 reaches leaves at ply 2 on the horizon rows, and the doors stop at ply 1 > knight fork K+R: search() and chooseMove at depth 1 reach ply 2; their doors reach ply 1 1ms
+ ✓ src/search.check-extension.test.ts > A2 — the instrument: depth 1 reaches leaves at ply 2 on the horizon rows, and the doors stop at ply 1 > knight fork K+Q: search() and chooseMove at depth 1 reach ply 2; their doors reach ply 1 1ms
+ ✓ src/search.check-extension.test.ts > A2 — the instrument: depth 1 reaches leaves at ply 2 on the horizon rows, and the doors stop at ply 1 > bishop skewer K+Q: search() and chooseMove at depth 1 reach ply 2; their doors reach ply 1 1ms
+ ✓ src/search.check-extension.test.ts > A2 — the instrument: depth 1 reaches leaves at ply 2 on the horizon rows, and the doors stop at ply 1 > rook skewer K+R: search() and chooseMove at depth 1 reach ply 2; their doors reach ply 1 1ms
+ ✓ src/search.check-extension.test.ts > A2 — the instrument: depth 1 reaches leaves at ply 2 on the horizon rows, and the doors stop at ply 1 > knight fork K+R, Black: search() and chooseMove at depth 1 reach ply 2; their doors reach ply 1 0ms
+ ✓ src/search.check-extension.test.ts > A2 — the cap: a line is extended at most once > the fixture bites: Qe2+ leaves Black one evasion, Ne3, and Ne3 gives check 0ms
+ ✓ src/search.check-extension.test.ts > A2 — the cap: a line is extended at most once > search() and chooseMove at depth 1 reach ply 2 and never 3; search() at depth 2 reaches 3 1ms
+ ✓ src/search.check-extension.test.ts > A2 — the instrument on four roots at depth 5: leaves at ply 6, never 7 [deep, SEARCH_DEEP=1] > kiwipete: search() at 5 and chooseMove to 5 reach ply 6 and never 7 [deep, SEARCH_DEEP=1] 316ms
+ ✓ src/search.check-extension.test.ts > A2 — the instrument on four roots at depth 5: leaves at ply 6, never 7 [deep, SEARCH_DEEP=1] > position-4: search() at 5 and chooseMove to 5 reach ply 6 and never 7 [deep, SEARCH_DEEP=1] 131ms
+ ✓ src/search.check-extension.test.ts > A2 — the instrument on four roots at depth 5: leaves at ply 6, never 7 [deep, SEARCH_DEEP=1] > position-5: search() at 5 and chooseMove to 5 reach ply 6 and never 7 [deep, SEARCH_DEEP=1] 52ms
+stdout | src/search.check-extension.test.ts > A3 — nodes at fixed depth 6 stay within 1.5x the door's [deep, SEARCH_DEEP=1] > kiwipete: search(position, 6).nodes <= 1.5 x searchWithoutCheckExtension(position, 6).nodes [deep, SEARCH_DEEP=1]
+ABC-210 A3 kiwipete d6: 249811 / 237007 = 1.054x
+
+ ✓ src/search.check-extension.test.ts > A2 — the instrument on four roots at depth 5: leaves at ply 6, never 7 [deep, SEARCH_DEEP=1] > position-6: search() at 5 and chooseMove to 5 reach ply 6 and never 7 [deep, SEARCH_DEEP=1] 114ms
+stdout | src/search.check-extension.test.ts > A3 — nodes at fixed depth 6 stay within 1.5x the door's [deep, SEARCH_DEEP=1] > position-6: search(position, 6).nodes <= 1.5 x searchWithoutCheckExtension(position, 6).nodes [deep, SEARCH_DEEP=1]
+ABC-210 A3 position-6 d6: 110654 / 109912 = 1.007x
+
+ ✓ src/search.check-extension.test.ts > A3 — nodes at fixed depth 6 stay within 1.5x the door's [deep, SEARCH_DEEP=1] > kiwipete: search(position, 6).nodes <= 1.5 x searchWithoutCheckExtension(position, 6).nodes [deep, SEARCH_DEEP=1] 962ms
+stdout | src/search.check-extension.test.ts > A3 — bounded drift against the check-extension doors, depth 5, the 190 [deep, SEARCH_DEEP=1] > search() against searchWithoutCheckExtension at fixed depth 5: >= 90% within 25 cp, none beyond 174 cp [deep, SEARCH_DEEP=1]
+ABC-210 A3 search() d5: 93.58% within 25 cp of 187, max 116 cp (position-4/f1f2: 708 -> 824); mate-status flips on the 190: 0 (a report, not a bar)
+
+ ✓ src/search.check-extension.test.ts > A3 — nodes at fixed depth 6 stay within 1.5x the door's [deep, SEARCH_DEEP=1] > position-6: search(position, 6).nodes <= 1.5 x searchWithoutCheckExtension(position, 6).nodes [deep, SEARCH_DEEP=1] 427ms
+ ✓ src/search.check-extension.test.ts > A3 — bounded drift against the check-extension doors, depth 5, the 190 [deep, SEARCH_DEEP=1] > the corpus is the 190 2ms
+stdout | src/search.check-extension.test.ts > A3 — bounded drift against the check-extension doors, depth 5, the 190 [deep, SEARCH_DEEP=1] > chooseMove against chooseMoveWithoutCheckExtension deepened to 5: >= 90% within 25 cp, none beyond 174 cp [deep, SEARCH_DEEP=1]
+ABC-210 A3 chooseMove to d5: 94.12% within 25 cp of 187, max 116 cp (position-4/f1f2: 708 -> 824); mate-status flips on the 190: 0 (a report, not a bar)
+
+ ✓ src/search.check-extension.test.ts > A3 — bounded drift against the check-extension doors, depth 5, the 190 [deep, SEARCH_DEEP=1] > search() against searchWithoutCheckExtension at fixed depth 5: >= 90% within 25 cp, none beyond 174 cp [deep, SEARCH_DEEP=1] 16373ms
+stdout | src/search.check-extension.test.ts > A3 — the same-depth mate floor on the 287 [deep, SEARCH_DEEP=1] > every mate searchWithoutCheckExtension scores at depth 5, search() scores at depth 5: same sign, no longer [deep, SEARCH_DEEP=1]
+ABC-210 A3 mate floor d5 -> d5: 0 of 189 violated
+
+ ✓ src/search.check-extension.test.ts > A3 — bounded drift against the check-extension doors, depth 5, the 190 [deep, SEARCH_DEEP=1] > chooseMove against chooseMoveWithoutCheckExtension deepened to 5: >= 90% within 25 cp, none beyond 174 cp [deep, SEARCH_DEEP=1] 14089ms
+ ✓ src/search.check-extension.test.ts > A3 — the same-depth mate floor on the 287 [deep, SEARCH_DEEP=1] > every mate searchWithoutCheckExtension scores at depth 5, search() scores at depth 5: same sign, no longer [deep, SEARCH_DEEP=1] 1212ms
+
+ Test Files  1 passed (1)
+      Tests  43 passed (43)
+   Start at  08:59:47
+   Duration  33.82s (transform 0ms, setup 0ms, import 61ms, tests 33.70s, environment 0ms)
+

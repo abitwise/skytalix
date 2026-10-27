@@ -1,0 +1,22 @@
+hb-ENGINE_DEEP-engine.json: 1 red / 60 (skipped 6)
+   RED A4 — no fixed depth anywhere in the delivered engine exports the two entry points and the two named values, and nothing that takes a depth
+hb-ENGINE_DEEP-gameend.json: 0 red / 47 (skipped 0)
+hb-ENGINE_DEEP-legal.json: 0 red / 37 (skipped 0)
+hb-ENGINE_DEEP-levels.json: 0 red / 41 (skipped 4)
+hb-ENGINE_DEEP-search.pvs-lmr.json: 0 red / 21 (skipped 1)
+hb-ENGINE_DEEP-transposition.json: 1 red / 26 (skipped 1)
+   RED A5 — the only non-losing line repeats, and it scores exactly 0 the fixture bites: at depth 3 the repetition is past the horizon, and the rook down shows
+hb-PUZZLE_DEEP-puzzle-suite.json: 0 red / 18 (skipped 0)
+hb-SEARCH_DEEP-quiescence.json: 0 red / 37 (skipped 0)
+hb-SEARCH_DEEP-search.json: 1 red / 57 (skipped 0)
+   RED A6 — no move is selected without a caller-supplied depth exports exactly the search core and nothing that picks a move on its own
+hb-SEARCH_DEEP-search.null-move.json: 5 red / 44 (skipped 0)
+   RED QE-208-c — every door's nullMove switch literal is false; only search() and chooseMove turn it on ./search.ts: each exported entry passes exactly one nullMove literal, and only the shipped one is true
+   RED QE-208-c — every door's nullMove switch literal is false; only search() and chooseMove turn it on ./engine.ts: each exported entry passes exactly one nullMove literal, and only the shipped one is true
+   RED A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth zugzwang.005: chooseMove on a frozen clock to depth 12 plays f4d5 [deep, SEARCH_DEEP=1]
+   RED A3 — bounded drift against the null-move-off doors, depth 5, the 190 [deep, SEARCH_DEEP=1] search() against searchWithoutNullMove at fixed depth 5: >= 95% within 25 cp, none beyond 37 cp [deep, SEARCH_DEEP=1]
+   RED A3 — bounded drift against the null-move-off doors, depth 5, the 190 [deep, SEARCH_DEEP=1] chooseMove against chooseMoveWithoutNullMove deepened to 5: >= 95% within 25 cp, none beyond 37 cp [deep, SEARCH_DEEP=1]
+hb-SEARCH_DEEP-search.ordering.json: 0 red / 38 (skipped 0)
+hb-SEARCH_DEEP-search.pvs-lmr.json: 0 red / 29 (skipped 0)
+hb-SEARCH_DEEP-transposition.json: 1 red / 40 (skipped 0)
+   RED A5 — the only non-losing line repeats, and it scores exactly 0 the fixture bites: at depth 3 the repetition is past the horizon, and the rook down shows

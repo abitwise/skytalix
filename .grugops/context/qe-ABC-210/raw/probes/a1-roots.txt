@@ -1,0 +1,79 @@
+roots startpos done 2026-10-27T07:27:37.785Z
+roots kiwipete done 2026-10-27T07:33:00.321Z
+roots position-3 done 2026-10-27T07:33:01.524Z
+roots position-4 done 2026-10-27T07:33:22.148Z
+roots position-5 done 2026-10-27T07:33:49.981Z
+roots position-6 done 2026-10-27T07:35:33.768Z
+A1 (roots): 384/384 cells equal in move, score and nodes (engine: and depth)
+  search():searchWithoutCheckExtension: 36/36
+  searchWithoutNullMove:searchWithoutNullMove: 36/36
+  searchWithoutPruning:searchWithoutPruning: 18/18
+  searchWithoutQuiescence:searchWithoutQuiescence: 36/36
+  searchWithoutPruningOrQuiescence:searchWithoutPruningOrQuiescence: 18/18
+  searchWithoutOrdering:searchWithoutOrdering: 24/24
+  searchWithoutKillers:searchWithoutKillers: 36/36
+  searchWithoutTable:searchWithoutTable: 36/36
+  searchWithoutReductions:searchWithoutReductions: 36/36
+  searchWithoutPvsOrReductions:searchWithoutPvsOrReductions: 36/36
+  chooseMove:chooseMoveWithoutCheckExtension: 18/18
+  chooseMoveWithoutNullMove:chooseMoveWithoutNullMove: 18/18
+  chooseMoveWithoutReductions:chooseMoveWithoutReductions: 18/18
+  chooseMoveWithoutPvsOrReductions:chooseMoveWithoutPvsOrReductions: 18/18
+mismatches: 0
+capped cells (unpruned doors above d3, the unordered door above d4): {"searchWithoutPruning":18,"searchWithoutPruningOrQuiescence":18,"searchWithoutOrdering":12}
+bite (head shipped differs from base shipped): search 27/36, engine 16/18
+  search roots:startpos:d1: SAME base 21 head 21 score 66/66
+  search roots:startpos:d2: SAME base 89 head 89 score 0/0
+  search roots:startpos:d3: SAME base 415 head 415 score 66/66
+  search roots:startpos:d4: SAME base 426 head 426 score 56/56
+  search roots:startpos:d5: DIFF base 4741 head 4749 score 38/38
+  search roots:startpos:d6: DIFF base 26533 head 26537 score 33/33
+  engine roots:startpos:maxDepth3: SAME base 214 head 214 score 66/66
+  engine roots:startpos:maxDepth5: SAME base 2535 head 2535 score 38/38
+  engine roots:startpos:maxDepth6: DIFF base 22778 head 23398 score 0/0
+  search roots:kiwipete:d1: SAME base 878 head 878 score 97/97
+  search roots:kiwipete:d2: DIFF base 2653 head 2665 score 30/30
+  search roots:kiwipete:d3: DIFF base 6278 head 6500 score 8/8
+  search roots:kiwipete:d4: DIFF base 18522 head 18938 score 8/8
+  search roots:kiwipete:d5: DIFF base 74424 head 74405 score -3/-3
+  search roots:kiwipete:d6: DIFF base 237007 head 249811 score -54/-64
+  engine roots:kiwipete:maxDepth3: DIFF base 9806 head 9999 score 8/8
+  engine roots:kiwipete:maxDepth5: DIFF base 86891 head 86808 score -3/-3
+  engine roots:kiwipete:maxDepth6: DIFF base 309541 head 324937 score -54/-64
+  search roots:position-3:d1: DIFF base 15 head 20 score 105/108
+  search roots:position-3:d2: SAME base 73 head 73 score 108/108
+  search roots:position-3:d3: DIFF base 336 head 353 score 120/120
+  search roots:position-3:d4: DIFF base 1099 head 1135 score 124/124
+  search roots:position-3:d5: DIFF base 2185 head 2569 score 116/97
+  search roots:position-3:d6: DIFF base 6714 head 7483 score 101/97
+  engine roots:position-3:maxDepth3: DIFF base 336 head 351 score 120/120
+  engine roots:position-3:maxDepth5: DIFF base 2183 head 2621 score 116/97
+  engine roots:position-3:maxDepth6: DIFF base 6154 head 6731 score 101/97
+  search roots:position-4:d1: SAME base 1279 head 1279 score -329/-329
+  search roots:position-4:d2: DIFF base 1331 head 1280 score -360/-360
+  search roots:position-4:d3: DIFF base 7065 head 7066 score -339/-339
+  search roots:position-4:d4: DIFF base 15114 head 19037 score -411/-459
+  search roots:position-4:d5: DIFF base 58282 head 58637 score -459/-459
+  search roots:position-4:d6: DIFF base 76114 head 81371 score -459/-459
+  engine roots:position-4:maxDepth3: DIFF base 4674 head 4675 score -339/-339
+  engine roots:position-4:maxDepth5: DIFF base 20503 head 19005 score -459/-459
+  engine roots:position-4:maxDepth6: DIFF base 40650 head 38442 score -459/-459
+  search roots:position-5:d1: SAME base 65 head 65 score 569/569
+  search roots:position-5:d2: DIFF base 385 head 400 score 569/569
+  search roots:position-5:d3: DIFF base 1887 head 1916 score 569/569
+  search roots:position-5:d4: DIFF base 7666 head 7586 score 520/533
+  search roots:position-5:d5: DIFF base 9873 head 10020 score 548/548
+  search roots:position-5:d6: DIFF base 22214 head 22813 score 518/503
+  engine roots:position-5:maxDepth3: DIFF base 2334 head 2366 score 569/569
+  engine roots:position-5:maxDepth5: DIFF base 15052 head 15033 score 548/548
+  engine roots:position-5:maxDepth6: DIFF base 31245 head 32029 score 503/503
+  search roots:position-6:d1: SAME base 611 head 611 score 14/14
+  search roots:position-6:d2: DIFF base 4104 head 4101 score 85/85
+  search roots:position-6:d3: DIFF base 9417 head 9524 score 85/85
+  search roots:position-6:d4: DIFF base 11688 head 11772 score 85/85
+  search roots:position-6:d5: DIFF base 40139 head 40605 score 91/91
+  search roots:position-6:d6: DIFF base 109912 head 110654 score 87/87
+  engine roots:position-6:maxDepth3: DIFF base 7354 head 7335 score 85/85
+  engine roots:position-6:maxDepth5: DIFF base 21208 head 21148 score 91/91
+  engine roots:position-6:maxDepth6: DIFF base 52265 head 52341 score 87/87
+rc=0

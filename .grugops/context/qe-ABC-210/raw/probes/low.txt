@@ -1,0 +1,14 @@
+part 1 (clock 149, 471 roots x d1,d2 = 942 cells): head != door on 10; of them the 75-move rule changes the head-door difference on 2
+  8/2p5/3p4/KP5r/5p1k/1R6/4P1P1/8 b - - 149 1 d2: head h4g4 0 door c7c6 22 | own clock: head h5e5 35 door h5e5 34
+  8/2p5/3p4/KP5r/5p1k/8/4P1P1/1R6 b - - 149 1 d2: head h4g4 0 door c7c6 22 | own clock: head h5e5 35 door h5e5 34
+part 2 White a queen down, quiet check Re8+ answerable by Rxe8 (a capture resets the clock) d1: head e1e2 0 (22 n) door e1e2 0 (21 n) checks [e1e8]
+part 2 White a queen down, quiet check Re8+ answerable by Rxe8 (a capture resets the clock) d2: head e1e7 -951 (277 n) door e1e7 -951 (268 n) checks [e1e8]
+part 2 White a queen down, quiet check Re8+ answerable by Rxe8 (a capture resets the clock) d3: head e1e7 -945 (928 n) door e1e7 -945 (919 n) checks [e1e8]
+part 2 dead: K+N v K, Nc7+ d1: head b5c7 0 (13 n) door b5c7 0 (12 n) checks [b5c7]
+part 2 dead: K+N v K, Nc7+ d2: head b5c7 0 (22 n) door b5c7 0 (22 n) checks [b5c7]
+part 2 dead: K+N v K, Nc7+ d3: head b5c7 0 (133 n) door b5c7 0 (131 n) checks [b5c7]
+part 2 dead: K+B v K, Bb2+ d1: head a1a2 0 (12 n) door a1a2 0 (11 n) checks [c1b2]
+part 2 dead: K+B v K, Bb2+ d2: head a1a2 0 (23 n) door a1a2 0 (23 n) checks [c1b2]
+part 2 dead: K+B v K, Bb2+ d3: head a1a2 0 (142 n) door a1a2 0 (142 n) checks [c1b2]
+part 3 8/2p5/3p4/KP5r/5p1k/1R6/4P1P1/8 b - - 149 1: root moves whose d2 value differs head vs door: f4f3 head -117 door -116; c7c6 head -128 door 22
+part 3 8/2p5/3p4/KP5r/5p1k/1R6/4P1P1/8 b - - 1 1: root moves whose d2 value differs head vs door: f4f3 head -117 door -116; h5h7 head -514 door -7; h5h8 head -502 door 5; h5g5 head 5 door 30; h5e5 head 35 door 34; c7c6 head -128 door 22

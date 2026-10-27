@@ -1,0 +1,7 @@
+d1 Score of skytalix vs base: 89 - 91 - 220  [0.497] 400 {"n": 400, "W": 89, "L": 91, "D": 220, "score": 0.4975, "X": -1.74, "Y": 22.84, "X-Y": -24.58, "X+Y": 21.1, "LOS": 44.1, "draw_ratio": 55.0, "state": "NEUTRAL"}
+d2 Score of skytalix vs base: 87 - 96 - 217  [0.489] 400 {"n": 400, "W": 87, "L": 96, "D": 217, "score": 0.4888, "X": -7.82, "Y": 23.03, "X-Y": -30.85, "X+Y": 15.21, "LOS": 25.3, "draw_ratio": 54.2, "state": "NEUTRAL"}
+pooled {"n": 800, "W": 176, "L": 187, "D": 437, "score": 0.4931, "X": -4.78, "Y": 16.21, "X-Y": -20.98, "X+Y": 11.43, "LOS": 28.2, "draw_ratio": 54.6, "state": "NEUTRAL"}
+pooled vitest-overlap-free {'n': 656, 'W': 144, 'L': 154, 'D': 358, 'X': -5.3, 'Y': 17.91, 'state': 'NEUTRAL'}
+pooled load-free {'n': 682, 'W': 147, 'L': 160, 'D': 375, 'X': -6.62, 'Y': 17.48, 'state': 'NEUTRAL'}
+pooled AC at game start {'n': 611, 'W': 135, 'L': 137, 'D': 339, 'X': -1.14, 'Y': 18.37, 'state': 'NEUTRAL'}
+pooled battery at game start {'n': 189, 'W': 41, 'L': 50, 'D': 98, 'X': -16.56, 'Y': 34.43, 'state': 'NEUTRAL'}
