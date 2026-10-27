@@ -1,0 +1,2 @@
+2026-10-26T14:26:08Z wait poll=1 load1=4.08 power=AC_Power batt=100% vitest=0 thermal=0
+2026-10-26T14:26:08Z PRECONDITIONS-MET

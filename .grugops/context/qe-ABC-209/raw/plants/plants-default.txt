@@ -1,0 +1,60 @@
+none [default] 0 red / 2138 (11 s)
+se:ucinewgame-keeps-tracker [default] 1 red / 2138 (10 s)
+    RED default transposition.test.ts :: ABC-209 A2 — the first search of game B equals a fresh search, on every new-game path UCI ucinewgame: game B's first position extends game A's last line, and still clears
+se:tracker-never-clears [default] 3 red / 2138 (10 s)
+    RED default transposition.test.ts :: ABC-209 — the continuation rule (createGameTracker) and the holder (prepareTable) gives a new token for an equal list, a shorter list, a different line or another start
+    RED default transposition.test.ts :: ABC-209 A2 — the first search of game B equals a fresh search, on every new-game path UCI position: a line that does not continue the previous search clears
+    RED default transposition.test.ts :: ABC-209 A2 — the first search of game B equals a fresh search, on every new-game path CLI new: the same seam, after a game of 10 engine moves, searches as a fresh process
+se:seam-per-instance-token [default] 1 red / 2138 (10 s)
+    RED default transposition.test.ts :: ABC-209 A2 — the first search of game B equals a fresh search, on every new-game path CLI new: the same seam, after a game of 10 engine moves, searches as a fresh process
+se:new-token-keeps-table [default] 4 red / 2138 (10 s)
+    RED default transposition.test.ts :: ABC-209 — the continuation rule (createGameTracker) and the holder (prepareTable) clears unless the token is the holder; a call with no token, and search(), release it
+    RED default transposition.test.ts :: ABC-209 A2 — the first search of game B equals a fresh search, on every new-game path UCI ucinewgame: game B's first position extends game A's last line, and still clears
+    RED default transposition.test.ts :: ABC-209 A2 — the first search of game B equals a fresh search, on every new-game path UCI position: a line that does not continue the previous search clears
+    RED default transposition.test.ts :: ABC-209 A4 / A5 — the size is unchanged; the same calls give the same moves ADR-0027: the same sequence of tokened calls gives the same moves and nodes
+se:no-token-keeps-table [default] 10 red / 2138 (10 s)
+    RED default engine.test.ts :: ABC-170 A3 — absent limits are today's engine, clock read for clock read returns identical move, score, depth, nodes and elapsedMs on perft root position-3
+    RED default engine.test.ts :: ABC-170 A3 — absent limits are today's engine, clock read for clock read returns identical move, score, depth, nodes and elapsedMs on perft root position-4
+    RED default engine.test.ts :: ABC-170 A3 — absent limits are today's engine, clock read for clock read returns identical move, score, depth, nodes and elapsedMs on perft root position-5
+    RED default engine.test.ts :: ABC-170 A3 — absent limits are today's engine, clock read for clock read returns identical move, score, depth, nodes and elapsedMs on perft root position-6
+    RED default engine.test.ts :: ABC-170 A5 — the limits only shorten; the ceiling still holds at budgetMs 5, maxDepth 50 returns the same depth and move as no maxDepth
+    RED default levels.test.ts :: ABC-174 A3 — the default plays as today: chooseMove at 3 000 ms, the old level 3 move, depth and nodes are equal on 30 of 30 positions, for each of two seeds
+    RED default levels.test.ts :: A6 — the default level at rate 0 returns `chooseMove`'s move, depth, nodes and elapsed on the same clock
+    RED default search.ordering.test.ts :: G1 — chooseMove records a killer only on a beta cutoff position-3 at 3 injected ticks: depth 3 in exactly 342 nodes
+    RED default transposition.test.ts :: ABC-209 — the continuation rule (createGameTracker) and the holder (prepareTable) clears unless the token is the holder; a call with no token, and search(), release it
+    RED default transposition.test.ts :: ABC-209 A1 — a fresh game, and every call through the clear door, is today's engine a call with no token, and the first call with a new token, equal a call before any game
+qe:prefix-not-strict [default] 1 red / 2138 (10 s)
+    RED default transposition.test.ts :: ABC-209 — the continuation rule (createGameTracker) and the holder (prepareTable) gives a new token for an equal list, a shorter list, a different line or another start
+qe:start-ignored [default] 1 red / 2138 (10 s)
+    RED default transposition.test.ts :: ABC-209 — the continuation rule (createGameTracker) and the holder (prepareTable) gives a new token for an equal list, a shorter list, a different line or another start
+qe:search-keeps-holder [default] 1 red / 2138 (11 s)
+    RED default transposition.test.ts :: ABC-209 — the continuation rule (createGameTracker) and the holder (prepareTable) clears unless the token is the holder; a call with no token, and search(), release it
+qe:engine-never-prepares [default] 1 red / 2138 (11 s)
+    RED default transposition.test.ts :: ABC-209 A3 — two consecutive moves of one game: the second search finds the first's entry the second search's first probe hits an entry the first search stored
+qe:uci-chooseMove-no-token [default] 0 red / 2138 (11 s)
+qe:uci-level-no-token [default] 0 red / 2138 (10 s)
+qe:uci-gameLine-never-set [default] 0 red / 2138 (10 s)
+qe:seam-no-token [default] 0 red / 2138 (10 s)
+qe:createLevel-drops-game [default] 0 red / 2138 (10 s)
+qe:blunder-children-carry-token [default] 11 red / 2001 (9 s)
+    RED SUITE FAILED uci-session.test.ts: game is not defined
+    RED default cli.test.ts :: ABC-101 — --difficulty selects a level, and the played engine is that level A8′ — the seam built for each level moves exactly as `createLevel` does, on one seed and one injected clock
+    RED default levels.test.ts :: A4 — the easiest level over ≥ 200 moves hands the borrowed position back byte-identical after a blunder
+    RED default levels.test.ts :: QE-087-a — the seed never reaches the engine (ADR-0027 d1) every call is `{ budgetMs, now }`; the engine path gets the level budget for any seed
+    RED default levels.test.ts :: QE-087-b — the scored list is the engine's, not a self-consistent lie each child's score is minus the real `chooseMove`'s depth-1 score on that child
+    RED default levels.test.ts :: Security/NFR R1 (QE-087-c) — the level clamps its own total to HARD_CEILING_MS a blundering level at twice the ceiling spends at most the ceiling plus a few readings
+    RED default levels.test.ts :: the blunder path's edge cases (ADR-0032 decisions 1-2) scores a mating child MATE_SCORE − 1, and the mate is not played as the second best
+    RED default levels.test.ts :: the blunder path's edge cases (ADR-0032 decisions 1-2) scores a stalemating child 0
+    RED default levels.test.ts :: the blunder path's edge cases (ADR-0032 decisions 1-2) with a single legal move there is no candidate, and it is played
+    RED default levels.test.ts :: A9 — different seeds actually differ ≥ 5 seeds over the same ≥ 30 positions give ≥ 2 distinct blunder-decision sequences
+    RED default levels.test.ts :: A7 — seeded, in deterministic mode a fixed seed gives identical blunder decisions across runs
+    RED default levels.test.ts :: A10 — the seed is threaded, not global two instances, different seeds, called A, B, A, B, … play as each alone: 10/10 each
+qe:createLevel-always-spreads [default] 1 red / 2138 (10 s)
+    RED default levels.test.ts :: QE-087-a — the seed never reaches the engine (ADR-0027 d1) every call is `{ budgetMs, now }`; the engine path gets the level budget for any seed
+qe:inventory-heap-flag-in-helper [default] 1 red / 2138 (10 s)
+    RED default cli.test.ts :: ABC-173 — every vitest run carries the V8 heap ceiling, read where it applies (ADR-0008 addendum 2026-10-19) A6 (static) — the history-pane and transposition children inherit childOf's construction: no env key, no hea
+qe:inventory-env-in-helper [default] 1 red / 2138 (10 s)
+    RED default cli.test.ts :: ABC-173 — every vitest run carries the V8 heap ceiling, read where it applies (ADR-0008 addendum 2026-10-19) A6 (static) — the history-pane and transposition children inherit childOf's construction: no env key, no hea
+qe:inventory-second-site [default] 1 red / 2138 (10 s)
+    RED default cli.test.ts :: ABC-173 — every vitest run carries the V8 heap ceiling, read where it applies (ADR-0008 addendum 2026-10-19) A6 (static) — the history-pane and transposition children inherit childOf's construction: no env key, no hea
+restored and verified equal to pristine

@@ -1,0 +1,1 @@
+test note 2: 12 of 12 blunder calls give the same scored list, summed nodes and depth with the game's token as without (children carry no token)

@@ -1,0 +1,2 @@
+qe:blunder-children-carry-token [default] 0 red / 2138 (10 s)
+restored and verified equal to pristine

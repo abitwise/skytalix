@@ -1,0 +1,66 @@
+
+ RUN  v4.1.12 <worktree>
+
+ ✓ src/search.test.ts > A5 — stalemate scores exactly 0, not a loss > K+Q smothering the lone king scores 0 at depth 0 1ms
+ ✓ src/search.test.ts > A5 — stalemate scores exactly 0, not a loss > K+Q smothering the lone king scores 0 at depth 1 0ms
+ ✓ src/search.test.ts > A5 — stalemate scores exactly 0, not a loss > K+Q smothering the lone king scores 0 at depth 2 0ms
+ ✓ src/search.test.ts > A5 — stalemate scores exactly 0, not a loss > K+Q smothering the lone king scores 0 at depth 3 0ms
+ ✓ src/search.test.ts > A5 — stalemate scores exactly 0, not a loss > the classic blocked-board stalemate scores 0 at depth 0 0ms
+ ✓ src/search.test.ts > A5 — stalemate scores exactly 0, not a loss > the classic blocked-board stalemate scores 0 at depth 1 0ms
+ ✓ src/search.test.ts > A5 — stalemate scores exactly 0, not a loss > the classic blocked-board stalemate scores 0 at depth 2 0ms
+ ✓ src/search.test.ts > A5 — stalemate scores exactly 0, not a loss > the classic blocked-board stalemate scores 0 at depth 3 0ms
+ ✓ src/search.test.ts > A5 — stalemate scores exactly 0, not a loss > K+P vs K, the king boxed in scores 0 at depth 0 0ms
+ ✓ src/search.test.ts > A5 — stalemate scores exactly 0, not a loss > K+P vs K, the king boxed in scores 0 at depth 1 0ms
+ ✓ src/search.test.ts > A5 — stalemate scores exactly 0, not a loss > K+P vs K, the king boxed in scores 0 at depth 2 0ms
+ ✓ src/search.test.ts > A5 — stalemate scores exactly 0, not a loss > K+P vs K, the king boxed in scores 0 at depth 3 0ms
+ ✓ src/search.test.ts > A5 — stalemate scores exactly 0, not a loss > does not play into a stalemate one ply inside the tree 1ms
+ ✓ src/search.test.ts > A1 — pruned and unpruned scores are identical > startpos at depth 2 9ms
+ ✓ src/search.test.ts > A1 — pruned and unpruned scores are identical > startpos at depth 3 [deep, SEARCH_DEEP=1] 40ms
+ ✓ src/search.test.ts > A1 — pruned and unpruned scores are identical > startpos at depth 3 on the bare leaf [deep, SEARCH_DEEP=1] 18ms
+ ✓ src/search.test.ts > A1 — pruned and unpruned scores are identical > kiwipete at depth 2 [deep, SEARCH_DEEP=1] 1478ms
+ ✓ src/search.test.ts > A1 — pruned and unpruned scores are identical > kiwipete at depth 3 on the bare leaf [deep, SEARCH_DEEP=1] 205ms
+ ✓ src/search.test.ts > A1 — pruned and unpruned scores are identical > position-3 at depth 2 1ms
+ ✓ src/search.test.ts > A1 — pruned and unpruned scores are identical > position-3 at depth 3 12ms
+ ✓ src/search.test.ts > A1 — pruned and unpruned scores are identical > position-3 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1] 4ms
+ ✓ src/search.test.ts > A1 — pruned and unpruned scores are identical > position-4 at depth 2 47ms
+ ✓ src/search.test.ts > A1 — pruned and unpruned scores are identical > position-4 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1] 22ms
+ ✓ src/search.test.ts > A1 — pruned and unpruned scores are identical > position-5 at depth 2 [deep, SEARCH_DEEP=1] 92ms
+ ✓ src/search.test.ts > A1 — pruned and unpruned scores are identical > position-5 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1] 113ms
+ ✓ src/search.test.ts > A1 — pruned and unpruned scores are identical > position-6 at depth 2 [deep, SEARCH_DEEP=1] 344ms
+ ✓ src/search.test.ts > A1 — pruned and unpruned scores are identical > position-6 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1] 173ms
+ ✓ src/search.test.ts > A2 — alpha-beta visits under 40% of the unpruned nodes > startpos at depth 2 — the default lane's cheap standing guard 0ms
+ ✓ src/search.test.ts > A2 — alpha-beta visits under 40% of the unpruned nodes > kiwipete at depth 3 on the bare leaf — the criterion's own position and depth [deep, SEARCH_DEEP=1] 0ms
+ ✓ src/search.test.ts > A3 — mate is found and the shorter mate preferred > returns the mating move and a score above any non-mate score, at depth 4 2ms
+ ✓ src/search.test.ts > A3 — mate is found and the shorter mate preferred > prefers the mate in 1 over the mate in 2 and the mate in 3 in the same position 1ms
+ ✓ src/search.test.ts > A3 — mate is found and the shorter mate preferred > prefers the mate in 2 over the mate in 3 at depth 5 [deep, SEARCH_DEEP=1] 4ms
+ ✓ src/search.test.ts > A3 — mate is found and the shorter mate preferred > prefers the mate in 2 over the mate in 4, at depth 7 [deep, SEARCH_DEEP=1] 16ms
+ ✓ src/search.test.ts > A4 — the returned root move is legal in every corpus position > returns a legal move in 200+ positions from the perft corpus, at depth 1 19ms
+ ✓ src/search.test.ts > A4 — the returned root move is legal in every corpus position > returns a legal move in the same 200+ positions at depth 2 [deep, SEARCH_DEEP=1] 73ms
+ ✓ src/search.test.ts > A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 1, whose six per-root slices are exactly that corpus [deep, SEARCH_DEEP=1] 100ms
+ ✓ src/search.test.ts > A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — startpos's slice [deep, SEARCH_DEEP=1] 17ms
+ ✓ src/search.test.ts > A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — kiwipete's slice [deep, SEARCH_DEEP=1] 264ms
+ ✓ src/search.test.ts > A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-3's slice [deep, SEARCH_DEEP=1] 4ms
+ ✓ src/search.test.ts > A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-4's slice [deep, SEARCH_DEEP=1] 21ms
+ ✓ src/search.test.ts > A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-5's slice [deep, SEARCH_DEEP=1] 28ms
+ ✓ src/search.test.ts > A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-6's slice [deep, SEARCH_DEEP=1] 172ms
+ ✓ src/search.test.ts > A6 — no move is selected without a caller-supplied depth > reads the delivered module — src/search.ts, not nothing 0ms
+ ✓ src/search.test.ts > A6 — no move is selected without a caller-supplied depth > exports exactly the search core and nothing that picks a move on its own 0ms
+ ✓ src/search.test.ts > A6 — no move is selected without a caller-supplied depth > gives every exported function a REQUIRED depth parameter 0ms
+ ✓ src/search.test.ts > A6 — no move is selected without a caller-supplied depth > carries no default value for depth anywhere in the module 0ms
+ ✓ src/search.test.ts > A6 — no move is selected without a caller-supplied depth > carries no clock — the time budget is ABC-078's, not this module's 0ms
+ ✓ src/search.test.ts > A7 — the searched position is unchanged on return > leaves every position in the 200+ corpus byte-identical after a depth-1 search 0ms
+ ✓ src/search.test.ts > A7 — the searched position is unchanged on return > leaves position-3 byte-identical after a depth-3 search, pruned and unpruned 1ms
+ ✓ src/search.test.ts > A7 — the searched position is unchanged on return > leaves the 200+ corpus byte-identical at depth 2 [deep, SEARCH_DEEP=1] 0ms
+ ✓ src/search.test.ts > A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — startpos's slice [deep, SEARCH_DEEP=1] 0ms
+ ✓ src/search.test.ts > A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — kiwipete's slice [deep, SEARCH_DEEP=1] 0ms
+ ✓ src/search.test.ts > A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-3's slice [deep, SEARCH_DEEP=1] 0ms
+ ✓ src/search.test.ts > A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-4's slice [deep, SEARCH_DEEP=1] 0ms
+ ✓ src/search.test.ts > A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-5's slice [deep, SEARCH_DEEP=1] 0ms
+ ✓ src/search.test.ts > A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-6's slice [deep, SEARCH_DEEP=1] 0ms
+ ✓ src/search.test.ts > A7 — the searched position is unchanged on return > leaves every perft root byte-identical at depth 2 and depth 3 [deep, SEARCH_DEEP=1] 568ms
+
+ Test Files  1 passed (1)
+      Tests  57 passed (57)
+   Start at  16:19:59
+   Duration  3.95s (transform 0ms, setup 0ms, import 39ms, tests 3.86s, environment 0ms)
+

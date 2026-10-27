@@ -1,0 +1,8 @@
+none [deepentry] 0 red / 188 (32 s)
+qe:uci-chooseMove-no-token [deepentry] 0 red / 188 (32 s)
+qe:uci-level-no-token [deepentry] 0 red / 188 (32 s)
+qe:uci-gameLine-never-set [deepentry] 0 red / 188 (32 s)
+qe:seam-no-token [deepentry] 0 red / 188 (33 s)
+qe:createLevel-drops-game [deepentry] 0 red / 188 (32 s)
+qe:blunder-children-carry-token [deepentry] 0 red / 188 (32 s)
+restored and verified equal to pristine
