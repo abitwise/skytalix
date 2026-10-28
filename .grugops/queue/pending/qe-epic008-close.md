@@ -12,7 +12,8 @@ held: spawn only after se-tools-rating-host AND bapm-epic008-hostB are merged in
 
 > **Option B (owner, `orch-2026-10-28a/…5dbd717b`):** M1 = R(close) − R(baseline), both read on THIS host, half-width √(Y1² + Y2²). The previous-host 2 061.3 ± 50.3 is **not** the comparison.
 > **One run each (`…4c3f7639`):** each R reading runs once and its written result is final. UNRESOLVED is reported; a re-run is the owner's word.
-> **Power:** log the power source; never stop a reading because of it.
+> **Power:** EPIC-008 § Host says every reading runs on AC. This host has no battery (no power_supply entries, orch-2026-10-28a), so the rule holds by construction. Log it once in PREREG. If a battery ever shows up, STOP before game 1; never stop a reading once it has started.
+> **E band:** if a reading lands outside 25–75 %, report it. Grading off-band and degenerate readings is owner Q3 on the EPIC-008 page (`bapm-epic008-hostB/…f0c8fedb`), BA/PM's call at step 4, not yours.
 
 ## Do
 - Read Orchestrator `orch-2026-10-28a/…5dbd717b`, SE `se-tools-rating-host` (re-pin), BA/PM `bapm-epic008-hostB` (M1 line + close-path step 3), and the EPIC-008 page as merged.
