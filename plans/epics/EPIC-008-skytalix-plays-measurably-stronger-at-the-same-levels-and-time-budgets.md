@@ -161,7 +161,7 @@ not favour either side. A FAIL-class fault on a host that is not quiet is UNRESO
 
 | # | measure | target | how it is read |
 |---|---|---|---|
-| M1 | **Stronger on an external scale** | R at the epic's close minus R at its start (the `ABC-204` `A4` baseline): the difference's 95 % interval lies **above 0**. Its half-width is √(Y₁² + Y₂²) | two R readings with E, the openings and the pins unchanged, on this host. ~~**The size of the gain is not set: owner question Q1**~~ **2026-10-24, owner-set (Q1, `…e44d2903`): the point estimate (R at close − R at baseline) is ≥ +100 Elo, AND the interval lies above 0. Both must hold for MET** |
+| M1 | **Stronger on an external scale** | R at the epic's close minus R at its start (the `ABC-204` `A4` baseline): the difference's 95 % interval lies **above 0**. Its half-width is √(Y₁² + Y₂²) | two R readings with E, the openings and the pins unchanged, on this host. ~~**The size of the gain is not set: owner question Q1**~~ **2026-10-24, owner-set (Q1, `…e44d2903`): the point estimate (R at close − R at baseline) is ≥ +100 Elo, AND the interval lies above 0. Both must hold for MET** ***2026-10-28 (owner, option B, `…5dbd717b`): both R readings are taken on the new host, the start at `3497aad2`; the dated `M1` line below (2026-10-28)*** |
 | M2 | **Every shipped change was measured** | each merged ticket of this epic carries a D reading that meets its ship rule (S1 or S2; S3 for `ABC-215`, added 2026-10-24) | the ticket's `## Reading` section and its QE note |
 | M3 | **Nothing regressed** | `G1`, `G5`, `G6`, `G8` and `G9` green on `main` at close | the gates' own instruments |
 | M4 | **The owner's decisions stayed his** | 0 NFR bounds moved without his word. Every new or changed ADR of this epic was reported to him when it landed | the ADR pages and the owner-word notes |
@@ -209,6 +209,44 @@ not favour either side. A FAIL-class fault on a host that is not quiet is UNRESO
 >   (Q1, the owner's).
 > - **`M2` and `M3`: untouched by `ABC-210`.** Nothing of it merged, so nothing shipped unmeasured, and no gate on
 >   `main` moved.
+>
+> **2026-10-28, `M1` after the host move: option B (BA/PM, `bapm-epic008-hostB`; the owner's word `orch-2026-10-28a`
+> `…5dbd717b`, picking from the options in `orch-2026-10-27o` `…e018297c`):**
+> - **The host moved.** The agents now run on a new Linux host. The previous host is retired, and nothing more runs
+>   there. R is defined "on this host" (§ The two readings), so a closing R read here cannot be compared with a
+>   baseline read there (`…e018297c` item 1).
+> - **`M1` now uses option B: both R readings are taken on this host.** Each is read by `ABC-204` `A4`'s protocol, with
+>   E = **1 910** frozen, 200 games, ALONE, and one run:
+>   - **R(baseline)** at `3497aad2`, the sha of the previous baseline;
+>   - **R(close)** at one `main` sha whose `src/` and `data/` equal `b5c67ab7`'s.
+>   - **Pins:** every pin in `ABC-204` § Reading "Frozen for `EPIC-008`" is unchanged. The host tools are re-pinned on
+>     this host (§ Dependencies, 2026-10-28).
+> - **`M1` = R(close) − R(baseline), half-width √(Y₁² + Y₂²)**, where Y₁ and Y₂ are this host's two readings. E is the
+>   same in both, so this is X₂ − X₁.
+> - **Unchanged: the +100 target and "interval above 0"** (Q1, `…e44d2903`). Both must hold for MET.
+> - **Superseded by this line, kept as record:**
+>   - The previous host's **2 061.3 ± 50.3** (the 2026-10-25 line) stands as that host's record. It is **no longer the
+>     comparison**.
+>   - The lines from 2026-10-25 to 2026-10-27 that say "the baseline stands" now read "stood, on the previous host".
+>   - The 2026-10-27 forecast's "about +71" used Y₁ = 50.3. Under B both Y come from this host, so the interval's bar
+>     is known only after both readings.
+> - **The E band.** E is frozen, and there is no E step on this host. `A4`'s "E is moved once and R is re-run" is not
+>   run for either reading. Each reading's score is reported against 25–75 %. What the page says, and what that does
+>   to `M1`'s grade:
+>   - **Off-band is not UNRESOLVED.** § "States of a D reading" and the close path name faults, fewer games, a missing
+>     raw file and a watchdog stop, and nothing names the band. `M1` needs "E, the openings and the pins unchanged",
+>     and an off-band reading meets that. A 200-game, 0-fault reading outside the band is therefore a result. BA/PM
+>     reads the page this way: `M1` is graded on its X and Y by the two clauses above, unchanged, and the band is
+>     reported next to it.
+>   - **What off-band costs is precision; the rule stays the same.** cutechess's Y widens as the score moves away from
+>     50 % (`ABC-204` § Reading: 70.5 % read ± 50.3, and 82.0 % read ± 61.8). At Y₁ = Y₂ = 61.8 the half-width is about
+>     87.4; at 50.3 it is about 71.1. So "above 0" needs a larger gain. The +100 clause does not move. This is
+>     arithmetic, not a measurement.
+>   - **`UNKNOWN - verify`, routed to the owner as Q3 (below).** First: is an off-band reading still an `M1` input?
+>     `A4`'s band was the baseline's validity bar, and it was tied to the E step. The owner froze E but did not say what
+>     an off-band reading means. Second: a degenerate reading, at or near a 0 % or 100 % score, where cutechess's X or
+>     Y may not be a finite number. Then `M1` cannot be computed. The page says nothing about either case, and no rule
+>     is written here. Nothing waits on Q3: both readings run, and Q3 matters only if a reading lands off the band.
 
 ## Tickets (order is the pull order; the pages are under `plans/tickets/`)
 
@@ -286,8 +324,9 @@ step.
    `orch-2026-10-26m`, `…cdc1fb61`). It is records only and reads the as-built code, which is now final for this epic.
    It includes whether `virtual-clock.ts` counts as a production module (42 or 43 of 46, `UNKNOWN - verify`). It goes
    before step 3, so that the reading runs ALONE and any finding lands before the close.
-3. **QE/E2E: the closing `M1` R reading, plus the `M3` gate reads, on one `main` sha** whose `src/` and `data/` equal
-   `b5c67ab7`'s (QE confirms it before the first game).
+3. *Superseded 2026-10-28 by step 3′ below (option B); kept as record.* **QE/E2E: the closing `M1` R reading, plus
+   the `M3` gate reads, on one `main` sha** whose `src/` and `data/` equal `b5c67ab7`'s (QE confirms it before the
+   first game).
    - **R by `ABC-204` `A4`'s protocol with every pin frozen** (`ABC-204` § Reading, "Frozen for `EPIC-008`"): E =
      **1 910**, 200 games, `openings.epd` sequential with both colours, `skytalix` at `st=3`, Stockfish at its pins, and
      `cutechess-cli` and Stockfish at the sha256 values in § Dependencies. **E does not move:** `A4`'s 25–75 % band and
@@ -299,9 +338,32 @@ step.
      candidate at close, so it reads `main` at close against the `M1` baseline sha `3497aad2`, by the `G6` row's rule (5
      interleaved runs per board per build, the median, floor 6). That is BA/PM's reading of "nothing regressed", and no
      bound moves.
+
+   **3′. *2026-10-28 (BA/PM, `bapm-epic008-hostB`; the owner's option B, `…5dbd717b`):* QE/E2E: two `M1` R readings on
+   this host, then the `M3` gate reads** (task `qe-epic008-close`).
+   - **PREREG first.** One sealed note before game 1 of reading 1 names both shas, E = 1 910, 200 games each, the
+     pins, the order, and the grading rule on this page.
+   - **Reading 1 is the baseline, `3497aad2`. Reading 2 is the close,** on one `main` sha whose `src/` and `data/`
+     equal `b5c67ab7`'s. QE confirms that before any game, and a difference stops to the Orchestrator.
+   - **Both readings use `ABC-204` `A4`'s protocol,** with every pin in "Frozen for `EPIC-008`" unchanged and the host
+     tools as re-pinned (`ABC-204` § Dependencies, 2026-10-28). **E = 1 910 is frozen, and there is no E step.** Each
+     score is reported against 25–75 % and read as § Success measures (2026-10-28) says.
+   - **One run each, and its written result is final** (`…4c3f7639`). An UNRESOLVED result is reported, and a re-run
+     is the owner's word.
+   - **ALONE** (width 1), with a quiet host, host log and watchdog (§ Host). At the previous host's `A6` rate (4.40 h
+     per 200 games) both readings take **about 9 h**. This host's rate is `UNKNOWN - verify` until reading 1 ends.
+   - **`M3`:** `G1`, `G5`, `G6`, `G8` and `G9` run on the close sha, after both R readings and never during one.
+     **`G6` "≥ base" reads the close sha against `3497aad2`, both on this host,** by the `G6` row's rule (5 interleaved
+     runs per board per build, the median, floor 6). No bound moves.
+   - QE reports R(baseline), R(close), R(close) − R(baseline) and √(Y₁² + Y₂²). It does not grade `M1`.
 4. **BA/PM: grade `M1`–`M4` and write the epic's close.**
-   - **`M1`:** both clauses must hold (Q1, `…e44d2903`): the point estimate (R at close − 2 061.3) is **≥ +100**, and
-     the interval, half-width √(50.3² + Y₂²), lies **above 0**.
+   - ***2026-10-28, option B:* `M1`:** both clauses must hold (Q1, `…e44d2903`). The point estimate, R(close) −
+     R(baseline) with both readings from this host, is **≥ +100**. The interval, half-width √(Y₁² + Y₂²) with both Y
+     from this host, lies **above 0**. An off-band or degenerate reading is read as § Success measures (2026-10-28)
+     says (Q3).
+   - *Superseded 2026-10-28 by the line above; kept as record:* **`M1`:** both clauses must hold (Q1, `…e44d2903`): the
+     point estimate (R at close − 2 061.3) is **≥ +100**, and the interval, half-width √(50.3² + Y₂²), lies **above
+     0**.
    - **`M2`:** each merged ticket's ship rule: `ABC-208` S1 (GAIN), `ABC-215` S3, and `ABC-206` S2 read under its
      waiver (`…cb10c36c`, accepted risk LOW, the Orchestrator's), which is stated as such. `ABC-204` and `ABC-217`
      change no engine value and owe no D.
@@ -348,6 +410,17 @@ oracle and one timing bar. Each can land as its own value-identical commit.
   - **Default without an answer:** whenever the board is idle, at width 1, as `ABC-202` ran.
   - **ANSWERED 2026-10-24: whenever idle** (`…e44d2903`, *"run whenever idle"*). That is the default as written: one
     reading at a time, on AC, alone among agent hops, with the host log and watchdog. The Orchestrator schedules it.
+- **Q3 (an off-band or degenerate R under option B). *Added 2026-10-28 by BA/PM (`bapm-epic008-hostB`).*** E is
+  frozen at 1 910, and there is no E step on this host (`…5dbd717b`).
+  - **The question.** If either `M1` reading's score lands outside 25–75 %, is it still an `M1` input? And if a
+    reading is degenerate (a score at or near 0 % or 100 %, where cutechess's X or Y may not be a finite number), how
+    is `M1` recorded?
+  - **What the page says.** An off-band reading is not UNRESOLVED, and it meets `M1`'s "E, the openings and the pins
+    unchanged". BA/PM therefore reads it as an input, graded by the two clauses, with the band reported and a wider Y
+    (§ Success measures, 2026-10-28). The page is silent on whether that is your intent, and silent on the degenerate
+    case. Both are `UNKNOWN - verify`.
+  - **No default is set here.** Nothing waits on Q3: both readings run, and BA/PM asks for your word at step 4 only if
+    a reading lands off the band.
 
 **Delivery calls, flagged as cheap to reverse (not questions):**
 - **The S1 ship rule:** a value-changing change that is not GAIN after one extension does not ship, even though you
@@ -366,6 +439,12 @@ oracle and one timing bar. Each can land as its own value-identical commit.
   `dc2f18c34ae962dff591b66147d220ec06e61d756b93d8a4f5e04fd8e55c251f`). Re-read 2026-10-23: it offers `UCI_LimitStrength`
   and `UCI_Elo` from 1320 to 3190.
 - Both are host tools, never repo dependencies (`EPIC-007` § Test notes).
+- *2026-10-28 (BA/PM, `bapm-epic008-hostB`):* **the agents moved to a new Linux host** (owner, `…5dbd717b`). The host
+  tools there are Stockfish 19 and `cutechess-cli` 1.5.1, built from cutechess commit `5e84232b`. Their paths come from
+  the environment and stay out of the records (`ADR-0049` d4). **The tool pins were re-pinned on this host in
+  `ABC-204` § Dependencies, 2026-10-28** (task `se-tools-rating-host`). Those are the pins that `A1` and both `M1`
+  readings check. The paths and sha256 values above, and those in § The two readings, belong to the previous host and
+  are kept as history.
 - `ABC-203` (PGN export) is being built in parallel. It shares no file with this epic.
 
 ## Risks
