@@ -5,6 +5,9 @@
  *   node tools/rating/rating.ts r <sha> <out-dir> [--elo E] [--rounds N]
  *   node tools/rating/rating.ts d <candidate-sha> <base-sha> <out-dir> [--budget-ms B] [--rounds N]
  *
+ * The environment gives both tool paths: `CUTECHESS_CLI` and `STOCKFISH`. There is no default; a
+ * missing or unreadable one stops the run before any work and names the variable.
+ *
  * R plays `skytalix` against Stockfish 19 at `UCI_LimitStrength` and `UCI_Elo` E (default 1650,
  * 100 rounds). D plays a candidate against a base (default 3 000 ms a move, 200 rounds). A round is
  * one opening played with both colours. Each artifact is built in a clone under <out-dir>, which
@@ -16,8 +19,10 @@
 import { execFileSync, spawn } from "node:child_process";
 import { createHash } from "node:crypto";
 import {
+  accessSync,
   appendFileSync,
   closeSync,
+  constants,
   existsSync,
   mkdirSync,
   openSync,
@@ -28,16 +33,29 @@ import {
   statSync,
   writeFileSync,
 } from "node:fs";
-import { loadavg, release } from "node:os";
+import { cpus, loadavg, platform, release } from "node:os";
 import { basename, dirname, join, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { artifactRecord } from "./dist-manifest.ts";
 import { OPENINGS_SHA256 } from "./openings.ts";
 
-const CUTECHESS = "/Users/olgeroeselg/Projects/others/cutechess/cutechess/build/cutechess-cli";
-const CUTECHESS_SHA256 = "fb4fc2aa8d3457ccce2368446a080517be42be69a8a446765b9693833e766e1c";
-const STOCKFISH = "/opt/homebrew/bin/stockfish";
-const STOCKFISH_SHA256 = "dc2f18c34ae962dff591b66147d220ec06e61d756b93d8a4f5e04fd8e55c251f";
+/** A tool's path from the environment variable `name`; no default (ABC-204 § Dependencies, 2026-10-28). */
+function toolPath(name: string): string {
+  const path = process.env[name];
+  if (path === undefined || path === "")
+    throw new Error(`${name} is not set: give the tool's path`);
+  try {
+    accessSync(path, constants.R_OK);
+  } catch {
+    throw new Error(`${name} is not a readable file`);
+  }
+  return path;
+}
+
+const CUTECHESS = toolPath("CUTECHESS_CLI");
+const CUTECHESS_SHA256 = "dc77690113d9ae130f5d1b4c76fefb28f42620ac45a2bd4abb7dd8eb2154f40a";
+const STOCKFISH = toolPath("STOCKFISH");
+const STOCKFISH_SHA256 = "c78c22a924e8d452e1089ec8d47826f7a276aba69373185e82cbac4593e352d2";
 /** Q4 budgets for D; Q1's rule gives each its `timemargin` = 5 000 − budget. */
 const D_BUDGETS_MS = [3000, 2500, 2000, 1500, 1000];
 const CEILING_MS = 5000;
@@ -81,6 +99,10 @@ function hostLine(out: string, label: string): void {
     thermal =
       run("notifyutil", ["-g", "com.apple.system.thermalpressurelevel"]).split(/\s+/)[1] ?? "?";
     power = (/'(.*)'/.exec(run("pmset", ["-g", "batt"]))?.[1] ?? "?").replaceAll(" ", "_");
+  } catch {
+    // macOS only: on Linux `notifyutil` and `pmset` are absent, and both stay "?".
+  }
+  try {
     vitest = run("pgrep", ["-f", "/vitest"]).split("\n").length;
   } catch {
     // pgrep exits 1 when nothing matches; that is 0 foreign vitest processes.
@@ -323,8 +345,8 @@ async function main(argv: string[]): Promise<void> {
   const sfLines = await uciLines(STOCKFISH, [], out);
   const toolSha = [sha256File(CUTECHESS), sha256File(STOCKFISH)];
   const machine = [
-    `chip: ${run("sysctl", ["-n", "machdep.cpu.brand_string"])}`,
-    `darwin: ${release()}`,
+    `chip: ${cpus()[0]?.model ?? "?"}`,
+    `${platform()}: ${release()}`,
     `node: ${process.execPath} ${process.version}`,
     `cutechess-cli: ${run(CUTECHESS, ["--version"]).split("\n")[0]} sha256 ${toolSha[0]} ${toolSha[0] === CUTECHESS_SHA256 ? "= pin" : `DIFFERS from pin ${CUTECHESS_SHA256}`}`,
     `stockfish: ${sfLines.find((l) => l.startsWith("id name"))} sha256 ${toolSha[1]} ${toolSha[1] === STOCKFISH_SHA256 ? "= pin" : `DIFFERS from pin ${STOCKFISH_SHA256}`}`,

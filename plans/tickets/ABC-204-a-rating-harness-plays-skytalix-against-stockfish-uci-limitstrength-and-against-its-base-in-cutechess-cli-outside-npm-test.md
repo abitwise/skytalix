@@ -132,6 +132,16 @@ Every figure carries its machine (chip, Darwin, `node --version`, `cutechess-cli
 - **Builder:** Architect/Design rules the five questions, the Software Engineer builds the script, and QE/E2E runs
   `A4`–`A6`.
 - **Owner Q2** (`EPIC-008`) sets when the readings run. It does not block the build.
+- **Change 2026-10-28** (Software Engineer, task `se-tools-rating-host`; reason: the host move, owner
+  `orch-2026-10-28a/…5dbd717b`). The tool paths come from the environment, `CUTECHESS_CLI` and `STOCKFISH`. There
+  are no defaults; a missing or unreadable one stops the run and names the variable. The pins are re-set to the new
+  host's binaries:
+  - `cutechess-cli`: `fb4fc2aa…6e1c` → `dc776901…f40a`, cutechess-cli 1.5.1 built from cutechess commit `5e84232b`;
+  - Stockfish: `dc2f18c3…251f` → `c78c22a9…52d2`, a Stockfish 19 build (`id name Stockfish 19`).
+
+  The old pins and the 2026-10-23 readings taken with them stand as records of the previous host. Two Linux fixes in
+  the same hop: the preamble reads the chip and OS through `node:os` (`sysctl machdep.cpu.brand_string` exits 1 on
+  Linux), and `host.log` counts foreign `vitest` processes even where the macOS-only probes fail.
 
 ## Size and priority
 
@@ -195,7 +205,7 @@ and Stockfish 19 sha256 `dc2f18c3…251f`. Both equal `EPIC-008` § Dependencies
 ### Q2. Stockfish: `st=0.5`, `Threads 1`, `Hash 16`, `UCI_LimitStrength true`, start E = 1650
 
 - **The pins:**
-  - `cmd=/opt/homebrew/bin/stockfish`;
+  - `cmd=$STOCKFISH` (the path comes from the environment; dated change in § Dependencies, 2026-10-28);
   - `st=0.5 timemargin=2000 restart=on`;
   - `option.Threads=1 option.Hash=16 option.UCI_LimitStrength=true option.UCI_Elo=<E>`.
   - Ponder stays off: `cutechess-cli` sends `setoption name Ponder value false` itself (probe). Every other option
@@ -328,9 +338,9 @@ and Stockfish 19 sha256 `dc2f18c3…251f`. Both equal `EPIC-008` § Dependencies
 - **The R command shape** (QE's `A2` records the exact line):
 
   ```
-  cutechess-cli \
+  $CUTECHESS_CLI \
     -engine name=skytalix cmd=<node> arg=<clone>/dist/uci.js dir=<clone> st=3 timemargin=2000 restart=on stderr=<out>/skytalix.stderr \
-    -engine name=stockfish cmd=/opt/homebrew/bin/stockfish st=0.5 timemargin=2000 restart=on \
+    -engine name=stockfish cmd=$STOCKFISH st=0.5 timemargin=2000 restart=on \
             option.Threads=1 option.Hash=16 option.UCI_LimitStrength=true option.UCI_Elo=<E> stderr=<out>/stockfish.stderr \
     -each proto=uci \
     -openings file=<repo>/tools/rating/openings.epd format=epd order=sequential -repeat \
