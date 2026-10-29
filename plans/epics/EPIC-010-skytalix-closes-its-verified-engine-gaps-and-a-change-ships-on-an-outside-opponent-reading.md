@@ -126,6 +126,12 @@ asked that this lesson be carried here as a rule for him to set (`…183a5bbc`).
   82–87 °C, spread over idle windows (`EPIC-008` Q2: whenever idle).
 - **Default without an answer: (d).** BA/PM does not apply a rule on its own. Every value-changing ticket stays in
   `Backlog`; the records tickets (`ABC-226`, `ABC-227`) and the value-identical `ABC-235` are unaffected.
+- **INFO for Q4, not applied (owner word on `EPIC-009`, Orchestrator `…a67f71ac`, Q1):** *"For simpler tests use much
+  less matches, 5 or 10, just to make sure things work, major validation with 100 or more games comes later since it
+  can run over 24 or 48 hours."* He said it of `EPIC-009`. If he means the same here, it is a fifth option, **(e):** a
+  5–10-game smoke per ticket (no faults, no illegal moves), and one batched outside validation later. Cost ≈ 0.5 h per
+  ticket. It shows a change works; at ± 200 Elo or wider it cannot show a gain or catch a per-ticket loss, so a later
+  batch that reads LOSS cannot say which merge caused it. Asked under Q4, not assumed.
 - **Not decided here:** a longer budget (the owner's "for promising changes, longer" in § B item 2). The owner plans
   longer-thinking games himself; when they exist they are evidence for this epic, and a ship reading only on his word.
 - The thermal rule of `EPIC-009` (`RISK-EPIC009-04`) applies to every reading: ALONE, on AC, thermal and frequency
@@ -251,6 +257,8 @@ All fifteen reserved ids are used. None is `XL`; `ABC-239` is the one `L` and is
   - **Default: (a).**
 - **Q4. The pre-merge outside-opponent rule** (§ Measurement first): (a) D only, as `EPIC-008`; (b) D, then an R pair
   that must not be LOSS; (c) the R pair instead of D; (d) hold. **Default: (d).** BA/PM's reading: (b).
+  (e), smoke per ticket and a batched validation later, is listed because of your `EPIC-009` word (`…a67f71ac`);
+  it is not applied here.
 - **Q5. Accept this epic and its measures M1–M5** (EPIC goals and M-criteria are yours, `…5aaf7cec` item 3).
   (a) As written, with **no Elo target**; (b) other measures, or a target for M2. **Default: (a).**
 - **Not questions for you:** which form an ADR takes, the door's shape, `Q-SET`'s extra rows, and the game counts
