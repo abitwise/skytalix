@@ -1,8 +1,8 @@
 ---
 id: ABC-225
 title: "One command reads an interleaved R pair: base and candidate against the same Stockfish, in alternating blocks, with the opening-paired error and a host log"
-status: backlog
-column: Backlog
+status: ready
+column: Ready
 size: M
 priority: P2
 epic: EPIC-010
@@ -10,13 +10,29 @@ epic: EPIC-010
 
 # ABC-225: an interleaved R pair in the rating harness
 
+> **RE-SCOPED 2026-10-29 by BA/PM** (task `bapm-owner-words-b`, records only). The owner set Q4 = (e), extended
+> (`orch-2026-10-29g` `…278e149b`): a 10-game D smoke and a 10-game R smoke per value-changing ticket, then a batched
+> major validation later. The cut said "under (a) or (d) it is closed unbuilt"; (e) is neither, so its purpose was
+> re-checked:
+>
+> - **Not the per-ticket reading any more.** The smokes run on today's harness as it is: `r <sha> <out> --elo 1910
+>   --rounds 5` and `d <candidate> <base> <out> --budget-ms 1500 --rounds 5` (10 games each; `tools/rating/rating.ts`
+>   usage lines 5–6, `--rounds` read at line 328). No `tools/` change is needed for them.
+> - **It is the batched validation's instrument.** Each batch, and `EPIC-010` M2 at the close, is an interleaved R
+>   pair: the batch's head against its base, 200 + 200 games. Two `r` runs back to back carry the order and drift
+>   confound that `EPIC-008`'s close carried. That pain is unchanged, so the mechanism, the scope and A1–A6 stand.
+> - **Kept, re-scoped, not renumbered.** Its place in milestone 1 moves from "before every value-changing reading" to
+>   "Done before milestone 1's batch", which reads after `ABC-228`, `ABC-229` and `ABC-230` merge.
+> - **Wait:** none. Q4 is answered. **DoR 9/10 → 10/10, Backlog → Ready** (P2). It may be built beside the In Design
+>   work of milestone 1; it is `tools/` only and plays 40 games once (A5).
+>
 > **Cut 2026-10-29 by BA/PM** (task `bapm-epic010-improvements`, records only, at `main` `f45aea95`). § B item 2,
-> after the Architect's `arch-epic008-rd` (`…0c5d62f4`, `…9d172446`). **Waits in Backlog on the owner's Q4:** it is
-> built only if he picks (b) or (c). Under (a) or (d) it is closed unbuilt.
+> after the Architect's `arch-epic008-rd` (`…0c5d62f4`, `…9d172446`). Waited on Q4 (b) or (c) until the re-scope above.
 
 ## Problem
 
-- **User:** QE/E2E, who reads every value-changing ticket under Q4 (b)/(c), and the owner, who reads the result.
+- **User:** QE/E2E, who reads each batched validation and `EPIC-010` M2 (Q4 = (e)), and the owner, who reads the
+  result to see whether things got worse (his Q5 word).
 - **Pain:** `tools/rating/rating.ts` has two modes, `r` (one build against Stockfish) and `d` (candidate against
   base). Two `r` runs back to back carry the fixed-order and drift confound that `EPIC-008`'s close carried
   (`EPIC-008` § close block, "Fixed order"). The tool reports cutechess's unpaired Y only; the opening-paired error
@@ -72,11 +88,11 @@ epic: EPIC-010
 ## Size and priority
 
 - **Size: M.** One mode, a scheduler, a pentanomial computation, a sampler; `ABC-204` was M for the whole harness.
-- **Priority: P2.** Under (b)/(c) every value-changing reading waits on it.
+- **Priority: P2.** Milestone 1's batch waits on it; no per-ticket reading does (re-scoped 2026-10-29).
 
 ## Dependencies
 
-- **Owner:** Q4 = (b) or (c).
+- **Owner:** Q4 answered 2026-10-29: (e), extended. It needs no further owner word.
 - `ABC-204`'s host pins (re-pinned on this host). No ADR: `tools/rating/rating.ts` cites none, and this adds no
   engine behaviour. Architect/Design reviews the pentanomial formula at design.
 
@@ -88,11 +104,12 @@ epic: EPIC-010
 | 2 | scope and out-of-scope | ✅ 5 items; no pin moves |
 | 3 | INVEST | ✅ independent of every engine ticket; M; testable offline |
 | 4 | testable, measurable acceptance | ✅ A1–A6, A3 against recorded numbers |
-| 5 | dependencies known | ✅ Q4; `ABC-204` pins |
+| 5 | dependencies known | ✅ `ABC-204` pins; Q4 answered |
 | 6 | NFR triggers with targets | ✅ `NFR-008` 0 lane files; input validation; heat |
 | 7 | test notes | ✅ 2 |
 | 8 | size | ✅ M |
 | 9 | priority | ✅ P2 |
-| 10 | no major unresolved blocker | ❌ Q4 unanswered |
+| 10 | no major unresolved blocker | ✅ none (Q4 answered 2026-10-29) |
 
-**DoR 9/10. Backlog**, until the owner answers Q4 with (b) or (c). Then Ready.
+**DoR 10/10 (re-scored 2026-10-29). Ready.** Pull before milestone 1's batch is due; it never runs beside an ALONE
+reading.

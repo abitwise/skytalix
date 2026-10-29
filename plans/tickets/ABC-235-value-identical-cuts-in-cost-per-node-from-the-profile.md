@@ -16,6 +16,11 @@ epic: EPIC-010
 > (`src/search.ts:193-196`). **Waits in Backlog on `ABC-227`**, which names the cuts. Value-identical, so it is not
 > held by Q4.
 
+> **NOTED 2026-10-29 by BA/PM** (task `bapm-owner-words-b`, records only): the owner set Q4 = (e), extended
+> (`orch-2026-10-29g` `…278e149b`): a smoke pair per **value-changing** ticket. This ticket is value-identical, so it
+> stays on `EPIC-008`'s S2 and plays no smoke. Its DoR (9/10) is unchanged. `ABC-227` is Done (`f4301d0c`), and this
+> ticket is In Design (`arch-ABC-235`) on the Orchestrator's board.
+
 ## Problem
 
 - **User:** the owner at level 5.

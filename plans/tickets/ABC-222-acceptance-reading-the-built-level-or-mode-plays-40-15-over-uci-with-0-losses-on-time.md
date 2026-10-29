@@ -11,6 +11,25 @@ owner: QE/E2E
 
 # ABC-222: smoke reading of `simple-tournament` at 40/15: `EPIC-009` M1, M2 and the 22.5 s ceiling, in 5 games
 
+> **RECONCILED 2026-10-29 to `ADR-0052` (PROPOSED) by BA/PM** (task `bapm-owner-words-b`, records only).
+>
+> - **The selecting line** is `option.TimeMode=simple-tournament` (`ADR-0052` D1). It needs no shell quoting. Game 1's
+>   `-debug all` log must show `setoption name TimeMode value simple-tournament`.
+> - **`cutechess-cli` 1.5.1 sends `movestogo`** whenever moves are left in the period (the Architect read its source,
+>   `…04fdc439` § 1). A6 still logs it.
+> - **The slack to read against:** M1's ≥ 500 ms survives a per-move overhead δ ≤ 600 ms on a period's last move, and
+>   about 487 ms of δ per move on average (`ADR-0052` D5). A6's overhead figures are read against that.
+> - **Smoke size: 5 games, kept** (BA/PM's call; the owner's `EPIC-009` word is "5 or 10"). Why not `EPIC-010`'s 10:
+>   - A 40/15 game costs up to ≈ 1 h ALONE, so 10 games would be ≈ 10 h of heat for one reading. The owner's 10 in
+>     `EPIC-010` was said of games at 1.5 s and 3 s a move, ≈ 0.7 h for all 20.
+>   - What this smoke guards, the flag at a period's end, is held by arithmetic with ≈ 18.8 s to spare (`ADR-0052`
+>     D3). Five games give up to 20 side-period ends to look at, which "makes sure things work". A forfeit rate is
+>     the later major validation's to count (≥ 100 games), and 10 games could not bound one either.
+>   - **One coverage rule uses his upper bound** (A4 below): if the 5 games complete fewer than 4 side-periods, QE plays
+>     on, up to 10 games. Self-play often ends early by repetition (`sa-ABC-226`: 1 718 of 4 199 games), and a smoke
+>     that never reaches move 40 cannot read M2.
+> - Nothing else changes. DoR stays 9/10, waiting on `ABC-220`.
+>
 > **RE-SCOPED 2026-10-29 by BA/PM** (task `bapm-amend-epic009`, records only, at `main` `a5d70e35`), on the owner's
 > answers of 2026-10-29 (`orch-2026-10-29g` `…a67f71ac`).
 >
@@ -34,7 +53,7 @@ owner: QE/E2E
 ## Scope
 
 - `cutechess-cli` 1.5.1 plays the built `dist/uci.js` at `ABC-220`'s merge sha against itself. Both sides use
-  `simple-tournament`, selected by the `option.<Name>=<value>` line the Architect ruled. `OwnBook` is on, with one
+  `simple-tournament`, selected by `option.TimeMode=simple-tournament` (`ADR-0052` D1). `OwnBook` is on, with one
   thread and `restart=on`.
 - **5 games at `tc=40/900`** (40/15, repeating, no increment), one game from each of openings 1–5 of
   `tools/rating/openings.epd`. In self-play both sides are the same build and setting, so colour balance does not
@@ -42,7 +61,10 @@ owner: QE/E2E
 - Each game is capped at `-maxmoves 80`, two periods per side. QE checks in game 1's PGN whether `cutechess-cli`
   counts moves or plies, and pins the cap in PREREG so that an uncapped game reaches each side's move 40.
 - `timemargin=0` for both sides, so any overrun past the flag is a loss on time.
-- Width 1, ALONE. Wall ≤ ~5 h (≤ 80 moves × 2 sides × 22.5 s ≈ 60 min a game).
+- **Coverage extension (2026-10-29):** if the 5 games complete fewer than 4 side-periods (a side's 40th move
+  reached), QE plays on, one game at a time on openings 6, 7, … in order, until 4 are complete, **up to 10 games in
+  all** (the owner's "5 or 10").
+- Width 1, ALONE. Wall ≤ ~5 h (≤ 80 moves × 2 sides × 22.5 s ≈ 60 min a game); ≤ ~10 h if the extension runs to 10.
 - `cutechess-cli` runs directly in QE's scratch clone. `tools/rating/rating.ts` plays `st=` only and is **not** edited.
 
 ## Out of scope
@@ -59,8 +81,9 @@ owner: QE/E2E
   - `cutechess-cli --version` = 1.5.1, with its sha256 equal to `ABC-204`'s host re-pin (2026-10-28);
   - the `openings.epd` sha256, equal to `OPENINGS_SHA256`;
   - the exact command line, with paths replaced by placeholders (`ADR-0049` d4);
-  - the `setoption` line that selects the setting, quoted from game 1's `-debug all` log. If it does not reach the
-    engine, stop, fix the spelling, and restart the count.
+  - the `setoption` line that selects the setting, quoted from game 1's `-debug all` log: it must read `setoption name
+    TimeMode value simple-tournament`. If it does not reach the engine, stop, fix the spelling, and restart the
+    count.
 - **A2 (games kept).** 5 of 5 PGNs and their `-debug all` logs are kept. Each game ends by a rule result, the move cap,
   or a loss on time.
   - Any other end (an illegal move, a disconnect, a stall, a crash) is a named fault, and it makes the reading
@@ -71,7 +94,9 @@ owner: QE/E2E
   least clock left after any `skytalix` move, derived from each `go` line's `wtime`/`btime` minus that move's time. QE
   pins the derivation in PREREG before game 1.
 - **A4 (M2).** Every completed 40-move period, per side, uses **≥ 75 %** of its 900 s, book moves included. QE pins
-  "completed period" in PREREG. It counts from the first move played after the opening position.
+  "completed period" in PREREG. It counts from the first move played after the opening position. **At least 4
+  side-periods are completed** across the games played (the coverage extension above, up to 10 games). If 10 games
+  still complete fewer than 4, A4 is UNRESOLVED and named, not MET.
 - **A5 (the ceiling).** The longest single `skytalix` move, from the PGN's per-move times, is **≤ 22 500 ms**.
 - **A6 (reported, not graded):**
   - the clock left after each period's 40th move (a list);
@@ -101,7 +126,7 @@ owner: QE/E2E
 
 ## Size and priority
 
-- **Size: S.** One reading of 5 games, ≤ ~5 h ALONE plus ~1 h QE.
+- **Size: S.** One reading of 5 games, ≤ ~5 h ALONE plus ~1 h QE (≤ ~10 h if the coverage extension runs to 10).
 - **Priority: P2.** It closes milestone 1.
 
 ## Dependencies
@@ -114,9 +139,9 @@ owner: QE/E2E
 | # | check | state |
 |---|---|---|
 | 1 | problem clear | ✅ owner word (Q1, Q4, Q8) |
-| 2 | scope and out-of-scope | ✅ 5 games pinned; strength and major validation out |
+| 2 | scope and out-of-scope | ✅ 5 games pinned, extended to ≤ 10 only for coverage; strength and major validation out |
 | 3 | INVEST | ✅ S; testable |
-| 4 | testable, measurable acceptance | ✅ 0 losses on time, ≥ 500 ms, ≥ 75 %, ≤ 22 500 ms, 5 of 5 games |
+| 4 | testable, measurable acceptance | ✅ 0 losses on time, ≥ 500 ms, ≥ 75 % over ≥ 4 side-periods, ≤ 22 500 ms, every game kept |
 | 5 | dependencies known | ✅ `ABC-220`; `ABC-204` pins; an idle board |
 | 6 | NFR triggers with targets | ✅ `NFR-004` 22.5 s; the 5 % frequency rule |
 | 7 | test notes | ✅ 3 |
