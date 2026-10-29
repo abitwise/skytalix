@@ -92,3 +92,10 @@ epic: EPIC-010
 | 10 | no major unresolved blocker | ✅ none beyond `ABC-227` |
 
 **DoR 9/10. Backlog** until `ABC-227` is Done; then BA/PM names the cuts and it goes Ready.
+
+> **Result 2026-10-29, Software Engineer** (task `se-ABC-235`, branch `grugops/ABC-235` from `main` `a37f1d87`): cuts
+> 1 (`dcbad73d`), 3 (`7f3f0fda`) and 5 (`f9576af3`) built to `arch-ABC-235`; all three kept, none reverted. A1 byte-equal
+> to the merge base at every cut (6 021 rows, plain `node`, out of tree, no golden file committed); perft counts equal,
+> `PERFT_DEEP` 32/32. SE nps, indicative, 5 interleaved per board, tip against base: kiwipete 1.27x, position-6 1.28x,
+> start 1.16x. QE's interleaved A3 reading, G2's binding read and G6's 5 interleaved runs decide. Notes:
+> `se-ABC-235`.
