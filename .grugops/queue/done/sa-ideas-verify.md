@@ -44,3 +44,33 @@ commit the list reviewed.
   observation (a table: item, sub-claim, verdict, evidence, history); and a `kind: decision` that summarises which
   items stand. Commit on your branch.
 - Write `## Result` plus a 10-cell trace row into this brief in main's queue, then move it and its claim.md to done/.
+
+## Result
+
+**Done, on `grugops/sa-ideas-verify` (worktree `../wt-sa-ideas-verify`, from main `51c85f49`): records `c28054cc`
+(time note, committed first) and `3d19a6bd` (claims table + decision). Not merged; nothing pushed.** Main's
+`src`/`data`/`tools` equal `3ad6bc10`. A copy of the time note is also in main's
+`.grugops/context/sa-ideas-verify/notes/` for `bapm-epic009-tournament`.
+
+- **Notes (task `sa-ideas-verify`, all sealed):**
+  - `20261029T195803Z-system-analyst-observation-1ccf0010`: time behaviour (level budgets, CLI and UCI rule, `go` tokens, 32 s clamp, blockers for a 22.5 s level and for clock-based time).
+  - `20261029T200022Z-system-analyst-observation-306a4012`: the claims table (item, sub-claim, verdict, evidence, history).
+  - `20261029T200049Z-system-analyst-decision-837e6fa8`: which items stand.
+- **Verdicts:**
+  - 1 stands: in-check stand pat, no terminal test past the leaf, no quiet promotions. The leaf itself is checked. A horizon check extension was tried (`ABC-210`, NEUTRAL).
+  - 2: facts true, already in hand via `arch-epic008-rd`. Paired openings already exist.
+  - 3 stands. The ep point is the owner's `ADR-0020` d2.
+  - 4 stands, corrected: the clock is honoured, then capped by the level. Level 7 already spends 22.5 s a move under 40/15 when `movestogo` is sent.
+  - 5 and 6 stand.
+  - 7 stands in part (`ABC-206` did captures-only legality).
+  - 8 stands; never tried.
+  - 9 stands in part: TT kept across a game was already tried (`ABC-209`).
+  - 10 is a permanent non-goal of `EPIC-004`.
+- **Probes:** single-position only, no games, about 41 s of CPU, no cutechess running. Raw files are in `raw/`.
+- **UNKNOWN - verify:** whether cutechess sends `movestogo` for 40/900; the 50 ms forfeit margin; the play effect of items 1, 3, 6, 7 and 9. Each has a named probe.
+- **Owner questions surfaced:** reopen item 10? Does `EPIC-004`'s "Strength above ~1700" non-goal line still stand? Re-open `ADR-0020` d2?
+- **STOP:** none.
+
+### Trace row (10 cells, header order)
+
+| sa-ideas-verify | SA: owner's 10 external ideas verified against main (src = 3ad6bc10) and history; time behaviour mapped for EPIC-009 (level 7 already ~22.5 s/move under 40/15 with movestogo; UCI clock honoured then level-capped; 32 s clamp; CLI has no clock) | EPIC-009 (and the deferred strength epic) | — | NFR-004, NFR-005, NFR-009 cited, none moved | grugops/sa-ideas-verify @ 3d19a6bd (records only): .grugops/context/sa-ideas-verify/notes/ (3) + raw/ (2 probe scripts, 2 outputs) | no gates run (records only); 5 UCI time probes + 3 quiescence probes, single position, ~41 s CPU, no games | — | — | done (records; not merged) |
