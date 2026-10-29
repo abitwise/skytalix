@@ -1,0 +1,55 @@
+
+## 40/15, 1 period, delta 31
+  level7 (D4.1)        {"closest":19,"minUsePct":100,"maxBudget":22500}
+  simple-tournament    {"closest":18760,"minUsePct":97.9,"maxBudget":22000}
+  uci-clock-mode       {"closest":1069,"minUsePct":99.9,"maxBudget":22668}
+
+## 40/15, 1 period, 6 book moves
+  level7 (D4.1)        {"closest":19,"minUsePct":100,"maxBudget":26471}
+  simple-tournament    {"closest":150946,"minUsePct":83.2,"maxBudget":22000}
+  uci-clock-mode       {"closest":1069,"minUsePct":99.9,"maxBudget":26623}
+
+## 40/15, 3 periods (120 moves)
+  level7 (D4.1)        {"closest":19,"minUsePct":100,"maxBudget":22500}
+  simple-tournament    {"closest":18760,"minUsePct":97.9,"maxBudget":22000}
+  uci-clock-mode       {"closest":1069,"minUsePct":99.9,"maxBudget":22695}
+
+## 40/15, no movestogo sent, 80 moves
+  level7 (D4.1)        {"closest":128230,"minUsePct":85.8,"maxBudget":30000}
+  simple-tournament    {"closest":166517,"minUsePct":81.5,"maxBudget":22000}
+  uci-clock-mode       {"closest":117735,"minUsePct":86.9,"maxBudget":50737}
+
+## scaled tc=40/60, 3 periods
+  level7 (D4.1)        {"closest":19,"minUsePct":100,"maxBudget":1500}
+  simple-tournament    {"closest":1069,"minUsePct":98.2,"maxBudget":1695}
+  uci-clock-mode       {"closest":1069,"minUsePct":98.2,"maxBudget":1695}
+
+## sudden death 15 min, 80 moves
+  level7 (D4.1)        {"closest":15939,"minUsePct":null,"maxBudget":30000}
+  simple-tournament    {"closest":23474,"minUsePct":null,"maxBudget":22000}
+  uci-clock-mode       {"closest":17205,"minUsePct":null,"maxBudget":44850}
+
+## 40/15, delta 500 (real-clock stress)
+  level7 (D4.1)        {"closest":-450,"minUsePct":100,"maxBudget":22500}
+  simple-tournament    {"closest":600,"minUsePct":99.9,"maxBudget":22000}
+  uci-clock-mode       {"closest":600,"minUsePct":99.9,"maxBudget":22375}
+
+## scaled tc=40/60, delta 500
+  level7 (D4.1)        {"closest":-1256,"minUsePct":102.1,"maxBudget":1500}
+  simple-tournament    {"closest":273,"minUsePct":99.5,"maxBudget":1375}
+  uci-clock-mode       {"closest":273,"minUsePct":99.5,"maxBudget":1375}
+
+## 60 min / 40, 1 period
+  level7 (D4.1)        {"closest":2398760,"minUsePct":33.4,"maxBudget":30000}
+  simple-tournament    {"closest":2718760,"minUsePct":24.5,"maxBudget":22000}
+  uci-clock-mode       {"closest":1218760,"minUsePct":66.1,"maxBudget":59500}
+max delta keeping closest>=500 at 40/15, level7 (D4.1): 0 ms
+max delta keeping closest>=500 at 40/15, simple-tournament: 600 ms
+max delta keeping closest>=500 at 40/15, uci-clock-mode: 600 ms
+max delta keeping closest>=500 at tc=40/60, level7 (D4.1): 0 ms
+max delta keeping closest>=500 at tc=40/60, simple-tournament: 456 ms
+max delta keeping closest>=500 at tc=40/60, uci-clock-mode: 456 ms
+
+hard stop: wtime 3000 movestogo 1 -> 1900 ; wtime 800 -> 1
+cap: wtime 3600000 movestogo 40 -> 59500
+T margin under 22.5 s ceiling: 500 ms
