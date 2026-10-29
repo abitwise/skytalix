@@ -11,6 +11,20 @@ owner: QE/E2E
 
 # ABC-223: smoke reading of `uci-clock-mode` at 40/15: `EPIC-009` M1, M2 and the 60 s ceiling, in 5 games
 
+> **RECONCILED 2026-10-29 to `ADR-0052` (PROPOSED) by BA/PM** (task `bapm-owner-words-b`, records only).
+>
+> - **The selecting line** is `option.TimeMode=uci-clock-mode` (`ADR-0052` D1). Game 1's log must show `setoption
+>   name TimeMode value uci-clock-mode`.
+> - **The ceiling read in A5:** the mode's budget is ≤ 59 500 ms under a 60 000 ms ceiling (`ADR-0052` D4). At 40/15
+>   with `movestogo` its share stays near 22.4 s, rising only by banked book time, so these games are not expected to
+>   reach the cap. `ABC-221`'s A7 and A10 hold it; A5 here only confirms it in play.
+> - **The slack to read against:** the reserve leaves ≥ 1 069 ms on the virtual clock, and M1's ≥ 500 ms survives
+>   δ ≤ 600 ms on a period's last move (`ADR-0052` D5). The margin is much thinner than `simple-tournament`'s 18.8 s,
+>   so A6's overhead figures matter more here.
+> - **Smoke size: 5 games, kept, with `ABC-222`'s coverage extension up to 10** (the same reasons; `ABC-222`'s header).
+>   If `ABC-222`'s per-move overhead max is over 300 ms (half the 600 ms slack), QE plays all 10 games here.
+> - DoR stays 9/10, waiting on `ABC-221`.
+>
 > **Cut 2026-10-29 by BA/PM** (task `bapm-amend-epic009`, records only, at `main` `a5d70e35`), on the owner's answers
 > of 2026-10-29 (`orch-2026-10-29g` `…a67f71ac`).
 >
@@ -34,8 +48,10 @@ owner: QE/E2E
 `ABC-222`'s protocol, unchanged except as listed:
 
 - the build is at `ABC-221`'s merge sha;
-- both sides use `uci-clock-mode`, selected by the Architect's ruled `option.<Name>=<value>` line;
-- the ceiling read in A5 is 60 000 ms.
+- both sides use `uci-clock-mode`, selected by `option.TimeMode=uci-clock-mode` (`ADR-0052` D1);
+- the ceiling read in A5 is 60 000 ms (budget ≤ 59 500 ms);
+- the coverage extension of `ABC-222` applies (up to 10 games), and all 10 are played if `ABC-222`'s per-move overhead
+  max was over 300 ms.
 
 So: `cutechess-cli` 1.5.1, self-play, **5 games at `tc=40/900`**, openings 1–5, `-maxmoves 80` (unit checked in game
 1), `timemargin=0`, `OwnBook` on, width 1, ALONE. The wall is ≤ ~5 h: each side spends at most its clock, ≤ 1 800 s
@@ -53,8 +69,10 @@ per 80 moves, so ≤ 60 min a game.
   re-run once. A kill after a result line is counted and reported.
 - **A3 (M1).** There are **0** losses on time by either side. The closest call is **≥ 500 ms**, derived as in PREREG
   (as `ABC-222` `A3`).
-- **A4 (M2).** Every completed 40-move period, per side, uses **≥ 75 %** of its 900 s, book moves included.
-- **A5 (the ceiling).** The longest single `skytalix` move is **≤ 60 000 ms** + `AR-NFR004-A`'s ≤ ~31 ms.
+- **A4 (M2).** Every completed 40-move period, per side, uses **≥ 75 %** of its 900 s, book moves included, over at
+  least 4 completed side-periods (as `ABC-222` `A4`).
+- **A5 (the ceiling).** The longest single `skytalix` move is **≤ 60 000 ms** (a budget ≤ 59 500 ms plus
+  `AR-NFR004-A`'s ≤ ~31 ms).
 - **A6 (reported, not graded):**
   - the clock left after each period's 40th move;
   - the `go` lines with and without `movestogo`;
@@ -92,7 +110,7 @@ per 80 moves, so ≤ 60 min a game.
 | 1 | problem clear | ✅ owner word (Q1, Q2, Q5, Q8) |
 | 2 | scope and out-of-scope | ✅ 5 games pinned; strength and major validation out |
 | 3 | INVEST | ✅ S; testable |
-| 4 | testable, measurable acceptance | ✅ 0 losses on time, ≥ 500 ms, ≥ 75 %, ≤ 60 000 ms + 31 ms, 5 of 5 games |
+| 4 | testable, measurable acceptance | ✅ 0 losses on time, ≥ 500 ms, ≥ 75 % over ≥ 4 side-periods, ≤ 60 000 ms, every game kept |
 | 5 | dependencies known | ✅ `ABC-221`; `ABC-204` pins; an idle board |
 | 6 | NFR triggers with targets | ✅ `NFR-004` 60 s; the 5 % frequency rule |
 | 7 | test notes | ✅ 2 |

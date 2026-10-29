@@ -13,6 +13,10 @@ epic: EPIC-010
 > **Cut 2026-10-29 by BA/PM** (task `bapm-epic010-improvements`, records only, at `main` `f45aea95`). § B item 1,
 > verified by the SA (`…306a4012` rows 1b, 1c, 1e). **Waits in Backlog on:** an ADR (below) and the owner's Q4.
 
+> **AMENDED 2026-10-29 by BA/PM** (task `bapm-owner-words-b`, records only): the owner set Q4 = (e), extended
+> (`orch-2026-10-29g` `…278e149b`). This ticket's reading is now the smoke pair before merge (`EPIC-010` § The
+> merge rule), with a batched validation later. Q4 no longer holds it. **Next real wait:** the ADR (In Design: `ADR-0024` d4 and `ABC-079`'s decision, an `ADR-0026` d10 door). DoR 8/10 → 9/10.
+
 ## Problem
 
 - **User:** the owner at level 5.
@@ -51,8 +55,7 @@ epic: EPIC-010
   the door's (`ADR-0024` d3 headroom). The frozen-clock pre-check runs before the real-clock `G6`.
 - **A5 (gates).** `G1` ≥ 54/58 (a newly solved row is reported; raising the baseline is QE's), `G2` (the evaluator
   is untouched, so read only if `ADR-0034` asks), `G5`, `G6` "≥ base" by its rule, depth floor 6, `G8`, `G9`, `G10`.
-- **A6 (the reading).** The Q4 rule, as the owner sets it. Under (b): D meets S1, then the R pair (`ABC-225`) is not
-  LOSS. Reported: X ± Y of each, the pentanomial, and `G11`.
+- **A6 (the reading).** The smoke pair of `EPIC-010` § The merge rule (owner Q4 = (e), extended, 2026-10-29), on the candidate head rebased on `main`, before the merge: S-1 0 faults, S-2 0 losses on time, S-3 D ≥ 3.0 of 10 (else ≥ 7.0 of 20), S-4 R ≥ 3.0 of 10 (else ≥ 7.0 of 20). Reported: each smoke's W/L/D and score, the ledger's pooled R score since the last batch, and `G11`.
 - **A7 (the ADR).** The ADR exists, names the evasion rule, the mate score and the door, and records that it was
   reported to the owner.
 
@@ -78,7 +81,7 @@ epic: EPIC-010
 - **Architect/Design first (In Design):** an ADR or an `ADR-0024` amendment. It reverses `ADR-0024` decision 4's
   "checks in quiescence" fence and `ABC-079`'s recorded decision (`src/quiescence.ts:21-24`), and adds an
   `ADR-0026` d10 door. One ADR may also name `ABC-229`'s quiet promotions. Reported to the owner when it lands.
-- **Owner:** Q4. Under (b)/(c): `ABC-225` Done.
+- **Owner:** Q4 answered 2026-10-29: (e), extended (`orch-2026-10-29g` `…278e149b`). `ABC-225` is no longer needed before this ticket; it is the batch's instrument.
 - Shares `src/quiescence.ts` with `ABC-229`: this one first.
 
 ## Definition of Ready
@@ -88,12 +91,12 @@ epic: EPIC-010
 | 1 | problem clear | ✅ probes Q1, Q2 |
 | 2 | scope and out-of-scope | ✅ 4 items; `ABC-210` forms out |
 | 3 | INVEST | ✅ one mechanism; M; testable |
-| 4 | testable, measurable acceptance | ⚠ A1–A5, A7 measurable; A6's reading is the rule Q4 sets |
-| 5 | dependencies known | ✅ ADR; Q4; `ABC-225` |
+| 4 | testable, measurable acceptance | ✅ every row measurable; A6 is the smoke pair (`EPIC-010` § The merge rule, S-1–S-4) |
+| 5 | dependencies known | ✅ ADR |
 | 6 | NFR triggers with targets | ✅ nodes ≤ 1.5 × at depth 6; depth floor 6 |
 | 7 | test notes | ✅ 3 |
 | 8 | size | ✅ M |
 | 9 | priority | ✅ P2 |
-| 10 | no major unresolved blocker | ❌ ADR not written; Q4 unanswered |
+| 10 | no major unresolved blocker | ❌ ADR not written |
 
-**DoR 8/10. Backlog**, then In Design for the ADR, then Ready once Q4 is set.
+**DoR 9/10 (re-scored 2026-10-29). Backlog**, then In Design for the ADR, then Ready when it lands.

@@ -14,6 +14,10 @@ epic: EPIC-010
 > verified by the SA (`…306a4012` rows 3a–3c, 3e). **Waits in Backlog on:** `ABC-226`'s count (it sets this ticket's
 > milestone), an ADR reading, and the owner's Q4. The en-passant key point is Q3, not this ticket.
 
+> **AMENDED 2026-10-29 by BA/PM** (task `bapm-owner-words-b`, records only): the owner set Q4 = (e), extended
+> (`orch-2026-10-29g` `…278e149b`). This ticket's reading is now the smoke pair before merge (`EPIC-010` § The
+> merge rule), with a batched validation later. Q4 no longer holds it. **Next real wait:** the Architect's ADR reading (`ADR-0002` clause 3, `ABC-081` `A6`, `ADR-0044` D3). `ABC-226` is Done (SA `…cc53fc79`: 484 costed games, R 26), so this ticket stays in milestone 1. DoR 8/10 → 9/10.
+
 ## Problem
 
 - **User:** the owner in the CLI and a GUI over UCI.
@@ -54,8 +58,7 @@ epic: EPIC-010
   irreversible move, and never more than 100 (the fifty-move window); `NFR-009` growth ≤ 1 MiB between 1 s and 3 s
   searches holds.
 - **A6 (gates).** `G1`, `G5`, `G6` "≥ base" (floor 6), `G7`, `G8`, `G9`.
-- **A7 (the reading).** The Q4 rule. Reported: X ± Y and the count of games in the reading that end by repetition,
-  head against base.
+- **A7 (the reading).** The smoke pair of `EPIC-010` § The merge rule (owner Q4 = (e), extended, 2026-10-29), on the candidate head rebased on `main`, before the merge: S-1 0 faults, S-2 0 losses on time, S-3 D ≥ 3.0 of 10 (else ≥ 7.0 of 20), S-4 R ≥ 3.0 of 10 (else ≥ 7.0 of 20). Reported: each smoke's W/L/D and score, the ledger's pooled R score since the last batch, and the count of smoke games that end by repetition, candidate against base.
 
 ## NFR triggers
 
@@ -80,7 +83,7 @@ epic: EPIC-010
 - **Architect/Design first:** `ADR-0002` clause 3 already says the per-ply array is "seeded once per search from the
   history module"; the Architect rules whether that clause covers this (keys handed in, `ABC-081` `A6`) or a new ADR
   or `ADR-0044` D3 amendment is owed, and whether an `ADR-0026` door applies. Reported to the owner when it lands.
-- **Owner:** Q4. Q3 only if he re-opens `ADR-0020` d2 (a separate ticket then).
+- **Owner:** Q4 answered 2026-10-29: (e), extended (`orch-2026-10-29g` `…278e149b`). Q3 (open; default (a) keep) only if he re-opens `ADR-0020` d2 (a separate ticket then).
 - Shares `src/uci-session.ts` with `EPIC-009`'s `ABC-220`/`ABC-221`; whichever merges second rebases.
 
 ## Definition of Ready
@@ -90,12 +93,12 @@ epic: EPIC-010
 | 1 | problem clear | ✅ SA 3a–3c |
 | 2 | scope and out-of-scope | ✅ 5 items; ep out |
 | 3 | INVEST | ✅ independent of 228/229; M |
-| 4 | testable, measurable acceptance | ⚠ A1–A6 measurable; A7's reading is the rule Q4 sets |
-| 5 | dependencies known | ✅ `ABC-226`; ADR reading; Q4 |
+| 4 | testable, measurable acceptance | ✅ every row measurable; A7 is the smoke pair (`EPIC-010` § The merge rule, S-1–S-4) |
+| 5 | dependencies known | ✅ `ABC-226` (Done); ADR reading |
 | 6 | NFR triggers with targets | ✅ ≤ 100 keys; ≤ 1 MiB growth |
 | 7 | test notes | ✅ 2 |
 | 8 | size | ✅ M |
 | 9 | priority | ✅ P2 (conditional) |
-| 10 | no major unresolved blocker | ❌ ADR reading; Q4; `ABC-226` |
+| 10 | no major unresolved blocker | ❌ ADR reading |
 
-**DoR 8/10. Backlog.**
+**DoR 9/10 (re-scored 2026-10-29). Backlog.**

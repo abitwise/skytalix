@@ -14,6 +14,10 @@ epic: EPIC-010
 > aspiration half (SA `…306a4012` row 9e). Never tried. `EPIC-008` § Out of scope listed aspiration windows; this is a
 > new epic on the owner's ideas. **Waits in Backlog on** a new ADR and the owner's Q4. Milestone 2.
 
+> **AMENDED 2026-10-29 by BA/PM** (task `bapm-owner-words-b`, records only): the owner set Q4 = (e), extended
+> (`orch-2026-10-29g` `…278e149b`). This ticket's reading is now the smoke pair before merge (`EPIC-010` § The
+> merge rule), with a batched validation later. Q4 no longer holds it. **Next real wait:** a new ADR. Milestone 2. DoR 8/10 → 9/10.
+
 ## Problem
 
 - **User:** the owner at level 5.
@@ -40,7 +44,7 @@ epic: EPIC-010
 - **A3 (it pays in nodes).** **Given** `kiwipete` and `position-6` at fixed depth 8, **then** total nodes over
   iterations 1–8 ≤ **0.95 ×** the door's on both.
 - **A4 (gates).** `G1`, `G5`, `G6` "≥ base" (floor 6), `G8`, `G9`, `G10`.
-- **A5 (the reading).** The Q4 rule. Reported: X ± Y, the re-search rate per move in the reading, `G11`.
+- **A5 (the reading).** The smoke pair of `EPIC-010` § The merge rule (owner Q4 = (e), extended, 2026-10-29), on the candidate head rebased on `main`, before the merge: S-1 0 faults, S-2 0 losses on time, S-3 D ≥ 3.0 of 10 (else ≥ 7.0 of 20), S-4 R ≥ 3.0 of 10 (else ≥ 7.0 of 20). Reported: each smoke's W/L/D and score, the ledger's pooled R score since the last batch, the re-search rate per move in the smokes, `G11`.
 
 ## NFR triggers
 
@@ -57,7 +61,7 @@ epic: EPIC-010
 
 ## Dependencies
 
-- **Architect/Design:** a new ADR (δ, the widening rule, the door). Reported to the owner. **Owner:** Q4.
+- **Architect/Design:** a new ADR (δ, the widening rule, the door). Reported to the owner. **Owner:** Q4 answered 2026-10-29: (e), extended (`orch-2026-10-29g` `…278e149b`).
 - Shares `src/engine.ts` with `ABC-230`: one at a time.
 
 ## Definition of Ready
@@ -67,12 +71,12 @@ epic: EPIC-010
 | 1 | problem clear | ✅ SA 9e |
 | 2 | scope and out-of-scope | ✅ |
 | 3 | INVEST | ✅ M |
-| 4 | testable, measurable acceptance | ⚠ A5 is Q4's |
+| 4 | testable, measurable acceptance | ✅ every row measurable; A5 is the smoke pair (`EPIC-010` § The merge rule, S-1–S-4) |
 | 5 | dependencies known | ✅ |
 | 6 | NFR triggers with targets | ✅ nodes ≤ 0.95 ×; `G5` |
 | 7 | test notes | ✅ 1 |
 | 8 | size | ✅ M |
 | 9 | priority | ✅ P3 |
-| 10 | no major unresolved blocker | ❌ ADR; Q4 |
+| 10 | no major unresolved blocker | ❌ ADR |
 
-**DoR 8/10. Backlog.**
+**DoR 9/10 (re-scored 2026-10-29). Backlog.**

@@ -10,6 +10,8 @@ owner: BA/PM
 
 # EPIC-004 — Engine and AI opponent
 
+_Updated: 2026-10-29 by BA/PM (task `bapm-owner-words-b`, at `main` `4dcb353e`) — **the "Strength above ~1700" non-goal is REMOVED on the owner's word** (Q2 of `EPIC-010`, 2026-10-29, Orchestrator note `.grugops/context/orch-2026-10-29g/notes/20261029T202809Z-orchestrator-decision-278e149b.md`, a transcription, not a stamp): *"remove that goal, I would set another goal - be the best vibe-engineered or TypeScript-based chess-engine (not sure what exists out there, we can put goal to 2700 elo rating or more, world record is 3650). It can be that in the future we need to rewrite to Rust, but let it be for now, this is big undertaking."* **The new product goal:** the best vibe-engineered / TypeScript-based chess engine, at 2 700 Elo or more. It is **aspirational**: no ticket is bound to it, and its scale (which rating list, which time control) and its field of comparison are `UNKNOWN - verify` (`EPIC-010` § Product goal). A Rust rewrite is out of scope. The old line is struck through and kept below. **No other non-goal changes:** endgame tablebases stay a permanent non-goal until the owner answers `EPIC-010` Q1 (open; default keep out). This epic stays Done. Its own delivery target, "club level, roughly 1400-1700" under `## User value`, was what it shipped against and stays as written; the forward goal is the new one._
+
 _Updated: 2026-10-24 by BA/PM (task `bapm-cut-levels-6-7`, at `main` `6c0ab29e`) — **post-close addition on the owner's word `…e44d2903`: `ABC-212` (levels 6 = 5 s and 7 = 30 s, blunder rate 0, every surface; the default stays 5; Ready, M, P2) belongs to this epic's levels line ("difficulty levels that map to a search budget plus a blunder rate").** The epic stays Done, and its acceptance is not reopened. "The hardest difficulty" in the epic-level acceptance and in `ABC-085` `A1` was verdicted as level 5 (1v5, `ADR-0045` D6), and it stays read that way. No 1v7 verdict is owed. The `NFR-004` ceiling under `## NFR triggers` ("5 s never exceeded at any difficulty") moves only when the owner accepts `ABC-212`'s proposed text (OD-212-1). Until then it reads as written._
 
 _Updated: 2026-10-18 by BA/PM (task `wave-2026-09-25`, subtask `bapm-engine-revise`) — **the UCI half of the second `Out of scope` bullet is LIFTED on the owner's Q1 word** ("Q1, Q2, Q3: recommended answer", Orchestrator note `.grugops/context/wave-2026-09-25/notes/20261018T093000Z-orchestrator-decision-owner-word-engine-q1-q11-answered-a41c7e02.md`, a transcription, not a stamp). UCI now lives in `EPIC-007` (PROPOSED). The "driving an external engine" half stays a permanent non-goal. The old sentence is kept below as dated history. Nothing else in this epic changed.)_
@@ -72,7 +74,11 @@ Target: club level, roughly 1400-1700, with weaker difficulty levels selectable 
     engine."* The engine being **drivable** over UCI is `EPIC-007`'s scope (PROPOSED). This engine
     still never drives another one.
 - Endgame tablebases — permanent non-goal.
-- Strength above ~1700 — the requester's "not too complex" constraint binds here.
+- ~~Strength above ~1700 — the requester's "not too complex" constraint binds here.~~
+  - **2026-10-29: REMOVED** on the owner's word (note `…278e149b`, path in the top `_Updated:` line). Until that date
+    the bullet read as struck through above. `EPIC-008` had already gone past it on his word (`…7feb0553`,
+    `…e44d2903`). The new product goal (best vibe-engineered / TypeScript-based engine, ≥ 2 700 Elo, aspirational,
+    scale `UNKNOWN - verify`) lives in `EPIC-010` § Product goal.
 
 ## Acceptance (epic level)
 
