@@ -14,6 +14,17 @@ epic: EPIC-010
 > play effect is `UNKNOWN - verify` (SA `…306a4012` row 3f); this is the SA's named probe: "records scan of the R and D
 > PGNs for repetition draws from a won score, or lost after avoiding one (no games)". No code, no games.
 
+> **Result 2026-10-29 (SA, task `sa-ABC-226`, records only, at `main` `b5df6cde`):** acceptance answered in note
+> `sa-ABC-226/20261029T202608Z-system-analyst-observation-cc53fc79`.
+> - A1: 4199 of 4199 games parsed across the 14 PGNs, 0 dropped.
+> - A2: 1718 threefold draws (R 35); 1718 before the root, 0 inside (by construction).
+> - A3: 461 (R 26; Stockfish agrees ≥ +100 in 4 of the 26).
+> - A4: 23 (5 lost, 18 drawn), R 0.
+> - A5: 484 over all games and 26 over R games, so **`ABC-230` stays in milestone 1**.
+> - A6: 22 repetitions an ep-normalised key counts one occurrence earlier; cutechess uses that key.
+>
+> Script and output: `.grugops/context/sa-ABC-226/raw/`.
+
 ## Problem
 
 - **User:** the owner, and BA/PM ordering `EPIC-010`.
