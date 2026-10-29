@@ -1,3 +1,4 @@
+_Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g) — bapm-owner-words-b merged: EPIC-010 accepted; merge rule = 10 D + 10 R smoke per value-changing ticket (S-1..S-4) + R-pair batch per milestone; EPIC-004 ~1700 non-goal removed (goal >= 2 700 aspirational); EPIC-009 folded to ADR-0052 (OQ-0052-1 open). ABC-225 → Ready 1/8. Width 1/3._
 _Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g) — ABC-227 DONE (f4301d0c): movegen ~47 %, eval ~30 %, ordering ~6 % of self time; six value-identical cuts. ABC-235 Backlog → In Design (`arch-ABC-235`, confirm value-identity + proof). Width 2/3._
 _Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g, …278e149b) — ABC-226 DONE (484 costed repetitions, R 26; ABC-230 stays M1). ADR-0052 PROPOSED (TimeMode combo; simple-tournament min(22.0 s, safe share); clock mode 60 s) → owner OQ-0052-1. Owner: EPIC-010 Q4 = (e) 10 D + 10 R smoke per ticket; ~1700 non-goal removed, goal best TS engine ≥ 2 700 (aspirational); measures accepted. `bapm-owner-words-b` routed. Width 2/3._
 _Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g) — bapm-amend-epic009 merged: EPIC-009 accepted and amended — simple-tournament (T 22.0 s proposed under the 22.5 s ceiling) first, uci-clock-mode (60 s ceiling) later; CLI parity out; ABC-219 retired; ABC-222/223 5-game smokes. All wait on `arch-epic009-settings` + owner ADR accept. ABC-227 pulled → In Development (`se-ABC-227`). Width 3/3._
@@ -1143,24 +1144,23 @@ _Updated: 2026-08-21 by the Software Engineer (task `repair-ABC-115-2026-08-21`,
 _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe-abc115-reverify`, Workflow 05) — **ONE TICKET MOVED: `ABC-115` `In Review` → `Ready for UAT`. `In Review` 1/3 → 0/3, `Ready for UAT` 0/4 → 1/4, inside the limit. NOTHING ELSE MOVED, NOTHING CUT, NOTHING RE-SCORED, NOTHING ARCHIVED, NO WIP LIMIT TOUCHED, `src/` UNTOUCHED.** **The headers above are ADDED TO, not superseded — the 2026-08-21 lines recording the `<= 0.5 s CPU` breach are the RECORD of what was true at those hops and are deliberately left standing; the clause they name was re-derived that same day and the delivery MEETS its replacement.** **THE `In Review` EXIT IS MINE AND IT IS A PASS**, reversing my own FAIL of 2026-08-21 02:35 because the two defects that caused it are CLOSED — re-verified at my own hand against my own mutants, not accepted from the repair hop's unstamped report. **`A10` was audited as a SUBJECT: it reads the product status from `NODE_EXIT=` and never from the wrapper, and a row mutated to read the wrapper goes RED on BOTH builds.** **Four gates green (1213 passed / 40 files), skip count 0, `No findings.`; exit codes 0/1/70 each driven independently; a real pty played a move and ended at 0, 3/3; no flake (10/10 and 5/5); the test diff is purely ADDITIVE.** **THREE RESIDUALS NAMED, NONE BLOCKING: `G-QE115-3` RULED a knowingly-open residual (its cheap close is barred by `plans/nfr-catalog.md`'s standing rule on wall-clock assertions — Architect/Design's and `ABC-108`'s, not a skipped bench fix); `G-QE115-4` and `G-QE115-5` newly raised here and both recorded rather than sent back, with the reasoning written so it can be overturned on the same terms.** **`NFR-008` NOT graded, no `N8-LANE` line claimed, and the exit-code, CPU-clause and count-ceiling rulings NOT re-opened.** **THIS IS NOT A UAT AND NOT AN ACCEPTANCE.** 13 production lines shipped, so the zero-production-lines waiver does NOT apply and the `In UAT` exit is the owner's word alone; a green QE run is not that word. Branch `grugops/qe-abc115-reverify` off `grugops/abc115-repair` @ `8d4980c` — **eleven branches stacked unmerged. NOT merged, NOT deployed, NOT self-signed.** **NOT A STAMP:** `human_admission` is `off`; every note is hand-authored under a soft kind and no `finding` is admissible._
 
 ## Backlog (WIP unlimited)
-- [EPIC-010] skytalix closes its verified engine gaps; a change ships on an outside-opponent reading (owner: BA/PM, size: L, priority: P2, since: 2026-10-29, proposed; items 1,3,5p,6,7p,8,9p of the owner's ideas as verified by sa-ideas-verify; owner Q1–Q5 open, Q4 = measurement rule, default (d) hold; MVP ABC-225..239)
-- [ABC-225] Interleaved R-pair command with paired error and host log (size: M, priority: P2, DoR 9/10; waits Q4 = b|c)
-- [ABC-228] In check, quiescence searches every evasion; none means mate (size: M, priority: P2, DoR 8/10; waits ADR (ADR-0024 d4), Q4)
-- [ABC-229] Quiescence searches quiet queen promotions (size: S, priority: P2, DoR 8/10; waits ADR, Q4; after ABC-228)
-- [ABC-230] The game's earlier positions reach the search, CLI and UCI (size: M, priority: P2, DoR 8/10; waits ABC-226, Architect reading of ADR-0002 cl. 3, Q4)
-- [ABC-231] King table tapered by phase, alone (size: S, priority: P3, DoR 8/10; milestone 2; waits ADR ruling, Q4)
-- [ABC-232] Passed pawns by phase (size: S, priority: P3, DoR 8/10; milestone 2; after ABC-231, Q4)
-- [ABC-233] History heuristic for quiet moves, cleared per search (size: M, priority: P3, DoR 8/10; milestone 2; waits ADR, Q4)
-- [ABC-234] SEE orders captures, ordering only (size: M, priority: P3, DoR 7/10; milestone 2; waits evidence + ADR, Q4)
-- [ABC-236] Aspiration windows at the root (size: M, priority: P3, DoR 8/10; milestone 2; waits ADR, Q4)
-- [ABC-237] TT keeps deeper entries on replace (size: S, priority: P3, DoR 8/10; milestone 2; waits ADR-0025 amendment, Q4)
-- [ABC-238] A deeper stored entry may cut off a shallower search (size: M, priority: P3, DoR 8/10; milestone 2; after ABC-237; waits ADR, Q4)
-- [ABC-239] Weights tuned offline, constants only, validated against Stockfish (size: L, priority: P3, DoR 7/10; milestone 3; waits ADR-0048 data licence, ADR, Q4)
-- [EPIC-009] skytalix plays a 40/15 tournament clock: simple-tournament then uci-clock-mode, uses the clock, never loses on time (owner: BA/PM, size: M, priority: P2, since: 2026-10-29, accepted 2026-10-29 (Q8); M1–M4; MVP ABC-220, 222 (milestone 1), ABC-221, 223 (milestone 2))
-- [ABC-220] simple-tournament over UCI: fixed T (22.0 s proposed), 22.5 s hard ceiling, levels 1–7 unchanged (size: M, priority: P2, DoR 9/10; waits only on the Architect's ruling arch-epic009-settings + owner ADR accept)
-- [ABC-221] uci-clock-mode over UCI: real clock, margin, hard stop, 60 s ceiling (size: M, priority: P3, DoR 9/10; milestone 2; waits on the Architect's ruling arch-epic009-settings + owner ADR accept)
-- [ABC-222] Smoke reading: simple-tournament, 5 games at 40/15, 0 losses on time, closest call >= 500 ms, >= 75 % clock use, longest move <= 22.5 s (owner: QE/E2E, size: S, priority: P2, DoR 9/10; after ABC-220 merges; ALONE <= ~5 h)
-- [ABC-223] Smoke reading: uci-clock-mode, 5 games at 40/15, 0 losses on time, closest call >= 500 ms, >= 75 % clock use, longest move <= 60 s (owner: QE/E2E, size: S, priority: P3, DoR 9/10; after ABC-221 merges; ALONE <= ~5 h)
+- [EPIC-010] skytalix closes its verified engine gaps; a change ships on an outside-opponent smoke (owner: BA/PM, size: L, priority: P2, since: 2026-10-29, accepted 2026-10-29 (Q5, no Elo target); Q4 = (e): 10 D + 10 R smoke per value-changing ticket + batched R pair per milestone; Q2 answered (~1700 non-goal removed; goal >= 2 700 aspirational); Q1, Q3 open (defaults))
+- [ABC-228] In check, quiescence searches every evasion; none means mate (size: M, priority: P2, DoR 9/10; waits ADR (ADR-0024 d4))
+- [ABC-229] Quiescence searches quiet queen promotions (size: S, priority: P2, DoR 9/10; waits ADR; after ABC-228)
+- [ABC-230] The game's earlier positions reach the search, CLI and UCI (size: M, priority: P2, DoR 9/10; waits Architect reading of ADR-0002 cl. 3)
+- [ABC-231] King table tapered by phase, alone (size: S, priority: P3, DoR 9/10; milestone 2; waits ADR ruling)
+- [ABC-232] Passed pawns by phase (size: S, priority: P3, DoR 9/10; milestone 2; after ABC-231)
+- [ABC-233] History heuristic for quiet moves, cleared per search (size: M, priority: P3, DoR 9/10; milestone 2; waits ADR)
+- [ABC-234] SEE orders captures, ordering only (size: M, priority: P3, DoR 8/10; milestone 2; waits evidence + ADR)
+- [ABC-236] Aspiration windows at the root (size: M, priority: P3, DoR 9/10; milestone 2; waits ADR)
+- [ABC-237] TT keeps deeper entries on replace (size: S, priority: P3, DoR 9/10; milestone 2; waits ADR-0025 amendment)
+- [ABC-238] A deeper stored entry may cut off a shallower search (size: M, priority: P3, DoR 9/10; milestone 2; after ABC-237; waits ADR)
+- [ABC-239] Weights tuned offline, constants only, validated against Stockfish (size: L, priority: P3, DoR 8/10; milestone 3; waits ADR-0048 licence, ADR; its batch reads before merge)
+- [EPIC-009] skytalix plays a 40/15 tournament clock: simple-tournament then uci-clock-mode, uses the clock, never loses on time (owner: BA/PM, size: M, priority: P2, since: 2026-10-29, accepted 2026-10-29 (Q8); M1–M4; MVP ABC-220, 222 (milestone 1), ABC-221, 223 (milestone 2; ADR-0052 PROPOSED folded 2026-10-29; owner OQ-0052-1 open)
+- [ABC-220] simple-tournament over UCI (TimeMode): T 22.0 s, min(T, C) with a clock, 22.5 s ceiling (size: M, priority: P2, DoR 9/10; waits owner accepts ADR-0052 (OQ-0052-1))
+- [ABC-221] uci-clock-mode over UCI (TimeMode): min(59.5 s, C), 60 s ceiling, clamp 32 -> 60 s at this build (size: M, priority: P3, DoR 9/10; milestone 2; waits OQ-0052-1 + ABC-220 merged)
+- [ABC-222] Smoke reading: simple-tournament, 5 games at 40/15 (<= 10 for coverage), 0 losses on time, closest call >= 500 ms, >= 75 % clock use, longest move <= 22.5 s (owner: QE/E2E, size: S, priority: P2, DoR 9/10; after ABC-220 merges; ALONE <= ~5 h)
+- [ABC-223] Smoke reading: uci-clock-mode, 5 games at 40/15 (<= 10 for coverage), 0 losses on time, closest call >= 500 ms, >= 75 % clock use, longest move <= 60 s (owner: QE/E2E, size: S, priority: P3, DoR 9/10; after ABC-221 merges; ALONE <= ~5 h)
 
 
 
@@ -1183,7 +1183,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 - [EPIC-006] Game session and packaging  (owner: BA/PM, **size: XL — corrected from `L`; 9 tickets / 20 points across both halves, ~1.5x the 13 `L` was assigned, and it hit that ceiling BEFORE distribution was priced**, priority: P1, since: 2026-07-22, **BOTH HALVES NOW CUT: the runnable half `ABC-041`…`ABC-046` (2026-08-13) and the second half `ABC-100`…`ABC-102` (2026-08-16) — only THREE tickets, because the scope of packaging is a FUNCTION of a distribution channel nobody has chosen.** `ABC-100` cuts the DECISION, never the ANSWER: a superseding ADR per `ADR-0007` `D5`, on the owner's word, verbatim and dated. **Acceptance criterion 1 (`npx <package>`) remains unmeetable by any ticket. Recommendation NOT taken, standing for the owner: this should probably be two epics** — the halves share no dependency in either direction and their blockers differ in kind)
 
-## Ready (WIP 0/8)
+## Ready (WIP 1/8)
+- [ABC-225] Interleaved R-pair command: the batch's instrument (re-scoped 2026-10-29) (size: M, priority: P2, DoR 10/10; tools only; Done before milestone 1's batch; not during an ALONE reading)
 
 
 
