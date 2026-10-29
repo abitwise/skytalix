@@ -1,4 +1,4 @@
-_Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g) — bapm-owner-words-b merged: EPIC-010 accepted; merge rule = 10 D + 10 R smoke per value-changing ticket (S-1..S-4) + R-pair batch per milestone; EPIC-004 ~1700 non-goal removed (goal >= 2 700 aspirational); EPIC-009 folded to ADR-0052 (OQ-0052-1 open). ABC-225 → Ready 1/8. Width 1/3._
+_Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g) — bapm-owner-words-b merged: EPIC-010 accepted; merge rule = 10 D + 10 R smoke per value-changing ticket (S-1..S-4) + R-pair batch per milestone; EPIC-004 ~1700 non-goal removed (goal >= 2 700 aspirational); EPIC-009 folded to ADR-0052 (OQ-0052-1 open). ABC-225 → Ready → In Development (`se-ABC-225`). Width 2/3._
 _Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g) — ABC-227 DONE (f4301d0c): movegen ~47 %, eval ~30 %, ordering ~6 % of self time; six value-identical cuts. ABC-235 Backlog → In Design (`arch-ABC-235`, confirm value-identity + proof). Width 2/3._
 _Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g, …278e149b) — ABC-226 DONE (484 costed repetitions, R 26; ABC-230 stays M1). ADR-0052 PROPOSED (TimeMode combo; simple-tournament min(22.0 s, safe share); clock mode 60 s) → owner OQ-0052-1. Owner: EPIC-010 Q4 = (e) 10 D + 10 R smoke per ticket; ~1700 non-goal removed, goal best TS engine ≥ 2 700 (aspirational); measures accepted. `bapm-owner-words-b` routed. Width 2/3._
 _Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g) — bapm-amend-epic009 merged: EPIC-009 accepted and amended — simple-tournament (T 22.0 s proposed under the 22.5 s ceiling) first, uci-clock-mode (60 s ceiling) later; CLI parity out; ABC-219 retired; ABC-222/223 5-game smokes. All wait on `arch-epic009-settings` + owner ADR accept. ABC-227 pulled → In Development (`se-ABC-227`). Width 3/3._
@@ -1064,7 +1064,8 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 0/3)
+    ## In Development (WIP 1/3)
+- [ABC-225] Interleaved R-pair command: the batch's instrument (re-scoped 2026-10-29) (size: M, priority: P2, DoR 10/10; tools only; Done before milestone 1's batch; not during an ALONE reading; **pulled 2026-10-29** → `se-ABC-225`, QE follows for A5/A6 ALONE)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
     ## In Review (WIP 0/3)
@@ -1183,8 +1184,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 - [EPIC-006] Game session and packaging  (owner: BA/PM, **size: XL — corrected from `L`; 9 tickets / 20 points across both halves, ~1.5x the 13 `L` was assigned, and it hit that ceiling BEFORE distribution was priced**, priority: P1, since: 2026-07-22, **BOTH HALVES NOW CUT: the runnable half `ABC-041`…`ABC-046` (2026-08-13) and the second half `ABC-100`…`ABC-102` (2026-08-16) — only THREE tickets, because the scope of packaging is a FUNCTION of a distribution channel nobody has chosen.** `ABC-100` cuts the DECISION, never the ANSWER: a superseding ADR per `ADR-0007` `D5`, on the owner's word, verbatim and dated. **Acceptance criterion 1 (`npx <package>`) remains unmeetable by any ticket. Recommendation NOT taken, standing for the owner: this should probably be two epics** — the halves share no dependency in either direction and their blockers differ in kind)
 
-## Ready (WIP 1/8)
-- [ABC-225] Interleaved R-pair command: the batch's instrument (re-scoped 2026-10-29) (size: M, priority: P2, DoR 10/10; tools only; Done before milestone 1's batch; not during an ALONE reading)
+## Ready (WIP 0/8)
 
 
 
