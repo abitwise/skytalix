@@ -382,3 +382,102 @@ export function generateMoves(position: Position): Move[] {
 
   return moves;
 }
+
+/**
+ * ABC-235 cut 3: the CAPTURES of `generateMoves`, and nothing else — exactly
+ * `generateMoves(position).filter((move) => move.captured !== EMPTY)`, in the SAME ORDER. Quiescence
+ * sorts its captures with a stable MVV-LVA sort, so ties keep generation order (ABC-206); a
+ * reordered list would find a different refutation first and change node counts. So this walks
+ * exactly as `generateMoves` walks, and only skips what that filter would drop:
+ *
+ * - squares 0..127; a pawn's capture sides -1 then +1, each side a normal capture (a promotion
+ *   capture emits Q, R, B, N) or else the en-passant check, with ABC-022's two guards (the target
+ *   is empty, the captured pawn is there); step offsets and ray directions in table order, rays
+ *   walking their empty squares without emitting them;
+ * - no pushes, no quiet promotions, no castling: none of them captures.
+ *
+ * `generateMoves` is untouched, so perft and NFR-001's perft half are untouched. The two
+ * generators share the movement rules; `src/moves.test.ts`'s oracle rows hold them together.
+ */
+export function generateCaptures(position: Position): Move[] {
+  const moves: Move[] = [];
+  const black = position.blackToMove;
+  const board = position.board;
+
+  for (let from = 0; from < 128; from++) {
+    if (!isOnBoard(from)) continue;
+
+    const piece = board[from] as number;
+    if (piece === EMPTY || isBlack(piece) !== black) continue;
+
+    const type = pieceType(piece);
+    if (type === PAWN) {
+      addPawnCaptures(moves, position, from, piece, black);
+      continue;
+    }
+
+    const steps = STEPS[type];
+    if (steps !== undefined) {
+      for (const offset of steps) {
+        const to = from + offset;
+        if (!isOnBoard(to)) continue;
+        const target = board[to] as number;
+        if (target === EMPTY || isBlack(target) === black) continue;
+        addMove(moves, from, to, piece, target);
+      }
+      continue;
+    }
+
+    for (const offset of RAYS[type] as readonly number[]) {
+      for (let to = from + offset; isOnBoard(to); to += offset) {
+        const target = board[to] as number;
+        if (target === EMPTY) continue;
+        if (isBlack(target) !== black) addMove(moves, from, to, piece, target);
+        break;
+      }
+    }
+  }
+
+  return moves;
+}
+
+/** `addPawnMoves`' capture half, verbatim: its pushes and quiet promotions are not captures. */
+function addPawnCaptures(
+  moves: Move[],
+  position: Position,
+  from: number,
+  piece: number,
+  black: boolean,
+): void {
+  const forward = black ? -16 : 16;
+  const push = from + forward;
+  const promotionRank = black ? BLACK_PROMOTION_RANK : WHITE_PROMOTION_RANK;
+
+  for (const side of PAWN_CAPTURE_SIDES) {
+    const to = push + side;
+    if (!isOnBoard(to)) continue;
+
+    const target = position.board[to] as number;
+    if (target !== EMPTY && isBlack(target) !== black) {
+      if (rankOf(to) === promotionRank) addPromotions(moves, from, to, piece, target);
+      else addMove(moves, from, to, piece, target);
+      continue;
+    }
+
+    // En passant, with the same two guards as `addPawnMoves` (ABC-022): the target square is
+    // empty and the captured pawn really stands beside the mover.
+    if (to === position.epSquare) {
+      const capturedPawn = PAWN | (black ? 0 : BLACK);
+      if (target === EMPTY && position.board[to - forward] === capturedPawn) {
+        moves.push({
+          from,
+          to,
+          piece,
+          captured: capturedPawn,
+          flags: FLAG_EN_PASSANT,
+          promotion: EMPTY,
+        });
+      }
+    }
+  }
+}

@@ -34,6 +34,15 @@ vi.mock("./apply.ts", async (importOriginal) => {
   return { ...actual, makeMove: vi.fn(actual.makeMove) };
 });
 
+vi.mock("./moves.ts", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("./moves.ts")>();
+  return {
+    ...actual,
+    generateMoves: vi.fn(actual.generateMoves),
+    generateCaptures: vi.fn(actual.generateCaptures),
+  };
+});
+
 vi.mock("./zobrist.ts", async (importOriginal) => {
   const actual = await importOriginal<typeof import("./zobrist.ts")>();
   return { ...actual, zobristKey: vi.fn(actual.zobristKey) };
@@ -42,7 +51,7 @@ vi.mock("./zobrist.ts", async (importOriginal) => {
 import { makeMove } from "./apply.ts";
 import { gameStatus, leafEndReason } from "./gameend.ts";
 import { hasLegalMove, legalCaptures, legalMoves } from "./legal.ts";
-import { FLAG_NONE, generateMoves } from "./moves.ts";
+import { FLAG_NONE, generateCaptures, generateMoves } from "./moves.ts";
 import { EMPTY, parseSquareName } from "./position.ts";
 import { quiesce } from "./quiescence.ts";
 import { lateMoveReduction } from "./search.ts";
@@ -208,5 +217,24 @@ describe("ABC-206 — the search leaf's game-end check stays cheap (call counts,
 
     legalCaptures(position);
     expect(makeMove).toHaveBeenCalledTimes(captures);
+  });
+
+  /**
+   * ABC-235 cut 3 (P3): `legalCaptures` builds its list from `generateCaptures` and never from the
+   * full generator. A reintroduced `generateMoves` call changes no returned value, so every value
+   * row is blind to it; this count is not (the ABC-206 precedent above).
+   */
+  it("legalCaptures runs generateCaptures once and generateMoves never", () => {
+    for (const fen of [
+      "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1",
+      "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+      "4k3/8/8/3pP3/8/8/8/4K3 w - d6 0 1",
+    ]) {
+      const position = parseFen(fen);
+      vi.clearAllMocks();
+      legalCaptures(position);
+      expect(generateMoves, fen).toHaveBeenCalledTimes(0);
+      expect(generateCaptures, fen).toHaveBeenCalledTimes(1);
+    }
   });
 });

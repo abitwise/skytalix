@@ -19,6 +19,7 @@ import { makeMove, unmakeMove } from "./apply.ts";
 import {
   FLAG_EN_PASSANT,
   FLAG_NONE,
+  generateCaptures,
   generateMoves,
   isSquareAttackedBy,
   type Move,
@@ -96,10 +97,11 @@ export function hasLegalMove(position: Position): boolean {
 
 /**
  * The legal captures for the side to move: the same list, in the same order, as
- * `legalMoves(position).filter((move) => move.captured !== EMPTY)`. It skips a non-capture
- * before playing it, so only captures pay the make/test/unmake check. Two order-preserving
- * filters commute, so the order is generation order, which quiescence's stable sort depends on
- * (ABC-206). The position is unchanged on return.
+ * `legalMoves(position).filter((move) => move.captured !== EMPTY)`. Only captures pay the
+ * make/test/unmake check, and since ABC-235 cut 3 only captures are generated:
+ * `generateCaptures` is `generateMoves(position).filter(capture)` in the same order. Two
+ * order-preserving filters commute, so the order is generation order, which quiescence's stable
+ * sort depends on (ABC-206). The position is unchanged on return.
  */
 export function legalCaptures(position: Position): Move[] {
   const moverIsBlack = position.blackToMove;
@@ -107,8 +109,7 @@ export function legalCaptures(position: Position): Move[] {
   const kingHome = kingSquareOf(position, moverIsBlack);
   const captures: Move[] = [];
 
-  for (const move of generateMoves(position)) {
-    if (move.captured === EMPTY) continue;
+  for (const move of generateCaptures(position)) {
     const undo = makeMove(position, move);
     const kingSquare = move.piece === king ? move.to : kingHome;
     if (!isSquareAttackedBy(position, kingSquare, !moverIsBlack)) captures.push(move);
