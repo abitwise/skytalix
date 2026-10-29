@@ -309,3 +309,33 @@ binary file-list check. **Still 10 of 10.** No column move.
 
 **Recommended (2026-10-21): `Blocked` → `Ready`.** `ABC-171` is merged. The SE may resume from the WIP patch on
 `grugops/ABC-168` @ `2f02d158`, which already has `"include": []`. The pull is the Orchestrator's.
+
+## QE
+
+**`qe-ABC-168`, 2026-10-21. Verdict: PASS_WITH_GAPS (2 LOW, 3 INFO, 0 blocking).** Branch `grugops/qe-ABC-168`, from the tip
+`b71f8902`. I merged `main` `649b3f82` at **`6d27dc9e`** with no conflict; only queue records, the board, the trace and this page came in,
+and `src/`, `package.json`, `tsconfig*` and `data/` are identical to the tip. Every criterion was run at that merge (`A7` in a fresh clone of
+`b71f8902`) before the SE's and Scribe's notes were opened. Notes and the probe are under `.grugops/context/qe-ABC-168/`.
+
+- **`A1`–`A3` MET:** arguments → rc 1, 0 bytes on stdout; `uci`/`quit` → the 5 lines, rc 0; end of input rc 0; `| head -1` → child rc 0,
+  0 bytes on stderr. **`A4` MET by review** (the `catch` sets `exitCode = 70` without `process.exit`, as `src/cli.ts:212-216`), plus a live
+  check with a fault planted in a scratch copy: rc 70, the fixed line, no stack. **`A5` MET:** `UCI_DEEP` 5/5.
+- **`A6` MET, one counted run** of `probe/a6-probe.mjs` against `node src/uci.ts` (Apple M3, Node v26.11.1, load1 3.85, sha `6d27dc9e`):
+  spawn → `uciok` **86.1 ms** (≤ 2 000), first `isready` → `readyok` with the book load **6.9 ms** (≤ 1 000), idle `isready` → `readyok`
+  **0.2 ms** (≤ 100); `quit` → exit 0. No miss. Not cited as `EPIC-007` M3's proof until the owner confirms the rewording.
+- **`A7` MET** in a fresh clone: `npm ci && npm run build` rc 0, shebang, 22 files with the four type-only emits and no `*.test.js`,
+  `cli.js` or `line-input.js`; the `import(` grep prints nothing; `node dist/uci.js` and `skytalix` (after `npm link` under a scratch prefix)
+  rc 0; `check-ignore` and typecheck hold; away from the clone with the four removed: one book warning, `bestmove g1f3`, rc 0. Not cited
+  as M9's proof until the owner confirms.
+- **`A11` MET:** the D2 no-edit list is unchanged; `cli.test.ts` 4/2 as Scope 6; `npm run chess` starts; with `bin` removed, `ABC-042` `A10`
+  is the one red row (1 / 88). **`A12` not met literally:** the diff also lists `memory-bank/90-agents-md-command-log.md` (QE-168-a). The
+  lock is unchanged.
+- **Gates at `6d27dc9e`:** lint, typecheck, build 0; `npm test` 60 files, 1988/1988, success true; skip count 0, integrity `No findings.`;
+  lane inventory 60 = 60; `UCI_DEEP` 5/5; `CLI_DEEP` 11/11 (6 children); `PERFT_DEEP` 32/32.
+- **Mutants (scratch):** arm removed, argument accepted and exception → 0 all pass `npm test` and the lane, and are caught only by `A3`,
+  `A1` and `A4`; arm moved after the first writes survives everything but review; `bin` → `src/uci.ts` survives the pin and `A7` (QE-168-b).
+- **Gaps:** QE-168-a (LOW) `A12` omits the command-log file the Scribe changed, so BA/PM should rule; QE-168-b (LOW) `bin`'s value is
+  unpinned; QE-168-c (INFO) `A1`–`A4` have no vitest row; QE-168-d (INFO) `ABC-171` `A1` still says `default 3` (ADR-0045 made it 5);
+  QE-168-e (INFO) the owner's M9 and M3 confirmations are owed.
+- **UAT owed to the owner** (`A8`–`A10`): the AGENTS.md form at `825b21d1` prints `src/uci.ts`, so the waiver does not apply. Next:
+  `In Security/NFR` (triggered), which also places `A6`'s numbers as candidate row (i).
