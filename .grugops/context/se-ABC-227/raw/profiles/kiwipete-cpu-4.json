@@ -1,0 +1,22 @@
+{
+  "board": "kiwipete",
+  "mode": "cpu",
+  "run": 4,
+  "fen": "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1",
+  "budgetMs": 3000,
+  "node": "v26.12.1",
+  "load1": 1.46,
+  "move": {
+    "from": 20,
+    "to": 80
+  },
+  "score": -84,
+  "depth": 8,
+  "nodes": 1771373,
+  "elapsedMs": 3000,
+  "nps": 590458,
+  "allocatedBytes": 4883420280,
+  "bytesPerNode": 2756.855998143813,
+  "t0us": 38743445198,
+  "t1us": 38746445092
+}

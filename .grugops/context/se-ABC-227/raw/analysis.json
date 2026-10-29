@@ -1,0 +1,1708 @@
+{
+  "kiwipete": {
+    "runs": {
+      "cpu": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "heap": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "perRun": [
+      {
+        "run": 1,
+        "depth": 8,
+        "nodes": 1719149,
+        "elapsedMs": 3001,
+        "nps": 572859,
+        "bytesPerNode": 2737,
+        "load1": 0.92,
+        "samplesInWindow": 12002,
+        "chooseMoveSamplesOutsideWindow": 0
+      },
+      {
+        "run": 2,
+        "depth": 8,
+        "nodes": 1665901,
+        "elapsedMs": 3000,
+        "nps": 555300,
+        "bytesPerNode": 2724,
+        "load1": 1.3,
+        "samplesInWindow": 11988,
+        "chooseMoveSamplesOutsideWindow": 0
+      },
+      {
+        "run": 3,
+        "depth": 8,
+        "nodes": 1763181,
+        "elapsedMs": 3000,
+        "nps": 587727,
+        "bytesPerNode": 2756,
+        "load1": 1.64,
+        "samplesInWindow": 12021,
+        "chooseMoveSamplesOutsideWindow": 0
+      },
+      {
+        "run": 4,
+        "depth": 8,
+        "nodes": 1771373,
+        "elapsedMs": 3000,
+        "nps": 590458,
+        "bytesPerNode": 2757,
+        "load1": 1.46,
+        "samplesInWindow": 11986,
+        "chooseMoveSamplesOutsideWindow": 0
+      },
+      {
+        "run": 5,
+        "depth": 8,
+        "nodes": 1649517,
+        "elapsedMs": 3000,
+        "nps": 549839,
+        "bytesPerNode": 2730,
+        "load1": 1.44,
+        "samplesInWindow": 12004,
+        "chooseMoveSamplesOutsideWindow": 0
+      }
+    ],
+    "heapRuns": [
+      {
+        "run": 1,
+        "depth": 7,
+        "nodes": 1165165,
+        "nps": 388130,
+        "bytesPerNode": 2606,
+        "sampledBytes": 2976037848,
+        "counterBytes": 3036367984,
+        "load1": 1.01
+      },
+      {
+        "run": 2,
+        "depth": 7,
+        "nodes": 1174381,
+        "nps": 391460,
+        "bytesPerNode": 2602,
+        "sampledBytes": 2998064824,
+        "counterBytes": 3055976032,
+        "load1": 1.36
+      },
+      {
+        "run": 3,
+        "depth": 7,
+        "nodes": 1211245,
+        "nps": 403614,
+        "bytesPerNode": 2598,
+        "sampledBytes": 3085194672,
+        "counterBytes": 3146633160,
+        "load1": 1.64
+      },
+      {
+        "run": 4,
+        "depth": 7,
+        "nodes": 1199981,
+        "nps": 399727,
+        "bytesPerNode": 2600,
+        "sampledBytes": 3074337952,
+        "counterBytes": 3119387440,
+        "load1": 1.46
+      },
+      {
+        "run": 5,
+        "depth": 7,
+        "nodes": 1202029,
+        "nps": 400543,
+        "bytesPerNode": 2604,
+        "sampledBytes": 3063745080,
+        "counterBytes": 3130276424,
+        "load1": 1.4
+      }
+    ],
+    "medianNps": 572859,
+    "medianDepth": 8,
+    "medianBytesPerNode": 2737,
+    "medianAllocMBperS": 1568,
+    "top15": [
+      {
+        "rank": 1,
+        "fn": "isSquareAttackedBy src/moves.ts:242",
+        "pooledShare": 12.9,
+        "medianShare": 12.5,
+        "minShare": 11.8,
+        "maxShare": 15.3,
+        "runRanks": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "rank": 2,
+        "fn": "whiteMinusBlack src/evaluate.ts:361",
+        "pooledShare": 10.1,
+        "medianShare": 10.1,
+        "minShare": 9.8,
+        "maxShare": 10.2,
+        "runRanks": [
+          2,
+          2,
+          2,
+          2,
+          2
+        ]
+      },
+      {
+        "rank": 3,
+        "fn": "kingSquareOf src/legal.ts:33",
+        "pooledShare": 7.2,
+        "medianShare": 7.2,
+        "minShare": 7,
+        "maxShare": 7.4,
+        "runRanks": [
+          4,
+          5,
+          5,
+          3,
+          3
+        ]
+      },
+      {
+        "rank": 4,
+        "fn": "squaresReached src/evaluate.ts:241",
+        "pooledShare": 7.1,
+        "medianShare": 7.2,
+        "minShare": 6.4,
+        "maxShare": 7.5,
+        "runRanks": [
+          6,
+          3,
+          3,
+          4,
+          6
+        ]
+      },
+      {
+        "rank": 5,
+        "fn": "raySliderAttacks src/moves.ts:217",
+        "pooledShare": 7,
+        "medianShare": 6.9,
+        "minShare": 6.7,
+        "maxShare": 7.4,
+        "runRanks": [
+          7,
+          4,
+          4,
+          5,
+          4
+        ]
+      },
+      {
+        "rank": 6,
+        "fn": "generateMoves src/moves.ts:356",
+        "pooledShare": 6.7,
+        "medianShare": 6.4,
+        "minShare": 6.4,
+        "maxShare": 7.7,
+        "runRanks": [
+          3,
+          7,
+          7,
+          6,
+          5
+        ]
+      },
+      {
+        "rank": 7,
+        "fn": "pawnStructure src/evaluate.ts:320",
+        "pooledShare": 6.7,
+        "medianShare": 6.7,
+        "minShare": 6.3,
+        "maxShare": 7,
+        "runRanks": [
+          5,
+          6,
+          6,
+          7,
+          7
+        ]
+      },
+      {
+        "rank": 8,
+        "fn": "isPassedPawn src/evaluate.ts:196",
+        "pooledShare": 4.3,
+        "medianShare": 4.3,
+        "minShare": 4,
+        "maxShare": 4.7,
+        "runRanks": [
+          8,
+          8,
+          8,
+          8,
+          8
+        ]
+      },
+      {
+        "rank": 9,
+        "fn": "addMove src/moves.ts:83",
+        "pooledShare": 3.5,
+        "medianShare": 3.4,
+        "minShare": 3.1,
+        "maxShare": 3.9,
+        "runRanks": [
+          9,
+          9,
+          9,
+          9,
+          10
+        ]
+      },
+      {
+        "rank": 10,
+        "fn": "orderMoves src/search.ts:188",
+        "pooledShare": 3,
+        "medianShare": 3,
+        "minShare": 2.7,
+        "maxShare": 3.1,
+        "runRanks": [
+          11,
+          10,
+          10,
+          10,
+          12
+        ]
+      },
+      {
+        "rank": 11,
+        "fn": "kingExposure src/evaluate.ts:279",
+        "pooledShare": 2.9,
+        "medianShare": 2.9,
+        "minShare": 2.6,
+        "maxShare": 3,
+        "runRanks": [
+          10,
+          11,
+          12,
+          11,
+          13
+        ]
+      },
+      {
+        "rank": 12,
+        "fn": "quiesce src/quiescence.ts:91",
+        "pooledShare": 2.8,
+        "medianShare": 2.8,
+        "minShare": 2.7,
+        "maxShare": 2.9,
+        "runRanks": [
+          12,
+          12,
+          11,
+          12,
+          11
+        ]
+      },
+      {
+        "rank": 13,
+        "fn": "makeMove src/apply.ts:122",
+        "pooledShare": 2.6,
+        "medianShare": 2.3,
+        "minShare": 2.1,
+        "maxShare": 3.9,
+        "runRanks": [
+          14,
+          13,
+          15,
+          14,
+          9
+        ]
+      },
+      {
+        "rank": 14,
+        "fn": "addRayMoves src/moves.ts:119",
+        "pooledShare": 2.3,
+        "medianShare": 2.4,
+        "minShare": 2,
+        "maxShare": 2.6,
+        "runRanks": [
+          13,
+          15,
+          13,
+          13,
+          15
+        ]
+      },
+      {
+        "rank": 15,
+        "fn": "addPawnMoves src/moves.ts:145",
+        "pooledShare": 2.1,
+        "medianShare": 2.1,
+        "minShare": 1.8,
+        "maxShare": 2.2,
+        "runRanks": [
+          15,
+          16,
+          16,
+          15,
+          16
+        ]
+      }
+    ],
+    "stability": [
+      {
+        "fn": "isSquareAttackedBy src/moves.ts:242",
+        "pooledRank": 1,
+        "runRanks": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "maxDeviation": 0
+      },
+      {
+        "fn": "whiteMinusBlack src/evaluate.ts:361",
+        "pooledRank": 2,
+        "runRanks": [
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "maxDeviation": 0
+      },
+      {
+        "fn": "kingSquareOf src/legal.ts:33",
+        "pooledRank": 3,
+        "runRanks": [
+          4,
+          5,
+          5,
+          3,
+          3
+        ],
+        "maxDeviation": 2
+      },
+      {
+        "fn": "squaresReached src/evaluate.ts:241",
+        "pooledRank": 4,
+        "runRanks": [
+          6,
+          3,
+          3,
+          4,
+          6
+        ],
+        "maxDeviation": 2
+      },
+      {
+        "fn": "raySliderAttacks src/moves.ts:217",
+        "pooledRank": 5,
+        "runRanks": [
+          7,
+          4,
+          4,
+          5,
+          4
+        ],
+        "maxDeviation": 2
+      }
+    ],
+    "stable": true,
+    "buckets": {
+      "movegen": {
+        "pooled": 47.4,
+        "median": 47.3,
+        "min": 46.5,
+        "max": 48.8
+      },
+      "make/unmake": {
+        "pooled": 4.2,
+        "median": 3.8,
+        "min": 3.7,
+        "max": 5.8
+      },
+      "evaluation": {
+        "pooled": 31.5,
+        "median": 31.9,
+        "min": 29.6,
+        "max": 32.3
+      },
+      "ordering": {
+        "pooled": 5.5,
+        "median": 5.5,
+        "min": 5.1,
+        "max": 5.8
+      },
+      "tt": {
+        "pooled": 1.1,
+        "median": 1.1,
+        "min": 1,
+        "max": 1.2
+      },
+      "other": {
+        "pooled": 10.3,
+        "median": 10.3,
+        "min": 9.5,
+        "max": 10.9
+      }
+    },
+    "bucketSum": 100,
+    "otherBreakdown": [
+      {
+        "what": "src/quiescence.ts",
+        "pooledShare": 3.9
+      },
+      {
+        "what": "src/position.ts",
+        "pooledShare": 2
+      },
+      {
+        "what": "(garbage collector)",
+        "pooledShare": 1.6
+      },
+      {
+        "what": "src/engine.ts",
+        "pooledShare": 1.3
+      },
+      {
+        "what": "src/zobrist.ts",
+        "pooledShare": 0.7
+      },
+      {
+        "what": "src/search.ts",
+        "pooledShare": 0.3
+      },
+      {
+        "what": "src/gameend.ts",
+        "pooledShare": 0.3
+      },
+      {
+        "what": "(program)",
+        "pooledShare": 0.1
+      },
+      {
+        "what": "(anonymous) (non-src)",
+        "pooledShare": 0
+      }
+    ],
+    "inclusive": {
+      "legalMoves": 17.9,
+      "legalCaptures": 23.6,
+      "hasLegalMove": 9.7,
+      "generateMoves": 24.1,
+      "isSquareAttackedBy": 20.5,
+      "makeMove": 3.4,
+      "unmakeMove": 0.9,
+      "evaluate": 32.4,
+      "quiesce": 60.7,
+      "orderMoves": 5.5,
+      "storeEntry": 0.2,
+      "probeTable": 0.8,
+      "tableCutoff": 0.1,
+      "zobristKeyAfterMove": 0.7,
+      "leafScore": 70.7
+    },
+    "alloc": {
+      "orderMovesShare": 8.6,
+      "orderingBucketShare": 8.6,
+      "buckets": {
+        "movegen": 78.1,
+        "make/unmake": 0.8,
+        "evaluation": 0,
+        "ordering": 8.6,
+        "tt": 0.2,
+        "other": 12.4
+      },
+      "topSites": [
+        {
+          "site": "generateMoves src/moves.ts:356",
+          "share": 52.5
+        },
+        {
+          "site": "addPawnMoves src/moves.ts:145",
+          "share": 14.5
+        },
+        {
+          "site": "sort (native)",
+          "share": 10.2
+        },
+        {
+          "site": "addCastlingMoves src/moves.ts:330",
+          "share": 6.4
+        },
+        {
+          "site": "orderMoves src/search.ts:188",
+          "share": 4.1
+        },
+        {
+          "site": "legalCaptures src/legal.ts:90",
+          "share": 1.7
+        },
+        {
+          "site": "legalMoves src/legal.ts:48",
+          "share": 1.5
+        },
+        {
+          "site": "(anonymous) src/search.ts:194",
+          "share": 1.3
+        },
+        {
+          "site": "(anonymous) src/quiescence.ts:110",
+          "share": 0.9
+        },
+        {
+          "site": "addPromotions src/moves.ts:88",
+          "share": 0.9
+        }
+      ],
+      "sampledOverCounter": 0.981
+    }
+  },
+  "position-6": {
+    "runs": {
+      "cpu": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "heap": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "perRun": [
+      {
+        "run": 1,
+        "depth": 10,
+        "nodes": 1817186,
+        "elapsedMs": 3000,
+        "nps": 605729,
+        "bytesPerNode": 2808,
+        "load1": 1.01,
+        "samplesInWindow": 11979,
+        "chooseMoveSamplesOutsideWindow": 0
+      },
+      {
+        "run": 2,
+        "depth": 10,
+        "nodes": 1833570,
+        "elapsedMs": 3000,
+        "nps": 611190,
+        "bytesPerNode": 2807,
+        "load1": 1.36,
+        "samplesInWindow": 11988,
+        "chooseMoveSamplesOutsideWindow": 0
+      },
+      {
+        "run": 3,
+        "depth": 10,
+        "nodes": 1816162,
+        "elapsedMs": 3001,
+        "nps": 605186,
+        "bytesPerNode": 2803,
+        "load1": 1.59,
+        "samplesInWindow": 12012,
+        "chooseMoveSamplesOutsideWindow": 0
+      },
+      {
+        "run": 4,
+        "depth": 10,
+        "nodes": 1792610,
+        "elapsedMs": 3000,
+        "nps": 597537,
+        "bytesPerNode": 2807,
+        "load1": 1.42,
+        "samplesInWindow": 11978,
+        "chooseMoveSamplesOutsideWindow": 0
+      },
+      {
+        "run": 5,
+        "depth": 10,
+        "nodes": 1830498,
+        "elapsedMs": 3000,
+        "nps": 610166,
+        "bytesPerNode": 2807,
+        "load1": 1.37,
+        "samplesInWindow": 12009,
+        "chooseMoveSamplesOutsideWindow": 0
+      }
+    ],
+    "heapRuns": [
+      {
+        "run": 1,
+        "depth": 9,
+        "nodes": 1099362,
+        "nps": 366210,
+        "bytesPerNode": 2803,
+        "sampledBytes": 3040782312,
+        "counterBytes": 3081266184,
+        "load1": 1.09
+      },
+      {
+        "run": 2,
+        "depth": 9,
+        "nodes": 1168994,
+        "nps": 389665,
+        "bytesPerNode": 2800,
+        "sampledBytes": 3217160744,
+        "counterBytes": 3273136432,
+        "load1": 1.49
+      },
+      {
+        "run": 3,
+        "depth": 9,
+        "nodes": 1171042,
+        "nps": 390347,
+        "bytesPerNode": 2789,
+        "sampledBytes": 3206790744,
+        "counterBytes": 3266097488,
+        "load1": 1.54
+      },
+      {
+        "run": 4,
+        "depth": 9,
+        "nodes": 1192546,
+        "nps": 397250,
+        "bytesPerNode": 2788,
+        "sampledBytes": 3265748784,
+        "counterBytes": 3324334432,
+        "load1": 1.39
+      },
+      {
+        "run": 5,
+        "depth": 9,
+        "nodes": 1221218,
+        "nps": 406937,
+        "bytesPerNode": 2779,
+        "sampledBytes": 3329988424,
+        "counterBytes": 3394133120,
+        "load1": 1.37
+      }
+    ],
+    "medianNps": 605729,
+    "medianDepth": 10,
+    "medianBytesPerNode": 2807,
+    "medianAllocMBperS": 1701,
+    "top15": [
+      {
+        "rank": 1,
+        "fn": "whiteMinusBlack src/evaluate.ts:361",
+        "pooledShare": 10.3,
+        "medianShare": 10.4,
+        "minShare": 10,
+        "maxShare": 10.7,
+        "runRanks": [
+          1,
+          1,
+          1,
+          2,
+          1
+        ]
+      },
+      {
+        "rank": 2,
+        "fn": "isSquareAttackedBy src/moves.ts:242",
+        "pooledShare": 9.9,
+        "medianShare": 9.8,
+        "minShare": 9.6,
+        "maxShare": 10.6,
+        "runRanks": [
+          2,
+          2,
+          2,
+          1,
+          2
+        ]
+      },
+      {
+        "rank": 3,
+        "fn": "generateMoves src/moves.ts:356",
+        "pooledShare": 8.2,
+        "medianShare": 7.9,
+        "minShare": 7.7,
+        "maxShare": 8.9,
+        "runRanks": [
+          4,
+          4,
+          3,
+          3,
+          4
+        ]
+      },
+      {
+        "rank": 4,
+        "fn": "kingSquareOf src/legal.ts:33",
+        "pooledShare": 8.2,
+        "medianShare": 8.2,
+        "minShare": 7.9,
+        "maxShare": 8.4,
+        "runRanks": [
+          3,
+          3,
+          4,
+          4,
+          3
+        ]
+      },
+      {
+        "rank": 5,
+        "fn": "squaresReached src/evaluate.ts:241",
+        "pooledShare": 7.1,
+        "medianShare": 7.2,
+        "minShare": 6.8,
+        "maxShare": 7.3,
+        "runRanks": [
+          5,
+          6,
+          5,
+          5,
+          5
+        ]
+      },
+      {
+        "rank": 6,
+        "fn": "pawnStructure src/evaluate.ts:320",
+        "pooledShare": 7,
+        "medianShare": 7,
+        "minShare": 6.8,
+        "maxShare": 7.3,
+        "runRanks": [
+          6,
+          5,
+          6,
+          6,
+          6
+        ]
+      },
+      {
+        "rank": 7,
+        "fn": "isPassedPawn src/evaluate.ts:196",
+        "pooledShare": 5.2,
+        "medianShare": 5.2,
+        "minShare": 4.7,
+        "maxShare": 5.6,
+        "runRanks": [
+          7,
+          7,
+          7,
+          7,
+          7
+        ]
+      },
+      {
+        "rank": 8,
+        "fn": "raySliderAttacks src/moves.ts:217",
+        "pooledShare": 4.3,
+        "medianShare": 4.2,
+        "minShare": 4.2,
+        "maxShare": 4.5,
+        "runRanks": [
+          8,
+          8,
+          8,
+          8,
+          8
+        ]
+      },
+      {
+        "rank": 9,
+        "fn": "orderMoves src/search.ts:188",
+        "pooledShare": 3.7,
+        "medianShare": 3.6,
+        "minShare": 3.4,
+        "maxShare": 3.9,
+        "runRanks": [
+          9,
+          10,
+          11,
+          9,
+          9
+        ]
+      },
+      {
+        "rank": 10,
+        "fn": "addMove src/moves.ts:83",
+        "pooledShare": 3.6,
+        "medianShare": 3.5,
+        "minShare": 3.3,
+        "maxShare": 3.8,
+        "runRanks": [
+          10,
+          9,
+          9,
+          10,
+          10
+        ]
+      },
+      {
+        "rank": 11,
+        "fn": "addRayMoves src/moves.ts:119",
+        "pooledShare": 2.8,
+        "medianShare": 2.7,
+        "minShare": 2.5,
+        "maxShare": 3.4,
+        "runRanks": [
+          13,
+          15,
+          10,
+          12,
+          14
+        ]
+      },
+      {
+        "rank": 12,
+        "fn": "addPawnMoves src/moves.ts:145",
+        "pooledShare": 2.8,
+        "medianShare": 2.8,
+        "minShare": 2.7,
+        "maxShare": 3,
+        "runRanks": [
+          12,
+          11,
+          12,
+          13,
+          12
+        ]
+      },
+      {
+        "rank": 13,
+        "fn": "quiesce src/quiescence.ts:91",
+        "pooledShare": 2.8,
+        "medianShare": 2.8,
+        "minShare": 2.6,
+        "maxShare": 3,
+        "runRanks": [
+          15,
+          12,
+          13,
+          11,
+          11
+        ]
+      },
+      {
+        "rank": 14,
+        "fn": "makeMove src/apply.ts:122",
+        "pooledShare": 2.8,
+        "medianShare": 2.7,
+        "minShare": 2.6,
+        "maxShare": 3.2,
+        "runRanks": [
+          11,
+          13,
+          14,
+          14,
+          13
+        ]
+      },
+      {
+        "rank": 15,
+        "fn": "kingExposure src/evaluate.ts:279",
+        "pooledShare": 2.5,
+        "medianShare": 2.5,
+        "minShare": 2.3,
+        "maxShare": 2.6,
+        "runRanks": [
+          14,
+          14,
+          15,
+          15,
+          15
+        ]
+      }
+    ],
+    "stability": [
+      {
+        "fn": "whiteMinusBlack src/evaluate.ts:361",
+        "pooledRank": 1,
+        "runRanks": [
+          1,
+          1,
+          1,
+          2,
+          1
+        ],
+        "maxDeviation": 1
+      },
+      {
+        "fn": "isSquareAttackedBy src/moves.ts:242",
+        "pooledRank": 2,
+        "runRanks": [
+          2,
+          2,
+          2,
+          1,
+          2
+        ],
+        "maxDeviation": 1
+      },
+      {
+        "fn": "generateMoves src/moves.ts:356",
+        "pooledRank": 3,
+        "runRanks": [
+          4,
+          4,
+          3,
+          3,
+          4
+        ],
+        "maxDeviation": 1
+      },
+      {
+        "fn": "kingSquareOf src/legal.ts:33",
+        "pooledRank": 4,
+        "runRanks": [
+          3,
+          3,
+          4,
+          4,
+          3
+        ],
+        "maxDeviation": 1
+      },
+      {
+        "fn": "squaresReached src/evaluate.ts:241",
+        "pooledRank": 5,
+        "runRanks": [
+          5,
+          6,
+          5,
+          5,
+          5
+        ],
+        "maxDeviation": 1
+      }
+    ],
+    "stable": true,
+    "buckets": {
+      "movegen": {
+        "pooled": 44.9,
+        "median": 44.7,
+        "min": 44.3,
+        "max": 45.7
+      },
+      "make/unmake": {
+        "pooled": 4.1,
+        "median": 4.1,
+        "min": 3.7,
+        "max": 4.6
+      },
+      "evaluation": {
+        "pooled": 32.8,
+        "median": 32.6,
+        "min": 32,
+        "max": 33.4
+      },
+      "ordering": {
+        "pooled": 6.6,
+        "median": 6.5,
+        "min": 6.4,
+        "max": 6.7
+      },
+      "tt": {
+        "pooled": 1.3,
+        "median": 1.3,
+        "min": 1,
+        "max": 1.5
+      },
+      "other": {
+        "pooled": 10.3,
+        "median": 10.3,
+        "min": 10.3,
+        "max": 10.5
+      }
+    },
+    "bucketSum": 100,
+    "otherBreakdown": [
+      {
+        "what": "src/quiescence.ts",
+        "pooledShare": 3.6
+      },
+      {
+        "what": "src/position.ts",
+        "pooledShare": 2
+      },
+      {
+        "what": "(garbage collector)",
+        "pooledShare": 1.7
+      },
+      {
+        "what": "src/engine.ts",
+        "pooledShare": 1.4
+      },
+      {
+        "what": "src/zobrist.ts",
+        "pooledShare": 0.9
+      },
+      {
+        "what": "src/search.ts",
+        "pooledShare": 0.3
+      },
+      {
+        "what": "src/gameend.ts",
+        "pooledShare": 0.3
+      },
+      {
+        "what": "(program)",
+        "pooledShare": 0.1
+      }
+    ],
+    "inclusive": {
+      "legalMoves": 18.8,
+      "legalCaptures": 20.1,
+      "hasLegalMove": 9.5,
+      "generateMoves": 19.6,
+      "isSquareAttackedBy": 14.6,
+      "makeMove": 3.4,
+      "unmakeMove": 0.7,
+      "evaluate": 33.7,
+      "quiesce": 58,
+      "orderMoves": 6.6,
+      "storeEntry": 0.2,
+      "probeTable": 1,
+      "tableCutoff": 0.1,
+      "zobristKeyAfterMove": 0.8,
+      "leafScore": 67.9
+    },
+    "alloc": {
+      "orderMovesShare": 9.6,
+      "orderingBucketShare": 9.6,
+      "buckets": {
+        "movegen": 76.5,
+        "make/unmake": 0.8,
+        "evaluation": 0,
+        "ordering": 9.6,
+        "tt": 0.2,
+        "other": 12.9
+      },
+      "topSites": [
+        {
+          "site": "generateMoves src/moves.ts:356",
+          "share": 50.5
+        },
+        {
+          "site": "addPawnMoves src/moves.ts:145",
+          "share": 15.6
+        },
+        {
+          "site": "sort (native)",
+          "share": 10.9
+        },
+        {
+          "site": "orderMoves src/search.ts:188",
+          "share": 4.9
+        },
+        {
+          "site": "addRayMoves src/moves.ts:119",
+          "share": 3.8
+        },
+        {
+          "site": "legalCaptures src/legal.ts:90",
+          "share": 2.2
+        },
+        {
+          "site": "addStepMoves src/moves.ts:100",
+          "share": 1.7
+        },
+        {
+          "site": "legalMoves src/legal.ts:48",
+          "share": 1.6
+        },
+        {
+          "site": "(anonymous) src/search.ts:194",
+          "share": 1.2
+        },
+        {
+          "site": "Set (native)",
+          "share": 1
+        }
+      ],
+      "sampledOverCounter": 0.983
+    }
+  },
+  "start": {
+    "runs": {
+      "cpu": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "heap": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "perRun": [
+      {
+        "run": 1,
+        "depth": 10,
+        "nodes": 1373204,
+        "elapsedMs": 3000,
+        "nps": 457735,
+        "bytesPerNode": 4017,
+        "load1": 1.24,
+        "samplesInWindow": 11999,
+        "chooseMoveSamplesOutsideWindow": 0
+      },
+      {
+        "run": 2,
+        "depth": 10,
+        "nodes": 1408020,
+        "elapsedMs": 3001,
+        "nps": 469184,
+        "bytesPerNode": 4019,
+        "load1": 1.49,
+        "samplesInWindow": 12014,
+        "chooseMoveSamplesOutsideWindow": 0
+      },
+      {
+        "run": 3,
+        "depth": 10,
+        "nodes": 1430548,
+        "elapsedMs": 3001,
+        "nps": 476690,
+        "bytesPerNode": 3996,
+        "load1": 1.54,
+        "samplesInWindow": 12028,
+        "chooseMoveSamplesOutsideWindow": 0
+      },
+      {
+        "run": 4,
+        "depth": 10,
+        "nodes": 1401876,
+        "elapsedMs": 3000,
+        "nps": 467292,
+        "bytesPerNode": 4034,
+        "load1": 1.39,
+        "samplesInWindow": 12034,
+        "chooseMoveSamplesOutsideWindow": 0
+      },
+      {
+        "run": 5,
+        "depth": 10,
+        "nodes": 1398804,
+        "elapsedMs": 3001,
+        "nps": 466113,
+        "bytesPerNode": 4026,
+        "load1": 1.34,
+        "samplesInWindow": 12007,
+        "chooseMoveSamplesOutsideWindow": 0
+      }
+    ],
+    "heapRuns": [
+      {
+        "run": 1,
+        "depth": 10,
+        "nodes": 789524,
+        "nps": 262912,
+        "bytesPerNode": 4167,
+        "sampledBytes": 3243472552,
+        "counterBytes": 3289582856,
+        "load1": 1.24
+      },
+      {
+        "run": 2,
+        "depth": 10,
+        "nodes": 851988,
+        "nps": 283901,
+        "bytesPerNode": 4135,
+        "sampledBytes": 3468531560,
+        "counterBytes": 3522893784,
+        "load1": 1.61
+      },
+      {
+        "run": 3,
+        "depth": 10,
+        "nodes": 864276,
+        "nps": 287804,
+        "bytesPerNode": 4120,
+        "sampledBytes": 3490802104,
+        "counterBytes": 3560761936,
+        "load1": 1.5
+      },
+      {
+        "run": 4,
+        "depth": 10,
+        "nodes": 863252,
+        "nps": 287559,
+        "bytesPerNode": 4087,
+        "sampledBytes": 3472370200,
+        "counterBytes": 3527875536,
+        "load1": 1.44
+      },
+      {
+        "run": 5,
+        "depth": 10,
+        "nodes": 848916,
+        "nps": 282972,
+        "bytesPerNode": 4096,
+        "sampledBytes": 3432984480,
+        "counterBytes": 3477431624,
+        "load1": 1.31
+      }
+    ],
+    "medianNps": 467292,
+    "medianDepth": 10,
+    "medianBytesPerNode": 4019,
+    "medianAllocMBperS": 1885,
+    "top15": [
+      {
+        "rank": 1,
+        "fn": "isSquareAttackedBy src/moves.ts:242",
+        "pooledShare": 10.9,
+        "medianShare": 10.9,
+        "minShare": 10.7,
+        "maxShare": 11.1,
+        "runRanks": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "rank": 2,
+        "fn": "generateMoves src/moves.ts:356",
+        "pooledShare": 10.3,
+        "medianShare": 10.3,
+        "minShare": 10.1,
+        "maxShare": 10.6,
+        "runRanks": [
+          2,
+          2,
+          2,
+          2,
+          2
+        ]
+      },
+      {
+        "rank": 3,
+        "fn": "whiteMinusBlack src/evaluate.ts:361",
+        "pooledShare": 8.2,
+        "medianShare": 8.3,
+        "minShare": 7.5,
+        "maxShare": 8.5,
+        "runRanks": [
+          3,
+          3,
+          3,
+          3,
+          4
+        ]
+      },
+      {
+        "rank": 4,
+        "fn": "kingSquareOf src/legal.ts:33",
+        "pooledShare": 7.3,
+        "medianShare": 7.2,
+        "minShare": 7,
+        "maxShare": 7.7,
+        "runRanks": [
+          4,
+          4,
+          4,
+          4,
+          3
+        ]
+      },
+      {
+        "rank": 5,
+        "fn": "squaresReached src/evaluate.ts:241",
+        "pooledShare": 5.6,
+        "medianShare": 5.7,
+        "minShare": 5.2,
+        "maxShare": 5.8,
+        "runRanks": [
+          5,
+          5,
+          5,
+          6,
+          5
+        ]
+      },
+      {
+        "rank": 6,
+        "fn": "pawnStructure src/evaluate.ts:320",
+        "pooledShare": 5.3,
+        "medianShare": 5.2,
+        "minShare": 5.1,
+        "maxShare": 5.7,
+        "runRanks": [
+          6,
+          7,
+          6,
+          5,
+          7
+        ]
+      },
+      {
+        "rank": 7,
+        "fn": "isPassedPawn src/evaluate.ts:196",
+        "pooledShare": 5.2,
+        "medianShare": 5.2,
+        "minShare": 5.1,
+        "maxShare": 5.3,
+        "runRanks": [
+          7,
+          6,
+          7,
+          7,
+          6
+        ]
+      },
+      {
+        "rank": 8,
+        "fn": "raySliderAttacks src/moves.ts:217",
+        "pooledShare": 4.7,
+        "medianShare": 4.8,
+        "minShare": 4.4,
+        "maxShare": 4.9,
+        "runRanks": [
+          8,
+          8,
+          8,
+          8,
+          8
+        ]
+      },
+      {
+        "rank": 9,
+        "fn": "addMove src/moves.ts:83",
+        "pooledShare": 4,
+        "medianShare": 4.1,
+        "minShare": 3.8,
+        "maxShare": 4.2,
+        "runRanks": [
+          9,
+          9,
+          9,
+          9,
+          9
+        ]
+      },
+      {
+        "rank": 10,
+        "fn": "addPawnMoves src/moves.ts:145",
+        "pooledShare": 3.5,
+        "medianShare": 3.6,
+        "minShare": 3.4,
+        "maxShare": 3.7,
+        "runRanks": [
+          10,
+          12,
+          11,
+          10,
+          11
+        ]
+      },
+      {
+        "rank": 11,
+        "fn": "addRayMoves src/moves.ts:119",
+        "pooledShare": 3.5,
+        "medianShare": 3.6,
+        "minShare": 3.3,
+        "maxShare": 3.7,
+        "runRanks": [
+          11,
+          10,
+          10,
+          11,
+          10
+        ]
+      },
+      {
+        "rank": 12,
+        "fn": "orderMoves src/search.ts:188",
+        "pooledShare": 3.5,
+        "medianShare": 3.5,
+        "minShare": 3.3,
+        "maxShare": 3.6,
+        "runRanks": [
+          12,
+          11,
+          12,
+          12,
+          12
+        ]
+      },
+      {
+        "rank": 13,
+        "fn": "makeMove src/apply.ts:122",
+        "pooledShare": 2.7,
+        "medianShare": 2.6,
+        "minShare": 2.6,
+        "maxShare": 2.9,
+        "runRanks": [
+          13,
+          13,
+          13,
+          13,
+          13
+        ]
+      },
+      {
+        "rank": 14,
+        "fn": "kingExposure src/evaluate.ts:279",
+        "pooledShare": 2.4,
+        "medianShare": 2.4,
+        "minShare": 2.1,
+        "maxShare": 2.5,
+        "runRanks": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ]
+      },
+      {
+        "rank": 15,
+        "fn": "(garbage collector)",
+        "pooledShare": 1.9,
+        "medianShare": 1.9,
+        "minShare": 1.8,
+        "maxShare": 2.1,
+        "runRanks": [
+          15,
+          15,
+          17,
+          17,
+          16
+        ]
+      }
+    ],
+    "stability": [
+      {
+        "fn": "isSquareAttackedBy src/moves.ts:242",
+        "pooledRank": 1,
+        "runRanks": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "maxDeviation": 0
+      },
+      {
+        "fn": "generateMoves src/moves.ts:356",
+        "pooledRank": 2,
+        "runRanks": [
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "maxDeviation": 0
+      },
+      {
+        "fn": "whiteMinusBlack src/evaluate.ts:361",
+        "pooledRank": 3,
+        "runRanks": [
+          3,
+          3,
+          3,
+          3,
+          4
+        ],
+        "maxDeviation": 1
+      },
+      {
+        "fn": "kingSquareOf src/legal.ts:33",
+        "pooledRank": 4,
+        "runRanks": [
+          4,
+          4,
+          4,
+          4,
+          3
+        ],
+        "maxDeviation": 1
+      },
+      {
+        "fn": "squaresReached src/evaluate.ts:241",
+        "pooledRank": 5,
+        "runRanks": [
+          5,
+          5,
+          5,
+          6,
+          5
+        ],
+        "maxDeviation": 1
+      }
+    ],
+    "stable": true,
+    "buckets": {
+      "movegen": {
+        "pooled": 50.5,
+        "median": 50.6,
+        "min": 49.9,
+        "max": 51.2
+      },
+      "make/unmake": {
+        "pooled": 4,
+        "median": 3.9,
+        "min": 3.8,
+        "max": 4.3
+      },
+      "evaluation": {
+        "pooled": 27,
+        "median": 27,
+        "min": 26.6,
+        "max": 27.3
+      },
+      "ordering": {
+        "pooled": 6.5,
+        "median": 6.4,
+        "min": 6.2,
+        "max": 6.8
+      },
+      "tt": {
+        "pooled": 2,
+        "median": 2,
+        "min": 1.9,
+        "max": 2.1
+      },
+      "other": {
+        "pooled": 10.1,
+        "median": 10,
+        "min": 9.8,
+        "max": 10.5
+      }
+    },
+    "bucketSum": 100.1,
+    "otherBreakdown": [
+      {
+        "what": "src/position.ts",
+        "pooledShare": 2.1
+      },
+      {
+        "what": "src/engine.ts",
+        "pooledShare": 2
+      },
+      {
+        "what": "(garbage collector)",
+        "pooledShare": 1.9
+      },
+      {
+        "what": "src/quiescence.ts",
+        "pooledShare": 1.6
+      },
+      {
+        "what": "src/zobrist.ts",
+        "pooledShare": 1.4
+      },
+      {
+        "what": "src/search.ts",
+        "pooledShare": 0.6
+      },
+      {
+        "what": "src/gameend.ts",
+        "pooledShare": 0.5
+      },
+      {
+        "what": "(program)",
+        "pooledShare": 0.1
+      },
+      {
+        "what": "(anonymous) (non-src)",
+        "pooledShare": 0
+      }
+    ],
+    "inclusive": {
+      "legalMoves": 22.7,
+      "legalCaptures": 17,
+      "hasLegalMove": 14.2,
+      "generateMoves": 26,
+      "isSquareAttackedBy": 16.1,
+      "makeMove": 3.2,
+      "unmakeMove": 0.8,
+      "evaluate": 27.7,
+      "quiesce": 46.6,
+      "orderMoves": 6.5,
+      "storeEntry": 0.2,
+      "probeTable": 1.6,
+      "tableCutoff": 0.1,
+      "zobristKeyAfterMove": 1.3,
+      "leafScore": 61.4
+    },
+    "alloc": {
+      "orderMovesShare": 12.8,
+      "orderingBucketShare": 12.8,
+      "buckets": {
+        "movegen": 76.1,
+        "make/unmake": 1.7,
+        "evaluation": 0,
+        "ordering": 12.8,
+        "tt": 0.2,
+        "other": 9.2
+      },
+      "topSites": [
+        {
+          "site": "generateMoves src/moves.ts:356",
+          "share": 38
+        },
+        {
+          "site": "addPawnMoves src/moves.ts:145",
+          "share": 27.3
+        },
+        {
+          "site": "orderMoves src/search.ts:188",
+          "share": 7.6
+        },
+        {
+          "site": "sort (native)",
+          "share": 7.1
+        },
+        {
+          "site": "addCastlingMoves src/moves.ts:330",
+          "share": 4.3
+        },
+        {
+          "site": "legalMoves src/legal.ts:48",
+          "share": 2
+        },
+        {
+          "site": "addMove src/moves.ts:83",
+          "share": 2
+        },
+        {
+          "site": "makeMove src/apply.ts:122",
+          "share": 1.6
+        },
+        {
+          "site": "isSquareAttackedBy src/moves.ts:242",
+          "share": 1.6
+        },
+        {
+          "site": "Set (native)",
+          "share": 1.4
+        }
+      ],
+      "sampledOverCounter": 0.984
+    }
+  }
+}

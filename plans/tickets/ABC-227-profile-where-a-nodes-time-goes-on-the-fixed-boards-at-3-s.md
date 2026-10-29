@@ -15,6 +15,14 @@ epic: EPIC-010
 > walk in the evaluator and the per-move allocations in `orderMoves` remain (SA 7b–7f). § B says "success is playing
 > results, not nps alone"; this ticket only finds where the time goes. No code change.
 
+> **Result 2026-10-29 by SE** (task `se-ABC-227`, at `main` `193447bc`, measurement only; notes
+> `20261029T203901Z-software-engineer-observation-7175ebdf`, `…-decision-e56997fd`; profiles and scripts in the task's `raw/`).
+> 5+5 runs per board (CPU + heap), no cutechess, load1 0.92-1.64. Median nps: kiwipete 572 859, position-6 605 729,
+> start 467 292. A2 holds (top-5 rank spread ≤ 2). Self time: move generation 47.4/44.9/50.5 %, evaluation
+> 31.5/32.8/27.0, ordering 5.5/6.6/6.5, make/unmake 4.2/4.1/4.0, TT 1.1/1.3/2.0, other 10.3/10.3/10.1. Bytes per node:
+> 2 737/2 807/4 019; `orderMoves` holds 8.6/9.6/12.8 % of bytes. A5 names six cuts for `ABC-235` in three buckets (move
+> generation, evaluation, ordering), each read as value-identical by the profiler. Architect/Design confirms.
+
 ## Problem
 
 - **User:** the owner at level 5 (3 s a move).
