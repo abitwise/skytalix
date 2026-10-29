@@ -21,6 +21,11 @@ epic: EPIC-010
 > stays on `EPIC-008`'s S2 and plays no smoke. Its DoR (9/10) is unchanged. `ABC-227` is Done (`f4301d0c`), and this
 > ticket is In Design (`arch-ABC-235`) on the Orchestrator's board.
 
+> **SCOPED 2026-10-29 by BA/PM** (task `bapm-ABC-235-split`, records only, at `main` `a37f1d87`): scope = **cuts 1, 3
+> and 5** per the Architect (`arch-ABC-235` `…7fc1b90c`, `…eebca902`); **cut 6 moved to `ABC-240`**; scope item 2's
+> "a cheaper evaluator walk (a piece list)" and "cheaper legality for non-captures" are **struck**; cuts 2 and 4 are
+> out, for the reasons in `…7fc1b90c`; M and P2 stand; DoR row 2 ✅, so 10/10; the rows below read under this line.
+
 ## Problem
 
 - **User:** the owner at level 5.
