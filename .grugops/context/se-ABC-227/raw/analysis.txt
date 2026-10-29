@@ -1,0 +1,78 @@
+== kiwipete: runs cpu 1,2,3,4,5 heap 1,2,3,4,5
+median nps 572859 (cpu-prof runs; per run 572859, 555300, 587727, 590458, 549839), median depth 8, load1 0.92, 1.3, 1.64, 1.46, 1.44
+bytes/node median 2737 (cpu runs, V8 total_allocated_bytes), 1568 MB/s; heap-sampled/counter 0.981
+top 15 self time (pooled share %, median, min-max, per-run ranks):
+   1  12.9  med 12.5  11.8-15.3  [1 1 1 1 1]  isSquareAttackedBy src/moves.ts:242
+   2  10.1  med 10.1  9.8-10.2  [2 2 2 2 2]  whiteMinusBlack src/evaluate.ts:361
+   3   7.2  med 7.2  7.0-7.4  [4 5 5 3 3]  kingSquareOf src/legal.ts:33
+   4   7.1  med 7.2  6.4-7.5  [6 3 3 4 6]  squaresReached src/evaluate.ts:241
+   5   7.0  med 6.9  6.7-7.4  [7 4 4 5 4]  raySliderAttacks src/moves.ts:217
+   6   6.7  med 6.4  6.4-7.7  [3 7 7 6 5]  generateMoves src/moves.ts:356
+   7   6.7  med 6.7  6.3-7.0  [5 6 6 7 7]  pawnStructure src/evaluate.ts:320
+   8   4.3  med 4.3  4.0-4.7  [8 8 8 8 8]  isPassedPawn src/evaluate.ts:196
+   9   3.5  med 3.4  3.1-3.9  [9 9 9 9 10]  addMove src/moves.ts:83
+  10   3.0  med 3.0  2.7-3.1  [11 10 10 10 12]  orderMoves src/search.ts:188
+  11   2.9  med 2.9  2.6-3.0  [10 11 12 11 13]  kingExposure src/evaluate.ts:279
+  12   2.8  med 2.8  2.7-2.9  [12 12 11 12 11]  quiesce src/quiescence.ts:91
+  13   2.6  med 2.3  2.1-3.9  [14 13 15 14 9]  makeMove src/apply.ts:122
+  14   2.3  med 2.4  2.0-2.6  [13 15 13 13 15]  addRayMoves src/moves.ts:119
+  15   2.1  med 2.1  1.8-2.2  [15 16 16 15 16]  addPawnMoves src/moves.ts:145
+top-5 rank stability (max |run rank - pooled rank|): 0, 0, 2, 2, 2 -> within +-2
+buckets (pooled %; median; min-max): movegen 47.4 (47.3; 46.5-48.8) | make/unmake 4.2 (3.8; 3.7-5.8) | evaluation 31.5 (31.9; 29.6-32.3) | ordering 5.5 (5.5; 5.1-5.8) | tt 1.1 (1.1; 1-1.2) | other 10.3 (10.3; 9.5-10.9)  sum 100
+other, by file/frame: src/quiescence.ts 3.9; src/position.ts 2; (garbage collector) 1.6; src/engine.ts 1.3; src/zobrist.ts 0.7; src/search.ts 0.3; src/gameend.ts 0.3; (program) 0.1; (anonymous) (non-src) 0
+inclusive %: legalMoves 17.9; legalCaptures 23.6; hasLegalMove 9.7; generateMoves 24.1; isSquareAttackedBy 20.5; makeMove 3.4; unmakeMove 0.9; evaluate 32.4; quiesce 60.7; orderMoves 5.5; storeEntry 0.2; probeTable 0.8; tableCutoff 0.1; zobristKeyAfterMove 0.7; leafScore 70.7
+alloc: orderMoves (incl. callees) 8.6% of bytes; by bucket movegen 78.1 | make/unmake 0.8 | evaluation 0 | ordering 8.6 | tt 0.2 | other 12.4
+alloc top sites: generateMoves src/moves.ts:356 52.5; addPawnMoves src/moves.ts:145 14.5; sort (native) 10.2; addCastlingMoves src/moves.ts:330 6.4; orderMoves src/search.ts:188 4.1; legalCaptures src/legal.ts:90 1.7; legalMoves src/legal.ts:48 1.5; (anonymous) src/search.ts:194 1.3; (anonymous) src/quiescence.ts:110 0.9; addPromotions src/moves.ts:88 0.9
+
+== position-6: runs cpu 1,2,3,4,5 heap 1,2,3,4,5
+median nps 605729 (cpu-prof runs; per run 605729, 611190, 605186, 597537, 610166), median depth 10, load1 1.01, 1.36, 1.59, 1.42, 1.37
+bytes/node median 2807 (cpu runs, V8 total_allocated_bytes), 1701 MB/s; heap-sampled/counter 0.983
+top 15 self time (pooled share %, median, min-max, per-run ranks):
+   1  10.3  med 10.4  10.0-10.7  [1 1 1 2 1]  whiteMinusBlack src/evaluate.ts:361
+   2   9.9  med 9.8  9.6-10.6  [2 2 2 1 2]  isSquareAttackedBy src/moves.ts:242
+   3   8.2  med 7.9  7.7-8.9  [4 4 3 3 4]  generateMoves src/moves.ts:356
+   4   8.2  med 8.2  7.9-8.4  [3 3 4 4 3]  kingSquareOf src/legal.ts:33
+   5   7.1  med 7.2  6.8-7.3  [5 6 5 5 5]  squaresReached src/evaluate.ts:241
+   6   7.0  med 7.0  6.8-7.3  [6 5 6 6 6]  pawnStructure src/evaluate.ts:320
+   7   5.2  med 5.2  4.7-5.6  [7 7 7 7 7]  isPassedPawn src/evaluate.ts:196
+   8   4.3  med 4.2  4.2-4.5  [8 8 8 8 8]  raySliderAttacks src/moves.ts:217
+   9   3.7  med 3.6  3.4-3.9  [9 10 11 9 9]  orderMoves src/search.ts:188
+  10   3.6  med 3.5  3.3-3.8  [10 9 9 10 10]  addMove src/moves.ts:83
+  11   2.8  med 2.7  2.5-3.4  [13 15 10 12 14]  addRayMoves src/moves.ts:119
+  12   2.8  med 2.8  2.7-3.0  [12 11 12 13 12]  addPawnMoves src/moves.ts:145
+  13   2.8  med 2.8  2.6-3.0  [15 12 13 11 11]  quiesce src/quiescence.ts:91
+  14   2.8  med 2.7  2.6-3.2  [11 13 14 14 13]  makeMove src/apply.ts:122
+  15   2.5  med 2.5  2.3-2.6  [14 14 15 15 15]  kingExposure src/evaluate.ts:279
+top-5 rank stability (max |run rank - pooled rank|): 1, 1, 1, 1, 1 -> within +-2
+buckets (pooled %; median; min-max): movegen 44.9 (44.7; 44.3-45.7) | make/unmake 4.1 (4.1; 3.7-4.6) | evaluation 32.8 (32.6; 32-33.4) | ordering 6.6 (6.5; 6.4-6.7) | tt 1.3 (1.3; 1-1.5) | other 10.3 (10.3; 10.3-10.5)  sum 100
+other, by file/frame: src/quiescence.ts 3.6; src/position.ts 2; (garbage collector) 1.7; src/engine.ts 1.4; src/zobrist.ts 0.9; src/search.ts 0.3; src/gameend.ts 0.3; (program) 0.1
+inclusive %: legalMoves 18.8; legalCaptures 20.1; hasLegalMove 9.5; generateMoves 19.6; isSquareAttackedBy 14.6; makeMove 3.4; unmakeMove 0.7; evaluate 33.7; quiesce 58; orderMoves 6.6; storeEntry 0.2; probeTable 1; tableCutoff 0.1; zobristKeyAfterMove 0.8; leafScore 67.9
+alloc: orderMoves (incl. callees) 9.6% of bytes; by bucket movegen 76.5 | make/unmake 0.8 | evaluation 0 | ordering 9.6 | tt 0.2 | other 12.9
+alloc top sites: generateMoves src/moves.ts:356 50.5; addPawnMoves src/moves.ts:145 15.6; sort (native) 10.9; orderMoves src/search.ts:188 4.9; addRayMoves src/moves.ts:119 3.8; legalCaptures src/legal.ts:90 2.2; addStepMoves src/moves.ts:100 1.7; legalMoves src/legal.ts:48 1.6; (anonymous) src/search.ts:194 1.2; Set (native) 1
+
+== start: runs cpu 1,2,3,4,5 heap 1,2,3,4,5
+median nps 467292 (cpu-prof runs; per run 457735, 469184, 476690, 467292, 466113), median depth 10, load1 1.24, 1.49, 1.54, 1.39, 1.34
+bytes/node median 4019 (cpu runs, V8 total_allocated_bytes), 1885 MB/s; heap-sampled/counter 0.984
+top 15 self time (pooled share %, median, min-max, per-run ranks):
+   1  10.9  med 10.9  10.7-11.1  [1 1 1 1 1]  isSquareAttackedBy src/moves.ts:242
+   2  10.3  med 10.3  10.1-10.6  [2 2 2 2 2]  generateMoves src/moves.ts:356
+   3   8.2  med 8.3  7.5-8.5  [3 3 3 3 4]  whiteMinusBlack src/evaluate.ts:361
+   4   7.3  med 7.2  7.0-7.7  [4 4 4 4 3]  kingSquareOf src/legal.ts:33
+   5   5.6  med 5.7  5.2-5.8  [5 5 5 6 5]  squaresReached src/evaluate.ts:241
+   6   5.3  med 5.2  5.1-5.7  [6 7 6 5 7]  pawnStructure src/evaluate.ts:320
+   7   5.2  med 5.2  5.1-5.3  [7 6 7 7 6]  isPassedPawn src/evaluate.ts:196
+   8   4.7  med 4.8  4.4-4.9  [8 8 8 8 8]  raySliderAttacks src/moves.ts:217
+   9   4.0  med 4.1  3.8-4.2  [9 9 9 9 9]  addMove src/moves.ts:83
+  10   3.5  med 3.6  3.4-3.7  [10 12 11 10 11]  addPawnMoves src/moves.ts:145
+  11   3.5  med 3.6  3.3-3.7  [11 10 10 11 10]  addRayMoves src/moves.ts:119
+  12   3.5  med 3.5  3.3-3.6  [12 11 12 12 12]  orderMoves src/search.ts:188
+  13   2.7  med 2.6  2.6-2.9  [13 13 13 13 13]  makeMove src/apply.ts:122
+  14   2.4  med 2.4  2.1-2.5  [14 14 14 14 14]  kingExposure src/evaluate.ts:279
+  15   1.9  med 1.9  1.8-2.1  [15 15 17 17 16]  (garbage collector)
+top-5 rank stability (max |run rank - pooled rank|): 0, 0, 1, 1, 1 -> within +-2
+buckets (pooled %; median; min-max): movegen 50.5 (50.6; 49.9-51.2) | make/unmake 4 (3.9; 3.8-4.3) | evaluation 27 (27; 26.6-27.3) | ordering 6.5 (6.4; 6.2-6.8) | tt 2 (2; 1.9-2.1) | other 10.1 (10; 9.8-10.5)  sum 100.1
+other, by file/frame: src/position.ts 2.1; src/engine.ts 2; (garbage collector) 1.9; src/quiescence.ts 1.6; src/zobrist.ts 1.4; src/search.ts 0.6; src/gameend.ts 0.5; (program) 0.1; (anonymous) (non-src) 0
+inclusive %: legalMoves 22.7; legalCaptures 17; hasLegalMove 14.2; generateMoves 26; isSquareAttackedBy 16.1; makeMove 3.2; unmakeMove 0.8; evaluate 27.7; quiesce 46.6; orderMoves 6.5; storeEntry 0.2; probeTable 1.6; tableCutoff 0.1; zobristKeyAfterMove 1.3; leafScore 61.4
+alloc: orderMoves (incl. callees) 12.8% of bytes; by bucket movegen 76.1 | make/unmake 1.7 | evaluation 0 | ordering 12.8 | tt 0.2 | other 9.2
+alloc top sites: generateMoves src/moves.ts:356 38; addPawnMoves src/moves.ts:145 27.3; orderMoves src/search.ts:188 7.6; sort (native) 7.1; addCastlingMoves src/moves.ts:330 4.3; legalMoves src/legal.ts:48 2; addMove src/moves.ts:83 2; makeMove src/apply.ts:122 1.6; isSquareAttackedBy src/moves.ts:242 1.6; Set (native) 1.4
+

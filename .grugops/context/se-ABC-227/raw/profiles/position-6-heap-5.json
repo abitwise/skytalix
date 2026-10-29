@@ -1,0 +1,22 @@
+{
+  "board": "position-6",
+  "mode": "heap",
+  "run": 5,
+  "fen": "r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10",
+  "budgetMs": 3000,
+  "node": "v26.12.1",
+  "load1": 1.37,
+  "move": {
+    "from": 34,
+    "to": 67
+  },
+  "score": 76,
+  "depth": 9,
+  "nodes": 1221218,
+  "elapsedMs": 3001,
+  "nps": 406937,
+  "allocatedBytes": 3394133120,
+  "bytesPerNode": 2779.3015825184366,
+  "t0us": 38772201107,
+  "t1us": 38775202263
+}

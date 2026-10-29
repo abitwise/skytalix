@@ -1,0 +1,22 @@
+{
+  "board": "start",
+  "mode": "cpu",
+  "run": 5,
+  "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+  "budgetMs": 3000,
+  "node": "v26.12.1",
+  "load1": 1.34,
+  "move": {
+    "from": 1,
+    "to": 34
+  },
+  "score": 13,
+  "depth": 10,
+  "nodes": 1398804,
+  "elapsedMs": 3001,
+  "nps": 466113,
+  "allocatedBytes": 5631280144,
+  "bytesPerNode": 4025.7821281609145,
+  "t0us": 38775518997,
+  "t1us": 38778519749
+}
