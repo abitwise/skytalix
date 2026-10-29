@@ -1,0 +1,579 @@
+ABC-226 records scan (repository key = ADR-0020 d2; ep-normalised key reported separately)
+
+pgn | kind | read | parsed | unparsed | 3-fold | before root | inside | A3 strict | A3 family | A4 strict (lost/drawn) | A4 family | A6 ep earlier
+qe-ABC-204/raw/a4-e1910-baseline/r.pgn | R | 200 | 200 | 0 | 15 | 15 | 0 | 12 | 12 | 0 (0/0) | 0 | 0
+qe-ABC-204/raw/a4-e1650/r.pgn | R | 200 | 200 | 0 | 6 | 6 | 0 | 5 | 5 | 0 (0/0) | 0 | 0
+qe-epic008-close/raw/r1/r.pgn | R | 200 | 200 | 0 | 7 | 7 | 0 | 4 | 4 | 0 (0/0) | 0 | 0
+qe-epic008-close/raw/r2/r.pgn | R | 200 | 200 | 0 | 7 | 7 | 0 | 5 | 5 | 0 (0/0) | 0 | 0
+qe-ABC-204/raw/a5/d.pgn | D | 99 | 99 | 0 | 51 | 51 | 0 | 17 | 28 | 0 (0/0) | 1 | 0
+qe-ABC-207/raw/d1/d.pgn | D | 400 | 400 | 0 | 218 | 218 | 0 | 38 | 108 | 0 (0/0) | 1 | 3
+qe-ABC-207/raw/d2/d.pgn | D | 400 | 400 | 0 | 200 | 200 | 0 | 41 | 93 | 1 (0/1) | 2 | 5
+qe-ABC-208/raw/d1/d.pgn | D | 400 | 400 | 0 | 208 | 208 | 0 | 66 | 123 | 0 (0/0) | 1 | 3
+qe-ABC-209/raw/d1/d.pgn | D | 400 | 400 | 0 | 171 | 171 | 0 | 37 | 73 | 5 (2/3) | 14 | 1
+qe-ABC-209/raw/d2/d.pgn | D | 400 | 400 | 0 | 156 | 156 | 0 | 36 | 73 | 10 (2/8) | 16 | 3
+qe-ABC-210/raw/d1/d.pgn | D | 400 | 400 | 0 | 213 | 213 | 0 | 57 | 104 | 1 (0/1) | 2 | 3
+qe-ABC-210/raw/d2/d.pgn | D | 400 | 400 | 0 | 212 | 212 | 0 | 58 | 110 | 1 (0/1) | 1 | 2
+qe-ABC-215/raw/d1/d.pgn | D | 400 | 400 | 0 | 201 | 201 | 0 | 65 | 117 | 4 (1/3) | 8 | 2
+qe-epic008-q4c/raw/d/d.pgn | D | 100 | 100 | 0 | 53 | 53 | 0 | 20 | 34 | 1 (0/1) | 2 | 0
+
+TOTALS {"gamesRead":4199,"gamesParsed":4199,"unparsed":0,"threefold":1718,"threefoldR":35,"beforeRoot":1718,"insideRoot":0,"a3Strict":461,"a3StrictR":26,"a3Family":889,"a4Strict":23,"a4StrictR":0,"a4StrictLost":5,"a4StrictDrawn":18,"a4Family":48,"a6EpEarlier":22,"repoKeyBelowThreeAtCutechessThreefold":22,"epThirdBeforeRepoThirdOutsideA2":0}
+
+A5 strict (engine named skytalix): all = A3 461 + A4 23 = 484; R alone = A3 26 + A4 0 = 26
+A5 family (D base counted too): all = A3 889 + A4 48 = 937
+
+unparsed: []
+
+R repetition games:
+  qe-ABC-204/raw/a4-e1910-baseline/r.pgn#10 (Round 5, stockfish-skytalix, 1/2-1/2) plies=64 completer=skytalix occ=[56,60,64] root=63 before the root skyLast={"ply":64,"cp":766} sfSame={"ply":63,"cpForSkytalix":418} A3=true epEarlier=false
+  qe-ABC-204/raw/a4-e1910-baseline/r.pgn#27 (Round 14, skytalix-stockfish, 1/2-1/2) plies=125 completer=skytalix occ=[105,117,125] root=124 before the root skyLast={"ply":125,"cp":300} sfSame={"ply":124,"cpForSkytalix":0} A3=true epEarlier=false
+  qe-ABC-204/raw/a4-e1910-baseline/r.pgn#30 (Round 15, stockfish-skytalix, 1/2-1/2) plies=172 completer=skytalix occ=[164,168,172] root=171 before the root skyLast={"ply":172,"cp":305} sfSame={"ply":171,"cpForSkytalix":0} A3=true epEarlier=false
+  qe-ABC-204/raw/a4-e1910-baseline/r.pgn#60 (Round 30, stockfish-skytalix, 1/2-1/2) plies=27 completer=skytalix occ=[19,23,27] root=26 before the root skyLast={"ply":27,"cp":215} sfSame={"ply":26,"cpForSkytalix":125} A3=true epEarlier=false
+  qe-ABC-204/raw/a4-e1910-baseline/r.pgn#72 (Round 36, stockfish-skytalix, 1/2-1/2) plies=105 completer=skytalix occ=[97,101,105] root=104 before the root skyLast={"ply":105,"cp":0} sfSame={"ply":104,"cpForSkytalix":0} A3=false epEarlier=false
+  qe-ABC-204/raw/a4-e1910-baseline/r.pgn#83 (Round 42, skytalix-stockfish, 1/2-1/2) plies=32 completer=stockfish occ=[24,28,32] root=30 before the root skyLast={"ply":31,"cp":125} sfSame={"ply":32,"cpForSkytalix":0} A3=true epEarlier=false
+  qe-ABC-204/raw/a4-e1910-baseline/r.pgn#84 (Round 42, stockfish-skytalix, 1/2-1/2) plies=176 completer=skytalix occ=[148,170,176] root=175 before the root skyLast={"ply":176,"cp":294} sfSame={"ply":175,"cpForSkytalix":0} A3=true epEarlier=false
+  qe-ABC-204/raw/a4-e1910-baseline/r.pgn#85 (Round 43, skytalix-stockfish, 1/2-1/2) plies=39 completer=skytalix occ=[31,35,39] root=38 before the root skyLast={"ply":39,"cp":629} sfSame={"ply":38,"cpForSkytalix":232} A3=true epEarlier=false
+  qe-ABC-204/raw/a4-e1910-baseline/r.pgn#92 (Round 46, stockfish-skytalix, 1/2-1/2) plies=94 completer=skytalix occ=[86,90,94] root=93 before the root skyLast={"ply":94,"cp":0} sfSame={"ply":93,"cpForSkytalix":0} A3=false epEarlier=false
+  qe-ABC-204/raw/a4-e1910-baseline/r.pgn#104 (Round 52, stockfish-skytalix, 1/2-1/2) plies=158 completer=skytalix occ=[132,154,158] root=157 before the root skyLast={"ply":158,"cp":331} sfSame={"ply":157,"cpForSkytalix":0} A3=true epEarlier=false
+  qe-ABC-204/raw/a4-e1910-baseline/r.pgn#105 (Round 53, skytalix-stockfish, 1/2-1/2) plies=138 completer=stockfish occ=[116,124,138] root=136 before the root skyLast={"ply":137,"cp":168} sfSame={"ply":138,"cpForSkytalix":0} A3=true epEarlier=false
+  qe-ABC-204/raw/a4-e1910-baseline/r.pgn#125 (Round 63, skytalix-stockfish, 1/2-1/2) plies=154 completer=skytalix occ=[146,150,154] root=153 before the root skyLast={"ply":154,"cp":319} sfSame={"ply":153,"cpForSkytalix":0} A3=true epEarlier=false
+  qe-ABC-204/raw/a4-e1910-baseline/r.pgn#168 (Round 84, stockfish-skytalix, 1/2-1/2) plies=66 completer=skytalix occ=[58,62,66] root=65 before the root skyLast={"ply":66,"cp":224} sfSame={"ply":65,"cpForSkytalix":11} A3=true epEarlier=false
+  qe-ABC-204/raw/a4-e1910-baseline/r.pgn#182 (Round 91, stockfish-skytalix, 1/2-1/2) plies=112 completer=skytalix occ=[104,108,112] root=111 before the root skyLast={"ply":112,"cp":0} sfSame={"ply":111,"cpForSkytalix":0} A3=false epEarlier=false
+  qe-ABC-204/raw/a4-e1910-baseline/r.pgn#193 (Round 97, skytalix-stockfish, 1/2-1/2) plies=71 completer=skytalix occ=[63,67,71] root=70 before the root skyLast={"ply":71,"cp":120} sfSame={"ply":70,"cpForSkytalix":0} A3=true epEarlier=false
+  qe-ABC-204/raw/a4-e1650/r.pgn#8 (Round 4, stockfish-skytalix, 1/2-1/2) plies=71 completer=stockfish occ=[63,67,71] root=69 before the root skyLast={"ply":70,"cp":313} sfSame={"ply":71,"cpForSkytalix":0} A3=true epEarlier=false
+  qe-ABC-204/raw/a4-e1650/r.pgn#31 (Round 16, skytalix-stockfish, 1/2-1/2) plies=80 completer=stockfish occ=[68,72,80] root=78 before the root skyLast={"ply":79,"cp":253} sfSame={"ply":80,"cpForSkytalix":0} A3=true epEarlier=false
+  qe-ABC-204/raw/a4-e1650/r.pgn#36 (Round 18, stockfish-skytalix, 1/2-1/2) plies=174 completer=skytalix occ=[152,170,174] root=173 before the root skyLast={"ply":174,"cp":202} sfSame={"ply":173,"cpForSkytalix":0} A3=true epEarlier=false
+  qe-ABC-204/raw/a4-e1650/r.pgn#93 (Round 47, skytalix-stockfish, 1/2-1/2) plies=68 completer=stockfish occ=[60,64,68] root=66 before the root skyLast={"ply":67,"cp":0} sfSame={"ply":68,"cpForSkytalix":0} A3=false epEarlier=false
+  qe-ABC-204/raw/a4-e1650/r.pgn#115 (Round 58, skytalix-stockfish, 1/2-1/2) plies=175 completer=skytalix occ=[167,171,175] root=174 before the root skyLast={"ply":175,"cp":329} sfSame={"ply":174,"cpForSkytalix":0} A3=true epEarlier=false
+  qe-ABC-204/raw/a4-e1650/r.pgn#130 (Round 65, stockfish-skytalix, 1/2-1/2) plies=119 completer=skytalix occ=[105,115,119] root=118 before the root skyLast={"ply":119,"cp":184} sfSame={"ply":118,"cpForSkytalix":8} A3=true epEarlier=false
+  qe-epic008-close/raw/r1/r.pgn#63 (Round 32, skytalix-stockfish, 1/2-1/2) plies=126 completer=skytalix occ=[104,116,126] root=125 before the root skyLast={"ply":126,"cp":109} sfSame={"ply":125,"cpForSkytalix":0} A3=true epEarlier=false
+  qe-epic008-close/raw/r1/r.pgn#64 (Round 32, stockfish-skytalix, 1/2-1/2) plies=175 completer=skytalix occ=[165,169,175] root=174 before the root skyLast={"ply":175,"cp":142} sfSame={"ply":174,"cpForSkytalix":0} A3=true epEarlier=false
+  qe-epic008-close/raw/r1/r.pgn#74 (Round 37, stockfish-skytalix, 1/2-1/2) plies=45 completer=skytalix occ=[37,41,45] root=44 before the root skyLast={"ply":45,"cp":110} sfSame={"ply":44,"cpForSkytalix":0} A3=true epEarlier=false
+  qe-epic008-close/raw/r1/r.pgn#76 (Round 38, stockfish-skytalix, 1/2-1/2) plies=166 completer=stockfish occ=[158,162,166] root=164 before the root skyLast={"ply":165,"cp":363} sfSame={"ply":166,"cpForSkytalix":0} A3=true epEarlier=false
+  qe-epic008-close/raw/r1/r.pgn#101 (Round 51, skytalix-stockfish, 1/2-1/2) plies=119 completer=skytalix occ=[111,115,119] root=118 before the root skyLast={"ply":119,"cp":40} sfSame={"ply":118,"cpForSkytalix":0} A3=false epEarlier=false
+  qe-epic008-close/raw/r1/r.pgn#108 (Round 54, stockfish-skytalix, 1/2-1/2) plies=46 completer=skytalix occ=[38,42,46] root=45 before the root skyLast={"ply":46,"cp":0} sfSame={"ply":45,"cpForSkytalix":0} A3=false epEarlier=false
+  qe-epic008-close/raw/r1/r.pgn#179 (Round 90, skytalix-stockfish, 1/2-1/2) plies=88 completer=stockfish occ=[80,84,88] root=86 before the root skyLast={"ply":87,"cp":70} sfSame={"ply":88,"cpForSkytalix":0} A3=false epEarlier=false
+  qe-epic008-close/raw/r2/r.pgn#1 (Round 1, skytalix-stockfish, 1/2-1/2) plies=130 completer=stockfish occ=[122,126,130] root=128 before the root skyLast={"ply":129,"cp":298} sfSame={"ply":130,"cpForSkytalix":0} A3=true epEarlier=false
+  qe-epic008-close/raw/r2/r.pgn#18 (Round 9, stockfish-skytalix, 1/2-1/2) plies=91 completer=stockfish occ=[83,87,91] root=89 before the root skyLast={"ply":90,"cp":268} sfSame={"ply":91,"cpForSkytalix":0} A3=true epEarlier=false
+  qe-epic008-close/raw/r2/r.pgn#53 (Round 27, skytalix-stockfish, 1/2-1/2) plies=76 completer=skytalix occ=[68,72,76] root=75 before the root skyLast={"ply":76,"cp":312} sfSame={"ply":75,"cpForSkytalix":222} A3=true epEarlier=false
+  qe-epic008-close/raw/r2/r.pgn#67 (Round 34, skytalix-stockfish, 1/2-1/2) plies=102 completer=skytalix occ=[94,98,102] root=101 before the root skyLast={"ply":102,"cp":0} sfSame={"ply":101,"cpForSkytalix":0} A3=false epEarlier=false
+  qe-epic008-close/raw/r2/r.pgn#127 (Round 64, skytalix-stockfish, 1/2-1/2) plies=98 completer=skytalix occ=[90,94,98] root=97 before the root skyLast={"ply":98,"cp":92} sfSame={"ply":97,"cpForSkytalix":0} A3=false epEarlier=false
+  qe-epic008-close/raw/r2/r.pgn#175 (Round 88, skytalix-stockfish, 1/2-1/2) plies=68 completer=stockfish occ=[60,64,68] root=66 before the root skyLast={"ply":67,"cp":242} sfSame={"ply":68,"cpForSkytalix":0} A3=true epEarlier=false
+  qe-epic008-close/raw/r2/r.pgn#183 (Round 92, skytalix-stockfish, 1/2-1/2) plies=252 completer=stockfish occ=[244,248,252] root=250 before the root skyLast={"ply":251,"cp":258} sfSame={"ply":252,"cpForSkytalix":0} A3=true epEarlier=false
+
+A3 strict games (D and R):
+  qe-ABC-204/raw/a4-e1910-baseline/r.pgn#10 (Round 5, stockfish-skytalix, 1/2-1/2) plies=64 completer=skytalix skyLast={"ply":64,"cp":766} sfSame={"ply":63,"cpForSkytalix":418}
+  qe-ABC-204/raw/a4-e1910-baseline/r.pgn#27 (Round 14, skytalix-stockfish, 1/2-1/2) plies=125 completer=skytalix skyLast={"ply":125,"cp":300} sfSame={"ply":124,"cpForSkytalix":0}
+  qe-ABC-204/raw/a4-e1910-baseline/r.pgn#30 (Round 15, stockfish-skytalix, 1/2-1/2) plies=172 completer=skytalix skyLast={"ply":172,"cp":305} sfSame={"ply":171,"cpForSkytalix":0}
+  qe-ABC-204/raw/a4-e1910-baseline/r.pgn#60 (Round 30, stockfish-skytalix, 1/2-1/2) plies=27 completer=skytalix skyLast={"ply":27,"cp":215} sfSame={"ply":26,"cpForSkytalix":125}
+  qe-ABC-204/raw/a4-e1910-baseline/r.pgn#83 (Round 42, skytalix-stockfish, 1/2-1/2) plies=32 completer=stockfish skyLast={"ply":31,"cp":125} sfSame={"ply":32,"cpForSkytalix":0}
+  qe-ABC-204/raw/a4-e1910-baseline/r.pgn#84 (Round 42, stockfish-skytalix, 1/2-1/2) plies=176 completer=skytalix skyLast={"ply":176,"cp":294} sfSame={"ply":175,"cpForSkytalix":0}
+  qe-ABC-204/raw/a4-e1910-baseline/r.pgn#85 (Round 43, skytalix-stockfish, 1/2-1/2) plies=39 completer=skytalix skyLast={"ply":39,"cp":629} sfSame={"ply":38,"cpForSkytalix":232}
+  qe-ABC-204/raw/a4-e1910-baseline/r.pgn#104 (Round 52, stockfish-skytalix, 1/2-1/2) plies=158 completer=skytalix skyLast={"ply":158,"cp":331} sfSame={"ply":157,"cpForSkytalix":0}
+  qe-ABC-204/raw/a4-e1910-baseline/r.pgn#105 (Round 53, skytalix-stockfish, 1/2-1/2) plies=138 completer=stockfish skyLast={"ply":137,"cp":168} sfSame={"ply":138,"cpForSkytalix":0}
+  qe-ABC-204/raw/a4-e1910-baseline/r.pgn#125 (Round 63, skytalix-stockfish, 1/2-1/2) plies=154 completer=skytalix skyLast={"ply":154,"cp":319} sfSame={"ply":153,"cpForSkytalix":0}
+  qe-ABC-204/raw/a4-e1910-baseline/r.pgn#168 (Round 84, stockfish-skytalix, 1/2-1/2) plies=66 completer=skytalix skyLast={"ply":66,"cp":224} sfSame={"ply":65,"cpForSkytalix":11}
+  qe-ABC-204/raw/a4-e1910-baseline/r.pgn#193 (Round 97, skytalix-stockfish, 1/2-1/2) plies=71 completer=skytalix skyLast={"ply":71,"cp":120} sfSame={"ply":70,"cpForSkytalix":0}
+  qe-ABC-204/raw/a4-e1650/r.pgn#8 (Round 4, stockfish-skytalix, 1/2-1/2) plies=71 completer=stockfish skyLast={"ply":70,"cp":313} sfSame={"ply":71,"cpForSkytalix":0}
+  qe-ABC-204/raw/a4-e1650/r.pgn#31 (Round 16, skytalix-stockfish, 1/2-1/2) plies=80 completer=stockfish skyLast={"ply":79,"cp":253} sfSame={"ply":80,"cpForSkytalix":0}
+  qe-ABC-204/raw/a4-e1650/r.pgn#36 (Round 18, stockfish-skytalix, 1/2-1/2) plies=174 completer=skytalix skyLast={"ply":174,"cp":202} sfSame={"ply":173,"cpForSkytalix":0}
+  qe-ABC-204/raw/a4-e1650/r.pgn#115 (Round 58, skytalix-stockfish, 1/2-1/2) plies=175 completer=skytalix skyLast={"ply":175,"cp":329} sfSame={"ply":174,"cpForSkytalix":0}
+  qe-ABC-204/raw/a4-e1650/r.pgn#130 (Round 65, stockfish-skytalix, 1/2-1/2) plies=119 completer=skytalix skyLast={"ply":119,"cp":184} sfSame={"ply":118,"cpForSkytalix":8}
+  qe-epic008-close/raw/r1/r.pgn#63 (Round 32, skytalix-stockfish, 1/2-1/2) plies=126 completer=skytalix skyLast={"ply":126,"cp":109} sfSame={"ply":125,"cpForSkytalix":0}
+  qe-epic008-close/raw/r1/r.pgn#64 (Round 32, stockfish-skytalix, 1/2-1/2) plies=175 completer=skytalix skyLast={"ply":175,"cp":142} sfSame={"ply":174,"cpForSkytalix":0}
+  qe-epic008-close/raw/r1/r.pgn#74 (Round 37, stockfish-skytalix, 1/2-1/2) plies=45 completer=skytalix skyLast={"ply":45,"cp":110} sfSame={"ply":44,"cpForSkytalix":0}
+  qe-epic008-close/raw/r1/r.pgn#76 (Round 38, stockfish-skytalix, 1/2-1/2) plies=166 completer=stockfish skyLast={"ply":165,"cp":363} sfSame={"ply":166,"cpForSkytalix":0}
+  qe-epic008-close/raw/r2/r.pgn#1 (Round 1, skytalix-stockfish, 1/2-1/2) plies=130 completer=stockfish skyLast={"ply":129,"cp":298} sfSame={"ply":130,"cpForSkytalix":0}
+  qe-epic008-close/raw/r2/r.pgn#18 (Round 9, stockfish-skytalix, 1/2-1/2) plies=91 completer=stockfish skyLast={"ply":90,"cp":268} sfSame={"ply":91,"cpForSkytalix":0}
+  qe-epic008-close/raw/r2/r.pgn#53 (Round 27, skytalix-stockfish, 1/2-1/2) plies=76 completer=skytalix skyLast={"ply":76,"cp":312} sfSame={"ply":75,"cpForSkytalix":222}
+  qe-epic008-close/raw/r2/r.pgn#175 (Round 88, skytalix-stockfish, 1/2-1/2) plies=68 completer=stockfish skyLast={"ply":67,"cp":242} sfSame={"ply":68,"cpForSkytalix":0}
+  qe-epic008-close/raw/r2/r.pgn#183 (Round 92, skytalix-stockfish, 1/2-1/2) plies=252 completer=stockfish skyLast={"ply":251,"cp":258} sfSame={"ply":252,"cpForSkytalix":0}
+  qe-ABC-204/raw/a5/d.pgn#10 (Round 5, base-skytalix, 1/2-1/2) plies=54 completer=skytalix skyLast={"ply":54,"cp":156} sfSame=null
+  qe-ABC-204/raw/a5/d.pgn#16 (Round 8, base-skytalix, 1/2-1/2) plies=88 completer=skytalix skyLast={"ply":88,"cp":115} sfSame=null
+  qe-ABC-204/raw/a5/d.pgn#17 (Round 9, skytalix-base, 1/2-1/2) plies=244 completer=base skyLast={"ply":243,"cp":236} sfSame=null
+  qe-ABC-204/raw/a5/d.pgn#31 (Round 16, skytalix-base, 1/2-1/2) plies=154 completer=base skyLast={"ply":153,"cp":112} sfSame=null
+  qe-ABC-204/raw/a5/d.pgn#34 (Round 17, base-skytalix, 1/2-1/2) plies=133 completer=base skyLast={"ply":132,"cp":460} sfSame=null
+  qe-ABC-204/raw/a5/d.pgn#35 (Round 18, skytalix-base, 1/2-1/2) plies=70 completer=base skyLast={"ply":69,"cp":231} sfSame=null
+  qe-ABC-204/raw/a5/d.pgn#48 (Round 24, base-skytalix, 1/2-1/2) plies=71 completer=skytalix skyLast={"ply":71,"cp":168} sfSame=null
+  qe-ABC-204/raw/a5/d.pgn#51 (Round 26, skytalix-base, 1/2-1/2) plies=103 completer=base skyLast={"ply":102,"cp":180} sfSame=null
+  qe-ABC-204/raw/a5/d.pgn#57 (Round 29, skytalix-base, 1/2-1/2) plies=114 completer=skytalix skyLast={"ply":114,"cp":285} sfSame=null
+  qe-ABC-204/raw/a5/d.pgn#63 (Round 32, skytalix-base, 1/2-1/2) plies=97 completer=base skyLast={"ply":96,"cp":252} sfSame=null
+  qe-ABC-204/raw/a5/d.pgn#64 (Round 32, base-skytalix, 1/2-1/2) plies=117 completer=skytalix skyLast={"ply":117,"cp":234} sfSame=null
+  qe-ABC-204/raw/a5/d.pgn#72 (Round 36, base-skytalix, 1/2-1/2) plies=124 completer=base skyLast={"ply":123,"cp":102} sfSame=null
+  qe-ABC-204/raw/a5/d.pgn#74 (Round 37, base-skytalix, 1/2-1/2) plies=88 completer=base skyLast={"ply":87,"cp":160} sfSame=null
+  qe-ABC-204/raw/a5/d.pgn#81 (Round 41, skytalix-base, 1/2-1/2) plies=96 completer=base skyLast={"ply":95,"cp":252} sfSame=null
+  qe-ABC-204/raw/a5/d.pgn#83 (Round 42, skytalix-base, 1/2-1/2) plies=94 completer=base skyLast={"ply":93,"cp":126} sfSame=null
+  qe-ABC-204/raw/a5/d.pgn#85 (Round 43, skytalix-base, 1/2-1/2) plies=85 completer=skytalix skyLast={"ply":85,"cp":345} sfSame=null
+  qe-ABC-204/raw/a5/d.pgn#98 (Round 49, base-skytalix, 1/2-1/2) plies=150 completer=skytalix skyLast={"ply":150,"cp":923} sfSame=null
+  qe-ABC-207/raw/d1/d.pgn#2 (Round 1, base-skytalix, 1/2-1/2) plies=128 completer=skytalix skyLast={"ply":128,"cp":159} sfSame=null
+  qe-ABC-207/raw/d1/d.pgn#12 (Round 6, base-skytalix, 1/2-1/2) plies=87 completer=base skyLast={"ply":86,"cp":185} sfSame=null
+  qe-ABC-207/raw/d1/d.pgn#22 (Round 11, base-skytalix, 1/2-1/2) plies=99 completer=base skyLast={"ply":98,"cp":106} sfSame=null
+  qe-ABC-207/raw/d1/d.pgn#27 (Round 14, skytalix-base, 1/2-1/2) plies=142 completer=base skyLast={"ply":141,"cp":336} sfSame=null
+  qe-ABC-207/raw/d1/d.pgn#28 (Round 14, base-skytalix, 1/2-1/2) plies=123 completer=base skyLast={"ply":122,"cp":555} sfSame=null
+  qe-ABC-207/raw/d1/d.pgn#30 (Round 15, base-skytalix, 1/2-1/2) plies=104 completer=skytalix skyLast={"ply":104,"cp":398} sfSame=null
+  qe-ABC-207/raw/d1/d.pgn#55 (Round 28, skytalix-base, 1/2-1/2) plies=162 completer=skytalix skyLast={"ply":162,"cp":972} sfSame=null
+  qe-ABC-207/raw/d1/d.pgn#57 (Round 29, skytalix-base, 1/2-1/2) plies=122 completer=skytalix skyLast={"ply":122,"cp":208} sfSame=null
+  qe-ABC-207/raw/d1/d.pgn#93 (Round 47, skytalix-base, 1/2-1/2) plies=127 completer=skytalix skyLast={"ply":127,"cp":563} sfSame=null
+  qe-ABC-207/raw/d1/d.pgn#96 (Round 48, base-skytalix, 1/2-1/2) plies=59 completer=base skyLast={"ply":58,"cp":249} sfSame=null
+  qe-ABC-207/raw/d1/d.pgn#100 (Round 50, base-skytalix, 1/2-1/2) plies=102 completer=skytalix skyLast={"ply":102,"cp":256} sfSame=null
+  qe-ABC-207/raw/d1/d.pgn#104 (Round 52, base-skytalix, 1/2-1/2) plies=136 completer=skytalix skyLast={"ply":136,"cp":142} sfSame=null
+  qe-ABC-207/raw/d1/d.pgn#105 (Round 53, skytalix-base, 1/2-1/2) plies=70 completer=base skyLast={"ply":69,"cp":131} sfSame=null
+  qe-ABC-207/raw/d1/d.pgn#111 (Round 56, skytalix-base, 1/2-1/2) plies=83 completer=skytalix skyLast={"ply":83,"cp":101} sfSame=null
+  qe-ABC-207/raw/d1/d.pgn#136 (Round 68, base-skytalix, 1/2-1/2) plies=163 completer=skytalix skyLast={"ply":163,"cp":133} sfSame=null
+  qe-ABC-207/raw/d1/d.pgn#161 (Round 81, skytalix-base, 1/2-1/2) plies=109 completer=skytalix skyLast={"ply":109,"cp":243} sfSame=null
+  qe-ABC-207/raw/d1/d.pgn#162 (Round 81, base-skytalix, 1/2-1/2) plies=135 completer=base skyLast={"ply":134,"cp":185} sfSame=null
+  qe-ABC-207/raw/d1/d.pgn#163 (Round 82, skytalix-base, 1/2-1/2) plies=130 completer=base skyLast={"ply":129,"cp":942} sfSame=null
+  qe-ABC-207/raw/d1/d.pgn#169 (Round 85, skytalix-base, 1/2-1/2) plies=36 completer=base skyLast={"ply":35,"cp":156} sfSame=null
+  qe-ABC-207/raw/d1/d.pgn#173 (Round 87, skytalix-base, 1/2-1/2) plies=68 completer=base skyLast={"ply":67,"cp":131} sfSame=null
+  qe-ABC-207/raw/d1/d.pgn#182 (Round 91, base-skytalix, 1/2-1/2) plies=148 completer=skytalix skyLast={"ply":148,"cp":183} sfSame=null
+  qe-ABC-207/raw/d1/d.pgn#188 (Round 94, base-skytalix, 1/2-1/2) plies=71 completer=base skyLast={"ply":70,"cp":100} sfSame=null
+  qe-ABC-207/raw/d1/d.pgn#193 (Round 97, skytalix-base, 1/2-1/2) plies=62 completer=base skyLast={"ply":61,"cp":423} sfSame=null
+  qe-ABC-207/raw/d1/d.pgn#222 (Round 111, base-skytalix, 1/2-1/2) plies=99 completer=base skyLast={"ply":98,"cp":106} sfSame=null
+  qe-ABC-207/raw/d1/d.pgn#227 (Round 114, skytalix-base, 1/2-1/2) plies=114 completer=base skyLast={"ply":113,"cp":437} sfSame=null
+  qe-ABC-207/raw/d1/d.pgn#228 (Round 114, base-skytalix, 1/2-1/2) plies=107 completer=base skyLast={"ply":106,"cp":109} sfSame=null
+  qe-ABC-207/raw/d1/d.pgn#230 (Round 115, base-skytalix, 1/2-1/2) plies=104 completer=skytalix skyLast={"ply":104,"cp":398} sfSame=null
+  qe-ABC-207/raw/d1/d.pgn#293 (Round 147, skytalix-base, 1/2-1/2) plies=119 completer=skytalix skyLast={"ply":119,"cp":565} sfSame=null
+  qe-ABC-207/raw/d1/d.pgn#300 (Round 150, base-skytalix, 1/2-1/2) plies=101 completer=base skyLast={"ply":100,"cp":250} sfSame=null
+  qe-ABC-207/raw/d1/d.pgn#305 (Round 153, skytalix-base, 1/2-1/2) plies=90 completer=base skyLast={"ply":89,"cp":354} sfSame=null
+  qe-ABC-207/raw/d1/d.pgn#311 (Round 156, skytalix-base, 1/2-1/2) plies=83 completer=skytalix skyLast={"ply":83,"cp":101} sfSame=null
+  qe-ABC-207/raw/d1/d.pgn#332 (Round 166, base-skytalix, 1/2-1/2) plies=100 completer=base skyLast={"ply":99,"cp":153} sfSame=null
+  qe-ABC-207/raw/d1/d.pgn#335 (Round 168, skytalix-base, 1/2-1/2) plies=112 completer=skytalix skyLast={"ply":112,"cp":264} sfSame=null
+  qe-ABC-207/raw/d1/d.pgn#336 (Round 168, base-skytalix, 1/2-1/2) plies=127 completer=skytalix skyLast={"ply":127,"cp":261} sfSame=null
+  qe-ABC-207/raw/d1/d.pgn#373 (Round 187, skytalix-base, 1/2-1/2) plies=68 completer=base skyLast={"ply":67,"cp":131} sfSame=null
+  qe-ABC-207/raw/d1/d.pgn#388 (Round 194, base-skytalix, 1/2-1/2) plies=80 completer=skytalix skyLast={"ply":80,"cp":150} sfSame=null
+  qe-ABC-207/raw/d1/d.pgn#393 (Round 197, skytalix-base, 1/2-1/2) plies=62 completer=base skyLast={"ply":61,"cp":423} sfSame=null
+  qe-ABC-207/raw/d1/d.pgn#395 (Round 198, skytalix-base, 1/2-1/2) plies=79 completer=skytalix skyLast={"ply":79,"cp":480} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#16 (Round 8, base-skytalix, 1/2-1/2) plies=90 completer=skytalix skyLast={"ply":90,"cp":217} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#21 (Round 11, skytalix-base, 1/2-1/2) plies=105 completer=skytalix skyLast={"ply":105,"cp":145} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#22 (Round 11, base-skytalix, 1/2-1/2) plies=99 completer=base skyLast={"ply":98,"cp":106} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#27 (Round 14, skytalix-base, 1/2-1/2) plies=90 completer=base skyLast={"ply":89,"cp":253} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#29 (Round 15, skytalix-base, 1/2-1/2) plies=116 completer=base skyLast={"ply":115,"cp":420} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#54 (Round 27, base-skytalix, 1/2-1/2) plies=165 completer=skytalix skyLast={"ply":165,"cp":335} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#64 (Round 32, base-skytalix, 1/2-1/2) plies=127 completer=skytalix skyLast={"ply":127,"cp":147} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#81 (Round 41, skytalix-base, 1/2-1/2) plies=80 completer=base skyLast={"ply":79,"cp":147} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#96 (Round 48, base-skytalix, 1/2-1/2) plies=91 completer=base skyLast={"ply":90,"cp":306} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#100 (Round 50, base-skytalix, 1/2-1/2) plies=107 completer=base skyLast={"ply":106,"cp":138} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#103 (Round 52, skytalix-base, 1/2-1/2) plies=104 completer=base skyLast={"ply":103,"cp":311} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#105 (Round 53, skytalix-base, 1/2-1/2) plies=75 completer=skytalix skyLast={"ply":75,"cp":174} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#111 (Round 56, skytalix-base, 1/2-1/2) plies=155 completer=skytalix skyLast={"ply":155,"cp":161} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#118 (Round 59, base-skytalix, 1/2-1/2) plies=84 completer=skytalix skyLast={"ply":84,"cp":227} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#129 (Round 65, skytalix-base, 1/2-1/2) plies=102 completer=skytalix skyLast={"ply":102,"cp":141} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#132 (Round 66, base-skytalix, 1/2-1/2) plies=99 completer=skytalix skyLast={"ply":99,"cp":101} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#136 (Round 68, base-skytalix, 1/2-1/2) plies=166 completer=base skyLast={"ply":165,"cp":131} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#176 (Round 88, base-skytalix, 1/2-1/2) plies=227 completer=base skyLast={"ply":226,"cp":970} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#186 (Round 93, base-skytalix, 1/2-1/2) plies=82 completer=skytalix skyLast={"ply":82,"cp":158} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#187 (Round 94, skytalix-base, 1/2-1/2) plies=103 completer=skytalix skyLast={"ply":103,"cp":282} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#193 (Round 97, skytalix-base, 1/2-1/2) plies=62 completer=base skyLast={"ply":61,"cp":423} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#195 (Round 98, skytalix-base, 1/2-1/2) plies=79 completer=skytalix skyLast={"ply":79,"cp":480} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#200 (Round 100, base-skytalix, 1/2-1/2) plies=75 completer=base skyLast={"ply":74,"cp":113} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#214 (Round 107, base-skytalix, 1/2-1/2) plies=161 completer=base skyLast={"ply":160,"cp":1000} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#216 (Round 108, base-skytalix, 1/2-1/2) plies=90 completer=skytalix skyLast={"ply":90,"cp":217} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#222 (Round 111, base-skytalix, 1/2-1/2) plies=99 completer=base skyLast={"ply":98,"cp":106} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#227 (Round 114, skytalix-base, 1/2-1/2) plies=114 completer=base skyLast={"ply":113,"cp":437} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#254 (Round 127, base-skytalix, 1/2-1/2) plies=171 completer=skytalix skyLast={"ply":171,"cp":550} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#274 (Round 137, base-skytalix, 1/2-1/2) plies=120 completer=base skyLast={"ply":119,"cp":111} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#296 (Round 148, base-skytalix, 1/2-1/2) plies=93 completer=base skyLast={"ply":92,"cp":271} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#299 (Round 150, skytalix-base, 1/2-1/2) plies=48 completer=base skyLast={"ply":47,"cp":134} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#303 (Round 152, skytalix-base, 1/2-1/2) plies=104 completer=base skyLast={"ply":103,"cp":311} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#332 (Round 166, base-skytalix, 1/2-1/2) plies=103 completer=skytalix skyLast={"ply":103,"cp":421} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#336 (Round 168, base-skytalix, 1/2-1/2) plies=155 completer=skytalix skyLast={"ply":155,"cp":131} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#341 (Round 171, skytalix-base, 1/2-1/2) plies=128 completer=skytalix skyLast={"ply":128,"cp":555} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#380 (Round 190, base-skytalix, 1/2-1/2) plies=111 completer=base skyLast={"ply":110,"cp":125} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#387 (Round 194, skytalix-base, 1/2-1/2) plies=116 completer=base skyLast={"ply":115,"cp":282} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#388 (Round 194, base-skytalix, 1/2-1/2) plies=80 completer=skytalix skyLast={"ply":80,"cp":150} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#393 (Round 197, skytalix-base, 1/2-1/2) plies=62 completer=base skyLast={"ply":61,"cp":423} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#395 (Round 198, skytalix-base, 1/2-1/2) plies=79 completer=skytalix skyLast={"ply":79,"cp":480} sfSame=null
+  qe-ABC-207/raw/d2/d.pgn#400 (Round 200, base-skytalix, 1/2-1/2) plies=47 completer=base skyLast={"ply":46,"cp":166} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#2 (Round 1, base-skytalix, 1/2-1/2) plies=133 completer=base skyLast={"ply":132,"cp":134} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#17 (Round 9, skytalix-base, 1/2-1/2) plies=147 completer=skytalix skyLast={"ply":147,"cp":1067} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#21 (Round 11, skytalix-base, 1/2-1/2) plies=100 completer=base skyLast={"ply":99,"cp":403} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#26 (Round 13, base-skytalix, 1/2-1/2) plies=88 completer=skytalix skyLast={"ply":88,"cp":172} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#31 (Round 16, skytalix-base, 1/2-1/2) plies=163 completer=skytalix skyLast={"ply":163,"cp":578} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#35 (Round 18, skytalix-base, 1/2-1/2) plies=47 completer=skytalix skyLast={"ply":47,"cp":247} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#45 (Round 23, skytalix-base, 1/2-1/2) plies=92 completer=skytalix skyLast={"ply":92,"cp":124} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#59 (Round 30, skytalix-base, 1/2-1/2) plies=144 completer=skytalix skyLast={"ply":144,"cp":141} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#75 (Round 38, skytalix-base, 1/2-1/2) plies=128 completer=skytalix skyLast={"ply":128,"cp":356} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#79 (Round 40, skytalix-base, 1/2-1/2) plies=67 completer=base skyLast={"ply":66,"cp":210} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#92 (Round 46, base-skytalix, 1/2-1/2) plies=104 completer=skytalix skyLast={"ply":104,"cp":111} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#114 (Round 57, base-skytalix, 1/2-1/2) plies=149 completer=base skyLast={"ply":148,"cp":518} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#119 (Round 60, skytalix-base, 1/2-1/2) plies=98 completer=base skyLast={"ply":97,"cp":224} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#120 (Round 60, base-skytalix, 1/2-1/2) plies=117 completer=base skyLast={"ply":116,"cp":124} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#122 (Round 61, base-skytalix, 1/2-1/2) plies=139 completer=skytalix skyLast={"ply":139,"cp":469} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#138 (Round 69, base-skytalix, 1/2-1/2) plies=146 completer=base skyLast={"ply":145,"cp":194} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#141 (Round 71, skytalix-base, 1/2-1/2) plies=174 completer=skytalix skyLast={"ply":174,"cp":122} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#142 (Round 71, base-skytalix, 1/2-1/2) plies=129 completer=skytalix skyLast={"ply":129,"cp":318} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#148 (Round 74, base-skytalix, 1/2-1/2) plies=72 completer=base skyLast={"ply":71,"cp":240} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#152 (Round 76, base-skytalix, 1/2-1/2) plies=231 completer=skytalix skyLast={"ply":231,"cp":1045} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#165 (Round 83, skytalix-base, 1/2-1/2) plies=74 completer=base skyLast={"ply":73,"cp":139} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#172 (Round 86, base-skytalix, 1/2-1/2) plies=87 completer=base skyLast={"ply":86,"cp":504} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#173 (Round 87, skytalix-base, 1/2-1/2) plies=142 completer=base skyLast={"ply":141,"cp":133} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#178 (Round 89, base-skytalix, 1/2-1/2) plies=122 completer=skytalix skyLast={"ply":122,"cp":483} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#183 (Round 92, skytalix-base, 1/2-1/2) plies=104 completer=base skyLast={"ply":103,"cp":139} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#190 (Round 95, base-skytalix, 1/2-1/2) plies=80 completer=skytalix skyLast={"ply":80,"cp":206} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#191 (Round 96, skytalix-base, 1/2-1/2) plies=132 completer=base skyLast={"ply":131,"cp":171} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#192 (Round 96, base-skytalix, 1/2-1/2) plies=108 completer=skytalix skyLast={"ply":108,"cp":206} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#195 (Round 98, skytalix-base, 1/2-1/2) plies=215 completer=skytalix skyLast={"ply":215,"cp":996} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#196 (Round 98, base-skytalix, 1/2-1/2) plies=79 completer=base skyLast={"ply":78,"cp":204} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#198 (Round 99, base-skytalix, 1/2-1/2) plies=92 completer=skytalix skyLast={"ply":92,"cp":106} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#208 (Round 104, base-skytalix, 1/2-1/2) plies=90 completer=skytalix skyLast={"ply":90,"cp":209} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#209 (Round 105, skytalix-base, 1/2-1/2) plies=96 completer=base skyLast={"ply":95,"cp":133} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#216 (Round 108, base-skytalix, 1/2-1/2) plies=151 completer=base skyLast={"ply":150,"cp":460} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#217 (Round 109, skytalix-base, 1/2-1/2) plies=147 completer=skytalix skyLast={"ply":147,"cp":1067} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#221 (Round 111, skytalix-base, 1/2-1/2) plies=102 completer=base skyLast={"ply":101,"cp":402} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#228 (Round 114, base-skytalix, 1/2-1/2) plies=80 completer=skytalix skyLast={"ply":80,"cp":391} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#231 (Round 116, skytalix-base, 1/2-1/2) plies=163 completer=skytalix skyLast={"ply":163,"cp":578} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#235 (Round 118, skytalix-base, 1/2-1/2) plies=47 completer=skytalix skyLast={"ply":47,"cp":247} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#250 (Round 125, base-skytalix, 1/2-1/2) plies=76 completer=base skyLast={"ply":75,"cp":166} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#258 (Round 129, base-skytalix, 1/2-1/2) plies=88 completer=base skyLast={"ply":87,"cp":244} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#260 (Round 130, base-skytalix, 1/2-1/2) plies=111 completer=skytalix skyLast={"ply":111,"cp":206} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#266 (Round 133, base-skytalix, 1/2-1/2) plies=118 completer=base skyLast={"ply":117,"cp":571} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#275 (Round 138, skytalix-base, 1/2-1/2) plies=89 completer=base skyLast={"ply":88,"cp":681} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#276 (Round 138, base-skytalix, 1/2-1/2) plies=152 completer=base skyLast={"ply":151,"cp":407} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#292 (Round 146, base-skytalix, 1/2-1/2) plies=104 completer=skytalix skyLast={"ply":104,"cp":111} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#302 (Round 151, base-skytalix, 1/2-1/2) plies=112 completer=skytalix skyLast={"ply":112,"cp":445} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#308 (Round 154, base-skytalix, 1/2-1/2) plies=119 completer=base skyLast={"ply":118,"cp":680} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#315 (Round 158, skytalix-base, 1/2-1/2) plies=119 completer=skytalix skyLast={"ply":119,"cp":156} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#319 (Round 160, skytalix-base, 1/2-1/2) plies=98 completer=base skyLast={"ply":97,"cp":224} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#320 (Round 160, base-skytalix, 1/2-1/2) plies=117 completer=base skyLast={"ply":116,"cp":124} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#329 (Round 165, skytalix-base, 1/2-1/2) plies=77 completer=base skyLast={"ply":76,"cp":247} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#334 (Round 167, base-skytalix, 1/2-1/2) plies=77 completer=skytalix skyLast={"ply":77,"cp":449} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#341 (Round 171, skytalix-base, 1/2-1/2) plies=124 completer=skytalix skyLast={"ply":124,"cp":137} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#342 (Round 171, base-skytalix, 1/2-1/2) plies=126 completer=base skyLast={"ply":125,"cp":321} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#352 (Round 176, base-skytalix, 1/2-1/2) plies=231 completer=skytalix skyLast={"ply":231,"cp":1045} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#354 (Round 177, base-skytalix, 1/2-1/2) plies=183 completer=skytalix skyLast={"ply":183,"cp":111} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#356 (Round 178, base-skytalix, 1/2-1/2) plies=139 completer=skytalix skyLast={"ply":139,"cp":295} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#365 (Round 183, skytalix-base, 1/2-1/2) plies=135 completer=skytalix skyLast={"ply":135,"cp":135} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#367 (Round 184, skytalix-base, 1/2-1/2) plies=87 completer=skytalix skyLast={"ply":87,"cp":269} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#370 (Round 185, base-skytalix, 1/2-1/2) plies=83 completer=base skyLast={"ply":82,"cp":230} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#377 (Round 189, skytalix-base, 1/2-1/2) plies=60 completer=base skyLast={"ply":59,"cp":182} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#380 (Round 190, base-skytalix, 1/2-1/2) plies=109 completer=base skyLast={"ply":108,"cp":107} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#383 (Round 192, skytalix-base, 1/2-1/2) plies=174 completer=base skyLast={"ply":173,"cp":362} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#389 (Round 195, skytalix-base, 1/2-1/2) plies=98 completer=base skyLast={"ply":97,"cp":261} sfSame=null
+  qe-ABC-208/raw/d1/d.pgn#398 (Round 199, base-skytalix, 1/2-1/2) plies=113 completer=base skyLast={"ply":112,"cp":618} sfSame=null
+  qe-ABC-209/raw/d1/d.pgn#4 (Round 2, base-skytalix, 1/2-1/2) plies=111 completer=base skyLast={"ply":110,"cp":193} sfSame=null
+  qe-ABC-209/raw/d1/d.pgn#6 (Round 3, base-skytalix, 1/2-1/2) plies=220 completer=skytalix skyLast={"ply":220,"cp":601} sfSame=null
+  qe-ABC-209/raw/d1/d.pgn#35 (Round 18, skytalix-base, 1/2-1/2) plies=164 completer=base skyLast={"ply":163,"cp":260} sfSame=null
+  qe-ABC-209/raw/d1/d.pgn#36 (Round 18, base-skytalix, 1/2-1/2) plies=84 completer=skytalix skyLast={"ply":84,"cp":262} sfSame=null
+  qe-ABC-209/raw/d1/d.pgn#39 (Round 20, skytalix-base, 1/2-1/2) plies=154 completer=base skyLast={"ply":153,"cp":1063} sfSame=null
+  qe-ABC-209/raw/d1/d.pgn#48 (Round 24, base-skytalix, 1/2-1/2) plies=197 completer=skytalix skyLast={"ply":197,"cp":1043} sfSame=null
+  qe-ABC-209/raw/d1/d.pgn#53 (Round 27, skytalix-base, 1/2-1/2) plies=151 completer=base skyLast={"ply":150,"cp":187} sfSame=null
+  qe-ABC-209/raw/d1/d.pgn#54 (Round 27, base-skytalix, 1/2-1/2) plies=192 completer=base skyLast={"ply":191,"cp":583} sfSame=null
+  qe-ABC-209/raw/d1/d.pgn#56 (Round 28, base-skytalix, 1/2-1/2) plies=76 completer=base skyLast={"ply":75,"cp":119} sfSame=null
+  qe-ABC-209/raw/d1/d.pgn#64 (Round 32, base-skytalix, 1/2-1/2) plies=175 completer=skytalix skyLast={"ply":175,"cp":1104} sfSame=null
+  qe-ABC-209/raw/d1/d.pgn#102 (Round 51, base-skytalix, 1/2-1/2) plies=111 completer=base skyLast={"ply":110,"cp":121} sfSame=null
+  qe-ABC-209/raw/d1/d.pgn#107 (Round 54, skytalix-base, 1/2-1/2) plies=137 completer=skytalix skyLast={"ply":137,"cp":830} sfSame=null
+  qe-ABC-209/raw/d1/d.pgn#115 (Round 58, skytalix-base, 1/2-1/2) plies=198 completer=base skyLast={"ply":197,"cp":375} sfSame=null
+  qe-ABC-209/raw/d1/d.pgn#131 (Round 66, skytalix-base, 1/2-1/2) plies=116 completer=skytalix skyLast={"ply":116,"cp":130} sfSame=null
+  qe-ABC-209/raw/d1/d.pgn#152 (Round 76, base-skytalix, 1/2-1/2) plies=187 completer=skytalix skyLast={"ply":187,"cp":137} sfSame=null
+  qe-ABC-209/raw/d1/d.pgn#154 (Round 77, base-skytalix, 1/2-1/2) plies=102 completer=base skyLast={"ply":101,"cp":209} sfSame=null
+  qe-ABC-209/raw/d1/d.pgn#182 (Round 91, base-skytalix, 1/2-1/2) plies=138 completer=skytalix skyLast={"ply":138,"cp":152} sfSame=null
+  qe-ABC-209/raw/d1/d.pgn#183 (Round 92, skytalix-base, 1/2-1/2) plies=101 completer=skytalix skyLast={"ply":101,"cp":105} sfSame=null
+  qe-ABC-209/raw/d1/d.pgn#193 (Round 97, skytalix-base, 1/2-1/2) plies=133 completer=skytalix skyLast={"ply":133,"cp":383} sfSame=null
+  qe-ABC-209/raw/d1/d.pgn#198 (Round 99, base-skytalix, 1/2-1/2) plies=134 completer=skytalix skyLast={"ply":134,"cp":276} sfSame=null
+  qe-ABC-209/raw/d1/d.pgn#211 (Round 106, skytalix-base, 1/2-1/2) plies=53 completer=skytalix skyLast={"ply":53,"cp":176} sfSame=null
+  qe-ABC-209/raw/d1/d.pgn#221 (Round 111, skytalix-base, 1/2-1/2) plies=179 completer=skytalix skyLast={"ply":179,"cp":130} sfSame=null
+  qe-ABC-209/raw/d1/d.pgn#237 (Round 119, skytalix-base, 1/2-1/2) plies=174 completer=base skyLast={"ply":173,"cp":639} sfSame=null
+  qe-ABC-209/raw/d1/d.pgn#242 (Round 121, base-skytalix, 1/2-1/2) plies=131 completer=skytalix skyLast={"ply":131,"cp":906} sfSame=null
+  qe-ABC-209/raw/d1/d.pgn#255 (Round 128, skytalix-base, 1/2-1/2) plies=157 completer=base skyLast={"ply":156,"cp":115} sfSame=null
+  qe-ABC-209/raw/d1/d.pgn#257 (Round 129, skytalix-base, 1/2-1/2) plies=202 completer=skytalix skyLast={"ply":202,"cp":1043} sfSame=null
+  qe-ABC-209/raw/d1/d.pgn#267 (Round 134, skytalix-base, 1/2-1/2) plies=154 completer=skytalix skyLast={"ply":154,"cp":520} sfSame=null
+  qe-ABC-209/raw/d1/d.pgn#274 (Round 137, base-skytalix, 1/2-1/2) plies=163 completer=skytalix skyLast={"ply":163,"cp":315} sfSame=null
+  qe-ABC-209/raw/d1/d.pgn#302 (Round 151, base-skytalix, 1/2-1/2) plies=111 completer=base skyLast={"ply":110,"cp":121} sfSame=null
+  qe-ABC-209/raw/d1/d.pgn#305 (Round 153, skytalix-base, 1/2-1/2) plies=154 completer=base skyLast={"ply":153,"cp":147} sfSame=null
+  qe-ABC-209/raw/d1/d.pgn#316 (Round 158, base-skytalix, 1/2-1/2) plies=162 completer=skytalix skyLast={"ply":162,"cp":111} sfSame=null
+  qe-ABC-209/raw/d1/d.pgn#322 (Round 161, base-skytalix, 1/2-1/2) plies=195 completer=skytalix skyLast={"ply":195,"cp":335} sfSame=null
+  qe-ABC-209/raw/d1/d.pgn#352 (Round 176, base-skytalix, 1/2-1/2) plies=167 completer=skytalix skyLast={"ply":167,"cp":147} sfSame=null
+  qe-ABC-209/raw/d1/d.pgn#359 (Round 180, skytalix-base, 1/2-1/2) plies=147 completer=base skyLast={"ply":146,"cp":226} sfSame=null
+  qe-ABC-209/raw/d1/d.pgn#368 (Round 184, base-skytalix, 1/2-1/2) plies=96 completer=skytalix skyLast={"ply":96,"cp":145} sfSame=null
+  qe-ABC-209/raw/d1/d.pgn#377 (Round 189, skytalix-base, 1/2-1/2) plies=103 completer=skytalix skyLast={"ply":103,"cp":168} sfSame=null
+  qe-ABC-209/raw/d1/d.pgn#383 (Round 192, skytalix-base, 1/2-1/2) plies=146 completer=base skyLast={"ply":145,"cp":143} sfSame=null
+  qe-ABC-209/raw/d2/d.pgn#7 (Round 4, skytalix-base, 1/2-1/2) plies=118 completer=base skyLast={"ply":117,"cp":116} sfSame=null
+  qe-ABC-209/raw/d2/d.pgn#35 (Round 18, skytalix-base, 1/2-1/2) plies=109 completer=skytalix skyLast={"ply":109,"cp":472} sfSame=null
+  qe-ABC-209/raw/d2/d.pgn#36 (Round 18, base-skytalix, 1/2-1/2) plies=227 completer=base skyLast={"ply":226,"cp":237} sfSame=null
+  qe-ABC-209/raw/d2/d.pgn#37 (Round 19, skytalix-base, 1/2-1/2) plies=116 completer=base skyLast={"ply":115,"cp":165} sfSame=null
+  qe-ABC-209/raw/d2/d.pgn#48 (Round 24, base-skytalix, 1/2-1/2) plies=166 completer=base skyLast={"ply":165,"cp":578} sfSame=null
+  qe-ABC-209/raw/d2/d.pgn#60 (Round 30, base-skytalix, 1/2-1/2) plies=173 completer=skytalix skyLast={"ply":173,"cp":197} sfSame=null
+  qe-ABC-209/raw/d2/d.pgn#68 (Round 34, base-skytalix, 1/2-1/2) plies=185 completer=skytalix skyLast={"ply":185,"cp":1043} sfSame=null
+  qe-ABC-209/raw/d2/d.pgn#73 (Round 37, skytalix-base, 1/2-1/2) plies=173 completer=base skyLast={"ply":172,"cp":577} sfSame=null
+  qe-ABC-209/raw/d2/d.pgn#76 (Round 38, base-skytalix, 1/2-1/2) plies=169 completer=skytalix skyLast={"ply":169,"cp":1043} sfSame=null
+  qe-ABC-209/raw/d2/d.pgn#93 (Round 47, skytalix-base, 1/2-1/2) plies=131 completer=skytalix skyLast={"ply":131,"cp":117} sfSame=null
+  qe-ABC-209/raw/d2/d.pgn#113 (Round 57, skytalix-base, 1/2-1/2) plies=94 completer=base skyLast={"ply":93,"cp":132} sfSame=null
+  qe-ABC-209/raw/d2/d.pgn#116 (Round 58, base-skytalix, 1/2-1/2) plies=124 completer=skytalix skyLast={"ply":124,"cp":144} sfSame=null
+  qe-ABC-209/raw/d2/d.pgn#120 (Round 60, base-skytalix, 1/2-1/2) plies=168 completer=skytalix skyLast={"ply":168,"cp":126} sfSame=null
+  qe-ABC-209/raw/d2/d.pgn#133 (Round 67, skytalix-base, 1/2-1/2) plies=77 completer=base skyLast={"ply":76,"cp":145} sfSame=null
+  qe-ABC-209/raw/d2/d.pgn#140 (Round 70, base-skytalix, 1/2-1/2) plies=149 completer=skytalix skyLast={"ply":149,"cp":214} sfSame=null
+  qe-ABC-209/raw/d2/d.pgn#143 (Round 72, skytalix-base, 1/2-1/2) plies=94 completer=skytalix skyLast={"ply":94,"cp":538} sfSame=null
+  qe-ABC-209/raw/d2/d.pgn#166 (Round 83, base-skytalix, 1/2-1/2) plies=258 completer=skytalix skyLast={"ply":258,"cp":255} sfSame=null
+  qe-ABC-209/raw/d2/d.pgn#167 (Round 84, skytalix-base, 1/2-1/2) plies=70 completer=base skyLast={"ply":69,"cp":155} sfSame=null
+  qe-ABC-209/raw/d2/d.pgn#171 (Round 86, skytalix-base, 1/2-1/2) plies=110 completer=base skyLast={"ply":109,"cp":165} sfSame=null
+  qe-ABC-209/raw/d2/d.pgn#178 (Round 89, base-skytalix, 1/2-1/2) plies=145 completer=base skyLast={"ply":144,"cp":127} sfSame=null
+  qe-ABC-209/raw/d2/d.pgn#209 (Round 105, skytalix-base, 1/2-1/2) plies=133 completer=skytalix skyLast={"ply":133,"cp":578} sfSame=null
+  qe-ABC-209/raw/d2/d.pgn#230 (Round 115, base-skytalix, 1/2-1/2) plies=102 completer=skytalix skyLast={"ply":102,"cp":156} sfSame=null
+  qe-ABC-209/raw/d2/d.pgn#249 (Round 125, skytalix-base, 1/2-1/2) plies=152 completer=skytalix skyLast={"ply":152,"cp":486} sfSame=null
+  qe-ABC-209/raw/d2/d.pgn#277 (Round 139, skytalix-base, 1/2-1/2) plies=132 completer=skytalix skyLast={"ply":132,"cp":714} sfSame=null
+  qe-ABC-209/raw/d2/d.pgn#298 (Round 149, base-skytalix, 1/2-1/2) plies=143 completer=base skyLast={"ply":142,"cp":303} sfSame=null
+  qe-ABC-209/raw/d2/d.pgn#302 (Round 151, base-skytalix, 1/2-1/2) plies=151 completer=base skyLast={"ply":150,"cp":129} sfSame=null
+  qe-ABC-209/raw/d2/d.pgn#307 (Round 154, skytalix-base, 1/2-1/2) plies=147 completer=skytalix skyLast={"ply":147,"cp":830} sfSame=null
+  qe-ABC-209/raw/d2/d.pgn#319 (Round 160, skytalix-base, 1/2-1/2) plies=211 completer=skytalix skyLast={"ply":211,"cp":886} sfSame=null
+  qe-ABC-209/raw/d2/d.pgn#332 (Round 166, base-skytalix, 1/2-1/2) plies=179 completer=skytalix skyLast={"ply":179,"cp":175} sfSame=null
+  qe-ABC-209/raw/d2/d.pgn#354 (Round 177, base-skytalix, 1/2-1/2) plies=111 completer=skytalix skyLast={"ply":111,"cp":208} sfSame=null
+  qe-ABC-209/raw/d2/d.pgn#361 (Round 181, skytalix-base, 1/2-1/2) plies=93 completer=skytalix skyLast={"ply":93,"cp":243} sfSame=null
+  qe-ABC-209/raw/d2/d.pgn#367 (Round 184, skytalix-base, 1/2-1/2) plies=97 completer=skytalix skyLast={"ply":97,"cp":309} sfSame=null
+  qe-ABC-209/raw/d2/d.pgn#368 (Round 184, base-skytalix, 1/2-1/2) plies=96 completer=skytalix skyLast={"ply":96,"cp":134} sfSame=null
+  qe-ABC-209/raw/d2/d.pgn#383 (Round 192, skytalix-base, 1/2-1/2) plies=96 completer=base skyLast={"ply":95,"cp":133} sfSame=null
+  qe-ABC-209/raw/d2/d.pgn#392 (Round 196, base-skytalix, 1/2-1/2) plies=151 completer=base skyLast={"ply":150,"cp":320} sfSame=null
+  qe-ABC-209/raw/d2/d.pgn#393 (Round 197, skytalix-base, 1/2-1/2) plies=119 completer=skytalix skyLast={"ply":119,"cp":273} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#2 (Round 1, base-skytalix, 1/2-1/2) plies=81 completer=base skyLast={"ply":80,"cp":108} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#13 (Round 7, skytalix-base, 1/2-1/2) plies=53 completer=skytalix skyLast={"ply":53,"cp":105} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#21 (Round 11, skytalix-base, 1/2-1/2) plies=86 completer=base skyLast={"ply":85,"cp":237} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#25 (Round 13, skytalix-base, 1/2-1/2) plies=97 completer=skytalix skyLast={"ply":97,"cp":261} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#26 (Round 13, base-skytalix, 1/2-1/2) plies=77 completer=base skyLast={"ply":76,"cp":119} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#31 (Round 16, skytalix-base, 1/2-1/2) plies=90 completer=base skyLast={"ply":89,"cp":255} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#37 (Round 19, skytalix-base, 1/2-1/2) plies=121 completer=skytalix skyLast={"ply":121,"cp":162} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#41 (Round 21, skytalix-base, 1/2-1/2) plies=66 completer=skytalix skyLast={"ply":66,"cp":104} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#45 (Round 23, skytalix-base, 1/2-1/2) plies=127 completer=base skyLast={"ply":126,"cp":635} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#54 (Round 27, base-skytalix, 1/2-1/2) plies=136 completer=base skyLast={"ply":135,"cp":152} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#61 (Round 31, skytalix-base, 1/2-1/2) plies=129 completer=base skyLast={"ply":128,"cp":248} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#66 (Round 33, base-skytalix, 1/2-1/2) plies=20 completer=base skyLast={"ply":19,"cp":104} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#78 (Round 39, base-skytalix, 1/2-1/2) plies=31 completer=skytalix skyLast={"ply":31,"cp":754} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#80 (Round 40, base-skytalix, 1/2-1/2) plies=114 completer=base skyLast={"ply":113,"cp":367} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#85 (Round 43, skytalix-base, 1/2-1/2) plies=29 completer=skytalix skyLast={"ply":29,"cp":202} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#96 (Round 48, base-skytalix, 1/2-1/2) plies=97 completer=base skyLast={"ply":96,"cp":132} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#114 (Round 57, base-skytalix, 1/2-1/2) plies=131 completer=base skyLast={"ply":130,"cp":283} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#116 (Round 58, base-skytalix, 1/2-1/2) plies=134 completer=skytalix skyLast={"ply":134,"cp":1043} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#121 (Round 61, skytalix-base, 1/2-1/2) plies=60 completer=skytalix skyLast={"ply":60,"cp":144} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#123 (Round 62, skytalix-base, 1/2-1/2) plies=194 completer=skytalix skyLast={"ply":194,"cp":292} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#126 (Round 63, base-skytalix, 1/2-1/2) plies=88 completer=base skyLast={"ply":87,"cp":221} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#152 (Round 76, base-skytalix, 1/2-1/2) plies=90 completer=base skyLast={"ply":89,"cp":111} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#155 (Round 78, skytalix-base, 1/2-1/2) plies=158 completer=skytalix skyLast={"ply":158,"cp":586} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#163 (Round 82, skytalix-base, 1/2-1/2) plies=116 completer=base skyLast={"ply":115,"cp":123} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#168 (Round 84, base-skytalix, 1/2-1/2) plies=172 completer=skytalix skyLast={"ply":172,"cp":1086} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#179 (Round 90, skytalix-base, 1/2-1/2) plies=112 completer=base skyLast={"ply":111,"cp":106} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#183 (Round 92, skytalix-base, 1/2-1/2) plies=166 completer=base skyLast={"ply":165,"cp":611} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#191 (Round 96, skytalix-base, 1/2-1/2) plies=77 completer=skytalix skyLast={"ply":77,"cp":259} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#193 (Round 97, skytalix-base, 1/2-1/2) plies=157 completer=skytalix skyLast={"ply":157,"cp":245} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#201 (Round 101, skytalix-base, 1/2-1/2) plies=159 completer=skytalix skyLast={"ply":159,"cp":1425} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#223 (Round 112, skytalix-base, 1/2-1/2) plies=97 completer=skytalix skyLast={"ply":97,"cp":108} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#224 (Round 112, base-skytalix, 1/2-1/2) plies=148 completer=skytalix skyLast={"ply":148,"cp":227} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#225 (Round 113, skytalix-base, 1/2-1/2) plies=133 completer=skytalix skyLast={"ply":133,"cp":244} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#233 (Round 117, skytalix-base, 1/2-1/2) plies=133 completer=skytalix skyLast={"ply":133,"cp":341} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#241 (Round 121, skytalix-base, 1/2-1/2) plies=66 completer=skytalix skyLast={"ply":66,"cp":104} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#245 (Round 123, skytalix-base, 1/2-1/2) plies=127 completer=base skyLast={"ply":126,"cp":635} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#252 (Round 126, base-skytalix, 1/2-1/2) plies=142 completer=base skyLast={"ply":141,"cp":1043} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#259 (Round 130, skytalix-base, 1/2-1/2) plies=80 completer=skytalix skyLast={"ply":80,"cp":259} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#266 (Round 133, base-skytalix, 1/2-1/2) plies=20 completer=base skyLast={"ply":19,"cp":104} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#285 (Round 143, skytalix-base, 1/2-1/2) plies=29 completer=skytalix skyLast={"ply":29,"cp":202} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#286 (Round 143, base-skytalix, 1/2-1/2) plies=71 completer=base skyLast={"ply":70,"cp":126} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#289 (Round 145, skytalix-base, 1/2-1/2) plies=137 completer=skytalix skyLast={"ply":137,"cp":611} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#300 (Round 150, base-skytalix, 1/2-1/2) plies=72 completer=skytalix skyLast={"ply":72,"cp":132} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#311 (Round 156, skytalix-base, 1/2-1/2) plies=116 completer=base skyLast={"ply":115,"cp":391} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#321 (Round 161, skytalix-base, 1/2-1/2) plies=60 completer=skytalix skyLast={"ply":60,"cp":144} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#322 (Round 161, base-skytalix, 1/2-1/2) plies=105 completer=skytalix skyLast={"ply":105,"cp":184} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#326 (Round 163, base-skytalix, 1/2-1/2) plies=113 completer=skytalix skyLast={"ply":113,"cp":221} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#335 (Round 168, skytalix-base, 1/2-1/2) plies=113 completer=base skyLast={"ply":112,"cp":100} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#339 (Round 170, skytalix-base, 1/2-1/2) plies=106 completer=skytalix skyLast={"ply":106,"cp":231} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#344 (Round 172, base-skytalix, 1/2-1/2) plies=148 completer=base skyLast={"ply":147,"cp":143} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#351 (Round 176, skytalix-base, 1/2-1/2) plies=137 completer=base skyLast={"ply":136,"cp":126} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#355 (Round 178, skytalix-base, 1/2-1/2) plies=94 completer=skytalix skyLast={"ply":94,"cp":117} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#360 (Round 180, base-skytalix, 1/2-1/2) plies=177 completer=skytalix skyLast={"ply":177,"cp":1043} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#372 (Round 186, base-skytalix, 1/2-1/2) plies=113 completer=base skyLast={"ply":112,"cp":168} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#375 (Round 188, skytalix-base, 1/2-1/2) plies=97 completer=skytalix skyLast={"ply":97,"cp":157} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#385 (Round 193, skytalix-base, 1/2-1/2) plies=125 completer=skytalix skyLast={"ply":125,"cp":174} sfSame=null
+  qe-ABC-210/raw/d1/d.pgn#393 (Round 197, skytalix-base, 1/2-1/2) plies=139 completer=skytalix skyLast={"ply":139,"cp":291} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#4 (Round 2, base-skytalix, 1/2-1/2) plies=83 completer=base skyLast={"ply":82,"cp":236} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#18 (Round 9, base-skytalix, 1/2-1/2) plies=101 completer=base skyLast={"ply":100,"cp":207} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#23 (Round 12, skytalix-base, 1/2-1/2) plies=161 completer=skytalix skyLast={"ply":161,"cp":1072} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#24 (Round 12, base-skytalix, 1/2-1/2) plies=148 completer=skytalix skyLast={"ply":148,"cp":227} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#26 (Round 13, base-skytalix, 1/2-1/2) plies=86 completer=skytalix skyLast={"ply":86,"cp":104} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#33 (Round 17, skytalix-base, 1/2-1/2) plies=133 completer=skytalix skyLast={"ply":133,"cp":341} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#34 (Round 17, base-skytalix, 1/2-1/2) plies=102 completer=skytalix skyLast={"ply":102,"cp":430} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#41 (Round 21, skytalix-base, 1/2-1/2) plies=66 completer=skytalix skyLast={"ply":66,"cp":104} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#46 (Round 23, base-skytalix, 1/2-1/2) plies=164 completer=base skyLast={"ply":163,"cp":583} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#52 (Round 26, base-skytalix, 1/2-1/2) plies=142 completer=base skyLast={"ply":141,"cp":1043} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#54 (Round 27, base-skytalix, 1/2-1/2) plies=125 completer=skytalix skyLast={"ply":125,"cp":148} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#66 (Round 33, base-skytalix, 1/2-1/2) plies=20 completer=base skyLast={"ply":19,"cp":104} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#74 (Round 37, base-skytalix, 1/2-1/2) plies=172 completer=base skyLast={"ply":171,"cp":392} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#85 (Round 43, skytalix-base, 1/2-1/2) plies=29 completer=skytalix skyLast={"ply":29,"cp":202} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#90 (Round 45, base-skytalix, 1/2-1/2) plies=92 completer=skytalix skyLast={"ply":92,"cp":249} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#93 (Round 47, skytalix-base, 1/2-1/2) plies=147 completer=skytalix skyLast={"ply":147,"cp":179} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#105 (Round 53, skytalix-base, 1/2-1/2) plies=101 completer=skytalix skyLast={"ply":101,"cp":309} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#111 (Round 56, skytalix-base, 1/2-1/2) plies=77 completer=skytalix skyLast={"ply":77,"cp":351} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#120 (Round 60, base-skytalix, 1/2-1/2) plies=132 completer=skytalix skyLast={"ply":132,"cp":170} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#121 (Round 61, skytalix-base, 1/2-1/2) plies=60 completer=skytalix skyLast={"ply":60,"cp":144} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#130 (Round 65, base-skytalix, 1/2-1/2) plies=82 completer=base skyLast={"ply":81,"cp":152} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#139 (Round 70, skytalix-base, 1/2-1/2) plies=106 completer=skytalix skyLast={"ply":106,"cp":231} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#149 (Round 75, skytalix-base, 1/2-1/2) plies=96 completer=skytalix skyLast={"ply":96,"cp":236} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#152 (Round 76, base-skytalix, 1/2-1/2) plies=90 completer=base skyLast={"ply":89,"cp":111} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#160 (Round 80, base-skytalix, 1/2-1/2) plies=177 completer=skytalix skyLast={"ply":177,"cp":1043} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#161 (Round 81, skytalix-base, 1/2-1/2) plies=137 completer=skytalix skyLast={"ply":137,"cp":503} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#166 (Round 83, base-skytalix, 1/2-1/2) plies=117 completer=base skyLast={"ply":116,"cp":133} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#168 (Round 84, base-skytalix, 1/2-1/2) plies=172 completer=skytalix skyLast={"ply":172,"cp":1086} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#179 (Round 90, skytalix-base, 1/2-1/2) plies=112 completer=base skyLast={"ply":111,"cp":106} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#183 (Round 92, skytalix-base, 1/2-1/2) plies=166 completer=base skyLast={"ply":165,"cp":611} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#185 (Round 93, skytalix-base, 1/2-1/2) plies=159 completer=skytalix skyLast={"ply":159,"cp":1043} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#191 (Round 96, skytalix-base, 1/2-1/2) plies=77 completer=skytalix skyLast={"ply":77,"cp":259} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#204 (Round 102, base-skytalix, 1/2-1/2) plies=116 completer=skytalix skyLast={"ply":116,"cp":487} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#211 (Round 106, skytalix-base, 1/2-1/2) plies=105 completer=skytalix skyLast={"ply":105,"cp":228} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#213 (Round 107, skytalix-base, 1/2-1/2) plies=141 completer=skytalix skyLast={"ply":141,"cp":136} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#230 (Round 115, base-skytalix, 1/2-1/2) plies=111 completer=base skyLast={"ply":110,"cp":125} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#234 (Round 117, base-skytalix, 1/2-1/2) plies=102 completer=skytalix skyLast={"ply":102,"cp":430} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#241 (Round 121, skytalix-base, 1/2-1/2) plies=66 completer=skytalix skyLast={"ply":66,"cp":104} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#245 (Round 123, skytalix-base, 1/2-1/2) plies=104 completer=skytalix skyLast={"ply":104,"cp":101} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#259 (Round 130, skytalix-base, 1/2-1/2) plies=80 completer=skytalix skyLast={"ply":80,"cp":259} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#278 (Round 139, base-skytalix, 1/2-1/2) plies=96 completer=base skyLast={"ply":95,"cp":211} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#285 (Round 143, skytalix-base, 1/2-1/2) plies=29 completer=skytalix skyLast={"ply":29,"cp":202} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#288 (Round 144, base-skytalix, 1/2-1/2) plies=91 completer=base skyLast={"ply":90,"cp":110} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#296 (Round 148, base-skytalix, 1/2-1/2) plies=97 completer=base skyLast={"ply":96,"cp":132} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#300 (Round 150, base-skytalix, 1/2-1/2) plies=72 completer=skytalix skyLast={"ply":72,"cp":132} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#311 (Round 156, skytalix-base, 1/2-1/2) plies=77 completer=skytalix skyLast={"ply":77,"cp":348} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#313 (Round 157, skytalix-base, 1/2-1/2) plies=102 completer=base skyLast={"ply":101,"cp":146} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#316 (Round 158, base-skytalix, 1/2-1/2) plies=63 completer=base skyLast={"ply":62,"cp":209} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#321 (Round 161, skytalix-base, 1/2-1/2) plies=60 completer=skytalix skyLast={"ply":60,"cp":144} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#323 (Round 162, skytalix-base, 1/2-1/2) plies=92 completer=skytalix skyLast={"ply":92,"cp":319} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#329 (Round 165, skytalix-base, 1/2-1/2) plies=105 completer=base skyLast={"ply":104,"cp":114} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#349 (Round 175, skytalix-base, 1/2-1/2) plies=96 completer=skytalix skyLast={"ply":96,"cp":236} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#351 (Round 176, skytalix-base, 1/2-1/2) plies=137 completer=base skyLast={"ply":136,"cp":126} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#354 (Round 177, base-skytalix, 1/2-1/2) plies=134 completer=base skyLast={"ply":133,"cp":344} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#360 (Round 180, base-skytalix, 1/2-1/2) plies=175 completer=skytalix skyLast={"ply":175,"cp":1043} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#361 (Round 181, skytalix-base, 1/2-1/2) plies=137 completer=skytalix skyLast={"ply":137,"cp":503} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#391 (Round 196, skytalix-base, 1/2-1/2) plies=77 completer=skytalix skyLast={"ply":77,"cp":259} sfSame=null
+  qe-ABC-210/raw/d2/d.pgn#393 (Round 197, skytalix-base, 1/2-1/2) plies=152 completer=base skyLast={"ply":151,"cp":287} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#6 (Round 3, base-skytalix, 1/2-1/2) plies=132 completer=skytalix skyLast={"ply":132,"cp":428} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#21 (Round 11, skytalix-base, 1/2-1/2) plies=123 completer=skytalix skyLast={"ply":123,"cp":234} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#22 (Round 11, base-skytalix, 1/2-1/2) plies=173 completer=base skyLast={"ply":172,"cp":828} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#31 (Round 16, skytalix-base, 1/2-1/2) plies=110 completer=base skyLast={"ply":109,"cp":483} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#37 (Round 19, skytalix-base, 1/2-1/2) plies=87 completer=skytalix skyLast={"ply":87,"cp":222} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#41 (Round 21, skytalix-base, 1/2-1/2) plies=142 completer=skytalix skyLast={"ply":142,"cp":601} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#44 (Round 22, base-skytalix, 1/2-1/2) plies=163 completer=skytalix skyLast={"ply":163,"cp":161} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#48 (Round 24, base-skytalix, 1/2-1/2) plies=118 completer=base skyLast={"ply":117,"cp":151} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#59 (Round 30, skytalix-base, 1/2-1/2) plies=119 completer=base skyLast={"ply":118,"cp":537} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#61 (Round 31, skytalix-base, 1/2-1/2) plies=41 completer=base skyLast={"ply":40,"cp":112} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#66 (Round 33, base-skytalix, 1/2-1/2) plies=17 completer=skytalix skyLast={"ply":17,"cp":104} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#69 (Round 35, skytalix-base, 1/2-1/2) plies=167 completer=base skyLast={"ply":166,"cp":413} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#70 (Round 35, base-skytalix, 1/2-1/2) plies=123 completer=skytalix skyLast={"ply":123,"cp":258} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#93 (Round 47, skytalix-base, 1/2-1/2) plies=154 completer=base skyLast={"ply":153,"cp":147} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#99 (Round 50, skytalix-base, 1/2-1/2) plies=153 completer=skytalix skyLast={"ply":153,"cp":862} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#102 (Round 51, base-skytalix, 1/2-1/2) plies=125 completer=base skyLast={"ply":124,"cp":407} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#103 (Round 52, skytalix-base, 1/2-1/2) plies=92 completer=base skyLast={"ply":91,"cp":164} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#104 (Round 52, base-skytalix, 1/2-1/2) plies=50 completer=skytalix skyLast={"ply":50,"cp":481} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#120 (Round 60, base-skytalix, 1/2-1/2) plies=53 completer=base skyLast={"ply":52,"cp":276} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#125 (Round 63, skytalix-base, 1/2-1/2) plies=117 completer=base skyLast={"ply":116,"cp":537} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#128 (Round 64, base-skytalix, 1/2-1/2) plies=117 completer=skytalix skyLast={"ply":117,"cp":502} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#137 (Round 69, skytalix-base, 1/2-1/2) plies=112 completer=skytalix skyLast={"ply":112,"cp":372} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#139 (Round 70, skytalix-base, 1/2-1/2) plies=99 completer=base skyLast={"ply":98,"cp":148} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#143 (Round 72, skytalix-base, 1/2-1/2) plies=107 completer=base skyLast={"ply":106,"cp":245} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#153 (Round 77, skytalix-base, 1/2-1/2) plies=127 completer=base skyLast={"ply":126,"cp":182} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#154 (Round 77, base-skytalix, 1/2-1/2) plies=145 completer=skytalix skyLast={"ply":145,"cp":157} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#163 (Round 82, skytalix-base, 1/2-1/2) plies=86 completer=base skyLast={"ply":85,"cp":239} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#170 (Round 85, base-skytalix, 1/2-1/2) plies=204 completer=skytalix skyLast={"ply":204,"cp":1018} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#173 (Round 87, skytalix-base, 1/2-1/2) plies=100 completer=base skyLast={"ply":99,"cp":384} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#176 (Round 88, base-skytalix, 1/2-1/2) plies=117 completer=base skyLast={"ply":116,"cp":220} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#177 (Round 89, skytalix-base, 1/2-1/2) plies=83 completer=skytalix skyLast={"ply":83,"cp":397} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#181 (Round 91, skytalix-base, 1/2-1/2) plies=76 completer=base skyLast={"ply":75,"cp":141} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#190 (Round 95, base-skytalix, 1/2-1/2) plies=47 completer=base skyLast={"ply":46,"cp":124} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#210 (Round 105, base-skytalix, 1/2-1/2) plies=176 completer=skytalix skyLast={"ply":176,"cp":774} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#214 (Round 107, base-skytalix, 1/2-1/2) plies=117 completer=base skyLast={"ply":116,"cp":257} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#220 (Round 110, base-skytalix, 1/2-1/2) plies=138 completer=skytalix skyLast={"ply":138,"cp":1215} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#221 (Round 111, skytalix-base, 1/2-1/2) plies=123 completer=skytalix skyLast={"ply":123,"cp":234} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#222 (Round 111, base-skytalix, 1/2-1/2) plies=173 completer=base skyLast={"ply":172,"cp":828} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#225 (Round 113, skytalix-base, 1/2-1/2) plies=90 completer=base skyLast={"ply":89,"cp":131} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#227 (Round 114, skytalix-base, 1/2-1/2) plies=96 completer=base skyLast={"ply":95,"cp":192} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#240 (Round 120, base-skytalix, 1/2-1/2) plies=123 completer=base skyLast={"ply":122,"cp":391} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#241 (Round 121, skytalix-base, 1/2-1/2) plies=60 completer=skytalix skyLast={"ply":60,"cp":236} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#253 (Round 127, skytalix-base, 1/2-1/2) plies=47 completer=base skyLast={"ply":46,"cp":161} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#255 (Round 128, skytalix-base, 1/2-1/2) plies=170 completer=skytalix skyLast={"ply":170,"cp":588} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#259 (Round 130, skytalix-base, 1/2-1/2) plies=107 completer=base skyLast={"ply":106,"cp":527} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#261 (Round 131, skytalix-base, 1/2-1/2) plies=82 completer=skytalix skyLast={"ply":82,"cp":144} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#269 (Round 135, skytalix-base, 1/2-1/2) plies=115 completer=base skyLast={"ply":114,"cp":238} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#270 (Round 135, base-skytalix, 1/2-1/2) plies=123 completer=skytalix skyLast={"ply":123,"cp":258} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#281 (Round 141, skytalix-base, 1/2-1/2) plies=124 completer=base skyLast={"ply":123,"cp":156} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#293 (Round 147, skytalix-base, 1/2-1/2) plies=118 completer=base skyLast={"ply":117,"cp":147} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#294 (Round 147, base-skytalix, 1/2-1/2) plies=137 completer=base skyLast={"ply":136,"cp":123} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#325 (Round 163, skytalix-base, 1/2-1/2) plies=117 completer=base skyLast={"ply":116,"cp":537} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#333 (Round 167, skytalix-base, 1/2-1/2) plies=108 completer=skytalix skyLast={"ply":108,"cp":133} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#337 (Round 169, skytalix-base, 1/2-1/2) plies=152 completer=skytalix skyLast={"ply":152,"cp":862} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#339 (Round 170, skytalix-base, 1/2-1/2) plies=99 completer=base skyLast={"ply":98,"cp":148} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#341 (Round 171, skytalix-base, 1/2-1/2) plies=132 completer=skytalix skyLast={"ply":132,"cp":814} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#353 (Round 177, skytalix-base, 1/2-1/2) plies=127 completer=base skyLast={"ply":126,"cp":182} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#354 (Round 177, base-skytalix, 1/2-1/2) plies=127 completer=skytalix skyLast={"ply":127,"cp":566} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#355 (Round 178, skytalix-base, 1/2-1/2) plies=77 completer=base skyLast={"ply":76,"cp":168} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#366 (Round 183, base-skytalix, 1/2-1/2) plies=88 completer=skytalix skyLast={"ply":88,"cp":202} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#377 (Round 189, skytalix-base, 1/2-1/2) plies=83 completer=skytalix skyLast={"ply":83,"cp":397} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#381 (Round 191, skytalix-base, 1/2-1/2) plies=85 completer=skytalix skyLast={"ply":85,"cp":154} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#389 (Round 195, skytalix-base, 1/2-1/2) plies=88 completer=base skyLast={"ply":87,"cp":188} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#392 (Round 196, base-skytalix, 1/2-1/2) plies=103 completer=base skyLast={"ply":102,"cp":755} sfSame=null
+  qe-ABC-215/raw/d1/d.pgn#395 (Round 198, skytalix-base, 1/2-1/2) plies=82 completer=base skyLast={"ply":81,"cp":164} sfSame=null
+  qe-epic008-q4c/raw/d/d.pgn#1 (Round 1, skytalix-base, 1/2-1/2) plies=88 completer=base skyLast={"ply":87,"cp":464} sfSame=null
+  qe-epic008-q4c/raw/d/d.pgn#4 (Round 2, base-skytalix, 1/2-1/2) plies=114 completer=skytalix skyLast={"ply":114,"cp":173} sfSame=null
+  qe-epic008-q4c/raw/d/d.pgn#9 (Round 5, skytalix-base, 1/2-1/2) plies=102 completer=base skyLast={"ply":101,"cp":321} sfSame=null
+  qe-epic008-q4c/raw/d/d.pgn#12 (Round 6, base-skytalix, 1/2-1/2) plies=170 completer=skytalix skyLast={"ply":170,"cp":304} sfSame=null
+  qe-epic008-q4c/raw/d/d.pgn#15 (Round 8, skytalix-base, 1/2-1/2) plies=80 completer=base skyLast={"ply":79,"cp":192} sfSame=null
+  qe-epic008-q4c/raw/d/d.pgn#17 (Round 9, skytalix-base, 1/2-1/2) plies=77 completer=skytalix skyLast={"ply":77,"cp":268} sfSame=null
+  qe-epic008-q4c/raw/d/d.pgn#25 (Round 13, skytalix-base, 1/2-1/2) plies=88 completer=base skyLast={"ply":87,"cp":265} sfSame=null
+  qe-epic008-q4c/raw/d/d.pgn#32 (Round 16, base-skytalix, 1/2-1/2) plies=82 completer=skytalix skyLast={"ply":82,"cp":433} sfSame=null
+  qe-epic008-q4c/raw/d/d.pgn#34 (Round 17, base-skytalix, 1/2-1/2) plies=121 completer=base skyLast={"ply":120,"cp":261} sfSame=null
+  qe-epic008-q4c/raw/d/d.pgn#37 (Round 19, skytalix-base, 1/2-1/2) plies=109 completer=skytalix skyLast={"ply":109,"cp":238} sfSame=null
+  qe-epic008-q4c/raw/d/d.pgn#40 (Round 20, base-skytalix, 1/2-1/2) plies=75 completer=base skyLast={"ply":74,"cp":100} sfSame=null
+  qe-epic008-q4c/raw/d/d.pgn#51 (Round 26, skytalix-base, 1/2-1/2) plies=134 completer=skytalix skyLast={"ply":134,"cp":222} sfSame=null
+  qe-epic008-q4c/raw/d/d.pgn#54 (Round 27, base-skytalix, 1/2-1/2) plies=109 completer=skytalix skyLast={"ply":109,"cp":121} sfSame=null
+  qe-epic008-q4c/raw/d/d.pgn#62 (Round 31, base-skytalix, 1/2-1/2) plies=163 completer=skytalix skyLast={"ply":163,"cp":588} sfSame=null
+  qe-epic008-q4c/raw/d/d.pgn#64 (Round 32, base-skytalix, 1/2-1/2) plies=79 completer=skytalix skyLast={"ply":79,"cp":204} sfSame=null
+  qe-epic008-q4c/raw/d/d.pgn#65 (Round 33, skytalix-base, 1/2-1/2) plies=87 completer=base skyLast={"ply":86,"cp":446} sfSame=null
+  qe-epic008-q4c/raw/d/d.pgn#70 (Round 35, base-skytalix, 1/2-1/2) plies=165 completer=skytalix skyLast={"ply":165,"cp":1043} sfSame=null
+  qe-epic008-q4c/raw/d/d.pgn#76 (Round 38, base-skytalix, 1/2-1/2) plies=96 completer=base skyLast={"ply":95,"cp":182} sfSame=null
+  qe-epic008-q4c/raw/d/d.pgn#90 (Round 45, base-skytalix, 1/2-1/2) plies=86 completer=skytalix skyLast={"ply":86,"cp":231} sfSame=null
+  qe-epic008-q4c/raw/d/d.pgn#92 (Round 46, base-skytalix, 1/2-1/2) plies=77 completer=base skyLast={"ply":76,"cp":113} sfSame=null
+
+A4 games (family; strict flagged):
+  qe-ABC-204/raw/a5/d.pgn#17 (Round 9, skytalix-base, 1/2-1/2) strict=false result={"skytalix":"draw","base":"draw"} term=Draw by 3-fold repetition hits=[{"ply":228,"mover":"base","cp":-202,"played":"Kc6","couldComplete":["Kb4"]},{"ply":240,"mover":"base","cp":-202,"played":"Ka5","couldComplete":["Kc7","Kc5"]}]
+  qe-ABC-207/raw/d1/d.pgn#182 (Round 91, base-skytalix, 1/2-1/2) strict=false result={"skytalix":"draw","base":"draw"} term=Draw by 3-fold repetition hits=[{"ply":141,"mover":"base","cp":-171,"played":"Rb4","couldComplete":["Rb3"]},{"ply":147,"mover":"base","cp":-171,"played":"Kh2","couldComplete":["Rb5+"]}]
+  qe-ABC-207/raw/d2/d.pgn#44 (Round 22, base-skytalix, 1/2-1/2) strict=true result={"skytalix":"draw","base":"draw"} term=Draw by fifty moves rule hits=[{"ply":217,"mover":"skytalix","cp":-117,"played":"Bb7","couldComplete":["Kg2"]}]
+  qe-ABC-207/raw/d2/d.pgn#136 (Round 68, base-skytalix, 1/2-1/2) strict=false result={"skytalix":"draw","base":"draw"} term=Draw by 3-fold repetition hits=[{"ply":158,"mover":"base","cp":-128,"played":"Bf4","couldComplete":["Bh2"]}]
+  qe-ABC-208/raw/d1/d.pgn#167 (Round 84, skytalix-base, 1-0) strict=false result={"skytalix":"win","base":"loss"} term=White mates hits=[{"ply":106,"mover":"base","cp":-298,"played":"Re8","couldComplete":["Rh8"]}]
+  qe-ABC-209/raw/d1/d.pgn#4 (Round 2, base-skytalix, 1/2-1/2) strict=false result={"skytalix":"draw","base":"draw"} term=Draw by 3-fold repetition hits=[{"ply":105,"mover":"base","cp":-198,"played":"Kd3","couldComplete":["Kf2"]},{"ply":109,"mover":"base","cp":-198,"played":"Kd3","couldComplete":["Kf2"]}]
+  qe-ABC-209/raw/d1/d.pgn#60 (Round 30, base-skytalix, 1/2-1/2) strict=false result={"skytalix":"draw","base":"draw"} term=Draw by fifty moves rule hits=[{"ply":260,"mover":"base","cp":-196,"played":"Kc2","couldComplete":["Kb1"]}]
+  qe-ABC-209/raw/d1/d.pgn#108 (Round 54, base-skytalix, 1-0) strict=true result={"skytalix":"loss","base":"win"} term=White mates hits=[{"ply":136,"mover":"skytalix","cp":-276,"played":"Kg7","couldComplete":["Kh7"]}]
+  qe-ABC-209/raw/d1/d.pgn#154 (Round 77, base-skytalix, 1/2-1/2) strict=false result={"skytalix":"draw","base":"draw"} term=Draw by 3-fold repetition hits=[{"ply":78,"mover":"base","cp":-193,"played":"Ba1","couldComplete":["Be5"]}]
+  qe-ABC-209/raw/d1/d.pgn#221 (Round 111, skytalix-base, 1/2-1/2) strict=false result={"skytalix":"draw","base":"draw"} term=Draw by 3-fold repetition hits=[{"ply":162,"mover":"base","cp":-130,"played":"Bd5","couldComplete":["Ba8"]},{"ply":176,"mover":"base","cp":-130,"played":"Kh6","couldComplete":["Kh7"]}]
+  qe-ABC-209/raw/d1/d.pgn#255 (Round 128, skytalix-base, 1/2-1/2) strict=false result={"skytalix":"draw","base":"draw"} term=Draw by 3-fold repetition hits=[{"ply":131,"mover":"base","cp":-107,"played":"Bc7","couldComplete":["Ke7"]}]
+  qe-ABC-209/raw/d1/d.pgn#257 (Round 129, skytalix-base, 1/2-1/2) strict=false result={"skytalix":"draw","base":"draw"} term=Draw by 3-fold repetition hits=[{"ply":165,"mover":"base","cp":-1043,"played":"Ke8","couldComplete":["Kd6"]}]
+  qe-ABC-209/raw/d1/d.pgn#291 (Round 146, skytalix-base, 1/2-1/2) strict=false result={"skytalix":"draw","base":"draw"} term=Draw by fifty moves rule hits=[{"ply":154,"mover":"base","cp":-135,"played":"Kg7","couldComplete":["Rd7"]}]
+  qe-ABC-209/raw/d1/d.pgn#305 (Round 153, skytalix-base, 1/2-1/2) strict=false result={"skytalix":"draw","base":"draw"} term=Draw by 3-fold repetition hits=[{"ply":152,"mover":"base","cp":-147,"played":"Kg6","couldComplete":["Kg7"]}]
+  qe-ABC-209/raw/d1/d.pgn#312 (Round 156, base-skytalix, 1/2-1/2) strict=true result={"skytalix":"draw","base":"draw"} term=Draw by 3-fold repetition hits=[{"ply":98,"mover":"skytalix","cp":-161,"played":"Kc7","couldComplete":["Kd7"]}]
+  qe-ABC-209/raw/d1/d.pgn#326 (Round 163, base-skytalix, 1/2-1/2) strict=true result={"skytalix":"draw","base":"draw"} term=Draw by 3-fold repetition hits=[{"ply":119,"mover":"skytalix","cp":-104,"played":"Raf8","couldComplete":["Rae8"]}]
+  qe-ABC-209/raw/d1/d.pgn#339 (Round 170, skytalix-base, 1/2-1/2) strict=true result={"skytalix":"draw","base":"draw"} term=Draw by fifty moves rule hits=[{"ply":224,"mover":"skytalix","cp":-136,"played":"Kh2","couldComplete":["Kg2"]},{"ply":228,"mover":"skytalix","cp":-136,"played":"Kh2","couldComplete":["Kg2"]}]
+  qe-ABC-209/raw/d1/d.pgn#352 (Round 176, base-skytalix, 1/2-1/2) strict=false result={"skytalix":"draw","base":"draw"} term=Draw by 3-fold repetition hits=[{"ply":164,"mover":"base","cp":-134,"played":"Kb2","couldComplete":["Kc2"]}]
+  qe-ABC-209/raw/d1/d.pgn#376 (Round 188, base-skytalix, 1-0) strict=true result={"skytalix":"loss","base":"win"} term=White mates hits=[{"ply":150,"mover":"skytalix","cp":-230,"played":"Rf6","couldComplete":["Re6"]}]
+  qe-ABC-209/raw/d2/d.pgn#32 (Round 16, base-skytalix, 1-0) strict=true result={"skytalix":"loss","base":"win"} term=White mates hits=[{"ply":100,"mover":"skytalix","cp":-215,"played":"Kc8","couldComplete":["Ka7"]},{"ply":104,"mover":"skytalix","cp":-215,"played":"Rf5","couldComplete":["Ka7"]},{"ply":106,"mover":"skytalix","cp":-221,"played":"Rf7","couldComplete":["Rf8"]}]
+  qe-ABC-209/raw/d2/d.pgn#62 (Round 31, base-skytalix, 1-0) strict=true result={"skytalix":"loss","base":"win"} term=White mates hits=[{"ply":87,"mover":"skytalix","cp":-435,"played":"h5","couldComplete":["Kg7"]}]
+  qe-ABC-209/raw/d2/d.pgn#73 (Round 37, skytalix-base, 1/2-1/2) strict=false result={"skytalix":"draw","base":"draw"} term=Draw by 3-fold repetition hits=[{"ply":167,"mover":"base","cp":-574,"played":"Kh8","couldComplete":["Kh6"]}]
+  qe-ABC-209/raw/d2/d.pgn#74 (Round 37, base-skytalix, 1/2-1/2) strict=true result={"skytalix":"draw","base":"draw"} term=Draw by 3-fold repetition hits=[{"ply":113,"mover":"skytalix","cp":-205,"played":"Ba2","couldComplete":["Bb3"]}]
+  qe-ABC-209/raw/d2/d.pgn#93 (Round 47, skytalix-base, 1/2-1/2) strict=false result={"skytalix":"draw","base":"draw"} term=Draw by 3-fold repetition hits=[{"ply":128,"mover":"base","cp":-117,"played":"Kg7","couldComplete":["Kg8"]}]
+  qe-ABC-209/raw/d2/d.pgn#95 (Round 48, skytalix-base, 1/2-1/2) strict=true result={"skytalix":"draw","base":"draw"} term=Draw by 3-fold repetition hits=[{"ply":105,"mover":"skytalix","cp":-121,"played":"Kh1","couldComplete":["Kg3"]}]
+  qe-ABC-209/raw/d2/d.pgn#140 (Round 70, base-skytalix, 1/2-1/2) strict=false result={"skytalix":"draw","base":"draw"} term=Draw by 3-fold repetition hits=[{"ply":110,"mover":"base","cp":-214,"played":"Kh1","couldComplete":["Kg1"]}]
+  qe-ABC-209/raw/d2/d.pgn#166 (Round 83, base-skytalix, 1/2-1/2) strict=false result={"skytalix":"draw","base":"draw"} term=Draw by 3-fold repetition hits=[{"ply":167,"mover":"base","cp":-312,"played":"Rf3","couldComplete":["Kh1"]}]
+  qe-ABC-209/raw/d2/d.pgn#182 (Round 91, base-skytalix, 1/2-1/2) strict=true result={"skytalix":"draw","base":"draw"} term=Draw by 3-fold repetition hits=[{"ply":78,"mover":"skytalix","cp":-110,"played":"Kb5","couldComplete":["Ka7"]}]
+  qe-ABC-209/raw/d2/d.pgn#203 (Round 102, skytalix-base, 1/2-1/2) strict=true result={"skytalix":"draw","base":"draw"} term=Draw by 3-fold repetition hits=[{"ply":137,"mover":"skytalix","cp":-137,"played":"Rb1","couldComplete":["Rc2"]},{"ply":155,"mover":"skytalix","cp":-133,"played":"Rg2","couldComplete":["Re2"]},{"ply":157,"mover":"skytalix","cp":-137,"played":"Kg1","couldComplete":["Rc2"]}]
+  qe-ABC-209/raw/d2/d.pgn#246 (Round 123, base-skytalix, 1/2-1/2) strict=true result={"skytalix":"draw","base":"draw"} term=Draw by 3-fold repetition hits=[{"ply":93,"mover":"skytalix","cp":-176,"played":"Kg8","couldComplete":["Kg7"]}]
+  qe-ABC-209/raw/d2/d.pgn#279 (Round 140, skytalix-base, 1/2-1/2) strict=true result={"skytalix":"draw","base":"draw"} term=Draw by 3-fold repetition hits=[{"ply":106,"mover":"skytalix","cp":-363,"played":"Ke1","couldComplete":["Kd3"]}]
+  qe-ABC-209/raw/d2/d.pgn#332 (Round 166, base-skytalix, 1/2-1/2) strict=false result={"skytalix":"draw","base":"draw"} term=Draw by 3-fold repetition hits=[{"ply":168,"mover":"base","cp":-167,"played":"Kg3","couldComplete":["Kg4"]}]
+  qe-ABC-209/raw/d2/d.pgn#366 (Round 183, base-skytalix, 1/2-1/2) strict=true result={"skytalix":"draw","base":"draw"} term=Draw by 3-fold repetition hits=[{"ply":100,"mover":"skytalix","cp":-197,"played":"Kh8","couldComplete":["Kg7"]}]
+  qe-ABC-209/raw/d2/d.pgn#373 (Round 187, skytalix-base, 1-0) strict=false result={"skytalix":"win","base":"loss"} term=White mates hits=[{"ply":134,"mover":"base","cp":-247,"played":"Ng8","couldComplete":["Ng4"]}]
+  qe-ABC-209/raw/d2/d.pgn#398 (Round 199, base-skytalix, 1/2-1/2) strict=true result={"skytalix":"draw","base":"draw"} term=Draw by 3-fold repetition hits=[{"ply":142,"mover":"skytalix","cp":-315,"played":"Rd4","couldComplete":["Rc4"]}]
+  qe-ABC-210/raw/d1/d.pgn#123 (Round 62, skytalix-base, 1/2-1/2) strict=false result={"skytalix":"draw","base":"draw"} term=Draw by 3-fold repetition hits=[{"ply":189,"mover":"base","cp":-292,"played":"Rd4","couldComplete":["Kg8"]}]
+  qe-ABC-210/raw/d1/d.pgn#133 (Round 67, skytalix-base, 1/2-1/2) strict=true result={"skytalix":"draw","base":"draw"} term=Draw by 3-fold repetition hits=[{"ply":138,"mover":"skytalix","cp":-125,"played":"Kh2","couldComplete":["Kg1"]}]
+  qe-ABC-210/raw/d2/d.pgn#295 (Round 148, skytalix-base, 1/2-1/2) strict=true result={"skytalix":"draw","base":"draw"} term=Draw by 3-fold repetition hits=[{"ply":169,"mover":"skytalix","cp":-187,"played":"Rc5","couldComplete":["Rc6"]}]
+  qe-ABC-215/raw/d1/d.pgn#44 (Round 22, base-skytalix, 1/2-1/2) strict=false result={"skytalix":"draw","base":"draw"} term=Draw by 3-fold repetition hits=[{"ply":160,"mover":"base","cp":-132,"played":"Kf3","couldComplete":["Ke1"]}]
+  qe-ABC-215/raw/d1/d.pgn#69 (Round 35, skytalix-base, 1/2-1/2) strict=false result={"skytalix":"draw","base":"draw"} term=Draw by 3-fold repetition hits=[{"ply":161,"mover":"base","cp":-369,"played":"Ba1","couldComplete":["Bc7"]}]
+  qe-ABC-215/raw/d1/d.pgn#102 (Round 51, base-skytalix, 1/2-1/2) strict=false result={"skytalix":"draw","base":"draw"} term=Draw by 3-fold repetition hits=[{"ply":121,"mover":"base","cp":-350,"played":"Ra7+","couldComplete":["Ra2"]}]
+  qe-ABC-215/raw/d1/d.pgn#138 (Round 69, base-skytalix, 1-0) strict=true result={"skytalix":"loss","base":"win"} term=White mates hits=[{"ply":91,"mover":"skytalix","cp":-318,"played":"h6","couldComplete":["Kg7"]}]
+  qe-ABC-215/raw/d1/d.pgn#162 (Round 81, base-skytalix, 1/2-1/2) strict=true result={"skytalix":"draw","base":"draw"} term=Draw by 3-fold repetition hits=[{"ply":170,"mover":"skytalix","cp":-588,"played":"Nc6","couldComplete":["Ka6"]}]
+  qe-ABC-215/raw/d1/d.pgn#281 (Round 141, skytalix-base, 1/2-1/2) strict=false result={"skytalix":"draw","base":"draw"} term=Draw by 3-fold repetition hits=[{"ply":108,"mover":"base","cp":-146,"played":"Re5","couldComplete":["Re6"]}]
+  qe-ABC-215/raw/d1/d.pgn#326 (Round 163, base-skytalix, 1/2-1/2) strict=true result={"skytalix":"draw","base":"draw"} term=Draw by 3-fold repetition hits=[{"ply":93,"mover":"skytalix","cp":-103,"played":"Kh8","couldComplete":["Kh7"]}]
+  qe-ABC-215/raw/d1/d.pgn#362 (Round 181, base-skytalix, 1/2-1/2) strict=true result={"skytalix":"draw","base":"draw"} term=Draw by 3-fold repetition hits=[{"ply":170,"mover":"skytalix","cp":-588,"played":"Nc6","couldComplete":["Ka6"]}]
+  qe-epic008-q4c/raw/d/d.pgn#12 (Round 6, base-skytalix, 1/2-1/2) strict=false result={"skytalix":"draw","base":"draw"} term=Draw by 3-fold repetition hits=[{"ply":167,"mover":"base","cp":-300,"played":"Kg1","couldComplete":["Kg2"]}]
+  qe-epic008-q4c/raw/d/d.pgn#83 (Round 42, skytalix-base, 1/2-1/2) strict=true result={"skytalix":"draw","base":"draw"} term=Draw by 3-fold repetition hits=[{"ply":97,"mover":"skytalix","cp":-214,"played":"Kh2","couldComplete":["Bf8"]}]
+
+repo key < 3 at a cutechess threefold: [{"id":"qe-ABC-207/raw/d1/d.pgn#98 (Round 49, base-skytalix, 1/2-1/2)","repoOccurrences":[37,41],"epNormOccurrences":[33,37,41]},{"id":"qe-ABC-207/raw/d1/d.pgn#298 (Round 149, base-skytalix, 1/2-1/2)","repoOccurrences":[37,41],"epNormOccurrences":[33,37,41]},{"id":"qe-ABC-207/raw/d1/d.pgn#367 (Round 184, skytalix-base, 1/2-1/2)","repoOccurrences":[92,96],"epNormOccurrences":[88,92,96]},{"id":"qe-ABC-207/raw/d2/d.pgn#2 (Round 1, base-skytalix, 1/2-1/2)","repoOccurrences":[36,40],"epNormOccurrences":[32,36,40]},{"id":"qe-ABC-207/raw/d2/d.pgn#16 (Round 8, base-skytalix, 1/2-1/2)","repoOccurrences":[86,90],"epNormOccurrences":[82,86,90]},{"id":"qe-ABC-207/raw/d2/d.pgn#98 (Round 49, base-skytalix, 1/2-1/2)","repoOccurrences":[37,41],"epNormOccurrences":[33,37,41]},{"id":"qe-ABC-207/raw/d2/d.pgn#216 (Round 108, base-skytalix, 1/2-1/2)","repoOccurrences":[86,90],"epNormOccurrences":[82,86,90]},{"id":"qe-ABC-207/raw/d2/d.pgn#367 (Round 184, skytalix-base, 1/2-1/2)","repoOccurrences":[92,96],"epNormOccurrences":[88,92,96]},{"id":"qe-ABC-208/raw/d1/d.pgn#130 (Round 65, base-skytalix, 1/2-1/2)","repoOccurrences":[62,66],"epNormOccurrences":[58,62,66]},{"id":"qe-ABC-208/raw/d1/d.pgn#298 (Round 149, base-skytalix, 1/2-1/2)","repoOccurrences":[70,74],"epNormOccurrences":[66,70,74]},{"id":"qe-ABC-208/raw/d1/d.pgn#387 (Round 194, skytalix-base, 1/2-1/2)","repoOccurrences":[56,60],"epNormOccurrences":[52,56,60]},{"id":"qe-ABC-209/raw/d1/d.pgn#340 (Round 170, base-skytalix, 1/2-1/2)","repoOccurrences":[22,26],"epNormOccurrences":[18,22,26]},{"id":"qe-ABC-209/raw/d2/d.pgn#74 (Round 37, base-skytalix, 1/2-1/2)","repoOccurrences":[133,137],"epNormOccurrences":[129,133,137]},{"id":"qe-ABC-209/raw/d2/d.pgn#364 (Round 182, base-skytalix, 1/2-1/2)","repoOccurrences":[87,91],"epNormOccurrences":[83,87,91]},{"id":"qe-ABC-209/raw/d2/d.pgn#372 (Round 186, base-skytalix, 1/2-1/2)","repoOccurrences":[76,80],"epNormOccurrences":[72,76,80]},{"id":"qe-ABC-210/raw/d1/d.pgn#73 (Round 37, skytalix-base, 1/2-1/2)","repoOccurrences":[77,81],"epNormOccurrences":[73,77,81]},{"id":"qe-ABC-210/raw/d1/d.pgn#340 (Round 170, base-skytalix, 1/2-1/2)","repoOccurrences":[22,26],"epNormOccurrences":[18,22,26]},{"id":"qe-ABC-210/raw/d1/d.pgn#358 (Round 179, base-skytalix, 1/2-1/2)","repoOccurrences":[67,71],"epNormOccurrences":[63,67,71]},{"id":"qe-ABC-210/raw/d2/d.pgn#158 (Round 79, base-skytalix, 1/2-1/2)","repoOccurrences":[67,71],"epNormOccurrences":[63,67,71]},{"id":"qe-ABC-210/raw/d2/d.pgn#358 (Round 179, base-skytalix, 1/2-1/2)","repoOccurrences":[67,71],"epNormOccurrences":[63,67,71]},{"id":"qe-ABC-215/raw/d1/d.pgn#126 (Round 63, base-skytalix, 1/2-1/2)","repoOccurrences":[102,106],"epNormOccurrences":[98,102,106]},{"id":"qe-ABC-215/raw/d1/d.pgn#349 (Round 175, skytalix-base, 1/2-1/2)","repoOccurrences":[59,63],"epNormOccurrences":[55,59,63]}]
+ep-normalised 3rd occurrence before the repo key's, outside A2: []
+
+hand-check: shortest D repetition {"id":"qe-ABC-215/raw/d1/d.pgn#164 (Round 82, base-skytalix, 1/2-1/2)","kind":"D","plies":15,"termination":"Draw by 3-fold repetition","occ":[7,11,15]}; first R non-repetition {"id":"qe-ABC-204/raw/a4-e1910-baseline/r.pgn#1 (Round 1, skytalix-stockfish, 1-0)","kind":"R","plies":63,"termination":"White mates","maxRepoCount":1}
