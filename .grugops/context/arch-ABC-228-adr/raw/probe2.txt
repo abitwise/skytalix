@@ -1,0 +1,7 @@
+kiwipete chooseMove to depth 6: base 309541 (1.000x) 1.12s (1.00x) 20-80 -54 | ev 391482 (1.265x) 1.15s (1.02x) 20-80 -59 | ev+qQ(probe gen) 398146 (1.286x) 1.87s (1.67x) 20-80 -59 | ev,cap<2 348060 (1.124x) 0.90s (0.80x) 20-80 -64
+kiwipete chooseMove to depth 7: base 590489 (1.000x) 1.48s (1.00x) 20-80 -64 | ev 740829 (1.255x) 1.98s (1.34x) 20-80 -59 | ev+qQ(probe gen) 756412 (1.281x) 3.26s (2.21x) 20-80 -59 | ev,cap<2 633871 (1.073x) 1.55s (1.05x) 20-80 -64
+kiwipete chooseMove to depth 8: base 1259463 (1.000x) 3.08s (1.00x) 20-80 -84 | ev 1543477 (1.226x) 4.12s (1.34x) 20-80 -59 | ev+qQ(probe gen) 1575537 (1.251x) 6.29s (2.04x) 20-80 -59 | ev,cap<2 1424912 (1.131x) 3.54s (1.15x) 20-80 -84
+position-6 chooseMove to depth 8: base 355565 (1.000x) 0.85s (1.00x) 34-67 74 | ev 476235 (1.339x) 1.31s (1.53x) 34-67 74 | ev+qQ(probe gen) 476244 (1.339x) 2.14s (2.51x) 34-67 74 | ev,cap<2 408141 (1.148x) 1.03s (1.20x) 34-67 74
+position-6 chooseMove to depth 9: base 940109 (1.000x) 2.23s (1.00x) 34-67 76 | ev 1247879 (1.327x) 3.35s (1.50x) 34-67 76 | ev+qQ(probe gen) 1247913 (1.327x) 5.38s (2.41x) 34-67 76 | ev,cap<2 1083614 (1.153x) 2.40s (1.07x) 34-67 76
+position-6 chooseMove to depth 10: base 1765861 (1.000x) 3.41s (1.00x) 34-67 73 | ev 2340431 (1.325x) 4.93s (1.44x) 34-67 73 | ev+qQ(probe gen) 2340567 (1.325x) 8.69s (2.55x) 34-67 73 | ev,cap<2 2104668 (1.192x) 3.99s (1.17x) 34-67 73
+total cpu 70.0 s

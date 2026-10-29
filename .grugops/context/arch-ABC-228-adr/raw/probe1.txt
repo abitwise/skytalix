@@ -1,0 +1,21 @@
+door identity (knobs off vs base, depth 3 and 4, 5 roots): 10/10 node- and score-equal
+Q1 capture-mate: static=-36 base=78 ev=29999 ev+qQ=29999
+Q2 in check, quiet evasion only: static=-548 base=-548 ev=-536 ev+qQ=-536
+Q3 quiet promotion: static=212 base=212 ev=212 ev+qQ=977
+kiwipete d6 base (all off): nodes 237007 (1.000x) score -54 move 20-80 evasionNodes 0 qMates 0 promoMoves 0 cpu 0.68 s
+kiwipete d6 evasions, cap 8: nodes 324162 (1.368x) score -59 move 20-80 evasionNodes 23061 qMates 72 promoMoves 0 cpu 0.98 s
+kiwipete d6 evasions, check cap qply<2: nodes 277879 (1.172x) score -64 move 20-80 evasionNodes 6714 qMates 0 promoMoves 0 cpu 0.76 s
+kiwipete d6 evasions, check cap qply<4: nodes 295611 (1.247x) score -59 move 20-80 evasionNodes 10567 qMates 12 promoMoves 0 cpu 0.84 s
+kiwipete d6 quiet Q promos only: nodes 240271 (1.014x) score -54 move 20-80 evasionNodes 0 qMates 0 promoMoves 3368 cpu 1.18 s
+kiwipete d6 quiet Q promos only, after captures: nodes 238185 (1.005x) score -54 move 20-80 evasionNodes 0 qMates 0 promoMoves 3376 cpu 1.19 s
+kiwipete d6 quiet all promos only: nodes 244518 (1.032x) score -54 move 20-80 evasionNodes 0 qMates 0 promoMoves 13588 cpu 1.20 s
+kiwipete d6 evasions + quiet Q promos: nodes 330314 (1.394x) score -59 move 20-80 evasionNodes 23984 qMates 85 promoMoves 4918 cpu 1.60 s
+position-6 d6 base (all off): nodes 109912 (1.000x) score 87 move 34-67 evasionNodes 0 qMates 0 promoMoves 0 cpu 0.29 s
+position-6 d6 evasions, cap 8: nodes 154464 (1.405x) score 87 move 34-67 evasionNodes 16656 qMates 0 promoMoves 0 cpu 0.46 s
+position-6 d6 evasions, check cap qply<2: nodes 130059 (1.183x) score 87 move 34-67 evasionNodes 6426 qMates 0 promoMoves 0 cpu 0.36 s
+position-6 d6 evasions, check cap qply<4: nodes 142707 (1.298x) score 87 move 34-67 evasionNodes 10615 qMates 0 promoMoves 0 cpu 0.41 s
+position-6 d6 quiet Q promos only: nodes 109914 (1.000x) score 87 move 34-67 evasionNodes 0 qMates 0 promoMoves 5 cpu 0.54 s
+position-6 d6 quiet Q promos only, after captures: nodes 109914 (1.000x) score 87 move 34-67 evasionNodes 0 qMates 0 promoMoves 5 cpu 0.54 s
+position-6 d6 quiet all promos only: nodes 109920 (1.000x) score 87 move 34-67 evasionNodes 0 qMates 0 promoMoves 20 cpu 0.53 s
+position-6 d6 evasions + quiet Q promos: nodes 154466 (1.405x) score 87 move 34-67 evasionNodes 16656 qMates 0 promoMoves 11 cpu 0.80 s
+total cpu 13.3 s
