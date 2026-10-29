@@ -1,0 +1,50 @@
+--- a/src/evaluate.ts
++++ b/src/evaluate.ts
+@@ -317,7 +317,29 @@
+  * stand on: the first finds which files each side has a pawn on (and counts the extra pawns that
+  * make a file doubled), the second needs those complete file sets to judge isolation.
+  */
++const PROBE = ((globalThis as any).__probe ??= { evals: 0, makes: 0, ps: 0, uniq: new Map<string, number>(), dm: new Array(1 << 14).fill(""), dmHits: 0, mism: 0 });
++function pawnSig(board: Uint8Array): string {
++  let w = 0, b = 0;
++  for (let rank = 1; rank <= 6; rank++) for (let file = 0; file < 8; file++) {
++    const v = board[rank * 16 + file];
++    const bit = 2 ** ((rank - 1) * 8 + file);
++    if (v === PAWN) w += bit; else if (v === BLACK_PAWN) b += bit;
++  }
++  return `${w}:${b}`;
++}
+ function pawnStructure(board: Uint8Array): number {
++  const sig = pawnSig(board);
++  const v = pawnStructureRaw(board);
++  PROBE.ps++;
++  const prev = PROBE.uniq.get(sig);
++  if (prev !== undefined && !Object.is(prev, v)) PROBE.mism++;
++  if (prev === undefined) PROBE.uniq.set(sig, v);
++  let h = 0; for (let i = 0; i < sig.length; i++) h = (Math.imul(h, 31) + sig.charCodeAt(i)) | 0;
++  const slot = h & ((1 << 14) - 1);
++  if (PROBE.dm[slot] === sig) PROBE.dmHits++; else PROBE.dm[slot] = sig;
++  return v;
++}
++function pawnStructureRaw(board: Uint8Array): number {
+   let whiteFiles = 0;
+   let blackFiles = 0;
+   let score = 0;
+@@ -406,6 +428,7 @@
+  * codebase does mutate transiently, which is why ABC-076's A5 asserts byte-identity here.)
+  */
+ export function evaluate(position: Position): number {
++  PROBE.evals++;
+   const score = whiteMinusBlack(position, MOBILITY_WEIGHT);
+   // `0 - score`, not `-score`: negating a balanced position yields `-0`, which is `Object.is`
+   // -distinct from `0` and so is NOT "exactly equal" to its mirror's score. Caught by A1 at
+--- a/src/apply.ts
++++ b/src/apply.ts
+@@ -120,6 +120,7 @@
+  * captured piece — it is read before it is overwritten.
+  */
+ export function makeMove(position: Position, move: Move): UndoRecord {
++  ((globalThis as any).__probe ??= { evals: 0, makes: 0 }).makes++;
+   const undo: UndoRecord = {
+     captured: position.board[move.to] as number,
+     castling: position.castling,
