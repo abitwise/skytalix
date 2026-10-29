@@ -15,10 +15,10 @@ held: DO NOT SPAWN until the owner's explicit go (orch-2026-10-29c/…d9513dc1).
 
 ## Do
 - Read Orchestrator `orch-2026-10-29c/…d9513dc1` and the owner's go note after it, BA/PM `bapm-close-EPIC-008/…e53131ba` (Q4), QE `qe-epic008-close` (the R readings and their host log), and the EPIC-008 page § D (frozen pins, RISK-EPIC008-03).
-- Own `npm ci --ignore-scripts`. Tool paths come from the environment; the values are in the env file named in your spawn prompt. Keep them out of every record.
+- Own `npm ci --ignore-scripts`. Run linters only via `npm run …` after `npm ci`, never a bare `npx <name>` (`orch-2026-10-29e/…647be941`). Tool paths come from the environment; the values are in the env file named in your spawn prompt. Keep them out of every record.
 - **Candidate:** main at your cut. **Confirm before game 1** that its `src/` and `data/` equal `b5c67ab7`'s. Any difference → STOP to me. **Base:** `3497aad2`.
 - **PREREG first:** both shas, B = 1 500 ms, 400 games (`--rounds 200`), the concurrency in force, and the grading by the page's D states (GAIN / NEUTRAL / LOSS).
-- `d <main-sha> 3497aad2 <out> --budget-ms 1500 --rounds 200`. Both tool hashes must print `= pin`.
+- `d <main-sha> 3497aad2 <out> --budget-ms 1500 --rounds 200 --concurrency <C>`, where C is the owner's width from his go note (no width in the note → omit the flag, default 3). Check that `machine.txt` shows the width. Both tool hashes must print `= pin`.
 - **Thermal sampler (folds in Q4 (d)):** every ~10 s, log load1, CPU temperature (Tctl), the current frequency of every core, and the governor. Report median and max temperature and frequency per quarter of the reading. Say whether the frequency fell under load (throttling). Logging only: never stop the reading on heat.
 - **Report** D as X ± Y with its state, the W/L/D count, the depth guard, wall time, and the thermal summary. Also report how this D compares with the R result (−82.9 ± 73.8): same sign or not. Don't grade M1; BA/PM does.
 
