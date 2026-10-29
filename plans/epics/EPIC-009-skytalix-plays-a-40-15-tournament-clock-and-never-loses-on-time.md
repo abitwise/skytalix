@@ -1,7 +1,7 @@
 ---
 id: EPIC-009
-title: "`skytalix` plays a 40/15 tournament clock: a named level that uses the clock and never loses on time"
-status: proposed
+title: "`skytalix` plays a 40/15 tournament clock: two settings, `simple-tournament` and `uci-clock-mode`, that use the clock and never lose on time"
+status: backlog
 column: Backlog
 priority: P2
 size: M
@@ -10,20 +10,45 @@ owner: BA/PM
 
 # EPIC-009: `skytalix` plays a 40/15 tournament clock, uses it, and never loses on time
 
-> **Cut 2026-10-29 by BA/PM** (task `bapm-epic009-tournament`, records only, at `main` `51c85f49`; `main`'s `src/`,
-> `data/` and `tools/` are byte-identical to `3ad6bc10` and to `64fb1544`). The rulings are in
-> `.grugops/context/bapm-epic009-tournament/notes/`. This hop ran no test, no game and no timing.
+> **AMENDED 2026-10-29 by BA/PM** (task `bapm-amend-epic009`, records only, at `main` `a5d70e35`; `src/`, `data/`
+> and `tools/` are byte-identical to `51c85f49`). The owner answered Q1–Q8 and closed `ABC-218` on 2026-10-29
+> (`orch-2026-10-29g` `…a67f71ac`, his words verbatim; they govern). This page now follows those answers.
 >
-> **Owner word** (`ideas-2026-10-29/input/owner-ideas.md` § A, transcribed by the Orchestrator, a transcription and
-> not a stamp): *"add new difficulty to allow 40/15 move rule of tournaments:
-> https://computerchess.org.uk/4040/index.html , basic solution would be to use 22.5 seconds per move, currently
-> difficulty level 7 allows 30s per move. New difficulty could be named "tournament" or 40-15"*. § B item 4 of the
-> same file (real clock management) is **UNKNOWN - verify**: it comes from an external chat model, and the owner asked
-> that it be checked, not taken as valid. It is used here only as the source of option (b), never as a fact.
+> - **Accepted.** The owner accepted the epic and its measures (Q8: "ok"). Status `proposed` → `backlog`.
+> - **Two new settings, not levels:** `simple-tournament` (a fixed T a move under a 22.5 s hard ceiling, milestone 1)
+>   and `uci-clock-mode` (the real clock, a margin, a hard stop and a 60 s ceiling, milestone 2, later). The owner
+>   picked option (a) first and option (b) later (Q2).
+> - **Levels 1–7 are unchanged.** So are the default (5) and the `Skill Level` default (5). Owner: "Let the difficulty
+>   setting stay."
+> - **UCI is the surface** (Q1: cutechess matches). CLI parity is out of scope (§ CLI parity).
+> - **Proposed T for `simple-tournament` is 22.0 s**, under the 22.5 s ceiling (§ The budget T). The owner is told
+>   the number; the ceiling is his and does not move.
+> - **Readings:** each setting gets a 5-game smoke reading at 40/15. Major validation (≥ 100 games, 24–48 h) and any
+>   strength reading come later and are out of this MVP.
+> - **The input form for both settings is the Architect's** (`arch-epic009-settings`, running in parallel; no note had
+>   landed when this page was amended). Every row below reads "form per the Architect's ruling" where it needs one.
+> - **Tickets:** `ABC-218` closed by the owner, not run. `ABC-219` retired. `ABC-220` re-scoped to
+>   `simple-tournament`. `ABC-221` re-scoped to `uci-clock-mode`. `ABC-222` re-scoped to `simple-tournament`'s smoke
+>   reading. `ABC-223` is new: `uci-clock-mode`'s smoke reading. `ABC-224` is unused.
+> - The notes are in `.grugops/context/bapm-amend-epic009/notes/`.
 >
-> **Routing:** Orchestrator `orch-2026-10-29g` `…ccb72dbe`. **What is the owner's here:** which option (Q2), the
-> name (Q3), who plays it (Q1), any `NFR-004` ceiling (Q4, Q5) and the measures (Q8). Nothing on this page picks them. Until he answers,
-> only `ABC-218` (a reading of today's engine, no code) is `Ready`.
+> **Cut 2026-10-29 by BA/PM** (task `bapm-epic009-tournament`, records only, at `main` `51c85f49`). The cut's notes
+> are in `.grugops/context/bapm-epic009-tournament/notes/`.
+>
+> **Owner word that started it** (`ideas-2026-10-29/input/owner-ideas.md` § A, transcribed by the Orchestrator): *"add
+> new difficulty to allow 40/15 move rule of tournaments: https://computerchess.org.uk/4040/index.html , basic
+> solution would be to use 22.5 seconds per move, currently difficulty level 7 allows 30s per move. New difficulty
+> could be named "tournament" or 40-15"*. § B item 4 of the same file (real clock management) came from an external
+> chat model and is **UNKNOWN - verify** as a claim. The owner now asks for a clock mode himself (Q2, Q3), so it is
+> built from his word and the System Analyst's map, not from § B.
+>
+> **Owner's answers, 2026-10-29, verbatim** (`…a67f71ac`): *"Close ABC-218 - no need to measure it, it is not
+> deterministic and we can't anyway use it for tournament. Let the difficulty setting stay. My answers: 1. cutechess
+> matches. For simpler tests use much less matches, 5 or 10, just to make sure things work, major validation with 100
+> or more games comes later since it can run over 24 or 48 hours. 2. Initially let's add 22.5 second separate
+> difficulty setting and use that, later UCI clock mode ; 3. it might make sense to use 2 new difficulty settings
+> then, 22.5s one could be simple-tournament and other one uci-clock-mode (maybe separate inputs) ; 4. 22.5 ceiling ;
+> 5. increase to 60s ; 6. not yet, let's do that after other improvements are done ; 7. no ; 8. ok"*
 
 ## How today's engine handles time (System Analyst `sa-ideas-verify` `…1ccf0010`, confirmed against BA/PM's reading)
 
@@ -44,8 +69,9 @@ single searches, not games: at `Skill Level` 7, `go wtime 900000 btime 900000 mo
 | T7 | A book move answers at once, with no search, so it costs ~0 s of clock | `src/uci-session.ts:289-294` |
 | T8 | The engine spends its whole budget even with one legal move (`ABC-212` OQ-212-2, ruled "spends 30 s"; SA probe P5: one legal move, 1 000 ms spent) | `ABC-212` § "Up to 30 s"; SA § 4 |
 
-**What follows from T3–T4 under a 40/15 clock** (arithmetic, not a measurement; `UNKNOWN - verify` until `ABC-218`
-reads it), at the first move of a period (900 000 ms left, `movestogo` 40, so `G` = 22 500 ms):
+**What follows from T3–T4 under a 40/15 clock** (arithmetic, not a measurement; `UNKNOWN - verify`; `ABC-218`, which
+was to read it, was closed by the owner, not run), at the first move of a period (900 000 ms left, `movestogo` 40,
+so `G` = 22 500 ms):
 
 | `Skill Level` | per-move budget | engine time over 40 moves (upper bound) | share of the 15 min |
 |---|---|---|---|
@@ -67,7 +93,7 @@ reads it), at the first move of a period (900 000 ms left, `movestogo` 40, so `G
 
 - **40/15 = 40 moves in 15 minutes, repeating**: after each 40th move the side's clock gains another 15 minutes. No
   increment. In `cutechess-cli` this is `tc=40/900` (spelling `UNKNOWN - verify` against the pinned 1.5.1 at
-  `ABC-218` `A1`).
+  `ABC-222` `A1`).
 - **A fixed 22.5 s a move is exactly 900 s over 40 moves**, so it has **zero margin** on a real clock. On a clock, any
   fixed budget needs to be below 22.5 s, or it relies on T3's arithmetic to stop it.
 - **CCRL's own rules are not confirmed here** (no web access at this hop). Each item below is **UNKNOWN - verify**, and
@@ -81,206 +107,226 @@ reads it), at the first move of a period (900 000 ms left, `movestogo` 40, so `G
 
 ## Problem
 
-- **Users.** Who plays it is the owner's answer (Q1). The candidates:
-  - **(i) the owner in the CLI**, wanting a slower, stronger opponent at a tournament pace;
-  - **(ii) a UCI GUI or `cutechess-cli` match** at a CCRL-style 40/15 clock, engine against engine. The owner's link
-    points here;
-  - **(iii) both.**
+- **User:** a `cutechess-cli` (or other UCI GUI) match at a CCRL-style 40/15 clock, engine against engine (Q1).
 - **Pain.**
-  - In a GUI at the default `Skill Level` 5, a 40/15 clock is 87 % unused: the engine plays 3 s moves (T4).
-  - A user who knows to pick `Skill Level` 7 gets ~22.5 s a move, but nothing names it as the 40/15 setting, and its
-    margin at a period's last move is 50 ms (T3). Whether that ever loses on time is unread.
-  - In the CLI there is no clock at all (T2). "40/15" can only mean a pace, about 22.5 s a move.
-- **Value.** One named setting that a player picks for 40/15 play. It spends most of the clock, and it never loses on
-  time. The human-facing levels 1–7 stay as they are.
+  - At the default `Skill Level` 5, a 40/15 clock is 87 % unused: the engine plays 3 s moves (T4).
+  - `Skill Level` 7 gets about 22.5 s a move, but nothing names it as the 40/15 setting. Its margin at a period's last
+    move is 50 ms (T3), so it can lose on time. Its time per move depends on the clock the GUI sends.
+- **Value:** two named settings that a match picks for 40/15. Each uses most of the clock and never loses on time.
+  The human-facing levels 1–7 stay as they are.
 
-## The cheapest slice that proves the value
+## The two settings (Q2, Q3)
 
-`ABC-218` reads today's `Skill Level` 7 under a real 40/15 clock first: how much of the clock it uses, and how close it
-comes to its flag. It changes no code. It may show that today's level 7 already does most of the job, and that the
-build is only a name and a wider margin. Every build ticket after it is measured by the same reading (`ABC-222`).
+| | `simple-tournament` (milestone 1) | `uci-clock-mode` (milestone 2, later) |
+|---|---|---|
+| what it does | Thinks a fixed T each move, blunder rate 0 | Spends the real clock: remaining ÷ `movestogo` (a fallback without it), a safety margin on every move, a hard stop before the flag |
+| per-move ceiling (owner's) | **22.5 s**, hard, never exceeded (Q4) | **60 s**, replacing the 32 s clamp for this mode only (Q5) |
+| budget | **T = 22.0 s, proposed** (§ The budget T) | From the clock, ≤ 60 s |
+| surface | UCI (cutechess). Form per the Architect's ruling | UCI. Form per the Architect's ruling |
+| build ticket | `ABC-220` | `ABC-221` |
+| smoke reading | `ABC-222` | `ABC-223` |
 
-## Options for the owner (Q2; BA/PM frames them and does not pick)
+- **Form.** The owner allowed "maybe separate inputs". Whether each is its own UCI option, a value outside 1–7, or
+  something else is the Architect's ruling (`arch-epic009-settings`). So is the exact `option.<Name>=<value>` line
+  that `cutechess-cli` sends to select each. The constraint is the owner's: levels 1–7 stay unchanged, and they stay
+  ordered weakest to strongest (SA `…1ccf0010` § 8).
+- **How `simple-tournament` meets a `go` clock** (whether a GUI clock caps it, or it ignores `wtime`) is the
+  Architect's ruling too. § The budget T shows that M1 and M2 hold at 40/15 either way.
 
-| | what is built | forfeit risk | use of the clock | testability | human-facing levels |
-|---|---|---|---|---|---|
-| **(o) nothing new** | Nothing. The page tells a GUI user to set `Skill Level` 7. `ABC-218` reads it | Today's 50 ms at a period's last move (T3). `ABC-218` reads it | ≤ 100 % at level 7; 13 % at the default 5 | One reading, no code | Unchanged |
-| **(a) a fixed-budget level** | A named level that thinks a fixed T a move (T = 22.5 s, or less; Q4), rate 0, at the CLI and at UCI (`ABC-219`, `ABC-220`) | In the CLI none: there is no clock. Under UCI, T3's arithmetic still caps it: at T = 22.5 s the same ~50 ms at a period's last move as (o); at T = 22.0 s, ~20 s (Q4) | 40 × T. At 22.5 s that is 100 % less book moves, and nothing saved for a hard move | The simplest. Virtual-clock pins, like `ABC-212` | Unchanged: a new name beside 1–7 |
-| **(b) clock-based allocation over UCI** | A named UCI mode that spends the real clock: remaining ÷ `movestogo`, a safety margin on every move, a hard stop before the flag, not capped at a level's 30 s (`ABC-221`) | Lowest by design: the margin is a requirement, and `ABC-222` reads it | Close to 100 % less the margin, and banks book-move time | The arithmetic pins on the virtual clock; the forfeit claim needs real-clock games | Unchanged. The CLI gets nothing: it has no clock |
-| **(c) both** | (a) in the CLI only (`ABC-219`) and (b) over UCI (`ABC-221`) | As (a) in the CLI, as (b) over UCI | As (a) in the CLI, as (b) over UCI | Both sets | Unchanged |
+## The budget T for `simple-tournament` (Q4 with Q8)
 
-- **Cost, in tickets** (after `ABC-218`, which every option shares): (o) none; (a) `ABC-219` M + `ABC-220` S +
-  `ABC-222` S; (b) `ABC-221` M + `ABC-222` S; (c) `ABC-219` M + `ABC-221` M + `ABC-222` S.
-- **What (b) does not include in this epic:** spending *more* time on a hard move (for example when the best move
-  changes between iterations). That changes how the engine searches. It needs an ADR and a strength reading, and it
-  is out of scope.
-- **BA/PM's reading, offered and not picked:** run `ABC-218` first, whatever he chooses. Then, if he plays the 40/15
-  pace in the CLI himself, (c); if 40/15 is for GUI or `cutechess-cli` matches only, (b). (a) alone adds little over
-  UCI that `Skill Level` 7 does not already do (T4), but it is the only option that gives the CLI a tournament pace.
-- **Default without an answer:** (o). Only `ABC-218` runs; `ABC-219`–`ABC-222` stay in `Backlog`.
+The owner set a 22.5 s ceiling (Q4) and accepted a closest call ≥ 500 ms (Q8). A fixed 22.5 s a move is exactly
+900 s over 40 moves. So 22.5 s cannot meet both, and T must sit below the ceiling. **The ceiling does not move.**
 
-## The name (Q3)
+- **Model.** Each move costs the clock `s = T + o`. Here `o` is the per-move overhead:
+  - the in-process overshoot past the deadline, ≤ ~31 ms (`AR-NFR004-A`; measured 4 ms at 30 s, `qe-ABC-212` `A4`;
+    1 ms at 22.5 s, SA probe P1);
+  - the pipe and GUI latency: **`UNKNOWN - verify`**, read by `ABC-222`.
+- **The clock left after a period's 40th move** (no book moves): `c = 900 000 − 40 × (T + o)` ms.
+- **Q8 holds** when `c ≥ 500`, so `T + o ≤ 22 487.5 ms`.
+- **Q4 holds** when `T + 31 ≤ 22 500` (the overshoot bound), so `T ≤ 22 469 ms`.
+- **At T = 22 500 ms**, `c` would be −40 × `o`. Today's `go` rule (`G = remaining − 50` on the last move) saves the
+  flag, but the closest call is ~50 ms less `o`. That misses Q8. It is the 50 ms the cut found.
+- **At T = 22 000 ms (proposed):**
+  - `c = 20 000 − 40 × o`. That is 18 760 ms at `o` = 31 ms. Q8 still holds while `o` ≤ 487 ms a move. The unknown
+    latency has about 16 × the room of the known overshoot.
+  - The headroom under the 22.5 s ceiling is 500 ms a move. That is ≥ 16 × the 31 ms overshoot bound.
+  - **M2 holds.** A period with no book moves uses 40 × 22 000 / 900 000 = **97.8 %**. The book stops at ply 12
+    (`data/opening-book/book.json` `maxPly`), so at most 6 of a side's first-period moves are free. Then 34 × 22 000 /
+    900 000 = **83.1 %**. M2's 75 % fails only if 10 or more moves in a period cost ~0 s. The book cannot cause that.
+  - **The cost** against 22.5 s is 0.5 s a move, 2.2 % of the clock.
+- **Today's `go` rule never binds at 40/15 with `movestogo`.** With `s < 22 500`, the share `remaining / movestogo`
+  stays ≥ 22 500 ms on every move. So a GUI cap, if the Architect rules one, gives T on every move.
+- **If `cutechess-cli` sends no `movestogo`** (`RISK-EPIC009-03`, `UNKNOWN - verify`), there are two cases.
+  - A GUI cap, if ruled, spreads the clock over 20 moves (T3). T binds for the first 21 moves, then `remaining / 20`
+    applies. That leaves ~165 s after the 40th move and uses ~81.6 % (no book).
+  - With no cap, the result is as above: 18.8 s left and 97.8 % used.
+  - So M1 and M2 hold either way.
+- **Why not closer to the ceiling.** T = 22 450 ms would leave `c` = 760 ms at `o` = 31 ms. Only 260 ms would remain
+  for the unread latency. A smoke reading of 5 games cannot vouch for that.
+- **The number the owner is told:** `simple-tournament` thinks **22.0 s a move**, never more than 22.5 s. At 40/15 it
+  ends a period with about 18–19 s left, and uses about 98 % of the clock (83 % in the first period when the book plays
+  6 moves). The Architect may refine T in the same ADR. If his T differs, the page follows his ruling and the
+  owner is told the new number. The numbers above hold for any T ≤ 22 000 ms.
 
-- **"tournament"**: a plain word, not tied to one clock. If a later clock is added (for example 40/40), it could cover
-  it. It does not say which clock it was tuned for.
-- **"40-15"**: says exactly which clock. In the CLI there is no clock (T2), so "40-15" there names a pace, not a rule.
-- **Where the name shows** (each is a design point for Architect/Design, not a choice here):
-  - the CLI flag and its usage line (`--difficulty <name>`, beside `1|2|…|7`);
-  - the start-up question's answers (`ABC-200`);
-  - the PGN `Difficulty` tag;
-  - UCI: `Skill Level` is a `spin` 1–7, which cannot carry a word. The level needs an ordinal or its own option.
-    Architect/Design rules this under `ADR-0044` and `ADR-0045`.
-- **The order constraint** (SA `…1ccf0010` § 8): levels are "weakest to strongest" (`ABC-101` ruling 1), and 22.5 s
-  sits between level 6 (5 s) and level 7 (30 s). An ordinal 8 breaks that order, and inserting it renumbers today's 7.
-  So a name beside the ordinals, or a separate option, is the likelier shape. That is Architect/Design's ruling.
+## CLI parity: out of scope
+
+The call (the Orchestrator's brief asked whether it is worth keeping): **not kept.** CLI parity is neither cheap nor
+clean.
+
+- **No user.** Q1 names `cutechess-cli` matches. No one plays the 40/15 setting in the CLI. Q7 ("no" think time in
+  the CLI) points the same way.
+- **Nothing to honour.** The CLI has no clock (T2). A "tournament" setting there is only a 22 s pace with no flag to
+  lose. Level 7 (30 s) already gives a slow CLI opponent.
+- **Not cheap.** It is the whole of the retired `ABC-219`, size M:
+  - the `Difficulty` union and the ordinal-only, exact-equality lookup in `src/cli-options.ts`;
+  - the usage line and the refusal text;
+  - the start-up question (`ABC-200`);
+  - the PGN `Difficulty` tag and the player name;
+  - the test suites `src/cli.test.ts`, `src/startup-questions.test.ts` and `src/render.test.ts`.
+- **Not clean.** If the Architect rules a separate UCI option (the owner's "maybe separate inputs"), the CLI would need
+  a second input of its own for a mode with no clock to spend. That is two shapes for one setting.
+- **If the owner later wants it,** it is a new small ticket on his word. Nothing here blocks it.
 
 ## Scope
 
-- `ABC-218`: one QE reading of today's engine under a 40/15 clock. No code.
-- On the owner's answers only:
-  - `ABC-219` (options a, c): the named level in the CLI;
-  - `ABC-220` (option a only): the same level over UCI;
-  - `ABC-221` (options b, c): the named clock mode over UCI;
-  - `ABC-222` (a, b, c): the acceptance reading of what was built.
-- An `ADR-0045` amendment (a named level) and/or an `ADR-0044` D4 amendment (clock mode), written by Architect/Design
-  and reported to the owner when they land.
+- `ABC-220`: `simple-tournament` over UCI, at T (22.0 s proposed) under a 22.5 s hard ceiling. Milestone 1.
+- `ABC-222`: the 5-game smoke reading of `simple-tournament` at 40/15. Milestone 1.
+- `ABC-221`: `uci-clock-mode` over UCI, with the real clock, a margin, a hard stop and a 60 s ceiling for this mode
+  only. Milestone 2, later (Q2).
+- `ABC-223`: the 5-game smoke reading of `uci-clock-mode` at 40/15. Milestone 2.
+- The Architect writes the ADR text: amendments to `ADR-0044` and `ADR-0045`, or a new ADR, status PROPOSED. It covers
+  the input form, T, the `go` interaction, the two ceilings and the `NFR-004` lines. The owner accepts or declines it.
+  BA/PM does not pre-empt it.
 
 ## Out of scope
 
-- **Changing levels 1–7, the default (5) or their budgets.** Gate: `LEVELS[1..7]` and `DEFAULT_LEVEL` byte-identical,
-  and the `Skill Level` default stays 5.
-- **Spending more time on hard moves** (variable allocation inside the search). A search change; a later epic with a
-  strength reading.
-- **Pondering, threads, a worker for `isready`/`stop`** (`ADR-0044` D5 stands).
-- **A clock in the CLI** (a human clock, flag falls, time-loss results). The CLI pace is per move only.
-- **A strength claim at 40/15.** No level, option or screen claims an Elo (`EPIC-008` § Out of scope, unchanged). A
-  strength reading at 40/15 is Q6, with its cost.
-- **Entering CCRL or any rating list.** That is distribution: `ADR-0049` (the engine deploys nowhere and publishes no
-  package) and the owner's call (`EPIC-008` § Out of scope).
-- **The other ten ideas of § B.** They wait for `sa-ideas-verify` and are cut later from `ABC-225` (Orchestrator
-  `…ccb72dbe`).
-- **Showing think time in the CLI.** Q7, default no. Under UCI the engine already prints `info … time` each move, and
-  `cutechess-cli`'s PGN records each move's time.
+- **Changing levels 1–7, the default (5), their budgets or their 32 s clamp.** Gate: `LEVELS[1..7]` and `DEFAULT_LEVEL`
+  are byte-identical, and the `Skill Level` default stays 5.
+- **CLI parity** (§ CLI parity), and a clock in the CLI.
+- **Major validation:** ≥ 100 games at 40/15, 24–48 h (Q1). It comes later, as its own ticket on the owner's word.
+- **A strength reading or claim at 40/15** (Q6: "not yet, let's do that after other improvements are done"). No setting
+  claims an Elo.
+- **Showing think time in the CLI** (Q7: no).
+- **Spending more time on a hard move** (a search change). Pondering, threads, and a worker for `isready`/`stop`
+  (`ADR-0044` D5 stands).
+- **Entering CCRL or any rating list.** That is distribution: `ADR-0049` and the owner's call.
+- **`EPIC-010`'s improvements** (`ABC-225..239`).
 
-## Success measures
+## Success measures (accepted by the owner, Q8, 2026-10-29)
 
 | # | measure | target | how it is read |
 |---|---|---|---|
-| M1 | **Never loses on time** | In `ABC-222`'s reading, `skytalix` in the built level or mode loses **0** games on time, and its closest call (the least clock left after any of its moves) is **≥ 500 ms** | `cutechess-cli` 1.5.1, `timemargin=0`, the games and counts pinned in `ABC-222` |
-| M2 | **Uses the clock** | Over each completed 40-move period of `ABC-222`'s full-length games, `skytalix` uses **≥ 75 %** of the 900 s it was given, book moves included | per-move times from the PGN, summed per period |
-| M3 | **The human-facing levels are unchanged** | `LEVELS[1..7]` and `DEFAULT_LEVEL` byte-identical to base; `Skill Level` default 5; at `Skill Level` 1–7, `G` over one whole simulated 40/15 period is identical to base on the virtual clock | `git diff`; each build ticket's identity row |
-| M4 | **The owner's decisions stayed his** | 0 NFR bounds moved without his word; each new ADR text reported to him when it lands; Q1–Q3 answered before any build ticket leaves `Backlog` | the ADR pages and owner-word notes |
+| M1 | **Never loses on time** | In each setting's smoke reading, `skytalix` loses **0** games on time, and its closest call (the least clock left after any of its moves) is **≥ 500 ms** | `cutechess-cli` 1.5.1, `timemargin=0`, 5 games at `tc=40/900` (`ABC-222`, `ABC-223`) |
+| M2 | **Uses the clock** | Over each completed 40-move period, `skytalix` uses **≥ 75 %** of the 900 s it was given, book moves included, per side | per-move times from the PGN, summed per period |
+| M3 | **The human-facing levels are unchanged** | `LEVELS[1..7]` and `DEFAULT_LEVEL` are byte-identical to base. `Skill Level` default is 5. At `Skill Level` 1–7 with neither setting selected, `G` over one simulated 40/15 period equals base, row for row | `git diff`; each build ticket's identity row |
+| M4 | **The owner's decisions stayed his** | 0 NFR bounds moved without his word: 22.5 s and 60 s are his. Each new ADR text is reported to him when it lands. T is told to him | the ADR pages and the owner-word notes |
 
-- **Under option (o), M1 and M2 are read on today's `Skill Level` 7 by `ABC-218`, and graded only if the owner says the
-  reading closes the epic.** `ABC-218` alone grades nothing; it reports.
-- **Strength is not a measure** (§ Out of scope, Q6). Respecting `RISK-EPIC008-03` and the Architect's ranking
-  (`arch-epic008-rd` `…0c5d62f4`): self-play does not stand in for an outside opponent, and a 3 s or 1.5 s reading does
-  not stand in for ~22.5 s. Nothing on this page infers strength at 40/15 from them.
+- **Each setting's per-move ceiling is read too.** The longest move is ≤ 22 500 ms (`simple-tournament`) or ≤ 60 000 ms
+  plus `AR-NFR004-A`'s ≤ ~31 ms (`uci-clock-mode`).
+- **A smoke reading shows that it works, nothing more** (Q1). Five games cannot bound a forfeit rate. That needs the
+  later major validation.
+- **Strength is not a measure** (Q6). Self-play does not stand in for an outside opponent (`RISK-EPIC008-03`,
+  `arch-epic008-rd` `…0c5d62f4`).
 
 ## Tickets (order is the pull order; the pages are under `plans/tickets/`)
 
 | order | id | title | size | priority | column | DoR | depends on | waits on |
 |---|---|---|---|---|---|---|---|---|
-| 1 | `ABC-218` | Reading: today's `Skill Level` 7 under a 40/15 clock over UCI, its clock use and its closest call to the flag | S | P2 | Ready | 10/10 | `ABC-204`'s pinned tools; an idle board (ALONE) | nothing |
-| 2 | `ABC-219` | A named tournament level in the CLI: the engine thinks a fixed T a move, rate 0, and levels 1–7 are unchanged | M | P2 | Backlog | 8/10 | Architect/Design (`ADR-0045` amendment) | Q1, Q2 (a or c), Q3, Q4 |
-| 3 | `ABC-220` | The same named level over UCI, at a fixed T a move under any clock | S | P2 | Backlog | 8/10 | `ABC-219`; Architect/Design (`ADR-0044` D4/D11) | Q2 = (a), Q3, Q4 |
-| 4 | `ABC-221` | Under a UCI clock, a named mode spends the real clock with a safety margin and a hard stop, and never loses on time | M | P2 | Backlog | 9/10 | Architect/Design (`ADR-0044` D4 amendment) | Q1, Q2 (b or c), Q3, Q5 |
-| 5 | `ABC-222` | Acceptance reading: the built level or mode plays 40/15 over UCI with 0 losses on time and ≥ 75 % clock use | S | P2 | Backlog | 9/10 | `ABC-220` or `ABC-221` merged; an idle board | Q2 |
+| — | `ABC-218` | Reading: today's `Skill Level` 7 under a 40/15 clock | S | P2 | Done (dropped) | — | — | **closed by the owner 2026-10-29, not run** |
+| — | `ABC-219` | A named tournament level in the CLI | M | P2 | Done (dropped) | — | — | **retired 2026-10-29**: CLI parity out of scope; its core moved into `ABC-220` |
+| 1 | `ABC-220` | `simple-tournament` over UCI: a fixed T a move (22.0 s proposed) under a 22.5 s hard ceiling | M | P2 | Backlog | 9/10 | — | **only the Architect's ruling** (`arch-epic009-settings`: the form, the `go` interaction, T) |
+| 2 | `ABC-222` | Smoke reading: `simple-tournament` plays 5 games at 40/15 with 0 losses on time | S | P2 | Backlog | 9/10 | `ABC-220` merged; an idle board | `ABC-220` |
+| 3 | `ABC-221` | `uci-clock-mode` over UCI: the real clock, a margin, a hard stop, a 60 s ceiling | M | P3 | Backlog | 9/10 | milestone 1 done (owner: "later") | **the Architect's ruling** (`ADR-0044` D4/D5 for the mode) |
+| 4 | `ABC-223` | Smoke reading: `uci-clock-mode` plays 5 games at 40/15 with 0 losses on time | S | P3 | Backlog | 9/10 | `ABC-221` merged; an idle board | `ABC-221` |
 
-- **Per option, what is pulled after `ABC-218`:** (o) nothing; (a) 219 → 220 → 222; (b) 221 → 222; (c) 219 and 221
-  (independent, either first) → 222. Under (c), `ABC-219`'s UCI rows do not exist, and `ABC-220` is closed unbuilt.
-- **`ABC-223` and `ABC-224` are not used.** They go back to the Orchestrator's pool.
+- **Milestone 1** is `ABC-220` then `ABC-222`. **Milestone 2** is `ABC-221` then `ABC-223`, after milestone 1 and on
+  the owner's "later".
+- `ABC-221` is P3 because the owner sequenced it after milestone 1. It needs no other code from `ABC-220`. They share
+  `src/uci-session.ts`, so whichever merges second rebases.
+- **`ABC-224` is unused.** It goes back to the Orchestrator's pool.
 
-## Owner questions
+## Owner questions (all answered 2026-10-29, `…a67f71ac`)
 
-- **Q1. Who plays the 40/15 setting?** (i) you, in the CLI; (ii) GUI or `cutechess-cli` matches, engine against
-  engine; (iii) both. **No default:** it decides between (b) and (c).
-- **Q2. Which option?** (o) nothing new; (a) a fixed-budget level; (b) clock-based allocation over UCI; (c) both
-  (§ Options). **Default without an answer: (o)**, and only `ABC-218` runs.
-- **Q3. The name: "tournament" or "40-15"?** (§ The name). **No default.** Spelling at each surface is Architect's.
-- **Q4 (only under a or c). The fixed budget T, and its `NFR-004` ceiling.**
-  - (i) **22.5 s**, as you said. In the CLI there is no clock, so nothing can lose on time. **Over UCI it misses M1 by
-    arithmetic:** if every move of a period spends 22.5 s, the 40th move starts with 22.5 s left, T3 gives it
-    remaining − 50 ms, and it ends ~50 ms from the flag (less the overshoot). Only banked book-move time helps.
-  - (ii) **22.0 s**: 40 × 22.0 = 880 s, so the 40th move ends with ~20 s left. M1 holds by arithmetic, and M2's
-    ≥ 75 % holds (98 % less book moves).
-  - **Ceiling:** the `ABC-212` rule (budget + 2 s) gives **24.5 s** or **24.0 s**. Either sits under today's 32 s
-    clamp, so the clamp does not move. The `NFR-004` text for the new level is yours.
-  - **Default: under (c), where the level is CLI-only, (i) 22.5 s with a 24.5 s ceiling; under (a), where it also runs
-    over UCI, (ii) 22.0 s with a 24.0 s ceiling.** One T for every surface: a level that differs by surface is a
-    defect (`ABC-212` § Size). Proposed, and not placed until you accept it.
-- **Q5 (only under b or c). The per-move ceiling of the clock mode.**
-  - (i) **Keep 32 s** (today's `HARD_CEILING_MS`). Under 40/15 the share is ~22.5 s, so it rarely binds. No bound
-    moves.
-  - (ii) **Lift it** for longer clocks. That moves `NFR-004` and lengthens the `isready` delay (T6).
-  - **Default: (i).**
-- **Q6. A strength reading at 40/15?** None is in this epic.
-  - (a) **None** (default). Nothing claims strength.
-  - (b) A short look, for information only: about 10 games against Stockfish at 40/15, ~10–15 h ALONE. Its error is
-    about ±200 Elo, so it says little.
-  - (c) A full R at 40/15: 200 games, ~150–250 h ALONE, on a host that runs 80–95 °C over hours
-    (`orch-2026-10-29g` `…ef6ab697`).
-  - Any of (b)/(c) waits on how the R/D question is settled (`arch-epic008-rd` `…0c5d62f4`, now with you).
-  - Hours are estimates (`UNKNOWN - verify`).
-- **Q7. Show the engine's think time in the CLI?** (a) no, default; (b) one line after each engine move ("thought
-  22.5 s"), a small ticket later.
-- **Q8. Accept this epic and its measures M1–M4** (EPIC goals and M-criteria are yours, `…5aaf7cec` item 3): M1's 0
-  losses on time with a closest call ≥ 500 ms, and M2's ≥ 75 % of each period. Options: (a) as written; (b) other
-  numbers. **Default: (a)**, read as proposed until you say otherwise; no build ticket leaves `Backlog` before Q1–Q3
-  anyway.
-- **Not a question for you:** how the safety margin in (b) is built. M1's ≥ 500 ms is the requirement, and
-  Architect/Design designs the mechanism. That is delivery, under your delegation (`…5aaf7cec` item 1). So are the
-  readings' game counts and the thermal rule.
+| Q | asked | answer (2026-10-29) | what it changed |
+|---|---|---|---|
+| Q1 | Who plays the 40/15 setting? | "cutechess matches". Smoke readings of 5 or 10 games. Major validation (≥ 100 games, 24–48 h) later | UCI is the surface. CLI parity is out. Smoke readings are 5 games. Major validation is out of the MVP |
+| Q2 | Which option? | "Initially … 22.5 second separate difficulty setting …, later UCI clock mode" | (a) first (`ABC-220`), then (b) later (`ABC-221`). Option (o) and `ABC-218` are gone |
+| Q3 | The name? | "2 new difficulty settings … simple-tournament and … uci-clock-mode (maybe separate inputs)" | The names are fixed. The form is the Architect's |
+| Q4 | T and its ceiling | "22.5 ceiling" | The hard ceiling is 22.5 s. T = 22.0 s is proposed under it (§ The budget T); the owner is told |
+| Q5 | The clock mode's per-move ceiling | "increase to 60s" | 60 s for `uci-clock-mode` only. The 32 s clamp stays for levels 1–7 |
+| Q6 | A strength reading at 40/15? | "not yet, … after other improvements are done" | None in this epic |
+| Q7 | Think time in the CLI? | "no" | Out of scope |
+| Q8 | Accept the epic and M1–M4? | "ok" | Accepted: 0 losses on time, closest call ≥ 500 ms, ≥ 75 % per period |
+
+- **No owner question is open.** Two items are reported to the owner and not asked: T = 22.0 s, and the Architect's
+  ADR text when it lands (he accepts or declines it).
+- **Not a question for the owner:** how the clock mode's margin is built, the readings' exact command lines, and the
+  thermal rule. That is delivery under his delegation (`…5aaf7cec` item 1).
+
+## Options as cut (history, superseded 2026-10-29 by Q2)
+
+The cut framed (o) nothing new, (a) a fixed-budget level, (b) clock-based allocation over UCI, and (c) both. The owner
+picked **(a) first, then (b) later**, as two separate settings. That is close to (c) without the CLI half. The
+original table is in git at `f45aea95`.
 
 ## Dependencies
 
-- `ABC-204`'s pinned host tools (`cutechess-cli` 1.5.1, Stockfish 19), re-pinned on this host (`EPIC-008`
-  § Dependencies, 2026-10-28). Their paths come from the environment and stay out of the records (`ADR-0049` d4).
-- `tools/rating/rating.ts` plays a fixed time per move (`st=`). It has no `tc=40/900` mode, so `ABC-218` and `ABC-222`
-  run `cutechess-cli` directly in QE's scratch clone. No `tools/` edit is needed for either.
-- `ABC-219`–`ABC-221` touch the files `ABC-212` touched (`src/levels.ts`, `src/cli-options.ts`, `src/uci-session.ts`,
-  the start-up question, `src/pgn.ts`). No open ticket holds them today.
-- `sa-ideas-verify` `…1ccf0010` is the source of § "How today's engine handles time". Its verdicts on the other § B
-  items are not used here.
+- **The Architect, `arch-epic009-settings`** (running in parallel). It rules the input form of both settings, the
+  `go` interaction for `simple-tournament`, the clock mode's rule, its margin and stop, and the ceilings. It also
+  writes the `NFR-004` change. `ABC-220` and `ABC-221` wait on it, and on the owner's acceptance of the ADR.
+- `ABC-204`'s pinned host tools (`cutechess-cli` 1.5.1), re-pinned on this host on 2026-10-28. Their paths come from
+  the environment and stay out of the records (`ADR-0049` d4).
+- `tools/rating/rating.ts` plays a fixed time per move (`st=`). It has no `tc=40/900` mode, so `ABC-222` and `ABC-223`
+  run `cutechess-cli` directly in QE's scratch clone. No `tools/` edit is needed.
+- `ABC-220` and `ABC-221` touch `src/uci-session.ts`, `src/levels.ts` and/or `src/engine.ts`, as the Architect rules.
+  No open ticket holds them today.
+- `sa-ideas-verify` `…1ccf0010` is the source of § "How today's engine handles time".
 
 ## Risks
 
-- **`RISK-EPIC009-01`: a loss on time at a period's last move.** Today's margin there is 50 ms (T3), the in-process
-  overshoot ≤ ~31 ms (T5), and the I/O latency is unknown. `ABC-218` reads it on today's engine; `ABC-221`'s margin
-  and `ABC-222` close it.
-- **`RISK-EPIC009-02`: a GUI gives up on `isready` or `stop` mid-search.** At ~22.5–30 s a move, an answer can be that
-  late (T6). `cutechess-cli` sent 0 pings during a search in `ABC-202`'s 8 games. But `ADR-0045` A4 records
-  `cutechess-cli` killing an engine at its 15 000 ms `IdleTimeout` after a mid-search `stop`, which it sends at a game
-  end or when pondering (SA `…1ccf0010` § 8). Level 7 carries the same exposure today. `ABC-218` classes such a kill
-  by when it happens. Other GUIs: `UNKNOWN - verify`.
-- **`RISK-EPIC009-03`: a GUI that does not send `movestogo`** for a repeating control. The session then assumes 20
-  (T3). `ABC-218` `A3` logs what `cutechess-cli` sends.
-- **`RISK-EPIC009-04`: wall time and heat.** A 40/15 game takes about 45–75 min. At width 1 over hours, this host ran a
-  Tctl median of 73–80 °C, max 95.5 °C, with no frequency fall (`orch-2026-10-29g` `…ef6ab697`). Each reading runs
+- **`RISK-EPIC009-01`: a loss on time at a period's last move.** With `simple-tournament` at T = 22.0 s, the margin
+  there is ~18.8 s by arithmetic. With `uci-clock-mode`, the margin is a requirement. The pipe and GUI latency is
+  unread. `ABC-222` and `ABC-223` read it in 5 games each. Only the later major validation bounds it.
+- **`RISK-EPIC009-02`: a GUI gives up on `isready` or `stop` mid-search.** An answer can be one budget late
+  (`ADR-0044` D5): up to 22.5 s for `simple-tournament` and up to 60 s for `uci-clock-mode`, against level 7's 32 s
+  today. `ADR-0045` A4 records `cutechess-cli` killing an engine at its 15 000 ms `IdleTimeout` after a mid-search
+  `stop`. It sends one at a game end or when pondering. The Architect rules on this residual. The smoke readings
+  count such kills.
+- **`RISK-EPIC009-03`: a GUI that does not send `movestogo`.** § The budget T shows that M1 and M2 hold for
+  `simple-tournament` either way. `uci-clock-mode` needs a fallback rule (the Architect's). The smoke readings log what
+  `cutechess-cli` sends.
+- **`RISK-EPIC009-04`: wall time and heat.** A 5-game 40/15 smoke reading is ≤ ~5 h at width 1 (games capped at 80
+  moves; § `ABC-222`). This host ran a Tctl median of 73–80 °C at width 1 over hours (`…ef6ab697`). Each reading runs
   ALONE, on AC, with a thermal and frequency log. A frequency fall over 5 % makes it UNRESOLVED.
-- **`RISK-EPIC009-05`: a strength story slips in.** A slower level "must be stronger" is a forecast, not a reading
-  (`RISK-EPIC008-03`; `arch-epic008-rd` explanation 3). Mitigated by no strength measure (Q6).
-- **`RISK-EPIC009-06`: the human waits on forced moves.** A fixed 22.5 s level spends it on one legal move too (T8).
-  Accepted under (a), as `ABC-212` OQ-212-2 accepted it at 30 s.
+- **`RISK-EPIC009-05`: a strength story slips in.** "A slower setting must be stronger" is a forecast, not a reading.
+  Q6 keeps strength out.
+- **`RISK-EPIC009-06`: a forced move costs a full 22.0 s.** `simple-tournament` spends T on one legal move too (T8).
+  This is accepted. A clock with banked time can absorb it; `simple-tournament` banks nothing.
+- **`RISK-EPIC009-07` (new): 60 s searches and memory.** `NFR-009` (≤ 16 MiB held, growth ≤ 1 MiB) was read MET at
+  30 s (`ABC-212`). A 60 s ceiling is outside that reading, so `ABC-221` owes a re-read.
 
 ## NFR triggers
 
-- **`NFR-004` (owner's).** A new level or mode needs its own ceiling: Q4 (24.5 s proposed) and Q5 (32 s kept). Nothing
-  moves without his word. `AR-NFR004-A` (≤ ~31 ms) is re-read by Security/NFR at the gate.
-- **`NFR-009`: search-held memory ≤ 16 MiB, growth ≤ 1 MiB.** It was read MET at 30 s (`ABC-212`). A budget ≤ 30 s is
-  inside that reading; a mode above 30 s (Q5 (ii)) re-reads it.
-- **`NFR-008`: `npm test` wall ≤ 10 s at load1 ≤ 8.** New rows run on the virtual clock only; 0 real-clock rows in the
-  default lane.
+- **`NFR-004` (owner's).**
+  - `simple-tournament`: a ceiling of **22.5 s** (Q4). This departs from `ABC-212`'s "budget + 2 s" rule, by the
+    owner's word.
+  - `uci-clock-mode`: **60 s** (Q5), above today's 32 s clamp, for this mode only. Levels 1–7 keep their rows and the
+    32 s clamp.
+  - The Architect names the change, and Security/NFR places the text. `AR-NFR004-A` (≤ ~31 ms) is re-read at each gate.
+- **`NFR-009`:** 22.5 s is inside `ABC-212`'s 30 s reading, so `ABC-220` owes no re-read. 60 s is outside it, so
+  `ABC-221` owes one (≤ 16 MiB, growth ≤ 1 MiB).
+- **`NFR-008`: `npm test` wall ≤ 10 s at load1 ≤ 8.** New rows run on the virtual clock only. There are 0 real-clock
+  rows in the default lane.
 - **`NFR-005`, `NFR-011`, `NFR-012`: untouched.** Their referent is `Skill Level` 5, which does not change.
-- **`ADR-0044` D5 latency:** at most one budget late, ≤ 24.5 s under Q4's default and ≤ 32 s under Q5's. It stays
-  accepted unless Architect/Design rules otherwise.
-- **Security (ASVS L1):** the new name is one word in closed sets (the flag, the start-up answer, the UCI option). No
-  new input class. Security/NFR confirms at each gate.
+- **`ADR-0044` D5 latency:** ≤ 22.5 s and ≤ 60 s (`RISK-EPIC009-02`). The Architect rules on it.
+- **Security (ASVS L1):** each setting is one value in a closed set, in the form the Architect rules. `go`'s numeric
+  tokens are already parsed and refused today. Security/NFR confirms at each gate.
 
 ## Test notes
 
 - Readings never run in `npm test` (`NFR-008`). They run in QE's scratch clone, ALONE, like `ABC-202` and `ABC-204`.
-- The clock arithmetic is pinned on the virtual clock (`src/virtual-clock.ts`, `ADR-0027`): one whole simulated 40/15
+- The clock arithmetic is pinned on the virtual clock (`src/virtual-clock.ts`, `ADR-0027`), one whole simulated 40/15
   period per row, with the injected `now`.
 - Each build ticket changes production lines, so UAT is owed. The QE verdict signs it under the owner delegation
-  (`…5aaf7cec` item 2). The owner may play a game; nothing waits on it.
+  (`…5aaf7cec` item 2). The owner may play a match; nothing waits on it.
