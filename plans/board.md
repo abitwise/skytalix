@@ -1,3 +1,4 @@
+_Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g) — arch-ABC-230-reading merged: ADR-0054 PROPOSED (prior keys; pre-root threefold needs two earlier occurrences; no TT/door change) → owner. Q3 ep options (a) keep (rec.), (b) ep-legal key (M, re-keys book), (c) normalise history only (S). Width 1/3._
 _Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g) — `arch-ABC-230-reading` routed (ADR-0002 cl. 3 reading for ABC-230 + ep options for EPIC-010 Q3). Width 2/3._
 _Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g) — arch-ABC-228-adr merged: ADR-0053 PROPOSED (owner accepts; changes owner-accepted ADR-0024 d4). OQ-228-1: G6 forecast fails on position-6 (depth 9 vs 10); options (a) grade floor + report ≥ base (rec.), (b) mate-only form, (c) full + G6 closes. ABC-228 waits owner + ABC-235 merge. Width 1/3._
 _Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g, …561f1ef1) — ABC-225 SE done (rpair; r/d byte-identical; gates 63/2 128); code review PASS → In Review; `qe-ABC-225` queued HELD until se-ABC-235 + arch-ABC-228-adr finish (A5 = 40 real games ALONE, ~1 h). Width 2/3._
@@ -1155,7 +1156,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [EPIC-010] skytalix closes its verified engine gaps; a change ships on an outside-opponent smoke (owner: BA/PM, size: L, priority: P2, since: 2026-10-29, accepted 2026-10-29 (Q5, no Elo target); Q4 = (e): 10 D + 10 R smoke per value-changing ticket + batched R pair per milestone; Q2 answered (~1700 non-goal removed; goal >= 2 700 aspirational); Q1, Q3 open (defaults))
 - [ABC-228] In check, quiescence searches every evasion; none means mate (size: M, priority: P2, DoR 9/10; waits owner accepts ADR-0053 + OQ-228-1 (G6 on position-6); build after ABC-235 merges (shares legalCaptures))
 - [ABC-229] Quiescence searches quiet queen promotions (size: S, priority: P2, DoR 9/10; waits owner accepts ADR-0053; after ABC-228)
-- [ABC-230] The game's earlier positions reach the search, CLI and UCI (size: M, priority: P2, DoR 9/10; waits Architect reading of ADR-0002 cl. 3)
+- [ABC-230] The game's earlier positions reach the search, CLI and UCI (size: M, priority: P2, DoR 9/10; Architect reading done (ADR-0054 PROPOSED, owner accepts); BA/PM fold owed (scope 3/5, A1 wording, A5 cut, rows H2/H4); value-changing → smokes)
 - [ABC-231] King table tapered by phase, alone (size: S, priority: P3, DoR 9/10; milestone 2; waits ADR ruling)
 - [ABC-232] Passed pawns by phase (size: S, priority: P3, DoR 9/10; milestone 2; after ABC-231)
 - [ABC-233] History heuristic for quiet moves, cleared per search (size: M, priority: P3, DoR 9/10; milestone 2; waits ADR; after ABC-240 (shared orderMoves))
