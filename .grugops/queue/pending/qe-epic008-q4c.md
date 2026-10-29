@@ -4,7 +4,7 @@ role: qe-e2e
 epic: plans/epics/EPIC-008-skytalix-plays-measurably-stronger-at-the-same-levels-and-time-budgets.md
 ref: .grugops/context/qe-epic008-q4c/
 branch: new grugops/qe-epic008-q4c from main, worktree ../wt-qe-epic008-q4c
-width: 1 — ALONE (one D reading, ~6 h, + ~1 h). Records-only hops may run beside it.
+width: 1 — ALONE (one D reading at --concurrency 1 per owner word orch-2026-10-29g/…21444ff1, ~18 h, + ~1 h). Records-only hops may run beside it.
 held: DO NOT SPAWN until the owner's explicit go (orch-2026-10-29c/…d9513dc1). He sets "counts or information only" and the concurrency.
 ---
 
