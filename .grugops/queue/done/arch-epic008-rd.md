@@ -42,3 +42,28 @@ Both intervals exclude 0, on opposite sides. Explain it from the records.
 ## Publish
 - Seal notes (task `arch-epic008-rd`) with `at` from `date -u`: one `observation` per explanation (or one note with all of them) and a `kind: decision` holding the ranking and the next step. Commit on your branch.
 - Write `## Result` plus a 10-cell trace row (header order of `plans/traceability.md`) into this brief in main's queue, then move it and its claim.md to done/.
+
+## Result
+
+**Done, on `grugops/arch-epic008-rd` (worktree `../wt-arch-epic008-rd`, from main `7a6afba5`): records `ed6fb2ee`. Not merged; nothing pushed.** Notes (task `arch-epic008-rd`): observation `20261029T195200Z-architect-design-observation-9d172446` (the evidence for each explanation) and decision `20261029T195200Z-architect-design-decision-0c5d62f4` (the ranking, what it means for M1 and the method, and the next step). The analysis scripts and their outputs are in `raw/`. No games, no `rating.ts` runs, no engine probes (0 s of engine CPU), and no `src/`, `data/`, `tools/` or board edits.
+
+**Ranking:**
+1. **Opponent dependence (non-transfer).** The D sign is replicated: `ABC-208` + `ABC-215` = +54.0 ± 33.3 on the previous host, and the look reads +52.5 here. R's drop shows on both opening halves (−71.7 and −93.8) and both colours (−84.1 and −81.7). Lost-game turning points in the middlegame went from 16 to 35. This cannot be separated from time per move, nor `ABC-215` from `ABC-208`.
+2. **Chance, on R's size.** R alone has p 0.6–1.4 % if the true value is 0. The joint split has p 0.001–0.002. The opening-paired R2 − R1 is −82.9 ± 64.3 (information only).
+3. **Time per move.** It cannot be told apart from 1, and no record points to it.
+4. **Host, heat and order: disfavoured.** Stockfish's nps was 1.643 M in R1 and 1.623 M in R2 (−1.2 %), flat by quarter.
+5. **Openings and colours: excluded.**
+6. **Artifact and build: excluded.** D's `dist/` trees are byte-equal to R's, and R1/R2 differ in exactly the 6 non-test source files.
+
+**M1:** clause 1 fails on any explanation, since even D's +52.5 has an upper limit of +99.3. The claim "main is weaker" hangs on 1 against 2. This is not re-graded here.
+
+**Next step, a proposal for the owner:** an R gauntlet of `3497aad2`, `ba74b71d` (`ABC-215` only) and main.
+- The existing `rating.ts r` shape: E 1 910, 3 000 ms, 200 games each, width 2, in the order `ba74b71d` → main → `3497aad2`.
+- Information only, unless the owner says it counts.
+- About 13.5 h + 1 h for QE, splittable into three runs of about 4.5 h.
+- Tctl median about 82–83 °C and max about 84–87 °C per run, as in R1 and R2.
+- A cheaper cut drops the `3497aad2` re-read: about 9 h + 1 h.
+
+**STOP:** none.
+
+| arch-epic008-rd | Architect: why R (−82.9 ± 73.8) and the D look (+52.5 ± 46.8) disagree on main vs 3497aad2, from records; ranked: opponent non-transfer > chance on R's size > time per move > host (disfavoured, SF nps −1.2 %) > openings/colours, artifact (excluded); next step proposed: 3-sha R gauntlet 3497aad2 / ba74b71d / main, ~13.5 h width 2 | EPIC-008 | — | none moved; RISK-EPIC008-03; ADR-0050, ADR-0048 cited, unchanged | grugops/arch-epic008-rd @ ed6fb2ee (records only): .grugops/context/arch-epic008-rd/notes/ (2) + raw/ (scripts, outputs) | no gates run (records only; no code changed); no games, no engine probes | n/a (records) | not released; main runs locally | arch-epic008-rd: done (proposal to owner) |
