@@ -1,8 +1,8 @@
 ---
 id: ABC-215
 title: "The evaluation's material values and piece-square tables are our own, each made by a stated rule, and the CC BY-SA 3.0 carve-out leaves `NOTICE` and the `src/evaluate.ts` header"
-status: ready
-column: Ready
+status: done
+column: Done
 size: L
 priority: P2
 epic: EPIC-008
