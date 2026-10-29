@@ -1,3 +1,4 @@
+_Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g) — bapm-ABC-235-split merged: ABC-240 (cut 6, S, P3) → Ready 1/8, pulled after ABC-235 merges; ABC-233/234 after ABC-240. Width 2/3._
 _Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g) — arch-ABC-235 merged (48015e9f): cuts 1,3,5 value-identical → ABC-235 In Development (`se-ABC-235`); cut 6 split → ABC-240 (`bapm-ABC-235-split`); cuts 2,4 out; no ADR; OD-235-1 (re-opening ADR-0003's king-scan attempt) INFO to owner, veto open. Width 3/3._
 _Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g) — bapm-owner-words-b merged: EPIC-010 accepted; merge rule = 10 D + 10 R smoke per value-changing ticket (S-1..S-4) + R-pair batch per milestone; EPIC-004 ~1700 non-goal removed (goal >= 2 700 aspirational); EPIC-009 folded to ADR-0052 (OQ-0052-1 open). ABC-225 → Ready → In Development (`se-ABC-225`). Width 2/3._
 _Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g) — ABC-227 DONE (f4301d0c): movegen ~47 %, eval ~30 %, ordering ~6 % of self time; six value-identical cuts. ABC-235 Backlog → In Design (`arch-ABC-235`, confirm value-identity + proof). Width 2/3._
@@ -1066,7 +1067,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
     ## In Development (WIP 2/3)
-- [ABC-235] Cost-per-node cuts 1 → 3 → 5, value-identical (size: M, priority: P2; design arch-ABC-235 …7fc1b90c/…eebca902: cuts 1,3,5 in; 6 split → ABC-240; 2,4 out; no ADR; S2, no smoke; **pulled 2026-10-29** → `se-ABC-235`)
+- [ABC-235] Cost-per-node cuts 1 → 3 → 5, value-identical (size: M, priority: P2; design arch-ABC-235 …7fc1b90c/…eebca902: cuts 1,3,5 in; 6 split → ABC-240; 2,4 out; no ADR; S2, no smoke; **pulled 2026-10-29** → `se-ABC-235`; DoR 10/10; scope line on page (bapm-ABC-235-split): piece-list + non-capture-legality candidates struck)
 - [ABC-225] Interleaved R-pair command: the batch's instrument (re-scoped 2026-10-29) (size: M, priority: P2, DoR 10/10; tools only; Done before milestone 1's batch; not during an ALONE reading; **pulled 2026-10-29** → `se-ABC-225`, QE follows for A5/A6 ALONE)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
@@ -1153,8 +1154,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [ABC-230] The game's earlier positions reach the search, CLI and UCI (size: M, priority: P2, DoR 9/10; waits Architect reading of ADR-0002 cl. 3)
 - [ABC-231] King table tapered by phase, alone (size: S, priority: P3, DoR 9/10; milestone 2; waits ADR ruling)
 - [ABC-232] Passed pawns by phase (size: S, priority: P3, DoR 9/10; milestone 2; after ABC-231)
-- [ABC-233] History heuristic for quiet moves, cleared per search (size: M, priority: P3, DoR 9/10; milestone 2; waits ADR)
-- [ABC-234] SEE orders captures, ordering only (size: M, priority: P3, DoR 8/10; milestone 2; waits evidence + ADR)
+- [ABC-233] History heuristic for quiet moves, cleared per search (size: M, priority: P3, DoR 9/10; milestone 2; waits ADR; after ABC-240 (shared orderMoves))
+- [ABC-234] SEE orders captures, ordering only (size: M, priority: P3, DoR 8/10; milestone 2; waits evidence + ADR; after ABC-240 (shared orderMoves))
 - [ABC-236] Aspiration windows at the root (size: M, priority: P3, DoR 9/10; milestone 2; waits ADR)
 - [ABC-237] TT keeps deeper entries on replace (size: S, priority: P3, DoR 9/10; milestone 2; waits ADR-0025 amendment)
 - [ABC-238] A deeper stored entry may cut off a shallower search (size: M, priority: P3, DoR 9/10; milestone 2; after ABC-237; waits ADR)
@@ -1186,7 +1187,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 - [EPIC-006] Game session and packaging  (owner: BA/PM, **size: XL — corrected from `L`; 9 tickets / 20 points across both halves, ~1.5x the 13 `L` was assigned, and it hit that ceiling BEFORE distribution was priced**, priority: P1, since: 2026-07-22, **BOTH HALVES NOW CUT: the runnable half `ABC-041`…`ABC-046` (2026-08-13) and the second half `ABC-100`…`ABC-102` (2026-08-16) — only THREE tickets, because the scope of packaging is a FUNCTION of a distribution channel nobody has chosen.** `ABC-100` cuts the DECISION, never the ANSWER: a superseding ADR per `ADR-0007` `D5`, on the owner's word, verbatim and dated. **Acceptance criterion 1 (`npx <package>`) remains unmeetable by any ticket. Recommendation NOT taken, standing for the owner: this should probably be two epics** — the halves share no dependency in either direction and their blockers differ in kind)
 
-## Ready (WIP 0/8)
+## Ready (WIP 1/8)
+- [ABC-240] Move ordering without per-move allocation, value-identical (cut 6, split from ABC-235) (size: S, priority: P3, DoR 10/10; S2, no smoke; A3 ≥ 1.03× nps on 2 boards, miss = not merged, dropped; pull after ABC-235 merges, before ABC-233/234; item 2 shares src/quiescence.ts with ABC-228/229)
 
 
 
