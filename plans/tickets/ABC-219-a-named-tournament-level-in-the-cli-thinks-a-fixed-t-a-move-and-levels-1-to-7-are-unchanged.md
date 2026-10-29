@@ -1,8 +1,8 @@
 ---
 id: ABC-219
 title: "A named tournament level in the CLI: the engine thinks a fixed T a move, rate 0, and levels 1–7 are unchanged"
-status: backlog
-column: Backlog
+status: dropped
+column: Done
 size: M
 priority: P2
 epic: EPIC-009
@@ -10,6 +10,18 @@ epic: EPIC-009
 
 # ABC-219: a named tournament level in the CLI, at a fixed T a move
 
+> **RETIRED 2026-10-29, CLOSED UNBUILT** (BA/PM, task `bapm-amend-epic009`, on the owner's answers of 2026-10-29,
+> `orch-2026-10-29g` `…a67f71ac`). Not delivered, and no code was written.
+>
+> - **CLI parity is out of scope** (`EPIC-009` § CLI parity). Q1 names `cutechess-cli` matches as the user, and Q7
+>   rules out CLI think time. The CLI has no clock to honour (T2). This ticket's whole M spread (the `Difficulty`
+>   union, the usage line, the start-up question, the PGN tag, the refusal text and their tests) buys nothing for
+>   that user. Under a separate-input form (the owner's "maybe separate inputs"), it would need a second CLI input.
+> - **Its core moved into `ABC-220`:** the setting itself (`simple-tournament`, a fixed T, rate 0), now under the
+>   owner's 22.5 s hard ceiling (Q4), with T = 22.0 s proposed.
+> - **If the owner later wants the setting in the CLI,** it is a new small ticket on his word.
+> - The page below is the cut, kept as history; its DoR no longer applies.
+>
 > **Cut 2026-10-29 by BA/PM** (task `bapm-epic009-tournament`, records only, at `main` `51c85f49`). **Waits in
 > Backlog on the owner:** Q2 = (a) or (c), Q3 (the name, written `<NAME>` below), Q4 (T and its ceiling). Q1 informs
 > Q2. If Q2 is (o) or (b), this ticket is closed unbuilt.

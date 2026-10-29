@@ -1,8 +1,8 @@
 ---
 id: ABC-218
 title: "Reading: today's `Skill Level` 7 under a 40/15 clock over UCI, its clock use and its closest call to the flag"
-status: ready
-column: Ready
+status: dropped
+column: Done
 size: S
 priority: P2
 epic: EPIC-009
@@ -11,6 +11,14 @@ owner: QE/E2E
 
 # ABC-218: read today's `Skill Level` 7 under a 40/15 clock: clock use, closest call, losses on time
 
+> **CLOSED BY THE OWNER 2026-10-29, NOT RUN.** Owner, verbatim (`orch-2026-10-29g` `…a67f71ac`): *"Close ABC-218 -
+> no need to measure it, it is not deterministic and we can't anyway use it for tournament."* Recorded by BA/PM,
+> task `bapm-amend-epic009`. No game was played, and nothing in `src/`, `data/` or `tools/` changed. Today's
+> `Skill Level` 7 is not the 40/15 setting: `EPIC-009` builds `simple-tournament` (`ABC-220`) and later
+> `uci-clock-mode` (`ABC-221`). Its protocol lives on, cut to 5 games at `tc=40/900`, as `ABC-222`'s and `ABC-223`'s
+> smoke readings. There is no baseline to compare them against; they are graded on `EPIC-009` M1 and M2 alone. The
+> page below is the cut, kept as history; its DoR no longer applies.
+>
 > **Cut 2026-10-29 by BA/PM** (task `bapm-epic009-tournament`, records only, at `main` `51c85f49`). A reading of
 > today's engine. **No code changes.** It grades nothing on the engine: it reports, and the owner's options in
 > `EPIC-009` § Options rest on it.
