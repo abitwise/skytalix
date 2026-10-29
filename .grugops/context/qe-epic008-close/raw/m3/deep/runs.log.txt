@@ -1,0 +1,9 @@
+2026-10-29T06:15:51Z PUZZLE_DEEP start load1=0.91 power=none vitest=0
+2026-10-29T06:15:55Z PUZZLE_DEEP end rc=0 load1=0.92 ::  Tests 18 passed (18) :: 
+2026-10-29T06:15:55Z ENGINE_DEEP src/engine.test.ts start load1=0.92 power=none vitest=0
+2026-10-29T06:18:15Z ENGINE_DEEP src/engine.test.ts end rc=0 load1=1.02 ::  Tests 60 passed (60)
+2026-10-29T06:18:15Z ENGINE_DEEP src/levels.test.ts start load1=1.02 power=none vitest=0
+2026-10-29T06:27:21Z ENGINE_DEEP src/levels.test.ts end rc=0 load1=1.10 ::  Tests 41 passed (41)
+2026-10-29T06:27:21Z end
+2026-10-29T06:28:31Z PUZZLE_DEEP verbose re-read (to print the count) start load1=0.81
+2026-10-29T06:28:35Z PUZZLE_DEEP verbose end ::  Tests 18 passed (18) :: solved 54/58, baseline 54/58

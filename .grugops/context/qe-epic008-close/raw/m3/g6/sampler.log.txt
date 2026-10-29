@@ -1,0 +1,7 @@
+2026-10-29T06:14:49Z load1=0.76 power=none thermal=38 vitest=0 cutechess_foreign=0
+2026-10-29T06:14:59Z load1=0.80 power=none thermal=71 vitest=0 cutechess_foreign=0
+2026-10-29T06:15:09Z load1=0.83 power=none thermal=72 vitest=0 cutechess_foreign=0
+2026-10-29T06:15:19Z load1=0.86 power=none thermal=72 vitest=0 cutechess_foreign=0
+2026-10-29T06:15:29Z load1=0.88 power=none thermal=72 vitest=0 cutechess_foreign=0
+2026-10-29T06:15:39Z load1=0.90 power=none thermal=72 vitest=0 cutechess_foreign=0
+2026-10-29T06:15:49Z load1=0.91 power=none thermal=72 vitest=0 cutechess_foreign=0

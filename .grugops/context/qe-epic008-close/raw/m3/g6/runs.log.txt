@@ -1,0 +1,22 @@
+2026-10-29T06:14:49Z G6 start
+2026-10-29T06:14:49Z run round=1 pos=kiwipete tree=base load1=0.76 power=none thermal=38 vitest=0
+2026-10-29T06:14:52Z run round=1 pos=kiwipete tree=head load1=0.76 power=none thermal=68 vitest=0
+2026-10-29T06:14:55Z run round=1 pos=position-6 tree=base load1=0.78 power=none thermal=70 vitest=0
+2026-10-29T06:14:58Z run round=1 pos=position-6 tree=head load1=0.80 power=none thermal=71 vitest=0
+2026-10-29T06:15:01Z run round=2 pos=kiwipete tree=head load1=0.80 power=none thermal=71 vitest=0
+2026-10-29T06:15:04Z run round=2 pos=kiwipete tree=base load1=0.81 power=none thermal=71 vitest=0
+2026-10-29T06:15:08Z run round=2 pos=position-6 tree=head load1=0.83 power=none thermal=71 vitest=0
+2026-10-29T06:15:11Z run round=2 pos=position-6 tree=base load1=0.83 power=none thermal=72 vitest=0
+2026-10-29T06:15:14Z run round=3 pos=kiwipete tree=base load1=0.84 power=none thermal=72 vitest=0
+2026-10-29T06:15:17Z run round=3 pos=kiwipete tree=head load1=0.84 power=none thermal=72 vitest=0
+2026-10-29T06:15:20Z run round=3 pos=position-6 tree=base load1=0.86 power=none thermal=72 vitest=0
+2026-10-29T06:15:23Z run round=3 pos=position-6 tree=head load1=0.87 power=none thermal=72 vitest=0
+2026-10-29T06:15:26Z run round=4 pos=kiwipete tree=head load1=0.87 power=none thermal=71 vitest=0
+2026-10-29T06:15:29Z run round=4 pos=kiwipete tree=base load1=0.88 power=none thermal=71 vitest=0
+2026-10-29T06:15:32Z run round=4 pos=position-6 tree=head load1=0.89 power=none thermal=71 vitest=0
+2026-10-29T06:15:36Z run round=4 pos=position-6 tree=base load1=0.89 power=none thermal=72 vitest=0
+2026-10-29T06:15:39Z run round=5 pos=kiwipete tree=base load1=0.90 power=none thermal=72 vitest=0
+2026-10-29T06:15:42Z run round=5 pos=kiwipete tree=head load1=0.90 power=none thermal=72 vitest=0
+2026-10-29T06:15:45Z run round=5 pos=position-6 tree=base load1=0.91 power=none thermal=72 vitest=0
+2026-10-29T06:15:48Z run round=5 pos=position-6 tree=head load1=0.91 power=none thermal=72 vitest=0
+2026-10-29T06:15:51Z end

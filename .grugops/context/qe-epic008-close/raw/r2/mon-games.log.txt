@@ -1,0 +1,400 @@
+2026-10-29T01:42:50Z Started game 2 of 200 (stockfish vs skytalix)
+2026-10-29T01:42:50Z Started game 1 of 200 (skytalix vs stockfish)
+2026-10-29T01:46:31Z Finished game 1 (skytalix vs stockfish): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T01:46:31Z Started game 3 of 200 (skytalix vs stockfish)
+2026-10-29T01:48:46Z Finished game 3 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T01:48:47Z Started game 4 of 200 (stockfish vs skytalix)
+2026-10-29T01:49:45Z Finished game 2 (stockfish vs skytalix): 1-0 {White mates}
+2026-10-29T01:49:45Z Started game 5 of 200 (skytalix vs stockfish)
+2026-10-29T01:51:18Z Finished game 5 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T01:51:18Z Started game 6 of 200 (stockfish vs skytalix)
+2026-10-29T01:54:16Z Finished game 4 (stockfish vs skytalix): 1-0 {White mates}
+2026-10-29T01:54:16Z Started game 7 of 200 (skytalix vs stockfish)
+2026-10-29T01:54:19Z Finished game 6 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T01:54:19Z Started game 8 of 200 (stockfish vs skytalix)
+2026-10-29T01:56:07Z Finished game 7 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T01:56:07Z Started game 9 of 200 (skytalix vs stockfish)
+2026-10-29T01:57:47Z Finished game 8 (stockfish vs skytalix): 1-0 {White mates}
+2026-10-29T01:57:47Z Started game 10 of 200 (stockfish vs skytalix)
+2026-10-29T02:00:24Z Finished game 10 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T02:00:24Z Started game 11 of 200 (skytalix vs stockfish)
+2026-10-29T02:00:34Z Finished game 9 (skytalix vs stockfish): 0-1 {Black mates}
+2026-10-29T02:00:35Z Started game 12 of 200 (stockfish vs skytalix)
+2026-10-29T02:01:43Z Finished game 11 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T02:01:44Z Started game 13 of 200 (skytalix vs stockfish)
+2026-10-29T02:02:23Z Finished game 12 (stockfish vs skytalix): 1-0 {White mates}
+2026-10-29T02:02:23Z Started game 14 of 200 (stockfish vs skytalix)
+2026-10-29T02:04:51Z Finished game 13 (skytalix vs stockfish): 0-1 {Black mates}
+2026-10-29T02:04:51Z Started game 15 of 200 (skytalix vs stockfish)
+2026-10-29T02:05:03Z Finished game 14 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T02:05:03Z Started game 16 of 200 (stockfish vs skytalix)
+2026-10-29T02:07:00Z Finished game 15 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T02:07:01Z Started game 17 of 200 (skytalix vs stockfish)
+2026-10-29T02:07:36Z Finished game 16 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T02:07:36Z Started game 18 of 200 (stockfish vs skytalix)
+2026-10-29T02:09:13Z Finished game 17 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T02:09:13Z Started game 19 of 200 (skytalix vs stockfish)
+2026-10-29T02:10:14Z Finished game 18 (stockfish vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T02:10:14Z Started game 20 of 200 (stockfish vs skytalix)
+2026-10-29T02:11:56Z Finished game 19 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T02:11:56Z Started game 21 of 200 (skytalix vs stockfish)
+2026-10-29T02:13:09Z Finished game 20 (stockfish vs skytalix): 1-0 {White mates}
+2026-10-29T02:13:09Z Started game 22 of 200 (stockfish vs skytalix)
+2026-10-29T02:13:33Z Finished game 21 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T02:13:33Z Started game 23 of 200 (skytalix vs stockfish)
+2026-10-29T02:16:29Z Finished game 23 (skytalix vs stockfish): 0-1 {Black mates}
+2026-10-29T02:16:29Z Started game 24 of 200 (stockfish vs skytalix)
+2026-10-29T02:16:57Z Finished game 22 (stockfish vs skytalix): 1-0 {White mates}
+2026-10-29T02:16:58Z Started game 25 of 200 (skytalix vs stockfish)
+2026-10-29T02:17:56Z Finished game 24 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T02:17:56Z Started game 26 of 200 (stockfish vs skytalix)
+2026-10-29T02:19:35Z Finished game 25 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T02:19:35Z Started game 27 of 200 (skytalix vs stockfish)
+2026-10-29T02:19:51Z Finished game 26 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T02:19:51Z Started game 28 of 200 (stockfish vs skytalix)
+2026-10-29T02:23:08Z Finished game 27 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T02:23:08Z Started game 29 of 200 (skytalix vs stockfish)
+2026-10-29T02:23:21Z Finished game 28 (stockfish vs skytalix): 1-0 {White mates}
+2026-10-29T02:23:21Z Started game 30 of 200 (stockfish vs skytalix)
+2026-10-29T02:26:04Z Finished game 29 (skytalix vs stockfish): 0-1 {Black mates}
+2026-10-29T02:26:05Z Started game 31 of 200 (skytalix vs stockfish)
+2026-10-29T02:26:12Z Finished game 30 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T02:26:12Z Started game 32 of 200 (stockfish vs skytalix)
+2026-10-29T02:27:58Z Finished game 31 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T02:27:58Z Started game 33 of 200 (skytalix vs stockfish)
+2026-10-29T02:29:03Z Finished game 32 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T02:29:03Z Started game 34 of 200 (stockfish vs skytalix)
+2026-10-29T02:30:42Z Finished game 33 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T02:30:42Z Started game 35 of 200 (skytalix vs stockfish)
+2026-10-29T02:31:39Z Finished game 34 (stockfish vs skytalix): 1-0 {White mates}
+2026-10-29T02:31:40Z Started game 36 of 200 (stockfish vs skytalix)
+2026-10-29T02:33:08Z Finished game 35 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T02:33:08Z Started game 37 of 200 (skytalix vs stockfish)
+2026-10-29T02:33:37Z Finished game 36 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T02:33:37Z Started game 38 of 200 (stockfish vs skytalix)
+2026-10-29T02:35:47Z Finished game 37 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T02:35:47Z Started game 39 of 200 (skytalix vs stockfish)
+2026-10-29T02:35:57Z Finished game 38 (stockfish vs skytalix): 1-0 {White mates}
+2026-10-29T02:35:57Z Started game 40 of 200 (stockfish vs skytalix)
+2026-10-29T02:37:27Z Finished game 39 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T02:37:28Z Started game 41 of 200 (skytalix vs stockfish)
+2026-10-29T02:38:16Z Finished game 40 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T02:38:17Z Started game 42 of 200 (stockfish vs skytalix)
+2026-10-29T02:40:11Z Finished game 42 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T02:40:11Z Started game 43 of 200 (skytalix vs stockfish)
+2026-10-29T02:42:09Z Finished game 43 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T02:42:09Z Started game 44 of 200 (stockfish vs skytalix)
+2026-10-29T02:43:13Z Finished game 41 (skytalix vs stockfish): 0-1 {Black mates}
+2026-10-29T02:43:13Z Started game 45 of 200 (skytalix vs stockfish)
+2026-10-29T02:44:27Z Finished game 44 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T02:44:28Z Started game 46 of 200 (stockfish vs skytalix)
+2026-10-29T02:46:19Z Finished game 46 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T02:46:19Z Started game 47 of 200 (skytalix vs stockfish)
+2026-10-29T02:46:59Z Finished game 45 (skytalix vs stockfish): 0-1 {Black mates}
+2026-10-29T02:46:59Z Started game 48 of 200 (stockfish vs skytalix)
+2026-10-29T02:47:21Z Finished game 47 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T02:47:21Z Started game 49 of 200 (skytalix vs stockfish)
+2026-10-29T02:49:32Z Finished game 48 (stockfish vs skytalix): 1-0 {White mates}
+2026-10-29T02:49:32Z Started game 50 of 200 (stockfish vs skytalix)
+2026-10-29T02:53:12Z Finished game 50 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T02:53:12Z Started game 51 of 200 (skytalix vs stockfish)
+2026-10-29T02:55:14Z Finished game 51 (skytalix vs stockfish): 0-1 {Black mates}
+2026-10-29T02:55:15Z Started game 52 of 200 (stockfish vs skytalix)
+2026-10-29T02:55:52Z Finished game 49 (skytalix vs stockfish): 0-1 {Black mates}
+2026-10-29T02:55:52Z Started game 53 of 200 (skytalix vs stockfish)
+2026-10-29T02:58:04Z Finished game 52 (stockfish vs skytalix): 1-0 {White mates}
+2026-10-29T02:58:05Z Started game 54 of 200 (stockfish vs skytalix)
+2026-10-29T02:58:05Z Finished game 53 (skytalix vs stockfish): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T02:58:06Z Started game 55 of 200 (skytalix vs stockfish)
+2026-10-29T02:59:38Z Finished game 54 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T02:59:38Z Started game 56 of 200 (stockfish vs skytalix)
+2026-10-29T03:00:15Z Finished game 55 (skytalix vs stockfish): 0-1 {Black mates}
+2026-10-29T03:00:15Z Started game 57 of 200 (skytalix vs stockfish)
+2026-10-29T03:01:58Z Finished game 56 (stockfish vs skytalix): 1-0 {White mates}
+2026-10-29T03:01:58Z Started game 58 of 200 (stockfish vs skytalix)
+2026-10-29T03:04:28Z Finished game 58 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T03:04:28Z Started game 59 of 200 (skytalix vs stockfish)
+2026-10-29T03:06:12Z Finished game 57 (skytalix vs stockfish): 0-1 {Black mates}
+2026-10-29T03:06:12Z Started game 60 of 200 (stockfish vs skytalix)
+2026-10-29T03:08:20Z Finished game 60 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T03:08:21Z Started game 61 of 200 (skytalix vs stockfish)
+2026-10-29T03:08:44Z Finished game 59 (skytalix vs stockfish): 0-1 {Black mates}
+2026-10-29T03:08:44Z Started game 62 of 200 (stockfish vs skytalix)
+2026-10-29T03:10:24Z Finished game 62 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T03:10:24Z Started game 63 of 200 (skytalix vs stockfish)
+2026-10-29T03:14:04Z Finished game 63 (skytalix vs stockfish): 0-1 {Black mates}
+2026-10-29T03:14:04Z Started game 64 of 200 (stockfish vs skytalix)
+2026-10-29T03:15:03Z Finished game 61 (skytalix vs stockfish): 1/2-1/2 {Draw by fifty moves rule}
+2026-10-29T03:15:04Z Started game 65 of 200 (skytalix vs stockfish)
+2026-10-29T03:15:45Z Finished game 64 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T03:15:45Z Started game 66 of 200 (stockfish vs skytalix)
+2026-10-29T03:16:03Z Finished game 65 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T03:16:03Z Started game 67 of 200 (skytalix vs stockfish)
+2026-10-29T03:17:33Z Finished game 66 (stockfish vs skytalix): 1-0 {White mates}
+2026-10-29T03:17:33Z Started game 68 of 200 (stockfish vs skytalix)
+2026-10-29T03:18:49Z Finished game 68 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T03:18:49Z Started game 69 of 200 (skytalix vs stockfish)
+2026-10-29T03:18:58Z Finished game 67 (skytalix vs stockfish): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T03:18:59Z Started game 70 of 200 (stockfish vs skytalix)
+2026-10-29T03:20:33Z Finished game 69 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T03:20:33Z Started game 71 of 200 (skytalix vs stockfish)
+2026-10-29T03:21:17Z Finished game 70 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T03:21:18Z Started game 72 of 200 (stockfish vs skytalix)
+2026-10-29T03:22:52Z Finished game 71 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T03:22:52Z Started game 73 of 200 (skytalix vs stockfish)
+2026-10-29T03:23:37Z Finished game 72 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T03:23:38Z Started game 74 of 200 (stockfish vs skytalix)
+2026-10-29T03:25:04Z Finished game 73 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T03:25:04Z Started game 75 of 200 (skytalix vs stockfish)
+2026-10-29T03:26:41Z Finished game 75 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T03:26:41Z Started game 76 of 200 (stockfish vs skytalix)
+2026-10-29T03:27:06Z Finished game 74 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T03:27:06Z Started game 77 of 200 (skytalix vs stockfish)
+2026-10-29T03:28:45Z Finished game 76 (stockfish vs skytalix): 1-0 {White mates}
+2026-10-29T03:28:46Z Started game 78 of 200 (stockfish vs skytalix)
+2026-10-29T03:28:53Z Finished game 77 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T03:28:54Z Started game 79 of 200 (skytalix vs stockfish)
+2026-10-29T03:30:05Z Finished game 78 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T03:30:05Z Started game 80 of 200 (stockfish vs skytalix)
+2026-10-29T03:30:48Z Finished game 79 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T03:30:48Z Started game 81 of 200 (skytalix vs stockfish)
+2026-10-29T03:32:45Z Finished game 80 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T03:32:46Z Started game 82 of 200 (stockfish vs skytalix)
+2026-10-29T03:33:10Z Finished game 81 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T03:33:10Z Started game 83 of 200 (skytalix vs stockfish)
+2026-10-29T03:35:29Z Finished game 82 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T03:35:29Z Started game 84 of 200 (stockfish vs skytalix)
+2026-10-29T03:35:58Z Finished game 83 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T03:35:58Z Started game 85 of 200 (skytalix vs stockfish)
+2026-10-29T03:36:57Z Finished game 84 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T03:36:57Z Started game 86 of 200 (stockfish vs skytalix)
+2026-10-29T03:38:03Z Finished game 85 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T03:38:03Z Started game 87 of 200 (skytalix vs stockfish)
+2026-10-29T03:38:16Z Finished game 86 (stockfish vs skytalix): 1-0 {White mates}
+2026-10-29T03:38:17Z Started game 88 of 200 (stockfish vs skytalix)
+2026-10-29T03:41:42Z Finished game 87 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T03:41:42Z Started game 89 of 200 (skytalix vs stockfish)
+2026-10-29T03:42:22Z Finished game 88 (stockfish vs skytalix): 1-0 {White mates}
+2026-10-29T03:42:22Z Started game 90 of 200 (stockfish vs skytalix)
+2026-10-29T03:43:31Z Finished game 89 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T03:43:31Z Started game 91 of 200 (skytalix vs stockfish)
+2026-10-29T03:43:52Z Finished game 90 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T03:43:52Z Started game 92 of 200 (stockfish vs skytalix)
+2026-10-29T03:44:23Z Finished game 91 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T03:44:23Z Started game 93 of 200 (skytalix vs stockfish)
+2026-10-29T03:46:06Z Finished game 92 (stockfish vs skytalix): 1-0 {White mates}
+2026-10-29T03:46:06Z Started game 94 of 200 (stockfish vs skytalix)
+2026-10-29T03:47:13Z Finished game 93 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T03:47:13Z Started game 95 of 200 (skytalix vs stockfish)
+2026-10-29T03:48:21Z Finished game 94 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T03:48:22Z Started game 96 of 200 (stockfish vs skytalix)
+2026-10-29T03:49:35Z Finished game 95 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T03:49:35Z Started game 97 of 200 (skytalix vs stockfish)
+2026-10-29T03:50:30Z Finished game 96 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T03:50:30Z Started game 98 of 200 (stockfish vs skytalix)
+2026-10-29T03:52:13Z Finished game 97 (skytalix vs stockfish): 0-1 {Black mates}
+2026-10-29T03:52:13Z Started game 99 of 200 (skytalix vs stockfish)
+2026-10-29T03:54:53Z Finished game 99 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T03:54:53Z Started game 100 of 200 (stockfish vs skytalix)
+2026-10-29T03:55:35Z Finished game 98 (stockfish vs skytalix): 1-0 {White mates}
+2026-10-29T03:55:35Z Started game 101 of 200 (skytalix vs stockfish)
+2026-10-29T03:57:13Z Finished game 100 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T03:57:13Z Started game 102 of 200 (stockfish vs skytalix)
+2026-10-29T03:59:14Z Finished game 102 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T03:59:14Z Started game 103 of 200 (skytalix vs stockfish)
+2026-10-29T04:00:37Z Finished game 101 (skytalix vs stockfish): 0-1 {Black mates}
+2026-10-29T04:00:37Z Started game 104 of 200 (stockfish vs skytalix)
+2026-10-29T04:01:26Z Finished game 103 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T04:01:26Z Started game 105 of 200 (skytalix vs stockfish)
+2026-10-29T04:03:21Z Finished game 105 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T04:03:21Z Started game 106 of 200 (stockfish vs skytalix)
+2026-10-29T04:05:36Z Finished game 106 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T04:05:37Z Started game 107 of 200 (skytalix vs stockfish)
+2026-10-29T04:08:20Z Finished game 107 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T04:08:20Z Started game 108 of 200 (stockfish vs skytalix)
+2026-10-29T04:08:45Z Finished game 104 (stockfish vs skytalix): 1-0 {White mates}
+2026-10-29T04:08:45Z Started game 109 of 200 (skytalix vs stockfish)
+2026-10-29T04:10:11Z Finished game 108 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T04:10:12Z Started game 110 of 200 (stockfish vs skytalix)
+2026-10-29T04:11:00Z Finished game 109 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T04:11:01Z Started game 111 of 200 (skytalix vs stockfish)
+2026-10-29T04:12:27Z Finished game 111 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T04:12:27Z Started game 112 of 200 (stockfish vs skytalix)
+2026-10-29T04:13:54Z Finished game 110 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T04:13:55Z Started game 113 of 200 (skytalix vs stockfish)
+2026-10-29T04:14:16Z Finished game 112 (stockfish vs skytalix): 1-0 {White mates}
+2026-10-29T04:14:16Z Started game 114 of 200 (stockfish vs skytalix)
+2026-10-29T04:16:17Z Finished game 114 (stockfish vs skytalix): 1-0 {White mates}
+2026-10-29T04:16:17Z Started game 115 of 200 (skytalix vs stockfish)
+2026-10-29T04:16:20Z Finished game 113 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T04:16:21Z Started game 116 of 200 (stockfish vs skytalix)
+2026-10-29T04:19:04Z Finished game 116 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T04:19:04Z Started game 117 of 200 (skytalix vs stockfish)
+2026-10-29T04:21:52Z Finished game 117 (skytalix vs stockfish): 0-1 {Black mates}
+2026-10-29T04:21:52Z Started game 118 of 200 (stockfish vs skytalix)
+2026-10-29T04:23:44Z Finished game 115 (skytalix vs stockfish): 0-1 {Black mates}
+2026-10-29T04:23:44Z Started game 119 of 200 (skytalix vs stockfish)
+2026-10-29T04:25:56Z Finished game 118 (stockfish vs skytalix): 1-0 {White mates}
+2026-10-29T04:25:56Z Started game 120 of 200 (stockfish vs skytalix)
+2026-10-29T04:26:10Z Finished game 119 (skytalix vs stockfish): 0-1 {Black mates}
+2026-10-29T04:26:10Z Started game 121 of 200 (skytalix vs stockfish)
+2026-10-29T04:27:57Z Finished game 121 (skytalix vs stockfish): 0-1 {Black mates}
+2026-10-29T04:27:57Z Started game 122 of 200 (stockfish vs skytalix)
+2026-10-29T04:29:05Z Finished game 120 (stockfish vs skytalix): 1-0 {White mates}
+2026-10-29T04:29:05Z Started game 123 of 200 (skytalix vs stockfish)
+2026-10-29T04:31:17Z Finished game 123 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T04:31:18Z Started game 124 of 200 (stockfish vs skytalix)
+2026-10-29T04:33:29Z Finished game 124 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T04:33:29Z Started game 125 of 200 (skytalix vs stockfish)
+2026-10-29T04:34:35Z Finished game 125 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T04:34:35Z Started game 126 of 200 (stockfish vs skytalix)
+2026-10-29T04:36:26Z Finished game 126 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T04:36:26Z Started game 127 of 200 (skytalix vs stockfish)
+2026-10-29T04:36:38Z Finished game 122 (stockfish vs skytalix): 1-0 {White mates}
+2026-10-29T04:36:38Z Started game 128 of 200 (stockfish vs skytalix)
+2026-10-29T04:38:25Z Finished game 128 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T04:38:25Z Started game 129 of 200 (skytalix vs stockfish)
+2026-10-29T04:39:18Z Finished game 127 (skytalix vs stockfish): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T04:39:18Z Started game 130 of 200 (stockfish vs skytalix)
+2026-10-29T04:40:58Z Finished game 129 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T04:40:58Z Started game 131 of 200 (skytalix vs stockfish)
+2026-10-29T04:43:27Z Finished game 131 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T04:43:28Z Started game 132 of 200 (stockfish vs skytalix)
+2026-10-29T04:45:17Z Finished game 130 (stockfish vs skytalix): 1-0 {White mates}
+2026-10-29T04:45:17Z Started game 133 of 200 (skytalix vs stockfish)
+2026-10-29T04:45:50Z Finished game 132 (stockfish vs skytalix): 1-0 {White mates}
+2026-10-29T04:45:51Z Started game 134 of 200 (stockfish vs skytalix)
+2026-10-29T04:47:02Z Finished game 133 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T04:47:02Z Started game 135 of 200 (skytalix vs stockfish)
+2026-10-29T04:47:04Z Finished game 134 (stockfish vs skytalix): 1-0 {White mates}
+2026-10-29T04:47:04Z Started game 136 of 200 (stockfish vs skytalix)
+2026-10-29T04:48:59Z Finished game 136 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T04:48:59Z Started game 137 of 200 (skytalix vs stockfish)
+2026-10-29T04:49:42Z Finished game 135 (skytalix vs stockfish): 0-1 {Black mates}
+2026-10-29T04:49:43Z Started game 138 of 200 (stockfish vs skytalix)
+2026-10-29T04:51:20Z Finished game 137 (skytalix vs stockfish): 0-1 {Black mates}
+2026-10-29T04:51:20Z Started game 139 of 200 (skytalix vs stockfish)
+2026-10-29T04:52:58Z Finished game 139 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T04:52:58Z Started game 140 of 200 (stockfish vs skytalix)
+2026-10-29T04:55:14Z Finished game 140 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T04:55:14Z Started game 141 of 200 (skytalix vs stockfish)
+2026-10-29T04:56:32Z Finished game 138 (stockfish vs skytalix): 1/2-1/2 {Draw by fifty moves rule}
+2026-10-29T04:56:32Z Started game 142 of 200 (stockfish vs skytalix)
+2026-10-29T04:58:47Z Finished game 142 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T04:58:47Z Started game 143 of 200 (skytalix vs stockfish)
+2026-10-29T05:00:41Z Finished game 141 (skytalix vs stockfish): 0-1 {Black mates}
+2026-10-29T05:00:41Z Started game 144 of 200 (stockfish vs skytalix)
+2026-10-29T05:02:06Z Finished game 143 (skytalix vs stockfish): 0-1 {Black mates}
+2026-10-29T05:02:07Z Started game 145 of 200 (skytalix vs stockfish)
+2026-10-29T05:02:50Z Finished game 144 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T05:02:50Z Started game 146 of 200 (stockfish vs skytalix)
+2026-10-29T05:05:57Z Finished game 145 (skytalix vs stockfish): 0-1 {Black mates}
+2026-10-29T05:05:57Z Started game 147 of 200 (skytalix vs stockfish)
+2026-10-29T05:07:35Z Finished game 147 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T05:07:35Z Started game 148 of 200 (stockfish vs skytalix)
+2026-10-29T05:08:44Z Finished game 148 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T05:08:44Z Started game 149 of 200 (skytalix vs stockfish)
+2026-10-29T05:10:52Z Finished game 146 (stockfish vs skytalix): 1-0 {White mates}
+2026-10-29T05:10:53Z Started game 150 of 200 (stockfish vs skytalix)
+2026-10-29T05:13:28Z Finished game 150 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T05:13:29Z Started game 151 of 200 (skytalix vs stockfish)
+2026-10-29T05:15:19Z Finished game 149 (skytalix vs stockfish): 0-1 {Black mates}
+2026-10-29T05:15:19Z Started game 152 of 200 (stockfish vs skytalix)
+2026-10-29T05:16:45Z Finished game 151 (skytalix vs stockfish): 0-1 {Black mates}
+2026-10-29T05:16:45Z Started game 153 of 200 (skytalix vs stockfish)
+2026-10-29T05:16:59Z Finished game 152 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T05:16:59Z Started game 154 of 200 (stockfish vs skytalix)
+2026-10-29T05:19:25Z Finished game 153 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T05:19:25Z Started game 155 of 200 (skytalix vs stockfish)
+2026-10-29T05:20:14Z Finished game 154 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T05:20:14Z Started game 156 of 200 (stockfish vs skytalix)
+2026-10-29T05:21:38Z Finished game 156 (stockfish vs skytalix): 1-0 {White mates}
+2026-10-29T05:21:38Z Started game 157 of 200 (skytalix vs stockfish)
+2026-10-29T05:21:59Z Finished game 155 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T05:21:59Z Started game 158 of 200 (stockfish vs skytalix)
+2026-10-29T05:23:43Z Finished game 158 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T05:23:44Z Started game 159 of 200 (skytalix vs stockfish)
+2026-10-29T05:24:04Z Finished game 157 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T05:24:04Z Started game 160 of 200 (stockfish vs skytalix)
+2026-10-29T05:25:03Z Finished game 159 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T05:25:03Z Started game 161 of 200 (skytalix vs stockfish)
+2026-10-29T05:26:05Z Finished game 161 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T05:26:05Z Finished game 160 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T05:26:05Z Started game 162 of 200 (stockfish vs skytalix)
+2026-10-29T05:26:05Z Started game 163 of 200 (skytalix vs stockfish)
+2026-10-29T05:28:07Z Finished game 163 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T05:28:07Z Started game 164 of 200 (stockfish vs skytalix)
+2026-10-29T05:29:24Z Finished game 162 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T05:29:24Z Started game 165 of 200 (skytalix vs stockfish)
+2026-10-29T05:30:12Z Finished game 164 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T05:30:12Z Started game 166 of 200 (stockfish vs skytalix)
+2026-10-29T05:30:52Z Finished game 165 (skytalix vs stockfish): 0-1 {Black mates}
+2026-10-29T05:30:52Z Started game 167 of 200 (skytalix vs stockfish)
+2026-10-29T05:31:52Z Finished game 166 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T05:31:53Z Started game 168 of 200 (stockfish vs skytalix)
+2026-10-29T05:32:22Z Finished game 167 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T05:32:22Z Started game 169 of 200 (skytalix vs stockfish)
+2026-10-29T05:34:29Z Finished game 169 (skytalix vs stockfish): 0-1 {Black mates}
+2026-10-29T05:34:29Z Started game 170 of 200 (stockfish vs skytalix)
+2026-10-29T05:35:22Z Finished game 168 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T05:35:23Z Started game 171 of 200 (skytalix vs stockfish)
+2026-10-29T05:37:21Z Finished game 171 (skytalix vs stockfish): 0-1 {Black mates}
+2026-10-29T05:37:21Z Started game 172 of 200 (stockfish vs skytalix)
+2026-10-29T05:39:12Z Finished game 170 (stockfish vs skytalix): 1-0 {White mates}
+2026-10-29T05:39:12Z Started game 173 of 200 (skytalix vs stockfish)
+2026-10-29T05:39:18Z Finished game 172 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T05:39:19Z Started game 174 of 200 (stockfish vs skytalix)
+2026-10-29T05:41:33Z Finished game 174 (stockfish vs skytalix): 1-0 {White mates}
+2026-10-29T05:41:33Z Started game 175 of 200 (skytalix vs stockfish)
+2026-10-29T05:43:29Z Finished game 175 (skytalix vs stockfish): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T05:43:29Z Started game 176 of 200 (stockfish vs skytalix)
+2026-10-29T05:43:34Z Finished game 173 (skytalix vs stockfish): 0-1 {Black mates}
+2026-10-29T05:43:35Z Started game 177 of 200 (skytalix vs stockfish)
+2026-10-29T05:45:19Z Finished game 177 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T05:45:19Z Started game 178 of 200 (stockfish vs skytalix)
+2026-10-29T05:47:13Z Finished game 176 (stockfish vs skytalix): 1-0 {White mates}
+2026-10-29T05:47:13Z Started game 179 of 200 (skytalix vs stockfish)
+2026-10-29T05:47:44Z Finished game 178 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T05:47:45Z Started game 180 of 200 (stockfish vs skytalix)
+2026-10-29T05:49:28Z Finished game 179 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T05:49:28Z Started game 181 of 200 (skytalix vs stockfish)
+2026-10-29T05:49:32Z Finished game 180 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T05:49:32Z Started game 182 of 200 (stockfish vs skytalix)
+2026-10-29T05:51:45Z Finished game 182 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T05:51:45Z Started game 183 of 200 (skytalix vs stockfish)
+2026-10-29T05:52:15Z Finished game 181 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T05:52:16Z Started game 184 of 200 (stockfish vs skytalix)
+2026-10-29T05:55:28Z Finished game 184 (stockfish vs skytalix): 1-0 {White mates}
+2026-10-29T05:55:28Z Started game 185 of 200 (skytalix vs stockfish)
+2026-10-29T05:57:45Z Finished game 185 (skytalix vs stockfish): 0-1 {Black mates}
+2026-10-29T05:57:45Z Started game 186 of 200 (stockfish vs skytalix)
+2026-10-29T05:59:06Z Finished game 183 (skytalix vs stockfish): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T05:59:06Z Started game 187 of 200 (skytalix vs stockfish)
+2026-10-29T05:59:31Z Finished game 186 (stockfish vs skytalix): 1-0 {White mates}
+2026-10-29T05:59:31Z Started game 188 of 200 (stockfish vs skytalix)
+2026-10-29T06:00:47Z Finished game 187 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T06:00:47Z Started game 189 of 200 (skytalix vs stockfish)
+2026-10-29T06:01:28Z Finished game 188 (stockfish vs skytalix): 1-0 {White mates}
+2026-10-29T06:01:28Z Started game 190 of 200 (stockfish vs skytalix)
+2026-10-29T06:02:03Z Finished game 189 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T06:02:03Z Started game 191 of 200 (skytalix vs stockfish)
+2026-10-29T06:03:32Z Finished game 190 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T06:03:33Z Started game 192 of 200 (stockfish vs skytalix)
+2026-10-29T06:04:29Z Finished game 191 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T06:04:29Z Started game 193 of 200 (skytalix vs stockfish)
+2026-10-29T06:05:06Z Finished game 192 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T06:05:06Z Started game 194 of 200 (stockfish vs skytalix)
+2026-10-29T06:07:08Z Finished game 194 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T06:07:08Z Started game 195 of 200 (skytalix vs stockfish)
+2026-10-29T06:07:27Z Finished game 193 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T06:07:27Z Started game 196 of 200 (stockfish vs skytalix)
+2026-10-29T06:09:31Z Finished game 196 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T06:09:32Z Started game 197 of 200 (skytalix vs stockfish)
+2026-10-29T06:09:42Z Finished game 195 (skytalix vs stockfish): 0-1 {Black mates}
+2026-10-29T06:09:42Z Started game 198 of 200 (stockfish vs skytalix)
+2026-10-29T06:11:30Z Finished game 198 (stockfish vs skytalix): 0-1 {Black mates}
+2026-10-29T06:11:30Z Started game 199 of 200 (skytalix vs stockfish)
+2026-10-29T06:11:53Z Finished game 197 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T06:11:54Z Started game 200 of 200 (stockfish vs skytalix)
+2026-10-29T06:13:13Z Finished game 199 (skytalix vs stockfish): 1-0 {White mates}
+2026-10-29T06:14:12Z Finished game 200 (stockfish vs skytalix): 0-1 {Black mates}
