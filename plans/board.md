@@ -1,3 +1,4 @@
+_Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g) — ABC-235 SE done: cuts 1,3,5 kept, value-identical (A1 hash equal), nps ~1.16–1.28× indicative; code review PASS → In Review; `qe-ABC-235` spawned ALONE (timing reads). `qe-ABC-225` still held behind it. Width 1/3._
 _Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g) — arch-ABC-230-reading merged: ADR-0054 PROPOSED (prior keys; pre-root threefold needs two earlier occurrences; no TT/door change) → owner. Q3 ep options (a) keep (rec.), (b) ep-legal key (M, re-keys book), (c) normalise history only (S). Width 1/3._
 _Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g) — `arch-ABC-230-reading` routed (ADR-0002 cl. 3 reading for ABC-230 + ep options for EPIC-010 Q3). Width 2/3._
 _Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g) — arch-ABC-228-adr merged: ADR-0053 PROPOSED (owner accepts; changes owner-accepted ADR-0024 d4). OQ-228-1: G6 forecast fails on position-6 (depth 9 vs 10); options (a) grade floor + report ≥ base (rec.), (b) mate-only form, (c) full + G6 closes. ABC-228 waits owner + ABC-235 merge. Width 1/3._
@@ -1071,11 +1072,11 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 1/3)
-- [ABC-235] Cost-per-node cuts 1 → 3 → 5, value-identical (size: M, priority: P2; design arch-ABC-235 …7fc1b90c/…eebca902: cuts 1,3,5 in; 6 split → ABC-240; 2,4 out; no ADR; S2, no smoke; **pulled 2026-10-29** → `se-ABC-235`; DoR 10/10; scope line on page (bapm-ABC-235-split): piece-list + non-capture-legality candidates struck)
+    ## In Development (WIP 0/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
-    ## In Review (WIP 1/3)
+    ## In Review (WIP 2/3)
+- [ABC-235] Cost-per-node cuts 1 → 3 → 5, value-identical (size: M, priority: P2; design arch-ABC-235 …7fc1b90c/…eebca902: cuts 1,3,5 in; 6 split → ABC-240; 2,4 out; no ADR; S2, no smoke; **pulled 2026-10-29** → `se-ABC-235`; DoR 10/10; scope line on page (bapm-ABC-235-split): piece-list + non-capture-legality candidates struck; SE done 6327a3b4 (cuts 1,3,5 kept; A1 hash equal; nps tip/base 1.27/1.28/1.16 indicative); code review PASS; QE `qe-ABC-235` ALONE now)
 - [ABC-225] Interleaved R-pair command: the batch's instrument (re-scoped 2026-10-29) (size: M, priority: P2, DoR 10/10; tools only; Done before milestone 1's batch; not during an ALONE reading; **pulled 2026-10-29** → `se-ABC-225`, QE follows for A5/A6 ALONE; SE done 9988a778, code review PASS (…561f1ef1); QE `qe-ABC-225` HELD until host idle (A5 40 games ALONE ~1 h))
     - [ABC-012] Portfolio FX conversion  (PR: #41, QE: running)
 
