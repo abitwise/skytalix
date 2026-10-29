@@ -1,8 +1,8 @@
 ---
 id: ABC-217
 title: "Test hardening: the ABC-206 and ABC-212 guards also see a missed discovered check, an in-module rebuild on `legalMoves`, and a dropped session clock; two stale `gameStatus` texts are reworded"
-status: ready
-column: Ready
+status: done
+column: Done
 size: XS
 priority: P3
 epic: EPIC-008

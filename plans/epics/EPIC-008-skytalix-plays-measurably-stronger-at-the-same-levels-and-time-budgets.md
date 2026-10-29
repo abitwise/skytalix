@@ -1,8 +1,9 @@
 ---
 id: EPIC-008
 title: "`skytalix` plays measurably stronger at the same levels and time budgets, measured by a rating harness and not by one game"
-status: backlog
-column: Backlog
+status: done
+closed: "2026-10-29, BA/PM (bapm-close-EPIC-008): M1 NOT MET (−82.9 ± 73.8); M2, M3, M4 MET"
+column: Done
 priority: P2
 size: L
 owner: BA/PM
@@ -29,6 +30,74 @@ owner: BA/PM
 >   `ABC-202` ran). No owner window is needed.
 > - **Levels 6 and 7 are not in this epic.** They are cut as `ABC-212` under `EPIC-004`'s levels line, because this
 >   epic holds the levels fixed. `G5` and `G9` are re-read below, and nothing else in this page moves.
+
+> **CLOSED, 2026-10-29, BA/PM (task `bapm-close-EPIC-008`, records only, at `main` `a1554ab4`). `M1` is NOT MET: the
+> close reads 82.9 below the baseline, and the 95 % interval lies wholly below 0. `M2`, `M3` and `M4` are MET. The
+> epic closes anyway, as close-path step 4 says.** Every proposal is spent. More strength work would be a new epic, on
+> the owner's word. The evidence is QE's `qe-epic008-close`: PREREG `…8fb860a9`, readings `…e8d5c13a` and `…f361ab33`,
+> `M3` `…ffb593fe`, verdict PASS `…bdbccbbf`. The Orchestrator checked the raw lines (`…0bacc1dd`).
+>
+> | # | state | evidence |
+> |---|---|---|
+> | M1 | **NOT MET**, on both clauses | R(baseline) at `3497aad2` = 1 910 + 188.5 ± 54.8 = **2 098.5 ± 54.8** (74.75 %, 146/47/7). R(close) at `38536a34` (`src`/`data` = `b5c67ab7`) = 1 910 + 105.6 ± 49.5 = **2 015.6 ± 49.5** (64.75 %, 125/66/9). Both were read on this host, 200/200 games each, 0 faults, 0 overlapping games. **`M1` = −82.9 ± 73.8, interval [−156.7, −9.1].** Clause 1 (≥ +100) misses by 182.9. Clause 2 (interval above 0) misses: the whole interval is below 0 |
+> | M2 | **MET**; `ABC-206` by waiver, with no D reading | `ABC-208` S1, D GAIN +38.4 ± 23.3 (QE `…0477ac64`). `ABC-215` S3, D NEUTRAL +15.6 ± 23.8 with X ≥ 0 (QE `…c2c3540f`). `ABC-206` S2: the D clause was **waived and never read** (Orchestrator `…cb10c36c`, accepted risk LOW, owner veto open). `ABC-204` and `ABC-217` change no engine value and owe no D |
+> | M3 | **MET** on `38536a34`, which is `main` at close (`git diff 38536a34 a1554ab4 -- src data tools package.json package-lock.json` is empty) | `G1` 54/58. `G5`: level 5 30/30, max 3 002 ms (the instrument's rows pass; the max is reported against 3 s); levels 6 and 7 within their ceilings. `G6`: `kiwipete` 8 ≥ 7 and `position-6` 10 ≥ 8 (medians, against `3497aad2` on this host); minimum run 7, floor 6. `G8` 8.32 s. `G9`: `src/levels.ts` identical (QE `…ffb593fe`) |
+> | M4 | **MET** | **0 NFR bounds moved by this epic.** The one bound placed in its window, `NFR-004`'s per-level ceiling, is `ABC-212`'s, under `EPIC-004`, on the owner's OD-212-1. Each ADR of the epic reached the owner, and each was accepted on his own word or not taken. `ADR-0031` addendum and `ADR-0026` d9: accepted `…fb0468ff`, not shipped / not in force. `ADR-0050`: reported 2026-10-26, accepted `…58bcd17c`, in force from `b5c67ab7`. `ADR-0025` D4 amendment: accepted `…2ae5fc12`, not in force. `ADR-0051` + `ADR-0050` d9 P2: accepted `…047d411f`, not in force. `ADR-0023` amendment: proposed, not taken (O0, `…58bcd17c`). `G6` "≥ base" is graded on his word (`…2ae5fc12`) |
+>
+> **What `M1` says, plainly.** On this host, and by the epic's own external measure, the engine on `main` at the close
+> scored lower than the engine at `3497aad2` against the same Stockfish setting. The 95 % interval does not reach 0. At
+> face value, the close is weaker than the baseline by roughly 9 to 157 Elo on this scale. The epic set out to make
+> `skytalix` measurably stronger. Its measure says it did not, and points the other way. How the drop splits across
+> `ABC-206`, `ABC-208` and `ABC-215` is `UNKNOWN - verify`: R measures the whole build, not one change.
+>
+> **Confounds, recorded as facts.** None of these is an UNRESOLVED cause on this page (§ The two readings, step 3′):
+> - **Fixed order.** The baseline ran first (21:22Z to 01:42Z) and the close second (01:42Z to 06:14Z). They ran back to
+>   back, 3 s apart, with no interleaving. If the host drifted over the 9 h, all of that drift lands on the difference.
+>   The records show none: median load1 was 2.07 and 2.05, and 0 of 400 games overlapped foreign load. How large a
+>   drift would be is `UNKNOWN - verify`.
+> - **Heat.** CPU temperature (k10temp Tctl) had a median of 83 °C and a max of 87 °C in the baseline, and a median of
+>   82 °C and a max of 84 °C in the close. The governor was `powersave`, with EPP `balance_performance`. **Whether the
+>   CPU throttled is `UNKNOWN - verify`.** The protocol reads none of this. The hotter reading was the baseline.
+> - **Band.** Reading 1 scored 74.75 %, 0.25 points inside 25–75 %. It is in band, and that score widens Y₁ to 54.8.
+>   Both readings are in band, so **Q3 did not arise.**
+> - **Depth.** The close searched about one ply deeper at 3 s: mean completed depth 10.09, against 9.13 (`raw/depths.txt`;
+>   reported, not graded). It searched deeper and still scored lower. A close slowed by the host would search
+>   shallower, and it did not.
+> - **D against R.** The shipped D readings are self-play at 1 500 ms. `ABC-208` was GAIN +38.4 ± 23.3. `ABC-215` was
+>   NEUTRAL +15.6 ± 23.8. `ABC-206` has no D reading, because its D was waived. R against Stockfish at 3 000 ms gives the
+>   opposite sign. `RISK-EPIC008-03` ("self-play overstates gains") names this case, and it is why `M1` is an R reading.
+> - **The grade stands.** Each reading ran once, and its written result is final (`…4c3f7639`, step 3′). The all-games
+>   figure is the graded one (`…0c5e9315`), and here it equals the overlap-free figure. The page names no confound that
+>   voids a reading. **`M1` is NOT MET.** A re-read, and whether it would count, is the owner's word (Q4).
+>
+> **Tickets.** Shipped (Done, merged):
+> - `ABC-204`: the harness, `tools/` only, `7f94e4cc`.
+> - `ABC-206`: the speed-up, value-identical, `0a9390e5`.
+> - `ABC-208`: null move, `b5c67ab7`.
+> - `ABC-215`: our own evaluation values, `5c91e2e4`.
+> - `ABC-217`: test hardening, `20c3b339`.
+>
+> Not shipped (Done, dropped):
+> - `ABC-205`, under S1, on the `G6` STOP.
+> - `ABC-207`, under S1, LOSS −18.3 ± 16.5.
+> - `ABC-209`, under S1, NEUTRAL +8.7 ± 18.3.
+> - `ABC-210`, under S1, NEUTRAL −4.8 ± 16.2.
+> - `ABC-211`, undelivered, on the owner's O0.
+>
+> The front-matter of `ABC-204`, `ABC-206`, `ABC-215` and `ABC-217` is synced to `done`/`Done` in this hop (the
+> board's LOW item from `orch-2026-10-27m`).
+>
+> **Open owner items.**
+> - **Q4**, below: whether `M1`'s negative reading is investigated, and whether a re-read would count.
+> - The vetoes on the S1 closes of `ABC-205`, `207`, `209` and `210`, and on `ABC-206`'s D waiver, are still open. None
+>   was used.
+> - Q1 and Q2 are answered. Q3 did not arise.
+>
+> **INFO, not the owner's:** two stale prose lines. § Out of scope still says "the owner's Mac", and `ABC-204`'s
+> A-criteria line still says "chip, Darwin" (QE `…bdbccbbf`).
+>
+> _Updated: 2026-10-29 by BA/PM (task `bapm-close-EPIC-008`), at `main` `a1554ab4`. Notes in
+> `.grugops/context/bapm-close-EPIC-008/notes/`._
 
 ## Problem
 
@@ -247,6 +316,10 @@ not favour either side. A FAIL-class fault on a host that is not quiet is UNRESO
 >     an off-band reading means. Second: a degenerate reading, at or near a 0 % or 100 % score, where cutechess's X or
 >     Y may not be a finite number. Then `M1` cannot be computed. The page says nothing about either case, and no rule
 >     is written here. Nothing waits on Q3: both readings run, and Q3 matters only if a reading lands off the band.
+>
+> **2026-10-29, `M1` graded NOT MET (BA/PM, `bapm-close-EPIC-008`):** R(close) − R(baseline) = 2 015.6 − 2 098.5 =
+> **−82.9 ± 73.8**, interval [−156.7, −9.1]. Both clauses miss, and both readings are in band. See the close block at the
+> top of this page.
 
 ## Tickets (order is the pull order; the pages are under `plans/tickets/`)
 
@@ -372,6 +445,8 @@ step.
      synced in the same hop.
    - **If `M1` is NOT MET, the epic still closes.** All eight proposals are spent, and none is left to re-tune here.
      Whether more strength work follows is the owner's call (a new epic on his word). It is not cut here.
+   - ***Done 2026-10-29 (BA/PM, `bapm-close-EPIC-008`):*** `M1` NOT MET (−82.9 ± 73.8, wholly below 0); `M2`, `M3`
+     and `M4` MET. See the close block at the top of this page. The front-matter is `done`/`Done`.
 5. **Orchestrator:** the board (`EPIC-008` → Done), the trace row, and the `M1` result to the owner.
 
 **Why this order.**
@@ -421,6 +496,31 @@ oracle and one timing bar. Each can land as its own value-identical commit.
     case. Both are `UNKNOWN - verify`.
   - **No default is set here.** Nothing waits on Q3: both readings run, and BA/PM asks for your word at step 4 only if
     a reading lands off the band.
+  - **DID NOT ARISE, 2026-10-29 (BA/PM, `bapm-close-EPIC-008`).** Both readings are in band (74.75 % and 64.75 %), and
+    both have finite X and Y (QE `…bdbccbbf`). Q3 is closed without an answer, and nothing on this page reads it.
+- **Q4 (`M1`'s negative reading: investigate it or not). *Added 2026-10-29 by BA/PM (`bapm-close-EPIC-008`).***
+  - **Why it is asked.** `M1` reads −82.9 ± 73.8, with the whole interval below 0 (close block, top of this page). At
+    face value, the engine you play now is weaker than the one before this epic. The shipped D readings point the
+    other way. The readings ran in a fixed order, back to back, on a CPU at 82–87 °C, and whether it throttled is
+    `UNKNOWN - verify`.
+  - **Options, with machine hours.** Every option runs ALONE, whenever the board is idle (Q2), so none costs you time.
+    - **(a) No investigation.** The epic stays closed as NOT MET, and any further strength work is a new epic on your
+      word. **0 h.**
+    - **(b) An interleaved R re-read** of the same two shas on this host. Same pins, E = 1 910, 200 games each. The two
+      shas' games alternate in blocks (QE designs the order), and the sampler adds CPU frequency and throttle counters.
+      This tests order and heat on `M1`'s own scale. **About 9 h** (2 × 4.3–4.5 h at this host's rate), **plus about 1 h
+      for QE.**
+    - **(c) One D reading, close against `3497aad2`** on this host: 400 games head to head at the frozen B = 1 500 ms.
+      Both builds play in the same games, so order and heat fall on both alike. It is self-play, though, and
+      `RISK-EPIC008-03` applies. **About 6 h** (the previous D readings took 5.9–6.0 h), **plus about 1 h for QE.**
+    - **(d) A thermal check only:** frequency and throttle counters under the 2-game load, with no graded games. It
+      says whether the CPU throttled, but not what that did to `M1`. **About 0.5 h.**
+  - **The second half of the question.** If you pick (b) or (c), does its result **count** (re-grade `M1`), or is it
+    **information only**? Under `…4c3f7639` the readings already taken are final, so a counting re-read is your word.
+  - **BA/PM's lean:** (b), as information only, with (d) folded into its sampler. That is one run of about 10 h, and it
+    tests both named confounds on the measure the epic set. If it repeats the drop, what to do about `main` (keep it,
+    or take a change back out) is a later question for you. It is not cut here.
+  - **Default without an answer: (a).** Nothing waits on Q4, and the epic is closed.
 
 **Delivery calls, flagged as cheap to reverse (not questions):**
 - **The S1 ship rule:** a value-changing change that is not GAIN after one extension does not ship, even though you
