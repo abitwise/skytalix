@@ -2,19 +2,20 @@
  * `ABC-204` — the rating harness. It drives `cutechess-cli` 1.5.1 in two modes, with the pins of
  * the ABC-204 page's `## Design ruling`, and reads `EPIC-008` § The two readings:
  *
- *   node tools/rating/rating.ts r <sha> <out-dir> [--elo E] [--rounds N]
- *   node tools/rating/rating.ts d <candidate-sha> <base-sha> <out-dir> [--budget-ms B] [--rounds N]
+ *   node tools/rating/rating.ts r <sha> <out-dir> [--elo E] [--rounds N] [--concurrency C]
+ *   node tools/rating/rating.ts d <candidate-sha> <base-sha> <out-dir> [--budget-ms B] [--rounds N] [--concurrency C]
  *
  * The environment gives both tool paths: `CUTECHESS_CLI` and `STOCKFISH`. There is no default; a
  * missing or unreadable one stops the run before any work and names the variable.
  *
  * R plays `skytalix` against Stockfish 19 at `UCI_LimitStrength` and `UCI_Elo` E (default 1650,
  * 100 rounds). D plays a candidate against a base (default 3 000 ms a move, 200 rounds). A round is
- * one opening played with both colours. Each artifact is built in a clone under <out-dir>, which
- * must be empty and outside this checkout (resolved through any symlink). `artifacts.txt` records
- * each side's whole `dist/`: a per-file sha256 manifest and its tree hash. The Elo figure is
- * `cutechess-cli`'s own result line; this file computes no Elo. Runs on demand only, never in the
- * test lane.
+ * one opening played with both colours. `--concurrency` C (1–8) is `cutechess-cli`'s `-concurrency`;
+ * without it the frozen Q4 values stand, R 2 and D 3 (ABC-204 § Dependencies, 2026-10-29). Each
+ * artifact is built in a clone under <out-dir>, which must be empty and outside this checkout
+ * (resolved through any symlink). `artifacts.txt` records each side's whole `dist/`: a per-file
+ * sha256 manifest and its tree hash. The Elo figure is `cutechess-cli`'s own result line; this file
+ * computes no Elo. Runs on demand only, never in the test lane.
  */
 import { execFileSync, spawn } from "node:child_process";
 import { createHash } from "node:crypto";
@@ -85,8 +86,9 @@ const eloNumber = (text: string): number =>
 
 function usage(): never {
   console.error(
-    "usage: node tools/rating/rating.ts r <sha> <out-dir> [--elo E] [--rounds N]\n" +
-      "       node tools/rating/rating.ts d <candidate-sha> <base-sha> <out-dir> [--budget-ms B] [--rounds N]",
+    "usage: node tools/rating/rating.ts r <sha> <out-dir> [--elo E] [--rounds N] [--concurrency C]\n" +
+      "       node tools/rating/rating.ts d <candidate-sha> <base-sha> <out-dir> [--budget-ms B] [--rounds N] [--concurrency C]\n" +
+      "       --concurrency: 1–8; default R 2, D 3",
   );
   process.exit(1);
 }
@@ -316,6 +318,7 @@ async function main(argv: string[]): Promise<void> {
   const mode = positional[0];
   if ((mode !== "r" && mode !== "d") || positional.length !== (mode === "r" ? 3 : 4)) usage();
   const allowed = mode === "r" ? ["--elo", "--rounds"] : ["--budget-ms", "--rounds"];
+  allowed.push("--concurrency");
   if ([...flags.keys()].some((flag) => !allowed.includes(flag))) usage();
   const shas = positional
     .slice(1, -1)
@@ -329,6 +332,12 @@ async function main(argv: string[]): Promise<void> {
     throw new Error(`--budget-ms ${budget}: not one of ${D_BUDGETS_MS}`);
   if (!Number.isInteger(rounds) || rounds < 1)
     throw new Error(`--rounds ${rounds}: not a positive integer`);
+  // Q4's frozen widths are the default; a flag value is checked as text, so `2.0` or `0x2` is refused.
+  const defaultConcurrency = mode === "r" ? 2 : 3;
+  const concurrencyFlag = flags.get("--concurrency");
+  if (concurrencyFlag !== undefined && !/^[1-8]$/.test(concurrencyFlag))
+    throw new Error(`--concurrency ${concurrencyFlag}: not an integer from 1 to 8`);
+  const concurrency = Number(concurrencyFlag ?? defaultConcurrency);
 
   const out = resolve(positional.at(-1) as string);
   const inside = (real: string): void => {
@@ -352,6 +361,7 @@ async function main(argv: string[]): Promise<void> {
     `stockfish: ${sfLines.find((l) => l.startsWith("id name"))} sha256 ${toolSha[1]} ${toolSha[1] === STOCKFISH_SHA256 ? "= pin" : `DIFFERS from pin ${STOCKFISH_SHA256}`}`,
     `openings: ${OPENINGS} sha256 ${sha256File(OPENINGS)}`,
     `harness: ${REPO} at ${run("git", ["rev-parse", "HEAD"])}`,
+    `concurrency: ${concurrency} ${concurrency === defaultConcurrency ? "(default)" : `(default ${defaultConcurrency})`}`,
   ].join("\n");
   writeFileSync(join(out, "machine.txt"), `${machine}\n`);
   console.log(machine);
@@ -396,7 +406,7 @@ async function main(argv: string[]): Promise<void> {
     ...opponent,
     ...["-each", "proto=uci"],
     ...["-openings", `file=${OPENINGS}`, "format=epd", "order=sequential", "-repeat"],
-    ...["-games", "2", "-rounds", String(rounds), "-concurrency", mode === "r" ? "2" : "3"],
+    ...["-games", "2", "-rounds", String(rounds), "-concurrency", String(concurrency)],
     ...["-maxmoves", "200", "-pgnout", join(out, `${mode}.pgn`), "-debug", "all"],
   ];
   const outFile = join(out, `${mode}.out`);

@@ -142,6 +142,13 @@ Every figure carries its machine (chip, Darwin, `node --version`, `cutechess-cli
   The old pins and the 2026-10-23 readings taken with them stand as records of the previous host. Two Linux fixes in
   the same hop: the preamble reads the chip and OS through `node:os` (`sysctl machdep.cpu.brand_string` exits 1 on
   Linux), and `host.log` counts foreign `vitest` processes even where the macOS-only probes fail.
+- **Change 2026-10-29** (Software Engineer, task `se-tools-rating-concurrency`; reason: heat on this host, owner
+  `orch-2026-10-29d/…3081f6d4`). `tools/rating/rating.ts` takes `--concurrency C` (an integer from 1 to 8) in both
+  modes and passes it to `cutechess-cli`'s `-concurrency`. Any other value stops the run before any work and names
+  the flag. Without the flag the Q4 values stand, R 2 and D 3, so the command line comes out byte-identical and no
+  past reading is affected. `machine.txt` records the width in force, for example `concurrency: 3 (default)` or
+  `concurrency: 2 (default 3)`; `cmd.txt` carries it in the args. Q4's ruling is not changed: a width other than
+  the default is chosen by the owner and recorded with the reading.
 
 ## Size and priority
 
