@@ -1,0 +1,32 @@
+R1 all                       n=200 W/L/D=146/47/7 s=0.7475 elo= +188.5 ±tri  54.1 ±penta  53.2
+R1 openings 1-50             n=100 W/L/D=73/23/4 s=0.7500 elo= +190.8 ±tri  76.5 ±penta  77.0
+R1 openings 51-100           n=100 W/L/D=73/24/3 s=0.7450 elo= +186.2 ±tri  76.6 ±penta  73.3
+R1 skytalix as white         n=100 W/L/D=74/23/3 s=0.7550 elo= +195.5 ±tri  77.5 ±penta   nan
+R1 skytalix as black         n=100 W/L/D=72/24/4 s=0.7400 elo= +181.7 ±tri  75.6 ±penta   nan
+R2 all                       n=200 W/L/D=125/66/9 s=0.6475 elo= +105.6 ±tri  49.1 ±penta  48.7
+R2 openings 1-50             n=100 W/L/D=64/31/5 s=0.6650 elo= +119.1 ±tri  70.1 ±penta  62.7
+R2 openings 51-100           n=100 W/L/D=61/35/4 s=0.6300 elo=  +92.5 ±tri  69.0 ±penta  73.9
+R2 skytalix as white         n=100 W/L/D=62/31/7 s=0.6550 elo= +111.4 ±tri  68.8 ±penta   nan
+R2 skytalix as black         n=100 W/L/D=63/35/2 s=0.6400 elo= +100.0 ±tri  70.2 ±penta   nan
+D all                        n=100 W/L/D=31/16/53 s=0.5750 elo=  +52.5 ±tri  46.6 ±penta  47.5
+D openings 1-50              n=100 W/L/D=31/16/53 s=0.5750 elo=  +52.5 ±tri  46.6 ±penta  47.5
+D skytalix as white          n= 50 W/L/D=18/10/22 s=0.5800 elo=  +56.1 ±tri  72.3 ±penta   nan
+D skytalix as black          n= 50 W/L/D=13/6/31 s=0.5700 elo=  +49.0 ±tri  59.0 ±penta   nan
+paired R2-R1 score diff -0.1000 se 0.0392; elo diff -82.9
+elo diff ± (paired, penta, 95%) 64.3; unpaired penta ± 72.1; corr(p1,p2)=0.205
+  openings 1-50: R1 +190.8 R2 +119.1 diff -71.7
+  openings 51-100: R1 +186.2 R2 +92.5 diff -93.8
+pair-sum R1 -> R2 crosstab: [((0.0, 0.0), 1), ((0.0, 0.5), 1), ((0.0, 1.0), 3), ((0.5, 2.0), 1), ((1.0, 0.0), 6), ((1.0, 1.0), 17), ((1.0, 1.5), 1), ((1.0, 2.0), 13), ((1.5, 1.0), 2), ((1.5, 2.0), 2), ((2.0, 0.0), 3), ((2.0, 0.5), 3), ((2.0, 1.0), 20), ((2.0, 1.5), 4), ((2.0, 2.0), 23)]
+corr over openings 1-50 of D pair score and R2-R1 pair diff: +0.191
+R1 {('W', 'White mates'): 74, ('W', 'Black mates'): 72, ('L', 'Black mates'): 23, ('L', 'White mates'): 24, ('D', 'Draw by 3-fold repetition'): 7}
+   win: n=146 plies median 70.0 q1 59.0 q3 82.0 short(<=60) 41 mid(61-120) 94 long(>120) 11
+   loss: n=47 plies median 125 q1 92.0 q3 178.0 short(<=60) 2 mid(61-120) 20 long(>120) 25
+   draw: n=7 plies median 119 q1 46.0 q3 166.0 short(<=60) 2 mid(61-120) 2 long(>120) 3
+R2 {('D', 'Draw by 3-fold repetition'): 7, ('L', 'White mates'): 35, ('W', 'White mates'): 62, ('W', 'Black mates'): 63, ('L', 'Black mates'): 31, ('D', 'Draw by fifty moves rule'): 2}
+   win: n=125 plies median 75 q1 59.0 q3 87.5 short(<=60) 34 mid(61-120) 86 long(>120) 5
+   loss: n=66 plies median 102.0 q1 76.5 q3 154.5 short(<=60) 4 mid(61-120) 35 long(>120) 27
+   draw: n=9 plies median 102 q1 83.5 q3 233.5 short(<=60) 0 mid(61-120) 5 long(>120) 4
+D {('D', 'Draw by 3-fold repetition'): 53, ('W', 'Black mates'): 13, ('W', 'White mates'): 18, ('L', 'White mates'): 6, ('L', 'Black mates'): 10}
+   win: n=31 plies median 110 q1 89.0 q3 132.0 short(<=60) 3 mid(61-120) 17 long(>120) 11
+   loss: n=16 plies median 126.5 q1 105.5 q3 156.25 short(<=60) 1 mid(61-120) 6 long(>120) 9
+   draw: n=53 plies median 88 q1 76.5 q3 113.0 short(<=60) 4 mid(61-120) 41 long(>120) 8
