@@ -1,0 +1,86 @@
+2026-10-29T19:54:18Z
+51c85f4996d809a3342852fb1ecc0a314beaa802
+# P1 level 7, 40/15 clock, movestogo 40
+  > uci
+  < id name skytalix
+  < id author Olger Oeselg
+  < option name OwnBook type check default true
+  < option name Skill Level type spin default 5 min 1 max 7
+  < uciok
+  > setoption name OwnBook value false
+  > setoption name Skill Level value 7
+  > position startpos moves e2e4 e7e5
+  > go wtime 900000 btime 900000 movestogo 40
+  < info depth 11 score cp 13 nodes 11144221 time 22500 nps 495299 pv g1f3
+  < bestmove g1f3
+  # wall 22501 ms
+  > isready
+  < readyok
+  > quit
+# P2 level 5 (default), 40/15 clock, movestogo 40
+  > uci
+  < id name skytalix
+  < id author Olger Oeselg
+  < option name OwnBook type check default true
+  < option name Skill Level type spin default 5 min 1 max 7
+  < uciok
+  > setoption name OwnBook value false
+  > position startpos moves e2e4 e7e5
+  > go wtime 900000 btime 900000 movestogo 40
+  < info depth 10 score cp 13 nodes 1373213 time 3000 nps 457738 pv g1f3
+  < bestmove g1f3
+  # wall 3002 ms
+  > isready
+  < readyok
+  > quit
+# P3 level 7, 200 s left, no movestogo (default 20)
+  > uci
+  < id name skytalix
+  < id author Olger Oeselg
+  < option name OwnBook type check default true
+  < option name Skill Level type spin default 5 min 1 max 7
+  < uciok
+  > setoption name OwnBook value false
+  > setoption name Skill Level value 7
+  > position startpos moves e2e4 e7e5
+  > go wtime 200000 btime 200000
+  < info depth 11 score cp 13 nodes 4942877 time 10000 nps 494288 pv g1f3
+  < bestmove g1f3
+  # wall 10001 ms
+  > isready
+  < readyok
+  > quit
+# P4 level 7, last move before control: movestogo 1, 2000 ms left
+  > uci
+  < id name skytalix
+  < id author Olger Oeselg
+  < option name OwnBook type check default true
+  < option name Skill Level type spin default 5 min 1 max 7
+  < uciok
+  > setoption name OwnBook value false
+  > setoption name Skill Level value 7
+  > position startpos moves e2e4 e7e5
+  > go wtime 2000 btime 2000 movestogo 1
+  < info depth 9 score cp 26 nodes 939037 time 1951 nps 481311 pv g1f3
+  < bestmove g1f3
+  # wall 1953 ms
+  > isready
+  < readyok
+  > quit
+# P5 one legal move (Kxb2), movetime 1000
+  > uci
+  < id name skytalix
+  < id author Olger Oeselg
+  < option name OwnBook type check default true
+  < option name Skill Level type spin default 5 min 1 max 7
+  < uciok
+  > setoption name OwnBook value false
+  > position fen k7/8/8/8/8/8/1r6/K7 w - - 0 1
+  > go movetime 1000
+  < info depth 21 score cp 0 nodes 1218561 time 1000 nps 1218561 pv a1b2
+  < bestmove a1b2
+  # wall 1001 ms
+  > isready
+  < readyok
+  > quit
+2026-10-29T19:54:57Z
