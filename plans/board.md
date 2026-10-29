@@ -1,3 +1,4 @@
+_Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g, …561f1ef1) — ABC-225 SE done (rpair; r/d byte-identical; gates 63/2 128); code review PASS → In Review; `qe-ABC-225` queued HELD until se-ABC-235 + arch-ABC-228-adr finish (A5 = 40 real games ALONE, ~1 h). Width 2/3._
 _Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g) — `arch-ABC-228-adr` routed: the ADR ABC-228/229 wait on (ADR-0024 d4: in-check evasions, mate, quiet promotions in quiescence). Width 3/3._
 _Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g) — bapm-ABC-235-split merged: ABC-240 (cut 6, S, P3) → Ready 1/8, pulled after ABC-235 merges; ABC-233/234 after ABC-240. Width 2/3._
 _Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g) — arch-ABC-235 merged (48015e9f): cuts 1,3,5 value-identical → ABC-235 In Development (`se-ABC-235`); cut 6 split → ABC-240 (`bapm-ABC-235-split`); cuts 2,4 out; no ADR; OD-235-1 (re-opening ADR-0003's king-scan attempt) INFO to owner, veto open. Width 3/3._
@@ -1067,12 +1068,12 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 2/3)
+    ## In Development (WIP 1/3)
 - [ABC-235] Cost-per-node cuts 1 → 3 → 5, value-identical (size: M, priority: P2; design arch-ABC-235 …7fc1b90c/…eebca902: cuts 1,3,5 in; 6 split → ABC-240; 2,4 out; no ADR; S2, no smoke; **pulled 2026-10-29** → `se-ABC-235`; DoR 10/10; scope line on page (bapm-ABC-235-split): piece-list + non-capture-legality candidates struck)
-- [ABC-225] Interleaved R-pair command: the batch's instrument (re-scoped 2026-10-29) (size: M, priority: P2, DoR 10/10; tools only; Done before milestone 1's batch; not during an ALONE reading; **pulled 2026-10-29** → `se-ABC-225`, QE follows for A5/A6 ALONE)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
-    ## In Review (WIP 0/3)
+    ## In Review (WIP 1/3)
+- [ABC-225] Interleaved R-pair command: the batch's instrument (re-scoped 2026-10-29) (size: M, priority: P2, DoR 10/10; tools only; Done before milestone 1's batch; not during an ALONE reading; **pulled 2026-10-29** → `se-ABC-225`, QE follows for A5/A6 ALONE; SE done 9988a778, code review PASS (…561f1ef1); QE `qe-ABC-225` HELD until host idle (A5 40 games ALONE ~1 h))
     - [ABC-012] Portfolio FX conversion  (PR: #41, QE: running)
 
   BOARD <-> TICKET CONTRACT: each ticket file (`plans/tickets/<prefix>-xxx.md`) carries a
