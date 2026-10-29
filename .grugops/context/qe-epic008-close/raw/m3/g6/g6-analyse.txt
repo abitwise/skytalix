@@ -1,0 +1,32 @@
+samples 7
+load1_min 0.76
+load1_max 0.91
+power ['none']
+batt ['']
+thermal {'38': 1, '71': 1, '72': 5}
+vitest_samples 0
+bursts []
+overlap_vitest_runs 0
+touch_load_gt8_runs 0
+all {"kiwipete": {"base_depths": [7, 7, 7, 7, 7], "head_depths": [8, 8, 8, 8, 8], "n_base": 5, "n_head": 5, "base_median": 7, "head_median": 8, "min_any": 7, "base_ms_max": 3002, "head_ms_max": 3000.8, "base_nodes_median": 1450586, "head_nodes_median": 1810285, "floor_ok": true, "ge_base": true, "warn_head_lt7": false}, "position-6": {"base_depths": [8, 8, 8, 8, 8], "head_depths": [10, 10, 10, 10, 10], "n_base": 5, "n_head": 5, "base_median": 8, "head_median": 10, "min_any": 8, "base_ms_max": 3001.4, "head_ms_max": 3000.9, "base_nodes_median": 1715865, "head_nodes_median": 1878626, "floor_ok": true, "ge_base": true, "warn_head_lt7": false}, "G6": "MET"}
+overlap_free {"kiwipete": {"base_depths": [7, 7, 7, 7, 7], "head_depths": [8, 8, 8, 8, 8], "n_base": 5, "n_head": 5, "base_median": 7, "head_median": 8, "min_any": 7, "base_ms_max": 3002, "head_ms_max": 3000.8, "base_nodes_median": 1450586, "head_nodes_median": 1810285, "floor_ok": true, "ge_base": true, "warn_head_lt7": false}, "position-6": {"base_depths": [8, 8, 8, 8, 8], "head_depths": [10, 10, 10, 10, 10], "n_base": 5, "n_head": 5, "base_median": 8, "head_median": 10, "min_any": 8, "base_ms_max": 3001.4, "head_ms_max": 3000.9, "base_nodes_median": 1715865, "head_nodes_median": 1878626, "floor_ok": true, "ge_base": true, "warn_head_lt7": false}, "G6": "MET"}
+1 kiwipete base 7 3000.3 1431130 Bxa6 False False
+1 kiwipete head 8 3000.6 1788781 Bxa6 False False
+1 position-6 base 8 3000.9 1715865 Nd5 False False
+1 position-6 head 10 2999.6 1898082 Nd5 False False
+2 kiwipete head 8 2999.5 1815405 Bxa6 False False
+2 kiwipete base 7 3001 1453658 Bxa6 False False
+2 position-6 head 10 2999.8 1863266 Nd5 False False
+2 position-6 base 8 3000.3 1720985 Nd5 False False
+3 kiwipete base 7 3001.2 1470042 Bxa6 False False
+3 kiwipete head 8 3000.8 1810285 Bxa6 False False
+3 position-6 base 8 2999.9 1680025 Nd5 False False
+3 position-6 head 10 2999.8 1769058 Nd5 False False
+4 kiwipete head 8 3000.7 1752941 Bxa6 False False
+4 kiwipete base 7 3000.5 1445466 Bxa6 False False
+4 position-6 head 10 3000.9 1885794 Nd5 False False
+4 position-6 base 8 3001.4 1718937 Nd5 False False
+5 kiwipete base 7 3002 1450586 Bxa6 False False
+5 kiwipete head 8 2999.5 1810285 Bxa6 False False
+5 position-6 base 8 2999.8 1703577 Nd5 False False
+5 position-6 head 10 3000.4 1878626 Nd5 False False

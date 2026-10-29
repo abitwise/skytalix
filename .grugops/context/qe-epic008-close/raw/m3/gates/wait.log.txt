@@ -1,0 +1,2 @@
+2026-10-29T06:27:21Z wait poll=1 load1=1.10 power=none vitest=0 cutechess=0 thermal=71
+2026-10-29T06:27:21Z PRECONDITIONS-MET

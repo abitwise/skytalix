@@ -1,0 +1,5 @@
+2026-10-29T01:42:46Z wait poll=1 load1=1.32 power=none vitest=0 cutechess=0 thermal=47
+2026-10-29T01:42:46Z PRECONDITIONS-MET
+2026-10-29T01:42:46Z harness start: r 38536a34547ce0c927018be0a125683a56efa1ea <out> --elo 1910 --rounds 100
+2026-10-29T01:42:47Z pins: both = pin
+2026-10-29T06:14:12Z harness end rc=0

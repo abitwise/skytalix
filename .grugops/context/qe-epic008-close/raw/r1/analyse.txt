@@ -1,0 +1,29 @@
+pgn_games: 200
+started: 200
+finished: 200
+result_texts: {"Black mates": 95, "White mates": 98, "Draw by 3-fold repetition": 7}
+fault_games: []
+out_fault_lines: []
+first_go_raw: {"skytalix": "226 >skytalix(0): go movetime 3000", "stockfish": "229 >stockfish(1): go movetime 500"}
+gaps: {"skytalix": {"budget_ms": 3000, "searched_n": 8955, "book_n": 87, "median": 3001, "max": 3005, "over_3031": 0, "over_3000": 6426, "p99": 3003}, "stockfish": {"budget_ms": 500, "searched_n": 8991, "book_n": 0, "median": 500, "max": 502, "over_531": 0, "over_500": 3000, "p99": 501}}
+pgn_moves_without_comment: {"skytalix": 87}
+fen_pairs: {"rounds": 100, "bad_rounds": [], "incomplete_rounds": [], "ep_square_dropped_by_cutechess_rounds": 23, "started_2k-1_2k_swapped": true}
+depth_guard: {"E": 1910, "level": 3.8257564156650288, "floor": 4, "stockfish_moves": 8991, "misses": 0, "min_depth": 10}
+elo_all_qe: {"n": 200, "W": 146, "L": 47, "D": 7, "score": 0.7475, "X": 188.53992581671483, "Y": 54.820395129816404, "LOS": 99.9999999999484, "draw_ratio": 3.5}
+cutechess_elo_line_raw: "Elo difference: 188.5 +/- 54.8, LOS: 100.0 %, DrawRatio: 3.5 %"
+cutechess_score_line_raw: "Score of skytalix vs stockfish: 146 - 47 - 7  [0.748] 200"
+one_result_line_raw: "Finished game 2 (stockfish vs skytalix): 0-1 {Black mates}"
+move_cap_draws: 0
+wall: {"median_game_s": 128.0, "mean_game_s": 155.225, "min": 20, "max": 466, "median_plies": 74.0, "first_start": "2026-10-28T21:22:19.366000+00:00", "last_end": "2026-10-29T01:42:43.650000+00:00", "median_game_s_from_start_end_ms": 128.3905, "duration_tag_vs_start_end_max_abs_diff_s": 0.9820000000000277, "match_span_s": 15624.284, "games_per_hour_measured": 46.082111666685016}
+samples: 1556
+sampler: {"load1_min": 0.93, "load1_max": 3.71, "load1_median": 2.07, "power": ["none"], "thermal_C": {"min": 36, "median": 83.0, "max": 87}, "vitest_samples": 0, "cutechess_foreign_samples": 0, "load_gt8_samples": 0}
+foreign_bursts: []
+overlap_games: 0
+elo_clean_qe: {"n": 200, "W": 146, "L": 47, "D": 7, "score": 0.7475, "X": 188.53992581671483, "Y": 54.820395129816404, "LOS": 99.9999999999484, "draw_ratio": 3.5}
+wall_clean_median_s: 128.0
+wall_clean_median_s_ms: 128.3905
+overlap_game_rounds: []
+games_touching_load_gt8: 0
+load_gt8_game_rounds: []
+elo_load_free_qe: {"n": 200, "W": 146, "L": 47, "D": 7, "score": 0.7475, "X": 188.53992581671483, "Y": 54.820395129816404, "LOS": 99.9999999999484, "draw_ratio": 3.5}
+elo_overlap_and_load_free_qe: {"n": 200, "W": 146, "L": 47, "D": 7, "score": 0.7475, "X": 188.53992581671483, "Y": 54.820395129816404, "LOS": 99.9999999999484, "draw_ratio": 3.5}
