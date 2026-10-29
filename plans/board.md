@@ -1,3 +1,4 @@
+_Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g, …9b987052) — cutechess-cli found already built, = pin; env file re-created outside the repo. `qe-epic008-q4c` SPAWNED (100 games, width 1, info only, ALONE). Width 1/3._
 _Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g, …6bbe56e9) — owner GO: Q4 (c) as a 100-game look (`--rounds 50`), width 1, info only (~4.5 h + ~1 h). Waiting only on the cutechess-cli path for the env file. Width 0/3._
 _Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g, …21444ff1) — owner word: Q4 (c) width = 1 (~18 h + ~1 h). `qe-epic008-q4c` still HELD: counts/info-only + go + cutechess path. Width 0/3._
 _Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g, …62981616) — resumed after the reboot: npm test 63/2 128, Stockfish = pin, idle 32.2 °C; cutechess-cli path is needed again (scratchpad env file lost). `qe-epic008-q4c` HELD for the owner: width + counts/info-only + go + cutechess path. Width 0/3._
