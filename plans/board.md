@@ -1,3 +1,4 @@
+_Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g) — ABC-227 DONE (f4301d0c): movegen ~47 %, eval ~30 %, ordering ~6 % of self time; six value-identical cuts. ABC-235 Backlog → In Design (`arch-ABC-235`, confirm value-identity + proof). Width 2/3._
 _Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g, …278e149b) — ABC-226 DONE (484 costed repetitions, R 26; ABC-230 stays M1). ADR-0052 PROPOSED (TimeMode combo; simple-tournament min(22.0 s, safe share); clock mode 60 s) → owner OQ-0052-1. Owner: EPIC-010 Q4 = (e) 10 D + 10 R smoke per ticket; ~1700 non-goal removed, goal best TS engine ≥ 2 700 (aspirational); measures accepted. `bapm-owner-words-b` routed. Width 2/3._
 _Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g) — bapm-amend-epic009 merged: EPIC-009 accepted and amended — simple-tournament (T 22.0 s proposed under the 22.5 s ceiling) first, uci-clock-mode (60 s ceiling) later; CLI parity out; ABC-219 retired; ABC-222/223 5-game smokes. All wait on `arch-epic009-settings` + owner ADR accept. ABC-227 pulled → In Development (`se-ABC-227`). Width 3/3._
 _Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g) — bapm-epic010-improvements merged: EPIC-010 proposed (15 tickets, no XL). ABC-226 (records scan) + ABC-227 (profile) → Ready 2/8; ABC-226 pulled → In Analysis (`sa-ABC-226`), ABC-227 waits for width; rest Backlog on ADRs + owner Q1–Q5 (Q4 measurement rule, default hold). Width 3/3._
@@ -1062,8 +1063,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 1/3)
-- [ABC-227] Profile: where a node's time goes at 3 s (owner: Software Engineer/Architect, size: S, priority: P2, since: 2026-10-29, DoR 10/10; no games; not during an ALONE reading; **pulled 2026-10-29** → `se-ABC-227`)
+    ## In Development (WIP 0/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
     ## In Review (WIP 0/3)
@@ -1148,7 +1148,6 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [ABC-228] In check, quiescence searches every evasion; none means mate (size: M, priority: P2, DoR 8/10; waits ADR (ADR-0024 d4), Q4)
 - [ABC-229] Quiescence searches quiet queen promotions (size: S, priority: P2, DoR 8/10; waits ADR, Q4; after ABC-228)
 - [ABC-230] The game's earlier positions reach the search, CLI and UCI (size: M, priority: P2, DoR 8/10; waits ABC-226, Architect reading of ADR-0002 cl. 3, Q4)
-- [ABC-235] Cost-per-node cuts that keep every value identical, from ABC-227 (size: M, priority: P2, DoR 9/10; after ABC-227)
 - [ABC-231] King table tapered by phase, alone (size: S, priority: P3, DoR 8/10; milestone 2; waits ADR ruling, Q4)
 - [ABC-232] Passed pawns by phase (size: S, priority: P3, DoR 8/10; milestone 2; after ABC-231, Q4)
 - [ABC-233] History heuristic for quiet moves, cleared per search (size: M, priority: P3, DoR 8/10; milestone 2; waits ADR, Q4)
@@ -1194,7 +1193,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## In Analysis (WIP 0/2)
 
 
-## In Design (WIP 0/2)
+## In Design (WIP 1/2)
+- [ABC-235] Cost-per-node cuts that keep every value identical, from ABC-227 (size: M, priority: P2, DoR 9/10; after ABC-227; ABC-227 done; **design step** → `arch-ABC-235` 2026-10-29)
 
 
 ## Ready for Dev (WIP 0/6)
@@ -1288,6 +1288,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+- [ABC-227] Profile: where a node's time goes at 3 s — **DONE** 2026-10-29 (se-ABC-227 …7175ebdf): movegen 45–51 %, eval 27–33 %, ordering 5.5–6.6 %, make/unmake ~4 %, TT 1–2 %; ~2.7–4.0 kB allocated per node; six value-identical cuts named for ABC-235
 - [ABC-226] Records scan: repetitions the search could not see — **DONE** 2026-10-29 (sa-ABC-226 …cc53fc79): 4 199 games; 1 718 threefold draws, all first seen before the root; 461 from a won eval + 23 after avoiding one = 484 (R 26) → ABC-230 stays in milestone 1; 22 games show cutechess's ep-normalised key (info for EPIC-010 Q3)
 - [ABC-219] Named tournament level in the CLI — **RETIRED, closed unbuilt** 2026-10-29 (CLI parity out of scope; core moved into ABC-220) (bapm-amend-epic009)
 - [ABC-218] Reading of today's level 7 at 40/15 — **CLOSED, not run** 2026-10-29 by the owner's word (non-deterministic; not usable for the tournament) (orch-2026-10-29g/…a67f71ac)
