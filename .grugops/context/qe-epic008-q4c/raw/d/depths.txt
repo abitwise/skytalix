@@ -1,0 +1,1 @@
+{"base": {"searched_moves_with_depth": 5128, "min": 6, "median": 8.0, "mean": 8.81, "max": 18}, "skytalix": {"searched_moves_with_depth": 5137, "min": 6, "median": 9, "mean": 9.55, "max": 18}}

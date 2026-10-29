@@ -1,0 +1,134 @@
+{
+ "span": [
+  "2026-10-29T15:08:26.332000+00:00",
+  "2026-10-29T19:25:26.323000+00:00"
+ ],
+ "core_classes_mhz": {
+  "5157": 8,
+  "3289": 16
+ },
+ "all_samples": 1513,
+ "in_span_samples": 1511,
+ "before_first_game": {
+  "samples": 1,
+  "tctl_median": 38.6,
+  "tctl_max": 38.6,
+  "load1_median": 2.0,
+  "busy_mhz_median": 3581,
+  "busy_mhz_max": 3581,
+  "busy_mhz_min": 3581,
+  "busy_req_mhz_median": 3588,
+  "class5157_busy_mhz_median": 3581,
+  "class5157_busy_mhz_max": 3581,
+  "class5157_share_of_samples_busiest": 1.0,
+  "class3289_busy_mhz_median": 2358,
+  "class3289_busy_mhz_max": 2358,
+  "class3289_share_of_samples_busiest": 0.0
+ },
+ "whole_span": {
+  "samples": 1511,
+  "tctl_median": 75.6,
+  "tctl_max": 95.5,
+  "load1_median": 1.6,
+  "busy_mhz_median": 5013,
+  "busy_mhz_max": 5146,
+  "busy_mhz_min": 2363,
+  "busy_req_mhz_median": 5013,
+  "class5157_busy_mhz_median": 5013,
+  "class5157_busy_mhz_max": 5146,
+  "class5157_share_of_samples_busiest": 0.999,
+  "class3289_busy_mhz_median": 2363,
+  "class3289_busy_mhz_max": 3333,
+  "class3289_share_of_samples_busiest": 0.001
+ },
+ "quarters": [
+  {
+   "samples": 378,
+   "tctl_median": 73.0,
+   "tctl_max": 79.4,
+   "load1_median": 1.1,
+   "busy_mhz_median": 5036.0,
+   "busy_mhz_max": 5146,
+   "busy_mhz_min": 4981,
+   "busy_req_mhz_median": 5038.0,
+   "class5157_busy_mhz_median": 5036.0,
+   "class5157_busy_mhz_max": 5146,
+   "class5157_share_of_samples_busiest": 1.0,
+   "class3289_busy_mhz_median": 2363.0,
+   "class3289_busy_mhz_max": 3330,
+   "class3289_share_of_samples_busiest": 0.0
+  },
+  {
+   "samples": 378,
+   "tctl_median": 76.5,
+   "tctl_max": 85.4,
+   "load1_median": 1.6,
+   "busy_mhz_median": 5008.0,
+   "busy_mhz_max": 5146,
+   "busy_mhz_min": 2363,
+   "busy_req_mhz_median": 5008.0,
+   "class5157_busy_mhz_median": 5008.0,
+   "class5157_busy_mhz_max": 5146,
+   "class5157_share_of_samples_busiest": 0.997,
+   "class3289_busy_mhz_median": 2363.0,
+   "class3289_busy_mhz_max": 3311,
+   "class3289_share_of_samples_busiest": 0.003
+  },
+  {
+   "samples": 378,
+   "tctl_median": 76.0,
+   "tctl_max": 87.9,
+   "load1_median": 1.6,
+   "busy_mhz_median": 5011.0,
+   "busy_mhz_max": 5142,
+   "busy_mhz_min": 4394,
+   "busy_req_mhz_median": 5011.0,
+   "class5157_busy_mhz_median": 5011.0,
+   "class5157_busy_mhz_max": 5142,
+   "class5157_share_of_samples_busiest": 1.0,
+   "class3289_busy_mhz_median": 2363.0,
+   "class3289_busy_mhz_max": 2376,
+   "class3289_share_of_samples_busiest": 0.0
+  },
+  {
+   "samples": 377,
+   "tctl_median": 79.6,
+   "tctl_max": 95.5,
+   "load1_median": 2.3,
+   "busy_mhz_median": 4980,
+   "busy_mhz_max": 5140,
+   "busy_mhz_min": 4732,
+   "busy_req_mhz_median": 4981,
+   "class5157_busy_mhz_median": 4980,
+   "class5157_busy_mhz_max": 5140,
+   "class5157_share_of_samples_busiest": 1.0,
+   "class3289_busy_mhz_median": 2364,
+   "class3289_busy_mhz_max": 3333,
+   "class3289_share_of_samples_busiest": 0.0
+  }
+ ],
+ "governors_seen": [
+  "powersavex24"
+ ],
+ "epp_seen": [
+  "balance_performance"
+ ],
+ "boost_seen": [
+  "1"
+ ],
+ "maxset_seen": [
+  "3289,5157"
+ ],
+ "power_seen": [
+  "none"
+ ],
+ "tctl_ge_95_samples": 1,
+ "busy_median_drop_vs_q1_pct": [
+  0.0,
+  0.56,
+  0.5,
+  1.11
+ ],
+ "frequency_fell_under_load": "NO (no fall seen; no throttle counter exists)",
+ "pearson_tctl_vs_busy_mhz": -0.432
+}
