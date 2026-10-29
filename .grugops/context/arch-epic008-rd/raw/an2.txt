@@ -1,0 +1,15 @@
+== R1
+  skytalix searched moves by phase: {'opening(>=26 men)': 2380, 'middlegame(14-25)': 4350, 'endgame(<=13)': 2225}
+  SF-judged skytalix errors (jump >= 150 cp, from < +300): {'middlegame(14-25)': 531, 'opening(>=26 men)': 158, 'endgame(<=13)': 137} total 826, per 100 moves: {'opening(>=26 men)': 6.64, 'middlegame(14-25)': 12.21, 'endgame(<=13)': 6.16}
+  lost games: phase where SF's eval went >= +300 for good: {'endgame(<=13)': 29, 'middlegame(14-25)': 16, 'opening(>=26 men)': 2} turn ply median 101
+  eval bias (skytalix + SF-next, cp, + = skytalix optimistic) endgame(<=13): n=2138 median +104 mean +401.5; depth mean 10.67
+  eval bias (skytalix + SF-next, cp, + = skytalix optimistic) middlegame(14-25): n=4287 median +144 mean +117.9; depth mean 8.97
+  eval bias (skytalix + SF-next, cp, + = skytalix optimistic) opening(>=26 men): n=2331 median +41 mean +47.7; depth mean 7.96
+== R2
+  skytalix searched moves by phase: {'opening(>=26 men)': 2491, 'middlegame(14-25)': 4469, 'endgame(<=13)': 2376}
+  SF-judged skytalix errors (jump >= 150 cp, from < +300): {'middlegame(14-25)': 491, 'endgame(<=13)': 147, 'opening(>=26 men)': 151} total 789, per 100 moves: {'opening(>=26 men)': 6.06, 'middlegame(14-25)': 10.99, 'endgame(<=13)': 6.19}
+  lost games: phase where SF's eval went >= +300 for good: {'endgame(<=13)': 27, 'middlegame(14-25)': 35, 'opening(>=26 men)': 4} turn ply median 73.5
+  eval bias (skytalix + SF-next, cp, + = skytalix optimistic) endgame(<=13): n=2299 median +110 mean +541.8; depth mean 11.04
+  eval bias (skytalix + SF-next, cp, + = skytalix optimistic) middlegame(14-25): n=4418 median +131 mean +243.7; depth mean 10.06
+  eval bias (skytalix + SF-next, cp, + = skytalix optimistic) opening(>=26 men): n=2443 median +59 mean +78.2; depth mean 9.25
+== D depth by phase: {('base', 'endgame(<=13)'): (1579, 10.38), ('base', 'middlegame(14-25)'): (2301, 8.47), ('base', 'opening(>=26 men)'): (1248, 7.47), ('skytalix', 'endgame(<=13)'): (1587, 10.28), ('skytalix', 'middlegame(14-25)'): (2303, 9.49), ('skytalix', 'opening(>=26 men)'): (1247, 8.73)}

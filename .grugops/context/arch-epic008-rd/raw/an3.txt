@@ -1,0 +1,12 @@
+R1  skytalix  moves  8955 nps p10   479923 median   546521 p90   728757 | median by quarter [542760, 546996, 550395, 545971] | nodes median 1640469
+     moves below 70 % of median nps: 5 (0.1 %)
+R1  stockfish moves  8442 nps p10  1423302 median  1643068 p90  2504186 | median by quarter [1631247, 1643706, 1645284, 1646746] | nodes median 821515
+     moves below 70 % of median nps: 1 (0.0 %)
+R2  skytalix  moves  9336 nps p10   521396 median   586426 p90   730563 | median by quarter [581572, 586534, 590945, 586418] | nodes median 1759340
+     moves below 70 % of median nps: 0 (0.0 %)
+R2  stockfish moves  8833 nps p10  1430964 median  1623258 p90  2755128 | median by quarter [1592822, 1595042, 1677177, 1654260] | nodes median 811629
+     moves below 70 % of median nps: 0 (0.0 %)
+D   skytalix  moves  5137 nps p10   528089 median   598745 p90   714070 | median by quarter [608300, 587802, 607769, 593545] | nodes median 898235
+     moves below 70 % of median nps: 2 (0.0 %)
+D   base      moves  5128 nps p10   493588 median   568388 p90   720905 | median by quarter [577737, 558683, 575892, 562472] | nodes median 853078
+     moves below 70 % of median nps: 3 (0.1 %)

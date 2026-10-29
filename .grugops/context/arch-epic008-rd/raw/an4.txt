@@ -1,0 +1,10 @@
+== R1: level positions (SF |eval|<=150 before skytalix's move) by phase {'open': 1647, 'mid': 1563, 'end': 435}
+   UNSEEN errors (SF +250 after, skytalix eval >= -0.5): {'open': 16, 'mid': 49, 'end': 6} rate/100 {'open': 0.97, 'mid': 3.13, 'end': 1.38} total 71
+   seen errors (skytalix already < -0.5): {'mid': 63, 'end': 78, 'open': 3}
+   games with >=1 unseen error 49; lost games 47, of which with one 34
+   unseen errors by ply bucket (20 plies): [(0, 10), (1, 23), (2, 16), (3, 12), (4, 6), (5, 3), (6, 1)]
+== R2: level positions (SF |eval|<=150 before skytalix's move) by phase {'open': 1767, 'mid': 1363, 'end': 546}
+   UNSEEN errors (SF +250 after, skytalix eval >= -0.5): {'open': 27, 'mid': 46, 'end': 2} rate/100 {'open': 1.53, 'mid': 3.37, 'end': 0.37} total 75
+   seen errors (skytalix already < -0.5): {'mid': 74, 'end': 107, 'open': 4}
+   games with >=1 unseen error 55; lost games 66, of which with one 40
+   unseen errors by ply bucket (20 plies): [(0, 14), (1, 26), (2, 25), (3, 8), (4, 1), (6, 1)]
