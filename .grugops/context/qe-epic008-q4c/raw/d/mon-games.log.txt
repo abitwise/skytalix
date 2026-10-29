@@ -1,0 +1,200 @@
+2026-10-29T15:08:28Z Started game 1 of 100 (skytalix vs base)
+2026-10-29T15:10:32Z Finished game 1 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T15:10:32Z Started game 2 of 100 (base vs skytalix)
+2026-10-29T15:13:41Z Finished game 2 (base vs skytalix): 0-1 {Black mates}
+2026-10-29T15:13:41Z Started game 3 of 100 (skytalix vs base)
+2026-10-29T15:16:34Z Finished game 3 (skytalix vs base): 1-0 {White mates}
+2026-10-29T15:16:34Z Started game 4 of 100 (base vs skytalix)
+2026-10-29T15:19:18Z Finished game 4 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T15:19:18Z Started game 5 of 100 (skytalix vs base)
+2026-10-29T15:22:04Z Finished game 5 (skytalix vs base): 1-0 {White mates}
+2026-10-29T15:22:05Z Started game 6 of 100 (base vs skytalix)
+2026-10-29T15:24:50Z Finished game 6 (base vs skytalix): 0-1 {Black mates}
+2026-10-29T15:24:50Z Started game 7 of 100 (skytalix vs base)
+2026-10-29T15:27:21Z Finished game 7 (skytalix vs base): 1-0 {White mates}
+2026-10-29T15:27:21Z Started game 8 of 100 (base vs skytalix)
+2026-10-29T15:30:40Z Finished game 8 (base vs skytalix): 0-1 {Black mates}
+2026-10-29T15:30:40Z Started game 9 of 100 (skytalix vs base)
+2026-10-29T15:33:11Z Finished game 9 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T15:33:11Z Started game 10 of 100 (base vs skytalix)
+2026-10-29T15:34:45Z Finished game 10 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T15:34:45Z Started game 11 of 100 (skytalix vs base)
+2026-10-29T15:37:10Z Finished game 11 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T15:37:10Z Started game 12 of 100 (base vs skytalix)
+2026-10-29T15:41:26Z Finished game 12 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T15:41:26Z Started game 13 of 100 (skytalix vs base)
+2026-10-29T15:43:36Z Finished game 13 (skytalix vs base): 1-0 {White mates}
+2026-10-29T15:43:36Z Started game 14 of 100 (base vs skytalix)
+2026-10-29T15:45:44Z Finished game 14 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T15:45:44Z Started game 15 of 100 (skytalix vs base)
+2026-10-29T15:47:43Z Finished game 15 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T15:47:43Z Started game 16 of 100 (base vs skytalix)
+2026-10-29T15:51:27Z Finished game 16 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T15:51:27Z Started game 17 of 100 (skytalix vs base)
+2026-10-29T15:53:21Z Finished game 17 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T15:53:21Z Started game 18 of 100 (base vs skytalix)
+2026-10-29T15:57:30Z Finished game 18 (base vs skytalix): 1-0 {White mates}
+2026-10-29T15:57:30Z Started game 19 of 100 (skytalix vs base)
+2026-10-29T16:01:12Z Finished game 19 (skytalix vs base): 1-0 {White mates}
+2026-10-29T16:01:12Z Started game 20 of 100 (base vs skytalix)
+2026-10-29T16:03:10Z Finished game 20 (base vs skytalix): 1-0 {White mates}
+2026-10-29T16:03:10Z Started game 21 of 100 (skytalix vs base)
+2026-10-29T16:06:07Z Finished game 21 (skytalix vs base): 0-1 {Black mates}
+2026-10-29T16:06:07Z Started game 22 of 100 (base vs skytalix)
+2026-10-29T16:08:07Z Finished game 22 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T16:08:07Z Started game 23 of 100 (skytalix vs base)
+2026-10-29T16:11:12Z Finished game 23 (skytalix vs base): 1-0 {White mates}
+2026-10-29T16:11:12Z Started game 24 of 100 (base vs skytalix)
+2026-10-29T16:13:00Z Finished game 24 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T16:13:00Z Started game 25 of 100 (skytalix vs base)
+2026-10-29T16:15:05Z Finished game 25 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T16:15:05Z Started game 26 of 100 (base vs skytalix)
+2026-10-29T16:17:32Z Finished game 26 (base vs skytalix): 0-1 {Black mates}
+2026-10-29T16:17:32Z Started game 27 of 100 (skytalix vs base)
+2026-10-29T16:19:38Z Finished game 27 (skytalix vs base): 1-0 {White mates}
+2026-10-29T16:19:38Z Started game 28 of 100 (base vs skytalix)
+2026-10-29T16:21:25Z Finished game 28 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T16:21:25Z Started game 29 of 100 (skytalix vs base)
+2026-10-29T16:23:08Z Finished game 29 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T16:23:09Z Started game 30 of 100 (base vs skytalix)
+2026-10-29T16:25:58Z Finished game 30 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T16:25:58Z Started game 31 of 100 (skytalix vs base)
+2026-10-29T16:27:57Z Finished game 31 (skytalix vs base): 1-0 {White mates}
+2026-10-29T16:27:57Z Started game 32 of 100 (base vs skytalix)
+2026-10-29T16:30:00Z Finished game 32 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T16:30:00Z Started game 33 of 100 (skytalix vs base)
+2026-10-29T16:31:35Z Finished game 33 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T16:31:35Z Started game 34 of 100 (base vs skytalix)
+2026-10-29T16:34:24Z Finished game 34 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T16:34:25Z Started game 35 of 100 (skytalix vs base)
+2026-10-29T16:38:17Z Finished game 35 (skytalix vs base): 0-1 {Black mates}
+2026-10-29T16:38:17Z Started game 36 of 100 (base vs skytalix)
+2026-10-29T16:41:06Z Finished game 36 (base vs skytalix): 1-0 {White mates}
+2026-10-29T16:41:06Z Started game 37 of 100 (skytalix vs base)
+2026-10-29T16:43:49Z Finished game 37 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T16:43:49Z Started game 38 of 100 (base vs skytalix)
+2026-10-29T16:45:39Z Finished game 38 (base vs skytalix): 1-0 {White mates}
+2026-10-29T16:45:39Z Started game 39 of 100 (skytalix vs base)
+2026-10-29T16:48:36Z Finished game 39 (skytalix vs base): 1-0 {White mates}
+2026-10-29T16:48:36Z Started game 40 of 100 (base vs skytalix)
+2026-10-29T16:50:27Z Finished game 40 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T16:50:27Z Started game 41 of 100 (skytalix vs base)
+2026-10-29T16:54:04Z Finished game 41 (skytalix vs base): 1-0 {White mates}
+2026-10-29T16:54:04Z Started game 42 of 100 (base vs skytalix)
+2026-10-29T16:57:25Z Finished game 42 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T16:57:25Z Started game 43 of 100 (skytalix vs base)
+2026-10-29T17:01:21Z Finished game 43 (skytalix vs base): 0-1 {Black mates}
+2026-10-29T17:01:21Z Started game 44 of 100 (base vs skytalix)
+2026-10-29T17:02:45Z Finished game 44 (base vs skytalix): 1-0 {White mates}
+2026-10-29T17:02:45Z Started game 45 of 100 (skytalix vs base)
+2026-10-29T17:05:56Z Finished game 45 (skytalix vs base): 0-1 {Black mates}
+2026-10-29T17:05:56Z Started game 46 of 100 (base vs skytalix)
+2026-10-29T17:08:42Z Finished game 46 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T17:08:43Z Started game 47 of 100 (skytalix vs base)
+2026-10-29T17:11:16Z Finished game 47 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T17:11:16Z Started game 48 of 100 (base vs skytalix)
+2026-10-29T17:15:08Z Finished game 48 (base vs skytalix): 0-1 {Black mates}
+2026-10-29T17:15:09Z Started game 49 of 100 (skytalix vs base)
+2026-10-29T17:16:49Z Finished game 49 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T17:16:49Z Started game 50 of 100 (base vs skytalix)
+2026-10-29T17:19:52Z Finished game 50 (base vs skytalix): 1-0 {White mates}
+2026-10-29T17:19:52Z Started game 51 of 100 (skytalix vs base)
+2026-10-29T17:23:14Z Finished game 51 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T17:23:14Z Started game 52 of 100 (base vs skytalix)
+2026-10-29T17:24:50Z Finished game 52 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T17:24:50Z Started game 53 of 100 (skytalix vs base)
+2026-10-29T17:28:07Z Finished game 53 (skytalix vs base): 0-1 {Black mates}
+2026-10-29T17:28:07Z Started game 54 of 100 (base vs skytalix)
+2026-10-29T17:30:47Z Finished game 54 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T17:30:47Z Started game 55 of 100 (skytalix vs base)
+2026-10-29T17:33:39Z Finished game 55 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T17:33:39Z Started game 56 of 100 (base vs skytalix)
+2026-10-29T17:35:42Z Finished game 56 (base vs skytalix): 0-1 {Black mates}
+2026-10-29T17:35:42Z Started game 57 of 100 (skytalix vs base)
+2026-10-29T17:38:26Z Finished game 57 (skytalix vs base): 0-1 {Black mates}
+2026-10-29T17:38:26Z Started game 58 of 100 (base vs skytalix)
+2026-10-29T17:41:33Z Finished game 58 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T17:41:33Z Started game 59 of 100 (skytalix vs base)
+2026-10-29T17:45:11Z Finished game 59 (skytalix vs base): 0-1 {Black mates}
+2026-10-29T17:45:11Z Started game 60 of 100 (base vs skytalix)
+2026-10-29T17:47:40Z Finished game 60 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T17:47:40Z Started game 61 of 100 (skytalix vs base)
+2026-10-29T17:50:37Z Finished game 61 (skytalix vs base): 1-0 {White mates}
+2026-10-29T17:50:37Z Started game 62 of 100 (base vs skytalix)
+2026-10-29T17:54:42Z Finished game 62 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T17:54:42Z Started game 63 of 100 (skytalix vs base)
+2026-10-29T17:56:51Z Finished game 63 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T17:56:51Z Started game 64 of 100 (base vs skytalix)
+2026-10-29T17:58:47Z Finished game 64 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T17:58:47Z Started game 65 of 100 (skytalix vs base)
+2026-10-29T18:00:53Z Finished game 65 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T18:00:53Z Started game 66 of 100 (base vs skytalix)
+2026-10-29T18:03:13Z Finished game 66 (base vs skytalix): 0-1 {Black mates}
+2026-10-29T18:03:13Z Started game 67 of 100 (skytalix vs base)
+2026-10-29T18:05:44Z Finished game 67 (skytalix vs base): 0-1 {Black mates}
+2026-10-29T18:05:44Z Started game 68 of 100 (base vs skytalix)
+2026-10-29T18:08:10Z Finished game 68 (base vs skytalix): 0-1 {Black mates}
+2026-10-29T18:08:10Z Started game 69 of 100 (skytalix vs base)
+2026-10-29T18:09:57Z Finished game 69 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T18:09:57Z Started game 70 of 100 (base vs skytalix)
+2026-10-29T18:14:03Z Finished game 70 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T18:14:03Z Started game 71 of 100 (skytalix vs base)
+2026-10-29T18:16:30Z Finished game 71 (skytalix vs base): 1-0 {White mates}
+2026-10-29T18:16:30Z Started game 72 of 100 (base vs skytalix)
+2026-10-29T18:19:04Z Finished game 72 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T18:19:04Z Started game 73 of 100 (skytalix vs base)
+2026-10-29T18:20:13Z Finished game 73 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T18:20:13Z Started game 74 of 100 (base vs skytalix)
+2026-10-29T18:23:37Z Finished game 74 (base vs skytalix): 0-1 {Black mates}
+2026-10-29T18:23:37Z Started game 75 of 100 (skytalix vs base)
+2026-10-29T18:25:01Z Finished game 75 (skytalix vs base): 1-0 {White mates}
+2026-10-29T18:25:01Z Started game 76 of 100 (base vs skytalix)
+2026-10-29T18:27:25Z Finished game 76 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T18:27:25Z Started game 77 of 100 (skytalix vs base)
+2026-10-29T18:29:25Z Finished game 77 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T18:29:26Z Started game 78 of 100 (base vs skytalix)
+2026-10-29T18:33:12Z Finished game 78 (base vs skytalix): 0-1 {Black mates}
+2026-10-29T18:33:12Z Started game 79 of 100 (skytalix vs base)
+2026-10-29T18:34:36Z Finished game 79 (skytalix vs base): 1-0 {White mates}
+2026-10-29T18:34:36Z Started game 80 of 100 (base vs skytalix)
+2026-10-29T18:36:35Z Finished game 80 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T18:36:35Z Started game 81 of 100 (skytalix vs base)
+2026-10-29T18:39:05Z Finished game 81 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T18:39:05Z Started game 82 of 100 (base vs skytalix)
+2026-10-29T18:41:49Z Finished game 82 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T18:41:49Z Started game 83 of 100 (skytalix vs base)
+2026-10-29T18:44:09Z Finished game 83 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T18:44:09Z Started game 84 of 100 (base vs skytalix)
+2026-10-29T18:46:33Z Finished game 84 (base vs skytalix): 0-1 {Black mates}
+2026-10-29T18:46:33Z Started game 85 of 100 (skytalix vs base)
+2026-10-29T18:50:51Z Finished game 85 (skytalix vs base): 0-1 {Black mates}
+2026-10-29T18:50:51Z Started game 86 of 100 (base vs skytalix)
+2026-10-29T18:53:05Z Finished game 86 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T18:53:05Z Started game 87 of 100 (skytalix vs base)
+2026-10-29T18:55:56Z Finished game 87 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T18:55:56Z Started game 88 of 100 (base vs skytalix)
+2026-10-29T18:57:08Z Finished game 88 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T18:57:08Z Started game 89 of 100 (skytalix vs base)
+2026-10-29T18:58:40Z Finished game 89 (skytalix vs base): 1-0 {White mates}
+2026-10-29T18:58:40Z Started game 90 of 100 (base vs skytalix)
+2026-10-29T19:00:40Z Finished game 90 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T19:00:40Z Started game 91 of 100 (skytalix vs base)
+2026-10-29T19:02:10Z Finished game 91 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T19:02:10Z Started game 92 of 100 (base vs skytalix)
+2026-10-29T19:04:06Z Finished game 92 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T19:04:06Z Started game 93 of 100 (skytalix vs base)
+2026-10-29T19:06:20Z Finished game 93 (skytalix vs base): 1-0 {White mates}
+2026-10-29T19:06:20Z Started game 94 of 100 (base vs skytalix)
+2026-10-29T19:08:47Z Finished game 94 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-29T19:08:47Z Started game 95 of 100 (skytalix vs base)
+2026-10-29T19:12:34Z Finished game 95 (skytalix vs base): 0-1 {Black mates}
+2026-10-29T19:12:34Z Started game 96 of 100 (base vs skytalix)
+2026-10-29T19:13:53Z Finished game 96 (base vs skytalix): 0-1 {Black mates}
+2026-10-29T19:13:53Z Started game 97 of 100 (skytalix vs base)
+2026-10-29T19:17:10Z Finished game 97 (skytalix vs base): 1-0 {White mates}
+2026-10-29T19:17:10Z Started game 98 of 100 (base vs skytalix)
+2026-10-29T19:20:07Z Finished game 98 (base vs skytalix): 0-1 {Black mates}
+2026-10-29T19:20:07Z Started game 99 of 100 (skytalix vs base)
+2026-10-29T19:25:05Z Finished game 99 (skytalix vs base): 1-0 {White mates}
+2026-10-29T19:25:05Z Started game 100 of 100 (base vs skytalix)
+2026-10-29T19:25:26Z Finished game 100 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}

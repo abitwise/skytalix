@@ -1,0 +1,6 @@
+2026-10-29T15:08:21Z wait poll=1 load1=2.00 power=none vitest=0 cutechess=0 thermal=38.6
+2026-10-29T15:08:21Z PRECONDITIONS-MET
+2026-10-29T15:08:21Z harness start: d 8a73fa261945464a5a16625083114691a4760e82 3497aad21fd089f29fe1791d42f81c47ac7ca522 <out> --budget-ms 1500 --rounds 50 --concurrency 1
+2026-10-29T15:08:23Z pins: both = pin
+2026-10-29T15:08:23Z width: machine.txt shows concurrency 1
+2026-10-29T19:25:26Z harness end rc=0
