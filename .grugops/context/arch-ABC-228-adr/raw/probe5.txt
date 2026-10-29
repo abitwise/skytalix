@@ -1,0 +1,6 @@
+kiwipete search d6: door 237007 score -54 | door cap 64 266261 score -54 | ev cap 8 324162 score -59 | ev cap 16 431201 score -59 | ev cap 64 438961 score -59
+position-6 search d6: door 109912 score 87 | door cap 64 119661 score 87 | ev cap 8 154464 score 87 | ev cap 16 162323 score 87 | ev cap 64 162348 score 87
+cpu after cap test 4.7 s
+corpus 190
+d5 drift search() ev vs door: positions done 190/190; non-mate 187; within 25 cp 167 (89.30 %); max 118 at r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P1RPP/R2Q2K1 b kq - 1 1 door 708 ev 826; p95 53; mate-status flips 0; root move differs 7
+total cpu 26.6 s

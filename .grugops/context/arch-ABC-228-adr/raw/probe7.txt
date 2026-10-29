@@ -1,0 +1,8 @@
+kpk-b6c6 @8: door b6c6 ok 186 (2572 nodes) | ev b6c6 ok 186 (2594 nodes) | ev+qQ b6c6 ok 902 (2998 nodes)
+kpk-c6d6 @8: door c6d6 ok 196 (3334 nodes) | ev c6d6 ok 196 (3387 nodes) | ev+qQ c6d6 ok 906 (4271 nodes)
+kpk-d6e6 @8: door d6e6 ok 196 (3367 nodes) | ev d6e6 ok 196 (3416 nodes) | ev+qQ d6e6 ok 906 (4201 nodes)
+kpk-e6f6 @8: door e6f6 ok 186 (3121 nodes) | ev e6f6 ok 186 (3235 nodes) | ev+qQ e6f6 ok 902 (3548 nodes)
+zugzwang.001 @9: door e1f1 ok -222 (85980 nodes) | ev e1f1 ok -224 (100305 nodes) | ev+qQ e1f1 ok -224 (78946 nodes)
+zugzwang.004 @11: door h3h4 ok 452 (847945 nodes) | ev h3h4 ok 451 (587282 nodes) | ev+qQ h3h4 ok 451 (587282 nodes)
+zugzwang.005 @12: door f4d5 ok 57 (3258266 nodes) | ev f4d5 ok 68 (3336131 nodes) | ev+qQ f4d5 ok 57 (2412618 nodes)
+total cpu 38.0 s
