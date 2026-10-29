@@ -1,3 +1,4 @@
+_Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g) — arch-ABC-235 merged (48015e9f): cuts 1,3,5 value-identical → ABC-235 In Development (`se-ABC-235`); cut 6 split → ABC-240 (`bapm-ABC-235-split`); cuts 2,4 out; no ADR; OD-235-1 (re-opening ADR-0003's king-scan attempt) INFO to owner, veto open. Width 3/3._
 _Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g) — bapm-owner-words-b merged: EPIC-010 accepted; merge rule = 10 D + 10 R smoke per value-changing ticket (S-1..S-4) + R-pair batch per milestone; EPIC-004 ~1700 non-goal removed (goal >= 2 700 aspirational); EPIC-009 folded to ADR-0052 (OQ-0052-1 open). ABC-225 → Ready → In Development (`se-ABC-225`). Width 2/3._
 _Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g) — ABC-227 DONE (f4301d0c): movegen ~47 %, eval ~30 %, ordering ~6 % of self time; six value-identical cuts. ABC-235 Backlog → In Design (`arch-ABC-235`, confirm value-identity + proof). Width 2/3._
 _Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g, …278e149b) — ABC-226 DONE (484 costed repetitions, R 26; ABC-230 stays M1). ADR-0052 PROPOSED (TimeMode combo; simple-tournament min(22.0 s, safe share); clock mode 60 s) → owner OQ-0052-1. Owner: EPIC-010 Q4 = (e) 10 D + 10 R smoke per ticket; ~1700 non-goal removed, goal best TS engine ≥ 2 700 (aspirational); measures accepted. `bapm-owner-words-b` routed. Width 2/3._
@@ -1064,7 +1065,8 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 1/3)
+    ## In Development (WIP 2/3)
+- [ABC-235] Cost-per-node cuts 1 → 3 → 5, value-identical (size: M, priority: P2; design arch-ABC-235 …7fc1b90c/…eebca902: cuts 1,3,5 in; 6 split → ABC-240; 2,4 out; no ADR; S2, no smoke; **pulled 2026-10-29** → `se-ABC-235`)
 - [ABC-225] Interleaved R-pair command: the batch's instrument (re-scoped 2026-10-29) (size: M, priority: P2, DoR 10/10; tools only; Done before milestone 1's batch; not during an ALONE reading; **pulled 2026-10-29** → `se-ABC-225`, QE follows for A5/A6 ALONE)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
@@ -1194,8 +1196,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## In Analysis (WIP 0/2)
 
 
-## In Design (WIP 1/2)
-- [ABC-235] Cost-per-node cuts that keep every value identical, from ABC-227 (size: M, priority: P2, DoR 9/10; after ABC-227; ABC-227 done; **design step** → `arch-ABC-235` 2026-10-29)
+## In Design (WIP 0/2)
 
 
 ## Ready for Dev (WIP 0/6)
