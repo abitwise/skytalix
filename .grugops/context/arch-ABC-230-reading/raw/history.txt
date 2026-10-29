@@ -1,0 +1,26 @@
+H1 black losing, Ke8 would be the 3rd occurrence | root 3k4/8/8/8/8/8/8/Q3K3 b - - 7 4 | prior 7
+   main  d8c8 -1006 n=524
+   base  d8c8 -1006 n=524  == main
+   r3    d8e8 0 n=96
+   r2    d8e8 0 n=96
+H2 black losing, Ke8 would be the 2nd occurrence | root 3k4/8/8/8/8/8/8/Q3K3 b - - 3 2 | prior 3
+   main  d8c8 -1006 n=524
+   base  d8c8 -1006 n=524  == main
+   r3    d8c8 -1006 n=524
+   r2    d8e8 0 n=96
+H3 knights shuffle, startpos 3rd occurrence available to black | root rnbqkb1r/pppppppp/5n2/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 7 4 | prior 7
+   main  d7d5 63 n=1853
+   base  d7d5 63 n=1853  == main
+   r3    d7d5 63 n=1850
+   r2    d7d5 63 n=1850
+H4 identity: untrimmed prior handed in, root right after a pawn move (clock 0) | root 4k3/p7/8/8/8/P7/8/Q3K3 b - - 0 5 | prior 9
+   main  e8f8 -1010 n=405
+   base  e8f8 -1010 n=405  == main
+   r3    e8f8 -1010 n=405
+   r2    e8f8 -1010 n=405
+H5 bare FEN kiwipete | root r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1 | prior 0
+   main  e2a6 8 n=27112
+   base  e2a6 8 n=27112  == main
+   r3    e2a6 8 n=27112
+   r2    e2a6 8 n=27112
+cpu 0.88+0.03 s
