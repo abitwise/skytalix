@@ -1,0 +1,6 @@
+Q1 capture-mate Qxf7# available (white to move)
+  inCheck=false static=-36 quiesce=78 chooseMove(300ms)=depth 12 score 29999
+Q2 side to move in check, quiet evasion only (black)
+  inCheck=true static=-548 quiesce=-548 chooseMove(300ms)=depth 11 score -581
+Q3 quiet promotion available (white)
+  inCheck=false static=212 quiesce=212 chooseMove(300ms)=depth 10 score 1033
