@@ -66,6 +66,13 @@
  * when the side to move has fewer than three non-pawn pieces (the zugzwang guard). It changes the
  * VALUE, so every door older than `ABC-208` turns it off, and `search()` is held to the TEST-ONLY
  * door `searchWithoutNullMove`, the pre-`ABC-208` `search()`, by a bounded oracle (decision 8).
+ *
+ * EVASIONS IN QUIESCENCE (ABC-228, `ADR-0053`): in check below its cap, `quiesce` searches every
+ * legal move instead of standing pat, and scores none as mate at the root-relative distance, so
+ * the leaf hands it its `ply`. Each recursion maps its switch, `quiescenceEvasions`, onto a
+ * constant `QuiescenceRules` record. It changes the VALUE, so every door older than `ABC-228`
+ * turns it off, and `search()` is held to the TEST-ONLY door `searchWithoutQuiescenceEvasions`,
+ * the pre-`ABC-228` `search()`, by a bounded oracle (decision 8).
  */
 
 import { makeMove, makeNullMove, unmakeMove, unmakeNullMove } from "./apply.ts";
@@ -74,7 +81,7 @@ import { leafEndReason } from "./gameend.ts";
 import { givesCheck, isInCheck, legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
 import { EMPTY, isBlack, isOnBoard, KING, PAWN, type Position, pieceType } from "./position.ts";
-import { mvvLvaKey, quiesce } from "./quiescence.ts";
+import { MATE_SCORE, mvvLvaKey, type QuiescenceRules, quiesce } from "./quiescence.ts";
 import {
   BOUND_EXACT,
   boundOf,
@@ -87,13 +94,15 @@ import {
 import { zobristKey, zobristKeyAfterMove, zobristKeyAfterNullMove } from "./zobrist.ts";
 
 /**
- * The score of being checkmated AT THE ROOT, negated: a side mated `ply` plies from the root
- * scores `-(MATE_SCORE - ply)`, so a mate delivered sooner is worth more than the same mate
- * delivered later and the search prefers the short line. Far above any static evaluation the
- * tables can produce (a full board of queens is under 10 000), so a mate is never confused
- * with material.
+ * The score of being checkmated AT THE ROOT, negated (`-(MATE_SCORE - ply)`). Defined in
+ * `src/quiescence.ts` since `ABC-228`, which now scores a mate too (`ADR-0053` decision 3), and
+ * re-exported here under the same name, so no importer changes.
  */
-export const MATE_SCORE = 30_000;
+export { MATE_SCORE };
+
+/** The quiescence rules each recursion hands `quiesce` (`ADR-0053` decision 6): constants, never built per leaf. */
+const EVASIONS_ON: QuiescenceRules = { evasions: true };
+const EVASIONS_OFF: QuiescenceRules = { evasions: false };
 
 export interface SearchResult {
   /** Centipawns, positive for the side to move. A mate reads `±(MATE_SCORE - ply)`. */
@@ -275,6 +284,11 @@ interface Switches {
    * decision 1); every older door turns it off (decision 3).
    */
   readonly nullMove: boolean;
+  /**
+   * Evasions in check inside quiescence (`ABC-228`, `ADR-0053`). True on `search()` only; every
+   * older door turns it off, so each reproduces its pre-`ABC-228` self node for node.
+   */
+  readonly quiescenceEvasions: boolean;
 }
 
 /** The least remaining depth, and the least 0-based index in the ordered list, a reduced move has. */
@@ -382,7 +396,8 @@ function leafScore(
   if (reason === null) {
     if (!switches.quiescence) return evaluate(position);
     // Every capture node the quiescence search enters is a position visited, and is counted.
-    return quiesce(position, alpha, beta, 0, () => counter.nodes++);
+    const rules = switches.quiescenceEvasions ? EVASIONS_ON : EVASIONS_OFF;
+    return quiesce(position, alpha, beta, 0, ply, rules, () => counter.nodes++);
   }
   if (reason === "checkmate") return 0 - (MATE_SCORE - ply);
   // Every other ended game is drawn: stalemate, dead position, seventy-five moves. Exactly 0,
@@ -703,6 +718,26 @@ export function search(position: Position, depth: number): SearchResult {
     pvs: true,
     reductions: true,
     nullMove: true,
+    quiescenceEvasions: true,
+  });
+}
+
+/**
+ * TEST-ONLY. The pre-`ABC-228` `search()`, node for node: evasions in quiescence off, everything
+ * else on, null move included. It is the reference `ABC-228`'s bounded drift oracle compares
+ * `search()` against, and the shipped side of every `ABC-208` row that measures null move alone
+ * (`ADR-0053` decisions 6 and 7). Not an engine option; nothing in production calls it.
+ */
+export function searchWithoutQuiescenceEvasions(position: Position, depth: number): SearchResult {
+  return searchRoot(position, depth, {
+    prune: true,
+    quiescence: true,
+    ordering: "full",
+    table: true,
+    pvs: true,
+    reductions: true,
+    nullMove: true,
+    quiescenceEvasions: false,
   });
 }
 
@@ -721,6 +756,7 @@ export function searchWithoutNullMove(position: Position, depth: number): Search
     pvs: true,
     reductions: true,
     nullMove: false,
+    quiescenceEvasions: false,
   });
 }
 
@@ -743,6 +779,7 @@ export function searchWithoutPruning(position: Position, depth: number): SearchR
     pvs: false,
     reductions: false,
     nullMove: false,
+    quiescenceEvasions: false,
   });
 }
 
@@ -763,6 +800,7 @@ export function searchWithoutQuiescence(position: Position, depth: number): Sear
     pvs: false,
     reductions: false,
     nullMove: false,
+    quiescenceEvasions: false,
   });
 }
 
@@ -785,6 +823,7 @@ export function searchWithoutPruningOrQuiescence(position: Position, depth: numb
     pvs: false,
     reductions: false,
     nullMove: false,
+    quiescenceEvasions: false,
   });
 }
 
@@ -803,6 +842,7 @@ export function searchWithoutOrdering(position: Position, depth: number): Search
     pvs: false,
     reductions: false,
     nullMove: false,
+    quiescenceEvasions: false,
   });
 }
 
@@ -820,6 +860,7 @@ export function searchWithoutKillers(position: Position, depth: number): SearchR
     pvs: false,
     reductions: false,
     nullMove: false,
+    quiescenceEvasions: false,
   });
 }
 
@@ -838,6 +879,7 @@ export function searchWithoutTable(position: Position, depth: number): SearchRes
     pvs: false,
     reductions: false,
     nullMove: false,
+    quiescenceEvasions: false,
   });
 }
 
@@ -856,6 +898,7 @@ export function searchWithoutReductions(position: Position, depth: number): Sear
     pvs: true,
     reductions: false,
     nullMove: false,
+    quiescenceEvasions: false,
   });
 }
 
@@ -874,5 +917,6 @@ export function searchWithoutPvsOrReductions(position: Position, depth: number):
     pvs: false,
     reductions: false,
     nullMove: false,
+    quiescenceEvasions: false,
   });
 }

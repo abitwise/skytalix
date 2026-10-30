@@ -18,10 +18,20 @@
  * behaviour — the guard degrades to the old horizon, never to something worse. The per-move
  * budget is `src/engine.ts`'s, and this constant must not become one.
  *
- * Not here, each a recorded decision rather than an omission: checks in quiescence, delta
+ * IN CHECK, NO STAND PAT (`ABC-228`, `ADR-0053` decisions 2-4). Below the cap, a node whose side
+ * to move is in check searches EVERY legal move — in check, every legal move is an evasion, quiet
+ * ones and under-promotions included — in the same stable `mvvLvaKey` order, fail-soft, each
+ * child one quiescence ply deeper. With no evasion it is mated, and scores
+ * `-(MATE_SCORE - (ply + qply))`, `ply` being the leaf's distance from the root, so a mate found
+ * here reads the distance the full-width search would give it. At the cap a node stands pat, in
+ * check or not: the guard still degrades to the old horizon. The rule is behind a switch,
+ * `QuiescenceRules.evasions`, which each recursion maps onto a constant record; the test-only
+ * doors older than `ABC-228` turn it off and reproduce the pre-ticket search node for node.
+ *
+ * Not here, each a recorded decision rather than an omission: quiet checks in quiescence, delta
  * pruning, static exchange evaluation, and QUIET promotions (a capturing promotion is a capture
- * and is searched like any other). No terminal detection: a quiescence node with no captures
- * stands pat, and mate and stalemate are the full-width search's to notice.
+ * and is searched like any other). No stalemate detection: a quiescence node out of check with
+ * no captures stands pat, and stalemate is the full-width search's to notice.
  *
  * CAPTURES ARE SEARCHED MOST-VALUABLE-VICTIM FIRST (`ADR-0024`), and that ordering is THIS
  * module's, not `ABC-080`'s: unordered, a losing capture is refuted only when its child reaches
@@ -35,13 +45,13 @@
  * Both recursions — `src/search.ts`'s and the abortable copy in `src/engine.ts` — call this one
  * function, so the leaf is shared rather than duplicated a third time. `visit` is how each
  * caller sees the nodes: the search counts them, the engine also consults its clock, and a test
- * observes the recursion depth. It is called once per node entered THROUGH A CAPTURE, never for
- * the leaf itself, which the caller already counted.
+ * observes the recursion depth. It is called once per node entered THROUGH A CAPTURE (or, in
+ * check, an evasion), never for the leaf itself, which the caller already counted.
  */
 
 import { makeMove, unmakeMove } from "./apply.ts";
 import { evaluate } from "./evaluate.ts";
-import { legalCaptures } from "./legal.ts";
+import { isInCheck, legalCaptures, legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
 import { type Position, pieceType } from "./position.ts";
 
@@ -84,7 +94,7 @@ export function captureScratchByteLength(): number {
  * keeps stable. `ABC-240`: each key is computed once into `CAPTURE_KEYS` (float64, so the
  * attacker's thousandths never merge), and the list is insertion-sorted beside it, moving an
  * entry only past a STRICTLY smaller key. The list must be the caller's own: `quiesce` sorts the
- * fresh array `legalCaptures` returned. Exported for `src/quiescence.test.ts`'s oracle.
+ * fresh array `legalCaptures` (or, in check, `legalMoves`) returned. Exported for `src/quiescence.test.ts`'s oracle.
  */
 export function orderCaptures(captures: Move[]): void {
   const count = captures.length;
@@ -111,8 +121,27 @@ export function orderCaptures(captures: Move[]): void {
 export const QUIESCENCE_MAX_PLY = 8;
 
 /**
- * Called once per quiescence node entered through a capture, with that node's ply past the
- * leaf (1 for the first capture). May throw — the engine's abort does — and the position is
+ * The score of being checkmated AT THE ROOT, negated: a side mated `ply` plies from the root
+ * scores `-(MATE_SCORE - ply)`, so a mate delivered sooner is worth more than the same mate
+ * delivered later and the search prefers the short line. Far above any static evaluation the
+ * tables can produce (a full board of queens is under 10 000), so a mate is never confused
+ * with material. Defined here, the lowest module that scores a mate (`ADR-0053` decision 3);
+ * `src/search.ts` re-exports it under the same name.
+ */
+export const MATE_SCORE = 30_000;
+
+/**
+ * Which of quiescence's rules are on (`ADR-0053` decision 6). Every caller passes one
+ * explicitly; each recursion maps its switches onto a module-level constant record.
+ */
+export interface QuiescenceRules {
+  /** In check below the cap: no stand pat, every legal move searched, none means mate (`ABC-228`). */
+  readonly evasions: boolean;
+}
+
+/**
+ * Called once per quiescence node entered through a capture or an evasion, with that node's ply
+ * past the leaf (1 for the first). May throw — the engine's abort does — and the position is
  * still byte-identical to the caller when it does.
  */
 export type QuiescenceVisitor = (qply: number) => void;
@@ -120,7 +149,8 @@ export type QuiescenceVisitor = (qply: number) => void;
 /**
  * The quiescence value of `position` for the side to move, in the negamax convention.
  *
- * `qply` is 0 at the leaf the full-width search handed over. Fail-soft: the result may fall
+ * `qply` is 0 at the leaf the full-width search handed over; `ply` is that leaf's distance from
+ * the root (0 on a direct call), read only by the mate score. Fail-soft: the result may fall
  * outside `[alpha, beta]`. The position is byte-identical on return, throw or no throw.
  */
 export function quiesce(
@@ -128,27 +158,39 @@ export function quiesce(
   alpha: number,
   beta: number,
   qply: number,
+  ply: number,
+  rules: QuiescenceRules,
   visit: QuiescenceVisitor,
 ): number {
   if (qply > 0) visit(qply);
 
-  const standPat = evaluate(position);
-  if (standPat >= beta) return standPat; // standing still already refutes the opponent's line
-  if (qply >= QUIESCENCE_MAX_PLY) return standPat; // the runaway guard: stand pat, do not expand
+  let best: number;
+  let moves: Move[];
+  if (rules.evasions && qply < QUIESCENCE_MAX_PLY && isInCheck(position)) {
+    // In check (`ADR-0053` decision 2): no stand pat, so `best` starts below every real score
+    // and only a searched move raises it. Every legal move is an evasion; none is mate here.
+    moves = legalMoves(position);
+    if (moves.length === 0) return 0 - (MATE_SCORE - (ply + qply));
+    best = Number.NEGATIVE_INFINITY;
+  } else {
+    const standPat = evaluate(position);
+    if (standPat >= beta) return standPat; // standing still already refutes the opponent's line
+    if (qply >= QUIESCENCE_MAX_PLY) return standPat; // the runaway guard: stand pat, do not expand
 
-  let best = standPat;
-  if (best > alpha) alpha = best;
+    best = standPat;
+    if (best > alpha) alpha = best;
 
-  // The legal captures in generation order (ABC-206): only captures are tested for legality.
-  const captures = legalCaptures(position);
+    // The legal captures in generation order (ABC-206): only captures are tested for legality.
+    moves = legalCaptures(position);
+  }
   // Stable sort: equal keys keep generation order, so the count is deterministic.
-  orderCaptures(captures);
+  orderCaptures(moves);
 
-  for (const move of captures) {
+  for (const move of moves) {
     const undo = makeMove(position, move);
     let score: number;
     try {
-      score = 0 - quiesce(position, 0 - beta, 0 - alpha, qply + 1, visit);
+      score = 0 - quiesce(position, 0 - beta, 0 - alpha, qply + 1, ply, rules, visit);
     } finally {
       unmakeMove(position, move, undo);
     }

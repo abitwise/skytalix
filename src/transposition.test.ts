@@ -515,7 +515,9 @@ describe("A5 — the only non-losing line repeats, and it scores exactly 0", () 
   it("the fixture bites: at depth 3 the repetition is past the horizon, and the rook down shows", () => {
     // RE-MEASURED at `ABC-083` (king safety and mobility): −470 became −488 (`probe/rows.ts`).
     // RE-PINNED at `ABC-215` (the evaluation values made by rule): −488 became −485.
-    expect(search(parseFen(REPEATS_AT_PLY_4), 3).score).toBe(-485);
+    // RE-PINNED at `ABC-228` (evasions in quiescence; `ADR-0053` decision 7, measured in its
+    // finding 6): −485 became −392. The premise holds: the material deficit still shows.
+    expect(search(parseFen(REPEATS_AT_PLY_4), 3).score).toBe(-392);
   });
 
   /**

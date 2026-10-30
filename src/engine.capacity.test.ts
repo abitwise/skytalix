@@ -78,7 +78,16 @@ function leafScoreAtCapacity(): number {
   }
   expect(gameStatus(position).result).toBe("in-progress");
   const infinity = Number.POSITIVE_INFINITY;
-  return quiesce(position, 0 - infinity, infinity, 0, () => {});
+  // As the leaf at ply 128 is scored: the shipped rules (`ABC-228`), the leaf's ply for a mate.
+  return quiesce(
+    position,
+    0 - infinity,
+    infinity,
+    0,
+    KEY_ARRAY_CAPACITY,
+    { evasions: true },
+    () => {},
+  );
 }
 
 /** The key writes each iteration made, keys[1] included, the last iteration up to the return. */

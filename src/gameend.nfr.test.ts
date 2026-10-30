@@ -168,7 +168,17 @@ describe("ABC-206 — the search leaf's game-end check stays cheap (call counts,
       "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1",
     );
     let visited = 0;
-    quiesce(position, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY, 0, () => visited++);
+    // `ABC-228` (`ADR-0053` decision 7): a work reading, so it passes the pre-ticket record. In
+    // check the shipped rules build the full list by design; the evasion rows own that path.
+    quiesce(
+      position,
+      Number.NEGATIVE_INFINITY,
+      Number.POSITIVE_INFINITY,
+      0,
+      0,
+      { evasions: false },
+      () => visited++,
+    );
 
     expect(visited).toBeGreaterThan(0); // the capture search ran, so the zero below is earned
     expect(legalCaptures).toHaveBeenCalled();
