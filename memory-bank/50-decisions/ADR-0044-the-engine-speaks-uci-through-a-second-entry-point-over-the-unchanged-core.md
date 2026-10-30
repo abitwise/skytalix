@@ -293,6 +293,10 @@ budget. There is no `info` line, and no way to read `stop` while `chooseMove` ho
   - **Not** `book-file.ts`, so the session reaches no `fs`. Only `uci.ts` imports it.
   - *(2026-10-30, `ADR-0054` accepted (`…3dd61448`): from `ABC-230`'s merge the list also holds `zobrist.ts`, and the
     session holds the prior keys beside its position. `history.ts` stays out. See `ADR-0054` decision 2.)*
+  - *(2026-10-30, `EPIC-010` Q3 (c) accepted on the owner's word (`…c4ab73de`): from the merge of the Q3 (c) ticket,
+    which is built after `ABC-230`, the list also holds `gameend.ts`, for the repetition-key helper only. The fence
+    above is unchanged. See `ADR-0020` § AMENDMENT 2026-10-30, C2 and Consequences. Pointer by Architect/Design, task
+    `arch-q3c-oq228ii`.)*
 - **One edit to `src/engine.ts`**, which D12 specifies: two optional fields, defaulted to today's
   behaviour. **No edit** to `search.ts`, `levels.ts`, `book.ts`, `book-engine.ts`, `book-file.ts`,
   `level-seam.ts`, `turn-loop.ts`, `cli.ts`, `fen.ts`, `moves.ts`, `legal.ts`, `apply.ts` or

@@ -15,6 +15,9 @@ stamp): *"ADR-0054: accept"*. Recorded by Architect/Design (task `arch-adr-accep
   row). Their texts are otherwise unchanged.
 - **Still open, and not this ADR's:** `EPIC-010` Q3, the ep key. The owner asked for more information, and
   `ADR-0020` stands as written. Q1 (Syzygy) is deferred and stays out of `EPIC-010`.
+  *(2026-10-30: Q3 is answered (c), verbatim "Q3: c" (`orch-2026-10-29g/…c4ab73de`). It is recorded as `ADR-0020`
+  § AMENDMENT 2026-10-30 and built by its own ticket after `ABC-230` merges. From that merge, every key in `priorKeys`
+  is a repetition key. Decisions 1–8 here are unchanged. Pointer added by Architect/Design, task `arch-q3c-oq228ii`.)*
 
 Previously **PROPOSED** 2026-10-29 by Architect/Design (task `arch-ABC-230-reading`, records plus probes, at `main`
 `989093f3`, whose `src/` tree is `1bf0138a`). The bullets below are kept as written then.
@@ -183,7 +186,9 @@ Previously **PROPOSED** 2026-10-29 by Architect/Design (task `arch-ABC-230-readi
   an uncapturable ep square is counted one occurrence late (`ADR-0020` d2). cutechess counts with an ep-normalised
   key, so in those games the arbiter declares the threefold one occurrence before the search sees it. SA `A6` counted
   22 such games of 1 718 (all D, 0 R). `ABC-230` ships on today's key either way; Q3's options are recorded in this
-  task's decision note.
+  task's decision note. *(2026-10-30: answered (c). `ADR-0020` § AMENDMENT 2026-10-30 removes the uncapturable ep
+  file from every key compared against the game's history, here and in `history.ts`'s count. `ABC-230` is not
+  re-scoped.)*
 - **Quiescence stays blind.** After `ABC-228` (`ADR-0053`), a leaf in check searches quiet evasions, and one of them
   can re-enter a prior position without being scanned. That is rare and existed before this ADR. `UNKNOWN - verify`;
   it is not in scope.
