@@ -1,3 +1,4 @@
+_Updated: 2026-10-30 16:20Z Orchestrator (orch-2026-10-30a) — se-ABC-229 done (no STOP), code review PASS → In Review; main merged into the branch (e196a281) so G8/smokes read the combined tree; `qe-ABC-229` spawned ALONE (G8 is the risk: STOP on > 10 s). Merged: secnfr-ABC-220 seal, bapm-ABC-220-merge-fold, scribe-agents-md-timemode (cli.test.ts 108/108). ABC-221, ABC-222 → Ready. Queue after QE: ABC-243, ABC-222 (games ALONE ~5 h). Width 1/3._
 _Updated: 2026-10-30 Orchestrator (orch-2026-10-30a) — ABC-220 DONE: QE PASS_WITH_GAPS + Security/NFR PASS_WITH_RISKS, merged ec1e835b + 18485bae, not pushed (secnfr notes seal pending until se-ABC-229 ends). Routed records-only: `bapm-ABC-220-merge-fold`, `scribe-agents-md-timemode`. ABC-243 / ABC-222 wait for the host (se-ABC-229 may time). Width 3/3._
 _Updated: 2026-10-30 15:25Z Orchestrator (orch-2026-10-30a) — qe-ABC-220 PASS_WITH_GAPS → ABC-220 In Security/NFR (`secnfr-ABC-220`, records only). arch-ABC-242-reading sealed + merged 01c37946 (PROPOSED, owner). ABC-229 pulled → `se-ABC-229`. Two orphaned wait loops from finished agents (pgrep -f self-match) left on host; kill denied by auto mode, owner told; briefs now carry a wait-loop rule. Width 2/3._
 _Updated: 2026-10-30 Orchestrator (orch-2026-10-30a) — arch-ABC-242-reading done (f2367198), PROPOSED → owner question asked. Its notes need node to seal; held with the merge until qe-ABC-220 ends. Width 1/3 (qe-ABC-220 ALONE)._
@@ -1198,8 +1199,6 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [ABC-238] A deeper stored entry may cut off a shallower search (size: M, priority: P3, DoR 9/10; milestone 2; after ABC-237; waits ADR)
 - [ABC-239] Weights tuned offline, constants only, validated against Stockfish (size: L, priority: P3, DoR 8/10; milestone 3; waits ADR-0048 licence, ADR; its batch reads before merge)
 - [EPIC-009] skytalix plays a 40/15 tournament clock: simple-tournament then uci-clock-mode, uses the clock, never loses on time (owner: BA/PM, size: M, priority: P2, since: 2026-10-29, accepted 2026-10-29 (Q8); M1–M4; MVP ABC-220, 222 (milestone 1), ABC-221, 223 (milestone 2; ADR-0052 PROPOSED folded 2026-10-29; owner OQ-0052-1 open)
-- [ABC-221] uci-clock-mode over UCI (TimeMode): min(59.5 s, C), 60 s ceiling, clamp 32 -> 60 s at this build (size: M, priority: P3, DoR 9/10; milestone 2; waits OQ-0052-1 + ABC-220 merged)
-- [ABC-222] Smoke reading: simple-tournament, 5 games at 40/15 (<= 10 for coverage), 0 losses on time, closest call >= 500 ms, >= 75 % clock use, longest move <= 22.5 s (owner: QE/E2E, size: S, priority: P2, DoR 9/10; after ABC-220 merges; ALONE <= ~5 h; ABC-220 merged ec1e835b → ordering met; pull when the host is free of ALONE work)
 - [ABC-223] Smoke reading: uci-clock-mode, 5 games at 40/15 (<= 10 for coverage), 0 losses on time, closest call >= 500 ms, >= 75 % clock use, longest move <= 60 s (owner: QE/E2E, size: S, priority: P3, DoR 9/10; after ABC-221 merges; ALONE <= ~5 h)
 
 
@@ -1223,7 +1222,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 - [EPIC-006] Game session and packaging  (owner: BA/PM, **size: XL — corrected from `L`; 9 tickets / 20 points across both halves, ~1.5x the 13 `L` was assigned, and it hit that ceiling BEFORE distribution was priced**, priority: P1, since: 2026-07-22, **BOTH HALVES NOW CUT: the runnable half `ABC-041`…`ABC-046` (2026-08-13) and the second half `ABC-100`…`ABC-102` (2026-08-16) — only THREE tickets, because the scope of packaging is a FUNCTION of a distribution channel nobody has chosen.** `ABC-100` cuts the DECISION, never the ANSWER: a superseding ADR per `ADR-0007` `D5`, on the owner's word, verbatim and dated. **Acceptance criterion 1 (`npx <package>`) remains unmeetable by any ticket. Recommendation NOT taken, standing for the owner: this should probably be two epics** — the halves share no dependency in either direction and their blockers differ in kind)
 
-## Ready (WIP 1/8)
+## Ready (WIP 3/8)
+- [ABC-221] uci-clock-mode over UCI (TimeMode): min(59.5 s, C), 60 s ceiling, clamp 32 -> 60 s at this build (size: M, priority: P3, DoR 9/10; milestone 2; waits OQ-0052-1 + ABC-220 merged; DoR 10/10 2026-10-30 (bapm-ABC-220-merge-fold) → Ready)
+- [ABC-222] Smoke reading: simple-tournament, 5 games at 40/15 (<= 10 for coverage), 0 losses on time, closest call >= 500 ms, >= 75 % clock use, longest move <= 22.5 s (owner: QE/E2E, size: S, priority: P2, DoR 9/10; after ABC-220 merges; ALONE <= ~5 h; ABC-220 merged ec1e835b → ordering met; pull when the host is free of ALONE work; DoR 10/10 2026-10-30 (bapm-ABC-220-merge-fold) → Ready)
 - [ABC-243] The setoption-Hash row reads a bare go at level 5; the TT memory row names the budget it reads; + QE-241-a UCI fen-with-uncapturable-ep row (size: XS, priority: P3, DoR 10/10 (2026-10-30); test-only, no smoke, no UAT; shares src/uci-session.test.ts with ABC-220 → pull after ABC-220 merges; ABC-220 merged ec1e835b → ordering met; pull when the host is free of ALONE work)
 
 
@@ -1240,8 +1241,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-229] Quiescence searches quiet queen promotions (size: S, priority: P2, DoR 10/10 (2026-10-30, bapm-ABC-229-rescore; ADR-0053 accepted, ABC-228 merged e42b637b); G6 both sides at 4 000 ms, a miss goes to the owner (no step past 4 s); QE freezes ≥ 6 quiet-promotion Q-SET rows before the build; pull after qe-ABC-241 — its smokes run on a main carrying ABC-241; shares only src/engine.test.ts with ABC-241 (second rebases); Q-SET FROZEN 2026-10-30 (qe-ABC-229-qset, QP-1..QP-9; one ABC-228 rule row expects 212 → re-point to quietPromotions:false); SE after qe-ABC-220; **pulled 2026-10-30** → `se-ABC-229`)
+## In Development (WIP 0/3)
 
 
 
@@ -1269,7 +1269,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-229] Quiescence searches quiet queen promotions (size: S, priority: P2, DoR 10/10 (2026-10-30, bapm-ABC-229-rescore; ADR-0053 accepted, ABC-228 merged e42b637b); G6 both sides at 4 000 ms, a miss goes to the owner (no step past 4 s); QE freezes ≥ 6 quiet-promotion Q-SET rows before the build; pull after qe-ABC-241 — its smokes run on a main carrying ABC-241; shares only src/engine.test.ts with ABC-241 (second rebases); Q-SET FROZEN 2026-10-30 (qe-ABC-229-qset, QP-1..QP-9; one ABC-228 rule row expects 212 → re-point to quietPromotions:false); SE after qe-ABC-220; **pulled 2026-10-30** → `se-ABC-229`; **SE done 4aa28965 (code f6ff1c4a): A1–A3 PASS, forecast 54.8 % / 79.7 % ≤ 100 %, QP-1..9 at frozen values, npm test 2 270; G8 headroom thin (~+0.25 s); code review PASS; main b92a3394 merged in (e196a281, clean)** → `qe-ABC-229` ALONE)
 
 
 
