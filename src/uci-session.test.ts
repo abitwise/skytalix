@@ -1282,8 +1282,9 @@ describe("ABC-230 A2, A3, A5 — the session hands the search the game's prior k
     ["4k3/8/8/8/8/8/8/R3K3 w - - 0 1", "a1a2 e8d8 a2a1 d8e8 a1a2 e8d8 a2a1", "d8e8"],
     ["r3k3/8/8/8/8/8/8/4K3 b - - 0 1", "a8a7 e1d1 a7a8 d1e1 a8a7 e1d1 a7a8", "d1e1"],
   ] as const;
+  // `ABC-244` (`ADR-0046` § Addendum 2026-10-30, R2/R3): 1 000 here and in the CLI rows.
   /** The CLI's step in `src/cli.test.ts`'s `ABC-230` rows: one clock pattern on both surfaces. */
-  const STEP_MS = 100;
+  const STEP_MS = 1_000;
 
   /** The test's own replay: the position after `moves`, and every key it passed through. */
   function replay(fen: string, moves: readonly string[]) {
@@ -1410,6 +1411,7 @@ describe("ABC-241 A4, A5 — UCI: the prior keys are repetition keys", () => {
   /** The same board with a white pawn on g5: g5xh6 e.p. is legal after h7h5. */
   const TWIN = "4k3/7p/8/6P1/8/8/8/Q3K3 b - - 0 1";
   const MOVES = "h7h5 a1a2 e8d8 a2a1 d8e8 a1a2 e8d8 a2a1";
+  // `ABC-244` (`ADR-0046` § Addendum 2026-10-30, R3): 100 kept, as in the CLI half.
   const STEP_MS = 100;
   const lastHanded = () => vi.mocked(chooseMove).mock.calls.at(-1)?.[1].priorKeys;
   const gameOf = (fen: string) => {
