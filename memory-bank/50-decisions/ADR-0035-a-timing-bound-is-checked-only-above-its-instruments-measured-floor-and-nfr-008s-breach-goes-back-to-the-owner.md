@@ -101,6 +101,8 @@ Previously `proposed` — 2026-10-10, by Architect/Design (task `wave-2026-09-25
 the owner of `NFR-008`'s protocol, its floor account and its spawn account. It rules `QE-119-a` (MEDIUM,
 QE at `ABC-119`) and the `NFR-008` clause state that has been unruled since `ADR-0019` trigger (a) fired.
 
+**Addendum 2026-10-30 (`arch-g8-headroom`, `SEC-REBASE-b`).** This is a reading of R-1's load qualifier on the 24-CPU reference. *"load1 ≤ 8"* stands as written, and it is not re-levelled. On `oeselg-devl` it is a tighter admissibility band than it was on the 8-core M3, so no reading on record is re-graded. It is set out in `§ Addendum 2026-10-30 (SEC-REBASE-b)` at the end of this file. No decision is changed and nothing was measured.
+
 **Proposal text amended 2026-10-10 (`design-owed-rulings-2026-10-10`).** Decision 3's `F` is keyed
 per narrow set (the block under decision 3). The status is still `proposed`, and the owner's question
 is unchanged.
@@ -745,3 +747,36 @@ comments only, and `vitest.config.ts` excludes `.grugops/**`.
 - B2 is arithmetic.
 - B3: folding `T-QEHOP-GROWTH` back into a risk changes only where it is written.
 - B4 adds nothing to roll back.
+
+## § Addendum 2026-10-30 (SEC-REBASE-b)
+
+**By** Architect/Design (task `arch-g8-headroom`), as the owner of this ADR's protocol. Security/NFR routed the
+question here (`secnfr-catalog-rebase`, `SEC-REBASE-b`): the reference moved from the 8-core M3 to `oeselg-devl`
+(24 logical CPUs, 12 cores with SMT). Does R-1's *"load1 ≤ 8"* still mean what it meant? This is a record only.
+Nothing was run or timed.
+
+**What it meant.** Decision 6 set the band on 8 logical cores. At load1 8 every core on that machine had, on average,
+one runnable thread. The band admitted a fully subscribed host. The "gate on load" alternative (wait for load1 < 4)
+was rejected because quiet could not be bought (`ABC-108` `A1`).
+
+**What it means now.**
+- **The lane's own demand is fixed by value, not by core count.** `maxWorkers: 2` (`ADR-0040` addendum 2) is an
+  integer. The lane runs 2 workers, the main thread, and at most one synchronous child at a time (`ABC-173` `C2`).
+- **On 24 logical CPUs, load1 8 leaves about 16 logical CPUs and at least 4 physical cores idle** for those 3–4
+  runnable threads. So a reading admitted at load1 ≤ 8 here is less contended than one admitted at the same figure
+  on the M3. The band is tighter relative to capacity, not looser.
+- **Ruling:** *"load1 ≤ 8"* stands as written. No reading taken since 2026-10-28 is re-graded. The figure 8 is not
+  scaled to 24, because scaling would admit contended readings that the M3 band never admitted. That would be a
+  re-level, and a re-level is the owner's.
+- **It does not bind in practice, and it buys no headroom.** QE's wait-clear reads at load1 ≤ 2.0 and Tctl ≤ 60 °C
+  before every `G8` run (`qe-ABC-220`, `qe-ABC-229`). The 0.10 s headroom at `ABC-229` was read at load1 0.89–1.73.
+- **Not settled here, `UNKNOWN - verify`:** whether two workers that share one SMT core read slower at moderate load.
+  No reading on record isolates it. The wait-clear makes it moot for `G8` as practised.
+
+**One stale sentence, routed to Security/NFR (the row's owner) and not edited here.** The `NFR-008` row says that
+"the wall clause is a function of CORE COUNT". Since `ADR-0040` pinned the cap by value, the wall on any host with
+4 or more idle cores is a function of per-thread speed and of the lane's slot-seconds. It is not a function of core
+count. Figures from the M3 and from `oeselg-devl` are therefore not comparable across the re-base. The row already
+says each figure keeps its label.
+
+**Rollback.** Strike this addendum. The qualifier's text never changed.
