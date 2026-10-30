@@ -10,6 +10,23 @@ owner: BA/PM
 
 # EPIC-010: the verified engine gaps, closed one measured change at a time, against an outside opponent
 
+> **FOLDED 2026-10-30 by BA/PM** (task `bapm-ABC-242-225-owner`, records only, at `main` `5090a4d6`; `src/`, `data/`
+> and `tools/` untouched). The owner's words, verbatim (`orch-2026-10-30a` `…65848126`): *"ABC-242: accept, ABC-225 -
+> approve to run one at a time"*.
+>
+> - **`ABC-242`: DoR 9/10 → 10/10, Ready.** The owner accepted `ADR-0054` § Proposed amendment 2026-10-30, so the
+>   blunder path scores a root move's third occurrence exactly 0, with no child search. `A1` gained the
+>   last-in-order fixture. `A4` is read through determinism. `A8` is corrected: the ladder lane is an identity row,
+>   and `A1`–`A5` are the checks. It is S2 with no smoke and in no milestone. It shares only
+>   `src/uci-session.test.ts` with `ABC-243`, which makes that rebase order only.
+> - **`ABC-225`: Blocked → In Development.** A5 runs at `--concurrency 1`.
+>   - Its wall is about 2 h, or about 2.2–2.4 h by the recorded 4 000 ms width-1 R rate.
+>   - The `rpair` budget still moves 3 000 → 4 000 (`se-ABC-225-main`). DoR stays 10/10.
+>   - A6 now projects the full pair at width 1, at about 22–24 h. **For the Orchestrator:** milestone 1's batch
+>     costs about 9 h at width 2 (§ cost). The owner's word covers `ABC-225`'s A5, not the batch's width.
+> - Tickets table: rows 3 (`ABC-225`) and 10 (`ABC-242`) changed. The notes are in
+>   `.grugops/context/bapm-ABC-242-225-owner/notes/`.
+
 > **FOLDED 2026-10-30 by BA/PM** (task `bapm-ABC-241-merge-fold`, records only, at `main` `a649fbc4`; `src/`, `data/`
 > and `tools/` untouched). **`ABC-241` is Done.** It merged at `1f6abec4` on QE's PASS_WITH_GAPS (`qe-ABC-241`
 > `…2368b03f`), which signs UAT.
@@ -389,14 +406,15 @@ same under every option and are not counted):
 | `ABC-241` (added 2026-10-30) | one smoke pair | ≈ 1.2 h (≈ 0.7 h ALONE); the total below is as re-costed 2026-10-29 and now ≈ 16 h, ≈ 13 h ALONE |
 | `ABC-235` | S2, no playing reading | 0 games |
 | `ABC-240` | S2, no playing reading | 0 games |
-| `ABC-225` | its A5 run, 40 games | ≈ 1 h ALONE |
-| milestone 1's batch | an interleaved R pair, 200 + 200 | ≈ 9 h ALONE plus ≈ 1 h |
+| `ABC-225` | its A5 run, 40 games | ≈ 1 h ALONE *(2026-10-30: at `--concurrency 1` by the owner's word, ≈ 2 h, or ≈ 2.2–2.4 h by the recorded 4 000 ms width-1 R rate)* |
+| milestone 1's batch | an interleaved R pair, 200 + 200 | ≈ 9 h ALONE plus ≈ 1 h *(at width 2; at width 1 ≈ 22–24 h, an estimate from the 4 000 ms width-1 R smokes. The batch's width is the Orchestrator's to schedule or take to the owner, 2026-10-30)* |
 | **total** | | **≈ 15 h, of which ≈ 12 h ALONE** (R heat: Tctl median 82–83 °C, max 84–87 °C) |
 
 Under (b), the same milestone was ≈ 60–80 h ALONE. A confirmation smoke adds ≤ 0.45 h per ticket that needs one.
 
-*`ABC-242` (added 2026-10-30, QE-230-a) is in no milestone: P3, S2 with 0 smoke games (its `A8`, the Orchestrator to confirm), pulled after
-`ABC-241` once its Architect reading is in. It does not change milestone 1's batch, which plays level 5 only.*
+*`ABC-242` (added 2026-10-30, QE-230-a) is in no milestone: P3, S2 with 0 smoke games (its `A8`; the Orchestrator ruled S2,
+no smoke), pulled after `ABC-241` once its Architect reading is in. It does not change milestone 1's batch, which plays level 5 only.
+2026-10-30 (`bapm-ABC-242-225-owner`): `ABC-241` is Done, the reading is merged and the owner accepted it. Ready 10/10.*
 
 **Milestone 2, "evaluation by phase, ordering, TT and window"** (each value-changing, each with its own smoke pair, each
 `Backlog` on an ADR; Q4 no longer holds them since 2026-10-29): `ABC-231` → `ABC-232` (evaluation; after milestone 1's quiescence changes settle the node
@@ -502,14 +520,14 @@ mates", ≥ 6 "a quiet promotion decides". It reads `quiesce` and `chooseMove` a
 |---|---|---|---|---|---|---|---|---|
 | 1 | `ABC-226` | Records scan: how often the R and D games repeated a position the search could not see | S | P2 | **Done** (2026-10-29) | — | the committed PGNs | done: SA `sa-ABC-226` `…cc53fc79`, 484 games (R 26); `ABC-230` stays in milestone 1 |
 | 2 | `ABC-227` | Profile: where a node's time goes, on the fixed boards, at 3 s | S | P2 | **Done** (2026-10-29) | — | none | done: SE `se-ABC-227`, merged `f4301d0c`; six value-identical cuts handed to `ABC-235` |
-| 3 | `ABC-225` | One command reads an interleaved R pair (base and candidate against Stockfish), with the opening-paired error and a host log. **Re-scoped 2026-10-29: the batch's instrument** | M | P2 | **Ready** | **10/10** | `ABC-204`'s pins | nothing. Done before milestone 1's batch |
+| 3 | `ABC-225` | One command reads an interleaved R pair (base and candidate against Stockfish), with the opening-paired error and a host log. **Re-scoped 2026-10-29: the batch's instrument** | M | P2 | **In Development** (2026-10-30; built, QE A1–A4 MET, A5/A6 unread on the thermal stop) | **10/10** | `ABC-204`'s pins; owner 2026-10-30: A5 at `--concurrency 1` | `se-ABC-225-main` (merge `main`; `rpair` budget 3 000 → 4 000), then QE A5/A6 ALONE at width 1 (≈ 2–2.4 h). Done before milestone 1's batch |
 | 4 | `ABC-228` | In check, quiescence searches every evasion and scores none as mate | M | P2 | **Done** (2026-10-30, `e42b637b`) | — | `ADR-0053` (ACCEPTED 2026-10-30); OQ-228-1 reading (ii), built | done: QE PASS_WITH_GAPS under (ii) `…e39d190c` (`G6` 8 = 8, 10 = 10; D 5.0, R 7.0 at 4 000 ms); its gaps are `ABC-243` |
 | 5 | `ABC-229` | Quiescence searches quiet promotions to a queen | S | P2 | **Ready** | **10/10** | `ADR-0053` (ACCEPTED 2026-10-30) decisions 5–8; door; `ABC-228` (Done, `e42b637b`) | nothing. Order only: no production file shared with `ABC-241`/`ABC-220`/`ABC-243`; smokes read on a `main` that carries `ABC-241` if it merges first (stale rule); R at 4 000 ms, not pooled |
 | 6 | `ABC-230` | The game's earlier positions reach the search, from the CLI and from UCI, so it sees a repetition the game already holds | M | P2 | **Done** (2026-10-30, `24f3e322`) | — | `ADR-0054` (ACCEPTED 2026-10-30) | done: QE PASS_WITH_GAPS `…ba5a249a`; its gap QE-230-a is `ABC-242` |
 | 7 | `ABC-235` | Value-identical cuts in cost per node, from `ABC-227`'s profile: **cuts 1, 3, 5** (scoped 2026-10-29) | M | P2 | In Development (`se-ABC-235`) | **10/10** | `ABC-227` (Done); Architect `…7fc1b90c` (1, 3, 5 value-identical; no ADR) | nothing |
 | 8 | `ABC-240` | Move ordering without per-move allocation, value-identical (cut 6, split from `ABC-235`) | S | P3 | **Ready** | **10/10** | Architect `…7fc1b90c` C1–C4; no ADR | pull order only: after `ABC-235` merges; before `ABC-233`/`ABC-234` |
 | 9 | `ABC-241` | A repetition against the game's earlier positions ignores an en-passant square no pawn can legally take (Q3 (c)); the hash does not change | S | P2 | **Done** (2026-10-30, `1f6abec4`) | — | `ADR-0020` § AMENDMENT 2026-10-30 (ACCEPTED on the owner's word) | done: QE PASS_WITH_GAPS `…2368b03f` (D 6.0, R 6.5 at 4 000 ms); its gap QE-241-a is folded into `ABC-243` |
-| 10 | `ABC-242` | On a blunder level (1–4), a root move that makes the third occurrence of a game position scores exactly 0 (QE-230-a) | S | P3 | Backlog | **9/10** | `ADR-0054` d2–d3, `ADR-0032` d1 (an Architect reading) | the Architect reading (and the owner, if it amends an accepted ADR); after `ABC-241` (both edit `src/levels.ts:142`) |
+| 10 | `ABC-242` | On a blunder level (1–4), a root move that makes the third occurrence of a game position scores exactly 0 (QE-230-a) | S | P3 | **Ready** (2026-10-30) | **10/10** | `ADR-0054` § Proposed amendment 2026-10-30 and its `ADR-0032` d1 bullet (owner ACCEPTED 2026-10-30, `…65848126`); `ABC-241` Done (`1f6abec4`) | nothing. S2, no smoke. Shares `src/uci-session.test.ts` with `ABC-243` (rebase order only) |
 | 11 | `ABC-231` | The king table is tapered by phase, alone, with no king-safety term | S | P3 | Backlog | **9/10** | `ADR-0031` addendum scope; door | the ADR ruling |
 | 12 | `ABC-232` | Passed pawns are worth more as material comes off | S | P3 | Backlog | **9/10** | `ABC-231`'s phase | `ABC-231` |
 | 13 | `ABC-233` | A history heuristic orders quiet moves after the killers, cleared per search | M | P3 | Backlog | **9/10** | `ADR-0026` d10; `ABC-080` `A6` | the ADR |
@@ -536,6 +554,8 @@ test-only (no smoke, no gate beyond the default lane) and is not one of the fift
 `ABC-228`'s (Done) were changed.*
 *Folded 2026-10-30 (`bapm-ABC-241-merge-fold`): only rows 9 (`ABC-241` Done) and 19 (`ABC-243` Ready 10/10, plus
 QE-241-a's row) were changed. The board holds the live state.*
+*Folded 2026-10-30 (`bapm-ABC-242-225-owner`, on the owner's words `…65848126`): only rows 3 (`ABC-225` In Development,
+A5 at width 1) and 10 (`ABC-242` Ready 10/10) were changed. The board holds the live state.*
 
 ## Observations (not tickets)
 

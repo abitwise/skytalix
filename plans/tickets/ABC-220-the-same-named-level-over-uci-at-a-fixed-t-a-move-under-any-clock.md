@@ -11,6 +11,19 @@ epic: EPIC-009
 
 # ABC-220: `simple-tournament` over UCI, a fixed T = 22 s a move, its hard ceiling also 22 s
 
+> **CONFIRMED 2026-10-30 by the owner, folded by BA/PM** (task `bapm-ABC-242-225-owner`, records only; `src/`, `data/`
+> and `tools/` untouched). His words on this item, verbatim (`orch-2026-10-30a` `…f4673b9f`):
+> *"Whole-second reading of "≤ 22 s" - confirm"*. The first half of that message, the catalog's reference machine,
+> is Security/NFR's.
+>
+> - **The whole-second reading is confirmed.** In `simple-tournament`, "≤ 22 s" is read to the whole second, which
+>   means **< 22 500 ms**. The open owner confirmation in the FOLDED note below is **closed**, and so are the lines
+>   that cite it: the MERGED block's "still open", § NFR triggers' `AR-UCI-BUSY` bullet, and DoR row 10.
+> - **Nothing moves.** A11's bound (< 22 500 ms, read at max 22 001.0 ms) and A6's deadline (≤ start + 22 000 ms)
+>   stand as read. No code changes. `ABC-222` A5 reads the same bound in games.
+> - The catalog side (`NFR-004`, `AR-UCI-BUSY`'s re-open condition "the owner declines the whole-second reading")
+>   and the reference-machine re-base belong to Security/NFR, under `secnfr-catalog-rebase`.
+
 > **MERGED 2026-10-30 at `ec1e835b`, folded by BA/PM** (task `bapm-ABC-220-merge-fold`, records only; `src/`, `data/`
 > and `tools/` untouched). **Done.** QE's verdict is **PASS_WITH_GAPS** with no blocking gap (`qe-ABC-220`
 > `…7a09c5e1`), and it signs UAT (Test note 3). Security/NFR's gate is **PASS_WITH_RISKS**, no required fix
@@ -40,7 +53,8 @@ epic: EPIC-009
 >   - **QE-220-b, QE-220-d, QE-220-e and `SEC-220-c` (INFO):** no ticket. `SEC-220-c` is QE's at the next `NFR-011`
 >     re-read.
 > - **Still open, blocks nothing:** the owner's confirmation of the whole-second reading (≤ 22 s means < 22 500 ms;
->   the FOLDED note below). `ABC-222` A5 reads the same bound in games.
+>   the FOLDED note below). `ABC-222` A5 reads the same bound in games. *(**Confirmed by the owner 2026-10-30**,
+>   `orch-2026-10-30a` `…f4673b9f`: "Whole-second reading of "≤ 22 s" - confirm".)*
 > - **`ABC-222` is now pullable** (DoR 10/10, Ready). `ABC-221`'s ADR and code waits are met (DoR 10/10, Ready; pull
 >   after `ABC-222`, by the owner's "later").
 
@@ -69,7 +83,9 @@ epic: EPIC-009
 >   18 760 ms left after move 40 at δ = 31 ms, 97.9 % (83.2 % with 6 book moves). M1's ≥ 500 ms holds while δ ≤ 487 ms.
 > - **Changed:** the title, scope 1, A6's deadline (≤ start + 22 000 ms), A11's wall reading, the NFR lines, § Dependencies
 >   and the DoR.
-> - **The wall reading (BA/PM's, on his "whole seconds"; confirm with the owner, it blocks nothing).** No `go` hands the
+> - **The wall reading (BA/PM's, on his "whole seconds"; confirm with the owner, it blocks nothing).**
+>   *(**Confirmed by the owner 2026-10-30**, `orch-2026-10-30a` `…f4673b9f`: "Whole-second reading of "≤ 22 s" -
+>   confirm".)* No `go` hands the
 >   search more than 22 000 ms, read exactly on the virtual clock (A6). A real move also carries the stop overshoot
 >   (`AR-NFR004-A`, ≤ ~31 ms) and the pipe, so its wall is a little over 22 000 ms. That is read **to the whole second**:
 >   ≤ 22 s means a wall < 22 500 ms. `ADR-0052` D3 rejected T = ceiling at 22.5 s for this overshoot; the owner's
@@ -280,6 +296,7 @@ simple-tournament`. The numbers are `ADR-0052`'s arithmetic (`arch-epic009-setti
     **< 22 500 ms**. It is not read as ≤ 22 000 ms exactly, which no search could meet with the budget equal to the
     ceiling. The entry adds that reading: *"… ≤ 22 s in `simple-tournament` (read to the whole second: < 22 500 ms)
     …"*. It is the same whole-second reading the FOLDED note asks the owner to confirm. It changes no code.
+    *(**Confirmed by the owner 2026-10-30**, `orch-2026-10-30a` `…f4673b9f`: "Whole-second reading of "≤ 22 s" - confirm".)*
 - **`NFR-009`:** 22 s is inside `ABC-212`'s 30 s reading (≤ 16 MiB, flat). No re-read is owed.
 - **`NFR-008`:** A12. **`NFR-005`, `NFR-011`, `NFR-012`:** unchanged (their referent is `TimeMode level`).
 - **Security (ASVS L1):** one option, matched exactly against a fixed tuple. The `go` numbers are already parsed and
@@ -337,7 +354,7 @@ simple-tournament`. The numbers are `ADR-0052`'s arithmetic (`arch-epic009-setti
 | 7 | test notes | ✅ 4 |
 | 8 | size | ✅ M |
 | 9 | priority | ✅ P2 |
-| 10 | no major unresolved blocker | ✅ none: `ADR-0052` accepted 2026-10-30. The whole-second wall reading is to be confirmed with the owner; it changes no code |
+| 10 | no major unresolved blocker | ✅ none: `ADR-0052` accepted 2026-10-30. The whole-second wall reading is to be confirmed with the owner; it changes no code. *(Confirmed by the owner 2026-10-30, `…f4673b9f`.)* |
 
 **DoR 10/10 (2026-10-30). Ready.** The owner accepted `ADR-0052`, so ABC-220 is ready to pull. His amendment
 moved only the ceiling, so A2–A7 keep their numbers. *(Was 9/10, waiting on OQ-0052-1.)* It shares

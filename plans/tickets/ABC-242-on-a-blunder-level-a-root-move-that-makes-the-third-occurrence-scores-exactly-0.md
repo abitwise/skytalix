@@ -1,14 +1,42 @@
 ---
 id: ABC-242
 title: "On a blunder level (1–4), a root move that makes the third occurrence of a game position scores exactly 0, on the CLI and over UCI; every engine-path search is unchanged"
-status: backlog
-column: Backlog
+status: ready
+column: Ready
 size: S
 priority: P3
 epic: EPIC-010
 ---
 
 # ABC-242: the blunder path sees the third occurrence at its root (QE-230-a)
+
+> **ACCEPTED and RE-SCORED 2026-10-30 by BA/PM** (task `bapm-ABC-242-225-owner`, records only, at `main` `5090a4d6`;
+> `src/`, `tools/` and `data/` untouched). **The owner accepted the Architect's design.** His words, verbatim
+> (`orch-2026-10-30a` `…65848126`): *"ABC-242: accept, ABC-225 - approve to run one at a time"*.
+>
+> - **What he accepted:** `ADR-0054` § Proposed amendment 2026-10-30, and the bullet it adds to `ADR-0032` d1. On a
+>   blunder move at levels 1–4, a root move whose child position stood twice before scores exactly 0, and its child
+>   is not searched. The check lives in `src/levels.ts` `blunder`. The engine path is unchanged. Both ADRs' status
+>   text is `arch-ABC-242-accept`'s hop. Where the ADR's words differ from this page, the ADR rules.
+> - **Folded from the Architect's reading (block below):**
+>   - **A1** pins the skipped child search: 4 child searches for 5 legal moves on the probe. It also gains the extra
+>     fixture the Architect recommended, with the third-occurrence move **last** in `legalMoves` order, which gives
+>     an exact pin on the whole list.
+>   - **A4** is re-worded to how it can be read. Neither surface prints the scored list, so A4 is read through
+>     determinism: the same move from three callers, with UCI's `nodes` and `depth` equal to a direct call's.
+>   - **A8** is corrected. The ladder lane hands in no prior keys, so it is an identity row, not a check of the
+>     change. **`A1`–`A5` are the checks.**
+>   - The `NFR-004` line reads at most 49 comparisons per root move (was ≤ 50).
+>   - The parent-root count is out of scope (§ Out of scope, dated line).
+> - **Files it shares with work in flight** (read with `git diff --stat` at `5090a4d6`):
+>   - **`ABC-229`** (In Review) changes `src/legal.ts`, `src/quiescence*.ts` and `src/search*.ts`, so the two
+>     tickets share no file.
+>   - **`ABC-243`** (Ready) touches `src/uci-session.test.ts`, which is also one of this ticket's two `A4` files. That
+>     makes it rebase order only.
+>   - Nothing else in flight touches `src/levels.ts`, `src/levels.test.ts` or `src/cli.test.ts`. `ABC-241`, the old
+>     overlap, is Done (`1f6abec4`).
+> - **DoR 9/10 → 10/10. Backlog → Ready.** Size S and P3 are unchanged. The board move and the pull are the
+>   Orchestrator's. The Orchestrator's ruling, S2 with no smoke, stands as `A8` now reads.
 
 > **Cut 2026-10-30 by BA/PM** (task `bapm-qe230a-followup`, records only, at `main` `691f9436`). Source: QE gap
 > **QE-230-a** (MEDIUM, design) in `qe-ABC-230` `…ba5a249a`. `ABC-230` met its `A1` as worded, and `ADR-0054` prescribes
@@ -113,7 +141,9 @@ The design is the Architect's (§ Dependencies). This page states the outcomes.
   prior list, so a line that returns to the parent root counts it as **before** the root (two matches needed). On
   the engine path the same position is the search's root and counts as **path** (one match). BA/PM's reading of
   `ADR-0054` decision 3 and `src/levels.ts:142`; whether it changes any score is `UNKNOWN - verify`. If the Architect
-  rules it into this ticket, BA/PM re-scores the page.
+  rules it into this ticket, BA/PM re-scores the page. *(2026-10-30, `arch-ABC-242-reading` `…fec766ee`: the
+  Architect ruled it **out**. It stays as `ADR-0054` d2 is written; changing it would be an engine change. No ticket
+  is cut for it.)*
 
 ## Acceptance criteria
 
@@ -121,14 +151,32 @@ The design is the Architect's (§ Dependencies). This page states the outcomes.
   at least one a winning side and one a losing side), **when** the blunder path scores the root moves with the
   game's prior keys, **then** the move that makes the third occurrence scores **exactly 0**, and base scores it
   otherwise (probe: `d8e8` −1013). Read on the injected seam at a forced blunder (rate 1), on a virtual clock.
+  *(Folded 2026-10-30 from the accepted design, `bapm-ABC-242-225-owner`:)*
+  - **Its child is not searched.** The number of child searches equals the number of legal moves minus the moves
+    scored 0 this way. On the probe that is **4 child searches for 5 legal moves**, and `scored[0]` is `{d8e8, 0}`
+    exactly. The probe's entries 1–4 inherit `d8e8`'s slice through `ADR-0032` d1's single deadline. Their values
+    are `UNKNOWN - verify` and are not pinned. The played move is not `d8e8`, unless those four entries collapse to
+    one value.
+  - **One of the ≥ 3 extra fixtures has its third-occurrence move last in `legalMoves` order** (the Architect's
+    recommendation). On it, every entry before the last equals base's exactly, the last entry is exactly 0, and
+    the number of child searches is `legalMoves` − 1. This is the exact pin on the whole list.
 - **A2 (second occurrence, base).** **Given** the same fixture cut after `b1b2 e8d8 b2b1` (so `d8e8` is a **second**
   occurrence), **then** `d8e8`'s score equals base's.
 - **A3 (clock bound).** **Given** A1's final position with its halfmove clock set to 0 in the FEN, and A1's prior keys
   handed in **untrimmed**, **then** the returning move keeps base's score: a key older than the child root's clock is
   never counted (as `ABC-230` `A9`).
-- **A4 (both surfaces).** **Given** A1's fixtures, **then** UCI (`setoption name Skill Level value 1`,
-  `position startpos|fen … moves …`, a forced blunder seed) and the CLI seam produce the **same scored list**, and
-  the same played move.
+- **A4 (both surfaces; re-worded 2026-10-30, `bapm-ABC-242-225-owner`, after the Architect's reading).** Neither
+  surface prints the scored list, and UCI writes only `info depth … nodes … time … pv` (`src/uci-session.ts:318-333`).
+  **Given** A1's fixtures, run three ways with the same seed, budget, virtual clock, position and trimmed prior keys:
+  - the CLI seam: `createLevelSeam(1, …)`, with the keys injected;
+  - UCI: `setoption name Skill Level value 1`, `position startpos|fen … moves …`, an injected `random` that gives
+    the seed, then `go`;
+  - a direct `createLevel(LEVELS[1], …)` call.
+
+  **Then** all three play the **same move**. UCI's `info` `nodes` and `depth` **equal** the direct call's. The direct
+  call's scored list carries the **0** for the third-occurrence move. The seed makes level 1's draw (< 0.4) call for
+  a blunder, which the row asserts. *(Was: "UCI … and the CLI seam produce the **same scored list**, and the same
+  played move." Not readable as worded: no surface prints the list.)*
 - **A5 (the pick is unchanged in kind).** On every A1 fixture, the played move is the strict second-best of the new
   list, ties to the first (`ADR-0032` decision 2, unchanged).
 - **A6 (identity).** **Given** no prior keys, **then** the blunder path's scored list equals base's. **Given** any
@@ -141,14 +189,22 @@ The design is the Architect's (§ Dependencies). This page states the outcomes.
 - **A8 (the reading).** **No smoke pair** (BA/PM's reading of `EPIC-010` § The merge rule, for the Orchestrator to
   confirm): `tools/rating/rating.ts` sets no `Skill Level`, so every D and R smoke move, and every batch move, runs
   at the default level 5's engine path, which A6 proves node-equal. A smoke would play base's code. The reading is
-  `EPIC-008`'s **S2**: A1–A7, with the ladder lane as the one playing check on the changed levels.
+  `EPIC-008`'s **S2**: A1–A7. **The checks of the change are `A1`–`A5`.** The ladder lane (`src/ladder.test.ts:179`,
+  `choose(h.position)`) hands in no prior keys, so the check never fires there. It is an **identity row** inside A7
+  (levels 1–5 still ordered), not a playing check of the change. *(Corrected 2026-10-30, `bapm-ABC-242-225-owner`,
+  per `arch-ABC-242-reading` `…f3b8d750`. Was: "with the ladder lane as the one playing check on the changed
+  levels". The Orchestrator ruled S2 with no smoke on 2026-10-30, so the confirmation this line asked for is given.)*
 
 ## NFR triggers
 
-- **`NFR-004` / `G5`:** no new search time. The check is at most `min(L, c)/2` ≤ 50 key comparisons per root move,
-  and the level layer's sum clamp is unchanged. The time is `UNKNOWN - verify` on this host and is read by `G5`.
+- **`NFR-004` / `G5`:** no new search time. The check is **at most 49 key comparisons per root move** (the walk
+  `−4, −6, …` bounded by `min(c, |K|, 100)`), plus one key per root move. A check that fires saves a child search.
+  The level layer's sum clamp is unchanged. The time is `UNKNOWN - verify` on this host and is read by `G5`.
+  *(Was "`min(L, c)/2` ≤ 50"; corrected 2026-10-30 per the Architect.)*
 - **`NFR-009`:** no new per-search storage. If the remedy appends to a list, at most one key per blunder call.
-- **`NFR-008`:** fixed-seed, virtual-clock rows only; 0 real-clock rows in the default lane.
+- **`NFR-008`:** fixed-seed, virtual-clock rows only; 0 real-clock rows in the default lane. The default-lane wall
+  stays **≤ 10 s**. After `ABC-220` the headroom was 0.27–0.31 s (QE-220-c), which is the Orchestrator's watch line.
+  `ABC-229`, `ABC-243` and this ticket all add rows.
 - **Security (ASVS L1):** no new input path (`RISK-EPIC010-06` is bounded by `ABC-230` `A5`).
 
 ## Test notes
@@ -156,6 +212,12 @@ The design is the Architect's (§ Dependencies). This page states the outcomes.
 1. QE's probe is the A1 seed row; it runs out of tree as written (`blunder-probe.mjs <tree>`).
 2. A1, A2 and A3 are pinned against base in the same run. If A2 turns red, the count has slipped to one.
 3. UAT is owed (production lines in `src/levels.ts` or `src/engine.ts`). The QE verdict signs it.
+4. *(2026-10-30.)* The SE's files are `src/levels.ts`, `src/levels.test.ts` (`A1`, `A2`, `A3`, `A5`, `A6`), and
+   `src/cli.test.ts` plus `src/uci-session.test.ts` (`A4`). `src/levels.ts` gains the check, a private helper, a named
+   100-key constant that points at the ADR, and doc lines. It gains no new import and no new export, so the
+   `src/levels.test.ts` § A8 import pin and the `ABC-078` `A4` engine export pin both stay green unedited. The
+   expected values are in the Architect-reading block above. Where they are marked `UNKNOWN - verify`, the SE
+   records what the run gives and does not pin it.
 
 ## Size and priority
 
@@ -174,22 +236,28 @@ The design is the Architect's (§ Dependencies). This page states the outcomes.
   `ABC-230` appends the root's key). `ABC-241` makes every prior key a repetition key. A child root with a halfmove
   clock ≥ 1 carries no ep square (`makeMove` sets one only on a double push, which resets the clock: `ADR-0054`
   § Context), so its raw key is its repetition key, and this ticket's result does not depend on the merge order.
-  **Pull it after `ABC-241`**; whichever merges second rebases.
+  **Pull it after `ABC-241`**; whichever merges second rebases. *(2026-10-30: met. `ABC-241` merged at `1f6abec4`, so
+  this ticket builds on a `main` that carries it.)*
+- *(2026-10-30, `bapm-ABC-242-225-owner`.)* **Met:** the Architect reading (`arch-ABC-242-reading`, merged
+  `01c37946`), and the owner's acceptance of the amendment it proposes (`orch-2026-10-30a` `…65848126`). The ADR
+  status text is `arch-ABC-242-accept`'s records hop. It is not a wait.
+- **Shared files** (rebase order only): `ABC-243` (Ready) also edits `src/uci-session.test.ts`. `ABC-229`
+  (In Review) shares no file.
 
 ## Definition of Ready
 
 | # | check | state |
 |---|---|---|
 | 1 | problem clear | ✅ QE-230-a; probe `d8e8` −1013 with and without keys |
-| 2 | scope and out-of-scope | ✅ 3 outcomes; engine-path root, `ADR-0032` pick, ep key out; parent-root count recorded for the Architect |
+| 2 | scope and out-of-scope | ✅ 3 outcomes; engine-path root, `ADR-0032` pick, ep key out; parent-root count ruled out by the Architect (2026-10-30) |
 | 3 | INVEST | ✅ one check on one path; S; testable |
-| 4 | testable, measurable acceptance | ✅ A1–A7 exact (0, base-equal, list-equal, node-equal); A8 S2 |
-| 5 | dependencies known | ✅ `ABC-230` Done; Architect reading; `ABC-241` overlap |
-| 6 | NFR triggers with targets | ✅ ≤ 50 comparisons per root move; `G5` 5 s; 0 real-clock rows |
-| 7 | test notes | ✅ 3 |
+| 4 | testable, measurable acceptance | ✅ A1–A7 exact (0, no child search, 4 of 5 child searches on the probe, a last-in-order fixture equal to base's except its 0, base-equal, node-equal; A4 by move, `nodes` and `depth` against a direct call); A8 S2, checks A1–A5 |
+| 5 | dependencies known | ✅ `ABC-230` Done; `ABC-241` Done (`1f6abec4`); Architect reading merged; owner accepted 2026-10-30; `ABC-243` shares `src/uci-session.test.ts` |
+| 6 | NFR triggers with targets | ✅ ≤ 49 comparisons per root move; `G5` 5 s; 0 real-clock rows; default lane ≤ 10 s |
+| 7 | test notes | ✅ 4 |
 | 8 | size | ✅ S |
 | 9 | priority | ✅ P3 |
-| 10 | no major unresolved blocker | ⬜ the Architect reading (and the owner's word if it amends an accepted ADR) |
+| 10 | no major unresolved blocker | ✅ none. The owner accepted `ADR-0054` § Proposed amendment 2026-10-30 (*"ABC-242: accept"*, `…65848126`). *(Was ⬜: the Architect reading, and the owner's word.)* |
 
-**DoR 9/10 (2026-10-30, `bapm-qe230a-followup`). Backlog.** On the Architect's reading, BA/PM folds it, and the
-ticket is 10/10 and Ready, unless the reading amends an accepted ADR, which then waits on the owner.
+**DoR 10/10 (2026-10-30, `bapm-ABC-242-225-owner`). Ready.** S, P3, S2 with no smoke. The pull is the
+Orchestrator's. *(Was: "DoR 9/10 (2026-10-30, `bapm-qe230a-followup`). Backlog.")*
