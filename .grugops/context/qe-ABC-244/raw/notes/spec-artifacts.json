@@ -1,0 +1,34 @@
+{
+  "refs": [
+    "qe-ABC-244",
+    "ABC-244",
+    "ADR-0046",
+    "ADR-0035",
+    "NFR-008",
+    "N8-LANE",
+    "EPIC-010",
+    "ABC-230",
+    "ABC-241",
+    "R1",
+    "R2",
+    "R3",
+    "QE-229-a",
+    "se-ABC-244/20261030T224640Z-software-engineer-decision-f1e84d64",
+    "se-ABC-244/20261030T224640Z-software-engineer-observation-497faf89",
+    "se-ABC-244/20261030T224640Z-software-engineer-observation-1b63ff56",
+    "se-ABC-244/20261030T224640Z-software-engineer-observation-ee17f704",
+    "grugops/ABC-244",
+    "25282ad4",
+    "d59e3194",
+    "grugops/qe-ABC-244",
+    "src/cli.test.ts",
+    "src/uci-session.test.ts"
+  ],
+  "notes": [
+    {
+      "kind": "observation",
+      "confidence": "high: files listed are committed on grugops/qe-ABC-244 (an observation, not an artifact-ref: no §14-gate run to bind)",
+      "bodyFile": "artifacts.md"
+    }
+  ]
+}

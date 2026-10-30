@@ -1,0 +1,24 @@
+controls: base ran 18 failed 0 suiteErrors 0 | head ran 18 failed 0 suiteErrors 0
+mutants: base 24, head 24, same ids in same order: true
+## U1 (changed)
+SAME | base {F230,REP0,QSEAMRAW,QPRIOROFF,QMATCH3,QTRIM1} | head {F230,REP0,QSEAMRAW,QPRIOROFF,QMATCH3,QTRIM1} | src/cli.test.ts > ABC-230 A1, A3 — the CLI's level seam hands the search the game's prior keys > A1: with keyHistory injected the default level plays the third occurrence, at 0
+SAME | base {F230,QSEAMTWICE} | head {F230,QSEAMTWICE} | src/cli.test.ts > ABC-230 A1, A3 — the CLI's level seam hands the search the game's prior keys > the injected keyHistory is read once per engine move, on the game the loop hands in
+SAME | base {-} | head {-} | (never red) A3: a game started from a FEN has no earlier positions: the move is base's
+SAME | base {F230,UNTRIM,REP0,QSEAMRAW,QPRIOROFF,QMATCH3,QTRIM1,QUCINOKEYS} | head {F230,UNTRIM,REP0,QSEAMRAW,QPRIOROFF,QMATCH3,QTRIM1,QUCINOKEYS} | src/uci-session.test.ts > ABC-230 A2, A3, A5 — the session hands the search the game's prior keys > A2: bestmove is byte-equal to the CLI level seam's move on the same game and clock
+## U2 (unchanged step 100)
+DIFF | base {F230,REP0,S241M1,QSEAMRAW,QPRIOROFF,QMATCH1,QMATCH3,QTRIM1} | head {REP0,S241M1,QPRIOROFF,QMATCH1,QMATCH3,QTRIM1} | src/cli.test.ts > ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square > A4: with repetitionKeyHistory injected the default level plays d8e8 at exactly 0; base does not
+SAME | base {S241M2,QMATCH1} | head {S241M2,QMATCH1} | src/cli.test.ts > ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square > A4: with a legal ep capture available the same line is not a draw
+DIFF | base {F230,S241M1,S241M2,S241M4,QSEAMRAW,QPRIOROFF,QMATCH3,QTRIM1} | head {S241M1,S241M2,S241M4} | src/cli.test.ts > ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square > A7: the move the search scores 0 is the move after which gameStatusOf reports the claim
+SAME | base {F230,UNTRIM,REP0,S241M1,S241M6,QSEAMRAW,QPRIOROFF,QMATCH3,QTRIM1,QUCINOKEYS} | head {F230,UNTRIM,REP0,S241M1,S241M6,QSEAMRAW,QPRIOROFF,QMATCH3,QTRIM1,QUCINOKEYS} | src/uci-session.test.ts > ABC-241 A4, A5 — UCI: the prior keys are repetition keys > A5: the CLI level seam's injected list equals UCI's, key for key, and both play d8e8
+## other rows of the four blocks that went red under any mutant
+SAME | base {UNTRIM,REP0,QPRIOROFF,QMATCH3,QTRIM1,QUCINOKEYS} | head {UNTRIM,REP0,QPRIOROFF,QMATCH3,QTRIM1,QUCINOKEYS} | src/uci-session.test.ts > ABC-230 A2, A3, A5 — the session hands the search the game's prior keys > A2: `position fen F moves …` then `go depth 4` plays the third occurrence at cp 0
+SAME | base {UNTRIM,QPRIOROFF,QMATCH3,QTRIM1,QUCINOKEYS} | head {UNTRIM,QPRIOROFF,QMATCH3,QTRIM1,QUCINOKEYS} | src/uci-session.test.ts > ABC-230 A2, A3, A5 — the session hands the search the game's prior keys > A2: `position startpos moves …` hands the replayed keys, trimmed, and the search reads them
+SAME | base {UNTRIM,QUCINOKEYS} | head {UNTRIM,QUCINOKEYS} | src/uci-session.test.ts > ABC-230 A2, A3, A5 — the session hands the search the game's prior keys > A3: a bare FEN, a bare startpos and `ucinewgame` hand an empty list
+SAME | base {UNTRIM,QTRIM1,QUCINOKEYS} | head {UNTRIM,QTRIM1,QUCINOKEYS} | src/uci-session.test.ts > ABC-230 A2, A3, A5 — the session hands the search the game's prior keys > A5: from a 600-ply move list, only the last 100 keys before the root are handed
+SAME | base {UNTRIM,S241M1,S241M6,QTRIM1,QUCINOKEYS} | head {UNTRIM,S241M1,S241M6,QTRIM1,QUCINOKEYS} | src/uci-session.test.ts > ABC-230 A2, A3, A5 — the session hands the search the game's prior keys > A5: the window starts at the last pawn move; a castling-rights change does not cut it
+SAME | base {UNTRIM,REP0,S241M1,S241M6,S241M2,QPRIOROFF,QMATCH1,QMATCH3,QTRIM1,QUCINOKEYS} | head {UNTRIM,REP0,S241M1,S241M6,S241M2,QPRIOROFF,QMATCH1,QMATCH3,QTRIM1,QUCINOKEYS} | src/uci-session.test.ts > ABC-241 A4, A5 — UCI: the prior keys are repetition keys > A4: the move that makes the third occurrence scores exactly 0; with a legal ep capture, no draw
+SAME | base {UNTRIM,S241M1,S241M6,S241M2,QTRIM1,QUCINOKEYS} | head {UNTRIM,S241M1,S241M6,S241M2,QTRIM1,QUCINOKEYS} | src/uci-session.test.ts > ABC-241 A4, A5 — UCI: the prior keys are repetition keys > A5: the list handed is the repetition-key list, trimmed: the h7h5 key normalised, the rest raw
+SAME | base {S241M8} | head {S241M8} | src/cli.test.ts > ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square > cli.ts imports repetitionKeyHistory from history.ts under its own name (no alias for keyHistory)
+survivors (kill no row of the 18): base {QM1,QM2,QM3,QM4,S241M5,QPARITY,QCLOCK,QPLY4,QPATHOFF} head {QM1,QM2,QM3,QM4,S241M5,QPARITY,QCLOCK,QPLY4,QPATHOFF}
+suite errors: base 0 head 0
+U1 changed rows with a different kill set: 0

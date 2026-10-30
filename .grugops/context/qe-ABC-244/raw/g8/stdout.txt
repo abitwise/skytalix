@@ -1,0 +1,8 @@
+run 1 base rc=0 wall=9.90s cpu=31.39s vitest_duration=9.59s (transform 0ms, setup 0ms, import 6.36s, tests 8.04s, environment 5ms) load1_before=1.76 load1_after=1.94 tctl_before=41.4 :: 2322 passed (2322)
+run 2 head rc=0 wall=9.34s cpu=29.89s vitest_duration=9.00s (transform 0ms, setup 0ms, import 6.36s, tests 7.09s, environment 5ms) load1_before=1.58 load1_after=1.94 tctl_before=40.5 :: 2322 passed (2322)
+run 3 head rc=0 wall=9.25s cpu=30.01s vitest_duration=8.92s (transform 0ms, setup 0ms, import 6.14s, tests 6.97s, environment 5ms) load1_before=1.51 load1_after=1.67 tctl_before=40.3 :: 2322 passed (2322)
+run 4 base rc=0 wall=9.69s cpu=30.81s vitest_duration=9.35s (transform 0ms, setup 0ms, import 6.22s, tests 7.87s, environment 5ms) load1_before=1.30 load1_after=1.41 tctl_before=39.8 :: 2322 passed (2322)
+run 5 base rc=0 wall=9.59s cpu=30.54s vitest_duration=9.25s (transform 0ms, setup 0ms, import 6.21s, tests 7.84s, environment 4ms) load1_before=1.10 load1_after=1.31 tctl_before=39.6 :: 2322 passed (2322)
+run 6 head rc=0 wall=8.81s cpu=29.08s vitest_duration=8.49s (transform 0ms, setup 0ms, import 5.87s, tests 6.93s, environment 4ms) load1_before=1.02 load1_after=1.25 tctl_before=39.6 :: 2322 passed (2322)
+median wall: base 9.69 s, head 9.25 s, delta -0.44 s; median cpu: base 30.81 s, head 29.89 s; admissible (rc 0, load1 <= 8 before and after every run): true
+exit 0
