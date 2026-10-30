@@ -16,3 +16,10 @@ AGENTS.md + your notes only. No board edits. Never push/force/amend/rebase/merge
 node (an SE is timing); the Orchestrator runs cli.test.ts before merging. If sealing needs node, draft + give me the command.
 ## Publish
 Notes (task `scribe-agents-md-timemode`), commit, `## Result` here, brief + claim to done/.
+
+## Result
+AGENTS.md +3 lines, 17,648 -> 18,176 B (budget 18,432; 256 B headroom): UCI TimeMode line after `npm run uci`; A11 lane
+`ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/uci-session.test.ts` before the real-engine UCI lane; one
+wait-loop line under the `pgrep -f` rule. Nothing run. Note drafted under `.grugops/context/scribe-agents-md-timemode/raw/`; seal
+pending (needs node):
+`node .grugops/context/scribe-agents-md-timemode/raw/seal.mjs .grugops/context scribe-agents-md-timemode .grugops/context/scribe-agents-md-timemode/raw/seal-spec.json`
