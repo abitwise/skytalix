@@ -1,0 +1,4 @@
+:1804 step 10 info depth 1 score cp 25 nodes 30 time 20 nps 1500 pv b8c6 | bestmove b8c6
+:1804 step 1000 info depth 1 score cp 25 nodes 30 time 2000 nps 15 pv b8c6 | bestmove b8c6
+:1910 step 100 info depth 3 score cp 25 nodes 370 time 400 nps 925 pv b8c6 | bestmove b8c6
+:1910 step 1000 info depth 3 score cp 25 nodes 370 time 4000 nps 93 pv b8c6 | bestmove b8c6

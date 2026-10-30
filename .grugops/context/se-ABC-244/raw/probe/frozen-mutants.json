@@ -1,0 +1,78 @@
+{
+  "frozenAt": "2026-10-30T22:38:25.118Z",
+  "base": "d59e3194",
+  "mutants": [
+    {
+      "id": "F230",
+      "file": "src/level-seam.ts",
+      "applies": true,
+      "occurrences": 1,
+      "from": "keyHistory === undefined",
+      "to": "true || keyHistory === undefined"
+    },
+    {
+      "id": "QM1",
+      "file": "src/levels.ts",
+      "applies": true,
+      "occurrences": 1,
+      "from": "[...priorKeys, repetitionKey(position, zobristKey(position))]",
+      "to": "[...priorKeys, zobristKey(position)]"
+    },
+    {
+      "id": "QM2",
+      "file": "src/gameend.ts",
+      "applies": true,
+      "occurrences": 1,
+      "from": "positionCounts.get(repetitionKey(position, zobristKey(position)))",
+      "to": "positionCounts.get(zobristKey(position))"
+    },
+    {
+      "id": "QM3",
+      "file": "src/uci-session.ts",
+      "applies": true,
+      "occurrences": 1,
+      "from": "const keys = [repetitionKey(position, zobristKey(position))];",
+      "to": "const keys = [zobristKey(position)];"
+    },
+    {
+      "id": "QM4",
+      "file": "src/gameend.ts",
+      "applies": true,
+      "occurrences": 1,
+      "from": "if (position.epSquare === NO_SQUARE || hasLegalEnPassant(position)) return key;",
+      "to": "if (position.epSquare === NO_SQUARE || ((t, b) => [(b ? t + 16 : t - 16) - 1, (b ? t + 16 : t - 16) + 1].some((s) => (s & 0x88) === 0 && position.board[s] === (PAWN | (b ? 8 : 0))))(position.epSquare, position.blackToMove)) return key;"
+    },
+    {
+      "id": "UNTRIM",
+      "file": "src/uci-session.ts",
+      "applies": true,
+      "occurrences": 1,
+      "from": "return { position, priorKeys: trimPriorKeys(keys, position.halfmoveClock) };",
+      "to": "return { position, priorKeys: keys };"
+    },
+    {
+      "id": "REP0",
+      "file": "src/engine.ts",
+      "applies": true,
+      "occurrences": 1,
+      "from": "    repeatsBeforeRoot(budget.prior, key, ply, position.halfmoveClock)\n  ) {\n    return 0;",
+      "to": "    repeatsBeforeRoot(budget.prior, key, ply, position.halfmoveClock)\n  ) {\n    return 1;"
+    },
+    {
+      "id": "S241M1",
+      "file": "src/gameend.ts",
+      "applies": true,
+      "occurrences": 1,
+      "from": "  if (position.epSquare === NO_SQUARE || hasLegalEnPassant(position)) return key;\n  return key ^ epFileKey(position.epSquare);",
+      "to": "  return key;"
+    },
+    {
+      "id": "S241M6",
+      "file": "src/uci-session.ts",
+      "applies": true,
+      "occurrences": 1,
+      "from": "    keys.push(repetitionKey(position, zobristKey(position)));",
+      "to": "    keys.push(zobristKey(position));"
+    }
+  ]
+}
