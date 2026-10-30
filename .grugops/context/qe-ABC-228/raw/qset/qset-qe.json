@@ -1,0 +1,8 @@
+[
+  { "id": "QE-C1 knight check, the checker taken by a pawn (no block possible)", "kind": "check", "fen": "4k3/2p5/3N4/8/8/8/8/4K3 b - - 0 1" },
+  { "id": "QE-C2 pawn check, evaded by an en-passant capture of the checker", "kind": "check", "fen": "4k3/8/8/3pP3/4K3/8/8/8 w - d6 0 1", "line": ["e5d6"] },
+  { "id": "QE-C3 the checker taken by a capturing promotion (under-promotions searched too)", "kind": "check", "fen": "3r3k/4P3/8/8/8/8/8/3K4 w - - 0 1" },
+  { "id": "QE-M1 the side in check is mated in quiescence: one evasion, then a capture mates (negative sign)", "kind": "mate", "fen": "1R4k1/5ppp/8/8/8/8/7K/3r4 b - - 0 1", "line": ["d1d8", "b8d8"] },
+  { "id": "QE-M2 a smothered mate by a knight capture", "kind": "mate", "fen": "6rk/5bpp/8/6N1/8/8/8/6K1 w - - 0 1", "line": ["g5f7"] },
+  { "id": "QE-M3 a direct call on a checkmated node: the distance is ply + qply", "kind": "mate", "fen": "4R1k1/5ppp/8/8/8/8/8/6K1 b - - 0 1" }
+]
