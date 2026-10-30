@@ -1,0 +1,237 @@
+{
+ "ticket": "ABC-229",
+ "task": "qe-ABC-229-qset",
+ "tree": "main a649fbc4 (src identical to main 2deed1ab)",
+ "call": "quiesce(parseFen(fen), -Infinity, +Infinity, qply 0, ply 0, rules, () => {})",
+ "rules": {
+  "old": "{ evasions: true } = shipped today = the door searchWithoutQuietPromotions/chooseMoveWithoutQuietPromotions quiesce",
+  "new": "{ evasions: true, quietPromotions: true } (ADR-0053 d5)"
+ },
+ "binding": "static, old, new, separates are binding; line is one best line (ties: generation order), informative only",
+ "rows": [
+  {
+   "id": "QP-1 Q3, a safe quiet promotion",
+   "kind": "d9-a safe",
+   "fen": "8/P6k/8/8/8/8/8/K7 w - - 0 1",
+   "inCheck": false,
+   "quietQueenPromotionsAtRoot": [
+    "a7a8q"
+   ],
+   "static": 212,
+   "old": 212,
+   "new": 977,
+   "separates": true,
+   "newLine": [
+    "a7a8q"
+   ],
+   "oldLine": []
+  },
+  {
+   "id": "QP-2 the promotion square is controlled (Rb2 x b8)",
+   "kind": "d9-b controlled",
+   "fen": "8/1P5k/8/8/8/8/1r6/7K w - - 0 1",
+   "inCheck": false,
+   "quietQueenPromotionsAtRoot": [
+    "b7b8q"
+   ],
+   "static": -370,
+   "old": -370,
+   "new": -370,
+   "separates": false,
+   "newLine": [],
+   "oldLine": []
+  },
+  {
+   "id": "QP-3 in check, a quiet queen promotion blocks (decision 2's path)",
+   "kind": "d9-c check-block",
+   "fen": "K6r/4P3/8/8/7k/8/8/4R3 w - - 0 1",
+   "inCheck": true,
+   "quietQueenPromotionsAtRoot": [
+    "e7e8q"
+   ],
+   "static": 220,
+   "old": 544,
+   "new": 544,
+   "separates": false,
+   "newLine": [
+    "e7e8q",
+    "h8e8",
+    "e1e8"
+   ],
+   "oldLine": [
+    "e7e8q",
+    "h8e8",
+    "e1e8"
+   ]
+  },
+  {
+   "id": "QP-4 only an under-promotion wins (e8=N+ forks Kg7, Qd6); e8=Q is met by Qxd1#",
+   "kind": "d9-d under-promotion only",
+   "fen": "8/4P1k1/3q4/8/8/8/5PPP/3B2K1 w - - 0 1",
+   "inCheck": false,
+   "quietQueenPromotionsAtRoot": [
+    "e7e8q"
+   ],
+   "static": -52,
+   "old": -52,
+   "new": -52,
+   "separates": false,
+   "newLine": [],
+   "oldLine": [],
+   "search": {
+    "d1": {
+     "old": {
+      "score": 1101,
+      "move": "e7e8n"
+     },
+     "new": {
+      "score": 1101,
+      "move": "e7e8n"
+     }
+    },
+    "d2": {
+     "old": {
+      "score": 1101,
+      "move": "e7e8n"
+     },
+     "new": {
+      "score": 1101,
+      "move": "e7e8n"
+     }
+    },
+    "d3": {
+     "old": {
+      "score": 1101,
+      "move": "e7e8n"
+     },
+     "new": {
+      "score": 1101,
+      "move": "e7e8n"
+     }
+    }
+   }
+  },
+  {
+   "id": "QP-5 a capturing under-promotion is best (exf8=N+ forks Kh7, Qd7), unchanged",
+   "kind": "d9-e capturing under-promotion",
+   "fen": "5r2/3qP2k/8/8/8/8/5PPP/3B2K1 w - - 0 1",
+   "inCheck": false,
+   "quietQueenPromotionsAtRoot": [
+    "e7e8q"
+   ],
+   "static": -570,
+   "old": 1073,
+   "new": 1073,
+   "separates": false,
+   "newLine": [
+    "e7f8n",
+    "h7h8",
+    "f8d7"
+   ],
+   "oldLine": [
+    "e7f8n",
+    "h7h8",
+    "f8d7"
+   ]
+  },
+  {
+   "id": "QP-6 KPK: c8=Q+ defended by Kb7",
+   "kind": "d9-f KPK",
+   "fen": "8/1KPk4/8/8/8/8/8/8 w - - 0 1",
+   "inCheck": false,
+   "quietQueenPromotionsAtRoot": [
+    "c7c8q"
+   ],
+   "static": 196,
+   "old": 196,
+   "new": 947,
+   "separates": true,
+   "newLine": [
+    "c7c8q",
+    "d7e7"
+   ],
+   "oldLine": []
+  },
+  {
+   "id": "QP-7 a quiet queen promotion mates (c8=Q#)",
+   "kind": "extra: mate by quiet promotion",
+   "fen": "k7/2P5/1K6/8/8/8/8/8 w - - 0 1",
+   "inCheck": false,
+   "quietQueenPromotionsAtRoot": [
+    "c7c8q"
+   ],
+   "static": 186,
+   "old": 186,
+   "new": 29999,
+   "separates": true,
+   "newLine": [
+    "c7c8q"
+   ],
+   "oldLine": [],
+   "newAtPly5": 29994
+  },
+  {
+   "id": "QP-8 the quiet promotion arrives at qply 2 (bxa7+ K moves, a8=Q)",
+   "kind": "extra: below qply 0",
+   "fen": "1k6/r7/1P6/8/4B3/8/8/R6K w - - 0 1",
+   "inCheck": false,
+   "quietQueenPromotionsAtRoot": [],
+   "static": 554,
+   "old": 1152,
+   "new": 1885,
+   "separates": true,
+   "newLine": [
+    "b6a7",
+    "b8c8",
+    "a7a8q",
+    "c8c7"
+   ],
+   "oldLine": [
+    "b6a7",
+    "b8c7"
+   ]
+  },
+  {
+   "id": "QP-9 Q3 colour-flipped, black promotes",
+   "kind": "extra: black to move",
+   "fen": "k7/8/8/8/8/8/p6K/8 b - - 0 1",
+   "inCheck": false,
+   "quietQueenPromotionsAtRoot": [
+    "a2a1q"
+   ],
+   "static": 212,
+   "old": 212,
+   "new": 977,
+   "separates": true,
+   "newLine": [
+    "a2a1q"
+   ],
+   "oldLine": []
+  },
+  {
+   "id": "INFO kpk-b6c6 through search() at depth 8 (ADR-0053 probe: 186 -> 902)",
+   "kind": "info: search",
+   "fen": "2k5/8/1K6/2P5/8/8/8/8 w - - 0 1",
+   "inCheck": false,
+   "quietQueenPromotionsAtRoot": [],
+   "static": 115,
+   "old": 115,
+   "new": 115,
+   "separates": false,
+   "newLine": [],
+   "oldLine": [],
+   "search": {
+    "d8": {
+     "old": {
+      "score": 186,
+      "move": "b6c6"
+     },
+     "new": {
+      "score": 902,
+      "move": "b6c6"
+     }
+    }
+   }
+  }
+ ]
+}

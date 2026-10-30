@@ -1,0 +1,25 @@
+{
+  "note": "qe-ABC-229-qset: QE's quiet-promotion Q-SET (ADR-0053 d9 kinds). 'expect' = QE's hand-reasoned prediction, written before the first read.",
+  "rows": [
+    { "id": "QP-1 Q3, a safe quiet promotion", "kind": "d9-a safe", "fen": "8/P6k/8/8/8/8/8/K7 w - - 0 1",
+      "expect": { "inCheck": false, "hasQuietQ": true, "oldIsStatic": true, "safe": true, "separates": true } },
+    { "id": "QP-2 the promotion square is controlled (Rb2 x b8)", "kind": "d9-b controlled", "fen": "8/1P5k/8/8/8/8/1r6/7K w - - 0 1",
+      "expect": { "inCheck": false, "hasQuietQ": true, "oldIsStatic": true, "newIsStatic": true, "separates": false } },
+    { "id": "QP-3 in check, a quiet queen promotion blocks (decision 2's path)", "kind": "d9-c check-block", "fen": "K6r/4P3/8/8/7k/8/8/4R3 w - - 0 1",
+      "expect": { "inCheck": true, "hasQuietQ": true, "separates": false } },
+    { "id": "QP-4 only an under-promotion wins (e8=N+ forks Kg7, Qd6); e8=Q is met by Qxd1#", "kind": "d9-d under-promotion only", "fen": "8/4P1k1/3q4/8/8/8/5PPP/3B2K1 w - - 0 1",
+      "expect": { "inCheck": false, "hasQuietQ": true, "oldIsStatic": true, "newIsStatic": true, "separates": false }, "searchDepths": [1, 2, 3] },
+    { "id": "QP-5 a capturing under-promotion is best (exf8=N+ forks Kh7, Qd7), unchanged", "kind": "d9-e capturing under-promotion", "fen": "5r2/3qP2k/8/8/8/8/5PPP/3B2K1 w - - 0 1",
+      "expect": { "inCheck": false, "hasQuietQ": true, "separates": false } },
+    { "id": "QP-6 KPK: c8=Q+ defended by Kb7", "kind": "d9-f KPK", "fen": "8/1KPk4/8/8/8/8/8/8 w - - 0 1",
+      "expect": { "inCheck": false, "hasQuietQ": true, "oldIsStatic": true, "safe": true, "separates": true } },
+    { "id": "QP-7 a quiet queen promotion mates (c8=Q#)", "kind": "extra: mate by quiet promotion", "fen": "k7/2P5/1K6/8/8/8/8/8 w - - 0 1",
+      "expect": { "inCheck": false, "hasQuietQ": true, "oldIsStatic": true, "new": 29999, "safe": true, "separates": true }, "ply5": true },
+    { "id": "QP-8 the quiet promotion arrives at qply 2 (bxa7+ K moves, a8=Q)", "kind": "extra: below qply 0", "fen": "1k6/r7/1P6/8/4B3/8/8/R6K w - - 0 1",
+      "expect": { "inCheck": false, "hasQuietQ": false, "separates": true } },
+    { "id": "QP-9 Q3 colour-flipped, black promotes", "kind": "extra: black to move", "fen": "k7/8/8/8/8/8/p6K/8 b - - 0 1",
+      "expect": { "inCheck": false, "hasQuietQ": true, "oldIsStatic": true, "safe": true, "separates": true } },
+    { "id": "INFO kpk-b6c6 through search() at depth 8 (ADR-0053 probe: 186 -> 902)", "kind": "info: search", "fen": "2k5/8/1K6/2P5/8/8/8/8 w - - 0 1",
+      "searchDepths": [8] }
+  ]
+}
