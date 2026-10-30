@@ -345,6 +345,9 @@ same under every option and are not counted):
 
 Under (b), the same milestone was ≈ 60–80 h ALONE. A confirmation smoke adds ≤ 0.45 h per ticket that needs one.
 
+*`ABC-242` (added 2026-10-30, QE-230-a) is in no milestone: P3, S2 with 0 smoke games (its `A8`, the Orchestrator to confirm), pulled after
+`ABC-241` once its Architect reading is in. It does not change milestone 1's batch, which plays level 5 only.*
+
 **Milestone 2, "evaluation by phase, ordering, TT and window"** (each value-changing, each with its own smoke pair, each
 `Backlog` on an ADR; Q4 no longer holds them since 2026-10-29): `ABC-231` → `ABC-232` (evaluation; after milestone 1's quiescence changes settle the node
 budget that `G6` reads, because `ABC-205` failed on exactly that), `ABC-233`, `ABC-234` (ordering; `ABC-234` behind
@@ -387,7 +390,9 @@ directly on how a tuned set is judged.
 - One `tools/` change (`ABC-225`), one records scan (`ABC-226`), one probe (`ABC-227`).
 - Thirteen engine changes (`ABC-228`–`ABC-240`: eleven value-changing, two value-identical, `ABC-235` and `ABC-240`), each in its own ticket, behind its own ADR
   or ADR reading, each measured by the Q4 rule (value-identical: S2). *(2026-10-30: plus `ABC-241`, Q3 (c), value-
-  changing: fourteen engine changes, twelve value-changing.)*
+  changing: fourteen engine changes, twelve value-changing.)* *(2026-10-30: plus `ABC-242`, QE-230-a: value-changing on the
+  blunder path (levels 1–4) only, node-equal at every smoke and batch pin, so BA/PM reads it under S2 (the Orchestrator to confirm): fifteen engine
+  changes.)*
 - `src/quiescence.ts`, `src/search.ts`, `src/engine.ts`, `src/evaluate.ts`, `src/transposition.ts`, `src/legal.ts`,
   `src/uci-session.ts`, `src/cli.ts` change, each only in the ticket that names it.
 
@@ -448,18 +453,19 @@ mates", ≥ 6 "a quiet promotion decides". It reads `quiesce` and `chooseMove` a
 | 3 | `ABC-225` | One command reads an interleaved R pair (base and candidate against Stockfish), with the opening-paired error and a host log. **Re-scoped 2026-10-29: the batch's instrument** | M | P2 | **Ready** | **10/10** | `ABC-204`'s pins | nothing. Done before milestone 1's batch |
 | 4 | `ABC-228` | In check, quiescence searches every evasion and scores none as mate | M | P2 | **Ready** | **10/10** | `ADR-0053` (ACCEPTED 2026-10-30); OQ-228-1 answered, reading (ii) (2026-10-30) | nothing. On an `A8` miss: the (ii) build in this ticket (level 5 → 4 000 ms, the `rating.ts` R literal) and its `A9` re-forecast ≤ 133 %; above it, the owner |
 | 5 | `ABC-229` | Quiescence searches quiet promotions to a queen | S | P2 | Backlog | **9/10** | `ADR-0053` (ACCEPTED 2026-10-30) decisions 5–8; door | `ABC-228` merged |
-| 6 | `ABC-230` | The game's earlier positions reach the search, from the CLI and from UCI, so it sees a repetition the game already holds | M | P2 | **Ready** | **10/10** | `ADR-0054` (ACCEPTED 2026-10-30) | nothing; shares `src/uci-session.ts` with `EPIC-009`'s `ABC-220` (pull order) |
+| 6 | `ABC-230` | The game's earlier positions reach the search, from the CLI and from UCI, so it sees a repetition the game already holds | M | P2 | **Done** (2026-10-30, `24f3e322`) | — | `ADR-0054` (ACCEPTED 2026-10-30) | done: QE PASS_WITH_GAPS `…ba5a249a`; its gap QE-230-a is `ABC-242` |
 | 7 | `ABC-235` | Value-identical cuts in cost per node, from `ABC-227`'s profile: **cuts 1, 3, 5** (scoped 2026-10-29) | M | P2 | In Development (`se-ABC-235`) | **10/10** | `ABC-227` (Done); Architect `…7fc1b90c` (1, 3, 5 value-identical; no ADR) | nothing |
 | 8 | `ABC-240` | Move ordering without per-move allocation, value-identical (cut 6, split from `ABC-235`) | S | P3 | **Ready** | **10/10** | Architect `…7fc1b90c` C1–C4; no ADR | pull order only: after `ABC-235` merges; before `ABC-233`/`ABC-234` |
-| 9 | `ABC-241` | A repetition against the game's earlier positions ignores an en-passant square no pawn can legally take (Q3 (c)); the hash does not change | S | P2 | Backlog | **9/10** | `ADR-0020` § AMENDMENT 2026-10-30 (ACCEPTED on the owner's word) | `ABC-230` merged |
-| 10 | `ABC-231` | The king table is tapered by phase, alone, with no king-safety term | S | P3 | Backlog | **9/10** | `ADR-0031` addendum scope; door | the ADR ruling |
-| 11 | `ABC-232` | Passed pawns are worth more as material comes off | S | P3 | Backlog | **9/10** | `ABC-231`'s phase | `ABC-231` |
-| 12 | `ABC-233` | A history heuristic orders quiet moves after the killers, cleared per search | M | P3 | Backlog | **9/10** | `ADR-0026` d10; `ABC-080` `A6` | the ADR |
-| 13 | `ABC-234` | SEE orders captures in the full-width search (ordering only, no pruning) | M | P3 | Backlog | **8/10** | `ADR-0024` d4 re-open evidence | the evidence; the ADR |
-| 14 | `ABC-236` | Aspiration windows at the root, with a stated re-search | M | P3 | Backlog | **9/10** | new ADR; door | the ADR |
-| 15 | `ABC-237` | The transposition table prefers deeper entries when it replaces | S | P3 | Backlog | **9/10** | `ADR-0025` (falsifier `T2`) | the ADR |
-| 16 | `ABC-238` | A deeper stored entry may cut off a shallower search | M | P3 | Backlog | **9/10** | `ABC-081` `A1` revised; `ADR-0025`; door | the ADR; after `ABC-237` |
-| 17 | `ABC-239` | Evaluation weights tuned offline by a stated method, emitted as constants, validated outside | L | P3 | Backlog | **8/10** | `ADR-0048` data licence; new ADR | milestone 2's evaluation done; the licence; the ADR. Its batch is read **before** its merge (its `A6`) |
+| 9 | `ABC-241` | A repetition against the game's earlier positions ignores an en-passant square no pawn can legally take (Q3 (c)); the hash does not change | S | P2 | **Ready** | **10/10** | `ADR-0020` § AMENDMENT 2026-10-30 (ACCEPTED on the owner's word) | nothing: `ABC-230` merged `24f3e322` |
+| 10 | `ABC-242` | On a blunder level (1–4), a root move that makes the third occurrence of a game position scores exactly 0 (QE-230-a) | S | P3 | Backlog | **9/10** | `ADR-0054` d2–d3, `ADR-0032` d1 (an Architect reading) | the Architect reading (and the owner, if it amends an accepted ADR); after `ABC-241` (both edit `src/levels.ts:142`) |
+| 11 | `ABC-231` | The king table is tapered by phase, alone, with no king-safety term | S | P3 | Backlog | **9/10** | `ADR-0031` addendum scope; door | the ADR ruling |
+| 12 | `ABC-232` | Passed pawns are worth more as material comes off | S | P3 | Backlog | **9/10** | `ABC-231`'s phase | `ABC-231` |
+| 13 | `ABC-233` | A history heuristic orders quiet moves after the killers, cleared per search | M | P3 | Backlog | **9/10** | `ADR-0026` d10; `ABC-080` `A6` | the ADR |
+| 14 | `ABC-234` | SEE orders captures in the full-width search (ordering only, no pruning) | M | P3 | Backlog | **8/10** | `ADR-0024` d4 re-open evidence | the evidence; the ADR |
+| 15 | `ABC-236` | Aspiration windows at the root, with a stated re-search | M | P3 | Backlog | **9/10** | new ADR; door | the ADR |
+| 16 | `ABC-237` | The transposition table prefers deeper entries when it replaces | S | P3 | Backlog | **9/10** | `ADR-0025` (falsifier `T2`) | the ADR |
+| 17 | `ABC-238` | A deeper stored entry may cut off a shallower search | M | P3 | Backlog | **9/10** | `ABC-081` `A1` revised; `ADR-0025`; door | the ADR; after `ABC-237` |
+| 18 | `ABC-239` | Evaluation weights tuned offline by a stated method, emitted as constants, validated outside | L | P3 | Backlog | **8/10** | `ADR-0048` data licence; new ADR | milestone 2's evaluation done; the licence; the ADR. Its batch is read **before** its merge (its `A6`) |
 
 *Re-scored 2026-10-29 (`bapm-owner-words-b`): Q4 is removed from every wait. Each value-changing ticket's DoR row 4
 is now ✅, because its reading is the smoke pair. No ticket but `ABC-225` changes column on this hop. `ABC-227` (Done)
@@ -470,6 +476,8 @@ All fifteen reserved ids are used. None is `XL`; `ABC-239` is the one `L` and is
 *`ABC-241` was added 2026-10-30 on the owner's Q3 (c) (`bapm-q3c-oq228ii-fold`); the order numbers from 9 on moved
 down by one. Only its row and `ABC-228`'s were changed; the other rows' columns are as last folded, and the board
 holds the live state.*
+*`ABC-242` was added 2026-10-30 from QE gap QE-230-a (`bapm-qe230a-followup`); the order numbers from 10 on moved
+down by one. Only its row and the `ABC-230` (Done) and `ABC-241` (Ready) rows were changed.*
 
 ## Observations (not tickets)
 
