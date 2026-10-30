@@ -10,6 +10,30 @@ owner: BA/PM
 
 # EPIC-009: `skytalix` plays a 40/15 tournament clock, uses it, and never loses on time
 
+> **MILESTONE 1, HALF DONE, 2026-10-30, folded by BA/PM** (task `bapm-ABC-220-merge-fold`, records only, at `main`
+> `4ac4f3bb`). **`ABC-220` is Done:** merged at `ec1e835b` on QE's PASS_WITH_GAPS (`qe-ABC-220` `…7a09c5e1`, which
+> signs UAT) and Security/NFR's PASS_WITH_RISKS (`secnfr-ABC-220`). `simple-tournament` is on `main`.
+>
+> - **What `ABC-220` read** (virtual clock unless named):
+>   - 22 000 on every capped branch; 18 760 ms left after a period's move 40, 97.9 % used (83.2 % with 6 book moves);
+>   - ≥ 1 069 ms left at `tc=40/60`;
+>   - levels 1–7 identical to base in 4 200 rows (M3 MET at the build);
+>   - on the real clock, one search at T took ≤ 22 001.0 ms of wall (+1.0 ms), and a busy `readyok` came 0.38 ms
+>     after `bestmove`.
+>
+>   M1 and M2 are not read yet: that is `ABC-222`.
+> - **`NFR-004`** carries "; 22 s in UCI `TimeMode` `simple-tournament` (budget 22 s)". `AR-NFR004-A` stands at 22 s.
+>   `AR-UCI-BUSY` (busy `isready`/`stop`, ≤ 22 s read to the whole second, ≤ 60 s in `uci-clock-mode`) is placed beside
+>   `NFR-011`.
+> - **`ADR-0044` folds:** D3, D4 (new D4.5), D5 and D11 carry dated lines for `simple-tournament`. The
+>   `uci-clock-mode` halves wait for `ABC-221`'s merge.
+> - **`ABC-222` is now pullable: DoR 10/10, Ready.** It closes milestone 1. It runs ALONE on an idle host (≤ ~5 h).
+> - **`ABC-221`: DoR 10/10, Ready**, pulled after `ABC-222` (owner: "later"). It gains A12 (QE-220-a: the side to move's
+>   own increment, four rows), test note 5 (`SEC-220-b`: a comment) and A11 re-worded to A14a + A14b.
+> - **`ABC-223`: unchanged**, 9/10, waits on `ABC-221`.
+> - **Still open with the owner, blocks nothing:** the whole-second reading of the 22 s ceiling (§ Owner questions).
+> - The notes are in `.grugops/context/bapm-ABC-220-merge-fold/notes/`.
+
 > **FOLDED 2026-10-30 by BA/PM** (task `bapm-owner-adr-fold`, records only, at `main` `a046e839`). The owner
 > **accepted `ADR-0052` with one amendment** (`orch-2026-10-29g` `…3dd61448`, verbatim): *"accept, but change 22.5s to
 > 22s for simplicity and compatibility, ceiling also at 22s, no need to implement fraction of a second ceiling or time
@@ -252,7 +276,8 @@ clean.
 - The Architect writes the ADR text: amendments to `ADR-0044` and `ADR-0045`, or a new ADR, status PROPOSED. It covers
   the input form, T, the `go` interaction, the two ceilings and the `NFR-004` lines. The owner accepts or declines it.
   BA/PM does not pre-empt it. *(2026-10-29: written as `ADR-0052`, PROPOSED. Its fold lines into `ADR-0044` D3, D4,
-  D5, D11 and `ADR-0045` A3 are BA/PM's, at each build's merge.)*
+  D5, D11 and `ADR-0045` A3 are BA/PM's, at each build's merge.)* *(2026-10-30: `ADR-0044`'s `simple-tournament`
+  lines folded at `ABC-220`'s merge `ec1e835b`. The `uci-clock-mode` lines and `ADR-0045` A3 come at `ABC-221`'s.)*
 
 ## Out of scope
 
@@ -292,9 +317,9 @@ clean.
 |---|---|---|---|---|---|---|---|---|
 | — | `ABC-218` | Reading: today's `Skill Level` 7 under a 40/15 clock | S | P2 | Done (dropped) | — | — | **closed by the owner 2026-10-29, not run** |
 | — | `ABC-219` | A named tournament level in the CLI | M | P2 | Done (dropped) | — | — | **retired 2026-10-29**: CLI parity out of scope; its core moved into `ABC-220` |
-| 1 | `ABC-220` | `simple-tournament` over UCI (`TimeMode`): T = 22 s, `min(T, C)` with a clock, never handed more than its 22 s hard ceiling | M | P2 | **Ready** | **10/10** | `ADR-0052` (ACCEPTED 2026-10-30, amended) | nothing; shares `src/uci-session.ts` with `ABC-230` (pull order) |
-| 2 | `ABC-222` | Smoke reading: `simple-tournament` plays 5 games at 40/15 (≤ 10 for coverage) with 0 losses on time | S | P2 | Backlog | 9/10 | `ABC-220` merged; an idle board | `ABC-220` |
-| 3 | `ABC-221` | `uci-clock-mode` over UCI (`TimeMode`): `min(59.5 s, C)`, a 60 s ceiling, the clamp to 60 s | M | P3 | Backlog | 9/10 | `ADR-0052` (ACCEPTED 2026-10-30; D4/D6 as written); `ABC-220`'s C and `TimeMode`; milestone 1 (owner: "later") | `ABC-220` merged. *(The page's DoR row 10 still names OQ-0052-1, now met. It was not re-scored on this hop.)* |
+| 1 | `ABC-220` | `simple-tournament` over UCI (`TimeMode`): T = 22 s, `min(T, C)` with a clock, never handed more than its 22 s hard ceiling | M | P2 | **Done** (merged `ec1e835b`, 2026-10-30) | 10/10 | `ADR-0052` (ACCEPTED 2026-10-30, amended) | — |
+| 2 | `ABC-222` | Smoke reading: `simple-tournament` plays 5 games at 40/15 (≤ 10 for coverage) with 0 losses on time | S | P2 | **Ready** (2026-10-30) | **10/10** | `ABC-220` merged (met, `ec1e835b`); an idle board | nothing; ALONE on an idle host |
+| 3 | `ABC-221` | `uci-clock-mode` over UCI (`TimeMode`): `min(59.5 s, C)`, a 60 s ceiling, the clamp to 60 s | M | P3 | **Ready** (2026-10-30) | **10/10** | `ADR-0052` (ACCEPTED 2026-10-30; D4/D6 as written); `ABC-220`'s C and `TimeMode` (met, `ec1e835b`); milestone 1 (owner: "later") | pull order only: after `ABC-222` |
 | 4 | `ABC-223` | Smoke reading: `uci-clock-mode` plays 5 games at 40/15 (≤ 10 for coverage) with 0 losses on time | S | P3 | Backlog | 9/10 | `ABC-221` merged; an idle board | `ABC-221` |
 
 - **Milestone 1** is `ABC-220` then `ABC-222`. **Milestone 2** is `ABC-221` then `ABC-223`, after milestone 1 and on

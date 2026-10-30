@@ -52,6 +52,10 @@ resolve. Since the 2026-10-18 revision that slug is no longer true: see § Revis
 >
 > In force at `ABC-220`'s merge (`simple-tournament`) and at `ABC-221`'s merge (`uci-clock-mode`). The in-place fold
 > lines are BA/PM's, at those merges (`ADR-0052` § Status).
+> *(Folded in place 2026-10-30 by BA/PM, task `bapm-ABC-220-merge-fold`, at `ABC-220`'s merge `ec1e835b`. Dated lines
+> are in D3 (the `uci` and `setoption` rows), D4 (a new item 5, D4.5: `C` and `simple-tournament`), D5 and D11. The
+> `uci-clock-mode` halves are folded at `ABC-221`'s merge, not before: D3's third `var`, D4.5's clock-mode line and
+> D5's ≤ 60 s.)*
 
 > **Amended 2026-10-30 by `ADR-0054` (accepted by the owner, note `…3dd61448`; pointer added by Architect/Design, task
 > `arch-adr-accept-0052-0053-0054`).** Two decisions move:
@@ -310,8 +314,8 @@ budget. There is no `info` line, and no way to read `stop` while `chooseMove` ho
 
 | GUI → engine | engine does |
 |---|---|
-| `uci` | `id name skytalix`, `id author Olger Oeselg`, `option name OwnBook type check default true`, `option name Skill Level type spin default 3 min 1 max 5` *(2026-10-19, `ADR-0045`: `default 5`, read from `DEFAULT_LEVEL`)* *(2026-10-24, `ADR-0045` A4: `max 7`, read from `HARDEST_LEVEL`)*, `uciok` |
-| `setoption name <id> [value <x>]` | `<id>` is the text between `name` and `value`, matched **case-insensitively** (the spec says option names *"should not be case sensitive and can inlude spaces"*). `OwnBook`: `true` or `false`. `Skill Level`: an integer from 1 to 5 *(1 to 7 from `ABC-212`, `ADR-0045` A4)*, looked up by an own key (`Object.hasOwn(LEVELS, n)`, the `level-seam.ts` rule). An invalid value keeps the old value and writes one `info string`. **Any other name is ignored**, which covers the options Lichess's provider sets unconditionally (`UCI_AnalyseMode`, `UCI_Chess960`, `Threads`, `Hash`, `MultiPV`) |
+| `uci` | `id name skytalix`, `id author Olger Oeselg`, `option name OwnBook type check default true`, `option name Skill Level type spin default 3 min 1 max 5` *(2026-10-19, `ADR-0045`: `default 5`, read from `DEFAULT_LEVEL`)* *(2026-10-24, `ADR-0045` A4: `max 7`, read from `HARDEST_LEVEL`)*, `uciok` *(Folded 2026-10-30, `ADR-0052` D1, `ABC-220`, merge `ec1e835b`: after the `Skill Level` line and before `uciok`, `option name TimeMode type combo default level var level var simple-tournament`. The `Skill Level` line is byte-identical. `var uci-clock-mode` joins at `ABC-221`'s merge only.)* |
+| `setoption name <id> [value <x>]` | `<id>` is the text between `name` and `value`, matched **case-insensitively** (the spec says option names *"should not be case sensitive and can inlude spaces"*). `OwnBook`: `true` or `false`. `Skill Level`: an integer from 1 to 5 *(1 to 7 from `ABC-212`, `ADR-0045` A4)*, looked up by an own key (`Object.hasOwn(LEVELS, n)`, the `level-seam.ts` rule). An invalid value keeps the old value and writes one `info string`. **Any other name is ignored**, which covers the options Lichess's provider sets unconditionally (`UCI_AnalyseMode`, `UCI_Chess960`, `Threads`, `Hash`, `MultiPV`) *(Folded 2026-10-30, `ADR-0052` D1, `ABC-220`, merge `ec1e835b`: `TimeMode`: the value matches **exactly** one value of the frozen tuple `TIME_MODES` (`level`, `simple-tournament`; `uci-clock-mode` from `ABC-221`), with no key lookup. Any other value keeps the old one and writes one `info string TimeMode takes level or simple-tournament, got <v>; kept <old>`, spelled from the same tuple. `ucinewgame` does not reset it.)* |
 | `isready` | the first time with `OwnBook` on, it warms the book (D10). Then `readyok` |
 | `ucinewgame` | sets the position back to the start. It does not reset the options, reload the book or reseed anything (D10, D11). The table is already cleared per search (`ADR-0025`) |
 | `position startpos \| fen <6 fields> [moves m1 m2 …]` | parse it, then apply the moves through `parseCoordinateMove` and `makeMove`. If the FEN or any move is bad, the **whole command is refused**: no position is held, and one `info string` line names the fault (text filtered to printable characters, the `cli.ts` `printableOf` rule) |
@@ -360,6 +364,21 @@ budget. There is no `info` line, and no way to read `stop` while `chooseMove` ho
    is held by its budget, at least 2 000 ms under it: 5 s at levels 1–5, 7 s at level 6, 32 s at level 7. Clause B
    is now written per level, in the owner's accepted text (`ADR-0045` § Consequences), which Security/NFR places in
    the catalog.)*
+5. **The `TimeMode` budgets (D4.5).** *(Added 2026-10-30 by BA/PM, task `bapm-ABC-220-merge-fold`, from `ADR-0052` D2
+   and D3, in force from `ABC-220`'s merge `ec1e835b`.)* D4.1–D4.4 above are unchanged, and they govern `TimeMode
+   level`, the default. While `TimeMode` is not `level`, D4.1's `G` and D4.2's level cap are not used, and `Skill
+   Level` is not read (D11).
+   - **The safe share `C`** (`ADR-0052` D2), for the side to move, with clock `t`, increment `i` (default 0) and
+     `movestogo m` (default 20): `C = max(1, min((t − 1 000 − m × 100) / m + i, t − 1 100))`. The constants are
+     `CLOCK_RESERVE_MS` (1 000) and `CLOCK_OVERHEAD_MS` (100), and `C` is `safeClockShare` beside `parseGo`. D4.1's
+     `MOVE_OVERHEAD_MS` (50) stays for `level` only.
+   - **`simple-tournament`** (`ADR-0052` D3): T = `SIMPLE_TOURNAMENT_BUDGET_MS` = `SIMPLE_TOURNAMENT_CEILING_MS` =
+     22 000. `movetime x` gives `min(x, T)`; a clock for the side to move gives `min(T, C)`; no time token gives T.
+     Every branch is at most T, so T holds the 22 s ceiling. The search is the rate-0 path with D12's limits.
+   - D4.3 (`infinite` and `ponder` hold the `bestmove`) and D4.4 (the engine clamp, `HARD_CEILING_MS` 32 000) apply
+     in every mode.
+   - `uci-clock-mode`'s line (`ADR-0052` D4: `min(x, 59 500)`, `min(59 500, C)`, T with no time token) is folded here
+     at `ABC-221`'s merge, with D4.4's clamp at 60 000. It is not in force before then.
 
 ### D5. One thread, synchronous search. No worker in v1.
 
@@ -373,6 +392,13 @@ handled in order afterwards. The consequences are accepted and stated:
 - *(Folded 2026-10-24, `ADR-0045` A4, `ABC-212`: `isready` and `stop` during a search are answered at most one
   budget late: about 5 s at levels 1–5, 7 s at level 6 and 32 s at level 7. Accepted, with no worker. One
   `bestmove` per `go` still holds.)*
+- *(Folded 2026-10-30 by BA/PM, task `bapm-ABC-220-merge-fold`, `ADR-0052` D7, at `ABC-220`'s merge `ec1e835b`: in
+  `TimeMode` `simple-tournament`, `isready` and `stop` during a search are answered at most one budget +
+  `AR-NFR004-A` late: ≤ 22 s, read to the whole second (< 22 500 ms). Accepted, with no worker. One `readyok` per
+  `isready`, in order, after the `bestmove`. QE's worst case read is ≈ 22 001.4 ms (`qe-ABC-220`: `A11` max
+  22 001.0 ms, `A14b` R1 0.38 ms). The accepted-risk entry is `AR-UCI-BUSY`, beside `NFR-011` in
+  `plans/nfr-catalog.md` (owner: Architect/Design). The `uci-clock-mode` bound, ≤ 60 s, is folded at `ABC-221`'s merge.
+  The worker's triggers below are unchanged.)*
 
 **The upgrade is pre-designed and is not built.** The search would move to one `worker_threads` worker.
 The stop flag would be a `SharedArrayBuffer` slot, read through the engine's **existing** injected `now`
@@ -506,6 +532,11 @@ that backend can run.
   no decision change here, like D4.2's.)* *(Folded 2026-10-24, `ADR-0045` A4, `ABC-212`: **`max 7`**, read from `HARDEST_LEVEL`.
   The `default` stays 5. Rate 0 is levels 5–7, and rate above 0 is levels 1–4.)* **No Elo is claimed.**
   `UCI_LimitStrength` / `UCI_Elo` is rejected (Alternatives).
+  *(Folded 2026-10-30 by BA/PM, task `bapm-ABC-220-merge-fold`, `ADR-0052` D1, at `ABC-220`'s merge `ec1e835b`:
+  `Skill Level` governs only while `TimeMode` is `level`, the default. In `simple-tournament` it is not read. The
+  search is the rate-0 `chooseMove` path with D12's limits, `createLevel` and the seed draw are not reached, and the
+  injected `random` is not consumed. A `Skill Level` set meanwhile is kept, and it takes effect when `TimeMode`
+  returns to `level`. The option line is byte-identical. The rest of this section reads for `TimeMode level`.)*
 - **With the `go` time.** The budget is `min(G, LEVELS[skill].budgetMs)` (D4). The level is a cap on
   effort and the GUI's clock is a cap on time, so the smaller one binds. Level 1 thinks at most 100 ms
   even with plenty of time on the clock. Any level thinks less when the clock is short. The engine still
