@@ -30,6 +30,11 @@ epic: EPIC-010
 > 10/10. Backlog → Ready**, with no change to scope or acceptance. Q3 (the ep key) is still open: on 2026-10-30 the
 > owner asked for more information. Default (a) keep holds, and it blocks nothing here.
 
+> **2026-10-30, BA/PM** (task `bapm-qe230a-followup`, records only): the "Q3 open" lines on this page (the notes
+> above, § Out of scope, § Dependencies, DoR row 10) are history. **Q3 was answered (c)** (`…c4ab73de`), and remedy (c)
+> is **`ABC-241`**. **`ABC-230` is Done**, merged at `24f3e322` (QE PASS_WITH_GAPS `qe-ABC-230` `…ba5a249a`). Its gap
+> QE-230-a (the blunder path's root move) is **`ABC-242`**.
+
 ## Problem
 
 - **User:** the owner in the CLI and a GUI over UCI.
