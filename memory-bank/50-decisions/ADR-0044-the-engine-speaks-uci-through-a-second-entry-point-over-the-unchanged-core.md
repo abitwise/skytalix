@@ -14,6 +14,8 @@ resolve. Since the 2026-10-18 revision that slug is no longer true: see § Revis
 > `DEFAULT_LEVEL`, which `ADR-0045` D2 moves from 3 to 5, and `LEVELS[5]` is `{ 3000, 0 }`, the shipped engine at
 > 3 s, as level 3 was. D11's path rule is unchanged and chosen by data: rate 0 is level 5 only, and levels 1–4 take
 > `createLevel`. Effective at `ABC-174`'s merge. No other decision here moves.
+> *(Pointer 2026-10-30, BA/PM, `bapm-ABC-241-merge-fold`: `LEVELS[5]` is `{ 4000, 0 }` since `ABC-228`'s merge
+> (`e42b637b`, `ADR-0053` d10). See D11's and D4.2's dated lines. No decision change.)*
 
 > **Addendum 2026-10-21 (Architect/Design, subtask `arch-ABC-168-D8`).** D8's emit sentence is corrected, and D8 gains
 > `"include": []`. `dist/` holds what `uci.ts` imports, type-only imports included. The fence is on what `dist/uci.js`
@@ -497,7 +499,11 @@ that backend can run.
   and `default 3` is `DEFAULT_LEVEL`, the terminal game's default (the shipped engine at 3 s, no
   blunders). *(Folded 2026-10-19, `ADR-0045` D2/D4: **`default 5`**. The `default` is `DEFAULT_LEVEL`, now 5, and it
   is still the shipped engine at 3 s with no blunders. The session reads it from `DEFAULT_LEVEL` rather than a
-  literal (`ABC-174`).)* *(Folded 2026-10-24, `ADR-0045` A4, `ABC-212`: **`max 7`**, read from `HARDEST_LEVEL`.
+  literal (`ABC-174`).)* *(Pointer 2026-10-30, BA/PM, task `bapm-ABC-241-merge-fold`: "at 3 s" in that fold reads
+  **4 000 ms since `ABC-228`'s merge** (`e42b637b`). Under `ADR-0053` d10, reading (ii), `LEVELS[5]` = `{ 4000, 0 }`.
+  `ADR-0045` is FOLDED in place (§ Status, 2026-10-30), and that fold records D11. The `default` is still 5, still
+  `DEFAULT_LEVEL`, and still the shipped engine with no blunders. Only the value it reads moved. This is a pointer, with
+  no decision change here, like D4.2's.)* *(Folded 2026-10-24, `ADR-0045` A4, `ABC-212`: **`max 7`**, read from `HARDEST_LEVEL`.
   The `default` stays 5. Rate 0 is levels 5–7, and rate above 0 is levels 1–4.)* **No Elo is claimed.**
   `UCI_LimitStrength` / `UCI_Elo` is rejected (Alternatives).
 - **With the `go` time.** The budget is `min(G, LEVELS[skill].budgetMs)` (D4). The level is a cap on
