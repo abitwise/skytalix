@@ -1,0 +1,14 @@
+A8 identity out of tree, plain node, raw/id.mjs (LEVELS and PLIES default to 1-7 and 40).
+base = main 8e1cdda5 src/; head = grugops/ABC-220 68ba364c src/ (production lines; header comment edit after the copy only).
+
+full run (LEVELS 1-7, 3 shapes, 40 plies):
+  base                                        1839 lines  7d319f711ff6e2a5
+  head                                        1839 lines  7d319f711ff6e2a5
+  head + setoption name TimeMode value level  1839 lines  7d319f711ff6e2a5
+  head + simple-tournament (full)             not completed (22 s budgets at step 97 too slow; stopped)
+
+non-vacuity run (LEVELS=1,5 PLIES=3):
+  base                                          81 lines  b504c3dcdb28a754
+  head                                          81 lines  b504c3dcdb28a754
+  head + setoption name TimeMode value level    81 lines  b504c3dcdb28a754
+  head + setoption name TimeMode value simple-tournament  78 lines  f4b39a5a6e1c73c5  (differs: the harness sees a mode change)
