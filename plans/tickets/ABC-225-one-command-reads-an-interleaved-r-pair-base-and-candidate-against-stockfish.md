@@ -10,6 +10,12 @@ epic: EPIC-010
 
 # ABC-225: an interleaved R pair in the rating harness
 
+> **Dated line 2026-10-30 by BA/PM** (task `bapm-q3c-oq228ii-fold`, records only). OQ-228-1 is (ii) (`ADR-0053` d10):
+> on an `ABC-228` `A8` miss, level 5 plays 4 000 ms, and the batches run both sides at 4 000 ms. **`ABC-228` carries
+> the `r` mode literal 3000 → 4000** (`tools/rating/rating.ts:405` on `main`). This branch's `rpair` passes its own
+> `budget: 3000` (`9988a778`, `:660`). When it rebases onto a `main` that carries (ii), that value moves to 4 000 in
+> the same rebase. If (ii) is not built, nothing changes. No scope or acceptance line changes; still Blocked.
+
 > **RE-SCOPED 2026-10-29 by BA/PM** (task `bapm-owner-words-b`, records only). The owner set Q4 = (e), extended
 > (`orch-2026-10-29g` `…278e149b`): a 10-game D smoke and a 10-game R smoke per value-changing ticket, then a batched
 > major validation later. The cut said "under (a) or (d) it is closed unbuilt"; (e) is neither, so its purpose was
