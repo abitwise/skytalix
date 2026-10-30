@@ -565,7 +565,8 @@ describe("A6 — no move is selected without a caller-supplied depth", () => {
     // which answers "how many plies shallower" for the null child and picks nothing. ABC-240
     // added `orderScratchByteLength`, a number for `NFR-009` (a)'s byte sum that picks nothing.
     // ABC-228 added one more door of that shape (`searchWithoutQuiescenceEvasions`, `ADR-0053`
-    // decision 6). Still nothing here picks a move without being told how deep.
+    // decision 6), and `ABC-229` one more (`searchWithoutQuietPromotions`, the same decision).
+    // Still nothing here picks a move without being told how deep.
     expect(Object.keys(searchModule).sort()).toEqual([
       "KEY_ARRAY_CAPACITY",
       "KillerTable",
@@ -584,6 +585,7 @@ describe("A6 — no move is selected without a caller-supplied depth", () => {
       "searchWithoutPvsOrReductions",
       "searchWithoutQuiescence",
       "searchWithoutQuiescenceEvasions",
+      "searchWithoutQuietPromotions",
       "searchWithoutReductions",
       "searchWithoutTable",
     ]);
