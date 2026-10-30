@@ -61,6 +61,11 @@
  * included. The session's history is not read: the seam hands in a `GameHistory` and only its
  * `position` is searched (`ADR-0002` clause 3).
  *
+ * THE GAME'S EARLIER POSITIONS (`ABC-230`, `ADR-0054`) arrive as `EngineOptions.priorKeys`, a
+ * read-only key list the caller builds with `trimPriorKeys`; this module still imports no history.
+ * A node repeats if its position stood once on the path, the root included, as before, or TWICE
+ * before the root (`repeatsBeforeRoot`). `search()` and the test-only doors take no prior keys.
+ *
  * PRINCIPAL-VARIATION SEARCH AND LATE-MOVE REDUCTIONS (`ABC-121`, `ADR-0026`) are `src/search.ts`'s
  * too, in the same shape (`searchMove`), and the reduction is that module's ONE predicate,
  * `lateMoveReduction`, imported rather than copied, so the rule cannot drift between the two
@@ -179,6 +184,14 @@ export interface EngineOptions {
    * completes, so a tiny value still returns a depth-1 move.
    */
   readonly maxNodes?: number;
+  /**
+   * `ABC-230` (`ADR-0054` decision 1): the Zobrist keys of the game's positions BEFORE the root,
+   * oldest first, the root's own key excluded — `trimPriorKeys`'s output. Read-only and never
+   * copied: the search reads the caller's array for the length of this call. At most the last
+   * `PRIOR_KEYS_WINDOW` entries are read, whatever is handed in. Absent or empty, the search is
+   * the one without game history, node for node. The test-only doors below ignore it.
+   */
+  readonly priorKeys?: readonly bigint[];
 }
 
 export interface EngineChoice {
@@ -194,12 +207,33 @@ export interface EngineChoice {
   readonly elapsedMs: number;
 }
 
+/**
+ * `ADR-0054` decision 1: the reversible window is capped at the fifty-move window, 100 plies. The
+ * prior-key list is trimmed to it, and the search reads no more of a list than this.
+ */
+const PRIOR_KEYS_WINDOW = 100;
+
+/** The prior-key list of a search with no game history: base, node for node. */
+const NO_PRIOR_KEYS: readonly bigint[] = [];
+
+/**
+ * `ADR-0054` decision 1: the one trim both surfaces call. `keys` is a game's key list, oldest
+ * first, the root's key LAST (`src/history.ts` `keyHistory`'s shape); the result is the keys before
+ * the root that can still repeat: the last `min(halfmoveClock, 100)` of them, the root excluded.
+ * Only the halfmove clock cuts the window; a castling-rights change does not need to, because no
+ * key before it can equal a key after it.
+ */
+export function trimPriorKeys(keys: readonly bigint[], halfmoveClock: number): bigint[] {
+  const root = keys.length - 1;
+  return keys.slice(Math.max(0, root - Math.min(halfmoveClock, PRIOR_KEYS_WINDOW)), root);
+}
+
 /** Thrown from inside the recursion when the budget is spent, caught by the deepening loop. */
 const ABORTED = Symbol("engine: the budget is spent");
 
 /**
- * The `ABC-121` and `ABC-208` switches, `src/search.ts`'s rule: on in `chooseMove`, off in its
- * doors.
+ * The `ABC-121`, `ABC-208` and `ABC-230` switches, `src/search.ts`'s rule: on in `chooseMove`, off
+ * in its doors.
  */
 interface Heuristics {
   /** Principal-variation search: false on `chooseMoveWithoutPvsOrReductions` only. */
@@ -208,6 +242,8 @@ interface Heuristics {
   readonly reductions: boolean;
   /** Null-move pruning (`ABC-208`), at null-window nodes: true on `chooseMove` only. */
   readonly nullMove: boolean;
+  /** `options.priorKeys` read (`ABC-230`, `ADR-0054` decision 3): true on `chooseMove` only. */
+  readonly priorKeys: boolean;
 }
 
 /** The deepening loop's mutable state: the clock, the deadline, and when to consult again. */
@@ -232,6 +268,8 @@ interface Budget extends Heuristics {
    * `chooseMove` call, `keys[0]` the root's key, each child's key derived from its parent's.
    */
   readonly keys: BigUint64Array;
+  /** `options.priorKeys` (`ABC-230`), borrowed, or `NO_PRIOR_KEYS` on the doors and when absent. */
+  readonly prior: readonly bigint[];
 }
 
 /**
@@ -266,6 +304,28 @@ function leafScore(
 }
 
 /**
+ * `ADR-0054` decision 3, the pre-root half of the repetition scan: true when the position at `ply`
+ * (key `key`, clock `halfmoveClock`) stood TWICE among the keys before the root. One occurrence
+ * there is not a draw. The walk is `repeatsInPath`'s continued below the root: the same parity,
+ * `-1` the position one ply before it, bounded by the clock and by the list (at most
+ * `PRIOR_KEYS_WINDOW` of it). It starts where the path walk (`ply - 4, ply - 6, …`) first goes
+ * below 0. With no prior keys, or a clock that does not reach past the root, it reads nothing.
+ */
+function repeatsBeforeRoot(
+  prior: readonly bigint[],
+  key: bigint,
+  ply: number,
+  halfmoveClock: number,
+): boolean {
+  const oldest = Math.max(ply - halfmoveClock, -Math.min(prior.length, PRIOR_KEYS_WINDOW));
+  let matches = 0;
+  for (let earlier = Math.min(ply - 4, (ply & 1) - 2); earlier >= oldest; earlier -= 2) {
+    if (prior[prior.length + earlier] === key && ++matches === 2) return true;
+  }
+  return false;
+}
+
+/**
  * `src/search.ts`'s negamax with ONE addition: the abort check, and it sits at the node rather
  * than at the iteration. The move ordering is that module's, by the same `orderMoves` and the
  * same `KillerTable` (`ABC-080`); the repetition scan, the capacity guard and the table probe,
@@ -288,11 +348,17 @@ function negamax(
   countNode(budget);
 
   const keys = budget.keys;
-  if (repeatsInPath(keys, ply, position.halfmoveClock)) return 0;
+  const key = keys[ply] as bigint;
+  // `ABC-230`: a repetition is one occurrence on the path or two before the root (`ADR-0054`).
+  if (
+    repeatsInPath(keys, ply, position.halfmoveClock) ||
+    repeatsBeforeRoot(budget.prior, key, ply, position.halfmoveClock)
+  ) {
+    return 0;
+  }
   if (remaining <= 0 || ply >= KEY_ARRAY_CAPACITY) {
     return leafScore(position, ply, alpha, beta, budget);
   }
-  const key = keys[ply] as bigint;
 
   const slot = probeTable(key);
   if (slot !== -1) {
@@ -482,7 +548,12 @@ function runIteration(
  * The position is byte-identical on return, aborted iteration or not.
  */
 export function chooseMove(position: Position, options: EngineOptions): EngineChoice | null {
-  return deepen(position, options, { pvs: true, reductions: true, nullMove: true });
+  return deepen(position, options, {
+    pvs: true,
+    reductions: true,
+    nullMove: true,
+    priorKeys: true,
+  });
 }
 
 /**
@@ -495,7 +566,12 @@ export function chooseMoveWithoutNullMove(
   position: Position,
   options: EngineOptions,
 ): EngineChoice | null {
-  return deepen(position, options, { pvs: true, reductions: true, nullMove: false });
+  return deepen(position, options, {
+    pvs: true,
+    reductions: true,
+    nullMove: false,
+    priorKeys: false,
+  });
 }
 
 /**
@@ -508,7 +584,12 @@ export function chooseMoveWithoutReductions(
   position: Position,
   options: EngineOptions,
 ): EngineChoice | null {
-  return deepen(position, options, { pvs: true, reductions: false, nullMove: false });
+  return deepen(position, options, {
+    pvs: true,
+    reductions: false,
+    nullMove: false,
+    priorKeys: false,
+  });
 }
 
 /**
@@ -520,7 +601,12 @@ export function chooseMoveWithoutPvsOrReductions(
   position: Position,
   options: EngineOptions,
 ): EngineChoice | null {
-  return deepen(position, options, { pvs: false, reductions: false, nullMove: false });
+  return deepen(position, options, {
+    pvs: false,
+    reductions: false,
+    nullMove: false,
+    priorKeys: false,
+  });
 }
 
 /** The deepening loop behind `chooseMove` and its three doors; they differ in `heuristics` only. */
@@ -544,6 +630,7 @@ function deepen(
     visit: () => countNode(budget),
     killers: new KillerTable(),
     keys: new BigUint64Array(KEY_ARRAY_CAPACITY + 1),
+    prior: heuristics.priorKeys ? (options.priorKeys ?? NO_PRIOR_KEYS) : NO_PRIOR_KEYS,
     ...heuristics,
   };
   budget.keys[0] = zobristKey(position);

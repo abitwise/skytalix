@@ -147,3 +147,14 @@ The design is `ADR-0054` § Decision. It binds (accepted by the owner 2026-10-30
 
 **DoR 10/10 (re-scored 2026-10-30, `bapm-owner-adr-fold`). Ready.** *(Was 9/10, waiting on the owner's acceptance of
 `ADR-0054`.)* It shares `src/uci-session.ts` with `ABC-220`; the Orchestrator orders them.
+
+> **Result 2026-10-30, Software Engineer** (task `se-ABC-230`, branch `grugops/ABC-230` from `main` `c0698ddd`): built to
+> `ADR-0054` in `2fbcb380`. `priorKeys` on `EngineOptions`, one trim helper (`trimPriorKeys`), and the pre-root scan in
+> `src/engine.ts` (two matches before the root are a draw, one is not; the path rule is unchanged; the doors, `search()`
+> and quiescence take none). The CLI injects `keyHistory` into the level seam (licence set unchanged), and UCI
+> `parsePosition` keeps the replayed keys. A1–A6, A8 and A9 have rows in the engine, levels, CLI and UCI test files.
+> The count, the cap, the clock bound and the UCI wiring were each planted red and restored. A6's protected rows are
+> green unchanged. Identity out of tree, plain `node`, against `c0698ddd`: no prior keys, an empty list, and root clock
+> 0 with adversarial keys are all node-equal (2 408 rows each, the 3 doors and the levels too). `npm test` 2 178
+> passed, skips 0; lint, typecheck and build exit 0; the deep lanes are green. Q3 (c) is not built here. A7 (the
+> smokes) is QE's. Notes: `se-ABC-230`.

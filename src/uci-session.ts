@@ -22,12 +22,19 @@
 import { makeMove } from "./apply.ts";
 import type { BookProbe } from "./book.ts";
 import { parseCoordinateMove } from "./coordinate-move.ts";
-import { type Clock, chooseMove, type EngineChoice, HARD_CEILING_MS } from "./engine.ts";
+import {
+  type Clock,
+  chooseMove,
+  type EngineChoice,
+  HARD_CEILING_MS,
+  trimPriorKeys,
+} from "./engine.ts";
 import { parseFen } from "./fen.ts";
 import { createLevel, DEFAULT_LEVEL, EASIEST_LEVEL, HARDEST_LEVEL, LEVELS } from "./levels.ts";
 import { BISHOP, KNIGHT, type Position, QUEEN, ROOK, squareName } from "./position.ts";
 import { MATE_SCORE } from "./search.ts";
 import { MATE_FLOOR } from "./transposition.ts";
+import { zobristKey } from "./zobrist.ts";
 
 export interface UciSessionOptions {
   /** Takes one output line, without its line terminator. */
@@ -112,11 +119,21 @@ function milliseconds(text: string | undefined): number | undefined {
   return Number(text);
 }
 
+/** A parsed `position`: the position after the moves, and the game's keys before it. */
+interface HeldPosition {
+  readonly position: Position;
+  /**
+   * `ABC-230` (`ADR-0054` decision 2, the `ADR-0044` D2 amendment): the key of every position the
+   * moves passed through, trimmed by `trimPriorKeys`. Empty after a bare `fen` or `startpos`.
+   */
+  readonly priorKeys: readonly bigint[];
+}
+
 /**
  * Parses `position startpos | fen <fields> [moves m1 m2 ...]`. Any fault refuses the whole
  * command (D3): the result is a message naming the fault, and no position is held.
  */
-function parsePosition(tokens: readonly string[]): Position | string {
+function parsePosition(tokens: readonly string[]): HeldPosition | string {
   const movesAt = tokens.indexOf("moves");
   const head = movesAt === -1 ? tokens.slice(1) : tokens.slice(1, movesAt);
   const moves = movesAt === -1 ? [] : tokens.slice(movesAt + 1);
@@ -132,12 +149,14 @@ function parsePosition(tokens: readonly string[]): Position | string {
   } catch (error) {
     return `bad fen: ${error instanceof Error ? error.message : String(error)}`;
   }
+  const keys = [zobristKey(position)];
   for (const text of moves) {
     const parsed = parseCoordinateMove(position, text);
     if (parsed.outcome !== "move") return `illegal move ${text}`;
     makeMove(position, parsed.move);
+    keys.push(zobristKey(position));
   }
-  return position;
+  return { position, priorKeys: trimPriorKeys(keys, position.halfmoveClock) };
 }
 
 interface GoRequest {
@@ -265,6 +284,8 @@ export function createUciSession(options: UciSessionOptions): UciSession {
   };
 
   let position: Position | null = parseFen(START_FEN);
+  /** `ABC-230`: the held position's prior keys. Empty on `ucinewgame` and on a refused `position`. */
+  let priorKeys: readonly bigint[] = [];
   /**
    * The `bestmove` line `go infinite` / `go ponder` holds. It is never dropped (QE-167-e): `stop`,
    * `ponderhit`, `go`, `position`, `ucinewgame` and `quit` write it first; other lines leave it held.
@@ -298,10 +319,10 @@ export function createUciSession(options: UciSessionOptions): UciSession {
         info(`skill level ${skill} ignores go ${request.limits.join(", ")}; searching on time`);
       }
       const seed = Math.floor(random() * 2 ** 32);
-      const choice = createLevel(
-        { budgetMs, blunderRate: level.blunderRate },
-        { seed, now },
-      )(position);
+      const choice = createLevel({ budgetMs, blunderRate: level.blunderRate }, { seed, now })(
+        position,
+        priorKeys,
+      );
       if (choice !== null) {
         const move = coordinateOf(choice.move);
         write(
@@ -313,6 +334,7 @@ export function createUciSession(options: UciSessionOptions): UciSession {
       const choice = chooseMove(position, {
         budgetMs,
         now,
+        priorKeys,
         ...(request.maxDepth === undefined ? {} : { maxDepth: request.maxDepth }),
         ...(request.maxNodes === undefined ? {} : { maxNodes: request.maxNodes }),
       });
@@ -370,14 +392,16 @@ export function createUciSession(options: UciSessionOptions): UciSession {
         case "ucinewgame":
           release();
           position = parseFen(START_FEN);
+          priorKeys = [];
           break;
         case "position": {
           release();
           const parsed = parsePosition(tokens);
           if (typeof parsed === "string") {
             position = null;
+            priorKeys = [];
             info(`position refused: ${parsed}`);
-          } else position = parsed;
+          } else ({ position, priorKeys } = parsed);
           break;
         }
         case "go":

@@ -90,7 +90,7 @@ import { withBook } from "./book-engine.ts";
 import { readBookFile } from "./book-file.ts";
 import { resolveOptions } from "./cli-options.ts";
 import { beginGlyphModeSession } from "./glyph-mode.ts";
-import { newGame } from "./history.ts";
+import { keyHistory, newGame } from "./history.ts";
 import { createLevelSeam } from "./level-seam.ts";
 import { createLineInputSeam } from "./line-input.ts";
 import { formatPgn } from "./pgn.ts";
@@ -219,9 +219,10 @@ async function main(): Promise<void> {
       // BUILT HERE, CALLED NOWHERE — `G6`'s single-caller precondition. See the module header.
       input: createLineInputSeam({ source: process.stdin, output: sink }),
       // `ABC-101` — the chosen level, inside the book (owner question 5). Its seed is `ADR-0037` D3's.
+      // `ABC-230` (`ADR-0054`): `keyHistory`, injected, hands the search the earlier positions.
       engine: withBook(
         book,
-        createLevelSeam(difficulty, { seed: Math.floor(Math.random() * 2 ** 32) }),
+        createLevelSeam(difficulty, { seed: Math.floor(Math.random() * 2 ** 32) }, keyHistory),
       ),
       sink,
     });

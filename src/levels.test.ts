@@ -42,13 +42,22 @@ import {
 import type { Move } from "./moves.ts";
 import { squareName } from "./position.ts";
 import { virtualClock } from "./virtual-clock.ts";
+import { zobristKey } from "./zobrist.ts";
 
 /**
  * QE-087-a: every `chooseMove` call the level module makes is recorded, its options copied, and
  * passed through to the real engine unchanged. A pass-through, so every other row reads the real
  * engine; it costs no search. `vi.hoisted` because `vi.mock` is hoisted above the imports.
  */
-const engineCalls = vi.hoisted(() => [] as { budgetMs: number; now: unknown; keys: string[] }[]);
+const engineCalls = vi.hoisted(
+  () =>
+    [] as {
+      budgetMs: number;
+      now: unknown;
+      keys: string[];
+      priorKeys?: readonly bigint[] | undefined;
+    }[],
+);
 vi.mock("./engine.ts", async (importOriginal) => {
   const real = await importOriginal<typeof import("./engine.ts")>();
   return {
@@ -59,6 +68,8 @@ vi.mock("./engine.ts", async (importOriginal) => {
         budgetMs: options.budgetMs,
         now: options.now,
         keys: Object.keys(options).sort(),
+        // `ABC-230`: the list handed in, by reference (the engine does not copy it).
+        priorKeys: options.priorKeys,
       });
       return real.chooseMove(...args);
     },
@@ -442,6 +453,47 @@ describe("QE-087-a — the seed never reaches the engine (ADR-0027 d1)", () => {
   });
 });
 
+describe("ABC-230 — the level hands the game's prior keys on (ADR-0054 decision 2)", () => {
+  const fen = "4k3/8/8/8/8/8/8/Q3K3 b - - 3 2";
+  const prior: readonly bigint[] = [11n, 12n, 13n];
+
+  it("the engine path hands chooseMove the caller's list itself", () => {
+    engineCalls.length = 0;
+    createLevel(LEVELS[DEFAULT_LEVEL], { seed: 1, now: coarseClock(LEVELS[DEFAULT_LEVEL]) })(
+      parseFen(fen),
+      prior,
+    );
+    expect(engineCalls).toHaveLength(1);
+    expect(engineCalls[0]?.keys).toEqual(["budgetMs", "now", "priorKeys"]);
+    expect(engineCalls[0]?.priorKeys).toBe(prior);
+  });
+
+  it("A1: a blunder hands every child search the prior keys plus the root's key, one list", () => {
+    const always: Level = { budgetMs: 100, blunderRate: 0.999_999 };
+    const position = parseFen(fen);
+    engineCalls.length = 0;
+    const choice = createLevel(always, { seed: 1, now: virtualClock(100) })(position, prior);
+    expect(choice?.kind).not.toBe("engine");
+    expect(engineCalls).toHaveLength(legalMoves(parseFen(fen)).length);
+    const handed = engineCalls[0]?.priorKeys;
+    expect(handed).toEqual([...prior, zobristKey(parseFen(fen))]);
+    for (const call of engineCalls) expect(call.priorKeys).toBe(handed);
+    // The caller's list is not changed, and the position is handed back unchanged.
+    expect(prior).toEqual([11n, 12n, 13n]);
+    expect(toFen(position)).toBe(fen);
+  });
+
+  it("absent, no search is handed a list, on either path", () => {
+    engineCalls.length = 0;
+    createLevel(
+      { budgetMs: 100, blunderRate: 0.999_999 },
+      { seed: 1, now: virtualClock(100) },
+    )(parseFen(fen));
+    expect(engineCalls.length).toBeGreaterThan(0);
+    for (const call of engineCalls) expect(call.keys).toEqual(["budgetMs", "now"]);
+  });
+});
+
 describe("QE-087-b — the scored list is the engine's, not a self-consistent lie", () => {
   it("each child's score is minus the real `chooseMove`'s depth-1 score on that child", () => {
     // White wins the black queen with Qxd5: the honest list puts d1d5 alone at the top.
@@ -589,6 +641,7 @@ describe("A8 — the level module's boundary", () => {
   const imports = [...code.matchAll(/from\s+"([^"]+)"/g)].map((m) => m[1]);
 
   it("does not import the virtual clock, the CLI, the turn loop or any I/O module", () => {
+    // `ABC-230` added `zobrist.ts`: a blunder hands each child search the root's key (`ADR-0054`).
     expect(imports.sort()).toEqual([
       "./apply.ts",
       "./engine.ts",
@@ -597,6 +650,7 @@ describe("A8 — the level module's boundary", () => {
       "./moves.ts",
       "./position.ts",
       "./search.ts",
+      "./zobrist.ts",
     ]);
   });
 
