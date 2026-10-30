@@ -52,7 +52,14 @@ import { chooseMove, DEFAULT_BUDGET_MS, trimPriorKeys } from "./engine.ts";
 import { parseFen, toFen } from "./fen.ts";
 import { frameHeight } from "./frame.ts";
 import * as glyphMode from "./glyph-mode.ts";
-import { type GameHistory, gameStatusOf, keyHistory, newGame, playMove } from "./history.ts";
+import {
+  type GameHistory,
+  gameStatusOf,
+  keyHistory,
+  newGame,
+  playMove,
+  repetitionKeyHistory,
+} from "./history.ts";
 import { HISTORY_ROWS, renderHistory } from "./history-pane.ts";
 import { legalMoves } from "./legal.ts";
 import { createLevelSeam } from "./level-seam.ts";
@@ -2946,8 +2953,10 @@ describe("ABC-043 — the live session", () => {
     // The default level is the old pin's engine at `DEFAULT_BUDGET_MS` (`ABC-101` `A8′`).
     // `ABC-230` MOVED THE INNER HALF BY ONE ARGUMENT (`ADR-0054` decision 2): `history.ts`'s
     // `keyHistory`, injected after the options object, which is unchanged.
+    // `ABC-241` MOVED THE THIRD ARGUMENT (`ADR-0020` § AMENDMENT 2026-10-30 C3): the injected list is
+    // `repetitionKeyHistory`, the repetition-key list; the options object is unchanged.
     expect(entry).toMatch(
-      /engine:\s*withBook\(\s*book,\s*createLevelSeam\(difficulty,\s*\{\s*seed:\s*Math\.floor\(Math\.random\(\)\s*\*\s*2\s*\*\*\s*32\)\s*\},\s*keyHistory\),?\s*\)/,
+      /engine:\s*withBook\(\s*book,\s*createLevelSeam\(\s*difficulty,\s*\{\s*seed:\s*Math\.floor\(Math\.random\(\)\s*\*\s*2\s*\*\*\s*32\)\s*\},\s*repetitionKeyHistory,?\s*\),?\s*\)/,
     );
     expect(entry.match(/\bcreateBookProbe\s*\(/g)).toHaveLength(1);
     // `ABC-096` `A8`: the render seam and the engine decorator get the SAME probe. `book` is bound
@@ -4601,6 +4610,83 @@ describe("ABC-230 A1, A3 — the CLI's level seam hands the search the game's pr
     const move = await seamOf(keyHistory)(game);
     expect(labelOf(move)).toBe(labelOf(await seamOf()(newGame(bare))));
     expect(labelOf(move)).not.toBe(repeat);
+  });
+});
+
+// ---------------------------------------------------------------------------------------------
+// `ABC-241` (`ADR-0020` § AMENDMENT 2026-10-30 C3) — the CLI injects the repetition-key list, so the
+// search and the game-end count agree about a position first reached by an uncapturable double push.
+// ---------------------------------------------------------------------------------------------
+
+describe("ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square", () => {
+  const FEN = "4k3/7p/8/8/8/8/8/Q3K3 b - - 0 1";
+  /** g5xh6 e.p. is legal after h7h5: the first occurrence keeps its ep file. */
+  const TWIN = "4k3/7p/8/6P1/8/8/8/Q3K3 b - - 0 1";
+  const MOVES = "h7h5 a1a2 e8d8 a2a1 d8e8 a1a2 e8d8 a2a1";
+  const STEP_MS = 100;
+  const labelOf = (move: { from: number; to: number }) =>
+    `${squareName(move.from)}${squareName(move.to)}`;
+  const gameOf = (fen: string): GameHistory => {
+    const game = newGame(fen);
+    for (const text of MOVES.split(" ")) {
+      const move = legalMoves(game.position).find((m) => labelOf(m) === text);
+      if (move === undefined) throw new Error(`fixture: ${text} is not legal`);
+      playMove(game, move);
+    }
+    return game;
+  };
+  const seamOf = (injected: typeof keyHistory) =>
+    createLevelSeam(DEFAULT_LEVEL, { seed: 1, now: virtualClock(STEP_MS) }, injected);
+  const scoreWith = (game: GameHistory, list: typeof keyHistory) =>
+    chooseMove(parseFen(toFen(game.position)), {
+      budgetMs: LEVELS[DEFAULT_LEVEL].budgetMs,
+      now: virtualClock(STEP_MS),
+      priorKeys: trimPriorKeys(list(game), game.position.halfmoveClock),
+    });
+
+  it("A4: with repetitionKeyHistory injected the default level plays d8e8 at exactly 0; base does not", async () => {
+    const game = gameOf(FEN);
+    expect(labelOf(await seamOf(repetitionKeyHistory)(game))).toBe("d8e8");
+    const direct = scoreWith(game, repetitionKeyHistory);
+    expect(direct && { move: labelOf(direct.move), score: direct.score }).toEqual({
+      move: "d8e8",
+      score: 0,
+    });
+    // `ABC-230`'s injection (the hash list), same clock: no draw seen, a losing score.
+    expect(scoreWith(game, keyHistory)?.score).not.toBe(0);
+  });
+
+  it("cli.ts imports repetitionKeyHistory from history.ts under its own name (no alias for keyHistory)", () => {
+    const source = readFileSync(new URL("./cli.ts", import.meta.url), "utf8");
+    expect(source).toMatch(/^import \{ newGame, repetitionKeyHistory \} from "\.\/history\.ts";$/m);
+    expect(source).not.toMatch(/\bkeyHistory\b/);
+  });
+
+  it("A4: with a legal ep capture available the same line is not a draw", () => {
+    const twin = gameOf(TWIN);
+    expect(repetitionKeyHistory(twin)).toEqual(keyHistory(twin));
+    expect(scoreWith(twin, repetitionKeyHistory)?.score).not.toBe(0);
+  });
+
+  it("A7: the move the search scores 0 is the move after which gameStatusOf reports the claim", async () => {
+    const game = gameOf(FEN);
+    expect(gameStatusOf(game).claimable).toBeUndefined();
+    const move = await seamOf(repetitionKeyHistory)(game);
+    playMove(game, move);
+    expect(gameStatusOf(game)).toEqual({
+      result: "in-progress",
+      reason: null,
+      claimable: { by: "white", draws: ["threefold-repetition"] },
+    });
+    // Base's count is one short: the h7h5 occurrence carries h6 in the hash list.
+    const hashes = keyHistory(game);
+    expect(hashes.filter((key) => key === hashes.at(-1))).toHaveLength(2);
+    // And the twin's d8e8 reports no claim: its h7h5 occurrence keeps the file.
+    const twin = gameOf(TWIN);
+    const repeat = legalMoves(twin.position).find((m) => labelOf(m) === "d8e8");
+    if (repeat === undefined) throw new Error("fixture: d8e8 is not legal");
+    playMove(twin, repeat);
+    expect(gameStatusOf(twin).claimable).toBeUndefined();
   });
 });
 

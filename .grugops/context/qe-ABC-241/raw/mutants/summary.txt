@@ -1,0 +1,4 @@
+QM1 src/levels.ts (blunder root key raw; SE M7): npm test rc=1 :: 1 failed | 2244 passed (2245); red: levels.test.ts ABC-241 A5 (every child search is handed the prior keys plus repetitionKey(root)); qrows FAIL 0
+QM2 src/gameend.ts (gameStatus lookup raw; SE M3): npm test rc=1 :: 1 failed | 2244 passed (2245); red: gameend.test.ts ABC-241 A1 crafted-map lookup row only; qrows FAIL 0
+QM3 src/uci-session.ts (FEN's own key raw; new): npm test rc=0 :: 2245 passed (2245); qrows FAIL 2: QE-A4e, QE-A5
+QM4 src/gameend.ts (pseudo-legal capturer test; new): npm test rc=1 :: 2 failed | 2243 passed (2245); red: gameend.test.ts A1 pinned capturer (diagonal), rank pin; qrows FAIL 8: QE-A1e, QE-A1m-e, QE-A1g, QE-A1m-g, QE-A1i, QE-A1m-i, QE-A1j, QE-A1m-j

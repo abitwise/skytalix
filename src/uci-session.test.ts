@@ -10,7 +10,7 @@ import { makeMove } from "./apply.ts";
 import { type BookProbe, createBookProbe } from "./book.ts";
 import { chooseMove, trimPriorKeys } from "./engine.ts";
 import { parseFen, toFen } from "./fen.ts";
-import { keyHistory, newGame, playMove } from "./history.ts";
+import { keyHistory, newGame, playMove, repetitionKeyHistory } from "./history.ts";
 import { isInCheck, legalMoves } from "./legal.ts";
 import { createLevelSeam } from "./level-seam.ts";
 import { createLevel, DEFAULT_LEVEL, HARDEST_LEVEL, LEVELS, seededRandom } from "./levels.ts";
@@ -1384,7 +1384,111 @@ describe("ABC-230 A2, A3, A5 — the session hands the search the game's prior k
     expect(game.position.castling).toBe(0);
     talk([`position startpos moves ${moves.join(" ")}`, "go depth 1"]);
     // The 8 keys since `e7e5`, the king moves that lost the castling rights among them.
-    expect(lastHanded()).toEqual(keyHistory(game).slice(-9, -1));
+    // `ABC-241` (`ADR-0020` § AMENDMENT 2026-10-30 C3) moved the oracle: every prior key is a
+    // repetition key. The oldest, after `e7e5`, carries e6 and no white pawn can take there, so it
+    // is the only one of the 8 that differs from the hash list.
+    expect(lastHanded()).toEqual(repetitionKeyHistory(game).slice(-9, -1));
+    const differs = keyHistory(game)
+      .slice(-9, -1)
+      .map((key, i) => key !== lastHanded()?.[i]);
+    expect(differs).toEqual([true, false, false, false, false, false, false, false]);
+  });
+});
+
+// ---------------------------------------------------------------------------------------------
+// `ABC-241` (`ADR-0020` § AMENDMENT 2026-10-30 C3, prior keys) — every key `parsePosition` keeps is a
+// repetition key. Black's h7h5 leaves h6 with no white pawn to take it, so that position's first
+// occurrence counts with its recurrences, and d8e8 makes the third. The engine spy calls through.
+// ---------------------------------------------------------------------------------------------
+
+describe("ABC-241 A4, A5 — UCI: the prior keys are repetition keys", () => {
+  const FEN = "4k3/7p/8/8/8/8/8/Q3K3 b - - 0 1";
+  /** The same board with a white pawn on g5: g5xh6 e.p. is legal after h7h5. */
+  const TWIN = "4k3/7p/8/6P1/8/8/8/Q3K3 b - - 0 1";
+  const MOVES = "h7h5 a1a2 e8d8 a2a1 d8e8 a1a2 e8d8 a2a1";
+  const STEP_MS = 100;
+  const lastHanded = () => vi.mocked(chooseMove).mock.calls.at(-1)?.[1].priorKeys;
+  const gameOf = (fen: string) => {
+    const game = newGame(fen);
+    for (const text of MOVES.split(" ")) {
+      const move = legalMoves(game.position).find((m) => coordinateOf(m) === text);
+      if (move === undefined) throw new Error(`fixture: ${text} is not legal`);
+      playMove(game, move);
+    }
+    return game;
+  };
+
+  it("A4: the move that makes the third occurrence scores exactly 0; with a legal ep capture, no draw", () => {
+    const { perLine } = talk([`position fen ${FEN} moves ${MOVES}`, "go depth 4"]);
+    expect(parseInfo(perLine[1]?.[0]).score).toBe("cp 0");
+    expect(perLine[1]?.at(-1)).toBe("bestmove d8e8");
+    const twin = talk([`position fen ${TWIN} moves ${MOVES}`, "go depth 4"]).perLine[1];
+    expect(parseInfo(twin?.[0]).score).not.toBe("cp 0");
+    // Base's list (the hash keys) at the same root, the same depth: not a draw either.
+    const game = gameOf(FEN);
+    const base = chooseMove(parseFen(toFen(game.position)), {
+      budgetMs: 1e9,
+      maxDepth: 4,
+      priorKeys: trimPriorKeys(keyHistory(game), game.position.halfmoveClock),
+    });
+    expect(base?.score).not.toBe(0);
+  });
+
+  it("A5: the list handed is the repetition-key list, trimmed: the h7h5 key normalised, the rest raw", () => {
+    const game = gameOf(FEN);
+    talk([`position fen ${FEN} moves ${MOVES}`, "go depth 1"]);
+    const handed = lastHanded();
+    expect(handed).toEqual(trimPriorKeys(repetitionKeyHistory(game), game.position.halfmoveClock));
+    expect(handed).toHaveLength(7);
+    const raw = trimPriorKeys(keyHistory(game), game.position.halfmoveClock);
+    expect(handed?.map((key, i) => key !== raw[i])).toEqual([
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+    ]);
+    // The twin's h6 can be taken: its list is the hash list, key for key.
+    const twin = gameOf(TWIN);
+    talk([`position fen ${TWIN} moves ${MOVES}`, "go depth 1"]);
+    expect(lastHanded()).toEqual(trimPriorKeys(keyHistory(twin), twin.position.halfmoveClock));
+  });
+
+  it("A5: the CLI level seam's injected list equals UCI's, key for key, and both play d8e8", async () => {
+    const game = gameOf(FEN);
+    const seam = createLevelSeam(
+      DEFAULT_LEVEL,
+      { seed: 1, now: virtualClock(STEP_MS) },
+      repetitionKeyHistory,
+    );
+    const cli = coordinateOf(await seam(game));
+    const fromCli = lastHanded();
+    const { perLine } = talk([`position fen ${FEN} moves ${MOVES}`, "go"], STEP_MS);
+    expect(lastHanded()).toEqual(fromCli);
+    expect(fromCli).toHaveLength(7);
+    expect(cli).toBe("d8e8");
+    expect(perLine[1]?.at(-1)).toBe("bestmove d8e8");
+    expect(parseInfo(perLine[1]?.[0]).score).toBe("cp 0");
+  });
+
+  it("A8: the session's one new import is gameend.ts (`ADR-0044` D2, the dated line)", () => {
+    const code = readFileSync(new URL("./uci-session.ts", import.meta.url), "utf8");
+    const imports = [...code.matchAll(/^import[^;]*?from\s+"(\.\/[^"]+)";/gm)].map((m) => m[1]);
+    expect(imports.sort()).toEqual([
+      "./apply.ts",
+      "./book.ts",
+      "./coordinate-move.ts",
+      "./engine.ts",
+      "./fen.ts",
+      "./gameend.ts",
+      "./levels.ts",
+      "./position.ts",
+      "./search.ts",
+      "./transposition.ts",
+      "./zobrist.ts",
+    ]);
   });
 });
 
