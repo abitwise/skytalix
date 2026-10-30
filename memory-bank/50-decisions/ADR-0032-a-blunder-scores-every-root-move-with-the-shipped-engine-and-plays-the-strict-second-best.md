@@ -6,9 +6,15 @@ id: ADR-0032
 
 ## Status
 
-*2026-10-30:* a **PROPOSED** addition to decision 1 for `ABC-242` is written in `ADR-0054` § Proposed amendment
-2026-10-30, A4: a child that is the third occurrence of a game position is scored 0 without a search. Acceptance is
-the owner's. Until he answers, decisions 1–5 stand as written. Pointer added by Architect/Design (task
+*2026-10-30:* the addition to decision 1 for `ABC-242` (`ADR-0054` § Proposed amendment 2026-10-30, A4: a child
+that is the third occurrence of a game position is scored 0 without a search) is **ACCEPTED** by the owner, verbatim
+*"ABC-242: accept"* (Orchestrator note
+`.grugops/context/orch-2026-10-30a/notes/20261030T180500Z-orchestrator-decision-65848126.md`, a transcription and
+not a stamp). It is added to decision 1 as proposed, marked *(added 2026-10-30, `ABC-242`)*. **It is in force on
+`main` at `ABC-242`'s merge.** Until then every child is searched. Decisions 2–5 and every other bullet of decision 1
+are unchanged. Recorded by Architect/Design (task `arch-ABC-242-accept`, records only, at `main` `5090a4d6`).
+
+Previously (2026-10-30): a **PROPOSED** addition, acceptance the owner's. Pointer added by Architect/Design (task
 `arch-ABC-242-reading`).
 
 **accepted** 2026-10-10 by the owner. Owner (Olger Oeselg), 2026-10-10, verbatim: *"accept ADR-0030, ADR-0031, ADR-0032, ADR-0034 with (b) at 0.8x"*
@@ -96,6 +102,8 @@ worktree on 12/12 cells):
      - An overrun by one child shortens the next. A non-positive budget still runs the engine's unabortable
        depth 1.
      - A move's score is minus its child's score.
+     - *(added 2026-10-30, `ABC-242`, accepted; in force on `main` at `ABC-242`'s merge)* A child that is the third
+       occurrence of a game position (`ADR-0054` § Proposed amendment 2026-10-30, A2) is scored 0 without a search.
      - A child with no legal move is scored from `gameStatus`: checkmate is `MATE_SCORE − 1` for the mover;
        anything else is 0.
      - Each child is made and unmade in a `finally`, so the borrowed position comes back byte-identical.
