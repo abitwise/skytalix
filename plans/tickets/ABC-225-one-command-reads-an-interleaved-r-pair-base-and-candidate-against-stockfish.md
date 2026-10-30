@@ -1,8 +1,8 @@
 ---
 id: ABC-225
 title: "One command reads an interleaved R pair: base and candidate against the same Stockfish, in alternating blocks, with the opening-paired error and a host log"
-status: ready
-column: Ready
+status: in-review
+column: In Review
 size: M
 priority: P2
 epic: EPIC-010

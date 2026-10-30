@@ -4,7 +4,7 @@ role: qe-e2e
 ticket: ABC-225
 ref: .grugops/context/qe-ABC-225/
 branch: grugops/ABC-225 @ 9988a778 (worktree ../wt-ABC-225 exists; add QE commits there or on a qe branch from it)
-held: DO NOT SPAWN until se-ABC-235 and arch-ABC-228-adr are done and the host is idle (orch …561f1ef1)
+held: released 2026-10-30 by the Orchestrator (se-ABC-235, arch-ABC-228-adr and qe-ABC-235 done; ABC-235 merged baf99a7c; host idle)
 width: ALONE (~1 h + QE)
 ---
 
@@ -16,7 +16,9 @@ width: ALONE (~1 h + QE)
 
 ## Do
 - Re-run `pair-check` and the gates yourself. Spot-check A1's argv equality and A3's arithmetic against the r1/r2 records.
-- PREREG first (sealed before game 1): the shas (base = main's merge-base, candidate = main, so expect NEUTRAL), the
+- PREREG first (sealed before game 1): the shas (base = `02fa9556`, the main before ABC-235; candidate = `baf99a7c`, main
+  with ABC-235: same moves, ~1.2× nps, so expect NEUTRAL to slightly positive; 40 games decide nothing about Elo,
+  and A5 is about the tool working; report the figure as INFO), the
   `--rounds 10`, the width, and what passes A5/A6.
 - **A5:** `rpair <base> <cand> <out> --rounds 10`, ALONE, with tool paths from the env file named in your spawn prompt.
   Check the four unverified points the SE named: cutechess honours `start=`; every `nps.log` line has a value;

@@ -1,8 +1,8 @@
 ---
 id: ABC-235
 title: "Value-identical cuts in cost per node, chosen from ABC-227's profile: same moves, same order, same scores, more nodes a second"
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: M
 priority: P2
 epic: EPIC-010

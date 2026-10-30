@@ -1,3 +1,4 @@
+_Updated: 2026-10-30 by Orchestrator (orch-2026-10-29g) — ABC-235 DONE (baf99a7c; QE PASS S2: nps 1.26/1.28/1.20, A1 rows equal). Rows ABC-225/235 had sat inside the board's template comment; moved to their real columns. `qe-ABC-225` spawned ALONE (40 games, ~1 h). ABC-240 pulled to In Development; `se-ABC-240` spawns only when the games end (ALONE = no builds or tests alongside). Width 1/3._
 _Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g, …c2534968) — owner: continue overnight. Night plan: qe-ABC-235 → merge ABC-235 → qe-ABC-225 (40 games ALONE) → ABC-240 SE+QE; owner-gated ADR work held; nothing pushed. Width 1/3._
 _Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g) — ABC-235 SE done: cuts 1,3,5 kept, value-identical (A1 hash equal), nps ~1.16–1.28× indicative; code review PASS → In Review; `qe-ABC-235` spawned ALONE (timing reads). `qe-ABC-225` still held behind it. Width 1/3._
 _Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g) — arch-ABC-230-reading merged: ADR-0054 PROPOSED (prior keys; pre-root threefold needs two earlier occurrences; no TT/door change) → owner. Q3 ep options (a) keep (rec.), (b) ep-legal key (M, re-keys book), (c) normalise history only (S). Width 1/3._
@@ -1077,8 +1078,6 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
     ## In Review (WIP 2/3)
-- [ABC-235] Cost-per-node cuts 1 → 3 → 5, value-identical (size: M, priority: P2; design arch-ABC-235 …7fc1b90c/…eebca902: cuts 1,3,5 in; 6 split → ABC-240; 2,4 out; no ADR; S2, no smoke; **pulled 2026-10-29** → `se-ABC-235`; DoR 10/10; scope line on page (bapm-ABC-235-split): piece-list + non-capture-legality candidates struck; SE done 6327a3b4 (cuts 1,3,5 kept; A1 hash equal; nps tip/base 1.27/1.28/1.16 indicative); code review PASS; QE `qe-ABC-235` ALONE now)
-- [ABC-225] Interleaved R-pair command: the batch's instrument (re-scoped 2026-10-29) (size: M, priority: P2, DoR 10/10; tools only; Done before milestone 1's batch; not during an ALONE reading; **pulled 2026-10-29** → `se-ABC-225`, QE follows for A5/A6 ALONE; SE done 9988a778, code review PASS (…561f1ef1); QE `qe-ABC-225` HELD until host idle (A5 40 games ALONE ~1 h))
     - [ABC-012] Portfolio FX conversion  (PR: #41, QE: running)
 
   BOARD <-> TICKET CONTRACT: each ticket file (`plans/tickets/<prefix>-xxx.md`) carries a
@@ -1194,8 +1193,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 - [EPIC-006] Game session and packaging  (owner: BA/PM, **size: XL — corrected from `L`; 9 tickets / 20 points across both halves, ~1.5x the 13 `L` was assigned, and it hit that ceiling BEFORE distribution was priced**, priority: P1, since: 2026-07-22, **BOTH HALVES NOW CUT: the runnable half `ABC-041`…`ABC-046` (2026-08-13) and the second half `ABC-100`…`ABC-102` (2026-08-16) — only THREE tickets, because the scope of packaging is a FUNCTION of a distribution channel nobody has chosen.** `ABC-100` cuts the DECISION, never the ANSWER: a superseding ADR per `ADR-0007` `D5`, on the owner's word, verbatim and dated. **Acceptance criterion 1 (`npx <package>`) remains unmeetable by any ticket. Recommendation NOT taken, standing for the owner: this should probably be two epics** — the halves share no dependency in either direction and their blockers differ in kind)
 
-## Ready (WIP 1/8)
-- [ABC-240] Move ordering without per-move allocation, value-identical (cut 6, split from ABC-235) (size: S, priority: P3, DoR 10/10; S2, no smoke; A3 ≥ 1.03× nps on 2 boards, miss = not merged, dropped; pull after ABC-235 merges, before ABC-233/234; item 2 shares src/quiescence.ts with ABC-228/229)
+## Ready (WIP 0/8)
 
 
 
@@ -1211,7 +1209,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+- [ABC-240] Move ordering without per-move allocation, value-identical (cut 6, split from ABC-235) (size: S, priority: P3, DoR 10/10; S2, no smoke; A3 ≥ 1.03× nps on 2 boards, miss = not merged, dropped; **pulled 2026-10-30** (ABC-235 merged baf99a7c); `se-ABC-240` spawns after qe-ABC-225's games; before ABC-233/234; item 2 shares src/quiescence.ts with ABC-228/229)
 
 
 
@@ -1239,7 +1238,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-225] Interleaved R-pair command: the batch's instrument (re-scoped 2026-10-29) (size: M, priority: P2, DoR 10/10; tools only; Done before milestone 1's batch; not during an ALONE reading; **pulled 2026-10-29** → `se-ABC-225`, QE follows for A5/A6 ALONE; SE done 9988a778, code review PASS (…561f1ef1); QE `qe-ABC-225` spawned ALONE 2026-10-30 after ABC-235 merged (A5 40 games ~1 h))
 
 
 
@@ -1299,6 +1299,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+- [ABC-235] Cost-per-node cuts 1 → 3 → 5, value-identical — **DONE** 2026-10-30 (merged baf99a7c; qe-ABC-235 …c575d703 PASS, S2, no smoke): A1 6 021 rows base = tip; nps tip/base 1.262 / 1.284 / 1.200 (kiwipete / position-6 / start), every cut ≥ 1.06; G2 310 v 456 ns; G6 8 = 8, 10 = 10; npm test 2 139/2 139; deep 621/621. OD-235-1 INFO to owner, veto open
 - [ABC-227] Profile: where a node's time goes at 3 s — **DONE** 2026-10-29 (se-ABC-227 …7175ebdf): movegen 45–51 %, eval 27–33 %, ordering 5.5–6.6 %, make/unmake ~4 %, TT 1–2 %; ~2.7–4.0 kB allocated per node; six value-identical cuts named for ABC-235
 - [ABC-226] Records scan: repetitions the search could not see — **DONE** 2026-10-29 (sa-ABC-226 …cc53fc79): 4 199 games; 1 718 threefold draws, all first seen before the root; 461 from a won eval + 23 after avoiding one = 484 (R 26) → ABC-230 stays in milestone 1; 22 games show cutechess's ep-normalised key (info for EPIC-010 Q3)
 - [ABC-219] Named tournament level in the CLI — **RETIRED, closed unbuilt** 2026-10-29 (CLI parity out of scope; core moved into ABC-220) (bapm-amend-epic009)
