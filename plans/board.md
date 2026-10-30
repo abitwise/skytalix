@@ -1,3 +1,4 @@
+_Updated: 2026-10-30 09:20Z by Orchestrator (orch-2026-10-30a) — qe-ABC-228 FAIL, STOPPED at G6 (position-6 9 vs 10; QE-228-c HIGH; npm-exec ruled LOW). ABC-228 In Review → In Development for (ii) (owner word OQ-228-1 covers it): `se-ABC-228-ii` spawned ALONE (Scope 5: LEVELS[5] → 4 000 ms + rating.ts R literal; A9 ≤ 133 %; above that → owner). QE records stay on grugops/qe-ABC-228, not merged. Width 1/3._
 _Updated: 2026-10-30 07:50Z by Orchestrator (orch-2026-10-30a) — RESUMED (Reduced tier: Agent available, default main thread, allowlist by instruction). Host clear after reboot (no vitest/cutechess, Tctl 36.8 °C). `qe-ABC-228` re-spawned ALONE on the same brief from c654f540 under the sealed PREREG (npm test, deep lanes, G8, G6, G11, smokes left). ABC-241 / ABC-220 wait behind it; ABC-242 waits Architect; ABC-225 Blocked on owner. Width 1/3._
 _Updated: 2026-10-30 07:30Z by Orchestrator (orch-2026-10-29g, …af3d2536) — SESSION PAUSED by owner (connection closing). `qe-ABC-228` claimed and in flight, PAUSED CLEANLY at checkpoint c654f540 (…7f33f79e): Q-SET + identity + lint/typecheck/build/G9 done; on resume re-spawn QE on the same brief from c654f540 under the sealed PREREG (npm test, deep lanes, G8, G6, G11, smokes left). Next: ABC-228 merge or (ii), then ABC-229 / ABC-220 / ABC-241; ABC-242 waits Architect; ABC-225 Blocked on owner. Nothing pushed._
 _Updated: 2026-10-30 by Orchestrator (orch-2026-10-29g) — ABC-228 SE done: A8 forecast 64.7 % (kiwipete) / 98.3 % (position-6), so no (ii); code review PASS → In Review; `qe-ABC-228` spawned ALONE (graded G6 is tight on position-6; on a miss QE reports, Orchestrator routes (ii)). Width 1/3._
@@ -1091,7 +1092,8 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 0/3)
+    ## In Development (WIP 1/3)
+- [ABC-228] In check, quiescence searches every evasion; none means mate (size: M, priority: P2, DoR 9/10; waits owner accepts ADR-0053 + OQ-228-1 (G6 on position-6); build after ABC-235 merges (shares legalCaptures; → Ready 2026-10-30: ADR-0053 ACCEPTED; DoR 10/10; A8 G6 re-forecast first; "3s→4s" reading pending owner; (ii) folded: A9 re-forecast at 4 000 ms ≤ 133 %, conditional level 5 → 4 s + rating.ts R literal, G9 waived on LEVELS[5] only; **pulled 2026-10-30** → `se-ABC-228`, A8 re-forecast ALONE first; SE done d9c5bcde (code 9bd3c519): A8 forecast 64.7 % / 98.3 % ≤ 100 % → built as designed, (ii) NOT applied; A1 doors = base; A2/A3 rows; A4 1.368×/1.405×; drift 89.3 %; npm test 2 211; code review PASS; QE `qe-ABC-228` (Q-SET review, graded G6, smokes width 1) now; **qe-ABC-228 FAIL 2026-10-30 (a4c04eae): G6 NOT MET on position-6 (median depth 9 vs base 10; kiwipete 8/8); gates, deep lanes, G1/G5/G7/G8/G11 MET; smokes not read** → (ii) per OQ-228-1: `se-ABC-228-ii` (Scope 5, A9 at 4 000 ms ≤ 133 %, QE-228-b rows folded), then a new QE brief + PREREG)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
     ## In Review (WIP 2/3)
@@ -1254,8 +1256,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
-- [ABC-228] In check, quiescence searches every evasion; none means mate (size: M, priority: P2, DoR 9/10; waits owner accepts ADR-0053 + OQ-228-1 (G6 on position-6); build after ABC-235 merges (shares legalCaptures; → Ready 2026-10-30: ADR-0053 ACCEPTED; DoR 10/10; A8 G6 re-forecast first; "3s→4s" reading pending owner; (ii) folded: A9 re-forecast at 4 000 ms ≤ 133 %, conditional level 5 → 4 s + rating.ts R literal, G9 waived on LEVELS[5] only; **pulled 2026-10-30** → `se-ABC-228`, A8 re-forecast ALONE first; SE done d9c5bcde (code 9bd3c519): A8 forecast 64.7 % / 98.3 % ≤ 100 % → built as designed, (ii) NOT applied; A1 doors = base; A2/A3 rows; A4 1.368×/1.405×; drift 89.3 %; npm test 2 211; code review PASS; QE `qe-ABC-228` (Q-SET review, graded G6, smokes width 1) now)
+## In Review (WIP 0/3)
 
 
 
