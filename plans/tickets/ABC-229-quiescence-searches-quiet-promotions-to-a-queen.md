@@ -1,8 +1,8 @@
 ---
 id: ABC-229
 title: "Quiescence searches quiet promotions to a queen, bounded, behind an off-door"
-status: backlog
-column: Backlog
+status: ready
+column: Ready
 size: S
 priority: P2
 epic: EPIC-010
@@ -23,6 +23,34 @@ epic: EPIC-010
 > quiet promotions from the capture pass, appended, then the one stable `mvvLvaKey` sort, with their own door pair.
 > OQ-228-1 ("build it fully"; the "3s to 4s" clause pending the owner) binds `G6` for both tickets (decision 9). The
 > ADR is no longer the wait. **The wait is `ABC-228`'s merge.** DoR stays 9/10, and row 10 now names that merge.
+
+> **RE-SCORED 2026-10-30 by BA/PM** (task `bapm-ABC-229-rescore`, records only, at `main` `ee3c7694`; `src/`, `data/`
+> and `tools/` untouched). **The wait is met:** `ABC-228` merged at `e42b637b` under OQ-228-1 reading (ii)
+> (`qe-ABC-228-ii` `…e39d190c`). **Level 5 is 4 000 ms on `main`** (`LEVELS[5]` = `{ 4000, 0 }`, `DEFAULT_BUDGET_MS`
+> = 4 000, `ADR-0053` d10, `ADR-0045` FOLDED), and `ADR-0053` d6's doors can be built with evasions on. **DoR 9/10 →
+> 10/10, Ready.** What (ii) changes on this page (dated marks in place):
+>
+> - **`A3`, `A4` (`G5`, `G6`, `G9`):** both sides of `G6` run at 4 000 ms (each build's own `LEVELS[5]`, both
+>   4 000). `G5` reads level 5 at ≤ 4 s and the 5 s ceiling. `G9` reads against `main`'s (ii) values; this ticket has
+>   no waiver. **OQ-228-1's answer is spent:** (ii) is on `main`, and `ADR-0053` names no step past 4 000 ms. So a
+>   `G6` miss here is not pre-answered. The SE stops and reports, and the Orchestrator takes it to the owner, as
+>   `ABC-228` `A9`'s above-133 % stop did. The reference reads 1.019× / 1.000× nodes (`ADR-0053` d9), so a miss is
+>   not forecast.
+> - **`A5` (the reading):** R plays at 4 000 ms. `tools/rating/rating.ts` already passes `4000` on `main`
+>   (`ABC-228`), so this ticket makes no `tools/` change. S-4's bar (≥ 3.0 of 10) is absolute and does not move.
+>   **No pooled R score is reported:** the 3 000 ms pool closed at `e42b637b`, and until milestone 1's batch sets the
+>   4 000 ms reference, the R row is recorded at 4 000 ms, not pooled, and no flag is evaluable (`EPIC-010` § The smoke
+>   ledger). `G11` is reported at 4 s.
+> - **No 3 000 ms reference applies.** R(close) 64.75 % and the ≤ 44.75 % trend flag are never compared with this
+>   ticket's readings.
+> - **Test note 1 corrected:** `ABC-228`'s `Q-SET` freeze covered only its in-check and capture-mate rows (the SE's 12
+>   plus QE's 6 and `QE-C4`; `qe-ABC-228` `…06163ef3`). **No quiet-promotion row is frozen yet.** QE freezes ≥ 6
+>   before this build, of the kinds `ADR-0053` d9 lists.
+> - **The ADR rules where this page is shorter:** `ADR-0053` d5–d8 and d9's `ABC-229` rows bind as written. These
+>   are the one-pass spy row, the d5 drift bar (≥ 95 % within 25 cp, none beyond 12 cp), the re-pointed `ABC-228`
+>   oracle rows, and the door ladder.
+> - **Ordering, not a wait** (§ Dependencies): no production file is shared with `ABC-241`, `ABC-220` or `ABC-243`.
+>   `ABC-241` is value-changing, so if it merges first, this ticket's smokes are read on a `main` that carries it.
 
 ## Problem
 
@@ -50,18 +78,33 @@ epic: EPIC-010
   door scores the static eval.
 - **A3 (growth).** **Given** `kiwipete` and `position-6` at fixed depth 6, **then** nodes ≤ **1.2 ×** the door's
   (promotions are rare in middlegames; the bar is BA/PM's, tighter than `ABC-228`'s 1.5). Frozen-clock pre-check, then
-  `G6`.
+  `G6`. *(2026-10-30, `bapm-ABC-229-rescore`: `G6` runs both sides at 4 000 ms, each build's own `LEVELS[5]`.)*
 - **A4 (gates).** `G1`, `G5`, `G6` "≥ base" (floor 6; a miss is read under the owner's answer to OQ-228-1, as
-  `ADR-0053` decision 9 gates both tickets), `G8`, `G9`, `G10`.
+  `ADR-0053` decision 9 gates both tickets), `G8`, `G9`, `G10`. *(2026-10-30, `bapm-ABC-229-rescore`: OQ-228-1 was
+  answered (ii) and is built on `main`. `G5` reads level 5 at ≤ 4 s and the 5 s ceiling. `G6` reads head and base
+  both at 4 000 ms, and a miss is not pre-answered: the SE stops and reports, and it goes to the owner. `G9` reads
+  `main`'s values, `LEVELS[5]` = `{ 4000, 0 }` included, byte-identical, with no waiver.)*
 - **A5 (the reading).** The smoke pair of `EPIC-010` § The merge rule (owner Q4 = (e), extended, 2026-10-29), on the candidate head rebased on `main`, before the merge: S-1 0 faults, S-2 0 losses on time, S-3 D ≥ 3.0 of 10 (else ≥ 7.0 of 20), S-4 R ≥ 3.0 of 10 (else ≥ 7.0 of 20). Reported: each smoke's W/L/D and score, the ledger's pooled R score since the last batch, `G11`.
+  *(2026-10-30, `bapm-ABC-229-rescore`: R plays at 4 000 ms, the `rating.ts` literal `ABC-228` merged, with no
+  `tools/` change here. The 3 000 ms pool closed at `e42b637b`, so the R row is recorded at 4 000 ms and **not
+  pooled**: no pooled score and no flag until milestone 1's batch sets the 4 000 ms reference (`EPIC-010` § The smoke
+  ledger). `G11` is reported at 4 s.)*
 
 ## NFR triggers
 
 - **`NFR-005`:** `G6`; floor 6 does not move. **`NFR-008`:** fixed-depth rows only. **Security:** none.
+  *(2026-10-30, `bapm-ABC-229-rescore`: `NFR-005`'s referent is the default's 4 s from `ABC-228`'s merge. The
+  catalog text is Security/NFR's. `NFR-004` (via `G5`): the default's bar is ≤ 4 s, and the 5 s ceiling at levels 1–5
+  stays. `NFR-008`: `G8` read 9.61 s against 10 s at `ABC-228`'s gate, 0.39 s of headroom (`…e39d190c`), so new rows
+  stay fixed-depth and few.)*
 
 ## Test notes
 
-1. `Q-SET`'s promotion rows are frozen with `ABC-228`'s.
+1. ~~`Q-SET`'s promotion rows are frozen with `ABC-228`'s.~~ *(2026-10-30, `bapm-ABC-229-rescore`: they were not.
+   `ABC-228`'s freeze held its in-check and capture-mate rows only, `qe-ABC-228` `…06163ef3`.)* QE freezes ≥ 6
+   quiet-promotion rows before the build and commits them as a test fixture. They cover `ADR-0053` d9's six kinds:
+   Q3 (safe), a controlled square, a check-blocking promotion, an under-promotion-only win (stays unseen), a
+   capturing under-promotion (unchanged), and a KPK row.
 2. UAT is owed. The QE verdict signs it.
 
 ## Size and priority
@@ -74,7 +117,24 @@ epic: EPIC-010
 - **`ADR-0053` ACCEPTED by the owner, 2026-10-30** (decisions 5–8 are this ticket's).
 - **Owner:** Q4 answered 2026-10-29: (e), extended (`orch-2026-10-29g` `…278e149b`). `ABC-228` merged or closed first (shared `src/quiescence.ts`); its D base is its own merge-base.
   *(2026-10-30: if `ABC-228` closes unmerged, this ticket goes back to the Architect before it is pulled. `ADR-0053`
-  decision 6 defines its doors with evasions on.)*
+  decision 6 defines its doors with evasions on.)* **MET 2026-10-30:** `ABC-228` merged at `e42b637b`, so the
+  closed-unmerged branch is moot.
+- **Shared files and order** (2026-10-30, `bapm-ABC-229-rescore`). The predicted file set is `ABC-228`'s
+  analogue: `src/legal.ts`, `src/quiescence.ts`, `src/search.ts`, `src/engine.ts`, and the tests that carry the rules
+  record or the door lists. It is `UNKNOWN - verify` until the SE greps.
+  - **`ABC-241`** (In Review, value-changing): no production file is shared. Its § Out of scope fences
+    `src/legal.ts`, `src/search.ts`, `src/quiescence.ts` and `src/transposition.ts`. Its branch also edits
+    `src/engine.test.ts`, in another `describe` (the clock-seam pin at about `:907`; this ticket's door list sits at
+    about `:500`), so whichever merges second rebases. **Its merge moves the base:** smokes read before it merges go
+    stale (`EPIC-010` § The merge rule). Read this ticket's smokes on a `main` that carries `ABC-241`, or read them again.
+  - **`ABC-220`** (In Development): no shared file. Its scope is `src/uci-session.ts` and its test only. Its
+    `TimeMode` is off by default. Whether its merge stales a level-5 smoke is the Orchestrator's ruling, and none is
+    recorded here.
+  - **`ABC-243`** (Backlog, test-only: `src/uci-session.test.ts`, `src/transposition.test.ts`): no shared file
+    predicted. If a shipped-path value pin in `src/transposition.test.ts` moves here (`ADR-0053` d7's route;
+    `UNKNOWN - verify`), whichever merges second rebases.
+  - **The host:** this ticket's QE reads (`G6`, `G11`, the smokes) run ALONE, so they queue behind `qe-ABC-241`, which
+    is held behind `se-ABC-220`. The Orchestrator schedules them.
 
 ## Definition of Ready
 
@@ -84,12 +144,12 @@ epic: EPIC-010
 | 2 | scope and out-of-scope | ✅ queen only |
 | 3 | INVEST | ✅ own mechanism, own reading; S |
 | 4 | testable, measurable acceptance | ✅ every row measurable; A5 is the smoke pair (`EPIC-010` § The merge rule, S-1–S-4) |
-| 5 | dependencies known | ✅ `ADR-0053` (ACCEPTED 2026-10-30); `ABC-228` |
+| 5 | dependencies known | ✅ `ADR-0053` (ACCEPTED 2026-10-30); `ABC-228` merged `e42b637b` under (ii); shared files with `ABC-241`/`ABC-220`/`ABC-243` named (§ Dependencies) |
 | 6 | NFR triggers with targets | ✅ nodes ≤ 1.2 ×; floor 6 |
 | 7 | test notes | ✅ 2 |
 | 8 | size | ✅ S |
 | 9 | priority | ✅ P2 |
-| 10 | no major unresolved blocker | ❌ `ABC-228` merged (shared file; `ADR-0053` d6's doors assume evasions on) |
+| 10 | no major unresolved blocker | ✅ ~~`ABC-228` merged (shared file; `ADR-0053` d6's doors assume evasions on)~~ met 2026-10-30, `e42b637b`. None left. The `Q-SET` promotion freeze is QE's pre-build step (Test note 1). A `G6` miss at 4 000 ms is a named stop (`A4`) |
 
-**DoR 9/10 (re-scored 2026-10-30, `bapm-owner-adr-fold`). Backlog** until `ABC-228` merges, then 10/10 → Ready with
-no further BA/PM hop.
+**DoR 10/10 (re-scored 2026-10-30, `bapm-ABC-229-rescore`). Ready.** *(Was 9/10, `bapm-owner-adr-fold`, waiting on
+`ABC-228`'s merge.)* The board move `Backlog → Ready` is the Orchestrator's to make on the board.
