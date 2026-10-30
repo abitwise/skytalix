@@ -1,8 +1,8 @@
 ---
 id: ABC-241
 title: "A repetition against the game's earlier positions ignores an en-passant square no pawn can legally take, in the game-end count and in the search's prior keys; the hash does not change"
-status: backlog
-column: Backlog
+status: ready
+column: Ready
 size: S
 priority: P2
 epic: EPIC-010

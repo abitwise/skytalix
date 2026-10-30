@@ -1,8 +1,8 @@
 ---
 id: ABC-228
 title: "In check, quiescence searches every evasion instead of standing pat, and a side in check with no evasion is mated"
-status: ready
-column: Ready
+status: in-development
+column: In Development
 size: M
 priority: P2
 epic: EPIC-010

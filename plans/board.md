@@ -1,3 +1,4 @@
+_Updated: 2026-10-30 by Orchestrator (orch-2026-10-29g) — ABC-230 DONE (24f3e322; smokes D 5.5/10, R 8.0/10, all S met, Tctl ≤ 74 °C at width 1). ABC-241 → Ready 10/10. ABC-228 pulled → `se-ABC-228` ALONE (A8 G6 re-forecast first; on a miss A9 at 4 s ≤ 133 % and (ii)). QE-230-a (levels 1–4 repetition at child roots) is a follow-up for BA/PM. Width 1/3._
 _Updated: 2026-10-30 by Orchestrator (orch-2026-10-29g) — ABC-230 SE done, code review PASS → In Review; `qe-ABC-230` spawned ALONE: G5 real clock + A7 smokes (10 D + 10 R), R at --concurrency 1 by the Orchestrator's delivery call (width 2 tripped 85 °C, qe-ABC-225). Width 1/3._
 _Updated: 2026-10-30 by Orchestrator (orch-2026-10-29g) — bapm-q3c-oq228ii-fold merged: ABC-241 (Q3 (c)) cut to Backlog 9/10, waits ABC-230; ABC-228 carries (ii) incl. the rating.ts R literal on a miss. `se-ABC-230` running. Width 1/3._
 _Updated: 2026-10-30 by Orchestrator (orch-2026-10-29g) — arch-q3c-oq228ii merged: Q3 (c) ACCEPTED as ADR-0020 § AMENDMENT 2026-10-30 (repetition key drops an uncapturable ep file; helper in gameend.ts; uci-session gains a gameend.ts import, ADR-0044 D2 list +1, taken as part of (c)); ADR-0053 d10 records (ii): on a G6 miss at a ≤ 133 % bar, level 5 → 4 000 ms, R frame moves to 4 s. `bapm-q3c-oq228ii-fold` routed (cut Q3 (c) ticket; fold (ii) into ABC-228). Width 2/3._
@@ -1167,7 +1168,6 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Backlog (WIP unlimited)
 - [EPIC-010] skytalix closes its verified engine gaps; a change ships on an outside-opponent smoke (owner: BA/PM, size: L, priority: P2, since: 2026-10-29, accepted 2026-10-29 (Q5, no Elo target); Q4 = (e): 10 D + 10 R smoke per value-changing ticket + batched R pair per milestone; Q2 answered (~1700 non-goal removed; goal >= 2 700 aspirational); Q1, Q3 open (defaults))
 - [ABC-229] Quiescence searches quiet queen promotions (size: S, priority: P2, DoR 9/10; waits owner accepts ADR-0053; after ABC-228)
-- [ABC-241] A repetition against the game's earlier positions ignores an ep square no pawn can legally take (Q3 (c), ADR-0020 § AMENDMENT 2026-10-30) (size: S, priority: P2, DoR 9/10; milestone 1; value-changing → 10 D + 10 R smoke; waits ABC-230 merge, then Ready 10/10)
 - [ABC-231] King table tapered by phase, alone (size: S, priority: P3, DoR 9/10; milestone 2; waits ADR ruling)
 - [ABC-232] Passed pawns by phase (size: S, priority: P3, DoR 9/10; milestone 2; after ABC-231)
 - [ABC-233] History heuristic for quiet moves, cleared per search (size: M, priority: P3, DoR 9/10; milestone 2; waits ADR; after ABC-240 (shared orderMoves))
@@ -1203,7 +1203,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [EPIC-006] Game session and packaging  (owner: BA/PM, **size: XL — corrected from `L`; 9 tickets / 20 points across both halves, ~1.5x the 13 `L` was assigned, and it hit that ceiling BEFORE distribution was priced**, priority: P1, since: 2026-07-22, **BOTH HALVES NOW CUT: the runnable half `ABC-041`…`ABC-046` (2026-08-13) and the second half `ABC-100`…`ABC-102` (2026-08-16) — only THREE tickets, because the scope of packaging is a FUNCTION of a distribution channel nobody has chosen.** `ABC-100` cuts the DECISION, never the ANSWER: a superseding ADR per `ADR-0007` `D5`, on the owner's word, verbatim and dated. **Acceptance criterion 1 (`npx <package>`) remains unmeetable by any ticket. Recommendation NOT taken, standing for the owner: this should probably be two epics** — the halves share no dependency in either direction and their blockers differ in kind)
 
 ## Ready (WIP 2/8)
-- [ABC-228] In check, quiescence searches every evasion; none means mate (size: M, priority: P2, DoR 9/10; waits owner accepts ADR-0053 + OQ-228-1 (G6 on position-6); build after ABC-235 merges (shares legalCaptures; → Ready 2026-10-30: ADR-0053 ACCEPTED; DoR 10/10; A8 G6 re-forecast first; "3s→4s" reading pending owner; (ii) folded: A9 re-forecast at 4 000 ms ≤ 133 %, conditional level 5 → 4 s + rating.ts R literal, G9 waived on LEVELS[5] only)
+- [ABC-241] A repetition against the game's earlier positions ignores an ep square no pawn can legally take (Q3 (c), ADR-0020 § AMENDMENT 2026-10-30) (size: S, priority: P2, DoR 10/10 (ABC-230 merged 24f3e322); milestone 1; value-changing → 10 D + 10 R smoke; after ABC-228)
 - [ABC-220] simple-tournament over UCI (TimeMode): T 22.0 s, min(T, C) with a clock, 22.5 s ceiling (size: M, priority: P2, DoR 9/10; waits owner accepts ADR-0052 (OQ-0052-1; → Ready 2026-10-30: ADR-0052 ACCEPTED (22 s / 22 s); DoR 10/10; shares uci-session.ts with ABC-230, builds after it)
 
 
@@ -1220,7 +1220,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+- [ABC-228] In check, quiescence searches every evasion; none means mate (size: M, priority: P2, DoR 9/10; waits owner accepts ADR-0053 + OQ-228-1 (G6 on position-6); build after ABC-235 merges (shares legalCaptures; → Ready 2026-10-30: ADR-0053 ACCEPTED; DoR 10/10; A8 G6 re-forecast first; "3s→4s" reading pending owner; (ii) folded: A9 re-forecast at 4 000 ms ≤ 133 %, conditional level 5 → 4 s + rating.ts R literal, G9 waived on LEVELS[5] only; **pulled 2026-10-30** → `se-ABC-228`, A8 re-forecast ALONE first)
 
 
 
@@ -1248,8 +1249,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
-- [ABC-230] The game's earlier positions reach the search, CLI and UCI (size: M, priority: P2, DoR 9/10; ADR-0054 PROPOSED folded (44e71960, bapm …644cf2af): priorKeys, pre-root needs two, A8/A9 probe rows; waits ONLY owner accept of ADR-0054, then Ready 10/10; value-changing → 10 D + 10 R smoke (A7; → Ready 2026-10-30: ADR-0054 ACCEPTED; DoR 10/10; **pulled 2026-10-30** → `se-ABC-230`; SE done dad753dc (code 2fbcb380): identity with no/empty keys and clock 0 node-equal to base; A1–A6, A8, A9 rows; npm test 2 178; code review PASS (repeatsBeforeRoot parity and window checked; levels.ts createLevel changed as the ADR names, LEVELS lines unchanged); QE `qe-ABC-230` (A7 smokes at width 1) now)
+## In Review (WIP 0/3)
 
 
 
@@ -1309,6 +1309,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+- [ABC-230] The game's earlier positions reach the search, CLI and UCI — **DONE** 2026-10-30 (merged 24f3e322; qe-ABC-230 …ba5a249a PASS_WITH_GAPS): identity with no keys / clock 0 = base; smokes ALONE width 1: D 5.5/10 (4/3/3), R 8.0/10 (8/2/0), 0 faults, 0 time losses; Tctl median ≤ 73.75 °C. Gap QE-230-a (MEDIUM): levels 1–4 blunder path does not score the third-occurrence move as a draw (child roots unchecked) → follow-up
 - [ABC-240] Move ordering without per-move allocation, value-identical (cut 6) — **DONE** 2026-10-30 (merged 5311f5bd; qe-ABC-240 …19068f9d PASS, S2, no smoke): A1 6 021 rows base = tip; nps tip/base 1.122 / 1.109 / 1.089; G6 8 = 8, 10 = 10; npm test 2 148/2 148; deep 743/743. Item 2's gain exceeds the Architect's bound, cause unmeasured (QE-240-a, LOW)
 - [ABC-235] Cost-per-node cuts 1 → 3 → 5, value-identical — **DONE** 2026-10-30 (merged baf99a7c; qe-ABC-235 …c575d703 PASS, S2, no smoke): A1 6 021 rows base = tip; nps tip/base 1.262 / 1.284 / 1.200 (kiwipete / position-6 / start), every cut ≥ 1.06; G2 310 v 456 ns; G6 8 = 8, 10 = 10; npm test 2 139/2 139; deep 621/621. OD-235-1 INFO to owner, veto open
 - [ABC-227] Profile: where a node's time goes at 3 s — **DONE** 2026-10-29 (se-ABC-227 …7175ebdf): movegen 45–51 %, eval 27–33 %, ordering 5.5–6.6 %, make/unmake ~4 %, TT 1–2 %; ~2.7–4.0 kB allocated per node; six value-identical cuts named for ABC-235
