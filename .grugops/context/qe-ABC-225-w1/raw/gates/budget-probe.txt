@@ -1,0 +1,5 @@
+r budget=1000: st=4 timemargin=1000 st=0.5 timemargin=2000
+r budget=3000: st=4 timemargin=1000 st=0.5 timemargin=2000
+r budget=4000: st=4 timemargin=1000 st=0.5 timemargin=2000
+r budget=9999: st=4 timemargin=1000 st=0.5 timemargin=2000
+d budget=1500: st=1.5 timemargin=3500 st=1.5 timemargin=3500

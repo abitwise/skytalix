@@ -1,0 +1,63 @@
+== nps.log
+   block 01 base stockfish_nps_median=1635048 moves_ge_400ms=862
+   block 01 candidate stockfish_nps_median=1753018 moves_ge_400ms=962
+  2 lines, numeric, moves>0: True tags: ['block 01 base', 'block 01 candidate']
+== schedule.log
+   2026-10-30T20:38:07Z start block 01 base
+   2026-10-30T21:30:42Z end block 01 base
+   2026-10-30T21:30:43Z start block 01 candidate
+   2026-10-30T22:28:52Z end block 01 candidate
+  block 01 base: 20:38:07 -> 21:30:42 = 52.6 min
+  block 01 candidate: 21:30:43 -> 22:28:52 = 58.1 min
+  play wall 2026-10-30T20:38:07Z -> 2026-10-30T22:28:52Z = 6645 s = 1.846 h; inter-block gaps [1.0] s
+== host.log
+   2026-10-30T20:38:03Z before load1=0.18 thermal=? power=? foreign_vitest_procs=0
+  build time (host before -> first start): 4 s
+== thermal.log
+  lines 666, numeric tctl on all: True; samples in schedule span 666 (need >= 664); max gap 11 s, min gap 2 s
+  tctl median 74.10 max 78.8 min 58.1; busy_mhz median 5034 min 2340; load1 median 1.08 max 1.75
+== blocks
+  base: Score of skytalix vs stockfish: 10-7-3 [0.575] 20; printed Elo 52.5 +/- 151.0; QE formula 52.5 +/- 151.0; equal: True
+    raw: stockfish bestmove lines 912, info-with-nps lines 29618
+    finished games 20; reasons {'Draw by 3-fold repetition': 3, 'White mates': 10, 'Black mates': 7}
+    PGN games 20; rounds 1-10 on EPD lines 1-10, skytalix once per colour: True
+    block summary.txt:
+      Elo difference: 52.5 +/- 151.0, LOS: 76.7 %, DrawRatio: 15.0 %
+      W/L/D: 10/7/3  score: 0.575  games: 20 of 20
+      draw ratio: 15.0 %
+      faults: 0  unclassified: 0  move-cap draws: 0
+      skytalix.stderr: 0 bytes
+      stockfish.stderr: 0 bytes
+      stockfish depth guard: 0 of 912 moves below depth 4
+      state: rating E + X ± Y = 1910 + 52.5 ± 151.0 = 1962.5 ± 151.0
+  candidate: Score of skytalix vs stockfish: 9-10-1 [0.475] 20; printed Elo -17.4 +/- 158.6; QE formula -17.4 +/- 158.6; equal: True
+    raw: stockfish bestmove lines 1009, info-with-nps lines 33683
+    finished games 20; reasons {'White mates': 11, 'Black mates': 8, 'Draw by 3-fold repetition': 1}
+    PGN games 20; rounds 1-10 on EPD lines 1-10, skytalix once per colour: True
+    block summary.txt:
+      Elo difference: -17.4 +/- 158.6, LOS: 40.9 %, DrawRatio: 5.0 %
+      W/L/D: 9/10/1  score: 0.475  games: 20 of 20
+      draw ratio: 5.0 %
+      faults: 0  unclassified: 0  move-cap draws: 0
+      skytalix.stderr: 0 bytes
+      stockfish.stderr: 0 bytes
+      stockfish depth guard: 0 of 1009 moves below depth 4
+      state: rating E + X ± Y = 1910 + -17.4 ± 158.6 = 1892.6 ± 158.6
+== summary.txt
+base: Elo difference: 52.5 +/- 151.0 (cutechess-cli 1.5.1's formula on 1 blocks' pooled score)
+  W/L/D: 10/7/3  score: 0.575  games: 20 of 20
+  draw ratio: 15.0 %
+  state: rating E + X ± Y = 1910 + 52.5 ± 151.0 = 1962.5 ± 151.0
+candidate: Elo difference: -17.4 +/- 158.6 (cutechess-cli 1.5.1's formula on 1 blocks' pooled score)
+  W/L/D: 9/10/1  score: 0.475  games: 20 of 20
+  draw ratio: 5.0 %
+  state: rating E + X ± Y = 1910 + -17.4 ± 158.6 = 1892.6 ± 158.6
+pair: candidate − base = -17.4 − 52.5 ± √(151.0² + 158.6²) = -69.9 ± 219.0
+pair state: NEUTRAL
+opening-paired (pentanomial), information only: -69.9 ± 214.0 (95 %, 10 openings, r = 0.184)
+
+  summary has both builds, pair, pair state, pentanomial: True | halted line: False
+== A6
+  play wall 110.8 min (1.846 h); games/hour 21.67; per game 2.77 min
+  projection 400 games width 1 = play wall x 10 + build 4 s = 18.46 h (ticket est. 22-24 h)
+A5 misses: none

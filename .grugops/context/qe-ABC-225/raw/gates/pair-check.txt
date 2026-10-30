@@ -1,0 +1,40 @@
+▶ A1: rpair reads each build with r's argv, but for openings start/count and output paths
+  ✔ the dry run exits 0 and writes nothing (0.354011ms)
+  ✔ every block of both builds differs from r's argv only where A1 allows (1789.536928ms)
+  ✔ the pins are r's: Stockfish at E 1910, skytalix at 3 s, width 2, both colours (0.534218ms)
+✔ A1: rpair reads each build with r's argv, but for openings start/count and output paths (1791.204744ms)
+▶ A2: the schedule
+  ✔ 10 blocks per build, 10 openings each, alternating order (0.342019ms)
+  ✔ openings 1–100 exactly once per build (0.239327ms)
+  ✔ the dry run prints that schedule and runs each block for each build once (128.68177ms)
+  ✔ --rounds 10 is the A5 smoke: one block per build, 40 games (0.197589ms)
+  ✔ bad values stop before any work, naming the argument (682.785086ms)
+✔ A2: the schedule (812.873203ms)
+▶ A3: the arithmetic on qe-epic008-close r1 and r2
+  ✔ the pooling formula gives cutechess-cli's own recorded lines (22.537741ms)
+  ✔ the pair difference reads −82.9 ± 73.8 (22.549323ms)
+  ✔ the pentanomial reads −82.9 ± 64.3 (0.558534ms)
+  ✔ split into 10 blocks, the pair summary pools to the same figures (1.941767ms)
+  ✔ Stockfish's median nps per reading matches arch-epic008-rd's an3 (257.885535ms)
+  ✔ the recorded games cover openings 1–100 with both colours (0.521254ms)
+✔ A3: the arithmetic on qe-epic008-close r1 and r2 (306.397296ms)
+▶ A4: one faulted block makes its build and the pair UNRESOLVED
+  ✔ clean fixture blocks read a rating, not UNRESOLVED (2.008903ms)
+  ✔ illegal move (0.94251ms)
+  ✔ disconnect (0.747126ms)
+  ✔ stall (0.782111ms)
+  ✔ time forfeit (0.96336ms)
+  ✔ watchdog stall (0.596825ms)
+  ✔ a block never played (the run halted) is UNRESOLVED too (0.382725ms)
+✔ A4: one faulted block makes its build and the pair UNRESOLVED (6.705286ms)
+▶ ADR-0049 d4: records carry placeholders, not host paths
+  ✔ paths longest first, then user and host as whole words (0.241141ms)
+✔ ADR-0049 d4: records carry placeholders, not host paths (0.301043ms)
+ℹ tests 22
+ℹ suites 5
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3308.083632

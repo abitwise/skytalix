@@ -1,0 +1,373 @@
+/**
+ * `ABC-225` — the offline checks of `rating.ts rpair` (A1–A4). Not a lane file (`NFR-008`): its
+ * name is not `*.test.*`, so `npm test` never collects it, and nothing in the lane imports it.
+ *
+ *   node --test tools/rating/pair-check.ts
+ *
+ * No engine and no `cutechess-cli` is started: A1 and A2 read `--dry-run` prints, A3 reads the
+ * committed `qe-epic008-close` r1/r2 records, and A4 writes fixture blocks to a temp directory.
+ */
+import assert from "node:assert/strict";
+import { execFileSync, spawnSync } from "node:child_process";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { homedir, tmpdir } from "node:os";
+import { join } from "node:path";
+import { after, describe, test } from "node:test";
+import { fileURLToPath } from "node:url";
+import { gunzipSync } from "node:zlib";
+import {
+  type Block,
+  coverageCauses,
+  cutechessElo,
+  eloText,
+  openingScores,
+  pairDifference,
+  pairSchedule,
+  pentanomialPair,
+  pgnGames,
+  redact,
+  stockfishNps,
+} from "./pair.ts";
+
+const HERE = fileURLToPath(new URL(".", import.meta.url));
+const REPO = fileURLToPath(new URL("../..", import.meta.url));
+const RATING = join(HERE, "rating.ts");
+const RECORDS = join(REPO, ".grugops/context/qe-epic008-close/raw");
+const EPD = readFileSync(join(HERE, "openings.epd"), "utf8").split("\n");
+const SCRATCH = mkdtempSync(join(tmpdir(), "abc225-check-"));
+after(() => rmSync(SCRATCH, { recursive: true, force: true }));
+
+// The harness reads both tool paths at load; any readable file will do when nothing is started.
+process.env.CUTECHESS_CLI = RATING;
+process.env.STOCKFISH = RATING;
+const rating = await import("./rating.ts");
+
+const git = (...args: string[]): string =>
+  execFileSync("git", args, { cwd: REPO, encoding: "utf8" }).trim();
+const harness = (...args: string[]) =>
+  spawnSync(process.execPath, [RATING, ...args], { cwd: REPO, encoding: "utf8", env: process.env });
+
+/** The argv lines of a dry-run print, one list per `cutechess-cli argv:` header. */
+function argvBlocks(text: string): { header: string; argv: string[] }[] {
+  const found: { header: string; argv: string[] }[] = [];
+  for (const line of text.split("\n")) {
+    if (line.endsWith("cutechess-cli argv:")) found.push({ header: line, argv: [] });
+    else if (line.startsWith("  ") && found.length > 0) found.at(-1)?.argv.push(line.slice(2));
+  }
+  return found;
+}
+
+describe("A1: rpair reads each build with r's argv, but for openings start/count and output paths", () => {
+  const base = git("rev-parse", "--short=12", "HEAD~1");
+  const candidate = git("rev-parse", "--short=12", "HEAD");
+  const out = join(SCRATCH, "a1");
+  const pair = harness("rpair", base, candidate, out, "--dry-run");
+
+  test("the dry run exits 0 and writes nothing", () => {
+    assert.equal(pair.status, 0, pair.stderr);
+    assert.equal(existsSync(out), false);
+  });
+
+  test("every block of both builds differs from r's argv only where A1 allows", () => {
+    const blocks = argvBlocks(pair.stdout);
+    assert.equal(blocks.length, 20);
+    for (const { header, argv } of blocks) {
+      const [, index, build] = /^block (\d\d) (base|candidate) /.exec(header) ?? [];
+      const sha = build === "base" ? base : candidate;
+      const r = harness("r", sha, join(out, build as string), "--elo", "1910", "--dry-run");
+      assert.equal(r.status, 0, r.stderr);
+      const rArgv = argvBlocks(r.stdout)[0]?.argv ?? [];
+      const start = (Number(index) - 1) * 10 + 1;
+      // The one added token: `start=S` inside `-openings`, right after `order=sequential`.
+      const at = argv.indexOf(`start=${start}`);
+      assert.equal(argv[at - 1], "order=sequential");
+      const same = [...argv.slice(0, at), ...argv.slice(at + 1)];
+      assert.equal(same.length, rArgv.length);
+      const differ = same.flatMap((a, i) => (a === rArgv[i] ? [] : [[rArgv[i], a]]));
+      // The print shows a path under the home directory as `<home>/…`.
+      const shown = (p: string): string =>
+        p.startsWith(homedir()) ? `<home>${p.slice(homedir().length)}` : p;
+      const files = shown(join(out, build as string));
+      const block = `${files}/b${index}`;
+      assert.deepEqual(differ, [
+        [`stderr=${files}/skytalix.stderr`, `stderr=${block}/skytalix.stderr`],
+        [`stderr=${files}/stockfish.stderr`, `stderr=${block}/stockfish.stderr`],
+        ["100", "10"],
+        [`${files}/r.pgn`, `${block}/r.pgn`],
+      ]);
+    }
+  });
+
+  test("the pins are r's: Stockfish at E 1910, skytalix at 4 s, width 2, both colours", () => {
+    const argv = argvBlocks(pair.stdout)[0]?.argv.join(" ") ?? "";
+    for (const pin of [
+      "option.UCI_Elo=1910",
+      "option.UCI_LimitStrength=true",
+      "st=4 timemargin=1000",
+      "st=0.5 timemargin=2000",
+      "-repeat -games 2",
+      "-concurrency 2",
+      "format=epd order=sequential start=1 -repeat",
+    ])
+      assert.ok(argv.includes(pin), pin);
+  });
+});
+
+describe("A2: the schedule", () => {
+  const blocks = pairSchedule(100);
+
+  test("10 blocks per build, 10 openings each, alternating order", () => {
+    assert.equal(blocks.length, 10);
+    blocks.forEach((b: Block, i) => {
+      assert.equal(b.rounds, 10);
+      assert.deepEqual(b.order, i % 2 === 0 ? ["base", "candidate"] : ["candidate", "base"]);
+    });
+  });
+
+  test("openings 1–100 exactly once per build", () => {
+    const covered = blocks.flatMap((b) => Array.from({ length: b.rounds }, (_, k) => b.start + k));
+    assert.deepEqual(
+      covered,
+      Array.from({ length: 100 }, (_, k) => k + 1),
+    );
+  });
+
+  test("the dry run prints that schedule and runs each block for each build once", () => {
+    const out = join(SCRATCH, "a2");
+    const sha = git("rev-parse", "--short", "HEAD");
+    const run = harness("rpair", sha, sha, out, "--dry-run");
+    assert.equal(run.status, 0, run.stderr);
+    const lines = run.stdout.split("\n").filter((l) => /^block \d\d openings/.test(l));
+    assert.equal(lines.length, 10);
+    assert.equal(lines[0], "block 01 openings 1-10: base, then candidate");
+    assert.equal(lines[1], "block 02 openings 11-20: candidate, then base");
+    assert.equal(lines[9], "block 10 openings 91-100: candidate, then base");
+    const headers = argvBlocks(run.stdout).map((b) => b.header.slice(0, 18));
+    assert.deepEqual(headers.slice(0, 4), [
+      "block 01 base cute",
+      "block 01 candidate",
+      "block 02 candidate",
+      "block 02 base cute",
+    ]);
+  });
+
+  test("--rounds 10 is the A5 smoke: one block per build, 40 games", () => {
+    assert.equal(pairSchedule(10).length, 1);
+  });
+
+  test("bad values stop before any work, naming the argument", () => {
+    const sha = git("rev-parse", "--short", "HEAD");
+    const cases: [string[], RegExp][] = [
+      [["rpair", "HEAD", sha], /HEAD: not a sha/],
+      [["rpair", sha, "ABCDEF0"], /ABCDEF0: not a sha/],
+      [["rpair", sha, "abc;true"], /abc;true: not a sha/],
+      [["rpair", sha, sha, "--rounds", "15"], /--rounds 15: not 10–100 in tens/],
+      [["rpair", sha, sha, "--rounds", "110"], /--rounds 110/],
+      [["rpair", sha, sha, "--concurrency", "9"], /--concurrency 9/],
+      [["rpair", sha, sha, "--elo", "1000"], /--elo 1000/],
+    ];
+    for (const [args, message] of cases) {
+      const out = join(SCRATCH, "bad");
+      const [mode, a, b, ...flags] = args as [string, string, string, ...string[]];
+      const run = harness(mode, a, b, out, ...flags);
+      assert.equal(run.status, 1, args.join(" "));
+      assert.match(run.stderr, message);
+      assert.equal(existsSync(out), false);
+    }
+    assert.equal(harness("rpair", sha, sha, join(SCRATCH, "x"), "--budget-ms", "1500").status, 1);
+  });
+});
+
+describe("A3: the arithmetic on qe-epic008-close r1 and r2", () => {
+  const outText = (r: string): string =>
+    gunzipSync(readFileSync(join(RECORDS, r, "r.out.gz"))).toString("utf8");
+  const [out1, out2] = [outText("r1"), outText("r2")];
+  const pgn1 = pgnGames(readFileSync(join(RECORDS, "r1/r.pgn"), "utf8"));
+  const pgn2 = pgnGames(readFileSync(join(RECORDS, "r2/r.pgn"), "utf8"));
+  const eloLine = (text: string) => {
+    const m = [...text.matchAll(/^Elo difference: (\S+) \+\/- (\S+),/gm)].at(-1);
+    return { x: m?.[1] as string, y: m?.[2] as string };
+  };
+
+  test("the pooling formula gives cutechess-cli's own recorded lines", () => {
+    const cases: [number, number, number, string, string][] = [
+      [146, 47, 7, "188.5", "54.8"], // qe-epic008-close r1
+      [125, 66, 9, "105.6", "49.5"], // qe-epic008-close r2
+      [31, 16, 53, "52.5", "46.8"], // qe-epic008-q4c d
+      [132, 50, 18, "151.3", "50.3"], // ABC-204 A4 baseline
+    ];
+    for (const [w, l, d, x, y] of cases) {
+      const e = cutechessElo(w, l, d);
+      assert.deepEqual([eloText(e.x), eloText(e.y)], [x, y]);
+    }
+    assert.deepEqual(eloLine(out1), { x: "188.5", y: "54.8" });
+    assert.deepEqual(eloLine(out2), { x: "105.6", y: "49.5" });
+  });
+
+  test("the pair difference reads −82.9 ± 73.8", () => {
+    const p = pairDifference(eloLine(out1), eloLine(out2));
+    assert.equal(p.x.toFixed(1), "-82.9");
+    assert.equal(p.y.toFixed(1), "73.8");
+  });
+
+  test("the pentanomial reads −82.9 ± 64.3", () => {
+    const p = pentanomialPair(
+      openingScores(pgn1, 1, "skytalix"),
+      openingScores(pgn2, 1, "skytalix"),
+    );
+    assert.ok(p !== undefined);
+    assert.ok(Math.abs(p.x - -82.9) <= 0.1, String(p.x));
+    assert.ok(Math.abs(p.half - 64.3) <= 0.1, String(p.half));
+    assert.equal(p.openings, 100);
+  });
+
+  test("split into 10 blocks, the pair summary pools to the same figures", () => {
+    const blocks = pairSchedule(100);
+    const asBlocks = (games: ReturnType<typeof pgnGames>) =>
+      blocks.map((block) => {
+        const mine = games
+          .filter((g) => g.round >= block.start && g.round < block.start + block.rounds)
+          .map((g) => ({ ...g, round: g.round - block.start + 1 }));
+        const wld = [1, 0, 0.5].map(
+          (s) =>
+            mine.filter(
+              (g) =>
+                (g.result === "1/2-1/2"
+                  ? 0.5
+                  : (g.result === "1-0") === (g.white === "skytalix")
+                    ? 1
+                    : 0) === s,
+            ).length,
+        ) as [number, number, number];
+        const own = cutechessElo(...wld);
+        return {
+          block,
+          games: mine,
+          judged: { text: "", causes: [], wld, elo: { x: eloText(own.x), y: eloText(own.y) } },
+        };
+      });
+    const base = rating.readBuild("base", blocks, asBlocks(pgn1), 1910, EPD);
+    const candidate = rating.readBuild("candidate", blocks, asBlocks(pgn2), 1910, EPD);
+    assert.deepEqual(base.causes, []);
+    assert.deepEqual(base.elo, { x: "188.5", y: "54.8" });
+    const text = rating.pairSummary(base, candidate, undefined);
+    assert.match(text, /^pair: .* = -82\.9 ± 73\.8$/m);
+    assert.match(text, /^pair state: LOSS$/m);
+    assert.match(
+      text,
+      /^opening-paired \(pentanomial\), information only: -82\.9 ± 64\.3 \(95 %, 100 openings/m,
+    );
+  });
+
+  test("Stockfish's median nps per reading matches arch-epic008-rd's an3", () => {
+    assert.deepEqual(stockfishNps(out1)?.median, 1_643_068);
+    assert.deepEqual(stockfishNps(out2)?.median, 1_623_258);
+  });
+
+  test("the recorded games cover openings 1–100 with both colours", () => {
+    assert.deepEqual(coverageCauses(pgn1, 1, 100, EPD, "skytalix"), []);
+  });
+});
+
+describe("A4: one faulted block makes its build and the pair UNRESOLVED", () => {
+  const blocks = pairSchedule(20);
+  /** A 10-opening block on disk: 12 wins, 6 losses, 2 draws, game `faultAt` ending in `fault`. */
+  function blockDir(name: string, start: number, fault?: string): string {
+    const dir = join(SCRATCH, "a4", name);
+    mkdirSync(dir, { recursive: true });
+    const finished: string[] = [];
+    const pgn: string[] = [];
+    for (let g = 1; g <= 20; g++) {
+      const round = Math.ceil(g / 2);
+      const skyWhite = g % 2 === 1;
+      const kind = g <= 12 ? "win" : g <= 18 ? "loss" : "draw";
+      const whiteWins = (kind === "win") === skyWhite;
+      const result = kind === "draw" ? "1/2-1/2" : whiteWins ? "1-0" : "0-1";
+      let text =
+        kind === "draw" ? "Draw by 3-fold repetition" : whiteWins ? "White mates" : "Black mates";
+      if (fault !== undefined && g === 5) text = fault;
+      const [white, black] = skyWhite ? ["skytalix", "stockfish"] : ["stockfish", "skytalix"];
+      finished.push(`Finished game ${g} (${white} vs ${black}): ${result} {${text}}`);
+      const fen = `${EPD[start + round - 2]} 0 1`;
+      pgn.push(
+        `[Event "?"]\n[Round "${round}"]\n[White "${white}"]\n[Black "${black}"]\n[Result "${result}"]\n[FEN "${fen}"]\n\n1. a3 {+0.10/20 0.50s} a6 {-0.10/20 0.50s} ${result}\n`,
+      );
+    }
+    const e = cutechessElo(12, 6, 2);
+    writeFileSync(
+      join(dir, "r.out"),
+      `${finished.join("\n")}\nScore of skytalix vs stockfish: 12 - 6 - 2  [0.650] 20\nElo difference: ${eloText(e.x)} +/- ${eloText(e.y)}, LOS: 99.1 %, DrawRatio: 10.0 %\n`,
+    );
+    writeFileSync(join(dir, "r.pgn"), pgn.join("\n"));
+    writeFileSync(join(dir, "skytalix.stderr"), "");
+    writeFileSync(join(dir, "stockfish.stderr"), "");
+    return dir;
+  }
+  const play = (dir: string, block: Block, stop?: string) => ({
+    block,
+    judged: rating.summarise({ mode: "r", out: dir, games: 20, elo: 1910 }, stop, [
+      "skytalix.stderr",
+      "stockfish.stderr",
+    ]),
+    games: pgnGames(readFileSync(join(dir, "r.pgn"), "utf8")),
+  });
+  const clean = (name: string) => [
+    play(blockDir(`${name}-1`, 1), blocks[0] as Block),
+    play(blockDir(`${name}-2`, 11), blocks[1] as Block),
+  ];
+
+  test("clean fixture blocks read a rating, not UNRESOLVED", () => {
+    const b = rating.readBuild("base", blocks, clean("clean"), 1910, EPD);
+    assert.deepEqual(b.causes, []);
+    assert.match(b.lines.join("\n"), /state: rating E \+ X ± Y = 1910 \+ /);
+  });
+
+  const faults: [string, string | undefined, string | undefined][] = [
+    ["illegal move", "Black makes an illegal move: e7e1", undefined],
+    ["disconnect", "White disconnects", undefined],
+    ["stall", "Black's connection stalls", undefined],
+    ["time forfeit", "White loses on time", undefined],
+    ["watchdog stall", undefined, "watchdog stop: no output for 600 s"],
+  ];
+  for (const [label, text, stop] of faults) {
+    test(label, () => {
+      const base = rating.readBuild("base", blocks, clean(label), 1910, EPD);
+      const dir = blockDir(`${label}-bad`, 11, text);
+      const candidate = rating.readBuild(
+        "candidate",
+        blocks,
+        [play(blockDir(`${label}-ok`, 1), blocks[0] as Block), play(dir, blocks[1] as Block, stop)],
+        1910,
+        EPD,
+      );
+      assert.ok(candidate.causes.length > 0);
+      assert.match(candidate.lines.join("\n"), /state: UNRESOLVED/);
+      assert.deepEqual(base.causes, []);
+      const summary = rating.pairSummary(base, candidate, `after block 02 candidate`);
+      assert.match(summary, /^pair state: UNRESOLVED/m);
+    });
+  }
+
+  test("a block never played (the run halted) is UNRESOLVED too", () => {
+    const b = rating.readBuild("base", blocks, clean("halted").slice(0, 1), 1910, EPD);
+    assert.ok(b.causes.includes("blocks: 1 of 2 played"));
+  });
+});
+
+describe("ADR-0049 d4: records carry placeholders, not host paths", () => {
+  test("paths longest first, then user and host as whole words", () => {
+    const text = "/home/u1x/work/out/b01/r.pgn by u1x on box1 (Bu1x stays)";
+    const red = redact(
+      text,
+      [
+        ["/home/u1x", "<home>"],
+        ["/home/u1x/work/out", "<out>"],
+      ],
+      [
+        ["u1x", "<user>"],
+        ["box1", "<host>"],
+      ],
+    );
+    assert.equal(red, "<out>/b01/r.pgn by <user> on <host> (Bu1x stays)");
+  });
+});

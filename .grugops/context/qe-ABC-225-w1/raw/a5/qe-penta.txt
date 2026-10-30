@@ -1,0 +1,2 @@
+pentanomial: n=10 s_base=0.575 s_cand=0.475 diff=-69.9 +/- 214.0 r=0.184
+pair: -69.9 +/- 219.0

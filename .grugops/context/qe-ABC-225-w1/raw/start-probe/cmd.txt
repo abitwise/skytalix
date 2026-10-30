@@ -1,0 +1,1 @@
+cutechess-cli (pin dc776901...f40a) -engine name=sfA cmd=<stockfish> -engine name=sfB cmd=<stockfish> -each proto=uci st=0.05 timemargin=200 option.Threads=1 option.Hash=16 -openings file=<repo>/tools/rating/openings.epd format=epd order=sequential start=51 -repeat -games 2 -rounds 2 -maxmoves 4 -concurrency 1 -pgnout <scratch>/probe/probe.pgn

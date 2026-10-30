@@ -68,6 +68,18 @@ epic: EPIC-010
 > **Cut 2026-10-29 by BA/PM** (task `bapm-epic010-improvements`, records only, at `main` `f45aea95`). § B item 2,
 > after the Architect's `arch-epic008-rd` (`…0c5d62f4`, `…9d172446`). Waited on Q4 (b) or (c) until the re-scope above.
 
+> **Result 2026-10-29 by SE** (task `se-ABC-225`, branch `grugops/ABC-225`, code `83751dc0`; notes
+> `20261029T210343Z-software-engineer-decision-e58c4d25`, `…-observation-868049fb`, `…-observation-14fdbedc`).
+> `rating.ts rpair <base> <candidate> <out>`: E 1 910 default, width 2, blocks of 10 openings, ABBA order. It pools each
+> build's blocks by cutechess-cli 1.5.1's own Elo formula, checked against each block's line. It prints the pair
+> X₂ − X₁ ± √(Y₁² + Y₂²) with EPIC-008's states and the pentanomial (information). It writes `nps.log` per block per
+> build and `thermal.log` every 10 s, with placeholders for host paths. `--dry-run` in every mode. No game was played.
+> A1–A4 met offline (`node --test tools/rating/pair-check.ts`, 22/22): A1 only start, count and output paths differ
+> from `r`. A2 10 alternating blocks, 1–100 once per build. A3 −82.9 ± 73.8 and −82.9 ± 64.3 from the r1/r2 records.
+> A4 any fault makes the build and pair UNRESOLVED, and the run halts. `r`/`d` defaults: `cmd.txt`, argv,
+> `summary.txt`, `machine.txt` byte-identical to `main`'s harness (stub cutechess-cli). lint, typecheck and build 0.
+> `npm test` 63 files / 2 128, skips 0. **A5 and A6 are QE's** (`rpair … --rounds 10`, 40 games, ALONE).
+
 ## Problem
 
 - **User:** QE/E2E, who reads each batched validation and `EPIC-010` M2 (Q4 = (e)), and the owner, who reads the

@@ -1,0 +1,30 @@
+== dry-rpair.txt: 20 block-runs; order 01b 01c 02c 02b 03b 03c 04c 04b 05b 05c 06c 06b 07b 07c 08c 08b 09b 09c 10c 10b
+  block 01 base cutechess-cli argv:: 41 tokens, 40 after start= dropped (r: 40); diffs 4 ['path', 'path', 'rounds 100->10', 'path']
+  block 01 candidate cutechess-cli argv:: 41 tokens, 40 after start= dropped (r: 40); diffs 4 ['path', 'path', 'rounds 100->10', 'path']
+  block 02 candidate cutechess-cli argv:: 41 tokens, 40 after start= dropped (r: 40); diffs 4 ['path', 'path', 'rounds 100->10', 'path']
+  block 02 base cutechess-cli argv:: 41 tokens, 40 after start= dropped (r: 40); diffs 4 ['path', 'path', 'rounds 100->10', 'path']
+  block 03 base cutechess-cli argv:: 41 tokens, 40 after start= dropped (r: 40); diffs 4 ['path', 'path', 'rounds 100->10', 'path']
+  block 03 candidate cutechess-cli argv:: 41 tokens, 40 after start= dropped (r: 40); diffs 4 ['path', 'path', 'rounds 100->10', 'path']
+  block 04 candidate cutechess-cli argv:: 41 tokens, 40 after start= dropped (r: 40); diffs 4 ['path', 'path', 'rounds 100->10', 'path']
+  block 04 base cutechess-cli argv:: 41 tokens, 40 after start= dropped (r: 40); diffs 4 ['path', 'path', 'rounds 100->10', 'path']
+  block 05 base cutechess-cli argv:: 41 tokens, 40 after start= dropped (r: 40); diffs 4 ['path', 'path', 'rounds 100->10', 'path']
+  block 05 candidate cutechess-cli argv:: 41 tokens, 40 after start= dropped (r: 40); diffs 4 ['path', 'path', 'rounds 100->10', 'path']
+  block 06 candidate cutechess-cli argv:: 41 tokens, 40 after start= dropped (r: 40); diffs 4 ['path', 'path', 'rounds 100->10', 'path']
+  block 06 base cutechess-cli argv:: 41 tokens, 40 after start= dropped (r: 40); diffs 4 ['path', 'path', 'rounds 100->10', 'path']
+  block 07 base cutechess-cli argv:: 41 tokens, 40 after start= dropped (r: 40); diffs 4 ['path', 'path', 'rounds 100->10', 'path']
+  block 07 candidate cutechess-cli argv:: 41 tokens, 40 after start= dropped (r: 40); diffs 4 ['path', 'path', 'rounds 100->10', 'path']
+  block 08 candidate cutechess-cli argv:: 41 tokens, 40 after start= dropped (r: 40); diffs 4 ['path', 'path', 'rounds 100->10', 'path']
+  block 08 base cutechess-cli argv:: 41 tokens, 40 after start= dropped (r: 40); diffs 4 ['path', 'path', 'rounds 100->10', 'path']
+  block 09 base cutechess-cli argv:: 41 tokens, 40 after start= dropped (r: 40); diffs 4 ['path', 'path', 'rounds 100->10', 'path']
+  block 09 candidate cutechess-cli argv:: 41 tokens, 40 after start= dropped (r: 40); diffs 4 ['path', 'path', 'rounds 100->10', 'path']
+  block 10 candidate cutechess-cli argv:: 41 tokens, 40 after start= dropped (r: 40); diffs 4 ['path', 'path', 'rounds 100->10', 'path']
+  block 10 base cutechess-cli argv:: 41 tokens, 40 after start= dropped (r: 40); diffs 4 ['path', 'path', 'rounds 100->10', 'path']
+  base starts [1, 11, 21, 31, 41, 51, 61, 71, 81, 91] covers 1-100 once: True
+  candidate starts [1, 11, 21, 31, 41, 51, 61, 71, 81, 91] covers 1-100 once: True
+== dry-rpair10.txt: 2 block-runs; order 01b 01c
+  block 01 base cutechess-cli argv:: 41 tokens, 40 after start= dropped (r: 40); diffs 4 ['path', 'path', 'rounds 100->10', 'path']
+  block 01 candidate cutechess-cli argv:: 41 tokens, 40 after start= dropped (r: 40); diffs 4 ['path', 'path', 'rounds 100->10', 'path']
+  base starts [1] covers 1-10 once: True
+  candidate starts [1] covers 1-10 once: True
+r pins: ['st=4', 'timemargin=1000', 'st=0.5', 'timemargin=2000', 'option.Threads=1', 'option.Hash=16', 'option.UCI_LimitStrength=true', 'option.UCI_Elo=1910', '-concurrency', '1']
+RESULT OK
