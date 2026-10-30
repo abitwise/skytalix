@@ -384,6 +384,12 @@ real `δ` from cutechess's per-move times.
     ceiling per level: 5 s at levels 1–5, 7 s at level 6, 32 s at level 7 (a level above 5 gets its budget + 2 s);
     22 s in UCI `TimeMode` `simple-tournament` (budget 22 s)."* The clamp stays 32 000. *(22.5 s before the owner's
     2026-10-30 amendment.)*
+    *(Pointer 2026-10-30, BA/PM, task `bapm-ABC-220-merge-fold`, on Security/NFR's `SEC-220-a`: clause A of this
+    quoted sentence reads **≤ 4 s** since `ABC-228`'s merge (`e42b637b`; `ADR-0053` d10; `ADR-0045` FOLDED in place,
+    § Status, 2026-10-30). Security/NFR placed only the new clause at `ABC-220`'s gate (`secnfr-ABC-220`), so the
+    catalog's `NFR-004` row is right, and "≤ 3 s" here is history. The level-5 comparisons in § Status and D3 ("its
+    3 000 ms budget … ≤ 3 s clause") and in the `AR-NFR004-A` bullet below ("level 5's ≤ 3 s") read 4 000 ms and
+    ≤ 4 s the same way. No decision changes.)*
   - **At the `uci-clock-mode` build**, appended: *"; 60 s in UCI `TimeMode` `uci-clock-mode` (budget ≤ 59.5 s). The
     engine's one clamp sits at the largest ceiling in force, 60 s."* `HARD_CEILING_MS` = 60 000.
   - `AR-NFR004-A` (≤ ~31 ms) is re-read by Security/NFR at 22 s, and at 59.5 s at the clock-mode gate. At 22 s it now

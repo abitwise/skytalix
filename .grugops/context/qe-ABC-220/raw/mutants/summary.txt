@@ -1,0 +1,24 @@
+QM1 src/uci-session.ts: npm test rc=1 :: 1 failed | 2296 passed (2297)
+  red: the increment comes back whole: go wtime 10000 btime 10000 winc 2000 binc 2000 movestogo 10 -> 2 800 ms 8ms
+  red: src/uci-session.test.ts > ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A7 — the safe share C binds a short clock > the increment comes back whole: go wtime 10000 btime 10000 winc 2000 binc 2000 movestogo 10 -> 2 800 ms
+  qrows FAIL 2: QE-A6a, QE-A3a
+QM2 src/uci-session.ts: npm test rc=1 :: 5 failed | 2292 passed (2297)
+  red: A3: one 40/15 period from 900 000 ms, movestogo 40..1, no book: T on every move, 18 760 ms left, 97.9 % used 10ms
+  red: A4: the same period with its first 6 moves from the book: 83.2 % used, every move leaves >= 18 000 ms 3ms
+  red: A5: no movestogo, 40 moves from 900 000 ms: every move leaves >= 1 000 ms, >= 75 % used; T binds for 21 moves, then C 2ms
+  red: go wtime 3600000 btime 3600000 movestogo 40 -> 22000; the engine's deadline is start + 22000 <= start + 22 000 0ms
+  red: Skill Level 1, 10 non-book moves of A3's period: random is called 0 times, every budget is A3's 1ms
+  red: src/uci-session.test.ts > ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A3-A5 — whole periods on one replayed clock > A3: one 40/15 period from 900 000 ms, movestogo 40..1, no book: T on every move, 18 760 ms left, 97.9 % used
+  red: src/uci-session.test.ts > ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A3-A5 — whole periods on one replayed clock > A4: the same period with its first 6 moves from the book: 83.2 % used, every move leaves >= 18 000 ms
+  red: src/uci-session.test.ts > ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A3-A5 — whole periods on one replayed clock > A5: no movestogo, 40 moves from 900 000 ms: every move leaves >= 1 000 ms, >= 75 % used; T binds for 21 moves, then C
+  red: src/uci-session.test.ts > ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A6 — the hard ceiling: no go hands the search more than 22 000 ms > go wtime 3600000 btime 3600000 movestogo 40 -> 22000; the engine's deadline is start + 22000 <= start + 22 000
+  red: src/uci-session.test.ts > ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A9 — rate 0: Skill Level is not read while TimeMode is not level > Skill Level 1, 10 non-book moves of A3's period: random is called 0 times, every budget is A3's
+  qrows FAIL 4: QE-A6a, QE-A6b, QE-A3a, QE-A9a
+QM3 src/uci-session.ts: npm test rc=1 :: 2 failed | 2295 passed (2297)
+  red: value Simple-Tournament from level: exactly one info string naming the offered values and the value got; level kept 9ms
+  red: value Simple-Tournament from simple-tournament: exactly one info string naming the offered values and the value got; simple-tournament kept 0ms
+  red: src/uci-session.test.ts > ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A10 — the option's refusals > value Simple-Tournament from level: exactly one info string naming the offered values and the value got; level kept
+  red: src/uci-session.test.ts > ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A10 — the option's refusals > value Simple-Tournament from simple-tournament: exactly one info string naming the offered values and the value got; simple-tournament kept
+  qrows FAIL 1: QE-A10a
+QM4 src/uci-session.ts: npm test rc=0 :: 2297 passed (2297)
+  qrows FAIL 2: QE-A6a, QE-A3a

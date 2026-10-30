@@ -1,8 +1,8 @@
 ---
 id: ABC-222
 title: "Smoke reading: `simple-tournament` plays 5 games at 40/15 over UCI with 0 losses on time, closest call ≥ 500 ms and ≥ 75 % clock use"
-status: backlog
-column: Backlog
+status: ready
+column: Ready
 size: S
 priority: P2
 epic: EPIC-009
@@ -10,6 +10,24 @@ owner: QE/E2E
 ---
 
 # ABC-222: smoke reading of `simple-tournament` at 40/15: `EPIC-009` M1, M2 and the 22 s ceiling, in 5 games
+
+> **RE-SCORED 2026-10-30 by BA/PM** (task `bapm-ABC-220-merge-fold`, records only, at `main` `4ac4f3bb`). **The wait
+> is met: `ABC-220` merged at `ec1e835b`** (QE PASS_WITH_GAPS `qe-ABC-220` `…7a09c5e1`; Security/NFR
+> PASS_WITH_RISKS `secnfr-ABC-220`). **DoR 9/10 → 10/10. Backlog → Ready.** The board move is the Orchestrator's.
+>
+> - **The build to read** is `ABC-220`'s merge, `ec1e835b` (Scope, A1). If `main` has moved on when the reading
+>   starts, QE records the tip sha it builds and, in PREREG, the `git diff --stat ec1e835b..<tip>` over
+>   `src/uci-session.ts`, `src/engine.ts` and `src/uci.ts`.
+> - **What `ABC-220` measured, for the PREREG to read against** (`qe-ABC-220` `…58af5b6a`, on this host): one search at
+>   T took 21 999.4–22 001.0 ms of wall (`A11`, 5 positions), so the in-process overshoot is ≤ 1.0 ms of
+>   `AR-NFR004-A`'s ≤ ~31 ms. A6's per-move overhead (the PGN time minus T) is therefore mostly the pipe and
+>   cutechess. Security/NFR names these games as `AR-NFR004-A`'s next reading at 22 s (the 5-search sample is thin).
+> - **A5 is unchanged:** < 22 500 ms, the whole-second reading. The owner's confirmation of that reading is still open
+>   and blocks nothing (`ABC-220`'s FOLDED note). A move over 22 000 ms is expected and is reported, not a breach.
+> - **QE-220-f (INFO):** a spaced `setoption name Time Mode …` is ignored silently. A1's check of game 1's `-debug all`
+>   log for `setoption name TimeMode value simple-tournament` is the guard; it stays as written.
+> - **Scheduling, not a DoR gap:** the reading is ALONE on an idle host (≤ ~5 h, ≤ ~10 h with the coverage
+>   extension). The Orchestrator places it after any timed SE or QE hop on the host.
 
 > **FOLDED 2026-10-30 by BA/PM** (task `bapm-owner-adr-fold`, records only, at `main` `a046e839`). The owner accepted
 > `ADR-0052` with the ceiling at 22 s, equal to T (`orch-2026-10-29g` `…3dd61448`; `ABC-220`'s header has his words).
@@ -144,10 +162,10 @@ owner: QE/E2E
 
 ## Dependencies
 
-- `ABC-220` merged. `ABC-204`'s host tool pins (re-pinned 2026-10-28). The openings file at its pinned sha.
+- `ABC-220` merged: **met 2026-10-30, `ec1e835b`**. `ABC-204`'s host tool pins (re-pinned 2026-10-28). The openings file at its pinned sha.
 - An idle board: this is alone-when-idle work, scheduled by the Orchestrator, never beside another reading.
 
-## Definition of Ready (re-scored 2026-10-29; rows 4 and 6 re-read 2026-10-30, count unchanged)
+## Definition of Ready (re-scored 2026-10-30, `bapm-ABC-220-merge-fold`; was 9/10 on 2026-10-29)
 
 | # | check | state |
 |---|---|---|
@@ -155,11 +173,12 @@ owner: QE/E2E
 | 2 | scope and out-of-scope | ✅ 5 games pinned, extended to ≤ 10 only for coverage; strength and major validation out |
 | 3 | INVEST | ✅ S; testable |
 | 4 | testable, measurable acceptance | ✅ 0 losses on time, ≥ 500 ms, ≥ 75 % over ≥ 4 side-periods, longest move < 22 500 ms (22 s to the whole second), every game kept |
-| 5 | dependencies known | ✅ `ABC-220`; `ABC-204` pins; an idle board |
+| 5 | dependencies known | ✅ `ABC-220` (merged `ec1e835b`); `ABC-204` pins; an idle board |
 | 6 | NFR triggers with targets | ✅ `NFR-004` 22 s (2026-10-30); the 5 % frequency rule |
 | 7 | test notes | ✅ 3 |
 | 8 | size | ✅ S |
 | 9 | priority | ✅ P2 |
-| 10 | no major unresolved blocker | ❌ nothing to read until `ABC-220` merges |
+| 10 | no major unresolved blocker | ✅ `ABC-220` merged at `ec1e835b` (2026-10-30). The whole-second confirmation is the owner's and blocks nothing. *(Was ❌: nothing to read until `ABC-220` merges.)* |
 
-**DoR 9/10. Backlog** until `ABC-220` merges.
+**DoR 10/10 (2026-10-30). Ready.** It closes milestone 1. It runs ALONE on an idle host; the Orchestrator places it.
+*(Was: "DoR 9/10. Backlog until `ABC-220` merges.")*

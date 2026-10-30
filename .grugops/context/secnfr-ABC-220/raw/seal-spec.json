@@ -1,0 +1,13 @@
+{
+  "refs": ["secnfr-ABC-220", "ABC-220", "EPIC-009", "ADR-0052", "ADR-0044", "NFR-004", "NFR-008", "NFR-011",
+           "AR-NFR004-A", "AR-UCI-BUSY", "SEC-220-a", "SEC-220-b", "SEC-220-c", "SEC-228-a", "SEC-212-a",
+           "qe-ABC-220/20261030T152147Z-qe-e2e-decision-7a09c5e1",
+           "qe-ABC-220/20261030T152147Z-qe-e2e-observation-58af5b6a",
+           "qe-ABC-220/20261030T152147Z-qe-e2e-observation-c6bdd364",
+           "arch-ABC-220-a14/20261030T143241Z-architect-design-observation-ca075632",
+           "fbab54ff", "68ba364c", "cc32a470", "9c676157", "plans/nfr-catalog.md", "src/uci-session.ts"],
+  "notes": [
+    { "kind": "decision", "confidence": "high: records-only gate read from code fbab54ff (git show/diff) and QE's sealed readings; nothing run; ADR-0036 clause (b) not run (UNKNOWN - verify)", "bodyFile": "note-decision.md" },
+    { "kind": "observation", "confidence": "high for the read facts; figures copied from qe-ABC-220 notes, none re-measured", "bodyFile": "note-observation.md" }
+  ]
+}

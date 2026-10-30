@@ -1,0 +1,7 @@
+run 1 base rc=0 wall=9.50s vitest_duration=9.17s load1_before=0.87 tctl_before=39.0 :: 2245 passed (2245)
+run 2 head rc=0 wall=9.73s vitest_duration=9.39s load1_before=0.94 tctl_before=39.5 :: 2297 passed (2297)
+run 3 head rc=0 wall=9.70s vitest_duration=9.35s load1_before=0.86 tctl_before=39.8 :: 2297 passed (2297)
+run 4 base rc=0 wall=9.64s vitest_duration=9.31s load1_before=0.81 tctl_before=39.6 :: 2245 passed (2245)
+run 5 base rc=0 wall=9.75s vitest_duration=9.39s load1_before=0.90 tctl_before=39.8 :: 2245 passed (2245)
+run 6 head rc=0 wall=9.76s vitest_duration=9.40s load1_before=1.56 tctl_before=40.3 :: 2297 passed (2297)
+median wall: base 9.64 s, head 9.73 s, delta 0.09 s

@@ -1,0 +1,16 @@
+{
+  "refs": ["bapm-ABC-220-merge-fold", "ABC-220", "ABC-221", "ABC-222", "ABC-223", "EPIC-009", "ADR-0044", "ADR-0045",
+           "ADR-0052", "ADR-0053", "NFR-004", "NFR-008", "NFR-011", "AR-NFR004-A", "AR-UCI-BUSY",
+           "QE-220-a", "QE-220-b", "QE-220-c", "QE-220-d", "QE-220-e", "QE-220-f",
+           "SEC-220-a", "SEC-220-b", "SEC-220-c", "SEC-228-a",
+           "qe-ABC-220/20261030T152147Z-qe-e2e-decision-7a09c5e1",
+           "qe-ABC-220/20261030T152147Z-qe-e2e-observation-c6bdd364",
+           "qe-ABC-220/20261030T152147Z-qe-e2e-observation-58af5b6a",
+           "secnfr-ABC-220",
+           "main ec1e835b", "main 18485bae", "main 4ac4f3bb",
+           "D3", "D4", "D4.5", "D5", "D11", "A11", "A12", "A13", "A14a", "A14b", "UAT"],
+  "notes": [
+    { "kind": "decision", "confidence": "high on the records folded (every figure copied from qe-ABC-220's sealed notes and secnfr-ABC-220's Result); nothing run, built, timed or played", "bodyFile": "note-decision.md" },
+    { "kind": "observation", "confidence": "high for the read facts; nothing re-measured", "bodyFile": "note-observation.md" }
+  ]
+}
