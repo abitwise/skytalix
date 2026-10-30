@@ -1,3 +1,4 @@
+_Updated: 2026-10-30 22:55Z Orchestrator (orch-2026-10-30a) — ABC-244 SE done, code review PASS (2 literals + 4 comments) → In Review; `qe-ABC-244` spawned ALONE (A6–A9). Width 1/3._
 _Updated: 2026-10-30 22:40Z Orchestrator (orch-2026-10-30a) — ABC-225 DONE (qe-ABC-225-w1 PASS_WITH_GAPS; merged 59dc3ab4 with qe-ABC-225 records; not pushed). Sealed + merged arch-g8-headroom, bapm-g8-headroom-cut (ABC-244 cut). ABC-244 pulled → `se-ABC-244`. Milestone-1 R-pair batch now projects ~18.5 h at width 1. Width 1/3._
 _Updated: 2026-10-30 Orchestrator (orch-2026-10-30a) — bapm-g8-headroom-cut done (a84bb462, seal pending): ABC-244 cut (S, P1, test-only, DoR 10/10; ADR-0046 addendum tranche 1; step-rule word given on its page); ABC-242/221/243 amended, all pulled after ABC-244. Seal + merge of arch-g8-headroom and bapm-g8-headroom-cut held until qe-ABC-225-w1 frees the host. Next pull: ABC-244 (SE) → its QE ALONE; ABC-222 games ALONE._
 _Updated: 2026-10-30 Orchestrator (orch-2026-10-30a) — arch-g8-headroom done (5fd3eee7, seal pending): recommend (a) cheaper time-blind virtual-clock rows (ADR-0046 addendum R1–R4), target G8 ≤ 9.4 s; (c) load1 ≤ 8 stands on 24 CPUs (ADR-0035 addendum); (d) not asked; no owner question. `bapm-g8-headroom-cut` routed (cut S/P1 test-only ticket; amend ABC-242, ABC-221). Width 2/3 (qe-ABC-225-w1 ALONE + records)._
@@ -1252,8 +1253,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-244] Time-blind virtual-clock rows in the CLI and UCI tests take the coarsest kill-set-preserving step (ADR-0046 § Addendum 2026-10-30, tranche 1; size: S, priority: P1, DoR 10/10; test-only, no smoke, UAT waived; G8 target ≤ 9.4 s; before ABC-242/221/243; **pulled 2026-10-30** → `se-ABC-244`)
+## In Development (WIP 0/3)
 
 
 
@@ -1281,7 +1281,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-244] Time-blind virtual-clock rows in the CLI and UCI tests take the coarsest kill-set-preserving step (ADR-0046 § Addendum 2026-10-30, tranche 1; size: S, priority: P1, DoR 10/10; test-only, no smoke, UAT waived; G8 target ≤ 9.4 s; before ABC-242/221/243; **pulled 2026-10-30** → `se-ABC-244`; **SE done bcd64f1a (code 25282ad4): U1 → step 1 000 (40 → 4 reads), U2 kept at 100 (loses F230 at 1 000); 2 322 tests, names byte-identical; informal wall 9.67 → 9.17 s; code review PASS** → `qe-ABC-244` ALONE)
 
 
 
