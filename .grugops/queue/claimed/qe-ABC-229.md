@@ -25,3 +25,12 @@ No host paths in commits. Scratch `qe-229/`. Tool env file outside the repo, mod
 Waiting: poll an output file or `kill -0 <pid>`; never `while pgrep -f …`. Stop every wait loop before reporting.
 ## Publish
 Sealed notes (task `qe-ABC-229`, contextRoot = worktree), commit, `## Result` + 10-cell trace row here, brief + claim to done/.
+
+## RESUME 2026-10-30 19:45Z (Orchestrator)
+The first QE run went silent after the R smoke died at 17:43:44Z (~80 s in, mid-game; cutechess, sampler and thermal watcher all
+stopped in the same second; no thermal stop, running median 74 °C) — an external kill, not a product fault. Done before it, in the
+first QE's scratch `qe-229/` (same session scratchpad) and branch commit a22d4d7b (PREREG …8ecd4ea6): §§ 1–2 (Q-SET 55/55, planted
+faults), § 3 gates + deep lanes, § 4 G8, § 5 G6 + G11 (both passed, since it proceeded to the smokes), § 6 D smoke (harness end code 0,
+Tctl median 74.75 °C). Remaining: re-read the committed evidence (do not re-run what is done, unless a record is missing — then say
+so), RE-RUN the R smoke ALONE from the start (the died run is VOID, recorded as such), then the verdict, notes, Result and done/ move.
+Before starting, check that nothing else writes to the worktree or runs a harness (another agent may still hold the old run).
