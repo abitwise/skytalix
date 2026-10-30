@@ -907,8 +907,10 @@ describe("ABC-086 A5 — the virtual clock stays off the shipped path", () => {
     // 1. The root's construction, verbatim: its options object is `{ seed }`, so no clock is passed.
     // Re-pinned 2026-10-30 (`ABC-230`, `ADR-0054` decision 2): a third argument, the injected
     // `keyHistory`, follows the options object; the options object is unchanged.
-    expect(cliSource).toContain(
-      "createLevelSeam(difficulty, { seed: Math.floor(Math.random() * 2 ** 32) }, keyHistory)",
+    // Re-pinned 2026-10-30 (`ABC-241`, `ADR-0020` § AMENDMENT 2026-10-30 C3): the third argument is
+    // `repetitionKeyHistory`, so the call breaks across lines; the options object is unchanged.
+    expect(cliSource).toMatch(
+      /createLevelSeam\(\s*difficulty,\s*\{ seed: Math\.floor\(Math\.random\(\) \* 2 \*\* 32\) \},\s*repetitionKeyHistory,?\s*\)/,
     );
     // 2. The module the root imports `createLevelSeam` from adds no clock of its own.
     const seamImport = /import\s*\{[^}]*\bcreateLevelSeam\b[^}]*\}\s*from\s*"(\.\/[^"]+)"/.exec(

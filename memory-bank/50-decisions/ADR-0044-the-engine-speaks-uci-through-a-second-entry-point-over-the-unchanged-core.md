@@ -347,7 +347,10 @@ budget. There is no `info` line, and no way to read `stop` while `chooseMove` ho
      at every level, 1–7, because every budget is at or below the clamp. The code line is unchanged.)*
 2. **The level caps it.** The budget passed down is `min(G, LEVELS[skill].budgetMs)` (D11). A bare `go`
    at the default level is therefore 3 000 ms, which is `DEFAULT_BUDGET_MS`, the same as the first
-   version of this ADR.
+   version of this ADR. *(Folded 2026-10-30, BA/PM, task `bapm-ABC-229-rescore`: **4 000 ms since `ABC-228`'s
+   merge** (`e42b637b`). Under `ADR-0053` d10, reading (ii), `LEVELS[5]` = `{ 4000, 0 }` and `DEFAULT_BUDGET_MS` =
+   4 000. `ADR-0045` is FOLDED in place (§ Status, 2026-10-30), and that fold records D11. The rule and the code line
+   are unchanged; only the value they read moved. A pointer only, with no decision change here.)*
 3. **`infinite` or `ponder` holds the `bestmove` until `stop`.** The spec says *"Do not exit the search
    without being told so in this mode"*. The engine may stop thinking early. It may not answer early.
 4. **The engine clamps every budget at `HARD_CEILING_MS`** (`NFR-004` clause B, unchanged). *(Folded 2026-10-24,

@@ -1,0 +1,200 @@
+
+> skytalix@0.0.0 test
+> NODE_OPTIONS=--max-old-space-size=128 node tools/grugops/run-bounded.js 60000 vitest run --reporter=default --reporter=./tools/grugops/result-file-reporter.js --outputFile.json=.test-results/last-run.json
+
+
+ RUN  v4.1.12 <scratchpad>/qe-241/mut/QM4
+
+ ✓ src/search.null-move.test.ts (38 tests) 1441ms
+     ✓ position-6, readings 3 to 25: 0 mutated roots, and aborts landing inside a null subtree  360ms
+ ✓ src/uci-session.test.ts (148 tests) 1834ms
+ ✓ src/engine.test.ts (64 tests) 516ms
+ ✓ tools/grugops/qe-hop-integrity.test.ts (32 tests) 249ms
+ ✓ src/legal.test.ts (36 tests) 161ms
+stdout | src/levels.test.ts > A9 — different seeds actually differ > ≥ 5 seeds over the same ≥ 30 positions give ≥ 2 distinct blunder-decision sequences
+A9: 5 distinct sequences over 5 seeds
+
+ ✓ src/levels.test.ts (37 tests) 144ms
+ ✓ src/perft.test.ts (24 tests) 108ms
+ ✓ src/zobrist.test.ts (32 tests) 124ms
+ ✓ src/history-pane.nfr.test.ts (12 tests) 98ms
+ ✓ src/book.test.ts (35 tests) 100ms
+ ✓ src/search.ordering.test.ts (29 tests) 98ms
+ ✓ src/transposition.test.ts (25 tests) 78ms
+ ✓ src/san.test.ts (22 tests) 90ms
+ ✓ src/search.test.ts (28 tests) 123ms
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap reading, level 180x
+A5 kiwipete depth 1: 878 nodes with quiescence / 49 without = 17.92x
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap reading, level 10x
+A5 position-6 depth 1: 421 nodes with quiescence / 47 without = 8.96x
+
+ ✓ src/quiescence.test.ts (74 tests) 79ms
+stdout | src/search.pvs-lmr.test.ts > A5 — search() visits fewer nodes than searchWithoutPvsOrReductions at depth 4 > position-3 at depth 4 — the default lane's standing guard
+ABC-121 A5 position-3 d4: 1099 / 1377 = 79.8%
+
+ ✓ src/search.pvs-lmr.test.ts (20 tests) 67ms
+ ✓ src/san.qualifier.hardening.test.ts (20 tests) 53ms
+ ✓ src/history-pane.test.ts (26 tests) 56ms
+ ✓ src/cli.test.ts (108 tests) 1213ms
+     ✓ A1: with keyHistory injected the default level plays the third occurrence, at 0  571ms
+ ✓ src/turn-loop.test.ts (64 tests) 53ms
+ ✓ src/render-seam.test.ts (28 tests) 51ms
+ ✓ src/moves.castling.hardening.test.ts (134 tests) 68ms
+ ✓ src/evaluate.king-mobility.test.ts (9 tests) 39ms
+ ✓ src/engine.capacity.test.ts (1 test) 75ms
+ ✓ src/turn-loop.nfr.test.ts (4 tests) 72ms
+ ✓ src/command-input.test.ts (188 tests) 60ms
+ ✓ src/pgn.test.ts (24 tests) 42ms
+ ✓ src/moves.enpassant.hardening.test.ts (120 tests) 45ms
+ ✓ src/puzzle-suite.test.ts (12 tests) 34ms
+ ✓ src/evaluate.pawns.test.ts (43 tests) 30ms
+ ✓ src/frame.test.ts (34 tests) 34ms
+ ❯ src/gameend.test.ts (57 tests | 2 failed) 31ms
+     ✓ reports checkmate and the winner from the fool's-mate position 2ms
+     ✓ reports stalemate as a draw when the side to move has no move and is not in check 0ms
+     ✓ makes threefold repetition claimable at the third occurrence, and draws at the fifth 2ms
+     ✓ does not report repetition for a position that is absent from the history 0ms
+     ✓ makes the fifty-move draw claimable by the side to move when the clock reaches 100 0ms
+     ✓ reports a draw by insufficient material for king versus king 0ms
+     ✓ does NOT draw king-and-bishop versus king-and-bishop on opposite colours 0ms
+     ✓ reports in-progress with no reason for a normal position 0ms
+     ✓ A1 — the third occurrence is White's to claim, and White plays the mate instead 0ms
+     ✓ A2 — the fifty-move twin is White's to claim, and White mates instead 0ms
+     ✓ A5 — the locked wall still terminates, on the 75-move backstop, with no claim made 2ms
+     ✓ A6 — checkmate still outranks the 75-move draw, not only the fifty-move claim 0ms
+     ✓ A7 — flip the side to move and the claim flips with it 0ms
+     ✓ A8 — a bare caller sees neither the fivefold draw nor the threefold claim 0ms
+     ✓ reports both draws when both hold, threefold first 0ms
+     ✓ offers no threefold claim at the second occurrence 0ms
+     ✓ omits the claimable property entirely rather than carrying an empty one 0ms
+     ✓ lets an automatic draw outrank a claim that holds at the same time 0ms
+     ✓ gives the claim to Black when it is WHITE's move that makes the third occurrence 0ms
+     ✓ decides no-legal-moves and thin material BEFORE the clock and the counts map 0ms
+     ✓ terminates the locked wall on a second no-progress line, not just A5's first-quiet one 1ms
+     ✓ still terminates the locked wall on a line that DOES capture — 150 plies per epoch 2ms
+     ✓ cannot spell a claimable draw as a completed draw, or a claim without a claimant 1ms
+     ✓ lets a consumer read the claim off the bare union with no narrowing 0ms
+     ✓ draws K vs K 0ms
+     ✓ draws K+N vs K 0ms
+     ✓ draws K+B vs K 0ms
+     ✓ draws K+B vs K+B same colour 0ms
+     ✓ does not draw with a lone pawn (K+P vs K) 0ms
+     ✓ does not draw with a rook (K+R vs K) 0ms
+     ✓ does not draw with bishop vs knight, opposite armies 0ms
+     ✓ reports white-wins when White delivers mate (the colour mirror of fool's mate) 0ms
+     ✓ prefers checkmate over the fifty-move rule when both could apply 0ms
+     ✓ draws KBB vs K, both bishops on one colour (b1, f1) 0ms
+     ✓ draws KBB vs KB, all three bishops on one colour 0ms
+     ✓ does not draw KNN vs K — unforceable, but mate is constructible 0ms
+     ✓ does not draw KN vs KN 0ms
+     ✓ does not draw KBN vs K — a forced mate 0ms
+     ✓ does not draw KBB vs K on opposite colours (c1, f1) 0ms
+     ✓ does not draw KBB on one colour vs KB on the other (f8) 0ms
+     ✓ does not draw KQ vs K 0ms
+     ✓ does not draw at 99 plies 0ms
+     ✓ makes the draw claimable at exactly 100 plies 0ms
+     ✓ is still only claimable at 149 plies, one ply short of the automatic draw 0ms
+     ✓ draws automatically at 150 plies, the seventy-five-move backstop 0ms
+     ✓ on the perft roots to depth 1 and every terminal or clock FEN; p is unchanged 7ms
+     ✓ an ep square with no legal capture: the key of the no-ep twin (no capturer (1.e4)) 0ms
+     × an ep square with no legal capture: the key of the no-ep twin (pinned capturer (diagonal)) 2ms
+     × an ep square with no legal capture: the key of the no-ep twin (rank pin) 0ms
+     ✓ an ep square with a legal capture: the Zobrist key, file in (legal capture (e5xd6)) 0ms
+     ✓ an ep square with a legal capture: the Zobrist key, file in (legal capture (d4xe3)) 0ms
+     ✓ an ep square with a legal capture: the Zobrist key, file in (one capturer pinned, the other legal) 0ms
+     ✓ no ep square: the Zobrist key, unchanged 0ms
+     ✓ reads the key it is handed rather than re-hashing (one Zobrist read per caller) 0ms
+     ✓ gameStatus looks the live position up by its repetition key (C3), so the lookup and the counts agree 0ms
+     ✓ is pure: the position is byte-identical after the call, on every case 2ms
+     ✓ F8: at every node of a 2-ply walk from three openings that carries an ep square, the key drops the file iff the generator offers no ep capture 4ms
+ ✓ src/book-engine.test.ts (5 tests) 30ms
+ ✓ src/render.test.ts (30 tests) 28ms
+ ✓ src/history.test.ts (17 tests) 29ms
+ ✓ src/evaluate.test.ts (36 tests) 13ms
+ ✓ src/rejection.test.ts (53 tests) 17ms
+ ✓ src/line-input.test.ts (30 tests) 18ms
+stdout | tools/opening-book/book.test.ts > the delivered artifact (data/opening-book/book.json) > A2 — every book move is legal in its keyed position, over every entry
+ABC-093 A2: examined 5390 entries of 5390; 5825 moves; 0 illegal
+
+stdout | tools/opening-book/book.test.ts > the delivered artifact (data/opening-book/book.json) > A3 — the longest line is >= 8 plies and never deeper than maxPly (<= 12)
+ABC-093 A3: longest book line 12 plies; maxPly 12
+
+stdout | tools/opening-book/book.test.ts > the delivered artifact (data/opening-book/book.json) > A4 — after 1. e4 the book carries >= 3 distinct replies with non-zero weight
+ABC-093 A4: 19 weighted replies to 1. e4
+
+stdout | tools/opening-book/book.test.ts > the delivered artifact (data/opening-book/book.json) > A5 — NFR-006: the artifact on disk is <= 1,048,576 bytes
+ABC-093 A5: 356526 bytes of 1048576 (34.0%)
+
+ ✓ tools/opening-book/book.test.ts (19 tests) 20ms
+ ✓ src/move-input.test.ts (50 tests) 18ms
+ ✓ src/moves.test.ts (37 tests) 17ms
+ ✓ src/san.parse.test.ts (30 tests) 18ms
+ ✓ src/status-panel.test.ts (29 tests) 14ms
+ ✓ src/status-panel.nfr.test.ts (6 tests) 16ms
+ ✓ src/moves.enpassant.test.ts (58 tests) 13ms
+ ✓ src/startup-questions.test.ts (26 tests) 14ms
+ ✓ src/search.qe.test.ts (8 tests) 16ms
+ ✓ src/frame.overflow-bound.test.ts (25 tests) 11ms
+ ✓ src/gameend.nfr.test.ts (9 tests) 11ms
+ ✓ src/result-screen.test.ts (13 tests) 11ms
+ ✓ src/coordinate-move.test.ts (45 tests) 11ms
+ ✓ src/ladder.test.ts (13 tests) 12ms
+ ✓ src/moves.castling.test.ts (33 tests) 12ms
+ ✓ src/fen.test.ts (82 tests) 10ms
+ ✓ src/cli.real-engine.test.ts (1 test) 8ms
+ ✓ src/apply.test.ts (24 tests) 11ms
+ ✓ src/search.capacity.test.ts (1 test) 10ms
+ ✓ src/san.suffix.hardening.test.ts (4 tests) 6ms
+ ✓ src/zobrist.nfr.test.ts (3 tests) 3ms
+ ✓ src/glyph-mode.test.ts (21 tests) 5ms
+ ✓ src/uci.real-engine.test.ts (1 test) 2ms
+ ✓ src/glyph-mode.nfr.test.ts (3 tests) 2ms
+ ✓ src/san.nfr.test.ts (5 tests) 4ms
+
+ Test Files  1 failed | 62 passed (63)
+      Tests  2 failed | 2243 passed (2245)
+   Start at  12:46:43
+   Duration  9.24s (transform 0ms, setup 0ms, import 6.26s, tests 7.68s, environment 5ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/gameend.test.ts > ABC-241 A1 — repetitionKey, the one helper > an ep square with no legal capture: the key of the no-ep twin (pinned capturer (diagonal))
+AssertionError: expected 2858735921838759354n to be 3015374642710632026n // Object.is equality
+
+- Expected
++ Received
+
+- 3015374642710632026n
++ 2858735921838759354n
+
+ ❯ src/gameend.test.ts:679:26
+    677|       expect(zobristKey(parseFen(fen))).not.toBe(zobristKey(parseFen(w…
+    678|       expect(legalMoves(parseFen(fen)).some((m) => (m.flags & FLAG_EN_…
+    679|       expect(keyOf(fen)).toBe(zobristKey(parseFen(withoutEp(fen))));
+       |                          ^
+    680|       expect(keyOf(fen)).toBe(zobristKey(parseFen(fen)) ^ epFileKey(pa…
+    681|     },
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/gameend.test.ts > ABC-241 A1 — repetitionKey, the one helper > an ep square with no legal capture: the key of the no-ep twin (rank pin)
+AssertionError: expected 973849139394194878n to be 285777158189409886n // Object.is equality
+
+- Expected
++ Received
+
+- 285777158189409886n
++ 973849139394194878n
+
+ ❯ src/gameend.test.ts:679:26
+    677|       expect(zobristKey(parseFen(fen))).not.toBe(zobristKey(parseFen(w…
+    678|       expect(legalMoves(parseFen(fen)).some((m) => (m.flags & FLAG_EN_…
+    679|       expect(keyOf(fen)).toBe(zobristKey(parseFen(withoutEp(fen))));
+       |                          ^
+    680|       expect(keyOf(fen)).toBe(zobristKey(parseFen(fen)) ^ epFileKey(pa…
+    681|     },
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+

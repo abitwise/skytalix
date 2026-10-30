@@ -111,12 +111,22 @@ vi.mock("./history.ts", async (importOriginal) => {
     keyHistory: vi.fn(actual.keyHistory),
     playMove: vi.fn(actual.playMove),
     repetitionCounts: vi.fn(actual.repetitionCounts),
+    // `ABC-241` (`ADR-0020` § AMENDMENT 2026-10-30 C3) MOVED THE DOOR: `claimShortfall` counts the
+    // repetition-key list, so the one derive `A8` ledgers is this export's, and `keyHistory` reads 0.
+    repetitionKeyHistory: vi.fn(actual.repetitionKeyHistory),
   };
 });
 
 import { assembleFrame, beginFrameSession, MESSAGE_ROWS, PROMPT_ROWS } from "./frame.ts";
 import { gameStatus } from "./gameend.ts";
-import { gameStatusOf, keyHistory, newGame, playMove, repetitionCounts } from "./history.ts";
+import {
+  gameStatusOf,
+  keyHistory,
+  newGame,
+  playMove,
+  repetitionCounts,
+  repetitionKeyHistory,
+} from "./history.ts";
 import { INPUT_ENDED_NOTICE, QUIT_NOTICE, runTurnLoop } from "./turn-loop.ts";
 
 // ---------------------------------------------------------------------------
@@ -1809,7 +1819,7 @@ describe("ABC-021 acceptance — transition 16, the draw claim", () => {
   // suite; `A9` exists because the width argument was carried in a comment and by nothing else.
   // -------------------------------------------------------------------------
 
-  it("A8 — the ONE derive the loop makes on its own, ledgered: `keyHistory` fires on the REFUSED claim, and on no advancing ply, allowed claim or take-back (`ABC-120` `A3`-`A5`)", async () => {
+  it("A8 — the ONE derive the loop makes on its own, ledgered: `repetitionKeyHistory` (`keyHistory` until `ABC-241`) fires on the REFUSED claim, and on no advancing ply, allowed claim or take-back (`ABC-120` `A3`-`A5`)", async () => {
     // (i) An ADVANCING run. Both standing bars read their green values here...
     await run({ fen: SHUFFLE_FEN, script: shuffle(2) });
     expect(derivesMade()).toBe(9);
@@ -1821,12 +1831,14 @@ describe("ABC-021 acceptance — transition 16, the draw claim", () => {
     // still reads `plies + 1`. Measured at the gate: 814 of 814, green. A count nothing counts is
     // not a bar.
     expect(vi.mocked(keyHistory)).toHaveBeenCalledTimes(0);
+    expect(vi.mocked(repetitionKeyHistory)).toHaveBeenCalledTimes(0);
 
     // (ii) A REFUSED claim costs EXACTLY ONE, and it is `claimShortfall`'s — the module declares it
     // rather than leaving it for a spy to discover, and this is the spy that holds it to the number.
     vi.clearAllMocks();
     await run({ script: ["claim"] });
-    expect(vi.mocked(keyHistory)).toHaveBeenCalledTimes(1);
+    expect(vi.mocked(repetitionKeyHistory)).toHaveBeenCalledTimes(1);
+    expect(vi.mocked(keyHistory)).toHaveBeenCalledTimes(0);
     expect(derivesMade()).toBe(1);
     expect(vi.mocked(repetitionCounts)).toHaveBeenCalledTimes(0);
 
@@ -1835,7 +1847,7 @@ describe("ABC-021 acceptance — transition 16, the draw claim", () => {
     // build that memoised here would be changing that contract from the wrong module.
     vi.clearAllMocks();
     await run({ script: ["claim", "claim"] });
-    expect(vi.mocked(keyHistory)).toHaveBeenCalledTimes(2);
+    expect(vi.mocked(repetitionKeyHistory)).toHaveBeenCalledTimes(2);
 
     // (iv) An ALLOWED claim derives NOTHING: it is answered from the ply's own `status`, which is
     // the whole reason transition 16 lives in the loop and not behind the seam.
@@ -1843,6 +1855,7 @@ describe("ABC-021 acceptance — transition 16, the draw claim", () => {
     const allowed = await run({ fen: SHUFFLE_FEN, script: [...shuffle(2), "claim"] });
     expect(allowed.outcome.reason).toBe("threefold-repetition");
     expect(vi.mocked(keyHistory)).toHaveBeenCalledTimes(0);
+    expect(vi.mocked(repetitionKeyHistory)).toHaveBeenCalledTimes(0);
     expect(derivesMade()).toBe(9);
   });
 
@@ -2026,5 +2039,38 @@ describe("ABC-120 acceptance — transitions 17 (quit) and 18 (take-back)", () =
     expect(Object.keys(everyKind)).toHaveLength(9);
     expect(Object.keys(everyKind)).toContain("quit");
     expect(Object.keys(everyKind)).toContain("take-back");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// `ABC-241` A3 (`ADR-0020` § AMENDMENT 2026-10-30 C3) — the refused claim's count is the repetition-key
+// count, so it agrees with `gameStatusOf`'s claim. After 1.e4 Nf6 2.Nf3 Ng8 3.Ng1 the 1.e4 board
+// stands for the second time: its first occurrence's e3 cannot be taken, so it counts (base: 1).
+// ---------------------------------------------------------------------------
+
+describe("ABC-241 A3 — claimShortfall reads the repetition-key count", () => {
+  const LINE = ["e2e4", "g8f6", "g1f3", "f6g8", "f3g1"] as const;
+  const gameAfter = (fen: string): GameHistory => {
+    const history = newGame(fen);
+    for (const token of LINE) playMove(history, movesNamed(history, token)[0] as Move);
+    return history;
+  };
+
+  it("after 3.Ng1 a refused claim reads `repetition 2 of 3`; the twin with a legal d4xe3 reads 1", async () => {
+    const counted = await run({
+      history: gameAfter(START_FEN),
+      humanColour: "black",
+      script: ["claim"],
+    });
+    expect(messageRegionOf(counted.frames[1] as string[])).toEqual([
+      "repetition 2 of 3",
+      "50-move 4 of 100",
+    ]);
+    const twin = "rnbqkbnr/ppp1pppp/8/8/3p4/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    const kept = await run({ history: gameAfter(twin), humanColour: "black", script: ["claim"] });
+    expect(messageRegionOf(kept.frames[1] as string[])).toEqual([
+      "repetition 1 of 3",
+      "50-move 4 of 100",
+    ]);
   });
 });

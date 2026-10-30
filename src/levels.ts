@@ -17,7 +17,7 @@
 
 import { makeMove, unmakeMove } from "./apply.ts";
 import { type Clock, chooseMove, HARD_CEILING_MS } from "./engine.ts";
-import { gameStatus } from "./gameend.ts";
+import { gameStatus, repetitionKey } from "./gameend.ts";
 import { legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
 import type { Position } from "./position.ts";
@@ -138,8 +138,12 @@ export function createLevel(
       const { move, depth, nodes, elapsedMs } = choice;
       return { move, kind: "engine", scored: null, depth, nodes, elapsedMs };
     }
-    // One list per blunder call: each child's root is one ply past `position`.
-    const childKeys = priorKeys === undefined ? undefined : [...priorKeys, zobristKey(position)];
+    // One list per blunder call: each child's root is one ply past `position`. The root's key is a
+    // repetition key, as every prior key is (`ABC-241`, `ADR-0020` § AMENDMENT 2026-10-30 C3).
+    const childKeys =
+      priorKeys === undefined
+        ? undefined
+        : [...priorKeys, repetitionKey(position, zobristKey(position))];
     return blunder(position, Math.min(level.budgetMs, HARD_CEILING_MS), now, childKeys);
   };
 }
