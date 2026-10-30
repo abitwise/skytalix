@@ -17,12 +17,31 @@ id: ADR-0045
 > Levels 1–7 are value-identical. Until `ABC-221`'s merge the clamp stays 32 000. The in-place fold line is BA/PM's,
 > at that merge. No other decision here moves.
 
-> **Amended 2026-10-30, CONDITIONAL: level 5 to 4 000 ms, see `ADR-0053` decision 10.** The owner's word is
+> **Amended 2026-10-30, ~~CONDITIONAL~~ in force from `ABC-228`'s merge (`e42b637b`): level 5 to 4 000 ms, see
+> `ADR-0053` decision 10.** The owner's word is
 > *"QQ-228-1: ii"* (`orch-2026-10-29g/…c4ab73de`; pointer added by Architect/Design, task `arch-q3c-oq228ii`). It
 > applies only if `ABC-228`'s `G6` re-forecast (`ADR-0053` decision 9) misses. Then `LEVELS[5]` and `DEFAULT_BUDGET_MS`
 > go from 3 000 to 4 000 in `ABC-228`, and D1's level-5 row, D2's "today's level 3 exactly", and A3's "2 000 at 5"
 > margin (which becomes 1 000; the ceiling stays 5 s) move with them. If the forecast meets `G6`, nothing here moves.
 > The in-place fold is BA/PM's, at that merge only.
+
+> **FOLDED in place 2026-10-30 by BA/PM** (task `bapm-ABC-228-merge-fold`, records only, at `main` `e42b637b`). The
+> condition fired: `ABC-228`'s graded `G6` at 3 s missed on position-6 (9 against 10), the re-forecast at 4 000 ms read
+> 65.9 % / 97.4 % (≤ 133 %), and QE passed the build under (ii) (`qe-ABC-228-ii` `…e39d190c`: `G6` 8 = 8 and 10 = 10,
+> `G5` max 4 001 ms). **`LEVELS[5]` = `{ 4000, 0 }` and `DEFAULT_BUDGET_MS` = 4 000 on `main`.**
+>
+> - **D2's equality holds:** `LEVELS[DEFAULT_LEVEL]` = `{ DEFAULT_BUDGET_MS, 0 }` = `{ 4000, 0 }`. "Today's level 3
+>   exactly" and "`NFR-005`'s referent at 3 s" are history.
+> - **Dated marks in place:** D1's level-5 row, D2's equality bullet, D4's bare-`go` line, A1's rows 1–5 and 6 (the
+>   5 → 6 step is now 1.25×), A2's equality bullet, A3's margin (1 000 at 5; the ceiling stays 5 s), and § Consequences'
+>   `NFR-005` line.
+> - **`ADR-0044` D11, recorded here:** UCI `Skill Level` 5 reads the table, so it plays 4 000 ms with no code change. A
+>   bare `go` at the default searches 4 000 ms. `ADR-0044` D4.2's "a bare `go` at the default level is therefore
+>   3 000 ms" reads 4 000 from this merge. Its text is not edited at this hop.
+> - **Unchanged:** levels 1–4 and 6–7, `DEFAULT_LEVEL` (5), `HARDEST_LEVEL` (7), `HARD_CEILING_MS` (32 000) and D3's
+>   mechanism. § Context, § Alternatives, D5, D6 and the 2026-10-19 § Consequences stand as written (history).
+> - **Not here:** the `NFR-004` / `NFR-005` catalog text (Security/NFR), the ladder re-take (Orchestrator; STALE under
+>   `ADR-0038` d6), and `AGENTS.md` (the Scribe).
 
 **accepted** 2026-10-19 by Olger Oeselg (owner), as proposed. The owner's menu answers, verbatim (note
 `.grugops/context/wave-2026-09-25/notes/20261019T130500Z-orchestrator-decision-owner-word-adr0045-accepted-q1-q3-abc171-rows-1a9c7f42.md`,
@@ -143,7 +162,7 @@ is out of 50 positions.
 | 2 | **180** (was 500) | **0.2** (unchanged) | 1.8x time, rate halved |
 | 3 | **330** (was 3 000) | **0.1** (was 0) | 1.83x time, rate halved |
 | 4 | **1 000** (was 4 000) | **0.05** (was 0) | 3.03x time, rate halved |
-| 5 (hardest, **default**) | **3 000** (was 4 500) | **0** | 3x time, rate to 0 |
+| 5 (hardest, **default**) | **3 000** (was 4 500) *(**4 000** from 2026-10-30, `ABC-228` `e42b637b`, `ADR-0053` d10)* | **0** | 3x time, rate to 0 *(4x from 2026-10-30)* |
 
 - **Every adjacent pair differs by more than time alone**, the wording of the owner's menu.
   - The rate halves at every step: 0.4, 0.2, 0.1, 0.05, then 0.
@@ -155,13 +174,16 @@ is out of 50 positions.
 
 - **`DEFAULT_LEVEL = HARDEST_LEVEL = 5`.** `EASIEST_LEVEL` stays 1, and the ordinals stay `1`–`5`.
 - **`LEVELS[DEFAULT_LEVEL]` is still `{ budgetMs: DEFAULT_BUDGET_MS, blunderRate: 0 }`**, which is `{ 3000, 0 }`.
+  *(2026-10-30, `ABC-228` `e42b637b`, `ADR-0053` d10: `{ 4000, 0 }`. Both values moved together, so the equality
+  holds. The "level 3", `ABC-101` `A8′` and `NFR-005` sentences below are history from this date.)*
   It is today's level 3 exactly. So the pins on that equality hold unchanged, and so do `ABC-087` `A6`,
   `ABC-101` `A8′` ("a session without the flag plays as it did") and `NFR-005`'s referent. Only the ordinal they
   are reached by changes.
 - `src/cli-options.ts` `DEFAULT_DIFFICULTY` follows. It is pinned equal to `DEFAULT_LEVEL` (`src/cli.test.ts:3609`).
 - **This overturns `ABC-101` ruling 2, which is the owner's call** (Q1). Ruling 2's reason was that `NFR-004`'s two
   bars have content only if some level is slower than the default. After this ADR:
-  - the ≤ 3 s bar binds the default, as today;
+  - the ≤ 3 s bar binds the default, as today; *(≤ 4 s from 2026-10-30, `ADR-0053` d10; the catalog text is
+    Security/NFR's)*
   - the 5 s bar binds the mechanism, through the engine's clamp (`RF-1`, `HARD_CEILING_MS`) and the level layer's
     blunder clamp. It is enforced whatever a caller passes, but no level reaches it any more.
   The counter-argument the page recorded, that *"club strength [is] the product, which argues for defaulting to
@@ -180,7 +202,7 @@ is out of 50 positions.
 - **`option name Skill Level type spin default 5 min 1 max 5`.** The `default` is `DEFAULT_LEVEL`.
 - **D11's two paths are chosen by the level's data, as written:**
   - **Level 5 (rate 0)** calls `chooseMove` with D12's `maxDepth` / `maxNodes`. A bare `go` at the default is
-    still 3 000 ms (D4.2).
+    still 3 000 ms (D4.2). *(4 000 ms from 2026-10-30, `ABC-228`; no code change.)*
   - **Levels 1–4 (rate > 0)** go through `createLevel`. `go depth` / `nodes` / `mate` are ignored there, with one
     `info string`, and no score is sent. **That is new for levels 3 and 4**, and it is the price of a rate at
     those levels (Q2).
@@ -463,8 +485,8 @@ note is `arch-design-ABC-212` (observation).
 
 | level | `budgetMs` | `blunderRate` | step from the level below |
 |---:|---:|---:|---|
-| 1–5 | unchanged (100/0.4, 180/0.2, 330/0.1, 1 000/0.05, 3 000/0) | | as D1 |
-| 6 | **5 000** | **0** | 1.67x time, rate 0 → 0 |
+| 1–5 | unchanged (100/0.4, 180/0.2, 330/0.1, 1 000/0.05, 3 000/0) *(level 5 is 4 000/0 from 2026-10-30, `ABC-228`)* | | as D1 |
+| 6 | **5 000** | **0** | 1.67x time, rate 0 → 0 *(1.25x from 2026-10-30)* |
 | 7 (hardest) | **30 000** | **0** | 6x time, rate 0 → 0 |
 
 - **D1's "every adjacent pair differs by more than time alone" no longer holds for 5v6 and 6v7.** All three levels
@@ -478,7 +500,8 @@ note is `arch-design-ABC-212` (observation).
 ### A2 (D2). The default stays 5, and the hardest is 7
 
 - **`DEFAULT_LEVEL` stays 5, `HARDEST_LEVEL` becomes 7, and `EASIEST_LEVEL` stays 1.**
-  - `LEVELS[DEFAULT_LEVEL]` is still `{ DEFAULT_BUDGET_MS, 0 }` = `{ 3000, 0 }`.
+  - `LEVELS[DEFAULT_LEVEL]` is still `{ DEFAULT_BUDGET_MS, 0 }` = `{ 3000, 0 }`. *(`{ 4000, 0 }` from 2026-10-30,
+    `ABC-228`; the equality holds.)*
   - `DEFAULT_DIFFICULTY` still equals `DEFAULT_LEVEL`.
   - `ABC-101` `A8′` and `NFR-005`'s referent do not move.
 - **Retired, on the owner's word:**
@@ -498,7 +521,9 @@ note is `arch-design-ABC-212` (observation).
   - The name and the export stay, and so do `deepen`'s `Math.min(options.budgetMs, HARD_CEILING_MS)` and the level
     layer's blunder clamp.
   - **Each level's own ceiling is held by its data:** `LEVELS[L].budgetMs ≤ ceiling(L)` for L = 1..7, with
-    `ceiling(L) − budget ≥ 2 000 ms` at every level (2 000 at 5, 6 and 7, more below).
+    `ceiling(L) − budget ≥ 2 000 ms` at every level (2 000 at 5, 6 and 7, more below). *(2026-10-30, `ABC-228`,
+    `ADR-0053` d10: **1 000 at 5**, still 2 000 at 6 and 7. Level 5's ceiling stays 5 s. 1 000 ms is about 30×
+    `AR-NFR004-A`'s ≤ 31 ms overshoot.)*
   - `AR-NFR004-A`'s ≤ 31 ms overshoot sits inside that margin. The `ABC-212` `A5` data row pins this.
 - **Rejected: a ceiling per level.** It would need one of two changes. Each departs from the points, and each would go
   back to the owner:
@@ -570,12 +595,16 @@ note is `arch-design-ABC-212` (observation).
 - **`NFR-004`, accepted text (OD-212-1 (a)):** *"Engine returns a move in ≤ 3 s at default difficulty (level 5); hard
   ceiling per level: 5 s at levels 1–5, 7 s at level 6, 32 s at level 7 (a level above 5 gets its budget + 2 s)."*
   Security/NFR places it in `plans/nfr-catalog.md` at `ABC-212`'s gate, with the mechanism line from A3.
+  *(2026-10-30, `ADR-0053` d10: "≤ 3 s at default difficulty" becomes ≤ 4 s, and the 5 s ceiling at levels 1–5 stays.
+  The catalog edit is Security/NFR's, at `ABC-228`'s gate.)*
 - **`AR-NFR004-A`:**
   - its "the hardest level is the default, so clause A covers it" is retired. The hardest level (7) is covered by
     clause B per level.
   - The catalog's "if a level's budget ever reaches `HARD_CEILING_MS` …" no longer fires. Level 6's 5 000 is 2 000
     under its own ceiling of 7 000, and 30 000 is under the 32 000 clamp.
-- **`NFR-005`:** unchanged. Its referent is level 5 at 3 s, with level 5's 5 s ceiling.
+- **`NFR-005`:** unchanged. Its referent is level 5 at 3 s, with level 5's 5 s ceiling. *(2026-10-30, `ABC-228`,
+  `ADR-0053` d10: the referent is level 5 at 4 s. The depth-6 FAIL floor and the depth-7 WARN do not move. The catalog
+  text is Security/NFR's.)*
 - **`NFR-009`:** re-read at 30 s by Security/NFR (`ABC-212`: ≤ 16 MiB, growth ≤ 1 MiB). The table is allocated once
   (`ADR-0025`), so a flat reading is expected. That is `UNKNOWN - verify`.
 - **`NFR-008`:** per `ABC-212` `A12`, with 0 files and 0 spawns. The value move keeps the default-lane `RF-1` rows at

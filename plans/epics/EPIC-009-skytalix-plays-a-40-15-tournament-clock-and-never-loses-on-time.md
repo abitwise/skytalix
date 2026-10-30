@@ -91,6 +91,13 @@ owner: BA/PM
 
 ## How today's engine handles time (System Analyst `sa-ideas-verify` `…1ccf0010`, confirmed against BA/PM's reading)
 
+> **Dated line 2026-10-30 by BA/PM** (task `bapm-ABC-228-merge-fold`, records only, at `main` `e42b637b`). `ABC-228`
+> merged under OQ-228-1 (ii) (`ADR-0053` d10): level 5 and `DEFAULT_BUDGET_MS` play **4 000 ms**. This section was read
+> at 3 000 ms and stays as read. From this merge, T1's and T4's default reads 4 000 ms, P2's `go` would spend 4 000 ms,
+> and the 40/15 share row for `Skill Level` 5 reads 160 s, 18 % (82 % of the clock unused). This is arithmetic, not a
+> measurement. **No reading of this epic plays level 5 at its fixed budget.** `ABC-220` and `ABC-221` `A8` compare head
+> with base at the same `LEVELS`. `ABC-222` and `ABC-223` play the named modes. So no acceptance row moves.
+
 The source is the System Analyst's time-behaviour note, `sa-ideas-verify` `…1ccf0010` (2026-10-29 19:58Z, read at
 `main` `51c85f49`; committed on `grugops/sa-ideas-verify` @ `c28054cc`, not yet merged when this page was cut). BA/PM
 read the same code independently before it landed, and the two readings agree on every row below. Where they differ in detail, the SA's note wins. The SA's probes P1–P5 are

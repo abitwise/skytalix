@@ -10,6 +10,13 @@ epic: EPIC-010
 
 # ABC-225: an interleaved R pair in the rating harness
 
+> **Dated line 2026-10-30 by BA/PM** (task `bapm-ABC-228-merge-fold`, records only). **(ii) is on `main`:** `ABC-228`
+> merged at `e42b637b`, and `tools/rating/rating.ts` R mode now passes skytalix 4000 (`mode === "r" ? 4000`). So the
+> follow-up below applies when this branch rebases: `rpair`'s `budget: 3000` moves to **4 000** in the same rebase.
+> `A1` ("the same pins as `r`") requires it, because `r` now plays 4 000 ms. Scope 1's "`skytalix` at 3 000 ms" reads
+> 4 000 ms from that rebase. `A3`'s arithmetic rows read the 3 000 ms records and do not move. Still Blocked (thermal,
+> the owner's call).
+
 > **Dated line 2026-10-30 by BA/PM** (task `bapm-q3c-oq228ii-fold`, records only). OQ-228-1 is (ii) (`ADR-0053` d10):
 > on an `ABC-228` `A8` miss, level 5 plays 4 000 ms, and the batches run both sides at 4 000 ms. **`ABC-228` carries
 > the `r` mode literal 3000 → 4000** (`tools/rating/rating.ts:405` on `main`). This branch's `rpair` passes its own
