@@ -10,6 +10,13 @@ owner: BA/PM
 
 # EPIC-010: the verified engine gaps, closed one measured change at a time, against an outside opponent
 
+> **RE-SCORED 2026-10-30 by BA/PM** (task `bapm-ABC-229-rescore`, records only, at `main` `ee3c7694`; `src/`, `data/`
+> and `tools/` untouched). **`ABC-229` is 10/10, Ready.** Its wait, `ABC-228`'s merge, is met (`e42b637b`). Its page
+> folds what (ii) changes: `G5`/`G6` at 4 000 ms, R at 4 000 ms recorded and not pooled, and no 3 000 ms reference.
+> A `G6` miss is not pre-answered and goes to the owner. The `Q-SET` promotion rows are still to be frozen by QE. It
+> shares no production file with `ABC-241`, `ABC-220` or `ABC-243`. Only the tickets table's row 5 changed. The notes
+> are in `.grugops/context/bapm-ABC-229-rescore/notes/`.
+
 > **FOLDED 2026-10-30 by BA/PM** (task `bapm-ABC-228-merge-fold`, records only, at `main` `e42b637b`; `src/`, `data/`
 > and `tools/` untouched). **`ABC-228` is Done.** It merged under (ii) at `e42b637b` on QE's PASS_WITH_GAPS
 > (`qe-ABC-228-ii` `…e39d190c`). The (ii) build happened: the graded `G6` at 3 s missed (position-6 9 against 10),
@@ -480,7 +487,7 @@ mates", ≥ 6 "a quiet promotion decides". It reads `quiesce` and `chooseMove` a
 | 2 | `ABC-227` | Profile: where a node's time goes, on the fixed boards, at 3 s | S | P2 | **Done** (2026-10-29) | — | none | done: SE `se-ABC-227`, merged `f4301d0c`; six value-identical cuts handed to `ABC-235` |
 | 3 | `ABC-225` | One command reads an interleaved R pair (base and candidate against Stockfish), with the opening-paired error and a host log. **Re-scoped 2026-10-29: the batch's instrument** | M | P2 | **Ready** | **10/10** | `ABC-204`'s pins | nothing. Done before milestone 1's batch |
 | 4 | `ABC-228` | In check, quiescence searches every evasion and scores none as mate | M | P2 | **Done** (2026-10-30, `e42b637b`) | — | `ADR-0053` (ACCEPTED 2026-10-30); OQ-228-1 reading (ii), built | done: QE PASS_WITH_GAPS under (ii) `…e39d190c` (`G6` 8 = 8, 10 = 10; D 5.0, R 7.0 at 4 000 ms); its gaps are `ABC-243` |
-| 5 | `ABC-229` | Quiescence searches quiet promotions to a queen | S | P2 | Backlog | **9/10** | `ADR-0053` (ACCEPTED 2026-10-30) decisions 5–8; door | `ABC-228` merged |
+| 5 | `ABC-229` | Quiescence searches quiet promotions to a queen | S | P2 | **Ready** | **10/10** | `ADR-0053` (ACCEPTED 2026-10-30) decisions 5–8; door; `ABC-228` (Done, `e42b637b`) | nothing. Order only: no production file shared with `ABC-241`/`ABC-220`/`ABC-243`; smokes read on a `main` that carries `ABC-241` if it merges first (stale rule); R at 4 000 ms, not pooled |
 | 6 | `ABC-230` | The game's earlier positions reach the search, from the CLI and from UCI, so it sees a repetition the game already holds | M | P2 | **Done** (2026-10-30, `24f3e322`) | — | `ADR-0054` (ACCEPTED 2026-10-30) | done: QE PASS_WITH_GAPS `…ba5a249a`; its gap QE-230-a is `ABC-242` |
 | 7 | `ABC-235` | Value-identical cuts in cost per node, from `ABC-227`'s profile: **cuts 1, 3, 5** (scoped 2026-10-29) | M | P2 | In Development (`se-ABC-235`) | **10/10** | `ABC-227` (Done); Architect `…7fc1b90c` (1, 3, 5 value-identical; no ADR) | nothing |
 | 8 | `ABC-240` | Move ordering without per-move allocation, value-identical (cut 6, split from `ABC-235`) | S | P3 | **Ready** | **10/10** | Architect `…7fc1b90c` C1–C4; no ADR | pull order only: after `ABC-235` merges; before `ABC-233`/`ABC-234` |
