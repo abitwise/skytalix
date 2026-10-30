@@ -16,6 +16,12 @@
  * depth-12 rows and `A3`'s oracle (the depth-5 drift in both recursions on the 190, and the mate
  * floor on the 287). Every deep row is deterministic: a fixed depth, or `chooseMove` on a frozen
  * clock with `maxDepth`. Unset, the deep cases are NOT DEFINED rather than skipped.
+ *
+ * `ABC-228` (`ADR-0053` decision 7): evasions in quiescence are on in `search()` and `chooseMove`,
+ * so every row here that compares the shipped path with a null-move door reads its shipped side
+ * off the evasion doors, `searchWithoutQuiescenceEvasions` and `chooseMoveWithoutQuiescenceEvasions`,
+ * the pre-`ABC-228` shipped path: the d5 drift pair, the mate floor and the two "changes the work"
+ * rows. They read their pre-ticket figures, so 37 cp keeps measuring null move alone.
  */
 
 import { readFileSync } from "node:fs";
@@ -24,6 +30,7 @@ import { makeMove, makeNullMove, unmakeMove, unmakeNullMove } from "./apply.ts";
 import {
   chooseMove,
   chooseMoveWithoutNullMove,
+  chooseMoveWithoutQuiescenceEvasions,
   chooseMoveWithoutReductions,
   type EngineChoice,
 } from "./engine.ts";
@@ -47,6 +54,7 @@ import {
   nullMoveReduction,
   search,
   searchWithoutNullMove,
+  searchWithoutQuiescenceEvasions,
   searchWithoutReductions,
 } from "./search.ts";
 import { zobristKey, zobristKeyAfterNullMove } from "./zobrist.ts";
@@ -372,20 +380,24 @@ describe("the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn
     expect(chooseMoveWithoutNullMove.length).toBe(2);
   });
 
-  it("search() makes null moves on position-6 at depth 4, and changes the work", () => {
+  // `ABC-228`: the shipped side reads the evasion door, the pre-`ABC-228` `search()`.
+  it("searchWithoutQuiescenceEvasions makes null moves on position-6 at depth 4, and changes the work", () => {
     const fen = fenOf("position-6");
     let shipped = 0;
     expect(
-      nullMovesDuring(() => (shipped = search(parseFen(fen), 4).nodes)).length,
+      nullMovesDuring(() => (shipped = searchWithoutQuiescenceEvasions(parseFen(fen), 4).nodes))
+        .length,
     ).toBeGreaterThan(0);
     expect(shipped).not.toBe(searchWithoutNullMove(parseFen(fen), 4).nodes);
   });
 
-  it("chooseMove makes null moves on position-6 deepened to 4, and changes the work", () => {
+  // `ABC-228`: the shipped side reads the evasion door, the pre-`ABC-228` `chooseMove`.
+  it("chooseMoveWithoutQuiescenceEvasions makes null moves on position-6 deepened to 4, and changes the work", () => {
     const fen = fenOf("position-6");
     let shipped = 0;
     expect(
-      nullMovesDuring(() => (shipped = deepenTo(chooseMove, fen, 4).nodes)).length,
+      nullMovesDuring(() => (shipped = deepenTo(chooseMoveWithoutQuiescenceEvasions, fen, 4).nodes))
+        .length,
     ).toBeGreaterThan(0);
     expect(shipped).not.toBe(deepenTo(chooseMoveWithoutNullMove, fen, 4).nodes);
   });
@@ -412,13 +424,14 @@ describe("the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn
   }
 });
 
-describe("QE-208-c — every door's nullMove switch literal is false; only search() and chooseMove turn it on", () => {
+describe("QE-208-c — every door's nullMove switch literal is false; only the shipped path and the ABC-228 doors turn it on", () => {
   const MODULES = [
     {
       path: "./search.ts",
       call: "searchRoot(position, depth, {",
       doors: {
         search: "true",
+        searchWithoutQuiescenceEvasions: "true",
         searchWithoutNullMove: "false",
         searchWithoutPruning: "false",
         searchWithoutQuiescence: "false",
@@ -435,6 +448,7 @@ describe("QE-208-c — every door's nullMove switch literal is false; only searc
       call: "deepen(position, options, {",
       doors: {
         chooseMove: "true",
+        chooseMoveWithoutQuiescenceEvasions: "true",
         chooseMoveWithoutNullMove: "false",
         chooseMoveWithoutReductions: "false",
         chooseMoveWithoutPvsOrReductions: "false",
@@ -443,7 +457,7 @@ describe("QE-208-c — every door's nullMove switch literal is false; only searc
   ];
 
   for (const { path, call, doors } of MODULES) {
-    it(`${path}: each exported entry passes exactly one nullMove literal, and only the shipped one is true`, () => {
+    it(`${path}: each exported entry passes exactly one nullMove literal, and only the shipped one and its ABC-228 door are true`, () => {
       const flat = readFileSync(new URL(path, import.meta.url), "utf8").replace(/\s+/g, " ");
       const found: Record<string, string> = {};
       for (const chunk of flat.split("export function ").slice(1)) {
@@ -720,21 +734,22 @@ if (RUN_DEEP) {
       expect(corpus()).toHaveLength(190);
     });
 
-    it("search() against searchWithoutNullMove at fixed depth 5: >= 95% within 25 cp, none beyond 37 cp [deep, SEARCH_DEEP=1]", () => {
+    // `ABC-228`: the shipped side reads the evasion doors, so the bar measures null move alone.
+    it("searchWithoutQuiescenceEvasions against searchWithoutNullMove at fixed depth 5: >= 95% within 25 cp, none beyond 37 cp [deep, SEARCH_DEEP=1]", () => {
       reportAndBar(
-        "search() d5",
+        "searchWithoutQuiescenceEvasions d5",
         drift(
-          (fen) => search(parseFen(fen), 5).score,
+          (fen) => searchWithoutQuiescenceEvasions(parseFen(fen), 5).score,
           (fen) => searchWithoutNullMove(parseFen(fen), 5).score,
         ),
       );
     }, 600_000);
 
-    it("chooseMove against chooseMoveWithoutNullMove deepened to 5: >= 95% within 25 cp, none beyond 37 cp [deep, SEARCH_DEEP=1]", () => {
+    it("chooseMoveWithoutQuiescenceEvasions against chooseMoveWithoutNullMove deepened to 5: >= 95% within 25 cp, none beyond 37 cp [deep, SEARCH_DEEP=1]", () => {
       reportAndBar(
-        "chooseMove to d5",
+        "chooseMoveWithoutQuiescenceEvasions to d5",
         drift(
-          (fen) => deepenTo(chooseMove, fen, 5).score,
+          (fen) => deepenTo(chooseMoveWithoutQuiescenceEvasions, fen, 5).score,
           (fen) => deepenTo(chooseMoveWithoutNullMove, fen, 5).score,
         ),
       );
@@ -742,14 +757,15 @@ if (RUN_DEEP) {
   });
 
   describe("A3 — the same-depth mate floor on the 287 [deep, SEARCH_DEEP=1]", () => {
-    it("every mate searchWithoutNullMove scores at depth 5, search() scores at depth 5: same sign, no longer [deep, SEARCH_DEEP=1]", () => {
+    // `ABC-228`: the shipped side reads the evasion door, the pre-`ABC-228` `search()`.
+    it("every mate searchWithoutNullMove scores at depth 5, searchWithoutQuiescenceEvasions scores at depth 5: same sign, no longer [deep, SEARCH_DEEP=1]", () => {
       let mates = 0;
       const violations: string[] = [];
       for (const fen of MATE_CORPUS) {
         const ref = searchWithoutNullMove(parseFen(fen), 5).score;
         if (!isMate(ref)) continue;
         mates++;
-        const got = search(parseFen(fen), 5).score;
+        const got = searchWithoutQuiescenceEvasions(parseFen(fen), 5).score;
         // A mate n plies away reads MATE_SCORE - n, so "no longer" is |got| >= |ref|.
         if (!isMate(got) || Math.sign(got) !== Math.sign(ref) || Math.abs(got) < Math.abs(ref)) {
           violations.push(`${fen}: ${ref} without null move, ${got} with it, depth 5`);

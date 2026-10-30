@@ -258,7 +258,7 @@ describe("ABC-174 A1 — the table is ADR-0045 D1's", () => {
       2: { budgetMs: 180, blunderRate: 0.2 },
       3: { budgetMs: 330, blunderRate: 0.1 },
       4: { budgetMs: 1_000, blunderRate: 0.05 },
-      5: { budgetMs: 3_000, blunderRate: 0 },
+      5: { budgetMs: 4_000, blunderRate: 0 }, // ABC-228, ADR-0053 d10 (ii): 3 000 -> 4 000
       6: { budgetMs: 5_000, blunderRate: 0 },
       7: { budgetMs: 30_000, blunderRate: 0 },
     });
@@ -288,7 +288,7 @@ describe("ABC-212 A1 — levels 6 and 7 above the default (ADR-0045 § AMENDMENT
       [180, 0.2],
       [330, 0.1],
       [1_000, 0.05],
-      [3_000, 0],
+      [4_000, 0], // ABC-228, ADR-0053 d10 (ii): level 5 is 4 000; G9 is waived on it only
     ];
     ([1, 2, 3, 4, 5] as const).forEach((id, i) => {
       const [budgetMs, blunderRate] = base[i] as [number, number];
@@ -314,14 +314,14 @@ describe("ABC-212 A1 — levels 6 and 7 above the default (ADR-0045 § AMENDMENT
   });
 });
 
-describe("ABC-174 A3 — the default plays as today: chooseMove at 3 000 ms, the old level 3", () => {
+describe("ABC-174 A3 — the default plays as the engine: chooseMove at 4 000 ms (ABC-228, ADR-0053 d10)", () => {
   const level = LEVELS[DEFAULT_LEVEL];
   const step = level.budgetMs / 3;
 
   it("move, depth and nodes are equal on 30 of 30 positions, for each of two seeds", () => {
     expect(THIRTY).toHaveLength(30);
     const reference = THIRTY.map((fen) =>
-      chooseMove(parseFen(fen), { budgetMs: 3_000, now: virtualClock(step) }),
+      chooseMove(parseFen(fen), { budgetMs: 4_000, now: virtualClock(step) }),
     );
     for (const seed of [1, 87]) {
       const equal = THIRTY.filter((fen, i) => {
@@ -352,17 +352,19 @@ describe("ABC-174 A4 — the mechanism's shape: a budget and a rate per level", 
 describe("ABC-174 A7 — the time budget, from the data (NFR-004; ADR-0038 decision 3)", () => {
   const budgets = ([1, 2, 3, 4, 5, 6, 7] as const).map((id) => LEVELS[id].budgetMs);
 
-  it("clause A: the default's budget is DEFAULT_BUDGET_MS, which is 3 000", () => {
+  it("clause A: the default's budget is DEFAULT_BUDGET_MS, which is 4 000 (ABC-228, ADR-0053 d10)", () => {
     expect(LEVELS[DEFAULT_LEVEL].budgetMs).toBe(DEFAULT_BUDGET_MS);
-    expect(DEFAULT_BUDGET_MS).toBe(3_000);
+    expect(DEFAULT_BUDGET_MS).toBe(4_000);
   });
 
   it("clause B, per level (ABC-212 A5): budgetMs <= ceiling(L) over 1..7, < 5 000 over 1..5, clamp 32 000", () => {
     // `ADR-0045` § AMENDMENT A3: one clamp at the largest ceiling; each level's own ceiling is
-    // held by its budget, with at least 2 000 ms of margin.
+    // held by its budget, with at least 2 000 ms of margin. `ABC-228` (`ADR-0053` d10, reading
+    // (ii)): level 5's margin is 1 000 ms (4 000 under its 5 s ceiling); every other level keeps 2 000.
     ([1, 2, 3, 4, 5, 6, 7] as const).forEach((id, i) => {
       expect(budgets[i], `level ${id}`).toBeLessThanOrEqual(CEILING_MS[id]);
-      expect(CEILING_MS[id] - (budgets[i] as number), `level ${id}`).toBeGreaterThanOrEqual(2_000);
+      const margin = id === 5 ? 1_000 : 2_000;
+      expect(CEILING_MS[id] - (budgets[i] as number), `level ${id}`).toBeGreaterThanOrEqual(margin);
     });
     for (const id of [1, 2, 3, 4, 5] as const) expect(LEVELS[id].budgetMs).toBeLessThan(5_000);
     expect(HARD_CEILING_MS).toBe(32_000);
@@ -380,8 +382,8 @@ describe("ABC-174 A7 — the time budget, from the data (NFR-004; ADR-0038 decis
 // ---------------------------------------------------------------------------
 
 describe("A6 — the default level", () => {
-  it("has the 3 s budget (`NFR-004`), the engine's own `DEFAULT_BUDGET_MS`", () => {
-    expect(LEVELS[DEFAULT_LEVEL].budgetMs).toBe(3_000);
+  it("has the 4 s budget (`NFR-004`; ABC-228, ADR-0053 d10), the engine's own `DEFAULT_BUDGET_MS`", () => {
+    expect(LEVELS[DEFAULT_LEVEL].budgetMs).toBe(4_000);
     expect(LEVELS[DEFAULT_LEVEL].budgetMs).toBe(DEFAULT_BUDGET_MS);
   });
 

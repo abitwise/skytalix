@@ -213,3 +213,40 @@ back to 3 000. Any reference read at 4 000 ms is then stale.
 
 **DoR 10/10 (re-scored 2026-10-30, `bapm-owner-adr-fold`; re-checked 2026-10-30, `bapm-q3c-oq228ii-fold`: rows 4, 5
 and 10 carry (ii), still 10/10). Ready.** *(Was 9/10, waiting on the ADR.)*
+
+> **Result 2026-10-30, Software Engineer** (task `se-ABC-228`, branch `grugops/ABC-228` from `main` `61d5d629`). **`A8`
+> read 64.7 % (kiwipete) and 98.3 % (position-6), both ≤ 100 %.** So `G6` is read by its rule. Scope 5 (reading (ii))
+> is NOT built, `A9` does not run, and `tools/rating/rating.ts` is untouched. Built to `ADR-0053` decisions 2–4 and 6–9
+> in `9bd3c519`:
+> - in check below the cap, `quiesce` searches every legal move and scores none as `-(MATE_SCORE - (ply + qply))`;
+> - `MATE_SCORE` moves to `src/quiescence.ts`;
+> - each recursion has a switch, and there is one door pair.
+>
+> `A1` is met: the doors are node-equal to base cross-build, and every older door to itself. `A2` and `A3` are met (6 + 6
+> `Q-SET` rows, with a brute-force reference). `A4` reads 1.368× and 1.405×. The d5 drift is 89.30 % / 88.77 % with a
+> 118 cp maximum, and the mate floor holds 189 of 189. Re-pins: −485 → −392, the `ABC-080` tie row, and the `ABC-079`
+> `A2` board, which was in check.
+>
+> **`Q-SET` was not frozen by QE before the build.** The SE wrote it, and QE's freeze or review is owed. Still owed
+> to QE: the graded `G6`, the smokes (`A6`), `G5`'s real clock and `G11`. Notes:
+> `.grugops/context/se-ABC-228/notes/`.
+
+> **Result 2026-10-30, Software Engineer** (task `se-ABC-228-ii`, branch `grugops/ABC-228`, code `8c82399f` on
+> `d9c5bcde`). **Scope 5, reading (ii), built after QE's `G6` miss** (`qe-ABC-228` QE-228-c: position-6 median depth 9
+> against base's 10). **`A9` reads 65.9 % (kiwipete) and 97.4 % (position-6) in `A8`'s units, both ≤ 133 %: MET.** So
+> `G6` is read under (ii) (`A5`), and then the smokes.
+> - **Data:** `LEVELS[5]` = `{ budgetMs: 4_000, blunderRate: 0 }`, `DEFAULT_BUDGET_MS` = 4 000, and the R literal
+>   `mode === "r" ? 4000`. Every other level value is byte-identical, and `ADR-0045` D2's equality row is green.
+> - **Test pins:** they follow the constant. The grep found more than the ADR's list: `src/uci-session.test.ts`, where
+>   the `GO_G3500` rows now read 3 500, and level 5's ceiling margin is 1 000.
+> - **QE-228-b:** QE's 6 rows and `QE-C4` are in `src/quiescence.test.ts`.
+> - **Gates:** lint, typecheck and build exit 0. `npm test` 2 219 / 2 219, skips 0.
+>
+> **INFO:**
+> - With QE's measured 1.139 factor, `A9` reads 68.9 % and 101.8 %, both ≤ 133 %.
+> - Head on the real clock at 4 000 ms completed base's depth in 3 of 3 runs on each board. That is not the graded
+>   `G6`.
+>
+> **Still owed to QE:** `G5`, `G6` and `G11` at 4 s, `G8`, the smokes (`A6` "Under (ii)"), and UAT.
+>
+> Notes: `.grugops/context/se-ABC-228-ii/notes/`.

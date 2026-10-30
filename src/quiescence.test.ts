@@ -22,10 +22,17 @@
  * The multiplier is printed with its node counts and the assertion holds the bar; a red here is
  * the ticket saying "stop and report to Architect/Design", and the number is not to be tuned to
  * fit. Losing the sort reads 6x–30x over the level, which is what the stop must catch.
+ *
+ * `ABC-228` (`ADR-0053`, the evasion rule) has its rows at the end of this file: `Q-SET`'s in-check
+ * and capture-mate rows, the rule rows, the doors and the source rows in the default lane; the
+ * node bar, the bounded drift oracle in both recursions and the mate floor under `SEARCH_DEEP=1`.
+ * Direct `quiesce` calls above pass the shipped rules; a work reading passes the pre-ticket record.
  */
 
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { makeMove, unmakeMove } from "./apply.ts";
+import { chooseMove, chooseMoveWithoutQuiescenceEvasions, type EngineChoice } from "./engine.ts";
 import { evaluate } from "./evaluate.ts";
 import { parseFen, toFen } from "./fen.ts";
 import { gameStatus } from "./gameend.ts";
@@ -38,9 +45,17 @@ import {
   mvvLvaKey,
   orderCaptures,
   QUIESCENCE_MAX_PLY,
+  type QuiescenceRules,
   quiesce,
 } from "./quiescence.ts";
-import { search, searchWithoutPvsOrReductions, searchWithoutQuiescence } from "./search.ts";
+import { MATE_CORPUS } from "./search.mate-corpus.ts";
+import {
+  MATE_SCORE,
+  search,
+  searchWithoutPvsOrReductions,
+  searchWithoutQuiescence,
+  searchWithoutQuiescenceEvasions,
+} from "./search.ts";
 
 /** The six perft positions — `src/search.test.ts`'s corpus, the capture-dense ones included. */
 const PERFT_CORPUS: ReadonlyArray<{ name: string; fen: string }> = [
@@ -63,6 +78,9 @@ const fenOf = (name: string): string =>
  * absent from the run, never skipped — so the gate's test-integrity skip count stays 0.
  */
 const RUN_DEEP = process.env.SEARCH_DEEP === "1";
+
+/** The shipped quiescence rules (`ABC-228`): a direct call passes them, as both recursions do. */
+const SHIPPED: QuiescenceRules = { evasions: true };
 
 const label = (move: Move | null): string =>
   move === null ? "null" : `${squareName(move.from)}${squareName(move.to)}`;
@@ -104,10 +122,18 @@ interface QuiesceRun {
 function quiesceFully(position: Position): QuiesceRun {
   let nodes = 0;
   let deepest = 0;
-  const score = quiesce(position, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY, 0, (qply) => {
-    nodes++;
-    if (qply > deepest) deepest = qply;
-  });
+  const score = quiesce(
+    position,
+    Number.NEGATIVE_INFINITY,
+    Number.POSITIVE_INFINITY,
+    0,
+    0,
+    SHIPPED,
+    (qply) => {
+      nodes++;
+      if (qply > deepest) deepest = qply;
+    },
+  );
   return { score, nodes, deepest };
 }
 
@@ -225,7 +251,11 @@ describe("A2 — stand-pat is a lower bound on the quiescence value, never a rep
   const QUIET: ReadonlyArray<{ name: string; fen: string }> = [
     { name: "king and pawn vs king", fen: "8/8/8/4k3/8/8/4P3/4K3 w - - 0 1" },
     { name: "the start position", fen: fenOf("startpos") },
-    { name: "queen vs rook, nothing en prise", fen: "4k3/8/8/8/8/8/8/Q3K2r w - - 0 1" },
+    // RE-PLACED at `ABC-228`: this row's board was `4k3/8/8/8/8/8/8/Q3K2r w`, where Rh1 gives
+    // check. Its premise (quiet, nothing en prise) did not hold, and with evasions in quiescence
+    // it reads −544, not the static 423: the king must step off the first rank and Rxa1 follows.
+    // The rook moves one square, to h2, so nothing checks; the old board is an `ABC-228` A2 row.
+    { name: "queen vs rook, nothing en prise", fen: "4k3/8/8/8/8/8/7r/Q3K3 w - - 0 1" },
     {
       name: "rook vs rook, nothing en prise, black to move",
       fen: "4k3/7r/8/8/8/8/8/R3K3 b - - 0 1",
@@ -544,9 +574,17 @@ describe("A6 — the searched position is unchanged on return", () => {
     const abort = new Error("test abort");
 
     expect(() =>
-      quiesce(position, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY, 0, (qply) => {
-        if (qply >= 3) throw abort;
-      }),
+      quiesce(
+        position,
+        Number.NEGATIVE_INFINITY,
+        Number.POSITIVE_INFINITY,
+        0,
+        0,
+        SHIPPED,
+        (qply) => {
+          if (qply >= 3) throw abort;
+        },
+      ),
     ).toThrow(abort);
     expect(snapshot(position)).toEqual(before);
   });
@@ -673,3 +711,577 @@ describe("ABC-240 (P2) — quiescence's capture order equals today's stable sort
     expect(captureScratchByteLength()).toBe(256 * 8);
   });
 });
+
+// ---------------------------------------------------------------------------
+// ABC-228 (`ADR-0053` decisions 2-4 and 6-9) — in check, quiescence searches every evasion and
+// scores none as mate. `Q-SET`'s rows, the rule rows, the doors, the source rows; the node bar,
+// the bounded drift oracle and the mate floor in the deep lane.
+// ---------------------------------------------------------------------------
+
+/** The pre-`ABC-228` rules: a work reading and the reference arm pass these. */
+const PRE_ABC228: QuiescenceRules = { evasions: false };
+
+/** A full-window `quiesce` at `qply` 0 under `rules`, the leaf `ply` plies from the root. */
+const quiesceAt = (fen: string, rules: QuiescenceRules, ply = 0, qply = 0): number =>
+  quiesce(
+    parseFen(fen),
+    Number.NEGATIVE_INFINITY,
+    Number.POSITIVE_INFINITY,
+    qply,
+    ply,
+    rules,
+    () => {},
+  );
+
+/**
+ * THE BRUTE-FORCE REFERENCE (`ABC-228` test note 2): the evasion rule as plain minimax, with no
+ * window, no cutoff and no ordering, written here and not in `src/`. In check below the cap every
+ * legal move is tried and none is mate at `ply + qply`; otherwise the static score, raised by any
+ * capture. Its value is the exact one a full-window fail-soft `quiesce` must return.
+ */
+function bruteForce(position: Position, qply: number, ply: number): number {
+  if (qply < QUIESCENCE_MAX_PLY && isInCheck(position)) {
+    const evasions = legalMoves(position);
+    if (evasions.length === 0) return 0 - (MATE_SCORE - (ply + qply));
+    let best = Number.NEGATIVE_INFINITY;
+    for (const move of evasions) {
+      const undo = makeMove(position, move);
+      const score = 0 - bruteForce(position, qply + 1, ply);
+      unmakeMove(position, move, undo);
+      if (score > best) best = score;
+    }
+    return best;
+  }
+  let best = evaluate(position);
+  if (qply >= QUIESCENCE_MAX_PLY) return best;
+  for (const move of legalCaptures(position)) {
+    const undo = makeMove(position, move);
+    const score = 0 - bruteForce(position, qply + 1, ply);
+    unmakeMove(position, move, undo);
+    if (score > best) best = score;
+  }
+  return best;
+}
+
+/**
+ * `Q-SET`, in check (`ADR-0053` decision 9, `A2`): the side to move is in check at `qply` 0. Q2 is
+ * the SA's probe row; the others cover the kinds the ADR names. NOT FROZEN BY QE before this build
+ * (`EPIC-010` § Common gates asks it to be): the SE wrote them. QE's freeze-review (`qe-ABC-228`)
+ * held all of them, and QE's own rows are `QE_IN_CHECK` and `QE-M1`..`QE-M3` below.
+ */
+const Q_SET_IN_CHECK: ReadonlyArray<{ name: string; fen: string; evasions: number }> = [
+  {
+    name: "Q2: a quiet king move is the only kind of evasion",
+    fen: "4k3/8/8/8/8/8/4R3/4K3 b - - 0 1",
+    evasions: 4,
+  },
+  {
+    name: "a block by interposition, Bf1, the only evasion",
+    fen: "6k1/5ppp/8/8/2B5/8/5PPP/r5K1 w - - 0 1",
+    evasions: 1,
+  },
+  {
+    name: "a capture of the checker, Qxd2 or Kxd2",
+    fen: "4k3/8/8/8/8/8/3q4/3QK3 w - - 0 1",
+    evasions: 3,
+  },
+  // `ABC-079` `A2`'s old "queen vs rook" board: the king steps off the rank and Rxa1 follows.
+  {
+    name: "an evasion that loses material to a follow-up capture",
+    fen: "4k3/8/8/8/8/8/8/Q3K2r w - - 0 1",
+    evasions: 3,
+  },
+  {
+    name: "a double check: Rxb5 does not evade, only king moves do",
+    fen: "4k3/8/8/rB6/8/8/8/4R1K1 b - - 0 1",
+    evasions: 3,
+  },
+  {
+    name: "an evasion that is itself a promotion, e8 blocking the rook",
+    fen: "K6r/4P3/8/8/8/8/8/k7 w - - 0 1",
+    evasions: 6,
+  },
+];
+
+/**
+ * `Q-SET`, a capture that mates (`A3`): each reads `±(MATE_SCORE - (ply + qply))`. `ply` is 0 on a
+ * direct call; the last row runs through `search()` at depth 1. Same freeze note as above.
+ */
+const Q_SET_MATES: ReadonlyArray<{ name: string; fen: string; score: number }> = [
+  {
+    name: "Q1: Qxf7 mates at qply 1",
+    fen: "r1bqkb1r/pppp1ppp/2n2n2/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq - 4 4",
+    score: MATE_SCORE - 1,
+  },
+  {
+    name: "after a two-capture exchange: Rxf8+ Qxf8 Rxf8 mates at qply 3",
+    fen: "5r1k/6pp/3q4/8/8/8/5RPP/5RK1 w - - 0 1",
+    score: MATE_SCORE - 3,
+  },
+  {
+    name: "a capturing promotion: cxd8=Q mates",
+    fen: "k2r4/ppP5/8/8/8/8/8/7K w - - 0 1",
+    score: MATE_SCORE - 1,
+  },
+  {
+    name: "an en-passant capture: exd6 opens the e-file and mates",
+    fen: "3rkr2/5p2/1N6/3pP3/8/8/8/4R2K w - d6 0 2",
+    score: MATE_SCORE - 1,
+  },
+];
+
+/** `A3`: Rxe8+ leaves Kh7 as black's ONE evasion, so this row must NOT read a mate score. */
+const ONE_EVASION = "4n1k1/5pp1/8/8/8/8/5PPP/4R1K1 w - - 0 1";
+/** `A3` through `search()`: Rd8+ (full width) Ne8 (an evasion in quiescence) Rxe8 mates, 3 plies. */
+const MATE_THROUGH_SEARCH = "6k1/2n2ppp/8/8/8/8/5PPP/3R2K1 w - - 0 1";
+
+const deepenWith = (choose: typeof chooseMove, fen: string, depth: number): EngineChoice =>
+  choose(parseFen(fen), { budgetMs: 1_000, now: () => 0, maxDepth: depth }) as EngineChoice;
+
+describe("ABC-228 A2 — in check, quiesce searches every evasion: Q-SET's in-check rows", () => {
+  it("carries six rows, Q2 among them, each with the side to move in check", () => {
+    expect(Q_SET_IN_CHECK).toHaveLength(6);
+    expect(Q_SET_IN_CHECK.some(({ fen }) => fen === "4k3/8/8/8/8/8/4R3/4K3 b - - 0 1")).toBe(true);
+    for (const { name, fen, evasions } of Q_SET_IN_CHECK) {
+      expect(isInCheck(parseFen(fen)), name).toBe(true);
+      expect(legalMoves(parseFen(fen)), name).toHaveLength(evasions);
+    }
+    // The kinds the rows claim: a promotion among the evasions, and a capture of the checker.
+    expect(
+      legalMoves(parseFen(Q_SET_IN_CHECK[5]?.fen as string)).some((m) => m.promotion !== 0),
+    ).toBe(true);
+    expect(
+      legalMoves(parseFen(Q_SET_IN_CHECK[2]?.fen as string)).some((m) => m.captured !== 0),
+    ).toBe(true);
+  });
+
+  for (const { name, fen } of Q_SET_IN_CHECK) {
+    it(`${name}: differs from the static score, equals the best evasion's and the brute force`, () => {
+      const position = parseFen(fen);
+      const score = quiesceAt(fen, SHIPPED);
+      expect(score).not.toBe(evaluate(position));
+      // The best evasion's quiescence score, one ply deeper, each searched from a full window.
+      let best = Number.NEGATIVE_INFINITY;
+      for (const move of legalMoves(position)) {
+        const undo = makeMove(position, move);
+        best = Math.max(
+          best,
+          0 -
+            quiesce(
+              position,
+              Number.NEGATIVE_INFINITY,
+              Number.POSITIVE_INFINITY,
+              1,
+              0,
+              SHIPPED,
+              () => {},
+            ),
+        );
+        unmakeMove(position, move, undo);
+      }
+      expect(score).toBe(best);
+      expect(score).toBe(bruteForce(parseFen(fen), 0, 0));
+    });
+  }
+
+  it("Q2 reads −536 where the static score is −548, and the pre-ticket rules stand pat at −548", () => {
+    // `ADR-0053` finding 1, probe Q2.
+    expect(quiesceAt("4k3/8/8/8/8/8/4R3/4K3 b - - 0 1", SHIPPED)).toBe(-536);
+    expect(quiesceAt("4k3/8/8/8/8/8/4R3/4K3 b - - 0 1", PRE_ABC228)).toBe(-548);
+  });
+});
+
+describe("ABC-228 A3 — a capture that mates scores mate, at the right sign and distance", () => {
+  it("carries six rows: Q1, the exchange, the promotion, en passant, one evasion, and search()", () => {
+    expect(Q_SET_MATES).toHaveLength(4);
+    expect([...Q_SET_MATES.map(({ fen }) => fen), ONE_EVASION, MATE_THROUGH_SEARCH]).toHaveLength(
+      6,
+    );
+    expect(Q_SET_MATES[0]?.fen).toBe(
+      "r1bqkb1r/pppp1ppp/2n2n2/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq - 4 4",
+    );
+    for (const { name, fen } of [...Q_SET_MATES, { name: "one", fen: ONE_EVASION }]) {
+      expect(isInCheck(parseFen(fen)), name).toBe(false);
+    }
+  });
+
+  for (const { name, fen, score } of Q_SET_MATES) {
+    it(`${name}: quiesce reads ${score}, the brute force agrees, the pre-ticket rules do not`, () => {
+      expect(quiesceAt(fen, SHIPPED)).toBe(score);
+      expect(bruteForce(parseFen(fen), 0, 0)).toBe(score);
+      expect(Math.abs(quiesceAt(fen, PRE_ABC228))).toBeLessThan(MATE_SCORE - 1_000);
+    });
+
+    it(`${name}: the same mate from a leaf 5 plies down reads 5 plies further`, () => {
+      expect(quiesceAt(fen, SHIPPED, 5)).toBe(score - 5);
+    });
+  }
+
+  it("the mated side reads the negated score: Q1 after Qxf7, black at qply 1, is −(MATE_SCORE − 1)", () => {
+    const position = parseFen(Q_SET_MATES[0]?.fen as string);
+    const qxf7 = legalCaptures(position).find((m) => label(m) === "h5f7") as Move;
+    makeMove(position, qxf7);
+    expect(legalMoves(position)).toHaveLength(0);
+    expect(
+      quiesce(
+        position,
+        Number.NEGATIVE_INFINITY,
+        Number.POSITIVE_INFINITY,
+        1,
+        0,
+        SHIPPED,
+        () => {},
+      ),
+    ).toBe(0 - (MATE_SCORE - 1));
+  });
+
+  it("exactly one evasion is not mate: Rxe8+ Kh7, and the score is the brute force's", () => {
+    const position = parseFen(ONE_EVASION);
+    const rxe8 = legalCaptures(position).find((m) => label(m) === "e1e8") as Move;
+    makeMove(position, rxe8);
+    expect(isInCheck(position)).toBe(true);
+    expect(legalMoves(position).map(label)).toEqual(["g8h7"]);
+    const score = quiesceAt(ONE_EVASION, SHIPPED);
+    expect(Math.abs(score)).toBeLessThan(MATE_SCORE - 1_000);
+    expect(score).toBe(bruteForce(parseFen(ONE_EVASION), 0, 0));
+  });
+
+  it("through search() at depth 1: Rd8+ Ne8 Rxe8 mates three plies from the root, MATE_SCORE − 3", () => {
+    const result = search(parseFen(MATE_THROUGH_SEARCH), 1);
+    expect(result.score).toBe(MATE_SCORE - 3);
+    expect(label(result.move as Move)).toBe("d1d8");
+    // The door, the pre-`ABC-228` search, does not see it at depth 1.
+    expect(
+      Math.abs(searchWithoutQuiescenceEvasions(parseFen(MATE_THROUGH_SEARCH), 1).score),
+    ).toBeLessThan(MATE_SCORE - 1_000);
+  });
+});
+
+/**
+ * `Q-SET`, QE's rows (`qe-ABC-228`, gap `QE-228-b`): frozen by QE before its reading and read there
+ * against QE's own brute force. `QE-C4` is the discriminating row (`QE-228-a`): the best evasion
+ * is a capture of the checker, yet the pre-ticket rule (stand pat, then captures) reads a
+ * DIFFERENT value, so a regression to that rule reds it. `C1` and `C2` read the same value under
+ * both rules, which is why `C4` is here.
+ */
+const QE_IN_CHECK: ReadonlyArray<{
+  name: string;
+  fen: string;
+  score: number;
+  stat: number;
+  pre: number;
+}> = [
+  {
+    name: "QE-C1: knight check, the checker taken by a pawn",
+    fen: "4k3/2p5/3N4/8/8/8/8/4K3 b - - 0 1",
+    score: 131,
+    stat: -292,
+    pre: 131,
+  },
+  {
+    name: "QE-C2: pawn check, evaded by an en-passant capture of the checker",
+    fen: "4k3/8/8/3pP3/4K3/8/8/8 w - d6 0 1",
+    score: 181,
+    stat: 14,
+    pre: 181,
+  },
+  {
+    name: "QE-C3: the checker taken by a capturing promotion",
+    fen: "3r3k/4P3/8/8/8/8/8/3K4 w - - 0 1",
+    score: 940,
+    stat: -349,
+    pre: 938,
+  },
+  {
+    name: "QE-C4: Nf2+ forks Kh1 and Qd1; Rxf2 is the best evasion, the pre-ticket rule misses it",
+    fen: "5rk1/6pp/8/8/8/8/PPP2n2/3Q1R1K w - - 0 1",
+    score: 475,
+    stat: 652,
+    pre: 652,
+  },
+];
+
+/** `QE-M1`: black is in check (Rb8+); the one evasion Rd8 is met by Rxd8 mate, two qplies on. */
+const QE_M1 = "1R4k1/5ppp/8/8/8/8/7K/3r4 b - - 0 1";
+/** `QE-M2`: a smothered mate by a knight capture, Nxf7. */
+const QE_M2 = "6rk/5bpp/8/6N1/8/8/8/6K1 w - - 0 1";
+/** `QE-M3`: the side to move is already checkmated. */
+const QE_M3 = "4R1k1/5ppp/8/8/8/8/8/6K1 b - - 0 1";
+
+describe("ABC-228 QE-228-b — QE's Q-SET rows (qe-ABC-228), in src", () => {
+  for (const { name, fen, score, stat, pre } of QE_IN_CHECK) {
+    it(`${name}: reads ${score} (static ${stat}, pre-ticket ${pre}), the brute force agrees`, () => {
+      expect(isInCheck(parseFen(fen))).toBe(true);
+      expect(evaluate(parseFen(fen))).toBe(stat);
+      expect(quiesceAt(fen, SHIPPED)).toBe(score);
+      expect(bruteForce(parseFen(fen), 0, 0)).toBe(score);
+      expect(quiesceAt(fen, PRE_ABC228)).toBe(pre);
+    });
+  }
+
+  it("QE-C4 discriminates: the shipped rule and the pre-ticket rule read different values", () => {
+    const row = QE_IN_CHECK[3] as (typeof QE_IN_CHECK)[number];
+    expect(quiesceAt(row.fen, SHIPPED)).not.toBe(quiesceAt(row.fen, PRE_ABC228));
+    // Rxf2 is the best evasion: its own quiescence score, one ply on, is the node's.
+    const position = parseFen(row.fen);
+    const rxf2 = legalMoves(position).find((m) => label(m) === "f1f2") as Move;
+    makeMove(position, rxf2);
+    expect(
+      0 -
+        quiesce(
+          position,
+          Number.NEGATIVE_INFINITY,
+          Number.POSITIVE_INFINITY,
+          1,
+          0,
+          SHIPPED,
+          () => {},
+        ),
+    ).toBe(row.score);
+  });
+
+  it("QE-M1: mated in quiescence with a negative sign, −(MATE_SCORE − 2), and search agrees at depths 1–3", () => {
+    expect(quiesceAt(QE_M1, SHIPPED)).toBe(0 - (MATE_SCORE - 2));
+    expect(bruteForce(parseFen(QE_M1), 0, 0)).toBe(0 - (MATE_SCORE - 2));
+    for (const depth of [1, 2, 3]) {
+      expect(search(parseFen(QE_M1), depth).score, `search d${depth}`).toBe(0 - (MATE_SCORE - 2));
+      expect(deepenWith(chooseMove, QE_M1, depth).score, `chooseMove d${depth}`).toBe(
+        0 - (MATE_SCORE - 2),
+      );
+    }
+    expect(Math.abs(searchWithoutQuiescenceEvasions(parseFen(QE_M1), 1).score)).toBeLessThan(
+      MATE_SCORE - 1_000,
+    );
+  });
+
+  it("QE-M2: Nxf7 smothers, MATE_SCORE − 1, and MATE_SCORE − 6 from a leaf 5 plies down", () => {
+    expect(isInCheck(parseFen(QE_M2))).toBe(false);
+    expect(quiesceAt(QE_M2, SHIPPED)).toBe(MATE_SCORE - 1);
+    expect(bruteForce(parseFen(QE_M2), 0, 0)).toBe(MATE_SCORE - 1);
+    expect(quiesceAt(QE_M2, SHIPPED, 5)).toBe(MATE_SCORE - 6);
+    expect(Math.abs(quiesceAt(QE_M2, PRE_ABC228))).toBeLessThan(MATE_SCORE - 1_000);
+  });
+
+  it("QE-M3: a checkmated node reads −MATE_SCORE at ply 0, −(MATE_SCORE − 3) at ply 3, static at the cap", () => {
+    expect(legalMoves(parseFen(QE_M3))).toHaveLength(0);
+    expect(isInCheck(parseFen(QE_M3))).toBe(true);
+    expect(quiesceAt(QE_M3, SHIPPED)).toBe(0 - MATE_SCORE);
+    expect(quiesceAt(QE_M3, SHIPPED, 3)).toBe(0 - (MATE_SCORE - 3));
+    expect(quiesceAt(QE_M3, SHIPPED, 0, QUIESCENCE_MAX_PLY)).toBe(evaluate(parseFen(QE_M3)));
+  });
+});
+
+describe("ABC-228 — the rule rows (`ADR-0053` decision 9; each reds a planted fault)", () => {
+  it("out of check the node still stands pat: Q3's free quiet promotion is not searched", () => {
+    const q3 = "8/P6k/8/8/8/8/8/K7 w - - 0 1";
+    expect(isInCheck(parseFen(q3))).toBe(false);
+    expect(quiesceAt(q3, SHIPPED)).toBe(evaluate(parseFen(q3)));
+  });
+
+  it("in check below the cap the static score is never returned: every in-check row, every qply 0..7", () => {
+    for (const { name, fen } of Q_SET_IN_CHECK) {
+      for (let qply = 0; qply < QUIESCENCE_MAX_PLY; qply++) {
+        expect(quiesceAt(fen, SHIPPED, 0, qply), `${name} @ qply ${qply}`).not.toBe(
+          evaluate(parseFen(fen)),
+        );
+      }
+    }
+  });
+
+  it("at the cap a node stands pat, in check or not: Q2 at qply 8 reads its static score, no node entered", () => {
+    let entered = 0;
+    const position = parseFen("4k3/8/8/8/8/8/4R3/4K3 b - - 0 1");
+    const score = quiesce(
+      position,
+      Number.NEGATIVE_INFINITY,
+      Number.POSITIVE_INFINITY,
+      QUIESCENCE_MAX_PLY,
+      0,
+      SHIPPED,
+      () => entered++,
+    );
+    expect(score).toBe(-548);
+    expect(entered).toBe(1); // the node itself, at qply 8; nothing past it
+  });
+
+  it("stalemate (no legal move, not in check) still stands pat, never a mate score", () => {
+    const stalemate = "k7/8/1Q6/8/8/8/8/7K b - - 0 1";
+    expect(legalMoves(parseFen(stalemate))).toHaveLength(0);
+    expect(isInCheck(parseFen(stalemate))).toBe(false);
+    expect(quiesceAt(stalemate, SHIPPED)).toBe(evaluate(parseFen(stalemate)));
+  });
+
+  it("no node past qply 8 is visited with evasions on, on every Q-SET row", () => {
+    for (const { fen } of [...Q_SET_IN_CHECK, ...Q_SET_MATES]) {
+      expect(quiesceFully(parseFen(fen)).deepest).toBeLessThanOrEqual(QUIESCENCE_MAX_PLY);
+    }
+  });
+
+  it("a mate found in quiescence survives the table's store and restore: MATE_SCORE − 3 at every depth", () => {
+    // `ADR-0025` decision 3: the table stores a mate relative to the node and restores it at the
+    // probing ply. `chooseMove` keeps its table across iterations, so each deeper iteration probes
+    // what the shallower one stored, at other plies.
+    for (let depth = 1; depth <= 4; depth++) {
+      expect(search(parseFen(MATE_THROUGH_SEARCH), depth).score, `search d${depth}`).toBe(
+        MATE_SCORE - 3,
+      );
+      expect(deepenWith(chooseMove, MATE_THROUGH_SEARCH, depth).score, `chooseMove d${depth}`).toBe(
+        MATE_SCORE - 3,
+      );
+    }
+  });
+
+  for (const path of ["./search.ts", "./engine.ts"]) {
+    it(`${path}: the leaf passes its ply and its rules record to quiesce, the record a module constant`, () => {
+      const flat = readFileSync(new URL(path, import.meta.url), "utf8").replace(/\s+/g, " ");
+      expect(flat).toContain("const EVASIONS_ON: QuiescenceRules = { evasions: true };");
+      expect(flat).toContain("const EVASIONS_OFF: QuiescenceRules = { evasions: false };");
+      expect(flat).toMatch(
+        /const rules = (switches|budget)\.quiescenceEvasions \? EVASIONS_ON : EVASIONS_OFF;/,
+      );
+      const calls = [...flat.matchAll(/quiesce\(([^;]*?)\);/g)].map((m) => m[1]);
+      expect(calls).toHaveLength(1);
+      expect(calls[0]).toMatch(/^position, alpha, beta, 0, ply, rules, /);
+    });
+  }
+});
+
+describe("ABC-228 — the doors: searchWithoutQuiescenceEvasions and chooseMoveWithoutQuiescenceEvasions", () => {
+  it("take what search() and chooseMove take, and no depth on the engine side", () => {
+    expect(searchWithoutQuiescenceEvasions.length).toBe(2);
+    expect(chooseMoveWithoutQuiescenceEvasions.length).toBe(2);
+  });
+
+  it("Q2 through the depth-0 seam: search() reads −536, its door the pre-ticket −548", () => {
+    expect(search(parseFen("4k3/8/8/8/8/8/4R3/4K3 b - - 0 1"), 0).score).toBe(-536);
+    expect(
+      searchWithoutQuiescenceEvasions(parseFen("4k3/8/8/8/8/8/4R3/4K3 b - - 0 1"), 0).score,
+    ).toBe(-548);
+  });
+
+  it("chooseMove sees the quiescence mate at depth 1, its door does not", () => {
+    expect(deepenWith(chooseMove, MATE_THROUGH_SEARCH, 1).score).toBe(MATE_SCORE - 3);
+    expect(
+      Math.abs(deepenWith(chooseMoveWithoutQuiescenceEvasions, MATE_THROUGH_SEARCH, 1).score),
+    ).toBeLessThan(MATE_SCORE - 1_000);
+  });
+
+  // The sibling of `QE-208-c`: one `quiescenceEvasions` literal per entry, true on the shipped
+  // pair only (`ADR-0053` decision 7).
+  const MODULES = [
+    { path: "./search.ts", call: "searchRoot(position, depth, {", on: "search" },
+    { path: "./engine.ts", call: "deepen(position, options, {", on: "chooseMove" },
+  ];
+  for (const { path, call, on } of MODULES) {
+    it(`${path}: each exported entry passes exactly one quiescenceEvasions literal, and only ${on}'s is true`, () => {
+      const flat = readFileSync(new URL(path, import.meta.url), "utf8").replace(/\s+/g, " ");
+      const found: Record<string, string> = {};
+      for (const chunk of flat.split("export function ").slice(1)) {
+        if (!chunk.includes(call)) continue;
+        const name = chunk.slice(0, chunk.indexOf("("));
+        const literals = [...chunk.matchAll(/quiescenceEvasions: (true|false)\b/g)].map(
+          (m) => m[1],
+        );
+        expect(literals, name).toHaveLength(1);
+        found[name] = literals[0] as string;
+      }
+      expect(Object.keys(found).length).toBeGreaterThanOrEqual(path === "./search.ts" ? 11 : 5);
+      expect(Object.entries(found).filter(([, value]) => value === "true")).toEqual([[on, "true"]]);
+    });
+  }
+});
+
+if (RUN_DEEP) {
+  /** `src/engine.test.ts`'s mate- and stalemate-adjacent endgames: the 190's last six. */
+  const ENDGAMES = [
+    "k7/8/1K6/8/8/8/8/1Q6 w - - 0 1",
+    "k7/8/1K6/8/8/8/8/1R6 w - - 0 1",
+    "7k/8/6K1/8/8/8/8/6Q1 w - - 0 1",
+    "8/8/8/4k3/8/8/4P3/4K3 w - - 0 1",
+    "8/8/8/8/8/k7/8/KR6 w - - 0 1",
+    "8/6p1/8/8/8/8/1P6/k1K5 w - - 0 1",
+  ];
+  /** `ABC-121`'s 190: the six roots, their in-progress children, the endgames. */
+  const corpus190 = (): { name: string; fen: string }[] => [
+    ...broadCorpus().map(({ name, position }) => ({ name, fen: toFen(position) })),
+    ...ENDGAMES.map((fen, i) => ({ name: `endgame-${i}`, fen })),
+  ];
+  const isMate = (score: number): boolean => Math.abs(score) > MATE_SCORE - 1_000;
+
+  /** The d5 drift of `on` against `reference` on the 190 (`ADR-0053` decision 8). */
+  const drift = (on: (fen: string) => number, reference: (fen: string) => number, what: string) => {
+    const deltas: Array<[number, string]> = [];
+    let mateFlips = 0;
+    for (const { name, fen } of corpus190()) {
+      const ref = reference(fen);
+      const got = on(fen);
+      if (isMate(ref) || isMate(got)) {
+        if (isMate(ref) !== isMate(got) || Math.sign(ref) !== Math.sign(got)) mateFlips++;
+        continue;
+      }
+      deltas.push([Math.abs(got - ref), `${name}: ${ref} -> ${got}`]);
+    }
+    deltas.sort((a, b) => b[0] - a[0]);
+    const within25 = deltas.filter(([delta]) => delta <= 25).length / deltas.length;
+    const max = deltas[0]?.[0] ?? 0;
+    console.log(
+      `ABC-228 ${what}: ${(100 * within25).toFixed(2)}% within 25 cp of ${deltas.length}, max ${max} cp ` +
+        `(${deltas[0]?.[1] ?? ""}); mate-status flips on the 190: ${mateFlips} (a report, not a bar)`,
+    );
+    expect(within25).toBeGreaterThanOrEqual(0.83);
+    expect(max).toBeLessThanOrEqual(177);
+  };
+
+  describe("ABC-228 A4 — search(…, 6).nodes <= 1.5x the door on kiwipete and position-6 [deep, SEARCH_DEEP=1]", () => {
+    for (const name of ["kiwipete", "position-6"]) {
+      it(`${name} at depth 6 [deep, SEARCH_DEEP=1]`, () => {
+        const head = search(parseFen(fenOf(name)), 6).nodes;
+        const door = searchWithoutQuiescenceEvasions(parseFen(fenOf(name)), 6).nodes;
+        console.log(`ABC-228 A4 ${name} d6: ${head} / ${door} = ${(head / door).toFixed(3)}x`);
+        expect(head).toBeLessThanOrEqual(1.5 * door);
+        expect(head).toBeGreaterThan(door); // the evasion loop is alive (`ADR-0053` § Rollback)
+      }, 120_000);
+    }
+  });
+
+  describe("ABC-228 — bounded drift against the evasion doors, depth 5, the 190 [deep, SEARCH_DEEP=1]", () => {
+    it("the corpus is the 190", () => {
+      expect(corpus190()).toHaveLength(190);
+    });
+
+    it("search() against searchWithoutQuiescenceEvasions at fixed depth 5: >= 83% within 25 cp, none beyond 177 cp [deep, SEARCH_DEEP=1]", () => {
+      drift(
+        (fen) => search(parseFen(fen), 5).score,
+        (fen) => searchWithoutQuiescenceEvasions(parseFen(fen), 5).score,
+        "search() d5",
+      );
+    }, 600_000);
+
+    it("chooseMove against chooseMoveWithoutQuiescenceEvasions deepened to 5: >= 83% within 25 cp, none beyond 177 cp [deep, SEARCH_DEEP=1]", () => {
+      drift(
+        (fen) => deepenWith(chooseMove, fen, 5).score,
+        (fen) => deepenWith(chooseMoveWithoutQuiescenceEvasions, fen, 5).score,
+        "chooseMove to d5",
+      );
+    }, 600_000);
+  });
+
+  describe("ABC-228 — the same-depth mate floor on the 287 [deep, SEARCH_DEEP=1]", () => {
+    it("every mate searchWithoutQuiescenceEvasions scores at depth 5, search() scores at depth 5: same sign, no longer [deep, SEARCH_DEEP=1]", () => {
+      let mates = 0;
+      const violations: string[] = [];
+      for (const fen of MATE_CORPUS) {
+        const ref = searchWithoutQuiescenceEvasions(parseFen(fen), 5).score;
+        if (!isMate(ref)) continue;
+        mates++;
+        const got = search(parseFen(fen), 5).score;
+        if (!isMate(got) || Math.sign(got) !== Math.sign(ref) || Math.abs(got) < Math.abs(ref)) {
+          violations.push(`${fen}: ${ref} on the door, ${got} on search(), depth 5`);
+        }
+      }
+      console.log(`ABC-228 mate floor d5: ${violations.length} of ${mates} violated`);
+      expect(mates).toBeGreaterThanOrEqual(100);
+      expect(violations).toEqual([]);
+    }, 300_000);
+  });
+}

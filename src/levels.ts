@@ -52,7 +52,7 @@ export const LEVELS: Readonly<Record<1 | 2 | 3 | 4 | 5 | 6 | 7, Level>> = Object
   2: Object.freeze({ budgetMs: 180, blunderRate: 0.2 }),
   3: Object.freeze({ budgetMs: 330, blunderRate: 0.1 }),
   4: Object.freeze({ budgetMs: 1_000, blunderRate: 0.05 }),
-  5: Object.freeze({ budgetMs: 3_000, blunderRate: 0 }),
+  5: Object.freeze({ budgetMs: 4_000, blunderRate: 0 }),
   6: Object.freeze({ budgetMs: 5_000, blunderRate: 0 }),
   7: Object.freeze({ budgetMs: 30_000, blunderRate: 0 }),
 });

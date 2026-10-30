@@ -1,0 +1,6 @@
+2026-10-30T10:21:48.014Z run 1 base rc=0 wall=8.91s vitest_duration=8.57s load1_before=0.84 tctl_before=38.8 :: 2178 passed (2178)
+2026-10-30T10:22:12.682Z run 2 head rc=0 wall=9.61s vitest_duration=9.25s load1_before=0.92 tctl_before=38.9 :: 2219 passed (2219)
+2026-10-30T10:22:37.190Z run 3 head rc=0 wall=9.45s vitest_duration=9.10s load1_before=1.08 tctl_before=39.3 :: 2219 passed (2219)
+2026-10-30T10:23:01.316Z run 4 base rc=0 wall=9.06s vitest_duration=8.72s load1_before=1.14 tctl_before=39.3 :: 2178 passed (2178)
+2026-10-30T10:23:25.239Z run 5 base rc=0 wall=8.87s vitest_duration=8.54s load1_before=1.07 tctl_before=39.4 :: 2178 passed (2178)
+2026-10-30T10:23:49.902Z run 6 head rc=0 wall=9.61s vitest_duration=9.27s load1_before=1.15 tctl_before=39.1 :: 2219 passed (2219)

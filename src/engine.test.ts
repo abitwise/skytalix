@@ -499,7 +499,8 @@ describe("A4 — no fixed depth anywhere in the delivered engine", () => {
     // `ABC-121` added two TEST-ONLY doors of `chooseMove`'s own shape (`ADR-0026` decision 2):
     // a position and options, a TIME budget, no depth. `ABC-208` added a third
     // (`chooseMoveWithoutNullMove`, `ADR-0050` decision 2). `ABC-230` added the prior-key trim
-    // (`trimPriorKeys`, `ADR-0054` decision 1): a key list and a clock, no depth.
+    // (`trimPriorKeys`, `ADR-0054` decision 1): a key list and a clock, no depth. `ABC-228` added a
+    // fourth door (`chooseMoveWithoutQuiescenceEvasions`, `ADR-0053` decision 6).
     expect(Object.keys(engineModule).sort()).toEqual([
       "DEFAULT_BUDGET_MS",
       "HARD_CEILING_MS",
@@ -507,6 +508,7 @@ describe("A4 — no fixed depth anywhere in the delivered engine", () => {
       "chooseMove",
       "chooseMoveWithoutNullMove",
       "chooseMoveWithoutPvsOrReductions",
+      "chooseMoveWithoutQuiescenceEvasions",
       "chooseMoveWithoutReductions",
       "createEngine",
       "trimPriorKeys",
@@ -517,6 +519,7 @@ describe("A4 — no fixed depth anywhere in the delivered engine", () => {
     expect(chooseMoveWithoutReductions.length).toBe(2);
     expect(chooseMoveWithoutPvsOrReductions.length).toBe(2);
     expect(engineModule.chooseMoveWithoutNullMove.length).toBe(2);
+    expect(engineModule.chooseMoveWithoutQuiescenceEvasions.length).toBe(2);
     expect(createEngine.length).toBe(1);
     expect(source).not.toMatch(/export function \w+\([^)]*depth/i);
   });
@@ -525,7 +528,7 @@ describe("A4 — no fixed depth anywhere in the delivered engine", () => {
     expect(source).toMatch(/readonly budgetMs: number;/);
     // A defaulted budget would make the ticket's "the budget arrives as a parameter" untrue.
     expect(source).not.toMatch(/budgetMs\s*\??\s*(:\s*[\w<>[\]| ]+)?\s*=[^=>]/);
-    expect(DEFAULT_BUDGET_MS).toBe(3_000);
+    expect(DEFAULT_BUDGET_MS).toBe(4_000); // ABC-228, ADR-0053 d10 (ii)
   });
 
   it("carries no depth default and no depth constant", () => {
@@ -1029,7 +1032,7 @@ if (RUN_DEEP) {
 
         expect(choice).not.toBeNull();
         if (ms > 5_000) overCeiling.push(`${name}: ${ms} ms`);
-        if (ms > 3_000) overBudget.push(`${name}: ${ms} ms`);
+        if (ms > DEFAULT_BUDGET_MS) overBudget.push(`${name}: ${ms} ms`); // ABC-228: follows the constant
         if (ms > worst.ms) worst = { name, ms, depth: (choice as { depth: number }).depth };
       }
 
@@ -1037,7 +1040,7 @@ if (RUN_DEEP) {
       // and of nothing else (`ABC-074` owns the off-machine generalisation and is Blocked).
       console.log(
         `A1 worst case: ${worst.name} ${worst.ms} ms at completed depth ${worst.depth}; ` +
-          `over 3 s: ${overBudget.length}/30`,
+          `over ${DEFAULT_BUDGET_MS} ms: ${overBudget.length}/30`,
       );
       expect(overCeiling).toEqual([]);
     }, 300_000);

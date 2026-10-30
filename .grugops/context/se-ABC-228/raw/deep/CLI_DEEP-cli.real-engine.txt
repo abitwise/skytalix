@@ -1,0 +1,13 @@
+
+> skytalix@0.0.0 test:watch
+> NODE_OPTIONS=--max-old-space-size=128 vitest run src/cli.real-engine.test.ts
+
+
+ RUN  v4.1.12 <worktree>
+
+
+ Test Files  1 passed (1)
+      Tests  11 passed (11)
+   Start at  07:06:51
+   Duration  9.73s (transform 0ms, setup 0ms, import 39ms, tests 9.58s, environment 0ms)
+

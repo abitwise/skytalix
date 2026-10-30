@@ -54,10 +54,11 @@ export const BOUND_LOWER = 2;
 export const BOUND_UPPER = 3;
 
 /**
- * Any score at or beyond `±MATE_FLOOR` is a mate score. `search.ts`'s `MATE_SCORE` is 30 000 and
- * a mate reads `±(MATE_SCORE - ply)`, with `ply` bounded by `KEY_ARRAY_CAPACITY` plus the
- * quiescence plies; a static evaluation is under 10 000 (a full board of queens). 20 000 sits
- * between the two with room on both sides. Declared here rather than imported, because
+ * Any score at or beyond `±MATE_FLOOR` is a mate score. `MATE_SCORE` is 30 000 and a mate reads
+ * `±(MATE_SCORE - ply)`, with `ply` bounded by `KEY_ARRAY_CAPACITY` plus `QUIESCENCE_MAX_PLY`,
+ * 136 plies, since quiescence scores a mate in check (`ABC-228`, `ADR-0053` decision 3); a static
+ * evaluation is under 10 000 (a full board of queens). 20 000 sits between the two with room on
+ * both sides. Declared here rather than imported, because
  * `search.ts` imports this module; `src/transposition.test.ts` asserts the relation.
  */
 export const MATE_FLOOR = 20_000;

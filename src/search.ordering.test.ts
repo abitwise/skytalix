@@ -33,6 +33,7 @@ import {
   searchWithoutKillers,
   searchWithoutOrdering,
   searchWithoutPvsOrReductions,
+  searchWithoutQuiescenceEvasions,
   searchWithoutTable,
 } from "./search.ts";
 
@@ -547,12 +548,18 @@ describe("Scope — the engine orders its root exactly as search() does", () => 
    * move. Bxb3 and Qxb3 both take the knight and tie at −221 at depth 1. Generation order tries
    * Qxb3 first; MVV-LVA tries the bishop first. On base they did not tie (both orders read Qxb3 at
    * −217). The engine row below moves with the fixture: its depth-1 move is search()'s, a4b3.
+   *
+   * RE-POINTED at `ABC-228` (`ADR-0053` decision 7): with evasions in quiescence on, `search()`
+   * reads a4b3 at −224 and the evasion-off ordering door −221, so a score gap no longer measures
+   * ordering alone. The ordered side reads `searchWithoutQuiescenceEvasions`, the pre-`ABC-228`
+   * `search()`, and the tie at −221 holds. `search()` still plays a4b3 (the engine row below).
    */
   const TIE_FEN = "r3k2r/Pppp1ppp/1b3nbN/1PB5/B1P1P3/qn3N2/Pp1P2PP/R2Q1RK1 w kq - 2 2";
 
   it("the fixture bites: ordered and unordered depth-1 searches break the tie differently", () => {
-    const ordered = search(parseFen(TIE_FEN), 1);
+    const ordered = searchWithoutQuiescenceEvasions(parseFen(TIE_FEN), 1);
     const unordered = searchWithoutOrdering(parseFen(TIE_FEN), 1);
+    expect(label(search(parseFen(TIE_FEN), 1).move as Move)).toBe("a4b3");
     expect(label(ordered.move as Move)).toBe("a4b3");
     expect(label(unordered.move as Move)).toBe("d1b3");
     expect(ordered.score).toBe(unordered.score);

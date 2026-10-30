@@ -219,8 +219,9 @@ describe("ABC-167 A5 — the D4 time rule, read from the info line's time", () =
     ["white reads wtime", "position startpos", 50, 1],
     ["black reads btime", "position startpos moves e2e4", 450, 10],
     ["a short clock", "position startpos", 1, 1],
-    ["capped by the default level 5", "position startpos", 3_000, 100],
-    ["a bare go", "position startpos", 3_000, 100],
+    // ABC-228 (ADR-0053 d10, reading (ii)): level 5 is 4 000, so G = 3 500 binds, not the level.
+    ["G = 3 500, under the default level 5's 4 000", "position startpos", 3_500, 100],
+    ["a bare go", "position startpos", 4_000, 100],
   ];
   const goes = [
     "go movetime 100",
@@ -303,8 +304,8 @@ describe("ABC-167 A6 — infinite waits for stop", () => {
     const { perLine } = talk(["position startpos", "go ponder", "ponderhit", "ponderhit"], 100);
     expect(perLine[1]).toHaveLength(1);
     const info = parseInfo(perLine[1]?.[0]);
-    expect(info.time).toBeGreaterThanOrEqual(3_000);
-    expect(info.time).toBeLessThanOrEqual(3_000 + 2 * 100);
+    expect(info.time).toBeGreaterThanOrEqual(4_000);
+    expect(info.time).toBeLessThanOrEqual(4_000 + 2 * 100);
     expect(perLine[2]).toEqual([`bestmove ${info.move}`]);
     expect(perLine[3]).toEqual([]);
   });
@@ -438,19 +439,20 @@ describe("ABC-167 A7 — the D12 limits", () => {
       expect(out).toHaveLength(3);
       expect(out[0]).toMatch(/^info string /);
       const info = parseInfo(out[1]);
-      expect(info.time).toBeGreaterThanOrEqual(3_000); // dropped: no limit, G is the capped ceiling
+      expect(info.time).toBeGreaterThanOrEqual(4_000); // dropped: no limit, G is the capped ceiling
       expect(out[2]).toBe(`bestmove ${info.move}`);
     });
   }
 
-  // ABC-197 R2 (QE-177-b): step 100 pins the dropped-token G to [3 000, 3 200], not U7's 1 000 band.
-  it("ABC-197 R2: go depth 0 on step 100 searches G = 3 000, time in [3 000, 3 200]", () => {
+  // ABC-197 R2 (QE-177-b): step 100 pins the dropped-token G to [4 000, 4 200], not U7's 1 000 band.
+  // ABC-228 (ADR-0053 d10): the capped ceiling is level 5's 4 000 (was 3 000).
+  it("ABC-197 R2: go depth 0 on step 100 searches G = 4 000, time in [4 000, 4 200]", () => {
     const { out } = talk(["position startpos", "go depth 0"], 100);
     expect(out).toHaveLength(3);
     expect(out[0]).toMatch(/^info string /);
     const info = parseInfo(out[1]);
-    expect(info.time).toBeGreaterThanOrEqual(3_000);
-    expect(info.time).toBeLessThanOrEqual(3_200);
+    expect(info.time).toBeGreaterThanOrEqual(4_000);
+    expect(info.time).toBeLessThanOrEqual(4_200);
     expect(out[2]).toBe(`bestmove ${info.move}`);
   });
 
@@ -485,12 +487,12 @@ describe("ABC-167 A7 — the D12 limits", () => {
 
   it("A7-f2: go movetime with no value searches as a bare go", () => {
     const { perLine } = talk(["position startpos", "go movetime"], 100);
-    expectWarnedSearch(perLine[1], 3_000, 3_000 + 2 * 100);
+    expectWarnedSearch(perLine[1], 4_000, 4_000 + 2 * 100);
   });
 
   it("A7-f3: go movetime 1e2 and movestogo 0 are dropped with one info string", () => {
     const bare = talk(["position startpos", "go movetime 1e2"], 100).perLine[1];
-    expectWarnedSearch(bare, 3_000, 3_000 + 2 * 100);
+    expectWarnedSearch(bare, 4_000, 4_000 + 2 * 100);
     const { perLine } = talk(["position startpos", "go wtime 1000 btime 1000 movestogo 0"], 100);
     expectWarnedSearch(perLine[1], 50, 50 + 2 * 100);
   });
@@ -756,7 +758,7 @@ describe("ABC-171 A2 — setoption", () => {
 
     const level = rig();
     expect(level.send("setoption name Hash value 64")).toEqual([]);
-    expectWithin(levelTime(level.send, 5), 3_000); // still the default level 5
+    expectWithin(levelTime(level.send, 5), 3_500); // still the default level 5 (ABC-228: G = 3 500 binds)
   });
 });
 
@@ -838,10 +840,11 @@ describe("ABC-171 A5 — the book is read once, and at the right time", () => {
 describe("ABC-171 A6 — a level change is observable (EPIC-007 M7)", () => {
   // G = 3500. Budget min(G, LEVELS[skill].budgetMs), step 100, ABC-167 A5's bound.
   // ABC-174: min(3500, 330) at level 3 and min(3500, 3000) at level 5 (ADR-0045 D1).
+  // ABC-228 (ADR-0053 d10): level 5 is 4 000, so min(3500, 4000) = 3 500 at level 5.
   for (const [level, budget] of [
     [1, 100],
     [3, 330],
-    [5, 3_000],
+    [5, 3_500],
   ] as const) {
     it(`level ${level}: ${GO_G3500} -> ${budget} ms (within 2 x 100 ms)`, () => {
       // A blunder level's first go must take the engine path, so the time is the budget's.
@@ -966,14 +969,14 @@ describe("ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12)", ()
     expect(send("uci")).toContain("option name Skill Level type spin default 5 min 1 max 7");
   });
 
-  it("at the default, a bare go takes the chooseMove path: score, and time within 3 000 ms", () => {
+  it("at the default, a bare go takes the chooseMove path: score, and time within 4 000 ms", () => {
     const { send, draws } = rig();
     send("position startpos");
     const lines = send("go");
     expect(lines).toHaveLength(2);
     const info = parseInfo(lines[0]);
     expect(lines[0]).toContain(" score ");
-    expectWithin(info.time, 3_000);
+    expectWithin(info.time, 4_000);
     expect(lines[1]).toBe(`bestmove ${info.move}`);
     expect(draws.count).toBe(0);
   });
