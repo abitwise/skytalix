@@ -1,8 +1,8 @@
 ---
 id: ABC-230
 title: "The game's earlier positions reach the search, from the CLI and from UCI, so it sees a repetition the game already holds; a bare FEN still has none"
-status: backlog
-column: Backlog
+status: ready
+column: Ready
 size: M
 priority: P2
 epic: EPIC-010
@@ -24,6 +24,12 @@ epic: EPIC-010
 > were added. **Waits in Backlog on one thing: the owner's acceptance of `ADR-0054`.** DoR stays 9/10, and row 10 now
 > names that acceptance. The ticket is build-ready once he accepts.
 
+> **ACCEPTED 2026-10-30, folded by BA/PM** (task `bapm-owner-adr-fold`, records only, at `main` `a046e839`). The owner
+> **accepted `ADR-0054` as written** (`orch-2026-10-29g` `…3dd61448`; the ADR's status line and its dated lines into
+> `ADR-0002` and `ADR-0044` are the Architect's hop `arch-adr-accept-0052-0053-0054`). Row 10 is met. **DoR 9/10 →
+> 10/10. Backlog → Ready**, with no change to scope or acceptance. Q3 (the ep key) is still open: on 2026-10-30 the
+> owner asked for more information. Default (a) keep holds, and it blocks nothing here.
+
 ## Problem
 
 - **User:** the owner in the CLI and a GUI over UCI.
@@ -36,7 +42,7 @@ epic: EPIC-010
 
 ## Scope
 
-The design is `ADR-0054` § Decision. It binds once the owner accepts it. This page states the outcomes.
+The design is `ADR-0054` § Decision. It binds (accepted by the owner 2026-10-30). This page states the outcomes.
 
 1. **Prior keys in.** The search takes `priorKeys`, a read-only list of the Zobrist keys of the game's positions
    before the root: oldest first, root excluded, at most `min(root halfmove clock, 100)`. It is an optional
@@ -116,13 +122,12 @@ The design is `ADR-0054` § Decision. It binds once the owner accepts it. This p
 ## Dependencies
 
 - **`ABC-226`** Done.
-- **`ADR-0054` PROPOSED; the owner accepts it** (`…5aaf7cec` item 3: it adds to `ADR-0002` clause 3 and amends
-  `ADR-0044` D2/D6, both owner-accepted). This ticket is pulled only after he accepts. The Architect's note allows a
-  build against the proposed text, with the smokes and the merge waiting. This page waits for the whole ticket, per
-  the fold's brief, and the Orchestrator may choose otherwise. On acceptance, an Architect/Design hop adds dated lines
-  to `ADR-0002` and `ADR-0044`.
-- **Owner:** Q4 answered 2026-10-29: (e), extended (`orch-2026-10-29g` `…278e149b`). Q3 is open, with default and
-  recommendation (a) keep. It blocks nothing here, and its remedy (c) would be a separate ticket.
+- **`ADR-0054` ACCEPTED by the owner, 2026-10-30, as written** (`…3dd61448`; `…5aaf7cec` item 3: it adds to
+  `ADR-0002` clause 3 and amends `ADR-0044` D2/D6, both owner-accepted). The Architect/Design hop
+  `arch-adr-accept-0052-0053-0054` adds the dated lines to `ADR-0002` and `ADR-0044`. Nothing waits on it any more.
+- **Owner:** Q4 answered 2026-10-29: (e), extended (`orch-2026-10-29g` `…278e149b`). Q3 is open (2026-10-30: "I need
+  more info to answer"), with default and recommendation (a) keep. It blocks nothing here, and its remedy (c) would be
+  a separate ticket.
 - Shares `src/uci-session.ts` with `EPIC-009`'s `ABC-220`/`ABC-221`; whichever merges second rebases.
 
 ## Definition of Ready
@@ -133,12 +138,12 @@ The design is `ADR-0054` § Decision. It binds once the owner accepts it. This p
 | 2 | scope and out-of-scope | ✅ 5 items per `ADR-0054`; ep, table, quiescence out |
 | 3 | INVEST | ✅ independent of 228/229; M |
 | 4 | testable, measurable acceptance | ✅ A1–A9 exact (0, base-equal, node-equal, ≤ 100); A7 the smoke pair |
-| 5 | dependencies known | ✅ `ABC-226` (Done); `ADR-0054` (PROPOSED) |
+| 5 | dependencies known | ✅ `ABC-226` (Done); `ADR-0054` (ACCEPTED 2026-10-30) |
 | 6 | NFR triggers with targets | ✅ ≤ 100 keys; ≤ 1 MiB growth; `G6` floor |
 | 7 | test notes | ✅ 3 |
 | 8 | size | ✅ M |
 | 9 | priority | ✅ P2, milestone 1 |
-| 10 | no major unresolved blocker | ❌ the owner's acceptance of `ADR-0054` |
+| 10 | no major unresolved blocker | ✅ none: `ADR-0054` accepted 2026-10-30; Q3 open, blocks nothing |
 
-**DoR 9/10 (re-scored 2026-10-30, `bapm-ABC-230-fold`). Backlog until the owner accepts `ADR-0054`, then 10/10 →
-Ready.**
+**DoR 10/10 (re-scored 2026-10-30, `bapm-owner-adr-fold`). Ready.** *(Was 9/10, waiting on the owner's acceptance of
+`ADR-0054`.)* It shares `src/uci-session.ts` with `ABC-220`; the Orchestrator orders them.

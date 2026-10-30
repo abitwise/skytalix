@@ -9,7 +9,18 @@ epic: EPIC-009
 owner: QE/E2E
 ---
 
-# ABC-222: smoke reading of `simple-tournament` at 40/15: `EPIC-009` M1, M2 and the 22.5 s ceiling, in 5 games
+# ABC-222: smoke reading of `simple-tournament` at 40/15: `EPIC-009` M1, M2 and the 22 s ceiling, in 5 games
+
+> **FOLDED 2026-10-30 by BA/PM** (task `bapm-owner-adr-fold`, records only, at `main` `a046e839`). The owner accepted
+> `ADR-0052` with the ceiling at 22 s, equal to T (`orch-2026-10-29g` `…3dd61448`; `ABC-220`'s header has his words).
+>
+> - **A5:** the longest move is **≤ 22 s read to the whole second, that is < 22 500 ms** (was ≤ 22 500 ms). The engine is
+>   never handed more than 22 000 ms (`ABC-220` A6); the stop overshoot and the pipe add a few ms past it. A move
+>   over 22 000 ms is therefore expected and is not a breach. The excess is reported (A6). This whole-second reading is
+>   BA/PM's, on the owner's "whole seconds", and the Orchestrator confirms it with him.
+> - **A3 and A4 hold unchanged:** T is still 22 000 ms, so 40 × 22 s = 880 s of 900 s (97.8 %, 97.9 % at δ = 31 ms),
+>   ≈ 18.8 s left after move 40, and M1's ≥ 500 ms survives δ ≤ 487 ms a move on average.
+> - Wall: 80 moves × 2 sides × 22 s ≈ 59 min a game, still ≤ ~5 h for 5 games. DoR stays 9/10, waiting on `ABC-220`.
 
 > **RECONCILED 2026-10-29 to `ADR-0052` (PROPOSED) by BA/PM** (task `bapm-owner-words-b`, records only).
 >
@@ -48,7 +59,7 @@ owner: QE/E2E
 - **User:** the owner, and any `cutechess-cli` match that selects `simple-tournament` at 40/15.
 - **Pain:** "never loses on time" is a claim about the real clock and the real pipe. `ABC-220`'s virtual-clock rows
   cannot show it, and the pipe and GUI latency is unread (`EPIC-009` § The budget T).
-- **Value:** `EPIC-009` M1 and M2 and the 22.5 s ceiling, shown working in real games.
+- **Value:** `EPIC-009` M1 and M2 and the 22 s ceiling, shown working in real games.
 
 ## Scope
 
@@ -64,7 +75,7 @@ owner: QE/E2E
 - **Coverage extension (2026-10-29):** if the 5 games complete fewer than 4 side-periods (a side's 40th move
   reached), QE plays on, one game at a time on openings 6, 7, … in order, until 4 are complete, **up to 10 games in
   all** (the owner's "5 or 10").
-- Width 1, ALONE. Wall ≤ ~5 h (≤ 80 moves × 2 sides × 22.5 s ≈ 60 min a game); ≤ ~10 h if the extension runs to 10.
+- Width 1, ALONE. Wall ≤ ~5 h (≤ 80 moves × 2 sides × 22 s ≈ 59 min a game); ≤ ~10 h if the extension runs to 10.
 - `cutechess-cli` runs directly in QE's scratch clone. `tools/rating/rating.ts` plays `st=` only and is **not** edited.
 
 ## Out of scope
@@ -97,7 +108,9 @@ owner: QE/E2E
   "completed period" in PREREG. It counts from the first move played after the opening position. **At least 4
   side-periods are completed** across the games played (the coverage extension above, up to 10 games). If 10 games
   still complete fewer than 4, A4 is UNRESOLVED and named, not MET.
-- **A5 (the ceiling).** The longest single `skytalix` move, from the PGN's per-move times, is **≤ 22 500 ms**.
+- **A5 (the ceiling, 22 s, owner 2026-10-30).** The longest single `skytalix` move, from the PGN's per-move times, is
+  **≤ 22 s read to the whole second, that is < 22 500 ms**. QE pins the PGN time's precision in PREREG
+  (`UNKNOWN - verify` for `cutechess-cli` 1.5.1).
 - **A6 (reported, not graded):**
   - the clock left after each period's 40th move (a list);
   - the count of `go` lines sent with and without `movestogo` (`RISK-EPIC009-03`), and game 1's first `go` line,
@@ -111,7 +124,7 @@ owner: QE/E2E
 
 ## NFR triggers
 
-- **`NFR-004`:** A5 (22.5 s, the owner's).
+- **`NFR-004`:** A5 (22 s, the owner's, amended 2026-10-30; read to the whole second).
 - **Heat:** ≤ ~5 h ALONE (`RISK-EPIC009-04`). A7.
 - **`NFR-008`:** untouched. Nothing runs in `npm test`.
 - **Security:** no new input. Host paths stay out of the records.
@@ -134,16 +147,16 @@ owner: QE/E2E
 - `ABC-220` merged. `ABC-204`'s host tool pins (re-pinned 2026-10-28). The openings file at its pinned sha.
 - An idle board: this is alone-when-idle work, scheduled by the Orchestrator, never beside another reading.
 
-## Definition of Ready (re-scored 2026-10-29)
+## Definition of Ready (re-scored 2026-10-29; rows 4 and 6 re-read 2026-10-30, count unchanged)
 
 | # | check | state |
 |---|---|---|
 | 1 | problem clear | ✅ owner word (Q1, Q4, Q8) |
 | 2 | scope and out-of-scope | ✅ 5 games pinned, extended to ≤ 10 only for coverage; strength and major validation out |
 | 3 | INVEST | ✅ S; testable |
-| 4 | testable, measurable acceptance | ✅ 0 losses on time, ≥ 500 ms, ≥ 75 % over ≥ 4 side-periods, ≤ 22 500 ms, every game kept |
+| 4 | testable, measurable acceptance | ✅ 0 losses on time, ≥ 500 ms, ≥ 75 % over ≥ 4 side-periods, longest move < 22 500 ms (22 s to the whole second), every game kept |
 | 5 | dependencies known | ✅ `ABC-220`; `ABC-204` pins; an idle board |
-| 6 | NFR triggers with targets | ✅ `NFR-004` 22.5 s; the 5 % frequency rule |
+| 6 | NFR triggers with targets | ✅ `NFR-004` 22 s (2026-10-30); the 5 % frequency rule |
 | 7 | test notes | ✅ 3 |
 | 8 | size | ✅ S |
 | 9 | priority | ✅ P2 |

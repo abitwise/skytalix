@@ -1,8 +1,8 @@
 ---
 id: ABC-228
 title: "In check, quiescence searches every evasion instead of standing pat, and a side in check with no evasion is mated"
-status: backlog
-column: Backlog
+status: ready
+column: Ready
 size: M
 priority: P2
 epic: EPIC-010
@@ -16,6 +16,23 @@ epic: EPIC-010
 > **AMENDED 2026-10-29 by BA/PM** (task `bapm-owner-words-b`, records only): the owner set Q4 = (e), extended
 > (`orch-2026-10-29g` `…278e149b`). This ticket's reading is now the smoke pair before merge (`EPIC-010` § The
 > merge rule), with a batched validation later. Q4 no longer holds it. **Next real wait:** the ADR (In Design: `ADR-0024` d4 and `ABC-079`'s decision, an `ADR-0026` d10 door). DoR 8/10 → 9/10.
+
+> **FOLDED 2026-10-30 by BA/PM** (task `bapm-owner-adr-fold`, records only, at `main` `a046e839`). The owner
+> **accepted `ADR-0053` as written** (`orch-2026-10-29g` `…3dd61448`; the ADR's status line is the Architect's hop
+> `arch-adr-accept-0052-0053-0054`). The design is `ADR-0053` decisions 1–4 and 6–9; where this page is shorter, the ADR
+> rules.
+>
+> - **OQ-228-1, his words:** *"If engine requires more effort then increase 3s to 4s, build it fully."* "Build it
+>   fully" means the full evasion design (decision 2), not option (b), the mate-test-only form.
+> - **The "3s to 4s" clause applies only on a forecast miss** (`A8`, decision 9's forecast on this ticket's own base,
+>   with `ABC-235` and `ABC-240` merged). Which 3 s it means is **pending the owner**: `G6`'s measurement budget, or
+>   level 5's per-move time. No meaning is chosen here. On a miss the SE stops before the graded `G6` and the smokes,
+>   and the Orchestrator takes the question to him.
+> - **The miss is borderline.** Head reaches depth 10 on `position-6` at 3 s only if the node rate rises ≈ 1.36×
+>   (`ADR-0053` finding 4: 2 340 431 × 1.09 against 1 878 626). The Orchestrator reads `ABC-235` and `ABC-240`
+>   together at ≈ 1.3–1.4×. Whether that is enough for `position-6` itself is `UNKNOWN - verify` until `A8` runs.
+> - **Changed:** `A5`'s `G6`, `A7` (met by the acceptance), `A8` (new: the forecast), § Dependencies and the DoR.
+>   **DoR 9/10 → 10/10. Backlog → Ready.**
 
 ## Problem
 
@@ -54,10 +71,19 @@ epic: EPIC-010
 - **A4 (growth).** **Given** `kiwipete` and `position-6` at fixed depth 6, **then** `search(…, 6).nodes` ≤ **1.5 ×**
   the door's (`ADR-0024` d3 headroom). The frozen-clock pre-check runs before the real-clock `G6`.
 - **A5 (gates).** `G1` ≥ 54/58 (a newly solved row is reported; raising the baseline is QE's), `G2` (the evaluator
-  is untouched, so read only if `ADR-0034` asks), `G5`, `G6` "≥ base" by its rule, depth floor 6, `G8`, `G9`, `G10`.
+  is untouched, so read only if `ADR-0034` asks), `G5`, `G6` "≥ base" by its rule when `A8` fits (on a miss, under the
+  owner's reading of OQ-228-1), depth floor 6, `G8`, `G9`, `G10`.
 - **A6 (the reading).** The smoke pair of `EPIC-010` § The merge rule (owner Q4 = (e), extended, 2026-10-29), on the candidate head rebased on `main`, before the merge: S-1 0 faults, S-2 0 losses on time, S-3 D ≥ 3.0 of 10 (else ≥ 7.0 of 20), S-4 R ≥ 3.0 of 10 (else ≥ 7.0 of 20). Reported: each smoke's W/L/D and score, the ledger's pooled R score since the last batch, and `G11`.
 - **A7 (the ADR).** The ADR exists, names the evasion rule, the mate score and the door, and records that it was
-  reported to the owner.
+  reported to the owner. *(Met 2026-10-30: `ADR-0053`, accepted by the owner.)*
+- **A8 (the `G6` forecast; `ADR-0053` decision 9, OQ-228-1).** Before the graded `G6` and the smokes, on this ticket's
+  base (`main` with `ABC-235` and `ABC-240`): base's completed depth and node count at 3 s from one real-clock
+  `chooseMove` per board (kiwipete, position-6), ALONE, in plain `node`; then head's `chooseMove` on a frozen clock to
+  that depth. Head's nodes × 1.09 are set against base's 3 s nodes, and both percentages are reported.
+  - **≤ 100 % on both boards:** `G6` is read by its rule, and OQ-228-1's clause does not apply.
+  - **> 100 % on either board:** the SE stops. `G6` and the smokes wait on the owner's reading of "increase 3s to
+    4s".
+  - Reference on pre-`ABC-235` `main`: 85 % and 125 %.
 
 ## NFR triggers
 
@@ -78,9 +104,11 @@ epic: EPIC-010
 
 ## Dependencies
 
-- **Architect/Design first (In Design):** an ADR or an `ADR-0024` amendment. It reverses `ADR-0024` decision 4's
-  "checks in quiescence" fence and `ABC-079`'s recorded decision (`src/quiescence.ts:21-24`), and adds an
-  `ADR-0026` d10 door. One ADR may also name `ABC-229`'s quiet promotions. Reported to the owner when it lands.
+- **`ADR-0053` ACCEPTED by the owner, 2026-10-30, as written.** It amends `ADR-0024` decision 4, supersedes
+  `ABC-079`'s recorded decision (`src/quiescence.ts:21-24`) for these items, and adds the `ADR-0026` d10 door pair. It
+  also names `ABC-229`'s quiet promotions.
+- **OQ-228-1 answered 2026-10-30:** build it fully. Its "3s to 4s" clause is conditional on an `A8` miss, and its
+  reading is pending the owner. It does not block the build.
 - **Owner:** Q4 answered 2026-10-29: (e), extended (`orch-2026-10-29g` `…278e149b`). `ABC-225` is no longer needed before this ticket; it is the batch's instrument.
 - Shares `src/quiescence.ts` with `ABC-229`: this one first.
 
@@ -91,12 +119,12 @@ epic: EPIC-010
 | 1 | problem clear | ✅ probes Q1, Q2 |
 | 2 | scope and out-of-scope | ✅ 4 items; `ABC-210` forms out |
 | 3 | INVEST | ✅ one mechanism; M; testable |
-| 4 | testable, measurable acceptance | ✅ every row measurable; A6 is the smoke pair (`EPIC-010` § The merge rule, S-1–S-4) |
-| 5 | dependencies known | ✅ ADR |
+| 4 | testable, measurable acceptance | ✅ every row measurable; A6 is the smoke pair (`EPIC-010` § The merge rule, S-1–S-4); A8 ≤ 100 % on both boards, else stop |
+| 5 | dependencies known | ✅ `ADR-0053` (ACCEPTED 2026-10-30); `ABC-235` merged; OQ-228-1 answered |
 | 6 | NFR triggers with targets | ✅ nodes ≤ 1.5 × at depth 6; depth floor 6 |
 | 7 | test notes | ✅ 3 |
 | 8 | size | ✅ M |
 | 9 | priority | ✅ P2 |
-| 10 | no major unresolved blocker | ❌ ADR not written |
+| 10 | no major unresolved blocker | ✅ none for the build. The "3s to 4s" reading is needed only on an `A8` miss, and `A8` names the stop |
 
-**DoR 9/10 (re-scored 2026-10-29). Backlog**, then In Design for the ADR, then Ready when it lands.
+**DoR 10/10 (re-scored 2026-10-30, `bapm-owner-adr-fold`). Ready.** *(Was 9/10, waiting on the ADR.)*
