@@ -1,3 +1,4 @@
+_Updated: 2026-10-30 Orchestrator (orch-2026-10-30a) — scribe-agents-md-level5 merged 8e1cdda5 (level 5 ≤ 4 s; deep lanes have no npm script, npx spelling stays the verified one; cli.test.ts 104/104 on the branch). ABC-220 pulled → `se-ABC-220` beside `se-ABC-241` (no timed reads at SE). `bapm-ABC-228-merge-fold` running. Width 3/3._
 _Updated: 2026-10-30 Orchestrator (orch-2026-10-30a) — ABC-228 DONE: qe-ABC-228-ii PASS_WITH_GAPS (G6 met at 4 s; D 5.0/10, R 7.0/10), merged e42b637b (both QE branches), not pushed. ABC-241 pulled → `se-ABC-241`; records-only beside it: `bapm-ABC-228-merge-fold` (follow-ups, XS test ticket for SE-228ii-a/QE-228ii-b) + `scribe-agents-md-level5`. ABC-220 next (its A11 lane ALONE). Owed: NFR-004/005 catalog text (Security/NFR), ladder re-take. Width 3/3._
 _Updated: 2026-10-30 Orchestrator (orch-2026-10-30a) — se-ABC-228-ii done: A9 met (65.9 % / 97.4 % ≤ 133 %); three literals per ticket Scope 5 (brief had named two; SE followed the ticket — Orchestrator brief slip, SE-228ii-c); code review PASS → In Review; `qe-ABC-228-ii` spawned ALONE (new PREREG, G6 at 4 s, smokes width 1). SE-228ii-a LOW for QE to rule. Width 1/3._
 _Updated: 2026-10-30 09:20Z by Orchestrator (orch-2026-10-30a) — qe-ABC-228 FAIL, STOPPED at G6 (position-6 9 vs 10; QE-228-c HIGH; npm-exec ruled LOW). ABC-228 In Review → In Development for (ii) (owner word OQ-228-1 covers it): `se-ABC-228-ii` spawned ALONE (Scope 5: LEVELS[5] → 4 000 ms + rating.ts R literal; A9 ≤ 133 %; above that → owner). QE records stay on grugops/qe-ABC-228, not merged. Width 1/3._
@@ -1211,8 +1212,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 - [EPIC-006] Game session and packaging  (owner: BA/PM, **size: XL — corrected from `L`; 9 tickets / 20 points across both halves, ~1.5x the 13 `L` was assigned, and it hit that ceiling BEFORE distribution was priced**, priority: P1, since: 2026-07-22, **BOTH HALVES NOW CUT: the runnable half `ABC-041`…`ABC-046` (2026-08-13) and the second half `ABC-100`…`ABC-102` (2026-08-16) — only THREE tickets, because the scope of packaging is a FUNCTION of a distribution channel nobody has chosen.** `ABC-100` cuts the DECISION, never the ANSWER: a superseding ADR per `ADR-0007` `D5`, on the owner's word, verbatim and dated. **Acceptance criterion 1 (`npx <package>`) remains unmeetable by any ticket. Recommendation NOT taken, standing for the owner: this should probably be two epics** — the halves share no dependency in either direction and their blockers differ in kind)
 
-## Ready (WIP 1/8)
-- [ABC-220] simple-tournament over UCI (TimeMode): T 22.0 s, min(T, C) with a clock, 22.5 s ceiling (size: M, priority: P2, DoR 9/10; waits owner accepts ADR-0052 (OQ-0052-1; → Ready 2026-10-30: ADR-0052 ACCEPTED (22 s / 22 s); DoR 10/10; shares uci-session.ts with ABC-230, builds after it)
+## Ready (WIP 0/8)
 
 
 
@@ -1228,8 +1228,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
+## In Development (WIP 2/3)
 - [ABC-241] A repetition against the game's earlier positions ignores an ep square no pawn can legally take (Q3 (c), ADR-0020 § AMENDMENT 2026-10-30) (size: S, priority: P2, DoR 10/10 (ABC-230 merged 24f3e322); milestone 1; value-changing → 10 D + 10 R smoke; after ABC-228; **pulled 2026-10-30** → `se-ABC-241`; R smoke reads level 5 at 4 000 ms)
+- [ABC-220] simple-tournament over UCI (TimeMode): T 22.0 s, min(T, C) with a clock, 22.5 s ceiling (size: M, priority: P2, DoR 9/10; waits owner accepts ADR-0052 (OQ-0052-1; → Ready 2026-10-30: ADR-0052 ACCEPTED (22 s / 22 s); DoR 10/10; shares uci-session.ts with ABC-230, builds after it; **pulled 2026-10-30** → `se-ABC-220` (A11/A14/A12 wall unrun at SE, QE runs them ALONE; NFR triggers → Security/NFR gate after QE)
 
 
 
