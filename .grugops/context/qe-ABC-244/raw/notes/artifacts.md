@@ -8,7 +8,7 @@
   `parity-base-vs-t1u2at1000.out`.
 - `a7/`: `census-base.tsv`, `census-head.tsv`, `census-table.out`.
 - `n8/`: `n8.tsv` (27 runs), `readout.txt`, `stdout.txt`.
-- `g8/`: `g8.log`, `g8-wait.log`, `g8-perfile.txt`, `stdout.txt`, a tail of each run's output.
+- `g8/`: `g8.log.txt`, `g8-wait.log.txt`, `g8-perfile.txt`, `stdout.txt`, a tail of each run's output.
 - `gates/`: `lint.txt`, `typecheck.txt`, `build.txt`, `skip-integrity.txt`.
 - Scratch paths are written `<scratch>`. Trees were `git archive` out of the repository, so no `src/` file was touched.
 - **Commands** (run from `qe-scripts/`, `QE244_NM` = the main checkout's `node_modules`):
