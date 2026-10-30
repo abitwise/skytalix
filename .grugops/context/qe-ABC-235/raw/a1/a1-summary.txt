@@ -1,0 +1,27 @@
+qe-ABC-235 A1 re-run (no golden file committed; outputs kept in scratch only)
+start 2026-10-29T22:21:53Z
+6021 a1-base.jsonl
+0ead98bd2ae901d1c22e3bf13eefdd16a7ed242d672a8175901ff122cc8ecee1  a1-base.jsonl
+base rc=0 2793s
+6021 a1-tip.jsonl
+0ead98bd2ae901d1c22e3bf13eefdd16a7ed242d672a8175901ff122cc8ecee1  a1-tip.jsonl
+tip rc=0 2089s
+u5 base 235s
+u5 tip 197s
+end 2026-10-29T23:50:27Z
+cmp a1-base a1-tip: equal; pure:false rows 0 / 0
+relayout (no engine run) of the same rows into run-a1.sh's n-shard order:
+  tip n=6 0ead98bd2ae901d1c22e3bf13eefdd16a7ed242d672a8175901ff122cc8ecee1 (= file)
+  tip n=8 812f86ae46766537f73657b70f447f4c2e61d124051e0629fb374f90ac2bd000 
+  base n=6 0ead98bd2ae901d1c22e3bf13eefdd16a7ed242d672a8175901ff122cc8ecee1 (= file)
+  base n=8 812f86ae46766537f73657b70f447f4c2e61d124051e0629fb374f90ac2bd000 
+depth-5 unpruned sample (a1-sample.mjs, A1_FAMILIES=six endgames + position-3, A1_UNPRUNED_DEPTH=5, 6 shards sequential):
+6a76ebab50ac128c09e21a1d086224d93756efe2d5d03deb6079745fefd77f4f  u5-base.jsonl
+6a76ebab50ac128c09e21a1d086224d93756efe2d5d03deb6079745fefd77f4f  u5-tip.jsonl
+  rows 264 each; cmp equal; pure:false 0 / 0; nodes summed 202 091 899, max one row 8 237 692
+part unpruned shard 0/6 corpus 301 mine 24 rows 48
+part unpruned shard 1/6 corpus 301 mine 23 rows 46
+part unpruned shard 2/6 corpus 301 mine 22 rows 44
+part unpruned shard 3/6 corpus 301 mine 21 rows 42
+part unpruned shard 4/6 corpus 301 mine 21 rows 42
+part unpruned shard 5/6 corpus 301 mine 21 rows 42
