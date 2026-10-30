@@ -1,0 +1,14 @@
+ABC-230 identity harness (id.mjs via run-id.sh), plain node v26.12.1, out of tree.
+base = main c0698ddd src/ (git archive); head = grugops/ABC-230 2fbcb380 src/ (production files cmp-identical).
+Each part runs id.mjs once per tree; the base tree ignores the unknown priorKeys field.
+Rows carry move, score, depth, nodes, clock reads and a purity flag; 0 impure rows in every head output.
+
+part         rows  base sha256[0:16]  head sha256[0:16]  verdict
+corpus        302  c56a3df9e7246ab4   c56a3df9e7246ab4   EQUAL  (301 positions: ABC-078 A3 + ABC-121's 190, deduped)
+choose       2408  8a50e586b3600107   8a50e586b3600107   EQUAL  (chooseMove + 3 doors, budgets 3 and 5, no priorKeys)
+choose-empty 2408  8a50e586b3600107   8a50e586b3600107   EQUAL  (priorKeys: [])
+clock0       2408  8a50e586b3600107   8a50e586b3600107   EQUAL  (root clock forced 0, adversarial priorKeys: 25 keys x4)
+doors-prior  1806  ba93283af174b6d9   ba93283af174b6d9   EQUAL  (3 doors, clock 99, adversarial priorKeys)
+level        1806  7c44b4a223572997   7c44b4a223572997   EQUAL  (createLevel rates of levels 1/3/5, seeds 1/7, no list)
+level-empty  1806  7c44b4a223572997   7c44b4a223572997   EQUAL  (same, list [] => blunder children get [rootKey])
+nonvac        602  bcad32bce2ff5e5b   1e420a7989cfe2fc   DIFFER (non-vacuity: chooseMove, clock 99, adversarial keys; 248 of 602 rows differ)
