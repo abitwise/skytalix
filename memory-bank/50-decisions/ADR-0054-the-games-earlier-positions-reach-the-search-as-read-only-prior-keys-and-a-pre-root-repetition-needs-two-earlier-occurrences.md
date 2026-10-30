@@ -6,6 +6,10 @@ id: ADR-0054
 
 ## Status
 
+*2026-10-30:* a **PROPOSED** amendment for `ABC-242` (`QE-230-a`: on a blunder, a root move that makes the third
+occurrence scores 0) is at the end of this file. Acceptance is the owner's. Until he answers, decisions 1–8 stand as
+written. Pointer added by Architect/Design (task `arch-ABC-242-reading`).
+
 **ACCEPTED** 2026-10-30 by the owner, Olger Oeselg, **as written**. His words, verbatim (Orchestrator note
 `.grugops/context/orch-2026-10-29g/notes/20261030T041740Z-orchestrator-decision-3dd61448.md`, a transcription and not a
 stamp): *"ADR-0054: accept"*. Recorded by Architect/Design (task `arch-adr-accept-0052-0053-0054`).
@@ -202,3 +206,176 @@ Delete the field and the scan's second loop, and stop passing the list. The sear
 the identity rows above prove it. Nothing is persisted, no data file or book key changes, and the table is cleared
 per search, so a rollback is one revert with nothing to migrate. Reverting only the count (two matches to one) is a
 one-character change, and probe H2 is the row that would red.
+
+## Proposed amendment 2026-10-30 (`ABC-242`, `QE-230-a`): on a blunder, a root move that makes the third occurrence scores exactly 0, and its child is not searched. PROPOSED
+
+### Status
+
+**PROPOSED** 2026-10-30 by Architect/Design (task `arch-ABC-242-reading`, records only, at `main` `ee7da249`).
+Nothing was built, run or timed at this hop, because a QE timing read may hold the host alone. The facts below were
+read from the source and from QE's recorded probe.
+
+- **Acceptance is the owner's.** This amendment adds to accepted text. `ADR-0032` decision 1 (accepted by the owner,
+  2026-10-10) gains one scoring bullet, and decision 2's blunder bullet here gains one sentence. The standing ruling of
+  2026-10-22 (`…5aaf7cec` item 3) keeps "one that changes or reverses an accepted one" with him. `ADR-0054` itself
+  set the precedent: it went to him although it only added to `ADR-0002` clause 3. No agent marks this accepted.
+- **The question:** *On a blunder move at levels 1–4, should a root move that makes the third occurrence of a game
+  position score exactly 0, without its child search? This applies decision 3's two-match rule to the blunder's root
+  moves, in `src/levels.ts` only. The engine path does not change.* The answer that settles it:
+  *"ADR-0054 ABC-242: accept"* or *"… decline"*.
+- **The default without an answer:** nothing changes. `ABC-242` stays in Backlog, and decisions 1–8 above and
+  `ADR-0032` stand as written.
+- **On acceptance:** an Architect/Design hop marks this block ACCEPTED, adds a dated line under `ADR-0032` decision 1,
+  and adds A5's sentence under decision 2's blunder bullet. The amendment is in force on `main` from `ABC-242`'s merge.
+- **Size S, P3.** It changes values at levels 1–4 only, on blunder moves only, and only when the game hands in prior
+  keys. There is no smoke pair (§ Consequences).
+
+### Context
+
+- **The gap.** `QE-230-a`, in `qe-ABC-230` `…ba5a249a`.
+  - Decision 2 hands each blunder child search `priorKeys` plus the root's key. Decision 3 scans nodes at ply `p ≥ 1`
+    only.
+  - A child search's root is the position after the root move, at that search's own ply 0. So no search checks it, and
+    a root move that makes the third occurrence is scored as if its position were new.
+  - **QE's probe** (`qe-ABC-230/raw/spot/blunder-probe.txt`): KQ v K, `4k3/8/8/8/8/8/8/1Q2K3 w - - 0 1` +
+    `b1b2 e8d8 b2b1 d8e8 b1b2 e8d8 b2b1`, rate 1, 2 000 ms, `virtualClock(1)`, seed 1. `d8e8` is the third
+    occurrence, and the list is `[d8e8 −1013, d8c8 −1030, d8d7 −1020, d8e7 −1010, d8c7 −1031]` with the keys and
+    without them. The blunder plays `d8e8`, the strict second-best of that list.
+- **The engine path has no such gap at the same move.** A `chooseMove` rooted at the game position sees that move's
+  child at ply 1, and decision 3 scores it 0 there (`ABC-230` `A1`, 4 fixtures).
+- **Why the check can be exact.** Take a root `R` with list `P`. The engine's scan of a ply-1 node reads the same
+  positions as a ply-0 scan of the child against the child's own list `[...P, key(R)]`, and it counts the same
+  matches.
+  - The ply-0 walk starts at `−4`. In the child's list, `−4` is `P`'s `−3`, which is where the engine's ply-1 walk
+    starts (`src/engine.ts:338`).
+  - The two lower bounds agree except at the 100-key cap.
+  - `key(R)` sits at the child's `−1` and can never match the child, whose side to move differs.
+- **Read at this hop:**
+  - `src/levels.ts`: `createLevel`'s child-key line (`:143-146`, a repetition key since `ABC-241`, `1f6abec4`) and
+    `blunder` (`:155-215`).
+  - `src/engine.ts`: `repeatsBeforeRoot` (`:330-342`).
+  - The `ABC-078` `A4` export pin (`src/engine.test.ts:504`) and the level module's import pin (`src/levels.test.ts`
+    § A8).
+  - `src/ladder.test.ts:179` and `tools/rating/rating.ts:377-411`.
+
+### Decision
+
+**A1. Where the check lives: in `src/levels.ts` `blunder`, and nowhere else.**
+- `src/engine.ts` and `src/search.ts` do not change. `ADR-0032` decision 1's fence holds.
+- `createLevel`'s engine branch does not change.
+- No helper is shared with the engine (§ Alternatives).
+
+**A2. The rule.** It applies after a root move is made and before its child search, and only when the level was
+handed prior keys. Let:
+- `c` be the child's halfmove clock;
+- `k` be the child's repetition key, `repetitionKey(child, zobristKey(child))` (`ADR-0020` § AMENDMENT C1);
+- `K` be the list the children are handed: `priorKeys` plus the root's key, the one list `createLevel` already builds
+  per call.
+
+Count each `e` in `−4, −6, …` with `e ≥ −min(c, |K|, 100)` and `K[|K| + e] === k`. **On two or more matches, the move
+scores exactly 0 and its child is not searched.** On one match (a second occurrence) or none, the child search runs as
+it does today.
+- This is `repeatsBeforeRoot` at ply 0, against the child's list. It is the count the child search would make at its
+  own root, and it is decision 3's two-match rule, unchanged, applied at the one node no search scans.
+- The walk reads nothing when `c < 4`, because it starts at `−4`.
+  - So a capture or a pawn move (clock 0) never matches, and neither do the first three reversible plies.
+  - A child with an ep square has clock 0, so it is never compared.
+  - Where the walk reads anything, the child has no ep square and `k` is its raw key. The helper is still called, so
+    that `C1`'s "every comparison" stays literally true. `k` need not be computed when `c < 4`.
+- The 100 is the engine's `PRIOR_KEYS_WINDOW`. `src/levels.ts` restates it as its own named constant, pointing here.
+  `engine.ts` does not export that name, and its export pin is not opened for it.
+- With no prior keys there is no check, no key and no comparison. An empty list (a bare FEN over UCI) gives a child
+  list that holds only the root key, which never matches.
+
+**A3. Why no search, and why 0.**
+- The engine returns 0 at a repetition before doing any work (decision 3's order: before the capacity guard and the
+  table probe). A root move whose child is a third occurrence is that same node, one level up.
+- The skipped child's slice of the shared deadline is not spent. The next child's `deadline − now()` takes it, as
+  `ADR-0032` decision 1's one deadline already does after any early return.
+- A checkmated or stalemated child can never be a third occurrence, because the game would have ended at its first.
+  So the order against `ADR-0032` decision 1's no-legal-move bullet changes nothing. The repetition test goes first,
+  as in the engine.
+
+**A4. `ADR-0032` decision 1 gains one bullet, by addition, on acceptance:** *"A child that is the third occurrence of
+a game position (`ADR-0054` § Proposed amendment 2026-10-30, A2) is scored 0 without a search."*
+- `ADR-0032` decisions 2 and 3, and every other bullet of decision 1, are unchanged. Decision 2 is the strict
+  second-best, ties to the first. Decision 3 is the worst class, read on the returned list.
+- The returned `scored` list carries the 0. `depth` and `nodes` count the children that ran.
+
+**A5. Decision 2's blunder bullet here gains one sentence, on acceptance:** "The blunder itself scores a root move
+whose child is a third occurrence at 0 (§ Proposed amendment 2026-10-30)." The hand-off of `priorKeys` plus the root
+key is unchanged.
+
+**A6. The parent-root count stays as decision 2 writes it. It is not in `ABC-242`.**
+- Inside a child search, the root `R` is a prior key. A line that returns to `R` therefore needs `R` to have stood
+  once more before (two matches). The engine path counts `R` as path (one match).
+- By decision 4's own argument, path is the truer count, since the blunder does examine every choice at `R`. But
+  counting the last prior key as path is an engine change and a decision 3 amendment. It falls outside `ABC-242`'s
+  fence, which keeps the engine path node-equal.
+- At the latest, the child sees the return when the cycle repeats on its own path, 4 plies later.
+- Its effect on any score is `UNKNOWN - verify`. No ticket is cut for it: P3, levels 1–4, unmeasured.
+
+### Alternatives
+
+- **A root check inside `chooseMove`, enabled only by the blunder path** (a new `EngineOptions` field). Rejected for
+  three reasons:
+  - it opens `src/engine.ts`, which `ADR-0032` decision 1 fences off;
+  - it adds a field to the shipped entry point (`ADR-0024` decision 7);
+  - `chooseMove` would still have to return a move for a root it has already judged a draw, which no caller needs.
+- **A root check in `chooseMove` for every caller.** Rejected: it changes the engine path's own root (`ABC-242`
+  § Out of scope), and it breaks `A6`'s node-equality at levels 5–7 and at UCI's default.
+- **One shared helper: export `repeatsBeforeRoot` from `src/engine.ts`.** This would keep a single supplier of the
+  walk. Rejected: it edits `engine.ts` against `ADR-0032` decision 1's fence, and it re-pins `ABC-078` `A4`'s export
+  list for a level-layer rule. The price of rejecting it is a ply-0 walk of a few lines restated in `levels.ts`.
+  `ABC-242` `A1`–`A3` pin that walk's count, clock bound and parity against base, so a drift between the two copies
+  turns them red.
+- **Search the child, then replace its score with 0.** Every other entry would then equal base's exactly, a stronger
+  `A1` pin. Rejected: it spends a slice on a search whose result is thrown away, and it departs from the engine's
+  order (the repetition test before any work). The strong pin comes back through a fixture whose third-occurrence
+  move is last in `legalMoves` order (`ABC-242`, Architect reading).
+- **A draw on one match (the path rule).** Rejected by decision 4 and probe H2: a second occurrence is not a draw.
+  `ABC-242` `A2` is the row that catches it.
+- **Counting `R` as path inside the child searches** (A6). Not in this ticket: it is an engine change.
+
+### Consequences
+
+- **The files `ABC-242` touches:**
+  - `src/levels.ts`: the check, a private helper, the 100-key constant, the header's blunder lines and `blunder`'s
+    doc;
+  - `src/levels.test.ts`: the `A1`, `A2`, `A3`, `A5` and `A6` rows;
+  - `src/cli.test.ts` and `src/uci-session.test.ts`: `A4`.
+- **Not touched:** `src/engine.ts`, `src/search.ts`, `src/level-seam.ts`, `src/uci-session.ts`, `src/cli.ts`,
+  `src/history.ts`, `src/gameend.ts`, `src/zobrist.ts`, `tools/`, `data/`.
+  - `levels.ts` gains no import. `zobristKey` and `repetitionKey` are already imported, so the § A8 import pin holds.
+  - It gains no export, so `G9` and the engine export pin hold.
+- **What stays the same, node for node:**
+  - every search at levels 5–7, every non-blunder move, and UCI `go` at the default;
+  - every blunder call with no prior keys or with an empty list;
+  - every blunder call in which no root move makes a third occurrence. The check reads no clock and runs no search, so
+    the keyed list equals base's keyed list.
+- **What changes:** a blunder call with a third-occurrence root move.
+  - That move's entry is 0.
+  - The entries scored before it in `legalMoves` order are exactly base's, because their clock readings are the same.
+  - The entries after it may differ, because they inherit the skipped slice.
+- **Cost (`NFR-004` / `G5`, `NFR-009`):**
+  - each root move, when keys are handed in, costs at most one repetition-key computation and ≤ 49 comparisons
+    (`e = −4 … −100`);
+  - a check that fires saves a child search;
+  - nothing is allocated per root move. The list is the one `createLevel` already builds, and the level layer's sum
+    clamp is unchanged.
+- **Rows that must stay green unedited:**
+  - the `ABC-230` and `ABC-241` rows in `src/levels.test.ts`. Their prior keys are synthetic (`11n…`, `21n…`) and
+    never match, so every child is still searched;
+  - `QE-087-b`, the engine export pin, the `ABC-078` `A3` corpus and the ladder lane.
+- **The smoke reading (`EPIC-010` § The merge rule): none.**
+  - `tools/rating/rating.ts` gives skytalix no `Skill Level` (`:377-387`), so every D, R and batch move is level 5's
+    engine path.
+  - **Correction for `ABC-242` `A8`:** the ladder lane (`src/ladder.test.ts:179`, `choose(h.position)`) hands in no
+    prior keys, so it plays base's code under this change too. It is an identity row, not a playing check on the
+    change. `A1`–`A5` are the only reads of the changed behaviour.
+- **UAT** is owed (production lines in `src/levels.ts`). The QE verdict signs it.
+
+### Rollback
+
+Delete the check. The blunder path is then `main`'s at `ee7da249`, node for node. Nothing is persisted, so nothing
+migrates.
