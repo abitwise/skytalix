@@ -1,0 +1,67 @@
+2026-10-30T16:31:17Z SEARCH_DEEP-quiescence start load1=1.50 tctl=40.1 foreign_vitest=0
+2026-10-30T16:32:11Z SEARCH_DEEP-quiescence end rc=0 wall=54.1s load1=1.25 tctl=74.5 :: 116 passed (116)
+2026-10-30T16:32:12Z SEARCH_DEEP-search.null-move wait poll=1 load1=1.25 vitest=0 cutechess=0 tctl=74.1
+2026-10-30T16:32:27Z SEARCH_DEEP-search.null-move clear after poll 2 load1=0.97 tctl=39.8
+2026-10-30T16:32:27Z SEARCH_DEEP-search.null-move start load1=0.97 tctl=39.8 foreign_vitest=0
+2026-10-30T16:32:59Z SEARCH_DEEP-search.null-move end rc=0 wall=32.3s load1=1.17 tctl=75.0 :: 44 passed (44)
+2026-10-30T16:32:59Z SEARCH_DEEP-search wait poll=1 load1=1.17 vitest=0 cutechess=0 tctl=74.6
+2026-10-30T16:33:14Z SEARCH_DEEP-search clear after poll 2 load1=0.91 tctl=39.3
+2026-10-30T16:33:14Z SEARCH_DEEP-search start load1=0.91 tctl=39.3 foreign_vitest=0
+2026-10-30T16:33:17Z SEARCH_DEEP-search end rc=0 wall=3.1s load1=0.92 tctl=69.6 :: 57 passed (57)
+2026-10-30T16:33:17Z SEARCH_DEEP-search.ordering wait poll=1 load1=0.92 vitest=0 cutechess=0 tctl=69.4
+2026-10-30T16:33:32Z SEARCH_DEEP-search.ordering clear after poll 2 load1=0.92 tctl=38.1
+2026-10-30T16:33:32Z SEARCH_DEEP-search.ordering start load1=0.92 tctl=38.1 foreign_vitest=0
+2026-10-30T16:33:39Z SEARCH_DEEP-search.ordering end rc=0 wall=6.9s load1=0.92 tctl=71.6 :: 43 passed (43)
+2026-10-30T16:33:39Z SEARCH_DEEP-search.pvs-lmr wait poll=1 load1=0.92 vitest=0 cutechess=0 tctl=71.3
+2026-10-30T16:33:54Z SEARCH_DEEP-search.pvs-lmr clear after poll 2 load1=0.86 tctl=38.9
+2026-10-30T16:33:54Z SEARCH_DEEP-search.pvs-lmr start load1=0.86 tctl=38.9 foreign_vitest=0
+2026-10-30T16:34:57Z SEARCH_DEEP-search.pvs-lmr end rc=0 wall=63.0s load1=1.88 tctl=78.8 :: 29 passed (29)
+2026-10-30T16:34:57Z SEARCH_DEEP-transposition wait poll=1 load1=1.88 vitest=0 cutechess=0 tctl=78.6
+2026-10-30T16:35:12Z SEARCH_DEEP-transposition clear after poll 2 load1=1.54 tctl=42.6
+2026-10-30T16:35:12Z SEARCH_DEEP-transposition start load1=1.54 tctl=42.6 foreign_vitest=0
+2026-10-30T16:35:16Z SEARCH_DEEP-transposition end rc=0 wall=4.2s load1=1.50 tctl=72.5 :: 40 passed (40)
+2026-10-30T16:35:16Z ENGINE_DEEP-quiescence wait poll=1 load1=1.50 vitest=0 cutechess=0 tctl=72.3
+2026-10-30T16:35:31Z ENGINE_DEEP-quiescence foreign vitest pid(s) 2900966,2901149,2901173: waiting on kill -0
+2026-10-30T16:35:46Z ENGINE_DEEP-quiescence foreign vitest gone after 30 s
+2026-10-30T16:35:46Z ENGINE_DEEP-quiescence clear after poll 3 load1=1.99 tctl=55.8
+2026-10-30T16:35:46Z ENGINE_DEEP-quiescence start load1=1.99 tctl=55.8 foreign_vitest=0
+2026-10-30T16:35:47Z ENGINE_DEEP-quiescence end rc=0 wall=0.9s load1=1.99 tctl=62.4 :: 99 passed (99)
+2026-10-30T16:35:47Z ENGINE_DEEP-search.ordering wait poll=1 load1=1.99 vitest=0 cutechess=0 tctl=62.3
+2026-10-30T16:36:02Z ENGINE_DEEP-search.ordering foreign vitest pid(s) 2902825,2904186,2904187: waiting on kill -0
+2026-10-30T16:37:32Z ENGINE_DEEP-search.ordering foreign vitest gone after 105 s
+2026-10-30T16:37:32Z ENGINE_DEEP-search.ordering clear after poll 3 load1=1.59 tctl=57.6
+2026-10-30T16:37:32Z ENGINE_DEEP-search.ordering start load1=1.59 tctl=57.6 foreign_vitest=0
+2026-10-30T16:37:37Z ENGINE_DEEP-search.ordering end rc=0 wall=4.5s load1=1.71 tctl=80.3 :: 30 passed (30)
+2026-10-30T16:37:37Z ENGINE_DEEP-search.pvs-lmr wait poll=1 load1=1.71 vitest=0 cutechess=0 tctl=79.9
+2026-10-30T16:37:52Z ENGINE_DEEP-search.pvs-lmr clear after poll 2 load1=1.33 tctl=40.6
+2026-10-30T16:37:52Z ENGINE_DEEP-search.pvs-lmr start load1=1.33 tctl=40.6 foreign_vitest=0
+2026-10-30T16:38:40Z ENGINE_DEEP-search.pvs-lmr end rc=0 wall=48.5s load1=1.36 tctl=75.3 :: 21 passed (21)
+2026-10-30T16:38:41Z ENGINE_DEEP-transposition wait poll=1 load1=1.36 vitest=0 cutechess=0 tctl=74.9
+2026-10-30T16:38:56Z ENGINE_DEEP-transposition clear after poll 2 load1=1.13 tctl=39.9
+2026-10-30T16:38:56Z ENGINE_DEEP-transposition start load1=1.13 tctl=39.9 foreign_vitest=0
+2026-10-30T16:39:01Z ENGINE_DEEP-transposition end rc=0 wall=5.6s load1=1.11 tctl=73.0 :: 26 passed (26)
+2026-10-30T16:39:01Z PUZZLE_DEEP-puzzle-suite wait poll=1 load1=1.11 vitest=0 cutechess=0 tctl=72.8
+2026-10-30T16:39:16Z PUZZLE_DEEP-puzzle-suite clear after poll 2 load1=0.86 tctl=39.0
+2026-10-30T16:39:16Z PUZZLE_DEEP-puzzle-suite start load1=0.86 tctl=39.0 foreign_vitest=0
+2026-10-30T16:39:19Z PUZZLE_DEEP-puzzle-suite end rc=0 wall=3.2s load1=0.86 tctl=68.9 :: 18 passed (18)
+2026-10-30T16:39:19Z ENGINE_DEEP-engine wait poll=1 load1=0.86 vitest=0 cutechess=0 tctl=68.5
+2026-10-30T16:39:34Z ENGINE_DEEP-engine clear after poll 2 load1=0.75 tctl=37.9
+2026-10-30T16:39:34Z ENGINE_DEEP-engine start load1=0.75 tctl=37.9 foreign_vitest=0
+2026-10-30T16:42:34Z ENGINE_DEEP-engine end rc=0 wall=179.4s load1=1.16 tctl=74.0 :: 77 passed (77)
+2026-10-30T16:42:34Z ENGINE_DEEP-levels wait poll=1 load1=1.16 vitest=0 cutechess=0 tctl=73.6
+2026-10-30T16:42:49Z ENGINE_DEEP-levels clear after poll 2 load1=0.90 tctl=39.4
+2026-10-30T16:42:49Z ENGINE_DEEP-levels start load1=0.90 tctl=39.4 foreign_vitest=0
+2026-10-30T16:52:26Z ENGINE_DEEP-levels end rc=0 wall=577.3s load1=1.13 tctl=73.4 :: 45 passed (45)
+2026-10-30T16:52:26Z CLI_DEEP-cli.real-engine wait poll=1 load1=1.13 vitest=0 cutechess=0 tctl=73.1
+2026-10-30T16:52:41Z CLI_DEEP-cli.real-engine clear after poll 2 load1=0.88 tctl=39.5
+2026-10-30T16:52:41Z CLI_DEEP-cli.real-engine start load1=0.88 tctl=39.5 foreign_vitest=0
+2026-10-30T16:52:54Z CLI_DEEP-cli.real-engine end rc=0 wall=13.0s load1=0.98 tctl=71.8 :: 11 passed (11)
+2026-10-30T16:52:54Z UCI_DEEP-uci.real-engine wait poll=1 load1=0.98 vitest=0 cutechess=0 tctl=71.4
+2026-10-30T16:53:09Z UCI_DEEP-uci.real-engine clear after poll 2 load1=0.84 tctl=38.6
+2026-10-30T16:53:09Z UCI_DEEP-uci.real-engine start load1=0.84 tctl=38.6 foreign_vitest=0
+2026-10-30T16:53:13Z UCI_DEEP-uci.real-engine end rc=0 wall=3.5s load1=0.85 tctl=69.4 :: 9 passed (9)
+2026-10-30T16:53:13Z ENGINE_DEEP-uci-session wait poll=1 load1=0.85 vitest=0 cutechess=0 tctl=69.1
+2026-10-30T16:53:28Z ENGINE_DEEP-uci-session clear after poll 2 load1=0.74 tctl=38.1
+2026-10-30T16:53:28Z ENGINE_DEEP-uci-session start load1=0.74 tctl=38.1 foreign_vitest=0
+2026-10-30T16:55:20Z ENGINE_DEEP-uci-session end rc=0 wall=112.5s load1=0.98 tctl=73.6 :: 206 passed (206)
+2026-10-30T16:55:20Z DONE

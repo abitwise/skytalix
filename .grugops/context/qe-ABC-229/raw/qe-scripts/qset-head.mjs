@@ -45,7 +45,8 @@ check(`src table has 9 rows (read ${srcRows.length})`, srcRows.length === 9);
 for (const f of frozen) {
   const id = f.id.split(" ")[0];
   const s = srcRows.find((r) => r.id === id);
-  check(`${id} src row present`, !!s);
+  // The fixture's INFO row is not a Q_SET_PROMOTIONS row (src pins it as KPK_B6C6 through search() at depth 8, below).
+  if (id.startsWith("QP-")) check(`${id} src row present`, !!s);
   if (s) check(`${id} src = frozen (fen ${s.fen === f.fen}, static ${s.stat}/${f.static}, old ${s.old}/${f.old}, new ${s.new}/${f.new})`, s.fen === f.fen && s.stat === f.static && s.old === f.old && s.new === f.new);
   const st = evaluate(parseFen(f.fen)), hs = q(f.fen, SHIPPED), ho = q(f.fen, PRE229);
   const rn = ref(parseFen(f.fen), 0, 0, true), ro = ref(parseFen(f.fen), 0, 0, false);
@@ -61,3 +62,4 @@ const KPK = "2k5/8/1K6/2P5/8/8/8/8 w - - 0 1";
 const a = sh.search(parseFen(KPK), 8), d = sh.searchWithoutQuietPromotions(parseFen(KPK), 8);
 check(`INFO kpk-b6c6 d8: search ${a.score} (902), door ${d.score} (186)`, a.score === 902 && d.score === 186);
 console.log(`checks ${checks} fails ${fails}`);
+process.exit(fails ? 1 : 0);

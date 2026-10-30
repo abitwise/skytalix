@@ -1,0 +1,35 @@
+
+ RUN  v4.1.12 <scratchpad>/qe-229/plant/P2-qply0-only
+
+ ✓ src/gameend.nfr.test.ts > NFR-001 — gameStatus stays cheap (call counts, spied) > generates the legal moves EXACTLY once, on every call shape 3ms
+ ✓ src/gameend.nfr.test.ts > NFR-001 — gameStatus stays cheap (call counts, spied) > reads the Zobrist key exactly ONCE when the counts map is consulted 1ms
+ ✓ src/gameend.nfr.test.ts > NFR-001 — gameStatus stays cheap (call counts, spied) > reads the Zobrist key NOT AT ALL when a cheaper branch already decides 0ms
+ ✓ src/gameend.nfr.test.ts > ABC-206 — the search leaf's game-end check stays cheap (call counts, spied) > leafEndReason never builds the move list or reads a key: hasLegalMove exactly once 1ms
+ ✓ src/gameend.nfr.test.ts > ABC-206 — the search leaf's game-end check stays cheap (call counts, spied) > quiesce never builds the full move list: captures come from legalCaptures 6ms
+ ✓ src/gameend.nfr.test.ts > ABC-206 — the search leaf's game-end check stays cheap (call counts, spied) > lateMoveReduction never plays an unflagged move to learn whether it gives check 0ms
+ ✓ src/gameend.nfr.test.ts > ABC-206 — the search leaf's game-end check stays cheap (call counts, spied) > hasLegalMove on the start position plays EXACTLY one move 0ms
+ ✓ src/gameend.nfr.test.ts > ABC-206 — the search leaf's game-end check stays cheap (call counts, spied) > legalCaptures on kiwipete plays only the pseudo-legal captures 0ms
+ ✓ src/gameend.nfr.test.ts > ABC-206 — the search leaf's game-end check stays cheap (call counts, spied) > legalCaptures runs generateCaptures once and generateMoves never 0ms
+ × src/gameend.nfr.test.ts > ABC-206 — the search leaf's game-end check stays cheap (call counts, spied) > quiesce out of check generates once per node with quiet promotions on: one generateCaptures, no generateMoves 2ms
+   → 8/P6k/8/8/8/8/8/K7 w - - 0 1: expected 1 to be greater than 1
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 9 passed (10)
+   Start at  16:23:50
+   Duration  168ms (transform 0ms, setup 0ms, import 51ms, tests 15ms, environment 0ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/gameend.nfr.test.ts > ABC-206 — the search leaf's game-end check stays cheap (call counts, spied) > quiesce out of check generates once per node with quiet promotions on: one generateCaptures, no generateMoves
+AssertionError: 8/P6k/8/8/8/8/8/K7 w - - 0 1: expected 1 to be greater than 1
+ ❯ <anonymous> src/gameend.nfr.test.ts:284:28
+    282|         () => visited++,
+    283|       );
+    284|       expect(visited, fen).toBeGreaterThan(1); // the node and at leas…
+       |                            ^
+    285|       expect(generateCaptures, fen).toHaveBeenCalledTimes(1);
+    286|       expect(generateMoves, fen).toHaveBeenCalledTimes(0);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

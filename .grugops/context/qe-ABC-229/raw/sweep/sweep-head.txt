@@ -1,0 +1,12 @@
+root start d3: positions 9323, with a legal quiet Q promotion 0
+root kiwipete d3: positions 99950, with a legal quiet Q promotion 1835
+root position-3 d4: positions 46256, with a legal quiet Q promotion 0
+root position-4 d3: positions 9738, with a legal quiet Q promotion 7331
+root position-4-mirror d3: positions 9738, with a legal quiet Q promotion 7331
+root position-5 d3: positions 63910, with a legal quiet Q promotion 129
+root promo-7 d4: positions 192842, with a legal quiet Q promotion 115124
+root eight-each d3: positions 47454, with a legal quiet Q promotion 43365
+root pinned-b7 d4: positions 2239, with a legal quiet Q promotion 979
+root blocked-7th d4: positions 35068, with a legal quiet Q promotion 11878
+LIST: positions 516518 (in check 32944), with a quiet Q promotion 187972, list mismatches 0, mutated 0
+VALUE: sample 400 of 117537 distinct promotion positions; read 250, skipped (ref cap 200000) 150, value mismatches 0, positions where the rule moved the value 153

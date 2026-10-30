@@ -1,0 +1,29 @@
+== P2-qply0-only (src/quiescence.ts)
+  src/quiescence.test.ts: rc=1 :: 2 failed | 96 passed (98)
+    red: src/quiescence.test.ts > ABC-229 A2 — quiescence sees the queen: Q-SET's quiet-promotion rows (QE-frozen) > QP-8 (the quiet promotion arrives at qply 2 (bxa7+, a king move, a8=Q)): static 554, pre-ABC-229 1152, shipped 1885, and the brute force agrees
+    red: src/quiescence.test.ts > ABC-229 A2 — quiescence sees the queen: Q-SET's quiet-promotion rows (QE-frozen) > five rows separate the rules (QP-1, QP-6, QP-7, QP-8, QP-9); the four that must not move do not
+  src/gameend.nfr.test.ts: rc=1 :: 1 failed | 9 passed (10)
+    red: src/gameend.nfr.test.ts > ABC-206 — the search leaf's game-end check stays cheap (call counts, spied) > quiesce out of check generates once per node with quiet promotions on: one generateCaptures, no generateMoves
+  QE sweep --list-only: rc=0 :: LIST: positions 516518 (in check 32944), with a quiet Q promotion 187972, list mismatches 0, mutated 0
+== P3-second-legalMoves-pass (src/quiescence.ts)
+  src/quiescence.test.ts: rc=0 :: 98 passed (98)
+  src/gameend.nfr.test.ts: rc=1 :: 1 failed | 9 passed (10)
+    red: src/gameend.nfr.test.ts > ABC-206 — the search leaf's game-end check stays cheap (call counts, spied) > quiesce out of check generates once per node with quiet promotions on: one generateCaptures, no generateMoves
+  QE sweep --list-only: rc=0 :: LIST: positions 516518 (in check 32944), with a quiet Q promotion 187972, list mismatches 0, mutated 0
+== P5-quiet-under-promotions (src/legal.ts)
+  src/quiescence.test.ts: rc=1 :: 3 failed | 95 passed (98)
+    red: src/quiescence.test.ts > ABC-229 A2 — quiescence sees the queen: Q-SET's quiet-promotion rows (QE-frozen) > QP-4 (only an under-promotion wins (e8=N+), and it stays unseen): static -52, pre-ABC-229 -52, shipped -52, and the brute force agrees
+    red: src/quiescence.test.ts > ABC-229 A2 — quiescence sees the queen: Q-SET's quiet-promotion rows (QE-frozen) > five rows separate the rules (QP-1, QP-6, QP-7, QP-8, QP-9); the four that must not move do not
+    red: src/quiescence.test.ts > ABC-229 — the one-pass list: legalCapturesAndQueenPromotions > is the legal captures, then the legal quiet queen promotions, on every position
+  src/gameend.nfr.test.ts: rc=0 :: 10 passed (10)
+  QE sweep --list-only: rc=1 :: LIST: positions 516518 (in check 32944), with a quiet Q promotion 187972, list mismatches 187972, mutated 0
+== QE1-promotions-only-without-captures (src/legal.ts)
+  src/quiescence.test.ts: rc=1 :: 1 failed | 97 passed (98)
+    red: src/quiescence.test.ts > ABC-229 — the one-pass list: legalCapturesAndQueenPromotions > is the legal captures, then the legal quiet queen promotions, on every position
+  src/gameend.nfr.test.ts: rc=0 :: 10 passed (10)
+  QE sweep --list-only: rc=1 :: LIST: positions 516518 (in check 32944), with a quiet Q promotion 187972, list mismatches 152742, mutated 0
+== QE2-no-empty-square-check (src/legal.ts)
+  src/quiescence.test.ts: rc=1 :: 1 failed | 97 passed (98)
+    red: src/quiescence.test.ts > ABC-229 — the one-pass list: legalCapturesAndQueenPromotions > is the legal captures, then the legal quiet queen promotions, on every position
+  src/gameend.nfr.test.ts: rc=0 :: 10 passed (10)
+  QE sweep --list-only: rc=1 :: LIST: positions 516518 (in check 32944), with a quiet Q promotion 187972, list mismatches 172545, mutated 0

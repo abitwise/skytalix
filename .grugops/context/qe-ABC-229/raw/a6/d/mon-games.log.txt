@@ -1,0 +1,20 @@
+2026-10-30T17:05:18Z Started game 1 of 10 (skytalix vs base)
+2026-10-30T17:06:38Z Finished game 1 (skytalix vs base): 1-0 {White mates}
+2026-10-30T17:06:38Z Started game 2 of 10 (base vs skytalix)
+2026-10-30T17:07:58Z Finished game 2 (base vs skytalix): 1-0 {White mates}
+2026-10-30T17:07:58Z Started game 3 of 10 (skytalix vs base)
+2026-10-30T17:12:09Z Finished game 3 (skytalix vs base): 0-1 {Black mates}
+2026-10-30T17:12:09Z Started game 4 of 10 (base vs skytalix)
+2026-10-30T17:14:09Z Finished game 4 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-30T17:14:09Z Started game 5 of 10 (skytalix vs base)
+2026-10-30T17:21:31Z Finished game 5 (skytalix vs base): 1/2-1/2 {Draw by fifty moves rule}
+2026-10-30T17:21:31Z Started game 6 of 10 (base vs skytalix)
+2026-10-30T17:26:52Z Finished game 6 (base vs skytalix): 1/2-1/2 {Draw by fifty moves rule}
+2026-10-30T17:26:52Z Started game 7 of 10 (skytalix vs base)
+2026-10-30T17:33:13Z Finished game 7 (skytalix vs base): 1/2-1/2 {Draw by fifty moves rule}
+2026-10-30T17:33:23Z Started game 8 of 10 (base vs skytalix)
+2026-10-30T17:36:04Z Finished game 8 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+2026-10-30T17:36:04Z Started game 9 of 10 (skytalix vs base)
+2026-10-30T17:38:34Z Finished game 9 (skytalix vs base): 0-1 {Black mates}
+2026-10-30T17:38:34Z Started game 10 of 10 (base vs skytalix)
+2026-10-30T17:41:55Z Finished game 10 (base vs skytalix): 0-1 {Black mates}
