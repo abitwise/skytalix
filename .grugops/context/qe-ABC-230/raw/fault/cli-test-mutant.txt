@@ -1,0 +1,43 @@
+
+ RUN  v4.1.12 <scratchpad>/qe-230/mut/tree
+
+ ❯ src/cli.test.ts (104 tests | 2 failed) 416ms
+     × A1: with keyHistory injected the default level plays the third occurrence, at 0 53ms
+     × the injected keyHistory is read once per engine move, on the game the loop hands in 39ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/cli.test.ts > ABC-230 A1, A3 — the CLI's level seam hands the search the game's prior keys > A1: with keyHistory injected the default level plays the third occurrence, at 0
+AssertionError: 3k4/8/8/8/8/8/8/Q3K3 b - - 7 4: expected 'd8c7' to be 'd8e8' // Object.is equality
+
+Expected: "d8e8"
+Received: "d8c7"
+
+ ❯ <anonymous> src/cli.test.ts:4566:39
+    4564|       const root = toFen(game.position);
+    4565|       const withKeys = await seamOf(keyHistory)(game);
+    4566|       expect(labelOf(withKeys), root).toBe(repeat);
+       |                                       ^
+    4567|       expect(toFen(game.position)).toBe(root);
+    4568|       // The seam's move is `chooseMove`'s on the trimmed list, on the…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/cli.test.ts > ABC-230 A1, A3 — the CLI's level seam hands the search the game's prior keys > the injected keyHistory is read once per engine move, on the game the loop hands in
+AssertionError: expected "vi.fn()" to be called 1 times, but got 0 times
+ ❯ <anonymous> src/cli.test.ts:4591:18
+    4589|     const read = vi.fn(keyHistory);
+    4590|     await seamOf(read)(game);
+    4591|     expect(read).toHaveBeenCalledTimes(1);
+       |                  ^
+    4592|     expect(read.mock.calls[0]?.[0]).toBe(game);
+    4593|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 102 passed (104)
+   Start at  05:14:02
+   Duration  3.73s (transform 0ms, setup 0ms, import 3.22s, tests 416ms, environment 0ms)
+

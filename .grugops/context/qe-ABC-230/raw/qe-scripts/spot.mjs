@@ -64,14 +64,16 @@ for (const [name, fen, mv, rep] of A1) {
     const base = B.engine.chooseMove(B.fen.parseFen(root), { ...o, now: B.vc.virtualClock(1) });
     const keys = H.engine.chooseMove(H.fen.parseFen(root), { ...o, now: H.vc.virtualClock(1), priorKeys: prior });
     const info = `d${d} base ${uciOf(B, base.move)} ${base.score} | keys ${uciOf(H, keys.move)} ${keys.score} | prior ${prior.length}`;
-    row(`A1 ${name}`, info, uciOf(H, keys.move) === rep && keys.score === 0 && base.score !== 0 && uciOf(B, base.move) !== rep);
+    // v2: the ticket's wording ("scores exactly 0 … base scores it otherwise"); base may pick the same move (INFO).
+    row(`A1 ${name}`, `${info} | base move ${uciOf(B, base.move) === rep ? "same (INFO)" : "differs"}`, uciOf(H, keys.move) === rep && keys.score === 0 && base.score !== 0);
   }
   // CLI surface: createLevelSeam(5, …, keyHistory) on the game, virtual clock; base seam has no third argument.
   const seamH = H.seam.createLevelSeam(5, { seed: 1, now: H.vc.virtualClock(1) }, H.history.keyHistory);
   const seamB = B.seam.createLevelSeam(5, { seed: 1, now: B.vc.virtualClock(1) });
   const mH = uciOf(H, await seamH(h));
   const mB = uciOf(B, await seamB(game(B, fen, moves)));
-  row(`A1 ${name} CLI seam L5`, `head ${mH} base ${mB}`, mH === rep && mB !== rep);
+  // v2: discriminating only where base's seam plays another move; otherwise the row is marked non-discriminating.
+  row(`A1 ${name} CLI seam L5`, `head ${mH} base ${mB}${mB === rep ? " (non-discriminating: base plays it too)" : ""}`, mH === rep);
   // A2: UCI on the same game, go depth 4 = cp 0 and the repetition; go movetime 3000 bestmove = the CLI seam's.
   const u4 = session(H, [`position fen ${fen} moves ${mv}`, "go depth 4"]);
   row(`A2 ${name} go depth 4`, `${scoreIn(lastInfo(u4))} ${best(u4)}`, scoreIn(lastInfo(u4)) === "cp 0" && best(u4) === `bestmove ${rep}`);
@@ -113,8 +115,12 @@ const BARE = [
   ["refused then bare FEN", [`position fen 4k3/8/8/8/8/8/8/1Q2K3 w - - 0 1 moves b1b2 e8d8 b2b1 d8e8 b1b2 e8d8 b2b1`, "position fen 4k3/8/8/8/8/8/8/1Q2K3 w - - 0 1 moves b1b2 xx", "position fen 3k4/8/8/8/8/8/8/1Q2K3 b - - 7 4", "go depth 5"]],
 ];
 for (const [name, lines] of BARE) {
-  const oh = session(H, lines);
-  const ob = session(B, lines);
+  // v2: the output after the last ucinewgame/position-refusal setup only; a search on the game before it may differ.
+  const cut = lines.lastIndexOf("ucinewgame");
+  const pre = cut === -1 ? 0 : session(H, lines.slice(0, cut)).length;
+  const preB = cut === -1 ? 0 : session(B, lines.slice(0, cut)).length;
+  const oh = session(H, lines).slice(pre);
+  const ob = session(B, lines).slice(preB);
   row(`A3 ${name}`, `${oh.filter((l) => !l.startsWith("info string")).join(" / ")}`, JSON.stringify(oh) === JSON.stringify(ob));
 }
 // A3 CLI: a game started from a FEN (no moves yet) through the seam with keyHistory = the base seam.

@@ -1,0 +1,47 @@
+A1 Q-b1 black | d4 base d8c7 -1000 | keys d8e8 0 | prior 7 | base move differs | PASS
+A1 Q-b1 black | d5 base d8c7 -1000 | keys d8e8 0 | prior 7 | base move differs | PASS
+A1 Q-b1 black CLI seam L5 | head d8e7 base d8e7 | FAIL
+A2 Q-b1 black go depth 4 | cp 0 bestmove d8e8 | PASS
+A2 Q-b1 black bestmove = CLI | bestmove d8e8 vs CLI d8e7 | FAIL
+A8 Q-b1 black | d3 base d8c8 -990 n186 | keys d8c8 -990 n186 | prior 3 | PASS
+A8 Q-b1 black | d4 base d8c7 -1000 n679 | keys d8c7 -1000 n679 | prior 3 | PASS
+A8 Q-b1 black | d5 base d8c7 -1000 n2095 | keys d8c7 -1000 n2095 | prior 3 | PASS
+A8 Q-b1 black UCI | info depth 4 score cp -1000 nodes 679 time 5 nps 135800 pv d8c7 == base | PASS
+A1 Q-b8 white | d4 base d1c1 -1000 | keys d1e1 0 | prior 7 | base move differs | PASS
+A1 Q-b8 white | d5 base d1c2 -1000 | keys d1e1 0 | prior 7 | base move differs | PASS
+A1 Q-b8 white CLI seam L5 | head d1d2 base d1d2 | FAIL
+A2 Q-b8 white go depth 4 | cp 0 bestmove d1e1 | PASS
+A2 Q-b8 white bestmove = CLI | bestmove d1e1 vs CLI d1d2 | FAIL
+A8 Q-b8 white | d3 base d1c1 -990 n176 | keys d1c1 -990 n176 | prior 3 | PASS
+A8 Q-b8 white | d4 base d1c1 -1000 n434 | keys d1c1 -1000 n434 | prior 3 | PASS
+A8 Q-b8 white | d5 base d1c2 -1000 n4567 | keys d1c2 -1000 n4567 | prior 3 | PASS
+A8 Q-b8 white UCI | info depth 4 score cp -1000 nodes 434 time 5 nps 86800 pv d1c1 == base | PASS
+A1 R-c1 black | d4 base d8d7 -576 | keys d8e8 0 | prior 7 | base move differs | PASS
+A1 R-c1 black | d5 base d8e8 -568 | keys d8e8 0 | prior 7 | base move same (INFO) | PASS
+A1 R-c1 black CLI seam L5 | head d8e8 base d8e8 (non-discriminating: base plays it too) | PASS
+A2 R-c1 black go depth 4 | cp 0 bestmove d8e8 | PASS
+A2 R-c1 black bestmove = CLI | bestmove d8e8 vs CLI d8e8 | PASS
+A8 R-c1 black | d3 base d8d7 -566 n96 | keys d8d7 -566 n96 | prior 3 | PASS
+A8 R-c1 black | d4 base d8d7 -576 n240 | keys d8d7 -576 n240 | prior 3 | PASS
+A8 R-c1 black | d5 base d8e8 -568 n1170 | keys d8e8 -568 n1170 | prior 3 | PASS
+A8 R-c1 black UCI | info depth 4 score cp -576 nodes 240 time 5 nps 48000 pv d8d7 == base | PASS
+A1 R-c8 white | d4 base d1d2 -576 | keys d1e1 0 | prior 7 | base move differs | PASS
+A1 R-c8 white | d5 base d1e1 -568 | keys d1e1 0 | prior 7 | base move same (INFO) | PASS
+A1 R-c8 white CLI seam L5 | head d1e1 base d1e1 (non-discriminating: base plays it too) | PASS
+A2 R-c8 white go depth 4 | cp 0 bestmove d1e1 | PASS
+A2 R-c8 white bestmove = CLI | bestmove d1e1 vs CLI d1e1 | PASS
+A8 R-c8 white | d3 base d1d2 -566 n100 | keys d1d2 -566 n100 | prior 3 | PASS
+A8 R-c8 white | d4 base d1d2 -576 n217 | keys d1d2 -576 n217 | prior 3 | PASS
+A8 R-c8 white | d5 base d1e1 -568 n1396 | keys d1e1 -568 n1396 | prior 3 | PASS
+A8 R-c8 white UCI | info depth 4 score cp -576 nodes 217 time 5 nps 43400 pv d1d2 == base | PASS
+INFO A2 startpos shuffle | head info depth 4 score cp 63 nodes 1850 time 6 nps 308333 pv d7d5 bestmove d7d5 | base info depth 4 score cp 63 nodes 1853 time 6 nps 308833 pv d7d5 bestmove d7d5
+A3 kiwipete | info depth 5 score cp -3 nodes 86891 time 89 nps 976303 pv e2a6 / bestmove e2a6 | PASS
+A3 A1 root as bare FEN | info depth 5 score cp -1000 nodes 2095 time 8 nps 261875 pv d8c7 / bestmove d8c7 | PASS
+A3 clock-99 bare FEN | info depth 6 score cp 134 nodes 1760 time 8 nps 220000 pv e1f1 / bestmove e1f1 | PASS
+A3 startpos bare | info depth 5 score cp 38 nodes 2535 time 8 nps 316875 pv b1c3 / bestmove b1c3 | PASS
+A3 ucinewgame after a game | info depth 5 score cp 38 nodes 2535 time 8 nps 316875 pv b1c3 / bestmove b1c3 | PASS
+A3 ucinewgame then bare FEN | info depth 5 score cp -1000 nodes 2095 time 8 nps 261875 pv d8c7 / bestmove d8c7 | PASS
+A3 refused position | bestmove 0000 | PASS
+A3 refused then bare FEN | info depth 5 score cp -1000 nodes 2095 time 8 nps 261875 pv d8c7 / bestmove d8c7 | PASS
+A3 CLI game from a FEN | head d8e7 base d8e7 | PASS
+FAIL rows: 4
