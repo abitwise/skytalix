@@ -15,6 +15,63 @@ epic: EPIC-010
 > the hand-off that leaves this gap. This is a design gap, not a build fault. **Waits in Backlog on one thing: an
 > Architect reading** (§ Dependencies).
 
+> **Architect reading 2026-10-30** (task `arch-ABC-242-reading`, records only, at `main` `ee7da249`; nothing was run).
+> The design is `ADR-0054` § Proposed amendment 2026-10-30. **It is PROPOSED, so the owner's acceptance is the
+> second wait** (§ Dependencies). Below are the facts for BA/PM to fold. Nothing else on this page was edited here,
+> and the DoR re-score is BA/PM's.
+>
+> - **Where the check lives:** in `src/levels.ts` `blunder`. After a root move is made, and before its child search,
+>   the child's repetition key is matched against the children's list (prior keys plus the root key). The walk is
+>   `−4, −6, …`, bounded by `min(child clock, list length, 100)`.
+>   - **Two or more matches: the move scores exactly 0, and its child is not searched.**
+>   - `src/engine.ts` and `src/search.ts` are untouched (`ADR-0032` d1's fence). So is `createLevel`'s engine branch.
+>   - The amendment adds to `ADR-0032` decision 1, by addition, and to `ADR-0054` decision 2's blunder bullet. That is
+>     why it is PROPOSED.
+> - **The owner's question:** *"On a blunder move at levels 1–4, should a root move that makes the third occurrence of
+>   a game position score exactly 0, without its child search? The engine path does not change."* The answer that
+>   settles it: "ADR-0054 ABC-242: accept" or "decline". Without an answer, nothing changes and this page stays in
+>   Backlog.
+> - **The parent-root count** (§ Out of scope, "Recorded for the Architect"): **ruled out of this ticket.** It stays
+>   as `ADR-0054` d2 writes it. Changing it would make the engine count one prior key as path, which is an engine
+>   change. Its effect is `UNKNOWN - verify`, and no ticket is cut for it (amendment A6).
+> - **SE files:**
+>   - `src/levels.ts`: the check, a private helper, a named 100-key constant that points at the ADR, and the doc
+>     lines. It gains no new import and no new export.
+>   - `src/levels.test.ts`: `A1`, `A2`, `A3`, `A5`, `A6`.
+>   - `src/cli.test.ts` and `src/uci-session.test.ts`: `A4`.
+>   - Nothing else under `src/`, `tools/` or `data/`.
+> - **Expected values, derived by reasoning** (QE's probe set-up: rate 1, 2 000 ms, `virtualClock(1)`, seed 1;
+>   `legalMoves` order is `d8e8 d8c8 d8d7 d8e7 d8c7`, read from `qe-ABC-230/raw/spot/blunder-probe.txt`).
+>   - **A1, probe:**
+>     - `scored[0]` is `{d8e8, 0}` exactly, and base scores it −1013.
+>     - Exactly 4 child searches run for 5 legal moves, because only `d8e8` makes a repeat.
+>     - Entries 1–4 inherit `d8e8`'s slice, so their values are `UNKNOWN - verify`. If they keep base's values
+>       (`−1030 −1020 −1010 −1031`), the move played is `d8e7`, kind `blunder`. Either way the played move is not
+>       `d8e8` unless those four entries collapse to one value.
+>   - **A1, a strong pin (test note):** at least one of the extra fixtures should have its third-occurrence move
+>     **last** in `legalMoves` order. Then every other entry equals base's exactly, and the last entry is 0.
+>   - **A2:** the child list is `[P0 P1 P2 P3]` and the child clock is 4. The walk reads index 0 only, which gives
+>     one match. So all 5 children run, and the whole list (and the played move) equals base's keyed list exactly.
+>   - **A3:** the FEN is `3k4/8/8/8/8/8/8/1Q2K3 b - - 0 4`, with the 7 keys untrimmed. The child clock is 1, so the
+>     walk reads nothing. All 5 children run, and the list equals base's with the same keys exactly.
+>   - **A5:** unchanged code. The move played is the strict second-best of the returned list.
+>   - **A6:** with no keys, or with an empty list, the list, `depth`, `nodes` and `elapsedMs` all equal base's.
+>     Levels 5–7 and non-blunder draws are node-equal by construction, because the engine files are byte-identical.
+> - **A4, how it is read:** neither surface prints the scored list. Three things run on the same seed, budget,
+>   virtual clock, position and trimmed keys:
+>   - the CLI seam (`createLevelSeam(1, …)`, with keys injected);
+>   - UCI (`Skill Level 1`, an injected `random` that gives that seed, then `go`);
+>   - a direct `createLevel(LEVELS[1], …)` call.
+>
+>   All three must give the same move. UCI's `info` `nodes` and `depth` must equal the direct call's. The direct
+>   call's list must carry the 0. The seed must make level 1's draw (< 0.4) call for a blunder.
+> - **Size and smoke:** **S stands.** The Orchestrator's **S2, no smoke** ruling fits: `tools/rating/rating.ts` sets
+>   no `Skill Level`, so every D, R and batch move runs the unchanged level-5 engine path.
+>   - **Correct `A8`:** the ladder lane (`src/ladder.test.ts:179`, `choose(h.position)`) hands in no prior keys, so it
+>     is an identity row and not "the one playing check on the changed levels". `A1`–`A5` are the only reads of the
+>     change.
+>   - The `NFR-004` line: at most 49 comparisons per root move (not 50), and a check that fires saves a child search.
+
 ## Problem
 
 - **User:** the owner (or a GUI over UCI) playing skytalix at levels 1–4 (`--difficulty 1..4`, UCI `Skill Level` 1–4).

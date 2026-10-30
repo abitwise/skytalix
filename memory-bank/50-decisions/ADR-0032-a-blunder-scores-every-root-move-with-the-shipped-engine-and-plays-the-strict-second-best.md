@@ -6,6 +6,11 @@ id: ADR-0032
 
 ## Status
 
+*2026-10-30:* a **PROPOSED** addition to decision 1 for `ABC-242` is written in `ADR-0054` § Proposed amendment
+2026-10-30, A4: a child that is the third occurrence of a game position is scored 0 without a search. Acceptance is
+the owner's. Until he answers, decisions 1–5 stand as written. Pointer added by Architect/Design (task
+`arch-ABC-242-reading`).
+
 **accepted** 2026-10-10 by the owner. Owner (Olger Oeselg), 2026-10-10, verbatim: *"accept ADR-0030, ADR-0031, ADR-0032, ADR-0034 with (b) at 0.8x"*
 
 Was: **proposed** 2026-10-10 by Architect/Design (task `wave-2026-09-25`, subtask `ruling-abc083-abc087`). It rules
