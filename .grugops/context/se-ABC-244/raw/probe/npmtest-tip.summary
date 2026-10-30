@@ -1,0 +1,7 @@
+ Test Files  63 passed (63)
+      Tests  2322 passed (2322)
+   Duration  8.88s (transform 0ms, setup 0ms, import 6.01s, tests 7.17s, environment 5ms)
+real 9.17
+user 27.75
+sys 1.64
+tip_rc=0

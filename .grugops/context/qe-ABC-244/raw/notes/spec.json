@@ -1,0 +1,13 @@
+{
+  "refs": ["qe-ABC-244", "ABC-244", "ADR-0046", "ADR-0035", "NFR-008", "N8-LANE", "EPIC-010", "ABC-230", "ABC-241", "R1", "R2", "R3", "QE-229-a",
+           "se-ABC-244/20261030T224640Z-software-engineer-decision-f1e84d64", "se-ABC-244/20261030T224640Z-software-engineer-observation-497faf89",
+           "se-ABC-244/20261030T224640Z-software-engineer-observation-1b63ff56", "se-ABC-244/20261030T224640Z-software-engineer-observation-ee17f704",
+           "grugops/ABC-244", "25282ad4", "d59e3194", "grugops/qe-ABC-244", "src/cli.test.ts", "src/uci-session.test.ts"],
+  "notes": [
+    { "kind": "decision", "confidence": "high: A6, A7, A8, A9, A10 run in this hop as pre-registered; A3-A5 spot-checked", "bodyFile": "decision.md" },
+    { "kind": "observation", "confidence": "high: parity and census run at both trees on a list frozen before any head run", "bodyFile": "a6a7.md" },
+    { "kind": "observation", "confidence": "high: ALONE, wait-clear by PID, n = 8 (A8) and 3 per arm (A9), admissible; G8 is one window", "bodyFile": "timing.md" },
+    { "kind": "observation", "confidence": "high on what was run; QE-244-c other-file coverage UNKNOWN - verify", "bodyFile": "findings.md" },
+    { "kind": "artifact-ref", "confidence": "high: files listed are committed on grugops/qe-ABC-244", "bodyFile": "artifacts.md" }
+  ]
+}

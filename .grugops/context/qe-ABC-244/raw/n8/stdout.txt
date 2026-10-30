@@ -1,0 +1,29 @@
+2026-10-30T23:01:09.543Z n8-window clear load1=0.81 tctl=38.1
+0 B cpu 11.36 wall 4.83 2 308 load1 0.81 foreign 0 tctl 38.1->66.9 ok
+0 T cpu 11.28 wall 4.81 2 308 load1 0.98 foreign 0 tctl 66.6->68.8 ok
+0 H cpu 10.12 wall 4.06 2 308 load1 1.07 foreign 0 tctl 68.6->65.0 ok
+1 T cpu 10.96 wall 4.7 2 308 load1 1.30 foreign 0 tctl 65.1->70.1 ok
+1 H cpu 10.12 wall 4.07 2 308 load1 1.44 foreign 0 tctl 70.0->66.3 ok
+1 B cpu 11.22 wall 4.77 2 308 load1 1.56 foreign 0 tctl 66.1->71.0 ok
+2 H cpu 10.24 wall 4.18 2 308 load1 1.52 foreign 0 tctl 70.9->65.8 ok
+2 B cpu 11.31 wall 4.78 2 308 load1 1.56 foreign 0 tctl 65.6->71.9 ok
+2 T cpu 11.17 wall 4.79 2 308 load1 1.51 foreign 0 tctl 71.8->71.6 ok
+3 B cpu 11.31 wall 4.78 2 308 load1 1.51 foreign 0 tctl 71.5->72.5 ok
+3 T cpu 11.11 wall 4.74 2 308 load1 1.47 foreign 0 tctl 72.4->72.5 ok
+3 H cpu 9.96 wall 4 2 308 load1 1.51 foreign 0 tctl 72.4->69.4 ok
+4 T cpu 11.27 wall 4.71 2 308 load1 1.63 foreign 0 tctl 69.3->72.3 ok
+4 H cpu 10.09 wall 3.98 2 308 load1 1.90 foreign 0 tctl 72.1->69.3 ok
+4 B cpu 11.3 wall 4.8 2 308 load1 1.99 foreign 0 tctl 69.1->73.3 ok
+5 H cpu 10.28 wall 4.06 2 308 load1 1.91 foreign 0 tctl 73.0->68.8 ok
+5 B cpu 11.29 wall 4.81 2 308 load1 1.76 foreign 0 tctl 68.6->73.4 ok
+5 T cpu 13.38 wall 5.89 2 308 load1 1.78 foreign 0 tctl 73.3->70.1 ok
+6 B cpu 11.28 wall 4.72 2 308 load1 1.71 foreign 0 tctl 70.0->72.5 ok
+6 T cpu 11.03 wall 4.71 2 308 load1 1.58 foreign 0 tctl 72.3->72.8 ok
+6 H cpu 10.13 wall 4.06 2 308 load1 1.45 foreign 0 tctl 72.6->68.8 ok
+7 T cpu 11.17 wall 4.74 2 308 load1 1.57 foreign 0 tctl 68.6->74.0 ok
+7 H cpu 10.18 wall 4.11 2 308 load1 1.77 foreign 0 tctl 73.9->69.5 ok
+7 B cpu 11.32 wall 4.79 2 308 load1 1.77 foreign 0 tctl 69.4->73.0 ok
+8 H cpu 10.03 wall 3.92 2 308 load1 2.03 foreign 0 tctl 72.9->70.8 ok
+8 B cpu 11.25 wall 4.69 2 308 load1 2.03 foreign 0 tctl 70.6->72.6 ok
+8 T cpu 11.19 wall 4.79 2 308 load1 2.10 foreign 0 tctl 72.4->74.1 ok
+exit 0

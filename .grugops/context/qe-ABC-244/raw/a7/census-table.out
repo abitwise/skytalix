@@ -1,0 +1,20 @@
+same row names: true (18 rows)
+--	2371	2371	0	same	searches 8/8	ABC-230 A2, A3, A5 — the session hands the search the game's prior keys > A2: `position fen F moves …` then `go depth 4` plays the third occurrence at cp 0
+U1	216148	836	-215312	fewer	searches 8/8	ABC-230 A2, A3, A5 — the session hands the search the game's prior keys > A2: bestmove is byte-equal to the CLI level seam's move on the same game and clock
+--	3707	3707	0	same	searches 2/2	ABC-230 A2, A3, A5 — the session hands the search the game's prior keys > A2: `position startpos moves …` hands the replayed keys, trimmed, and the search reads them
+--	69	69	0	same	searches 3/3	ABC-230 A2, A3, A5 — the session hands the search the game's prior keys > A3: a bare FEN, a bare startpos and `ucinewgame` hand an empty list
+--	0	0	0	same	searches 0/0	ABC-230 A2, A3, A5 — the session hands the search the game's prior keys > A3: a refused `position` holds no position and no keys; `go` does not search
+--	26	26	0	same	searches 1/1	ABC-230 A2, A3, A5 — the session hands the search the game's prior keys > A5: from a 600-ply move list, only the last 100 keys before the root are handed
+--	29	29	0	same	searches 1/1	ABC-230 A2, A3, A5 — the session hands the search the game's prior keys > A5: the window starts at the last pawn move; a castling-rights change does not cut it
+--	3458	3458	0	same	searches 3/3	ABC-241 A4, A5 — UCI: the prior keys are repetition keys > A4: the move that makes the third occurrence scores exactly 0; with a legal ep capture, no draw
+--	13	13	0	same	searches 2/2	ABC-241 A4, A5 — UCI: the prior keys are repetition keys > A5: the list handed is the repetition-key list, trimmed: the h7h5 key normalised, the rest raw
+U2	55310	55310	0	same	searches 2/2	ABC-241 A4, A5 — UCI: the prior keys are repetition keys > A5: the CLI level seam's injected list equals UCI's, key for key, and both play d8e8
+--	0	0	0	same	searches 0/0	ABC-241 A4, A5 — UCI: the prior keys are repetition keys > A8: the session's one new import is gameend.ts (`ADR-0044` D2, the dated line)
+U1	486540	4742	-481798	fewer	searches 16/16	ABC-230 A1, A3 — the CLI's level seam hands the search the game's prior keys > A1: with keyHistory injected the default level plays the third occurrence, at 0
+U1	25605	96	-25509	fewer	searches 1/1	ABC-230 A1, A3 — the CLI's level seam hands the search the game's prior keys > the injected keyHistory is read once per engine move, on the game the loop hands in
+U1	69646	1190	-68456	fewer	searches 2/2	ABC-230 A1, A3 — the CLI's level seam hands the search the game's prior keys > A3: a game started from a FEN has no earlier positions: the move is base's
+U2	89108	89108	0	same	searches 3/3	ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square > A4: with repetitionKeyHistory injected the default level plays d8e8 at exactly 0; base does not
+--	0	0	0	same	searches 0/0	ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square > cli.ts imports repetitionKeyHistory from history.ts under its own name (no alias for keyHistory)
+U2	34822	34822	0	same	searches 1/1	ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square > A4: with a legal ep capture available the same line is not a draw
+U2	27655	27655	0	same	searches 1/1	ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square > A7: the move the search scores 0 is the move after which gameStatusOf reports the claim
+sum base 1014507 head 223432 delta -791075; rows breaking the A7 rule (U1 must be fewer, others same): 0

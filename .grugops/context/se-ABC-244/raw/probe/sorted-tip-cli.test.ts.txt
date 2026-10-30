@@ -1,0 +1,108 @@
+ABC-042 — a human can run it > A1 — AGENTS.md's `Dev / run` line is the command that was run
+ABC-042 — a human can run it > A1 — `npm run chess` writes the start position and exits 0
+ABC-042 — a human can run it > A7 — `--unicode` on a pipe puts real chess glyphs in the board region
+ABC-042 — a human can run it > A7 — no flags on a pipe: zero code points above U+007F on the emitted stream
+ABC-042 — a human can run it > A8 / ABC-043 A6 — the entry point begins NO frame session and names no height
+ABC-042 — a human can run it > A8 — the append strategy: no cursor control, and exactly one newline after the last row
+ABC-042 — a rejected command line starts no game > A5 — `--ascii --unicode` is refused at the resolver, and selectGlyphMode is not called
+ABC-042 — a rejected command line starts no game > A5 — end to end: both flags named, non-zero exit, and zero frame rows on either channel
+ABC-042 — a rejected command line starts no game > A6(iii) — four unrecognised command lines: named, non-zero, and no frame anywhere
+ABC-042 — the accepted set is closed > A6(i) — an undocumented fifth flag is rejected and named
+ABC-042 — the accepted set is closed > A6(i) — every documented spelling resolves in its legal argv position
+ABC-042 — the accepted set is closed > A6(i) — the enumeration is the ONLY argv literal in the delivered resolver
+ABC-042 — the accepted set is closed > A6(i) — the exported enumeration EQUALS the table, element for element, both ways
+ABC-042 — the accepted set is closed > A6(i) — the near-miss family, COMPLETE OVER POSITION, is rejected in its legal position
+ABC-042 — the accepted set is closed > A6(ii) — 1000 generated tokens, 250 per shape, every one rejected and named
+ABC-042 — the accepted set is closed > ABC-061 A2 — the five deterministic accepted argvs are pinned by WHAT THEY RESOLVE TO
+ABC-042 — the accepted set is closed > ABC-061 A3 — `--colour random` is pinned as a PAIR, whichever side the coin lands
+ABC-042 — the resolved colour reaches the board > A4 — `--colour random` resolves to white or black 1000 times, with zero spawns
+ABC-042 — the resolved colour reaches the board > A4 — the orientation follows the colour, and it is resolved before anyone sees it
+ABC-042 — the resolved colour reaches the board > A4 — the running entry point draws each colour from the human's side
+ABC-042 — the shape of what was delivered > A10 — package.json gains exactly one scripts key and nothing else
+ABC-042 — the shape of what was delivered > A12 — the licence gained exactly the entry point, and the guard still equals
+ABC-042 — the shape of what was delivered > A2 — the entry point exports nothing
+ABC-042 — the shape of what was delivered > A3 — the entry point is flat in src/, where the licence guard can see it
+ABC-042 — the shape of what was delivered > A8 — neither delivered module names a row count
+ABC-042 — the shape of what was delivered > A9 — process.argv occurs EXACTLY once and only as the resolver's argument
+ABC-042 — the shape of what was delivered > A9 — process.stdout is acquired once, in the entry point, and only as the FrameSink
+ABC-042 — the shape of what was delivered > A9 — the resolver names no ambient handle at all, comments included
+ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-EIGHT children and no more
+ABC-042 — the shape of what was delivered > bar 1 — the production modules treat arguments as data, never as code
+ABC-042 — the shape of what was delivered > bar 3 — an argument carrying an escape sequence is echoed, stripped of its control bytes
+ABC-043 — the live session > A1 — `runTurnLoop` is called ONCE, with all six options, and with no cast and no adapter
+ABC-043 — the live session > A2 — a scripted game runs end to end: the mated board, the cadence, and exit 0
+ABC-043 — the live session > A3 — a parser bug ends the game as an INTERNAL ERROR, never as a chess outcome, and exits non-zero
+ABC-043 — the live session > A4 — end-of-input is the CLEAN path, and it is distinguishable from A3 by message and by code
+ABC-043 — the live session > A5 — an engine fault is not a chess outcome: both faulty seams exit 0 and name nothing
+ABC-043 — the live session > A6 — one frame session, one writer, and no row count is named on either side of the diff
+ABC-043 — the live session > A7 — the human's colour decides who moves first, in BOTH directions
+ABC-043 — the live session > G6 — the input seam is built ONCE and called NOWHERE (the hang with no output)
+ABC-044 — the result screen reaches the player > A3 — a faulty engine gets a screen that is not a chess outcome, and says the game did not finish
+ABC-044 — the result screen reaches the player > A4 — end of input writes ZERO BYTES for the screen: the notice is still the last thing said
+ABC-044 — the result screen reaches the player > A6 — the screen is ONE write, and the only other thing the entry point writes to the sink is ABC-203's saved line
+ABC-044 — the result screen reaches the player > A6 — the stream ENDS with the screen, after the final frame's last row, and exits 0
+ABC-045 — `resign` reaches the screen as reason 8 > A4 — the stream ends with ABC-044's screen naming resignation and the opponent as winner, exit 0
+ABC-046 — `quit` and `new` through the delivered entry point > A1 — quit / EOF: a single `quit` asks and does NOT end the session; end-of-input does
+ABC-046 — `quit` and `new` through the delivered entry point > A2/A3 — quit / quit ends the session on `QUIT_NOTICE`, writes NO result screen, exit 0
+ABC-046 — `quit` and `new` through the delivered entry point > A6 — `new` redraws the OPENING frame byte for byte: colour, glyph mode and orientation kept
+ABC-059 — every claim AGENTS.md makes about `Dev / run` agrees with the delivered command > A1-A4 — no span says `UNKNOWN - verify`, every command span names the entry point's script, and `Q13` reds
+ABC-062 — the two command lines that reach the refusal path untested > A1/A2/A7 — `--colour` alone and a bare `white` are each refused, naming their own token and their own reason
+ABC-063 — UAT-16's six game verbs, by name > A1/A2/A3 — the six argvs UAT-16 names are each refused, each naming its own first token
+ABC-064 — the frame's shape and the status panel, on the three non-default children > A1 — each non-default child writes the reference frame's row count, and one newline after its last row
+ABC-064 — the frame's shape and the status panel, on the three non-default children > A2 — no cursor control on any non-default child: zero CSI introducers on stdout
+ABC-064 — the frame's shape and the status panel, on the three non-default children > A3 — the human's colour changes the orientation only: `black` and `random` carry the default child's status rows
+ABC-064 — the frame's shape and the status panel, on the three non-default children > A4 — `random` is resolved before anything can see it: the word occurs zero times on the child's whole stdout
+ABC-065 — AGENTS.md's `Dev / run` slot is reachable and its option list is the accepted set > A1 — the slot shows the separator, and the invocation it shows RESOLVES
+ABC-065 — AGENTS.md's `Dev / run` slot is reachable and its option list is the accepted set > A3 — the documented option list EQUALS the accepted set, both ways, and names every value
+ABC-065 — AGENTS.md's `Dev / run` slot is reachable and its option list is the accepted set > ABC-067 A1/A2/A4 — the window stops inside the slot's OWN comment, and an unterminated slot is LOUD
+ABC-065 — AGENTS.md's `Dev / run` slot is reachable and its option list is the accepted set > ABC-071 A1/A2/A3 — the slot label occurs EXACTLY once, and a duplicate reds on the COUNT wherever it sits
+ABC-066 — the usage line is a command the user can actually run > A1/A2/A3 — every refusal advertises the separator, and all it advertises resolves
+ABC-101 — --difficulty selects a level, and the played engine is that level > A1 — `EPIC-006` criterion 4's command line, in both orders, resolves to the same options
+ABC-101 — --difficulty selects a level, and the played engine is that level > A2 — the default is a VALUE: the exported constant, `DEFAULT_LEVEL`, below the maximum
+ABC-101 — --difficulty selects a level, and the played engine is that level > A3 (extended) — the words `--difficulty` accepts EQUAL `Object.keys(LEVELS)`, both ways
+ABC-101 — --difficulty selects a level, and the played engine is that level > A3 — every level is in, and the boundary pair, the near-numbers and a bare flag are out
+ABC-101 — --difficulty selects a level, and the played engine is that level > A5 — the usage line advertises --difficulty with every level, after the separator, and each form resolves
+ABC-101 — --difficulty selects a level, and the played engine is that level > A7 — NO DEPTH, NO CLOCK, NO NODES in the resolver's code, and the field is a plain ordinal
+ABC-101 — --difficulty selects a level, and the played engine is that level > A8′ — no flag builds `DEFAULT_LEVEL`, which IS the shipped engine at `DEFAULT_BUDGET_MS`
+ABC-101 — --difficulty selects a level, and the played engine is that level > A8′ — the seam built for each level moves exactly as `createLevel` does, on one seed and one injected clock
+ABC-101 — --difficulty selects a level, and the played engine is that level > A8′ — the table is read only by an OWN key: everything else is refused (Security forward note)
+ABC-101 — --difficulty selects a level, and the played engine is that level > ABC-174 A2/A3 — no flag resolves difficulty 5, the hardest level, which is `DEFAULT_LEVEL`
+ABC-101 — --difficulty selects a level, and the played engine is that level > ABC-212 A6 — `--difficulty 6` and `7` resolve, and a bare flag names 1|2|3|4|5|6|7
+ABC-101 — --difficulty selects a level, and the played engine is that level > ABC-212 A7 — the usage line is byte-exact, read off the existing refusal child
+ABC-109 — AGENTS.md stays inside its byte budget > A5 — AGENTS.md's size on disk, in BYTES, is at most the budget
+ABC-115 — a reader that closes early ends the session quietly, at the right code > A1 — the player is shown NO stack, no `write EPIPE`, no checkout path, no crash claim
+ABC-115 — a reader that closes early ends the session quietly, at the right code > A10 — a REAL write failure is not absorbed: the arm narrows to EPIPE and nothing wider
+ABC-115 — a reader that closes early ends the session quietly, at the right code > A2 — it exits 0, and independently of that it is neither a refusal nor a crash
+ABC-115 — a reader that closes early ends the session quietly, at the right code > A3 — the trigger is the RULE: any reader that closes before the session's last write
+ABC-115 — a reader that closes early ends the session quietly, at the right code > A4 — the arm swallows NO real failure: 70 still means a crash and 1 still means a refusal
+ABC-115 — a reader that closes early ends the session quietly, at the right code > A9 — THE SESSION ENDS: stdin stays open behind the closed reader and the child still exits
+ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040) > vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it
+ABC-152 V3 — the lane runs src/ without vite's module runner (ADR-0042 addendum) > vitest.config.ts sets experimental.viteModuleRunner to exactly false
+ABC-173 — every vitest run carries the V8 heap ceiling, read where it applies (ADR-0008 addendum 2026-10-19) > A3 — every vitest command in AGENTS.md carries its shape's heap flag, and the flags are heap-guard.js's
+ABC-173 — every vitest run carries the V8 heap ceiling, read where it applies (ADR-0008 addendum 2026-10-19) > A4 — in a worker, heap_size_limit is at most the admitted row
+ABC-173 — every vitest run carries the V8 heap ceiling, read where it applies (ADR-0008 addendum 2026-10-19) > A5 — ROWS_MIB and FLAGS_MIB are the addendum's table, and each row times its live isolates is at most 2048 MiB
+ABC-173 — every vitest run carries the V8 heap ceiling, read where it applies (ADR-0008 addendum 2026-10-19) > A5 — the guard cannot look, so it refuses: 0 files, no getPaths, no project, a count that is not one
+ABC-173 — every vitest run carries the V8 heap ceiling, read where it applies (ADR-0008 addendum 2026-10-19) > A5 — the guard's comparison: a limit equal to the row is admitted; one MiB or one byte above it is refused, and nothing is provided
+ABC-173 — every vitest run carries the V8 heap ceiling, read where it applies (ADR-0008 addendum 2026-10-19) > A5 — the guard's shape: 1 file is ONE-FILE, 2 or more is SUITE, and the row provided is the row chosen
+ABC-173 — every vitest run carries the V8 heap ceiling, read where it applies (ADR-0008 addendum 2026-10-19) > A6 (static) — the history-pane and transposition children inherit childOf's construction: no env key, no heap flag
+ABC-173 — every vitest run carries the V8 heap ceiling, read where it applies (ADR-0008 addendum 2026-10-19) > A6 — a child built by childOf reports heap_size_limit at most the admitted row
+ABC-173 — every vitest run carries the V8 heap ceiling, read where it applies (ADR-0008 addendum 2026-10-19) > C2 — no src test file calls an asynchronous child_process form; at least four synchronous call sites exist
+ABC-176 — a heap-guard refusal is named on stdout and handed to vitest as an unhandled error > A1/A2 — a refusal is written to stdout as ONE line, the thrown message verbatim, that no JSON reader parses and that holds no integer
+ABC-176 — a heap-guard refusal is named on stdout and handed to vitest as an unhandled error > A3 — a 'cannot look' throw is named the same way: on stdout and to catchError, verbatim
+ABC-176 — a heap-guard refusal is named on stdout and handed to vitest as an unhandled error > A3 — the thrown error itself, not a copy or a fixed string, is handed to vitest's catchError
+ABC-176 — a heap-guard refusal is named on stdout and handed to vitest as an unhandled error > A4 — the reporter header keeps its six ABC-149 plant rows and adds the refusal as a seventh
+ABC-176 — a heap-guard refusal is named on stdout and handed to vitest as an unhandled error > non-vacuity — an admitted run writes nothing, hands vitest nothing, and provides its row
+ABC-192 — setup hands the guard process.stdout, and a vitest bump names its re-run list > A1 — setup's one guard(…) call passes process.stdout (QE-176-a)
+ABC-192 — setup hands the guard process.stdout, and a vitest bump names its re-run list > A2 — the installed vitest is the version the capture arm was last read on (QE-176-b)
+ABC-203 — PGN export through the delivered entry point > A1/A2/A3 — exactly the children that reach an outcome save one file each; every other ending saves none
+ABC-203 — PGN export through the delivered entry point > A11 — after a successful write, stdout is base's stream plus one final saved line, stderr is empty, exit 0
+ABC-203 — PGN export through the delivered entry point > guard — no child whose working directory is the repository prints a PGN line
+ABC-203 — PGN export through the delivered entry point > guard — the neutral directory's games/ holds exactly one file per child that printed PGN saved
+ABC-230 A1, A3 — the CLI's level seam hands the search the game's prior keys > A1: with keyHistory injected the default level plays the third occurrence, at 0
+ABC-230 A1, A3 — the CLI's level seam hands the search the game's prior keys > A3: a game started from a FEN has no earlier positions: the move is base's
+ABC-230 A1, A3 — the CLI's level seam hands the search the game's prior keys > the injected keyHistory is read once per engine move, on the game the loop hands in
+ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square > A4: with a legal ep capture available the same line is not a draw
+ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square > A4: with repetitionKeyHistory injected the default level plays d8e8 at exactly 0; base does not
+ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square > A7: the move the search scores 0 is the move after which gameStatusOf reports the claim
+ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square > cli.ts imports repetitionKeyHistory from history.ts under its own name (no alias for keyHistory)
+this file's own instruments > the instruments themselves are not blind — every derived view is WATCHED losing its evidence

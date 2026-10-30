@@ -4551,8 +4551,9 @@ describe("ABC-230 A1, A3 — the CLI's level seam hands the search the game's pr
     ["4k3/8/8/8/8/8/8/R3K3 w - - 0 1", "a1a2 e8d8 a2a1 d8e8 a1a2 e8d8 a2a1", "d8e8"],
     ["r3k3/8/8/8/8/8/8/4K3 b - - 0 1", "a8a7 e1d1 a7a8 d1e1 a8a7 e1d1 a7a8", "d1e1"],
   ] as const;
+  // `ABC-244` (`ADR-0046` § Addendum 2026-10-30, R2/R3): 1 000 here and in the UCI pair.
   /** A virtual step that leaves the default level several iterations inside its budget. */
-  const STEP_MS = 100;
+  const STEP_MS = 1_000;
   const seamOf = (injected?: typeof keyHistory) =>
     createLevelSeam(DEFAULT_LEVEL, { seed: 1, now: virtualClock(STEP_MS) }, injected);
   const labelOf = (move: { from: number; to: number }) =>
@@ -4623,6 +4624,7 @@ describe("ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable
   /** g5xh6 e.p. is legal after h7h5: the first occurrence keeps its ep file. */
   const TWIN = "4k3/7p/8/6P1/8/8/8/Q3K3 b - - 0 1";
   const MOVES = "h7h5 a1a2 e8d8 a2a1 d8e8 a1a2 e8d8 a2a1";
+  // `ABC-244` (`ADR-0046` § Addendum 2026-10-30): 100 kept; at 1 000 A4 and A7 lose a mutant.
   const STEP_MS = 100;
   const labelOf = (move: { from: number; to: number }) =>
     `${squareName(move.from)}${squareName(move.to)}`;
