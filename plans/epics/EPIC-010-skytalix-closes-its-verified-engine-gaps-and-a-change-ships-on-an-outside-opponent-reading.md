@@ -10,6 +10,18 @@ owner: BA/PM
 
 # EPIC-010: the verified engine gaps, closed one measured change at a time, against an outside opponent
 
+> **FOLDED 2026-10-30 by BA/PM** (task `bapm-ABC-241-merge-fold`, records only, at `main` `a649fbc4`; `src/`, `data/`
+> and `tools/` untouched). **`ABC-241` is Done.** It merged at `1f6abec4` on QE's PASS_WITH_GAPS (`qe-ABC-241`
+> `…2368b03f`), which signs UAT.
+>
+> - **§ The smoke ledger:** one row, `ABC-241` (D 4/2/4 = 6.0, R 6/3/1 = 6.5 at 4 000 ms, recorded and not pooled).
+>   S-1..S-4 were met. Rows waiting at 4 000 ms are now `ABC-228` and `ABC-241`, 13.5 / 20, INFO only and never judged.
+>   There is still no 4 000 ms reference before milestone 1's batch.
+> - **`ABC-243` re-scored 10/10, Ready** (its wait was `ABC-241`'s merge). It gained one row from QE-241-a (LOW): a UCI
+>   `position fen` that carries an uncapturable ep square. It is still XS and test-only.
+> - Tickets table: rows 9 (`ABC-241` Done) and 19 (`ABC-243` Ready) changed. The notes are in
+>   `.grugops/context/bapm-ABC-241-merge-fold/notes/`.
+
 > **RE-SCORED 2026-10-30 by BA/PM** (task `bapm-ABC-229-rescore`, records only, at `main` `ee3c7694`; `src/`, `data/`
 > and `tools/` untouched). **`ABC-229` is 10/10, Ready.** Its wait, `ABC-228`'s merge, is met (`e42b637b`). Its page
 > folds what (ii) changes: `G5`/`G6` at 4 000 ms, R at 4 000 ms recorded and not pooled, and no 3 000 ms reference.
@@ -267,10 +279,15 @@ always before a batch. The pooled score and the flag are QE's to compute at each
 |---|---|---|---|---|---|---|---|---|---|
 | `ABC-230` | `dad753dc` | `c0698ddd` | 4/3/3 (5.5) | 8/2/0 (8.0) | 0 | 0 | 8.0 / 10 = 80.0 % (this smoke only; the ledger had no row) | not evaluable (10 < 30 pooled games) | D 73.5 / 75.8 °C; R 73.75 / 77.6 °C (width 1) |
 | `ABC-228` | `5e84d0d7` | `61d5d629` | 3/3/4 (5.0) | 7/3/0 (7.0) **at 4 000 ms; recorded, not pooled** | 0 | 0 | 8.0 / 10 = 80.0 % (`ABC-230`'s row at 3 000 ms; the pool closes at this merge) | not evaluable (10 < 30 pooled games) | D 76.0 / 87.3 °C; R 75.13 / 85.8 °C (width 1) |
+| `ABC-241` | `d1a2d5cd` | `e42b637b` | 4/2/4 (6.0) | 6/3/1 (6.5) **at 4 000 ms; recorded, not pooled** | 0 | 0 | none computed: there is no 4 000 ms reference until milestone 1's batch (the 3 000 ms pool closed at `ABC-228`'s merge). Rows waiting at 4 000 ms: `ABC-228` 7.0 / 10 and `ABC-241` 6.5 / 10 (13.5 / 20, INFO only, never judged) | not evaluable (no reference) | D 74.38 / 83.6 °C; R 74.63 / 85.5 °C (width 1) |
 
 *Reference: R(close) 64.75 % at `38536a34` (`EPIC-008`), at 3 000 ms.* *Folded 2026-10-30 by BA/PM
 (`bapm-ABC-228-merge-fold`), copied from QE's smoke notes: `qe-ABC-230` `…a715c1d8` and `qe-ABC-228-ii` `…2123617d`.
 Both rows ran at width 1 (the Orchestrator's delivery call after the width-2 thermal stop), not at the table's R width 2.*
+*`ABC-241`'s row was folded 2026-10-30 by BA/PM (`bapm-ABC-241-merge-fold`), copied verbatim from QE's smoke note
+`qe-ABC-241` `…5d70bb7c`. It ran ALONE at width 1. A foreign process overlapped part of each smoke (D 31 of 253
+samples, R 13 of 195), with no thermal stop and a frequency fall ≤ 0.10 %, so both readings stand (QE-241-f). Repetition
+endings were D 1 / R 1 against base's 1 / 0, and `ABC-241`'s rule touched neither (QE-241-e).*
 
 - **The 3 000 ms pool is closed** (`ABC-228`'s merge, `e42b637b`): 1 row, 10 R games, 8.0 / 10 = 80.0 %, judged
   against 64.75 %. The flag was never evaluable (fewer than 30 games). This pool is not carried forward.
@@ -491,7 +508,7 @@ mates", ≥ 6 "a quiet promotion decides". It reads `quiesce` and `chooseMove` a
 | 6 | `ABC-230` | The game's earlier positions reach the search, from the CLI and from UCI, so it sees a repetition the game already holds | M | P2 | **Done** (2026-10-30, `24f3e322`) | — | `ADR-0054` (ACCEPTED 2026-10-30) | done: QE PASS_WITH_GAPS `…ba5a249a`; its gap QE-230-a is `ABC-242` |
 | 7 | `ABC-235` | Value-identical cuts in cost per node, from `ABC-227`'s profile: **cuts 1, 3, 5** (scoped 2026-10-29) | M | P2 | In Development (`se-ABC-235`) | **10/10** | `ABC-227` (Done); Architect `…7fc1b90c` (1, 3, 5 value-identical; no ADR) | nothing |
 | 8 | `ABC-240` | Move ordering without per-move allocation, value-identical (cut 6, split from `ABC-235`) | S | P3 | **Ready** | **10/10** | Architect `…7fc1b90c` C1–C4; no ADR | pull order only: after `ABC-235` merges; before `ABC-233`/`ABC-234` |
-| 9 | `ABC-241` | A repetition against the game's earlier positions ignores an en-passant square no pawn can legally take (Q3 (c)); the hash does not change | S | P2 | **Ready** | **10/10** | `ADR-0020` § AMENDMENT 2026-10-30 (ACCEPTED on the owner's word) | nothing: `ABC-230` merged `24f3e322` |
+| 9 | `ABC-241` | A repetition against the game's earlier positions ignores an en-passant square no pawn can legally take (Q3 (c)); the hash does not change | S | P2 | **Done** (2026-10-30, `1f6abec4`) | — | `ADR-0020` § AMENDMENT 2026-10-30 (ACCEPTED on the owner's word) | done: QE PASS_WITH_GAPS `…2368b03f` (D 6.0, R 6.5 at 4 000 ms); its gap QE-241-a is folded into `ABC-243` |
 | 10 | `ABC-242` | On a blunder level (1–4), a root move that makes the third occurrence of a game position scores exactly 0 (QE-230-a) | S | P3 | Backlog | **9/10** | `ADR-0054` d2–d3, `ADR-0032` d1 (an Architect reading) | the Architect reading (and the owner, if it amends an accepted ADR); after `ABC-241` (both edit `src/levels.ts:142`) |
 | 11 | `ABC-231` | The king table is tapered by phase, alone, with no king-safety term | S | P3 | Backlog | **9/10** | `ADR-0031` addendum scope; door | the ADR ruling |
 | 12 | `ABC-232` | Passed pawns are worth more as material comes off | S | P3 | Backlog | **9/10** | `ABC-231`'s phase | `ABC-231` |
@@ -501,7 +518,7 @@ mates", ≥ 6 "a quiet promotion decides". It reads `quiesce` and `chooseMove` a
 | 16 | `ABC-237` | The transposition table prefers deeper entries when it replaces | S | P3 | Backlog | **9/10** | `ADR-0025` (falsifier `T2`) | the ADR |
 | 17 | `ABC-238` | A deeper stored entry may cut off a shallower search | M | P3 | Backlog | **9/10** | `ABC-081` `A1` revised; `ADR-0025`; door | the ADR; after `ABC-237` |
 | 18 | `ABC-239` | Evaluation weights tuned offline by a stated method, emitted as constants, validated outside | L | P3 | Backlog | **8/10** | `ADR-0048` data licence; new ADR | milestone 2's evaluation done; the licence; the ADR. Its batch is read **before** its merge (its `A6`) |
-| 19 | `ABC-243` | The setoption-Hash row reads a bare `go` (level 5 = 4 000 ms), and the TT `A7` title names the budget it reads (test-only, from `ABC-228`'s QE gaps) | XS | P3 | Backlog | **9/10** | `ABC-228` Done; no ADR; `src/uci-session.test.ts` and `src/transposition.test.ts` only | pull order: after `ABC-241` merges (shared `src/uci-session.test.ts`) |
+| 19 | `ABC-243` | The setoption-Hash row reads a bare `go` (level 5 = 4 000 ms), and the TT `A7` title names the budget it reads (test-only, from `ABC-228`'s QE gaps); *2026-10-30:* plus a UCI row for a FEN that carries an uncapturable ep square (QE-241-a) | XS | P3 | **Ready** | **10/10** | `ABC-228` and `ABC-241` Done; no ADR; `src/uci-session.test.ts` and `src/transposition.test.ts` only | nothing: `ABC-241` merged `1f6abec4`. `ABC-220`'s rows in the same file are rebase order only |
 
 *Re-scored 2026-10-29 (`bapm-owner-words-b`): Q4 is removed from every wait. Each value-changing ticket's DoR row 4
 is now ✅, because its reading is the smoke pair. No ticket but `ABC-225` changes column on this hop. `ABC-227` (Done)
@@ -517,6 +534,8 @@ down by one. Only its row and the `ABC-230` (Done) and `ABC-241` (Ready) rows we
 *`ABC-243` was added 2026-10-30 from QE gaps SE-228ii-a and QE-228ii-b (`bapm-ABC-228-merge-fold`), at the end: it is
 test-only (no smoke, no gate beyond the default lane) and is not one of the fifteen engine changes. Only its row and
 `ABC-228`'s (Done) were changed.*
+*Folded 2026-10-30 (`bapm-ABC-241-merge-fold`): only rows 9 (`ABC-241` Done) and 19 (`ABC-243` Ready 10/10, plus
+QE-241-a's row) were changed. The board holds the live state.*
 
 ## Observations (not tickets)
 
