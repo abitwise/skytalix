@@ -1,0 +1,102 @@
+
+> skytalix@0.0.0 test
+> NODE_OPTIONS=--max-old-space-size=128 node tools/grugops/run-bounded.js 60000 vitest run --reporter=default --reporter=./tools/grugops/result-file-reporter.js --outputFile.json=.test-results/last-run.json src/quiescence.test.ts -t stalemate
+
+
+ RUN  v4.1.12 <worktree>
+
+ ❯ src/quiescence.test.ts (66 tests | 1 failed | 65 skipped) 6ms
+     ↓ king and pawn vs king: a quiet position's quiescence value IS the static evaluation, exactly
+     ↓ the start position: a quiet position's quiescence value IS the static evaluation, exactly
+     ↓ queen vs rook, nothing en prise: a quiet position's quiescence value IS the static evaluation, exactly
+     ↓ rook vs rook, nothing en prise, black to move: a quiet position's quiescence value IS the static evaluation, exactly
+     ↓ a hanging pawn makes the quiescence value STRICTLY greater than the static evaluation
+     ↓ a DEFENDED pawn does not raise the value: the recapture is seen and the capture declined
+     ↓ carries at least 20 positions, none of them in check for the side to move
+     ↓ both arms at depth 1 — with quiescence the losing move is avoided, without it it is played
+     ↓ returns on every one of 200+ positions, the capture-dense roots included, under the cap
+     ↓ the cap BINDS on a runaway rig — twenty queens on alternating squares — and is not exceeded
+     ↓ bare kings at depth 1: same score, same move, same node count
+     ↓ bare kings at depth 2: same score, same move, same node count
+     ↓ bare kings at depth 3: same score, same move, same node count
+     ↓ bare kings at depth 4: same score, same move, same node count
+     ↓ king and pawn vs a far king at depth 1: same score, same move, same node count
+     ↓ king and pawn vs a far king at depth 2: same score, same move, same node count
+     ↓ king and pawn vs a far king at depth 3: same score, same move, same node count
+     ↓ king and pawn vs a far king at depth 4: same score, same move, same node count
+     ↓ two far-apart pawns at depth 1: same score, same move, same node count
+     ↓ two far-apart pawns at depth 2: same score, same move, same node count
+     ↓ two far-apart pawns at depth 3: same score, same move, same node count
+     ↓ two far-apart pawns at depth 4: same score, same move, same node count
+     ↓ the start position at depth 1: same score, same move, same node count
+     ↓ the bare-leaf door IS the pre-quiescence build: position-6 at depth 2 reproduces its recorded fingerprint
+     ↓ kiwipete at depth 1 — the default lane's cheap reading, level 180x
+     ↓ position-6 at depth 1 — the default lane's cheap reading, level 10x
+     ↓ leaves every one of the 200+ corpus positions byte-identical after a quiescence search
+     ↓ leaves every hanging-piece position byte-identical after a depth-1 search, both arms
+     ↓ leaves the position byte-identical when the visitor THROWS mid-sequence — the engine's abort path
+     ↓ on every node of the perft roots and terminal FENs to depth 1, as given and reversed
+     ↓ C1: captures with one key keep their given order, both ways round
+     ↓ C2: NxP before BxP before QxP of one pawn, whatever the given order
+     ↓ sorts the list it is handed in place, keeping exactly its moves, with a fixed scratch
+     ↓ carries six rows, Q2 among them, each with the side to move in check
+     ↓ Q2: a quiet king move is the only kind of evasion: differs from the static score, equals the best evasion's and the brute force
+     ↓ a block by interposition, Bf1, the only evasion: differs from the static score, equals the best evasion's and the brute force
+     ↓ a capture of the checker, Qxd2 or Kxd2: differs from the static score, equals the best evasion's and the brute force
+     ↓ an evasion that loses material to a follow-up capture: differs from the static score, equals the best evasion's and the brute force
+     ↓ a double check: Rxb5 does not evade, only king moves do: differs from the static score, equals the best evasion's and the brute force
+     ↓ an evasion that is itself a promotion, e8 blocking the rook: differs from the static score, equals the best evasion's and the brute force
+     ↓ Q2 reads −536 where the static score is −548, and the pre-ticket rules stand pat at −548
+     ↓ carries six rows: Q1, the exchange, the promotion, en passant, one evasion, and search()
+     ↓ Q1: Qxf7 mates at qply 1: quiesce reads 29999, the brute force agrees, the pre-ticket rules do not
+     ↓ Q1: Qxf7 mates at qply 1: the same mate from a leaf 5 plies down reads 5 plies further
+     ↓ after a two-capture exchange: Rxf8+ Qxf8 Rxf8 mates at qply 3: quiesce reads 29997, the brute force agrees, the pre-ticket rules do not
+     ↓ after a two-capture exchange: Rxf8+ Qxf8 Rxf8 mates at qply 3: the same mate from a leaf 5 plies down reads 5 plies further
+     ↓ a capturing promotion: cxd8=Q mates: quiesce reads 29999, the brute force agrees, the pre-ticket rules do not
+     ↓ a capturing promotion: cxd8=Q mates: the same mate from a leaf 5 plies down reads 5 plies further
+     ↓ an en-passant capture: exd6 opens the e-file and mates: quiesce reads 29999, the brute force agrees, the pre-ticket rules do not
+     ↓ an en-passant capture: exd6 opens the e-file and mates: the same mate from a leaf 5 plies down reads 5 plies further
+     ↓ the mated side reads the negated score: Q1 after Qxf7, black at qply 1, is −(MATE_SCORE − 1)
+     ↓ exactly one evasion is not mate: Rxe8+ Kh7, and the score is the brute force's
+     ↓ through search() at depth 1: Rd8+ Ne8 Rxe8 mates three plies from the root, MATE_SCORE − 3
+     ↓ out of check the node still stands pat: Q3's free quiet promotion is not searched
+     ↓ in check below the cap the static score is never returned: every in-check row, every qply 0..7
+     ↓ at the cap a node stands pat, in check or not: Q2 at qply 8 reads its static score, no node entered
+     × stalemate (no legal move, not in check) still stands pat, never a mate score 5ms
+     ↓ no node past qply 8 is visited with evasions on, on every Q-SET row
+     ↓ a mate found in quiescence survives the table's store and restore: MATE_SCORE − 3 at every depth
+     ↓ ./search.ts: the leaf passes its ply and its rules record to quiesce, the record a module constant
+     ↓ ./engine.ts: the leaf passes its ply and its rules record to quiesce, the record a module constant
+     ↓ take what search() and chooseMove take, and no depth on the engine side
+     ↓ Q2 through the depth-0 seam: search() reads −536, its door the pre-ticket −548
+     ↓ chooseMove sees the quiescence mate at depth 1, its door does not
+     ↓ ./search.ts: each exported entry passes exactly one quiescenceEvasions literal, and only search's is true
+     ↓ ./engine.ts: each exported entry passes exactly one quiescenceEvasions literal, and only chooseMove's is true
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/quiescence.test.ts > ABC-228 — the rule rows (`ADR-0053` decision 9; each reds a planted fault) > stalemate (no legal move, not in check) still stands pat, never a mate score
+AssertionError: expected -30000 to be -992 // Object.is equality
+
+- Expected
++ Received
+
+- -992
++ -30000
+
+ ❯ src/quiescence.test.ts:996:43
+    994|     expect(legalMoves(parseFen(stalemate))).toHaveLength(0);
+    995|     expect(isInCheck(parseFen(stalemate))).toBe(false);
+    996|     expect(quiesceAt(stalemate, SHIPPED)).toBe(evaluate(parseFen(stale…
+       |                                           ^
+    997|   });
+    998|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 65 skipped (66)
+   Start at  07:00:58
+   Duration  143ms (transform 0ms, setup 0ms, import 50ms, tests 6ms, environment 0ms)
+

@@ -1,0 +1,16 @@
+SEARCH_DEEP=1 quiescence rc=0 wall=25.110401852s  Tests 80 passed (80)
+PUZZLE_DEEP=1 puzzle-suite rc=1 wall=2.220634190s 
+SEARCH_DEEP=1 search.null-move rc=0 wall=34.432295518s  Tests 44 passed (44)
+SEARCH_DEEP=1 transposition rc=0 wall=4.381251661s  Tests 40 passed (40)
+SEARCH_DEEP=1 search rc=0 wall=3.246798397s  Tests 57 passed (57)
+SEARCH_DEEP=1 search.ordering rc=0 wall=7.180340896s  Tests 43 passed (43)
+SEARCH_DEEP=1 search.pvs-lmr rc=0 wall=63.005119298s  Tests 29 passed (29)
+ENGINE_DEEP=1 engine rc=0 wall=138.325165330s  Tests 77 passed (77)
+ENGINE_DEEP=1 transposition rc=0 wall=4.542505526s  Tests 26 passed (26)
+ENGINE_DEEP=1 quiescence rc=0 wall=.847936844s  Tests 67 passed (67)
+ENGINE_DEEP=1 search.ordering rc=0 wall=4.476454670s  Tests 30 passed (30)
+ENGINE_DEEP=1 search.pvs-lmr rc=0 wall=36.566194252s  Tests 21 passed (21)
+CLI_DEEP=1 cli.real-engine rc=0 wall=9.966122459s  Tests 11 passed (11)
+UCI_DEEP=1 uci.real-engine rc=0 wall=1.485310547s  Tests 5 passed (5)
+ENGINE_DEEP=1 levels rc=0 wall=546.748290070s  Tests 44 passed (44)
+done

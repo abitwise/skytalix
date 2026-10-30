@@ -1,0 +1,13 @@
+
+> skytalix@0.0.0 test:watch
+> NODE_OPTIONS=--max-old-space-size=128 vitest run src/levels.test.ts
+
+
+ RUN  v4.1.12 <worktree>
+
+
+ Test Files  1 passed (1)
+      Tests  44 passed (44)
+   Start at  07:07:03
+   Duration  546.53s (transform 0ms, setup 0ms, import 77ms, tests 546.37s, environment 0ms)
+

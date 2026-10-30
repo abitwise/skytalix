@@ -1,0 +1,13 @@
+
+> skytalix@0.0.0 test:watch
+> NODE_OPTIONS=--max-old-space-size=128 vitest run src/engine.test.ts
+
+
+ RUN  v4.1.12 <worktree>
+
+
+ Test Files  1 passed (1)
+      Tests  77 passed (77)
+   Start at  07:03:46
+   Duration  138.06s (transform 0ms, setup 0ms, import 271ms, tests 137.69s, environment 0ms)
+

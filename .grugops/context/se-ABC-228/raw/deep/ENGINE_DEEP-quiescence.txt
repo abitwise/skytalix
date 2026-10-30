@@ -1,0 +1,13 @@
+
+> skytalix@0.0.0 test:watch
+> NODE_OPTIONS=--max-old-space-size=128 vitest run src/quiescence.test.ts
+
+
+ RUN  v4.1.12 <worktree>
+
+
+ Test Files  1 passed (1)
+      Tests  67 passed (67)
+   Start at  07:06:09
+   Duration  585ms (transform 0ms, setup 0ms, import 39ms, tests 483ms, environment 0ms)
+

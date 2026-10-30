@@ -1,0 +1,13 @@
+
+> skytalix@0.0.0 test:watch
+> NODE_OPTIONS=--max-old-space-size=128 vitest run src/search.test.ts
+
+
+ RUN  v4.1.12 <worktree>
+
+
+ Test Files  1 passed (1)
+      Tests  57 passed (57)
+   Start at  07:02:33
+   Duration  3.02s (transform 0ms, setup 0ms, import 51ms, tests 2.88s, environment 0ms)
+

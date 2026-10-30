@@ -213,3 +213,20 @@ back to 3 000. Any reference read at 4 000 ms is then stale.
 
 **DoR 10/10 (re-scored 2026-10-30, `bapm-owner-adr-fold`; re-checked 2026-10-30, `bapm-q3c-oq228ii-fold`: rows 4, 5
 and 10 carry (ii), still 10/10). Ready.** *(Was 9/10, waiting on the ADR.)*
+
+> **Result 2026-10-30, Software Engineer** (task `se-ABC-228`, branch `grugops/ABC-228` from `main` `61d5d629`). **`A8`
+> read 64.7 % (kiwipete) and 98.3 % (position-6), both ≤ 100 %.** So `G6` is read by its rule. Scope 5 (reading (ii))
+> is NOT built, `A9` does not run, and `tools/rating/rating.ts` is untouched. Built to `ADR-0053` decisions 2–4 and 6–9
+> in `9bd3c519`:
+> - in check below the cap, `quiesce` searches every legal move and scores none as `-(MATE_SCORE - (ply + qply))`;
+> - `MATE_SCORE` moves to `src/quiescence.ts`;
+> - each recursion has a switch, and there is one door pair.
+>
+> `A1` is met: the doors are node-equal to base cross-build, and every older door to itself. `A2` and `A3` are met (6 + 6
+> `Q-SET` rows, with a brute-force reference). `A4` reads 1.368× and 1.405×. The d5 drift is 89.30 % / 88.77 % with a
+> 118 cp maximum, and the mate floor holds 189 of 189. Re-pins: −485 → −392, the `ABC-080` tie row, and the `ABC-079`
+> `A2` board, which was in check.
+>
+> **`Q-SET` was not frozen by QE before the build.** The SE wrote it, and QE's freeze or review is owed. Still owed
+> to QE: the graded `G6`, the smokes (`A6`), `G5`'s real clock and `G11`. Notes:
+> `.grugops/context/se-ABC-228/notes/`.
