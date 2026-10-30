@@ -1,14 +1,48 @@
 ---
 id: ABC-220
 title: "`simple-tournament` over UCI (`TimeMode`): a fixed T = 22 s a move, capped by a safe clock share, never handed more than its 22 s hard ceiling, levels 1–7 unchanged"
-status: ready
-column: Ready
+status: done
+column: Done
+closed: "2026-10-30, merged to main at ec1e835b; QE PASS_WITH_GAPS (qe-ABC-220, 7a09c5e1), which signs UAT; Security/NFR PASS_WITH_RISKS (secnfr-ABC-220)"
 size: M
 priority: P2
 epic: EPIC-009
 ---
 
 # ABC-220: `simple-tournament` over UCI, a fixed T = 22 s a move, its hard ceiling also 22 s
+
+> **MERGED 2026-10-30 at `ec1e835b`, folded by BA/PM** (task `bapm-ABC-220-merge-fold`, records only; `src/`, `data/`
+> and `tools/` untouched). **Done.** QE's verdict is **PASS_WITH_GAPS** with no blocking gap (`qe-ABC-220`
+> `…7a09c5e1`), and it signs UAT (Test note 3). Security/NFR's gate is **PASS_WITH_RISKS**, no required fix
+> (`secnfr-ABC-220`, `.grugops/queue/done/secnfr-ABC-220.md` § Result). Candidate `fbab54ff` (code `68ba364c`); the
+> Security/NFR catalog commit `9c676157` came in with `18485bae`.
+>
+> - **A1–A14 MET** (A14 = A14a + A14b). A3: 18 760 ms left, 97.9 %. A4: 83.2 %. A5: 166 517 ms left after move 40.
+>   A6: 22 000 on every capped branch, and none over 22 000 in 3 000 random `go` lines. A8: 0 differences in
+>   4 200 rows against base. **A11: 5 / 5 walls < 22 500 ms, max 22 001.0 ms (+1.0 ms).** A12: 9.69 s at load1 0.41.
+>   A14a: `UCI_DEEP` 9 / 9. **A14b: R1 0.38 ms**, R2 and R3 met. `npm test` 2 297 / 2 297, 0 skipped; `G8` +0.09 s.
+> - **`NFR-004`:** the catalog row gains "; 22 s in UCI `TimeMode` `simple-tournament` (budget 22 s)". It is MET
+>   exactly on the budget (A6) and to the whole second on the wall (A11). Read strictly as ≤ 22 000 ms it misses by
+>   ≤ 1.0 ms, and `AR-NFR004-A` covers that; it was re-read at 22 s and stands. **`AR-UCI-BUSY`** (busy
+>   `isready`/`stop`, the Architect's text) is placed beside `NFR-011`, owner Architect/Design.
+> - **Test note 4, owed at merge:**
+>   - BA/PM: `ADR-0044` D3, D4 (new D4.5), D5 and D11 carry dated fold lines (this hop).
+>   - SE: the D5 latency sentence is in `src/uci-session.ts`'s header (it came with the merge).
+>   - Scribe: the `TimeMode` line in `AGENTS.md`'s UCI notes is `scribe-agents-md-timemode`'s, claimed beside this hop.
+>     SE F3 (no command for the A11 lane in `AGENTS.md`) goes with it.
+> - **Each gap's disposition:**
+>   - **QE-220-a (LOW):** folded into `ABC-221` as **A12**, QE-A3a's four asymmetric-increment rows in the A7 block.
+>   - **`SEC-220-b` (INFO):** folded into `ABC-221` as test note 5 (the `milliseconds` comment).
+>   - **`SEC-220-a` (INFO):** `ADR-0052` § Consequences carries a dated pointer: the quoted clause A reads ≤ 4 s.
+>   - **QE-220-c (INFO):** the `NFR-008` headroom of 0.27–0.31 s is the Orchestrator's watch line (the catalog's
+>     `NFR-008` row). `ABC-221` names it.
+>   - **QE-220-f (INFO):** `ABC-222` A1 already reads the `setoption name TimeMode value …` line from game 1's log.
+>   - **QE-220-b, QE-220-d, QE-220-e and `SEC-220-c` (INFO):** no ticket. `SEC-220-c` is QE's at the next `NFR-011`
+>     re-read.
+> - **Still open, blocks nothing:** the owner's confirmation of the whole-second reading (≤ 22 s means < 22 500 ms;
+>   the FOLDED note below). `ABC-222` A5 reads the same bound in games.
+> - **`ABC-222` is now pullable** (DoR 10/10, Ready). `ABC-221`'s ADR and code waits are met (DoR 10/10, Ready; pull
+>   after `ABC-222`, by the owner's "later").
 
 > **AMENDED 2026-10-30 by Architect/Design** (task `arch-ABC-220-a14`, records only, at `main` `f22e31b3`). This
 > answers the SE's F1 (`se-ABC-220` `…a76bc514`, build `68ba364c`). The ruling is in `ADR-0052` § Status and in its
@@ -308,3 +342,7 @@ simple-tournament`. The numbers are `ADR-0052`'s arithmetic (`arch-epic009-setti
 **DoR 10/10 (2026-10-30). Ready.** The owner accepted `ADR-0052`, so ABC-220 is ready to pull. His amendment
 moved only the ceiling, so A2–A7 keep their numbers. *(Was 9/10, waiting on OQ-0052-1.)* It shares
 `src/uci-session.ts` with `ABC-230`; the Orchestrator orders them.
+
+**Closed 2026-10-30 (`bapm-ABC-220-merge-fold`): Done**, merged at `ec1e835b` on QE's PASS_WITH_GAPS (`…7a09c5e1`,
+which signs UAT) and Security/NFR's PASS_WITH_RISKS (`secnfr-ABC-220`). The MERGED block at the top has each gap's
+disposition.
