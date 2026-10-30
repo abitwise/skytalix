@@ -10,6 +10,23 @@ owner: BA/PM
 
 # EPIC-010: the verified engine gaps, closed one measured change at a time, against an outside opponent
 
+> **FOLDED 2026-10-30 by BA/PM** (task `bapm-q3c-oq228ii-fold`, records only, at `main` `7b8eeb94`; `src/`, `data/`
+> and `tools/` untouched). The owner answered in session, verbatim *"QQ-228-1: ii ; Q3: c"* (`orch-2026-10-29g`
+> `…c4ab73de`). The Architect recorded both (`arch-q3c-oq228ii` `…b86f7d93`): `ADR-0020` § AMENDMENT 2026-10-30 and
+> `ADR-0053` decision 10.
+>
+> - **Q3 answered (c):** normalise the ep file only when comparing against the game's earlier positions; the hash does
+>   not change. **`ABC-241` is cut:** S, P2, milestone 1, value-changing (smoke pair, with the repetition-ending count),
+>   DoR 9/10, Backlog until `ABC-230` merges. § B item 3, § Out of scope, the tickets table and § Owner questions are
+>   folded.
+> - **OQ-228-1 answered (ii):** on an `ABC-228` `A8` miss, level 5's per-move time goes 3 000 → 4 000 ms inside
+>   `ABC-228`, after a re-forecast at ≤ 133 % (above it, back to the owner). `G9` is waived for `ABC-228` on
+>   `LEVELS[5]` only (§ Out of scope). `ABC-228` carries the `rating.ts` R literal (3000 → 4000). The R frame then
+>   moves to 4 000 ms: the 3 000 ms references (R(close) 64.75 %, the trend flag at ≤ 44.75 %) are never compared
+>   with a 4 000 ms reading, the trend pool closes at `ABC-228`'s merge, and the batches run both sides at 4 000 ms.
+>   § The merge rule's R row and § NFR triggers read 3 000 ms until that merge. If `A8` fits, none of it happens.
+> - The notes are in `.grugops/context/bapm-q3c-oq228ii-fold/notes/`.
+
 > **FOLDED 2026-10-30 by BA/PM** (task `bapm-owner-adr-fold`, records only, at `main` `a046e839`; `src/`, `data/` and
 > `tools/` untouched). The owner answered in session (`orch-2026-10-29g` `…3dd61448`, verbatim): *"ADR-0053: accept ;
 > QQ-228-1: If engine requires more effort then increase 3s to 4s, build it fully. ; ADR-0054: accept ; Q1: ok defer
@@ -18,11 +35,13 @@ owner: BA/PM
 > - **`ADR-0053` accepted:** `ABC-228` DoR 10/10, **Ready**. `ABC-229` stays 9/10, and its wait is now `ABC-228`'s merge.
 > - **OQ-228-1:** build the full evasion design. The "3s to 4s" clause applies only if `ABC-228` `A8` (`ADR-0053`
 >   decision 9's forecast, re-read after `ABC-235`/`ABC-240`) still misses `G6`. Which 3 s it means (`G6`'s budget,
->   or level 5's per-move time) is pending the owner. A level-5 reading would move `NFR-005`'s referent and
->   `ADR-0045`, so it is his.
+>   or level 5's per-move time) ~~is pending the owner~~ **is (ii), level 5's per-move time** *(answered 2026-10-30,
+>   `…c4ab73de`; see the block above)*. A level-5 reading would move `NFR-005`'s referent and `ADR-0045`, so it is
+>   his.
 > - **`ADR-0054` accepted:** `ABC-230` DoR 10/10, **Ready**.
-> - **Q1 deferred** by the owner: Syzygy stays out of this epic. **Q3 still open:** he asked for more information. The
->   Orchestrator gives it in session from `arch-ABC-230-reading` `…90a3aa31` § 3. Default (a) holds.
+> - **Q1 deferred** by the owner: Syzygy stays out of this epic. ~~**Q3 still open:** he asked for more information.
+>   The Orchestrator gives it in session from `arch-ABC-230-reading` `…90a3aa31` § 3. Default (a) holds.~~ *(Q3
+>   answered (c), 2026-10-30; see the block above.)*
 > - The notes are in `.grugops/context/bapm-owner-adr-fold/notes/`.
 
 > **AMENDED 2026-10-29 by BA/PM** (task `bapm-ABC-235-split`, records only, at `main` `a37f1d87`; `src/`, `data/` and
@@ -88,7 +107,7 @@ owner: BA/PM
 |---|---|---|
 | 1 Quiescence | **Stands**, one correction: the leaf (ply 0) is checked for mate and stalemate | `ABC-228` (evasions in check), `ABC-229` (quiet promotions) |
 | 2 Evaluation process | Facts true; **already in hand** (`arch-epic008-rd`); paired openings already exist | **The measurement rule (Q4)** and `ABC-225` (the reading it needs) |
-| 3 Game history into search | **Stands**; never tried. The ep-late point is an owner ruling (`ADR-0020` d2) | `ABC-226` (records scan first), `ABC-230` (the build). The ep point is Q3 |
+| 3 Game history into search | **Stands**; never tried. The ep-late point is an owner ruling (`ADR-0020` d2) | `ABC-226` (records scan first), `ABC-230` (the build). The ep point is Q3, answered (c) 2026-10-30: `ABC-241` (the repetition key, after `ABC-230`) |
 | 4 Tournament clock | Stands, corrected | **Not here: `EPIC-009`** (`ABC-218`–`ABC-222`). Cross-referenced, not duplicated |
 | 5 Phase-aware evaluation | **Stands**. `ABC-205` failed on depth cost (`G6`), not on play | `ABC-231` (king table taper only), `ABC-232` (passed pawns by phase) |
 | 6 Move ordering | **Stands**. SEE is fenced (`ADR-0024` d4); under LMR an order change changes values | `ABC-233` (history heuristic), `ABC-234` (SEE for capture order, behind its fence) |
@@ -205,7 +224,7 @@ Three layers answer it. Each sees a different size of fall, and none sees a fall
   true fall to 44.75 % (≈ 140 Elo) it fires about half the time; at 40 %, about 7 times in 10. A fall to 55 % (≈ 70
   Elo) fires it about 1 time in 9.
 - **The batch: when.** At each milestone's close, after its value-changing merges (milestone 1: after `ABC-228`,
-  `ABC-229` and `ABC-230`). Earlier if the trend flag fires, or on the owner's word. The epic-close batch is M2.
+  `ABC-229`, `ABC-230` and `ABC-241`). Earlier if the trend flag fires, or on the owner's word. The epic-close batch is M2.
 - **The batch: what.** Base = `main` just before the batch's first value-changing merge (for the first batch, the
   epic's first merge-base, so milestone 1's batch is also M2 if the epic stops there). E = 1 910, 3 000 ms, the R
   pins, width 2, ALONE: ≈ 9 h plus ≈ 1 h of QE. That is the owner's "100 or more games" at the R pins.
@@ -306,6 +325,7 @@ asked that this lesson be carried here as a rule for him to set (`…183a5bbc`).
 | 6 | `ABC-230` | The external list's #3. Proven gap (rows 3a–3c), never tried. **ADR reading first:** `ADR-0002` clause 3 already speaks of seeding the per-ply array from history, and `ABC-081` `A6` forbids importing `src/history.ts` into the search, so keys are handed in; `ADR-0044` D3 for the UCI parser. Behind `ABC-226` |
 | 7 | `ABC-235` | Value-identical, so S2 and no playing reading: the cheapest engine change. Behind `ABC-227` |
 | 8 | `ABC-240` | Split from `ABC-235` (2026-10-29, cut 6). Value-identical, S2, no smoke. After `ABC-235`, so its reading has a quiet host and a base that holds it. It must land before milestone 2's `ABC-233`/`ABC-234`, which edit the same `orderMoves`. If its A3 misses, it is dropped and the order closes up |
+| 9 | `ABC-241` | Q3 (c), cut 2026-10-30: the repetition key drops an uncapturable ep file in the game-end count and the prior keys. After `ABC-230`, whose prior-key builders it edits. Value-changing, S |
 | close | the batch | An interleaved R pair (`ABC-225`), milestone 1's head against the epic's first merge-base (§ The merge rule) |
 
 **Milestone 1, re-costed 2026-10-29 under Q4 = (e)** (this host; the `G6` real-clock gates each ticket owes are the
@@ -316,6 +336,7 @@ same under every option and are not counted):
 | `ABC-226` | Done: a records scan, 3.7 s of CPU | 0 |
 | `ABC-227` | a profile, 0 games | 0 games |
 | `ABC-228`, `ABC-229`, `ABC-230` | one smoke pair each | ≈ 3 × 1.2 h ≈ 3.6 h (≈ 2.1 h ALONE) |
+| `ABC-241` (added 2026-10-30) | one smoke pair | ≈ 1.2 h (≈ 0.7 h ALONE); the total below is as re-costed 2026-10-29 and now ≈ 16 h, ≈ 13 h ALONE |
 | `ABC-235` | S2, no playing reading | 0 games |
 | `ABC-240` | S2, no playing reading | 0 games |
 | `ABC-225` | its A5 run, 40 games | ≈ 1 h ALONE |
@@ -365,7 +386,8 @@ directly on how a tuned set is judged.
 
 - One `tools/` change (`ABC-225`), one records scan (`ABC-226`), one probe (`ABC-227`).
 - Thirteen engine changes (`ABC-228`–`ABC-240`: eleven value-changing, two value-identical, `ABC-235` and `ABC-240`), each in its own ticket, behind its own ADR
-  or ADR reading, each measured by the Q4 rule (value-identical: S2).
+  or ADR reading, each measured by the Q4 rule (value-identical: S2). *(2026-10-30: plus `ABC-241`, Q3 (c), value-
+  changing: fourteen engine changes, twelve value-changing.)*
 - `src/quiescence.ts`, `src/search.ts`, `src/engine.ts`, `src/evaluate.ts`, `src/transposition.ts`, `src/legal.ts`,
   `src/uci-session.ts`, `src/cli.ts` change, each only in the ticket that names it.
 
@@ -375,14 +397,19 @@ directly on how a tuned set is judged.
 - **Item 10, Syzygy:** deferred by the owner, 2026-10-30 (Q1: "ok defer Syzygy tables"). `EPIC-004`'s tablebase
   non-goal stands. Bringing it back takes a later word of his and its own epic.
 - **The levels and their budgets:** `LEVELS[1..7]`, `DEFAULT_LEVEL` and `HARD_CEILING_MS` byte-identical (`G9`).
+  *(2026-10-30, OQ-228-1 (ii), `ADR-0053` d10: one conditional exception. On an `ABC-228` `A8` miss, `ABC-228` moves
+  `LEVELS[5].budgetMs` and `DEFAULT_BUDGET_MS` to 4 000 ms, and `G9` is waived for `ABC-228` on `LEVELS[5]` only.
+  Every other value stays byte-identical, and later tickets read `G9` against the new base.)*
 - **Re-runs of what was tried:** `ABC-209`'s TT retention, `ABC-210`'s horizon extension, `ABC-205`'s design,
   `ABC-207`'s weights (above).
 - **Stalemate detection inside quiescence** (part of § B item 1): it needs a full legal-move count at every quiescence
   node that is not in check. Not cut; `ABC-228` gets mate in check for free (no evasion = mate).
 - **Rook activity by phase** (part of § B item 5), **SEE pruning** (§ B item 6 calls it a separate, riskier change),
   **incremental evaluation as a value change**, **delta pruning**, **threads, pondering.**
-- **Normalising `epSquare` for repetition** (§ B item 3's ep point): only if the owner re-opens `ADR-0020` d2 (Q3); a
-  ticket is then cut from the pool.
+- ~~**Normalising `epSquare` for repetition** (§ B item 3's ep point): only if the owner re-opens `ADR-0020` d2 (Q3); a
+  ticket is then cut from the pool.~~ *(2026-10-30: Q3 answered (c). The comparison against the game's earlier
+  positions is now in scope as `ABC-241` (`ADR-0020` § AMENDMENT 2026-10-30). Still out: normalising `epSquare` in
+  the hash or upstream in `apply.ts`, and the in-tree and ep-root cases that stay one late (C4).)*
 - **A user-visible Elo, rating lists, CCRL entry** (`EPIC-008` § Out of scope, unchanged).
 - **A Rust rewrite** (Q2, 2026-10-29: "let it be for now"). **Any ticket, gate or measure bound to the ≥ 2 700 goal**
   (§ Product goal: aspirational).
@@ -419,19 +446,20 @@ mates", ≥ 6 "a quiet promotion decides". It reads `quiesce` and `chooseMove` a
 | 1 | `ABC-226` | Records scan: how often the R and D games repeated a position the search could not see | S | P2 | **Done** (2026-10-29) | — | the committed PGNs | done: SA `sa-ABC-226` `…cc53fc79`, 484 games (R 26); `ABC-230` stays in milestone 1 |
 | 2 | `ABC-227` | Profile: where a node's time goes, on the fixed boards, at 3 s | S | P2 | **Done** (2026-10-29) | — | none | done: SE `se-ABC-227`, merged `f4301d0c`; six value-identical cuts handed to `ABC-235` |
 | 3 | `ABC-225` | One command reads an interleaved R pair (base and candidate against Stockfish), with the opening-paired error and a host log. **Re-scoped 2026-10-29: the batch's instrument** | M | P2 | **Ready** | **10/10** | `ABC-204`'s pins | nothing. Done before milestone 1's batch |
-| 4 | `ABC-228` | In check, quiescence searches every evasion and scores none as mate | M | P2 | **Ready** | **10/10** | `ADR-0053` (ACCEPTED 2026-10-30); OQ-228-1 answered | nothing. On an `A8` forecast miss, the owner's reading of "3s to 4s" before `G6` and the smokes |
+| 4 | `ABC-228` | In check, quiescence searches every evasion and scores none as mate | M | P2 | **Ready** | **10/10** | `ADR-0053` (ACCEPTED 2026-10-30); OQ-228-1 answered, reading (ii) (2026-10-30) | nothing. On an `A8` miss: the (ii) build in this ticket (level 5 → 4 000 ms, the `rating.ts` R literal) and its `A9` re-forecast ≤ 133 %; above it, the owner |
 | 5 | `ABC-229` | Quiescence searches quiet promotions to a queen | S | P2 | Backlog | **9/10** | `ADR-0053` (ACCEPTED 2026-10-30) decisions 5–8; door | `ABC-228` merged |
 | 6 | `ABC-230` | The game's earlier positions reach the search, from the CLI and from UCI, so it sees a repetition the game already holds | M | P2 | **Ready** | **10/10** | `ADR-0054` (ACCEPTED 2026-10-30) | nothing; shares `src/uci-session.ts` with `EPIC-009`'s `ABC-220` (pull order) |
 | 7 | `ABC-235` | Value-identical cuts in cost per node, from `ABC-227`'s profile: **cuts 1, 3, 5** (scoped 2026-10-29) | M | P2 | In Development (`se-ABC-235`) | **10/10** | `ABC-227` (Done); Architect `…7fc1b90c` (1, 3, 5 value-identical; no ADR) | nothing |
 | 8 | `ABC-240` | Move ordering without per-move allocation, value-identical (cut 6, split from `ABC-235`) | S | P3 | **Ready** | **10/10** | Architect `…7fc1b90c` C1–C4; no ADR | pull order only: after `ABC-235` merges; before `ABC-233`/`ABC-234` |
-| 9 | `ABC-231` | The king table is tapered by phase, alone, with no king-safety term | S | P3 | Backlog | **9/10** | `ADR-0031` addendum scope; door | the ADR ruling |
-| 10 | `ABC-232` | Passed pawns are worth more as material comes off | S | P3 | Backlog | **9/10** | `ABC-231`'s phase | `ABC-231` |
-| 11 | `ABC-233` | A history heuristic orders quiet moves after the killers, cleared per search | M | P3 | Backlog | **9/10** | `ADR-0026` d10; `ABC-080` `A6` | the ADR |
-| 12 | `ABC-234` | SEE orders captures in the full-width search (ordering only, no pruning) | M | P3 | Backlog | **8/10** | `ADR-0024` d4 re-open evidence | the evidence; the ADR |
-| 13 | `ABC-236` | Aspiration windows at the root, with a stated re-search | M | P3 | Backlog | **9/10** | new ADR; door | the ADR |
-| 14 | `ABC-237` | The transposition table prefers deeper entries when it replaces | S | P3 | Backlog | **9/10** | `ADR-0025` (falsifier `T2`) | the ADR |
-| 15 | `ABC-238` | A deeper stored entry may cut off a shallower search | M | P3 | Backlog | **9/10** | `ABC-081` `A1` revised; `ADR-0025`; door | the ADR; after `ABC-237` |
-| 16 | `ABC-239` | Evaluation weights tuned offline by a stated method, emitted as constants, validated outside | L | P3 | Backlog | **8/10** | `ADR-0048` data licence; new ADR | milestone 2's evaluation done; the licence; the ADR. Its batch is read **before** its merge (its `A6`) |
+| 9 | `ABC-241` | A repetition against the game's earlier positions ignores an en-passant square no pawn can legally take (Q3 (c)); the hash does not change | S | P2 | Backlog | **9/10** | `ADR-0020` § AMENDMENT 2026-10-30 (ACCEPTED on the owner's word) | `ABC-230` merged |
+| 10 | `ABC-231` | The king table is tapered by phase, alone, with no king-safety term | S | P3 | Backlog | **9/10** | `ADR-0031` addendum scope; door | the ADR ruling |
+| 11 | `ABC-232` | Passed pawns are worth more as material comes off | S | P3 | Backlog | **9/10** | `ABC-231`'s phase | `ABC-231` |
+| 12 | `ABC-233` | A history heuristic orders quiet moves after the killers, cleared per search | M | P3 | Backlog | **9/10** | `ADR-0026` d10; `ABC-080` `A6` | the ADR |
+| 13 | `ABC-234` | SEE orders captures in the full-width search (ordering only, no pruning) | M | P3 | Backlog | **8/10** | `ADR-0024` d4 re-open evidence | the evidence; the ADR |
+| 14 | `ABC-236` | Aspiration windows at the root, with a stated re-search | M | P3 | Backlog | **9/10** | new ADR; door | the ADR |
+| 15 | `ABC-237` | The transposition table prefers deeper entries when it replaces | S | P3 | Backlog | **9/10** | `ADR-0025` (falsifier `T2`) | the ADR |
+| 16 | `ABC-238` | A deeper stored entry may cut off a shallower search | M | P3 | Backlog | **9/10** | `ABC-081` `A1` revised; `ADR-0025`; door | the ADR; after `ABC-237` |
+| 17 | `ABC-239` | Evaluation weights tuned offline by a stated method, emitted as constants, validated outside | L | P3 | Backlog | **8/10** | `ADR-0048` data licence; new ADR | milestone 2's evaluation done; the licence; the ADR. Its batch is read **before** its merge (its `A6`) |
 
 *Re-scored 2026-10-29 (`bapm-owner-words-b`): Q4 is removed from every wait. Each value-changing ticket's DoR row 4
 is now ✅, because its reading is the smoke pair. No ticket but `ABC-225` changes column on this hop. `ABC-227` (Done)
@@ -439,6 +467,9 @@ and `ABC-235` (In Design) moved on the Orchestrator's board during this hop (`ff
 
 All fifteen reserved ids are used. None is `XL`; `ABC-239` is the one `L` and is the last pull. *`ABC-240` was added
 2026-10-29 by the split of `ABC-235` (`bapm-ABC-235-split`); the order numbers from 8 on moved down by one.*
+*`ABC-241` was added 2026-10-30 on the owner's Q3 (c) (`bapm-q3c-oq228ii-fold`); the order numbers from 9 on moved
+down by one. Only its row and `ABC-228`'s were changed; the other rows' columns are as last folded, and the board
+holds the live state.*
 
 ## Observations (not tickets)
 
@@ -450,13 +481,13 @@ All fifteen reserved ids are used. None is `XL`; `ABC-239` is the one `L` and is
   both A5's 5 % threshold and the 3 % drop bar. Re-read only if a fresh profile after `ABC-235` ranks it ≥ 5 % on
   ≥ 2 boards.
 
-## Owner questions (Q2, Q4, Q5 answered 2026-10-29, `…278e149b`; Q1 deferred 2026-10-30, `…3dd61448`; Q3 open)
+## Owner questions (Q2, Q4, Q5 answered 2026-10-29, `…278e149b`; Q1 deferred 2026-10-30, `…3dd61448`; Q3 answered (c) 2026-10-30, `…c4ab73de`)
 
 | Q | asked | answer | what it changed |
 |---|---|---|---|
 | Q1 | Syzygy (§ B item 10) against `EPIC-004`'s permanent non-goal: (a) keep out, (b) re-open as a later epic | "not sure, explain" (2026-10-29). **2026-10-30: "ok defer Syzygy tables"** | **Deferred**, out of this epic. The tablebase non-goal stands, and nothing is cut |
 | Q2 | `EPIC-004`'s "Strength above ~1700": (a) cite his `EPIC-008` word, (b) amend the line | **2026-10-29:** "remove that goal", and a new goal: the best vibe-engineered / TypeScript-based engine, 2 700 Elo or more; Rust "let it be for now" | The non-goal is **removed** by a dated amendment on `EPIC-004`. § Product goal: aspirational, no ticket bound, scale `UNKNOWN - verify`. A Rust rewrite is out of scope |
-| Q3 | Re-open `ADR-0020` d2 (the ep repetition key)? (a) keep, (b) re-open | **Open.** "not sure, explain" (2026-10-29); **2026-10-30: "I need more info to answer"**. The Orchestrator gives it in session (`arch-ABC-230-reading` `…90a3aa31` § 3: (a) keep, (b) ep-legal key, (c) normalise history only) | Nothing. **Default (a) holds.** SA `…cc53fc79` A6 is information for it: in 22 D games, cutechess counted the threefold one occurrence before the repository's key would |
+| Q3 | Re-open `ADR-0020` d2 (the ep repetition key)? (a) keep, (b) re-open | "not sure, explain" (2026-10-29); 2026-10-30: "I need more info to answer". The Orchestrator gave it in session (`arch-ABC-230-reading` `…90a3aa31` § 3: (a) keep, (b) ep-legal key, (c) normalise history only). **2026-10-30: "Q3: c"** (`…c4ab73de`) | **(c):** `ADR-0020` § AMENDMENT 2026-10-30 (ACCEPTED on his word; the hash, TT and book unchanged). **`ABC-241` cut** (S, P2, after `ABC-230`). SA `…cc53fc79` A6 was the information: in 22 D games, cutechess counted the threefold one occurrence before the repository's key would |
 | Q4 | The pre-merge outside-opponent rule: (a)–(d), and (e) from his `EPIC-009` word | **2026-10-29: (e), extended:** "10 games self-play + 10 games vs stockfish" | § The merge rule: S-1 to S-4 per value-changing ticket, the trend, and a batched R pair. `ABC-225` re-scoped. Q4 is removed from every ticket's wait |
 | Q5 | Accept this epic and M1–M5, no Elo target | **2026-10-29: accepted, no Elo target:** "elo target is hard to reach, but try to understand if things get worse" | `proposed` → `backlog`. M1–M5 stand as written. The "worse" question is answered by § The merge rule's three layers |
 
@@ -478,7 +509,8 @@ All fifteen reserved ids are used. None is `XL`; `ABC-239` is the one `L` and is
   rebases, and the Orchestrator orders them.
 - Within this epic: `ABC-228` → `ABC-229` share `src/quiescence.ts`, and `ABC-240`'s item 2 edits its capture sort;
   `ABC-240` → `ABC-233` → `ABC-234` share `orderMoves` (if `ABC-240` is dropped, nothing waits on it);
-  `ABC-237` → `ABC-238` share `src/transposition.ts`; `ABC-231` → `ABC-232` share `src/evaluate.ts`. A value-changing
+  `ABC-237` → `ABC-238` share `src/transposition.ts`; `ABC-231` → `ABC-232` share `src/evaluate.ts`; `ABC-230` →
+  `ABC-241` share the prior-key builders (`src/cli.ts`, `src/uci-session.ts`). A value-changing
   merge stales any D or R read on the old base (`EPIC-008` § When a D reading goes stale).
 
 ## Risks
@@ -497,7 +529,8 @@ All fifteen reserved ids are used. None is `XL`; `ABC-239` is the one `L` and is
   pre-check before the real-clock `G6`.
 - **`RISK-EPIC010-04`: heat and hours.** *(Re-costed 2026-10-29 under (e).)* ≈ 1.2 h per value-changing ticket
   (≈ 0.7 h ALONE) and ≈ 10 h per batch, at Tctl median 74–83 °C, max 84–87 °C. Eleven value-changing tickets and
-  three batches come to ≈ 45 h, against ≈ 200–300 h under (b). Milestone 1 is ≈ 15 h. The owner may stop the epic
+  three batches come to ≈ 45 h, against ≈ 200–300 h under (b). *(2026-10-30: twelve with `ABC-241`, ≈ 46 h. Under
+  OQ-228-1 (ii), a batch at 4 000 ms takes longer by `UNKNOWN - verify`.)* Milestone 1 is ≈ 15 h. The owner may stop the epic
   after any milestone.
 - **`RISK-EPIC010-05`: self-play tuning repeats non-transfer** (`ABC-239`). Its validation is outside, by rule.
 - **`RISK-EPIC010-06`: history keys widen the UCI input surface** (`ABC-230`): a `position … moves` list of any length
