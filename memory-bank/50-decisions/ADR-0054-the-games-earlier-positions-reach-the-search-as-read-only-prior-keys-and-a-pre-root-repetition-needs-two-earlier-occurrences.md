@@ -6,9 +6,16 @@ id: ADR-0054
 
 ## Status
 
-*2026-10-30:* a **PROPOSED** amendment for `ABC-242` (`QE-230-a`: on a blunder, a root move that makes the third
-occurrence scores 0) is at the end of this file. Acceptance is the owner's. Until he answers, decisions 1–8 stand as
-written. Pointer added by Architect/Design (task `arch-ABC-242-reading`).
+*2026-10-30:* the amendment for `ABC-242` at the end of this file (`QE-230-a`: on a blunder, a root move that makes
+the third occurrence scores 0) is **ACCEPTED** by the owner, verbatim *"ABC-242: accept"* (Orchestrator note
+`.grugops/context/orch-2026-10-30a/notes/20261030T180500Z-orchestrator-decision-65848126.md`, a transcription and
+not a stamp). It is applied as proposed: A5's sentence under decision 2 and A4's bullet under `ADR-0032` decision
+1, each marked *(added 2026-10-30, `ABC-242`)*. **It is in force on `main` at `ABC-242`'s merge.** Until then the
+blunder searches every child. Recorded by Architect/Design (task `arch-ABC-242-accept`, records only, at `main`
+`5090a4d6`).
+
+Previously (2026-10-30): a **PROPOSED** amendment, acceptance the owner's. Pointer added by Architect/Design (task
+`arch-ABC-242-reading`).
 
 **ACCEPTED** 2026-10-30 by the owner, Olger Oeselg, **as written**. His words, verbatim (Orchestrator note
 `.grugops/context/orch-2026-10-29g/notes/20261030T041740Z-orchestrator-decision-3dd61448.md`, a transcription and not a
@@ -90,6 +97,8 @@ Previously **PROPOSED** 2026-10-29 by Architect/Design (task `arch-ABC-230-readi
      - `createLevel` passes `priorKeys` to its engine-path `chooseMove`.
      - On the blunder path (levels 1–4), each child search gets `priorKeys` plus the root's key. One list is built per
        blunder call.
+       *(added 2026-10-30, `ABC-242`, accepted; in force on `main` at `ABC-242`'s merge)* The blunder itself scores a
+       root move whose child is a third occurrence at 0 (§ Proposed amendment 2026-10-30).
      - `createEngine` in `src/engine.ts` has no production caller and stays history-free.
    - **UCI:** `parsePosition` keeps the key of every position it replays through (`zobristKey`, or the
      `zobristKeyAfterMove` chain), trims with the helper, and returns the list with the position. The session holds it
@@ -207,11 +216,22 @@ the identity rows above prove it. Nothing is persisted, no data file or book key
 per search, so a rollback is one revert with nothing to migrate. Reverting only the count (two matches to one) is a
 one-character change, and probe H2 is the row that would red.
 
-## Proposed amendment 2026-10-30 (`ABC-242`, `QE-230-a`): on a blunder, a root move that makes the third occurrence scores exactly 0, and its child is not searched. PROPOSED
+## Proposed amendment 2026-10-30 (`ABC-242`, `QE-230-a`): on a blunder, a root move that makes the third occurrence scores exactly 0, and its child is not searched. ACCEPTED, not in force on `main`
 
 ### Status
 
-**PROPOSED** 2026-10-30 by Architect/Design (task `arch-ABC-242-reading`, records only, at `main` `ee7da249`).
+**ACCEPTED** 2026-10-30 by Olger Oeselg (owner), verbatim *"ABC-242: accept, ABC-225 - approve to run one at a
+time"*, its first clause answering the question below (Orchestrator note
+`.grugops/context/orch-2026-10-30a/notes/20261030T180500Z-orchestrator-decision-65848126.md`, a transcription and
+not a stamp). Recorded by Architect/Design (task `arch-ABC-242-accept`, records only, at `main` `5090a4d6`).
+
+- **ACCEPTED; in force on `main` at `ABC-242`'s merge.** Until then the blunder in `src/levels.ts` searches every
+  child, and the QE verdict still decides that merge.
+- **Applied as proposed, by addition only:** A4's bullet under `ADR-0032` decision 1 and A5's sentence under
+  decision 2's blunder bullet here, each marked *(added 2026-10-30, `ABC-242`)*. A1–A6 and the text below are
+  unchanged and are kept as the amendment's record. A6 holds: the parent-root count is not in `ABC-242`.
+
+Was: **PROPOSED** 2026-10-30 by Architect/Design (task `arch-ABC-242-reading`, records only, at `main` `ee7da249`).
 Nothing was built, run or timed at this hop, because a QE timing read may hold the host alone. The facts below were
 read from the source and from QE's recorded probe.
 
