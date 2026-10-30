@@ -1,3 +1,4 @@
+_Updated: 2026-10-30 Orchestrator (orch-2026-10-30a) — se-ABC-228-ii done: A9 met (65.9 % / 97.4 % ≤ 133 %); three literals per ticket Scope 5 (brief had named two; SE followed the ticket — Orchestrator brief slip, SE-228ii-c); code review PASS → In Review; `qe-ABC-228-ii` spawned ALONE (new PREREG, G6 at 4 s, smokes width 1). SE-228ii-a LOW for QE to rule. Width 1/3._
 _Updated: 2026-10-30 09:20Z by Orchestrator (orch-2026-10-30a) — qe-ABC-228 FAIL, STOPPED at G6 (position-6 9 vs 10; QE-228-c HIGH; npm-exec ruled LOW). ABC-228 In Review → In Development for (ii) (owner word OQ-228-1 covers it): `se-ABC-228-ii` spawned ALONE (Scope 5: LEVELS[5] → 4 000 ms + rating.ts R literal; A9 ≤ 133 %; above that → owner). QE records stay on grugops/qe-ABC-228, not merged. Width 1/3._
 _Updated: 2026-10-30 07:50Z by Orchestrator (orch-2026-10-30a) — RESUMED (Reduced tier: Agent available, default main thread, allowlist by instruction). Host clear after reboot (no vitest/cutechess, Tctl 36.8 °C). `qe-ABC-228` re-spawned ALONE on the same brief from c654f540 under the sealed PREREG (npm test, deep lanes, G8, G6, G11, smokes left). ABC-241 / ABC-220 wait behind it; ABC-242 waits Architect; ABC-225 Blocked on owner. Width 1/3._
 _Updated: 2026-10-30 07:30Z by Orchestrator (orch-2026-10-29g, …af3d2536) — SESSION PAUSED by owner (connection closing). `qe-ABC-228` claimed and in flight, PAUSED CLEANLY at checkpoint c654f540 (…7f33f79e): Q-SET + identity + lint/typecheck/build/G9 done; on resume re-spawn QE on the same brief from c654f540 under the sealed PREREG (npm test, deep lanes, G8, G6, G11, smokes left). Next: ABC-228 merge or (ii), then ABC-229 / ABC-220 / ABC-241; ABC-242 waits Architect; ABC-225 Blocked on owner. Nothing pushed._
@@ -1227,8 +1228,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-228] In check, quiescence searches every evasion; none means mate (size: M, priority: P2, DoR 9/10; waits owner accepts ADR-0053 + OQ-228-1 (G6 on position-6); build after ABC-235 merges (shares legalCaptures; → Ready 2026-10-30: ADR-0053 ACCEPTED; DoR 10/10; A8 G6 re-forecast first; "3s→4s" reading pending owner; (ii) folded: A9 re-forecast at 4 000 ms ≤ 133 %, conditional level 5 → 4 s + rating.ts R literal, G9 waived on LEVELS[5] only; **pulled 2026-10-30** → `se-ABC-228`, A8 re-forecast ALONE first; SE done d9c5bcde (code 9bd3c519): A8 forecast 64.7 % / 98.3 % ≤ 100 % → built as designed, (ii) NOT applied; A1 doors = base; A2/A3 rows; A4 1.368×/1.405×; drift 89.3 %; npm test 2 211; code review PASS; QE `qe-ABC-228` (Q-SET review, graded G6, smokes width 1) now; **qe-ABC-228 FAIL 2026-10-30 (a4c04eae): G6 NOT MET on position-6 (median depth 9 vs base 10; kiwipete 8/8); gates, deep lanes, G1/G5/G7/G8/G11 MET; smokes not read** → (ii) per OQ-228-1: `se-ABC-228-ii` (Scope 5, A9 at 4 000 ms ≤ 133 %, QE-228-b rows folded), then a new QE brief + PREREG)
+## In Development (WIP 0/3)
 
 
 
@@ -1256,7 +1256,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-228] In check, quiescence searches every evasion; none means mate (size: M, priority: P2, DoR 9/10; waits owner accepts ADR-0053 + OQ-228-1 (G6 on position-6); build after ABC-235 merges (shares legalCaptures; → Ready 2026-10-30: ADR-0053 ACCEPTED; DoR 10/10; A8 G6 re-forecast first; "3s→4s" reading pending owner; (ii) folded: A9 re-forecast at 4 000 ms ≤ 133 %, conditional level 5 → 4 s + rating.ts R literal, G9 waived on LEVELS[5] only; **pulled 2026-10-30** → `se-ABC-228`, A8 re-forecast ALONE first; SE done d9c5bcde (code 9bd3c519): A8 forecast 64.7 % / 98.3 % ≤ 100 % → built as designed, (ii) NOT applied; A1 doors = base; A2/A3 rows; A4 1.368×/1.405×; drift 89.3 %; npm test 2 211; code review PASS; QE `qe-ABC-228` (Q-SET review, graded G6, smokes width 1) now; **qe-ABC-228 FAIL 2026-10-30 (a4c04eae): G6 NOT MET on position-6 (median depth 9 vs base 10; kiwipete 8/8); gates, deep lanes, G1/G5/G7/G8/G11 MET; smokes not read** → (ii) per OQ-228-1: `se-ABC-228-ii` (Scope 5, A9 at 4 000 ms ≤ 133 %, QE-228-b rows folded), then a new QE brief + PREREG; **se-ABC-228-ii done 5e84d0d7 (code 8c82399f): A9 65.9 % / 97.4 % ≤ 133 % met; LEVELS[5] + DEFAULT_BUDGET_MS → 4 000, R literal 4000; QE rows in src; npm test 2 219; code review PASS** → `qe-ABC-228-ii`)
 
 
 
