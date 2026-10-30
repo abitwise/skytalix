@@ -10,6 +10,20 @@ epic: EPIC-009
 
 # ABC-220: `simple-tournament` over UCI, a fixed T = 22 s a move, its hard ceiling also 22 s
 
+> **AMENDED 2026-10-30 by Architect/Design** (task `arch-ABC-220-a14`, records only, at `main` `f22e31b3`). This
+> answers the SE's F1 (`se-ABC-220` `…a76bc514`, build `68ba364c`). The ruling is in `ADR-0052` § Status and in its
+> dated lines in D1, D7, D8 and D9.
+>
+> - **A14 is re-worded into A14a and A14b.** A14a is the lane row: one `readyok` per `isready`, in order, the busy
+>   one straight after the `bestmove`, no line lost. A14b is a QE hand reading of the ≤ 100 ms bound, taken by an
+>   asynchronous probe outside vitest (new test note 5; the `ABC-168` `A6` precedent). The bound, the order and
+>   "no line lost" are unchanged, so no requirement moved and nothing goes to the owner.
+> - **A10's text is confirmed:** `info string TimeMode takes level or simple-tournament, got <v>; kept <old>`.
+> - **A14a's file is confirmed:** `src/uci.real-engine.test.ts` (Scope 6 dated line).
+> - **The D5 bound's reading for Security/NFR:** "≤ 22 s" means a delay < 22 500 ms (§ NFR triggers).
+> - Code `68ba364c` already matches A10 and A14a. QE writes and runs A14b's probe. No SE hop is owed. Size,
+>   priority, column and DoR 10/10 are unchanged.
+
 > **FOLDED 2026-10-30 by BA/PM** (task `bapm-owner-adr-fold`, records only, at `main` `a046e839`). The owner
 > **accepted `ADR-0052` with one amendment** (`orch-2026-10-29g` `…3dd61448`, verbatim there): *"change 22.5s to 22s
 > for simplicity and compatibility, ceiling also at 22s, no need to implement fraction of a second ceiling or time per
@@ -104,7 +118,10 @@ All of it is `ADR-0052` (ACCEPTED 2026-10-30, as amended by the owner), D1–D3 
 5. **Off by default.** `TimeMode level` is today's behaviour: D4.1's `G` with `MOVE_OVERHEAD_MS` 50 and
    `DEFAULT_MOVES_TO_GO` 20, capped by the level.
 6. **Where the code goes** (D8): `src/uci-session.ts` only (the value and its tuple, C, D3's rule, and its
-   constants). Tests in `src/uci-session.test.ts` and its `ENGINE_DEEP` lane. **No new file.** `src/engine.ts`,
+   constants). Tests in `src/uci-session.test.ts` and its `ENGINE_DEEP` lane. **No new file.** *(Amended 2026-10-30,
+   `arch-ABC-220-a14`, `ADR-0052` D8's dated line: A14a lives in the existing real-child lane,
+   `src/uci.real-engine.test.ts` `UCI_DEEP`, with `runDialogue` still its only spawn site. A14b's probe is a record
+   under `.grugops/context/`, not a delivery file.)* `src/engine.ts`,
    `src/levels.ts`, `src/cli-options.ts`, `src/cli.ts`, `src/startup-questions.ts`, `src/pgn.ts` and `src/search.ts`
    do not change.
 
@@ -160,7 +177,10 @@ simple-tournament`. The numbers are `ADR-0052`'s arithmetic (`arch-epic009-setti
   name). `value Simple-Tournament`, `value uci-clock-mode` and `value 7` are each refused: the old value is kept, and
   exactly one `info string` line names the offered values and the value got. The setting survives `ucinewgame`.
   (`ADR-0052` D1's text lists `uci-clock-mode`, which this build does not offer. BA/PM reads it as "the values
-  offered at this build". The Architect confirms the exact text at design.)
+  offered at this build". The Architect confirms the exact text at design.) *(Confirmed 2026-10-30 by Architect/Design,
+  `arch-ABC-220-a14`; `ADR-0052` D1's dated line. At this build the line is exactly `info string TimeMode takes level
+  or simple-tournament, got <v>; kept <old>`, spelled from the same frozen tuple as the `combo` line. An empty value
+  reads `got nothing`. The `uci-clock-mode` build gets D1's three-value text from the same code, with no edit.)*
 - **A11 (wall, deep lane).** **Given** 5 fixed positions, **when** each is searched once at T = 22 000 on the real
   clock in plain `node`, **then** each returns in **≤ 22 s read to the whole second, that is < 22 500 ms** of wall
   (the 2026-10-30 reading above). The max and its excess over 22 000 ms are recorded; the excess is the overshoot,
@@ -169,9 +189,46 @@ simple-tournament`. The numbers are `ADR-0052`'s arithmetic (`arch-epic009-setti
 - **A12 (`NFR-008`).** The default lane gains 0 real-clock rows. `npm test` wall stays ≤ 10 s at load1 ≤ 8.
 - **A13 (busy `isready`, default lane; `ADR-0052` D7).** **Given** the setting and a `go`, **when** `isready` is sent
   before the search ends, **then** exactly one `readyok` is written, after the `bestmove`, and in order.
-- **A14 (busy `isready`, opt-in real-child lane; `ADR-0052` D7; the `ABC-119` precedent, unset = NOT DEFINED).**
-  **Given** `node src/uci.ts` with the setting, **when** `go movetime 2000` and then `isready` 100 ms later are sent,
-  **then** `readyok` arrives ≤ 100 ms after `bestmove`, and no line is lost.
+- **A14 (busy `isready` against the real child; `ADR-0052` D7, amended 2026-10-30).** *(Re-worded 2026-10-30 by
+  Architect/Design, task `arch-ABC-220-a14`. It was: ~~"**Given** `node src/uci.ts` with the setting, **when** `go
+  movetime 2000` and then `isready` 100 ms later are sent, **then** `readyok` arrives ≤ 100 ms after `bestmove`, and
+  no line is lost"~~. That could not be read in the lane: the child is synchronous (`ABC-173` `C2`), so its script
+  goes in at spawn and its output comes back whole at exit. The bound, the order and the count are unchanged. They
+  are now split across two instruments.)* A14 is MET only when **A14a and A14b** are both met.
+  - **A14a (lane row; `UCI_DEEP`, `src/uci.real-engine.test.ts`; the `ABC-119` form, unset = NOT DEFINED).**
+    **Given** `node src/uci.ts` with one fixed script:
+    `uci`, `setoption name TimeMode value simple-tournament`, `setoption name OwnBook value false`, `isready`,
+    `position startpos moves e2e4`, `go movetime 2000`, `isready`, `quit`.
+    The second `isready` is waiting in the child's input while the search runs. **Then:**
+    - exactly 2 `readyok` and 1 `bestmove` are written. The first `readyok` comes before the `bestmove`. The busy
+      one is the line straight after the `bestmove`, and it is the last line;
+    - no line is lost: the `TimeMode` option line, `uciok` and an `info depth` line are present, and there is no
+      `info string` line;
+    - the `bestmove` is legal;
+    - spawn to exit takes ≥ 2 000 ms;
+    - every line passes M4, the exit code is 0 with no signal, and stderr is empty.
+
+    The row reads no time between lines. It prints the spawn-to-exit wall and labels it as what it is.
+  - **A14b (QE hand reading, the ≤ 100 ms bound; outside vitest).** At the QE hop, on the tip under review, QE runs
+    the probe in test note 5 **once** against `node src/uci.ts`. The probe:
+    - sends `uci`; after `uciok`, sends `setoption name TimeMode value simple-tournament`, `setoption name OwnBook
+      value false` and `isready`;
+    - after that `readyok`, sends `position startpos moves e2e4` and `go movetime 2000`;
+    - **100 ms after writing `go`**, writes `isready`.
+
+    **Then:**
+    - **(R1)** the busy `readyok` arrives **≤ 100 ms after `bestmove` arrives**;
+    - **(R2)** the `isready` was written before `bestmove` arrived, so it was busy. Otherwise R2 is missed, recorded
+      as "not busy";
+    - **(R3)** exactly one `readyok` per `isready` (2 in all) and one `bestmove`, and the busy `readyok` is the first
+      line after the `bestmove`.
+
+    Then `quit`, and the exit code is recorded. A reply that has not arrived 10 000 ms after its command is a miss,
+    recorded as "no reply". The record holds the host CPU and OS, the Node version, load1 (read just before the
+    spawn), the tip sha, R1's value in ms, and R1–R3 each marked **met** or **missed**. It also records two values
+    that are not graded: `go` → `bestmove` and `go` → `isready`. One run counts, and there is no re-run to pick a
+    better one. A miss is reported, not trimmed. Any miss makes A14 NOT MET in the QE verdict, and the raw output is
+    attached.
 
 ## NFR triggers
 
@@ -183,6 +240,12 @@ simple-tournament`. The numbers are `ADR-0052`'s arithmetic (`arch-epic009-setti
   no worker (`ADR-0052` D7). **Owed:** the accepted-risk entry beside `NFR-011`, placed by Security/NFR: *"busy
   `isready`/`stop`: answered ≤ one budget + `AR-NFR004-A` late; ≤ 22 s in `simple-tournament`, ≤ 60 s in
   `uci-clock-mode`; one `readyok` per `isready`, in order"*, plus A13 and A14.
+  - *(The bound's reading, 2026-10-30, `arch-ABC-220-a14`; `ADR-0052` D7's dated line, for Security/NFR.)* The
+    latency is one budget (≤ 22 000 ms, which A6 reads exactly), plus `AR-NFR004-A` (≤ ~31 ms), plus the drain
+    (≤ 100 ms, A14b R1). The worst case is ≈ 22 131 ms. "≤ 22 s" is read to the whole second, as A11 is: a delay
+    **< 22 500 ms**. It is not read as ≤ 22 000 ms exactly, which no search could meet with the budget equal to the
+    ceiling. The entry adds that reading: *"… ≤ 22 s in `simple-tournament` (read to the whole second: < 22 500 ms)
+    …"*. It is the same whole-second reading the FOLDED note asks the owner to confirm. It changes no code.
 - **`NFR-009`:** 22 s is inside `ABC-212`'s 30 s reading (≤ 16 MiB, flat). No re-read is owed.
 - **`NFR-008`:** A12. **`NFR-005`, `NFR-011`, `NFR-012`:** unchanged (their referent is `TimeMode level`).
 - **Security (ASVS L1):** one option, matched exactly against a fixed tuple. The `go` numbers are already parsed and
@@ -192,12 +255,26 @@ simple-tournament`. The numbers are `ADR-0052`'s arithmetic (`arch-epic009-setti
 
 1. Default lane: A1–A10, A12 and A13, on the virtual clock, in `src/uci-session.test.ts`'s pattern (`ADR-0027`). A3,
    A4, A5 and A7's `tc=40/60` row are each one simulated sequence.
-2. `ENGINE_DEEP` lane: A11, ~2 min, ALONE, never during a reading. Opt-in real-child lane: A14.
+2. `ENGINE_DEEP` lane: A11, ~2 min, ALONE, never during a reading. Opt-in real-child lane (`UCI_DEEP`,
+   `src/uci.real-engine.test.ts`): A14a. A14b is test note 5. *(Amended 2026-10-30, `arch-ABC-220-a14`.)*
 3. UAT is owed (production lines change). The QE verdict signs it (`…5aaf7cec` item 2). `ABC-222` is the real-clock
    smoke.
 4. **Owed at merge** (`ADR-0052` § Consequences): BA/PM folds the dated lines into `ADR-0044` D3, D4 (a new D4.5), D5
    and D11. The Scribe adds the `TimeMode` line to `AGENTS.md`'s UCI notes. The SE adds D5's latency sentence to
    `src/uci-session.ts`'s header.
+5. **A14b's probe** (added 2026-10-30, `arch-ABC-220-a14`; the `ABC-168` test note 6 precedent).
+   - **Where it lives.** QE writes one script under `.grugops/context/qe-ABC-220/probe/`. It may start from
+     `qe-ABC-168`'s `probe/a6-probe.mjs`. It runs with plain `node`, never through vitest. QE's note records the
+     script's path, its command and its raw output.
+   - **Why it may spawn asynchronously.** `ABC-173` `C2` covers `src/**/*.test.ts` only, and the `ADR-0008` heap
+     ceiling covers vitest runs only. Neither is edited or waived. The probe is not a delivery file, and it adds no
+     spawn to the default lane (`NFR-008` unchanged).
+   - **How it reads.**
+     - The child is `process.execPath` with `src/uci.ts`, spawned asynchronously with no shell, from the repository.
+     - Time is `performance.now()`, taken when each stdout line arrives and right after each write.
+     - load1 is `os.loadavg()[0]`, which works on any host. The `sysctl` read in `a6-probe.mjs` is macOS only.
+   - **When it runs.** In QE's ALONE window, before or after A11 and A12's wall reading, never alongside them. It
+     takes about 3 s.
 
 ## Size and priority
 

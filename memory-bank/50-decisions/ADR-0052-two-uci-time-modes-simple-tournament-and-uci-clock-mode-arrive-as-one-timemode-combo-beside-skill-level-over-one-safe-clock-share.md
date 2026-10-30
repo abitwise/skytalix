@@ -35,6 +35,13 @@ Architect/Design (task `arch-adr-accept-0052-0053-0054`).
 - **Pointer lines.** This hop added dated pointers to the § Status of `ADR-0044` and `ADR-0045`. The in-place fold
   lines in those ADRs and the `NFR-004` text stay with BA/PM and Security/NFR at each build's merge, as listed below.
 - `OQ-0052-1` is closed (§ Owner questions).
+- **Amended 2026-10-30 by Architect/Design** (task `arch-ABC-220-a14`, records only, at `main` `f22e31b3`), on the
+  SE's `ABC-220` finding F1 (`se-ABC-220` `…a76bc514`). D7's real-child row could not be measured as written. It is
+  now read by two instruments: (a) an order-and-count row in the real-child lane, and (b) a QE hand reading of the
+  ≤ 100 ms bound, taken by an asynchronous probe outside vitest. This is the `ABC-168` `A6` precedent. D8 now names
+  the file that row lives in. D1's refusal text is read for the values offered at each build. D7 states how its
+  latency bound is read. The dated lines are in D1, D7, D8 and D9. **No requirement moved,** so nothing goes to the
+  owner: the bound (≤ 100 ms), the order, the count and "no line lost" are D7's, unchanged.
 
 Previously **proposed** 2026-10-29 by Architect/Design (task `arch-epic009-settings`), at `main` `b5df6cde`.
 ~~**The owner accepts or declines it.** Nothing is built on it, and no `EPIC-009` build ticket leaves `Backlog` on it,
@@ -119,6 +126,11 @@ default test lane runs on the virtual clock only (`NFR-008`). KISS.
   **exactly** one of the offered `var` strings, a closed set held as a frozen tuple. Any other value keeps the old
   one and writes one line, `info string TimeMode takes level, simple-tournament or uci-clock-mode, got <v>; kept
   <old>` (D3's invalid-value rule, text through `printableOf`). `ucinewgame` does not reset it (D3's rule for options).
+  - *(Read 2026-10-30, `arch-ABC-220-a14`.)* The list in that line is the values **offered at the build**, spelled
+    from the same frozen tuple as the `combo` line, so the two cannot drift. At the `simple-tournament` build the
+    line is `info string TimeMode takes level or simple-tournament, got <v>; kept <old>`. At the `uci-clock-mode`
+    build the same code produces the text above, with no edit. An empty value reads `got nothing`, as the other
+    options do. `ABC-220` `A10` pins this. A refusal never names a value that cannot be selected.
 - **While `TimeMode` is not `level`, `Skill Level` is not read at all.** The search is the rate-0 path:
   `chooseMove(position, { budgetMs, now, maxDepth, maxNodes })` with D12's limits, and one `info … score …` line. A
   `Skill Level` set meanwhile is kept and takes effect when `TimeMode` returns to `level`. The blunder path is never
@@ -266,6 +278,46 @@ real `δ` from cutechess's per-move times.
     DEFINED), `node src/uci.ts` with `TimeMode` set, `go movetime 2000`, then `isready` 100 ms later: `readyok` arrives
     ≤ 100 ms after `bestmove`, and no line is lost. The bound scales with the budget, so 2 s stands for 60 s. No 60 s
     real-clock row runs in any lane but `ENGINE_DEEP`.
+- **Amended 2026-10-30 (`arch-ABC-220-a14`): the real-child row is read by two instruments.** The row above cannot be
+  read as written. The real-child lane's child is synchronous (`spawnSync`, because `ABC-173` `C2` bars every
+  asynchronous `child_process` form in `src/**/*.test.ts`). Its whole stdin script is written at spawn, and its whole
+  stdout comes back at exit. So the lane cannot send anything "100 ms later", and it has no time for any single line.
+  The row's intent does not change. Each `isready` gets one `readyok`, in order, after the `bestmove`. No line is
+  lost. Once the search ends, the waiting `isready` is answered within 100 ms.
+  - **(a) The lane row** (`UCI_DEEP`, `src/uci.real-engine.test.ts`, D8). `node src/uci.ts` runs with `TimeMode`
+    set and the book off. In the script, `isready` comes straight after `go movetime 2000`, so it is waiting in the
+    child's input while the search runs. This is the case `ADR-0044` D5 describes. The row reads:
+    - exactly one `readyok` per `isready`, and the busy one is the line straight after the only `bestmove`;
+    - nothing is lost or refused, and the `bestmove` is legal;
+    - spawn to exit takes ≥ 2 000 ms, so the search ran;
+    - M4 holds, the exit code is 0, and stderr is empty.
+
+    The row reads no time between lines, and it says so.
+  - **(b) The QE hand reading** of the ≤ 100 ms bound. One asynchronous probe lives outside `src/` and runs with
+    plain `node`, never through vitest. This is the `ABC-168` `A6` / `NFR-011` precedent. `C2` covers
+    `src/**/*.test.ts` only, and the `ADR-0008` heap ceiling covers vitest runs only, so neither is edited or waived.
+    The probe writes `isready` 100 ms after `go movetime 2000`, so the line arrives while the child is inside the
+    search, as a GUI would send it. It reads the gap from the arrival of `bestmove` to the arrival of `readyok`.
+    `ABC-220` `A14` states the protocol.
+  - **Rejected:** opening `C2` to allow one asynchronous child in the lane. That is route (1) at `ABC-168`, which
+    reopens an addendum the owner accepted for a single row. Also rejected: dropping the 100 ms bound and keeping only
+    the order. That would move D7's requirement, and the owner would have to be asked.
+- **How "≤ 22 s" is read in the accepted-risk entry** (2026-10-30, `arch-ABC-220-a14`; for Security/NFR's entry beside
+  `NFR-011`). The latency has three terms:
+  - **one budget:** the budget the `go` handed. That is ≤ 22 000 ms in `simple-tournament`, and `ABC-220` `A6` reads
+    it exactly on the virtual clock;
+  - **`+ AR-NFR004-A`:** the abort overshoot, ≤ ~31 ms;
+  - **the drain:** ≤ 100 ms, the bound (b) reads.
+
+  The worst case is an `isready` or `stop` that arrives together with the `go`: ≤ 22 000 + ~31 + 100 ≈ 22 131 ms.
+  **"≤ 22 s" is read to the whole second, as a delay < 22 500 ms.** This is the same reading as `ABC-220` `A11`'s
+  wall, and it follows the owner's "no need to implement fraction of a second ceiling". It is **not** read as
+  ≤ 22 000 ms exactly. With the budget equal to the ceiling, no real search could meet that, because the overshoot
+  alone passes it, and the owner ruled out a sub-second margin. In `uci-clock-mode`, 59 500 + ~31 + 100 < 60 000, so
+  "≤ 60 s" holds exactly. `ABC-221` re-reads that at its gate. The entry text, with the reading added:
+  *"busy `isready`/`stop`: answered ≤ one budget + `AR-NFR004-A` late; ≤ 22 s in `simple-tournament` (read to the
+  whole second: < 22 500 ms), ≤ 60 s in `uci-clock-mode`; one `readyok` per `isready`, in order"*. The whole-second
+  reading changes no code. If the owner rejects it, only the text of this entry and `A11`'s bound move.
 
 ### D8. Where the code goes
 
@@ -273,6 +325,13 @@ real `δ` from cutechess's per-move times.
   rule, and the constants `SIMPLE_TOURNAMENT_CEILING_MS`, `SIMPLE_TOURNAMENT_BUDGET_MS`, `CLOCK_RESERVE_MS` and
   `CLOCK_OVERHEAD_MS`. Tests in `src/uci-session.test.ts` and its `ENGINE_DEEP` lane. **No new file**, so D8's closure,
   `ADR-0011`'s census and `NFR-008`'s per-file floor do not move.
+  - *(Amended 2026-10-30, `arch-ABC-220-a14`.)* There is one exception: D7's real-child row (a). It lives in
+    `src/uci.real-engine.test.ts`, in its existing `UCI_DEEP` lane. That file is the "opt-in real-child lane" D7 and D9
+    name (`ADR-0044` D9, `ABC-168`). `src/uci-session.test.ts` drives the session in process and has no spawn site.
+    Spawning the delivered entry point from it would add a second spawn site. Moving the row to the existing file
+    adds no file, no delivery file and no spawn site: `runDialogue` takes a script and stays the file's only
+    `spawnSync` call. So what D8 guards still holds. The probe for (b) is a record under `.grugops/context/`, not a
+    delivery file.
 - **`uci-clock-mode` build:** `src/uci-session.ts` (the third value, D4's rule, `CLOCK_MODE_CEILING_MS`,
   `CLOCK_MODE_MAX_BUDGET_MS`) and **one value** in `src/engine.ts` (`HARD_CEILING_MS`, and its header comment's
   numbers).
@@ -298,7 +357,8 @@ real `δ` from cutechess's per-move times.
   adds no sub-second margin. Its tolerance is the one Security/NFR re-reads at 22 s. At the
   clock-mode build, one at 59 500 returns ≤ 60 000, with the max completed depth logged against `KEY_ARRAY_CAPACITY`'s
   tripwire (≥ 100 → Architect; the runaway guard at `src/search.ts:121` already bounds it).
-- **Opt-in real-child lane:** D7's latency row.
+- **Opt-in real-child lane:** D7's latency row. *(Amended 2026-10-30, `arch-ABC-220-a14`: this lane holds row (a), the
+  order and the count, in `src/uci.real-engine.test.ts`. The ≤ 100 ms bound is (b), a QE hand reading outside vitest.)*
 - **Acceptance outside vitest:** the smoke reading per mode (5–10 cutechess games at `tc=40/900`, `timemargin=0`, the
   lines in D1), graded on M1 and M2. Major validation (≥ 100 games) is later and out of this MVP (owner Q1).
 
