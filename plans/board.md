@@ -1,3 +1,4 @@
+_Updated: 2026-10-30 Orchestrator (orch-2026-10-30a) — ABC-228 DONE: qe-ABC-228-ii PASS_WITH_GAPS (G6 met at 4 s; D 5.0/10, R 7.0/10), merged e42b637b (both QE branches), not pushed. ABC-241 pulled → `se-ABC-241`; records-only beside it: `bapm-ABC-228-merge-fold` (follow-ups, XS test ticket for SE-228ii-a/QE-228ii-b) + `scribe-agents-md-level5`. ABC-220 next (its A11 lane ALONE). Owed: NFR-004/005 catalog text (Security/NFR), ladder re-take. Width 3/3._
 _Updated: 2026-10-30 Orchestrator (orch-2026-10-30a) — se-ABC-228-ii done: A9 met (65.9 % / 97.4 % ≤ 133 %); three literals per ticket Scope 5 (brief had named two; SE followed the ticket — Orchestrator brief slip, SE-228ii-c); code review PASS → In Review; `qe-ABC-228-ii` spawned ALONE (new PREREG, G6 at 4 s, smokes width 1). SE-228ii-a LOW for QE to rule. Width 1/3._
 _Updated: 2026-10-30 09:20Z by Orchestrator (orch-2026-10-30a) — qe-ABC-228 FAIL, STOPPED at G6 (position-6 9 vs 10; QE-228-c HIGH; npm-exec ruled LOW). ABC-228 In Review → In Development for (ii) (owner word OQ-228-1 covers it): `se-ABC-228-ii` spawned ALONE (Scope 5: LEVELS[5] → 4 000 ms + rating.ts R literal; A9 ≤ 133 %; above that → owner). QE records stay on grugops/qe-ABC-228, not merged. Width 1/3._
 _Updated: 2026-10-30 07:50Z by Orchestrator (orch-2026-10-30a) — RESUMED (Reduced tier: Agent available, default main thread, allowlist by instruction). Host clear after reboot (no vitest/cutechess, Tctl 36.8 °C). `qe-ABC-228` re-spawned ALONE on the same brief from c654f540 under the sealed PREREG (npm test, deep lanes, G8, G6, G11, smokes left). ABC-241 / ABC-220 wait behind it; ABC-242 waits Architect; ABC-225 Blocked on owner. Width 1/3._
@@ -1210,8 +1211,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 - [EPIC-006] Game session and packaging  (owner: BA/PM, **size: XL — corrected from `L`; 9 tickets / 20 points across both halves, ~1.5x the 13 `L` was assigned, and it hit that ceiling BEFORE distribution was priced**, priority: P1, since: 2026-07-22, **BOTH HALVES NOW CUT: the runnable half `ABC-041`…`ABC-046` (2026-08-13) and the second half `ABC-100`…`ABC-102` (2026-08-16) — only THREE tickets, because the scope of packaging is a FUNCTION of a distribution channel nobody has chosen.** `ABC-100` cuts the DECISION, never the ANSWER: a superseding ADR per `ADR-0007` `D5`, on the owner's word, verbatim and dated. **Acceptance criterion 1 (`npx <package>`) remains unmeetable by any ticket. Recommendation NOT taken, standing for the owner: this should probably be two epics** — the halves share no dependency in either direction and their blockers differ in kind)
 
-## Ready (WIP 2/8)
-- [ABC-241] A repetition against the game's earlier positions ignores an ep square no pawn can legally take (Q3 (c), ADR-0020 § AMENDMENT 2026-10-30) (size: S, priority: P2, DoR 10/10 (ABC-230 merged 24f3e322); milestone 1; value-changing → 10 D + 10 R smoke; after ABC-228)
+## Ready (WIP 1/8)
 - [ABC-220] simple-tournament over UCI (TimeMode): T 22.0 s, min(T, C) with a clock, 22.5 s ceiling (size: M, priority: P2, DoR 9/10; waits owner accepts ADR-0052 (OQ-0052-1; → Ready 2026-10-30: ADR-0052 ACCEPTED (22 s / 22 s); DoR 10/10; shares uci-session.ts with ABC-230, builds after it)
 
 
@@ -1228,7 +1228,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+- [ABC-241] A repetition against the game's earlier positions ignores an ep square no pawn can legally take (Q3 (c), ADR-0020 § AMENDMENT 2026-10-30) (size: S, priority: P2, DoR 10/10 (ABC-230 merged 24f3e322); milestone 1; value-changing → 10 D + 10 R smoke; after ABC-228; **pulled 2026-10-30** → `se-ABC-241`; R smoke reads level 5 at 4 000 ms)
 
 
 
@@ -1256,8 +1257,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
-- [ABC-228] In check, quiescence searches every evasion; none means mate (size: M, priority: P2, DoR 9/10; waits owner accepts ADR-0053 + OQ-228-1 (G6 on position-6); build after ABC-235 merges (shares legalCaptures; → Ready 2026-10-30: ADR-0053 ACCEPTED; DoR 10/10; A8 G6 re-forecast first; "3s→4s" reading pending owner; (ii) folded: A9 re-forecast at 4 000 ms ≤ 133 %, conditional level 5 → 4 s + rating.ts R literal, G9 waived on LEVELS[5] only; **pulled 2026-10-30** → `se-ABC-228`, A8 re-forecast ALONE first; SE done d9c5bcde (code 9bd3c519): A8 forecast 64.7 % / 98.3 % ≤ 100 % → built as designed, (ii) NOT applied; A1 doors = base; A2/A3 rows; A4 1.368×/1.405×; drift 89.3 %; npm test 2 211; code review PASS; QE `qe-ABC-228` (Q-SET review, graded G6, smokes width 1) now; **qe-ABC-228 FAIL 2026-10-30 (a4c04eae): G6 NOT MET on position-6 (median depth 9 vs base 10; kiwipete 8/8); gates, deep lanes, G1/G5/G7/G8/G11 MET; smokes not read** → (ii) per OQ-228-1: `se-ABC-228-ii` (Scope 5, A9 at 4 000 ms ≤ 133 %, QE-228-b rows folded), then a new QE brief + PREREG; **se-ABC-228-ii done 5e84d0d7 (code 8c82399f): A9 65.9 % / 97.4 % ≤ 133 % met; LEVELS[5] + DEFAULT_BUDGET_MS → 4 000, R literal 4000; QE rows in src; npm test 2 219; code review PASS** → `qe-ABC-228-ii`)
+## In Review (WIP 0/3)
 
 
 
@@ -1317,6 +1317,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+- [ABC-228] In check, quiescence searches every evasion; none means mate (size: M, priority: P2, DoR 9/10; waits owner accepts ADR-0053 + OQ-228-1 (G6 on position-6); build after ABC-235 merges (shares legalCaptures; → Ready 2026-10-30: ADR-0053 ACCEPTED; DoR 10/10; A8 G6 re-forecast first; "3s→4s" reading pending owner; (ii) folded: A9 re-forecast at 4 000 ms ≤ 133 %, conditional level 5 → 4 s + rating.ts R literal, G9 waived on LEVELS[5] only; **pulled 2026-10-30** → `se-ABC-228`, A8 re-forecast ALONE first; SE done d9c5bcde (code 9bd3c519): A8 forecast 64.7 % / 98.3 % ≤ 100 % → built as designed, (ii) NOT applied; A1 doors = base; A2/A3 rows; A4 1.368×/1.405×; drift 89.3 %; npm test 2 211; code review PASS; QE `qe-ABC-228` (Q-SET review, graded G6, smokes width 1) now; **qe-ABC-228 FAIL 2026-10-30 (a4c04eae): G6 NOT MET on position-6 (median depth 9 vs base 10; kiwipete 8/8); gates, deep lanes, G1/G5/G7/G8/G11 MET; smokes not read** → (ii) per OQ-228-1: `se-ABC-228-ii` (Scope 5, A9 at 4 000 ms ≤ 133 %, QE-228-b rows folded), then a new QE brief + PREREG; **se-ABC-228-ii done 5e84d0d7 (code 8c82399f): A9 65.9 % / 97.4 % ≤ 133 % met; LEVELS[5] + DEFAULT_BUDGET_MS → 4 000, R literal 4000; QE rows in src; npm test 2 219; code review PASS** → `qe-ABC-228-ii`; **qe-ABC-228-ii PASS_WITH_GAPS (abc1eeb5): G6 8/8, 10/10; G5 4 001 ms; G8 +0.70 s; smokes D 5.0/10, R 7.0/10, S-1..S-4 met; UAT signed by QE verdict (delegation 2026-10-22); MERGED e42b637b 2026-10-30, not pushed**)
 - [ABC-230] The game's earlier positions reach the search, CLI and UCI — **DONE** 2026-10-30 (merged 24f3e322; qe-ABC-230 …ba5a249a PASS_WITH_GAPS): identity with no keys / clock 0 = base; smokes ALONE width 1: D 5.5/10 (4/3/3), R 8.0/10 (8/2/0), 0 faults, 0 time losses; Tctl median ≤ 73.75 °C. Gap QE-230-a (MEDIUM): levels 1–4 blunder path does not score the third-occurrence move as a draw (child roots unchecked) → follow-up
 - [ABC-240] Move ordering without per-move allocation, value-identical (cut 6) — **DONE** 2026-10-30 (merged 5311f5bd; qe-ABC-240 …19068f9d PASS, S2, no smoke): A1 6 021 rows base = tip; nps tip/base 1.122 / 1.109 / 1.089; G6 8 = 8, 10 = 10; npm test 2 148/2 148; deep 743/743. Item 2's gain exceeds the Architect's bound, cause unmeasured (QE-240-a, LOW)
 - [ABC-235] Cost-per-node cuts 1 → 3 → 5, value-identical — **DONE** 2026-10-30 (merged baf99a7c; qe-ABC-235 …c575d703 PASS, S2, no smoke): A1 6 021 rows base = tip; nps tip/base 1.262 / 1.284 / 1.200 (kiwipete / position-6 / start), every cut ≥ 1.06; G2 310 v 456 ns; G6 8 = 8, 10 = 10; npm test 2 139/2 139; deep 621/621. OD-235-1 INFO to owner, veto open
