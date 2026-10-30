@@ -53,7 +53,7 @@ Real commands only, with flags, preferring fast single-file variants. If a comma
 ### Development
 
 - Dev / run: `npm run chess` <!-- prints the board and plays a game against the engine, default
-  level 5 (≤3 s/move, ADR-0045; no longer the hardest: levels 6 and 7 think 5 s and 30 s a move). Options:
+  level 5 (≤4 s/move, ADR-0053 d10, was 3 s under ADR-0045; no longer the hardest: levels 6 and 7 think 5 s and 30 s a move). Options:
   `--colour white|black|random`, `--difficulty 1|2|3|4|5|6|7`, `--ascii`, `--unicode`. Pass an option AFTER `--`: `npm run chess -- --colour black` — the separator is
   load-bearing; without it npm eats the flag name (npm 11.20.0): a value-less flag (`--ascii`) is
   dropped and the game runs with defaults, exit 0; a value flag leaves its value behind as a stray
@@ -78,6 +78,7 @@ completion notification; if a pattern is unavoidable, bracket one character (`[v
   `npx vitest run` directly, never through `npm test`. -->
 - Heap flag (ABC-173): `--max-old-space-size=400` is for ONE-file vitest runs only. Whole-suite or
   multi-file runs use 128, as `npm test` sets itself; the heap guard refuses 400 there.
+- No `npm run` script runs a `*_DEEP` lane: `npm test` pins heap 128 and a 60 s bound, and a deep lane needs 400 and runs longer. The `*_DEEP` lines below, spelled with npx, are the only verified spelling. A brief that fences out npx cannot run them; the Orchestrator routes the lane to a hop that may, or records `UNKNOWN - verify`.
 - Worker cap (ABC-144, ADR-0040 addendum 2): `vitest.config.ts` `test.maxWorkers: 2`, pinned by value in
   `src/cli.test.ts`; `isolate` stays on; no `projects`/`poolOptions`. Never raise it or pass a higher
   `--maxWorkers`; env may only lower it: `VITEST_MAX_WORKERS` 1..2. The env note, the module
