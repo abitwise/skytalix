@@ -4,7 +4,7 @@ role: qe-e2e
 ticket: ABC-220
 ref: .grugops/context/qe-ABC-220/
 branch: grugops/ABC-220 @ fbab54ff (code 68ba364c + main a649fbc4 merged in 9ac8b365); QE commits on new grugops/qe-ABC-220 from fbab54ff (worktree .claude/worktrees/qe-ABC-220)
-width: ALONE (A11 ~2 min, A12 wall, A14b probe) — HELD until qe-ABC-229-qset ends
+width: ALONE (A11 ~2 min, A12 wall, A14b probe) (host clear)
 ---
 # QE ABC-220: Q-SET review, gates, A11 / A12 / A14a / A14b ALONE, UAT
 ## Read
