@@ -1,0 +1,37 @@
+qe-ABC-244 PRE-REGISTRATION (sealed and committed before any head run; nothing below was moved after a reading)
+Ticket ABC-244, ADR-0046 § Addendum 2026-10-30. Base d59e3194 (main). Head 25282ad4 (grugops/ABC-244 code; branch tip bcd64f1a).
+Trees (scratch, out of the repository): B = git archive d59e3194; H = git archive 25282ad4; T = cp -R B (diff -r B T clean).
+diff -r B H: only src/cli.test.ts and src/uci-session.test.ts (2 step literals, 4 comment lines). node_modules: one symlink
+to the main checkout's, shared by all arms (the ADR-0035 condition, stated).
+
+A6 MUTANT LIST: frozen-mutants.json, 24 mutants, frozenAt 2026-10-30T22:53:55.595Z, sha256 9cbf279f0684d73ca256aec013ff673fe3efcee2ae060fdaf2467d7af1942fdb.
+  Part 1 the SE's nine, byte-identical to se-ABC-244 probe/mutants.mjs (freeze.mjs asserts it): F230 QM1 QM2 QM3 QM4 UNTRIM REP0 S241M1 S241M6.
+  Part 2 se-ABC-241 …887921ba M2/M4/M5/M8, reconstructed by QE from their one-line descriptions: S241M2 S241M4 S241M5 S241M8.
+  Part 3 QE's own, aimed at the U1 rows: QSEAMRAW QSEAMTWICE QPRIOROFF QMATCH1 QMATCH3 QPARITY QCLOCK QTRIM1 QUCINOKEYS,
+         and two depth-sensitive ones: QPLY4 (pre-root scan off at ply >= 4), QPATHOFF (on-path repetition scan off).
+  Every edit applies exactly once at B and at H (freeze.mjs).
+A6 RUN: qe-scripts/mut.mjs, CONTROL + 24 per tree; the 18 rows of the four blocks ("ABC-230 A1, A3|ABC-241 A4, A7|ABC-230 A2,
+  A3, A5|ABC-241 A4, A5") of both files, NODE_OPTIONS=--max-old-space-size=128, node_modules/.bin/vitest, json reporter.
+  Base (B) runs complete BEFORE the first head (H) run. Controls must be 18 ran, 0 failed, 0 suite errors at both trees.
+A6 RULE: each of the 4 U1 rows (changed step) must kill exactly the same mutant ids at H as at B -> MET; any DIFF -> NOT MET
+  (a loss or a gain). The 4 U2 rows (step 100 at both) are listed and expected SAME by construction; a U2 DIFF is a harness
+  or flake signal, investigated, not graded. A row red under CONTROL voids that tree's run; one re-run allowed.
+A7: qe-scripts/census.mjs instruments deepen's return (nodes, searches) in a scratch copy and adds per-test hooks;
+  the four blocks at B and H. Rule: every U1 row strictly fewer nodes at H; every other row node-equal. Summed delta reported.
+A10 / A3 / A4 / A5: npm run lint, npm run typecheck, npm run build, npm test at H (tree H); test-skip-integrity with the
+  run's pending+todo count; per-file counts and sorted full names from the G8 runs' last-run.json (B vs H); git diff -U0 checks.
+A8 N8-LANE (ALONE): qe-scripts/lane.mjs. Arms B, T, H. Command node_modules/.bin/vitest run src/cli.test.ts
+  src/uci-session.test.ts (json + default reporters), NODE_OPTIONS=--max-old-space-size=128. 9 rounds, order rotated per round,
+  round 0 discarded (n = 8, k = 2). CPU = user + sys from /usr/bin/time -p. Counts asserted against round 0. One wait-clear
+  (host.mjs) before the window; load1, Tctl and foreign vitest LOGGED per run, never gated (ADR-0035 D2).
+  Readout qe-scripts/readout.mjs, ADR-0035 D1: admissible iff |twin cpu median| <= 1.5 % of B's cpu median and twin sign
+  test two-sided p > 0.05; resolves 0.650 s iff twin R <= 0.650 s; MET iff admissible, resolves, and H-B cpu median <= 0.650 s;
+  NOT MET iff admissible and (resolves with median > 0.650 or x(k) > 0.650); else UNRESOLVED. F = 16 % of B cpu (provisional,
+  UNKNOWN - verify). H-B cpu and wall medians with intervals reported as the narrow-set saving. One re-run allowed if
+  inadmissible or any HARNESS_ERROR.
+A9 G8 (ALONE, after A8): qe-scripts/g8.mjs, npm test as spelled, order b h h b b h, base tree B, head tree H. Wait-clear before
+  every run: 0 foreign vitest (found by bracketed pgrep, waited BY PID with kill -0), 0 cutechess-cli, load1 <= 2.0,
+  Tctl <= 60.0 C (poll 15 s, up to 60 min). Scored set admissible iff all 6 rc 0 and load1 <= 8 before and after every run.
+  Median of 3 per arm. States: H median <= 10 s NFR-008 MET; H median vs design target 9.4 s (> 9.4 s fires tranche 2,
+  reported, does not fail); H > 10 s -> STOP, report to the owner via the Orchestrator. One re-run of the whole set allowed
+  only if inadmissible; both reported.
