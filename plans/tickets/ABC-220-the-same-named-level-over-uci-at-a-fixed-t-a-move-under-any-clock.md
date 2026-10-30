@@ -1,14 +1,33 @@
 ---
 id: ABC-220
-title: "`simple-tournament` over UCI (`TimeMode`): a fixed T = 22.0 s a move, capped by a safe clock share, under a 22.5 s hard ceiling, levels 1–7 unchanged"
-status: backlog
-column: Backlog
+title: "`simple-tournament` over UCI (`TimeMode`): a fixed T = 22 s a move, capped by a safe clock share, never handed more than its 22 s hard ceiling, levels 1–7 unchanged"
+status: ready
+column: Ready
 size: M
 priority: P2
 epic: EPIC-009
 ---
 
-# ABC-220: `simple-tournament` over UCI, a fixed T a move under a 22.5 s hard ceiling
+# ABC-220: `simple-tournament` over UCI, a fixed T = 22 s a move, its hard ceiling also 22 s
+
+> **FOLDED 2026-10-30 by BA/PM** (task `bapm-owner-adr-fold`, records only, at `main` `a046e839`). The owner
+> **accepted `ADR-0052` with one amendment** (`orch-2026-10-29g` `…3dd61448`, verbatim there): *"change 22.5s to 22s
+> for simplicity and compatibility, ceiling also at 22s, no need to implement fraction of a second ceiling or time per
+> move if it is not supported by current solution"*. The ADR's own text is the Architect's hop
+> (`arch-adr-accept-0052-0053-0054`); where its amended D3 words differ from this page, the ADR rules.
+>
+> - **T stays 22 000 ms. The ceiling moves 22 500 → 22 000 ms**, equal to T. Whole seconds; nothing sub-second.
+> - **So A2–A5 and A7 are unchanged in value** (they depend on T, not the ceiling): 40 × 22 s = 880 s of 900 s,
+>   18 760 ms left after move 40 at δ = 31 ms, 97.9 % (83.2 % with 6 book moves). M1's ≥ 500 ms holds while δ ≤ 487 ms.
+> - **Changed:** the title, scope 1, A6's deadline (≤ start + 22 000 ms), A11's wall reading, the NFR lines, § Dependencies
+>   and the DoR.
+> - **The wall reading (BA/PM's, on his "whole seconds"; confirm with the owner, it blocks nothing).** No `go` hands the
+>   search more than 22 000 ms, read exactly on the virtual clock (A6). A real move also carries the stop overshoot
+>   (`AR-NFR004-A`, ≤ ~31 ms) and the pipe, so its wall is a little over 22 000 ms. That is read **to the whole second**:
+>   ≤ 22 s means a wall < 22 500 ms. `ADR-0052` D3 rejected T = ceiling at 22.5 s for this overshoot; the owner's
+>   whole-second ceiling is what makes T = ceiling readable. The code is the same under any reading; only A11's and
+>   `ABC-222` A5's bound would move.
+> - **DoR 9/10 → 10/10. Backlog → Ready.** No further BA/PM hop.
 
 > **RECONCILED 2026-10-29 to `ADR-0052` (PROPOSED) by BA/PM** (task `bapm-owner-words-b`, records only, at `main`
 > `4dcb353e`). The Architect ruled the form, the `go` interaction and T (`arch-epic009-settings` `…fa9e821e`,
@@ -51,18 +70,19 @@ epic: EPIC-009
 - **Pain:** no setting is named for 40/15. `Skill Level` 7 gets ~22.5 s a move only when the GUI sends a clock, with
   ~50 ms left at a period's 40th move (`EPIC-009` T3–T4; ~19 ms at δ = 31 ms on the virtual clock, `ADR-0052`
   § Context). That can lose on time.
-- **Value:** one named setting that a match selects. It thinks a fixed 22.0 s a move, never more than 22.5 s, never
-  spends past the clock it is given, and keeps a margin at every period's end by arithmetic.
+- **Value:** one named setting that a match selects. It thinks a fixed 22 s a move, is never handed more than 22 s,
+  never spends past the clock it is given, and keeps a margin at every period's end by arithmetic.
 
 ## Scope
 
-All of it is `ADR-0052` (PROPOSED), D1–D3 and D7–D9.
+All of it is `ADR-0052` (ACCEPTED 2026-10-30, as amended by the owner), D1–D3 and D7–D9.
 
 1. **The setting `simple-tournament`:**
-   - per-move budget T = **22 000 ms** (`SIMPLE_TOURNAMENT_BUDGET_MS` = 22 500 − 500);
+   - per-move budget T = **22 000 ms**;
    - blunder rate 0;
-   - a **hard ceiling of 22 500 ms** (`SIMPLE_TOURNAMENT_CEILING_MS`): no `go` (clock, `movetime`, `infinite`, bare)
-     makes it think longer.
+   - a **hard ceiling of 22 000 ms**, equal to T (owner, 2026-10-30): no `go` (clock, `movetime`, `infinite`, bare)
+     hands the search a longer budget. Every branch of scope 3 is `≤ T`, so T holds it. The constants' names and
+     number are amended `ADR-0052` D3's (was `SIMPLE_TOURNAMENT_BUDGET_MS` = 22 500 − 500 under a 22 500 ceiling).
 2. **Selected over UCI by `TimeMode`** (D1):
    - `uci` writes `option name TimeMode type combo default level var level var simple-tournament` after the
      `Skill Level` line and before `uciok`. The `Skill Level` line stays byte-identical (`default 5 min 1 max 7`).
@@ -83,7 +103,7 @@ All of it is `ADR-0052` (PROPOSED), D1–D3 and D7–D9.
    consumed. A `Skill Level` set meanwhile is kept, and it takes effect when `TimeMode` returns to `level`.
 5. **Off by default.** `TimeMode level` is today's behaviour: D4.1's `G` with `MOVE_OVERHEAD_MS` 50 and
    `DEFAULT_MOVES_TO_GO` 20, capped by the level.
-6. **Where the code goes** (D8): `src/uci-session.ts` only (the value and its tuple, C, D3's rule, and the four
+6. **Where the code goes** (D8): `src/uci-session.ts` only (the value and its tuple, C, D3's rule, and its
    constants). Tests in `src/uci-session.test.ts` and its `ENGINE_DEEP` lane. **No new file.** `src/engine.ts`,
    `src/levels.ts`, `src/cli-options.ts`, `src/cli.ts`, `src/startup-questions.ts`, `src/pgn.ts` and `src/search.ts`
    do not change.
@@ -120,7 +140,7 @@ simple-tournament`. The numbers are `ADR-0052`'s arithmetic (`arch-epic009-setti
   C ≥ 22 000, about the first 20 moves, then C spreads what is left over 20.
 - **A6 (the hard ceiling).** **Given** the setting, **when** `go movetime 30000`, `go infinite`, a bare `go`, and
   `go wtime 3600000 btime 3600000 movestogo 40` (C = 89 875) are each sent, **then** each budget is 22 000, and each
-  deadline is ≤ start + 22 500 ms. **Given** `go movetime 5000`, **then** the budget is 5 000. The rows read the
+  deadline is ≤ start + 22 000 ms (the ceiling, 2026-10-30). **Given** `go movetime 5000`, **then** the budget is 5 000. The rows read the
   deadline the engine is handed.
 - **A7 (the safe share).** **Given** the setting:
   - `go wtime 3000 btime 3000 movestogo 1` → budget **1 900 ms**, and the move leaves ≥ 1 000 ms (1 069);
@@ -142,8 +162,10 @@ simple-tournament`. The numbers are `ADR-0052`'s arithmetic (`arch-epic009-setti
   (`ADR-0052` D1's text lists `uci-clock-mode`, which this build does not offer. BA/PM reads it as "the values
   offered at this build". The Architect confirms the exact text at design.)
 - **A11 (wall, deep lane).** **Given** 5 fixed positions, **when** each is searched once at T = 22 000 on the real
-  clock in plain `node`, **then** each returns in **≤ 22 500 ms** of wall, and the max is recorded. It runs in the
-  `ENGINE_DEEP` lane, never in the default lane, and ALONE (~2 min).
+  clock in plain `node`, **then** each returns in **≤ 22 s read to the whole second, that is < 22 500 ms** of wall
+  (the 2026-10-30 reading above). The max and its excess over 22 000 ms are recorded; the excess is the overshoot,
+  set against `AR-NFR004-A` (≤ ~31 ms) and reported. It runs in the `ENGINE_DEEP` lane, never in the default lane,
+  and ALONE (~2 min).
 - **A12 (`NFR-008`).** The default lane gains 0 real-clock rows. `npm test` wall stays ≤ 10 s at load1 ≤ 8.
 - **A13 (busy `isready`, default lane; `ADR-0052` D7).** **Given** the setting and a `go`, **when** `isready` is sent
   before the search ends, **then** exactly one `readyok` is written, after the `bestmove`, and in order.
@@ -153,12 +175,13 @@ simple-tournament`. The numbers are `ADR-0052`'s arithmetic (`arch-epic009-setti
 
 ## NFR triggers
 
-- **`NFR-004` (owner's, Q4): a 22.5 s ceiling for the setting.** Proposed text (`ADR-0052` § Consequences), placed by
-  Security/NFR at this ticket's gate: *"…; 22.5 s in UCI `TimeMode` `simple-tournament` (budget 22 s)."* The clamp
-  stays 32 000. A6 and A11 read it; `ABC-222` reads it in games. `AR-NFR004-A` (≤ ~31 ms) is re-read at 22 s.
-- **`ADR-0044` D5 latency:** `isready`/`stop` mid-search are answered ≤ one budget late, ≤ 22.5 s here. Accepted with
+- **`NFR-004` (owner's, Q4, amended 2026-10-30): a 22 s ceiling for the setting**, equal to its budget. The text is
+  amended `ADR-0052` § Consequences' (was *"…; 22.5 s in UCI `TimeMode` `simple-tournament` (budget 22 s)."*), placed
+  by Security/NFR at this ticket's gate. The clamp stays 32 000. A6 reads it exactly, A11 to the whole second;
+  `ABC-222` reads it in games. `AR-NFR004-A` (≤ ~31 ms) is re-read at 22 s.
+- **`ADR-0044` D5 latency:** `isready`/`stop` mid-search are answered ≤ one budget late, ≤ 22 s here. Accepted with
   no worker (`ADR-0052` D7). **Owed:** the accepted-risk entry beside `NFR-011`, placed by Security/NFR: *"busy
-  `isready`/`stop`: answered ≤ one budget + `AR-NFR004-A` late; ≤ 22.5 s in `simple-tournament`, ≤ 60 s in
+  `isready`/`stop`: answered ≤ one budget + `AR-NFR004-A` late; ≤ 22 s in `simple-tournament`, ≤ 60 s in
   `uci-clock-mode`; one `readyok` per `isready`, in order"*, plus A13 and A14.
 - **`NFR-009`:** 22 s is inside `ABC-212`'s 30 s reading (≤ 16 MiB, flat). No re-read is owed.
 - **`NFR-008`:** A12. **`NFR-005`, `NFR-011`, `NFR-012`:** unchanged (their referent is `TimeMode level`).
@@ -178,34 +201,33 @@ simple-tournament`. The numbers are `ADR-0052`'s arithmetic (`arch-epic009-setti
 
 ## Size and priority
 
-- **Size: M.** One option, one small function (C), D3's rule, four constants and 14 rows, in one file. `ABC-212` was
+- **Size: M.** One option, one small function (C), D3's rule, its constants and 14 rows, in one file. `ABC-212` was
   M for a similar spread.
 - **Priority: P2.** It is the owner's own idea and his milestone 1. Nothing is broken without it.
 
 ## Dependencies
 
-- **The owner accepts `ADR-0052` (OQ-0052-1).** It is PROPOSED, and nothing is built on it until he answers. Options
-  (a) accept, (b) accept with another T under 22.5 s, (c) decline. On (c) this ticket goes back to BA/PM and the
-  Architect. This is the only open blocker.
+- **`ADR-0052` ACCEPTED by the owner, 2026-10-30, with his amendment** (OQ-0052-1 closed; `orch-2026-10-29g`
+  `…3dd61448`): T and the ceiling both 22 s. Nothing blocks the build.
 - Shares `src/uci-session.ts` with `ABC-221` (milestone 2) and with `EPIC-010`'s `ABC-230`. Whichever merges second
   rebases; the Orchestrator orders them.
 - Owner answers: all in (Q1–Q4, Q8; 2026-10-29).
 
-## Definition of Ready (re-scored 2026-10-29, `bapm-owner-words-b`)
+## Definition of Ready (re-scored 2026-10-30, `bapm-owner-adr-fold`)
 
 | # | check | state |
 |---|---|---|
 | 1 | problem clear | ✅ owner word (Q1–Q4); user, pain and value stated |
 | 2 | scope and out-of-scope | ✅ 6 scope items, each from `ADR-0052`; CLI, levels, clock mode, clamp and games out |
 | 3 | INVEST | ✅ independent of `ABC-221`; M; testable |
-| 4 | testable, measurable acceptance | ✅ A1–A14: byte-exact lines, ms, %, a row-for-row identity, wall ≤ 22 500 ms, in-order `readyok` |
-| 5 | dependencies known | ✅ `ADR-0052` (PROPOSED), named; owner answers in |
-| 6 | NFR triggers with targets | ✅ `NFR-004` 22.5 s (owner's word; text proposed); D5 ≤ 22.5 s accepted-risk entry; `NFR-009` inside the 30 s reading; `NFR-008` ≤ 10 s |
+| 4 | testable, measurable acceptance | ✅ A1–A14: byte-exact lines, ms, %, a row-for-row identity, deadline ≤ start + 22 000 ms, wall < 22 500 ms (22 s to the whole second), in-order `readyok` |
+| 5 | dependencies known | ✅ `ADR-0052` (ACCEPTED 2026-10-30, amended); owner answers in |
+| 6 | NFR triggers with targets | ✅ `NFR-004` 22 s (owner's word, 2026-10-30); D5 ≤ 22 s accepted-risk entry; `NFR-009` inside the 30 s reading; `NFR-008` ≤ 10 s |
 | 7 | test notes | ✅ 4 |
 | 8 | size | ✅ M |
 | 9 | priority | ✅ P2 |
-| 10 | no major unresolved blocker | ❌ **the owner's acceptance of `ADR-0052` (OQ-0052-1)** |
+| 10 | no major unresolved blocker | ✅ none: `ADR-0052` accepted 2026-10-30. The whole-second wall reading is to be confirmed with the owner; it changes no code |
 
-**DoR 9/10. Backlog. It waits only on the owner accepting `ADR-0052` (OQ-0052-1).** On (a) it goes to Ready with no
-further BA/PM hop: every row already pins the ruling. On (b), BA/PM first re-derives A2–A7's numbers for his T (a T
-above 22 375 ms would let C bind at 40/15, so the rows change shape, not only value).
+**DoR 10/10 (2026-10-30). Ready.** The owner accepted `ADR-0052`, so ABC-220 is ready to pull. His amendment
+moved only the ceiling, so A2–A7 keep their numbers. *(Was 9/10, waiting on OQ-0052-1.)* It shares
+`src/uci-session.ts` with `ABC-230`; the Orchestrator orders them.
