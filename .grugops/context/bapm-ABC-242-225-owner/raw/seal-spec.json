@@ -1,0 +1,20 @@
+{
+  "refs": ["bapm-ABC-242-225-owner", "ABC-242", "ABC-225", "ABC-220", "ABC-221", "ABC-222", "ABC-229", "ABC-243", "ABC-241",
+           "EPIC-009", "EPIC-010", "ADR-0054", "ADR-0032", "ADR-0052", "NFR-004", "NFR-008", "NFR-009", "AR-UCI-BUSY",
+           "QE-230-a", "QE-225-b", "QE-220-c",
+           "orch-2026-10-30a/20261030T180500Z-orchestrator-decision-65848126",
+           "orch-2026-10-30a/20261030T181200Z-orchestrator-decision-f4673b9f",
+           "arch-ABC-242-reading/20261030T152301Z-architect-design-decision-fec766ee",
+           "arch-ABC-242-reading/20261030T152301Z-architect-design-observation-f3b8d750",
+           "qe-ABC-225/20261030T003823Z-qe-e2e-decision-3a53bdfc",
+           "qe-ABC-228-ii/20261030T115900Z-qe-e2e-observation-2123617d",
+           "qe-ABC-241/20261030T143112Z-qe-e2e-observation-5d70bb7c",
+           "qe-ABC-230/20261030T064100Z-qe-e2e-decision-ba5a249a",
+           "arch-ABC-242-accept", "se-ABC-225-main", "secnfr-catalog-rebase",
+           "main 5090a4d6", "main 01c37946", "main 1f6abec4", "grugops/ABC-225", "grugops/qe-ABC-225 3da78303",
+           "A1", "A4", "A5", "A6", "A8", "A11"],
+  "notes": [
+    { "kind": "decision", "confidence": "high on the records folded (owner words verbatim from the sealed orchestrator notes; design facts from arch-ABC-242-reading's sealed notes); the width-1 walls are estimates from recorded smokes, UNKNOWN - verify until A6 reads them; nothing run, built, timed or played", "bodyFile": "note-decision.md" },
+    { "kind": "observation", "confidence": "high for the read facts (records and git at 5090a4d6); nothing re-measured", "bodyFile": "note-observation.md" }
+  ]
+}

@@ -8,9 +8,11 @@ import { readFileSync } from "node:fs";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { makeMove } from "./apply.ts";
 import { type BookProbe, createBookProbe } from "./book.ts";
-import { chooseMove } from "./engine.ts";
-import { parseFen } from "./fen.ts";
+import { chooseMove, HARD_CEILING_MS, trimPriorKeys } from "./engine.ts";
+import { parseFen, toFen } from "./fen.ts";
+import { keyHistory, newGame, playMove, repetitionKeyHistory } from "./history.ts";
 import { isInCheck, legalMoves } from "./legal.ts";
+import { createLevelSeam } from "./level-seam.ts";
 import { createLevel, DEFAULT_LEVEL, HARDEST_LEVEL, LEVELS, seededRandom } from "./levels.ts";
 import type { Move } from "./moves.ts";
 import { type Position, squareName } from "./position.ts";
@@ -122,12 +124,14 @@ function expectPrintable(line: string | undefined): void {
 }
 
 describe("ABC-167 A1-A2 — handshake and ready", () => {
-  it("A1: uci writes id name, id author, then (ABC-171 A1) the two option lines, then uciok", () => {
+  // Re-pinned by ABC-220 (ADR-0052 D1): the TimeMode line follows Skill Level, before uciok.
+  it("A1: uci writes id name, id author, then (ABC-171 A1, ABC-220 A1) the three option lines, then uciok", () => {
     expect(talk(["uci"]).out).toEqual([
       "id name skytalix",
       "id author Olger Oeselg",
       "option name OwnBook type check default true",
       "option name Skill Level type spin default 5 min 1 max 7",
+      "option name TimeMode type combo default level var level var simple-tournament",
       "uciok",
     ]);
   });
@@ -217,8 +221,9 @@ describe("ABC-167 A5 — the D4 time rule, read from the info line's time", () =
     ["white reads wtime", "position startpos", 50, 1],
     ["black reads btime", "position startpos moves e2e4", 450, 10],
     ["a short clock", "position startpos", 1, 1],
-    ["capped by the default level 5", "position startpos", 3_000, 100],
-    ["a bare go", "position startpos", 3_000, 100],
+    // ABC-228 (ADR-0053 d10, reading (ii)): level 5 is 4 000, so G = 3 500 binds, not the level.
+    ["G = 3 500, under the default level 5's 4 000", "position startpos", 3_500, 100],
+    ["a bare go", "position startpos", 4_000, 100],
   ];
   const goes = [
     "go movetime 100",
@@ -301,8 +306,8 @@ describe("ABC-167 A6 — infinite waits for stop", () => {
     const { perLine } = talk(["position startpos", "go ponder", "ponderhit", "ponderhit"], 100);
     expect(perLine[1]).toHaveLength(1);
     const info = parseInfo(perLine[1]?.[0]);
-    expect(info.time).toBeGreaterThanOrEqual(3_000);
-    expect(info.time).toBeLessThanOrEqual(3_000 + 2 * 100);
+    expect(info.time).toBeGreaterThanOrEqual(4_000);
+    expect(info.time).toBeLessThanOrEqual(4_000 + 2 * 100);
     expect(perLine[2]).toEqual([`bestmove ${info.move}`]);
     expect(perLine[3]).toEqual([]);
   });
@@ -436,19 +441,20 @@ describe("ABC-167 A7 — the D12 limits", () => {
       expect(out).toHaveLength(3);
       expect(out[0]).toMatch(/^info string /);
       const info = parseInfo(out[1]);
-      expect(info.time).toBeGreaterThanOrEqual(3_000); // dropped: no limit, G is the capped ceiling
+      expect(info.time).toBeGreaterThanOrEqual(4_000); // dropped: no limit, G is the capped ceiling
       expect(out[2]).toBe(`bestmove ${info.move}`);
     });
   }
 
-  // ABC-197 R2 (QE-177-b): step 100 pins the dropped-token G to [3 000, 3 200], not U7's 1 000 band.
-  it("ABC-197 R2: go depth 0 on step 100 searches G = 3 000, time in [3 000, 3 200]", () => {
+  // ABC-197 R2 (QE-177-b): step 100 pins the dropped-token G to [4 000, 4 200], not U7's 1 000 band.
+  // ABC-228 (ADR-0053 d10): the capped ceiling is level 5's 4 000 (was 3 000).
+  it("ABC-197 R2: go depth 0 on step 100 searches G = 4 000, time in [4 000, 4 200]", () => {
     const { out } = talk(["position startpos", "go depth 0"], 100);
     expect(out).toHaveLength(3);
     expect(out[0]).toMatch(/^info string /);
     const info = parseInfo(out[1]);
-    expect(info.time).toBeGreaterThanOrEqual(3_000);
-    expect(info.time).toBeLessThanOrEqual(3_200);
+    expect(info.time).toBeGreaterThanOrEqual(4_000);
+    expect(info.time).toBeLessThanOrEqual(4_200);
     expect(out[2]).toBe(`bestmove ${info.move}`);
   });
 
@@ -483,12 +489,12 @@ describe("ABC-167 A7 — the D12 limits", () => {
 
   it("A7-f2: go movetime with no value searches as a bare go", () => {
     const { perLine } = talk(["position startpos", "go movetime"], 100);
-    expectWarnedSearch(perLine[1], 3_000, 3_000 + 2 * 100);
+    expectWarnedSearch(perLine[1], 4_000, 4_000 + 2 * 100);
   });
 
   it("A7-f3: go movetime 1e2 and movestogo 0 are dropped with one info string", () => {
     const bare = talk(["position startpos", "go movetime 1e2"], 100).perLine[1];
-    expectWarnedSearch(bare, 3_000, 3_000 + 2 * 100);
+    expectWarnedSearch(bare, 4_000, 4_000 + 2 * 100);
     const { perLine } = talk(["position startpos", "go wtime 1000 btime 1000 movestogo 0"], 100);
     expectWarnedSearch(perLine[1], 50, 50 + 2 * 100);
   });
@@ -694,13 +700,15 @@ function expectWithin(time: number, budget: number, step = 100): void {
 }
 
 describe("ABC-171 A1 — the option lines", () => {
-  it("uci writes exactly 5 lines, the two options after the id lines and before uciok", () => {
+  // Re-pinned by ABC-220 (ADR-0052 D1): 6 lines, the TimeMode line third of the options.
+  it("uci writes exactly 6 lines, the three options after the id lines and before uciok", () => {
     const { send } = rig();
     expect(send("uci")).toEqual([
       "id name skytalix",
       "id author Olger Oeselg",
       "option name OwnBook type check default true",
       "option name Skill Level type spin default 5 min 1 max 7",
+      "option name TimeMode type combo default level var level var simple-tournament",
       "uciok",
     ]);
   });
@@ -754,7 +762,7 @@ describe("ABC-171 A2 — setoption", () => {
 
     const level = rig();
     expect(level.send("setoption name Hash value 64")).toEqual([]);
-    expectWithin(levelTime(level.send, 5), 3_000); // still the default level 5
+    expectWithin(levelTime(level.send, 5), 3_500); // still the default level 5 (ABC-228: G = 3 500 binds)
   });
 });
 
@@ -836,10 +844,11 @@ describe("ABC-171 A5 — the book is read once, and at the right time", () => {
 describe("ABC-171 A6 — a level change is observable (EPIC-007 M7)", () => {
   // G = 3500. Budget min(G, LEVELS[skill].budgetMs), step 100, ABC-167 A5's bound.
   // ABC-174: min(3500, 330) at level 3 and min(3500, 3000) at level 5 (ADR-0045 D1).
+  // ABC-228 (ADR-0053 d10): level 5 is 4 000, so min(3500, 4000) = 3 500 at level 5.
   for (const [level, budget] of [
     [1, 100],
     [3, 330],
-    [5, 3_000],
+    [5, 3_500],
   ] as const) {
     it(`level ${level}: ${GO_G3500} -> ${budget} ms (within 2 x 100 ms)`, () => {
       // A blunder level's first go must take the engine path, so the time is the budget's.
@@ -964,14 +973,14 @@ describe("ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12)", ()
     expect(send("uci")).toContain("option name Skill Level type spin default 5 min 1 max 7");
   });
 
-  it("at the default, a bare go takes the chooseMove path: score, and time within 3 000 ms", () => {
+  it("at the default, a bare go takes the chooseMove path: score, and time within 4 000 ms", () => {
     const { send, draws } = rig();
     send("position startpos");
     const lines = send("go");
     expect(lines).toHaveLength(2);
     const info = parseInfo(lines[0]);
     expect(lines[0]).toContain(" score ");
-    expectWithin(info.time, 3_000);
+    expectWithin(info.time, 4_000);
     expect(lines[1]).toBe(`bestmove ${info.move}`);
     expect(draws.count).toBe(0);
   });
@@ -1259,6 +1268,808 @@ describe("ABC-171 A11 — book.ts is a type-only import", () => {
     for (const line of lines) expect(line).toMatch(/^import type \{[^}]*\} from "\.\/book\.ts";$/);
   });
 });
+
+// ---------------------------------------------------------------------------------------------
+// `ABC-230` (`ADR-0054` decision 2, the `ADR-0044` D2 amendment) — `position … moves …` keeps the
+// keys it replays through, and the search reads them. The engine spy calls through.
+// ---------------------------------------------------------------------------------------------
+
+describe("ABC-230 A2, A3, A5 — the session hands the search the game's prior keys", () => {
+  /** `src/engine.test.ts`'s `A1` fixtures: `repeat` returns to a position that stood twice. */
+  const THIRD_OCCURRENCE = [
+    ["4k3/8/8/8/8/8/8/Q3K3 w - - 0 1", "a1a2 e8d8 a2a1 d8e8 a1a2 e8d8 a2a1", "d8e8"],
+    ["q3k3/8/8/8/8/8/8/4K3 b - - 0 1", "a8a7 e1d1 a7a8 d1e1 a8a7 e1d1 a7a8", "d1e1"],
+    ["4k3/8/8/8/8/8/8/R3K3 w - - 0 1", "a1a2 e8d8 a2a1 d8e8 a1a2 e8d8 a2a1", "d8e8"],
+    ["r3k3/8/8/8/8/8/8/4K3 b - - 0 1", "a8a7 e1d1 a7a8 d1e1 a8a7 e1d1 a7a8", "d1e1"],
+  ] as const;
+  /** The CLI's step in `src/cli.test.ts`'s `ABC-230` rows: one clock pattern on both surfaces. */
+  const STEP_MS = 100;
+
+  /** The test's own replay: the position after `moves`, and every key it passed through. */
+  function replay(fen: string, moves: readonly string[]) {
+    const game = newGame(fen);
+    for (const text of moves) {
+      const move = legalMoves(game.position).find((m) => coordinateOf(m) === text);
+      if (move === undefined) throw new Error(`fixture: ${text} is not legal`);
+      playMove(game, move);
+    }
+    return game;
+  }
+
+  /** The `priorKeys` the session handed its last `chooseMove` call. */
+  const lastHanded = () => vi.mocked(chooseMove).mock.calls.at(-1)?.[1].priorKeys;
+
+  it("A2: `position fen F moves …` then `go depth 4` plays the third occurrence at cp 0", () => {
+    for (const [fen, moves, repeat] of THIRD_OCCURRENCE) {
+      const { perLine } = talk([`position fen ${fen} moves ${moves}`, "go depth 4"]);
+      const info = parseInfo(perLine[1]?.[0]);
+      expect(info.score, fen).toBe("cp 0");
+      expect(perLine[1]?.at(-1)).toBe(`bestmove ${repeat}`);
+      // The same root as a bare FEN carries no history: base's move, which is not the repetition.
+      const root = toFen(replay(fen, moves.split(" ")).position);
+      const bare = talk([`position fen ${root}`, "go depth 4"]).perLine[1];
+      expect(parseInfo(bare?.[0]).score, root).not.toBe("cp 0");
+      expect(bare?.at(-1)).not.toBe(`bestmove ${repeat}`);
+    }
+  });
+
+  it("A2: bestmove is byte-equal to the CLI level seam's move on the same game and clock", async () => {
+    for (const [fen, moves] of THIRD_OCCURRENCE) {
+      const game = replay(fen, moves.split(" "));
+      const seam = createLevelSeam(
+        DEFAULT_LEVEL,
+        { seed: 1, now: virtualClock(STEP_MS) },
+        keyHistory,
+      );
+      const cli = coordinateOf(await seam(game));
+      const { perLine } = talk([`position fen ${fen} moves ${moves}`, "go"], STEP_MS);
+      expect(perLine[1]?.at(-1), fen).toBe(`bestmove ${cli}`);
+      expect(parseInfo(perLine[1]?.[0]).score).toBe("cp 0");
+    }
+  });
+
+  it("A2: `position startpos moves …` hands the replayed keys, trimmed, and the search reads them", () => {
+    const moves = "g1f3 g8f6 f3g1 f6g8 g1f3 g8f6 f3g1".split(" ");
+    const game = replay(START_FEN, moves);
+    const lines = talk([`position startpos moves ${moves.join(" ")}`, "go depth 4"]).perLine[1];
+    expect(lastHanded()).toEqual(trimPriorKeys(keyHistory(game), game.position.halfmoveClock));
+    expect(lastHanded()).toHaveLength(7);
+    // Probe H3: same move and score as the bare root, fewer nodes (a once-seen position is cut
+    // from the work, never scored a draw).
+    const bare = talk([`position fen ${toFen(game.position)}`, "go depth 4"]).perLine[1];
+    const [withKeys, without] = [parseInfo(lines?.[0]), parseInfo(bare?.[0])];
+    expect({ move: withKeys.move, score: withKeys.score }).toEqual({
+      move: without.move,
+      score: without.score,
+    });
+    expect(withKeys.nodes).not.toBe(without.nodes);
+  });
+
+  it("A3: a bare FEN, a bare startpos and `ucinewgame` hand an empty list", () => {
+    const [fen, moves] = THIRD_OCCURRENCE[0];
+    talk([`position fen ${fen}`, "go depth 1"]);
+    expect(lastHanded()).toEqual([]);
+    talk(["position startpos", "go depth 1"]);
+    expect(lastHanded()).toEqual([]);
+    talk([`position fen ${fen} moves ${moves}`, "ucinewgame", "go depth 1"]);
+    expect(lastHanded()).toEqual([]);
+  });
+
+  it("A3: a refused `position` holds no position and no keys; `go` does not search", () => {
+    const [fen, moves] = THIRD_OCCURRENCE[0];
+    vi.mocked(chooseMove).mockClear();
+    const { perLine } = talk([
+      `position fen ${fen} moves ${moves}`,
+      `position fen ${fen} moves ${moves} e1e1`,
+      "go depth 1",
+    ]);
+    expect(perLine[1]?.[0]).toMatch(/^info string position refused: illegal move e1e1$/);
+    expect(perLine[2]).toEqual(["bestmove 0000"]);
+    expect(vi.mocked(chooseMove)).not.toHaveBeenCalled();
+  });
+
+  it("A5: from a 600-ply move list, only the last 100 keys before the root are handed", () => {
+    const moves = Array.from({ length: 150 }, () => "g1f3 g8f6 f3g1 f6g8")
+      .join(" ")
+      .split(" ");
+    expect(moves).toHaveLength(600);
+    const game = replay(START_FEN, moves);
+    talk([`position startpos moves ${moves.join(" ")}`, "go depth 1"]);
+    const keys = keyHistory(game);
+    expect(lastHanded()).toHaveLength(100);
+    expect(lastHanded()).toEqual(keys.slice(500, 600));
+  });
+
+  it("A5: the window starts at the last pawn move; a castling-rights change does not cut it", () => {
+    const shuffle = Array.from({ length: 140 }, () => "g1f3 g8f6 f3g1 f6g8").join(" ");
+    const moves = `${shuffle} e2e4 e7e5 e1e2 e8e7 e2e1 e7e8 g1f3 g8f6 f3g1 f6g8`.split(" ");
+    const game = replay(START_FEN, moves);
+    expect(game.position.halfmoveClock).toBe(8);
+    expect(game.position.castling).toBe(0);
+    talk([`position startpos moves ${moves.join(" ")}`, "go depth 1"]);
+    // The 8 keys since `e7e5`, the king moves that lost the castling rights among them.
+    // `ABC-241` (`ADR-0020` § AMENDMENT 2026-10-30 C3) moved the oracle: every prior key is a
+    // repetition key. The oldest, after `e7e5`, carries e6 and no white pawn can take there, so it
+    // is the only one of the 8 that differs from the hash list.
+    expect(lastHanded()).toEqual(repetitionKeyHistory(game).slice(-9, -1));
+    const differs = keyHistory(game)
+      .slice(-9, -1)
+      .map((key, i) => key !== lastHanded()?.[i]);
+    expect(differs).toEqual([true, false, false, false, false, false, false, false]);
+  });
+});
+
+// ---------------------------------------------------------------------------------------------
+// `ABC-241` (`ADR-0020` § AMENDMENT 2026-10-30 C3, prior keys) — every key `parsePosition` keeps is a
+// repetition key. Black's h7h5 leaves h6 with no white pawn to take it, so that position's first
+// occurrence counts with its recurrences, and d8e8 makes the third. The engine spy calls through.
+// ---------------------------------------------------------------------------------------------
+
+describe("ABC-241 A4, A5 — UCI: the prior keys are repetition keys", () => {
+  const FEN = "4k3/7p/8/8/8/8/8/Q3K3 b - - 0 1";
+  /** The same board with a white pawn on g5: g5xh6 e.p. is legal after h7h5. */
+  const TWIN = "4k3/7p/8/6P1/8/8/8/Q3K3 b - - 0 1";
+  const MOVES = "h7h5 a1a2 e8d8 a2a1 d8e8 a1a2 e8d8 a2a1";
+  const STEP_MS = 100;
+  const lastHanded = () => vi.mocked(chooseMove).mock.calls.at(-1)?.[1].priorKeys;
+  const gameOf = (fen: string) => {
+    const game = newGame(fen);
+    for (const text of MOVES.split(" ")) {
+      const move = legalMoves(game.position).find((m) => coordinateOf(m) === text);
+      if (move === undefined) throw new Error(`fixture: ${text} is not legal`);
+      playMove(game, move);
+    }
+    return game;
+  };
+
+  it("A4: the move that makes the third occurrence scores exactly 0; with a legal ep capture, no draw", () => {
+    const { perLine } = talk([`position fen ${FEN} moves ${MOVES}`, "go depth 4"]);
+    expect(parseInfo(perLine[1]?.[0]).score).toBe("cp 0");
+    expect(perLine[1]?.at(-1)).toBe("bestmove d8e8");
+    const twin = talk([`position fen ${TWIN} moves ${MOVES}`, "go depth 4"]).perLine[1];
+    expect(parseInfo(twin?.[0]).score).not.toBe("cp 0");
+    // Base's list (the hash keys) at the same root, the same depth: not a draw either.
+    const game = gameOf(FEN);
+    const base = chooseMove(parseFen(toFen(game.position)), {
+      budgetMs: 1e9,
+      maxDepth: 4,
+      priorKeys: trimPriorKeys(keyHistory(game), game.position.halfmoveClock),
+    });
+    expect(base?.score).not.toBe(0);
+  });
+
+  it("A5: the list handed is the repetition-key list, trimmed: the h7h5 key normalised, the rest raw", () => {
+    const game = gameOf(FEN);
+    talk([`position fen ${FEN} moves ${MOVES}`, "go depth 1"]);
+    const handed = lastHanded();
+    expect(handed).toEqual(trimPriorKeys(repetitionKeyHistory(game), game.position.halfmoveClock));
+    expect(handed).toHaveLength(7);
+    const raw = trimPriorKeys(keyHistory(game), game.position.halfmoveClock);
+    expect(handed?.map((key, i) => key !== raw[i])).toEqual([
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+    ]);
+    // The twin's h6 can be taken: its list is the hash list, key for key.
+    const twin = gameOf(TWIN);
+    talk([`position fen ${TWIN} moves ${MOVES}`, "go depth 1"]);
+    expect(lastHanded()).toEqual(trimPriorKeys(keyHistory(twin), twin.position.halfmoveClock));
+  });
+
+  it("A5: the CLI level seam's injected list equals UCI's, key for key, and both play d8e8", async () => {
+    const game = gameOf(FEN);
+    const seam = createLevelSeam(
+      DEFAULT_LEVEL,
+      { seed: 1, now: virtualClock(STEP_MS) },
+      repetitionKeyHistory,
+    );
+    const cli = coordinateOf(await seam(game));
+    const fromCli = lastHanded();
+    const { perLine } = talk([`position fen ${FEN} moves ${MOVES}`, "go"], STEP_MS);
+    expect(lastHanded()).toEqual(fromCli);
+    expect(fromCli).toHaveLength(7);
+    expect(cli).toBe("d8e8");
+    expect(perLine[1]?.at(-1)).toBe("bestmove d8e8");
+    expect(parseInfo(perLine[1]?.[0]).score).toBe("cp 0");
+  });
+
+  it("A8: the session's one new import is gameend.ts (`ADR-0044` D2, the dated line)", () => {
+    const code = readFileSync(new URL("./uci-session.ts", import.meta.url), "utf8");
+    const imports = [...code.matchAll(/^import[^;]*?from\s+"(\.\/[^"]+)";/gm)].map((m) => m[1]);
+    expect(imports.sort()).toEqual([
+      "./apply.ts",
+      "./book.ts",
+      "./coordinate-move.ts",
+      "./engine.ts",
+      "./fen.ts",
+      "./gameend.ts",
+      "./levels.ts",
+      "./position.ts",
+      "./search.ts",
+      "./transposition.ts",
+      "./zobrist.ts",
+    ]);
+  });
+});
+
+// ---------------------------------------------------------------------------------------------
+// ABC-220 — `TimeMode` `simple-tournament` over UCI (`ADR-0052` D1-D3, D7, as amended 2026-10-30:
+// T = 22 000 ms, which is also its ceiling). Every default-lane row below runs on the virtual clock
+// (`ADR-0027`); `A12`: none reads the wall clock. The clock rows replay one GUI clock: each searched
+// move costs the budget the session hands `chooseMove` plus 31 ms (`AR-NFR004-A`'s bound), and a
+// book move costs 0 ms. The expected figures are `ADR-0052`'s arithmetic (`raw/alloc.txt`).
+// ---------------------------------------------------------------------------------------------
+
+/** "The setting" (`ABC-220` § Acceptance criteria). */
+const SIMPLE_TOURNAMENT = "setoption name TimeMode value simple-tournament";
+/** `ADR-0052` D3: T, and the ceiling it equals. */
+const T_MS = 22_000;
+/** `AR-NFR004-A`'s overshoot bound: what each simulated search costs on top of its budget. */
+const DELTA_MS = 31;
+/** One 40/15 period. */
+const PERIOD_MS = 900_000;
+
+/** `ADR-0052` D2's `C`, re-derived here: the oracle the period rows check `min(T, C)` against. */
+function oracleShare(time: number, increment: number, movesToGo: number): number {
+  return Math.max(
+    1,
+    Math.min((time - 1_000 - movesToGo * 100) / movesToGo + increment, time - 1_000 - 100),
+  );
+}
+
+/** `ADR-0044` D4.1-D4.2, re-derived here: base's budget at a level, for `A8`'s identity. */
+function oracleLevelBudget(time: number, movesToGo: number, level: keyof typeof LEVELS): number {
+  const g = Math.max(1, Math.min(time / movesToGo, time - 50));
+  return Math.min(g, LEVELS[level].budgetMs);
+}
+
+interface Handed {
+  readonly budgetMs: number;
+  readonly maxDepth?: number;
+}
+
+/**
+ * One session for the `ABC-220` rows: a counted `random` (`random` given, or `seededRandom(1)`),
+ * a real book probe over `read`'s bytes, and a virtual clock. With `stub`, `chooseMove` records what
+ * it is handed and answers the position's first legal move at once (the `ABC-212` budget-read arm,
+ * reset after each row); without it, the real engine searches.
+ */
+function session220({
+  stub = true,
+  stepMs = 1_000,
+  random = seededRandom(1),
+  read = () => bookBytes({}),
+}: {
+  stub?: boolean;
+  stepMs?: number;
+  random?: () => number;
+  read?: () => Uint8Array;
+} = {}) {
+  const out: string[] = [];
+  const draws = { count: 0 };
+  const handed: Handed[] = [];
+  if (stub) {
+    vi.mocked(chooseMove).mockImplementation((position, options) => {
+      handed.push({
+        budgetMs: options.budgetMs,
+        ...(options.maxDepth === undefined ? {} : { maxDepth: options.maxDepth }),
+      });
+      const move = legalMoves(position)[0] as Move;
+      return { move, score: 0, depth: 1, nodes: 1, elapsedMs: options.budgetMs };
+    });
+  }
+  const session = createUciSession({
+    write: (line) => out.push(line),
+    now: virtualClock(stepMs),
+    random: () => {
+      draws.count++;
+      return random();
+    },
+    book: createBookProbe({ read, warn: () => {}, random: seededRandom(7) }),
+  });
+  const send = (line: string): string[] => {
+    const before = out.length;
+    expect(session.handleLine(line)).toBe(line === "quit" ? "quit" : "continue");
+    const written = out.slice(before);
+    everyLine.push(...written);
+    return written;
+  };
+  return { send, handed, draws, out };
+}
+
+interface ClockRow {
+  /** What the session handed `chooseMove`, or `undefined` for a book move. */
+  readonly budget: number | undefined;
+  /** The clock `t` the `go` carried. */
+  readonly sent: number;
+  /** The clock left after the move. */
+  readonly left: number;
+}
+
+/**
+ * Replays one GUI clock over `plies` engine moves. Ply `p` sends `position startpos` while
+ * `p <= bookPlies` (the `START_BOOK` hit) and `position startpos moves e2e4` otherwise (never in a
+ * book), then `goFor(t, p)`. The clock falls by budget + `DELTA_MS` on a searched move and by 0 on a
+ * book move; `addAfter` adds a period's time after the given ply.
+ */
+function replayClock(
+  rig220: ReturnType<typeof session220>,
+  plies: number,
+  goFor: (time: number, ply: number) => string,
+  {
+    start,
+    bookPlies = 0,
+    addAfter = {},
+  }: { start: number; bookPlies?: number; addAfter?: Record<number, number> },
+): ClockRow[] {
+  const { send, handed } = rig220;
+  const rows: ClockRow[] = [];
+  let time = start;
+  for (let ply = 1; ply <= plies; ply++) {
+    const before = handed.length;
+    expect(send(ply <= bookPlies ? "position startpos" : "position startpos moves e2e4")).toEqual(
+      [],
+    );
+    const lines = send(goFor(time, ply));
+    expect(lines.at(-1)).toMatch(/^bestmove [a-h][1-8][a-h][1-8]/);
+    expect(handed.length - before, `ply ${ply}: engine calls`).toBe(ply <= bookPlies ? 0 : 1);
+    const budget = ply <= bookPlies ? undefined : (handed[before] as Handed).budgetMs;
+    const sent = time;
+    time -= budget === undefined ? 0 : budget + DELTA_MS;
+    rows.push({ budget, sent, left: time });
+    time += addAfter[ply] ?? 0;
+  }
+  return rows;
+}
+
+/** 40/15 with `movestogo`: ply `p` of a period carries `movestogo` 41 - p. */
+const periodGo = (time: number, ply: number): string =>
+  `go wtime ${time} btime ${time} movestogo ${40 - ((ply - 1) % 40)}`;
+
+describe("ABC-220 — TimeMode simple-tournament over UCI (ADR-0052)", () => {
+  afterEach(() => {
+    vi.mocked(chooseMove).mockReset();
+  });
+
+  describe("A1 — offered, off by default", () => {
+    it("uci writes the TimeMode combo byte-exact, after Skill Level (byte-identical) and before uciok", () => {
+      const { send } = session220();
+      const reply = send("uci");
+      const at = reply.indexOf(
+        "option name TimeMode type combo default level var level var simple-tournament",
+      );
+      expect(at).toBeGreaterThan(-1);
+      expect(reply[at - 1]).toBe("option name Skill Level type spin default 5 min 1 max 7");
+      expect(reply[at + 1]).toBe("uciok");
+      expect(reply.filter((line) => line.includes("TimeMode"))).toHaveLength(1);
+    });
+
+    it("uci-clock-mode is not offered at this build (ABC-221)", () => {
+      const { send } = session220();
+      expect(send("uci").join("\n")).not.toContain("uci-clock-mode");
+    });
+  });
+
+  describe("A2 — no clock gives T", () => {
+    for (const go of ["go", "go infinite", "go depth 4"]) {
+      it(`${go} hands the search 22 000 ms`, () => {
+        const rig220 = session220();
+        rig220.send(SIMPLE_TOURNAMENT);
+        rig220.send("position startpos moves e2e4");
+        rig220.send(go);
+        if (go === "go infinite") expect(rig220.send("stop")).toHaveLength(1);
+        expect(rig220.handed.map(({ budgetMs }) => budgetMs)).toEqual([T_MS]);
+      });
+    }
+  });
+
+  describe("A3-A5 — whole periods on one replayed clock", () => {
+    it("A3: one 40/15 period from 900 000 ms, movestogo 40..1, no book: T on every move, 18 760 ms left, 97.9 % used", () => {
+      const rig220 = session220();
+      rig220.send(SIMPLE_TOURNAMENT);
+      const rows = replayClock(rig220, 40, periodGo, { start: PERIOD_MS });
+      expect(rows.map(({ budget }) => budget)).toEqual(Array(40).fill(T_MS));
+      // C starts at 22 375 and only grows, so T binds on every move.
+      const shares = rows.map(({ sent }, index) => oracleShare(sent, 0, 40 - index));
+      expect(shares[0]).toBe(22_375);
+      for (let index = 1; index < shares.length; index++) {
+        expect(shares[index] as number).toBeGreaterThanOrEqual(shares[index - 1] as number);
+      }
+      expect(rows.at(-1)?.left).toBe(18_760);
+      expect(Math.min(...rows.map(({ left }) => left))).toBeGreaterThanOrEqual(18_000);
+      for (const { left } of rows) expect(left).toBeGreaterThanOrEqual(1_000);
+      const used = (PERIOD_MS - (rows.at(-1)?.left as number)) / PERIOD_MS;
+      expect(used).toBeGreaterThanOrEqual(0.75);
+      expect(used.toFixed(3)).toBe("0.979");
+    });
+
+    it("A4: the same period with its first 6 moves from the book: 83.2 % used, every move leaves >= 18 000 ms", () => {
+      const rig220 = session220({ read: START_BOOK });
+      rig220.send(SIMPLE_TOURNAMENT);
+      const rows = replayClock(rig220, 40, periodGo, { start: PERIOD_MS, bookPlies: 6 });
+      expect(rows.slice(0, 6).map(({ budget }) => budget)).toEqual(Array(6).fill(undefined));
+      expect(rows.slice(6).map(({ budget }) => budget)).toEqual(Array(34).fill(T_MS));
+      for (const { left } of rows) expect(left).toBeGreaterThanOrEqual(18_000);
+      const used = (PERIOD_MS - (rows.at(-1)?.left as number)) / PERIOD_MS;
+      expect(used).toBeGreaterThanOrEqual(0.75);
+      expect(used.toFixed(3)).toBe("0.832");
+    });
+
+    it("A5: no movestogo, 40 moves from 900 000 ms: every move leaves >= 1 000 ms, >= 75 % used; T binds for 21 moves, then C", () => {
+      const rig220 = session220();
+      rig220.send(SIMPLE_TOURNAMENT);
+      const rows = replayClock(rig220, 40, (time) => `go wtime ${time} btime ${time}`, {
+        start: PERIOD_MS,
+      });
+      for (const { left } of rows) expect(left).toBeGreaterThanOrEqual(1_000);
+      // T binds while C = (t - 3 000) / 20 >= 22 000; afterwards the budget is C itself.
+      expect(rows.slice(0, 21).map(({ budget }) => budget)).toEqual(Array(21).fill(T_MS));
+      for (const { budget, sent } of rows.slice(21)) {
+        expect(budget).toBe(oracleShare(sent, 0, 20));
+        expect(budget as number).toBeLessThan(T_MS);
+      }
+      const left = rows.at(-1)?.left as number;
+      expect((PERIOD_MS - left) / PERIOD_MS).toBeGreaterThanOrEqual(0.75);
+      // The record (BA/PM: "about 166 s"): the clock left after move 40, to the ms (166 517.12).
+      expect(Math.round(left)).toBe(166_517);
+    });
+  });
+
+  describe("A6 — the hard ceiling: no go hands the search more than 22 000 ms", () => {
+    const rows: ReadonlyArray<readonly [string, number]> = [
+      ["go movetime 30000", T_MS],
+      ["go infinite", T_MS],
+      ["go", T_MS],
+      ["go wtime 3600000 btime 3600000 movestogo 40", T_MS],
+      ["go movetime 5000", 5_000],
+    ];
+    for (const [go, budget] of rows) {
+      it(`${go} -> ${budget}; the engine's deadline is start + ${budget} <= start + 22 000`, () => {
+        const rig220 = session220();
+        rig220.send(SIMPLE_TOURNAMENT);
+        rig220.send("position startpos moves e2e4");
+        rig220.send(go);
+        if (go === "go infinite") rig220.send("stop");
+        expect(rig220.handed.map(({ budgetMs }) => budgetMs)).toEqual([budget]);
+        // The deadline the engine is handed is start + min(budgetMs, HARD_CEILING_MS) (engine.ts).
+        expect(Math.min(budget, HARD_CEILING_MS)).toBeLessThanOrEqual(T_MS);
+      });
+    }
+
+    it("the 1-hour clock's C is 89 875, so T binds there", () => {
+      expect(oracleShare(3_600_000, 0, 40)).toBe(89_875);
+    });
+
+    it("the real engine on a step-1 000 clock: a bare go reports time in [22 000, 22 000 + 2 x 1 000]", () => {
+      const { send } = session220({ stub: false, stepMs: 1_000 });
+      send(SIMPLE_TOURNAMENT);
+      send("position startpos moves e2e4");
+      const lines = send("go");
+      expect(lines).toHaveLength(2);
+      const info = parseInfo(lines[0]);
+      expectWithin(info.time, T_MS, 1_000);
+      expect(lines[1]).toBe(`bestmove ${info.move}`);
+    });
+  });
+
+  describe("A7 — the safe share C binds a short clock", () => {
+    it("go wtime 3000 btime 3000 movestogo 1 -> 1 900 ms, and the move leaves 1 069 ms", () => {
+      const rig220 = session220();
+      rig220.send(SIMPLE_TOURNAMENT);
+      const [row] = replayClock(rig220, 1, () => "go wtime 3000 btime 3000 movestogo 1", {
+        start: 3_000,
+      });
+      expect(row?.budget).toBe(1_900);
+      expect(row?.left).toBe(1_069);
+    });
+
+    it("the increment comes back whole: go wtime 10000 btime 10000 winc 2000 binc 2000 movestogo 10 -> 2 800 ms", () => {
+      const rig220 = session220();
+      rig220.send(SIMPLE_TOURNAMENT);
+      rig220.send("position startpos moves e2e4");
+      rig220.send("go wtime 10000 btime 10000 winc 2000 binc 2000 movestogo 10");
+      expect(rig220.handed.map(({ budgetMs }) => budgetMs)).toEqual([2_800]);
+      expect(oracleShare(10_000, 2_000, 10)).toBe(2_800);
+    });
+
+    it("the side to move's clock: black reads btime and binc (go wtime 900000 btime 3000 winc 9000 binc 0 movestogo 1 -> 1 900)", () => {
+      const rig220 = session220();
+      rig220.send(SIMPLE_TOURNAMENT);
+      rig220.send("position startpos moves e2e4");
+      rig220.send("go wtime 900000 btime 3000 winc 9000 binc 0 movestogo 1");
+      expect(rig220.handed.map(({ budgetMs }) => budgetMs)).toEqual([1_900]);
+    });
+
+    it("the hard stop on the clock left: go wtime 3000 btime 3000 winc 500 binc 500 movestogo 1 -> 1 900, not the spread's 2 400", () => {
+      const rig220 = session220();
+      rig220.send(SIMPLE_TOURNAMENT);
+      rig220.send("position startpos moves e2e4");
+      rig220.send("go wtime 3000 btime 3000 winc 500 binc 500 movestogo 1");
+      expect(rig220.handed.map(({ budgetMs }) => budgetMs)).toEqual([1_900]);
+    });
+
+    it("go wtime 800 btime 800 -> 1 ms", () => {
+      const rig220 = session220();
+      rig220.send(SIMPLE_TOURNAMENT);
+      rig220.send("position startpos moves e2e4");
+      rig220.send("go wtime 800 btime 800");
+      expect(rig220.handed.map(({ budgetMs }) => budgetMs)).toEqual([1]);
+    });
+
+    it("go wtime 800 btime 800 on the real engine still returns a legal move (its unabortable depth 1)", () => {
+      const { send } = session220({ stub: false, stepMs: 10 });
+      send(SIMPLE_TOURNAMENT);
+      send("position startpos moves e2e4");
+      const lines = send("go wtime 800 btime 800");
+      expect(lines).toHaveLength(2);
+      const info = parseInfo(lines[0]);
+      expect(info.depth).toBeGreaterThanOrEqual(1);
+      expect(lines[1]).toBe(`bestmove ${info.move}`);
+      expect(legalMoves(afterMoves(START_FEN, ["e2e4"])).map(coordinateOf)).toContain(info.move);
+    });
+
+    it("tc=40/60 over 3 periods (60 000 ms, movestogo 40..1, +60 000 after moves 40 and 80): C binds on every move, every move leaves >= 1 000 ms", () => {
+      const rig220 = session220();
+      rig220.send(SIMPLE_TOURNAMENT);
+      const rows = replayClock(rig220, 120, periodGo, {
+        start: 60_000,
+        addAfter: { 40: 60_000, 80: 60_000 },
+      });
+      for (const [index, { budget, sent, left }] of rows.entries()) {
+        expect(budget).toBe(oracleShare(sent, 0, 40 - (index % 40)));
+        expect(budget as number).toBeLessThan(T_MS);
+        expect(left).toBeGreaterThanOrEqual(1_000);
+      }
+      // The closest call is each period's last move: RESERVE + OVERHEAD - 31.
+      for (const ply of [40, 80, 120]) {
+        expect(rows[ply - 1]?.left).toBeCloseTo(1_069, 6);
+      }
+    });
+  });
+
+  describe("A8 — levels unchanged (EPIC-009 M3)", () => {
+    it("LEVELS, DEFAULT_LEVEL, the Skill Level default and HARD_CEILING_MS hold their base values", () => {
+      expect(
+        Object.entries(LEVELS).map(([level, { budgetMs, blunderRate }]) => [
+          level,
+          budgetMs,
+          blunderRate,
+        ]),
+      ).toEqual([
+        ["1", 100, 0.4],
+        ["2", 180, 0.2],
+        ["3", 330, 0.1],
+        ["4", 1_000, 0.05],
+        ["5", 4_000, 0],
+        ["6", 5_000, 0],
+        ["7", 30_000, 0],
+      ]);
+      expect(DEFAULT_LEVEL).toBe(5);
+      expect(HARD_CEILING_MS).toBe(32_000);
+      const { send } = session220();
+      expect(send("uci")).toContain("option name Skill Level type spin default 5 min 1 max 7");
+    });
+
+    /**
+     * A constant `random` makes every `go`'s seed the same; this one's first draw is at or above
+     * every level's blunder rate, so each level's every `go` takes `createLevel`'s engine path and
+     * hands `chooseMove` exactly the budget the session computed.
+     */
+    const NO_BLUNDER = 0.5;
+
+    it("precondition: NO_BLUNDER's seed draws above every blunder rate", () => {
+      const first = seededRandom(Math.floor(NO_BLUNDER * 2 ** 32))();
+      for (const { blunderRate } of Object.values(LEVELS)) {
+        expect(first).toBeGreaterThanOrEqual(blunderRate);
+      }
+    });
+
+    for (const setup of [[], ["setoption name TimeMode value level"]] as const) {
+      for (const level of [1, 2, 3, 4, 5, 6, 7] as const) {
+        const how = setup.length === 0 ? "TimeMode unset" : "TimeMode level";
+        it(`${how}, Skill Level ${level}: A3's period gives base's budget on every go, row for row`, () => {
+          const rig220 = session220({ random: () => NO_BLUNDER });
+          for (const line of setup) expect(rig220.send(line)).toEqual([]);
+          expect(rig220.send(`setoption name Skill Level value ${level}`)).toEqual([]);
+          const rows = replayClock(rig220, 40, periodGo, { start: PERIOD_MS });
+          expect(rows.map(({ budget }) => budget)).toEqual(
+            rows.map(({ sent }, index) => oracleLevelBudget(sent, 40 - index, level)),
+          );
+        });
+      }
+    }
+  });
+
+  describe("A9 — rate 0: Skill Level is not read while TimeMode is not level", () => {
+    it("Skill Level 1, 10 non-book moves of A3's period: random is called 0 times, every budget is A3's", () => {
+      const rig220 = session220();
+      rig220.send(SIMPLE_TOURNAMENT);
+      expect(rig220.send("setoption name Skill Level value 1")).toEqual([]);
+      const rows = replayClock(rig220, 10, periodGo, { start: PERIOD_MS });
+      expect(rig220.draws.count).toBe(0);
+      expect(rows.map(({ budget }) => budget)).toEqual(Array(10).fill(T_MS));
+      expect(rows.map(({ left }) => left)).toEqual(
+        Array.from({ length: 10 }, (_, index) => PERIOD_MS - (index + 1) * (T_MS + DELTA_MS)),
+      );
+    });
+
+    it("Skill Level 7: go movetime 30000 is capped by T, not by the level's 30 000", () => {
+      const rig220 = session220();
+      rig220.send(SIMPLE_TOURNAMENT);
+      rig220.send("setoption name Skill Level value 7");
+      rig220.send("position startpos moves e2e4");
+      rig220.send("go movetime 30000");
+      expect(rig220.handed.map(({ budgetMs }) => budgetMs)).toEqual([T_MS]);
+    });
+
+    it("Skill Level 1, go depth 3 on the real engine: the rate-0 line (a score), depth <= 3, no dropped-limit line, no draw", () => {
+      const rig220 = session220({ stub: false, stepMs: 100 });
+      rig220.send(SIMPLE_TOURNAMENT);
+      rig220.send("setoption name Skill Level value 1");
+      rig220.send("position startpos moves e2e4");
+      const lines = rig220.send("go depth 3");
+      expect(lines).toHaveLength(2);
+      const info = parseInfo(lines[0]);
+      expect(info.depth).toBeLessThanOrEqual(3);
+      expect(lines[1]).toBe(`bestmove ${info.move}`);
+      expect(rig220.draws.count).toBe(0);
+    });
+
+    it("Skill Level 6 set in the setting takes effect when TimeMode returns to level: a bare go is level 6's 5 000", () => {
+      const rig220 = session220();
+      rig220.send(SIMPLE_TOURNAMENT);
+      expect(rig220.send("setoption name Skill Level value 6")).toEqual([]);
+      rig220.send("position startpos moves e2e4");
+      rig220.send("go");
+      expect(rig220.send("setoption name TimeMode value level")).toEqual([]);
+      rig220.send("go");
+      expect(rig220.handed.map(({ budgetMs }) => budgetMs)).toEqual([T_MS, 5_000]);
+    });
+  });
+
+  describe("A10 — the option's refusals", () => {
+    it("setoption name timemode value simple-tournament (lower-case name) is accepted, silently", () => {
+      const rig220 = session220();
+      expect(rig220.send("setoption name timemode value simple-tournament")).toEqual([]);
+      rig220.send("position startpos moves e2e4");
+      rig220.send("go");
+      expect(rig220.handed.map(({ budgetMs }) => budgetMs)).toEqual([T_MS]);
+    });
+
+    for (const value of ["Simple-Tournament", "uci-clock-mode", "7"]) {
+      for (const from of ["level", "simple-tournament"] as const) {
+        it(`value ${value} from ${from}: exactly one info string naming the offered values and the value got; ${from} kept`, () => {
+          const rig220 = session220();
+          if (from === "simple-tournament") rig220.send(SIMPLE_TOURNAMENT);
+          expect(rig220.send(`setoption name TimeMode value ${value}`)).toEqual([
+            `info string TimeMode takes level or simple-tournament, got ${value}; kept ${from}`,
+          ]);
+          rig220.send("position startpos moves e2e4");
+          rig220.send("go");
+          // Kept: T in the setting; the default level 5's 4 000 otherwise.
+          expect(rig220.handed.map(({ budgetMs }) => budgetMs)).toEqual([
+            from === "level" ? 4_000 : T_MS,
+          ]);
+        });
+      }
+    }
+
+    it("no value: one info string naming nothing; a control character in a value is dropped from the line", () => {
+      const rig220 = session220();
+      expect(rig220.send("setoption name TimeMode")).toEqual([
+        "info string TimeMode takes level or simple-tournament, got nothing; kept level",
+      ]);
+      const lines = rig220.send("setoption name TimeMode value simple-tournament\x1b[31m");
+      expect(lines).toHaveLength(1);
+      expectPrintable(lines[0]);
+      expect(lines[0]).toBe(
+        "info string TimeMode takes level or simple-tournament, got simple-tournament[31m; kept level",
+      );
+    });
+
+    it("the setting survives ucinewgame", () => {
+      const rig220 = session220();
+      rig220.send(SIMPLE_TOURNAMENT);
+      expect(rig220.send("ucinewgame")).toEqual([]);
+      rig220.send("position startpos moves e2e4");
+      rig220.send("go");
+      expect(rig220.handed.map(({ budgetMs }) => budgetMs)).toEqual([T_MS]);
+    });
+  });
+
+  describe("A13 — busy isready (ADR-0052 D7), default lane", () => {
+    it("isready that arrives mid-search is answered once, after the bestmove, in order", () => {
+      // The `src/uci.ts` shape: input lines queue while `go` runs on the one thread. The clock puts
+      // `isready` on the queue at its 3rd reading inside the real search, as a GUI would send it.
+      const queue = [SIMPLE_TOURNAMENT, "position startpos moves e2e4", "go"];
+      const clock = virtualClock(500);
+      let searching = false;
+      let readings = 0;
+      let queuedMidSearch = false;
+      const out: string[] = [];
+      const session = createUciSession({
+        write: (line) => out.push(line),
+        now: () => {
+          if (searching && ++readings === 3) {
+            queue.push("isready");
+            queuedMidSearch = true;
+          }
+          return clock();
+        },
+        random: seededRandom(1),
+        book: emptyBook(),
+      });
+      while (queue.length > 0) {
+        const line = queue.shift() as string;
+        searching = line === "go";
+        session.handleLine(line);
+        searching = false;
+      }
+      everyLine.push(...out);
+      expect(queuedMidSearch).toBe(true);
+      expect(out).toHaveLength(3);
+      const info = parseInfo(out[0]);
+      expectWithin(info.time, T_MS, 500);
+      expect(out.slice(1)).toEqual([`bestmove ${info.move}`, "readyok"]);
+    });
+  });
+});
+
+/**
+ * `ABC-220` `A11` — `simple-tournament`'s wall on the REAL clock. OPT-IN: `ENGINE_DEEP=1`, never in
+ * the default lane, run ALONE (~2 min: 5 searches of 22 s). Unset, these cases are NOT DEFINED (the
+ * `ABC-119` form). Each fixed position is searched once through the session at T on `Date.now`;
+ * each must return in < 22 500 ms of wall (22 s read to the whole second, the 2026-10-30 reading).
+ * The max and its excess over 22 000 ms (the overshoot, set against `AR-NFR004-A`'s ~31 ms) are
+ * printed for the record.
+ */
+const RUN_ENGINE_DEEP = process.env.ENGINE_DEEP === "1";
+
+if (RUN_ENGINE_DEEP) {
+  describe("ABC-220 A11 — five searches at T = 22 000 on the real clock [deep, ENGINE_DEEP=1]", () => {
+    const fixtures: ReadonlyArray<readonly [string, string]> = [
+      ["start", START_FEN],
+      ["after 1. e4 e5", "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq e6 0 2"],
+      ["italian", "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4"],
+      ["kiwipete", KIWIPETE],
+      ["cpw position 4", "r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1"],
+    ];
+    const walls: number[] = [];
+    for (const [name, fen] of fixtures) {
+      it(`${name}: returns in < 22 500 ms of wall`, () => {
+        const out: string[] = [];
+        const session = createUciSession({
+          write: (line) => out.push(line),
+          now: Date.now,
+          random: seededRandom(1),
+          book: emptyBook(),
+        });
+        session.handleLine(SIMPLE_TOURNAMENT);
+        session.handleLine(`position fen ${fen}`);
+        const started = performance.now();
+        session.handleLine("go");
+        const wall = performance.now() - started;
+        walls.push(wall);
+        console.log(`ABC-220 A11 ${name}: wall ${wall.toFixed(1)} ms; ${out[0]}`);
+        expect(out.at(-1)).toMatch(/^bestmove [a-h][1-8][a-h][1-8]/);
+        expect(wall).toBeLessThan(22_500);
+      }, 60_000);
+    }
+
+    it("reports the max wall and its excess over 22 000 ms (the overshoot, against AR-NFR004-A)", () => {
+      expect(walls).toHaveLength(5);
+      const max = Math.max(...walls);
+      console.log(
+        `ABC-220 A11 max wall ${max.toFixed(1)} ms, excess over 22 000 ms ${(max - T_MS).toFixed(1)} ms`,
+      );
+      expect(max).toBeLessThan(22_500);
+    });
+  });
+}
 
 describe("ABC-167 A11 — capability-free, and M4", () => {
   const source = readFileSync(new URL("./uci-session.ts", import.meta.url), "utf8");

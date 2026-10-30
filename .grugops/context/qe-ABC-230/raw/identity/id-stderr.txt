@@ -1,0 +1,16 @@
+part corpus corpus 301 rows 0
+part corpus corpus 301 rows 0
+part choose corpus 301 rows 2408
+part choose corpus 301 rows 2408
+part choose-empty corpus 301 rows 2408
+part choose-empty corpus 301 rows 2408
+part clock0 corpus 301 rows 2408
+part clock0 corpus 301 rows 2408
+part doors-prior corpus 301 rows 1806
+part doors-prior corpus 301 rows 1806
+part level corpus 301 rows 1806
+part level corpus 301 rows 1806
+part level-empty corpus 301 rows 1806
+part level-empty corpus 301 rows 1806
+part nonvac corpus 301 rows 602
+part nonvac corpus 301 rows 602

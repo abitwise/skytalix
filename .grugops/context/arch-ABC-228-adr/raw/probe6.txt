@@ -1,0 +1,6 @@
+REPEATS_AT_PLY_4 depth 2: door -502 | evasions -502 | quiet Q promos -502
+REPEATS_AT_PLY_4 depth 3: door -485 | evasions -392 | quiet Q promos -485
+REPEATS_AT_PLY_4 depth 4: door 0 | evasions 0 | quiet Q promos 0
+mate corpus 287
+mate floor d5 over 287: door mates 189; held (same sign, no longer) 189 (of which shorter 0); longer 0; lost 0; new mates with evasions 0
+total cpu 2.9 s

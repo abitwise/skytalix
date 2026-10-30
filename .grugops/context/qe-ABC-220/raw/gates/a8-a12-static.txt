@@ -1,0 +1,7 @@
+git diff a649fbc4 fbab54ff -- src/engine.ts src/levels.ts | wc -c: 0
+ src/uci-session.test.ts     | 585 +++++++++++++++++++++++++++++++++++++++++++-
+ src/uci-session.ts          |  77 +++++-
+ src/uci.real-engine.test.ts |  83 ++++++-
+ 3 files changed, 733 insertions(+), 12 deletions(-)
+ABC-220 default-lane block lines 1500..2030; Date.now/performance.now hits: 1
+A11 block real-clock hits: 4

@@ -1,0 +1,8 @@
+corpus rows=302 base=c56a3df9e7246ab4 head=c56a3df9e7246ab4 EQUAL impure_head=0
+choose rows=2408 base=8a50e586b3600107 head=8a50e586b3600107 EQUAL impure_head=0
+choose-empty rows=2408 base=8a50e586b3600107 head=8a50e586b3600107 EQUAL impure_head=0
+clock0 rows=2408 base=8a50e586b3600107 head=8a50e586b3600107 EQUAL impure_head=0
+doors-prior rows=1806 base=ba93283af174b6d9 head=ba93283af174b6d9 EQUAL impure_head=0
+level rows=1806 base=7c44b4a223572997 head=7c44b4a223572997 EQUAL impure_head=0
+level-empty rows=1806 base=7c44b4a223572997 head=7c44b4a223572997 EQUAL impure_head=0
+nonvac rows=602 base=bcad32bce2ff5e5b head=1e420a7989cfe2fc DIFFER (248 rows) impure_head=0

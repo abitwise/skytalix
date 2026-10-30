@@ -1,0 +1,102 @@
+--- base/src/quiescence.ts	2026-10-29 21:04:15.187458279 +0000
++++ probe/src/quiescence.ts	2026-10-29 21:11:14.414837479 +0000
+@@ -41,7 +41,9 @@
+ 
+ import { makeMove, unmakeMove } from "./apply.ts";
+ import { evaluate } from "./evaluate.ts";
+-import { legalCaptures } from "./legal.ts";
++import { hasLegalMove, isInCheck, legalCaptures, legalMoves } from "./legal.ts";
++import { generateMoves } from "./moves.ts";
++import { EMPTY, QUEEN } from "./position.ts";
+ import type { Move } from "./moves.ts";
+ import { type Position, pieceType } from "./position.ts";
+ 
+@@ -88,32 +90,62 @@
+  * `qply` is 0 at the leaf the full-width search handed over. Fail-soft: the result may fall
+  * outside `[alpha, beta]`. The position is byte-identical on return, throw or no throw.
+  */
++export const PROBE = { evasions: false, promotions: "none" as "none" | "queen" | "all", promoLast: false, checkCap: 99, minQply: 0, mateOnlyBeyond: false, cap: 8, mated: 0, evasionNodes: 0, promoMoves: 0 };
++const MATE_SCORE_P = 30_000;
++function tacticals(position: Position): Move[] {
++  // captures (legal, generation order) then quiet promotions (legal, generation order)
++  const caps = legalCaptures(position);
++  if (PROBE.promotions === "none") return caps;
++  const all = legalMoves(position);
++  const promos = all.filter((m) => m.captured === EMPTY && m.promotion !== 0 && (PROBE.promotions === "all" || m.promotion === QUEEN));
++  PROBE.promoMoves += promos.length;
++  return caps.concat(promos);
++}
+ export function quiesce(
+   position: Position,
+   alpha: number,
+   beta: number,
+   qply: number,
+   visit: QuiescenceVisitor,
++  ply = 0,
+ ): number {
+   if (qply > 0) visit(qply);
++  if (PROBE.evasions && qply < PROBE.cap && qply < PROBE.checkCap && qply >= PROBE.minQply && isInCheck(position)) {
++    PROBE.evasionNodes++;
++    const moves = legalMoves(position);
++    if (moves.length === 0) { PROBE.mated++; return 0 - (MATE_SCORE_P - (ply + qply)); }
++    moves.sort((a, b) => mvvLvaKey(b) - mvvLvaKey(a));
++    let best = 0 - MATE_SCORE_P;
++    for (const move of moves) {
++      const undo = makeMove(position, move);
++      let score: number;
++      try { score = 0 - quiesce(position, 0 - beta, 0 - alpha, qply + 1, visit, ply); } finally { unmakeMove(position, move, undo); }
++      if (score > best) best = score;
++      if (best > alpha) alpha = best;
++      if (alpha >= beta) break;
++    }
++    return best;
++  }
+ 
++  if (PROBE.mateOnlyBeyond && qply < QUIESCENCE_MAX_PLY && isInCheck(position) && !hasLegalMove(position)) { PROBE.mated++; return 0 - (MATE_SCORE_P - (ply + qply)); }
+   const standPat = evaluate(position);
+   if (standPat >= beta) return standPat; // standing still already refutes the opponent's line
+-  if (qply >= QUIESCENCE_MAX_PLY) return standPat; // the runaway guard: stand pat, do not expand
++  if (qply >= PROBE.cap) return standPat; // the runaway guard: stand pat, do not expand
+ 
+   let best = standPat;
+   if (best > alpha) alpha = best;
+ 
+   // The legal captures in generation order (ABC-206): only captures are tested for legality.
+-  const captures = legalCaptures(position);
++  const captures = tacticals(position);
+   // Stable sort: equal keys keep generation order, so the count is deterministic.
+-  captures.sort((a, b) => mvvLvaKey(b) - mvvLvaKey(a));
++  if (PROBE.promoLast) { const key = (m: Move) => (m.captured === EMPTY ? -1 : mvvLvaKey(m)); captures.sort((a, b) => key(b) - key(a)); }
++  else captures.sort((a, b) => mvvLvaKey(b) - mvvLvaKey(a));
+ 
+   for (const move of captures) {
+     const undo = makeMove(position, move);
+     let score: number;
+     try {
+-      score = 0 - quiesce(position, 0 - beta, 0 - alpha, qply + 1, visit);
++      score = 0 - quiesce(position, 0 - beta, 0 - alpha, qply + 1, visit, ply);
+     } finally {
+       unmakeMove(position, move, undo);
+     }
+--- base/src/search.ts	2026-10-29 21:04:15.205101914 +0000
++++ probe/src/search.ts	2026-10-29 21:04:28.484729144 +0000
+@@ -353,7 +353,7 @@
+   if (reason === null) {
+     if (!switches.quiescence) return evaluate(position);
+     // Every capture node the quiescence search enters is a position visited, and is counted.
+-    return quiesce(position, alpha, beta, 0, () => counter.nodes++);
++    return quiesce(position, alpha, beta, 0, () => counter.nodes++, ply);
+   }
+   if (reason === "checkmate") return 0 - (MATE_SCORE - ply);
+   // Every other ended game is drawn: stalemate, dead position, seventy-five moves. Exactly 0,
+--- base/src/engine.ts	2026-10-29 21:04:15.138531750 +0000
++++ probe/src/engine.ts	2026-10-29 21:04:28.484828910 +0000
+@@ -260,7 +260,7 @@
+   budget: Budget,
+ ): number {
+   const reason = leafEndReason(position);
+-  if (reason === null) return quiesce(position, alpha, beta, 0, budget.visit);
++  if (reason === null) return quiesce(position, alpha, beta, 0, budget.visit, ply);
+   if (reason === "checkmate") return 0 - (MATE_SCORE - ply);
+   return 0;
+ }

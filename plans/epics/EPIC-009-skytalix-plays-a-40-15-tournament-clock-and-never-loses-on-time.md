@@ -10,6 +10,65 @@ owner: BA/PM
 
 # EPIC-009: `skytalix` plays a 40/15 tournament clock, uses it, and never loses on time
 
+> **CONFIRMED 2026-10-30 by the owner, folded by BA/PM** (task `bapm-ABC-242-225-owner`, records only). His words on
+> this item, verbatim (`orch-2026-10-30a` `…f4673b9f`): *"Whole-second reading of "≤ 22 s" - confirm"*. The first
+> half of that message, the catalog's reference machine, is Security/NFR's.
+>
+> - **The whole-second reading is confirmed:** in `simple-tournament`, "≤ 22 s" means < 22 500 ms on the wall. The
+>   last open owner item on this epic is **closed** (§ Owner questions; the MILESTONE 1 and FOLDED blocks below).
+> - **Nothing moves:**
+>   - T = the ceiling = 22 000 ms.
+>   - `ABC-220`'s A11 stands as read.
+>   - `ABC-222`'s PREREG reads A5 against < 22 500 ms.
+>   - `ABC-221`'s "≤ 60 s" is read exactly (59 500 + ~31 + 100 < 60 000), so it does not use this reading and its
+>     page is unchanged.
+> - **The catalog's reference machine** is re-based to the Linux host named by the owner. That is Security/NFR's
+>   hop (`secnfr-catalog-rebase`), not this page's.
+
+> **MILESTONE 1, HALF DONE, 2026-10-30, folded by BA/PM** (task `bapm-ABC-220-merge-fold`, records only, at `main`
+> `4ac4f3bb`). **`ABC-220` is Done:** merged at `ec1e835b` on QE's PASS_WITH_GAPS (`qe-ABC-220` `…7a09c5e1`, which
+> signs UAT) and Security/NFR's PASS_WITH_RISKS (`secnfr-ABC-220`). `simple-tournament` is on `main`.
+>
+> - **What `ABC-220` read** (virtual clock unless named):
+>   - 22 000 on every capped branch; 18 760 ms left after a period's move 40, 97.9 % used (83.2 % with 6 book moves);
+>   - ≥ 1 069 ms left at `tc=40/60`;
+>   - levels 1–7 identical to base in 4 200 rows (M3 MET at the build);
+>   - on the real clock, one search at T took ≤ 22 001.0 ms of wall (+1.0 ms), and a busy `readyok` came 0.38 ms
+>     after `bestmove`.
+>
+>   M1 and M2 are not read yet: that is `ABC-222`.
+> - **`NFR-004`** carries "; 22 s in UCI `TimeMode` `simple-tournament` (budget 22 s)". `AR-NFR004-A` stands at 22 s.
+>   `AR-UCI-BUSY` (busy `isready`/`stop`, ≤ 22 s read to the whole second, ≤ 60 s in `uci-clock-mode`) is placed beside
+>   `NFR-011`.
+> - **`ADR-0044` folds:** D3, D4 (new D4.5), D5 and D11 carry dated lines for `simple-tournament`. The
+>   `uci-clock-mode` halves wait for `ABC-221`'s merge.
+> - **`ABC-222` is now pullable: DoR 10/10, Ready.** It closes milestone 1. It runs ALONE on an idle host (≤ ~5 h).
+> - **`ABC-221`: DoR 10/10, Ready**, pulled after `ABC-222` (owner: "later"). It gains A12 (QE-220-a: the side to move's
+>   own increment, four rows), test note 5 (`SEC-220-b`: a comment) and A11 re-worded to A14a + A14b.
+> - **`ABC-223`: unchanged**, 9/10, waits on `ABC-221`.
+> - **Still open with the owner, blocks nothing:** the whole-second reading of the 22 s ceiling (§ Owner questions).
+>   *(**Confirmed by the owner 2026-10-30**, `…f4673b9f`; see the CONFIRMED block above.)*
+> - The notes are in `.grugops/context/bapm-ABC-220-merge-fold/notes/`.
+
+> **FOLDED 2026-10-30 by BA/PM** (task `bapm-owner-adr-fold`, records only, at `main` `a046e839`). The owner
+> **accepted `ADR-0052` with one amendment** (`orch-2026-10-29g` `…3dd61448`, verbatim): *"accept, but change 22.5s to
+> 22s for simplicity and compatibility, ceiling also at 22s, no need to implement fraction of a second ceiling or time
+> per move if it is not supported by current solution"*. OQ-0052-1 is closed. The ADR text is the Architect's hop
+> (`arch-adr-accept-0052-0053-0054`); where it differs from this page, the ADR rules.
+>
+> - **`simple-tournament`: T = 22 s, and its hard ceiling is 22 s too** (was T 22.0 s under 22.5 s). Whole seconds;
+>   nothing sub-second. `uci-clock-mode` (59.5 s under 60 s, the clamp to 60 s at `ABC-221`) is accepted as written.
+> - **The margin and clock-use arithmetic holds unchanged**, because T did not move: 40 × 22 s = 880 s of 900 s
+>   (97.8 %; 97.9 % at δ = 31 ms), 18 760 ms left after move 40, and M1's ≥ 500 ms survives δ ≤ 487 ms a move.
+>   83.1 % with 6 book moves.
+> - **How a 22 s ceiling equal to T is read** (BA/PM's reading on his "whole seconds"; the Orchestrator confirms it with
+>   him, it changes no code; *confirmed by the owner 2026-10-30, `…f4673b9f`*): no `go` hands the search more than 22 000 ms, read exactly on the virtual clock (`ABC-220`
+>   A6). A real move's wall carries the stop overshoot (`AR-NFR004-A`, ≤ ~31 ms) and the pipe on top, so it is read to
+>   the whole second: ≤ 22 s means a wall < 22 500 ms (`ABC-220` A11, `ABC-222` A5).
+> - **`ABC-220`: DoR 10/10, Ready.** `ABC-222`: 9/10, waits on `ABC-220`. `ABC-221` and `ABC-223`: their pages are
+>   unchanged on this hop.
+> - The notes are in `.grugops/context/bapm-owner-adr-fold/notes/`.
+
 > **RECONCILED 2026-10-29 to `ADR-0052` (PROPOSED) by BA/PM** (task `bapm-owner-words-b`, records only, at `main`
 > `4dcb353e`). The Architect's ruling landed (`arch-epic009-settings` `…fa9e821e`, `…04fdc439`, `…3b11f12e`). This page
 > and `ABC-220`..`ABC-223` now follow it, as proposed:
@@ -71,6 +130,13 @@ owner: BA/PM
 > 5. increase to 60s ; 6. not yet, let's do that after other improvements are done ; 7. no ; 8. ok"*
 
 ## How today's engine handles time (System Analyst `sa-ideas-verify` `…1ccf0010`, confirmed against BA/PM's reading)
+
+> **Dated line 2026-10-30 by BA/PM** (task `bapm-ABC-228-merge-fold`, records only, at `main` `e42b637b`). `ABC-228`
+> merged under OQ-228-1 (ii) (`ADR-0053` d10): level 5 and `DEFAULT_BUDGET_MS` play **4 000 ms**. This section was read
+> at 3 000 ms and stays as read. From this merge, T1's and T4's default reads 4 000 ms, P2's `go` would spend 4 000 ms,
+> and the 40/15 share row for `Skill Level` 5 reads 160 s, 18 % (82 % of the clock unused). This is arithmetic, not a
+> measurement. **No reading of this epic plays level 5 at its fixed budget.** `ABC-220` and `ABC-221` `A8` compare head
+> with base at the same `LEVELS`. `ABC-222` and `ABC-223` play the named modes. So no acceptance row moves.
 
 The source is the System Analyst's time-behaviour note, `sa-ideas-verify` `…1ccf0010` (2026-10-29 19:58Z, read at
 `main` `51c85f49`; committed on `grugops/sa-ideas-verify` @ `c28054cc`, not yet merged when this page was cut). BA/PM
@@ -140,8 +206,8 @@ so `G` = 22 500 ms):
 | | `simple-tournament` (milestone 1) | `uci-clock-mode` (milestone 2, later) |
 |---|---|---|
 | what it does | Thinks a fixed T each move, blunder rate 0 | Spends the real clock: remaining ÷ `movestogo` (a fallback without it), a safety margin on every move, a hard stop before the flag |
-| per-move ceiling (owner's) | **22.5 s**, hard, never exceeded (Q4) | **60 s** (Q5). The engine's one clamp moves 32 s → 60 s at this build; levels stay value-identical (`ADR-0052` D6) |
-| budget | **T = 22.0 s** (`ADR-0052` D3, proposed); with a clock, `min(T, C)` | `min(59.5 s, C)` with a clock; `min(x, 59.5 s)` on `movetime`; T with no time token (`ADR-0052` D4) |
+| per-move ceiling (owner's) | **22 s**, hard, equal to T (Q4, amended 2026-10-30; was 22.5 s); read to the whole second on the wall | **60 s** (Q5). The engine's one clamp moves 32 s → 60 s at this build; levels stay value-identical (`ADR-0052` D6) |
+| budget | **T = 22 s** (`ADR-0052` D3, accepted 2026-10-30 as amended); with a clock, `min(T, C)` | `min(59.5 s, C)` with a clock; `min(x, 59.5 s)` on `movetime`; T with no time token (`ADR-0052` D4) |
 | surface | UCI `TimeMode` combo: `option.TimeMode=simple-tournament` | UCI `TimeMode` combo: `option.TimeMode=uci-clock-mode` |
 | build ticket | `ABC-220` | `ABC-221` |
 | smoke reading | `ABC-222` | `ABC-223` |
@@ -154,6 +220,12 @@ so `G` = 22 500 ms):
   `t − 50` at a period's last move misses M1. At 40/15, C starts at 22 375 ms and grows, so T binds on every move.
 
 ## The budget T for `simple-tournament` (Q4 with Q8)
+
+*2026-10-30: the owner moved the ceiling to 22 s, equal to T (§ the FOLDED block at the top). The derivation below is
+kept as history: it chose T under the old 22.5 s ceiling. Its margin and clock-use figures still hold, because T is
+still 22 000 ms. Its ceiling lines ("Q4 holds when T + 31 ≤ 22 500", the 500 ms headroom, "why not closer to the
+ceiling") are superseded. Under a 22 s ceiling, T + 31 ms is over 22 000 ms on the wall, and the owner's whole-second
+ceiling reads that as 22 s.*
 
 The owner set a 22.5 s ceiling (Q4) and accepted a closest call ≥ 500 ms (Q8). A fixed 22.5 s a move is exactly
 900 s over 40 moves. So 22.5 s cannot meet both, and T must sit below the ceiling. **The ceiling does not move.**
@@ -212,7 +284,7 @@ clean.
 
 ## Scope
 
-- `ABC-220`: `simple-tournament` over UCI, at T (22.0 s proposed) under a 22.5 s hard ceiling. Milestone 1.
+- `ABC-220`: `simple-tournament` over UCI, at T = 22 s, its hard ceiling also 22 s (owner, 2026-10-30). Milestone 1.
 - `ABC-222`: the 5-game smoke reading of `simple-tournament` at 40/15 (up to 10 games, for coverage only). Milestone 1.
 - `ABC-221`: `uci-clock-mode` over UCI, with the real clock, a margin, a hard stop and a 60 s ceiling for this mode
   only. Milestone 2, later (Q2).
@@ -220,7 +292,8 @@ clean.
 - The Architect writes the ADR text: amendments to `ADR-0044` and `ADR-0045`, or a new ADR, status PROPOSED. It covers
   the input form, T, the `go` interaction, the two ceilings and the `NFR-004` lines. The owner accepts or declines it.
   BA/PM does not pre-empt it. *(2026-10-29: written as `ADR-0052`, PROPOSED. Its fold lines into `ADR-0044` D3, D4,
-  D5, D11 and `ADR-0045` A3 are BA/PM's, at each build's merge.)*
+  D5, D11 and `ADR-0045` A3 are BA/PM's, at each build's merge.)* *(2026-10-30: `ADR-0044`'s `simple-tournament`
+  lines folded at `ABC-220`'s merge `ec1e835b`. The `uci-clock-mode` lines and `ADR-0045` A3 come at `ABC-221`'s.)*
 
 ## Out of scope
 
@@ -245,10 +318,10 @@ clean.
 | M1 | **Never loses on time** | In each setting's smoke reading, `skytalix` loses **0** games on time, and its closest call (the least clock left after any of its moves) is **≥ 500 ms** | `cutechess-cli` 1.5.1, `timemargin=0`, 5 games at `tc=40/900`, up to 10 for coverage (`ABC-222`, `ABC-223`) |
 | M2 | **Uses the clock** | Over each completed 40-move period, `skytalix` uses **≥ 75 %** of the 900 s it was given, book moves included, per side | per-move times from the PGN, summed per period |
 | M3 | **The human-facing levels are unchanged** | `LEVELS[1..7]` and `DEFAULT_LEVEL` are byte-identical to base. `Skill Level` default is 5. At `Skill Level` 1–7 with neither setting selected, `G` over one simulated 40/15 period equals base, row for row | `git diff`; each build ticket's identity row |
-| M4 | **The owner's decisions stayed his** | 0 NFR bounds moved without his word: 22.5 s and 60 s are his. Each new ADR text is reported to him when it lands. T is told to him | the ADR pages and the owner-word notes |
+| M4 | **The owner's decisions stayed his** | 0 NFR bounds moved without his word: 22 s (amended from 22.5 s, 2026-10-30) and 60 s are his. Each new ADR text is reported to him when it lands. T is told to him | the ADR pages and the owner-word notes |
 
-- **Each setting's per-move ceiling is read too.** The longest move is ≤ 22 500 ms (`simple-tournament`) or ≤ 60 000 ms
-  plus `AR-NFR004-A`'s ≤ ~31 ms (`uci-clock-mode`).
+- **Each setting's per-move ceiling is read too.** The longest move is ≤ 22 s read to the whole second, that is
+  < 22 500 ms (`simple-tournament`, 2026-10-30), or ≤ 60 000 ms plus `AR-NFR004-A`'s ≤ ~31 ms (`uci-clock-mode`).
 - **A smoke reading shows that it works, nothing more** (Q1). Five games cannot bound a forfeit rate. That needs the
   later major validation.
 - **Strength is not a measure** (Q6). Self-play does not stand in for an outside opponent (`RISK-EPIC008-03`,
@@ -260,9 +333,9 @@ clean.
 |---|---|---|---|---|---|---|---|---|
 | — | `ABC-218` | Reading: today's `Skill Level` 7 under a 40/15 clock | S | P2 | Done (dropped) | — | — | **closed by the owner 2026-10-29, not run** |
 | — | `ABC-219` | A named tournament level in the CLI | M | P2 | Done (dropped) | — | — | **retired 2026-10-29**: CLI parity out of scope; its core moved into `ABC-220` |
-| 1 | `ABC-220` | `simple-tournament` over UCI (`TimeMode`): T = 22.0 s, `min(T, C)` with a clock, under a 22.5 s hard ceiling | M | P2 | Backlog | 9/10 | `ADR-0052` (PROPOSED) | **the owner accepts `ADR-0052` (OQ-0052-1)** |
-| 2 | `ABC-222` | Smoke reading: `simple-tournament` plays 5 games at 40/15 (≤ 10 for coverage) with 0 losses on time | S | P2 | Backlog | 9/10 | `ABC-220` merged; an idle board | `ABC-220` |
-| 3 | `ABC-221` | `uci-clock-mode` over UCI (`TimeMode`): `min(59.5 s, C)`, a 60 s ceiling, the clamp to 60 s | M | P3 | Backlog | 9/10 | `ADR-0052` (PROPOSED); `ABC-220`'s C and `TimeMode`; milestone 1 (owner: "later") | **the owner accepts `ADR-0052` (OQ-0052-1)**; `ABC-220` merged |
+| 1 | `ABC-220` | `simple-tournament` over UCI (`TimeMode`): T = 22 s, `min(T, C)` with a clock, never handed more than its 22 s hard ceiling | M | P2 | **Done** (merged `ec1e835b`, 2026-10-30) | 10/10 | `ADR-0052` (ACCEPTED 2026-10-30, amended) | — |
+| 2 | `ABC-222` | Smoke reading: `simple-tournament` plays 5 games at 40/15 (≤ 10 for coverage) with 0 losses on time | S | P2 | **Ready** (2026-10-30) | **10/10** | `ABC-220` merged (met, `ec1e835b`); an idle board | nothing; ALONE on an idle host |
+| 3 | `ABC-221` | `uci-clock-mode` over UCI (`TimeMode`): `min(59.5 s, C)`, a 60 s ceiling, the clamp to 60 s | M | P3 | **Ready** (2026-10-30) | **10/10** | `ADR-0052` (ACCEPTED 2026-10-30; D4/D6 as written); `ABC-220`'s C and `TimeMode` (met, `ec1e835b`); milestone 1 (owner: "later") | pull order only: after `ABC-222` |
 | 4 | `ABC-223` | Smoke reading: `uci-clock-mode` plays 5 games at 40/15 (≤ 10 for coverage) with 0 losses on time | S | P3 | Backlog | 9/10 | `ABC-221` merged; an idle board | `ABC-221` |
 
 - **Milestone 1** is `ABC-220` then `ABC-222`. **Milestone 2** is `ABC-221` then `ABC-223`, after milestone 1 and on
@@ -271,22 +344,25 @@ clean.
   `src/uci-session.ts`, so whichever merges second rebases.
 - **`ABC-224` is unused.** It goes back to the Orchestrator's pool.
 
-## Owner questions (all answered 2026-10-29, `…a67f71ac`)
+## Owner questions (all answered 2026-10-29, `…a67f71ac`; OQ-0052-1 answered 2026-10-30, `…3dd61448`; the whole-second reading confirmed 2026-10-30, `…f4673b9f`)
 
 | Q | asked | answer (2026-10-29) | what it changed |
 |---|---|---|---|
 | Q1 | Who plays the 40/15 setting? | "cutechess matches". Smoke readings of 5 or 10 games. Major validation (≥ 100 games, 24–48 h) later | UCI is the surface. CLI parity is out. Smoke readings are 5 games. Major validation is out of the MVP |
 | Q2 | Which option? | "Initially … 22.5 second separate difficulty setting …, later UCI clock mode" | (a) first (`ABC-220`), then (b) later (`ABC-221`). Option (o) and `ABC-218` are gone |
 | Q3 | The name? | "2 new difficulty settings … simple-tournament and … uci-clock-mode (maybe separate inputs)" | The names are fixed. The form is the Architect's |
-| Q4 | T and its ceiling | "22.5 ceiling" | The hard ceiling is 22.5 s. T = 22.0 s is proposed under it (§ The budget T); the owner is told |
+| Q4 | T and its ceiling | "22.5 ceiling" | The hard ceiling is 22.5 s. T = 22.0 s is proposed under it (§ The budget T); the owner is told. **2026-10-30 (OQ-0052-1): "change 22.5s to 22s …, ceiling also at 22s"**, so T = 22 s and the ceiling = 22 s |
 | Q5 | The clock mode's per-move ceiling | "increase to 60s" | 60 s for `uci-clock-mode` only. The 32 s clamp stays for levels 1–7 |
 | Q6 | A strength reading at 40/15? | "not yet, … after other improvements are done" | None in this epic |
 | Q7 | Think time in the CLI? | "no" | Out of scope |
 | Q8 | Accept the epic and M1–M4? | "ok" | Accepted: 0 losses on time, closest call ≥ 500 ms, ≥ 75 % per period |
 
-- **One owner question is open (2026-10-29): OQ-0052-1, accept `ADR-0052`?** (a) as written; (b) with another T under
-  22.5 s; (c) decline. No default; nothing is built on it until he answers. The Orchestrator puts it
-  (`arch-epic009-settings` `…3b11f12e`). T = 22.0 s is part of it.
+- **OQ-0052-1, accept `ADR-0052`? Answered 2026-10-30:** accepted, with T and the ceiling both 22 s, whole seconds
+  (`orch-2026-10-29g` `…3dd61448`). *(Was open 2026-10-29: (a) as written; (b) another T under 22.5 s; (c) decline.)*
+- **The whole-second reading. Answered 2026-10-30: confirmed** (`orch-2026-10-30a` `…f4673b9f`, verbatim: "Whole-second reading of "≤ 22 s" - confirm").
+  A 22 s ceiling equal to T is read to the whole second on the wall (< 22 500 ms), because each move carries ~31 ms of
+  stop overshoot past the 22 000 ms it is handed. T stays at 22 s. *(Was open, not a blocker: "If he means a strict
+  22 000 ms wall instead, T has to sit below 22 s, and that is his number to give.")*
 - **Not a question for the owner:** how the clock mode's margin is built, the readings' exact command lines, and the
   thermal rule. That is delivery under his delegation (`…5aaf7cec` item 1).
 
@@ -298,10 +374,10 @@ original table is in git at `f45aea95`.
 
 ## Dependencies
 
-- **`ADR-0052` (PROPOSED, `arch-epic009-settings`, merged `a060c449`).** It rules the input form of both settings,
-  the `go` interaction for `simple-tournament`, the clock mode's rule, its margin and stop, the ceilings, the clamp and
-  the latency. It also proposes the `NFR-004` text. `ABC-220` and `ABC-221` wait on the owner's acceptance of it
-  (OQ-0052-1).
+- **`ADR-0052` (`arch-epic009-settings`, merged `a060c449`; ACCEPTED by the owner 2026-10-30, with the 22 s
+  amendment).** It rules the input form of both settings, the `go` interaction for `simple-tournament`, the clock
+  mode's rule, its margin and stop, the ceilings, the clamp and the latency. It also gives the `NFR-004` text. No
+  ticket waits on its acceptance any more.
 - `ABC-204`'s pinned host tools (`cutechess-cli` 1.5.1), re-pinned on this host on 2026-10-28. Their paths come from
   the environment and stay out of the records (`ADR-0049` d4).
 - `tools/rating/rating.ts` plays a fixed time per move (`st=`). It has no `tc=40/900` mode, so `ABC-222` and `ABC-223`
@@ -320,7 +396,7 @@ original table is in git at `f45aea95`.
   `ADR-0052` D2 closes it by design. C keeps ≥ 1 s, 1 069 ms on the virtual clock, and M1 survives δ ≤ 600 ms on a
   period's last move. The smokes read the real δ.)*
 - **`RISK-EPIC009-02`: a GUI gives up on `isready` or `stop` mid-search.** An answer can be one budget late
-  (`ADR-0044` D5): up to 22.5 s for `simple-tournament` and up to 60 s for `uci-clock-mode`, against level 7's 32 s
+  (`ADR-0044` D5): up to 22 s for `simple-tournament` (2026-10-30) and up to 60 s for `uci-clock-mode`, against level 7's 32 s
   today. `ADR-0045` A4 records `cutechess-cli` killing an engine at its 15 000 ms `IdleTimeout` after a mid-search
   `stop`. It sends one at a game end or when pondering. The Architect rules on this residual. The smoke readings
   count such kills. *(2026-10-29: `ADR-0052` D7 accepts it up to 60 s, with no worker. cutechess pings only between
@@ -342,21 +418,21 @@ original table is in git at `f45aea95`.
 ## NFR triggers
 
 - **`NFR-004` (owner's).**
-  - `simple-tournament`: a ceiling of **22.5 s** (Q4). This departs from `ABC-212`'s "budget + 2 s" rule, by the
-    owner's word.
+  - `simple-tournament`: a ceiling of **22 s**, equal to its budget (Q4, amended 2026-10-30; was 22.5 s). This departs
+    from `ABC-212`'s "budget + 2 s" rule, by the owner's word.
   - `uci-clock-mode`: **60 s** (Q5), above today's 32 s clamp, for this mode only. Levels 1–7 keep their rows and the
     32 s clamp.
   - The Architect names the change, and Security/NFR places the text. `AR-NFR004-A` (≤ ~31 ms) is re-read at each gate.
   - *(2026-10-29, `ADR-0052` § Consequences, proposed text.)* At `ABC-220`: *"; 22.5 s in UCI `TimeMode`
-    `simple-tournament` (budget 22 s)"*, and the clamp stays 32 000. At `ABC-221`: *"; 60 s in UCI `TimeMode`
+    `simple-tournament` (budget 22 s)"*, and the clamp stays 32 000. *(2026-10-30: 22 s, per the amended ADR text.)* At `ABC-221`: *"; 60 s in UCI `TimeMode`
     `uci-clock-mode` (budget ≤ 59.5 s). The engine's one clamp sits at the largest ceiling in force, 60 s."*
-- **`NFR-009`:** 22.5 s is inside `ABC-212`'s 30 s reading, so `ABC-220` owes no re-read. 60 s is outside it, so
+- **`NFR-009`:** 22 s is inside `ABC-212`'s 30 s reading, so `ABC-220` owes no re-read. 60 s is outside it, so
   `ABC-221` owes one (≤ 16 MiB, growth ≤ 1 MiB).
 - **`NFR-008`: `npm test` wall ≤ 10 s at load1 ≤ 8.** New rows run on the virtual clock only. There are 0 real-clock
   rows in the default lane.
 - **`NFR-005`, `NFR-011`, `NFR-012`: untouched.** Their referent is `Skill Level` 5 under `TimeMode level`, which
   does not change.
-- **`ADR-0044` D5 latency:** ≤ 22.5 s and ≤ 60 s (`RISK-EPIC009-02`). Ruled 2026-10-29 (`ADR-0052` D7): accepted, no
+- **`ADR-0044` D5 latency:** ≤ 22 s and ≤ 60 s (`RISK-EPIC009-02`; 22 s from 2026-10-30). Ruled 2026-10-29 (`ADR-0052` D7): accepted, no
   worker, no new `NFR` bound. An accepted-risk entry goes beside `NFR-011`, placed by Security/NFR. `NFR-011` itself is
   idle-only and does not move.
 - **Security (ASVS L1):** each setting is one value of the `TimeMode` closed set, matched exactly. `go`'s numeric

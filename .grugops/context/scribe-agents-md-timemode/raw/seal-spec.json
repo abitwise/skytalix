@@ -1,0 +1,7 @@
+{
+  "refs": ["scribe-agents-md-timemode", "ABC-220", "ADR-0052", "ABC-109", "AGENTS.md", "src/uci-session.ts",
+           "qe-ABC-220/20261030T152147Z-qe-e2e-observation-c6bdd364"],
+  "notes": [
+    { "kind": "decision", "confidence": "high: three lines added, byte count read with wc -c; nothing run; cli.test.ts A3 and A5 not run (UNKNOWN - verify)", "bodyFile": "note-decision.md" }
+  ]
+}

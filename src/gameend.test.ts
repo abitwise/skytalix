@@ -1,16 +1,18 @@
 import { describe, expect, it } from "vitest";
 import { makeMove, unmakeMove } from "./apply.ts";
-import { parseFen } from "./fen.ts";
+import { parseFen, toFen } from "./fen.ts";
 import {
   type ClaimableDraw,
   type DrawClaims,
   type GameStatus,
   gameStatus,
   leafEndReason,
+  repetitionKey,
 } from "./gameend.ts";
 import { legalMoves } from "./legal.ts";
+import { FLAG_EN_PASSANT } from "./moves.ts";
 import { EMPTY, PAWN, type Position, parseSquareName, pieceType } from "./position.ts";
-import { zobristKey } from "./zobrist.ts";
+import { epFileKey, zobristKey } from "./zobrist.ts";
 
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
@@ -634,4 +636,127 @@ describe("ABC-206 A2 — leafEndReason(p) === gameStatus(p).reason", () => {
   if (RUN_DEEP) {
     it("to depth 3 [deep, ENGINE_DEEP=1]", leafRow(3), 600_000);
   }
+});
+
+// ---------------------------------------------------------------------------------------------
+// `ABC-241` A1 (`ADR-0020` § AMENDMENT 2026-10-30 C1, C2) — the repetition key: the ep file out when
+// no LEGAL en-passant capture exists, the Zobrist key unchanged otherwise. The hash is not touched.
+// ---------------------------------------------------------------------------------------------
+
+describe("ABC-241 A1 — repetitionKey, the one helper", () => {
+  /** The same FEN with its ep field cleared: the oracle for "the ep file is removed". */
+  const withoutEp = (fen: string): string => {
+    const fields = fen.split(" ");
+    fields[3] = "-";
+    return fields.join(" ");
+  };
+  const keyOf = (fen: string): bigint => {
+    const position = parseFen(fen);
+    return repetitionKey(position, zobristKey(position));
+  };
+
+  const REMOVED: [label: string, fen: string][] = [
+    // One ply after 1.e4: no black pawn on d4 or f4 (the `ABC-011` pair, `zobrist.test.ts`).
+    ["no capturer (1.e4)", "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1"],
+    // exd6 e.p. is pseudo-legal but leaves the b2-h8 diagonal: the h8 bishop then hits b2.
+    ["pinned capturer (diagonal)", "k6b/8/8/3pP3/8/8/1K6/8 w - d6 0 1"],
+    // c5xd6 e.p. lifts both pawns off rank 5 and bares the a5 king to the h5 rook.
+    ["rank pin", "7k/8/8/K1Pp3r/8/8/8/8 w - d6 0 1"],
+  ];
+  const KEPT: [label: string, fen: string][] = [
+    ["legal capture (e5xd6)", "4k3/8/8/3pP3/8/8/8/4K3 w - d6 0 1"],
+    ["legal capture (d4xe3)", "rnbqkbnr/ppp1pppp/8/8/3pP3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1"],
+    // `hasLegalEnPassant` keeps looking past a pinned lower-file capturer (`legal.test.ts`).
+    ["one capturer pinned, the other legal", "2r1k3/8/8/2PpP3/8/8/8/2K5 w - d6 0 1"],
+  ];
+
+  it.each(REMOVED)(
+    "an ep square with no legal capture: the key of the no-ep twin (%s)",
+    (_l, fen) => {
+      // Non-vacuity: the hash still separates the pair (`ADR-0020` d1), and the generator agrees.
+      expect(zobristKey(parseFen(fen))).not.toBe(zobristKey(parseFen(withoutEp(fen))));
+      expect(legalMoves(parseFen(fen)).some((m) => (m.flags & FLAG_EN_PASSANT) !== 0)).toBe(false);
+      expect(keyOf(fen)).toBe(zobristKey(parseFen(withoutEp(fen))));
+      expect(keyOf(fen)).toBe(zobristKey(parseFen(fen)) ^ epFileKey(parseFen(fen).epSquare));
+    },
+  );
+
+  it.each(KEPT)("an ep square with a legal capture: the Zobrist key, file in (%s)", (_l, fen) => {
+    expect(legalMoves(parseFen(fen)).some((m) => (m.flags & FLAG_EN_PASSANT) !== 0)).toBe(true);
+    expect(keyOf(fen)).toBe(zobristKey(parseFen(fen)));
+    expect(keyOf(fen)).not.toBe(zobristKey(parseFen(withoutEp(fen))));
+  });
+
+  it("no ep square: the Zobrist key, unchanged", () => {
+    for (const fen of [START_FEN, ...[...REMOVED, ...KEPT].map(([, f]) => withoutEp(f))]) {
+      expect(keyOf(fen), fen).toBe(zobristKey(parseFen(fen)));
+    }
+  });
+
+  it("reads the key it is handed rather than re-hashing (one Zobrist read per caller)", () => {
+    const [, noCapturer] = REMOVED[0] as [string, string];
+    const [, legal] = KEPT[0] as [string, string];
+    expect(repetitionKey(parseFen(noCapturer), 0n)).toBe(epFileKey(parseFen(noCapturer).epSquare));
+    expect(repetitionKey(parseFen(legal), 5n)).toBe(5n);
+    expect(repetitionKey(parseFen(START_FEN), 7n)).toBe(7n);
+  });
+
+  it("gameStatus looks the live position up by its repetition key (C3), so the lookup and the counts agree", () => {
+    // In a real game a live position carrying an ep square is its window's first occurrence, so no
+    // game reaches this through `gameStatusOf`; the contract is pinned on a counts map directly.
+    const [, noCapturer] = REMOVED[0] as [string, string];
+    const position = parseFen(noCapturer);
+    const byRepetitionKey = new Map([[keyOf(noCapturer), 3]]);
+    expect(gameStatus(position, byRepetitionKey).claimable?.draws).toEqual([
+      "threefold-repetition",
+    ]);
+    const byHash = new Map([[zobristKey(position), 3]]);
+    expect(gameStatus(position, byHash).claimable).toBeUndefined();
+    const [, legal] = KEPT[0] as [string, string];
+    expect(gameStatus(parseFen(legal), new Map([[keyOf(legal), 5]])).reason).toBe(
+      "fivefold-repetition",
+    );
+  });
+
+  it("is pure: the position is byte-identical after the call, on every case", () => {
+    for (const [, fen] of [...REMOVED, ...KEPT]) {
+      const position = parseFen(fen);
+      const board = Uint8Array.from(position.board);
+      repetitionKey(position, zobristKey(position));
+      expect(toFen(position)).toBe(fen);
+      expect(position.board).toEqual(board);
+    }
+  });
+
+  it("F8: at every node of a 2-ply walk from three openings that carries an ep square, the key drops the file iff the generator offers no ep capture", () => {
+    let removed = 0;
+    let kept = 0;
+    const check = (position: Position): void => {
+      if (position.epSquare === -1) return;
+      const raw = zobristKey(position);
+      const canTake = legalMoves(position).some((m) => (m.flags & FLAG_EN_PASSANT) !== 0);
+      if (canTake) kept++;
+      else removed++;
+      expect(repetitionKey(position, raw)).toBe(canTake ? raw : raw ^ epFileKey(position.epSquare));
+    };
+    for (const fen of [
+      START_FEN,
+      "rnbqkbnr/ppp1pppp/8/8/3p4/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+      "rnbqkbnr/pppppppp/8/4P3/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1",
+    ]) {
+      const position = parseFen(fen);
+      for (const first of legalMoves(position)) {
+        const undoFirst = makeMove(position, first);
+        check(position);
+        for (const second of legalMoves(position)) {
+          const undo = makeMove(position, second);
+          check(position);
+          unmakeMove(position, second, undo);
+        }
+        unmakeMove(position, first, undoFirst);
+      }
+    }
+    expect(removed).toBeGreaterThan(0);
+    expect(kept).toBeGreaterThan(0);
+  });
 });

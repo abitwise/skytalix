@@ -1,0 +1,85 @@
+--- src/zobrist.ts	2026-10-29 21:28:46.350232116 +0000
++++ srcb/zobrist.ts	2026-10-29 21:29:54.976581899 +0000
+@@ -82,11 +82,23 @@
+     if ((position.castling & (CASTLE_FLAGS[i] as number)) !== 0) key ^= CASTLE_KEYS[i] as bigint;
+   }
+ 
+-  if (position.epSquare !== NO_SQUARE) key ^= EP_FILE[fileOf(position.epSquare)] as bigint;
++  if (position.epSquare !== NO_SQUARE && epCapturerBeside(position)) key ^= EP_FILE[fileOf(position.epSquare)] as bigint;
+ 
+   return key;
+ }
+ 
++/** PROBE ONLY (Q3 option (b)): a pawn of the side to move stands beside the double-pushed pawn. */
++function epCapturerBeside(position: Position): boolean {
++  const target = position.epSquare;
++  const pushed = target + (position.blackToMove ? 16 : -16);
++  for (const side of [pushed - 1, pushed + 1]) {
++    if (!isOnBoard(side)) continue;
++    const piece = position.board[side] as number;
++    if (piece !== EMPTY && (piece & 7) === 1 && isBlack(piece) === position.blackToMove) return true;
++  }
++  return false;
++}
++
+ /** The square the en-passant-captured pawn stood on: one rank behind the target, same file. */
+ const enPassantCaptureSquare = (move: Move): number => move.to + (isBlack(move.piece) ? 16 : -16);
+ 
+--- src/search.ts	2026-10-29 21:28:46.349852738 +0000
++++ srcb/search.ts	2026-10-29 21:29:27.711980404 +0000
+@@ -416,7 +416,7 @@
+     const nullReduction = nullMoveReduction(position, depth, ply, afterNull);
+     if (nullReduction > 0) {
+       const nullUndo = makeNullMove(position);
+-      keys[ply + 1] = zobristKeyAfterNullMove(key, nullUndo);
++      keys[ply + 1] = zobristKey(position);
+       const nullScore =
+         0 -
+         negamax(
+@@ -455,7 +455,7 @@
+       ? lateMoveReduction(position, move, depth, index, false)
+       : 0;
+     const undo = makeMove(position, move);
+-    keys[ply + 1] = zobristKeyAfterMove(key, position, move, undo);
++    keys[ply + 1] = zobristKey(position);
+     const score = searchMove(
+       position,
+       depth,
+@@ -632,7 +632,7 @@
+       ? lateMoveReduction(position, move, depth, index, true)
+       : 0;
+     const undo = makeMove(position, move);
+-    keys[1] = zobristKeyAfterMove(rootKey, position, move, undo);
++    keys[1] = zobristKey(position);
+     const score = searchMove(
+       position,
+       depth,
+--- src/engine.ts	2026-10-29 21:28:46.348390256 +0000
++++ srcb/engine.ts	2026-10-29 21:29:27.712465881 +0000
+@@ -306,7 +306,7 @@
+       const nullUndo = makeNullMove(position);
+       let nullScore: number;
+       try {
+-        keys[ply + 1] = zobristKeyAfterNullMove(key, nullUndo);
++        keys[ply + 1] = zobristKey(position);
+         nullScore =
+           0 -
+           negamax(
+@@ -341,7 +341,7 @@
+     const undo = makeMove(position, move);
+     let score: number;
+     try {
+-      keys[ply + 1] = zobristKeyAfterMove(key, position, move, undo);
++      keys[ply + 1] = zobristKey(position);
+       score = searchMove(position, remaining, alpha, beta, ply, index, reduction, budget);
+     } finally {
+       unmakeMove(position, move, undo);
+@@ -445,7 +445,7 @@
+     const undo = makeMove(position, move);
+     let score: number;
+     try {
+-      budget.keys[1] = zobristKeyAfterMove(rootKey, position, move, undo);
++      budget.keys[1] = zobristKey(position);
+       score = searchMove(
+         position,
+         remaining,

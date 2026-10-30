@@ -98,12 +98,12 @@ describe("A1: rpair reads each build with r's argv, but for openings start/count
     }
   });
 
-  test("the pins are r's: Stockfish at E 1910, skytalix at 3 s, width 2, both colours", () => {
+  test("the pins are r's: Stockfish at E 1910, skytalix at 4 s, width 2, both colours", () => {
     const argv = argvBlocks(pair.stdout)[0]?.argv.join(" ") ?? "";
     for (const pin of [
       "option.UCI_Elo=1910",
       "option.UCI_LimitStrength=true",
-      "st=3 timemargin=2000",
+      "st=4 timemargin=1000",
       "st=0.5 timemargin=2000",
       "-repeat -games 2",
       "-concurrency 2",

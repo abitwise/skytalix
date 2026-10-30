@@ -1,0 +1,13 @@
+round 1 skytalix vs stockfish 1-0 cand=1 plies=77 {White mates}
+round 1 stockfish vs skytalix 0-1 cand=1 plies=54 {Black mates}
+round 2 skytalix vs stockfish 1-0 cand=1 plies=75 {White mates}
+round 2 stockfish vs skytalix 0-1 cand=1 plies=70 {Black mates}
+round 3 skytalix vs stockfish 1/2-1/2 cand=0.5 plies=46 {Draw by 3-fold repetition} repeating move by stockfish
+round 3 stockfish vs skytalix 1-0 cand=0 plies=83 {White mates}
+round 4 skytalix vs stockfish 0-1 cand=0 plies=262 {Black mates}
+round 4 stockfish vs skytalix 0-1 cand=1 plies=82 {Black mates}
+round 5 skytalix vs stockfish 1-0 cand=1 plies=69 {White mates}
+round 5 stockfish vs skytalix 1-0 cand=0 plies=61 {White mates}
+games 10  candidate W/L/D 6/3/1  score 6.5
+endings {"White mates":5,"Black mates":4,"Draw by 3-fold repetition":1}
+repetition endings 1

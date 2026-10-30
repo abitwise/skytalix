@@ -6,8 +6,46 @@ id: ADR-0052
 
 ## Status
 
-**proposed** 2026-10-29 by Architect/Design (task `arch-epic009-settings`), at `main` `b5df6cde`. **The owner accepts
-or declines it.** Nothing is built on it, and no `EPIC-009` build ticket leaves `Backlog` on it, until he accepts it.
+**ACCEPTED** 2026-10-30 by the owner, Olger Oeselg, **with one amendment**. His words, verbatim (Orchestrator note
+`.grugops/context/orch-2026-10-29g/notes/20261030T041740Z-orchestrator-decision-3dd61448.md`, a transcription and not a
+stamp): *"ADR-0052: accept, but change 22.5s to 22s for simplicity and compatibility, ceiling also at 22s, no need to
+implement fraction of a second ceiling or time per move if it is not supported by current solution"*. Recorded by
+Architect/Design (task `arch-adr-accept-0052-0053-0054`).
+
+- **The amendment.** `simple-tournament`'s ceiling goes from 22 500 to **22 000 ms**. T stays 22 000 ms, so T now
+  equals its ceiling. Budgets and ceilings stay whole seconds, and nothing sub-second is introduced. The figures were
+  changed in place in this § Status (the amends list), D3, D5, D6, D7, D9, § Consequences and § Owner questions.
+  § Context and the owner's quoted ask keep 22.5 s as history.
+- **Unchanged by the amendment:** D1, D2 (`C`, `RESERVE`, `OVERHEAD`, the ≥ 1 s floor), `min(T, C)`, D4
+  (`uci-clock-mode`: 59.5 s under 60 s), D6's clamp rule (32 000 → 60 000 at the `uci-clock-mode` build only), D8's
+  files and constant names, and levels 1–7.
+- **The arithmetic.** T was already 22 000, so every period figure stands. At 40/15, `C` starts at 22 375 and T binds
+  on every move. 18 760 ms are left after move 40, and 97.9 % of the period is used (83.2 % with 6 book moves). The
+  closest call is ≥ 1 069 ms at `tc=40/60`. Only three things move:
+  - the margin under the ceiling, from 500 ms to **0 ms**;
+  - the busy-latency bound, from 22.5 s to **22 s** (D7);
+  - the `NFR-004` text, from 22.5 s to **22 s** (§ Consequences).
+- **The overshoot past the ceiling is stated, not hidden.** With no margin, a search at 22 000 returns up to the
+  abort granularity (≤ ~31 ms) past 22 s. Level 5 has the same shape: its 3 000 ms budget meets `NFR-004`'s ≤ 3 s
+  clause, and the overshoot is the accepted risk `AR-NFR004-A`. `src/engine.test.ts` states the rule as *"stated
+  rather than papered over with a safety margin"*. Security/NFR re-reads `AR-NFR004-A` at 22 s at the build's gate,
+  which was already owed (§ Consequences). By the owner's word, no sub-second margin is added.
+- **In force:** `simple-tournament` at `ABC-220`'s merge, and `uci-clock-mode` (D4, D6's clamp) at `ABC-221`'s merge.
+  Nothing is on `main` before then.
+- **Pointer lines.** This hop added dated pointers to the § Status of `ADR-0044` and `ADR-0045`. The in-place fold
+  lines in those ADRs and the `NFR-004` text stay with BA/PM and Security/NFR at each build's merge, as listed below.
+- `OQ-0052-1` is closed (§ Owner questions).
+- **Amended 2026-10-30 by Architect/Design** (task `arch-ABC-220-a14`, records only, at `main` `f22e31b3`), on the
+  SE's `ABC-220` finding F1 (`se-ABC-220` `…a76bc514`). D7's real-child row could not be measured as written. It is
+  now read by two instruments: (a) an order-and-count row in the real-child lane, and (b) a QE hand reading of the
+  ≤ 100 ms bound, taken by an asynchronous probe outside vitest. This is the `ABC-168` `A6` precedent. D8 now names
+  the file that row lives in. D1's refusal text is read for the values offered at each build. D7 states how its
+  latency bound is read. The dated lines are in D1, D7, D8 and D9. **No requirement moved,** so nothing goes to the
+  owner: the bound (≤ 100 ms), the order, the count and "no line lost" are D7's, unchanged.
+
+Previously **proposed** 2026-10-29 by Architect/Design (task `arch-epic009-settings`), at `main` `b5df6cde`.
+~~**The owner accepts or declines it.** Nothing is built on it, and no `EPIC-009` build ticket leaves `Backlog` on it,
+until he accepts it.~~ *(Met 2026-10-30: accepted above, with the 22 s amendment.)*
 
 - **The ask** is the owner's word of 2026-10-29 (Orchestrator note
   `.grugops/context/orch-2026-10-29g/notes/20261029T221000Z-orchestrator-decision-a67f71ac.md`, a transcription and
@@ -19,7 +57,7 @@ or declines it.** Nothing is built on it, and no `EPIC-009` build ticket leaves 
   set. Each takes effect at the merge of the ticket that builds it, not at acceptance.
   - `ADR-0044` D3: the `uci` row gains the `TimeMode` option line; the `setoption` row gains `TimeMode`.
   - `ADR-0044` D4: a new D4.5 (the two modes' budgets, D2–D4 below). D4.1–D4.4 are unchanged for `TimeMode level`.
-  - `ADR-0044` D5: the accepted latency bound becomes one budget late in the active mode: ≤ 22.5 s in
+  - `ADR-0044` D5: the accepted latency bound becomes one budget late in the active mode: ≤ 22 s in
     `simple-tournament` and ≤ 60 s in `uci-clock-mode` (D7 below).
   - `ADR-0044` D11: `Skill Level` governs only while `TimeMode` is `level` (D1 below).
   - `ADR-0045` § AMENDMENT A3: `HARD_CEILING_MS` 32 000 → **60 000**, at the `uci-clock-mode` build only, with the
@@ -88,6 +126,11 @@ default test lane runs on the virtual clock only (`NFR-008`). KISS.
   **exactly** one of the offered `var` strings, a closed set held as a frozen tuple. Any other value keeps the old
   one and writes one line, `info string TimeMode takes level, simple-tournament or uci-clock-mode, got <v>; kept
   <old>` (D3's invalid-value rule, text through `printableOf`). `ucinewgame` does not reset it (D3's rule for options).
+  - *(Read 2026-10-30, `arch-ABC-220-a14`.)* The list in that line is the values **offered at the build**, spelled
+    from the same frozen tuple as the `combo` line, so the two cannot drift. At the `simple-tournament` build the
+    line is `info string TimeMode takes level or simple-tournament, got <v>; kept <old>`. At the `uci-clock-mode`
+    build the same code produces the text above, with no edit. An empty value reads `got nothing`, as the other
+    options do. `ABC-220` `A10` pins this. A refusal never names a value that cannot be selected.
 - **While `TimeMode` is not `level`, `Skill Level` is not read at all.** The search is the rate-0 path:
   `chooseMove(position, { budgetMs, now, maxDepth, maxNodes })` with D12's limits, and one `info … score …` line. A
   `Skill Level` set meanwhile is kept and takes effect when `TimeMode` returns to `level`. The blunder path is never
@@ -132,10 +175,12 @@ OVERHEAD =   100 ms   (charged per move still to play before the control)
 - `C` is a private function of `src/uci-session.ts`, beside `parseGo`. Its two constants are named there. D4.1's
   `MOVE_OVERHEAD_MS` (50) stays for `TimeMode level` only.
 
-### D3. `simple-tournament`: a fixed T = 22 000 ms under a 22 500 ms ceiling, never more than the clock safely allows
+### D3. `simple-tournament`: a fixed T = 22 000 ms, which is also its ceiling, never more than the clock safely allows
 
-- **T = 22 000 ms**, rate 0. It is the ceiling less a named margin: `SIMPLE_TOURNAMENT_CEILING_MS` = 22 500, and
-  `SIMPLE_TOURNAMENT_BUDGET_MS` = 22 500 − 500.
+- **T = 22 000 ms**, rate 0, and **the ceiling is 22 000 ms too** (the owner's amendment, 2026-10-30, § Status).
+  `SIMPLE_TOURNAMENT_CEILING_MS` = 22 000, and `SIMPLE_TOURNAMENT_BUDGET_MS` = `SIMPLE_TOURNAMENT_CEILING_MS`, with no
+  margin between them. Both are whole seconds. Both names are kept because `ABC-220` cites them: the ceiling is the
+  `NFR-004` bound, and the budget is what is spent. *(Before the amendment: ceiling 22 500, budget 22 500 − 500.)*
 - **The budget at `go`:**
   - `movetime x`: `min(x, T)`. An explicit move time wins over a clock, as in D4.1.
   - a clock for the side to move: **`min(T, C)`**.
@@ -146,16 +191,21 @@ OVERHEAD =   100 ms   (charged per move still to play before the control)
   - Under a shorter clock, or without `movestogo`, `C` binds first and keeps the reserve. A fixed setting that ignored
     `wtime` would lose on time under any clock shorter than 40/15. `G`'s `t − 50` at a period's last move is the very
     margin that misses M1 (§ Context).
-- **Why 22 000, and not 22 500 or 20 500.**
-  - 22 500 has 0 ms under its own ceiling. The overshoot (≤ ~31 ms) would break the ceiling, and `C` (22 375) would
-    bind from move 1, so it would not be a fixed setting at 40/15.
+- **Why 22 000, with no margin under the ceiling.**
+  - It is the owner's figure, both for T and for the ceiling (§ Status).
+  - With 0 ms under the ceiling, the abort overshoot (≤ ~31 ms) passes 22 000 ms by that much. Level 5's 3 000 ms
+    budget passes its ≤ 3 s clause the same way. That is `AR-NFR004-A`, stated and not hidden behind a sub-second
+    margin. Security/NFR re-reads it at 22 s (§ Consequences).
+  - 22 500 is now above the ceiling. It would also stop being a fixed setting at 40/15, because `C` (22 375) would
+    bind from move 1.
   - 20 500 follows `NFR-004`'s "budget + 2 s" rule, which derives a level's ceiling from its budget. Here the owner
-    set the ceiling directly. 500 ms is 16 × the measured overshoot bound.
+    set the ceiling directly.
   - At 22 000: 40 × (22 000 + 31) = 881 240 ms, so **18 760 ms** are left after move 40 and **97.9 %** of the period is
     used. With the book's maximum of 6 engine moves (`maxPly` 12) the period still uses **83.2 %**. Three periods, and
     `tc=40/60`, keep the closest call at ≥ 1 069 ms on the virtual clock (`raw/alloc.txt`). M1 and M2 hold by
-    arithmetic.
-  - The owner is told the number. He may move T anywhere under 22 500. The rules above do not change with it.
+    arithmetic. The amendment moved none of these figures.
+  - The owner set T and the ceiling on 2026-10-30. Any later change is his to make, and the rules above do not
+    change with it.
 
 ### D4. `uci-clock-mode` (a later milestone; designed now): the clock, the safe share, a 59.5 s cap under a 60 s ceiling
 
@@ -182,7 +232,7 @@ OVERHEAD =   100 ms   (charged per move still to play before the control)
 | cutechess's own read and timer | `UNKNOWN - verify` | its timer runs from `startTimer()` to the move | inside `OVERHEAD`; then the slack below |
 | D4.1's 50 ms (`MOVE_OVERHEAD_MS`) | 50 ms, at a period's last move only | `ADR-0044` D4.1 | **levels only.** The modes do not use it |
 | the reserve at the control | 1 000 ms | D2 | `RESERVE` |
-| the margin under a ceiling | 500 ms | D3, D4 | between T (or 59 500) and its `NFR-004` ceiling |
+| the margin under a ceiling | 0 ms in `simple-tournament` (the owner's 22 s amendment); 500 ms in `uci-clock-mode` | D3, D4 | between the budget and its `NFR-004` ceiling. At 0 ms the abort overshoot passes the ceiling by ≤ ~31 ms: `AR-NFR004-A` |
 
 The slack is wide. M1's ≥ 500 ms survives `δ` up to 600 ms on a period's last move at 40/15. In `simple-tournament` at
 40/15 the cushion is 20 000 − 40 × `δ` ms after move 40, about 487 ms of `δ` per move on average. `ABC-222` reads the
@@ -195,7 +245,7 @@ real `δ` from cutechess's per-move times.
   `ADR-0045` A3's shape (`RF-1`): one absolute clamp at the largest ceiling. Each setting's own ceiling is held by its
   data, at the setting:
   - levels 1–7 by `LEVELS[L].budgetMs`, unchanged (5, 7, 32 s);
-  - `simple-tournament` by T (22 000 under 22 500);
+  - `simple-tournament` by T (22 000, equal to its ceiling; the overshoot is `AR-NFR004-A`);
   - `uci-clock-mode` by `CLOCK_MODE_MAX_BUDGET_MS` (59 500 under 60 000).
 - **Levels 1–7 are value-identical after the move.** Every level budget is ≤ 30 000, so `min(budget, 60 000)` =
   `min(budget, 32 000)`. A bare `go` at a level is still the level's budget (D4.1's `G = HARD_CEILING_MS`, then D4.2's
@@ -209,7 +259,7 @@ real `δ` from cutechess's per-move times.
 ### D7. One thread at budgets up to 60 s: the stop and `isready` latency
 
 - **The risk.** `ADR-0044` D5 stands: `isready` and `stop` sent during a search are answered when the search ends, at
-  most one budget late. That is ≤ 22.5 s in `simple-tournament` (inside level 7's accepted 32 s) and **≤ 60 s in
+  most one budget late. That is ≤ 22 s in `simple-tournament` (inside level 7's accepted 32 s) and **≤ 60 s in
   `uci-clock-mode`**. `RISK-EPIC009-02` names it.
 - **What cutechess does** (`ADR-0045` A4's source read): it pings only between moves, and it sends a mid-search
   `stop` only at a game end or when pondering. After that `stop` it kills the engine at `IdleTimeout` (15 000 ms). In
@@ -221,13 +271,53 @@ real `δ` from cutechess's per-move times.
 - **What it owes.** It owes no new `NFR` bound. Adding a bound is the owner's, and the risk is already accepted
   under `ADR-0044` D5.
   - **An accepted-risk entry**, placed by Security/NFR beside `NFR-011` (which is idle-only and does not move):
-    *"busy `isready`/`stop`: answered ≤ one budget + `AR-NFR004-A` late; ≤ 22.5 s in `simple-tournament`, ≤ 60 s in
+    *"busy `isready`/`stop`: answered ≤ one budget + `AR-NFR004-A` late; ≤ 22 s in `simple-tournament`, ≤ 60 s in
     `uci-clock-mode`; one `readyok` per `isready`, in order"*.
   - **Two test rows.** In the default lane (virtual clock), `isready` sent after a `go` is answered with exactly one
     `readyok`, written after the `bestmove`. In the opt-in real-child lane (the `ABC-119` precedent; unset means NOT
     DEFINED), `node src/uci.ts` with `TimeMode` set, `go movetime 2000`, then `isready` 100 ms later: `readyok` arrives
     ≤ 100 ms after `bestmove`, and no line is lost. The bound scales with the budget, so 2 s stands for 60 s. No 60 s
     real-clock row runs in any lane but `ENGINE_DEEP`.
+- **Amended 2026-10-30 (`arch-ABC-220-a14`): the real-child row is read by two instruments.** The row above cannot be
+  read as written. The real-child lane's child is synchronous (`spawnSync`, because `ABC-173` `C2` bars every
+  asynchronous `child_process` form in `src/**/*.test.ts`). Its whole stdin script is written at spawn, and its whole
+  stdout comes back at exit. So the lane cannot send anything "100 ms later", and it has no time for any single line.
+  The row's intent does not change. Each `isready` gets one `readyok`, in order, after the `bestmove`. No line is
+  lost. Once the search ends, the waiting `isready` is answered within 100 ms.
+  - **(a) The lane row** (`UCI_DEEP`, `src/uci.real-engine.test.ts`, D8). `node src/uci.ts` runs with `TimeMode`
+    set and the book off. In the script, `isready` comes straight after `go movetime 2000`, so it is waiting in the
+    child's input while the search runs. This is the case `ADR-0044` D5 describes. The row reads:
+    - exactly one `readyok` per `isready`, and the busy one is the line straight after the only `bestmove`;
+    - nothing is lost or refused, and the `bestmove` is legal;
+    - spawn to exit takes ≥ 2 000 ms, so the search ran;
+    - M4 holds, the exit code is 0, and stderr is empty.
+
+    The row reads no time between lines, and it says so.
+  - **(b) The QE hand reading** of the ≤ 100 ms bound. One asynchronous probe lives outside `src/` and runs with
+    plain `node`, never through vitest. This is the `ABC-168` `A6` / `NFR-011` precedent. `C2` covers
+    `src/**/*.test.ts` only, and the `ADR-0008` heap ceiling covers vitest runs only, so neither is edited or waived.
+    The probe writes `isready` 100 ms after `go movetime 2000`, so the line arrives while the child is inside the
+    search, as a GUI would send it. It reads the gap from the arrival of `bestmove` to the arrival of `readyok`.
+    `ABC-220` `A14` states the protocol.
+  - **Rejected:** opening `C2` to allow one asynchronous child in the lane. That is route (1) at `ABC-168`, which
+    reopens an addendum the owner accepted for a single row. Also rejected: dropping the 100 ms bound and keeping only
+    the order. That would move D7's requirement, and the owner would have to be asked.
+- **How "≤ 22 s" is read in the accepted-risk entry** (2026-10-30, `arch-ABC-220-a14`; for Security/NFR's entry beside
+  `NFR-011`). The latency has three terms:
+  - **one budget:** the budget the `go` handed. That is ≤ 22 000 ms in `simple-tournament`, and `ABC-220` `A6` reads
+    it exactly on the virtual clock;
+  - **`+ AR-NFR004-A`:** the abort overshoot, ≤ ~31 ms;
+  - **the drain:** ≤ 100 ms, the bound (b) reads.
+
+  The worst case is an `isready` or `stop` that arrives together with the `go`: ≤ 22 000 + ~31 + 100 ≈ 22 131 ms.
+  **"≤ 22 s" is read to the whole second, as a delay < 22 500 ms.** This is the same reading as `ABC-220` `A11`'s
+  wall, and it follows the owner's "no need to implement fraction of a second ceiling". It is **not** read as
+  ≤ 22 000 ms exactly. With the budget equal to the ceiling, no real search could meet that, because the overshoot
+  alone passes it, and the owner ruled out a sub-second margin. In `uci-clock-mode`, 59 500 + ~31 + 100 < 60 000, so
+  "≤ 60 s" holds exactly. `ABC-221` re-reads that at its gate. The entry text, with the reading added:
+  *"busy `isready`/`stop`: answered ≤ one budget + `AR-NFR004-A` late; ≤ 22 s in `simple-tournament` (read to the
+  whole second: < 22 500 ms), ≤ 60 s in `uci-clock-mode`; one `readyok` per `isready`, in order"*. The whole-second
+  reading changes no code. If the owner rejects it, only the text of this entry and `A11`'s bound move.
 
 ### D8. Where the code goes
 
@@ -235,6 +325,13 @@ real `δ` from cutechess's per-move times.
   rule, and the constants `SIMPLE_TOURNAMENT_CEILING_MS`, `SIMPLE_TOURNAMENT_BUDGET_MS`, `CLOCK_RESERVE_MS` and
   `CLOCK_OVERHEAD_MS`. Tests in `src/uci-session.test.ts` and its `ENGINE_DEEP` lane. **No new file**, so D8's closure,
   `ADR-0011`'s census and `NFR-008`'s per-file floor do not move.
+  - *(Amended 2026-10-30, `arch-ABC-220-a14`.)* There is one exception: D7's real-child row (a). It lives in
+    `src/uci.real-engine.test.ts`, in its existing `UCI_DEEP` lane. That file is the "opt-in real-child lane" D7 and D9
+    name (`ADR-0044` D9, `ABC-168`). `src/uci-session.test.ts` drives the session in process and has no spawn site.
+    Spawning the delivered entry point from it would add a second spawn site. Moving the row to the existing file
+    adds no file, no delivery file and no spawn site: `runDialogue` takes a script and stays the file's only
+    `spawnSync` call. So what D8 guards still holds. The probe for (b) is a record under `.grugops/context/`, not a
+    delivery file.
 - **`uci-clock-mode` build:** `src/uci-session.ts` (the third value, D4's rule, `CLOCK_MODE_CEILING_MS`,
   `CLOCK_MODE_MAX_BUDGET_MS`) and **one value** in `src/engine.ts` (`HARD_CEILING_MS`, and its header comment's
   numbers).
@@ -255,10 +352,13 @@ real `δ` from cutechess's per-move times.
     each, and ≥ 75 % used; `tc=40/60` keeps ≥ 1 000 ms; `movetime 5000` gives 5 000;
   - `uci-clock-mode`: `ABC-221`'s A2–A7 as written. They hold by D4's arithmetic;
   - D7's in-order `readyok` row.
-- **`ENGINE_DEEP` lane, real clock, ALONE:** one search at 22 000 returns ≤ 22 500 (`simple-tournament`). At the
+- **`ENGINE_DEEP` lane, real clock, ALONE:** one search at 22 000 returns at the 22 000 ceiling plus no more than the
+  abort overshoot `AR-NFR004-A` accepts, as at level 5 (`simple-tournament`). The row reports the overshoot and
+  adds no sub-second margin. Its tolerance is the one Security/NFR re-reads at 22 s. At the
   clock-mode build, one at 59 500 returns ≤ 60 000, with the max completed depth logged against `KEY_ARRAY_CAPACITY`'s
   tripwire (≥ 100 → Architect; the runaway guard at `src/search.ts:121` already bounds it).
-- **Opt-in real-child lane:** D7's latency row.
+- **Opt-in real-child lane:** D7's latency row. *(Amended 2026-10-30, `arch-ABC-220-a14`: this lane holds row (a), the
+  order and the count, in `src/uci.real-engine.test.ts`. The ≤ 100 ms bound is (b), a QE hand reading outside vitest.)*
 - **Acceptance outside vitest:** the smoke reading per mode (5–10 cutechess games at `tc=40/900`, `timemargin=0`, the
   lines in D1), graded on M1 and M2. Major validation (≥ 100 games) is later and out of this MVP (owner Q1).
 
@@ -282,10 +382,19 @@ real `δ` from cutechess's per-move times.
 - **`NFR-004`, proposed text for the owner** (Security/NFR places it at each gate):
   - **At the `simple-tournament` build:** *"Engine returns a move in ≤ 3 s at default difficulty (level 5); hard
     ceiling per level: 5 s at levels 1–5, 7 s at level 6, 32 s at level 7 (a level above 5 gets its budget + 2 s);
-    22.5 s in UCI `TimeMode` `simple-tournament` (budget 22 s)."* The clamp stays 32 000.
+    22 s in UCI `TimeMode` `simple-tournament` (budget 22 s)."* The clamp stays 32 000. *(22.5 s before the owner's
+    2026-10-30 amendment.)*
+    *(Pointer 2026-10-30, BA/PM, task `bapm-ABC-220-merge-fold`, on Security/NFR's `SEC-220-a`: clause A of this
+    quoted sentence reads **≤ 4 s** since `ABC-228`'s merge (`e42b637b`; `ADR-0053` d10; `ADR-0045` FOLDED in place,
+    § Status, 2026-10-30). Security/NFR placed only the new clause at `ABC-220`'s gate (`secnfr-ABC-220`), so the
+    catalog's `NFR-004` row is right, and "≤ 3 s" here is history. The level-5 comparisons in § Status and D3 ("its
+    3 000 ms budget … ≤ 3 s clause") and in the `AR-NFR004-A` bullet below ("level 5's ≤ 3 s") read 4 000 ms and
+    ≤ 4 s the same way. No decision changes.)*
   - **At the `uci-clock-mode` build**, appended: *"; 60 s in UCI `TimeMode` `uci-clock-mode` (budget ≤ 59.5 s). The
     engine's one clamp sits at the largest ceiling in force, 60 s."* `HARD_CEILING_MS` = 60 000.
-  - `AR-NFR004-A` (≤ ~31 ms) is re-read by Security/NFR at 22 s, and at 59.5 s at the clock-mode gate.
+  - `AR-NFR004-A` (≤ ~31 ms) is re-read by Security/NFR at 22 s, and at 59.5 s at the clock-mode gate. At 22 s it now
+    covers the overshoot past the ceiling itself, as it does for level 5's ≤ 3 s, because the budget equals the
+    ceiling (D3).
 - **`NFR-009`:** 22 s is inside `ABC-212`'s 30 s reading (≤ 16 MiB, flat), so no re-read is owed at the
   `simple-tournament` build. **A re-read at 59.5 s is owed at the `uci-clock-mode` gate.** The table is allocated once
   (`ADR-0025`), so a flat reading is expected. That is `UNKNOWN - verify`.
@@ -326,3 +435,7 @@ real `δ` from cutechess's per-move times.
   5. answers to `isready`/`stop` up to one move late, ≤ 60 s in the clock mode, accepted with no worker (D7).
   - Options: (a) accept as written; (b) accept with a different T (anything under 22.5 s); (c) decline.
   - **No default.** An ADR is accepted only on your word. Until then nothing is built on it.
+  - **Closed 2026-10-30.** He accepted with an amendment that none of the three options offered. T stays 22 s, the
+    ceiling moves to 22 s, and nothing is sub-second. Points 1 and 3–5 stand as written. In point 2, the ceiling now
+    reads 22 s. His words and the record are in § Status and in the Orchestrator note
+    `.grugops/context/orch-2026-10-29g/notes/20261030T041740Z-orchestrator-decision-3dd61448.md`.

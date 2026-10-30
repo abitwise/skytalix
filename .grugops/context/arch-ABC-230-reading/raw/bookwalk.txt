@@ -1,0 +1,2 @@
+{"totalEntries":5390,"reachedFromStartpos":3626,"epSet":693,"epUncapturable":685,"startFenRoundTrip":"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"}
+cpu 0.26+0.02 s

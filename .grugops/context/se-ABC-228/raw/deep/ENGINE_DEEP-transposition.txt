@@ -1,0 +1,13 @@
+
+> skytalix@0.0.0 test:watch
+> NODE_OPTIONS=--max-old-space-size=128 vitest run src/transposition.test.ts
+
+
+ RUN  v4.1.12 <worktree>
+
+
+ Test Files  1 passed (1)
+      Tests  26 passed (26)
+   Start at  07:06:05
+   Duration  4.30s (transform 0ms, setup 0ms, import 69ms, tests 4.14s, environment 0ms)
+

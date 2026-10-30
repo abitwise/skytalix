@@ -1,0 +1,4 @@
+{"tree":"base","cold":false,"N":20000,"startpos":692,"kiwipete":572.1,"position-3":371.5,"position-4":538.4,"position-5":612.1,"position-6":836.3,"mean":603.7,"load1_before":1.46,"load1_after":1.46,"at":"2026-10-29T22:14:17.063Z","sink":0}
+{"tree":"tip","cold":true,"N":20000,"startpos":753.6,"kiwipete":740.9,"position-3":452.2,"position-4":672.7,"position-5":646.7,"position-6":712.1,"mean":663,"load1_before":1.46,"load1_after":1.46,"at":"2026-10-29T22:14:17.513Z","sink":0}
+{"tree":"tip","cold":true,"N":20000,"startpos":642.2,"kiwipete":632.5,"position-3":415.1,"position-4":567.7,"position-5":594.1,"position-6":633.7,"mean":580.9,"load1_before":1.46,"load1_after":1.46,"at":"2026-10-29T22:14:17.930Z","sink":0}
+{"tree":"base","cold":false,"N":20000,"startpos":1154.7,"kiwipete":709.7,"position-3":416.9,"position-4":521.7,"position-5":515,"position-6":576.8,"mean":649.1,"load1_before":1.46,"load1_after":1.46,"at":"2026-10-29T22:14:18.430Z","sink":0}

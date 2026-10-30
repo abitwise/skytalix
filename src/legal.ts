@@ -19,16 +19,37 @@ import { makeMove, unmakeMove } from "./apply.ts";
 import {
   FLAG_EN_PASSANT,
   FLAG_NONE,
+  FLAG_PROMOTION,
+  generateCaptures,
   generateMoves,
   isSquareAttackedBy,
   type Move,
 } from "./moves.ts";
-import { BLACK, EMPTY, isOnBoard, KING, NO_SQUARE, PAWN, type Position } from "./position.ts";
+import {
+  BLACK,
+  EMPTY,
+  isOnBoard,
+  KING,
+  NO_SQUARE,
+  PAWN,
+  type Position,
+  QUEEN,
+} from "./position.ts";
 
 /**
  * The 0x88 square of the given side's king. Every legal position has exactly one king per
  * side (parseFen enforces it, make/unmake preserves it), and off-board squares are EMPTY, so
  * a single scan for the king's byte finds it.
+ *
+ * ABC-235 cut 1: the three filters below (`legalMoves`, `hasLegalMove`, `legalCaptures`) scan
+ * ONCE per call, before their loop, instead of once per move after `makeMove`. With one king per
+ * side, no move of the mover's changes where its king stands except its own king move (castling
+ * included, whose `to` is the king's square): en passant removes an ENEMY pawn and a promotion
+ * replaces a pawn. So for each move the king stands on `move.to` when `move.piece` is the mover's
+ * king, else on the hoisted square — the square the per-move scan found — and the attack test
+ * reads the same board. The make/test/unmake strategy is unchanged (ADR-0003 clause 1, OD-206-1);
+ * only where the scan runs moved. Nothing is cached on `Position` (ADR-0020). `isInCheck`,
+ * `givesCheck` and `hasLegalEnPassant` keep their own scan.
  */
 function kingSquareOf(position: Position, black: boolean): number {
   return position.board.indexOf(KING | (black ? BLACK : 0));
@@ -47,12 +68,14 @@ export function isInCheck(position: Position): boolean {
  */
 export function legalMoves(position: Position): Move[] {
   const moverIsBlack = position.blackToMove;
+  const king = KING | (moverIsBlack ? BLACK : 0);
+  const kingHome = kingSquareOf(position, moverIsBlack);
   const legal: Move[] = [];
 
   for (const move of generateMoves(position)) {
     const undo = makeMove(position, move);
     // makeMove flipped the side; the mover's king must not be attacked by the now-mover.
-    const kingSquare = kingSquareOf(position, moverIsBlack);
+    const kingSquare = move.piece === king ? move.to : kingHome;
     if (!isSquareAttackedBy(position, kingSquare, !moverIsBlack)) legal.push(move);
     unmakeMove(position, move, undo);
   }
@@ -68,10 +91,12 @@ export function legalMoves(position: Position): Move[] {
  */
 export function hasLegalMove(position: Position): boolean {
   const moverIsBlack = position.blackToMove;
+  const king = KING | (moverIsBlack ? BLACK : 0);
+  const kingHome = kingSquareOf(position, moverIsBlack);
 
   for (const move of generateMoves(position)) {
     const undo = makeMove(position, move);
-    const kingSquare = kingSquareOf(position, moverIsBlack);
+    const kingSquare = move.piece === king ? move.to : kingHome;
     const legal = !isSquareAttackedBy(position, kingSquare, !moverIsBlack);
     unmakeMove(position, move, undo);
     if (legal) return true;
@@ -82,24 +107,80 @@ export function hasLegalMove(position: Position): boolean {
 
 /**
  * The legal captures for the side to move: the same list, in the same order, as
- * `legalMoves(position).filter((move) => move.captured !== EMPTY)`. It skips a non-capture
- * before playing it, so only captures pay the make/test/unmake check. Two order-preserving
- * filters commute, so the order is generation order, which quiescence's stable sort depends on
- * (ABC-206). The position is unchanged on return.
+ * `legalMoves(position).filter((move) => move.captured !== EMPTY)`. Only captures pay the
+ * make/test/unmake check, and since ABC-235 cut 3 only captures are generated:
+ * `generateCaptures` is `generateMoves(position).filter(capture)` in the same order. Two
+ * order-preserving filters commute, so the order is generation order, which quiescence's stable
+ * sort depends on (ABC-206). The position is unchanged on return.
  */
 export function legalCaptures(position: Position): Move[] {
   const moverIsBlack = position.blackToMove;
+  const king = KING | (moverIsBlack ? BLACK : 0);
+  const kingHome = kingSquareOf(position, moverIsBlack);
   const captures: Move[] = [];
 
-  for (const move of generateMoves(position)) {
-    if (move.captured === EMPTY) continue;
+  for (const move of generateCaptures(position)) {
     const undo = makeMove(position, move);
-    const kingSquare = kingSquareOf(position, moverIsBlack);
+    const kingSquare = move.piece === king ? move.to : kingHome;
     if (!isSquareAttackedBy(position, kingSquare, !moverIsBlack)) captures.push(move);
     unmakeMove(position, move, undo);
   }
 
   return captures;
+}
+
+/** The 0x88 square of the a-file pawn one push from queening: rank 7 for white, rank 2 for black. */
+const WHITE_PROMOTING_RANK_START = 0x60;
+const BLACK_PROMOTING_RANK_START = 0x10;
+
+/**
+ * Quiescence's move list out of check (`ABC-229`, `ADR-0053` decision 5): `legalCaptures`' list,
+ * in its order, with the legal QUIET promotions TO A QUEEN appended after it, by `from` square
+ * ascending — the order `generateMoves` would give them. The same list as
+ * `legalMoves(position).filter((m) => m.captured !== EMPTY || m.promotion === QUEEN)` with the
+ * quiet queen promotions moved to the end. Quiet under-promotions stay out.
+ *
+ * ONE generation pass: the captures come from the single `generateCaptures` call, and the quiet
+ * queen promotions from a scan of the eight squares one push from queening, in the same call. No
+ * second `generateMoves` or `legalMoves` pass (the probe's second pass cost 1.7x CPU at 1.01x
+ * nodes). Only the captures and the quiet queen promotions pay the make/test/unmake check. The
+ * position is unchanged on return.
+ */
+export function legalCapturesAndQueenPromotions(position: Position): Move[] {
+  const moverIsBlack = position.blackToMove;
+  const king = KING | (moverIsBlack ? BLACK : 0);
+  const kingHome = kingSquareOf(position, moverIsBlack);
+  const moves: Move[] = [];
+
+  for (const move of generateCaptures(position)) {
+    const undo = makeMove(position, move);
+    const kingSquare = move.piece === king ? move.to : kingHome;
+    if (!isSquareAttackedBy(position, kingSquare, !moverIsBlack)) moves.push(move);
+    unmakeMove(position, move, undo);
+  }
+
+  const pawn = PAWN | (moverIsBlack ? BLACK : 0);
+  const forward = moverIsBlack ? -16 : 16;
+  const start = moverIsBlack ? BLACK_PROMOTING_RANK_START : WHITE_PROMOTING_RANK_START;
+  const board = position.board;
+  for (let from = start; from < start + 8; from++) {
+    const to = from + forward;
+    if (board[from] !== pawn || board[to] !== EMPTY) continue;
+    const move: Move = {
+      from,
+      to,
+      piece: pawn,
+      captured: EMPTY,
+      flags: FLAG_PROMOTION,
+      promotion: QUEEN,
+    };
+    const undo = makeMove(position, move);
+    // A pawn move never moves the king, so the mover's king stands on its hoisted square.
+    if (!isSquareAttackedBy(position, kingHome, !moverIsBlack)) moves.push(move);
+    unmakeMove(position, move, undo);
+  }
+
+  return moves;
 }
 
 /**

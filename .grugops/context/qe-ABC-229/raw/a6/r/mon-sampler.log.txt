@@ -1,0 +1,315 @@
+2026-10-30T19:49:48Z load1=1.22 tctl=74.5 vitest=0 cutechess=1 busy_mhz=5005
+2026-10-30T19:49:58Z load1=1.19 tctl=76.1 vitest=0 cutechess=1 busy_mhz=5010
+2026-10-30T19:50:08Z load1=1.16 tctl=75.5 vitest=0 cutechess=1 busy_mhz=5070
+2026-10-30T19:50:18Z load1=1.13 tctl=73.5 vitest=0 cutechess=1 busy_mhz=5040
+2026-10-30T19:50:28Z load1=1.11 tctl=74.3 vitest=0 cutechess=1 busy_mhz=5029
+2026-10-30T19:50:38Z load1=1.10 tctl=73.6 vitest=0 cutechess=1 busy_mhz=5033
+2026-10-30T19:50:48Z load1=1.15 tctl=73.6 vitest=0 cutechess=1 busy_mhz=5040
+2026-10-30T19:50:58Z load1=1.20 tctl=73.0 vitest=0 cutechess=1 busy_mhz=5040
+2026-10-30T19:51:08Z load1=1.25 tctl=77.0 vitest=0 cutechess=1 busy_mhz=5008
+2026-10-30T19:51:18Z load1=1.21 tctl=74.9 vitest=0 cutechess=1 busy_mhz=5029
+2026-10-30T19:51:29Z load1=1.18 tctl=74.1 vitest=0 cutechess=1 busy_mhz=5034
+2026-10-30T19:51:39Z load1=1.15 tctl=73.0 vitest=0 cutechess=1 busy_mhz=5055
+2026-10-30T19:51:49Z load1=1.12 tctl=74.5 vitest=0 cutechess=1 busy_mhz=5015
+2026-10-30T19:51:59Z load1=1.10 tctl=75.1 vitest=0 cutechess=1 busy_mhz=5021
+2026-10-30T19:52:09Z load1=1.09 tctl=73.6 vitest=0 cutechess=1 busy_mhz=5040
+2026-10-30T19:52:19Z load1=1.07 tctl=75.4 vitest=0 cutechess=1 busy_mhz=5045
+2026-10-30T19:52:29Z load1=1.06 tctl=72.8 vitest=0 cutechess=1 busy_mhz=5031
+2026-10-30T19:52:39Z load1=1.05 tctl=74.1 vitest=0 cutechess=1 busy_mhz=5015
+2026-10-30T19:52:49Z load1=1.04 tctl=74.8 vitest=0 cutechess=1 busy_mhz=5024
+2026-10-30T19:52:59Z load1=1.04 tctl=72.9 vitest=0 cutechess=1 busy_mhz=5042
+2026-10-30T19:53:09Z load1=1.11 tctl=72.4 vitest=0 cutechess=1 busy_mhz=5024
+2026-10-30T19:53:19Z load1=1.17 tctl=73.1 vitest=0 cutechess=1 busy_mhz=5030
+2026-10-30T19:53:29Z load1=1.15 tctl=74.3 vitest=0 cutechess=1 busy_mhz=5022
+2026-10-30T19:53:39Z load1=1.12 tctl=73.4 vitest=0 cutechess=1 busy_mhz=5033
+2026-10-30T19:53:49Z load1=1.10 tctl=71.6 vitest=0 cutechess=1 busy_mhz=5065
+2026-10-30T19:53:59Z load1=1.09 tctl=72.9 vitest=0 cutechess=1 busy_mhz=5030
+2026-10-30T19:54:09Z load1=1.07 tctl=72.5 vitest=0 cutechess=1 busy_mhz=5047
+2026-10-30T19:54:19Z load1=2.74 tctl=72.0 vitest=0 cutechess=1 busy_mhz=5045
+2026-10-30T19:54:29Z load1=2.47 tctl=74.6 vitest=0 cutechess=1 busy_mhz=5023
+2026-10-30T19:54:39Z load1=2.24 tctl=73.6 vitest=0 cutechess=1 busy_mhz=5045
+2026-10-30T19:54:49Z load1=2.05 tctl=73.4 vitest=0 cutechess=1 busy_mhz=5032
+2026-10-30T19:54:59Z load1=1.89 tctl=73.8 vitest=0 cutechess=1 busy_mhz=5040
+2026-10-30T19:55:09Z load1=1.75 tctl=73.6 vitest=0 cutechess=1 busy_mhz=5035
+2026-10-30T19:55:19Z load1=1.72 tctl=73.4 vitest=0 cutechess=1 busy_mhz=5055
+2026-10-30T19:55:29Z load1=1.61 tctl=73.4 vitest=0 cutechess=1 busy_mhz=5033
+2026-10-30T19:55:39Z load1=1.51 tctl=73.8 vitest=0 cutechess=1 busy_mhz=5034
+2026-10-30T19:55:49Z load1=1.43 tctl=73.8 vitest=0 cutechess=1 busy_mhz=5041
+2026-10-30T19:55:59Z load1=1.37 tctl=74.5 vitest=0 cutechess=1 busy_mhz=4964
+2026-10-30T19:56:09Z load1=1.31 tctl=74.0 vitest=0 cutechess=1 busy_mhz=5020
+2026-10-30T19:56:20Z load1=1.34 tctl=73.0 vitest=0 cutechess=1 busy_mhz=5039
+2026-10-30T19:56:30Z load1=1.29 tctl=73.9 vitest=0 cutechess=1 busy_mhz=5020
+2026-10-30T19:56:40Z load1=1.32 tctl=74.1 vitest=0 cutechess=1 busy_mhz=5040
+2026-10-30T19:56:50Z load1=1.27 tctl=73.6 vitest=0 cutechess=1 busy_mhz=5045
+2026-10-30T19:57:00Z load1=1.23 tctl=75.1 vitest=0 cutechess=1 busy_mhz=5015
+2026-10-30T19:57:10Z load1=1.19 tctl=74.0 vitest=0 cutechess=1 busy_mhz=5026
+2026-10-30T19:57:20Z load1=1.24 tctl=74.5 vitest=0 cutechess=1 busy_mhz=5020
+2026-10-30T19:57:30Z load1=1.20 tctl=74.1 vitest=0 cutechess=1 busy_mhz=5078
+2026-10-30T19:57:40Z load1=1.17 tctl=73.8 vitest=0 cutechess=1 busy_mhz=5023
+2026-10-30T19:57:50Z load1=1.22 tctl=72.5 vitest=0 cutechess=1 busy_mhz=5041
+2026-10-30T19:58:00Z load1=1.18 tctl=74.9 vitest=0 cutechess=1 busy_mhz=5023
+2026-10-30T19:58:10Z load1=1.16 tctl=75.0 vitest=0 cutechess=1 busy_mhz=5023
+2026-10-30T19:58:20Z load1=1.21 tctl=73.9 vitest=0 cutechess=1 busy_mhz=5020
+2026-10-30T19:58:30Z load1=1.25 tctl=73.0 vitest=0 cutechess=1 busy_mhz=5040
+2026-10-30T19:58:40Z load1=1.29 tctl=73.1 vitest=0 cutechess=1 busy_mhz=5040
+2026-10-30T19:58:50Z load1=1.24 tctl=72.8 vitest=0 cutechess=1 busy_mhz=2341
+2026-10-30T19:59:00Z load1=1.21 tctl=73.5 vitest=0 cutechess=1 busy_mhz=5075
+2026-10-30T19:59:10Z load1=1.17 tctl=72.9 vitest=0 cutechess=1 busy_mhz=5040
+2026-10-30T19:59:20Z load1=1.22 tctl=72.1 vitest=0 cutechess=1 busy_mhz=5044
+2026-10-30T19:59:30Z load1=1.19 tctl=73.9 vitest=0 cutechess=1 busy_mhz=5041
+2026-10-30T19:59:40Z load1=1.16 tctl=73.6 vitest=0 cutechess=1 busy_mhz=5074
+2026-10-30T19:59:50Z load1=1.21 tctl=73.3 vitest=0 cutechess=1 busy_mhz=5062
+2026-10-30T20:00:00Z load1=1.33 tctl=77.8 vitest=2 cutechess=1 busy_mhz=4991
+2026-10-30T20:00:00Z FOREIGN-VITEST count=2
+2026-10-30T20:00:10Z load1=1.44 tctl=80.6 vitest=2 cutechess=1 busy_mhz=4979
+2026-10-30T20:00:10Z FOREIGN-VITEST count=2
+2026-10-30T20:00:20Z load1=1.68 tctl=81.5 vitest=2 cutechess=1 busy_mhz=4952
+2026-10-30T20:00:20Z FOREIGN-VITEST count=2
+2026-10-30T20:00:30Z load1=1.73 tctl=79.0 vitest=2 cutechess=1 busy_mhz=4993
+2026-10-30T20:00:30Z FOREIGN-VITEST count=2
+2026-10-30T20:00:40Z load1=1.85 tctl=80.5 vitest=2 cutechess=1 busy_mhz=4929
+2026-10-30T20:00:40Z FOREIGN-VITEST count=2
+2026-10-30T20:00:50Z load1=1.88 tctl=81.6 vitest=2 cutechess=1 busy_mhz=4948
+2026-10-30T20:00:50Z FOREIGN-VITEST count=2
+2026-10-30T20:01:00Z load1=1.98 tctl=82.0 vitest=2 cutechess=1 busy_mhz=4935
+2026-10-30T20:01:00Z FOREIGN-VITEST count=2
+2026-10-30T20:01:10Z load1=1.98 tctl=79.0 vitest=2 cutechess=1 busy_mhz=4977
+2026-10-30T20:01:10Z FOREIGN-VITEST count=2
+2026-10-30T20:01:21Z load1=1.98 tctl=78.5 vitest=2 cutechess=1 busy_mhz=5007
+2026-10-30T20:01:21Z FOREIGN-VITEST count=2
+2026-10-30T20:01:31Z load1=1.99 tctl=79.6 vitest=2 cutechess=1 busy_mhz=4962
+2026-10-30T20:01:31Z FOREIGN-VITEST count=2
+2026-10-30T20:01:41Z load1=1.99 tctl=79.0 vitest=2 cutechess=1 busy_mhz=5004
+2026-10-30T20:01:41Z FOREIGN-VITEST count=2
+2026-10-30T20:01:51Z load1=1.99 tctl=76.1 vitest=2 cutechess=1 busy_mhz=5012
+2026-10-30T20:01:51Z FOREIGN-VITEST count=2
+2026-10-30T20:02:01Z load1=2.07 tctl=79.8 vitest=2 cutechess=1 busy_mhz=4962
+2026-10-30T20:02:01Z FOREIGN-VITEST count=2
+2026-10-30T20:02:11Z load1=2.06 tctl=83.1 vitest=2 cutechess=1 busy_mhz=4967
+2026-10-30T20:02:11Z FOREIGN-VITEST count=2
+2026-10-30T20:02:21Z load1=2.21 tctl=77.0 vitest=2 cutechess=1 busy_mhz=4993
+2026-10-30T20:02:21Z FOREIGN-VITEST count=2
+2026-10-30T20:02:31Z load1=2.10 tctl=77.3 vitest=2 cutechess=1 busy_mhz=4986
+2026-10-30T20:02:31Z FOREIGN-VITEST count=2
+2026-10-30T20:02:41Z load1=2.08 tctl=77.0 vitest=2 cutechess=1 busy_mhz=5037
+2026-10-30T20:02:41Z FOREIGN-VITEST count=2
+2026-10-30T20:02:51Z load1=2.00 tctl=76.0 vitest=2 cutechess=1 busy_mhz=5015
+2026-10-30T20:02:51Z FOREIGN-VITEST count=2
+2026-10-30T20:03:01Z load1=2.00 tctl=76.3 vitest=2 cutechess=1 busy_mhz=5027
+2026-10-30T20:03:01Z FOREIGN-VITEST count=2
+2026-10-30T20:03:11Z load1=1.85 tctl=76.8 vitest=2 cutechess=1 busy_mhz=5044
+2026-10-30T20:03:11Z FOREIGN-VITEST count=2
+2026-10-30T20:03:21Z load1=1.86 tctl=76.0 vitest=2 cutechess=1 busy_mhz=5029
+2026-10-30T20:03:21Z FOREIGN-VITEST count=2
+2026-10-30T20:03:31Z load1=1.80 tctl=75.3 vitest=2 cutechess=1 busy_mhz=5029
+2026-10-30T20:03:31Z FOREIGN-VITEST count=2
+2026-10-30T20:03:41Z load1=1.75 tctl=78.4 vitest=2 cutechess=1 busy_mhz=4988
+2026-10-30T20:03:41Z FOREIGN-VITEST count=2
+2026-10-30T20:03:51Z load1=1.71 tctl=76.9 vitest=2 cutechess=1 busy_mhz=5015
+2026-10-30T20:03:51Z FOREIGN-VITEST count=2
+2026-10-30T20:04:01Z load1=1.76 tctl=77.1 vitest=2 cutechess=1 busy_mhz=5003
+2026-10-30T20:04:01Z FOREIGN-VITEST count=2
+2026-10-30T20:04:11Z load1=1.79 tctl=78.8 vitest=2 cutechess=1 busy_mhz=4977
+2026-10-30T20:04:11Z FOREIGN-VITEST count=2
+2026-10-30T20:04:21Z load1=1.81 tctl=78.6 vitest=2 cutechess=1 busy_mhz=4997
+2026-10-30T20:04:21Z FOREIGN-VITEST count=2
+2026-10-30T20:04:31Z load1=1.76 tctl=77.5 vitest=2 cutechess=1 busy_mhz=5070
+2026-10-30T20:04:31Z FOREIGN-VITEST count=2
+2026-10-30T20:04:41Z load1=1.81 tctl=77.5 vitest=2 cutechess=1 busy_mhz=4979
+2026-10-30T20:04:41Z FOREIGN-VITEST count=2
+2026-10-30T20:04:51Z load1=1.84 tctl=79.4 vitest=2 cutechess=1 busy_mhz=4940
+2026-10-30T20:04:51Z FOREIGN-VITEST count=2
+2026-10-30T20:05:01Z load1=1.95 tctl=80.3 vitest=2 cutechess=1 busy_mhz=4963
+2026-10-30T20:05:01Z FOREIGN-VITEST count=2
+2026-10-30T20:05:11Z load1=1.95 tctl=78.0 vitest=2 cutechess=1 busy_mhz=4990
+2026-10-30T20:05:11Z FOREIGN-VITEST count=2
+2026-10-30T20:05:21Z load1=1.96 tctl=81.0 vitest=2 cutechess=1 busy_mhz=4964
+2026-10-30T20:05:21Z FOREIGN-VITEST count=2
+2026-10-30T20:05:31Z load1=1.97 tctl=77.6 vitest=2 cutechess=1 busy_mhz=4998
+2026-10-30T20:05:31Z FOREIGN-VITEST count=2
+2026-10-30T20:05:41Z load1=1.97 tctl=78.5 vitest=2 cutechess=1 busy_mhz=4961
+2026-10-30T20:05:41Z FOREIGN-VITEST count=2
+2026-10-30T20:05:51Z load1=1.98 tctl=76.1 vitest=2 cutechess=1 busy_mhz=5012
+2026-10-30T20:05:51Z FOREIGN-VITEST count=2
+2026-10-30T20:06:01Z load1=1.98 tctl=77.0 vitest=2 cutechess=1 busy_mhz=5023
+2026-10-30T20:06:01Z FOREIGN-VITEST count=2
+2026-10-30T20:06:11Z load1=1.83 tctl=74.3 vitest=2 cutechess=1 busy_mhz=5028
+2026-10-30T20:06:11Z FOREIGN-VITEST count=2
+2026-10-30T20:06:21Z load1=1.78 tctl=78.0 vitest=2 cutechess=1 busy_mhz=4997
+2026-10-30T20:06:21Z FOREIGN-VITEST count=2
+2026-10-30T20:06:32Z load1=1.82 tctl=76.4 vitest=2 cutechess=1 busy_mhz=5044
+2026-10-30T20:06:32Z FOREIGN-VITEST count=2
+2026-10-30T20:06:42Z load1=2.07 tctl=78.8 vitest=2 cutechess=1 busy_mhz=4970
+2026-10-30T20:06:42Z FOREIGN-VITEST count=2
+2026-10-30T20:06:52Z load1=1.98 tctl=77.5 vitest=2 cutechess=1 busy_mhz=4998
+2026-10-30T20:06:52Z FOREIGN-VITEST count=2
+2026-10-30T20:07:02Z load1=1.98 tctl=79.0 vitest=2 cutechess=1 busy_mhz=4977
+2026-10-30T20:07:02Z FOREIGN-VITEST count=2
+2026-10-30T20:07:12Z load1=2.13 tctl=77.9 vitest=2 cutechess=1 busy_mhz=5014
+2026-10-30T20:07:12Z FOREIGN-VITEST count=2
+2026-10-30T20:07:22Z load1=2.74 tctl=80.4 vitest=2 cutechess=1 busy_mhz=4955
+2026-10-30T20:07:22Z FOREIGN-VITEST count=2
+2026-10-30T20:07:32Z load1=2.78 tctl=82.6 vitest=2 cutechess=1 busy_mhz=4934
+2026-10-30T20:07:32Z FOREIGN-VITEST count=2
+2026-10-30T20:07:42Z load1=2.66 tctl=82.8 vitest=2 cutechess=1 busy_mhz=4945
+2026-10-30T20:07:42Z FOREIGN-VITEST count=2
+2026-10-30T20:07:52Z load1=2.64 tctl=82.4 vitest=2 cutechess=1 busy_mhz=5024
+2026-10-30T20:07:52Z FOREIGN-VITEST count=2
+2026-10-30T20:08:02Z load1=2.93 tctl=80.8 vitest=4 cutechess=1 busy_mhz=4942
+2026-10-30T20:08:02Z FOREIGN-VITEST count=4
+2026-10-30T20:08:12Z load1=3.09 tctl=83.0 vitest=2 cutechess=1 busy_mhz=4912
+2026-10-30T20:08:12Z FOREIGN-VITEST count=2
+2026-10-30T20:08:22Z load1=3.46 tctl=83.8 vitest=2 cutechess=1 busy_mhz=4945
+2026-10-30T20:08:22Z FOREIGN-VITEST count=2
+2026-10-30T20:08:32Z load1=3.55 tctl=83.1 vitest=2 cutechess=1 busy_mhz=4915
+2026-10-30T20:08:32Z FOREIGN-VITEST count=2
+2026-10-30T20:08:42Z load1=3.54 tctl=83.4 vitest=2 cutechess=1 busy_mhz=4997
+2026-10-30T20:08:42Z FOREIGN-VITEST count=2
+2026-10-30T20:08:52Z load1=3.62 tctl=82.8 vitest=2 cutechess=1 busy_mhz=4938
+2026-10-30T20:08:52Z FOREIGN-VITEST count=2
+2026-10-30T20:09:02Z load1=3.45 tctl=86.1 vitest=2 cutechess=1 busy_mhz=4888
+2026-10-30T20:09:02Z FOREIGN-VITEST count=2
+2026-10-30T20:09:12Z load1=3.15 tctl=85.9 vitest=2 cutechess=1 busy_mhz=4901
+2026-10-30T20:09:12Z FOREIGN-VITEST count=2
+2026-10-30T20:09:22Z load1=3.04 tctl=86.9 vitest=2 cutechess=1 busy_mhz=4895
+2026-10-30T20:09:22Z FOREIGN-VITEST count=2
+2026-10-30T20:09:32Z load1=3.04 tctl=80.3 vitest=2 cutechess=1 busy_mhz=4963
+2026-10-30T20:09:32Z FOREIGN-VITEST count=2
+2026-10-30T20:09:42Z load1=2.89 tctl=81.0 vitest=2 cutechess=1 busy_mhz=4957
+2026-10-30T20:09:42Z FOREIGN-VITEST count=2
+2026-10-30T20:09:52Z load1=2.83 tctl=79.4 vitest=2 cutechess=1 busy_mhz=4973
+2026-10-30T20:09:52Z FOREIGN-VITEST count=2
+2026-10-30T20:10:02Z load1=2.70 tctl=79.9 vitest=2 cutechess=1 busy_mhz=4974
+2026-10-30T20:10:02Z FOREIGN-VITEST count=2
+2026-10-30T20:10:12Z load1=2.59 tctl=78.3 vitest=2 cutechess=1 busy_mhz=4967
+2026-10-30T20:10:12Z FOREIGN-VITEST count=2
+2026-10-30T20:10:22Z load1=2.58 tctl=79.8 vitest=2 cutechess=1 busy_mhz=4983
+2026-10-30T20:10:22Z FOREIGN-VITEST count=2
+2026-10-30T20:10:32Z load1=2.49 tctl=79.1 vitest=2 cutechess=1 busy_mhz=4980
+2026-10-30T20:10:32Z FOREIGN-VITEST count=2
+2026-10-30T20:10:42Z load1=2.41 tctl=79.3 vitest=2 cutechess=1 busy_mhz=4978
+2026-10-30T20:10:42Z FOREIGN-VITEST count=2
+2026-10-30T20:10:52Z load1=2.27 tctl=79.1 vitest=2 cutechess=1 busy_mhz=4986
+2026-10-30T20:10:52Z FOREIGN-VITEST count=2
+2026-10-30T20:11:02Z load1=2.38 tctl=81.0 vitest=2 cutechess=1 busy_mhz=4982
+2026-10-30T20:11:02Z FOREIGN-VITEST count=2
+2026-10-30T20:11:12Z load1=2.39 tctl=81.4 vitest=2 cutechess=1 busy_mhz=4962
+2026-10-30T20:11:12Z FOREIGN-VITEST count=2
+2026-10-30T20:11:22Z load1=2.32 tctl=82.1 vitest=2 cutechess=1 busy_mhz=4946
+2026-10-30T20:11:22Z FOREIGN-VITEST count=2
+2026-10-30T20:11:33Z load1=2.27 tctl=81.0 vitest=2 cutechess=1 busy_mhz=4970
+2026-10-30T20:11:33Z FOREIGN-VITEST count=2
+2026-10-30T20:11:43Z load1=2.23 tctl=80.9 vitest=2 cutechess=1 busy_mhz=4962
+2026-10-30T20:11:43Z FOREIGN-VITEST count=2
+2026-10-30T20:11:53Z load1=2.19 tctl=82.0 vitest=2 cutechess=1 busy_mhz=4926
+2026-10-30T20:11:53Z FOREIGN-VITEST count=2
+2026-10-30T20:12:03Z load1=2.16 tctl=80.5 vitest=2 cutechess=1 busy_mhz=4937
+2026-10-30T20:12:03Z FOREIGN-VITEST count=2
+2026-10-30T20:12:13Z load1=2.14 tctl=79.1 vitest=2 cutechess=1 busy_mhz=4901
+2026-10-30T20:12:13Z FOREIGN-VITEST count=2
+2026-10-30T20:12:23Z load1=2.12 tctl=78.4 vitest=2 cutechess=1 busy_mhz=4983
+2026-10-30T20:12:23Z FOREIGN-VITEST count=2
+2026-10-30T20:12:33Z load1=2.18 tctl=80.1 vitest=2 cutechess=1 busy_mhz=4944
+2026-10-30T20:12:33Z FOREIGN-VITEST count=2
+2026-10-30T20:12:43Z load1=2.23 tctl=81.0 vitest=2 cutechess=1 busy_mhz=4950
+2026-10-30T20:12:43Z FOREIGN-VITEST count=2
+2026-10-30T20:12:53Z load1=2.11 tctl=79.1 vitest=2 cutechess=1 busy_mhz=5043
+2026-10-30T20:12:53Z FOREIGN-VITEST count=2
+2026-10-30T20:13:03Z load1=2.18 tctl=82.4 vitest=2 cutechess=1 busy_mhz=4979
+2026-10-30T20:13:03Z FOREIGN-VITEST count=2
+2026-10-30T20:13:13Z load1=2.45 tctl=79.3 vitest=2 cutechess=1 busy_mhz=4983
+2026-10-30T20:13:13Z FOREIGN-VITEST count=2
+2026-10-30T20:13:23Z load1=2.46 tctl=80.0 vitest=2 cutechess=1 busy_mhz=4957
+2026-10-30T20:13:23Z FOREIGN-VITEST count=2
+2026-10-30T20:13:33Z load1=2.46 tctl=78.6 vitest=2 cutechess=1 busy_mhz=4997
+2026-10-30T20:13:33Z FOREIGN-VITEST count=2
+2026-10-30T20:13:43Z load1=2.39 tctl=80.1 vitest=2 cutechess=1 busy_mhz=4983
+2026-10-30T20:13:43Z FOREIGN-VITEST count=2
+2026-10-30T20:13:53Z load1=2.48 tctl=79.0 vitest=2 cutechess=1 busy_mhz=4986
+2026-10-30T20:13:53Z FOREIGN-VITEST count=2
+2026-10-30T20:14:03Z load1=2.41 tctl=80.0 vitest=2 cutechess=1 busy_mhz=4992
+2026-10-30T20:14:03Z FOREIGN-VITEST count=2
+2026-10-30T20:14:13Z load1=2.42 tctl=78.1 vitest=2 cutechess=1 busy_mhz=4989
+2026-10-30T20:14:13Z FOREIGN-VITEST count=2
+2026-10-30T20:14:23Z load1=2.36 tctl=79.1 vitest=2 cutechess=1 busy_mhz=4981
+2026-10-30T20:14:23Z FOREIGN-VITEST count=2
+2026-10-30T20:14:33Z load1=2.38 tctl=83.1 vitest=2 cutechess=1 busy_mhz=4924
+2026-10-30T20:14:33Z FOREIGN-VITEST count=2
+2026-10-30T20:14:43Z load1=2.56 tctl=83.3 vitest=2 cutechess=1 busy_mhz=4943
+2026-10-30T20:14:43Z FOREIGN-VITEST count=2
+2026-10-30T20:14:53Z load1=2.70 tctl=85.9 vitest=2 cutechess=1 busy_mhz=4992
+2026-10-30T20:14:53Z FOREIGN-VITEST count=2
+2026-10-30T20:15:03Z load1=2.59 tctl=83.0 vitest=2 cutechess=1 busy_mhz=4930
+2026-10-30T20:15:03Z FOREIGN-VITEST count=2
+2026-10-30T20:15:13Z load1=2.50 tctl=80.0 vitest=2 cutechess=1 busy_mhz=4967
+2026-10-30T20:15:13Z FOREIGN-VITEST count=2
+2026-10-30T20:15:23Z load1=2.50 tctl=82.4 vitest=2 cutechess=1 busy_mhz=4950
+2026-10-30T20:15:23Z FOREIGN-VITEST count=2
+2026-10-30T20:15:33Z load1=2.47 tctl=79.6 vitest=2 cutechess=1 busy_mhz=4974
+2026-10-30T20:15:33Z FOREIGN-VITEST count=2
+2026-10-30T20:15:43Z load1=2.39 tctl=80.4 vitest=2 cutechess=1 busy_mhz=4968
+2026-10-30T20:15:43Z FOREIGN-VITEST count=2
+2026-10-30T20:15:53Z load1=2.26 tctl=79.4 vitest=2 cutechess=1 busy_mhz=4990
+2026-10-30T20:15:53Z FOREIGN-VITEST count=2
+2026-10-30T20:16:03Z load1=2.30 tctl=80.5 vitest=2 cutechess=1 busy_mhz=4943
+2026-10-30T20:16:03Z FOREIGN-VITEST count=2
+2026-10-30T20:16:13Z load1=2.25 tctl=80.8 vitest=2 cutechess=1 busy_mhz=4953
+2026-10-30T20:16:13Z FOREIGN-VITEST count=2
+2026-10-30T20:16:23Z load1=2.29 tctl=78.6 vitest=2 cutechess=1 busy_mhz=4969
+2026-10-30T20:16:23Z FOREIGN-VITEST count=2
+2026-10-30T20:16:33Z load1=2.25 tctl=79.4 vitest=2 cutechess=1 busy_mhz=4973
+2026-10-30T20:16:33Z FOREIGN-VITEST count=2
+2026-10-30T20:16:44Z load1=2.21 tctl=83.0 vitest=2 cutechess=1 busy_mhz=4892
+2026-10-30T20:16:44Z FOREIGN-VITEST count=2
+2026-10-30T20:16:54Z load1=2.18 tctl=83.8 vitest=2 cutechess=1 busy_mhz=4919
+2026-10-30T20:16:54Z FOREIGN-VITEST count=2
+2026-10-30T20:17:04Z load1=2.15 tctl=87.4 vitest=2 cutechess=1 busy_mhz=4848
+2026-10-30T20:17:04Z FOREIGN-VITEST count=2
+2026-10-30T20:17:14Z load1=2.13 tctl=80.8 vitest=2 cutechess=1 busy_mhz=4944
+2026-10-30T20:17:14Z FOREIGN-VITEST count=2
+2026-10-30T20:17:24Z load1=2.03 tctl=78.8 vitest=2 cutechess=1 busy_mhz=4986
+2026-10-30T20:17:24Z FOREIGN-VITEST count=2
+2026-10-30T20:17:34Z load1=2.10 tctl=79.3 vitest=2 cutechess=1 busy_mhz=4972
+2026-10-30T20:17:34Z FOREIGN-VITEST count=2
+2026-10-30T20:17:44Z load1=2.16 tctl=79.5 vitest=2 cutechess=1 busy_mhz=5047
+2026-10-30T20:17:44Z FOREIGN-VITEST count=2
+2026-10-30T20:17:54Z load1=2.36 tctl=86.9 vitest=2 cutechess=1 busy_mhz=4893
+2026-10-30T20:17:54Z FOREIGN-VITEST count=2
+2026-10-30T20:18:04Z load1=2.15 tctl=76.6 vitest=2 cutechess=1 busy_mhz=4964
+2026-10-30T20:18:04Z FOREIGN-VITEST count=2
+2026-10-30T20:18:14Z load1=2.13 tctl=79.3 vitest=2 cutechess=1 busy_mhz=4966
+2026-10-30T20:18:14Z FOREIGN-VITEST count=2
+2026-10-30T20:18:24Z load1=2.11 tctl=81.0 vitest=2 cutechess=1 busy_mhz=4962
+2026-10-30T20:18:24Z FOREIGN-VITEST count=2
+2026-10-30T20:18:34Z load1=2.09 tctl=79.1 vitest=2 cutechess=1 busy_mhz=4984
+2026-10-30T20:18:34Z FOREIGN-VITEST count=2
+2026-10-30T20:18:44Z load1=2.08 tctl=87.5 vitest=2 cutechess=1 busy_mhz=4885
+2026-10-30T20:18:44Z FOREIGN-VITEST count=2
+2026-10-30T20:18:54Z load1=2.15 tctl=80.4 vitest=2 cutechess=1 busy_mhz=4962
+2026-10-30T20:18:54Z FOREIGN-VITEST count=2
+2026-10-30T20:19:04Z load1=2.12 tctl=77.1 vitest=2 cutechess=1 busy_mhz=4942
+2026-10-30T20:19:04Z FOREIGN-VITEST count=2
+2026-10-30T20:19:14Z load1=2.50 tctl=79.5 vitest=2 cutechess=1 busy_mhz=4896
+2026-10-30T20:19:14Z FOREIGN-VITEST count=2
+2026-10-30T20:19:24Z load1=2.42 tctl=79.3 vitest=2 cutechess=1 busy_mhz=4979
+2026-10-30T20:19:24Z FOREIGN-VITEST count=2
+2026-10-30T20:19:34Z load1=2.43 tctl=79.4 vitest=2 cutechess=1 busy_mhz=4989
+2026-10-30T20:19:34Z FOREIGN-VITEST count=2
+2026-10-30T20:19:44Z load1=2.44 tctl=81.6 vitest=2 cutechess=1 busy_mhz=5007
+2026-10-30T20:19:44Z FOREIGN-VITEST count=2
+2026-10-30T20:19:54Z load1=2.30 tctl=78.0 vitest=2 cutechess=1 busy_mhz=4977
+2026-10-30T20:19:54Z FOREIGN-VITEST count=2
+2026-10-30T20:20:04Z load1=2.18 tctl=78.0 vitest=2 cutechess=1 busy_mhz=5013
+2026-10-30T20:20:04Z FOREIGN-VITEST count=2
+2026-10-30T20:20:14Z load1=2.23 tctl=78.3 vitest=2 cutechess=1 busy_mhz=4984
+2026-10-30T20:20:14Z FOREIGN-VITEST count=2
+2026-10-30T20:20:24Z load1=2.19 tctl=86.0 vitest=2 cutechess=1 busy_mhz=4873
+2026-10-30T20:20:24Z FOREIGN-VITEST count=2
+2026-10-30T20:20:34Z load1=2.31 tctl=80.9 vitest=2 cutechess=1 busy_mhz=4901
+2026-10-30T20:20:34Z FOREIGN-VITEST count=2
+2026-10-30T20:20:44Z load1=2.26 tctl=78.8 vitest=2 cutechess=1 busy_mhz=4982
+2026-10-30T20:20:44Z FOREIGN-VITEST count=2
+2026-10-30T20:20:54Z load1=2.22 tctl=84.1 vitest=2 cutechess=1 busy_mhz=4959
+2026-10-30T20:20:54Z FOREIGN-VITEST count=2
+2026-10-30T20:21:04Z load1=2.11 tctl=62.1 vitest=2 cutechess=0 busy_mhz=4943
+2026-10-30T20:21:04Z FOREIGN-VITEST count=2

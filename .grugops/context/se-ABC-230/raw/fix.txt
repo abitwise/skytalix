@@ -1,0 +1,24 @@
+d3 kqk black | 3k4/8/8/8/8/8/8/Q3K3 b - - 7 4 | prior 7 | base d8c8 -992 n208 | keys d8e8 0 n49
+d3 kqk white | q3k3/8/8/8/8/8/8/3K4 w - - 7 5 | prior 7 | base d1c1 -992 n210 | keys d1e1 0 n48
+d3 krk black | 3k4/8/8/8/8/8/8/R3K3 b - - 7 4 | prior 7 | base d8c7 -556 n115 | keys d8e8 0 n52
+d3 krk white | r3k3/8/8/8/8/8/8/3K4 w - - 7 5 | prior 7 | base d1c2 -556 n117 | keys d1e1 0 n48
+d3 kqk black h1q | 3k4/8/8/8/8/8/8/4K2Q b - - 7 4 | prior 7 | base d8c8 -990 n174 | keys d8e8 0 n48
+d3 kqk white h8q | 4k2q/8/8/8/8/8/8/3K4 w - - 7 5 | prior 7 | base d1c1 -990 n175 | keys d1e1 0 n49
+d3 H2 kqk black 2nd | 3k4/8/8/8/8/8/8/Q3K3 b - - 3 2 | prior 3 | base d8c8 -992 n208 | keys d8c8 -992 n208
+d3 H2 kqk white 2nd | q3k3/8/8/8/8/8/8/3K4 w - - 3 3 | prior 3 | base d1c1 -992 n210 | keys d1c1 -992 n210
+d4 kqk black | 3k4/8/8/8/8/8/8/Q3K3 b - - 7 4 | prior 7 | base d8c8 -1006 n524 | keys d8e8 0 n96
+d4 kqk white | q3k3/8/8/8/8/8/8/3K4 w - - 7 5 | prior 7 | base d1c1 -1006 n527 | keys d1e1 0 n93
+d4 krk black | 3k4/8/8/8/8/8/8/R3K3 b - - 7 4 | prior 7 | base d8c7 -556 n296 | keys d8e8 0 n104
+d4 krk white | r3k3/8/8/8/8/8/8/3K4 w - - 7 5 | prior 7 | base d1c1 -556 n375 | keys d1e1 0 n93
+d4 kqk black h1q | 3k4/8/8/8/8/8/8/4K2Q b - - 7 4 | prior 7 | base d8c7 -1000 n750 | keys d8e8 0 n95
+d4 kqk white h8q | 4k2q/8/8/8/8/8/8/3K4 w - - 7 5 | prior 7 | base d1c2 -1000 n712 | keys d1e1 0 n96
+d4 H2 kqk black 2nd | 3k4/8/8/8/8/8/8/Q3K3 b - - 3 2 | prior 3 | base d8c8 -1006 n524 | keys d8c8 -1006 n524
+d4 H2 kqk white 2nd | q3k3/8/8/8/8/8/8/3K4 w - - 3 3 | prior 3 | base d1c1 -1006 n527 | keys d1c1 -1006 n527
+d5 kqk black | 3k4/8/8/8/8/8/8/Q3K3 b - - 7 4 | prior 7 | base d8c7 -992 n4735 | keys d8e8 0 n171
+d5 kqk white | q3k3/8/8/8/8/8/8/3K4 w - - 7 5 | prior 7 | base d1c2 -992 n3971 | keys d1e1 0 n190
+d5 krk black | 3k4/8/8/8/8/8/8/R3K3 b - - 7 4 | prior 7 | base d8c7 -556 n1045 | keys d8e8 0 n195
+d5 krk white | r3k3/8/8/8/8/8/8/3K4 w - - 7 5 | prior 7 | base d1c2 -556 n1367 | keys d1e1 0 n190
+d5 kqk black h1q | 3k4/8/8/8/8/8/8/4K2Q b - - 7 4 | prior 7 | base d8c7 -985 n1940 | keys d8e8 0 n181
+d5 kqk white h8q | 4k2q/8/8/8/8/8/8/3K4 w - - 7 5 | prior 7 | base d1c2 -985 n1882 | keys d1e1 0 n195
+d5 H2 kqk black 2nd | 3k4/8/8/8/8/8/8/Q3K3 b - - 3 2 | prior 3 | base d8c7 -992 n4735 | keys d8c7 -992 n4735
+d5 H2 kqk white 2nd | q3k3/8/8/8/8/8/8/3K4 w - - 3 3 | prior 3 | base d1c2 -992 n3971 | keys d1c2 -992 n3971

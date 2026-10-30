@@ -1,0 +1,5 @@
+{"at":"2026-10-30T06:44:56Z","load1":0.20,"cutechess":0,"vitest":0,"tctl":"35.2"}
+{"reading":"a8-base","round":1,"tree":"base","board":"kiwipete","load1":0.33,"start":"2026-10-30T06:45:07.597Z","depth":8,"nodes":2600813,"elapsedMs":3000,"wallMs":3000.8,"nps":866938,"move":"20-80-0","score":-84}
+{"at":"2026-10-30T06:45:11Z","load1":0.33,"cutechess":0,"vitest":0,"tctl":"66.6"}
+{"reading":"a8-base","round":1,"tree":"base","board":"position-6","load1":0.39,"start":"2026-10-30T06:45:11.238Z","depth":10,"nodes":2594402,"elapsedMs":3000,"wallMs":3000.1,"nps":864801,"move":"34-67-0","score":73}
+{"at":"2026-10-30T06:45:14Z","load1":0.39,"cutechess":0,"vitest":0,"tctl":"68.5"}

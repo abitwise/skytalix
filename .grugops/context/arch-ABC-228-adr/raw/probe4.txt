@@ -1,0 +1,11 @@
+kiwipete base: search d6 237007 (1.000x, evasion nodes 0) | chooseMove to 8 1259463 (1.000x) 20-80 -84
+kiwipete mate-only (no evasions; in check + no legal move = mate): search d6 236801 (0.999x, evasion nodes 0) | chooseMove to 8 1259882 (1.000x) 20-80 -84
+kiwipete ev qply<2, then mate-only: search d6 277602 (1.171x, evasion nodes 6689) | chooseMove to 8 1424619 (1.131x) 20-80 -84
+kiwipete ev qply<3, then mate-only: search d6 281648 (1.188x, evasion nodes 7524) | chooseMove to 8 1424318 (1.131x) 20-80 -84
+kiwipete ev all qply (full): search d6 324162 (1.368x, evasion nodes 23061) | chooseMove to 8 1543477 (1.226x) 20-80 -59
+position-6 base: search d6 109912 (1.000x, evasion nodes 0) | chooseMove to 10 1765861 (1.000x) 34-67 73
+position-6 mate-only (no evasions; in check + no legal move = mate): search d6 109912 (1.000x, evasion nodes 0) | chooseMove to 10 1768881 (1.002x) 34-67 73
+position-6 ev qply<2, then mate-only: search d6 130059 (1.183x, evasion nodes 6426) | chooseMove to 10 2107260 (1.193x) 34-67 73
+position-6 ev qply<3, then mate-only: search d6 160332 (1.459x, evasion nodes 10606) | chooseMove to 10 2160281 (1.223x) 34-67 73
+position-6 ev all qply (full): search d6 154464 (1.405x, evasion nodes 16656) | chooseMove to 10 2340431 (1.325x) 34-67 73
+total cpu 38.0 s

@@ -1,0 +1,23 @@
+
+> skytalix@0.0.0 test:watch
+> NODE_OPTIONS=--max-old-space-size=128 vitest run src/puzzle-suite.test.ts
+
+
+ RUN  v4.1.12 <worktree>
+
+node:events:505
+    throw er; // Unhandled 'error' event
+    ^
+
+Error: Worker exited unexpectedly
+    at Worker.emitUnexpectedExit (file://<worktree>/node_modules/vitest/dist/chunks/cli-api.B0Pz1_R7.js:3090:33)
+    at Worker.emit (node:events:514:20)
+    at Worker.[kOnExit] (node:internal/worker:405:10)
+    at Worker.<computed>.onexit (node:internal/worker:299:20)
+Emitted 'error' event at:
+    at Worker.emitUnexpectedExit (file://<worktree>/node_modules/vitest/dist/chunks/cli-api.B0Pz1_R7.js:3092:22)
+    at Worker.emit (node:events:514:20)
+    at Worker.[kOnExit] (node:internal/worker:405:10)
+    at Worker.<computed>.onexit (node:internal/worker:299:20)
+
+Node.js v26.12.1

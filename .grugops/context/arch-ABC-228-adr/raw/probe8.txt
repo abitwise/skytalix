@@ -1,0 +1,4 @@
+cpu after cap test 0.0 s
+corpus 190
+d5 drift search() ev+qQ vs ev: positions done 190/190; non-mate 187; within 25 cp 187 (100.00 %); max 8 at r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N1BQ1p/PPP1BPPP/R3K2R b KQkq - 1 1 door 350 ev 358; p95 0; mate-status flips 0; root move differs 1
+total cpu 44.2 s

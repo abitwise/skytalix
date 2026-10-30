@@ -19,12 +19,13 @@
  * claim share a single Zobrist key read that a caller passing no counts map never pays for at all.
  */
 
-import { hasLegalMove, isInCheck, legalMoves } from "./legal.ts";
+import { hasLegalEnPassant, hasLegalMove, isInCheck, legalMoves } from "./legal.ts";
 import {
   BISHOP,
   fileOf,
   isOnBoard,
   KNIGHT,
+  NO_SQUARE,
   PAWN,
   type Position,
   pieceType,
@@ -32,7 +33,7 @@ import {
   ROOK,
   rankOf,
 } from "./position.ts";
-import { zobristKey } from "./zobrist.ts";
+import { epFileKey, zobristKey } from "./zobrist.ts";
 
 export type GameResult = "in-progress" | "white-wins" | "black-wins" | "draw";
 
@@ -119,9 +120,27 @@ function isInsufficientMaterial(position: Position): boolean {
 }
 
 /**
+ * The REPETITION KEY of `position`, whose Zobrist key is `key` (`ADR-0020` § AMENDMENT 2026-10-30,
+ * C1 and C2): `key` with the ep file XORed out when `position` carries an ep square and no LEGAL
+ * en-passant capture exists, and `key` unchanged otherwise. A pseudo-legal capture that is illegal
+ * (a pinned capturer, the rank pin) takes the file out: FIDE 9.2.3 counts those positions as the
+ * same. A legal capture keeps it in, so two positions with different move sets never share a key.
+ *
+ * EVERY comparison of a position against the game's earlier positions uses it: the game-end
+ * counts, this module's lookup into them, and every key in a search's `priorKeys`. The hash, the
+ * TT, the book and the search's own per-ply array stay raw. This is the one function that computes
+ * it. Pure: `hasLegalEnPassant` plays a probe move and takes it back, and it runs only when an ep
+ * square is set — once per double push in a game, never per search node.
+ */
+export function repetitionKey(position: Position, key: bigint): bigint {
+  if (position.epSquare === NO_SQUARE || hasLegalEnPassant(position)) return key;
+  return key ^ epFileKey(position.epSquare);
+}
+
+/**
  * The state of `position`: over, or in progress with the claims the side to move holds. Pass
- * `positionCounts` — a map from each seen position's Zobrist key to how many times it has
- * occurred (including the current one) — to enable the repetition rules; omit it (the loop has
+ * `positionCounts` — a map from each seen position's REPETITION key (`repetitionKey`) to how many
+ * times it has occurred (including the current one) — to enable the repetition rules; omit it (the loop has
  * no history yet, a search leaf keeps its own) and repetition is simply never reported. A bare
  * caller still gets both clock-based rules, so it can never see a game that does not end.
  *
@@ -151,8 +170,11 @@ export function gameStatus(
 
   // ONE key read, shared by the automatic fivefold rule and the threefold claim below — and
   // skipped entirely, at no cost, by a caller that passes no counts map.
+  // The counts are keyed by repetition key (`ADR-0020` § AMENDMENT 2026-10-30 C3), so the lookup is.
   const occurrences =
-    positionCounts === undefined ? 0 : (positionCounts.get(zobristKey(position)) ?? 0);
+    positionCounts === undefined
+      ? 0
+      : (positionCounts.get(repetitionKey(position, zobristKey(position))) ?? 0);
 
   if (occurrences >= FIVEFOLD_OCCURRENCES) {
     return { result: "draw", reason: "fivefold-repetition" };

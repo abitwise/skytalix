@@ -1,0 +1,13 @@
+start 2026-10-30T01:46:47Z load1 0.89
+a1 base rc=0 2070s rows+sha: 6021 812f86ae46766537f73657b70f447f4c2e61d124051e0629fb374f90ac2bd000 -
+a1 tip rc=0 1920s rows+sha: 6021 812f86ae46766537f73657b70f447f4c2e61d124051e0629fb374f90ac2bd000 -
+cmp a1: equal
+impure base 0 tip 0
+u5 base rc=0 191s rows+sha: 264 63173dde63fb246a044bee007a6ac9ede6087ae25ebed79c62e0a312523b96a5 -
+u5 tip rc=0 183s rows+sha: 264 63173dde63fb246a044bee007a6ac9ede6087ae25ebed79c62e0a312523b96a5 -
+cmp u5: equal
+impure u5 base 0 tip 0
+mid base rc=0 28s rows 8 sha 74e373d638388dca894c5ae28c8526f6ed68b7a957d38bb13725ac912b09ef17  -
+mid tip rc=0 27s rows 8 sha 74e373d638388dca894c5ae28c8526f6ed68b7a957d38bb13725ac912b09ef17  -
+cmp mid: equal
+end 2026-10-30T03:00:26Z load1 1.13

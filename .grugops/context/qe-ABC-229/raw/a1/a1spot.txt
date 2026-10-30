@@ -1,0 +1,1 @@
+A1 spot: 19 positions, 114 rows, 0 differ; non-vacuity: head search() differs from base search() on 40 of 76 search rows

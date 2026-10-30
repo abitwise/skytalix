@@ -6,8 +6,11 @@
  * positive is good for the SIDE TO MOVE, never "good for white". The search (ABC-077) can
  * therefore negate on every ply without knowing whose turn it is.
  *
- * There is no search here, no state, no cache, and no terminal scoring: mate and stalemate
- * depend on distance to the root, which a bare position cannot know, so they are ABC-077's.
+ * There is no search here and no terminal scoring: mate and stalemate depend on distance to the
+ * root, which a bare position cannot know, so they are ABC-077's. There is no state that changes
+ * a value, and ONE memo (ABC-235 cut 5): the pawn-structure parts, kept in fixed typed arrays and
+ * keyed EXACTLY by the two pawn masks they are a pure function of (see `pawnStructureCached`). A
+ * hit returns what a miss would compute, so the memo changes the cost and never the score.
  *
  * Every number below is HAND-TUNED and expected to move. Tests assert relations (a minor
  * piece outweighs the whole positional term; a centralised knight beats a knight at home),
@@ -313,14 +316,25 @@ function kingExposure(
 const adjacentFiles = (file: number): number => (((1 << file) << 1) | ((1 << file) >> 1)) & 0xff;
 
 /**
+ * `pawnStructure`'s passed-pawn part, set by each call beside its return value: the cache stores
+ * the doubled-and-isolated sum and the passed sum apart, so `ABC-232` can blend the passed part
+ * by phase outside the cache without re-keying it (the Architect's seam, `arch-ABC-235`).
+ */
+let passedPart = 0;
+
+/**
  * The three pawn terms from WHITE's point of view. Two passes over the six ranks a pawn can
  * stand on: the first finds which files each side has a pawn on (and counts the extra pawns that
  * make a file doubled), the second needs those complete file sets to judge isolation.
+ *
+ * Returns the doubled-and-isolated sum and leaves the passed-pawn sum in `passedPart`. Both are
+ * integer sums, so their total is the single sum this function used to return, bit for bit.
  */
 function pawnStructure(board: Uint8Array): number {
   let whiteFiles = 0;
   let blackFiles = 0;
   let score = 0;
+  let passed = 0;
 
   for (let rank = 1; rank <= 6; rank++) {
     for (let file = 0; file < 8; file++) {
@@ -342,15 +356,122 @@ function pawnStructure(board: Uint8Array): number {
       const piece = board[square];
       if (piece === PAWN) {
         if ((whiteFiles & adjacentFiles(file)) === 0) score -= ISOLATED_PAWN_PENALTY;
-        if (isPassedPawn(board, square)) score += PASSED_PAWN_BONUS[rank] as number;
+        if (isPassedPawn(board, square)) passed += PASSED_PAWN_BONUS[rank] as number;
       } else if (piece === BLACK_PAWN) {
         if ((blackFiles & adjacentFiles(file)) === 0) score += ISOLATED_PAWN_PENALTY;
-        if (isPassedPawn(board, square)) score -= PASSED_PAWN_BONUS[7 - rank] as number;
+        if (isPassedPawn(board, square)) passed -= PASSED_PAWN_BONUS[7 - rank] as number;
       }
     }
   }
 
+  passedPart = passed;
   return score;
+}
+
+/**
+ * ABC-235 cut 5: the pawn-structure memo. `pawnStructure` reads only the squares of ranks 2-7
+ * compared with `PAWN` and `BLACK_PAWN` (and `isPassedPawn` only enemy pawns there), so it is a
+ * pure function of two 48-bit masks: which of those 48 squares hold a white pawn, and which a
+ * black one. A 48-bit integer is exact in a double, so the KEY is the two masks themselves.
+ *
+ * - Direct-mapped: 2^14 slots in fixed typed arrays, allocated once per process. Each slot holds
+ *   both masks and the two parts: 2^14 x (8 + 8 + 4 + 4) bytes = 384 KiB, fixed (`NFR-009`).
+ * - A HIT needs BOTH masks equal — never the slot index alone. Empty slots hold -1, which no
+ *   mask equals. A collision only overwrites; it can cost a recomputation, never a wrong score.
+ * - Never cleared between searches: no value depends on it. `clearPawnCacheForTest` empties it
+ *   for a cold reading. `kingExposure` reads the king squares too, so it stays out.
+ */
+const PAWN_CACHE_SLOTS = 1 << 14;
+const PAWN_CACHE_INDEX_MASK = PAWN_CACHE_SLOTS - 1;
+const pawnCacheWhite = new Float64Array(PAWN_CACHE_SLOTS).fill(-1);
+const pawnCacheBlack = new Float64Array(PAWN_CACHE_SLOTS).fill(-1);
+const pawnCacheStructure = new Int32Array(PAWN_CACHE_SLOTS);
+const pawnCachePassed = new Int32Array(PAWN_CACHE_SLOTS);
+
+/**
+ * Per 0x88 square: the square's bit in a pawn mask (2^0 … 2^47 over ranks 2-7), and a fixed
+ * pseudo-random 32-bit word per colour that only picks the slot. Both are 0 off ranks 2-7, so a
+ * pawn there (off-domain) enters neither the key nor the index — `pawnStructure` never reads it.
+ */
+const PAWN_MASK_BIT = new Float64Array(128);
+const PAWN_SLOT_WORD_WHITE = new Int32Array(128);
+const PAWN_SLOT_WORD_BLACK = new Int32Array(128);
+{
+  let seed = 0x2545f491;
+  const next = (): number => {
+    // xorshift32: deterministic, so the slot layout is the same in every process.
+    seed ^= seed << 13;
+    seed ^= seed >>> 17;
+    seed ^= seed << 5;
+    return seed | 0;
+  };
+  for (let rank = 1; rank <= 6; rank++) {
+    for (let file = 0; file < 8; file++) {
+      const square = rank * 16 + file;
+      PAWN_MASK_BIT[square] = 2 ** ((rank - 1) * 8 + file);
+      PAWN_SLOT_WORD_WHITE[square] = next();
+      PAWN_SLOT_WORD_BLACK[square] = next();
+    }
+  }
+}
+
+/** `pawnStructure(board)`'s two parts, from the memo when both masks match; sets `passedPart`. */
+function pawnStructureCached(
+  board: Uint8Array,
+  whiteMask: number,
+  blackMask: number,
+  slotWord: number,
+): number {
+  const slot = slotWord & PAWN_CACHE_INDEX_MASK;
+  if (pawnCacheWhite[slot] === whiteMask && pawnCacheBlack[slot] === blackMask) {
+    passedPart = pawnCachePassed[slot] as number;
+    return pawnCacheStructure[slot] as number;
+  }
+  const structure = pawnStructure(board);
+  pawnCacheWhite[slot] = whiteMask;
+  pawnCacheBlack[slot] = blackMask;
+  pawnCacheStructure[slot] = structure;
+  pawnCachePassed[slot] = passedPart;
+  return structure;
+}
+
+/** TEST-ONLY. Empties the pawn memo, for a cache-cold reading. No value depends on it. */
+export function clearPawnCacheForTest(): void {
+  pawnCacheWhite.fill(-1);
+  pawnCacheBlack.fill(-1);
+}
+
+/** The pawn memo's fixed size in bytes, for `NFR-009` (a)'s byte-length sum. */
+export function pawnCacheByteLength(): number {
+  return (
+    pawnCacheWhite.byteLength +
+    pawnCacheBlack.byteLength +
+    pawnCacheStructure.byteLength +
+    pawnCachePassed.byteLength
+  );
+}
+
+/**
+ * TEST-ONLY. The slot `position`'s pawn placement maps to, and whether the memo holds that exact
+ * placement there now — so a test can build a forced collision and watch a hit happen.
+ */
+export function pawnCacheProbeForTest(position: Position): { slot: number; hit: boolean } {
+  const board = position.board;
+  let whiteMask = 0;
+  let blackMask = 0;
+  let slotWord = 0;
+  for (let square = 0; square < 128; square++) {
+    const piece = board[square];
+    if (piece === PAWN) {
+      whiteMask += PAWN_MASK_BIT[square] as number;
+      slotWord ^= PAWN_SLOT_WORD_WHITE[square] as number;
+    } else if (piece === BLACK_PAWN) {
+      blackMask += PAWN_MASK_BIT[square] as number;
+      slotWord ^= PAWN_SLOT_WORD_BLACK[square] as number;
+    }
+  }
+  const slot = slotWord & PAWN_CACHE_INDEX_MASK;
+  return { slot, hit: pawnCacheWhite[slot] === whiteMask && pawnCacheBlack[slot] === blackMask };
 }
 
 /**
@@ -358,12 +479,15 @@ function pawnStructure(board: Uint8Array): number {
  * black's. Kept separate from the negamax flip so the sign convention lives in exactly one
  * place and the tables are read exactly once per piece.
  */
-function whiteMinusBlack(position: Position, mobilityWeight: number): number {
+function whiteMinusBlack(position: Position, mobilityWeight: number, pawnCache = true): number {
   const board = position.board;
   let score = 0;
   let mobility = 0;
   let whiteKing = -1;
   let blackKing = -1;
+  let whitePawns = 0;
+  let blackPawns = 0;
+  let pawnSlotWord = 0;
 
   for (let rank = 7; rank >= 0; rank--) {
     for (let file = 0; file < 8; file++) {
@@ -381,7 +505,16 @@ function whiteMinusBlack(position: Position, mobilityWeight: number): number {
 
       score += black ? -value : value;
 
-      if (type === PAWN) continue;
+      if (type === PAWN) {
+        if (black) {
+          blackPawns += PAWN_MASK_BIT[square] as number;
+          pawnSlotWord ^= PAWN_SLOT_WORD_BLACK[square] as number;
+        } else {
+          whitePawns += PAWN_MASK_BIT[square] as number;
+          pawnSlotWord ^= PAWN_SLOT_WORD_WHITE[square] as number;
+        }
+        continue;
+      }
       const reached = squaresReached(board, square, piece);
       mobility += black ? -reached : reached;
       if (type === KING) {
@@ -396,7 +529,10 @@ function whiteMinusBlack(position: Position, mobilityWeight: number): number {
     kingExposure(board, blackKing, BLACK_PAWN, PAWN, -1) -
     kingExposure(board, whiteKing, PAWN, BLACK_PAWN, 1);
 
-  return score + pawnStructure(board) + kingSafety + mobilityScore;
+  const structure = pawnCache
+    ? pawnStructureCached(board, whitePawns, blackPawns, pawnSlotWord)
+    : pawnStructure(board);
+  return score + (structure + passedPart) + kingSafety + mobilityScore;
 }
 
 /**
@@ -421,5 +557,16 @@ export function evaluate(position: Position): number {
  */
 export function evaluateWithoutMobility(position: Position): number {
   const score = whiteMinusBlack(position, 0);
+  return position.blackToMove ? 0 - score : score;
+}
+
+/**
+ * TEST-ONLY. `evaluate` with the pawn memo bypassed — `pawnStructure` computed afresh, the memo
+ * neither read nor written — so ABC-235 cut 5's oracle can compare the memoised `evaluate` with
+ * it `Object.is` for `Object.is`. Nothing in production calls it (the `evaluateWithoutMobility`
+ * precedent).
+ */
+export function evaluateWithoutPawnCache(position: Position): number {
+  const score = whiteMinusBlack(position, MOBILITY_WEIGHT, false);
   return position.blackToMove ? 0 - score : score;
 }

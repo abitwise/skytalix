@@ -1,14 +1,53 @@
 ---
 id: ABC-225
 title: "One command reads an interleaved R pair: base and candidate against the same Stockfish, in alternating blocks, with the opening-paired error and a host log"
-status: ready
-column: Ready
+status: in-development
+column: In Development
 size: M
 priority: P2
 epic: EPIC-010
 ---
 
 # ABC-225: an interleaved R pair in the rating harness
+
+> **UNBLOCKED 2026-10-30 by the owner, folded by BA/PM** (task `bapm-ABC-242-225-owner`, records only, at `main`
+> `5090a4d6`; `src/`, `tools/` and `data/` untouched). His words, verbatim (`orch-2026-10-30a` `…65848126`):
+> *"ABC-242: accept, ABC-225 - approve to run one at a time"*.
+>
+> - **A5 runs at `--concurrency 1`, one game at a time**, by the owner's word. This settles the 2026-10-30 thermal
+>   block (QE-225-b: a Tctl median of 87.05 °C at width 2 in `qe-ABC-225` `…3a53bdfc`), using QE's option (iii).
+>   - `rpair` already takes `--concurrency C` (1–8, default 2) on `grugops/ABC-225`, so no tool change is owed for
+>     it. QE passes `--concurrency 1` explicitly.
+>   - The 85 °C Tctl-median stop line and ALONE still hold. A new PREREG goes with the re-run, as QE asked.
+> - **The width-1 wall of the A5 smoke (40 games):**
+>   - About **2 h**, double the width-2 estimate of about 1 h.
+>   - The recorded width-1 R rate at 4 000 ms puts it a little higher, at **about 2.2–2.4 h**. The R smokes of
+>     `qe-ABC-228-ii` and `qe-ABC-241` took 36.1 and 32.6 min for 10 games each, at `--concurrency 1` and skytalix
+>     `st=4`, which is 3.3–3.6 min a game.
+>   - The figure is an estimate. A6 reads the real one.
+> - **The budget line stands: `rpair`'s `budget: 3000` moves to 4 000** (the dated line below, `bapm-ABC-228-merge-fold`;
+>   `A1`, "the same pins as `r`"). The SE hop `se-ABC-225-main` takes `main` into this branch by **merge**, not
+>   rebase. Read "rebase" in the two dated lines below as that merge.
+> - **A6 is re-worded for width 1.** A smoke at width 1 cannot project a width-2 pair (QE-225-b (iii)), so A6 now
+>   projects the full pair at width 1 and no longer grades the width-2 ≤ 10 h estimate. By the rate above, a
+>   400-game pair at width 1 is **about 22–24 h** ALONE, against about 9 h at width 2. That is an estimate (A6 reads
+>   it). The width of `EPIC-010`'s batch is not set by this word, and it is the Orchestrator's to schedule or take to
+>   the owner.
+> - **Column: Blocked → In Development** (the Orchestrator's board, 18:10Z). The order is `se-ABC-225-main` (merge
+>   and budget), then QE re-reads A5 and A6 ALONE at width 1. **DoR stays 10/10.**
+
+> **Dated line 2026-10-30 by BA/PM** (task `bapm-ABC-228-merge-fold`, records only). **(ii) is on `main`:** `ABC-228`
+> merged at `e42b637b`, and `tools/rating/rating.ts` R mode now passes skytalix 4000 (`mode === "r" ? 4000`). So the
+> follow-up below applies when this branch rebases: `rpair`'s `budget: 3000` moves to **4 000** in the same rebase.
+> `A1` ("the same pins as `r`") requires it, because `r` now plays 4 000 ms. Scope 1's "`skytalix` at 3 000 ms" reads
+> 4 000 ms from that rebase. `A3`'s arithmetic rows read the 3 000 ms records and do not move. Still Blocked (thermal,
+> the owner's call).
+
+> **Dated line 2026-10-30 by BA/PM** (task `bapm-q3c-oq228ii-fold`, records only). OQ-228-1 is (ii) (`ADR-0053` d10):
+> on an `ABC-228` `A8` miss, level 5 plays 4 000 ms, and the batches run both sides at 4 000 ms. **`ABC-228` carries
+> the `r` mode literal 3000 → 4000** (`tools/rating/rating.ts:405` on `main`). This branch's `rpair` passes its own
+> `budget: 3000` (`9988a778`, `:660`). When it rebases onto a `main` that carries (ii), that value moves to 4 000 in
+> the same rebase. If (ii) is not built, nothing changes. No scope or acceptance line changes; still Blocked.
 
 > **RE-SCOPED 2026-10-29 by BA/PM** (task `bapm-owner-words-b`, records only). The owner set Q4 = (e), extended
 > (`orch-2026-10-29g` `…278e149b`): a 10-game D smoke and a 10-game R smoke per value-changing ticket, then a batched
@@ -80,21 +119,27 @@ epic: EPIC-010
   `…9d172446` § 4 computed.
 - **A4 (faults).** **Given** one block with a fault (illegal move, disconnect, stall, time forfeit), **then** that
   build's reading is UNRESOLVED by `EPIC-008`'s states, and the pair is UNRESOLVED.
-- **A5 (host log).** **Given** a real 2-block smoke run (40 games, ALONE), **then** the log has one nps value per
-  block per build and ≥ 1 thermal sample per 10 s, and no absolute host path or username appears in any output file.
-- **A6 (cost).** The smoke run's wall is reported, and the full pair's wall is projected from it (target ≤ 10 h at
-  width 2, the R rate 44–46 games/h).
+- **A5 (host log).** **Given** a real 2-block smoke run (40 games, ALONE, **`--concurrency 1`**: the owner's word
+  2026-10-30), **then** the log has one nps value per block per build and ≥ 1 thermal sample per 10 s, and no
+  absolute host path or username appears in any output file.
+- **A6 (cost; re-worded 2026-10-30, `bapm-ABC-242-225-owner`).** The smoke run's wall at width 1 is reported, with
+  its start and end times and its games per hour. The full 400-game pair's wall **at width 1** is projected from it,
+  estimated at about 22–24 h. A width-2 figure is not projected (QE-225-b (iii)). A6 is MET when both numbers are
+  reported from the run's own times. *(Was: "projected from it (target ≤ 10 h at width 2, the R rate 44–46
+  games/h)".)*
 
 ## NFR triggers
 
 - **`NFR-008`:** no new file under `src/`; any tool test runs outside the default lane, as `ABC-204`'s did.
 - **Security (ASVS L1):** two sha arguments, validated as `[0-9a-f]{7,40}` before any `git` call; no shell string
   concatenation. No host paths in outputs (`ADR-0049` d4).
-- **Heat:** the smoke run is ALONE, on AC, with the thermal log.
+- **Heat:** the smoke run is ALONE, on AC, with the thermal log, at `--concurrency 1` (owner 2026-10-30). It stops
+  when the Tctl median goes over 85 °C. For reference, the width-1 R smokes of `ABC-230` read a median of 73.75 °C.
 
 ## Test notes
 
-1. A2 and A1 by dry run, no engines started. A3 offline from committed records. A5 is the only real run (≈ 1 h).
+1. A2 and A1 by dry run, no engines started. A3 offline from committed records. A5 is the only real run (≈ 1 h at
+   width 2; *2026-10-30:* ≈ 2 h at width 1, ≈ 2.2–2.4 h by the recorded 4 000 ms width-1 R rate).
 2. `tools/` only, no production line: no UAT. QE reads A5.
 
 ## Size and priority
@@ -104,7 +149,9 @@ epic: EPIC-010
 
 ## Dependencies
 
-- **Owner:** Q4 answered 2026-10-29: (e), extended. It needs no further owner word.
+- **Owner:** Q4 answered 2026-10-29: (e), extended. It needs no further owner word. *(2026-10-30: the thermal block
+  was the owner's call, and he answered it: "approve to run one at a time", `…65848126`.)*
+- *(2026-10-30.)* `se-ABC-225-main` (merge `main` in; `rpair` budget 3 000 → 4 000) comes before QE's re-run.
 - `ABC-204`'s host pins (re-pinned on this host). No ADR: `tools/rating/rating.ts` cites none, and this adds no
   engine behaviour. Architect/Design reviews the pentanomial formula at design.
 
@@ -121,7 +168,7 @@ epic: EPIC-010
 | 7 | test notes | ✅ 2 |
 | 8 | size | ✅ M |
 | 9 | priority | ✅ P2 |
-| 10 | no major unresolved blocker | ✅ none (Q4 answered 2026-10-29) |
+| 10 | no major unresolved blocker | ✅ none (Q4 answered 2026-10-29; the thermal block answered 2026-10-30: width 1) |
 
-**DoR 10/10 (re-scored 2026-10-29). Ready.** Pull before milestone 1's batch is due; it never runs beside an ALONE
-reading.
+**DoR 10/10 (re-scored 2026-10-29; held 2026-10-30, `bapm-ABC-242-225-owner`). In Development.** Pull before
+milestone 1's batch is due; it never runs beside an ALONE reading.

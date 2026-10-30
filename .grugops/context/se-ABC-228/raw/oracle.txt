@@ -1,0 +1,6 @@
+corpus 190
+A4 kiwipete d6: 324162 / 237007 = 1.368x
+A4 position-6 d6: 154464 / 109912 = 1.405x
+search() d5: 89.30% within 25 cp of 187, max 118 cp (position-4/f1f2: 708 -> 826), p95 56, flips 0, scores moved 47/190
+chooseMove to d5: 88.77% within 25 cp of 187, max 118 cp (position-4/f1f2: 708 -> 826), p95 59, flips 0, scores moved 48/190
+mate floor d5 on 287: 0 of 189 door mates violated; new mates 0

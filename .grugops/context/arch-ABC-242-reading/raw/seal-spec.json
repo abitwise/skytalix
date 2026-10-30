@@ -1,0 +1,9 @@
+{
+  "refs": ["arch-ABC-242-reading", "ABC-242", "EPIC-010", "ADR-0054", "ADR-0032", "ADR-0020", "QE-230-a",
+           "qe-ABC-230/20261030T064100Z-qe-e2e-decision-ba5a249a", "ABC-230", "ABC-241", "1f6abec4", "ee7da249",
+           "NFR-004", "NFR-009", "src/levels.ts", "src/levels.test.ts", "src/cli.test.ts", "src/uci-session.test.ts"],
+  "notes": [
+    { "kind": "decision", "confidence": "high: records-only ruling read from src/levels.ts, src/engine.ts, the export and import pins and QE's recorded probe at main ee7da249; nothing run (host may be held ALONE by QE); PROPOSED, the owner's to accept", "bodyFile": "note-decision.md" },
+    { "kind": "observation", "confidence": "high for the read facts (line refs at ee7da249); UNKNOWN - verify for the probe entries 1-4 after the change and for the parent-root count's effect", "bodyFile": "note-observation.md" }
+  ]
+}

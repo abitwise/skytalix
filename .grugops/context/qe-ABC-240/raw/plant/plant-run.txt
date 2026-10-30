@@ -1,0 +1,374 @@
+
+ RUN  v4.1.12 <copy>
+
+ ❯ src/search.ordering.test.ts (29 tests | 6 failed) 134ms
+     × C4: two calls in a row return two distinct arrays, the first unchanged by the second 10ms
+     × startpos at depth 3 23ms
+     × position-3 at depth 3 5ms
+     × position-6 at depth 2: none 10 371, MVV-LVA 3 266, + killers 3 177 2ms
+     × the promotion-capture fixture at depth 3 visits 232 nodes (ABC-079 QE G4) 3ms
+     × position-3 at 3 injected ticks: depth 3 in exactly 342 nodes 2ms
+ ❯ src/engine.test.ts (47 tests | 7 failed) 255ms
+     × returns the completed depth-2 move, which is NOT the depth-3 move 5ms
+     × agrees with search() on move and score across the mate/stalemate endgames 31ms
+     × goes DEEPER than any small hard-coded ceiling would allow — the behavioural half 15ms
+     × is assignable to EngineSeam and answers with a Promise<Move> 1ms
+     × plays a scripted game to end-of-input with the loop driving it 2ms
+     × is a real stop: unlimited, the same budget completes depth 6 or more 13ms
+     × reports depth 3 at maxDepth 3, with search(position, 3)'s move and score 2ms
+ ❯ src/search.test.ts (28 tests | 6 failed) 1400ms
+     × startpos at depth 2 14ms
+     × position-3 at depth 2 23ms
+     × position-4 at depth 2 1317ms
+     × returns the mating move and a score above any non-mate score, at depth 4 1ms
+     × prefers the mate in 1 over the mate in 2 and the mate in 3 in the same position 5ms
+     × leaves position-3 byte-identical after a depth-3 search, pruned and unpruned 0ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 19 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/engine.test.ts > A3 — an aborted iteration's move is discarded, not returned > returns the completed depth-2 move, which is NOT the depth-3 move
+AssertionError: expected 'e2e3' to be 'e8d8' // Object.is equality
+
+Expected: "e8d8"
+Received: "e2e3"
+
+ ❯ src/engine.test.ts:364:32
+    362|       score: number;
+    363|     };
+    364|     expect(label(choice.move)).toBe(label(reference.move as Move));
+       |                                ^
+    365|     expect(choice.score).toBe(reference.score);
+    366|     // `search(A3_FEN, 3).move` is `g4g5`, measured at the ABC-080 bra…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/19]⎯
+
+ FAIL  src/engine.test.ts > A3 (identity) — the completed iteration equals search() in move AND score > agrees with search() on move and score across the mate/stalemate endgames
+TypeError: Cannot read properties of undefined (reading 'to')
+ ❯ makeMove src/apply.ts:124:35
+    122| export function makeMove(position: Position, move: Move): UndoRecord {
+    123|   const undo: UndoRecord = {
+    124|     captured: position.board[move.to] as number,
+       |                                   ^
+    125|     castling: position.castling,
+    126|     epSquare: position.epSquare,
+ ❯ rootMoveScore src/engine.test.ts:452:3
+ ❯ identityDivergences src/engine.test.ts:429:21
+ ❯ src/engine.test.ts:477:12
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/19]⎯
+
+ FAIL  src/engine.test.ts > A4 — no fixed depth anywhere in the delivered engine > goes DEEPER than any small hard-coded ceiling would allow — the behavioural half
+AssertionError: expected 3 to be greater than 3
+ ❯ src/engine.test.ts:585:18
+    583|     // Delivered: 4 then 6. With `if (iteration > 4) break;` in the lo…
+    584|     // assertions red. A ceiling anywhere at or below 5 is caught the …
+    585|     expect(deep).toBeGreaterThan(shallow);
+       |                  ^
+    586|     expect(deep).toBeGreaterThanOrEqual(6);
+    587|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/19]⎯
+
+ FAIL  src/engine.test.ts > A6 — the implementation IS an EngineSeam, and runTurnLoop drives it > is assignable to EngineSeam and answers with a Promise<Move>
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ src/engine.test.ts:739:89
+    737|     const history = newGame(fenOf("startpos"));
+    738|     const move = await seamUnderTest(history);
+    739|     expect(legalMoves(history.position).some((candidate) => sameMove(c…
+       |                                                                                         ^
+    740|   });
+    741|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/19]⎯
+
+ FAIL  src/engine.test.ts > A6 — the implementation IS an EngineSeam, and runTurnLoop drives it > plays a scripted game to end-of-input with the loop driving it
+AssertionError: expected { result: null, …(2) } to deeply equal { result: null, reason: null, …(1) }
+
+- Expected
++ Received
+
+  {
+    "exitCode": 0,
+-   "reason": null,
++   "reason": "engine-failure",
+    "result": null,
+  }
+
+ ❯ src/engine.test.ts:781:21
+    779|     // The loop terminated on end-of-input, not on `engine-failure`: e…
+    780|     // returned passed the loop's own `wasGenerated` membership test o…
+    781|     expect(outcome).toEqual({ result: null, reason: null, exitCode: 0 …
+       |                     ^
+    782|     expect(engineMoves).toHaveLength(3);
+    783|     expect(history.moves).toHaveLength(6);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/19]⎯
+
+ FAIL  src/engine.test.ts > ABC-170 A1 — maxDepth stops deepening once that depth has completed > is a real stop: unlimited, the same budget completes depth 6 or more
+AssertionError: expected 3 to be greater than or equal to 6
+ ❯ src/engine.test.ts:1258:29
+    1256|     // budget that never reached depth 4 in the first place.
+    1257|     const unlimited = chooseMove(sparse(), options) as EngineChoice;
+    1258|     expect(unlimited.depth).toBeGreaterThanOrEqual(6);
+       |                             ^
+    1259|   });
+    1260|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/19]⎯
+
+ FAIL  src/engine.test.ts > ABC-170 A1 — maxDepth stops deepening once that depth has completed > reports depth 3 at maxDepth 3, with search(position, 3)'s move and score
+AssertionError: expected 182 to be 136 // Object.is equality
+
+- Expected
++ Received
+
+- 136
++ 182
+
+ ❯ src/engine.test.ts:1266:44
+    1264|     expect((choice as EngineChoice).depth).toBe(3);
+    1265|     expect(label((choice as EngineChoice).move)).toBe(label(reference.…
+    1266|     expect((choice as EngineChoice).score).toBe(reference.score);
+       |                                            ^
+    1267|   });
+    1268|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/19]⎯
+
+ FAIL  src/search.ordering.test.ts > ABC-240 C1-C4 — the four conditions, one targeted row each > C4: two calls in a row return two distinct arrays, the first unchanged by the second
+AssertionError: expected [ { from: 16, to: 48, …(4) }, …(47) ] not to be [ { from: 16, to: 48, …(4) }, …(47) ] // Object.is equality
+
+Compared values have no visual difference.
+
+ ❯ <anonymous> src/search.ordering.test.ts:421:24
+    419|     const firstCopy = first.slice();
+    420|     const second = orderMoves(legal, [quiet[3] as Move], quiet[8] as M…
+    421|     expect(second).not.toBe(first);
+       |                        ^
+    422|     expect(first).not.toBe(legal);
+    423|     expect(first.every((move, i) => move === firstCopy[i])).toBe(true);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/19]⎯
+
+ FAIL  src/search.ordering.test.ts > A1 — ordered and unordered scores are identical > startpos at depth 3
+AssertionError: expected 1721 to be 66 // Object.is equality
+
+- Expected
++ Received
+
+- 66
++ 1721
+
+ ❯ <anonymous> src/search.ordering.test.ts:515:43
+    513|         () => {
+    514|           const unordered = none(name, depth).score;
+    515|           expect(full(name, depth).score).toBe(unordered);
+       |                                           ^
+    516|           expect(mvvLva(name, depth).score).toBe(unordered);
+    517|         },
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/19]⎯
+
+ FAIL  src/search.ordering.test.ts > A1 — ordered and unordered scores are identical > position-3 at depth 3
+AssertionError: expected 29999 to be 120 // Object.is equality
+
+- Expected
++ Received
+
+- 120
++ 29999
+
+ ❯ <anonymous> src/search.ordering.test.ts:515:43
+    513|         () => {
+    514|           const unordered = none(name, depth).score;
+    515|           expect(full(name, depth).score).toBe(unordered);
+       |                                           ^
+    516|           expect(mvvLva(name, depth).score).toBe(unordered);
+    517|         },
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/19]⎯
+
+ FAIL  src/search.ordering.test.ts > A4 — each heuristic's node count, and the delete rule > position-6 at depth 2: none 10 371, MVV-LVA 3 266, + killers 3 177
+AssertionError: expected 605 to be 3266 // Object.is equality
+
+- Expected
++ Received
+
+- 3266
++ 605
+
+ ❯ <anonymous> src/search.ordering.test.ts:635:43
+    633|   it("position-6 at depth 2: none 10 371, MVV-LVA 3 266, + killers 3 1…
+    634|     expect(none("position-6", 2).nodes).toBe(10_371);
+    635|     expect(mvvLva("position-6", 2).nodes).toBe(3_266);
+       |                                           ^
+    636|     expect(full("position-6", 2).nodes).toBe(3_177);
+    637|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/19]⎯
+
+ FAIL  src/search.ordering.test.ts > A4 — each heuristic's node count, and the delete rule > the promotion-capture fixture at depth 3 visits 232 nodes (ABC-079 QE G4)
+AssertionError: expected 590 to be 232 // Object.is equality
+
+- Expected
++ Received
+
+- 232
++ 590
+
+ ❯ <anonymous> src/search.ordering.test.ts:657:84
+    655|   it("the promotion-capture fixture at depth 3 visits 232 nodes (ABC-0…
+    656|     // The pre-`ABC-121` search since `ABC-121` (`ADR-0026` decision 4…
+    657|     expect(searchWithoutPvsOrReductions(parseFen(PROMOTION_CAPTURE_FEN…
+       |                                                                                    ^
+    658|   });
+    659|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/19]⎯
+
+ FAIL  src/search.ordering.test.ts > G1 — chooseMove records a killer only on a beta cutoff > position-3 at 3 injected ticks: depth 3 in exactly 342 nodes
+AssertionError: expected 2 to be 3 // Object.is equality
+
+- Expected
++ Received
+
+- 3
++ 2
+
+ ❯ <anonymous> src/search.ordering.test.ts:847:26
+    845|       now: () => ticks++,
+    846|     }) as { depth: number; nodes: number };
+    847|     expect(choice.depth).toBe(3);
+       |                          ^
+    848|     expect(choice.nodes).toBe(342);
+    849|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/19]⎯
+
+ FAIL  src/search.test.ts > A1 — pruned and unpruned scores are identical > startpos at depth 2
+AssertionError: expected 10 to be -181 // Object.is equality
+
+- Expected
++ Received
+
+- -181
++ 10
+
+ ❯ src/search.test.ts:398:32
+    396|         () => {
+    397|           const { pruned, unpruned } = searchPair(fen, depth, "quiesce…
+    398|           expect(pruned.score).toBe(unpruned.score);
+       |                                ^
+    399|         },
+    400|         deep ? 30_000 : undefined,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/19]⎯
+
+ FAIL  src/search.test.ts > A1 — pruned and unpruned scores are identical > position-3 at depth 2
+AssertionError: expected 356 to be 597 // Object.is equality
+
+- Expected
++ Received
+
+- 597
++ 356
+
+ ❯ src/search.test.ts:398:32
+    396|         () => {
+    397|           const { pruned, unpruned } = searchPair(fen, depth, "quiesce…
+    398|           expect(pruned.score).toBe(unpruned.score);
+       |                                ^
+    399|         },
+    400|         deep ? 30_000 : undefined,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/19]⎯
+
+ FAIL  src/search.test.ts > A1 — pruned and unpruned scores are identical > position-4 at depth 2
+AssertionError: expected -657 to be -29998 // Object.is equality
+
+- Expected
++ Received
+
+- -29998
++ -657
+
+ ❯ src/search.test.ts:398:32
+    396|         () => {
+    397|           const { pruned, unpruned } = searchPair(fen, depth, "quiesce…
+    398|           expect(pruned.score).toBe(unpruned.score);
+       |                                ^
+    399|         },
+    400|         deep ? 30_000 : undefined,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/19]⎯
+
+ FAIL  src/search.test.ts > A3 — mate is found and the shorter mate preferred > returns the mating move and a score above any non-mate score, at depth 4
+AssertionError: expected 2662 to be 29997 // Object.is equality
+
+- Expected
++ Received
+
+- 29997
++ 2662
+
+ ❯ src/search.test.ts:460:26
+    458|     const result = search(parseFen(MATE_IN_2), 4);
+    459|
+    460|     expect(result.score).toBe(MATE_SCORE - 3); // mated 3 plies from t…
+       |                          ^
+    461|     expect(["f6f7", "f6g6"]).toContain(label(result.move as Move)); //…
+    462|     // Above every score the static evaluation can produce: the whole …
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/19]⎯
+
+ FAIL  src/search.test.ts > A3 — mate is found and the shorter mate preferred > prefers the mate in 1 over the mate in 2 and the mate in 3 in the same position
+AssertionError: expected 6568 to be 29999 // Object.is equality
+
+- Expected
++ Received
+
+- 29999
++ 6568
+
+ ❯ src/search.test.ts:470:26
+    468|     const result = search(parseFen(MATE_IN_1), 4);
+    469|
+    470|     expect(result.score).toBe(MATE_SCORE - 1);
+       |                          ^
+    471|     expect(label(result.move as Move)).toBe("a1a8");
+    472|     expect(result.score).toBeGreaterThan(MATE_SCORE - 3); // strictly …
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/19]⎯
+
+ FAIL  src/search.test.ts > A7 — the searched position is unchanged on return > leaves position-3 byte-identical after a depth-3 search, pruned and unpruned
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ src/search.test.ts:634:53
+    632|     const fen = (entry as { fen: string }).fen;
+    633|
+    634|     expect(searchPair(fen, 3, "quiescence").intact).toBe(true);
+       |                                                     ^
+    635|     const position = parseFen(fen);
+    636|     const before = snapshot(position);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[19/19]⎯
+
+
+ Test Files  3 failed (3)
+      Tests  19 failed | 85 passed (104)
+   Start at  03:00:39
+   Duration  1.83s (transform 0ms, setup 0ms, import 338ms, tests 1.79s, environment 0ms)
+

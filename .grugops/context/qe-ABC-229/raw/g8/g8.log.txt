@@ -1,0 +1,7 @@
+2026-10-30T16:28:46.842Z run 1 base rc=0 wall=9.64s vitest_duration=9.33s (transform 0ms, setup 0ms, import 6.12s, tests 7.91s, environment 5ms) load1_before=0.89 tctl_before=38.0 :: 2297 passed (2297)
+2026-10-30T16:29:11.712Z run 2 head rc=0 wall=9.82s vitest_duration=9.48s (transform 0ms, setup 0ms, import 6.20s, tests 8.03s, environment 5ms) load1_before=1.23 tctl_before=51.8 :: 2322 passed (2322)
+2026-10-30T16:29:36.791Z run 3 head rc=0 wall=10.03s vitest_duration=9.71s (transform 0ms, setup 0ms, import 6.28s, tests 8.44s, environment 5ms) load1_before=1.48 tctl_before=59.4 :: 2322 passed (2322)
+2026-10-30T16:30:01.733Z run 4 base rc=0 wall=9.90s vitest_duration=9.57s (transform 0ms, setup 0ms, import 6.20s, tests 8.45s, environment 4ms) load1_before=1.63 tctl_before=44.5 :: 2297 passed (2297)
+2026-10-30T16:30:26.873Z run 5 base rc=0 wall=10.09s vitest_duration=9.80s (transform 0ms, setup 0ms, import 6.29s, tests 8.36s, environment 6ms) load1_before=1.73 tctl_before=59.3 :: 2297 passed (2297)
+2026-10-30T16:30:51.831Z run 6 head rc=0 wall=9.90s vitest_duration=9.56s (transform 0ms, setup 0ms, import 6.24s, tests 8.04s, environment 5ms) load1_before=1.69 tctl_before=42.3 :: 2322 passed (2322)
+2026-10-30T16:30:51.831Z median wall: base 9.90 s, head 9.90 s, delta 0.01 s

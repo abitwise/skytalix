@@ -1,0 +1,4 @@
+{"name":"kiwipete","depth":6,"nodes":400237,"evals":372715,"makesPerEval":5.3,"makesPerNode":4.9,"pawnCalls":372715,"uniquePawnSigs":15114,"idealHitRate":0.9594,"directMapped16kHitRate":0.9428,"sigValueMismatch":0}
+{"name":"position-6","depth":8,"nodes":400994,"evals":365699,"makesPerEval":5.4,"makesPerNode":5,"pawnCalls":365699,"uniquePawnSigs":21511,"idealHitRate":0.9412,"directMapped16kHitRate":0.9216,"sigValueMismatch":0}
+{"name":"start","depth":9,"nodes":400404,"evals":294576,"makesPerEval":9.3,"makesPerNode":6.8,"pawnCalls":294576,"uniquePawnSigs":38301,"idealHitRate":0.87,"directMapped16kHitRate":0.8318,"sigValueMismatch":0}
+cpu 3.34 s user

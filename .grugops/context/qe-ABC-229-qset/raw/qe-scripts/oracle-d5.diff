@@ -1,0 +1,38 @@
+diff -ru base/src/engine.ts oracle/src/engine.ts
+--- base/src/engine.ts	2026-10-30 14:32:52.000000000 +0000
++++ oracle/src/engine.ts	2026-10-30 14:38:31.356007979 +0000
+@@ -256,7 +256,7 @@
+ }
+ 
+ /** The quiescence rules this recursion hands `quiesce` (`ADR-0053` decision 6): constants, never built per leaf. */
+-const EVASIONS_ON: QuiescenceRules = { evasions: true };
++const EVASIONS_ON: QuiescenceRules = { evasions: true, quietPromotions: true } as QuiescenceRules;
+ const EVASIONS_OFF: QuiescenceRules = { evasions: false };
+ 
+ /** The deepening loop's mutable state: the clock, the deadline, and when to consult again. */
+diff -ru base/src/quiescence.ts oracle/src/quiescence.ts
+--- base/src/quiescence.ts	2026-10-30 14:32:52.000000000 +0000
++++ oracle/src/quiescence.ts	2026-10-30 14:38:31.355672723 +0000
+@@ -182,6 +182,10 @@
+ 
+     // The legal captures in generation order (ABC-206): only captures are tested for legality.
+     moves = legalCaptures(position);
++    // QE ORACLE ONLY (qe-ABC-229-qset): ADR-0053 d5, quiet queen promotions appended after the captures.
++    if ((rules as { quietPromotions?: boolean }).quietPromotions) {
++      for (const m of legalMoves(position)) if (m.promotion === 5 && m.captured === 0) moves.push(m);
++    }
+   }
+   // Stable sort: equal keys keep generation order, so the count is deterministic.
+   orderCaptures(moves);
+diff -ru base/src/search.ts oracle/src/search.ts
+--- base/src/search.ts	2026-10-30 14:32:52.000000000 +0000
++++ oracle/src/search.ts	2026-10-30 14:38:31.355860173 +0000
+@@ -101,7 +101,7 @@
+ export { MATE_SCORE };
+ 
+ /** The quiescence rules each recursion hands `quiesce` (`ADR-0053` decision 6): constants, never built per leaf. */
+-const EVASIONS_ON: QuiescenceRules = { evasions: true };
++const EVASIONS_ON: QuiescenceRules = { evasions: true, quietPromotions: true } as QuiescenceRules;
+ const EVASIONS_OFF: QuiescenceRules = { evasions: false };
+ 
+ export interface SearchResult {

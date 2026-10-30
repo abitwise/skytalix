@@ -1,0 +1,29 @@
+== g6: base vs tip, runs 20, load1 0.4-0.97, Tctl 34.1-73.4 C, wall 2999.7-3001.3 ms, elapsedMs max 3001
+  kiwipete: base nps 710266 781685 773071 783732 788431 med 781685 | tip nps 870692 878202 864548 880591 876154 med 876154 | ratio 1.1209
+  kiwipete: depth base 8 8 8 8 8 med 8 | tip 8 8 8 8 8 med 8 | min tip 8 | moves base 20-80-0 tip 20-80-0
+  position-6: base nps 807188 805823 800704 809846 812577 med 807188 | tip nps 900982 891425 879478 904395 906141 med 900982 | ratio 1.1162
+  position-6: depth base 10 10 10 10 10 med 10 | tip 10 10 10 10 10 med 10 | min tip 10 | moves base 34-67-0 tip 34-67-0
+== a3: base vs tip, runs 30, load1 0.98-1.19, Tctl 68.6-74.5 C, wall 2999.6-3001.5 ms, elapsedMs max 3001
+  kiwipete: base nps 772047 781003 784335 747563 782628 med 781003 | tip nps 878543 876154 876154 872450 863524 med 876154 | ratio 1.1218
+  kiwipete: depth base 8 8 8 8 8 med 8 | tip 8 8 8 8 8 med 8 | min tip 8 | moves base 20-80-0 tip 20-80-0
+  position-6: base nps 798582 809235 791833 808822 808481 med 808481 | tip nps 896886 906102 895862 899999 893175 med 896886 | ratio 1.1093
+  position-6: depth base 10 10 10 10 10 med 10 | tip 10 10 10 10 10 med 10 | min tip 10 | moves base 34-67-0 tip 34-67-0
+  start: base nps 558924 583151 586417 581786 579932 med 581786 | tip nps 623074 633651 622732 641158 638087 med 633651 | ratio 1.0891
+  start: depth base 10 10 10 10 10 med 10 | tip 10 10 10 11 10 med 10 | min tip 10 | moves base 1-34-0 tip 1-34-0
+== item1: base vs item1, runs 30, load1 1.09-1.65, Tctl 70-75.6 C, wall 2999.4-3001.8 ms, elapsedMs max 3001
+  kiwipete: base nps 784676 778273 780239 783994 782709 med 782709 | item1 nps 828367 838607 830074 832463 820858 med 830074 | ratio 1.0605
+  kiwipete: depth base 8 8 8 8 8 med 8 | item1 8 8 8 8 8 med 8 | min item1 8 | moves base 20-80-0 item1 20-80-0
+  position-6: base nps 797558 808894 792174 806433 805482 med 805482 | item1 nps 869921 870945 865483 861387 867925 med 867925 | ratio 1.0775
+  position-6: depth base 10 10 10 10 10 med 10 | item1 10 10 10 10 10 med 10 | min item1 10 | moves base 34-67-0 item1 34-67-0
+  start: base nps 586563 583687 580421 580762 570375 med 580762 | item1 nps 615567 630580 627719 626695 593585 med 626695 | ratio 1.0791
+  start: depth base 10 10 10 10 10 med 10 | item1 10 10 10 10 10 med 10 | min item1 10 | moves base 1-34-0 item1 1-34-0
+== item2: item1 vs tip, runs 30, load1 1.26-1.62, Tctl 69.1-75.1 C, wall 2999.5-3001.7 ms, elapsedMs max 3001
+  kiwipete: item1 nps 844811 835535 836900 827343 837583 med 836900 | tip nps 875812 879908 875520 862159 873132 med 875520 | ratio 1.0461
+  kiwipete: depth item1 8 8 8 8 8 med 8 | tip 8 8 8 8 8 med 8 | min tip 8 | moves item1 20-80-0 tip 20-80-0
+  position-6: item1 nps 861783 867873 853252 845745 861387 med 861387 | tip nps 898976 894540 894838 905419 890445 med 894838 | ratio 1.0388
+  position-6: depth item1 10 10 10 10 10 med 10 | tip 10 10 10 10 10 med 10 | min tip 10 | moves item1 34-67-0 tip 34-67-0
+  start: item1 nps 630791 616932 618844 617820 608401 med 617820 | tip nps 637959 629557 639324 635569 595975 med 635569 | ratio 1.0287
+  start: depth item1 10 10 10 10 10 med 10 | tip 10 10 10 10 10 med 10 | min tip 10 | moves item1 1-34-0 tip 1-34-0
+voided rows 0
+{"session_start":"2026-10-30T01:40:22Z","load1":0.40,"tctl":"34.1"}
+{"session_end":"2026-10-30T01:46:20Z","load1":1.26,"tctl":"69.8"}

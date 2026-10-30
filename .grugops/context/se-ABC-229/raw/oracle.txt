@@ -1,0 +1,8 @@
+corpus 190
+ABC-229 A3 kiwipete d6: 330314 / 324162 = 1.0190x; ABC-228 A4 (re-pointed) 324162 / 237007 = 1.3677x
+ABC-229 A3 position-6 d6: 154466 / 154464 = 1.0000x; ABC-228 A4 (re-pointed) 154464 / 109912 = 1.4053x
+ABC-229 search() d5 vs searchWithoutQuietPromotions: 100.00% within 25 cp of 187, max 8 cp (r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N1BQ1p/PPP1BPPP/R3K2R b KQkq - 1 1: 350 -> 358); scores moved on 3/190; mate flips 0
+ABC-229 chooseMove to d5 vs chooseMoveWithoutQuietPromotions: 100.00% within 25 cp of 187, max 8 cp (r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N1BQ1p/PPP1BPPP/R3K2R b KQkq - 1 1: 350 -> 358); scores moved on 3/190; mate flips 0
+ABC-228 (re-pointed) searchWithoutQuietPromotions d5 vs searchWithoutQuiescenceEvasions: 89.30% within 25 cp of 187, max 118 cp (r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P1RPP/R2Q2K1 b kq - 1 1: 708 -> 826); scores moved on 47/190; mate flips 0
+ABC-228 (re-pointed) chooseMoveWithoutQuietPromotions to d5 vs chooseMoveWithoutQuiescenceEvasions: 88.77% within 25 cp of 187, max 118 cp (r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P1RPP/R2Q2K1 b kq - 1 1: 708 -> 826); scores moved on 48/190; mate flips 0
+ABC-228 mate floor (re-pointed) d5: 0 of 189 violated; report: search() vs ABC-229 door, 0 of 189 violated

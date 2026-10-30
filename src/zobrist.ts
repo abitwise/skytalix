@@ -87,6 +87,15 @@ export function zobristKey(position: Position): bigint {
   return key;
 }
 
+/**
+ * The en-passant component `zobristKey` XORs in for a position carrying `epSquare`: the ep file's
+ * key. A pure read of the table. `ADR-0020` § AMENDMENT 2026-10-30 C2: `src/gameend.ts`'s
+ * repetition key XORs it back out when no legal ep capture exists; the hash itself is unchanged.
+ */
+export function epFileKey(epSquare: number): bigint {
+  return EP_FILE[fileOf(epSquare)] as bigint;
+}
+
 /** The square the en-passant-captured pawn stood on: one rank behind the target, same file. */
 const enPassantCaptureSquare = (move: Move): number => move.to + (isBlack(move.piece) ? 16 : -16);
 

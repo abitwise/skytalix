@@ -1,0 +1,13 @@
+round 1 skytalix vs base 0-1 cand=0 plies=94 {Black mates}
+round 1 base vs skytalix 1-0 cand=0 plies=103 {White mates}
+round 2 skytalix vs base 1-0 cand=1 plies=157 {White mates}
+round 2 base vs skytalix 0-1 cand=1 plies=140 {Black mates}
+round 3 skytalix vs base 1-0 cand=1 plies=119 {White mates}
+round 3 base vs skytalix 1/2-1/2 cand=0.5 plies=204 {Draw by fifty moves rule}
+round 4 skytalix vs base 1/2-1/2 cand=0.5 plies=194 {Draw by 3-fold repetition} repeating move by base
+round 4 base vs skytalix 1/2-1/2 cand=0.5 plies=302 {Draw by fifty moves rule}
+round 5 skytalix vs base 0-1 cand=0 plies=178 {Black mates}
+round 5 base vs skytalix 1/2-1/2 cand=0.5 plies=253 {Draw by fifty moves rule}
+games 10  candidate W/L/D 3/3/4  score 5
+endings {"Black mates":3,"White mates":3,"Draw by fifty moves rule":3,"Draw by 3-fold repetition":1}
+repetition endings 1

@@ -1,0 +1,2 @@
+kiwipete: base 8,8,8,8,8 median 8 | head 8,8,8,8,8 median 8 | min 8 | MET
+position-6: base 10,10,10,10,10 median 10 | head 10,10,10,10,10 median 10 | min 10 | MET

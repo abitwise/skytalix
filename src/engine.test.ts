@@ -37,6 +37,7 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { makeMove, unmakeMove } from "./apply.ts";
 import { resolveOptions } from "./cli-options.ts";
+import { parseCoordinateMove } from "./coordinate-move.ts";
 import * as engineModule from "./engine.ts";
 import {
   type Clock,
@@ -48,11 +49,12 @@ import {
   type EngineChoice,
   HARD_CEILING_MS,
   NODES_PER_CLOCK_CHECK,
+  trimPriorKeys,
 } from "./engine.ts";
 import { parseFen, toFen } from "./fen.ts";
 import type { FrameSink } from "./frame.ts";
 import { gameStatus } from "./gameend.ts";
-import { type GameHistory, newGame } from "./history.ts";
+import { type GameHistory, keyHistory, newGame, playMove } from "./history.ts";
 import { legalMoves } from "./legal.ts";
 import { DEFAULT_LEVEL, LEVELS } from "./levels.ts";
 import type { Move } from "./moves.ts";
@@ -66,6 +68,7 @@ import {
   runTurnLoop,
 } from "./turn-loop.ts";
 import { virtualClock } from "./virtual-clock.ts";
+import { zobristKey } from "./zobrist.ts";
 
 /**
  * `ENGINE_DEEP=1` registers the real-clock lane. Unset, those cases are not defined at all —
@@ -495,7 +498,10 @@ describe("A4 — no fixed depth anywhere in the delivered engine", () => {
   it("exports the two entry points and the two named values, and nothing that takes a depth", () => {
     // `ABC-121` added two TEST-ONLY doors of `chooseMove`'s own shape (`ADR-0026` decision 2):
     // a position and options, a TIME budget, no depth. `ABC-208` added a third
-    // (`chooseMoveWithoutNullMove`, `ADR-0050` decision 2).
+    // (`chooseMoveWithoutNullMove`, `ADR-0050` decision 2). `ABC-230` added the prior-key trim
+    // (`trimPriorKeys`, `ADR-0054` decision 1): a key list and a clock, no depth. `ABC-228` added a
+    // fourth door (`chooseMoveWithoutQuiescenceEvasions`, `ADR-0053` decision 6), and `ABC-229` a
+    // fifth (`chooseMoveWithoutQuietPromotions`, the same decision).
     expect(Object.keys(engineModule).sort()).toEqual([
       "DEFAULT_BUDGET_MS",
       "HARD_CEILING_MS",
@@ -503,8 +509,11 @@ describe("A4 — no fixed depth anywhere in the delivered engine", () => {
       "chooseMove",
       "chooseMoveWithoutNullMove",
       "chooseMoveWithoutPvsOrReductions",
+      "chooseMoveWithoutQuiescenceEvasions",
+      "chooseMoveWithoutQuietPromotions",
       "chooseMoveWithoutReductions",
       "createEngine",
+      "trimPriorKeys",
     ]);
     // `Function.length` counts parameters before the first defaulted one: a third, defaulted
     // depth parameter cannot hide behind these numbers.
@@ -512,6 +521,8 @@ describe("A4 — no fixed depth anywhere in the delivered engine", () => {
     expect(chooseMoveWithoutReductions.length).toBe(2);
     expect(chooseMoveWithoutPvsOrReductions.length).toBe(2);
     expect(engineModule.chooseMoveWithoutNullMove.length).toBe(2);
+    expect(engineModule.chooseMoveWithoutQuiescenceEvasions.length).toBe(2);
+    expect(engineModule.chooseMoveWithoutQuietPromotions.length).toBe(2);
     expect(createEngine.length).toBe(1);
     expect(source).not.toMatch(/export function \w+\([^)]*depth/i);
   });
@@ -520,7 +531,7 @@ describe("A4 — no fixed depth anywhere in the delivered engine", () => {
     expect(source).toMatch(/readonly budgetMs: number;/);
     // A defaulted budget would make the ticket's "the budget arrives as a parameter" untrue.
     expect(source).not.toMatch(/budgetMs\s*\??\s*(:\s*[\w<>[\]| ]+)?\s*=[^=>]/);
-    expect(DEFAULT_BUDGET_MS).toBe(3_000);
+    expect(DEFAULT_BUDGET_MS).toBe(4_000); // ABC-228, ADR-0053 d10 (ii)
   });
 
   it("carries no depth default and no depth constant", () => {
@@ -897,8 +908,12 @@ describe("ABC-086 A5 — the virtual clock stays off the shipped path", () => {
   it("(i′) the shipped construction passes no clock, and its default level is the shipped engine", () => {
     // Re-pinned 2026-10-12 (BA/PM, `bapm-amend-ABC-101`): `ABC-101` moves the literal, not the property.
     // 1. The root's construction, verbatim: its options object is `{ seed }`, so no clock is passed.
-    expect(cliSource).toContain(
-      "createLevelSeam(difficulty, { seed: Math.floor(Math.random() * 2 ** 32) })",
+    // Re-pinned 2026-10-30 (`ABC-230`, `ADR-0054` decision 2): a third argument, the injected
+    // `keyHistory`, follows the options object; the options object is unchanged.
+    // Re-pinned 2026-10-30 (`ABC-241`, `ADR-0020` § AMENDMENT 2026-10-30 C3): the third argument is
+    // `repetitionKeyHistory`, so the call breaks across lines; the options object is unchanged.
+    expect(cliSource).toMatch(
+      /createLevelSeam\(\s*difficulty,\s*\{ seed: Math\.floor\(Math\.random\(\) \* 2 \*\* 32\) \},\s*repetitionKeyHistory,?\s*\)/,
     );
     // 2. The module the root imports `createLevelSeam` from adds no clock of its own.
     const seamImport = /import\s*\{[^}]*\bcreateLevelSeam\b[^}]*\}\s*from\s*"(\.\/[^"]+)"/.exec(
@@ -1022,7 +1037,7 @@ if (RUN_DEEP) {
 
         expect(choice).not.toBeNull();
         if (ms > 5_000) overCeiling.push(`${name}: ${ms} ms`);
-        if (ms > 3_000) overBudget.push(`${name}: ${ms} ms`);
+        if (ms > DEFAULT_BUDGET_MS) overBudget.push(`${name}: ${ms} ms`); // ABC-228: follows the constant
         if (ms > worst.ms) worst = { name, ms, depth: (choice as { depth: number }).depth };
       }
 
@@ -1030,7 +1045,7 @@ if (RUN_DEEP) {
       // and of nothing else (`ABC-074` owns the off-machine generalisation and is Blocked).
       console.log(
         `A1 worst case: ${worst.name} ${worst.ms} ms at completed depth ${worst.depth}; ` +
-          `over 3 s: ${overBudget.length}/30`,
+          `over ${DEFAULT_BUDGET_MS} ms: ${overBudget.length}/30`,
       );
       expect(overCeiling).toEqual([]);
     }, 300_000);
@@ -1395,6 +1410,285 @@ describe("ABC-170 A5 — the limits only shorten; the ceiling still holds", () =
       }) as EngineChoice;
       expect(capped.depth).toBe(free.depth);
       expect(label(capped.move)).toBe(label(free.move));
+    }
+  });
+});
+
+// ---------------------------------------------------------------------------
+// ABC-230 (`ADR-0054`) — the game's earlier positions reach the search as prior keys. A
+// repetition on the path needs one earlier occurrence, as before; before the root it needs two.
+// ---------------------------------------------------------------------------
+
+/** A game from `fen` through `moves` (coordinate text), played as the turn loop plays it. */
+function gameOf(fen: string, moves: string): GameHistory {
+  const game = newGame(fen);
+  for (const text of moves.split(" ")) {
+    const parsed = parseCoordinateMove(game.position, text);
+    if (parsed.outcome !== "move") throw new Error(`fixture: ${text} is not legal`);
+    playMove(game, parsed.move);
+  }
+  return game;
+}
+
+/** The legal move `text` of `position`. */
+function moveOf(position: Position, text: string): Move {
+  return legalMoves(position).find((move) => label(move) === text) as Move;
+}
+
+/** Fixed depth on a virtual clock (`NFR-008`): every figure below is exact on every host. */
+const fixedDepth = (maxDepth: number) => ({
+  budgetMs: HARD_CEILING_MS,
+  now: virtualClock(1),
+  maxDepth,
+});
+
+/** Every figure a search reports but the clock's: equal figures are a node-equal search. */
+const figures = (choice: EngineChoice | null) =>
+  choice === null
+    ? null
+    : { move: label(choice.move), score: choice.score, depth: choice.depth, nodes: choice.nodes };
+
+/** The root FEN of `game` with its halfmove clock set to `clock`. */
+function rootAtClock(game: GameHistory, clock: number): string {
+  const fields = toFen(game.position).split(" ");
+  fields[4] = String(clock);
+  return fields.join(" ");
+}
+
+/**
+ * `A1`'s fixtures: a shuffle where the losing side's king move `repeat` returns to a position that
+ * already stood twice, both colours, queen and rook. `base` is the search with no prior keys at
+ * depth 4 (probe H1 is the first row: Kc8 at -1006, against Ke8 at 0 with the keys).
+ */
+const THIRD_OCCURRENCE = [
+  {
+    name: "KQ v K, Black to move",
+    fen: "4k3/8/8/8/8/8/8/Q3K3 w - - 0 1",
+    moves: "a1a2 e8d8 a2a1 d8e8 a1a2 e8d8 a2a1",
+    repeat: "d8e8",
+    base: { move: "d8c8", score: -1006 },
+  },
+  {
+    name: "K v KQ, White to move",
+    fen: "q3k3/8/8/8/8/8/8/4K3 b - - 0 1",
+    moves: "a8a7 e1d1 a7a8 d1e1 a8a7 e1d1 a7a8",
+    repeat: "d1e1",
+    base: { move: "d1c1", score: -1006 },
+  },
+  {
+    name: "KR v K, Black to move",
+    fen: "4k3/8/8/8/8/8/8/R3K3 w - - 0 1",
+    moves: "a1a2 e8d8 a2a1 d8e8 a1a2 e8d8 a2a1",
+    repeat: "d8e8",
+    base: { move: "d8c7", score: -556 },
+  },
+  {
+    name: "K v KR, White to move",
+    fen: "r3k3/8/8/8/8/8/8/4K3 b - - 0 1",
+    moves: "a8a7 e1d1 a7a8 d1e1 a8a7 e1d1 a7a8",
+    repeat: "d1e1",
+    base: { move: "d1c1", score: -556 },
+  },
+] as const;
+
+/** The game's prior keys, as both surfaces build them. */
+const priorKeysOf = (game: GameHistory): bigint[] =>
+  trimPriorKeys(keyHistory(game), game.position.halfmoveClock);
+
+/** How many times the position after `text` stands in `keys`. */
+function occurrencesAfter(position: Position, text: string, keys: readonly bigint[]): number {
+  const move = moveOf(position, text);
+  const undo = makeMove(position, move);
+  const key = zobristKey(position);
+  unmakeMove(position, move, undo);
+  return keys.filter((each) => each === key).length;
+}
+
+describe("ABC-230 — trimPriorKeys: the reversible window, root excluded, at most 100", () => {
+  const keys = Array.from({ length: 600 }, (_, index) => BigInt(index));
+
+  it("keeps the last min(clock, 100) keys before the root, oldest first", () => {
+    expect(trimPriorKeys([0n, 1n, 2n, 3n, 4n, 5n], 3)).toEqual([2n, 3n, 4n]);
+    expect(trimPriorKeys([0n, 1n, 2n], 2)).toEqual([0n, 1n]);
+    // A FEN clock larger than the list (the moves before the FEN are unknown): the whole list.
+    expect(trimPriorKeys([0n, 1n, 2n], 50)).toEqual([0n, 1n]);
+  });
+
+  it("is empty at clock 0 and for a lone root", () => {
+    expect(trimPriorKeys([0n, 1n, 2n], 0)).toEqual([]);
+    expect(trimPriorKeys([7n], 0)).toEqual([]);
+    expect(trimPriorKeys([7n], 40)).toEqual([]);
+  });
+
+  it("A5: never more than 100 keys from a 600-key list, the root's own key excluded", () => {
+    const trimmed = trimPriorKeys(keys, 599);
+    expect(trimmed).toHaveLength(100);
+    expect(trimmed[0]).toBe(499n);
+    expect(trimmed.at(-1)).toBe(598n);
+    expect(trimPriorKeys(keys, 37)).toEqual(keys.slice(562, 599));
+  });
+
+  it("does not change the list it is handed", () => {
+    const before = [...keys];
+    trimPriorKeys(keys, 80);
+    expect(keys).toEqual(before);
+  });
+});
+
+describe("ABC-230 A1 — a third occurrence scores exactly 0 at the root; base scores it otherwise", () => {
+  for (const fixture of THIRD_OCCURRENCE) {
+    it(`${fixture.name}: ${fixture.repeat} at 0 with the prior keys, base's move without them`, () => {
+      const game = gameOf(fixture.fen, fixture.moves);
+      const root = toFen(game.position);
+      const prior = priorKeysOf(game);
+      expect(prior).toHaveLength(7);
+      // Non-vacuity: the move returns to a position that already stood TWICE.
+      expect(occurrencesAfter(game.position, fixture.repeat, prior)).toBe(2);
+
+      const withKeys = chooseMove(game.position, { ...fixedDepth(4), priorKeys: prior });
+      expect(toFen(game.position)).toBe(root);
+      expect(withKeys && label(withKeys.move)).toBe(fixture.repeat);
+      expect(withKeys?.score).toBe(0);
+
+      const base = chooseMove(parseFen(root), fixedDepth(4));
+      expect(base && { move: label(base.move), score: base.score }).toEqual(fixture.base);
+      // Base's own score of the repeating move, read on its child: not a draw.
+      const child = parseFen(root);
+      makeMove(child, moveOf(child, fixture.repeat));
+      const baseChild = chooseMove(child, fixedDepth(3));
+      expect(baseChild?.score).not.toBe(0);
+    });
+  }
+});
+
+describe("ABC-230 A8 — a second occurrence before the root is not a draw (probe H2)", () => {
+  for (const fixture of THIRD_OCCURRENCE.slice(0, 2)) {
+    it(`${fixture.name}: ${fixture.repeat} would stand a second time; node-equal to base`, () => {
+      const game = gameOf(fixture.fen, fixture.moves.split(" ").slice(0, 3).join(" "));
+      const root = toFen(game.position);
+      const prior = priorKeysOf(game);
+      expect(occurrencesAfter(game.position, fixture.repeat, prior)).toBe(1);
+
+      const withKeys = chooseMove(game.position, { ...fixedDepth(4), priorKeys: prior });
+      const base = chooseMove(parseFen(root), fixedDepth(4));
+      expect(figures(withKeys)).toEqual(figures(base));
+      // H2's figures: the one-match rule would play the repetition at 0 instead.
+      expect(base && { move: label(base.move), score: base.score }).toEqual(fixture.base);
+    });
+  }
+});
+
+describe("ABC-230 A9 and A5 — the clock and the 100-key cap bound what the search reads", () => {
+  it("A9 (probe H4): untrimmed prior keys at root clock 0 are node-equal to base", () => {
+    const game = gameOf(
+      "4k3/p7/8/8/8/8/P7/Q3K3 w - - 0 1",
+      "a1b1 e8d8 b1a1 d8e8 a1b1 e8d8 b1a1 d8e8 a2a3",
+    );
+    expect(game.position.halfmoveClock).toBe(0);
+    const untrimmed = keyHistory(game).slice(0, -1);
+    expect(untrimmed).toHaveLength(9);
+    const root = toFen(game.position);
+    expect(figures(chooseMove(game.position, { ...fixedDepth(4), priorKeys: untrimmed }))).toEqual(
+      figures(chooseMove(parseFen(root), fixedDepth(4))),
+    );
+  });
+
+  it("A9: on the A1 fixtures with the root clock set to 0, the same keys are node-equal to base", () => {
+    for (const fixture of THIRD_OCCURRENCE) {
+      const game = gameOf(fixture.fen, fixture.moves);
+      const prior = keyHistory(game).slice(0, -1);
+      const root = rootAtClock(game, 0);
+      expect(
+        figures(chooseMove(parseFen(root), { ...fixedDepth(4), priorKeys: prior })),
+        fixture.name,
+      ).toEqual(figures(chooseMove(parseFen(root), fixedDepth(4))));
+    }
+  });
+
+  it("A5: a prior key older than the root clock is never matched", () => {
+    const fixture = THIRD_OCCURRENCE[0];
+    const game = gameOf(fixture.fen, fixture.moves);
+    const prior = keyHistory(game).slice(0, -1);
+    // Clock 4: every key that stands twice has its older occurrence more than 4 plies back.
+    const short = rootAtClock(game, 4);
+    expect(figures(chooseMove(parseFen(short), { ...fixedDepth(4), priorKeys: prior }))).toEqual(
+      figures(chooseMove(parseFen(short), fixedDepth(4))),
+    );
+    // Clock 7, the true one: both occurrences are in the window, and the repetition reads 0.
+    const inWindow = chooseMove(parseFen(rootAtClock(game, 7)), {
+      ...fixedDepth(4),
+      priorKeys: prior,
+    });
+    expect(inWindow && { move: label(inWindow.move), score: inWindow.score }).toEqual({
+      move: fixture.repeat,
+      score: 0,
+    });
+  });
+
+  it("A5: the search reads at most the last 100 prior keys, whatever it is handed", () => {
+    const fixture = THIRD_OCCURRENCE[0];
+    const game = gameOf(fixture.fen, fixture.moves);
+    const prior = keyHistory(game).slice(0, -1);
+    const root = rootAtClock(game, 120);
+    // Keys no position here has, an even count so each real key keeps its parity.
+    const filler = (count: number) =>
+      Array.from({ length: count }, (_, index) => BigInt(index + 1));
+    // 92 more: the two occurrences sit 95 and 99 plies back, inside the 100 read.
+    const inside = chooseMove(parseFen(root), {
+      ...fixedDepth(4),
+      priorKeys: [...prior, ...filler(92)],
+    });
+    expect(inside && { move: label(inside.move), score: inside.score }).toEqual({
+      move: fixture.repeat,
+      score: 0,
+    });
+    // 100 more: they sit 103 and 107 plies back, past the cap, so the search is base.
+    const past = chooseMove(parseFen(root), {
+      ...fixedDepth(4),
+      priorKeys: [...prior, ...filler(100)],
+    });
+    expect(figures(past)).toEqual(figures(chooseMove(parseFen(root), fixedDepth(4))));
+  });
+
+  it("the engine reads the caller's list and does not change it", () => {
+    const fixture = THIRD_OCCURRENCE[1];
+    const game = gameOf(fixture.fen, fixture.moves);
+    const prior = Object.freeze(priorKeysOf(game));
+    expect(() => chooseMove(game.position, { ...fixedDepth(4), priorKeys: prior })).not.toThrow();
+    expect(prior).toEqual(priorKeysOf(game));
+  });
+});
+
+describe("ABC-230 A3 and A4 — no prior keys is base, node for node, and the doors take none", () => {
+  it("A4: an empty list is node-equal to an absent one over the endgames and the thirty", () => {
+    const corpus = [
+      ...ENDGAME_CORPUS.map(({ name, fen }) => ({ name, position: parseFen(fen) })),
+      ...thirtyPositions(),
+    ];
+    for (const { name, position } of corpus) {
+      const fen = toFen(position);
+      const absent = chooseMove(parseFen(fen), { budgetMs: 5, now: tickingClock(1) });
+      const empty = chooseMove(parseFen(fen), {
+        budgetMs: 5,
+        now: tickingClock(1),
+        priorKeys: [],
+      });
+      expect(figures(empty), name).toEqual(figures(absent));
+    }
+  });
+
+  it("the three test-only doors ignore prior keys: node-equal with and without them", () => {
+    const game = gameOf(THIRD_OCCURRENCE[0].fen, THIRD_OCCURRENCE[0].moves);
+    const prior = priorKeysOf(game);
+    const root = toFen(game.position);
+    for (const door of [
+      engineModule.chooseMoveWithoutNullMove,
+      chooseMoveWithoutReductions,
+      chooseMoveWithoutPvsOrReductions,
+    ]) {
+      expect(figures(door(parseFen(root), { ...fixedDepth(4), priorKeys: prior }))).toEqual(
+        figures(door(parseFen(root), fixedDepth(4))),
+      );
     }
   });
 });

@@ -1,0 +1,9 @@
+
+ RUN  v4.1.12 <worktree>
+
+
+ Test Files  1 passed (1)
+      Tests  9 passed (9)
+   Start at  23:54:34
+   Duration  124ms (transform 0ms, setup 0ms, import 51ms, tests 13ms, environment 0ms)
+

@@ -1,0 +1,11 @@
+base-L6 rc=1 :: 1 failed | 143 passed (144)
+  red: src/uci-session.test.ts > ABC-171 A2 — setoption > setoption name Hash value 64 writes nothing and changes nothing 56ms
+  red: src/uci-session.test.ts > ABC-171 A2 — setoption > setoption name Hash value 64 writes nothing and changes nothing
+base-L7 rc=1 :: 1 failed | 143 passed (144)
+  red: src/uci-session.test.ts > ABC-171 A2 — setoption > setoption name Hash value 64 writes nothing and changes nothing 56ms
+  red: src/uci-session.test.ts > ABC-171 A2 — setoption > setoption name Hash value 64 writes nothing and changes nothing
+head-L4 rc=1 :: 1 failed | 143 passed (144)
+  red: src/uci-session.test.ts > ABC-171 A2 — setoption > setoption name Hash value 64 writes nothing and changes nothing 15ms
+  red: src/uci-session.test.ts > ABC-171 A2 — setoption > setoption name Hash value 64 writes nothing and changes nothing
+head-L6 rc=0 :: 144 passed (144)
+head-L7 rc=0 :: 144 passed (144)

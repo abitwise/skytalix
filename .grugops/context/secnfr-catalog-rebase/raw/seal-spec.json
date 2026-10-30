@@ -1,0 +1,15 @@
+{
+  "refs": ["secnfr-catalog-rebase", "SEC-228-a", "SEC-228-b", "SEC-220-c", "SEC-REBASE-a", "SEC-REBASE-b", "SEC-REBASE-c",
+           "plans/nfr-catalog.md", "NFR-004", "NFR-005", "NFR-008", "NFR-009", "NFR-011", "AR-NFR004-A", "AR-UCI-BUSY",
+           "ADR-0052", "ADR-0035", "ABC-220", "ABC-222", "ABC-228", "EPIC-009",
+           "orch-2026-10-30a/20261030T181200Z-orchestrator-decision-f4673b9f",
+           "orch-2026-10-28a/20261028T210902Z-orchestrator-decision-5dbd717b",
+           "qe-ABC-220/20261030T152147Z-qe-e2e-observation-58af5b6a",
+           "qe-ABC-228-ii/20261030T103542Z-qe-e2e-observation-3fac6579",
+           "qe-ABC-228-ii/20261030T103542Z-qe-e2e-observation-269152b2",
+           "5bc22858", "b81bdd26"],
+  "notes": [
+    { "kind": "decision", "confidence": "high: records-only catalog re-base on the owner's verbatim words as transcribed in orch-2026-10-30a/…f4673b9f; host facts from QE machine records plus hostname/nproc/uname read at this hop; no bound moved; nothing run (host held ALONE by QE)", "bodyFile": "note-decision.md" },
+    { "kind": "observation", "confidence": "high for the read facts; SEC-REBASE-b is an unruled protocol question, not a measurement", "bodyFile": "note-observation.md" }
+  ]
+}

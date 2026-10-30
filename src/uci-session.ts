@@ -11,23 +11,41 @@
  * `createLevel`, seeded per `go` from the injected `random`. Levels 5-7 have rate 0 and take
  * `chooseMove` with D12's limits (`ADR-0045` § AMENDMENT A4).
  *
+ * `ABC-220` (`ADR-0052` D1-D3, D8) adds a third option, the `combo` `TimeMode` (`TIME_MODES`,
+ * default `level`). `level` is everything above, unchanged. `simple-tournament` searches a fixed
+ * `SIMPLE_TOURNAMENT_BUDGET_MS` (22 000) a move at rate 0, never past the clock it is given: a
+ * `movetime x` gets `min(x, T)`, a clock for the side to move `min(T, C)` (`safeClockShare`), and no
+ * time token T. T is also the setting's hard ceiling, `SIMPLE_TOURNAMENT_CEILING_MS`. While
+ * `TimeMode` is not `level`, `Skill Level` is not read: no level cap, no blunder draw.
+ *
  * ONE THREAD (`ADR-0044` D5). `go` searches to its budget inside `handleLine`, so a `stop` that
  * arrives later finds the search already finished; `infinite` and `ponder` only HOLD the answer.
  * So `isready` and `stop` sent during a search are answered at most one budget late: about 5 s at
  * levels 1-5, 7 s at 6 and 32 s at 7 (`ABC-212`). That latency is accepted, with no worker
  * (`ADR-0045` § AMENDMENT A4): a GUI that times out on `isready` or `stop` mid-search should be
- * used at level 5 or below.
+ * used at level 5 or below. In `TimeMode` `simple-tournament` they are answered at most one budget
+ * plus the abort overshoot (`AR-NFR004-A`) late, so 22 s read to the whole second (22 000 ms plus
+ * the overshoot), and that is accepted with no worker too (`ADR-0052` D7, `ABC-220`): one
+ * `readyok` per `isready`, written in order, after the `bestmove`.
  */
 
 import { makeMove } from "./apply.ts";
 import type { BookProbe } from "./book.ts";
 import { parseCoordinateMove } from "./coordinate-move.ts";
-import { type Clock, chooseMove, type EngineChoice, HARD_CEILING_MS } from "./engine.ts";
+import {
+  type Clock,
+  chooseMove,
+  type EngineChoice,
+  HARD_CEILING_MS,
+  trimPriorKeys,
+} from "./engine.ts";
 import { parseFen } from "./fen.ts";
+import { repetitionKey } from "./gameend.ts";
 import { createLevel, DEFAULT_LEVEL, EASIEST_LEVEL, HARDEST_LEVEL, LEVELS } from "./levels.ts";
 import { BISHOP, KNIGHT, type Position, QUEEN, ROOK, squareName } from "./position.ts";
 import { MATE_SCORE } from "./search.ts";
 import { MATE_FLOOR } from "./transposition.ts";
+import { zobristKey } from "./zobrist.ts";
 
 export interface UciSessionOptions {
   /** Takes one output line, without its line terminator. */
@@ -68,6 +86,22 @@ const MOVE_OVERHEAD_MS = 50;
 /** D4's default number of moves the remaining clock is spread over. */
 const DEFAULT_MOVES_TO_GO = 20;
 
+/**
+ * `ADR-0052` D1: the `TimeMode` values offered at this build, a closed set. `level` (the default)
+ * is today's behaviour. `uci-clock-mode` is not offered until it works (`ABC-221`).
+ */
+const TIME_MODES = Object.freeze(["level", "simple-tournament"] as const);
+type TimeMode = (typeof TIME_MODES)[number];
+
+/** `ADR-0052` D3, as amended 2026-10-30: `simple-tournament`'s hard ceiling (`NFR-004`), whole seconds. */
+const SIMPLE_TOURNAMENT_CEILING_MS = 22_000;
+/** `ADR-0052` D3: T, what `simple-tournament` spends a move. Equal to its ceiling, no margin. */
+const SIMPLE_TOURNAMENT_BUDGET_MS = SIMPLE_TOURNAMENT_CEILING_MS;
+/** `ADR-0052` D2: kept back on the clock at the time control. */
+const CLOCK_RESERVE_MS = 1_000;
+/** `ADR-0052` D2: charged per move still to play before the control. */
+const CLOCK_OVERHEAD_MS = 100;
+
 const PROMOTION_LETTERS: Readonly<Record<number, string>> = {
   [QUEEN]: "q",
   [ROOK]: "r",
@@ -92,6 +126,13 @@ function printableOf(text: string): string {
   return kept;
 }
 
+/** `a`, `a or b`, `a, b or c`: `ADR-0052` D1's spelling of the offered values. */
+function spokenList(values: readonly string[]): string {
+  return values.length <= 1
+    ? values.join("")
+    : `${values.slice(0, -1).join(", ")} or ${values.at(-1) as string}`;
+}
+
 /** D3: `score mate ±M` at or beyond `MATE_FLOOR`, in moves, negative when being mated. */
 function scoreOf(score: number): string {
   if (Math.abs(score) < MATE_FLOOR) return `cp ${score}`;
@@ -112,11 +153,21 @@ function milliseconds(text: string | undefined): number | undefined {
   return Number(text);
 }
 
+/** A parsed `position`: the position after the moves, and the game's keys before it. */
+interface HeldPosition {
+  readonly position: Position;
+  /**
+   * `ABC-230` (`ADR-0054` decision 2, the `ADR-0044` D2 amendment): the key of every position the
+   * moves passed through, trimmed by `trimPriorKeys`. Empty after a bare `fen` or `startpos`.
+   */
+  readonly priorKeys: readonly bigint[];
+}
+
 /**
  * Parses `position startpos | fen <fields> [moves m1 m2 ...]`. Any fault refuses the whole
  * command (D3): the result is a message naming the fault, and no position is held.
  */
-function parsePosition(tokens: readonly string[]): Position | string {
+function parsePosition(tokens: readonly string[]): HeldPosition | string {
   const movesAt = tokens.indexOf("moves");
   const head = movesAt === -1 ? tokens.slice(1) : tokens.slice(1, movesAt);
   const moves = movesAt === -1 ? [] : tokens.slice(movesAt + 1);
@@ -132,16 +183,29 @@ function parsePosition(tokens: readonly string[]): Position | string {
   } catch (error) {
     return `bad fen: ${error instanceof Error ? error.message : String(error)}`;
   }
+  // `ABC-241` (`ADR-0020` § AMENDMENT 2026-10-30 C3): every kept key is a repetition key.
+  const keys = [repetitionKey(position, zobristKey(position))];
   for (const text of moves) {
     const parsed = parseCoordinateMove(position, text);
     if (parsed.outcome !== "move") return `illegal move ${text}`;
     makeMove(position, parsed.move);
+    keys.push(repetitionKey(position, zobristKey(position)));
   }
-  return position;
+  return { position, priorKeys: trimPriorKeys(keys, position.halfmoveClock) };
+}
+
+/**
+ * `ADR-0052` D2, the safe clock share `C` for the side to move: the clock `time` less the reserve
+ * and one overhead per move still to play, spread over `movesToGo`, plus the `increment`; never
+ * more than leaves `RESERVE + OVERHEAD` on the clock; never below 1 (the engine's depth 1).
+ */
+function safeClockShare(time: number, increment: number, movesToGo: number): number {
+  const spread = (time - CLOCK_RESERVE_MS - movesToGo * CLOCK_OVERHEAD_MS) / movesToGo + increment;
+  return Math.max(1, Math.min(spread, time - CLOCK_RESERVE_MS - CLOCK_OVERHEAD_MS));
 }
 
 interface GoRequest {
-  /** D4.1's `G`, before the level caps it. */
+  /** D4.1's `G` under `TimeMode` `level`, before the level caps it; `ADR-0052` D3's under a mode. */
   readonly budgetMs: number;
   readonly maxDepth: number | undefined;
   readonly maxNodes: number | undefined;
@@ -154,6 +218,7 @@ interface GoRequest {
 function parseGo(
   tokens: readonly string[],
   blackToMove: boolean,
+  timeMode: TimeMode,
   warn: (message: string) => void,
 ): GoRequest {
   const clock: Record<string, number> = {};
@@ -216,7 +281,16 @@ function parseGo(
   // into the level's own budget at every level (`ABC-212`: every budget is under the clamp).
   let budget: number = HARD_CEILING_MS;
   const time = clock[blackToMove ? "btime" : "wtime"];
-  if (clock.movetime !== undefined) {
+  if (timeMode === "simple-tournament") {
+    // `ADR-0052` D3: T with no time token, `min(x, T)` for `movetime x`, `min(T, C)` on a clock.
+    budget = SIMPLE_TOURNAMENT_BUDGET_MS;
+    if (clock.movetime !== undefined) budget = Math.min(clock.movetime, budget);
+    else if (time !== undefined) {
+      const increment = clock[blackToMove ? "binc" : "winc"] ?? 0;
+      const movesToGo = clock.movestogo ?? DEFAULT_MOVES_TO_GO;
+      budget = Math.min(budget, safeClockShare(time, increment, movesToGo));
+    }
+  } else if (clock.movetime !== undefined) {
     budget = clock.movetime;
   } else if (time !== undefined) {
     const increment = clock[blackToMove ? "binc" : "winc"] ?? 0;
@@ -256,6 +330,8 @@ export function createUciSession(options: UciSessionOptions): UciSession {
 
   let ownBook = true;
   let skill: keyof typeof LEVELS = DEFAULT_LEVEL;
+  /** `ADR-0052` D1: `ucinewgame` does not reset it. */
+  let timeMode: TimeMode = TIME_MODES[0];
   /** D10: the book is read once per process, at the first `isready` with `OwnBook` on, or at `go`. */
   let warmed = false;
   const warm = (): void => {
@@ -265,6 +341,8 @@ export function createUciSession(options: UciSessionOptions): UciSession {
   };
 
   let position: Position | null = parseFen(START_FEN);
+  /** `ABC-230`: the held position's prior keys. Empty on `ucinewgame` and on a refused `position`. */
+  let priorKeys: readonly bigint[] = [];
   /**
    * The `bestmove` line `go infinite` / `go ponder` holds. It is never dropped (QE-167-e): `stop`,
    * `ponderhit`, `go`, `position`, `ucinewgame` and `quit` write it first; other lines leave it held.
@@ -281,10 +359,12 @@ export function createUciSession(options: UciSessionOptions): UciSession {
   const go = (tokens: readonly string[]): void => {
     // One `bestmove` per `go`: an answer still held is released before the next search.
     release();
-    const request = parseGo(tokens, position?.blackToMove ?? false, info);
+    const request = parseGo(tokens, position?.blackToMove ?? false, timeMode, info);
     // D4.2 / D11: the level caps G. The engine still clamps at `HARD_CEILING_MS` (D4.4).
+    // `ADR-0052` D1: under a mode `Skill Level` is not read, so no cap and the rate-0 path.
     const level = LEVELS[skill];
-    const budgetMs = Math.min(request.budgetMs, level.budgetMs);
+    const leveled = timeMode === "level";
+    const budgetMs = leveled ? Math.min(request.budgetMs, level.budgetMs) : request.budgetMs;
     let answer = "bestmove 0000";
     // D10: the book before any search, on the position after the moves.
     warm();
@@ -292,16 +372,16 @@ export function createUciSession(options: UciSessionOptions): UciSession {
     if (booked !== undefined) {
       info("book");
       answer = `bestmove ${coordinateOf(booked)}`;
-    } else if (position !== null && level.blunderRate > 0) {
+    } else if (position !== null && leveled && level.blunderRate > 0) {
       // D11: a fresh level per `go`, seeded from the injected `random`; it takes no depth limit.
       if (request.limits.length > 0) {
         info(`skill level ${skill} ignores go ${request.limits.join(", ")}; searching on time`);
       }
       const seed = Math.floor(random() * 2 ** 32);
-      const choice = createLevel(
-        { budgetMs, blunderRate: level.blunderRate },
-        { seed, now },
-      )(position);
+      const choice = createLevel({ budgetMs, blunderRate: level.blunderRate }, { seed, now })(
+        position,
+        priorKeys,
+      );
       if (choice !== null) {
         const move = coordinateOf(choice.move);
         write(
@@ -313,6 +393,7 @@ export function createUciSession(options: UciSessionOptions): UciSession {
       const choice = chooseMove(position, {
         budgetMs,
         now,
+        priorKeys,
         ...(request.maxDepth === undefined ? {} : { maxDepth: request.maxDepth }),
         ...(request.maxNodes === undefined ? {} : { maxNodes: request.maxNodes }),
       });
@@ -344,6 +425,11 @@ export function createUciSession(options: UciSessionOptions): UciSession {
         info(
           `Skill Level takes an integer ${EASIEST_LEVEL}-${HARDEST_LEVEL}, got ${got}; kept ${skill}`,
         );
+    } else if (name === "timemode") {
+      // `ADR-0052` D1: the value matches one offered value exactly, case and all.
+      const offered = TIME_MODES.find((mode) => mode === value);
+      if (offered !== undefined) timeMode = offered;
+      else info(`TimeMode takes ${spokenList(TIME_MODES)}, got ${got}; kept ${timeMode}`);
     }
   };
 
@@ -358,6 +444,9 @@ export function createUciSession(options: UciSessionOptions): UciSession {
           write(
             `option name Skill Level type spin default ${DEFAULT_LEVEL} min ${EASIEST_LEVEL} max ${HARDEST_LEVEL}`,
           );
+          write(
+            `option name TimeMode type combo default ${TIME_MODES[0]} ${TIME_MODES.map((mode) => `var ${mode}`).join(" ")}`,
+          );
           write("uciok");
           break;
         case "isready":
@@ -370,14 +459,16 @@ export function createUciSession(options: UciSessionOptions): UciSession {
         case "ucinewgame":
           release();
           position = parseFen(START_FEN);
+          priorKeys = [];
           break;
         case "position": {
           release();
           const parsed = parsePosition(tokens);
           if (typeof parsed === "string") {
             position = null;
+            priorKeys = [];
             info(`position refused: ${parsed}`);
-          } else position = parsed;
+          } else ({ position, priorKeys } = parsed);
           break;
         }
         case "go":

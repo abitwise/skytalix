@@ -1,0 +1,8 @@
+startpos d4 base nodes=426 score=56 | (b) nodes=426 score=56 SAME
+kiwipete d4 base nodes=18522 score=8 | (b) nodes=18380 score=8 MOVED
+position-3 d4 base nodes=1099 score=124 | (b) nodes=1099 score=124 SAME
+position-4 d4 base nodes=15114 score=-411 | (b) nodes=15076 score=-411 MOVED
+position-5 d4 base nodes=7666 score=520 | (b) nodes=7368 score=520 MOVED
+position-6 d4 base nodes=11688 score=85 | (b) nodes=11673 score=85 MOVED
+moved 4/6
+cpu 0.82+0.04 s

@@ -1,0 +1,13 @@
+
+> skytalix@0.0.0 test:watch
+> NODE_OPTIONS=--max-old-space-size=128 vitest run src/search.pvs-lmr.test.ts
+
+
+ RUN  v4.1.12 <worktree>
+
+
+ Test Files  1 passed (1)
+      Tests  21 passed (21)
+   Start at  15:57:11
+   Duration  48.20s (transform 0ms, setup 0ms, import 58ms, tests 48.07s, environment 0ms)
+

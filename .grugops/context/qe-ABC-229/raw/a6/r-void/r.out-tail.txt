@@ -1,0 +1,40 @@
+80861 <stockfish(1): info depth 211 seldepth 5 multipv 1 score mate -2 nodes 11184 nps 5592000 hashfull 0 tbhits 0 time 2 pv b6b5 d1d5 b5c4 f3d2
+80862 <stockfish(1): info depth 212 seldepth 5 multipv 1 score mate -2 nodes 11238 nps 5619000 hashfull 0 tbhits 0 time 2 pv b6b5 d1d5 b5c4 f3d2
+80862 <stockfish(1): info depth 213 seldepth 5 multipv 1 score mate -2 nodes 11293 nps 5646500 hashfull 0 tbhits 0 time 2 pv b6b5 d1d5 b5c4 f3d2
+80862 <stockfish(1): info depth 214 seldepth 5 multipv 1 score mate -2 nodes 11348 nps 5674000 hashfull 0 tbhits 0 time 2 pv b6b5 d1d5 b5c4 f3d2
+80862 <stockfish(1): info depth 215 seldepth 5 multipv 1 score mate -2 nodes 11403 nps 5701500 hashfull 0 tbhits 0 time 2 pv b6b5 d1d5 b5c4 f3d2
+80862 <stockfish(1): info depth 216 seldepth 5 multipv 1 score mate -2 nodes 11458 nps 5729000 hashfull 0 tbhits 0 time 2 pv b6b5 d1d5 b5c4 f3d2
+80862 <stockfish(1): info depth 217 seldepth 5 multipv 1 score mate -2 nodes 11513 nps 5756500 hashfull 0 tbhits 0 time 2 pv b6b5 d1d5 b5c4 f3d2
+80862 <stockfish(1): info depth 218 seldepth 5 multipv 1 score mate -2 nodes 11568 nps 5784000 hashfull 0 tbhits 0 time 2 pv b6b5 d1d5 b5c4 f3d2
+80862 <stockfish(1): info depth 219 seldepth 5 multipv 1 score mate -2 nodes 11623 nps 5811500 hashfull 0 tbhits 0 time 2 pv b6b5 d1d5 b5c4 f3d2
+80862 <stockfish(1): info depth 220 seldepth 5 multipv 1 score mate -2 nodes 11678 nps 5839000 hashfull 0 tbhits 0 time 2 pv b6b5 d1d5 b5c4 f3d2
+80862 <stockfish(1): info depth 221 seldepth 5 multipv 1 score mate -2 nodes 11733 nps 3911000 hashfull 0 tbhits 0 time 3 pv b6b5 d1d5 b5c4 f3d2
+80862 <stockfish(1): info depth 222 seldepth 5 multipv 1 score mate -2 nodes 11788 nps 3929333 hashfull 0 tbhits 0 time 3 pv b6b5 d1d5 b5c4 f3d2
+80862 <stockfish(1): info depth 223 seldepth 5 multipv 1 score mate -2 nodes 11843 nps 3947666 hashfull 0 tbhits 0 time 3 pv b6b5 d1d5 b5c4 f3d2
+80862 <stockfish(1): info depth 224 seldepth 5 multipv 1 score mate -2 nodes 11898 nps 3966000 hashfull 0 tbhits 0 time 3 pv b6b5 d1d5 b5c4 f3d2
+80862 <stockfish(1): info depth 225 seldepth 5 multipv 1 score mate -2 nodes 11953 nps 3984333 hashfull 0 tbhits 0 time 3 pv b6b5 d1d5 b5c4 f3d2
+80862 <stockfish(1): info depth 226 seldepth 5 multipv 1 score mate -2 nodes 12008 nps 4002666 hashfull 0 tbhits 0 time 3 pv b6b5 d1d5 b5c4 f3d2
+80862 <stockfish(1): info depth 227 seldepth 5 multipv 1 score mate -2 nodes 12063 nps 4021000 hashfull 0 tbhits 0 time 3 pv b6b5 d1d5 b5c4 f3d2
+80862 <stockfish(1): info depth 228 seldepth 5 multipv 1 score mate -2 nodes 12118 nps 4039333 hashfull 0 tbhits 0 time 3 pv b6b5 d1d5 b5c4 f3d2
+80862 <stockfish(1): info depth 229 seldepth 5 multipv 1 score mate -2 nodes 12173 nps 4057666 hashfull 0 tbhits 0 time 3 pv b6b5 d1d5 b5c4 f3d2
+80862 <stockfish(1): info depth 230 seldepth 5 multipv 1 score mate -2 nodes 12228 nps 4076000 hashfull 0 tbhits 0 time 3 pv b6b5 d1d5 b5c4 f3d2
+80862 <stockfish(1): info depth 231 seldepth 5 multipv 1 score mate -2 nodes 12283 nps 4094333 hashfull 0 tbhits 0 time 3 pv b6b5 d1d5 b5c4 f3d2
+80862 <stockfish(1): info depth 232 seldepth 5 multipv 1 score mate -2 nodes 12338 nps 4112666 hashfull 0 tbhits 0 time 3 pv b6b5 d1d5 b5c4 f3d2
+80862 <stockfish(1): info depth 233 seldepth 5 multipv 1 score mate -2 nodes 12393 nps 4131000 hashfull 0 tbhits 0 time 3 pv b6b5 d1d5 b5c4 f3d2
+80862 <stockfish(1): info depth 234 seldepth 5 multipv 1 score mate -2 nodes 12448 nps 4149333 hashfull 0 tbhits 0 time 3 pv b6b5 d1d5 b5c4 f3d2
+80862 <stockfish(1): info depth 235 seldepth 5 multipv 1 score mate -2 nodes 12503 nps 4167666 hashfull 0 tbhits 0 time 3 pv b6b5 d1d5 b5c4 f3d2
+80862 <stockfish(1): info depth 236 seldepth 5 multipv 1 score mate -2 nodes 12558 nps 4186000 hashfull 0 tbhits 0 time 3 pv b6b5 d1d5 b5c4 f3d2
+80862 <stockfish(1): info depth 237 seldepth 5 multipv 1 score mate -2 nodes 12613 nps 4204333 hashfull 0 tbhits 0 time 3 pv b6b5 d1d5 b5c4 f3d2
+80862 <stockfish(1): info depth 238 seldepth 5 multipv 1 score mate -2 nodes 12667 nps 4222333 hashfull 0 tbhits 0 time 3 pv b6b5 d1d5 b5c4 f3d2
+80862 <stockfish(1): info depth 239 seldepth 5 multipv 1 score mate -2 nodes 12722 nps 4240666 hashfull 0 tbhits 0 time 3 pv b6b5 d1d5 b5c4 f3d2
+80862 <stockfish(1): info depth 240 seldepth 5 multipv 1 score mate -2 nodes 12779 nps 4259666 hashfull 0 tbhits 0 time 3 pv b6b5 d1d5 b5c4 f3d2
+80862 <stockfish(1): info depth 241 seldepth 5 multipv 1 score mate -2 nodes 12837 nps 4279000 hashfull 0 tbhits 0 time 3 pv b6b5 d1d5 b5c4 f3d2
+80862 <stockfish(1): info depth 242 seldepth 5 multipv 1 score mate -2 nodes 12897 nps 4299000 hashfull 0 tbhits 0 time 3 pv b6b5 d1d5 b5c4 f3d2
+80862 <stockfish(1): info depth 243 seldepth 5 multipv 1 score mate -2 nodes 12959 nps 4319666 hashfull 0 tbhits 0 time 3 pv b6b5 d1d5 b5c4 f3d2
+80862 <stockfish(1): info depth 244 seldepth 5 multipv 1 score mate -2 nodes 13032 nps 4344000 hashfull 0 tbhits 0 time 3 pv b6b5 d1d5 b5c4 f3d2
+80862 <stockfish(1): info depth 245 seldepth 5 multipv 1 score mate -2 nodes 13107 nps 4369000 hashfull 0 tbhits 0 time 3 pv b6b5 d1d5 b5c4 f3d2
+80863 <stockfish(1): bestmove b6b5 ponder d1d5
+80863 >skytalix(0): position fen rnbqk1nr/ppppppbp/6p1/8/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 1 moves d2d4 a7a6 b1c3 b7b5 b2b4 c8b7 a2a4 c7c6 c1f4 d7d6 e4e5 g8h6 f1d3 d6e5 d4e5 b8d7 e1g1 a6a5 a4b5 a5b4 d3e4 d8c8 b5c6 b7c6 e4c6 a8a1 c6d7 e8d8 d1a1 c8d7 a1a8 d7c8 f1d1 d8c7 e5e6 c7b6 c3a4 b6b5
+80863 >skytalix(0): isready
+80863 <skytalix(0): readyok
+80863 >skytalix(0): go movetime 4000

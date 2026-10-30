@@ -17,11 +17,12 @@
 
 import { makeMove, unmakeMove } from "./apply.ts";
 import { type Clock, chooseMove, HARD_CEILING_MS } from "./engine.ts";
-import { gameStatus } from "./gameend.ts";
+import { gameStatus, repetitionKey } from "./gameend.ts";
 import { legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
 import type { Position } from "./position.ts";
 import { MATE_SCORE } from "./search.ts";
+import { zobristKey } from "./zobrist.ts";
 
 export interface Level {
   /** The per-move budget in milliseconds, passed to `chooseMove`. */
@@ -51,7 +52,7 @@ export const LEVELS: Readonly<Record<1 | 2 | 3 | 4 | 5 | 6 | 7, Level>> = Object
   2: Object.freeze({ budgetMs: 180, blunderRate: 0.2 }),
   3: Object.freeze({ budgetMs: 330, blunderRate: 0.1 }),
   4: Object.freeze({ budgetMs: 1_000, blunderRate: 0.05 }),
-  5: Object.freeze({ budgetMs: 3_000, blunderRate: 0 }),
+  5: Object.freeze({ budgetMs: 4_000, blunderRate: 0 }),
   6: Object.freeze({ budgetMs: 5_000, blunderRate: 0 }),
   7: Object.freeze({ budgetMs: 30_000, blunderRate: 0 }),
 });
@@ -115,21 +116,35 @@ export interface LevelOptions {
 /**
  * A level instance: its own generator and its own clock. `null` ONLY when the position has no
  * legal move. The borrowed position is byte-identical on return.
+ *
+ * `priorKeys` (`ABC-230`, `ADR-0054` decision 2): the game's keys before `position`, already
+ * trimmed (`trimPriorKeys`). The engine path hands them to `chooseMove`; a blunder hands each child
+ * search them plus `position`'s own key. Absent, no search is handed any, as before.
  */
 export function createLevel(
   level: Level,
   options: LevelOptions,
-): (position: Position) => LevelChoice | null {
+): (position: Position, priorKeys?: readonly bigint[]) => LevelChoice | null {
   const random = seededRandom(options.seed);
   const now = options.now ?? Date.now;
-  return (position) => {
+  return (position, priorKeys) => {
     if (random() >= level.blunderRate) {
-      const choice = chooseMove(position, { budgetMs: level.budgetMs, now });
+      const choice = chooseMove(position, {
+        budgetMs: level.budgetMs,
+        now,
+        ...(priorKeys === undefined ? {} : { priorKeys }),
+      });
       if (choice === null) return null;
       const { move, depth, nodes, elapsedMs } = choice;
       return { move, kind: "engine", scored: null, depth, nodes, elapsedMs };
     }
-    return blunder(position, Math.min(level.budgetMs, HARD_CEILING_MS), now);
+    // One list per blunder call: each child's root is one ply past `position`. The root's key is a
+    // repetition key, as every prior key is (`ABC-241`, `ADR-0020` § AMENDMENT 2026-10-30 C3).
+    const childKeys =
+      priorKeys === undefined
+        ? undefined
+        : [...priorKeys, repetitionKey(position, zobristKey(position))];
+    return blunder(position, Math.min(level.budgetMs, HARD_CEILING_MS), now, childKeys);
   };
 }
 
@@ -137,7 +152,12 @@ export function createLevel(
  * `ADR-0032` decision 1. `budgetMs` is already clamped: `NFR-004`'s ceiling is enforced per
  * `chooseMove` call, which does not bound a SUM of calls, so the level layer clamps its own total.
  */
-function blunder(position: Position, budgetMs: number, now: Clock): LevelChoice | null {
+function blunder(
+  position: Position,
+  budgetMs: number,
+  now: Clock,
+  priorKeys: readonly bigint[] | undefined,
+): LevelChoice | null {
   const start = now();
   const moves = legalMoves(position);
   if (moves.length === 0) return null;
@@ -151,7 +171,11 @@ function blunder(position: Position, budgetMs: number, now: Clock): LevelChoice 
       // One shared deadline: an overrun by one child shortens the next. A non-positive budget
       // still runs the engine's unabortable depth 1.
       const deadline = start + (budgetMs * (i + 1)) / moves.length;
-      const child = chooseMove(position, { budgetMs: deadline - now(), now });
+      const child = chooseMove(position, {
+        budgetMs: deadline - now(),
+        now,
+        ...(priorKeys === undefined ? {} : { priorKeys }),
+      });
       if (child === null) {
         const mated = gameStatus(position).reason === "checkmate";
         scored.push({ move, score: mated ? MATE_SCORE - 1 : 0 });

@@ -1,0 +1,66 @@
+PASS src table has 9 rows (read 9)
+PASS QP-1 src row present
+PASS QP-1 src = frozen (fen true, static 212/212, old 212/212, new 977/977)
+  QP-1 static 212 head-shipped 977 head-pre229 212 ref-new 977 ref-old 212 base-shipped 212
+PASS QP-1 static = frozen
+PASS QP-1 head shipped = frozen new = QE ref new
+PASS QP-1 head pre-229 = frozen old = QE ref old = base shipped
+PASS QP-1 safe: new >= static + 600 and old = static
+PASS QP-2 src row present
+PASS QP-2 src = frozen (fen true, static -370/-370, old -370/-370, new -370/-370)
+  QP-2 static -370 head-shipped -370 head-pre229 -370 ref-new -370 ref-old -370 base-shipped -370
+PASS QP-2 static = frozen
+PASS QP-2 head shipped = frozen new = QE ref new
+PASS QP-2 head pre-229 = frozen old = QE ref old = base shipped
+PASS QP-3 src row present
+PASS QP-3 src = frozen (fen true, static 220/220, old 544/544, new 544/544)
+  QP-3 static 220 head-shipped 544 head-pre229 544 ref-new 544 ref-old 544 base-shipped 544
+PASS QP-3 static = frozen
+PASS QP-3 head shipped = frozen new = QE ref new
+PASS QP-3 head pre-229 = frozen old = QE ref old = base shipped
+PASS QP-4 src row present
+PASS QP-4 src = frozen (fen true, static -52/-52, old -52/-52, new -52/-52)
+  QP-4 static -52 head-shipped -52 head-pre229 -52 ref-new -52 ref-old -52 base-shipped -52
+PASS QP-4 static = frozen
+PASS QP-4 head shipped = frozen new = QE ref new
+PASS QP-4 head pre-229 = frozen old = QE ref old = base shipped
+PASS QP-5 src row present
+PASS QP-5 src = frozen (fen true, static -570/-570, old 1073/1073, new 1073/1073)
+  QP-5 static -570 head-shipped 1073 head-pre229 1073 ref-new 1073 ref-old 1073 base-shipped 1073
+PASS QP-5 static = frozen
+PASS QP-5 head shipped = frozen new = QE ref new
+PASS QP-5 head pre-229 = frozen old = QE ref old = base shipped
+PASS QP-6 src row present
+PASS QP-6 src = frozen (fen true, static 196/196, old 196/196, new 947/947)
+  QP-6 static 196 head-shipped 947 head-pre229 196 ref-new 947 ref-old 196 base-shipped 196
+PASS QP-6 static = frozen
+PASS QP-6 head shipped = frozen new = QE ref new
+PASS QP-6 head pre-229 = frozen old = QE ref old = base shipped
+PASS QP-6 safe: new >= static + 600 and old = static
+PASS QP-7 src row present
+PASS QP-7 src = frozen (fen true, static 186/186, old 186/186, new 29999/29999)
+  QP-7 static 186 head-shipped 29999 head-pre229 186 ref-new 29999 ref-old 186 base-shipped 186
+PASS QP-7 static = frozen
+PASS QP-7 head shipped = frozen new = QE ref new
+PASS QP-7 head pre-229 = frozen old = QE ref old = base shipped
+PASS QP-7 safe: new >= static + 600 and old = static
+PASS QP-8 src row present
+PASS QP-8 src = frozen (fen true, static 554/554, old 1152/1152, new 1885/1885)
+  QP-8 static 554 head-shipped 1885 head-pre229 1152 ref-new 1885 ref-old 1152 base-shipped 1152
+PASS QP-8 static = frozen
+PASS QP-8 head shipped = frozen new = QE ref new
+PASS QP-8 head pre-229 = frozen old = QE ref old = base shipped
+PASS QP-9 src row present
+PASS QP-9 src = frozen (fen true, static 212/212, old 212/212, new 977/977)
+  QP-9 static 212 head-shipped 977 head-pre229 212 ref-new 977 ref-old 212 base-shipped 212
+PASS QP-9 static = frozen
+PASS QP-9 head shipped = frozen new = QE ref new
+PASS QP-9 head pre-229 = frozen old = QE ref old = base shipped
+PASS QP-9 safe: new >= static + 600 and old = static
+  INFO static 115 head-shipped 115 head-pre229 115 ref-new 115 ref-old 115 base-shipped 115
+PASS INFO static = frozen
+PASS INFO head shipped = frozen new = QE ref new
+PASS INFO head pre-229 = frozen old = QE ref old = base shipped
+PASS QP-7 at ply 5 = 29994 (read 29994)
+PASS INFO kpk-b6c6 d8: search 902 (902), door 186 (186)
+checks 55 fails 0

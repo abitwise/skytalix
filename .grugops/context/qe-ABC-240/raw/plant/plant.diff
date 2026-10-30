@@ -1,0 +1,6 @@
+184a185
+> const PLANT_OUT: Move[] = [];
+211c212
+<   const out = moves.slice();
+---
+>   const out = PLANT_OUT; out.length = count; for (let k = 0; k < count; k++) out[k] = moves[k] as Move;

@@ -19,6 +19,12 @@ epic: EPIC-010
 > (`orch-2026-10-29g` `…278e149b`). This ticket's reading is now the smoke pair before merge (`EPIC-010` § The
 > merge rule), with a batched validation later. Q4 no longer holds it. **Next real wait:** the Architect's ruling (`ADR-0031` addendum scope). Milestone 2. DoR 8/10 → 9/10.
 
+> **Dated line 2026-10-30 by BA/PM** (task `bapm-ABC-228-merge-fold`, records only, at `main` `e42b637b`). `ABC-228`
+> merged under OQ-228-1 (ii) (`ADR-0053` d10): level 5 and `DEFAULT_BUDGET_MS` play 4 000 ms. **`A1` reads at the new
+> referent:** head and base both at `LEVELS[5]` = 4 000 ms, on the frozen clock first and then by the `G6` rule.
+> `ABC-205`'s failing 3 s reading stays the reason for `A1`, but it is never compared with a 4 000 ms reading. `A5`'s
+> `G5` reads level 5 at ≤ 4 s, with the 5 s ceiling. No other row moves, and DoR stays 9/10 (Backlog, the ADR ruling).
+
 ## Problem
 
 - **User:** the owner, in endgames.
@@ -41,7 +47,9 @@ epic: EPIC-010
 
 - **A1 (`ABC-205`'s failure, first).** **Given** `ABC-205`'s failing reading (`G6` on `position-6`), **when** this
   ticket's head is read by the `G6` rule, **then** `position-6`'s median completed depth is ≥ base's. This is read on
-  the frozen clock first and, if it fails, the ticket stops before any game.
+  the frozen clock first and, if it fails, the ticket stops before any game. *(2026-10-30: both builds at
+  `LEVELS[5]` = 4 000 ms, the referent from `ABC-228`'s merge `e42b637b`. `ABC-205`'s 3 s reading is not the
+  comparison.)*
 - **A2 (the taper).** **Given** 6 king-and-pawn endings chosen by QE and frozen before the build, **then** the king's PST term on a
   centre square exceeds a corner square's by ≥ 20 cp; **given** the start position and 6 middlegames, **then** the
   king term equals base's within 2 cp.

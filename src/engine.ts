@@ -61,6 +61,11 @@
  * included. The session's history is not read: the seam hands in a `GameHistory` and only its
  * `position` is searched (`ADR-0002` clause 3).
  *
+ * THE GAME'S EARLIER POSITIONS (`ABC-230`, `ADR-0054`) arrive as `EngineOptions.priorKeys`, a
+ * read-only key list the caller builds with `trimPriorKeys`; this module still imports no history.
+ * A node repeats if its position stood once on the path, the root included, as before, or TWICE
+ * before the root (`repeatsBeforeRoot`). `search()` and the test-only doors take no prior keys.
+ *
  * PRINCIPAL-VARIATION SEARCH AND LATE-MOVE REDUCTIONS (`ABC-121`, `ADR-0026`) are `src/search.ts`'s
  * too, in the same shape (`searchMove`), and the reduction is that module's ONE predicate,
  * `lateMoveReduction`, imported rather than copied, so the rule cannot drift between the two
@@ -75,6 +80,18 @@
  * above turn it off, and a third TEST-ONLY door, `chooseMoveWithoutNullMove`, is the pre-`ABC-208`
  * `chooseMove`, node for node: the engine side of its bounded drift oracle. It takes no depth.
  *
+ * EVASIONS IN QUIESCENCE (`ABC-228`, `ADR-0053`) reach this recursion through the same `quiesce`,
+ * by a `quiescenceEvasions` switch mapped onto a constant `QuiescenceRules` record; the leaf hands
+ * it its `ply` for the mate distance, and evasion nodes go through `budget.visit` like any
+ * quiescence node, so the clock is consulted inside them (`NFR-004`). It changes the VALUE, so
+ * every door above turns it off, and a fourth TEST-ONLY door, `chooseMoveWithoutQuiescenceEvasions`,
+ * is the pre-`ABC-228` `chooseMove`, node for node. It takes no depth.
+ *
+ * QUIET QUEEN PROMOTIONS IN QUIESCENCE (`ABC-229`, `ADR-0053` decision 5) reach it the same way, by
+ * a `quietPromotions` switch beside `quiescenceEvasions`. It changes the VALUE, so every door
+ * above turns it off, and a fifth TEST-ONLY door, `chooseMoveWithoutQuietPromotions` (evasions
+ * on), is the pre-`ABC-229` `chooseMove`, node for node. It takes no depth.
+ *
  * NOT HERE, each owned elsewhere: difficulty selection and how a level persists (`EPIC-006`), the
  * budget-to-level mapping (`ABC-087`), aspiration windows and threading (none requested;
  * `ADR-0005` F6 leaves threading to Architect/Design).
@@ -85,7 +102,7 @@ import { leafEndReason } from "./gameend.ts";
 import { isInCheck, legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
 import type { Position } from "./position.ts";
-import { type QuiescenceVisitor, quiesce } from "./quiescence.ts";
+import { type QuiescenceRules, type QuiescenceVisitor, quiesce } from "./quiescence.ts";
 import {
   KEY_ARRAY_CAPACITY,
   KillerTable,
@@ -129,7 +146,7 @@ export type Clock = () => number;
  * rather than each caller spelling 3000. It is a VALUE for the caller to choose, never a default
  * this module applies on its own: `budgetMs` below is required.
  */
-export const DEFAULT_BUDGET_MS = 3_000;
+export const DEFAULT_BUDGET_MS = 4_000;
 
 /**
  * `NFR-004`'s hard ceiling, in milliseconds: the largest per-level ceiling (32 s, level 7;
@@ -179,6 +196,14 @@ export interface EngineOptions {
    * completes, so a tiny value still returns a depth-1 move.
    */
   readonly maxNodes?: number;
+  /**
+   * `ABC-230` (`ADR-0054` decision 1): the Zobrist keys of the game's positions BEFORE the root,
+   * oldest first, the root's own key excluded — `trimPriorKeys`'s output. Read-only and never
+   * copied: the search reads the caller's array for the length of this call. At most the last
+   * `PRIOR_KEYS_WINDOW` entries are read, whatever is handed in. Absent or empty, the search is
+   * the one without game history, node for node. The test-only doors below ignore it.
+   */
+  readonly priorKeys?: readonly bigint[];
 }
 
 export interface EngineChoice {
@@ -194,12 +219,33 @@ export interface EngineChoice {
   readonly elapsedMs: number;
 }
 
+/**
+ * `ADR-0054` decision 1: the reversible window is capped at the fifty-move window, 100 plies. The
+ * prior-key list is trimmed to it, and the search reads no more of a list than this.
+ */
+const PRIOR_KEYS_WINDOW = 100;
+
+/** The prior-key list of a search with no game history: base, node for node. */
+const NO_PRIOR_KEYS: readonly bigint[] = [];
+
+/**
+ * `ADR-0054` decision 1: the one trim both surfaces call. `keys` is a game's key list, oldest
+ * first, the root's key LAST (`src/history.ts` `keyHistory`'s shape); the result is the keys before
+ * the root that can still repeat: the last `min(halfmoveClock, 100)` of them, the root excluded.
+ * Only the halfmove clock cuts the window; a castling-rights change does not need to, because no
+ * key before it can equal a key after it.
+ */
+export function trimPriorKeys(keys: readonly bigint[], halfmoveClock: number): bigint[] {
+  const root = keys.length - 1;
+  return keys.slice(Math.max(0, root - Math.min(halfmoveClock, PRIOR_KEYS_WINDOW)), root);
+}
+
 /** Thrown from inside the recursion when the budget is spent, caught by the deepening loop. */
 const ABORTED = Symbol("engine: the budget is spent");
 
 /**
- * The `ABC-121` and `ABC-208` switches, `src/search.ts`'s rule: on in `chooseMove`, off in its
- * doors.
+ * The `ABC-121`, `ABC-208` and `ABC-230` switches, `src/search.ts`'s rule: on in `chooseMove`, off
+ * in its doors.
  */
 interface Heuristics {
   /** Principal-variation search: false on `chooseMoveWithoutPvsOrReductions` only. */
@@ -208,7 +254,22 @@ interface Heuristics {
   readonly reductions: boolean;
   /** Null-move pruning (`ABC-208`), at null-window nodes: true on `chooseMove` only. */
   readonly nullMove: boolean;
+  /** `options.priorKeys` read (`ABC-230`, `ADR-0054` decision 3): true on `chooseMove` only. */
+  readonly priorKeys: boolean;
+  /**
+   * Evasions in check inside quiescence (`ABC-228`, `ADR-0053`): true on `chooseMove` and
+   * `chooseMoveWithoutQuietPromotions`.
+   */
+  readonly quiescenceEvasions: boolean;
+  /** Quiet queen promotions inside quiescence (`ABC-229`, `ADR-0053`): true on `chooseMove` only. */
+  readonly quietPromotions: boolean;
 }
+
+/** The quiescence rules this recursion hands `quiesce` (`ADR-0053` decision 6): constants, never built per leaf. */
+const RULES_SHIPPED: QuiescenceRules = { evasions: true, quietPromotions: true };
+const RULES_NO_QUIET_PROMOTIONS: QuiescenceRules = { evasions: true, quietPromotions: false };
+const RULES_NO_EVASIONS: QuiescenceRules = { evasions: false, quietPromotions: true };
+const RULES_NEITHER: QuiescenceRules = { evasions: false, quietPromotions: false };
 
 /** The deepening loop's mutable state: the clock, the deadline, and when to consult again. */
 interface Budget extends Heuristics {
@@ -232,6 +293,8 @@ interface Budget extends Heuristics {
    * `chooseMove` call, `keys[0]` the root's key, each child's key derived from its parent's.
    */
   readonly keys: BigUint64Array;
+  /** `options.priorKeys` (`ABC-230`), borrowed, or `NO_PRIOR_KEYS` on the doors and when absent. */
+  readonly prior: readonly bigint[];
 }
 
 /**
@@ -260,9 +323,40 @@ function leafScore(
   budget: Budget,
 ): number {
   const reason = leafEndReason(position);
-  if (reason === null) return quiesce(position, alpha, beta, 0, budget.visit);
+  if (reason === null) {
+    const rules = budget.quiescenceEvasions
+      ? budget.quietPromotions
+        ? RULES_SHIPPED
+        : RULES_NO_QUIET_PROMOTIONS
+      : budget.quietPromotions
+        ? RULES_NO_EVASIONS
+        : RULES_NEITHER;
+    return quiesce(position, alpha, beta, 0, ply, rules, budget.visit);
+  }
   if (reason === "checkmate") return 0 - (MATE_SCORE - ply);
   return 0;
+}
+
+/**
+ * `ADR-0054` decision 3, the pre-root half of the repetition scan: true when the position at `ply`
+ * (key `key`, clock `halfmoveClock`) stood TWICE among the keys before the root. One occurrence
+ * there is not a draw. The walk is `repeatsInPath`'s continued below the root: the same parity,
+ * `-1` the position one ply before it, bounded by the clock and by the list (at most
+ * `PRIOR_KEYS_WINDOW` of it). It starts where the path walk (`ply - 4, ply - 6, …`) first goes
+ * below 0. With no prior keys, or a clock that does not reach past the root, it reads nothing.
+ */
+function repeatsBeforeRoot(
+  prior: readonly bigint[],
+  key: bigint,
+  ply: number,
+  halfmoveClock: number,
+): boolean {
+  const oldest = Math.max(ply - halfmoveClock, -Math.min(prior.length, PRIOR_KEYS_WINDOW));
+  let matches = 0;
+  for (let earlier = Math.min(ply - 4, (ply & 1) - 2); earlier >= oldest; earlier -= 2) {
+    if (prior[prior.length + earlier] === key && ++matches === 2) return true;
+  }
+  return false;
 }
 
 /**
@@ -288,11 +382,17 @@ function negamax(
   countNode(budget);
 
   const keys = budget.keys;
-  if (repeatsInPath(keys, ply, position.halfmoveClock)) return 0;
+  const key = keys[ply] as bigint;
+  // `ABC-230`: a repetition is one occurrence on the path or two before the root (`ADR-0054`).
+  if (
+    repeatsInPath(keys, ply, position.halfmoveClock) ||
+    repeatsBeforeRoot(budget.prior, key, ply, position.halfmoveClock)
+  ) {
+    return 0;
+  }
   if (remaining <= 0 || ply >= KEY_ARRAY_CAPACITY) {
     return leafScore(position, ply, alpha, beta, budget);
   }
-  const key = keys[ply] as bigint;
 
   const slot = probeTable(key);
   if (slot !== -1) {
@@ -482,7 +582,55 @@ function runIteration(
  * The position is byte-identical on return, aborted iteration or not.
  */
 export function chooseMove(position: Position, options: EngineOptions): EngineChoice | null {
-  return deepen(position, options, { pvs: true, reductions: true, nullMove: true });
+  return deepen(position, options, {
+    pvs: true,
+    reductions: true,
+    nullMove: true,
+    priorKeys: true,
+    quiescenceEvasions: true,
+    quietPromotions: true,
+  });
+}
+
+/**
+ * TEST-ONLY. The pre-`ABC-229` `chooseMove`, node for node: quiet queen promotions in quiescence
+ * off, everything else on, evasions, null move and the prior keys included — the engine side of
+ * `ABC-229`'s bounded drift oracle, and the shipped side of every `ABC-228` row that measures
+ * evasions alone (`ADR-0053` decisions 6 and 7). Not an engine option; nothing in production
+ * calls it.
+ */
+export function chooseMoveWithoutQuietPromotions(
+  position: Position,
+  options: EngineOptions,
+): EngineChoice | null {
+  return deepen(position, options, {
+    pvs: true,
+    reductions: true,
+    nullMove: true,
+    priorKeys: true,
+    quiescenceEvasions: true,
+    quietPromotions: false,
+  });
+}
+
+/**
+ * TEST-ONLY. The pre-`ABC-228` `chooseMove`, node for node: evasions in quiescence off, everything
+ * else on, null move and the prior keys included — the engine side of `ABC-228`'s bounded drift
+ * oracle, and the shipped side of every `ABC-208` row that measures null move alone (`ADR-0053`
+ * decisions 6 and 7). Not an engine option; nothing in production calls it.
+ */
+export function chooseMoveWithoutQuiescenceEvasions(
+  position: Position,
+  options: EngineOptions,
+): EngineChoice | null {
+  return deepen(position, options, {
+    pvs: true,
+    reductions: true,
+    nullMove: true,
+    priorKeys: true,
+    quiescenceEvasions: false,
+    quietPromotions: false,
+  });
 }
 
 /**
@@ -495,7 +643,14 @@ export function chooseMoveWithoutNullMove(
   position: Position,
   options: EngineOptions,
 ): EngineChoice | null {
-  return deepen(position, options, { pvs: true, reductions: true, nullMove: false });
+  return deepen(position, options, {
+    pvs: true,
+    reductions: true,
+    nullMove: false,
+    priorKeys: false,
+    quiescenceEvasions: false,
+    quietPromotions: false,
+  });
 }
 
 /**
@@ -508,7 +663,14 @@ export function chooseMoveWithoutReductions(
   position: Position,
   options: EngineOptions,
 ): EngineChoice | null {
-  return deepen(position, options, { pvs: true, reductions: false, nullMove: false });
+  return deepen(position, options, {
+    pvs: true,
+    reductions: false,
+    nullMove: false,
+    priorKeys: false,
+    quiescenceEvasions: false,
+    quietPromotions: false,
+  });
 }
 
 /**
@@ -520,10 +682,17 @@ export function chooseMoveWithoutPvsOrReductions(
   position: Position,
   options: EngineOptions,
 ): EngineChoice | null {
-  return deepen(position, options, { pvs: false, reductions: false, nullMove: false });
+  return deepen(position, options, {
+    pvs: false,
+    reductions: false,
+    nullMove: false,
+    priorKeys: false,
+    quiescenceEvasions: false,
+    quietPromotions: false,
+  });
 }
 
-/** The deepening loop behind `chooseMove` and its three doors; they differ in `heuristics` only. */
+/** The deepening loop behind `chooseMove` and its five doors; they differ in `heuristics` only. */
 function deepen(
   position: Position,
   options: EngineOptions,
@@ -544,6 +713,7 @@ function deepen(
     visit: () => countNode(budget),
     killers: new KillerTable(),
     keys: new BigUint64Array(KEY_ARRAY_CAPACITY + 1),
+    prior: heuristics.priorKeys ? (options.priorKeys ?? NO_PRIOR_KEYS) : NO_PRIOR_KEYS,
     ...heuristics,
   };
   budget.keys[0] = zobristKey(position);

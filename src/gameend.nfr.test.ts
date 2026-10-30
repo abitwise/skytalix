@@ -26,12 +26,22 @@ vi.mock("./legal.ts", async (importOriginal) => {
     legalMoves: vi.fn(actual.legalMoves),
     hasLegalMove: vi.fn(actual.hasLegalMove),
     legalCaptures: vi.fn(actual.legalCaptures),
+    legalCapturesAndQueenPromotions: vi.fn(actual.legalCapturesAndQueenPromotions),
   };
 });
 
 vi.mock("./apply.ts", async (importOriginal) => {
   const actual = await importOriginal<typeof import("./apply.ts")>();
   return { ...actual, makeMove: vi.fn(actual.makeMove) };
+});
+
+vi.mock("./moves.ts", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("./moves.ts")>();
+  return {
+    ...actual,
+    generateMoves: vi.fn(actual.generateMoves),
+    generateCaptures: vi.fn(actual.generateCaptures),
+  };
 });
 
 vi.mock("./zobrist.ts", async (importOriginal) => {
@@ -41,10 +51,15 @@ vi.mock("./zobrist.ts", async (importOriginal) => {
 
 import { makeMove } from "./apply.ts";
 import { gameStatus, leafEndReason } from "./gameend.ts";
-import { hasLegalMove, legalCaptures, legalMoves } from "./legal.ts";
-import { FLAG_NONE, generateMoves } from "./moves.ts";
+import {
+  hasLegalMove,
+  legalCaptures,
+  legalCapturesAndQueenPromotions,
+  legalMoves,
+} from "./legal.ts";
+import { FLAG_NONE, generateCaptures, generateMoves } from "./moves.ts";
 import { EMPTY, parseSquareName } from "./position.ts";
-import { quiesce } from "./quiescence.ts";
+import { QUIESCENCE_MAX_PLY, quiesce } from "./quiescence.ts";
 import { lateMoveReduction } from "./search.ts";
 import { zobristKey } from "./zobrist.ts";
 
@@ -159,7 +174,18 @@ describe("ABC-206 — the search leaf's game-end check stays cheap (call counts,
       "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1",
     );
     let visited = 0;
-    quiesce(position, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY, 0, () => visited++);
+    // `ABC-228` (`ADR-0053` decision 7): a work reading, so it passes the pre-ticket record, with
+    // `ABC-229`'s quiet promotions off too. In check the shipped rules build the full list by
+    // design; the evasion rows own that path.
+    quiesce(
+      position,
+      Number.NEGATIVE_INFINITY,
+      Number.POSITIVE_INFINITY,
+      0,
+      0,
+      { evasions: false, quietPromotions: false },
+      () => visited++,
+    );
 
     expect(visited).toBeGreaterThan(0); // the capture search ran, so the zero below is earned
     expect(legalCaptures).toHaveBeenCalled();
@@ -208,5 +234,59 @@ describe("ABC-206 — the search leaf's game-end check stays cheap (call counts,
 
     legalCaptures(position);
     expect(makeMove).toHaveBeenCalledTimes(captures);
+  });
+
+  /**
+   * ABC-235 cut 3 (P3): `legalCaptures` builds its list from `generateCaptures` and never from the
+   * full generator. A reintroduced `generateMoves` call changes no returned value, so every value
+   * row is blind to it; this count is not (the ABC-206 precedent above).
+   */
+  it("legalCaptures runs generateCaptures once and generateMoves never", () => {
+    for (const fen of [
+      "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1",
+      "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+      "4k3/8/8/3pP3/8/8/8/4K3 w - d6 0 1",
+    ]) {
+      const position = parseFen(fen);
+      vi.clearAllMocks();
+      legalCaptures(position);
+      expect(generateMoves, fen).toHaveBeenCalledTimes(0);
+      expect(generateCaptures, fen).toHaveBeenCalledTimes(1);
+    }
+  });
+
+  /**
+   * `ABC-229` (`ADR-0053` decisions 5 and 9, the one-pass row): out of check, the shipped rules
+   * build captures and quiet queen promotions from ONE generation call per quiescence node, never
+   * a second `generateMoves` or `legalMoves` pass (the probe's second pass cost 1.7x CPU at 1.01x
+   * nodes, and changes no value). The node sits one ply below the cap, so its children stand pat
+   * without generating: exactly one node generates, and it must generate once.
+   */
+  it("quiesce out of check generates once per node with quiet promotions on: one generateCaptures, no generateMoves", () => {
+    for (const fen of [
+      "8/P6k/8/8/8/8/8/K7 w - - 0 1", // QP-1, a quiet queen promotion and no capture
+      "k7/8/8/8/8/8/p6K/8 b - - 0 1", // QP-9, black promotes
+      "5r2/3qP2k/8/8/8/8/5PPP/3B2K1 w - - 0 1", // QP-5, captures and a quiet promotion
+      "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1", // kiwipete
+    ]) {
+      const position = parseFen(fen);
+      vi.clearAllMocks();
+      let visited = 0;
+      quiesce(
+        position,
+        Number.NEGATIVE_INFINITY,
+        Number.POSITIVE_INFINITY,
+        QUIESCENCE_MAX_PLY - 1,
+        0,
+        { evasions: true, quietPromotions: true },
+        () => visited++,
+      );
+      expect(visited, fen).toBeGreaterThan(1); // the node and at least one child, so it expanded
+      expect(generateCaptures, fen).toHaveBeenCalledTimes(1);
+      expect(generateMoves, fen).toHaveBeenCalledTimes(0);
+      expect(legalMoves, fen).toHaveBeenCalledTimes(0);
+      expect(legalCaptures, fen).toHaveBeenCalledTimes(0);
+      expect(legalCapturesAndQueenPromotions, fen).toHaveBeenCalledTimes(1);
+    }
   });
 });

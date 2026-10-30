@@ -1,0 +1,63 @@
+--- src/engine.ts	2026-10-29 21:28:46.348390256 +0000
++++ srcc/engine.ts	2026-10-29 21:31:31.417023571 +0000
+@@ -179,6 +179,10 @@
+    * completes, so a tiny value still returns a depth-1 move.
+    */
+   readonly maxNodes?: number;
++  /** PROBE ONLY (ABC-230 reading): keys of the game's positions before the root, oldest first. */
++  readonly priorKeys?: readonly bigint[];
++  /** PROBE ONLY: 3 = a pre-root repetition needs two earlier occurrences; 2 = one. */
++  readonly priorRule?: 2 | 3;
+ }
+ 
+ export interface EngineChoice {
+@@ -232,6 +236,8 @@
+    * `chooseMove` call, `keys[0]` the root's key, each child's key derived from its parent's.
+    */
+   readonly keys: BigUint64Array;
++  prior: readonly bigint[];
++  priorNeed: number;
+ }
+ 
+ /**
+@@ -276,6 +282,22 @@
+  * (`history.ts:39-44`) — a search that unwound without unmaking would hand the loop a board
+  * several plies into a line nobody played. The null move (`ABC-208`) is unmade the same way.
+  */
++/** PROBE ONLY: the path scan unchanged, then the pre-root scan with its own count rule. */
++function repeatsProbe(budget: Budget, ply: number, clock: number): boolean {
++  const keys = budget.keys;
++  const key = keys[ply] as bigint;
++  const oldest = ply - clock;
++  let earlier = ply - 4;
++  for (; earlier >= 0 && earlier >= oldest; earlier -= 2) if (keys[earlier] === key) return true;
++  const prior = budget.prior;
++  const available = Math.min(prior.length, 100);
++  let count = 0;
++  for (; earlier >= oldest && earlier >= -available; earlier -= 2) {
++    if (prior[prior.length + earlier] === key && ++count >= budget.priorNeed) return true;
++  }
++  return false;
++}
++
+ function negamax(
+   position: Position,
+   remaining: number,
+@@ -288,7 +310,7 @@
+   countNode(budget);
+ 
+   const keys = budget.keys;
+-  if (repeatsInPath(keys, ply, position.halfmoveClock)) return 0;
++  if (repeatsProbe(budget, ply, position.halfmoveClock)) return 0;
+   if (remaining <= 0 || ply >= KEY_ARRAY_CAPACITY) {
+     return leafScore(position, ply, alpha, beta, budget);
+   }
+@@ -544,6 +566,8 @@
+     visit: () => countNode(budget),
+     killers: new KillerTable(),
+     keys: new BigUint64Array(KEY_ARRAY_CAPACITY + 1),
++    prior: options.priorKeys ?? [],
++    priorNeed: (options.priorRule ?? 3) - 1,
+     ...heuristics,
+   };
+   budget.keys[0] = zobristKey(position);

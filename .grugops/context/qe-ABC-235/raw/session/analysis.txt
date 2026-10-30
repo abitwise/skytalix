@@ -1,0 +1,45 @@
+== g2.jsonl
+  base: mean 455.7 ns  [531.7 / 481.4 / 279.2 / 473.8 / 467.1 / 501.1]  load1 1.1->1.3
+  tip: mean 310.4 ns  [328 / 348.6 / 170 / 343.8 / 329.5 / 342.8]  load1 1.3->1.41
+  tip: mean 311.3 ns  [326.8 / 348.9 / 169.2 / 349.5 / 331.7 / 341.7]  load1 1.41->1.59
+  base: mean 451 ns  [529.1 / 480.2 / 276.7 / 473.5 / 462.8 / 483.8]  load1 1.59->1.46
+  base avg 453.4  tip avg 310.9  tip/base 0.686  tip max 311.3 (bar 1100)
+== g2cold.jsonl
+  base: mean 603.7 ns  [692 / 572.1 / 371.5 / 538.4 / 612.1 / 836.3]  load1 1.46->1.46
+  tip: mean 663 ns  [753.6 / 740.9 / 452.2 / 672.7 / 646.7 / 712.1]  load1 1.46->1.46
+  tip: mean 580.9 ns  [642.2 / 632.5 / 415.1 / 567.7 / 594.1 / 633.7]  load1 1.46->1.46
+  base: mean 649.1 ns  [1154.7 / 709.7 / 416.9 / 521.7 / 515 / 576.8]  load1 1.46->1.46
+  base avg 626.4  tip avg 622.0  tip/base 0.993  tip max 663 (bar 1100)
+== g6: base vs tip, runs 20, load1 1.46-2.62, wall 2999.3-3001.4 ms
+  kiwipete: base nps 529359 589237 591626 571002 575098 med 575098 | tip nps 781946 750884 761466 773754 731087 med 761466 | ratio 1.3241
+  kiwipete: depth base 8 8 8 8 8 med 8 | tip 8 8 8 8 8 med 8 | min tip 8 | moves base 20-80-0 tip 20-80-0
+  position-6: base nps 600609 603138 614603 612214 597195 med 603138 | tip nps 755574 782539 786294 769910 768630 med 769910 | ratio 1.2765
+  position-6: depth base 10 10 10 10 10 med 10 | tip 10 10 10 10 10 med 10 | min tip 10 | moves base 34-67-0 tip 34-67-0
+== a3: base vs tip, runs 30, load1 2.51-3.60, wall 2999.5-3002.5 ms
+  kiwipete: base nps 577977 565882 563151 561598 558527 med 563151 | tip nps 739279 707535 710948 730746 706511 med 710948 | ratio 1.2624
+  kiwipete: depth base 8 8 8 8 8 med 8 | tip 8 8 8 8 8 med 8 | min tip 8 | moves base 20-80-0 tip 20-80-0
+  position-6: base nps 606209 582324 584907 599926 563216 med 584907 | tip nps 749089 751137 756939 742262 770593 med 751137 | ratio 1.2842
+  position-6: depth base 10 9 9 10 9 med 9 | tip 10 10 10 10 10 med 10 | min tip 10 | moves base 34-67-0 tip 34-67-0
+  start: base nps 451591 447836 448519 445105 431506 med 447836 | tip nps 541020 544092 537607 512689 537607 med 537607 | ratio 1.2005
+  start: depth base 10 10 10 10 10 med 10 | tip 10 10 10 10 10 med 10 | min tip 10 | moves base 1-34-0 tip 1-34-0
+== cut1: base vs cut1, runs 30, load1 2.78-3.55, wall 2999.5-3002.1 ms
+  kiwipete: base nps 564328 532254 561444 546926 559055 med 559055 | cut1 nps 589775 597768 620836 631759 616740 med 616740 | ratio 1.1032
+  kiwipete: depth base 8 8 8 8 8 med 8 | cut1 8 8 8 8 8 med 8 | min cut1 8 | moves base 20-80-0 cut1 20-80-0
+  position-6: base nps 589686 599243 600609 600750 605387 med 600609 | cut1 nps 645108 636237 672747 666264 646689 med 646689 | ratio 1.0767
+  position-6: depth base 10 10 10 10 10 med 10 | cut1 10 10 10 10 10 med 10 | min cut1 10 | moves base 34-67-0 cut1 34-67-0
+  start: base nps 452123 435062 470023 463196 474801 med 463196 | cut1 nps 486748 496481 492387 488455 491881 med 491881 | ratio 1.0619
+  start: depth base 10 10 10 10 10 med 10 | cut1 10 10 10 10 10 med 10 | min cut1 10 | moves base 1-34-0 cut1 1-34-0
+== cut3: cut1 vs cut3, runs 30, load1 2.18-3.11, wall 2999.3-3001.5 ms
+  kiwipete: cut1 nps 619130 626639 632913 627322 634148 med 627322 | cut3 nps 668282 686372 672836 677272 681252 med 677272 | ratio 1.0796
+  kiwipete: depth cut1 8 8 8 8 8 med 8 | cut3 8 8 8 8 8 med 8 | min cut3 8 | moves cut1 20-80-0 cut3 20-80-0
+  position-6: cut1 nps 666605 669217 650227 677409 666605 med 666605 | cut3 nps 710518 718027 670582 708234 697315 med 708234 | ratio 1.0624
+  position-6: depth cut1 10 10 10 10 10 med 10 | cut3 10 10 10 10 10 med 10 | min cut3 10 | moves cut1 34-67-0 cut3 34-67-0
+  start: cut1 nps 505353 493410 503306 505694 499211 med 503306 | cut3 nps 535217 535217 534357 533169 522247 med 534357 | ratio 1.0617
+  start: depth cut1 10 10 10 10 10 med 10 | cut3 10 10 10 10 10 med 10 | min cut3 10 | moves cut1 1-34-0 cut3 1-34-0
+== cut5: cut3 vs tip, runs 30, load1 2.05-2.74, wall 2999.6-3002.0 ms
+  kiwipete: cut3 nps 680570 671012 678637 678637 688762 med 678637 | tip nps 760100 750202 739279 763855 742445 med 750202 | ratio 1.1055
+  kiwipete: depth cut3 8 8 8 8 8 med 8 | tip 8 8 8 8 8 med 8 | min tip 8 | moves cut3 20-80-0 tip 20-80-0
+  position-6: cut3 nps 708234 702326 688214 701985 698230 med 701985 | tip nps 773665 779809 796610 781515 785270 med 781515 | ratio 1.1133
+  position-6: depth cut3 10 10 10 10 10 med 10 | tip 10 10 10 10 10 med 10 | min tip 10 | moves cut3 34-67-0 tip 34-67-0
+  start: cut3 nps 534357 503132 532992 534535 530262 med 532992 | tip nps 562183 562865 565255 576177 569692 med 565255 | ratio 1.0605
+  start: depth cut3 10 10 10 10 10 med 10 | tip 10 10 10 10 10 med 10 | min tip 10 | moves cut3 1-34-0 tip 1-34-0

@@ -1,0 +1,112 @@
+[
+ {
+  "plant": "F1 evasions searched out of check",
+  "exit": 124,
+  "tests": "?",
+  "red": []
+ },
+ {
+  "plant": "F2 stand pat kept in check",
+  "exit": 1,
+  "tests": "Tests  9 failed | 187 passed (196)",
+  "red": [
+   "src/quiescence.test.ts > ABC-228 A2 \u2014 in check, quiesce searches every evasion: Q-SET's in-check rows > a block by interposition, Bf1, the only evasion: differs from the static score, equals the best evasion's and the brute force",
+   "src/quiescence.test.ts > ABC-228 A2 \u2014 in check, quiesce searches every evasion: Q-SET's in-check rows > an evasion that loses material to a follow-up capture: differs from the static score, equals the best evasion's and the brute force",
+   "src/quiescence.test.ts > ABC-228 A3 \u2014 a capture that mates scores mate, at the right sign and distance > after a two-capture exchange: Rxf8+ Qxf8 Rxf8 mates at qply 3: quiesce reads 29997, the brute force agrees, the pre-ticket rules do not",
+   "src/quiescence.test.ts > ABC-228 A3 \u2014 a capture that mates scores mate, at the right sign and distance > after a two-capture exchange: Rxf8+ Qxf8 Rxf8 mates at qply 3: the same mate from a leaf 5 plies down reads 5 plies further",
+   "src/quiescence.test.ts > ABC-228 A3 \u2014 a capture that mates scores mate, at the right sign and distance > exactly one evasion is not mate: Rxe8+ Kh7, and the score is the brute force's",
+   "src/quiescence.test.ts > ABC-228 A3 \u2014 a capture that mates scores mate, at the right sign and distance > through search() at depth 1: Rd8+ Ne8 Rxe8 mates three plies from the root, MATE_SCORE \u2212 3",
+   "src/quiescence.test.ts > ABC-228 \u2014 the doors: searchWithoutQuiescenceEvasions and chooseMoveWithoutQuiescenceEvasions > chooseMove sees the quiescence mate at depth 1, its door does not",
+   "src/quiescence.test.ts > ABC-228 \u2014 the rule rows (`ADR-0053` decision 9; each reds a planted fault) > a mate found in quiescence survives the table's store and restore: MATE_SCORE \u2212 3 at every depth",
+   "src/quiescence.test.ts > ABC-228 \u2014 the rule rows (`ADR-0053` decision 9; each reds a planted fault) > in check below the cap the static score is never returned: every in-check row, every qply 0..7"
+  ]
+ },
+ {
+  "plant": "F3 mate scored without check (stalemate)",
+  "exit": 1,
+  "tests": "Tests  1 failed | 195 passed (196)",
+  "red": [
+   "src/quiescence.test.ts > ABC-228 \u2014 the rule rows (`ADR-0053` decision 9; each reds a planted fault) > stalemate (no legal move, not in check) still stands pat, never a mate score"
+  ]
+ },
+ {
+  "plant": "F4 evasions past the cap",
+  "exit": 1,
+  "tests": "Tests  4 failed | 192 passed (196)",
+  "red": [
+   "src/engine.test.ts > ABC-170 A2 \u2014 maxNodes aborts, and the last COMPLETED iteration is played > plays search(position, d)'s move and score at the reported depth d \u2014 the abort is discarded",
+   "src/quiescence.test.ts > A3 \u2014 quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > returns on every one of 200+ positions, the capture-dense roots included, under the cap",
+   "src/quiescence.test.ts > A3 \u2014 quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > the cap BINDS on a runaway rig \u2014 twenty queens on alternating squares \u2014 and is not exceeded",
+   "src/quiescence.test.ts > ABC-228 \u2014 the rule rows (`ADR-0053` decision 9; each reds a planted fault) > at the cap a node stands pat, in check or not: Q2 at qply 8 reads its static score, no node entered"
+  ]
+ },
+ {
+  "plant": "F5 mate distance drops the leaf ply",
+  "exit": 1,
+  "tests": "Tests  7 failed | 189 passed (196)",
+  "red": [
+   "src/quiescence.test.ts > ABC-228 A3 \u2014 a capture that mates scores mate, at the right sign and distance > Q1: Qxf7 mates at qply 1: the same mate from a leaf 5 plies down reads 5 plies further",
+   "src/quiescence.test.ts > ABC-228 A3 \u2014 a capture that mates scores mate, at the right sign and distance > a capturing promotion: cxd8=Q mates: the same mate from a leaf 5 plies down reads 5 plies further",
+   "src/quiescence.test.ts > ABC-228 A3 \u2014 a capture that mates scores mate, at the right sign and distance > after a two-capture exchange: Rxf8+ Qxf8 Rxf8 mates at qply 3: the same mate from a leaf 5 plies down reads 5 plies further",
+   "src/quiescence.test.ts > ABC-228 A3 \u2014 a capture that mates scores mate, at the right sign and distance > an en-passant capture: exd6 opens the e-file and mates: the same mate from a leaf 5 plies down reads 5 plies further",
+   "src/quiescence.test.ts > ABC-228 A3 \u2014 a capture that mates scores mate, at the right sign and distance > through search() at depth 1: Rd8+ Ne8 Rxe8 mates three plies from the root, MATE_SCORE \u2212 3",
+   "src/quiescence.test.ts > ABC-228 \u2014 the doors: searchWithoutQuiescenceEvasions and chooseMoveWithoutQuiescenceEvasions > chooseMove sees the quiescence mate at depth 1, its door does not",
+   "src/quiescence.test.ts > ABC-228 \u2014 the rule rows (`ADR-0053` decision 9; each reds a planted fault) > a mate found in quiescence survives the table's store and restore: MATE_SCORE \u2212 3 at every depth"
+  ]
+ },
+ {
+  "plant": "F6 mate score of the wrong sign",
+  "exit": 1,
+  "tests": "Tests  12 failed | 184 passed (196)",
+  "red": [
+   "src/quiescence.test.ts > ABC-228 A3 \u2014 a capture that mates scores mate, at the right sign and distance > Q1: Qxf7 mates at qply 1: quiesce reads 29999, the brute force agrees, the pre-ticket rules do not",
+   "src/quiescence.test.ts > ABC-228 A3 \u2014 a capture that mates scores mate, at the right sign and distance > Q1: Qxf7 mates at qply 1: the same mate from a leaf 5 plies down reads 5 plies further",
+   "src/quiescence.test.ts > ABC-228 A3 \u2014 a capture that mates scores mate, at the right sign and distance > a capturing promotion: cxd8=Q mates: quiesce reads 29999, the brute force agrees, the pre-ticket rules do not",
+   "src/quiescence.test.ts > ABC-228 A3 \u2014 a capture that mates scores mate, at the right sign and distance > a capturing promotion: cxd8=Q mates: the same mate from a leaf 5 plies down reads 5 plies further",
+   "src/quiescence.test.ts > ABC-228 A3 \u2014 a capture that mates scores mate, at the right sign and distance > after a two-capture exchange: Rxf8+ Qxf8 Rxf8 mates at qply 3: quiesce reads 29997, the brute force agrees, the pre-ticket rules do not",
+   "src/quiescence.test.ts > ABC-228 A3 \u2014 a capture that mates scores mate, at the right sign and distance > after a two-capture exchange: Rxf8+ Qxf8 Rxf8 mates at qply 3: the same mate from a leaf 5 plies down reads 5 plies further",
+   "src/quiescence.test.ts > ABC-228 A3 \u2014 a capture that mates scores mate, at the right sign and distance > an en-passant capture: exd6 opens the e-file and mates: quiesce reads 29999, the brute force agrees, the pre-ticket rules do not",
+   "src/quiescence.test.ts > ABC-228 A3 \u2014 a capture that mates scores mate, at the right sign and distance > an en-passant capture: exd6 opens the e-file and mates: the same mate from a leaf 5 plies down reads 5 plies further",
+   "src/quiescence.test.ts > ABC-228 A3 \u2014 a capture that mates scores mate, at the right sign and distance > the mated side reads the negated score: Q1 after Qxf7, black at qply 1, is \u2212(MATE_SCORE \u2212 1)",
+   "src/quiescence.test.ts > ABC-228 A3 \u2014 a capture that mates scores mate, at the right sign and distance > through search() at depth 1: Rd8+ Ne8 Rxe8 mates three plies from the root, MATE_SCORE \u2212 3",
+   "src/quiescence.test.ts > ABC-228 \u2014 the doors: searchWithoutQuiescenceEvasions and chooseMoveWithoutQuiescenceEvasions > chooseMove sees the quiescence mate at depth 1, its door does not",
+   "src/quiescence.test.ts > ABC-228 \u2014 the rule rows (`ADR-0053` decision 9; each reds a planted fault) > a mate found in quiescence survives the table's store and restore: MATE_SCORE \u2212 3 at every depth"
+  ]
+ },
+ {
+  "plant": "F7 engine leaf passes ply 0",
+  "exit": 1,
+  "tests": "Tests  3 failed | 193 passed (196)",
+  "red": [
+   "src/quiescence.test.ts > ABC-228 \u2014 the doors: searchWithoutQuiescenceEvasions and chooseMoveWithoutQuiescenceEvasions > chooseMove sees the quiescence mate at depth 1, its door does not",
+   "src/quiescence.test.ts > ABC-228 \u2014 the rule rows (`ADR-0053` decision 9; each reds a planted fault) > ./engine.ts: the leaf passes its ply and its rules record to quiesce, the record a module constant",
+   "src/quiescence.test.ts > ABC-228 \u2014 the rule rows (`ADR-0053` decision 9; each reds a planted fault) > a mate found in quiescence survives the table's store and restore: MATE_SCORE \u2212 3 at every depth"
+  ]
+ },
+ {
+  "plant": "F8 chooseMove switch off",
+  "exit": 1,
+  "tests": "Tests  3 failed | 193 passed (196)",
+  "red": [
+   "src/quiescence.test.ts > ABC-228 \u2014 the doors: searchWithoutQuiescenceEvasions and chooseMoveWithoutQuiescenceEvasions > ./engine.ts: each exported entry passes exactly one quiescenceEvasions literal, and only chooseMove's is true",
+   "src/quiescence.test.ts > ABC-228 \u2014 the doors: searchWithoutQuiescenceEvasions and chooseMoveWithoutQuiescenceEvasions > chooseMove sees the quiescence mate at depth 1, its door does not",
+   "src/quiescence.test.ts > ABC-228 \u2014 the rule rows (`ADR-0053` decision 9; each reds a planted fault) > a mate found in quiescence survives the table's store and restore: MATE_SCORE \u2212 3 at every depth"
+  ]
+ },
+ {
+  "plant": "F9 search door switch on",
+  "exit": 1,
+  "tests": "Tests  3 failed | 193 passed (196)",
+  "red": [
+   "src/quiescence.test.ts > ABC-228 A3 \u2014 a capture that mates scores mate, at the right sign and distance > through search() at depth 1: Rd8+ Ne8 Rxe8 mates three plies from the root, MATE_SCORE \u2212 3",
+   "src/quiescence.test.ts > ABC-228 \u2014 the doors: searchWithoutQuiescenceEvasions and chooseMoveWithoutQuiescenceEvasions > ./search.ts: each exported entry passes exactly one quiescenceEvasions literal, and only search's is true",
+   "src/quiescence.test.ts > ABC-228 \u2014 the doors: searchWithoutQuiescenceEvasions and chooseMoveWithoutQuiescenceEvasions > Q2 through the depth-0 seam: search() reads \u2212536, its door the pre-ticket \u2212548"
+  ]
+ },
+ {
+  "plant": "F10 evasions unordered",
+  "exit": 0,
+  "tests": "Tests  196 passed (196)",
+  "red": []
+ }
+]

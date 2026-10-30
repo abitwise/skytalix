@@ -1,14 +1,32 @@
 ---
 id: ABC-221
 title: "`uci-clock-mode` over UCI (`TimeMode`): spends the real clock through a safe share with a hard stop, a 59.5 s budget under a 60 s ceiling, never loses on time"
-status: backlog
-column: Backlog
+status: ready
+column: Ready
 size: M
 priority: P3
 epic: EPIC-009
 ---
 
 # ABC-221: `uci-clock-mode`: the real clock, a safety margin, a hard stop, a 60 s ceiling
+
+> **FOLDED 2026-10-30 by BA/PM** (task `bapm-ABC-220-merge-fold`, records only, at `main` `4ac4f3bb`). **Both waits
+> are met:** the owner accepted `ADR-0052` (OQ-0052-1, `orch-2026-10-29g` `…3dd61448`; D4 and D6 as written, 59.5 s
+> under 60 s), and **`ABC-220` merged at `ec1e835b`**, so `C` (`safeClockShare`), `TIME_MODES` and D3's rule are on
+> `main`. **DoR 9/10 → 10/10. Backlog → Ready.** Pull order: after `ABC-222`, by the owner's "later" (milestone 2).
+> The board move and the order are the Orchestrator's.
+>
+> - **A11 re-worded** to `ABC-220`'s split of A14 into A14a (lane row) and A14b (QE probe) (`arch-ABC-220-a14`). The
+>   bound, the order and the count are unchanged. The existing A14a row pins the two-value option line, so it moves
+>   with A1 at this build.
+> - **A12 added (QE-220-a, LOW, from `qe-ABC-220` `…c6bdd364`):** QE-A3a's four asymmetric-increment rows go into
+>   `src/uci-session.test.ts`'s `simple-tournament` A7 block, with the same four inputs in this mode. QE's mutant QM4
+>   (the mode reads `winc` for either side) survives `npm test` today.
+> - **Test note 5 added (`SEC-220-b`, INFO):** the `milliseconds` comment in `src/uci-session.ts` is corrected. No
+>   behaviour changes, and no row is added.
+> - **`NFR-008` headroom** is 0.27–0.31 s after `ABC-220` (QE-220-c). A9's bound is unchanged; the line under NFR
+>   triggers names the risk.
+> - **Size stays M**: 12 rows, one comment line. Priority P3.
 
 > **RECONCILED 2026-10-29 to `ADR-0052` (PROPOSED) by BA/PM** (task `bapm-owner-words-b`, records only, at `main`
 > `4dcb353e`). The Architect ruled the form, the allocation rule, the fallback, the margin, the stop, the ceiling and
@@ -60,7 +78,8 @@ epic: EPIC-009
 
 ## Scope
 
-All of it is `ADR-0052` (PROPOSED), D1, D2 and D4–D9.
+All of it is `ADR-0052` (PROPOSED), D1, D2 and D4–D9. *(2026-10-30: ACCEPTED by the owner, `…3dd61448`; D4 and D6 as
+written.)*
 
 1. **The value `uci-clock-mode`** joins `TimeMode` at this build: `option name TimeMode type combo default level var
    level var simple-tournament var uci-clock-mode`. `setoption`, the exact-match tuple, the refusal line and
@@ -129,8 +148,32 @@ uci-clock-mode`. The numbers are `ADR-0052`'s arithmetic (`arch-epic009-settings
   completed depth is logged against `KEY_ARRAY_CAPACITY`'s tripwire (≥ 100 → the Architect), and search-held memory
   stays ≤ 16 MiB, with growth ≤ 1 MiB (`NFR-009`, measured as `ABC-212` measured it). It runs in the `ENGINE_DEEP`
   lane, ALONE (~3–4 min).
-- **A11 (busy `isready`).** `ABC-220`'s A13 (default lane) and A14 (opt-in real-child lane) pass with `TimeMode`
-  `uci-clock-mode`.
+- **A11 (busy `isready`; re-worded 2026-10-30, `bapm-ABC-220-merge-fold`).** *(Was: "`ABC-220`'s A13 (default lane)
+  and A14 (opt-in real-child lane) pass with `TimeMode` `uci-clock-mode`." `ABC-220`'s A14 was split into A14a and
+  A14b on 2026-10-30, `arch-ABC-220-a14`.)* A11 is MET only when all three are met:
+  - **A13 in the mode (default lane).** `ABC-220`'s A13 passes with `TimeMode` `uci-clock-mode`: exactly one
+    `readyok`, after the `bestmove`, in order.
+  - **A14a in the mode (`UCI_DEEP`, `src/uci.real-engine.test.ts`).** `ABC-220`'s A14a fixed script, with
+    `setoption name TimeMode value uci-clock-mode` in place of `simple-tournament`, meets every A14a bullet. The
+    existing `simple-tournament` A14a row still passes. Its option-line expectation becomes A1's three-value line.
+  - **A14b in the mode (QE hand reading, outside vitest).** At the QE hop QE runs `ABC-220`'s A14b protocol once with
+    `TimeMode` `uci-clock-mode`. The script is a copy of `qe-ABC-220`'s `probe/a14b-probe.mjs` with the one
+    `setoption` value changed, kept under QE's own task context. **R1** ≤ 100 ms, **R2** busy and **R3** one
+    `readyok` per `isready` are graded as `ABC-220` A14b states, with the same record and the same "one run counts"
+    rule.
+
+- **A12 (the side to move reads its own increment; added 2026-10-30, QE-220-a).** In `src/uci-session.test.ts`'s
+  `simple-tournament` A7 block, with `go wtime 10000 btime 10000 movestogo 10` and the increments below, the budget
+  is:
+  - Black to move, `winc 0 binc 2000` → **2 800**;
+  - Black to move, `winc 2000 binc 0` → **800**;
+  - White to move, `winc 2000 binc 0` → **2 800**;
+  - White to move, `winc 0 binc 2000` → **800**.
+
+  `C` = (10 000 − 1 000 − 10 × 100) / 10 + the side's own increment = 800 + inc, under the hard stop 8 900, and
+  below T, so `C` binds. The same four inputs in `uci-clock-mode` give the same four budgets, because `C` is also
+  below 59 500. These are QE-A3a's rows (`qe-ABC-220` `raw/qrows/qrows-v1.txt`). A plant that makes a mode read `winc`
+  for either side (QE's QM4) turns that mode's two Black rows red in `npm test`.
 
 The 1 000 ms reserve on the virtual clock leaves room for pipe and GUI latency under `EPIC-009` M1's ≥ 500 ms closest
 call: M1 survives δ ≤ 600 ms on a period's last move at 40/15 (`ADR-0052` D5). `ABC-223` reads M1 on the real clock.
@@ -145,47 +188,65 @@ call: M1 survives δ ≤ 600 ms on a period's last move at 40/15 (`ADR-0052` D5)
   (`RISK-EPIC009-07`). A flat reading is expected because the table is allocated once; that is `UNKNOWN - verify`.
 - **`ADR-0044` D5 latency:** `isready` and `stop` are answered ≤ one budget late, ≤ 60 s in this mode. Accepted with
   no worker (`ADR-0052` D7). cutechess pings only between moves, and sends a mid-search `stop` only at a game end or
-  when pondering. The accepted-risk entry placed at `ABC-220`'s gate already names ≤ 60 s. A11.
+  when pondering. The accepted-risk entry placed at `ABC-220`'s gate already names ≤ 60 s. A11. *(2026-10-30: placed as
+  `AR-UCI-BUSY` beside `NFR-011`, owner Architect/Design. In this mode 59 500 + ~31 + 100 < 60 000, so "≤ 60 s" is
+  read exactly; Security/NFR re-reads it at this gate.)*
 - **`NFR-008`:** A9. **`NFR-005`, `NFR-011`, `NFR-012`:** unchanged (their referent is `TimeMode level`).
+  - *(2026-10-30, QE-220-c.)* After `ABC-220` the headroom under 10 s is 0.27–0.31 s (`A12` 9.69 s; `G8` head
+    9.73 s). `ABC-229` and `ABC-243` also add rows. This ticket adds about 12 virtual-clock rows. A9's ≤ 10 s does not
+    move. If the wall crosses 10 s, A9 is NOT MET and the Orchestrator's `NFR-008` watch takes it; it is not waived
+    here. The added wall is `UNKNOWN - verify` until read.
 - **Security (ASVS L1):** the closed set gains one value. `go`'s numbers are already parsed and refused today.
 
 ## Test notes
 
-1. Default lane: A1–A9 and A11's first row on the virtual clock, in `src/uci-session.test.ts`'s pattern
-   (`ADR-0027`). A2–A7 are each one simulated sequence.
-2. `ENGINE_DEEP` lane: A10, ALONE, never during a reading. Opt-in real-child lane: A11's second row.
+1. Default lane: A1–A9, A11's first row and A12 on the virtual clock, in `src/uci-session.test.ts`'s pattern
+   (`ADR-0027`). A2–A7 are each one simulated sequence. *(A12 added 2026-10-30.)*
+2. `ENGINE_DEEP` lane: A10, ALONE, never during a reading. Opt-in real-child lane (`UCI_DEEP`): A11's second row.
+   A11's third row is QE's probe, run once in QE's ALONE window, never through vitest. *(Amended 2026-10-30.)*
 3. UAT is owed. The QE verdict signs it. `ABC-223` is the real-clock smoke.
 4. **Owed at merge:** BA/PM folds the dated line into `ADR-0045` § AMENDMENT A3 (`HARD_CEILING_MS` 60 000).
+   *(2026-10-30: also the `uci-clock-mode` halves of `ADR-0044`'s folds, left at `ABC-220`'s merge: D3's third `var`,
+   D4.5's clock-mode line with D4.4's clamp at 60 000, and D5's ≤ 60 s.)*
+5. **Carried note (`SEC-220-b`, INFO, pre-existing; added 2026-10-30).** `milliseconds` in `src/uci-session.ts` is
+   documented as "any finite decimal number", but a figure longer than 308 digits parses to ±Infinity. QE found every
+   branch safe (QE-220-d): ±Infinity and NaN reach T, the cap or depth 1. **BA/PM's call: fix the comment, not the
+   rule.** The SE rewords that one comment to say what it returns, including ±Infinity. No behaviour changes, and no
+   row is added. If the SE finds the rule itself should change, that is a new ticket, not this one.
 
 ## Size and priority
 
-- **Size: M.** One value, one rule over `ABC-220`'s C, two constants, one clamp value, and 11 rows. Variable
+- **Size: M.** One value, one rule over `ABC-220`'s C, two constants, one clamp value, and 11 rows *(12 from
+  2026-10-30: A12, plus one comment line)*. Variable
   allocation is out, so it is not L.
 - **Priority: P3.** It is the owner's milestone 2 ("later"), after `ABC-220` and `ABC-222`.
 
 ## Dependencies
 
-- **The owner accepts `ADR-0052` (OQ-0052-1).** It is PROPOSED; nothing is built on it until he answers.
+- **The owner accepts `ADR-0052` (OQ-0052-1).** It is PROPOSED; nothing is built on it until he answers. *(Met
+  2026-10-30, `…3dd61448`: accepted, D4 and D6 as written.)*
 - **Milestone order:** after `ABC-220` and `ABC-222` (the owner's "later"). It **uses `ABC-220`'s C and `TimeMode`**,
-  so `ABC-220` merges first. That is a code dependency now, not only a pull order.
+  so `ABC-220` merges first. That is a code dependency now, not only a pull order. *(Met 2026-10-30: `ABC-220` merged
+  at `ec1e835b`. The pull order after `ABC-222` stands.)*
 - **`EPIC-010`'s `G9`** ("`HARD_CEILING_MS` byte-identical") binds `EPIC-010`'s own diffs. This ticket moves the
   clamp. If both are in flight, whichever merges second rebases, and the Orchestrator orders them.
 - Owner answers: all in (Q2, Q3, Q5, Q8; 2026-10-29).
 
-## Definition of Ready (re-scored 2026-10-29, `bapm-owner-words-b`)
+## Definition of Ready (re-scored 2026-10-30, `bapm-ABC-220-merge-fold`; was 9/10 on 2026-10-29, `bapm-owner-words-b`)
 
 | # | check | state |
 |---|---|---|
 | 1 | problem clear | ✅ owner word (Q2, Q3, Q5); user, pain and value stated |
 | 2 | scope and out-of-scope | ✅ 5 scope items, each from `ADR-0052`; variable allocation, levels, per-call ceiling and CLI out |
 | 3 | INVEST | ✅ M; testable; builds on `ABC-220`'s C (named) |
-| 4 | testable, measurable acceptance | ✅ A1–A11: byte-exact lines, ms, %, a row-for-row identity, ≤ 60 000 ms wall, ≤ 16 MiB |
-| 5 | dependencies known | ✅ `ADR-0052` (PROPOSED); `ABC-220` merged; `EPIC-010` `G9` |
-| 6 | NFR triggers with targets | ✅ `NFR-004` 60 s (owner's word; text proposed); `NFR-009` ≤ 16 MiB re-read; `NFR-008` ≤ 10 s |
-| 7 | test notes | ✅ 4 |
+| 4 | testable, measurable acceptance | ✅ A1–A12: byte-exact lines, ms, %, a row-for-row identity, ≤ 60 000 ms wall, ≤ 16 MiB, R1 ≤ 100 ms, four exact budgets (A12) |
+| 5 | dependencies known | ✅ `ADR-0052` (ACCEPTED 2026-10-30); `ABC-220` merged at `ec1e835b`; `EPIC-010` `G9` |
+| 6 | NFR triggers with targets | ✅ `NFR-004` 60 s (owner's word; text proposed); `NFR-009` ≤ 16 MiB re-read; `NFR-008` ≤ 10 s (headroom 0.27–0.31 s named); `AR-UCI-BUSY` ≤ 60 s |
+| 7 | test notes | ✅ 5 |
 | 8 | size | ✅ M |
 | 9 | priority | ✅ P3 |
-| 10 | no major unresolved blocker | ❌ **the owner's acceptance of `ADR-0052` (OQ-0052-1)** |
+| 10 | no major unresolved blocker | ✅ `ADR-0052` accepted (2026-10-30) and `ABC-220` merged (`ec1e835b`). *(Was ❌: the owner's acceptance of `ADR-0052`, OQ-0052-1.)* |
 
-**DoR 9/10. Backlog.** It waits on the owner accepting `ADR-0052`. Its place after milestone 1 is pull order plus the
-`ABC-220` code dependency, not a DoR gap.
+**DoR 10/10 (2026-10-30). Ready.** Pull it after `ABC-222` (milestone 1 closes first, by the owner's "later"). That
+is pull order, not a DoR gap. It shares `src/uci-session.ts` with any ticket in flight on that file; the Orchestrator
+orders them. *(Was: "DoR 9/10. Backlog. It waits on the owner accepting `ADR-0052`.")*

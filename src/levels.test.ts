@@ -28,6 +28,7 @@ import { describe, expect, it, vi } from "vitest";
 import { makeMove, unmakeMove } from "./apply.ts";
 import { type Clock, chooseMove, DEFAULT_BUDGET_MS, HARD_CEILING_MS } from "./engine.ts";
 import { parseFen, toFen } from "./fen.ts";
+import { repetitionKey } from "./gameend.ts";
 import { legalMoves } from "./legal.ts";
 import {
   createLevel,
@@ -42,13 +43,22 @@ import {
 import type { Move } from "./moves.ts";
 import { squareName } from "./position.ts";
 import { virtualClock } from "./virtual-clock.ts";
+import { zobristKey } from "./zobrist.ts";
 
 /**
  * QE-087-a: every `chooseMove` call the level module makes is recorded, its options copied, and
  * passed through to the real engine unchanged. A pass-through, so every other row reads the real
  * engine; it costs no search. `vi.hoisted` because `vi.mock` is hoisted above the imports.
  */
-const engineCalls = vi.hoisted(() => [] as { budgetMs: number; now: unknown; keys: string[] }[]);
+const engineCalls = vi.hoisted(
+  () =>
+    [] as {
+      budgetMs: number;
+      now: unknown;
+      keys: string[];
+      priorKeys?: readonly bigint[] | undefined;
+    }[],
+);
 vi.mock("./engine.ts", async (importOriginal) => {
   const real = await importOriginal<typeof import("./engine.ts")>();
   return {
@@ -59,6 +69,8 @@ vi.mock("./engine.ts", async (importOriginal) => {
         budgetMs: options.budgetMs,
         now: options.now,
         keys: Object.keys(options).sort(),
+        // `ABC-230`: the list handed in, by reference (the engine does not copy it).
+        priorKeys: options.priorKeys,
       });
       return real.chooseMove(...args);
     },
@@ -247,7 +259,7 @@ describe("ABC-174 A1 — the table is ADR-0045 D1's", () => {
       2: { budgetMs: 180, blunderRate: 0.2 },
       3: { budgetMs: 330, blunderRate: 0.1 },
       4: { budgetMs: 1_000, blunderRate: 0.05 },
-      5: { budgetMs: 3_000, blunderRate: 0 },
+      5: { budgetMs: 4_000, blunderRate: 0 }, // ABC-228, ADR-0053 d10 (ii): 3 000 -> 4 000
       6: { budgetMs: 5_000, blunderRate: 0 },
       7: { budgetMs: 30_000, blunderRate: 0 },
     });
@@ -277,7 +289,7 @@ describe("ABC-212 A1 — levels 6 and 7 above the default (ADR-0045 § AMENDMENT
       [180, 0.2],
       [330, 0.1],
       [1_000, 0.05],
-      [3_000, 0],
+      [4_000, 0], // ABC-228, ADR-0053 d10 (ii): level 5 is 4 000; G9 is waived on it only
     ];
     ([1, 2, 3, 4, 5] as const).forEach((id, i) => {
       const [budgetMs, blunderRate] = base[i] as [number, number];
@@ -303,14 +315,14 @@ describe("ABC-212 A1 — levels 6 and 7 above the default (ADR-0045 § AMENDMENT
   });
 });
 
-describe("ABC-174 A3 — the default plays as today: chooseMove at 3 000 ms, the old level 3", () => {
+describe("ABC-174 A3 — the default plays as the engine: chooseMove at 4 000 ms (ABC-228, ADR-0053 d10)", () => {
   const level = LEVELS[DEFAULT_LEVEL];
   const step = level.budgetMs / 3;
 
   it("move, depth and nodes are equal on 30 of 30 positions, for each of two seeds", () => {
     expect(THIRTY).toHaveLength(30);
     const reference = THIRTY.map((fen) =>
-      chooseMove(parseFen(fen), { budgetMs: 3_000, now: virtualClock(step) }),
+      chooseMove(parseFen(fen), { budgetMs: 4_000, now: virtualClock(step) }),
     );
     for (const seed of [1, 87]) {
       const equal = THIRTY.filter((fen, i) => {
@@ -341,17 +353,19 @@ describe("ABC-174 A4 — the mechanism's shape: a budget and a rate per level", 
 describe("ABC-174 A7 — the time budget, from the data (NFR-004; ADR-0038 decision 3)", () => {
   const budgets = ([1, 2, 3, 4, 5, 6, 7] as const).map((id) => LEVELS[id].budgetMs);
 
-  it("clause A: the default's budget is DEFAULT_BUDGET_MS, which is 3 000", () => {
+  it("clause A: the default's budget is DEFAULT_BUDGET_MS, which is 4 000 (ABC-228, ADR-0053 d10)", () => {
     expect(LEVELS[DEFAULT_LEVEL].budgetMs).toBe(DEFAULT_BUDGET_MS);
-    expect(DEFAULT_BUDGET_MS).toBe(3_000);
+    expect(DEFAULT_BUDGET_MS).toBe(4_000);
   });
 
   it("clause B, per level (ABC-212 A5): budgetMs <= ceiling(L) over 1..7, < 5 000 over 1..5, clamp 32 000", () => {
     // `ADR-0045` § AMENDMENT A3: one clamp at the largest ceiling; each level's own ceiling is
-    // held by its budget, with at least 2 000 ms of margin.
+    // held by its budget, with at least 2 000 ms of margin. `ABC-228` (`ADR-0053` d10, reading
+    // (ii)): level 5's margin is 1 000 ms (4 000 under its 5 s ceiling); every other level keeps 2 000.
     ([1, 2, 3, 4, 5, 6, 7] as const).forEach((id, i) => {
       expect(budgets[i], `level ${id}`).toBeLessThanOrEqual(CEILING_MS[id]);
-      expect(CEILING_MS[id] - (budgets[i] as number), `level ${id}`).toBeGreaterThanOrEqual(2_000);
+      const margin = id === 5 ? 1_000 : 2_000;
+      expect(CEILING_MS[id] - (budgets[i] as number), `level ${id}`).toBeGreaterThanOrEqual(margin);
     });
     for (const id of [1, 2, 3, 4, 5] as const) expect(LEVELS[id].budgetMs).toBeLessThan(5_000);
     expect(HARD_CEILING_MS).toBe(32_000);
@@ -369,8 +383,8 @@ describe("ABC-174 A7 — the time budget, from the data (NFR-004; ADR-0038 decis
 // ---------------------------------------------------------------------------
 
 describe("A6 — the default level", () => {
-  it("has the 3 s budget (`NFR-004`), the engine's own `DEFAULT_BUDGET_MS`", () => {
-    expect(LEVELS[DEFAULT_LEVEL].budgetMs).toBe(3_000);
+  it("has the 4 s budget (`NFR-004`; ABC-228, ADR-0053 d10), the engine's own `DEFAULT_BUDGET_MS`", () => {
+    expect(LEVELS[DEFAULT_LEVEL].budgetMs).toBe(4_000);
     expect(LEVELS[DEFAULT_LEVEL].budgetMs).toBe(DEFAULT_BUDGET_MS);
   });
 
@@ -439,6 +453,65 @@ describe("QE-087-a — the seed never reaches the engine (ADR-0027 d1)", () => {
         expect(call.now).toBe(blunderClock);
       }
     }
+  });
+});
+
+describe("ABC-230 — the level hands the game's prior keys on (ADR-0054 decision 2)", () => {
+  const fen = "4k3/8/8/8/8/8/8/Q3K3 b - - 3 2";
+  const prior: readonly bigint[] = [11n, 12n, 13n];
+
+  it("the engine path hands chooseMove the caller's list itself", () => {
+    engineCalls.length = 0;
+    createLevel(LEVELS[DEFAULT_LEVEL], { seed: 1, now: coarseClock(LEVELS[DEFAULT_LEVEL]) })(
+      parseFen(fen),
+      prior,
+    );
+    expect(engineCalls).toHaveLength(1);
+    expect(engineCalls[0]?.keys).toEqual(["budgetMs", "now", "priorKeys"]);
+    expect(engineCalls[0]?.priorKeys).toBe(prior);
+  });
+
+  it("A1: a blunder hands every child search the prior keys plus the root's key, one list", () => {
+    const always: Level = { budgetMs: 100, blunderRate: 0.999_999 };
+    const position = parseFen(fen);
+    engineCalls.length = 0;
+    const choice = createLevel(always, { seed: 1, now: virtualClock(100) })(position, prior);
+    expect(choice?.kind).not.toBe("engine");
+    expect(engineCalls).toHaveLength(legalMoves(parseFen(fen)).length);
+    const handed = engineCalls[0]?.priorKeys;
+    expect(handed).toEqual([...prior, zobristKey(parseFen(fen))]);
+    for (const call of engineCalls) expect(call.priorKeys).toBe(handed);
+    // The caller's list is not changed, and the position is handed back unchanged.
+    expect(prior).toEqual([11n, 12n, 13n]);
+    expect(toFen(position)).toBe(fen);
+  });
+
+  it("absent, no search is handed a list, on either path", () => {
+    engineCalls.length = 0;
+    createLevel(
+      { budgetMs: 100, blunderRate: 0.999_999 },
+      { seed: 1, now: virtualClock(100) },
+    )(parseFen(fen));
+    expect(engineCalls.length).toBeGreaterThan(0);
+    for (const call of engineCalls) expect(call.keys).toEqual(["budgetMs", "now"]);
+  });
+});
+
+describe("ABC-241 A5 — the blunder path's appended root key is a repetition key", () => {
+  // One ply after 1.e4: the root carries e3 and no black pawn can take there.
+  const fen = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1";
+  const prior: readonly bigint[] = [21n, 22n];
+
+  it("every child search is handed the prior keys plus repetitionKey(root), not the raw hash", () => {
+    const always: Level = { budgetMs: 100, blunderRate: 0.999_999 };
+    engineCalls.length = 0;
+    const choice = createLevel(always, { seed: 1, now: virtualClock(100) })(parseFen(fen), prior);
+    expect(choice?.kind).not.toBe("engine");
+    const root = parseFen(fen);
+    const expected = repetitionKey(root, zobristKey(root));
+    expect(expected).not.toBe(zobristKey(root)); // non-vacuity: the helper changed this key
+    expect(engineCalls).toHaveLength(legalMoves(root).length);
+    for (const call of engineCalls) expect(call.priorKeys).toEqual([...prior, expected]);
   });
 });
 
@@ -589,6 +662,7 @@ describe("A8 — the level module's boundary", () => {
   const imports = [...code.matchAll(/from\s+"([^"]+)"/g)].map((m) => m[1]);
 
   it("does not import the virtual clock, the CLI, the turn loop or any I/O module", () => {
+    // `ABC-230` added `zobrist.ts`: a blunder hands each child search the root's key (`ADR-0054`).
     expect(imports.sort()).toEqual([
       "./apply.ts",
       "./engine.ts",
@@ -597,6 +671,7 @@ describe("A8 — the level module's boundary", () => {
       "./moves.ts",
       "./position.ts",
       "./search.ts",
+      "./zobrist.ts",
     ]);
   });
 

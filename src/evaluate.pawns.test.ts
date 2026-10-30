@@ -14,15 +14,33 @@
 
 import { readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
+import { makeMove, unmakeMove } from "./apply.ts";
 import {
   buildCorpus,
   clonePosition,
   mirrorPosition,
   PERFT_POSITIONS,
 } from "./evaluate.mirror-corpus.ts";
-import { evaluate, isPassedPawn } from "./evaluate.ts";
-import { parseFen } from "./fen.ts";
-import { PAWN, type Position, parseSquareName, pieceType } from "./position.ts";
+import {
+  clearPawnCacheForTest,
+  evaluate,
+  evaluateWithoutPawnCache,
+  isPassedPawn,
+  pawnCacheByteLength,
+  pawnCacheProbeForTest,
+} from "./evaluate.ts";
+import { parseFen, parseFenGrammarOnly, toFen } from "./fen.ts";
+import { legalMoves } from "./legal.ts";
+import {
+  BLACK,
+  EMPTY,
+  emptyPosition,
+  KING,
+  PAWN,
+  type Position,
+  parseSquareName,
+  pieceType,
+} from "./position.ts";
 
 /**
  * `A5`'s hand-labelled passed / not-passed cases: the pawn on `square` in `fen`. A pawn is passed
@@ -378,4 +396,142 @@ describe("A7 — one corpus and one mirror helper, shared, and no production mod
     // The module's own docblock names itself; a self-mention is not an import.
     expect(importers.filter((file) => file !== "evaluate.mirror-corpus.ts")).toEqual([]);
   });
+});
+
+// ---------------------------------------------------------------------------
+// ABC-235 cut 5 — the pawn-structure memo changes the cost, never the score. The reference is
+// `evaluateWithoutPawnCache`, which computes `pawnStructure` afresh and neither reads nor writes
+// the memo. Compared `Object.is` (so a `-0` would count), cache-cold and then cache-warm, on
+// ABC-206 A2's walk (depth 1 in the lane, depth 3 under `ENGINE_DEEP=1`) and on `G3`'s mirror
+// corpus with each mirror. Then a forced collision: two placements on one slot.
+// ---------------------------------------------------------------------------
+
+const CUT5_ROOTS: readonly string[] = [
+  ...PERFT_POSITIONS.map(({ fen }) => fen),
+  "4Q2k/6pp/8/8/8/8/8/6K1 b - - 100 80",
+  "7k/5K2/5N2/8/8/8/8/8 b - - 0 1",
+  "k7/8/1K6/8/8/8/8/2Q5 b - - 0 1",
+  "4k3/8/8/8/8/8/8/4K3 w - - 0 1",
+  "r3k3/8/8/8/8/8/8/4K2R w - - 150 120",
+  "r3k3/8/8/8/8/8/8/4K2R w - - 100 120",
+];
+
+/** Every position of the walk (root included, depth `depth`), each as its own FEN. */
+function cut5Walk(depth: number): string[] {
+  const out: string[] = [];
+  const walk = (position: Position, left: number): void => {
+    out.push(toFen(position));
+    if (left === 0) return;
+    for (const move of legalMoves(position)) {
+      const undo = makeMove(position, move);
+      walk(position, left - 1);
+      unmakeMove(position, move, undo);
+    }
+  };
+  for (const fen of CUT5_ROOTS) walk(parseFenGrammarOnly(fen), depth);
+  return out;
+}
+
+/** One pass: memoised `evaluate` against the reference, position unchanged. Returns the hits. */
+function cut5Pass(positions: readonly Position[], where: string): number {
+  let hits = 0;
+  const faults: string[] = [];
+  for (const [index, position] of positions.entries()) {
+    const before = toFen(position);
+    const hit = pawnCacheProbeForTest(position).hit;
+    const got = evaluate(position);
+    const want = evaluateWithoutPawnCache(position);
+    if (!Object.is(got, want)) faults.push(`${where} #${index} ${before}: ${got} vs ${want}`);
+    if (toFen(position) !== before) faults.push(`${where} #${index} ${before}: position changed`);
+    if (hit) hits++;
+  }
+  expect(faults.slice(0, 5), where).toEqual([]);
+  return hits;
+}
+
+describe("ABC-235 cut 5 — the pawn memo returns what a fresh pawnStructure returns", () => {
+  const walkRow = (depth: number) => () => {
+    const positions = cut5Walk(depth).map((fen) => parseFenGrammarOnly(fen));
+    expect(positions.length).toBeGreaterThan(depth === 1 ? 200 : 200_000); // the denominator
+    clearPawnCacheForTest();
+    cut5Pass(positions, "cold");
+    // Warm: every placement was stored on the cold pass, so most now hit; all still equal.
+    const hits = cut5Pass(positions, "warm");
+    expect(hits).toBeGreaterThan(positions.length / 2);
+  };
+
+  it("cold then warm, on every position of the walk, depth 1", walkRow(1));
+
+  it("cold then warm, on G3's mirror corpus and every mirror", () => {
+    const corpus = buildCorpus().map(({ position }) => position);
+    const positions = corpus.flatMap((position) => [
+      clonePosition(position),
+      mirrorPosition(position),
+    ]);
+    expect(positions.length).toBeGreaterThan(300);
+    clearPawnCacheForTest();
+    cut5Pass(positions, "mirror cold");
+    expect(cut5Pass(positions, "mirror warm")).toBeGreaterThan(positions.length / 2);
+  });
+
+  it("a forced collision: two placements on one slot each return their own value", () => {
+    // Deterministic placements: both kings home, pawns from a fixed sequence on ranks 2-7.
+    let seed = 12345;
+    const next = (bound: number): number => {
+      seed = (Math.imul(seed, 1103515245) + 12345) & 0x7fffffff;
+      return seed % bound;
+    };
+    const placement = (): Position => {
+      const position = emptyPosition();
+      position.board[parseSquareName("e1")] = KING;
+      position.board[parseSquareName("e8")] = KING | BLACK;
+      const pawns = 2 + next(10);
+      for (let i = 0; i < pawns; i++) {
+        const square = (1 + next(6)) * 16 + next(8);
+        if (position.board[square] === EMPTY) {
+          position.board[square] = next(2) === 0 ? PAWN : PAWN | BLACK;
+        }
+      }
+      return position;
+    };
+    const bySlot = new Map<number, Position>();
+    let pair: [Position, Position] | null = null;
+    for (let i = 0; i < 100_000 && pair === null; i++) {
+      const position = placement();
+      const { slot } = pawnCacheProbeForTest(position);
+      const other = bySlot.get(slot);
+      const differs =
+        other !== undefined &&
+        evaluateWithoutPawnCache(other) !== evaluateWithoutPawnCache(position);
+      if (differs) pair = [other as Position, position];
+      else if (other === undefined) bySlot.set(slot, position);
+    }
+    expect(pair).not.toBeNull();
+    const [a, b] = pair as [Position, Position];
+    expect(pawnCacheProbeForTest(a).slot).toBe(pawnCacheProbeForTest(b).slot);
+
+    clearPawnCacheForTest();
+    for (let round = 0; round < 3; round++) {
+      for (const position of [a, b]) {
+        // The other placement now holds the slot: a slot match alone must not be a hit.
+        expect(pawnCacheProbeForTest(position).hit).toBe(false);
+        expect(Object.is(evaluate(position), evaluateWithoutPawnCache(position))).toBe(true);
+        expect(pawnCacheProbeForTest(position).hit).toBe(true);
+        expect(Object.is(evaluate(position), evaluateWithoutPawnCache(position))).toBe(true);
+      }
+    }
+  });
+
+  it("is a fixed 384 KiB: 2^14 slots of two 8-byte masks and two 4-byte parts", () => {
+    expect(pawnCacheByteLength()).toBe(2 ** 14 * (8 + 8 + 4 + 4));
+    expect(pawnCacheByteLength()).toBe(384 * 1024);
+  });
+
+  if (process.env.ENGINE_DEEP === "1") {
+    it(
+      "cold then warm, on every position of the walk, depth 3 [deep, ENGINE_DEEP=1]",
+      walkRow(3),
+      600_000,
+    );
+  }
 });

@@ -1,9 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { parseFen } from "./fen.ts";
+import { makeMove, unmakeMove } from "./apply.ts";
+import { parseFen, parseFenGrammarOnly, toFen } from "./fen.ts";
+import { legalMoves } from "./legal.ts";
 import {
   FLAG_CASTLE,
   FLAG_EN_PASSANT,
   FLAG_PROMOTION,
+  generateCaptures,
   generateMoves,
   isSquareAttackedBy,
   type Move,
@@ -321,4 +324,139 @@ describe("ABC-004 — attack detection", () => {
     expect(isSquareAttackedBy(position, parseSquareName("a8"), false)).toBe(false);
     expect(isSquareAttackedBy(position, parseSquareName("a3"), false)).toBe(true);
   });
+});
+
+// ---------------------------------------------------------------------------
+// ABC-235 cut 3 — `generateCaptures` is `generateMoves(p).filter(capture)`, in the SAME ORDER.
+// Quiescence's stable sort keeps generation order on ties (ABC-206), so order is part of the
+// value. The walk is ABC-206 A2's: the six perft FENs and the terminal and clock FENs, depth 1
+// in the lane and depth 3 under `ENGINE_DEEP=1`; then targeted rows.
+// ---------------------------------------------------------------------------
+
+const CUT3_ROOTS: readonly string[] = [
+  START_FEN,
+  "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1",
+  "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1",
+  "r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1",
+  "rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8",
+  "r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10",
+  "4Q2k/6pp/8/8/8/8/8/6K1 b - - 100 80",
+  "7k/5K2/5N2/8/8/8/8/8 b - - 0 1",
+  "k7/8/1K6/8/8/8/8/2Q5 b - - 0 1",
+  "4k3/8/8/8/8/8/8/4K3 w - - 0 1",
+  "r3k3/8/8/8/8/8/8/4K2R w - - 150 120",
+  "r3k3/8/8/8/8/8/8/4K2R w - - 100 120",
+];
+
+/** The oracle: every pseudo-legal capture, in generation order, the position unchanged. */
+function expectCapturesMatch(position: Position, where: string): number {
+  const before = toFen(position);
+  const want = generateMoves(position).filter((move) => move.captured !== EMPTY);
+  expect(generateCaptures(position), where).toEqual(want);
+  expect(toFen(position), where).toBe(before);
+  return want.length;
+}
+
+describe("ABC-235 cut 3 — generateCaptures is generateMoves filtered to captures, in order", () => {
+  const walkRow = (depth: number) => () => {
+    let seen = 0;
+    let captures = 0;
+    const walk = (position: Position, where: string, left: number): void => {
+      captures += expectCapturesMatch(position, where);
+      seen++;
+      if (left === 0) return;
+      for (const move of legalMoves(position)) {
+        const undo = makeMove(position, move);
+        walk(position, `${where} ${move.from}-${move.to}`, left - 1);
+        unmakeMove(position, move, undo);
+      }
+    };
+    for (const fen of CUT3_ROOTS) walk(parseFenGrammarOnly(fen), fen, depth);
+    // The denominators, asserted: a sweep over nothing is green.
+    expect(seen).toBeGreaterThan(depth === 1 ? 200 : 200_000);
+    expect(captures).toBeGreaterThan(depth === 1 ? 500 : 1_000_000);
+  };
+
+  it("on every position of the walk, depth 1", walkRow(1));
+
+  it("en passant on both sides, the capture before a later normal capture, and both guards", () => {
+    const rows: readonly string[] = [
+      "4k3/8/8/3pP3/8/8/8/4K3 w - d6 0 1", // white ep, side -1
+      "4k3/8/8/4Pp2/8/8/8/4K3 w - f6 0 1", // white ep, side +1
+      "4k3/8/8/8/3pP3/8/8/4K3 b - e3 0 1", // black ep, side +1
+      "4k3/8/8/8/4Pp2/8/8/4K3 b - e3 0 1", // black ep, side -1
+      "4k3/8/8/2pP4/8/8/8/4K3 w - c6 0 1", // ep on side -1 alone; d5xc6 is ep
+      "4k3/8/4n3/2pP4/8/8/8/4K3 w - c6 0 1", // ep on side -1 BEFORE the normal capture on +1
+      "7k/8/8/K1Pp3r/8/8/8/8 w - d6 0 1", // the rank-pinned ep capture (pseudo-legal, offered)
+      // ABC-022's off-domain boards: own piece on the target, the captured pawn absent or wrong.
+      "4k3/8/8/8/3pP3/4n3/8/4K3 b - e3 0 1",
+      "4k3/8/3N4/3pP3/8/8/8/4K3 w - d6 0 1",
+      "4k3/8/8/8/3pP3/4r3/8/4K3 b - e3 0 1",
+      "4k3/8/3R4/3pP3/8/8/8/4K3 w - d6 0 1",
+      "4k3/8/8/8/8/8/1P6/4K3 w - a3 0 1",
+      "4k3/8/8/4P3/8/8/8/4K3 w - d6 0 1",
+      "4k3/8/8/3PP3/8/8/8/4K3 w - d6 0 1",
+      "4k3/8/8/8/3p4/8/8/4K3 b - e3 0 1",
+      "4k3/8/8/8/6p1/8/8/4K3 b - h3 0 1",
+      "4k3/8/8/8/3pp3/8/8/4K3 b - e3 0 1",
+      "4k3/8/8/8/3pP3/4N3/8/4K3 b - e3 0 1",
+      "4k3/8/3n4/3pP3/8/8/8/4K3 w - d6 0 1",
+    ];
+    let enPassant = 0;
+    for (const fen of rows) {
+      const position = parseFenGrammarOnly(fen);
+      expectCapturesMatch(position, fen);
+      enPassant += generateCaptures(position).filter((m) => m.flags === FLAG_EN_PASSANT).length;
+    }
+    expect(enPassant).toBeGreaterThanOrEqual(7); // the seven on-domain ep rows each offer one
+    // The ordering case, named: the ep capture on side -1 comes first.
+    const order = generateCaptures(parseFenGrammarOnly("4k3/8/4n3/2pP4/8/8/8/4K3 w - c6 0 1"));
+    expect(order.map((m) => m.flags)).toEqual([FLAG_EN_PASSANT, 0]);
+  });
+
+  it("capture promotions on both sides emit Q, R, B, N in that order; quiet ones are absent", () => {
+    for (const fen of [
+      "1n2k3/P7/8/8/8/8/8/4K3 w - - 0 1", // a7xb8, and the quiet a8 promotion
+      "n1n1k3/1P6/8/8/8/8/8/4K3 w - - 0 1", // b7xa8 and b7xc8
+      "4k3/8/8/8/8/8/1p6/N1N1K3 b - - 0 1", // b2xa1 and b2xc1
+    ]) {
+      const position = parseFenGrammarOnly(fen);
+      expectCapturesMatch(position, fen);
+      const promotions = generateCaptures(position).filter((m) => m.flags === FLAG_PROMOTION);
+      expect(promotions.length % 4, fen).toBe(0);
+      expect(
+        promotions.slice(0, 4).map((m) => m.promotion),
+        fen,
+      ).toEqual([QUEEN, ROOK, BISHOP, KNIGHT]);
+    }
+  });
+
+  it("all castling rights held: no castle is offered, and no own-colour target ever is", () => {
+    for (const fen of [
+      "r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1",
+      "r3k2r/8/8/8/8/8/8/R3K2R b KQkq - 0 1",
+      "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 1",
+    ]) {
+      const position = parseFenGrammarOnly(fen);
+      expect(
+        generateMoves(position).some((m) => m.flags === FLAG_CASTLE),
+        fen,
+      ).toBe(true);
+      expectCapturesMatch(position, fen);
+      const captures = generateCaptures(position);
+      expect(
+        captures.some((m) => m.flags === FLAG_CASTLE),
+        fen,
+      ).toBe(false);
+      for (const m of captures) {
+        if (m.flags === FLAG_EN_PASSANT) continue;
+        expect(position.board[m.to], fen).toBe(m.captured);
+        expect((m.captured & BLACK) !== 0, fen).toBe(!position.blackToMove);
+      }
+    }
+  });
+
+  if (process.env.ENGINE_DEEP === "1") {
+    it("on every position of the walk, depth 3 [deep, ENGINE_DEEP=1]", walkRow(3), 600_000);
+  }
 });

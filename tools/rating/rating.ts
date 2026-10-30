@@ -407,7 +407,7 @@ export function cutechessArgs(spec: ArgSpec): string[] {
       : sky("base", clones[1] as string, budget);
   const start = spec.start === undefined ? [] : [`start=${spec.start}`];
   return [
-    ...sky("skytalix", clones[0] as string, mode === "r" ? 3000 : budget),
+    ...sky("skytalix", clones[0] as string, mode === "r" ? 4000 : budget),
     ...opponent,
     ...["-each", "proto=uci"],
     ...["-openings", `file=${OPENINGS}`, "format=epd", "order=sequential", ...start, "-repeat"],
@@ -657,7 +657,7 @@ async function rpair(positional: string[], flags: Map<string, string>, dryRun: b
       files: dirOf(build, block),
       clones: [join(out, build, "clone-skytalix")],
       elo,
-      budget: 3000,
+      budget: 4000,
       rounds: block.rounds,
       concurrency,
       start: block.start,
