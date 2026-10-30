@@ -1,0 +1,8 @@
+Finished game 1 (skytalix vs stockfish): 1-0 {White mates}
+Score of skytalix vs stockfish: 1 - 0 - 0  [1.000] 1
+Finished game 2 (stockfish vs skytalix): 0-1 {Black mates}
+Score of skytalix vs stockfish: 2 - 0 - 0  [1.000] 2
+Finished game 3 (skytalix vs stockfish): 1-0 {White mates}
+Score of skytalix vs stockfish: 3 - 0 - 0  [1.000] 3
+Finished game 4 (stockfish vs skytalix): 0-1 {Black mates}
+Score of skytalix vs stockfish: 4 - 0 - 0  [1.000] 4

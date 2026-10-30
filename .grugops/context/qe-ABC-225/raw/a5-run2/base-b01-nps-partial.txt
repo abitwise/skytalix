@@ -1,0 +1,2 @@
+tool stockfishNps: {"median":1442528,"moves":162}
+stockfish bestmove lines 170, info-with-nps lines 4962
