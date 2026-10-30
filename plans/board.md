@@ -1,3 +1,4 @@
+_Updated: 2026-10-30 by Orchestrator (orch-2026-10-29g) — qe-ABC-225 FAIL on THERMAL STOP (Tctl median 87.05 °C at width 2 after 4/40 games; a foreign vitest also ran on the host). A1–A4 met, no tool defect. ABC-225 → Blocked on owner (R-run Tctl line / width 1 / cooler host); no more games tonight per the night plan. EPIC-010 batch (~9 h at width 2) at the same risk. `se-ABC-240` spawned (no games). Width 1/3._
 _Updated: 2026-10-30 by Orchestrator (orch-2026-10-29g) — ABC-235 DONE (baf99a7c; QE PASS S2: nps 1.26/1.28/1.20, A1 rows equal). Rows ABC-225/235 had sat inside the board's template comment; moved to their real columns. `qe-ABC-225` spawned ALONE (40 games, ~1 h). ABC-240 pulled to In Development; `se-ABC-240` spawns only when the games end (ALONE = no builds or tests alongside). Width 1/3._
 _Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g, …c2534968) — owner: continue overnight. Night plan: qe-ABC-235 → merge ABC-235 → qe-ABC-225 (40 games ALONE) → ABC-240 SE+QE; owner-gated ADR work held; nothing pushed. Width 1/3._
 _Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g) — ABC-235 SE done: cuts 1,3,5 kept, value-identical (A1 hash equal), nps ~1.16–1.28× indicative; code review PASS → In Review; `qe-ABC-235` spawned ALONE (timing reads). `qe-ABC-225` still held behind it. Width 1/3._
@@ -1238,8 +1239,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
-- [ABC-225] Interleaved R-pair command: the batch's instrument (re-scoped 2026-10-29) (size: M, priority: P2, DoR 10/10; tools only; Done before milestone 1's batch; not during an ALONE reading; **pulled 2026-10-29** → `se-ABC-225`, QE follows for A5/A6 ALONE; SE done 9988a778, code review PASS (…561f1ef1); QE `qe-ABC-225` spawned ALONE 2026-10-30 after ABC-235 merged (A5 40 games ~1 h))
+## In Review (WIP 0/3)
 
 
 
@@ -1561,6 +1561,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [ABC-142] `npm test` keeps the failing test's name on disk when the console is truncated  (BA/PM, XS, P2, since: 2026-10-10, DoR 10/10; cut from QE-141-a + QE-093-e, two unnamed one-test flakes) **2026-10-10: cut → Ready → Ready for Dev → pulled → In Development (pass-through); build `ticket-to-pr-ABC-142`; zero `src/` expected.** **2026-10-10: engineer STOPPED pre-code — premise stale: `src/cli.test.ts:1665–1686` (ABC-042 A10) pins `scripts.test`; A5 forbade the one test line. Orchestrator routes option 1 (update the pin, zero production lines) → BA/PM amend `bapm-amend-abc142-2026-10-10`, then the build resumes.** **2026-10-10: A5 amended (merged `a559ca34`, DoR 10/10; new A6 keeps the pin exact) → build resumed.** **2026-10-10: BUILT `41abc389`/`ab8d0088`: A1–A6 met; 53/1680; `.test-results/last-run.json` names the failing test even through `| tail -3`. One deviation: vitest adds one console line (`JSON report written to …`) — Orchestrator reads it as acceptable IF no console consumer breaks (QE to verify) → In Review, QE `qe-ABC-142`.** **2026-10-10: QE PASS_WITH_GAPS (`8b0685de`; no console consumer breaks — the extra `JSON report written to …` line is ACCEPTED by the Orchestrator) → merged `addbc328` → Done (UAT WAIVED: test-only `src/`). Follow-ups next session (BA/PM): QE-142-a MEDIUM (unhandled error → exit 1 but file says success), QE-142-b/c LOW.**
 
 ## Blocked (visible, time-tracked)
+- [ABC-225] Interleaved R-pair command: the batch's instrument (re-scoped 2026-10-29) (size: M, priority: P2, DoR 10/10; tools only; Done before milestone 1's batch; not during an ALONE reading; **pulled 2026-10-29** → `se-ABC-225`, QE follows for A5/A6 ALONE; SE done 9988a778, code review PASS (…561f1ef1); QE `qe-ABC-225` spawned ALONE 2026-10-30 after ABC-235 merged (A5 40 games ~1 h; QE `qe-ABC-225` FAIL 2026-10-30 (…3a53bdfc): A1–A4 MET, no tool defect; A5/A6 unread — THERMAL STOP (Tctl median 87.05 °C at width 2, 4 of 40 games) + foreign vitest on host; QE records on grugops/qe-ABC-225 @ 3da78303, not merged) — **BLOCKED since 2026-10-30 on owner**: Tctl line for R runs, or A5 at --concurrency 1, or a cooler host
 
 
 _2026-09-24: ONE ticket blocked — `ABC-074` (no non-M3 machine). `ABC-079` left Blocked on its oracle ruling (`b324cb6`). The line below is the prior state, kept for the record._
