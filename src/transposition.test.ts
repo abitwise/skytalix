@@ -30,7 +30,7 @@ import { parseFen } from "./fen.ts";
 import { legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
 import { EMPTY, squareName } from "./position.ts";
-import { QUIESCENCE_MAX_PLY } from "./quiescence.ts";
+import { captureScratchByteLength, QUIESCENCE_MAX_PLY } from "./quiescence.ts";
 import {
   KEY_ARRAY_CAPACITY,
   MATE_SCORE,
@@ -640,10 +640,16 @@ describe("A7 — the table holds a fixed 4 MiB, whatever the search", () => {
     const keyArrayBytes = (KEY_ARRAY_CAPACITY + 1) * 8;
     // ABC-235 cut 5: the pawn-structure memo is fixed at 384 KiB and counted in (a)'s sum.
     expect(pawnCacheByteLength()).toBe(384 * 1024);
-    // ABC-240: orderMoves' float64 key scratch is fixed at 256 slots and counted in (a)'s sum.
+    // ABC-240: orderMoves' and quiescence's float64 key scratches are fixed at 256 slots each
+    // and counted in (a)'s sum.
     expect(orderScratchByteLength()).toBe(256 * 8);
+    expect(captureScratchByteLength()).toBe(256 * 8);
     expect(
-      tableByteLength() + keyArrayBytes + pawnCacheByteLength() + orderScratchByteLength(),
+      tableByteLength() +
+        keyArrayBytes +
+        pawnCacheByteLength() +
+        orderScratchByteLength() +
+        captureScratchByteLength(),
     ).toBeLessThanOrEqual(16 * 1024 * 1024);
   });
 
