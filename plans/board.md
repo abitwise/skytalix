@@ -1092,8 +1092,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 1/3)
-- [ABC-228] In check, quiescence searches every evasion; none means mate (size: M, priority: P2, DoR 9/10; waits owner accepts ADR-0053 + OQ-228-1 (G6 on position-6); build after ABC-235 merges (shares legalCaptures; → Ready 2026-10-30: ADR-0053 ACCEPTED; DoR 10/10; A8 G6 re-forecast first; "3s→4s" reading pending owner; (ii) folded: A9 re-forecast at 4 000 ms ≤ 133 %, conditional level 5 → 4 s + rating.ts R literal, G9 waived on LEVELS[5] only; **pulled 2026-10-30** → `se-ABC-228`, A8 re-forecast ALONE first; SE done d9c5bcde (code 9bd3c519): A8 forecast 64.7 % / 98.3 % ≤ 100 % → built as designed, (ii) NOT applied; A1 doors = base; A2/A3 rows; A4 1.368×/1.405×; drift 89.3 %; npm test 2 211; code review PASS; QE `qe-ABC-228` (Q-SET review, graded G6, smokes width 1) now; **qe-ABC-228 FAIL 2026-10-30 (a4c04eae): G6 NOT MET on position-6 (median depth 9 vs base 10; kiwipete 8/8); gates, deep lanes, G1/G5/G7/G8/G11 MET; smokes not read** → (ii) per OQ-228-1: `se-ABC-228-ii` (Scope 5, A9 at 4 000 ms ≤ 133 %, QE-228-b rows folded), then a new QE brief + PREREG)
+    ## In Development (WIP 0/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
     ## In Review (WIP 2/3)
@@ -1228,7 +1227,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+- [ABC-228] In check, quiescence searches every evasion; none means mate (size: M, priority: P2, DoR 9/10; waits owner accepts ADR-0053 + OQ-228-1 (G6 on position-6); build after ABC-235 merges (shares legalCaptures; → Ready 2026-10-30: ADR-0053 ACCEPTED; DoR 10/10; A8 G6 re-forecast first; "3s→4s" reading pending owner; (ii) folded: A9 re-forecast at 4 000 ms ≤ 133 %, conditional level 5 → 4 s + rating.ts R literal, G9 waived on LEVELS[5] only; **pulled 2026-10-30** → `se-ABC-228`, A8 re-forecast ALONE first; SE done d9c5bcde (code 9bd3c519): A8 forecast 64.7 % / 98.3 % ≤ 100 % → built as designed, (ii) NOT applied; A1 doors = base; A2/A3 rows; A4 1.368×/1.405×; drift 89.3 %; npm test 2 211; code review PASS; QE `qe-ABC-228` (Q-SET review, graded G6, smokes width 1) now; **qe-ABC-228 FAIL 2026-10-30 (a4c04eae): G6 NOT MET on position-6 (median depth 9 vs base 10; kiwipete 8/8); gates, deep lanes, G1/G5/G7/G8/G11 MET; smokes not read** → (ii) per OQ-228-1: `se-ABC-228-ii` (Scope 5, A9 at 4 000 ms ≤ 133 %, QE-228-b rows folded), then a new QE brief + PREREG)
 
 
 
