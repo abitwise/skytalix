@@ -1,0 +1,66 @@
+# source: the qe-ABC-229 worktree's .test-results/last-run.json, written by QE's G8 run 6 (head e196a281, 16:30:42Z start, wall 9.90 s); sha256 54ae234d211e4aad355fc54dc5a314c3894cdf232bd034c42c4a215b970fb5ef; NOT committed by QE; shape and ranking only, not an admissible reading
+run start 2026-10-30 16:30:42.199000 first file start->last end 9.36s report start->first file 0.21s
+sum span 7.99  sum testdur 7.95  files 63
+  2.006   2.001  200  cum 25.1%  [  0.06-  2.06] src/uci-session.test.ts
+  1.443   1.441   38  cum 43.1%  [  0.00-  1.44] src/search.null-move.test.ts
+  1.347   1.345  108  cum 60.0%  [  4.88-  6.23] src/cli.test.ts
+  0.524   0.522   64  cum 66.5%  [  2.32-  2.84] src/engine.test.ts
+  0.280   0.279   32  cum 70.1%  [  2.94-  3.22] tools/grugops/qe-hop-integrity.test.ts
+  0.154   0.153   98  cum 72.0%  [  5.19-  5.34] src/quiescence.test.ts
+  0.144   0.143   37  cum 73.8%  [  3.40-  3.55] src/levels.test.ts
+  0.129   0.128   32  cum 75.4%  [  4.03-  4.16] src/zobrist.test.ts
+  0.127   0.127   36  cum 77.0%  [  3.64-  3.76] src/legal.test.ts
+  0.125   0.124   35  cum 78.6%  [  4.69-  4.82] src/book.test.ts
+  0.108   0.107   24  cum 79.9%  [  3.85-  3.96] src/perft.test.ts
+  0.104   0.102   28  cum 81.2%  [  4.93-  5.03] src/search.test.ts
+  0.099   0.097   29  cum 82.5%  [  4.28-  4.38] src/search.ordering.test.ts
+  0.097   0.098   12  cum 83.7%  [  4.50-  4.60] src/history-pane.nfr.test.ts
+  0.083   0.083   20  cum 84.7%  [  6.16-  6.24] src/search.pvs-lmr.test.ts
+  0.075   0.074   25  cum 85.7%  [  5.45-  5.52] src/transposition.test.ts
+  0.074   0.074   22  cum 86.6%  [  5.64-  5.71] src/san.test.ts
+  0.057   0.056   28  cum 87.3%  [  6.36-  6.42] src/render-seam.test.ts
+  0.055   0.054   43  cum 88.0%  [  7.09-  7.15] src/evaluate.pawns.test.ts
+  0.052   0.052   26  cum 88.6%  [  6.56-  6.61] src/history-pane.test.ts
+  0.049   0.049    1  cum 89.2%  [  6.76-  6.81] src/engine.capacity.test.ts
+  0.049   0.047   57  cum 89.9%  [  7.24-  7.29] src/gameend.test.ts
+  0.048   0.047   64  cum 90.5%  [  6.58-  6.63] src/turn-loop.test.ts
+  0.047   0.046   20  cum 91.0%  [  5.82-  5.87] src/san.qualifier.hardening.test.ts
+  0.046   0.046   12  cum 91.6%  [  6.39-  6.44] src/puzzle-suite.test.ts
+  0.046   0.046    4  cum 92.2%  [  5.99-  6.03] src/turn-loop.nfr.test.ts
+  0.040   0.039   24  cum 92.7%  [  6.95-  6.99] src/pgn.test.ts
+  0.039   0.038  134  cum 93.2%  [  6.91-  6.95] src/moves.castling.hardening.test.ts
+  0.038   0.038    9  cum 93.7%  [  6.72-  6.75] src/evaluate.king-mobility.test.ts
+  0.037   0.036  188  cum 94.1%  [  7.10-  7.14] src/command-input.test.ts
+  0.032   0.032   34  cum 94.5%  [  7.49-  7.52] src/frame.test.ts
+  0.029   0.028  120  cum 94.9%  [  7.36-  7.39] src/moves.enpassant.hardening.test.ts
+  0.028   0.027   50  cum 95.3%  [  7.80-  7.83] src/move-input.test.ts
+  0.028   0.028    5  cum 95.6%  [  7.25-  7.27] src/book-engine.test.ts
+  0.027   0.026   30  cum 95.9%  [  7.36-  7.39] src/render.test.ts
+  0.021   0.020   36  cum 96.2%  [  8.27-  8.29] src/evaluate.test.ts
+  0.020   0.020   17  cum 96.5%  [  7.61-  7.63] src/history.test.ts
+  0.020   0.020   58  cum 96.7%  [  8.02-  8.04] src/moves.enpassant.test.ts
+  0.020   0.019   53  cum 97.0%  [  7.65-  7.67] src/rejection.test.ts
+  0.019   0.019    6  cum 97.2%  [  7.91-  7.93] src/status-panel.nfr.test.ts
+  0.018   0.018   37  cum 97.4%  [  7.72-  7.74] src/moves.test.ts
+  0.016   0.016   30  cum 97.6%  [  7.51-  7.52] src/line-input.test.ts
+  0.015   0.015   19  cum 97.8%  [  8.12-  8.13] tools/opening-book/book.test.ts
+  0.015   0.015   13  cum 98.0%  [  8.41-  8.43] src/result-screen.test.ts
+  0.013   0.013   26  cum 98.2%  [  8.79-  8.80] src/startup-questions.test.ts
+  0.013   0.012   29  cum 98.3%  [  8.72-  8.74] src/status-panel.test.ts
+  0.013   0.012   24  cum 98.5%  [  8.90-  8.91] src/apply.test.ts
+  0.012   0.011   30  cum 98.7%  [  7.92-  7.93] src/san.parse.test.ts
+  0.012   0.011    8  cum 98.8%  [  8.19-  8.20] src/search.qe.test.ts
+  0.011   0.011   10  cum 98.9%  [  8.54-  8.55] src/gameend.nfr.test.ts
+  0.011   0.011    1  cum 99.1%  [  8.67-  8.68] src/search.capacity.test.ts
+  0.010   0.010   13  cum 99.2%  [  8.48-  8.49] src/ladder.test.ts
+  0.010   0.010   82  cum 99.3%  [  8.59-  8.60] src/fen.test.ts
+  0.010   0.010   25  cum 99.5%  [  8.35-  8.36] src/frame.overflow-bound.test.ts
+  0.007   0.007    4  cum 99.6%  [  9.05-  9.05] src/san.suffix.hardening.test.ts
+  0.007   0.007    1  cum 99.7%  [  9.07-  9.08] src/cli.real-engine.test.ts
+  0.007   0.007   45  cum 99.7%  [  8.85-  8.86] src/coordinate-move.test.ts
+  0.006   0.006   33  cum 99.8%  [  8.98-  8.98] src/moves.castling.test.ts
+  0.004   0.003   21  cum 99.9%  [  9.15-  9.15] src/glyph-mode.test.ts
+  0.004   0.003    3  cum 99.9%  [  9.18-  9.18] src/zobrist.nfr.test.ts
+  0.002   0.002    5  cum100.0%  [  9.26-  9.26] src/san.nfr.test.ts
+  0.002   0.001    3  cum100.0%  [  9.36-  9.36] src/glyph-mode.nfr.test.ts
+  0.002   0.002    1  cum100.0%  [  9.28-  9.28] src/uci.real-engine.test.ts

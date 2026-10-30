@@ -8,6 +8,11 @@ transcription, not a stamp). Recorded by BA/PM (subtask `bapm-cut-ABC-177`). The
 says the ticket is not cut or the step-set word is owed, this line wins: `ABC-177` is cut and the D2(b) word is given
 on its page.
 
+**§ Addendum 2026-10-30 (`arch-g8-headroom`): PROPOSED.** D2(b)'s rule is extended from `ABC-167`'s classes to
+every time-blind virtual-clock row in the default lane (R1–R4), with a first tranche on the `ABC-230` / `ABC-241`
+rows. It needs BA/PM's word at the cut, as D2(b) did. No owner word is needed, because no NFR level, bar, cap, pin,
+row count or lane line moves. D1–D6 are unchanged. See the addendum at the end of this file.
+
 **proposed**, 2026-10-20, by Architect/Design (task `arch-lane-under-10s`). This ADR is the remedy that `R-174-1`
 option (a) asked for. The owner accepted (a) at `…bdff4d33`.
 
@@ -191,3 +196,99 @@ O2 alone leaves about 9.7 s, roughly 1 twin R of headroom, which is not enough. 
   rollback.
 - A row that turns flaky or loses a mutant after the move goes back to its prior step alone.
 - If D5.4 reads over 10 s, the owner decides. The cap does not give way (Q4).
+
+## § Addendum 2026-10-30 (`arch-g8-headroom`): the rule reaches every time-blind virtual-clock row — PROPOSED
+
+**Status.** PROPOSED 2026-10-30 by Architect/Design (task `arch-g8-headroom`). It needs BA/PM's word at the cut,
+under the same precedent as D2(b): a coarser step needs BA/PM's word (`…a7c3d910`). No owner word is needed, because
+no NFR level, bar, cap, pin, row count or lane line moves. D1–D6 above are unchanged. This is a record only: nothing
+was run or timed at this hop.
+
+### Context
+- **The headroom is 0.10 s, and it is inside the spread.** `ABC-229`'s `G8` reads head 9.90 s and base 9.90 s
+  (`qe-ABC-229` `…0b7fd4f6`, finding `QE-229-a`). One base run read 10.09 s, and base's three runs span 9.64–10.09 s.
+  The same lane inputs (`fbab54ff` and `b92a3394`, with an empty `git diff` over `src tools package.json
+  package-lock.json vitest.config.ts tsconfig.json`) read 9.73 s at `ABC-220`'s `G8` and 9.90 s about 90 minutes
+  later. That is +0.17 s of drift between windows with no code change.
+- **How the lane grew back after `ABC-177`** (head medians on `oeselg-devl`, from QE records):
+  `ABC-228` (i) 9.37 s, `ABC-228` (ii) 9.61 s (+0.70 s on its base), `ABC-241` 9.63 s, `ABC-220` 9.73 s,
+  `ABC-229` 9.90 s.
+- **Why a virtual clock is not free** (`ADR-0027`; `src/engine.ts` `NODES_PER_CLOCK_CHECK` = 1 024). The engine
+  reads the clock every 1 024 nodes, plus once per iteration and once at return. A search therefore costs about
+  1 024 × (budget ÷ step) nodes. At the default level, 4 000 ÷ 100 is 40 reads, about 41 000 nodes. That is
+  60–70 ms of in-thread time per search on this host: `uci-session.test.ts`'s "a bare go: go -> 4000 ms" row took
+  64 ms in `QE`'s `G8` run 6.
+- **A row that takes its budget from `LEVELS` inherits every level re-cut.** `ABC-228` (ii) moved level 5 from
+  3 000 to 4 000 ms. Every such row then made 33 % more reads, without its file changing.
+- **Where the time is** (`.grugops/context/arch-g8-headroom/raw/probe/`, which is QE's `G8` run 6 JSON report, used
+  for shape and ranking only):
+  - The lane is still throughput-bound on 2 slots, so wall ≈ 0.35 s + Σ slot-seconds ÷ 2, with Σ ≈ 19.1 s.
+  - Per-file worker start and imports take about 7.8 s (about 0.12 s per file × 63 files), fenced by `ADR-0040`.
+  - `src/cli.test.ts`'s 28 module-scope children take about 3.4 s, on the `N8-SPAWN` account, and stay synchronous
+    under `ABC-173` `C2`.
+  - Test bodies take 8.0 s:
+    - `src/uci-session.test.ts` 2.0 s;
+    - `src/search.null-move.test.ts` 1.44 s;
+    - `src/cli.test.ts` 1.35 s;
+    - `src/engine.test.ts` 0.52 s;
+    - the other 59 files 2.7 s.
+  - **Of `src/cli.test.ts`'s 1.35 s, 1.05 s is the `ABC-230` and `ABC-241` blocks.**
+    - Their rows run the default level at step 100 (40 reads), on 3–4-piece endgames.
+    - They read the move, the score (0, or not 0) and the keys handed. None reads `time`, the elapsed time or the
+      depth.
+    - The mirrored `src/uci-session.test.ts` blocks add 0.38 s.
+    - The tranche-1 set below is 1.43 s of in-thread time in all.
+
+### Decision
+- **R1 (census).** Every default-lane row that searches on a virtual clock records its reads per search
+  (budget ÷ step) in the SE's build note. BA/PM checks that the line exists at each cut, in the DoR NFR row.
+- **R2 (the D2(b) rule, extended).** A row is **time-blind** when none of its assertions reads `time`, the elapsed
+  time, a virtual-time bound or a depth reached on a budget.
+  - A time-blind row takes the coarsest step in **{1, 10, 100, 1 000}** for which QE's kill set for that row is
+    identical to base's. This is D2(b) word for word, applied beyond `ABC-167`'s classes.
+  - A row that reads time (class P or C) keeps its step.
+- **R3 (paired surfaces move together).** Rows that assert the CLI seam's move equals UCI's on "the same game and
+  clock" move together, to one step on both surfaces:
+  - `uci-session.test.ts` `ABC-230` A2 with `cli.test.ts` `ABC-230` A1;
+  - `ABC-241` A5 with `ABC-241` A4.
+- **R4 (new rows).** R1–R3 bind a new row at its own ticket. The ticket does not wait for a remedy hop.
+  - A QE probe's set-up is not a lane form. An example is `ABC-242`'s "rate 1, 2 000 ms, `virtualClock(1)`", which
+    is about 2 000 reads per scored list.
+- **Tranche 1 (one test-only ticket, size S):**
+  - R2 and R3 are applied to the `ABC-230` and `ABC-241` blocks of `src/cli.test.ts` and `src/uci-session.test.ts`.
+  - The ticket also applies them to any other time-blind row that its R1 census finds in those two files and that
+    was added after `ABC-177`.
+  - **Expected: −0.3 to −0.65 s of wall** (1.43 s in-thread × ~90 % saved at step 1 000, halved for 2 slots; the
+    low end if half the rows keep step 100). This is an estimate, not a reading.
+- **Design target: `G8` head median ≤ 9.4 s at tranche 1's gate.** That is 10 s − 3 × 0.17 s of window drift,
+  rounded down. It is a design target, not an NFR level. `NFR-008` stays at 10 s, and only the owner moves it.
+- **Tranche 2 opens** if tranche 1's gate reads more than 9.4 s, or if any later `G8` head median reads more than
+  9.6 s. Architect/Design then re-opens with the candidates below for a BA/PM ruling. If the lane is still over
+  9.7 s after tranche 2, `NFR-008` goes to the owner (`ADR-0035` D6).
+
+### Alternatives (ranked by estimated wall saving against risk)
+| # | option | est. wall | risk | coverage the default lane loses |
+|---|---|---:|---|---|
+| **T1** | **R2/R3 on the `ABC-230`/`ABC-241` rows (chosen)** | −0.3..−0.65 s | LOW, test-only, parity per row | none |
+| T2a | O3 above: UCI class P/C rows to `UCI_DEEP` (that lane exists since `ABC-168`) | −0.3..−0.45 s | MEDIUM | the D4 time-rule pins, which `ABC-221` is about to change |
+| T2b | `search.null-move.test.ts`'s `QE-208-a` sweep and `QE-208-b` / A2 depth-6 rows to `SEARCH_DEEP` | ≈ −0.45 s | MEDIUM | `ADR-0050`'s abort-restores-root and key-under-null guards |
+| T2c | sample `QE-208-a`'s readings 3–25 more sparsely, under parity | ≈ −0.1 s | MEDIUM: the "≥ 3 aborts inside a null subtree" guard | none, if parity holds |
+| — | `cli.test.ts` children to `CLI_DEEP` (O4) | ~−0.05 s per child | MEDIUM-HIGH | delivered-command and security bars |
+| — | `maxWorkers: 3`, or a lower heap flag | large | owner's word (heat, his "max 2 cpu cores", `NFR-010`'s rows) | none, but two owner levels move |
+| — | raise W | — | owner's call | — |
+
+### Consequences
+- **The cost of a time-blind row stops depending on `LEVELS`.** At step 1 000 a level-5 search makes 4 reads, and a
+  re-cut to 5 000 ms makes 5. At step 100 those are 40 and 50.
+- **Depth drops on the moved rows** to about 3–4 plies on these endgames. They assert a 1-ply repetition and a
+  material score, so the depth does not matter. Parity is the check.
+- **The queue still spends the headroom.** Estimates, `UNKNOWN - verify`:
+  - `ABC-243`: about +0.03 s, one 40-read time row plus one fixed-depth row;
+  - `ABC-221`: about +0.1 s, if its period rows stay stubbed as `ABC-220`'s are;
+  - `ABC-242`: +0.05 to +0.15 s under R4. It could add seconds if the probe's `virtualClock(1)` at 2 000 ms is
+    copied into the lane.
+
+### Rollback
+- Revert the tranche-1 commit, which is the whole rollback.
+- A row that turns flaky, or that loses a mutant after the move, goes back to its prior step alone.
+- R1–R4 are text. Striking them restores D2(b)'s original scope.
