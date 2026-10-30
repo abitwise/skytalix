@@ -68,6 +68,41 @@ export function mvvLvaKey(move: Move): number {
   );
 }
 
+/** More than any legal position's capture count; a longer list allocates its own keys. */
+const CAPTURE_SCRATCH_LENGTH = 256;
+/** `orderCaptures`' key scratch: fixed, float64, shared by every ply (the sort never recurses). */
+const CAPTURE_KEYS = new Float64Array(CAPTURE_SCRATCH_LENGTH);
+
+/** The capture-sort scratch's fixed size in bytes, for `NFR-009` (a)'s byte-length sum. */
+export function captureScratchByteLength(): number {
+  return CAPTURE_KEYS.byteLength;
+}
+
+/**
+ * Sorts `captures` IN PLACE by `mvvLvaKey`, highest first, equal keys in their given order —
+ * exactly `captures.sort((a, b) => mvvLvaKey(b) - mvvLvaKey(a))`, which `Array.prototype.sort`
+ * keeps stable. `ABC-240`: each key is computed once into `CAPTURE_KEYS` (float64, so the
+ * attacker's thousandths never merge), and the list is insertion-sorted beside it, moving an
+ * entry only past a STRICTLY smaller key. The list must be the caller's own: `quiesce` sorts the
+ * fresh array `legalCaptures` returned. Exported for `src/quiescence.test.ts`'s oracle.
+ */
+export function orderCaptures(captures: Move[]): void {
+  const count = captures.length;
+  const keys = count <= CAPTURE_SCRATCH_LENGTH ? CAPTURE_KEYS : new Float64Array(count);
+  for (let i = 0; i < count; i++) {
+    const move = captures[i] as Move;
+    const key = mvvLvaKey(move);
+    let j = i;
+    while (j > 0 && (keys[j - 1] as number) < key) {
+      keys[j] = keys[j - 1] as number;
+      captures[j] = captures[j - 1] as Move;
+      j--;
+    }
+    keys[j] = key;
+    captures[j] = move;
+  }
+}
+
 /**
  * The deepest capture ply the quiescence recursion enters past the leaf. A node at this ply
  * stands pat without generating captures. A guard against runaway, sized above any exchange
@@ -107,7 +142,7 @@ export function quiesce(
   // The legal captures in generation order (ABC-206): only captures are tested for legality.
   const captures = legalCaptures(position);
   // Stable sort: equal keys keep generation order, so the count is deterministic.
-  captures.sort((a, b) => mvvLvaKey(b) - mvvLvaKey(a));
+  orderCaptures(captures);
 
   for (const move of captures) {
     const undo = makeMove(position, move);

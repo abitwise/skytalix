@@ -1,0 +1,7 @@
+npm test rc=0 wall=8.365361941s
+ Test Files  63 passed (63)
+      Tests  2148 passed (2148)
+   Duration  8.03s (transform 0ms, setup 0ms, import 5.88s, tests 5.49s, environment 5ms)
+last-run.json: skips(pending+todo) passed total failed = 0 2148 2148 0
+No findings.
+integrity rc=0

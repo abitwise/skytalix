@@ -141,3 +141,11 @@ epic: EPIC-010
 | 10 | no major unresolved blocker | ✅ none |
 
 **DoR 10/10. Ready.** The Orchestrator pulls it after `ABC-235` merges.
+
+> **Result 2026-10-30, Software Engineer** (task `se-ABC-240`, branch `grugops/ABC-240` from `main` `0e0ef856`): item 1
+> (`69e19fc4`, `orderMoves`) and item 2 (`7913499d`, quiescence's `orderCaptures`) built to `arch-ABC-235` cut 6
+> (C1–C4). A1 byte-equal to the merge base at both commits (6 021 rows, plain `node`, out of tree, no golden file
+> committed), plus a depth-5 sample of the unpruned doors (264 rows), equal. A2 (P1, P2, C1–C4) green, with the
+> 285 074-position walk under `ENGINE_DEEP=1`; each condition planted red. SE nps, indicative, 5 interleaved per board,
+> tip against base: kiwipete 1.117x, position-6 1.109x, start 1.076x (load1 1.7–2.9, Tctl 75–81 °C). QE's interleaved
+> A3 reading and G6's 5 runs decide. Notes: `se-ABC-240`.

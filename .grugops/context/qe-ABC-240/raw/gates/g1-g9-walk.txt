@@ -1,0 +1,13 @@
+qe-ABC-240, G1 / G9 / the walk rows
+
+G1: se-ABC-235/raw/g1.mjs on base 0e0ef856 and tip 220ab978, plain node, out of tree, one at a time.
+  58 rows each; sha256 ade68870a257d78cbf8227e60c0c14d371246caf79848b18ba16518bfd340d81 both; cmp equal (move, score, depth, nodes).
+  PUZZLE_DEEP=1 src/puzzle-suite.test.ts, verbose re-print: "PUZZLES shipped: solved 54/58, baseline 54/58, budget 25 step 1, wall 1.74 s"; 18/18.
+
+G9: git diff 0e0ef856 220ab978 -- src/levels.ts : empty. Also empty: src/engine.ts, src/evaluate.ts, src/moves.ts, src/legal.ts.
+
+ENGINE_DEEP=1 walk rows, verbose re-print:
+  search.ordering > ABC-240 (P1) > on ABC-206's 285 074-position walk to depth 3 [deep, ENGINE_DEEP=1]  green, 3881 ms (file 30/30)
+  search.ordering > ABC-240 C1-C4 > C1, C2, C3, C4  each green
+  quiescence > ABC-240 (P2) > on ABC-206's 285 074-position walk to depth 3 [deep, ENGINE_DEEP=1]  green, 416 ms (file 34/34)
+  quiescence > ABC-240 (P2) > C1, C2, in place with a fixed scratch  each green

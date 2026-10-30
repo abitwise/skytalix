@@ -29,11 +29,17 @@ import { makeMove, unmakeMove } from "./apply.ts";
 import { evaluate } from "./evaluate.ts";
 import { parseFen, toFen } from "./fen.ts";
 import { gameStatus } from "./gameend.ts";
-import { isInCheck, legalMoves } from "./legal.ts";
+import { isInCheck, legalCaptures, legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
 import { type Position, squareName } from "./position.ts";
 import { HANGING_CORPUS } from "./puzzle-corpus.ts";
-import { QUIESCENCE_MAX_PLY, quiesce } from "./quiescence.ts";
+import {
+  captureScratchByteLength,
+  mvvLvaKey,
+  orderCaptures,
+  QUIESCENCE_MAX_PLY,
+  quiesce,
+} from "./quiescence.ts";
 import { search, searchWithoutPvsOrReductions, searchWithoutQuiescence } from "./search.ts";
 
 /** The six perft positions — `src/search.test.ts`'s corpus, the capture-dense ones included. */
@@ -550,4 +556,120 @@ describe("A6 — the searched position is unchanged on return", () => {
       expect(sweep("broad").mutated).toEqual([]);
     }, 60_000);
   }
+});
+
+// ---------------------------------------------------------------------------
+// ABC-240 (P2) — the capture sort without a per-comparison key equals today's stable sort.
+// The walk is ABC-206 A2's: the perft roots and its terminal FENs, depth 1 in the lane and
+// depth 3 (285 074 positions) under `ENGINE_DEEP=1`. C1 and C2 have a targeted row each.
+// ---------------------------------------------------------------------------
+
+/** `ABC-240`'s walk to depth 3 is the `ENGINE_DEEP` lane's (`arch-ABC-235` cut 6). */
+const RUN_ENGINE_DEEP = process.env.ENGINE_DEEP === "1";
+
+/** THE REFERENCE: quiescence's sort before `ABC-240` (merge base `0e0ef856`), verbatim. */
+const referenceOrderCaptures = (captures: Move[]): void => {
+  captures.sort((a, b) => mvvLvaKey(b) - mvvLvaKey(a));
+};
+
+/** ABC-206 A2's terminal and clock FENs (`src/legal.test.ts`), walked with the perft roots. */
+const WALK_TERMINAL_FENS: ReadonlyArray<{ name: string; fen: string }> = [
+  { name: "checkmate", fen: "4Q2k/6pp/8/8/8/8/8/6K1 b - - 100 80" },
+  { name: "stalemate, thin", fen: "7k/5K2/5N2/8/8/8/8/8 b - - 0 1" },
+  { name: "stalemate, queen", fen: "k7/8/1K6/8/8/8/8/2Q5 b - - 0 1" },
+  { name: "insufficient material", fen: "4k3/8/8/8/8/8/8/4K3 w - - 0 1" },
+  { name: "seventy-five moves", fen: "r3k3/8/8/8/8/8/8/4K2R w - - 150 120" },
+  { name: "fifty-move claim, in progress", fen: "r3k3/8/8/8/8/8/8/4K2R w - - 100 120" },
+];
+
+/** Both orders hold the same `Move` objects in the same slots. */
+const sameOrder = (a: readonly Move[], b: readonly Move[]): boolean =>
+  a.length === b.length && a.every((move, i) => move === b[i]);
+
+/**
+ * Every node of the walk, to `depth` plies: `orderCaptures` on the legal captures in generation
+ * order, and on the same list reversed (ties in a non-generation order), each equal to the
+ * reference by `Move` identity, element by element. Returns the nodes and captures seen.
+ */
+function walkCaptureOrder(depth: number): { nodes: number; captures: number; failures: string[] } {
+  let nodes = 0;
+  let captures = 0;
+  const failures: string[] = [];
+  const visit = (position: Position, where: string, left: number): void => {
+    nodes++;
+    const generated = legalCaptures(position);
+    captures += generated.length;
+    for (const [variant, input] of [generated, generated.slice().reverse()].entries()) {
+      const want = input.slice();
+      referenceOrderCaptures(want);
+      const got = input.slice();
+      orderCaptures(got);
+      if (!sameOrder(got, want)) failures.push(`${where} variant ${variant}: order differs`);
+    }
+    if (left === 0) return;
+    for (const move of legalMoves(position)) {
+      const undo = makeMove(position, move);
+      visit(position, `${where}/${label(move)}`, left - 1);
+      unmakeMove(position, move, undo);
+    }
+  };
+  for (const { name, fen } of [...PERFT_CORPUS, ...WALK_TERMINAL_FENS])
+    visit(parseFen(fen), name, depth);
+  return { nodes, captures, failures };
+}
+
+describe("ABC-240 (P2) — quiescence's capture order equals today's stable sort", () => {
+  it("on every node of the perft roots and terminal FENs to depth 1, as given and reversed", () => {
+    const { nodes, captures, failures } = walkCaptureOrder(1);
+    expect(failures).toEqual([]);
+    expect(nodes).toBeGreaterThan(200); // the denominators, asserted
+    expect(captures).toBeGreaterThan(500);
+  });
+
+  if (RUN_ENGINE_DEEP) {
+    it("on ABC-206's 285 074-position walk to depth 3 [deep, ENGINE_DEEP=1]", () => {
+      const { nodes, captures, failures } = walkCaptureOrder(3);
+      expect(failures).toEqual([]);
+      expect(nodes).toBe(285_074);
+      expect(captures).toBeGreaterThan(1_000_000);
+    }, 600_000);
+  }
+
+  it("C1: captures with one key keep their given order, both ways round", () => {
+    const captures = legalCaptures(parseFen(fenOf("kiwipete")));
+    const tied = captures.find((move) =>
+      captures.some((other) => other !== move && mvvLvaKey(other) === mvvLvaKey(move)),
+    ) as Move;
+    const twins = captures.filter((move) => mvvLvaKey(move) === mvvLvaKey(tied));
+    expect(twins.length).toBeGreaterThanOrEqual(2);
+    for (const input of [twins, twins.slice().reverse()]) {
+      const got = input.slice();
+      orderCaptures(got);
+      expect(sameOrder(got, input)).toBe(true);
+    }
+  });
+
+  it("C2: NxP before BxP before QxP of one pawn, whatever the given order", () => {
+    // Keys 100 - 0.32, 100 - 0.33, 100 - 0.9: an int32 key merges all three. (Without the
+    // full-width tier's 1 000 000 a float32 key still parts them; the walk above catches it.)
+    const captures = legalCaptures(parseFen("4k3/8/8/3p4/8/2N5/B7/3QK3 w - - 0 1"));
+    expect(captures.length).toBe(3);
+    for (const input of [captures, captures.slice().reverse()]) {
+      const got = input.slice();
+      orderCaptures(got);
+      expect(got.map((move) => move.piece & 7)).toEqual([2, 3, 5]);
+      const want = input.slice();
+      referenceOrderCaptures(want);
+      expect(sameOrder(got, want)).toBe(true);
+    }
+  });
+
+  it("sorts the list it is handed in place, keeping exactly its moves, with a fixed scratch", () => {
+    const captures = legalCaptures(parseFen(fenOf("kiwipete")));
+    const before = new Set(captures);
+    orderCaptures(captures);
+    expect(captures.length).toBe(before.size);
+    expect(captures.every((move) => before.has(move))).toBe(true);
+    expect(captureScratchByteLength()).toBe(256 * 8);
+  });
 });

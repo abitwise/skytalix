@@ -25,6 +25,7 @@ import { gameStatus } from "./gameend.ts";
 import { legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
 import { EMPTY, type Position, squareName } from "./position.ts";
+import { mvvLvaKey } from "./quiescence.ts";
 import {
   KillerTable,
   orderMoves,
@@ -36,6 +37,8 @@ import {
 } from "./search.ts";
 
 const RUN_DEEP = process.env.SEARCH_DEEP === "1";
+/** `ABC-240`'s walk to depth 3 (ABC-206's 285 074 positions) is the `ENGINE_DEEP` lane's. */
+const RUN_ENGINE_DEEP = process.env.ENGINE_DEEP === "1";
 
 /**
  * `A6`'s instrument: how many moves are made and not yet unmade — which, at a full-width node,
@@ -239,6 +242,187 @@ describe("the comparator — hash move, then MVV-LVA, then killers, then generat
     const position = parseFen(PROMOTION_CAPTURE_FEN);
     const first = orderMoves(legalMoves(position), [], null)[0] as Move;
     expect(label(first)).toBe("b7a85"); // bxa8=Q
+  });
+});
+
+// ---------------------------------------------------------------------------
+// ABC-240 — `orderMoves` without per-move allocation is today's map/sort/map, move for move.
+// (P1) on every node of the walk; one row per condition C1-C4 (`arch-ABC-235` cut 6).
+// ---------------------------------------------------------------------------
+
+/**
+ * THE REFERENCE: `orderMoves` as it stood before `ABC-240` (merge base `0e0ef856`), with its
+ * private `orderKey` and `sameMove`, copied verbatim. It lives here, not in `src/`.
+ */
+function referenceOrderMoves(
+  moves: readonly Move[],
+  killers: readonly Move[],
+  hashMove: Move | null,
+): Move[] {
+  const same = (a: Move, b: Move): boolean =>
+    a.from === b.from && a.to === b.to && a.promotion === b.promotion;
+  const orderKey = (move: Move): number => {
+    if (hashMove !== null && same(move, hashMove)) return 3_000_000;
+    if (move.captured !== EMPTY || move.promotion !== EMPTY) return 1_000_000 + mvvLvaKey(move);
+    const killer = killers.findIndex((candidate) => same(candidate, move));
+    return killer === -1 ? 0 : killers.length - killer;
+  };
+  return moves
+    .map((move) => ({ move, key: orderKey(move) }))
+    .sort((a, b) => b.key - a.key)
+    .map(({ move }) => move);
+}
+
+/** ABC-206 A2's terminal and clock FENs (`src/legal.test.ts`), walked with the perft roots. */
+const WALK_TERMINAL_FENS: ReadonlyArray<{ name: string; fen: string }> = [
+  { name: "checkmate", fen: "4Q2k/6pp/8/8/8/8/8/6K1 b - - 100 80" },
+  { name: "stalemate, thin", fen: "7k/5K2/5N2/8/8/8/8/8 b - - 0 1" },
+  { name: "stalemate, queen", fen: "k7/8/1K6/8/8/8/8/2Q5 b - - 0 1" },
+  { name: "insufficient material", fen: "4k3/8/8/8/8/8/8/4K3 w - - 0 1" },
+  { name: "seventy-five moves", fen: "r3k3/8/8/8/8/8/8/4K2R w - - 150 120" },
+  { name: "fifty-move claim, in progress", fen: "r3k3/8/8/8/8/8/8/4K2R w - - 100 120" },
+];
+
+/** A move no walked position can play: a from-square off the board. */
+const ABSENT: Move = { from: 120, to: 121, piece: 1, captured: EMPTY, flags: 0, promotion: EMPTY };
+/** Another position's move, as a sibling's killer is. */
+const FOREIGN = legalMoves(parseFen(fenOf("position-3")))[0] as Move;
+
+/**
+ * Killers and hash moves per node, drawn from the list plus absent ones: none; two quiet killers
+ * from the list; a hash move from the list (a capture when there is one) beside an absent killer
+ * and a killer that is a COPY (squares, not identity); an absent hash move; and a foreign
+ * position's move as both.
+ */
+function orderingVariants(legal: readonly Move[]): Array<[Move[], Move | null]> {
+  const quiet = legal.filter((move) => !isTactical(move));
+  const capture = legal.find(isTactical) ?? null;
+  const middle = legal[legal.length >> 1] ?? null;
+  const copy = quiet[2] === undefined ? ABSENT : { ...quiet[2] };
+  return [
+    [[], null],
+    [[quiet[quiet.length - 1] ?? ABSENT, quiet[0] ?? ABSENT], null],
+    [[ABSENT, copy], capture ?? middle],
+    [[quiet[1] ?? ABSENT], ABSENT],
+    [[FOREIGN], FOREIGN],
+  ];
+}
+
+/**
+ * Every node of the walk: each perft root and ABC-206's terminal FENs, to `depth` plies. At
+ * each node every variant's new order must equal the reference's by `Move` identity, and the
+ * input list must be unchanged (identity per index). Returns the nodes and the orders compared.
+ */
+function walkOrdering(depth: number): { nodes: number; orders: number; failures: string[] } {
+  let nodes = 0;
+  let orders = 0;
+  const failures: string[] = [];
+  const visit = (position: Position, where: string, left: number): void => {
+    nodes++;
+    const legal = legalMoves(position);
+    const before = legal.slice();
+    for (const [index, [killers, hashMove]] of orderingVariants(legal).entries()) {
+      const want = referenceOrderMoves(legal, killers, hashMove);
+      const got = orderMoves(legal, killers, hashMove);
+      orders++;
+      if (got.length !== want.length || got.some((move, i) => move !== want[i]))
+        failures.push(`${where} variant ${index}: order differs`);
+      if (legal.some((move, i) => move !== before[i]))
+        failures.push(`${where} variant ${index}: input mutated`);
+    }
+    if (left === 0) return;
+    for (const move of legal) {
+      const undo = makeMove(position, move);
+      visit(position, `${where}/${label(move)}`, left - 1);
+      unmakeMove(position, move, undo);
+    }
+  };
+  for (const { name, fen } of [...PERFT_CORPUS, ...WALK_TERMINAL_FENS])
+    visit(parseFen(fen), name, depth);
+  return { nodes, orders, failures };
+}
+
+describe("ABC-240 (P1) — the allocation-free orderMoves equals today's map/sort/map", () => {
+  it("on every node of the perft roots and terminal FENs to depth 1, five variants each", () => {
+    const { nodes, orders, failures } = walkOrdering(1);
+    expect(failures).toEqual([]);
+    expect(nodes).toBeGreaterThan(200); // the denominator, asserted
+    expect(orders).toBe(nodes * 5);
+  });
+
+  if (RUN_ENGINE_DEEP) {
+    it("on ABC-206's 285 074-position walk to depth 3 [deep, ENGINE_DEEP=1]", () => {
+      const { nodes, failures } = walkOrdering(3);
+      expect(failures).toEqual([]);
+      expect(nodes).toBe(285_074);
+    }, 600_000);
+  }
+});
+
+describe("ABC-240 C1-C4 — the four conditions, one targeted row each", () => {
+  /** Nxd5, Bxd5 and Qxd5 of one pawn: keys 100 - 0.32, 100 - 0.33, 100 - 0.9 over the tier. */
+  const ONE_VICTIM_FEN = "4k3/8/8/3p4/8/2N5/B7/3QK3 w - - 0 1";
+  const attacker = (move: Move): number => move.piece & 7;
+  const sameAsReference = (input: readonly Move[], ordered: readonly Move[]): boolean => {
+    const want = referenceOrderMoves(input, [], null);
+    return ordered.length === want.length && ordered.every((move, i) => move === want[i]);
+  };
+
+  it("C1: equal keys keep INPUT order, not generation order — a reversed list stays reversed", () => {
+    const legal = legalMoves(parseFen(fenOf("kiwipete")));
+    const reversed = legal.slice().reverse();
+    const ordered = orderMoves(reversed, [], null);
+    expect(ordered.filter((move) => !isTactical(move))).toEqual(
+      reversed.filter((move) => !isTactical(move)),
+    );
+    expect(sameAsReference(reversed, ordered)).toBe(true);
+    // Captures that share one key (same victim type, same attacker type) keep input order too.
+    const twins = legal.filter(
+      (move) =>
+        isTactical(move) &&
+        legal.some(
+          (other) => other !== move && isTactical(other) && mvvLvaKey(other) === mvvLvaKey(move),
+        ),
+    );
+    expect(twins.length).toBeGreaterThanOrEqual(2);
+    for (const input of [twins, twins.slice().reverse()]) {
+      const tied = orderMoves(input, [], null);
+      expect(sameAsReference(input, tied)).toBe(true);
+    }
+  });
+
+  it("C2: QxP against NxP, and a knight against a bishop on one victim, keep today's order", () => {
+    const captures = legalMoves(parseFen(ONE_VICTIM_FEN)).filter((move) => move.captured !== EMPTY);
+    expect(captures.length).toBe(3);
+    for (const input of [captures, captures.slice().reverse()]) {
+      const ordered = orderMoves(input, [], null);
+      // Knight (0.32) before bishop (0.33) before queen (0.9): a float32 or int32 key merges them.
+      expect(ordered.map(attacker)).toEqual([2, 3, 5]);
+      expect(sameAsReference(input, ordered)).toBe(true);
+    }
+  });
+
+  it("C3: the input is deep- and identity-equal after the call", () => {
+    const legal = legalMoves(parseFen(fenOf("position-6")));
+    const identities = legal.slice();
+    const deep = JSON.stringify(legal);
+    const quiet = legal.filter((move) => !isTactical(move));
+    orderMoves(legal, [quiet[4] as Move, quiet[1] as Move], quiet[9] as Move);
+    expect(legal.every((move, i) => move === identities[i])).toBe(true);
+    expect(JSON.stringify(legal)).toBe(deep);
+  });
+
+  it("C4: two calls in a row return two distinct arrays, the first unchanged by the second", () => {
+    const legal = legalMoves(parseFen(fenOf("kiwipete")));
+    const quiet = legal.filter((move) => !isTactical(move));
+    const first = orderMoves(legal, [], null);
+    const firstCopy = first.slice();
+    const second = orderMoves(legal, [quiet[3] as Move], quiet[8] as Move);
+    expect(second).not.toBe(first);
+    expect(first).not.toBe(legal);
+    expect(first.every((move, i) => move === firstCopy[i])).toBe(true);
+    expect(sameAsReference(legal, first)).toBe(true);
+    expect(second[0]).toBe(quiet[8]);
   });
 });
 
