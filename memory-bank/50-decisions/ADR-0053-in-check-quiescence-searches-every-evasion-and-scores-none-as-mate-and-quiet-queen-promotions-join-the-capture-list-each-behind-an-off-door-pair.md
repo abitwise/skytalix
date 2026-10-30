@@ -6,8 +6,29 @@ id: ADR-0053
 
 ## Status
 
-**PROPOSED** 2026-10-29 by Architect/Design (task `arch-ABC-228-adr`, records plus probes, at `main` `95f7369e`, whose
-`src/` equals `38536a34`'s).
+**ACCEPTED** 2026-10-30 by the owner, Olger Oeselg, **as written**. His words, verbatim (Orchestrator note
+`.grugops/context/orch-2026-10-29g/notes/20261030T041740Z-orchestrator-decision-3dd61448.md`, a transcription and not a
+stamp): *"ADR-0053: accept"*. Recorded by Architect/Design (task `arch-adr-accept-0052-0053-0054`).
+
+- **`OQ-228-1` is answered** (decision 10). His words, verbatim, under his own label: *"QQ-228-1: If engine requires
+  more effort then increase 3s to 4s, build it fully."*
+  - **"build it fully"**: the full design is built, decisions 2–9 by `ABC-228` and `ABC-229`. Form (b), the
+    mate-test-only form, is not taken.
+  - **"increase 3s to 4s"** applies only if decision 9's `G6` forecast still misses.
+  - **The re-forecast runs first,** on `ABC-228`'s own base, which is `main` with `ABC-235` (`baf99a7c`) and `ABC-240`
+    (`5311f5bd`) merged. Their QE readings put the node rate at about 1.2–1.3× and 1.1×. If both boards read
+    ≤ 100 %, `G6` is read by its rule and the clause does not apply.
+  - **On a miss, the reading of "3s to 4s" is PENDING THE OWNER.** It can mean `G6`'s measurement budget, or level 5's
+    per-move time (`LEVELS[5]`, the default). This ADR records his words and picks neither reading. The SE stops and
+    reports as decision 9 says, and the Orchestrator takes the reading to him.
+- **In force on `main`** at `ABC-228`'s merge (evasions, the mate score) and at `ABC-229`'s merge (quiet queen
+  promotions). Until then `main` keeps `ADR-0024` decision 4 as written.
+- **The pointer line is added.** `ADR-0024` decision 4 carries a dated line that points here, written by this hop.
+- The smokes and the merge no longer wait on acceptance. They still wait on the forecast, and on a miss, on the
+  owner's reading.
+
+Previously **PROPOSED** 2026-10-29 by Architect/Design (task `arch-ABC-228-adr`, records plus probes, at `main`
+`95f7369e`, whose `src/` equals `38536a34`'s). The bullets below are kept as written then.
 
 - **Acceptance is the owner's.** The standing ruling of 2026-10-22 (`…5aaf7cec` item 3,
   `memory-bank/45-standing-rulings.md`) keeps "a new ADR, or one that changes or reverses an accepted one" with him.
@@ -309,6 +330,11 @@ of 1 878 626 nodes.
 
     Until he answers, the SE builds decisions 2–4 and 6–9. The evasion loop is the only part (b) removes. If the
     forecast misses, the SE stops before the graded `G6` and the smokes.
+
+    *(Answered 2026-10-30, owner, verbatim: "If engine requires more effort then increase 3s to 4s, build it fully."
+    The full design is built, and (b) is not taken. The re-forecast in decision 9 runs first, on `main` with `ABC-235`
+    and `ABC-240` merged. On a miss, the meaning of "3s to 4s" (`G6`'s measurement budget or level 5's per-move time)
+    goes back to the owner. See § Status.)*
 
 ## Alternatives
 

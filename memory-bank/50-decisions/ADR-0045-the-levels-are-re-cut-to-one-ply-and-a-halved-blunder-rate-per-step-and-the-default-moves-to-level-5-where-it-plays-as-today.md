@@ -11,6 +11,12 @@ id: ADR-0045
 > when it lands, with his veto open. See § AMENDMENT 2026-10-24 at the end. D1, D2, D4 and the Consequences move
 > there. D3 holds except for the clamp's value, D5 and D6 are not changed, and nothing above that section is edited.
 
+> **Amended 2026-10-30 by `ADR-0052` (accepted by the owner with his 22 s amendment, note `…3dd61448`; pointer added
+> by Architect/Design, task `arch-adr-accept-0052-0053-0054`).** § AMENDMENT A3's `HARD_CEILING_MS` goes from 32 000
+> to **60 000**, at the `uci-clock-mode` build (`ABC-221`) only, with the same per-setting rule (`ADR-0052` D6).
+> Levels 1–7 are value-identical. Until `ABC-221`'s merge the clamp stays 32 000. The in-place fold line is BA/PM's,
+> at that merge. No other decision here moves.
+
 **accepted** 2026-10-19 by Olger Oeselg (owner), as proposed. The owner's menu answers, verbatim (note
 `.grugops/context/wave-2026-09-25/notes/20261019T130500Z-orchestrator-decision-owner-word-adr0045-accepted-q1-q3-abc171-rows-1a9c7f42.md`,
 a transcription, not a stamp):

@@ -6,8 +6,18 @@ id: ADR-0054
 
 ## Status
 
-**PROPOSED** 2026-10-29 by Architect/Design (task `arch-ABC-230-reading`, records plus probes, at `main` `989093f3`,
-whose `src/` tree is `1bf0138a`).
+**ACCEPTED** 2026-10-30 by the owner, Olger Oeselg, **as written**. His words, verbatim (Orchestrator note
+`.grugops/context/orch-2026-10-29g/notes/20261030T041740Z-orchestrator-decision-3dd61448.md`, a transcription and not a
+stamp): *"ADR-0054: accept"*. Recorded by Architect/Design (task `arch-adr-accept-0052-0053-0054`).
+
+- **In force on `main` at `ABC-230`'s merge.** Until then the search sees the root key only, as today.
+- **Pointer lines added by this hop:** `ADR-0002` (§ Status, and at clause 3) and `ADR-0044` (§ Status, D2 and D6's
+  row). Their texts are otherwise unchanged.
+- **Still open, and not this ADR's:** `EPIC-010` Q3, the ep key. The owner asked for more information, and
+  `ADR-0020` stands as written. Q1 (Syzygy) is deferred and stays out of `EPIC-010`.
+
+Previously **PROPOSED** 2026-10-29 by Architect/Design (task `arch-ABC-230-reading`, records plus probes, at `main`
+`989093f3`, whose `src/` tree is `1bf0138a`). The bullets below are kept as written then.
 
 - **Acceptance is the owner's.** The standing ruling of 2026-10-22 (`…5aaf7cec` item 3) keeps "a new ADR, or one that
   changes or reverses an accepted one" with him. This ADR adds to `ADR-0002` clause 3 (ratified by the owner,
