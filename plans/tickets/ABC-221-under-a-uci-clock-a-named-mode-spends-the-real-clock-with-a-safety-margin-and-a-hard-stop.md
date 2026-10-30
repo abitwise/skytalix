@@ -10,6 +10,18 @@ epic: EPIC-009
 
 # ABC-221: `uci-clock-mode`: the real clock, a safety margin, a hard stop, a 60 s ceiling
 
+> **AMENDED 2026-10-30 by BA/PM** (task `bapm-g8-headroom-cut`, records only, at `main` `161e940d`). Source:
+> `ADR-0046` § Addendum 2026-10-30 R1–R4 (`arch-g8-headroom`, `5fd3eee7`), given BA/PM's word on `ABC-244`'s page.
+> `G8` read 9.90 s at `ABC-229` (`QE-229-a`): 0.10 s of headroom.
+>
+> - **A9 gains an R1 census line:** each real-engine default-lane row (A8's parity rows, A11's lane row, and any
+>   other row that reaches the real `chooseMove`) records its clock reads per search in the build note. **The
+>   period rows A2–A4 stay on the stubbed `chooseMove`**, as `ABC-220`'s do. A time-blind real-engine row takes its
+>   R2 step at this build.
+> - **Pull order:** after `ABC-244` (shared `src/uci-session.test.ts`). The pull after `ABC-222` stands.
+> - The estimate is about +0.1 s of lane wall with the period rows stubbed, `UNKNOWN - verify`. A9's ≤ 10 s does not
+>   move. Size M, P3 and DoR **10/10** are unchanged; rows 5 and 6 gain dated lines.
+
 > **FOLDED 2026-10-30 by BA/PM** (task `bapm-ABC-220-merge-fold`, records only, at `main` `4ac4f3bb`). **Both waits
 > are met:** the owner accepted `ADR-0052` (OQ-0052-1, `orch-2026-10-29g` `…3dd61448`; D4 and D6 as written, 59.5 s
 > under 60 s), and **`ABC-220` merged at `ec1e835b`**, so `C` (`safeClockShare`), `TIME_MODES` and D3's rule are on
@@ -143,6 +155,17 @@ uci-clock-mode`. The numbers are `ADR-0052`'s arithmetic (`arch-epic009-settings
 - **A9 (`NFR-008`).** The default lane gains 0 real-clock rows. `npm test` wall stays ≤ 10 s at load1 ≤ 8. Any
   default-lane row that hands the engine an unclamped budget (the `RF-1` rows) still makes the same number of clock
   reads: its virtual step scales with the clamp, as at `ABC-212` (`ADR-0046`). The SE checks this at the build.
+  *(Amended 2026-10-30, `bapm-g8-headroom-cut`, `ADR-0046` § Addendum R1–R4.)*
+  - **R1 census.** Each default-lane row that reaches the real `chooseMove` on a virtual clock (A8's parity rows,
+    A11's default-lane row, and any other such row this build adds or edits) has one line in the build note: its
+    title, budget, step and clock reads per search (⌈budget ÷ step⌉).
+  - **The period rows A2–A4 stay on the stubbed `chooseMove`**, as `ABC-220`'s A2–A7 do. They read budgets and the
+    clock left, so a real search adds cost and no check.
+  - **R2.** A real-engine row whose assertions read no `time`, elapsed time, virtual-time bound or depth on a budget
+    takes the coarsest step in {1, 10, 100, 1 000} that keeps its assertions and QE's kill set (`ABC-244`'s
+    conditions 1–3). A row that reads time keeps its step.
+  - Estimate: about +0.1 s of lane wall, `UNKNOWN - verify` until `G8` reads it. If this ticket's `G8` head median
+    reads > 9.6 s, `ABC-244`'s tranche-2 trigger fires.
 - **A10 (wall, depth and memory at 59.5 s, deep lane).** **Given** 3 fixed positions, **when** each is searched once
   in the mode at a 59 500 ms budget on the real clock, **then** each returns in **≤ 60 000 ms** of wall, the max
   completed depth is logged against `KEY_ARRAY_CAPACITY`'s tripwire (≥ 100 → the Architect), and search-held memory
@@ -225,6 +248,8 @@ call: M1 survives δ ≤ 600 ms on a period's last move at 40/15 (`ADR-0052` D5)
 
 - **The owner accepts `ADR-0052` (OQ-0052-1).** It is PROPOSED; nothing is built on it until he answers. *(Met
   2026-10-30, `…3dd61448`: accepted, D4 and D6 as written.)*
+- *(2026-10-30, `bapm-g8-headroom-cut`.)* **Pull after `ABC-244`** (cut 2026-10-30, P1, test-only), which changes
+  step literals in `src/uci-session.test.ts`. This ticket rebases on it. That is order, not a design wait.
 - **Milestone order:** after `ABC-220` and `ABC-222` (the owner's "later"). It **uses `ABC-220`'s C and `TimeMode`**,
   so `ABC-220` merges first. That is a code dependency now, not only a pull order. *(Met 2026-10-30: `ABC-220` merged
   at `ec1e835b`. The pull order after `ABC-222` stands.)*
@@ -240,8 +265,8 @@ call: M1 survives δ ≤ 600 ms on a period's last move at 40/15 (`ADR-0052` D5)
 | 2 | scope and out-of-scope | ✅ 5 scope items, each from `ADR-0052`; variable allocation, levels, per-call ceiling and CLI out |
 | 3 | INVEST | ✅ M; testable; builds on `ABC-220`'s C (named) |
 | 4 | testable, measurable acceptance | ✅ A1–A12: byte-exact lines, ms, %, a row-for-row identity, ≤ 60 000 ms wall, ≤ 16 MiB, R1 ≤ 100 ms, four exact budgets (A12) |
-| 5 | dependencies known | ✅ `ADR-0052` (ACCEPTED 2026-10-30); `ABC-220` merged at `ec1e835b`; `EPIC-010` `G9` |
-| 6 | NFR triggers with targets | ✅ `NFR-004` 60 s (owner's word; text proposed); `NFR-009` ≤ 16 MiB re-read; `NFR-008` ≤ 10 s (headroom 0.27–0.31 s named); `AR-UCI-BUSY` ≤ 60 s |
+| 5 | dependencies known | ✅ `ADR-0052` (ACCEPTED 2026-10-30); `ABC-220` merged at `ec1e835b`; `EPIC-010` `G9`. *2026-10-30:* pull after `ABC-244` (shared test file) |
+| 6 | NFR triggers with targets | ✅ `NFR-004` 60 s (owner's word; text proposed); `NFR-009` ≤ 16 MiB re-read; `NFR-008` ≤ 10 s (headroom 0.27–0.31 s named); `AR-UCI-BUSY` ≤ 60 s. *2026-10-30:* headroom 0.10 s (`QE-229-a`); A9's R1 census line per real-engine row owed; period rows stubbed |
 | 7 | test notes | ✅ 5 |
 | 8 | size | ✅ M |
 | 9 | priority | ✅ P3 |

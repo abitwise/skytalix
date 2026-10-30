@@ -10,6 +10,18 @@ epic: EPIC-010
 
 # ABC-243: two test rows that went stale when level 5 moved to 4 000 ms
 
+> **NOTED 2026-10-30 by BA/PM** (task `bapm-g8-headroom-cut`, records only, at `main` `161e940d`). `ADR-0046`
+> § Addendum 2026-10-30 R1–R4 (`arch-g8-headroom`, `5fd3eee7`; BA/PM's word on `ABC-244`'s page) changes nothing in
+> this ticket's rows:
+>
+> - `A1`'s bare `go` reads `time` (`G ≤ time ≤ G + 2 × step`), so it is class P and keeps step 100: 40 reads.
+> - `A6`'s row is fixed-depth, with no clock.
+> - The R1 census line for the `A1` row (4 000 ms ÷ 100 = 40 reads) goes in the build note.
+> - **The estimate is about +0.03 s of lane wall** (`ADR-0046` § Addendum, Consequences), `UNKNOWN - verify` until
+>   `A5`'s `G8` reads it.
+> - **Pull order:** after `ABC-244` (shared `src/uci-session.test.ts`). This ticket rebases on it.
+> - Acceptance, size XS, P3 and DoR **10/10** are unchanged; rows 5 and 6 gain dated lines.
+
 > **Cut 2026-10-30 by BA/PM** (task `bapm-ABC-228-merge-fold`, records only, at `main` `e42b637b`). Source: the two
 > non-blocking gaps in `ABC-228`'s QE verdict (`qe-ABC-228-ii` `…e39d190c`):
 > - **SE-228ii-a** (LOW, test strength), raised by the SE (`se-ABC-228-ii` `…0f553b17`). QE confirmed it with a planted
@@ -108,6 +120,10 @@ epic: EPIC-010
 - **`NFR-008`:** 0 real-clock rows added; the edited row stays on the virtual clock. `G8` is reported, with a target
   of ≤ 10 s at load1 ≤ 8. `A6`'s row is fixed-depth (no clock), with 5 pieces on the board. `G8` read 9.63 s at
   `ABC-241`'s QE, so the headroom is 0.37 s. Its added wall is `UNKNOWN - verify`, read in `A5`'s `G8`.
+  - *(2026-10-30, `bapm-g8-headroom-cut`.)* After `ABC-229` the headroom is 0.10 s (`G8` 9.90 s, `QE-229-a`). This
+    ticket's estimate is **about +0.03 s** (one 40-read time row plus one fixed-depth row; `ADR-0046` § Addendum
+    2026-10-30). R1: the build note carries the `A1` row's census line (40 reads per search). R2 does not apply,
+    because `A1` reads `time`. If this ticket's `G8` head median reads > 9.6 s, `ABC-244`'s tranche-2 trigger fires.
 - **`NFR-009`:** the bar (≤ 16 MiB, growth ≤ 1 MiB) and the reading are unchanged. Only the label changes.
 - **Security:** none (no input path, no production line).
 
@@ -137,6 +153,8 @@ epic: EPIC-010
   import line, the `ABC-230` oracle line and a new describe block at `:1404`). The Hash row at `:753` was not touched. `A6`'s row reads `ABC-241`'s
   helper through `parsePosition`. `ABC-220` (in flight) still adds rows to this file. Whichever of the two merges
   second rebases. That is order only, not a wait.)*
+- *(2026-10-30, `bapm-g8-headroom-cut`.)* **Pull after `ABC-244`** (cut 2026-10-30, P1, test-only), which changes
+  step literals in `src/uci-session.test.ts`. This ticket rebases on it. That is order, not a wait on design.
 - No ADR. No owner question.
 
 ## Definition of Ready
@@ -147,8 +165,8 @@ epic: EPIC-010
 | 2 | scope and out-of-scope | ✅ 2 items (*2026-10-30:* 3, Scope 3 added); other `GO_G3500` rows, `NFR-009` catalog text and production files out |
 | 3 | INVEST | ✅ independent of production; XS; testable by plant |
 | 4 | testable, measurable acceptance | ✅ A1 4 000–4 200 ms; A2 red at L = 4, 6, 7; A3/A4 exact diff fences; A5 skips 0. *2026-10-30:* A6 bestmove `d1e1` at `cp 0`, the raw list not 0, red under QM3; A4 row count base's + 1 |
-| 5 | dependencies known | ✅ `ABC-228` Done; file overlap with `ABC-241` / `ABC-220` named. *2026-10-30:* `ABC-241` Done (`1f6abec4`); `A6` reads its helper |
-| 6 | NFR triggers with targets | ✅ 0 real-clock rows; `G8` ≤ 10 s; `NFR-009` bar unchanged. *2026-10-30:* `A6` fixed-depth; `G8` headroom 0.37 s named |
+| 5 | dependencies known | ✅ `ABC-228` Done; file overlap with `ABC-241` / `ABC-220` named. *2026-10-30:* `ABC-241` Done (`1f6abec4`); `A6` reads its helper; pull after `ABC-244` (shared file) |
+| 6 | NFR triggers with targets | ✅ 0 real-clock rows; `G8` ≤ 10 s; `NFR-009` bar unchanged. *2026-10-30:* `A6` fixed-depth; `G8` headroom 0.37 s named; *later 2026-10-30:* headroom 0.10 s (`QE-229-a`), est. +0.03 s, R1 line for `A1` owed |
 | 7 | test notes | ✅ 3 (*2026-10-30:* 4) |
 | 8 | size | ✅ XS |
 | 9 | priority | ✅ P3 |
