@@ -556,3 +556,78 @@ describe("ABC-206 A2 — the faster pieces equal what they replace", () => {
     it("givesCheck, to depth 3 [deep, ENGINE_DEEP=1]", givesCheckRow(3), 600_000);
   }
 });
+
+// ---------------------------------------------------------------------------
+// ABC-235 cut 1 — the king square is read once per call, not once per move. The oracle is the
+// pre-cut loop, rebuilt here from the exported pieces it was made of (`generateMoves`,
+// `makeMove`, `unmakeMove`, `isSquareAttackedBy` and a per-move `board.indexOf` of the mover's
+// king). Same walk as ABC-206 A2 above: depth 1 in the lane, depth 3 under `ENGINE_DEEP=1`.
+// ---------------------------------------------------------------------------
+
+/** The pre-ABC-235 filter, verbatim in effect: the king is looked up after every `makeMove`. */
+function referenceFilter(position: Position, capturesOnly: boolean): Move[] {
+  const moverIsBlack = position.blackToMove;
+  const king = KING | (moverIsBlack ? BLACK : 0);
+  const out: Move[] = [];
+  for (const move of generateMoves(position)) {
+    if (capturesOnly && move.captured === EMPTY) continue;
+    const undo = makeMove(position, move);
+    const square = position.board.indexOf(king);
+    if (!isSquareAttackedBy(position, square, !moverIsBlack)) out.push(move);
+    unmakeMove(position, move, undo);
+  }
+  return out;
+}
+
+describe("ABC-235 cut 1 — the hoisted king square answers what the per-move scan answered", () => {
+  const cutOneRow = (depth: number) => () => {
+    let kingMoves = 0;
+    let castles = 0;
+    const seen = walkA2(depth, (position, where) => {
+      const wantAll = referenceFilter(position, false);
+      const before = fullState(position);
+      // List equality, in order and by value, for both lists, and boolean equality.
+      expect(legalMoves(position), where).toEqual(wantAll);
+      expect(legalCaptures(position), where).toEqual(referenceFilter(position, true));
+      expect(hasLegalMove(position), where).toBe(wantAll.length > 0);
+      expect(fullState(position), where).toBe(before);
+      const king = KING | (position.blackToMove ? BLACK : 0);
+      for (const move of wantAll) {
+        if (move.piece === king) kingMoves++;
+        if (move.piece === king && Math.abs(move.to - move.from) === 2) castles++;
+      }
+    });
+    // The denominators, asserted: the walk reached boards, king moves and castles alike.
+    expect(seen).toBeGreaterThan(depth === 1 ? 200 : 200_000);
+    expect(kingMoves).toBeGreaterThan(0);
+    expect(castles).toBeGreaterThan(0);
+  };
+
+  it(
+    "legalMoves, legalCaptures and hasLegalMove equal the per-move-scan reference, p unchanged",
+    cutOneRow(1),
+  );
+
+  it("a king in check, a pinned piece, and a castle each answer as the reference does", () => {
+    const rows: ReadonlyArray<readonly [name: string, fen: string]> = [
+      ["rook check, king must move or block", "4k3/8/8/8/8/8/8/R3K2r w Q - 0 1"],
+      ["absolutely pinned knight", "k3r3/8/8/8/8/8/4N3/4K3 w - - 0 1"],
+      ["both castles legal, black", "r3k2r/8/8/8/8/8/8/4K3 b kq - 0 1"],
+      ["castle through an attacked square", "r3k2r/8/8/8/8/8/8/5R1K b kq - 0 1"],
+      ["king captures the checker", "8/8/8/8/8/8/3q4/4K2k w - - 0 1"],
+      ["en passant exposes the king on the rank", "8/8/8/K2pP2r/8/8/8/7k w - d6 0 1"],
+    ];
+    for (const [name, fen] of rows) {
+      const position = parseFen(fen);
+      const before = fullState(position);
+      expect(legalMoves(position), name).toEqual(referenceFilter(position, false));
+      expect(legalCaptures(position), name).toEqual(referenceFilter(position, true));
+      expect(hasLegalMove(position), name).toBe(referenceFilter(position, false).length > 0);
+      expect(fullState(position), name).toBe(before);
+    }
+  });
+
+  if (RUN_DEEP) {
+    it("the same three, to depth 3 [deep, ENGINE_DEEP=1]", cutOneRow(3), 600_000);
+  }
+});

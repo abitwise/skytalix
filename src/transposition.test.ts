@@ -25,6 +25,7 @@ import { spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { chooseMove, chooseMoveWithoutPvsOrReductions, DEFAULT_BUDGET_MS } from "./engine.ts";
+import { pawnCacheByteLength } from "./evaluate.ts";
 import { parseFen } from "./fen.ts";
 import { legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
@@ -634,9 +635,13 @@ describe("A7 — the table holds a fixed 4 MiB, whatever the search", () => {
     expect(tableByteLength()).toBe(FOUR_MIB);
   });
 
-  it("stays inside NFR-009's 16 MiB with the key array beside it", () => {
+  it("stays inside NFR-009's 16 MiB with the key array and the pawn memo beside it", () => {
     const keyArrayBytes = (KEY_ARRAY_CAPACITY + 1) * 8;
-    expect(tableByteLength() + keyArrayBytes).toBeLessThanOrEqual(16 * 1024 * 1024);
+    // ABC-235 cut 5: the pawn-structure memo is fixed at 384 KiB and counted in (a)'s sum.
+    expect(pawnCacheByteLength()).toBe(384 * 1024);
+    expect(tableByteLength() + keyArrayBytes + pawnCacheByteLength()).toBeLessThanOrEqual(
+      16 * 1024 * 1024,
+    );
   });
 
   if (RUN_ENGINE_DEEP) {
