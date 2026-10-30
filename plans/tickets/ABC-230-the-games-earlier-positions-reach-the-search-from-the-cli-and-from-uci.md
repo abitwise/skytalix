@@ -1,8 +1,8 @@
 ---
 id: ABC-230
 title: "The game's earlier positions reach the search, from the CLI and from UCI, so it sees a repetition the game already holds; a bare FEN still has none"
-status: in-development
-column: In Development
+status: in-review
+column: In Review
 size: M
 priority: P2
 epic: EPIC-010

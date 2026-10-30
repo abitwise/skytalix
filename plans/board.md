@@ -1,3 +1,4 @@
+_Updated: 2026-10-30 by Orchestrator (orch-2026-10-29g) — ABC-230 SE done, code review PASS → In Review; `qe-ABC-230` spawned ALONE: G5 real clock + A7 smokes (10 D + 10 R), R at --concurrency 1 by the Orchestrator's delivery call (width 2 tripped 85 °C, qe-ABC-225). Width 1/3._
 _Updated: 2026-10-30 by Orchestrator (orch-2026-10-29g) — bapm-q3c-oq228ii-fold merged: ABC-241 (Q3 (c)) cut to Backlog 9/10, waits ABC-230; ABC-228 carries (ii) incl. the rating.ts R literal on a miss. `se-ABC-230` running. Width 1/3._
 _Updated: 2026-10-30 by Orchestrator (orch-2026-10-29g) — arch-q3c-oq228ii merged: Q3 (c) ACCEPTED as ADR-0020 § AMENDMENT 2026-10-30 (repetition key drops an uncapturable ep file; helper in gameend.ts; uci-session gains a gameend.ts import, ADR-0044 D2 list +1, taken as part of (c)); ADR-0053 d10 records (ii): on a G6 miss at a ≤ 133 % bar, level 5 → 4 000 ms, R frame moves to 4 s. `bapm-q3c-oq228ii-fold` routed (cut Q3 (c) ticket; fold (ii) into ABC-228). Width 2/3._
 _Updated: 2026-10-30 by Orchestrator (orch-2026-10-29g, …c4ab73de) — OWNER: OQ-228-1 = (ii) (on a G6 miss, level 5 → 4 s per move); Q3 = (c) (normalise the ep key for the game-history comparison only; new S ticket after ABC-230). `se-ABC-230` + `arch-q3c-oq228ii` (records) running. Width 2/3._
@@ -1219,8 +1220,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-230] The game's earlier positions reach the search, CLI and UCI (size: M, priority: P2, DoR 9/10; ADR-0054 PROPOSED folded (44e71960, bapm …644cf2af): priorKeys, pre-root needs two, A8/A9 probe rows; waits ONLY owner accept of ADR-0054, then Ready 10/10; value-changing → 10 D + 10 R smoke (A7; → Ready 2026-10-30: ADR-0054 ACCEPTED; DoR 10/10; **pulled 2026-10-30** → `se-ABC-230`)
+## In Development (WIP 0/3)
 
 
 
@@ -1248,7 +1248,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-230] The game's earlier positions reach the search, CLI and UCI (size: M, priority: P2, DoR 9/10; ADR-0054 PROPOSED folded (44e71960, bapm …644cf2af): priorKeys, pre-root needs two, A8/A9 probe rows; waits ONLY owner accept of ADR-0054, then Ready 10/10; value-changing → 10 D + 10 R smoke (A7; → Ready 2026-10-30: ADR-0054 ACCEPTED; DoR 10/10; **pulled 2026-10-30** → `se-ABC-230`; SE done dad753dc (code 2fbcb380): identity with no/empty keys and clock 0 node-equal to base; A1–A6, A8, A9 rows; npm test 2 178; code review PASS (repeatsBeforeRoot parity and window checked; levels.ts createLevel changed as the ADR names, LEVELS lines unchanged); QE `qe-ABC-230` (A7 smokes at width 1) now)
 
 
 
