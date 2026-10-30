@@ -17,6 +17,13 @@ id: ADR-0045
 > Levels 1–7 are value-identical. Until `ABC-221`'s merge the clamp stays 32 000. The in-place fold line is BA/PM's,
 > at that merge. No other decision here moves.
 
+> **Amended 2026-10-30, CONDITIONAL: level 5 to 4 000 ms, see `ADR-0053` decision 10.** The owner's word is
+> *"QQ-228-1: ii"* (`orch-2026-10-29g/…c4ab73de`; pointer added by Architect/Design, task `arch-q3c-oq228ii`). It
+> applies only if `ABC-228`'s `G6` re-forecast (`ADR-0053` decision 9) misses. Then `LEVELS[5]` and `DEFAULT_BUDGET_MS`
+> go from 3 000 to 4 000 in `ABC-228`, and D1's level-5 row, D2's "today's level 3 exactly", and A3's "2 000 at 5"
+> margin (which becomes 1 000; the ceiling stays 5 s) move with them. If the forecast meets `G6`, nothing here moves.
+> The in-place fold is BA/PM's, at that merge only.
+
 **accepted** 2026-10-19 by Olger Oeselg (owner), as proposed. The owner's menu answers, verbatim (note
 `.grugops/context/wave-2026-09-25/notes/20261019T130500Z-orchestrator-decision-owner-word-adr0045-accepted-q1-q3-abc171-rows-1a9c7f42.md`,
 a transcription, not a stamp):

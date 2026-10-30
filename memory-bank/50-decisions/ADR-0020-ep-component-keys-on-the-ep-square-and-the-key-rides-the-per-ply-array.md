@@ -6,6 +6,13 @@ id: ADR-0020
 
 ## Status
 
+> **Amended 2026-10-30: decision 2's threefold consequence (`EPIC-010` Q3 (c)). ACCEPTED on the owner's word**, "Q3: c"
+> (Orchestrator note `.grugops/context/orch-2026-10-29g/notes/20261030T044400Z-orchestrator-decision-c4ab73de.md`, a
+> transcription, not a stamp). Text by Architect/Design (task `arch-q3c-oq228ii`). In force on `main` at the merge of
+> the ticket BA/PM cuts for it, which is built after `ABC-230` merges. See § AMENDMENT 2026-10-30 at the end.
+> Decisions 1 and 3 and the hash do not change. Nothing above that section is edited except this block and one line
+> under decision 2.
+
 **accepted** — 2026-09-19 by Architect/Design at task `owner-rulings-2026-09-19`, subtask
 `ruling-abc075-ep-square`, under the owner's standing directive of 2026-08-03 ("who decides",
 `memory-bank/60-progress.md`) that sends architecture decisions and ADR ratification to this role.
@@ -82,6 +89,8 @@ within 2 plies. On each consumer:
   equalities, never a false equality. `ABC-011`'s headline reproduction — the `1.e4` pair — **goes
   back to hashing differently.** This is the deliberate trade the owner made, and it is recorded
   here rather than smoothed over.
+  *(2026-10-30, owner "Q3: c" (`…c4ab73de`): from the Q3 (c) ticket's merge, this bullet no longer holds for
+  comparisons against the game's history. The hash and the TT bullet above do not change. See § AMENDMENT 2026-10-30.)*
 
 **Why this is the standard, safe direction.** The classic Zobrist scheme hashes the ep file the
 position *carries*; that is the simplest thing that is never wrong, because every refinement
@@ -269,3 +278,198 @@ trivially per thread; the hash no longer writes; nothing here forecloses it.
 | **F4** | 3 — per-ply array, no `Position` field | `Position` gaining a key field, or `makeMove` computing a key | `grep -n "key" src/position.ts src/apply.ts` after `ABC-075`/`ABC-081` |
 | **F5** | 3 — seam signature sufficient | a component of the delta that needs an input outside `(keyBefore, position-after, move, undo)` — none was found on the six components listed | `ABC-075 A1` at 0 mismatches is the proof; a mismatch class that cannot be closed from those four inputs is the falsifier |
 | **F6** | graph — acyclic, `zobrist` below `legal` | any `from "./zobrist.ts"` in `apply.ts`, `moves.ts` or `position.ts` | rebuild the import graph from `src/*.ts` |
+
+## AMENDMENT 2026-10-30 — comparisons against the game's history remove an uncapturable ep file (`EPIC-010` Q3 (c)); the hash does not change
+
+### Status of this section
+
+**ACCEPTED 2026-10-30 on the owner's word.** His answer, verbatim: *"Q3: c"*. He was asked in session to choose
+between *"(a) keep, (b) ep-legal key, (c) normalise only when comparing against the game's earlier positions"*
+(Orchestrator note `.grugops/context/orch-2026-10-29g/notes/20261030T044400Z-orchestrator-decision-c4ab73de.md`, a
+transcription, not a stamp). The options and their costs are in Architect/Design's Q3 table
+(`arch-ABC-230-reading/…90a3aa31` § 3). That table recommended (a), and named (c) as the remedy if FIDE-exact
+repetition was wanted. The text below is by Architect/Design (task `arch-q3c-oq228ii`, records only, at `main`
+`c0698ddd`).
+
+- **What it amends:** decision 2's threefold bullet ("counted one occurrence late"), for comparisons against the
+  game's history only.
+- **What it does not amend:**
+  - decision 1 (the hash keys on `epSquare` set);
+  - decision 3 (the per-ply array);
+  - decision 2's TT bullet;
+  - `F1`–`F6`.
+
+  `zobristKey` and `zobristKeyAfterMove` return what they return today. The table, the book and every node pin are
+  untouched.
+- **In force on `main`** at the merge of its own ticket, which BA/PM cuts. It is built **after `ABC-230` merges**,
+  because half of it edits the prior-key builders that `ABC-230` (`ADR-0054`) creates. `ABC-230` is not re-scoped.
+- **Size S. Value-changing.** The merge rule's smoke pair applies: 10 D games and 10 R games, S-1 to S-4
+  (`EPIC-010` § The merge rule).
+
+### Context
+
+- Under decision 1, a position reached by a double push carries an ep square whether or not a pawn can capture on it.
+  Its later recurrences carry none. So its first occurrence's key differs from its second's and third's, and the
+  threefold is counted one occurrence late (decision 2). cutechess counts it on time.
+- SA `sa-ABC-226/…cc53fc79` `A6`: 22 of 1 718 repetitions (all D, 0 R), about 0.5 % of 4 199 games.
+- **The fact that keeps the remedy small** (`F3` below, and `src/apply.ts`): a double push resets the halfmove clock,
+  and every other move clears the ep square. So in a reversible window (the positions since the clock last reset)
+  only the oldest position can carry an ep square. A position before a clock reset can never equal one after it.
+
+### Decision
+
+**C1. The repetition key.** Every comparison of a position against the game's earlier positions uses the *repetition
+key*:
+
+- if `position.epSquare` is set and no legal en-passant capture exists (`hasLegalEnPassant(position)` is false,
+  `src/legal.ts:182`): `zobristKey(position)` with the ep file XORed out;
+- otherwise: `zobristKey(position)`, unchanged.
+
+By the fact above, this changes at most the oldest key of each reversible window. So applying it to every position is
+the same as applying it to "the oldest key of the window". The per-position form is the one built: it needs no index
+arithmetic, and it is the same rule on every surface.
+
+- A **legal** capture keeps the ep file in (FIDE 9.2.3's test), so two positions with different move sets never get
+  equal keys.
+- A capture that is pseudo-legal but illegal (a pinned capturer, or the rank pin that the capture would uncover) takes
+  the file out. FIDE counts those positions as the same.
+
+**C2. One helper, in `src/gameend.ts`.** One pure function computes the repetition key from a position and its
+Zobrist key. Its name and exact signature are the Software Engineer's. That there is exactly one is not.
+
+- **Why `gameend.ts`:**
+  - it already holds FIDE 9.2's repetition rule (`gameStatus` reads `positionCounts`);
+  - it already imports `legal.ts` and `zobrist.ts`;
+  - `history.ts` and `engine.ts` (`leafEndReason`) already import it.
+
+  No module gains an import of `legal.ts`, so the `history.ts` header's "does not import `legal.ts`" stays true.
+- **`src/zobrist.ts` gains one export:** a pure read of the ep file's key component. Today `EP_FILE` is private. No
+  import edge changes, and `F6` holds: `zobrist.ts` stays below `legal.ts`.
+- **Rejected homes:**
+  - `zobrist.ts` itself: it would import `legal.ts` again, which decision 1 removed.
+  - `legal.ts`: it adds a `legal.ts` → `zobrist.ts` edge and a `history.ts` → `legal.ts` edge, in a file that `ABC-229`
+    and `ABC-235` edit.
+  - A new module: one more file and one more import on every consumer, for no gain.
+- **Cost.** `hasLegalEnPassant` runs once per position with an ep square set, when a key list is built. That is once
+  per double push in the game, per derive, and never per search node.
+
+**C3. Where it is used. Both halves land together** (Q3 table: "(c) without the game-end half" is inconsistent).
+
+- **The CLI's game-end count** (`src/history.ts`; the licensed callers are unchanged):
+  - **`keyHistory` stays the hash list** and keeps its meaning. Its doc names it as the TT and book seam.
+  - `history.ts` gains one function, the repetition-key list: the same replay with C2's helper applied. Its name is
+    the Software Engineer's.
+  - `repetitionCounts` counts that list. It stays the **one supplier** of `positionCounts` (`ADR-0002` clause 4).
+  - `gameStatus` looks up the live position through the same helper (`src/gameend.ts:155`), so the lookup and the
+    counts agree. The lookup runs only when a counts map is passed, so a bare caller pays nothing.
+  - `src/turn-loop.ts` `claimShortfall` (the "repetition n of 3" line after a refused claim) counts the repetition-key
+    list too. Otherwise the line and the claim would disagree.
+- **The search's prior keys** (`ADR-0054` decision 2):
+  - **CLI:** `cli.ts` injects the repetition-key list into the level seam, where `ABC-230` injects `keyHistory`.
+  - **UCI:** `parsePosition`'s replay passes each key through the helper as it keeps it.
+  - **Blunder path:** the root key it appends for its child searches is a repetition key too.
+  - **The rule: every key in `priorKeys` is a repetition key.** The trim helper, the scan and its two counts
+    (`ADR-0054` decisions 1 and 3) are unchanged.
+- **Not used by:** the search's own per-ply array, the TT, the book, perft, or any `zobristKey` call inside the
+  search. A node's key, and the path scan against it, stay raw.
+
+**C4. What stays one late (recorded, not fixed).** Both cases defer a draw and never declare a false one, which is
+decision 2's safe direction.
+
+- **In-tree:** a double push inside the search, then a return to that position. Those nodes are compared raw on the
+  path (Q3 table: "in-tree only stays one late").
+- **A root that carries an uncapturable ep square.** Its clock is 0, so it has no prior keys, and it sits raw in
+  `keys[0]`. A search node that returns to the root's board is compared raw against it. From the next move's search
+  on, that position is a prior key and is normalised.
+
+### Alternatives
+
+- **(a) Keep decision 2.** Not taken: the owner chose (c).
+- **(b) The ep-legal key in the hash** (the ep file only with an adjacent capturer). Not taken. It reverses the
+  owner's 2026-09-19 ruling, re-keys 685 or more book entries and moves node pins, to buy what (c) buys.
+- **Upstream normalisation in `apply.ts`** (this ADR's reconsider trigger (a)). Not taken: it changes the FEN
+  round-trip and every key. (c) changes neither.
+- **Normalise inside `keyHistory`.** Rejected. It gives the hash list a second meaning under the hash's name, and the
+  next caller that reads it as a hash (book, TT) would be wrong in the rare ep case.
+- **Only the prior-key half, or only the game-end half.** Rejected. Either alone makes the CLI's search and its
+  game-end count disagree about one position.
+
+### Consequences
+
+- **Files the ticket touches**, a few lines each:
+  - `src/gameend.ts` (the helper and the lookup);
+  - `src/zobrist.ts` (one export);
+  - `src/history.ts` (one function, and `repetitionCounts`);
+  - `src/turn-loop.ts` (`claimShortfall`);
+  - `src/cli.ts` (the injection);
+  - `src/uci-session.ts` (the replay);
+  - the module that appends the blunder path's root key, as `ABC-230` builds it (`UNKNOWN - verify` which one).
+
+  **Not touched:** `src/apply.ts`, `src/legal.ts`, `src/search.ts`, `src/transposition.ts`, `src/quiescence.ts`,
+  `src/book*.ts` and `data/`.
+- **The licence surface (`ADR-0011` clause 3, `ADR-0002` clause 4, `ADR-0044` D2):**
+  - **`LICENSED_DRIVERS` stays `["turn-loop.ts", "cli.ts"]`** (`src/history-pane.nfr.test.ts:274`). No module gains a
+    runtime import of `history.ts`. The two licensed drivers call one more `history.ts` function, and nothing else
+    does. `history.ts`'s own import list does not change.
+  - **Clause 3 (ii), the single supplier, holds.** `repetitionCounts` is still the only builder of a `positionCounts`
+    map. `claimShortfall` counts one key and builds no map, as today. The prior-key list is not a counts map.
+  - **`src/uci-session.ts` gains an import of `gameend.ts`.** That adds one module to `ADR-0044` D2's allowed list, and
+    D2 carries a dated line for it. D2's fence is unchanged: no `history.ts`, `turn-loop.ts`, `book-engine.ts`,
+    `level-seam.ts` or `book-file.ts`. `src/uci-session.test.ts` `A11-g1`'s deny list still holds. `gameend.ts` has no
+    capabilities, and `engine.ts` already imports it.
+  - **`ABC-081` `A6` holds:** no search module imports `history.ts`, and the engine is still handed its keys.
+- **Values:**
+  - **Unchanged:**
+    - the hash, the TT, the book (`book.json` is not rebuilt) and perft;
+    - every search with no prior keys: a bare FEN, the benchmarks, the `ABC-078` `A3` corpus and `G6`'s boards;
+    - every search whose prior keys hold no uncapturable-ep position.
+  - **Changed:**
+    - a game search whose prior window starts at a double push with no legal ep capture;
+    - the CLI's threefold claim and fivefold draw in that case, which now come one occurrence earlier, on time by FIDE.
+  - So it is value-changing. The smoke pair applies, and the count of smoke games that end by repetition, candidate
+    against base, is reported (as `ABC-230` `A7`). The expected effect is tiny: about 0.5 % of D games, and none
+    measured in R.
+- **The tests the ticket owes.** This is their shape; the rows themselves are QE's and the Software Engineer's.
+  - **Helper rows:**
+    - an ep square with no capturer: the key equals `zobristKey` of the same position with no ep square;
+    - an ep square with a legal capture: the key equals `zobristKey`;
+    - a pseudo-legal but illegal capture (a pinned capturer, and the rank-pin case): the ep file is removed;
+    - no ep square: the key is unchanged;
+    - purity: the position is unchanged after the call.
+  - **Hash rows, unchanged:** the `zobrist.test.ts` ep rows (decision 1's `not.toBe` pair), the `ABC-075` oracle walk,
+    the book rows and every node pin pass as they are. A red there is a build fault, not a re-pin.
+  - **Game-end rows (the `ABC-011` `1.e4` line):**
+    - after 1.e4 Nf6 2.Nf3 Ng8 3.Ng1 Nf6 4.Nf3 Ng8 5.Ng1, `gameStatusOf` reports the threefold claim. Today it comes
+      at 7.Ng1;
+    - the fivefold draw comes at 9.Ng1. Today it comes at 11.Ng1;
+    - `claimShortfall` reads "2 of 3" after 3.Ng1;
+    - a twin line from a FEN where the double push can be captured legally keeps today's counts.
+  - **Prior-key rows:**
+    - from a FEN with a non-zero score, a line through an uncapturable double push and then a shuffle. The move that
+      makes the third occurrence scores exactly 0, on the CLI and on UCI. With a legal ep capture available, the same
+      line is not a draw;
+    - for the same line, the CLI's injected list equals UCI's list;
+    - with no prior keys, or with none that carries ep, every search is node-equal to base.
+  - **Consistency row:** on the CLI, the move the search scores 0 is the move after which `gameStatusOf` reports the
+    claim.
+  - **Fence rows, unchanged:** the `LICENSED_DRIVERS` equality, `A11-g1` and `ABC-081` `A6`.
+  - **Gates:** as `ABC-230`: `G4` identity, `G8`, `G9`, `G10` and the smoke pair. `G6` cannot move, because its boards
+    have no prior keys, and the identity rows stand for it.
+- **NFR:** no level moves. `NFR-002`'s per-ply derive gains one `hasLegalEnPassant` call per double push in the game.
+  Its cost on this host is `UNKNOWN - verify`, and it is expected to be within the noise of the 46–50 µs replay.
+- **`ADR-0054`** carries a dated line: its "the ep interaction (Q3)" consequence is answered here.
+
+### What would falsify this section
+
+| # | clause | what would falsify it | how to check |
+|---|---|---|---|
+| **F7** | C1 — only a window's oldest position carries ep | a move other than a double push setting `epSquare`, or a double push that does not reset the clock | `F3`'s grep, and `src/apply.ts`'s clock reset |
+| **F8** | C1 — never a false equality | two positions with different legal move sets and equal repetition keys | the `F2` walk, run on repetition keys |
+| **F9** | C3 — the hash is unchanged | any node pin, book key or `ABC-075` oracle row that moves at the ticket's merge | the pinned rows, unedited |
+
+### Rollback
+
+Point the call sites (`repetitionCounts`, the `gameStatus` lookup, `claimShortfall`, and the two prior-key builders)
+back at the raw key. Then drop the helper and the export. Nothing is stored: no data file, book key or TT entry depends
+on the repetition key. The `1.e4` rows go red, which proves the rollback took. Decision 2's bullet then holds again as
+written.

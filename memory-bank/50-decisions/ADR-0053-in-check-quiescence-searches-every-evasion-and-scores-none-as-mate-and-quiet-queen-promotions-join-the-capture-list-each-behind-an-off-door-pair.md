@@ -18,14 +18,24 @@ stamp): *"ADR-0053: accept"*. Recorded by Architect/Design (task `arch-adr-accep
   - **The re-forecast runs first,** on `ABC-228`'s own base, which is `main` with `ABC-235` (`baf99a7c`) and `ABC-240`
     (`5311f5bd`) merged. Their QE readings put the node rate at about 1.2–1.3× and 1.1×. If both boards read
     ≤ 100 %, `G6` is read by its rule and the clause does not apply.
-  - **On a miss, the reading of "3s to 4s" is PENDING THE OWNER.** It can mean `G6`'s measurement budget, or level 5's
-    per-move time (`LEVELS[5]`, the default). This ADR records his words and picks neither reading. The SE stops and
-    reports as decision 9 says, and the Orchestrator takes the reading to him.
+  - ~~**On a miss, the reading of "3s to 4s" is PENDING THE OWNER.** It can mean `G6`'s measurement budget, or level
+    5's per-move time (`LEVELS[5]`, the default). This ADR records his words and picks neither reading. The SE stops
+    and reports as decision 9 says, and the Orchestrator takes the reading to him.~~ *(Answered 2026-10-30, below.)*
+  - **On a miss, "3s to 4s" means level 5's per-move time: reading (ii).** The owner answered 2026-10-30, verbatim:
+    *"QQ-228-1: ii"* (Orchestrator note
+    `.grugops/context/orch-2026-10-29g/notes/20261030T044400Z-orchestrator-decision-c4ab73de.md`). He chose it over
+    *"(i) only the depth test gets 4 s"*, against the Orchestrator's wording *"(ii) level 5 itself gets 4 s per
+    move"*.
+    - On a miss, `LEVELS[5].budgetMs` goes from 3 000 to **4 000 ms**, in `ABC-228`.
+    - That amends the owner-accepted `ADR-0045`, so `G9` is waived for `ABC-228` on that one value.
+    - The consequences are in decision 10's 2026-10-30 block. Recorded by Architect/Design (task `arch-q3c-oq228ii`).
+    - **If the re-forecast meets `G6`, nothing in that block happens.**
 - **In force on `main`** at `ABC-228`'s merge (evasions, the mate score) and at `ABC-229`'s merge (quiet queen
   promotions). Until then `main` keeps `ADR-0024` decision 4 as written.
 - **The pointer line is added.** `ADR-0024` decision 4 carries a dated line that points here, written by this hop.
-- The smokes and the merge no longer wait on acceptance. They still wait on the forecast, and on a miss, on the
-  owner's reading.
+- The smokes and the merge no longer wait on acceptance. They still wait on the forecast. ~~On a miss, they also wait
+  on the owner's reading.~~ *(2026-10-30: the reading is (ii). On a miss they wait on decision 10's (ii) build
+  instead, and on its re-read forecast.)*
 
 Previously **PROPOSED** 2026-10-29 by Architect/Design (task `arch-ABC-228-adr`, records plus probes, at `main`
 `95f7369e`, whose `src/` equals `38536a34`'s). The bullets below are kept as written then.
@@ -291,6 +301,7 @@ of 1 878 626 nodes.
      for CPU per node, are set against base's 3 s node count.
      - At or below 100 % on both boards: `G6` is read by its rule, and `OQ-228-1` does not apply.
      - Above 100 % on either board: the SE stops and reports. `G6` is read under the owner's answer to `OQ-228-1`.
+       *(2026-10-30: the answer is (ii). Decision 10's 2026-10-30 block says what is built and how it is re-read.)*
      - Reference, on today's `main`: 1.226× and 1.325× head over door; 85 % and 125 % of base's 3 s nodes.
    - **`ABC-229` `A2`, quiet-promotion rows (≥ 6, Q3 among them).** Each reads ≥ static + 600 cp where the promotion is
      safe, and the door reads the static score. QE's frozen rows cover at least:
@@ -334,7 +345,86 @@ of 1 878 626 nodes.
     *(Answered 2026-10-30, owner, verbatim: "If engine requires more effort then increase 3s to 4s, build it fully."
     The full design is built, and (b) is not taken. The re-forecast in decision 9 runs first, on `main` with `ABC-235`
     and `ABC-240` merged. On a miss, the meaning of "3s to 4s" (`G6`'s measurement budget or level 5's per-move time)
-    goes back to the owner. See § Status.)*
+    ~~goes back to the owner~~ is (ii), level 5's per-move time (2026-10-30, below). See § Status.)*
+
+    **2026-10-30: the owner's reading is (ii)** (verbatim *"QQ-228-1: ii"*, `orch-2026-10-29g/…c4ab73de`). The
+    consequences were written before any such build, as he asked, by Architect/Design (task `arch-q3c-oq228ii`).
+    **All of this is conditional.** If decision 9's re-forecast reads ≤ 100 % on both boards, none of it happens, and
+    `ABC-228` keeps `G9` as written.
+
+    - **The trigger.** The re-forecast reads above 100 % on either board. The SE stops and reports, as decision 9
+      says. No new owner word is needed. The Orchestrator routes the (ii) build inside `ABC-228`, on the ticket
+      wording that BA/PM has folded in.
+    - **The forecast is re-read at 4 000 ms before the graded `G6` and the smokes.** Head then has 4/3 of base's
+      time. So the bar becomes: head's nodes × 1.09 ≤ 4/3 × base's 3 s node count, which is ≤ 133 % in decision 9's
+      units.
+      - Today's reference reads 125 % (`position-6`) and 85 % (kiwipete), so it fits.
+      - The linear time-to-nodes scale is `UNKNOWN - verify`. The graded `G6` decides.
+      - **Above 133 % on either board, (ii) does not cover the miss.** The SE stops again, and the Orchestrator takes
+        it to the owner.
+    - **The code (data only):**
+      - `LEVELS[5].budgetMs`: 3 000 → **4 000** (`src/levels.ts`);
+      - `DEFAULT_BUDGET_MS`: 3 000 → **4 000** (`src/engine.ts:132`, `NFR-004`'s default budget). This keeps
+        `ADR-0045` D2's equality `LEVELS[DEFAULT_LEVEL] = { DEFAULT_BUDGET_MS, 0 }`;
+      - the pins move with them. The `3_000` literals in `src/levels.test.ts` are at `:250`, `:313`, `:346` and `:373`.
+        The rows that read the constant follow it (`src/levels.test.ts:264`, `src/engine.test.ts:914`,
+        `src/cli.test.ts:4505`). Line numbers are as read at `c0698ddd`. Whether the list is complete is
+        `UNKNOWN - verify`: the SE greps for it.
+      - **Byte-identical:** `LEVELS[1..4]`, `LEVELS[6..7]`, `DEFAULT_LEVEL` (5), `HARDEST_LEVEL` and `HARD_CEILING_MS`.
+        The mechanism (`ADR-0045` D3) does not change.
+    - **`G9` is waived for `ABC-228` on `LEVELS[5]` only.** Every other value `G9` names stays byte-identical, and later
+      tickets read `G9` against the new base.
+    - **The `ADR-0045` amendment.** It carries a conditional pointer in § Status now. Its dated in-place fold is
+      BA/PM's, at `ABC-228`'s merge if the build happens. What moves:
+      - D1's level-5 row (3 000 → 4 000);
+      - D2's "it is today's level 3 exactly" and "`NFR-005`'s referent", which become history;
+      - § AMENDMENT A3's margin, "2 000 at 5", which becomes **1 000 at 5**. Level 5's ceiling stays 5 s (the owner's
+        `NFR-004` text: 5 s at levels 1–5), so no further bound moves. 1 000 ms is about 30× `AR-NFR004-A`'s ≤ 31 ms
+        overshoot.
+      - **The level 5 → 6 step shrinks** to 4 000 → 5 000 ms (1.25×, about +0.1 ply by D's own table: 3 000 v 4 000
+        reads +0.14, 4 000 v 4 500 reads +0.06; `UNKNOWN - verify`). Level 6 is then barely above the default. It is
+        not re-cut here: levels 6–7 are outside the ladder (A5), and re-cutting them is the owner's.
+    - **`NFR` text** (Security/NFR's, at `ABC-228`'s gate; no catalog edit at this hop):
+      - `NFR-004`: "≤ 3 s at default difficulty (level 5)" becomes ≤ 4 s. The 5 s ceiling at levels 1–5 stays;
+      - `NFR-005`: the referent becomes the default's 4 s budget. The depth-6 FAIL floor and the depth-7 WARN do not
+        move.
+    - **The gates `ABC-228` reads under it:**
+      - `G5`: level 5 at ≤ 4 s, and the 5 s ceiling;
+      - `G6`: each build at its own `LEVELS[5]`, so head at 4 000 ms against base at 3 000 ms. The rule does not
+        change: 5 interleaved runs, the median, any run below depth 6 FAILs. From the merge on, both sides of later
+        tickets run at 4 000 ms;
+      - `G11`: level 5's choice at 4 s, reported;
+      - `G8`: the rows that call `chooseMove` at `DEFAULT_BUDGET_MS` on the real clock (`src/search.pvs-lmr.test.ts:738`,
+        `src/transposition.test.ts:674`) take a third longer. Whether they run in the default lane is
+        `UNKNOWN - verify`. `G8` reads it.
+    - **The R frame moves to 4 000 ms:**
+      - **`tools/rating/rating.ts`** gives skytalix `st=3` in R mode (the literal `3000`, `:405`), with
+        `timemargin = 5 000 − budget`. It moves to 4 000 (margin 1 000) in the same merge, before `ABC-228`'s R
+        smoke, so the smoke reads the product as it ships. This is a `tools/` change, and BA/PM places it. S-4's bar
+        (≥ 3.0 of 10) is absolute and does not move.
+      - **D does not move:** both sides play at the frozen B = 1 500 ms.
+      - **The 3 000 ms references stay on record. They are never compared with a 4 000 ms reading.** They are:
+        `EPIC-008`'s R(close), 64.75 % (W/L/D 125/66/9) at `38536a34`; 2 015.6 ± 49.5; and `EPIC-010`'s trend
+        reference (the flag at ≤ 44.75 %).
+      - **The trend pool closes at `ABC-228`'s merge.** Rows before it are judged against the 3 000 ms reference.
+        Rows after it wait for the next batch.
+      - **The batches run both sides at 4 000 ms**, so they measure code, not time. That covers milestone 1's batch
+        (`ABC-225`'s interleaved pair, due after `ABC-228`–`ABC-230`) and the epic-close `M2` batch. Under `EPIC-010`'s
+        existing rule, the passing batch's head score at 4 000 ms becomes the new reference. The batch's wall time
+        grows by `UNKNOWN - verify`.
+    - **What must be re-read or re-pointed** (and by whom):
+      - `G5`, `G6` and `G11` at `ABC-228` (QE);
+      - the `NFR-004` and `NFR-005` catalog text (Security/NFR);
+      - the ladder verdict: it is STALE under `ADR-0038` decision 6, a merge that touches `src/levels.ts`. Re-taking it
+        is the Orchestrator's to schedule, and it does not gate the merge;
+      - `ABC-231` `A1`, which replays `ABC-205`'s failing `G6`: it reads at the new referent (BA/PM);
+      - any `EPIC-009` reading that plays level 5 at its fixed budget rather than a clock (BA/PM;
+        `UNKNOWN - verify` which ones);
+      - `AGENTS.md`'s "level 5 (≤3 s/move …)" line (the Scribe);
+      - `ADR-0044` D11: UCI `Skill Level` 5 reads the table, so it plays 4 000 ms with no code change. It is recorded at
+        the `ADR-0045` fold.
+    - **Rollback:** `LEVELS[5]`, `DEFAULT_BUDGET_MS` and the R literal go back to 3 000, and the `levels.test.ts`
+      literals go back with them. Any reference read at 4 000 ms is then stale.
 
 ## Alternatives
 
