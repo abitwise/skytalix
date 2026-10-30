@@ -1,3 +1,4 @@
+_Updated: 2026-10-30 by Orchestrator (orch-2026-10-29g) — ABC-240 SE done (value-identical: A1 hash equal; nps 1.08–1.12× indicative, above the Architect's ~6–8 % bound, unexplained, QE reads); code review PASS → In Review; `qe-ABC-240` spawned ALONE (timing reads; host clear, Tctl 37 °C). Width 1/3._
 _Updated: 2026-10-30 by Orchestrator (orch-2026-10-29g) — qe-ABC-225 FAIL on THERMAL STOP (Tctl median 87.05 °C at width 2 after 4/40 games; a foreign vitest also ran on the host). A1–A4 met, no tool defect. ABC-225 → Blocked on owner (R-run Tctl line / width 1 / cooler host); no more games tonight per the night plan. EPIC-010 batch (~9 h at width 2) at the same risk. `se-ABC-240` spawned (no games). Width 1/3._
 _Updated: 2026-10-30 by Orchestrator (orch-2026-10-29g) — ABC-235 DONE (baf99a7c; QE PASS S2: nps 1.26/1.28/1.20, A1 rows equal). Rows ABC-225/235 had sat inside the board's template comment; moved to their real columns. `qe-ABC-225` spawned ALONE (40 games, ~1 h). ABC-240 pulled to In Development; `se-ABC-240` spawns only when the games end (ALONE = no builds or tests alongside). Width 1/3._
 _Updated: 2026-10-29 by Orchestrator (orch-2026-10-29g, …c2534968) — owner: continue overnight. Night plan: qe-ABC-235 → merge ABC-235 → qe-ABC-225 (40 games ALONE) → ABC-240 SE+QE; owner-gated ADR work held; nothing pushed. Width 1/3._
@@ -1210,8 +1211,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-240] Move ordering without per-move allocation, value-identical (cut 6, split from ABC-235) (size: S, priority: P3, DoR 10/10; S2, no smoke; A3 ≥ 1.03× nps on 2 boards, miss = not merged, dropped; **pulled 2026-10-30** (ABC-235 merged baf99a7c); `se-ABC-240` spawns after qe-ABC-225's games; before ABC-233/234; item 2 shares src/quiescence.ts with ABC-228/229)
+## In Development (WIP 0/3)
 
 
 
@@ -1239,7 +1239,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-240] Move ordering without per-move allocation, value-identical (cut 6, split from ABC-235) (size: S, priority: P3, DoR 10/10; S2, no smoke; A3 ≥ 1.03× nps on 2 boards, miss = not merged, dropped; **pulled 2026-10-30** (ABC-235 merged baf99a7c); `se-ABC-240` spawns after qe-ABC-225's games; before ABC-233/234; item 2 shares src/quiescence.ts with ABC-228/229; SE done 220ab978 (code 7913499d): A1 6 021 rows hash = base 812f86ae; unpruned doors d5 264 rows equal; P1/P2/C1–C4 rows; nps 1.117/1.109/1.076 indicative; gates green; code review PASS (stable insertion sort, fixed float64 scratch); QE `qe-ABC-240` now)
 
 
 

@@ -1,8 +1,8 @@
 ---
 id: ABC-240
 title: "Move ordering without per-move allocation, value-identical: the same order, the same nodes, more nodes a second"
-status: in-development
-column: In Development
+status: in-review
+column: In Review
 size: S
 priority: P3
 epic: EPIC-010
