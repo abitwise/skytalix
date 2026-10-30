@@ -1,0 +1,56 @@
+== P1 generator white-rank only:  Tests 14 failed | 224 passed (238)
+× a block by interposition, Bf1, the only evasion: differs from the static score, equals the best evasion's and the brute force 2ms
+× every safe row reads at least static + 600 cp, and the pre-ABC-229 rules read the static score 0ms
+× five rows separate the rules (QP-1, QP-6, QP-7, QP-8, QP-9); the four that must not move do not 1ms
+× is identical 2/2 on 15 positions, each completing root depth >= 2 — 30/30, 15/15 42ms
+× is the legal captures, then the legal quiet queen promotions, on every position 1ms
+× plays search(position, d)'s move and score at the reported depth d — the abort is discarded 31ms
+× position-6, readings 3 to 25: 0 mutated roots, and aborts landing inside a null subtree 416ms
+× QE-C4 discriminates: the shipped rule and the pre-ticket rule read different values 1ms
+× QE-C4: Nf2+ forks Kh1 and Qd1; Rxf2 is the best evasion, the pre-ticket rule misses it: reads 475 (static 652, pre-ticket 652), the brute force agrees 1ms
+× QP-9 (QP-1 colour-flipped, black promotes): static 212, pre-ABC-229 212, shipped 977, and the brute force agrees 0ms
+× quiesce out of check generates once per node with quiet promotions on: one generateCaptures, no generateMoves 3ms
+× returns the completed depth-2 move, which is NOT the depth-3 move 2ms
+== P2 quiet promotions at qply 0 only:  Tests 3 failed | 235 passed (238)
+× five rows separate the rules (QP-1, QP-6, QP-7, QP-8, QP-9); the four that must not move do not 2ms
+× QP-8 (the quiet promotion arrives at qply 2 (bxa7+, a king move, a8=Q)): static 554, pre-ABC-229 1152, shipped 1885, and the brute force agrees 3ms
+× quiesce out of check generates once per node with quiet promotions on: one generateCaptures, no generateMoves 4ms
+FAIL  src/gameend.nfr.test.ts > ABC-206 — the search leaf's game-end check stays cheap (call counts, spied) > quiesce out of check generates once per node with quiet promotions on: one generateCaptures, no generateMoves
+FAIL  src/quiescence.test.ts > ABC-229 A2 — quiescence sees the queen: Q-SET's quiet-promotion rows (QE-frozen) > five rows separate the rules (QP-1, QP-6, QP-7, QP-8, QP-9); the four that must not move do not
+FAIL  src/quiescence.test.ts > ABC-229 A2 — quiescence sees the queen: Q-SET's quiet-promotion rows (QE-frozen) > QP-8 (the quiet promotion arrives at qply 2 (bxa7+, a king move, a8=Q)): static 554, pre-ABC-229 1152, shipped 1885, and the brute force agrees
+== P3 second legalMoves pass:  Tests 1 failed | 237 passed (238)
+× quiesce out of check generates once per node with quiet promotions on: one generateCaptures, no generateMoves 7ms
+FAIL  src/gameend.nfr.test.ts > ABC-206 — the search leaf's game-end check stays cheap (call counts, spied) > quiesce out of check generates once per node with quiet promotions on: one generateCaptures, no generateMoves
+== P4 no legality test on the promotion:  Tests 2 failed | 236 passed (238)
+× drops a quiet queen promotion that would expose its own king (a pinned pawn) 0ms
+× is the legal captures, then the legal quiet queen promotions, on every position 3ms
+FAIL  src/quiescence.test.ts > ABC-229 — the one-pass list: legalCapturesAndQueenPromotions > drops a quiet queen promotion that would expose its own king (a pinned pawn)
+FAIL  src/quiescence.test.ts > ABC-229 — the one-pass list: legalCapturesAndQueenPromotions > is the legal captures, then the legal quiet queen promotions, on every position
+== P5 quiet under-promotions included:  Tests 3 failed | 235 passed (238)
+× five rows separate the rules (QP-1, QP-6, QP-7, QP-8, QP-9); the four that must not move do not 1ms
+× is the legal captures, then the legal quiet queen promotions, on every position 1ms
+× QP-4 (only an under-promotion wins (e8=N+), and it stays unseen): static -52, pre-ABC-229 -52, shipped -52, and the brute force agrees 2ms
+FAIL  src/quiescence.test.ts > ABC-229 A2 — quiescence sees the queen: Q-SET's quiet-promotion rows (QE-frozen) > five rows separate the rules (QP-1, QP-6, QP-7, QP-8, QP-9); the four that must not move do not
+FAIL  src/quiescence.test.ts > ABC-229 A2 — quiescence sees the queen: Q-SET's quiet-promotion rows (QE-frozen) > QP-4 (only an under-promotion wins (e8=N+), and it stays unseen): static -52, pre-ABC-229 -52, shipped -52, and the brute force agrees
+FAIL  src/quiescence.test.ts > ABC-229 — the one-pass list: legalCapturesAndQueenPromotions > is the legal captures, then the legal quiet queen promotions, on every position
+== P6 search door's switch on:  Tests 3 failed | 235 passed (238)
+× Q3 through the depth-0 seam: search() reads 977, its door the pre-ticket 212 2ms
+× Q-SET's INFO row kpk-b6c6 through search() at depth 8: 902 shipped, 186 on the door, both b6c6 13ms
+× ./search.ts: each exported entry passes exactly one quietPromotions literal, and only search's is true 1ms
+FAIL  src/quiescence.test.ts > ABC-229 — the doors: searchWithoutQuietPromotions and chooseMoveWithoutQuietPromotions > Q3 through the depth-0 seam: search() reads 977, its door the pre-ticket 212
+FAIL  src/quiescence.test.ts > ABC-229 — the doors: searchWithoutQuietPromotions and chooseMoveWithoutQuietPromotions > Q-SET's INFO row kpk-b6c6 through search() at depth 8: 902 shipped, 186 on the door, both b6c6
+FAIL  src/quiescence.test.ts > ABC-229 — the doors: searchWithoutQuietPromotions and chooseMoveWithoutQuietPromotions > ./search.ts: each exported entry passes exactly one quietPromotions literal, and only search's is true
+== P7 chooseMove's switch off:  Tests 2 failed | 236 passed (238)
+× chooseMove reads the INFO row the same way at depth 8; its door does not see the queen 6ms
+× ./engine.ts: each exported entry passes exactly one quietPromotions literal, and only chooseMove's is true 1ms
+FAIL  src/quiescence.test.ts > ABC-229 — the doors: searchWithoutQuietPromotions and chooseMoveWithoutQuietPromotions > chooseMove reads the INFO row the same way at depth 8; its door does not see the queen
+FAIL  src/quiescence.test.ts > ABC-229 — the doors: searchWithoutQuietPromotions and chooseMoveWithoutQuietPromotions > ./engine.ts: each exported entry passes exactly one quietPromotions literal, and only chooseMove's is true
+== P8 list left unsorted with promotions on:  Tests 4 failed | 234 passed (238)
+× plays search(position, d)'s move and score at the reported depth d — the abort is discarded 22ms
+× position-6, readings 3 to 25: 0 mutated roots, and aborts landing inside a null subtree 407ms
+× stops within one clock-check interval of the node budget 12ms
+× visits only a bounded number of nodes past the deadline — the in-recursion check 1ms
+FAIL  src/engine.test.ts > A2 — a budget far below one iteration's cost still returns a move, and stops near it > visits only a bounded number of nodes past the deadline — the in-recursion check
+FAIL  src/engine.test.ts > ABC-170 A2 — maxNodes aborts, and the last COMPLETED iteration is played > plays search(position, d)'s move and score at the reported depth d — the abort is discarded
+FAIL  src/engine.test.ts > ABC-170 A2 — maxNodes aborts, and the last COMPLETED iteration is played > stops within one clock-check interval of the node budget
+FAIL  src/search.null-move.test.ts > QE-208-a — an abort inside a null move's subtree still hands the root back byte-identical > position-6, readings 3 to 25: 0 mutated roots, and aborts landing inside a null subtree

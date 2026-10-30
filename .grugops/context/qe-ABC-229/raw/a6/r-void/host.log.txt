@@ -1,0 +1,3 @@
+2026-10-30T17:42:23Z before load1=0.58 thermal=? power=? foreign_vitest_procs=0
+2026-10-30T17:42:26Z start load1=0.58 thermal=? power=? foreign_vitest_procs=0
+2026-10-30T17:43:26Z periodic load1=2.38 thermal=? power=? foreign_vitest_procs=0

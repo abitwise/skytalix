@@ -87,6 +87,11 @@
  * every door above turns it off, and a fourth TEST-ONLY door, `chooseMoveWithoutQuiescenceEvasions`,
  * is the pre-`ABC-228` `chooseMove`, node for node. It takes no depth.
  *
+ * QUIET QUEEN PROMOTIONS IN QUIESCENCE (`ABC-229`, `ADR-0053` decision 5) reach it the same way, by
+ * a `quietPromotions` switch beside `quiescenceEvasions`. It changes the VALUE, so every door
+ * above turns it off, and a fifth TEST-ONLY door, `chooseMoveWithoutQuietPromotions` (evasions
+ * on), is the pre-`ABC-229` `chooseMove`, node for node. It takes no depth.
+ *
  * NOT HERE, each owned elsewhere: difficulty selection and how a level persists (`EPIC-006`), the
  * budget-to-level mapping (`ABC-087`), aspiration windows and threading (none requested;
  * `ADR-0005` F6 leaves threading to Architect/Design).
@@ -251,13 +256,20 @@ interface Heuristics {
   readonly nullMove: boolean;
   /** `options.priorKeys` read (`ABC-230`, `ADR-0054` decision 3): true on `chooseMove` only. */
   readonly priorKeys: boolean;
-  /** Evasions in check inside quiescence (`ABC-228`, `ADR-0053`): true on `chooseMove` only. */
+  /**
+   * Evasions in check inside quiescence (`ABC-228`, `ADR-0053`): true on `chooseMove` and
+   * `chooseMoveWithoutQuietPromotions`.
+   */
   readonly quiescenceEvasions: boolean;
+  /** Quiet queen promotions inside quiescence (`ABC-229`, `ADR-0053`): true on `chooseMove` only. */
+  readonly quietPromotions: boolean;
 }
 
 /** The quiescence rules this recursion hands `quiesce` (`ADR-0053` decision 6): constants, never built per leaf. */
-const EVASIONS_ON: QuiescenceRules = { evasions: true };
-const EVASIONS_OFF: QuiescenceRules = { evasions: false };
+const RULES_SHIPPED: QuiescenceRules = { evasions: true, quietPromotions: true };
+const RULES_NO_QUIET_PROMOTIONS: QuiescenceRules = { evasions: true, quietPromotions: false };
+const RULES_NO_EVASIONS: QuiescenceRules = { evasions: false, quietPromotions: true };
+const RULES_NEITHER: QuiescenceRules = { evasions: false, quietPromotions: false };
 
 /** The deepening loop's mutable state: the clock, the deadline, and when to consult again. */
 interface Budget extends Heuristics {
@@ -312,7 +324,13 @@ function leafScore(
 ): number {
   const reason = leafEndReason(position);
   if (reason === null) {
-    const rules = budget.quiescenceEvasions ? EVASIONS_ON : EVASIONS_OFF;
+    const rules = budget.quiescenceEvasions
+      ? budget.quietPromotions
+        ? RULES_SHIPPED
+        : RULES_NO_QUIET_PROMOTIONS
+      : budget.quietPromotions
+        ? RULES_NO_EVASIONS
+        : RULES_NEITHER;
     return quiesce(position, alpha, beta, 0, ply, rules, budget.visit);
   }
   if (reason === "checkmate") return 0 - (MATE_SCORE - ply);
@@ -570,6 +588,28 @@ export function chooseMove(position: Position, options: EngineOptions): EngineCh
     nullMove: true,
     priorKeys: true,
     quiescenceEvasions: true,
+    quietPromotions: true,
+  });
+}
+
+/**
+ * TEST-ONLY. The pre-`ABC-229` `chooseMove`, node for node: quiet queen promotions in quiescence
+ * off, everything else on, evasions, null move and the prior keys included — the engine side of
+ * `ABC-229`'s bounded drift oracle, and the shipped side of every `ABC-228` row that measures
+ * evasions alone (`ADR-0053` decisions 6 and 7). Not an engine option; nothing in production
+ * calls it.
+ */
+export function chooseMoveWithoutQuietPromotions(
+  position: Position,
+  options: EngineOptions,
+): EngineChoice | null {
+  return deepen(position, options, {
+    pvs: true,
+    reductions: true,
+    nullMove: true,
+    priorKeys: true,
+    quiescenceEvasions: true,
+    quietPromotions: false,
   });
 }
 
@@ -589,6 +629,7 @@ export function chooseMoveWithoutQuiescenceEvasions(
     nullMove: true,
     priorKeys: true,
     quiescenceEvasions: false,
+    quietPromotions: false,
   });
 }
 
@@ -608,6 +649,7 @@ export function chooseMoveWithoutNullMove(
     nullMove: false,
     priorKeys: false,
     quiescenceEvasions: false,
+    quietPromotions: false,
   });
 }
 
@@ -627,6 +669,7 @@ export function chooseMoveWithoutReductions(
     nullMove: false,
     priorKeys: false,
     quiescenceEvasions: false,
+    quietPromotions: false,
   });
 }
 
@@ -645,10 +688,11 @@ export function chooseMoveWithoutPvsOrReductions(
     nullMove: false,
     priorKeys: false,
     quiescenceEvasions: false,
+    quietPromotions: false,
   });
 }
 
-/** The deepening loop behind `chooseMove` and its four doors; they differ in `heuristics` only. */
+/** The deepening loop behind `chooseMove` and its five doors; they differ in `heuristics` only. */
 function deepen(
   position: Position,
   options: EngineOptions,

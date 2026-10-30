@@ -32,13 +32,18 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { makeMove, unmakeMove } from "./apply.ts";
-import { chooseMove, chooseMoveWithoutQuiescenceEvasions, type EngineChoice } from "./engine.ts";
+import {
+  chooseMove,
+  chooseMoveWithoutQuiescenceEvasions,
+  chooseMoveWithoutQuietPromotions,
+  type EngineChoice,
+} from "./engine.ts";
 import { evaluate } from "./evaluate.ts";
 import { parseFen, toFen } from "./fen.ts";
 import { gameStatus } from "./gameend.ts";
-import { isInCheck, legalCaptures, legalMoves } from "./legal.ts";
+import { isInCheck, legalCaptures, legalCapturesAndQueenPromotions, legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
-import { type Position, squareName } from "./position.ts";
+import { EMPTY, type Position, QUEEN, squareName } from "./position.ts";
 import { HANGING_CORPUS } from "./puzzle-corpus.ts";
 import {
   captureScratchByteLength,
@@ -55,6 +60,7 @@ import {
   searchWithoutPvsOrReductions,
   searchWithoutQuiescence,
   searchWithoutQuiescenceEvasions,
+  searchWithoutQuietPromotions,
 } from "./search.ts";
 
 /** The six perft positions — `src/search.test.ts`'s corpus, the capture-dense ones included. */
@@ -79,8 +85,8 @@ const fenOf = (name: string): string =>
  */
 const RUN_DEEP = process.env.SEARCH_DEEP === "1";
 
-/** The shipped quiescence rules (`ABC-228`): a direct call passes them, as both recursions do. */
-const SHIPPED: QuiescenceRules = { evasions: true };
+/** The shipped quiescence rules (`ABC-228`, `ABC-229`): a direct call passes them, as both recursions do. */
+const SHIPPED: QuiescenceRules = { evasions: true, quietPromotions: true };
 
 const label = (move: Move | null): string =>
   move === null ? "null" : `${squareName(move.from)}${squareName(move.to)}`;
@@ -718,8 +724,10 @@ describe("ABC-240 (P2) — quiescence's capture order equals today's stable sort
 // the bounded drift oracle and the mate floor in the deep lane.
 // ---------------------------------------------------------------------------
 
-/** The pre-`ABC-228` rules: a work reading and the reference arm pass these. */
-const PRE_ABC228: QuiescenceRules = { evasions: false };
+/** The pre-`ABC-228` rules (and so pre-`ABC-229`): a work reading and the reference arm pass these. */
+const PRE_ABC228: QuiescenceRules = { evasions: false, quietPromotions: false };
+/** The pre-`ABC-229` rules, evasions on: what `ABC-229`'s doors hand `quiesce` (`ADR-0053` decision 6). */
+const PRE_ABC229: QuiescenceRules = { evasions: true, quietPromotions: false };
 
 /** A full-window `quiesce` at `qply` 0 under `rules`, the leaf `ply` plies from the root. */
 const quiesceAt = (fen: string, rules: QuiescenceRules, ply = 0, qply = 0): number =>
@@ -738,15 +746,19 @@ const quiesceAt = (fen: string, rules: QuiescenceRules, ply = 0, qply = 0): numb
  * window, no cutoff and no ordering, written here and not in `src/`. In check below the cap every
  * legal move is tried and none is mate at `ply + qply`; otherwise the static score, raised by any
  * capture. Its value is the exact one a full-window fail-soft `quiesce` must return.
+ *
+ * `ABC-229`'s twin: with `rules.quietPromotions`, out of check the quiet promotions to a queen are
+ * tried too, found here by filtering `legalMoves` — an independent derivation, not the one-pass
+ * generator `quiesce` uses.
  */
-function bruteForce(position: Position, qply: number, ply: number): number {
-  if (qply < QUIESCENCE_MAX_PLY && isInCheck(position)) {
+function bruteForce(position: Position, qply: number, ply: number, rules: QuiescenceRules): number {
+  if (rules.evasions && qply < QUIESCENCE_MAX_PLY && isInCheck(position)) {
     const evasions = legalMoves(position);
     if (evasions.length === 0) return 0 - (MATE_SCORE - (ply + qply));
     let best = Number.NEGATIVE_INFINITY;
     for (const move of evasions) {
       const undo = makeMove(position, move);
-      const score = 0 - bruteForce(position, qply + 1, ply);
+      const score = 0 - bruteForce(position, qply + 1, ply, rules);
       unmakeMove(position, move, undo);
       if (score > best) best = score;
     }
@@ -754,9 +766,12 @@ function bruteForce(position: Position, qply: number, ply: number): number {
   }
   let best = evaluate(position);
   if (qply >= QUIESCENCE_MAX_PLY) return best;
-  for (const move of legalCaptures(position)) {
+  const moves = rules.quietPromotions
+    ? legalMoves(position).filter((m) => m.captured !== EMPTY || m.promotion === QUEEN)
+    : legalCaptures(position);
+  for (const move of moves) {
     const undo = makeMove(position, move);
-    const score = 0 - bruteForce(position, qply + 1, ply);
+    const score = 0 - bruteForce(position, qply + 1, ply, rules);
     unmakeMove(position, move, undo);
     if (score > best) best = score;
   }
@@ -880,7 +895,7 @@ describe("ABC-228 A2 — in check, quiesce searches every evasion: Q-SET's in-ch
         unmakeMove(position, move, undo);
       }
       expect(score).toBe(best);
-      expect(score).toBe(bruteForce(parseFen(fen), 0, 0));
+      expect(score).toBe(bruteForce(parseFen(fen), 0, 0, SHIPPED));
     });
   }
 
@@ -908,7 +923,7 @@ describe("ABC-228 A3 — a capture that mates scores mate, at the right sign and
   for (const { name, fen, score } of Q_SET_MATES) {
     it(`${name}: quiesce reads ${score}, the brute force agrees, the pre-ticket rules do not`, () => {
       expect(quiesceAt(fen, SHIPPED)).toBe(score);
-      expect(bruteForce(parseFen(fen), 0, 0)).toBe(score);
+      expect(bruteForce(parseFen(fen), 0, 0, SHIPPED)).toBe(score);
       expect(Math.abs(quiesceAt(fen, PRE_ABC228))).toBeLessThan(MATE_SCORE - 1_000);
     });
 
@@ -943,7 +958,7 @@ describe("ABC-228 A3 — a capture that mates scores mate, at the right sign and
     expect(legalMoves(position).map(label)).toEqual(["g8h7"]);
     const score = quiesceAt(ONE_EVASION, SHIPPED);
     expect(Math.abs(score)).toBeLessThan(MATE_SCORE - 1_000);
-    expect(score).toBe(bruteForce(parseFen(ONE_EVASION), 0, 0));
+    expect(score).toBe(bruteForce(parseFen(ONE_EVASION), 0, 0, SHIPPED));
   });
 
   it("through search() at depth 1: Rd8+ Ne8 Rxe8 mates three plies from the root, MATE_SCORE − 3", () => {
@@ -1014,7 +1029,7 @@ describe("ABC-228 QE-228-b — QE's Q-SET rows (qe-ABC-228), in src", () => {
       expect(isInCheck(parseFen(fen))).toBe(true);
       expect(evaluate(parseFen(fen))).toBe(stat);
       expect(quiesceAt(fen, SHIPPED)).toBe(score);
-      expect(bruteForce(parseFen(fen), 0, 0)).toBe(score);
+      expect(bruteForce(parseFen(fen), 0, 0, SHIPPED)).toBe(score);
       expect(quiesceAt(fen, PRE_ABC228)).toBe(pre);
     });
   }
@@ -1042,7 +1057,7 @@ describe("ABC-228 QE-228-b — QE's Q-SET rows (qe-ABC-228), in src", () => {
 
   it("QE-M1: mated in quiescence with a negative sign, −(MATE_SCORE − 2), and search agrees at depths 1–3", () => {
     expect(quiesceAt(QE_M1, SHIPPED)).toBe(0 - (MATE_SCORE - 2));
-    expect(bruteForce(parseFen(QE_M1), 0, 0)).toBe(0 - (MATE_SCORE - 2));
+    expect(bruteForce(parseFen(QE_M1), 0, 0, SHIPPED)).toBe(0 - (MATE_SCORE - 2));
     for (const depth of [1, 2, 3]) {
       expect(search(parseFen(QE_M1), depth).score, `search d${depth}`).toBe(0 - (MATE_SCORE - 2));
       expect(deepenWith(chooseMove, QE_M1, depth).score, `chooseMove d${depth}`).toBe(
@@ -1057,7 +1072,7 @@ describe("ABC-228 QE-228-b — QE's Q-SET rows (qe-ABC-228), in src", () => {
   it("QE-M2: Nxf7 smothers, MATE_SCORE − 1, and MATE_SCORE − 6 from a leaf 5 plies down", () => {
     expect(isInCheck(parseFen(QE_M2))).toBe(false);
     expect(quiesceAt(QE_M2, SHIPPED)).toBe(MATE_SCORE - 1);
-    expect(bruteForce(parseFen(QE_M2), 0, 0)).toBe(MATE_SCORE - 1);
+    expect(bruteForce(parseFen(QE_M2), 0, 0, SHIPPED)).toBe(MATE_SCORE - 1);
     expect(quiesceAt(QE_M2, SHIPPED, 5)).toBe(MATE_SCORE - 6);
     expect(Math.abs(quiesceAt(QE_M2, PRE_ABC228))).toBeLessThan(MATE_SCORE - 1_000);
   });
@@ -1072,10 +1087,13 @@ describe("ABC-228 QE-228-b — QE's Q-SET rows (qe-ABC-228), in src", () => {
 });
 
 describe("ABC-228 — the rule rows (`ADR-0053` decision 9; each reds a planted fault)", () => {
-  it("out of check the node still stands pat: Q3's free quiet promotion is not searched", () => {
+  // `ABC-229` (`ADR-0053` decision 7): the shipped rules now search Q3's quiet promotion (977,
+  // `QP-1`), so this row reads the pre-`ABC-229` record, evasions on: it still reds evasions
+  // searched out of check, which is the fault it was written for.
+  it("out of check the node still stands pat: Q3's free quiet promotion is not searched (pre-ABC-229 rules)", () => {
     const q3 = "8/P6k/8/8/8/8/8/K7 w - - 0 1";
     expect(isInCheck(parseFen(q3))).toBe(false);
-    expect(quiesceAt(q3, SHIPPED)).toBe(evaluate(parseFen(q3)));
+    expect(quiesceAt(q3, PRE_ABC229)).toBe(evaluate(parseFen(q3)));
   });
 
   it("in check below the cap the static score is never returned: every in-check row, every qply 0..7", () => {
@@ -1134,10 +1152,21 @@ describe("ABC-228 — the rule rows (`ADR-0053` decision 9; each reds a planted 
   for (const path of ["./search.ts", "./engine.ts"]) {
     it(`${path}: the leaf passes its ply and its rules record to quiesce, the record a module constant`, () => {
       const flat = readFileSync(new URL(path, import.meta.url), "utf8").replace(/\s+/g, " ");
-      expect(flat).toContain("const EVASIONS_ON: QuiescenceRules = { evasions: true };");
-      expect(flat).toContain("const EVASIONS_OFF: QuiescenceRules = { evasions: false };");
+      // `ABC-229` adds the second switch: four constant records, picked by both switches.
+      expect(flat).toContain(
+        "const RULES_SHIPPED: QuiescenceRules = { evasions: true, quietPromotions: true };",
+      );
+      expect(flat).toContain(
+        "const RULES_NO_QUIET_PROMOTIONS: QuiescenceRules = { evasions: true, quietPromotions: false };",
+      );
+      expect(flat).toContain(
+        "const RULES_NO_EVASIONS: QuiescenceRules = { evasions: false, quietPromotions: true };",
+      );
+      expect(flat).toContain(
+        "const RULES_NEITHER: QuiescenceRules = { evasions: false, quietPromotions: false };",
+      );
       expect(flat).toMatch(
-        /const rules = (switches|budget)\.quiescenceEvasions \? EVASIONS_ON : EVASIONS_OFF;/,
+        /const rules = (switches|budget)\.quiescenceEvasions \? \1\.quietPromotions \? RULES_SHIPPED : RULES_NO_QUIET_PROMOTIONS : \1\.quietPromotions \? RULES_NO_EVASIONS : RULES_NEITHER;/,
       );
       const calls = [...flat.matchAll(/quiesce\(([^;]*?)\);/g)].map((m) => m[1]);
       expect(calls).toHaveLength(1);
@@ -1145,6 +1174,39 @@ describe("ABC-228 — the rule rows (`ADR-0053` decision 9; each reds a planted 
     });
   }
 });
+
+/** The two recursions' exported entries, the shipped one, and `ABC-229`'s door. */
+const SWITCH_MODULES = [
+  {
+    path: "./search.ts",
+    call: "searchRoot(position, depth, {",
+    on: "search",
+    door: "searchWithoutQuietPromotions",
+  },
+  {
+    path: "./engine.ts",
+    call: "deepen(position, options, {",
+    on: "chooseMove",
+    door: "chooseMoveWithoutQuietPromotions",
+  },
+];
+
+/** Each exported entry of `path` that calls its recursion, mapped to its one `switchName` literal. */
+function switchLiterals(path: string, switchName: string): Record<string, string> {
+  const { call } = SWITCH_MODULES.find((entry) => entry.path === path) as { call: string };
+  const flat = readFileSync(new URL(path, import.meta.url), "utf8").replace(/\s+/g, " ");
+  const found: Record<string, string> = {};
+  for (const chunk of flat.split("export function ").slice(1)) {
+    if (!chunk.includes(call)) continue;
+    const name = chunk.slice(0, chunk.indexOf("("));
+    const literals = [...chunk.matchAll(new RegExp(`${switchName}: (true|false)\\b`, "g"))].map(
+      (m) => m[1],
+    );
+    expect(literals, name).toHaveLength(1);
+    found[name] = literals[0] as string;
+  }
+  return found;
+}
 
 describe("ABC-228 — the doors: searchWithoutQuiescenceEvasions and chooseMoveWithoutQuiescenceEvasions", () => {
   it("take what search() and chooseMove take, and no depth on the engine side", () => {
@@ -1167,25 +1229,292 @@ describe("ABC-228 — the doors: searchWithoutQuiescenceEvasions and chooseMoveW
   });
 
   // The sibling of `QE-208-c`: one `quiescenceEvasions` literal per entry, true on the shipped
-  // pair only (`ADR-0053` decision 7).
-  const MODULES = [
-    { path: "./search.ts", call: "searchRoot(position, depth, {", on: "search" },
-    { path: "./engine.ts", call: "deepen(position, options, {", on: "chooseMove" },
+  // pair only (`ADR-0053` decision 7) — and, since `ABC-229`, on its doors, which keep evasions on.
+  for (const { path, on, door } of SWITCH_MODULES) {
+    it(`${path}: each exported entry passes exactly one quiescenceEvasions literal, true on ${on} and ${door} only`, () => {
+      const found = switchLiterals(path, "quiescenceEvasions");
+      expect(Object.keys(found).length).toBeGreaterThanOrEqual(path === "./search.ts" ? 12 : 6);
+      expect(Object.entries(found).filter(([, value]) => value === "true")).toEqual([
+        [on, "true"],
+        [door, "true"],
+      ]);
+    });
+  }
+});
+
+// ---------------------------------------------------------------------------
+// ABC-229 (`ADR-0053` decisions 5-8) — out of check, quiescence also searches the legal quiet
+// promotions to a queen. `Q-SET`'s quiet-promotion rows (QE-frozen), the doors, the source rows;
+// the node bar and the bounded drift oracle in the deep lane.
+// ---------------------------------------------------------------------------
+
+/**
+ * `Q-SET`, quiet promotions (`ABC-229` `A2`, `ADR-0053` decision 9). FROZEN BY QE before this build
+ * (`qe-ABC-229-qset`, fixture `qset-229-frozen.json`, sha256 `7ba64d89…`): every value here is
+ * QE's, read on `main` `a649fbc4`. `old` is the pre-`ABC-229` rules (evasions on), which is what
+ * the doors hand `quiesce`; `new` is the shipped rules.
+ */
+const Q_SET_PROMOTIONS: ReadonlyArray<{
+  id: string;
+  kind: string;
+  fen: string;
+  stat: number;
+  old: number;
+  new: number;
+  safe: boolean;
+}> = [
+  {
+    id: "QP-1",
+    kind: "Q3, a safe quiet promotion",
+    fen: "8/P6k/8/8/8/8/8/K7 w - - 0 1",
+    stat: 212,
+    old: 212,
+    new: 977,
+    safe: true,
+  },
+  {
+    id: "QP-2",
+    kind: "the promotion square is controlled (Rb2 takes on b8)",
+    fen: "8/1P5k/8/8/8/8/1r6/7K w - - 0 1",
+    stat: -370,
+    old: -370,
+    new: -370,
+    safe: false,
+  },
+  {
+    id: "QP-3",
+    kind: "in check, a quiet queen promotion blocks (decision 2's path)",
+    fen: "K6r/4P3/8/8/7k/8/8/4R3 w - - 0 1",
+    stat: 220,
+    old: 544,
+    new: 544,
+    safe: false,
+  },
+  {
+    id: "QP-4",
+    kind: "only an under-promotion wins (e8=N+), and it stays unseen",
+    fen: "8/4P1k1/3q4/8/8/8/5PPP/3B2K1 w - - 0 1",
+    stat: -52,
+    old: -52,
+    new: -52,
+    safe: false,
+  },
+  {
+    id: "QP-5",
+    kind: "a capturing under-promotion (exf8=N+), unchanged",
+    fen: "5r2/3qP2k/8/8/8/8/5PPP/3B2K1 w - - 0 1",
+    stat: -570,
+    old: 1_073,
+    new: 1_073,
+    safe: false,
+  },
+  {
+    id: "QP-6",
+    kind: "KPK, c8=Q+ defended by Kb7",
+    fen: "8/1KPk4/8/8/8/8/8/8 w - - 0 1",
+    stat: 196,
+    old: 196,
+    new: 947,
+    safe: true,
+  },
+  {
+    id: "QP-7",
+    kind: "a quiet queen promotion mates (c8=Q#)",
+    fen: "k7/2P5/1K6/8/8/8/8/8 w - - 0 1",
+    stat: 186,
+    old: 186,
+    new: MATE_SCORE - 1,
+    safe: true,
+  },
+  {
+    id: "QP-8",
+    kind: "the quiet promotion arrives at qply 2 (bxa7+, a king move, a8=Q)",
+    fen: "1k6/r7/1P6/8/4B3/8/8/R6K w - - 0 1",
+    stat: 554,
+    old: 1_152,
+    new: 1_885,
+    safe: false,
+  },
+  {
+    id: "QP-9",
+    kind: "QP-1 colour-flipped, black promotes",
+    fen: "k7/8/8/8/8/8/p6K/8 b - - 0 1",
+    stat: 212,
+    old: 212,
+    new: 977,
+    safe: true,
+  },
+];
+
+const qpRow = (id: string) =>
+  Q_SET_PROMOTIONS.find((row) => row.id === id) as (typeof Q_SET_PROMOTIONS)[number];
+
+/** `Q-SET`'s INFO row through `search()` at depth 8: the `ADR-0053` probe's `kpk-b6c6`, 186 → 902. */
+const KPK_B6C6 = "2k5/8/1K6/2P5/8/8/8/8 w - - 0 1";
+
+describe("ABC-229 A2 — quiescence sees the queen: Q-SET's quiet-promotion rows (QE-frozen)", () => {
+  it("carries nine rows, Q3 among them, covering ADR-0053 decision 9's six kinds", () => {
+    expect(Q_SET_PROMOTIONS).toHaveLength(9);
+    expect(qpRow("QP-1").fen).toBe("8/P6k/8/8/8/8/8/K7 w - - 0 1");
+    // The kinds the rows claim, checked on the board rather than trusted.
+    expect(isInCheck(parseFen(qpRow("QP-3").fen))).toBe(true);
+    for (const id of ["QP-1", "QP-2", "QP-4", "QP-5", "QP-6", "QP-7", "QP-9"]) {
+      const moves = legalMoves(parseFen(qpRow(id).fen));
+      expect(isInCheck(parseFen(qpRow(id).fen)), id).toBe(false);
+      expect(
+        moves.some((m) => m.captured === EMPTY && m.promotion === QUEEN),
+        `${id} has a quiet queen promotion`,
+      ).toBe(true);
+    }
+    // QP-8: no quiet promotion at the root; it only appears below it.
+    expect(legalMoves(parseFen(qpRow("QP-8").fen)).some((m) => m.promotion !== EMPTY)).toBe(false);
+    // QP-5: the capturing under-promotion is in the capture list already.
+    expect(
+      legalCaptures(parseFen(qpRow("QP-5").fen)).some(
+        (m) => m.captured !== EMPTY && m.promotion !== EMPTY && m.promotion !== QUEEN,
+      ),
+    ).toBe(true);
+  });
+
+  for (const row of Q_SET_PROMOTIONS) {
+    it(`${row.id} (${row.kind}): static ${row.stat}, pre-ABC-229 ${row.old}, shipped ${row.new}, and the brute force agrees`, () => {
+      expect(evaluate(parseFen(row.fen))).toBe(row.stat);
+      expect(quiesceAt(row.fen, SHIPPED)).toBe(row.new);
+      expect(quiesceAt(row.fen, PRE_ABC229)).toBe(row.old);
+      expect(bruteForce(parseFen(row.fen), 0, 0, SHIPPED)).toBe(row.new);
+      expect(bruteForce(parseFen(row.fen), 0, 0, PRE_ABC229)).toBe(row.old);
+    });
+  }
+
+  it("every safe row reads at least static + 600 cp, and the pre-ABC-229 rules read the static score", () => {
+    const safe = Q_SET_PROMOTIONS.filter((row) => row.safe);
+    expect(safe.map((row) => row.id)).toEqual(["QP-1", "QP-6", "QP-7", "QP-9"]);
+    for (const row of safe) {
+      expect(quiesceAt(row.fen, SHIPPED), row.id).toBeGreaterThanOrEqual(row.stat + 600);
+      expect(quiesceAt(row.fen, PRE_ABC229), row.id).toBe(evaluate(parseFen(row.fen)));
+    }
+  });
+
+  it("five rows separate the rules (QP-1, QP-6, QP-7, QP-8, QP-9); the four that must not move do not", () => {
+    const separating = Q_SET_PROMOTIONS.filter(
+      (row) => quiesceAt(row.fen, SHIPPED) !== quiesceAt(row.fen, PRE_ABC229),
+    ).map((row) => row.id);
+    expect(separating).toEqual(["QP-1", "QP-6", "QP-7", "QP-8", "QP-9"]);
+  });
+
+  it("QP-7's mate is distance-correct: MATE_SCORE − 6 from a leaf 5 plies down", () => {
+    expect(quiesceAt(qpRow("QP-7").fen, SHIPPED, 5)).toBe(29_994);
+  });
+
+  it("QP-2: a controlled square is not read as a free queen", () => {
+    const row = qpRow("QP-2");
+    expect(quiesceAt(row.fen, SHIPPED)).toBe(row.stat);
+  });
+
+  it("no node past qply 8 is visited with quiet promotions on, on every row", () => {
+    for (const { id, fen } of Q_SET_PROMOTIONS) {
+      let deepest = 0;
+      quiesce(
+        parseFen(fen),
+        Number.NEGATIVE_INFINITY,
+        Number.POSITIVE_INFINITY,
+        0,
+        0,
+        SHIPPED,
+        (qply) => {
+          if (qply > deepest) deepest = qply;
+        },
+      );
+      expect(deepest, id).toBeLessThanOrEqual(QUIESCENCE_MAX_PLY);
+    }
+  });
+
+  it("leaves every row's position byte-identical", () => {
+    for (const { id, fen } of Q_SET_PROMOTIONS) {
+      const position = parseFen(fen);
+      const before = snapshot(position);
+      quiesce(
+        position,
+        Number.NEGATIVE_INFINITY,
+        Number.POSITIVE_INFINITY,
+        0,
+        0,
+        SHIPPED,
+        () => {},
+      );
+      expect(matchesSnapshot(position, before), id).toBe(true);
+    }
+  });
+});
+
+describe("ABC-229 — the one-pass list: legalCapturesAndQueenPromotions", () => {
+  // Every position the file reads, plus the perft roots: the list equals the legal captures in
+  // their order, then the legal quiet queen promotions in generation order.
+  const fens = [
+    ...PERFT_CORPUS.map(({ fen }) => fen),
+    ...Q_SET_PROMOTIONS.map(({ fen }) => fen),
+    "8/8/8/8/8/8/1p5k/5K2 b - - 0 1", // a black pawn one push from queening
+    "4k3/1P6/8/8/8/8/8/1R2K3 w - - 0 1", // b7 with b8 empty: the push is legal
+    "1n2k3/1P6/8/8/8/8/8/4K3 w - - 0 1", // b8 occupied by a knight: no push, nothing to take
+    "4k3/8/1P6/8/8/8/8/4K3 w - - 0 1", // a pawn on the 6th: nothing appended
+    "7k/2P5/8/8/8/8/8/2r1K3 w - - 0 1", // c7 pawn, not pinned (king on e1)
+    "2b4k/3P4/8/8/8/8/8/K7 w - - 0 1", // d7xc8 capture-promotions and the quiet d8=Q
   ];
-  for (const { path, call, on } of MODULES) {
-    it(`${path}: each exported entry passes exactly one quiescenceEvasions literal, and only ${on}'s is true`, () => {
-      const flat = readFileSync(new URL(path, import.meta.url), "utf8").replace(/\s+/g, " ");
-      const found: Record<string, string> = {};
-      for (const chunk of flat.split("export function ").slice(1)) {
-        if (!chunk.includes(call)) continue;
-        const name = chunk.slice(0, chunk.indexOf("("));
-        const literals = [...chunk.matchAll(/quiescenceEvasions: (true|false)\b/g)].map(
-          (m) => m[1],
-        );
-        expect(literals, name).toHaveLength(1);
-        found[name] = literals[0] as string;
-      }
-      expect(Object.keys(found).length).toBeGreaterThanOrEqual(path === "./search.ts" ? 11 : 5);
+
+  it("is the legal captures, then the legal quiet queen promotions, on every position", () => {
+    for (const fen of fens) {
+      const position = parseFen(fen);
+      const legal = legalMoves(position);
+      const want = [
+        ...legal.filter((m) => m.captured !== EMPTY),
+        ...legal.filter((m) => m.captured === EMPTY && m.promotion === QUEEN),
+      ];
+      expect(legalCapturesAndQueenPromotions(position), fen).toEqual(want);
+    }
+  });
+
+  it("drops a quiet queen promotion that would expose its own king (a pinned pawn)", () => {
+    // The e7 pawn is pinned along the 7th rank by the rook on a7 against the king on h7, so e8=Q
+    // would leave its own king in check.
+    const pinned = "8/r3P2K/8/8/8/8/8/k7 w - - 0 1";
+    const position = parseFen(pinned);
+    expect(isInCheck(position)).toBe(false);
+    expect(legalMoves(position).some((m) => m.promotion !== EMPTY)).toBe(false);
+    expect(legalCapturesAndQueenPromotions(position)).toEqual([]);
+  });
+});
+
+describe("ABC-229 — the doors: searchWithoutQuietPromotions and chooseMoveWithoutQuietPromotions", () => {
+  it("take what search() and chooseMove take, and no depth on the engine side", () => {
+    expect(searchWithoutQuietPromotions.length).toBe(2);
+    expect(chooseMoveWithoutQuietPromotions.length).toBe(2);
+  });
+
+  it("Q3 through the depth-0 seam: search() reads 977, its door the pre-ticket 212", () => {
+    expect(search(parseFen(qpRow("QP-1").fen), 0).score).toBe(977);
+    expect(searchWithoutQuietPromotions(parseFen(qpRow("QP-1").fen), 0).score).toBe(212);
+  });
+
+  it("Q-SET's INFO row kpk-b6c6 through search() at depth 8: 902 shipped, 186 on the door, both b6c6", () => {
+    const head = search(parseFen(KPK_B6C6), 8);
+    const door = searchWithoutQuietPromotions(parseFen(KPK_B6C6), 8);
+    expect([head.score, label(head.move)]).toEqual([902, "b6c6"]);
+    expect([door.score, label(door.move)]).toEqual([186, "b6c6"]);
+    // `ADR-0053` decision 6's ladder: the evasion door is pre-`ABC-229` too.
+    expect(searchWithoutQuiescenceEvasions(parseFen(KPK_B6C6), 8).score).toBe(186);
+  });
+
+  it("chooseMove reads the INFO row the same way at depth 8; its door does not see the queen", () => {
+    expect(deepenWith(chooseMove, KPK_B6C6, 8).score).toBe(902);
+    expect(deepenWith(chooseMoveWithoutQuietPromotions, KPK_B6C6, 8).score).toBe(186);
+  });
+
+  // The sibling of `QE-208-c` for the second switch: one `quietPromotions` literal per entry, true
+  // on the shipped pair only (`ADR-0053` decision 7).
+  for (const { path, on } of SWITCH_MODULES) {
+    it(`${path}: each exported entry passes exactly one quietPromotions literal, and only ${on}'s is true`, () => {
+      const found = switchLiterals(path, "quietPromotions");
+      expect(Object.keys(found).length).toBeGreaterThanOrEqual(path === "./search.ts" ? 12 : 6);
       expect(Object.entries(found).filter(([, value]) => value === "true")).toEqual([[on, "true"]]);
     });
   }
@@ -1209,7 +1538,16 @@ if (RUN_DEEP) {
   const isMate = (score: number): boolean => Math.abs(score) > MATE_SCORE - 1_000;
 
   /** The d5 drift of `on` against `reference` on the 190 (`ADR-0053` decision 8). */
-  const drift = (on: (fen: string) => number, reference: (fen: string) => number, what: string) => {
+  const drift = (
+    on: (fen: string) => number,
+    reference: (fen: string) => number,
+    what: string,
+    bars: { within25: number; max: number; ticket: string } = {
+      within25: 0.83,
+      max: 177,
+      ticket: "ABC-228",
+    },
+  ) => {
     const deltas: Array<[number, string]> = [];
     let mateFlips = 0;
     for (const { name, fen } of corpus190()) {
@@ -1225,17 +1563,19 @@ if (RUN_DEEP) {
     const within25 = deltas.filter(([delta]) => delta <= 25).length / deltas.length;
     const max = deltas[0]?.[0] ?? 0;
     console.log(
-      `ABC-228 ${what}: ${(100 * within25).toFixed(2)}% within 25 cp of ${deltas.length}, max ${max} cp ` +
+      `${bars.ticket} ${what}: ${(100 * within25).toFixed(2)}% within 25 cp of ${deltas.length}, max ${max} cp ` +
         `(${deltas[0]?.[1] ?? ""}); mate-status flips on the 190: ${mateFlips} (a report, not a bar)`,
     );
-    expect(within25).toBeGreaterThanOrEqual(0.83);
-    expect(max).toBeLessThanOrEqual(177);
+    expect(within25).toBeGreaterThanOrEqual(bars.within25);
+    expect(max).toBeLessThanOrEqual(bars.max);
   };
 
   describe("ABC-228 A4 — search(…, 6).nodes <= 1.5x the door on kiwipete and position-6 [deep, SEARCH_DEEP=1]", () => {
     for (const name of ["kiwipete", "position-6"]) {
       it(`${name} at depth 6 [deep, SEARCH_DEEP=1]`, () => {
-        const head = search(parseFen(fenOf(name)), 6).nodes;
+        // `ABC-229` (`ADR-0053` decision 7): the shipped side reads `ABC-229`'s door, so the ratio
+        // keeps measuring evasions alone.
+        const head = searchWithoutQuietPromotions(parseFen(fenOf(name)), 6).nodes;
         const door = searchWithoutQuiescenceEvasions(parseFen(fenOf(name)), 6).nodes;
         console.log(`ABC-228 A4 ${name} d6: ${head} / ${door} = ${(head / door).toFixed(3)}x`);
         expect(head).toBeLessThanOrEqual(1.5 * door);
@@ -1249,17 +1589,18 @@ if (RUN_DEEP) {
       expect(corpus190()).toHaveLength(190);
     });
 
-    it("search() against searchWithoutQuiescenceEvasions at fixed depth 5: >= 83% within 25 cp, none beyond 177 cp [deep, SEARCH_DEEP=1]", () => {
+    // `ABC-229` (`ADR-0053` decision 7): the shipped side of both rows reads `ABC-229`'s doors.
+    it("searchWithoutQuietPromotions against searchWithoutQuiescenceEvasions at fixed depth 5: >= 83% within 25 cp, none beyond 177 cp [deep, SEARCH_DEEP=1]", () => {
       drift(
-        (fen) => search(parseFen(fen), 5).score,
+        (fen) => searchWithoutQuietPromotions(parseFen(fen), 5).score,
         (fen) => searchWithoutQuiescenceEvasions(parseFen(fen), 5).score,
         "search() d5",
       );
     }, 600_000);
 
-    it("chooseMove against chooseMoveWithoutQuiescenceEvasions deepened to 5: >= 83% within 25 cp, none beyond 177 cp [deep, SEARCH_DEEP=1]", () => {
+    it("chooseMoveWithoutQuietPromotions against chooseMoveWithoutQuiescenceEvasions deepened to 5: >= 83% within 25 cp, none beyond 177 cp [deep, SEARCH_DEEP=1]", () => {
       drift(
-        (fen) => deepenWith(chooseMove, fen, 5).score,
+        (fen) => deepenWith(chooseMoveWithoutQuietPromotions, fen, 5).score,
         (fen) => deepenWith(chooseMoveWithoutQuiescenceEvasions, fen, 5).score,
         "chooseMove to d5",
       );
@@ -1267,21 +1608,54 @@ if (RUN_DEEP) {
   });
 
   describe("ABC-228 — the same-depth mate floor on the 287 [deep, SEARCH_DEEP=1]", () => {
-    it("every mate searchWithoutQuiescenceEvasions scores at depth 5, search() scores at depth 5: same sign, no longer [deep, SEARCH_DEEP=1]", () => {
+    // `ABC-229` (`ADR-0053` decision 7): the shipped side reads `searchWithoutQuietPromotions`.
+    it("every mate searchWithoutQuiescenceEvasions scores at depth 5, searchWithoutQuietPromotions scores at depth 5: same sign, no longer [deep, SEARCH_DEEP=1]", () => {
       let mates = 0;
       const violations: string[] = [];
       for (const fen of MATE_CORPUS) {
         const ref = searchWithoutQuiescenceEvasions(parseFen(fen), 5).score;
         if (!isMate(ref)) continue;
         mates++;
-        const got = search(parseFen(fen), 5).score;
+        const got = searchWithoutQuietPromotions(parseFen(fen), 5).score;
         if (!isMate(got) || Math.sign(got) !== Math.sign(ref) || Math.abs(got) < Math.abs(ref)) {
-          violations.push(`${fen}: ${ref} on the door, ${got} on search(), depth 5`);
+          violations.push(`${fen}: ${ref} on the door, ${got} on the ABC-229 door, depth 5`);
         }
       }
       console.log(`ABC-228 mate floor d5: ${violations.length} of ${mates} violated`);
       expect(mates).toBeGreaterThanOrEqual(100);
       expect(violations).toEqual([]);
     }, 300_000);
+  });
+  describe("ABC-229 A3 — search(…, 6).nodes <= 1.2x its door on kiwipete and position-6 [deep, SEARCH_DEEP=1]", () => {
+    for (const name of ["kiwipete", "position-6"]) {
+      it(`${name} at depth 6 [deep, SEARCH_DEEP=1]`, () => {
+        const head = search(parseFen(fenOf(name)), 6).nodes;
+        const door = searchWithoutQuietPromotions(parseFen(fenOf(name)), 6).nodes;
+        console.log(`ABC-229 A3 ${name} d6: ${head} / ${door} = ${(head / door).toFixed(3)}x`);
+        expect(head).toBeLessThanOrEqual(1.2 * door);
+      }, 120_000);
+    }
+  });
+
+  describe("ABC-229 — bounded drift against the quiet-promotion doors, depth 5, the 190 [deep, SEARCH_DEEP=1]", () => {
+    const bars = { within25: 0.95, max: 12, ticket: "ABC-229" };
+
+    it("search() against searchWithoutQuietPromotions at fixed depth 5: >= 95% within 25 cp, none beyond 12 cp [deep, SEARCH_DEEP=1]", () => {
+      drift(
+        (fen) => search(parseFen(fen), 5).score,
+        (fen) => searchWithoutQuietPromotions(parseFen(fen), 5).score,
+        "search() d5",
+        bars,
+      );
+    }, 600_000);
+
+    it("chooseMove against chooseMoveWithoutQuietPromotions deepened to 5: >= 95% within 25 cp, none beyond 12 cp [deep, SEARCH_DEEP=1]", () => {
+      drift(
+        (fen) => deepenWith(chooseMove, fen, 5).score,
+        (fen) => deepenWith(chooseMoveWithoutQuietPromotions, fen, 5).score,
+        "chooseMove to d5",
+        bars,
+      );
+    }, 600_000);
   });
 }

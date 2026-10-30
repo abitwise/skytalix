@@ -1,0 +1,2 @@
+2026-10-30T17:42:23Z PRECONDITIONS-MET
+2026-10-30T17:42:23Z harness start: r e196a281 <out> --elo 1910 --rounds 5 --concurrency 1

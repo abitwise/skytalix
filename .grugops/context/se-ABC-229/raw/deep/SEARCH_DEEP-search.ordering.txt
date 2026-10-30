@@ -1,0 +1,13 @@
+
+> skytalix@0.0.0 test:watch
+> NODE_OPTIONS=--max-old-space-size=128 vitest run src/search.ordering.test.ts
+
+
+ RUN  v4.1.12 <worktree>
+
+
+ Test Files  1 passed (1)
+      Tests  43 passed (43)
+   Start at  15:52:46
+   Duration  6.83s (transform 0ms, setup 0ms, import 72ms, tests 6.70s, environment 0ms)
+

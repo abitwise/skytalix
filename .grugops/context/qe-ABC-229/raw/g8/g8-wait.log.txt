@@ -1,0 +1,11 @@
+2026-10-30T16:28:46.866Z run 2 head wait poll=1 load1=1.30 vitest=0 cutechess=0 tctl=73.4
+2026-10-30T16:29:01.896Z run 2 head clear after poll 2 load1=1.23 tctl=51.8
+2026-10-30T16:29:11.740Z run 3 head wait poll=1 load1=1.81 vitest=0 cutechess=0 tctl=72.8
+2026-10-30T16:29:26.766Z run 3 head clear after poll 2 load1=1.48 tctl=59.4
+2026-10-30T16:29:36.804Z run 4 base foreign vitest pid(s) 2885471: waiting on kill -0
+2026-10-30T16:29:51.806Z run 4 base foreign vitest gone after 15 s
+2026-10-30T16:29:51.836Z run 4 base clear after poll 2 load1=1.63 tctl=44.5
+2026-10-30T16:30:01.757Z run 5 base wait poll=1 load1=2.05 vitest=0 cutechess=0 tctl=76.3
+2026-10-30T16:30:16.783Z run 5 base clear after poll 2 load1=1.73 tctl=59.3
+2026-10-30T16:30:26.897Z run 6 head wait poll=1 load1=2.09 vitest=0 cutechess=0 tctl=64.6
+2026-10-30T16:30:41.928Z run 6 head clear after poll 2 load1=1.69 tctl=42.3

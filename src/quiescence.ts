@@ -1,5 +1,6 @@
 /**
- * Quiescence search on captures — the horizon fix (ABC-079).
+ * Quiescence search on captures — the horizon fix (ABC-079) — with evasions in check (ABC-228)
+ * and quiet queen promotions (ABC-229).
  *
  * A fixed-depth search evaluates whatever position it lands on. If the last ply was a capture,
  * the recapture is one ply past the horizon and the evaluator scores a won pawn on a board where
@@ -28,10 +29,19 @@
  * `QuiescenceRules.evasions`, which each recursion maps onto a constant record; the test-only
  * doors older than `ABC-228` turn it off and reproduce the pre-ticket search node for node.
  *
+ * QUIET PROMOTIONS TO A QUEEN (`ABC-229`, `ADR-0053` decision 5). Out of check, the move list is
+ * the legal captures plus the legal quiet promotions to a queen, from one generation pass
+ * (`legalCapturesAndQueenPromotions`), the promotions appended after the captures and then the one
+ * stable `mvvLvaKey` sort: a quiet queen promotion keys at 899.9, beside the queen captures, and a
+ * tie keeps the capture first. Stand pat still applies, because the side may decline to promote.
+ * The rule is behind a second switch, `QuiescenceRules.quietPromotions`; every test-only door
+ * older than `ABC-229`, `ABC-228`'s pair included, turns it off.
+ *
  * Not here, each a recorded decision rather than an omission: quiet checks in quiescence, delta
- * pruning, static exchange evaluation, and QUIET promotions (a capturing promotion is a capture
- * and is searched like any other). No stalemate detection: a quiescence node out of check with
- * no captures stands pat, and stalemate is the full-width search's to notice.
+ * pruning, static exchange evaluation, and QUIET UNDER-promotions (a capturing promotion, under-
+ * promotions included, is a capture and is searched like any other; in check every under-promotion
+ * is an evasion). No stalemate detection: a quiescence node out of check with no captures stands
+ * pat, and stalemate is the full-width search's to notice.
  *
  * CAPTURES ARE SEARCHED MOST-VALUABLE-VICTIM FIRST (`ADR-0024`), and that ordering is THIS
  * module's, not `ABC-080`'s: unordered, a losing capture is refuted only when its child reaches
@@ -46,12 +56,12 @@
  * function, so the leaf is shared rather than duplicated a third time. `visit` is how each
  * caller sees the nodes: the search counts them, the engine also consults its clock, and a test
  * observes the recursion depth. It is called once per node entered THROUGH A CAPTURE (or, in
- * check, an evasion), never for the leaf itself, which the caller already counted.
+ * check, an evasion; or a quiet queen promotion), never for the leaf itself, which the caller already counted.
  */
 
 import { makeMove, unmakeMove } from "./apply.ts";
 import { evaluate } from "./evaluate.ts";
-import { isInCheck, legalCaptures, legalMoves } from "./legal.ts";
+import { isInCheck, legalCaptures, legalCapturesAndQueenPromotions, legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
 import { type Position, pieceType } from "./position.ts";
 
@@ -94,7 +104,8 @@ export function captureScratchByteLength(): number {
  * keeps stable. `ABC-240`: each key is computed once into `CAPTURE_KEYS` (float64, so the
  * attacker's thousandths never merge), and the list is insertion-sorted beside it, moving an
  * entry only past a STRICTLY smaller key. The list must be the caller's own: `quiesce` sorts the
- * fresh array `legalCaptures` (or, in check, `legalMoves`) returned. Exported for `src/quiescence.test.ts`'s oracle.
+ * fresh array `legalCaptures` (or `legalCapturesAndQueenPromotions`, or in check `legalMoves`)
+ * returned. Exported for `src/quiescence.test.ts`'s oracle.
  */
 export function orderCaptures(captures: Move[]): void {
   const count = captures.length;
@@ -137,11 +148,13 @@ export const MATE_SCORE = 30_000;
 export interface QuiescenceRules {
   /** In check below the cap: no stand pat, every legal move searched, none means mate (`ABC-228`). */
   readonly evasions: boolean;
+  /** Out of check: the legal quiet promotions to a queen join the captures (`ABC-229`). */
+  readonly quietPromotions: boolean;
 }
 
 /**
- * Called once per quiescence node entered through a capture or an evasion, with that node's ply
- * past the leaf (1 for the first). May throw — the engine's abort does — and the position is
+ * Called once per quiescence node entered through a capture, an evasion or a quiet queen
+ * promotion, with that node's ply past the leaf (1 for the first). May throw — the engine's abort does — and the position is
  * still byte-identical to the caller when it does.
  */
 export type QuiescenceVisitor = (qply: number) => void;
@@ -181,7 +194,11 @@ export function quiesce(
     if (best > alpha) alpha = best;
 
     // The legal captures in generation order (ABC-206): only captures are tested for legality.
-    moves = legalCaptures(position);
+    // With quiet promotions on (`ABC-229`), the legal quiet queen promotions are appended after
+    // them from the same pass, and the one stable sort below places them (`ADR-0053` decision 5).
+    moves = rules.quietPromotions
+      ? legalCapturesAndQueenPromotions(position)
+      : legalCaptures(position);
   }
   // Stable sort: equal keys keep generation order, so the count is deterministic.
   orderCaptures(moves);

@@ -1,0 +1,7 @@
+2026-10-30T19:41:08Z smoke foreign vitest pid(s) 3632991,3763028: waiting on kill -0
+2026-10-30T19:49:38Z smoke foreign vitest gone after 510 s
+2026-10-30T19:49:38Z smoke clear after poll 2 load1=1.18 tctl=58.5
+2026-10-30T19:49:38Z PRECONDITIONS-MET
+2026-10-30T19:49:38Z harness start: r e196a281 <out> --elo 1910 --rounds 5 --concurrency 1
+2026-10-30T20:21:04Z harness end code=0 signal=null samples=188 tctl_median=78.44 tctl_max=87.5 busy_mhz_first6=5031 busy_mhz_median=4989.5 fall=0.82% thermal_stop=false
+2026-10-30T20:21:07Z after: cutechess=0 stockfish=0

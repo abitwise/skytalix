@@ -73,6 +73,12 @@
  * constant `QuiescenceRules` record. It changes the VALUE, so every door older than `ABC-228`
  * turns it off, and `search()` is held to the TEST-ONLY door `searchWithoutQuiescenceEvasions`,
  * the pre-`ABC-228` `search()`, by a bounded oracle (decision 8).
+ *
+ * QUIET QUEEN PROMOTIONS IN QUIESCENCE (ABC-229, `ADR-0053` decision 5): out of check, `quiesce`
+ * searches the legal quiet promotions to a queen with the captures, from one generation pass. Its
+ * switch, `quietPromotions`, joins `quiescenceEvasions` in picking the constant record. It changes
+ * the VALUE, so every door older than `ABC-229` turns it off, and `search()` is held to the
+ * TEST-ONLY door `searchWithoutQuietPromotions`, the pre-`ABC-229` `search()`, by a bounded oracle.
  */
 
 import { makeMove, makeNullMove, unmakeMove, unmakeNullMove } from "./apply.ts";
@@ -101,8 +107,10 @@ import { zobristKey, zobristKeyAfterMove, zobristKeyAfterNullMove } from "./zobr
 export { MATE_SCORE };
 
 /** The quiescence rules each recursion hands `quiesce` (`ADR-0053` decision 6): constants, never built per leaf. */
-const EVASIONS_ON: QuiescenceRules = { evasions: true };
-const EVASIONS_OFF: QuiescenceRules = { evasions: false };
+const RULES_SHIPPED: QuiescenceRules = { evasions: true, quietPromotions: true };
+const RULES_NO_QUIET_PROMOTIONS: QuiescenceRules = { evasions: true, quietPromotions: false };
+const RULES_NO_EVASIONS: QuiescenceRules = { evasions: false, quietPromotions: true };
+const RULES_NEITHER: QuiescenceRules = { evasions: false, quietPromotions: false };
 
 export interface SearchResult {
   /** Centipawns, positive for the side to move. A mate reads `±(MATE_SCORE - ply)`. */
@@ -285,10 +293,15 @@ interface Switches {
    */
   readonly nullMove: boolean;
   /**
-   * Evasions in check inside quiescence (`ABC-228`, `ADR-0053`). True on `search()` only; every
-   * older door turns it off, so each reproduces its pre-`ABC-228` self node for node.
+   * Evasions in check inside quiescence (`ABC-228`, `ADR-0053`). True on `search()` and
+   * `searchWithoutQuietPromotions`; every older door turns it off, so each reproduces its pre-`ABC-228` self node for node.
    */
   readonly quiescenceEvasions: boolean;
+  /**
+   * Quiet promotions to a queen inside quiescence (`ABC-229`, `ADR-0053` decision 5). True on
+   * `search()` only; every older door, `searchWithoutQuiescenceEvasions` included, turns it off.
+   */
+  readonly quietPromotions: boolean;
 }
 
 /** The least remaining depth, and the least 0-based index in the ordered list, a reduced move has. */
@@ -396,7 +409,13 @@ function leafScore(
   if (reason === null) {
     if (!switches.quiescence) return evaluate(position);
     // Every capture node the quiescence search enters is a position visited, and is counted.
-    const rules = switches.quiescenceEvasions ? EVASIONS_ON : EVASIONS_OFF;
+    const rules = switches.quiescenceEvasions
+      ? switches.quietPromotions
+        ? RULES_SHIPPED
+        : RULES_NO_QUIET_PROMOTIONS
+      : switches.quietPromotions
+        ? RULES_NO_EVASIONS
+        : RULES_NEITHER;
     return quiesce(position, alpha, beta, 0, ply, rules, () => counter.nodes++);
   }
   if (reason === "checkmate") return 0 - (MATE_SCORE - ply);
@@ -719,6 +738,28 @@ export function search(position: Position, depth: number): SearchResult {
     reductions: true,
     nullMove: true,
     quiescenceEvasions: true,
+    quietPromotions: true,
+  });
+}
+
+/**
+ * TEST-ONLY. The pre-`ABC-229` `search()`, node for node: quiet queen promotions in quiescence
+ * off, everything else on, evasions and null move included. It is the reference `ABC-229`'s
+ * bounded drift oracle compares `search()` against, and the shipped side of every `ABC-228` row
+ * that measures evasions alone (`ADR-0053` decisions 6 and 7). Not an engine option; nothing in
+ * production calls it.
+ */
+export function searchWithoutQuietPromotions(position: Position, depth: number): SearchResult {
+  return searchRoot(position, depth, {
+    prune: true,
+    quiescence: true,
+    ordering: "full",
+    table: true,
+    pvs: true,
+    reductions: true,
+    nullMove: true,
+    quiescenceEvasions: true,
+    quietPromotions: false,
   });
 }
 
@@ -738,6 +779,7 @@ export function searchWithoutQuiescenceEvasions(position: Position, depth: numbe
     reductions: true,
     nullMove: true,
     quiescenceEvasions: false,
+    quietPromotions: false,
   });
 }
 
@@ -757,6 +799,7 @@ export function searchWithoutNullMove(position: Position, depth: number): Search
     reductions: true,
     nullMove: false,
     quiescenceEvasions: false,
+    quietPromotions: false,
   });
 }
 
@@ -780,6 +823,7 @@ export function searchWithoutPruning(position: Position, depth: number): SearchR
     reductions: false,
     nullMove: false,
     quiescenceEvasions: false,
+    quietPromotions: false,
   });
 }
 
@@ -801,6 +845,7 @@ export function searchWithoutQuiescence(position: Position, depth: number): Sear
     reductions: false,
     nullMove: false,
     quiescenceEvasions: false,
+    quietPromotions: false,
   });
 }
 
@@ -824,6 +869,7 @@ export function searchWithoutPruningOrQuiescence(position: Position, depth: numb
     reductions: false,
     nullMove: false,
     quiescenceEvasions: false,
+    quietPromotions: false,
   });
 }
 
@@ -843,6 +889,7 @@ export function searchWithoutOrdering(position: Position, depth: number): Search
     reductions: false,
     nullMove: false,
     quiescenceEvasions: false,
+    quietPromotions: false,
   });
 }
 
@@ -861,6 +908,7 @@ export function searchWithoutKillers(position: Position, depth: number): SearchR
     reductions: false,
     nullMove: false,
     quiescenceEvasions: false,
+    quietPromotions: false,
   });
 }
 
@@ -880,6 +928,7 @@ export function searchWithoutTable(position: Position, depth: number): SearchRes
     reductions: false,
     nullMove: false,
     quiescenceEvasions: false,
+    quietPromotions: false,
   });
 }
 
@@ -899,6 +948,7 @@ export function searchWithoutReductions(position: Position, depth: number): Sear
     reductions: false,
     nullMove: false,
     quiescenceEvasions: false,
+    quietPromotions: false,
   });
 }
 
@@ -918,5 +968,6 @@ export function searchWithoutPvsOrReductions(position: Position, depth: number):
     reductions: false,
     nullMove: false,
     quiescenceEvasions: false,
+    quietPromotions: false,
   });
 }

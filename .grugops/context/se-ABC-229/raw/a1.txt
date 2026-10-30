@@ -1,0 +1,19 @@
+corpus 276 positions
+search vs searchWithoutQuietPromotions d1-4: 1104 rows, 0 differ; base 477fbd2e070c21db head 477fbd2e070c21db
+chooseMove vs chooseMoveWithoutQuietPromotions to 4: 276 rows, 0 differ; base 32a44406418cfd09 head 32a44406418cfd09
+searchWithoutQuiescenceEvasions d1-4 (self): 1104 rows, 0 differ; base 7a5924b5bf81f303 head 7a5924b5bf81f303
+chooseMoveWithoutQuiescenceEvasions to 4 (self): 276 rows, 0 differ; base aa3b9cfae2b2631b head aa3b9cfae2b2631b
+searchWithoutNullMove d3: 276 rows, 0 differ; base a4ac0aeece45e537 head a4ac0aeece45e537
+searchWithoutReductions d3: 276 rows, 0 differ; base a4ac0aeece45e537 head a4ac0aeece45e537
+searchWithoutPvsOrReductions d3: 276 rows, 0 differ; base e7b6f5fb32dc7e88 head e7b6f5fb32dc7e88
+searchWithoutTable d3: 276 rows, 0 differ; base bea3a5ef8558febb head bea3a5ef8558febb
+searchWithoutOrdering d3: 276 rows, 0 differ; base 7f203175b97e5bb0 head 7f203175b97e5bb0
+searchWithoutKillers d3: 276 rows, 0 differ; base c3d9258ab143f3b2 head c3d9258ab143f3b2
+searchWithoutQuiescence d3: 276 rows, 0 differ; base ea71bf0780f39b5a head ea71bf0780f39b5a
+searchWithoutPruning d2: 276 rows, 0 differ; base afd2d1e05b2fa941 head afd2d1e05b2fa941
+searchWithoutPruningOrQuiescence d2: 276 rows, 0 differ; base 3e7cd492b45c2163 head 3e7cd492b45c2163
+chooseMoveWithoutNullMove to 4: 276 rows, 0 differ; base 18b0849f412c3f37 head 18b0849f412c3f37
+chooseMoveWithoutReductions to 4: 276 rows, 0 differ; base bcfb47874dcc3e63 head bcfb47874dcc3e63
+chooseMoveWithoutPvsOrReductions to 4: 276 rows, 0 differ; base dd8cbb57a71c22d2 head dd8cbb57a71c22d2
+non-vacuity: head search() differs from base search() on 236/1104 rows
+A1 IDENTITY: ALL EQUAL

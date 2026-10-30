@@ -1,0 +1,8 @@
+2026-10-30T17:42:33Z load1=0.65 tctl=72.5 vitest=0 cutechess=1 busy_mhz=5036
+2026-10-30T17:42:43Z load1=0.70 tctl=72.9 vitest=0 cutechess=1 busy_mhz=5029
+2026-10-30T17:42:53Z load1=0.75 tctl=73.0 vitest=0 cutechess=1 busy_mhz=5077
+2026-10-30T17:43:03Z load1=0.79 tctl=74.0 vitest=0 cutechess=1 busy_mhz=5024
+2026-10-30T17:43:14Z load1=0.89 tctl=74.1 vitest=0 cutechess=1 busy_mhz=4998
+2026-10-30T17:43:24Z load1=2.38 tctl=74.0 vitest=0 cutechess=1 busy_mhz=5029
+2026-10-30T17:43:34Z load1=2.24 tctl=74.6 vitest=0 cutechess=1 busy_mhz=5038
+2026-10-30T17:43:44Z load1=2.05 tctl=75.3 vitest=0 cutechess=1 busy_mhz=5007

@@ -500,7 +500,8 @@ describe("A4 — no fixed depth anywhere in the delivered engine", () => {
     // a position and options, a TIME budget, no depth. `ABC-208` added a third
     // (`chooseMoveWithoutNullMove`, `ADR-0050` decision 2). `ABC-230` added the prior-key trim
     // (`trimPriorKeys`, `ADR-0054` decision 1): a key list and a clock, no depth. `ABC-228` added a
-    // fourth door (`chooseMoveWithoutQuiescenceEvasions`, `ADR-0053` decision 6).
+    // fourth door (`chooseMoveWithoutQuiescenceEvasions`, `ADR-0053` decision 6), and `ABC-229` a
+    // fifth (`chooseMoveWithoutQuietPromotions`, the same decision).
     expect(Object.keys(engineModule).sort()).toEqual([
       "DEFAULT_BUDGET_MS",
       "HARD_CEILING_MS",
@@ -509,6 +510,7 @@ describe("A4 — no fixed depth anywhere in the delivered engine", () => {
       "chooseMoveWithoutNullMove",
       "chooseMoveWithoutPvsOrReductions",
       "chooseMoveWithoutQuiescenceEvasions",
+      "chooseMoveWithoutQuietPromotions",
       "chooseMoveWithoutReductions",
       "createEngine",
       "trimPriorKeys",
@@ -520,6 +522,7 @@ describe("A4 — no fixed depth anywhere in the delivered engine", () => {
     expect(chooseMoveWithoutPvsOrReductions.length).toBe(2);
     expect(engineModule.chooseMoveWithoutNullMove.length).toBe(2);
     expect(engineModule.chooseMoveWithoutQuiescenceEvasions.length).toBe(2);
+    expect(engineModule.chooseMoveWithoutQuietPromotions.length).toBe(2);
     expect(createEngine.length).toBe(1);
     expect(source).not.toMatch(/export function \w+\([^)]*depth/i);
   });
