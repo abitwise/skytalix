@@ -1,0 +1,31 @@
+2026-10-30T07:50:06Z SEARCH_DEEP-quiescence start load1=1.62 tctl=39.8 foreign_vitest=0
+2026-10-30T07:50:32Z SEARCH_DEEP-quiescence end rc=0 wall=26.0s load1=1.67 tctl=77.5 :: 80 passed (80)
+2026-10-30T07:50:32Z SEARCH_DEEP-search.null-move start load1=1.67 tctl=77.5 foreign_vitest=0
+2026-10-30T07:51:06Z SEARCH_DEEP-search.null-move end rc=0 wall=34.0s load1=2.17 tctl=79.3 :: 44 passed (44)
+2026-10-30T07:51:06Z SEARCH_DEEP-search start load1=2.17 tctl=79.3 foreign_vitest=2
+2026-10-30T07:51:10Z SEARCH_DEEP-search end rc=0 wall=3.2s load1=2.32 tctl=80.5 :: 57 passed (57)
+2026-10-30T07:51:10Z SEARCH_DEEP-search.ordering start load1=2.32 tctl=80.5 foreign_vitest=2
+2026-10-30T07:51:17Z SEARCH_DEEP-search.ordering end rc=0 wall=7.0s load1=2.46 tctl=80.4 :: 43 passed (43)
+2026-10-30T07:51:17Z SEARCH_DEEP-search.pvs-lmr start load1=2.46 tctl=80.4 foreign_vitest=2
+2026-10-30T07:52:20Z SEARCH_DEEP-search.pvs-lmr end rc=0 wall=63.5s load1=2.24 tctl=78.0 :: 29 passed (29)
+2026-10-30T07:52:20Z SEARCH_DEEP-transposition start load1=2.24 tctl=78.0 foreign_vitest=2
+2026-10-30T07:52:24Z SEARCH_DEEP-transposition end rc=0 wall=4.2s load1=2.24 tctl=77.9 :: 40 passed (40)
+2026-10-30T07:52:24Z ENGINE_DEEP-quiescence start load1=2.24 tctl=77.9 foreign_vitest=2
+2026-10-30T07:52:25Z ENGINE_DEEP-quiescence end rc=0 wall=0.8s load1=2.38 tctl=77.0 :: 67 passed (67)
+2026-10-30T07:52:25Z ENGINE_DEEP-search.ordering start load1=2.38 tctl=77.0 foreign_vitest=2
+2026-10-30T07:52:29Z ENGINE_DEEP-search.ordering end rc=0 wall=4.3s load1=2.75 tctl=83.3 :: 30 passed (30)
+2026-10-30T07:52:30Z ENGINE_DEEP-search.pvs-lmr start load1=2.75 tctl=83.3 foreign_vitest=2
+2026-10-30T07:53:06Z ENGINE_DEEP-search.pvs-lmr end rc=0 wall=36.5s load1=2.88 tctl=78.3 :: 21 passed (21)
+2026-10-30T07:53:06Z ENGINE_DEEP-transposition start load1=2.88 tctl=78.3 foreign_vitest=2
+2026-10-30T07:53:11Z ENGINE_DEEP-transposition end rc=0 wall=4.6s load1=2.97 tctl=78.4 :: 26 passed (26)
+2026-10-30T07:53:11Z PUZZLE_DEEP-puzzle-suite start load1=2.97 tctl=78.4 foreign_vitest=2
+2026-10-30T07:53:14Z PUZZLE_DEEP-puzzle-suite end rc=0 wall=3.1s load1=2.97 tctl=77.3 :: 18 passed (18)
+2026-10-30T07:53:14Z ENGINE_DEEP-engine start load1=2.97 tctl=77.3 foreign_vitest=2
+2026-10-30T07:55:31Z ENGINE_DEEP-engine end rc=0 wall=137.7s load1=3.42 tctl=83.6 :: 77 passed (77)
+2026-10-30T07:55:31Z ENGINE_DEEP-levels start load1=3.42 tctl=83.6 foreign_vitest=2
+2026-10-30T08:04:38Z ENGINE_DEEP-levels end rc=0 wall=546.7s load1=2.21 tctl=85.6 :: 44 passed (44)
+2026-10-30T08:04:38Z CLI_DEEP-cli.real-engine start load1=2.21 tctl=85.6 foreign_vitest=2
+2026-10-30T08:04:48Z CLI_DEEP-cli.real-engine end rc=0 wall=9.9s load1=2.18 tctl=84.8 :: 11 passed (11)
+2026-10-30T08:04:48Z UCI_DEEP-uci.real-engine start load1=2.18 tctl=84.8 foreign_vitest=2
+2026-10-30T08:04:50Z UCI_DEEP-uci.real-engine end rc=0 wall=1.4s load1=2.17 tctl=85.3 :: 5 passed (5)
+2026-10-30T08:04:50Z DONE
