@@ -39,6 +39,26 @@ resolve. Since the 2026-10-18 revision that slug is no longer true: see § Revis
 > § Consequences lines. Effective at `ABC-212`'s merge. D6's row for levels 1–4 is unchanged. The history
 > sections (§ Revision, § Context, § Alternatives, § Owner questions) stand as written. No other decision here moves.
 
+> **Amended 2026-10-30 by `ADR-0052` (accepted by the owner with his 22 s amendment, note `…3dd61448`; pointer added
+> by Architect/Design, task `arch-adr-accept-0052-0053-0054`).** A UCI `TimeMode` combo (`level`, `simple-tournament`,
+> later `uci-clock-mode`) arrives beside `Skill Level`. It changes four decisions here:
+> - D3: the `uci` and `setoption` rows gain `TimeMode`;
+> - D4: a new D4.5 holds the two modes' budgets. D4.1–D4.4 are unchanged for `TimeMode level`;
+> - D5: answers during a search are up to one budget late in the active mode, ≤ 22 s in `simple-tournament` and ≤ 60 s
+>   in `uci-clock-mode`;
+> - D11: `Skill Level` governs only while `TimeMode` is `level`.
+>
+> In force at `ABC-220`'s merge (`simple-tournament`) and at `ABC-221`'s merge (`uci-clock-mode`). The in-place fold
+> lines are BA/PM's, at those merges (`ADR-0052` § Status).
+
+> **Amended 2026-10-30 by `ADR-0054` (accepted by the owner, note `…3dd61448`; pointer added by Architect/Design, task
+> `arch-adr-accept-0052-0053-0054`).** Two decisions move:
+> - D2: the session also imports `zobrist.ts` and holds the game's prior keys beside its position. `history.ts`
+>   stays out;
+> - D6: the row "game-history repetition seen by the search" leaves the "not in v1" table.
+>
+> In force at `ABC-230`'s merge. Both rows carry a dated pointer in place.
+
 **accepted** 2026-10-18 by Olger Oeselg (owner), verbatim "accept the revised ADR-0044 and EPIC-007" (note
 `.grugops/context/wave-2026-09-25/notes/20261018T113000Z-orchestrator-decision-owner-word-engine-private-adr0044-epic007-accepted-c3e81a57.md`).
 Owner menu: licence → private ("let's keep private for now"); Q14 → keep `npm run chess`; Q15 → moot
@@ -271,6 +291,8 @@ budget. There is no `info` line, and no way to read `stop` while `chooseMove` ho
     `EngineSeam` adapters over a `GameHistory`. So `ADR-0011` clause 3's licence set does not move, and
     no `GameHistory` is built.
   - **Not** `book-file.ts`, so the session reaches no `fs`. Only `uci.ts` imports it.
+  - *(2026-10-30, `ADR-0054` accepted (`…3dd61448`): from `ABC-230`'s merge the list also holds `zobrist.ts`, and the
+    session holds the prior keys beside its position. `history.ts` stays out. See `ADR-0054` decision 2.)*
 - **One edit to `src/engine.ts`**, which D12 specifies: two optional fields, defaulted to today's
   behaviour. **No edit** to `search.ts`, `levels.ts`, `book.ts`, `book-engine.ts`, `book-file.ts`,
   `level-seam.ts`, `turn-loop.ts`, `cli.ts`, `fen.ts`, `moves.ts`, `legal.ts`, `apply.ts` or
@@ -363,7 +385,7 @@ one of these triggers fires:
 | UCI options `Hash`, `Threads`, `MultiPV`, `Ponder`, `UCI_Chess960`, `UCI_LimitStrength` / `UCI_Elo` | the owner's word per option. `ADR-0024` d7 and rule 7 forbid an unrequested engine option. `UCI_Elo` also needs Elo numbers, and this project has never claimed one (`src/levels.ts`) |
 | honouring `searchmoves` | a named user. It would need a root-move filter in `src/engine.ts` |
 | `info` per iteration, `currmove`, `seldepth`, a pv longer than one move | needs a per-iteration hook in `src/engine.ts` (a GUI shows only the final line in v1) |
-| game-history repetition seen by the search | an `ADR-0002` clause 3 amendment. Today's terminal game has the same gap |
+| game-history repetition seen by the search | an `ADR-0002` clause 3 amendment. Today's terminal game has the same gap. *(2026-10-30: brought in by `ADR-0054`, accepted (`…3dd61448`). The row leaves this table at `ABC-230`'s merge.)* |
 | `depth`/`nodes`/`mate` at a level with a blunder rate (1, 2; *1–4 from `ABC-174`, `ADR-0045`*) | an edit to `src/levels.ts` to forward the limits. Not wanted for v1 (D11) |
 | Chess960, CECP, `go perft`, any server, a bundler, a Web Worker bundle or a WASM build in this repo | rejected below, or belongs to the web project (D8) |
 

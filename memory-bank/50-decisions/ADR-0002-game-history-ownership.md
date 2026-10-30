@@ -6,6 +6,11 @@ id: ADR-0002
 
 ## Status
 
+> **Extended 2026-10-30 by `ADR-0054` (accepted by the owner, note `…3dd61448`; pointer added by Architect/Design,
+> task `arch-adr-accept-0052-0053-0054`).** Clause 3 is extended, not reversed. The game's earlier keys reach the
+> search as a read-only `priorKeys` list, and a pre-root repetition needs two earlier occurrences. In force on `main`
+> at `ABC-230`'s merge. Clauses 1, 2 and 4 and the ratification record below are unchanged.
+
 **accepted** — ratified by a named human on 2026-07-30. No agent may move an ADR to `accepted`; a
 human did.
 
@@ -142,6 +147,8 @@ bug `EPIC-006` already predicts.
 preallocated array of Zobrist keys indexed by ply, seeded once per search from the history
 module, and scans it backwards by 2, bounded by the halfmove clock. Zero allocation per node,
 9-23 ns/node. The seeding is once per *move*, not per *node*.
+*(2026-10-30: extended by `ADR-0054`, accepted by the owner (`…3dd61448`). Its decisions 1–4 say how the earlier keys
+are seeded and scanned. In force at `ABC-230`'s merge.)*
 
 **4. `gameStatus`'s `positionCounts` gets exactly one supplier: the history module.** No other
 caller constructs that map. The signature does not change.
