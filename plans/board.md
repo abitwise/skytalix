@@ -1,4 +1,4 @@
-_Updated: 2026-10-30 by Orchestrator (orch-2026-10-29g) — bapm-owner-adr-fold merged: ABC-230, ABC-228, ABC-220 → Ready 10/10; ABC-229/222 wait their predecessors; Q1 Syzygy deferred out of EPIC-010. Order: ABC-230 first (SE now), ABC-228 next (G6 re-forecast ALONE), ABC-220 after ABC-230 (shared uci-session.ts). Smokes run at --concurrency 1 (owner's width-1 word; R width 2 tripped 85 °C). Width 0/3._
+_Updated: 2026-10-30 by Orchestrator (orch-2026-10-29g) — bapm-owner-adr-fold merged: ABC-230, ABC-228, ABC-220 → Ready 10/10; ABC-229/222 wait their predecessors; Q1 Syzygy deferred out of EPIC-010. Order: ABC-230 first (SE now), ABC-228 next (G6 re-forecast ALONE), ABC-220 after ABC-230 (shared uci-session.ts). Smokes run at --concurrency 1 (owner's width-1 word; R width 2 tripped 85 °C). Width 1/3._
 _Updated: 2026-10-30 by Orchestrator (orch-2026-10-29g) — arch-adr-accept merged: ADR-0052 (22 s / 22 s ceiling, 0 ms margin: a 22 s search may end ~31 ms past 22 s under accepted risk AR-NFR004-A), ADR-0053, ADR-0054 ACCEPTED. `bapm-owner-adr-fold` still running. Width 1/3._
 _Updated: 2026-10-30 by Orchestrator (orch-2026-10-29g, …3dd61448) — OWNER: ADR-0052 ACCEPTED amended (simple-tournament 22 s, ceiling 22 s); ADR-0053 ACCEPTED (OQ-228-1: build fully; '3s→4s' clause pending clarification, only on a G6 miss); ADR-0054 ACCEPTED; Q1 Syzygy deferred; Q3 open (info asked). Routed `arch-adr-accept-0052-0053-0054` + `bapm-owner-adr-fold` (records only). Width 2/3._
 _Updated: 2026-10-30 by Orchestrator (orch-2026-10-29g) — bapm-ABC-230-fold merged (44e71960): ABC-230 build-ready on owner accept of ADR-0054 (build held until accept, as the brief said; the Architect's start-on-PROPOSED option is the owner's call). Night queue drained; all remaining work owner-gated or games. Width 0/3._
@@ -1197,8 +1197,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 - [EPIC-006] Game session and packaging  (owner: BA/PM, **size: XL — corrected from `L`; 9 tickets / 20 points across both halves, ~1.5x the 13 `L` was assigned, and it hit that ceiling BEFORE distribution was priced**, priority: P1, since: 2026-07-22, **BOTH HALVES NOW CUT: the runnable half `ABC-041`…`ABC-046` (2026-08-13) and the second half `ABC-100`…`ABC-102` (2026-08-16) — only THREE tickets, because the scope of packaging is a FUNCTION of a distribution channel nobody has chosen.** `ABC-100` cuts the DECISION, never the ANSWER: a superseding ADR per `ADR-0007` `D5`, on the owner's word, verbatim and dated. **Acceptance criterion 1 (`npx <package>`) remains unmeetable by any ticket. Recommendation NOT taken, standing for the owner: this should probably be two epics** — the halves share no dependency in either direction and their blockers differ in kind)
 
-## Ready (WIP 3/8)
-- [ABC-230] The game's earlier positions reach the search, CLI and UCI (size: M, priority: P2, DoR 9/10; ADR-0054 PROPOSED folded (44e71960, bapm …644cf2af): priorKeys, pre-root needs two, A8/A9 probe rows; waits ONLY owner accept of ADR-0054, then Ready 10/10; value-changing → 10 D + 10 R smoke (A7; → Ready 2026-10-30: ADR-0054 ACCEPTED; DoR 10/10)
+## Ready (WIP 2/8)
 - [ABC-228] In check, quiescence searches every evasion; none means mate (size: M, priority: P2, DoR 9/10; waits owner accepts ADR-0053 + OQ-228-1 (G6 on position-6); build after ABC-235 merges (shares legalCaptures; → Ready 2026-10-30: ADR-0053 ACCEPTED; DoR 10/10; A8 G6 re-forecast first; "3s→4s" reading pending owner)
 - [ABC-220] simple-tournament over UCI (TimeMode): T 22.0 s, min(T, C) with a clock, 22.5 s ceiling (size: M, priority: P2, DoR 9/10; waits owner accepts ADR-0052 (OQ-0052-1; → Ready 2026-10-30: ADR-0052 ACCEPTED (22 s / 22 s); DoR 10/10; shares uci-session.ts with ABC-230, builds after it)
 
@@ -1216,7 +1215,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+- [ABC-230] The game's earlier positions reach the search, CLI and UCI (size: M, priority: P2, DoR 9/10; ADR-0054 PROPOSED folded (44e71960, bapm …644cf2af): priorKeys, pre-root needs two, A8/A9 probe rows; waits ONLY owner accept of ADR-0054, then Ready 10/10; value-changing → 10 D + 10 R smoke (A7; → Ready 2026-10-30: ADR-0054 ACCEPTED; DoR 10/10; **pulled 2026-10-30** → `se-ABC-230`)
 
 
 
