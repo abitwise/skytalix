@@ -3,8 +3,8 @@ subtask: se-ABC-225-main
 role: software-engineer
 ticket: ABC-225
 ref: .grugops/context/se-ABC-225-main/
-branch: grugops/ABC-225 @ 9988a778 (worktree /home/olger/projects/public/wt-ABC-225); bring current main in by MERGE (no rebase)
-width: shared, no timed reads — HELD until qe-ABC-229 ends
+branch: grugops/ABC-225 @ 9988a778 (worktree /home/olger/projects/public/wt-ABC-225); bring main 14c8aafa in by MERGE (no rebase)
+width: shared, no timed reads
 ---
 # SE ABC-225: take main into the branch; rpair budget 3 000 → 4 000
 ## Read
