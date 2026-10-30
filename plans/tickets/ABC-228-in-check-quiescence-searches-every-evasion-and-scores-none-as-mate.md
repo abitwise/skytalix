@@ -1,8 +1,9 @@
 ---
 id: ABC-228
 title: "In check, quiescence searches every evasion instead of standing pat, and a side in check with no evasion is mated"
-status: in-review
-column: In Review
+status: done
+column: Done
+closed: "2026-10-30, merged to main at e42b637b; QE PASS_WITH_GAPS under (ii) (qe-ABC-228-ii, e39d190c), which signs UAT"
 size: M
 priority: P2
 epic: EPIC-010
@@ -50,6 +51,19 @@ epic: EPIC-010
 >   budget); when it rebases onto a `main` that carries (ii), it moves that one too (dated line on `ABC-225`).
 > - **Changed:** Scope 5 (new), § Out of scope, `A5`, `A6`, `A8`, `A9` (new), § NFR triggers, § Test notes 4,
 >   § Dependencies, § Follow-ups (new). **DoR stays 10/10. Ready.**
+
+> **MERGED 2026-10-30 at `e42b637b`, folded by BA/PM** (task `bapm-ABC-228-merge-fold`, records only; `src/`,
+> `data/` and `tools/` untouched). **Done.** The `A8` miss fired (ii): QE's graded `G6` at 3 s read position-6 9 against
+> base's 10 (`qe-ABC-228` QE-228-c), the SE built Scope 5, and `A9` read 65.9 % / 97.4 % (≤ 133 %). QE's verdict is
+> **PASS_WITH_GAPS** under (ii) (`qe-ABC-228-ii` `…e39d190c`), and it signs UAT (Test note 3).
+>
+> - **`G6` under (ii) MET:** kiwipete 8 = 8, position-6 10 = 10. `G5` max 4 001 ms. `G8` 9.61 s. `G1` 54/58.
+> - **`A6` MET** (`…2123617d`): S-1 0 faults and S-2 0 time losses in 20 games. S-3 D 3/3/4 = 5.0 / 10. S-4 R at
+>   4 000 ms 7/3/0 = 7.0 / 10, recorded and not pooled. Folded into `EPIC-010` § The smoke ledger.
+> - **Gaps (non-blocking):** SE-228ii-a (LOW) and QE-228ii-b (INFO) are cut as one XS test-only ticket, **`ABC-243`**
+>   (Backlog, P3). QE-228ii-c (INFO, host) needs no ticket.
+> - **§ Follow-ups:** BA/PM's rows are folded at this hop. The others stay with their owners. The state of each row is
+>   under the table.
 
 ## Problem
 
@@ -192,6 +206,21 @@ epic: EPIC-010
 | any `EPIC-009` reading that plays level 5 at its fixed budget (`UNKNOWN - verify` which) | BA/PM | at this ticket's merge |
 | `AGENTS.md`'s "level 5 (≤3 s/move …)" line | Scribe | at this ticket's merge |
 | `ABC-225`'s `rpair` budget 3 000 → 4 000 | the SE who rebases `ABC-225` | when it rebases onto (ii) |
+
+**State at the merge** (2026-10-30, `bapm-ABC-228-merge-fold`):
+
+- **`G5`, `G6`, `G11` at 4 s:** done by QE (`…e39d190c`): `G5` and `G6` MET, `G11` reported.
+- **`NFR-004` / `NFR-005` catalog text:** open, Security/NFR's. Not touched here.
+- **`ADR-0045` fold:** done. D1, D2, D4, A1–A3 and § Consequences carry dated marks. `ADR-0044` D11 is recorded in
+  the `ADR-0045` § Status fold block.
+- **`EPIC-008` `G6` / `G9` text:** done (dated marks in its § Common gates; `G5` and `G11` too).
+- **The ladder re-take:** open, the Orchestrator's to schedule. It does not gate anything here.
+- **`ABC-231` `A1`:** done (dated line: both sides at 4 000 ms).
+- **`EPIC-009` readings at level 5's fixed budget:** checked, and **none found**. `ABC-220`/`ABC-221` `A8` compare head
+  with base at the same `LEVELS`. `ABC-222`/`ABC-223` play the named modes. Only § The budget T's analysis rows (T1,
+  T4, the 40/15 share table) quote 3 000 ms; a dated line marks them.
+- **`AGENTS.md` level-5 line:** the Scribe's (`scribe-agents-md-level5`). Not touched here.
+- **`ABC-225` `rpair` budget:** open, for the SE who rebases it. A dated line on `ABC-225` says (ii) is on `main`.
 
 **Rollback** (`ADR-0053` d10): `LEVELS[5]`, `DEFAULT_BUDGET_MS`, the `levels.test.ts` literals and the R literal go
 back to 3 000. Any reference read at 4 000 ms is then stale.
