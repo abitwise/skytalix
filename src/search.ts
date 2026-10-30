@@ -179,21 +179,50 @@ function orderKey(move: Move, killers: readonly Move[], hashMove: Move | null): 
   return killer === -1 ? 0 : killers.length - killer;
 }
 
+/** More than any legal position's move count (218); a longer list allocates its own keys. */
+const ORDER_SCRATCH_LENGTH = 256;
+/** `orderMoves`' key scratch: fixed, float64, shared by every ply (the sort never recurses). */
+const ORDER_KEYS = new Float64Array(ORDER_SCRATCH_LENGTH);
+
+/** The ordering scratch's fixed size in bytes, for `NFR-009` (a)'s byte-length sum. */
+export function orderScratchByteLength(): number {
+  return ORDER_KEYS.byteLength;
+}
+
 /**
  * THE move-ordering comparator (`ABC-080`), shared by both full-width recursions: the hash move
  * first, then captures and promotions by `mvvLvaKey`, then `killers` in the order given, then
  * every other move in generation order (the sort is stable). Returns a NEW array holding exactly
  * the moves it was handed — a killer or hash move absent from `moves` is ignored, never added.
+ *
+ * NO PER-MOVE ALLOCATION (`ABC-240`, the Architect's four conditions): each key is computed once
+ * into `ORDER_KEYS`, a fixed float64 module scratch (keys stay float64 — `mvvLvaKey`'s attacker
+ * thousandths must not merge), and the one fresh output array is insertion-sorted beside it,
+ * moving an entry only past a STRICTLY smaller key, so ties keep generation order. The input is
+ * never touched, and the scratch is safe to share between plies because the sort ends before the
+ * caller recurses. A list longer than the scratch (no legal position has one) gets its own keys.
  */
 export function orderMoves(
   moves: readonly Move[],
   killers: readonly Move[],
   hashMove: Move | null,
 ): Move[] {
-  return moves
-    .map((move) => ({ move, key: orderKey(move, killers, hashMove) }))
-    .sort((a, b) => b.key - a.key)
-    .map(({ move }) => move);
+  const count = moves.length;
+  const out = moves.slice();
+  const keys = count <= ORDER_SCRATCH_LENGTH ? ORDER_KEYS : new Float64Array(count);
+  for (let i = 0; i < count; i++) {
+    const move = out[i] as Move;
+    const key = orderKey(move, killers, hashMove);
+    let j = i;
+    while (j > 0 && (keys[j - 1] as number) < key) {
+      keys[j] = keys[j - 1] as number;
+      out[j] = out[j - 1] as Move;
+      j--;
+    }
+    keys[j] = key;
+    out[j] = move;
+  }
+  return out;
 }
 
 /**

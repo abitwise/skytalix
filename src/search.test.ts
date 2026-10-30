@@ -562,8 +562,9 @@ describe("A6 — no move is selected without a caller-supplied depth", () => {
     // (decision 6), which answers "how many plies shallower" for a move it is handed and picks
     // nothing. ABC-208 added one more door of that shape (`searchWithoutNullMove`, `ADR-0050`
     // decision 2) and the null-move rule both recursions share, `nullMoveReduction` (decision 6),
-    // which answers "how many plies shallower" for the null child and picks nothing. Still
-    // nothing here picks a move without being told how deep.
+    // which answers "how many plies shallower" for the null child and picks nothing. ABC-240
+    // added `orderScratchByteLength`, a number for `NFR-009` (a)'s byte sum that picks nothing.
+    // Still nothing here picks a move without being told how deep.
     expect(Object.keys(searchModule).sort()).toEqual([
       "KEY_ARRAY_CAPACITY",
       "KillerTable",
@@ -571,6 +572,7 @@ describe("A6 — no move is selected without a caller-supplied depth", () => {
       "lateMoveReduction",
       "nullMoveReduction",
       "orderMoves",
+      "orderScratchByteLength",
       "repeatsInPath",
       "search",
       "searchWithoutKillers",
