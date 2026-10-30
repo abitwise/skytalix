@@ -10,6 +10,21 @@ owner: BA/PM
 
 # EPIC-009: `skytalix` plays a 40/15 tournament clock, uses it, and never loses on time
 
+> **CONFIRMED 2026-10-30 by the owner, folded by BA/PM** (task `bapm-ABC-242-225-owner`, records only). His words on
+> this item, verbatim (`orch-2026-10-30a` `…f4673b9f`): *"Whole-second reading of "≤ 22 s" - confirm"*. The first
+> half of that message, the catalog's reference machine, is Security/NFR's.
+>
+> - **The whole-second reading is confirmed:** in `simple-tournament`, "≤ 22 s" means < 22 500 ms on the wall. The
+>   last open owner item on this epic is **closed** (§ Owner questions; the MILESTONE 1 and FOLDED blocks below).
+> - **Nothing moves:**
+>   - T = the ceiling = 22 000 ms.
+>   - `ABC-220`'s A11 stands as read.
+>   - `ABC-222`'s PREREG reads A5 against < 22 500 ms.
+>   - `ABC-221`'s "≤ 60 s" is read exactly (59 500 + ~31 + 100 < 60 000), so it does not use this reading and its
+>     page is unchanged.
+> - **The catalog's reference machine** is re-based to the Linux host named by the owner. That is Security/NFR's
+>   hop (`secnfr-catalog-rebase`), not this page's.
+
 > **MILESTONE 1, HALF DONE, 2026-10-30, folded by BA/PM** (task `bapm-ABC-220-merge-fold`, records only, at `main`
 > `4ac4f3bb`). **`ABC-220` is Done:** merged at `ec1e835b` on QE's PASS_WITH_GAPS (`qe-ABC-220` `…7a09c5e1`, which
 > signs UAT) and Security/NFR's PASS_WITH_RISKS (`secnfr-ABC-220`). `simple-tournament` is on `main`.
@@ -32,6 +47,7 @@ owner: BA/PM
 >   own increment, four rows), test note 5 (`SEC-220-b`: a comment) and A11 re-worded to A14a + A14b.
 > - **`ABC-223`: unchanged**, 9/10, waits on `ABC-221`.
 > - **Still open with the owner, blocks nothing:** the whole-second reading of the 22 s ceiling (§ Owner questions).
+>   *(**Confirmed by the owner 2026-10-30**, `…f4673b9f`; see the CONFIRMED block above.)*
 > - The notes are in `.grugops/context/bapm-ABC-220-merge-fold/notes/`.
 
 > **FOLDED 2026-10-30 by BA/PM** (task `bapm-owner-adr-fold`, records only, at `main` `a046e839`). The owner
@@ -46,7 +62,7 @@ owner: BA/PM
 >   (97.8 %; 97.9 % at δ = 31 ms), 18 760 ms left after move 40, and M1's ≥ 500 ms survives δ ≤ 487 ms a move.
 >   83.1 % with 6 book moves.
 > - **How a 22 s ceiling equal to T is read** (BA/PM's reading on his "whole seconds"; the Orchestrator confirms it with
->   him, it changes no code): no `go` hands the search more than 22 000 ms, read exactly on the virtual clock (`ABC-220`
+>   him, it changes no code; *confirmed by the owner 2026-10-30, `…f4673b9f`*): no `go` hands the search more than 22 000 ms, read exactly on the virtual clock (`ABC-220`
 >   A6). A real move's wall carries the stop overshoot (`AR-NFR004-A`, ≤ ~31 ms) and the pipe on top, so it is read to
 >   the whole second: ≤ 22 s means a wall < 22 500 ms (`ABC-220` A11, `ABC-222` A5).
 > - **`ABC-220`: DoR 10/10, Ready.** `ABC-222`: 9/10, waits on `ABC-220`. `ABC-221` and `ABC-223`: their pages are
@@ -328,7 +344,7 @@ clean.
   `src/uci-session.ts`, so whichever merges second rebases.
 - **`ABC-224` is unused.** It goes back to the Orchestrator's pool.
 
-## Owner questions (all answered 2026-10-29, `…a67f71ac`; OQ-0052-1 answered 2026-10-30, `…3dd61448`)
+## Owner questions (all answered 2026-10-29, `…a67f71ac`; OQ-0052-1 answered 2026-10-30, `…3dd61448`; the whole-second reading confirmed 2026-10-30, `…f4673b9f`)
 
 | Q | asked | answer (2026-10-29) | what it changed |
 |---|---|---|---|
@@ -343,9 +359,10 @@ clean.
 
 - **OQ-0052-1, accept `ADR-0052`? Answered 2026-10-30:** accepted, with T and the ceiling both 22 s, whole seconds
   (`orch-2026-10-29g` `…3dd61448`). *(Was open 2026-10-29: (a) as written; (b) another T under 22.5 s; (c) decline.)*
-- **One confirmation for the owner (not a blocker):** a 22 s ceiling equal to T is read to the whole second on the wall
-  (< 22 500 ms), because each move carries ~31 ms of stop overshoot past the 22 000 ms it is handed. If he means a
-  strict 22 000 ms wall instead, T has to sit below 22 s, and that is his number to give.
+- **The whole-second reading. Answered 2026-10-30: confirmed** (`orch-2026-10-30a` `…f4673b9f`, verbatim: "Whole-second reading of "≤ 22 s" - confirm").
+  A 22 s ceiling equal to T is read to the whole second on the wall (< 22 500 ms), because each move carries ~31 ms of
+  stop overshoot past the 22 000 ms it is handed. T stays at 22 s. *(Was open, not a blocker: "If he means a strict
+  22 000 ms wall instead, T has to sit below 22 s, and that is his number to give.")*
 - **Not a question for the owner:** how the clock mode's margin is built, the readings' exact command lines, and the
   thermal rule. That is delivery under his delegation (`…5aaf7cec` item 1).
 

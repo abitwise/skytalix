@@ -11,6 +11,14 @@ owner: QE/E2E
 
 # ABC-222: smoke reading of `simple-tournament` at 40/15: `EPIC-009` M1, M2 and the 22 s ceiling, in 5 games
 
+> **CONFIRMED 2026-10-30 by the owner, folded by BA/PM** (task `bapm-ABC-242-225-owner`, records only). His words on
+> this item, verbatim (`orch-2026-10-30a` `…f4673b9f`): *"Whole-second reading of "≤ 22 s" - confirm"*. The first
+> half of that message, the catalog's reference machine, is Security/NFR's.
+>
+> - **The PREREG reads A5 against < 22 500 ms.** "≤ 22 s" is read to the whole second, by the owner's word. The open
+>   confirmation in the two blocks below is **closed**. A5's bound does not move.
+> - Nothing else changes. DoR stays 10/10, and the ticket stays Ready.
+
 > **RE-SCORED 2026-10-30 by BA/PM** (task `bapm-ABC-220-merge-fold`, records only, at `main` `4ac4f3bb`). **The wait
 > is met: `ABC-220` merged at `ec1e835b`** (QE PASS_WITH_GAPS `qe-ABC-220` `…7a09c5e1`; Security/NFR
 > PASS_WITH_RISKS `secnfr-ABC-220`). **DoR 9/10 → 10/10. Backlog → Ready.** The board move is the Orchestrator's.
@@ -23,7 +31,7 @@ owner: QE/E2E
 >   `AR-NFR004-A`'s ≤ ~31 ms. A6's per-move overhead (the PGN time minus T) is therefore mostly the pipe and
 >   cutechess. Security/NFR names these games as `AR-NFR004-A`'s next reading at 22 s (the 5-search sample is thin).
 > - **A5 is unchanged:** < 22 500 ms, the whole-second reading. The owner's confirmation of that reading is still open
->   and blocks nothing (`ABC-220`'s FOLDED note). A move over 22 000 ms is expected and is reported, not a breach.
+>   and blocks nothing (`ABC-220`'s FOLDED note). *(**Confirmed by the owner 2026-10-30**, `…f4673b9f`.)* A move over 22 000 ms is expected and is reported, not a breach.
 > - **QE-220-f (INFO):** a spaced `setoption name Time Mode …` is ignored silently. A1's check of game 1's `-debug all`
 >   log for `setoption name TimeMode value simple-tournament` is the guard; it stays as written.
 > - **Scheduling, not a DoR gap:** the reading is ALONE on an idle host (≤ ~5 h, ≤ ~10 h with the coverage
@@ -35,7 +43,8 @@ owner: QE/E2E
 > - **A5:** the longest move is **≤ 22 s read to the whole second, that is < 22 500 ms** (was ≤ 22 500 ms). The engine is
 >   never handed more than 22 000 ms (`ABC-220` A6); the stop overshoot and the pipe add a few ms past it. A move
 >   over 22 000 ms is therefore expected and is not a breach. The excess is reported (A6). This whole-second reading is
->   BA/PM's, on the owner's "whole seconds", and the Orchestrator confirms it with him.
+>   BA/PM's, on the owner's "whole seconds", and the Orchestrator confirms it with him. *(**Confirmed by the owner
+>   2026-10-30**, `orch-2026-10-30a` `…f4673b9f`: "Whole-second reading of "≤ 22 s" - confirm".)*
 > - **A3 and A4 hold unchanged:** T is still 22 000 ms, so 40 × 22 s = 880 s of 900 s (97.8 %, 97.9 % at δ = 31 ms),
 >   ≈ 18.8 s left after move 40, and M1's ≥ 500 ms survives δ ≤ 487 ms a move on average.
 > - Wall: 80 moves × 2 sides × 22 s ≈ 59 min a game, still ≤ ~5 h for 5 games. DoR stays 9/10, waiting on `ABC-220`.
@@ -128,7 +137,8 @@ owner: QE/E2E
   still complete fewer than 4, A4 is UNRESOLVED and named, not MET.
 - **A5 (the ceiling, 22 s, owner 2026-10-30).** The longest single `skytalix` move, from the PGN's per-move times, is
   **≤ 22 s read to the whole second, that is < 22 500 ms**. QE pins the PGN time's precision in PREREG
-  (`UNKNOWN - verify` for `cutechess-cli` 1.5.1).
+  (`UNKNOWN - verify` for `cutechess-cli` 1.5.1). *(The whole-second reading was confirmed by the owner on
+  2026-10-30, `…f4673b9f`. The PREREG reads A5 against < 22 500 ms.)*
 - **A6 (reported, not graded):**
   - the clock left after each period's 40th move (a list);
   - the count of `go` lines sent with and without `movestogo` (`RISK-EPIC009-03`), and game 1's first `go` line,
@@ -178,7 +188,7 @@ owner: QE/E2E
 | 7 | test notes | ✅ 3 |
 | 8 | size | ✅ S |
 | 9 | priority | ✅ P2 |
-| 10 | no major unresolved blocker | ✅ `ABC-220` merged at `ec1e835b` (2026-10-30). The whole-second confirmation is the owner's and blocks nothing. *(Was ❌: nothing to read until `ABC-220` merges.)* |
+| 10 | no major unresolved blocker | ✅ `ABC-220` merged at `ec1e835b` (2026-10-30). The whole-second confirmation is the owner's and blocks nothing. *(Confirmed by the owner 2026-10-30, `…f4673b9f`.)* *(Was ❌: nothing to read until `ABC-220` merges.)* |
 
 **DoR 10/10 (2026-10-30). Ready.** It closes milestone 1. It runs ALONE on an idle host; the Orchestrator places it.
 *(Was: "DoR 9/10. Backlog until `ABC-220` merges.")*
