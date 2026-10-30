@@ -1,0 +1,23 @@
+Started game 1 of 4 (sfA vs sfB)
+Finished game 1 (sfA vs sfB): 1/2-1/2 {Draw by adjudication: maximal game length}
+Score of sfA vs sfB: 0 - 0 - 1  [0.500] 1
+Started game 2 of 4 (sfB vs sfA)
+Finished game 2 (sfB vs sfA): 1/2-1/2 {Draw by adjudication: maximal game length}
+Score of sfA vs sfB: 0 - 0 - 2  [0.500] 2
+Started game 3 of 4 (sfA vs sfB)
+Finished game 3 (sfA vs sfB): 1/2-1/2 {Draw by adjudication: maximal game length}
+Score of sfA vs sfB: 0 - 0 - 3  [0.500] 3
+Started game 4 of 4 (sfB vs sfA)
+Finished game 4 (sfB vs sfA): 1/2-1/2 {Draw by adjudication: maximal game length}
+Score of sfA vs sfB: 0 - 0 - 4  [0.500] 4
+...      sfA playing White: 0 - 0 - 2  [0.500] 2
+...      sfA playing Black: 0 - 0 - 2  [0.500] 2
+...      White vs Black: 0 - 0 - 4  [0.500] 4
+Elo difference: 0.0 +/- 0.0, LOS: nan %, DrawRatio: 100.0 %
+SPRT: llr 0 (0.0%), lbound -inf, ubound inf
+
+Player: sfA
+   "Draw by adjudication: maximal game length": 4
+Player: sfB
+   "Draw by adjudication: maximal game length": 4
+Finished match

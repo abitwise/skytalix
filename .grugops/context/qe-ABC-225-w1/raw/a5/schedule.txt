@@ -1,0 +1,2 @@
+schedule: 1 blocks of 10 openings per build, 2 games per opening (both colours)
+block 01 openings 1-10: base, then candidate

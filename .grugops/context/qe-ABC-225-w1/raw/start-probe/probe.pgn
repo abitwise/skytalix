@@ -1,0 +1,84 @@
+[Event "?"]
+[Site "?"]
+[Date "2026.10.30"]
+[Round "1"]
+[White "sfA"]
+[Black "sfB"]
+[Result "1/2-1/2"]
+[FEN "r1bqk1nr/ppppbppp/2n5/4p3/4P3/2P2N2/PP1P1PPP/RNBQKB1R w KQkq - 0 1"]
+[GameDuration "00:00:00"]
+[GameEndTime "2026-10-30T20:37:37.368 UTC"]
+[GameStartTime "2026-10-30T20:37:36.960 UTC"]
+[PlyCount "8"]
+[SetUp "1"]
+[Termination "adjudication"]
+[TimeControl "0.05/move"]
+
+1. d4 {+0.54/13 0.049s} d6 {-0.65/14 0.050s} 2. Bd3 {+0.67/15 0.050s}
+Bg4 {-0.84/14 0.049s} 3. d5 {+0.65/14 0.050s} Nb8 {-0.83/17 0.050s}
+4. h3 {+0.82/16 0.049s}
+Bxf3 {-0.78/16 0.049s, Draw by adjudication: maximal game length} 1/2-1/2
+
+[Event "?"]
+[Site "?"]
+[Date "2026.10.30"]
+[Round "1"]
+[White "sfB"]
+[Black "sfA"]
+[Result "1/2-1/2"]
+[FEN "r1bqk1nr/ppppbppp/2n5/4p3/4P3/2P2N2/PP1P1PPP/RNBQKB1R w KQkq - 0 1"]
+[GameDuration "00:00:00"]
+[GameEndTime "2026-10-30T20:37:37.774 UTC"]
+[GameStartTime "2026-10-30T20:37:37.369 UTC"]
+[PlyCount "8"]
+[SetUp "1"]
+[Termination "adjudication"]
+[TimeControl "0.05/move"]
+
+1. d4 {+0.54/13 0.050s} d6 {-0.69/14 0.049s} 2. Bd3 {+0.76/17 0.049s}
+exd4 {-0.86/14 0.049s} 3. cxd4 {+0.73/15 0.049s} Bg4 {-0.79/14 0.049s}
+4. Be2 {+0.79/14 0.049s}
+Nf6 {-0.65/17 0.049s, Draw by adjudication: maximal game length} 1/2-1/2
+
+[Event "?"]
+[Site "?"]
+[Date "2026.10.30"]
+[Round "2"]
+[White "sfA"]
+[Black "sfB"]
+[Result "1/2-1/2"]
+[FEN "rnbqkb1r/ppp1pp1p/5np1/3p4/2PP4/5N2/PP2PPPP/RNBQKB1R w KQkq - 0 1"]
+[GameDuration "00:00:00"]
+[GameEndTime "2026-10-30T20:37:38.178 UTC"]
+[GameStartTime "2026-10-30T20:37:37.774 UTC"]
+[PlyCount "8"]
+[SetUp "1"]
+[Termination "adjudication"]
+[TimeControl "0.05/move"]
+
+1. cxd5 {+0.74/15 0.050s} Bg7 {-0.82/17 0.050s} 2. Qa4+ {+0.59/16 0.049s}
+c6 {-0.61/18 0.049s} 3. dxc6 {+0.47/16 0.049s} Nxc6 {-0.71/15 0.049s}
+4. Nc3 {+0.51/16 0.049s}
+Bf5 {-0.76/16 0.050s, Draw by adjudication: maximal game length} 1/2-1/2
+
+[Event "?"]
+[Site "?"]
+[Date "2026.10.30"]
+[Round "2"]
+[White "sfB"]
+[Black "sfA"]
+[Result "1/2-1/2"]
+[FEN "rnbqkb1r/ppp1pp1p/5np1/3p4/2PP4/5N2/PP2PPPP/RNBQKB1R w KQkq - 0 1"]
+[GameDuration "00:00:00"]
+[GameEndTime "2026-10-30T20:37:38.582 UTC"]
+[GameStartTime "2026-10-30T20:37:38.178 UTC"]
+[PlyCount "8"]
+[SetUp "1"]
+[Termination "adjudication"]
+[TimeControl "0.05/move"]
+
+1. cxd5 {+0.74/15 0.049s} Bg7 {-0.82/17 0.050s} 2. Qa4+ {+0.71/16 0.049s}
+c6 {-0.65/17 0.050s} 3. dxc6 {+0.70/17 0.050s} Nxc6 {-0.55/18 0.050s}
+4. Nc3 {+0.60/17 0.049s}
+Bf5 {-0.57/16 0.049s, Draw by adjudication: maximal game length} 1/2-1/2
+
