@@ -1,0 +1,11 @@
+--- a/src/uci-session.ts
++++ b/src/uci-session.ts
+@@ -359,6 +359,8 @@
+     if (name === "ownbook") {
+       if (value === "true" || value === "false") ownBook = value === "true";
+       else info(`OwnBook takes true or false, got ${got}; kept ${ownBook}`);
++    } else if (name === "hash") {
++      skill = 6 as keyof typeof LEVELS; // QE PLANTED FAULT (qe-ABC-228-ii, SE-228ii-a): Hash silently moves the level
+     } else if (name === "skill level") {
+       // An own key only (the `level-seam.ts` rule), so no inherited key ever selects a level.
+       if (Object.hasOwn(LEVELS, value)) skill = Number(value) as keyof typeof LEVELS;

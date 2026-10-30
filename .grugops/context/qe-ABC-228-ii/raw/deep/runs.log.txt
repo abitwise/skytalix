@@ -1,0 +1,143 @@
+2026-10-30T09:39:54Z SEARCH_DEEP-quiescence start load1=0.74 tctl=37.0 foreign_vitest=0
+2026-10-30T09:40:20Z SEARCH_DEEP-quiescence end rc=0 wall=25.3s load1=0.91 tctl=73.8 :: 88 passed (88)
+2026-10-30T09:40:20Z SEARCH_DEEP-search.null-move wait poll=1 load1=0.91 vitest=0 cutechess=0 tctl=73.4
+2026-10-30T09:40:35Z SEARCH_DEEP-search.null-move clear after poll 2
+2026-10-30T09:40:35Z SEARCH_DEEP-search.null-move start load1=1.02 tctl=37.6 foreign_vitest=0
+2026-10-30T09:41:08Z SEARCH_DEEP-search.null-move end rc=0 wall=33.2s load1=1.06 tctl=72.5 :: 44 passed (44)
+2026-10-30T09:41:08Z SEARCH_DEEP-search wait poll=1 load1=1.06 vitest=0 cutechess=0 tctl=72.1
+2026-10-30T09:41:23Z SEARCH_DEEP-search clear after poll 2
+2026-10-30T09:41:23Z SEARCH_DEEP-search start load1=0.98 tctl=38.8 foreign_vitest=0
+2026-10-30T09:41:26Z SEARCH_DEEP-search end rc=0 wall=3.3s load1=1.06 tctl=73.5 :: 57 passed (57)
+2026-10-30T09:41:26Z SEARCH_DEEP-search.ordering wait poll=1 load1=1.06 vitest=0 cutechess=0 tctl=73.5
+2026-10-30T09:41:41Z SEARCH_DEEP-search.ordering clear after poll 2
+2026-10-30T09:41:41Z SEARCH_DEEP-search.ordering start load1=0.96 tctl=42.4 foreign_vitest=0
+2026-10-30T09:41:49Z SEARCH_DEEP-search.ordering end rc=0 wall=7.2s load1=1.13 tctl=75.4 :: 43 passed (43)
+2026-10-30T09:41:49Z SEARCH_DEEP-search.pvs-lmr wait poll=1 load1=1.13 vitest=0 cutechess=0 tctl=75.0
+2026-10-30T09:42:04Z SEARCH_DEEP-search.pvs-lmr clear after poll 2
+2026-10-30T09:42:04Z SEARCH_DEEP-search.pvs-lmr start load1=1.02 tctl=38.9 foreign_vitest=0
+2026-10-30T09:43:05Z SEARCH_DEEP-search.pvs-lmr end rc=0 wall=60.8s load1=1.00 tctl=73.0 :: 29 passed (29)
+2026-10-30T09:43:05Z SEARCH_DEEP-transposition wait poll=1 load1=1.00 vitest=0 cutechess=0 tctl=72.8
+2026-10-30T09:43:20Z SEARCH_DEEP-transposition clear after poll 2
+2026-10-30T09:43:20Z SEARCH_DEEP-transposition start load1=0.86 tctl=53.0 foreign_vitest=0
+2026-10-30T09:43:24Z SEARCH_DEEP-transposition end rc=0 wall=4.2s load1=0.87 tctl=72.8 :: 40 passed (40)
+2026-10-30T09:43:24Z ENGINE_DEEP-quiescence wait poll=1 load1=0.87 vitest=0 cutechess=0 tctl=72.4
+2026-10-30T09:43:39Z ENGINE_DEEP-quiescence clear after poll 2
+2026-10-30T09:43:39Z ENGINE_DEEP-quiescence start load1=0.90 tctl=41.4 foreign_vitest=0
+2026-10-30T09:43:40Z ENGINE_DEEP-quiescence end rc=0 wall=0.9s load1=0.90 tctl=53.6 :: 75 passed (75)
+2026-10-30T09:43:40Z ENGINE_DEEP-search.ordering start load1=0.90 tctl=54.0 foreign_vitest=0
+2026-10-30T09:43:44Z ENGINE_DEEP-search.ordering end rc=0 wall=4.5s load1=1.15 tctl=78.9 :: 30 passed (30)
+2026-10-30T09:43:44Z ENGINE_DEEP-search.pvs-lmr wait poll=1 load1=1.15 vitest=0 cutechess=0 tctl=78.5
+2026-10-30T09:43:59Z ENGINE_DEEP-search.pvs-lmr wait poll=2 load1=1.20 vitest=0 cutechess=0 tctl=67.1
+2026-10-30T09:44:14Z ENGINE_DEEP-search.pvs-lmr wait poll=3 load1=1.29 vitest=2 cutechess=0 tctl=44.1
+2026-10-30T09:44:30Z ENGINE_DEEP-search.pvs-lmr wait poll=4 load1=1.30 vitest=2 cutechess=0 tctl=41.9
+2026-10-30T09:44:45Z ENGINE_DEEP-search.pvs-lmr wait poll=5 load1=1.24 vitest=2 cutechess=0 tctl=41.1
+2026-10-30T09:45:00Z ENGINE_DEEP-search.pvs-lmr clear after poll 6
+2026-10-30T09:45:00Z ENGINE_DEEP-search.pvs-lmr start load1=1.03 tctl=38.8 foreign_vitest=0
+2026-10-30T09:45:48Z ENGINE_DEEP-search.pvs-lmr end rc=0 wall=48.5s load1=1.01 tctl=72.6 :: 21 passed (21)
+2026-10-30T09:45:48Z ENGINE_DEEP-transposition wait poll=1 load1=1.01 vitest=0 cutechess=0 tctl=72.4
+2026-10-30T09:46:03Z ENGINE_DEEP-transposition clear after poll 2
+2026-10-30T09:46:03Z ENGINE_DEEP-transposition start load1=0.95 tctl=38.6 foreign_vitest=0
+2026-10-30T09:46:09Z ENGINE_DEEP-transposition end rc=0 wall=5.6s load1=0.95 tctl=70.5 :: 26 passed (26)
+2026-10-30T09:46:09Z PUZZLE_DEEP-puzzle-suite wait poll=1 load1=0.95 vitest=0 cutechess=0 tctl=70.3
+2026-10-30T09:46:24Z PUZZLE_DEEP-puzzle-suite clear after poll 2
+2026-10-30T09:46:24Z PUZZLE_DEEP-puzzle-suite start load1=0.81 tctl=37.8 foreign_vitest=0
+2026-10-30T09:46:27Z PUZZLE_DEEP-puzzle-suite end rc=0 wall=3.2s load1=0.83 tctl=68.6 :: 18 passed (18)
+2026-10-30T09:46:27Z ENGINE_DEEP-engine wait poll=1 load1=0.83 vitest=0 cutechess=0 tctl=68.4
+2026-10-30T09:46:42Z ENGINE_DEEP-engine clear after poll 2
+2026-10-30T09:46:42Z ENGINE_DEEP-engine start load1=0.81 tctl=49.5 foreign_vitest=0
+2026-10-30T09:49:41Z ENGINE_DEEP-engine end rc=0 wall=179.2s load1=1.76 tctl=75.9 :: 77 passed (77)
+2026-10-30T09:49:41Z ENGINE_DEEP-levels wait poll=1 load1=1.76 vitest=0 cutechess=0 tctl=75.6
+2026-10-30T09:49:56Z ENGINE_DEEP-levels clear after poll 2
+2026-10-30T09:49:56Z ENGINE_DEEP-levels start load1=1.37 tctl=40.4 foreign_vitest=0
+2026-10-30T09:59:34Z ENGINE_DEEP-levels end rc=0 wall=577.3s load1=1.88 tctl=76.1 :: 44 passed (44)
+2026-10-30T09:59:34Z CLI_DEEP-cli.real-engine wait poll=1 load1=1.88 vitest=2 cutechess=0 tctl=75.8
+2026-10-30T09:59:49Z CLI_DEEP-cli.real-engine wait poll=2 load1=1.68 vitest=2 cutechess=0 tctl=43.8
+2026-10-30T10:00:04Z CLI_DEEP-cli.real-engine wait poll=3 load1=1.38 vitest=2 cutechess=0 tctl=42.0
+2026-10-30T10:00:19Z CLI_DEEP-cli.real-engine wait poll=4 load1=1.23 vitest=2 cutechess=0 tctl=43.0
+2026-10-30T10:00:34Z CLI_DEEP-cli.real-engine wait poll=5 load1=1.17 vitest=2 cutechess=0 tctl=44.5
+2026-10-30T10:00:49Z CLI_DEEP-cli.real-engine wait poll=6 load1=1.14 vitest=2 cutechess=0 tctl=47.6
+2026-10-30T10:01:04Z CLI_DEEP-cli.real-engine wait poll=7 load1=1.18 vitest=2 cutechess=0 tctl=42.6
+2026-10-30T10:01:19Z CLI_DEEP-cli.real-engine wait poll=8 load1=1.13 vitest=2 cutechess=0 tctl=40.8
+2026-10-30T10:01:34Z CLI_DEEP-cli.real-engine wait poll=9 load1=1.18 vitest=2 cutechess=0 tctl=40.0
+2026-10-30T10:01:49Z CLI_DEEP-cli.real-engine wait poll=10 load1=1.13 vitest=2 cutechess=0 tctl=39.9
+2026-10-30T10:02:04Z CLI_DEEP-cli.real-engine wait poll=11 load1=1.03 vitest=2 cutechess=0 tctl=40.9
+2026-10-30T10:02:19Z CLI_DEEP-cli.real-engine wait poll=12 load1=1.02 vitest=2 cutechess=0 tctl=39.9
+2026-10-30T10:02:34Z CLI_DEEP-cli.real-engine wait poll=13 load1=0.87 vitest=2 cutechess=0 tctl=40.5
+2026-10-30T10:02:49Z CLI_DEEP-cli.real-engine wait poll=14 load1=0.97 vitest=2 cutechess=0 tctl=40.5
+2026-10-30T10:03:04Z CLI_DEEP-cli.real-engine wait poll=15 load1=0.98 vitest=2 cutechess=0 tctl=67.6
+2026-10-30T10:03:19Z CLI_DEEP-cli.real-engine wait poll=16 load1=1.13 vitest=2 cutechess=0 tctl=69.3
+2026-10-30T10:03:34Z CLI_DEEP-cli.real-engine wait poll=17 load1=1.10 vitest=2 cutechess=0 tctl=69.6
+2026-10-30T10:03:49Z CLI_DEEP-cli.real-engine wait poll=18 load1=1.21 vitest=2 cutechess=0 tctl=70.6
+2026-10-30T10:04:04Z CLI_DEEP-cli.real-engine wait poll=19 load1=1.17 vitest=2 cutechess=0 tctl=69.9
+2026-10-30T10:04:19Z CLI_DEEP-cli.real-engine wait poll=20 load1=1.28 vitest=2 cutechess=0 tctl=70.6
+2026-10-30T10:04:34Z CLI_DEEP-cli.real-engine wait poll=21 load1=1.44 vitest=2 cutechess=0 tctl=70.8
+2026-10-30T10:04:49Z CLI_DEEP-cli.real-engine wait poll=22 load1=1.42 vitest=2 cutechess=0 tctl=61.3
+2026-10-30T10:05:04Z CLI_DEEP-cli.real-engine wait poll=23 load1=1.41 vitest=2 cutechess=0 tctl=43.8
+2026-10-30T10:05:19Z CLI_DEEP-cli.real-engine wait poll=24 load1=1.32 vitest=2 cutechess=0 tctl=42.8
+2026-10-30T10:05:34Z CLI_DEEP-cli.real-engine wait poll=25 load1=1.32 vitest=2 cutechess=0 tctl=42.3
+2026-10-30T10:05:49Z CLI_DEEP-cli.real-engine wait poll=26 load1=1.40 vitest=2 cutechess=0 tctl=42.0
+2026-10-30T10:06:04Z CLI_DEEP-cli.real-engine wait poll=27 load1=1.39 vitest=2 cutechess=0 tctl=41.8
+2026-10-30T10:06:19Z CLI_DEEP-cli.real-engine wait poll=28 load1=1.30 vitest=2 cutechess=0 tctl=40.8
+2026-10-30T10:06:34Z CLI_DEEP-cli.real-engine wait poll=29 load1=1.24 vitest=2 cutechess=0 tctl=61.6
+2026-10-30T10:06:50Z CLI_DEEP-cli.real-engine wait poll=30 load1=1.26 vitest=2 cutechess=0 tctl=62.1
+2026-10-30T10:07:05Z CLI_DEEP-cli.real-engine wait poll=31 load1=1.20 vitest=2 cutechess=0 tctl=62.5
+2026-10-30T10:07:20Z CLI_DEEP-cli.real-engine wait poll=32 load1=1.38 vitest=2 cutechess=0 tctl=63.5
+2026-10-30T10:07:35Z CLI_DEEP-cli.real-engine wait poll=33 load1=1.36 vitest=2 cutechess=0 tctl=64.1
+2026-10-30T10:07:50Z CLI_DEEP-cli.real-engine wait poll=34 load1=1.50 vitest=2 cutechess=0 tctl=45.4
+2026-10-30T10:08:05Z CLI_DEEP-cli.real-engine wait poll=35 load1=1.47 vitest=2 cutechess=0 tctl=43.0
+2026-10-30T10:08:20Z CLI_DEEP-cli.real-engine wait poll=36 load1=1.21 vitest=2 cutechess=0 tctl=50.8
+2026-10-30T10:08:35Z CLI_DEEP-cli.real-engine wait poll=37 load1=1.31 vitest=2 cutechess=0 tctl=42.6
+2026-10-30T10:08:50Z CLI_DEEP-cli.real-engine wait poll=38 load1=1.31 vitest=2 cutechess=0 tctl=42.4
+2026-10-30T10:09:05Z CLI_DEEP-cli.real-engine wait poll=39 load1=1.24 vitest=2 cutechess=0 tctl=42.4
+2026-10-30T10:09:20Z CLI_DEEP-cli.real-engine wait poll=40 load1=1.48 vitest=2 cutechess=0 tctl=41.3
+2026-10-30T10:09:35Z CLI_DEEP-cli.real-engine wait poll=41 load1=1.36 vitest=2 cutechess=0 tctl=41.3
+2026-10-30T10:09:50Z CLI_DEEP-cli.real-engine wait poll=42 load1=1.28 vitest=2 cutechess=0 tctl=40.8
+2026-10-30T10:10:05Z CLI_DEEP-cli.real-engine wait poll=43 load1=1.30 vitest=2 cutechess=0 tctl=40.8
+2026-10-30T10:10:20Z CLI_DEEP-cli.real-engine wait poll=44 load1=1.23 vitest=2 cutechess=0 tctl=41.1
+2026-10-30T10:10:35Z CLI_DEEP-cli.real-engine wait poll=45 load1=1.18 vitest=2 cutechess=0 tctl=40.9
+2026-10-30T10:10:50Z CLI_DEEP-cli.real-engine wait poll=46 load1=1.93 vitest=2 cutechess=0 tctl=41.5
+2026-10-30T10:11:05Z CLI_DEEP-cli.real-engine wait poll=47 load1=1.80 vitest=2 cutechess=0 tctl=41.8
+2026-10-30T10:11:20Z CLI_DEEP-cli.real-engine wait poll=48 load1=1.69 vitest=2 cutechess=0 tctl=41.6
+2026-10-30T10:11:35Z CLI_DEEP-cli.real-engine wait poll=49 load1=1.60 vitest=2 cutechess=0 tctl=41.4
+2026-10-30T10:11:50Z CLI_DEEP-cli.real-engine wait poll=50 load1=1.54 vitest=2 cutechess=0 tctl=50.1
+2026-10-30T10:12:05Z CLI_DEEP-cli.real-engine wait poll=51 load1=1.42 vitest=2 cutechess=0 tctl=41.1
+2026-10-30T10:12:20Z CLI_DEEP-cli.real-engine wait poll=52 load1=1.49 vitest=2 cutechess=0 tctl=65.5
+2026-10-30T10:12:35Z CLI_DEEP-cli.real-engine wait poll=53 load1=1.38 vitest=2 cutechess=0 tctl=68.0
+2026-10-30T10:12:50Z CLI_DEEP-cli.real-engine wait poll=54 load1=1.29 vitest=2 cutechess=0 tctl=68.9
+2026-10-30T10:13:05Z CLI_DEEP-cli.real-engine wait poll=55 load1=1.30 vitest=2 cutechess=0 tctl=44.3
+2026-10-30T10:13:20Z CLI_DEEP-cli.real-engine wait poll=56 load1=1.24 vitest=2 cutechess=0 tctl=42.9
+2026-10-30T10:13:35Z CLI_DEEP-cli.real-engine wait poll=57 load1=1.18 vitest=2 cutechess=0 tctl=42.3
+2026-10-30T10:13:50Z CLI_DEEP-cli.real-engine wait poll=58 load1=1.22 vitest=2 cutechess=0 tctl=60.9
+2026-10-30T10:14:05Z CLI_DEEP-cli.real-engine wait poll=59 load1=1.25 vitest=2 cutechess=0 tctl=47.0
+2026-10-30T10:14:20Z CLI_DEEP-cli.real-engine wait poll=60 load1=1.27 vitest=2 cutechess=0 tctl=74.1
+2026-10-30T10:14:35Z CLI_DEEP-cli.real-engine wait poll=61 load1=1.28 vitest=2 cutechess=0 tctl=41.6
+2026-10-30T10:14:50Z CLI_DEEP-cli.real-engine wait poll=62 load1=1.15 vitest=2 cutechess=0 tctl=65.8
+2026-10-30T10:15:05Z CLI_DEEP-cli.real-engine wait poll=63 load1=1.32 vitest=2 cutechess=0 tctl=41.8
+2026-10-30T10:15:20Z CLI_DEEP-cli.real-engine wait poll=64 load1=1.25 vitest=2 cutechess=0 tctl=46.9
+2026-10-30T10:15:36Z CLI_DEEP-cli.real-engine wait poll=65 load1=1.05 vitest=2 cutechess=0 tctl=63.8
+2026-10-30T10:15:51Z CLI_DEEP-cli.real-engine wait poll=66 load1=1.60 vitest=2 cutechess=0 tctl=66.4
+2026-10-30T10:16:06Z CLI_DEEP-cli.real-engine wait poll=67 load1=1.53 vitest=2 cutechess=0 tctl=77.5
+2026-10-30T10:16:21Z CLI_DEEP-cli.real-engine wait poll=68 load1=1.41 vitest=2 cutechess=0 tctl=44.6
+2026-10-30T10:16:36Z CLI_DEEP-cli.real-engine wait poll=69 load1=1.46 vitest=2 cutechess=0 tctl=69.0
+2026-10-30T10:16:51Z CLI_DEEP-cli.real-engine wait poll=70 load1=2.14 vitest=5 cutechess=0 tctl=73.8
+2026-10-30T10:17:06Z CLI_DEEP-cli.real-engine wait poll=71 load1=2.58 vitest=5 cutechess=0 tctl=68.6
+2026-10-30T10:17:21Z CLI_DEEP-cli.real-engine wait poll=72 load1=2.15 vitest=5 cutechess=0 tctl=44.5
+2026-10-30T10:17:36Z CLI_DEEP-cli.real-engine wait poll=73 load1=2.13 vitest=5 cutechess=0 tctl=49.9
+2026-10-30T10:17:51Z CLI_DEEP-cli.real-engine wait poll=74 load1=2.33 vitest=5 cutechess=0 tctl=83.9
+2026-10-30T10:18:06Z CLI_DEEP-cli.real-engine wait poll=75 load1=3.07 vitest=5 cutechess=0 tctl=73.1
+2026-10-30T10:18:21Z CLI_DEEP-cli.real-engine wait poll=76 load1=2.82 vitest=2 cutechess=0 tctl=51.9
+2026-10-30T10:18:36Z CLI_DEEP-cli.real-engine wait poll=77 load1=2.42 vitest=2 cutechess=0 tctl=62.1
+2026-10-30T10:18:51Z CLI_DEEP-cli.real-engine wait poll=78 load1=2.03 vitest=2 cutechess=0 tctl=48.3
+2026-10-30T10:19:06Z CLI_DEEP-cli.real-engine wait poll=79 load1=2.20 vitest=2 cutechess=0 tctl=64.5
+2026-10-30T10:19:21Z CLI_DEEP-cli.real-engine wait poll=80 load1=1.93 vitest=2 cutechess=0 tctl=67.4
+2026-10-30T10:19:36Z CLI_DEEP-cli.real-engine wait poll=81 load1=1.72 vitest=2 cutechess=0 tctl=67.1
+2026-10-30T10:19:51Z CLI_DEEP-cli.real-engine wait poll=82 load1=1.49 vitest=2 cutechess=0 tctl=62.5
+2026-10-30T10:20:06Z CLI_DEEP-cli.real-engine wait poll=83 load1=1.53 vitest=2 cutechess=0 tctl=64.5
+2026-10-30T10:20:21Z CLI_DEEP-cli.real-engine clear after poll 84
+2026-10-30T10:20:21Z CLI_DEEP-cli.real-engine start load1=1.47 tctl=40.5 foreign_vitest=0
+2026-10-30T10:20:34Z CLI_DEEP-cli.real-engine end rc=0 wall=13.0s load1=1.37 tctl=70.9 :: 11 passed (11)
+2026-10-30T10:20:34Z UCI_DEEP-uci.real-engine wait poll=1 load1=1.37 vitest=0 cutechess=0 tctl=70.6
+2026-10-30T10:20:49Z UCI_DEEP-uci.real-engine clear after poll 2
+2026-10-30T10:20:49Z UCI_DEEP-uci.real-engine start load1=1.14 tctl=39.4 foreign_vitest=0
+2026-10-30T10:20:51Z UCI_DEEP-uci.real-engine end rc=0 wall=1.4s load1=1.14 tctl=57.6 :: 5 passed (5)
+2026-10-30T10:20:51Z DONE
