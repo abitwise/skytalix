@@ -1,0 +1,20 @@
+QE-A1a | head uci = base uci + the TimeMode line right after Skill Level (head 6 lines, base 5) | PASS
+QE-A1b | after the setting a second uci writes the same reply (combo default stays level) | PASS
+QE-A6a | 3 000 random go lines in the setting: 0 oracle mismatches, 0 budgets > 22 000; T bound 2165, C bound 482, movetime bound 353 | PASS
+QE-A6b | 400-digit clocks: wtime -> 22000, movetime -> 22000, wtime -inf winc +inf -> NaN; real engine on the NaN budget: depth 1, bestmove b1c3 | PASS
+QE-A6c | movetime -5 / 0 in the setting: -5 -> head -5 (base level 5 -5), bestmove b8c6; 0 -> head 0 (base level 5 0), bestmove b8c6 | PASS
+QE-A3a | side to move reads its own clock and increment: B wtime 10000 btime 10000 winc 0 binc 2000 movestogo 10 -> 2800 (want 2800); B wtime 10000 btime 10000 winc 2000 binc 0 movestogo 10 -> 800 (want 800); W wtime 10000 btime 10000 winc 2000 binc 0 movestogo 10 -> 2800 (want 2800); W wtime 10000 btime 10000 winc 0 binc 2000 movestogo 10 -> 800 (want 800); W wtime 900000 btime 3000 movestogo 1 -> 22000 (want 22000); B wtime 3000 btime 900000 movestogo 1 -> 22000 (want 22000); W wtime 3000 btime 900000 movestogo 1 -> 1900 (want 1900) | PASS
+QE-A3b | White to move with only btime 5000: budget 22000 (the no-time-token branch; base level 7 gives 30000, its own no-clock budget) | PASS
+QE-A8 | base a649fbc4 vs head, TimeMode unset and level, Skill Level 1-7, 300 random go lines each: 4200 rows, 0 differences (handed budget/limits, lines, random draws) | PASS
+QE-A9a | Skill Level 1-4 in the setting, 20 go each: L1 draws 0, calls 20, via levels.ts 0, all T true; L2 draws 0, calls 20, via levels.ts 0, all T true; L3 draws 0, calls 20, via levels.ts 0, all T true; L4 draws 0, calls 20, via levels.ts 0, all T true; non-vacuity TimeMode level L1: draws 1, engine via levels.ts | PASS
+QE-A9b | limits in the setting at Skill Level 1: go depth 3 -> {"budgetMs":22000,"maxDepth":3,"from":"uci-session.ts"}; go nodes 5000 -> {"budgetMs":22000,"maxNodes":5000,"from":"uci-session.ts"}; go mate 2 -> {"budgetMs":22000,"maxDepth":3,"from":"uci-session.ts"}; no 'ignores' line | PASS
+QE-A9c | toggle setting/level at Skill Level 6, bare go budgets: 22000, 5000, 22000, 5000 | PASS
+QE-A10a | 8 refused values x 2 starting modes: 0 wrong | PASS
+QE-A10b | accepted silently: 'setoption name TIMEMODE value simple-tournament' -> [] budget 22000; 'setoption   name   TimeMode   value   simple-tournament' -> [] budget 22000 | PASS
+QE-A10c | 'setoption name Time Mode value simple-tournament' (unknown option): lines [], budget 4000 (level 5) | PASS
+QE-A10d | the setting survives ucinewgame x2 and a second uci: budget 22000 | PASS
+QE-A10e | BEL and ESC in the value: ["info string TimeMode takes level or simple-tournament, got simple-tournament; kept level"] printable | PASS
+QE-A13a | two isready queued during go: ["info depth","bestmove b8c6","readyok","readyok"] | PASS
+QE-A13b | go infinite, stop then isready queued during the search: ["info depth","bestmove b8c6","readyok"] | PASS
+QE-A13c | go movetime 2000, isready queued: ["info depth","bestmove b8c6","readyok"] | PASS
+FAIL 0
