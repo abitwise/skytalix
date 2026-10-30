@@ -3,7 +3,7 @@ subtask: secnfr-catalog-rebase
 role: security-nfr
 ref: .grugops/context/secnfr-catalog-rebase/
 branch: new grugops/secnfr-catalog-rebase from main (sha at spawn)
-width: records only — HELD for a free slot
+width: records only
 ---
 # Security/NFR: catalog reference machine re-base (SEC-228-a) + whole-second confirmation
 Owner words verbatim in `orch-2026-10-30a/…f4673b9f`.
