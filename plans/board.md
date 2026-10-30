@@ -1,3 +1,4 @@
+_Updated: 2026-10-30 12:35Z Orchestrator (orch-2026-10-30a) — ABC-220 SE done, code review PASS → In Review. Host clear → `qe-ABC-241` spawned ALONE (timing + 20 games). `arch-ABC-220-a14` beside it, records only, no CPU (F1: A14 unmeasurable as written; refusal text + file confirmations; D5 bound reading). Width 2/3._
 _Updated: 2026-10-30 Orchestrator (orch-2026-10-30a) — bapm-ABC-229-rescore merged: ABC-229 → Ready 10/10; ADR-0044 D4.2 pointer to 4 000 ms. Ruling: ABC-220 adds a new UCI TimeMode and leaves level 5 / the default as is, so its merge does not make a level-5 smoke stale. Host order (ALONE reads): se-ABC-220 ends → qe-ABC-241 → ABC-229 (QE Q-SET freeze, SE, QE) / qe-ABC-220. LOW to next BA/PM hop: ADR-0044 D11 text still says level 5 at 3 s. Width 1/3 (se-ABC-220)._
 _Updated: 2026-10-30 Orchestrator (orch-2026-10-30a) — secnfr-ABC-228-catalog merged (NFR-004/005/009 at 4 000 ms; PASS; no owner decision on the text). SEC-228-a (LOW, owner, non-blocking): catalog still names the M3 reference + Node v26.11.x; re-base to the Linux host is the owner's call. Watch: npm test wall 9.61 s vs NFR-008 10 s (0.39 s headroom). Width 2/3 (se-ABC-220, bapm-ABC-229-rescore); qe-ABC-241 held for ALONE._
 _Updated: 2026-10-30 Orchestrator (orch-2026-10-30a) — ABC-241 SE done, code review PASS → In Review; `qe-ABC-241` pending, HELD until se-ABC-220 ends (timing + games ALONE). `bapm-ABC-229-rescore` (records: ABC-229 DoR after ABC-228; ADR-0044 D4.2 stale 3 000 ms) spawned. Running: se-ABC-220, secnfr-ABC-228-catalog, bapm-ABC-229-rescore. Width 3/3._
@@ -1233,8 +1234,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-220] simple-tournament over UCI (TimeMode): T 22.0 s, min(T, C) with a clock, 22.5 s ceiling (size: M, priority: P2, DoR 9/10; waits owner accepts ADR-0052 (OQ-0052-1; → Ready 2026-10-30: ADR-0052 ACCEPTED (22 s / 22 s); DoR 10/10; shares uci-session.ts with ABC-230, builds after it; **pulled 2026-10-30** → `se-ABC-220` (A11/A14/A12 wall unrun at SE, QE runs them ALONE; NFR triggers → Security/NFR gate after QE)
+## In Development (WIP 0/3)
 
 
 
@@ -1262,8 +1262,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
+## In Review (WIP 2/3)
 - [ABC-241] A repetition against the game's earlier positions ignores an ep square no pawn can legally take (Q3 (c), ADR-0020 § AMENDMENT 2026-10-30) (size: S, priority: P2, DoR 10/10 (ABC-230 merged 24f3e322); milestone 1; value-changing → 10 D + 10 R smoke; after ABC-228; **pulled 2026-10-30** → `se-ABC-241`; R smoke reads level 5 at 4 000 ms; **SE done d1a2d5cd (code 33540592): A1–A9 met, 8/8 mutants caught, npm test 2 245; code review PASS** → `qe-ABC-241` queued HELD until se-ABC-220 ends (ALONE))
+- [ABC-220] simple-tournament over UCI (TimeMode): T 22.0 s, min(T, C) with a clock, 22.5 s ceiling (size: M, priority: P2, DoR 9/10; waits owner accepts ADR-0052 (OQ-0052-1; → Ready 2026-10-30: ADR-0052 ACCEPTED (22 s / 22 s); DoR 10/10; shares uci-session.ts with ABC-230, builds after it; **pulled 2026-10-30** → `se-ABC-220` (A11/A14/A12 wall unrun at SE, QE runs them ALONE; NFR triggers → Security/NFR gate after QE; **SE done 8f444cc4 (code 68ba364c, uci-session.ts only): A1–A10, A13 green; A11/A14/A12 wall unrun (QE ALONE); 13/13 mutants; npm test 2 271; code review PASS**; F1 MEDIUM (A14 unmeasurable in sync-child lane) → `arch-ABC-220-a14`; QE after qe-ABC-241; then Security/NFR gate)
 
 
 

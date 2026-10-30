@@ -4,7 +4,7 @@ role: qe-e2e
 ticket: ABC-241
 ref: .grugops/context/qe-ABC-241/
 branch: grugops/ABC-241 @ d1a2d5cd (code 33540592; base main e42b637b — current main is src/tools/data-identical, verify); QE commits on new grugops/qe-ABC-241 from d1a2d5cd (worktree .claude/worktrees/qe-ABC-241)
-width: ALONE (timing + games) — HELD until se-ABC-220 finishes
+width: ALONE (timing + games) (host clear 12:34Z)
 ---
 # QE ABC-241: Q-SET freeze-review, gates, G8, SE-241-b cost, A10 smoke pair
 ## Read
