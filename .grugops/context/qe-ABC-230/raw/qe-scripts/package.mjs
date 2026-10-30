@@ -4,13 +4,14 @@ import { execFileSync } from "node:child_process";
 import { mkdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 
-const [wt, scr, listPath] = process.argv.slice(2);
+const envArg = process.argv.slice(2).find((a) => a.startsWith("--env="));
+const [wt, scr, listPath] = process.argv.slice(2).filter((a) => !a.startsWith("--env="));
 const raw = join(wt, ".grugops/context/qe-ABC-230/raw");
 let bad = 0;
 for (const [src, dst] of JSON.parse(readFileSync(listPath, "utf8"))) {
   mkdirSync(dirname(join(raw, dst)), { recursive: true });
   try {
-    execFileSync(process.execPath, [join(scr, "scripts/redact.mjs"), join(scr, src), join(raw, dst), wt, scr], { stdio: "inherit" });
+    execFileSync(process.execPath, [join(scr, "scripts/redact.mjs"), join(scr, src), join(raw, dst), wt, scr, ...(envArg ? [envArg] : [])], { stdio: "inherit" });
     console.log(`ok ${dst}`);
   } catch {
     bad++;

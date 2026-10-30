@@ -5,7 +5,16 @@ import { readFileSync, realpathSync, writeFileSync } from "node:fs";
 import { homedir, hostname, userInfo } from "node:os";
 import { dirname } from "node:path";
 
-const [src, dst, wt, scr] = process.argv.slice(2);
+const argv = process.argv.slice(2);
+// `--env=<file>`: the `export NAME=value` tool-path file, read here so that the tool paths are redacted by name.
+const envArg = argv.find((a) => a.startsWith("--env="));
+if (envArg) {
+  for (const line of readFileSync(envArg.slice(6), "utf8").split("\n")) {
+    const m = /^\s*(?:export\s+)?([A-Z_][A-Z0-9_]*)=["']?(.*?)["']?\s*$/.exec(line);
+    if (m) process.env[m[1]] = m[2];
+  }
+}
+const [src, dst, wt, scr] = argv.filter((a) => !a.startsWith("--env="));
 const pairs = [
   [scr, "<scratchpad>/qe-230"],
   [wt, "<worktree>"],

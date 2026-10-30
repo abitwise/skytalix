@@ -8,7 +8,17 @@ import { appendFileSync, existsSync, mkdirSync, openSync, readdirSync, readFileS
 import { loadavg } from "node:os";
 import { join } from "node:path";
 
-const [dir, mode, cand, base] = process.argv.slice(2);
+// `--env=<file>` (optional, any position): `export NAME=value` lines read into this process's environment, so the
+// tool paths reach the harness without a shell `source` (the sandbox refuses it). Nothing from the file is logged.
+const argv = process.argv.slice(2);
+const envArg = argv.find((a) => a.startsWith("--env="));
+if (envArg) {
+  for (const line of readFileSync(envArg.slice(6), "utf8").split("\n")) {
+    const m = /^\s*(?:export\s+)?([A-Z_][A-Z0-9_]*)=["']?(.*?)["']?\s*$/.exec(line);
+    if (m) process.env[m[1]] = m[2];
+  }
+}
+const [dir, mode, cand, base] = argv.filter((a) => !a.startsWith("--env="));
 const mon = join(dir, "mon");
 const out = join(dir, "out");
 mkdirSync(mon, { recursive: true });
