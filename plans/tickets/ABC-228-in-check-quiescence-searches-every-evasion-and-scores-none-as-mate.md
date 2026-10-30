@@ -230,3 +230,23 @@ and 10 carry (ii), still 10/10). Ready.** *(Was 9/10, waiting on the ADR.)*
 > **`Q-SET` was not frozen by QE before the build.** The SE wrote it, and QE's freeze or review is owed. Still owed
 > to QE: the graded `G6`, the smokes (`A6`), `G5`'s real clock and `G11`. Notes:
 > `.grugops/context/se-ABC-228/notes/`.
+
+> **Result 2026-10-30, Software Engineer** (task `se-ABC-228-ii`, branch `grugops/ABC-228`, code `8c82399f` on
+> `d9c5bcde`). **Scope 5, reading (ii), built after QE's `G6` miss** (`qe-ABC-228` QE-228-c: position-6 median depth 9
+> against base's 10). **`A9` reads 65.9 % (kiwipete) and 97.4 % (position-6) in `A8`'s units, both ≤ 133 %: MET.** So
+> `G6` is read under (ii) (`A5`), and then the smokes.
+> - **Data:** `LEVELS[5]` = `{ budgetMs: 4_000, blunderRate: 0 }`, `DEFAULT_BUDGET_MS` = 4 000, and the R literal
+>   `mode === "r" ? 4000`. Every other level value is byte-identical, and `ADR-0045` D2's equality row is green.
+> - **Test pins:** they follow the constant. The grep found more than the ADR's list: `src/uci-session.test.ts`, where
+>   the `GO_G3500` rows now read 3 500, and level 5's ceiling margin is 1 000.
+> - **QE-228-b:** QE's 6 rows and `QE-C4` are in `src/quiescence.test.ts`.
+> - **Gates:** lint, typecheck and build exit 0. `npm test` 2 219 / 2 219, skips 0.
+>
+> **INFO:**
+> - With QE's measured 1.139 factor, `A9` reads 68.9 % and 101.8 %, both ≤ 133 %.
+> - Head on the real clock at 4 000 ms completed base's depth in 3 of 3 runs on each board. That is not the graded
+>   `G6`.
+>
+> **Still owed to QE:** `G5`, `G6` and `G11` at 4 s, `G8`, the smokes (`A6` "Under (ii)"), and UAT.
+>
+> Notes: `.grugops/context/se-ABC-228-ii/notes/`.
