@@ -1,3 +1,4 @@
+_Updated: 2026-10-30 20:40Z Orchestrator (orch-2026-10-30a) — se-ABC-225-main done, review PASS → In Review; `qe-ABC-225-w1` spawned ALONE (40 games at width 1, ~2.2–2.4 h). arch-g8-headroom (records) beside. Width 2/3._
 _Updated: 2026-10-30 20:30Z Orchestrator (orch-2026-10-30a) — ABC-229 DONE: qe-ABC-229 PASS_WITH_GAPS (R re-run 9.0/10), merged 5953c631, not pushed. Sealed + merged: arch-ABC-242-accept, bapm-ABC-242-225-owner, secnfr-catalog-rebase. ABC-242 → Ready. G8 headroom 0.10 s (QE-229-a MEDIUM) → `arch-g8-headroom` (records); HOLD ABC-243/242/221 (all add default-lane rows) until its ruling. `se-ABC-225-main` spawned. Width 2/3._
 _Updated: 2026-10-30 19:45Z Orchestrator (orch-2026-10-30a) — qe-ABC-229: R smoke died at 17:43:44Z (external kill of the process group, ~80 s in; no thermal stop); first QE silent ~2 h. G8, G6, G11, D smoke done in its scratch. Resume QE spawned on the same worktree: re-run R ALONE, verdict. Width 1/3._
 _Updated: 2026-10-30 Orchestrator (orch-2026-10-30a) — secnfr-catalog-rebase done (4801b87e, seal pending): reference = oeselg-devl as owner wrote; SEC-228-a CLOSED; whole-second CONFIRMED in NFR-004/AR-UCI-BUSY. Asked owner: hostname reads oeselg-dev vs his "oeselg-devl" (SEC-REBASE-a). LOW to Architect later: SEC-REBASE-b (load1 ≤ 8 gate on 24 CPUs vs 8), ADR-0052 D7 wording. Awaiting seal + merge after qe-ABC-229: arch-ABC-242-accept, bapm-ABC-242-225-owner, secnfr-catalog-rebase._
@@ -1248,8 +1249,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-225] Interleaved R-pair command: the batch's instrument (re-scoped 2026-10-29) (size: M, priority: P2, DoR 10/10; tools only; Done before milestone 1's batch; not during an ALONE reading; **pulled 2026-10-29** → `se-ABC-225`, QE follows for A5/A6 ALONE; SE done 9988a778, code review PASS (…561f1ef1); QE `qe-ABC-225` spawned ALONE 2026-10-30 after ABC-235 merged (A5 40 games ~1 h; QE `qe-ABC-225` FAIL 2026-10-30 (…3a53bdfc): A1–A4 MET, no tool defect; A5/A6 unread — THERMAL STOP (Tctl median 87.05 °C at width 2, 4 of 40 games) + foreign vitest on host; QE records on grugops/qe-ABC-225 @ 3da78303, not merged) — **BLOCKED since 2026-10-30 on owner**: Tctl line for R runs, or A5 at --concurrency 1, or a cooler hos; **UNBLOCKED 2026-10-30 by owner: "approve to run one at a time"** (…65848126) → `se-ABC-225-main` (main in + rpair 4 000) HELD until qe-ABC-229 ends, then QE A5/A6 ALONE at --concurrency 1)
+## In Development (WIP 0/3)
 
 
 
@@ -1277,7 +1277,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-225] Interleaved R-pair command: the batch's instrument (re-scoped 2026-10-29) (size: M, priority: P2, DoR 10/10; tools only; Done before milestone 1's batch; not during an ALONE reading; **pulled 2026-10-29** → `se-ABC-225`, QE follows for A5/A6 ALONE; SE done 9988a778, code review PASS (…561f1ef1); QE `qe-ABC-225` spawned ALONE 2026-10-30 after ABC-235 merged (A5 40 games ~1 h; QE `qe-ABC-225` FAIL 2026-10-30 (…3a53bdfc): A1–A4 MET, no tool defect; A5/A6 unread — THERMAL STOP (Tctl median 87.05 °C at width 2, 4 of 40 games) + foreign vitest on host; QE records on grugops/qe-ABC-225 @ 3da78303, not merged) — **BLOCKED since 2026-10-30 on owner**: Tctl line for R runs, or A5 at --concurrency 1, or a cooler hos; **UNBLOCKED 2026-10-30 by owner: "approve to run one at a time"** (…65848126) → `se-ABC-225-main` (main in + rpair 4 000) HELD until qe-ABC-229 ends, then QE A5/A6 ALONE at --concurrency 1; **se-ABC-225-main done 933d9f35: main 14c8aafa merged in (1 conflict in rating.ts, resolved; r/d argv = main), rpair 4 000 ms, A1–A4 22/22, npm test 2 322; code review PASS** → `qe-ABC-225-w1` ALONE at --concurrency 1)
 
 
 
