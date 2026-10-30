@@ -10,6 +10,20 @@ epic: EPIC-010
 
 # ABC-242: the blunder path sees the third occurrence at its root (QE-230-a)
 
+> **AMENDED 2026-10-30 by BA/PM** (task `bapm-g8-headroom-cut`, records only, at `main` `161e940d`). Source:
+> `ADR-0046` § Addendum 2026-10-30 R1–R4 (`arch-g8-headroom`, `5fd3eee7`), given BA/PM's word on `ABC-244`'s page.
+> `G8` read 9.90 s at `ABC-229` (`QE-229-a`), so the lane has 0.10 s of headroom.
+>
+> - **The lane form of this ticket's rows follows R1–R4** (§ NFR triggers, `NFR-008` line; Test note 5). Its
+>   default-lane rows that search on a virtual clock are in `src/levels.test.ts` (A1–A6) and the `A4` rows in
+>   `src/cli.test.ts` and `src/uci-session.test.ts`.
+> - **The lane form is level 1's own 100 ms budget at the coarsest kill-set-preserving step.** It is not QE's probe
+>   set-up (rate 1, 2 000 ms, `virtualClock(1)`, about 2 000 reads per scored list), which is a probe, not a lane
+>   form (R4). Under R4 the estimate is +0.05 to +0.15 s of lane wall. Copying the probe form could add seconds.
+> - **Pull order:** after `ABC-244`, which edits both of this ticket's `A4` files. This ticket rebases on it.
+> - Acceptance A1–A8, size S, P3 and S2 with no smoke are unchanged. DoR stays **10/10**: rows 5 and 6 gain dated
+>   lines.
+
 > **ACCEPTED and RE-SCORED 2026-10-30 by BA/PM** (task `bapm-ABC-242-225-owner`, records only, at `main` `5090a4d6`;
 > `src/`, `tools/` and `data/` untouched). **The owner accepted the Architect's design.** His words, verbatim
 > (`orch-2026-10-30a` `…65848126`): *"ABC-242: accept, ABC-225 - approve to run one at a time"*.
@@ -205,6 +219,20 @@ The design is the Architect's (§ Dependencies). This page states the outcomes.
 - **`NFR-008`:** fixed-seed, virtual-clock rows only; 0 real-clock rows in the default lane. The default-lane wall
   stays **≤ 10 s**. After `ABC-220` the headroom was 0.27–0.31 s (QE-220-c), which is the Orchestrator's watch line.
   `ABC-229`, `ABC-243` and this ticket all add rows.
+  - *(2026-10-30, `bapm-g8-headroom-cut`; `ADR-0046` § Addendum R1–R4.)* After `ABC-229` the headroom is 0.10 s
+    (`G8` 9.90 s, `QE-229-a`). **Every default-lane row this ticket adds or edits that searches on a virtual clock
+    follows R1–R4:**
+    - **R1:** the build note gives each such row's reads per search (⌈budget ÷ step⌉).
+    - **R2:** a time-blind row takes the coarsest step in {1, 10, 100, 1 000} at which its assertions hold and QE's
+      kill set for it equals its kill set at step 1. A new row has no base step, so step 1 is the reference. The
+      budget of a level-1 row is level 1's own **100 ms**. `ABC-244`'s condition 2 applies: a search that runs ≥ 2
+      clock-check intervals at step 1 still runs ≥ 2 at the chosen step. Which step that is for each row is
+      `UNKNOWN - verify` until the SE's parity run reads it.
+    - **R3:** `A4`'s three-way row (CLI seam, UCI, direct `createLevel`) uses one step on all three callers.
+    - **R4:** QE's probe set-up (rate 1, 2 000 ms, `virtualClock(1)`) is **not** the lane form. A row that copies it
+      makes about 2 000 reads per scored list.
+    - Estimate under the rule: **+0.05 to +0.15 s** of lane wall, `UNKNOWN - verify` until `G8` reads it. `G8` ≤ 10 s
+      stays the bar. If this ticket's `G8` head median reads > 9.6 s, `ABC-244`'s tranche-2 trigger fires.
 - **Security (ASVS L1):** no new input path (`RISK-EPIC010-06` is bounded by `ABC-230` `A5`).
 
 ## Test notes
@@ -218,6 +246,12 @@ The design is the Architect's (§ Dependencies). This page states the outcomes.
    `src/levels.test.ts` § A8 import pin and the `ABC-078` `A4` engine export pin both stay green unedited. The
    expected values are in the Architect-reading block above. Where they are marked `UNKNOWN - verify`, the SE
    records what the run gives and does not pin it.
+5. *(2026-10-30, `bapm-g8-headroom-cut`.)* **The lane form (R1–R4).** The default-lane rows run level 1's own
+   100 ms budget on a virtual clock, at the coarsest step that keeps the row's assertions and kill set (§ NFR
+   triggers). QE's probe (`blunder-probe.mjs`: rate 1, 2 000 ms, `virtualClock(1)`) stays a probe. The SE may use it
+   out of tree to derive expected values, and does not copy its budget or step into `src/`. A forced blunder is set by
+   the seed (A4: level 1's draw < 0.4) or by a rate-1 level built in the test, with the same 100 ms budget. The build
+   note carries one R1 line per row: title, budget, step, reads per search.
 
 ## Size and priority
 
@@ -243,6 +277,9 @@ The design is the Architect's (§ Dependencies). This page states the outcomes.
   status text is `arch-ABC-242-accept`'s records hop. It is not a wait.
 - **Shared files** (rebase order only): `ABC-243` (Ready) also edits `src/uci-session.test.ts`. `ABC-229`
   (In Review) shares no file.
+- *(2026-10-30, `bapm-g8-headroom-cut`.)* **Pull after `ABC-244`** (cut 2026-10-30, P1, test-only). It changes the step
+  literals of the `ABC-230` / `ABC-241` blocks in `src/cli.test.ts` and `src/uci-session.test.ts`, both of this
+  ticket's `A4` files. This ticket rebases on it. That is order, not a wait on design.
 
 ## Definition of Ready
 
@@ -252,9 +289,9 @@ The design is the Architect's (§ Dependencies). This page states the outcomes.
 | 2 | scope and out-of-scope | ✅ 3 outcomes; engine-path root, `ADR-0032` pick, ep key out; parent-root count ruled out by the Architect (2026-10-30) |
 | 3 | INVEST | ✅ one check on one path; S; testable |
 | 4 | testable, measurable acceptance | ✅ A1–A7 exact (0, no child search, 4 of 5 child searches on the probe, a last-in-order fixture equal to base's except its 0, base-equal, node-equal; A4 by move, `nodes` and `depth` against a direct call); A8 S2, checks A1–A5 |
-| 5 | dependencies known | ✅ `ABC-230` Done; `ABC-241` Done (`1f6abec4`); Architect reading merged; owner accepted 2026-10-30; `ABC-243` shares `src/uci-session.test.ts` |
-| 6 | NFR triggers with targets | ✅ ≤ 49 comparisons per root move; `G5` 5 s; 0 real-clock rows; default lane ≤ 10 s |
-| 7 | test notes | ✅ 4 |
+| 5 | dependencies known | ✅ `ABC-230` Done; `ABC-241` Done (`1f6abec4`); Architect reading merged; owner accepted 2026-10-30; `ABC-243` shares `src/uci-session.test.ts`. *2026-10-30:* pull after `ABC-244` (shares both `A4` files) |
+| 6 | NFR triggers with targets | ✅ ≤ 49 comparisons per root move; `G5` 5 s; 0 real-clock rows; default lane ≤ 10 s. *2026-10-30:* R1 census line per virtual-clock row owed in the build note; level 1's 100 ms at the coarsest safe step, not the probe's 2 000 ms (R2–R4); est. +0.05..+0.15 s |
+| 7 | test notes | ✅ 4 (*2026-10-30:* 5, the lane form) |
 | 8 | size | ✅ S |
 | 9 | priority | ✅ P3 |
 | 10 | no major unresolved blocker | ✅ none. The owner accepted `ADR-0054` § Proposed amendment 2026-10-30 (*"ABC-242: accept"*, `…65848126`). *(Was ⬜: the Architect reading, and the owner's word.)* |

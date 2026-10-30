@@ -1,0 +1,85 @@
+# BA/PM decision, bapm-g8-headroom-cut: `ABC-244` is cut (S, P1, test-only, `EPIC-010`, DoR 10/10) and pulled before `ABC-242`, `ABC-221` and `ABC-243`. `ADR-0046` § Addendum 2026-10-30 R1–R4 gets BA/PM's word. `ABC-242`, `ABC-221` and `ABC-243` gain dated lines
+
+Records only, on branch `grugops/bapm-g8-headroom-cut` from `main` `161e940d`. Nothing was run, built, timed or
+played; a QE plays 40 games ALONE on this host. No `src/`, `tools/`, `data/`, board or ADR file was touched. The
+design read is `grugops/arch-g8-headroom` @ `5fd3eee7` (`ADR-0046` § Addendum 2026-10-30, `ADR-0035` § Addendum
+2026-10-30, the Result in `.grugops/queue/done/arch-g8-headroom.md`, the drafted `raw/note-decision.md` and
+`raw/note-observation.md`). The cost evidence is `qe-ABC-229` `…0b7fd4f6` (`G8` head 9.90 s, base 9.90 s, `QE-229-a`).
+
+## 1. The word on R1–R4 (as `ABC-177` gave D2(b)'s)
+- **Given.** The step set is {1, 10, 100, 1 000}. `ABC-177`'s three conditions carry over unchanged:
+  1. kill-set parity decides, never finer than today's step; a unit whose kill set changes at the coarser step
+     keeps today's, and that covers a gain as well as a loss;
+  2. step 1 000 never turns a search of ≥ 2 clock-check intervals into a one-interval search;
+  3. the mutant list is frozen before any head run.
+- **R3, applied:** a CLI/UCI pair is one value, and the weaker surface decides it.
+- **R1/R4 bind other tickets from now on:** each ticket that adds or edits a default-lane virtual-clock row owes an R1
+  census line, checked in its DoR NFR row. A QE probe's set-up is not a lane form.
+- **No owner word.** No NFR level, bar, cap, pin, row count or lane line moves. The ADR status line recording this
+  word is owed by a records hop (Architect or merge). BA/PM did not edit the ADR.
+
+## 2. `ABC-244` (new)
+- **Title:** time-blind virtual-clock rows in `src/cli.test.ts` and `src/uci-session.test.ts` take the coarsest step
+  that keeps QE's caught-mutant set (`ADR-0046` § Addendum 2026-10-30, tranche 1; test-only).
+- **S, P1, `EPIC-010`** (its rows are `ABC-230`'s and `ABC-241`'s, as `ABC-177` took `EPIC-007`). **DoR 10/10.**
+  Recommended Backlog → Ready, pulled first.
+- **Scope:** two units, each one `STEP_MS` value written in both files.
+  - **U1:** CLI `ABC-230` `:4555` (A1, read-once, A3) with UCI `ABC-230` `:1286` (A2 "byte-equal … same game and
+    clock").
+  - **U2:** CLI `ABC-241` `:4626` (A4 ×2, A7) with UCI `ABC-241` `:1413` (A5 "CLI … equals UCI's").
+  - Both are at 100 today, with {100, 1 000} admitted. The other 10 of the 18 block rows are fixed-depth or
+    non-searching, and stay byte-identical.
+  - **Census units:** optional, at most 4. They are rows added after `4debc07d` (`ABC-177`'s merge), each time-blind
+    with a single-literal step. More than 4 means none joins, and the list goes to a follow-up.
+- **Acceptance:**
+  - **Build:**
+    - **A1:** an R1 census line per row;
+    - **A2:** each unit at its coarsest step under conditions 1–2, on both surfaces;
+    - **A3:** per-file test count equal, sorted names byte-identical, 0 skipped;
+    - **A4:** only step literals change, and no `expect(`, `it(` or `describe(` line;
+    - **A5:** every other line, helper and file is byte-identical.
+  - **Gate:**
+    - **A6:** the same caught-mutant ids per changed row, against a frozen list (`qe-ABC-230`'s seam fault,
+      `qe-ABC-241` QM1–QM4, untrimmed keys, a repetition that scores non-zero, and any SE ids);
+    - **A7:** strictly fewer nodes per moved row;
+    - **A8:** `N8-LANE` on the two-file set, ≤ 650 ms CPU;
+    - **A9:** `G8` b h h b b h after a wait-clear. `NFR-008` is MET at ≤ 10 s, the design target is ≤ 9.4 s, and a
+      miss of 9.4 s alone does not fail the ticket;
+    - **A10:** the four gates, 0 skips.
+- **Triggers** (in § NFR triggers):
+  - H > 9.4 s at this gate, or any later `G8` head median > 9.6 s, opens tranche 2 (T2a/T2b/T2c, a new ticket after
+    Architect/Design re-opens and BA/PM rules);
+  - still > 9.7 s after tranche 2 goes to the owner (`ADR-0035` D6);
+  - > 10 s at any gate goes to the owner.
+- **Estimate:** −0.3 to −0.65 s of wall, `UNKNOWN - verify` until A9.
+- **Width:** A8 and A9 are ALONE timed reads. The build, A6 and A7 are not.
+- **UAT** is waived by the standing test-only rule, measured at delivery. No smoke.
+
+## 3. Amendments (dated lines; the old text is kept)
+- **`ABC-242`:**
+  - a header block;
+  - the `NFR-008` line: R1–R4, a level-1 row runs level 1's own 100 ms at the coarsest safe step with step 1 as the
+    parity reference, the three-way `A4` row is one step on all callers (R3), and QE's probe set-up (rate 1,
+    2 000 ms, `virtualClock(1)`) is not the lane form (R4). Estimate +0.05..+0.15 s;
+  - Test note 5;
+  - a pull-after-`ABC-244` dependency line;
+  - DoR rows 5, 6 and 7 dated. It stays 10/10, Ready, S, P3.
+- **`ABC-221`:**
+  - a header block;
+  - `A9` gains the R1 census: each real-engine default-lane row (A8's parity rows, A11's lane row) records its clock
+    reads per search. The period rows A2–A4 stay on the stubbed `chooseMove`. A time-blind real-engine row takes R2.
+    Estimate about +0.1 s;
+  - a pull-after-`ABC-244` line;
+  - DoR rows 5 and 6 dated. It stays 10/10, M, P3.
+- **`ABC-243`:**
+  - a header note: R2 does not apply, because `A1` reads `time` (40 reads) and `A6` is fixed-depth. Estimate about
+    +0.03 s. The R1 line for `A1` is owed;
+  - a pull-after-`ABC-244` line;
+  - DoR rows 5 and 6 dated. It stays 10/10, XS, P3.
+- **`EPIC-010`:** a header fold block and tickets-table row 20 (`ABC-244`). A footnote says that its row number is not
+  its pull order.
+
+## 4. For the Orchestrator
+- Merge `grugops/arch-g8-headroom` (`5fd3eee7`, notes seal pending) and this branch before `ABC-244`'s build.
+- Move `ABC-244` to Ready, and order it ahead of `ABC-242`, `ABC-221` and `ABC-243`. The board is yours.
+- The `ADR-0046` status line recording the word is owed by a records hop.

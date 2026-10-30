@@ -10,6 +10,15 @@ owner: BA/PM
 
 # EPIC-010: the verified engine gaps, closed one measured change at a time, against an outside opponent
 
+> **CUT 2026-10-30 by BA/PM** (task `bapm-g8-headroom-cut`, records only, at `main` `161e940d`; `src/`, `data/`,
+> `tools/`, the board and the ADRs untouched). **`ABC-244` cut** (S, P1, test-only, DoR 10/10): the time-blind
+> `ABC-230` / `ABC-241` virtual-clock rows take the coarsest kill-set-preserving step (`ADR-0046` § Addendum
+> 2026-10-30 R1–R4, whose BA/PM word is given on its page). It answers `QE-229-a` (`G8` 9.90 s, 0.10 s of headroom),
+> with a design target of `G8` ≤ 9.4 s. **It is pulled before `ABC-242` and `ABC-243`.** Both gained dated lines:
+> `ABC-242`'s rows take level 1's 100 ms at the coarsest safe step, not QE's 2 000 ms probe set-up; `ABC-243` is
+> estimated at about +0.03 s. Tickets table: row 20 added. The notes are in
+> `.grugops/context/bapm-g8-headroom-cut/notes/`.
+
 > **FOLDED 2026-10-30 by BA/PM** (task `bapm-ABC-242-225-owner`, records only, at `main` `5090a4d6`; `src/`, `data/`
 > and `tools/` untouched). The owner's words, verbatim (`orch-2026-10-30a` `…65848126`): *"ABC-242: accept, ABC-225 -
 > approve to run one at a time"*.
@@ -537,6 +546,7 @@ mates", ≥ 6 "a quiet promotion decides". It reads `quiesce` and `chooseMove` a
 | 17 | `ABC-238` | A deeper stored entry may cut off a shallower search | M | P3 | Backlog | **9/10** | `ABC-081` `A1` revised; `ADR-0025`; door | the ADR; after `ABC-237` |
 | 18 | `ABC-239` | Evaluation weights tuned offline by a stated method, emitted as constants, validated outside | L | P3 | Backlog | **8/10** | `ADR-0048` data licence; new ADR | milestone 2's evaluation done; the licence; the ADR. Its batch is read **before** its merge (its `A6`) |
 | 19 | `ABC-243` | The setoption-Hash row reads a bare `go` (level 5 = 4 000 ms), and the TT `A7` title names the budget it reads (test-only, from `ABC-228`'s QE gaps); *2026-10-30:* plus a UCI row for a FEN that carries an uncapturable ep square (QE-241-a) | XS | P3 | **Ready** | **10/10** | `ABC-228` and `ABC-241` Done; no ADR; `src/uci-session.test.ts` and `src/transposition.test.ts` only | nothing: `ABC-241` merged `1f6abec4`. `ABC-220`'s rows in the same file are rebase order only |
+| 20 | `ABC-244` | Time-blind virtual-clock rows in `src/cli.test.ts` and `src/uci-session.test.ts` take the coarsest step that keeps QE's caught-mutant set (`ADR-0046` § Addendum 2026-10-30, tranche 1; test-only, from `QE-229-a`) | S | **P1** | Backlog (cut 2026-10-30; recommended Ready) | **10/10** | `ADR-0046` § Addendum 2026-10-30 R1–R4 (PROPOSED, `5fd3eee7`; BA/PM's word given on its page); `ABC-230`/`ABC-241` Done | nothing but the merges. **Pulled before `ABC-242` (row 10), `ABC-243` (row 19) and `EPIC-009`'s `ABC-221`** (shared test files). A8/A9 timed reads ALONE |
 
 *Re-scored 2026-10-29 (`bapm-owner-words-b`): Q4 is removed from every wait. Each value-changing ticket's DoR row 4
 is now ✅, because its reading is the smoke pair. No ticket but `ABC-225` changes column on this hop. `ABC-227` (Done)
@@ -556,6 +566,10 @@ test-only (no smoke, no gate beyond the default lane) and is not one of the fift
 QE-241-a's row) were changed. The board holds the live state.*
 *Folded 2026-10-30 (`bapm-ABC-242-225-owner`, on the owner's words `…65848126`): only rows 3 (`ABC-225` In Development,
 A5 at width 1) and 10 (`ABC-242` Ready 10/10) were changed. The board holds the live state.*
+*`ABC-244` was added 2026-10-30 from `QE-229-a` (`bapm-g8-headroom-cut`), at the end, like `ABC-243`: it is
+test-only and not one of the fifteen engine changes. **Its row number is not its pull order: it is pulled ahead of
+`ABC-242` and `ABC-243`**, because all three edit `src/uci-session.test.ts` and it wins the lane headroom they spend.
+Only its row was added; `ABC-242`'s and `ABC-243`'s pages gained dated lines, and their rows here are unchanged.*
 
 ## Observations (not tickets)
 
