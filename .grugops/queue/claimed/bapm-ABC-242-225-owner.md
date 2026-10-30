@@ -16,3 +16,7 @@ Owner words verbatim in `orch-2026-10-30a/…65848126`.
 - EPIC-010 tickets table rows for both.
 Fences: records only. No src/, tools/, data/, board. Never push/force/amend/rebase/merge into main. No host paths. Run no builds, tests or node (a QE times ALONE on this host); if sealing needs node, draft + a seal script calling only context-io admitAndAppend and give me the command. Never `while pgrep -f` loops.
 Publish: notes (task `bapm-ABC-242-225-owner`), commit, `## Result` + trace row here, brief + claim to done/.
+
+## Added 18:12Z (owner, `orch-2026-10-30a/…f4673b9f`)
+- Whole-second reading CONFIRMED ("≤ 22 s" = < 22 500 ms): close the open owner confirmation in ABC-220's FOLDED note, EPIC-009,
+  ABC-222 (PREREG reads A5 against < 22 500 ms) and ABC-221's ≤ 60 s analogue if it references the same reading. Dated, quote the owner.
