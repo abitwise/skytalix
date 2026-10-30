@@ -1,0 +1,48 @@
+== smoke/d/out/d.pgn
+game 1 round 1 skytalix-base 1-0 plies 59: ep-normalised positions 5, of which recur later 0
+game 2 round 1 base-skytalix 1/2-1/2 plies 211: ep-normalised positions 6, of which recur later 0
+game 3 round 2 skytalix-base 1/2-1/2 plies 89: ep-normalised positions 4, of which recur later 0 | REPETITION: final board at plies 81,85,89 (repetition keys) vs 81,85,89 (hash keys)
+game 4 round 2 base-skytalix 1-0 plies 187: ep-normalised positions 4, of which recur later 0
+game 5 round 3 skytalix-base 1/2-1/2 plies 231: ep-normalised positions 1, of which recur later 0
+game 6 round 3 base-skytalix 0-1 plies 222: ep-normalised positions 1, of which recur later 0
+game 7 round 4 skytalix-base 1-0 plies 237: ep-normalised positions 5, of which recur later 0
+game 8 round 4 base-skytalix 1/2-1/2 plies 235: ep-normalised positions 5, of which recur later 0
+game 9 round 5 skytalix-base 0-1 plies 120: ep-normalised positions 3, of which recur later 0
+game 10 round 5 base-skytalix 0-1 plies 112: ep-normalised positions 3, of which recur later 0
+games 10; normalised positions that recur later: 0
+== smoke/r/out/r.pgn
+game 1 round 1 skytalix-stockfish 1-0 plies 77: ep-normalised positions 5, of which recur later 0
+game 2 round 1 stockfish-skytalix 0-1 plies 54: ep-normalised positions 5, of which recur later 0
+game 3 round 2 skytalix-stockfish 1-0 plies 75: ep-normalised positions 6, of which recur later 0
+game 4 round 2 stockfish-skytalix 0-1 plies 70: ep-normalised positions 5, of which recur later 0
+game 5 round 3 skytalix-stockfish 1/2-1/2 plies 46: ep-normalised positions 2, of which recur later 0 | REPETITION: final board at plies 38,42,46 (repetition keys) vs 38,42,46 (hash keys)
+game 6 round 3 stockfish-skytalix 1-0 plies 83: ep-normalised positions 2, of which recur later 0
+game 7 round 4 skytalix-stockfish 0-1 plies 262: ep-normalised positions 4, of which recur later 0
+game 8 round 4 stockfish-skytalix 0-1 plies 82: ep-normalised positions 3, of which recur later 0
+game 9 round 5 skytalix-stockfish 1-0 plies 69: ep-normalised positions 5, of which recur later 0
+game 10 round 5 stockfish-skytalix 1-0 plies 61: ep-normalised positions 3, of which recur later 0
+games 10; normalised positions that recur later: 0
+== out/ref/ref228-d.pgn
+game 1 round 1 skytalix-base 0-1 plies 94: ep-normalised positions 6, of which recur later 0
+game 2 round 1 base-skytalix 1-0 plies 103: ep-normalised positions 4, of which recur later 0
+game 3 round 2 skytalix-base 1-0 plies 157: ep-normalised positions 5, of which recur later 0
+game 4 round 2 base-skytalix 0-1 plies 140: ep-normalised positions 3, of which recur later 0
+game 5 round 3 skytalix-base 1-0 plies 119: ep-normalised positions 5, of which recur later 0
+game 6 round 3 base-skytalix 1/2-1/2 plies 204: ep-normalised positions 3, of which recur later 0
+game 7 round 4 skytalix-base 1/2-1/2 plies 194: ep-normalised positions 5, of which recur later 0 | REPETITION: final board at plies 168,190,194 (repetition keys) vs 168,190,194 (hash keys)
+game 8 round 4 base-skytalix 1/2-1/2 plies 302: ep-normalised positions 4, of which recur later 0
+game 9 round 5 skytalix-base 0-1 plies 178: ep-normalised positions 5, of which recur later 0
+game 10 round 5 base-skytalix 1/2-1/2 plies 253: ep-normalised positions 4, of which recur later 0
+games 10; normalised positions that recur later: 0
+== out/ref/ref228-r.pgn
+game 1 round 1 skytalix-stockfish 0-1 plies 112: ep-normalised positions 3, of which recur later 0
+game 2 round 1 stockfish-skytalix 0-1 plies 72: ep-normalised positions 3, of which recur later 0
+game 3 round 2 skytalix-stockfish 1-0 plies 77: ep-normalised positions 2, of which recur later 0
+game 4 round 2 stockfish-skytalix 0-1 plies 48: ep-normalised positions 4, of which recur later 0
+game 5 round 3 skytalix-stockfish 1-0 plies 73: ep-normalised positions 4, of which recur later 0
+game 6 round 3 stockfish-skytalix 1-0 plies 173: ep-normalised positions 3, of which recur later 0
+game 7 round 4 skytalix-stockfish 1-0 plies 71: ep-normalised positions 3, of which recur later 0
+game 8 round 4 stockfish-skytalix 0-1 plies 94: ep-normalised positions 4, of which recur later 0
+game 9 round 5 skytalix-stockfish 1-0 plies 65: ep-normalised positions 3, of which recur later 0
+game 10 round 5 stockfish-skytalix 1-0 plies 191: ep-normalised positions 3, of which recur later 0
+games 10; normalised positions that recur later: 0

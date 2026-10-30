@@ -1,0 +1,133 @@
+
+ RUN  v4.1.12 <worktree>
+
+stdout | src/quiescence.test.ts > A1 — the losing capture is not chosen in >= 19 of 20, and the bare leaf is strictly worse > with quiescence the losing move is still avoided at depth 3 [deep, SEARCH_DEEP=1]
+A1 depth 3: losing capture chosen 0/24 with quiescence, 0/24 without
+
+ ✓ src/quiescence.test.ts > A2 — stand-pat is a lower bound on the quiescence value, never a replacement > king and pawn vs king: a quiet position's quiescence value IS the static evaluation, exactly 3ms
+ ✓ src/quiescence.test.ts > A2 — stand-pat is a lower bound on the quiescence value, never a replacement > the start position: a quiet position's quiescence value IS the static evaluation, exactly 1ms
+ ✓ src/quiescence.test.ts > A2 — stand-pat is a lower bound on the quiescence value, never a replacement > queen vs rook, nothing en prise: a quiet position's quiescence value IS the static evaluation, exactly 0ms
+ ✓ src/quiescence.test.ts > A2 — stand-pat is a lower bound on the quiescence value, never a replacement > rook vs rook, nothing en prise, black to move: a quiet position's quiescence value IS the static evaluation, exactly 0ms
+ ✓ src/quiescence.test.ts > A2 — stand-pat is a lower bound on the quiescence value, never a replacement > a hanging pawn makes the quiescence value STRICTLY greater than the static evaluation 0ms
+ ✓ src/quiescence.test.ts > A2 — stand-pat is a lower bound on the quiescence value, never a replacement > a DEFENDED pawn does not raise the value: the recapture is seen and the capture declined 0ms
+ ✓ src/quiescence.test.ts > A1 — the losing capture is not chosen in >= 19 of 20, and the bare leaf is strictly worse > carries at least 20 positions, none of them in check for the side to move 2ms
+ ✓ src/quiescence.test.ts > A1 — the losing capture is not chosen in >= 19 of 20, and the bare leaf is strictly worse > both arms at depth 1 — with quiescence the losing move is avoided, without it it is played 14ms
+ ✓ src/quiescence.test.ts > A1 — the losing capture is not chosen in >= 19 of 20, and the bare leaf is strictly worse > with quiescence the losing move is still avoided at depth 3 [deep, SEARCH_DEEP=1] 58ms
+ ✓ src/quiescence.test.ts > A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > returns on every one of 200+ positions, the capture-dense roots included, under the cap 10ms
+ ✓ src/quiescence.test.ts > A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > the cap BINDS on a runaway rig — twenty queens on alternating squares — and is not exceeded 17ms
+ ✓ src/quiescence.test.ts > A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > returns on the six roots and every one-ply child, under the cap [deep, SEARCH_DEEP=1] 96ms
+ ✓ src/quiescence.test.ts > A4 — a position with no capture anywhere near the leaves scores exactly as before > bare kings at depth 1: same score, same move, same node count 0ms
+ ✓ src/quiescence.test.ts > A4 — a position with no capture anywhere near the leaves scores exactly as before > bare kings at depth 2: same score, same move, same node count 0ms
+ ✓ src/quiescence.test.ts > A4 — a position with no capture anywhere near the leaves scores exactly as before > bare kings at depth 3: same score, same move, same node count 0ms
+ ✓ src/quiescence.test.ts > A4 — a position with no capture anywhere near the leaves scores exactly as before > bare kings at depth 4: same score, same move, same node count 0ms
+ ✓ src/quiescence.test.ts > A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 1: same score, same move, same node count 0ms
+ ✓ src/quiescence.test.ts > A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 2: same score, same move, same node count 0ms
+ ✓ src/quiescence.test.ts > A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 3: same score, same move, same node count 0ms
+ ✓ src/quiescence.test.ts > A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 4: same score, same move, same node count 0ms
+ ✓ src/quiescence.test.ts > A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 1: same score, same move, same node count 0ms
+ ✓ src/quiescence.test.ts > A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 2: same score, same move, same node count 0ms
+ ✓ src/quiescence.test.ts > A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 3: same score, same move, same node count 0ms
+ ✓ src/quiescence.test.ts > A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 4: same score, same move, same node count 1ms
+ ✓ src/quiescence.test.ts > A4 — a position with no capture anywhere near the leaves scores exactly as before > the start position at depth 1: same score, same move, same node count 0ms
+ ✓ src/quiescence.test.ts > A4 — a position with no capture anywhere near the leaves scores exactly as before > the bare-leaf door IS the pre-quiescence build: position-6 at depth 2 reproduces its recorded fingerprint 1ms
+ ✓ src/quiescence.test.ts > A4 — a position with no capture anywhere near the leaves scores exactly as before > position-6 at depth 3 reproduces the recorded 2 398 nodes and c3d5 [deep, SEARCH_DEEP=1] 5ms
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap reading, level 180x
+A5 kiwipete depth 1: 878 nodes with quiescence / 49 without = 17.92x
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap reading, level 10x
+A5 position-6 depth 1: 421 nodes with quiescence / 47 without = 8.96x
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 2, level 50x [deep, SEARCH_DEEP=1]
+A5 kiwipete depth 2: 2704 nodes with quiescence / 132 without = 20.48x
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 3, level 70x, and the oracle-checked answer 8 / e2a6 [deep, SEARCH_DEEP=1]
+A5 kiwipete depth 3: 8115 nodes with quiescence / 2312 without = 3.51x
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 2, level 42x [deep, SEARCH_DEEP=1]
+A5 position-6 depth 2: 3177 nodes with quiescence / 136 without = 23.36x
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 3, level 13x, and the oracle-checked answer 85 / c3d5 [deep, SEARCH_DEEP=1]
+A5 position-6 depth 3: 12458 nodes with quiescence / 2398 without = 5.20x
+
+stdout | src/quiescence.test.ts > ABC-228 A4 — search(…, 6).nodes <= 1.5x the door on kiwipete and position-6 [deep, SEARCH_DEEP=1] > kiwipete at depth 6 [deep, SEARCH_DEEP=1]
+ABC-228 A4 kiwipete d6: 324162 / 237007 = 1.368x
+
+ ✓ src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap reading, level 180x 1ms
+ ✓ src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap reading, level 10x 1ms
+ ✓ src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 2, level 50x [deep, SEARCH_DEEP=1] 3ms
+ ✓ src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 3, level 70x, and the oracle-checked answer 8 / e2a6 [deep, SEARCH_DEEP=1] 15ms
+ ✓ src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 2, level 42x [deep, SEARCH_DEEP=1] 4ms
+ ✓ src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 3, level 13x, and the oracle-checked answer 85 / c3d5 [deep, SEARCH_DEEP=1] 18ms
+ ✓ src/quiescence.test.ts > A6 — the searched position is unchanged on return > leaves every one of the 200+ corpus positions byte-identical after a quiescence search 0ms
+ ✓ src/quiescence.test.ts > A6 — the searched position is unchanged on return > leaves every hanging-piece position byte-identical after a depth-1 search, both arms 2ms
+ ✓ src/quiescence.test.ts > A6 — the searched position is unchanged on return > leaves the position byte-identical when the visitor THROWS mid-sequence — the engine's abort path 0ms
+ ✓ src/quiescence.test.ts > A6 — the searched position is unchanged on return > leaves the broad corpus byte-identical [deep, SEARCH_DEEP=1] 0ms
+ ✓ src/quiescence.test.ts > ABC-240 (P2) — quiescence's capture order equals today's stable sort > on every node of the perft roots and terminal FENs to depth 1, as given and reversed 1ms
+ ✓ src/quiescence.test.ts > ABC-240 (P2) — quiescence's capture order equals today's stable sort > C1: captures with one key keep their given order, both ways round 0ms
+ ✓ src/quiescence.test.ts > ABC-240 (P2) — quiescence's capture order equals today's stable sort > C2: NxP before BxP before QxP of one pawn, whatever the given order 0ms
+ ✓ src/quiescence.test.ts > ABC-240 (P2) — quiescence's capture order equals today's stable sort > sorts the list it is handed in place, keeping exactly its moves, with a fixed scratch 0ms
+ ✓ src/quiescence.test.ts > ABC-228 A2 — in check, quiesce searches every evasion: Q-SET's in-check rows > carries six rows, Q2 among them, each with the side to move in check 1ms
+ ✓ src/quiescence.test.ts > ABC-228 A2 — in check, quiesce searches every evasion: Q-SET's in-check rows > Q2: a quiet king move is the only kind of evasion: differs from the static score, equals the best evasion's and the brute force 0ms
+ ✓ src/quiescence.test.ts > ABC-228 A2 — in check, quiesce searches every evasion: Q-SET's in-check rows > a block by interposition, Bf1, the only evasion: differs from the static score, equals the best evasion's and the brute force 0ms
+ ✓ src/quiescence.test.ts > ABC-228 A2 — in check, quiesce searches every evasion: Q-SET's in-check rows > a capture of the checker, Qxd2 or Kxd2: differs from the static score, equals the best evasion's and the brute force 0ms
+ ✓ src/quiescence.test.ts > ABC-228 A2 — in check, quiesce searches every evasion: Q-SET's in-check rows > an evasion that loses material to a follow-up capture: differs from the static score, equals the best evasion's and the brute force 0ms
+ ✓ src/quiescence.test.ts > ABC-228 A2 — in check, quiesce searches every evasion: Q-SET's in-check rows > a double check: Rxb5 does not evade, only king moves do: differs from the static score, equals the best evasion's and the brute force 0ms
+ ✓ src/quiescence.test.ts > ABC-228 A2 — in check, quiesce searches every evasion: Q-SET's in-check rows > an evasion that is itself a promotion, e8 blocking the rook: differs from the static score, equals the best evasion's and the brute force 0ms
+ ✓ src/quiescence.test.ts > ABC-228 A2 — in check, quiesce searches every evasion: Q-SET's in-check rows > Q2 reads −536 where the static score is −548, and the pre-ticket rules stand pat at −548 0ms
+ ✓ src/quiescence.test.ts > ABC-228 A3 — a capture that mates scores mate, at the right sign and distance > carries six rows: Q1, the exchange, the promotion, en passant, one evasion, and search() 0ms
+ ✓ src/quiescence.test.ts > ABC-228 A3 — a capture that mates scores mate, at the right sign and distance > Q1: Qxf7 mates at qply 1: quiesce reads 29999, the brute force agrees, the pre-ticket rules do not 5ms
+ ✓ src/quiescence.test.ts > ABC-228 A3 — a capture that mates scores mate, at the right sign and distance > Q1: Qxf7 mates at qply 1: the same mate from a leaf 5 plies down reads 5 plies further 0ms
+ ✓ src/quiescence.test.ts > ABC-228 A3 — a capture that mates scores mate, at the right sign and distance > after a two-capture exchange: Rxf8+ Qxf8 Rxf8 mates at qply 3: quiesce reads 29997, the brute force agrees, the pre-ticket rules do not 0ms
+ ✓ src/quiescence.test.ts > ABC-228 A3 — a capture that mates scores mate, at the right sign and distance > after a two-capture exchange: Rxf8+ Qxf8 Rxf8 mates at qply 3: the same mate from a leaf 5 plies down reads 5 plies further 0ms
+ ✓ src/quiescence.test.ts > ABC-228 A3 — a capture that mates scores mate, at the right sign and distance > a capturing promotion: cxd8=Q mates: quiesce reads 29999, the brute force agrees, the pre-ticket rules do not 0ms
+ ✓ src/quiescence.test.ts > ABC-228 A3 — a capture that mates scores mate, at the right sign and distance > a capturing promotion: cxd8=Q mates: the same mate from a leaf 5 plies down reads 5 plies further 0ms
+ ✓ src/quiescence.test.ts > ABC-228 A3 — a capture that mates scores mate, at the right sign and distance > an en-passant capture: exd6 opens the e-file and mates: quiesce reads 29999, the brute force agrees, the pre-ticket rules do not 0ms
+ ✓ src/quiescence.test.ts > ABC-228 A3 — a capture that mates scores mate, at the right sign and distance > an en-passant capture: exd6 opens the e-file and mates: the same mate from a leaf 5 plies down reads 5 plies further 0ms
+ ✓ src/quiescence.test.ts > ABC-228 A3 — a capture that mates scores mate, at the right sign and distance > the mated side reads the negated score: Q1 after Qxf7, black at qply 1, is −(MATE_SCORE − 1) 0ms
+ ✓ src/quiescence.test.ts > ABC-228 A3 — a capture that mates scores mate, at the right sign and distance > exactly one evasion is not mate: Rxe8+ Kh7, and the score is the brute force's 0ms
+ ✓ src/quiescence.test.ts > ABC-228 A3 — a capture that mates scores mate, at the right sign and distance > through search() at depth 1: Rd8+ Ne8 Rxe8 mates three plies from the root, MATE_SCORE − 3 0ms
+ ✓ src/quiescence.test.ts > ABC-228 QE-228-b — QE's Q-SET rows (qe-ABC-228), in src > QE-C1: knight check, the checker taken by a pawn: reads 131 (static -292, pre-ticket 131), the brute force agrees 0ms
+ ✓ src/quiescence.test.ts > ABC-228 QE-228-b — QE's Q-SET rows (qe-ABC-228), in src > QE-C2: pawn check, evaded by an en-passant capture of the checker: reads 181 (static 14, pre-ticket 181), the brute force agrees 0ms
+ ✓ src/quiescence.test.ts > ABC-228 QE-228-b — QE's Q-SET rows (qe-ABC-228), in src > QE-C3: the checker taken by a capturing promotion: reads 940 (static -349, pre-ticket 938), the brute force agrees 0ms
+ ✓ src/quiescence.test.ts > ABC-228 QE-228-b — QE's Q-SET rows (qe-ABC-228), in src > QE-C4: Nf2+ forks Kh1 and Qd1; Rxf2 is the best evasion, the pre-ticket rule misses it: reads 475 (static 652, pre-ticket 652), the brute force agrees 0ms
+ ✓ src/quiescence.test.ts > ABC-228 QE-228-b — QE's Q-SET rows (qe-ABC-228), in src > QE-C4 discriminates: the shipped rule and the pre-ticket rule read different values 0ms
+ ✓ src/quiescence.test.ts > ABC-228 QE-228-b — QE's Q-SET rows (qe-ABC-228), in src > QE-M1: mated in quiescence with a negative sign, −(MATE_SCORE − 2), and search agrees at depths 1–3 1ms
+ ✓ src/quiescence.test.ts > ABC-228 QE-228-b — QE's Q-SET rows (qe-ABC-228), in src > QE-M2: Nxf7 smothers, MATE_SCORE − 1, and MATE_SCORE − 6 from a leaf 5 plies down 0ms
+ ✓ src/quiescence.test.ts > ABC-228 QE-228-b — QE's Q-SET rows (qe-ABC-228), in src > QE-M3: a checkmated node reads −MATE_SCORE at ply 0, −(MATE_SCORE − 3) at ply 3, static at the cap 0ms
+ ✓ src/quiescence.test.ts > ABC-228 — the rule rows (`ADR-0053` decision 9; each reds a planted fault) > out of check the node still stands pat: Q3's free quiet promotion is not searched 0ms
+ ✓ src/quiescence.test.ts > ABC-228 — the rule rows (`ADR-0053` decision 9; each reds a planted fault) > in check below the cap the static score is never returned: every in-check row, every qply 0..7 1ms
+ ✓ src/quiescence.test.ts > ABC-228 — the rule rows (`ADR-0053` decision 9; each reds a planted fault) > at the cap a node stands pat, in check or not: Q2 at qply 8 reads its static score, no node entered 0ms
+ ✓ src/quiescence.test.ts > ABC-228 — the rule rows (`ADR-0053` decision 9; each reds a planted fault) > stalemate (no legal move, not in check) still stands pat, never a mate score 0ms
+ ✓ src/quiescence.test.ts > ABC-228 — the rule rows (`ADR-0053` decision 9; each reds a planted fault) > no node past qply 8 is visited with evasions on, on every Q-SET row 0ms
+ ✓ src/quiescence.test.ts > ABC-228 — the rule rows (`ADR-0053` decision 9; each reds a planted fault) > a mate found in quiescence survives the table's store and restore: MATE_SCORE − 3 at every depth 7ms
+ ✓ src/quiescence.test.ts > ABC-228 — the rule rows (`ADR-0053` decision 9; each reds a planted fault) > ./search.ts: the leaf passes its ply and its rules record to quiesce, the record a module constant 1ms
+ ✓ src/quiescence.test.ts > ABC-228 — the rule rows (`ADR-0053` decision 9; each reds a planted fault) > ./engine.ts: the leaf passes its ply and its rules record to quiesce, the record a module constant 0ms
+ ✓ src/quiescence.test.ts > ABC-228 — the doors: searchWithoutQuiescenceEvasions and chooseMoveWithoutQuiescenceEvasions > take what search() and chooseMove take, and no depth on the engine side 0ms
+ ✓ src/quiescence.test.ts > ABC-228 — the doors: searchWithoutQuiescenceEvasions and chooseMoveWithoutQuiescenceEvasions > Q2 through the depth-0 seam: search() reads −536, its door the pre-ticket −548 0ms
+ ✓ src/quiescence.test.ts > ABC-228 — the doors: searchWithoutQuiescenceEvasions and chooseMoveWithoutQuiescenceEvasions > chooseMove sees the quiescence mate at depth 1, its door does not 0ms
+ ✓ src/quiescence.test.ts > ABC-228 — the doors: searchWithoutQuiescenceEvasions and chooseMoveWithoutQuiescenceEvasions > ./search.ts: each exported entry passes exactly one quiescenceEvasions literal, and only search's is true 1ms
+ ✓ src/quiescence.test.ts > ABC-228 — the doors: searchWithoutQuiescenceEvasions and chooseMoveWithoutQuiescenceEvasions > ./engine.ts: each exported entry passes exactly one quiescenceEvasions literal, and only chooseMove's is true 0ms
+ ✓ src/quiescence.test.ts > ABC-228 A4 — search(…, 6).nodes <= 1.5x the door on kiwipete and position-6 [deep, SEARCH_DEEP=1] > kiwipete at depth 6 [deep, SEARCH_DEEP=1] 641ms
+stdout | src/quiescence.test.ts > ABC-228 A4 — search(…, 6).nodes <= 1.5x the door on kiwipete and position-6 [deep, SEARCH_DEEP=1] > position-6 at depth 6 [deep, SEARCH_DEEP=1]
+ABC-228 A4 position-6 d6: 154464 / 109912 = 1.405x
+
+ ✓ src/quiescence.test.ts > ABC-228 A4 — search(…, 6).nodes <= 1.5x the door on kiwipete and position-6 [deep, SEARCH_DEEP=1] > position-6 at depth 6 [deep, SEARCH_DEEP=1] 318ms
+stdout | src/quiescence.test.ts > ABC-228 — bounded drift against the evasion doors, depth 5, the 190 [deep, SEARCH_DEEP=1] > search() against searchWithoutQuiescenceEvasions at fixed depth 5: >= 83% within 25 cp, none beyond 177 cp [deep, SEARCH_DEEP=1]
+ABC-228 search() d5: 89.30% within 25 cp of 187, max 118 cp (position-4/f1f2: 708 -> 826); mate-status flips on the 190: 0 (a report, not a bar)
+
+ ✓ src/quiescence.test.ts > ABC-228 — bounded drift against the evasion doors, depth 5, the 190 [deep, SEARCH_DEEP=1] > the corpus is the 190 2ms
+ ✓ src/quiescence.test.ts > ABC-228 — bounded drift against the evasion doors, depth 5, the 190 [deep, SEARCH_DEEP=1] > search() against searchWithoutQuiescenceEvasions at fixed depth 5: >= 83% within 25 cp, none beyond 177 cp [deep, SEARCH_DEEP=1] 11941ms
+stdout | src/quiescence.test.ts > ABC-228 — bounded drift against the evasion doors, depth 5, the 190 [deep, SEARCH_DEEP=1] > chooseMove against chooseMoveWithoutQuiescenceEvasions deepened to 5: >= 83% within 25 cp, none beyond 177 cp [deep, SEARCH_DEEP=1]
+ABC-228 chooseMove to d5: 88.77% within 25 cp of 187, max 118 cp (position-4/f1f2: 708 -> 826); mate-status flips on the 190: 0 (a report, not a bar)
+
+ ✓ src/quiescence.test.ts > ABC-228 — bounded drift against the evasion doors, depth 5, the 190 [deep, SEARCH_DEEP=1] > chooseMove against chooseMoveWithoutQuiescenceEvasions deepened to 5: >= 83% within 25 cp, none beyond 177 cp [deep, SEARCH_DEEP=1] 10366ms
+stdout | src/quiescence.test.ts > ABC-228 — the same-depth mate floor on the 287 [deep, SEARCH_DEEP=1] > every mate searchWithoutQuiescenceEvasions scores at depth 5, search() scores at depth 5: same sign, no longer [deep, SEARCH_DEEP=1]
+ABC-228 mate floor d5: 0 of 189 violated
+
+ ✓ src/quiescence.test.ts > ABC-228 — the same-depth mate floor on the 287 [deep, SEARCH_DEEP=1] > every mate searchWithoutQuiescenceEvasions scores at depth 5, search() scores at depth 5: same sign, no longer [deep, SEARCH_DEEP=1] 901ms
+
+ Test Files  1 passed (1)
+      Tests  88 passed (88)
+   Start at  12:47:45
+   Duration  24.60s (transform 0ms, setup 0ms, import 53ms, tests 24.45s, environment 0ms)
+

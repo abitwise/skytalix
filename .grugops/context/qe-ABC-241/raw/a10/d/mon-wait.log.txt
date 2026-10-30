@@ -1,0 +1,5 @@
+2026-10-30T13:13:02Z wait poll=1 load1=0.32 vitest=0 cutechess=0 tctl=36.0
+2026-10-30T13:13:02Z PRECONDITIONS-MET
+2026-10-30T13:13:02Z harness start: d d1a2d5cd e42b637b <out> --budget-ms 1500 --rounds 5 --concurrency 1
+2026-10-30T13:55:20Z harness end code=0 signal=null samples=253 tctl_median=74.38 tctl_max=83.6 busy_mhz_first6=5026.5 busy_mhz_median=5029 fall=-0.05% thermal_stop=false
+2026-10-30T13:55:23Z after: cutechess=0 stockfish=0

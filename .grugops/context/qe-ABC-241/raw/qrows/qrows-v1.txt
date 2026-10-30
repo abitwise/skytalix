@@ -1,0 +1,66 @@
+QE-A1a | W, a6, no capturer: removed | PASS
+QE-A1m-a | kept iff legalMoves offers ep (false) | PASS
+QE-A1b | a-file wrap guard (pawn h5, ep a6): removed | PASS
+QE-A1m-b | kept iff legalMoves offers ep (false) | PASS
+QE-A1c | h-file legal capture: kept | PASS
+QE-A1m-c | kept iff legalMoves offers ep (true) | PASS
+QE-A1d | B to move, legal capture: kept | PASS
+QE-A1m-d | kept iff legalMoves offers ep (true) | PASS
+QE-A1e | B, capturer pinned, leaves the diagonal: removed | PASS
+QE-A1m-e | kept iff legalMoves offers ep (false) | PASS
+QE-A1l-e | purity: FEN and board bytes unchanged | PASS
+QE-A1f | B, capturer pinned, captures along the pin: kept | PASS
+QE-A1m-f | kept iff legalMoves offers ep (true) | PASS
+QE-A1g | captured pawn shields the king diagonally (static): removed | PASS
+QE-A1m-g | kept iff legalMoves offers ep (false) | PASS
+QE-A1l-g | purity: FEN and board bytes unchanged | PASS
+QE-A1h | in check by the pushed pawn, ep resolves: kept | PASS
+QE-A1m-h | kept iff legalMoves offers ep (true) | PASS
+QE-A1i | discovered check by the push, ep does not resolve: removed | PASS
+QE-A1m-i | kept iff legalMoves offers ep (false) | PASS
+QE-A1l-i | purity: FEN and board bytes unchanged | PASS
+QE-A1j | two capturers, both pinned: removed | PASS
+QE-A1m-j | kept iff legalMoves offers ep (false) | PASS
+QE-A1l-j | purity: FEN and board bytes unchanged | PASS
+QE-A1k | a knight beside the pushed pawn: removed | PASS
+QE-A1m-k | kept iff legalMoves offers ep (false) | PASS
+info | A1n walk: 31965 positions; ep positions kept 237, removed 4337; mismatches 0; repetition-key collisions 0
+QE-A1n | F8 walk: kept iff ep legal, removed key = stripped FEN's key, 0 collisions (kept 237, removed 4337) | PASS
+QE-A2 | hash unchanged: zobristKey base = head on 31965 positions (diff 0); zobristKeyAfterMove base = head = full key (diff 0) | PASS
+info | A3a head: first claim at ply 10, fivefold at ply 18; the d5 board's own count at its plies 2:1 6:2 10:3 14:4 18:5 22:6
+info | A3b head twin: first claim at ply 11, fivefold at ply 19
+info | A3a base: first claim at ply 11, fivefold at ply 19; the d5 board's own count at its plies 2:1 6:1 10:2 14:3 18:4 22:5
+info | A3b base twin: first claim at ply 11, fivefold at ply 19
+QE-A3a-head | Black's push: claim first after 5...Ng8 (ply 10), fivefold after 9...Ng8 (ply 18) | PASS
+QE-A3a-base | base as PREREG'd: claim first after 7...Ng8 (ply 14), fivefold after 11...Ng8 (ply 22) | FAIL
+QE-A3a-board | the d5 board's own count reaches 3 at ply 10 (head) / ply 14 (base), 5 at ply 18 / 22 | PASS
+QE-A3b | twin (exd6 legal): head's first claim and fivefold plies equal base's | PASS
+info | A3c head: first claim ply 8; base: 9; FEN board count at ply 8: head 3, base 2; at ply 12 base 3
+QE-A3c | FEN carrying ep: the FEN board's third occurrence at ply 8 on head (claim reported), base counts 2 there and 3 at ply 12 | PASS
+info | A3d {"head-line":"repetition 2 of 3","head-twin":"repetition 1 of 3","base-line":"repetition 1 of 3","base-twin":"repetition 1 of 3"}
+QE-A3d | refused claim after 3.Nf3 Ng8 (d5 board twice): head 'repetition 2 of 3', base '1 of 3'; twin '1 of 3' on both | PASS
+info | A3e ticket line through runTurnLoop: {"head":"draw/fivefold-repetition@17","base":"draw/fivefold-repetition@18"} (9.Ng1 = ply 17, 9...Nf6 = ply 18, 11.Ng1 = ply 21)
+QE-A3e-head | ticket line in the loop: head ends draw/fivefold after 9.Ng1 (ply 17) | PASS
+QE-A3e-base | base as PREREG'd: ends draw/fivefold after 11.Ng1 (ply 21) | FAIL
+info | A4 main cli d1e1/0/7 d1e1/0/18 d1e1/0/64 d1e1/0/129 d1e1/0/291
+info | A4 main uci d1e1/cp 0/7 d1e1/cp 0/18 d1e1/cp 0/64 d1e1/cp 0/129 d1e1/cp 0/291
+info | A4 main base a4a5/-834/9 d1c2/-896/314 d1c2/-865/428 d1c2/-875/732 d1c2/-851/2592 | baseUci a4a5/cp -834 d1c2/cp -896 d1c2/cp -865 d1c2/cp -875 d1c2/cp -851
+QE-A4a | CLI list, depth 1-5: d1e1 at exactly 0 | PASS
+QE-A4b | UCI go depth 1-5: bestmove d1e1, cp 0, nodes = CLI's | PASS
+QE-A4c | base (keyHistory / base UCI): not 0 at any depth | PASS
+info | A4 twin cli d1c2/-958/8 d1c2/-1013/120 d1c2/-981/223 d1c2/-1046/767 d1c2/-1058/1998
+info | A4 twin uci d1c2/cp -958/8 d1c2/cp -1013/120 d1c2/cp -981/223 d1c2/cp -1046/767 d1c2/cp -1058/1998
+info | A4 twin base d1c2/-958/8 d1c2/-1013/120 d1c2/-981/223 d1c2/-1046/767 d1c2/-1058/1998 | baseUci d1c2/cp -958 d1c2/cp -1013 d1c2/cp -981 d1c2/cp -1046 d1c2/cp -1058
+QE-A4d | twin (b4xa3 legal): not 0 on either surface (head) | PASS
+info | A4 fen-ep cli d1e1/0/7 d1e1/0/18 d1e1/0/64 d1e1/0/129 d1e1/0/291
+info | A4 fen-ep uci d1e1/cp 0/7 d1e1/cp 0/18 d1e1/cp 0/64 d1e1/cp 0/129 d1e1/cp 0/291
+info | A4 fen-ep base a4a5/-834/9 d1c2/-896/314 d1c2/-865/428 d1c2/-875/732 d1c2/-851/2268 | baseUci a4a5/cp -834 d1c2/cp -896 d1c2/cp -865 d1c2/cp -875 d1c2/cp -851
+QE-A4e | FEN carrying ep: d1e1 at exactly 0 on CLI and UCI, depth 1-5; base not 0 | PASS
+info | A7 head {"result":"in-progress","reason":null,"claimable":{"by":"black","draws":["threefold-repetition"]}} base {"result":"in-progress","reason":null}
+QE-A7 | after d1e1, head reports the threefold claim by Black; base reports none | PASS
+info | A5 cases 22; lists equal 22; UCI nodes+move = CLI 22; cases whose window holds a normalised key 12
+QE-A5 | CLI list = UCI-shaped list, and UCI go depth 3 node count + move = CLI list's, on 22 games | PASS
+QE-A6i | bare FENs (no prior keys), depth 4: head = base node for node on 6/6 | PASS
+QE-A6ii | game roots whose window holds no normalised key, depth 4: head (CLI list) = base (keyHistory) on 10/10 | PASS
+info | A6iii reported: roots whose window holds a normalised (uncapturable ep) key: node-equal to base on 10/10
+TOTAL FAIL 2
