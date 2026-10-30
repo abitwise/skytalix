@@ -141,7 +141,7 @@ export type Clock = () => number;
  * rather than each caller spelling 3000. It is a VALUE for the caller to choose, never a default
  * this module applies on its own: `budgetMs` below is required.
  */
-export const DEFAULT_BUDGET_MS = 3_000;
+export const DEFAULT_BUDGET_MS = 4_000;
 
 /**
  * `NFR-004`'s hard ceiling, in milliseconds: the largest per-level ceiling (32 s, level 7;

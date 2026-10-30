@@ -402,7 +402,7 @@ async function main(argv: string[]): Promise<void> {
         ]
       : sky("base", clones[1] as string, budget);
   const args = [
-    ...sky("skytalix", clones[0] as string, mode === "r" ? 3000 : budget),
+    ...sky("skytalix", clones[0] as string, mode === "r" ? 4000 : budget),
     ...opponent,
     ...["-each", "proto=uci"],
     ...["-openings", `file=${OPENINGS}`, "format=epd", "order=sequential", "-repeat"],

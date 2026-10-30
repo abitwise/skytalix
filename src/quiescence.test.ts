@@ -766,7 +766,8 @@ function bruteForce(position: Position, qply: number, ply: number): number {
 /**
  * `Q-SET`, in check (`ADR-0053` decision 9, `A2`): the side to move is in check at `qply` 0. Q2 is
  * the SA's probe row; the others cover the kinds the ADR names. NOT FROZEN BY QE before this build
- * (`EPIC-010` § Common gates asks it to be): the SE wrote them, and QE's freeze is owed.
+ * (`EPIC-010` § Common gates asks it to be): the SE wrote them. QE's freeze-review (`qe-ABC-228`)
+ * held all of them, and QE's own rows are `QE_IN_CHECK` and `QE-M1`..`QE-M3` below.
  */
 const Q_SET_IN_CHECK: ReadonlyArray<{ name: string; fen: string; evasions: number }> = [
   {
@@ -953,6 +954,120 @@ describe("ABC-228 A3 — a capture that mates scores mate, at the right sign and
     expect(
       Math.abs(searchWithoutQuiescenceEvasions(parseFen(MATE_THROUGH_SEARCH), 1).score),
     ).toBeLessThan(MATE_SCORE - 1_000);
+  });
+});
+
+/**
+ * `Q-SET`, QE's rows (`qe-ABC-228`, gap `QE-228-b`): frozen by QE before its reading and read there
+ * against QE's own brute force. `QE-C4` is the discriminating row (`QE-228-a`): the best evasion
+ * is a capture of the checker, yet the pre-ticket rule (stand pat, then captures) reads a
+ * DIFFERENT value, so a regression to that rule reds it. `C1` and `C2` read the same value under
+ * both rules, which is why `C4` is here.
+ */
+const QE_IN_CHECK: ReadonlyArray<{
+  name: string;
+  fen: string;
+  score: number;
+  stat: number;
+  pre: number;
+}> = [
+  {
+    name: "QE-C1: knight check, the checker taken by a pawn",
+    fen: "4k3/2p5/3N4/8/8/8/8/4K3 b - - 0 1",
+    score: 131,
+    stat: -292,
+    pre: 131,
+  },
+  {
+    name: "QE-C2: pawn check, evaded by an en-passant capture of the checker",
+    fen: "4k3/8/8/3pP3/4K3/8/8/8 w - d6 0 1",
+    score: 181,
+    stat: 14,
+    pre: 181,
+  },
+  {
+    name: "QE-C3: the checker taken by a capturing promotion",
+    fen: "3r3k/4P3/8/8/8/8/8/3K4 w - - 0 1",
+    score: 940,
+    stat: -349,
+    pre: 938,
+  },
+  {
+    name: "QE-C4: Nf2+ forks Kh1 and Qd1; Rxf2 is the best evasion, the pre-ticket rule misses it",
+    fen: "5rk1/6pp/8/8/8/8/PPP2n2/3Q1R1K w - - 0 1",
+    score: 475,
+    stat: 652,
+    pre: 652,
+  },
+];
+
+/** `QE-M1`: black is in check (Rb8+); the one evasion Rd8 is met by Rxd8 mate, two qplies on. */
+const QE_M1 = "1R4k1/5ppp/8/8/8/8/7K/3r4 b - - 0 1";
+/** `QE-M2`: a smothered mate by a knight capture, Nxf7. */
+const QE_M2 = "6rk/5bpp/8/6N1/8/8/8/6K1 w - - 0 1";
+/** `QE-M3`: the side to move is already checkmated. */
+const QE_M3 = "4R1k1/5ppp/8/8/8/8/8/6K1 b - - 0 1";
+
+describe("ABC-228 QE-228-b — QE's Q-SET rows (qe-ABC-228), in src", () => {
+  for (const { name, fen, score, stat, pre } of QE_IN_CHECK) {
+    it(`${name}: reads ${score} (static ${stat}, pre-ticket ${pre}), the brute force agrees`, () => {
+      expect(isInCheck(parseFen(fen))).toBe(true);
+      expect(evaluate(parseFen(fen))).toBe(stat);
+      expect(quiesceAt(fen, SHIPPED)).toBe(score);
+      expect(bruteForce(parseFen(fen), 0, 0)).toBe(score);
+      expect(quiesceAt(fen, PRE_ABC228)).toBe(pre);
+    });
+  }
+
+  it("QE-C4 discriminates: the shipped rule and the pre-ticket rule read different values", () => {
+    const row = QE_IN_CHECK[3] as (typeof QE_IN_CHECK)[number];
+    expect(quiesceAt(row.fen, SHIPPED)).not.toBe(quiesceAt(row.fen, PRE_ABC228));
+    // Rxf2 is the best evasion: its own quiescence score, one ply on, is the node's.
+    const position = parseFen(row.fen);
+    const rxf2 = legalMoves(position).find((m) => label(m) === "f1f2") as Move;
+    makeMove(position, rxf2);
+    expect(
+      0 -
+        quiesce(
+          position,
+          Number.NEGATIVE_INFINITY,
+          Number.POSITIVE_INFINITY,
+          1,
+          0,
+          SHIPPED,
+          () => {},
+        ),
+    ).toBe(row.score);
+  });
+
+  it("QE-M1: mated in quiescence with a negative sign, −(MATE_SCORE − 2), and search agrees at depths 1–3", () => {
+    expect(quiesceAt(QE_M1, SHIPPED)).toBe(0 - (MATE_SCORE - 2));
+    expect(bruteForce(parseFen(QE_M1), 0, 0)).toBe(0 - (MATE_SCORE - 2));
+    for (const depth of [1, 2, 3]) {
+      expect(search(parseFen(QE_M1), depth).score, `search d${depth}`).toBe(0 - (MATE_SCORE - 2));
+      expect(deepenWith(chooseMove, QE_M1, depth).score, `chooseMove d${depth}`).toBe(
+        0 - (MATE_SCORE - 2),
+      );
+    }
+    expect(Math.abs(searchWithoutQuiescenceEvasions(parseFen(QE_M1), 1).score)).toBeLessThan(
+      MATE_SCORE - 1_000,
+    );
+  });
+
+  it("QE-M2: Nxf7 smothers, MATE_SCORE − 1, and MATE_SCORE − 6 from a leaf 5 plies down", () => {
+    expect(isInCheck(parseFen(QE_M2))).toBe(false);
+    expect(quiesceAt(QE_M2, SHIPPED)).toBe(MATE_SCORE - 1);
+    expect(bruteForce(parseFen(QE_M2), 0, 0)).toBe(MATE_SCORE - 1);
+    expect(quiesceAt(QE_M2, SHIPPED, 5)).toBe(MATE_SCORE - 6);
+    expect(Math.abs(quiesceAt(QE_M2, PRE_ABC228))).toBeLessThan(MATE_SCORE - 1_000);
+  });
+
+  it("QE-M3: a checkmated node reads −MATE_SCORE at ply 0, −(MATE_SCORE − 3) at ply 3, static at the cap", () => {
+    expect(legalMoves(parseFen(QE_M3))).toHaveLength(0);
+    expect(isInCheck(parseFen(QE_M3))).toBe(true);
+    expect(quiesceAt(QE_M3, SHIPPED)).toBe(0 - MATE_SCORE);
+    expect(quiesceAt(QE_M3, SHIPPED, 3)).toBe(0 - (MATE_SCORE - 3));
+    expect(quiesceAt(QE_M3, SHIPPED, 0, QUIESCENCE_MAX_PLY)).toBe(evaluate(parseFen(QE_M3)));
   });
 });
 
