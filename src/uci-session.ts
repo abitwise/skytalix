@@ -30,6 +30,7 @@ import {
   trimPriorKeys,
 } from "./engine.ts";
 import { parseFen } from "./fen.ts";
+import { repetitionKey } from "./gameend.ts";
 import { createLevel, DEFAULT_LEVEL, EASIEST_LEVEL, HARDEST_LEVEL, LEVELS } from "./levels.ts";
 import { BISHOP, KNIGHT, type Position, QUEEN, ROOK, squareName } from "./position.ts";
 import { MATE_SCORE } from "./search.ts";
@@ -149,12 +150,13 @@ function parsePosition(tokens: readonly string[]): HeldPosition | string {
   } catch (error) {
     return `bad fen: ${error instanceof Error ? error.message : String(error)}`;
   }
-  const keys = [zobristKey(position)];
+  // `ABC-241` (`ADR-0020` § AMENDMENT 2026-10-30 C3): every kept key is a repetition key.
+  const keys = [repetitionKey(position, zobristKey(position))];
   for (const text of moves) {
     const parsed = parseCoordinateMove(position, text);
     if (parsed.outcome !== "move") return `illegal move ${text}`;
     makeMove(position, parsed.move);
-    keys.push(zobristKey(position));
+    keys.push(repetitionKey(position, zobristKey(position)));
   }
   return { position, priorKeys: trimPriorKeys(keys, position.halfmoveClock) };
 }

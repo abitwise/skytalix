@@ -26,7 +26,7 @@
 
 import { makeMove } from "./apply.ts";
 import { parseFen } from "./fen.ts";
-import { type GameStatus, gameStatus } from "./gameend.ts";
+import { type GameStatus, gameStatus, repetitionKey } from "./gameend.ts";
 import type { Move } from "./moves.ts";
 import type { Position } from "./position.ts";
 import { zobristKey } from "./zobrist.ts";
@@ -126,16 +126,36 @@ export function keyHistory(history: GameHistory): bigint[] {
 }
 
 /**
+ * `keyHistory`'s replay with `gameend.ts`'s `repetitionKey` applied to each position (`ADR-0020`
+ * § AMENDMENT 2026-10-30 C3): `keys[i]` is the REPETITION key of the position after `i` plies, so a
+ * position whose ep square no pawn can legally take keys equal to its later recurrences. It is the
+ * list every comparison against the game's earlier positions reads — `repetitionCounts`, the
+ * refused-claim count, and the search's prior keys, which `cli.ts` injects. `keyHistory` stays the
+ * hash list, the TT and book seam; this list is never a hash.
+ */
+export function repetitionKeyHistory(history: GameHistory): bigint[] {
+  const position = parseFen(history.initialFen);
+  const keys = [repetitionKey(position, zobristKey(position))];
+
+  for (const move of history.moves) {
+    makeMove(position, move);
+    keys.push(repetitionKey(position, zobristKey(position)));
+  }
+
+  return keys;
+}
+
+/**
  * How many times each position in the game has occurred, INCLUDING THE CURRENT ONE — `gameStatus`
- * tests `counts.get(zobristKey(position)) >= 3`, so counting only the past would report threefold
- * one repetition late, silently.
+ * tests `counts.get(repetitionKey(position, …)) >= 3`, so counting only the past would report
+ * threefold one repetition late, silently. Keyed by repetition key (`repetitionKeyHistory`).
  *
  * Counting from ply 0 rather than from the last irreversible move is correct: a capture or a pawn
  * move changes the key permanently, so positions either side of one can never collide.
  */
 export function repetitionCounts(history: GameHistory): ReadonlyMap<bigint, number> {
   const counts = new Map<bigint, number>();
-  for (const key of keyHistory(history)) counts.set(key, (counts.get(key) ?? 0) + 1);
+  for (const key of repetitionKeyHistory(history)) counts.set(key, (counts.get(key) ?? 0) + 1);
   return counts;
 }
 

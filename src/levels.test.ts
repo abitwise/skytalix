@@ -28,6 +28,7 @@ import { describe, expect, it, vi } from "vitest";
 import { makeMove, unmakeMove } from "./apply.ts";
 import { type Clock, chooseMove, DEFAULT_BUDGET_MS, HARD_CEILING_MS } from "./engine.ts";
 import { parseFen, toFen } from "./fen.ts";
+import { repetitionKey } from "./gameend.ts";
 import { legalMoves } from "./legal.ts";
 import {
   createLevel,
@@ -493,6 +494,24 @@ describe("ABC-230 — the level hands the game's prior keys on (ADR-0054 decisio
     )(parseFen(fen));
     expect(engineCalls.length).toBeGreaterThan(0);
     for (const call of engineCalls) expect(call.keys).toEqual(["budgetMs", "now"]);
+  });
+});
+
+describe("ABC-241 A5 — the blunder path's appended root key is a repetition key", () => {
+  // One ply after 1.e4: the root carries e3 and no black pawn can take there.
+  const fen = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1";
+  const prior: readonly bigint[] = [21n, 22n];
+
+  it("every child search is handed the prior keys plus repetitionKey(root), not the raw hash", () => {
+    const always: Level = { budgetMs: 100, blunderRate: 0.999_999 };
+    engineCalls.length = 0;
+    const choice = createLevel(always, { seed: 1, now: virtualClock(100) })(parseFen(fen), prior);
+    expect(choice?.kind).not.toBe("engine");
+    const root = parseFen(fen);
+    const expected = repetitionKey(root, zobristKey(root));
+    expect(expected).not.toBe(zobristKey(root)); // non-vacuity: the helper changed this key
+    expect(engineCalls).toHaveLength(legalMoves(root).length);
+    for (const call of engineCalls) expect(call.priorKeys).toEqual([...prior, expected]);
   });
 });
 

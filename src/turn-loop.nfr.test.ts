@@ -52,11 +52,13 @@ vi.mock("./history.ts", async (importOriginal) => {
     ...actual,
     keyHistory: vi.fn(actual.keyHistory),
     repetitionCounts: vi.fn(actual.repetitionCounts),
+    // `ABC-241`: the refused claim's replay is this export's now; a per-ply call would show here.
+    repetitionKeyHistory: vi.fn(actual.repetitionKeyHistory),
   };
 });
 
 import { gameStatus } from "./gameend.ts";
-import { keyHistory, newGame, repetitionCounts } from "./history.ts";
+import { keyHistory, newGame, repetitionCounts, repetitionKeyHistory } from "./history.ts";
 import { runTurnLoop } from "./turn-loop.ts";
 
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -146,6 +148,7 @@ describe("NFR-002 — the loop derives once per ply, spied at A17's three ply co
       // never ran.
       expect(vi.mocked(repetitionCounts)).toHaveBeenCalledTimes(0);
       expect(vi.mocked(keyHistory)).toHaveBeenCalledTimes(0);
+      expect(vi.mocked(repetitionKeyHistory)).toHaveBeenCalledTimes(0);
     });
   }
 
@@ -157,5 +160,6 @@ describe("NFR-002 — the loop derives once per ply, spied at A17's three ply co
     expect(vi.mocked(gameStatus)).toHaveBeenCalledTimes(41);
     expect(vi.mocked(repetitionCounts)).toHaveBeenCalledTimes(0);
     expect(vi.mocked(keyHistory)).toHaveBeenCalledTimes(0);
+    expect(vi.mocked(repetitionKeyHistory)).toHaveBeenCalledTimes(0);
   });
 });

@@ -49,7 +49,13 @@
 
 import { beginFrameSession, type FrameSink, type FrameWriter } from "./frame.ts";
 import type { ClaimableDraw, EndReason, GameResult, GameStatus } from "./gameend.ts";
-import { type GameHistory, gameStatusOf, keyHistory, playMove, takeBack } from "./history.ts";
+import {
+  type GameHistory,
+  gameStatusOf,
+  playMove,
+  repetitionKeyHistory,
+  takeBack,
+} from "./history.ts";
 import { legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
 
@@ -245,15 +251,17 @@ const FIFTY_MOVE_PLIES = 100;
  * clock ≤ 99, because 3 and 100 are the values that make a claim AVAILABLE and never reach this
  * path. The player-facing wording at the real prompt is `ABC-034`/`ABC-035`'s, not this seam's.
  *
- * THE ONE DERIVE THIS LOOP MAKES ON ITS OWN, and it is stated rather than hidden: `keyHistory` is an
- * `O(plies)` replay, ~46-50 µs at 120 plies (`history.ts:13-15`). It runs ONLY here — on a claim the
- * rules core refused, which advances no ply — so `NFR-002`'s per-ply bar is untouched, and the
+ * THE ONE DERIVE THIS LOOP MAKES ON ITS OWN, and it is stated rather than hidden:
+ * `repetitionKeyHistory` (`keyHistory` until `ABC-241`, so the count agrees with `gameStatusOf`'s
+ * claim) is an `O(plies)` replay, ~46-50 µs at 120 plies (`history.ts:13-15`) plus one
+ * `hasLegalEnPassant` per double push. It runs ONLY here — on a claim the rules core refused, which advances no ply — so `NFR-002`'s per-ply bar is untouched, and the
  * occurrence count exists nowhere cheaper: `GameStatus` reports `claimable` at three occurrences and
  * carries no count below it. One replay, not `repetitionCounts` plus a second `zobristKey` call, and
  * no import edge from the loop to `zobrist.ts`.
  */
 function claimShortfall(history: GameHistory): string[] {
-  const keys = keyHistory(history);
+  // Repetition keys (`ADR-0020` § AMENDMENT 2026-10-30 C3), as `gameStatusOf` counts them.
+  const keys = repetitionKeyHistory(history);
   const current = keys[keys.length - 1] as bigint;
   let occurrences = 0;
   for (const key of keys) if (key === current) occurrences++;

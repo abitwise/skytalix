@@ -9,6 +9,7 @@
  * `history.ts` compared against itself. A test that replayed with `keyHistory` to check
  * `keyHistory` would pass on a module that is consistently wrong.
  */
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { makeMove } from "./apply.ts";
 import { parseFen, toFen } from "./fen.ts";
@@ -19,10 +20,11 @@ import {
   newGame,
   playMove,
   repetitionCounts,
+  repetitionKeyHistory,
   takeBack,
 } from "./history.ts";
 import { legalMoves } from "./legal.ts";
-import type { Move } from "./moves.ts";
+import { FLAG_EN_PASSANT, type Move } from "./moves.ts";
 import { type Position, parseSquareName } from "./position.ts";
 import { zobristKey } from "./zobrist.ts";
 
@@ -316,5 +318,122 @@ describe("ABC-012 QE adversarial pass", () => {
 
     expect(repetitionCounts(history).get(zobristKey(history.position))).toBe(5);
     expect(gameStatusOf(history)).toEqual({ result: "draw", reason: "fivefold-repetition" });
+  });
+});
+
+// ---------------------------------------------------------------------------------------------
+// `ABC-241` A3 (`ADR-0020` § AMENDMENT 2026-10-30 C3, game end) — the `ABC-011` `1.e4` line. After
+// 1.e4 the position carries e3 and no black pawn can take there, so its first occurrence now counts
+// with its recurrences. Base's count (the hash list) is computed beside it in the same run.
+// ---------------------------------------------------------------------------------------------
+
+describe("ABC-241 A3 — the 1.e4 line: the claim at 5.Ng1 and the fivefold at 9.Ng1", () => {
+  /** The `…Nf6 Nf3 Ng8 Ng1` round trip that follows 1.e4: one cycle returns to the 1.e4 board. */
+  const CYCLE = [
+    ["g8", "f6"],
+    ["g1", "f3"],
+    ["f6", "g8"],
+    ["f3", "g1"],
+  ] as const;
+  /** The line from `fen`: 1.e4, then `cycles` round trips; cycle `n` ends on move `2n + 1`.Ng1. */
+  const lineOf = (fen: string, cycles: number): GameHistory => {
+    const history = newGame(fen);
+    play(history, "e2", "e4");
+    for (let cycle = 0; cycle < cycles; cycle++) {
+      for (const [from, to] of CYCLE) play(history, from, to);
+    }
+    return history;
+  };
+  /** Base's count (`ADR-0020` d2): occurrences of the live position in the HASH list. */
+  const hashOccurrences = (history: GameHistory): number => {
+    const keys = keyHistory(history);
+    return keys.filter((key) => key === keys[keys.length - 1]).length;
+  };
+  const THREEFOLD = {
+    result: "in-progress",
+    reason: null,
+    claimable: { by: "black", draws: ["threefold-repetition"] },
+  };
+  const FIVEFOLD = { result: "draw", reason: "fivefold-repetition" };
+  /** Which cycle first reports `status`, over cycles 0..6. */
+  const firstCycle = (fen: string, status: object): number =>
+    [0, 1, 2, 3, 4, 5, 6].find((n) => {
+      const actual = gameStatusOf(lineOf(fen, n));
+      return JSON.stringify(actual) === JSON.stringify(status);
+    }) ?? -1;
+
+  it("the threefold claim after 5.Ng1 (base 7.Ng1) and the fivefold after 9.Ng1 (base 11.Ng1)", () => {
+    expect(firstCycle(START_FEN, THREEFOLD)).toBe(2); // 5.Ng1
+    expect(firstCycle(START_FEN, FIVEFOLD)).toBe(4); // 9.Ng1
+    // Base, pinned in this run: the hash list counts the same positions one occurrence late.
+    for (let cycles = 0; cycles <= 5; cycles++) {
+      const history = lineOf(START_FEN, cycles);
+      const counts = repetitionCounts(history);
+      const live = repetitionKeyHistory(history).at(-1) as bigint;
+      expect(counts.get(live), `cycle ${cycles}`).toBe(cycles + 1);
+      // At cycle 0 the live position IS the 1.e4 position, ep and all: one, on either list.
+      expect(hashOccurrences(history), `cycle ${cycles}`).toBe(Math.max(cycles, 1));
+    }
+    expect(hashOccurrences(lineOf(START_FEN, 3))).toBe(3); // base's 7.Ng1
+    expect(hashOccurrences(lineOf(START_FEN, 5))).toBe(5); // base's 11.Ng1
+  });
+
+  it("twin: where the double push can be taken legally (d4xe3), the counts stay base's", () => {
+    const twin = "rnbqkbnr/ppp1pppp/8/8/3p4/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    expect(firstCycle(twin, THREEFOLD)).toBe(3); // 7.Ng1
+    expect(firstCycle(twin, FIVEFOLD)).toBe(5); // 11.Ng1
+    for (let cycles = 0; cycles <= 5; cycles++) {
+      const history = lineOf(twin, cycles);
+      expect(repetitionKeyHistory(history)).toEqual(keyHistory(history));
+    }
+  });
+
+  it("the repetition-key list differs from the hash list at exactly the 1.e4 key, and has its length", () => {
+    const history = lineOf(START_FEN, 2);
+    const hashes = keyHistory(history);
+    const keys = repetitionKeyHistory(history);
+    expect(keys).toHaveLength(hashes.length);
+    expect(keys.map((key, i) => key !== hashes[i])).toEqual(hashes.map((_, i) => i === 1));
+    // The 1.e4 key is the key of the same board with no ep square: the 3.Ng1 and 5.Ng1 keys.
+    expect(keys[1]).toBe(hashes[5]);
+    expect(keys[1]).toBe(hashes[9]);
+  });
+
+  it("A6 (game side): a game with no uncapturable ep square has a repetition-key list equal to its hash list", () => {
+    const history = knightCycles(3);
+    expect(repetitionKeyHistory(history)).toEqual(keyHistory(history));
+    const random = newGame(START_FEN);
+    playPseudoRandomGame(random, 120);
+    expect(random.moves).toHaveLength(120);
+    // The pseudo-random game's keys differ only where an ep square stands that nobody can take.
+    const position = parseFen(START_FEN);
+    const expected = [zobristKey(position)];
+    for (const move of random.moves) {
+      makeMove(position, move);
+      const takeable = legalMoves(position).some((m) => (m.flags & FLAG_EN_PASSANT) !== 0);
+      expected.push(position.epSquare === -1 || takeable ? zobristKey(position) : -1n);
+    }
+    const keys = repetitionKeyHistory(random);
+    const hashes = keyHistory(random);
+    expect(expected.filter((key) => key === -1n).length).toBeGreaterThan(0); // non-vacuity
+    keys.forEach((key, i) => {
+      if (expected[i] === -1n) expect(key, `ply ${i}`).not.toBe(hashes[i]);
+      else expect(key, `ply ${i}`).toBe(hashes[i]);
+    });
+  });
+});
+
+describe("ABC-241 A8 — history.ts's import list is unchanged, and it still imports no legal.ts", () => {
+  it("imports exactly apply, fen, gameend, moves, position and zobrist", () => {
+    const code = readFileSync(new URL("./history.ts", import.meta.url), "utf8");
+    const imports = [...code.matchAll(/^import[^;]*?from\s+"(\.\/[^"]+)";/gm)].map((m) => m[1]);
+    expect(imports.sort()).toEqual([
+      "./apply.ts",
+      "./fen.ts",
+      "./gameend.ts",
+      "./moves.ts",
+      "./position.ts",
+      "./zobrist.ts",
+    ]);
   });
 });
