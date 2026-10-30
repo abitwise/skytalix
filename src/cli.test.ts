@@ -48,11 +48,11 @@ import {
   resolveOptions,
 } from "./cli-options.ts";
 import { QUIT_CONFIRMATION_MESSAGES } from "./command-input.ts";
-import { DEFAULT_BUDGET_MS } from "./engine.ts";
-import { parseFen } from "./fen.ts";
+import { chooseMove, DEFAULT_BUDGET_MS, trimPriorKeys } from "./engine.ts";
+import { parseFen, toFen } from "./fen.ts";
 import { frameHeight } from "./frame.ts";
 import * as glyphMode from "./glyph-mode.ts";
-import { type GameHistory, gameStatusOf, newGame, playMove } from "./history.ts";
+import { type GameHistory, gameStatusOf, keyHistory, newGame, playMove } from "./history.ts";
 import { HISTORY_ROWS, renderHistory } from "./history-pane.ts";
 import { legalMoves } from "./legal.ts";
 import { createLevelSeam } from "./level-seam.ts";
@@ -2944,8 +2944,10 @@ describe("ABC-043 — the live session", () => {
     // `ABC-101` MOVED THE INNER HALF, AS ITS PAGE SAID IT WOULD: the book stays OUTSIDE (owner
     // question 5) and the level the human chose replaces `createEngine(…)`, seeded per `ADR-0037` D3.
     // The default level is the old pin's engine at `DEFAULT_BUDGET_MS` (`ABC-101` `A8′`).
+    // `ABC-230` MOVED THE INNER HALF BY ONE ARGUMENT (`ADR-0054` decision 2): `history.ts`'s
+    // `keyHistory`, injected after the options object, which is unchanged.
     expect(entry).toMatch(
-      /engine:\s*withBook\(\s*book,\s*createLevelSeam\(difficulty,\s*\{\s*seed:\s*Math\.floor\(Math\.random\(\)\s*\*\s*2\s*\*\*\s*32\)\s*\}\),?\s*\)/,
+      /engine:\s*withBook\(\s*book,\s*createLevelSeam\(difficulty,\s*\{\s*seed:\s*Math\.floor\(Math\.random\(\)\s*\*\s*2\s*\*\*\s*32\)\s*\},\s*keyHistory\),?\s*\)/,
     );
     expect(entry.match(/\bcreateBookProbe\s*\(/g)).toHaveLength(1);
     // `ABC-096` `A8`: the render seam and the engine decorator get the SAME probe. `book` is bound
@@ -4524,6 +4526,81 @@ describe("ABC-101 — --difficulty selects a level, and the played engine is tha
         RangeError,
       );
     }
+  });
+});
+
+// ---------------------------------------------------------------------------------------------
+// `ABC-230` (`ADR-0054` decision 2) — the level seam hands the search the game's earlier positions,
+// through the `keyHistory` the entry point injects (pinned in `ABC-043` `A1` above).
+// ---------------------------------------------------------------------------------------------
+
+describe("ABC-230 A1, A3 — the CLI's level seam hands the search the game's prior keys", () => {
+  /** `src/engine.test.ts`'s `A1` fixtures: `repeat` returns to a position that stood twice. */
+  const THIRD_OCCURRENCE = [
+    ["4k3/8/8/8/8/8/8/Q3K3 w - - 0 1", "a1a2 e8d8 a2a1 d8e8 a1a2 e8d8 a2a1", "d8e8"],
+    ["q3k3/8/8/8/8/8/8/4K3 b - - 0 1", "a8a7 e1d1 a7a8 d1e1 a8a7 e1d1 a7a8", "d1e1"],
+    ["4k3/8/8/8/8/8/8/R3K3 w - - 0 1", "a1a2 e8d8 a2a1 d8e8 a1a2 e8d8 a2a1", "d8e8"],
+    ["r3k3/8/8/8/8/8/8/4K3 b - - 0 1", "a8a7 e1d1 a7a8 d1e1 a8a7 e1d1 a7a8", "d1e1"],
+  ] as const;
+  /** A virtual step that leaves the default level several iterations inside its budget. */
+  const STEP_MS = 100;
+  const seamOf = (injected?: typeof keyHistory) =>
+    createLevelSeam(DEFAULT_LEVEL, { seed: 1, now: virtualClock(STEP_MS) }, injected);
+  const labelOf = (move: { from: number; to: number }) =>
+    `${squareName(move.from)}${squareName(move.to)}`;
+  const gameOf = (fen: string, moves: string): GameHistory => {
+    const game = newGame(fen);
+    for (const text of moves.split(" ")) {
+      const move = legalMoves(game.position).find((m) => labelOf(m) === text);
+      if (move === undefined) throw new Error(`fixture: ${text} is not legal`);
+      playMove(game, move);
+    }
+    return game;
+  };
+
+  it("A1: with keyHistory injected the default level plays the third occurrence, at 0", async () => {
+    for (const [fen, moves, repeat] of THIRD_OCCURRENCE) {
+      const game = gameOf(fen, moves);
+      const root = toFen(game.position);
+      const withKeys = await seamOf(keyHistory)(game);
+      expect(labelOf(withKeys), root).toBe(repeat);
+      expect(toFen(game.position)).toBe(root);
+      // The seam's move is `chooseMove`'s on the trimmed list, on the same clock, and scores 0.
+      const options = { budgetMs: LEVELS[DEFAULT_LEVEL].budgetMs };
+      const direct = chooseMove(parseFen(root), {
+        ...options,
+        now: virtualClock(STEP_MS),
+        priorKeys: trimPriorKeys(keyHistory(game), game.position.halfmoveClock),
+      });
+      expect(direct && { move: labelOf(direct.move), score: direct.score }).toEqual({
+        move: repeat,
+        score: 0,
+      });
+      // Without the injection the seam is base: base's move, which base does not score 0.
+      const base = chooseMove(parseFen(root), { ...options, now: virtualClock(STEP_MS) });
+      expect(labelOf(await seamOf()(game)), root).toBe(base && labelOf(base.move));
+      expect(base?.score, root).not.toBe(0);
+    }
+  });
+
+  it("the injected keyHistory is read once per engine move, on the game the loop hands in", async () => {
+    const [fen, moves] = THIRD_OCCURRENCE[0];
+    const game = gameOf(fen, moves);
+    const read = vi.fn(keyHistory);
+    await seamOf(read)(game);
+    expect(read).toHaveBeenCalledTimes(1);
+    expect(read.mock.calls[0]?.[0]).toBe(game);
+  });
+
+  it("A3: a game started from a FEN has no earlier positions: the move is base's", async () => {
+    // The first fixture's root, as a bare FEN: its clock says 7, but no position before it exists.
+    const [fen, moves, repeat] = THIRD_OCCURRENCE[0];
+    const bare = toFen(gameOf(fen, moves).position);
+    const game = newGame(bare);
+    expect(trimPriorKeys(keyHistory(game), game.position.halfmoveClock)).toEqual([]);
+    const move = await seamOf(keyHistory)(game);
+    expect(labelOf(move)).toBe(labelOf(await seamOf()(newGame(bare))));
+    expect(labelOf(move)).not.toBe(repeat);
   });
 });
 

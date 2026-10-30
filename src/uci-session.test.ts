@@ -8,9 +8,11 @@ import { readFileSync } from "node:fs";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { makeMove } from "./apply.ts";
 import { type BookProbe, createBookProbe } from "./book.ts";
-import { chooseMove } from "./engine.ts";
-import { parseFen } from "./fen.ts";
+import { chooseMove, trimPriorKeys } from "./engine.ts";
+import { parseFen, toFen } from "./fen.ts";
+import { keyHistory, newGame, playMove } from "./history.ts";
 import { isInCheck, legalMoves } from "./legal.ts";
+import { createLevelSeam } from "./level-seam.ts";
 import { createLevel, DEFAULT_LEVEL, HARDEST_LEVEL, LEVELS, seededRandom } from "./levels.ts";
 import type { Move } from "./moves.ts";
 import { type Position, squareName } from "./position.ts";
@@ -1257,6 +1259,129 @@ describe("ABC-171 A11 — book.ts is a type-only import", () => {
     const lines = source.split("\n").filter((line) => /["']\.\/book\.ts["']/.test(line));
     expect(lines.length).toBeGreaterThan(0);
     for (const line of lines) expect(line).toMatch(/^import type \{[^}]*\} from "\.\/book\.ts";$/);
+  });
+});
+
+// ---------------------------------------------------------------------------------------------
+// `ABC-230` (`ADR-0054` decision 2, the `ADR-0044` D2 amendment) — `position … moves …` keeps the
+// keys it replays through, and the search reads them. The engine spy calls through.
+// ---------------------------------------------------------------------------------------------
+
+describe("ABC-230 A2, A3, A5 — the session hands the search the game's prior keys", () => {
+  /** `src/engine.test.ts`'s `A1` fixtures: `repeat` returns to a position that stood twice. */
+  const THIRD_OCCURRENCE = [
+    ["4k3/8/8/8/8/8/8/Q3K3 w - - 0 1", "a1a2 e8d8 a2a1 d8e8 a1a2 e8d8 a2a1", "d8e8"],
+    ["q3k3/8/8/8/8/8/8/4K3 b - - 0 1", "a8a7 e1d1 a7a8 d1e1 a8a7 e1d1 a7a8", "d1e1"],
+    ["4k3/8/8/8/8/8/8/R3K3 w - - 0 1", "a1a2 e8d8 a2a1 d8e8 a1a2 e8d8 a2a1", "d8e8"],
+    ["r3k3/8/8/8/8/8/8/4K3 b - - 0 1", "a8a7 e1d1 a7a8 d1e1 a8a7 e1d1 a7a8", "d1e1"],
+  ] as const;
+  /** The CLI's step in `src/cli.test.ts`'s `ABC-230` rows: one clock pattern on both surfaces. */
+  const STEP_MS = 100;
+
+  /** The test's own replay: the position after `moves`, and every key it passed through. */
+  function replay(fen: string, moves: readonly string[]) {
+    const game = newGame(fen);
+    for (const text of moves) {
+      const move = legalMoves(game.position).find((m) => coordinateOf(m) === text);
+      if (move === undefined) throw new Error(`fixture: ${text} is not legal`);
+      playMove(game, move);
+    }
+    return game;
+  }
+
+  /** The `priorKeys` the session handed its last `chooseMove` call. */
+  const lastHanded = () => vi.mocked(chooseMove).mock.calls.at(-1)?.[1].priorKeys;
+
+  it("A2: `position fen F moves …` then `go depth 4` plays the third occurrence at cp 0", () => {
+    for (const [fen, moves, repeat] of THIRD_OCCURRENCE) {
+      const { perLine } = talk([`position fen ${fen} moves ${moves}`, "go depth 4"]);
+      const info = parseInfo(perLine[1]?.[0]);
+      expect(info.score, fen).toBe("cp 0");
+      expect(perLine[1]?.at(-1)).toBe(`bestmove ${repeat}`);
+      // The same root as a bare FEN carries no history: base's move, which is not the repetition.
+      const root = toFen(replay(fen, moves.split(" ")).position);
+      const bare = talk([`position fen ${root}`, "go depth 4"]).perLine[1];
+      expect(parseInfo(bare?.[0]).score, root).not.toBe("cp 0");
+      expect(bare?.at(-1)).not.toBe(`bestmove ${repeat}`);
+    }
+  });
+
+  it("A2: bestmove is byte-equal to the CLI level seam's move on the same game and clock", async () => {
+    for (const [fen, moves] of THIRD_OCCURRENCE) {
+      const game = replay(fen, moves.split(" "));
+      const seam = createLevelSeam(
+        DEFAULT_LEVEL,
+        { seed: 1, now: virtualClock(STEP_MS) },
+        keyHistory,
+      );
+      const cli = coordinateOf(await seam(game));
+      const { perLine } = talk([`position fen ${fen} moves ${moves}`, "go"], STEP_MS);
+      expect(perLine[1]?.at(-1), fen).toBe(`bestmove ${cli}`);
+      expect(parseInfo(perLine[1]?.[0]).score).toBe("cp 0");
+    }
+  });
+
+  it("A2: `position startpos moves …` hands the replayed keys, trimmed, and the search reads them", () => {
+    const moves = "g1f3 g8f6 f3g1 f6g8 g1f3 g8f6 f3g1".split(" ");
+    const game = replay(START_FEN, moves);
+    const lines = talk([`position startpos moves ${moves.join(" ")}`, "go depth 4"]).perLine[1];
+    expect(lastHanded()).toEqual(trimPriorKeys(keyHistory(game), game.position.halfmoveClock));
+    expect(lastHanded()).toHaveLength(7);
+    // Probe H3: same move and score as the bare root, fewer nodes (a once-seen position is cut
+    // from the work, never scored a draw).
+    const bare = talk([`position fen ${toFen(game.position)}`, "go depth 4"]).perLine[1];
+    const [withKeys, without] = [parseInfo(lines?.[0]), parseInfo(bare?.[0])];
+    expect({ move: withKeys.move, score: withKeys.score }).toEqual({
+      move: without.move,
+      score: without.score,
+    });
+    expect(withKeys.nodes).not.toBe(without.nodes);
+  });
+
+  it("A3: a bare FEN, a bare startpos and `ucinewgame` hand an empty list", () => {
+    const [fen, moves] = THIRD_OCCURRENCE[0];
+    talk([`position fen ${fen}`, "go depth 1"]);
+    expect(lastHanded()).toEqual([]);
+    talk(["position startpos", "go depth 1"]);
+    expect(lastHanded()).toEqual([]);
+    talk([`position fen ${fen} moves ${moves}`, "ucinewgame", "go depth 1"]);
+    expect(lastHanded()).toEqual([]);
+  });
+
+  it("A3: a refused `position` holds no position and no keys; `go` does not search", () => {
+    const [fen, moves] = THIRD_OCCURRENCE[0];
+    vi.mocked(chooseMove).mockClear();
+    const { perLine } = talk([
+      `position fen ${fen} moves ${moves}`,
+      `position fen ${fen} moves ${moves} e1e1`,
+      "go depth 1",
+    ]);
+    expect(perLine[1]?.[0]).toMatch(/^info string position refused: illegal move e1e1$/);
+    expect(perLine[2]).toEqual(["bestmove 0000"]);
+    expect(vi.mocked(chooseMove)).not.toHaveBeenCalled();
+  });
+
+  it("A5: from a 600-ply move list, only the last 100 keys before the root are handed", () => {
+    const moves = Array.from({ length: 150 }, () => "g1f3 g8f6 f3g1 f6g8")
+      .join(" ")
+      .split(" ");
+    expect(moves).toHaveLength(600);
+    const game = replay(START_FEN, moves);
+    talk([`position startpos moves ${moves.join(" ")}`, "go depth 1"]);
+    const keys = keyHistory(game);
+    expect(lastHanded()).toHaveLength(100);
+    expect(lastHanded()).toEqual(keys.slice(500, 600));
+  });
+
+  it("A5: the window starts at the last pawn move; a castling-rights change does not cut it", () => {
+    const shuffle = Array.from({ length: 140 }, () => "g1f3 g8f6 f3g1 f6g8").join(" ");
+    const moves = `${shuffle} e2e4 e7e5 e1e2 e8e7 e2e1 e7e8 g1f3 g8f6 f3g1 f6g8`.split(" ");
+    const game = replay(START_FEN, moves);
+    expect(game.position.halfmoveClock).toBe(8);
+    expect(game.position.castling).toBe(0);
+    talk([`position startpos moves ${moves.join(" ")}`, "go depth 1"]);
+    // The 8 keys since `e7e5`, the king moves that lost the castling rights among them.
+    expect(lastHanded()).toEqual(keyHistory(game).slice(-9, -1));
   });
 });
 
