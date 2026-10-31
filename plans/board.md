@@ -1,3 +1,4 @@
+_Updated: 2026-10-31 Orchestrator (orch-2026-10-30a) — `bapm-ABC-221-fold` merged 6caa0f17: ABC-221 page closed; ADR-0045/0044 folds; EPIC-009 milestone 2 half done. ABC-223 → Ready 10/10; ABC-246 (XS, QE-221-a) → Ready. Both wait for the batch (ALONE). Records beside the batch: `scribe-agents-md-clockmode`, `arch-hostname-adrs`. Width 3/3._
 _Updated: 2026-10-31 Orchestrator (orch-2026-10-30a) — `secnfr-hostname` merged: catalog reads `oeselg-dev` (owner quotes kept verbatim). Owed (LOW, Architect records): ADR-0035 ×3, ADR-0046 ×1 old spelling. Slip (mine): owner note …c2752305 carries at 07:30Z, but the host clock read ~06:19Z; content stands. Running: batch (ALONE), `bapm-ABC-221-fold`. Width 2/3._
 _Updated: 2026-10-31 Orchestrator (orch-2026-10-30a) — ABC-245 SE done, code review PASS → In Review (QE after the batch). **`qe-EPIC-010-m1-batch` spawned: 400-game R pair, width 1, STRICTLY ALONE, ~18.5 h + ~1 h QE** (owner …c2752305). Beside it, records only: `bapm-ABC-221-fold`, `secnfr-hostname`. Width 3/3._
 _Updated: 2026-10-31 Orchestrator (orch-2026-10-30a) — `arch-ABC-221-records` merged (ADR-0052 D8 spawn ruling, D4 17 205 ms; ADR-0054 −1020). `secnfr-hostname` claimed (catalog oeselg-devl → oeselg-dev). Running: `se-ABC-245`, `bapm-ABC-221-fold`, `secnfr-hostname`. Width 3/3._
@@ -1227,7 +1228,6 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [ABC-238] A deeper stored entry may cut off a shallower search (size: M, priority: P3, DoR 9/10; milestone 2; after ABC-237; waits ADR)
 - [ABC-239] Weights tuned offline, constants only, validated against Stockfish (size: L, priority: P3, DoR 8/10; milestone 3; waits ADR-0048 licence, ADR; its batch reads before merge)
 - [EPIC-009] skytalix plays a 40/15 tournament clock: simple-tournament then uci-clock-mode, uses the clock, never loses on time (owner: BA/PM, size: M, priority: P2, since: 2026-10-29, accepted 2026-10-29 (Q8); M1–M4; MVP ABC-220, 222 (milestone 1), ABC-221, 223 (milestone 2; ADR-0052 PROPOSED folded 2026-10-29; owner OQ-0052-1 open)
-- [ABC-223] Smoke reading: uci-clock-mode, 5 games at 40/15 (<= 10 for coverage), 0 losses on time, closest call >= 500 ms, >= 75 % clock use, longest move <= 60 s (owner: QE/E2E, size: S, priority: P3, DoR 9/10; after ABC-221 merges; ALONE <= ~5 h)
 
 
 
@@ -1250,7 +1250,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 - [EPIC-006] Game session and packaging  (owner: BA/PM, **size: XL — corrected from `L`; 9 tickets / 20 points across both halves, ~1.5x the 13 `L` was assigned, and it hit that ceiling BEFORE distribution was priced**, priority: P1, since: 2026-07-22, **BOTH HALVES NOW CUT: the runnable half `ABC-041`…`ABC-046` (2026-08-13) and the second half `ABC-100`…`ABC-102` (2026-08-16) — only THREE tickets, because the scope of packaging is a FUNCTION of a distribution channel nobody has chosen.** `ABC-100` cuts the DECISION, never the ANSWER: a superseding ADR per `ADR-0007` `D5`, on the owner's word, verbatim and dated. **Acceptance criterion 1 (`npx <package>`) remains unmeetable by any ticket. Recommendation NOT taken, standing for the owner: this should probably be two epics** — the halves share no dependency in either direction and their blockers differ in kind)
 
-## Ready (WIP 0/8)
+## Ready (WIP 2/8)
+- [ABC-223] Smoke reading: uci-clock-mode, 5 games at 40/15 (<= 10 for coverage), 0 losses on time, closest call >= 500 ms, >= 75 % clock use, longest move <= 60 s (owner: QE/E2E, size: S, priority: P3, DoR 10/10 2026-10-31 (bapm-ABC-221-fold; ABC-221 merged af32f82c); ALONE <= ~5 h; → Ready; ALONE, after the milestone-1 batch; never beside ABC-245/246 G8)
+- [ABC-246] In uci-clock-mode, rows pin the hard stop (winc near the clock edge → 1 900) and movetime over a clock (→ 5 000); + SE-221-g comment (QE-221-a; size: XS, priority: P3, test-only, UAT waived; DoR 10/10; cut by bapm-ABC-221-fold; after the batch)
 
 
 
