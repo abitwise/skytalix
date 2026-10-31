@@ -101,7 +101,12 @@ Previously `proposed` — 2026-10-10, by Architect/Design (task `wave-2026-09-25
 the owner of `NFR-008`'s protocol, its floor account and its spawn account. It rules `QE-119-a` (MEDIUM,
 QE at `ABC-119`) and the `NFR-008` clause state that has been unruled since `ADR-0019` trigger (a) fired.
 
-**Addendum 2026-10-30 (`arch-g8-headroom`, `SEC-REBASE-b`).** This is a reading of R-1's load qualifier on the 24-CPU reference. *"load1 ≤ 8"* stands as written, and it is not re-levelled. On `oeselg-devl` it is a tighter admissibility band than it was on the 8-core M3, so no reading on record is re-graded. It is set out in `§ Addendum 2026-10-30 (SEC-REBASE-b)` at the end of this file. No decision is changed and nothing was measured.
+**Addendum 2026-10-30 (`arch-g8-headroom`, `SEC-REBASE-b`).** This is a reading of R-1's load qualifier on the 24-CPU reference. *"load1 ≤ 8"* stands as written, and it is not re-levelled. On `oeselg-dev` it is a tighter admissibility band than it was on the 8-core M3, so no reading on record is re-graded. It is set out in `§ Addendum 2026-10-30 (SEC-REBASE-b)` at the end of this file. No decision is changed and nothing was measured.
+
+**Spelling 2026-10-31 (`arch-hostname-adrs`, records only).** The reference machine is spelled `oeselg-dev`, on the
+owner's word *"hostname spelling: oeselg-dev"* (`orch-2026-10-30a` `…c2752305`). Three places in this file are
+corrected: the addendum paragraph above and two lines in `§ Addendum 2026-10-30 (SEC-REBASE-b)`. They said
+`oeselg-devl`. The host is the same, and no decision, figure or band moves.
 
 **Proposal text amended 2026-10-10 (`design-owed-rulings-2026-10-10`).** Decision 3's `F` is keyed
 per narrow set (the block under decision 3). The status is still `proposed`, and the owner's question
@@ -751,7 +756,7 @@ comments only, and `vitest.config.ts` excludes `.grugops/**`.
 ## § Addendum 2026-10-30 (SEC-REBASE-b)
 
 **By** Architect/Design (task `arch-g8-headroom`), as the owner of this ADR's protocol. Security/NFR routed the
-question here (`secnfr-catalog-rebase`, `SEC-REBASE-b`): the reference moved from the 8-core M3 to `oeselg-devl`
+question here (`secnfr-catalog-rebase`, `SEC-REBASE-b`): the reference moved from the 8-core M3 to `oeselg-dev`
 (24 logical CPUs, 12 cores with SMT). Does R-1's *"load1 ≤ 8"* still mean what it meant? This is a record only.
 Nothing was run or timed.
 
@@ -776,7 +781,7 @@ was rejected because quiet could not be bought (`ABC-108` `A1`).
 **One stale sentence, routed to Security/NFR (the row's owner) and not edited here.** The `NFR-008` row says that
 "the wall clause is a function of CORE COUNT". Since `ADR-0040` pinned the cap by value, the wall on any host with
 4 or more idle cores is a function of per-thread speed and of the lane's slot-seconds. It is not a function of core
-count. Figures from the M3 and from `oeselg-devl` are therefore not comparable across the re-base. The row already
+count. Figures from the M3 and from `oeselg-dev` are therefore not comparable across the re-base. The row already
 says each figure keeps its label.
 
 **Rollback.** Strike this addendum. The qualifier's text never changed.

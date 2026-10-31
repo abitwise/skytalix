@@ -1,0 +1,11 @@
+{
+  "refs": ["arch-hostname-adrs", "secnfr-hostname", "SEC-REBASE-a", "SEC-REBASE-b", "ADR-0035", "ADR-0046", "NFR-008",
+           "EPIC-010", "ABC-177",
+           "orch-2026-10-30a/20261031T073000Z-orchestrator-decision-c2752305",
+           "secnfr-hostname/20261031T061916Z-security-nfr-observation-8b4e0311",
+           "164a70c1", "e4386e96"],
+  "notes": [
+    { "kind": "decision", "confidence": "high: records-only label correction on the owner's verbatim word in orch-2026-10-30a/…c2752305; no decision, figure, band or rule moved; nothing run", "bodyFile": "note-decision.md" },
+    { "kind": "observation", "confidence": "high: git grep at e4386e96; the only oeselg-devl left in the two ADRs are the two dated lines naming the old spelling", "bodyFile": "note-observation.md" }
+  ]
+}
