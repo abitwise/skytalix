@@ -31,6 +31,11 @@ candidates are re-costed, and one test-only ticket is recommended for BA/PM's ru
 construction. W1 is a confirmation read before the 9.7 s owner line routes; it needs BA/PM's word and moves no
 level. No owner word is owed now. See the dated section at the end of this file.
 
+**BA/PM ruling 2026-10-31 (`bapm-tranche2-ruling`, records only).** T2-R is **accepted with amendments** and cut as
+`ABC-248` (S, P1, `EPIC-010`, ordered after `ABC-246`). W1 is **given BA/PM's word with clarifications**. No owner
+word is owed. Where the addendum says T2-R or W1 is PROPOSED or needs BA/PM's word, this line wins. See § BA/PM ruling
+2026-10-31 at the end of this file.
+
 **proposed**, 2026-10-20, by Architect/Design (task `arch-lane-under-10s`). This ADR is the remedy that `R-174-1`
 option (a) asked for. The owner accepted (a) at `…bdff4d33`.
 
@@ -564,3 +569,75 @@ was run or timed at this hop.
 - Revert the tranche-2 commit; that is the whole rollback.
 - A moved row goes back on its own. So does a re-rooted or re-sampled row.
 - W1 is text. Striking it restores the addendum's reading.
+
+### BA/PM ruling 2026-10-31 (`bapm-tranche2-ruling`): T2-R accepted with amendments and cut as `ABC-248`; W1 given its word with clarifications
+
+**Ruled by BA/PM, records only, at `main` `209f4c5f`. Nothing was run or timed** (QE holds the host ALONE). The ticket
+page is `plans/tickets/ABC-248-…md`, whose § BA/PM ruling carries the conditions in full. This section is the dated
+record the addendum asked for.
+
+**T2-R: accepted, one S test-only ticket, `ABC-248` (P1, `EPIC-010`), ordered after `ABC-246` (same file).**
+- **Why accept.**
+  - It is the only candidate set that sizes to the noise reading (central about −0.3 s against a lane centred near
+    9.5 s) and loses no default-lane coverage by construction. A change that fails its parity or non-vacuity
+    condition is not made.
+  - It is cheap to undo: each lever reverts alone (§ Rollback).
+  - One ticket, not three: splitting T2c, T2a (narrow) and T2d would buy three ALONE `G8` gates for one −0.3 s
+    remedy, and each part alone is below what one gate's n = 3 can resolve.
+- **Why no owner word is owed for moving rows out of the default lane.** D1 ("no row leaves the default lane") was the
+  scope of `ABC-177`'s remedy. The text the owner accepted already names the next step: D4 says tranche 2 re-opens with
+  O3 "for a BA/PM ruling", and § Alternatives says "O3 is tranche 2 if D4 misses". T2a (narrow) is a strict subset of
+  O3: at most six rows, into the file's existing `ENGINE_DEEP` branch, with no new lane and no `AGENTS.md` line, and
+  only under default-lane kill parity. No NFR level, cap, pin, W, step set or lane command moves.
+- **Why not T2b.** It buys about 0.1 s more by moving `ADR-0050`'s abort-restores-root and key-under-null guards out of
+  the default lane, where no other row holds them. Trading coverage for speed is option (b) of the owner framing, so
+  it stays his lever, not this ticket's.
+- **Amendments (binding on `ABC-248`):**
+  1. **The T2a rows are named.** They are the six searched rows of `ABC-167` A5: "movetime 100", "white reads wtime",
+     "black reads btime", "G = 3 500, under the default level 5's 4 000", "a bare go" and "A5-b3". No other row moves.
+     A moved row keeps its `it` title byte-identical, inside a `describe` under `RUN_ENGINE_DEEP` whose title ends
+     "[deep, ENGINE_DEEP=1]", which is the file's own pattern.
+  2. **The frozen mutant list names the wrong-side build.** The census marked "white reads wtime" and "black reads
+     btime" as possibly the only default-lane killers of a level-mode wrong-side build (`UNKNOWN - verify`). So the
+     list must hold `WRONGSIDE`: the session hands white's search `btime`, and black's `wtime`. Condition 2 then
+     decides by evidence, not by assumption.
+  3. **Retitles (BA/PM's word, condition 3).** `QE-208-a`'s `it` title states the readings it samples, exactly.
+     `QE-208-b`'s two `it` titles name the new root. Both `describe` titles stay, and no other title changes.
+  4. **T2d's census is capped.** A4-a2 plus at most two more time-blind rows in the two files that `ABC-244`'s census
+     did not list. If the census finds more, none of them joins, and the list goes to the build note for a follow-up.
+     This keeps the ticket S.
+  5. **The saving is graded on nodes, and the wall is reported.** Every changed row on T2c or T2d reads strictly fewer
+     nodes at the tip (node census, as at `ABC-244` A7). `N8-LANE` on the two-file set is charge ≤ 650 ms CPU, with
+     H − B reported. `G8` is `NFR-008` ≤ 10 s, the design target is ≤ 9.4 s, and a miss of 9.4 s with H ≤ 10 s does
+     not fail the ticket. W1 (below) applies at this gate.
+- **The Architect's conditions 1–5 bind as written,** with the amendments above. `AGENTS.md` is not edited (condition
+  5).
+
+**W1: given BA/PM's word, with four clarifications.** It is a reading rule, and no level moves.
+- **Why.** At `ABC-245` the head median read 9.82 s, the six runs pooled read 9.51 s, and the head's three runs
+  spanned 0.75 s. The 9.7 s line sits 0.3 s under `NFR-008`, inside one noisy window's spread. An owner question raised
+  on one such window costs his time and settles nothing. With a second window, one bad window cannot decide alone.
+  The rule filters only the route to the owner: the 10 s line and D6 are not filtered, so `NFR-008` carries no new
+  risk.
+- **Clarifications:**
+  1. **Same tree.** The confirmation reads the byte-identical head tree (`src/`, `tools/`, `data/`, `package*`,
+     `vitest.config.ts`). A read on any other tree is a new reading, not a confirmation.
+  2. **The arithmetic.** The median of six is the mean of the 3rd and 4th sorted head walls. Above 9.7 s routes to the
+     owner. Exactly 9.7 s does not.
+  3. **Admissibility.** The second window is held to the first window's pre-registered rules (wait-clear, load1 and
+     Tctl gates, no foreign vitest). If it is not admissible, it is re-run once. If the re-run is also not admissible,
+     the addendum's text reads alone and the first reading routes. The rule fails toward the owner, not away from him.
+  4. **Not a merge gate.** A ticket's bar stays `NFR-008` ≤ 10 s. The confirmation does not hold a verdict or a merge.
+     QE runs it in the same hop when the window allows; otherwise the Orchestrator dispatches it in the next ALONE
+     slot. A crossing that does not confirm is recorded with both medians, and the next admissible head median above
+     9.7 s starts W1 again.
+
+**`T-QEHOP-GROWTH` (`ADR-0035` B3), disposition.** A QE re-read hop is owed, and no ticket. B3 already says what the
+trigger does: QE re-reads the set's `N8-LANE` at `main`'s tip on `qe-ABC-154`'s method; MET means Architect/Design
+writes the reading and sets the next threshold, and NOT MET goes to the owner. Nothing is built, so there is nothing to
+cut. The re-read is ALONE and LOW. It blocks no ticket, does not ride inside `ABC-248`'s gate (B3: "a changing ticket's
+own reading resets nothing"), and is the Orchestrator's to dispatch. B3's projection puts the set at about 0.49–0.52 s
+of a 650 ms bound at 4 000 notes. `main` held 4 209 notes at `209f4c5f`.
+
+**No owner word is owed.** No NFR level, cap, pin, W, step set or lane command moves. This section is insertions
+only.

@@ -1,0 +1,7 @@
+{
+  "refs": ["bapm-tranche2-ruling", "ABC-248", "ABC-246", "ABC-229", "EPIC-010", "EPIC-009", "ADR-0046", "ADR-0035", "ADR-0050", "NFR-008", "ABC-244", "ABC-245", "ABC-243", "ABC-177", "ABC-167", "QE-245-b", "QE-208-a", "QE-208-b", "QE-229-a", "QE-229-b", "QE-229-c", "QE-229-d", "T2a", "T2b", "T2c", "T2d", "T2-R", "W1", "WRONGSIDE", "T-QEHOP-GROWTH", "arch-g8-tranche2/20261031T070529Z-architect-design-decision-28d7bc3b", "arch-g8-tranche2/20261031T070529Z-architect-design-observation-f1e25b52", "qe-ABC-245/20261031T064950Z-qe-e2e-observation-af467c7b", "qe-ABC-245/20261031T064950Z-qe-e2e-observation-cf53b0ed", "qe-ABC-229/20261030T202320Z-qe-e2e-decision-2afef8bf", "qe-ABC-229/20261030T202320Z-qe-e2e-observation-0b7fd4f6", "qe-ABC-229/20261030T202320Z-qe-e2e-observation-cfb537cf", "5953c631", "209f4c5f", "60f08f49", "38d02496", "c7b45b2f"],
+  "notes": [
+    {"kind": "decision", "confidence": "high on the rulings (records read at 209f4c5f; owner-accepted ADR-0046 text quoted); every saving figure is the Architect's estimate, UNKNOWN - verify until ABC-248's gate; nothing run, built or timed", "bodyFile": "note-decision.md"},
+    {"kind": "observation", "confidence": "high: files and commit as written; QE verdicts and merge SHAs read from sealed notes and git log (recorded as an observation: no §14 gate run backs an artifact-ref here)", "bodyFile": "note-observation.md"}
+  ]
+}
