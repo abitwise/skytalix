@@ -1,0 +1,13 @@
+# PGN move-time comments, count by value (skytalix and Stockfish moves together; Stockfish plays st=0.5)
+== qe-ABC-225-w1/raw/a5/base/b01/r.pgn:  895 3.0; 857 0.50; 17 ; 8 0.007;
+   moves at 4.0s: 0; at 3.0s: 895
+== qe-ABC-225-w1/raw/a5/candidate/b01/r.pgn:  991 3.0; 953 0.50; 19 ; 5 0.005;
+   moves at 4.0s: 0; at 3.0s: 991
+== qe-ABC-241/raw/a10/r/r.pgn:  430 4.0; 402 0.50; 9 ; 4 0.005;
+   moves at 4.0s: 430; at 3.0s: 0
+
+# qe-ABC-225-w1 A5 r.out (session scratch, not committed there): what cutechess sent and what the engine reported
+== qe-ABC-225-w1 A5 base 02fa9556 (before ABC-228): go commands:  912 movetime 4000
+   skytalix 'info depth … time T' with T > 3100 ms: 0 of 905
+== qe-ABC-225-w1 A5 candidate baf99a7c (before ABC-228): go commands:  1008 movetime 4000
+   skytalix 'info depth … time T' with T > 3100 ms: 0 of 1000
