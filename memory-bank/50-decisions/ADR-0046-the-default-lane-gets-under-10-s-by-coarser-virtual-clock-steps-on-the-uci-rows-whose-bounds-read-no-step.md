@@ -25,6 +25,12 @@ owner's word *"hostname spelling: oeselg-dev"* (`orch-2026-10-30a` `…c2752305`
 § Context bullet on how the lane grew back after `ABC-177`. It said `oeselg-devl`. The host is the same, and no
 figure, rule or decision moves.
 
+**§ Addendum 2026-10-31 (`arch-g8-tranche2`): tranche 2 is OPEN; the recommendation and W1 are PROPOSED.** Tranche
+2 opened on `qe-ABC-245`'s `G8` head median of 9.82 s, which is above 9.6 s. The trigger is not waived. The
+candidates are re-costed, and one test-only ticket is recommended for BA/PM's ruling. It loses no coverage by
+construction. W1 is a confirmation read before the 9.7 s owner line routes; it needs BA/PM's word and moves no
+level. No owner word is owed now. See the dated section at the end of this file.
+
 **proposed**, 2026-10-20, by Architect/Design (task `arch-lane-under-10s`). This ADR is the remedy that `R-174-1`
 option (a) asked for. The owner accepted (a) at `…bdff4d33`.
 
@@ -350,3 +356,211 @@ was run or timed at this hop.
 - **No owner word is owed.** No owner-accepted decision changes. This ruling follows BA/PM's own U8 count, under the
   steps the owner accepted for U8. No NFR level, bar, cap, pin, row count or lane line moves. No ticket page is edited
   here. BA/PM's close hop may cite this section.
+
+## § Addendum 2026-10-31 (`arch-g8-tranche2`): tranche 2 opens, and its candidates are re-costed — PROPOSED
+
+**Status.** By Architect/Design (task `arch-g8-tranche2`). This is a record only: nothing was run or timed at this hop.
+- **Tranche 2 is OPEN.** That is a fact, not a proposal. It opened on `qe-ABC-245`'s `G8` (`…af467c7b`), and the
+  Orchestrator recorded it at `4cd261c1`. The trigger is not waived.
+- **T2-R (the recommendation) is PROPOSED.** It needs BA/PM's ruling at the cut, as R1–R4 did.
+- **W1 (how the owner line is read) is PROPOSED.** It needs BA/PM's word. It changes how one line is read, and it
+  moves no level.
+- **No owner word is owed now.** No NFR level, cap, pin, W, step set or lane command moves.
+
+### Context: the reading
+- **`G8` head medians on `main` since tranche 1** (`oeselg-dev`; admissible unless marked):
+  - `ABC-244` 9.25 s;
+  - `ABC-243` 9.28 s;
+  - `ABC-242` 9.41 s;
+  - `ABC-221` 9.84 s. This one is inadmissible as a trigger (the Orchestrator's ruling, `9c008db4`): `QE-221-c`'s
+    orphan process held a core, and its base read 9.82 s too.
+  - `ABC-245` 9.82 s, with base 9.44 s.
+- **9.82 s is above 9.6 s, so § Addendum 2026-10-30's "any later `G8` head median > 9.6 s" fires.**
+- **The firing is not growth (`QE-245-b`).**
+  - The head adds one row of 1.67 ms.
+  - The +0.38 s H − B delta sits in files that are byte-identical between the arms.
+  - Head run 3 read 10.19 s and was slow in every file. Its summed spans were 7.93 s, against 7.08–7.42 s in the
+    other five runs.
+  - CPU tracks wall from run to run on identical trees, 29.65–33.11 s. What varied is the host's per-thread speed,
+    not the work.
+- **The lane's central value is about 9.5 s.** This is an estimate, not a reading. Two routes agree:
+  - **Pooling `ABC-245`'s six runs** (the code delta is 1.67 ms): 9.08, 9.44, 9.44, 9.58, 9.82 and 10.19 s. The
+    median is **9.51 s**.
+  - **Adding up from `ABC-242`:** its H was 9.41 s. `ABC-221` adds 30 rows (39 ms in-thread, `se-ABC-221`
+    `…af63269c`), and `uci-session.test.ts` grew +78 ms per file (`qe-ABC-221`). Add `ABC-245`'s row and the total
+    is about 9.45–9.5 s.
+- **How much `G8` moves at n = 3 with no code change:**
+  - In quiet windows (`ABC-242`, `ABC-243`), each arm's three runs span 0.13–0.15 s.
+  - In `ABC-245`'s window, the head's runs span 0.75 s, and all six runs span 1.11 s.
+  - Between windows: +0.17 s at `ABC-229` with the same inputs, and about +0.4 s at `ABC-221`, from the orphan.
+
+### The noise question (`QE-245-b`)
+- **It does not change whether the trigger fired.** The text reads a raw, admissible head median, and 9.82 s is
+  one. Reading it any other way would need a dated amendment, and this section makes none.
+- **It does change what the firing tells us.**
+  - It does not say the lane grew by 0.4 s.
+  - It does say the lane sits close enough to 9.6 s that one noisy window reads over it. With a central value of
+    9.5 s and one run at 10.19 s, the noise already reaches `NFR-008`.
+  - Catching this is the line's job: § Addendum 2026-10-30 set the target at 10 s − 3 × 0.17 s of drift. So the
+    noise strengthens the case for tranche 2 rather than weakening it.
+- **It changes how large the remedy needs to be.**
+  - Tranche 2 is sized against about 9.5 s, not 9.82 s.
+  - About −0.3 s of wall puts the central value near D4's 9.2 s and under the 9.4 s design target.
+- **It changes how the saving is read.**
+  - The gate's n = 3 `G8` alone cannot resolve a −0.2..−0.3 s change in a window like `ABC-245`'s.
+  - The saving is read on the narrow set (`N8-LANE`), which resolved −1.145 s CPU at `ABC-244` with R 0.250 s, and
+    on the gate's H − B.
+  - The 9.4 s design target is read on the head median, as before.
+- **The 9.6 s line opens tranche 2 once, and it is now spent.**
+  - No tranche 3 is defined, so a later head median above 9.6 s re-opens nothing.
+  - `ABC-246`'s page expects its own `G8` to fire the trigger. BA/PM may fold that line.
+  - After tranche 2's gate, two lines remain to watch: 9.7 s (the owner line, below) and 10 s (`NFR-008`,
+    `ADR-0035` D6).
+
+### The lane as it stands (census, used for shape and ranking only)
+**Source.** `se-ABC-221`'s own `npm test` JSON report at `c48a6f83`, written 2026-10-31T05:38Z.
+- Its `src/`, `tools/`, `data/`, `package*` and `vitest.config.ts` equal `qe-ABC-245`'s base `9c008db4`, so it is
+  today's lane minus one 1.67 ms row.
+- Snapshot: `.grugops/context/arch-g8-tranche2/raw/probe/`, sha256 `8e4e281c…f8dd`.
+- Its load, power and window are `UNKNOWN - verify`. It is not an admissible reading.
+
+**The lane is still throughput-bound on two slots.** The in-vitest span is 8.61 s over 63 files.
+- Slot B runs `search.null-move` from 0.26 to 1.81 s. It then collects `cli.test.ts`, whose 28 module-scope
+  children fill the gap from 1.81 to 5.18 s (≈ 3.37 s), and runs `cli.test.ts`'s rows from 5.18 to 5.80 s.
+- Slot A runs `uci-session` from 0.22 to 1.93 s, then `engine`, `qe-hop-integrity` and the mid-sized files.
+- Both slots share the tail until 8.61 s.
+- So one slot-second saved is still about 0.5 s of wall.
+
+| where | in-thread s | what is inside |
+|---|---:|---|
+| `src/uci-session.test.ts` | 1.71 | Class P/C rows (they read `time` or depth) ≈ 0.95: A5 0.33; A7's R2 depth 0, f2, f3, depth 3 and `searchmoves` 0.32; A6-d1 0.06; `ABC-174` A5, `ABC-171` A6, `ABC-212` A9 and the Hash row 0.23. `ABC-241` A5 0.09 kept step 100 at tranche 1 (U2) |
+| `src/search.null-move.test.ts` | 1.55 | `QE-208-a` sweep 0.40; `QE-208-b` ×2, depth 6, 0.37; the A2 instrument 0.31; the doors 0.25; the zugzwang rows 0.15 |
+| `src/cli.test.ts` | ≈ 3.37 collect + 0.62 | the 28 children (`N8-SPAWN`, `ABC-173` `C2`); `ABC-241` U2 rows 0.25 |
+| `src/engine.test.ts` | 0.60 | `ABC-230` A4 0.25. It runs 5 ms at step 1, which is 5 intervals, so condition 2 keeps it there |
+| `tools/grugops/qe-hop-integrity.test.ts` | 0.28 | It grows with the record |
+| per-file start | ≈ 0.08–0.13 each × 63 | `ADR-0040` isolation |
+
+**What the census finds beyond T2a–T2c:**
+- **Two of A5's searched rows read nothing that another default-lane row does not already read.**
+  - A5's "a bare go: go -> 4000 ms" reads the same G and the same window as four other rows: `ABC-174` A5's bare
+    go, A7-f2, A7-f3 and `ABC-197` R2.
+  - A5's "G = 3 500" sends the same `go` line, against the same bound, as `ABC-171` A6's level-5 row.
+- **The D4 arithmetic is now pinned on the stub seam,** which reads the exact budget handed:
+  - `ABC-220` A8: 7 levels × TimeMode unset/level × 40 goes, against the `ADR-0044` D4.1–D4.2 oracle;
+  - `ABC-212` A12;
+  - `ABC-221` A8 and A12.
+
+  These pins are why T2a is stale. They did not exist when T2a was costed, and `ABC-221` (`c48a6f83`) landed the
+  last of them.
+- **Not every A5 row is covered by those pins.** `ABC-220` A8 replays one side to move with equal clocks. A5's
+  "white reads wtime" and "black reads btime" may therefore be the only default-lane rows that kill a level-mode
+  wrong-side build (`UNKNOWN - verify`; parity decides).
+- **One time-blind row lies outside tranche 1's scope:** `ABC-167` A4-a2, `go depth \x1b[31m`. The token is
+  dropped, so it runs a bare go: 40 reads at step 100, 77 ms.
+  - `ABC-167` A3's two rows cannot move. They search 100 ms at step 10, and at step 100 that is 1 interval, which
+    condition 2 forbids.
+- **`ABC-241`'s U2 rows are not a candidate.** They kept step 100 on parity at tranche 1 (`se-ABC-244`), so at that
+  step they are the only rows that kill F230, REP0 and S241M1.
+- **`T-QEHOP-GROWTH` (`ADR-0035` B3) has fired.**
+  - `main` holds 4 206 notes at `4cd261c1`. The count crossed 4 000 on 2026-10-30, between `33669cd8` (3 992) and
+    `e7b22c11` (4 036).
+  - No re-read is on record. It is routed to the Orchestrator: QE reads, and Architect/Design records.
+  - It is not a tranche-2 lever.
+
+### Candidates (re-costed). Every saving is an estimate, and wall is taken as in-thread ÷ 2
+| # | option | in-thread s | est. wall | risk | coverage the default lane loses |
+|---|---|---:|---:|---|---|
+| **T2a (narrow)** | Move A5's six searched rows to the file's existing `ENGINE_DEEP` branch (`ABC-220` A11 / `ABC-221` A10), each only under **default-lane kill parity** (T2-R condition 2). The six: bare go, G = 3 500, white wtime, black btime, movetime 100, A5-b3. Likely: the two duplicates, and possibly movetime 100 and A5-b3 | 0.12..0.33 | −0.06..−0.16 s | LOW-MEDIUM | none by construction: a row that is the only default-lane killer of any mutant stays |
+| T2a (wide) | every class P/C row ≥ 40 ms to `ENGINE_DEEP` | ≈ 0.95 | ≈ −0.47 s | MEDIUM | the D12 limits on a clock (depth 3, `searchmoves`); the dropped-token time reads (A7-f2/f3, `ABC-197` R2); the ponder hold at the ceiling (A6-d1); the level rows (`ABC-174` A5, `ABC-171` A6, `ABC-212` A9, Hash) |
+| T2b | `QE-208-a`, both `QE-208-b` rows and A2's pawn-only depth-6 row move to `SEARCH_DEEP`. `AGENTS.md`'s "44 rows" becomes "48 rows" (four rows move), the same byte count | 0.77 | ≈ −0.39 s | MEDIUM | `ADR-0050`'s abort-restores-root and key-under-null guards. No other default-lane row aborts inside a null subtree (`ABC-078` A7 aborts in iteration 2, which tries no null move), and none checks the key at a probing null child |
+| **T2c (widened)** | Sample `QE-208-a`'s readings more sparsely: its cost is Σ readings × 1 024 nodes whatever the root. Re-root `QE-208-b` on a cheaper position with ≥ 3 non-pawn pieces each side, where a null child still probes at depth 6. Both under kill parity and the non-vacuity guards | 0.1..0.5 | −0.05..−0.25 s | LOW-MEDIUM: it is a fixture choice, and parity is the check | none, if parity holds |
+| **T2d (new)** | Apply R2 to A4-a2: step 100 → 1 000, 40 reads → 4. Also apply it to any other time-blind row the R1 census finds in the two files | ≈ 0.07 | ≈ −0.035 s | LOW | none |
+| — | Move the U2 rows (`ABC-241` A4/A5/A7, both surfaces) to deep lanes | 0.34 | ≈ −0.17 s | MEDIUM | the ep-repetition guard (they are its only killers) |
+| — | Move `cli.test.ts` children to `CLI_DEEP` (O4). The cost per child is from the census mean; the `npm run chess` child is likely dearer (`UNKNOWN - verify`) | ≈ 0.12 per child | ≈ −0.06 s per child | MEDIUM-HIGH | the delivered command, the security bars, `N8-SPAWN` |
+| — | Merge files (O5) | — | — | HIGH | isolation (`ADR-0040`) |
+| — | `maxWorkers: 3`, a lower heap flag, or W | large | — | the owner's | — |
+
+**Rejected outright at this hop:**
+- **A coarser step on a class P row.** It widens G + 2s, which changes the bound.
+- **A non-uniform ("jump") clock on a pinned row.** A build with W < G − s reads time = G at the jump and passes,
+  so kills are lost.
+
+### Decision (PROPOSED)
+- **T2-R. One test-only ticket, size S: T2c + T2a (narrow) + T2d.** It touches `src/search.null-move.test.ts` and
+  `src/uci-session.test.ts` only.
+  - **Expected saving: −0.15..−0.45 s of wall, central about −0.3 s.** This is an estimate.
+  - **Coverage lost: none by construction.** A change that fails its condition is not made.
+  - **Conditions:**
+    1. **Per changed row:** `ABC-244`'s conditions 1–3 carry over unchanged. Kill-set parity decides the step or the
+       fixture. Step 1 000 never turns a multi-check search into a one-check search. The mutant list is frozen
+       before any head run.
+    2. **Default-lane kill parity for a moved row (T2a).** A row leaves the default lane only if every named mutant
+       it kills at base is still killed by the default lane at head.
+       - The mutants: M01–M11 and the wrong builds A5's rows name (W ≠ G for each side, `movestogo` and
+         `movetime`).
+       - A row that is the only default-lane killer of any mutant stays.
+    3. **Non-vacuity on the re-rooted and re-sampled rows (T2c).**
+       - `QE-208-a`'s insideNull is ≥ 3.
+       - `QE-208-b`'s underNull is > 0 in both recursions.
+       - `ADR-0050`'s plants are killed as at base: the null move not unmade on abort, and the null child's key not
+         written, in each recursion.
+       - A re-root may re-title the row ("position-6"). That is BA/PM's word.
+    4. **A moved row runs green once in its deep lane at the ticket's QE.** The command is `ENGINE_DEEP=1 … src/uci-session.test.ts -t
+       "<moved describe>"`, the `-t` form that `AGENTS.md` line 102 already shows. Unset, the row is NOT DEFINED, on
+       the file's existing pattern.
+    5. **No `AGENTS.md` edit is owed**, because line 102's command does not change. If BA/PM wants the line to name
+       the moved rows, it needs a trim first: the file has 11 B spare.
+  - **Design target:** `G8` head median ≤ 9.4 s at its gate. That is the tranche-1 figure, and it is a design target,
+    not an NFR level.
+  - **Measurement:** D5's plan as `ABC-244` used it: the R1 census, parity, a two-file `N8-LANE` and `G8`.
+  - **Owners:**
+    - BA/PM: the ruling, the cut and condition 2's word;
+    - SE: the change and the census;
+    - QE: parity, the deep-lane run and D5;
+    - Architect/Design: the records.
+- **The ticket BA/PM should cut (it is not cut here):** *"The default lane sheds ~0.3 s and loses no coverage:
+  `QE-208-a` sampled more sparsely and `QE-208-b` on a cheaper root, `ABC-167` A5's duplicated searches moved to the
+  file's `ENGINE_DEEP` branch, and A4-a2 on R2 (test-only)."*
+  - Size S, P1, `EPIC-010`, as `ABC-244` was.
+  - It shares `src/uci-session.test.ts` with `ABC-246`. The order is the Orchestrator's. Taking `ABC-246` first
+    (XS, Ready) puts its rows in tranche 2's base.
+- **The alternative, if BA/PM prefers certainty to coverage:** T2b alone, about −0.39 s. It is not recommended.
+  - It moves two `ADR-0050` guards that the default lane has no other row for.
+  - The noise reading says −0.3 s is enough.
+  - It stays the first agent-side lever the owner question below would weigh.
+- **W1 (PROPOSED; a reading rule, BA/PM's word): the 9.7 s owner line is confirmed before it is routed.**
+  - **Where it is read:** on tranche 2's gate `G8` head median, and on every admissible `G8` head median after it.
+  - **The confirmation:** a reading above 9.7 s triggers a second read by QE, head only, n = 3, in a second window.
+    That window starts ≥ 30 min after the first, after the usual wait-clear, with Tctl ≤ 60 °C.
+  - **The routing:** the reading goes to the owner if the median of the six head runs is above 9.7 s.
+  - **Until BA/PM gives W1 its word,** § Addendum 2026-10-30's text reads alone: one admissible head median above
+    9.7 s after tranche 2 goes to the owner.
+  - **The 10 s line is not touched.** A median above 10 s at a gate is `NFR-008` NOT MET and goes to `ADR-0035` D6,
+    with no confirmation step.
+  - **Why:** at `ABC-245` the six runs pooled read 9.51 s while the head median read 9.82 s. The 0.3 s between this
+    line and the NFR is inside one window's noise. An owner question raised on a noisy window costs his time and
+    settles nothing.
+- **How a confirmed crossing would reach the owner:**
+  - **What has not happened:** `NFR-008` is still MET at ≤ 10 s.
+  - **What has:** two tranches have used up the test-only levers that keep coverage, so the agent-side headroom is
+    gone.
+  - **His options, in the order they would be put to him:**
+    - (a) accept the band and watch: D6 fires only on a median above 10 s;
+    - (b) accept coverage-losing lane moves as the price of the 10 s level, first T2b (−0.4 s, two `ADR-0050`
+      guards to `SEARCH_DEEP`), then U2 and O4 one child at a time;
+    - (c) one of his reserved levers: W, `maxWorkers: 3` (against his heat word and "max 2 cpu cores"), or the heap
+      flag (`NFR-010`).
+
+### Consequences
+- **D1 ("no row leaves the default lane") was the scope of `ABC-177`'s remedy.** This addendum lets a row leave only
+  under default-lane kill parity, and only on the tranche-2 ticket. The moved rows still run in `ENGINE_DEEP`.
+- **The queue still spends headroom.** These are estimates:
+  - `ABC-246`: about +0.01 s, from two stubbed rows;
+  - `ABC-223`: no rows, because it is a smoke reading;
+  - `ABC-247`: tools only, under `node --test`, so it is outside `npm test`.
+- **The record keeps growing.** `qe-hop-integrity` grows with it, and `T-QEHOP-GROWTH`'s re-read is owed.
+
+### Rollback
+- Revert the tranche-2 commit; that is the whole rollback.
+- A moved row goes back on its own. So does a re-rooted or re-sampled row.
+- W1 is text. Striking it restores the addendum's reading.
