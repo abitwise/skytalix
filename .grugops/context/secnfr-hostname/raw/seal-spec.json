@@ -1,0 +1,11 @@
+{
+  "refs": ["secnfr-hostname", "SEC-REBASE-a", "SEC-228-a", "plans/nfr-catalog.md", "NFR-004", "NFR-005", "NFR-008", "NFR-009", "NFR-011",
+           "AR-NFR004-A", "AR-UCI-BUSY", "ADR-0035", "ADR-0046", "EPIC-010",
+           "orch-2026-10-30a/20261031T073000Z-orchestrator-decision-c2752305",
+           "orch-2026-10-30a/20261030T181200Z-orchestrator-decision-f4673b9f",
+           "e0c58b9a", "9f0a8d32"],
+  "notes": [
+    { "kind": "decision", "confidence": "high: records-only label correction on the owner's verbatim word in orch-2026-10-30a/…c2752305; no bound moved; nothing run", "bodyFile": "note-decision.md" },
+    { "kind": "observation", "confidence": "high: git grep at e0c58b9a; not edited", "bodyFile": "note-observation.md" }
+  ]
+}
