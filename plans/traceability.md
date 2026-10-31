@@ -1656,3 +1656,4 @@ _Updated: 2026-08-19 by BA/PM (task `cut-agents-md-cap-2026-08-19`, Workflow 07)
 | qe-EPIC-010-m1-batch (merge) | Milestone-1 batch: STOP before game 1 (QE-M1B-a: 3 s vs 4 s asymmetry); base ca6e675c, head 72a65fb7 | — | STOP (no verdict) | merged 698ce0ce 2026-10-31, not pushed | Re-run after the rpair fix (Orchestrator) |
 | bapm-rpair-level6-cut (merge) | ABC-247 cut; batch cost restated; smoke-ledger audit clean | records 3cab2a02 | — | merged 2026-10-31, not pushed | Done (Orchestrator) |
 | ABC-245 (merge) | Far-back third-occurrence row turns a lowered prior-keys cap red (QE-242-b) | test 7e81732e | qe-ABC-245 PASS | merged 2cce84e0 2026-10-31, not pushed | Done (Orchestrator) |
+| arch-g8-tranche2 (merge) | ADR-0046 tranche 2 opened; candidates re-costed; recommendation PROPOSED | records 38d02496 | — | merged 2026-10-31, not pushed | Done (Orchestrator) |
