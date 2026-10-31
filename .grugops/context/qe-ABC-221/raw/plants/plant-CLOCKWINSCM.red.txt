@@ -1,0 +1,2 @@
+CLOCKWINSCM (src/uci-session.ts) rc=0 total=2363 passed=2363 failed=0 skipped=0 wall=10.0s
+

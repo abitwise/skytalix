@@ -1,0 +1,9 @@
+A2: first 22375, min left 1069.000, last 1069.000, used 0.99881
+A3: move 7 26341.176, min left 1069.000, used 0.99881
+A4 period 1: min left 1069.000, used 0.99881
+A4 period 2: min left 1069.000, used 1.00000
+A4 period 3: min left 1069.000, used 1.00000
+A5: wtime 3000 mtg 1 -> 1900, left 1069; wtime 800 -> 1
+A7: C(3 600 000, 0, 40) = 89875 -> 59500; movetime 90000 -> 59500; 5000 -> 5000
+A12: 2800 / 800 / 2800 / 800 (own increment 2000, 0, 2000, 0)
+AR-UCI-BUSY: 59 500 + 31 + 100 = 59631 < 60 000

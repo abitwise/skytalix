@@ -1,0 +1,88 @@
+# `ABC-221` gates, deep lanes, A14b probe and `G8` at head `c48a6f83` (base `d58f2d77`): A7, A10 and A11 MET; `G8` H 9.84 s (B 9.82 s, +0.02 s), A9 MET (≤ 10 s); tranche 2 FIRES on the raw median (> 9.6 s), on a host QE-221-c slowed
+
+## Host (QE-221-c)
+- A foreign orphan `python3 -I -` held one of 24 cores at 100 % through the whole window. It has ppid 1, cwd
+  `.claude/worktrees/secnfr-ABC-221`, and its task was stopped.
+- Tctl read 69–74 °C, above `host.mjs`'s 60 °C clear. The thermal stop is 85 °C; the Tctl median before the `G8` runs
+  was 73.0 °C.
+- vitest = 0 (bracketed pgrep, PIDs waited on with `kill -0`) and cutechess = 0 throughout. QE did not kill the process,
+  because it is not QE's.
+- **Deviation, post-PREREG:**
+  - The deep lanes and the probe ran after a 4-minute wait that could not clear (`raw/deep/wait.log`).
+  - `G8` ran with `g8-host80.mjs` / `host80.mjs`, which is `g8.mjs` / `host.mjs` with one line changed: the Tctl clear
+    60 → 80 °C. Every other precondition held before each run, including load1 ≤ 2.0.
+
+## A7 gates at H (`raw/gates/`)
+- `npm run lint`: exit 0 ("Checked 131 files … No fixes applied."). `npm run typecheck` and `npm run build`: exit 0.
+  `dist/` was removed afterwards, and H had 0 content differences against `git archive c48a6f83`.
+- **`npm test` ×3 at H** (the three `G8` head runs): rc 0, **2 363 passed**, 0 failed, 0 skipped, each time. Base reads
+  2 333 in its three runs.
+- `node tools/grugops/test-skip-integrity.js .grugops/test-skips.md --skip-count 0`: "No findings.", exit 0.
+- `node tools/grugops/lane-inventory.js` (run in the worktree, with a temporary `node_modules` link, removed after):
+  63 = 63, "No findings.", exit 0.
+- **Names** (`raw/g8/names.txt`, the same in all 3 B/H pairs): net +30.
+  - Added (31): 27 rows in the `ABC-221` block and 4 `A12 (ABC-221)` rows in `ABC-220`'s A7 block.
+  - Removed (1): `ABC-220` A1 "uci-clock-mode is not offered at this build (ABC-221)".
+  - Retitled (4): `ABC-220` A8 constants, levels clause B, and `ABC-220` A10's two `uci-clock-mode` → `Uci-Clock-Mode`
+    rows.
+  - With those stripped, the sorted-name hashes are equal (`d3a35ed79db9`), so no other row moved. `ABC-220`'s A2–A7
+    rows run unedited and green.
+- **A7 MET.**
+
+## `ENGINE_DEEP` A10, once (`raw/deep/engine-deep-a10.txt`)
+- Command: `ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 node_modules/.bin/vitest run src/uci-session.test.ts -t "ABC-221 A10" --silent=false --reporter=verbose`.
+- Result: **1 passed** (the other 238 were filtered out by `-t`), 179.8 s, rc 0. load1 was 1.4 at the start.
+
+  | position | wall | depth | nodes | `time` | heapUsed after | arrayBuffers after |
+  |---|---|---|---|---|---|---|
+  | start | 59 500.1 ms | 13 | 35 831 828 | 59 500 | 9.34 MiB | 4.51 MiB |
+  | italian | 59 500.8 ms | 11 | 37 695 532 | 59 501 | 9.37 MiB | 4.51 MiB |
+  | kiwipete | 59 499.4 ms | 11 | 43 493 101 | 59 500 | 9.37 MiB | 4.51 MiB |
+
+  - The first read was heapUsed 9.25 MiB and arrayBuffers 4.51 MiB. Growth is at most +0.12 MiB (heapUsed) and 0
+    (arrayBuffers).
+  - **Max wall 59 500.8 ms ≤ 60 000.** Max completed depth 13, so the tripwire (100) is not reached.
+  - **A10 MET**, and the readings agree with the SE's run 3 to within 1.7 ms of wall.
+
+## `UCI_DEEP`, once (`raw/deep/uci-deep.txt`)
+- **13 / 13 passed**, 5.35 s, rc 0.
+  - `ABC-221` A11 ×4: the child ran spawn to exit in 2 091 ms (not a latency).
+  - `ABC-220` A14 ×4: these rows now read the three-value line.
+  - `ABC-168` ×5.
+- **A11 row 2 MET.** The "no line is lost" row also shows no `info string` line, so the mode was accepted.
+
+## A11 row 3, the A14b probe, once (`raw/probe/a14b-run1.json`)
+- `node probe/a14b-probe.mjs <worktree>`. The probe is qe-ABC-220's with the one `setoption` value changed. It ran
+  against src tree `56dcfe03`, which is head's, at load1 1.79.
+- **R1 0.41 ms** (≤ 100 ms) **met**.
+- **R2 met:** `isready` was written 100.4 ms after `go`, and `bestmove` arrived at 2 002.25 ms.
+- **R3 met:** 2 `readyok` and 1 `bestmove`, and the busy `readyok` is the line straight after `bestmove`.
+- No misses, exit 0, empty stderr. QE's added reading: stdout has no `info string` line, so the `setoption` was
+  accepted. `info depth 9 … time 2001`.
+- **A11 row 3 MET.** One run counts.
+
+## `G8` (ALONE; b h h b b h; wait-clear by PID before each run)
+
+| run | tree | rc | wall | CPU | vitest Duration | load1 before / after | Tctl before | tests |
+|---|---|---|---|---|---|---|---|---|
+| 1 | B | 0 | 9.82 s | 31.60 s | 9.51 s | 1.22 / 1.57 | 73.3 | 2 333 passed |
+| 2 | H | 0 | 9.83 s | 32.30 s | 9.54 s | 1.57 / 2.01 | 69.3 | 2 363 passed |
+| 3 | H | 0 | 9.90 s | 32.99 s | 9.59 s | 1.78 / 2.13 | 72.6 | 2 363 passed |
+| 4 | B | 0 | 9.71 s | 32.01 s | 9.40 s | 1.96 / 2.12 | 74.3 | 2 333 passed |
+| 5 | B | 0 | 9.84 s | 32.20 s | 9.51 s | 1.87 / 2.42 | 74.4 | 2 333 passed |
+| 6 | H | 0 | 9.84 s | 32.63 s | 9.55 s | 1.86 / 2.11 | 69.9 | 2 363 passed |
+
+- **Medians of 3: B 9.82 s, H 9.84 s, H − B +0.02 s.** CPU medians: B 32.01 s, H 32.63 s (+0.62 s). Admissible: rc 0
+  and load1 ≤ 2.42 on all 6 runs.
+- **A9 / `NFR-008` MET:** 9.84 ≤ 10 s at load1 ≤ 8. No STOP.
+- **`ABC-244` tranche 2: FIRES on the raw median**, 9.84 > 9.6 s, as the brief's rule reads (report only).
+- **The reading is confounded.**
+  - Base `d58f2d77` is the code QE read at `ABC-242`'s `G8` as H = 9.41 s with 2 333 rows. Here the same code reads
+    9.82 s, so the host ran about +0.41 s slow (QE-221-c).
+  - Against that, the build's own cost is +0.02 s wall (CPU +0.62 s on 4 workers). That matches the SE's 39 ms
+    in-thread and the ticket's "about +0.1 s" estimate.
+  - On a clean host head would read about 9.43 s, under 9.6. That figure is an inference, `UNKNOWN - verify`.
+- **For the Orchestrator:** the trigger is reported as fired on the reading taken. Re-reading `G8` once the orphan is
+  reaped would settle whether tranche 2 is owed on this build. QE does not grade that in either direction.
+- **Per file** (`raw/g8/g8-perfile.txt`, median in-thread ms): `uci-session.test.ts` +78. The others, including
+  unchanged `cli.test.ts` +58 and `search.null-move.test.ts` −44, are inside the run-to-run spread.

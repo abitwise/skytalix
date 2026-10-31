@@ -1,0 +1,63 @@
+{
+  "probe": "ABC-221 A11 row 3 (ABC-220 A14b protocol, TimeMode uci-clock-mode)",
+  "at_utc": "2026-10-31T06:03:58.034Z",
+  "host_cpu": "AMD Ryzen AI 9 HX 370 w/ Radeon 890M",
+  "host_os": "Linux 7.0.0-42-generic",
+  "node": "v26.12.1",
+  "load1_before_spawn": 1.79,
+  "tip_sha": "6d7f2c24a421880c0e64f41833bfab665cfd42df",
+  "src_tree": "56dcfe036086391fb0b9d10ea533e386bdbc5927",
+  "command": "node src/uci.ts (cwd: the repository; spawned asynchronously, no shell, NODE_OPTIONS removed)",
+  "readings": {
+    "R1": {
+      "ms": 0.41,
+      "bound_ms": 100,
+      "verdict": "met"
+    },
+    "R2": {
+      "isready_written_ms_after_go": 100.4,
+      "bestmove_arrived_ms_after_go": 2002.25,
+      "verdict": "met"
+    },
+    "R3": {
+      "readyok_count": 2,
+      "bestmove_count": 1,
+      "busy_readyok_index": 9,
+      "bestmove_index": 8,
+      "verdict": "met"
+    }
+  },
+  "not_graded": {
+    "go_to_bestmove_ms": 2002.25,
+    "go_to_isready_ms": 100.4
+  },
+  "A14b": "MET",
+  "misses": [],
+  "child_exit": {
+    "code": 0,
+    "signal": null
+  },
+  "writes": [
+    "3.39ms > uci",
+    "60.04ms > setoption name TimeMode value uci-clock-mode",
+    "60.05ms > setoption name OwnBook value false",
+    "60.05ms > isready",
+    "60.21ms > position startpos moves e2e4",
+    "60.23ms > go movetime 2000",
+    "160.63ms > isready",
+    "2063.01ms > quit"
+  ],
+  "stdout": [
+    "59.82ms < id name skytalix",
+    "59.93ms < id author Olger Oeselg",
+    "59.93ms < option name OwnBook type check default true",
+    "59.93ms < option name Skill Level type spin default 5 min 1 max 7",
+    "59.93ms < option name TimeMode type combo default level var level var simple-tournament var uci-clock-mode",
+    "59.93ms < uciok",
+    "60.17ms < readyok",
+    "2062.48ms < info depth 9 score cp -6 nodes 1151006 time 2001 nps 575215 pv e7e5",
+    "2062.48ms < bestmove e7e5",
+    "2062.89ms < readyok"
+  ],
+  "stderr": ""
+}

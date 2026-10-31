@@ -1,0 +1,3 @@
+NOTOK59 (src/uci-session.ts) rc=1 total=2363 passed=2361 failed=2 skipped=0 wall=9.7s
+  RED uci-session.test.ts :: ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A7 — the ceiling: no go hands the search more than 59 500 ms go -> 22000; the engine's deadline is start + 22000 <= start + 60 000
+  RED uci-session.test.ts :: ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A7 — the ceiling: no go hands the search more than 59 500 ms go infinite -> 22000; the engine's deadline is start + 22000 <= start + 60 000

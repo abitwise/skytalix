@@ -1,0 +1,2 @@
+BLUNDERCM (src/uci-session.ts) rc=1 total=2363 passed=2362 failed=1 skipped=0 wall=10.1s
+  RED uci-session.test.ts :: ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A1 — offered, off by default Skill Level is not read in the mode: at 1 and at 7, go movetime 45000 is 45 000 and random is called 0 times

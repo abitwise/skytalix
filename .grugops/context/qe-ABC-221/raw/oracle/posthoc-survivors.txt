@@ -1,0 +1,12 @@
+== POST-HOC oracle vs HSCM
+O1 FAIL lines: 1386
+FAIL O1 L1 white 'go wtime 800 btime 800 winc 2000 binc 0' budget 1890 want 1
+FAIL O1 L1 white 'go wtime 800 btime 800 winc 2000 binc 0 movestogo 1' budget 1700 want 1
+FAIL O1 L1 white 'go wtime 800 btime 800 winc 2000 binc 0 movestogo 10' budget 1880 want 1
+ORACLE 78717 checks, 1386 FAIL
+== POST-HOC oracle vs CLOCKWINSCM
+O1 FAIL lines: 112
+FAIL O1 L1 white 'go wtime 900000 btime 900000 movestogo 40 movetime 300' budget 22375 want 300
+FAIL O1 L1 white 'go movetime 300 wtime 1000 btime 1000' budget 1 want 300
+FAIL O1 L1 white 'go wtime 900000 btime 900000 movestogo 40 movetime 5000' budget 22375 want 5000
+ORACLE 78717 checks, 112 FAIL

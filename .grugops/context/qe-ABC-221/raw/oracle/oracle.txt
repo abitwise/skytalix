@@ -1,0 +1,4 @@
+clamp B 32000, H 60000; 351 go lines x 7 skills x 2 sides per mode
+go records compared base vs head (unset, level, simple-tournament): 14742; uci-clock-mode go records vs oracle: 4914
+largest finite budget handed at head: level/unset 30000, simple-tournament 22000, uci-clock-mode 59500
+ORACLE 78717 checks, 0 FAIL
