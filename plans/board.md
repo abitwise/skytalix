@@ -1,3 +1,4 @@
+_Updated: 2026-10-31 Orchestrator (orch-2026-10-30a) — ABC-245 SE done, code review PASS → In Review (QE after the batch). **`qe-EPIC-010-m1-batch` spawned: 400-game R pair, width 1, STRICTLY ALONE, ~18.5 h + ~1 h QE** (owner …c2752305). Beside it, records only: `bapm-ABC-221-fold`, `secnfr-hostname`. Width 3/3._
 _Updated: 2026-10-31 Orchestrator (orch-2026-10-30a) — `arch-ABC-221-records` merged (ADR-0052 D8 spawn ruling, D4 17 205 ms; ADR-0054 −1020). `secnfr-hostname` claimed (catalog oeselg-devl → oeselg-dev). Running: `se-ABC-245`, `bapm-ABC-221-fold`, `secnfr-hostname`. Width 3/3._
 _Updated: 2026-10-31 Orchestrator (orch-2026-10-30a, …c2752305) — OWNER: hostname = `oeselg-dev` (catalog fix → Security/NFR records hop); 17:43 kill was probably his (qe-ABC-229 interruption closed); **EPIC-010 milestone-1 batch: schedule now** → `qe-EPIC-010-m1-batch` queued, starts STRICTLY ALONE when `se-ABC-245` hands back (~18.5 h + ~1 h QE). ABC-245 QE and ABC-223 games wait for the batch. Orphan PID 259277 reaped by the owner._
 _Updated: 2026-10-31 Orchestrator (orch-2026-10-30a) — ABC-221 DONE (qe-ABC-221 PASS_WITH_GAPS signs UAT; secnfr PASS; merged af32f82c/9395d8dc, not pushed; HARD_CEILING_MS 60 000). G8 9.84 s inadmissible (base also +0.41 s: orphaned python from secnfr hop held a core) → re-read at ABC-245 QE. ABC-245 pulled → `se-ABC-245`; records: `bapm-ABC-221-fold` (Test note 4 folds, A6, QE-221-a route, ABC-223 re-score), `arch-ABC-221-records` (D4 figure, D8 spawn line, ADR-0054 probe value, QE-221-b). Width 3/3._
@@ -1264,8 +1265,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-245] A blunder row reads a third occurrence more than 50 plies back, so a lowered prior-keys cap turns red (QE-242-b) (size: XS, priority: P3, test-only; DoR 10/10 2026-10-31 (bapm-ABC-245-rescore, on ADR-0046 § Ruling 2026-10-31: step 10 per level call); cut by `bapm-ABC-242-close`; → Ready; pull after ABC-221 (host-alone timing); **pulled 2026-10-31** → `se-ABC-245`)
+## In Development (WIP 0/3)
 
 
 
@@ -1293,7 +1293,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-245] A blunder row reads a third occurrence more than 50 plies back, so a lowered prior-keys cap turns red (QE-242-b) (size: XS, priority: P3, test-only; DoR 10/10 2026-10-31 (bapm-ABC-245-rescore, on ADR-0046 § Ruling 2026-10-31: step 10 per level call); cut by `bapm-ABC-242-close`; → Ready; pull after ABC-221 (host-alone timing); **pulled 2026-10-31** → `se-ABC-245`; SE done 7c1721ce (test 7e81732e, levels.test.ts +60 −1; cap 8/50 red, 100 green; 2 364 tests); code review PASS → In Review; QE waits for the milestone-1 batch (ALONE))
 
 
 
