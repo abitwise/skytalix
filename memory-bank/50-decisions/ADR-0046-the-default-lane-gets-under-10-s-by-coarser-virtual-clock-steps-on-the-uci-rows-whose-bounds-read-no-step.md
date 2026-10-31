@@ -20,6 +20,11 @@ No owner word was owed. Tranche 1 is `ABC-244`, merged at `24b22339` (`G8` head 
 it "needs BA/PM's word", this line wins. The ruling on `QE-242-a` (how condition 2 reads a blunder) is the dated
 section at the end of the addendum.
 
+**Spelling 2026-10-31 (`arch-hostname-adrs`, records only).** The reference machine is spelled `oeselg-dev`, on the
+owner's word *"hostname spelling: oeselg-dev"* (`orch-2026-10-30a` `…c2752305`). One place is corrected: the addendum's
+§ Context bullet on how the lane grew back after `ABC-177`. It said `oeselg-devl`. The host is the same, and no
+figure, rule or decision moves.
+
 **proposed**, 2026-10-20, by Architect/Design (task `arch-lane-under-10s`). This ADR is the remedy that `R-174-1`
 option (a) asked for. The owner accepted (a) at `…bdff4d33`.
 
@@ -217,7 +222,7 @@ was run or timed at this hop.
   The same lane inputs (`fbab54ff` and `b92a3394`, with an empty `git diff` over `src tools package.json
   package-lock.json vitest.config.ts tsconfig.json`) read 9.73 s at `ABC-220`'s `G8` and 9.90 s about 90 minutes
   later. That is +0.17 s of drift between windows with no code change.
-- **How the lane grew back after `ABC-177`** (head medians on `oeselg-devl`, from QE records):
+- **How the lane grew back after `ABC-177`** (head medians on `oeselg-dev`, from QE records):
   `ABC-228` (i) 9.37 s, `ABC-228` (ii) 9.61 s (+0.70 s on its base), `ABC-241` 9.63 s, `ABC-220` 9.73 s,
   `ABC-229` 9.90 s.
 - **Why a virtual clock is not free** (`ADR-0027`; `src/engine.ts` `NODES_PER_CLOCK_CHECK` = 1 024). The engine
