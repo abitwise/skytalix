@@ -1,0 +1,29 @@
+# `qe-ABC-245` artifacts (committed on `grugops/qe-ABC-245` under `.grugops/context/qe-ABC-245/raw/`)
+
+- `PREREG.txt`: the pre-registration, commit `d16c7505`, before any run.
+- `qe-scripts/`:
+  - `setup.sh`: the scratch trees H, B and `levels-4387d4e8.ts`.
+  - `plant.mjs`: none, Q6, Q8, QB, Q97, Q98 on the whole lane plus X1–X4.
+  - `fixture.mjs`: the independent K+Q v K fixture check.
+  - `qe245-census.test.ts`: the R1 re-read, scratch only.
+  - `g8.mjs`: qe-ABC-242's script plus Tctl after each run and a top-CPU snapshot.
+  - Copied unchanged from qe-ABC-242: `host.mjs`, `clear.mjs`, `waitpid.mjs`, `qe-extra.test.ts` and `seal.mjs`.
+  - `names.mjs`: the tree regex, with the post-PREREG fix.
+- `fixture/fixture.txt`: 17 checks, 0 FAIL.
+- `plants/`:
+  - `plant-*.red.txt` and `plants-summary-*.txt`;
+  - `abc245-row-messages.txt`, the row's failure message per plant;
+  - `json-sha256.txt`, the json reporter outputs, which stayed in scratch and were deleted with it;
+  - `clear.log`.
+- `census/census.txt`: steps 10 and 1.
+- `gates/`:
+  - `setup.txt`, `diff.txt`;
+  - `lint.txt`, `typecheck.txt`, `build.txt`, `skip-integrity.txt`;
+  - `header-line.txt`, `tree-integrity.txt`.
+- `g8/`:
+  - `g8.log`, `g8-wait.log`, `stdout.txt`, `pre-g8-top.txt`;
+  - `g8-{1..6}-{base,head}.txt`, the full `npm test` outputs;
+  - `g8-perfile.txt`, `counts.txt`, `names.txt`;
+  - `last-run-sha256.txt`, the last-run.json files, which stayed in scratch.
+- `notes/`: the note bodies and `spec.json`.
+- Scratch `qe-245/` (H, B, P, the json outputs) was removed at the end of the hop.

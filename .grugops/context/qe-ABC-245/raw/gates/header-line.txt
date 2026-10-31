@@ -1,0 +1,1 @@
+ * - DEFAULT (`npm test`, 46 tests): `A1`, `A6`, `A7`, `A8`, `A9`, `A10`, `A4`'s byte-identity row

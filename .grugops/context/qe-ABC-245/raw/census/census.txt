@@ -1,0 +1,14 @@
+
+ RUN  v4.1.12 /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-245/P
+
+stdout | src/qe245-census.test.ts > qe-ABC-245 census > reads the handed child budgets at step 10
+QE245-CENSUS {"step":10,"legal":8,"children":7,"budgets":[2.5,-25,-52.5,-80,-95,-122.5,-150],"depths":[1,1,1,1,1,1,1],"repeat":0,"played":"d7c8","elapsedVirtualMs":290,"clockReadsTotal":30,"budgetIntervalsPerLevelCall":10}
+QE245-CENSUS {"step":1,"legal":8,"children":7,"budgets":[11.5,9,9.5,9,22,9.5,9],"depths":[5,4,5,4,5,4,4],"repeat":0,"played":"d7c6","elapsedVirtualMs":103,"clockReadsTotal":104,"budgetIntervalsPerLevelCall":100}
+
+ ✓ src/qe245-census.test.ts > qe-ABC-245 census > reads the handed child budgets at step 10 126ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  06:44:00
+   Duration  278ms (transform 0ms, setup 0ms, import 66ms, tests 127ms, environment 0ms)
+

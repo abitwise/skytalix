@@ -1,0 +1,13 @@
+<!-- GENERATED — do not hand-edit. Re-run: node scripts/context-io.js render <task> -->
+# Context: qe-ABC-245
+
+## Current state
+
+| at | kind | by | confidence | verified_by | note |
+| --- | --- | --- | --- | --- | --- |
+| 2026-10-31T06:49:50Z | decision | qe-e2e | high: A1-A5, plants, fixture and G8 run in this hop as pre-registered (PREREG d16c7505) |  | # QE on `ABC-245` at `7e81732e` (base `9c008db4`): **PASS.** A1–A5 MET, plants as pre-registered (the new row is red under cap 8, cap 50 and base `levels.ts`, and green at 100), fixture 0 FAIL. `G8` H 9.82 s / B 9.44 s ≤ 10 s; tranche 2 fires on the raw head median (reported). UAT waived (0 production lines); this verdict is the QE sign-off |
+| 2026-10-31T06:49:50Z | observation | qe-e2e | high: independent K+Q v K generator and position identity, cross-checked with the project at every ply; census by a recording mock |  | # `ABC-245` fixture and R1 census, re-derived independently: a legal game with no capture and no pawn move. Offsets are [−98, −94], child clock 98 < 100, 98 keys handed (≤ 101), and the project reads the child as a claimable threefold. The census equals the SE's line. 0 FAIL |
+| 2026-10-31T06:49:50Z | observation | qe-e2e | high: 6 plants, whole default lane each (2 364 rows + X1-X4), on a scratch tree; all as pre-registered |  | # `ABC-245` plants on the whole default lane at head `7e81732e`: the new row is red under cap 8 and cap 50 and is the only change of verdict versus `qe-ABC-242`. It is green at cap 100 and red under base's `levels.ts`. All 6 plants ran as pre-registered |
+| 2026-10-31T06:49:50Z | observation | qe-e2e | high: files listed are committed on grugops/qe-ABC-245 (an observation, not an artifact-ref: no §14-gate run to bind) |  | # `qe-ABC-245` artifacts (committed on `grugops/qe-ABC-245` under `.grugops/context/qe-ABC-245/raw/`) |
+| 2026-10-31T06:49:50Z | observation | qe-e2e | high for gates, names and G8 as measured (ALONE, wait-clear by PID, admissible); the H-B delta is attributed to noise by per-file medians at n = 3 |  | # `ABC-245` gates, names and `G8` at head `7e81732e` (base `9c008db4`): A4 and A5 MET. `G8` H **9.82 s** (B **9.44 s**), admissible. `NFR-008` ≤ 10 s MET, and `ABC-244`'s tranche-2 trigger (> 9.6 s) **FIRES on the raw head median**. The +0.38 s delta is host noise in byte-identical files, not the row. B 9.44 s is the clean re-read of `ABC-221`'s tree |
+| 2026-10-31T06:49:50Z | observation | qe-e2e | high on what was run; none blocking |  | # `ABC-245` QE findings: one LOW (`G8` head 9.82 s fires tranche 2 on a noise-dominated median; 0.18 s of `NFR-008` headroom) and three INFO. None is a build fault. QE-242-b is closed |

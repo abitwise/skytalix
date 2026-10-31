@@ -1,4 +1,4 @@
-// qe-ABC-245 (copied from qe-ABC-242 names.mjs, tree regex qe-242 -> qe-245): per-file counts and sorted full names from two last-run.json files (B vs H); prints the set difference.
+// qe-ABC-245 (copied from qe-ABC-242 names.mjs, tree regex qe-242 -> qe-245): per-file counts and sorted full names from two last-run.json files (B vs H); prints the set difference. Post-PREREG harness fix: the first copy missed the escaped slash, so the regex still read qe-242 (no expectation changed).
 // usage: node names.mjs <base last-run.json> <head last-run.json>
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
@@ -7,7 +7,7 @@ const load = (p) => {
   const per = {}, all = [];
   let pending = 0;
   for (const f of j.testResults) {
-    const name = f.name.replace(/^.*\/qe-242\/[BH]\//, "");
+    const name = f.name.replace(/^.*\/qe-245\/[BH]\//, "");
     per[name] = f.assertionResults.length;
     for (const a of f.assertionResults) { all.push(`${name} > ${a.fullName}`); if (a.status !== "passed") pending += a.status === "failed" ? 0 : 1; }
   }
