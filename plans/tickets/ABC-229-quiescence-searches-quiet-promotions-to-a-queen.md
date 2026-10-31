@@ -1,14 +1,44 @@
 ---
 id: ABC-229
 title: "Quiescence searches quiet promotions to a queen, bounded, behind an off-door"
-status: ready
-column: Ready
+status: done
+column: Done
+closed: "2026-10-30, merged to main at 5953c631; QE PASS_WITH_GAPS (qe-ABC-229, 2afef8bf), which signs UAT"
 size: S
 priority: P2
 epic: EPIC-010
 ---
 
 # ABC-229: quiet promotions in quiescence
+
+> **CLOSED 2026-10-31, Done, folded by BA/PM** (task `bapm-tranche2-ruling`, records only, at `main` `209f4c5f`;
+> nothing run, built or timed). QE's verdict is **PASS_WITH_GAPS** at candidate `e196a281` (code `f6ff1c4a`), base
+> `b92a3394` (`qe-ABC-229` `…2afef8bf`, by PREREG `…8ecd4ea6`, sealed before any timed read). It was merged at
+> **`5953c631`** on 2026-10-30. **The QE verdict signs UAT** (Test note 2; the owner delegation of 2026-10-22).
+>
+> - **A1–A5 MET** (QE's table in `…2afef8bf`):
+>   - A2 `Q-SET` 55 / 55 (`qe-ABC-229-qset` `…fd9819a5`);
+>   - A1 door identity 0 of 114 differ;
+>   - A3 1.019× / 1.000× against ≤ 1.2×;
+>   - A4: lint, typecheck, build and `npm test` 2 322 / 2 322, 16 / 16 deep lanes, `G1` 54 / 58, `G5` max 4 001 ms,
+>     `G9` identical, `G8` H 9.90 s (B 9.90 s), `G6` 8 = 8 and 10 = 10 at 4 000 ms;
+>   - A5: S-1..S-4 MET, with D 2/3/5 = 4.5 / 10 and R 9/1/0 = 9.0 / 10 at 4 000 ms, recorded and not pooled
+>     (`…cfb537cf`). The smoke-ledger row is folded on `EPIC-010` (`bapm-rpair-level6-cut`).
+> - **`EPIC-010` M3's quiet-promotion row reads met at merge:** every `Q-SET` quiet-promotion row reflects the promotion.
+>   M3 itself is read on `main` at the epic's close.
+> - **The gaps, dispositioned:**
+>   - **QE-229-a (MEDIUM, `G8` headroom 0.10 s): answered.** It was cut as `ABC-244` (tranche 1, merged `24b22339`,
+>     `G8` head 9.25 s). The lane has since grown back, and tranche 2 is open as `ABC-248` (`ADR-0046` § Addendum
+>     2026-10-31 and its § BA/PM ruling).
+>   - **QE-229-b (LOW, host/method): recorded, no ticket.** The readings stand under the PREREG (no thermal stop; clock
+>     fall ≤ 0.82 %). The wait-clear gates only the start of a run, so a long run's ALONE rests on the Orchestrator's
+>     dispatch, as it already does ("STRICTLY ALONE" on the board). Whether QE should also poll for foreign load during
+>     a run is a method question for QE's next PREREG. It is not owed here.
+>   - **QE-229-c (INFO): closed.** The first R run was VOID and was re-run once, ALONE. The owner said the 17:43 kill
+>     was probably his (`orch-2026-10-30a` `…c2752305`, as the board records).
+>   - **QE-229-d (INFO, test strength): recorded, no ticket.** QE1 and QE2 are each red in the default lane, on one
+>     list-shape row. A2 asks for value rows on `Q-SET` and they pass; no criterion asks a value row to red these
+>     plants.
 
 > **Cut 2026-10-29 by BA/PM** (task `bapm-epic010-improvements`, records only, at `main` `f45aea95`). § B item 1,
 > verified by the SA (`…306a4012` row 1d). **Waits in Backlog on:** the ADR shared with `ABC-228`, the owner's Q4, and

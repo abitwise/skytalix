@@ -81,8 +81,14 @@ The figures are `ADR-0052` D2 and D4: `C = max(1, min((t − 1 000 − m × 100)
   under +0.01 s (`ABC-221`'s 30 new rows cost 39 ms in-thread; `se-ABC-221` `…af63269c`), `UNKNOWN - verify` until
   `G8` reads it.
   - `ABC-221`'s `G8` 9.84 s is inadmissible as a trigger (the Orchestrator's ruling, `9c008db4`); the clean re-read is
-    at `ABC-245`'s QE hop. If this ticket's own `G8` head median reads > 9.6 s on a clean host, `ABC-244`'s tranche-2
-    trigger fires.
+    at `ABC-245`'s QE hop. ~~If this ticket's own `G8` head median reads > 9.6 s on a clean host, `ABC-244`'s tranche-2
+    trigger fires.~~
+    *(2026-10-31, `bapm-tranche2-ruling`: **that trigger is spent.** It fired on `qe-ABC-245`'s head median of 9.82 s
+    (`…af467c7b`). Tranche 2 is open (`ADR-0046` § Addendum 2026-10-31) and is cut as `ABC-248`, pulled after this
+    ticket. No tranche 3 is defined, so a head median above 9.6 s here re-opens nothing. This ticket's `G8` is graded
+    on `NFR-008` ≤ 10 s alone (A5), and a reading above 10 s goes to the owner (`ADR-0035` D6). The 9.7 s owner line
+    and W1 start at `ABC-248`'s gate, not here. QE reports this ticket's head median, which becomes part of
+    `ABC-248`'s base.)*
 - **`NFR-004` / `NFR-009` / `AR-UCI-BUSY`:** no production line changes, so none moves.
 - **Security (ASVS L1):** no input path.
 
@@ -106,6 +112,9 @@ The figures are `ADR-0052` D2 and D4: `C = max(1, min((t − 1 000 − m × 100)
 - `ABC-221` merged (met, `af32f82c`): the mode and its block are on `main`.
 - No open ticket edits `src/uci-session.test.ts` or `src/engine.test.ts`. `ABC-245` (In Development) edits
   `src/levels.test.ts` only. No design wait and no owner question.
+  *(2026-10-31, `bapm-tranche2-ruling`: `ABC-245` is Done (`2cce84e0`). `ABC-248` (tranche 2, S, P1, Backlog
+  recommended Ready) also edits `src/uci-session.test.ts`, in `ABC-167`'s A4 and A5 blocks, not in `ABC-221`'s. It is
+  ordered **after** this ticket, so this ticket's two rows are in its base. This ticket's scope does not change.)*
 
 ## Definition of Ready (scored 2026-10-31, `bapm-ABC-221-fold`)
 
@@ -116,7 +125,7 @@ The figures are `ADR-0052` D2 and D4: `C = max(1, min((t − 1 000 − m × 100)
 | 3 | INVEST | ✅ XS; independent of `ABC-223` and `ABC-245`; testable |
 | 4 | testable, measurable acceptance | ✅ exact budgets 1 900 and 5 000; each plant red; comment-only diff; gates; `G8` ≤ 10 s |
 | 5 | dependencies known | ✅ `ABC-221` merged; no shared file in flight |
-| 6 | NFR triggers with targets | ✅ `NFR-008` ≤ 10 s (0 real-engine rows); the 9.6 s tranche-2 line on a clean host |
+| 6 | NFR triggers with targets | ✅ `NFR-008` ≤ 10 s (0 real-engine rows); ~~the 9.6 s tranche-2 line on a clean host~~ *(2026-10-31, `bapm-tranche2-ruling`: spent at `qe-ABC-245`; graded on 10 s alone, see § NFR triggers)* |
 | 7 | test notes | ✅ 3 |
 | 8 | size | ✅ XS |
 | 9 | priority | ✅ P3 |
