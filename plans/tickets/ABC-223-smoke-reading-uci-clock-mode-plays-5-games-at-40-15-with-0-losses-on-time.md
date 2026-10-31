@@ -1,8 +1,8 @@
 ---
 id: ABC-223
 title: "Smoke reading: `uci-clock-mode` plays 5 games at 40/15 over UCI with 0 losses on time, closest call ≥ 500 ms and ≥ 75 % clock use"
-status: backlog
-column: Backlog
+status: ready
+column: Ready
 size: S
 priority: P3
 epic: EPIC-009
@@ -10,6 +10,29 @@ owner: QE/E2E
 ---
 
 # ABC-223: smoke reading of `uci-clock-mode` at 40/15: `EPIC-009` M1, M2 and the 60 s ceiling, in 5 games
+
+> **RE-SCORED 2026-10-31 by BA/PM** (task `bapm-ABC-221-fold`, records only, at `main` `9c008db4`; nothing run). **The
+> wait is met: `ABC-221` merged** at `af32f82c` (code `c48a6f83`) and `9395d8dc`, on QE PASS_WITH_GAPS (`qe-ABC-221`
+> `…861e737d`) and Security/NFR PASS (`secnfr-ABC-221` `…ef060512`). **DoR 9/10 → 10/10, Ready.** The board move and
+> the order are the Orchestrator's. What the merge sets here:
+>
+> - **The build (A1).** "`ABC-221`'s merge sha" is **`af32f82c`**, the merge that carries the code. `git diff c48a6f83
+>   9c008db4 -- src data tools` is empty. *BA/PM's reading:* a later `main` sha is the same build for this reading
+>   only if `git diff af32f82c <sha> -- src data` lists `*.test.ts` files and nothing else (for example `ABC-245`'s or
+>   `ABC-246`'s test-only merges). PREREG names the one sha it plays.
+> - **A6's budget is derived.** Read from the code at `9c008db4`: no engine line names the budget (the `info string`
+>   lines are `book`, the refusals and the level notice). So the 2026-10-31 fallback below applies: PREREG derives each
+>   budget from its `go` line by `ADR-0052` D4 (`min(59 500, C)`; `min(x, 59 500)` for `movetime`). That `UNKNOWN` is
+>   closed.
+> - **What `ABC-221` read that this reading confirms in play:** on the virtual clock 1 069 ms are left on every move of
+>   a period (A2–A4), and on the real clock the longest search walled 59 500.8 ms at a 59 500 budget (A10). At 40/15
+>   with `movestogo` the share stays near 22.4 s, so A5 is not expected to reach the cap. A3's closest call (≥ 500 ms)
+>   is still the row to watch: the margin is about 1 s.
+> - **Host.** QE-221-c showed an orphan process from another hop can hold a core through an ALONE window. A7's ALONE
+>   check includes no foreign process at 100 % of a core before game 1. This reading must not overlap `ABC-245`'s or
+>   `ABC-246`'s `G8`; the order is the Orchestrator's.
+> - **Nothing else moves.** 5 games plus the coverage extension (the "play all 10" rule did not fire), the bounds in
+>   A3–A5, size S, P3.
 
 > **DATED 2026-10-31 by BA/PM** (task `bapm-ABC-222-epic009-m1`, records only, at `main` `4bd9ac6a`). **`ABC-222` is
 > Done** (QE PASS `qe-ABC-222` `…cc542c76`, merged `ae7211c3`), and milestone 1 meets M1–M4 (`EPIC-009`). What that
@@ -121,7 +144,7 @@ per 80 moves, so ≤ 60 min a game.
 
 ## Dependencies
 
-- `ABC-221` merged. `ABC-204`'s host tool pins. The openings file at its pinned sha. An idle board.
+- `ABC-221` merged *(met 2026-10-31, `af32f82c`)*. `ABC-204`'s host tool pins. The openings file at its pinned sha. An idle board.
 - `ABC-222` read first is useful (its per-move overhead), but it is not required.
 
 ## Definition of Ready
@@ -137,6 +160,7 @@ per 80 moves, so ≤ 60 min a game.
 | 7 | test notes | ✅ 2 |
 | 8 | size | ✅ S |
 | 9 | priority | ✅ P3 |
-| 10 | no major unresolved blocker | ❌ nothing to read until `ABC-221` merges |
+| 10 | no major unresolved blocker | ✅ `ABC-221` merged at `af32f82c` (2026-10-31). *(Was ❌: nothing to read until `ABC-221` merges.)* |
 
-**DoR 9/10. Backlog** until `ABC-221` merges.
+**DoR 10/10 (re-scored 2026-10-31, `bapm-ABC-221-fold`). Ready.** It runs ALONE, ≤ ~5 h. *(Was: "DoR 9/10. Backlog
+until `ABC-221` merges.")*
