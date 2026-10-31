@@ -1,0 +1,106 @@
+qe-ABC-221 PRE-REGISTRATION (committed before any head run; nothing below moves after a reading)
+Ticket ABC-221 (M, P3, milestone 2): TimeMode uci-clock-mode over UCI; HARD_CEILING_MS 32 000 -> 60 000.
+Source: the ticket page A1-A12, NFR triggers, Test notes 1-5; ADR-0052 (ACCEPTED) D1-D9; ADR-0045 § AMENDMENT A3;
+ADR-0044 D5; ADR-0046 § Addendum R1-R4 and § Ruling 2026-10-31; se-ABC-221 notes (ac6abd6a, 563fc63b, af63269c, 7896971d);
+qe-ABC-220 notes (A14a/A14b split, QM4).
+Base d58f2d77. Head c48a6f83 (code); branch tip fb3696fa = SE notes only (src tree 56dcfe03 equal at both).
+Trees (scratch, out of the repository, session scratchpad qe-221/): B = git archive d58f2d77, H = git archive c48a6f83,
+node_modules one symlink each to the main checkout's (package.json / package-lock.json equal at B, H and main).
+diff -rq B H (read before this file): exactly src/engine.ts, src/engine.test.ts, src/levels.test.ts, src/uci-session.ts,
+src/uci-session.test.ts, src/uci.real-engine.test.ts. Plant tree P = hard-link copy of H with a REAL src/ (plant.mjs).
+WIDTH: ALONE (a records-only Security/NFR hop runs beside, no vitest). Sequential; never two vitest at once; never vitest on
+the same command line as a wait; waits by kill -0 (host.mjs / waitpid.mjs). Thermal stop: Tctl median > 85 C.
+Order: A8 fence -> gates -> oracle / census / SE-221-a (plain node) -> plants -> ENGINE_DEEP A10 -> UCI_DEEP -> A14b probe -> G8.
+
+1. A8 FENCE (qe-scripts/a8diff.mjs <repo> d58f2d77 c48a6f83). MET iff: src/levels.ts, search.ts, uci.ts, cli.ts,
+   cli-options.ts, startup-questions.ts, pgn.ts byte-identical; engine.ts non-comment change is exactly
+   `export const HARD_CEILING_MS = 32_000;` -> `= 60_000;`; LEVELS block / DEFAULT_LEVEL / EASIEST / HARDEST and the Skill
+   Level option line byte-equal. uci-session.ts non-comment changes are listed and must be only TIME_MODES' third value,
+   the two constants, and D4's rule in parseGo (the `cap`, `timeMode !== "level"`, the two `Math.min(..., cap)`).
+
+2. ORACLE (qe-scripts/oracle.mjs B H <scratch>; plain node; counting shim copies of each tree's src, chooseMove answers at
+   once and records { budgetMs, min(budgetMs, that tree's HARD_CEILING_MS), maxDepth, maxNodes }; now = 0).
+   Grid: ~400 go lines (no token, infinite, ponder, depth/nodes/mate, movetime 0..3 600 000 and -5, 1.5, a 320-digit figure,
+   malformed; symmetric and asymmetric clocks 800..3 600 000 x 5 increment shapes x movestogo none/1/10/40; movetime with a
+   clock; malformed clocks) x Skill Level 1-7 x side to move white/black, per TimeMode {unset, level, simple-tournament,
+   uci-clock-mode}.
+   P1  unset / level / simple-tournament: head == base on every go: handed budgets and limits, the effective (clamped)
+       budget, the output lines and the random draws; setup output equal.
+   O1  uci-clock-mode at head == an INDEPENDENT oracle written from D2/D4: movetime x -> min(x, 59 500); else the side to
+       move's clock -> min(59 500, C(t, own inc, movestogo or 20)); else 22 000. One call per go, 0 draws, effective
+       <= 60 000 and handed <= 59 500.
+   S1  in both modes the records are identical across Skill Level 1-7 (Skill Level not read).
+   L1  every level budget under both clamps; LEVELS and DEFAULT_LEVEL equal B/H.
+   ORACLE MET iff "ORACLE n checks, 0 FAIL".
+
+3. R1 CENSUS (qe-scripts/census.mjs H; real modules, counting virtual clock). The SE's 3 rows replayed:
+   A5 real (budget 1, step 10, ceil 1): expect depth 1, time 20. A7 real (59 500, step 5 000, ceil 12): expect time in
+   [59 500, 69 500]. A11 (30 000, step 5 000, ceil 6): expect time in [30 000, 40 000], bestmove then readyok.
+   Plus SE's raw/rf1-census.mjs re-run on B/src and H/src: expect B == H for every field except `clamp`.
+   Plus a read of the test diff: every row that reaches the real chooseMove and is added or edited by this build is one of
+   the three (search for `stub: false` and direct createUciSession in the added lines). CENSUS MET iff all hold and the
+   SE's budget/step/ceil figures match; 0 time-blind rows (so no R2 step owed).
+
+4. SE-221-a (qe-scripts/se221a.mjs, written from the ticket's words): expect W (A6 as worded) 17 205 ms after move 80 and
+   every move >= 1 000; P (+900 000 after move 40) closest 117 735 after move 40. Confirmed iff both round to those.
+
+5. PLANTS (qe-scripts/plant.mjs H P <out>; one exact string edit each, asserted to occur once; WHOLE default lane per
+   plant; vitest via node, json, heap 128; H re-checked against git archive c48a6f83 after). Frozen list and expectations:
+   none        REQUIRED 0 failed.
+   QM4         both modes read winc for either side.     REQUIRED ABC-221 A12's two Black rows AND ABC-220 A7-block A12
+                                                          (ABC-221)'s two Black rows red. Expected exactly those 4.
+   QM4CM       uci-clock-mode only.                      REQUIRED ABC-221 A12's two Black rows red. Expected exactly 2.
+   QM4ST       simple-tournament only.                   REQUIRED ABC-220 block A12 (ABC-221) two Black rows red. Exp. 2.
+   CAPSWAP     the cap swapped between modes.            REQUIRED >= 1 ABC-220 row AND >= 1 ABC-221 A7 row red. Exp. many.
+   CLAMP32     HARD_CEILING_MS back to 32 000.           REQUIRED ABC-221 A7 "the real engine on a step-5 000 clock ..."
+                                                          red. Expected also engine RF-1 pin, levels clause B, ABC-220 A8
+                                                          constants, A7 3600000/40 and movetime 90000 (6).
+   NOTOK59     no time token -> the cap (59 500).        REQUIRED ABC-221 A7 `go` and `go infinite` red. Expected 2.
+   CAP60       cap = 60 000.                             Expected A7 3600000/40 and movetime 90000 red (2); real A7 row
+                                                          survives (60 000 is inside [59 500, 69 500]).
+   CAP59       cap = 59 000.                             Expected the same 2 rows; real A7 row survives.
+   MTUNCAPCM   movetime uncapped, uci-clock-mode only.   Expected A7 movetime 90000 red (1); real row survives (clamp).
+   CLOCKWINSCM a clock beats movetime, mode only.        Expected SURVIVES (no clock-mode row sends both). A survivor here
+                                                          is a test-strength gap (D3/D4 order: movetime first).
+   NOSHARECM   C replaced by t / m, mode only.           Expected A2-A6 and A12 rows red (about 12).
+   HSCM        hard stop t - 1 100 dropped, mode only.   Expected SURVIVES: with no increment the spread never exceeds the
+                                                          hard stop (t >= 1 000), A5's movestogo 1 makes them equal, and A12
+                                                          stays under 8 900. A survivor is a test-strength gap.
+   FLOORCM     floor of 1 dropped, mode only.            Expected A5 `go wtime 800 btime 800 -> 1 ms` red (1).
+   MTG40CM     movestogo default 40, mode only.          Expected A6's two rows red (2).
+   LEVELCAPCM  the level cap applied in the mode.        Expected many (A1, A2-A7, A11, A12).
+   BLUNDERCM   the blunder path reachable in the mode.   REQUIRED ABC-221 A1 "Skill Level is not read" red. Expected 1.
+   MODEASLEVEL uci-clock-mode takes level's G path.      Expected many.
+   CLAMP59500  clamp at 59 500.                          Expected the three constant pins only (3); behaviour rows survive.
+   CLAMP45     clamp at 45 000.                          Expected the 3 pins, A7 x2 and the real A7 row (6).
+   PLANTS MET iff `none` is 0 failed AND every REQUIRED red holds. Every other red, and every survivor, is reported with a
+   severity (section 9).
+
+6. GATES at H (scratch tree): npm run lint / typecheck / build, each exit 0 (dist/ removed after; H re-compared).
+   npm test x3 at H = G8's three head runs: each rc 0, 2 363 passed, 0 failed, 0 skipped (base 2 333).
+   node tools/grugops/test-skip-integrity.js .grugops/test-skips.md --skip-count 0 -> "No findings."
+   node tools/grugops/lane-inventory.js -> no findings.
+   names.mjs on a B/H pair of last-run.json: net +30; only-at-base = the removed ABC-220 A1 "uci-clock-mode is not offered"
+   row plus old titles of retitled rows (ABC-220 A8 constants, levels clause B, ABC-220 A10 `uci-clock-mode` value rows);
+   only-at-head = ABC-221 rows plus their new titles. Anything else is a finding. A7 MET iff all hold.
+
+7. DEEP LANES (ALONE, once each, wait-clear before; never during G8):
+   ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 node_modules/.bin/vitest run src/uci-session.test.ts -t "ABC-221 A10"
+     --silent=false --reporter=verbose. A10 MET iff pass and each of 3: wall <= 60 000 ms, time >= 59 500, arrayBuffers
+     <= 16 MiB, heapUsed and arrayBuffers growth <= 1 MiB; max depth logged (>= 100 -> Architect).
+   UCI_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 node_modules/.bin/vitest run src/uci.real-engine.test.ts --reporter=verbose.
+     A11 row 2 MET iff the 4 ABC-221 A11 rows pass; the ABC-220 A14 rows (now the three-value line) pass too; expect 13/13.
+
+8. A14b PROBE (A11 row 3; probe/a14b-probe.mjs = qe-ABC-220's with the one setoption value changed; plain node, run ONCE
+   against the worktree (src tree 56dcfe03), wait-clear first). MET iff R1 <= 100 ms, R2 busy, R3 one readyok per isready
+   with the busy one straight after bestmove, no misses, exit 0. QE adds one reading: stdout carries no `info string` line
+   (the setoption was accepted; at a refusal the level-5 cap would hand the same 2 000 ms and hide it). One run counts.
+
+9. G8 (qe-scripts/g8.mjs H B <out>; b h h b b h, wait-clear by PID before each run). Report medians of 3.
+   Admissible: rc 0 and load1 <= 8 before and after every run. Head median > 9.6 s: ABC-244 tranche 2 fires (report only).
+   Head median > 10 s: A9 NOT MET, STOP. Reference: 9.41 s at ABC-242.
+
+10. VERDICT. FAIL if any A row NOT MET, any REQUIRED plant red missing, the oracle has a FAIL, a gate is red, or G8 head
+   > 10 s. PASS_WITH_GAPS if all met but a survivor or a records gap stands (each with a severity: a survivor whose
+   behaviour no ticket row pins = LOW; records-only drift = INFO; anything that could lose on time or change a level = HIGH).
+   PASS if none.
