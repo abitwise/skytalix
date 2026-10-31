@@ -1,0 +1,17 @@
+{
+  "refs": ["secnfr-ABC-221", "ABC-221", "EPIC-009", "ADR-0052", "ADR-0044", "ADR-0045", "ADR-0036", "NFR-004", "NFR-008",
+           "NFR-009", "NFR-010", "NFR-011", "AR-NFR004-A", "AR-UCI-BUSY", "SEC-221-a", "SEC-221-b", "SE-221-b",
+           "SEC-220-b", "orch-2026-10-29g/20261029T221000Z-orchestrator-decision-a67f71ac",
+           "orch-2026-10-29g/20261030T041740Z-orchestrator-decision-3dd61448",
+           "se-ABC-221/20261031T053932Z-software-engineer-decision-ac6abd6a",
+           "se-ABC-221/20261031T053932Z-software-engineer-observation-563fc63b",
+           "se-ABC-221/20261031T053932Z-software-engineer-observation-af63269c",
+           "se-ABC-221/20261031T053932Z-software-engineer-observation-7896971d",
+           "secnfr-ABC-220/20261030T161256Z-security-nfr-decision-87a74b89",
+           "c48a6f83", "d58f2d77", "fb3696fa", "787820c3", "plans/nfr-catalog.md", "src/uci-session.ts", "src/engine.ts",
+           "src/uci-session.test.ts"],
+  "notes": [
+    { "kind": "decision", "confidence": "high: records-only gate read from code c48a6f83 (git show/diff) and the SE's sealed readings; nothing run; real-clock lines pending QE's re-run (UNKNOWN - verify); ADR-0036 clause (b) read, not run", "bodyFile": "note-decision.md" },
+    { "kind": "observation", "confidence": "high for the read facts; figures copied from se-ABC-221 notes, none re-measured", "bodyFile": "note-observation.md" }
+  ]
+}
