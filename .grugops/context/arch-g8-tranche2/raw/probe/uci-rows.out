@@ -1,0 +1,37 @@
+  85.4  ABC-241 A4, A5 — UCI: the prior keys are repetition keys | A5: the CLI level seam's injected list equals UCI's, key for key, and both play d8e8
+  85.3  ABC-167 A5 — the D4 time rule, read from the info line's time | white reads wtime: go wtime 1000 btime 9000 -> 50 ms (within 2 x 1 ms)
+  77.5  ABC-167 A4 — bad input holds no position | A4-a2: an echoed control character in a go value is dropped from the info string
+  74.1  ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A13 — busy isready (ADR-0052 D7), default lane | isready that arrives mid-search is answered once, after the bestmove, in order
+  73.0  ABC-167 A5 — the D4 time rule, read from the info line's time | black reads btime: go wtime 1000 btime 9000 -> 450 ms (within 2 x 10 ms)
+  67.5  ABC-171 A7 — the blunder path | two sessions on the same seededRandom(k) write the same bestmove sequence
+  66.1  ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12) | at the default, a bare go takes the chooseMove path: score, and time within 4 000 ms
+  66.0  ABC-167 A7 — the D12 limits | go depth 3 reports depth 3 on a clock where an unlimited go reaches depth >= 5
+  65.4  ABC-167 A5 — the D4 time rule, read from the info line's time | a bare go: go -> 4000 ms (within 2 x 100 ms)
+  64.4  ABC-171 A2 — setoption | setoption name Hash value 64 writes nothing and changes nothing
+  64.3  ABC-167 A7 — the D12 limits | A7-f3: go movetime 1e2 and movestogo 0 are dropped with one info string
+  64.2  ABC-167 A6 — infinite waits for stop | A6-d1: go ponder holds at the capped ceiling; ponderhit releases once
+  64.0  ABC-167 A7 — the D12 limits | ABC-197 R2: go depth 0 on step 100 searches G = 4 000, time in [4 000, 4 200]
+  63.2  ABC-167 A7 — the D12 limits | A7-f2: go movetime with no value searches as a bare go
+  57.9  ABC-167 A7 — the D12 limits | go movetime 1000 searchmoves e2e4 -> one info string, all moves searched
+  56.6  ABC-167 A5 — the D4 time rule, read from the info line's time | G = 3 500, under the default level 5's 4 000: go wtime 60000 btime 60000 winc 1000 binc 1000 -> 3500 ms (within 2 x 100 ms)
+  54.0  ABC-171 A6 — a level change is observable (EPIC-007 M7) | level 5: go wtime 60000 btime 60000 winc 1000 binc 1000 -> 3500 ms (within 2 x 100 ms)
+  45.0  ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path | setoption name Skill Level value 7 sets 7: a bare go searches 30 000 ms
+  38.8  ABC-167 A7 — the D12 limits | go nodes 20000 -> nodes <= 21 024, unless depth 1 alone took more
+  35.5  ABC-167 A6 — infinite waits for stop | A6-e2: position startpos writes the held bestmove first, in the position it searched
+  31.5  ABC-167 A6 — infinite waits for stop | A6-e3: ucinewgame writes the held bestmove first, in the position it searched
+  29.4  ABC-167 A5 — the D4 time rule, read from the info line's time | A5-b3: position startpos, go wtime 1000 btime 1000 movestogo 5 -> 200 ms (within 2 x 10 ms)
+  29.3  ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A6 — the hard ceiling: no go hands the search more than 22 000 ms | the real engine on a step-1 000 clock: a bare go reports time in [22 000, 22 000 + 2 x 1 000]
+  25.6  ABC-167 A3 — a move from a position | writes one info line then one bestmove, the same legal move
+  17.3  ABC-167 A11 — capability-free, and M4 | every line written in every row starts with an M4 prefix
+  15.5  ABC-167 A5 — the D4 time rule, read from the info line's time | movetime 100: go movetime 100 -> 100 ms (within 2 x 10 ms)
+  14.0  ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) > A7 — the ceiling: no go hands the search more than 59 500 ms | the real engine on a step-5 000 clock: go movetime 90000 reports time in [59 500, 59 500 + 2 x 5 000], past the old 32 000 clamp
+  13.5  ABC-167 A3 — a move from a position | A3-h1: nps = round(N x 1000 / max(1, T))
+  12.6  ABC-171 A8 — no reseed, and one draw per blunder-level search | every blunder level's searched go draws exactly one seed (a book hit draws 0: A13b)
+  11.1  ABC-167 A9 — ignored and reset | A9-h1: a new session with no position line starts at the start position
+  10.9  ABC-171 A7 — the blunder path | go depth 3 at level 1: one info string naming the dropped limit, then a bestmove
+  10.4  ABC-171 A4 — OwnBook off | OwnBook false before isready/go: a search, no book line, read called 0 times
+   9.9  ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12) | at skill 4, go depth 3: one info string naming depth, a level line with no score, bestmove
+   9.8  ABC-167 A9 — ignored and reset | ucinewgame sets the position back to the start
+   9.6  ABC-171 A2 — setoption | OwnBook value maybe: one info string, the old value (false) kept
+   8.1  ABC-242 A4 — Skill Level 1: the CLI seam, UCI and a direct createLevel call agree | A4: the same move from all three; UCI's nodes and depth are the direct call's, whose list carries the 0
+total 1711.9 ms, rows 232, rows>=8ms 36
