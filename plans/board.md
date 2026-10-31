@@ -1,3 +1,4 @@
+_Updated: 2026-10-31 Orchestrator (orch-2026-10-30a) — ABC-242 SE done (no STOP), code review PASS → In Review; `qe-ABC-242` spawned ALONE (G8 + deep lanes; UAT owed, QE verdict signs). Width 1/3._
 _Updated: 2026-10-31 Orchestrator (orch-2026-10-30a) — ABC-243 DONE (qe-ABC-243 PASS; G8 H 9.28 s / B 9.23 s, tranche 2 not fired; merged 3628fe99, not pushed). ABC-242 pulled → `se-ABC-242` (S, P3, S2 no smoke; R1–R4 lane form). Next: ABC-221. Width 1/3._
 _Updated: 2026-10-31 Orchestrator (orch-2026-10-30a) — ABC-243 SE done, code review PASS (2 test files, +1 row) → In Review; `qe-ABC-243` spawned (G8 ALONE). Width 2/3 (+ bapm records)._
 _Updated: 2026-10-31 03:00Z Orchestrator (orch-2026-10-30a) — ABC-222 DONE (QE PASS; merged ae7211c3, not pushed): EPIC-009 milestone 1 readings complete. ABC-243 pulled → `se-ABC-243`; `bapm-ABC-222-epic009-m1` (records: close ABC-222, grade milestone 1, restate the 400-game estimate). Next: ABC-242 → ABC-221. Width 2/3._
@@ -1255,8 +1256,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-242] On a blunder level (1–4), a root move that makes the third occurrence scores exactly 0, CLI and UCI (QE-230-a) (size: S, priority: P3, DoR 9/10; waits Architect reading (blunder vs chooseMove root check; may amend ADR-0054/0032 → owner); after ABC-241 (shared levels.ts:142); S2, no smoke — Orchestrator ruling: smokes play level 5 only, so they would replay base code; the ladder lane reads the changed levels; ABC-241 merged 1f6abec4 (ordering met); `arch-ABC-242-reading` routed 2026-10-30; **arch-ABC-242-reading done f2367198: PROPOSED (adds to owner-accepted ADR-0032 d1 + ADR-0054 d2): check in levels.ts blunder, third-occurrence root move scores 0 without its child search; engine path untouched; S + S2/no-smoke stand** → OWNER: "ADR-0054 ABC-242: accept" or "decline"; notes seal + merge after qe-ABC-220 frees the host; notes sealed, merged 01c37946; **OWNER ACCEPTED 2026-10-30** (…65848126) → `arch-ABC-242-accept` + `bapm-ABC-242-225-owner` (A8 fix, DoR); → Ready 10/10 2026-10-30 (bapm-ABC-242-225-owner, merged 31a87d57; ADR-0054/0032 ACCEPTED 625fcd60); **pulled 2026-10-31** → `se-ABC-242`)
+## In Development (WIP 0/3)
 
 
 
@@ -1284,7 +1284,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-242] On a blunder level (1–4), a root move that makes the third occurrence scores exactly 0, CLI and UCI (QE-230-a) (size: S, priority: P3, DoR 9/10; waits Architect reading (blunder vs chooseMove root check; may amend ADR-0054/0032 → owner); after ABC-241 (shared levels.ts:142); S2, no smoke — Orchestrator ruling: smokes play level 5 only, so they would replay base code; the ladder lane reads the changed levels; ABC-241 merged 1f6abec4 (ordering met); `arch-ABC-242-reading` routed 2026-10-30; **arch-ABC-242-reading done f2367198: PROPOSED (adds to owner-accepted ADR-0032 d1 + ADR-0054 d2): check in levels.ts blunder, third-occurrence root move scores 0 without its child search; engine path untouched; S + S2/no-smoke stand** → OWNER: "ADR-0054 ABC-242: accept" or "decline"; notes seal + merge after qe-ABC-220 frees the host; notes sealed, merged 01c37946; **OWNER ACCEPTED 2026-10-30** (…65848126) → `arch-ABC-242-accept` + `bapm-ABC-242-225-owner` (A8 fix, DoR); → Ready 10/10 2026-10-30 (bapm-ABC-242-225-owner, merged 31a87d57; ADR-0054/0032 ACCEPTED 625fcd60); **pulled 2026-10-31** → `se-ABC-242`; SE done 56058203 (code 6884d61a, 4 files, engine/search byte-identical, 2 333 tests, informal G8 9.22 s); code review PASS → `qe-ABC-242`)
 
 
 
