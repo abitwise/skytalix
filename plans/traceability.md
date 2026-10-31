@@ -1641,3 +1641,4 @@ _Updated: 2026-08-19 by BA/PM (task `cut-agents-md-cap-2026-08-19`, Workflow 07)
 | ABC-229 (merge) | Quiescence searches quiet queen promotions (ADR-0053 d5–d9) | code f6ff1c4a | qe-ABC-229 PASS_WITH_GAPS (G6, S-1..S-4 met) | merged 5953c631 2026-10-30, not pushed | Done (Orchestrator) |
 | ABC-225 (merge) | Interleaved R-pair command (rpair), 4 000 ms | tools/rating 9988a778 + 3dca0e67 | qe-ABC-225 FAIL (thermal, width 2); qe-ABC-225-w1 PASS_WITH_GAPS (width 1) | merged 59dc3ab4 2026-10-30, not pushed | Done (Orchestrator) |
 | ABC-244 (merge) | Time-blind virtual-clock rows take the coarsest kill-set-preserving step (ADR-0046 addendum) | test 25282ad4 | qe-ABC-244 PASS; secnfr-ABC-244 PASS | merged 24b22339 2026-10-30, not pushed | Done (Orchestrator) |
+| ABC-222 (merge) | Smoke reading: simple-tournament 5 games at 40/15 | reading only (build 19d18df1) | qe-ABC-222 PASS | merged ae7211c3 2026-10-31, not pushed | Done (Orchestrator) |
