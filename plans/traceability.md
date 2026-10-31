@@ -1646,3 +1646,4 @@ _Updated: 2026-08-19 by BA/PM (task `cut-agents-md-cap-2026-08-19`, Workflow 07)
 | ABC-242 (merge) | Blunder path scores a third-occurrence root move exactly 0, child unsearched (ADR-0054 amendment, owner-accepted) | code 6884d61a | qe-ABC-242 PASS_WITH_GAPS (signs UAT) | merged af5b2b49 2026-10-31, not pushed | Done (Orchestrator) |
 | arch-qe242a-ruling (merge) | QE-242-a: ABC-244 condition 2 reads a blunder per level call (ADR-0046 § Ruling 2026-10-31) | records 1b142ea0 | — | merged 10492743 2026-10-31, not pushed | Done (Orchestrator) |
 | bapm-ABC-242-close (merge) | ABC-242 closed; ABC-225 page Done; EPIC-010 m1 total restated; ABC-245 cut | records f2245757 | — | merged 2026-10-31, not pushed | Done (Orchestrator) |
+| bapm-ABC-245-rescore (merge) | ABC-245 re-scored 10/10 on ADR-0046 § Ruling 2026-10-31 | records 285a830c | — | merged 2026-10-31, not pushed | Done (Orchestrator) |
