@@ -1,3 +1,4 @@
+_Updated: 2026-10-31 Orchestrator (orch-2026-10-30a) — ABC-247 SE done, code review PASS → In Review; `qe-ABC-247` ALONE (A2: block-01 probe at base ca6e675c and head, plus control). Running beside: `arch-g8-tranche2` (records). Width 2/3._
 _Updated: 2026-10-31 Orchestrator (orch-2026-10-30a) — ABC-245 DONE (qe-ABC-245 PASS; merged 2cce84e0, not pushed). G8 H 9.82 s / B 9.44 s (admissible; B = ABC-221 clean re-read 9.44 s). Per ADR-0046 § Addendum ("any later G8 head median > 9.6 s"), **tranche 2 OPENS** → `arch-g8-tranche2` (records: candidates T2a–T2c for a BA/PM ruling; noise reading QE-245-b). ABC-247 pulled → `se-ABC-247`. Width 2/3._
 _Updated: 2026-10-31 Orchestrator (orch-2026-10-30a) — `bapm-rpair-level6-cut` merged: ABC-247 (XS, P1) → Ready; batch ~21.7–24.1 h ALONE + ~1 h QE (18.5 h withdrawn); audit clean (no smoke asymmetric). Owed LOW: ABC-229 page close + EPIC-010 row 5. Running: `qe-ABC-245` (ALONE). Next: ABC-247 SE → QE → batch → ABC-246 → ABC-223. Width 1/3._
 _Updated: 2026-10-31 Orchestrator (orch-2026-10-30a, …fb0c8978) — milestone-1 batch STOPPED before game 1 (QE-M1B-a HIGH: base level 5 = 3 000 ms caps rpair's movetime 4000 → 3 s vs 4 s). Ruling: route (A), rpair passes Skill Level 6 (levels 5/6 differ in budget only) → `bapm-rpair-level6-cut` (ticket + cost restated ~21.7–24.1 h + smoke-ledger audit). Host free → `qe-ABC-245` ALONE now (+ clean G8 re-read). Scratch cleared (/tmp 12 G → 1.2 G). Width 2/3._
@@ -1273,8 +1274,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-247] rpair passes Skill Level 6 to skytalix on both builds, so a base before ABC-228 searches 4 000 ms (QE-M1B-a) (size: XS, priority: P1, tools only, no UAT; DoR 10/10; cut by bapm-rpair-level6-cut; blocks the milestone-1 batch; SE after qe-ABC-245; **pulled 2026-10-31** → `se-ABC-247`)
+## In Development (WIP 0/3)
 
 
 
@@ -1302,7 +1302,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-247] rpair passes Skill Level 6 to skytalix on both builds, so a base before ABC-228 searches 4 000 ms (QE-M1B-a) (size: XS, priority: P1, tools only, no UAT; DoR 10/10; cut by bapm-rpair-level6-cut; blocks the milestone-1 batch; SE after qe-ABC-245; **pulled 2026-10-31** → `se-ABC-247`; SE done cec9c252 (code 02f4f3d4, tools/rating only; pair-check 25/25; A3 met at both SHAs); code review PASS → `qe-ABC-247` ALONE (A2 probe))
 
 
 
