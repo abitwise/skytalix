@@ -1,0 +1,22 @@
+# QE probe, 2026-10-31, scratch builds (git archive src data package.json tsconfig*.json; npm run build rc 0 both)
+# position: kiwipete FEN, out of book; command: go movetime 4000 (what cutechess sends for st=4)
+== base ca6e675c, default Skill Level (5)
+id name skytalix
+uciok
+bestmove e2a6 after 3001 ms
+exit 0
+== head 72a65fb7, default Skill Level (5)
+id name skytalix
+uciok
+bestmove e2a6 after 4001 ms
+exit 0
+== base ca6e675c, setoption name Skill Level value 6
+id name skytalix
+uciok
+bestmove e2a6 after 4001 ms
+exit 0
+== head 72a65fb7, setoption name Skill Level value 6
+id name skytalix
+uciok
+bestmove e2a6 after 4001 ms
+exit 0
