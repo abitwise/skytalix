@@ -1,14 +1,70 @@
 ---
 id: ABC-221
 title: "`uci-clock-mode` over UCI (`TimeMode`): spends the real clock through a safe share with a hard stop, a 59.5 s budget under a 60 s ceiling, never loses on time"
-status: ready
-column: Ready
+status: done
+column: Done
+closed: "2026-10-31, merged to main at af32f82c (code c48a6f83) and 9395d8dc (Security/NFR catalog); QE PASS_WITH_GAPS (qe-ABC-221, 861e737d), which signs UAT; Security/NFR PASS (secnfr-ABC-221, ef060512)"
 size: M
 priority: P3
 epic: EPIC-009
 ---
 
 # ABC-221: `uci-clock-mode`: the real clock, a safety margin, a hard stop, a 60 s ceiling
+
+> **CLOSED 2026-10-31, Done, folded by BA/PM** (task `bapm-ABC-221-fold`, records only, at `main` `9c008db4`; nothing
+> run or timed; `src/`, `data/` and `tools/` untouched). **Merged at `af32f82c`** (QE's branch over code `c48a6f83`) and
+> **`9395d8dc`** (Security/NFR's catalog commit `787820c3`). Not pushed. `git diff c48a6f83 9c008db4 -- src data tools`
+> is empty, so `main`'s production lines are the code QE read.
+>
+> - **QE: PASS_WITH_GAPS** (`qe-ABC-221` `…861e737d`), no blocking gap. **It signs UAT** (Test note 3). PREREG
+>   `6d7f2c24` came before any head run.
+>   - **A1–A12 MET.** A2–A4: 1 069 ms left on every move; 99.9 % (A2, A3) and 99.88 % / 100 % / 100 % (A4). A5: 1 900
+>     (1 069 left); `wtime 800` → 1, a move is returned at depth 1. A6: met, **17 205 ms** left after move 80 (dated
+>     line at A6). A7: 59 500 / 59 500 / 5 000 / 22 000 / 22 000. A8: `level` and `simple-tournament` equal base on
+>     14 742 `go` records. **A10: walls 59 500.1 / 59 500.8 / 59 499.4 ms (max 59 500.8 ≤ 60 000), heap +0.12 MiB,
+>     arrayBuffers 4.51 MiB with 0 growth, depth 13** (the `KEY_ARRAY_CAPACITY` tripwire is not reached). A11: lane row
+>     green, `UCI_DEEP` 13/13, **A14b R1 0.41 ms**, R2 and R3 met. A12: QM4 killed in both modes.
+>   - `npm test` 2 363 passed ×3, 0 skipped. QE oracle 78 717 checks, 0 FAIL. Plants 21/21 as pre-registered; the two
+>     survivors were predicted (QE-221-a).
+>   - **A9 (`NFR-008`): MET** at 9.84 s ≤ 10 s. **The `G8` figure is inadmissible as a trigger** (dated line at A9).
+> - **Security/NFR: PASS** (the role's PASS_WITH_RISKS; ASVS L1), no required fix (`secnfr-ABC-221` `…ef060512`,
+>   `…8881d726`). Its "conditional on QE" lines are met: QE's A10 max is 59 500.8 ms (≤ 60 000), growth ≤ 0.12 MiB
+>   (≤ 1 MiB), and A14b's R1 is 0.41 ms (≤ 100 ms).
+>   - **`NFR-004`** gains *"; 60 s in UCI `TimeMode` `uci-clock-mode` (budget ≤ 59.5 s). The engine's one clamp sits at
+>     the largest ceiling in force, 60 s."* Clause B's raw-call bound moves 32 s → 60 s, on the owner's Q5.
+>   - **`AR-NFR004-A`** is re-accepted at 59.5 s. **`AR-UCI-BUSY`** holds exactly at ≤ 60 s (59 500 + ~31 + 100 ≈
+>     59 631 < 60 000). **`NFR-009`** MET at 59.5 s.
+> - **Test note 4, folded at this hop:** `ADR-0045` § Status and § AMENDMENT A3 (`HARD_CEILING_MS` 60 000), and
+>   `ADR-0044`'s `uci-clock-mode` halves (D3's third `var` and the refusal text, D4.4's clamp at 60 000, D4.5's
+>   clock-mode line, D5's ≤ 60 s). `ADR-0052` is the Architect's (`arch-ABC-221-records`, beside this hop). The
+>   `AGENTS.md` `TimeMode` line is the Scribe's (Security/NFR's § Next); it is the Orchestrator's to route.
+> - **Each finding's disposition:**
+>   - **SE-221-a (LOW, confirmed by QE):** A6 corrected in place (17 205 ms, and the +900 000 shape named). `ADR-0052`
+>     D4's "≥ 117 s" sentence is the Architect's (`arch-ABC-221-records` item 1).
+>   - **QE-221-a (LOW): cut as `ABC-246`** (XS, P3, test-only, DoR 10/10): QE's two rows, the hard stop with an
+>     increment near the clock edge (→ 1 900) and `movetime` over a clock (→ 5 000), in this mode. The class is
+>     `QE-220-a`'s, which became A12 here; a ticket, because no open ticket edits `src/uci-session.test.ts`.
+>   - **QE-221-b (INFO):** the stale `src/levels.ts` lines 49–50 comment ("`HARD_CEILING_MS` is the largest of them")
+>     is **not** put into `ABC-246`: it is a production line, and it would void that ticket's zero-production-lines UAT
+>     waiver for a comment. It is carried as a dated line in `ADR-0045` § AMENDMENT A3, and it is folded at the next
+>     ticket that edits `src/levels.ts`'s production lines (as A3 already carries `KEY_ARRAY_CAPACITY`'s stale comment
+>     for `src/search.ts`). The Architect may name a carrier as well (`arch-ABC-221-records` item 4).
+>   - **SE-221-b (INFO) and `SEC-221-b` (INFO):** the deep-lane `spawnSync` against `ADR-0052` D8's "no spawn site"
+>     words. The Architect's (`arch-ABC-221-records` item 2). QE and Security/NFR see no risk; nothing for BA/PM.
+>   - **SE-221-c (INFO):** the `src/engine.test.ts` RF-1 and `src/levels.test.ts` clause B re-pins are sound (QE). The
+>     `ADR-0045` A3 fold line names the clause B re-pin, as the SE asked.
+>   - **SE-221-d (INFO):** net +30 rows (one `ABC-220` "not offered" row removed, three titles changed). Sound (QE).
+>     No action.
+>   - **SE-221-e (INFO):** the `QE-244-a` carry is untouched by this build. No action.
+>   - **SE-221-f (INFO):** the informal +0.16 s is superseded by QE's `G8`, itself inadmissible (A9). No action here.
+>   - **SE-221-g (INFO):** the stale `src/engine.test.ts` `ABC-170` A2 comment ("about 5 000 consultations") joins
+>     `ABC-246` as a test-file comment line. It stays test-only.
+>   - **`SEC-221-a` (INFO):** no reading of a raw call at 60 000 exists, and no surface reaches it (every surface caps
+>     at a level budget, T or 59 500). Security/NFR's, at any ticket that hands the engine more than 59 500. No ticket.
+>   - **QE-221-c (INFO, host):** the orphan `python3 -I -` from the `secnfr-ABC-221` worktree. The Orchestrator's to
+>     reap. It is why `G8` is inadmissible.
+> - **`ABC-223`'s wait is met** (DoR 9/10 → 10/10 on its page). The board move is the Orchestrator's.
+> - The notes are in `.grugops/context/bapm-ABC-221-fold/notes/`.
 
 > **DATED 2026-10-31 by BA/PM** (task `bapm-ABC-222-epic009-m1`, records only, at `main` `4bd9ac6a`).
 >
@@ -151,7 +207,13 @@ uci-clock-mode`. The numbers are `ADR-0052`'s arithmetic (`arch-epic009-settings
   **1 900 ms**, and the move leaves ≥ 1 000 ms of the 3 000 ms (1 069). **Given** `go wtime 800 btime 800`, **then**
   the budget is 1 ms, a move is still returned (the engine's unabortable depth 1), and the row records the clock used.
 - **A6 (no `movestogo`).** **Given** `go wtime 900000 btime 900000` with no `movestogo`, **when** 80 moves are played
-  with no added time, **then** every move leaves ≥ 1 000 ms (≥ 117 s by arithmetic).
+  with no added time, **then** every move leaves ≥ 1 000 ms ~~(≥ 117 s by arithmetic)~~. *(Corrected 2026-10-31 by
+  BA/PM, task `bapm-ABC-221-fold`, SE-221-a confirmed by QE (`se-ABC-221` `…7896971d`, `qe-ABC-221` `…f9b43b6d`): as
+  worded, with no added time, **17 205 ms** are left after move 80 (`arch-epic009-settings` `raw/alloc.txt` § "sudden
+  death 15 min, 80 moves"). The 117 735 ms figure belongs to a different shape, alloc.txt's § "40/15, no movestogo
+  sent, 80 moves", which adds 900 000 ms after move 40; its closest call is after move 40. **The bound (≥ 1 000 ms)
+  does not move**, and it holds in both shapes; the build pins both as two stubbed rows. `ADR-0052` D4's "≥ 117 s"
+  sentence is the Architect's.)*
 - **A7 (the ceiling).** **Given** the mode:
   - `go wtime 3600000 btime 3600000 movestogo 40` (C ≈ 89 875) → budget **59 500**, deadline ≤ start + 60 000;
   - `go movetime 90000` → budget 59 500; `go movetime 5000` → 5 000;
@@ -179,6 +241,14 @@ uci-clock-mode`. The numbers are `ADR-0052`'s arithmetic (`arch-epic009-settings
     conditions 1–3). A row that reads time keeps its step.
   - Estimate: about +0.1 s of lane wall, `UNKNOWN - verify` until `G8` reads it. If this ticket's `G8` head median
     reads > 9.6 s, `ABC-244`'s tranche-2 trigger fires.
+  - *(Read 2026-10-31, recorded by BA/PM, task `bapm-ABC-221-fold`.)* **A9 MET:** QE's `G8` head median is 9.84 s
+    ≤ 10 s (B 9.82 s, H − B +0.02 s; 6/6 rc 0, load1 ≤ 2.42; `qe-ABC-221` `…b348899a`). **The 9.84 s is inadmissible
+    as `ABC-244`'s tranche-2 trigger, by the Orchestrator's ruling** (board `_Updated` 2026-10-31, commit
+    `9c008db4`). The host was contended: an orphan process from another hop held one core at 100 % (QE-221-c), and
+    the same base code read 9.82 s here against 9.41 s at `ABC-242`, so the host ran about +0.41 s slow. **It is not
+    recorded as a trigger.** The build's own cost is +0.02 s of wall (CPU +0.62 s on 4 workers). The re-read is at
+    `ABC-245`'s QE hop on a clean host; whether tranche 2 is owed is read there. R1 census as the SE recorded it
+    (`…563fc63b`): 3 class-P rows, 0 time-blind, so no R2 step was owed.
 - **A10 (wall, depth and memory at 59.5 s, deep lane).** **Given** 3 fixed positions, **when** each is searched once
   in the mode at a 59 500 ms budget on the real clock, **then** each returns in **≤ 60 000 ms** of wall, the max
   completed depth is logged against `KEY_ARRAY_CAPACITY`'s tripwire (≥ 100 → the Architect), and search-held memory
@@ -243,7 +313,9 @@ call: M1 survives δ ≤ 600 ms on a period's last move at 40/15 (`ADR-0052` D5)
 3. UAT is owed. The QE verdict signs it. `ABC-223` is the real-clock smoke.
 4. **Owed at merge:** BA/PM folds the dated line into `ADR-0045` § AMENDMENT A3 (`HARD_CEILING_MS` 60 000).
    *(2026-10-30: also the `uci-clock-mode` halves of `ADR-0044`'s folds, left at `ABC-220`'s merge: D3's third `var`,
-   D4.5's clock-mode line with D4.4's clamp at 60 000, and D5's ≤ 60 s.)*
+   D4.5's clock-mode line with D4.4's clamp at 60 000, and D5's ≤ 60 s.)* *(**Folded 2026-10-31** by BA/PM, task
+   `bapm-ABC-221-fold`, at `main` `9c008db4`: `ADR-0045` § Status and A3; `ADR-0044` § Status, D3's `uci` and
+   `setoption` rows, D4.4, D4.5 and D5.)*
 5. **Carried note (`SEC-220-b`, INFO, pre-existing; added 2026-10-30).** `milliseconds` in `src/uci-session.ts` is
    documented as "any finite decimal number", but a figure longer than 308 digits parses to ±Infinity. QE found every
    branch safe (QE-220-d): ±Infinity and NaN reach T, the cap or depth 1. **BA/PM's call: fix the comment, not the
@@ -288,3 +360,5 @@ call: M1 survives δ ≤ 600 ms on a period's last move at 40/15 (`ADR-0052` D5)
 **DoR 10/10 (2026-10-30). Ready.** Pull it after `ABC-222` (milestone 1 closes first, by the owner's "later"). That
 is pull order, not a DoR gap. It shares `src/uci-session.ts` with any ticket in flight on that file; the Orchestrator
 orders them. *(Was: "DoR 9/10. Backlog. It waits on the owner accepting `ADR-0052`.")*
+
+*(2026-10-31, `bapm-ABC-221-fold`: **Done.** Merged at `af32f82c` and `9395d8dc`; see the CLOSED block at the top.)*

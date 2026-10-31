@@ -17,6 +17,17 @@ id: ADR-0045
 > Levels 1–7 are value-identical. Until `ABC-221`'s merge the clamp stays 32 000. The in-place fold line is BA/PM's,
 > at that merge. No other decision here moves.
 
+> **FOLDED in place 2026-10-31 by BA/PM** (task `bapm-ABC-221-fold`, records only, at `main` `9c008db4`). `ABC-221`
+> merged at `af32f82c` (code `c48a6f83`) and `9395d8dc`, on QE PASS_WITH_GAPS (`qe-ABC-221` `…861e737d`) and Security/NFR
+> PASS (`secnfr-ABC-221` `…ef060512`). **`HARD_CEILING_MS` = 60 000 on `main`** (`src/engine.ts`).
+>
+> - **The dated mark is in place** in § AMENDMENT A3's clamp bullet and its "what the value move changes" bullet.
+> - **Unchanged:** the clamp's shape (one absolute clamp, `RF-1`), `deepen`'s `Math.min`, the level layer's blunder
+>   clamp, `LEVELS[1..7]`, `DEFAULT_LEVEL` (5), `HARDEST_LEVEL` (7), and each level's ceiling held by its data. QE read
+>   `level` equal to base on 14 742 `go` records (`ABC-221` A8).
+> - **Not here:** `ADR-0052` (the Architect's), the `NFR-004` catalog text (Security/NFR placed it at `787820c3`), and
+>   `AGENTS.md` (the Scribe).
+
 > **Amended 2026-10-30, ~~CONDITIONAL~~ in force from `ABC-228`'s merge (`e42b637b`): level 5 to 4 000 ms, see
 > `ADR-0053` decision 10.** The owner's word is
 > *"QQ-228-1: ii"* (`orch-2026-10-29g/…c4ab73de`; pointer added by Architect/Design, task `arch-q3c-oq228ii`). It
@@ -517,7 +528,16 @@ note is `arch-design-ABC-212` (observation).
 - These do not change: `createLevel`, `blunder`, `seededRandom`, `src/search.ts` and `src/virtual-clock.ts`.
 - There is no `maxDepth`, no `maxNodes` and no ceiling on a level.
 - **The clamp keeps its shape (one absolute clamp, `RF-1`). `HARD_CEILING_MS` goes from 5 000 to 32 000**, the
-  largest per-level ceiling in `NFR-004`'s accepted text.
+  largest per-level ceiling in `NFR-004`'s accepted text. *(Folded 2026-10-31 by BA/PM, task `bapm-ABC-221-fold`,
+  `ADR-0052` D6, at `ABC-221`'s merge `af32f82c`: **`HARD_CEILING_MS` is 60 000**, the largest ceiling in force,
+  which is `uci-clock-mode`'s 60 s (the owner's Q5). It is no longer the largest per-level ceiling; that stays 32 000
+  at level 7. The shape is unchanged, and each setting's own ceiling is held by its data: levels 1–7 by
+  `LEVELS[L].budgetMs` (≤ 30 000), `simple-tournament` by T (22 000), `uci-clock-mode` by its 59 500 cap.
+  `src/levels.test.ts` clause B no longer asserts "the largest level ceiling equals the clamp"; it pins the clamp at
+  60 000, the largest level ceiling at 32 000, and the second ≤ the first (SE-221-c, confirmed by QE). The
+  `src/levels.ts` header comment's "`HARD_CEILING_MS` is the largest of them" (lines 49–50) goes stale and is not
+  edited here, because `ADR-0052` D8 fenced `src/levels.ts` (QE-221-b). It is folded at the next ticket that edits
+  `src/levels.ts`'s production lines.)*
   - The name and the export stay, and so do `deepen`'s `Math.min(options.budgetMs, HARD_CEILING_MS)` and the level
     layer's blunder clamp.
   - **Each level's own ceiling is held by its data:** `LEVELS[L].budgetMs ≤ ceiling(L)` for L = 1..7, with
@@ -531,7 +551,9 @@ note is `arch-design-ABC-212` (observation).
   - an `EngineOptions` ceiling field, which reopens `ADR-0027` decision 3.
   It also buys nothing that the data row does not already hold.
 - **What the value move changes.** `NFR-004` clause B's "whatever a caller passes" now bounds a raw `chooseMove` call
-  at 32 s, not 5 s.
+  at 32 s, not 5 s. *(Folded 2026-10-31, `ABC-221`, `bapm-ABC-221-fold`: **60 s from `af32f82c`**, by the owner's Q5;
+  Security/NFR moved clause B's bound in the catalog (`787820c3`). No surface hands the engine more than 59 500
+  (`SEC-221-a`).)*
   - Every surface derives its budget from a level: the CLI through `createLevel`, and UCI as
     `min(G, LEVELS[skill].budgetMs)`. So no surface can start a level-L search above ceiling(L).
   - That is why clause B is written per level.

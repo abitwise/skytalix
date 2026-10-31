@@ -56,6 +56,12 @@ resolve. Since the 2026-10-18 revision that slug is no longer true: see § Revis
 > are in D3 (the `uci` and `setoption` rows), D4 (a new item 5, D4.5: `C` and `simple-tournament`), D5 and D11. The
 > `uci-clock-mode` halves are folded at `ABC-221`'s merge, not before: D3's third `var`, D4.5's clock-mode line and
 > D5's ≤ 60 s.)*
+> *(**`uci-clock-mode` halves folded in place 2026-10-31** by BA/PM, task `bapm-ABC-221-fold`, at `main` `9c008db4`,
+> from `ABC-221`'s merge `af32f82c` (code `c48a6f83`; QE PASS_WITH_GAPS `…861e737d`, Security/NFR PASS `…ef060512`).
+> Dated lines are in D3 (the `uci` row's third `var`; the `setoption` row's tuple and refusal text), D4.4 (the clamp
+> at 60 000), D4.5 (the clock-mode line, and its "D4.4 … 32 000" bullet) and D5 (≤ 60 s). D11 needs no new line: its
+> 2026-10-30 fold reads for every value that is not `level`, and `ABC-221` A1 read `Skill Level` as not read in the
+> mode. The `ADR-0052` pointer is now fully folded.)*
 
 > **Amended 2026-10-30 by `ADR-0054` (accepted by the owner, note `…3dd61448`; pointer added by Architect/Design, task
 > `arch-adr-accept-0052-0053-0054`).** Two decisions move:
@@ -314,8 +320,8 @@ budget. There is no `info` line, and no way to read `stop` while `chooseMove` ho
 
 | GUI → engine | engine does |
 |---|---|
-| `uci` | `id name skytalix`, `id author Olger Oeselg`, `option name OwnBook type check default true`, `option name Skill Level type spin default 3 min 1 max 5` *(2026-10-19, `ADR-0045`: `default 5`, read from `DEFAULT_LEVEL`)* *(2026-10-24, `ADR-0045` A4: `max 7`, read from `HARDEST_LEVEL`)*, `uciok` *(Folded 2026-10-30, `ADR-0052` D1, `ABC-220`, merge `ec1e835b`: after the `Skill Level` line and before `uciok`, `option name TimeMode type combo default level var level var simple-tournament`. The `Skill Level` line is byte-identical. `var uci-clock-mode` joins at `ABC-221`'s merge only.)* |
-| `setoption name <id> [value <x>]` | `<id>` is the text between `name` and `value`, matched **case-insensitively** (the spec says option names *"should not be case sensitive and can inlude spaces"*). `OwnBook`: `true` or `false`. `Skill Level`: an integer from 1 to 5 *(1 to 7 from `ABC-212`, `ADR-0045` A4)*, looked up by an own key (`Object.hasOwn(LEVELS, n)`, the `level-seam.ts` rule). An invalid value keeps the old value and writes one `info string`. **Any other name is ignored**, which covers the options Lichess's provider sets unconditionally (`UCI_AnalyseMode`, `UCI_Chess960`, `Threads`, `Hash`, `MultiPV`) *(Folded 2026-10-30, `ADR-0052` D1, `ABC-220`, merge `ec1e835b`: `TimeMode`: the value matches **exactly** one value of the frozen tuple `TIME_MODES` (`level`, `simple-tournament`; `uci-clock-mode` from `ABC-221`), with no key lookup. Any other value keeps the old one and writes one `info string TimeMode takes level or simple-tournament, got <v>; kept <old>`, spelled from the same tuple. `ucinewgame` does not reset it.)* |
+| `uci` | `id name skytalix`, `id author Olger Oeselg`, `option name OwnBook type check default true`, `option name Skill Level type spin default 3 min 1 max 5` *(2026-10-19, `ADR-0045`: `default 5`, read from `DEFAULT_LEVEL`)* *(2026-10-24, `ADR-0045` A4: `max 7`, read from `HARDEST_LEVEL`)*, `uciok` *(Folded 2026-10-30, `ADR-0052` D1, `ABC-220`, merge `ec1e835b`: after the `Skill Level` line and before `uciok`, `option name TimeMode type combo default level var level var simple-tournament`. The `Skill Level` line is byte-identical. `var uci-clock-mode` joins at `ABC-221`'s merge only.)* *(Folded 2026-10-31, `ADR-0052` D1, `ABC-221`, merge `af32f82c`: the line is now `option name TimeMode type combo default level var level var simple-tournament var uci-clock-mode`, byte-exact, in the same place. The `Skill Level` line is still byte-identical.)* |
+| `setoption name <id> [value <x>]` | `<id>` is the text between `name` and `value`, matched **case-insensitively** (the spec says option names *"should not be case sensitive and can inlude spaces"*). `OwnBook`: `true` or `false`. `Skill Level`: an integer from 1 to 5 *(1 to 7 from `ABC-212`, `ADR-0045` A4)*, looked up by an own key (`Object.hasOwn(LEVELS, n)`, the `level-seam.ts` rule). An invalid value keeps the old value and writes one `info string`. **Any other name is ignored**, which covers the options Lichess's provider sets unconditionally (`UCI_AnalyseMode`, `UCI_Chess960`, `Threads`, `Hash`, `MultiPV`) *(Folded 2026-10-30, `ADR-0052` D1, `ABC-220`, merge `ec1e835b`: `TimeMode`: the value matches **exactly** one value of the frozen tuple `TIME_MODES` (`level`, `simple-tournament`; `uci-clock-mode` from `ABC-221`), with no key lookup. Any other value keeps the old one and writes one `info string TimeMode takes level or simple-tournament, got <v>; kept <old>`, spelled from the same tuple. `ucinewgame` does not reset it.)* *(Folded 2026-10-31, `ADR-0052` D1, `ABC-221`, merge `af32f82c`: `TIME_MODES` is `level`, `simple-tournament`, `uci-clock-mode`, still frozen and matched exactly. The refusal is `info string TimeMode takes level, simple-tournament or uci-clock-mode, got <v>; kept <old>`, spelled from the tuple. A value that differs only in case, such as `Uci-Clock-Mode`, is refused.)* |
 | `isready` | the first time with `OwnBook` on, it warms the book (D10). Then `readyok` |
 | `ucinewgame` | sets the position back to the start. It does not reset the options, reload the book or reseed anything (D10, D11). The table is already cleared per search (`ADR-0025`) |
 | `position startpos \| fen <6 fields> [moves m1 m2 …]` | parse it, then apply the moves through `parseCoordinateMove` and `makeMove`. If the FEN or any move is bad, the **whole command is refused**: no position is held, and one `info string` line names the fault (text filtered to printable characters, the `cli.ts` `printableOf` rule) |
@@ -363,7 +369,12 @@ budget. There is no `info` line, and no way to read `stop` while `chooseMove` ho
    `ADR-0045` A3/A4, `ABC-212`: one absolute clamp, `HARD_CEILING_MS` now 32 000. Each level's `NFR-004` ceiling
    is held by its budget, at least 2 000 ms under it: 5 s at levels 1–5, 7 s at level 6, 32 s at level 7. Clause B
    is now written per level, in the owner's accepted text (`ADR-0045` § Consequences), which Security/NFR places in
-   the catalog.)*
+   the catalog.)* *(Folded 2026-10-31 by BA/PM, task `bapm-ABC-221-fold`, `ADR-0052` D6 and `ADR-0045` A3's fold, at
+   `ABC-221`'s merge `af32f82c`: **`HARD_CEILING_MS` is 60 000**, the largest ceiling in force (`uci-clock-mode`'s 60 s,
+   the owner's Q5). The shape is one absolute clamp, as before. Each setting's ceiling is held by its own data: each
+   level by its budget, as above (≤ 30 000), `simple-tournament` by T, and `uci-clock-mode` by its 59 500 cap. Clause
+   B's raw-call bound is 60 s (Security/NFR, `787820c3`). Levels 1–7 are value-identical; QE read `level` equal to
+   base on 14 742 `go` records.)*
 5. **The `TimeMode` budgets (D4.5).** *(Added 2026-10-30 by BA/PM, task `bapm-ABC-220-merge-fold`, from `ADR-0052` D2
    and D3, in force from `ABC-220`'s merge `ec1e835b`.)* D4.1–D4.4 above are unchanged, and they govern `TimeMode
    level`, the default. While `TimeMode` is not `level`, D4.1's `G` and D4.2's level cap are not used, and `Skill
@@ -376,9 +387,17 @@ budget. There is no `info` line, and no way to read `stop` while `chooseMove` ho
      22 000. `movetime x` gives `min(x, T)`; a clock for the side to move gives `min(T, C)`; no time token gives T.
      Every branch is at most T, so T holds the 22 s ceiling. The search is the rate-0 path with D12's limits.
    - D4.3 (`infinite` and `ponder` hold the `bestmove`) and D4.4 (the engine clamp, `HARD_CEILING_MS` 32 000) apply
-     in every mode.
+     in every mode. *(2026-10-31, `ABC-221`, merge `af32f82c`: the clamp is **60 000**; see D4.4's fold.)*
    - `uci-clock-mode`'s line (`ADR-0052` D4: `min(x, 59 500)`, `min(59 500, C)`, T with no time token) is folded here
      at `ABC-221`'s merge, with D4.4's clamp at 60 000. It is not in force before then.
+   - **`uci-clock-mode`** (`ADR-0052` D4). *(Folded 2026-10-31 by BA/PM, task `bapm-ABC-221-fold`, in force from
+     `ABC-221`'s merge `af32f82c`.)* The ceiling is `CLOCK_MODE_CEILING_MS` = 60 000 (the owner's Q5), and the most the
+     mode spends on a move is `CLOCK_MODE_MAX_BUDGET_MS` = 60 000 − 500 = **59 500**. `movetime x` gives
+     `min(x, 59 500)`; a clock for the side to move gives `min(59 500, C)`, with the same `C` as above and no level's
+     budget; no time token gives T (22 000). `movetime` is read first when both are sent. Every branch is at most
+     59 500, so the cap holds the 60 s ceiling with a 500 ms margin. The search is the rate-0 path with D12's limits,
+     and `Skill Level` is not read (D11). QE read it on the virtual clock (`ABC-221` A2–A7, A12) and on the real clock
+     (A10: max wall 59 500.8 ms).
 
 ### D5. One thread, synchronous search. No worker in v1.
 
@@ -399,6 +418,12 @@ handled in order afterwards. The consequences are accepted and stated:
   22 001.0 ms, `A14b` R1 0.38 ms). The accepted-risk entry is `AR-UCI-BUSY`, beside `NFR-011` in
   `plans/nfr-catalog.md` (owner: Architect/Design). The `uci-clock-mode` bound, ≤ 60 s, is folded at `ABC-221`'s merge.
   The worker's triggers below are unchanged.)*
+- *(Folded 2026-10-31 by BA/PM, task `bapm-ABC-221-fold`, `ADR-0052` D7, at `ABC-221`'s merge `af32f82c`: in
+  `TimeMode` `uci-clock-mode`, `isready` and `stop` during a search are answered at most one budget + `AR-NFR004-A`
+  late: **≤ 60 s, read exactly** (59 500 + ~31 + 100 ≈ 59 631 ms < 60 000, so no whole-second reading is needed).
+  Accepted, with no worker. One `readyok` per `isready`, in order, after the `bestmove`. QE's reads: `A10` max wall
+  59 500.8 ms and `A14b` R1 0.41 ms (`qe-ABC-221`); Security/NFR re-read `AR-UCI-BUSY` at this bound and it holds
+  (`secnfr-ABC-221` `…ef060512`). The worker's triggers below are unchanged.)*
 
 **The upgrade is pre-designed and is not built.** The search would move to one `worker_threads` worker.
 The stop flag would be a `SharedArrayBuffer` slot, read through the engine's **existing** injected `now`
