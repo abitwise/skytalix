@@ -1652,3 +1652,4 @@ _Updated: 2026-08-19 by BA/PM (task `cut-agents-md-cap-2026-08-19`, Workflow 07)
 | secnfr-hostname (merge) | Catalog reference machine spelled oeselg-dev | records 9f0a8d32 | — | merged 2026-10-31, not pushed | Done (Orchestrator) |
 | bapm-ABC-221-fold (merge) | ABC-221 closed; ADR-0045/0044 folds; ABC-223 10/10; ABC-246 cut | records 4a87316d | — | merged 6caa0f17 2026-10-31, not pushed | Done (Orchestrator) |
 | arch-hostname-adrs (merge) | ADR-0035/0046 reference machine spelled oeselg-dev | records e4386e96 | — | merged 2026-10-31, not pushed | Done (Orchestrator) |
+| scribe-agents-md-clockmode (merge) | AGENTS.md TimeMode three values + A10 deep row | records 78b350ac | — | merged 2026-10-31, not pushed | Done (Orchestrator) |
