@@ -10,6 +10,50 @@ owner: BA/PM
 
 # EPIC-010: the verified engine gaps, closed one measured change at a time, against an outside opponent
 
+> **CUT AND RESTATED 2026-10-31 by BA/PM** (task `bapm-rpair-level6-cut`, records only, at `main` `278a9bb7`; nothing
+> run, built or timed, because `qe-ABC-245` holds the host ALONE; `src/`, `tools/`, `data/`, the board and the ADRs
+> untouched). Source: QE's STOP of milestone 1's batch before game 1 (`qe-EPIC-010-m1-batch` `…5967dfc1`,
+> `…21029f54`; QE-M1B-a HIGH, QE-M1B-b MEDIUM) and the Orchestrator's route (A) (`orch-2026-10-30a` `…fb0c8978`).
+>
+> - **`ABC-247` cut** (XS, **P1**, tools only, DoR 10/10, Ready): `rpair` passes `option.Skill Level=6` to skytalix
+>   on both builds. The base `ca6e675c` caps `go movetime 4000` at its `LEVELS[5]` = 3 000 ms. Level 6 is
+>   `{ 5 000 ms, rate 0 }` at both SHAs, so both sides then search 4 000 ms. `pair-check` pins the token; a 4-game
+>   probe reads 4.0 s clocks at both SHAs; the SE confirms the skill reaches only the cap in `go()`. **The D and R
+>   smoke paths are left alone** (the reason is on its page). It blocks the batch. Tickets table: row 22.
+> - **The batch's cost is restated: about 21.7–24.1 h ALONE at 4 000 ms on both sides, plus about 1 h of QE (about
+>   22.7–25.1 h).** QE-M1B-b: 3.26–3.61 min a game, from the `qe-ABC-228-ii` and `qe-ABC-241` R smokes (36.1 and
+>   32.6 min for 10 games), × 400 games. **The 18.5 h figure is withdrawn:** `ABC-225` A6's 21.67 games/h was a
+>   **3 000 ms rate**, because both A5 builds came before `ABC-228` and capped `movetime 4000` at 3 000 ms (QE's
+>   count: PGN clocks 3.0 s on 895 and 991 skytalix moves, 4.0 s on none). BA/PM's cross-check, arithmetic and not a
+>   measurement: scaling A5's 2.77 min a game by (4 + 0.5) / (3 + 0.5) s a move pair gives 3.56 min, or about 23.7 h,
+>   inside the range. **The whole milestone, spent plus remaining, is about 29–32 h, about 26–29 h of it ALONE**
+>   (an estimate; `ABC-247`'s probe, about 0.3 h, is not counted). The Orchestrator tells the owner, who may stop or
+>   reschedule. Changed with dated marks: the cost table's batch and total rows, § Cost on this host and
+>   `RISK-EPIC010-04`. `ABC-225`'s page carries the same block.
+> - **Audit of the smoke ledger for 3 s / 4 s asymmetry (records only; confidence high):** **no ledger reading was
+>   asymmetric, no verdict moves and the trend pool does not move.**
+>   - Two ledger rows have a base before `ABC-228`'s merge `e42b637b`: `ABC-230` (base `c0698ddd`) and `ABC-228`
+>     (base `61d5d629`). `ABC-241` (base `e42b637b`) and `ABC-229` (base `b92a3394`, after it) do not.
+>   - **`ABC-230`:** R sent 3 000 ms then (the R literal was 3 000 at `dad753dc`), so it is outside the question. PGN:
+>     468 skytalix moves at 3.0 s, 0 at 4.0 s. It is the closed 3 000 ms pool's one row, read in its own frame.
+>   - **`ABC-228`:** R sent 4 000 ms. **An R smoke plays one skytalix build, the candidate; its base does not play.**
+>     The candidate `5e84d0d7` has `LEVELS[5]` = 4 000: the R literal and the level moved in one commit, `8c82399f`.
+>     PGN: 476 skytalix moves at 4.0 s, 0 at 3.0 s (`TimeControl "4/move"`). Not capped.
+>   - **D smokes:** both builds play at B = 1 500 ms, below every `LEVELS[5]` in this epic (3 000 ms or more;
+>     `D_BUDGETS_MS` tops out at 3 000). All four D PGNs read 1.5 s on every move. Never capped.
+>   - **Why only `rpair` was exposed:** it is the one mode where two skytalix builds play under the R pins and one can
+>     predate `e42b637b`. Its one real run, `qe-ABC-225-w1` A5, played both sides at 3 000 ms (symmetric but labelled
+>     4 000 ms). A5 graded no strength, so its verdict stands; its rate moves the cost (above). `qe-ABC-225`'s
+>     thermal-stopped A5 (4 games) read nothing. `qe-ABC-228-ii`'s `G6`/`G11` ran each build at its own `LEVELS[5]` by
+>     design under (ii), recorded as such; that is not a smoke and not this defect.
+>   - **What moves:** nothing graded. The 4 000 ms rows waiting for the reference (`ABC-228`, `ABC-241`, `ABC-229`)
+>     are all truly 4 000 ms by their PGN clocks (476, 430 and 410 moves at 4.0 s, none at 3.0 s).
+>   - **What is owed:** (1) `ABC-229`'s ledger row, owed at this page's next BA/PM hop and before any batch, is
+>     **folded on this hop** (§ The smoke ledger). (2) `ABC-229`'s page close and tickets-table row 5 (merged
+>     `5953c631`, QE PASS_WITH_GAPS `qe-ABC-229` `…2afef8bf`) are a separate fold, not done here. (3) The dated cost
+>     lines, done here. Nothing is owed to the owner from the audit.
+> - The notes are in `.grugops/context/bapm-rpair-level6-cut/notes/`.
+
 > **FOLDED 2026-10-31 by BA/PM** (task `bapm-ABC-242-close`, records only, at `main` `d58f2d77`; nothing run, built
 > or timed; `src/`, `tools/`, `data/`, the board and the ADRs untouched).
 >
@@ -21,7 +65,9 @@ owner: BA/PM
 >     at a time"*. It covers `ABC-225`'s A5. The Orchestrator ruled on 2026-10-30 (board, under the 2026-10-22
 >     delegation) that the batch also runs at `--concurrency 1`, on the same thermal ground: width 2 tripped 85 °C.
 >     The owner was informed and may override.
->   - **The source of 18.5 h:** `ABC-225` A6 (`qe-ABC-225-w1` `…7e9bd36f`), 21.67 games/h over 40 games at 4 000 ms.
+>   - **The source of 18.5 h:** `ABC-225` A6 (`qe-ABC-225-w1` `…7e9bd36f`), 21.67 games/h over 40 games at 4 000 ms. *(2026-10-31, `bapm-rpair-level6-cut`: a **3 000 ms** rate; both A5 builds
+>     predate `ABC-228` and capped `movetime 4000` at 3 000 ms (QE-M1B-a). The batch is about 21.7–24.1 h ALONE plus
+>     about 1 h; the block at the top.)*
 >     It is an estimate from a small sample, and 22–24 h stays the slow case. The batch reads its own wall.
 >   - **The whole milestone, spent plus remaining, is about 26 h, about 23 h of it ALONE** (an estimate): the four
 >     smoke pairs as costed on 2026-10-29 (≈ 4.8 h, ≈ 2.8 h ALONE; not re-summed from the ledger), `ABC-225`'s A5 as
@@ -44,7 +90,9 @@ owner: BA/PM
 
 > **ESTIMATE RESTATED 2026-10-31 by BA/PM** (task `bapm-ABC-222-epic009-m1`, records only, at `main` `4bd9ac6a`;
 > QE-225w1-b, LOW). **Milestone 1's batch, a 400-game interleaved R pair (200 + 200) at width 1, is about 18.5 h
-> ALONE (range 17.5–19.4 h), plus about 1 h of QE.** It was about 22–24 h.
+> ALONE (range 17.5–19.4 h), plus about 1 h of QE.** It was about 22–24 h. *(Withdrawn 2026-10-31,
+> `bapm-rpair-level6-cut`: A6's rate was read at 3 000 ms, not 4 000 ms (QE-M1B-a/b). At 4 000 ms on both sides the
+> batch is about 21.7–24.1 h ALONE plus about 1 h of QE; the block at the top.)*
 >
 > - The source is `ABC-225`'s A6 reading (`qe-ABC-225-w1` `…7e9bd36f`): 21.67 games/h at `--concurrency 1` and
 >   4 000 ms, over 40 games, ALONE. The Tctl median was 74.1 °C and the max 78.8 °C.
@@ -333,6 +381,11 @@ Three layers answer it. Each sees a different size of fall, and none sees a fall
   epic's first merge-base, so milestone 1's batch is also M2 if the epic stops there). E = 1 910, 3 000 ms *(4 000 ms
   on both sides from `ABC-228`'s merge, `ADR-0053` d10; the added wall time is `UNKNOWN - verify`)*, the R
   pins, width 2, ALONE: ≈ 9 h plus ≈ 1 h of QE. That is the owner's "100 or more games" at the R pins.
+  *(2026-10-31, `bapm-rpair-level6-cut`: a base before `e42b637b` caps `go movetime 4000` at its level 5's 3 000 ms (QE-M1B-a), so
+  `rpair` plays both builds at `Skill Level` 6 (`{ 5 000 ms, rate 0 }` at every SHA so far), which searches 4 000 ms
+  on both sides: `ABC-247`, route (A), `…fb0c8978`. Each batch PREREG checks that level 6 is still rate 0 with a
+  budget ≥ 4 000 ms at both SHAs, and reads 4.0 s clocks on both builds after block 01 (`ABC-247` Test note 3). At
+  width 1 and 4 000 ms the batch is ≈ 21.7–24.1 h ALONE plus ≈ 1 h of QE.)*
 - **After a passing batch,** its head's own R score becomes the trend's reference, and the pool restarts.
 - **A batch that reads LOSS** cannot say which merge caused it. Then no further value-changing merge of this epic
   happens. The ledger names the suspects, the merges in the batch with their R smoke scores, for information only.
@@ -351,6 +404,7 @@ always before a batch. The pooled score and the flag are QE's to compute at each
 | `ABC-230` | `dad753dc` | `c0698ddd` | 4/3/3 (5.5) | 8/2/0 (8.0) | 0 | 0 | 8.0 / 10 = 80.0 % (this smoke only; the ledger had no row) | not evaluable (10 < 30 pooled games) | D 73.5 / 75.8 °C; R 73.75 / 77.6 °C (width 1) |
 | `ABC-228` | `5e84d0d7` | `61d5d629` | 3/3/4 (5.0) | 7/3/0 (7.0) **at 4 000 ms; recorded, not pooled** | 0 | 0 | 8.0 / 10 = 80.0 % (`ABC-230`'s row at 3 000 ms; the pool closes at this merge) | not evaluable (10 < 30 pooled games) | D 76.0 / 87.3 °C; R 75.13 / 85.8 °C (width 1) |
 | `ABC-241` | `d1a2d5cd` | `e42b637b` | 4/2/4 (6.0) | 6/3/1 (6.5) **at 4 000 ms; recorded, not pooled** | 0 | 0 | none computed: there is no 4 000 ms reference until milestone 1's batch (the 3 000 ms pool closed at `ABC-228`'s merge). Rows waiting at 4 000 ms: `ABC-228` 7.0 / 10 and `ABC-241` 6.5 / 10 (13.5 / 20, INFO only, never judged) | not evaluable (no reference) | D 74.38 / 83.6 °C; R 74.63 / 85.5 °C (width 1) |
+| `ABC-229` | `e196a281` | `b92a3394` | 2/3/5 (4.5) | 9/1/0 (9.0) **at 4 000 ms; recorded, not pooled** | 0 | 0 | none computed: no 4 000 ms reference until milestone 1's batch. Rows waiting at 4 000 ms: `ABC-228` 7.0 / 10, `ABC-241` 6.5 / 10 and `ABC-229` 9.0 / 10 (22.5 / 30, INFO only, never judged) | not evaluable (no reference) | D 74.75 / 83.0 °C; R 78.44 / 87.5 °C (width 1) |
 
 *Reference: R(close) 64.75 % at `38536a34` (`EPIC-008`), at 3 000 ms.* *Folded 2026-10-30 by BA/PM
 (`bapm-ABC-228-merge-fold`), copied from QE's smoke notes: `qe-ABC-230` `…a715c1d8` and `qe-ABC-228-ii` `…2123617d`.
@@ -359,6 +413,13 @@ Both rows ran at width 1 (the Orchestrator's delivery call after the width-2 the
 `qe-ABC-241` `…5d70bb7c`. It ran ALONE at width 1. A foreign process overlapped part of each smoke (D 31 of 253
 samples, R 13 of 195), with no thermal stop and a frequency fall ≤ 0.10 %, so both readings stand (QE-241-f). Repetition
 endings were D 1 / R 1 against base's 1 / 0, and `ABC-241`'s rule touched neither (QE-241-e).*
+*`ABC-229`'s row was folded 2026-10-31 by BA/PM (`bapm-rpair-level6-cut`), copied from QE's smoke note `qe-ABC-229`
+`…cfb537cf` (merged `5953c631`; verdict `…2afef8bf`). It ran ALONE at width 1. The first R run was killed externally in
+game 1 (VOID) and re-run once. A foreign vitest overlapped part of each smoke (D 25 of 220 samples, R 127 of 188), with
+no thermal stop and a frequency fall of 0.10 % (D) and 0.82 % (R), so both readings stand under QE's PREREG. Its R row
+read 410 skytalix moves at 4.0 s and 0 at 3.0 s (PGN clocks). The audit of 2026-10-31 (the block at the top) found no
+row in this ledger read at an unequal or capped time: `ABC-230` at 3 000 ms and the other three at 4 000 ms, as
+labelled; every D at 1 500 ms on both sides.*
 
 - **The 3 000 ms pool is closed** (`ABC-228`'s merge, `e42b637b`): 1 row, 10 R games, 8.0 / 10 = 80.0 %, judged
   against 64.75 %. The flag was never evaluable (fewer than 30 games). This pool is not carried forward.
@@ -375,7 +436,9 @@ endings were D 1 / R 1 against base's 1 / 0, and `ABC-241`'s rule touched neithe
   builds once per run; that time is not in the records (`UNKNOWN - verify`; minutes).
 - **Per batch:** ≈ 9 h ALONE plus ≈ 1 h of QE. *(2026-10-31, `bapm-ABC-242-close`: that is width 2. The batch runs at `--concurrency 1`
   (the owner's "one at a time" for `ABC-225`, extended to the batch by the Orchestrator's ruling of 2026-10-30), at
-  **≈ 18.5 h ALONE (17.5–19.4 h) plus ≈ 1 h of QE**, from `ABC-225` A6.)*
+  **≈ 18.5 h ALONE (17.5–19.4 h) plus ≈ 1 h of QE**, from `ABC-225` A6.)* *(2026-10-31, `bapm-rpair-level6-cut`: **≈ 21.7–24.1 h
+  ALONE plus ≈ 1 h of QE** at 4 000 ms on both sides (QE-M1B-b, from the 4 000 ms R smokes' 3.26–3.61 min a game).
+  A6's 21.67 games/h was a 3 000 ms rate, so 18.5 h is withdrawn.)*
 - **Against the framed options:** (b) was ≈ 19–27 h per ticket; (a) was ≈ 9–17 h.
 
 ## Measurement first: the options as framed for Q4 (history; the owner picked (e), extended, 2026-10-29)
@@ -463,8 +526,8 @@ same under every option and are not counted):
 | `ABC-235` | S2, no playing reading | 0 games |
 | `ABC-240` | S2, no playing reading | 0 games |
 | `ABC-225` | its A5 run, 40 games | ≈ 1 h ALONE *(2026-10-30: at `--concurrency 1` by the owner's word, ≈ 2 h, or ≈ 2.2–2.4 h by the recorded 4 000 ms width-1 R rate)* |
-| milestone 1's batch | an interleaved R pair, 200 + 200 | ≈ 9 h ALONE plus ≈ 1 h *(at width 2; at width 1 ≈ 22–24 h, an estimate from the 4 000 ms width-1 R smokes. The batch's width is the Orchestrator's to schedule or take to the owner, 2026-10-30)* *(**Restated 2026-10-31:** at width 1 ≈ 18.5 h ALONE, range 17.5–19.4 h, plus ≈ 1 h, from `ABC-225` A6's 21.67 games/h (`qe-ABC-225-w1` `…7e9bd36f`); 22–24 h is the slow case)* |
-| **total** | | ~~≈ 15 h, of which ≈ 12 h ALONE (R heat: Tctl median 82–83 °C, max 84–87 °C)~~ *(stale: the batch at width 2)* **Restated 2026-10-31 (`bapm-ABC-242-close`), at width 1: what remains is the batch alone, ≈ 18.5 h ALONE (17.5–19.4 h) plus ≈ 1 h of QE (≈ 19.5 h); every other row is spent. Spent plus remaining ≈ 26 h, ≈ 23 h ALONE (an estimate; the smoke rows are the 2026-10-29 costing, `ABC-225` A5 is the read 1.85 h). Width 1 by the owner's "one at a time" (`…65848126`) and the Orchestrator's batch ruling of 2026-10-30. Heat at width 1: Tctl median 74.1 °C, max 78.8 °C (`ABC-225` A5)** |
+| milestone 1's batch | an interleaved R pair, 200 + 200 | ≈ 9 h ALONE plus ≈ 1 h *(at width 2; at width 1 ≈ 22–24 h, an estimate from the 4 000 ms width-1 R smokes. The batch's width is the Orchestrator's to schedule or take to the owner, 2026-10-30)* *(**Restated 2026-10-31:** at width 1 ≈ 18.5 h ALONE, range 17.5–19.4 h, plus ≈ 1 h, from `ABC-225` A6's 21.67 games/h (`qe-ABC-225-w1` `…7e9bd36f`); 22–24 h is the slow case)* *(**Restated 2026-10-31, `bapm-rpair-level6-cut`:** ≈ 21.7–24.1 h ALONE plus ≈ 1 h, at 4 000 ms on both sides with `rpair` at `Skill Level` 6 (`ABC-247`); A6's rate was a 3 000 ms rate, QE-M1B-a/b)* |
+| **total** | | ~~≈ 15 h, of which ≈ 12 h ALONE (R heat: Tctl median 82–83 °C, max 84–87 °C)~~ *(stale: the batch at width 2)* **Restated 2026-10-31 (`bapm-ABC-242-close`), at width 1: what remains is the batch alone, ≈ 18.5 h ALONE (17.5–19.4 h) plus ≈ 1 h of QE (≈ 19.5 h); every other row is spent. Spent plus remaining ≈ 26 h, ≈ 23 h ALONE (an estimate; the smoke rows are the 2026-10-29 costing, `ABC-225` A5 is the read 1.85 h). Width 1 by the owner's "one at a time" (`…65848126`) and the Orchestrator's batch ruling of 2026-10-30. Heat at width 1: Tctl median 74.1 °C, max 78.8 °C (`ABC-225` A5)** *(**Restated 2026-10-31, `bapm-rpair-level6-cut`:** what remains is `ABC-247` (XS, its probe ≈ 0.3 h ALONE, an estimate) and the batch, ≈ 21.7–24.1 h ALONE plus ≈ 1 h of QE (≈ 22.7–25.1 h). Spent plus remaining ≈ 29–32 h, ≈ 26–29 h ALONE, the probe not counted. The A5 heat figure was read at 3 000 ms; the batch reads its own)* |
 
 Under (b), the same milestone was ≈ 60–80 h ALONE. A confirmation smoke adds ≤ 0.45 h per ticket that needs one.
 
@@ -596,6 +659,7 @@ mates", ≥ 6 "a quiet promotion decides". It reads `quiesce` and `chooseMove` a
 | 19 | `ABC-243` | The setoption-Hash row reads a bare `go` (level 5 = 4 000 ms), and the TT `A7` title names the budget it reads (test-only, from `ABC-228`'s QE gaps); *2026-10-30:* plus a UCI row for a FEN that carries an uncapturable ep square (QE-241-a) | XS | P3 | **Ready** | **10/10** | `ABC-228` and `ABC-241` Done; no ADR; `src/uci-session.test.ts` and `src/transposition.test.ts` only | nothing: `ABC-241` merged `1f6abec4`. `ABC-220`'s rows in the same file are rebase order only |
 | 20 | `ABC-244` | Time-blind virtual-clock rows in `src/cli.test.ts` and `src/uci-session.test.ts` take the coarsest step that keeps QE's caught-mutant set (`ADR-0046` § Addendum 2026-10-30, tranche 1; test-only, from `QE-229-a`) | S | **P1** | Backlog (cut 2026-10-30; recommended Ready) | **10/10** | `ADR-0046` § Addendum 2026-10-30 R1–R4 (PROPOSED, `5fd3eee7`; BA/PM's word given on its page); `ABC-230`/`ABC-241` Done | nothing but the merges. **Pulled before `ABC-242` (row 10), `ABC-243` (row 19) and `EPIC-009`'s `ABC-221`** (shared test files). A8/A9 timed reads ALONE |
 | 21 | `ABC-245` | A blunder-level row reads a third occurrence whose earlier occurrences lie more than 50 plies back, so lowering the 100-key cap turns the lane red; the `src/levels.test.ts` header count is corrected (test-only, from QE-242-b and SE-242-f) | XS | P3 | **Ready** (re-scored 2026-10-31, `bapm-ABC-245-rescore`) | **10/10** | `ABC-242` Done (`af5b2b49`); `ADR-0046` § Addendum R1–R4 and § Ruling 2026-10-31 (`10492743`: per level call, step 10) | nothing. Order only: `ABC-221`'s diff against `src/levels.test.ts` is checked at the pull |
+| 22 | `ABC-247` | `rpair` passes `Skill Level` 6 to skytalix on both builds, so `go movetime 4000` searches 4 000 ms on a base whose level 5 is 3 000 ms; the `r` and `d` paths are unchanged (tools only, from QE-M1B-a; route (A), `…fb0c8978`) | XS | **P1** | **Ready** (cut 2026-10-31, `bapm-rpair-level6-cut`) | **10/10** | `ABC-225` Done (`59dc3ab4`); no ADR (`ADR-0053` d10's intent kept) | order only: after `qe-ABC-245` (ALONE). **Blocks milestone 1's batch.** A2's probe runs ALONE |
 
 *Re-scored 2026-10-29 (`bapm-owner-words-b`): Q4 is removed from every wait. Each value-changing ticket's DoR row 4
 is now ✅, because its reading is the smoke pair. No ticket but `ABC-225` changes column on this hop. `ABC-227` (Done)
@@ -622,6 +686,9 @@ Only its row was added; `ABC-242`'s and `ABC-243`'s pages gained dated lines, an
 *Folded 2026-10-31 (`bapm-ABC-242-close`): rows 3 (`ABC-225` Done) and 10 (`ABC-242` Done) were changed, and row 21
 (`ABC-245`) was added at the end, like `ABC-243` and `ABC-244`: it is test-only and not one of the fifteen engine
 changes. The board holds the live state.*
+*`ABC-247` was added 2026-10-31 (`bapm-rpair-level6-cut`) at the end: it is tools only and not one of the fifteen engine
+changes. Its row number is not its pull order: it is P1 and pulled after `qe-ABC-245`, ahead of the batch. Row 5
+(`ABC-229`) is stale here (merged `5953c631`); its fold is owed separately. The board holds the live state.*
 
 ## Observations (not tickets)
 
@@ -685,7 +752,9 @@ changes. The board holds the live state.*
   OQ-228-1 (ii), a batch at 4 000 ms takes longer by `UNKNOWN - verify`.)* Milestone 1 is ≈ 15 h. *(2026-10-31,
   `bapm-ABC-242-close`: at width 1 a batch is ≈ 18.5 h ALONE plus ≈ 1 h of QE, from `ABC-225` A6 at 4 000 ms, so the
   4 000 ms question is answered for width 1. Milestone 1's remaining time is its batch, ≈ 19.5 h; spent plus remaining
-  ≈ 26 h. The ≈ 45–46 h epic figure counted batches at ≈ 10 h and is not re-summed here.)* The owner may stop the epic
+  ≈ 26 h. The ≈ 45–46 h epic figure counted batches at ≈ 10 h and is not re-summed here.)* *(2026-10-31, `bapm-rpair-level6-cut`:
+  that A6 rate was read at 3 000 ms (QE-M1B-a). At 4 000 ms both sides a width-1 batch is ≈ 21.7–24.1 h ALONE plus
+  ≈ 1 h of QE; milestone 1 spent plus remaining ≈ 29–32 h, ≈ 26–29 h ALONE.)* The owner may stop the epic
   after any milestone.
 - **`RISK-EPIC010-05`: self-play tuning repeats non-transfer** (`ABC-239`). Its validation is outside, by rule.
 - **`RISK-EPIC010-06`: history keys widen the UCI input surface** (`ABC-230`): a `position … moves` list of any length
