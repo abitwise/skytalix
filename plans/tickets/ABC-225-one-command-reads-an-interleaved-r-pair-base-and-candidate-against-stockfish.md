@@ -11,6 +11,26 @@ epic: EPIC-010
 
 # ABC-225: an interleaved R pair in the rating harness
 
+> **RESTATED 2026-10-31 by BA/PM** (task `bapm-rpair-level6-cut`, records only, at `main` `278a9bb7`; nothing run, built or
+> timed). Source: `qe-EPIC-010-m1-batch` `…5967dfc1` (QE-M1B-a HIGH, QE-M1B-b MEDIUM) and the Orchestrator's route (A)
+> (`orch-2026-10-30a` `…fb0c8978`). **The page stays Done, and A1–A6 stay MET as written.**
+>
+> - **A5 was labelled 4 000 ms but played at 3 000 ms on both sides.** Its two builds, `02fa9556` and `baf99a7c`, both
+>   predate `ABC-228` (`e42b637b`), where `LEVELS[5]` is 3 000 ms. `rpair` sends `go movetime 4000` with no `Skill
+>   Level`, and `go()` caps it at the level's budget. QE's count on A5's records: 0 of 905 and 0 of 1 000 `info … time`
+>   values above 3 100 ms; PGN clocks at 3.0 s on 895 and 991 skytalix moves, at 4.0 s on none. Both sides were equal,
+>   and A5 graded no strength (its Elo was INFO), so **no verdict moves.**
+> - **A6's 21.67 games/h is a 3 000 ms rate**, so the 18.46 h projection (17.5–19.4 h) does not price a 4 000 ms
+>   pair, and is withdrawn as the batch estimate. The "why it fell" line in the ESTIMATE RESTATED block below
+>   (shorter games) is superseded: the cap explains the fall. **A 400-game pair at width 1 with both sides at
+>   4 000 ms is about 21.7–24.1 h ALONE, plus about 1 h of QE** (QE-M1B-b: 3.26–3.61 min a game from the
+>   `qe-ABC-228-ii` and `qe-ABC-241` R smokes). `EPIC-010`'s cost lines carry the same restatement.
+> - **What changes in the tool:** `ABC-247` (XS, P1, Ready): `rpair` passes `option.Skill Level=6` to skytalix on both
+>   builds. Level 6 is `{ 5 000 ms, rate 0 }` at every SHA so far, so both sides search 4 000 ms. A1's "`rpair` = `r`'s
+>   argv except openings and output paths" gains that one token, restated and pinned by `ABC-247` A1. The `r` and `d`
+>   paths are unchanged.
+> - Notes: `.grugops/context/bapm-rpair-level6-cut/notes/`.
+
 > **CLOSED, Done, folded 2026-10-31 by BA/PM** (task `bapm-ABC-242-close`, records only, at `main` `d58f2d77`;
 > nothing run). The page read `in-development` after the merge; this fold closes it. QE's verdict is
 > **PASS_WITH_GAPS** (`qe-ABC-225-w1` `…d0807789`, by PREREG `…6d1d5bff`, committed at `b4d7d5d5` before any game).
@@ -20,7 +40,8 @@ epic: EPIC-010
 > - **A1–A6 MET.** A1–A4 re-run by QE at `933d9f35` (`…5d562743`); A5 and A6 on the real 40-game run at
 >   `--concurrency 1`, ALONE, to the end (`…7e9bd36f`): Tctl median 74.1 °C, max 78.8 °C, no thermal stop, rc 0.
 >   A6: 1.846 h play wall, 21.67 games/h, a 400-game pair at width 1 projected at 18.46 h (17.5–19.4 h). The
->   ESTIMATE RESTATED block below carries that figure.
+>   ESTIMATE RESTATED block below carries that figure. *(2026-10-31, `bapm-rpair-level6-cut`: read at 3 000 ms on both sides, not
+>   4 000 ms; the RESTATED block at the top.)*
 > - **The SE's four `UNKNOWN - verify` points are closed by the real run:** cutechess honours `start=S` (the
 >   `start=51` probe), every block yields an nps value, k10temp Tctl reads, and a block's Elo line equals the pooled
 >   formula.
@@ -46,7 +67,8 @@ epic: EPIC-010
 > - **Source:** A6's own reading (`qe-ABC-225-w1` `…7e9bd36f`). 40 games at `--concurrency 1` and 4 000 ms took
 >   1.846 h, which is 21.67 games/h, or 2.77 min a game. Play wall × 10 + build = 18.46 h. The per-block range
 >   (52.6–58.1 min × 20 block-runs) gives 17.5–19.4 h.
-> - **Why it fell.** The 22–24 h came from 3.3–3.6 min a game in the `qe-ABC-228-ii` and `qe-ABC-241` R smokes. This
+> - ~~**Why it fell.**~~ *(Superseded 2026-10-31, `bapm-rpair-level6-cut`: the A5 builds capped `movetime 4000` at 3 000 ms; the block
+>   at the top. At 4 000 ms the pair is about 21.7–24.1 h ALONE plus about 1 h.)* The 22–24 h came from 3.3–3.6 min a game in the `qe-ABC-228-ii` and `qe-ABC-241` R smokes. This
 >   run's games were shorter, likely because 36 of 40 ended in mate (QE's reading).
 > - **How firm it is.** The rate depends on game length, and 40 games is a small sample for a rate. Read 18.5 h as the
 >   central figure and the old 22–24 h as the slow case if games run longer. It is still an estimate: the batch reads
