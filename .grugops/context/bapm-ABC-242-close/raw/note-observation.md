@@ -1,0 +1,41 @@
+# BA/PM observation, bapm-ABC-242-close: the figures this hop folded, copied from sealed notes and plans/ files at `main` `d58f2d77`
+
+Read with `cat`/`grep`/`sed`. Nothing was run.
+
+## `qe-ABC-242` (`…f24601b8`, `…b9f3cd67`, `…93eb0bf9`, `…f041ddb3`) and `se-ABC-242` (`…8b42a94e`, `…76069fd1`, `…c0e5e0fa`)
+- QE PASS_WITH_GAPS at code `6884d61a`, base `4387d4e8`, PREREG `5da281c9`. A1–A7 MET, A8 confirmed. Merged `af5b2b49`.
+- `G8`: B 9.21 s, H 9.41 s (+0.21 s; estimate +0.05..+0.15). Tranche 2 (> 9.6 s) not fired.
+- Plants 20 of 20 as pre-registered. Survivors: Q7, Q11, Q12, Q16a equivalent; Q6 (cap 8) and Q8 (cap 50) not
+  equivalent; Q18 unpinned by design. Every fixture has a 7-ply history, matches at −4 and −8. X2 (matches −98, −100) kills
+  Q6 and Q8. Post-hoc sweep: cap 50 0 FAIL, cap 6 280 FAIL.
+- A1 lane form (100 ms, rate 1, seed 1, step 10): H `[0, −990, −1012, −1003, −1002]` plays `d8c8`; B
+  `[−1005, −1000, −1012, −1003, −1002]` plays `d8c7`. Probe set-up (2 000 ms, `virtualClock(1)`): H
+  `[0, −1041, −1030, −1015, −1031]` plays `d8e7`; B `[−1020, −1030, −1030, −1015, −1031]`.
+- SE-242-a: base `d8e8` −1013 at `24f3e322`, −1020 from `e42b637b` on; unchanged at `1f6abec4`, `5953c631`, `4387d4e8`.
+- QE-242-a: at step 10 children are handed 10, −10, −30, −50, −70 ms (depth 1); elapsed 210 virtual ms of 100. Step 1
+  costs about +2.5 s of lane wall. Kill sets equal at every step.
+- QE-242-c: `LADDER_DEEP=1` short 18/18, 25.5 s, pair lines not printed. SE's run: 4/4, 3.5/4, 3/4, 3.5/4, 10/10, digest
+  `f61f457801fe67af`.
+- `src/levels.ts:160`: `const PRIOR_KEYS_WINDOW = 100;`. `src/levels.test.ts:15` reads "DEFAULT (`npm test`, 19 tests)".
+
+## `qe-ABC-225-w1` (`…d0807789`, `…7e9bd36f`, `…5d562743`) and `se-ABC-225-main` (`…0813b232`, `…2f0a5298`, `…a9f5834c`)
+- QE PASS_WITH_GAPS, A1–A6 MET, PREREG `…6d1d5bff` at `b4d7d5d5`. Merged `59dc3ab4` (2026-10-30 22:34Z).
+- A6: 1.846 h play wall, 21.67 games/h, 400-game pair at width 1 projected 18.46 h (17.5–19.4 h). Tctl median 74.1 °C,
+  max 78.8 °C.
+- QE-225w1-a (LOW, `rpair` `budget` not read on `r`), -b (LOW, estimate), -c (INFO, 1 of 111 samples foreign vitest),
+  -d (INFO, nps 1.635 M → 1.753 M, +7 %), -e (INFO, real halt path unexercised). QE-225-d carried.
+- SE mutation check: `cutechessArgs()` `r` literal back to 3000 → `pair-check` 21 pass, 1 fail (the pin test).
+
+## Owner and Orchestrator words
+- `orch-2026-10-30a` `…65848126`: *"ABC-242: accept, ABC-225 - approve to run one at a time"*.
+- `…f4673b9f` (whole-second confirmed, catalog host): read; not used by this fold.
+- `plans/board.md` 2026-10-30 line (after `bapm-ABC-242-225-owner`): "ORCHESTRATOR RULING (delivery, delegation 2026-10-22):
+  milestone-1 R-pair batch also runs at --concurrency 1 … owner informed, may override."
+
+## `bapm-ABC-222-epic009-m1` `…e84baed7`
+- The width-1 400-game restatement (about 18.5 h, 17.5–19.4 h, plus about 1 h of QE) and the flag that `ABC-225`'s page
+  still read `in-development` and `EPIC-010`'s "≈ 15 h" total predated the width-1 ruling.
+
+## `EPIC-010` cost table at `d58f2d77` (the inputs to the restated total)
+- Smoke pairs: `ABC-228`/`229`/`230` ≈ 3.6 h (≈ 2.1 h ALONE); `ABC-241` ≈ 1.2 h (≈ 0.7 h ALONE). `ABC-226`, `227`, `235`,
+  `240`: 0 games. `ABC-225` A5 read 1.846 h play. Board: all nine milestone 1 tickets Done.

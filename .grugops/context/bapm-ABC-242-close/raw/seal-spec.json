@@ -1,0 +1,24 @@
+{
+  "refs": ["bapm-ABC-242-close", "ABC-242", "ABC-225", "ABC-245", "EPIC-010", "ABC-244", "ABC-230", "ABC-228",
+           "ADR-0054", "ADR-0032", "ADR-0046", "NFR-008", "NFR-004",
+           "QE-242-a", "QE-242-b", "QE-242-c", "SE-242-a", "SE-242-b", "SE-242-c", "SE-242-d", "SE-242-e", "SE-242-f",
+           "QE-225w1-a", "QE-225w1-b", "QE-225w1-c", "QE-225w1-d", "QE-225w1-e", "QE-225-d", "RISK-EPIC010-04",
+           "arch-qe242a-ruling",
+           "qe-ABC-242/20261031T051332Z-qe-e2e-decision-f24601b8",
+           "qe-ABC-242/20261031T051332Z-qe-e2e-observation-b9f3cd67",
+           "qe-ABC-242/20261031T051332Z-qe-e2e-observation-93eb0bf9",
+           "qe-ABC-242/20261031T051332Z-qe-e2e-observation-f041ddb3",
+           "se-ABC-242/20261031T043705Z-software-engineer-observation-c0e5e0fa",
+           "se-ABC-242/20261031T043705Z-software-engineer-observation-76069fd1",
+           "qe-ABC-225-w1/20261030T223134Z-qe-e2e-decision-d0807789",
+           "qe-ABC-225-w1/20261030T223127Z-qe-e2e-observation-7e9bd36f",
+           "se-ABC-225-main/20261030T202846Z-software-engineer-observation-a9f5834c",
+           "bapm-ABC-222-epic009-m1/20261031T025846Z-ba-pm-observation-e84baed7",
+           "orch-2026-10-30a/20261030T180500Z-orchestrator-decision-65848126",
+           "orch-2026-10-30a/20261030T181200Z-orchestrator-decision-f4673b9f",
+           "main af5b2b49", "main 59dc3ab4", "main d58f2d77", "6884d61a"],
+  "notes": [
+    { "kind": "decision", "confidence": "high on the records closed and the dispositions (every figure copied from sealed qe-ABC-242, se-ABC-242, qe-ABC-225-w1 and se-ABC-225-main notes); the restated 18.5 h and the ≈ 26 h whole-milestone sum are estimates, UNKNOWN - verify until the batch reads its own wall; ABC-245's game-reachable fixture is UNKNOWN - verify until the SE builds it; nothing run, built, timed or played", "bodyFile": "note-decision.md" },
+    { "kind": "observation", "confidence": "high: copied from sealed notes and from plans/ and src/ files read with cat/grep/sed at main d58f2d77", "bodyFile": "note-observation.md" }
+  ]
+}

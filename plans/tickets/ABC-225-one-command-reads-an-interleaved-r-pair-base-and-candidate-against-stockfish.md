@@ -1,14 +1,43 @@
 ---
 id: ABC-225
 title: "One command reads an interleaved R pair: base and candidate against the same Stockfish, in alternating blocks, with the opening-paired error and a host log"
-status: in-development
-column: In Development
+status: done
+column: Done
+closed: "2026-10-30, merged to main at 59dc3ab4; QE PASS_WITH_GAPS at --concurrency 1 (qe-ABC-225-w1, d0807789); tools/ only, no UAT"
 size: M
 priority: P2
 epic: EPIC-010
 ---
 
 # ABC-225: an interleaved R pair in the rating harness
+
+> **CLOSED, Done, folded 2026-10-31 by BA/PM** (task `bapm-ABC-242-close`, records only, at `main` `d58f2d77`;
+> nothing run). The page read `in-development` after the merge; this fold closes it. QE's verdict is
+> **PASS_WITH_GAPS** (`qe-ABC-225-w1` `…d0807789`, by PREREG `…6d1d5bff`, committed at `b4d7d5d5` before any game).
+> It was **merged at `59dc3ab4`** on 2026-10-30, with the `qe-ABC-225` records of the width-2 thermal stop. `tools/`
+> only, so **no UAT** (Test note 2). The SE merge hop is `se-ABC-225-main` (`3dca0e67`; `rpair` at 4 000 ms).
+>
+> - **A1–A6 MET.** A1–A4 re-run by QE at `933d9f35` (`…5d562743`); A5 and A6 on the real 40-game run at
+>   `--concurrency 1`, ALONE, to the end (`…7e9bd36f`): Tctl median 74.1 °C, max 78.8 °C, no thermal stop, rc 0.
+>   A6: 1.846 h play wall, 21.67 games/h, a 400-game pair at width 1 projected at 18.46 h (17.5–19.4 h). The
+>   ESTIMATE RESTATED block below carries that figure.
+> - **The SE's four `UNKNOWN - verify` points are closed by the real run:** cutechess honours `start=S` (the
+>   `start=51` probe), every block yields an nps value, k10temp Tctl reads, and a block's Elo line equals the pooled
+>   formula.
+> - **QE-225w1-b (LOW, records):** done on 2026-10-31 (`bapm-ABC-222-epic009-m1`), the block below.
+>
+> **Gap dispositions:**
+>
+> | gap | QE grade | disposition |
+> |---|---|---|
+> | **QE-225w1-a** | LOW, maintainability (the SE's LOW, confirmed) | **No ticket. Recorded here as a known misleading field.** `cutechessArgs()` takes the R budget from its literal (`mode === "r" ? 4000 : budget`), so `rpair`'s `budget: 4000` (`rating.ts:660`) is passed and never read. A1 holds by construction, and `pair-check.ts`'s A1 pin (`st=4 timemargin=1000`) turns red if the literal moves alone (the SE's mutation check, `se-ABC-225-main` `…a9f5834c`). The risk is only a reader who edits `rpair`'s `budget` and expects an effect; a dry run shows `st=4`. **Fold rule:** the next ticket that moves the R budget names one R-budget constant or drops `budget` from `rpair`'s spec in the same change. Cutting a ticket for a field nothing reads is not worth a hop. |
+> | **QE-225w1-c** | INFO, host | **No ticket.** A foreign vitest from another session showed in 1 of 111 watcher samples (about 60 s) and did not move Tctl. Host coordination stays outside this factory (QE-225-c stands). The batch's PREREG keeps the wait-clear and the logged-not-stopped rule. |
+> | **QE-225w1-d** | INFO | **No ticket; carried to the batch.** Stockfish's nps swung +7 % between two consecutive blocks (1.635 M → 1.753 M) on one binary and host. That is the variance the gauge exists to show. Milestone 1's batch reads `nps.log` per block (20 per build) and reports the spread, information only. |
+> | **QE-225w1-e** | INFO | **No ticket; a residual.** A4's real halt path is unexercised on real data (0 faults); it is covered offline by `pair-check.ts`'s A4 suite. The first real fault, in the batch or later, exercises it, and that run's QE reads the halt. |
+>
+> - **Carried unchanged:** QE-225-d (LOW, `qe-ABC-225`: the pentanomial variance convention is unstated in `pair.ts`).
+> - Elo (INFO, graded by nothing): pair −69.9 ± 219.0 NEUTRAL, 40 games.
+> - Notes: `.grugops/context/bapm-ABC-242-close/notes/`.
 
 > **ESTIMATE RESTATED 2026-10-31 by BA/PM** (task `bapm-ABC-222-epic009-m1`, records only, at `main` `4bd9ac6a`;
 > QE-225w1-b, LOW, from `qe-ABC-225-w1` `…d0807789`). **A 400-game R pair at width 1 is about 18.5 h ALONE (range
@@ -185,5 +214,8 @@ epic: EPIC-010
 | 9 | priority | ✅ P2 |
 | 10 | no major unresolved blocker | ✅ none (Q4 answered 2026-10-29; the thermal block answered 2026-10-30: width 1) |
 
-**DoR 10/10 (re-scored 2026-10-29; held 2026-10-30, `bapm-ABC-242-225-owner`). In Development.** Pull before
-milestone 1's batch is due; it never runs beside an ALONE reading.
+**Done (merged `59dc3ab4`, 2026-10-30; folded 2026-10-31, `bapm-ABC-242-close`).** It is the instrument of
+milestone 1's batch, which runs at `--concurrency 1`.
+
+*(Was: "DoR 10/10 (re-scored 2026-10-29; held 2026-10-30, `bapm-ABC-242-225-owner`). In Development. Pull before
+milestone 1's batch is due; it never runs beside an ALONE reading.")*

@@ -1,14 +1,63 @@
 ---
 id: ABC-242
 title: "On a blunder level (1–4), a root move that makes the third occurrence of a game position scores exactly 0, on the CLI and over UCI; every engine-path search is unchanged"
-status: ready
-column: Ready
+status: done
+column: Done
+closed: "2026-10-31, merged to main at af5b2b49; QE PASS_WITH_GAPS (qe-ABC-242, f24601b8), which signs UAT"
 size: S
 priority: P3
 epic: EPIC-010
 ---
 
 # ABC-242: the blunder path sees the third occurrence at its root (QE-230-a)
+
+> **CLOSED 2026-10-31, Done, folded by BA/PM** (task `bapm-ABC-242-close`, records only, at `main` `d58f2d77`;
+> nothing run, built or timed). QE's verdict is **PASS_WITH_GAPS** at code `6884d61a`, base `4387d4e8` (`qe-ABC-242`
+> `…f24601b8`, by PREREG `5da281c9`, committed before any head run). It was merged at **`af5b2b49`**. **The QE verdict
+> signs UAT** (Test note 3; the owner delegation). The SE's build is `se-ABC-242` `…8b42a94e`.
+>
+> - **A1–A7 MET, A8 confirmed** (QE's table in `…f24601b8`). A1–A3 were read against the real base tree, not only the
+>   SE's test-local `base()` (SE-242-e confirmed on 42 of 42 checks). 20 of 20 plants matched the pre-registration.
+> - **`G8`: H 9.41 s, B 9.21 s** (+0.21 s, against the +0.05..+0.15 s estimate). `NFR-008` ≤ 10 s MET. `ABC-244`'s
+>   tranche-2 trigger (> 9.6 s) did not fire, with 0.19 s to spare.
+> - **A1's `UNKNOWN - verify` entries, as read (recorded, not pinned):**
+>   - the lane form (level 1's 100 ms, rate 1, seed 1, step 10): H `[d8e8 0, d8c8 −990, d8d7 −1012, d8e7 −1003,
+>     d8c7 −1002]` plays `d8c8`; base `[−1005, −1000, −1012, −1003, −1002]` plays `d8c7` (`se-ABC-242` `…76069fd1`,
+>     QE `…f041ddb3`);
+>   - QE's probe set-up (2 000 ms, `virtualClock(1)`), out of tree: H `[0, −1041, −1030, −1015, −1031]` plays `d8e7`;
+>     base `[−1020, −1030, −1030, −1015, −1031]`.
+>   - In both, `scored[0]` is `{d8e8, 0}` and 4 child searches run for 5 legal moves. The played move is not `d8e8`.
+> - **SE-242-a (INFO), answered by QE: the base probe value moved at a known merge.** QE's `blunder-probe.mjs`, run
+>   unchanged, reads base `d8e8` at −1013 at the `ABC-230` merge `24f3e322`, and at **−1020 from the `ABC-228` merge
+>   `e42b637b` on** (quiescence in check searches every evasion, `ADR-0053`). It is unchanged at `1f6abec4`, `5953c631`
+>   and `4387d4e8`. The other entries moved with it. So the "−1013" on this page and in `ADR-0054` is the `ABC-230`
+>   tree's reading, and nothing unexplained moved it. The page's −1013 lines carry a dated pointer here. The ADR's text
+>   is the Architect's and is not edited on this hop.
+> - **SE-242-b (LOW, design note): recorded, no ticket.** On a plain 2-cycle, base already scores the winner's third
+>   occurrence 0 from inside the child search: the loser's shuttle reply is itself a twice-seen position at ply 1. So
+>   the change bites the loser's repeat, and a winner's repeat only where the loser's replies are not themselves
+>   repeats. Both of `ADR-0054` d4's measured classes stay covered. QE agrees (INFO). The A1 winning fixtures use an
+>   asymmetric shuttle for that reason. § Problem's value line reads with this limit.
+> - **QE-242-b (LOW, a regression gap): cut as `ABC-245`** (XS, P3, test-only, Backlog 9/10). Lowering the 100-key cap
+>   to 8 (Q6) or 50 (Q8) survives the whole lane, because every `ABC-242` fixture has a 7-ply history with its matches
+>   at −4 and −8. A third occurrence whose earlier occurrences lie further back is game-reachable (a 6-ply cycle
+>   already reads −6 and −12). `ABC-245` adds one row that reads past −50, and also corrects the stale
+>   `src/levels.test.ts` header count (SE-242-f, INFO). It waits on the QE-242-a ruling for its step. Q18 (the check
+>   spends a clock read) is unpinned by design: INFO, no ticket.
+> - **QE-242-c (INFO): recorded, no ticket.** The `LADDER_DEEP=1` short run was read pass/fail only (18/18, exit 0).
+>   The default reporter did not print the per-pair lines, so the pair scores are `UNKNOWN - verify` from QE's hop.
+>   A7's "levels 1–5 still ordered" rests on the rows' own assertions, which passed. The SE's run at the same code
+>   printed 4/4, 3.5/4, 3/4, 3.5/4 and 10/10 (digest `f61f457801fe67af`).
+> - **QE-242-a (MEDIUM): PENDING with the Architect** (`arch-qe242a-ruling`, claimed 2026-10-31). The question is
+>   whether `ABC-244`'s condition 2 (`ADR-0046` § Addendum R2) reads a blunder per level call, which admits step 10 as
+>   built, or per child search, which admits only step 1 at about +2.5 s of lane wall and so breaches `G8`. At step 10
+>   the children are handed 10, −10, −30, −50 and −70 ms; kill sets are equal at every step, and the product is
+>   unaffected. **BA/PM does not rule it here.** It did not block the merge. If the ruling names a change to a merged
+>   row, BA/PM cuts that ticket then.
+> - Other SE findings: SE-242-c (M7, M8 and the cap's removal are equivalent; QE agrees), SE-242-d (the `QE-244-a`
+>   carry did not trigger) and SE-242-f (folded into `ABC-245`) are INFO.
+> - The scope fence held: only the 4 named files changed, and the engine-path files are byte-identical B → H.
+> - Notes: `.grugops/context/bapm-ABC-242-close/notes/`.
 
 > **AMENDED 2026-10-30 by BA/PM** (task `bapm-g8-headroom-cut`, records only, at `main` `161e940d`). Source:
 > `ADR-0046` § Addendum 2026-10-30 R1–R4 (`arch-g8-headroom`, `5fd3eee7`), given BA/PM's word on `ABC-244`'s page.
@@ -125,10 +174,15 @@ epic: EPIC-010
   `4k3/8/8/8/8/8/8/1Q2K3 w - - 0 1` + `b1b2 e8d8 b2b1 d8e8 b1b2 e8d8 b2b1`, blunder forced (rate 1, 2 000 ms, virtual
   clock, seed 1). `d8e8` (the third occurrence) is scored **−1013 with the prior keys and −1013 without**. The
   whole scored list is identical: the keys change nothing on this path's root moves.
+  *(2026-10-31, `bapm-ABC-242-close`: −1013 is the `ABC-230` tree's reading. From the `ABC-228` merge `e42b637b` on,
+  base reads −1020 on the same probe (SE-242-a, answered by QE; § CLOSED).)*
 - **Value:** the blunder path ranks root moves the way the game will end them. Its "strict second-best"
   (`ADR-0032` decision 2) is then picked from a list that reads a third occurrence as a draw, as the engine path
   already does at the same level. The size of the effect in play is `UNKNOWN - verify`: `ABC-226`'s count read level
   5 games only, where this path never runs.
+  *(2026-10-31, `bapm-ABC-242-close`, SE-242-b: on a plain 2-cycle base already scored the winner's third occurrence
+  0 from inside the child search. The change bites the loser's repeat, and a winner's only where the loser's replies
+  are not themselves repeats.)*
 
 ## Scope
 
@@ -164,7 +218,7 @@ The design is the Architect's (§ Dependencies). This page states the outcomes.
 - **A1 (third occurrence, scored 0).** **Given** QE's probe fixture above and ≥ 3 more fixture games (both colours,
   at least one a winning side and one a losing side), **when** the blunder path scores the root moves with the
   game's prior keys, **then** the move that makes the third occurrence scores **exactly 0**, and base scores it
-  otherwise (probe: `d8e8` −1013). Read on the injected seam at a forced blunder (rate 1), on a virtual clock.
+  otherwise (probe: `d8e8` −1013; *−1020 from `e42b637b` on, SE-242-a*). Read on the injected seam at a forced blunder (rate 1), on a virtual clock.
   *(Folded 2026-10-30 from the accepted design, `bapm-ABC-242-225-owner`:)*
   - **Its child is not searched.** The number of child searches equals the number of legal moves minus the moves
     scored 0 this way. On the probe that is **4 child searches for 5 legal moves**, and `scored[0]` is `{d8e8, 0}`
@@ -295,6 +349,9 @@ The design is the Architect's (§ Dependencies). This page states the outcomes.
 | 8 | size | ✅ S |
 | 9 | priority | ✅ P3 |
 | 10 | no major unresolved blocker | ✅ none. The owner accepted `ADR-0054` § Proposed amendment 2026-10-30 (*"ABC-242: accept"*, `…65848126`). *(Was ⬜: the Architect reading, and the owner's word.)* |
+
+**Done 2026-10-31** (`bapm-ABC-242-close`): merged `af5b2b49`, QE PASS_WITH_GAPS signs UAT; QE-242-a pending
+with the Architect; QE-242-b is `ABC-245`.
 
 **DoR 10/10 (2026-10-30, `bapm-ABC-242-225-owner`). Ready.** S, P3, S2 with no smoke. The pull is the
 Orchestrator's. *(Was: "DoR 9/10 (2026-10-30, `bapm-qe230a-followup`). Backlog.")*
