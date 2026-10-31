@@ -1,0 +1,16 @@
+
+ RUN  v4.1.12 <worktree>
+
+stdout | src/uci-session.test.ts > ABC-221 A10 — three searches at 59 500 ms on the real clock [deep, ENGINE_DEEP=1] > each returns in <= 60 000 ms of wall; memory <= 16 MiB, growth <= 1 MiB; max depth logged
+ABC-221 A10 start: wall 59499.5 ms, depth 13, nodes 37238804, time 59500; heapUsed 9.34 MiB, arrayBuffers 4.51 MiB
+ABC-221 A10 italian: wall 59499.8 ms, depth 11, nodes 38437932, time 59500; heapUsed 9.36 MiB, arrayBuffers 4.51 MiB
+ABC-221 A10 kiwipete: wall 59501.1 ms, depth 11, nodes 44009197, time 59501; heapUsed 9.36 MiB, arrayBuffers 4.51 MiB
+ABC-221 A10 first read: heapUsed 9.24 MiB, arrayBuffers 4.51 MiB; max wall 59501.1 ms; max completed depth 13 (KEY_ARRAY_CAPACITY tripwire 100: not reached)
+
+ ✓ src/uci-session.test.ts > ABC-221 A10 — three searches at 59 500 ms on the real clock [deep, ENGINE_DEEP=1] > each returns in <= 60 000 ms of wall; memory <= 16 MiB, growth <= 1 MiB; max depth logged 179609ms
+
+ Test Files  1 passed (1)
+   Start at  05:34:33
+   Duration  179.85s (transform 0ms, setup 0ms, import 160ms, tests 179.61s, environment 0ms)
+
+exit 0

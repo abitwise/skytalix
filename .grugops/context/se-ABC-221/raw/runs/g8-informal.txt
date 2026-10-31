@@ -1,0 +1,7 @@
+1 b load1=1.05 rc=0 Duration  8.91s Tests  2333 passed
+2 h load1=1.45 rc=0 Duration  9.11s Tests  2363 passed
+3 h load1=1.85 rc=0 Duration  9.23s Tests  2363 passed
+4 b load1=2.22 rc=0 Duration  9.01s Tests  2333 passed
+5 b load1=2.23 rc=0 Duration  9.11s Tests  2333 passed
+6 h load1=2.40 rc=0 Duration  9.17s Tests  2363 passed
+DONE

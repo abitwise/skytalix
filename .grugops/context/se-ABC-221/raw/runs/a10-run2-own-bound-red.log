@@ -1,0 +1,29 @@
+
+ RUN  v4.1.12 <worktree>
+
+stdout | src/uci-session.test.ts > ABC-221 A10 — three searches at 59 500 ms on the real clock [deep, ENGINE_DEEP=1] > each returns in <= 60 000 ms of wall; memory <= 16 MiB, growth <= 1 MiB; max depth logged
+ABC-221 A10 start: wall 59499.4 ms, depth 13, nodes 37074964, time 59500; heapUsed 9.34 MiB, arrayBuffers 4.51 MiB
+
+ × src/uci-session.test.ts > ABC-221 A10 — three searches at 59 500 ms on the real clock [deep, ENGINE_DEEP=1] > each returns in <= 60 000 ms of wall; memory <= 16 MiB, growth <= 1 MiB; max depth logged 179620ms
+   → expected 59499.445238 to be greater than or equal to 59500
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/uci-session.test.ts > ABC-221 A10 — three searches at 59 500 ms on the real clock [deep, ENGINE_DEEP=1] > each returns in <= 60 000 ms of wall; memory <= 16 MiB, growth <= 1 MiB; max depth logged
+AssertionError: expected 59499.445238 to be greater than or equal to 59500
+ ❯ <anonymous> src/uci-session.test.ts:2597:22
+    2595|         );
+    2596|         expect(lines.at(-1)).toMatch(/^bestmove [a-h][1-8][a-h][1-8]/);
+    2597|         expect(wall).toBeGreaterThanOrEqual(CLOCK_MODE_CAP);
+       |                      ^
+    2598|         expect(wall).toBeLessThanOrEqual(CLOCK_MODE_CEILING);
+    2599|         expect(memory.heapUsed - first.heapUsed).toBeLessThanOrEqual(M…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+   Start at  05:31:06
+   Duration  179.89s (transform 0ms, setup 0ms, import 162ms, tests 179.62s, environment 0ms)
+
+exit 1
