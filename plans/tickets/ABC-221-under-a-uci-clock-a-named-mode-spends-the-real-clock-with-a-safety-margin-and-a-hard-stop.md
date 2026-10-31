@@ -10,6 +10,19 @@ epic: EPIC-009
 
 # ABC-221: `uci-clock-mode`: the real clock, a safety margin, a hard stop, a 60 s ceiling
 
+> **DATED 2026-10-31 by BA/PM** (task `bapm-ABC-222-epic009-m1`, records only, at `main` `4bd9ac6a`).
+>
+> - **Milestone 1 is Done.** `ABC-222` merged at `ae7211c3` on QE's PASS (`qe-ABC-222` `…cc542c76`). It meets M1–M4
+>   (`EPIC-009`).
+> - **Both pull-order lines are met:** after `ABC-222` (Done) and after `ABC-244` (Done, `24b22339`). This ticket is
+>   pullable.
+>   - It shares `src/uci-session.test.ts` with `ABC-243` (In Development) and `ABC-242` (Ready). That is rebase order
+>     only.
+>   - The board's order, `ABC-243` → `ABC-242` → `ABC-221`, is the Orchestrator's.
+> - **What `ABC-222` read on the real pipe:** the per-move overhead has a median of 0 ms and a max of +2 ms (561
+>   searches, `AR-NFR004-A` at 22 s). D5's ≤ 600 ms slack is far from that. No row here moves.
+> - Size M, P3 and DoR **10/10** are unchanged.
+
 > **AMENDED 2026-10-30 by BA/PM** (task `bapm-g8-headroom-cut`, records only, at `main` `161e940d`). Source:
 > `ADR-0046` § Addendum 2026-10-30 R1–R4 (`arch-g8-headroom`, `5fd3eee7`), given BA/PM's word on `ABC-244`'s page.
 > `G8` read 9.90 s at `ABC-229` (`QE-229-a`): 0.10 s of headroom.

@@ -11,6 +11,27 @@ owner: QE/E2E
 
 # ABC-223: smoke reading of `uci-clock-mode` at 40/15: `EPIC-009` M1, M2 and the 60 s ceiling, in 5 games
 
+> **DATED 2026-10-31 by BA/PM** (task `bapm-ABC-222-epic009-m1`, records only, at `main` `4bd9ac6a`). **`ABC-222` is
+> Done** (QE PASS `qe-ABC-222` `…cc542c76`, merged `ae7211c3`), and milestone 1 meets M1–M4 (`EPIC-009`). What that
+> reading sets here:
+>
+> - **The "play all 10" rule does not fire.** `ABC-222`'s per-move overhead max is **+2 ms**, under the 300 ms trigger
+>   (median 0 ms, 561 searches). So this reading plays 5 games, plus the coverage extension only if fewer than 4
+>   side-periods complete. *(In `ABC-222`, 5 games completed 10.)*
+> - **How A5 and A6 read their ms.** `cutechess-cli` 1.5.1 prints a move time of ≥ 10 s to whole seconds in the PGN
+>   (QE-222-f). So PREREG takes each move's time from the exact `go` clock deltas, as `ABC-222`'s PREREG did. The PGN
+>   is cross-checked against them; in `ABC-222` 0 of 561 disagreed.
+>   - A5's bound does not move: ≤ 60 000 ms, read exactly.
+>   - A6's "the budget the engine logged": if no engine line carries the budget, PREREG derives it from each `go` line
+>     by `ADR-0052` D4 (`min(59 500, C)`). Whether an engine line carries it is `UNKNOWN - verify` at PREREG.
+> - **The slack to read against.** The real δ in `ABC-222` was ≤ 2 ms, against this mode's ≤ 600 ms on a period's
+>   last move. This mode's margin is about 1 s, not 18.8 s, so A3's closest call is the row to watch.
+> - **Not exercised in `ABC-222`, logged again here:** `isready` during a search (0) and `go` without `movestogo` (0).
+>   That is A6, unchanged.
+> - **The wall.** `ABC-222`'s 5 games took 3.44 h ALONE (Tctl median 73.9 °C, max 76.1 °C). This mode may spend up to
+>   its whole clock (≤ 60 min a game, § Scope), so the ≤ ~5 h bound stands. 3.44 h is not a forecast for this mode.
+> - **Nothing else moves.** DoR stays **9/10**, and the ticket stays in Backlog until `ABC-221` merges.
+
 > **RECONCILED 2026-10-29 to `ADR-0052` (PROPOSED) by BA/PM** (task `bapm-owner-words-b`, records only).
 >
 > - **The selecting line** is `option.TimeMode=uci-clock-mode` (`ADR-0052` D1). Game 1's log must show `setoption
