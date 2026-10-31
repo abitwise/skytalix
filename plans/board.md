@@ -1,3 +1,4 @@
+_Updated: 2026-10-31 Orchestrator (orch-2026-10-30a) — ABC-245 DONE (qe-ABC-245 PASS; merged 2cce84e0, not pushed). G8 H 9.82 s / B 9.44 s (admissible; B = ABC-221 clean re-read 9.44 s). Per ADR-0046 § Addendum ("any later G8 head median > 9.6 s"), **tranche 2 OPENS** → `arch-g8-tranche2` (records: candidates T2a–T2c for a BA/PM ruling; noise reading QE-245-b). ABC-247 pulled → `se-ABC-247`. Width 2/3._
 _Updated: 2026-10-31 Orchestrator (orch-2026-10-30a) — `bapm-rpair-level6-cut` merged: ABC-247 (XS, P1) → Ready; batch ~21.7–24.1 h ALONE + ~1 h QE (18.5 h withdrawn); audit clean (no smoke asymmetric). Owed LOW: ABC-229 page close + EPIC-010 row 5. Running: `qe-ABC-245` (ALONE). Next: ABC-247 SE → QE → batch → ABC-246 → ABC-223. Width 1/3._
 _Updated: 2026-10-31 Orchestrator (orch-2026-10-30a, …fb0c8978) — milestone-1 batch STOPPED before game 1 (QE-M1B-a HIGH: base level 5 = 3 000 ms caps rpair's movetime 4000 → 3 s vs 4 s). Ruling: route (A), rpair passes Skill Level 6 (levels 5/6 differ in budget only) → `bapm-rpair-level6-cut` (ticket + cost restated ~21.7–24.1 h + smoke-ledger audit). Host free → `qe-ABC-245` ALONE now (+ clean G8 re-read). Scratch cleared (/tmp 12 G → 1.2 G). Width 2/3._
 _Updated: 2026-10-31 Orchestrator (orch-2026-10-30a) — `scribe-agents-md-clockmode` merged (AGENTS.md 18 421 B; 11 B spare: the next AGENTS.md addition needs a trim first). Running: `qe-EPIC-010-m1-batch` only (ALONE). Queue after it: ABC-245 QE (+ clean G8 re-read) → ABC-246 → ABC-223 (games ~5 h). Width 1/3._
@@ -1254,8 +1255,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 - [EPIC-006] Game session and packaging  (owner: BA/PM, **size: XL — corrected from `L`; 9 tickets / 20 points across both halves, ~1.5x the 13 `L` was assigned, and it hit that ceiling BEFORE distribution was priced**, priority: P1, since: 2026-07-22, **BOTH HALVES NOW CUT: the runnable half `ABC-041`…`ABC-046` (2026-08-13) and the second half `ABC-100`…`ABC-102` (2026-08-16) — only THREE tickets, because the scope of packaging is a FUNCTION of a distribution channel nobody has chosen.** `ABC-100` cuts the DECISION, never the ANSWER: a superseding ADR per `ADR-0007` `D5`, on the owner's word, verbatim and dated. **Acceptance criterion 1 (`npx <package>`) remains unmeetable by any ticket. Recommendation NOT taken, standing for the owner: this should probably be two epics** — the halves share no dependency in either direction and their blockers differ in kind)
 
-## Ready (WIP 3/8)
-- [ABC-247] rpair passes Skill Level 6 to skytalix on both builds, so a base before ABC-228 searches 4 000 ms (QE-M1B-a) (size: XS, priority: P1, tools only, no UAT; DoR 10/10; cut by bapm-rpair-level6-cut; blocks the milestone-1 batch; SE after qe-ABC-245)
+## Ready (WIP 2/8)
 - [ABC-223] Smoke reading: uci-clock-mode, 5 games at 40/15 (<= 10 for coverage), 0 losses on time, closest call >= 500 ms, >= 75 % clock use, longest move <= 60 s (owner: QE/E2E, size: S, priority: P3, DoR 10/10 2026-10-31 (bapm-ABC-221-fold; ABC-221 merged af32f82c); ALONE <= ~5 h; → Ready; ALONE, after the milestone-1 batch; never beside ABC-245/246 G8)
 - [ABC-246] In uci-clock-mode, rows pin the hard stop (winc near the clock edge → 1 900) and movetime over a clock (→ 5 000); + SE-221-g comment (QE-221-a; size: XS, priority: P3, test-only, UAT waived; DoR 10/10; cut by bapm-ABC-221-fold; after the batch)
 
@@ -1273,7 +1273,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+- [ABC-247] rpair passes Skill Level 6 to skytalix on both builds, so a base before ABC-228 searches 4 000 ms (QE-M1B-a) (size: XS, priority: P1, tools only, no UAT; DoR 10/10; cut by bapm-rpair-level6-cut; blocks the milestone-1 batch; SE after qe-ABC-245; **pulled 2026-10-31** → `se-ABC-247`)
 
 
 
@@ -1301,8 +1302,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
-- [ABC-245] A blunder row reads a third occurrence more than 50 plies back, so a lowered prior-keys cap turns red (QE-242-b) (size: XS, priority: P3, test-only; DoR 10/10 2026-10-31 (bapm-ABC-245-rescore, on ADR-0046 § Ruling 2026-10-31: step 10 per level call); cut by `bapm-ABC-242-close`; → Ready; pull after ABC-221 (host-alone timing); **pulled 2026-10-31** → `se-ABC-245`; SE done 7c1721ce (test 7e81732e, levels.test.ts +60 −1; cap 8/50 red, 100 green; 2 364 tests); code review PASS → In Review; QE waits for the milestone-1 batch (ALONE))
+## In Review (WIP 0/3)
 
 
 
@@ -1362,6 +1362,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+- [ABC-245] A blunder row reads a third occurrence more than 50 plies back, so a lowered prior-keys cap turns red (QE-242-b) (size: XS, priority: P3, test-only; DoR 10/10 2026-10-31 (bapm-ABC-245-rescore, on ADR-0046 § Ruling 2026-10-31: step 10 per level call); cut by `bapm-ABC-242-close`; → Ready; pull after ABC-221 (host-alone timing); **pulled 2026-10-31** → `se-ABC-245`; SE done 7c1721ce (test 7e81732e, levels.test.ts +60 −1; cap 8/50 red, 100 green; 2 364 tests); code review PASS → In Review; QE waits for the milestone-1 batch (ALONE); **QE PASS** qe-ABC-245 (UAT waived; QE-242-b closed) → merged 2cce84e0 2026-10-31, not pushed)
 - [ABC-221] uci-clock-mode over UCI (TimeMode): min(59.5 s, C), 60 s ceiling, clamp 32 -> 60 s at this build (size: M, priority: P3, DoR 9/10; milestone 2; waits OQ-0052-1 + ABC-220 merged; DoR 10/10 2026-10-30 (bapm-ABC-220-merge-fold) → Ready; **pulled 2026-10-31** → `se-ABC-221`; Security/NFR gate after QE (HARD_CEILING_MS 60 000); SE done fb3696fa (code c48a6f83; HARD_CEILING_MS 60 000; 2 363 tests; informal G8 +0.16 s); code review PASS → `qe-ABC-221` ALONE + `secnfr-ABC-221` (records); **QE PASS_WITH_GAPS** qe-ABC-221 (signs UAT) + secnfr PASS → merged af32f82c + 9395d8dc 2026-10-31, not pushed; G8 H 9.84 s read on a contended host (B 9.82 s vs 9.41 s at ABC-242): Orchestrator ruling: inadmissible for ABC-244 tranche 2, re-read at ABC-245 QE on a clean host)
 - [ABC-242] On a blunder level (1–4), a root move that makes the third occurrence scores exactly 0, CLI and UCI (QE-230-a) (size: S, priority: P3, DoR 9/10; waits Architect reading (blunder vs chooseMove root check; may amend ADR-0054/0032 → owner); after ABC-241 (shared levels.ts:142); S2, no smoke — Orchestrator ruling: smokes play level 5 only, so they would replay base code; the ladder lane reads the changed levels; ABC-241 merged 1f6abec4 (ordering met); `arch-ABC-242-reading` routed 2026-10-30; **arch-ABC-242-reading done f2367198: PROPOSED (adds to owner-accepted ADR-0032 d1 + ADR-0054 d2): check in levels.ts blunder, third-occurrence root move scores 0 without its child search; engine path untouched; S + S2/no-smoke stand** → OWNER: "ADR-0054 ABC-242: accept" or "decline"; notes seal + merge after qe-ABC-220 frees the host; notes sealed, merged 01c37946; **OWNER ACCEPTED 2026-10-30** (…65848126) → `arch-ABC-242-accept` + `bapm-ABC-242-225-owner` (A8 fix, DoR); → Ready 10/10 2026-10-30 (bapm-ABC-242-225-owner, merged 31a87d57; ADR-0054/0032 ACCEPTED 625fcd60); **pulled 2026-10-31** → `se-ABC-242`; SE done 56058203 (code 6884d61a, 4 files, engine/search byte-identical, 2 333 tests, informal G8 9.22 s); code review PASS → `qe-ABC-242`; **QE PASS_WITH_GAPS** qe-ABC-242 (signs UAT; G8 H 9.41 s / B 9.21 s; QE-242-a MEDIUM → `arch-qe242a-ruling`) → merged af5b2b49 2026-10-31, not pushed)
 - [ABC-243] The setoption-Hash row reads a bare go at level 5; the TT memory row names the budget it reads; + QE-241-a UCI fen-with-uncapturable-ep row (size: XS, priority: P3, DoR 10/10 (2026-10-30); test-only, no smoke, no UAT; shares src/uci-session.test.ts with ABC-220 → pull after ABC-220 merges; ABC-220 merged ec1e835b → ordering met; pull when the host is free of ALONE work; **pulled 2026-10-31** → `se-ABC-243`; **SE done 4a9a264b (code 8772cf36): A1–A6 built, plants red (L=4/6/7, QM3), 2 323 tests, informal wall ~9.0 s; code review PASS** → `qe-ABC-243`; **QE PASS** qe-ABC-243 (G8 H 9.28 s, tranche 2 not fired; UAT waived) → merged 3628fe99 2026-10-31, not pushed)
