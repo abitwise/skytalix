@@ -1,5 +1,6 @@
 /**
- * `ABC-225` — the offline checks of `rating.ts rpair` (A1–A4). Not a lane file (`NFR-008`): its
+ * `ABC-225` — the offline checks of `rating.ts rpair` (A1–A4); `ABC-247` adds its A1 (the
+ * `Skill Level` 6 token on both builds, none on `r` or `d`). Not a lane file (`NFR-008`): its
  * name is not `*.test.*`, so `npm test` never collects it, and nothing in the lane imports it.
  *
  *   node --test tools/rating/pair-check.ts
@@ -57,7 +58,21 @@ function argvBlocks(text: string): { header: string; argv: string[] }[] {
   return found;
 }
 
-describe("A1: rpair reads each build with r's argv, but for openings start/count and output paths", () => {
+/** `ABC-247` A1: the one `Skill Level` token, and where it sits in r's skytalix group. */
+const SKILL = "option.Skill Level=6";
+
+/** An argv split at each `-engine`, so each engine's options can be read on their own. */
+function engineGroups(argv: readonly string[]): string[][] {
+  const groups: string[][] = [];
+  for (const arg of argv) {
+    if (arg === "-engine") groups.push([]);
+    else if (arg.startsWith("-")) groups.push([arg]);
+    else groups.at(-1)?.push(arg);
+  }
+  return groups.filter((g) => g[0]?.startsWith("name="));
+}
+
+describe("A1: rpair reads each build with r's argv, but for openings start/count, output paths and Skill Level 6", () => {
   const base = git("rev-parse", "--short=12", "HEAD~1");
   const candidate = git("rev-parse", "--short=12", "HEAD");
   const out = join(SCRATCH, "a1");
@@ -78,10 +93,13 @@ describe("A1: rpair reads each build with r's argv, but for openings start/count
       assert.equal(r.status, 0, r.stderr);
       const rArgv = argvBlocks(r.stdout)[0]?.argv ?? [];
       const start = (Number(index) - 1) * 10 + 1;
-      // The one added token: `start=S` inside `-openings`, right after `order=sequential`.
+      // The two added tokens. `start=S` inside `-openings`, right after `order=sequential`, and
+      // (ABC-247) `option.Skill Level=6` in the skytalix group, right after `restart=on`.
       const at = argv.indexOf(`start=${start}`);
       assert.equal(argv[at - 1], "order=sequential");
-      const same = [...argv.slice(0, at), ...argv.slice(at + 1)];
+      const skill = argv.indexOf(SKILL);
+      assert.equal(argv[skill - 1], "restart=on", header);
+      const same = argv.filter((_, i) => i !== at && i !== skill);
       assert.equal(same.length, rArgv.length);
       const differ = same.flatMap((a, i) => (a === rArgv[i] ? [] : [[rArgv[i], a]]));
       // The print shows a path under the home directory as `<home>/…`.
@@ -110,6 +128,124 @@ describe("A1: rpair reads each build with r's argv, but for openings start/count
       "format=epd order=sequential start=1 -repeat",
     ])
       assert.ok(argv.includes(pin), pin);
+  });
+
+  test("ABC-247 (a): every block of both builds gives skytalix Skill Level 6 once, Stockfish none", () => {
+    const blocks = argvBlocks(pair.stdout);
+    assert.equal(blocks.length, 20);
+    for (const { header, argv } of blocks) {
+      assert.equal(argv.filter((a) => a === SKILL).length, 1, header);
+      assert.equal(argv.filter((a) => /Skill Level/i.test(a)).length, 1, header);
+      const groups = engineGroups(argv);
+      assert.deepEqual(
+        groups.map((g) => g[0]),
+        ["name=skytalix", "name=stockfish"],
+        header,
+      );
+      assert.ok(groups[0]?.includes(SKILL), header);
+      assert.equal(
+        groups[1]?.some((a) => /Skill Level/i.test(a)),
+        false,
+        header,
+      );
+    }
+  });
+
+  test("ABC-247 (a): the A5 shape (--rounds 10 --concurrency 1) carries it on both builds too", () => {
+    const run = harness(
+      "rpair",
+      base,
+      candidate,
+      join(SCRATCH, "a1-a5"),
+      "--rounds",
+      "10",
+      "--concurrency",
+      "1",
+      "--dry-run",
+    );
+    assert.equal(run.status, 0, run.stderr);
+    const blocks = argvBlocks(run.stdout);
+    assert.deepEqual(
+      blocks.map((b) => b.header),
+      ["block 01 base cutechess-cli argv:", "block 01 candidate cutechess-cli argv:"],
+    );
+    for (const { argv } of blocks) assert.equal(argv.filter((a) => a === SKILL).length, 1);
+  });
+
+  test("ABC-247 (c): the r and d argvs send no Skill Level and are main's, token for token", () => {
+    const sha = git("rev-parse", "--short=12", "HEAD");
+    const files = join(SCRATCH, "a1-c");
+    const shown = (p: string): string =>
+      p.startsWith(homedir()) ? `<home>${p.slice(homedir().length)}` : p;
+    const f = shown(files);
+    const sky = (name: string, st: string, margin: string): string[] => [
+      "-engine",
+      `name=${name}`,
+      "cmd=<node>",
+      `arg=${f}/clone-${name}/dist/uci.js`,
+      `dir=${f}/clone-${name}`,
+      `st=${st}`,
+      `timemargin=${margin}`,
+      "restart=on",
+      `stderr=${f}/${name}.stderr`,
+    ];
+    const tail = (mode: string, rounds: string, width: string): string[] => [
+      "-each",
+      "proto=uci",
+      "-openings",
+      "file=<repo>/tools/rating/openings.epd",
+      "format=epd",
+      "order=sequential",
+      "-repeat",
+      "-games",
+      "2",
+      "-rounds",
+      rounds,
+      "-concurrency",
+      width,
+      "-maxmoves",
+      "200",
+      "-pgnout",
+      `${f}/${mode}.pgn`,
+      "-debug",
+      "all",
+    ];
+    const r = harness("r", sha, files, "--dry-run");
+    assert.equal(r.status, 0, r.stderr);
+    const rArgv = argvBlocks(r.stdout)[0]?.argv ?? [];
+    const d = harness("d", sha, sha, files, "--budget-ms", "1500", "--dry-run");
+    assert.equal(d.status, 0, d.stderr);
+    const dArgv = argvBlocks(d.stdout)[0]?.argv ?? [];
+    for (const argv of [rArgv, dArgv])
+      assert.equal(
+        argv.some((a) => /Skill Level/i.test(a)),
+        false,
+        argv.join(" "),
+      );
+    const stockfishCmd = rArgv[rArgv.indexOf("name=stockfish") + 1] as string;
+    assert.match(stockfishCmd, /^cmd=/);
+    assert.deepEqual(rArgv, [
+      "<cutechess-cli>",
+      ...sky("skytalix", "4", "1000"),
+      "-engine",
+      "name=stockfish",
+      stockfishCmd,
+      "st=0.5",
+      "timemargin=2000",
+      "restart=on",
+      "option.Threads=1",
+      "option.Hash=16",
+      "option.UCI_LimitStrength=true",
+      "option.UCI_Elo=1650",
+      `stderr=${f}/stockfish.stderr`,
+      ...tail("r", "100", "2"),
+    ]);
+    assert.deepEqual(dArgv, [
+      "<cutechess-cli>",
+      ...sky("skytalix", "1.5", "3500"),
+      ...sky("base", "1.5", "3500"),
+      ...tail("d", "200", "3"),
+    ]);
   });
 });
 
