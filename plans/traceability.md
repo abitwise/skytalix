@@ -1649,3 +1649,4 @@ _Updated: 2026-08-19 by BA/PM (task `cut-agents-md-cap-2026-08-19`, Workflow 07)
 | bapm-ABC-245-rescore (merge) | ABC-245 re-scored 10/10 on ADR-0046 § Ruling 2026-10-31 | records 285a830c | — | merged 2026-10-31, not pushed | Done (Orchestrator) |
 | ABC-221 (merge) | uci-clock-mode over UCI TimeMode: min(59.5 s, C), 60 s ceiling; HARD_CEILING_MS 60 000 | code c48a6f83 | qe-ABC-221 PASS_WITH_GAPS (signs UAT); secnfr-ABC-221 PASS | merged af32f82c + 9395d8dc 2026-10-31, not pushed | Done (Orchestrator) |
 | arch-ABC-221-records (merge) | ADR-0052 D8 spawn ruling, D4 correction; ADR-0054 probe value | records db8fea11 | — | merged 2026-10-31, not pushed | Done (Orchestrator) |
+| secnfr-hostname (merge) | Catalog reference machine spelled oeselg-dev | records 9f0a8d32 | — | merged 2026-10-31, not pushed | Done (Orchestrator) |
