@@ -317,7 +317,13 @@ real `δ` from cutechess's per-move times.
   "≤ 60 s" holds exactly. `ABC-221` re-reads that at its gate. The entry text, with the reading added:
   *"busy `isready`/`stop`: answered ≤ one budget + `AR-NFR004-A` late; ≤ 22 s in `simple-tournament` (read to the
   whole second: < 22 500 ms), ≤ 60 s in `uci-clock-mode`; one `readyok` per `isready`, in order"*. The whole-second
-  reading changes no code. If the owner rejects it, only the text of this entry and `A11`'s bound move.
+  reading changes no code. ~~If the owner rejects it, only the text of this entry and `A11`'s bound move.~~
+  - *(2026-10-31, `arch-qe242a-ruling`, records only.)* **The whole-second reading is accepted.** The owner accepted
+    this ADR on 2026-10-30 (§ Status). The reading above was added after that, so he confirmed it on its own the same
+    day: *"Whole-second reading of "≤ 22 s" - confirm"* (Orchestrator note
+    `.grugops/context/orch-2026-10-30a/notes/20261030T181200Z-orchestrator-decision-f4673b9f.md`, a transcription
+    and not a stamp). "≤ 22 s" in `simple-tournament` means < 22 500 ms. Nothing moves: not this entry's text, not
+    `A11`'s bound, and no code.
 
 ### D8. Where the code goes
 

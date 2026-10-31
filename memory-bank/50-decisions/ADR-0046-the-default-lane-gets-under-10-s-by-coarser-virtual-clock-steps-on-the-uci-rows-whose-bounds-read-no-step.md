@@ -13,6 +13,13 @@ every time-blind virtual-clock row in the default lane (R1–R4), with a first t
 rows. It needs BA/PM's word at the cut, as D2(b) did. No owner word is needed, because no NFR level, bar, cap, pin,
 row count or lane line moves. D1–D6 are unchanged. See the addendum at the end of this file.
 
+**§ Addendum: BA/PM's word given (dated 2026-10-31, `arch-qe242a-ruling`, records only).** BA/PM gave R1–R4 its
+word on `ABC-244`'s page, § BA/PM ruling, on 2026-10-30 (task `bapm-g8-headroom-cut`, merged `de02f8c2`). This is how
+`ABC-177`'s page gave D2(b)'s word, and `ABC-177`'s three conditions carry over unchanged. R1–R4 bind from that cut.
+No owner word was owed. Tranche 1 is `ABC-244`, merged at `24b22339` (`G8` head 9.25 s). Where the addendum still says
+it "needs BA/PM's word", this line wins. The ruling on `QE-242-a` (how condition 2 reads a blunder) is the dated
+section at the end of the addendum.
+
 **proposed**, 2026-10-20, by Architect/Design (task `arch-lane-under-10s`). This ADR is the remedy that `R-174-1`
 option (a) asked for. The owner accepted (a) at `…bdff4d33`.
 
@@ -292,3 +299,49 @@ was run or timed at this hop.
 - Revert the tranche-1 commit, which is the whole rollback.
 - A row that turns flaky, or that loses a mutant after the move, goes back to its prior step alone.
 - R1–R4 are text. Striking them restores D2(b)'s original scope.
+
+### Ruling 2026-10-31 (`arch-qe242a-ruling`): condition 2 reads a blunder per level call (`QE-242-a`)
+
+**Ruled by Architect/Design, records only. Nothing was run or timed.** `QE-242-a` (MEDIUM, `qe-ABC-242`
+`…b9f3cd67`, census `…51079df4`) asks how `ABC-244`'s condition 2 reads a blunder row. The condition says a search with
+≥ 2 clock-check intervals at the reference step must still have ≥ 2 at the chosen step, where intervals are
+⌈budget ÷ step⌉. A blunder is one level call that slices one shared deadline across its child searches (`ADR-0032` d1).
+
+- **The ruling.** For a blunder row, the search the condition counts is **the level call**: its one budget and its
+  one deadline. Level 1's 100 ms at step 10 is 10 intervals, which is ≥ 2. **So `ABC-242`'s step 10 is admitted as
+  built.** No merged row changes, and no ticket is owed.
+- **Why the level call:**
+  - **The condition's own precedent counts it that way.** In its first use (`ABC-177` § BA/PM ruling, U8), BA/PM wrote
+    "level 1's 100 ms budget: 10 intervals at step 10". U8's gos take both paths, the blunder and the plain search.
+    `ABC-244` carried the condition over unchanged. U8's steps, {10, 100}, are the ones the owner accepted with this
+    ADR.
+  - **It is the only reading that agrees with R4.** R4 and § Consequences planned `ABC-242`'s rows at
+    +0.05 to +0.15 s, and they warned that a step-1 form "could add seconds". Read per child search, the condition
+    admits only step 1, which is about +2.5 s of lane wall. On `G8` H 9.41 s that breaches `NFR-008`, and `NFR-008`'s
+    level is the owner's. A reading under which no 5-move level-1 blunder row can meet R2 and `NFR-008` at once cannot
+    be what the addendum meant.
+  - **It counts the loop the row was written over.** That loop is the level call's shared deadline, and at step 10 it
+    still makes 10 reads and runs every child. The code under test is `ABC-242`'s check, and it runs at the blunder's
+    root, before any child, and reads no clock. Child depth is engine behaviour. `src/engine.ts` and `src/search.ts`
+    were byte-identical in `ABC-242`.
+  - **The evidence shows no loss.** QE's 20 plants kill the same sets at steps 1 and 10. The SE's M1–M8 kill the same
+    sets at steps 1, 10, 100 and 1 000.
+- **What this ruling accepts, stated plainly:**
+  - Step 10 does **not** meet a per-child reading. At step 10 the children are handed 10, −10, −30, −50 and −70 ms.
+    They search depth 1, and the call takes 210 of its 100 virtual ms.
+  - The build note's "2 reads per child" is a nominal slice, not a reading.
+  - No default-lane `ABC-242` row exercises a level-1 blunder's children past depth 1, so a level-layer fault that
+    shows only there would pass unseen. No `ABC-242` criterion asks for depth.
+- **The limit, so the reading cannot be stretched.** In two cases the condition reads each child search on the budget
+  it is handed, not the level call:
+  - a row asserts a child search's depth;
+  - a row's property under test is computed inside a child search, and is not compared with a reference run at the
+    same step.
+- **R1 for a sliced call.** The census line gives reads per level call and says so. A per-child figure in the line is
+  the budget each child was actually handed, as read, never the nominal slice.
+- **Older level-1 blunder rows on a virtual clock** (QE's `UNKNOWN - verify`) read the same way. One is U8 itself
+  (`src/uci-session.test.ts`, "two sessions on the same seededRandom(k)…"), which asserts equality only. Whether the
+  limit above catches any other is `UNKNOWN - verify`. This ruling owes no ticket for them.
+- **No owner word is owed.** No owner-accepted decision changes. This ruling follows BA/PM's own U8 count, under the
+  steps the owner accepted for U8. No NFR level, bar, cap, pin, row count or lane line moves. No ticket page is edited
+  here. BA/PM's close hop may cite this section.
