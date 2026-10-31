@@ -173,7 +173,8 @@ function step() {
     const vitest = ps.filter((p) => /[/]vitest/.test(p.args));
     const fcc = ps.filter((p) => p.comm.startsWith("cutechess") && !ccPids.has(p.pid));
     const fsf = ps.filter((p) => p.comm.startsWith("stockfish") && !ccPids.has(p.ppid));
-    const fsky = ps.filter((p) => /dist\/uci\.js/.test(p.args) && !ccPids.has(p.ppid));
+    // QE-M1B2-a: a cutechess-cli argv carries `arg=…/dist/uci.js`, so cutechess-cli is not a skytalix engine.
+    const fsky = ps.filter((p) => /dist\/uci\.js/.test(p.args) && !p.comm.startsWith("cutechess") && !ccPids.has(p.ppid));
     const fg = vitest.length + fcc.length + fsf.length + fsky.length;
     log(
       `tick ${block} fin=${fin} tctl=${t.toFixed(1)} th_med30=${Number.isFinite(th.med) ? th.med.toFixed(2) : "-"} load1=${loadavg()[0].toFixed(2)} ours: cc=${cc.length} eng=${eng.length} paused=${paused} foreign: vitest=${vitest.length} cc=${fcc.length} sf=${fsf.length} sky=${fsky.length}${fg ? " FOREIGN " + [...vitest, ...fcc, ...fsf, ...fsky].map((p) => `${p.pid}:${p.comm}`).join(",") : ""}`,

@@ -1,0 +1,1 @@
+base/b01/r.pgn: games 14; skytalix moves 599; at 4.0s 591; at 3.0s 0; book/no clock 8; <1s 0; hist 4.0s×591
