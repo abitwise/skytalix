@@ -1,0 +1,2 @@
+L4@B rc=1 total=200 passed=199 failed=1 pending=0 suiteErrors=0
+  red: ABC-171 A2 — setoption setoption name Hash value 64 writes nothing and changes nothing :: AssertionError: not an info line: info depth 5 nodes 5140 time 1100 pv b1c3: expected null not to be null

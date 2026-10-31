@@ -1,0 +1,12 @@
+ ✓ src/moves.castling.test.ts (33 tests) 8ms
+ ✓ src/glyph-mode.test.ts (21 tests) 4ms
+ ✓ src/zobrist.nfr.test.ts (3 tests) 4ms
+ ✓ src/san.nfr.test.ts (5 tests) 3ms
+ ✓ src/uci.real-engine.test.ts (1 test) 3ms
+ ✓ src/glyph-mode.nfr.test.ts (3 tests) 2ms
+
+ Test Files  63 passed (63)
+      Tests  2322 passed (2322)
+   Start at  04:04:08
+   Duration  8.91s (transform 0ms, setup 0ms, import 6.21s, tests 6.97s, environment 5ms)
+
