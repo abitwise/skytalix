@@ -1,0 +1,1 @@
+exit=0 signal=null wall_s=331 thermal_stop=false tctl_samples=33 median=74.8 max=76.4

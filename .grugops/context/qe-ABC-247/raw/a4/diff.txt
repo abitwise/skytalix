@@ -1,0 +1,43 @@
+== git diff --stat main -- src data
+== git diff --name-only main cec9c252 (non-.grugops)
+plans/board.md
+tools/rating/pair-check.ts
+tools/rating/rating.ts
+== .grugops paths changed: 32
+== 72a65fb7 vs cec9c252, src data package*
+ src/levels.test.ts | 61 +++++++++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 60 insertions(+), 1 deletion(-)
+== git diff --name-only main...cec9c252 (branch's own changes since merge-base 4cd261c1)
+.grugops/context/se-ABC-247/index.jsonl
+.grugops/context/se-ABC-247/index.md
+.grugops/context/se-ABC-247/notes/20261031T065701Z-software-engineer-decision-09cbe15a.md
+.grugops/context/se-ABC-247/notes/20261031T065701Z-software-engineer-observation-e9efa27d.md
+.grugops/context/se-ABC-247/notes/20261031T065701Z-software-engineer-observation-ea98b31b.md
+.grugops/context/se-ABC-247/notes/20261031T065709Z-software-engineer-observation-c062cb93.md
+.grugops/context/se-ABC-247/raw/a3-grep.txt
+.grugops/context/se-ABC-247/raw/build.txt
+.grugops/context/se-ABC-247/raw/dry-d.head.txt
+.grugops/context/se-ABC-247/raw/dry-d.main.txt
+.grugops/context/se-ABC-247/raw/dry-d2.head.txt
+.grugops/context/se-ABC-247/raw/dry-d2.main.txt
+.grugops/context/se-ABC-247/raw/dry-r.head.txt
+.grugops/context/se-ABC-247/raw/dry-r.main.txt
+.grugops/context/se-ABC-247/raw/dry-r2.head.txt
+.grugops/context/se-ABC-247/raw/dry-r2.main.txt
+.grugops/context/se-ABC-247/raw/dry-rpair.diff.txt
+.grugops/context/se-ABC-247/raw/dry-rpair.head.txt
+.grugops/context/se-ABC-247/raw/dry-rpair.main.txt
+.grugops/context/se-ABC-247/raw/lint.txt
+.grugops/context/se-ABC-247/raw/npm-test.txt
+.grugops/context/se-ABC-247/raw/pair-check-mut-leak.txt
+.grugops/context/se-ABC-247/raw/pair-check-mut-remove.txt
+.grugops/context/se-ABC-247/raw/pair-check-old-tests-red.txt
+.grugops/context/se-ABC-247/raw/pair-check.txt
+.grugops/context/se-ABC-247/raw/skips.txt
+.grugops/context/se-ABC-247/raw/typecheck.txt
+.grugops/queue/claimed/se-ABC-247.md
+.grugops/queue/done/se-ABC-247.claim.md
+.grugops/queue/done/se-ABC-247.md
+tools/rating/pair-check.ts
+tools/rating/rating.ts
+== main moved by: e08b7718 docs(orch): ABC-247 → In Review (code review PASS); qe-ABC-247 claimed;

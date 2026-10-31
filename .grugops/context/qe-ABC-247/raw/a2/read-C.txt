@@ -1,0 +1,14 @@
+log: skytalix instances 2 (uci handshakes 1,1); go lines 97: {"go movetime 4000":97}
+log: setoption Skill Level lines to skytalix: []; per instance count 0,0; before first go false,false
+log: stockfish go lines {"go movetime 500":96}; stockfish Skill Level setoptions 0
+pgn: games 2
+pgn: skytalix-stockfish 1-0 plies=67 dur=00:01:51 term=- comment=["White mates"]
+pgn: stockfish-skytalix 0-1 plies=126 dur=00:03:39 term=- comment=["Black mates"]
+pgn: skytalix clocks >= 1 s: {"3.0":95}; < 1 s 0; without a clock comment (book) 2
+run: exit=0 signal=null wall_s=331 thermal_stop=false tctl_samples=33 median=74.8 max=76.4; skytalix.stderr 0 bytes
+OK   P1 cutechess-cli exit 0 and 2 games in the PGN
+OK   C2 no Skill Level setoption to skytalix
+OK   P3 every skytalix go is 'go movetime 4000'
+OK   C4 skytalix clocks: 95 at 3.0s (need >= 20), 0 at 4.0s (need 0)
+OK   P5 0 faults / time losses (fault-like results 0); skytalix.stderr empty
+RESULT PASS (0 failed)

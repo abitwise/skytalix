@@ -1,0 +1,3 @@
+B: skytalix info-with-time lines 84; max 4001 ms; in [3900,4100] 84; in [2900,3100] 0; >3100 84
+H: skytalix info-with-time lines 125; max 4001 ms; in [3900,4100] 125; in [2900,3100] 0; >3100 125
+C: skytalix info-with-time lines 95; max 3001 ms; in [3900,4100] 0; in [2900,3100] 95; >3100 0

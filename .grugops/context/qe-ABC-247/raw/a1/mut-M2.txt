@@ -1,0 +1,112 @@
+▶ A1: rpair reads each build with r's argv, but for openings start/count, output paths and Skill Level 6
+  ✔ the dry run exits 0 and writes nothing (0.438238ms)
+  ✖ every block of both builds differs from r's argv only where A1 allows (74.381559ms)
+  ✔ the pins are r's: Stockfish at E 1910, skytalix at 4 s, width 2, both colours (0.253343ms)
+  ✖ ABC-247 (a): every block of both builds gives skytalix Skill Level 6 once, Stockfish none (0.290052ms)
+  ✖ ABC-247 (a): the A5 shape (--rounds 10 --concurrency 1) carries it on both builds too (77.898737ms)
+  ✔ ABC-247 (c): the r and d argvs send no Skill Level and are main's, token for token (162.706799ms)
+✖ A1: rpair reads each build with r's argv, but for openings start/count, output paths and Skill Level 6 (316.800152ms)
+▶ A2: the schedule
+  ✔ 10 blocks per build, 10 openings each, alternating order (0.269143ms)
+  ✔ openings 1–100 exactly once per build (0.142125ms)
+  ✔ the dry run prints that schedule and runs each block for each build once (107.525099ms)
+  ✔ --rounds 10 is the A5 smoke: one block per build, 40 games (0.152455ms)
+  ✔ bad values stop before any work, naming the argument (668.226453ms)
+✔ A2: the schedule (776.681069ms)
+▶ A3: the arithmetic on qe-epic008-close r1 and r2
+  ✔ the pooling formula gives cutechess-cli's own recorded lines (22.094916ms)
+  ✔ the pair difference reads −82.9 ± 73.8 (22.497989ms)
+  ✔ the pentanomial reads −82.9 ± 64.3 (0.659191ms)
+  ✔ split into 10 blocks, the pair summary pools to the same figures (1.803628ms)
+  ✔ Stockfish's median nps per reading matches arch-epic008-rd's an3 (261.559171ms)
+  ✔ the recorded games cover openings 1–100 with both colours (0.513058ms)
+✔ A3: the arithmetic on qe-epic008-close r1 and r2 (309.51168ms)
+▶ A4: one faulted block makes its build and the pair UNRESOLVED
+  ✔ clean fixture blocks read a rating, not UNRESOLVED (1.979577ms)
+  ✔ illegal move (0.950225ms)
+  ✔ disconnect (0.753717ms)
+  ✔ stall (0.621851ms)
+  ✔ time forfeit (0.640476ms)
+  ✔ watchdog stall (0.569383ms)
+  ✔ a block never played (the run halted) is UNRESOLVED too (0.355785ms)
+✔ A4: one faulted block makes its build and the pair UNRESOLVED (6.120942ms)
+▶ ADR-0049 d4: records carry placeholders, not host paths
+  ✔ paths longest first, then user and host as whole words (0.225541ms)
+✔ ADR-0049 d4: records carry placeholders, not host paths (0.304458ms)
+ℹ tests 25
+ℹ suites 5
+ℹ pass 22
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1789.850906
+
+✖ failing tests:
+
+test at tools/rating/pair-check.ts:86:3
+✖ every block of both builds differs from r's argv only where A1 allows (74.381559ms)
+  AssertionError [ERR_ASSERTION]: block 01 base cutechess-cli argv:
+  + actual - expected
+  
+  + undefined
+  - 'restart=on'
+  
+      at TestContext.<anonymous> (file://<scratch>/clT/tools/rating/pair-check.ts:101:14)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Suite.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Promise.all (index 0)
+      at async Suite.run (node:internal/test_runner/test:1905:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: 'restart=on',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tools/rating/pair-check.ts:133:3
+✖ ABC-247 (a): every block of both builds gives skytalix Skill Level 6 once, Stockfish none (0.290052ms)
+  AssertionError [ERR_ASSERTION]: block 01 base cutechess-cli argv:
+  
+  0 !== 1
+  
+      at TestContext.<anonymous> (file://<scratch>/clT/tools/rating/pair-check.ts:137:14)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Suite.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tools/rating/pair-check.ts:154:3
+✖ ABC-247 (a): the A5 shape (--rounds 10 --concurrency 1) carries it on both builds too (77.898737ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0 !== 1
+  
+      at TestContext.<anonymous> (file://<scratch>/clT/tools/rating/pair-check.ts:172:43)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Suite.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
