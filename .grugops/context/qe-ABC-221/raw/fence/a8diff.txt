@@ -1,0 +1,30 @@
+changed files: src/engine.test.ts, src/engine.ts, src/levels.test.ts, src/uci-session.test.ts, src/uci-session.ts, src/uci.real-engine.test.ts
+src/levels.ts: byte-identical
+src/search.ts: byte-identical
+src/uci.ts: byte-identical
+src/cli.ts: byte-identical
+src/cli-options.ts: byte-identical
+src/startup-questions.ts: byte-identical
+src/pgn.ts: byte-identical
+src/level-seam.ts: byte-identical
+src/virtual-clock.ts: byte-identical
+package.json: byte-identical
+package-lock.json: byte-identical
+src/engine.ts: non-comment lines removed 1, added 1
+  - export const HARD_CEILING_MS = 32_000;
+  + export const HARD_CEILING_MS = 60_000;
+src/uci-session.ts: non-comment lines removed 4, added 8
+  - const TIME_MODES = Object.freeze(["level", "simple-tournament"] as const);
+  - if (timeMode === "simple-tournament") {
+  - if (clock.movetime !== undefined) budget = Math.min(clock.movetime, budget);
+  - budget = Math.min(budget, safeClockShare(time, increment, movesToGo));
+  + const TIME_MODES = Object.freeze(["level", "simple-tournament", "uci-clock-mode"] as const);
+  + const CLOCK_MODE_CEILING_MS = 60_000;
+  + const CLOCK_MODE_MAX_BUDGET_MS = CLOCK_MODE_CEILING_MS - 500;
+  + if (timeMode !== "level") {
+  + const cap =
+  + timeMode === "simple-tournament" ? SIMPLE_TOURNAMENT_BUDGET_MS : CLOCK_MODE_MAX_BUDGET_MS;
+  + if (clock.movetime !== undefined) budget = Math.min(clock.movetime, cap);
+  + budget = Math.min(cap, safeClockShare(time, increment, movesToGo));
+LEVELS / DEFAULT_LEVEL / EASIEST / HARDEST byte-equal: true (found,found,found,found)
+Skill Level option line byte-equal: true :: `option name Skill Level type spin default ${DEFAULT_LEVEL} min ${EASIEST_LEVEL} max ${HARDEST_LEVEL}`,

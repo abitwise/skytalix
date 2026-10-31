@@ -1,0 +1,12 @@
+{
+  "refs": ["se-ABC-221", "ABC-221", "EPIC-009", "ADR-0052", "ADR-0045", "ADR-0044", "ADR-0046", "ADR-0027", "NFR-004",
+           "NFR-008", "NFR-009", "AR-NFR004-A", "AR-UCI-BUSY", "SEC-220-b", "QE-220-a", "QE-244-a", "ABC-220", "ABC-244",
+           "grugops/ABC-221", "c48a6f83", "d58f2d77", "src/uci-session.ts", "src/engine.ts", "src/uci-session.test.ts",
+           "src/uci.real-engine.test.ts", "src/engine.test.ts", "src/levels.test.ts"],
+  "notes": [
+    { "kind": "decision", "confidence": "high: built to ADR-0052 as accepted; each choice is pinned by a row and every planted mutant was killed", "bodyFile": "note-decision.md" },
+    { "kind": "observation", "confidence": "high: reads per search are arithmetic from budget and step; RF-1 reads probed at base and head", "bodyFile": "note-census.md" },
+    { "kind": "observation", "confidence": "high for gates, counts, red checks and deep lanes (all run); the G8 wall is informal (n=3 per arm), UNKNOWN - verify", "bodyFile": "note-readings.md" },
+    { "kind": "observation", "confidence": "high on what was run; SE-221-a is arithmetic against alloc.txt; SE-221-b is my reading of D8 for the Architect", "bodyFile": "note-findings.md" }
+  ]
+}

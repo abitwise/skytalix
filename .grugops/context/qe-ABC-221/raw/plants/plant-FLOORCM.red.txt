@@ -1,0 +1,2 @@
+FLOORCM (src/uci-session.ts) rc=1 total=2363 passed=2362 failed=1 skipped=0 wall=9.6s
+  RED uci-session.test.ts :: ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A5 — the hard stop go wtime 800 btime 800 -> 1 ms

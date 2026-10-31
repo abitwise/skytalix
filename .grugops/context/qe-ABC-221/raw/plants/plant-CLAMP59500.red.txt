@@ -1,0 +1,4 @@
+CLAMP59500 (src/engine.ts) rc=1 total=2363 passed=2360 failed=3 skipped=0 wall=10.0s
+  RED engine.test.ts :: RF-1 — a budget above the hard ceiling is CAPPED at it, not honoured names the ceiling as an exported constant
+  RED levels.test.ts :: ABC-174 A7 — the time budget, from the data (NFR-004; ADR-0038 decision 3) clause B, per level (ABC-212 A5): budgetMs <= ceiling(L) over 1..7, < 5 000 over 1..5, clamp 60 000 (ABC-221)
+  RED uci-session.test.ts :: ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) A8 — levels unchanged (EPIC-009 M3) LEVELS, DEFAULT_LEVEL and the Skill Level default hold their base values; HARD_CEILING_MS is 60 000 (ABC-221)

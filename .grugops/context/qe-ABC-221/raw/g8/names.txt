@@ -1,0 +1,48 @@
+base total 2333 failed 0 skipped 0; head total 2363 failed 0 skipped 0
+count differs: src/uci-session.test.ts 202 -> 232
+only at head (35):
+  + src/levels.test.ts > ABC-174 A7 — the time budget, from the data (NFR-004; ADR-0038 decision 3) clause B, per level (ABC-212 A5): budgetMs <= ceiling(L) over 1..7, < 5 000 over 1..5, clamp 60 000 (ABC-221)
+  + src/uci-session.test.ts > ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) A10 — the option's refusals value Uci-Clock-Mode from level: exactly one info string naming the offered values and the value got; level kept
+  + src/uci-session.test.ts > ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) A10 — the option's refusals value Uci-Clock-Mode from simple-tournament: exactly one info string naming the offered values and the value got; simple-tournament kept
+  + src/uci-session.test.ts > ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) A7 — the safe share C binds a short clock A12 (ABC-221): Black to move, winc 0 binc 2000, go wtime 10000 btime 10000 winc 0 binc 2000 movestogo 10 -> 2800
+  + src/uci-session.test.ts > ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) A7 — the safe share C binds a short clock A12 (ABC-221): Black to move, winc 2000 binc 0, go wtime 10000 btime 10000 winc 2000 binc 0 movestogo 10 -> 800
+  + src/uci-session.test.ts > ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) A7 — the safe share C binds a short clock A12 (ABC-221): White to move, winc 0 binc 2000, go wtime 10000 btime 10000 winc 0 binc 2000 movestogo 10 -> 800
+  + src/uci-session.test.ts > ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) A7 — the safe share C binds a short clock A12 (ABC-221): White to move, winc 2000 binc 0, go wtime 10000 btime 10000 winc 2000 binc 0 movestogo 10 -> 2800
+  + src/uci-session.test.ts > ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) A8 — levels unchanged (EPIC-009 M3) LEVELS, DEFAULT_LEVEL and the Skill Level default hold their base values; HARD_CEILING_MS is 60 000 (ABC-221)
+  + src/uci-session.test.ts > ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A1 — offered, off by default Skill Level is not read in the mode: at 1 and at 7, go movetime 45000 is 45 000 and random is called 0 times
+  + src/uci-session.test.ts > ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A1 — offered, off by default a refused value keeps uci-clock-mode with the three-value line, and the mode survives ucinewgame
+  + src/uci-session.test.ts > ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A1 — offered, off by default off by default: go movetime 30000 is the default level's 4 000; after setoption ... uci-clock-mode (silent) it is 30 000
+  + src/uci-session.test.ts > ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A1 — offered, off by default uci writes the three-value TimeMode combo byte-exact, after Skill Level (byte-identical) and before uciok
+  + src/uci-session.test.ts > ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A11 — busy isready in the mode (ADR-0052 D7), default lane isready that arrives mid-search is answered once, after the bestmove, in order
+  + src/uci-session.test.ts > ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A12 — the side to move reads its own increment, in the mode Black to move, winc 0 binc 2000, go wtime 10000 btime 10000 winc 0 binc 2000 movestogo 10 -> 2800
+  + src/uci-session.test.ts > ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A12 — the side to move reads its own increment, in the mode Black to move, winc 2000 binc 0, go wtime 10000 btime 10000 winc 2000 binc 0 movestogo 10 -> 800
+  + src/uci-session.test.ts > ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A12 — the side to move reads its own increment, in the mode White to move, winc 0 binc 2000, go wtime 10000 btime 10000 winc 0 binc 2000 movestogo 10 -> 800
+  + src/uci-session.test.ts > ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A12 — the side to move reads its own increment, in the mode White to move, winc 2000 binc 0, go wtime 10000 btime 10000 winc 2000 binc 0 movestogo 10 -> 2800
+  + src/uci-session.test.ts > ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A2-A4 — whole 40/15 periods on one replayed clock A2: one period from 900 000 ms, movestogo 40..1, no book: min(59 500, C) on every move, >= 1 000 ms left after each (1 069), 99.9 % used
+  + src/uci-session.test.ts > ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A2-A4 — whole 40/15 periods on one replayed clock A3: the same period with its first 6 moves from the book: the banked time is spent, >= 1 000 ms left after each (1 069), the 34 searched moves use 99.9 %
+  + src/uci-session.test.ts > ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A2-A4 — whole 40/15 periods on one replayed clock A4: 120 moves over 3 periods (+900 000 ms after moves 40 and 80): >= 1 000 ms left after each, each period uses >= 85 %
+  + src/uci-session.test.ts > ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A5 — the hard stop go wtime 3000 btime 3000 movestogo 1 -> 1 900 ms, and the move leaves 1 069 ms of the 3 000
+  + src/uci-session.test.ts > ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A5 — the hard stop go wtime 800 btime 800 -> 1 ms
+  + src/uci-session.test.ts > ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A5 — the hard stop go wtime 800 btime 800 on the real engine (step 10): a legal move at depth 1, and the clock used is 2 readings, 20 ms
+  + src/uci-session.test.ts > ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A6 — no movestogo go wtime 900000 btime 900000, 80 moves, no added time: C over 20 on every move, >= 1 000 ms left after each (17 205 after move 80)
+  + src/uci-session.test.ts > ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A6 — no movestogo the alloc.txt shape (+900 000 ms after move 40, still no movestogo): the closest call is 117 735 ms, after move 40
+  + src/uci-session.test.ts > ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A7 — the ceiling: no go hands the search more than 59 500 ms go -> 22000; the engine's deadline is start + 22000 <= start + 60 000
+  + src/uci-session.test.ts > ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A7 — the ceiling: no go hands the search more than 59 500 ms go infinite -> 22000; the engine's deadline is start + 22000 <= start + 60 000
+  + src/uci-session.test.ts > ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A7 — the ceiling: no go hands the search more than 59 500 ms go movetime 5000 -> 5000; the engine's deadline is start + 5000 <= start + 60 000
+  + src/uci-session.test.ts > ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A7 — the ceiling: no go hands the search more than 59 500 ms go movetime 90000 -> 59500; the engine's deadline is start + 59500 <= start + 60 000
+  + src/uci-session.test.ts > ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A7 — the ceiling: no go hands the search more than 59 500 ms go wtime 3600000 btime 3600000 movestogo 40 -> 59500; the engine's deadline is start + 59500 <= start + 60 000
+  + src/uci-session.test.ts > ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A7 — the ceiling: no go hands the search more than 59 500 ms the 1-hour clock's C is 89 875, so 59 500 binds there
+  + src/uci-session.test.ts > ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A7 — the ceiling: no go hands the search more than 59 500 ms the real engine on a step-5 000 clock: go movetime 90000 reports time in [59 500, 59 500 + 2 x 5 000], past the old 32 000 clamp
+  + src/uci-session.test.ts > ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A8 — levels value-identical (EPIC-009 M3) TimeMode level: a bare go at Skill Level 1-7 is each level's budget, and go movetime 60000 at 7 is 30 000
+  + src/uci-session.test.ts > ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A8 — levels value-identical (EPIC-009 M3) TimeMode unset: a bare go at Skill Level 1-7 is each level's budget, and go movetime 60000 at 7 is 30 000
+  + src/uci-session.test.ts > ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A8 — levels value-identical (EPIC-009 M3) every level budget is under the clamp, so min(budget, 60 000) = min(budget, 32 000) = the budget
+only at base (5):
+  - src/levels.test.ts > ABC-174 A7 — the time budget, from the data (NFR-004; ADR-0038 decision 3) clause B, per level (ABC-212 A5): budgetMs <= ceiling(L) over 1..7, < 5 000 over 1..5, clamp 32 000
+  - src/uci-session.test.ts > ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) A1 — offered, off by default uci-clock-mode is not offered at this build (ABC-221)
+  - src/uci-session.test.ts > ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) A10 — the option's refusals value uci-clock-mode from level: exactly one info string naming the offered values and the value got; level kept
+  - src/uci-session.test.ts > ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) A10 — the option's refusals value uci-clock-mode from simple-tournament: exactly one info string naming the offered values and the value got; simple-tournament kept
+  - src/uci-session.test.ts > ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) A8 — levels unchanged (EPIC-009 M3) LEVELS, DEFAULT_LEVEL, the Skill Level default and HARD_CEILING_MS hold their base values
+sorted names sha256/12: base a8c725b7261d, head minus added d3a35ed79db9 (equal = nothing else moved)
+--- QE classification (post-run, same pair):
+base minus only-at-base d3a35ed79db9 == head minus only-at-head d3a35ed79db9
+only-at-head by class: {"retitled":4,"A12 (ABC-221) in ABC-220 A7":4,"ABC-221 block":27}

@@ -18,6 +18,11 @@
  * time token T. T is also the setting's hard ceiling, `SIMPLE_TOURNAMENT_CEILING_MS`. While
  * `TimeMode` is not `level`, `Skill Level` is not read: no level cap, no blunder draw.
  *
+ * `ABC-221` (`ADR-0052` D4, D6, D8) adds the third value, `uci-clock-mode`: it spends the clock it
+ * is given through the same `C`, capped at `CLOCK_MODE_MAX_BUDGET_MS` (59 500) under its ceiling
+ * `CLOCK_MODE_CEILING_MS` (60 000), never at any level's budget. A `movetime x` gets
+ * `min(x, 59 500)`, a clock for the side to move `min(59 500, C)`, and no time token T (22 000).
+ *
  * ONE THREAD (`ADR-0044` D5). `go` searches to its budget inside `handleLine`, so a `stop` that
  * arrives later finds the search already finished; `infinite` and `ponder` only HOLD the answer.
  * So `isready` and `stop` sent during a search are answered at most one budget late: about 5 s at
@@ -26,7 +31,8 @@
  * used at level 5 or below. In `TimeMode` `simple-tournament` they are answered at most one budget
  * plus the abort overshoot (`AR-NFR004-A`) late, so 22 s read to the whole second (22 000 ms plus
  * the overshoot), and that is accepted with no worker too (`ADR-0052` D7, `ABC-220`): one
- * `readyok` per `isready`, written in order, after the `bestmove`.
+ * `readyok` per `isready`, written in order, after the `bestmove`. In `uci-clock-mode` the same
+ * bound is at most 59 500 ms plus the overshoot, so under 60 s (`ADR-0052` D7, `ABC-221`).
  */
 
 import { makeMove } from "./apply.ts";
@@ -88,9 +94,9 @@ const DEFAULT_MOVES_TO_GO = 20;
 
 /**
  * `ADR-0052` D1: the `TimeMode` values offered at this build, a closed set. `level` (the default)
- * is today's behaviour. `uci-clock-mode` is not offered until it works (`ABC-221`).
+ * is today's behaviour. `uci-clock-mode` joined at `ABC-221`, the build where it works.
  */
-const TIME_MODES = Object.freeze(["level", "simple-tournament"] as const);
+const TIME_MODES = Object.freeze(["level", "simple-tournament", "uci-clock-mode"] as const);
 type TimeMode = (typeof TIME_MODES)[number];
 
 /** `ADR-0052` D3, as amended 2026-10-30: `simple-tournament`'s hard ceiling (`NFR-004`), whole seconds. */
@@ -101,6 +107,10 @@ const SIMPLE_TOURNAMENT_BUDGET_MS = SIMPLE_TOURNAMENT_CEILING_MS;
 const CLOCK_RESERVE_MS = 1_000;
 /** `ADR-0052` D2: charged per move still to play before the control. */
 const CLOCK_OVERHEAD_MS = 100;
+/** `ADR-0052` D4: `uci-clock-mode`'s hard ceiling (`NFR-004`, the owner's Q5), whole seconds. */
+const CLOCK_MODE_CEILING_MS = 60_000;
+/** `ADR-0052` D4: the most `uci-clock-mode` spends a move, 500 ms under its ceiling. */
+const CLOCK_MODE_MAX_BUDGET_MS = CLOCK_MODE_CEILING_MS - 500;
 
 const PROMOTION_LETTERS: Readonly<Record<number, string>> = {
   [QUEEN]: "q",
@@ -147,7 +157,11 @@ function positiveInteger(text: string | undefined): number | undefined {
   return Number.isSafeInteger(value) && value >= 1 ? value : undefined;
 }
 
-/** A clock figure in milliseconds: any finite decimal number, or `undefined`. */
+/**
+ * A clock figure in milliseconds: `Number` of a plain decimal (an optional `-`, digits, an
+ * optional fraction), or `undefined` for any other text. A figure too long for a double (more than
+ * 308 integer digits) comes back as `Infinity` or `-Infinity`, not `undefined` (`SEC-220-b`).
+ */
 function milliseconds(text: string | undefined): number | undefined {
   if (text === undefined || !/^-?\d+(\.\d+)?$/.test(text)) return undefined;
   return Number(text);
@@ -205,7 +219,7 @@ function safeClockShare(time: number, increment: number, movesToGo: number): num
 }
 
 interface GoRequest {
-  /** D4.1's `G` under `TimeMode` `level`, before the level caps it; `ADR-0052` D3's under a mode. */
+  /** D4.1's `G` under `TimeMode` `level`, before the level caps it; `ADR-0052` D3's or D4's in a mode. */
   readonly budgetMs: number;
   readonly maxDepth: number | undefined;
   readonly maxNodes: number | undefined;
@@ -281,14 +295,17 @@ function parseGo(
   // into the level's own budget at every level (`ABC-212`: every budget is under the clamp).
   let budget: number = HARD_CEILING_MS;
   const time = clock[blackToMove ? "btime" : "wtime"];
-  if (timeMode === "simple-tournament") {
-    // `ADR-0052` D3: T with no time token, `min(x, T)` for `movetime x`, `min(T, C)` on a clock.
+  if (timeMode !== "level") {
+    // `ADR-0052` D3 / D4: with no time token T in both modes. Otherwise the mode's cap, T or
+    // 59 500, binds `movetime x` and the safe share C alike.
+    const cap =
+      timeMode === "simple-tournament" ? SIMPLE_TOURNAMENT_BUDGET_MS : CLOCK_MODE_MAX_BUDGET_MS;
     budget = SIMPLE_TOURNAMENT_BUDGET_MS;
-    if (clock.movetime !== undefined) budget = Math.min(clock.movetime, budget);
+    if (clock.movetime !== undefined) budget = Math.min(clock.movetime, cap);
     else if (time !== undefined) {
       const increment = clock[blackToMove ? "binc" : "winc"] ?? 0;
       const movesToGo = clock.movestogo ?? DEFAULT_MOVES_TO_GO;
-      budget = Math.min(budget, safeClockShare(time, increment, movesToGo));
+      budget = Math.min(cap, safeClockShare(time, increment, movesToGo));
     }
   } else if (clock.movetime !== undefined) {
     budget = clock.movetime;

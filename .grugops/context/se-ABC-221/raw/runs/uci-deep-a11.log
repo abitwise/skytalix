@@ -1,0 +1,16 @@
+
+ RUN  v4.1.12 <worktree>
+
+stdout | src/uci.real-engine.test.ts > ABC-221 A11 — a busy isready in uci-clock-mode against node src/uci.ts [deep, UCI_DEEP=1]
+UCI_DEEP ABC-221 A11 child: spawn to exit 2088 ms (not a readyok latency); load1 0.99
+
+ ✓ src/uci.real-engine.test.ts > ABC-221 A11 — a busy isready in uci-clock-mode against node src/uci.ts [deep, UCI_DEEP=1] > two isready, two readyok: the first before the search, the busy one directly after the bestmove 1ms
+ ✓ src/uci.real-engine.test.ts > ABC-221 A11 — a busy isready in uci-clock-mode against node src/uci.ts [deep, UCI_DEEP=1] > no line is lost: the uci reply carries the TimeMode line and uciok; the search writes an info depth line, no book line 1ms
+ ✓ src/uci.real-engine.test.ts > ABC-221 A11 — a busy isready in uci-clock-mode against node src/uci.ts [deep, UCI_DEEP=1] > the search took its movetime: spawn to exit is at least 2 000 ms 0ms
+ ✓ src/uci.real-engine.test.ts > ABC-221 A11 — a busy isready in uci-clock-mode against node src/uci.ts [deep, UCI_DEEP=1] > M4, and quit: every line begins with an engine-to-GUI keyword; exit 0, no signal, empty stderr 0ms
+
+ Test Files  1 passed (1)
+      Tests  4 passed | 9 skipped (13)
+   Start at  05:37:41
+   Duration  2.22s (transform 0ms, setup 0ms, import 38ms, tests 2.09s, environment 0ms)
+

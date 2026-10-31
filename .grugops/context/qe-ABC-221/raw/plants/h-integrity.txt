@@ -1,0 +1,2 @@
+H content differences vs git archive c48a6f83: 0
+P src restored: cmp uci-session.ts and engine.ts equal to H

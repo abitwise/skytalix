@@ -1,0 +1,3 @@
+{"row":"A5 real: go wtime 800 btime 800 (step 10)","budget":1,"step":10,"ceil":1,"readsInGo":3,"depth":1,"nodes":30,"time":20,"out":["bestmove b8c6"]}
+{"row":"A7 real: go movetime 90000 (step 5 000)","budget":59500,"step":5000,"ceil":12,"readsInGo":14,"depth":5,"nodes":7198,"time":65000,"out":["bestmove b8c6"]}
+{"row":"A11: go movetime 30000, isready queued at the 3rd reading (step 5 000)","budget":30000,"step":5000,"ceil":6,"readsInGo":8,"depth":4,"nodes":2078,"time":35000,"out":["bestmove b8c6","readyok"]}

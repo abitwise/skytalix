@@ -4,6 +4,7 @@
  * (`ADR-0027`), so every figure below is exact on every host and no row reads the wall clock.
  */
 
+import { spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { makeMove } from "./apply.ts";
@@ -125,13 +126,14 @@ function expectPrintable(line: string | undefined): void {
 
 describe("ABC-167 A1-A2 — handshake and ready", () => {
   // Re-pinned by ABC-220 (ADR-0052 D1): the TimeMode line follows Skill Level, before uciok.
+  // Re-pinned by ABC-221 (ADR-0052 D1): the TimeMode line gains its third value.
   it("A1: uci writes id name, id author, then (ABC-171 A1, ABC-220 A1) the three option lines, then uciok", () => {
     expect(talk(["uci"]).out).toEqual([
       "id name skytalix",
       "id author Olger Oeselg",
       "option name OwnBook type check default true",
       "option name Skill Level type spin default 5 min 1 max 7",
-      "option name TimeMode type combo default level var level var simple-tournament",
+      "option name TimeMode type combo default level var level var simple-tournament var uci-clock-mode",
       "uciok",
     ]);
   });
@@ -701,6 +703,7 @@ function expectWithin(time: number, budget: number, step = 100): void {
 
 describe("ABC-171 A1 — the option lines", () => {
   // Re-pinned by ABC-220 (ADR-0052 D1): 6 lines, the TimeMode line third of the options.
+  // Re-pinned by ABC-221 (ADR-0052 D1): the TimeMode line gains its third value.
   it("uci writes exactly 6 lines, the three options after the id lines and before uciok", () => {
     const { send } = rig();
     expect(send("uci")).toEqual([
@@ -708,7 +711,7 @@ describe("ABC-171 A1 — the option lines", () => {
       "id author Olger Oeselg",
       "option name OwnBook type check default true",
       "option name Skill Level type spin default 5 min 1 max 7",
-      "option name TimeMode type combo default level var level var simple-tournament",
+      "option name TimeMode type combo default level var level var simple-tournament var uci-clock-mode",
       "uciok",
     ]);
   });
@@ -1737,6 +1740,28 @@ function replayClock(
 const periodGo = (time: number, ply: number): string =>
   `go wtime ${time} btime ${time} movestogo ${40 - ((ply - 1) % 40)}`;
 
+/**
+ * `ABC-221` `A12` (QE-220-a; `qe-ABC-220` QE-A3a's rows): the side to move reads its own increment.
+ * `C` = (10 000 - 1 000 - 10 x 100) / 10 + the side's own increment = 800 + inc, under the hard stop
+ * 8 900 and below both caps (T and 59 500), so `C` binds in both modes. A mode that reads `winc` for
+ * either side (QE's QM4) turns the two Black rows red.
+ */
+const SIDE_INCREMENT_ROWS: ReadonlyArray<readonly [string, string, string, number]> = [
+  ["Black to move, winc 0 binc 2000", "position startpos moves e2e4", "winc 0 binc 2000", 2_800],
+  ["Black to move, winc 2000 binc 0", "position startpos moves e2e4", "winc 2000 binc 0", 800],
+  ["White to move, winc 2000 binc 0", "position startpos", "winc 2000 binc 0", 2_800],
+  ["White to move, winc 0 binc 2000", "position startpos", "winc 0 binc 2000", 800],
+];
+
+/** Runs one `SIDE_INCREMENT_ROWS` row in the mode `setting` selects: the budget `chooseMove` got. */
+function sideIncrementBudget(setting: string, position: string, increments: string): number[] {
+  const rig220 = session220();
+  expect(rig220.send(setting)).toEqual([]);
+  expect(rig220.send(position)).toEqual([]);
+  rig220.send(`go wtime 10000 btime 10000 ${increments} movestogo 10`);
+  return rig220.handed.map(({ budgetMs }) => budgetMs);
+}
+
 describe("ABC-220 — TimeMode simple-tournament over UCI (ADR-0052)", () => {
   afterEach(() => {
     vi.mocked(chooseMove).mockReset();
@@ -1746,18 +1771,14 @@ describe("ABC-220 — TimeMode simple-tournament over UCI (ADR-0052)", () => {
     it("uci writes the TimeMode combo byte-exact, after Skill Level (byte-identical) and before uciok", () => {
       const { send } = session220();
       const reply = send("uci");
+      // Re-pinned by ABC-221 (ADR-0052 D1): the line gains its third value.
       const at = reply.indexOf(
-        "option name TimeMode type combo default level var level var simple-tournament",
+        "option name TimeMode type combo default level var level var simple-tournament var uci-clock-mode",
       );
       expect(at).toBeGreaterThan(-1);
       expect(reply[at - 1]).toBe("option name Skill Level type spin default 5 min 1 max 7");
       expect(reply[at + 1]).toBe("uciok");
       expect(reply.filter((line) => line.includes("TimeMode"))).toHaveLength(1);
-    });
-
-    it("uci-clock-mode is not offered at this build (ABC-221)", () => {
-      const { send } = session220();
-      expect(send("uci").join("\n")).not.toContain("uci-clock-mode");
     });
   });
 
@@ -1883,6 +1904,14 @@ describe("ABC-220 — TimeMode simple-tournament over UCI (ADR-0052)", () => {
       expect(oracleShare(10_000, 2_000, 10)).toBe(2_800);
     });
 
+    // `ABC-221` `A12` (QE-220-a): the four asymmetric-increment rows, in this mode.
+    for (const [side, position, increments, budget] of SIDE_INCREMENT_ROWS) {
+      it(`A12 (ABC-221): ${side}, go wtime 10000 btime 10000 ${increments} movestogo 10 -> ${budget}`, () => {
+        expect(sideIncrementBudget(SIMPLE_TOURNAMENT, position, increments)).toEqual([budget]);
+        expect(oracleShare(10_000, budget - 800, 10)).toBe(budget);
+      });
+    }
+
     it("the side to move's clock: black reads btime and binc (go wtime 900000 btime 3000 winc 9000 binc 0 movestogo 1 -> 1 900)", () => {
       const rig220 = session220();
       rig220.send(SIMPLE_TOURNAMENT);
@@ -1939,7 +1968,8 @@ describe("ABC-220 — TimeMode simple-tournament over UCI (ADR-0052)", () => {
   });
 
   describe("A8 — levels unchanged (EPIC-009 M3)", () => {
-    it("LEVELS, DEFAULT_LEVEL, the Skill Level default and HARD_CEILING_MS hold their base values", () => {
+    // Re-pinned by ABC-221 (ADR-0052 D6): HARD_CEILING_MS is 60 000 from that build; the rest is base.
+    it("LEVELS, DEFAULT_LEVEL and the Skill Level default hold their base values; HARD_CEILING_MS is 60 000 (ABC-221)", () => {
       expect(
         Object.entries(LEVELS).map(([level, { budgetMs, blunderRate }]) => [
           level,
@@ -1956,7 +1986,7 @@ describe("ABC-220 — TimeMode simple-tournament over UCI (ADR-0052)", () => {
         ["7", 30_000, 0],
       ]);
       expect(DEFAULT_LEVEL).toBe(5);
-      expect(HARD_CEILING_MS).toBe(32_000);
+      expect(HARD_CEILING_MS).toBe(60_000);
       const { send } = session220();
       expect(send("uci")).toContain("option name Skill Level type spin default 5 min 1 max 7");
     });
@@ -2047,13 +2077,15 @@ describe("ABC-220 — TimeMode simple-tournament over UCI (ADR-0052)", () => {
       expect(rig220.handed.map(({ budgetMs }) => budgetMs)).toEqual([T_MS]);
     });
 
-    for (const value of ["Simple-Tournament", "uci-clock-mode", "7"]) {
+    // Re-pinned by ABC-221 (ADR-0052 D1): uci-clock-mode is offered, so the refusal line names it,
+    // and a case variant of it is refused in its place.
+    for (const value of ["Simple-Tournament", "Uci-Clock-Mode", "7"]) {
       for (const from of ["level", "simple-tournament"] as const) {
         it(`value ${value} from ${from}: exactly one info string naming the offered values and the value got; ${from} kept`, () => {
           const rig220 = session220();
           if (from === "simple-tournament") rig220.send(SIMPLE_TOURNAMENT);
           expect(rig220.send(`setoption name TimeMode value ${value}`)).toEqual([
-            `info string TimeMode takes level or simple-tournament, got ${value}; kept ${from}`,
+            `info string TimeMode takes level, simple-tournament or uci-clock-mode, got ${value}; kept ${from}`,
           ]);
           rig220.send("position startpos moves e2e4");
           rig220.send("go");
@@ -2068,13 +2100,13 @@ describe("ABC-220 — TimeMode simple-tournament over UCI (ADR-0052)", () => {
     it("no value: one info string naming nothing; a control character in a value is dropped from the line", () => {
       const rig220 = session220();
       expect(rig220.send("setoption name TimeMode")).toEqual([
-        "info string TimeMode takes level or simple-tournament, got nothing; kept level",
+        "info string TimeMode takes level, simple-tournament or uci-clock-mode, got nothing; kept level",
       ]);
       const lines = rig220.send("setoption name TimeMode value simple-tournament\x1b[31m");
       expect(lines).toHaveLength(1);
       expectPrintable(lines[0]);
       expect(lines[0]).toBe(
-        "info string TimeMode takes level or simple-tournament, got simple-tournament[31m; kept level",
+        "info string TimeMode takes level, simple-tournament or uci-clock-mode, got simple-tournament[31m; kept level",
       );
     });
 
@@ -2175,6 +2207,409 @@ if (RUN_ENGINE_DEEP) {
       );
       expect(max).toBeLessThan(22_500);
     });
+  });
+}
+
+// ---------------------------------------------------------------------------------------------
+// ABC-221 — `TimeMode` `uci-clock-mode` over UCI (`ADR-0052` D1, D2, D4, D6, D7). The same
+// replayed GUI clock as the `ABC-220` rows: each searched move costs its budget + 31 ms
+// (`AR-NFR004-A`) and a book move 0 ms. The period rows (A2-A4, A6) stay on the stubbed
+// `chooseMove` (`ADR-0046` § Addendum R1, the ticket's A9): they read budgets and the clock left.
+// The figures are `ADR-0052`'s arithmetic (`arch-epic009-settings` `raw/alloc.txt`).
+// ---------------------------------------------------------------------------------------------
+
+/** "The mode" (`ABC-221` § Acceptance criteria). */
+const CLOCK_MODE = "setoption name TimeMode value uci-clock-mode";
+/** `ADR-0052` D4: the mode's ceiling (the owner's Q5) and the most it spends a move. */
+const CLOCK_MODE_CEILING = 60_000;
+const CLOCK_MODE_CAP = CLOCK_MODE_CEILING - 500;
+/** `ADR-0052` D4, re-derived here: `min(59 500, C)` on a clock. */
+const oracleClockMode = (time: number, increment: number, movesToGo: number): number =>
+  Math.min(CLOCK_MODE_CAP, oracleShare(time, increment, movesToGo));
+/** The share of `PERIOD_MS` the searched moves of `rows` spent (budget + 31 each). */
+const periodUse = (rows: readonly ClockRow[]): number =>
+  rows.reduce((sum, { budget }) => sum + (budget === undefined ? 0 : budget + DELTA_MS), 0) /
+  PERIOD_MS;
+
+describe("ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4)", () => {
+  afterEach(() => {
+    vi.mocked(chooseMove).mockReset();
+  });
+
+  describe("A1 — offered, off by default", () => {
+    it("uci writes the three-value TimeMode combo byte-exact, after Skill Level (byte-identical) and before uciok", () => {
+      const { send } = session220();
+      const reply = send("uci");
+      const at = reply.indexOf(
+        "option name TimeMode type combo default level var level var simple-tournament var uci-clock-mode",
+      );
+      expect(at).toBeGreaterThan(-1);
+      expect(reply[at - 1]).toBe("option name Skill Level type spin default 5 min 1 max 7");
+      expect(reply[at + 1]).toBe("uciok");
+      expect(reply.filter((line) => line.includes("TimeMode"))).toHaveLength(1);
+    });
+
+    it("off by default: go movetime 30000 is the default level's 4 000; after setoption ... uci-clock-mode (silent) it is 30 000", () => {
+      const rig221 = session220();
+      rig221.send("position startpos moves e2e4");
+      rig221.send("go movetime 30000");
+      expect(rig221.send(CLOCK_MODE)).toEqual([]);
+      rig221.send("go movetime 30000");
+      expect(rig221.handed.map(({ budgetMs }) => budgetMs)).toEqual([4_000, 30_000]);
+    });
+
+    it("a refused value keeps uci-clock-mode with the three-value line, and the mode survives ucinewgame", () => {
+      const rig221 = session220();
+      rig221.send(CLOCK_MODE);
+      expect(rig221.send("setoption name TimeMode value UCI-clock-mode")).toEqual([
+        "info string TimeMode takes level, simple-tournament or uci-clock-mode, got UCI-clock-mode; kept uci-clock-mode",
+      ]);
+      expect(rig221.send("ucinewgame")).toEqual([]);
+      rig221.send("position startpos moves e2e4");
+      rig221.send("go movetime 30000");
+      expect(rig221.handed.map(({ budgetMs }) => budgetMs)).toEqual([30_000]);
+    });
+
+    it("Skill Level is not read in the mode: at 1 and at 7, go movetime 45000 is 45 000 and random is called 0 times", () => {
+      const rig221 = session220();
+      rig221.send(CLOCK_MODE);
+      rig221.send("position startpos moves e2e4");
+      for (const level of [1, 7]) {
+        expect(rig221.send(`setoption name Skill Level value ${level}`)).toEqual([]);
+        rig221.send("go movetime 45000");
+      }
+      expect(rig221.handed.map(({ budgetMs }) => budgetMs)).toEqual([45_000, 45_000]);
+      expect(rig221.draws.count).toBe(0);
+    });
+  });
+
+  describe("A2-A4 — whole 40/15 periods on one replayed clock", () => {
+    it("A2: one period from 900 000 ms, movestogo 40..1, no book: min(59 500, C) on every move, >= 1 000 ms left after each (1 069), 99.9 % used", () => {
+      const rig221 = session220();
+      rig221.send(CLOCK_MODE);
+      const rows = replayClock(rig221, 40, periodGo, { start: PERIOD_MS });
+      for (const [index, { budget, sent, left }] of rows.entries()) {
+        expect(budget).toBe(oracleClockMode(sent, 0, 40 - index));
+        expect(left).toBeGreaterThanOrEqual(1_000);
+      }
+      expect(rows[0]?.budget).toBe(22_375);
+      expect(rows.at(-1)?.left).toBeCloseTo(1_069, 6);
+      const used = (PERIOD_MS - (rows.at(-1)?.left as number)) / PERIOD_MS;
+      expect(used).toBeGreaterThanOrEqual(0.85);
+      expect(used.toFixed(3)).toBe("0.999");
+    });
+
+    it("A3: the same period with its first 6 moves from the book: the banked time is spent, >= 1 000 ms left after each (1 069), the 34 searched moves use 99.9 %", () => {
+      const rig221 = session220({ read: START_BOOK });
+      rig221.send(CLOCK_MODE);
+      const rows = replayClock(rig221, 40, periodGo, { start: PERIOD_MS, bookPlies: 6 });
+      expect(rows.slice(0, 6).map(({ budget }) => budget)).toEqual(Array(6).fill(undefined));
+      for (const [index, { budget, sent }] of rows.entries()) {
+        if (index >= 6) expect(budget).toBe(oracleClockMode(sent, 0, 40 - index));
+      }
+      for (const { left } of rows) expect(left).toBeGreaterThanOrEqual(1_000);
+      // Move 7 spreads the whole 900 000 over 34 moves, so it gets more than A2's first 22 375.
+      expect(rows[6]?.budget as number).toBeGreaterThan(22_375);
+      expect(rows.at(-1)?.left).toBeCloseTo(1_069, 6);
+      const used = periodUse(rows);
+      expect(used).toBeGreaterThanOrEqual(0.85);
+      expect(used.toFixed(3)).toBe("0.999");
+    });
+
+    it("A4: 120 moves over 3 periods (+900 000 ms after moves 40 and 80): >= 1 000 ms left after each, each period uses >= 85 %", () => {
+      const rig221 = session220();
+      rig221.send(CLOCK_MODE);
+      const rows = replayClock(rig221, 120, periodGo, {
+        start: PERIOD_MS,
+        addAfter: { 40: PERIOD_MS, 80: PERIOD_MS },
+      });
+      for (const [index, { budget, sent, left }] of rows.entries()) {
+        expect(budget).toBe(oracleClockMode(sent, 0, 40 - (index % 40)));
+        expect(left).toBeGreaterThanOrEqual(1_000);
+      }
+      for (const period of [0, 1, 2]) {
+        const slice = rows.slice(period * 40, period * 40 + 40);
+        expect(slice.at(-1)?.left).toBeCloseTo(1_069, 6);
+        expect(periodUse(slice)).toBeGreaterThanOrEqual(0.85);
+      }
+    });
+  });
+
+  describe("A5 — the hard stop", () => {
+    it("go wtime 3000 btime 3000 movestogo 1 -> 1 900 ms, and the move leaves 1 069 ms of the 3 000", () => {
+      const rig221 = session220();
+      rig221.send(CLOCK_MODE);
+      const [row] = replayClock(rig221, 1, () => "go wtime 3000 btime 3000 movestogo 1", {
+        start: 3_000,
+      });
+      expect(row?.budget).toBe(1_900);
+      expect(row?.left).toBe(1_069);
+    });
+
+    it("go wtime 800 btime 800 -> 1 ms", () => {
+      const rig221 = session220();
+      rig221.send(CLOCK_MODE);
+      rig221.send("position startpos moves e2e4");
+      rig221.send("go wtime 800 btime 800");
+      expect(rig221.handed.map(({ budgetMs }) => budgetMs)).toEqual([1]);
+    });
+
+    it("go wtime 800 btime 800 on the real engine (step 10): a legal move at depth 1, and the clock used is 2 readings, 20 ms", () => {
+      const { send } = session220({ stub: false, stepMs: 10 });
+      send(CLOCK_MODE);
+      send("position startpos moves e2e4");
+      const lines = send("go wtime 800 btime 800");
+      expect(lines).toHaveLength(2);
+      const info = parseInfo(lines[0]);
+      expect(info.depth).toBe(1);
+      expect(lines[1]).toBe(`bestmove ${info.move}`);
+      expect(legalMoves(afterMoves(START_FEN, ["e2e4"])).map(coordinateOf)).toContain(info.move);
+      // The record: the loop's one reading after depth 1 and the return reading, one step each.
+      expect(info.time).toBe(20);
+    });
+  });
+
+  describe("A6 — no movestogo", () => {
+    it("go wtime 900000 btime 900000, 80 moves, no added time: C over 20 on every move, >= 1 000 ms left after each (17 205 after move 80)", () => {
+      const rig221 = session220();
+      rig221.send(CLOCK_MODE);
+      const rows = replayClock(rig221, 80, (time) => `go wtime ${time} btime ${time}`, {
+        start: PERIOD_MS,
+      });
+      for (const { budget, sent, left } of rows) {
+        expect(budget).toBe(oracleClockMode(sent, 0, 20));
+        expect(left).toBeGreaterThanOrEqual(1_000);
+      }
+      expect(Math.round(rows.at(-1)?.left as number)).toBe(17_205);
+    });
+
+    it("the alloc.txt shape (+900 000 ms after move 40, still no movestogo): the closest call is 117 735 ms, after move 40", () => {
+      const rig221 = session220();
+      rig221.send(CLOCK_MODE);
+      const rows = replayClock(rig221, 80, (time) => `go wtime ${time} btime ${time}`, {
+        start: PERIOD_MS,
+        addAfter: { 40: PERIOD_MS },
+      });
+      for (const { budget, sent } of rows) expect(budget).toBe(oracleClockMode(sent, 0, 20));
+      const lefts = rows.map(({ left }) => left);
+      expect(Math.round(Math.min(...lefts))).toBe(117_735);
+      expect(Math.round(lefts[39] as number)).toBe(117_735);
+    });
+  });
+
+  describe("A7 — the ceiling: no go hands the search more than 59 500 ms", () => {
+    const rows: ReadonlyArray<readonly [string, number]> = [
+      ["go wtime 3600000 btime 3600000 movestogo 40", CLOCK_MODE_CAP],
+      ["go movetime 90000", CLOCK_MODE_CAP],
+      ["go movetime 5000", 5_000],
+      ["go", T_MS],
+      ["go infinite", T_MS],
+    ];
+    for (const [go, budget] of rows) {
+      it(`${go} -> ${budget}; the engine's deadline is start + ${budget} <= start + 60 000`, () => {
+        const rig221 = session220();
+        rig221.send(CLOCK_MODE);
+        rig221.send("position startpos moves e2e4");
+        rig221.send(go);
+        if (go === "go infinite") expect(rig221.send("stop")).toHaveLength(1);
+        expect(rig221.handed.map(({ budgetMs }) => budgetMs)).toEqual([budget]);
+        // The deadline the engine is handed is start + min(budgetMs, HARD_CEILING_MS) (engine.ts).
+        expect(Math.min(budget, HARD_CEILING_MS)).toBe(budget);
+        expect(Math.min(budget, HARD_CEILING_MS)).toBeLessThanOrEqual(CLOCK_MODE_CEILING);
+      });
+    }
+
+    it("the 1-hour clock's C is 89 875, so 59 500 binds there", () => {
+      expect(oracleShare(3_600_000, 0, 40)).toBe(89_875);
+      expect(oracleClockMode(3_600_000, 0, 40)).toBe(CLOCK_MODE_CAP);
+    });
+
+    it("the real engine on a step-5 000 clock: go movetime 90000 reports time in [59 500, 59 500 + 2 x 5 000], past the old 32 000 clamp", () => {
+      const { send } = session220({ stub: false, stepMs: 5_000 });
+      send(CLOCK_MODE);
+      send("position startpos moves e2e4");
+      const lines = send("go movetime 90000");
+      expect(lines).toHaveLength(2);
+      const info = parseInfo(lines[0]);
+      expectWithin(info.time, CLOCK_MODE_CAP, 5_000);
+      expect(lines[1]).toBe(`bestmove ${info.move}`);
+    });
+  });
+
+  describe("A8 — levels value-identical (EPIC-009 M3)", () => {
+    /** As `ABC-220` `A8`: a seed whose first draw is above every blunder rate. */
+    const NO_BLUNDER = 0.5;
+
+    it("every level budget is under the clamp, so min(budget, 60 000) = min(budget, 32 000) = the budget", () => {
+      for (const { budgetMs } of Object.values(LEVELS)) {
+        expect(Math.min(budgetMs, HARD_CEILING_MS)).toBe(budgetMs);
+        expect(Math.min(budgetMs, 32_000)).toBe(budgetMs);
+      }
+    });
+
+    for (const setup of [[], ["setoption name TimeMode value level"]] as const) {
+      const how = setup.length === 0 ? "TimeMode unset" : "TimeMode level";
+      it(`${how}: a bare go at Skill Level 1-7 is each level's budget, and go movetime 60000 at 7 is 30 000`, () => {
+        const rig221 = session220({ random: () => NO_BLUNDER });
+        for (const line of setup) expect(rig221.send(line)).toEqual([]);
+        rig221.send("position startpos moves e2e4");
+        for (const level of [1, 2, 3, 4, 5, 6, 7] as const) {
+          expect(rig221.send(`setoption name Skill Level value ${level}`)).toEqual([]);
+          rig221.send("go");
+        }
+        rig221.send("go movetime 60000");
+        expect(rig221.handed.map(({ budgetMs }) => budgetMs)).toEqual([
+          ...([1, 2, 3, 4, 5, 6, 7] as const).map((level) => LEVELS[level].budgetMs),
+          30_000,
+        ]);
+      });
+    }
+  });
+
+  describe("A11 — busy isready in the mode (ADR-0052 D7), default lane", () => {
+    it("isready that arrives mid-search is answered once, after the bestmove, in order", () => {
+      // `ABC-220` `A13`'s driver, with the mode and a `movetime` only the mode hands whole.
+      const queue = [CLOCK_MODE, "position startpos moves e2e4", "go movetime 30000"];
+      const clock = virtualClock(5_000);
+      let searching = false;
+      let readings = 0;
+      let queuedMidSearch = false;
+      const out: string[] = [];
+      const session = createUciSession({
+        write: (line) => out.push(line),
+        now: () => {
+          if (searching && ++readings === 3) {
+            queue.push("isready");
+            queuedMidSearch = true;
+          }
+          return clock();
+        },
+        random: seededRandom(1),
+        book: emptyBook(),
+      });
+      while (queue.length > 0) {
+        const line = queue.shift() as string;
+        searching = line.startsWith("go");
+        session.handleLine(line);
+        searching = false;
+      }
+      everyLine.push(...out);
+      expect(queuedMidSearch).toBe(true);
+      expect(out).toHaveLength(3);
+      const info = parseInfo(out[0]);
+      expectWithin(info.time, 30_000, 5_000);
+      expect(out.slice(1)).toEqual([`bestmove ${info.move}`, "readyok"]);
+    });
+  });
+
+  describe("A12 — the side to move reads its own increment, in the mode", () => {
+    for (const [side, position, increments, budget] of SIDE_INCREMENT_ROWS) {
+      it(`${side}, go wtime 10000 btime 10000 ${increments} movestogo 10 -> ${budget}`, () => {
+        expect(sideIncrementBudget(CLOCK_MODE, position, increments)).toEqual([budget]);
+      });
+    }
+  });
+});
+
+/**
+ * `ABC-221` `A10` — 59 500 ms on the REAL clock. OPT-IN: `ENGINE_DEEP=1`, never in the default
+ * lane, run ALONE (~3-4 min: one 1 s warm search and 3 searches of 59.5 s). Unset, it is NOT
+ * DEFINED (the `ABC-119` form). One child started with `--expose-gc` (the `ABC-081` `A7` / `NFR-009`
+ * instrument, as `ABC-212` read it at 30 s) drives the session in the mode on `Date.now`: a 1 s
+ * search, a read after two `gc()`s, then each fixed position once at `go wtime 3600000 btime 3600000
+ * movestogo 40` (59 500 ms), each followed by a read. Each must report `time` >= 59 500 (the
+ * budget was the cap) and return in <= 60 000 ms of wall, and
+ * its `heapUsed` and `arrayBuffers` may grow <= 1 MiB over the first read, with `arrayBuffers`
+ * <= 16 MiB. The max completed depth is printed against `KEY_ARRAY_CAPACITY`'s tripwire (100).
+ */
+if (RUN_ENGINE_DEEP) {
+  describe("ABC-221 A10 — three searches at 59 500 ms on the real clock [deep, ENGINE_DEEP=1]", () => {
+    it("each returns in <= 60 000 ms of wall; memory <= 16 MiB, growth <= 1 MiB; max depth logged", () => {
+      const fixtures: ReadonlyArray<readonly [string, string]> = [
+        ["start", START_FEN],
+        ["italian", "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4"],
+        ["kiwipete", KIWIPETE],
+      ];
+      const url = (file: string): string => new URL(file, import.meta.url).href;
+      const script = `
+        const { createUciSession } = await import(${JSON.stringify(url("./uci-session.ts"))});
+        const { createBookProbe } = await import(${JSON.stringify(url("./book.ts"))});
+        const { seededRandom } = await import(${JSON.stringify(url("./levels.ts"))});
+        const { HARD_CEILING_MS } = await import(${JSON.stringify(url("./engine.ts"))});
+        const fixtures = ${JSON.stringify(fixtures)};
+        const out = [];
+        const empty = new TextEncoder().encode(JSON.stringify({ format: 1, maxPly: 12, positions: {} }));
+        const session = createUciSession({
+          write: (line) => out.push(line),
+          now: Date.now,
+          random: seededRandom(1),
+          book: createBookProbe({ read: () => empty, warn: () => {}, random: seededRandom(7) }),
+        });
+        const read = () => { gc(); gc(); const m = process.memoryUsage(); return { heapUsed: m.heapUsed, arrayBuffers: m.arrayBuffers }; };
+        session.handleLine("setoption name OwnBook value false");
+        session.handleLine(${JSON.stringify(CLOCK_MODE)});
+        session.handleLine("position fen " + fixtures[0][1]);
+        session.handleLine("go movetime 1000");
+        const first = read();
+        const runs = [];
+        for (const [name, fen] of fixtures) {
+          out.length = 0;
+          session.handleLine("position fen " + fen);
+          const started = performance.now();
+          session.handleLine("go wtime 3600000 btime 3600000 movestogo 40");
+          const wall = performance.now() - started;
+          runs.push({ name, wall, lines: [...out], memory: read() });
+        }
+        console.log(JSON.stringify({ first, runs, clamp: HARD_CEILING_MS }));
+      `;
+      const run = spawnSync(
+        process.execPath,
+        ["--expose-gc", "--input-type=module", "-e", script],
+        {
+          encoding: "utf8",
+          timeout: 330_000,
+        },
+      );
+      expect(run.error, String(run.error)).toBeUndefined();
+      expect(run.status, run.stderr).toBe(0);
+      const { first, runs, clamp } = JSON.parse(run.stdout.trim().split("\n").pop() as string) as {
+        first: { heapUsed: number; arrayBuffers: number };
+        runs: {
+          name: string;
+          wall: number;
+          lines: string[];
+          memory: { heapUsed: number; arrayBuffers: number };
+        }[];
+        clamp: number;
+      };
+      const MIB = 1024 * 1024;
+      const mib = (bytes: number): string => (bytes / MIB).toFixed(2);
+      expect(clamp).toBe(60_000);
+      expect(runs).toHaveLength(3);
+      const depths: number[] = [];
+      for (const { name, wall, lines, memory } of runs) {
+        const info = parseInfo(lines.find((line) => line.startsWith("info depth")));
+        depths.push(info.depth);
+        console.log(
+          `ABC-221 A10 ${name}: wall ${wall.toFixed(1)} ms, depth ${info.depth}, nodes ${info.nodes}, ` +
+            `time ${info.time}; heapUsed ${mib(memory.heapUsed)} MiB, arrayBuffers ${mib(memory.arrayBuffers)} MiB`,
+        );
+        expect(lines.at(-1)).toMatch(/^bestmove [a-h][1-8][a-h][1-8]/);
+        // The budget was 59 500: the engine's own `Date.now` reading. The wall, on `performance.now`,
+        // can sit up to 1 ms under it, because `Date.now` counts whole milliseconds.
+        expect(info.time).toBeGreaterThanOrEqual(CLOCK_MODE_CAP);
+        expect(wall).toBeLessThanOrEqual(CLOCK_MODE_CEILING);
+        expect(memory.heapUsed - first.heapUsed).toBeLessThanOrEqual(MIB);
+        expect(memory.arrayBuffers - first.arrayBuffers).toBeLessThanOrEqual(MIB);
+        expect(memory.arrayBuffers).toBeLessThanOrEqual(16 * MIB);
+      }
+      const maxDepth = Math.max(...depths);
+      console.log(
+        `ABC-221 A10 first read: heapUsed ${mib(first.heapUsed)} MiB, arrayBuffers ${mib(first.arrayBuffers)} MiB; ` +
+          `max wall ${Math.max(...runs.map(({ wall }) => wall)).toFixed(1)} ms; max completed depth ${maxDepth} ` +
+          `(KEY_ARRAY_CAPACITY tripwire 100: ${maxDepth >= 100 ? "REACHED, to the Architect" : "not reached"})`,
+      );
+    }, 360_000);
   });
 }
 

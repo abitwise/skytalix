@@ -1,0 +1,3 @@
+W (as worded, no added time): after move 80 17204.530 ms; closest 17204.530 ms after move 80; every move >= 1 000: true; >= 117 000 after every move: false
+P (+900 000 after move 40): closest 117735.082 ms after move 40; after move 80 132865.471 ms; every move >= 1 000: true; >= 117 000 after every move: true
+rounded: W after move 80 = 17205; P closest = 117735

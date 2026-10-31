@@ -69,9 +69,9 @@ const DIALOGUE = [
  * off, so the `go` searches. The script is written in one piece, so the second `isready` reaches the
  * child while `go movetime 2000` runs (the one thread reads it after the search).
  */
-const BUSY_ISREADY_DIALOGUE = [
+const busyIsreadyDialogue = (mode: string): string[] => [
   "uci",
-  "setoption name TimeMode value simple-tournament",
+  `setoption name TimeMode value ${mode}`,
   "setoption name OwnBook value false",
   "isready",
   "position startpos moves e2e4",
@@ -79,6 +79,9 @@ const BUSY_ISREADY_DIALOGUE = [
   "isready",
   "quit",
 ];
+const BUSY_ISREADY_DIALOGUE = busyIsreadyDialogue("simple-tournament");
+/** `ABC-221` `A11` (A14a in the mode): the same script with `uci-clock-mode` set instead. */
+const BUSY_ISREADY_CLOCK_DIALOGUE = busyIsreadyDialogue("uci-clock-mode");
 
 /** `EPIC-007` M4: the engine-to-GUI keywords a stdout line may begin with. */
 const M4_KEYWORDS: ReadonlySet<string> = new Set([
@@ -92,7 +95,8 @@ const M4_KEYWORDS: ReadonlySet<string> = new Set([
 
 /**
  * A HANG GUARD, NOT A CRITERION: the dialogue is one 1 s search, one book hit and start-up.
- * `ABC-212`: a literal 20 s, today's value, so it does not grow with `HARD_CEILING_MS` (32 000).
+ * `ABC-212`: a literal 20 s, today's value, so it does not grow with `HARD_CEILING_MS` (60 000 since
+ * `ABC-221`).
  */
 const HANG_GUARD_MS = 20_000;
 
@@ -180,6 +184,7 @@ describe("ABC-168 — the UCI lane's child is the delivered entry point (default
     expect(Object.keys(CHILD_ENV)).toEqual([]);
     expect(DIALOGUE.at(-1), "the script ends the session itself").toBe("quit");
     expect(BUSY_ISREADY_DIALOGUE.at(-1), "the A14 script ends the session itself").toBe("quit");
+    expect(BUSY_ISREADY_CLOCK_DIALOGUE.at(-1), "the ABC-221 A11 script ends it too").toBe("quit");
   });
 });
 
@@ -230,56 +235,65 @@ if (RUN_DEEP) {
  * exit. WHAT IT CANNOT READ: "`readyok` ≤ 100 ms after `bestmove`". The child is synchronous
  * (`ABC-173` `C2`), so its output arrives whole at exit and no per-line time exists here; the
  * spawn-to-exit wall is printed, labelled as what it is.
+ *
+ * `ABC-221` `A11` runs the same rows with `TimeMode` `uci-clock-mode` (its A14a), and both read the
+ * three-value `TimeMode` line (`ADR-0052` D1 at that build).
  */
+const BUSY_ISREADY_LANES: ReadonlyArray<readonly [string, string, readonly string[]]> = [
+  ["ABC-220 A14", "simple-tournament", BUSY_ISREADY_DIALOGUE],
+  ["ABC-221 A11", "uci-clock-mode", BUSY_ISREADY_CLOCK_DIALOGUE],
+];
 if (RUN_DEEP) {
-  describe("ABC-220 A14 — a busy isready in simple-tournament against node src/uci.ts [deep, UCI_DEEP=1]", () => {
-    let dialogue: Dialogue;
-    beforeAll(() => {
-      dialogue = runDialogue(BUSY_ISREADY_DIALOGUE);
-      console.log(
-        `UCI_DEEP A14 child: spawn to exit ${dialogue.wallMs.toFixed(0)} ms (not a readyok latency); load1 ${loadavg()[0]?.toFixed(2)}`,
-      );
-    }, 2 * HANG_GUARD_MS);
+  for (const [row, mode, script] of BUSY_ISREADY_LANES) {
+    describe(`${row} — a busy isready in ${mode} against node src/uci.ts [deep, UCI_DEEP=1]`, () => {
+      let dialogue: Dialogue;
+      beforeAll(() => {
+        dialogue = runDialogue(script);
+        console.log(
+          `UCI_DEEP ${row} child: spawn to exit ${dialogue.wallMs.toFixed(0)} ms (not a readyok latency); load1 ${loadavg()[0]?.toFixed(2)}`,
+        );
+      }, 2 * HANG_GUARD_MS);
 
-    it("two isready, two readyok: the first before the search, the busy one directly after the bestmove", () => {
-      const lines = dialogue.lines;
-      const readyAt = lines.flatMap((line, index) => (line === "readyok" ? [index] : []));
-      const bestAt = lines.flatMap((line, index) => (line.startsWith("bestmove") ? [index] : []));
-      expect(readyAt, JSON.stringify(lines)).toHaveLength(2);
-      expect(bestAt, JSON.stringify(lines)).toHaveLength(1);
-      expect(readyAt[0] as number).toBeLessThan(bestAt[0] as number);
-      expect(readyAt[1], "the busy readyok is the line after the bestmove").toBe(
-        (bestAt[0] as number) + 1,
-      );
-      expect(lines.at(-1)).toBe("readyok");
-    });
+      it("two isready, two readyok: the first before the search, the busy one directly after the bestmove", () => {
+        const lines = dialogue.lines;
+        const readyAt = lines.flatMap((line, index) => (line === "readyok" ? [index] : []));
+        const bestAt = lines.flatMap((line, index) => (line.startsWith("bestmove") ? [index] : []));
+        expect(readyAt, JSON.stringify(lines)).toHaveLength(2);
+        expect(bestAt, JSON.stringify(lines)).toHaveLength(1);
+        expect(readyAt[0] as number).toBeLessThan(bestAt[0] as number);
+        expect(readyAt[1], "the busy readyok is the line after the bestmove").toBe(
+          (bestAt[0] as number) + 1,
+        );
+        expect(lines.at(-1)).toBe("readyok");
+      });
 
-    it("no line is lost: the uci reply carries the TimeMode line and uciok; the search writes an info depth line, no book line", () => {
-      const lines = dialogue.lines;
-      expect(lines).toContain(
-        "option name TimeMode type combo default level var level var simple-tournament",
-      );
-      expect(lines).toContain("uciok");
-      expect(lines).not.toContain("info string book");
-      expect(lines.some((line) => /^info depth \d+/.test(line))).toBe(true);
-      expect(lines.filter((line) => line.startsWith("info string"))).toEqual([]);
-      const best = lines.find((line) => line.startsWith("bestmove")) as string;
-      const move = best.split(" ")[1] as string;
-      const afterE4 = parseFen("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1");
-      expect(parseCoordinateMove(afterE4, move).outcome, `${move} is legal`).toBe("move");
-    });
+      it("no line is lost: the uci reply carries the TimeMode line and uciok; the search writes an info depth line, no book line", () => {
+        const lines = dialogue.lines;
+        expect(lines).toContain(
+          "option name TimeMode type combo default level var level var simple-tournament var uci-clock-mode",
+        );
+        expect(lines).toContain("uciok");
+        expect(lines).not.toContain("info string book");
+        expect(lines.some((line) => /^info depth \d+/.test(line))).toBe(true);
+        expect(lines.filter((line) => line.startsWith("info string"))).toEqual([]);
+        const best = lines.find((line) => line.startsWith("bestmove")) as string;
+        const move = best.split(" ")[1] as string;
+        const afterE4 = parseFen("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1");
+        expect(parseCoordinateMove(afterE4, move).outcome, `${move} is legal`).toBe("move");
+      });
 
-    it("the search took its movetime: spawn to exit is at least 2 000 ms", () => {
-      expect(dialogue.wallMs).toBeGreaterThanOrEqual(2_000);
-    });
+      it("the search took its movetime: spawn to exit is at least 2 000 ms", () => {
+        expect(dialogue.wallMs).toBeGreaterThanOrEqual(2_000);
+      });
 
-    it("M4, and quit: every line begins with an engine-to-GUI keyword; exit 0, no signal, empty stderr", () => {
-      for (const text of dialogue.lines) {
-        expect(M4_KEYWORDS.has(text.split(" ")[0] as string), JSON.stringify(text)).toBe(true);
-      }
-      expect(dialogue.signal).toBeNull();
-      expect(dialogue.status).toBe(0);
-      expect(dialogue.stderr).toBe("");
+      it("M4, and quit: every line begins with an engine-to-GUI keyword; exit 0, no signal, empty stderr", () => {
+        for (const text of dialogue.lines) {
+          expect(M4_KEYWORDS.has(text.split(" ")[0] as string), JSON.stringify(text)).toBe(true);
+        }
+        expect(dialogue.signal).toBeNull();
+        expect(dialogue.status).toBe(0);
+        expect(dialogue.stderr).toBe("");
+      });
     });
-  });
+  }
 }
