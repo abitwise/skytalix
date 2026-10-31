@@ -63,7 +63,7 @@ import {
 import { HISTORY_ROWS, renderHistory } from "./history-pane.ts";
 import { legalMoves } from "./legal.ts";
 import { createLevelSeam } from "./level-seam.ts";
-import { createLevel, DEFAULT_LEVEL, HARDEST_LEVEL, LEVELS } from "./levels.ts";
+import { createLevel, DEFAULT_LEVEL, HARDEST_LEVEL, LEVELS, seededRandom } from "./levels.ts";
 import { PROMPT } from "./line-input.ts";
 import { squareName } from "./position.ts";
 import { type GlyphMode, type Orientation, renderBoard } from "./render.ts";
@@ -4689,6 +4689,61 @@ describe("ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable
     if (repeat === undefined) throw new Error("fixture: d8e8 is not legal");
     playMove(twin, repeat);
     expect(gameStatusOf(twin).claimable).toBeUndefined();
+  });
+});
+
+// ---------------------------------------------------------------------------------------------
+// `ABC-242` A4 (`ADR-0054` § Proposed amendment 2026-10-30) — at level 1 the CLI's seam plays the
+// blunder that scores the third occurrence 0. The UCI half, and the third caller, are in
+// `src/uci-session.test.ts`'s `ABC-242` row, on the same seed, step and fixtures.
+// ---------------------------------------------------------------------------------------------
+
+describe("ABC-242 A4 — the CLI seam at level 1: a blunder that reads the third occurrence as 0", () => {
+  /** `src/levels.test.ts`'s `ABC-242` fixtures: after `moves`, `repeat` makes the third occurrence. */
+  const THIRD = [
+    ["4k3/8/8/8/8/8/8/1Q2K3 w - - 0 1", "b1b2 e8d8 b2b1 d8e8 b1b2 e8d8 b2b1", "d8e8"],
+    ["8/3k4/8/8/8/8/8/Q3K3 w - - 0 1", "a1a2 d7e8 a2a1 e8d7 a1a2 d7e8 a2a1", "e8d7"],
+    ["q3k3/8/8/8/8/8/8/4K3 b - - 0 1", "a8a7 e1d1 a7a8 d1e1 a8a7 e1d1 a7a8", "d1e1"],
+    ["8/8/8/4k3/8/7p/7P/6KR b - - 0 1", "e5d5 g1f1 d5e5 f1g1 e5f5 g1f1 f5e5", "f1g1"],
+    ["6kr/7p/7P/8/4K3/8/8/8 w - - 0 1", "e4d4 g8f8 d4e4 f8g8 e4f4 g8f8 f4e4", "f8g8"],
+  ] as const;
+  // `ADR-0046` § Addendum 2026-10-30 R3: one step on all three callers, here and in the other file.
+  /** Level 1's 100 ms at the coarsest kill-set-preserving step (the build note's R1 census). */
+  const STEP_MS = 10;
+  /** `seededRandom(7)`'s first draw is 0.0117, under level 1's 0.4: the move is a blunder. */
+  const SEED = 7;
+  const labelOf = (move: { from: number; to: number }) =>
+    `${squareName(move.from)}${squareName(move.to)}`;
+  const gameOf = (fen: string, moves: string): GameHistory => {
+    const game = newGame(fen);
+    for (const text of moves.split(" ")) {
+      const move = legalMoves(game.position).find((m) => labelOf(m) === text);
+      if (move === undefined) throw new Error(`fixture: ${text} is not legal`);
+      playMove(game, move);
+    }
+    return game;
+  };
+
+  it("A4: the seam plays a direct createLevel(LEVELS[1]) call's move; that call's list carries the 0", async () => {
+    expect(seededRandom(SEED)()).toBeLessThan(LEVELS[1].blunderRate);
+    for (const [fen, moves, repeat] of THIRD) {
+      const game = gameOf(fen, moves);
+      const root = toFen(game.position);
+      const seam = createLevelSeam(
+        1,
+        { seed: SEED, now: virtualClock(STEP_MS) },
+        repetitionKeyHistory,
+      );
+      const played = labelOf(await seam(game));
+      expect(toFen(game.position)).toBe(root);
+      const direct = createLevel(LEVELS[1], { seed: SEED, now: virtualClock(STEP_MS) })(
+        parseFen(root),
+        trimPriorKeys(repetitionKeyHistory(game), game.position.halfmoveClock),
+      );
+      expect(direct?.kind, root).toBe("blunder");
+      expect(direct?.scored?.find((s) => labelOf(s.move) === repeat)?.score, root).toBe(0);
+      expect(played, root).toBe(direct && labelOf(direct.move));
+    }
   });
 });
 
