@@ -664,14 +664,15 @@ describe("RF-1 — a budget above the hard ceiling is CAPPED at it, not honoured
    */
 
   it("names the ceiling as an exported constant", () => {
-    // `ABC-212` (`ADR-0045` § AMENDMENT A3): the largest per-level ceiling in `NFR-004`.
-    expect(HARD_CEILING_MS).toBe(32_000);
+    // `ABC-212` (`ADR-0045` § AMENDMENT A3): the largest per-level ceiling in `NFR-004`, 32 000.
+    // `ABC-221` (`ADR-0052` D6): the largest ceiling in force, `uci-clock-mode`'s 60 000.
+    expect(HARD_CEILING_MS).toBe(60_000);
   });
 
   it("stops at start + HARD_CEILING_MS when handed twice that budget", () => {
     // The deepening stops at the first reading at or past the deadline, and the return reading
     // is one step later — so the ceiling plus one step is the tightest true bound. Unclamped
-    // this run stops at 64 000 and returns 80 000, which is what reds here.
+    // this run stops at 120 000 and returns 150 000, which is what reds here.
     expect(run(2 * HARD_CEILING_MS).elapsedMs).toBeLessThanOrEqual(HARD_CEILING_MS + STEP_MS);
   });
 
@@ -687,7 +688,7 @@ describe("RF-1 — a budget above the hard ceiling is CAPPED at it, not honoured
   });
 
   it("leaves every degenerate budget exactly as it was — Math.min, not an if", () => {
-    // `Math.min(NaN, 32000)` is `NaN`, so both deadline comparisons stay false and depth 1 comes
+    // `Math.min(NaN, 60000)` is `NaN`, so both deadline comparisons stay false and depth 1 comes
     // back as before; 0 and negatives are already below the ceiling and are untouched. This is
     // the reason the fix is a `Math.min` and not a conditional.
     for (const budgetMs of [Number.NaN, 0, -1, -1e9]) {

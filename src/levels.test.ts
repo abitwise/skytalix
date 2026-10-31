@@ -365,7 +365,7 @@ describe("ABC-174 A7 — the time budget, from the data (NFR-004; ADR-0038 decis
     expect(DEFAULT_BUDGET_MS).toBe(4_000);
   });
 
-  it("clause B, per level (ABC-212 A5): budgetMs <= ceiling(L) over 1..7, < 5 000 over 1..5, clamp 32 000", () => {
+  it("clause B, per level (ABC-212 A5): budgetMs <= ceiling(L) over 1..7, < 5 000 over 1..5, clamp 60 000 (ABC-221)", () => {
     // `ADR-0045` § AMENDMENT A3: one clamp at the largest ceiling; each level's own ceiling is
     // held by its budget, with at least 2 000 ms of margin. `ABC-228` (`ADR-0053` d10, reading
     // (ii)): level 5's margin is 1 000 ms (4 000 under its 5 s ceiling); every other level keeps 2 000.
@@ -375,8 +375,11 @@ describe("ABC-174 A7 — the time budget, from the data (NFR-004; ADR-0038 decis
       expect(CEILING_MS[id] - (budgets[i] as number), `level ${id}`).toBeGreaterThanOrEqual(margin);
     });
     for (const id of [1, 2, 3, 4, 5] as const) expect(LEVELS[id].budgetMs).toBeLessThan(5_000);
-    expect(HARD_CEILING_MS).toBe(32_000);
-    expect(Math.max(...Object.values(CEILING_MS))).toBe(HARD_CEILING_MS);
+    // `ABC-221` (`ADR-0052` D6): the one clamp moved from the largest level ceiling (32 000) to the
+    // largest ceiling in force, UCI `uci-clock-mode`'s 60 000. Every level ceiling sits under it.
+    expect(HARD_CEILING_MS).toBe(60_000);
+    expect(Math.max(...Object.values(CEILING_MS))).toBe(32_000);
+    expect(Math.max(...Object.values(CEILING_MS))).toBeLessThanOrEqual(HARD_CEILING_MS);
   });
 
   it("the verdict's step 4 is admitted: 4 <= LEVELS[1].budgetMs / 10, which is 10", () => {
