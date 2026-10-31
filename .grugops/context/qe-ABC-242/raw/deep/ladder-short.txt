@@ -1,0 +1,13 @@
+
+ RUN  v4.1.12 /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-242/H
+
+fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+
+ Test Files  1 passed (1)
+      Tests  18 passed (18)
+   Start at  05:06:27
+   Duration  25.32s (transform 0ms, setup 0ms, import 59ms, tests 25.17s, environment 0ms)
+
+wall 25.52 s
+exit=0

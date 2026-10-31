@@ -1,0 +1,19 @@
+EQUAL levels.ts LEVELS block: B defb6c45061c0b59 H defb6c45061c0b59 | "export const LEVELS: Readonly<Record<1 | 2 | 3 | 4 | 5 | 6 | 7, Level>> = Object.freeze({
+EQUAL levels.ts EASIEST_LEVEL: B b1fded1a368552fd H b1fded1a368552fd | "export const EASIEST_LEVEL = 1;"
+EQUAL levels.ts DEFAULT_LEVEL: B 4f877bd3368544ae H 4f877bd3368544ae | "export const DEFAULT_LEVEL = 5;"
+EQUAL levels.ts HARDEST_LEVEL: B eeb54a60eaed0c21 H eeb54a60eaed0c21 | "export const HARDEST_LEVEL = 7;"
+EQUAL levels.ts sum clamp: B 598287ec65845935 H 598287ec65845935 | "return blunder(position, Math.min(level.budgetMs, HARD_CEILING_MS), now, childKeys);"
+EQUAL engine.ts HARD_CEILING_MS: B b221de05ba09d5ca H b221de05ba09d5ca | "export const HARD_CEILING_MS = 32_000;"
+EQUAL src/engine.ts (whole file) B eac5589bcd9c0a06 H eac5589bcd9c0a06
+EQUAL src/search.ts (whole file) B 963ea60f9c9d592c H 963ea60f9c9d592c
+EQUAL src/level-seam.ts (whole file) B 60be460052ece7b8 H 60be460052ece7b8
+EQUAL src/uci-session.ts (whole file) B 4ff126cac6c06d71 H 4ff126cac6c06d71
+EQUAL src/cli.ts (whole file) B c2596e5e2fc68207 H c2596e5e2fc68207
+EQUAL src/history.ts (whole file) B 50303a4244f5b38c H 50303a4244f5b38c
+EQUAL src/gameend.ts (whole file) B 1e05d36eadde25f7 H 1e05d36eadde25f7
+EQUAL src/zobrist.ts (whole file) B 28359baa0c9a7d6c H 28359baa0c9a7d6c
+EQUAL src/quiescence.ts (whole file) B 66f1f74113fa2078 H 66f1f74113fa2078
+EQUAL src/transposition.ts (whole file) B 4e2565b893ddf77f H 4e2565b893ddf77f
+EQUAL levels.ts exports: DEFAULT_LEVEL,EASIEST_LEVEL,HARDEST_LEVEL,LEVELS,Level,LevelChoice,LevelOptions,ScoredMove,createLevel,seededRandom
+EQUAL levels.ts imports: import { makeMove, unmakeMove } from "./apply.ts"; | import { type Clock, chooseMove, HARD_CEILING_MS } from "./engine.ts"; | import { gameStatus, repetitionKey } from "./gameend.ts"; | import { legalMoves } from "./legal.ts"; | import type { Move } from "./moves.ts"; | import type { Position } from "./position.ts"; | import { MATE_SCORE } from "./search.ts"; | import { zobristKey } from "./zobrist.ts";
+G9 MET (0 differences)

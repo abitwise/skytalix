@@ -1,0 +1,51 @@
+base total 2323 failed 0 skipped 0; head total 2333 failed 0 skipped 0
+count differs: src/cli.test.ts 108 -> 109
+count differs: src/levels.test.ts 37 -> 45
+count differs: src/uci-session.test.ts 201 -> 202
+only at head (10):
+  + src/cli.test.ts > ABC-242 A4 — the CLI seam at level 1: a blunder that reads the third occurrence as 0 A4: the seam plays a direct createLevel(LEVELS[1]) call's move; that call's list carries the 0
+  + src/levels.test.ts > ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A1: on QE's probe, scored[0] is {d8e8, 0} and 4 child searches run for 5 legal moves
+  + src/levels.test.ts > ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A1: the third-occurrence move scores exactly 0, unsearched; base scores it otherwise
+  + src/levels.test.ts > ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A1: with the repeat last in legalMoves order, the list is base's but for its exact 0
+  + src/levels.test.ts > ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A2: a second occurrence keeps base's score; every child runs and the list is base's
+  + src/levels.test.ts > ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A3: a key older than the child's clock is never counted: clock 0, the 7 keys untrimmed
+  + src/levels.test.ts > ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A5: on every A1 fixture the move played is the strict second-best of the new list
+  + src/levels.test.ts > ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A6: a non-blunder draw at level 1 is chooseMove's on the same keys, node for node
+  + src/levels.test.ts > ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A6: with no keys, or an empty list, the list, depth, nodes and elapsedMs are base's
+  + src/uci-session.test.ts > ABC-242 A4 — Skill Level 1: the CLI seam, UCI and a direct createLevel call agree A4: the same move from all three; UCI's nodes and depth are the direct call's, whose list carries the 0
+only at base (0):
+sorted names sha256/12: base 591600527f07, head minus added 591600527f07 (equal = nothing else moved)
+base total 2323 failed 0 skipped 0; head total 2333 failed 0 skipped 0
+count differs: src/cli.test.ts 108 -> 109
+count differs: src/levels.test.ts 37 -> 45
+count differs: src/uci-session.test.ts 201 -> 202
+only at head (10):
+  + src/cli.test.ts > ABC-242 A4 — the CLI seam at level 1: a blunder that reads the third occurrence as 0 A4: the seam plays a direct createLevel(LEVELS[1]) call's move; that call's list carries the 0
+  + src/levels.test.ts > ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A1: on QE's probe, scored[0] is {d8e8, 0} and 4 child searches run for 5 legal moves
+  + src/levels.test.ts > ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A1: the third-occurrence move scores exactly 0, unsearched; base scores it otherwise
+  + src/levels.test.ts > ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A1: with the repeat last in legalMoves order, the list is base's but for its exact 0
+  + src/levels.test.ts > ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A2: a second occurrence keeps base's score; every child runs and the list is base's
+  + src/levels.test.ts > ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A3: a key older than the child's clock is never counted: clock 0, the 7 keys untrimmed
+  + src/levels.test.ts > ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A5: on every A1 fixture the move played is the strict second-best of the new list
+  + src/levels.test.ts > ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A6: a non-blunder draw at level 1 is chooseMove's on the same keys, node for node
+  + src/levels.test.ts > ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A6: with no keys, or an empty list, the list, depth, nodes and elapsedMs are base's
+  + src/uci-session.test.ts > ABC-242 A4 — Skill Level 1: the CLI seam, UCI and a direct createLevel call agree A4: the same move from all three; UCI's nodes and depth are the direct call's, whose list carries the 0
+only at base (0):
+sorted names sha256/12: base 591600527f07, head minus added 591600527f07 (equal = nothing else moved)
+base total 2323 failed 0 skipped 0; head total 2333 failed 0 skipped 0
+count differs: src/cli.test.ts 108 -> 109
+count differs: src/levels.test.ts 37 -> 45
+count differs: src/uci-session.test.ts 201 -> 202
+only at head (10):
+  + src/cli.test.ts > ABC-242 A4 — the CLI seam at level 1: a blunder that reads the third occurrence as 0 A4: the seam plays a direct createLevel(LEVELS[1]) call's move; that call's list carries the 0
+  + src/levels.test.ts > ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A1: on QE's probe, scored[0] is {d8e8, 0} and 4 child searches run for 5 legal moves
+  + src/levels.test.ts > ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A1: the third-occurrence move scores exactly 0, unsearched; base scores it otherwise
+  + src/levels.test.ts > ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A1: with the repeat last in legalMoves order, the list is base's but for its exact 0
+  + src/levels.test.ts > ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A2: a second occurrence keeps base's score; every child runs and the list is base's
+  + src/levels.test.ts > ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A3: a key older than the child's clock is never counted: clock 0, the 7 keys untrimmed
+  + src/levels.test.ts > ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A5: on every A1 fixture the move played is the strict second-best of the new list
+  + src/levels.test.ts > ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A6: a non-blunder draw at level 1 is chooseMove's on the same keys, node for node
+  + src/levels.test.ts > ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A6: with no keys, or an empty list, the list, depth, nodes and elapsedMs are base's
+  + src/uci-session.test.ts > ABC-242 A4 — Skill Level 1: the CLI seam, UCI and a direct createLevel call agree A4: the same move from all three; UCI's nodes and depth are the direct call's, whose list carries the 0
+only at base (0):
+sorted names sha256/12: base 591600527f07, head minus added 591600527f07 (equal = nothing else moved)

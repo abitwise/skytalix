@@ -1,0 +1,4 @@
+Q1 rc=1 total=2337 passed=2334 failed=3 skipped=0 wall=9.2s
+  RED levels.test.ts :: ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A2: a second occurrence keeps base's score; every child runs and the list is base's
+  RED qe-extra.test.ts :: qe-ABC-242 extra — bounds the lane cannot see (synthetic lists) X3 straddle: one match inside (-100), one beyond (-102) is a second occurrence, not 0
+  RED qe-extra.test.ts :: qe-ABC-242 extra — bounds the lane cannot see (synthetic lists) X4 walk start: a key at -2 is never read (with -4, one match: not 0); not game-reachable

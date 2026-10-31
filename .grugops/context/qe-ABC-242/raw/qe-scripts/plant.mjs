@@ -3,7 +3,7 @@
 // Each plant runs the WHOLE default lane plus QE's extra file (qe-extra.test.ts copied into P/src), vitest via node
 // (never npx), json reporter, NODE_OPTIONS=--max-old-space-size=128. Restores levels.ts after every plant.
 // usage: node plant.mjs <H> <B> <P scratch dir> <outDir> [ids=all]
-import { spawnSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import { copyFileSync, cpSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -11,9 +11,26 @@ import { fileURLToPath } from "node:url";
 const [H, B, P, out, idsArg] = process.argv.slice(2);
 const here = dirname(fileURLToPath(import.meta.url));
 rmSync(P, { recursive: true, force: true });
-cpSync(H, P, { recursive: true, filter: (s) => !s.endsWith("/node_modules") });
-symlinkSync(join(H, "node_modules"), join(P, "node_modules"));
+// Post-PREREG harness fix (no plant or expectation changed): the scratch quota cannot hold a full copy of H (.grugops is
+// 146 MB), so P is a HARD-LINK tree of H with src/ replaced by a REAL copy (the only directory a plant writes). H's
+// integrity is re-checked against `git archive 6884d61a` after the run (tar --compare), so a test that wrote in place
+// through a link would show.
+execFileSync("cp", ["-al", H, P]);
+rmSync(join(P, "src"), { recursive: true, force: true });
+cpSync(join(H, "src"), join(P, "src"), { recursive: true });
+void symlinkSync;
 copyFileSync(join(here, "qe-extra.test.ts"), join(P, "src/qe-extra.test.ts"));
+// Post-PREREG extension (POST-HOC, informative; default behaviour unchanged): QE_STEP=<n> rewrites `const STEP_MS = 10;`
+// in the three ABC-242 blocks of P's test files, and QE_FILTER=<t> runs only the three files with `-t <t>`.
+const QE_STEP = process.env.QE_STEP, QE_FILTER = process.env.QE_FILTER;
+if (QE_STEP !== undefined) {
+  for (const f of ["src/levels.test.ts", "src/cli.test.ts", "src/uci-session.test.ts"]) {
+    const t = readFileSync(join(P, f), "utf8");
+    const re = /(ABC-242[\s\S]*?const STEP_MS = )10;/;
+    if (!re.test(t)) throw new Error(`no ABC-242 STEP_MS in ${f}`);
+    writeFileSync(join(P, f), t.replace(re, `$1${QE_STEP};`));
+  }
+}
 const prodPath = join(P, "src/levels.ts");
 const orig = readFileSync(prodPath, "utf8");
 const BASE_LEVELS = readFileSync(join(B, "src/levels.ts"), "utf8");
@@ -54,7 +71,8 @@ try {
     writeFileSync(prodPath, mutated);
     const json = join(out, `plant-${id}.json`);
     const t0 = Date.now();
-    const r = spawnSync(process.execPath, [join(P, "node_modules/vitest/vitest.mjs"), "run", "--reporter=json", `--outputFile.json=${json}`], {
+    const scope = QE_FILTER === undefined ? [] : ["src/levels.test.ts", "src/cli.test.ts", "src/uci-session.test.ts", "src/qe-extra.test.ts", "-t", QE_FILTER];
+    const r = spawnSync(process.execPath, [join(P, "node_modules/vitest/vitest.mjs"), "run", ...scope, "--reporter=json", `--outputFile.json=${json}`], {
       cwd: P, encoding: "utf8", maxBuffer: 64 * 1024 * 1024, env: { ...process.env, NODE_OPTIONS: "--max-old-space-size=128" },
     });
     const j = JSON.parse(readFileSync(json, "utf8"));
