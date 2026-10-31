@@ -1,0 +1,47 @@
+# `ABC-242` R1 census and the step-10 choice: the census lines exist and the code reads them, but on the budgets actually handed, step 10 does not meet `ABC-244` condition 2 as written (QE-242-a, MEDIUM, a ruling is owed)
+
+## R1: the lines, checked against the code (`6884d61a`)
+- All 10 added rows use level 1's own 100 ms. That is either `forced = { budgetMs: LEVELS[1].budgetMs, blunderRate: 1 }` with
+  seed 1, or `LEVELS[1]` with seed 7, whose first draw is 0.0117 < 0.4 (asserted).
+- All 10 run on `virtualClock(STEP_MS)` with `STEP_MS = 10` in all three files' `ABC-242` blocks (levels `:537`, CLI `:4712`,
+  UCI `:1551`). No row uses a real clock, and none uses the probe's 2 000 ms at step 1 (R4 holds).
+- **R3 holds.** The A4 rows use one `STEP_MS` (10) on all three callers: the seam `virtualClock(STEP_MS)`, the session
+  `now: virtualClock(STEP_MS)` and the direct `createLevel`. Both files carry the same value.
+- **The SE's arithmetic** is 100 ms ÷ 10 = 10 reads per blunder call, and 100 ÷ 5 children ÷ 10 = "2 reads per child".
+  The first part is right as a nominal count.
+
+## Condition 2 on the budgets actually handed (QE's counting shim, `raw/oracle/oracle.txt` CB lines)
+- **The ruling** (`ABC-244` § BA/PM ruling, applied to new rows by the ticket's R2): *"a search that runs ≥ 2 clock-check
+  intervals at step 1 still runs ≥ 2 at the chosen step"*, where intervals = ⌈budget ÷ step⌉.
+- **Every child `chooseMove` is a search**, and each is handed its own `budgetMs = deadline − now()`.
+
+| step | budgets handed to the 5 children (base, every fixture) | intervals per child | child depth | blunder elapsed (virtual) |
+|---|---|---|---|---|
+| 1 | 19, 17, 17, 17, 17 ms | 19, 17, 17, 17, 17 | 5–9 | 103 ms |
+| 10 | **10, −10, −30, −50, −70 ms** | **1, 0, 0, 0, 0** | 1 | **210 ms** |
+
+- **Read per child search, condition 2 fails at step 10.** Every child has ≥ 2 intervals at step 1, and none has 2 at
+  step 10. From the second child on, the budget is non-positive, so the engine runs its unabortable depth 1.
+- **Read per blunder call** (100 ms ÷ 10 = 10 ≥ 2), it passes.
+- **The SE's "2 per child"** is a third reading: the nominal slice. It ignores the ~3 clock reads that each `chooseMove`
+  makes (entry, iteration, return), and at step 10 those cost ~30 virtual ms against a 20 ms slice.
+- **Of {1, 10, 100, 1 000}, only step 1 meets the per-child reading.** The SE measured step 1 at 5.15 s of in-thread time for
+  the 10 rows, against 0.085 s at step 10. That is roughly +2.5 s of lane wall, which would breach `G8` ≤ 10 s.
+- So for a blunder row, R2 as written cannot meet both condition 2 and `NFR-008` at once.
+
+## What it changes (so the grade is MEDIUM, not HIGH)
+- **The product: nothing.** The check is at the root and reads no clock.
+- **The tests' power on the frozen lists: nothing seen.**
+  - The SE's M1–M8 kill sets are identical at steps 1, 10, 100 and 1 000.
+  - QE's 20 plants at step 10 matched the pre-registration row for row.
+  - QE re-ran its 20 plants with step 1 on the `ABC-242` rows (`QE_STEP=1 QE_FILTER=ABC-242`; post-hoc, informative). The
+    kill sets are **identical to step 10 for 20 of 20 plants** (`raw/plants-step1/parity-vs-step10.txt`).
+- **The lane form differs from the R2 text.** At step 10 the rows exercise a blunder whose children are depth-1 searches
+  that overrun the shared deadline 2.1×. They do not exercise level 1's 100 ms the way it runs on a real clock or at
+  step 1. A level-layer fault that showed only in a child searched past depth 1 would not be seen. No acceptance
+  criterion asks for depth.
+- **Owed: a BA/PM ruling** on how condition 2 reads a blunder's sliced child searches. Either "per blunder call", which
+  admits step 10 as built, or "per child search", which admits only step 1 and needs another lane form or the
+  `ADR-0046` tranche-2 lever. The census line should then state the handed budgets, not the nominal slice.
+- The same pattern (children handed a non-positive budget at a coarse step) likely applies to any older level-1 blunder
+  row on a virtual clock. That is `UNKNOWN - verify`, and not this ticket's scope.

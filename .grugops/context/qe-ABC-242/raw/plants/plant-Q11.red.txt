@@ -1,0 +1,2 @@
+Q11 rc=1 total=2337 passed=2336 failed=1 skipped=0 wall=9.2s
+  RED qe-extra.test.ts :: qe-ABC-242 extra — bounds the lane cannot see (synthetic lists) X4 walk start: a key at -2 is never read (with -4, one match: not 0); not game-reachable

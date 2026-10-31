@@ -1,0 +1,5 @@
+ 04:25:28 up 20:43,  1 user,  load average: 1.17, 1.32, 0.75
+ Test Files  63 passed (63)
+      Tests  2333 passed (2333)
+   Duration  8.89s (transform 0ms, setup 0ms, import 5.93s, tests 6.99s, environment 4ms)
+wall 9.22 s

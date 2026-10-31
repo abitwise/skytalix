@@ -26,9 +26,16 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it, vi } from "vitest";
 import { makeMove, unmakeMove } from "./apply.ts";
-import { type Clock, chooseMove, DEFAULT_BUDGET_MS, HARD_CEILING_MS } from "./engine.ts";
+import {
+  type Clock,
+  chooseMove,
+  DEFAULT_BUDGET_MS,
+  HARD_CEILING_MS,
+  trimPriorKeys,
+} from "./engine.ts";
 import { parseFen, toFen } from "./fen.ts";
 import { repetitionKey } from "./gameend.ts";
+import { type GameHistory, newGame, playMove, repetitionKeyHistory } from "./history.ts";
 import { legalMoves } from "./legal.ts";
 import {
   createLevel,
@@ -41,7 +48,7 @@ import {
   seededRandom,
 } from "./levels.ts";
 import type { Move } from "./moves.ts";
-import { squareName } from "./position.ts";
+import { type Position, squareName } from "./position.ts";
 import { virtualClock } from "./virtual-clock.ts";
 import { zobristKey } from "./zobrist.ts";
 
@@ -512,6 +519,228 @@ describe("ABC-241 A5 — the blunder path's appended root key is a repetition ke
     expect(expected).not.toBe(zobristKey(root)); // non-vacuity: the helper changed this key
     expect(engineCalls).toHaveLength(legalMoves(root).length);
     for (const call of engineCalls) expect(call.priorKeys).toEqual([...prior, expected]);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// `ABC-242` (`ADR-0054` § Proposed amendment 2026-10-30, accepted; `ADR-0032` decision 1's added
+// bullet): on a blunder handed the game's prior keys, a root move whose child is the THIRD
+// occurrence of a game position scores exactly 0, and its child is not searched.
+// ---------------------------------------------------------------------------
+
+describe("ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0", () => {
+  /**
+   * The lane form (`ADR-0046` § Addendum 2026-10-30 R2/R4): level 1's own 100 ms, a forced
+   * blunder (rate 1), seed 1, on a virtual clock at the coarsest step whose kill set equals step
+   * 1's (the build note's R1 census). Never QE's probe set-up (2 000 ms on `virtualClock(1)`).
+   */
+  const STEP_MS = 10;
+  const forced: Level = { budgetMs: LEVELS[EASIEST_LEVEL].budgetMs, blunderRate: 1 };
+
+  /**
+   * `[name, fen, moves, repeat]`: after `moves`, the side to move can play `repeat`, which makes
+   * the third occurrence of a game position. `probe` is QE's (`qe-ABC-230` blunder probe). Both
+   * colours, losing (KQ v K) and winning (KR+P v K+P) sides; on `last` the repeat is the last
+   * root move in `legalMoves` order. On the winning fixtures the loser shuttles to two different
+   * squares, so no reply of the loser is itself a third occurrence and base does not read 0.
+   */
+  const THIRD = [
+    ["probe", "4k3/8/8/8/8/8/8/1Q2K3 w - - 0 1", "b1b2 e8d8 b2b1 d8e8 b1b2 e8d8 b2b1", "d8e8"],
+    ["last", "8/3k4/8/8/8/8/8/Q3K3 w - - 0 1", "a1a2 d7e8 a2a1 e8d7 a1a2 d7e8 a2a1", "e8d7"],
+    [
+      "white losing",
+      "q3k3/8/8/8/8/8/8/4K3 b - - 0 1",
+      "a8a7 e1d1 a7a8 d1e1 a8a7 e1d1 a7a8",
+      "d1e1",
+    ],
+    [
+      "white winning",
+      "8/8/8/4k3/8/7p/7P/6KR b - - 0 1",
+      "e5d5 g1f1 d5e5 f1g1 e5f5 g1f1 f5e5",
+      "f1g1",
+    ],
+    [
+      "black winning",
+      "6kr/7p/7P/8/4K3/8/8/8 w - - 0 1",
+      "e4d4 g8f8 d4e4 f8g8 e4f4 g8f8 f4e4",
+      "f8g8",
+    ],
+  ] as const;
+
+  const gameOf = (fen: string, moves: string): GameHistory => {
+    const game = newGame(fen);
+    for (const text of moves.split(" ")) {
+      const move = legalMoves(game.position).find((m) => label(m) === text);
+      if (move === undefined) throw new Error(`fixture: ${text} is not legal`);
+      playMove(game, move);
+    }
+    return game;
+  };
+  /** The trimmed prior keys a caller hands the level (`ABC-230`, `ABC-241`). */
+  const priorOf = (game: GameHistory): bigint[] =>
+    trimPriorKeys(repetitionKeyHistory(game), game.position.halfmoveClock);
+
+  /** The level under test on a fresh clock; `searches` counts its child `chooseMove` calls. */
+  function head(position: Position, prior?: readonly bigint[]) {
+    engineCalls.length = 0;
+    const choice = createLevel(forced, { seed: 1, now: virtualClock(STEP_MS) })(position, prior);
+    if (choice === null) throw new Error("fixture: no legal move");
+    return { ...choice, searches: engineCalls.length };
+  }
+
+  /**
+   * BASE, the oracle (test note 2): `main`'s `blunder` before `ABC-242`, line for line: every
+   * child searched against the one shared deadline, on the same clock pattern and the list
+   * `createLevel` builds (`prior` plus the root's repetition key). The fixtures hold no mate and
+   * no stalemate one ply on. Its agreement with the level wherever the check cannot fire (`A2`,
+   * `A3`, `A6`) is checked in this run, so it cannot drift from the code it stands for.
+   */
+  function base(position: Position, prior?: readonly bigint[]) {
+    const now = virtualClock(STEP_MS);
+    const keys =
+      prior === undefined ? undefined : [...prior, repetitionKey(position, zobristKey(position))];
+    const start = now();
+    const moves = legalMoves(position);
+    const scored: { move: Move; score: number }[] = [];
+    let depth = 0;
+    let nodes = 0;
+    moves.forEach((move, i) => {
+      const undo = makeMove(position, move);
+      try {
+        const deadline = start + (forced.budgetMs * (i + 1)) / moves.length;
+        const child = chooseMove(position, {
+          budgetMs: deadline - now(),
+          now,
+          ...(keys === undefined ? {} : { priorKeys: keys }),
+        });
+        if (child === null) throw new Error("fixture: a child with no legal move");
+        scored.push({ move, score: -child.score });
+        depth = Math.max(depth, child.depth);
+        nodes += child.nodes;
+      } finally {
+        unmakeMove(position, move, undo);
+      }
+    });
+    return { scored, depth, nodes, elapsedMs: now() - start };
+  }
+
+  const listOf = (scored: readonly { move: Move; score: number }[] | null) =>
+    (scored ?? []).map((s) => `${label(s.move)}:${s.score}`);
+
+  it("A1: the third-occurrence move scores exactly 0, unsearched; base scores it otherwise", () => {
+    for (const [name, fen, moves, repeat] of THIRD) {
+      const game = gameOf(fen, moves);
+      const root = toFen(game.position);
+      const legal = legalMoves(game.position).map(label);
+      const at = legal.indexOf(repeat);
+      const got = head(game.position, priorOf(game));
+      expect(toFen(game.position), name).toBe(root);
+      expect(got.scored?.[at] && listOf([got.scored[at]]), name).toEqual([`${repeat}:0`]);
+      // Its child is not searched: one child search per legal move but the repeat.
+      expect(got.searches, name).toBe(legal.length - 1);
+      const was = base(parseFen(root), priorOf(game));
+      expect(was.scored[at]?.score, name).not.toBe(0);
+      // The entries scored before it read the same clock as base's, so they are base's exactly.
+      expect(listOf(got.scored).slice(0, at), name).toEqual(listOf(was.scored).slice(0, at));
+    }
+  });
+
+  it("A1: on QE's probe, scored[0] is {d8e8, 0} and 4 child searches run for 5 legal moves", () => {
+    const [, fen, moves] = THIRD[0];
+    const game = gameOf(fen, moves);
+    expect(legalMoves(game.position).map(label)).toEqual(["d8e8", "d8c8", "d8d7", "d8e7", "d8c7"]);
+    const got = head(game.position, priorOf(game));
+    expect(got.scored?.[0]).toEqual({ move: expect.anything(), score: 0 });
+    expect(label(got.scored?.[0]?.move as Move)).toBe("d8e8");
+    expect(got.searches).toBe(4);
+    expect(label(got.move)).not.toBe("d8e8");
+  });
+
+  it("A1: with the repeat last in legalMoves order, the list is base's but for its exact 0", () => {
+    const [, fen, moves, repeat] = THIRD[1];
+    const game = gameOf(fen, moves);
+    const legal = legalMoves(game.position).map(label);
+    expect(legal.at(-1)).toBe(repeat);
+    const got = head(game.position, priorOf(game));
+    const was = base(parseFen(toFen(game.position)), priorOf(game));
+    expect(listOf(got.scored)).toEqual([...listOf(was.scored).slice(0, -1), `${repeat}:0`]);
+    expect(was.scored.at(-1)?.score).not.toBe(0);
+    expect(got.searches).toBe(legal.length - 1);
+  });
+
+  it("A2: a second occurrence keeps base's score; every child runs and the list is base's", () => {
+    const game = gameOf("4k3/8/8/8/8/8/8/1Q2K3 w - - 0 1", "b1b2 e8d8 b2b1");
+    const root = toFen(game.position);
+    expect(root).toBe("3k4/8/8/8/8/8/8/1Q2K3 b - - 3 2");
+    const got = head(game.position, priorOf(game));
+    const was = base(parseFen(root), priorOf(game));
+    expect(listOf(got.scored)).toEqual(listOf(was.scored));
+    // d8e8 is a SECOND occurrence: one match, not a draw. Its entry is base's, and not 0.
+    expect(got.scored?.[0]).toEqual(was.scored[0]);
+    expect(label(was.scored[0]?.move as Move)).toBe("d8e8");
+    expect(was.scored[0]?.score).not.toBe(0);
+    // The same list through the unchanged pick: the played move is base's strict second-best.
+    assertPerMove([root], [got]);
+    expect(got.searches).toBe(legalMoves(parseFen(root)).length);
+    expect({ depth: got.depth, nodes: got.nodes }).toEqual({ depth: was.depth, nodes: was.nodes });
+  });
+
+  it("A3: a key older than the child's clock is never counted: clock 0, the 7 keys untrimmed", () => {
+    const [, fen, moves] = THIRD[0];
+    const keys = repetitionKeyHistory(gameOf(fen, moves)).slice(0, -1);
+    expect(keys).toHaveLength(7);
+    const root = "3k4/8/8/8/8/8/8/1Q2K3 b - - 0 4";
+    const got = head(parseFen(root), keys);
+    const was = base(parseFen(root), keys);
+    expect(listOf(got.scored)).toEqual(listOf(was.scored));
+    expect(got.searches).toBe(5);
+    expect({ depth: got.depth, nodes: got.nodes }).toEqual({ depth: was.depth, nodes: was.nodes });
+  });
+
+  it("A5: on every A1 fixture the move played is the strict second-best of the new list", () => {
+    for (const [name, fen, moves, repeat] of THIRD) {
+      const game = gameOf(fen, moves);
+      const root = toFen(game.position);
+      const got = head(game.position, priorOf(game));
+      // The new list: it carries the 0. The pick on it is `ADR-0032` decision 2's, unchanged.
+      expect(got.scored?.find((s) => label(s.move) === repeat)?.score, name).toBe(0);
+      assertPerMove([root], [got]);
+    }
+  });
+
+  it("A6: with no keys, or an empty list, the list, depth, nodes and elapsedMs are base's", () => {
+    for (const [name, fen, moves] of THIRD) {
+      const root = toFen(gameOf(fen, moves).position);
+      for (const prior of [undefined, []]) {
+        const { searches, move, kind, ...got } = head(parseFen(root), prior);
+        const was = base(parseFen(root), prior);
+        expect(searches, name).toBe(was.scored.length);
+        expect({ ...got, scored: listOf(got.scored) }, name).toEqual({
+          ...was,
+          scored: listOf(was.scored),
+        });
+      }
+    }
+  });
+
+  it("A6: a non-blunder draw at level 1 is chooseMove's on the same keys, node for node", () => {
+    const [, fen, moves] = THIRD[0];
+    const game = gameOf(fen, moves);
+    const root = toFen(game.position);
+    expect(seededRandom(1)()).toBeGreaterThanOrEqual(LEVELS[EASIEST_LEVEL].blunderRate);
+    const choice = createLevel(LEVELS[EASIEST_LEVEL], { seed: 1, now: virtualClock(STEP_MS) })(
+      game.position,
+      priorOf(game),
+    );
+    const direct = chooseMove(parseFen(root), {
+      budgetMs: LEVELS[EASIEST_LEVEL].budgetMs,
+      now: virtualClock(STEP_MS),
+      priorKeys: priorOf(game),
+    });
+    expect(choice?.kind).toBe("engine");
+    expect(
+      choice && { move: label(choice.move), depth: choice.depth, nodes: choice.nodes },
+    ).toEqual(direct && { move: label(direct.move), depth: direct.depth, nodes: direct.nodes });
   });
 });
 

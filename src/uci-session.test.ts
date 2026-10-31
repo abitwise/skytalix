@@ -1531,6 +1531,79 @@ describe("ABC-241 A4, A5 — UCI: the prior keys are repetition keys", () => {
 });
 
 // ---------------------------------------------------------------------------------------------
+// `ABC-242` A4 (`ADR-0054` § Proposed amendment 2026-10-30) — at `Skill Level` 1, `go` plays the
+// blunder that scores the third occurrence 0. Three callers on one seed, budget, virtual clock,
+// position and trimmed key list: the CLI seam, the session and a direct `createLevel` call.
+// Neither surface prints the scored list, so the direct call's list is where the 0 is read.
+// ---------------------------------------------------------------------------------------------
+
+describe("ABC-242 A4 — Skill Level 1: the CLI seam, UCI and a direct createLevel call agree", () => {
+  /** `src/levels.test.ts`'s `ABC-242` fixtures: after `moves`, `repeat` makes the third occurrence. */
+  const THIRD = [
+    ["4k3/8/8/8/8/8/8/1Q2K3 w - - 0 1", "b1b2 e8d8 b2b1 d8e8 b1b2 e8d8 b2b1", "d8e8"],
+    ["8/3k4/8/8/8/8/8/Q3K3 w - - 0 1", "a1a2 d7e8 a2a1 e8d7 a1a2 d7e8 a2a1", "e8d7"],
+    ["q3k3/8/8/8/8/8/8/4K3 b - - 0 1", "a8a7 e1d1 a7a8 d1e1 a8a7 e1d1 a7a8", "d1e1"],
+    ["8/8/8/4k3/8/7p/7P/6KR b - - 0 1", "e5d5 g1f1 d5e5 f1g1 e5f5 g1f1 f5e5", "f1g1"],
+    ["6kr/7p/7P/8/4K3/8/8/8 w - - 0 1", "e4d4 g8f8 d4e4 f8g8 e4f4 g8f8 f4e4", "f8g8"],
+  ] as const;
+  // `ADR-0046` § Addendum 2026-10-30 R3: one step on all three callers, here and in the other file.
+  /** Level 1's 100 ms at the coarsest kill-set-preserving step (the build note's R1 census). */
+  const STEP_MS = 10;
+  /** `seededRandom(7)`'s first draw is 0.0117, under level 1's 0.4: the move is a blunder. */
+  const SEED = 7;
+
+  it("A4: the same move from all three; UCI's nodes and depth are the direct call's, whose list carries the 0", async () => {
+    expect(seededRandom(SEED)()).toBeLessThan(LEVELS[1].blunderRate);
+    for (const [fen, moves, repeat] of THIRD) {
+      const game = newGame(fen);
+      for (const text of moves.split(" ")) {
+        const move = legalMoves(game.position).find((m) => coordinateOf(m) === text);
+        if (move === undefined) throw new Error(`fixture: ${text} is not legal`);
+        playMove(game, move);
+      }
+      const root = toFen(game.position);
+      const direct = createLevel(LEVELS[1], { seed: SEED, now: virtualClock(STEP_MS) })(
+        parseFen(root),
+        trimPriorKeys(repetitionKeyHistory(game), game.position.halfmoveClock),
+      );
+      expect(direct?.kind, root).toBe("blunder");
+      expect(direct?.scored?.find((s) => coordinateOf(s.move) === repeat)?.score, root).toBe(0);
+      const seam = createLevelSeam(
+        1,
+        { seed: SEED, now: virtualClock(STEP_MS) },
+        repetitionKeyHistory,
+      );
+      const cli = coordinateOf(await seam(game));
+      // The session draws its seed as floor(random() * 2^32): this `random` gives SEED exactly.
+      const out: string[] = [];
+      const session = createUciSession({
+        write: (line) => out.push(line),
+        now: virtualClock(STEP_MS),
+        random: () => SEED / 2 ** 32,
+        book: emptyBook(),
+      });
+      for (const line of [
+        "setoption name Skill Level value 1",
+        `position fen ${fen} moves ${moves}`,
+        "go",
+      ]) {
+        expect(session.handleLine(line)).toBe("continue");
+      }
+      everyLine.push(...out);
+      expect(out).toHaveLength(2);
+      const info = parseLevelInfo(out[0]);
+      expect(out[1]).toBe(`bestmove ${info.move}`);
+      expect({ move: info.move, depth: info.depth, nodes: info.nodes }, root).toEqual({
+        move: direct && coordinateOf(direct.move),
+        depth: direct?.depth,
+        nodes: direct?.nodes,
+      });
+      expect(cli, root).toBe(info.move);
+    }
+  });
+});
+
+// ---------------------------------------------------------------------------------------------
 // ABC-220 — `TimeMode` `simple-tournament` over UCI (`ADR-0052` D1-D3, D7, as amended 2026-10-30:
 // T = 22 000 ms, which is also its ceiling). Every default-lane row below runs on the virtual clock
 // (`ADR-0027`); `A12`: none reads the wall clock. The clock rows replay one GUI clock: each searched

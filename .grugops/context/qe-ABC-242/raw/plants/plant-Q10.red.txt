@@ -1,0 +1,8 @@
+Q10 rc=1 total=2337 passed=2330 failed=7 skipped=0 wall=9.4s
+  RED cli.test.ts :: ABC-242 A4 — the CLI seam at level 1: a blunder that reads the third occurrence as 0 A4: the seam plays a direct createLevel(LEVELS[1]) call's move; that call's list carries the 0
+  RED levels.test.ts :: ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A1: the third-occurrence move scores exactly 0, unsearched; base scores it otherwise
+  RED levels.test.ts :: ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A1: on QE's probe, scored[0] is {d8e8, 0} and 4 child searches run for 5 legal moves
+  RED levels.test.ts :: ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A1: with the repeat last in legalMoves order, the list is base's but for its exact 0
+  RED levels.test.ts :: ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A5: on every A1 fixture the move played is the strict second-best of the new list
+  RED qe-extra.test.ts :: qe-ABC-242 extra — bounds the lane cannot see (synthetic lists) X2 cap edge: matches at -98 and -100 are both counted (third occurrence, 0)
+  RED uci-session.test.ts :: ABC-242 A4 — Skill Level 1: the CLI seam, UCI and a direct createLevel call agree A4: the same move from all three; UCI's nodes and depth are the direct call's, whose list carries the 0

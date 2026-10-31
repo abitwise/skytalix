@@ -1,0 +1,4 @@
+Q3 rc=1 total=360 passed=11 failed=3 skipped=346 wall=5.4s
+  RED levels.test.ts :: ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A1: the third-occurrence move scores exactly 0, unsearched; base scores it otherwise
+  RED levels.test.ts :: ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A1: on QE's probe, scored[0] is {d8e8, 0} and 4 child searches run for 5 legal moves
+  RED levels.test.ts :: ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A1: with the repeat last in legalMoves order, the list is base's but for its exact 0

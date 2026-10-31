@@ -1,0 +1,11 @@
+{
+  "refs": ["se-ABC-242", "ABC-242", "EPIC-010", "ADR-0054", "ADR-0032", "ADR-0046", "NFR-004", "NFR-008", "NFR-009",
+           "QE-230-a", "QE-244-a", "ABC-230", "ABC-241", "ABC-243", "ABC-244", "grugops/ABC-242", "6884d61a", "4387d4e8",
+           "src/levels.ts", "src/levels.test.ts", "src/cli.test.ts", "src/uci-session.test.ts"],
+  "notes": [
+    { "kind": "decision", "confidence": "high: built to the ADR's words, rows run green, parity run on a frozen mutant list", "bodyFile": "note-decision.md" },
+    { "kind": "observation", "confidence": "high: reads per search are arithmetic from budget and step; kill sets read from the parity run", "bodyFile": "note-census.md" },
+    { "kind": "observation", "confidence": "high for gates, counts, deep lanes and values (all run); the npm test wall is informal (n=3 tip, no base), UNKNOWN - verify", "bodyFile": "note-readings.md" },
+    { "kind": "observation", "confidence": "high on what was run; equivalence of M7/M8 by reasoning; probe drift cause UNKNOWN - verify", "bodyFile": "note-findings.md" }
+  ]
+}

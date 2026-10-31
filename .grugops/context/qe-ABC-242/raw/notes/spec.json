@@ -1,0 +1,18 @@
+{
+  "refs": ["qe-ABC-242", "ABC-242", "EPIC-010", "ADR-0054", "ADR-0032", "ADR-0046", "NFR-004", "NFR-008", "NFR-009",
+           "QE-230-a", "ABC-230", "ABC-241", "ABC-244", "ABC-228", "R1", "R2", "R3", "R4",
+           "QE-242-a", "QE-242-b", "QE-242-c", "SE-242-a", "SE-242-c", "SE-242-e",
+           "se-ABC-242/20261031T043705Z-software-engineer-decision-8b42a94e", "se-ABC-242/20261031T043705Z-software-engineer-observation-712a6bb4",
+           "se-ABC-242/20261031T043705Z-software-engineer-observation-76069fd1", "se-ABC-242/20261031T043705Z-software-engineer-observation-c0e5e0fa",
+           "grugops/ABC-242", "6884d61a", "4387d4e8", "grugops/qe-ABC-242", "5da281c9",
+           "src/levels.ts", "src/levels.test.ts", "src/cli.test.ts", "src/uci-session.test.ts"],
+  "notes": [
+    { "kind": "decision", "confidence": "high: A1-A8, plants, oracle and G8 run in this hop as pre-registered (PREREG 5da281c9)", "bodyFile": "note-decision.md" },
+    { "kind": "observation", "confidence": "high: oracle run out of tree against the real base and head trees; 362 checks, 0 FAIL", "bodyFile": "note-oracle.md" },
+    { "kind": "observation", "confidence": "high: 20 plants, whole lane each, on a scratch tree; all as pre-registered; equivalence by reasoning", "bodyFile": "note-plants.md" },
+    { "kind": "observation", "confidence": "high on the handed budgets (counting shim); the condition-2 reading is a ruling owed, not a fault", "bodyFile": "note-census.md" },
+    { "kind": "observation", "confidence": "high: G8 ALONE, wait-clear by PID before each of 6 runs, admissible; deep lanes once each, ALONE", "bodyFile": "note-timing.md" },
+    { "kind": "observation", "confidence": "high on what was run; none blocking", "bodyFile": "note-findings.md" },
+    { "kind": "observation", "confidence": "high: files listed are committed on grugops/qe-ABC-242 (an observation, not an artifact-ref: no §14-gate run to bind)", "bodyFile": "note-artifacts.md" }
+  ]
+}

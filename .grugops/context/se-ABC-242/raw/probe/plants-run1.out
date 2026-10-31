@@ -1,0 +1,50 @@
+cli.test.ts :: A4: the seam plays a direct createLevel(LEVELS[1]) call's move; that call's list carries the 0
+  step    1: green=true 749ms kills={M1,M5,M6}
+  step   10: green=true 25ms kills={M1,M5,M6}
+  step  100: green=true 12ms kills={M1,M5,M6}
+  step 1000: green=true 19ms kills={M1,M5,M6}
+levels.test.ts :: A1: the third-occurrence move scores exactly 0, unsearched; base scores it otherwise
+  step    1: green=true 758ms kills={M1,M4,M5,M6}
+  step   10: green=true 28ms kills={M1,M4,M5,M6}
+  step  100: green=true 18ms kills={M1,M4,M5,M6}
+  step 1000: green=true 23ms kills={M1,M4,M5,M6}
+levels.test.ts :: A1: on QE's probe, scored[0] is {d8e8, 0} and 4 child searches run for 5 legal moves
+  step    1: green=true 76ms kills={M1,M4,M5,M6}
+  step   10: green=true 6ms kills={M1,M4,M5,M6}
+  step  100: green=true 2ms kills={M1,M4,M5,M6}
+  step 1000: green=true 2ms kills={M1,M4,M5,M6}
+levels.test.ts :: A1: with the repeat last in legalMoves order, the list is base's but for its exact 0
+  step    1: green=true 124ms kills={M1,M4,M5,M6}
+  step   10: green=true 2ms kills={M1,M4,M5,M6}
+  step  100: green=true 1ms kills={M1,M4,M5,M6}
+  step 1000: green=true 2ms kills={M1,M4,M5,M6}
+levels.test.ts :: A2: a second occurrence keeps base's score; every child runs and the list is base's
+  step    1: green=true 137ms kills={M2}
+  step   10: green=true 4ms kills={M2}
+  step  100: green=true 2ms kills={M2}
+  step 1000: green=true 2ms kills={M2}
+levels.test.ts :: A3: a key older than the child's clock is never counted: clock 0, the 7 keys untrimmed
+  step    1: green=true 135ms kills={M3}
+  step   10: green=true 3ms kills={M3}
+  step  100: green=true 1ms kills={M3}
+  step 1000: green=true 2ms kills={M3}
+levels.test.ts :: A5: on every A1 fixture the move played is the strict second-best of the new list
+  step    1: green=true 366ms kills={M1,M6}
+  step   10: green=true 14ms kills={}
+  step  100: green=true 2ms kills={}
+  step 1000: green=true 3ms kills={}
+levels.test.ts :: A6: with no keys, or an empty list, the list, depth, nodes and elapsedMs are base's
+  step    1: green=true 1322ms kills={}
+  step   10: green=true 9ms kills={}
+  step  100: green=true 8ms kills={}
+  step 1000: green=true 8ms kills={}
+levels.test.ts :: A6: a non-blunder draw at level 1 is chooseMove's on the same keys, node for node
+  step    1: green=true 247ms kills={}
+  step   10: green=true 6ms kills={}
+  step  100: green=true 1ms kills={}
+  step 1000: green=true 1ms kills={}
+uci-session.test.ts :: A4: the same move from all three; UCI's nodes and depth are the direct call's, whose list carries the 0
+  step    1: green=true 1132ms kills={M1,M5,M6}
+  step   10: green=true 36ms kills={M1,M5,M6}
+  step  100: green=true 13ms kills={M1,M5,M6}
+  step 1000: green=true 12ms kills={M1,M5,M6}

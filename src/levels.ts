@@ -9,6 +9,10 @@
  * - A blunder: every legal root move is scored, in `legalMoves` order, as minus the shipped
  *   `chooseMove`'s score on its child, on one clock against one shared deadline. The STRICT
  *   second-best is played.
+ * - A blunder handed the game's prior keys scores a root move whose child is the THIRD occurrence
+ *   of a game position at exactly 0, and does not search that child (`ADR-0054` § Proposed
+ *   amendment 2026-10-30, `ABC-242`; `ADR-0032` decision 1's added bullet). No search checks its
+ *   own root, so this one node is checked here, by the engine's two-match rule.
  *
  * The seed reaches the draw and nothing else (`ADR-0027` decision 1). The generator's state is
  * per level instance, never module-level (decision 2). The clock is passed in, the same way as
@@ -149,8 +153,37 @@ export function createLevel(
 }
 
 /**
+ * The most prior keys the third-occurrence check reads: `src/engine.ts`'s `PRIOR_KEYS_WINDOW`,
+ * restated here because the engine does not export it (`ADR-0054` § Proposed amendment
+ * 2026-10-30, A2). The two must stay equal.
+ */
+const PRIOR_KEYS_WINDOW = 100;
+
+/**
+ * `ADR-0054` § Proposed amendment 2026-10-30, A2: true when `child` (the position after a root
+ * move) stood TWICE in `keys`, the list its search is handed (the prior keys plus the root's key).
+ * This is the engine's pre-root walk at ply 0: `-4, -6, …`, bounded by the child's halfmove
+ * clock, the list and `PRIOR_KEYS_WINDOW`. One match (a second occurrence) is not a draw. With a
+ * clock under 4 the walk reads nothing, and no key is computed.
+ */
+function standsTwiceBefore(child: Position, keys: readonly bigint[]): boolean {
+  const oldest = -Math.min(child.halfmoveClock, keys.length, PRIOR_KEYS_WINDOW);
+  if (oldest > -4) return false;
+  const key = repetitionKey(child, zobristKey(child));
+  let matches = 0;
+  for (let earlier = -4; earlier >= oldest; earlier -= 2) {
+    if (keys[keys.length + earlier] === key && ++matches === 2) return true;
+  }
+  return false;
+}
+
+/**
  * `ADR-0032` decision 1. `budgetMs` is already clamped: `NFR-004`'s ceiling is enforced per
  * `chooseMove` call, which does not bound a SUM of calls, so the level layer clamps its own total.
+ *
+ * `ABC-242` (`ADR-0054` § Proposed amendment 2026-10-30): with `priorKeys`, a child that is the
+ * third occurrence of a game position is scored 0 without a search. Its slice of the shared
+ * deadline passes to the next child; `depth` and `nodes` count the children that ran.
  */
 function blunder(
   position: Position,
@@ -168,6 +201,11 @@ function blunder(
   moves.forEach((move, i) => {
     const undo = makeMove(position, move);
     try {
+      // The repetition test comes first, as in the engine: a third occurrence is 0, unsearched.
+      if (priorKeys !== undefined && standsTwiceBefore(position, priorKeys)) {
+        scored.push({ move, score: 0 });
+        return;
+      }
       // One shared deadline: an overrun by one child shortens the next. A non-positive budget
       // still runs the engine's unabortable depth 1.
       const deadline = start + (budgetMs * (i + 1)) / moves.length;

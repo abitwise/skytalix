@@ -1,0 +1,3 @@
+Q7 rc=1 total=2337 passed=2335 failed=2 skipped=0 wall=9.0s
+  RED qe-extra.test.ts :: qe-ABC-242 extra — bounds the lane cannot see (synthetic lists) X1 cap: two matches only beyond -100 (at -102, -104) are never counted
+  RED qe-extra.test.ts :: qe-ABC-242 extra — bounds the lane cannot see (synthetic lists) X3 straddle: one match inside (-100), one beyond (-102) is a second occurrence, not 0

@@ -1,0 +1,98 @@
+qe-ABC-242 PRE-REGISTRATION (committed before any head run; nothing below moves after a reading)
+Ticket ABC-242 (S, P3, S2, no smoke): on a blunder (levels 1-4), a root move that makes the third occurrence scores exactly 0,
+its child unsearched. Source: the ticket page A1-A8 + NFR triggers R1-R4 + Test notes; ADR-0054 § Proposed amendment 2026-10-30
+(ACCEPTED) A1-A6; ADR-0032 d1/d2; ADR-0046 § Addendum R1-R4; ABC-244 § BA/PM ruling conditions 1-3.
+Base 4387d4e8 (main at the SE's branch point). Head 6884d61a (code); branch tip 56058203 = SE notes only (src identical).
+Trees (scratch, out of the repository, under the session scratchpad qe-242/): B = git archive 4387d4e8, H = git archive 6884d61a.
+diff -rq B H: exactly src/levels.ts, src/levels.test.ts, src/cli.test.ts, src/uci-session.test.ts. node_modules: one symlink to
+the main checkout's (package.json / package-lock.json equal at B, H and main). Plant tree P = a copy of H (plant.mjs).
+WIDTH: ALONE. Everything runs sequentially; no two vitest processes at once; never vitest on the same command line as a wait.
+Thermal stop: Tctl median > 85 C (host.mjs tctl) -> stop and report.
+
+ORACLE (qe-scripts/oracle.mjs B H <scratch> 10,1 4; counting shim copies, never the SE's spy). Graded checks:
+  C0  SE-242-e: B's REAL createLevel blunder == the SE's base() copy (transcribed line for line, on B's modules): list,
+      depth, nodes, elapsedMs, child-search count; all 7 fixtures x {keys, no keys, []} x steps {10, 1}. Expect all PASS.
+  A1  per THIRD fixture (5: probe, last, white losing, white winning, black winning) x steps {10, 1}: H scores the repeat
+      exactly 0; B (real) scores it != 0; H runs legal-1 child searches, B legal; H's entries before the repeat == B's.
+      A1p: probe scored[0] = d8e8:0, 4 searches, played move != d8e8. A1l: `last` H list == B's but its last entry 0.
+  A2  second occurrence: H == B in full (list, depth, nodes, elapsedMs), 5 searches, B's d8e8 != 0.
+  A3  clock 0 + 7 keys untrimmed: H == B in full, 5 searches.
+  A6  no keys and [] on all 7 fixtures: H == B (list, depth, nodes, elapsedMs, searches).
+  SW  differential sweep at step 10: 6 starts x 4 seeded games x <= 48 plies (KQvK both colours, KRPvKP both colours,
+      startpos, KQvK from clock 90 so roots pass clock 100). At every root an INDEPENDENT count of each child's earlier
+      occurrences in repetitionKeyHistory within distance <= min(child clock, 101): >= 2 -> H must score it 0 and not
+      search it; every other child searched; entries before the first such move == B's; none -> H == B in full;
+      A5 pick recomputed from H's list (strict second-best, ties to the first) == H's move and kind. Expect 0 FAIL and
+      a non-trivial count of third-occurrence roots and second-occurrence moves.
+  CB  (informative, the R1/condition-2 reading) budgetMs handed to each child chooseMove and its depth, B and H, steps 10/1.
+  ORACLE MET iff "ORACLE n checks, 0 FAIL".
+
+PLANTS (qe-scripts/plant.mjs H B P <out>; each one exact string edit of src/levels.ts asserted to occur once; WHOLE default lane
++ qe-extra.test.ts (X1-X4, synthetic lists, QE scratch only) per plant; vitest via node, json, heap 128). Frozen list:
+  none  no edit. REQUIRED: 0 failed (lane + X1-X4).
+  Q1    ++matches === 2 -> === 1 (one match scores 0).            REQUIRED: levels A2 row red. Expected also X3, X4.
+  Q2    clock dropped from the oldest bound.                       REQUIRED: levels A3 row red. Expected nothing else.
+  Q3    the skip becomes a search (child searched, then 0).        REQUIRED: an A1 row red on the child count.
+                                                                   Expected: the three levels A1 rows only.
+  Q4    the check never fires (if (false)).                        REQUIRED: A1 rows red. Expected A1 x3, A5, CLI A4,
+                                                                   UCI A4, X2.
+  QB    B's real src/levels.ts under H's tests.                    Expected = Q4's set (A2, A3, A6 green on real base).
+  Q5    cap 100 -> 6.     Expected = Q4's set (the fixtures' second match sits at -8).
+  Q6    cap 100 -> 8.     Expected: lane SURVIVES (no fixture reads past -8); X2 red.
+  Q7    cap 100 -> +Inf.  Expected: lane SURVIVES; X1, X3 red. Equivalent for every trimmed caller (<= 100 keys + root).
+  Q8    cap 100 -> 50.    Expected: lane SURVIVES; X2 red. NOT equivalent (a repeat at distance > 50 is game-reachable).
+  Q9    the root's clock (child clock - 1).     Expected = Q4's set minus X2.
+  Q10   three matches needed (=== 3).           Expected = Q4's set.
+  Q11   walk from -2 (SE M7).                   Expected: lane SURVIVES; X4 red (synthetic only). Claim: equivalent on
+                                                game-consistent lists (K[-2] can never equal the child).
+  Q12   raw zobristKey (SE M8).                 Expected: SURVIVES everything. Claim: equivalent (a child made by
+                                                makeMove with an ep square has clock 0, so the walk reads nothing).
+  Q13   index off by one (odd offsets).         Expected = Q4's set.
+  Q14   the skip scores 1, not 0.               Expected: A1 x3, A5, CLI A4, UCI A4, X2.
+  Q15   earlier > oldest (SE M6).               Expected = Q4's set.
+  Q16a  early exit at oldest > -8.              Expected: SURVIVES everything. Claim: equivalent (two matches need -4 and
+                                                -8 at least: K[-4] == K[-6] is a 2-ply cycle, impossible).
+  Q16b  early exit at oldest > -9.              Expected = Q4's set minus X2.
+  Q18   the check spends one clock read.        Expected: lane SURVIVES (entries after the skip are unpinned by design,
+                                                ticket A1 "UNKNOWN - verify"); X rows green.
+  PLANTS MET iff none is 0 failed AND every REQUIRED red holds. Every other red, and every survivor, is reported; the
+  SE's M7/M8 equivalence claims (SE-242-c) are judged on Q11/Q12 plus the reasoning above.
+
+A1  MET iff ORACLE A1/A1p/A1l PASS at steps 10 and 1 AND the in-lane A1 rows green at H (plant none) AND Q3/Q4 reds hold.
+A2  MET iff ORACLE A2 PASS AND levels A2 row green at H AND Q1 turns it red.
+A3  MET iff ORACLE A3 PASS AND levels A3 row green at H AND Q2 turns it red.
+A4  rerun: node_modules/vitest/vitest.mjs run src/cli.test.ts src/uci-session.test.ts -t "ABC-242 A4" at H (heap 128).
+    MET iff both rows green AND the code reads one STEP_MS (10) on all three callers in both files (R3) AND seed 7 < 0.4 is
+    asserted AND Q4/Q14 turn both rows red.
+A5  MET iff the levels A5 row green at H AND ORACLE SW-A5 0 FAIL.
+A6  MET iff ORACLE A6 PASS AND g9.mjs shows engine.ts / search.ts (and the other fenced files) byte-identical AND the
+    lane at H keeps every base row name (names.mjs on the G8 last-run.json: only the 10 ABC-242 rows added, none removed)
+    AND the lane is green (the ABC-078 A3 corpus and the ABC-230 identity rows run unedited).
+A7  at H: npm run lint, npm run typecheck, npm run build exit 0 (build output removed after); npm test x3 = the three G8 head
+    runs, each green with skips 0; node tools/grugops/test-skip-integrity.js .grugops/test-skips.md --skip-count 0 ->
+    "No findings."; g9.mjs "G9 MET"; ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 node_modules/.bin/vitest run
+    src/levels.test.ts --reporter=verbose ONCE ALONE (green, 53 rows expected; level-5 A5 max <= 5 000 ms read for G5);
+    LADDER_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 node_modules/.bin/vitest run src/ladder.test.ts ONCE ALONE (green;
+    levels 1-5 ordered). G4 = engine.test.ts / search*.test.ts green with engine files byte-identical. G10 = no level reddened.
+    MET iff all of that.
+A8  a reading: confirm tools/rating/rating.ts sets no Skill Level and src/ladder.test.ts hands no prior keys (grep).
+R1  census check: every one of the 10 added rows is on a virtual clock at level 1's 100 ms, step 10 (code read); the SE's
+    reads-per-search arithmetic is re-derived; condition 2 (ABC-244 § BA/PM ruling: a search that runs >= 2 clock-check
+    intervals at step 1 still runs >= 2 at the chosen step) is re-read on the CB budgets actually handed to each child.
+    A mismatch is a finding, graded by what it changes; it does not by itself fail an acceptance criterion.
+
+G8 (ALONE, last of the timed work): qe-scripts/g8.mjs (qe-ABC-243's, header line only edited), npm test as spelled, order
+  b h h b b h, base tree B, head tree H. Wait-clear before every run (host.mjs): 0 foreign vitest (bracketed pgrep, then
+  waited BY PID with kill -0), 0 cutechess-cli, load1 <= 2.0, Tctl <= 60.0 C. Admissible iff all 6 rc 0 and load1 <= 8 before
+  and after every run. Median of 3 per arm. H median <= 10 s -> NFR-008 MET. H median > 9.6 s -> ABC-244's tranche-2 trigger
+  FIRES (reported only). H median > 10 s -> STOP, report. H - B delta reported against the ticket's +0.05..+0.15 s.
+  One re-run of the whole set only if inadmissible.
+
+SE-242-a (time-box 15 min; UNKNOWN is fine): qe-scripts/se242a.mjs runs QE-230's blunder-probe.mjs UNCHANGED on git archive
+  trees of 24f3e322 (ABC-230 merge), e42b637b (ABC-228), 1f6abec4 (ABC-241), 5953c631 (ABC-229), 4387d4e8 (base). The first
+  merge whose d8e8 base reading leaves -1013 is named; a reading at 24f3e322 other than -1013 makes the answer UNKNOWN.
+
+VERDICT: PASS iff A1-A7 MET, A8 confirmed, PLANTS MET, ORACLE MET, G8 admissible with H <= 10 s, and no finding above LOW.
+  PASS_WITH_GAPS iff the same holds but a MEDIUM gap (or a non-equivalent survivor the ticket's rows should catch) is named.
+  FAIL iff any acceptance criterion is NOT MET. STOP iff the G8 H median > 10 s.
+UAT: owed (production lines in src/levels.ts); the QE verdict signs it (Test note 3).

@@ -1,0 +1,2 @@
+Q2 rc=1 total=360 passed=13 failed=1 skipped=346 wall=5.5s
+  RED levels.test.ts :: ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A3: a key older than the child's clock is never counted: clock 0, the 7 keys untrimmed

@@ -1,0 +1,2 @@
+Q8 rc=1 total=2337 passed=2336 failed=1 skipped=0 wall=9.0s
+  RED qe-extra.test.ts :: qe-ABC-242 extra — bounds the lane cannot see (synthetic lists) X2 cap edge: matches at -98 and -100 are both counted (third occurrence, 0)
