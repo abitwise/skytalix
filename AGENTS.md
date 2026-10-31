@@ -63,7 +63,7 @@ Real commands only, with flags, preferring fast single-file variants. If a comma
   Writing rules for this slot and full receipts (RUN dates, byte-exact before/after the `--` trap): `memory-bank/90-agents-md-command-log.md` § "Dev / run". -->
 - Perft deep counts (opt-in slow suite): `PERFT_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/perft.test.ts`
 - UCI engine entry (ABC-168): `npm run uci` <!-- `node src/uci.ts`: reads UCI on stdin, writes UCI on stdout; exit 0 on `quit` or end of input, 1 on any argument, 70 on an exception. Receipts: `memory-bank/90-agents-md-command-log.md` § "UCI entry point". -->
-- UCI time mode (ABC-220, ADR-0052): `setoption name TimeMode value simple-tournament` searches a fixed T = 22 s a move, `min(T, C)` under a clock C, and ignores `Skill Level`; default `level` is unchanged. `isready` and `stop` mid-search answer up to one budget late (no worker).
+- UCI time mode (ABC-220/221, ADR-0052): `setoption name TimeMode value level|simple-tournament|uci-clock-mode`; default `level`. `simple-tournament` searches a fixed T = 22 s a move, `min(T, C)` under a clock C. `uci-clock-mode` spends `min(59.5 s, C)`, ceiling 60 s. Both ignore `Skill Level`. `HARD_CEILING_MS` = 60 000. `isready` and `stop` mid-search answer up to one budget late (no worker).
 
 ### Test
 
@@ -99,7 +99,7 @@ In a script, poll the job's output file or `kill -0 <pid>`; never `while pgrep -
   src/search.pvs-lmr.test.ts`
 - Null-move deep lane (opt-in, ABC-208, door / zugzwang guard / oracle rows, 44 rows): `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/search.null-move.test.ts`
 - Real-engine CLI lane (opt-in, ABC-119): `CLI_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/cli.real-engine.test.ts`
-- UCI session deep lane (opt-in, ABC-220, A11, 22 s walls): `ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/uci-session.test.ts`
+- UCI session deep lane (opt-in, ABC-220 A11, 22 s walls; ABC-221 A10, 3 x 59.5 s; one row: add `-t "ABC-221 A10"`): `ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/uci-session.test.ts`. A spawn here: `ENGINE_DEEP` only, sync, argument array (ADR-0052 D8).
 - Real-engine UCI lane (opt-in, ABC-168): `UCI_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/uci.real-engine.test.ts`
 - Self-play ladder lane (opt-in, ABC-085, ADR-0038): `LADDER_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/ladder.test.ts`
 - Test (single file): `NODE_OPTIONS=--max-old-space-size=400 npx vitest run <path>`
