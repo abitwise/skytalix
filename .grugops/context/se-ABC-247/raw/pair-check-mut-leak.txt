@@ -1,0 +1,89 @@
+▶ A1: rpair reads each build with r's argv, but for openings start/count, output paths and Skill Level 6
+  ✔ the dry run exits 0 and writes nothing (0.817677ms)
+  ✖ every block of both builds differs from r's argv only where A1 allows (104.802619ms)
+  ✔ the pins are r's: Stockfish at E 1910, skytalix at 4 s, width 2, both colours (0.235139ms)
+  ✔ ABC-247 (a): every block of both builds gives skytalix Skill Level 6 once, Stockfish none (0.795425ms)
+  ✔ ABC-247 (a): the A5 shape (--rounds 10 --concurrency 1) carries it on both builds too (100.712523ms)
+  ✖ ABC-247 (c): the r and d argvs send no Skill Level and are main's, token for token (189.763173ms)
+✖ A1: rpair reads each build with r's argv, but for openings start/count, output paths and Skill Level 6 (398.520879ms)
+▶ A2: the schedule
+  ✔ 10 blocks per build, 10 openings each, alternating order (0.191237ms)
+  ✔ openings 1–100 exactly once per build (0.129322ms)
+  ✔ the dry run prints that schedule and runs each block for each build once (116.780202ms)
+  ✔ --rounds 10 is the A5 smoke: one block per build, 40 games (0.138749ms)
+  ✔ bad values stop before any work, naming the argument (718.834824ms)
+✔ A2: the schedule (836.440748ms)
+▶ A3: the arithmetic on qe-epic008-close r1 and r2
+  ✔ the pooling formula gives cutechess-cli's own recorded lines (22.902099ms)
+  ✔ the pair difference reads −82.9 ± 73.8 (21.940192ms)
+  ✔ the pentanomial reads −82.9 ± 64.3 (0.604749ms)
+  ✔ split into 10 blocks, the pair summary pools to the same figures (1.827853ms)
+  ✔ Stockfish's median nps per reading matches arch-epic008-rd's an3 (259.876918ms)
+  ✔ the recorded games cover openings 1–100 with both colours (0.632742ms)
+✔ A3: the arithmetic on qe-epic008-close r1 and r2 (308.21723ms)
+▶ A4: one faulted block makes its build and the pair UNRESOLVED
+  ✔ clean fixture blocks read a rating, not UNRESOLVED (2.006426ms)
+  ✔ illegal move (1.014274ms)
+  ✔ disconnect (0.731686ms)
+  ✔ stall (0.639354ms)
+  ✔ time forfeit (1.040883ms)
+  ✔ watchdog stall (0.59486ms)
+  ✔ a block never played (the run halted) is UNRESOLVED too (0.328944ms)
+✔ A4: one faulted block makes its build and the pair UNRESOLVED (6.595113ms)
+▶ ADR-0049 d4: records carry placeholders, not host paths
+  ✔ paths longest first, then user and host as whole words (0.245338ms)
+✔ ADR-0049 d4: records carry placeholders, not host paths (0.323995ms)
+ℹ tests 25
+ℹ suites 5
+ℹ pass 23
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1955.069909
+
+✖ failing tests:
+
+test at tools/rating/pair-check.ts:86:3
+✖ every block of both builds differs from r's argv only where A1 allows (104.802619ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  40 !== 41
+  
+      at TestContext.<anonymous> (file://<repo>/tools/rating/pair-check.ts:103:14)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Suite.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Promise.all (index 0)
+      at async Suite.run (node:internal/test_runner/test:1905:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 40,
+    expected: 41,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tools/rating/pair-check.ts:171:3
+✖ ABC-247 (c): the r and d argvs send no Skill Level and are main's, token for token (189.763173ms)
+  AssertionError [ERR_ASSERTION]: <cutechess-cli> -engine name=skytalix cmd=<node> arg=/tmp/abc225-check-vkIVJv/a1-c/clone-skytalix/dist/uci.js dir=/tmp/abc225-check-vkIVJv/a1-c/clone-skytalix st=4 timemargin=1000 restart=on option.Skill Level=6 stderr=/tmp/abc225-check-vkIVJv/a1-c/skytalix.stderr -engine name=stockfish cmd=<cutechess-cli> st=0.5 timemargin=2000 restart=on option.Threads=1 option.Hash=16 option.UCI_LimitStrength=true option.UCI_Elo=1650 stderr=/tmp/abc225-check-vkIVJv/a1-c/stockfish.stderr -each proto=uci -openings file=<repo>/tools/rating/openings.epd format=epd order=sequential -repeat -games 2 -rounds 100 -concurrency 2 -maxmoves 200 -pgnout /tmp/abc225-check-vkIVJv/a1-c/r.pgn -debug all
+  
+  true !== false
+  
+      at TestContext.<anonymous> (file://<repo>/tools/rating/pair-check.ts:216:14)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Suite.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

@@ -1,0 +1,133 @@
+=== ca6e675c
+ca6e675c:src/level-seam.ts:6: * The table is read only by an OWN key (`Object.hasOwn`): `LEVELS["constructor"]` is a prototype
+ca6e675c:src/level-seam.ts:15:  const choose = createLevel(LEVELS[level as keyof typeof LEVELS], options);
+ca6e675c:src/levels.ts:28:  readonly budgetMs: number;
+ca6e675c:src/levels.ts:30:  readonly blunderRate: number;
+ca6e675c:src/levels.ts:50:  1: Object.freeze({ budgetMs: 100, blunderRate: 0.4 }),
+ca6e675c:src/levels.ts:51:  2: Object.freeze({ budgetMs: 180, blunderRate: 0.2 }),
+ca6e675c:src/levels.ts:52:  3: Object.freeze({ budgetMs: 330, blunderRate: 0.1 }),
+ca6e675c:src/levels.ts:53:  4: Object.freeze({ budgetMs: 1_000, blunderRate: 0.05 }),
+ca6e675c:src/levels.ts:54:  5: Object.freeze({ budgetMs: 3_000, blunderRate: 0 }),
+ca6e675c:src/levels.ts:55:  6: Object.freeze({ budgetMs: 5_000, blunderRate: 0 }),
+ca6e675c:src/levels.ts:56:  7: Object.freeze({ budgetMs: 30_000, blunderRate: 0 }),
+ca6e675c:src/levels.ts:126:    if (random() >= level.blunderRate) {
+ca6e675c:src/levels.ts:127:      const choice = chooseMove(position, { budgetMs: level.budgetMs, now });
+ca6e675c:src/levels.ts:132:    return blunder(position, Math.min(level.budgetMs, HARD_CEILING_MS), now);
+ca6e675c:src/levels.ts:137: * `ADR-0032` decision 1. `budgetMs` is already clamped: `NFR-004`'s ceiling is enforced per
+ca6e675c:src/levels.ts:140:function blunder(position: Position, budgetMs: number, now: Clock): LevelChoice | null {
+ca6e675c:src/levels.ts:153:      const deadline = start + (budgetMs * (i + 1)) / moves.length;
+ca6e675c:src/levels.ts:154:      const child = chooseMove(position, { budgetMs: deadline - now(), now });
+ca6e675c:src/uci-session.ts:9: * injected `book` before any search. `Skill Level` (`EASIEST_LEVEL`-`HARDEST_LEVEL`, 1-7, default
+ca6e675c:src/uci-session.ts:145:  readonly budgetMs: number;
+ca6e675c:src/uci-session.ts:232:  return { budgetMs: budget, maxDepth, maxNodes: nodes, limits, hold };
+ca6e675c:src/uci-session.ts:258:  let skill: keyof typeof LEVELS = DEFAULT_LEVEL;
+ca6e675c:src/uci-session.ts:286:    const level = LEVELS[skill];
+ca6e675c:src/uci-session.ts:287:    const budgetMs = Math.min(request.budgetMs, level.budgetMs);
+ca6e675c:src/uci-session.ts:295:    } else if (position !== null && level.blunderRate > 0) {
+ca6e675c:src/uci-session.ts:298:        info(`skill level ${skill} ignores go ${request.limits.join(", ")}; searching on time`);
+ca6e675c:src/uci-session.ts:302:        { budgetMs, blunderRate: level.blunderRate },
+ca6e675c:src/uci-session.ts:314:        budgetMs,
+ca6e675c:src/uci-session.ts:340:    } else if (name === "skill level") {
+ca6e675c:src/uci-session.ts:342:      if (Object.hasOwn(LEVELS, value)) skill = Number(value) as keyof typeof LEVELS;
+ca6e675c:src/uci-session.ts:345:          `Skill Level takes an integer ${EASIEST_LEVEL}-${HARDEST_LEVEL}, got ${got}; kept ${skill}`,
+ca6e675c:src/uci-session.ts:359:            `option name Skill Level type spin default ${DEFAULT_LEVEL} min ${EASIEST_LEVEL} max ${HARDEST_LEVEL}`,
+=== 4cd261c1
+4cd261c1:src/level-seam.ts:6: * The table is read only by an OWN key (`Object.hasOwn`): `LEVELS["constructor"]` is a prototype
+4cd261c1:src/level-seam.ts:27:  const choose = createLevel(LEVELS[level as keyof typeof LEVELS], options);
+4cd261c1:src/levels.ts:33:  readonly budgetMs: number;
+4cd261c1:src/levels.ts:35:  readonly blunderRate: number;
+4cd261c1:src/levels.ts:55:  1: Object.freeze({ budgetMs: 100, blunderRate: 0.4 }),
+4cd261c1:src/levels.ts:56:  2: Object.freeze({ budgetMs: 180, blunderRate: 0.2 }),
+4cd261c1:src/levels.ts:57:  3: Object.freeze({ budgetMs: 330, blunderRate: 0.1 }),
+4cd261c1:src/levels.ts:58:  4: Object.freeze({ budgetMs: 1_000, blunderRate: 0.05 }),
+4cd261c1:src/levels.ts:59:  5: Object.freeze({ budgetMs: 4_000, blunderRate: 0 }),
+4cd261c1:src/levels.ts:60:  6: Object.freeze({ budgetMs: 5_000, blunderRate: 0 }),
+4cd261c1:src/levels.ts:61:  7: Object.freeze({ budgetMs: 30_000, blunderRate: 0 }),
+4cd261c1:src/levels.ts:135:    if (random() >= level.blunderRate) {
+4cd261c1:src/levels.ts:137:        budgetMs: level.budgetMs,
+4cd261c1:src/levels.ts:151:    return blunder(position, Math.min(level.budgetMs, HARD_CEILING_MS), now, childKeys);
+4cd261c1:src/levels.ts:181: * `ADR-0032` decision 1. `budgetMs` is already clamped: `NFR-004`'s ceiling is enforced per
+4cd261c1:src/levels.ts:190:  budgetMs: number,
+4cd261c1:src/levels.ts:211:      const deadline = start + (budgetMs * (i + 1)) / moves.length;
+4cd261c1:src/levels.ts:213:        budgetMs: deadline - now(),
+4cd261c1:src/uci-session.ts:9: * injected `book` before any search. `Skill Level` (`EASIEST_LEVEL`-`HARDEST_LEVEL`, 1-7, default
+4cd261c1:src/uci-session.ts:14: * `ABC-220` (`ADR-0052` D1-D3, D8) adds a third option, the `combo` `TimeMode` (`TIME_MODES`,
+4cd261c1:src/uci-session.ts:19: * `TimeMode` is not `level`, `Skill Level` is not read: no level cap, no blunder draw.
+4cd261c1:src/uci-session.ts:31: * used at level 5 or below. In `TimeMode` `simple-tournament` they are answered at most one budget
+4cd261c1:src/uci-session.ts:96: * `ADR-0052` D1: the `TimeMode` values offered at this build, a closed set. `level` (the default)
+4cd261c1:src/uci-session.ts:100:type TimeMode = (typeof TIME_MODES)[number];
+4cd261c1:src/uci-session.ts:222:  /** D4.1's `G` under `TimeMode` `level`, before the level caps it; `ADR-0052` D3's or D4's in a mode. */
+4cd261c1:src/uci-session.ts:223:  readonly budgetMs: number;
+4cd261c1:src/uci-session.ts:235:  timeMode: TimeMode,
+4cd261c1:src/uci-session.ts:298:  if (timeMode !== "level") {
+4cd261c1:src/uci-session.ts:302:      timeMode === "simple-tournament" ? SIMPLE_TOURNAMENT_BUDGET_MS : CLOCK_MODE_MAX_BUDGET_MS;
+4cd261c1:src/uci-session.ts:323:  return { budgetMs: budget, maxDepth, maxNodes: nodes, limits, hold };
+4cd261c1:src/uci-session.ts:349:  let skill: keyof typeof LEVELS = DEFAULT_LEVEL;
+4cd261c1:src/uci-session.ts:351:  let timeMode: TimeMode = TIME_MODES[0];
+4cd261c1:src/uci-session.ts:379:    const request = parseGo(tokens, position?.blackToMove ?? false, timeMode, info);
+4cd261c1:src/uci-session.ts:381:    // `ADR-0052` D1: under a mode `Skill Level` is not read, so no cap and the rate-0 path.
+4cd261c1:src/uci-session.ts:382:    const level = LEVELS[skill];
+4cd261c1:src/uci-session.ts:383:    const leveled = timeMode === "level";
+4cd261c1:src/uci-session.ts:384:    const budgetMs = leveled ? Math.min(request.budgetMs, level.budgetMs) : request.budgetMs;
+4cd261c1:src/uci-session.ts:392:    } else if (position !== null && leveled && level.blunderRate > 0) {
+4cd261c1:src/uci-session.ts:395:        info(`skill level ${skill} ignores go ${request.limits.join(", ")}; searching on time`);
+4cd261c1:src/uci-session.ts:398:      const choice = createLevel({ budgetMs, blunderRate: level.blunderRate }, { seed, now })(
+4cd261c1:src/uci-session.ts:411:        budgetMs,
+4cd261c1:src/uci-session.ts:438:    } else if (name === "skill level") {
+4cd261c1:src/uci-session.ts:440:      if (Object.hasOwn(LEVELS, value)) skill = Number(value) as keyof typeof LEVELS;
+4cd261c1:src/uci-session.ts:443:          `Skill Level takes an integer ${EASIEST_LEVEL}-${HARDEST_LEVEL}, got ${got}; kept ${skill}`,
+4cd261c1:src/uci-session.ts:445:    } else if (name === "timemode") {
+4cd261c1:src/uci-session.ts:448:      if (offered !== undefined) timeMode = offered;
+4cd261c1:src/uci-session.ts:449:      else info(`TimeMode takes ${spokenList(TIME_MODES)}, got ${got}; kept ${timeMode}`);
+4cd261c1:src/uci-session.ts:462:            `option name Skill Level type spin default ${DEFAULT_LEVEL} min ${EASIEST_LEVEL} max ${HARDEST_LEVEL}`,
+4cd261c1:src/uci-session.ts:465:            `option name TimeMode type combo default ${TIME_MODES[0]} ${TIME_MODES.map((mode) => `var ${mode}`).join(" ")}`,
+=== 72a65fb7
+72a65fb7:src/level-seam.ts:6: * The table is read only by an OWN key (`Object.hasOwn`): `LEVELS["constructor"]` is a prototype
+72a65fb7:src/level-seam.ts:27:  const choose = createLevel(LEVELS[level as keyof typeof LEVELS], options);
+72a65fb7:src/levels.ts:33:  readonly budgetMs: number;
+72a65fb7:src/levels.ts:35:  readonly blunderRate: number;
+72a65fb7:src/levels.ts:55:  1: Object.freeze({ budgetMs: 100, blunderRate: 0.4 }),
+72a65fb7:src/levels.ts:56:  2: Object.freeze({ budgetMs: 180, blunderRate: 0.2 }),
+72a65fb7:src/levels.ts:57:  3: Object.freeze({ budgetMs: 330, blunderRate: 0.1 }),
+72a65fb7:src/levels.ts:58:  4: Object.freeze({ budgetMs: 1_000, blunderRate: 0.05 }),
+72a65fb7:src/levels.ts:59:  5: Object.freeze({ budgetMs: 4_000, blunderRate: 0 }),
+72a65fb7:src/levels.ts:60:  6: Object.freeze({ budgetMs: 5_000, blunderRate: 0 }),
+72a65fb7:src/levels.ts:61:  7: Object.freeze({ budgetMs: 30_000, blunderRate: 0 }),
+72a65fb7:src/levels.ts:135:    if (random() >= level.blunderRate) {
+72a65fb7:src/levels.ts:137:        budgetMs: level.budgetMs,
+72a65fb7:src/levels.ts:151:    return blunder(position, Math.min(level.budgetMs, HARD_CEILING_MS), now, childKeys);
+72a65fb7:src/levels.ts:181: * `ADR-0032` decision 1. `budgetMs` is already clamped: `NFR-004`'s ceiling is enforced per
+72a65fb7:src/levels.ts:190:  budgetMs: number,
+72a65fb7:src/levels.ts:211:      const deadline = start + (budgetMs * (i + 1)) / moves.length;
+72a65fb7:src/levels.ts:213:        budgetMs: deadline - now(),
+72a65fb7:src/uci-session.ts:9: * injected `book` before any search. `Skill Level` (`EASIEST_LEVEL`-`HARDEST_LEVEL`, 1-7, default
+72a65fb7:src/uci-session.ts:14: * `ABC-220` (`ADR-0052` D1-D3, D8) adds a third option, the `combo` `TimeMode` (`TIME_MODES`,
+72a65fb7:src/uci-session.ts:19: * `TimeMode` is not `level`, `Skill Level` is not read: no level cap, no blunder draw.
+72a65fb7:src/uci-session.ts:31: * used at level 5 or below. In `TimeMode` `simple-tournament` they are answered at most one budget
+72a65fb7:src/uci-session.ts:96: * `ADR-0052` D1: the `TimeMode` values offered at this build, a closed set. `level` (the default)
+72a65fb7:src/uci-session.ts:100:type TimeMode = (typeof TIME_MODES)[number];
+72a65fb7:src/uci-session.ts:222:  /** D4.1's `G` under `TimeMode` `level`, before the level caps it; `ADR-0052` D3's or D4's in a mode. */
+72a65fb7:src/uci-session.ts:223:  readonly budgetMs: number;
+72a65fb7:src/uci-session.ts:235:  timeMode: TimeMode,
+72a65fb7:src/uci-session.ts:298:  if (timeMode !== "level") {
+72a65fb7:src/uci-session.ts:302:      timeMode === "simple-tournament" ? SIMPLE_TOURNAMENT_BUDGET_MS : CLOCK_MODE_MAX_BUDGET_MS;
+72a65fb7:src/uci-session.ts:323:  return { budgetMs: budget, maxDepth, maxNodes: nodes, limits, hold };
+72a65fb7:src/uci-session.ts:349:  let skill: keyof typeof LEVELS = DEFAULT_LEVEL;
+72a65fb7:src/uci-session.ts:351:  let timeMode: TimeMode = TIME_MODES[0];
+72a65fb7:src/uci-session.ts:379:    const request = parseGo(tokens, position?.blackToMove ?? false, timeMode, info);
+72a65fb7:src/uci-session.ts:381:    // `ADR-0052` D1: under a mode `Skill Level` is not read, so no cap and the rate-0 path.
+72a65fb7:src/uci-session.ts:382:    const level = LEVELS[skill];
+72a65fb7:src/uci-session.ts:383:    const leveled = timeMode === "level";
+72a65fb7:src/uci-session.ts:384:    const budgetMs = leveled ? Math.min(request.budgetMs, level.budgetMs) : request.budgetMs;
+72a65fb7:src/uci-session.ts:392:    } else if (position !== null && leveled && level.blunderRate > 0) {
+72a65fb7:src/uci-session.ts:395:        info(`skill level ${skill} ignores go ${request.limits.join(", ")}; searching on time`);
+72a65fb7:src/uci-session.ts:398:      const choice = createLevel({ budgetMs, blunderRate: level.blunderRate }, { seed, now })(
+72a65fb7:src/uci-session.ts:411:        budgetMs,
+72a65fb7:src/uci-session.ts:438:    } else if (name === "skill level") {
+72a65fb7:src/uci-session.ts:440:      if (Object.hasOwn(LEVELS, value)) skill = Number(value) as keyof typeof LEVELS;
+72a65fb7:src/uci-session.ts:443:          `Skill Level takes an integer ${EASIEST_LEVEL}-${HARDEST_LEVEL}, got ${got}; kept ${skill}`,
+72a65fb7:src/uci-session.ts:445:    } else if (name === "timemode") {
+72a65fb7:src/uci-session.ts:448:      if (offered !== undefined) timeMode = offered;
+72a65fb7:src/uci-session.ts:449:      else info(`TimeMode takes ${spokenList(TIME_MODES)}, got ${got}; kept ${timeMode}`);
+72a65fb7:src/uci-session.ts:462:            `option name Skill Level type spin default ${DEFAULT_LEVEL} min ${EASIEST_LEVEL} max ${HARDEST_LEVEL}`,
+72a65fb7:src/uci-session.ts:465:            `option name TimeMode type combo default ${TIME_MODES[0]} ${TIME_MODES.map((mode) => `var ${mode}`).join(" ")}`,

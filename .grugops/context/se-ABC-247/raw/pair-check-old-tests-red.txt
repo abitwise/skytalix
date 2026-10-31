@@ -1,0 +1,65 @@
+▶ A1: rpair reads each build with r's argv, but for openings start/count and output paths
+  ✔ the dry run exits 0 and writes nothing (0.50358ms)
+  ✖ every block of both builds differs from r's argv only where A1 allows (113.93506ms)
+  ✔ the pins are r's: Stockfish at E 1910, skytalix at 4 s, width 2, both colours (0.485687ms)
+✖ A1: rpair reads each build with r's argv, but for openings start/count and output paths (115.874601ms)
+▶ A2: the schedule
+  ✔ 10 blocks per build, 10 openings each, alternating order (0.877258ms)
+  ✔ openings 1–100 exactly once per build (0.276175ms)
+  ✔ the dry run prints that schedule and runs each block for each build once (145.868851ms)
+  ✔ --rounds 10 is the A5 smoke: one block per build, 40 games (0.136785ms)
+  ✔ bad values stop before any work, naming the argument (759.008049ms)
+✔ A2: the schedule (906.682531ms)
+▶ A3: the arithmetic on qe-epic008-close r1 and r2
+  ✔ the pooling formula gives cutechess-cli's own recorded lines (23.021201ms)
+  ✔ the pair difference reads −82.9 ± 73.8 (23.215975ms)
+  ✔ the pentanomial reads −82.9 ± 64.3 (0.572108ms)
+  ✔ split into 10 blocks, the pair summary pools to the same figures (1.787497ms)
+  ✔ Stockfish's median nps per reading matches arch-epic008-rd's an3 (255.907967ms)
+  ✔ the recorded games cover openings 1–100 with both colours (0.46564ms)
+✔ A3: the arithmetic on qe-epic008-close r1 and r2 (305.40529ms)
+▶ A4: one faulted block makes its build and the pair UNRESOLVED
+  ✔ clean fixture blocks read a rating, not UNRESOLVED (1.945743ms)
+  ✔ illegal move (0.859746ms)
+  ✔ disconnect (0.789333ms)
+  ✔ stall (0.623825ms)
+  ✔ time forfeit (0.591064ms)
+  ✔ watchdog stall (0.592927ms)
+  ✔ a block never played (the run halted) is UNRESOLVED too (0.339284ms)
+✔ A4: one faulted block makes its build and the pair UNRESOLVED (5.952092ms)
+▶ ADR-0049 d4: records carry placeholders, not host paths
+  ✔ paths longest first, then user and host as whole words (0.216023ms)
+✔ ADR-0049 d4: records carry placeholders, not host paths (0.26753ms)
+ℹ tests 22
+ℹ suites 5
+ℹ pass 21
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1835.158061
+
+✖ failing tests:
+
+test at tools/rating/pair-check.ts:71:3
+✖ every block of both builds differs from r's argv only where A1 allows (113.93506ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  41 !== 40
+  
+      at TestContext.<anonymous> (file://<repo>/tools/rating/pair-check.ts:85:14)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Suite.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Promise.all (index 0)
+      at async Suite.run (node:internal/test_runner/test:1905:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 41,
+    expected: 40,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
