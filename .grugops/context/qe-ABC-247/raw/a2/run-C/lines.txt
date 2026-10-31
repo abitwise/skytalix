@@ -1,0 +1,9 @@
+# skytalix setoption / go lines and Finished lines from log.txt (grep)
+1x  >skytalix(0): uci
+1x  Started game 1 of 2 (skytalix vs stockfish)
+34x  >skytalix(0): go movetime 4000
+1x  Finished game 1 (skytalix vs stockfish): 1-0 {White mates}
+1x  >skytalix(3): uci
+1x  Started game 2 of 2 (stockfish vs skytalix)
+63x  >skytalix(3): go movetime 4000
+1x  Finished game 2 (stockfish vs skytalix): 0-1 {Black mates}

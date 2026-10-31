@@ -1,0 +1,90 @@
+== base ca6e675c src/uci-session.ts
+258:   let skill: keyof typeof LEVELS = DEFAULT_LEVEL;
+281:   const go = (tokens: readonly string[]): void => {
+286:     const level = LEVELS[skill];
+287:     const budgetMs = Math.min(request.budgetMs, level.budgetMs);
+295:     } else if (position !== null && level.blunderRate > 0) {
+298:         info(`skill level ${skill} ignores go ${request.limits.join(", ")}; searching on time`);
+301:       const choice = createLevel(
+302:         { budgetMs, blunderRate: level.blunderRate },
+313:       const choice = chooseMove(position, {
+314:         budgetMs,
+315:         now,
+316:         ...(request.maxDepth === undefined ? {} : { maxDepth: request.maxDepth }),
+317:         ...(request.maxNodes === undefined ? {} : { maxNodes: request.maxNodes }),
+318:       });
+342:       if (Object.hasOwn(LEVELS, value)) skill = Number(value) as keyof typeof LEVELS;
+345:           `Skill Level takes an integer ${EASIEST_LEVEL}-${HARDEST_LEVEL}, got ${got}; kept ${skill}`,
+359:             `option name Skill Level type spin default ${DEFAULT_LEVEL} min ${EASIEST_LEVEL} max ${HARDEST_LEVEL}`,
+== head 4cd261c1 src/uci-session.ts
+99: const TIME_MODES = Object.freeze(["level", "simple-tournament", "uci-clock-mode"] as const);
+349:   let skill: keyof typeof LEVELS = DEFAULT_LEVEL;
+351:   let timeMode: TimeMode = TIME_MODES[0];
+376:   const go = (tokens: readonly string[]): void => {
+379:     const request = parseGo(tokens, position?.blackToMove ?? false, timeMode, info);
+382:     const level = LEVELS[skill];
+383:     const leveled = timeMode === "level";
+384:     const budgetMs = leveled ? Math.min(request.budgetMs, level.budgetMs) : request.budgetMs;
+388:     const booked = ownBook && position !== null ? book.bookMove(position) : undefined;
+392:     } else if (position !== null && leveled && level.blunderRate > 0) {
+395:         info(`skill level ${skill} ignores go ${request.limits.join(", ")}; searching on time`);
+398:       const choice = createLevel({ budgetMs, blunderRate: level.blunderRate }, { seed, now })(
+410:       const choice = chooseMove(position, {
+411:         budgetMs,
+412:         now,
+413:         priorKeys,
+414:         ...(request.maxDepth === undefined ? {} : { maxDepth: request.maxDepth }),
+415:         ...(request.maxNodes === undefined ? {} : { maxNodes: request.maxNodes }),
+416:       });
+440:       if (Object.hasOwn(LEVELS, value)) skill = Number(value) as keyof typeof LEVELS;
+443:           `Skill Level takes an integer ${EASIEST_LEVEL}-${HARDEST_LEVEL}, got ${got}; kept ${skill}`,
+462:             `option name Skill Level type spin default ${DEFAULT_LEVEL} min ${EASIEST_LEVEL} max ${HARDEST_LEVEL}`,
+== levels.ts base :54 :55 / head :59 :60
+  5: Object.freeze({ budgetMs: 3_000, blunderRate: 0 }),
+  6: Object.freeze({ budgetMs: 5_000, blunderRate: 0 }),
+  5: Object.freeze({ budgetMs: 4_000, blunderRate: 0 }),
+  6: Object.freeze({ budgetMs: 5_000, blunderRate: 0 }),
+== tip cec9c252 vs 4cd261c1 vs 72a65fb7, engine files
+== git grep -n -i skill, non-test src, ca6e675c
+src/uci-session.ts:9: * injected `book` before any search. `Skill Level` (`EASIEST_LEVEL`-`HARDEST_LEVEL`, 1-7, default
+src/uci-session.ts:258:  let skill: keyof typeof LEVELS = DEFAULT_LEVEL;
+src/uci-session.ts:286:    const level = LEVELS[skill];
+src/uci-session.ts:298:        info(`skill level ${skill} ignores go ${request.limits.join(", ")}; searching on time`);
+src/uci-session.ts:340:    } else if (name === "skill level") {
+src/uci-session.ts:342:      if (Object.hasOwn(LEVELS, value)) skill = Number(value) as keyof typeof LEVELS;
+src/uci-session.ts:345:          `Skill Level takes an integer ${EASIEST_LEVEL}-${HARDEST_LEVEL}, got ${got}; kept ${skill}`,
+src/uci-session.ts:359:            `option name Skill Level type spin default ${DEFAULT_LEVEL} min ${EASIEST_LEVEL} max ${HARDEST_LEVEL}`,
+== git grep -n -i skill, non-test src, 4cd261c1
+src/uci-session.ts:9: * injected `book` before any search. `Skill Level` (`EASIEST_LEVEL`-`HARDEST_LEVEL`, 1-7, default
+src/uci-session.ts:19: * `TimeMode` is not `level`, `Skill Level` is not read: no level cap, no blunder draw.
+src/uci-session.ts:349:  let skill: keyof typeof LEVELS = DEFAULT_LEVEL;
+src/uci-session.ts:381:    // `ADR-0052` D1: under a mode `Skill Level` is not read, so no cap and the rate-0 path.
+src/uci-session.ts:382:    const level = LEVELS[skill];
+src/uci-session.ts:395:        info(`skill level ${skill} ignores go ${request.limits.join(", ")}; searching on time`);
+src/uci-session.ts:438:    } else if (name === "skill level") {
+src/uci-session.ts:440:      if (Object.hasOwn(LEVELS, value)) skill = Number(value) as keyof typeof LEVELS;
+src/uci-session.ts:443:          `Skill Level takes an integer ${EASIEST_LEVEL}-${HARDEST_LEVEL}, got ${got}; kept ${skill}`,
+src/uci-session.ts:462:            `option name Skill Level type spin default ${DEFAULT_LEVEL} min ${EASIEST_LEVEL} max ${HARDEST_LEVEL}`,
+== git grep -n 'LEVELS\[\|DEFAULT_LEVEL\b' non-test src, ca6e675c
+src/level-seam.ts:6: * The table is read only by an OWN key (`Object.hasOwn`): `LEVELS["constructor"]` is a prototype
+src/level-seam.ts:15:  const choose = createLevel(LEVELS[level as keyof typeof LEVELS], options);
+src/levels.ts:60:export const DEFAULT_LEVEL = 5;
+src/uci-session.ts:10: * `DEFAULT_LEVEL`) caps the budget at its level's, and a level with a blunder rate plays through
+src/uci-session.ts:27:import { createLevel, DEFAULT_LEVEL, EASIEST_LEVEL, HARDEST_LEVEL, LEVELS } from "./levels.ts";
+src/uci-session.ts:258:  let skill: keyof typeof LEVELS = DEFAULT_LEVEL;
+src/uci-session.ts:286:    const level = LEVELS[skill];
+src/uci-session.ts:359:            `option name Skill Level type spin default ${DEFAULT_LEVEL} min ${EASIEST_LEVEL} max ${HARDEST_LEVEL}`,
+== git grep -n 'LEVELS\[\|DEFAULT_LEVEL\b' non-test src, 4cd261c1
+src/level-seam.ts:6: * The table is read only by an OWN key (`Object.hasOwn`): `LEVELS["constructor"]` is a prototype
+src/level-seam.ts:27:  const choose = createLevel(LEVELS[level as keyof typeof LEVELS], options);
+src/levels.ts:65:export const DEFAULT_LEVEL = 5;
+src/uci-session.ts:10: * `DEFAULT_LEVEL`) caps the budget at its level's, and a level with a blunder rate plays through
+src/uci-session.ts:50:import { createLevel, DEFAULT_LEVEL, EASIEST_LEVEL, HARDEST_LEVEL, LEVELS } from "./levels.ts";
+src/uci-session.ts:349:  let skill: keyof typeof LEVELS = DEFAULT_LEVEL;
+src/uci-session.ts:382:    const level = LEVELS[skill];
+src/uci-session.ts:462:            `option name Skill Level type spin default ${DEFAULT_LEVEL} min ${EASIEST_LEVEL} max ${HARDEST_LEVEL}`,
+== level-seam base :15 / head :27
+  const choose = createLevel(LEVELS[level as keyof typeof LEVELS], options);
+  const choose = createLevel(LEVELS[level as keyof typeof LEVELS], options);
+== head uci.ts :76
+  const session = createUciSession({ write, now: Date.now, random: Math.random, book });

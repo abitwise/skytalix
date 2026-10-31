@@ -31,6 +31,11 @@
  * labelled information. `nps.log` holds Stockfish's median nps per block per build and `thermal.log`
  * a Tctl, busy-core frequency and load sample every 10 s. Every record under <out-dir> but the
  * build clones is written with placeholders for host paths, user and host name (`ADR-0049` d4).
+ *
+ * `ABC-247` — `rpair` also gives skytalix `option.Skill Level=6` (`PAIR_SKILL_LEVEL`) on both builds.
+ * `go()` caps `go movetime 4000` at `LEVELS[skill].budgetMs`, and the default level 5 is 3 000 ms on
+ * a base before `ABC-228`. Level 6 is 5 000 ms and rate 0 at every SHA in `EPIC-010`, so both builds
+ * search the 4 000 ms `ADR-0053` d10 names. `r` and `d` send no `Skill Level` (the shipped level 5).
  */
 import { execFileSync, spawn } from "node:child_process";
 import { createHash } from "node:crypto";
@@ -373,7 +378,12 @@ export interface ArgSpec {
   readonly concurrency: number;
   /** `rpair` only: the block's first opening, as `-openings … start=S`. */
   readonly start?: number;
+  /** `rpair` only (`ABC-247`): skytalix's `Skill Level`, as `option.Skill Level=L`; absent, none. */
+  readonly skill?: number;
 }
+
+/** `ABC-247`: the `Skill Level` `rpair` gives skytalix on both builds. */
+export const PAIR_SKILL_LEVEL = 6;
 
 /** The pinned command (design ruling § The R command shape). */
 export function cutechessArgs(spec: ArgSpec): string[] {
@@ -387,6 +397,7 @@ export function cutechessArgs(spec: ArgSpec): string[] {
     `st=${ms / 1000}`,
     `timemargin=${CEILING_MS - ms}`,
     "restart=on",
+    ...(spec.skill === undefined ? [] : [`option.Skill Level=${spec.skill}`]),
     `stderr=${join(files, `${name}.stderr`)}`,
   ];
   const opponent =
@@ -661,6 +672,7 @@ async function rpair(positional: string[], flags: Map<string, string>, dryRun: b
       rounds: block.rounds,
       concurrency,
       start: block.start,
+      skill: PAIR_SKILL_LEVEL,
     });
   const scheduleText = [
     `schedule: ${schedule.length} blocks of 10 openings per build, 2 games per opening (both colours)`,

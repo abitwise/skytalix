@@ -1,0 +1,5 @@
+[10] printed 'stderr=<scratch>/out/candidate/b01/skytalix.stderr' -> run 'stderr=<run>/skytalix.stderr'
+[21] printed 'stderr=<scratch>/out/candidate/b01/stockfish.stderr' -> run 'stderr=<run>/stockfish.stderr'
+[33] printed '10' -> run '1'
+[39] printed '<scratch>/out/candidate/b01/r.pgn' -> run '<run>/r.pgn'
+argv 42 elements; 4 changed vs the print

@@ -1,0 +1,10 @@
+base lock equal
+base ca6e675c build rc=0
+id name skytalix
+option name Skill Level type spin default 5 min 1 max 7
+uciok
+candidate lock equal
+candidate cec9c252 build rc=0
+id name skytalix
+option name Skill Level type spin default 5 min 1 max 7
+uciok

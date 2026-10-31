@@ -1,0 +1,6 @@
+removed: option.Skill Level=6 (1 element)
+[9] printed 'stderr=<scratch>/out/base/b01/skytalix.stderr' -> run 'stderr=<run>/skytalix.stderr'
+[20] printed 'stderr=<scratch>/out/base/b01/stockfish.stderr' -> run 'stderr=<run>/stockfish.stderr'
+[32] printed '10' -> run '1'
+[38] printed '<scratch>/out/base/b01/r.pgn' -> run '<run>/r.pgn'
+argv 41 elements; 4 changed vs the print

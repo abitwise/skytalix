@@ -1,0 +1,73 @@
+qe-ABC-247 PRE-REGISTRATION (committed before any check, mutation, build or game; nothing below moves after a reading)
+Ticket ABC-247 (XS, P1, tools only): rpair gives skytalix `option.Skill Level=6` on both builds; r and d unchanged.
+Source: the ticket page (A1-A4, Test notes 1-4); qe-EPIC-010-m1-batch observation ...5967dfc1 and raw/probe (base 3 001 ms /
+head 4 001 ms at default level; 4 001 ms both at level 6; method: git archive + node_modules link + npm run build);
+se-ABC-247 notes (decision 09cbe15a, A3 e9efa27d, A1/A4 ea98b31b, artifacts c062cb93). Brief: .grugops/queue/claimed/qe-ABC-247.md.
+
+SHAS. Branch tip T = cec9c252 (SE notes on top of code 02f4f3d4). main M = e08b7718 (tools/ and package files equal 4cd261c1,
+the SE's branch point). Base B = ca6e675c. Head H = the branch tip cec9c252 (src equals main; vs the ticket's 72a65fb7 it
+differs only in src/levels.test.ts, a test file, so the engine is the same; recorded, not assumed: re-checked in A4).
+Scratch: session scratchpad qe-247/ (tmpfs), removed at the end. Tools from an env set per command (never committed):
+CUTECHESS_CLI = the pinned cutechess-cli 1.5.1 (sha256 dc776901...f40a = pin), STOCKFISH = Stockfish 19 (c78c22a9...52d2 = pin).
+WIDTH: ALONE for A2 (a records-only Architect hop beside, no engine, no vitest). Everything sequential. Waits by kill -0
+(waitpid.mjs) or polling an output file; never `while pgrep -f`. Never bare npx / npm exec. No edit to src/ tools/ data/ or
+the board. No push / force / amend / rebase / merge.
+
+A1 (the pin)
+ a. `node --test tools/rating/pair-check.ts` at T: MET iff 25 tests, 25 pass, 0 fail, 0 skipped, 0 todo.
+ b. Mutations, in a scratch `git clone --shared` of T (the worktree's tools/ is never touched), each run of pair-check:
+    M1 drop `skill: PAIR_SKILL_LEVEL,` from rpair's argsOf            -> MET iff >= 1 fail (ticket A1 (d)).
+    M2 PAIR_SKILL_LEVEL = 5                                           -> informative; expected >= 1 fail.
+    M3 the token in every sky() group (r and d too: `spec.skill ?? 6`) -> informative; expected >= 1 fail.
+    Clone removed after; the worktree's rating.ts is checked equal to T's blob (git diff --quiet) before and after.
+ c. Dry runs with the real env, main's rating.ts (a scratch git clone --shared at M) vs T's, same arguments, same out path
+    (not created): `r ca6e675c`, `r cec9c252 --elo 1910 --rounds 10 --concurrency 1`, `d cec9c252 ca6e675c`,
+    `d cec9c252 ca6e675c --budget-ms 1500 --rounds 50`. MET iff each pair is byte-equal after the repo-root placeholder (both
+    prints are redacted to <repo>/<worktree>; if the placeholder differs between the clones only that token may differ),
+    and no print carries `Skill Level`.
+ d. rpair dry run, M vs T, `rpair ca6e675c cec9c252 <out> --elo 1910 --rounds 100 --concurrency 1` (the batch command):
+    MET iff the diff is exactly 20 added lines `  option.Skill Level=6`, 0 removed; in T's print every one of the 20 argvs
+    carries that token exactly once, directly after `restart=on` of the `name=skytalix` group, and the stockfish group none.
+
+A2 (the probe; ALONE)
+ Argv: block 01 of the batch command's dry run at T (`--concurrency 1`), base argv for B and candidate argv for H, with the
+ placeholders put back to the real paths, changed only in `-rounds 10` -> `-rounds 1` and the three output paths
+ (2 x stderr=, -pgnout) to scratch run dirs. The engine paths stay the printed `<out>/base/clone-skytalix` and
+ `<out>/candidate/clone-skytalix`: QE builds B and H exactly there (git archive <sha> src data package.json package-lock.json
+ tsconfig*.json; node_modules one symlink to the main checkout's, lock files equal; `npm run build` rc 0; each answers uci).
+ A reconstructed argv, re-redacted, is diffed against the print: only -rounds and the output paths may differ.
+ Control: B's argv with the `option.Skill Level=6` element removed (nothing else changed), its own scratch outputs.
+ Order: B, H, control. Before each: wait-clear (0 foreign vitest, 0 cutechess-cli, load1 <= 2.0, Tctl <= 60 C; host.mjs).
+ cutechess-cli stdout (the -debug all log) to run/log.txt; run in background; waited on by kill -0.
+ Thermal: a sampler logs Tctl every 10 s during each run. THERMAL STOP if the median of the last 30 samples > 85 C: SIGTERM to
+ our cutechess-cli and its engines (by pid); that run is UNRESOLVED; no re-run.
+ Counting (qe-scripts/probe-read.mjs): skytalix moves = the PGN moves of the side whose tag is skytalix; their clock is the
+ `N.Ns` in the move comment. Book / instant replies (< 1 s) are not counted. Log lines are cutechess's `>skytalix(n): ...`.
+ PASS per SHA (B and H with the token), each must hold:
+  P1 cutechess-cli exit 0 and 2 games finished (PGN has 2 games).
+  P2 the log shows `setoption name Skill Level value 6` to skytalix before that engine instance's first `go`, in every game
+     (restart=on: one instance per game; counted per instance, i.e. per `uci` handshake).
+  P3 every skytalix `go` line is exactly `go movetime 4000` (count of go lines = count of `go movetime 4000`; > 0).
+  P4 skytalix PGN clocks: 0 moves at 3.0s and >= 20 moves at 4.0s, over the 2 games. The full histogram of skytalix clocks
+     >= 1 s is reported (a value between 1 s and 3.9 s other than 3.0 is information, not a fail).
+  P5 0 skytalix faults and 0 losses on time: no game result comment with `time`, `disconnect`, `illegal`, `stall`,
+     `crash`, `connection`; skytalix.stderr empty (its size reported).
+ CONTROL MET iff: P1, no `Skill Level` setoption to skytalix in the log, every skytalix go `go movetime 4000`, >= 20 skytalix
+ moves at 3.0s and 0 at 4.0s, P5. (The ticket's "reads 3.0 s".)
+ A2 MET iff B PASS, H PASS and CONTROL MET. These are probe games; no score, Elo or ledger row is read or graded.
+
+A3 (spot-check of the SE's readings in e9efa27d): every cited file:line at B (ca6e675c) and at the head (4cd261c1 = T for
+ src) shows the content the SE names: uci-session.ts B :258 :281 :286 :287 :295 :298 :301-302 :313-318 :342 :359;
+ head :99 :349 :351 :376 :382 :383 :384 :392 :395 :398 :410-416 :440 :462; levels.ts B :54 :55, head :59 :60 with the
+ stated rows; `git grep -n -i skill` over non-test src/ at both SHAs lists nothing beyond the SE's set. MET iff all hold;
+ a wrong line number with the right content elsewhere is a LOW finding, a wrong content claim is a FAIL of A3.
+
+A4 (gates at T, in the worktree, node_modules one symlink to the main checkout's, removed at the end): `npm run lint`,
+ `npm run typecheck`, `npm run build` exit 0; `npm test` once after a wait-clear: 0 failed, 0 skipped, 0 todo;
+ `node tools/grugops/test-skip-integrity.js .grugops/test-skips.md --skip-count 0` -> "No findings.";
+ `git diff --stat main -- src data` empty; `git diff --name-only main T` = tools/rating/rating.ts, tools/rating/pair-check.ts
+ and .grugops/ records only. Build output (dist/) is untracked/ignored and removed if it was not there before.
+
+VERDICT. PASS iff A1-A4 all MET. PASS_WITH_GAPS iff all acceptance holds but a named gap remains (e.g. a check QE could not
+run). FAIL iff any MET criterion above fails (A1 a/b(M1)/c/d, A2 P1-P5 or control, A3 content, A4). THERMAL STOP or a host
+that never clears: UNRESOLVED for that check, reported, verdict at most PASS_WITH_GAPS. No UAT (tools only).
