@@ -1,3 +1,4 @@
+_Updated: 2026-10-31 Orchestrator (orch-2026-10-30a) — ABC-221 SE done (no STOP), code review PASS → In Review; `qe-ABC-221` ALONE (G8, deep lanes, A14b probe; UAT owed) + `secnfr-ABC-221` records-only alongside (NFR-004 60 s). Width 2/3._
 _Updated: 2026-10-31 Orchestrator (orch-2026-10-30a) — `bapm-ABC-245-rescore` merged: ABC-245 → Ready 10/10. Running: `se-ABC-221`. Next: ABC-221 QE → ABC-245. Width 1/3._
 _Updated: 2026-10-31 Orchestrator (orch-2026-10-30a) — `bapm-ABC-242-close` merged: ABC-242 page closed, ABC-225 page Done, EPIC-010 milestone 1 restated ~18.5 h + ~1 h QE; ABC-245 (XS, QE-242-b) → Backlog 9/10 (its wait, the QE-242-a ruling, is given; re-score owed). Running: `se-ABC-221`. Width 1/3._
 _Updated: 2026-10-31 Orchestrator (orch-2026-10-30a) — `arch-qe242a-ruling` merged 10492743: QE-242-a ruled (ABC-244 condition 2 reads a blunder per level call; step 10 admitted; no ticket, nothing to the owner); ADR-0046 status line + ADR-0052 D7 fixed. Running: `se-ABC-221`, `bapm-ABC-242-close`. Width 2/3._
@@ -1260,8 +1261,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-221] uci-clock-mode over UCI (TimeMode): min(59.5 s, C), 60 s ceiling, clamp 32 -> 60 s at this build (size: M, priority: P3, DoR 9/10; milestone 2; waits OQ-0052-1 + ABC-220 merged; DoR 10/10 2026-10-30 (bapm-ABC-220-merge-fold) → Ready; **pulled 2026-10-31** → `se-ABC-221`; Security/NFR gate after QE (HARD_CEILING_MS 60 000))
+## In Development (WIP 0/3)
 
 
 
@@ -1289,7 +1289,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-221] uci-clock-mode over UCI (TimeMode): min(59.5 s, C), 60 s ceiling, clamp 32 -> 60 s at this build (size: M, priority: P3, DoR 9/10; milestone 2; waits OQ-0052-1 + ABC-220 merged; DoR 10/10 2026-10-30 (bapm-ABC-220-merge-fold) → Ready; **pulled 2026-10-31** → `se-ABC-221`; Security/NFR gate after QE (HARD_CEILING_MS 60 000); SE done fb3696fa (code c48a6f83; HARD_CEILING_MS 60 000; 2 363 tests; informal G8 +0.16 s); code review PASS → `qe-ABC-221` ALONE + `secnfr-ABC-221` (records))
 
 
 
