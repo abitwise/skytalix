@@ -1,0 +1,21 @@
+# Folds and artifacts of `bapm-tranche2-ruling`: `ABC-246`'s spent 9.6 s line struck; `ABC-229` closed Done (`5953c631`, QE PASS_WITH_GAPS signs UAT; QE-229-a..d dispositioned); `EPIC-010` row 5 folded and row 23 added; `ADR-0046` insertions only
+
+Records commit `60f08f49` on `grugops/bapm-tranche2-ruling` (from `main` `209f4c5f`).
+
+- **`ABC-246`** (`plans/tickets/ABC-246-…`): the § NFR triggers line that expected its own `G8` to fire the 9.6 s
+  trigger is struck with a dated mark. The trigger is spent (fired at `qe-ABC-245` `…af467c7b`); this ticket is graded
+  on `NFR-008` ≤ 10 s alone; the 9.7 s line and W1 start at `ABC-248`'s gate. DoR row 6 marked the same way.
+  § Dependencies gains a dated line: `ABC-245` Done (`2cce84e0`), `ABC-248` edits the same file and is ordered after.
+  Scope, acceptance and DoR score unchanged (10/10).
+- **`ABC-229`** (`plans/tickets/ABC-229-…`): front matter `status: done`, `column: Done`, `closed:` line; a CLOSED
+  block at the top. A1–A5 MET per `qe-ABC-229` `…2afef8bf` (PREREG `…8ecd4ea6`), merged `5953c631`. Gaps:
+  QE-229-a answered by `ABC-244` (`24b22339`) and now `ABC-248`; QE-229-b (LOW, host) recorded, no ticket (a QE
+  PREREG method question, not owed); QE-229-c closed (owner `…c2752305`); QE-229-d (INFO) recorded, no ticket.
+- **`EPIC-010`** (`plans/epics/EPIC-010-…`): row 5 → Done (`5953c631`); row 23 `ABC-248` added; a dated fold line.
+  Rows 19 (`ABC-243`), 20 (`ABC-244`) and 21 (`ABC-245`) are Done on the board and still stale in the table; named in
+  the fold line, not folded on this hop.
+- **`ADR-0046`**: one § Status paragraph and one dated section at the end (§ BA/PM ruling 2026-10-31). Insertions
+  only; no earlier line changed.
+- **`ABC-248`** (`plans/tickets/ABC-248-…`): new page.
+- **Not touched:** the board, `src/`, `tools/`, `data/`, `AGENTS.md`, `ADR-0035`. Nothing run, timed, pushed or
+  merged; no process left running.
