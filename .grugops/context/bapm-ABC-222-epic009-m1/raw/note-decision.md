@@ -1,0 +1,66 @@
+# BA/PM decision, bapm-ABC-222-epic009-m1: `ABC-222` closed (Done, QE PASS signs UAT). `EPIC-009` milestone 1 MEETS M1–M4. `ABC-221` is pullable. The 400-game width-1 pair is restated at about 18.5 h
+
+Records only, at `main` `4bd9ac6a`. Nothing was run, built, timed or played. The figures are copied from sealed QE notes.
+
+## 1. `ABC-222`: Done
+- QE's PASS (`qe-ABC-222` `…cc542c76`, by PREREG `…63f93685`) was merged at `ae7211c3`. **The QE verdict signs UAT**,
+  under the owner delegation. Front matter: `status: done`, `column: Done`, and a `closed:` line.
+- A CLOSED block lists A1–A5 and A7 MET and A6 reported. Test note 3 did not fire.
+- **QE-222-a (the build):** QE read tip `19d18df1` under the RE-SCORED block's rule. Only `src/engine.ts` differs
+  (`ABC-229`'s `quietPromotions`), and the deadline, the node check and `HARD_CEILING_MS` are unchanged. A1 is met by
+  that rule.
+- **QE-222-f closes A5's `UNKNOWN - verify`, inline:** cutechess 1.5.1 prints ≥ 10 s to whole seconds, so `22s` reads
+  < 22 500 ms.
+- QE-222-c, -g and -h are INFO, with no ticket.
+
+## 2. `EPIC-009` milestone 1: MEETS M1–M4 (a MILESTONE 1 DONE block with a grade table)
+| # | read | grade |
+|---|---|---|
+| M1 | 0 losses on time; closest call 19 991 ms (≥ 500) | MET (`simple-tournament`) |
+| M2 | least 88.00 % over 10 side-periods (≥ 75 %) | MET (`simple-tournament`) |
+| M3 | `ABC-220` A8: 0 differences in 4 200 rows against base; `ABC-222` changed no code | MET at the build |
+| M4 | 22 s / 22 s and the whole-second reading are the owner's; Security/NFR gates record no bound moved beyond his word | MET |
+| ceiling | longest move 22 002 ms (< 22 500) | MET |
+
+- `uci-clock-mode`'s half of M1 and M2 is milestone 2's (`ABC-223`). Five games do not bound a forfeit rate.
+- **M3 and `ABC-228`:** level 5 moved to 4 000 ms in `EPIC-010`, on the owner's word (`ADR-0053` d10). It was not a
+  milestone 1 build, and M3 is read per build ticket against its own base.
+- **`RISK-EPIC009-02` and `-03` are recorded as not exercised** (QE-222-d, -e), both inline and in the block:
+  - 0 `isready` arrived during a search, so `AR-UCI-BUSY` still covers it;
+  - 574 of 574 `go` lines carried `movestogo`, so the no-`movestogo` branch is read by `ABC-220`'s virtual-clock rows
+    only.
+- **`RISK-EPIC009-01` and `-04` carry their readings inline:** a real δ of ≤ 2 ms; 3.44 h at 73.9 °C median and
+  76.1 °C max.
+- **Inline closures:** the pipe latency (§ The budget T), the `tc=40/900` spelling, and cutechess sending `movestogo`.
+  Other GUIs stay `UNKNOWN - verify`.
+- Tickets table row 2 now reads Done.
+
+## 3. Milestone 2: state and pull order
+- **`ABC-221`: Ready 10/10, P3, pullable now.** Both of its pull lines are met: after `ABC-222` (`ae7211c3`) and after
+  `ABC-244` (`24b22339`). It shares `src/uci-session.test.ts` with `ABC-243` (In Development) and `ABC-242` (Ready).
+  That is rebase order only. The board's order `ABC-243` → `ABC-242` → `ABC-221` stands, and it is the Orchestrator's.
+  A dated line was added; nothing else moved.
+- **`ABC-223`: Backlog 9/10**, waiting on `ABC-221`'s merge. A dated line was added.
+  - Its "play all 10" trigger (overhead max > 300 ms) does **not** fire: the max was +2 ms.
+  - A5 and A6 read ms from the `go` clock deltas, because the PGN prints ≥ 10 s to whole seconds. A5's ≤ 60 000 ms
+    bound is unchanged.
+  - If no engine line logs the budget, A6's budget is derived from `ADR-0052` D4 (`UNKNOWN - verify` at PREREG).
+  - The ≤ ~5 h bound stands.
+- `EPIC-009` stays open until `ABC-223` reads. Board columns are the Orchestrator's.
+
+## 4. Security/NFR note (no catalog edit here)
+`AR-NFR004-A` at 22 s, through the real pipe, reads max +2 ms (median 0) over 561 searches (QE-222-b). It stands with
+its number. Placing that reading in `plans/nfr-catalog.md` is Security/NFR's.
+
+## 5. QE-225w1-b (LOW): the 400-game pair estimate is restated
+- **At width 1, about 18.5 h ALONE (range 17.5–19.4 h), plus about 1 h of QE.** It was about 22–24 h.
+- The source is `ABC-225` A6 (`qe-ABC-225-w1` `…7e9bd36f`): 21.67 games/h over 40 games.
+- The rate depends on game length (36 of 40 ended in mate), so 22–24 h stays as the slow case.
+- Restated on `ABC-225` (a top block plus two inline lines) and on `EPIC-010` (a top block, the FOLDED A6 line, and the
+  cost table's batch row). No grade moved.
+
+## For the Orchestrator
+- **`ABC-225`'s page still reads `status: in-development`**, while the board has it Done (merged `59dc3ab4`). Its merge
+  fold (close and gap dispositions QE-225w1-a, -c, -d, -e) is not done on this hop; it is outside this brief.
+- `EPIC-010`'s milestone 1 cost table total ("≈ 15 h, of which ≈ 12 h ALONE") predates the width-1 ruling and was left
+  as is. Only the batch row was restated.

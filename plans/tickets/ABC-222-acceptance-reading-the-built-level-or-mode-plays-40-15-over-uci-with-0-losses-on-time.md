@@ -1,8 +1,9 @@
 ---
 id: ABC-222
 title: "Smoke reading: `simple-tournament` plays 5 games at 40/15 over UCI with 0 losses on time, closest call ≥ 500 ms and ≥ 75 % clock use"
-status: ready
-column: Ready
+status: done
+column: Done
+closed: "2026-10-31, merged to main at ae7211c3; QE PASS (qe-ABC-222, cc542c76), which signs UAT"
 size: S
 priority: P2
 epic: EPIC-009
@@ -10,6 +11,47 @@ owner: QE/E2E
 ---
 
 # ABC-222: smoke reading of `simple-tournament` at 40/15: `EPIC-009` M1, M2 and the 22 s ceiling, in 5 games
+
+> **CLOSED 2026-10-31, Done, folded by BA/PM** (task `bapm-ABC-222-epic009-m1`, records only, at `main` `4bd9ac6a`).
+> QE's verdict is **PASS** (`qe-ABC-222` `…cc542c76`), by the pre-registered rule (PREREG `…63f93685`, sealed at
+> `9138d0a5` before any game). It was merged at `ae7211c3`. **The QE verdict signs UAT** (the owner delegation; no
+> production line changed). The reading is in `…00cc4db1` and the observations are in `…4daf292f`.
+>
+> - **A1 MET.** The pins hold. Game 1's `-debug all` log shows `setoption name TimeMode value simple-tournament` for
+>   both engines, with 0 refusals in 5 games. `-maxmoves 80` counts full moves (`PlyCount` 160 at the cap).
+> - **A2 MET.** 5 of 5 games are kept: 4 rule results and 1 move cap. 0 faults, 0 kills after a result.
+> - **A3 MET (M1).** 0 losses on time. The closest call is **19 991 ms** (bar ≥ 500 ms).
+> - **A4 MET (M2).** 10 side-periods are complete (≥ 4 needed). The least use is **88.00 %** (bar ≥ 75 %). The coverage
+>   extension did not fire.
+> - **A5 MET (22 s).** The longest move is **22 002 ms**, below 22 500 ms. That is +2 ms over 22 000 ms, and it is
+>   expected (§ FOLDED). No PGN time reads above `22s`.
+> - **A6 reported:**
+>   - the clock left after a period's 40th move is 19 991–107 990 ms;
+>   - 574 of 574 `go` lines carry `movestogo`;
+>   - 0 `isready` lines arrived during a search;
+>   - the per-move overhead has a median of 0 ms and a max of +2 ms, over 561 searches.
+> - **A7 MET.** The run was ALONE and on mains. The Tctl median was 73.9 °C and the max 76.1 °C. The frequency fell by
+>   ≤ 0.01 % against Q1. The play window was 3.44 h for 5 games.
+> - **QE-222-a (INFO, the build).** QE built the tip `19d18df1`, not `ec1e835b`, under the RE-SCORED block's rule. Over
+>   `src/uci-session.ts`, `src/engine.ts` and `src/uci.ts`, only `engine.ts` differs: `ABC-229`'s `quietPromotions`
+>   switch. The deadline, the 1 024-node check and `HARD_CEILING_MS` are unchanged. So the reading covers what `main`
+>   ships, with the `ABC-228`/`ABC-229` search included. A1's "at `ABC-220`'s merge sha" is met by that rule.
+> - **QE-222-f (INFO) closes A5's `UNKNOWN - verify`, the PGN's precision.** `cutechess-cli` 1.5.1 prints a move time
+>   of ≥ 10 s to whole seconds. So the PGN alone reads A5 exactly at the owner's whole-second reading: `22s` means
+>   < 22 500 ms. The ms figures come from the `go` clock deltas. Those are the same integer, and 0 of 561 disagree. A
+>   book move under 500 ms has no PGN time at all.
+> - **QE-222-b (INFO), for Security/NFR:** `AR-NFR004-A` at 22 s, through the real pipe and cutechess's timer, reads max
+>   +2 ms over 561 searches. The risk stands with its number. No catalog edit is made on this hop.
+> - **QE-222-d, QE-222-e (INFO): `RISK-EPIC009-02` and `-03` were not exercised.** cutechess sent 0 `isready` during a
+>   search, and it sent `movestogo` on every `go`. Both residuals stay covered as before: `AR-UCI-BUSY` and `ABC-220`'s
+>   virtual-clock rows.
+> - **QE-222-c, -g, -h (INFO): no ticket.**
+>   - c: the closest call is `ADR-0052` D3's arithmetic, less 9 ms.
+>   - g: the reader got one parsing fix after the ungraded rehearsal; no derivation moved.
+>   - h: ALONE rests on a process scan plus the Orchestrator's schedule.
+> - **Test note 3 did not fire.** Nothing goes back to BA/PM, and no re-tune is owed.
+> - **`EPIC-009` milestone 1 is complete** (`ABC-220` + `ABC-222`). The grade against M1–M4 is on the epic page.
+> - The notes are in `.grugops/context/bapm-ABC-222-epic009-m1/notes/`.
 
 > **CONFIRMED 2026-10-30 by the owner, folded by BA/PM** (task `bapm-ABC-242-225-owner`, records only). His words on
 > this item, verbatim (`orch-2026-10-30a` `…f4673b9f`): *"Whole-second reading of "≤ 22 s" - confirm"*. The first
@@ -138,7 +180,8 @@ owner: QE/E2E
 - **A5 (the ceiling, 22 s, owner 2026-10-30).** The longest single `skytalix` move, from the PGN's per-move times, is
   **≤ 22 s read to the whole second, that is < 22 500 ms**. QE pins the PGN time's precision in PREREG
   (`UNKNOWN - verify` for `cutechess-cli` 1.5.1). *(The whole-second reading was confirmed by the owner on
-  2026-10-30, `…f4673b9f`. The PREREG reads A5 against < 22 500 ms.)*
+  2026-10-30, `…f4673b9f`. The PREREG reads A5 against < 22 500 ms.)* *(**Closed 2026-10-31**, QE-222-f (`qe-ABC-222`
+  `…4daf292f`): 1.5.1 prints ≥ 10 s to whole seconds, so `22s` reads < 22 500 ms. Read: 22 002 ms, MET.)*
 - **A6 (reported, not graded):**
   - the clock left after each period's 40th move (a list);
   - the count of `go` lines sent with and without `movestogo` (`RISK-EPIC009-03`), and game 1's first `go` line,
@@ -191,4 +234,5 @@ owner: QE/E2E
 | 10 | no major unresolved blocker | ✅ `ABC-220` merged at `ec1e835b` (2026-10-30). The whole-second confirmation is the owner's and blocks nothing. *(Confirmed by the owner 2026-10-30, `…f4673b9f`.)* *(Was ❌: nothing to read until `ABC-220` merges.)* |
 
 **DoR 10/10 (2026-10-30). Ready.** It closes milestone 1. It runs ALONE on an idle host; the Orchestrator places it.
+*(**Done 2026-10-31:** QE PASS `…cc542c76`, merged `ae7211c3`. Milestone 1 is closed; see the CLOSED block at the top.)*
 *(Was: "DoR 9/10. Backlog until `ABC-220` merges.")*

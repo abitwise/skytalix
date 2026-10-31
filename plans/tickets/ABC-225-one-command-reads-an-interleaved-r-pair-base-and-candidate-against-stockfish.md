@@ -10,6 +10,21 @@ epic: EPIC-010
 
 # ABC-225: an interleaved R pair in the rating harness
 
+> **ESTIMATE RESTATED 2026-10-31 by BA/PM** (task `bapm-ABC-222-epic009-m1`, records only, at `main` `4bd9ac6a`;
+> QE-225w1-b, LOW, from `qe-ABC-225-w1` `…d0807789`). **A 400-game R pair at width 1 is about 18.5 h ALONE (range
+> 17.5–19.4 h), plus about 1 h of QE.** It was about 22–24 h.
+>
+> - **Source:** A6's own reading (`qe-ABC-225-w1` `…7e9bd36f`). 40 games at `--concurrency 1` and 4 000 ms took
+>   1.846 h, which is 21.67 games/h, or 2.77 min a game. Play wall × 10 + build = 18.46 h. The per-block range
+>   (52.6–58.1 min × 20 block-runs) gives 17.5–19.4 h.
+> - **Why it fell.** The 22–24 h came from 3.3–3.6 min a game in the `qe-ABC-228-ii` and `qe-ABC-241` R smokes. This
+>   run's games were shorter, likely because 36 of 40 ended in mate (QE's reading).
+> - **How firm it is.** The rate depends on game length, and 40 games is a small sample for a rate. Read 18.5 h as the
+>   central figure and the old 22–24 h as the slow case if games run longer. It is still an estimate: the batch reads
+>   its own wall.
+> - **Nothing graded moves.** A6 was MET as written: both numbers were reported from the run's own times. Scheduling an
+>   ALONE run of about 18–20 h, or a narrower batch, is the Orchestrator's call.
+
 > **UNBLOCKED 2026-10-30 by the owner, folded by BA/PM** (task `bapm-ABC-242-225-owner`, records only, at `main`
 > `5090a4d6`; `src/`, `tools/` and `data/` untouched). His words, verbatim (`orch-2026-10-30a` `…65848126`):
 > *"ABC-242: accept, ABC-225 - approve to run one at a time"*.
@@ -31,7 +46,7 @@ epic: EPIC-010
 > - **A6 is re-worded for width 1.** A smoke at width 1 cannot project a width-2 pair (QE-225-b (iii)), so A6 now
 >   projects the full pair at width 1 and no longer grades the width-2 ≤ 10 h estimate. By the rate above, a
 >   400-game pair at width 1 is **about 22–24 h** ALONE, against about 9 h at width 2. That is an estimate (A6 reads
->   it). The width of `EPIC-010`'s batch is not set by this word, and it is the Orchestrator's to schedule or take to
+>   it). *(Restated 2026-10-31 from A6's reading: about 18.5 h, range 17.5–19.4 h; see the block at the top.)* The width of `EPIC-010`'s batch is not set by this word, and it is the Orchestrator's to schedule or take to
 >   the owner.
 > - **Column: Blocked → In Development** (the Orchestrator's board, 18:10Z). The order is `se-ABC-225-main` (merge
 >   and budget), then QE re-reads A5 and A6 ALONE at width 1. **DoR stays 10/10.**
@@ -124,7 +139,7 @@ epic: EPIC-010
   absolute host path or username appears in any output file.
 - **A6 (cost; re-worded 2026-10-30, `bapm-ABC-242-225-owner`).** The smoke run's wall at width 1 is reported, with
   its start and end times and its games per hour. The full 400-game pair's wall **at width 1** is projected from it,
-  estimated at about 22–24 h. A width-2 figure is not projected (QE-225-b (iii)). A6 is MET when both numbers are
+  estimated at about 22–24 h *(read 2026-10-31: 18.46 h, range 17.5–19.4 h; the block at the top)*. A width-2 figure is not projected (QE-225-b (iii)). A6 is MET when both numbers are
   reported from the run's own times. *(Was: "projected from it (target ≤ 10 h at width 2, the R rate 44–46
   games/h)".)*
 

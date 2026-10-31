@@ -10,6 +10,18 @@ owner: BA/PM
 
 # EPIC-010: the verified engine gaps, closed one measured change at a time, against an outside opponent
 
+> **ESTIMATE RESTATED 2026-10-31 by BA/PM** (task `bapm-ABC-222-epic009-m1`, records only, at `main` `4bd9ac6a`;
+> QE-225w1-b, LOW). **Milestone 1's batch, a 400-game interleaved R pair (200 + 200) at width 1, is about 18.5 h
+> ALONE (range 17.5–19.4 h), plus about 1 h of QE.** It was about 22–24 h.
+>
+> - The source is `ABC-225`'s A6 reading (`qe-ABC-225-w1` `…7e9bd36f`): 21.67 games/h at `--concurrency 1` and
+>   4 000 ms, over 40 games, ALONE. The Tctl median was 74.1 °C and the max 78.8 °C.
+> - The rate depends on game length (36 of 40 ended in mate), and 40 games is a small sample for a rate. So 22–24 h
+>   stays as the slow case. The batch reads its own wall.
+> - Changed: the cost table's batch row and the 2026-10-30 FOLDED block's A6 line (dated inline). The width-2 ≈ 9 h
+>   figure is not re-read: no width-2 run is planned (QE-225-b (iii)).
+> - Scheduling an ALONE run of about 18–20 h is the Orchestrator's call. `ABC-225`'s page carries the same block.
+
 > **CUT 2026-10-30 by BA/PM** (task `bapm-g8-headroom-cut`, records only, at `main` `161e940d`; `src/`, `data/`,
 > `tools/`, the board and the ADRs untouched). **`ABC-244` cut** (S, P1, test-only, DoR 10/10): the time-blind
 > `ABC-230` / `ABC-241` virtual-clock rows take the coarsest kill-set-preserving step (`ADR-0046` § Addendum
@@ -31,7 +43,8 @@ owner: BA/PM
 > - **`ABC-225`: Blocked → In Development.** A5 runs at `--concurrency 1`.
 >   - Its wall is about 2 h, or about 2.2–2.4 h by the recorded 4 000 ms width-1 R rate.
 >   - The `rpair` budget still moves 3 000 → 4 000 (`se-ABC-225-main`). DoR stays 10/10.
->   - A6 now projects the full pair at width 1, at about 22–24 h. **For the Orchestrator:** milestone 1's batch
+>   - A6 now projects the full pair at width 1, at about 22–24 h *(read 2026-10-31: about 18.5 h, range 17.5–19.4 h;
+>     the ESTIMATE RESTATED block at the top)*. **For the Orchestrator:** milestone 1's batch
 >     costs about 9 h at width 2 (§ cost). The owner's word covers `ABC-225`'s A5, not the batch's width.
 > - Tickets table: rows 3 (`ABC-225`) and 10 (`ABC-242`) changed. The notes are in
 >   `.grugops/context/bapm-ABC-242-225-owner/notes/`.
@@ -416,7 +429,7 @@ same under every option and are not counted):
 | `ABC-235` | S2, no playing reading | 0 games |
 | `ABC-240` | S2, no playing reading | 0 games |
 | `ABC-225` | its A5 run, 40 games | ≈ 1 h ALONE *(2026-10-30: at `--concurrency 1` by the owner's word, ≈ 2 h, or ≈ 2.2–2.4 h by the recorded 4 000 ms width-1 R rate)* |
-| milestone 1's batch | an interleaved R pair, 200 + 200 | ≈ 9 h ALONE plus ≈ 1 h *(at width 2; at width 1 ≈ 22–24 h, an estimate from the 4 000 ms width-1 R smokes. The batch's width is the Orchestrator's to schedule or take to the owner, 2026-10-30)* |
+| milestone 1's batch | an interleaved R pair, 200 + 200 | ≈ 9 h ALONE plus ≈ 1 h *(at width 2; at width 1 ≈ 22–24 h, an estimate from the 4 000 ms width-1 R smokes. The batch's width is the Orchestrator's to schedule or take to the owner, 2026-10-30)* *(**Restated 2026-10-31:** at width 1 ≈ 18.5 h ALONE, range 17.5–19.4 h, plus ≈ 1 h, from `ABC-225` A6's 21.67 games/h (`qe-ABC-225-w1` `…7e9bd36f`); 22–24 h is the slow case)* |
 | **total** | | **≈ 15 h, of which ≈ 12 h ALONE** (R heat: Tctl median 82–83 °C, max 84–87 °C) |
 
 Under (b), the same milestone was ≈ 60–80 h ALONE. A confirmation smoke adds ≤ 0.45 h per ticket that needs one.
