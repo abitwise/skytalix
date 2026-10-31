@@ -1,0 +1,58 @@
+== games
+g01: opening FEN side w; plies 87; rule result: Finished game 1 (skytalix-a vs skytalix-b): 1/2-1/2 {Draw by 3-fold repetition}
+g02: opening FEN side w; plies 128; rule result: Finished game 1 (skytalix-a vs skytalix-b): 0-1 {Black mates}
+g03: opening FEN side w; plies 59; rule result: Finished game 1 (skytalix-a vs skytalix-b): 1-0 {White mates}
+g04: opening FEN side w; plies 160; move cap: Finished game 1 (skytalix-a vs skytalix-b): 1/2-1/2 {Draw by adjudication: maximal game length}
+g05: opening FEN side w; plies 140; rule result: Finished game 1 (skytalix-a vs skytalix-b): 0-1 {Black mates}
+
+== A1 setoption lines (game 1)
+  skytalix-a: setoption name TimeMode value simple-tournament
+  skytalix-b: setoption name TimeMode value simple-tournament
+games with both engines sent `setoption name TimeMode value simple-tournament`: 5 of 5; engine refusals `TimeMode takes`: 0
+
+== A2
+games 5; faults 0 []; engine kill/timeout lines after the result: 0
+
+== A3
+losses on time: 0
+closest call: 19991 ms  (g05 skytalix-b move 40, clock 41991, elapsed 22000 [clock])
+five least: [('g05', 'skytalix-b', 40, 19991), ('g04', 'skytalix-a', 40, 19992), ('g04', 'skytalix-b', 40, 19993), ('g04', 'skytalix-b', 80, 39990), ('g04', 'skytalix-a', 80, 39991)]
+
+== A4 completed periods (game, engine, side, period, used ms, fraction, clock left after 40th, book moves)
+  g01 skytalix-a w P1: used 836014 ms = 92.89 %; left 63986 ms; book 2
+  g01 skytalix-b b P1: used 836015 ms = 92.89 %; left 63985 ms; book 2
+  g02 skytalix-a w P1: used 792016 ms = 88.00 %; left 107984 ms; book 4
+  g02 skytalix-b b P1: used 792010 ms = 88.00 %; left 107990 ms; book 4
+  g04 skytalix-a w P1: used 880008 ms = 97.78 %; left 19992 ms; book 0
+  g04 skytalix-a w P2: used 880001 ms = 97.78 %; left 39991 ms; book 0
+  g04 skytalix-b b P1: used 880007 ms = 97.78 %; left 19993 ms; book 0
+  g04 skytalix-b b P2: used 880003 ms = 97.78 %; left 39990 ms; book 0
+  g05 skytalix-a w P1: used 858012 ms = 95.33 %; left 41988 ms; book 1
+  g05 skytalix-b b P1: used 880009 ms = 97.78 %; left 19991 ms; book 0
+completed side-periods: 10; min use 88.00 %
+
+== A5
+longest move: 22002 ms (g02 skytalix-a move 6 [clock], PGN '22s'); excess over 22 000 ms: 2 ms; < 22 500: True
+PGN times present 561 of 574; max PGN time 22.0 s; PGN strings > 22: 0
+moves over 22 000 ms: 150 of 574
+PGN vs exact mismatches: 0 []
+stamp - exact over 564 moves: min -1 max 1 median 0.0
+
+== A6
+clock left after each period's 40th move: [('g01', 'skytalix-a', 'P1', 63986), ('g01', 'skytalix-b', 'P1', 63985), ('g02', 'skytalix-a', 'P1', 107984), ('g02', 'skytalix-b', 'P1', 107990), ('g04', 'skytalix-a', 'P1', 19992), ('g04', 'skytalix-a', 'P2', 39991), ('g04', 'skytalix-b', 'P1', 19993), ('g04', 'skytalix-b', 'P2', 39990), ('g05', 'skytalix-a', 'P1', 41988), ('g05', 'skytalix-b', 'P1', 19991)]
+go lines with movestogo 574, without 0; first go: g01 skytalix-a: go wtime 900000 btime 900000 movestogo 40
+isready during a search: 0
+moves 574: book 13, searched 561; searched < 21 000 ms: 0
+overhead (elapsed - 22 000) over searched moves: median 0 ms, max 2 ms, min -1 ms
+overhead over searched moves >= 21 000 ms: median 0 ms, max 2 ms; exact-clock only: max 2 ms
+book moves: 13, elapsed max 1 ms, total 4 ms
+
+== A7 host (play window: first game start to last game end, harness.log)
+play wall 12368 s; samples 1231; largest gap 11 s
+  Q1: n 308 Tctl median 73.9 max 76.1; fmax median 5033696.5 kHz (+0.00 % vs Q1); fmean median 1377149.0 kHz; load1 median 1.07
+  Q2: n 308 Tctl median 74.1 max 76.0; fmax median 5032956.0 kHz (-0.01 % vs Q1); fmean median 1375255.0 kHz; load1 median 1.06
+  Q3: n 307 Tctl median 73.5 max 75.9; fmax median 5038719 kHz (+0.10 % vs Q1); fmean median 1371048 kHz; load1 median 1.07
+  Q4: n 308 Tctl median 74.0 max 76.0; fmax median 5034123.5 kHz (+0.01 % vs Q1); fmean median 1385884.0 kHz; load1 median 1.07
+Tctl median (all) 73.9; max 76.1
+frequency fall > 5 % from Q1 in any quarter: False
+samples with a foreign vitest: 0; with more than one cutechess-cli: 0

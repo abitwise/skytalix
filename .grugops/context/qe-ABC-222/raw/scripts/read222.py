@@ -48,7 +48,7 @@ def pgn_read(path):
 def pgn_secs(comment):
     if comment is None:
         return None
-    m = re.search(r"(\d+(?:\.\d+)?)s$", comment.strip())
+    m = re.search(r"(?:^|\s)(\d+(?:\.\d+)?)s(?:,|$)", comment.strip())
     return (float(m.group(1)), m.group(1)) if m else None
 
 
@@ -215,6 +215,8 @@ if bk:
     print(f"book moves: {len(bk)}, elapsed max {max(bk)} ms, total {sum(bk)} ms")
 
 print("\n== A7 host (play window: first game start to last game end, harness.log)")
+if not (out / "harness.log").exists():
+    sys.exit(0)
 H = (out / "harness.log").read_text().splitlines()
 starts = [int(re.search(r" t=(\d+)", l).group(1)) for l in H if re.match(r"game \d+ start", l)]
 ends = [int(re.search(r" t=(\d+)", l).group(1)) for l in H if re.match(r"game \d+ end", l)]
