@@ -1642,3 +1642,4 @@ _Updated: 2026-08-19 by BA/PM (task `cut-agents-md-cap-2026-08-19`, Workflow 07)
 | ABC-225 (merge) | Interleaved R-pair command (rpair), 4 000 ms | tools/rating 9988a778 + 3dca0e67 | qe-ABC-225 FAIL (thermal, width 2); qe-ABC-225-w1 PASS_WITH_GAPS (width 1) | merged 59dc3ab4 2026-10-30, not pushed | Done (Orchestrator) |
 | ABC-244 (merge) | Time-blind virtual-clock rows take the coarsest kill-set-preserving step (ADR-0046 addendum) | test 25282ad4 | qe-ABC-244 PASS; secnfr-ABC-244 PASS | merged 24b22339 2026-10-30, not pushed | Done (Orchestrator) |
 | ABC-222 (merge) | Smoke reading: simple-tournament 5 games at 40/15 | reading only (build 19d18df1) | qe-ABC-222 PASS | merged ae7211c3 2026-10-31, not pushed | Done (Orchestrator) |
+| ABC-243 (merge) | Hash row reads a bare go at level 5; TT memory row names its budget; QE-241-a UCI fen row | test 8772cf36 | qe-ABC-243 PASS | merged 3628fe99 2026-10-31, not pushed | Done (Orchestrator) |
