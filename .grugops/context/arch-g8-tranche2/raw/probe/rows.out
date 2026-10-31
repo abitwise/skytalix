@@ -1,0 +1,193 @@
+## top 60 rows (ms)
+  401.4  src/search.null-move.test.ts | QE-208-a — an abort inside a null move's subtree still hands the root back byte-identical | position-6, readings 3 to 25: 0 mutated roots, and aborts landing inside a null subtree
+  293.6  src/search.null-move.test.ts | A2 — the instrumented search makes 0 null moves in check, and 0 below three non-pawn pieces | search() to depth 4 and chooseMove deepened to 4: every null move is made out of check, with three or more pieces
+  248.0  src/search.null-move.test.ts | QE-208-b — the null child's key is written: every table probe reads the key of the position it probes | search() on position-6 at depth 6
+  247.6  src/engine.test.ts | ABC-230 A3 and A4 — no prior keys is base, node for node, and the doors take none | A4: an empty list is node-equal to an absent one over the endgames and the thirty
+  163.4  src/cli.test.ts | ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square | A4: with repetitionKeyHistory injected the default level plays d8e8 at exactly 0; base does not
+  147.8  src/cli.test.ts | ABC-042 — the shape of what was delivered | N8-LANE — this file spawns TWENTY-EIGHT children and no more
+  132.6  src/search.null-move.test.ts | A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth | zugzwang.001: chooseMove on a frozen clock to depth 9 plays e1f1
+  128.6  tools/grugops/qe-hop-integrity.test.ts | ABC-105 A9 — the security-nfr substitute is visible, not silent (real notes) | --sweep lists ABC-073 as a finding
+  116.9  src/search.null-move.test.ts | QE-208-b — the null child's key is written: every table probe reads the key of the position it probes | chooseMove on position-6 deepened to 6
+   91.3  src/history-pane.nfr.test.ts | A11 — the pane derives nothing, and this is a CALL COUNT | evaluates history.ts's module body NOWHERE ON THE FRAME PATH — measured, not pattern-matched
+   85.4  src/zobrist.test.ts | ABC-075 property — the ep component tracks the ep FIELD, not availability (ADR-0020) | holds at every node within 2 plies of every perft position
+   85.4  src/uci-session.test.ts | ABC-241 A4, A5 — UCI: the prior keys are repetition keys | A5: the CLI level seam's injected list equals UCI's, key for key, and both play d8e8
+   85.3  src/uci-session.test.ts | ABC-167 A5 — the D4 time rule, read from the info line's time | white reads wtime: go wtime 1000 btime 9000 -> 50 ms (within 2 x 1 ms)
+   85.3  src/legal.test.ts | ABC-206 A2 — the faster pieces equal what they replace | givesCheck(p, m) equals make, isInCheck, unmake for every legal move, and p is unchanged
+   78.2  src/engine.test.ts | ABC-170 A5 — the limits only shorten; the ceiling still holds | on an infinite budget, maxDepth 1000 returns within the same consultation count
+   77.5  src/uci-session.test.ts | ABC-167 A4 — bad input holds no position | A4-a2: an echoed control character in a go value is dropped from the info string
+   74.1  src/uci-session.test.ts | ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A13 — busy isready (ADR-0052 D7), default lane | isready that arrives mid-search is answered once, after the bestmove, in order
+   73.0  src/uci-session.test.ts | ABC-167 A5 — the D4 time rule, read from the info line's time | black reads btime: go wtime 1000 btime 9000 -> 450 ms (within 2 x 10 ms)
+   72.0  tools/grugops/qe-hop-integrity.test.ts | ABC-105 A3 — the refs-only false pass is closed (real notes) | coverage() over EVERY real note (no --ticket folder filter) reads ABC-062 and ABC-073 as findings
+   67.8  src/cli.test.ts | ABC-173 — every vitest run carries the V8 heap ceiling, read where it applies (ADR-0008 addendum 2026-10-19) | A6 (static) — the history-pane and transposition children inherit childOf's construction: no env key, no heap flag
+   67.5  src/uci-session.test.ts | ABC-171 A7 — the blunder path | two sessions on the same seededRandom(k) write the same bestmove sequence
+   66.1  src/uci-session.test.ts | ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12) | at the default, a bare go takes the chooseMove path: score, and time within 4 000 ms
+   66.0  src/uci-session.test.ts | ABC-167 A7 — the D12 limits | go depth 3 reports depth 3 on a clock where an unlimited go reaches depth >= 5
+   65.4  src/uci-session.test.ts | ABC-167 A5 — the D4 time rule, read from the info line's time | a bare go: go -> 4000 ms (within 2 x 100 ms)
+   64.4  src/uci-session.test.ts | ABC-171 A2 — setoption | setoption name Hash value 64 writes nothing and changes nothing
+   64.3  src/uci-session.test.ts | ABC-167 A7 — the D12 limits | A7-f3: go movetime 1e2 and movestogo 0 are dropped with one info string
+   64.2  src/uci-session.test.ts | ABC-167 A6 — infinite waits for stop | A6-d1: go ponder holds at the capped ceiling; ponderhit releases once
+   64.0  src/uci-session.test.ts | ABC-167 A7 — the D12 limits | ABC-197 R2: go depth 0 on step 100 searches G = 4 000, time in [4 000, 4 200]
+   63.2  src/uci-session.test.ts | ABC-167 A7 — the D12 limits | A7-f2: go movetime with no value searches as a bare go
+   59.1  src/search.null-move.test.ts | the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn null move off, as every older door does | chooseMoveWithoutQuiescenceEvasions makes null moves on position-6 deepened to 4, and changes the work
+   58.7  src/search.null-move.test.ts | the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn null move off, as every older door does | searchWithoutQuiescenceEvasions makes null moves on position-6 at depth 4, and changes the work
+   57.9  src/uci-session.test.ts | ABC-167 A7 — the D12 limits | go movetime 1000 searchmoves e2e4 -> one info string, all moves searched
+   56.6  src/uci-session.test.ts | ABC-167 A5 — the D4 time rule, read from the info line's time | G = 3 500, under the default level 5's 4 000: go wtime 60000 btime 60000 winc 1000 binc 1000 -> 3500 ms (within 2 x 100 ms)
+   54.6  src/cli.test.ts | ABC-173 — every vitest run carries the V8 heap ceiling, read where it applies (ADR-0008 addendum 2026-10-19) | C2 — no src test file calls an asynchronous child_process form; at least four synchronous call sites exist
+   54.0  src/uci-session.test.ts | ABC-171 A6 — a level change is observable (EPIC-007 M7) | level 5: go wtime 60000 btime 60000 winc 1000 binc 1000 -> 3500 ms (within 2 x 100 ms)
+   49.9  src/engine.capacity.test.ts | ABC-122 A8: src/engine.ts's KEY_ARRAY_CAPACITY guard, reached through chooseMove() | ends every line at ply 128 with a leaf's score once the deepening passes it: no node or key past it
+   46.4  tools/grugops/qe-hop-integrity.test.ts | ABC-105 A4 — the sweep's counts partition the Done rows (real board) | prints each count line and every finding by id, exits 1; 0 when every row is grandfathered
+   46.0  src/cli.test.ts | ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square | A4: with a legal ep capture available the same line is not a draw
+   45.3  src/levels.test.ts | ABC-174 A3 — the default plays as the engine: chooseMove at 4 000 ms (ABC-228, ADR-0053 d10) | move, depth and nodes are equal on 30 of 30 positions, for each of two seeds
+   45.1  src/puzzle-suite.test.ts | A6 — every puzzle carries its provenance, and the mates are the rules' answer | each mate row has no mate in 1, and its accepted moves are EXACTLY the moves that mate in 2
+   45.0  src/uci-session.test.ts | ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path | setoption name Skill Level value 7 sets 7: a bare go searches 30 000 ms
+   44.6  src/cli.test.ts | ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square | A7: the move the search scores 0 is the move after which gameStatusOf reports the claim
+   39.1  src/evaluate.king-mobility.test.ts | A6 — purity: evaluation leaves the position byte-identical | over ABC-076's corpus, the perft roots and the king positions, twice, with the same score
+   39.1  src/search.null-move.test.ts | the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn null move off, as every older door does | chooseMoveWithoutReductions makes no null move on position-6 deepened to 4
+   38.8  src/uci-session.test.ts | ABC-167 A7 — the D12 limits | go nodes 20000 -> nodes <= 21 024, unless depth 1 alone took more
+   38.1  src/san.test.ts | toSan — the logic beneath the table | emits only strings of the SAN grammar
+   37.6  src/cli.test.ts | ABC-101 — --difficulty selects a level, and the played engine is that level | A8′ — the seam built for each level moves exactly as `createLevel` does, on one seed and one injected clock
+   37.2  src/san.qualifier.hardening.test.ts | ABC-025 A1 — the qualifier is the shortest ladder entry that names exactly one move | holds for every non-pawn, non-castle legal move of all 207 corpus positions, both call forms
+   35.5  src/uci-session.test.ts | ABC-167 A6 — infinite waits for stop | A6-e2: position startpos writes the held bestmove first, in the position it searched
+   34.9  src/search.null-move.test.ts | the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn null move off, as every older door does | chooseMoveWithoutNullMove makes no null move on position-6 deepened to 4
+   34.6  src/book.test.ts | ABC-094 A3 — variety after 1. e4 on seeds 1 to 10 | ten seeds, one pick each, at least 3 distinct replies
+   34.1  src/search.test.ts | A1 — pruned and unpruned scores are identical | position-4 at depth 2
+   34.1  src/search.null-move.test.ts | the null move — makeNullMove / unmakeNullMove and zobristKeyAfterNullMove | unmakeNullMove leaves every position byte-identical
+   32.6  src/perft.test.ts | ABC-006 acceptance — exact perft counts | startpos perft(4) = 197281
+   31.5  src/uci-session.test.ts | ABC-167 A6 — infinite waits for stop | A6-e3: ucinewgame writes the held bestmove first, in the position it searched
+   30.8  src/search.null-move.test.ts | the null move — makeNullMove / unmakeNullMove and zobristKeyAfterNullMove | passes: the side flips, the ep square clears, the halfmove clock is 0, fullmove moves as makeMove's
+   30.4  src/engine.test.ts | ABC-170 A3 — absent limits are today's engine, clock read for clock read | returns identical move, score, depth, nodes and elapsedMs on perft root position-4
+   30.3  src/transposition.test.ts | A5 — the only non-losing line repeats, and it scores exactly 0 | search(), depth 4: the perpetual scores exactly 0 and is played — in 7 295 nodes
+   29.7  src/search.null-move.test.ts | the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn null move off, as every older door does | searchWithoutReductions makes no null move on position-6 at depth 4
+   29.4  src/uci-session.test.ts | ABC-167 A5 — the D4 time rule, read from the info line's time | A5-b3: position startpos, go wtime 1000 btime 1000 movestogo 5 -> 200 ms (within 2 x 10 ms)
+
+## src/uci-session.test.ts by top-level describe (rows, ms)
+  23    380.4  ABC-167 A7 — the D12 limits
+  12    334.9  ABC-167 A5 — the D4 time rule, read from the info line's time
+  11    148.1  ABC-167 A6 — infinite waits for stop
+  55    147.4  ABC-220 — TimeMode simple-tournament over UCI (ADR-0052)
+   5     93.3  ABC-241 A4, A5 — UCI: the prior keys are repetition keys
+   6     80.4  ABC-167 A4 — bad input holds no position
+   6     79.9  ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12)
+   4     79.6  ABC-171 A7 — the blunder path
+  10     75.7  ABC-171 A2 — setoption
+   3     56.5  ABC-171 A6 — a level change is observable (EPIC-007 M7)
+   9     47.3  ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path
+  27     39.4  ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4)
+   2     39.1  ABC-167 A3 — a move from a position
+   7     21.8  ABC-230 A2, A3, A5 — the session hands the search the game's prior keys
+   3     21.0  ABC-167 A9 — ignored and reset
+  11     18.0  ABC-167 A11 — capability-free, and M4
+   2     13.0  ABC-171 A8 — no reseed, and one draw per blunder-level search
+   1     10.4  ABC-171 A4 — OwnBook off
+  10      9.8  ABC-171 A13a — the seed oracle floor(random() * 2^32) (QE-171-a)
+   1      8.1  ABC-242 A4 — Skill Level 1: the CLI seam, UCI and a direct createLevel call agree
+   2      1.8  ABC-167 A1-A2 — handshake and ready
+   2      1.5  ABC-171 A9 — a bad book
+   3      0.9  ABC-171 A3 — a book hit (EPIC-007 M6)
+   2      0.8  ABC-167 A8 — mate scores
+   3      0.7  ABC-171 A5 — the book is read once, and at the right time
+   2      0.6  ABC-171 A13c — the dropped-limit line names nodes and mate, as one line (QE-171-c)
+   5      0.5  ABC-171 A13b — a book hit at a blunder level draws 0 seeds (QE-171-b)
+   1      0.2  ABC-171 A1 — the option lines
+   1      0.2  ABC-171 A11 — book.ts is a type-only import
+   1      0.2  ABC-171 A13d — an invalid OwnBook keeps true (QE-171-d)
+   1      0.2  ABC-171 A10 — infinite with a book hit
+   1      0.2  ABC-167 A10 — quit
+
+## src/search.null-move.test.ts by top-level describe (rows, ms)
+   1    401.4  QE-208-a — an abort inside a null move's subtree still hands the root back byte-identical
+   2    364.9  QE-208-b — the null child's key is written: every table probe reads the key of the position it probes
+   3    313.1  A2 — the instrumented search makes 0 null moves in check, and 0 below three non-pawn pieces
+   7    248.8  the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn null move off, as every older door does
+   6    150.1  A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth
+   3     67.3  the null move — makeNullMove / unmakeNullMove and zobristKeyAfterNullMove
+   2      2.0  both recursions try the null move through the predicate, at null-window nodes, and return beta
+   2      1.5  QE-208-c — every door's nullMove switch literal is false; only the shipped path and the ABC-228 and ABC-229 doors turn it on
+  12      1.0  nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces
+
+## src/engine.test.ts by top-level describe (rows, ms)
+   2    255.6  ABC-230 A3 and A4 — no prior keys is base, node for node, and the doors take none
+   6    138.0  ABC-170 A3 — absent limits are today's engine, clock read for clock read
+   2     86.2  ABC-170 A5 — the limits only shorten; the ceiling still holds
+   3     30.6  ABC-170 A2 — maxNodes aborts, and the last COMPLETED iteration is played
+   1     20.0  A3 (identity) — the completed iteration equals search() in move AND score
+   5     15.8  ABC-230 A9 and A5 — the clock and the 100-key cap bound what the search reads
+   1     12.5  ABC-086 A1 — the same position, budget and fresh virtual clock choose the same move
+   4      8.4  ABC-230 A1 — a third occurrence scores exactly 0 at the root; base scores it otherwise
+   6      8.2  A4 — no fixed depth anywhere in the delivered engine
+   3      6.8  ABC-170 A1 — maxDepth stops deepening once that depth has completed
+   2      3.9  ABC-230 A8 — a second occurrence before the root is not a draw (probe H2)
+   2      2.4  A3 — an aborted iteration's move is discarded, not returned
+   3      2.2  ABC-086 A7 — the step guard and the reading shape, asserted at the factory
+   2      2.2  A6 — the implementation IS an EngineSeam, and runTurnLoop drives it
+   2      2.1  ABC-086 A5 — the virtual clock stays off the shipped path
+   5      2.1  RF-1 — a budget above the hard ceiling is CAPPED at it, not honoured
+   3      1.1  A2 — a budget far below one iteration's cost still returns a move, and stops near it
+   4      0.7  ABC-230 — trimPriorKeys: the reversible window, root excluded, at most 100
+   1      0.2  ABC-086 A4 — the virtual-clock module reads no real clock and no entropy
+   2      0.2  ABC-086 A6 — each virtual clock keeps its own state
+   3      0.1  A7 — a legal move comes back at a budget with nothing left in it
+   2      0.1  A5 — the completed depth is monotonically non-decreasing in the budget
+
+## src/cli.test.ts by top-level describe (rows, ms)
+   4    254.5  ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square
+  11    150.7  ABC-042 — the shape of what was delivered
+   9    125.4  ABC-173 — every vitest run carries the V8 heap ceiling, read where it applies (ADR-0008 addendum 2026-10-19)
+  12     39.8  ABC-101 — --difficulty selects a level, and the played engine is that level
+   3     16.0  ABC-230 A1, A3 — the CLI's level seam hands the search the game's prior keys
+   8      6.0  ABC-043 — the live session
+   8      5.4  ABC-042 — the accepted set is closed
+   1      5.4  ABC-242 A4 — the CLI seam at level 1: a blunder that reads the third occurrence as 0
+   6      2.4  ABC-042 — a human can run it
+   4      2.3  ABC-064 — the frame's shape and the status panel, on the three non-default children
+   2      1.7  ABC-192 — setup hands the guard process.stdout, and a vitest bump names its re-run list
+   4      1.5  ABC-065 — AGENTS.md's `Dev / run` slot is reachable and its option list is the accepted set
+   1      1.4  this file's own instruments
+   5      1.4  ABC-176 — a heap-guard refusal is named on stdout and handed to vitest as an unhandled error
+   3      1.3  ABC-042 — the resolved colour reaches the board
+   1      1.1  ABC-059 — every claim AGENTS.md makes about `Dev / run` agrees with the delivered command
+   4      1.0  ABC-044 — the result screen reaches the player
+   4      1.0  ABC-203 — PGN export through the delivered entry point
+   1      0.9  ABC-066 — the usage line is a command the user can actually run
+   3      0.8  ABC-046 — `quit` and `new` through the delivered entry point
+   6      0.8  ABC-115 — a reader that closes early ends the session quietly, at the right code
+   1      0.7  ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040)
+   3      0.7  ABC-042 — a rejected command line starts no game
+   1      0.4  ABC-063 — UAT-16's six game verbs, by name
+   1      0.3  ABC-045 — `resign` reaches the screen as reason 8
+   1      0.1  ABC-152 V3 — the lane runs src/ without vite's module runner (ADR-0042 addendum)
+   1      0.1  ABC-062 — the two command lines that reach the refusal path untested
+   1      0.1  ABC-109 — AGENTS.md stays inside its byte budget
+
+## tools/grugops/qe-hop-integrity.test.ts by top-level describe (rows, ms)
+   3    134.1  ABC-105 A9 — the security-nfr substitute is visible, not silent (real notes)
+   3     76.7  ABC-105 A3 — the refs-only false pass is closed (real notes)
+   2     47.7  ABC-105 A4 — the sweep's counts partition the Done rows (real board)
+   3      8.4  ABC-105 A2 — it passes a real QE hop (real notes)
+   1      6.5  ABC-105 A1 — it catches the measured failure (real notes)
+  16      4.5  ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag
+   1      1.6  ABC-105 Test note 5 — the committed cutover snapshot is pinned
+   3      0.3  ABC-105 A5 — id normalisation decides both the folder and the refs condition
+
+## src/levels.test.ts by top-level describe (rows, ms)
+   1     45.3  ABC-174 A3 — the default plays as the engine: chooseMove at 4 000 ms (ABC-228, ADR-0053 d10)
+   8     25.5  ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0
+   1     24.8  A9 — different seeds actually differ
+   2     13.3  seededRandom — the generator
+   1      9.2  A7 — seeded, in deterministic mode
+   1      7.2  A4 — the easiest level over ≥ 200 moves
+   1      4.7  ABC-241 A5 — the blunder path's appended root key is a repetition key
+   3      3.9  ABC-230 — the level hands the game's prior keys on (ADR-0054 decision 2)
+   1      3.2  QE-087-b — the scored list is the engine's, not a self-consistent lie
+   1      2.9  QE-087-a — the seed never reaches the engine (ADR-0027 d1)
+   1      2.6  A10 — the seed is threaded, not global
+   3      2.4  A6 — the default level
+   4      2.1  A1 — the level table
+   4      1.3  the blunder path's edge cases (ADR-0032 decisions 1-2)
+   1      0.9  Security/NFR R1 (QE-087-c) — the level clamps its own total to HARD_CEILING_MS
+   4      0.6  ABC-212 A1 — levels 6 and 7 above the default (ADR-0045 § AMENDMENT A1-A2)
+   3      0.3  ABC-174 A7 — the time budget, from the data (NFR-004; ADR-0038 decision 3)
+   1      0.3  ABC-174 A4 — the mechanism's shape: a budget and a rate per level
+   2      0.2  A8 — the level module's boundary
+   1      0.2  ABC-174 A1 — the table is ADR-0045 D1's
+   1      0.1  ABC-174 A2 — the default is level 5 (ABC-212: no longer the top)
