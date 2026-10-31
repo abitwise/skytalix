@@ -1,0 +1,16 @@
+{
+  "refs": ["arch-ABC-221-records", "ABC-221", "ABC-242", "ABC-228", "ABC-245", "EPIC-009", "ADR-0052", "ADR-0054",
+           "ADR-0045", "ADR-0053", "NFR-004", "NFR-009", "SE-221-a", "SE-221-b", "SEC-221-b", "QE-221-b", "SE-242-a",
+           "se-ABC-221/20261031T053932Z-software-engineer-observation-7896971d",
+           "qe-ABC-221/20261031T060935Z-qe-e2e-observation-8ad25906",
+           "qe-ABC-221/20261031T060935Z-qe-e2e-observation-f9b43b6d",
+           "secnfr-ABC-221/20261031T055207Z-security-nfr-decision-ef060512",
+           "secnfr-ABC-221/20261031T055207Z-security-nfr-observation-8881d726",
+           "qe-ABC-242/20261031T051332Z-qe-e2e-observation-b9f3cd67",
+           "af32f82c", "9395d8dc", "c48a6f83", "e42b637b", "af5b2b49", "9c008db4", "db8fea11",
+           "src/uci-session.test.ts", "src/levels.ts"],
+  "notes": [
+    { "kind": "decision", "confidence": "high: a records ruling read from QE, SE and Security/NFR sealed notes and the spawn block at main 9c008db4; no run", "bodyFile": "note-decision.md" },
+    { "kind": "observation", "confidence": "high: dated text lines, each traced to a sealed note or a merge on main; levels.ts :43 NFR-005 wording UNKNOWN - verify", "bodyFile": "note-observation.md" }
+  ]
+}
