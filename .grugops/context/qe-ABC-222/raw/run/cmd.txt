@@ -1,0 +1,13 @@
+# per game n = 1..5 (opening line n); paths are placeholders (ADR-0049 d4); harness raw/scripts/run-222.sh
+<cutechess> \
+  -engine name=skytalix-a cmd=<node> arg=<clone>/dist/uci.js dir=<clone> stderr=<out>/gNN-a.stderr \
+  -engine name=skytalix-b cmd=<node> arg=<clone>/dist/uci.js dir=<clone> stderr=<out>/gNN-b.stderr \
+  -each proto=uci tc=40/900 timemargin=0 restart=on option.OwnBook=true option.TimeMode=simple-tournament \
+  -openings file=<clone>/tools/rating/openings.epd format=epd order=sequential start=<n> \
+  -games 1 -rounds 1 -concurrency 1 -maxmoves 80 \
+  -pgnout <out>/gNN.pgn -debug all
+# rehearsal (not graded): the same with tc=40/20 -maxmoves 4, start=1
+# clone: 19d18df13841a075a838ac4a4cd313ec76fa3c7e (detached), npm ci rc 0, npm run build rc 0; node v26.12.1
+# cutechess-cli 1.5.1 (Qt 6.10.2) sha256 dc77690113d9ae130f5d1b4c76fefb28f42620ac45a2bd4abb7dd8eb2154f40a (= ABC-204 re-pin, = rating.ts pin)
+# stockfish (not used) sha256 c78c22a924e8d452e1089ec8d47826f7a276aba69373185e82cbac4593e352d2 (= rating.ts pin)
+# openings.epd sha256 0d7f7a72678cbf54c2c309dc5d664e7aac5de2c15bc54fe4247a437f51e82666 (= OPENINGS_SHA256)
