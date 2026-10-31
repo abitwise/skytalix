@@ -1,0 +1,2 @@
+ ✓ src/transposition.test.ts > A7 — the table holds a fixed 4 MiB, whatever the search > heapUsed and arrayBuffers each grow <= 1 MiB between a 1 s and a DEFAULT_BUDGET_MS (4 s) search [deep, ENGINE_DEEP=1] 5094ms
+      Tests  1 passed | 25 skipped (26)
