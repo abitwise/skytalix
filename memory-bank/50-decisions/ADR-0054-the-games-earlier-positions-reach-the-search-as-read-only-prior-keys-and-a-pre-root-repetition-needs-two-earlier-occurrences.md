@@ -227,6 +227,9 @@ not a stamp). Recorded by Architect/Design (task `arch-ABC-242-accept`, records 
 
 - **ACCEPTED; in force on `main` at `ABC-242`'s merge.** Until then the blunder in `src/levels.ts` searches every
   child, and the QE verdict still decides that merge.
+  *(2026-10-31, `arch-ABC-221-records`: met. `ABC-242` merged at `af5b2b49` on QE's PASS_WITH_GAPS, so the amendment
+  is in force on `main`. Where this block's heading and the file's § Status say "not in force" or "until then", that
+  is history.)*
 - **Applied as proposed, by addition only:** A4's bullet under `ADR-0032` decision 1 and A5's sentence under
   decision 2's blunder bullet here, each marked *(added 2026-10-30, `ABC-242`)*. A1–A6 and the text below are
   unchanged and are kept as the amendment's record. A6 holds: the parent-root count is not in `ABC-242`.
@@ -261,6 +264,15 @@ read from the source and from QE's recorded probe.
     `b1b2 e8d8 b2b1 d8e8 b1b2 e8d8 b2b1`, rate 1, 2 000 ms, `virtualClock(1)`, seed 1. `d8e8` is the third
     occurrence, and the list is `[d8e8 −1013, d8c8 −1030, d8d7 −1020, d8e7 −1010, d8c7 −1031]` with the keys and
     without them. The blunder plays `d8e8`, the strict second-best of that list.
+    - *(2026-10-31, `arch-ABC-221-records`, records only; `SE-242-a`, answered by QE in `qe-ABC-242` `…b9f3cd67`,
+      `raw/probe/se242a.txt`.)* **Since `ABC-228`'s merge (`e42b637b`), the probe's base value for `d8e8` has read
+      −1020, not −1013.** Run unchanged, the probe reads `[d8e8 −1020, d8c8 −1030, d8d7 −1030, d8e7 −1015, d8c7 −1031]`
+      with and without the keys.
+      - −1013 is the value at `ABC-230`'s merge (`24f3e322`). `ABC-228` makes quiescence in check search every evasion
+        (`ADR-0053`), and `d8d7` (−1020 → −1030) and `d8e7` (−1010 → −1015) moved with it. The reading is the same at
+        `1f6abec4`, `5953c631` and `4387d4e8`.
+      - `d8e8` is still the third occurrence and still the strict second-best, so the gap and A1–A6 read as before.
+        No decision changes.
 - **The engine path has no such gap at the same move.** A `chooseMove` rooted at the game position sees that move's
   child at ply 1, and decision 3 scores it 0 there (`ABC-230` `A1`, 4 fixtures).
 - **Why the check can be exact.** Take a root `R` with list `P`. The engine's scan of a ply-1 node reads the same

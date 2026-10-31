@@ -32,6 +32,8 @@ Architect/Design (task `arch-adr-accept-0052-0053-0054`).
   which was already owed (§ Consequences). By the owner's word, no sub-second margin is added.
 - **In force:** `simple-tournament` at `ABC-220`'s merge, and `uci-clock-mode` (D4, D6's clamp) at `ABC-221`'s merge.
   Nothing is on `main` before then.
+  *(2026-10-31, `arch-ABC-221-records`: both are in force. `ABC-221` merged at `af32f82c` (QE) and `9395d8dc`
+  (Security/NFR). Dated lines for `SE-221-a`, `SE-221-b`/`SEC-221-b` and `QE-221-b` are in D4 and D8.)*
 - **Pointer lines.** This hop added dated pointers to the § Status of `ADR-0044` and `ADR-0045`. The in-place fold
   lines in those ADRs and the `NFR-004` text stay with BA/PM and Security/NFR at each build's merge, as listed below.
 - `OQ-0052-1` is closed (§ Owner questions).
@@ -222,6 +224,17 @@ OVERHEAD =   100 ms   (charged per move still to play before the control)
   99.9 %. With 6 book moves the banked time is spent on later moves, and the closest call is the same. Three periods,
   the same. With no `movestogo`, 80 moves leave ≥ 117 s. `go wtime 3000 movestogo 1` gets 1 900 ms and leaves ≥
   1 069. `go wtime 800` gets 1 ms, and depth 1 still answers. `wtime 3600000 movestogo 40` gets 59 500.
+  - *(2026-10-31, `arch-ABC-221-records`, records only; `SE-221-a`, confirmed by QE in `qe-ABC-221` `…f9b43b6d`.)*
+    **"80 moves leave ≥ 117 s" is corrected.** The sentence names 80 moves with no `movestogo` and no time added,
+    which is `raw/alloc.txt` § "sudden death 15 min, 80 moves". On that shape the clock after move 80 reads
+    **17 205 ms** (QE's `se221a.mjs`: 17 204.53), and that is the closest call. 117 735 ms belongs to a different
+    shape, § "40/15, no movestogo sent, 80 moves". There the period's 900 000 ms is added after move 40, and the
+    closest call is just after move 40.
+    - **The bound does not move.** On both shapes every move leaves ≥ 1 000 ms, and `ABC-221` pins each shape with
+      its own row.
+    - § Alternatives A9's "≥ 117 s" is the same figure, and it also reads 17 205 ms.
+    - The rule and the bound stay the same. Only the arithmetic figure is corrected, so this is not PROPOSED and
+      nothing goes to the owner.
 
 ### D5. The overhead model, term by term
 
@@ -338,11 +351,43 @@ real `δ` from cutechess's per-move times.
     adds no file, no delivery file and no spawn site: `runDialogue` takes a script and stays the file's only
     `spawnSync` call. So what D8 guards still holds. The probe for (b) is a record under `.grugops/context/`, not a
     delivery file.
+  - *(2026-10-31, `arch-ABC-221-records`, records only; `SE-221-b`, `SEC-221-b`.)* **Ruled: `ABC-221` `A10`'s
+    `spawnSync` stays where it is.** "Has no spawn site" above was true only until `ABC-221`'s merge (`af32f82c`, code
+    `c48a6f83`). Since that merge, `src/uci-session.test.ts` has one spawn site: `A10`'s child,
+    `node --expose-gc --input-type=module -e <script>`. It is the `ABC-081` `A7` / `NFR-009` instrument that
+    `src/transposition.test.ts` already runs in the same `ENGINE_DEEP` lane.
+    - **What D8 guards still holds.** There is no new file and no delivery file. The delivered entry point is still
+      spawned from one place only, `runDialogue` in `src/uci.real-engine.test.ts`. `A10`'s child imports
+      `uci-session.ts`, `book.ts`, `levels.ts` and `engine.ts`, and never `src/uci.ts` or `dist/`. The row is defined
+      only under `ENGINE_DEEP=1`, so the default lane spawns 0 (QE: lane inventory 63 = 63).
+    - **Why keep the row rather than move it to a QE hand reading in plain node (the `ABC-212` form).** The row re-reads
+      `NFR-009` at 59.5 s on every `ENGINE_DEEP` run, while a hand reading is taken once. Security/NFR found no risk
+      and prefers the row (`secnfr-ABC-221` `…ef060512`). Moving it would add none of the guards D8 exists for.
+    - **The rule from here, for this file.** A spawn in `src/uci-session.test.ts` is admitted only if all three hold:
+      (1) it is not the delivered entry point (`src/uci.ts`, `dist/uci.js`); (2) it is defined only under an opt-in
+      deep lane, so the default lane spawns 0; (3) it is synchronous, with an argument array and no shell (`ABC-173`
+      `C2`). A spawn of the delivered entry point still belongs in `src/uci.real-engine.test.ts`.
+    - D8's 2026-10-30 text was an Architect amendment that moved no requirement. This line moves none either, so it is
+      not PROPOSED and nothing goes to the owner.
 - **`uci-clock-mode` build:** `src/uci-session.ts` (the third value, D4's rule, `CLOCK_MODE_CEILING_MS`,
   `CLOCK_MODE_MAX_BUDGET_MS`) and **one value** in `src/engine.ts` (`HARD_CEILING_MS`, and its header comment's
   numbers).
 - `src/levels.ts`, `src/cli-options.ts`, `src/cli.ts`, `src/startup-questions.ts`, `src/pgn.ts` and `src/search.ts`
   do not change.
+  - *(2026-10-31, `arch-ABC-221-records`, records only; `QE-221-b`.)* **A stale comment in `src/levels.ts`, left in
+    place by this fence.** Since `ABC-221`'s merge, the header's "`HARD_CEILING_MS` is the largest of them" (the level
+    ceilings, `:50`) is false. The clamp is 60 000 and the largest level ceiling is 32 000, because D6 retired
+    `ADR-0045` A3's equality.
+    - **Read at `main` `9c008db4`:** two more words in the same header have been stale since `ABC-228`'s merge
+      (`e42b637b`). At `:42`, "`NFR-004`'s 3 s" now reads 4 s, because `LEVELS[5]` is 4 000. At `:49–50`, "at least 2 s
+      under it" is 1 s at level 5 (4 000 under 5 s).
+    - **This line carries all three.** The next ticket whose diff touches `src/levels.ts` corrects them in the same
+      diff, as comment-only lines, in D6's words: the clamp sits at the largest ceiling in force (60 s,
+      `uci-clock-mode`), at or above every level ceiling. BA/PM names this line on that ticket's page when the ticket
+      is cut.
+    - **No ticket of its own.** A comment-only `src/` edit changes no behaviour and would not pay for a pass through
+      the gates on its own. `ABC-245` touches `src/levels.test.ts` only, so it cannot carry it. Neither can a
+      `QE-221-a` test ticket in `src/uci-session.test.ts`.
 
 ### D9. Tests (shape only; the tickets write them)
 
@@ -380,7 +425,7 @@ real `δ` from cutechess's per-move times.
 | A6 | `simple-tournament` capped by D4.1's `G` (`min(G, T)`, `ABC-220`'s first text) | At 40/15, T binds and it is safe. Under a shorter clock `G`'s `t − 50` at the last move leaves 19 ms on the virtual clock (`raw/alloc.txt`): M1 fails exactly where the scaled reading looks. `C` costs one small function, and the clock mode needs it anyway |
 | A7 | T = 22 500 or 20 500 | D3 |
 | A8 | A per-call ceiling instead of moving the clamp | D6; `ADR-0045` A3 |
-| A9 | A different `movestogo` default (30, 40) for the modes | With cutechess sending `movestogo` (§ Context) the default is a fallback. 20 is D4.1's constant, and 80 moves of sudden death still leave ≥ 117 s. Tuning it is `ABC-222`'s to measure, not to argue |
+| A9 | A different `movestogo` default (30, 40) for the modes | With cutechess sending `movestogo` (§ Context) the default is a fallback. 20 is D4.1's constant, and 80 moves of sudden death still leave ≥ 117 s *(2026-10-31: 17 205 ms; see D4's dated line)*. Tuning it is `ABC-222`'s to measure, not to argue |
 | A10 | A soft/hard split, early stop on a stable root, more time on a hard move | A search change with a strength reading. `EPIC-009` § Out of scope |
 
 ## Consequences
