@@ -1,0 +1,14 @@
+{
+  "refs": ["qe-ABC-243", "ABC-243", "EPIC-010", "ADR-0046", "NFR-008", "NFR-009", "ABC-228", "ABC-241", "ABC-244",
+           "SE-228ii-a", "QE-228ii-b", "QE-241-a", "QM3", "QE-244-a", "R1",
+           "se-ABC-243/20261031T025851Z-software-engineer-decision-c408ef9e", "se-ABC-243/20261031T025851Z-software-engineer-observation-9c3d34df",
+           "se-ABC-243/20261031T025851Z-software-engineer-observation-a66447b8", "se-ABC-243/20261031T025851Z-software-engineer-observation-fd162ca2",
+           "grugops/ABC-243", "8772cf36", "4bd9ac6a", "grugops/qe-ABC-243", "src/uci-session.test.ts", "src/transposition.test.ts"],
+  "notes": [
+    { "kind": "decision", "confidence": "high: A1-A6 and G8 run in this hop as pre-registered (PREREG 3cd91179)", "bodyFile": "note-decision.md" },
+    { "kind": "observation", "confidence": "high: every plant run at H (and the ticket's at B) on scratch copies; diff read from git", "bodyFile": "note-plants.md" },
+    { "kind": "observation", "confidence": "high: G8 ALONE, wait-clear by PID before each of 6 runs, admissible; the deep row's wait ended on its cap (QE-243-a)", "bodyFile": "note-timing.md" },
+    { "kind": "observation", "confidence": "high on what was run; none blocking", "bodyFile": "note-gaps.md" },
+    { "kind": "observation", "confidence": "high: files listed are committed on grugops/qe-ABC-243 (an observation, not an artifact-ref: no §14-gate run to bind)", "bodyFile": "note-artifacts.md" }
+  ]
+}

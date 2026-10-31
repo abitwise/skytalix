@@ -1,0 +1,8 @@
+== L4 on tip test file: exit 1
+  AssertionError: expected 1100 to be greater than or equal to 4000
+== L6 on tip test file: exit 1
+  AssertionError: expected 5100 to be less than or equal to 4200
+== L7 on tip test file: exit 1
+  AssertionError: expected 30100 to be less than or equal to 4200
+== QM3 on tip test file: exit 1
+  AssertionError: expected 'cp -875' to be 'cp 0' // Object.is equality

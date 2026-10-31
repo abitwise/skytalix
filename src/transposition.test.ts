@@ -16,7 +16,7 @@
  * LANES, on the `SEARCH_DEEP` / `ENGINE_DEEP` precedent (`N8-LANE`). The criteria's own positions
  * and depths (depth 4 over the whole perft corpus, depth 5 on kiwipete and position-6, the
  * depth-10 mate fixture) run under `SEARCH_DEEP=1`, on an injected clock. `A7`'s memory reading is
- * WALL-CLOCK (a 1 s and a 3 s search) and runs under `ENGINE_DEEP=1`, the lane that holds every
+ * WALL-CLOCK (a 1 s and a `DEFAULT_BUDGET_MS` (4 s) search) and runs under `ENGINE_DEEP=1`, the lane that holds every
  * wall-clock case. The default lane holds the cheap standing guard for each criterion. Unset, the
  * deep cases are NOT DEFINED rather than skipped, so the gate's skip count stays 0.
  */
@@ -657,14 +657,14 @@ describe("A7 — the table holds a fixed 4 MiB, whatever the search", () => {
 
   if (RUN_ENGINE_DEEP) {
     /**
-     * `NFR-009`'s own measurement: a 1 s and a 3 s `chooseMove` on kiwipete, each read after
+     * `NFR-009`'s own measurement: a 1 s and a `DEFAULT_BUDGET_MS` (4 s) `chooseMove` on kiwipete, each read after
      * `gc()`; `heapUsed` and `arrayBuffers` each move by no more than 1 MiB between them. It runs in
      * a CHILD process started with `--expose-gc`, so the reading needs no flag on the runner and
      * is taken from a process nothing else has touched. `heapUsed` is the read that catches a
      * growing `Map` — a `Map`-backed table grows with search time there and not in `arrayBuffers`
      * — and it was watched going RED against exactly that mutant before this was kept.
      */
-    it("heapUsed and arrayBuffers each grow <= 1 MiB between a 1 s and a 3 s search [deep, ENGINE_DEEP=1]", () => {
+    it("heapUsed and arrayBuffers each grow <= 1 MiB between a 1 s and a DEFAULT_BUDGET_MS (4 s) search [deep, ENGINE_DEEP=1]", () => {
       const engineUrl = new URL("./engine.ts", import.meta.url).href;
       const fenUrl = new URL("./fen.ts", import.meta.url).href;
       const script = `

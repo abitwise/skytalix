@@ -1,0 +1,6 @@
+ ✓ src/uci-session.test.ts (201 tests) 1723ms
+ ✓ src/transposition.test.ts (25 tests) 77ms
+ Test Files  63 passed (63)
+      Tests  2323 passed (2323)
+   Duration  8.48s (transform 0ms, setup 0ms, import 5.73s, tests 6.99s, environment 4ms)
+wall 8.81 s

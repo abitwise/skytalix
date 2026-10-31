@@ -1,0 +1,6 @@
+base total 2322 failed 0 skipped 0; head total 2323 failed 0 skipped 0
+count differs: src/uci-session.test.ts 200 -> 201
+only at head (1):
+  + src/uci-session.test.ts > ABC-241 A4, A5 — UCI: the prior keys are repetition keys A6: a FEN carrying an uncapturable ep square: its own key counts, d1e1 scores exactly 0; base's list does not
+only at base (0):
+sorted names sha256/12: base 0729b47e8a08, head minus added 0729b47e8a08 (equal = nothing else moved)

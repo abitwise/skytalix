@@ -1,0 +1,45 @@
+== none on tip test file: exit 0
+  ✓ src/uci-session.test.ts > ABC-171 A2 — setoption > setoption name Hash value 64 writes nothing and changes nothing 63ms
+  ✓ src/uci-session.test.ts > ABC-241 A4, A5 — UCI: the prior keys are repetition keys > A6: a FEN carrying an uncapturable ep square: its own key counts, d1e1 sc
+  Tests  201 passed (201)
+== L4 on tip test file: exit 1
+  × src/uci-session.test.ts > ABC-171 A2 — setoption > setoption name Hash value 64 writes nothing and changes nothing 16ms
+  ✓ src/uci-session.test.ts > ABC-241 A4, A5 — UCI: the prior keys are repetition keys > A6: a FEN carrying an uncapturable ep square: its own key counts, d1e1 sc
+  Tests  1 failed | 200 passed (201)
+  ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+  FAIL  src/uci-session.test.ts > ABC-171 A2 — setoption > setoption name Hash value 64 writes nothing and changes nothing
+== L6 on tip test file: exit 1
+  × src/uci-session.test.ts > ABC-171 A2 — setoption > setoption name Hash value 64 writes nothing and changes nothing 87ms
+  ✓ src/uci-session.test.ts > ABC-241 A4, A5 — UCI: the prior keys are repetition keys > A6: a FEN carrying an uncapturable ep square: its own key counts, d1e1 sc
+  Tests  1 failed | 200 passed (201)
+  ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+  FAIL  src/uci-session.test.ts > ABC-171 A2 — setoption > setoption name Hash value 64 writes nothing and changes nothing
+== L7 on tip test file: exit 1
+  × src/uci-session.test.ts > ABC-171 A2 — setoption > setoption name Hash value 64 writes nothing and changes nothing 520ms
+  ✓ src/uci-session.test.ts > ABC-241 A4, A5 — UCI: the prior keys are repetition keys > A6: a FEN carrying an uncapturable ep square: its own key counts, d1e1 sc
+  Tests  1 failed | 200 passed (201)
+  ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+  FAIL  src/uci-session.test.ts > ABC-171 A2 — setoption > setoption name Hash value 64 writes nothing and changes nothing
+== QM3 on tip test file: exit 1
+  ✓ src/uci-session.test.ts > ABC-171 A2 — setoption > setoption name Hash value 64 writes nothing and changes nothing 62ms
+  × src/uci-session.test.ts > ABC-241 A4, A5 — UCI: the prior keys are repetition keys > A6: a FEN carrying an uncapturable ep square: its own key counts, d1e1 sc
+  Tests  1 failed | 200 passed (201)
+  ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+  FAIL  src/uci-session.test.ts > ABC-241 A4, A5 — UCI: the prior keys are repetition keys > A6: a FEN carrying an uncapturable ep square: its own key counts, d1e
+== none on base test file: exit 0
+  ✓ src/uci-session.test.ts > ABC-171 A2 — setoption > setoption name Hash value 64 writes nothing and changes nothing 53ms
+  Tests  200 passed (200)
+== L4 on base test file: exit 1
+  × src/uci-session.test.ts > ABC-171 A2 — setoption > setoption name Hash value 64 writes nothing and changes nothing 16ms
+  Tests  1 failed | 199 passed (200)
+  ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+  FAIL  src/uci-session.test.ts > ABC-171 A2 — setoption > setoption name Hash value 64 writes nothing and changes nothing
+== L6 on base test file: exit 0
+  ✓ src/uci-session.test.ts > ABC-171 A2 — setoption > setoption name Hash value 64 writes nothing and changes nothing 53ms
+  Tests  200 passed (200)
+== L7 on base test file: exit 0
+  ✓ src/uci-session.test.ts > ABC-171 A2 — setoption > setoption name Hash value 64 writes nothing and changes nothing 53ms
+  Tests  200 passed (200)
+== QM3 on base test file: exit 0
+  ✓ src/uci-session.test.ts > ABC-171 A2 — setoption > setoption name Hash value 64 writes nothing and changes nothing 53ms
+  Tests  200 passed (200)

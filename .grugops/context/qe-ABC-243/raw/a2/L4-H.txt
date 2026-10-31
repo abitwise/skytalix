@@ -1,0 +1,2 @@
+L4@H rc=1 total=201 passed=200 failed=1 pending=0 suiteErrors=0
+  red: ABC-171 A2 — setoption setoption name Hash value 64 writes nothing and changes nothing :: AssertionError: expected 1100 to be greater than or equal to 4000

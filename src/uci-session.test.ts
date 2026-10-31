@@ -760,9 +760,17 @@ describe("ABC-171 A2 — setoption", () => {
     booked.send("position startpos");
     expect(booked.send("go movetime 1000")).toEqual(["info string book", "bestmove e2e4"]);
 
+    // Still the default level 5. `ABC-243` A1: a bare `go` searches the level's own budget, and the
+    // seven levels' budgets all differ, so a silent move to any other level leaves the bound.
     const level = rig();
     expect(level.send("setoption name Hash value 64")).toEqual([]);
-    expectWithin(levelTime(level.send, 5), 3_500); // still the default level 5 (ABC-228: G = 3 500 binds)
+    level.send("position startpos");
+    const lines = level.send("go");
+    expect(lines).toHaveLength(2);
+    const time = / time (\d+) /.exec(lines[0] ?? "");
+    expect(time, `no time on: ${lines[0]}`).not.toBeNull();
+    expectWithin(Number(time?.[1]), LEVELS[5].budgetMs);
+    expect(lines[1]).toMatch(/^bestmove [a-h][1-8][a-h][1-8]/);
   });
 });
 
@@ -1477,6 +1485,30 @@ describe("ABC-241 A4, A5 — UCI: the prior keys are repetition keys", () => {
     expect(cli).toBe("d8e8");
     expect(perLine[1]?.at(-1)).toBe("bestmove d8e8");
     expect(parseInfo(perLine[1]?.[0]).score).toBe("cp 0");
+  });
+
+  // `ABC-243` A6 (QE-241-a): the FEN's own key. Its a3 has no black pawn to take on it, so the FEN's
+  // board recurs after d1e1 (ply 4) and d1e1 makes the third occurrence (ply 8). Under the raw hash
+  // list the FEN's key carries a3 and matches neither, so base does not see the draw.
+  it("A6: a FEN carrying an uncapturable ep square: its own key counts, d1e1 scores exactly 0; base's list does not", () => {
+    const fen = "4k2q/8/8/8/P7/8/8/4K3 b - a3 0 1";
+    const moves = "h8h7 e1d1 h7h8 d1e1 h8h7 e1d1 h7h8";
+    const { perLine } = talk([`position fen ${fen} moves ${moves}`, "go depth 4"]);
+    expect(parseInfo(perLine[1]?.[0]).score).toBe("cp 0");
+    expect(perLine[1]?.at(-1)).toBe("bestmove d1e1");
+    // Base's list (the hash keys) at the same root, the same depth: not a draw.
+    const game = newGame(fen);
+    for (const text of moves.split(" ")) {
+      const move = legalMoves(game.position).find((m) => coordinateOf(m) === text);
+      if (move === undefined) throw new Error(`fixture: ${text} is not legal`);
+      playMove(game, move);
+    }
+    const base = chooseMove(parseFen(toFen(game.position)), {
+      budgetMs: 1e9,
+      maxDepth: 4,
+      priorKeys: trimPriorKeys(keyHistory(game), game.position.halfmoveClock),
+    });
+    expect(base?.score).not.toBe(0);
   });
 
   it("A8: the session's one new import is gameend.ts (`ADR-0044` D2, the dated line)", () => {

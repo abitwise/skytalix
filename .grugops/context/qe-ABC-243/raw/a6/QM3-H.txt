@@ -1,0 +1,2 @@
+QM3@H rc=1 total=2323 passed=2322 failed=1 pending=0 suiteErrors=0
+  red: ABC-241 A4, A5 — UCI: the prior keys are repetition keys A6: a FEN carrying an uncapturable ep square: its own key counts, d1e1 scores exactly 0; base's list does not :: AssertionError: expected 'cp -875' to be 'cp 0' // Object.is equality

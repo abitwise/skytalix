@@ -1,0 +1,13 @@
+diff --git a/src/transposition.test.ts b/src/transposition.test.ts
+index 2ae27d3d..71257895 100644
+--- a/src/transposition.test.ts
++++ b/src/transposition.test.ts
+@@ -19 +19 @@
+- * WALL-CLOCK (a 1 s and a 3 s search) and runs under `ENGINE_DEEP=1`, the lane that holds every
++ * WALL-CLOCK (a 1 s and a `DEFAULT_BUDGET_MS` (4 s) search) and runs under `ENGINE_DEEP=1`, the lane that holds every
+@@ -660 +660 @@ describe("A7 — the table holds a fixed 4 MiB, whatever the search", () => {
+-     * `NFR-009`'s own measurement: a 1 s and a 3 s `chooseMove` on kiwipete, each read after
++     * `NFR-009`'s own measurement: a 1 s and a `DEFAULT_BUDGET_MS` (4 s) `chooseMove` on kiwipete, each read after
+@@ -667 +667 @@ describe("A7 — the table holds a fixed 4 MiB, whatever the search", () => {
+-    it("heapUsed and arrayBuffers each grow <= 1 MiB between a 1 s and a 3 s search [deep, ENGINE_DEEP=1]", () => {
++    it("heapUsed and arrayBuffers each grow <= 1 MiB between a 1 s and a DEFAULT_BUDGET_MS (4 s) search [deep, ENGINE_DEEP=1]", () => {

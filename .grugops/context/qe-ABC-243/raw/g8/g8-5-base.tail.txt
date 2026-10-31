@@ -1,0 +1,12 @@
+ ✓ src/apply.test.ts (24 tests) 9ms
+ ✓ src/glyph-mode.test.ts (21 tests) 7ms
+ ✓ src/san.nfr.test.ts (5 tests) 5ms
+ ✓ src/uci.real-engine.test.ts (1 test) 2ms
+ ✓ src/zobrist.nfr.test.ts (3 tests) 4ms
+ ✓ src/glyph-mode.nfr.test.ts (3 tests) 2ms
+
+ Test Files  63 passed (63)
+      Tests  2322 passed (2322)
+   Start at  04:05:45
+   Duration  8.93s (transform 0ms, setup 0ms, import 6.31s, tests 7.00s, environment 5ms)
+

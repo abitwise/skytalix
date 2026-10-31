@@ -1,0 +1,34 @@
+qe-ABC-243 PRE-REGISTRATION (sealed and committed before any head run; nothing below is moved after a reading)
+Ticket ABC-243 (XS, test-only), A1-A6. Base 4bd9ac6a (main at the SE's branch point). Head 8772cf36 (grugops/ABC-243 code;
+branch tip 4a9a264b = SE notes only). Trees (scratch, out of the repository): B = git archive 4bd9ac6a; H = git archive 8772cf36.
+diff -r B H: only src/transposition.test.ts and src/uci-session.test.ts. node_modules: one symlink to the main checkout's,
+shared by both trees (package.json / package-lock.json equal at base and at main).
+
+A1 (read): the Hash row's level half sends position startpos + bare go after setoption name Hash value 64 on a fresh rig(),
+  reads time and bounds it by expectWithin(time, LEVELS[5].budgetMs) (step 100 -> 4 000..4 200), from the constant.
+  MET iff the code says so (read) AND the row is green at H with no plant (A2 "none") AND A2's reds show the bound bites.
+A2 (plants): qe-scripts/plant.mjs, QE's own insertion point (an early `if (name === "hash") { skill = L; return; }` at the top
+  of setOption, not the SE's branch), one exact replacement asserted unique, file src/uci-session.test.ts only,
+  node_modules/.bin/vitest json reporter, NODE_OPTIONS=--max-old-space-size=128.
+  Runs: none, L4, L6, L7 at H and at B (ticket); L1, L2, L3, L5 at H (QE extension, informative; L5 is the identity control).
+  MET iff none@H 0 failed AND each of L4, L6, L7 @H fails the Hash row on the time bound. Any other red row is reported.
+  Expected, not graded: B fails for L4, stays green for L6 and L7 (SE-228ii-a). L1-L3 @H red, L5 @H green.
+A6 (QM3): qe-ABC-241 mutate.mjs QM3 strings byte for byte, applied once in src/uci-session.ts; the WHOLE suite
+  (node_modules/.bin/vitest run, json reporter, NODE_OPTIONS=--max-old-space-size=128) at H and at B, plus none@H whole suite.
+  MET iff QM3@H fails the A6 row (and the code reads: d1e1, cp 0, go depth N with 1 <= N <= 5, the raw keyHistory list not 0)
+  AND none@H whole suite 0 failed. Every other red row under QM3@H is reported. Expected, not graded: QM3@B 0 failed (QE-241-a).
+A3: git diff -U0 4bd9ac6a 8772cf36 -- src/transposition.test.ts shows exactly 3 changed lines (3 -, 3 +), the header, the doc
+  comment and the deep row's title, each naming DEFAULT_BUDGET_MS; no code, bound or budget token changes. MET iff so.
+A4: git diff --name-only 4bd9ac6a 8772cf36 -- src tools data = exactly the 2 test files; per-file counts and sorted full names
+  from the G8 runs' last-run.json B vs H: exactly one name added (the A6 row), none removed, total = base + 1. MET iff so.
+A5: at H: npm run lint, npm run typecheck, npm run build exit 0; npm test green with skips 0 (from the G8 head runs).
+  ENGINE_DEEP=1 node_modules/.bin/vitest run src/transposition.test.ts -t DEFAULT_BUDGET_MS, NODE_OPTIONS=--max-old-space-size=400
+  (the SE's flag), ONCE, ALONE: the renamed deep row must run and pass (1 passed, 0 failed). MET iff all of that.
+G8 (ALONE, last): qe-scripts/g8.mjs (qe-ABC-244's, unchanged but the header line), npm test as spelled, order b h h b b h,
+  base tree B, head tree H. Wait-clear before every run (host.mjs): 0 foreign vitest (bracketed pgrep, then waited BY PID with
+  kill -0), 0 cutechess-cli, load1 <= 2.0, Tctl <= 60.0 C. Admissible iff all 6 rc 0 and load1 <= 8 before and after every run.
+  Median of 3 per arm. States: H median <= 10 s -> NFR-008 MET (A5's G8 reported). H median > 9.6 s -> ABC-244's tranche-2
+  trigger FIRES (reported; does not fail this ticket). H median > 10 s -> STOP, report to the owner via the Orchestrator.
+  H - B delta reported against the ticket's estimate of about +0.03 s. One re-run of the whole set only if inadmissible.
+VERDICT: PASS iff A1-A6 all MET and the G8 set is admissible with H median <= 10 s. Anything else FAIL or STOP as stated.
+UAT: waived (test-only, 0 production lines); the QE verdict is the gate.

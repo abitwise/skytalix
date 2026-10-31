@@ -1,0 +1,11 @@
+{
+  "refs": ["se-ABC-243", "ABC-243", "EPIC-010", "ADR-0046", "NFR-008", "NFR-009", "ABC-228", "ABC-241", "ABC-244",
+           "SE-228ii-a", "QE-228ii-b", "QE-241-a", "QM3", "QE-244-a", "grugops/ABC-243", "8772cf36", "4bd9ac6a",
+           "src/uci-session.test.ts", "src/transposition.test.ts"],
+  "notes": [
+    { "kind": "decision", "confidence": "high: the rows were written, run green, and each plant was run red on scratch copies", "bodyFile": "note-decision.md" },
+    { "kind": "observation", "confidence": "high: reads per search are arithmetic from the budget and step in the code", "bodyFile": "note-census.md" },
+    { "kind": "observation", "confidence": "high for gates, counts, names and plants (all run); the npm test wall is informal (n=1 base, n=2 tip), UNKNOWN - verify", "bodyFile": "note-readings.md" },
+    { "kind": "observation", "confidence": "high on what was run; wall cost estimates UNKNOWN - verify until QE's G8", "bodyFile": "note-findings.md" }
+  ]
+}

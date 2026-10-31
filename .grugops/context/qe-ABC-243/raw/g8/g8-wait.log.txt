@@ -1,0 +1,10 @@
+2026-10-31T04:04:17.386Z run 2 head wait poll=1 load1=0.43 vitest=0 cutechess=0 tctl=68.6
+2026-10-31T04:04:32.419Z run 2 head clear after poll 2 load1=0.33 tctl=34.5
+2026-10-31T04:04:41.661Z run 3 head wait poll=1 load1=0.91 vitest=0 cutechess=0 tctl=68.9
+2026-10-31T04:04:56.692Z run 3 head clear after poll 2 load1=0.71 tctl=36.0
+2026-10-31T04:05:06.004Z run 4 base wait poll=1 load1=1.07 vitest=0 cutechess=0 tctl=70.1
+2026-10-31T04:05:21.036Z run 4 base clear after poll 2 load1=0.90 tctl=36.5
+2026-10-31T04:05:30.229Z run 5 base wait poll=1 load1=1.07 vitest=0 cutechess=0 tctl=69.8
+2026-10-31T04:05:45.257Z run 5 base clear after poll 2 load1=0.83 tctl=37.1
+2026-10-31T04:05:54.547Z run 6 head wait poll=1 load1=1.17 vitest=0 cutechess=0 tctl=71.9
+2026-10-31T04:06:09.578Z run 6 head clear after poll 2 load1=0.98 tctl=37.3
