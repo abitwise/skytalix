@@ -1,0 +1,12 @@
+{
+  "refs": ["se-ABC-245", "ABC-245", "ABC-242", "EPIC-010", "ADR-0046", "ADR-0054", "ADR-0032", "NFR-008", "QE-242-b",
+           "SE-242-f", "R1", "R2", "R4", "arch-qe242a-ruling", "bapm-ABC-245-rescore",
+           "qe-ABC-242/20261031T051332Z-qe-e2e-observation-93eb0bf9", "grugops/ABC-245", "7e81732e", "9c008db4",
+           "4387d4e8", "src/levels.test.ts"],
+  "notes": [
+    { "kind": "decision", "confidence": "high: the row runs green at head and the fixture's offsets are asserted in it", "bodyFile": "note-decision.md" },
+    { "kind": "observation", "confidence": "high: census reads from the recorded chooseMove options; plants run in-file on a scratch tree", "bodyFile": "note-census.md" },
+    { "kind": "observation", "confidence": "high for gates and counts (run); the npm test wall is informal (n=3, head only, shared host), UNKNOWN - verify", "bodyFile": "note-readings.md" },
+    { "kind": "observation", "confidence": "high on what was run; SE-245-a's range by reasoning from the asserted offsets", "bodyFile": "note-findings.md" }
+  ]
+}

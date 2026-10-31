@@ -1,0 +1,27 @@
+{
+ "plant": "base",
+ "passed": 41,
+ "failed": 5,
+ "reds": [
+  {
+   "title": "ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A1: the third-occurrence move scores exactly 0, unsearched; base scores it otherwise",
+   "first": "AssertionError: probe: expected [ 'd8e8:-1005' ] to deeply equal [ 'd8e8:0' ]"
+  },
+  {
+   "title": "ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A1: on QE's probe, scored[0] is {d8e8, 0} and 4 child searches run for 5 legal moves",
+   "first": "AssertionError: expected { …(2) } to deeply equal { move: Anything, score: +0 }"
+  },
+  {
+   "title": "ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A1: with the repeat last in legalMoves order, the list is base's but for its exact 0",
+   "first": "AssertionError: expected [ 'e8f8:-1000', 'e8d8:-1010', …(3) ] to deeply equal [ 'e8f8:-1000', 'e8d8:-1010', …(3) ]"
+  },
+  {
+   "title": "ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A5: on every A1 fixture the move played is the strict second-best of the new list",
+   "first": "AssertionError: probe: expected -1005 to be +0 // Object.is equality"
+  },
+  {
+   "title": "ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 ABC-245 — a third occurrence whose earlier two lie more than 50 plies back A1–A3: it scores exactly 0 with legal − 1 child searches at matches −98 and −94; base reads it otherwise",
+   "first": "AssertionError: expected [ 'd7e8:-1005' ] to deeply equal [ 'd7e8:0' ]"
+  }
+ ]
+}

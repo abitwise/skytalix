@@ -1,0 +1,11 @@
+{
+ "plant": "cap8",
+ "passed": 45,
+ "failed": 1,
+ "reds": [
+  {
+   "title": "ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 ABC-245 — a third occurrence whose earlier two lie more than 50 plies back A1–A3: it scores exactly 0 with legal − 1 child searches at matches −98 and −94; base reads it otherwise",
+   "first": "AssertionError: expected [ 'd7e8:-1005' ] to deeply equal [ 'd7e8:0' ]"
+  }
+ ]
+}
