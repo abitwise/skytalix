@@ -1,0 +1,19 @@
+PASS start material is exactly K+Q v k (got KQk); castling -, ep -, clock 0
+PASS every one of the 98 plies (97 fixture moves + the repeat d7e8) is legal by QE's own K+Q v K generator
+PASS QE's generator equals the project's legalMoves at every one of the 98 positions before a move (0 mismatches)
+PASS no capture and no pawn move on any ply (the material never changes)
+PASS gameStatusOf reads in-progress at every position before the child (no mate, stalemate, fifty-move or fivefold end)
+PASS the child position occurs at plies 0,4,98 (expected 0, 4, 98)
+PASS before the child, the only position seen twice is the start (1 repeated, start x2); no earlier third occurrence
+PASS child halfmove clock 98 (independent ply count 98); 98 < 100, the fifty-move claim never reached
+  child status by gameStatusOf: {"result":"in-progress","reason":null,"claimable":{"by":"white","draws":["threefold-repetition"]}}
+PASS the project's own game-end reads the child as a claimable threefold (a real third occurrence)
+PASS root clock 97; trimPriorKeys hands 97 keys
+PASS handed list 98 keys <= 101 (trimmed prior + root key)
+PASS key offsets of the child in the handed list [-98,-94] (expected [-98,-94])
+PASS key equality mirrors QE's position identity over all 98^2 pairs (0 mismatches); independent offsets [-98,-94]
+PASS both offsets < -50 and within min(child clock 98, list 98) = 98
+PASS the -98 match sits exactly at the oldest readable entry (min(clock, list) = 98): an edge, not slack
+PASS nothing matches the child in -4 ... -92 (so any cap < 98 leaves at most one match)
+  root legal moves 8: d7d8 d7e7 d7c7 d7d6 d7e8 d7c8 d7e6 d7c6; repeat index 4
+FIXTURE MET (0 FAIL)

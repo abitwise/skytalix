@@ -1,0 +1,20 @@
+{
+  "refs": ["qe-ABC-245", "ABC-245", "EPIC-010", "ADR-0046", "ADR-0054", "ADR-0032", "NFR-008", "ABC-244", "ABC-242", "ABC-221", "ABC-230",
+           "QE-242-b", "SE-242-f", "SE-245-a", "SE-245-b", "SE-245-c", "QE-221-c", "QE-245-a", "QE-245-b", "QE-245-c", "QE-245-d", "R1", "R2", "R4",
+           "arch-qe242a-ruling", "bapm-ABC-245-rescore",
+           "qe-ABC-242/20261031T051332Z-qe-e2e-observation-93eb0bf9",
+           "se-ABC-245/20261031T061812Z-software-engineer-decision-69e64b77",
+           "se-ABC-245/20261031T061812Z-software-engineer-observation-c1655da6",
+           "se-ABC-245/20261031T061812Z-software-engineer-observation-bce18931",
+           "se-ABC-245/20261031T061812Z-software-engineer-observation-f0b04c75",
+           "grugops/ABC-245", "7e81732e", "7c1721ce", "9c008db4", "4387d4e8", "c48a6f83", "grugops/qe-ABC-245", "d16c7505",
+           "src/levels.test.ts", "src/levels.ts"],
+  "notes": [
+    { "kind": "decision", "confidence": "high: A1-A5, plants, fixture and G8 run in this hop as pre-registered (PREREG d16c7505)", "bodyFile": "note-decision.md" },
+    { "kind": "observation", "confidence": "high: 6 plants, whole default lane each (2 364 rows + X1-X4), on a scratch tree; all as pre-registered", "bodyFile": "note-plants.md" },
+    { "kind": "observation", "confidence": "high: independent K+Q v K generator and position identity, cross-checked with the project at every ply; census by a recording mock", "bodyFile": "note-fixture.md" },
+    { "kind": "observation", "confidence": "high for gates, names and G8 as measured (ALONE, wait-clear by PID, admissible); the H-B delta is attributed to noise by per-file medians at n = 3", "bodyFile": "note-timing.md" },
+    { "kind": "observation", "confidence": "high on what was run; none blocking", "bodyFile": "note-findings.md" },
+    { "kind": "observation", "confidence": "high: files listed are committed on grugops/qe-ABC-245 (an observation, not an artifact-ref: no §14-gate run to bind)", "bodyFile": "note-artifacts.md" }
+  ]
+}

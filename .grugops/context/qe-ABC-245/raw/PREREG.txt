@@ -1,0 +1,76 @@
+qe-ABC-245 PRE-REGISTRATION (committed before any head run; nothing below moves after a reading)
+Ticket ABC-245 (XS, P3, test-only): one far-repeat blunder row in src/levels.test.ts pins ABC-242's 100-key prior-keys cap
+(QE-242-b); the file's header count corrected (SE-242-f). Source: the ticket page (RE-SCORED block, A1-A5, NFR triggers, Test
+notes 1-3); ADR-0046 § Ruling 2026-10-31 (per level call, step 10); qe-ABC-242 plants note …93eb0bf9 (Q6 cap 8, Q8 cap 50
+survived the lane); se-ABC-245 notes (decision 69e64b77, census+plants c1655da6, readings bce18931, findings f0b04c75,
+branch c117d509). Brief: .grugops/queue/claimed/qe-ABC-245.md.
+Base 9c008db4 (main at the SE's branch point; its src/tools/data/package/vitest.config equal c48a6f83, ABC-221's QE head).
+Head 7e81732e (code); branch tip 7c1721ce = SE notes only (src/tools/data/package identical to 7e81732e).
+"Base levels.ts" for A3 and plant QB = ABC-242's base 4387d4e8 src/levels.ts (ticket A3): 9c008db4's levels.ts is head's.
+
+TREES (qe-scripts/setup.sh; session scratchpad qe-245/, removed at the end): H = git archive 7e81732e; node_modules = one
+symlink to the main checkout's (lock files equal; a hard link cannot cross /home -> tmpfs: a stated deviation from the
+brief's "hard-link node_modules"). B = hard-link tree of H with src/levels.test.ts a real copy of 9c008db4's (asserted to
+be the only differing file). P = hard-link tree of H with a real src/ (plant.mjs). After all runs, H and B are compared with
+git archive 7e81732e / 9c008db4 (tar --compare): a test that wrote through a link would show.
+WIDTH: ALONE for timing (a records-only BA/PM hop beside, no vitest). Everything sequential; no two vitest processes at
+once; never vitest on the same command line as a wait; waits by kill -0 (host.mjs / waitpid.mjs), never `while pgrep`.
+Never bare npx / npm exec. No edit to src/, tools/, data/ or the board. Thermal stop: Tctl median > 85 C.
+
+1 DIFF   git diff --name-only 9c008db4 7e81732e == "src/levels.test.ts" exactly; the hunks are the header line (15) and
+         one appended describe after the last ABC-242 row (no existing line other than 15 edited); 7e81732e..7c1721ce touches
+         no src/ tools/ data/ package*. MET iff all hold.
+2 FIXTURE (qe-scripts/fixture.mjs H; fixture read by regex from H's levels.test.ts, an INDEPENDENT K+Q v K generator and
+         position identity, cross-checked with the project's legalMoves, history, gameStatusOf, trimPriorKeys, repetitionKey).
+         Checks: start material K+Q v k; every ply legal by QE's generator; QE's generator == legalMoves at every position;
+         no capture, no pawn move; gameStatusOf in-progress at every position before the child; the child occurs at plies
+         0, 4, 98 only and no other position repeats before it; child clock 98 (< 100) by the project and by QE's ply count;
+         root clock 97, 97 trimmed keys, handed list (trimmed + root key) <= 101; child-key offsets == [-98, -94] by key and
+         by QE's position identity, key equality mirrors position identity over all pairs; both offsets < -50 and within
+         min(child clock, list); nothing matches in -4..-92; gameStatusOf reads the child a claimable threefold.
+         FIXTURE MET iff "0 FAIL".
+3 PLANTS (qe-scripts/plant.mjs H levels-4387d4e8.ts P out; WHOLE default lane + qe-ABC-242's qe-extra.test.ts X1-X4 per
+         plant; vitest via node, json, heap 128). Lane at H = 2 364 rows (+4 X). Frozen expectations:
+  none  cap 100.   REQUIRED: 0 failed (lane + X).
+  Q6    cap 8.     REQUIRED: the ABC-245 row red. Expected lane reds EXACTLY {the ABC-245 row}; X reds {X2}.
+                   (qe-ABC-242 at 6884d61a: lane reds {} , X {X2}: the one new lane red is the only change of verdict.)
+  Q8    cap 50.    Same as Q6.
+  QB    4387d4e8's real src/levels.ts under H's tests. REQUIRED: the ABC-245 row red, with d7e8 read != 0.
+                   Expected lane reds EXACTLY qe-ABC-242's QB lane set {levels A1 x3, levels A5, cli ABC-242 A4, uci-session
+                   ABC-242 A4} + the ABC-245 row; X {X2}.
+  Q97   cap 97 (informative, SE-245-a). Expected: lane reds {the ABC-245 row}; X {X2}.
+  Q98   cap 98 (informative, SE-245-a). Expected: lane SURVIVES (no red); X {X2}.
+  PLANTS MET iff none is 0 failed AND every REQUIRED red holds. Any other lane red under Q6/Q8/QB (a change of verdict
+  versus qe-ABC-242) is reported and graded by cause; Q97/Q98 are informative and never fail the verdict.
+4 CENSUS (informative; qe-scripts/qe245-census.test.ts copied into P/src, run alone in P after the plants with levels.ts
+         restored): the child budgets actually handed, their depths, the level call's virtual elapsed and clock reads, at
+         steps 10 and 1, against the SE's R1 line (10 per level call; children 7 for 8 legal; budgets 2.5, -25, -52.5, -80,
+         -95, -122.5, -150; elapsed 290). A mismatch is a finding graded by what it changes.
+5 GATES  at H: npm run lint, npm run typecheck, npm run build (dist removed after), each exit 0;
+         node tools/grugops/test-skip-integrity.js .grugops/test-skips.md --skip-count 0 -> "No findings."; npm test x3 = the
+         three G8 head runs, each rc 0, 0 failed, 0 skipped/todo. NAMES (qe-scripts/names.mjs on G8 run-1 base vs run-2 head
+         last-run.json): only at head = exactly 1 (the ABC-245 row), only at base = 0, totals 2 363 -> 2 364; the
+         ABC-242 and ABC-230 rows present and green at head.
+6 G8     ALONE, last of the timed work: qe-scripts/g8.mjs H B out, npm test as spelled, order b h h b b h. Wait-clear before
+         every run (host.mjs): 0 foreign vitest (bracketed pgrep, then waited BY PID with kill -0), 0 cutechess-cli,
+         load1 <= 2.0, Tctl <= 60.0 C. Pre-G8 precondition read once by QE (top -b, second sample): no foreign process at
+         >= 50 % current CPU (QE-221-c's orphan). Records per run: wall, cpu, load1 before/after, Tctl before/after.
+         Admissible iff all 6 rc 0 and load1 <= 8 before and after every run and the precondition held. Median of 3 per
+         arm. H median <= 10 s -> NFR-008 MET (A5). H median > 9.6 s -> ABC-244's tranche-2 trigger FIRES (reported only).
+         H median > 10 s -> STOP, report. Tctl median of the 12 readings > 85 C -> thermal STOP. H - B delta reported against
+         the ticket's < +0.05 s estimate. The B median is the clean re-read of ABC-221's tree (src = c48a6f83) owed for its
+         inadmissible 9.84 s. One re-run of the whole set only if inadmissible.
+
+A1 MET iff the ABC-245 row green at H (plant none and the 3 G8 head runs) AND FIXTURE MET (the row's own offsets/clock/<=101
+   assertions are re-derived independently) AND the census reads children == legal - 1.
+A2 MET iff Q6 and Q8 each turn the ABC-245 row red AND it is green at cap 100 (none).
+A3 MET iff QB turns the ABC-245 row red with d7e8 != 0 AND the row's in-test base() assertions are green at H.
+A4 MET iff the header reads "DEFAULT (`npm test`, N tests)" with N == the src/levels.test.ts row count in the G8 head
+   last-run.json (expected 46).
+A5 MET iff GATES MET AND DIFF MET AND NAMES hold AND G8 admissible with H median <= 10 s.
+
+SEVERITY: HIGH = an acceptance criterion not met or a build fault; MEDIUM = a gap the ticket's rows should catch, or a ruling
+owed; LOW = a test-only regression gap; INFO = everything else.
+VERDICT: PASS iff A1-A5 MET, PLANTS MET, FIXTURE MET and no finding above LOW. PASS_WITH_GAPS iff the same holds but a MEDIUM
+gap is named. FAIL iff any acceptance criterion is NOT MET. STOP iff the G8 H median > 10 s or the thermal stop fires.
+UAT: waived (0 production lines; Test note 2); this verdict is the QE sign-off.

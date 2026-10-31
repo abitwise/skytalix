@@ -1,0 +1,21 @@
+== name-only 9c008db4..7e81732e
+src/levels.test.ts
+== hunks
+@@ -15 +15 @@
+@@ -747,0 +748,59 @@ describe("ABC-242 — a blunder scores a root move that makes the third occurren
+== 7e81732e..7c1721ce src/tools/data/package
+(empty above = none)
+== c48a6f83..9c008db4 src/tools/data/package/vitest.config
+(empty above = equal)
+== last ABC-242 row vs appended block
+      now: virtualClock(STEP_MS),
+      priorKeys: priorOf(game),
+    });
+    expect(choice?.kind).toBe("engine");
+    expect(
+      choice && { move: label(choice.move), depth: choice.depth, nodes: choice.nodes },
+    ).toEqual(direct && { move: label(direct.move), depth: direct.depth, nodes: direct.nodes });
+  });
+});
+
+describe("QE-087-b — the scored list is the engine's, not a self-consistent lie", () => {

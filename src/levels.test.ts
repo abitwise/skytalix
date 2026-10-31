@@ -12,7 +12,7 @@
  * the positions a game actually reaches.
  *
  * LANES, on the `ENGINE_DEEP` precedent (`N8-LANE`):
- * - DEFAULT (`npm test`, 19 tests): `A1`, `A6`, `A7`, `A8`, `A9`, `A10`, `A4`'s byte-identity row
+ * - DEFAULT (`npm test`, 46 tests): `A1`, `A6`, `A7`, `A8`, `A9`, `A10`, `A4`'s byte-identity row
  *   and the edge cases, on `ENDGAMES` with a virtual clock on a COARSE step (one reading per level
  *   budget, so every search is depth 1). `A9`'s moves also carry `A4`'s per-move clauses (test
  *   note 7), a guard and not `A4`'s evidence.
@@ -744,6 +744,65 @@ describe("ABC-242 — a blunder scores a root move that makes the third occurren
     expect(
       choice && { move: label(choice.move), depth: choice.depth, nodes: choice.nodes },
     ).toEqual(direct && { move: label(direct.move), depth: direct.depth, nodes: direct.nodes });
+  });
+
+  /**
+   * `ABC-245` (QE-242-b): the rows above all read their two matches at −4 and −8, so a
+   * `PRIOR_KEYS_WINDOW` lowered to 8 or 50 left them green. Here the third occurrence's two earlier
+   * occurrences sit 94 and 98 plies before the child: a legal reversible game from the probe's
+   * FEN, a 4-ply cycle back to the start, then 93 plies on which no position repeats, then the
+   * loser's king steps back into the start. The child's clock is 98 (under the fifty-move claim at
+   * 100), and the caller hands 97 trimmed keys plus the root key. Same lane form as above: level
+   * 1's 100 ms, forced, seed 1, step 10 (`ADR-0046` § Ruling 2026-10-31, per level call).
+   */
+  describe("ABC-245 — a third occurrence whose earlier two lie more than 50 plies back", () => {
+    const FAR_FEN = "4k3/8/8/8/8/8/8/1Q2K3 w - - 0 1";
+    const FAR_MOVES = [
+      "b1b2 e8d8 b2b1 d8e8 b1h7 e8d8 h7h8 d8d7 h8h7 d7e8 h7g8 e8d7 g8d5 d7c8 d5h1 c8c7 h1h4",
+      "c7c6 h4f2 c6c7 f2g1 c7d7 g1d4 d7e8 d4c5 e8f7 c5c4 f7g7 c4a6 g7g8 a6e6 g8h8 e6b3 h8h7",
+      "b3b6 h7g7 b6b8 g7f7 b8g3 f7f8 g3d3 f8g7 d3g3 g7h7 g3g6 h7h8 g6b6 h8h7 b6b5 h7g6 b5a6",
+      "g6f5 a6c4 f5e5 c4d3 e5e6 d3a6 e6f7 a6d3 f7g8 d3g3 g8f7 g3e5 f7g6 e5f4 g6h7 f4c1 h7g6",
+      "c1c8 g6g7 c8h3 g7f8 h3d7 f8g8 d7d4 g8f7 d4h4 f7g8 h4h5 g8g7 h5b5 g7f6 b5b4 f6e6 b4c3",
+      "e6e7 c3a3 e7d8 a3a8 d8d7 a8a6 d7e7 a6a1 e7d8 a1a2 d8d7 a2b1",
+    ].join(" ");
+    const REPEAT = "d7e8";
+
+    it("A1–A3: it scores exactly 0 with legal − 1 child searches at matches −98 and −94; base reads it otherwise", () => {
+      const game = gameOf(FAR_FEN, FAR_MOVES);
+      const root = toFen(game.position);
+      const prior = priorOf(game);
+      // What a production caller hands: the trimmed prior keys, plus the root key the level adds.
+      const handed = [...prior, repetitionKey(game.position, zobristKey(game.position))];
+      expect(handed.length).toBeLessThanOrEqual(101);
+      const legal = legalMoves(game.position).map(label);
+      const at = legal.indexOf(REPEAT);
+      expect(at).toBeGreaterThanOrEqual(0);
+
+      // The child: where its key stands in the handed list, as offsets from the child (ply 0).
+      const repeat = legalMoves(game.position)[at] as Move;
+      const undo = makeMove(game.position, repeat);
+      const childKey = repetitionKey(game.position, zobristKey(game.position));
+      const childClock = game.position.halfmoveClock;
+      unmakeMove(game.position, repeat, undo);
+      const offsets = handed.flatMap((k, i) => (k === childKey ? [i - handed.length] : []));
+      expect(offsets).toEqual([-98, -94]);
+      // Both earlier occurrences: more than 50 plies back, inside the child's clock and the list.
+      expect(childClock).toBe(98);
+      for (const offset of offsets) {
+        expect(offset).toBeLessThan(-50);
+        expect(-offset).toBeLessThanOrEqual(Math.min(childClock, handed.length));
+      }
+
+      const got = head(game.position, prior);
+      expect(toFen(game.position)).toBe(root);
+      expect(got.scored?.[at] && listOf([got.scored[at]])).toEqual([`${REPEAT}:0`]);
+      expect(got.searches).toBe(legal.length - 1);
+      // A3: base searches that child at the same budget and step, and does not read 0.
+      const was = base(parseFen(root), prior);
+      expect(label(was.scored[at]?.move as Move)).toBe(REPEAT);
+      expect(was.scored[at]?.score).not.toBe(0);
+      expect(listOf(got.scored).slice(0, at)).toEqual(listOf(was.scored).slice(0, at));
+    });
   });
 });
 

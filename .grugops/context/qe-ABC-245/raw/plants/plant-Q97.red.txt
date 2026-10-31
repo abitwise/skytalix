@@ -1,0 +1,3 @@
+Q97 rc=1 total=2368 passed=2366 failed=2 skipped=0 wall=9.3s
+  RED levels.test.ts :: ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 ABC-245 — a third occurrence whose earlier two lie more than 50 plies back A1–A3: it scores exactly 0 with legal − 1 child searches at matches −98 and −94; base reads it otherwise
+  RED qe-extra.test.ts :: qe-ABC-242 extra — bounds the lane cannot see (synthetic lists) X2 cap edge: matches at -98 and -100 are both counted (third occurrence, 0)
