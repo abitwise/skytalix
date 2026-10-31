@@ -1,3 +1,4 @@
+_Updated: 2026-10-31 Orchestrator (orch-2026-10-30a) — ABC-243 SE done, code review PASS (2 test files, +1 row) → In Review; `qe-ABC-243` spawned (G8 ALONE). Width 2/3 (+ bapm records)._
 _Updated: 2026-10-31 03:00Z Orchestrator (orch-2026-10-30a) — ABC-222 DONE (QE PASS; merged ae7211c3, not pushed): EPIC-009 milestone 1 readings complete. ABC-243 pulled → `se-ABC-243`; `bapm-ABC-222-epic009-m1` (records: close ABC-222, grade milestone 1, restate the 400-game estimate). Next: ABC-242 → ABC-221. Width 2/3._
 _Updated: 2026-10-30 23:25Z Orchestrator (orch-2026-10-30a) — ABC-244 DONE (QE PASS + Security/NFR PASS; merged 24b22339, not pushed; G8 9.25 s). ABC-222 pulled → `qe-ABC-222`, 5 games at 40/15, strictly ALONE (~5 h overnight). Next: ABC-243 → ABC-242 → ABC-221. Width 1/3._
 _Updated: 2026-10-30 23:15Z Orchestrator (orch-2026-10-30a) — qe-ABC-244 PASS: G8 head 9.25 s (≤ 9.4 target met; tranche 2 not fired). → `secnfr-ABC-244` (records). ABC-222 games (A7: no other hop) start right after it. Width 1/3._
@@ -1254,8 +1255,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-243] The setoption-Hash row reads a bare go at level 5; the TT memory row names the budget it reads; + QE-241-a UCI fen-with-uncapturable-ep row (size: XS, priority: P3, DoR 10/10 (2026-10-30); test-only, no smoke, no UAT; shares src/uci-session.test.ts with ABC-220 → pull after ABC-220 merges; ABC-220 merged ec1e835b → ordering met; pull when the host is free of ALONE work; **pulled 2026-10-31** → `se-ABC-243`)
+## In Development (WIP 0/3)
 
 
 
@@ -1283,7 +1283,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-243] The setoption-Hash row reads a bare go at level 5; the TT memory row names the budget it reads; + QE-241-a UCI fen-with-uncapturable-ep row (size: XS, priority: P3, DoR 10/10 (2026-10-30); test-only, no smoke, no UAT; shares src/uci-session.test.ts with ABC-220 → pull after ABC-220 merges; ABC-220 merged ec1e835b → ordering met; pull when the host is free of ALONE work; **pulled 2026-10-31** → `se-ABC-243`; **SE done 4a9a264b (code 8772cf36): A1–A6 built, plants red (L=4/6/7, QM3), 2 323 tests, informal wall ~9.0 s; code review PASS** → `qe-ABC-243`)
 
 
 
