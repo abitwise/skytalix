@@ -1658,3 +1658,4 @@ _Updated: 2026-08-19 by BA/PM (task `cut-agents-md-cap-2026-08-19`, Workflow 07)
 | ABC-245 (merge) | Far-back third-occurrence row turns a lowered prior-keys cap red (QE-242-b) | test 7e81732e | qe-ABC-245 PASS | merged 2cce84e0 2026-10-31, not pushed | Done (Orchestrator) |
 | arch-g8-tranche2 (merge) | ADR-0046 tranche 2 opened; candidates re-costed; recommendation PROPOSED | records 38d02496 | — | merged 2026-10-31, not pushed | Done (Orchestrator) |
 | bapm-tranche2-ruling (merge) | Tranche-2 ruling; ABC-248 cut; W1; ABC-229 closed | records 60f08f49 | — | merged 2026-10-31, not pushed | Done (Orchestrator) |
+| ABC-247 (merge) | rpair passes Skill Level 6 on both builds (QE-M1B-a) | tools 02f4f3d4 | qe-ABC-247 PASS | merged 3af97f71 2026-10-31, not pushed | Done (Orchestrator) |
