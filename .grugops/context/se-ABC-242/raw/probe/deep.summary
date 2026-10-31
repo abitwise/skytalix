@@ -1,0 +1,44 @@
+ 04:26:16 up 20:44,  1 user,  load average: 1.48, 1.39, 0.80
+A5: 30 moves, max 4002 ms: 4002,4000,4000,4000,4000,4000,4000,4000,4000,4001,4000,4001,4000,4000,4001,4000,4000,4000,4000,4001,4001,4001,4000,4001,4000,4001,4000,4001,4000,4000
+A3: easiest 32/58, default 54/58
+ Test Files  1 passed (1)
+      Tests  53 passed (53)
+wall 577.66 s
+exit=0
+ 04:35:54 up 20:53,  1 user,  load average: 2.07, 1.88, 1.32
+LADDER GAME {"mode":"short mode, step 120","pair":"3v4","seed":1,"white":4,"black":3,"plies":105,"result":"white-wins","reason":"checkmate","wallS":0.6}
+LADDER GAME {"mode":"short mode, step 120","pair":"3v4","seed":1,"white":3,"black":4,"plies":70,"result":"draw","reason":"threefold-repetition (claimed)","wallS":0.3}
+LADDER GAME {"mode":"short mode, step 120","pair":"3v4","seed":2,"white":4,"black":3,"plies":61,"result":"white-wins","reason":"checkmate","wallS":0.4}
+LADDER GAME {"mode":"short mode, step 120","pair":"3v4","seed":2,"white":3,"black":4,"plies":65,"result":"draw","reason":"threefold-repetition (claimed)","wallS":0.4}
+LADDER PAIR {"mode":"short mode, step 120","criterion":"none — short mode, step 120 is never A2","pair":"3v4","stronger":4,"commit":"4387d4e82600ffaec5914300288e8dd615623f9a+dirty-src","step":120,"seeds":"1..2, both colours each","games":4,"stronger_w_d_l":[2,2,0],"score":"3/4","scorePct":75,"bar":"
+LADDER GAME {"mode":"short mode, step 120","pair":"4v5","seed":1,"white":5,"black":4,"plies":42,"result":"draw","reason":"threefold-repetition (claimed)","wallS":1}
+LADDER GAME {"mode":"short mode, step 120","pair":"4v5","seed":1,"white":4,"black":5,"plies":102,"result":"black-wins","reason":"checkmate","wallS":2.2}
+LADDER GAME {"mode":"short mode, step 120","pair":"4v5","seed":2,"white":5,"black":4,"plies":119,"result":"white-wins","reason":"checkmate","wallS":2.9}
+LADDER GAME {"mode":"short mode, step 120","pair":"4v5","seed":2,"white":4,"black":5,"plies":60,"result":"black-wins","reason":"checkmate","wallS":1.5}
+LADDER PAIR {"mode":"short mode, step 120","criterion":"none — short mode, step 120 is never A2","pair":"4v5","stronger":5,"commit":"4387d4e82600ffaec5914300288e8dd615623f9a+dirty-src","step":120,"seeds":"1..2, both colours each","games":4,"stronger_w_d_l":[3,1,0],"score":"3.5/4","scorePct":87.5,"ba
+LADDER GAME {"mode":"short mode, step 120","pair":"2v3","seed":1,"white":3,"black":2,"plies":55,"result":"white-wins","reason":"checkmate","wallS":0.1}
+LADDER GAME {"mode":"short mode, step 120","pair":"2v3","seed":1,"white":2,"black":3,"plies":80,"result":"draw","reason":"threefold-repetition (claimed)","wallS":0.2}
+LADDER GAME {"mode":"short mode, step 120","pair":"2v3","seed":2,"white":3,"black":2,"plies":55,"result":"white-wins","reason":"checkmate","wallS":0.2}
+LADDER GAME {"mode":"short mode, step 120","pair":"2v3","seed":2,"white":2,"black":3,"plies":92,"result":"black-wins","reason":"checkmate","wallS":0.2}
+LADDER PAIR {"mode":"short mode, step 120","criterion":"none — short mode, step 120 is never A2","pair":"2v3","stronger":3,"commit":"4387d4e82600ffaec5914300288e8dd615623f9a+dirty-src","step":120,"seeds":"1..2, both colours each","games":4,"stronger_w_d_l":[3,1,0],"score":"3.5/4","scorePct":87.5,"ba
+LADDER GAME {"mode":"short mode, step 120","pair":"1v2","seed":1,"white":2,"black":1,"plies":121,"result":"white-wins","reason":"checkmate","wallS":0.3}
+LADDER GAME {"mode":"short mode, step 120","pair":"1v2","seed":1,"white":1,"black":2,"plies":108,"result":"black-wins","reason":"checkmate","wallS":0.1}
+LADDER GAME {"mode":"short mode, step 120","pair":"1v2","seed":2,"white":2,"black":1,"plies":43,"result":"white-wins","reason":"checkmate","wallS":0.1}
+LADDER GAME {"mode":"short mode, step 120","pair":"1v2","seed":2,"white":1,"black":2,"plies":112,"result":"black-wins","reason":"checkmate","wallS":0.2}
+LADDER PAIR {"mode":"short mode, step 120","criterion":"none — short mode, step 120 is never A2","pair":"1v2","stronger":2,"commit":"4387d4e82600ffaec5914300288e8dd615623f9a+dirty-src","step":120,"seeds":"1..2, both colours each","games":4,"stronger_w_d_l":[4,0,0],"score":"4/4","scorePct":100,"bar":
+LADDER GAME {"mode":"short mode, step 120","pair":"1v5","seed":1,"white":5,"black":1,"plies":67,"result":"white-wins","reason":"checkmate","wallS":1.4}
+LADDER GAME {"mode":"short mode, step 120","pair":"1v5","seed":1,"white":1,"black":5,"plies":68,"result":"black-wins","reason":"checkmate","wallS":1.4}
+LADDER GAME {"mode":"short mode, step 120","pair":"1v5","seed":2,"white":5,"black":1,"plies":47,"result":"white-wins","reason":"checkmate","wallS":1.1}
+LADDER GAME {"mode":"short mode, step 120","pair":"1v5","seed":2,"white":1,"black":5,"plies":52,"result":"black-wins","reason":"checkmate","wallS":1.1}
+LADDER GAME {"mode":"short mode, step 120","pair":"1v5","seed":3,"white":5,"black":1,"plies":65,"result":"white-wins","reason":"checkmate","wallS":1.5}
+LADDER GAME {"mode":"short mode, step 120","pair":"1v5","seed":3,"white":1,"black":5,"plies":70,"result":"black-wins","reason":"checkmate","wallS":1.5}
+LADDER GAME {"mode":"short mode, step 120","pair":"1v5","seed":4,"white":5,"black":1,"plies":59,"result":"white-wins","reason":"checkmate","wallS":1.3}
+LADDER GAME {"mode":"short mode, step 120","pair":"1v5","seed":4,"white":1,"black":5,"plies":66,"result":"black-wins","reason":"checkmate","wallS":1.5}
+LADDER GAME {"mode":"short mode, step 120","pair":"1v5","seed":5,"white":5,"black":1,"plies":59,"result":"white-wins","reason":"checkmate","wallS":1.4}
+LADDER GAME {"mode":"short mode, step 120","pair":"1v5","seed":5,"white":1,"black":5,"plies":40,"result":"black-wins","reason":"checkmate","wallS":0.9}
+LADDER PAIR {"mode":"short mode, step 120","criterion":"none — short mode, step 120 is never A1","pair":"1v5","stronger":5,"commit":"4387d4e82600ffaec5914300288e8dd615623f9a+dirty-src","step":120,"seeds":"1..5, both colours each","games":10,"stronger_w_d_l":[10,0,0],"score":"10/10","scorePct":100,"b
+LADDER A5 {"mode":"short mode, step 120","digest":"f61f457801fe67af"}
+ Test Files  1 passed (1)
+      Tests  18 passed (18)
+wall 25.63 s
+exit=0

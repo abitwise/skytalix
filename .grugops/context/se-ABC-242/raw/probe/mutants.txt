@@ -1,0 +1,9 @@
+# se-ABC-242 frozen mutant list (written before any parity run). Each is one string edit of src/levels.ts.
+M1 no-check        the check never fires (rollback: base)
+M2 one-match       ++matches === 1 (a second occurrence reads 0; ADR-0054 d4 / probe H2)
+M3 no-clock-bound  oldest ignores the child's halfmove clock
+M4 search-then-0   the child is searched, then scored 0 (the rejected alternative)
+M5 score-1         the third occurrence scores 1, not 0
+M6 strict-oldest   earlier > oldest (the oldest in-window key is not read)
+M7 walk-from-2     the walk starts at -2, not -4
+M8 raw-key         zobristKey(child) instead of repetitionKey(child, …)
