@@ -10,6 +10,13 @@ owner: BA/PM
 
 # EPIC-011: the path toward 3 000 Elo, classical and measured (`ADR-0056`)
 
+> **`ABC-254` RETURNED TO `EPIC-010` 2026-11-01 by BA/PM** (task `bapm-ABC-254-ready`, records only, at `main`
+> `039cb05e`; nothing run, built or timed). C11's exception is met: the owner's "ABC-254: yes" (`orch-2026-10-30a`
+> `…f7a50e95`; Q-SP-3 = yes) and the ADR amending `ADR-0003` (`arch-adr0003-amend` `…c314772c`, merged `89af8b56`)
+> both landed before `ABC-250` entered development. So `ABC-254` (V2) leaves Phase 5 and goes back to `EPIC-010`
+> milestone 1b, first, DoR 10/10. It lands before this epic starts; V3 (staged generation) stays here and is written
+> on it. Q-SP-3 is no longer open. Lines below that place `ABC-254` here are struck or carry this date.
+
 > **CREATED 2026-11-01 by BA/PM** (task `bapm-epic011-dedupe`, records only, at `main` `2e9a2457`). Nothing was run,
 > built or timed, because `qe-ABC-223` holds the host STRICTLY ALONE. `src/`, `tools/`, `data/`, the board, the trace,
 > the ADRs and `AGENTS.md` are untouched. An Architect hop (`arch-adr0056-owner-fold`) is folding the owner's answers
@@ -31,7 +38,8 @@ owner: BA/PM
 >   `UCI_Elo` (the Orchestrator reads it as not contested, `…022fb66f` item 1, but he did not name it); the claim rule
 >   (a 200-game reading at E = M scoring ≥ 50 %, `ADR-0056` D5 item 5); the milestones 2 200 … 2 800; the routine
 >   control and its game counts (the Architect's, `arch-adr0056-owner-fold` item 3).
-> - **Open owner calls:** Q-3K-2, Q-3K-3, Q-3K-4, Q-3K-6, Q-3K-7, Q-3K-8 and Q-SP-3 (§ Owner questions).
+> - **Open owner calls:** Q-3K-2, Q-3K-3, Q-3K-4, Q-3K-6, Q-3K-7, Q-3K-8 ~~and Q-SP-3~~ (§ Owner questions; Q-SP-3
+>   answered yes 2026-11-01).
 > - **The dedupe audit** of every epic and ticket against `ADR-0056` and against each other is § Dedupe audit. No work
 >   on this page repeats work already done or held elsewhere.
 
@@ -123,8 +131,8 @@ reorders made here are named in the "why" column.
 | **5, extensions, time, speed** | X1 | *stub:* check extension at every depth (not `ABC-210`'s horizon form, which stays closed) | title only | |
 | 5 | X2 | *stub:* singular extension (and IIR) | title only | after T1 |
 | 5 | W1 | *stub:* time use under a clock: no doomed iteration started, a partial iteration's root move kept when it beat the incumbent, soft and hard limits | title only | **must land before the first 40/15 reading**, wherever that falls (reorder: the owner set 40/15 as the claim control, and `uci-clock-mode` today has no soft/hard limit, `ADR-0056` § Inventory, "Time use") |
-| 5 | V2 | `ABC-254` lazy legality (O1-d) | full page (moved in) | **waits the owner's yes (Q-SP-3)**; after `EPIC-010`'s `ABC-252` (both rewrite `src/legal.ts`) |
-| 5 | V3 | *stub:* staged move generation (hash move before generating; captures before quiets) | title only | after V2 |
+| ~~5~~ | V2 | `ABC-254` lazy legality (O1-d) | ~~full page (moved in)~~ **returned to `EPIC-010`** 2026-11-01 | ~~**waits the owner's yes (Q-SP-3)**; after `EPIC-010`'s `ABC-252` (both rewrite `src/legal.ts`)~~ yes `…f7a50e95` and `ADR-0003` amended before `ABC-250` entered development: `EPIC-010` milestone 1b, first (C11) |
+| 5 | V3 | *stub:* staged move generation (hash move before generating; captures before quiets) | title only | after V2 (`ABC-254`, in `EPIC-010` since 2026-11-01) |
 | — | reading | **R3**, milestone reading; and **the 40/15 claim reading** when a routine reading points at 3 000 | (QE readings) | `ADR-0056` D6 item 7 |
 | later | V4 | (not a stub) bitboards: re-opening `ADR-0001` | — | **Q-3K-8, the owner's**, only if the curve flattens below 3 000 after Phase 5 |
 
@@ -203,7 +211,7 @@ Phase 5, the next question is V4 and it is his (`ADR-0056` D6 item 7).
 | 10 | `ABC-231` | King table tapered by phase, alone | S | P3 | Backlog | 9/10 | **to be merged into E1** at Phase 4's refinement |
 | 11 | `ABC-232` | Passed pawns by phase | S | P3 | Backlog | 9/10 | **to be merged into E1** (phase scaling) and E4 (passer terms) |
 | 12 | `ABC-239` | Weights tuned offline, constants only, validated outside (E2) | L | P3 | Backlog | 8/10 | E1; Q-3K-7; `ADR-0048` licence; the method ADR |
-| 13 | `ABC-254` | Lazy legality (V2, O1-d) | M | P2 | Backlog | 9/10 | **Q-SP-3**; the ADR amending `ADR-0003`; `EPIC-010`'s `ABC-252` (or where the O1-b chain stops) |
+| ~~13~~ | `ABC-254` | Lazy legality (V2, O1-d) | M | P2 | **Returned to `EPIC-010`** 2026-11-01 (milestone 1b, first) | 10/10 | ~~**Q-SP-3**; the ADR amending `ADR-0003`; `EPIC-010`'s `ABC-252` (or where the O1-b chain stops)~~ none (yes `…f7a50e95`; `ADR-0003` amended, `89af8b56`) |
 
 The stubs of § Phases get ids when their phase is refined. **Ids `ABC-255`…`ABC-258` are taken here; `ABC-224` stays in
 the Orchestrator's pool.** No moved ticket was renumbered.
@@ -224,7 +232,7 @@ line, id unchanged), **merge into X**, **supersede**, **drop**, **close** (the e
 | `EPIC-008` stronger at the same levels | the harness (`ABC-204`), the R scale, the dropped `ABC-205`/`207`/`209`/`210` | keep (done) | `EPIC-011` reuses its harness and pins; the dropped tickets stay closed and are re-tried here under new ids or stubs |
 | `EPIC-006` game session and packaging | none with `ADR-0056` | **close** (§ Close-out) | every cut ticket is Done; the save/resume slice is not earned |
 | `EPIC-009` 40/15 clock | the claim control; W1; its "major validation" and "strength at 40/15, later" | **close** on `ABC-223`'s grade; three items move here | § Close-out; C4–C6 below |
-| `EPIC-010` verified engine gaps | milestones 2 and 3 (`ABC-231`…`239`), `ABC-254`, Q6 and the 3 000 goal | **close** after milestone 1b; those items move here | § Close-out; `ADR-0056` D4 maps all eight Backlog tickets to its gap list |
+| `EPIC-010` verified engine gaps | milestones 2 and 3 (`ABC-231`…`239`), ~~`ABC-254`~~ (returned 2026-11-01), Q6 and the 3 000 goal | **close** after milestone 1b; those items move here | § Close-out; `ADR-0056` D4 maps all eight Backlog tickets to its gap list |
 
 ### Tickets
 
@@ -238,7 +246,7 @@ line, id unchanged), **merge into X**, **supersede**, **drop**, **close** (the e
 | `ABC-237` TT replacement | T2; order against `ABC-238` | **move** (Phase 1, second) | covered gap; order C2 |
 | `ABC-238` deeper cutoffs | T1 | **move** (Phase 1, first; P3 → P2) | covered gap, the cheapest real one; order C2 |
 | `ABC-239` offline tuning | E2; Q-3K-7 | **move** (Phase 4, after E1) | covered gap; its wait on "milestone 2's evaluation" becomes E1 |
-| `ABC-254` lazy legality | V2; `ABC-235`'s struck cut 4 ("cheaper legality for non-captures") | **move** (Phase 5, whenever Q-SP-3 is yes) | it would hold `EPIC-010` open on an unanswered owner call; `ADR-0056` D6: "O1-d whenever the owner says yes (after O1-b)". Exception kept: on a yes plus its ADR before `ABC-250` enters development, the Orchestrator may pull it back into 1b, first (C11). Not a duplicate of `ABC-235`: cut 4 was struck, never built |
+| `ABC-254` lazy legality | V2; `ABC-235`'s struck cut 4 ("cheaper legality for non-captures") | ~~**move** (Phase 5, whenever Q-SP-3 is yes)~~ **keep in `EPIC-010`, milestone 1b, first** (2026-11-01: the exception below was met) | it would hold `EPIC-010` open on an unanswered owner call; `ADR-0056` D6: "O1-d whenever the owner says yes (after O1-b)". Exception kept: on a yes plus its ADR before `ABC-250` enters development, the Orchestrator may pull it back into 1b, first (C11). Not a duplicate of `ABC-235`: cut 4 was struck, never built |
 | `ABC-249` pre-root repetition row | `ADR-0056` Phase 0 | **keep** in `EPIC-010` | test-only, Ready, closes with `EPIC-010` |
 | `ABC-250`…`ABC-253` milestone 1b | `ADR-0056` V1 / Phase 0 | **keep** in `EPIC-010` | `ADR-0055` D2/D4 and `ADR-0056` D6 both put O1 before every algorithm ticket, and the owner closes `EPIC-010` first, so the order holds without a move. `ABC-250` stays first (C3) |
 | `ABC-223` `uci-clock-mode` smoke | `EPIC-011`'s 40/15 claim control | **keep** in `EPIC-009` | its 5 games prove the mode; the claim readings use it |
@@ -278,7 +286,7 @@ line, id unchanged), **merge into X**, **supersede**, **drop**, **close** (the e
 | C8 | `EPIC-010` Q5 "no Elo target" vs the 3 000 goal | no conflict: `EPIC-010` M2 stays "not LOSS"; the goal is `EPIC-011`'s |
 | C9 | `EPIC-010` Q6 (the 3 000 scale and measure) | moved here; its time-control half is answered (40/15); the scale and the claim rule stay *[proposed]* |
 | C10 | The R smoke (E = 1 910) loses meaning as the engine climbs (a 2 400 engine scores ≈ 95 % against it; S-4's 3.0 of 10 then guards nothing) | risk `RISK-EPIC011-03`; the Architect or QE proposes E for the smoke when a milestone reading moves past 2 200 (the game counts and pins inside the owner's rule are delivery, `EPIC-010` § Owner questions) |
-| C11 | `ADR-0055` D4 puts O1-d (`ABC-254`) first in O1; `ADR-0056` D6 puts it "whenever the owner says yes (after O1-b)" | `ADR-0056`'s placement adopted (it is in `EPIC-011`), with `ADR-0055` D4's order kept as the exception on `ABC-254`'s page: yes plus ADR before `ABC-250` enters development pulls it back into `EPIC-010` 1b, first |
+| C11 | `ADR-0055` D4 puts O1-d (`ABC-254`) first in O1; `ADR-0056` D6 puts it "whenever the owner says yes (after O1-b)" | `ADR-0056`'s placement adopted (it is in `EPIC-011`), with `ADR-0055` D4's order kept as the exception on `ABC-254`'s page: yes plus ADR before `ABC-250` enters development pulls it back into `EPIC-010` 1b, first. **2026-11-01: met** (yes `…f7a50e95`; `ADR-0003` amended, `89af8b56`; `ABC-250` not yet in development); `ABC-254` is back in `EPIC-010` 1b, first |
 
 ## Close-out of the open epics (the owner: finish them first)
 
@@ -309,10 +317,11 @@ line, id unchanged), **merge into X**, **supersede**, **drop**, **close** (the e
 
 ### `EPIC-010` (verified engine gaps)
 
-- **What remains to Done:** `ABC-249` (Ready, test-only), then milestone 1b: `ABC-250` (Ready; its A4 perft reading
+- **What remains to Done:** `ABC-249` (Ready, test-only), then milestone 1b: *(2026-11-01)* `ABC-254` (first, 10/10),
+  `ABC-250` (Ready; its A4 perft reading
   decides `ABC-251`'s form and whether `ABC-252` exists), `ABC-251`, `ABC-252`, `ABC-253` (Ready, pulled last).
 - **Moved to `EPIC-011`:** `ABC-231`, `232`, `233`, `234`, `236`, `237`, `238` (milestone 2), `ABC-239` (milestone 3),
-  `ABC-254` (it waits on Q-SP-3 and would hold the close), Q6 and the 3 000 goal.
+  ~~`ABC-254` (it waits on Q-SP-3 and would hold the close),~~ Q6 and the 3 000 goal. *(`ABC-254` returned 2026-11-01.)*
 - **Milestone 1b stays in `EPIC-010`, last,** because `ADR-0055` D2/D4 and `ADR-0056` D6 both place O1 before every
   ticket that edits `orderMoves`, the search or `evaluate`, and the owner closes `EPIC-010` before `EPIC-011` starts.
   So 1b lands first under either reading, `EPIC-011` is written on the packed base, and no file collision is ordered
@@ -333,7 +342,7 @@ line, id unchanged), **merge into X**, **supersede**, **drop**, **close** (the e
 | **Q-3K-6** | `NFR-009` above 16 MiB for T4 (he pre-offered 128 MiB, 2026-09-25) | 16 MiB; `ABC-258` goes to 8 MiB only | `ABC-258` beyond 8 MiB |
 | **Q-3K-7** | Tuning data: the project's own games (allowed by default), Lichess exports (CC0), a Stockfish-labelled set (a product-identity question) | own games only | `ABC-239`'s data source |
 | **Q-3K-8** | Re-open `ADR-0001` (bitboards), only if the readings call for it | no | V4 |
-| **Q-SP-3** | Amend `ADR-0003` so lazy legality may be built | not built | `ABC-254` |
+| ~~**Q-SP-3**~~ | Amend `ADR-0003` so lazy legality may be built | **answered yes 2026-11-01** (`…f7a50e95`); `ADR-0003` amended | nothing (`ABC-254` is in `EPIC-010`) |
 | (part of Q-3K-1) | Confirm the scale (Stockfish 19 `UCI_Elo`) and the claim rule (≥ 50 % over 200 games at E = M) | *[proposed]* as written | G1's wording |
 
 ## Dependencies
@@ -344,7 +353,7 @@ line, id unchanged), **merge into X**, **supersede**, **drop**, **close** (the e
 - `EPIC-010` closed: 1b's packed base is what every Phase 1+ ticket edits.
 - Within the epic: `ABC-238` → `ABC-237` → `ABC-257` → `ABC-258` share `src/transposition.ts`; `ABC-233` → O2c →
   `ABC-234` → Q1 share `orderMoves` and the capture path; E1 → `ABC-239` → E3–E7 share `src/evaluate.ts`; `ABC-254` →
-  V3 share `src/legal.ts` and `src/moves.ts`.
+  V3 share `src/legal.ts` and `src/moves.ts` (`ABC-254` in `EPIC-010` since 2026-11-01, so it lands first).
 
 ## Risks
 

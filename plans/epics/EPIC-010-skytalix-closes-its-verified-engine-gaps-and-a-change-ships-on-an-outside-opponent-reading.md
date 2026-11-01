@@ -10,17 +10,27 @@ owner: BA/PM
 
 # EPIC-010: the verified engine gaps, closed one measured change at a time, against an outside opponent
 
+> **`ABC-254` BACK IN MILESTONE 1b, FIRST, 2026-11-01 by BA/PM** (task `bapm-ABC-254-ready`, records only, at `main`
+> `039cb05e`; nothing run, built or timed, because `qe-ABC-223` holds the host STRICTLY ALONE). The owner said
+> "ABC-254: yes" (`orch-2026-10-30a` `…f7a50e95`; Q-SP-3 = yes), and the Architect amended `ADR-0003` clauses 1 and 3
+> on that word (`arch-adr0003-amend` `…c314772c`, merged `89af8b56`). Both landed before `ABC-250` entered development,
+> so the exception on `ABC-254`'s page (`EPIC-011` C11) is met: **`ABC-254` is this epic's again, milestone 1b,
+> first, DoR 10/10** (Ready recommended; the column move is the Orchestrator's). Milestone 1b's order is now
+> `ABC-254` → `ABC-250` → `ABC-251` → `ABC-252` → `ABC-253`; `ABC-250` packs the lazy filter. Lines below that put it in
+> `EPIC-011` are struck or carry this date. One more S2 nps reading is owed at the close (≈ 1 h ALONE, estimate).
+
 > **CLOSE-OUT PLAN AND RE-HOME 2026-11-01 by BA/PM** (task `bapm-epic011-dedupe`, records only, at `main`
 > `2e9a2457`; nothing run, built or timed, because `qe-ABC-223` holds the host STRICTLY ALONE; `src/`, `tools/`,
 > `data/`, the board, the trace, the ADRs and `AGENTS.md` untouched). Source: the owner's word of 2026-11-01
 > (`orch-2026-10-30a` `…022fb66f`, verbatim): *"… let's create new Epic yes and finish other epics before that. Go over
 > previous epics and tickets to find conflicting work, no need to do the same work twice."*
 >
-> - **This epic closes after milestone 1b.** What remains: `ABC-249` (Ready, test-only), then `ABC-250` (Ready) →
+> - **This epic closes after milestone 1b.** What remains: `ABC-249` (Ready, test-only), then *(2026-11-01)* `ABC-254`
+>   (first in 1b, top block), then `ABC-250` (Ready) →
 >   `ABC-251` → `ABC-252` → `ABC-253` (Ready, pulled last), as § Milestone 1b orders them.
 > - **Moved to `EPIC-011`** (the 3 000 path, `ADR-0056`; ids unchanged, each page carries a dated line): milestone 2
->   (`ABC-231`, `232`, `233`, `234`, `236`, `237`, `238`), milestone 3 (`ABC-239`), and `ABC-254` (it waits on the
->   owner's Q-SP-3 and would hold this epic open). Also moved: Q6 and the 3 000 goal (§ Product goal). `ADR-0056` D4
+>   (`ABC-231`, `232`, `233`, `234`, `236`, `237`, `238`), milestone 3 (`ABC-239`), ~~and `ABC-254` (it waits on the
+>   owner's Q-SP-3 and would hold this epic open)~~ *(`ABC-254` back here 2026-11-01, top block)*. Also moved: Q6 and the 3 000 goal (§ Product goal). `ADR-0056` D4
 >   maps every one of them to its gap list; keeping them here would make this epic's close wait on the 3 000 path.
 > - **Milestone 1b stays here, last.** `ADR-0055` D2/D4 and `ADR-0056` D6 both put O1 before any ticket that edits
 >   `orderMoves`, the search or `evaluate`, and the owner closes this epic before `EPIC-011` starts, so 1b lands first
@@ -35,7 +45,7 @@ owner: BA/PM
 >   the value-changing work of this epic stops there). This saves a ≈ 23 h ALONE batch.
 > - **Fences unchanged:** § Out of scope still fences the re-tries, SEE and delta pruning and rook activity **for this
 >   epic**; `EPIC-011` holds them now (the owner's Q-3K-5 answer re-opened them there).
-> - Tickets table: rows 11–18 and 29 read "Moved to `EPIC-011`". The dedupe audit of every epic and ticket is on
+> - Tickets table: rows 11–18 ~~and 29~~ read "Moved to `EPIC-011`" *(row 29 back 2026-11-01)*. The dedupe audit of every epic and ticket is on
 >   `EPIC-011` § Dedupe audit. The notes are in `.grugops/context/bapm-epic011-dedupe/notes/`.
 
 > **GOAL RESTATED AND MILESTONE 1b CUT 2026-11-01 by BA/PM** (task `bapm-goal3000-o1-cut`, records only, at `main`
@@ -692,7 +702,7 @@ sits inside the batch's ± 78, so speed is graded on nps, not games).
 
 | order | id | `ADR-0055` cut | size, priority | why here |
 |---|---|---|---|---|
-| ~~(first, only if allowed in time)~~ **moved to `EPIC-011` 2026-11-01** (`bapm-epic011-dedupe`: waits Q-SP-3; would hold the close) | `ABC-254` | O1-d, lazy legality (`ADR-0003` (c2)), est. 1.15–1.40× | M, P2 | The largest single prize; `ADR-0055` D4 puts it first. **Waits the owner's yes on amending `ADR-0003` (Q-SP-3) and the amending ADR.** If they arrive before `ABC-250` enters development, it goes first; otherwise after `ABC-252`, because both rewrite `src/legal.ts` |
+| ~~(first, only if allowed in time)~~ ~~**moved to `EPIC-011` 2026-11-01** (`bapm-epic011-dedupe`: waits Q-SP-3; would hold the close)~~ **first** (back 2026-11-01, `bapm-ABC-254-ready`) | `ABC-254` | O1-d, lazy legality (`ADR-0003` (c2)), est. 1.15–1.40× | M, P2 | The largest single prize; `ADR-0055` D4 puts it first. ~~**Waits the owner's yes on amending `ADR-0003` (Q-SP-3) and the amending ADR.** If they arrive before `ABC-250` enters development, it goes first; otherwise after `ABC-252`, because both rewrite `src/legal.ts`~~ **2026-11-01: the yes (`…f7a50e95`) and the amending ADR (`89af8b56`) arrived before `ABC-250` entered development, so it goes first**, and `ABC-250` packs the lazy filter |
 | 1 | `ABC-250` | O1-b part 1: packed moves in generation, legality, make/unmake; read on perft | M, P2 | Reads O1-b's data-layout gain on perft before the search is spent, with `ADR-0055` D3's A1 / A0 bars (GO ≥ 1.25×; HOLD 1.10–1.25×; NO-GO < 1.10×). The AssemblyScript prototype is not run, so this is where that reading happens. Not merged on HOLD or NO-GO |
 | 2 | `ABC-251` | O1-b part 2 with O1-c: the search, quiescence, ordering and killers on packed moves; inlined helpers | L (S if narrowed), P2 | On GO: the full form, bar ≥ 1.10×. On HOLD / NO-GO: narrowed to O1-c alone, bar ≥ 1.03× (`ADR-0055`'s HOLD row: "only the cheap parts (O1-a, O1-c)") |
 | 3 | `ABC-252` | O1-b part 3: one generator; the shell through one converter | M, P3 | Removes the second move path `ABC-250` stages; dropped if `ABC-250` is dropped |
@@ -888,7 +898,7 @@ mates", ≥ 6 "a quiet promotion decides". It reads `quiesce` and `chooseMove` a
 | 26 | `ABC-251` | The search, quiescence, ordering and killers walk the packed moves and build a `Move` only at `chooseMove`'s return, with hand-inlined helpers (milestone 1b, O1-b part 2 with O1-c, value-identical) | L (S narrowed) | P2 | Backlog | **9/10** | `ABC-250` | `ABC-250`'s A4 reading (full form on GO, bar ≥ 1.10×; O1-c alone otherwise, bar ≥ 1.03×) |
 | 27 | `ABC-252` | One move generator: the shell's move calls build their `Move` lists from the packed path through one converter, and the object generator is removed (milestone 1b, O1-b part 3, value-identical) | M | P3 | Backlog | **9/10** | `ABC-250` GO, `ABC-251` full form | `ABC-251`'s merge; dropped if `ABC-250` is dropped |
 | 28 | `ABC-253` | Zobrist keys travel as two 32-bit halves in the search, the TT and the repetition scan, and stay `bigint` at the API (milestone 1b, O1-a, value-identical) | M | P3 | Backlog (Ready recommended) | **10/10** | none (`ADR-0025`, `ADR-0054` kept) | none; pulled after the O1-b chain (`ADR-0055` D4), bar ≥ 1.02× |
-| 29 | `ABC-254` | Lazy legality: the full make/test/unmake only for king moves, en passant, pinned pieces and positions in check (milestone 1b, O1-d = `ADR-0003` (c2), value-identical) | M | P2 | **Moved to `EPIC-011`** (2026-11-01; was Backlog) | **9/10** | an ADR amending `ADR-0003` clauses 1 and 3 | **the owner's yes (Q-SP-3)** and that ADR; first in milestone 1b if in time, else after `ABC-252` |
+| 29 | `ABC-254` | Lazy legality: the full make/test/unmake only for king moves, en passant, pinned pieces and positions in check (milestone 1b, O1-d = `ADR-0003` (c2), value-identical) | M | P2 | Backlog (Ready recommended); ~~**Moved to `EPIC-011`**~~ back 2026-11-01 | **10/10** | `ADR-0003` amended (clauses 1 and 3; `…c314772c`, merged `89af8b56`) | none; ~~**the owner's yes (Q-SP-3)** and that ADR~~ yes `…f7a50e95`; **first in milestone 1b** |
 
 *Re-scored 2026-10-29 (`bapm-owner-words-b`): Q4 is removed from every wait. Each value-changing ticket's DoR row 4
 is now ✅, because its reading is the smoke pair. No ticket but `ABC-225` changes column on this hop. `ABC-227` (Done)
@@ -934,6 +944,8 @@ not pulled; the column move is the Orchestrator's. The board holds the live stat
 are value-identical engine changes outside the fifteen. **Their row numbers are not their pull order:** § Milestone 1b
 gives it (`ABC-254` first only if the owner's yes and its ADR come in time; then `ABC-250` → `ABC-251` → `ABC-252` →
 `ABC-253`). No other row was changed. The board holds the live state; the column moves are the Orchestrator's.*
+*Folded 2026-11-01 (`bapm-ABC-254-ready`): row 29 (`ABC-254`) is back in this epic, DoR 10/10, first in milestone 1b,
+because the owner's yes and the amending ADR came before `ABC-250` entered development. No other row was changed.*
 
 ## Observations (not tickets)
 
@@ -955,7 +967,7 @@ gives it (`ABC-254` first only if the owner's yes and its ADR come in time; then
 | Q4 | The pre-merge outside-opponent rule: (a)–(d), and (e) from his `EPIC-009` word | **2026-10-29: (e), extended:** "10 games self-play + 10 games vs stockfish" | § The merge rule: S-1 to S-4 per value-changing ticket, the trend, and a batched R pair. `ABC-225` re-scoped. Q4 is removed from every ticket's wait |
 | Q5 | Accept this epic and M1–M5, no Elo target | **2026-10-29: accepted, no Elo target:** "elo target is hard to reach, but try to understand if things get worse" | `proposed` → `backlog`. M1–M5 stand as written. The "worse" question is answered by § The merge rule's three layers |
 | Q6 (open, 2026-11-01; **moved to `EPIC-011`** 2026-11-01, `bapm-epic011-dedupe`: its time-control half is answered, 40/15) | The 3 000 goal: (a) which scale it is on (rating list, time control, field); (b) whether it becomes a measure of this epic or a later one, and read how (MQ-3000, § Product goal) | — **Asked after `arch-algo-analysis` reports**, which proposes the measurement; the Orchestrator takes it to him | Default until he answers: no ticket, gate or measure bound to 3 000; M2 stays "not LOSS"; scale `UNKNOWN - verify` |
-| Q-SP-3 (`ADR-0055`, open) | Amend the owner-ratified `ADR-0003` clauses 1 and 3 so lazy legality ((c2)) may be built now, for speed | — Not answered explicitly on 2026-11-01 (Orchestrator `…74216a44`, item 2) | `ABC-254` waits in Backlog (9/10); on yes, the Architect writes the amending ADR and it goes Ready; on no, it is closed as declined |
+| Q-SP-3 (`ADR-0055`, ~~open~~ answered) | Amend the owner-ratified `ADR-0003` clauses 1 and 3 so lazy legality ((c2)) may be built now, for speed | — Not answered explicitly on 2026-11-01 (Orchestrator `…74216a44`, item 2). **Later 2026-11-01: "ABC-254: yes"** (`…f7a50e95`); `ADR-0003` amended (`…c314772c`, merged `89af8b56`); `ABC-254` 10/10, first in milestone 1b | `ABC-254` waits in Backlog (9/10); on yes, the Architect writes the amending ADR and it goes Ready; on no, it is closed as declined |
 | Q-SP-2 (`ADR-0055`, open) | `ADR-0055` D3's bars, as written or reset | — | Used only by `ABC-250` A4 (perft A1 / A0: GO ≥ 1.25×, HOLD 1.10–1.25×, NO-GO < 1.10×). **They apply as written unless he resets them before the reading** |
 
 - **The cut's text of Q1–Q5**, with the options and defaults, is in git at `542e8219` and in note
@@ -982,7 +994,7 @@ gives it (`ABC-254` first only if the owner's yes and its ADR come in time; then
 - **Milestone 1b (2026-11-01, `bapm-goal3000-o1-cut`):** `ABC-250` → `ABC-251` → `ABC-252` share `src/moves.ts`,
   `src/legal.ts`, `src/apply.ts` and `src/zobrist.ts` (the core) and `src/search.ts`, `src/engine.ts`,
   `src/quiescence.ts`, `src/transposition.ts` (the search); `ABC-253` shares the search, TT and key files, so it follows
-  the chain; `ABC-254` shares `src/legal.ts` (first if allowed in time, else after `ABC-252`). **Against milestone 2:**
+  the chain; `ABC-254` shares `src/legal.ts` (~~first if allowed in time, else after `ABC-252`~~ first: allowed in time, 2026-11-01). **Against milestone 2:**
   `ABC-251` edits the `orderMoves` that `ABC-233`/`ABC-234` change, the search and TT that `ABC-236`–`ABC-238` change,
   and possibly `src/evaluate.ts` (`ABC-231`/`ABC-232`); milestone 1b goes first, so milestone 2 is written on it. A
   value-identical merge does not stale a D or R reading's verdict, but each nps reading needs its own ALONE window.
