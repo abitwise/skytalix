@@ -1,0 +1,11 @@
+tsv n8-qeg.tsv; host columns: linux (Tctl)
+round	cond	cpu	wall	files	tests	load_b	load_a	foreign_b	foreign_a	therm	power_or_cutechess	sampler_bad	status	kept
+0	B	0.41	0.29	1	1	0.21	0.21	0	0	34.3->35.5	cc 0/0	0	ok	round0
+0	H	0.88	0.58	1	32	0.21	0.21	0	0	35.5->40.9	cc 0/0	0	ok	round0
+0	T	0.34	0.23	1	1	0.21	0.21	0	0	40.9->43.8	cc 0/0	0	ok	round0
+
+cpu == user + sys (centiseconds) on every row: True
+Tctl over the window: median 38.2 C, max 43.8 C, n 6 (thermal stop > 85.0 C: False)
+sampler rows over the lane: 2; bad 0; whole file 2 rows, bad 0
+scored rounds 0 []; discarded rounds []
+WINDOW STATE: VOID (n must be 8; a window with any discarded round is void). No summary is used.
