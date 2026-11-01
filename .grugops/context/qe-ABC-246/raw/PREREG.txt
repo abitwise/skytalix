@@ -1,0 +1,81 @@
+qe-ABC-246 PRE-REGISTRATION (committed before any head run; nothing below moves after a reading)
+Ticket ABC-246 (XS, P3, test-only, UAT waived): two uci-clock-mode rows in src/uci-session.test.ts (A1 hard stop 1 900,
+A2 movetime over a clock 5 000) and one comment in src/engine.test.ts's ABC-170 A2 block (SE-221-g). Source: the ticket page
+(A1-A5, NFR triggers, Test notes 1-3); qe-ABC-221 notes …8ad25906 (QE-221-a) and …c6f37a35 (plants HSCM, CLOCKWINSCM);
+se-ABC-246 notes (decision 2f43204c, A3 8de958b6, A4/A5 851629b3, handoff 0d04bf8a); ADR-0046 § Addendum 2026-10-31 and
+§ BA/PM ruling 2026-10-31 (W1). Brief: .grugops/queue/claimed/qe-ABC-246.md (main 3aad6571).
+Base 832ff246 (main at the SE's branch point). Head 3c5e05fd (code); branch tip a1942ea0 = SE notes only (src/ tools/ data/
+package* vitest.config.ts identical to 3c5e05fd). main has moved to 55fbc90e by records only (no src/ tools/ data/ package*
+change vs 832ff246; checked before this file was written).
+
+TREES (qe-scripts/setup.sh; session scratchpad qe-246/, removed at the end): H = git archive a1942ea0; node_modules = one
+symlink to the main checkout's (package.json / package-lock.json equal at 832ff246, a1942ea0 and main). B = hard-link tree of
+H with src/uci-session.test.ts and src/engine.test.ts REAL copies of 832ff246's (asserted: the only src/ tools/ data/ package*
+files that differ between 832ff246 and a1942ea0). B's records (.grugops/, plans/) are H's, the qe-ABC-245 method, so G8's
+H - B reads the code change only. P (plants) = hard-link tree of a tree with a real src/ (plant.mjs). After all runs H and B
+are compared with git archive a1942ea0 (tar --compare; B with the two files excepted and those cmp'd against 832ff246).
+WIDTH: ALONE for timing (one records-only BA/PM hop beside, no vitest). Everything sequential; no two vitest processes at
+once; never vitest on the same command line as a wait; waits by kill -0 (host.mjs / waitpid.mjs) or by polling a file,
+never `while pgrep`. Never bare npx / npm exec. No edit to src/, tools/, data/ or the board. Thermal stop: Tctl median > 85 C.
+Foreign processes: every timed run logs load1 and the top-CPU processes; a foreign vitest is logged and waited on by PID,
+never killed.
+
+1 DIFF   git diff --name-only 832ff246 3c5e05fd == {src/engine.test.ts, src/uci-session.test.ts} exactly; the
+         uci-session.test.ts diff removes 0 lines and adds one describe inside ABC-221's describe; 3c5e05fd..a1942ea0 touches
+         no src/ tools/ data/ package*. Zero-production-lines measurement (AGENTS.md, unfiltered form) on 832ff246..a1942ea0
+         is empty. MET iff all hold.
+2 ROWS   (by hand, recorded in the decision note) A1's and A2's expected budgets re-derived from ADR-0052 D2/D4:
+         C = max(1, min((t - 1 000 - 100m)/m + i, t - 1 100)), mode cap 59 500, movetime read first.
+         A1: t 3 000, i 500, m 1 -> spread 2 400, hard stop 1 900 -> 1 900. A2: movetime 5 000 -> min(5 000, 59 500) = 5 000;
+         the clock's C = (900 000 - 1 000 - 4 000)/40 = 22 375. The rows must assert exactly [1 900] and [5 000] on the
+         stubbed chooseMove's handed budget with CLOCK_MODE sent first.
+3 PLANTS (qe-scripts/plant.mjs; plant strings VERBATIM from qe-ABC-221 raw/qe-scripts/plant.mjs, each asserted to occur once
+         in src/uci-session.ts; WHOLE default lane per plant, vitest via node, json reporter, heap 128; file restored after
+         each plant, cmp-checked at the end). Lane at H = 2 366 rows (SE's reading; read again under `none`).
+  H none         REQUIRED: 0 failed, 0 skipped, total 2 366.
+  H HSCM         REQUIRED: the ABC-246 A1 row red. Expected lane reds EXACTLY {ABC-246 A1} (handed [2400]).
+  H CLOCKWINSCM  REQUIRED: the ABC-246 A2 row red. Expected lane reds EXACTLY {ABC-246 A2} (handed [22375]).
+  B HSCM         informative: expected 0 red (qe-ABC-221 read HSCM a lane survivor at c48a6f83), so A1 is the only killer.
+  B CLOCKWINSCM  informative: expected 0 red, so A2 is the only killer.
+  A3 MET iff H none is 0 failed AND each REQUIRED red holds AND no other lane row turns red under either plant ("nothing
+  else red", the brief). A B reading other than 0 red is reported (INFO) and does not fail A3.
+4 A4     (a) git diff 832ff246 3c5e05fd -- src/engine.test.ts: every removed and added line is inside one /** ... */ block
+         (qe-scripts/a4.mjs: each changed line, after trim, starts with "/**", "*" or "*/"; and the code tokens of the file with
+         comments stripped are equal at base and head). (b) The comment's figures against HARD_CEILING_MS = 60 000 (read from
+         H's src/engine.ts): "about 60 000 clock readings before the deadline" on a 1 ms step = 60 000 / 1 (arithmetic);
+         "the node budget ends the search after about 10" re-read by QE (qe-scripts/a4-readings.ts at H: the block's own
+         chooseMove call, kiwipete, budget HARD_CEILING_MS, tickingClock(1)-equivalent counter, maxNodes 6 000; readings
+         counted). Expected 9 (SE's reading). A4 MET iff (a) holds and no figure in the comment is false at 60 000 ("about
+         10" is admissible for a reading in 5..20; outside that is a finding graded LOW, comment accuracy only).
+5 GATES  at H: npm run lint, npm run typecheck, npm run build (dist removed after), each exit 0;
+         node tools/grugops/test-skip-integrity.js .grugops/test-skips.md --skip-count 0 -> "No findings."; node
+         tools/grugops/lane-inventory.js -> "No findings." exit 0; npm test x3 = the three G8 head runs, each rc 0, 0 failed,
+         0 skipped/todo. NAMES (qe-scripts/names.mjs on G8 run-1 base vs run-2 head last-run.json): only at head = exactly 2
+         (ABC-246 A1, A2), only at base = 0, totals 2 364 -> 2 366 (net +2); every ABC-220 and ABC-221 row present and green
+         at head, and the sorted name set minus the 2 added equal to base's.
+6 G8     ALONE, last of the timed work: qe-scripts/g8.mjs H B out (qe-ABC-245's g8.mjs, tree regex only), npm test as spelled,
+         order b h h b b h. Wait-clear before every run (host.mjs): 0 foreign vitest (bracketed pgrep, then waited BY PID with
+         kill -0), 0 cutechess-cli, load1 <= 2.0, Tctl <= 60.0 C. Pre-G8 precondition read once by QE (top -b, second
+         sample): no foreign process at >= 50 % current CPU. Records per run: wall, cpu, load1 before/after, Tctl
+         before/after, top-CPU processes before. Admissible iff all 6 rc 0 and load1 <= 8 before and after every run and the
+         precondition held. Median of 3 per arm. H median <= 10 s -> NFR-008 MET (A5). H median > 10 s -> STOP, report
+         (ADR-0035 D6; no confirmation step). Tctl median of the 12 readings > 85 C -> thermal STOP. H - B delta reported
+         against the ticket's +0.01 s estimate. One re-run of the whole set only if inadmissible.
+         W1 (the brief applies it here; the ticket page says W1 starts at ABC-248's gate — reported, not resolved by QE):
+         if the H median > 9.7 s, a second window: head only, n = 3, same H tree (byte-identical), starting >= 30 min after
+         the first window ended, after wait-clear, Tctl <= 60 C, held to the same admissibility rules (re-run once if
+         inadmissible). The median of the six head walls (mean of the 3rd and 4th sorted) is reported; > 9.7 s is recorded
+         as a confirmed W1 crossing for the Orchestrator to route; exactly 9.7 s is not. W1 is not a merge gate and does not
+         change this verdict (ruling clarification 4). The ticket's bar stays NFR-008 <= 10 s on the first window's median.
+
+A1 MET iff the A1 row green at H (plant none and the 3 G8 head runs) AND ROWS (2) holds for A1 AND HSCM reds it.
+A2 MET iff the same for A2 with CLOCKWINSCM.
+A3 MET iff PLANTS MET as defined in 3.
+A4 MET as defined in 4.
+A5 MET iff GATES MET AND DIFF MET AND NAMES hold AND G8 admissible with H median <= 10 s.
+
+SEVERITY: HIGH = an acceptance criterion not met or a build fault; MEDIUM = a gap the ticket's rows should catch, or a ruling
+owed; LOW = a test-only regression gap or a comment inaccuracy; INFO = everything else.
+VERDICT: PASS iff A1-A5 MET and no finding above LOW. PASS_WITH_GAPS iff the same holds but a MEDIUM gap is named. FAIL iff
+any acceptance criterion is NOT MET. STOP iff the G8 H median > 10 s or the thermal stop fires.
+UAT: waived (0 production lines; Test note 2); this verdict is the QE sign-off.
