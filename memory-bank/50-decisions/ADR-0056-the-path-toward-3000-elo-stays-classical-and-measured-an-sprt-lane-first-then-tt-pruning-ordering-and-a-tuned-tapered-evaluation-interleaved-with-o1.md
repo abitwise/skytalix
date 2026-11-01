@@ -809,8 +809,8 @@ The settings in use:
     and 5 and `ABC-212` A9 at 6–7; the blunder path; `ABC-220` and `ABC-221`, the two `TimeMode` budgets.
 - **Per strength-changing ticket, the named check: the Levels deep lane.**
   - The command: `ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/levels.test.ts
-    --reporter=verbose`. It has 41 tests and takes about 555 s (`memory-bank/90-agents-md-command-log.md` § "Levels
-    deep lane").
+    --reporter=verbose`. It has 57 tests and took 577 s on `EPIC-010`'s closing head (`memory-bank/90-agents-md-command-log.md`
+    § "Levels deep lane"). *(Refreshed 2026-11-01; was "41 tests and takes about 555 s".)*
   - It is the cheapest existing check that runs the changed engine at every level:
     - A2: each of levels 1–7 on the shipped path spends its budget ± 20 % on a fine virtual step, inside its ceiling,
       and so does level 1's blunder path;
@@ -823,16 +823,24 @@ The settings in use:
     - A3: level 1 solves strictly fewer puzzles than level 5, so the two ends of the scale stay ordered.
   - The games cover the fast end: the 100 ms read is level 1's budget at rate 0, and S′ sits between levels 3 and 4.
     A5 and the level 6–7 rows cover the slow end.
-  - QE runs it on the candidate head, host alone, beside C2′. The pass is exit 0 with 41 passed (count your run).
-    About 9 min.
+  - QE runs it on the candidate head, host alone, beside C2′. The pass is exit 0 with 57 passed (count your run).
+    About 10 min. *(Refreshed 2026-11-01; was "41 passed" and "About 9 min".)*
 - **Per epic, on the closing head, beside C3″**, two more lanes:
   - the self-play ladder in short mode, `LADDER_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run
-    src/ladder.test.ts` (848 s on a loaded host, the command log). It plays real games between levels 1–5, blunders
+    src/ladder.test.ts` (18 tests, 23.4 s with the host alone, the command log; *refreshed 2026-11-01, was "848 s on a
+    loaded host"*). It plays real games between levels 1–5, blunders
     included, and asserts each one ends legally (A3, A4);
   - the UCI session deep lane, `ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run
-    src/uci-session.test.ts`. Its 5 × 22 s and 3 × 59.5 s searches put both `TimeMode`s on the real clock. About
-    5 min (estimate).
-  - Together with the Levels deep lane that is about 30 min. Each lane is under 1 h, so none is asked.
+    src/uci-session.test.ts`. Its 5 × 22 s and 3 × 59.5 s searches put both `TimeMode`s on the real clock. 241
+    tests, 291 s with the host alone (*refreshed 2026-11-01; was "About 5 min (estimate)"*).
+  - Together with the Levels deep lane that is about 15 min (*refreshed 2026-11-01; was "about 30 min"*). Each lane
+    is under 1 h, so none is asked.
+  - *2026-11-01, dated figure refresh by Architect/Design (task `arch-adr0057-fix`, records only, at `main`
+    `ff775417`; nothing run).* The four refreshed figures above are QE's readings on `EPIC-010`'s closing head
+    (`qe-EPIC-010-close` `…388b3044`: worktree at `608ebfa4`, `src/` equal to `053733d2`, vitest 4.1.12, each lane
+    under the host lock, one at a time). All three lanes exited 0 with every test passed: Levels 57 of 57, 577 s, host
+    SHARED; ladder short 18 of 18, 23.4 s, host ALONE; UCI session 241 of 241, 291 s, host ALONE. The Scribe listed
+    them as stale (`scribe-lane-figures` `…1fdc30f0`). No rule, lane, command or duty in this section changes.
 
 **Gaps (for BA/PM to cut; nothing covers them today)**
 
