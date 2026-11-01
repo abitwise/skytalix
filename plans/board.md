@@ -1,3 +1,4 @@
+_Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — `bapm-qe-gaps-1101b` merged: ABC-262 (EPIC-011 M0, XS) in Backlog; QE-255-a declined (diminishing returns; re-open trigger recorded); notes on ABC-250/251/252. No other hop running → ALONE window: `qe-ABC-250` dispatched; nothing else until it returns._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — **ABC-261 DONE** (merged). Owed to next BA/PM hop: QE-260-a note on ABC-251; QE-261-a/b (bundle or decline). Running: se-ABC-250._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — **ABC-260 DONE** (merged). QE-260-a carried as an ABC-251 review note. Running: qe-ABC-261, se-ABC-250._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — housekeeping: 68 merged, clean worktrees under .claude/worktrees removed (branches kept). Six old ../wt-* worktrees (EPIC-008 era, all merged and clean) left for the owner — removal outside the repo dir was refused by the permission gate. Running: qe-ABC-260, se-ABC-261, se-ABC-250._
@@ -1273,6 +1274,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 ## Backlog (WIP unlimited)
 - [EPIC-011] skytalix climbs toward 3 000 Elo, read at 40/15, on a classical measured path (owner: BA/PM, size: XL, priority: P2, since 2026-11-01; ADR-0056 accepted in direction; ADR-0055 O1; starts after EPIC-009 and EPIC-010 close; phases 0–5; milestones 2 200…3 000 (proposed); open owner calls Q-3K-2, Q-3K-4, Q-3K-6, Q-3K-7, Q-3K-8, rest of Q-3K-1)
+- [ABC-262] The early-exit row reads a pawns-first board and the in-check promotion row reads black to move (test-only; EPIC-011 phase 0; size: XS, priority: P3; DoR 10/10; QE-261-a/b; cut 2026-11-01 bapm-qe-gaps-1101b; after ABC-250 resolves, before ABC-252)
 - [ABC-257] T3: the TT is kept across the moves of one game, re-tried after deeper cutoffs and depth-preferred replacement (supersedes dropped ABC-209) (EPIC-011 Phase 1; size: S, priority: P3, DoR 8/10)
 - [ABC-258] T4: a larger TT, 8 MiB inside NFR-009 (more only on the owner's word) (EPIC-011 Phase 1; size: S, priority: P3, DoR 8/10)
 - [ABC-251] The search walks packed moves and builds a Move only at its return, with inlined helpers (ADR-0055 O1-b part 2 + O1-c; size: L (S if narrowed), priority: P2; DoR 9/10; milestone 1b; waits ABC-250's reading)

@@ -13,6 +13,7 @@ plans/tickets/ABC-250*.md, A1–A7 and "What happens on a miss" (GO ≥ 1.25× m
 ## Do
 - A1/A2 re-read (spot); A3/G4 out of tree byte-equal vs base; plants of your own on the packed path (at least: promotion piece, castling rights in undo, ep square in undo).
 - A4 on a sealed PREREG implementing D3-V2 for the page's perft boards and depths (if perft runs are too short for the 5 % spread, follow the page's stated depth/repetition method; if the page does not state one, choose a pre-registered repetition count BEFORE any run and say so). A5 search-nps guard under the same rule. Grade by script.
+- QE-261-c relay: confirm the packed path did not change what generateMoves returns first (ABC-261 precondition; ticket forbids it) — the full lane at head already covers it; say so explicitly.
 - Gates: G1 (PUZZLE_DEEP=1), G5, G6, G7 growth 0, G8, G9, lint/typecheck/build, npm test ×3, skip-integrity, lane-inventory.
 - Verdict per the page: GO (PASS / PASS_WITH_GAPS) / HOLD / NO-GO / UNRESOLVED (VOID-LOAD). Record the window start/end UTC.
 - Run time ≤ 45 min excluding waits; if your estimate exceeds 60 min, STOP and report first. Thermal stop. Never kill foreign processes.
