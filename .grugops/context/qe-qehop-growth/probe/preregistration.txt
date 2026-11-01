@@ -1,0 +1,100 @@
+qe-qehop-growth T-QEHOP-GROWTH re-read (ADR-0035 § Addendum 2026-10-12 (after ABC-154) B3): PRE-REGISTRATION, written
+2026-11-01T08:45Z, BEFORE any run of the set, the lane, the gate or the pre-flight. ALONE for timing (brief
+.grugops/queue/claimed/qe-qehop-growth.md at main 37a93b76; only a records-only BA/PM hop, no vitest, may be beside).
+Committed on grugops/qe-qehop-growth (off main 37a93b76) before the pre-flight and before window 1. Nothing below changes
+after the pre-flight starts; any later text is an ADDENDUM that changes no rule.
+
+TRIGGER
+  `find .grugops/context -path '*/notes/*.md' | wc -l` on main 37a93b76 = 4272 (>= 4000). `git ls-tree` agrees (4272).
+
+WHAT IS READ
+  The set tools/grugops/qe-hop-integrity.test.ts at main's tip 37a93b76: blob bf0ea7d5, sha256 140ed0dc...590070b. It is
+  the SAME blob qe-ABC-154 read at 0f8036f9 (no commit touches the file or the tool since 0f8036f9); the tool
+  tools/grugops/qe-hop-integrity.js is blob cc0f4157 at both. So H's code is unchanged: what moved is the record it reads
+  (2656 note files in qe-ABC-154's arms -> 4272 here), plus the stack and the host (ADAPTATIONS). 32 tests (qe-ABC-154).
+  Whole-tree reads per run: 2, by the identical blob (qe-ABC-154 counted 2 at this blob; not re-counted here).
+ARMS
+  Three out-of-tree `git archive 37a93b76` trees in <scratch>/lane/arms/{B,H,T}, <scratch> =
+  /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-qehop, each with
+  one node_modules symlink at its root to the main checkout's node_modules (main checkout clean at 37a93b76; package-lock
+  blob 59b35eba equal). Every arm holds the note count of 37a93b76 (find, recorded in window-once.txt).
+    B = the one-assertion placeholder at the path (probe/placeholder.test.ts, sha256 f730fdb2...ba515e3e, cmp 0 to
+        qe-ABC-154's);
+    T = twin of B (cp -a B T; /usr/bin/diff -r --no-dereference B T: identical);
+    H = the archive as-is (cmp 0 to git show 37a93b76:tools/grugops/qe-hop-integrity.test.ts).
+METHOD: qe-ABC-154's (preregistration b9a5c957, probe/window-qe5.sh, probe/readout-qe5.py), unchanged except ADAPTATIONS.
+  CONDS=B,H,T, ROUNDS=9 (round 0 discarded, n = 8), order rotated by one per round, GAP=0; load1 / Tctl / foreign logged
+  before and after every run; a 5 s sampler throughout; settle gate first; 6 s tail.
+  Run as: ROUNDS=9 STREAK=4 GMAX=45 bash probe/window-qeg.sh <scratch>/lane/wN (window N copied to probe/wN/).
+  Readout: python3 -I probe/readout-qeg.py probe/wN > probe/wN/readout-qeg.out.txt.
+
+ADAPTATIONS (every one, with its reason; the tree and the host moved since 2026-10-12)
+  A-1 Host. qe-ABC-154 ran on the M3 (macOS). The reference is now oeselg-dev (Linux 7.0, AMD Ryzen AI 9 HX 370, 24
+      logical CPUs, mixed Zen 5 / Zen 5c cores, governor powersave / EPP balance_performance). lane144b.mjs (652b7793...)
+      and gate.sh (5335905a...) cannot run here (sysctl vm.loadavg, pmset, notifyutil do not exist). They are PORTED, shape
+      kept: probe/lane-qeg.mjs, probe/gate-qeg.mjs, probe/sampler-qeg.mjs, probe/host-qeg.mjs, probe/window-qeg.sh (Linux
+      reads taken from qe-ABC-248 qe-scripts/host.mjs and lane.mjs, the practised Linux N8-LANE harness).
+      Timer: GNU /usr/bin/time -p prints 2 decimals, so A1's one tick is 0.010 s here as written.
+  A-2 Command. `npx vitest run <file>` -> `node_modules/.bin/vitest run tools/grugops/qe-hop-integrity.test.ts` with the
+      same three reporters (the brief fences bare npx).
+  A-3 Heap. NODE_OPTIONS=--max-old-space-size=400 on every run of every arm: the ONE-FILE row; the heap guard (ABC-173,
+      landed after qe-ABC-154) refuses an unprefixed run.
+  A-4 Stack moved with main, identical in all three arms: vitest 4.1.11 -> 4.1.12, node v26.11.0 -> v26.12.1,
+      `pool: "threads"`, the heap-guard globalSetup. H - B still isolates the file's own cost. Per ADR-0035 § Addendum
+      2026-10-30 (SEC-REBASE-b) figures across the re-base are not comparable: this reading is NOT paired with +0.380 s.
+  A-5 Thermal. macOS thermalpressurelevel -> Tctl (k10temp temp1_input). Settle: Tctl <= 60.0 C. Per-round discard: Tctl
+      >= 100.0 C (Tjmax, the throttle point) before or after the run, or in a sampler row of the round's interval. Thermal
+      stop (the brief): the window is VOID when the median Tctl over the window (per-run before/after readings and sampler
+      rows from the first start to the last end) is > 85.0 C.
+  A-6 Power. /sys/class/power_supply has no device: there is no power column and no power rule.
+  A-7 Foreign processes. vitest found by the bracketed `pgrep -f "[/]vitest"` (never `while pgrep -f`). In the sampler a
+      vitest is foreign when /proc/<pid>/cwd is not under the arms root (macOS excluded by the test-file name; the pool is
+      threads here, and cwd is the owner). cutechess-cli is ADDED as a void condition beside oeselg-labs/platform (kept;
+      expected 0). A foreign process is logged by pid, cwd and command, NEVER signalled. top (second 1 s iteration) is
+      logged before the gate and after the lane.
+  A-8 Settle gate: ok = Tctl <= 60.0 C AND 0 vitest AND 0 cutechess-cli, 4 consecutive 15 s samples; load1 logged, NOT
+      gated (MAXLOAD "" as qe-ABC-154); GMAX 45 min.
+  A-9 Readout probe/readout-qeg.py, derived from readout-qe5.py: the TSV name and the host columns only (A-5..A-7). Self-test
+      BEFORE any run on qe-ABC-154 w1's raw TSVs (probe/readout-selftest.out.txt): every line equals qe-ABC-154's
+      readout-qe5.out.txt except two labels; MET, +0.380 s (+0.350..+0.410), twin -0.005 s, R 0.030 s; wall +0.300 s, R
+      0.030 s. A harness check, not a reading.
+  A-10 The scratch is tmpfs (/tmp) here; qe-ABC-154's was APFS. After round 0 both read the notes from the page cache.
+  A-11 Pre-flight (added). Before window 1: ROUNDS=1 STREAK=1 GMAX=45 bash probe/window-qeg.sh <scratch>/lane/preflight ->
+      probe/preflight/. It checks plumbing only: counts B 1/1, H 1/32, T 1/1, status ok, the sampler and gate files. Its
+      numbers are never graded, pooled or reported as a reading. If H is not 32/32 passed there, no window runs: NOT READ,
+      and the failure is a finding. A harness defect found by it may be fixed by an ADDENDUM committed before window 1; an
+      addendum can change no rule in VOID / ADMISSIBLE / GRADE / ATTEMPTS.
+
+VOID (fixed now)
+  - A round is discarded on: status != ok; counts != (1,1) for B and T or (1,32) for H; a vitest before or after the run;
+    a cutechess-cli before or after the run; Tctl >= 100.0 C before or after; or any 5 s sampler row in [start-5 s,
+    end+5 s] with a foreign vitest, an oeselg-labs/platform process, a cutechess-cli, or Tctl >= 100.0 C.
+  - A window with ANY discarded round is VOID (n must be 8). A gate timeout (45 min) is VOID. The thermal stop is VOID.
+ADMISSIBLE (ADR-0035 § Addendum 2026-10-12 A1, read with B1)
+  - |twin T-B CPU median| <= max(1.5 % of the B CPU median, one tick 0.010 s) AND the two-sided sign test on the NON-ZERO
+    twin deltas at p > 0.05 (zeros dropped; n' = 0 gives p = 1). The old convention is printed and decides nothing.
+  - B1: this file is committed before the first run, on a commit with e7d8a09f as an ancestor (37a93b76 descends from it),
+    and must reach main with the same blob; that is the Orchestrator's merge, QE never merges.
+GRADE (ADR-0035 decision 1 at 650 ms CPU, on CPU; wall reported, not graded)
+  - n = 8, k = 2: R = the larger magnitude of the twin's x(2), x(7); the treatment interval is x(2)..x(7) of H-B.
+  - NOT MET if x(2) > 0.650 s; else MET if R <= 0.650 s and the H-B median <= 0.650 s; else NOT MET if R <= 0.650 s; else
+    UNRESOLVED.
+  - F = 0.020 s CPU (A2 / B2): 650 ms >= F. F was read on the M3; this set has no admissible R on oeselg-dev on record.
+    The grade's R <= b test does not depend on F. The window's twin R is reported for the Architect's series, not ruled.
+B3 MAPPING
+  - MET -> write the reading; Architect/Design sets the next threshold (QE states the arithmetic below, writes no ADR).
+  - NOT MET -> to the owner through the Orchestrator; the lever is the count of whole-tree reads.
+  - NOT READ (both windows void or inadmissible, an UNRESOLVED, or the pre-flight stop) -> the trigger stays armed.
+ATTEMPTS
+  ONE window (w1). If w1 is void or inadmissible: ONE re-attempt (w2) under exactly this rule, same arms, harness, gate and
+  readout. No w3. No pooling of windows, ever. No estimate. A void or inadmissible window is kept in probe/ and reported.
+NEXT-THRESHOLD ARITHMETIC (B3 "by the same arithmetic"; reported to the Architect, decides nothing here)
+  With M = the H-B CPU median, hi = x(7), N0 = the arm's note count, and A3's slope s = 0.215 s / 2630 notes = 81.75 us a
+  note (at 2 reads):
+  - crossing of 650 ms: N0 + (0.650 - M)/s, and N0 + (0.650 - hi)/s from the interval's upper end;
+  - the 75 %-of-bound point (A3/B3 placed 4000 where the projection read ~0.48-0.49 s): N0 + (0.4875 - M)/s;
+  - beside it, printed only: the two-point slope (M - 0.380)/(N0 - 2656), which crosses the host and stack re-base and is
+    NOT comparable (A-4); and the record's growth rate from `git ls-tree` counts on main.
+LIFT CLAUSE (A3 / B3; static, no run)
+  grep of src/ and tools/ test files at 37a93b76 for `.grugops/context`: tools/grugops/qe-hop-integrity.test.ts reads it;
+  the eight src/*.test.ts hits are comments naming probe paths. The set is still the only reader.
