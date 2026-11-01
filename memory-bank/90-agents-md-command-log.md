@@ -306,6 +306,11 @@ tripwire (depth >= 100, Architect notice) is read from those lines only. Same ca
 `LADDER_DEEP` entries below. On a terminal: `UNKNOWN - verify` (not measured; the flag is harmless there). Not run in this pass
 (owner one-run rule `…4c3f7639`; the lane is 41 tests, ~555 s); the evidence is QE's two readings above.
 
+CORRECTED 2026-11-01 (`scribe-lane-figures`, QE-E010C-c, QE `qe-EPIC-010-close` note `…388b3044`, worktree at `608ebfa4`, `src/` equal
+to `053733d2`, vitest 4.1.12): the lane is now **57 tests, 577 s** (exit 0, 57 passed of 57, 0 skipped/todo; host SHARED, 16 of 57
+samples with a foreign vitest), not 41 tests, ~555 s. The 28 / 41 above are dated history (text kept). The old "41 tests, ~555 s" is also
+in `ADR-0056` and `EPIC-010`; the Scribe does not edit those.
+
 APPLIED 2026-10-10, `scribe-receipts-2026-10-10` (the former OWED paragraph): `ABC-131` merged
 (`231d1288`, UAT accepted by the owner) and changed the figures this entry quoted. `AGENTS.md` now says
 `A4` perft + puzzles **242 moves** (was 246) and `A3` **35 vs 54 of 58** (was 35-36 vs 58 of 62), per
@@ -571,6 +576,12 @@ the `console.log` of a passing test, so without it no `LADDER` score line prints
 `ADR-0038` addendum 2, Architect `…b7e2c915`). The `NODE_OPTIONS` heap flag is the one-file shape's (`ABC-173`, Architect
 `…7c31d5e8`). The first addendum's code move (route N) is not built; it stays the accepted fallback. Ruling to move this text:
 Orchestrator `…6a2f9d03`.
+
+CORRECTED 2026-11-01 (`scribe-lane-figures`, QE-E010C-c, QE `qe-EPIC-010-close` note `…388b3044`): short mode is **18 tests, 23.4 s** on
+a host ALONE (exit 0, 18 passed of 18, 0 skipped/todo; `LADDER_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run
+src/ladder.test.ts`; 26 `LADDER GAME` lines over pairs 3v4, 4v5, 2v3, 1v2 at 4 games each and 1v5 at 10). The "848 s, loaded host" of the
+2026-10-11 pass (14 passed, 9 default) is dated history (text kept): a loaded-host reading at 14 tests, not a quiet-host one. The verdict
+mode above is not re-measured (hours, unchanged).
 
 ## Coverage — `npx vitest run --coverage`
 
@@ -1087,3 +1098,15 @@ AGENTS.md Scribe, task `scribe-runbook-ABC-212`. Three files: `AGENTS.md`, `memo
 | this file § Levels deep lane | not touched since 2026-10-10 | dated CORRECTED paragraph after the trigger sentence |
 
 Why: (a) the runbook never restated the lane command; the command lives in `AGENTS.md` only, so the flag went there and the runbook gained no command line (it would be a second copy to drift). (b) QE read the CLI drawing the `thinking...` frame 1 ms after Enter, before the search (`A10`), so "no output" was untrue as written. The `QE-212-d` re-flow note needs nothing.
+
+## `scribe-lane-figures` pass, 2026-11-01 (`QE-E010C-c`; Orchestrator brief `scribe-lane-figures`; branch `grugops/scribe-lane-figures` from `main` `903a3dc5`)
+
+AGENTS.md Scribe, task `scribe-lane-figures`. One file changed: this one. `AGENTS.md` not touched (it carries no lane time or test count for the three lanes; 18,421 B, budget 18,432). Nothing was run: the figures are QE's readings in note `…388b3044` (`qe-EPIC-010-close`, worktree `608ebfa4`, `src/` equal to `053733d2`, vitest 4.1.12).
+
+| lane | was | now (QE reading) | where |
+|---|---|---|---|
+| Levels deep lane | 41 tests, ~555 s | **57 passed of 57, 577 s**, exit 0; host SHARED (16 of 57 samples with a foreign vitest) | dated CORRECTED paragraph in § Levels deep lane |
+| Self-play ladder, short mode | "848 s, loaded host" (14 passed, 9 default) | **18 passed of 18, 23.4 s**, exit 0; host ALONE | dated CORRECTED paragraph in § Self-play ladder lane |
+| UCI session deep lane | "about 5 min (estimate)" in `ADR-0056` / `EPIC-010` / `EPIC-011` | **241 passed of 241, 291 s**, exit 0; host ALONE (0 of 29 samples) | this row only: the lane has no section in this file and `AGENTS.md`'s line carries no figure |
+
+The old text of each is kept as dated history. Stale elsewhere, not edited (the Architect and BA/PM own them): `ADR-0056` (Levels 41 tests / ~555 s, "41 passed", ladder 848 s, UCI "about 5 min"), `EPIC-010` (41, 848 s, "≈ 5 min, estimate") and `EPIC-011` (41, 848 s, "≈ 5 min, estimate").
