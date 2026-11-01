@@ -6,7 +6,35 @@ id: ADR-0056
 
 ## Status
 
-**PROPOSED** 2026-11-01 by Architect/Design (task `arch-algo-analysis`, records and reading only, at `main` `bae25131`).
+**ACCEPTED IN DIRECTION** 2026-11-01 by the owner. Folded by Architect/Design (task `arch-adr0056-owner-fold`,
+records only, at `main` `2e9a2457`). Nothing was run.
+
+- **His words, verbatim** (`orch-2026-10-30a` `…022fb66f`): *"3000 elo target would be 22s per move or 15 minutes per
+  40 moves, not with 4s per move. But let's not benchmark all the time with those values, we can becnhmark with
+  smaller values for faster feedback loop, can be also 0,5s per move to get faster readings. Otherwise i'm happy with
+  where we are going, let's create new Epic yes and finish other epics before that. Go over previous epics and tickets
+  to find conflicting work, no need to do the same work twice."*
+- **What "in direction" accepts:** the classical path (D1–D4), measuring on a named scale with a per-change instrument
+  (D5), and the phase order (D6) as a recommendation. Each step still brings its own ticket, and its own ADR where an
+  existing decision changes. Nothing in D7 that he did not answer is accepted.
+- **Answered:**
+  - **Q-3K-1, the time part.** The 3 000 claim is read at **40/15** (40 moves in 15 minutes, about 22 s a move), not
+    at 4 s a move. That replaces D5 item 2's "one 120 + 1 reading at the claim". The scale (Stockfish 19 `UCI_Elo`)
+    and the claim rule (D5 item 5) were not contested. They stand as proposed, accepted in direction. The claim plan
+    is under D5 (dated block, 2026-11-01).
+  - **Routine readings use shorter controls, down to 0.5 s a move** (his word). The controls proposed are under D5
+    (dated block). The claim stays at 40/15.
+  - **Q-3K-5, scope.** A **new epic** (`EPIC-011`, created by BA/PM, task `bapm-epic011-dedupe`). It **starts after
+    the open epics close**, and no work is done twice (his dedupe word, BA/PM's audit).
+- **Still open (his):** Q-3K-2 (SPRT in the per-change rule), Q-3K-3 (test width, cores), Q-3K-4 (`G6` "≥ base"),
+  Q-3K-6 (`NFR-009` above 16 MiB), Q-3K-7 (tuning data), Q-3K-8 (bitboards, later), and `ADR-0055`'s Q-SP-3
+  (`ABC-254`, the `ADR-0003` amendment). See D7's dated lines.
+- **One order line is corrected:** D6 Phase 0's "O1-a, then O1-b/c" yields to `ADR-0055` D4 as BA/PM cut it.
+  `ABC-250` (O1-b part 1, the gate reading) comes first and `ABC-253` (O1-a) after. See D6's dated line.
+- **One estimate is corrected:** D5 item 3's pick depth at E ≈ 3 000 is **14**, not 18–20 (read from Stockfish's
+  `search.h` at `sf_19`). See D5's dated block.
+
+*Original status, kept:* **PROPOSED** 2026-11-01 by Architect/Design (task `arch-algo-analysis`, records and reading only, at `main` `bae25131`).
 **Nothing is decided here.** Nothing was run, built, benchmarked or played: `qe-ABC-223` holds the host STRICTLY ALONE.
 Every Elo figure below is either quoted from a sealed reading (named) or is an **estimate** with its basis. An
 estimate is not a reading.
@@ -253,6 +281,129 @@ The smoke pair stays as the fault, time-loss and collapse guard. Milestone R rea
 Throughput is the owner's call: at width 1 an SPRT test costs ≈ 10–30 h (estimate); with the CPU's spare cores in use
 it costs a few hours, but the host is then not "one at a time".
 
+#### Dated 2026-11-01 (owner fold, `arch-adr0056-owner-fold`): the claim at 40/15, and the fast routine controls
+
+The owner set the claim's time control (Q-3K-1) and allowed shorter routine controls, down to 0.5 s a move
+(`…022fb66f`). This block amends D5 items 2 and 3 and the per-change paragraph above. Items 1, 4 and 5 stand. Every
+hour and game count below is an **estimate**, with its basis named. None is a reading. Nothing was run.
+
+**Facts used** (from the records, not re-read on the host):
+- Width 1 is the owner's rule, for heat. At width 2, Tctl read a median of 87.05 °C, and he moved readings to one game
+  at a time (`…65848126`). At width 1, `ABC-222`'s 40/15 self-play read a Tctl median of 73.9 °C and a max of 76.1 °C.
+  Its frequency fell ≤ 0.01 % over 3.44 h for 5 games, about 41 min a game with both sides on the clock and an 80-move
+  cap (`qe-ABC-222` `…00cc4db1`). The longest clean run at width 1 on record is the milestone 1 R pair: 22.22 h,
+  400 games, 18.0 games/h, 0 thermal pauses (`ADR-0053`). That is about 200 s a game at 4 s + 0.5 s a move.
+- **Stockfish's pick depth, read from `search.h` at `sf_19`.** `level = clamp(((37.2473·e − 40.8525)·e + 22.2943)·e −
+  0.311438, 0, 19)`, with e = (E − 1 320) / 1 870. The pick is made at depth 1 + int(level). This reproduces
+  `ABC-204`'s two recorded values: level 2.56 at E 1 650, and depth 5 at E 2 000. It gives:
+
+  | E | 2 200 | 2 300 | 2 400 | 2 600 | 2 800 | 2 900 | 3 000 | 3 190 |
+  |---|---|---|---|---|---|---|---|---|
+  | pick depth | 6 | 6 | 7 | 8 | 11 | 12 | **14** | 19 |
+
+  D5 item 3's "≈ 18–20 at E ≈ 3 000" was wrong; it is 14. `ABC-204`'s probe read depth 12 at 250 ms, but that was on
+  the previous host and from a probe position. So `st=0.5` holds the pick depth with headroom up to about E 2 600.
+  Above that it is `UNKNOWN - verify` on this host.
+
+**C1. The 3 000 claim reading, at 40/15.**
+- **skytalix:** a real 40/15 clock (`cutechess-cli` `tc=40/900`). The time mode is `uci-clock-mode` if `ABC-223`
+  reads it MET, because that mode spends the clock as a clock. Otherwise it is `simple-tournament` (22 s a move,
+  capped by the clock; M1 and M2 were MET at `ABC-222`). Both are about 22 s a move, the owner's figure. Book on, as
+  the product ships.
+- **Time management (W1)** is not needed for the claim to be legal: both modes have never lost on time (`EPIC-009`
+  M1). It is needed for strength. With no "will the next iteration finish" test, an iteration that cannot finish is
+  aborted and thrown away. At a branching factor of about 2.5–3, that is often half or more of a move's time (estimate,
+  `[J]`). W1 lands before the claim reading, inside `EPIC-011`. Its gain is graded at the fast control (C2): the waste
+  is a share of the move's time, so it shows at 0.5 s as well.
+- **Stockfish's side:** 19, `UCI_LimitStrength`, `UCI_Elo` = E, `Threads 1`, `Hash 16`, as `ABC-204` pins it. E is
+  stepped by `ABC-204`'s band rule (D5 item 4). **Its move time is fixed (`st`), not a clock.**
+  - Its play is pinned by depth: it picks at depth 1 + int(level) and keeps that move. So any time past that depth
+    changes nothing in play (`ABC-204` § Q2). That holds just as much on the 120 + 1 clock its scale was calibrated
+    on.
+  - The fixed time is set at PREREG by a probe on this host. It is at least 4× the 95th percentile of
+    time-to-pick-depth over the reading's openings, with a floor of 0.5 s. Estimate at E 3 000 (depth 14): about
+    2–4 s (`UNKNOWN - verify`).
+  - `ABC-204`'s depth guard stays: a Stockfish move below its pick depth makes the reading UNRESOLVED.
+  - **The alternative is both engines on the same 40/15 clock.** That is the same strength for Stockfish and about
+    twice the wall time. It is open to the owner if he prefers both sides on one clock to read the claim (see D7).
+- **Games:** 200, at E = 3 000. MET when the score is ≥ 50 % (D5 item 5); E = 3 190 at ≥ 25 % reads it as well. At a
+  50 % score, 200 games give about ± 40–45 Elo (95 %), by the spread of the R readings on record (± 6.11 points at
+  200 games).
+  - **Futility stop, pre-registered:** after 100 games, a score below 41 % (more than 2 SE under 50 %) stops the
+    reading as NOT MET. That saves about 1.5 days. The stop can only fail a claim. It can never make one.
+- **Host hours at width 1 (estimate):** skytalix spends about 20 min of clock a game (`ABC-222`'s 41 min for two
+  sides). Stockfish spends about 2–3.5 min (≈ 50 moves × 2–4 s). That is about 22–24 min a game, and **≈ 75–80 h
+  (about 3.2 days) ALONE for 200 games**. On the equal-clock alternative it is ≈ 130–140 h (about 5.5–6 days).
+- **Heat:** width 1 only, on mains, with `ABC-222`'s A7 rule (a sampler ≤ 60 s, the Tctl median per quarter and the
+  max, and a frequency fall > 5 % from the first quarter makes the session UNRESOLVED, re-run once).
+  - The run is split into **sessions of 50 games** (≈ 19–20 h each, inside the 22 h the host has run clean), each a
+    fixed, seeded slice of the openings. A cool-down gap between sessions waits until Tctl is back at its idle level
+    (the level is pinned at PREREG).
+  - A thermal or fault event then costs one session, not the reading. Holding Tctl near 74 °C for days is
+    `UNKNOWN - verify`: nothing on record has run longer than 22.22 h.
+- **When to spend it:** only when a 4 s trend reading, plus the measured 40/15 offset (C4), puts the point estimate
+  at or above 3 000. Otherwise the 3 days buy a known NOT MET.
+
+**C2. The per-change SPRT, the fast routine control** (the tool is M0; whether its verdict enters the per-change rule
+is still Q-3K-2):
+- **Control: 0.5 s a move on both sides** (`st=0.5`; `movetime` is the budget under level 5's cap), self-play,
+  candidate against base. Each opening is played with both colours. The opening set is fixed and seeded, and larger
+  than `ABC-204`'s 100 positions; its size is M0's. Width 1.
+- **Bounds:** gain tests H0 Elo ≤ 0 against H1 Elo ≥ 10. Non-regression tests (a value change meant to be neutral,
+  such as a simplification) use [−10, 0]. α = β = 0.05. Value-identical tickets stay on their S2 perft/nps reading,
+  with no games.
+  - D5's [0, 5] is **not affordable at width 1**. The arithmetic (estimate; logistic SPRT, about 30 % draws): [0, 5]
+    needs about 4× the games of [0, 10]. [0, 10] needs about 700 games for a true +40, about 1 650 for +20, about
+    5 000 for +10 or for 0, and about 7 300 at worst (+5).
+  - D2's early rows (P1, P2, P4, T1) are estimated at +15 to +100. They end in the low thousands of games or fewer.
+    Rows smaller than +10 need more width (Q-3K-3) or wait for the block reading.
+  - D5's "a few thousand games per test" and "≈ 10–30 h" were optimistic for [0, 5]. This replaces them.
+- **Throughput (estimate):** at 0.5 s a move, a game is about 90 plies × 0.5 s plus engine start, so ≈ 45–55 s, or
+  **≈ 65–80 games/h at width 1** (scaled from the R pair's 200 s a game; `UNKNOWN - verify`, read on M0's first run).
+  A +40 change ends in ≈ 10 h, a +20 change in ≈ 24 h, and a null change in ≈ 70 h. A **cap of 6 000 games
+  (≈ 85 h)**: a test still running at the cap has not shown a gain.
+- **Depth caveat at 0.5 s:** skytalix reaches about 2 plies less than at 4 s (median depth 7–8 at 4 s, `G6`; so about
+  5–6, `UNKNOWN - verify`). Where a ticket's mechanism barely fires at that depth (X2 singular extensions, T4 a larger
+  TT, depth-scaled null move P5), the Architect names a longer SPRT control at design. Use 2 s a move (about
+  4× slower), and show the mechanism's firing rate at 0.5 s as the reason.
+- The smoke pair stays as the fault, time-loss and collapse guard, as D5 says.
+
+**C3. Milestone trend readings, against Stockfish:** R's instrument at **4 s a move** (level 5), Stockfish at E by the
+band rule, with `st` held to the pick-depth headroom rule in C1 (0.5 s up to about E 2 600). 200 games, width 1,
+≈ 11–12 h ALONE (18.0 games/h, `ADR-0053`).
+- **Why 4 s and not 0.5 s:** it continues every outside reading on record (≈ 2 074, `…1a53a7f9`). It is also about
+  2.5 doublings from 40/15 (22/4), where 0.5 s is about 5.5. So its offset to 40/15 is smaller and drifts less.
+- A 0.5 s reading against Stockfish (≈ 3 h for 200 games) may be used as a quick check between milestones. It is
+  labelled as such and is never a milestone.
+- Milestones 2 200 … 2 800 are trend readings at 4 s, reported as "at 4 s a move", plus the latest measured offset.
+  Only 3 000 is claimed, and only at 40/15 (C1).
+
+**C4. The 40/15 anchor readings** (the readings the Architect names at 40/15 besides the claim):
+- **A0, first reading of `EPIC-011`:** 100 games at 40/15 at the E the band rule picks (expected about 2 200–2 400).
+  Stockfish `st=0.5` holds depth 6–7. It is paired with a 4 s trend reading on the same build, so the 40/15 offset is
+  **measured**, not assumed. ≈ 35 h ALONE (about 20.5 min a game).
+- **A1, after Phase 4** (the tuned evaluation; the change most likely to move how the engine scales): the same pair
+  again, so the offset is re-measured before C1 relies on it.
+- Nothing else is read at 40/15.
+
+**What a shorter control can and cannot predict about 40/15** (the scaling caveat):
+- **It can predict:**
+  - the **sign** of most changes;
+  - bugs, collapses and losses on time;
+  - time-use changes (W1), which are a share of the move's time;
+  - the trend's direction from milestone to milestone.
+- **It cannot predict:**
+  - **The size of a gain at 40/15.** Evaluation gains often shrink at longer controls. Gains from searching deeper
+    (reductions, extensions, a larger TT) often grow, and may read zero or negative at 0.5 s.
+  - **skytalix's absolute R at 40/15.** skytalix gains with its own time: about 50–100 Elo per doubling (`ADR-0055`
+    [D]), less at depth. Limited Stockfish does not, because its play is depth-pinned. So a 4 s reading
+    underestimates 40/15 by an offset. Estimate: about +120 to +250 at 2.5 doublings, low confidence. A 0.5 s
+    reading underestimates it by more (≈ +270 to +550, lower confidence still).
+  - **The offset after the engine changes.** Better pruning steepens the scaling curve, which is why C4 measures the
+    offset twice.
+  - **Self-play inflation.** Self-play gains overstate outside gains (`RISK-EPIC008-03`), at any control.
+- So no fast reading is a claim. The claim rule stays at 40/15.
+
 ### D6. The order proposed (speed and algorithms interleaved)
 
 Ordered by expected Elo per cost, by file collisions (`ADR-0055` D2), and by what each step needs measured.
@@ -276,6 +427,27 @@ Ordered by expected Elo per cost, by file collisions (`ADR-0055` D2), and by wha
 The phase order is a recommendation. Within the owner's calls, the Orchestrator and BA/PM may reorder by width and
 evidence.
 
+*Dated 2026-11-01 (owner fold, `arch-adr0056-owner-fold`):*
+- **The O1 order line. Ruling: `ABC-250` first stands.** Phase 0's "O1-a, then O1-b/c" is withdrawn. O1 runs in
+  `ADR-0055` D4's accepted order as BA/PM cut it: `ABC-249` → **`ABC-250`** (O1-b part 1, the perft gate reading) →
+  `ABC-251` / `ABC-252` on its reading → **`ABC-253`** (O1-a). That is the board's queue. The reasons:
+  1. `ADR-0055` is ACCEPTED, and this ADR's own status says it does not change it. D4 item 2 placed O1-b before O1-a,
+     and its fold made the order "BA/PM's cut". So the "O1-a first" in Phase 0 was a slip, not a choice. No reason
+     for it was given.
+  2. `ABC-250` is the gate. Its ≥ 1.25× bar decides whether `ABC-251` and `ABC-252` exist at all. Reading it first
+     settles the most open question for one M ticket.
+  3. Its expected yield is the larger (bar 1.25× against `ABC-253`'s 1.02×).
+  4. O1-b changes the core's move type, so Phase 0's own rule (land before any ticket that edits `orderMoves`,
+     `negamax` or `evaluate`) holds either way.
+  No file collision argues for O1-a first.
+- **Phases 1–5 and M0 are `EPIC-011`'s** (Q-3K-5). By the owner's order they start after the open epics close. So
+  Phase 0's "M0 … now" becomes "M0 first in `EPIC-011`". BA/PM's dedupe (`bapm-epic011-dedupe`) places the
+  `EPIC-010` milestone 2 tickets (`ABC-231`…`ABC-239`). This ADR notes only one thing: a ticket graded before M0
+  exists is graded by the current rule, with the resolution limits stated under § The measurement problem.
+- **Readings (item 7), restated by D5's dated block:** 4 s trend readings after Phases 2, 4 and 5 (C3), 40/15 anchors
+  A0 (first in `EPIC-011`) and A1 (after Phase 4) (C4), and the 40/15 claim (C1) only when the trend plus the offset
+  reaches 3 000. W1 lands before the claim.
+
 ### D7. What is the owner's call
 
 - **Q-3K-1, the scale and the time** a "3 000" is read on (D5 items 1, 2 and 5). The proposal is Stockfish 19
@@ -296,6 +468,22 @@ evidence.
 - **Q-3K-8, later:** re-opening `ADR-0001` (bitboards), only if the readings call for it.
 - **Not asked:** any level or budget (`G9` holds), any NFR level other than Q-3K-6, any language change (`ADR-0055`
   O1 holds).
+
+*Dated 2026-11-01 (owner fold, `arch-adr0056-owner-fold`; his word `…022fb66f`):*
+- **Q-3K-1: answered (the time).** The claim is read at 40/15, not at 4 s. The scale (Stockfish 19 `UCI_Elo`) and the
+  claim rule were not contested and stand, accepted in direction. One sub-choice is left open to him, only if he wants
+  it: Stockfish on a fixed, depth-safe move time (recommended; about 3.2 days for 200 games), or on the same 40/15
+  clock (the same strength for Stockfish, about 5.5–6 days). D5's dated block C1 uses the first.
+- **Q-3K-2: open.** He allowed fast routine controls (down to 0.5 s). He did not say whether an SPRT verdict joins or
+  replaces his Q4 = (e) rule. C2 proposes the control and bounds. The rule stays his.
+- **Q-3K-3: open.** C2's arithmetic is the input: at width 1, a +20 change costs about 24 h and a null change about
+  70 h. Rows below +10 need more width.
+- **Q-3K-4: open** (`G6` "≥ base" for value-changing tickets).
+- **Q-3K-5: answered.** A new epic, `EPIC-011`, after the open epics close, with no work done twice. Re-trying a
+  dropped ticket (`ABC-209` after T1, `ABC-210` in another form, `ABC-205`/`ABC-207` under the tuner) is not "the same
+  work twice" only where D4's changed precondition is recorded. BA/PM's audit records it per ticket.
+- **Q-3K-6, Q-3K-7, Q-3K-8: open.**
+- **`ADR-0055` Q-SP-3 (`ABC-254`, the `ADR-0003` amendment): open.**
 
 ### D8. What BA/PM would cut on a yes
 
@@ -327,6 +515,16 @@ evidence.
 - **Open `UNKNOWN - verify` items:** every Elo estimate in D2; the mapping of R's scale to any list; the depth
   Stockfish 19 needs at E ≈ 3 000 and the `st` that reaches it on this host; SPRT throughput on this host; the cause of
   the two negative outside point estimates; whether a TypeScript engine with a list rating exists.
+- *Dated 2026-11-01 (owner fold):*
+  - **Closed:** the pick depth at E ≈ 3 000 is 14 (`sf_19` `search.h`; D5's dated block).
+  - **Added `UNKNOWN - verify`:**
+    - the `st` that reaches depth 14 on this host;
+    - games per hour at 0.5 s a move;
+    - skytalix's depth at 0.5 s;
+    - the 4 s → 40/15 offset (C4 measures it);
+    - multi-day heat at width 1.
+  - **Host cost of the claim path at width 1:** A0 ≈ 35 h + 11 h, A1 the same, three trend readings ≈ 11–12 h each,
+    the claim ≈ 75–80 h, plus each SPRT test (≈ 10–85 h).
 
 ## Rollback
 
