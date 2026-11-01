@@ -110,6 +110,11 @@ BA/PM re-scores the page on that reading; nothing else is re-cut.
    go through a test-side adapter or are rewritten; the count is reported (`UNKNOWN - verify` now).
 4. About 1 h of ALONE host time for A3 and `G6` (estimate).
 5. UAT is owed (production lines). The QE verdict signs it.
+6. *(2026-11-01, `bapm-qe-gaps-1101`, QE-259-c LOW, `qe-ABC-259` `…1aca1753`.)* **Review habit, not a row.**
+   `ABC-259`'s text scan cannot see a budget read through a computed key (`options["budget" + "Ms"]`) or a
+   threshold on `deadline - start` (`deadline - start <= 100` is the forbidden 100 ms branch in other words); only
+   an AST would. This ticket rewrites the scanned search, so its review reads the diff for both and the build note
+   says so. `ABC-260` (recommended before this ticket) closes the scan's `process` and string holes, not this class.
 
 ## Size and priority
 

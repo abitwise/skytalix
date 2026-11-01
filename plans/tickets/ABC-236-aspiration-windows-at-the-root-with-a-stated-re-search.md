@@ -61,6 +61,13 @@ epic: EPIC-011
 ## Test notes
 
 1. A2's positions committed as a fixture. UAT is owed. The QE verdict signs it.
+2. *(2026-11-01, `bapm-qe-gaps-1101`, QE-249-a LOW, `qe-ABC-249` `…66371344`.)* **If this ticket re-pins
+   `ABC-249`'s row** in `src/engine.test.ts` ("Qe5+ at ply 4 stood twice before the root …"), the with-keys move
+   stays different from the withheld move, or the row gains the relational assert
+   `expect(label(withKeys.move)).not.toBe(label(base.move))`. Equal figures mean the fixture is dead: re-run QE's
+   `QPLY4` plant and rebuild the fixture before merge; never re-pin both to one value. *QE-249-b (INFO):* no
+   default-lane row holds a pre-root draw scored exactly 0 below ply 1; if this ticket changes how such a draw is
+   scored or stored, it adds one.
 
 ## Size and priority
 
