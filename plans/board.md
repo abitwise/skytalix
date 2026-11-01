@@ -1,3 +1,4 @@
+_Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — **ABC-263 DONE** (spike; ADR-0057 PROPOSED). `arch-adr0057-fix` queued (G1 stale ABC-253, G3–G8 wording, stale lane figures in ADR-0056). Running: bapm-epic010-close._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — `scribe-lane-figures` merged (command log figures). Slip (Scribe): its queue moves landed uncommitted in the main checkout, not its branch; committed here by the Orchestrator. Stale lane figures remain in ADR-0056 (l.812–834) and EPIC-010/011 close lines — owed to the next Architect/BA-PM hops (LOW)._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — **EPIC-010 close reads MET** (qe-EPIC-010-close: C3″ 218.0/400, +31.4 ± 26.4 Elo vs ca6e675c, 0 time losses; smoke 9/10 vs E1650, pool 18/20; Levels 57/57, UCI session 241/241, ladder 18/18). → `bapm-epic010-close` (grade M3/M4, close EPIC-010), `scribe-lane-figures`, `qe-ABC-263` (records check of the spike). Owner questions OQ-1..6 on ADR-0057 pending._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — ABC-263 spike delivered: **ADR-0057 PROPOSED** (threads before devices). Owner asked OQ-1..OQ-6. Running: qe-EPIC-010-close (lanes after the 400 games)._
@@ -1207,7 +1208,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
     ## In Development (WIP 0/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
-    ## In Review (WIP 1/3)
+    ## In Review (WIP 0/3)
     - [ABC-012] Portfolio FX conversion  (PR: #41, QE: running)
 
   BOARD <-> TICKET CONTRACT: each ticket file (`plans/tickets/<prefix>-xxx.md`) carries a
@@ -1361,8 +1362,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
-- [ABC-263] SPIKE: can skytalix use the NPU, the iGPU and more CPU threads from Node.js on this host, and share search info between them? (records only; Architect; EPIC-011, any time; size: M, priority: P2; DoR 10/10; owner 2026-11-01 …78c476bf) **→ Ready → pulled → `arch-ABC-263`. Rulings: a ≤ 5 min multi-core scaling prototype is not a validation game (one-core rule binds games), runs alone under the lock; "a few minutes" = ≤ 5 min per run.** **→ In Review 2026-11-01 (arch-ABC-263 done: ADR-0057 PROPOSED "threads before devices"; Q1 devices blocked — olger not in render group; WebGPU round trip 45–65 µs on lavapipe; Q2 Lazy SMP measured 1.8×@2, 3.3–3.6×@4, 5.6–6.0×@8, 6.7–7.5×@12 workers; Q3 device-shared TT not feasible from Node; Q4 open → owner OQ-1..6). QE A1–A8 records check owed; owner questions asked.**
+## In Review (WIP 0/3)
 
 
 
@@ -1422,6 +1422,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+- [ABC-263] SPIKE: can skytalix use the NPU, the iGPU and more CPU threads from Node.js on this host, and share search info between them? (records only; Architect; EPIC-011, any time; size: M, priority: P2; DoR 10/10; owner 2026-11-01 …78c476bf) **→ Ready → pulled → `arch-ABC-263`. Rulings: a ≤ 5 min multi-core scaling prototype is not a validation game (one-core rule binds games), runs alone under the lock; "a few minutes" = ≤ 5 min per run.** **→ In Review 2026-11-01 (arch-ABC-263 done: ADR-0057 PROPOSED "threads before devices"; Q1 devices blocked — olger not in render group; WebGPU round trip 45–65 µs on lavapipe; Q2 Lazy SMP measured 1.8×@2, 3.3–3.6×@4, 5.6–6.0×@8, 6.7–7.5×@12 workers; Q3 device-shared TT not feasible from Node; Q4 open → owner OQ-1..6). QE A1–A8 records check owed; owner questions asked.** **→ Done 2026-11-01 (qe-ABC-263 PASS_WITH_GAPS, records spike, UAT waived; ADR-0057 stays PROPOSED pending owner OQ-1..6). Gaps → `arch-adr0057-fix`: G1 MEDIUM (ADR calls ABC-253 "in flight" — it was dropped; threads tickets must split the key themselves; effort may exceed L 30–60 h), G3–G8 LOW wording.**
 - [ABC-253] Zobrist keys travel as two 32-bit halves in the search, the TT and the repetition scan; bigint at the API (ADR-0055 O1-a; size: M, priority: P3, value-identical S2; DoR 10/10; milestone 1b; ≥ 1.02×; pull after the O1-b tickets) **→ pulled 2026-11-01 → `se-ABC-253` (last in milestone 1b; A5 search read under D3-V2)** **→ Done (dropped — "nothing to cut") 2026-11-01 (…27ddb1fb): key path ≈ 2 %; TT probe cost is cache misses, not bigint; prototype ≈ 1.00× vs 1.02× bar; no src change. Not a miss.**
 - [ABC-251] The search walks packed moves and builds a Move only at its return, with inlined helpers (ADR-0055 O1-b part 2 + O1-c; size: L (S if narrowed), priority: P2; DoR 9/10; milestone 1b; waits ABC-250's reading) **2026-11-01: narrows to O1-c alone (ABC-250 closed not merged) → re-scope by `bapm-abc250-close`** **2026-11-01 re-scoped (bapm-abc250-close): O1-c alone, size S, DoR 10/10 → Ready → pulled → `se-ABC-251` (profile first; stop before any timed read if nothing measurable)** **→ Done (dropped — "nothing to cut") 2026-11-01 (…1f6ed15a): profile STOP — helpers already inlined by TurboFan (68/68), Budget monomorphic; no src change, no timed read. Not a miss.**
 - [ABC-262] The early-exit row reads a pawns-first board and the in-check promotion row reads black to move (test-only; EPIC-011 phase 0; size: XS, priority: P3; DoR 10/10; QE-261-a/b; cut 2026-11-01 bapm-qe-gaps-1101b; after ABC-250 resolves, before ABC-252) **→ Ready → pulled 2026-11-01 → `se-ABC-262`** **→ In Review 2026-11-01 (se-ABC-262 done bb399321; A1–A3, A5–A8 met; A4 STOP: QB survives because in check epoch stays 0 and unstamped pinStamp squares read 0 — production is correct (`inCheck ||` short-circuits, src/legal.ts:429). Orchestrator ruling: A4 WAIVED — no setup call on module-private state; QB stays covered by the ENGINE_DEEP ABC-254 A1 walk) → `qe-ABC-262`** **→ Done 2026-11-01 (qe-ABC-262 PASS_WITH_GAPS, A4 waived, UAT waived test-only; QB confirmed caught by the ENGINE_DEEP walk; line 429 production reasoning confirmed; G8 8.94 / 8.94 s ALONE; merged). Gaps: QE-262-a LOW (re-plant QB/QBe/QKb if the guard or pin set is rewritten), b INFO (mark A4 waived on the page — next BA/PM hop), c INFO (scratch quota).**
