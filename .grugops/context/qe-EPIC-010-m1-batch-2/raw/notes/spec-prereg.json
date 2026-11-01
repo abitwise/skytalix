@@ -1,0 +1,19 @@
+{
+  "refs": ["qe-EPIC-010-m1-batch-2", "EPIC-010", "EPIC-008", "ABC-247", "ABC-225", "ABC-230", "ABC-228", "ABC-241", "ABC-229",
+           "ABC-235", "ABC-240", "ABC-245", "ADR-0053", "QE-M1B-a", "QE-M1B-b", "QE-247-a", "QE-247-b",
+           "tools/rating/rating.ts", "tools/rating/pair.ts", "tools/rating/pair-check.ts", "src/levels.ts", "src/uci-session.ts",
+           "ca6e675c137fb1dac16eef6b849d72a2f32cc514", "c0698dddaee51af35a2124bb4a1c6c1d3e9ffb7c",
+           "24f3e3223c11eca78777674099130ae2d771905a", "51902be5cfb0e13a340d9d342767f64b1dd01cee", "72a65fb7", "3af97f71",
+           "grugops/qe-EPIC-010-m1-batch-2",
+           "qe-EPIC-010-m1-batch/20261031T062729Z-qe-e2e-decision-93c1fb08",
+           "qe-EPIC-010-m1-batch/20261031T063141Z-qe-e2e-observation-5967dfc1",
+           "qe-EPIC-010-m1-batch/20261031T063150Z-qe-e2e-decision-21029f54",
+           "qe-ABC-247/20261031T073055Z-qe-e2e-decision-236bbe39",
+           "qe-ABC-247/20261031T073055Z-qe-e2e-observation-17c50af0",
+           "qe-ABC-247/20261031T073055Z-qe-e2e-observation-07d2a834",
+           "orch-2026-10-30a/20261031T065500Z-orchestrator-decision-fb0c8978",
+           "orch-2026-10-30a/20261031T073000Z-orchestrator-decision-c2752305"],
+  "notes": [
+    { "kind": "decision", "confidence": "high (written and sealed before any game or engine search in this hop; base re-derived in git; levels 5/6 read at both SHAs; pair-check and the exact command's dry run re-run by QE)", "bodyFile": "note-prereg.md" }
+  ]
+}

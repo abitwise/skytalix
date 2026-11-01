@@ -1,0 +1,9 @@
+chip: AMD Ryzen AI 9 HX 370 w/ Radeon 890M
+linux: 7.0.0-42-generic
+node: <node> v26.12.1
+cutechess-cli: cutechess-cli 1.5.1 sha256 dc77690113d9ae130f5d1b4c76fefb28f42620ac45a2bd4abb7dd8eb2154f40a = pin
+stockfish: id name Stockfish 19 sha256 c78c22a924e8d452e1089ec8d47826f7a276aba69373185e82cbac4593e352d2 = pin
+openings: <repo>/tools/rating/openings.epd sha256 0d7f7a72678cbf54c2c309dc5d664e7aac5de2c15bc54fe4247a437f51e82666
+harness: <repo> at 5d9c6b3a95071b2e97cf0d465e03fc21ca54736a
+mode: rpair  base ca6e675c137fb1dac16eef6b849d72a2f32cc514  candidate 51902be5cfb0e13a340d9d342767f64b1dd01cee  E 1910  10 blocks per build
+concurrency: 1 (default 2)

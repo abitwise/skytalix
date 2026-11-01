@@ -1,0 +1,43 @@
+▶ A1: rpair reads each build with r's argv, but for openings start/count, output paths and Skill Level 6
+  ✔ the dry run exits 0 and writes nothing (0.58937ms)
+  ✔ every block of both builds differs from r's argv only where A1 allows (1889.624977ms)
+  ✔ the pins are r's: Stockfish at E 1910, skytalix at 4 s, width 2, both colours (0.618996ms)
+  ✔ ABC-247 (a): every block of both builds gives skytalix Skill Level 6 once, Stockfish none (1.023531ms)
+  ✔ ABC-247 (a): the A5 shape (--rounds 10 --concurrency 1) carries it on both builds too (94.723237ms)
+  ✔ ABC-247 (c): the r and d argvs send no Skill Level and are main's, token for token (189.376863ms)
+✔ A1: rpair reads each build with r's argv, but for openings start/count, output paths and Skill Level 6 (2177.232986ms)
+▶ A2: the schedule
+  ✔ 10 blocks per build, 10 openings each, alternating order (0.271587ms)
+  ✔ openings 1–100 exactly once per build (0.306442ms)
+  ✔ the dry run prints that schedule and runs each block for each build once (142.007705ms)
+  ✔ --rounds 10 is the A5 smoke: one block per build, 40 games (0.14469ms)
+  ✔ bad values stop before any work, naming the argument (675.690232ms)
+✔ A2: the schedule (818.974461ms)
+▶ A3: the arithmetic on qe-epic008-close r1 and r2
+  ✔ the pooling formula gives cutechess-cli's own recorded lines (22.083049ms)
+  ✔ the pair difference reads −82.9 ± 73.8 (22.557434ms)
+  ✔ the pentanomial reads −82.9 ± 64.3 (0.613114ms)
+  ✔ split into 10 blocks, the pair summary pools to the same figures (2.219083ms)
+  ✔ Stockfish's median nps per reading matches arch-epic008-rd's an3 (266.564021ms)
+  ✔ the recorded games cover openings 1–100 with both colours (0.471921ms)
+✔ A3: the arithmetic on qe-epic008-close r1 and r2 (314.831054ms)
+▶ A4: one faulted block makes its build and the pair UNRESOLVED
+  ✔ clean fixture blocks read a rating, not UNRESOLVED (1.920586ms)
+  ✔ illegal move (0.909778ms)
+  ✔ disconnect (0.757845ms)
+  ✔ stall (0.655855ms)
+  ✔ time forfeit (0.630176ms)
+  ✔ watchdog stall (0.582037ms)
+  ✔ a block never played (the run halted) is UNRESOLVED too (0.371022ms)
+✔ A4: one faulted block makes its build and the pair UNRESOLVED (6.053622ms)
+▶ ADR-0049 d4: records carry placeholders, not host paths
+  ✔ paths longest first, then user and host as whole words (0.234899ms)
+✔ ADR-0049 d4: records carry placeholders, not host paths (0.288218ms)
+ℹ tests 25
+ℹ suites 5
+ℹ pass 25
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3807.699629
