@@ -1,14 +1,42 @@
 ---
 id: ABC-243
 title: "The setoption-Hash row reads a bare `go` at level 5 (4 000 ms), so it catches a silent jump to any other level again; the TT memory row names the budget it reads; and a UCI FEN that carries an uncapturable ep square has a row (test-only)"
-status: ready
-column: Ready
+status: done
+column: Done
+closed: "2026-10-31, merged to main at 3628fe99; QE PASS (qe-ABC-243, 2d790e40); test-only, UAT waived"
 size: XS
 priority: P3
 epic: EPIC-010
 ---
 
 # ABC-243: two test rows that went stale when level 5 moved to 4 000 ms
+
+> **CLOSED, Done, folded 2026-11-01 by BA/PM** (task `bapm-page-closes`, records only, at `main` `55fbc90e`; nothing
+> run, because `qe-ABC-246` holds the host). The page read `ready` after the merge; this fold closes it. QE's verdict
+> is **PASS** (`qe-ABC-243` `…2d790e40`, PREREG `3cd91179` before any head run) at `8772cf36`. It was **merged at
+> `3628fe99`** on 2026-10-31. Two `*.test.ts` files and 0 production lines, so **UAT is waived**; the QE verdict is
+> the gate (Test note 2).
+>
+> - **A1–A6 MET** (`…2d790e40`). A2: L4, L6 and L7 red at head (L1–L3 too), green with no plant. A4: 2 322 → 2 323
+>   tests, one name added. A6: `cp 0`, `bestmove d1e1` at depth 4; QM3 red on the A6 row only. `G8` H 9.28 s, B 9.23 s
+>   (+0.05 s against the +0.03 s estimate); the 9.6 s tranche-2 line was not crossed.
+> - **Source gaps closed:** SE-228ii-a (A1/A2), QE-228ii-b (A3, for the three lines A3 fenced), QE-241-a (A6).
+> - **QE's and the SE's gaps, dispositioned** (`qe-ABC-243` `…cf057dd1`):
+>   - **QE-243-a** (LOW, QE harness: `host.mjs`'s `[/]vitest` match found its own wrapper shell). **Closed.** It sits
+>     in QE's scratch harness, not in `src/` or `tools/`, and no reading moved. The fix (never a vitest call on the
+>     wait-clear's shell line, or drop the script's own ancestors from the match) is on record in `…cf057dd1`, and
+>     `AGENTS.md` already forbids `pgrep -f` waits.
+>   - **QE-243-b** (INFO; SE-243-b). **Closed.** The Hash row reads `time`, not `score`; `ABC-167`'s default-level row
+>     still checks `score`.
+>   - **QE-243-c** (INFO). **Carried, to a proposed ticket.** The deep row's stdout line (`:695`) still prints `3 s
+>     (depth 8)` for the `DEFAULT_BUDGET_MS` search, and its child script names that search `three`. A3's three-line
+>     fence kept both out. `NFR-009`'s catalog wording, the other half QE named, was already fixed by Security/NFR
+>     (`secnfr-ABC-228-catalog`: the row's second search is `DEFAULT_BUDGET_MS`, 4 s). The carrier is an XS, P3,
+>     test-only ticket proposed in `bapm-page-closes`' Result, for the Orchestrator to cut or to fold into the next
+>     ticket that edits that row.
+>   - **SE-243-a, SE-243-c** (118 characters, not 117), **SE-243-d, SE-243-e.** **Closed.** QE confirmed them, and `G8`
+>     read what SE-243-d left open.
+> - No follow-up ticket cut here. Notes: `.grugops/context/bapm-page-closes/notes/`.
 
 > **NOTED 2026-10-30 by BA/PM** (task `bapm-g8-headroom-cut`, records only, at `main` `161e940d`). `ADR-0046`
 > § Addendum 2026-10-30 R1–R4 (`arch-g8-headroom`, `5fd3eee7`; BA/PM's word on `ABC-244`'s page) changes nothing in

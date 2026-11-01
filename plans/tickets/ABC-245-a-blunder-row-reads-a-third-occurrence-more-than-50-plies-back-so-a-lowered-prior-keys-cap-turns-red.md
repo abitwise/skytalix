@@ -1,14 +1,40 @@
 ---
 id: ABC-245
 title: "A blunder-level row reads a third occurrence whose earlier occurrences lie more than 50 plies back, so lowering the 100-key cap turns the lane red; the `src/levels.test.ts` header count is corrected (test-only)"
-status: ready
-column: Ready
+status: done
+column: Done
+closed: "2026-10-31, merged to main at 2cce84e0; QE PASS (qe-ABC-245, b2ebc183); test-only, UAT waived"
 size: XS
 priority: P3
 epic: EPIC-010
 ---
 
 # ABC-245: pin `ABC-242`'s 100-key cap with one far-repeat row (QE-242-b)
+
+> **CLOSED, Done, folded 2026-11-01 by BA/PM** (task `bapm-page-closes`, records only, at `main` `55fbc90e`; nothing
+> run, because `qe-ABC-246` holds the host). The page read `ready` after the merge; this fold closes it. QE's verdict
+> is **PASS** (`qe-ABC-245` `…b2ebc183`, PREREG `d16c7505` before any run) at `7e81732e`. It was **merged at
+> `2cce84e0`** on 2026-10-31. `src/levels.test.ts` only, 0 production lines, so **UAT is waived**; the QE verdict signs
+> (Test note 2).
+>
+> - **A1–A5 MET.** The far repeat's earlier occurrences sit at −98 and −94 (child clock 98, 98 keys ≤ 101) and score
+>   exactly 0. Whole-lane plants: Q6 (cap 8) and Q8 (cap 50) turn only this row red (plus QE's scratch X2); cap 100 is
+>   green; QB (base `levels.ts`) red. Header 46 = run 46. `npm test` 2 364 ×3, skips 0. `G8` H 9.82 s, B 9.44 s:
+>   `NFR-008` MET.
+> - **Source gap closed:** **QE-242-b** (QE: "CLOSED", `…cf53b0ed`). SE-242-f (the stale header count) is closed by A4.
+> - **QE's and the SE's gaps, dispositioned** (`qe-ABC-245` `…cf53b0ed`):
+>   - **QE-245-b** (LOW: `G8` H 9.82 s fires `ABC-244`'s tranche-2 line on a noise-dominated n = 3 median). **Carried,
+>     carrier `ABC-248`.** Architect/Design re-costed the noise (`arch-g8-tranche2`), BA/PM ruled T2-R, and `ABC-248`
+>     (Ready, next to pull) is the tranche-2 ticket cut on this reading. Nothing is owed here.
+>   - **QE-245-a** (INFO: "10 reads per level call" is the ruling's interval count; the call makes 30 `now()` calls).
+>     **Closed.** `ADR-0046` § Ruling 2026-10-31 accepts the form, and Test note 3 asked for exactly that label.
+>   - **QE-245-c** (INFO; SE-245-c: the header count goes stale with the next row in this file). **Closed**, as an
+>     accepted maintenance cost. A4 allowed dropping the number, and the SE kept it. The next ticket that adds a row
+>     to `src/levels.test.ts` corrects the count or drops it; BA/PM names that at its cut.
+>   - **QE-245-d** (INFO, QE harness deviations, no plant or expectation changed). **Closed.**
+>   - **SE-245-a** (the row kills every cap below 98), **SE-245-b** (the fixture's checks; the pick not asserted).
+>     **Closed.** QE confirmed both (Q97 red, Q98 survives; fixture 17 checks, 0 FAIL).
+> - No follow-up ticket cut here. Notes: `.grugops/context/bapm-page-closes/notes/`.
 
 > **Cut 2026-10-31 by BA/PM** (task `bapm-ABC-242-close`, records only, at `main` `d58f2d77`; nothing run). Source:
 > QE gap **QE-242-b** (LOW, a regression gap) in `qe-ABC-242` `…b9f3cd67` and the plants note `…93eb0bf9`, plus
