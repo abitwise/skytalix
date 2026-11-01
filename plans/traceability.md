@@ -1667,3 +1667,4 @@ _Updated: 2026-08-19 by BA/PM (task `cut-agents-md-cap-2026-08-19`, Workflow 07)
 | bapm-ABC-248-close (merge) | ABC-248 closed; tranche 2 delivered; QE-248-a ruling-6 fix; SE-248-b floor; ABC-249 cut | records 1d01e77b | — | merged 2026-11-01, not pushed | Done (Orchestrator) |
 | arch-adr-folds-nov1 (merge) | ADR-0046 condition 4 spelling + status line; ADR-0053 d10 wall | records 2ad41af5 | — | merged 2026-11-01, not pushed | Done (Orchestrator) |
 | qe-qehop-growth (merge) | T-QEHOP-GROWTH re-read (ADR-0035 B3) at 37a93b76, 4 272 notes | — | MET +0.455 s CPU (+0.440..+0.490), twin +0.010 s, R 0.030 s | merged 8fecca09 2026-11-01, not pushed | Done (Orchestrator); Architect threshold owed |
+| arch-qehop-threshold (merge) | T-QEHOP-GROWTH MET recorded; next threshold 5 500; F new series on oeselg-dev | records 36995474 | — | merged 2026-11-01, not pushed | Done (Orchestrator) |
