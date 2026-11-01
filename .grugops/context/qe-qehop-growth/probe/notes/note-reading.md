@@ -1,0 +1,50 @@
+# T-QEHOP-GROWTH: `N8-LANE` on `tools/grugops/qe-hop-integrity.test.ts` at `main` `37a93b76`, 4 272 note files. Window 1 is not void and is admissible. **MET at 650 ms CPU: H−B +0.455 s (+0.440..+0.490), twin +0.010 s, R 0.030 s, n = 8**
+
+QE ran ALONE: only the records-only BA/PM hop `bapm-ABC-248-close` was beside it. Every number below comes from `probe/w1/`, and none is estimated. The readout is `probe/w1/readout-qeg.out.txt`.
+
+## What was read
+- **The set.** It is the same blob `qe-ABC-154` read: test `bf0ea7d5` (sha256 `140ed0dc…590070b`) and tool `cc0f4157`. No commit has touched either file since `0f8036f9`.
+  - The code is unchanged. What grew is the record the file reads: **2 656 → 4 272 note files**.
+  - The stack and the host moved too (adaptations A-1..A-4).
+- **Arms.** Three out-of-tree `git archive 37a93b76` trees, each with one `node_modules` symlink. Each holds 4 272 note files (`probe/arms.txt`).
+  - B is the placeholder (`f730fdb2…`, `cmp` 0 to `qe-ABC-154`'s).
+  - T is a `cp -a` twin of B (`diff -r`: identical).
+  - H is the archive as-is (`cmp` 0 to `37a93b76`).
+- **Method.** `qe-ABC-154`'s (`b9a5c957`), pre-registered as `833192d7` (08:39:42Z) with addendum 1 `8dfbabf5` (08:40:13Z), both before any run. The plumbing pre-flight was 08:40:29Z and window 1 started at 08:41:23Z.
+  - The eleven adaptations are listed in `probe/preregistration.txt`. The ones that matter: a Linux port of `lane144b.mjs` and `gate.sh`, which cannot run on `oeselg-dev`; `node_modules/.bin/vitest` in place of npx; heap 400 (the ONE-FILE row); Tctl in place of macOS thermal pressure; no power device; foreign vitest found by cwd.
+- **Stack.** node v26.12.1, vitest 4.1.12, `pool: "threads"`, `maxWorkers: 2`, GNU `/usr/bin/time -p` (10 ms tick). The host is oeselg-dev: Ryzen AI 9 HX 370, 24 logical CPUs, governor powersave, EPP balance_performance, 0 power-supply devices, 0 `VITEST_` env vars.
+
+## The window
+| window | gate (4 × 15 s) | lane | load1 before scored runs | foreign vitest / cutechess / platform | Tctl | discarded | state |
+|---|---|---|---|---|---|---|---|
+| w1 | passed 08:41:24→08:42:09Z, load1 0.26–0.36, Tctl 34.3–51.5 °C | 08:42:09–08:42:20Z | **0.49–0.61** (0.24–0.76 over the window) | 0 / 0 / 0 on every run and in all 13 sampler rows | median **62.0 °C**, max 68.1 (stop is > 85) | **0** | **admissible, graded** |
+
+- **Foreign processes** (`top`, before the gate and after the lane): `abtop` at 15.8–21.8 % of one CPU, two idle `claude` sessions at 2–3 %, `node-MainThread` pid 1578145 at 1–2 %, `tailscaled` at 1 %. There was no other repository's vitest, so nothing was waited on and nothing was signalled.
+- **There is no window 2.** The pre-registration allows a re-attempt only when w1 is void or inadmissible.
+
+## The reading
+| arm / delta | CPU | wall |
+|---|---|---|
+| B median | 0.370 s | 0.235 s |
+| H median | 0.830 s | 0.515 s |
+| T median | 0.360 s | 0.240 s |
+| twin T − B median | **+0.010 s (+2.703 % of B)**. The limit is max(5.55 ms, one tick 10 ms) = 10 ms | +0.005 s (+2.128 %). The limit is 10 ms |
+| twin signs, non-zero only | +4 / −3, 1 zero dropped: **p 1.000** | +4 / −3, 1 zero: p 1.000 |
+| twin R (k = 2) | **0.030 s** | 0.020 s |
+| treatment H − B median | **+0.455 s** | +0.270 s |
+| treatment interval x(2)..x(7) | **+0.440..+0.490 s** | +0.260..+0.310 s |
+
+- **Sorted twin CPU deltas:** −0.04, −0.02, −0.02, 0.00, +0.02, +0.03, +0.03, +0.03.
+- **Sorted treatment CPU deltas:** +0.42, +0.44, +0.45, +0.45, +0.46, +0.46, +0.49, +0.54.
+- **Grade** (decision 1, b = 0.650 s CPU):
+  - the window is admissible;
+  - R 0.030 ≤ 0.650;
+  - the median +0.455 ≤ 0.650;
+  - the lower end +0.440 is not > 0.650.
+  - **→ MET.** F is 0.020 s, and 650 ms ≥ F.
+- **The record's size at the read is 4 272 note files**, in each arm and on `main` at `37a93b76`. That is 70.0 % of the bound by the median and 75.4 % by the upper end.
+- **H's last run** (`probe/w1/h-last-run.json`): 32/32 passed, 0 failed, 0 pending, 0 todo.
+
+## Not compared
+- **This reading is not paired with `qe-ABC-154`'s +0.380 s.** That was the M3 on vitest 4.1.11. `ADR-0035` § Addendum 2026-10-30 says figures across the re-base are not comparable.
+- On this host, B costs 0.370 s CPU, against 0.575 s on the M3. The H − B growth cannot be split between the record, the stack and the host.

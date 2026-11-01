@@ -1,0 +1,13 @@
+{
+  "refs": ["qe-qehop-growth", "T-QEHOP-GROWTH", "N8-LANE", "NFR-008", "ADR-0035", "ADR-0046", "bapm-tranche2-ruling",
+           "tools/grugops/qe-hop-integrity.test.ts", "qe-ABC-154", "b9a5c957", "833192d7", "8dfbabf5", "37a93b76",
+           "qe-ABC-154/20261012T113700Z-qe-e2e-observation-abc154-n8-lane-met-4e153e76",
+           "QE-QHG-a", "QE-QHG-b", "QE-QHG-c", "QE-QHG-d", "QE-QHG-e", "QE-QHG-f", "grugops/qe-qehop-growth"],
+  "notes": [
+    { "kind": "observation", "confidence": "high: one pre-registered window, ALONE, 0 rounds discarded, 0 foreign vitest/cutechess/platform in any run or sampler row; every figure read from probe/w1", "bodyFile": "note-reading.md" },
+    { "kind": "decision", "confidence": "high: B3 applied as written to an admissible window; the admissibility rests on A1's one-tick floor (stated, QE-QHG-a)", "bodyFile": "note-decision.md" },
+    { "kind": "observation", "confidence": "medium: arithmetic exact, but a projection on A3's M3 slope (UNKNOWN - verify on oeselg-dev), linear in N assumed; not a reading", "bodyFile": "note-threshold.md" },
+    { "kind": "observation", "confidence": "high on what was read; series and threshold questions are the Architect's; none blocking", "bodyFile": "note-findings.md" },
+    { "kind": "observation", "confidence": "high: files listed are committed on grugops/qe-qehop-growth (an observation, not an artifact-ref: no gate run to bind)", "bodyFile": "note-artifacts.md" }
+  ]
+}

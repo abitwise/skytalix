@@ -1,0 +1,4 @@
+# n8-qeg: NODE_OPTIONS=--max-old-space-size=400 /usr/bin/time -p node_modules/.bin/vitest run tools/grugops/qe-hop-integrity.test.ts --reporter=default --reporter=json --outputFile.json=.test-results/last-run.json | conds B,H,T | rounds 1 | gap 0 -> /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-qehop/lane/preflight/n8-qeg.tsv
+0 B cpu 0.41 wall 0.29 1 1 load1 0.21 foreign 0/0 tctl 34.3->35.5 ok
+0 H cpu 0.88 wall 0.58 1 32 load1 0.21 foreign 0/0 tctl 35.5->40.9 ok
+0 T cpu 0.34 wall 0.23 1 1 load1 0.21 foreign 0/0 tctl 40.9->43.8 ok

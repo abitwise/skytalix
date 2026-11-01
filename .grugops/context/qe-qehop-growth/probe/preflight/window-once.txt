@@ -1,0 +1,72 @@
+utc_start 2026-11-01T08:40:29Z
+lane-qeg.mjs sha256 0c23701bc27295cd67d17cc34bee96ebc4bf865c186f48bbd34c3cf5b8f521f5
+host-qeg.mjs sha256 c3dda32f5694f5a23870911a2c5de684542bd69eb4d7d0a91c0065dfc956a260
+gate-qeg.mjs sha256 576481d330f5b122da4676162c9a4da3d2b9bc3594ac22ee642a08de3e3fba6f
+sampler-qeg.mjs sha256 c7058df655944f21849cadf49544d518b023fcbd6e5c72a637a70dfd7cfcfa78
+window-qeg.sh sha256 738d3a62867f446f2ebc5aeee57c66fe26870be00a50d1cbfbccfbaeb21b27b7
+node v26.12.1 vitest 4.1.12
+time: time (GNU Time) UNKNOWN
+host oeselg-dev | AMD Ryzen AI 9 HX 370 w/ Radeon 890M | nproc 24 | kernel 7.0.0-42-generic
+power_supply devices: 0
+governor powersave epp balance_performance
+loadavg 0.23 0.30 0.63 2/863 2728065
+VITEST_ env: 0 ; NODE_OPTIONS env: []
+arm B notes 4272 test sha256 f730fdb27019018b1d032586ca8baf88d9ddd6052cd870ae19704217ba515e3e
+arm H notes 4272 test sha256 140ed0dcc8fca2a928fc5f994351983db238e3fc8d1139f949789e584590070b
+arm T notes 4272 test sha256 f730fdb27019018b1d032586ca8baf88d9ddd6052cd870ae19704217ba515e3e
+--- top before the gate (second iteration, 1 s)
+top - 08:40:30 up 2 days, 58 min,  1 user,  load average: 0.21, 0.29, 0.63
+Tasks: 430 total,   1 running, 429 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.6 us,  0.1 sy,  0.0 ni, 99.3 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st 
+MiB Mem :  30176.4 total,   6118.2 free,   6578.1 used,  20987.7 buff/cache     
+MiB Swap:   8192.0 total,   8192.0 free,      0.0 used.  23598.3 avail Mem 
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+   4469 olger     20   0 5722172 443044 134252 S   7.9   1.4  47:23.30 claude
+   6693 olger     20   0 5697420 584968 130488 S   5.0   1.9  60:35.77 claude
+   1708 root      20   0 1295196  54872  27032 S   2.0   0.2  12:26.34 tailscaled
+1578145 olger     20   0   17.7g 159348  62844 S   2.0   0.5   6:58.34 node-MainThread
+   4836 olger     20   0 5717920 411952 130648 S   1.0   1.3  41:27.95 claude
+2026140 root      20   0       0      0      0 I   1.0   0.0   0:03.60 kworker/20:2-mm_percpu_wq
+      1 root      20   0   26504  16424  10876 S   0.0   0.1   0:20.48 systemd
+      2 root      20   0       0      0      0 S   0.0   0.0   0:00.16 kthreadd
+      3 root      20   0       0      0      0 S   0.0   0.0   0:00.00 pool_workqueue_release
+      4 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/R-rcu_gp
+      5 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/R-sync_wq
+      6 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/R-kvfree_rcu_reclaim
+      7 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/R-slub_flushwq
+      8 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/R-netns
+     10 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/0:0H-kblockd
+     13 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/R-mm_percpu_wq
+     14 root      20   0       0      0      0 S   0.0   0.0   0:02.23 ksoftirqd/0
+sampler_pid 2728091
+gate_start 2026-11-01T08:40:30Z STREAK=1 GMAX=45
+gate_pass 2026-11-01T08:40:30Z
+lane_exit 0 2026-11-01T08:40:32Z
+--- top after the lane (second iteration, 1 s)
+top - 08:40:42 up 2 days, 58 min,  1 user,  load average: 0.26, 0.30, 0.63
+Tasks: 431 total,   1 running, 430 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  1.8 us,  0.7 sy,  0.0 ni, 97.4 id,  0.1 wa,  0.0 hi,  0.0 si,  0.0 st 
+MiB Mem :  30176.4 total,   5830.0 free,   6681.1 used,  21173.0 buff/cache     
+MiB Swap:   8192.0 total,   8192.0 free,      0.0 used.  23495.3 avail Mem 
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+1578058 olger     20   0  142884   6908   4008 S  20.0   0.0  57:09.34 abtop
+   6693 olger     20   0 5697420 597832 130488 S  12.0   1.9  60:36.68 claude
+   4469 olger     20   0 5722172 442328 134252 S   6.0   1.4  47:23.44 claude
+    650 root      20   0       0      0      0 S   1.0   0.0   0:10.54 jbd2/dm-0-8
+   1708 root      20   0 1295196  54872  27032 S   1.0   0.2  12:26.40 tailscaled
+   4836 olger     20   0 5717920 411964 130648 S   1.0   1.3  41:28.10 claude
+1578145 olger     20   0   17.7g 159348  62844 S   1.0   0.5   6:58.47 node-MainThread
+2657866 root      20   0       0      0      0 I   1.0   0.0   0:00.23 kworker/21:2-events
+      1 root      20   0   26504  16424  10876 S   0.0   0.1   0:20.48 systemd
+      2 root      20   0       0      0      0 S   0.0   0.0   0:00.16 kthreadd
+      3 root      20   0       0      0      0 S   0.0   0.0   0:00.00 pool_workqueue_release
+      4 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/R-rcu_gp
+      5 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/R-sync_wq
+      6 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/R-kvfree_rcu_reclaim
+      7 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/R-slub_flushwq
+      8 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/R-netns
+     10 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/0:0H-kblockd
+loadavg 0.26 0.30 0.63 1/863 2728724
+utc_end 2026-11-01T08:40:42Z

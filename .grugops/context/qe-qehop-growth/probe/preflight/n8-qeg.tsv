@@ -1,0 +1,4 @@
+round	cond	wall	user	sys	cpu	par	files	tests	failed	skipped	load1_before	load1_after	foreign_vitest	foreign_after	cutechess_before	cutechess_after	tctl_before	tctl_after	utc	status
+0	B	0.29	0.37	0.04	0.41	1.414	1	1	0	0	0.21	0.21	0	0	0	0	34.3	35.5	2026-11-01T08:40:30.836Z	ok
+0	H	0.58	0.77	0.11	0.88	1.517	1	32	0	0	0.21	0.21	0	0	0	0	35.5	40.9	2026-11-01T08:40:31.188Z	ok
+0	T	0.23	0.31	0.03	0.34	1.478	1	1	0	0	0.21	0.21	0	0	0	0	40.9	43.8	2026-11-01T08:40:31.823Z	ok
