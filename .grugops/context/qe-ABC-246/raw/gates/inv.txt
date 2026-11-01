@@ -1,0 +1,4 @@
+# run in the worktree (tracked src/ tools/ data/ == a1942ea0 == H; the archive tree has no .git); node_modules = temporary symlink, removed after
+The lane collects 63 test files; git tracks 63.
+No findings.
+rc=0

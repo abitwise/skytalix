@@ -1,0 +1,2 @@
+H CLOCKWINSCM rc=1 files=63 total=2366 passed=2365 failed=1 skipped=0 wall=8.9s
+  RED uci-session.test.ts :: ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) ABC-246 (QE-221-a) — the hard stop with an increment, and movetime over a clock, in the mode A2: go wtime 900000 btime 900000 movestogo 40 movetime 5000 -> 5 000 (movetime is read first), not the clock's 22 375 :: AssertionError: expected [ 22375 ] to deeply equal [ 5000 ] at <anonymous> (<scratch>/P/src/uci-session.test.ts:2527:61) at file://<repo>/node_modules/@vitest/runner/dist/

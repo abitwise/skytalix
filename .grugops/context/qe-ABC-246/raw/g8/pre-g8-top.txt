@@ -1,0 +1,21 @@
+2026-11-01T07:10:37Z
+ 07:10:37 up 1 day, 23:28,  1 user,  load average: 1.51, 0.68, 0.68
+top - 07:10:39 up 1 day, 23:28,  1 user,  load average: 1.39, 0.67, 0.67
+Tasks: 430 total,   1 running, 429 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.6 us,  0.2 sy,  0.0 ni, 99.2 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st 
+MiB Mem :  30176.4 total,   6861.8 free,   5711.3 used,  20215.8 buff/cache     
+MiB Swap:   8192.0 total,   8192.0 free,      0.0 used.  24465.1 avail Mem 
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+1578058 olger     20   0  142884   6908   4008 S   9.5   0.0  50:21.15 abtop
+   6693 olger     20   0 5697420 582332 130428 S   2.5   1.9  57:46.03 claude
+   4469 olger     20   0 5722172 444276 134252 S   1.5   1.4  46:25.04 claude
+   4836 olger     20   0 5717920 409632 130648 S   1.5   1.3  40:34.35 claude
+1578145 olger     20   0   17.7g 159508  62844 S   1.5   0.5   5:57.96 node-Ma+
+   1826 root      20   0 3371224  54304  31336 S   0.5   0.2   4:45.77 contain+
+   9593 olger     20   0  307768   9636   7208 S   0.5   0.0   8:21.20 btop
+2496808 root      20   0       0      0      0 I   0.5   0.0   0:03.62 kworker+
+      1 root      20   0   26504  16424  10876 S   0.0   0.1   0:20.10 systemd
+foreign vitest count: 0
+cutechess: 0
+Tctl:         +41.0°C  

@@ -1,0 +1,9 @@
+## H vs git archive a1942ea0 (tar --compare; content differences only)
+H diff lines: 0
+## B vs git archive a1942ea0, the two files excepted
+src/engine.test.ts: Size differs
+src/uci-session.test.ts: Size differs
+B src/uci-session.test.ts == 832ff246
+B src/engine.test.ts == 832ff246
+## untracked in H/B beyond archive (test output dirs)
+./.test-results/last-run.json
