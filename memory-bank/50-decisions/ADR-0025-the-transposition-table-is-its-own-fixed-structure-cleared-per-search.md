@@ -6,6 +6,11 @@ id: ADR-0025
 
 ## Status
 
+*2026-11-01:* a **PROPOSED** amendment to decision 2's replacement bullet for `ABC-237` (depth-preferred
+replacement, T2) is at the end of this file. Acceptance is the owner's. Until he accepts it and `ABC-237` merges,
+decision 2's "the replacement policy is the Engineer's" and the delivered always-replace stand on `main`. Written by
+Architect/Design (task `arch-epic011-phase1`, records only, at `main` `13627d0f`).
+
 *2026-10-27:* the amendment to decision 4 for `ABC-209` (the table lives one game, held by a game token) at the end
 of this file is **accepted, not in force on `main`**. `ABC-209`'s single reading was S1 NOT MET (pooled over 800 games
 NEUTRAL +8.69 ± 18.25), so the ticket was not merged. **Decisions 1–7 stand on `main` as written, decision 4's
@@ -354,3 +359,148 @@ work has his go-ahead, and the Orchestrator reports this text to him when it lan
 - **Before acceptance** (passed; accepted 2026-10-26): mark this section `withdrawn`. Nothing else was edited.
 - **After it ships** (not reached: `ABC-209` was not merged, 2026-10-27; nothing to roll back on `main`): `prepareTable(options.game)` becomes `clearTable()` again, and the two trackers and the
   optional field are deleted. About ten production lines; no data or format is involved.
+
+## Proposed amendment 2026-11-01 (`ABC-237`, T2): a store keeps the deeper entry of another position. PROPOSED
+
+### Status
+
+**PROPOSED** 2026-11-01 by Architect/Design. Task `arch-epic011-phase1`, records only, at `main` `13627d0f`. Nothing
+was run, built or timed.
+
+- **Acceptance is the owner's.** Changing an accepted ADR is his (2026-10-22 delegation, `…5aaf7cec` item 3).
+- **The answer that settles it:** *"accept the ADR-0025 T2 amendment"* or *"decline it"*.
+- **Reading (b)**, the `ABC-208` / `ABC-209` precedent:
+  - the build of `ABC-237` and its gates may proceed while this amendment is PROPOSED;
+  - the read it owes (below) and the merge wait on his acceptance.
+- **Default without an answer:** always-replace stands, and `ABC-237` does not merge.
+- **If `ABC-237` does not merge,** a dated line here records "accepted, not in force on `main`" (`ADR-0026` decision 9's
+  form).
+- **What this amendment touches:**
+  - **It changes:** decision 2's third bullet only.
+  - **Decision 4 is untouched.** The table is still cleared per search. The 2026-10-26 decision 4 amendment stays
+    accepted and not in force.
+  - **Decisions 1, 3 and 5–7 are untouched.** So are the size (2^18 × 16 B = 4 MiB) and `ADR-0058` (T1, deeper
+    cutoffs), which this amendment follows on the shared file.
+- **Why an amendment and not a new ADR.** This ADR named the policy as its own open slot ("the replacement policy is
+  the Engineer's") and named its falsifier (`T2`). Every source cite of the policy reads "`ADR-0025`", as the
+  2026-10-26 amendment argued for decision 4.
+
+### Context
+
+- **Today.** `storeEntry` overwrites its slot whatever the slot held (`src/transposition.ts:22-26`, `:136-148`). A
+  shallow store of position B evicts a deep entry of position A, which cost far more to compute (SA `…306a4012`
+  row 9b).
+- **Under `ADR-0058`, a deep entry is worth more.** It now settles shallower probes, where before it only supplied a
+  hash move. That is why `ADR-0056` D6 orders T1 before T2.
+- **Table pressure, by arithmetic from `qe-tc-depth-probe` `…1889e3b0` R1** (median nodes per search: 47 131 at
+  100 ms, 317 555 at 500 ms, 2 806 820 at 4 000 ms; 262 144 slots):
+  - Storing `n` keys at random into `m` slots, the expected share of stores that land on an occupied slot is
+    `1 − (m / n)(1 − e^(−n/m))`.
+  - That gives **≤ 8.5 % at 100 ms, ≤ 42 % at 500 ms and ≤ 91 % at 4 s.**
+  - These are upper bounds. Quiescence nodes are counted but never stored, and a re-store of the same key evicts
+    nothing.
+  - **So T2 acts in proportion to table pressure, not to depth.** It barely fires at 100 ms, and it fires on nearly
+    every store at the shipped 4 s.
+
+### Decision 2, third bullet, as amended
+
+- **The replacement policy is depth-preferred.** A store writes its slot when any one of these holds:
+  - **(a)** the slot is empty;
+  - **(b)** the slot holds the same position (the full 64-bit key is equal);
+  - **(c)** the slot holds another position whose stored depth is **no greater than** the new depth.
+
+  Otherwise the store is dropped, and the slot keeps the deeper entry of the other position. The rule is stated in
+  the delivered code comment, as before.
+- **Why (b), the same key always replaces.** A node is searched, and so stores, only when its own entry did not settle
+  it. Its new result, window and best move are what the next identical probe wants, and the newest hash move is the
+  one the next iteration tries first (this ADR's Context: the table's value is "across iterations of one move").
+- **Why "no greater than" in (c), and not "less than".** At equal depth the newer entry wins, as today.
+- **The root's store always lands.** The root stores at the iteration's depth `d`. Every other entry in a table cleared
+  per search holds remaining depth ≤ `d − 1` (children of this iteration's root, or earlier iterations). So the root's
+  hash move for the next iteration is never blocked.
+- **One switch, `depthPreferred`, in BOTH recursions,** passed to `storeEntry` as an argument. That means no
+  module-level state and no option (`ADR-0026` decision 2). The name is the Engineer's.
+- **Two TEST-ONLY doors,** one per recursion. Each is the shipped path with `depthPreferred` off and everything else
+  on: the pre-`ABC-237` `search()` and `chooseMove`, node for node (`ABC-237` `A1`). The names are the Engineer's, in
+  the `…Without…` form.
+- **Every door that exists before `ABC-237` turns `depthPreferred` off,** by the ladder rule (`ADR-0026` decision 3).
+  - If `ABC-238` merged first, `ADR-0058`'s two doors are among them. Each then turns T1 and T2 off and still
+    reproduces the pre-`ABC-238` search.
+  - Rows re-point as `ADR-0058` decision 5 says, now to the T2 door.
+  - If `ABC-238` closed unmerged, the same holds without the T1 doors.
+- **No bits and no arrays are added.** The packed word stays 17 + 2 + 13 bits, and `tableByteLength()` stays
+  4 194 304. **No generation or age.** In a table cleared per search, every entry is from this move.
+
+### The bounded oracle and the rule's rows
+
+- **The rule's rows (`ABC-237` `A2`, worded for BA/PM).** Two DIFFERENT keys that share one slot:
+  - store depth 6 then depth 2: the depth-6 entry remains;
+  - store depth 2 then depth 6: it is replaced;
+  - store depth 4 then depth 4: it is replaced.
+
+  One key, stored at depth 6 then at depth 2: replaced, by (b). With the switch off, every case replaces.
+- **Drift, the regression net.** At depth 5 on `ABC-121`'s 190, in both recursions, against the T2 door: at least 95 %
+  of non-mate positions within 25 cp, and 0 mate scores change sign (`ADR-0058` decision 6's bars).
+  - At depth 5 the table is barely loaded, so a correct T2 reads close to identity. The test reports the count of
+    identical scores.
+  - A rule wired to drop same-key stores, or to compare the wrong way, is what this row is for.
+  - It is not a proof. The rows above are.
+
+### The read `ABC-237` owes (`ADR-0056` D5, as folded)
+
+- **Intent: GAIN.** T2 is meant to make the engine stronger. C2′ reserves NEUTRAL for correctness fixes and
+  simplifications, and the Architect does not re-class a strength change to soften its bar.
+- **C2′:** 100 games at 100 ms against the merge-base, ≥ 50.0 of 100, with 0 faults and 0 losses on time.
+- **S′:** 10 games at 0.5 s against Stockfish 19 at E 1 650, ≥ 3.0 of 10 (below that, ≥ 7.0 of 20).
+- **The Levels deep lane:** exit 0, every test passed. QE counts its own run; `EPIC-010`'s close read 57/57.
+- **R-TC item 2 at review.** T2 is keyed on table state only.
+- **What 100 ms can see: almost nothing of the gain.** At most 8.5 % of stores meet another position's entry at
+  100 ms (Context). So the 100-game read guards against breakage, and its score sits near a coin flip for an effect
+  this small. QE reports it with that limit stated, as `ABC-258` `A4`'s note does for size.
+- **What sees the mechanism:** `ABC-237` `A3`.
+  - The 3 000 ms median completed depth, over 5 interleaved runs per build.
+  - Fixed-depth-8 nodes on kiwipete and position-6. An inference from R1, not a measurement: kiwipete reaches depth 8
+    only at 4 s, where the median search visits about 10× the slot count.
+- **A longer-control read is not recommended.** 100 games at 500 ms (≈ 2.3 h, `ADR-0056` C2′) is an other run over
+  1 h, so it is the owner's to allow. At the +5–15 estimate (`ADR-0056` D2), 100 games cannot resolve the effect at
+  any control (C2′'s table: P(pass | +10) = 0.66).
+- **Open question for the Orchestrator** (a C2′ change, so the owner's if asked): may a mechanism that cannot fire at
+  the read's control be read on the NEUTRAL bar, with its gain shown by its own mechanism rows? This applies to T2
+  and T4 (`ABC-258`) alike. Without an answer, the GAIN bar applies as above.
+
+### Falsifiers added or re-read
+
+| # | clause | what would falsify it | how to check |
+|---|---|---|---|
+| **T2** (re-read) | 2 — 2^18 entries suffice | unchanged: a 3 s search whose replacement costs ≥ 10 % nodes against a 2^20 table. Still `ABC-258`'s question, not this amendment's | `ABC-258` |
+| **T5** (re-read) | 4 as amended 2026-10-26 — always-replace is enough across a game | moot while decision 4's amendment is not in force; `ABC-257` re-reads it against this policy | `ABC-257` |
+| **T6** | 2 as amended here — depth-preferred pays at 2^18 | `ABC-237` `A3` missed: head's median completed depth at 3 000 ms below base's on kiwipete or position-6, or fixed-depth-8 nodes above **0.97 ×** the door's on both; or C2′ NOT MET | `ABC-237` `A3`, `A6` |
+| **T7** | 2 as amended here — the rule is wired as written | any `A2` case wrong, or the drift row red | `ABC-237` `A2`; the drift row above |
+
+If T6 fires, `ABC-237` is not merged and this amendment is "accepted, not in force". If T7 fires, it is a defect,
+back to the Engineer.
+
+### Consequences
+
+- **`NFR-009`:** unchanged (`A4`'s 16 MiB and its growth clause still bite). **`NFR-005`:** `A3`. No new NFR file.
+- **Source comments to rewrite in the build:**
+  - `src/transposition.ts:22-26`, the "always replace" header;
+  - the `storeEntry` doc at `:132-135`;
+  - the `describe` title at `src/transposition.test.ts:239` and its "always replaces" row (`:252`). That row stays,
+    as the door's behaviour.
+- **`ADR-0057` coupling (named, not decided).**
+  - The rule is layout-neutral. Word 2 of `ADR-0057` D2.3 keeps today's packing.
+  - Under a lockless shared table, depth-preferred replacement is a read, a compare and a write, with no lock. A lost
+    race costs only a replacement decision, never correctness, because the XOR check still guards every hit.
+  - If `ABC-257` needs an age field, the 13-bit depth field is the only donor that does not grow the entry. That
+    trade is a layout question for `ADR-0057`, not this amendment.
+- **`ABC-257` coupling.** With the table kept across moves, depth-preferred replacement with no age lets deep entries
+  from earlier moves hold their slots for the rest of the game. `ABC-257`'s design owes an age rule, or a measured
+  statement that none is needed.
+- **Migration:** none.
+
+### Rollback
+
+- **Before acceptance:** mark this section `withdrawn`. The status line at the top goes with it.
+- **After it ships:** set `depthPreferred` to false in `search()` and `chooseMove`, two booleans. The shipped path is
+  then the door, node for node. Removing the switch, the doors and the re-points afterwards is a revert of one ticket.
