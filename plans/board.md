@@ -1172,7 +1172,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   one hop at pull, when it checks `Ready for Dev`'s exit at that moment; the row records the pull.
 
   HEADING FORMAT (spec §6.1): each column is an H2 heading carrying its live/limit WIP count,
-  e.g. `## In Development (WIP 1/3)` — the left number is how many tickets are in the column
+  e.g. `## In Development (WIP 0/3)` — the left number is how many tickets are in the column
   now, the right number is the limit from config. Unlimited columns read `(WIP unlimited)`;
   Blocked is visible and time-tracked (no WIP limit) and reads `(visible, time-tracked)`.
   INVARIANT: the column H2 headings and the rows of the `## Columns` table are the same 13 names in the
@@ -1182,10 +1182,10 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 1/3)
+    ## In Development (WIP 0/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
-    ## In Review (WIP 2/3)
+    ## In Review (WIP 3/3)
     - [ABC-012] Portfolio FX conversion  (PR: #41, QE: running)
 
   BOARD <-> TICKET CONTRACT: each ticket file (`plans/tickets/<prefix>-xxx.md`) carries a
@@ -1315,8 +1315,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-259] A default-lane source scan turns red when engine-core code reads the budget other than as the deadline, or reads a test flag or the environment (EPIC-010 milestone 1b; size: XS, priority: P2; test-only; DoR 10/10; owner rule R-TC, ADR-0056 G-1; cut 2026-11-01 bapm-reconcile-adr0056) **→ Ready → pulled 2026-11-01 → `se-ABC-259` (before ABC-251)**
+## In Development (WIP 0/3)
 
 
 
@@ -1344,7 +1343,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 2/3)
+## In Review (WIP 3/3)
+- [ABC-259] A default-lane source scan turns red when engine-core code reads the budget other than as the deadline, or reads a test flag or the environment (EPIC-010 milestone 1b; size: XS, priority: P2; test-only; DoR 10/10; owner rule R-TC, ADR-0056 G-1; cut 2026-11-01 bapm-reconcile-adr0056) **→ Ready → pulled 2026-11-01 → `se-ABC-259` (before ABC-251)** **→ In Review 2026-11-01 (se-ABC-259 done 4dbfde26; 3 scan rows, planted violations red, comments green, 0.83 ms; review OK — note: alias reads of the budget under another name are out of scope by design) → `qe-ABC-259`**
 - [ABC-255] M0: a self-play SPRT lane on the rating harness (H1 on a known gain, H0 on an identical pair) (EPIC-011 Phase 0; size: M, priority: P1, DoR 8/10) **2026-11-01: re-scoped to the 100/400 + 0.5 s smoke harness (size S, DoR 10/10; bapm-reconcile-adr0056) → Ready → pulled → `se-ABC-255` (tools/ only; tests under the lock)** **→ In Review 2026-11-01 (se-ABC-255 done a08ba9be; A1/A2/A6/A7 met on dry runs; 14 existing shapes byte-identical; 0 lines src/data; review OK) → `qe-ABC-255` (A3 100-game sanity, A4 100-game identical pair, A5 smoke; ~1 h play, owner-set counts)**
 - [ABC-254] Lazy legality: make/test/unmake only for king moves, en passant, pinned pieces and checks (ADR-0055 O1-d; size: M, priority: P2; DoR 10/10; milestone 1b; **owner YES 2026-11-01 (…f7a50e95)**; → Ready when `arch-adr0003-amend` merges) **Stays EPIC-010 milestone 1b, first once arch-adr0003-amend merges** (ABC-254 page exception: owner yes + amending ADR before ABC-250 enters development) **→ Ready 2026-11-01 (bapm-ABC-254-ready; first in 1b)** **pulled 2026-11-01 → `se-ABC-254` (parallel coding; tests serialized by host-test.lock after the probe)** **→ In Review 2026-11-01 (se-ABC-254 done fe53dbda; A1/A2/perft green; npm test 2 368/0; out-of-ticket edit: gameend.nfr.test.ts bars tightened 1/8→0, reviewed OK) → `qe-ABC-254` (A3/G4, A4 ALONE nps, G1/G5/G6/G8/G9)**
 
