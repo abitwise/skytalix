@@ -1,3 +1,4 @@
+_Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — ABC-246 SE done (no STOP; +2 rows, 1 comment; plants red as named), code review PASS → In Review; `qe-ABC-246` ALONE (A3 whole-lane re-read, G8 with W1). SE-246-a (INFO: stale "6 746 nodes" comment, ABC-170 A2) carried for the next ticket that edits that block. Beside: `bapm-m1-batch-fold` (records). Width 2/3._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — **EPIC-010 milestone-1 batch: NOT LOSS (NEUTRAL)** (qe-EPIC-010-m1-batch-2; merged 5325a0f0, not pushed). Base ca6e675c 78.25 % ± 5.48 vs head 51902be5 72.00 % ± 6.11; X −58.3, Y 77.9, X+Y +19.6 ≥ 0. Clocks 4.0 s both, 0 faults/time losses, 400/400. **New 4 000 ms trend reference: 72.00 % ± 6.11 (flag 52.00 %)** → `bapm-m1-batch-fold` (trend ref, EPIC-010 rows 19–21, QE-M1B2-b detached-launch rule). QE-M1B2-c (ALONE host shared with another repo's vitest, 7.7 % of ticks) → owner informed. ABC-246 pulled → `se-ABC-246`. Next: ABC-248 → qe-qehop-growth → ABC-223. Width 2/3._
 _Updated: 2026-10-31 Orchestrator (orch-2026-10-30a) — ABC-247 DONE (qe-ABC-247 PASS; merged 3af97f71, not pushed). **`qe-EPIC-010-m1-batch-2` spawned: 400-game R pair at Skill Level 6 (4 000 ms both sides), width 1, STRICTLY ALONE, ~21.7–24.1 h + ~1 h QE.** Then: ABC-246 → ABC-248 → qe-qehop-growth → ABC-223. Width 1/3._
 _Updated: 2026-10-31 Orchestrator (orch-2026-10-30a) — `bapm-tranche2-ruling` merged: ABC-248 (S, P1) → Ready; W1 in force; ABC-229 closed. Owed LOW: `qe-qehop-growth` (ADR-0035 B3 N8-LANE re-read, ALONE) queued after the batch; EPIC-010 table rows 19–21 stale (fold at next BA/PM hop). Running: `qe-ABC-247` (ALONE). Queue (ALONE, one at a time): batch → ABC-246 → ABC-248 → qe-qehop-growth → ABC-223. Width 1/3._
@@ -1148,8 +1149,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 1/3)
-- [ABC-246] In uci-clock-mode, rows pin the hard stop (winc near the clock edge → 1 900) and movetime over a clock (→ 5 000); + SE-221-g comment (QE-221-a; size: XS, priority: P3, test-only, UAT waived; DoR 10/10; cut by bapm-ABC-221-fold; after the batch; batch NOT LOSS 2026-11-01; pulled → `se-ABC-246`)
+    ## In Development (WIP 0/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
     ## In Review (WIP 2/3)
@@ -1307,7 +1307,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-246] In uci-clock-mode, rows pin the hard stop (winc near the clock edge → 1 900) and movetime over a clock (→ 5 000); + SE-221-g comment (QE-221-a; size: XS, priority: P3, test-only, UAT waived; DoR 10/10; cut by bapm-ABC-221-fold; after the batch; batch NOT LOSS 2026-11-01; SE done at 3c5e05fd (branch grugops/ABC-246 @ a1942ea0), code review PASS; → `qe-ABC-246` ALONE)
 
 
 
