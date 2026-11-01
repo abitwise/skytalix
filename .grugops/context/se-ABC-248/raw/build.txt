@@ -1,0 +1,3 @@
+> tsc -p tsconfig.build.json
+
+rc=0

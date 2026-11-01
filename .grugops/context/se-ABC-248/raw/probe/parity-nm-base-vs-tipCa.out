@@ -1,0 +1,7 @@
+CONTROL base ran 38 failed 0 | tip ran 38 failed 0
+same id list run: true (26 mutants)
+killed base 26 tip 26; LOST at tip: {-}; gained: {-}
+SAME row "position-6, readings 3 to 25" -> "position-6, the even readings 4 to 24": base {engine-no-finally,min-depth-3,null-no-fullmove} tip {engine-no-finally,min-depth-3,null-no-fullmove}
+SAME row "search() on position-6 at depth 6": base {search-stale-null-key,R-5,key-without-ep,null-no-ep-clear} tip {search-stale-null-key,R-5,key-without-ep,null-no-ep-clear}
+SAME row "chooseMove on position-6 deepened to 6": base {engine-stale-null-key,R-5,key-without-ep,null-no-ep-clear} tip {engine-stale-null-key,R-5,key-without-ep,null-no-ep-clear}
+PARITY HOLDS (file level)

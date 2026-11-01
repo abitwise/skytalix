@@ -1,0 +1,17 @@
+lane base total 2366 pending 0 todo 0 | tip total 2362 pending 0 todo 0
+
+src/search.null-move.test.ts: base 38 {'passed': 38} | tip 38 {'passed': 38}
+  - base only: QE-208-a — an abort inside a null move's subtree still hands the root back byte-identical > position-6, readings 3 to 25: 0 mutated roots, and aborts landing inside a null subtree
+  - base only: QE-208-b — the null child's key is written: every table probe reads the key of the position it probes > chooseMove on position-6 deepened to 6
+  - base only: QE-208-b — the null child's key is written: every table probe reads the key of the position it probes > search() on position-6 at depth 6
+  + tip only : QE-208-a — an abort inside a null move's subtree still hands the root back byte-identical > position-6, the even readings 4 to 24: 0 mutated roots, and aborts landing inside a null subtree
+  + tip only : QE-208-b — the null child's key is written: every table probe reads the key of the position it probes > chooseMove on startpos deepened to 6
+  + tip only : QE-208-b — the null child's key is written: every table probe reads the key of the position it probes > search() on startpos at depth 6
+
+src/uci-session.test.ts: base 234 {'passed': 234} | tip 230 {'passed': 230}
+  - base only: ABC-167 A5 — the D4 time rule, read from the info line's time > A5-b3: position startpos, go wtime 1000 btime 1000 movestogo 5 -> 200 ms (within 2 x 10 ms)
+  - base only: ABC-167 A5 — the D4 time rule, read from the info line's time > G = 3 500, under the default level 5's 4 000: go wtime 60000 btime 60000 winc 1000 binc 1000 -> 3500 ms (within 2 x 100 ms)
+  - base only: ABC-167 A5 — the D4 time rule, read from the info line's time > a bare go: go -> 4000 ms (within 2 x 100 ms)
+  - base only: ABC-167 A5 — the D4 time rule, read from the info line's time > movetime 100: go movetime 100 -> 100 ms (within 2 x 10 ms)
+count differs: src/uci-session.test.ts 234 230
+files with a different count: 1

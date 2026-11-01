@@ -1,0 +1,15 @@
+CONTROL ran 234 failed 0
+killed 120 / 137; survivors: 167-M09 167-M10 167-M35 167-M38 167-M40 167-M41 167-M42 171-N08 171-S03 171-S09 171-S29 171-S43 171-S46 171-S47 174-M12 174-M13 174-M14
+row "a bare go" (1 name) kills {167-M46,171-S28,167-M45b,174-M10,174-M11,174-M17,167-M07r,171-S19r,L5-3000,L5-4500} sole killer of {-}
+row "G = 3 500, under the default level 5's 4 000" (1 name) kills {167-M01,167-M03,167-M04,167-M46,171-S28,167-M45b,174-M10,174-M11,174-M17,171-S19r,171-S17r,L5-3000} sole killer of {-}
+row "movetime 100" (1 name) kills {167-M46,171-S28,167-M45b,174-M10,174-M11,174-M17,171-S19r,171-S17r,MOVETIME-OFF} sole killer of {-}
+row "A5-b3" (1 name) kills {167-M05,167-M46,171-S28,167-M45b,174-M10,174-M11,174-M17,171-S19r,171-S17r,MOVESTOGO-1} sole killer of {-}
+row "white reads wtime" (1 name) kills {167-M01,167-M08,167-M46,171-S28,167-M45b,174-M10,174-M11,174-M17,171-S19r,171-S17r,WRONGSIDE,WS-WHITE} sole killer of {WS-WHITE}
+row "black reads btime" (1 name) kills {167-M01,167-M08,167-M46,171-S28,167-M45b,174-M10,174-M11,174-M17,171-S19r,171-S17r,WRONGSIDE,WS-BLACK} sole killer of {WS-BLACK}
+MOVE  "a bare go"
+MOVE  "G = 3 500, under the default level 5's 4 000"
+MOVE  "movetime 100"
+MOVE  "A5-b3"
+STAY  "white reads wtime": its move (with 4 already moved) loses {WS-WHITE}
+STAY  "black reads btime": its move (with 4 already moved) loses {WS-BLACK}
+moved set: a bare go | G = 3 500, under the default level 5's 4 000 | movetime 100 | A5-b3

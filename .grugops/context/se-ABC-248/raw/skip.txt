@@ -1,0 +1,3 @@
+skip count from the npm test JSON report (tip): 0
+No findings.
+rc=0
