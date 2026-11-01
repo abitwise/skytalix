@@ -1659,3 +1659,4 @@ _Updated: 2026-08-19 by BA/PM (task `cut-agents-md-cap-2026-08-19`, Workflow 07)
 | arch-g8-tranche2 (merge) | ADR-0046 tranche 2 opened; candidates re-costed; recommendation PROPOSED | records 38d02496 | — | merged 2026-10-31, not pushed | Done (Orchestrator) |
 | bapm-tranche2-ruling (merge) | Tranche-2 ruling; ABC-248 cut; W1; ABC-229 closed | records 60f08f49 | — | merged 2026-10-31, not pushed | Done (Orchestrator) |
 | ABC-247 (merge) | rpair passes Skill Level 6 on both builds (QE-M1B-a) | tools 02f4f3d4 | qe-ABC-247 PASS | merged 3af97f71 2026-10-31, not pushed | Done (Orchestrator) |
+| qe-EPIC-010-m1-batch-2 (merge) | Milestone-1 batch: interleaved R pair, base ca6e675c vs head 51902be5, 200 + 200 games at 4 000 ms (Skill Level 6), E 1910, width 1 | — | NOT LOSS (NEUTRAL) X −58.3 ± 77.9; head 72.00 % ± 6.11 = new trend reference | merged 5325a0f0 2026-11-01, not pushed | Done (Orchestrator); BA/PM fold owed |
