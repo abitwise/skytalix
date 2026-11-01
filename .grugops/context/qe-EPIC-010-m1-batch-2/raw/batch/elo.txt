@@ -1,0 +1,3 @@
+base: blocks 10; W/L/D 151/38/11 (N 200); score 78.25 % ± 5.48 points (95 %); Elo 222.41 ± 56.85 (one decimal: 222.4 ± 56.9)
+candidate: blocks 10; W/L/D 141/53/6 (N 200); score 72.00 % ± 6.11 points (95 %); Elo 164.07 ± 53.19 (one decimal: 164.1 ± 53.2)
+pair (one-decimal inputs): X = 164.1 − 222.4 = -58.3; Y = √(56.9² + 53.2²) = 77.9; X + Y = 19.6 → not LOSS
