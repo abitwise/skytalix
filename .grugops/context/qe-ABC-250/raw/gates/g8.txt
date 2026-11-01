@@ -1,0 +1,6 @@
+run=1 tree=b rc=0 wall=9.31s load1=2.35/2.91  Tests 2372 passed (2372) |  Duration 8.95s (transform 0ms, setup 0ms, import 6.71s, tests 6.56s, environment 5ms) | abc250rows=0 sum=0.0ms
+run=2 tree=h rc=0 wall=9.42s load1=2.30/2.63  Tests 2381 passed (2381) |  Duration 9.03s (transform 0ms, setup 0ms, import 6.95s, tests 6.77s, environment 5ms) | abc250rows=9 sum=75.3ms
+run=3 tree=h rc=0 wall=8.60s load1=2.63/3.14  Tests 2381 passed (2381) |  Duration 8.30s (transform 0ms, setup 0ms, import 6.07s, tests 6.13s, environment 5ms) | abc250rows=9 sum=51.0ms
+run=4 tree=b rc=0 wall=8.56s load1=3.14/3.12  Tests 2372 passed (2372) |  Duration 8.28s (transform 0ms, setup 0ms, import 5.99s, tests 6.22s, environment 5ms) | abc250rows=0 sum=0.0ms
+run=5 tree=b rc=0 wall=8.67s load1=3.12/2.95  Tests 2372 passed (2372) |  Duration 8.36s (transform 0ms, setup 0ms, import 6.20s, tests 6.09s, environment 5ms) | abc250rows=0 sum=0.0ms
+run=6 tree=h rc=0 wall=8.76s load1=2.95/2.96  Tests 2381 passed (2381) |  Duration 8.48s (transform 0ms, setup 0ms, import 6.22s, tests 6.11s, environment 5ms) | abc250rows=9 sum=46.0ms

@@ -1,0 +1,11 @@
+pool wall 545 s
+   7827 $SCRATCH/qe-250/out/g4/g4-B.jsonl
+    264 $SCRATCH/qe-250/out/g4/g4-sample-B.jsonl
+   8091 total
+1f29d4346517333236bb6d28faba4ef37fcd2708ead08a8eddca0c4f799f4320  $SCRATCH/qe-250/out/g4/g4-B.jsonl
+63173dde63fb246a044bee007a6ac9ede6087ae25ebed79c62e0a312523b96a5  $SCRATCH/qe-250/out/g4/g4-sample-B.jsonl
+   7827 $SCRATCH/qe-250/out/g4/g4-H.jsonl
+    264 $SCRATCH/qe-250/out/g4/g4-sample-H.jsonl
+   8091 total
+1f29d4346517333236bb6d28faba4ef37fcd2708ead08a8eddca0c4f799f4320  $SCRATCH/qe-250/out/g4/g4-H.jsonl
+63173dde63fb246a044bee007a6ac9ede6087ae25ebed79c62e0a312523b96a5  $SCRATCH/qe-250/out/g4/g4-sample-H.jsonl

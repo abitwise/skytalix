@@ -1,0 +1,37 @@
+# qe-ABC-250 window, lock and load: hop 19:36:31Z → report; timed job under the lock 19:45:24–19:53:24Z (A4 19:45:24–19:49:46, A5 19:49:46–19:53:23); not SHARED; 12 foreign vitest processes and a foreign `abtop` were seen during the "ALONE" window, waited out or discarded, never killed
+
+QE/E2E, task `qe-ABC-250`.
+
+## Window (UTC)
+- **Hop start:** 19:36:31Z (worktree created, brief claimed). PREREG sealed at 19:45:15Z and committed `eaa3d4ce` before the first timed run.
+- **Timed job:** `flock …/host-test.lock bash run.sh` (one background job).
+  - lock requested and acquired 19:45:24Z;
+  - start precondition clear at 19:45:27Z: 0 vitest, 0 cutechess, 0 hot processes, load1 0.72, Tctl 38.1 °C;
+  - A4 main ran 19:45:24–19:48:49Z and A4 re-run (kiwipete, start) 19:48:49–19:49:46Z;
+  - A5 main ran 19:49:46–19:53:23Z, with no re-run owed;
+  - released 19:53:24Z.
+  - While the job ran, this hop ran no other command.
+- **Untimed work under the lock:** gates batch 19:55:01–20:02:37Z; QE-261-c and the G4 pool 20:03:17–20:12:22Z.
+- **Window end:** this hop's report time, after 20:13:23Z.
+
+## Load during the timed job
+- **A4 main:**
+  - 39 attempts, 30 admitted, 9 discarded, for foreign cores 1.45–3.59, a foreign vitest, or after-run Tctl 85.1–87.4 °C;
+  - gate waits 66.2 s;
+  - the schedule took 201.4 s.
+- **A4 re-run:** 10 attempts, 10 admitted, waits 0.3 s, 36.4 s.
+- **A5:** 22 attempts, 15 admitted, 7 discarded, waits 15.7 s, 195.8 s.
+- **Counted runs:**
+  - foreign cores ≤ 0.64 (A4) and ≤ 0.44 (A5);
+  - load1 0.72–2.66;
+  - after-run Tctl 69.0–82.1 °C (A4) and ≤ 78.0 °C (A5).
+- **Foreign vitest processes**, origin `UNKNOWN - verify` (not this hop's; never touched):
+  - 3567500 and 3569627 (19:45:52 and 19:46:05Z);
+  - 3574449, 3574689 and 3574706 (19:46:46Z);
+  - 3592501, 3593944 and 3595412 (19:52:52 and 19:53:05Z);
+  - before G8, 3608508, 3610108, 3610190 and 3612267 (19:55:05–19:55:24Z).
+  - Each was waited out by the gate or caused a discard. No counted pair had one present.
+- **Other foreign load:** a foreign `abtop` process (PID 1578058) used 20–24 % of one core on most start runs.
+- **Thermal:** one gate pause at Tctl 86.25 °C (19:47:20Z, before position-3), which waited to ≤ 75 °C. No thermal STOP: per-board medians were ≤ 79.7 °C.
+- **Not SHARED:** the start was clear and no gate passed the cap.
+- **Left running by this hop:** nothing. The probe, G4 and vitest processes all exited. No foreign process was killed.

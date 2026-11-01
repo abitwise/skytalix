@@ -1,0 +1,13 @@
+lock-requested 2026-11-01T19:45:24Z
+lock-acquired 2026-11-01T19:45:24Z
+clear-deadline 2026-11-01T20:30:24Z
+perft-main-start 2026-11-01T19:45:24Z
+perft-main-end rc=0 2026-11-01T19:48:49Z
+perft-rerun-owed [kiwipete,start]
+perft-rerun-start 2026-11-01T19:48:49Z
+perft-rerun-end rc=0 2026-11-01T19:49:46Z
+search-main-start 2026-11-01T19:49:46Z
+search-main-end rc=0 2026-11-01T19:53:23Z
+search-rerun-owed []
+done 2026-11-01T19:53:23Z
+rc=0 lock-released 2026-11-01T19:53:24Z

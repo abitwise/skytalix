@@ -1,0 +1,22 @@
+     × kiwipete perft(2) = 2039 3ms
+     × kiwipete perft(3) = 97862 8ms
+     × position-4 perft(2) = 264 1ms
+     × position-4 perft(3) = 9467 1ms
+     × position-5 perft(3) = 62379 4ms
+     × splits Kiwipete depth 3 into one entry per legal first move that sums to the total 5ms
+     × startpos depth 2: counts, leaf-key XOR, every packed key delta equals a fresh key 2ms
+     × kiwipete depth 2: counts, leaf-key XOR, every packed key delta equals a fresh key 2ms
+     × position-4 depth 2: counts, leaf-key XOR, every packed key delta equals a fresh key 0ms
+     × position-5 depth 2: counts, leaf-key XOR, every packed key delta equals a fresh key 1ms
+⎯⎯⎯⎯⎯⎯ Failed Tests 10 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/perft.test.ts > ABC-006 acceptance — exact perft counts > kiwipete perft(2) = 2039
+ FAIL  src/perft.test.ts > ABC-006 acceptance — exact perft counts > kiwipete perft(3) = 97862
+ FAIL  src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-4 perft(2) = 264
+ FAIL  src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-4 perft(3) = 9467
+ FAIL  src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-5 perft(3) = 62379
+ FAIL  src/perft.test.ts > ABC-006 — perftDivide > splits Kiwipete depth 3 into one entry per legal first move that sums to the total
+ FAIL  src/perft.test.ts > ABC-250 A1 — leaf-key XOR on the packed path equals the object path > startpos depth 2: counts, leaf-key XOR, every packed key delta equals a fresh key
+ FAIL  src/perft.test.ts > ABC-250 A1 — leaf-key XOR on the packed path equals the object path > kiwipete depth 2: counts, leaf-key XOR, every packed key delta equals a fresh key
+ FAIL  src/perft.test.ts > ABC-250 A1 — leaf-key XOR on the packed path equals the object path > position-4 depth 2: counts, leaf-key XOR, every packed key delta equals a fresh key
+ FAIL  src/perft.test.ts > ABC-250 A1 — leaf-key XOR on the packed path equals the object path > position-5 depth 2: counts, leaf-key XOR, every packed key delta equals a fresh key
+      Tests  10 failed | 21 passed (31)

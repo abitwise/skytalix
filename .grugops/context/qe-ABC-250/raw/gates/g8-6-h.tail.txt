@@ -1,0 +1,8 @@
+ ✓ src/zobrist.nfr.test.ts (3 tests) 4ms
+ ✓ src/uci.real-engine.test.ts (1 test) 3ms
+
+ Test Files  63 passed (63)
+      Tests  2381 passed (2381)
+   Start at  19:58:10
+   Duration  8.48s (transform 0ms, setup 0ms, import 6.22s, tests 6.11s, environment 5ms)
+

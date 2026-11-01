@@ -1,0 +1,64 @@
+{
+ "g6Met": true,
+ "g6": {
+  "kiwipete": {
+   "runs": 10,
+   "B": [
+    8,
+    9,
+    9,
+    9,
+    9
+   ],
+   "H": [
+    9,
+    8,
+    9,
+    9,
+    9
+   ],
+   "medB": 9,
+   "medH": 9,
+   "countedMedB": 9,
+   "countedMedH": 9,
+   "min": 8,
+   "warnRuns": 0,
+   "geBase": true
+  },
+  "position-6": {
+   "runs": 14,
+   "B": [
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10
+   ],
+   "H": [
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10
+   ],
+   "medB": 10,
+   "medH": 10,
+   "countedMedB": 10,
+   "countedMedH": 10,
+   "min": 10,
+   "warnRuns": 0,
+   "geBase": true
+  }
+ },
+ "g5": {
+  "runs": 44,
+  "maxWallMs": 4001.4,
+  "over4000": 31,
+  "over5000": 0,
+  "met": true
+ }
+}
