@@ -1,14 +1,52 @@
 ---
 id: EPIC-009
 title: "`skytalix` plays a 40/15 tournament clock: two settings, `simple-tournament` and `uci-clock-mode`, that use the clock and never lose on time"
-status: backlog
-column: Backlog
+status: done
+column: Done
+closed: "2026-11-01, by BA/PM (bapm-epic009-close): milestone 1 MET (ABC-220, ABC-222) and milestone 2 MET (ABC-221, ABC-223 at b45162fc, QE PASS_WITH_GAPS 767b4959); three non-ticket items moved to EPIC-011 (C4-C6)"
 priority: P2
 size: M
 owner: BA/PM
 ---
 
 # EPIC-009: `skytalix` plays a 40/15 tournament clock, uses it, and never loses on time
+
+> **CLOSED 2026-11-01: MILESTONE 2 DONE, graded by BA/PM** (task `bapm-epic009-close`, records only, at `main`
+> `38c787be`; nothing run). **`ABC-223` is Done.** It merged at `b45162fc` on QE PASS_WITH_GAPS (`qe-ABC-223`
+> `…767b4959`, no blocking gap, which signs UAT). With `ABC-221` (Done, `af32f82c`), milestone 2 is complete:
+> `uci-clock-mode` is built and has been read in real games.
+>
+> **The grade: milestone 2 MEETS M1–M4 and the 60 s ceiling** for `uci-clock-mode`.
+>
+> | # | target | read | grade | source |
+> |---|---|---|---|---|
+> | M1 | 0 losses on time; closest call ≥ 500 ms | 0 in 5 games, 12 side-periods; closest call **1 099 ms** (D2's 1 100 − δ, δ ≤ 1 ms at every period end) | **MET** | `ABC-223` A3; `qe-ABC-223` `…2c62a346` |
+> | M2 | ≥ 75 % per completed period, per side, book included | least **99.88 %** over 12 side-periods | **MET** | `ABC-223` A4 |
+> | M3 | `LEVELS[1..7]`, `DEFAULT_LEVEL` byte-identical; `G` equal to base | `level` and `simple-tournament` equal base on 14 742 `go` records; `LEVELS` and default unchanged. `ABC-223` changed no code | **MET** (at the build) | `ABC-221` A8; `qe-ABC-221` `…861e737d` |
+> | M4 | 0 NFR bounds moved without his word | the two that moved (`NFR-004`'s 60 s clause, clause B's 60 s raw-call bound) are his Q5 words. `ABC-223` moved nothing | **MET** | `secnfr-ABC-221` `…ef060512` |
+> | ceiling | longest move ≤ 60 000 ms | **25 285 ms**; 0 of 629 budgets at the 59 500 cap. The cap's hard stop: 59 500.8 ms (`ABC-221` A10) | **MET** | `ABC-223` A5 |
+>
+> - **The epic's rule is met, so it is closed.** The close-out plan below set the rule: `ABC-223` reads, BA/PM
+>   grades milestone 2, and the epic closes. The exit reading met every bar. Every ticket is Done or dropped:
+>   - Done: `ABC-220`, `ABC-221`, `ABC-222`, `ABC-223`, `ABC-246`;
+>   - dropped: `ABC-218`, `ABC-219`.
+>
+>   Both settings meet M1–M4 and their ceilings. The board card is the Orchestrator's to move.
+> - **Moved to `EPIC-011`** (none was a ticket; nothing renumbered; `EPIC-011` § Dedupe audit):
+>   - (1) **W1, time management under a clock** (C4);
+>   - (2) **the strength reading at 40/15**, Q6 (C5);
+>   - (3) **the major validation**, ≥ 100 games at 40/15, merged into `EPIC-011`'s 40/15 readings (C6, its G4).
+> - **What the grade does not say.** Five games show that the mode works. They do not bound a forfeit rate; that is
+>   (3). The margin is about 1 s by design, so a real δ over 600 ms on a period's last move would break M1. Here δ was
+>   at most 2.5 ms.
+> - **Residuals accepted at the close:**
+>   - `RISK-EPIC009-01` is read in play for both settings. Its rate bound goes with (3).
+>   - `RISK-EPIC009-02` and `-03` were not exercised in either smoke. They stay covered by `AR-UCI-BUSY` and the
+>     virtual-clock rows. Other GUIs are `UNKNOWN - verify`.
+>   - `RISK-EPIC009-04`: 3.93 h, under ≤ ~5 h. Not ALONE (QE-223-a, a foreign `vitest` in 48.8 % of samples). The
+>     window rule did not fire, the frequency fell by at most 0.26 %, and the Orchestrator informed the owner.
+> - **QE-223-a…g are dispositioned** on `ABC-223`'s page. None is blocking and none opens a ticket.
+> - The notes are in `.grugops/context/bapm-epic009-close/notes/`.
 
 > **CLOSE-OUT PLAN 2026-11-01 by BA/PM** (task `bapm-epic011-dedupe`, records only, at `main` `2e9a2457`; nothing
 > run). Source: the owner's word of 2026-11-01 (`orch-2026-10-30a` `…022fb66f`): finish the open epics before the new
@@ -429,11 +467,11 @@ clean.
 | 1 | `ABC-220` | `simple-tournament` over UCI (`TimeMode`): T = 22 s, `min(T, C)` with a clock, never handed more than its 22 s hard ceiling | M | P2 | **Done** (merged `ec1e835b`, 2026-10-30) | 10/10 | `ADR-0052` (ACCEPTED 2026-10-30, amended) | — |
 | 2 | `ABC-222` | Smoke reading: `simple-tournament` plays 5 games at 40/15 (≤ 10 for coverage) with 0 losses on time | S | P2 | **Done** (merged `ae7211c3`, 2026-10-31; QE PASS `…cc542c76`) | 10/10 | `ABC-220` merged (met, `ec1e835b`); an idle board | — |
 | 3 | `ABC-221` | `uci-clock-mode` over UCI (`TimeMode`): `min(59.5 s, C)`, a 60 s ceiling, the clamp to 60 s | M | P3 | **Done** (merged `af32f82c` + `9395d8dc`, 2026-10-31; QE PASS_WITH_GAPS `…861e737d`) | 10/10 | `ADR-0052` (ACCEPTED 2026-10-30; D4/D6 as written); `ABC-220`'s C and `TimeMode` (met, `ec1e835b`); milestone 1 (owner: "later") | — |
-| 4 | `ABC-223` | Smoke reading: `uci-clock-mode` plays 5 games at 40/15 (≤ 10 for coverage) with 0 losses on time | S | P3 | **Ready** (2026-10-31) | **10/10** | `ABC-221` merged (met, `af32f82c`); an idle board | — (ALONE, ≤ ~5 h; not beside a `G8`) |
-| — | `ABC-246` | In `uci-clock-mode`, rows pin the hard stop and `movetime` over a clock (QE-221-a; test-only) | XS | P3 | Ready (cut 2026-10-31) | 10/10 | `ABC-221` merged (met) | — (not a milestone ticket) |
+| 4 | `ABC-223` | Smoke reading: `uci-clock-mode` plays 5 games at 40/15 (≤ 10 for coverage) with 0 losses on time | S | P3 | **Done** (merged `b45162fc`, 2026-11-01; QE PASS_WITH_GAPS `…767b4959`) | 10/10 | `ABC-221` merged (met, `af32f82c`); an idle board | — |
+| — | `ABC-246` | In `uci-clock-mode`, rows pin the hard stop and `movetime` over a clock (QE-221-a; test-only) | XS | P3 | **Done** (merged `0ce5041d`, 2026-11-01; QE PASS) | 10/10 | `ABC-221` merged (met) | — (not a milestone ticket) |
 
 - **Milestone 1** is `ABC-220` then `ABC-222`. **Milestone 2** is `ABC-221` then `ABC-223`, after milestone 1 and on
-  the owner's "later". *(2026-10-31: milestone 1 is Done and meets M1–M4; see the MILESTONE 1 DONE block at the top.)*
+  the owner's "later". *(2026-10-31: milestone 1 is Done and meets M1–M4; see the MILESTONE 1 DONE block at the top.)* *(2026-11-01: milestone 2 is Done and meets M1–M4; the epic is closed; see the CLOSED block at the top.)*
 - `ABC-221` is P3 because the owner sequenced it after milestone 1. It needs no other code from `ABC-220`. They share
   `src/uci-session.ts`, so whichever merges second rebases.
 - **`ABC-224` is unused.** It goes back to the Orchestrator's pool.
@@ -489,7 +527,8 @@ original table is in git at `f45aea95`.
   unread. `ABC-222` and `ABC-223` read it in 5 games each. Only the later major validation bounds it. *(2026-10-29:
   `ADR-0052` D2 closes it by design. C keeps ≥ 1 s, 1 069 ms on the virtual clock, and M1 survives δ ≤ 600 ms on a
   period's last move. The smokes read the real δ.)* *(2026-10-31, `ABC-222`: in `simple-tournament` the real δ is ≤ 2 ms,
-  and the closest call is 19 991 ms. Open for `uci-clock-mode` until `ABC-223`.)*
+  and the closest call is 19 991 ms. Open for `uci-clock-mode` until `ABC-223`.)* *(2026-11-01, `ABC-223`: in `uci-clock-mode` δ ≤ 2.5 ms and the closest call is 1 099 ms. Read in play for both
+  settings; the rate bound goes with `EPIC-011`'s 40/15 readings, C6.)*
 - **`RISK-EPIC009-02`: a GUI gives up on `isready` or `stop` mid-search.** An answer can be one budget late
   (`ADR-0044` D5): up to 22 s for `simple-tournament` (2026-10-30) and up to 60 s for `uci-clock-mode`, against level 7's 32 s
   today. `ADR-0045` A4 records `cutechess-cli` killing an engine at its 15 000 ms `IdleTimeout` after a mid-search
