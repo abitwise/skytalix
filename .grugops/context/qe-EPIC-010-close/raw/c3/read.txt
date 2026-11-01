@@ -1,0 +1,28 @@
+== think time (cutechess -debug clock), budget 100 ms for skytalix/base ==
+skytalix: go lines {"go movetime 100":23931}; searched 23581, book 350; think median 101 p99 102 max 105 ms; overshoot over 100 ms: median 1 p99 2 MAX 5 ms; >0: 12175, >5: 0, >10: 0, >12: 0, >25: 0, >50: 0
+base: go lines {"go movetime 100":23912}; searched 23570, book 342; think median 101 p99 102 max 104 ms; overshoot over 100 ms: median 1 p99 2 MAX 4 ms; >0: 12167, >5: 0, >10: 0, >12: 0, >25: 0, >50: 0
+== results ==
+finished 400; time losses 0; faults 0
+terminations: {"Black mates":121,"White mates":119,"Draw by 3-fold repetition":123,"Draw by fifty moves rule":26,"Draw by insufficient mating material":11}
+Score of skytalix vs base: W/L/D 138/102/160; points 218 of 400 [0.545]
+Elo difference 31.4 +/- 26.4; LOS 99.0 %; draw ratio 40.0 %
+== pgn ==
+games 400; plies mean 119.6 [39-318]; first start -> last end 4796 s; games/hour 300.3
+host.log: before -> end 4801 s (incl. builds); cutechess start -> end 4796 s; games/hour (cutechess wall) 300.3
+== harness summary.txt ==
+Elo difference: 31.4 +/- 26.4, LOS: 99.0 %, DrawRatio: 40.0 %
+W/L/D: 138/102/160  score: 0.545  games: 400 of 400
+draw ratio: 40.0 %
+faults: 0  unclassified: 0  move-cap draws: 0
+skytalix.stderr: 0 bytes
+base.stderr: 0 bytes
+state: GAIN
+== machine.txt control line == harness: <worktree> at de55df65a472d6bc5ec131c8e1645fd6a9280170 | concurrency: 1 (default 3) | control: skytalix and base st=0.1 timemargin=50
+== host (block samples, 10 s) ==
+samples 479; with real foreign vitest 280 (58.5 %); with foreign cutechess 0; with a foreign process >= 20 % CPU 17; load1 median 2.45 max 5.95; Tctl median 79.9 max 90.8
+2026-11-01T20:56:16.723Z c3 block start; cmd: node tools/rating/rating.ts d 053733d2 ca6e675c <scratch>/qe-e010c/out-c3 --budget-ms 100 --rounds 200 --concurrency 1
+2026-11-01T20:56:16.734Z c3 wait poll=1 vitest=0 cutechess=0 load1=7.84 tctl=47.3
+2026-11-01T20:57:01.755Z c3 wait poll=4 vitest=0 cutechess=0 load1=3.95 tctl=40.9
+2026-11-01T20:58:01.781Z c3 ALONE clear at poll 8 after 105 s load1=1.77 tctl=40.3
+2026-11-01T20:58:01.783Z c3 spawned pid 3875822
+2026-11-01T22:18:02.415Z c3 exit rc=0 sig=null wall=4906 s run=4801 s
