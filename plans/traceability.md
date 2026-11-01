@@ -1670,3 +1670,4 @@ _Updated: 2026-08-19 by BA/PM (task `cut-agents-md-cap-2026-08-19`, Workflow 07)
 | arch-qehop-threshold (merge) | T-QEHOP-GROWTH MET recorded; next threshold 5 500; F new series on oeselg-dev | records 36995474 | — | merged 2026-11-01, not pushed | Done (Orchestrator) |
 | arch-speed-path-spike (merge) | ADR-0055 PROPOSED: speed-path options + prototype plan; owner Q-SP-1..5 | records 9fe45421 | — | merged 2026-11-01, not pushed | Awaiting owner (Orchestrator) |
 | bapm-goal3000-o1-cut (merge) | Goal 3 000 Elo; ADR-0055 O1 cut: ABC-250..254 (EPIC-010 milestone 1b) | records ec875040 | — | merged 2026-11-01, not pushed | Done (Orchestrator) |
+| arch-algo-analysis (merge) | ADR-0055 ACCEPTED (O1); ADR-0056 PROPOSED path to 3 000; owner Q-3K-1..8 | records f2cc6c3d | — | merged 2026-11-01, not pushed | Awaiting owner (Orchestrator) |
