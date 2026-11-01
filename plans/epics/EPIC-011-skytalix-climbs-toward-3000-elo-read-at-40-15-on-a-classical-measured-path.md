@@ -289,12 +289,12 @@ reorders made here are named in the "why" column.
   - **2026-11-01, `ADR-0056` R-TC part 2 (`bapm-reconcile-adr0056`): the engine still plays at each difficulty
     setting.** Per strength-changing ticket, beside the 100-game read, QE runs the **Levels deep lane** on the
     candidate head, host alone: `ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/levels.test.ts
-    --reporter=verbose` (≈ 9 min). It passes on exit 0 with every test passed (41 at the ADR's count; QE counts its own
+    --reporter=verbose` (~~≈ 9 min~~ *577 s*). It passes on exit 0 with every test passed (~~41 at the ADR's count~~ *57 tests, `qe-EPIC-010-close` `…388b3044`*; QE counts its own
     run); a failure is a defect, back to the Software Engineer. Per epic, on the closing head, beside C3″: the Levels
     deep lane, the ladder short mode (`LADDER_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run
-    src/ladder.test.ts`, 848 s loaded) and the UCI session deep lane (`ENGINE_DEEP=1
-    NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/uci-session.test.ts`, ≈ 5 min, estimate), each exit 0
-    with every test passed; ≈ 30 min together, not asked. R-TC part 1, item 2 (no engine path keyed on a control, a
+    src/ladder.test.ts`, ~~848 s loaded~~ *18 tests, 23 s*) and the UCI session deep lane (`ENGINE_DEEP=1
+    NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/uci-session.test.ts`, ~~≈ 5 min, estimate~~ *241 tests, 291 s*), each exit 0
+    with every test passed; ~~≈ 30 min~~ *≈ 15 min (891 s; figures 2026-11-01, `bapm-phase1-wording`)* together, not asked. R-TC part 1, item 2 (no engine path keyed on a control, a
     budget value, a test flag or the environment) is read at review and, once `ABC-259` merges, by its default-lane
     row.
   - **2026-11-01, the owner's answer 1 ("b"): per epic, before the close, 400 games head-to-head at 100 ms.** The
@@ -375,8 +375,8 @@ Phase 5, the next question is V4 and it is his (`ADR-0056` D6 item 7).
 |---|---|---|---|---|---|---|---|
 | 1 | `ABC-255` | M0: ~~a self-play SPRT lane on the rating harness that stops H1 on a known gain and H0 on an identical pair~~ *(re-scoped 2026-11-01)* the rating harness plays the owner's two reads at 100 ms: 100 games new against base, and the 400-game ~~pair against Stockfish~~ *head-to-head read; and the 10-game Stockfish smoke at 0.5 s (`bapm-owner-answers`)* | ~~M~~ S | P1 | Backlog *(Ready recommended, `bapm-reconcile-adr0056`)* | ~~10/10~~ ~~9/10 *(row 5: the owner-answers fold)*~~ **10/10** *(fold merged `a0f9297e`)* | ~~`EPIC-006`/`009`/`010` closed; Q-3K-2 (its use as a gate), Q-3K-3 (width); the Architect's routine control~~ none (`ADR-0056` fold merged `94f1504c`); may be pulled before `EPIC-010` closes (C12) |
 | 2 | `ABC-256` | ~~B0: baseline reading of `main` on the routine milestone control, after `EPIC-010` closes~~ **Closed as superseded by C3″** (2026-11-01, `bapm-reconcile-adr0056`) | S | P2 | ~~Backlog~~ **dropped** (page `status: dropped`; the board move is the Orchestrator's) | ~~8/10~~ — | the Architect's routine control; `EPIC-010` closed; *2026-11-01:* ~~closes as merged into `EPIC-010`'s 400-game close reading (C13; condition met by the fold, `94f1504c`)~~ *C13 void (`bapm-owner-answers`): the close read is head-to-head; B0's control and fate wait on the owner-answers fold* *(answered: the fold keeps no routine Stockfish reading; closed as superseded, `bapm-reconcile-adr0056`)* |
-| 3 | `ABC-238` | A deeper stored entry may cut off a shallower search (T1) | M | P2 *(was P3)* | Backlog | 9/10 | the ADR revising `ABC-081` `A1`; `ABC-255` (if Q-3K-2 yes) |
-| 4 | `ABC-237` | The TT prefers deeper entries when it replaces (T2) | S | P3 | Backlog | 9/10 | `ADR-0025` amendment; `ABC-238` merged or closed |
+| 3 | `ABC-238` | A deeper stored entry may cut off a shallower search (T1) | M | P2 *(was P3)* | ~~Backlog~~ **Ready** *(2026-11-01, `bapm-phase1-wording`; moves past Ready are the Orchestrator's)* | ~~9/10~~ **10/10** | ~~the ADR revising `ABC-081` `A1`; `ABC-255` (if Q-3K-2 yes)~~ *2026-11-01:* `ADR-0058` written, PROPOSED; reading (b): build now, read and merge on the owner's acceptance |
+| 4 | `ABC-237` | The TT prefers deeper entries when it replaces (T2) | S | P3 | Backlog | 9/10 | ~~`ADR-0025` amendment~~ *(written 2026-11-01, PROPOSED; read and merge on the owner's acceptance)*; `ABC-238` merged or closed |
 | 5 | `ABC-257` | The TT is kept across the moves of one game, re-tried after T1 and T2 (T3) | S | P3 | Backlog | 8/10 | `ABC-238`, `ABC-237`; `ADR-0025` d4 amendment (accepted 2026-10-26, not in force) re-read |
 | 6 | `ABC-258` | A larger transposition table: 8 MiB inside `NFR-009`, more only on the owner's word (T4) | S | P3 | Backlog | 8/10 | `ABC-257`; Q-3K-6 for > 8 MiB |
 | 7 | `ABC-233` | History heuristic after the killers (O1h) | M | P3 | Backlog | 9/10 | the ADR (`ADR-0026` d10) |

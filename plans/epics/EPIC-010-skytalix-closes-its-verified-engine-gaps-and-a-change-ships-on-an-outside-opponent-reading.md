@@ -72,6 +72,7 @@ owner: BA/PM
 >   smoke of ≥ 8.0 of 10 fires the upward re-pin** (QE-E010C-d). It is carried to `EPIC-011` (its § Close-out).
 > - **QE-E010C-c** (stale lane figures: the Levels deep lane is now 57 tests and 577 s, not 41; the ladder short mode
 >   is 23 s, not 848 s) belongs to the Scribe (`scribe-lane-figures`). The lines below that cite 41 and 848 s are history.
+>   *(2026-11-01, `bapm-phase1-wording`: those lines now carry the measured figures beside the struck ones.)*
 > - **Q-SP-2 lapses:** `ADR-0055` D3's bars were used only by `ABC-250` A4, which closed ungraded.
 > - **Housekeeping (the LOW items owed):** `ABC-249`, `254`, `259`, `260`, `261` and `262` page front matter now reads
 >   done/Done with a `closed:` line, as the board holds them. § Milestone 1b's `ABC-251` and `ABC-253` rows and tickets
@@ -147,11 +148,11 @@ owner: BA/PM
 >   (new, below) makes that a default-lane row. Part 2, *"it works on different difficulty settings"*: **per
 >   strength-changing ticket, the Levels deep lane** on the candidate head, beside C2′:
 >   `ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/levels.test.ts --reporter=verbose`, QE,
->   host alone, ≈ 9 min; passes on exit 0 with every test passed (41 at the ADR's count; QE counts its own run).
+>   host alone, ~~≈ 9 min~~ *577 s*; passes on exit 0 with every test passed (~~41 at the ADR's count~~ *57 tests, `qe-EPIC-010-close` `…388b3044`*; QE counts its own run).
 >   **Per epic, on the closing head, beside C3″:** the Levels deep lane, the ladder in short mode
->   (`LADDER_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/ladder.test.ts`, 848 s on a loaded host)
+>   (`LADDER_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/ladder.test.ts`, ~~848 s on a loaded host~~ *18 tests, 23 s*)
 >   and the UCI session deep lane (`ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run
->   src/uci-session.test.ts`, ≈ 5 min, estimate), each exit 0 with every test passed; ≈ 30 min together, under 1 h,
+>   src/uci-session.test.ts`, ~~≈ 5 min, estimate~~ *241 tests, 291 s*), each exit 0 with every test passed; ~~≈ 30 min~~ *≈ 15 min (891 s)* together, under 1 h,
 >   not asked.
 > - **This epic's close, then:** C3″ (head = `main` after milestone 1b, base = `ca6e675c`), S′ on the head, and the
 >   three lanes on the head. M2 stays graded on milestone 1's batch. Every ticket left here is value-identical or

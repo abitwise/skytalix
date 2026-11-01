@@ -1,8 +1,9 @@
 ---
 id: ABC-253
 title: "Zobrist keys travel as two 32-bit halves in the search, the TT and the repetition scan, and stay bigint at the API (ADR-0055 O1-a, value-identical)"
-status: backlog
-column: Backlog
+status: dropped
+column: Done
+closed: "2026-11-01, dropped, nothing to cut (profile-first stop; not a graded miss; no src/ change; se-ABC-253 efd7790c, orch-2026-10-30a 27ddb1fb); front matter aligned to the board by bapm-phase1-wording"
 size: M
 priority: P3
 epic: EPIC-010
