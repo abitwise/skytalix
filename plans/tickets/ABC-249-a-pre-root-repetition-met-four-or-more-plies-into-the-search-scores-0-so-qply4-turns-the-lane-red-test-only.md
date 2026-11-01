@@ -1,8 +1,9 @@
 ---
 id: ABC-249
 title: "A position that stood twice before the root, met four or more plies into the search, scores exactly 0, so turning the pre-root scan off at depth (`QPLY4`) turns the default lane red (test-only, from QE-248-c)"
-status: ready
-column: Backlog
+status: done
+column: Done
+closed: "2026-11-01, merged to main at 98d601d6; QE PASS_WITH_GAPS (qe-ABC-249, 17ce7d7c); test-only, UAT waived; front matter aligned to the board by bapm-epic010-close"
 size: XS
 priority: P3
 epic: EPIC-010

@@ -498,9 +498,22 @@ line, id unchanged), **merge into X**, **supersede**, **drop**, **close** (the e
 
 ### `EPIC-010` (verified engine gaps)
 
-- **What remains to Done:** `ABC-249` (Ready, test-only), then milestone 1b: *(2026-11-01)* `ABC-254` (first, 10/10),
+- ~~**What remains to Done:** `ABC-249` (Ready, test-only), then milestone 1b: *(2026-11-01)* `ABC-254` (first, 10/10),
   `ABC-250` (Ready; its A4 perft reading
-  decides `ABC-251`'s form and whether `ABC-252` exists), `ABC-251`, `ABC-252`, `ABC-253` (Ready, pulled last).
+  decides `ABC-251`'s form and whether `ABC-252` exists), `ABC-251`, `ABC-252`, `ABC-253` (Ready, pulled last).~~
+  **CLOSED 2026-11-01** (`bapm-epic010-close`). The close reads are MET (`qe-EPIC-010-close` `…b52cee9a`, merged
+  `70847284`): C3″ 218.0 of 400 at `053733d2` against `ca6e675c`, +31.4 ± 26.4 Elo (effective ± 27.7); S′ 9.0 of 10
+  at E 1 650; Levels 57/57, UCI session 241/241, ladder 18/18. **M1–M5 are MET.** Milestone 1b delivered `ABC-254`,
+  `ABC-249`, `ABC-259`, `ABC-260` and `ABC-261`. `ABC-250` closed by routing, and `ABC-251`, `ABC-252` and `ABC-253` were
+  dropped. Nothing remains. **With `EPIC-006`, `EPIC-009` and `EPIC-010` closed, this epic may start** (the owner's
+  order, `…022fb66f`). The column move is the Orchestrator's.
+- **Carried into this epic from `EPIC-010`'s close (2026-11-01, `bapm-epic010-close`):**
+
+  | item | as it stands | what it means here |
+  |---|---|---|
+  | The S′ pool (500 ms, E 1 650) | `qe-ABC-255` A5 9.0 / 10 (`becf571a`) plus `qe-EPIC-010-close` 9.0 / 10 (`053733d2`) = **18.0 / 20 = 90.0 %**; < 30 games, so no re-pin yet (`…77ca3420`, QE-E010C-d) | QE adds each S′ to this pool. It does not restart. **The next S′ at ≥ 8.0 of 10 makes the pool ≥ 26.0 / 30 = 86.7 % > 85 % and fires the upward re-pin**, one band-rule step, E ≤ 2 600, with no owner ask (C10's trigger; `RISK-EPIC011-03`). A score of 7.5 or less does not fire it. A downward re-pin is a question for the owner |
+  | C3″'s resolution (`RISK-EPIC010-08`, closed) | effective **± 27.7 Elo** by opening cluster at 40 % draws (design effect 1.094); ± 26.4 iid; the ADR's ± 24 assumed 0.50 draws (`…33395f26`, QE-E010C-b) | Read this epic's C3″ (G7) interval as about ± 28, not ± 24. QE reports the cluster figure again at each C3″. The MET line (≥ 200.0 of 400) does not change |
+  | The base this epic is written on | `main` at `053733d2`: today's `Move` objects with `ABC-254`'s lazy filter. O1-c and O1-a were not built (`ABC-251` and `ABC-253` dropped) | "The packed base" on this page reads this base (the top block) |
 - **Moved to `EPIC-011`:** `ABC-231`, `232`, `233`, `234`, `236`, `237`, `238` (milestone 2), `ABC-239` (milestone 3),
   ~~`ABC-254` (it waits on Q-SP-3 and would hold the close),~~ Q6 and the 3 000 goal. *(`ABC-254` returned 2026-11-01.)*
 - **Milestone 1b stays in `EPIC-010`, last,** because `ADR-0055` D2/D4 and `ADR-0056` D6 both place O1 before every
@@ -509,6 +522,10 @@ line, id unchanged), **merge into X**, **supersede**, **drop**, **close** (the e
   across two epics.
 - **Exit readings owed:** one S2 nps reading per 1b ticket (≈ 1 h ALONE each, ≈ 4 h, estimate); `ABC-249`'s `G8`;
   a close hop on `main` reading M3 (the `Q-SET` rows) and M4 (`G1` ≥ 54/58, `G5`, `G6`, `G7`, `G8`, `G9`).
+  *(2026-11-01, `bapm-epic010-close`: settled. `ABC-254`'s nps reading is MET, and `ABC-249`'s `G8` was read. `ABC-250`'s
+  reading was UNRESOLVED, and the ticket closed by routing. `ABC-251` and `ABC-253` stopped before their readings, and
+  `ABC-252` was dropped. M3 and M4 are MET from the
+  records on the closing code.)*
   **M2 needs no new batch:** milestone 1's batch (head `51902be5` vs the epic's first merge-base `ca6e675c`, NOT LOSS)
   read the last value change. `git log 51902be5..2e9a2457` shows no production `src/` change since, and 1b is
   value-identical by `G4`, so that batch stands as M2 at the close. This saves a ≈ 23 h ALONE batch.

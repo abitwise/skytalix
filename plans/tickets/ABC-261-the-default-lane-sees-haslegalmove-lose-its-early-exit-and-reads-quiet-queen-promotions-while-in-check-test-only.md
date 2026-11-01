@@ -1,8 +1,9 @@
 ---
 id: ABC-261
 title: "The default lane turns red when `hasLegalMove` loses its early exit, and reads `legalCapturesAndQueenPromotions`' quiet queen promotions while in check (test-only, from QE-254-b and QE-254-c)"
-status: backlog
-column: Backlog
+status: done
+column: Done
+closed: "2026-11-01, merged to main at 12e78c4d; QE PASS_WITH_GAPS (qe-ABC-261, 4c6e9ee5); test-only, UAT waived; front matter aligned to the board by bapm-epic010-close"
 size: XS
 priority: P3
 epic: EPIC-010

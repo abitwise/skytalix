@@ -1,14 +1,85 @@
 ---
 id: EPIC-010
 title: "`skytalix` closes the engine gaps the owner's ideas named and the System Analyst verified, and a value-changing change ships only on the outside-opponent reading the owner sets"
-status: backlog
-column: Backlog
+status: done
+column: Done
+closed: "2026-11-01, by BA/PM (bapm-epic010-close): close reads MET (qe-EPIC-010-close b52cee9a; C3'' 218.0/400 at 053733d2 vs ca6e675c, +31.4 +/- 26.4, cluster +/- 27.7; S' 9.0/10 vs E 1650; Levels 57/57, UCI session 241/241, ladder 18/18); M1-M5 MET; milestones 2 and 3, Q6 and the 3 000 goal moved to EPIC-011"
 priority: P2
 size: L
 owner: BA/PM
 ---
 
 # EPIC-010: the verified engine gaps, closed one measured change at a time, against an outside opponent
+
+> **CLOSED 2026-11-01: THE CLOSE READS ARE MET; M3 AND M4 GRADED; THE EPIC IS DONE, by BA/PM** (task
+> `bapm-epic010-close`, records only, at `main` `903a3dc5`; nothing run, built or timed). M3 and M4 are graded from the
+> recorded readings. `git` shows which code each reading ran on. Sources: `qe-EPIC-010-close` (merged `70847284`;
+> verdict `…b52cee9a`, C3″ `…d976e19f`, RISK-08 `…33395f26`, S′ `…77ca3420`, lanes `…388b3044`, gaps `…43de1349`)
+> and the Orchestrator's milestone 1b close (`orch-2026-10-30a` `…27ddb1fb`).
+>
+> **The measured result, on head `053733d2` (`main` after milestone 1b) against base `ca6e675c` (the epic's first
+> merge-base):**
+>
+> - **C3″, 400 games head to head at 100 ms: MET.** 400/400 complete, 0 faults, 0 losses on time at the 50 ms margin
+>   (largest overshoot 5 ms head, 4 ms base). **W/L/D 138/102/160 = 218.0 of 400 (0.545), +31.4 ± 26.4 Elo** (iid, cutechess).
+>   The effective interval is **± 27.7** by opening cluster. The bar is ≥ 200.0 of 400. Draws were 40 %. Both lower
+>   bounds are above 0. The interval is reported, not graded.
+> - **S′, 10 games against Stockfish 19 at E 1 650, `skytalix` `st=0.5` on level 5: S-1, S-2 and S-4 met.** W/L/D 9/1/0
+>   = 9.0 of 10, 0 faults, 0 losses on time, overshoot max 3 ms (the flag is 12 ms).
+> - **R-TC part 2, the three lanes on the head:** each exited 0 with every test passed and 0 skipped. Levels deep lane
+>   57/57 in 577 s. UCI session deep lane 241/241 in 291 s. Ladder short mode 18/18 in 23 s.
+>
+> **The grade, by the measures the owner accepted (§ Success measures):**
+>
+> | # | measure | read at the close | grade | source |
+> |---|---|---|---|---|
+> | M1 | every value-changing merge passed the owner's rule | Milestone 1: 4 of 4 value-changing merges met S-1 to S-4, and 2 of 2 value-identical merges met S2 (graded 2026-11-01). `ABC-242` met the S2 reading the Orchestrator ruled for it. Milestone 1b had one code merge, `ABC-254`. It is value-identical and met S2: `G4` byte-equal on 7 827 rows, and A4 MET under D3-V2 at 1.112 / 1.120 / 1.106. `ABC-249`, `259`, `260` and `261` are test-only and owe no reading. `ABC-250`–`253` never merged | **MET** | `…1a53a7f9`; `qe-ABC-242` `…f24601b8`; `qe-ABC-254-a4v2` `…623a62e2` |
+> | M2 | not weaker outside, at the close | Milestone 1's batch read NOT LOSS (X + Y = +19.6). Milestone 1b changed no value (`G4`), so the batch stands as M2, as the close-out plan ruled. The owner's per-epic read was added on top: C3″ MET | **MET** | `…1a53a7f9`; `…d976e19f` |
+> | M3 | the proven gaps are closed | The `Q-SET` and repetition rows are default-lane rows. In `src/quiescence.test.ts`: `ABC-228` A2 "Q-SET's in-check rows", A3 "a capture that mates scores mate", QE-228-b "QE's Q-SET rows", and `ABC-229` A2 "Q-SET's quiet-promotion rows". In `src/engine.test.ts`: `ABC-230` A1 "a third occurrence scores exactly 0" and A8, plus `ABC-249`'s ply-4 row. The default lane passed 2 376/2 376 with 0 skips and no skip-integrity findings. It ran on `qe-ABC-262`'s merge tree `0988f004`, whose `src/` and `data/` trees are the same objects as `053733d2`'s and `903a3dc5`'s (`src/` `f2388e40`). The Levels and UCI session deep lanes run the whole of `src/levels.test.ts` and `src/uci-session.test.ts`, which include `ABC-230`'s level and session rows. Both passed on `053733d2` | **MET** | `qe-ABC-262` `…ed4d02a5`; `…388b3044` |
+> | M4 | nothing regressed | **`G1`** 54/58, rows equal. **`G5`**: lanes green, max 4 002.7 ms; on `053733d2` the Levels deep lane read level 5 max 4 001 ms, level 6 5 002 ms and level 7 30 001 ms, and the UCI session deep lane passed. **`G6`**: `kiwipete` 8 → 9 and `position-6` 10 = 10 (≥ base, floor 6). **`G7`**: a 512 B fixed scratch, growth 0. `G1`, `G6` and `G7` were read on `ABC-254`'s code `600d8de3`. Its production `src/` and `data/` are byte-identical to `053733d2`'s (the `git diff`, test files excluded, is empty). **`G8`**: H 8.94 s, ALONE, on the close tree. **`G9`**: across the epic (`git diff ca6e675c 053733d2`, production `src/`), `LEVELS[1..4]`, `[6]`, `[7]` and `DEFAULT_LEVEL` are byte-identical. `LEVELS[5]` 3 000 → 4 000 is `ABC-228`'s one waiver (`ADR-0053` d10). `HARD_CEILING_MS` 32 000 → 60 000 is `EPIC-009`'s `ABC-221` (`c48a6f83`, `ADR-0052` D6), outside this epic's own diffs (§ Dependencies). Inside milestone 1b, `G9`'s diff is empty | **MET** | `qe-ABC-254` `…aaf4675b`; `qe-ABC-262` `…dffb3c15`; `…388b3044` |
+> | M5 | the owner's decisions stayed his | 0 NFR bounds moved in milestone 1b. `ADR-0003` was amended on his "ABC-254: yes" (`…f7a50e95`). E 1 650 is his word (`…1f5e3b27`). The 100 / 400 rule (`…2896c6eb`) and the head-to-head read (`…43098cef`) are his. Option O1 (`ADR-0055`) is his "1" (`…74216a44`). Q1 was deferred and Q3 answered by him. Q6 moved to `EPIC-011` | **MET** | § Owner questions; the blocks below |
+>
+> **Delivered:**
+>
+> - Milestone 1: `ABC-226`, `227`, `225`, `228`, `229`, `230`, `235`, `240` and `241`, closed by the batch.
+> - Outside the milestones: `ABC-242`, `243`, `244`, `245`, `247` and `248`.
+> - Milestone 1b: `ABC-254` (lazy legality, 1.11–1.12×), `ABC-249`, `ABC-259`, `ABC-260` and `ABC-261`.
+>
+> In product terms, quiescence now searches every evasion in check and scores mates in captures (`ABC-228`). It sees
+> quiet queen promotions (`ABC-229`). The search sees a repetition the game already holds, from the CLI and from UCI
+> (`ABC-230`, `ABC-241`, `ABC-242`). With lazy legality, the engine reads 1.11–1.12× faster on the fixed boards (`ABC-254`, A4). A default-lane scan guards the owner's
+> "engine is not changed internally" rule (`ABC-259`, `ABC-260`).
+>
+> **Closed without delivery:** `ABC-250` (closed by routing, not merged; A4 not graded, `…d2571be5`). `ABC-251`
+> ("nothing to cut", `…1f6ed15a`), `ABC-252` (a consequence of `ABC-250`'s close) and `ABC-253` ("nothing to cut",
+> `…27ddb1fb`) were dropped. None of them was a graded miss. **Moved to `EPIC-011` earlier** (`bapm-epic011-dedupe`):
+> milestone 2 (`ABC-231`–`234`, `236`–`238`), milestone 3 (`ABC-239`), Q6 and the 3 000 goal.
+>
+> **What the grade does not say:**
+>
+> - C3″ is self-play at 100 ms. It cannot see transfer to an outside opponent beyond S′ (`ADR-0056` C3″).
+> - Milestone 1's batch against Stockfish at 4 000 ms read −58.3 ± 77.9 for its head. The two reads measure different
+>   things (opponent, control, and milestone 1b's speed), and their intervals overlap (about +3.7 to +19.6). Neither is
+>   a claim of an outside gain. M2 has no Elo target.
+> - `G1`, `G6` and `G7` were not re-run on `053733d2`. They carry by byte identity of the production code. A re-run would
+>   read the same bytes, so BA/PM asks for none (the Orchestrator may).
+> - C3″, S′ and the Levels lane ran SHARED by rule (QE-E010C-a). The UCI session and ladder lanes ran ALONE.
+>
+> **Records folded on this hop:**
+>
+> - **`RISK-EPIC010-08` is closed** with the measured ± 27.7 (QE-E010C-b; § Risks).
+> - **The S′ pool** is folded into § The smoke ledger: 18.0 / 20 = 90.0 %, under 30 games, so no re-pin yet. **A next
+>   smoke of ≥ 8.0 of 10 fires the upward re-pin** (QE-E010C-d). It is carried to `EPIC-011` (its § Close-out).
+> - **QE-E010C-c** (stale lane figures: the Levels deep lane is now 57 tests and 577 s, not 41; the ladder short mode
+>   is 23 s, not 848 s) belongs to the Scribe (`scribe-lane-figures`). The lines below that cite 41 and 848 s are history.
+> - **Q-SP-2 lapses:** `ADR-0055` D3's bars were used only by `ABC-250` A4, which closed ungraded.
+> - **Housekeeping (the LOW items owed):** `ABC-249`, `254`, `259`, `260`, `261` and `262` page front matter now reads
+>   done/Done with a `closed:` line, as the board holds them. § Milestone 1b's `ABC-251` and `ABC-253` rows and tickets
+>   row 28 (`ABC-253`) read Done (dropped).
+>
+> **The epic is closed. Nothing blocks it, and nothing in it is open.** Every ticket on this page is Done, dropped, or
+> moved to `EPIC-011`. The board card is the Orchestrator's to move. **`EPIC-011` may start:** the owner's order was
+> to close `EPIC-006`, `EPIC-009` and `EPIC-010` first (`…022fb66f`), and all three are now closed.
 
 > **`ABC-250` CLOSED NOT MERGED BY ROUTING; MILESTONE 1b NOW; THE SMOKE'S E 1 650 CONFIRMED BY THE OWNER, 2026-11-01,
 > by BA/PM** (task `bapm-abc250-close`, records only, at `main` `767a2e3e`; nothing run, built or timed).
@@ -757,6 +828,23 @@ labelled; every D at 1 500 ms on both sides.*
     `e42b637b` on, both search `go movetime 4000` for 4 000 ms at rate 0 (QE, `…1a53a7f9`), so a later R row compares
     with this reference. The R smokes since `ABC-230` ran at width 1, as the batch did. If `LEVELS[5]` is ever rolled
     back to 3 000 ms (`ADR-0053` d10 § Rollback), this reference is stale.
+  - *(Closed 2026-11-01, `bapm-epic010-close`: the pool closes with this epic, still empty at 0 games. No value-changing
+    merge followed the batch. The owner's 100 / 400 rule replaced the trend for every later merge (top blocks). The
+    reference stays on record only and is not carried to `EPIC-011`.)*
+- **The S′ pool (500 ms, E 1 650; folded 2026-11-01 by BA/PM, `bapm-epic010-close`, copied from QE's S′ note
+  `qe-EPIC-010-close` `…77ca3420`, QE-E010C-d).** This is the pooling rule of the top blocks. S′ scores pool here. When
+  the pooled score leaves 60–85 % over ≥ 30 games, E is re-pinned by one band-rule step. An upward re-pin (E ≤ 2 600)
+  needs no owner ask (`…1f5e3b27`). BA/PM reads a downward re-pin as a question for the owner.
+
+  | read | candidate sha | W/L/D | score | faults | time losses | pooled | re-pin |
+  |---|---|---|---|---|---|---|---|
+  | `qe-ABC-255` A5 | `becf571a` | 9/1/0 | 9.0 / 10 | 0 | 0 | 9.0 / 10 = 90.0 % | not evaluable (10 < 30 games) |
+  | `qe-EPIC-010-close` S′ | `053733d2` | 9/1/0 | 9.0 / 10 | 0 | 0 | **18.0 / 20 = 90.0 %** | not evaluable (20 < 30 games) |
+
+  - **The next smoke decides it.** A score of 8.0 of 10 or more makes the pool ≥ 26.0 / 30 = 86.7 %, above 85 %, and
+    fires the upward re-pin. A score of 7.5 or less does not: 25.5 / 30 = 85.0 % is not above 85 %.
+  - **Carried to `EPIC-011` as it stands** (its § Close-out, `EPIC-010`). The pool does not restart at the epic
+    boundary. The rule names no restart, and every S′ is read at the same E and control.
 
 ### Cost on this host
 
@@ -876,9 +964,9 @@ sits inside the batch's ± 78, so speed is graded on nps, not games).
 |---|---|---|---|---|
 | ~~(first, only if allowed in time)~~ ~~**moved to `EPIC-011` 2026-11-01** (`bapm-epic011-dedupe`: waits Q-SP-3; would hold the close)~~ **first** (back 2026-11-01, `bapm-ABC-254-ready`) | `ABC-254` | O1-d, lazy legality (`ADR-0003` (c2)), est. 1.15–1.40× | M, P2 | The largest single prize; `ADR-0055` D4 puts it first. ~~**Waits the owner's yes on amending `ADR-0003` (Q-SP-3) and the amending ADR.** If they arrive before `ABC-250` enters development, it goes first; otherwise after `ABC-252`, because both rewrite `src/legal.ts`~~ **2026-11-01: the yes (`…f7a50e95`) and the amending ADR (`89af8b56`) arrived before `ABC-250` entered development, so it goes first**, and `ABC-250` packs the lazy filter |
 | 1 | `ABC-250` **closed not merged by routing 2026-11-01** (A4 not graded, UNRESOLVED; `…d2571be5`) | O1-b part 1: packed moves in generation, legality, make/unmake; read on perft | M, P2 | Reads O1-b's data-layout gain on perft before the search is spent, with `ADR-0055` D3's A1 / A0 bars (GO ≥ 1.25×; HOLD 1.10–1.25×; NO-GO < 1.10×). The AssemblyScript prototype is not run, so this is where that reading happens. Not merged on HOLD or NO-GO |
-| 2 | `ABC-251` **narrowed 2026-11-01 to O1-c alone** (S, bar ≥ 1.03×; DoR 10/10 after the Architect's design input, `eed51a35`) | ~~O1-b part 2 with O1-c: the search, quiescence, ordering and killers on packed moves; inlined helpers~~ O1-c alone: inlined helpers, constant-shape `Budget` | ~~L (S if narrowed)~~ S, P2 | On GO: the full form, bar ≥ 1.10×. On HOLD / NO-GO: narrowed to O1-c alone, bar ≥ 1.03× (`ADR-0055`'s HOLD row: "only the cheap parts (O1-a, O1-c)") |
+| 2 | `ABC-251` **narrowed 2026-11-01 to O1-c alone** (S, bar ≥ 1.03×; DoR 10/10 after the Architect's design input, `eed51a35`); **Done (dropped) 2026-11-01, "nothing to cut"** (item 2a's stop rule: TurboFan already inlines the helpers, 68/68 sites, and `Budget` is already monomorphic; no `src/` change, not a graded miss; `se-ABC-251` `…4342e5b5`, `…1f6ed15a`) | ~~O1-b part 2 with O1-c: the search, quiescence, ordering and killers on packed moves; inlined helpers~~ O1-c alone: inlined helpers, constant-shape `Budget` | ~~L (S if narrowed)~~ S, P2 | On GO: the full form, bar ≥ 1.10×. On HOLD / NO-GO: narrowed to O1-c alone, bar ≥ 1.03× (`ADR-0055`'s HOLD row: "only the cheap parts (O1-a, O1-c)") |
 | 3 | `ABC-252` **dropped 2026-11-01** (consequence of `ABC-250`'s close) | O1-b part 3: one generator; the shell through one converter | M, P3 | Removes the second move path `ABC-250` stages; dropped if `ABC-250` is dropped |
-| 4 | `ABC-253` | O1-a: keys as two 32-bit halves in the hot path; `bigint` at the API | M, P3 | `ADR-0055` D4's last O1 step. Independent of `ABC-250`'s reading; shares the search, TT and key files, so it rebases on the chain |
+| 4 | `ABC-253` **Done (dropped) 2026-11-01, "nothing to cut"** (key path ≈ 2 % of search self time; the TT probe's cost is cache misses, not `bigint`; prototype ≈ 1.00× against the 1.02× bar; no `src/` change, not a graded miss; `se-ABC-253` `…efd7790c`, `…27ddb1fb`) | O1-a: keys as two 32-bit halves in the hot path; `bigint` at the API | M, P3 | `ADR-0055` D4's last O1 step. Independent of `ABC-250`'s reading; shares the search, TT and key files, so it rebases on the chain |
 | — | (not cut) | O1-e, incremental material + PST | — | `ADR-0055`: "S; not proposed now" (`arch-ABC-235`: "low net, wide reach, collides with `ABC-231`"). Recorded, not cut |
 
 - **Placement: a milestone of this epic, not a new epic.** (1) This page already carries the S2 rule for
@@ -896,6 +984,9 @@ sits inside the batch's ± 78, so speed is graded on nps, not games).
   the search is a change the scan already reads.)*
 - **Close:** milestone 1b closes when its last ticket is merged, dropped or (for `ABC-254`) declined. **There is no
   batch:** value-identical merges move no value, so the 4 000 ms trend pool and reference are untouched.
+  *(**Closed 2026-11-01** (`…27ddb1fb`). Delivered: `ABC-254`, `ABC-249`, `ABC-259`, `ABC-260` and `ABC-261`. Closed
+  without delivery: `ABC-250` by routing, and `ABC-251`, `ABC-252` and `ABC-253` dropped. The epic's close reads
+  followed and are MET (the top block).)*
 - **Cost on this host (estimate):** 0 games. One QE nps reading per ticket, about 1 h ALONE with `G6` each (the
   `qe-ABC-235` / `qe-ABC-240` shape), so about 4–5 h ALONE across the milestone. Expected gain, `ADR-0055` § O1
   combined: **1.08–1.35× without O1-d, 1.25–1.85× with it** (low-medium confidence; central guesses ≈ 1.2× and
@@ -1039,6 +1130,10 @@ mates", ≥ 6 "a quiet promotion decides". It reads `quiesce` and `chooseMove` a
 | M4 | **Nothing regressed** | `G1` ≥ 54/58, `G5`, `G6`, `G7`, `G8`, `G9` green on `main` at close | the gates' own instruments |
 | M5 | **The owner's decisions stayed his** | 0 NFR bounds moved without his word; every ADR reported when it lands; Q1–Q4 answered before a ticket that waits on them leaves `Backlog` | ADR pages, owner-word notes |
 
+*Graded 2026-11-01 at the close (`bapm-epic010-close`): **M1–M5 MET.** The table, sources and limits are in the top
+block. M3 and M4 were read from the records on `main` at the close. `git` shows that the readings ran on the closing
+code (the production `src/` and `data/` are byte-identical).*
+
 ## Tickets (order is the pull order; the pages are under `plans/tickets/`)
 
 | order | id | title | size | priority | column | DoR | depends on / ADR | waits on |
@@ -1070,7 +1165,7 @@ mates", ≥ 6 "a quiet promotion decides". It reads `quiesce` and `chooseMove` a
 | 25 | `ABC-250` | Moves packed into integers in reused typed arrays for generation, legality and make/unmake, read on perft first; the search is not touched yet (milestone 1b, `ADR-0055` O1-b part 1, value-identical) | M | P2 | ~~Backlog (Ready recommended)~~ **Done (dropped) 2026-11-01: closed not merged by routing; A4 not graded (UNRESOLVED)** (`…d2571be5`; `qe-ABC-250` `…4fe9c469`) | ~~**10/10**~~ — | `ADR-0055` (option O1 chosen by the owner 2026-11-01); no ADR; Architect confirms at design | ~~none. Its A4 perft reading (GO ≥ 1.25× / HOLD / NO-GO) picks `ABC-251`'s form and whether `ABC-252` exists. ALONE~~ closed: A1–A3, A5, `G1`, `G4`–`G9` green; branch `grugops/ABC-250` (`2e04eee5`) kept, revivable with an Architect-ruled read method; `ABC-251` narrowed, `ABC-252` dropped (`bapm-abc250-close`) |
 | 26 | `ABC-251` | ~~The search, quiescence, ordering and killers walk the packed moves and build a `Move` only at `chooseMove`'s return, with hand-inlined helpers (milestone 1b, O1-b part 2 with O1-c, value-identical)~~ *(2026-11-01, narrowed)* O1-c alone: `isBlack` / `pieceType` inlined (or provably inlinable) and a constant-shape `Budget`, on today's `Move` objects (milestone 1b, value-identical) | ~~L (S narrowed)~~ **S** | P2 | ~~Backlog (Ready recommended)~~ **Done (dropped) 2026-11-01, "nothing to cut"** (`…1f6ed15a`; page closed by `bapm-spike-accel`) | ~~**9/10**~~ ~~**10/10**~~ — | ~~`ABC-250`~~ none on `ABC-250`/`ABC-252`; `arch-abc250-close` design input folded (`eed51a35`, `…a07418ac`) | ~~none; profile first, and stop before any ALONE read if nothing is left to cut; bar ≥ 1.03× on two boards, ≥ 1.00× on the third (D3-V2 as written); before `ABC-253` (same files; the Orchestrator may swap)~~ closed at item 2a's stop rule: TurboFan already inlines the helpers (68/68 sites), `Budget` already monomorphic; no `src/` change, no ALONE read, not a graded miss, no `failed-attempt` owed (`se-ABC-251` `…4342e5b5`; records merged `d87f30f7`) |
 | 27 | `ABC-252` | One move generator: the shell's move calls build their `Move` lists from the packed path through one converter, and the object generator is removed (milestone 1b, O1-b part 3, value-identical) | M | P3 | ~~Backlog~~ **Done (dropped) 2026-11-01**, the consequence of `ABC-250`'s close (`…d2571be5`) | ~~**9/10**~~ — | `ABC-250` GO, `ABC-251` full form | ~~`ABC-251`'s merge; dropped if `ABC-250` is dropped~~ dropped: one generator already; nothing built (`bapm-abc250-close`) |
-| 28 | `ABC-253` | Zobrist keys travel as two 32-bit halves in the search, the TT and the repetition scan, and stay `bigint` at the API (milestone 1b, O1-a, value-identical) | M | P3 | Backlog (Ready recommended) | **10/10** | none (`ADR-0025`, `ADR-0054` kept) | none; pulled after the O1-b chain (`ADR-0055` D4), bar ≥ 1.02× |
+| 28 | `ABC-253` | Zobrist keys travel as two 32-bit halves in the search, the TT and the repetition scan, and stay `bigint` at the API (milestone 1b, O1-a, value-identical) | M | P3 | ~~Backlog (Ready recommended)~~ **Done (dropped) 2026-11-01, "nothing to cut"** (`…27ddb1fb`; board) | ~~**10/10**~~ — | none (`ADR-0025`, `ADR-0054` kept) | ~~none; pulled after the O1-b chain (`ADR-0055` D4), bar ≥ 1.02×~~ closed at the profile-first stop: key path ≈ 2 %, prototype ≈ 1.00× against 1.02×; no `src/` change, not a graded miss (`se-ABC-253` `…efd7790c`); re-open trigger "key path ≥ 5 %" |
 | 29 | `ABC-254` | Lazy legality: the full make/test/unmake only for king moves, en passant, pinned pieces and positions in check (milestone 1b, O1-d = `ADR-0003` (c2), value-identical) | M | P2 | ~~Backlog (Ready recommended); **Moved to `EPIC-011`** back 2026-11-01~~ **Done** (2026-11-01, `3bfe180e`; A4 MET under D3-V2; board) | **10/10** | `ADR-0003` amended (clauses 1 and 3; `…c314772c`, merged `89af8b56`) | none; ~~**the owner's yes (Q-SP-3)** and that ADR~~ yes `…f7a50e95`; **first in milestone 1b** |
 | 30 | `ABC-259` | One default-lane source scan turns red when engine-core code reads the search budget other than as the deadline, or reads a test flag or the environment (`ADR-0056` R-TC item 2, gap G-1; milestone 1b; test-only) | XS | P2 | ~~Backlog (Ready recommended)~~ **Done** (2026-11-01, `2091d301`; board) | **10/10** | `ADR-0056` R-TC (merged `a0f9297e`); no ADR of its own | none; recommended before `ABC-251` (which rewrites the scanned search files), beside `ABC-249` |
 | 31 | `ABC-260` | The R-TC source scan catches `process` by any spelling, and a comment marker inside a string literal cannot hide code from it or from `ABC-087` A8 (milestone 1b; test-only, from QE-259-a MEDIUM and QE-259-b LOW; cut 2026-11-01, `bapm-qe-gaps-1101`) | XS | P2 | ~~Backlog (Ready recommended)~~ **Done** (2026-11-01, `59842f9f`; board) | **10/10** | `ABC-259` merged (`2091d301`); `ADR-0056` R-TC; no ADR of its own; `src/levels.test.ts` only | none; row number is not pull order: recommended before `ABC-251` (which rewrites the scanned search); independent of `ABC-254` |
@@ -1126,6 +1221,10 @@ because the owner's yes and the amending ADR came before `ABC-250` entered devel
 test-only and not one of the fifteen engine changes; it guards the owner's condition (R-TC item 2) for milestone 1b's
 rewrites and for every strength change after them. Its row number is not its pull order. No other row was changed;
 the column move is the Orchestrator's.*
+*Folded 2026-11-01 (`bapm-epic010-close`, at the epic's close): row 28 (`ABC-253`) reads Done (dropped), as the board
+holds it. Every row now reads Done, Done (dropped) or Moved to `EPIC-011`. Each was checked against the board, and
+they agree. Rows 30–32 were added by `bapm-reconcile-adr0056` and `bapm-qe-gaps-1101`. **No row is open, so the epic
+closes** (the top block).*
 
 ## Observations (not tickets)
 
@@ -1148,7 +1247,7 @@ the column move is the Orchestrator's.*
 | Q5 | Accept this epic and M1–M5, no Elo target | **2026-10-29: accepted, no Elo target:** "elo target is hard to reach, but try to understand if things get worse" | `proposed` → `backlog`. M1–M5 stand as written. The "worse" question is answered by § The merge rule's three layers |
 | Q6 (open, 2026-11-01; **moved to `EPIC-011`** 2026-11-01, `bapm-epic011-dedupe`: its time-control half is answered, 40/15) | The 3 000 goal: (a) which scale it is on (rating list, time control, field); (b) whether it becomes a measure of this epic or a later one, and read how (MQ-3000, § Product goal) | — **Asked after `arch-algo-analysis` reports**, which proposes the measurement; the Orchestrator takes it to him | Default until he answers: no ticket, gate or measure bound to 3 000; M2 stays "not LOSS"; scale `UNKNOWN - verify` |
 | Q-SP-3 (`ADR-0055`, ~~open~~ answered) | Amend the owner-ratified `ADR-0003` clauses 1 and 3 so lazy legality ((c2)) may be built now, for speed | — Not answered explicitly on 2026-11-01 (Orchestrator `…74216a44`, item 2). **Later 2026-11-01: "ABC-254: yes"** (`…f7a50e95`); `ADR-0003` amended (`…c314772c`, merged `89af8b56`); `ABC-254` 10/10, first in milestone 1b | `ABC-254` waits in Backlog (9/10); on yes, the Architect writes the amending ADR and it goes Ready; on no, it is closed as declined |
-| Q-SP-2 (`ADR-0055`, open) | `ADR-0055` D3's bars, as written or reset | — | Used only by `ABC-250` A4 (perft A1 / A0: GO ≥ 1.25×, HOLD 1.10–1.25×, NO-GO < 1.10×). **They apply as written unless he resets them before the reading** |
+| Q-SP-2 (`ADR-0055`, ~~open~~ **lapsed** 2026-11-01, `bapm-epic010-close`: `ABC-250` closed with A4 ungraded, so the bars were never applied) | `ADR-0055` D3's bars, as written or reset | — | Used only by `ABC-250` A4 (perft A1 / A0: GO ≥ 1.25×, HOLD 1.10–1.25×, NO-GO < 1.10×). **They apply as written unless he resets them before the reading** |
 
 - **Q4 superseded 2026-11-01** (`bapm-100-400-rule`): the owner's word `…2896c6eb` replaces (e), extended, with 100
   games at 100 ms per strength-changing ticket and 400 at 100 ms per epic (the top block). M1 and M2 stand as graded.
@@ -1216,6 +1315,14 @@ the column move is the Orchestrator's.*
   the four games of each opening, or the per-opening paired error as `ABC-225` reports it; the method is QE's). The
   read's shape and its MET line do not change on this hop; a finding that the interval is much wider goes to the
   Architect.
+  ***CLOSED 2026-11-01** (`bapm-epic010-close`; QE-E010C-b, `qe-EPIC-010-close` `…33395f26`): QE measured it at the
+  first C3″. **The effective 95 % interval is ± 27.7 Elo** (per-opening cluster SE; design effect 1.094, about 366
+  effective games of 400). The iid interval is ± 26.4 and the colour-pair interval ± 25.1. The ± 24 above assumed
+  0.50 draws; the measured draw rate was 40 %, which alone gives ± 26.4. 10.5 % of same-colour repeats replayed
+  move for move. The ± 27.7 is 1.05× the iid figure, under the PREREG's "much wider" line (> 1.25× iid or > 30 Elo),
+  so nothing goes to the Architect. **For every later C3″, read "± 24" as about ± 28** at 40 % draws and four games
+  per opening. The design effect is noisy at 100 clusters, so QE reports it again at each C3″. Carried to
+  `EPIC-011`.*
 
 ## NFR triggers
 
