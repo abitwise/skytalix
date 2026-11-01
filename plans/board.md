@@ -1,3 +1,4 @@
+_Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — `bapm-spike-accel` merged: **ABC-263 spike** cut and pulled → `arch-ABC-263` (records; ≤ 5 min prototypes under the lock). ABC-251 page dropped; ABC-262 A4 waived. Owed (LOW, next BA/PM): stale front matter on ABC-249/254/259/260/261/262; EPIC-010 milestone-1b ABC-251 row. Running: se-ABC-253, arch-ABC-263._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a, …78c476bf) — OWNER: spike ticket for the Architect in EPIC-011 — NPU/GPU use, multi-threaded Node.js search, sharing search info via shared/video memory. → `bapm-spike-accel` (cut the ticket; also closes ABC-251 page and marks ABC-262 A4 waived). Running: se-ABC-253._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — **ABC-251 DONE (dropped, nothing to cut)**: TurboFan already inlines the helpers. ABC-253 pulled → `se-ABC-253`, last in milestone 1b; then the EPIC-010 close hop. Owed to next BA/PM: ABC-251 page close, ABC-262 A4-waived mark (QE-262-b). Owed to next Architect: O1-c ≈ 0 on ADR-0055. Scratch quota freed (~8 GB of finished hops' scratch removed)._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — **ABC-262 DONE** (merged; first EPIC-011 M0 ticket done). Running: se-ABC-251._
@@ -1189,7 +1190,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   one hop at pull, when it checks `Ready for Dev`'s exit at that moment; the row records the pull.
 
   HEADING FORMAT (spec §6.1): each column is an H2 heading carrying its live/limit WIP count,
-  e.g. `## In Development (WIP 1/3)` — the left number is how many tickets are in the column
+  e.g. `## In Development (WIP 2/3)` — the left number is how many tickets are in the column
   now, the right number is the limit from config. Unlimited columns read `(WIP unlimited)`;
   Blocked is visible and time-tracked (no WIP limit) and reads `(visible, time-tracked)`.
   INVARIANT: the column H2 headings and the rows of the `## Columns` table are the same 13 names in the
@@ -1199,7 +1200,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 1/3)
+    ## In Development (WIP 2/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
     ## In Review (WIP 0/3)
@@ -1328,7 +1329,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
+## In Development (WIP 2/3)
+- [ABC-263] SPIKE: can skytalix use the NPU, the iGPU and more CPU threads from Node.js on this host, and share search info between them? (records only; Architect; EPIC-011, any time; size: M, priority: P2; DoR 10/10; owner 2026-11-01 …78c476bf) **→ Ready → pulled → `arch-ABC-263`. Rulings: a ≤ 5 min multi-core scaling prototype is not a validation game (one-core rule binds games), runs alone under the lock; "a few minutes" = ≤ 5 min per run.**
 - [ABC-253] Zobrist keys travel as two 32-bit halves in the search, the TT and the repetition scan; bigint at the API (ADR-0055 O1-a; size: M, priority: P3, value-identical S2; DoR 10/10; milestone 1b; ≥ 1.02×; pull after the O1-b tickets) **→ pulled 2026-11-01 → `se-ABC-253` (last in milestone 1b; A5 search read under D3-V2)**
 
 
