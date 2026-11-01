@@ -1,0 +1,8 @@
+a4.jsonl kiwipete clear pairs 4 ratio 1.135 spreadB 4.2 spreadH 1.5
+a4.jsonl position-6 clear pairs 4 ratio 1.126 spreadB 4.5 spreadH 4.0
+a4.jsonl start clear pairs 4 ratio 1.107 spreadB 1.1 spreadH 1.4
+a4.jsonl position-4 clear pairs 4 ratio 1.089 spreadB 3.1 spreadH 1.8
+a4-rerun.jsonl kiwipete clear pairs 5 ratio 1.120 spreadB 3.8 spreadH 3.0
+a4-rerun.jsonl position-6 clear pairs 2 ratio 1.136 spreadB 0.6 spreadH 0.8
+a4-rerun.jsonl position-4 clear pairs 3 ratio 1.116 spreadB 2.0 spreadH 1.5
+INFO only, post hoc, not a grade: medians over every clear attempt (any attempt) per file

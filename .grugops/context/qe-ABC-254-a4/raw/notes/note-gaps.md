@@ -1,0 +1,28 @@
+# ABC-254 gaps after the A4 re-read: QE-254-a stays BLOCKING (A4 UNRESOLVED twice, both reads started ALONE); QE-254-b and QE-254-c LOW carry; QE-254-d INFO (the load-attribution instrument cannot name short-lived processes)
+
+QE/E2E, task `qe-ABC-254-a4`. This note follows the PREREG `…2e86c6f1`, the timing note and the host note of this task, and qe-ABC-254's verdict `…1c801504`.
+
+## QE-254-a: BLOCKING, still open
+- **What:** A4 is UNRESOLVED a second time.
+  - Two independent reads both started ALONE under the lock: qe-ABC-254 at 16:04Z and this one at 17:54Z.
+  - Each time, two boards voided under ADR-0055 D3's 5 % spread rule after its one re-run. First position-6 and start; now position-6 and the position-4 guard.
+- **Why it voids:** short-lived foreign work from other sessions lands inside 4 s runs. In each not-clear pair, the busier run read foreign cores 1.31–5.15. Clear runs read ≤ 0.70, and clear-only spreads are ≤ 4.5 %.
+  - The rule's one board re-run cannot absorb this while other sessions run.
+  - The start check, including the brief's > 50 % process check, was clear both times. It is a point-in-time check and cannot hold the host quiet for the 5–6 min a schedule takes.
+- **What the INFO says (not a grade):** 35 graded pairs across both of this hop's schedules. No pair fell below 1.00 on any board or below 0.97 on position-4. position-6's lowest pair was 1.020 and position-4's was 1.060. On the boards that were read validly, the bar's 1.10 holds on two boards: kiwipete 1.120 and start 1.105.
+- **Carrier:** the Orchestrator. The open question is the one qe-ABC-254 named: can the 5 % rule be met on this host while other sessions run? It goes to BA/PM, then the Architect. QE does not change the rule.
+  - The routes visible to QE are listed only, not chosen:
+    - a window where the other sessions are stopped, which is the owner's or the Orchestrator's to arrange;
+    - an Architect ruling on how D3's validity reads under foreign load. If that changes ADR-0055, it is the owner's word under the standing rulings.
+  - A third read under the same conditions would likely void again.
+
+## QE-254-b: LOW, carried from qe-ABC-254 (unchanged)
+The tightened `hasLegalMove` bar does not catch a rebuild on the lazy list: PL3a survives the whole default lane. Carrier: BA/PM, test-only.
+
+## QE-254-c: LOW, carried from qe-ABC-254 (unchanged)
+No default-lane row reads quiet promotions in check: PQ2 survives the lane and dies only in the deep lane. Carrier: BA/PM, test-only.
+
+## QE-254-d: INFO, new
+- **What:** the A4 driver's per-run `/proc` snapshot diff names only processes alive at both ends of a run. It named 1 process in 96 runs. The foreign CPU that voided the boards came from processes born and gone inside a run, so their identity is UNKNOWN - verify.
+- **Fix (QE's next timing hop):** a process-accounting or sampling probe running during the run. This is not a product gap.
+- **Carrier:** QE.

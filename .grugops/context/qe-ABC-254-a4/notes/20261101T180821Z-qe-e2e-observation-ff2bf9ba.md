@@ -1,0 +1,63 @@
+---
+id: 20261101T180821Z-qe-e2e-observation-ff2bf9ba
+kind: observation
+by: qe-e2e
+at: 2026-11-01T18:08:21Z
+verified_by: 
+confidence: high: paths, commits and hashes as recorded
+refs:
+  - qe-ABC-254-a4
+  - ABC-254
+  - QE-254-a
+  - QE-254-b
+  - QE-254-c
+  - QE-254-d
+  - EPIC-010
+  - ADR-0003
+  - ADR-0055
+  - NFR-005
+  - NFR-004
+  - grugops/ABC-254
+  - 600d8de3
+  - fe53dbda
+  - 09d1f675
+  - grugops/qe-ABC-254
+  - 15eadd7a
+  - grugops/qe-ABC-254-a4
+  - 3d201ec7
+  - 9f6e64b1
+  - src/legal.ts
+  - qe-ABC-254-a4/20261101T173308Z-qe-e2e-decision-2e86c6f1
+  - qe-ABC-254/20261101T153338Z-qe-e2e-decision-6b25d0a8
+  - qe-ABC-254/20261101T172756Z-qe-e2e-decision-1c801504
+  - qe-ABC-254/20261101T172756Z-qe-e2e-observation-09221f68
+  - qe-ABC-254/20261101T172756Z-qe-e2e-observation-f777a50a
+  - qe-ABC-254/20261101T172756Z-qe-e2e-observation-aaf4675b
+  - qe-ABC-254/20261101T172756Z-qe-e2e-observation-dede949b
+supersedes: 
+seal: sha256:d28ec3cd8bf5b080a1ec680d57052bdb5ecbb0088bc45e558615498d7f068741
+---
+
+# qe-ABC-254-a4 artifacts: commits, raw logs, scripts (sha256), trees
+
+QE/E2E, task `qe-ABC-254-a4`. All of these are on branch `grugops/qe-ABC-254-a4`, cut from `grugops/qe-ABC-254` at `15eadd7a`. Not pushed, not merged.
+
+## Commits
+- `3d201ec7`: claim the brief.
+- `9f6e64b1`: PREREG sealed (`…2e86c6f1`) and the harness, before any timed run.
+- The evidence and notes commit and the done move follow this note on the same branch.
+
+## Raw (`.grugops/context/qe-ABC-254-a4/raw/`)
+- `a4/a4.jsonl`: the main schedule. 54 runs plus wait, clear, pause and pair-void events.
+- `a4/a4-rerun.jsonl`: the board re-run of kiwipete, position-6 and position-4. 42 runs plus events.
+- `a4/analysis-main.jsonl`, `a4/analysis-rerun.jsonl`: `analyse.mjs` output (graded attempt per round).
+- `a4/grade.json`: `grade.mjs` output, `"a4": "UNRESOLVED"`.
+- `a4/times.txt`: the lock and schedule timeline.
+- `a4/posthoc-info.txt`: the clear-only INFO medians. Not a grade.
+- `qe-scripts/`, with sha256 prefixes as sealed in the PREREG: `a4.mjs ab613cf489873a86`, `host.mjs 5d59a3e4250faa90`, `probe.mjs a9742d21999959ae` (byte-identical to qe-ABC-254's), `analyse.mjs a67d2f38911acf6c`, `grade.mjs c290ab99a42f5448`, `run.sh 1ea0911bb1179574`, `seal.mjs ef92d4298f9ed71c`.
+- `notes/`: note bodies and seal specs.
+
+## Trees (scratchpad, not committed)
+- `qe-254-a4/trees/B` = `git archive 09d1f675 src package.json`.
+- `qe-254-a4/trees/H` = `git archive 600d8de3 src package.json`.
+- They differ in `src/legal.ts`, plus two test files.
