@@ -947,9 +947,18 @@ describe("A10 — the seed is threaded, not global", () => {
 // A8 — no user interface, and the engine is not touched. The diff half is the PR's numstat.
 // ---------------------------------------------------------------------------
 
+// ABC-260 (QE-259-b): the comment strip for A8 and ABC-259. One left-to-right pass matches string
+// and template literals before comments and keeps them whole, so a `//` or `/*` inside a string
+// cannot open a comment that hides code; comments are removed as before.
+const stripComments = (source: string): string =>
+  source.replace(
+    /"(?:[^"\\\n]|\\.)*"|'(?:[^'\\\n]|\\.)*'|`(?:[^`\\]|\\[\s\S])*`|\/\*[\s\S]*?\*\/|\/\/.*$/gm,
+    (token) => (token.startsWith("/") ? "" : token),
+  );
+
 describe("A8 — the level module's boundary", () => {
   const source = readFileSync(new URL("./levels.ts", import.meta.url), "utf8");
-  const code = source.replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, "");
+  const code = stripComments(source);
   const imports = [...code.matchAll(/from\s+"([^"]+)"/g)].map((m) => m[1]);
 
   it("does not import the virtual clock, the CLI, the turn loop or any I/O module", () => {
@@ -985,10 +994,7 @@ describe("ABC-259 — R-TC item 2: the engine core reads the budget only as the 
     "src/transposition.ts",
   ];
   const codeOf = (file: string): string =>
-    readFileSync(new URL(`../${file}`, import.meta.url), "utf8").replace(
-      /\/\*[\s\S]*?\*\/|\/\/.*$/gm,
-      "",
-    );
+    stripComments(readFileSync(new URL(`../${file}`, import.meta.url), "utf8"));
   const sources = files.map((file) => ({ file, code: codeOf(file) }));
 
   it("budget rule: `budgetMs` is the options field and the deadline in src/engine.ts, nowhere else", () => {
@@ -1015,9 +1021,10 @@ describe("ABC-259 — R-TC item 2: the engine core reads the budget only as the 
     expect(violations.join("\n")).toBe(""); // the message names the file and the rule
   });
 
-  it("environment rule: no core file reads `process.`, `argv` or `import.meta.env`", () => {
+  it("environment rule: no core file reads `process`, `argv` or `import.meta.env`", () => {
+    // ABC-260 (QE-259-a): whole-word `process`, so `node:process` and `globalThis.process` count.
     const violations = sources.flatMap(({ file, code }) =>
-      (code.match(/process\.|argv|import\.meta\.env/g) ?? []).map(
+      (code.match(/\bprocess\b|argv|import\.meta\.env/g) ?? []).map(
         (hit) => `${file}: environment rule — ${hit}`,
       ),
     );

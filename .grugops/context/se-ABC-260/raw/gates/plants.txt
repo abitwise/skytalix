@@ -1,0 +1,16 @@
+tip  A2a-Q5-named-import-search rc=1
+tip  A2b-259A3-process-env-search rc=1
+tip  A3-Q6-string-slashstar-search rc=1
+tip  A3x-template-slashstar-search rc=1
+tip  A4a-Q7-string-slashslash-engine rc=1
+tip  A4b-string-slashslash-levels rc=1
+tip  A5-comments-quiescence-search rc=0
+tip  C0-control rc=0
+base A2a-Q5-named-import-search rc=0
+base A2b-259A3-process-env-search rc=1
+base A3-Q6-string-slashstar-search rc=0
+base A3x-template-slashstar-search rc=0
+base A4a-Q7-string-slashslash-engine rc=0
+base A4b-string-slashslash-levels rc=0
+base A5-comments-quiescence-search rc=0
+base C0-control rc=0

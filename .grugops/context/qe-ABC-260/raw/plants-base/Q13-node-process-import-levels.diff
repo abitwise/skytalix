@@ -1,0 +1,16 @@
+diff -ru src/levels.ts /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-260/plants-base/Q13-node-process-import-levels//src/levels.ts
+--- src/levels.ts	2026-11-01 17:38:26.000000000 +0000
++++ /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-260/plants-base/Q13-node-process-import-levels//src/levels.ts	2026-11-01 19:08:43.285274521 +0000
+@@ -1,3 +1,4 @@
++import { stdout as qeOut } from "node:process";
+ /**
+  * Difficulty levels — the MECHANISM (`ABC-087`). A level is data: a per-move budget and a
+  * blunder rate. How a human picks one is `EPIC-006`'s (`ABC-101`), not this module's.
+@@ -28,6 +29,7 @@
+ import { MATE_SCORE } from "./search.ts";
+ import { zobristKey } from "./zobrist.ts";
+ 
++qeOut.write("");
+ export interface Level {
+   /** The per-move budget in milliseconds, passed to `chooseMove`. */
+   readonly budgetMs: number;

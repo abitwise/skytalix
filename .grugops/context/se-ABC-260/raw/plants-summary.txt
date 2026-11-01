@@ -1,0 +1,96 @@
+== tip A2a-Q5-named-import-search
+  passed A8 — the lev | does not import the virtual clock, the C | null
+  passed A8 — the lev | holds no argv parsing and no prompt | null
+  passed ABC-259 — R- | budget rule: `budgetMs` is the options f | null
+  failed ABC-259 — R- | environment rule: no core file reads `pr | AssertionError: expected 'src/search.ts: environment rule — pro…' to be '' // Object.is equality
+  passed ABC-259 — R- | test-flag rule: no core file names `VITE | null
+== tip A2b-259A3-process-env-search
+  passed A8 — the lev | does not import the virtual clock, the C | null
+  passed A8 — the lev | holds no argv parsing and no prompt | null
+  passed ABC-259 — R- | budget rule: `budgetMs` is the options f | null
+  failed ABC-259 — R- | environment rule: no core file reads `pr | AssertionError: expected 'src/search.ts: environment rule — pro…' to be '' // Object.is equality
+  passed ABC-259 — R- | test-flag rule: no core file names `VITE | null
+== tip A3-Q6-string-slashstar-search
+  passed A8 — the lev | does not import the virtual clock, the C | null
+  passed A8 — the lev | holds no argv parsing and no prompt | null
+  passed ABC-259 — R- | budget rule: `budgetMs` is the options f | null
+  failed ABC-259 — R- | environment rule: no core file reads `pr | AssertionError: expected 'src/search.ts: environment rule — pro…' to be '' // Object.is equality
+  passed ABC-259 — R- | test-flag rule: no core file names `VITE | null
+== tip A3x-template-slashstar-search
+  passed A8 — the lev | does not import the virtual clock, the C | null
+  passed A8 — the lev | holds no argv parsing and no prompt | null
+  passed ABC-259 — R- | budget rule: `budgetMs` is the options f | null
+  failed ABC-259 — R- | environment rule: no core file reads `pr | AssertionError: expected 'src/search.ts: environment rule — pro…' to be '' // Object.is equality
+  passed ABC-259 — R- | test-flag rule: no core file names `VITE | null
+== tip A4a-Q7-string-slashslash-engine
+  passed A8 — the lev | does not import the virtual clock, the C | null
+  passed A8 — the lev | holds no argv parsing and no prompt | null
+  failed ABC-259 — R- | budget rule: `budgetMs` is the options f | AssertionError: expected 'src/engine.ts: budget rule — budgetMs…' to be '' // Object.is equality
+  passed ABC-259 — R- | environment rule: no core file reads `pr | null
+  passed ABC-259 — R- | test-flag rule: no core file names `VITE | null
+== tip A4b-string-slashslash-levels
+  passed A8 — the lev | does not import the virtual clock, the C | null
+  failed A8 — the lev | holds no argv parsing and no prompt | AssertionError: expected '\n\nimport { makeMove, unmakeMove } f…' not to match /process\.|argv|readline|prompt|stdin|…/
+  passed ABC-259 — R- | budget rule: `budgetMs` is the options f | null
+  passed ABC-259 — R- | environment rule: no core file reads `pr | null
+  passed ABC-259 — R- | test-flag rule: no core file names `VITE | null
+== tip A5-comments-quiescence-search
+  passed A8 — the lev | does not import the virtual clock, the C | null
+  passed A8 — the lev | holds no argv parsing and no prompt | null
+  passed ABC-259 — R- | budget rule: `budgetMs` is the options f | null
+  passed ABC-259 — R- | environment rule: no core file reads `pr | null
+  passed ABC-259 — R- | test-flag rule: no core file names `VITE | null
+== tip C0-control
+  passed A8 — the lev | does not import the virtual clock, the C | null
+  passed A8 — the lev | holds no argv parsing and no prompt | null
+  passed ABC-259 — R- | budget rule: `budgetMs` is the options f | null
+  passed ABC-259 — R- | environment rule: no core file reads `pr | null
+  passed ABC-259 — R- | test-flag rule: no core file names `VITE | null
+== base A2a-Q5-named-import-search
+  passed A8 — the lev | does not import the virtual clock, the C | null
+  passed A8 — the lev | holds no argv parsing and no prompt | null
+  passed ABC-259 — R- | budget rule: `budgetMs` is the options f | null
+  passed ABC-259 — R- | environment rule: no core file reads `pr | null
+  passed ABC-259 — R- | test-flag rule: no core file names `VITE | null
+== base A2b-259A3-process-env-search
+  passed A8 — the lev | does not import the virtual clock, the C | null
+  passed A8 — the lev | holds no argv parsing and no prompt | null
+  passed ABC-259 — R- | budget rule: `budgetMs` is the options f | null
+  failed ABC-259 — R- | environment rule: no core file reads `pr | AssertionError: expected 'src/search.ts: environment rule — pro…' to be '' // Object.is equality
+  passed ABC-259 — R- | test-flag rule: no core file names `VITE | null
+== base A3-Q6-string-slashstar-search
+  passed A8 — the lev | does not import the virtual clock, the C | null
+  passed A8 — the lev | holds no argv parsing and no prompt | null
+  passed ABC-259 — R- | budget rule: `budgetMs` is the options f | null
+  passed ABC-259 — R- | environment rule: no core file reads `pr | null
+  passed ABC-259 — R- | test-flag rule: no core file names `VITE | null
+== base A3x-template-slashstar-search
+  passed A8 — the lev | does not import the virtual clock, the C | null
+  passed A8 — the lev | holds no argv parsing and no prompt | null
+  passed ABC-259 — R- | budget rule: `budgetMs` is the options f | null
+  passed ABC-259 — R- | environment rule: no core file reads `pr | null
+  passed ABC-259 — R- | test-flag rule: no core file names `VITE | null
+== base A4a-Q7-string-slashslash-engine
+  passed A8 — the lev | does not import the virtual clock, the C | null
+  passed A8 — the lev | holds no argv parsing and no prompt | null
+  passed ABC-259 — R- | budget rule: `budgetMs` is the options f | null
+  passed ABC-259 — R- | environment rule: no core file reads `pr | null
+  passed ABC-259 — R- | test-flag rule: no core file names `VITE | null
+== base A4b-string-slashslash-levels
+  passed A8 — the lev | does not import the virtual clock, the C | null
+  passed A8 — the lev | holds no argv parsing and no prompt | null
+  passed ABC-259 — R- | budget rule: `budgetMs` is the options f | null
+  passed ABC-259 — R- | environment rule: no core file reads `pr | null
+  passed ABC-259 — R- | test-flag rule: no core file names `VITE | null
+== base A5-comments-quiescence-search
+  passed A8 — the lev | does not import the virtual clock, the C | null
+  passed A8 — the lev | holds no argv parsing and no prompt | null
+  passed ABC-259 — R- | budget rule: `budgetMs` is the options f | null
+  passed ABC-259 — R- | environment rule: no core file reads `pr | null
+  passed ABC-259 — R- | test-flag rule: no core file names `VITE | null
+== base C0-control
+  passed A8 — the lev | does not import the virtual clock, the C | null
+  passed A8 — the lev | holds no argv parsing and no prompt | null
+  passed ABC-259 — R- | budget rule: `budgetMs` is the options f | null
+  passed ABC-259 — R- | environment rule: no core file reads `pr | null
+  passed ABC-259 — R- | test-flag rule: no core file names `VITE | null

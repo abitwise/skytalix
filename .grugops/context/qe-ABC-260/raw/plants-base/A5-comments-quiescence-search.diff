@@ -1,0 +1,26 @@
+diff -ru src/quiescence.ts /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-260/plants-base/A5-comments-quiescence-search//src/quiescence.ts
+--- src/quiescence.ts	2026-11-01 17:38:26.000000000 +0000
++++ /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-260/plants-base/A5-comments-quiescence-search//src/quiescence.ts	2026-11-01 19:08:43.214438475 +0000
+@@ -64,6 +64,10 @@
+ import { isInCheck, legalCaptures, legalCapturesAndQueenPromotions, legalMoves } from "./legal.ts";
+ import type { Move } from "./moves.ts";
+ import { type Position, pieceType } from "./position.ts";
++/**
++ * QE plant A5: budgetMs process.env ENGINE_DEEP VITEST NODE_ENV argv import.meta.env
++ */
++void 0; // budgetMs process.env.SKYTALIX_FAST ENGINE_DEEP
+ 
+ /**
+  * Centipawn value per piece type for ORDERING only, indexed by `pieceType` like
+diff -ru src/search.ts /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-260/plants-base/A5-comments-quiescence-search//src/search.ts
+--- src/search.ts	2026-11-01 17:38:26.000000000 +0000
++++ /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-260/plants-base/A5-comments-quiescence-search//src/search.ts	2026-11-01 19:08:43.215060887 +0000
+@@ -190,6 +190,8 @@
+ const TACTICAL_KEY = 1_000_000;
+ 
+ function orderKey(move: Move, killers: readonly Move[], hashMove: Move | null): number {
++  // QE plant A5: a quoted "//" and the word process, inside a comment
++  /* block: "//", process, an apostrophe it's, a backtick ` and a lone quote " */
+   if (hashMove !== null && sameMove(move, hashMove)) return HASH_MOVE_KEY;
+   if (move.captured !== EMPTY || move.promotion !== EMPTY) return TACTICAL_KEY + mvvLvaKey(move);
+   const killer = killers.findIndex((candidate) => sameMove(candidate, move));

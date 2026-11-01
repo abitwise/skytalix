@@ -1,0 +1,11 @@
+diff -ru src/levels.ts /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-260/plants-base/A4b-string-slashslash-levels//src/levels.ts
+--- src/levels.ts	2026-11-01 17:38:26.000000000 +0000
++++ /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-260/plants-base/A4b-string-slashslash-levels//src/levels.ts	2026-11-01 19:08:43.207707211 +0000
+@@ -27,6 +27,7 @@
+ import type { Position } from "./position.ts";
+ import { MATE_SCORE } from "./search.ts";
+ import { zobristKey } from "./zobrist.ts";
++const qeUrl = "http://x"; void qeUrl; process.stdout.write("");
+ 
+ export interface Level {
+   /** The per-move budget in milliseconds, passed to `chooseMove`. */

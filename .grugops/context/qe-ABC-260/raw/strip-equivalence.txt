@@ -1,0 +1,14 @@
+# /home/olger/projects/public/skytalix/.claude/worktrees/qe-ABC-260
+engine.ts identical=true literals=13 (dq 13, sq 0, tpl 0) bprocess_hits=0 literal_with_comment_opener=0
+search.ts identical=true literals=27 (dq 27, sq 0, tpl 0) bprocess_hits=0 literal_with_comment_opener=0
+quiescence.ts identical=true literals=5 (dq 5, sq 0, tpl 0) bprocess_hits=0 literal_with_comment_opener=0
+evaluate.ts identical=true literals=1 (dq 1, sq 0, tpl 0) bprocess_hits=0 literal_with_comment_opener=0
+transposition.ts identical=true literals=1 (dq 1, sq 0, tpl 0) bprocess_hits=0 literal_with_comment_opener=0
+levels.ts identical=true literals=16 (dq 15, sq 0, tpl 1) bprocess_hits=0 literal_with_comment_opener=0
+# /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-260/merged
+engine.ts identical=true literals=13 (dq 13, sq 0, tpl 0) bprocess_hits=0 literal_with_comment_opener=0
+search.ts identical=true literals=27 (dq 27, sq 0, tpl 0) bprocess_hits=0 literal_with_comment_opener=0
+quiescence.ts identical=true literals=5 (dq 5, sq 0, tpl 0) bprocess_hits=0 literal_with_comment_opener=0
+evaluate.ts identical=true literals=1 (dq 1, sq 0, tpl 0) bprocess_hits=0 literal_with_comment_opener=0
+transposition.ts identical=true literals=1 (dq 1, sq 0, tpl 0) bprocess_hits=0 literal_with_comment_opener=0
+levels.ts identical=true literals=16 (dq 15, sq 0, tpl 1) bprocess_hits=0 literal_with_comment_opener=0
