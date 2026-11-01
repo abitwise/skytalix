@@ -15,6 +15,7 @@ width: parallel coding allowed (owner 2026-11-01); test/build/engine runs serial
 - **Wrap every vitest / npm test / npm run build|lint|typecheck / engine / cutechess run in `flock /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/host-test.lock <command>`** — no two hops run tests at once; never hold the lock while idle. Single-file vitest needs NODE_OPTIONS=--max-old-space-size=400. Worktree needs npm ci.
 - Any timing or real game run you record: under the lock, with load1 and foreign processes logged. A foreign vitest from another repo recurs; never kill it.
 - Any single run estimated over 60 min: STOP and report (owner rule).
+- QE-254-b/c plants (PL3a, PQ2) for reuse: .grugops/context/qe-ABC-254/raw/ on main.
 ## Do
 - Implement the ticket to its acceptance; gates green, 0 skips; skip-integrity and lane inventory clean. A STOP if the page cannot be met as written.
 ## Fences
