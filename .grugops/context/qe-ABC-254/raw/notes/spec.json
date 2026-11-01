@@ -1,0 +1,20 @@
+{
+  "refs": ["qe-ABC-254", "ABC-254", "EPIC-010", "ADR-0003", "ADR-0055", "ADR-0026", "NFR-005", "NFR-004", "NFR-009", "NFR-008", "NFR-001",
+           "QE-254-a", "QE-254-b", "QE-254-c", "G1", "G4", "G5", "G6", "G7", "G8", "G9",
+           "grugops/ABC-254", "600d8de3", "fe53dbda", "09d1f675", "grugops/qe-ABC-254", "2c0bcbc3", "12288266", "6d393592",
+           "qe-ABC-254/20261101T153338Z-qe-e2e-decision-6b25d0a8",
+           "se-ABC-254/20261101T152313Z-software-engineer-decision-cb525705",
+           "se-ABC-254/20261101T152313Z-software-engineer-decision-7f5312e8",
+           "se-ABC-254/20261101T152313Z-software-engineer-observation-4a50887c",
+           "se-ABC-254/20261101T152313Z-software-engineer-observation-1b77dfbe",
+           "se-ABC-254/20261101T152325Z-software-engineer-observation-d672f92e",
+           "src/legal.ts", "src/legal.test.ts", "src/gameend.nfr.test.ts"],
+  "notes": [
+    { "kind": "decision", "confidence": "high on what was run (A1-A3, A5 MET as pre-registered); verdict UNRESOLVED because A4 is ungraded by the PREREG's D3 spread rule, not because anything failed", "bodyFile": "note-decision.md" },
+    { "kind": "observation", "confidence": "high for the numbers as measured; the reading is UNRESOLVED (two boards VOID under shared host load); the post-hoc clear-pair medians are INFO only, not a grade", "bodyFile": "note-timing.md" },
+    { "kind": "observation", "confidence": "high: G4 cmp byte-equal on 8 091 rows, A1 deep lane 48/48, QE fuzz 0/777 439, perft and G1 rows equal", "bodyFile": "note-identity.md" },
+    { "kind": "observation", "confidence": "high: every gate and 16 deep lanes run once at head under the lock; G8 on a shared host (load1 about 4, under the bar of 8)", "bodyFile": "note-gates.md" },
+    { "kind": "observation", "confidence": "high on the plant results as run; QE-254-b/c suggested rows are QE advice, BA/PM decides; deviations disclosed", "bodyFile": "note-findings.md" },
+    { "kind": "observation", "confidence": "high: commits and files as listed on grugops/qe-ABC-254 (an observation, not an artifact-ref: no §14-gate run to bind)", "bodyFile": "note-artifacts.md" }
+  ]
+}

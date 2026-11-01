@@ -1,0 +1,6 @@
+     × legalCaptures on kiwipete plays none of the pseudo-legal captures (all of them before ABC-254) 2ms
+     × legalCaptures runs generateCaptures once and generateMoves never 0ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/gameend.nfr.test.ts > ABC-206 — the search leaf's game-end check stays cheap (call counts, spied) > legalCaptures on kiwipete plays none of the pseudo-legal captures (all of them before ABC-254)
+ FAIL  src/gameend.nfr.test.ts > ABC-206 — the search leaf's game-end check stays cheap (call counts, spied) > legalCaptures runs generateCaptures once and generateMoves never
+      Tests  2 failed | 8 passed (10)

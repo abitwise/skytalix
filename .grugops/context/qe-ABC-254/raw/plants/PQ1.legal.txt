@@ -1,0 +1,6 @@
+     × legalMoves, legalCaptures and hasLegalMove equal the per-move-scan reference, p unchanged 13ms
+     × on ABC-206's roots to depth 1: four lists in order, hasLegalMove, p unchanged 12ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/legal.test.ts > ABC-235 cut 1 — the hoisted king square answers what the per-move scan answered > legalMoves, legalCaptures and hasLegalMove equal the per-move-scan reference, p unchanged
+ FAIL  src/legal.test.ts > ABC-254 A1 — the lazy filters equal the full make/test/unmake filters > on ABC-206's roots to depth 1: four lists in order, hasLegalMove, p unchanged
+      Tests  2 failed | 40 passed (42)

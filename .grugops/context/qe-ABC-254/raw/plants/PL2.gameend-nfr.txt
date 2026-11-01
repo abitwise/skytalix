@@ -1,0 +1,8 @@
+     × hasLegalMove on the start position plays NO move (it was exactly one before ABC-254) 4ms
+     × legalCaptures on kiwipete plays none of the pseudo-legal captures (all of them before ABC-254) 0ms
+     × legalCaptures runs generateCaptures once and generateMoves never 0ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/gameend.nfr.test.ts > ABC-206 — the search leaf's game-end check stays cheap (call counts, spied) > hasLegalMove on the start position plays NO move (it was exactly one before ABC-254)
+ FAIL  src/gameend.nfr.test.ts > ABC-206 — the search leaf's game-end check stays cheap (call counts, spied) > legalCaptures on kiwipete plays none of the pseudo-legal captures (all of them before ABC-254)
+ FAIL  src/gameend.nfr.test.ts > ABC-206 — the search leaf's game-end check stays cheap (call counts, spied) > legalCaptures runs generateCaptures once and generateMoves never
+      Tests  3 failed | 7 passed (10)

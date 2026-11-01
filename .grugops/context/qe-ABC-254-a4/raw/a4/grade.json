@@ -1,0 +1,59 @@
+{
+ "a4": "UNRESOLVED",
+ "owed": [],
+ "boards": {
+  "kiwipete": {
+   "from": "rerun",
+   "ratio": 1.12,
+   "ratioExact": 1.1200900985889466,
+   "B": 773819,
+   "H": 866747,
+   "spreadB": 3.8,
+   "spreadH": 3,
+   "status": "valid",
+   "allClear": true,
+   "foreignCoresMax": 0.61,
+   "tctlAfterMedian": 77.25
+  },
+  "position-6": {
+   "from": "rerun",
+   "ratio": 1.131,
+   "ratioExact": 1.1306745271254317,
+   "B": 773831,
+   "H": 874951,
+   "spreadB": 10.5,
+   "spreadH": 15.4,
+   "status": "VOID",
+   "allClear": false,
+   "foreignCoresMax": 2.38,
+   "tctlAfterMedian": 80.8125
+  },
+  "start": {
+   "from": "main",
+   "ratio": 1.105,
+   "ratioExact": 1.1050083169464235,
+   "B": 600581,
+   "H": 663647,
+   "spreadB": 3.6,
+   "spreadH": 3.6,
+   "status": "valid",
+   "allClear": false,
+   "foreignCoresMax": 1.41,
+   "tctlAfterMedian": 77.5625
+  },
+  "position-4": {
+   "from": "rerun",
+   "ratio": 1.11,
+   "ratioExact": 1.1095955503704475,
+   "B": 892299,
+   "H": 990091,
+   "spreadB": 5.9,
+   "spreadH": 6.7,
+   "status": "VOID",
+   "allClear": false,
+   "foreignCoresMax": 2.03,
+   "tctlAfterMedian": 80
+  }
+ },
+ "note": "thermal is read from the graded runs by analyse.mjs's tctlAfterMedianAll per file"
+}

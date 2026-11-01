@@ -214,15 +214,19 @@ describe("ABC-206 — the search leaf's game-end check stays cheap (call counts,
 
   // ABC-217 A2 (QE-206-b): the spies above see only cross-module calls, so a rebuild on
   // `legalMoves` inside legal.ts would pass them. `makeMove` is cross-module from there.
-  it("hasLegalMove on the start position plays EXACTLY one move", () => {
+  // ABC-254 (ADR-0003 (1-A)) tightened both bars below: out of check, a move that is not a king
+  // move, an en-passant capture or a pinned piece's move is accepted untested, and an unflagged
+  // tested move is played on the board bytes alone, so neither call plays a move with `makeMove`.
+  // A rebuild on the full filter (`fullLegalMoves`, `fullLegalCaptures`) still plays 20 and 8.
+  it("hasLegalMove on the start position plays NO move (it was exactly one before ABC-254)", () => {
     const position = parseFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
     vi.clearAllMocks();
 
     expect(hasLegalMove(position)).toBe(true);
-    expect(makeMove).toHaveBeenCalledTimes(1);
+    expect(makeMove).toHaveBeenCalledTimes(0);
   });
 
-  it("legalCaptures on kiwipete plays only the pseudo-legal captures", () => {
+  it("legalCaptures on kiwipete plays none of the pseudo-legal captures (all of them before ABC-254)", () => {
     const position = parseFen(
       "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1",
     );
@@ -233,7 +237,7 @@ describe("ABC-206 — the search leaf's game-end check stays cheap (call counts,
     vi.clearAllMocks();
 
     legalCaptures(position);
-    expect(makeMove).toHaveBeenCalledTimes(captures);
+    expect(makeMove).toHaveBeenCalledTimes(0);
   });
 
   /**

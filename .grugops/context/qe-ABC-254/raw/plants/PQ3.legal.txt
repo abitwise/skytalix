@@ -1,0 +1,18 @@
+     × never leaves the mover's own king in check, for every legal move on every perft position 3ms
+     × forbids the king from stepping onto an attacked square 1ms
+     × hasLegalMove(p) === legalMoves(p).length > 0, and p is unchanged 7ms
+     × legalMoves, legalCaptures and hasLegalMove equal the per-move-scan reference, p unchanged 12ms
+     × a king in check, a pinned piece, and a castle each answer as the reference does 2ms
+     × on ABC-206's roots to depth 1: four lists in order, hasLegalMove, p unchanged 8ms
+     × a king move into an attacked square is rejected, x-rayed through its own square too 1ms
+     × a castle through an attacked square is rejected 1ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 8 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/legal.test.ts > ABC-005 acceptance > never leaves the mover's own king in check, for every legal move on every perft position
+ FAIL  src/legal.test.ts > ABC-005 QE edge probes > forbids the king from stepping onto an attacked square
+ FAIL  src/legal.test.ts > ABC-206 A2 — the faster pieces equal what they replace > hasLegalMove(p) === legalMoves(p).length > 0, and p is unchanged
+ FAIL  src/legal.test.ts > ABC-235 cut 1 — the hoisted king square answers what the per-move scan answered > legalMoves, legalCaptures and hasLegalMove equal the per-move-scan reference, p unchanged
+ FAIL  src/legal.test.ts > ABC-235 cut 1 — the hoisted king square answers what the per-move scan answered > a king in check, a pinned piece, and a castle each answer as the reference does
+ FAIL  src/legal.test.ts > ABC-254 A1 — the lazy filters equal the full make/test/unmake filters > on ABC-206's roots to depth 1: four lists in order, hasLegalMove, p unchanged
+ FAIL  src/legal.test.ts > ABC-254 A2 — each fallback class answers as the full test does > a king move into an attacked square is rejected, x-rayed through its own square too
+ FAIL  src/legal.test.ts > ABC-254 A2 — each fallback class answers as the full test does > a castle through an attacked square is rejected
+      Tests  8 failed | 34 passed (42)

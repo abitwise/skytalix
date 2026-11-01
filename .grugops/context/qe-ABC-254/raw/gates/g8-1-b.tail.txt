@@ -1,0 +1,8 @@
+ ✓ src/engine.capacity.test.ts (1 test) 52ms
+ ✓ src/search.capacity.test.ts (1 test) 10ms
+
+ Test Files  63 passed (63)
+      Tests  2362 passed (2362)
+   Start at  16:55:14
+   Duration  9.26s (transform 0ms, setup 0ms, import 6.73s, tests 7.36s, environment 5ms)
+

@@ -1,0 +1,41 @@
+
+ RUN  v4.1.12 /home/olger/projects/public/skytalix/.claude/worktrees/se-ABC-254
+
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > startpos perft(1) = 20 2ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > startpos perft(2) = 400 1ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > startpos perft(3) = 8902 3ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > startpos perft(4) = 197281 19ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > startpos perft(5) = 4865609 [deep, PERFT_DEEP=1] 255ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > kiwipete perft(1) = 48 0ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > kiwipete perft(2) = 2039 0ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > kiwipete perft(3) = 97862 6ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > kiwipete perft(4) = 4085603 [deep, PERFT_DEEP=1] 206ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-3 perft(1) = 14 0ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-3 perft(2) = 191 0ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-3 perft(3) = 2812 0ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-3 perft(4) = 43238 3ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-3 perft(5) = 674624 [deep, PERFT_DEEP=1] 47ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-3 perft(6) = 11030083 [deep, PERFT_DEEP=1] 813ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-4 perft(1) = 6 0ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-4 perft(2) = 264 0ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-4 perft(3) = 9467 1ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-4 perft(4) = 422333 [deep, PERFT_DEEP=1] 20ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-4 perft(5) = 15833292 [deep, PERFT_DEEP=1] 718ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-5 perft(1) = 44 0ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-5 perft(2) = 1486 0ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-5 perft(3) = 62379 3ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-5 perft(4) = 2103487 [deep, PERFT_DEEP=1] 86ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-6 perft(1) = 46 0ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-6 perft(2) = 2079 0ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-6 perft(3) = 89890 3ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-6 perft(4) = 3894594 [deep, PERFT_DEEP=1] 147ms
+ ✓ src/perft.test.ts > ABC-006 — perftDivide > splits Kiwipete depth 3 into one entry per legal first move that sums to the total 5ms
+ ✓ src/perft.test.ts > ABC-006 — perftDivide > labels each move in long algebraic coordinate notation 1ms
+ ✓ src/perft.test.ts > ABC-006 — perftDivide > emits promotion labels carrying the promoted piece letter 0ms
+ ✓ src/perft.test.ts > perft base case > counts one node at depth 0 (the position itself) 0ms
+
+ Test Files  1 passed (1)
+      Tests  32 passed (32)
+   Start at  15:17:04
+   Duration  2.47s (transform 0ms, setup 0ms, import 33ms, tests 2.34s, environment 0ms)
+

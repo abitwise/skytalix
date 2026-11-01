@@ -1,0 +1,73 @@
+# qe-ABC-254-a4 pre-registration: the ALONE A4 re-read for ABC-254 (QE-254-a), using the method and rule of qe-ABC-254's PREREG `…6b25d0a8`, unchanged except for two items: the foreign-CPU start check and the busy-host detector the brief asks for
+
+QE/E2E, task `qe-ABC-254-a4`. Sealed and committed before any timed run of this hop. One run per reading: a written result
+is final. The only repeats are the ones named below. Grading is mechanical (`grade.mjs`). Nothing is graded by hand.
+
+## What this re-reads
+- **Only ABC-254 A4** (QE-254-a, the one open criterion). A1, A2, A3 and A5 stay MET from qe-ABC-254: verdict `…1c801504`, identity `…f777a50a`, gates `…aaf4675b`. They are carried, not re-run.
+- Ticket A4 as written:
+  - Boards: `kiwipete`, `position-6`, `start`. 5 interleaved fresh-process runs per board per build at 4 000 ms, ALONE, with ADR-0055 D3 validity.
+  - Bar: head ÷ base median nps **≥ 1.10 on at least two boards and ≥ 1.00 on the third**.
+  - In-check guard: `position-4` **≥ 0.97**.
+
+## Trees and host
+- **Base B** = `09d1f675` (the merge base). **Head H** = code `600d8de3`.
+- Both are `git archive <sha> src package.json` into the scratchpad (`qe-254-a4/trees/{B,H}`). `src/legal.ts` is the only production difference.
+- `main` has moved only `src/engine.test.ts` and `src/levels.test.ts` since `09d1f675`, so B is still main's production engine. `git merge-tree main grugops/ABC-254` is clean.
+- node v26.12.1, 24 cores (AMD Ryzen AI 9 HX 370), Linux.
+- Disclosed before this note: both trees were import-smoked (`chooseMove` and `parseFen` load; no search ran). `foreignHot` was called once to check that it reads. `grade.mjs` was checked against qe-ABC-254's own analysis file and reproduced its result: main RERUN-OWED on position-6, start and position-4; with the re-run, UNRESOLVED.
+
+## The lock
+- The whole timing read runs as one job, `flock …/scratchpad/host-test.lock bash run.sh …`, in the background. The lock is held from the first clear-host wait to the last run.
+- If qe-ABC-255 or any other holder has the lock first, the job waits for it. The lock is never bypassed.
+- No other process of this hop runs while the job holds the lock. The job is never suspended or signalled by this hop. Foreign processes are never killed.
+
+## Method: qe-ABC-254's, unchanged
+Scripts: `raw/qe-scripts/`, sha256 prefixes `a4.mjs ab613cf489873a86`, `host.mjs 5d59a3e4250faa90`, `probe.mjs a9742d21999959ae`, `analyse.mjs a67d2f38911acf6c`, `grade.mjs c290ab99a42f5448`, `run.sh 1ea0911bb1179574`. Changes to qe-ABC-254's scripts are marked `A4-RR`.
+
+- **A run:** one fresh process runs `chooseMove(parseFen(fen), { budgetMs: 4000 })` on the real clock (`probe.mjs`, byte-identical to qe-ABC-254's). nps = nodes / elapsedMs × 1000.
+- **Schedule:** 5 rounds. Each round runs pairs in this order: kiwipete, position-6, start, position-4. Base goes first in odd rounds and head first in even rounds. 40 runs.
+- **Recorded for each run:**
+  - load1 and Tctl, before and after the run;
+  - foreign cores = (host busy CPU-s from `/proc/stat` − the probe's own CPU-s) / wall;
+  - **(A4-RR)** the foreign processes above 20 % of one core over the run, from two `/proc/<pid>/stat` snapshots. This replaces `ps pcpu`, which reports a lifetime average. It is evidence only and does not enter any rule.
+- **Before every pair:** a foreign vitest is waited out by PID (`kill -0`), never past the deadline. A `cutechess-cli` is waited out by poll. Tctl ≥ 85 °C pauses the run until Tctl is ≤ 75 °C.
+- **A pair is clear** when, after it, no foreign vitest or `cutechess-cli` is present and both runs read foreign cores ≤ 1.0. A pair that is not clear is re-run once, at once. The second attempt is graded whatever it reads, and it is labelled.
+- **Busy-host detector, the fixed one:** a foreign vitest is a process matched by the bracketed `pgrep -f "[/]vitest"` whose `/proc/<pid>/comm` is `node` or `vitest`. Waiters do not count: `flock`, `sh`, `bash` and `npm exec`.
+- **Start precondition:** all of the following, polled every 15 s:
+  - 0 running foreign vitest;
+  - 0 `cutechess-cli`;
+  - **(A4-RR, the brief) no foreign process above 50 % of one core over a 3 s `/proc` sample** (the driver excluded);
+  - load1 ≤ 2.0;
+  - Tctl ≤ 60 °C.
+- **Wait cap:** the deadline is set at lock acquisition + 45 min (`CLEAR_DEADLINE`). If the cap is reached, the reading proceeds and is labelled **SHARED**. Waits on the lock itself are excluded from the cap and from the run-time budget.
+
+## Validity (ADR-0055 D3, exactly as qe-ABC-254 adapted it; the spread rule is NOT changed)
+- **(v1) values:** at equal completed depth, base and head choose the same move and score. A difference is a defect: STOP, no grade.
+- **(v2) spread:** per build and board, (max − min) / median nps, unrounded, must be ≤ 5 %. Spreads are reported to 0.1.
+  - Over 5 % on either build in the main schedule: that board's whole 5-round schedule is re-run once, right after the main schedule. It uses both builds and the same order rule, and the re-run replaces the main reading.
+  - Over 5 % again: that board is **VOID**. `run.sh` launches the re-run itself from `grade.mjs`'s `owed` list.
+- **(v3) thermal:** if the median after-run Tctl over the graded runs is above 85 °C, the reading is thermal-STOPPED (void).
+- **Mid-read load:** if the host turns busy mid-read, the spread rule decides. The pair re-run applies as above, and nothing else is added.
+
+## Bar and grade (`grade.mjs`)
+- Per board, the re-run's reading replaces the main one if a re-run exists.
+- **MET:** every board is valid, head ÷ base is ≥ 1.10 on at least two of kiwipete, position-6 and start and ≥ 1.00 on the third, and position-4 is ≥ 0.97.
+- **NOT MET:** every board is valid and the bar or the guard is missed.
+  - A missed bar means the ticket's miss rule applies: not merged, a `failed-attempt` note, and BA/PM closes the ticket as dropped.
+  - A missed in-check guard goes back to the Architect.
+- **UNRESOLVED:** any board VOID, or a thermal STOP. It is reported with the load evidence, and nothing is graded by hand.
+- **SHARED:** graded as above, but labelled. A ratio within 0.03 of its bar under SHARED → QE recommends another ALONE re-read.
+- **Reported as INFO, not graded:** G6 depths and the G5 max wall from these runs. G5 and G6 stay MET from qe-ABC-254.
+
+## QE-254-a's open question (noted only, not acted on)
+Can the 5 % spread rule be met on this shared host while other sessions run? This read applies the rule as written. The question stays with BA/PM and the Architect.
+
+## Final ABC-254 verdict rule (this hop)
+- **A4 MET:** **PASS_WITH_GAPS**. QE-254-b and QE-254-c (LOW, non-blocking) carry, along with the MET rows from qe-ABC-254 (`…1c801504`).
+- **A4 NOT MET (bar):** **FAIL**, with the ticket's miss rule above.
+- **A4 UNRESOLVED:** **UNRESOLVED**.
+
+## Run time
+- Expected: main schedule about 9 min, plus pair re-runs and board re-runs. That is about 15 min at most, inside the brief's 30 min excluding waits.
+- If the job's non-wait time reaches 30 min, the hop reports what it has. Anything not graded is UNKNOWN - verify.

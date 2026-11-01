@@ -1,0 +1,3 @@
+ Test Files  1 passed (1)
+      Tests  10 passed (10)
+   Duration  131ms (transform 0ms, setup 0ms, import 58ms, tests 12ms, environment 0ms)

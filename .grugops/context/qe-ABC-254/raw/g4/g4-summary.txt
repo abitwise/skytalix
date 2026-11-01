@@ -1,0 +1,42 @@
+G4 pool 2026-11-01T16:43:03Z -> 2026-11-01T16:53:03Z
+pool wall 600 s
+   7827 $SCRATCH/qe-254/out/g4/g4-B.jsonl
+    264 $SCRATCH/qe-254/out/g4/g4-sample-B.jsonl
+   8091 total
+1f29d4346517333236bb6d28faba4ef37fcd2708ead08a8eddca0c4f799f4320  $SCRATCH/qe-254/out/g4/g4-B.jsonl
+63173dde63fb246a044bee007a6ac9ede6087ae25ebed79c62e0a312523b96a5  $SCRATCH/qe-254/out/g4/g4-sample-B.jsonl
+   7827 $SCRATCH/qe-254/out/g4/g4-H.jsonl
+    264 $SCRATCH/qe-254/out/g4/g4-sample-H.jsonl
+   8091 total
+1f29d4346517333236bb6d28faba4ef37fcd2708ead08a8eddca0c4f799f4320  $SCRATCH/qe-254/out/g4/g4-H.jsonl
+63173dde63fb246a044bee007a6ac9ede6087ae25ebed79c62e0a312523b96a5  $SCRATCH/qe-254/out/g4/g4-sample-H.jsonl
+rc=0
+cmp: B == H (main and sample)
+pure:false rows: 0
+(False, 'chooseMove', 'b3') 301
+(False, 'chooseMove', 'b5') 301
+(False, 'chooseMoveWithoutNullMove', 'b3') 301
+(False, 'chooseMoveWithoutNullMove', 'b5') 301
+(False, 'chooseMoveWithoutPvsOrReductions', 'b3') 301
+(False, 'chooseMoveWithoutPvsOrReductions', 'b5') 301
+(False, 'chooseMoveWithoutQuiescenceEvasions', 'b3') 301
+(False, 'chooseMoveWithoutQuiescenceEvasions', 'b5') 301
+(False, 'chooseMoveWithoutQuietPromotions', 'b3') 301
+(False, 'chooseMoveWithoutQuietPromotions', 'b5') 301
+(False, 'chooseMoveWithoutReductions', 'b3') 301
+(False, 'chooseMoveWithoutReductions', 'b5') 301
+(False, 'search', 5) 301
+(False, 'searchWithoutKillers', 5) 301
+(False, 'searchWithoutNullMove', 5) 301
+(False, 'searchWithoutOrdering', 5) 301
+(False, 'searchWithoutPruning', 2) 301
+(False, 'searchWithoutPruningOrQuiescence', 2) 301
+(False, 'searchWithoutPvsOrReductions', 5) 301
+(False, 'searchWithoutQuiescence', 5) 301
+(False, 'searchWithoutQuiescenceEvasions', 5) 301
+(False, 'searchWithoutQuietPromotions', 5) 301
+(False, 'searchWithoutReductions', 5) 301
+(False, 'searchWithoutTable', 5) 301
+(True, 'searchWithoutPruning', 5) 132
+(True, 'searchWithoutPruningOrQuiescence', 5) 132
+choose depths {3: 1307, 4: 586, 5: 238, 2: 988, 1: 493} rows with clock reads 3612 lists rows 301 rows where capsQ != caps (quiet promos appended) 6 total nodes 2200254007

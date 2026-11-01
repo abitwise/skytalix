@@ -1,0 +1,18 @@
+{
+  "refs": ["qe-ABC-254-a4v2", "ABC-254", "QE-254-a", "QE-254-b", "QE-254-c", "QE-254-d", "EPIC-010", "ADR-0003", "ADR-0055", "NFR-005", "NFR-004",
+           "grugops/ABC-254", "600d8de3", "fe53dbda", "09d1f675", "grugops/qe-ABC-254-a4v2", "af26e437", "acc092ca", "src/legal.ts",
+           "qe-ABC-254-a4v2/20261101T185729Z-qe-e2e-decision-a1136cf6",
+           "arch-d3-under-load/20261101T181555Z-architect-design-decision-6f646a39",
+           "qe-ABC-254/20261101T172756Z-qe-e2e-decision-1c801504",
+           "qe-ABC-254/20261101T172756Z-qe-e2e-observation-f777a50a",
+           "qe-ABC-254/20261101T172756Z-qe-e2e-observation-aaf4675b",
+           "qe-ABC-254-a4/20261101T180821Z-qe-e2e-decision-ab3062eb",
+           "qe-ABC-254-a4/20261101T180821Z-qe-e2e-observation-42b83a6d"],
+  "notes": [
+    { "kind": "observation", "confidence": "high for the numbers as measured; A4 MET by the pre-registered D3-V2 rule (grade.mjs), no hand grade", "bodyFile": "note-timing.md" },
+    { "kind": "observation", "confidence": "high for the lock, precondition and per-run readings; one disclosed cat during the job", "bodyFile": "note-host.md" },
+    { "kind": "observation", "confidence": "high: gaps named from this hop's and qe-ABC-254's readings", "bodyFile": "note-gaps.md" },
+    { "kind": "artifact-ref", "confidence": "high: paths, commits and hashes as recorded", "bodyFile": "note-artifacts.md" },
+    { "kind": "decision", "confidence": "high: verdict from grade.mjs under the sealed PREREG; A1-A3, A5 carried from qe-ABC-254", "bodyFile": "note-decision.md" }
+  ]
+}

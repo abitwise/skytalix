@@ -1,0 +1,7 @@
+MISSED	mate-in-3	b3c4	d5	n20513	mate in 3, seed 24: black Q+N against P
+MISSED	mate-in-3	d8h8	d5	n20556	mate in 3, seed 234: white Q+R against P
+MISSED	mate-in-3	a2h2	d5	n20522	mate in 3, seed 288: white Q+B against a bare king
+MISSED	mate-in-3	f1f5	d5	n20539	mate in 3, seed 580: white Q+B against a bare king
+PUZZLES shipped: solved 54/58, baseline 54/58, budget 25 step 1, wall 1.85 s
+ ✓ src/puzzle-suite.test.ts > the gating run [deep, PUZZLE_DEEP=1] > ABC-131 A6 — every recorded unsolved name is a PUZZLES row, and solved + |unsolved| = total 0ms
+      Tests  18 passed (18)

@@ -1,0 +1,12 @@
+{
+  "refs": ["qe-ABC-254", "ABC-254", "EPIC-010", "ADR-0003", "ADR-0055", "ADR-0026", "NFR-005", "NFR-004", "NFR-009", "NFR-008", "NFR-001",
+           "grugops/ABC-254", "600d8de3", "fe53dbda", "09d1f675", "grugops/qe-ABC-254", "src/legal.ts", "src/legal.test.ts", "src/gameend.nfr.test.ts",
+           "se-ABC-254/20261101T152313Z-software-engineer-decision-cb525705",
+           "se-ABC-254/20261101T152313Z-software-engineer-decision-7f5312e8",
+           "se-ABC-254/20261101T152313Z-software-engineer-observation-4a50887c",
+           "se-ABC-254/20261101T152313Z-software-engineer-observation-1b77dfbe",
+           "se-ABC-254/20261101T152325Z-software-engineer-observation-d672f92e"],
+  "notes": [
+    { "kind": "decision", "confidence": "high: written and sealed before any timed, G4 or test run of this hop", "bodyFile": "note-prereg.md" }
+  ]
+}

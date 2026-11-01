@@ -1,0 +1,12 @@
+PL1 gameend.nfr rc=1
+PL2 gameend.nfr rc=1
+PL3a gameend.nfr rc=0
+PL3a npm test rc=0
+PL3b gameend.nfr rc=1
+PQ1 legal.test.ts rc=1
+PQ1 fuzz rc=0 mismatches=428 mutations 0
+PQ2 legal.test.ts rc=0
+PQ2 fuzz rc=0 mismatches=988 mutations 0
+PQ3 legal.test.ts rc=1
+PQ3 fuzz rc=0 mismatches=26673 mutations 0
+FP legal.ts restored == worktree
