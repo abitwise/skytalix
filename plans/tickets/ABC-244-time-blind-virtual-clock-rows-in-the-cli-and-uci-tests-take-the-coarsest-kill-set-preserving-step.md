@@ -1,8 +1,9 @@
 ---
 id: ABC-244
 title: "Time-blind virtual-clock rows in `src/cli.test.ts` and `src/uci-session.test.ts` take the coarsest step that keeps QE's caught-mutant set (`ADR-0046` § Addendum 2026-10-30, tranche 1; test-only)"
-status: ready
-column: Backlog
+status: done
+column: Done
+closed: "2026-10-30, merged to main at 24b22339; QE PASS (qe-ABC-244, 4fe9bfe1); Security/NFR PASS (secnfr-ABC-244, 9087cb39); test-only, UAT waived"
 size: S
 priority: P1
 epic: EPIC-010
@@ -10,6 +11,41 @@ feature: —
 ---
 
 # ABC-244: give the time-blind `ABC-230` / `ABC-241` rows the coarsest kill-set-preserving step, on both surfaces at once. Two test files
+
+> **CLOSED, Done, folded 2026-11-01 by BA/PM** (task `bapm-page-closes`, records only, at `main` `55fbc90e`; nothing
+> run, because `qe-ABC-246` holds the host). The page read `ready` / `Backlog` after the merge; this fold closes it.
+> QE's verdict is **PASS** (`qe-ABC-244` `…4fe9bfe1`, PREREG and frozen list `5b4961e1` before any head run) at
+> `25282ad4`. Security/NFR's gate is **PASS** (`secnfr-ABC-244` `…9087cb39`; security not triggered). It was **merged
+> at `24b22339`** on 2026-10-30. Two `*.test.ts` files and 0 production lines, so **UAT is waived**; the QE verdict
+> signs (Test note 6).
+>
+> - **A6–A9 MET, A10 green, A3–A5 MET on QE's spot check.** A1–A2 are the SE's build note, re-confirmed by A6. U1
+>   took step 1 000 on both surfaces; U2 kept 100 (it loses mutants at 1 000); no census unit joined. A6: 24 frozen
+>   mutants, 0 U1 rows differ base to head. A7: 1 014 507 → 223 432 nodes. A8 `N8-LANE` −1.145 s CPU. A9 `G8` H
+>   9.25 s, B 9.69 s: `NFR-008` MET and the 9.4 s design target MET, so tranche 2 did not fire here.
+> - **QE's, Security/NFR's and the SE's gaps, dispositioned** (`qe-ABC-244` `…98d5d2e4`, `secnfr-ABC-244` `…619ead26`):
+>   - **QE-244-a** (LOW; SE-244-a widened: at step 1 000 CLI `ABC-241` A4 and A7 lose F230, QSEAMRAW, QPRIOROFF, QMATCH3,
+>     QTRIM1). **Carried, with two named carriers.** (1) BA/PM at every cut, through the R4 DoR line in § BA/PM ruling:
+>     a ticket that moves those rows' step, cuts `LEVELS[5].budgetMs`, or raises `NODES_PER_CLOCK_CHECK` re-runs A6 on
+>     CLI `ABC-241` A4 and A7 with at least those five mutants. (2) Tranche 2, `ABC-248`: its § Out of scope already
+>     fences the `ABC-241` U2 rows out ("the ep guard's only killers"), so the carry holds there with no edit.
+>   - **QE-244-b** (INFO; SE-244-b). **Closed.** CLI `ABC-230` A3 kills none of the 24, as `qe-ABC-230` recorded; parity
+>     holds on it vacuously. The other row SE-244-b named does discriminate on QE's list.
+>   - **QE-244-c** (INFO: 9 mutants survive all 18 rows at both trees). **Closed for this ticket**, which asked for
+>     parity, not more kills. Four of the nine are killed elsewhere on record: QM1, QM2 and QM4 turned `npm test` red
+>     at `qe-ABC-241`, and QM3 is killed by `ABC-243`'s A6 row (`qe-ABC-243` `…2d790e40`). Whether any other row kills
+>     the other five (S241M5, QPARITY, QCLOCK, QPLY4, QPATHOFF) stays `UNKNOWN - verify`. A whole-lane read of them is
+>     proposed in `bapm-page-closes`' Result, as a read in a later QE hop, not a ticket.
+>   - **QE-244-d** (INFO: 9.25 s sits 0.15 s under the target, inside window drift). **Closed, overtaken.** The standing
+>     trigger fired later: `qe-ABC-245` read H 9.82 s, and tranche 2 is cut as `ABC-248`.
+>   - **QE-244-e** (twin near the 1.5 % edge), **QE-244-f** (the U1 comment stays true). **Closed**, no action.
+>   - **SE-244-c, SE-244-d** (saving and informal wall, `UNKNOWN - verify`). **Closed:** A8 and A9 read them.
+>     **SE-244-e** (two reconstructed mutants). **Closed:** QE adopted the SE's 9 into the frozen 24.
+>   - **Security/NFR's carries.** The `NFR-008` state and the two-file set's first `F` (0.250 s CPU) are in
+>     `plans/nfr-catalog.md`. **Closed.** QE-244-a is the carry above.
+> - **§ Dependencies' records item is met:** `ADR-0046`'s status block records this page's word (§ Addendum: BA/PM's word
+>   given, `arch-qe242a-ruling`, 2026-10-31).
+> - No follow-up ticket cut here. Notes: `.grugops/context/bapm-page-closes/notes/`.
 
 > **Cut 2026-10-30 by BA/PM** (task `bapm-g8-headroom-cut`, records only, at `main` `161e940d`; `src/`, `tools/`,
 > `data/`, the board and the ADRs untouched). It answers `QE-229-a` (MEDIUM, `qe-ABC-229` `…0b7fd4f6`): `G8` read
