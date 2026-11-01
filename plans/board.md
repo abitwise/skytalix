@@ -1,3 +1,4 @@
+_Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — **ABC-238 stopped on its pre-registered falsifier F4** (node saving 0.4–0.6 % vs ≥ 5 % needed; deeper entries rarely exist with always-replace and a per-search table). Not merged; Blocked. → `arch-phase1-replan`: measure probe statistics for T1 alone vs T1+T2 vs T1+T2+T3 on the ABC-238 branch BEFORE any new build._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — `bapm-phase1-wording` merged: ABC-238 page aligned to ADR-0058 (10/10, In Development); ABC-237 aligned to the T2 amendment (9/10, holds until ABC-238 merges or closes); stale lane figures fixed; ABC-253 front matter dropped. Waiting on owner: accept ADR-0058, accept ADR-0025 T2, NEUTRAL-bar question, ADR-0057 OQ-1..6. Running: se-ABC-238._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — `arch-epic011-phase1` merged: **ADR-0058 PROPOSED** (T1 deeper cutoffs, behind test-only off doors; ABC-081 A1 identity binds older doors) and **ADR-0025 T2 amendment PROPOSED** (depth-preferred replacement). Owner asked to accept both (+ NEUTRAL-bar question for T2/T4). ABC-238 pulled → `se-ABC-238` (build only; read/merge wait for acceptance). `bapm-phase1-wording` queued._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — `arch-adr0057-fix` merged: ADR-0057 corrected (threads effort L 32–65 h; key split inside probe/store keeps signatures; fallback 42–85 h); ADR-0056 lane figures refreshed. Owed (LOW, BA/PM): stale lane figures EPIC-010 l.79–83, EPIC-011 l.292–296; ABC-253 front matter. Owner OQ-1..6 pending. Running: arch-epic011-phase1._
@@ -1199,7 +1200,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   one hop at pull, when it checks `Ready for Dev`'s exit at that moment; the row records the pull.
 
   HEADING FORMAT (spec §6.1): each column is an H2 heading carrying its live/limit WIP count,
-  e.g. `## In Development (WIP 1/3)` — the left number is how many tickets are in the column
+  e.g. `## In Development (WIP 0/3)` — the left number is how many tickets are in the column
   now, the right number is the limit from config. Unlimited columns read `(WIP unlimited)`;
   Blocked is visible and time-tracked (no WIP limit) and reads `(visible, time-tracked)`.
   INVARIANT: the column H2 headings and the rows of the `## Columns` table are the same 13 names in the
@@ -1209,7 +1210,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 1/3)
+    ## In Development (WIP 0/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
     ## In Review (WIP 0/3)
@@ -1336,8 +1337,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-238] A deeper stored entry may cut off a shallower search (size: M, priority: P2, DoR 9/10; milestone 2; after ABC-237; waits ADR) **→ EPIC-011 Phase 1, first (T1), P3 → P2 2026-11-01** **2026-11-01: design met — ADR-0058 PROPOSED (arch-epic011-phase1 …2c2c1df6); DoR 10/10 under the reading-(b) precedent (build may start; read and merge wait for owner acceptance of ADR-0058) → pulled → `se-ABC-238`**
+## In Development (WIP 0/3)
 
 
 
@@ -1720,6 +1720,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [ABC-142] `npm test` keeps the failing test's name on disk when the console is truncated  (BA/PM, XS, P2, since: 2026-10-10, DoR 10/10; cut from QE-141-a + QE-093-e, two unnamed one-test flakes) **2026-10-10: cut → Ready → Ready for Dev → pulled → In Development (pass-through); build `ticket-to-pr-ABC-142`; zero `src/` expected.** **2026-10-10: engineer STOPPED pre-code — premise stale: `src/cli.test.ts:1665–1686` (ABC-042 A10) pins `scripts.test`; A5 forbade the one test line. Orchestrator routes option 1 (update the pin, zero production lines) → BA/PM amend `bapm-amend-abc142-2026-10-10`, then the build resumes.** **2026-10-10: A5 amended (merged `a559ca34`, DoR 10/10; new A6 keeps the pin exact) → build resumed.** **2026-10-10: BUILT `41abc389`/`ab8d0088`: A1–A6 met; 53/1680; `.test-results/last-run.json` names the failing test even through `| tail -3`. One deviation: vitest adds one console line (`JSON report written to …`) — Orchestrator reads it as acceptable IF no console consumer breaks (QE to verify) → In Review, QE `qe-ABC-142`.** **2026-10-10: QE PASS_WITH_GAPS (`8b0685de`; no console consumer breaks — the extra `JSON report written to …` line is ACCEPTED by the Orchestrator) → merged `addbc328` → Done (UAT WAIVED: test-only `src/`). Follow-ups next session (BA/PM): QE-142-a MEDIUM (unhandled error → exit 1 but file says success), QE-142-b/c LOW.**
 
 ## Blocked (visible, time-tracked)
+- [ABC-238] A deeper stored entry may cut off a shallower search (size: M, priority: P2, DoR 9/10; milestone 2; after ABC-237; waits ADR) **→ EPIC-011 Phase 1, first (T1), P3 → P2 2026-11-01** **2026-11-01: design met — ADR-0058 PROPOSED (arch-epic011-phase1 …2c2c1df6); DoR 10/10 under the reading-(b) precedent (build may start; read and merge wait for owner acceptance of ADR-0058) → pulled → `se-ABC-238`** **2026-11-01 se-ABC-238 STOP on F4 (…db17e44b): depth-8 nodes 0.9939× / 0.9958× vs bar ≤ 0.95×; deeper entries settle only 0.18–0.21 % of probes (always-replace, per-search table). Every other row met (A1/G4 0 diffs, drift max 3/10 cp, 0 mate flips, gates green). NOT merged; branch kept. → Blocked: `arch-phase1-replan` (combined T1+T2(+T3) premise, measured before building).**
 
 
 _2026-09-24: ONE ticket blocked — `ABC-074` (no non-M3 machine). `ABC-079` left Blocked on its oracle ruling (`b324cb6`). The line below is the prior state, kept for the record._
