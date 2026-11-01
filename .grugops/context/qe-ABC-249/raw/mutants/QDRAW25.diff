@@ -1,0 +1,17 @@
+--- /home/olger/projects/public/skytalix/.claude/worktrees/qe-ABC-249/src/engine.ts	2026-11-01 15:28:27.954726098 +0000
++++ QDRAW25/src/engine.ts	2026-11-01 15:33:30.138294831 +0000
+@@ -386,12 +386,8 @@
+   const keys = budget.keys;
+   const key = keys[ply] as bigint;
+   // `ABC-230`: a repetition is one occurrence on the path or two before the root (`ADR-0054`).
+-  if (
+-    repeatsInPath(keys, ply, position.halfmoveClock) ||
+-    repeatsBeforeRoot(budget.prior, key, ply, position.halfmoveClock)
+-  ) {
+-    return 0;
+-  }
++  if (repeatsInPath(keys, ply, position.halfmoveClock)) return 0;
++  if (repeatsBeforeRoot(budget.prior, key, ply, position.halfmoveClock)) return 25;
+   if (remaining <= 0 || ply >= KEY_ARRAY_CAPACITY) {
+     return leafScore(position, ply, alpha, beta, budget);
+   }

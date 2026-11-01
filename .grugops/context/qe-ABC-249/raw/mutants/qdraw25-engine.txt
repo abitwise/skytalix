@@ -1,0 +1,85 @@
+
+ RUN  v4.1.12 /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-249/QDRAW25
+
+ ❯ src/engine.test.ts (65 tests | 6 failed) 558ms
+     × KQ v K, Black to move: d8e8 at 0 with the prior keys, base's move without them 3ms
+     × K v KQ, White to move: d1e1 at 0 with the prior keys, base's move without them 1ms
+     × KR v K, Black to move: d8e8 at 0 with the prior keys, base's move without them 1ms
+     × K v KR, White to move: d1e1 at 0 with the prior keys, base's move without them 0ms
+     × A5: a prior key older than the root clock is never matched 3ms
+     × A5: the search reads at most the last 100 prior keys, whatever it is handed 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/engine.test.ts > ABC-230 A1 — a third occurrence scores exactly 0 at the root; base scores it otherwise > KQ v K, Black to move: d8e8 at 0 with the prior keys, base's move without them
+ FAIL  src/engine.test.ts > ABC-230 A1 — a third occurrence scores exactly 0 at the root; base scores it otherwise > K v KQ, White to move: d1e1 at 0 with the prior keys, base's move without them
+ FAIL  src/engine.test.ts > ABC-230 A1 — a third occurrence scores exactly 0 at the root; base scores it otherwise > KR v K, Black to move: d8e8 at 0 with the prior keys, base's move without them
+ FAIL  src/engine.test.ts > ABC-230 A1 — a third occurrence scores exactly 0 at the root; base scores it otherwise > K v KR, White to move: d1e1 at 0 with the prior keys, base's move without them
+AssertionError: expected -25 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ -25
+
+ ❯ src/engine.test.ts:1555:31
+    1553|       expect(toFen(game.position)).toBe(root);
+    1554|       expect(withKeys && label(withKeys.move)).toBe(fixture.repeat);
+    1555|       expect(withKeys?.score).toBe(0);
+       |                               ^
+    1556|
+    1557|       const base = chooseMove(parseFen(root), fixedDepth(4));
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  src/engine.test.ts > ABC-230 A9 and A5 — the clock and the 100-key cap bound what the search reads > A5: a prior key older than the root clock is never matched
+AssertionError: expected { move: 'd8e8', score: -25 } to deeply equal { move: 'd8e8', score: +0 }
+
+- Expected
++ Received
+
+  {
+    "move": "d8e8",
+-   "score": 0,
++   "score": -25,
+  }
+
+ ❯ src/engine.test.ts:1626:79
+    1624|       priorKeys: prior,
+    1625|     });
+    1626|     expect(inWindow && { move: label(inWindow.move), score: inWindow.s…
+       |                                                                               ^
+    1627|       move: fixture.repeat,
+    1628|       score: 0,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  src/engine.test.ts > ABC-230 A9 and A5 — the clock and the 100-key cap bound what the search reads > A5: the search reads at most the last 100 prior keys, whatever it is handed
+AssertionError: expected { move: 'd8e8', score: -25 } to deeply equal { move: 'd8e8', score: +0 }
+
+- Expected
++ Received
+
+  {
+    "move": "d8e8",
+-   "score": 0,
++   "score": -25,
+  }
+
+ ❯ src/engine.test.ts:1645:73
+    1643|       priorKeys: [...prior, ...filler(92)],
+    1644|     });
+    1645|     expect(inside && { move: label(inside.move), score: inside.score }…
+       |                                                                         ^
+    1646|       move: fixture.repeat,
+    1647|       score: 0,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  6 failed | 59 passed (65)
+   Start at  16:13:25
+   Duration  830ms (transform 0ms, setup 0ms, import 191ms, tests 558ms, environment 0ms)
+

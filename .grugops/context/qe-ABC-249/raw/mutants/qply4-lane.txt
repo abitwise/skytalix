@@ -1,0 +1,191 @@
+
+> skytalix@0.0.0 test
+> NODE_OPTIONS=--max-old-space-size=128 node tools/grugops/run-bounded.js 60000 vitest run --reporter=default --reporter=./tools/grugops/result-file-reporter.js --outputFile.json=.test-results/last-run.json
+
+
+ RUN  v4.1.12 /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-249/QPLY4
+
+ ❯ src/engine.test.ts (65 tests | 1 failed) 591ms
+     ✓ returns a legal move at a 50 ms budget in the middlegame position 1ms
+     ✓ stops within 2x the budget on the clock it was given 0ms
+     ✓ visits only a bounded number of nodes past the deadline — the in-recursion check 0ms
+     ✓ aborts INSIDE depth 3 — the run really did enter the iteration it discards 1ms
+     ✓ returns the completed depth-2 move, which is NOT the depth-3 move 1ms
+     ✓ agrees with search() on move and score across the mate/stalemate endgames 19ms
+     ✓ reads the delivered module — src/engine.ts, not nothing 0ms
+     ✓ exports the two entry points and the two named values, and nothing that takes a depth 0ms
+     ✓ takes a TIME budget, in milliseconds, and requires it 0ms
+     ✓ carries no depth default and no depth constant 1ms
+     ✓ is driven by the clock and not by a ceiling — the deepening loop has no constant upper bound 0ms
+     ✓ goes DEEPER than any small hard-coded ceiling would allow — the behavioural half 6ms
+     ✓ names the ceiling as an exported constant 0ms
+     ✓ stops at start + HARD_CEILING_MS when handed twice that budget 0ms
+     ✓ makes any budget above the ceiling indistinguishable from the ceiling itself 1ms
+     ✓ terminates on an infinite budget — the module's only unbounded path, closed 0ms
+     ✓ leaves every degenerate budget exactly as it was — Math.min, not an if 0ms
+     ✓ never goes shallower as the budget grows 0ms
+     ✓ actually goes deeper somewhere across the three budgets 0ms
+     ✓ is assignable to EngineSeam and answers with a Promise<Move> 0ms
+     ✓ plays a scripted game to end-of-input with the loop driving it 2ms
+     ✓ covers 200+ positions — the denominator, asserted rather than trusted 0ms
+     ✓ returns a legal move in every one of them — never null, never a throw 0ms
+     ✓ leaves every searched position byte-identical, aborted iteration or not 0ms
+     ✓ is identical 2/2 on 15 positions, each completing root depth >= 2 — 30/30, 15/15 11ms
+     ✓ (i′) the shipped construction passes no clock, and its default level is the shipped engine 1ms
+     ✓ (ii) src/cli.ts does not import the virtual-clock module, directly or transitively 1ms
+     ✓ keeps each clock's state in its own instance — a second clock starts at 0 0ms
+     ✓ keeps each clock's own step — two live clocks at steps 1 and 0.5, read interleaved (ABC-125) 0ms
+     ✓ throws on a step that is not finite or not greater than 0 — 5/5 0ms
+     ✓ reads exactly 0, 0.5, 1 at a step of 0.5 0ms
+     ✓ reads exactly 0, 1, 2 at a step of 1 0ms
+     ✓ carries no real-clock read and no entropy source 0ms
+     ✓ is a real stop: unlimited, the same budget completes depth 6 or more 5ms
+     ✓ reports depth 3 at maxDepth 3, with search(position, 3)'s move and score 1ms
+     ✓ reports depth 1 and a legal move at maxDepth 1 0ms
+     ✓ stops within one clock-check interval of the node budget 9ms
+     ✓ plays search(position, d)'s move and score at the reported depth d — the abort is discarded 20ms
+     ✓ still completes the first iteration at maxNodes 1: non-null, legal, depth 1 2ms
+     ✓ returns identical move, score, depth, nodes and elapsedMs on perft root startpos 21ms
+     ✓ returns identical move, score, depth, nodes and elapsedMs on perft root kiwipete 24ms
+     ✓ returns identical move, score, depth, nodes and elapsedMs on perft root position-3 19ms
+     ✓ returns identical move, score, depth, nodes and elapsedMs on perft root position-4 20ms
+     ✓ returns identical move, score, depth, nodes and elapsedMs on perft root position-5 20ms
+     ✓ returns identical move, score, depth, nodes and elapsedMs on perft root position-6 22ms
+     ✓ on an infinite budget, maxDepth 1000 returns within the same consultation count 89ms
+     ✓ at budgetMs 5, maxDepth 50 returns the same depth and move as no maxDepth 8ms
+     ✓ keeps the last min(clock, 100) keys before the root, oldest first 0ms
+     ✓ is empty at clock 0 and for a lone root 0ms
+     ✓ A5: never more than 100 keys from a 600-key list, the root's own key excluded 0ms
+     ✓ does not change the list it is handed 0ms
+     ✓ KQ v K, Black to move: d8e8 at 0 with the prior keys, base's move without them 3ms
+     ✓ K v KQ, White to move: d1e1 at 0 with the prior keys, base's move without them 2ms
+     ✓ KR v K, Black to move: d8e8 at 0 with the prior keys, base's move without them 1ms
+     ✓ K v KR, White to move: d1e1 at 0 with the prior keys, base's move without them 1ms
+     ✓ KQ v K, Black to move: d8e8 would stand a second time; node-equal to base 2ms
+     ✓ K v KQ, White to move: d1e1 would stand a second time; node-equal to base 2ms
+     ✓ A9 (probe H4): untrimmed prior keys at root clock 0 are node-equal to base 3ms
+     ✓ A9: on the A1 fixtures with the root clock set to 0, the same keys are node-equal to base 6ms
+     ✓ A5: a prior key older than the root clock is never matched 2ms
+     ✓ A5: the search reads at most the last 100 prior keys, whatever it is handed 2ms
+     ✓ the engine reads the caller's list and does not change it 1ms
+     ✓ A4: an empty list is node-equal to an absent one over the endgames and the thirty 240ms
+     ✓ the three test-only doors ignore prior keys: node-equal with and without them 9ms
+     × Qe5+ at ply 4 stood twice before the root: Ke1 at 404 with the keys, Kg1 at 497 without 4ms
+ ✓ src/pgn.test.ts (24 tests) 36ms
+ ✓ tools/grugops/qe-hop-integrity.test.ts (32 tests) 292ms
+ ✓ src/uci-session.test.ts (230 tests) 1528ms
+ ✓ src/cli.test.ts (109 tests) 643ms
+stdout | src/levels.test.ts > A9 — different seeds actually differ > ≥ 5 seeds over the same ≥ 30 positions give ≥ 2 distinct blunder-decision sequences
+A9: 5 distinct sequences over 5 seeds
+
+ ✓ src/levels.test.ts (46 tests) 152ms
+ ✓ src/search.null-move.test.ts (38 tests) 1064ms
+ ✓ src/legal.test.ts (36 tests) 139ms
+ ✓ src/book.test.ts (35 tests) 111ms
+ ✓ src/search.ordering.test.ts (29 tests) 140ms
+ ✓ src/perft.test.ts (24 tests) 124ms
+ ✓ src/search.test.ts (28 tests) 102ms
+ ✓ src/zobrist.test.ts (32 tests) 127ms
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap reading, level 180x
+A5 kiwipete depth 1: 878 nodes with quiescence / 49 without = 17.92x
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap reading, level 10x
+A5 position-6 depth 1: 421 nodes with quiescence / 47 without = 8.96x
+
+ ✓ src/quiescence.test.ts (98 tests) 102ms
+ ✓ src/transposition.test.ts (25 tests) 91ms
+ ✓ src/san.test.ts (22 tests) 89ms
+ ✓ src/history-pane.nfr.test.ts (12 tests) 88ms
+ ✓ src/render-seam.test.ts (28 tests) 56ms
+stdout | src/search.pvs-lmr.test.ts > A5 — search() visits fewer nodes than searchWithoutPvsOrReductions at depth 4 > position-3 at depth 4 — the default lane's standing guard
+ABC-121 A5 position-3 d4: 1099 / 1377 = 79.8%
+
+ ✓ src/search.pvs-lmr.test.ts (20 tests) 63ms
+ ✓ src/history-pane.test.ts (26 tests) 52ms
+ ✓ src/turn-loop.nfr.test.ts (4 tests) 55ms
+ ✓ src/turn-loop.test.ts (64 tests) 47ms
+ ✓ src/san.qualifier.hardening.test.ts (20 tests) 54ms
+ ✓ src/moves.enpassant.hardening.test.ts (120 tests) 33ms
+ ✓ src/engine.capacity.test.ts (1 test) 50ms
+ ✓ src/command-input.test.ts (188 tests) 48ms
+ ✓ src/moves.castling.hardening.test.ts (134 tests) 38ms
+ ✓ src/evaluate.king-mobility.test.ts (9 tests) 39ms
+ ✓ src/puzzle-suite.test.ts (12 tests) 33ms
+ ✓ src/gameend.test.ts (57 tests) 30ms
+ ✓ src/render.test.ts (30 tests) 28ms
+ ✓ src/frame.test.ts (34 tests) 32ms
+ ✓ src/book-engine.test.ts (5 tests) 30ms
+ ✓ src/evaluate.pawns.test.ts (43 tests) 31ms
+ ✓ src/san.parse.test.ts (30 tests) 13ms
+ ✓ src/startup-questions.test.ts (26 tests) 15ms
+ ✓ src/history.test.ts (17 tests) 26ms
+ ✓ src/rejection.test.ts (53 tests) 19ms
+ ✓ src/evaluate.test.ts (36 tests) 18ms
+stdout | tools/opening-book/book.test.ts > the delivered artifact (data/opening-book/book.json) > A2 — every book move is legal in its keyed position, over every entry
+ABC-093 A2: examined 5390 entries of 5390; 5825 moves; 0 illegal
+
+stdout | tools/opening-book/book.test.ts > the delivered artifact (data/opening-book/book.json) > A3 — the longest line is >= 8 plies and never deeper than maxPly (<= 12)
+ABC-093 A3: longest book line 12 plies; maxPly 12
+
+stdout | tools/opening-book/book.test.ts > the delivered artifact (data/opening-book/book.json) > A4 — after 1. e4 the book carries >= 3 distinct replies with non-zero weight
+ABC-093 A4: 19 weighted replies to 1. e4
+
+stdout | tools/opening-book/book.test.ts > the delivered artifact (data/opening-book/book.json) > A5 — NFR-006: the artifact on disk is <= 1,048,576 bytes
+ABC-093 A5: 356526 bytes of 1048576 (34.0%)
+
+ ✓ tools/opening-book/book.test.ts (19 tests) 17ms
+ ✓ src/line-input.test.ts (30 tests) 21ms
+ ✓ src/moves.test.ts (37 tests) 17ms
+ ✓ src/coordinate-move.test.ts (45 tests) 8ms
+ ✓ src/gameend.nfr.test.ts (10 tests) 22ms
+ ✓ src/moves.enpassant.test.ts (58 tests) 17ms
+ ✓ src/move-input.test.ts (50 tests) 17ms
+ ✓ src/search.capacity.test.ts (1 test) 12ms
+ ✓ src/status-panel.nfr.test.ts (6 tests) 20ms
+ ✓ src/frame.overflow-bound.test.ts (25 tests) 11ms
+ ✓ src/search.qe.test.ts (8 tests) 18ms
+ ✓ src/moves.castling.test.ts (33 tests) 7ms
+ ✓ src/apply.test.ts (24 tests) 9ms
+ ✓ src/status-panel.test.ts (29 tests) 14ms
+ ✓ src/cli.real-engine.test.ts (1 test) 16ms
+ ✓ src/fen.test.ts (82 tests) 10ms
+ ✓ src/ladder.test.ts (13 tests) 10ms
+ ✓ src/glyph-mode.test.ts (21 tests) 4ms
+ ✓ src/result-screen.test.ts (13 tests) 16ms
+ ✓ src/san.suffix.hardening.test.ts (4 tests) 9ms
+ ✓ src/zobrist.nfr.test.ts (3 tests) 3ms
+ ✓ src/uci.real-engine.test.ts (1 test) 2ms
+ ✓ src/san.nfr.test.ts (5 tests) 2ms
+ ✓ src/glyph-mode.nfr.test.ts (3 tests) 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/engine.test.ts > ABC-249 — a pre-root repetition met four plies deep scores 0 (QE-248-c) > Qe5+ at ply 4 stood twice before the root: Ke1 at 404 with the keys, Kg1 at 497 without
+AssertionError: expected { move: 'f1g1', score: 497 } to deeply equal { move: 'f1e1', score: 404 }
+
+- Expected
++ Received
+
+  {
+-   "move": "f1e1",
+-   "score": 404,
++   "move": "f1g1",
++   "score": 497,
+  }
+
+ ❯ src/engine.test.ts:1729:79
+    1727|     const withKeys = chooseMove(game.position, { ...fixedDepth(4), pri…
+    1728|     expect(toFen(game.position)).toBe(root);
+    1729|     expect(withKeys && { move: label(withKeys.move), score: withKeys.s…
+       |                                                                               ^
+    1730|       move: "f1e1",
+    1731|       score: 404,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 62 passed (63)
+      Tests  1 failed | 2362 passed (2363)
+   Start at  15:31:05
+   Duration  8.94s (transform 0ms, setup 0ms, import 6.35s, tests 6.51s, environment 5ms)
+

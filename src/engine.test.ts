@@ -1696,3 +1696,48 @@ describe("ABC-230 A3 and A4 — no prior keys is base, node for node, and the do
     }
   });
 });
+
+// ---------------------------------------------------------------------------
+// ABC-249 (`ADR-0054` decision 3, QE-248-c) — the pre-root half of the scan holds at depth. A
+// queen gives perpetual check; the position after Black's fourth reply, four plies into the
+// search, stood twice before the root and nowhere on the line before it, the root included.
+// ---------------------------------------------------------------------------
+
+describe("ABC-249 — a pre-root repetition met four plies deep scores 0 (QE-248-c)", () => {
+  it("Qe5+ at ply 4 stood twice before the root: Ke1 at 404 with the keys, Kg1 at 497 without", () => {
+    const game = gameOf(
+      "6k1/RR3ppp/8/4q3/8/7P/PP4PK/1N6 w - - 0 1",
+      "h2h1 e5e1 h1h2 e1e5 h2g1 e5d4 g1f1 d4f6",
+    );
+    const root = toFen(game.position);
+    const prior = priorKeysOf(game);
+    expect(prior).toHaveLength(8);
+
+    // Non-vacuity: the line Kg1 Qd4+ Kh2 Qe5+ ends, at ply 4, on a position that stood TWICE
+    // before the root, and that no position on the line before it, the root included, equals.
+    const line = parseFen(root);
+    const keys = [zobristKey(line)];
+    for (const text of ["f1g1", "f6d4", "g1h2"]) {
+      makeMove(line, moveOf(line, text));
+      keys.push(zobristKey(line));
+    }
+    expect(occurrencesAfter(line, "d4e5", prior)).toBe(2);
+    expect(occurrencesAfter(line, "d4e5", keys)).toBe(0);
+
+    const withKeys = chooseMove(game.position, { ...fixedDepth(4), priorKeys: prior });
+    expect(toFen(game.position)).toBe(root);
+    expect(withKeys && { move: label(withKeys.move), score: withKeys.score }).toEqual({
+      move: "f1e1",
+      score: 404,
+    });
+
+    // Withheld keys: Kg1 lets Black return to the twice-seen position, which is not a draw here.
+    const position = parseFen(root);
+    const base = chooseMove(position, fixedDepth(4));
+    expect(toFen(position)).toBe(root);
+    expect(base && { move: label(base.move), score: base.score }).toEqual({
+      move: "f1g1",
+      score: 497,
+    });
+  });
+});
