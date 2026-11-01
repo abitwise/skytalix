@@ -1,3 +1,4 @@
+_Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — `arch-epic011-phase1` merged: **ADR-0058 PROPOSED** (T1 deeper cutoffs, behind test-only off doors; ABC-081 A1 identity binds older doors) and **ADR-0025 T2 amendment PROPOSED** (depth-preferred replacement). Owner asked to accept both (+ NEUTRAL-bar question for T2/T4). ABC-238 pulled → `se-ABC-238` (build only; read/merge wait for acceptance). `bapm-phase1-wording` queued._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — `arch-adr0057-fix` merged: ADR-0057 corrected (threads effort L 32–65 h; key split inside probe/store keeps signatures; fallback 42–85 h); ADR-0056 lane figures refreshed. Owed (LOW, BA/PM): stale lane figures EPIC-010 l.79–83, EPIC-011 l.292–296; ABC-253 front matter. Owner OQ-1..6 pending. Running: arch-epic011-phase1._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — **EPIC-010 CLOSED** (M1–M5 MET; +31.4 ± 26.4 Elo self-play). **EPIC-011 STARTED.** Phase 1 design → `arch-epic011-phase1` (T1 ABC-238 + T2 ABC-237 ADRs). Running: arch-adr0057-fix._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — **ABC-263 DONE** (spike; ADR-0057 PROPOSED). `arch-adr0057-fix` queued (G1 stale ABC-253, G3–G8 wording, stale lane figures in ADR-0056). Running: bapm-epic010-close._
@@ -1197,7 +1198,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   one hop at pull, when it checks `Ready for Dev`'s exit at that moment; the row records the pull.
 
   HEADING FORMAT (spec §6.1): each column is an H2 heading carrying its live/limit WIP count,
-  e.g. `## In Development (WIP 0/3)` — the left number is how many tickets are in the column
+  e.g. `## In Development (WIP 1/3)` — the left number is how many tickets are in the column
   now, the right number is the limit from config. Unlimited columns read `(WIP unlimited)`;
   Blocked is visible and time-tracked (no WIP limit) and reads `(visible, time-tracked)`.
   INVARIANT: the column H2 headings and the rows of the `## Columns` table are the same 13 names in the
@@ -1207,7 +1208,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 0/3)
+    ## In Development (WIP 1/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
     ## In Review (WIP 0/3)
@@ -1296,7 +1297,6 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [ABC-234] SEE orders captures, ordering only (size: M, priority: P3, DoR 8/10; milestone 2; waits evidence + ADR; after ABC-240 (shared orderMoves)) **→ EPIC-011 2026-11-01 (bapm-epic011-dedupe; id kept)**
 - [ABC-236] Aspiration windows at the root (size: M, priority: P3, DoR 9/10; milestone 2; waits ADR) **→ EPIC-011 2026-11-01 (bapm-epic011-dedupe; id kept)**
 - [ABC-237] TT keeps deeper entries on replace (size: S, priority: P3, DoR 9/10; milestone 2; waits ADR-0025 amendment) **→ EPIC-011 2026-11-01 (bapm-epic011-dedupe; id kept)**
-- [ABC-238] A deeper stored entry may cut off a shallower search (size: M, priority: P2, DoR 9/10; milestone 2; after ABC-237; waits ADR) **→ EPIC-011 Phase 1, first (T1), P3 → P2 2026-11-01**
 - [ABC-239] Weights tuned offline, constants only, validated against Stockfish (size: L, priority: P3, DoR 8/10; milestone 3; waits ADR-0048 licence, ADR; its batch reads before merge) **→ EPIC-011 2026-11-01 (bapm-epic011-dedupe; id kept)**
 
 
@@ -1335,7 +1335,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+- [ABC-238] A deeper stored entry may cut off a shallower search (size: M, priority: P2, DoR 9/10; milestone 2; after ABC-237; waits ADR) **→ EPIC-011 Phase 1, first (T1), P3 → P2 2026-11-01** **2026-11-01: design met — ADR-0058 PROPOSED (arch-epic011-phase1 …2c2c1df6); DoR 10/10 under the reading-(b) precedent (build may start; read and merge wait for owner acceptance of ADR-0058) → pulled → `se-ABC-238`**
 
 
 
