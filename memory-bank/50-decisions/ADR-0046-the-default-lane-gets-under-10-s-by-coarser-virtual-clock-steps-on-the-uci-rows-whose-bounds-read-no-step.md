@@ -36,6 +36,11 @@ level. No owner word is owed now. See the dated section at the end of this file.
 word is owed. Where the addendum says T2-R or W1 is PROPOSED or needs BA/PM's word, this line wins. See § BA/PM ruling
 2026-10-31 at the end of this file.
 
+**Tranche 2 delivered 2026-11-01 (`arch-adr-folds-nov1`, records only).** `ABC-248` merged at `ef4cd095` (code
+`71700836`; QE PASS_WITH_GAPS, no gap blocking), with `G8` H 9.09 s / B 9.37 s: `NFR-008` MET, the 9.4 s design target
+MET, W1 not triggered. No tranche 3 opens. W1 stays in force on every later admissible `G8` head median. Where the
+addendum line above says tranche 2 is OPEN, this line wins. See the dated line of 2026-11-01 at the end of this file.
+
 **proposed**, 2026-10-20, by Architect/Design (task `arch-lane-under-10s`). This ADR is the remedy that `R-174-1`
 option (a) asked for. The owner accepted (a) at `…bdff4d33`.
 
@@ -513,6 +518,12 @@ was run or timed at this hop.
     4. **A moved row runs green once in its deep lane at the ticket's QE.** The command is `ENGINE_DEEP=1 … src/uci-session.test.ts -t
        "<moved describe>"`, the `-t` form that `AGENTS.md` line 102 already shows. Unset, the row is NOT DEFINED, on
        the file's existing pattern.
+       - **Spelling 2026-11-01 (`arch-adr-folds-nov1`, records only; QE-248-a).** The `-t` above is read as a regular
+         expression, so a `describe` title ending "[deep, ENGINE_DEEP=1]" is a character class and the unescaped form
+         runs 0 tests and exits 0. The form this condition means escapes both brackets, as § BA/PM ruling 2026-10-31's
+         dated line of 2026-11-01 spells it:
+         `ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/uci-session.test.ts -t "ABC-167 A5 — the D4 time rule, read from the info line's time \[deep, ENGINE_DEEP=1\]"`.
+         The check is the passed count, not the exit code: "4 passed", one per moved row. The condition is unchanged.
     5. **No `AGENTS.md` edit is owed**, because line 102's command does not change. If BA/PM wants the line to name
        the moved rows, it needs a trim first: the file has 11 B spare.
   - **Design target:** `G8` head median ≤ 9.4 s at its gate. That is the tranche-1 figure, and it is a design target,

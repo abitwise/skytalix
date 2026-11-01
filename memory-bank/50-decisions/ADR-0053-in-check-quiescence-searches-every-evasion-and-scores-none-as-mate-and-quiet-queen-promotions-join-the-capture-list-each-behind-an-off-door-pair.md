@@ -412,6 +412,11 @@ of 1 878 626 nodes.
         (`ABC-225`'s interleaved pair, due after `ABC-228`–`ABC-230`) and the epic-close `M2` batch. Under `EPIC-010`'s
         existing rule, the passing batch's head score at 4 000 ms becomes the new reference. The batch's wall time
         grows by `UNKNOWN - verify`.
+        - **Wall read 2026-11-01 (`arch-adr-folds-nov1`, records only).** Milestone 1's batch read its own wall: the
+          session ran **22.22 h at 18.0 games/h** (400 games, 0 thermal pauses), inside the restated 21.7–24.1 h. It ran
+          via `rpair` at `Skill Level` 6 on both builds (`ABC-247`), so both searched 4 000 ms on every search move.
+          Source: `qe-EPIC-010-m1-batch-2` `…428e3797`, `…1a53a7f9`. The `UNKNOWN - verify` above is closed. No rule
+          moves.
     - **What must be re-read or re-pointed** (and by whom):
       - `G5`, `G6` and `G11` at `ABC-228` (QE);
       - the `NFR-004` and `NFR-005` catalog text (Security/NFR);
