@@ -1,0 +1,22 @@
+diff -ru src/gameend.nfr.test.ts /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/se-262/plants/C0-control-prime/src/gameend.nfr.test.ts
+--- src/gameend.nfr.test.ts	2026-11-01 20:18:11.130824949 +0000
++++ /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/se-262/plants/C0-control-prime/src/gameend.nfr.test.ts	2026-11-01 20:20:03.102193074 +0000
+@@ -266,6 +266,7 @@
+     expect(hasLegalMove(position)).toBe(true);
+     const attackTests = vi.mocked(isSquareAttackedBy).mock.calls.length;
+     expect(attackTests).toBeGreaterThan(0); // the spy sees legal.ts's calls, so the bar is live
++    console.log("B2COUNT", attackTests); // SCRATCH PROBE
+     expect(attackTests).toBeLessThanOrEqual(1);
+   });
+ 
+diff -ru src/legal.test.ts /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/se-262/plants/C0-control-prime/src/legal.test.ts
+--- src/legal.test.ts	2026-11-01 20:18:22.593973936 +0000
++++ /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/se-262/plants/C0-control-prime/src/legal.test.ts	2026-11-01 20:20:03.117655921 +0000
+@@ -890,6 +890,7 @@
+       // P2′: the a1 rook checks along the first rank; b1 blocks it.
+       ["P2′, promotion blocks the check", "7K/8/8/8/8/8/1p6/R3k3 b - - 0 1", "b2", "b1", true],
+     ];
++    legalCaptures(parseFen("k7/8/8/8/8/8/r7/R6K b - - 0 1")); // SCRATCH PRIME: stamp a2 as pinned
+     for (const [name, fen, pawn, ahead, present] of boards) {
+       const position = parseFen(fen);
+       const from = parseSquareName(pawn);

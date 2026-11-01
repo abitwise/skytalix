@@ -1,0 +1,10 @@
+C0-control -t ABC-261 alone rc=0 ::  Tests 1 passed | 43 skipped (44)
+C0-control -t ABC-262 alone rc=0 ::  Tests 1 passed | 43 skipped (44)
+QB -t ABC-261 alone rc=0 ::  Tests 1 passed | 43 skipped (44)
+QB -t ABC-262 alone rc=0 ::  Tests 1 passed | 43 skipped (44)
+PQ2 -t ABC-261 alone rc=1 ::  Tests 1 failed | 43 skipped (44)
+PQ2 -t ABC-262 alone rc=1 ::  Tests 1 failed | 43 skipped (44)
+C0-control-prime alone rc=0 ::  Tests 1 passed | 43 skipped (44) :: 
+C0-control-prime file rc=0 ::  Tests 44 passed (44) :: 
+QB-prime alone rc=1 ::  Tests 1 failed | 43 skipped (44) ::  × src/legal.test.ts > ABC-262 — legalCapturesAndQueenPromotions in check tests black's quiet queen promotions > equals the full filter with black in check: a non-blocking promotion is absent, a blocking one present 4ms;
+QB-prime file rc=1 ::  Tests 1 failed | 43 passed (44) ::  × src/legal.test.ts > ABC-262 — legalCapturesAndQueenPromotions in check tests black's quiet queen promotions > equals the full filter with black in check: a non-blocking promotion is absent, a blocking one present 3ms;

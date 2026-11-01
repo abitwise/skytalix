@@ -1,0 +1,22 @@
+diff -ru src/gameend.nfr.test.ts /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/se-262/plants/QX2//src/gameend.nfr.test.ts
+--- src/gameend.nfr.test.ts	2026-11-01 20:18:11.130824949 +0000
++++ /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/se-262/plants/QX2//src/gameend.nfr.test.ts	2026-11-01 20:19:02.849958780 +0000
+@@ -266,6 +266,7 @@
+     expect(hasLegalMove(position)).toBe(true);
+     const attackTests = vi.mocked(isSquareAttackedBy).mock.calls.length;
+     expect(attackTests).toBeGreaterThan(0); // the spy sees legal.ts's calls, so the bar is live
++    console.log("B2COUNT", attackTests); // SCRATCH PROBE
+     expect(attackTests).toBeLessThanOrEqual(1);
+   });
+ 
+diff -ru src/legal.ts /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/se-262/plants/QX2//src/legal.ts
+--- src/legal.ts	2026-11-01 20:17:27.122082710 +0000
++++ /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/se-262/plants/QX2//src/legal.ts	2026-11-01 20:19:02.864175460 +0000
+@@ -364,6 +364,7 @@
+   }
+ 
+   const epoch = markPins(position.board, kingHome, moverIsBlack);
++  if (moves[0] !== undefined && moves[0].piece !== king) return legalMoves(position).length > 0; // PLANT QX2
+   for (const move of moves) {
+     if (move.piece === king) {
+       if (staysSafe(position, move, move.to, moverIsBlack)) return true;

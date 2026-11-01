@@ -1,0 +1,10 @@
+head-1.last-run.json passed 0.25 hasLegalMove out of check answers a pawn
+head-1.last-run.json passed 0.15 equals the full filter with black in che
+found=2 sum=0.39ms total=2376 passed=2376 failed=0 pending=0 todo=0
+head-2.last-run.json passed 0.26 hasLegalMove out of check answers a pawn
+head-2.last-run.json passed 0.15 equals the full filter with black in che
+found=2 sum=0.41ms total=2376 passed=2376 failed=0 pending=0 todo=0
+head-3.last-run.json passed 0.21 hasLegalMove out of check answers a pawn
+head-3.last-run.json passed 0.22 equals the full filter with black in che
+found=2 sum=0.43ms total=2376 passed=2376 failed=0 pending=0 todo=0
+median sum ms: 0.41 sums: 0.39 0.41 0.43

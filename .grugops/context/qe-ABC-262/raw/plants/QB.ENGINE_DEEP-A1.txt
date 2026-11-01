@@ -1,0 +1,52 @@
+
+ RUN  v4.1.12 /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-262/plants/QB
+
+ ❯ src/legal.test.ts (50 tests | 1 failed | 47 skipped) 37528ms
+     × on the six perft roots, ADR-0003's 518 474-node walk [deep, ENGINE_DEEP=1] 15218ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/legal.test.ts > ABC-254 A1 — the lazy filters equal the full make/test/unmake filters > on the six perft roots, ADR-0003's 518 474-node walk [deep, ENGINE_DEEP=1]
+AssertionError: kiwipete 20-65 39-22 65-99: expected [ { from: 81, to: 99, …(4) }, …(3) ] to deeply equal [ { from: 81, to: 99, …(4) }, …(2) ]
+
+- Expected
++ Received
+
+@@ -21,6 +21,14 @@
+      "from": 100,
+      "piece": 13,
+      "promotion": 0,
+      "to": 99,
+    },
++   {
++     "captured": 0,
++     "flags": 4,
++     "from": 22,
++     "piece": 9,
++     "promotion": 5,
++     "to": 6,
++   },
+  ]
+
+ ❯ checkLazyNode src/legal.test.ts:678:60
+    676|   expect(legalCaptures(position), where).toEqual(fullLegalCaptures(pos…
+    677|   const qWant = fullLegalCapturesAndQueenPromotions(position);
+    678|   expect(legalCapturesAndQueenPromotions(position), where).toEqual(qWa…
+       |                                                            ^
+    679|   expect(hasLegalMove(position), where).toBe(fullHasLegalMove(position…
+    680|   expect(hasLegalMove(position), where).toBe(want.length > 0);
+ ❯ walk src/legal.test.ts:718:5
+ ❯ walk src/legal.test.ts:722:7
+ ❯ walk src/legal.test.ts:722:7
+ ❯ walk src/legal.test.ts:722:7
+ ❯ walkLazy src/legal.test.ts:726:36
+ ❯ src/legal.test.ts:748:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 2 passed | 47 skipped (50)
+   Start at  20:27:53
+   Duration  37.63s (transform 0ms, setup 0ms, import 32ms, tests 37.53s, environment 0ms)
+

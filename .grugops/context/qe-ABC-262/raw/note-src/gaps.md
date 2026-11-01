@@ -1,0 +1,12 @@
+# qe-ABC-262 gaps: QE-262-a (LOW), QE-262-b (INFO), QE-262-c (INFO, host); none blocking
+
+- **QE-262-a (LOW; carry to `ABC-252`'s SE as a dated note; no new ticket).** The black in-check promotion row catches a black-only in-check regression only when the regression does not keep the `pinStamp[from] === epoch` operand.
+  - **Hole:** QE's QBe and QKb turn the row red. QB itself (A4's plant) survives the whole default lane (2 376/2 376), because in check `epoch` is 0 and a never-stamped square reads 0. QB dies only on the ENGINE_DEEP `ABC-254` A1 walk (re-confirmed). This is QE-261-b, narrowed: before ABC-262, QBe and QKb also survived.
+  - **Why LOW:** production line 429 is correct (`inCheck ||` short-circuits), and the deep lane holds the line. The Orchestrator waived A4.
+  - **Carry:** if `ABC-252` (or any rewrite) changes how the quiet-promotion guard or `pinStamp`/`epoch` start (for example a non-zero in-check sentinel, or a packed pin set), re-plant QB, QBe and QKb against this row and the ENGINE_DEEP walk. The SE's scratch priming call (`se-ABC-262` `…2aee4de1`) stays not taken: it leans on module-private state.
+- **QE-262-b (INFO; BA/PM, records only).** Ticket ABC-262's A4 still reads "QB turns the promotion row red on P1′", and the delivery does not do that. The waiver lives only in the Orchestrator's brief. At close, BA/PM should mark A4 waived on the ticket page, citing the line-429 reading, so the page is not a contract the code silently breaks.
+- **QE-262-c (INFO; Orchestrator, host).**
+  - The session scratch volume (`/tmp/claude-1000`, user quota ≈ 10 GB) hit **EDQUOT** during this hop. 8.0 GB sits under this session's scratchpad, almost all of it earlier hops' plant and base trees (`qe-261` 2.0 G, `se-262` 1.6 G, `qe-260` 646 M, `qe-tcprobe` 605 M, `qe-223` 584 M, …).
+  - QE deleted only its own trees. It moved the G8 base tree and the merged tree to detached worktrees on the home volume (`.claude/worktrees/qe-ABC-262-base`, `-merged`), which were removed at the end of the hop.
+  - The next hop that makes `git archive` copies (159 MB each) will fail the same way until someone with owner consent clears the old scratch.
+- **Not a gap, re-stated:** the B2 precondition `pseudo[0]?.piece === PAWN` is bound to `generateMoves`' scan order (QE-261-c, already carried on ABC-250 and ABC-252). The row's comment says so. On a reorder the row goes loud red, never false green.

@@ -1,0 +1,22 @@
+window start 20:30:42 load1=1.39
+head 46a0c69a; src+tools+config == 39a6237e: yes
+lint rc=0
+typecheck rc=0
+build rc=0
+status after build: 0 lines
+lane-inventory rc=0 :: The lane collects 63 test files; git tracks 63. No findings. 
+g8 start 20:30:45
+merged tree == 0988f0040e00590583f72742965b27302d9debbf: 0988f0040e00590583f72742965b27302d9debbf
+run 1 base rc=0 wall=8.90s cpu=28.84s vitest_duration=8.48s (transform 0ms, setup 0ms, import 6.27s, tests 6.16s, environment 5ms) load1_before=1.25 load1_after=1.52 tctl_before=42.1 tctl_after=76.5 alone_before=true waited_s=15 foreign_vitest_after=none :: 2374 passed (2374)
+run 2 head rc=0 wall=9.15s cpu=29.18s vitest_duration=8.81s (transform 0ms, setup 0ms, import 6.27s, tests 6.46s, environment 5ms) load1_before=1.27 load1_after=1.53 tctl_before=41.8 tctl_after=74.6 alone_before=true waited_s=15 foreign_vitest_after=none :: 2376 passed (2376)
+run 3 head rc=0 wall=8.94s cpu=29.11s vitest_duration=8.61s (transform 0ms, setup 0ms, import 6.40s, tests 6.20s, environment 5ms) load1_before=1.40 load1_after=1.61 tctl_before=41.3 tctl_after=73.3 alone_before=true waited_s=15 foreign_vitest_after=none :: 2376 passed (2376)
+run 4 base rc=0 wall=9.01s cpu=29.23s vitest_duration=8.66s (transform 0ms, setup 0ms, import 6.47s, tests 6.11s, environment 5ms) load1_before=1.32 load1_after=1.73 tctl_before=42.6 tctl_after=76.0 alone_before=true waited_s=15 foreign_vitest_after=none :: 2374 passed (2374)
+run 5 base rc=0 wall=8.94s cpu=29.42s vitest_duration=8.67s (transform 0ms, setup 0ms, import 6.32s, tests 6.10s, environment 5ms) load1_before=1.64 load1_after=1.91 tctl_before=54.0 tctl_after=74.6 alone_before=true waited_s=15 foreign_vitest_after=none :: 2374 passed (2374)
+run 6 head rc=0 wall=8.85s cpu=28.96s vitest_duration=8.50s (transform 0ms, setup 0ms, import 6.08s, tests 6.43s, environment 5ms) load1_before=1.49 load1_after=2.34 tctl_before=41.4 tctl_after=72.8 alone_before=true waited_s=15 foreign_vitest_after=none :: 2376 passed (2376)
+median wall: base 8.94 s, head 8.94 s, delta -0.00 s; median cpu: base 29.23 s, head 29.11 s; admissible (rc 0, load1 <= 8 before and after every run, alone before every run): true; tctl median 63.4 C (max 76.5), thermal stop (> 85 C): false
+g8 rc=0 end 20:33:09
+skip count (g8 run 2 head JSON)=0
+skip-integrity rc=0 :: No findings. 
+merged npm test rc=0 ::  Test Files 63 passed (63)  Tests 2376 passed (2376) 
+window end 20:33:18
+exit 0

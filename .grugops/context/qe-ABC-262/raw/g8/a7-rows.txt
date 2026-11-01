@@ -1,0 +1,7 @@
+g8-1-base.last-run.json: total=2374 passed=2374 failed=0 pending=0 todo=0 files=533 :: rows n=0 | n=0 :: sum -
+g8-2-head.last-run.json: total=2376 passed=2376 failed=0 pending=0 todo=0 files=534 :: rows passed 0.15ms | passed 0.15ms :: sum 0.30ms
+g8-3-head.last-run.json: total=2376 passed=2376 failed=0 pending=0 todo=0 files=534 :: rows passed 0.15ms | passed 0.14ms :: sum 0.29ms
+g8-4-base.last-run.json: total=2374 passed=2374 failed=0 pending=0 todo=0 files=533 :: rows n=0 | n=0 :: sum -
+g8-5-base.last-run.json: total=2374 passed=2374 failed=0 pending=0 todo=0 files=533 :: rows n=0 | n=0 :: sum -
+g8-6-head.last-run.json: total=2376 passed=2376 failed=0 pending=0 todo=0 files=534 :: rows passed 0.14ms | passed 0.14ms :: sum 0.28ms
+head row-sum median: 0.29 ms over 3 runs (0.30 / 0.29 / 0.28)

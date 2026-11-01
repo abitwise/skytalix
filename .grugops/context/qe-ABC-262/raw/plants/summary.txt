@@ -1,0 +1,19 @@
+C0-control gameend.nfr rc=0 ::  Tests 12 passed (12) :: B2COUNT 1 :: fails: 
+C0-control legal rc=0 ::  Tests 44 passed (44) ::  :: fails: 
+PL3a gameend.nfr rc=1 ::  Tests 2 failed | 10 passed (12) :: B2COUNT 9 :: fails:  × src/gameend.nfr.test.ts > ABC-206 — the search leaf's game-end check stays cheap (call counts, spied) > hasLegalMove out of check stops at the first legal king move: at most 2 attack tests 4ms; × src/gameend.nfr.test.ts > ABC-206 — the search leaf's game-end check stays cheap (call counts, spied) > hasLegalMove out of check answers a pawn-first board at once: at most 1 attack test 1ms;
+PL3a legal rc=0 ::  Tests 44 passed (44) ::  :: fails: 
+QB gameend.nfr rc=0 ::  Tests 12 passed (12) :: B2COUNT 1 :: fails: 
+QB legal rc=0 ::  Tests 44 passed (44) ::  :: fails: 
+QBe gameend.nfr rc=0 ::  Tests 12 passed (12) :: B2COUNT 1 :: fails: 
+QBe legal rc=1 ::  Tests 1 failed | 43 passed (44) ::  :: fails:  × src/legal.test.ts > ABC-262 — legalCapturesAndQueenPromotions in check tests black's quiet queen promotions > equals the full filter with black in check: a non-blocking promotion is absent, a blocking one present 3ms;
+QKb gameend.nfr rc=0 ::  Tests 12 passed (12) :: B2COUNT 1 :: fails: 
+QKb legal rc=1 ::  Tests 1 failed | 43 passed (44) ::  :: fails:  × src/legal.test.ts > ABC-262 — legalCapturesAndQueenPromotions in check tests black's quiet queen promotions > equals the full filter with black in check: a non-blocking promotion is absent, a blocking one present 3ms;
+QX1 gameend.nfr rc=1 ::  Tests 1 failed | 11 passed (12) :: B2COUNT 2 :: fails:  × src/gameend.nfr.test.ts > ABC-206 — the search leaf's game-end check stays cheap (call counts, spied) > hasLegalMove out of check answers a pawn-first board at once: at most 1 attack test 3ms;
+QX1 legal rc=0 ::  Tests 44 passed (44) ::  :: fails: 
+QX2 gameend.nfr rc=1 ::  Tests 1 failed | 11 passed (12) :: B2COUNT 10 :: fails:  × src/gameend.nfr.test.ts > ABC-206 — the search leaf's game-end check stays cheap (call counts, spied) > hasLegalMove out of check answers a pawn-first board at once: at most 1 attack test 4ms;
+QX2 legal rc=0 ::  Tests 44 passed (44) ::  :: fails: 
+QB npm test rc=0 ::  Test Files 63 passed (63)  Tests 2376 passed (2376)  :: fails: 
+QKb npm test rc=1 ::  Test Files 1 failed | 62 passed (63)  Tests 1 failed | 2375 passed (2376)  :: fails:  × equals the full filter with black in check: a non-blocking promotion is absent, a blocking one present 5ms;
+C0-control ENGINE_DEEP A1 rc=0 ::  Tests 3 passed | 47 skipped (50) :: fails: 
+QB ENGINE_DEEP A1 rc=1 ::  Tests 1 failed | 2 passed | 47 skipped (50) :: fails:  × on the six perft roots, ADR-0003's 518 474-node walk [deep, ENGINE_DEEP=1] 15218ms;
+AssertionError: kiwipete 20-65 39-22 65-99: expected [ { from: 81, to: 99, …(4) }, …(3) ] to deeply equal [ { from: 81, to: 99, …(4) }, …(2) ]

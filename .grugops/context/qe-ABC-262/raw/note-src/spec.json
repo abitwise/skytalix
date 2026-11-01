@@ -1,0 +1,8 @@
+{ "refs": ["qe-ABC-262", "ABC-262", "ABC-261", "ABC-254", "ABC-252", "EPIC-011", "QE-261-a", "QE-261-b", "QE-262-a", "QE-262-b", "QE-262-c", "NFR-008", "src/gameend.nfr.test.ts", "src/legal.test.ts"],
+  "notes": [
+    {"kind": "decision", "confidence": "high: every A-row re-read under the lock or from git; raw evidence in raw/", "bodyFile": "verdict.md"},
+    {"kind": "observation", "confidence": "high: 7 plant trees run under the lock; diffs and logs in raw/plants", "bodyFile": "plants.md"},
+    {"kind": "observation", "confidence": "high: src/legal.ts read at 39a6237e; QB deep-walk log in raw/plants", "bodyFile": "line429.md"},
+    {"kind": "observation", "confidence": "high: gates and G8 window run under the lock; outputs in raw/gates and raw/g8", "bodyFile": "gates.md"},
+    {"kind": "observation", "confidence": "high: gaps read from the plant runs and the code", "bodyFile": "gaps.md"}
+  ] }

@@ -1,0 +1,8 @@
+{ "refs": ["se-ABC-262", "ABC-262", "ABC-261", "ABC-254", "EPIC-011", "QE-261-a", "QE-261-b", "NFR-008"],
+  "notes": [
+    {"kind": "decision", "confidence": "high: rows and asserts as committed in 39a6237e", "bodyFile": "design.md"},
+    {"kind": "observation", "confidence": "high: each plant run under the lock; logs and diffs in raw/plants and raw/probe2", "bodyFile": "plants.md"},
+    {"kind": "observation", "confidence": "high: every gate run under the lock; outputs in raw/gates", "bodyFile": "gates.md"},
+    {"kind": "observation", "confidence": "high: pointer note (filed as observation; artifact-ref needs gate_run)", "bodyFile": "artifacts.md"},
+    {"kind": "failed-attempt", "confidence": "high: QB plant run green on the row, file and alone", "bodyFile": "stop.md"}
+  ] }

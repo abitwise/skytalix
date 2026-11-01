@@ -1,0 +1,10 @@
+C0-control gameend.nfr rc=0 ::  Tests 12 passed (12) :: B2COUNT 1 :: fails: 
+C0-control legal rc=0 ::  Tests 44 passed (44) ::  :: fails: 
+PL3a gameend.nfr rc=1 ::  Tests 2 failed | 10 passed (12) :: B2COUNT 9 :: fails:  × src/gameend.nfr.test.ts > ABC-206 — the search leaf's game-end check stays cheap (call counts, spied) > hasLegalMove out of check stops at the first legal king move: at most 2 attack tests 2ms; × src/gameend.nfr.test.ts > ABC-206 — the search leaf's game-end check stays cheap (call counts, spied) > hasLegalMove out of check answers a pawn-first board at once: at most 1 attack test 1ms;
+PL3a legal rc=0 ::  Tests 44 passed (44) ::  :: fails: 
+QB gameend.nfr rc=0 ::  Tests 12 passed (12) :: B2COUNT 1 :: fails: 
+QB legal rc=0 ::  Tests 44 passed (44) ::  :: fails: 
+QX1 gameend.nfr rc=1 ::  Tests 1 failed | 11 passed (12) :: B2COUNT 2 :: fails:  × src/gameend.nfr.test.ts > ABC-206 — the search leaf's game-end check stays cheap (call counts, spied) > hasLegalMove out of check answers a pawn-first board at once: at most 1 attack test 3ms;
+QX1 legal rc=0 ::  Tests 44 passed (44) ::  :: fails: 
+QX2 gameend.nfr rc=1 ::  Tests 1 failed | 11 passed (12) :: B2COUNT 10 :: fails:  × src/gameend.nfr.test.ts > ABC-206 — the search leaf's game-end check stays cheap (call counts, spied) > hasLegalMove out of check answers a pawn-first board at once: at most 1 attack test 4ms;
+QX2 legal rc=0 ::  Tests 44 passed (44) ::  :: fails: 
