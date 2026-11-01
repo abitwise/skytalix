@@ -1,0 +1,7 @@
+games 400; openings 100 (sizes [4]); pairs 200; FEN mismatches 0
+score 218.0 of 400 = 0.5450; Elo 31.4
+iid per game (trinomial): SE(score) 0.0193; 95 % +/- 26.4 Elo; deff 1.000; effective games 400
+per colour-swapped pair (pentanomial-like, 200 pairs): SE(score) 0.0183; 95 % +/- 25.1 Elo; deff 0.904; effective games 442
+per opening cluster (4 games, 100 clusters) = effective resolution: SE(score) 0.0201; 95 % +/- 27.7 Elo; deff 1.094; effective games 366
+repeat pairs (same opening, same colours, round r vs r+100): 200; identical result 98 (49.0 %); identical movetext 21 (10.5 %)
+half 1 (rounds 1-100) score 0.5450; half 2 score 0.5450; per-opening correlation half1 vs half2 r = 0.204

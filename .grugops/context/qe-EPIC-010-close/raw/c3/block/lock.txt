@@ -1,0 +1,2 @@
+2026-11-01T20:56:16Z lock acquired c3
+2026-11-01T22:18:02Z released c3 rc=0

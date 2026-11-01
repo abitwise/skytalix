@@ -1,0 +1,31 @@
+== think time (cutechess -debug clock), budget 500 ms for skytalix/base ==
+skytalix: go lines {"go movetime 500":499}; searched 496, book 3; think median 500 p99 502 max 503 ms; overshoot over 500 ms: median 0 p99 2 MAX 3 ms; >0: 195, >5: 0, >10: 0, >12: 0, >25: 0, >50: 0
+stockfish: go lines {"go movetime 500":495}; searched 495, book 0; think median 500 p99 501 max 501 ms; overshoot over 500 ms: median 0 p99 1 MAX 1 ms; >0: 78, >5: 0, >10: 0, >12: 0, >25: 0, >50: 0
+== results ==
+finished 10; time losses 0; faults 0
+terminations: {"White mates":6,"Black mates":4}
+Score of skytalix vs stockfish: W/L/D 9/1/0; points 9 of 10 [0.900]
+Elo difference 381.7 +/- nan; LOS 99.4 %; draw ratio 0.0 %
+== pgn ==
+games 10; plies mean 99.4 [39-196]; first start -> last end 488 s; games/hour 73.8
+host.log: before -> end 491 s (incl. builds); cutechess start -> end 488 s; games/hour (cutechess wall) 73.8
+stockfish depth per move (PGN): n 495; median 17; min 11; max 245; histogram {"11":1,"12":6,"13":8,"14":44,"15":76,"16":68,"17":75,"18":61,"19":33,"20":16,"21":8,"22":9,"23":5,"24":5,"25":4,"26":1,"27":1,"28":1,"29":1,"31":2,"32":1,"33":4,"34":2,"35":1,"36":2,"37":2,"38":2,"40":4,"41":2,"42":2,"45":1,"47":2,"48":1,"49":2,"50":2,"56":2,"58":1,"60":1,"61":1,"65":1,"67":1,"69":1,"70":1,"75":1,"95":1,"110":1,"134":1,"141":1,"153":1,"165":1,"170":1,"180":1,"245":22}
+skytalix PGN clock per searched move: max 0.5 s; n 496
+== harness summary.txt ==
+Elo difference: 381.7 +/- nan, LOS: 99.4 %, DrawRatio: 0.0 %
+W/L/D: 9/1/0  score: 0.900  games: 10 of 10
+draw ratio: 0.0 %
+faults: 0  unclassified: 0  move-cap draws: 0
+skytalix.stderr: 0 bytes
+stockfish.stderr: 0 bytes
+stockfish depth guard: 0 of 495 moves below depth 3
+state: rating E + X ± Y = 1650 + 381.7 ± nan = 2031.7 ± nan
+== machine.txt control line == harness: <worktree> at de55df65a472d6bc5ec131c8e1645fd6a9280170 | concurrency: 1 (default 2) | control: skytalix st=0.5 timemargin=50
+== host (block samples, 10 s) ==
+samples 49; with real foreign vitest 11 (22.4 %); with foreign cutechess 0; with a foreign process >= 20 % CPU 4; load1 median 2.24 max 3.39; Tctl median 77.8 max 87.3
+2026-11-01T22:19:30.196Z smoke block start; cmd: node tools/rating/rating.ts r 053733d2 <scratch>/qe-e010c/out-smoke --budget-ms 500 --rounds 5 --concurrency 1
+2026-11-01T22:19:30.205Z smoke wait poll=1 vitest=0 cutechess=0 load1=4.58 tctl=72.6
+2026-11-01T22:20:15.226Z smoke wait poll=4 vitest=0 cutechess=0 load1=2.21 tctl=42.1
+2026-11-01T22:20:30.233Z smoke ALONE clear at poll 5 after 60 s load1=2.00 tctl=41.0
+2026-11-01T22:20:30.235Z smoke spawned pid 320076
+2026-11-01T22:28:41.502Z smoke exit rc=0 sig=null wall=551 s run=491 s
