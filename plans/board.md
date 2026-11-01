@@ -1,3 +1,4 @@
+_Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — OWNER (…1f5e3b27): smoke stays at **E1650**; raise it when pooled smoke shows it too easy (≥ 30 games outside 60–85 %). **ABC-250 closed NOT MERGED by routing** (…d2571be5; A4 unresolved, GO unreachable on the evidence; not a graded miss); ABC-252 dropped; ABC-251 narrows to O1-c. Records hops: `bapm-abc250-close`, `arch-abc250-close`. Pulled `se-ABC-262`._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — `bapm-qe-gaps-1101b` merged: ABC-262 (EPIC-011 M0, XS) in Backlog; QE-255-a declined (diminishing returns; re-open trigger recorded); notes on ABC-250/251/252. No other hop running → ALONE window: `qe-ABC-250` dispatched; nothing else until it returns._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — **ABC-261 DONE** (merged). Owed to next BA/PM hop: QE-260-a note on ABC-251; QE-261-a/b (bundle or decline). Running: se-ABC-250._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — **ABC-260 DONE** (merged). QE-260-a carried as an ABC-251 review note. Running: qe-ABC-261, se-ABC-250._
@@ -1183,7 +1184,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   one hop at pull, when it checks `Ready for Dev`'s exit at that moment; the row records the pull.
 
   HEADING FORMAT (spec §6.1): each column is an H2 heading carrying its live/limit WIP count,
-  e.g. `## In Development (WIP 0/3)` — the left number is how many tickets are in the column
+  e.g. `## In Development (WIP 1/3)` — the left number is how many tickets are in the column
   now, the right number is the limit from config. Unlimited columns read `(WIP unlimited)`;
   Blocked is visible and time-tracked (no WIP limit) and reads `(visible, time-tracked)`.
   INVARIANT: the column H2 headings and the rows of the `## Columns` table are the same 13 names in the
@@ -1193,10 +1194,10 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 0/3)
+    ## In Development (WIP 1/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
-    ## In Review (WIP 1/3)
+    ## In Review (WIP 0/3)
     - [ABC-012] Portfolio FX conversion  (PR: #41, QE: running)
 
   BOARD <-> TICKET CONTRACT: each ticket file (`plans/tickets/<prefix>-xxx.md`) carries a
@@ -1274,11 +1275,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 ## Backlog (WIP unlimited)
 - [EPIC-011] skytalix climbs toward 3 000 Elo, read at 40/15, on a classical measured path (owner: BA/PM, size: XL, priority: P2, since 2026-11-01; ADR-0056 accepted in direction; ADR-0055 O1; starts after EPIC-009 and EPIC-010 close; phases 0–5; milestones 2 200…3 000 (proposed); open owner calls Q-3K-2, Q-3K-4, Q-3K-6, Q-3K-7, Q-3K-8, rest of Q-3K-1)
-- [ABC-262] The early-exit row reads a pawns-first board and the in-check promotion row reads black to move (test-only; EPIC-011 phase 0; size: XS, priority: P3; DoR 10/10; QE-261-a/b; cut 2026-11-01 bapm-qe-gaps-1101b; after ABC-250 resolves, before ABC-252)
 - [ABC-257] T3: the TT is kept across the moves of one game, re-tried after deeper cutoffs and depth-preferred replacement (supersedes dropped ABC-209) (EPIC-011 Phase 1; size: S, priority: P3, DoR 8/10)
 - [ABC-258] T4: a larger TT, 8 MiB inside NFR-009 (more only on the owner's word) (EPIC-011 Phase 1; size: S, priority: P3, DoR 8/10)
-- [ABC-251] The search walks packed moves and builds a Move only at its return, with inlined helpers (ADR-0055 O1-b part 2 + O1-c; size: L (S if narrowed), priority: P2; DoR 9/10; milestone 1b; waits ABC-250's reading)
-- [ABC-252] One move generator: legalMoves builds its list from the packed generator through one converter (O1-b part 3; size: M, priority: P3; DoR 9/10; milestone 1b; dropped if ABC-250 is dropped)
+- [ABC-251] The search walks packed moves and builds a Move only at its return, with inlined helpers (ADR-0055 O1-b part 2 + O1-c; size: L (S if narrowed), priority: P2; DoR 9/10; milestone 1b; waits ABC-250's reading) **2026-11-01: narrows to O1-c alone (ABC-250 closed not merged) → re-scope by `bapm-abc250-close`**
 - [EPIC-010] skytalix closes its verified engine gaps; a change ships on an outside-opponent smoke (owner: BA/PM, size: L, priority: P2, since: 2026-10-29, accepted 2026-10-29 (Q5, no Elo target); Q4 = (e): 10 D + 10 R smoke per value-changing ticket + batched R pair per milestone; Q2 answered (~1700 non-goal removed; ~~goal >= 2 700 aspirational~~ → **goal 3 000 Elo** (owner 2026-11-01, …74216a44; scale open, MQ-3000)); Q1, Q3 open (defaults)) **2026-11-01: goal text moved to EPIC-011; remaining = ABC-249, ABC-254 (if its ADR lands first), ABC-250 → 251 → 252 → 253; M2 stands on milestone 1's batch (no new batch); close hop owed for M3/M4.**
 - [ABC-231] King table tapered by phase, alone (size: S, priority: P3, DoR 9/10; milestone 2; waits ADR ruling) **→ EPIC-011 2026-11-01 (bapm-epic011-dedupe; id kept)** (folds into E1 full taper at Phase 4)
 - [ABC-232] Passed pawns by phase (size: S, priority: P3, DoR 9/10; milestone 2; after ABC-231) **→ EPIC-011 2026-11-01 (bapm-epic011-dedupe; id kept)** (folds into E1/E4 at Phase 4)
@@ -1326,7 +1325,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+- [ABC-262] The early-exit row reads a pawns-first board and the in-check promotion row reads black to move (test-only; EPIC-011 phase 0; size: XS, priority: P3; DoR 10/10; QE-261-a/b; cut 2026-11-01 bapm-qe-gaps-1101b; after ABC-250 resolves, before ABC-252) **→ Ready → pulled 2026-11-01 → `se-ABC-262`**
 
 
 
@@ -1354,8 +1354,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
-- [ABC-250] Moves packed into integers in reused typed arrays for generation, legality and make/unmake, read on perft first (ADR-0055 O1-b part 1; size: M, priority: P2, value-identical S2, 0 games; DoR 10/10; EPIC-010 milestone 1b; bars ≥ 1.25× merge / below → not merged, ABC-251 narrows, ABC-252 dropped; Architect to confirm ADR-0003 clause 1 reading at design; after ABC-223 and ABC-249) **→ pulled 2026-11-01 → `se-ABC-250` (on top of ABC-254; speed rows under D3-V2)** **→ In Review 2026-11-01 (se-ABC-250 done 35139b31; packed int32 moves, typed-array undo stack, perft on fixed buffers; A1 perft 45/45, A2 285 074-node walk 0 mismatches; 2 381/2 381; review OK. RISK: informal perft 1.07–1.14× vs GO bar 1.25× — likely HOLD/NO-GO; search nps 1.00× (search not yet on the packed path, by scope)) → `qe-ABC-250` (A4 under D3-V2 in an ALONE window, after bapm-qe-gaps-1101b returns)**
+## In Review (WIP 0/3)
 
 
 
@@ -1415,6 +1414,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+- [ABC-250] Moves packed into integers in reused typed arrays for generation, legality and make/unmake, read on perft first (ADR-0055 O1-b part 1; size: M, priority: P2, value-identical S2, 0 games; DoR 10/10; EPIC-010 milestone 1b; bars ≥ 1.25× merge / below → not merged, ABC-251 narrows, ABC-252 dropped; Architect to confirm ADR-0003 clause 1 reading at design; after ABC-223 and ABC-249) **→ pulled 2026-11-01 → `se-ABC-250` (on top of ABC-254; speed rows under D3-V2)** **→ In Review 2026-11-01 (se-ABC-250 done 35139b31; packed int32 moves, typed-array undo stack, perft on fixed buffers; A1 perft 45/45, A2 285 074-node walk 0 mismatches; 2 381/2 381; review OK. RISK: informal perft 1.07–1.14× vs GO bar 1.25× — likely HOLD/NO-GO; search nps 1.00× (search not yet on the packed path, by scope)) → `qe-ABC-250` (A4 under D3-V2 in an ALONE window, after bapm-qe-gaps-1101b returns)** **→ Done 2026-11-01 — CLOSED NOT MERGED by routing (…d2571be5), NOT a graded miss: qe-ABC-250 UNRESOLVED on A4 (kiwipete/start VOID; position-6 valid 1.111 < 1.25; no kiwipete pair ≥ 1.25); A1/A2/A3/A5/G1/G4–G9 green. Branch grugops/ABC-250 kept (revivable). Consequences per page: ABC-251 narrows to O1-c; ABC-252 dropped. QE-250-a (perft reads void on a hot host) → Architect.**
+- [ABC-252] One move generator: legalMoves builds its list from the packed generator through one converter (O1-b part 3; size: M, priority: P3; DoR 9/10; milestone 1b; dropped if ABC-250 is dropped) **→ Done (dropped) 2026-11-01 — consequence of ABC-250 closed not merged (…d2571be5)**
 - [ABC-261] The default lane sees hasLegalMove lose its early exit and reads quiet queen promotions while in check (test-only; EPIC-010 milestone 1b; size: XS, priority: P3; DoR 10/10 once ABC-254 merges; QE-254-b/c; cut 2026-11-01 bapm-qe-gaps-1101; dropped if ABC-254 is dropped) **→ Ready (ABC-254 merged) → pulled 2026-11-01 → `se-ABC-261`** **→ In Review 2026-11-01 (se-ABC-261 done 06d6d987; early-exit row (PL3a 6 calls vs bar 2) and in-check promotion row (PQ2 red); 2 374/2 374; review OK — claim paths in the code commit accepted, as on ABC-259) → `qe-ABC-261`** **→ Done 2026-11-01 (qe-ABC-261 PASS_WITH_GAPS, UAT waived test-only; merge-tree 2 374; G8 8.84 / 8.90 s ALONE; merged). Gaps LOW → next BA/PM hop (bundle or decline): QE-261-a (add a pawns-first board to the early-exit row), QE-261-b (colour-mirrored promotion boards); QE-261-c LOW carried to ABC-250 (generator reorder breaks the row precondition — re-board, never drop the bar); d INFO.**
 - [ABC-260] The source scan catches `process` by any spelling and a comment marker inside a string cannot hide code (test-only; EPIC-010 milestone 1b; size: XS, priority: P2; DoR 10/10; QE-259-a/b; cut 2026-11-01 bapm-qe-gaps-1101) **→ Ready → pulled 2026-11-01 → `se-ABC-260` (before ABC-251)** **→ In Review 2026-11-01 (se-ABC-260 done 64c7e829; whole-word `process`, string-aware comment strip shared by A8 and ABC-259; plants Q5/Q6/Q7 red; review OK — LOW: strings are kept, so a string literal naming `process` in core files now trips the env row (stricter, accepted); regex literals with quotes unhandled) → `qe-ABC-260` queued AFTER the ABC-254 alone window** **→ Done 2026-11-01 (qe-ABC-260 PASS_WITH_GAPS, UAT waived test-only; merge-tree 2 372 = main + 0; G8 8.96 / 8.94 s ALONE; merged). Gaps: QE-260-a LOW (regex literals with quotes or \/\/ can still hide code — no such literal today; carried as a review note on ABC-251, no ticket), QE-260-b LOW (backtick in ${}), c–e INFO.**
 - [ABC-254] Lazy legality: make/test/unmake only for king moves, en passant, pinned pieces and checks (ADR-0055 O1-d; size: M, priority: P2; DoR 10/10; milestone 1b; **owner YES 2026-11-01 (…f7a50e95)**; → Ready when `arch-adr0003-amend` merges) **Stays EPIC-010 milestone 1b, first once arch-adr0003-amend merges** (ABC-254 page exception: owner yes + amending ADR before ABC-250 enters development) **→ Ready 2026-11-01 (bapm-ABC-254-ready; first in 1b)** **pulled 2026-11-01 → `se-ABC-254` (parallel coding; tests serialized by host-test.lock after the probe)** **→ In Review 2026-11-01 (se-ABC-254 done fe53dbda; A1/A2/perft green; npm test 2 368/0; out-of-ticket edit: gameend.nfr.test.ts bars tightened 1/8→0, reviewed OK) → `qe-ABC-254` (A3/G4, A4 ALONE nps, G1/G5/G6/G8/G9)** **2026-11-01 qe-ABC-254 UNRESOLVED (branch 15eadd7a): A1/A2/A3/A5 MET (G4 byte-equal 7 827 rows; 777k-position differential 0 mismatches; perft 32/32; G8 9.01 vs 9.59 s); A4 ungraded — kiwipete 1.115 and position-4 1.102 valid, position-6 and start voided by the 5 % spread rule under foreign load (every round 1.067–1.192). QE-254-a BLOCKING → `qe-ABC-254-a4` re-read (~15 min, ALONE, after qe-ABC-255). QE-254-b/c LOW test-only → BA/PM. Not merged.** **2026-11-01 qe-ABC-254-a4 UNRESOLVED again (branch c5da6514): kiwipete 1.120 and start 1.105 valid; position-6 and position-4 voided by spread (bursty short-lived foreign load within ~1 min of an ALONE start). INFO: 35/35 pairs ≥ 1.02. → `arch-d3-under-load` (forward-only validity ruling), then a fresh read with no other hop of this session running.** **→ Done 2026-11-01 (qe-ABC-254-a4v2 PASS_WITH_GAPS: A4 MET under ADR-0055 D3-V2 — kiwipete 1.112, position-6 1.120, start 1.106, guard position-4 1.095; ALONE window 18:52–19:03Z; UAT signed by QE verdict under owner delegation; merged; post-merge npm test 2 372/2 372, typecheck 0). Gaps → ABC-261 (QE-254-b/c), QE-254-d INFO.**
