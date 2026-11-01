@@ -1182,7 +1182,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   one hop at pull, when it checks `Ready for Dev`'s exit at that moment; the row records the pull.
 
   HEADING FORMAT (spec §6.1): each column is an H2 heading carrying its live/limit WIP count,
-  e.g. `## In Development (WIP 1/3)` — the left number is how many tickets are in the column
+  e.g. `## In Development (WIP 0/3)` — the left number is how many tickets are in the column
   now, the right number is the limit from config. Unlimited columns read `(WIP unlimited)`;
   Blocked is visible and time-tracked (no WIP limit) and reads `(visible, time-tracked)`.
   INVARIANT: the column H2 headings and the rows of the `## Columns` table are the same 13 names in the
@@ -1192,10 +1192,10 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 1/3)
+    ## In Development (WIP 0/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
-    ## In Review (WIP 0/3)
+    ## In Review (WIP 1/3)
     - [ABC-012] Portfolio FX conversion  (PR: #41, QE: running)
 
   BOARD <-> TICKET CONTRACT: each ticket file (`plans/tickets/<prefix>-xxx.md`) carries a
@@ -1324,8 +1324,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-250] Moves packed into integers in reused typed arrays for generation, legality and make/unmake, read on perft first (ADR-0055 O1-b part 1; size: M, priority: P2, value-identical S2, 0 games; DoR 10/10; EPIC-010 milestone 1b; bars ≥ 1.25× merge / below → not merged, ABC-251 narrows, ABC-252 dropped; Architect to confirm ADR-0003 clause 1 reading at design; after ABC-223 and ABC-249) **→ pulled 2026-11-01 → `se-ABC-250` (on top of ABC-254; speed rows under D3-V2)**
+## In Development (WIP 0/3)
 
 
 
@@ -1353,7 +1352,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-250] Moves packed into integers in reused typed arrays for generation, legality and make/unmake, read on perft first (ADR-0055 O1-b part 1; size: M, priority: P2, value-identical S2, 0 games; DoR 10/10; EPIC-010 milestone 1b; bars ≥ 1.25× merge / below → not merged, ABC-251 narrows, ABC-252 dropped; Architect to confirm ADR-0003 clause 1 reading at design; after ABC-223 and ABC-249) **→ pulled 2026-11-01 → `se-ABC-250` (on top of ABC-254; speed rows under D3-V2)** **→ In Review 2026-11-01 (se-ABC-250 done 35139b31; packed int32 moves, typed-array undo stack, perft on fixed buffers; A1 perft 45/45, A2 285 074-node walk 0 mismatches; 2 381/2 381; review OK. RISK: informal perft 1.07–1.14× vs GO bar 1.25× — likely HOLD/NO-GO; search nps 1.00× (search not yet on the packed path, by scope)) → `qe-ABC-250` (A4 under D3-V2 in an ALONE window, after bapm-qe-gaps-1101b returns)**
 
 
 
