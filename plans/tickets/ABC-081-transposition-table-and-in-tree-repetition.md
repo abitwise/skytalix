@@ -80,6 +80,12 @@ FAIL — checked by this ticket's own `A1`.
   searched with the table enabled and disabled, **then** the returned **scores are identical** in
   every case. *(The single most dangerous class of TT bug is a bound flag applied at the wrong depth
   or window, and it shows up only as a wrong score.)*
+  *(2026-11-01, `bapm-phase1-wording`: **`A1` revised by `ADR-0058` decision 8**, PROPOSED; in force only once the owner
+  accepts it and `ABC-238` merges.)* `A1` holds for the exact-depth table: with deeper cutoffs off, a table-on search
+  scores identically to the table-off search (the perft corpus at depth 4, on the doors that predate `ABC-121`, as
+  today). With deeper cutoffs on (`ABC-238`), a deeper stored entry may change a value; that change is judged by
+  `ADR-0058` decision 6's bounded oracle and by `ADR-0056` C2′, never by identity. **The rows under `A1` do not
+  change: they bind the older doors,** each of which turns deeper cutoffs off (`ADR-0058` decision 4).
 - **`A2` (it hits, and the hit rate is reported).** **Given** `kiwipete` and `position-6` at depth 5,
   **then** the table hit rate is reported and is **≥ 15%**. *(A table that never hits is a
   memory leak with a lookup.)*

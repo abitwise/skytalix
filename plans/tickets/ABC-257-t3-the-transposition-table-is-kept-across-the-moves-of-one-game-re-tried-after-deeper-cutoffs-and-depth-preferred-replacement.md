@@ -48,7 +48,7 @@ adr: "ADR-0025 decision 4 amendment of 2026-10-26: ACCEPTED by the owner (…2ae
   the next move; `NFR-009` size and growth, including `heapUsed` ≤ 1 MiB over a 40-move game; `G1`, `G4` with the clear
   door, `G5`, `G6`, `G8`, `G9`; the ADR records that it was reported to the owner), re-read at refinement against the
   base this ticket is written on.
-- **A6 (the reading, replacing `ABC-209`'s S1).** *(2026-11-01, the owner's rule, `bapm-100-400-rule`; replaces the smoke pair and the SPRT this row named.)* One 100-game read at 100 ms a move before the merge (`EPIC-011` § The per-change rule): the candidate head rebased on `main` against its merge-base, self-play, openings 1–50 with both colours, one game at a time, through `ABC-255`. 100 of 100 games complete, the candidate makes 0 faults and loses 0 games on time at the 50 ms margin, and the score meets `ADR-0056` C2′ (merged `94f1504c`): ≥ 50.0 of 100 for a GAIN, ≥ 43.0 for a NEUTRAL, the intent declared at design. A miss is NOT MET and is not re-played. Reported: W/L/D, score, `cutechess-cli`'s Elo ± error. A miss of the pass line closes the ticket; it is not re-tuned without the owner's word. *(2026-11-01, `bapm-owner-answers`, the owner's answer 3.)* **And the Stockfish smoke beside it:** 10 games, the candidate at 0.5 s a move against Stockfish 19 `UCI_LimitStrength`, one game at a time, through `ABC-255` (`EPIC-011` § The per-change rule): 10 of 10 complete, 0 faults, 0 losses on time, and S-4 at E 1 650: ≥ 3.0 of 10, below that 10 more games and ≥ 7.0 of 20 (`ADR-0056` S′; `skytalix` `timemargin` 50 ms; `r <candidate> <out> --budget-ms 500 --rounds 5 --concurrency 1`) *(was the fold's bar, `UNKNOWN - verify`; merged `a0f9297e`, `bapm-reconcile-adr0056`)*. *(2026-11-01, `bapm-reconcile-adr0056`, `ADR-0056` R-TC part 2: the owner's "works on different difficulty settings".)* **And the Levels deep lane on the candidate head:** `ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/levels.test.ts --reporter=verbose`, QE, host alone, beside the 100-game read (≈ 9 min): exit 0 with every test passed (41 at `ADR-0056`'s count; QE counts its own run). A failure is a defect, back to the Software Engineer.
+- **A6 (the reading, replacing `ABC-209`'s S1).** *(2026-11-01, the owner's rule, `bapm-100-400-rule`; replaces the smoke pair and the SPRT this row named.)* One 100-game read at 100 ms a move before the merge (`EPIC-011` § The per-change rule): the candidate head rebased on `main` against its merge-base, self-play, openings 1–50 with both colours, one game at a time, through `ABC-255`. 100 of 100 games complete, the candidate makes 0 faults and loses 0 games on time at the 50 ms margin, and the score meets `ADR-0056` C2′ (merged `94f1504c`): ≥ 50.0 of 100 for a GAIN, ≥ 43.0 for a NEUTRAL, the intent declared at design. A miss is NOT MET and is not re-played. Reported: W/L/D, score, `cutechess-cli`'s Elo ± error. A miss of the pass line closes the ticket; it is not re-tuned without the owner's word. *(2026-11-01, `bapm-owner-answers`, the owner's answer 3.)* **And the Stockfish smoke beside it:** 10 games, the candidate at 0.5 s a move against Stockfish 19 `UCI_LimitStrength`, one game at a time, through `ABC-255` (`EPIC-011` § The per-change rule): 10 of 10 complete, 0 faults, 0 losses on time, and S-4 at E 1 650: ≥ 3.0 of 10, below that 10 more games and ≥ 7.0 of 20 (`ADR-0056` S′; `skytalix` `timemargin` 50 ms; `r <candidate> <out> --budget-ms 500 --rounds 5 --concurrency 1`) *(was the fold's bar, `UNKNOWN - verify`; merged `a0f9297e`, `bapm-reconcile-adr0056`)*. *(2026-11-01, `bapm-reconcile-adr0056`, `ADR-0056` R-TC part 2: the owner's "works on different difficulty settings".)* **And the Levels deep lane on the candidate head:** `ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/levels.test.ts --reporter=verbose`, QE, host alone, beside the 100-game read (≈ 9 min): exit 0 with every test passed (~~41 at `ADR-0056`'s count~~ *57 at `EPIC-010`'s close read, 577 s, `qe-EPIC-010-close` `…388b3044`*; QE counts its own run). A failure is a defect, back to the Software Engineer.
 - **A8 (it pays where it should).** On a 10-move sequence of one game at a fixed depth (QE fixes both before the first
   build; a 40/15 move is not a lane row), the summed nodes of moves 2–10 are ≤ 0.90 × the clear door's.
 
@@ -69,6 +69,15 @@ adr: "ADR-0025 decision 4 amendment of 2026-10-26: ACCEPTED by the owner (…2ae
 
 - `ABC-238` and `ABC-237` merged or closed (same file, `src/transposition.ts`; the precondition this re-try rests on).
 - **Architect:** re-read the accepted `ADR-0025` d4 amendment on the new base and give it its in-force line at merge.
+  *(2026-11-01, `bapm-phase1-wording`, carried from `arch-epic011-phase1` `…1dcdd8c7`; named, not decided.)* **This
+  ticket's design owes three re-checks:**
+  1. `ADR-0058` d7's pre-root repetition argument holds **within one search only**; the prior keys grow between
+     searches, so a kept entry must be re-argued (or shown harmless) across moves.
+  2. The 2026-10-26 `ADR-0025` d4 amendment's line "an entry cuts only at its exact stored depth … never wrong, only
+     possibly useless" is **false once `ABC-238` lands**; the re-read restates it.
+  3. Depth-preferred replacement with no age (`ADR-0025` T2 amendment) lets deep entries from earlier moves hold their
+     slots for the rest of the game: **an age rule, or a measured statement that none is needed.** An age field could
+     only take bits from the 13-bit depth field, a layout question for `ADR-0057` (Scope 2).
 - **Owner:** none new (the amendment is his, accepted 2026-10-26). Q-3K-2 only shapes A6. *(2026-11-01: answered, no SPRT; A6 is the 100-game read.)*
 
 ## Definition of Ready
@@ -84,6 +93,6 @@ adr: "ADR-0025 decision 4 amendment of 2026-10-26: ACCEPTED by the owner (…2ae
 | 7 | test notes | ✅ |
 | 8 | size | ✅ S |
 | 9 | priority | ✅ P3 |
-| 10 | no major unresolved blocker | ❌ `ABC-238`, `ABC-237`; `EPIC-011` not started |
+| 10 | no major unresolved blocker | ❌ `ABC-238`, `ABC-237`; ~~`EPIC-011` not started~~ *(started 2026-11-01)*; the three re-checks above |
 
 **DoR 8/10** (row 4's carried rows are re-read at refinement). **Backlog.**
