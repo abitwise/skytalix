@@ -1,0 +1,12 @@
+diff -ru src/legal.ts /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-261/plants/QN//src/legal.ts
+--- src/legal.ts	2026-11-01 19:13:12.491029547 +0000
++++ /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-261/plants/QN//src/legal.ts	2026-11-01 19:18:38.590814670 +0000
+@@ -422,7 +422,7 @@
+       piece: pawn,
+       captured: EMPTY,
+       flags: FLAG_PROMOTION,
+-      promotion: QUEEN,
++      promotion: inCheck ? 2 : QUEEN, // PLANT QN (2 = KNIGHT)
+     };
+     // A pawn move never moves the king, so the mover's king stands on its hoisted square.
+     if (
