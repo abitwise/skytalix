@@ -1,0 +1,7 @@
+none rc=0 total=234 passed=234 failed=0 skipped=0
+
+HSCM rc=1 total=234 passed=233 failed=1 skipped=0
+  RED ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) ABC-246 (QE-221-a) — the hard stop with an increment, and movetime over a clock, in the mode A1: go wtime 3000 btime 3000 winc 500 binc 500 movestogo 1 -> 1 900 (the hard stop t - 1 100), not the spread's 2 400
+CLOCKWINSCM rc=1 total=234 passed=233 failed=1 skipped=0
+  RED ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) ABC-246 (QE-221-a) — the hard stop with an increment, and movetime over a clock, in the mode A2: go wtime 900000 btime 900000 movestogo 40 movetime 5000 -> 5 000 (movetime is read first), not the clock's 22 375
+restored: cmp H P src/uci-session.ts equal
