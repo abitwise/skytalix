@@ -1,0 +1,11 @@
+# bench.mjs <tree> 8 : kiwipete d4 + position-6 d4, 8 reps after a perft(start,3) warm, one process per line, under the host lock (informal)
+B 26.49 Mnps
+H 28.42 Mnps
+B 25.89 Mnps
+H 28.26 Mnps
+B 26.00 Mnps
+H 27.87 Mnps
+# variant: UndoStack clock as Int32Array (NOT shipped; not exact for halfmove clocks beyond int32)
+H-int32 28.75 Mnps
+H-int32 27.81 Mnps
+H-int32 28.92 Mnps
