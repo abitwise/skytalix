@@ -181,3 +181,46 @@ change the shapes above; the column move is the Orchestrator's.**~~
 
 **DoR 10/10 (re-scored 2026-11-01, `bapm-reconcile-adr0056`): the fold merged and item 2 follows it. Ready
 recommended; the column move is the Orchestrator's.**
+
+## Reading
+
+> **2026-11-01, QE (`qe-ABC-255`, branch `grugops/qe-ABC-255`).** Written by QE under A8. The PREREG `28b800cc` was
+> sealed before any game. Every run went under the host lock at `--concurrency 1`, one at a time. The harness was
+> branch HEAD `73ec5545`, whose `tools/` equal `78cd2415`. Records are in `.grugops/context/qe-ABC-255/raw/`.
+> **Verdict: PASS_WITH_GAPS** (QE-255-a LOW; QE-255-b, c, d and e INFO; none blocking; decision `…cc9d4bad`).
+
+| read | command | games | W/L/D (first-named engine) | score | Elo ± | draws | faults | time losses | max overshoot | games/h | host |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| **A3** (ABC-208, reported) | `d b5c67ab7 12270c02 <out> --budget-ms 100 --rounds 50 --concurrency 1` | 100/100 | 30/26/44 | **52.0 of 100** | +13.9 ± 51.3 | 44.0 % | 0 | 0 | 5 ms (both sides) | 334.0 | ALONE |
+| **A4** (identical pair) | `d becf571a becf571a <out> --budget-ms 100 --rounds 50 --concurrency 1` | 100/100 | 29/38/33 | **45.5 of 100** | −31.4 ± 56.3 | 33.0 % | 0 | 0 | 4 / 5 ms | 253.3 | SHARED* |
+| **A5** (S′ on main) | `r becf571a <out> --budget-ms 500 --rounds 5 --concurrency 1` (E 1 650) | 10/10 | 9/1/0 | **9.0 of 10** | +381.7 ± nan | 0 % | 0 | 0 | **3 ms** over 500 | 94.2 | SHARED* |
+
+- **A3 (reported, not graded):**
+  - The GAIN bar (at least 50.0 of 100, point estimate at or above 0) **is met**, at 52.0 and +13.9.
+  - The harness state is NEUTRAL: the interval spans 0. At 3 s the reading was +38.4 ± 23.3.
+  - The lower point estimate at 100 ms fits ADR-0056's depth-gated caveat, but it is within the noise.
+- **A4:**
+  - **Checked: 100 of 100 games complete, with 0 faults and 0 losses on time**, by either side.
+  - The identical pair sits near 50 %: 45.5, and the interval covers 0.
+  - The draw ratio at 100 ms is **33 %**. A3 drew 44 %, and ADR-0056 assumed 0.50, so the 100-game interval is nearer ±56 than ±48.
+- **A5:**
+  - **Checked: 10 of 10 games complete, with 0 faults and 0 losses on time.**
+  - Stockfish's depth per move has a median of 17 and a minimum of 12. The harness depth guard counts 0 of 392 moves below 3.
+  - **skytalix's largest overshoot over 500 ms is 3 ms** (p99 2 ms). That is under ADR-0056 S′'s 12 ms flag, so no margin re-set is needed.
+  - The score of 0.900 is above the 67–83 % estimate. That comes from one read, and the E re-pin needs at least 30 pooled games (QE-255-d).
+- **Overshoot method:** cutechess-cli's `-debug` clock, from `go movetime` to `bestmove`, with book replies excluded. At 100 ms the largest was 5 ms over 24 515 searched moves, so the 50 ms margin is 10 times the largest seen.
+- **\*Host:** A3 was ALONE.
+  - A5's start came after the 20 min wait cap. Behind it were a long foreign vitest from `projects/public/grugops` and recurring short ones.
+  - A4 started ALONE, then 15.5 % of its samples saw a foreign vitest from another repo.
+  - Foreign processes stayed under 20 % CPU in all but 1–3 samples. Tctl medians were 76–77 °C, with no thermal stop.
+- **Gaps:**
+
+  | id | severity | gap |
+  |---|---|---|
+  | QE-255-a | LOW | No offline row holds the `machine.txt` `control:` line. Mutant M8 survives, but the line is present in all three reads. |
+  | QE-255-b | INFO | `--budget-ms` accepts `500.0` / `5e2` / `0x1F4`, with the same vector. |
+  | QE-255-c | INFO | The harness `host.log` counts flock waiter lines as vitest. Pre-existing, ABC-225 code. |
+  | QE-255-d | INFO | The first S′ scored 0.900. Log it in the S′ ledger. |
+  | QE-255-e | INFO | Admissibility labels, as in the \*Host item above. |
+
+- **Notes** (task `qe-ABC-255`): PREREG `…1a15c163`, static `…3d8f640a`, A5 `…06e00dd9`, A3 `…919fe884`, A4 `…78ea212c`, gaps `…f41a5b6e`, verdict `…cc9d4bad`, artifacts `…870e01e7`.

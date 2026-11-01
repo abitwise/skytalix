@@ -1,0 +1,9 @@
+✔ ADR-0049 d4: records carry placeholders, not host paths (0.366645ms)
+ℹ tests 32
+ℹ suites 6
+ℹ pass 32
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6027.375092

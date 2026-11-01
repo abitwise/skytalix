@@ -1,0 +1,11 @@
+# refusals (stderr first error line), rows 18-22 of dry-compare.txt; all exit 1 in base and head
+18 base: usage: node tools/rating/rating.ts r <sha> <out-dir> [--elo E] [--rounds N] [--concurrency C]
+18 head: Error: --budget-ms 4000: r takes only 500
+19 base: usage: node tools/rating/rating.ts r <sha> <out-dir> [--elo E] [--rounds N] [--concurrency C]
+19 head: Error: --budget-ms 100: r takes only 500
+20 base: usage: node tools/rating/rating.ts r <sha> <out-dir> [--elo E] [--rounds N] [--concurrency C]
+20 head: Error: --budget-ms 1000: r takes only 500
+21 base: Error: --budget-ms 500: not one of 3000,2500,2000,1500,1000
+21 head: Error: --budget-ms 500: not one of 3000,2500,2000,1500,1000,100
+22 base: usage: node tools/rating/rating.ts r <sha> <out-dir> [--elo E] [--rounds N] [--concurrency C]
+22 head: usage: node tools/rating/rating.ts r <sha> <out-dir> [--elo E] [--budget-ms 500] [--rounds N] [--concurrency C]

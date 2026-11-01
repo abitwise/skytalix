@@ -2,7 +2,7 @@
  * `ABC-204` — the rating harness. It drives `cutechess-cli` 1.5.1 in two modes, with the pins of
  * the ABC-204 page's `## Design ruling`, and reads `EPIC-008` § The two readings:
  *
- *   node tools/rating/rating.ts r <sha> <out-dir> [--elo E] [--rounds N] [--concurrency C]
+ *   node tools/rating/rating.ts r <sha> <out-dir> [--elo E] [--budget-ms 500] [--rounds N] [--concurrency C]
  *   node tools/rating/rating.ts d <candidate-sha> <base-sha> <out-dir> [--budget-ms B] [--rounds N] [--concurrency C]
  *   node tools/rating/rating.ts rpair <base-sha> <candidate-sha> <out-dir> [--elo E] [--rounds N] [--concurrency C]
  *
@@ -36,6 +36,13 @@
  * `go()` caps `go movetime 4000` at `LEVELS[skill].budgetMs`, and the default level 5 is 3 000 ms on
  * a base before `ABC-228`. Level 6 is 5 000 ms and rate 0 at every SHA in `EPIC-010`, so both builds
  * search the 4 000 ms `ADR-0053` d10 names. `r` and `d` send no `Skill Level` (the shipped level 5).
+ *
+ * `ABC-255` — the owner's reads (`ADR-0056` C2′, C3″, S′). `d --budget-ms 100` plays both sides at
+ * `st=0.1` with `timemargin` 50 ms: the change read is `--rounds 50` (100 games), the epic read
+ * `--rounds 200` (400 games). `r --budget-ms 500` (the only value `r` takes) is the smoke: skytalix at
+ * `st=0.5` with `timemargin` 50 ms, Stockfish's pins unchanged. Every other budget keeps Q1's
+ * 5 000 − budget, so `r` without the flag, every `rpair` and today's `d` budgets print as before.
+ * The control reaches skytalix only as `st=` and `timemargin=` (`ADR-0056` R-TC).
  */
 import { execFileSync, spawn } from "node:child_process";
 import { createHash } from "node:crypto";
@@ -97,9 +104,19 @@ const CUTECHESS = toolPath("CUTECHESS_CLI");
 const CUTECHESS_SHA256 = "dc77690113d9ae130f5d1b4c76fefb28f42620ac45a2bd4abb7dd8eb2154f40a";
 const STOCKFISH = toolPath("STOCKFISH");
 const STOCKFISH_SHA256 = "c78c22a924e8d452e1089ec8d47826f7a276aba69373185e82cbac4593e352d2";
-/** Q4 budgets for D; Q1's rule gives each its `timemargin` = 5 000 − budget. */
-const D_BUDGETS_MS = [3000, 2500, 2000, 1500, 1000];
+/** Q4 budgets for D, each with Q1's `timemargin` = 5 000 − budget; `ABC-255` adds C2′'s 100 (`SHORT_MARGIN_MS`). */
+const D_BUDGETS_MS = [3000, 2500, 2000, 1500, 1000, 100];
+/** R's skytalix budget (design ruling), and the one `--budget-ms` R takes (`ABC-255`, `ADR-0056` S′). */
+const R_BUDGET_MS = 4000;
+const R_SMOKE_BUDGET_MS = 500;
 const CEILING_MS = 5000;
+/** `ADR-0056` C2′ and S′: a short budget's fixed `timemargin`, not Q1's 5 000 − budget. */
+const SHORT_MARGIN_MS = new Map([
+  [100, 50],
+  [R_SMOKE_BUDGET_MS, 50],
+]);
+/** skytalix's `timemargin` at a budget: the short budget's fixed margin, else 5 000 − budget. */
+export const timemarginMs = (ms: number): number => SHORT_MARGIN_MS.get(ms) ?? CEILING_MS - ms;
 /** The watchdog: no byte of `cutechess-cli` output for this long stops the run as a stall. */
 const WATCHDOG_MS = 600_000;
 const POLL_MS = 5_000;
@@ -128,10 +145,11 @@ const eloNumber = (text: string): number =>
 
 function usage(): never {
   console.error(
-    "usage: node tools/rating/rating.ts r <sha> <out-dir> [--elo E] [--rounds N] [--concurrency C]\n" +
+    "usage: node tools/rating/rating.ts r <sha> <out-dir> [--elo E] [--budget-ms 500] [--rounds N] [--concurrency C]\n" +
       "       node tools/rating/rating.ts d <candidate-sha> <base-sha> <out-dir> [--budget-ms B] [--rounds N] [--concurrency C]\n" +
       "       node tools/rating/rating.ts rpair <base-sha> <candidate-sha> <out-dir> [--elo E] [--rounds N] [--concurrency C]\n" +
       "       --concurrency: 1–8; default R 2, D 3, rpair 2\n" +
+      "       --budget-ms: R 500 only (default 4000); D 3000 (default), 2500, 2000, 1500, 1000 or 100\n" +
       "       rpair: --elo default 1910; --rounds 10–100 in tens, default 100 (10 = one block per build, 40 games)\n" +
       "       --dry-run (any mode): print the cutechess-cli arguments and stop",
   );
@@ -395,7 +413,7 @@ export function cutechessArgs(spec: ArgSpec): string[] {
     `arg=${join(clone, "dist/uci.js")}`,
     `dir=${clone}`,
     `st=${ms / 1000}`,
-    `timemargin=${CEILING_MS - ms}`,
+    `timemargin=${timemarginMs(ms)}`,
     "restart=on",
     ...(spec.skill === undefined ? [] : [`option.Skill Level=${spec.skill}`]),
     `stderr=${join(files, `${name}.stderr`)}`,
@@ -418,7 +436,7 @@ export function cutechessArgs(spec: ArgSpec): string[] {
       : sky("base", clones[1] as string, budget);
   const start = spec.start === undefined ? [] : [`start=${spec.start}`];
   return [
-    ...sky("skytalix", clones[0] as string, mode === "r" ? 4000 : budget),
+    ...sky("skytalix", clones[0] as string, budget),
     ...opponent,
     ...["-each", "proto=uci"],
     ...["-openings", `file=${OPENINGS}`, "format=epd", "order=sequential", ...start, "-repeat"],
@@ -668,7 +686,7 @@ async function rpair(positional: string[], flags: Map<string, string>, dryRun: b
       files: dirOf(build, block),
       clones: [join(out, build, "clone-skytalix")],
       elo,
-      budget: 4000,
+      budget: R_BUDGET_MS,
       rounds: block.rounds,
       concurrency,
       start: block.start,
@@ -793,18 +811,21 @@ async function main(argv: string[]): Promise<void> {
   const mode = positional[0];
   if (mode === "rpair") return rpair(positional, flags, dryRun);
   if ((mode !== "r" && mode !== "d") || positional.length !== (mode === "r" ? 3 : 4)) usage();
-  const allowed = mode === "r" ? ["--elo", "--rounds"] : ["--budget-ms", "--rounds"];
-  allowed.push("--concurrency");
+  const allowed = mode === "r" ? ["--elo", "--rounds"] : ["--rounds"];
+  allowed.push("--budget-ms", "--concurrency");
   if ([...flags.keys()].some((flag) => !allowed.includes(flag))) usage();
   const shas = positional
     .slice(1, -1)
     .map((ref) => run("git", ["rev-parse", "--verify", `${ref}^{commit}`]));
   const elo = Number(flags.get("--elo") ?? 1650);
-  const budget = Number(flags.get("--budget-ms") ?? 3000);
+  const budgetFlag = flags.get("--budget-ms");
+  const budget = Number(budgetFlag ?? (mode === "r" ? R_BUDGET_MS : 3000));
   const rounds = Number(flags.get("--rounds") ?? (mode === "r" ? 100 : 200));
   if (!Number.isInteger(elo) || elo < 1320 || elo > 3190)
     throw new Error(`--elo ${elo}: not 1320–3190`);
-  if (!D_BUDGETS_MS.includes(budget))
+  if (mode === "r" && budgetFlag !== undefined && budget !== R_SMOKE_BUDGET_MS)
+    throw new Error(`--budget-ms ${budgetFlag}: r takes only ${R_SMOKE_BUDGET_MS}`);
+  if (mode === "d" && !D_BUDGETS_MS.includes(budget))
     throw new Error(`--budget-ms ${budget}: not one of ${D_BUDGETS_MS}`);
   if (!Number.isInteger(rounds) || rounds < 1)
     throw new Error(`--rounds ${rounds}: not a positive integer`);
@@ -831,6 +852,12 @@ async function main(argv: string[]): Promise<void> {
   const machine = [
     ...(await machineLines(out)),
     `concurrency: ${concurrency} ${concurrency === defaultConcurrency ? "(default)" : `(default ${defaultConcurrency})`}`,
+    // ABC-255 scope 3: a short control is recorded; every other run's record is as before.
+    ...(SHORT_MARGIN_MS.has(budget)
+      ? [
+          `control: skytalix${mode === "d" ? " and base" : ""} st=${budget / 1000} timemargin=${timemarginMs(budget)}`,
+        ]
+      : []),
   ].join("\n");
   writeFileSync(join(out, "machine.txt"), `${machine}\n`);
   console.log(machine);

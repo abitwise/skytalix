@@ -1,0 +1,6 @@
+1c1
+< usage: node tools/rating/rating.ts r <sha> <out-dir> [--elo E] [--rounds N] [--concurrency C]
+---
+> usage: node tools/rating/rating.ts r <sha> <out-dir> [--elo E] [--budget-ms 500] [--rounds N] [--concurrency C]
+4a5
+>        --budget-ms: R 500 only (default 4000); D 3000 (default), 2500, 2000, 1500, 1000 or 100

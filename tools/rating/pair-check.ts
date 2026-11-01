@@ -1,6 +1,7 @@
 /**
  * `ABC-225` — the offline checks of `rating.ts rpair` (A1–A4); `ABC-247` adds its A1 (the
- * `Skill Level` 6 token on both builds, none on `r` or `d`). Not a lane file (`NFR-008`): its
+ * `Skill Level` 6 token on both builds, none on `r` or `d`); `ABC-255` adds `d` at 100 ms and `r` at
+ * 500 ms, with today's prints unchanged. Not a lane file (`NFR-008`): its
  * name is not `*.test.*`, so `npm test` never collects it, and nothing in the lane imports it.
  *
  *   node --test tools/rating/pair-check.ts
@@ -246,6 +247,190 @@ describe("A1: rpair reads each build with r's argv, but for openings start/count
       ...sky("base", "1.5", "3500"),
       ...tail("d", "200", "3"),
     ]);
+  });
+});
+
+describe("ABC-255: d at 100 ms (C2′, C3″) and r at 500 ms (S′); every other print as before", () => {
+  const sha = git("rev-parse", "--short=12", "HEAD");
+  const files = join(SCRATCH, "abc255");
+  const f = files.startsWith(homedir()) ? `<home>${files.slice(homedir().length)}` : files;
+  const sky = (name: string, st: string, margin: string): string[] => [
+    "-engine",
+    `name=${name}`,
+    "cmd=<node>",
+    `arg=${f}/clone-${name}/dist/uci.js`,
+    `dir=${f}/clone-${name}`,
+    `st=${st}`,
+    `timemargin=${margin}`,
+    "restart=on",
+    `stderr=${f}/${name}.stderr`,
+  ];
+  const tail = (mode: string, rounds: string, width: string): string[] => [
+    "-each",
+    "proto=uci",
+    "-openings",
+    "file=<repo>/tools/rating/openings.epd",
+    "format=epd",
+    "order=sequential",
+    "-repeat",
+    "-games",
+    "2",
+    "-rounds",
+    rounds,
+    "-concurrency",
+    width,
+    "-maxmoves",
+    "200",
+    "-pgnout",
+    `${f}/${mode}.pgn`,
+    "-debug",
+    "all",
+  ];
+  const argvOf = (...args: string[]): string[] => {
+    const run = harness(...args, "--dry-run");
+    assert.equal(run.status, 0, run.stderr);
+    assert.equal(existsSync(files), false);
+    return argvBlocks(run.stdout)[0]?.argv ?? [];
+  };
+  const stockfish = (argv: readonly string[], elo: string): string[] => [
+    "-engine",
+    "name=stockfish",
+    argv[argv.indexOf("name=stockfish") + 1] as string,
+    "st=0.5",
+    "timemargin=2000",
+    "restart=on",
+    "option.Threads=1",
+    "option.Hash=16",
+    "option.UCI_LimitStrength=true",
+    `option.UCI_Elo=${elo}`,
+    `stderr=${f}/stockfish.stderr`,
+  ];
+
+  test("A1: d --budget-ms 100 gives both sides st=0.1 and timemargin=50, at 50 and at 200 rounds", () => {
+    for (const rounds of ["50", "200"]) {
+      const argv = argvOf(
+        "d",
+        sha,
+        sha,
+        files,
+        "--budget-ms",
+        "100",
+        "--rounds",
+        rounds,
+        "--concurrency",
+        "1",
+      );
+      assert.deepEqual(argv, [
+        "<cutechess-cli>",
+        ...sky("skytalix", "0.1", "50"),
+        ...sky("base", "0.1", "50"),
+        ...tail("d", rounds, "1"),
+      ]);
+    }
+  });
+
+  test("A1: the default and each of today's d budgets keep Q1's 5 000 − budget", () => {
+    for (const [flags, st, margin] of [
+      [[], "3", "2000"],
+      [["--budget-ms", "3000"], "3", "2000"],
+      [["--budget-ms", "2500"], "2.5", "2500"],
+      [["--budget-ms", "2000"], "2", "3000"],
+      [["--budget-ms", "1500"], "1.5", "3500"],
+      [["--budget-ms", "1000"], "1", "4000"],
+    ] as [string[], string, string][]) {
+      assert.deepEqual(argvOf("d", sha, sha, files, ...flags), [
+        "<cutechess-cli>",
+        ...sky("skytalix", st, margin),
+        ...sky("base", st, margin),
+        ...tail("d", "200", "3"),
+      ]);
+    }
+  });
+
+  test("A2: r --budget-ms 500 is the S′ smoke: skytalix st=0.5 timemargin=50, Stockfish's pins as r's", () => {
+    const argv = argvOf(
+      "r",
+      sha,
+      files,
+      "--budget-ms",
+      "500",
+      "--rounds",
+      "5",
+      "--concurrency",
+      "1",
+    );
+    assert.deepEqual(argv, [
+      "<cutechess-cli>",
+      ...sky("skytalix", "0.5", "50"),
+      ...stockfish(argv, "1650"),
+      ...tail("r", "5", "1"),
+    ]);
+  });
+
+  test("A2: r without --budget-ms is r's 4 s, and every rpair block keeps st=4 timemargin=1000", () => {
+    const argv = argvOf("r", sha, files);
+    assert.deepEqual(argv, [
+      "<cutechess-cli>",
+      ...sky("skytalix", "4", "1000"),
+      ...stockfish(argv, "1650"),
+      ...tail("r", "100", "2"),
+    ]);
+    const pair = harness(
+      "rpair",
+      sha,
+      sha,
+      files,
+      "--rounds",
+      "10",
+      "--concurrency",
+      "1",
+      "--dry-run",
+    );
+    assert.equal(pair.status, 0, pair.stderr);
+    for (const { argv: block } of argvBlocks(pair.stdout)) {
+      const [skytalix] = engineGroups(block);
+      assert.ok(skytalix?.includes("st=4") && skytalix.includes("timemargin=1000"));
+      assert.ok(skytalix?.includes(SKILL));
+    }
+  });
+
+  test("A6: the control reaches skytalix only as st= and timemargin= (no new option)", () => {
+    const keys = (argv: readonly string[]): string[] =>
+      (engineGroups(argv)[0] ?? []).map((a) => a.split("=")[0] as string);
+    const plain = keys(argvOf("r", sha, files));
+    assert.deepEqual(keys(argvOf("r", sha, files, "--budget-ms", "500")), plain);
+    const d100 = argvOf("d", sha, sha, files, "--budget-ms", "100");
+    assert.deepEqual(keys(d100), keys(argvOf("d", sha, sha, files)));
+    for (const argv of [argvOf("r", sha, files, "--budget-ms", "500"), d100])
+      assert.equal(
+        argv.some((a) => a.startsWith("option.") && !/^option\.(Threads|Hash|UCI_)/.test(a)),
+        false,
+      );
+  });
+
+  test("timemarginMs: 50 at 100 and 500 ms, else 5 000 − budget", () => {
+    assert.deepEqual(
+      [100, 500, 1000, 1500, 2000, 2500, 3000, 4000].map(rating.timemarginMs),
+      [50, 50, 4000, 3500, 3000, 2500, 2000, 1000],
+    );
+  });
+
+  test("r refuses any --budget-ms but 500, d refuses 500, rpair refuses the flag", () => {
+    const cases: [string[], RegExp][] = [
+      [["r", sha, files, "--budget-ms", "4000"], /--budget-ms 4000: r takes only 500/],
+      [["r", sha, files, "--budget-ms", "100"], /--budget-ms 100: r takes only 500/],
+      [["r", sha, files, "--budget-ms", "1000"], /--budget-ms 1000: r takes only 500/],
+      [["r", sha, files, "--budget-ms", "x"], /--budget-ms x: r takes only 500/],
+      [["d", sha, sha, files, "--budget-ms", "500"], /--budget-ms 500: not one of/],
+      [["d", sha, sha, files, "--budget-ms", "50"], /--budget-ms 50: not one of/],
+      [["rpair", sha, sha, files, "--budget-ms", "500"], /usage/],
+    ];
+    for (const [args, message] of cases) {
+      const run = harness(...args, "--dry-run");
+      assert.equal(run.status, 1, args.join(" "));
+      assert.match(run.stderr, message, args.join(" "));
+      assert.equal(existsSync(files), false);
+    }
   });
 });
 

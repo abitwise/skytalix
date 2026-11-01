@@ -1,0 +1,16 @@
+## git diff --name-only 8f2fc9b5 78cd2415 -- src/ data/
+(end; lines: 0)
+## same, to branch tip a08ba9be
+0
+## numstat 8f2fc9b5..78cd2415
+5	0	.grugops/queue/claimed/se-ABC-255.claim.md
+0	0	.grugops/queue/{pending => claimed}/se-ABC-255.md
+186	1	tools/rating/pair-check.ts
+38	11	tools/rating/rating.ts
+## numstat 8f2fc9b5..a08ba9be outside .grugops
+186	1	tools/rating/pair-check.ts
+38	11	tools/rating/rating.ts
+## src/data diff becf571a (main) vs 8f2fc9b5
+src/engine.test.ts
+## A3 pair src/data diff 12270c02..b5c67ab7
+ 8 files changed, 1064 insertions(+), 37 deletions(-)

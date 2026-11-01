@@ -1,0 +1,81 @@
+qe-ABC-255 PRE-REGISTRATION (written and committed before any real game run; nothing below moves after a reading)
+Sealed 2026-11-01 (UTC, `date -u` at commit). Ticket ABC-255 (S, P1, tools only), A1-A8. ADR-0056 C2', C3'', S', R-TC.
+Source: the ticket page; se-ABC-255 notes 8953bec7 (decision), 5333bc23 (dry runs, A6), 8b930153 (gates), e65b673f
+(artifacts); brief .grugops/queue/claimed/qe-ABC-255.md.
+
+SHAS. Base of the change Bc = 8f2fc9b5. Code commit = 78cd2415 (tools/ at the QE branch HEAD equals it, checked).
+Harness under test = this worktree (branch grugops/qe-ABC-255 from grugops/ABC-255 a08ba9be); every real run is
+started from it, so machine.txt's `harness:` line records the QE branch HEAD (tools/ = 78cd2415).
+A3 pair: candidate b5c67ab7 (ABC-208 merge), base 12270c02 (its first parent).
+"main at the hop" for A4 and A5: becf571a (main's tip at this PREREG; src/ data/ equal to 8f2fc9b5 except
+src/engine.test.ts, a test file). If main moves before a run, the run stays on becf571a and the src/data diff to the new
+tip is recorded.
+Tools from tools.env per command (never committed): CUTECHESS_CLI = cutechess-cli 1.5.1 sha256 dc776901...f40a (= pin),
+STOCKFISH = Stockfish 19 sha256 c78c22a9...52d2 (= pin). Node v26.12.1.
+Scratch: session scratchpad qe-255/ (tmpfs); run dirs outside the checkout (freshOut refuses inside).
+
+SERIALIZATION. Every test / build / engine / cutechess run under `flock <scratchpad>/host-test.lock`; each game block
+holds the lock for its whole run (wait-clear + builds + games). Waits by child exit or kill -0, never `while pgrep -f`.
+
+STATIC CHECKS (A1, A2, A6, A7; before or beside the games, under the lock)
+ S1 dry runs, base rating.ts (scratch clone at 8f2fc9b5) vs head, same args, same absent out path:
+    EQUAL rows (stdout+rc byte-equal): d default; d --budget-ms 3000/2500/2000/1500/1000; d 1000 --rounds 50 -c 1;
+    d --rounds 200 -c 1; r default; r --elo 1910; r --rounds 5 -c 1; r --elo 1650 --rounds 10 -c 2; rpair default;
+    rpair --elo 1650; rpair --rounds 10 -c 1; rpair --rounds 40 --elo 1910 -c 2; rpair --budget-ms 500 (usage both);
+    rpair --budget-ms 100. MET iff every row EQUAL.
+    NEW rows (head): d --budget-ms 100 --rounds 50 -c 1 and --rounds 200: st=0.1 timemargin=50 on both engines,
+    -games 2 -rounds 50|200 -concurrency 1, openings.epd format=epd order=sequential -repeat. r --budget-ms 500
+    --rounds 5 -c 1: skytalix st=0.5 timemargin=50 and no option.* on skytalix; stockfish st=0.5 timemargin=2000
+    option.UCI_Elo=1650; -rounds 5 -games 2 -concurrency 1. Refusals: r --budget-ms 4000/100/1000/0/499/501/-500/abc
+    exit 1; d --budget-ms 500/50/4000/200 exit 1. Lenient numeric spellings (500.0, 5e2, 0x1F4 on r; 1e2 on d) are
+    RECORDED (information; base d already reads --budget-ms with Number()).
+    A6 keys: skytalix's engine-group keys in every new vector equal today's (only st/timemargin values differ).
+ S2 A6: git diff --name-only 8f2fc9b5 78cd2415 -- src/ data/ empty; also against the branch tip; numstat recorded.
+    A7 "git diff touches tools/rating/ and its tests only" (code commit; queue/context records excluded).
+ S3 A7 gates at the branch HEAD: npm run lint, npm run typecheck, npm test (count, skips), npm run build,
+    node --test tools/rating/pair-check.ts (expect 32/32, 0 skipped), skip-integrity, lane-inventory.
+    New lane rows: 0 expected (pair-check is not *.test.*), so G8 is untouched.
+ S4 mutations (scratch clone of HEAD; worktree never edited), pair-check each, MET-kill iff >= 1 fail:
+    M1 SHORT_MARGIN 100 -> 60; M2 drop the 500 entry (r@500 margin 4 500); M3 skytalix ms back to
+    `mode === "r" ? 4000 : budget`; M4 rpair budget R_BUDGET_MS -> R_SMOKE_BUDGET_MS; M5 base group keeps Q1
+    (5 000 - ms) at 100; M6 r refusal `!==` -> `>` (accepts 100); M7 d without 100 in D_BUDGETS_MS.
+    M8 drop the machine.txt control line: expected SURVIVOR (records line, no offline row) -> information.
+
+REAL READS (one at a time, concurrency 1, each under the lock, via scripts/block.mjs)
+ Host rule per block: wait-clear (ALONE) = 0 real foreign vitest (comm node*, args with /vitest; flock waiters and
+ shells NOT counted, QE-249-c), 0 foreign cutechess-cli, load1 <= 2.0, Tctl <= 60 C; poll 15 s; cap 20 min, then
+ proceed flagged SHARED. During the run a 10 s sampler logs load1, Tctl, real foreign vitest (pid@cwd), foreign
+ cutechess-cli, foreign processes >= 20 % CPU. THERMAL STOP: median of the last 30 Tctl samples > 85 C -> SIGTERM our
+ cutechess-cli + engines; that read is UNRESOLVED, no re-run in this hop. RUN CAP 60 min per block (builds included):
+ at the cap our cutechess-cli is stopped, the read is UNRESOLVED and reported (no single run is estimated over 60 min).
+ Admissibility label per block: ALONE if the start was clear and >= 90 % of samples carry 0 real foreign vitest and 0
+ foreign cutechess-cli; else SHARED (reported, not discarded: A3-A5 grade nothing timing-sensitive except time losses).
+ A3 node tools/rating/rating.ts d b5c67ab7 12270c02 <out-a3> --budget-ms 100 --rounds 50 --concurrency 1
+    Estimate: 100 games at ~259 games/h (qe-tc-depth-probe) = ~23 min + 2 builds ~2-4 min = ~27 min.
+    Reported (not graded): W/L/D, points of 100, Elo +/- error, draw ratio, GAIN bar (>= 50.0 of 100 AND point
+    estimate >= 0) met or not; faults; time losses (by side); games/h; overshoot over 100 ms (both sides).
+ A4 node tools/rating/rating.ts d becf571a becf571a <out-a4> --budget-ms 100 --rounds 50 --concurrency 1
+    Estimate ~27 min. CHECKED (ticket A4 / "what happens on a miss"): 100 of 100 games complete, 0 faults, 0 losses on
+    time (either side). Reported: games/h, draw ratio, score (expected near 50 %: informational band 40.0-60.0 of
+    100, i.e. inside ~ +/-2 sigma at draws 0.5; outside the band is a finding to explain, not a fail by the page).
+ A5 node tools/rating/rating.ts r becf571a <out-a5> --budget-ms 500 --rounds 5 --concurrency 1   (E = 1 650 default)
+    Estimate: 10 games at ~40-45 games/h = ~14 min + 1 build ~1-2 min = ~16 min.
+    CHECKED: 10 of 10 complete, 0 faults, 0 losses on time. Reported: W/L/D, score, games/h, Stockfish depth per move
+    (PGN histogram; harness depth guard), skytalix's LARGEST overshoot over 500 ms in ms (> 12 ms -> flag to the
+    Architect per ADR-0056 S').
+ Order: A5, A3, A4 (shortest first), each after the previous block's lock is released. Planned total play ~70 min.
+ Overshoot method (scripts/analyse.mjs): from the -debug all log in <mode>.out (cutechess-cli's ms clock, the clock it
+ forfeits by): per engine instance, `>name(n): go ...` to the next `<name(n): bestmove`; a reply preceded by
+ `info string book` counts as book and is excluded; overshoot = think - budget (100 or 500; stockfish 500). Reported:
+ median, p99, MAX, and counts > 0/5/10/12/25/50 ms. Time losses: Finished-game texts matching /on time|timeout/;
+ faults: harness summary.txt causes plus texts matching illegal/disconnect/stall/No result/Result error.
+ Games/h: PGN first GameStartTime -> last GameEndTime, and host.log cutechess start -> end.
+
+VERDICT RULE. FAIL iff a static check S1-S3 is NOT MET (a byte diff on an existing shape, a wrong new vector, a
+non-empty src/data diff, a red gate), or A4/A5 show a fault, a time loss or an incomplete run (the page routes that back
+to the SE). A thermal stop / cap / harness stall that is the host's, not the shape's, makes that read UNRESOLVED and
+the verdict at most PASS_WITH_GAPS with the read owed. PASS_WITH_GAPS for any named gap that does not block (e.g. a
+mutation survivor, a lenient numeric flag spelling, a SHARED block, an overshoot > 12 ms at 500 ms, which is the
+Architect's to act on per S'). PASS otherwise. A3's score never decides the verdict.
+FENCES. Only tests, tools/rating test rows if a gap needs proof, the ABC-255 page's ## Reading section, QE records.
+No src/, board, other plans/, memory-bank/. No push / force / amend / rebase / merge into main. Nothing left running.

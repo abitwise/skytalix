@@ -1,0 +1,5 @@
+== 2026-11-01T16:53:41Z load1=5.39
+M1-margin rc=1 ℹ pass 29 ℹ fail 3 
+M2-r-any-budget rc=1 ℹ pass 31 ℹ fail 1 
+M3-r-ignores-budget rc=1 ℹ pass 31 ℹ fail 1 
+M4-d-no-100 rc=1 ℹ pass 30 ℹ fail 2 

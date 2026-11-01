@@ -1,0 +1,50 @@
+== think time (cutechess -debug clock), budget 500 ms for skytalix/base ==
+skytalix: go lines {"go movetime 500":396}; searched 393, book 3; think median 500 p99 502 max 503 ms; overshoot over 500 ms: median 0 p99 2 MAX 3 ms; >0: 183, >5: 0, >10: 0, >12: 0, >25: 0, >50: 0
+stockfish: go lines {"go movetime 500":392}; searched 392, book 0; think median 500 p99 501 max 501 ms; overshoot over 500 ms: median 0 p99 1 MAX 1 ms; >0: 92, >5: 0, >10: 0, >12: 0, >25: 0, >50: 0
+== results ==
+finished 10; time losses 0; faults 0
+terminations: {"White mates":6,"Black mates":4}
+Score of skytalix vs stockfish: W/L/D 9/1/0; points 9 of 10 [0.900]
+Elo difference 381.7 +/- nan; LOS 99.4 %; draw ratio 0.0 %
+== pgn ==
+games 10; plies mean 78.8 [45-122]; first start -> last end 381 s; games/hour 94.4
+host.log: before -> end 385 s (incl. builds); cutechess start -> end 382 s; games/hour (cutechess wall) 94.2
+stockfish depth per move (PGN): n 392; median 17; min 12; max 245; histogram {"12":2,"13":10,"14":30,"15":60,"16":71,"17":75,"18":37,"19":17,"20":9,"21":8,"22":4,"23":7,"24":1,"25":2,"26":1,"28":1,"32":1,"34":1,"36":1,"39":1,"42":1,"44":1,"45":1,"46":1,"47":1,"48":1,"54":1,"55":1,"61":2,"64":1,"68":1,"82":2,"98":1,"102":1,"122":1,"155":1,"183":1,"190":1,"245":33}
+skytalix PGN clock per searched move: max 0.5 s; n 393
+== harness summary.txt ==
+Elo difference: 381.7 +/- nan, LOS: 99.4 %, DrawRatio: 0.0 %
+W/L/D: 9/1/0  score: 0.900  games: 10 of 10
+draw ratio: 0.0 %
+faults: 0  unclassified: 0  move-cap draws: 0
+skytalix.stderr: 0 bytes
+stockfish.stderr: 0 bytes
+stockfish depth guard: 0 of 392 moves below depth 3
+state: rating E + X ± Y = 1650 + 381.7 ± nan = 2031.7 ± nan
+== machine.txt control line == harness: <worktree> at 73ec55456f9907587fd5b4e148b6a061456e4d9f | concurrency: 1 (default 2) | control: skytalix st=0.5 timemargin=50
+== host (block samples, 10 s) ==
+samples 38; with real foreign vitest 11 (28.9 %); with foreign cutechess 0; with a foreign process >= 20 % CPU 3; load1 median 1.96 max 2.43; Tctl median 77.1 max 87.1
+2026-11-01T17:28:03.355Z a5 block start; cmd: node tools/rating/rating.ts r becf571a <scratch>/qe-255/out-a5 --budget-ms 500 --rounds 5 --concurrency 1
+2026-11-01T17:28:03.371Z a5 wait poll=1 vitest=2791369@<home>/projects/public/grugops,2809600@<home>/projects/public/grugops,2822561@<home>/projects/private/oeselg-tech/platform/repos/marketing,2824323@<home>/projects/private/oeselg-tech/platform/repos/marketing cutechess=0 load1=3.19 tctl=65.6
+2026-11-01T17:28:48.389Z a5 wait poll=4 vitest=2791369@<home>/projects/public/grugops,2809600@<home>/projects/public/grugops cutechess=0 load1=2.65 tctl=48.8
+2026-11-01T17:29:48.415Z a5 wait poll=8 vitest=2791369@<home>/projects/public/grugops,2809600@<home>/projects/public/grugops,2842994@<home>/projects/private/oeselg-tech/platform/repos/marketing,2843072@<home>/projects/private/oeselg-tech/platform/repos/marketing cutechess=0 load1=2.09 tctl=63.1
+2026-11-01T17:30:48.442Z a5 wait poll=12 vitest=2791369@<home>/projects/public/grugops,2844536@<home>/projects/public/grugops,2854570@<home>/projects/private/oeselg-tech/platform/repos/marketing,2857570@<home>/projects/private/oeselg-tech/platform/repos/marketing,2857584@<home>/projects/private/oeselg-tech/platform/repos/marketing cutechess=0 load1=2.72 tctl=80.0
+2026-11-01T17:31:48.469Z a5 wait poll=16 vitest=2791369@<home>/projects/public/grugops,2844536@<home>/projects/public/grugops,2861993@<home>/projects/private/oeselg-tech/platform/repos/marketing,2863876@<home>/projects/private/oeselg-tech/platform/repos/marketing,2870662@<home>/projects/private/oeselg-tech/platform/repos/marketing cutechess=0 load1=2.44 tctl=67.3
+2026-11-01T17:32:48.495Z a5 wait poll=20 vitest=2791369@<home>/projects/public/grugops,2861993@<home>/projects/private/oeselg-tech/platform/repos/marketing,2883472@<home>/projects/public/grugops,2887216@<home>/projects/private/oeselg-tech/platform/repos/marketing,2887519@<home>/projects/private/oeselg-tech/platform/repos/marketing cutechess=0 load1=3.27 tctl=77.1
+2026-11-01T17:33:48.520Z a5 wait poll=24 vitest=2791369@<home>/projects/public/grugops,2883472@<home>/projects/public/grugops cutechess=0 load1=3.42 tctl=75.6
+2026-11-01T17:34:48.545Z a5 wait poll=28 vitest=2791369@<home>/projects/public/grugops,2898713@<home>/projects/public/grugops cutechess=0 load1=2.63 tctl=52.4
+2026-11-01T17:35:48.568Z a5 wait poll=32 vitest=2791369@<home>/projects/public/grugops,2898713@<home>/projects/public/grugops cutechess=0 load1=1.92 tctl=50.5
+2026-11-01T17:36:48.592Z a5 wait poll=36 vitest=2791369@<home>/projects/public/grugops,2927999@<home>/projects/public/grugops cutechess=0 load1=1.73 tctl=59.6
+2026-11-01T17:37:48.615Z a5 wait poll=40 vitest=2791369@<home>/projects/public/grugops,2942361@<home>/projects/public/grugops cutechess=0 load1=1.59 tctl=48.8
+2026-11-01T17:38:48.639Z a5 wait poll=44 vitest=2791369@<home>/projects/public/grugops,2963588@<home>/projects/public/grugops cutechess=0 load1=2.08 tctl=73.9
+2026-11-01T17:39:48.661Z a5 wait poll=48 vitest=2791369@<home>/projects/public/grugops,2977198@<home>/projects/public/grugops cutechess=0 load1=1.67 tctl=54.5
+2026-11-01T17:40:48.685Z a5 wait poll=52 vitest=2791369@<home>/projects/public/grugops,2988778@<home>/projects/public/grugops cutechess=0 load1=1.54 tctl=50.8
+2026-11-01T17:41:48.707Z a5 wait poll=56 vitest=2791369@<home>/projects/public/grugops,3001678@<home>/projects/public/grugops cutechess=0 load1=1.87 tctl=76.4
+2026-11-01T17:42:48.728Z a5 wait poll=60 vitest=2791369@<home>/projects/public/grugops,3009976@<home>/projects/public/grugops cutechess=0 load1=1.48 tctl=59.3
+2026-11-01T17:43:48.750Z a5 wait poll=64 vitest=2791369@<home>/projects/public/grugops,3018785@<home>/projects/public/grugops cutechess=0 load1=1.37 tctl=57.4
+2026-11-01T17:44:48.772Z a5 wait poll=68 vitest=2791369@<home>/projects/public/grugops,3030608@<home>/projects/public/grugops cutechess=0 load1=1.25 tctl=58.5
+2026-11-01T17:45:48.800Z a5 wait poll=72 vitest=2791369@<home>/projects/public/grugops,3038133@<home>/projects/public/grugops cutechess=0 load1=1.43 tctl=72.4
+2026-11-01T17:46:48.824Z a5 wait poll=76 vitest=2791369@<home>/projects/public/grugops,3049025@<home>/projects/public/grugops cutechess=0 load1=1.35 tctl=60.3
+2026-11-01T17:47:48.845Z a5 wait poll=80 vitest=2791369@<home>/projects/public/grugops,3058636@<home>/projects/public/grugops cutechess=0 load1=1.49 tctl=64.4
+2026-11-01T17:48:03.850Z a5 WAIT CAP 20 min reached: proceeding flagged SHARED (vitest=2791369@<home>/projects/public/grugops,3059488@<home>/projects/public/grugops cutechess=0 load1=1.46 tctl=64.4)
+2026-11-01T17:48:03.852Z a5 spawned pid 3060099 (SHARED start)
+2026-11-01T17:54:28.229Z a5 exit rc=0 sig=null wall=1585 s run=384 s SHARED-start

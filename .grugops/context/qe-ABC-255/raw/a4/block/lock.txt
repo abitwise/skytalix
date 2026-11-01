@@ -1,0 +1,2 @@
+2026-11-01T18:24:28Z lock acquired a4
+2026-11-01T18:48:29Z released a4 rc=0
