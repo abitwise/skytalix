@@ -1,0 +1,56 @@
+{
+ "refs": [
+  "bapm-ABC-248-close",
+  "ABC-248",
+  "ABC-249",
+  "EPIC-010",
+  "ADR-0046",
+  "ADR-0054",
+  "ADR-0050",
+  "ADR-0035",
+  "NFR-008",
+  "N8-LANE",
+  "W1",
+  "ABC-230",
+  "ABC-244",
+  "ABC-245",
+  "ABC-167",
+  "QE-248-a",
+  "QE-248-b",
+  "QE-248-c",
+  "QE-248-d",
+  "QE-248-e",
+  "QE-248-f",
+  "QE-248-g",
+  "SE-248-a",
+  "SE-248-b",
+  "SE-248-c",
+  "SE-248-d",
+  "QE-244-a",
+  "QE-244-c",
+  "QE-245-b",
+  "P-2",
+  "QPLY4",
+  "QPARITY",
+  "qe-ABC-248/20261101T083046Z-qe-e2e-decision-cf9bdabf",
+  "qe-ABC-248/20261101T083046Z-qe-e2e-observation-b519324e",
+  "se-ABC-248/20261101T075832Z-software-engineer-observation-aedad93f",
+  "ef4cd095",
+  "71700836",
+  "18bad5fb",
+  "37a93b76",
+  "grugops/bapm-ABC-248-close"
+ ],
+ "notes": [
+  {
+   "kind": "observation",
+   "confidence": "high: the files as edited on this branch (an artifact-ref needs a gate_run, which a records-only hop has none of)",
+   "bodyFile": "note-artifacts.md"
+  },
+  {
+   "kind": "observation",
+   "confidence": "high on what is owed; none blocking",
+   "bodyFile": "note-owed.md"
+  }
+ ]
+}

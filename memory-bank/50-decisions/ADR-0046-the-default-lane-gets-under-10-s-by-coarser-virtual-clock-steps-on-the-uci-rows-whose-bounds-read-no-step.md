@@ -641,3 +641,39 @@ of a 650 ms bound at 4 000 notes. `main` held 4 209 notes at `209f4c5f`.
 
 **No owner word is owed.** No NFR level, cap, pin, W, step set or lane command moves. This section is insertions
 only.
+
+**Dated 2026-11-01 (`bapm-ABC-248-close`, records only, at `main` `37a93b76`; nothing run or timed).** Three lines,
+insertions only. No NFR level, cap, pin, W, step set or lane command moves, and no owner word is owed.
+
+- **Tranche 2 is delivered.** `ABC-248` merged at `ef4cd095` (code `71700836`) with QE PASS_WITH_GAPS, no gap
+  blocking (`qe-ABC-248` `…cf9bdabf`); UAT waived (0 production lines). Every lever met its condition: T2c-a and
+  T2c-b kept (plants 26 → 26); T2a moved 4 rows and kept "white reads wtime" and "black reads btime" as the sole
+  default-lane killers of `WRONGSIDE` (parity 120 → 120); T2d took A4-a2 to step 1 000 (8 = 8); the census added 0.
+  **`G8` H 9.09 s, B 9.37 s**: `NFR-008` MET, the 9.4 s design target MET, W1 not triggered. `N8-LANE` H−B CPU
+  −0.635 s. So no tranche 3 opens, and W1 stays in force on every later admissible `G8` head median. This ADR's
+  § Status still reads "tranche 2 is OPEN"; a Status line saying it is delivered is the Architect's (owed, LOW).
+- **Ruling 6 / A10's `-t` form is corrected (QE-248-a, MEDIUM).** Vitest reads `-t` as a regular expression, so a
+  title ending "[deep, ENGINE_DEEP=1]" is a character class and `-t "<moved describe>"` runs **0 tests and exits 0**.
+  The binding form escapes both brackets, on one line:
+  `ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/uci-session.test.ts -t "ABC-167 A5 — the D4 time rule, read from the info line's time \[deep, ENGINE_DEEP=1\]"`.
+  **The check is the passed count, not the exit code:** "4 passed", one per moved row. The same holds for any `-t`
+  that names a `[deep, …]` title in any later ruling or brief: escape the brackets, or stop before them, and check the
+  passed count equals the rows meant. `ABC-248`'s page carries the same fix (ruling 6 and A10). The Architect's
+  condition 4 in § Addendum 2026-10-31 (Decision) spells the unescaped form; a matching co-edit there is **owed to the
+  Architect**, LOW, not blocking, because this line binds the gate. `AGENTS.md` needs no edit: its `-t "ABC-221 A10"`
+  stops before the bracket.
+- **SE-248-b / QE-248-b: condition 2 is met as written, and one floor is added for depth-sensitive rows.** Condition 2
+  (`ABC-244`'s, carried as ruling 2) counts intervals as ⌈budget ÷ step⌉. A4-a2 goes 40 → 4, which is ≥ 2, so it
+  passes. At step 1 000 its search reached depth 3 on 1 044 nodes, against depth 6 on 34 836 at step 100: about one
+  in-search node check. It stands, because the census classes it time-blind, it asserts no depth, and its kill set is
+  equal (8 = 8). **No Architect reading of "interval" is owed before the next step move.** Kill-set parity decides
+  first, and it already caught the depth-sensitive loss `QE-244-a` found on CLI `ABC-241` A4/A7. But parity covers only
+  the frozen list, so this floor is added (BA/PM's word, binding on every later R4 step move from this date):
+  - **A depth-sensitive row** is one that asserts the depth reached, or a move, score or PV that a shallower search
+    could change. The build note's R1 census line classes each changed row as depth-sensitive or not.
+  - For a depth-sensitive row, the build note also records the depth reached and the nodes at the current and the
+    candidate step, and the in-search node checks at the candidate step (nodes ÷ `NODES_PER_CLOCK_CHECK`, rounded
+    down).
+  - **If that count is below 2, the row keeps its current step** until the Architect rules condition 2's unit (clock
+    reads or node checks). The floor never makes a step coarser; it can only hold one.
+  - So the Architect's reading falls due only when a move trips the floor. It is owed to no one now.

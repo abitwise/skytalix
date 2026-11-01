@@ -1,8 +1,9 @@
 ---
 id: ABC-248
 title: "The default lane sheds about 0.3 s and loses no coverage: `QE-208-a` sampled more sparsely and `QE-208-b` on a cheaper root, `ABC-167` A5's duplicated searches moved to the file's `ENGINE_DEEP` branch under default-lane kill parity, and A4-a2 on R2 (`ADR-0046` tranche 2; test-only)"
-status: ready
-column: Backlog
+status: done
+column: Done
+closed: "2026-11-01, merged to main at ef4cd095 (code 71700836); QE PASS_WITH_GAPS (qe-ABC-248, cf9bdabf); G8 H 9.09 s / B 9.37 s; test-only, UAT waived"
 size: S
 priority: P1
 epic: EPIC-010
@@ -10,6 +11,55 @@ feature: —
 ---
 
 # ABC-248: tranche 2 of the lane remedy, T2c + T2a (narrow) + T2d. Two test files
+
+> **CLOSED, Done, folded 2026-11-01 by BA/PM** (task `bapm-ABC-248-close`, records only, at `main` `37a93b76`; nothing
+> run, built or timed, because `qe-qehop-growth` holds the host ALONE). The page read `ready` / `Backlog` after the merge;
+> this fold closes it. QE's verdict is **PASS_WITH_GAPS, no gap blocking** (`qe-ABC-248` `…cf9bdabf`, PREREG `af00650c`
+> before any run) at `18bad5fb` (code `71700836`, base `main` `46365ed0`). It was **merged at `ef4cd095`** on
+> 2026-11-01. Two `*.test.ts` files and 0 production lines, so **UAT is waived**; the QE verdict signs (Test note 5).
+> **`ADR-0046` tranche 2 is delivered** (dated line in that ADR's § BA/PM ruling 2026-10-31).
+>
+> - **Every lever met its condition** (QE's own runs; the SE's frozen lists reused, hashes matched, not re-frozen):
+>   - **T2c-a:** `QE-208-a` samples the even readings 4–24 (Σ 154 < 322); `insideNull` 5 → 4 (≥ 3).
+>   - **T2c-b:** both `QE-208-b` rows re-rooted on `startpos` (7 non-pawn pieces a side); `underNull` 44/44 → 19/19.
+>     Plants 26 → 26, every per-row set equal.
+>   - **T2a (narrow):** 4 rows moved ("a bare go", "G = 3 500", "movetime 100", "A5-b3"); "white reads wtime" and
+>     "black reads btime" **stayed**, as the sole default-lane killers of WS-WHITE and WS-BLACK (together, of
+>     `WRONGSIDE`). Default-lane parity 120 → 120 of 137, none lost.
+>   - **T2d:** A4-a2 at step 1 000 (reads 40 → 4), 8 = 8 ids. Census: 0 rows joined.
+> - **A3–A11 MET.** Lane 2 366 → 2 362, 0 skipped. A7 −435 052 nodes on the two files. **A8 `N8-LANE`** H−B CPU
+>   −0.635 s [−0.720, −0.420]. **A9 `G8` H 9.09 s, B 9.37 s** (H − B −0.28 s; load1 0.55–1.72): `NFR-008` MET, the 9.4 s
+>   design target MET, **W1 not triggered**. A10 green in the escaped `-t` form only (QE-248-a, below).
+> - **Carried in:** QE-245-b **closed** by this `G8`. QE-244-a **not triggered and still open as written** (no step of
+>   CLI `ABC-241` A4/A7, `LEVELS[5].budgetMs` or `NODES_PER_CLOCK_CHECK` moved); its carrier stays the R4 DoR line on
+>   `ABC-244`'s page.
+> - **QE's and the SE's gaps, dispositioned** (`qe-ABC-248` `…b519324e`, `se-ABC-248` `…aedad93f`):
+>   - **QE-248-a** (MEDIUM; SE-248-a): ruling 6 / A10's `-t "<moved describe>"` runs 0 tests and exits 0, because
+>     vitest reads `-t` as a regular expression and "[deep, ENGINE_DEEP=1]" is a character class. **Fixed on this
+>     page** (ruling 6 and A10, dated 2026-11-01) and in `ADR-0046` § BA/PM ruling 2026-10-31 (dated line). The
+>     Architect's condition 4 in § Addendum 2026-10-31 spells the same form; a matching co-edit is **owed to the
+>     Architect**, LOW, not blocking. `AGENTS.md` needs no edit: its `-t "ABC-221 A10"` stops before the bracket.
+>   - **QE-248-b** (INFO; SE-248-b): A4-a2 reached depth 3 / 1 044 nodes at step 1 000 against depth 6 / 34 836 at 100,
+>     about one in-search node check. **Ruled: met as written, and a new BA/PM condition binds the next depth-sensitive
+>     step move** (`ADR-0046` § BA/PM ruling 2026-10-31, dated line "SE-248-b"). A4-a2 asserts no depth and its kill set
+>     is equal, so it stands. The Architect's reading of condition 2's unit is owed only if a later move trips the
+>     condition.
+>   - **QE-248-c** (LOW, pre-existing; P-2): `QPLY4` (the pre-root repetition scan off at ply ≥ 4) survives the whole
+>     default lane. **Cut as `ABC-249`** (XS, P3, test-only, `EPIC-010`, DoR 10/10, Ready recommended).
+>   - **QE-248-d** (INFO): `QPARITY` very likely equivalent (the Zobrist key carries the side to move,
+>     `src/zobrist.ts:79`). **Closed, no ticket.** Equivalence is reasoned, not proven: `UNKNOWN - verify` if anyone
+>     needs the proof. With QE-248-c this closes P-2: S241M5, QCLOCK, QPATHOFF killed; QPLY4 → `ABC-249`; QPARITY
+>     equivalent.
+>   - **QE-248-e** (INFO: `insideNull` 4 against a bar of 3). **Closed.** The `expect` fails loud if an engine change
+>     drops it; it cannot go silently vacuous.
+>   - **QE-248-f** (INFO: 9.4 s met, QE-245-b closed). **Closed.** Window drift (about +0.17 s at `ABC-229`) stays
+>     W1's to guard.
+>   - **QE-248-g** (INFO: QE harness deviations, no expectation changed). **Closed.** A brief that fences `npx` runs the
+>     same lanes through `node_modules/.bin/vitest`; the values match. A later P-2-style PREREG counts exit 124 as a
+>     kill only with a failed row in the capture, as QE did here.
+>   - **SE-248-c** (INFO, the wrong-side sole killers) and **SE-248-d** (INFO, 24 of `qe-ABC-177`'s list no longer apply
+>     as written; M06/M07 re-anchored). **Closed**: both confirmed by QE (137 = 137 applied exactly once).
+> - Notes: `.grugops/context/bapm-ABC-248-close/notes/`.
 
 > **Cut 2026-10-31 by BA/PM** (task `bapm-tranche2-ruling`, records only, at `main` `209f4c5f`; nothing run, built or
 > timed, because QE holds the host ALONE; `src/`, `tools/`, `data/` and the board untouched).
@@ -109,7 +159,18 @@ dated record is that ADR's § BA/PM ruling 2026-10-31. The Architect's condition
    titles name the new root (a fixture name `fenOf` knows, or the FEN's source). Both `describe` titles stay. No other
    title changes.
 6. **A moved row runs green in its deep lane** at this ticket's QE:
-   `ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/uci-session.test.ts -t "<moved describe>"`.
+   ~~`ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/uci-session.test.ts -t "<moved describe>"`.~~
+   *(2026-11-01, `bapm-ABC-248-close`, QE-248-a: the form above runs 0 tests and exits 0. Vitest reads `-t` as a
+   regular expression, so "[deep, ENGINE_DEEP=1]" is a character class and the title matches nothing.)* **The command
+   is, on one line, with both brackets escaped:**
+
+   ```
+   ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/uci-session.test.ts -t "ABC-167 A5 — the D4 time rule, read from the info line's time \[deep, ENGINE_DEEP=1\]"
+   ```
+
+   **The check is the count, not the exit code:** the run prints **"4 passed"**, one per moved row. Exit 0 with fewer
+   passed, or with 0 tests, fails the check. A brief that fences `npx` runs the same arguments through
+   `node_modules/.bin/vitest`.
 
 **Why accept.** It is the only set that sizes to the noise reading (about −0.3 s against a lane centred near 9.5 s)
 with no coverage lost by construction, and each lever reverts alone. **Why one ticket:** three gates for one −0.3 s
@@ -182,7 +243,9 @@ delivered commit.
   - **H > 10 s** goes to the owner (`ADR-0035` D6), and the ticket holds at the gate until his word. No cap, pin, bar
     or level moves to get under.
 - **`A10` (the deep lane).** **Given** the tip, **then** the command in ruling 6 runs the moved rows green, and with
-  `ENGINE_DEEP` unset they are not collected.
+  `ENGINE_DEEP` unset they are not collected. *(2026-11-01, `bapm-ABC-248-close`, QE-248-a: "green" is read as the
+  escaped command in ruling 6 printing "4 passed", the number of rows moved. Exit 0 alone is not the check. QE read
+  "4 passed" (237 skipped), rc 0, at `18bad5fb`, so A10 stands MET.)*
 - **`A11` (gates).** **Given** the tip, **then**:
   - lint, typecheck, unit and build are green;
   - the default lane has 0 skips, and `test-skip-integrity` and `lane-inventory` report no findings;
