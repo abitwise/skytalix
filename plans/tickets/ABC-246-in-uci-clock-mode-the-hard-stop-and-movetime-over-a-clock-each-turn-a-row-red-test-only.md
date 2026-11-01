@@ -1,14 +1,19 @@
 ---
 id: ABC-246
 title: "In `uci-clock-mode`, a row pins the hard stop with an increment near the clock edge and a row pins `movetime` over a clock, so QE's HSCM and CLOCKWINSCM plants turn the lane red; one stale `src/engine.test.ts` comment is corrected (test-only)"
-status: ready
-column: Ready
+status: done
+column: Done
 size: XS
 priority: P3
 epic: EPIC-009
 ---
 
 # ABC-246: pin `uci-clock-mode`'s hard stop and its `movetime`-first rule with two rows (QE-221-a)
+
+> **FRONT MATTER FOLDED 2026-11-01 by BA/PM** (task `bapm-epic011-dedupe`, records only, at `main` `2e9a2457`):
+> `status` and `column` read Done, as the board holds this ticket: merged `0ce5041d` (Orchestrator `46365ed0`:
+> "ABC-246 Done"). The page still read an earlier column, which invites the same work twice. No other line on this
+> page is changed.
 
 > **Cut 2026-10-31 by BA/PM** (task `bapm-ABC-221-fold`, records only, at `main` `9c008db4`; nothing run). Source: QE
 > gap **QE-221-a** (LOW, test strength) in `qe-ABC-221` `…8ad25906`, with the plants note `…c6f37a35`, and SE-221-g

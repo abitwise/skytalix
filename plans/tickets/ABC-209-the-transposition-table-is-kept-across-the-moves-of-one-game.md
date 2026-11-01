@@ -12,6 +12,12 @@ adr: "ADR-0025 decision 4 amendment of 2026-10-26: ACCEPTED by the owner 2026-10
 
 # ABC-209: keep the transposition table across moves
 
+> **DEDUPE LINE 2026-11-01** (BA/PM, `bapm-epic011-dedupe`): this ticket **stays dropped** and is **superseded by
+> `ABC-257`** (`EPIC-011` Phase 1, T3), which re-tries it after deeper-entry cutoffs (`ABC-238`) and depth-preferred
+> replacement (`ABC-237`). This page's NEUTRAL was read under exact-depth cutoffs, where a kept entry almost never
+> cuts (`ADR-0056` D2 T3). `ABC-257` carries this page's `A1`–`A5` and `A7` by reference and uses `bb6cf451` as its
+> reference code. Nothing else on this page changes.
+
 > **CLOSED UNMERGED 2026-10-27 under ship rule S1. Not delivered.** BA/PM, task `bapm-s1-ABC-209`. D was NEUTRAL
 > (pooled over 800 games, +8.7 ± 18.3), so S1 is NOT MET. `A1`–`A5` and `A7` were MET, `G6` and `G2` included. S1's
 > one re-tune round is not taken. The code stays on `grugops/ABC-209` `bb6cf451`. See § Close.

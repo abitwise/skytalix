@@ -1,8 +1,8 @@
 ---
 id: ABC-214
 title: "The repository is licensed Apache-2.0: a verbatim `LICENSE`, a `NOTICE`, and `\"license\": \"Apache-2.0\"` in `package.json`, with the CC BY-SA 3.0 evaluation tables carved out (path A)"
-status: ready
-column: Ready
+status: done
+column: Done
 size: XS
 priority: P1
 epic: EPIC-007 (post-close addition)
@@ -11,6 +11,11 @@ adr: "the licence ADR (Architect/Design; supersedes ADR-0044 D13's private readi
 ---
 
 # ABC-214: Apache-2.0 for the repository. Zero executable lines
+
+> **FRONT MATTER FOLDED 2026-11-01 by BA/PM** (task `bapm-epic011-dedupe`, records only, at `main` `2e9a2457`):
+> `status` and `column` read Done, as the board holds this ticket: merged `59f50717` (the board's Done row: "Done
+> 2026-10-24, merged 59f50717"). The page still read an earlier column, which invites the same work twice. No other
+> line on this page is changed.
 
 > **Cut 2026-10-24 by BA/PM** (task `bapm-cut-licence`, records only, at `main` `c487d89c`). The owner's word is
 > `.grugops/context/owner-word-2026-10-23/notes/20261023T220500Z-orchestrator-decision-28633db0.md`. Verbatim:

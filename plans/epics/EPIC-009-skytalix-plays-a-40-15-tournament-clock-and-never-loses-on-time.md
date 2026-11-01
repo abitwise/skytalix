@@ -10,6 +10,24 @@ owner: BA/PM
 
 # EPIC-009: `skytalix` plays a 40/15 tournament clock, uses it, and never loses on time
 
+> **CLOSE-OUT PLAN 2026-11-01 by BA/PM** (task `bapm-epic011-dedupe`, records only, at `main` `2e9a2457`; nothing
+> run). Source: the owner's word of 2026-11-01 (`orch-2026-10-30a` `…022fb66f`): finish the open epics before the new
+> 3 000 epic (`EPIC-011`), and do no work twice.
+>
+> - **What remains to Done:** `ABC-223` (In Development, `qe-ABC-223` ALONE now), then BA/PM grades milestone 2 (M1
+>   and M2 for `uci-clock-mode`, the 60 s ceiling) from its reading, and the epic closes. `ABC-246` is Done
+>   (`0ce5041d`).
+> - **Moved to `EPIC-011`** (none was a ticket; nothing is renumbered): (1) **time management under a clock** (W1:
+>   no doomed iteration started, soft and hard limits), which § Out of scope calls "spending more time on a hard move
+>   (a search change)"; (2) **the strength reading at 40/15** (Q6: "after other improvements are done"), now the 3 000
+>   claim control by the owner's word; (3) **the major validation** (≥ 100 games at 40/15), **merged** into
+>   `EPIC-011`'s 40/15 readings, which count losses on time and the closest call (its G4), so one set of games serves
+>   both. The owner may still ask for a dedicated validation.
+> - **Exit reading owed:** `ABC-223`'s 5 games (0 losses on time, closest call ≥ 500 ms, ≥ 75 % clock use, longest
+>   move ≤ 60 s). A miss is a defect in a built mode and stays here; it is not 3 000-path work.
+> - The dedupe audit is on `EPIC-011` § Dedupe audit (C4–C6). The notes are in
+>   `.grugops/context/bapm-epic011-dedupe/notes/`.
+
 > **MILESTONE 2, HALF DONE, 2026-10-31, folded by BA/PM** (task `bapm-ABC-221-fold`, records only, at `main`
 > `9c008db4`; nothing run). **`ABC-221` is Done:** merged at `af32f82c` (code `c48a6f83`) and `9395d8dc`, on QE
 > PASS_WITH_GAPS (`qe-ABC-221` `…861e737d`, which signs UAT) and Security/NFR PASS (`secnfr-ABC-221` `…ef060512`).
@@ -377,11 +395,11 @@ clean.
   `HARD_CEILING_MS`, moves to 60 000 at `ABC-221` only. Every level budget is ≤ 30 000, so the levels stay
   value-identical, and `ABC-221` A8 reads it row for row.)*
 - **CLI parity** (§ CLI parity), and a clock in the CLI.
-- **Major validation:** ≥ 100 games at 40/15, 24–48 h (Q1). It comes later, as its own ticket on the owner's word.
+- **Major validation:** ≥ 100 games at 40/15, 24–48 h (Q1). It comes later, as its own ticket on the owner's word. *(2026-11-01, `bapm-epic011-dedupe`: merged into `EPIC-011`'s 40/15 readings, C6; no separate ticket unless the owner asks.)*
 - **A strength reading or claim at 40/15** (Q6: "not yet, let's do that after other improvements are done"). No setting
   claims an Elo.
 - **Showing think time in the CLI** (Q7: no).
-- **Spending more time on a hard move** (a search change). Pondering, threads, and a worker for `isready`/`stop`
+- **Spending more time on a hard move** (a search change). *(2026-11-01, `bapm-epic011-dedupe`: carried by `EPIC-011` as W1.)* Pondering, threads, and a worker for `isready`/`stop`
   (`ADR-0044` D5 stands).
 - **Entering CCRL or any rating list.** That is distribution: `ADR-0049` and the owner's call.
 - **`EPIC-010`'s improvements** (`ABC-225..239`).

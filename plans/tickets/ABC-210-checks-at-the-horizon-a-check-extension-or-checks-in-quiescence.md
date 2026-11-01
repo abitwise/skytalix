@@ -12,6 +12,11 @@ adr: "ADR-0051 (form (a) at the horizon plus an ADR-0026 off-door pair): ACCEPTE
 
 # ABC-210: checks at the horizon
 
+> **DEDUPE LINE 2026-11-01** (BA/PM, `bapm-epic011-dedupe`): this ticket **stays dropped, and its form (a) at the
+> horizon is not re-run** (`ABC-228` now covers checks inside quiescence). `EPIC-011` stub X1 is a **different form**,
+> a check extension at every depth (`ADR-0056` D2 X1), and cites this page's NEUTRAL −4.8 ± 16.2 as the nearest prior
+> evidence. `ADR-0051` stays not in force unless X1's own ADR revives part of it. Nothing else on this page changes.
+
 > **CLOSED UNMERGED 2026-10-27 under ship rule S1. Not delivered.** BA/PM, task `bapm-s1-ABC-210`. D was NEUTRAL
 > (pooled over 800 games, −4.8 ± 16.2), so S1 is NOT MET. `A1`–`A4` and `A6` were MET, `G6` and `G2` included. S1's
 > one re-tune round is not taken. The code stays on `grugops/ABC-210` `a96f36b0`. This was the epic's last engine

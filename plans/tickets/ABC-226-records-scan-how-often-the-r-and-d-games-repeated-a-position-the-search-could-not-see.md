@@ -1,14 +1,19 @@
 ---
 id: ABC-226
 title: "Records scan: how often the R and D games repeated a position the search could not see, and whether it decided a result"
-status: ready
-column: Ready
+status: done
+column: Done
 size: S
 priority: P2
 epic: EPIC-010
 ---
 
 # ABC-226: records scan for repetitions the search could not see
+
+> **FRONT MATTER FOLDED 2026-11-01 by BA/PM** (task `bapm-epic011-dedupe`, records only, at `main` `2e9a2457`):
+> `status` and `column` read Done, as the board holds this ticket: Done 2026-10-29 (`sa-ABC-226` `…cc53fc79`; the
+> board's Done row and `EPIC-010` tickets row 1). The page still read an earlier column, which invites the same work
+> twice. No other line on this page is changed.
 
 > **Cut 2026-10-29 by BA/PM** (task `bapm-epic010-improvements`, records only, at `main` `f45aea95`). § B item 3's
 > play effect is `UNKNOWN - verify` (SA `…306a4012` row 3f); this is the SA's named probe: "records scan of the R and D

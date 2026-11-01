@@ -1,8 +1,8 @@
 ---
 id: ABC-216
 title: "A short `README.md` with an ASCII-art title tells a first-time visitor what `skytalix` is, how to play it, how to plug it into a UCI GUI, and its licence"
-status: ready
-column: Ready
+status: done
+column: Done
 size: XS
 priority: P2
 epic: EPIC-006
@@ -10,6 +10,11 @@ feature: —
 ---
 
 # ABC-216: a short `README.md` with an ASCII-art title. One new file; no code, no test
+
+> **FRONT MATTER FOLDED 2026-11-01 by BA/PM** (task `bapm-epic011-dedupe`, records only, at `main` `2e9a2457`):
+> `status` and `column` read Done, as the board holds this ticket: merged `39b93505` (Orchestrator `9b4f7296`:
+> "ABC-216 … Done"). The page still read an earlier column, which invites the same work twice. No other line on this
+> page is changed.
 
 > **Cut 2026-10-24 by BA/PM** (task `bapm-cut-readme`, records only, at `main` `2a1a7c93`). The rulings are in
 > `.grugops/context/bapm-cut-readme/notes/`. This hop ran no npm, vitest, build or CLI. Every fact below was read

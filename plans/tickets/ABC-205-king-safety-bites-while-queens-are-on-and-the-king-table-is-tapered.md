@@ -12,6 +12,12 @@ adr: "ADR-0031 addendum: route the text to the owner when it lands (…7feb0553)
 
 # ABC-205: king safety that bites while queens are on, and a tapered king table
 
+> **DEDUPE LINE 2026-11-01** (BA/PM, `bapm-epic011-dedupe`): this ticket **stays dropped**. `EPIC-011` (the 3 000
+> path, `ADR-0056`) carries its two halves in new forms, never as a re-run: the taper is part of E1 (the full taper,
+> which also folds `ABC-231`), and the king-safety term is E3 (king attack on a king zone, weighted and tapered, added
+> under the tuner `ABC-239`, and judged on play if the owner answers Q-3K-4 that way). The forms on
+> `grugops/ABC-205-final` `b5d5cea5` are input to E3's design. Nothing else on this page changes.
+
 > **CLOSED UNMERGED 2026-10-25 under ship rule S1. Not delivered.** BA/PM, task `bapm-close-ABC-205`. `G6`'s
 > "≥ base" missed on `position-6`, D was not run and is not owed, and the forms stay on `grugops/ABC-205-final`.
 > See § Close.

@@ -10,6 +10,34 @@ owner: BA/PM
 
 # EPIC-010: the verified engine gaps, closed one measured change at a time, against an outside opponent
 
+> **CLOSE-OUT PLAN AND RE-HOME 2026-11-01 by BA/PM** (task `bapm-epic011-dedupe`, records only, at `main`
+> `2e9a2457`; nothing run, built or timed, because `qe-ABC-223` holds the host STRICTLY ALONE; `src/`, `tools/`,
+> `data/`, the board, the trace, the ADRs and `AGENTS.md` untouched). Source: the owner's word of 2026-11-01
+> (`orch-2026-10-30a` `…022fb66f`, verbatim): *"… let's create new Epic yes and finish other epics before that. Go over
+> previous epics and tickets to find conflicting work, no need to do the same work twice."*
+>
+> - **This epic closes after milestone 1b.** What remains: `ABC-249` (Ready, test-only), then `ABC-250` (Ready) →
+>   `ABC-251` → `ABC-252` → `ABC-253` (Ready, pulled last), as § Milestone 1b orders them.
+> - **Moved to `EPIC-011`** (the 3 000 path, `ADR-0056`; ids unchanged, each page carries a dated line): milestone 2
+>   (`ABC-231`, `232`, `233`, `234`, `236`, `237`, `238`), milestone 3 (`ABC-239`), and `ABC-254` (it waits on the
+>   owner's Q-SP-3 and would hold this epic open). Also moved: Q6 and the 3 000 goal (§ Product goal). `ADR-0056` D4
+>   maps every one of them to its gap list; keeping them here would make this epic's close wait on the 3 000 path.
+> - **Milestone 1b stays here, last.** `ADR-0055` D2/D4 and `ADR-0056` D6 both put O1 before any ticket that edits
+>   `orderMoves`, the search or `evaluate`, and the owner closes this epic before `EPIC-011` starts, so 1b lands first
+>   either way and `EPIC-011` is written on the packed base. `ABC-250` stays first (the O1-a / O1-b order line in
+>   `ADR-0056` D6 is with the Architect, `arch-adr0056-owner-fold` item 4).
+> - **Exit readings still owed:** one S2 nps reading per 1b ticket (≈ 1 h ALONE each, ≈ 4 h, estimate); `ABC-249`'s
+>   `G8`; a close hop on `main` reading **M3** (the `Q-SET` rows) and **M4** (`G1` ≥ 54/58, `G5`, `G6`, `G7`, `G8`,
+>   `G9`); **M1** and **M5** from the records.
+> - **M2 needs no new batch.** Milestone 1's batch (head `51902be5` against the first merge-base `ca6e675c`) read NOT
+>   LOSS. `git log 51902be5..2e9a2457` shows no production `src/` change, and milestone 1b is value-identical by `G4`,
+>   so that batch is M2 at the close (the milestone 1 grade: "this reading stands as M2 only if the epic stops here";
+>   the value-changing work of this epic stops there). This saves a ≈ 23 h ALONE batch.
+> - **Fences unchanged:** § Out of scope still fences the re-tries, SEE and delta pruning and rook activity **for this
+>   epic**; `EPIC-011` holds them now (the owner's Q-3K-5 answer re-opened them there).
+> - Tickets table: rows 11–18 and 29 read "Moved to `EPIC-011`". The dedupe audit of every epic and ticket is on
+>   `EPIC-011` § Dedupe audit. The notes are in `.grugops/context/bapm-epic011-dedupe/notes/`.
+
 > **GOAL RESTATED AND MILESTONE 1b CUT 2026-11-01 by BA/PM** (task `bapm-goal3000-o1-cut`, records only, at `main`
 > `bae25131`; nothing run, built or timed, because `qe-ABC-223` holds the host STRICTLY ALONE; `src/`, `tools/`,
 > `data/`, the board, the trace, the ADRs and `AGENTS.md` untouched). Source: the owner's word of 2026-11-01, verbatim
@@ -664,7 +692,7 @@ sits inside the batch's ± 78, so speed is graded on nps, not games).
 
 | order | id | `ADR-0055` cut | size, priority | why here |
 |---|---|---|---|---|
-| (first, only if allowed in time) | `ABC-254` | O1-d, lazy legality (`ADR-0003` (c2)), est. 1.15–1.40× | M, P2 | The largest single prize; `ADR-0055` D4 puts it first. **Waits the owner's yes on amending `ADR-0003` (Q-SP-3) and the amending ADR.** If they arrive before `ABC-250` enters development, it goes first; otherwise after `ABC-252`, because both rewrite `src/legal.ts` |
+| ~~(first, only if allowed in time)~~ **moved to `EPIC-011` 2026-11-01** (`bapm-epic011-dedupe`: waits Q-SP-3; would hold the close) | `ABC-254` | O1-d, lazy legality (`ADR-0003` (c2)), est. 1.15–1.40× | M, P2 | The largest single prize; `ADR-0055` D4 puts it first. **Waits the owner's yes on amending `ADR-0003` (Q-SP-3) and the amending ADR.** If they arrive before `ABC-250` enters development, it goes first; otherwise after `ABC-252`, because both rewrite `src/legal.ts` |
 | 1 | `ABC-250` | O1-b part 1: packed moves in generation, legality, make/unmake; read on perft | M, P2 | Reads O1-b's data-layout gain on perft before the search is spent, with `ADR-0055` D3's A1 / A0 bars (GO ≥ 1.25×; HOLD 1.10–1.25×; NO-GO < 1.10×). The AssemblyScript prototype is not run, so this is where that reading happens. Not merged on HOLD or NO-GO |
 | 2 | `ABC-251` | O1-b part 2 with O1-c: the search, quiescence, ordering and killers on packed moves; inlined helpers | L (S if narrowed), P2 | On GO: the full form, bar ≥ 1.10×. On HOLD / NO-GO: narrowed to O1-c alone, bar ≥ 1.03× (`ADR-0055`'s HOLD row: "only the cheap parts (O1-a, O1-c)") |
 | 3 | `ABC-252` | O1-b part 3: one generator; the shell through one converter | M, P3 | Removes the second move path `ABC-250` stages; dropped if `ABC-250` is dropped |
@@ -695,11 +723,11 @@ sits inside the batch's ± 78, so speed is graded on nps, not games).
 **Milestone 2, "evaluation by phase, ordering, TT and window"** (each value-changing, each with its own smoke pair, each
 `Backlog` on an ADR; Q4 no longer holds them since 2026-10-29): `ABC-231` → `ABC-232` (evaluation; after milestone 1's quiescence changes settle the node
 budget that `G6` reads, because `ABC-205` failed on exactly that), `ABC-233`, `ABC-234` (ordering; `ABC-234` behind
-`ADR-0024` d4's own re-open condition), `ABC-236`, `ABC-237`, `ABC-238` (TT and window). *(2026-11-01,
+`ADR-0024` d4's own re-open condition), `ABC-236`, `ABC-237`, `ABC-238` (TT and window). ***(2026-11-01, `bapm-epic011-dedupe`: milestone 2 moved to `EPIC-011`, Phases 1, 3 and 4, in `ADR-0056` D6's order. This epic does not read it.)*** *(2026-11-01,
 `bapm-goal3000-o1-cut`: after milestone 1b, on its packed base. Its content and order are unchanged here and wait on
 the Architect's `arch-algo-analysis`, which maps `ABC-231`…`ABC-239` against the 3 000 goal.)*
 
-**Milestone 3:** `ABC-239`, offline tuning. Item 8 itself says "after the phase-aware design settles". It is the
+**Milestone 3:** ***(2026-11-01, `bapm-epic011-dedupe`: moved to `EPIC-011` Phase 4 as E2, after the full taper E1.)*** `ABC-239`, offline tuning. Item 8 itself says "after the phase-aware design settles". It is the
 costliest (High in § B), it needs a data licence ruling (`ADR-0048`), and self-play non-transfer (`…0c5d62f4`) bears
 directly on how a tuned set is judged.
 
@@ -711,6 +739,8 @@ directly on how a tuned set is judged.
 - Item 4 is `EPIC-009`'s. Its `ABC-218` reading and this epic's readings both run ALONE; the Orchestrator orders them.
 
 ## Product goal (owner, 2026-10-29, Q2; restated by the owner 2026-11-01: 3 000 Elo): no ticket bound to it
+
+**2026-11-01 (`bapm-epic011-dedupe`): the 3 000 goal now lives in `EPIC-011`**, with its claim control (40/15, the owner's word `…022fb66f`) and its open parts (scale, claim rule, milestones). This section is kept as the record; this epic binds no measure to it, and M2 stays "not LOSS".
 
 **2026-11-01, the owner's word** (Orchestrator `orch-2026-10-30a` `…74216a44`, verbatim; recorded by BA/PM,
 `bapm-goal3000-o1-cut`): *"As we can see it is possible to reach 3000 elo rating without neural engine? Set the goal to
@@ -840,14 +870,14 @@ mates", ≥ 6 "a quiet promotion decides". It reads `quiesce` and `chooseMove` a
 | 8 | `ABC-240` | Move ordering without per-move allocation, value-identical (cut 6, split from `ABC-235`) | S | P3 | **Done** (2026-10-30, `5311f5bd`) | — | Architect `…7fc1b90c` C1–C4; no ADR | done: QE PASS on S2, no smoke (`qe-ABC-240` `…19068f9d`; nps tip/base 1.122 / 1.109 / 1.089); QE-240-a LOW |
 | 9 | `ABC-241` | A repetition against the game's earlier positions ignores an en-passant square no pawn can legally take (Q3 (c)); the hash does not change | S | P2 | **Done** (2026-10-30, `1f6abec4`) | — | `ADR-0020` § AMENDMENT 2026-10-30 (ACCEPTED on the owner's word) | done: QE PASS_WITH_GAPS `…2368b03f` (D 6.0, R 6.5 at 4 000 ms); its gap QE-241-a is folded into `ABC-243` |
 | 10 | `ABC-242` | On a blunder level (1–4), a root move that makes the third occurrence of a game position scores exactly 0 (QE-230-a) | S | P3 | **Done** (2026-10-31, `af5b2b49`) | — | `ADR-0054` § amendment 2026-10-30 and its `ADR-0032` d1 bullet (ACCEPTED) | done: QE PASS_WITH_GAPS `…f24601b8` signs UAT; QE-242-a pending with the Architect (`arch-qe242a-ruling`); QE-242-b is `ABC-245` |
-| 11 | `ABC-231` | The king table is tapered by phase, alone, with no king-safety term | S | P3 | Backlog | **9/10** | `ADR-0031` addendum scope; door | the ADR ruling |
-| 12 | `ABC-232` | Passed pawns are worth more as material comes off | S | P3 | Backlog | **9/10** | `ABC-231`'s phase | `ABC-231` |
-| 13 | `ABC-233` | A history heuristic orders quiet moves after the killers, cleared per search | M | P3 | Backlog | **9/10** | `ADR-0026` d10; `ABC-080` `A6` | the ADR |
-| 14 | `ABC-234` | SEE orders captures in the full-width search (ordering only, no pruning) | M | P3 | Backlog | **8/10** | `ADR-0024` d4 re-open evidence | the evidence; the ADR |
-| 15 | `ABC-236` | Aspiration windows at the root, with a stated re-search | M | P3 | Backlog | **9/10** | new ADR; door | the ADR |
-| 16 | `ABC-237` | The transposition table prefers deeper entries when it replaces | S | P3 | Backlog | **9/10** | `ADR-0025` (falsifier `T2`) | the ADR |
-| 17 | `ABC-238` | A deeper stored entry may cut off a shallower search | M | P3 | Backlog | **9/10** | `ABC-081` `A1` revised; `ADR-0025`; door | the ADR; after `ABC-237` |
-| 18 | `ABC-239` | Evaluation weights tuned offline by a stated method, emitted as constants, validated outside | L | P3 | Backlog | **8/10** | `ADR-0048` data licence; new ADR | milestone 2's evaluation done; the licence; the ADR. Its batch is read **before** its merge (its `A6`) |
+| 11 | `ABC-231` | The king table is tapered by phase, alone, with no king-safety term | S | P3 | **Moved to `EPIC-011`** (2026-11-01; was Backlog) | **9/10** | `ADR-0031` addendum scope; door | the ADR ruling |
+| 12 | `ABC-232` | Passed pawns are worth more as material comes off | S | P3 | **Moved to `EPIC-011`** (2026-11-01; was Backlog) | **9/10** | `ABC-231`'s phase | `ABC-231` |
+| 13 | `ABC-233` | A history heuristic orders quiet moves after the killers, cleared per search | M | P3 | **Moved to `EPIC-011`** (2026-11-01; was Backlog) | **9/10** | `ADR-0026` d10; `ABC-080` `A6` | the ADR |
+| 14 | `ABC-234` | SEE orders captures in the full-width search (ordering only, no pruning) | M | P3 | **Moved to `EPIC-011`** (2026-11-01; was Backlog) | **8/10** | `ADR-0024` d4 re-open evidence | the evidence; the ADR |
+| 15 | `ABC-236` | Aspiration windows at the root, with a stated re-search | M | P3 | **Moved to `EPIC-011`** (2026-11-01; was Backlog) | **9/10** | new ADR; door | the ADR |
+| 16 | `ABC-237` | The transposition table prefers deeper entries when it replaces | S | P3 | **Moved to `EPIC-011`** (2026-11-01; was Backlog) | **9/10** | `ADR-0025` (falsifier `T2`) | the ADR |
+| 17 | `ABC-238` | A deeper stored entry may cut off a shallower search | M | P3 | **Moved to `EPIC-011`** (2026-11-01; was Backlog) | **9/10** | `ABC-081` `A1` revised; `ADR-0025`; door | the ADR; after `ABC-237` |
+| 18 | `ABC-239` | Evaluation weights tuned offline by a stated method, emitted as constants, validated outside | L | P3 | **Moved to `EPIC-011`** (2026-11-01; was Backlog) | **8/10** | `ADR-0048` data licence; new ADR | milestone 2's evaluation done; the licence; the ADR. Its batch is read **before** its merge (its `A6`) |
 | 19 | `ABC-243` | The setoption-Hash row reads a bare `go` (level 5 = 4 000 ms), and the TT `A7` title names the budget it reads (test-only, from `ABC-228`'s QE gaps); *2026-10-30:* plus a UCI row for a FEN that carries an uncapturable ep square (QE-241-a) | XS | P3 | **Done** (2026-10-31, `3628fe99`) | — | `ABC-228` and `ABC-241` Done; no ADR; `src/uci-session.test.ts` and `src/transposition.test.ts` only | done: QE PASS (`qe-ABC-243` `…2d790e40`; `G8` H 9.28 s); UAT waived (test-only) |
 | 20 | `ABC-244` | Time-blind virtual-clock rows in `src/cli.test.ts` and `src/uci-session.test.ts` take the coarsest step that keeps QE's caught-mutant set (`ADR-0046` § Addendum 2026-10-30, tranche 1; test-only, from `QE-229-a`) | S | **P1** | **Done** (2026-10-30, `24b22339`) | — | `ADR-0046` § Addendum 2026-10-30 R1–R4 (PROPOSED, `5fd3eee7`; BA/PM's word given on its page); `ABC-230`/`ABC-241` Done | done: QE PASS (`qe-ABC-244` `…4fe9bfe1`; `G8` H 9.25 s, ≤ 9.4 s target met) and Security/NFR PASS (`secnfr-ABC-244` `…9087cb39`); UAT waived (test-only) |
 | 21 | `ABC-245` | A blunder-level row reads a third occurrence whose earlier occurrences lie more than 50 plies back, so lowering the 100-key cap turns the lane red; the `src/levels.test.ts` header count is corrected (test-only, from QE-242-b and SE-242-f) | XS | P3 | **Done** (2026-10-31, `2cce84e0`) | — | `ABC-242` Done (`af5b2b49`); `ADR-0046` § Addendum R1–R4 and § Ruling 2026-10-31 (`10492743`: per level call, step 10) | done: QE PASS (`qe-ABC-245` `…b2ebc183`; `G8` H 9.82 s, which opened tranche 2, now `ABC-248`); QE-242-b closed; UAT waived (test-only) |
@@ -858,7 +888,7 @@ mates", ≥ 6 "a quiet promotion decides". It reads `quiesce` and `chooseMove` a
 | 26 | `ABC-251` | The search, quiescence, ordering and killers walk the packed moves and build a `Move` only at `chooseMove`'s return, with hand-inlined helpers (milestone 1b, O1-b part 2 with O1-c, value-identical) | L (S narrowed) | P2 | Backlog | **9/10** | `ABC-250` | `ABC-250`'s A4 reading (full form on GO, bar ≥ 1.10×; O1-c alone otherwise, bar ≥ 1.03×) |
 | 27 | `ABC-252` | One move generator: the shell's move calls build their `Move` lists from the packed path through one converter, and the object generator is removed (milestone 1b, O1-b part 3, value-identical) | M | P3 | Backlog | **9/10** | `ABC-250` GO, `ABC-251` full form | `ABC-251`'s merge; dropped if `ABC-250` is dropped |
 | 28 | `ABC-253` | Zobrist keys travel as two 32-bit halves in the search, the TT and the repetition scan, and stay `bigint` at the API (milestone 1b, O1-a, value-identical) | M | P3 | Backlog (Ready recommended) | **10/10** | none (`ADR-0025`, `ADR-0054` kept) | none; pulled after the O1-b chain (`ADR-0055` D4), bar ≥ 1.02× |
-| 29 | `ABC-254` | Lazy legality: the full make/test/unmake only for king moves, en passant, pinned pieces and positions in check (milestone 1b, O1-d = `ADR-0003` (c2), value-identical) | M | P2 | Backlog | **9/10** | an ADR amending `ADR-0003` clauses 1 and 3 | **the owner's yes (Q-SP-3)** and that ADR; first in milestone 1b if in time, else after `ABC-252` |
+| 29 | `ABC-254` | Lazy legality: the full make/test/unmake only for king moves, en passant, pinned pieces and positions in check (milestone 1b, O1-d = `ADR-0003` (c2), value-identical) | M | P2 | **Moved to `EPIC-011`** (2026-11-01; was Backlog) | **9/10** | an ADR amending `ADR-0003` clauses 1 and 3 | **the owner's yes (Q-SP-3)** and that ADR; first in milestone 1b if in time, else after `ABC-252` |
 
 *Re-scored 2026-10-29 (`bapm-owner-words-b`): Q4 is removed from every wait. Each value-changing ticket's DoR row 4
 is now ✅, because its reading is the smoke pair. No ticket but `ABC-225` changes column on this hop. `ABC-227` (Done)
@@ -924,7 +954,7 @@ gives it (`ABC-254` first only if the owner's yes and its ADR come in time; then
 | Q3 | Re-open `ADR-0020` d2 (the ep repetition key)? (a) keep, (b) re-open | "not sure, explain" (2026-10-29); 2026-10-30: "I need more info to answer". The Orchestrator gave it in session (`arch-ABC-230-reading` `…90a3aa31` § 3: (a) keep, (b) ep-legal key, (c) normalise history only). **2026-10-30: "Q3: c"** (`…c4ab73de`) | **(c):** `ADR-0020` § AMENDMENT 2026-10-30 (ACCEPTED on his word; the hash, TT and book unchanged). **`ABC-241` cut** (S, P2, after `ABC-230`). SA `…cc53fc79` A6 was the information: in 22 D games, cutechess counted the threefold one occurrence before the repository's key would |
 | Q4 | The pre-merge outside-opponent rule: (a)–(d), and (e) from his `EPIC-009` word | **2026-10-29: (e), extended:** "10 games self-play + 10 games vs stockfish" | § The merge rule: S-1 to S-4 per value-changing ticket, the trend, and a batched R pair. `ABC-225` re-scoped. Q4 is removed from every ticket's wait |
 | Q5 | Accept this epic and M1–M5, no Elo target | **2026-10-29: accepted, no Elo target:** "elo target is hard to reach, but try to understand if things get worse" | `proposed` → `backlog`. M1–M5 stand as written. The "worse" question is answered by § The merge rule's three layers |
-| Q6 (open, 2026-11-01) | The 3 000 goal: (a) which scale it is on (rating list, time control, field); (b) whether it becomes a measure of this epic or a later one, and read how (MQ-3000, § Product goal) | — **Asked after `arch-algo-analysis` reports**, which proposes the measurement; the Orchestrator takes it to him | Default until he answers: no ticket, gate or measure bound to 3 000; M2 stays "not LOSS"; scale `UNKNOWN - verify` |
+| Q6 (open, 2026-11-01; **moved to `EPIC-011`** 2026-11-01, `bapm-epic011-dedupe`: its time-control half is answered, 40/15) | The 3 000 goal: (a) which scale it is on (rating list, time control, field); (b) whether it becomes a measure of this epic or a later one, and read how (MQ-3000, § Product goal) | — **Asked after `arch-algo-analysis` reports**, which proposes the measurement; the Orchestrator takes it to him | Default until he answers: no ticket, gate or measure bound to 3 000; M2 stays "not LOSS"; scale `UNKNOWN - verify` |
 | Q-SP-3 (`ADR-0055`, open) | Amend the owner-ratified `ADR-0003` clauses 1 and 3 so lazy legality ((c2)) may be built now, for speed | — Not answered explicitly on 2026-11-01 (Orchestrator `…74216a44`, item 2) | `ABC-254` waits in Backlog (9/10); on yes, the Architect writes the amending ADR and it goes Ready; on no, it is closed as declined |
 | Q-SP-2 (`ADR-0055`, open) | `ADR-0055` D3's bars, as written or reset | — | Used only by `ABC-250` A4 (perft A1 / A0: GO ≥ 1.25×, HOLD 1.10–1.25×, NO-GO < 1.10×). **They apply as written unless he resets them before the reading** |
 

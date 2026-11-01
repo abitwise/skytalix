@@ -5,10 +5,17 @@ status: backlog
 column: Backlog
 size: M
 priority: P3
-epic: EPIC-010
+epic: EPIC-011
 ---
 
 # ABC-236: aspiration windows at the root
+
+> **RE-HOMED 2026-11-01 to `EPIC-011` by BA/PM** (task `bapm-epic011-dedupe`, records only, at `main` `2e9a2457`). The
+> owner asked for a new epic for the 3 000 path, started after the open epics close, and for no work done twice
+> (`orch-2026-10-30a` `…022fb66f`). `ADR-0056` D4 maps this ticket to its gap list, so it leaves `EPIC-010` rather
+> than holding that epic's close. **Id unchanged; nothing below this block is edited.** `ADR-0056` row S1. `EPIC-011`
+> Phase 3, last; **it now also waits on `ABC-238`** (`ADR-0056` D2: S1 depends on T1). Its reading is `EPIC-011` § The
+> per-change rule.
 
 > **Cut 2026-10-29 by BA/PM** (task `bapm-epic010-improvements`, records only, at `main` `f45aea95`). § B item 9, the
 > aspiration half (SA `…306a4012` row 9e). Never tried. `EPIC-008` § Out of scope listed aspiration windows; this is a

@@ -5,10 +5,22 @@ status: backlog
 column: Backlog
 size: M
 priority: P2
-epic: EPIC-010
+epic: EPIC-011
 ---
 
 # ABC-254: lazy legality, behind the unchanged legalMoves signature
+
+> **RE-HOMED 2026-11-01 to `EPIC-011` by BA/PM** (task `bapm-epic011-dedupe`, records only, at `main` `2e9a2457`). The
+> owner asked for a new epic for the 3 000 path, started after the open epics close, and for no work done twice
+> (`orch-2026-10-30a` `…022fb66f`). `ADR-0056` D4 maps this ticket to its gap list, so it leaves `EPIC-010` rather
+> than holding that epic's close. **Id unchanged; nothing below this block is edited.** `ADR-0056` row V2 and D6 Phase
+> 5 ("O1-d whenever the owner says yes (after O1-b)"). **Moved because it waits on an unanswered owner call (Q-SP-3)**
+> and, left in `EPIC-010` milestone 1b, would hold that epic open. **Its "first in milestone 1b if in time" option
+> (`ADR-0055` D4) is kept only as an exception:** if the owner's yes and the amending ADR both land before `ABC-250`
+> enters development, the Orchestrator may pull this ticket back into `EPIC-010` milestone 1b, first. Otherwise it
+> follows `EPIC-010`'s O1-b chain (`ABC-252`, or wherever that chain stops), since both rewrite `src/legal.ts`. On the
+> owner's yes, the Architect writes the ADR amending `ADR-0003` and BA/PM re-scores it; on no, it closes as declined.
+> Staged move generation (V3) is a separate `EPIC-011` stub after it.
 
 > **Cut 2026-11-01 by BA/PM** (task `bapm-goal3000-o1-cut`, records only, at `main` `bae25131`; nothing run, built or
 > timed). Source: `ADR-0055` option **O1-d** ("lazy legality (`ADR-0003` menu item (c2))", **1.15–1.40×**, medium

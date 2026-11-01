@@ -12,6 +12,11 @@ adr: "none if ADR-0031 D2's attack-map form stays; a different form is an ADR-00
 
 # ABC-207: per-piece mobility weights and a small early-queen term
 
+> **DEDUPE LINE 2026-11-01** (BA/PM, `bapm-epic011-dedupe`): this ticket **stays dropped**. Its hand weights lost (D
+> LOSS −18.3 ± 16.5) and are not re-tried by hand. `EPIC-011` stub E5 (piece terms, including mobility per piece) sets
+> such weights **by the tuner** (`ABC-239`), as `ADR-0056` D4 says. The code on `grugops/ABC-207` `5477df21` is
+> reference only. Nothing else on this page changes.
+
 > **CLOSED UNMERGED 2026-10-26 under ship rule S1. Not delivered.** BA/PM, task `bapm-s1-ABC-207`. D was LOSS
 > (pooled over 800 games, −18.3 ± 16.5). `A1`–`A4` were MET, `G6` included. S1's one re-tune round is not taken.
 > The code stays on `grugops/ABC-207` `5477df21`. See § Close.
