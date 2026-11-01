@@ -1,3 +1,4 @@
+_Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — **ABC-249 DONE** (qe-ABC-249 PASS_WITH_GAPS; merged). Owed to next BA/PM hop: QE-249-a test note on ABC-233/236/237/238. Running: qe-ABC-254, se-ABC-255, se-ABC-259._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — `bapm-reconcile-adr0056` merged: pages carry ADR-0056 figures (epic pass ≥ 200.0/400; smoke E1650, S-1/S-2/S-4); levels deep lane in every strength ticket; RISK-EPIC010-08 (±24 optimistic, QE checks at first epic read). **ABC-256 → Done (dropped).** **ABC-259 cut** (R-TC source scan, XS). Pulled: `se-ABC-255` (tools only), `se-ABC-259` (test only). G-2 (levels lane trigger list in memory-bank/90-agents-md-command-log.md) → `scribe-levels-trigger`. Running: qe-ABC-254, qe-ABC-249. Tests serialized by lock._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — `bapm-owner-answers` merged (cafb83d5); it ran before the ADR fold landed, so `bapm-reconcile-adr0056` queued: ADR figures into pages, ABC-256 closed as superseded, ABC-255 → DoR 10/10, levels deep lane in strength-ticket reading rows, G-1 cut (source-scan row), G-2 trigger list._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — `arch-adr0056-owner-answers` merged: C3″ per-epic = 400 head-to-head at 100 ms (`d --budget-ms 100 --rounds 200`), pass ≥ 200.0/400; GAIN/NEUTRAL owner-accepted; smoke = 10 games vs SF **E1650** at 0.5 s (E1910 would stop unchanged builds); rule R-TC (no engine path keyed on control; tools/-only harness tickets); difficulty check = levels deep lane per strength ticket (~9 min), + ladder short + UCI deep per epic. Owed to BA/PM: G-1 (source-scan row, XS), G-2 (levels lane trigger list), ABC-256 drop recommended. Running: `qe-ABC-254`, `qe-ABC-249`, `bapm-owner-answers`._
@@ -1184,7 +1185,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
     ## In Development (WIP 2/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
-    ## In Review (WIP 2/3)
+    ## In Review (WIP 1/3)
     - [ABC-012] Portfolio FX conversion  (PR: #41, QE: running)
 
   BOARD <-> TICKET CONTRACT: each ticket file (`plans/tickets/<prefix>-xxx.md`) carries a
@@ -1344,8 +1345,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 2/3)
-- [ABC-249] A pre-root repetition met four or more plies into the search scores 0, so QPLY4 turns the lane red (QE-248-c; size: XS, priority: P3, test-only, UAT waived; DoR 10/10; cut by bapm-ABC-248-close; one src/engine.test.ts row ≤ 100 ms; after ABC-223 (host-alone order)) **pulled 2026-11-01 → `se-ABC-249` (parallel coding; tests serialized by host-test.lock after the probe)** **→ In Review 2026-11-01 (se-ABC-249 done dd66bfee; one row, QPLY4 red / production green, 3.93 ms; review OK — LOW: row pins score 404/497, will need re-pin when eval changes in EPIC-011) → `qe-ABC-249` (QPLY4 re-read, G8)**
+## In Review (WIP 1/3)
 - [ABC-254] Lazy legality: make/test/unmake only for king moves, en passant, pinned pieces and checks (ADR-0055 O1-d; size: M, priority: P2; DoR 10/10; milestone 1b; **owner YES 2026-11-01 (…f7a50e95)**; → Ready when `arch-adr0003-amend` merges) **Stays EPIC-010 milestone 1b, first once arch-adr0003-amend merges** (ABC-254 page exception: owner yes + amending ADR before ABC-250 enters development) **→ Ready 2026-11-01 (bapm-ABC-254-ready; first in 1b)** **pulled 2026-11-01 → `se-ABC-254` (parallel coding; tests serialized by host-test.lock after the probe)** **→ In Review 2026-11-01 (se-ABC-254 done fe53dbda; A1/A2/perft green; npm test 2 368/0; out-of-ticket edit: gameend.nfr.test.ts bars tightened 1/8→0, reviewed OK) → `qe-ABC-254` (A3/G4, A4 ALONE nps, G1/G5/G6/G8/G9)**
 
 
@@ -1406,6 +1406,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+- [ABC-249] A pre-root repetition met four or more plies into the search scores 0, so QPLY4 turns the lane red (QE-248-c; size: XS, priority: P3, test-only, UAT waived; DoR 10/10; cut by bapm-ABC-248-close; one src/engine.test.ts row ≤ 100 ms; after ABC-223 (host-alone order)) **pulled 2026-11-01 → `se-ABC-249` (parallel coding; tests serialized by host-test.lock after the probe)** **→ In Review 2026-11-01 (se-ABC-249 done dd66bfee; one row, QPLY4 red / production green, 3.93 ms; review OK — LOW: row pins score 404/497, will need re-pin when eval changes in EPIC-011) → `qe-ABC-249` (QPLY4 re-read, G8)** **→ Done 2026-11-01 (qe-ABC-249 PASS_WITH_GAPS, UAT waived test-only; G8 head 9.15 s / base 9.45 s; merged to local main). Gaps: QE-249-a LOW (row discriminates only at depth 4–5; add relational assert note to ABC-233/236/237/238 — next BA/PM hop), QE-249-b INFO (no ply ≥ 4 draw-score row), QE-249-c INFO (QE harness pgrep counts flock waiters)**
 - [ABC-256] B0: baseline reading of main on the routine milestone control after EPIC-010 closes (EPIC-011 Phase 0; size: S, priority: P2, DoR 8/10) **→ Done (dropped, superseded by ADR-0056 C3″) 2026-11-01 (bapm-reconcile-adr0056)**
 - [EPIC-009] skytalix plays a 40/15 tournament clock: simple-tournament then uci-clock-mode, uses the clock, never loses on time (owner: BA/PM, size: M, priority: P2, since: 2026-10-29, accepted 2026-10-29 (Q8); M1–M4; MVP ABC-220, 222 (milestone 1), ABC-221, 223 (milestone 2; ADR-0052 PROPOSED folded 2026-10-29; owner OQ-0052-1 open) **2026-11-01: closes on ABC-223's grade (milestone 2); W1 time management, 40/15 strength reading and major validation moved to EPIC-011.** **2026-11-01 CLOSED (bapm-epic009-close): milestone 2 MET (M1–M4 + 60 s ceiling); W1, the 40/15 strength reading and the major validation live in EPIC-011.**
 - [ABC-223] Smoke reading: uci-clock-mode, 5 games at 40/15 (<= 10 for coverage), 0 losses on time, closest call >= 500 ms, >= 75 % clock use, longest move <= 60 s (owner: QE/E2E, size: S, priority: P3, DoR 10/10 2026-10-31 (bapm-ABC-221-fold; ABC-221 merged af32f82c); ALONE <= ~5 h; → Ready; ALONE, after the milestone-1 batch; never beside ABC-245/246 G8; **pulled 2026-11-01** → `qe-ABC-223` STRICTLY ALONE ~5 h) **QE PASS_WITH_GAPS** qe-ABC-223 (signs UAT; 5/5 games, 0 time losses, closest call 1 099 ms, period use ≥ 99.88 %, longest 25 285 ms; QE-223-a host shared 48.8 % of samples) → merged b45162fc 2026-11-01, not pushed
