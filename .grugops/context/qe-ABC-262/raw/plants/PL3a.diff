@@ -1,0 +1,22 @@
+diff -ru src/gameend.nfr.test.ts /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-262/plants/PL3a//src/gameend.nfr.test.ts
+--- src/gameend.nfr.test.ts	2026-11-01 20:24:47.995110851 +0000
++++ /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-262/plants/PL3a//src/gameend.nfr.test.ts	2026-11-01 20:26:24.391302031 +0000
+@@ -266,6 +266,7 @@
+     expect(hasLegalMove(position)).toBe(true);
+     const attackTests = vi.mocked(isSquareAttackedBy).mock.calls.length;
+     expect(attackTests).toBeGreaterThan(0); // the spy sees legal.ts's calls, so the bar is live
++    console.log("B2COUNT", attackTests); // SCRATCH PROBE
+     expect(attackTests).toBeLessThanOrEqual(1);
+   });
+ 
+diff -ru src/legal.ts /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-262/plants/PL3a//src/legal.ts
+--- src/legal.ts	2026-11-01 20:24:47.996110842 +0000
++++ /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-262/plants/PL3a//src/legal.ts	2026-11-01 20:26:24.406145750 +0000
+@@ -349,6 +349,7 @@
+  * move outside the tested classes answers at once (ABC-254). The position is unchanged on return.
+  */
+ export function hasLegalMove(position: Position): boolean {
++  return legalMoves(position).length > 0; // PLANT PL3a
+   const moverIsBlack = position.blackToMove;
+   const king = KING | (moverIsBlack ? BLACK : 0);
+   const kingHome = kingSquareOf(position, moverIsBlack);
