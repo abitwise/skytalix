@@ -1,0 +1,10 @@
+     × position-4 perft(3) = 9467 4ms
+     × position-5 perft(2) = 1486 0ms
+     × position-5 perft(3) = 62379 4ms
+     × position-5 depth 2: counts, leaf-key XOR, every packed key delta equals a fresh key 1ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-4 perft(3) = 9467
+ FAIL  src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-5 perft(2) = 1486
+ FAIL  src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-5 perft(3) = 62379
+ FAIL  src/perft.test.ts > ABC-250 A1 — leaf-key XOR on the packed path equals the object path > position-5 depth 2: counts, leaf-key XOR, every packed key delta equals a fresh key
+      Tests  4 failed | 27 passed (31)

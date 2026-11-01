@@ -1,0 +1,9 @@
+
+ RUN  v4.1.12 /home/olger/projects/public/skytalix/.claude/worktrees/qe-ABC-250
+
+
+ Test Files  1 passed (1)
+      Tests  3 passed | 48 skipped (51)
+   Start at  19:58:37
+   Duration  45.95s (transform 0ms, setup 0ms, import 33ms, tests 45.83s, environment 0ms)
+

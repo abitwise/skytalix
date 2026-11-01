@@ -1,0 +1,14 @@
+     × startpos depth 2: counts, leaf-key XOR, every packed key delta equals a fresh key 3ms
+     × kiwipete depth 2: counts, leaf-key XOR, every packed key delta equals a fresh key 3ms
+     × position-3 depth 2: counts, leaf-key XOR, every packed key delta equals a fresh key 0ms
+     × position-4 depth 2: counts, leaf-key XOR, every packed key delta equals a fresh key 0ms
+     × position-5 depth 2: counts, leaf-key XOR, every packed key delta equals a fresh key 1ms
+     × position-6 depth 2: counts, leaf-key XOR, every packed key delta equals a fresh key 1ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/perft.test.ts > ABC-250 A1 — leaf-key XOR on the packed path equals the object path > startpos depth 2: counts, leaf-key XOR, every packed key delta equals a fresh key
+ FAIL  src/perft.test.ts > ABC-250 A1 — leaf-key XOR on the packed path equals the object path > kiwipete depth 2: counts, leaf-key XOR, every packed key delta equals a fresh key
+ FAIL  src/perft.test.ts > ABC-250 A1 — leaf-key XOR on the packed path equals the object path > position-3 depth 2: counts, leaf-key XOR, every packed key delta equals a fresh key
+ FAIL  src/perft.test.ts > ABC-250 A1 — leaf-key XOR on the packed path equals the object path > position-4 depth 2: counts, leaf-key XOR, every packed key delta equals a fresh key
+ FAIL  src/perft.test.ts > ABC-250 A1 — leaf-key XOR on the packed path equals the object path > position-5 depth 2: counts, leaf-key XOR, every packed key delta equals a fresh key
+ FAIL  src/perft.test.ts > ABC-250 A1 — leaf-key XOR on the packed path equals the object path > position-6 depth 2: counts, leaf-key XOR, every packed key delta equals a fresh key
+      Tests  6 failed | 25 passed (31)

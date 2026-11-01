@@ -1,0 +1,4 @@
+     × on the six perft roots to depth 1: lists in order, make/unmake identical, 0 mutations 42ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/legal.test.ts > ABC-250 A2 — the packed generator, filter and make/unmake equal the object ones > on the six perft roots to depth 1: lists in order, make/unmake identical, 0 mutations
+      Tests  1 failed | 43 passed (44)

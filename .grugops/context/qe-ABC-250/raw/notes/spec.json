@@ -1,0 +1,10 @@
+{ "refs": ["qe-ABC-250","ABC-250","EPIC-010","ADR-0055","ADR-0055-D3-V2","NFR-001","NFR-004","NFR-005","NFR-008","NFR-009","grugops/ABC-250","2e04eee5","ceb28780","ABC-251","ABC-252","ABC-261","QE-261-c","QE-250-a","QE-250-b","QE-250-c","QE-250-d","QE-250-e","20261101T194515Z-qe-e2e-decision-7ff2b573"],
+  "notes": [
+    { "kind": "observation", "confidence": "high for the numbers as measured; A4 UNRESOLVED by the pre-registered D3-V2 rule (grade.mjs), no hand grade", "bodyFile": "note-a4.md" },
+    { "kind": "observation", "confidence": "high: A5 MET, G6 MET, G5 MET by grade.mjs / g56.mjs under the sealed PREREG", "bodyFile": "note-a5.md" },
+    { "kind": "observation", "confidence": "high: every row ran as stated at 2e04eee5 under the host lock", "bodyFile": "note-gates.md" },
+    { "kind": "observation", "confidence": "high for the lock, window and per-run readings; foreign-process origin UNKNOWN - verify", "bodyFile": "note-host.md" },
+    { "kind": "observation", "confidence": "high: gaps named from this hop's readings; QE-250-a mechanism UNKNOWN - verify", "bodyFile": "note-gaps.md" },
+    { "kind": "decision", "confidence": "high: verdict by rule under the sealed PREREG; A4 UNRESOLVED (VOID), all else green", "bodyFile": "note-decision.md" },
+    { "kind": "observation", "confidence": "high: paths, commits and hashes as recorded (observation: an artifact-ref needs §14-gate provenance this hop has not got)", "bodyFile": "note-artifacts.md" }
+  ] }

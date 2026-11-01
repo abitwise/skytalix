@@ -1,0 +1,5 @@
+ ✓ src/legal.test.ts > ABC-250 A2 — the packed generator, filter and make/unmake equal the object ones > on the six perft roots to depth 1: lists in order, make/unmake identical, 0 mutations 63ms
+ ✓ src/legal.test.ts > ABC-250 A2 — the packed generator, filter and make/unmake equal the object ones > on ABC-206's 285 074-position walk to depth 3 [deep, ENGINE_DEEP=1] 45863ms
+ ✓ src/legal.test.ts > ABC-250 A2 — the packed generator, filter and make/unmake equal the object ones > a packed generator run past its buffer throws instead of truncating 1ms
+      Tests  3 passed | 48 skipped (51)
+   Duration  46.07s (transform 0ms, setup 0ms, import 47ms, tests 45.93s, environment 0ms)

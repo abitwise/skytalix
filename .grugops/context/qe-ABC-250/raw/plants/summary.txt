@@ -1,0 +1,7 @@
+QP1 lane perft rc=1 ( Tests 4 failed | 27 passed (31)) legal rc=1 ( Tests 1 failed | 43 passed (44))
+QP2 lane perft rc=1 ( Tests 10 failed | 21 passed (31)) legal rc=1 ( Tests 1 failed | 43 passed (44))
+QP3 lane perft rc=1 ( Tests 6 failed | 25 passed (31)) legal rc=1 ( Tests 1 failed | 43 passed (44))
+QP4 lane perft rc=1 ( Tests 1 failed | 30 passed (31)) legal rc=1 ( Tests 1 failed | 43 passed (44))
+QP5 lane perft rc=1 ( Tests 6 failed | 25 passed (31)) legal rc=0 ( Tests 44 passed (44))
+QP6 lane perft rc=0 ( Tests 31 passed (31)) legal rc=1 ( Tests 1 failed | 43 passed (44))
+FP src restored == worktree src

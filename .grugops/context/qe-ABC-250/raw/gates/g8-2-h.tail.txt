@@ -1,0 +1,8 @@
+ ✓ src/uci.real-engine.test.ts (1 test) 3ms
+ ✓ src/san.nfr.test.ts (5 tests) 3ms
+
+ Test Files  63 passed (63)
+      Tests  2381 passed (2381)
+   Start at  19:57:35
+   Duration  9.03s (transform 0ms, setup 0ms, import 6.95s, tests 6.77s, environment 5ms)
+

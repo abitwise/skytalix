@@ -1,0 +1,8 @@
+ ✓ src/glyph-mode.nfr.test.ts (3 tests) 3ms
+ ✓ src/san.nfr.test.ts (5 tests) 3ms
+
+ Test Files  63 passed (63)
+      Tests  2372 passed (2372)
+   Start at  19:55:15
+   Duration  8.95s (transform 0ms, setup 0ms, import 6.71s, tests 6.56s, environment 5ms)
+

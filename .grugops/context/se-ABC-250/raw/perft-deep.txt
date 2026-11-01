@@ -1,0 +1,47 @@
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > startpos perft(1) = 20 2ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > startpos perft(2) = 400 1ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > startpos perft(3) = 8902 4ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > startpos perft(4) = 197281 22ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > startpos perft(5) = 4865609 [deep, PERFT_DEEP=1] 199ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > kiwipete perft(1) = 48 0ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > kiwipete perft(2) = 2039 1ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > kiwipete perft(3) = 97862 5ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > kiwipete perft(4) = 4085603 [deep, PERFT_DEEP=1] 172ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-3 perft(1) = 14 0ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-3 perft(2) = 191 0ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-3 perft(3) = 2812 0ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-3 perft(4) = 43238 3ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-3 perft(5) = 674624 [deep, PERFT_DEEP=1] 40ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-3 perft(6) = 11030083 [deep, PERFT_DEEP=1] 739ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-4 perft(1) = 6 0ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-4 perft(2) = 264 0ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-4 perft(3) = 9467 0ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-4 perft(4) = 422333 [deep, PERFT_DEEP=1] 18ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-4 perft(5) = 15833292 [deep, PERFT_DEEP=1] 601ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-5 perft(1) = 44 0ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-5 perft(2) = 1486 0ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-5 perft(3) = 62379 3ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-5 perft(4) = 2103487 [deep, PERFT_DEEP=1] 75ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-6 perft(1) = 46 0ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-6 perft(2) = 2079 0ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-6 perft(3) = 89890 3ms
+ ✓ src/perft.test.ts > ABC-006 acceptance — exact perft counts > position-6 perft(4) = 3894594 [deep, PERFT_DEEP=1] 122ms
+ ✓ src/perft.test.ts > ABC-006 — perftDivide > splits Kiwipete depth 3 into one entry per legal first move that sums to the total 12ms
+ ✓ src/perft.test.ts > ABC-006 — perftDivide > labels each move in long algebraic coordinate notation 1ms
+ ✓ src/perft.test.ts > ABC-006 — perftDivide > emits promotion labels carrying the promoted piece letter 1ms
+ ✓ src/perft.test.ts > perft base case > counts one node at depth 0 (the position itself) 0ms
+ ✓ src/perft.test.ts > ABC-250 A1 — leaf-key XOR on the packed path equals the object path > startpos depth 2: counts, leaf-key XOR, every packed key delta equals a fresh key 4ms
+ ✓ src/perft.test.ts > ABC-250 A1 — leaf-key XOR on the packed path equals the object path > startpos depth 4 (perft-bench): counts and leaf-key XOR [deep, PERFT_DEEP=1] 49ms
+ ✓ src/perft.test.ts > ABC-250 A1 — leaf-key XOR on the packed path equals the object path > kiwipete depth 2: counts, leaf-key XOR, every packed key delta equals a fresh key 2ms
+ ✓ src/perft.test.ts > ABC-250 A1 — leaf-key XOR on the packed path equals the object path > kiwipete depth 4 (perft-bench): counts and leaf-key XOR [deep, PERFT_DEEP=1] 691ms
+ ✓ src/perft.test.ts > ABC-250 A1 — leaf-key XOR on the packed path equals the object path > position-3 depth 2: counts, leaf-key XOR, every packed key delta equals a fresh key 0ms
+ ✓ src/perft.test.ts > ABC-250 A1 — leaf-key XOR on the packed path equals the object path > position-3 depth 5 (perft-bench): counts and leaf-key XOR [deep, PERFT_DEEP=1] 139ms
+ ✓ src/perft.test.ts > ABC-250 A1 — leaf-key XOR on the packed path equals the object path > position-4 depth 2: counts, leaf-key XOR, every packed key delta equals a fresh key 0ms
+ ✓ src/perft.test.ts > ABC-250 A1 — leaf-key XOR on the packed path equals the object path > position-4 depth 4 (perft-bench): counts and leaf-key XOR [deep, PERFT_DEEP=1] 72ms
+ ✓ src/perft.test.ts > ABC-250 A1 — leaf-key XOR on the packed path equals the object path > position-5 depth 2: counts, leaf-key XOR, every packed key delta equals a fresh key 1ms
+ ✓ src/perft.test.ts > ABC-250 A1 — leaf-key XOR on the packed path equals the object path > position-5 depth 4 (perft-bench): counts and leaf-key XOR [deep, PERFT_DEEP=1] 355ms
+ ✓ src/perft.test.ts > ABC-250 A1 — leaf-key XOR on the packed path equals the object path > position-6 depth 2: counts, leaf-key XOR, every packed key delta equals a fresh key 1ms
+ ✓ src/perft.test.ts > ABC-250 A1 — leaf-key XOR on the packed path equals the object path > position-6 depth 4 (perft-bench): counts and leaf-key XOR [deep, PERFT_DEEP=1] 540ms
+ ✓ src/perft.test.ts > ABC-250 A1 — leaf-key XOR on the packed path equals the object path > refuses a depth beyond its fixed stack instead of overrunning it 1ms
+      Tests  45 passed (45)
+   Duration  4.03s (transform 0ms, setup 0ms, import 55ms, tests 3.88s, environment 0ms)

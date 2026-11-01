@@ -1,0 +1,6 @@
+# each plant applied, vitest run src/perft.test.ts src/legal.test.ts (heap 128, under lock), file restored by cp; tree hash before/after 8a4f1bc8…301b (equal)
+P1 promotion order R before Q (writePromotions)        => 1 failed | 74 passed (A2 lane row)
+P2 unmake ep victim not restored (unmakeMovePacked)    => 7 failed | 68 passed (perft counts, divide, A1 kiwipete)
+P3 packed key: castle rook not keyed (zobrist packed)  => 3 failed | 72 passed (A1 kiwipete, position-4, position-5)
+P4 packed filter ignores pins (filterLazilyPacked)     => 16 failed | 59 passed (perft counts, A1, A2)
+P5 packed halfmove clock not restored                  => 1 failed | 74 passed (A2 lane row)

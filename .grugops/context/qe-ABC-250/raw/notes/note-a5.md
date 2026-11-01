@@ -1,0 +1,21 @@
+# ABC-250 A5 (search speed guard) under D3-V2: MET. kiwipete 1.003, position-6 0.994, start 1.005 (bar ≥ 0.98 on every board; all valid, agreement held, no re-run). G6 MET (kiwipete 9 = 9, position-6 10 = 10, min depth 8). G5 instrument part MET (44 runs, max wall 4 001.4 ms ≤ 5 000)
+
+QE/E2E, task `qe-ABC-250`. Graded by `grade.mjs search` and `g56.mjs` under the sealed PREREG `…7ff2b573`. The probe is qe-ABC-254-a4v2's `probe.mjs`, byte-identical: `chooseMove` at 4 000 ms on the real clock, one fresh process per run.
+
+| board | attempts | counted | B median nps | H median nps | H ÷ B | paired median | agree (0.98) | spread B / H | status |
+|---|---:|---:|---:|---:|---:|---:|---|---|---|
+| kiwipete | 5 | 5 | 873 659 | 876 219 | **1.003** | 1.003 | yes | 3.9 % / 2.6 % | valid |
+| position-6 | 7 | 5 | 884 202 | 878 535 | **0.994** | 0.996 | yes | 0.4 % / 3.3 % | valid |
+| start | 10 | 5 | 674 396 | 677 468 | **1.005** | 1.010 | yes | 1.4 % / 2.1 % | valid |
+
+- **A5 MET.** Every board is ≥ 0.98, the smallest margin being position-6 at 0.014. (v1) held on every attempt: the same move and score at equal depth.
+- **Discards:** 7 of 22 attempts, each for foreign cores above 0.8 or a foreign vitest. None was for Tctl. Counted runs read foreign cores ≤ 0.44, after-run Tctl ≤ 78.0 °C, and load1 1.12–1.84.
+- **G6 (all A5 runs, admitted or discarded, as the EPIC-008 row reads it):**
+  - kiwipete: B depths 8 9 9 9 9, H 9 8 9 9 9, so median 9 = 9;
+  - position-6: B and H 10 on all 7 runs each, so 10 = 10;
+  - the minimum is 8, so no run fell below the floor of 6 and no run is a WARN below 7.
+  - **G6 MET** ("≥ base", graded on the owner's word).
+- **G5:**
+  - 44 runs, the largest `chooseMove` wall 4 001.4 ms, 0 runs over 5 000 ms. Reported against 4 000 ms: 31 of 44 runs ended 0.0–1.4 ms past it, as every recent 4 s read has (qe-ABC-254-a4v2's max was 4 001.2 ms);
+  - the `ENGINE_DEEP` engine lane (G5's real-clock rows) was 78/78 green at head;
+  - **G5 MET.** The search is untouched by this ticket.
