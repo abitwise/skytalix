@@ -1,0 +1,2123 @@
+{
+ "base": "46365ed0",
+ "frozenAt": "2026-11-01T07:23:59.608Z",
+ "mutants": [
+  {
+   "id": "167-M01",
+   "crit": "A5",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "const DEFAULT_MOVES_TO_GO = 20;",
+     "repl": "const DEFAULT_MOVES_TO_GO = 19;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M02",
+   "crit": "A5",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "const MOVE_OVERHEAD_MS = 50;",
+     "repl": "const MOVE_OVERHEAD_MS = 0;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M03",
+   "crit": "A5",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "+ increment / 2;",
+     "repl": "+ 0 * increment;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M04",
+   "crit": "A5",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "+ increment / 2;",
+     "repl": "+ increment;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M05",
+   "crit": "A5",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "(clock.movestogo ?? DEFAULT_MOVES_TO_GO)",
+     "repl": "DEFAULT_MOVES_TO_GO"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M06",
+   "crit": "A5",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "clock[blackToMove ? \"binc\" : \"winc\"]",
+     "repl": "clock[blackToMove ? \"winc\" : \"binc\"]"
+    }
+   ],
+   "applies": false,
+   "notApplicable": "2 occurrences in src/uci-session.ts"
+  },
+  {
+   "id": "167-M07",
+   "crit": "A5",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "budgetMs: Math.min(budget, LEVELS[DEFAULT_LEVEL].budgetMs),",
+     "repl": "budgetMs: budget,"
+    }
+   ],
+   "applies": false,
+   "notApplicable": "0 occurrences in src/uci-session.ts"
+  },
+  {
+   "id": "167-M08",
+   "crit": "A5",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "clock[blackToMove ? \"btime\" : \"wtime\"]",
+     "repl": "clock[blackToMove ? \"wtime\" : \"btime\"]"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M09",
+   "crit": "A5",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "Math.max(1, Math.min(share, time - MOVE_OVERHEAD_MS))",
+     "repl": "Math.max(0, Math.min(share, time - MOVE_OVERHEAD_MS))"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M10",
+   "crit": "A5",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "budget = Math.max(1, Math.min(share, time - MOVE_OVERHEAD_MS));",
+     "repl": "budget = Math.min(share, time - MOVE_OVERHEAD_MS);"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M11",
+   "crit": "A5",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "if (clock.movetime !== undefined) {",
+     "repl": "if (clock.movetime !== undefined && time === undefined) {"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M12",
+   "crit": "A6",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "if (keyword === \"infinite\" || keyword === \"ponder\") {",
+     "repl": "if (keyword === \"infinite\") {"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M13",
+   "crit": "A6",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "    held = null;\n    write(line);",
+     "repl": "    write(line);"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M14",
+   "crit": "A6",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "        case \"stop\":\n        case \"ponderhit\":",
+     "repl": "        case \"stop\":"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M15",
+   "crit": "A6",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "    // One `bestmove` per `go`: an answer still held is released before the next search.\n    release();",
+     "repl": "    held = null;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M16",
+   "crit": "A6",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "if (request.hold) held = answer;",
+     "repl": "if (false) held = answer;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M17",
+   "crit": "A7",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "2 * mate - 1",
+     "repl": "2 * mate"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M18",
+   "crit": "A7",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "Math.min(depth, mateDepth)",
+     "repl": "Math.max(depth, mateDepth)"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M19",
+   "crit": "A7",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "value >= 1 ? value : undefined",
+     "repl": "value >= 0 ? value : undefined"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M20",
+   "crit": "A7",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "if (text === undefined || !/^\\d+$/.test(text)) return undefined;\n  const value = Number(text);",
+     "repl": "if (text === undefined || Number.isNaN(Number.parseInt(text))) return undefined;\n  const value = Number.parseInt(text);"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M21",
+   "crit": "A7",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "...(request.maxNodes === undefined ? {} : { maxNodes: request.maxNodes }),",
+     "repl": ""
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M22",
+   "crit": "A7",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "      warn(\"searchmoves is not supported; searching all moves\");",
+     "repl": ""
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M23",
+   "crit": "A7",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "while (index + 1 < tokens.length && !GO_KEYWORDS.has(tokens[index + 1] as string)) index++;",
+     "repl": "index = tokens.length;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M24",
+   "crit": "A7",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "        warn(`go ${keyword} needs an integer >= 1, got ${text ?? \"nothing\"}; ignored`);",
+     "repl": "        depth = 1;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M25",
+   "crit": "A7",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "...(request.maxDepth === undefined ? {} : { maxDepth: request.maxDepth }),",
+     "repl": ""
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M26",
+   "crit": "A4",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "    if (request.hold) held = answer;\n    else write(answer);",
+     "repl": "    if (request.hold) held = answer;\n    else if (answer !== \"bestmove 0000\") write(answer);"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M27",
+   "crit": "A4",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "let answer = \"bestmove 0000\";",
+     "repl": "let answer = \"bestmove (none)\";"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M28",
+   "crit": "A4",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "            position = null;\n",
+     "repl": ""
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M29",
+   "crit": "A4",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "    if (code < 0x20 || code === 0x7f) continue;",
+     "repl": "    if (code === 0x7f) continue;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M30",
+   "crit": "A4",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "if (parsed.outcome !== \"move\") return `illegal move ${text}`;",
+     "repl": "if (parsed.outcome !== \"move\") continue;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M31",
+   "crit": "A8",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "const moves = Math.ceil((MATE_SCORE - Math.abs(score)) / 2);",
+     "repl": "const moves = Math.floor((MATE_SCORE - Math.abs(score)) / 2);"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M32",
+   "crit": "A8",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "return `mate ${score > 0 ? moves : -moves}`;",
+     "repl": "return `mate ${moves}`;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M33",
+   "crit": "A8",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "if (Math.abs(score) < MATE_FLOOR) return `cp ${score}`;",
+     "repl": "return `cp ${score}`;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M34",
+   "crit": "A9",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "          position = parseFen(START_FEN);\n          break;\n        case \"position\"",
+     "repl": "          break;\n        case \"position\""
+    }
+   ],
+   "applies": false,
+   "notApplicable": "0 occurrences in src/uci-session.ts"
+  },
+  {
+   "id": "167-M35",
+   "crit": "A9",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "        default:\n",
+     "repl": "        default:\n          if (tokens[0] === \"setoption\") info(\"ignored\");\n"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M36",
+   "crit": "A1",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "          write(\"id name skytalix\");\n          write(\"id author Olger Oeselg\");",
+     "repl": "          write(\"id author Olger Oeselg\");\n          write(\"id name skytalix\");"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M37",
+   "crit": "A10",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "          return \"quit\";",
+     "repl": "          return \"continue\";"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M38",
+   "crit": "A11",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "import { makeMove } from \"./apply.ts\";",
+     "repl": "import { makeMove } from \"./apply.ts\";\nimport { readFileSync as _r } from 'node:fs';\nvoid _r;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M39",
+   "crit": "A11",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "import { makeMove } from \"./apply.ts\";",
+     "repl": "import { makeMove } from \"./apply.ts\";\nimport \"./history.ts\";"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M40",
+   "crit": "A11",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "  const { write, now, random, book } = options;",
+     "repl": "  const { write, now, random, book } = options;\n  void (globalThis as any)[\"Math\"][\"random\"]();"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M41",
+   "crit": "A11",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "import { makeMove } from \"./apply.ts\";",
+     "repl": "import { makeMove } from \"./apply.ts\";\nimport fs from \"fs\";\nvoid fs;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M42",
+   "crit": "A11",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "  const { write, now, random, book } = options;",
+     "repl": "  const { write, now, random, book } = options;\n  void (globalThis as any)[\"process\"]?.env;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M43",
+   "crit": "A3-h1",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "const nps = Math.round((choice.nodes * 1000) / Math.max(1, choice.elapsedMs));",
+     "repl": "const nps = choice.nodes;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M44",
+   "crit": "A9-h1",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "let position: Position | null = parseFen(START_FEN);",
+     "repl": "let position: Position | null = null;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M45",
+   "crit": "A3",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "pv ${move}`,",
+     "repl": "pv ${move} ${move}`,"
+    }
+   ],
+   "applies": false,
+   "notApplicable": "2 occurrences in src/uci-session.ts"
+  },
+  {
+   "id": "167-M46",
+   "crit": "A11",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "write(answer);",
+     "repl": "write(answer);\n    write(\"readyok\");"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M47",
+   "crit": "A11",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "import { makeMove } from \"./apply.ts\";",
+     "repl": "import { makeMove } from \"./apply.ts\";\nimport \"./turn-loop.ts\";"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M48",
+   "crit": "A11",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "import { makeMove } from \"./apply.ts\";",
+     "repl": "import { makeMove } from \"./apply.ts\";\nimport \"./book-file.ts\";"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M49",
+   "crit": "A11",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "import { makeMove } from \"./apply.ts\";",
+     "repl": "import { makeMove } from \"./apply.ts\";\nimport \"./line-input.ts\";"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M50",
+   "crit": "A11",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "import { makeMove } from \"./apply.ts\";",
+     "repl": "import { makeMove } from \"./apply.ts\";\nimport \"./book-engine.ts\";"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M51",
+   "crit": "A11",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "import { makeMove } from \"./apply.ts\";",
+     "repl": "import { makeMove } from \"./apply.ts\";\nimport \"./level-seam.ts\";"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-N01",
+   "crit": "A6-e2",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "        case \"position\": {\n          release();\n",
+     "repl": "        case \"position\": {\n"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-N02",
+   "crit": "A6-e3",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "        case \"ucinewgame\":\n          release();\n",
+     "repl": "        case \"ucinewgame\":\n"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-N03",
+   "crit": "A6-e4",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "        case \"quit\":\n          release();\n",
+     "repl": "        case \"quit\":\n"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-N04",
+   "crit": "A7-f1",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "return next === undefined || GO_KEYWORDS.has(next) ? undefined : next;",
+     "repl": "return next;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-N05",
+   "crit": "A7-f1",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "const text = valueAfter(index);\n      if (text !== undefined) index++;\n      const value = positiveInteger(text);\n      if (value === undefined) {\n        warn(`go ${keyword}",
+     "repl": "const text = tokens[++index];\n      const value = positiveInteger(text);\n      if (value === undefined) {\n        warn(`go ${keyword}"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-N06",
+   "crit": "A7-f",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "const text = valueAfter(index);\n      if (text !== undefined) index++;\n      const value = milliseconds(text);",
+     "repl": "const text = tokens[++index];\n      const value = milliseconds(text);"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-N07",
+   "crit": "A7-f",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "const text = valueAfter(index);\n      if (text !== undefined) index++;\n      const value = positiveInteger(text);\n      if (value === undefined) {\n        warn(`go movestogo",
+     "repl": "const text = tokens[++index];\n      const value = positiveInteger(text);\n      if (value === undefined) {\n        warn(`go movestogo"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-N08",
+   "crit": "A7-f",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "      if (text !== undefined) index++;\n      const value = milliseconds(text);",
+     "repl": "      const value = milliseconds(text);"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-N09",
+   "crit": "A6-e",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "          release();\n          const parsed = parsePosition(tokens);\n          if (typeof parsed === \"string\") {\n            position = null;\n            info(`position refused: ${parsed}`);\n          } else position = parsed;\n",
+     "repl": "          const parsed = parsePosition(tokens);\n          if (typeof parsed === \"string\") {\n            position = null;\n            info(`position refused: ${parsed}`);\n          } else position = parsed;\n          release();\n"
+    }
+   ],
+   "applies": false,
+   "notApplicable": "0 occurrences in src/uci-session.ts"
+  },
+  {
+   "id": "171-N10",
+   "crit": "A6-e5",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "      switch (tokens[0]) {\n",
+     "repl": "      release();\n      switch (tokens[0]) {\n"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-N11",
+   "crit": "A6-e5",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "        case \"isready\":\n          write(\"readyok\");",
+     "repl": "        case \"isready\":\n          release();\n          write(\"readyok\");"
+    }
+   ],
+   "applies": false,
+   "notApplicable": "0 occurrences in src/uci-session.ts"
+  },
+  {
+   "id": "171-N11b",
+   "crit": "A6-e5",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "        case \"isready\":\n          warm();\n          write(\"readyok\");",
+     "repl": "        case \"isready\":\n          release();\n          warm();\n          write(\"readyok\");"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-N12",
+   "crit": "A6-e5",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "        default:\n",
+     "repl": "        default:\n          release();\n"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-N13",
+   "crit": "A7-f",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "  \"infinite\",\n]);",
+     "repl": "]);"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-N14",
+   "crit": "A7-f",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "  \"depth\",\n",
+     "repl": ""
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-N15",
+   "crit": "A7-f",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "  \"winc\",\n",
+     "repl": ""
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-N16",
+   "crit": "A7-f1",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "  \"movetime\",\n",
+     "repl": ""
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-N17",
+   "crit": "A6-e2",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "          release();\n          const parsed = parsePosition(tokens);",
+     "repl": "          held = null;\n          const parsed = parsePosition(tokens);"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-N18",
+   "crit": "A11",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "import { makeMove } from \"./apply.ts\";",
+     "repl": "import { makeMove } from \"./apply.ts\";\nimport './book-file.ts';"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-N19",
+   "crit": "A11",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "  const { write, now, random, book } = options;",
+     "repl": "  const { write, now, random, book } = options;\n  void import(\"./line-input.ts\");"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-N20",
+   "crit": "A7-f3",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "if (text === undefined || !/^-?\\d+(\\.\\d+)?$/.test(text)) return undefined;",
+     "repl": "if (text === undefined || !Number.isFinite(Number(text))) return undefined;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-N21",
+   "crit": "A7-f3",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "      const value = positiveInteger(text);\n      if (value === undefined) {\n        warn(`go movestogo",
+     "repl": "      const value = text !== undefined && /^\\d+$/.test(text) ? Number(text) : undefined;\n      if (value === undefined) {\n        warn(`go movestogo"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S01",
+   "crit": "A2 name case",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "      .join(\" \")\n      .toLowerCase(),",
+     "repl": "      .join(\" \"),"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S02",
+   "crit": "choice2 value case",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "value: valueAt === -1 ? \"\" : tokens.slice(valueAt + 1).join(\" \"),",
+     "repl": "value: valueAt === -1 ? \"\" : tokens.slice(valueAt + 1).join(\" \").toLowerCase(),"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S03",
+   "crit": "choice3 value first token",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "value: valueAt === -1 ? \"\" : tokens.slice(valueAt + 1).join(\" \"),",
+     "repl": "value: valueAt === -1 ? \"\" : (tokens[valueAt + 1] ?? \"\"),"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S04",
+   "crit": "A2 name to end",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "const end = valueAt === -1 ? tokens.length : valueAt;",
+     "repl": "const end = tokens.length;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S05",
+   "crit": "A2 hasOwn->in",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "if (Object.hasOwn(LEVELS, value))",
+     "repl": "if (value in LEVELS)"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S06",
+   "crit": "A2 hasOwn->!==undefined",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "if (Object.hasOwn(LEVELS, value))",
+     "repl": "if ((LEVELS as any)[value] !== undefined)"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S07",
+   "crit": "A2 hasOwn->integer range",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "if (Object.hasOwn(LEVELS, value))",
+     "repl": "if (Number.isInteger(Number(value)) && Number(value) >= 1 && Number(value) <= 5 && value !== \"\")"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S08",
+   "crit": "A2 bound 0",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "if (Object.hasOwn(LEVELS, value))",
+     "repl": "if (Object.hasOwn(LEVELS, value) || value === \"0\")"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S09",
+   "crit": "A2 bound 6",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "if (Object.hasOwn(LEVELS, value))",
+     "repl": "if (Object.hasOwn(LEVELS, value) || value === \"6\")"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S10",
+   "crit": "A2 2.5 floored",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "if (Object.hasOwn(LEVELS, value))",
+     "repl": "if (Object.hasOwn(LEVELS, String(Math.floor(Number(value)))))"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S10b",
+   "crit": "A2 2.5 floored (value too)",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "if (Object.hasOwn(LEVELS, value)) skill = Number(value) as keyof typeof LEVELS;",
+     "repl": "if (Object.hasOwn(LEVELS, String(Math.floor(Number(value))))) skill = Math.floor(Number(value)) as keyof typeof LEVELS;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S11",
+   "crit": "A2 invalid skill resets default",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "      else info(`Skill Level takes",
+     "repl": "      else if ((skill = DEFAULT_LEVEL)) info(`Skill Level takes"
+    }
+   ],
+   "applies": false,
+   "notApplicable": "0 occurrences in src/uci-session.ts"
+  },
+  {
+   "id": "171-S12",
+   "crit": "A2 invalid OwnBook -> false",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "      else info(`OwnBook takes",
+     "repl": "      else if (!(ownBook = false)) info(`OwnBook takes"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S12b",
+   "crit": "A2 invalid OwnBook -> true",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "      else info(`OwnBook takes",
+     "repl": "      else if ((ownBook = true)) info(`OwnBook takes"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S13",
+   "crit": "A2 invalid OwnBook silent",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "      else info(`OwnBook takes true or false, got ${got}; kept ${ownBook}`);",
+     "repl": "      else void 0;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S14",
+   "crit": "A2 invalid skill two lines",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "      else info(`Skill Level takes an integer 1-5, got ${got}; kept ${skill}`);",
+     "repl": "      else { info(`Skill Level takes an integer 1-5, got ${got}; kept ${skill}`); info(\"again\"); }"
+    }
+   ],
+   "applies": false,
+   "notApplicable": "0 occurrences in src/uci-session.ts"
+  },
+  {
+   "id": "171-S15",
+   "crit": "A2 unknown name speaks",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "      else info(`Skill Level takes an integer 1-5, got ${got}; kept ${skill}`);\n    }",
+     "repl": "      else info(`Skill Level takes an integer 1-5, got ${got}; kept ${skill}`);\n    } else info(`unknown option ${name}`);"
+    }
+   ],
+   "applies": false,
+   "notApplicable": "0 occurrences in src/uci-session.ts"
+  },
+  {
+   "id": "171-S16",
+   "crit": "A2 OwnBook inverted",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "ownBook = value === \"true\";",
+     "repl": "ownBook = value === \"false\";"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S17",
+   "crit": "A6 budget = level only",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "const budgetMs = Math.min(request.budgetMs, level.budgetMs);",
+     "repl": "const budgetMs = level.budgetMs;"
+    }
+   ],
+   "applies": false,
+   "notApplicable": "0 occurrences in src/uci-session.ts"
+  },
+  {
+   "id": "171-S18",
+   "crit": "A6 budget = G only",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "const budgetMs = Math.min(request.budgetMs, level.budgetMs);",
+     "repl": "const budgetMs = request.budgetMs;"
+    }
+   ],
+   "applies": false,
+   "notApplicable": "0 occurrences in src/uci-session.ts"
+  },
+  {
+   "id": "171-S19",
+   "crit": "A6 min->max",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "const budgetMs = Math.min(request.budgetMs, level.budgetMs);",
+     "repl": "const budgetMs = Math.max(request.budgetMs, level.budgetMs);"
+    }
+   ],
+   "applies": false,
+   "notApplicable": "0 occurrences in src/uci-session.ts"
+  },
+  {
+   "id": "171-S20",
+   "crit": "A6 min(ceiling, level)",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "const budgetMs = Math.min(request.budgetMs, level.budgetMs);",
+     "repl": "const budgetMs = Math.min(HARD_CEILING_MS, level.budgetMs);"
+    }
+   ],
+   "applies": false,
+   "notApplicable": "0 occurrences in src/uci-session.ts"
+  },
+  {
+   "id": "171-S21",
+   "crit": "A5 no warm at isready",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "        case \"isready\":\n          warm();\n",
+     "repl": "        case \"isready\":\n"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S22",
+   "crit": "A4 warm ignores OwnBook",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "if (warmed || !ownBook) return;",
+     "repl": "if (warmed) return;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S23",
+   "crit": "A5 warm at uci",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "          write(\"id name skytalix\");",
+     "repl": "          warm();\n          write(\"id name skytalix\");"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S24",
+   "crit": "A4 probe even when off",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "const booked = ownBook && position !== null ? book.bookMove(position) : undefined;",
+     "repl": "const probed = position !== null ? book.bookMove(position) : undefined;\n    const booked = ownBook ? probed : undefined;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S25",
+   "crit": "D10 book only at rate 0",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "const booked = ownBook && position !== null ? book.bookMove(position) : undefined;",
+     "repl": "const booked = ownBook && position !== null && level.blunderRate === 0 ? book.bookMove(position) : undefined;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S26",
+   "crit": "A10 book hit ignores infinite",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "      info(\"book\");\n      answer = `bestmove ${coordinateOf(booked)}`;",
+     "repl": "      info(\"book\");\n      write(`bestmove ${coordinateOf(booked)}`);\n      return;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S27",
+   "crit": "A3 book hit also searches",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "      info(\"book\");\n      answer = `bestmove ${coordinateOf(booked)}`;\n    } else if (position !== null && level.blunderRate > 0) {",
+     "repl": "      info(\"book\");\n      answer = `bestmove ${coordinateOf(booked)}`;\n      write(\"info depth 1 score cp 0 nodes 1 time 0 nps 0 pv e2e4\");\n    } else if (position !== null && level.blunderRate > 0) {"
+    }
+   ],
+   "applies": false,
+   "notApplicable": "0 occurrences in src/uci-session.ts"
+  },
+  {
+   "id": "171-S28",
+   "crit": "A9 miss with OwnBook on -> 0000",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "    } else if (position !== null) {\n      const choice = chooseMove(",
+     "repl": "    } else if (position !== null && !(ownBook && warmed)) {\n      const choice = chooseMove("
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S29",
+   "crit": "A9 warn->extra call each go",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "    warm();\n    const booked",
+     "repl": "    warm();\n    if (ownBook) book.openingName(parseFen(START_FEN));\n    const booked"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S30",
+   "crit": "A8 seed drawn at every level",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "    warm();\n    const booked",
+     "repl": "    random();\n    warm();\n    const booked"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S31",
+   "crit": "A8 seed drawn on a blunder-level book hit",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "    warm();\n    const booked",
+     "repl": "    const early = level.blunderRate > 0 ? Math.floor(random() * 2 ** 32) : 0;\n    warm();\n    const booked"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S32",
+   "crit": "A7 seed constant, draw kept",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "      const seed = Math.floor(random() * 2 ** 32);",
+     "repl": "      random();\n      const seed = 12345;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S33",
+   "crit": "A7 seed scale 2**16",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "      const seed = Math.floor(random() * 2 ** 32);",
+     "repl": "      const seed = Math.floor(random() * 2 ** 16);"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S34",
+   "crit": "A8 no draw",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "      const seed = Math.floor(random() * 2 ** 32);",
+     "repl": "      const seed = 12345;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S35",
+   "crit": "A8 two draws",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "      const seed = Math.floor(random() * 2 ** 32);",
+     "repl": "      const seed = Math.floor(random() * random() * 2 ** 32);"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S36",
+   "crit": "A8 ucinewgame reseeds",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "        case \"ucinewgame\":\n          release();\n",
+     "repl": "        case \"ucinewgame\":\n          random();\n          release();\n"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S37",
+   "crit": "A7 dropped line always",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "if (request.limits.length > 0) {",
+     "repl": "if (request.limits.length >= 0) {"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S38",
+   "crit": "D11 only depth named",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "if (!limits.includes(keyword)) limits.push(keyword);",
+     "repl": "if (keyword === \"depth\" && !limits.includes(keyword)) limits.push(keyword);"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S39",
+   "crit": "D11 one line per limit",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "        info(`skill level ${skill} ignores go ${request.limits.join(\", \")}; searching on time`);",
+     "repl": "        for (const l of request.limits) info(`skill level ${skill} ignores go ${l}; searching on time`);"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S40",
+   "crit": "A7 level line carries score",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "`info depth ${choice.depth} nodes ${choice.nodes} time ${choice.elapsedMs} pv ${move}`,",
+     "repl": "`info depth ${choice.depth} score cp 0 nodes ${choice.nodes} time ${choice.elapsedMs} pv ${move}`,"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S41",
+   "crit": "A6 blunder path takes G",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "        { budgetMs, blunderRate: level.blunderRate },",
+     "repl": "        { budgetMs: request.budgetMs, blunderRate: level.blunderRate },"
+    }
+   ],
+   "applies": false,
+   "notApplicable": "0 occurrences in src/uci-session.ts"
+  },
+  {
+   "id": "171-S42",
+   "crit": "A1 option order",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "          write(\"option name OwnBook type check default true\");\n          write(\"option name Skill Level type spin default 3 min 1 max 5\");",
+     "repl": "          write(\"option name Skill Level type spin default 3 min 1 max 5\");\n          write(\"option name OwnBook type check default true\");"
+    }
+   ],
+   "applies": false,
+   "notApplicable": "0 occurrences in src/uci-session.ts"
+  },
+  {
+   "id": "171-S43",
+   "crit": "default level 5",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "let skill: keyof typeof LEVELS = DEFAULT_LEVEL;",
+     "repl": "let skill: keyof typeof LEVELS = 5;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S44",
+   "crit": "default OwnBook off",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "let ownBook = true;",
+     "repl": "let ownBook = false;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S45",
+   "crit": "choice6 warm reset on ucinewgame",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "          position = parseFen(START_FEN);\n          break;",
+     "repl": "          position = parseFen(START_FEN);\n          warmed = false;\n          break;"
+    }
+   ],
+   "applies": false,
+   "notApplicable": "0 occurrences in src/uci-session.ts"
+  },
+  {
+   "id": "171-S46",
+   "crit": "D10 warm via bookMove",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "    book.openingName(parseFen(START_FEN));",
+     "repl": "    book.bookMove(parseFen(START_FEN));"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S47",
+   "crit": "D10 warm on held position",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "    book.openingName(parseFen(START_FEN));",
+     "repl": "    book.openingName(position ?? parseFen(START_FEN));"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S48",
+   "crit": "A3 probe start not held",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "book.bookMove(position) : undefined;",
+     "repl": "book.bookMove(parseFen(START_FEN)) : undefined;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M45a",
+   "crit": "A3 extra pv token (level line)",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "time ${choice.elapsedMs} pv ${move}`,",
+     "repl": "time ${choice.elapsedMs} pv ${move} ${move}`,"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M45b",
+   "crit": "A3 extra pv token (engine line)",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "nps ${nps} pv ${move}`,",
+     "repl": "nps ${nps} pv ${move} ${move}`,"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "174-M01",
+   "crit": "table: level 1 budget 100 -> 110",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/levels.ts",
+     "find": "budgetMs: 100, blunderRate: 0.4",
+     "repl": "budgetMs: 110, blunderRate: 0.4"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "174-M02",
+   "crit": "table: level 2 budget 180 -> 200",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/levels.ts",
+     "find": "budgetMs: 180, blunderRate: 0.2",
+     "repl": "budgetMs: 200, blunderRate: 0.2"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "174-M03",
+   "crit": "table: level 3 rate 0.1 -> 0",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/levels.ts",
+     "find": "budgetMs: 330, blunderRate: 0.1",
+     "repl": "budgetMs: 330, blunderRate: 0"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "174-M04",
+   "crit": "table: level 4 rate 0.05 -> 0 (page armed red)",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/levels.ts",
+     "find": "budgetMs: 1_000, blunderRate: 0.05",
+     "repl": "budgetMs: 1_000, blunderRate: 0"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "174-M05",
+   "crit": "table: level 4 rate 0.05 -> 0.1",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/levels.ts",
+     "find": "budgetMs: 1_000, blunderRate: 0.05",
+     "repl": "budgetMs: 1_000, blunderRate: 0.1"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "174-M06",
+   "crit": "table: level 3 rate 0.1 -> 0.2",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/levels.ts",
+     "find": "budgetMs: 330, blunderRate: 0.1",
+     "repl": "budgetMs: 330, blunderRate: 0.2"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "174-M07",
+   "crit": "table: level 4 budget 1000 -> 900",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/levels.ts",
+     "find": "budgetMs: 1_000, blunderRate: 0.05",
+     "repl": "budgetMs: 900, blunderRate: 0.05"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "174-M08",
+   "crit": "table: level 5 budget 3000 -> 3500",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/levels.ts",
+     "find": "budgetMs: 3_000, blunderRate: 0 })",
+     "repl": "budgetMs: 3_500, blunderRate: 0 })"
+    }
+   ],
+   "applies": false,
+   "notApplicable": "0 occurrences in src/levels.ts"
+  },
+  {
+   "id": "174-M09",
+   "crit": "table: level 5 rate 0 -> 0.01",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/levels.ts",
+     "find": "budgetMs: 3_000, blunderRate: 0 })",
+     "repl": "budgetMs: 3_000, blunderRate: 0.01 })"
+    }
+   ],
+   "applies": false,
+   "notApplicable": "0 occurrences in src/levels.ts"
+  },
+  {
+   "id": "174-M10",
+   "crit": "DEFAULT_LEVEL 5 -> 4",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/levels.ts",
+     "find": "DEFAULT_LEVEL = 5",
+     "repl": "DEFAULT_LEVEL = 4"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "174-M11",
+   "crit": "DEFAULT_LEVEL 5 -> 3 (page armed red)",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/levels.ts",
+     "find": "DEFAULT_LEVEL = 5",
+     "repl": "DEFAULT_LEVEL = 3"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "174-M12",
+   "crit": "DEFAULT_DIFFICULTY 5 -> 4",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/cli-options.ts",
+     "find": "DEFAULT_DIFFICULTY: Difficulty = 5",
+     "repl": "DEFAULT_DIFFICULTY: Difficulty = 4"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "174-M13",
+   "crit": "DEFAULT_DIFFICULTY 5 -> 3",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/cli-options.ts",
+     "find": "DEFAULT_DIFFICULTY: Difficulty = 5",
+     "repl": "DEFAULT_DIFFICULTY: Difficulty = 3"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "174-M14",
+   "crit": "parser seeds difficulty 3 (constant left 5)",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/cli-options.ts",
+     "find": "let difficulty = DEFAULT_DIFFICULTY",
+     "repl": "let difficulty: Difficulty = 3"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "174-M15",
+   "crit": "UCI option literal default 3 (page armed red)",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "default ${DEFAULT_LEVEL} min 1",
+     "repl": "default 3 min 1"
+    }
+   ],
+   "applies": false,
+   "notApplicable": "0 occurrences in src/uci-session.ts"
+  },
+  {
+   "id": "174-M16",
+   "crit": "UCI option default DEFAULT_LEVEL-1",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "default ${DEFAULT_LEVEL} min 1",
+     "repl": "default ${DEFAULT_LEVEL - 1} min 1"
+    }
+   ],
+   "applies": false,
+   "notApplicable": "0 occurrences in src/uci-session.ts"
+  },
+  {
+   "id": "174-M17",
+   "crit": "UCI session starts at skill 3 (option line still 5)",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "let skill: keyof typeof LEVELS = DEFAULT_LEVEL;",
+     "repl": "let skill: keyof typeof LEVELS = 3;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "174-M18",
+   "crit": "createLevel: engine path budget +300 ms",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/levels.ts",
+     "find": "chooseMove(position, { budgetMs: level.budgetMs, now })",
+     "repl": "chooseMove(position, { budgetMs: level.budgetMs + 300, now })"
+    }
+   ],
+   "applies": false,
+   "notApplicable": "0 occurrences in src/levels.ts"
+  },
+  {
+   "id": "174-M19",
+   "crit": "createLevel: engine path budget x1.4",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/levels.ts",
+     "find": "chooseMove(position, { budgetMs: level.budgetMs, now })",
+     "repl": "chooseMove(position, { budgetMs: level.budgetMs * 1.4, now })"
+    }
+   ],
+   "applies": false,
+   "notApplicable": "0 occurrences in src/levels.ts"
+  },
+  {
+   "id": "174-M20",
+   "crit": "createLevel: engine path budget -1 ms",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/levels.ts",
+     "find": "chooseMove(position, { budgetMs: level.budgetMs, now })",
+     "repl": "chooseMove(position, { budgetMs: level.budgetMs - 1, now })"
+    }
+   ],
+   "applies": false,
+   "notApplicable": "0 occurrences in src/levels.ts"
+  },
+  {
+   "id": "174-M21",
+   "crit": "table: level 3 rate 0.1 -> 0.05 (= level 4's)",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/levels.ts",
+     "find": "budgetMs: 330, blunderRate: 0.1",
+     "repl": "budgetMs: 330, blunderRate: 0.05"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "174-M22",
+   "crit": "table: level 2 rate 0.2 -> 0.4 (= level 1's)",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/levels.ts",
+     "find": "budgetMs: 180, blunderRate: 0.2",
+     "repl": "budgetMs: 180, blunderRate: 0.4"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "H1",
+   "crit": "A6 hold: a bestmove written on go infinite",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "if (request.hold) held = answer;",
+     "repl": "if (false) held = answer;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "H2",
+   "crit": "A6 release: a second release writes",
+   "source": "qe-ABC-177 refrozen",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "    held = null;\n    write(line);",
+     "repl": "    write(line);"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M06r",
+   "crit": "A5 M06 re-anchored to the level branch: the side to move reads the other side's increment",
+   "source": "se-ABC-248",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "const increment = clock[blackToMove ? \"binc\" : \"winc\"] ?? 0;\n    const share",
+     "repl": "const increment = clock[blackToMove ? \"winc\" : \"binc\"] ?? 0;\n    const share"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "167-M07r",
+   "crit": "A5 M07 re-anchored: the level cap is not applied (G only)",
+   "source": "se-ABC-248",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "const budgetMs = leveled ? Math.min(request.budgetMs, level.budgetMs) : request.budgetMs;",
+     "repl": "const budgetMs = request.budgetMs;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S19r",
+   "crit": "S19 re-anchored: the level cap is a max",
+   "source": "se-ABC-248",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "const budgetMs = leveled ? Math.min(request.budgetMs, level.budgetMs) : request.budgetMs;",
+     "repl": "const budgetMs = leveled ? Math.max(request.budgetMs, level.budgetMs) : request.budgetMs;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "171-S17r",
+   "crit": "S17 re-anchored: the budget is the level's only",
+   "source": "se-ABC-248",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "const budgetMs = leveled ? Math.min(request.budgetMs, level.budgetMs) : request.budgetMs;",
+     "repl": "const budgetMs = leveled ? level.budgetMs : request.budgetMs;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "WRONGSIDE",
+   "crit": "ruling 3: in level mode the session hands white's search btime and black's wtime",
+   "source": "se-ABC-248",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "  } else if (time !== undefined) {\n    const increment",
+     "repl": "  } else if (clock[blackToMove ? \"wtime\" : \"btime\"] !== undefined) {\n    const time = clock[blackToMove ? \"wtime\" : \"btime\"];\n    const increment"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "WS-WHITE",
+   "crit": "W != G for white: in level mode both sides read btime (white wrong, black right)",
+   "source": "se-ABC-248",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "  } else if (time !== undefined) {\n    const increment",
+     "repl": "  } else if (clock.btime !== undefined) {\n    const time = clock.btime;\n    const increment"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "WS-BLACK",
+   "crit": "W != G for black: in level mode both sides read wtime (black wrong, white right)",
+   "source": "se-ABC-248",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "  } else if (time !== undefined) {\n    const increment",
+     "repl": "  } else if (clock.wtime !== undefined) {\n    const time = clock.wtime;\n    const increment"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "MOVETIME-OFF",
+   "crit": "movetime: in level mode movetime is never read (the clock or the ceiling binds)",
+   "source": "se-ABC-248",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "  } else if (clock.movetime !== undefined) {\n    budget = clock.movetime;",
+     "repl": "  } else if (false) {\n    budget = clock.movetime;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "MOVESTOGO-1",
+   "crit": "movestogo: read one too many (movestogo + 1)",
+   "source": "se-ABC-248",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "(clock.movestogo ?? DEFAULT_MOVES_TO_GO)",
+     "repl": "(clock.movestogo === undefined ? DEFAULT_MOVES_TO_GO : clock.movestogo + 1)"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "L5-3000",
+   "crit": "LEVELS[5].budgetMs 4 000 -> 3 000 (the pre-ABC-228 value)",
+   "source": "se-ABC-248",
+   "edits": [
+    {
+     "file": "src/levels.ts",
+     "find": "5: Object.freeze({ budgetMs: 4_000, blunderRate: 0 }),",
+     "repl": "5: Object.freeze({ budgetMs: 3_000, blunderRate: 0 }),"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "L5-4500",
+   "crit": "LEVELS[5].budgetMs 4 000 -> 4 500",
+   "source": "se-ABC-248",
+   "edits": [
+    {
+     "file": "src/levels.ts",
+     "find": "5: Object.freeze({ budgetMs: 4_000, blunderRate: 0 }),",
+     "repl": "5: Object.freeze({ budgetMs: 4_500, blunderRate: 0 }),"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "OVERHEAD-100",
+   "crit": "MOVE_OVERHEAD_MS 50 -> 100",
+   "source": "se-ABC-248",
+   "edits": [
+    {
+     "file": "src/uci-session.ts",
+     "find": "const MOVE_OVERHEAD_MS = 50;",
+     "repl": "const MOVE_OVERHEAD_MS = 100;"
+    }
+   ],
+   "applies": true
+  }
+ ]
+}

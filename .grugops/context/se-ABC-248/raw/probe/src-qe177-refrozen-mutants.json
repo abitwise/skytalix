@@ -1,0 +1,1357 @@
+[
+ {
+  "id": "167-M01",
+  "crit": "A5",
+  "file": "src/uci-session.ts",
+  "from": "const DEFAULT_MOVES_TO_GO = 20;",
+  "to": "const DEFAULT_MOVES_TO_GO = 19;",
+  "source": "qe-ABC-167/probe/mutants.mjs",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M02",
+  "crit": "A5",
+  "file": "src/uci-session.ts",
+  "from": "const MOVE_OVERHEAD_MS = 50;",
+  "to": "const MOVE_OVERHEAD_MS = 0;",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M03",
+  "crit": "A5",
+  "file": "src/uci-session.ts",
+  "from": "+ increment / 2;",
+  "to": "+ 0 * increment;",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M04",
+  "crit": "A5",
+  "file": "src/uci-session.ts",
+  "from": "+ increment / 2;",
+  "to": "+ increment;",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M05",
+  "crit": "A5",
+  "file": "src/uci-session.ts",
+  "from": "(clock.movestogo ?? DEFAULT_MOVES_TO_GO)",
+  "to": "DEFAULT_MOVES_TO_GO",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M06",
+  "crit": "A5",
+  "file": "src/uci-session.ts",
+  "from": "clock[blackToMove ? \"binc\" : \"winc\"]",
+  "to": "clock[blackToMove ? \"winc\" : \"binc\"]",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M07",
+  "crit": "A5",
+  "file": "src/uci-session.ts",
+  "from": "budgetMs: Math.min(budget, LEVELS[DEFAULT_LEVEL].budgetMs),",
+  "to": "budgetMs: budget,",
+  "source": "qe-ABC-167/probe/mutants.mjs",
+  "baseMatch": "BAD-PATTERN count=0"
+ },
+ {
+  "id": "167-M08",
+  "crit": "A5",
+  "file": "src/uci-session.ts",
+  "from": "clock[blackToMove ? \"btime\" : \"wtime\"]",
+  "to": "clock[blackToMove ? \"wtime\" : \"btime\"]",
+  "source": "qe-ABC-167/probe/mutants.mjs",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M09",
+  "crit": "A5",
+  "file": "src/uci-session.ts",
+  "from": "Math.max(1, Math.min(share, time - MOVE_OVERHEAD_MS))",
+  "to": "Math.max(0, Math.min(share, time - MOVE_OVERHEAD_MS))",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M10",
+  "crit": "A5",
+  "file": "src/uci-session.ts",
+  "from": "budget = Math.max(1, Math.min(share, time - MOVE_OVERHEAD_MS));",
+  "to": "budget = Math.min(share, time - MOVE_OVERHEAD_MS);",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M11",
+  "crit": "A5",
+  "file": "src/uci-session.ts",
+  "from": "if (clock.movetime !== undefined) {",
+  "to": "if (clock.movetime !== undefined && time === undefined) {",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M12",
+  "crit": "A6",
+  "file": "src/uci-session.ts",
+  "from": "if (keyword === \"infinite\" || keyword === \"ponder\") {",
+  "to": "if (keyword === \"infinite\") {",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M13",
+  "crit": "A6",
+  "file": "src/uci-session.ts",
+  "from": "    held = null;\n    write(line);",
+  "to": "    write(line);",
+  "source": "qe-ABC-167/probe/mutants.mjs",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M14",
+  "crit": "A6",
+  "file": "src/uci-session.ts",
+  "from": "        case \"stop\":\n        case \"ponderhit\":",
+  "to": "        case \"stop\":",
+  "source": "qe-ABC-167/probe/mutants.mjs",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M15",
+  "crit": "A6",
+  "file": "src/uci-session.ts",
+  "from": "    // One `bestmove` per `go`: an answer still held is released before the next search.\n    release();",
+  "to": "    held = null;",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M16",
+  "crit": "A6",
+  "file": "src/uci-session.ts",
+  "from": "if (request.hold) held = answer;",
+  "to": "if (false) held = answer;",
+  "source": "qe-ABC-167/probe/mutants.mjs",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M17",
+  "crit": "A7",
+  "file": "src/uci-session.ts",
+  "from": "2 * mate - 1",
+  "to": "2 * mate",
+  "source": "qe-ABC-167/probe/mutants.mjs",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M18",
+  "crit": "A7",
+  "file": "src/uci-session.ts",
+  "from": "Math.min(depth, mateDepth)",
+  "to": "Math.max(depth, mateDepth)",
+  "source": "qe-ABC-167/probe/mutants.mjs",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M19",
+  "crit": "A7",
+  "file": "src/uci-session.ts",
+  "from": "value >= 1 ? value : undefined",
+  "to": "value >= 0 ? value : undefined",
+  "source": "qe-ABC-167/probe/mutants.mjs",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M20",
+  "crit": "A7",
+  "file": "src/uci-session.ts",
+  "from": "if (text === undefined || !/^\\d+$/.test(text)) return undefined;\n  const value = Number(text);",
+  "to": "if (text === undefined || Number.isNaN(Number.parseInt(text))) return undefined;\n  const value = Number.parseInt(text);",
+  "source": "qe-ABC-167/probe/mutants.mjs",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M21",
+  "crit": "A7",
+  "file": "src/uci-session.ts",
+  "from": "...(request.maxNodes === undefined ? {} : { maxNodes: request.maxNodes }),",
+  "to": "",
+  "source": "qe-ABC-167/probe/mutants.mjs",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M22",
+  "crit": "A7",
+  "file": "src/uci-session.ts",
+  "from": "      warn(\"searchmoves is not supported; searching all moves\");",
+  "to": "",
+  "source": "qe-ABC-167/probe/mutants.mjs",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M23",
+  "crit": "A7",
+  "file": "src/uci-session.ts",
+  "from": "while (index + 1 < tokens.length && !GO_KEYWORDS.has(tokens[index + 1] as string)) index++;",
+  "to": "index = tokens.length;",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M24",
+  "crit": "A7",
+  "file": "src/uci-session.ts",
+  "from": "        warn(`go ${keyword} needs an integer >= 1, got ${text ?? \"nothing\"}; ignored`);",
+  "to": "        depth = 1;",
+  "source": "qe-ABC-167/probe/mutants.mjs",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M25",
+  "crit": "A7",
+  "file": "src/uci-session.ts",
+  "from": "...(request.maxDepth === undefined ? {} : { maxDepth: request.maxDepth }),",
+  "to": "",
+  "source": "qe-ABC-167/probe/mutants.mjs",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M26",
+  "crit": "A4",
+  "file": "src/uci-session.ts",
+  "from": "    if (request.hold) held = answer;\n    else write(answer);",
+  "to": "    if (request.hold) held = answer;\n    else if (answer !== \"bestmove 0000\") write(answer);",
+  "source": "qe-ABC-167/probe/mutants.mjs",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M27",
+  "crit": "A4",
+  "file": "src/uci-session.ts",
+  "from": "let answer = \"bestmove 0000\";",
+  "to": "let answer = \"bestmove (none)\";",
+  "source": "qe-ABC-167/probe/mutants.mjs",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M28",
+  "crit": "A4",
+  "file": "src/uci-session.ts",
+  "from": "            position = null;\n",
+  "to": "",
+  "source": "qe-ABC-167/probe/mutants.mjs",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M29",
+  "crit": "A4",
+  "file": "src/uci-session.ts",
+  "from": "    if (code < 0x20 || code === 0x7f) continue;",
+  "to": "    if (code === 0x7f) continue;",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M30",
+  "crit": "A4",
+  "file": "src/uci-session.ts",
+  "from": "if (parsed.outcome !== \"move\") return `illegal move ${text}`;",
+  "to": "if (parsed.outcome !== \"move\") continue;",
+  "source": "qe-ABC-167/probe/mutants.mjs",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M31",
+  "crit": "A8",
+  "file": "src/uci-session.ts",
+  "from": "const moves = Math.ceil((MATE_SCORE - Math.abs(score)) / 2);",
+  "to": "const moves = Math.floor((MATE_SCORE - Math.abs(score)) / 2);",
+  "source": "qe-ABC-167/probe/mutants.mjs",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M32",
+  "crit": "A8",
+  "file": "src/uci-session.ts",
+  "from": "return `mate ${score > 0 ? moves : -moves}`;",
+  "to": "return `mate ${moves}`;",
+  "source": "qe-ABC-167/probe/mutants.mjs",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M33",
+  "crit": "A8",
+  "file": "src/uci-session.ts",
+  "from": "if (Math.abs(score) < MATE_FLOOR) return `cp ${score}`;",
+  "to": "return `cp ${score}`;",
+  "source": "qe-ABC-167/probe/mutants.mjs",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M34",
+  "crit": "A9",
+  "file": "src/uci-session.ts",
+  "from": "          position = parseFen(START_FEN);\n          break;\n        case \"position\"",
+  "to": "          break;\n        case \"position\"",
+  "source": "qe-ABC-167/probe/mutants.mjs",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M35",
+  "crit": "A9",
+  "file": "src/uci-session.ts",
+  "from": "        default:\n",
+  "to": "        default:\n          if (tokens[0] === \"setoption\") info(\"ignored\");\n",
+  "source": "qe-ABC-167/probe/mutants.mjs",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M36",
+  "crit": "A1",
+  "file": "src/uci-session.ts",
+  "from": "          write(\"id name skytalix\");\n          write(\"id author Olger Oeselg\");",
+  "to": "          write(\"id author Olger Oeselg\");\n          write(\"id name skytalix\");",
+  "source": "qe-ABC-167/probe/mutants.mjs",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M37",
+  "crit": "A10",
+  "file": "src/uci-session.ts",
+  "from": "          return \"quit\";",
+  "to": "          return \"continue\";",
+  "source": "qe-ABC-167/probe/mutants.mjs",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M38",
+  "crit": "A11",
+  "file": "src/uci-session.ts",
+  "from": "import { makeMove } from \"./apply.ts\";",
+  "to": "import { makeMove } from \"./apply.ts\";\nimport { readFileSync as _r } from 'node:fs';\nvoid _r;",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M39",
+  "crit": "A11",
+  "file": "src/uci-session.ts",
+  "from": "import { makeMove } from \"./apply.ts\";",
+  "to": "import { makeMove } from \"./apply.ts\";\nimport \"./history.ts\";",
+  "source": "qe-ABC-167/probe/mutants.mjs",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M40",
+  "crit": "A11",
+  "file": "src/uci-session.ts",
+  "from": "  const { write, now, random, book } = options;",
+  "to": "  const { write, now, random, book } = options;\n  void (globalThis as any)[\"Math\"][\"random\"]();",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M41",
+  "crit": "A11",
+  "file": "src/uci-session.ts",
+  "from": "import { makeMove } from \"./apply.ts\";",
+  "to": "import { makeMove } from \"./apply.ts\";\nimport fs from \"fs\";\nvoid fs;",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M42",
+  "crit": "A11",
+  "file": "src/uci-session.ts",
+  "from": "  const { write, now, random, book } = options;",
+  "to": "  const { write, now, random, book } = options;\n  void (globalThis as any)[\"process\"]?.env;",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M43",
+  "crit": "A3-h1",
+  "file": "src/uci-session.ts",
+  "from": "const nps = Math.round((choice.nodes * 1000) / Math.max(1, choice.elapsedMs));",
+  "to": "const nps = choice.nodes;",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M44",
+  "crit": "A9-h1",
+  "file": "src/uci-session.ts",
+  "from": "let position: Position | null = parseFen(START_FEN);",
+  "to": "let position: Position | null = null;",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M45",
+  "crit": "A3",
+  "file": "src/uci-session.ts",
+  "from": "pv ${move}`,",
+  "to": "pv ${move} ${move}`,",
+  "source": "qe-ABC-167/probe/mutants.mjs",
+  "baseMatch": "BAD-PATTERN count=2"
+ },
+ {
+  "id": "167-M46",
+  "crit": "A11",
+  "file": "src/uci-session.ts",
+  "from": "write(answer);",
+  "to": "write(answer);\n    write(\"readyok\");",
+  "source": "qe-ABC-167/probe/mutants.mjs",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M47",
+  "crit": "A11",
+  "file": "src/uci-session.ts",
+  "from": "import { makeMove } from \"./apply.ts\";",
+  "to": "import { makeMove } from \"./apply.ts\";\nimport \"./turn-loop.ts\";",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M48",
+  "crit": "A11",
+  "file": "src/uci-session.ts",
+  "from": "import { makeMove } from \"./apply.ts\";",
+  "to": "import { makeMove } from \"./apply.ts\";\nimport \"./book-file.ts\";",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M49",
+  "crit": "A11",
+  "file": "src/uci-session.ts",
+  "from": "import { makeMove } from \"./apply.ts\";",
+  "to": "import { makeMove } from \"./apply.ts\";\nimport \"./line-input.ts\";",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M50",
+  "crit": "A11",
+  "file": "src/uci-session.ts",
+  "from": "import { makeMove } from \"./apply.ts\";",
+  "to": "import { makeMove } from \"./apply.ts\";\nimport \"./book-engine.ts\";",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M51",
+  "crit": "A11",
+  "file": "src/uci-session.ts",
+  "from": "import { makeMove } from \"./apply.ts\";",
+  "to": "import { makeMove } from \"./apply.ts\";\nimport \"./level-seam.ts\";",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-N01",
+  "crit": "A6-e2",
+  "file": "src/uci-session.ts",
+  "from": "        case \"position\": {\n          release();\n",
+  "to": "        case \"position\": {\n",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-N02",
+  "crit": "A6-e3",
+  "file": "src/uci-session.ts",
+  "from": "        case \"ucinewgame\":\n          release();\n",
+  "to": "        case \"ucinewgame\":\n",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-N03",
+  "crit": "A6-e4",
+  "file": "src/uci-session.ts",
+  "from": "        case \"quit\":\n          release();\n",
+  "to": "        case \"quit\":\n",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-N04",
+  "crit": "A7-f1",
+  "file": "src/uci-session.ts",
+  "from": "return next === undefined || GO_KEYWORDS.has(next) ? undefined : next;",
+  "to": "return next;",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-N05",
+  "crit": "A7-f1",
+  "file": "src/uci-session.ts",
+  "from": "const text = valueAfter(index);\n      if (text !== undefined) index++;\n      const value = positiveInteger(text);\n      if (value === undefined) {\n        warn(`go ${keyword}",
+  "to": "const text = tokens[++index];\n      const value = positiveInteger(text);\n      if (value === undefined) {\n        warn(`go ${keyword}",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-N06",
+  "crit": "A7-f",
+  "file": "src/uci-session.ts",
+  "from": "const text = valueAfter(index);\n      if (text !== undefined) index++;\n      const value = milliseconds(text);",
+  "to": "const text = tokens[++index];\n      const value = milliseconds(text);",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-N07",
+  "crit": "A7-f",
+  "file": "src/uci-session.ts",
+  "from": "const text = valueAfter(index);\n      if (text !== undefined) index++;\n      const value = positiveInteger(text);\n      if (value === undefined) {\n        warn(`go movestogo",
+  "to": "const text = tokens[++index];\n      const value = positiveInteger(text);\n      if (value === undefined) {\n        warn(`go movestogo",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-N08",
+  "crit": "A7-f",
+  "file": "src/uci-session.ts",
+  "from": "      if (text !== undefined) index++;\n      const value = milliseconds(text);",
+  "to": "      const value = milliseconds(text);",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-N09",
+  "crit": "A6-e",
+  "file": "src/uci-session.ts",
+  "from": "          release();\n          const parsed = parsePosition(tokens);\n          if (typeof parsed === \"string\") {\n            position = null;\n            info(`position refused: ${parsed}`);\n          } else position = parsed;\n",
+  "to": "          const parsed = parsePosition(tokens);\n          if (typeof parsed === \"string\") {\n            position = null;\n            info(`position refused: ${parsed}`);\n          } else position = parsed;\n          release();\n",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-N10",
+  "crit": "A6-e5",
+  "file": "src/uci-session.ts",
+  "from": "      switch (tokens[0]) {\n",
+  "to": "      release();\n      switch (tokens[0]) {\n",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-N11",
+  "crit": "A6-e5",
+  "file": "src/uci-session.ts",
+  "from": "        case \"isready\":\n          write(\"readyok\");",
+  "to": "        case \"isready\":\n          release();\n          write(\"readyok\");",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "BAD-PATTERN count=0"
+ },
+ {
+  "id": "171-N11b",
+  "crit": "A6-e5",
+  "file": "src/uci-session.ts",
+  "from": "        case \"isready\":\n          warm();\n          write(\"readyok\");",
+  "to": "        case \"isready\":\n          release();\n          warm();\n          write(\"readyok\");",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-N12",
+  "crit": "A6-e5",
+  "file": "src/uci-session.ts",
+  "from": "        default:\n",
+  "to": "        default:\n          release();\n",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-N13",
+  "crit": "A7-f",
+  "file": "src/uci-session.ts",
+  "from": "  \"infinite\",\n]);",
+  "to": "]);",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-N14",
+  "crit": "A7-f",
+  "file": "src/uci-session.ts",
+  "from": "  \"depth\",\n",
+  "to": "",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-N15",
+  "crit": "A7-f",
+  "file": "src/uci-session.ts",
+  "from": "  \"winc\",\n",
+  "to": "",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-N16",
+  "crit": "A7-f1",
+  "file": "src/uci-session.ts",
+  "from": "  \"movetime\",\n",
+  "to": "",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-N17",
+  "crit": "A6-e2",
+  "file": "src/uci-session.ts",
+  "from": "          release();\n          const parsed = parsePosition(tokens);",
+  "to": "          held = null;\n          const parsed = parsePosition(tokens);",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-N18",
+  "crit": "A11",
+  "file": "src/uci-session.ts",
+  "from": "import { makeMove } from \"./apply.ts\";",
+  "to": "import { makeMove } from \"./apply.ts\";\nimport './book-file.ts';",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-N19",
+  "crit": "A11",
+  "file": "src/uci-session.ts",
+  "from": "  const { write, now, random, book } = options;",
+  "to": "  const { write, now, random, book } = options;\n  void import(\"./line-input.ts\");",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-N20",
+  "crit": "A7-f3",
+  "file": "src/uci-session.ts",
+  "from": "if (text === undefined || !/^-?\\d+(\\.\\d+)?$/.test(text)) return undefined;",
+  "to": "if (text === undefined || !Number.isFinite(Number(text))) return undefined;",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-N21",
+  "crit": "A7-f3",
+  "file": "src/uci-session.ts",
+  "from": "      const value = positiveInteger(text);\n      if (value === undefined) {\n        warn(`go movestogo",
+  "to": "      const value = text !== undefined && /^\\d+$/.test(text) ? Number(text) : undefined;\n      if (value === undefined) {\n        warn(`go movestogo",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S01",
+  "crit": "A2 name case",
+  "file": "src/uci-session.ts",
+  "from": "      .join(\" \")\n      .toLowerCase(),",
+  "to": "      .join(\" \"),",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S02",
+  "crit": "choice2 value case",
+  "file": "src/uci-session.ts",
+  "from": "value: valueAt === -1 ? \"\" : tokens.slice(valueAt + 1).join(\" \"),",
+  "to": "value: valueAt === -1 ? \"\" : tokens.slice(valueAt + 1).join(\" \").toLowerCase(),",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S03",
+  "crit": "choice3 value first token",
+  "file": "src/uci-session.ts",
+  "from": "value: valueAt === -1 ? \"\" : tokens.slice(valueAt + 1).join(\" \"),",
+  "to": "value: valueAt === -1 ? \"\" : (tokens[valueAt + 1] ?? \"\"),",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S04",
+  "crit": "A2 name to end",
+  "file": "src/uci-session.ts",
+  "from": "const end = valueAt === -1 ? tokens.length : valueAt;",
+  "to": "const end = tokens.length;",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S05",
+  "crit": "A2 hasOwn->in",
+  "file": "src/uci-session.ts",
+  "from": "if (Object.hasOwn(LEVELS, value))",
+  "to": "if (value in LEVELS)",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S06",
+  "crit": "A2 hasOwn->!==undefined",
+  "file": "src/uci-session.ts",
+  "from": "if (Object.hasOwn(LEVELS, value))",
+  "to": "if ((LEVELS as any)[value] !== undefined)",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S07",
+  "crit": "A2 hasOwn->integer range",
+  "file": "src/uci-session.ts",
+  "from": "if (Object.hasOwn(LEVELS, value))",
+  "to": "if (Number.isInteger(Number(value)) && Number(value) >= 1 && Number(value) <= 5 && value !== \"\")",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S08",
+  "crit": "A2 bound 0",
+  "file": "src/uci-session.ts",
+  "from": "if (Object.hasOwn(LEVELS, value))",
+  "to": "if (Object.hasOwn(LEVELS, value) || value === \"0\")",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S09",
+  "crit": "A2 bound 6",
+  "file": "src/uci-session.ts",
+  "from": "if (Object.hasOwn(LEVELS, value))",
+  "to": "if (Object.hasOwn(LEVELS, value) || value === \"6\")",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S10",
+  "crit": "A2 2.5 floored",
+  "file": "src/uci-session.ts",
+  "from": "if (Object.hasOwn(LEVELS, value))",
+  "to": "if (Object.hasOwn(LEVELS, String(Math.floor(Number(value)))))",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S10b",
+  "crit": "A2 2.5 floored (value too)",
+  "file": "src/uci-session.ts",
+  "from": "if (Object.hasOwn(LEVELS, value)) skill = Number(value) as keyof typeof LEVELS;",
+  "to": "if (Object.hasOwn(LEVELS, String(Math.floor(Number(value))))) skill = Math.floor(Number(value)) as keyof typeof LEVELS;",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S11",
+  "crit": "A2 invalid skill resets default",
+  "file": "src/uci-session.ts",
+  "from": "      else info(`Skill Level takes",
+  "to": "      else if ((skill = DEFAULT_LEVEL)) info(`Skill Level takes",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S12",
+  "crit": "A2 invalid OwnBook -> false",
+  "file": "src/uci-session.ts",
+  "from": "      else info(`OwnBook takes",
+  "to": "      else if (!(ownBook = false)) info(`OwnBook takes",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S12b",
+  "crit": "A2 invalid OwnBook -> true",
+  "file": "src/uci-session.ts",
+  "from": "      else info(`OwnBook takes",
+  "to": "      else if ((ownBook = true)) info(`OwnBook takes",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S13",
+  "crit": "A2 invalid OwnBook silent",
+  "file": "src/uci-session.ts",
+  "from": "      else info(`OwnBook takes true or false, got ${got}; kept ${ownBook}`);",
+  "to": "      else void 0;",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S14",
+  "crit": "A2 invalid skill two lines",
+  "file": "src/uci-session.ts",
+  "from": "      else info(`Skill Level takes an integer 1-5, got ${got}; kept ${skill}`);",
+  "to": "      else { info(`Skill Level takes an integer 1-5, got ${got}; kept ${skill}`); info(\"again\"); }",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S15",
+  "crit": "A2 unknown name speaks",
+  "file": "src/uci-session.ts",
+  "from": "      else info(`Skill Level takes an integer 1-5, got ${got}; kept ${skill}`);\n    }",
+  "to": "      else info(`Skill Level takes an integer 1-5, got ${got}; kept ${skill}`);\n    } else info(`unknown option ${name}`);",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S16",
+  "crit": "A2 OwnBook inverted",
+  "file": "src/uci-session.ts",
+  "from": "ownBook = value === \"true\";",
+  "to": "ownBook = value === \"false\";",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S17",
+  "crit": "A6 budget = level only",
+  "file": "src/uci-session.ts",
+  "from": "const budgetMs = Math.min(request.budgetMs, level.budgetMs);",
+  "to": "const budgetMs = level.budgetMs;",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S18",
+  "crit": "A6 budget = G only",
+  "file": "src/uci-session.ts",
+  "from": "const budgetMs = Math.min(request.budgetMs, level.budgetMs);",
+  "to": "const budgetMs = request.budgetMs;",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S19",
+  "crit": "A6 min->max",
+  "file": "src/uci-session.ts",
+  "from": "const budgetMs = Math.min(request.budgetMs, level.budgetMs);",
+  "to": "const budgetMs = Math.max(request.budgetMs, level.budgetMs);",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S20",
+  "crit": "A6 min(ceiling, level)",
+  "file": "src/uci-session.ts",
+  "from": "const budgetMs = Math.min(request.budgetMs, level.budgetMs);",
+  "to": "const budgetMs = Math.min(HARD_CEILING_MS, level.budgetMs);",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S21",
+  "crit": "A5 no warm at isready",
+  "file": "src/uci-session.ts",
+  "from": "        case \"isready\":\n          warm();\n",
+  "to": "        case \"isready\":\n",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S22",
+  "crit": "A4 warm ignores OwnBook",
+  "file": "src/uci-session.ts",
+  "from": "if (warmed || !ownBook) return;",
+  "to": "if (warmed) return;",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S23",
+  "crit": "A5 warm at uci",
+  "file": "src/uci-session.ts",
+  "from": "          write(\"id name skytalix\");",
+  "to": "          warm();\n          write(\"id name skytalix\");",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S24",
+  "crit": "A4 probe even when off",
+  "file": "src/uci-session.ts",
+  "from": "const booked = ownBook && position !== null ? book.bookMove(position) : undefined;",
+  "to": "const probed = position !== null ? book.bookMove(position) : undefined;\n    const booked = ownBook ? probed : undefined;",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S25",
+  "crit": "D10 book only at rate 0",
+  "file": "src/uci-session.ts",
+  "from": "const booked = ownBook && position !== null ? book.bookMove(position) : undefined;",
+  "to": "const booked = ownBook && position !== null && level.blunderRate === 0 ? book.bookMove(position) : undefined;",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S26",
+  "crit": "A10 book hit ignores infinite",
+  "file": "src/uci-session.ts",
+  "from": "      info(\"book\");\n      answer = `bestmove ${coordinateOf(booked)}`;",
+  "to": "      info(\"book\");\n      write(`bestmove ${coordinateOf(booked)}`);\n      return;",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S27",
+  "crit": "A3 book hit also searches",
+  "file": "src/uci-session.ts",
+  "from": "      info(\"book\");\n      answer = `bestmove ${coordinateOf(booked)}`;\n    } else if (position !== null && level.blunderRate > 0) {",
+  "to": "      info(\"book\");\n      answer = `bestmove ${coordinateOf(booked)}`;\n      write(\"info depth 1 score cp 0 nodes 1 time 0 nps 0 pv e2e4\");\n    } else if (position !== null && level.blunderRate > 0) {",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S28",
+  "crit": "A9 miss with OwnBook on -> 0000",
+  "file": "src/uci-session.ts",
+  "from": "    } else if (position !== null) {\n      const choice = chooseMove(",
+  "to": "    } else if (position !== null && !(ownBook && warmed)) {\n      const choice = chooseMove(",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S29",
+  "crit": "A9 warn->extra call each go",
+  "file": "src/uci-session.ts",
+  "from": "    warm();\n    const booked",
+  "to": "    warm();\n    if (ownBook) book.openingName(parseFen(START_FEN));\n    const booked",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S30",
+  "crit": "A8 seed drawn at every level",
+  "file": "src/uci-session.ts",
+  "from": "    warm();\n    const booked",
+  "to": "    random();\n    warm();\n    const booked",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S31",
+  "crit": "A8 seed drawn on a blunder-level book hit",
+  "file": "src/uci-session.ts",
+  "from": "    warm();\n    const booked",
+  "to": "    const early = level.blunderRate > 0 ? Math.floor(random() * 2 ** 32) : 0;\n    warm();\n    const booked",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "companion": {
+   "from": "      const seed = Math.floor(random() * 2 ** 32);",
+   "to": "      const seed = early;"
+  },
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S32",
+  "crit": "A7 seed constant, draw kept",
+  "file": "src/uci-session.ts",
+  "from": "      const seed = Math.floor(random() * 2 ** 32);",
+  "to": "      random();\n      const seed = 12345;",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S33",
+  "crit": "A7 seed scale 2**16",
+  "file": "src/uci-session.ts",
+  "from": "      const seed = Math.floor(random() * 2 ** 32);",
+  "to": "      const seed = Math.floor(random() * 2 ** 16);",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S34",
+  "crit": "A8 no draw",
+  "file": "src/uci-session.ts",
+  "from": "      const seed = Math.floor(random() * 2 ** 32);",
+  "to": "      const seed = 12345;",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S35",
+  "crit": "A8 two draws",
+  "file": "src/uci-session.ts",
+  "from": "      const seed = Math.floor(random() * 2 ** 32);",
+  "to": "      const seed = Math.floor(random() * random() * 2 ** 32);",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S36",
+  "crit": "A8 ucinewgame reseeds",
+  "file": "src/uci-session.ts",
+  "from": "        case \"ucinewgame\":\n          release();\n",
+  "to": "        case \"ucinewgame\":\n          random();\n          release();\n",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S37",
+  "crit": "A7 dropped line always",
+  "file": "src/uci-session.ts",
+  "from": "if (request.limits.length > 0) {",
+  "to": "if (request.limits.length >= 0) {",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S38",
+  "crit": "D11 only depth named",
+  "file": "src/uci-session.ts",
+  "from": "if (!limits.includes(keyword)) limits.push(keyword);",
+  "to": "if (keyword === \"depth\" && !limits.includes(keyword)) limits.push(keyword);",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S39",
+  "crit": "D11 one line per limit",
+  "file": "src/uci-session.ts",
+  "from": "        info(`skill level ${skill} ignores go ${request.limits.join(\", \")}; searching on time`);",
+  "to": "        for (const l of request.limits) info(`skill level ${skill} ignores go ${l}; searching on time`);",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S40",
+  "crit": "A7 level line carries score",
+  "file": "src/uci-session.ts",
+  "from": "`info depth ${choice.depth} nodes ${choice.nodes} time ${choice.elapsedMs} pv ${move}`,",
+  "to": "`info depth ${choice.depth} score cp 0 nodes ${choice.nodes} time ${choice.elapsedMs} pv ${move}`,",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S41",
+  "crit": "A6 blunder path takes G",
+  "file": "src/uci-session.ts",
+  "from": "        { budgetMs, blunderRate: level.blunderRate },",
+  "to": "        { budgetMs: request.budgetMs, blunderRate: level.blunderRate },",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S42",
+  "crit": "A1 option order",
+  "file": "src/uci-session.ts",
+  "from": "          write(\"option name OwnBook type check default true\");\n          write(\"option name Skill Level type spin default 3 min 1 max 5\");",
+  "to": "          write(\"option name Skill Level type spin default 3 min 1 max 5\");\n          write(\"option name OwnBook type check default true\");",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "BAD-PATTERN count=0"
+ },
+ {
+  "id": "171-S43",
+  "crit": "default level 5",
+  "file": "src/uci-session.ts",
+  "from": "let skill: keyof typeof LEVELS = DEFAULT_LEVEL;",
+  "to": "let skill: keyof typeof LEVELS = 5;",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S44",
+  "crit": "default OwnBook off",
+  "file": "src/uci-session.ts",
+  "from": "let ownBook = true;",
+  "to": "let ownBook = false;",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S45",
+  "crit": "choice6 warm reset on ucinewgame",
+  "file": "src/uci-session.ts",
+  "from": "          position = parseFen(START_FEN);\n          break;",
+  "to": "          position = parseFen(START_FEN);\n          warmed = false;\n          break;",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S46",
+  "crit": "D10 warm via bookMove",
+  "file": "src/uci-session.ts",
+  "from": "    book.openingName(parseFen(START_FEN));",
+  "to": "    book.bookMove(parseFen(START_FEN));",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S47",
+  "crit": "D10 warm on held position",
+  "file": "src/uci-session.ts",
+  "from": "    book.openingName(parseFen(START_FEN));",
+  "to": "    book.openingName(position ?? parseFen(START_FEN));",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S48",
+  "crit": "A3 probe start not held",
+  "file": "src/uci-session.ts",
+  "from": "book.bookMove(position) : undefined;",
+  "to": "book.bookMove(parseFen(START_FEN)) : undefined;",
+  "source": "qe-ABC-171/probe/mutants3.mjs (current anchors)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M45a",
+  "crit": "A3 extra pv token (level line)",
+  "file": "src/uci-session.ts",
+  "from": "time ${choice.elapsedMs} pv ${move}`,",
+  "to": "time ${choice.elapsedMs} pv ${move} ${move}`,",
+  "source": "ABC-177 successor of 167-M45 (2 matches at base)",
+  "nth": 0,
+  "baseMatch": "OK"
+ },
+ {
+  "id": "167-M45b",
+  "crit": "A3 extra pv token (engine line)",
+  "file": "src/uci-session.ts",
+  "from": "nps ${nps} pv ${move}`,",
+  "to": "nps ${nps} pv ${move} ${move}`,",
+  "source": "ABC-177 successor of 167-M45",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "171-S42b",
+  "crit": "A1 option order (default ${DEFAULT_LEVEL})",
+  "file": "src/uci-session.ts",
+  "from": null,
+  "to": null,
+  "source": "ABC-177 successor of 171-S42; filled below",
+  "baseMatch": "BAD-PATTERN count=0"
+ },
+ {
+  "id": "174-M01",
+  "crit": "table: level 1 budget 100 -> 110",
+  "file": "src/levels.ts",
+  "from": "budgetMs: 100, blunderRate: 0.4",
+  "to": "budgetMs: 110, blunderRate: 0.4",
+  "source": "qe-ABC-174/probe/mutants.tsv",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "174-M02",
+  "crit": "table: level 2 budget 180 -> 200",
+  "file": "src/levels.ts",
+  "from": "budgetMs: 180, blunderRate: 0.2",
+  "to": "budgetMs: 200, blunderRate: 0.2",
+  "source": "qe-ABC-174/probe/mutants.tsv",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "174-M03",
+  "crit": "table: level 3 rate 0.1 -> 0",
+  "file": "src/levels.ts",
+  "from": "budgetMs: 330, blunderRate: 0.1",
+  "to": "budgetMs: 330, blunderRate: 0",
+  "source": "qe-ABC-174/probe/mutants.tsv",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "174-M04",
+  "crit": "table: level 4 rate 0.05 -> 0 (page armed red)",
+  "file": "src/levels.ts",
+  "from": "budgetMs: 1_000, blunderRate: 0.05",
+  "to": "budgetMs: 1_000, blunderRate: 0",
+  "source": "qe-ABC-174/probe/mutants.tsv",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "174-M05",
+  "crit": "table: level 4 rate 0.05 -> 0.1",
+  "file": "src/levels.ts",
+  "from": "budgetMs: 1_000, blunderRate: 0.05",
+  "to": "budgetMs: 1_000, blunderRate: 0.1",
+  "source": "qe-ABC-174/probe/mutants.tsv",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "174-M06",
+  "crit": "table: level 3 rate 0.1 -> 0.2",
+  "file": "src/levels.ts",
+  "from": "budgetMs: 330, blunderRate: 0.1",
+  "to": "budgetMs: 330, blunderRate: 0.2",
+  "source": "qe-ABC-174/probe/mutants.tsv",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "174-M07",
+  "crit": "table: level 4 budget 1000 -> 900",
+  "file": "src/levels.ts",
+  "from": "budgetMs: 1_000, blunderRate: 0.05",
+  "to": "budgetMs: 900, blunderRate: 0.05",
+  "source": "qe-ABC-174/probe/mutants.tsv",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "174-M08",
+  "crit": "table: level 5 budget 3000 -> 3500",
+  "file": "src/levels.ts",
+  "from": "budgetMs: 3_000, blunderRate: 0 })",
+  "to": "budgetMs: 3_500, blunderRate: 0 })",
+  "source": "qe-ABC-174/probe/mutants.tsv",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "174-M09",
+  "crit": "table: level 5 rate 0 -> 0.01",
+  "file": "src/levels.ts",
+  "from": "budgetMs: 3_000, blunderRate: 0 })",
+  "to": "budgetMs: 3_000, blunderRate: 0.01 })",
+  "source": "qe-ABC-174/probe/mutants.tsv",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "174-M10",
+  "crit": "DEFAULT_LEVEL 5 -> 4",
+  "file": "src/levels.ts",
+  "from": "DEFAULT_LEVEL = 5",
+  "to": "DEFAULT_LEVEL = 4",
+  "source": "qe-ABC-174/probe/mutants.tsv",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "174-M11",
+  "crit": "DEFAULT_LEVEL 5 -> 3 (page armed red)",
+  "file": "src/levels.ts",
+  "from": "DEFAULT_LEVEL = 5",
+  "to": "DEFAULT_LEVEL = 3",
+  "source": "qe-ABC-174/probe/mutants.tsv",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "174-M12",
+  "crit": "DEFAULT_DIFFICULTY 5 -> 4",
+  "file": "src/cli-options.ts",
+  "from": "DEFAULT_DIFFICULTY: Difficulty = 5",
+  "to": "DEFAULT_DIFFICULTY: Difficulty = 4",
+  "source": "qe-ABC-174/probe/mutants.tsv",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "174-M13",
+  "crit": "DEFAULT_DIFFICULTY 5 -> 3",
+  "file": "src/cli-options.ts",
+  "from": "DEFAULT_DIFFICULTY: Difficulty = 5",
+  "to": "DEFAULT_DIFFICULTY: Difficulty = 3",
+  "source": "qe-ABC-174/probe/mutants.tsv",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "174-M14",
+  "crit": "parser seeds difficulty 3 (constant left 5)",
+  "file": "src/cli-options.ts",
+  "from": "let difficulty = DEFAULT_DIFFICULTY",
+  "to": "let difficulty: Difficulty = 3",
+  "source": "qe-ABC-174/probe/mutants.tsv",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "174-M15",
+  "crit": "UCI option literal default 3 (page armed red)",
+  "file": "src/uci-session.ts",
+  "from": "default ${DEFAULT_LEVEL} min 1",
+  "to": "default 3 min 1",
+  "source": "qe-ABC-174/probe/mutants.tsv",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "174-M16",
+  "crit": "UCI option default DEFAULT_LEVEL-1",
+  "file": "src/uci-session.ts",
+  "from": "default ${DEFAULT_LEVEL} min 1",
+  "to": "default ${DEFAULT_LEVEL - 1} min 1",
+  "source": "qe-ABC-174/probe/mutants.tsv",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "174-M17",
+  "crit": "UCI session starts at skill 3 (option line still 5)",
+  "file": "src/uci-session.ts",
+  "from": "let skill: keyof typeof LEVELS = DEFAULT_LEVEL;",
+  "to": "let skill: keyof typeof LEVELS = 3;",
+  "source": "qe-ABC-174/probe/mutants.tsv",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "174-M18",
+  "crit": "createLevel: engine path budget +300 ms",
+  "file": "src/levels.ts",
+  "from": "chooseMove(position, { budgetMs: level.budgetMs, now })",
+  "to": "chooseMove(position, { budgetMs: level.budgetMs + 300, now })",
+  "source": "qe-ABC-174/probe/mutants.tsv",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "174-M19",
+  "crit": "createLevel: engine path budget x1.4",
+  "file": "src/levels.ts",
+  "from": "chooseMove(position, { budgetMs: level.budgetMs, now })",
+  "to": "chooseMove(position, { budgetMs: level.budgetMs * 1.4, now })",
+  "source": "qe-ABC-174/probe/mutants.tsv",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "174-M20",
+  "crit": "createLevel: engine path budget -1 ms",
+  "file": "src/levels.ts",
+  "from": "chooseMove(position, { budgetMs: level.budgetMs, now })",
+  "to": "chooseMove(position, { budgetMs: level.budgetMs - 1, now })",
+  "source": "qe-ABC-174/probe/mutants.tsv",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "174-M21",
+  "crit": "table: level 3 rate 0.1 -> 0.05 (= level 4's)",
+  "file": "src/levels.ts",
+  "from": "budgetMs: 330, blunderRate: 0.1",
+  "to": "budgetMs: 330, blunderRate: 0.05",
+  "source": "qe-ABC-174/probe/mutants.tsv",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "174-M22",
+  "crit": "table: level 2 rate 0.2 -> 0.4 (= level 1's)",
+  "file": "src/levels.ts",
+  "from": "budgetMs: 180, blunderRate: 0.2",
+  "to": "budgetMs: 180, blunderRate: 0.4",
+  "source": "qe-ABC-174/probe/mutants.tsv",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "H1",
+  "crit": "A6 hold: a bestmove written on go infinite",
+  "file": "src/uci-session.ts",
+  "from": "if (request.hold) held = answer;",
+  "to": "if (false) held = answer;",
+  "source": "ABC-177 A6 (same text as 167-M16)",
+  "baseMatch": "OK"
+ },
+ {
+  "id": "H2",
+  "crit": "A6 release: a second release writes",
+  "file": "src/uci-session.ts",
+  "from": "    held = null;\n    write(line);",
+  "to": "    write(line);",
+  "source": "ABC-177 A6 (same text as 167-M13)",
+  "baseMatch": "OK"
+ }
+]

@@ -1,0 +1,47 @@
+se-ABC-248 PREREG — frozen before any head run (no row of either test file has changed when this is committed)
+Base: main 46365ed0 (carries ABC-246's merge 0ce5041d). Branch grugops/ABC-248. Kit role: software-engineer.
+
+FROZEN LISTS (raw/probe/, made by freeze.mjs against `git archive 46365ed0`)
+- frozen-uci.json   sha256 013a860f500bd168fb04631b58f97a4d1029f4d4879ca51a1c5f7eba8b165c8f
+  161 mutants, 137 apply at base. Run against src/uci-session.test.ts, default lane (ENGINE_DEEP unset).
+  * M01–M11 (ABC-177 A6): 167-M01..M05, M08..M11 as frozen; M06 and M07 no longer apply as written
+    (M06: 2 occurrences since ABC-220 added the mode branch; M07: the cap line moved), so they are
+    re-anchored as 167-M06r (level branch increment side swapped) and 167-M07r (level cap not applied).
+  * The wrong builds A5's rows name (ruling 3): WRONGSIDE (level mode: white's search gets btime,
+    black's gets wtime), WS-WHITE (white wrong only), WS-BLACK (black wrong only), MOVETIME-OFF (level mode
+    never reads movetime), MOVESTOGO-1, 167-M05 (movestogo ignored), 167-M11 (movetime ignored under a clock),
+    L5-3000 / L5-4500 (LEVELS[5].budgetMs), OVERHEAD-100, 171-S17r / S19r (level cap re-anchored).
+  * The rest of qe-ABC-177's re-frozen union list (source copied byte-identical as
+    src-qe177-refrozen-mutants.json, sha256 b9033970…afbe): ABC-167 M12–M51, ABC-171 N/S, ABC-174 M, H1/H2.
+    24 entries no longer apply as written and are recorded NOT APPLICABLE (listed by freeze.mjs).
+- frozen-plants.json sha256 23811b194325720c7071227d162fe799924a9210c32f4155b56744452224525d
+  29 plants (qe-ABC-208 plants.mjs), 26 apply. Run against src/search.null-move.test.ts, default lane.
+  The binding three (ruling 4): engine-no-finally (the null move not unmade on abort; QE-208-a),
+  search-stale-null-key and engine-stale-null-key (the null child's key not written, each recursion; QE-208-b).
+- Runner: mut.mjs (one file, heap 400, node_modules/.bin/vitest, never npx), CONTROL first.
+
+DECISION RULES (fixed now)
+T2a (default-lane kill parity, ruling 3). From the base run, per mutant, the set of default-lane rows of
+  src/uci-session.test.ts that kill it. Rows are taken in this order: "a bare go", "G = 3 500, under the
+  default level 5's 4 000", "movetime 100", "A5-b3", "white reads wtime", "black reads btime". A row joins the
+  moved set iff, with it and every row already moved removed, every mutant killed at base is still killed by
+  some remaining default-lane row (a sole killer stays). The tip run of the file must confirm: killed ids at
+  tip ⊇ killed ids at base (file level). If it does not, the offending move is reverted.
+T2d (ruling 2 = ABC-244 conditions 1–3). A4-a2: step 100 -> 1 000 iff its own kill set at the tip equals its
+  base kill set exactly (and the file-level parity above holds). 4 000 ms is 40 intervals at 100 and 4 at
+  1 000, so condition 2 holds. Else it keeps 100. Census: a row joins only if time-blind, a single step
+  literal at one call site, finer than 1 000, the coarser step keeps >= 2 clock-check intervals, and it reads
+  strictly fewer nodes at the coarser step; at most two may join, and if more than two qualify none joins.
+T2c (non-vacuity and plant parity, ruling 4). Candidates, tried in order, first that passes wins:
+  - QE-208-a S: (1) the even readings 4, 6, …, 24 (Σ 154); (2) every reading 8..22 (Σ 225); else 3..25 stays.
+    Pass = insideNull >= 3 at the tip, 0 mutated roots, and engine-no-finally reds the row at the tip.
+  - QE-208-b root (fenOf names, ≥ 3 non-pawn pieces each side): (1) startpos; (2) position-5; (3) position-4;
+    else position-6 stays. Pass = underNull > 0 in both rows at the tip, stale [] at the tip, and
+    search-stale-null-key reds the search() row and engine-stale-null-key reds the chooseMove row, as at base.
+  - Plant parity on the whole file: every plant killed at base is killed at the tip, by the same rows for the
+    two QE-208 describes.
+  (Selection inputs read before this freeze, on base production only, scratch probe t2c.probe.test.ts:
+  position-6 sweep — inside a null subtree at readings 8, 10, 11, 18, 22; roots at depth 6 — search()/chooseMove
+  nodes: startpos 26 703/23 798, position-5 29 639/40 415, position-4 140 298/59 738, position-6 154 466/73 867;
+  underNull startpos 19/19.)
+A lever that fails its rule stays as it is and is recorded, not forced.
