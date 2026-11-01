@@ -6,7 +6,27 @@ id: ADR-0055
 
 ## Status
 
-**PROPOSED** 2026-11-01 by Architect/Design (task `arch-speed-path-spike`, records and reading only, at `main`
+**ACCEPTED (O1)** 2026-11-01.
+
+- *2026-11-01, dated status line by Architect/Design (task `arch-algo-analysis`, records only, at `main` `bae25131`), on
+  the owner's word as the Orchestrator recorded it (`orch-2026-10-30a` `…74216a44`, verbatim inside: "my call is let's
+  go with 1, least effort and risk").*
+  - **The owner chose O1 (in-TypeScript cuts) on 2026-11-01.** O2 (AssemblyScript) and O3 (Rust to WASM) are not
+    pursued now. O4 is not taken.
+  - **The prototype (D3) is not run.** Q-SP-1 is answered no by the choice. Q-SP-4 and Q-SP-5 fall away, because no
+    port goes. Q-SP-2's bars bind only the O1-b reading (A1 / A0) if one is ever taken. Without the prototype, each
+    O1 ticket is graded on its own S2 reading (node-rate ratio, `G4` identity, perft equal), as `ABC-235` and `ABC-240`
+    were. D4 item 2's "ordered by the prototype's reading" becomes "ordered by BA/PM's cut".
+  - **O1-d (lazy legality) waits on `ADR-0003`'s amendment** (Q-SP-3). The owner has not yet said yes to it. It goes
+    to Backlog with its acceptance written, and the Orchestrator's reading is that O1-a, O1-b and O1-c proceed.
+  - **O1-e stays "not now"**, as D1 says.
+  - **What is accepted:** D1's O1 rows, D2, and D6's O1 bullet. **Not accepted (not pursued):** D3, D1's O2 and O3
+    rows, D4 items 1, 4 and 5, and D6's O2/O3 bullet. They stay on the page as the record of what was weighed. Re-opening
+    O2 or O3 needs a new owner word and the D3 prototype first.
+  - The order of O1 against the algorithm work toward the owner's new goal (3 000 Elo, same note) is proposed in
+    `ADR-0056` (PROPOSED). It does not change this ADR.
+
+*Original status, kept:* **PROPOSED** 2026-11-01 by Architect/Design (task `arch-speed-path-spike`, records and reading only, at `main`
 `3e35b667`). **Nothing is decided here.** Nothing was run, built, installed or timed: `qe-ABC-223` holds the host
 STRICTLY ALONE. Every speed figure below is either quoted from a sealed reading (named) or is an **estimate** with
 its basis and confidence. An estimate is not a reading.
