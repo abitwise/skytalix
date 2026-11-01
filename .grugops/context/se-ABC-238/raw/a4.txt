@@ -1,0 +1,4 @@
+A4 search kiwipete d8: head 1109987 door 1116785 = 0.9939x; score -60 -> -60; move same true [2.7 s]
+A4 chooseMove kiwipete to 8: head 1510449 door 1575537 = 0.9587x; score -59 -> -59 (report) [6.3 s]
+A4 search position-6 d8: head 1595656 door 1602457 = 0.9958x; score 74 -> 74; move same true [10.3 s]
+A4 chooseMove position-6 to 8: head 475565 door 476244 = 0.9986x; score 74 -> 74 (report) [11.4 s]

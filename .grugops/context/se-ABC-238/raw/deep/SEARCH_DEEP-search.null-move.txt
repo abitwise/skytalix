@@ -1,0 +1,24 @@
+
+ RUN  v4.1.12 <worktree>
+
+stdout | src/search.null-move.test.ts > A3 — bounded drift against the null-move-off doors, depth 5, the 190 [deep, SEARCH_DEEP=1] > searchWithoutQuiescenceEvasions against searchWithoutNullMove at fixed depth 5: >= 95% within 25 cp, none beyond 37 cp [deep, SEARCH_DEEP=1]
+ABC-208 A3 searchWithoutQuiescenceEvasions d5: 100.00% within 25 cp of 187, max 25 cp (position-5/e1f2: -228 -> -203); mate-status flips on the 190: 0 (a report, not a bar)
+
+stdout | src/search.null-move.test.ts > A3 — bounded drift against the null-move-off doors, depth 5, the 190 [deep, SEARCH_DEEP=1] > chooseMoveWithoutQuiescenceEvasions against chooseMoveWithoutNullMove deepened to 5: >= 95% within 25 cp, none beyond 37 cp [deep, SEARCH_DEEP=1]
+ABC-208 A3 chooseMoveWithoutQuiescenceEvasions to d5: 100.00% within 25 cp of 187, max 8 cp (position-6/f3d4: 565 -> 573); mate-status flips on the 190: 0 (a report, not a bar)
+
+stdout | src/search.null-move.test.ts > A3 — the same-depth mate floor on the 287 [deep, SEARCH_DEEP=1] > every mate searchWithoutNullMove scores at depth 5, searchWithoutQuiescenceEvasions scores at depth 5: same sign, no longer [deep, SEARCH_DEEP=1]
+ABC-208 A3 mate floor d5 -> d5: 0 of 189 violated
+
+ ✓ src/search.null-move.test.ts (44 tests) 27425ms
+     ✓ zugzwang.004: chooseMove on a frozen clock to depth 11 plays h3h4 [deep, SEARCH_DEEP=1]  875ms
+     ✓ zugzwang.005: chooseMove on a frozen clock to depth 12 plays f4d5 [deep, SEARCH_DEEP=1]  3296ms
+     ✓ searchWithoutQuiescenceEvasions against searchWithoutNullMove at fixed depth 5: >= 95% within 25 cp, none beyond 37 cp [deep, SEARCH_DEEP=1]  11277ms
+     ✓ chooseMoveWithoutQuiescenceEvasions against chooseMoveWithoutNullMove deepened to 5: >= 95% within 25 cp, none beyond 37 cp [deep, SEARCH_DEEP=1]  10150ms
+     ✓ every mate searchWithoutNullMove scores at depth 5, searchWithoutQuiescenceEvasions scores at depth 5: same sign, no longer [deep, SEARCH_DEEP=1]  946ms
+
+ Test Files  1 passed (1)
+      Tests  44 passed (44)
+   Start at  23:28:09
+   Duration  27.56s (transform 0ms, setup 0ms, import 67ms, tests 27.43s, environment 0ms)
+

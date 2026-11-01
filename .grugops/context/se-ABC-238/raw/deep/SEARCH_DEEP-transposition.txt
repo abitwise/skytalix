@@ -1,0 +1,52 @@
+
+ RUN  v4.1.12 <worktree>
+
+stdout | src/transposition.test.ts > A2 — the hit rate is reported and is at least 10% > kiwipete at depth 5 [deep, SEARCH_DEEP=1]
+ABC-081 A2 kiwipete: fixed depth 5 16.00%, iterative deepening to 5 39.58%
+
+stdout | src/transposition.test.ts > A2 — the hit rate is reported and is at least 10% > position-6 at depth 5 [deep, SEARCH_DEEP=1]
+ABC-081 A2 position-6: fixed depth 5 15.41%, iterative deepening to 5 40.65%
+
+stdout | src/transposition.test.ts > A3 — iterative deepening with the table visits <= 70% of the nodes it visits without > kiwipete deepened to depth 5: <= 70% [deep, SEARCH_DEEP=1]
+ABC-081 A3 kiwipete to depth 5: 144149 / 236622 = 60.92%
+
+stdout | src/transposition.test.ts > A3 — iterative deepening with the table visits <= 70% of the nodes it visits without > position-6 deepened to depth 5: <= 70% [deep, SEARCH_DEEP=1]
+ABC-081 A3 position-6 to depth 5: 110520 / 188793 = 58.54%
+
+stdout | src/transposition.test.ts > ABC-238 A3 — bounded drift against the deeper-cutoff doors, depth 5, the 190 [deep, SEARCH_DEEP=1] > search() against searchWithoutDeeperCutoffs at fixed depth 5: >= 95% within 25 cp, 0 mate sign flips [deep, SEARCH_DEEP=1]
+ABC-238 A3 search() d5: 100.00% within 25 cp of 187, max 3 cp (startpos/d2d4: 6 -> 9), a report; moved 1; mate sign flips 0; mate-status changes 0 (a report)
+
+stdout | src/transposition.test.ts > ABC-238 A3 — bounded drift against the deeper-cutoff doors, depth 5, the 190 [deep, SEARCH_DEEP=1] > chooseMove against chooseMoveWithoutDeeperCutoffs deepened to 5: >= 95% within 25 cp, 0 mate sign flips [deep, SEARCH_DEEP=1]
+ABC-238 A3 chooseMove to d5: 100.00% within 25 cp of 187, max 10 cp (endgame-3: 147 -> 137), a report; moved 1; mate sign flips 0; mate-status changes 0 (a report)
+
+stdout | src/transposition.test.ts > ABC-238 — the mate sign floor on the 287 at depth 5 [deep, SEARCH_DEEP=1] > every mate searchWithoutDeeperCutoffs scores at depth 5, search() scores as a mate of the same sign; the distance is reported [deep, SEARCH_DEEP=1]
+ABC-238 mate sign floor d5: 0 of 189 violated; 0 mate distances changed (a report)
+
+stdout | src/transposition.test.ts > ABC-238 A4 — search(…, 8).nodes against the door on kiwipete and position-6, REPORTED [deep, SEARCH_DEEP=1] > kiwipete at depth 8 [deep, SEARCH_DEEP=1]
+ABC-238 A4 kiwipete d8: 1109987 / 1116785 = 0.9939x (bar 0.95x); score -60 -> -60
+
+stdout | src/transposition.test.ts > ABC-238 A4 — search(…, 8).nodes against the door on kiwipete and position-6, REPORTED [deep, SEARCH_DEEP=1] > position-6 at depth 8 [deep, SEARCH_DEEP=1]
+ABC-238 A4 position-6 d8: 1595656 / 1602457 = 0.9958x (bar 0.95x); score 74 -> 74
+
+stdout | src/transposition.test.ts > ABC-238 — the firing rate at depth 6 on the 190, REPORTED (ADR-0058 decision 9) [deep, SEARCH_DEEP=1] > the share of probes a deeper entry settles, search() at fixed depth 6 and chooseMove deepened to 6 [deep, SEARCH_DEEP=1]
+ABC-238 firing rate search() d6: 2367 deeper cuts / 1114332 probes = 0.212% (0.902% of 262545 hits)
+ABC-238 firing rate chooseMove to d6: 1541 deeper cuts / 876757 probes = 0.176% (0.479% of 321833 hits)
+
+ ✓ src/transposition.test.ts (57 tests) 78121ms
+     ✓ reports the table-free mate distance where the engine reuses a mate score at a second ply [deep, SEARCH_DEEP=1]  1820ms
+     ✓ kiwipete at depth 5 [deep, SEARCH_DEEP=1]  385ms
+     ✓ position-6 at depth 5 [deep, SEARCH_DEEP=1]  309ms
+     ✓ kiwipete deepened to depth 5: <= 70% [deep, SEARCH_DEEP=1]  492ms
+     ✓ position-6 deepened to depth 5: <= 70% [deep, SEARCH_DEEP=1]  399ms
+     ✓ search() against searchWithoutDeeperCutoffs at fixed depth 5: >= 95% within 25 cp, 0 mate sign flips [deep, SEARCH_DEEP=1]  14917ms
+     ✓ chooseMove against chooseMoveWithoutDeeperCutoffs deepened to 5: >= 95% within 25 cp, 0 mate sign flips [deep, SEARCH_DEEP=1]  13352ms
+     ✓ every mate searchWithoutDeeperCutoffs scores at depth 5, search() scores as a mate of the same sign; the distance is reported [deep, SEARCH_DEEP=1]  1147ms
+     ✓ kiwipete at depth 8 [deep, SEARCH_DEEP=1]  3563ms
+     ✓ position-6 at depth 8 [deep, SEARCH_DEEP=1]  3960ms
+     ✓ the share of probes a deeper entry settles, search() at fixed depth 6 and chooseMove deepened to 6 [deep, SEARCH_DEEP=1]  37215ms
+
+ Test Files  1 passed (1)
+      Tests  57 passed (57)
+   Start at  23:25:59
+   Duration  78.27s (transform 0ms, setup 0ms, import 73ms, tests 78.12s, environment 0ms)
+

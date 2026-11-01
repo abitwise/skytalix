@@ -1,0 +1,19 @@
+
+ RUN  v4.1.12 <worktree>
+
+stdout | src/uci.real-engine.test.ts > ABC-168 — one real UCI dialogue against node src/uci.ts [deep, UCI_DEEP=1]
+UCI_DEEP child: spawn to exit 1080 ms (not an A6 reading); host AMD Ryzen AI 9 HX 370 w/ Radeon 890M, node v26.12.1, load1 1.47
+
+stdout | src/uci.real-engine.test.ts > ABC-220 A14 — a busy isready in simple-tournament against node src/uci.ts [deep, UCI_DEEP=1]
+UCI_DEEP ABC-220 A14 child: spawn to exit 2092 ms (not a readyok latency); load1 1.43
+
+stdout | src/uci.real-engine.test.ts > ABC-221 A11 — a busy isready in uci-clock-mode against node src/uci.ts [deep, UCI_DEEP=1]
+UCI_DEEP ABC-221 A11 child: spawn to exit 2082 ms (not a readyok latency); load1 1.43
+
+ ✓ src/uci.real-engine.test.ts (13 tests) 5265ms
+
+ Test Files  1 passed (1)
+      Tests  13 passed (13)
+   Start at  23:33:48
+   Duration  5.35s (transform 0ms, setup 0ms, import 30ms, tests 5.26s, environment 0ms)
+

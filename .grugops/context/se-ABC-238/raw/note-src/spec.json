@@ -1,0 +1,8 @@
+{ "refs": ["se-ABC-238", "ABC-238", "ADR-0058", "ABC-081", "EPIC-011", "ADR-0056", "ADR-0026", "ADR-0025", "ABC-229", "ABC-249", "NFR-005", "NFR-008", "NFR-009", "grugops/ABC-238", "3abaefdd", "b19af469"],
+  "notes": [
+    {"kind": "decision", "confidence": "high: as committed in 3abaefdd; the design is ADR-0058 d1-d5 as written", "bodyFile": "design.md"},
+    {"kind": "observation", "confidence": "high: deterministic cross-build and fixed-depth readings under the lock; raw in raw/", "bodyFile": "acceptance.md"},
+    {"kind": "observation", "confidence": "high: every gate run under the lock; outputs in raw/gates and raw/deep", "bodyFile": "gates.md"},
+    {"kind": "observation", "confidence": "high: pointer note (filed as observation; artifact-ref needs gate_run)", "bodyFile": "artifacts.md"},
+    {"kind": "failed-attempt", "confidence": "high on the readings (deterministic, two instruments agree); UNKNOWN - verify on the cause", "bodyFile": "stop.md"}
+  ] }

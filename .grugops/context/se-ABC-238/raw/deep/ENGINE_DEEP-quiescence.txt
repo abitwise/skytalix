@@ -1,0 +1,17 @@
+
+ RUN  v4.1.12 <worktree>
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap reading, level 180x
+A5 kiwipete depth 1: 878 nodes with quiescence / 49 without = 17.92x
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap reading, level 10x
+A5 position-6 depth 1: 421 nodes with quiescence / 47 without = 8.96x
+
+ ✓ src/quiescence.test.ts (99 tests) 470ms
+     ✓ on ABC-206's 285 074-position walk to depth 3 [deep, ENGINE_DEEP=1]  376ms
+
+ Test Files  1 passed (1)
+      Tests  99 passed (99)
+   Start at  23:32:36
+   Duration  582ms (transform 0ms, setup 0ms, import 42ms, tests 470ms, environment 0ms)
+

@@ -1,0 +1,67 @@
+
+ RUN  v4.1.12 <worktree>
+
+stdout | src/quiescence.test.ts > A1 — the losing capture is not chosen in >= 19 of 20, and the bare leaf is strictly worse > with quiescence the losing move is still avoided at depth 3 [deep, SEARCH_DEEP=1]
+A1 depth 3: losing capture chosen 0/24 with quiescence, 0/24 without
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap reading, level 180x
+A5 kiwipete depth 1: 878 nodes with quiescence / 49 without = 17.92x
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap reading, level 10x
+A5 position-6 depth 1: 421 nodes with quiescence / 47 without = 8.96x
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 2, level 50x [deep, SEARCH_DEEP=1]
+A5 kiwipete depth 2: 2704 nodes with quiescence / 132 without = 20.48x
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 3, level 70x, and the oracle-checked answer 8 / e2a6 [deep, SEARCH_DEEP=1]
+A5 kiwipete depth 3: 8115 nodes with quiescence / 2312 without = 3.51x
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 2, level 42x [deep, SEARCH_DEEP=1]
+A5 position-6 depth 2: 3177 nodes with quiescence / 136 without = 23.36x
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 3, level 13x, and the oracle-checked answer 85 / c3d5 [deep, SEARCH_DEEP=1]
+A5 position-6 depth 3: 12458 nodes with quiescence / 2398 without = 5.20x
+
+stdout | src/quiescence.test.ts > ABC-228 A4 — search(…, 6).nodes <= 1.5x the door on kiwipete and position-6 [deep, SEARCH_DEEP=1] > kiwipete at depth 6 [deep, SEARCH_DEEP=1]
+ABC-228 A4 kiwipete d6: 324162 / 237007 = 1.368x
+
+stdout | src/quiescence.test.ts > ABC-228 A4 — search(…, 6).nodes <= 1.5x the door on kiwipete and position-6 [deep, SEARCH_DEEP=1] > position-6 at depth 6 [deep, SEARCH_DEEP=1]
+ABC-228 A4 position-6 d6: 154464 / 109912 = 1.405x
+
+stdout | src/quiescence.test.ts > ABC-228 — bounded drift against the evasion doors, depth 5, the 190 [deep, SEARCH_DEEP=1] > searchWithoutQuietPromotions against searchWithoutQuiescenceEvasions at fixed depth 5: >= 83% within 25 cp, none beyond 177 cp [deep, SEARCH_DEEP=1]
+ABC-228 search() d5: 89.30% within 25 cp of 187, max 118 cp (position-4/f1f2: 708 -> 826); mate-status flips on the 190: 0 (a report, not a bar)
+
+stdout | src/quiescence.test.ts > ABC-228 — bounded drift against the evasion doors, depth 5, the 190 [deep, SEARCH_DEEP=1] > chooseMoveWithoutQuietPromotions against chooseMoveWithoutQuiescenceEvasions deepened to 5: >= 83% within 25 cp, none beyond 177 cp [deep, SEARCH_DEEP=1]
+ABC-228 chooseMove to d5: 88.77% within 25 cp of 187, max 118 cp (position-4/f1f2: 708 -> 826); mate-status flips on the 190: 0 (a report, not a bar)
+
+stdout | src/quiescence.test.ts > ABC-228 — the same-depth mate floor on the 287 [deep, SEARCH_DEEP=1] > every mate searchWithoutQuiescenceEvasions scores at depth 5, searchWithoutQuietPromotions scores at depth 5: same sign, no longer [deep, SEARCH_DEEP=1]
+ABC-228 mate floor d5: 0 of 189 violated
+
+stdout | src/quiescence.test.ts > ABC-229 A3 — search(…, 6).nodes <= 1.2x its door on kiwipete and position-6 [deep, SEARCH_DEEP=1] > kiwipete at depth 6 [deep, SEARCH_DEEP=1]
+ABC-229 A3 kiwipete d6: 330314 / 324162 = 1.019x
+
+stdout | src/quiescence.test.ts > ABC-229 A3 — search(…, 6).nodes <= 1.2x its door on kiwipete and position-6 [deep, SEARCH_DEEP=1] > position-6 at depth 6 [deep, SEARCH_DEEP=1]
+ABC-229 A3 position-6 d6: 154466 / 154464 = 1.000x
+
+stdout | src/quiescence.test.ts > ABC-229 — bounded drift against the quiet-promotion doors, depth 5, the 190 [deep, SEARCH_DEEP=1] > searchWithoutDeeperCutoffs against searchWithoutQuietPromotions at fixed depth 5: >= 95% within 25 cp, none beyond 12 cp [deep, SEARCH_DEEP=1]
+ABC-229 search() d5: 100.00% within 25 cp of 187, max 8 cp (kiwipete/d2e3: 350 -> 358); mate-status flips on the 190: 0 (a report, not a bar)
+
+stdout | src/quiescence.test.ts > ABC-229 — bounded drift against the quiet-promotion doors, depth 5, the 190 [deep, SEARCH_DEEP=1] > chooseMoveWithoutDeeperCutoffs against chooseMoveWithoutQuietPromotions deepened to 5: >= 95% within 25 cp, none beyond 12 cp [deep, SEARCH_DEEP=1]
+ABC-229 chooseMove to d5: 100.00% within 25 cp of 187, max 8 cp (kiwipete/d2e3: 350 -> 358); mate-status flips on the 190: 0 (a report, not a bar)
+
+ ✓ src/quiescence.test.ts (116 tests) 48572ms
+     ✓ kiwipete at depth 6 [deep, SEARCH_DEEP=1]  601ms
+     ✓ position-6 at depth 6 [deep, SEARCH_DEEP=1]  364ms
+     ✓ searchWithoutQuietPromotions against searchWithoutQuiescenceEvasions at fixed depth 5: >= 83% within 25 cp, none beyond 177 cp [deep, SEARCH_DEEP=1]  10876ms
+     ✓ chooseMoveWithoutQuietPromotions against chooseMoveWithoutQuiescenceEvasions deepened to 5: >= 83% within 25 cp, none beyond 177 cp [deep, SEARCH_DEEP=1]  9536ms
+     ✓ every mate searchWithoutQuiescenceEvasions scores at depth 5, searchWithoutQuietPromotions scores at depth 5: same sign, no longer [deep, SEARCH_DEEP=1]  967ms
+     ✓ kiwipete at depth 6 [deep, SEARCH_DEEP=1]  710ms
+     ✓ position-6 at depth 6 [deep, SEARCH_DEEP=1]  363ms
+     ✓ searchWithoutDeeperCutoffs against searchWithoutQuietPromotions at fixed depth 5: >= 95% within 25 cp, none beyond 12 cp [deep, SEARCH_DEEP=1]  13268ms
+     ✓ chooseMoveWithoutDeeperCutoffs against chooseMoveWithoutQuietPromotions deepened to 5: >= 95% within 25 cp, none beyond 12 cp [deep, SEARCH_DEEP=1]  11647ms
+
+ Test Files  1 passed (1)
+      Tests  116 passed (116)
+   Start at  23:27:20
+   Duration  48.69s (transform 0ms, setup 0ms, import 42ms, tests 48.57s, environment 0ms)
+
