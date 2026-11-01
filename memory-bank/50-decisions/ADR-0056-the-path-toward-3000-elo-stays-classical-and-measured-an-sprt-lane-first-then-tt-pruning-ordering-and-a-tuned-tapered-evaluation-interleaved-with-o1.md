@@ -49,6 +49,24 @@ the owner's word of 2026-11-01 (`orch-2026-10-30a` `…2896c6eb`) and the `qe-tc
 - **Unchanged:** the 40/15 claim (C1), its 0.5 s Stockfish floor, the scale, the claim rule, and D1–D4 and D6's order.
   C4's anchors keep their place, but their paired fast reading moves from 4 s to 100 ms.
 
+**Folded 2026-11-01, third time** (task `arch-adr0056-owner-answers`, records only, at `main` `adab5f0d`; nothing run):
+the owner's answers to the three calls the second fold left open (`orch-2026-10-30a` `…43098cef`).
+
+- **His words, verbatim:** *"1. b ; 2. ok ; 3. quick check can be with 0.5s difficulty. Make sure engine is not
+  changed internally and it works on different difficulty settings."*
+- **What changes:**
+  - **"1. b":** the per-epic read is **400 games head to head**, the epic's closing build against its starting build,
+    at 100 ms. C3′ (200 + 200 games against Stockfish) is superseded by **C3″** in D5's dated block "the owner's three
+    answers".
+  - **"2. ok":** C2′'s GAIN (≥ 50.0 of 100) and NEUTRAL (≥ 43.0 of 100) bars are **owner-accepted**, with their stated
+    blind spot.
+  - **"3.":** the R smoke stays, as **10 games against Stockfish at 0.5 s a move**, not 4 s (**S′**). His condition is
+    written as the rule **R-TC**: a test control lives in the harness and its configuration only, and every strength
+    change shows that the engine still plays at each difficulty setting. The same block names the check.
+- **The outside opponent now:** the 0.5 s smoke, and the 40/15 readings (the C1 claim and the C4 anchors). No routine
+  per-epic reading against Stockfish remains.
+- **Unchanged:** C1; C2′, except its smoke paragraph; the scale; the claim rule; D1–D4; D6's order.
+
 *Original status, kept:* **PROPOSED** 2026-11-01 by Architect/Design (task `arch-algo-analysis`, records and reading only, at `main` `bae25131`).
 **Nothing is decided here.** Nothing was run, built, benchmarked or played: `qe-ABC-223` holds the host STRICTLY ALONE.
 Every Elo figure below is either quoted from a sealed reading (named) or is an **estimate** with its basis. An
@@ -488,6 +506,7 @@ bounds and the overshoot figures upper bounds. Every hour and Elo figure not quo
       "not seen worse than base".
     - **NEUTRAL** (a correctness fix or simplification that changes values): **≥ 43.0 of 100**, which is
       ≈ −49 Elo, the lower edge of the 95 % interval at 50 %: "no clear loss".
+    - *Owner-accepted 2026-11-01 (`…43098cef`, "2. ok"): both bars stand, with the blind spot stated below.*
   - **A miss is NOT MET.** QE records a `failed-attempt`, and the ticket goes back to BA/PM. A miss is not re-played
     for luck, and the 100 games are not extended. A changed form may come back as a new attempt, and that is a new
     read.
@@ -526,9 +545,15 @@ bounds and the overshoot figures upper bounds. Every hour and Elo figure not quo
   4 s control, ≈ 14 min). It is the only per-change check of the shipped control and of an outside opponent. Dropping
   it is not this ADR's call. BA/PM records the merge rule (`bapm-100-400-rule`), and the Orchestrator rules if they
   differ.
+  - *Superseded in part 2026-11-01 (`arch-adr0056-owner-answers`; owner `…43098cef` item 3). The D smoke stays
+    replaced. The R smoke stays, at **0.5 s** a move, not 4 s: S′ in D5's dated block "the owner's three answers".*
 
 **C3′. The per-epic read: 400 games, an interleaved pair against Stockfish, 100 ms**
 
+- *Superseded 2026-11-01 (`arch-adr0056-owner-answers`; owner `…43098cef`, "1. b"). The per-epic read is now C3″,
+  400 games head to head, in D5's dated block "the owner's three answers". C3′ is kept as history. Its Stockfish
+  settings and its E > 2 600 probe rule still apply to the 100 ms readings C4 and C1 take (that block, "C4 and C1
+  re-pointed").*
 - **Who plays.** This is `rpair`'s shape, as in the milestone 1 batch, at 100 ms.
   - The base is the epic's starting SHA on `main`. The head is `main` when the epic's last ticket has merged.
   - Each build plays 200 games (`--rounds 100`: openings 1–100, both colours) against Stockfish 19
@@ -629,6 +654,218 @@ Architect's ruling:
 - **`ABC-256` (B0):** it becomes a 200-game read of `main` at the C3′ control, ≈ 0.5–0.8 h (estimate). That is under
   1 h, so it is not asked. It is the base half of the first C3′ comparison. This is for BA/PM to record.
 
+#### Dated 2026-11-01 (`arch-adr0056-owner-answers`): the owner's three answers. A head-to-head epic read, the bars accepted, the smoke at 0.5 s, and the test-control rule (supersedes C3′)
+
+The owner answered the three calls (`…43098cef`): *"1. b ; 2. ok ; 3. quick check can be with 0.5s difficulty. Make
+sure engine is not changed internally and it works on different difficulty settings."* "2. ok" is folded into C2′ as
+a dated line, and nothing else in C2′ moves. This block holds items 1 and 3. Every hour and Elo figure not quoted from
+a reading is an **estimate**, with its basis named. Nothing was run.
+
+**C3″. The per-epic read: 400 games head to head at 100 ms** (supersedes C3′)
+
+- **Who plays.** The head is `main` when the epic's last ticket has merged. The base is the epic's starting SHA on
+  `main`, before its first engine-changing merge. It is self-play, as C2′ is.
+- **The control.**
+  - Both sides think 100 ms a move (`st=0.1`), with `timemargin` 50 ms on both sides (C2′'s reason).
+  - The harness defaults stay: level 5 with no `Skill Level` sent, `OwnBook` on, `restart=on`, `-maxmoves 200`.
+  - Width 1, one game at a time (`…f7a50e95`).
+- **The openings.** Openings 1–100 of `tools/rating/openings.epd`, each played with both colours. The file is read in
+  sequence and wraps at round 101, so each opening is played twice with each colour. That is `d`'s default of
+  200 rounds, the shape `ABC-207`'s 400-game D reading ran (`EPIC-008`).
+- **The command:** `d <head> <base> <out> --budget-ms 100 --rounds 200 --concurrency 1`. It needs only `ABC-255`
+  item 1, which C2′ already needs. There is no new harness path.
+- **Wall time:** 400 games at 259.2 games/h is ≈ 1.55 h, plus two builds. The owner pre-approved about 1.5 h, so it is
+  not asked again. 259.2 was read on a shared host, so it is a lower bound.
+- **Validity.** 400 of 400 games complete, and neither build makes a fault (`EPIC-008`'s states) or loses on time at
+  the 50 ms margin. Otherwise the read is UNRESOLVED and is re-run once. A fault in the base is routed as a defect on
+  `main`.
+- **The decision rule.**
+  - **MET:** the head scores **≥ 200.0 of 400**, so its point estimate is ≥ 0 Elo: "the epic is not seen worse than
+    where it started". It is C2′'s GAIN bar at four times the games.
+  - **NOT MET:** below 200.0. As under C3′, the next epic's strength tickets do not start until two things happen.
+    BA/PM records which of the epic's changes are suspect, from their C2′ reads, intents and margins. Then the
+    Orchestrator rules keep, revert or re-read. No revert is automatic, and a miss is not re-played for luck.
+  - The interval is reported, not graded.
+- **What it resolves.** About **±24 Elo** at 95 % at the measured draw ratio of 0.50 (C2′'s ±48 at 100 games,
+  divided by √4), and about ±28–29 at 0.30.
+  - Each opening is played four times. The four games differ, because identical 100 ms searches vary by a ply and by
+    up to ±25 % in nodes (`…1889e3b0` R2). But they are not fully independent, so "±24" slightly flatters the read.
+  - By the normal approximation (SE ≈ 12.2 Elo), the chance of MET given the epic's true net effect:
+
+    | true net effect (Elo) | +40 | +20 | +10 | 0 | −10 | −20 |
+    |---|---|---|---|---|---|---|
+    | P(MET) | 1.00 | 0.95 | 0.79 | 0.50 | 0.21 | 0.05 |
+
+  - An epic bundle is expected at +60…+150 (D2's rows, estimates), and it reads MET almost surely. A net loss of 20 or
+    more is stopped 19 times in 20. That is about three times finer than C3′'s ±58–78.
+- **What it cannot see (the owner's choice, stated once).** It is self-play, and so is every per-change read. So
+  self-play gains that do not transfer to an outside opponent stay unseen until a 40/15 reading. Two negative outside
+  point estimates in a row are on record (§ Today's outside reading, `RISK-EPIC008-03`). The outside checks left are
+  S′, which sees collapses only, and C4 and C1.
+  - **Recommended to BA/PM (no new run):** pool the S′ scores in the smoke ledger, as `EPIC-010`'s trend rule pools
+    the R smokes. A slow outside slide then shows once 30 or more games are pooled, at about 140 Elo resolution.
+- **No E + X trend figure** comes from the epic read any more. The trend toward 3 000 is read only by C4's anchors and
+  by C1.
+- **An epic with no engine-core change** (no change under `src/` that the shipped `dist/uci.js` runs) would read an
+  identical pair, so it owes no C3″. This is the Architect's reading of "after each epic is done", and the owner may
+  correct it.
+
+**S′. The smoke: 10 games against Stockfish at 0.5 s a move** (replaces the R smoke at 4 s; owner item 3)
+
+- **Who plays:** one skytalix build, the candidate, as the R smoke did. The base does not play.
+- **skytalix:** `st=0.5`, level 5 with no `Skill Level` sent, `OwnBook` on, `restart=on`, and `timemargin` **50 ms**
+  (not Q1's 5 000 − 500).
+  - The reason: the engine reads the clock every `NODES_PER_CLOCK_CHECK` nodes (`src/engine.ts`). So its overshoot is
+    a fixed amount, not a share of the budget, and the largest measured was 4 ms at 100 ms. A 4 500 ms margin would let
+    a broken time check think 10× its budget and pass S-2.
+  - The overshoot at 500 ms is `UNKNOWN - verify`. `ABC-255`'s first S′ reports its largest. If that is over 12 ms
+    (a quarter of the margin), the Architect re-sets the margin before any graded S′.
+- **Stockfish, by C1's settings at this control:** Stockfish 19, `UCI_LimitStrength` true, `Threads 1`, `Hash 16`,
+  `restart=on`, `timemargin` 2 000 ms, and **`st=0.5`**.
+  - C1's rule is "at least 4 × the 95th percentile of time-to-pick-depth, with a floor of 0.5 s". Up to E 2 600 the
+    95th percentile is ≤ 19.1 ms (`…9fd1fdce` R5), so the floor decides: 0.5 s, equal time with skytalix.
+  - It is `r`'s existing Stockfish pin, unchanged. `ABC-204`'s depth guard stays.
+  - Above E 2 600, the R5-style probe in the 100 ms block runs first, and `st` = the larger of 0.5 s and 4 × p95.
+- **E = 1 650** (`r`'s default, `ABC-204`'s first pin), not the R smoke's 1 910.
+  - The basis (estimate): skytalix at 0.5 s is three time doublings under 4 s (≈ 2 074). At 50–100 Elo a doubling it
+    sits at about 1 775–1 925.
+  - At E 1 650 an unchanged build then expects about 67–83 %. That is near the 72 % that S-4's bar was set against at
+    4 s (`EPIC-010`'s milestone 1 reference).
+  - At E 1 910 it would expect about 31–52 %, and S-4's "≥ 3.0 of 10" would often stop an unchanged build.
+  - E is re-pinned when the pooled S′ score leaves 60–85 % over 30 or more pooled games: one band-rule step, kept at
+    E ≤ 2 600. That is `EPIC-011` C10's re-pin, now with a trigger. The expected score is `UNKNOWN - verify` until the
+    first S′ on `main`.
+- **The bars:** S-1, S-2 and S-4 as `EPIC-010` states them (S-4: ≥ 3.0 of 10; below that, 10 more games and ≥ 7.0 of
+  20). S-3 is C2′'s now. BA/PM records the rule.
+- **The command:** `r <candidate> <out> --budget-ms 500 --rounds 5 --concurrency 1` (openings 1–5, both colours).
+  `r` refuses `--budget-ms` today, so this is `ABC-255`'s item 2, re-pointed below.
+- **Wall time:** about 10 min (estimate: games of about 85–140 plies at 0.5 s a side, plus engine starts).
+- **When it is owed:**
+  - per strength-changing ticket, on the candidate head, beside its C2′ read;
+  - per epic, on the closing head, beside C3″;
+  - never for a value-identical ticket, which keeps its S2 reading and plays no games.
+- **Why 0.5 s keeps the smoke's job:** faults, losses on time and collapses show at any control (C2's scaling caveat,
+  "It can predict"). What the move to 0.5 s loses is the per-change game check at the shipped 4 s control. The
+  real-clock level 5 row (A5 in R-TC part 2) carries that.
+
+**R-TC. The test-control rule** (the owner's *"make sure engine is not changed internally and it works on different
+difficulty settings"*)
+
+*Part 1: a test control is harness and configuration only.*
+
+1. **Where a control is set.** A test control (100 ms, 0.5 s, 40/15, or any later one) is set only outside the
+   engine: by `cutechess-cli`'s `st=` / `tc=` / `timemargin`, by the harness under `tools/rating/`, and by the UCI
+   options the product already ships (`Skill Level`, `TimeMode`, `OwnBook`).
+   - The engine receives it as the ordinary `go movetime` or clock that any GUI sends.
+   - At 100 ms and at 0.5 s the session is at level 5, and `go()` passes min(G, 4 000) = G (`src/uci-session.ts`). So
+     every fast read takes the shipped path at rate 0.
+2. **No engine code path is keyed on the control.** That means no path keyed on a budget's value, on a test or bench
+   flag, or on the environment.
+   - The budget enters the engine core only as the deadline: `start + Math.min(options.budgetMs, HARD_CEILING_MS)` in
+     `src/engine.ts`.
+   - Read at `main` `adab5f0d`: that is the only read of `budgetMs` in `src/engine.ts`. `src/search.ts`,
+     `src/quiescence.ts`, `src/evaluate.ts` and `src/transposition.ts` read neither the budget nor the environment.
+   - **Allowed:**
+     - rules keyed on search state (depth, ply, nodes, the TT);
+     - a time rule that is a continuous function of the time left and acts the same at every control, such as W1's
+       "will the next iteration finish". That is product behaviour at every level, and C2′ grades it like any other
+       change.
+   - **Not allowed:**
+     - a branch chosen by a particular budget or control ("if the budget is 100 ms or less …");
+     - a constant tuned to one test control and used only there;
+     - a door the harness switches on;
+     - an environment read in the engine.
+3. **Every read plays the shipped artifact.** That is the built `dist/uci.js` of the SHA under test (`rating.ts`
+   passes `arg=<clone>/dist/uci.js`), the artifact `npm run uci` and the build ship.
+   - `ADR-0026`'s test-only doors stay separate exports that no shipped entry calls, and no read uses them.
+4. **A harness ticket changes `tools/` only.** That covers `ABC-255` and any harness ticket after it. Its diff holds 0
+   lines under `src/`, read from the PR's numstat at review, and the existing dry runs stay byte-equal.
+
+The check per strength-changing ticket: the review reads the diff against item 2. Any new read of the budget, the
+deadline, `movetime` or the environment in the engine core goes to the Architect. G-1 below would make this
+mechanical.
+
+*Part 2: the engine still plays at each difficulty setting.*
+
+The settings in use:
+- `Skill Level` 1–7, with budgets of 100 / 180 / 330 / 1 000 / 4 000 / 5 000 / 30 000 ms and blunder rates from 0.4
+  down to 0;
+- `TimeMode` `level`, `simple-tournament` (22 s) and `uci-clock-mode` (up to 59.5 s);
+- the test controls, 100 ms and 0.5 s.
+
+- **Every PR, already owed: `npm test`** (a mandatory gate). Its default rows prove the wiring of every setting, on
+  virtual clocks, at no new cost:
+  - in `src/levels.test.ts`: the table; level 5 at rate 0 is `chooseMove`, move for move; the seed is threaded; the
+    boundary scan (A8);
+  - in `src/uci-session.test.ts`: `Skill Level` 1–7 reaches the level and caps `go`, with `ABC-171` A6 at levels 1, 3
+    and 5 and `ABC-212` A9 at 6–7; the blunder path; `ABC-220` and `ABC-221`, the two `TimeMode` budgets.
+- **Per strength-changing ticket, the named check: the Levels deep lane.**
+  - The command: `ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/levels.test.ts
+    --reporter=verbose`. It has 41 tests and takes about 555 s (`memory-bank/90-agents-md-command-log.md` § "Levels
+    deep lane").
+  - It is the cheapest existing check that runs the changed engine at every level:
+    - A2: each of levels 1–7 on the shipped path spends its budget ± 20 % on a fine virtual step, inside its ceiling,
+      and so does level 1's blunder path;
+    - A4: level 1's blunder path over at least 200 endgame moves, and over the perft and puzzle corpus. Every move is
+      legal, the blunder rate is within ± 5 points, the worst move is never played, and the blunder is the strict
+      second-best;
+    - A5: level 5, the shipped default at 4 s, on 30 positions on the real clock, every move ≤ 5 s;
+    - `ABC-212` A4: levels 6 and 7 on the real clock, each move inside its ceiling. It also logs the depth that
+      `KEY_ARRAY_CAPACITY` is watched by;
+    - A3: level 1 solves strictly fewer puzzles than level 5, so the two ends of the scale stay ordered.
+  - The games cover the fast end: the 100 ms read is level 1's budget at rate 0, and S′ sits between levels 3 and 4.
+    A5 and the level 6–7 rows cover the slow end.
+  - QE runs it on the candidate head, host alone, beside C2′. The pass is exit 0 with 41 passed (count your run).
+    About 9 min.
+- **Per epic, on the closing head, beside C3″**, two more lanes:
+  - the self-play ladder in short mode, `LADDER_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run
+    src/ladder.test.ts` (848 s on a loaded host, the command log). It plays real games between levels 1–5, blunders
+    included, and asserts each one ends legally (A3, A4);
+  - the UCI session deep lane, `ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run
+    src/uci-session.test.ts`. Its 5 × 22 s and 3 × 59.5 s searches put both `TimeMode`s on the real clock. About
+    5 min (estimate).
+  - Together with the Levels deep lane that is about 30 min. Each lane is under 1 h, so none is asked.
+
+**Gaps (for BA/PM to cut; nothing covers them today)**
+
+- **G-1: R-TC item 2 has no mechanical guard.** Proposed: one default-lane source-scan row, in the shape of
+  `levels.test.ts`'s boundary row A8. It reads `src/engine.ts`, `search.ts`, `quiescence.ts`, `evaluate.ts` and
+  `transposition.ts`. `budgetMs` may be read only in the deadline expression, and no file may read the environment or
+  argv. It is test-only, size XS, and touches one `src/` test file. Without it, item 2 rests on review.
+- **G-2: the Levels deep lane's recorded trigger is too narrow.** The command log says "after any change to
+  `src/levels.ts`, `src/engine.ts` or `src/virtual-clock.ts`". It misses the files strength tickets change:
+  `search.ts`, `evaluate.ts`, `quiescence.ts`, `transposition.ts` and the move-ordering code. The per-ticket duty above
+  covers this, but the trigger line should name the engine core. Records only, a Scribe line.
+- **Recorded, not proposed:** no lane plays real games at levels 6 and 7, or at any level against an outside engine.
+  The ladder covers 1–5 in self-play. Levels 6 and 7 are at rate 0 and differ from level 5 by budget alone, so A2 and
+  `ABC-212` A4 are judged enough. More would be gold plating.
+
+**`ABC-255` re-pointed again** (for BA/PM)
+
+- **Item 1 stays:** `d --budget-ms 100`, with `timemargin` 50 ms. It now carries both C2′ (`--rounds 50`) and C3″
+  (`--rounds 200`).
+- **Item 2 changes:**
+  - `rpair` at 100 ms is no longer needed, because there is no per-epic pair.
+  - Instead, `r` accepts `--budget-ms 500`: skytalix gets `st=0.5` and `timemargin` 50 ms. Stockfish's pins are
+    unchanged (`st=0.5`, 2 000 ms margin), and `--elo` keeps its default of 1 650.
+  - Every existing `r`, `d` and `rpair` default, pin and dry-run output stays byte-equal.
+- **Acceptance:**
+  - a `--dry-run` row for each of the three command lines (C2′, C3″, S′);
+  - the `ABC-208` sanity C2′ read and the identical-pair C2′ read, as before;
+  - one S′ on `main`, reported and not graded: the score and the largest overshoot at 0.5 s;
+  - 0 lines under `src/` (R-TC item 4).
+- **`ABC-256` (B0)** was C3′'s base half, and with C3′ gone it has no routine use. **The Architect recommends dropping
+  it now.** The 100 ms reading against Stockfish that C4 and C1 need is cut with A0, when the owner is asked for it.
+
+**C4 and C1 re-pointed**
+
+- The routine 100 ms outside figure (C3′'s head figure) no longer exists.
+- A0 and A1 each take their own 100 ms reading against Stockfish on the same build: 200 games, with C3′'s Stockfish
+  settings and its E > 2 600 probe rule, about 0.5–0.8 h. It is part of the anchor the owner is asked for.
+- **C1's "when to spend it":** the claim is spent only when a 100 ms reading of that kind on the latest head, plus the
+  measured offset, reaches 3 000.
+- `r` at 100 ms (skytalix and Stockfish both at `st=0.1`) is cut with A0, not now.
+
 ### D6. The order proposed (speed and algorithms interleaved)
 
 Ordered by expected Elo per cost, by file collisions (`ADR-0055` D2), and by what each step needs measured.
@@ -679,6 +916,12 @@ evidence.
   100 ms). The readings in item 7 are C3′ (400 games at 100 ms) after each epic, plus C4's anchors and the C1 claim.
   The order is unchanged.
 
+*Dated 2026-11-01 (`arch-adr0056-owner-answers`; owner `…43098cef`):*
+- **Per strength ticket:** C2′, plus S′ (10 games at 0.5 s against Stockfish) and the Levels deep lane (R-TC part 2).
+- **Readings, item 7:** after each epic, C3″ (400 games head to head at 100 ms), plus S′, the Levels deep lane, the
+  ladder in short mode and the UCI session deep lane on the closing head. Then C4's anchors, each with its own 100 ms
+  outside reading, and the C1 claim. The order is unchanged.
+
 ### D7. What is the owner's call
 
 - **Q-3K-1, the scale and the time** a "3 000" is read on (D5 items 1, 2 and 5). The proposal is Stockfish 19
@@ -727,6 +970,18 @@ evidence.
 - **New, the owner's if he wants it:** whether the R smoke (4 s, 10 games) stays beside C2′. The Architect recommends
   that it does.
 
+*Dated 2026-11-01 (`arch-adr0056-owner-answers`; his word `…43098cef`):*
+- **The GAIN and NEUTRAL bars: answered, "2. ok".** They stand, owner-accepted.
+- **The epic opponent: answered, "1. b".** The epic is read head to head (C3″). Stockfish is no longer the epic
+  opponent.
+- **The R smoke: answered (item 3).** It stays, at 0.5 s a move (S′), under the rule R-TC.
+- **The Architect's readings, which he may correct:**
+  - S′ at E 1 650 with a 50 ms margin;
+  - an epic with no engine-core change owes no C3″;
+  - the lanes R-TC part 2 names.
+  None of them is a new owner call.
+- **Q-3K-4, Q-3K-6, Q-3K-7, Q-3K-8: still open.**
+
 ### D8. What BA/PM would cut on a yes
 
 - On Q-3K-2/3: the M0 ticket (`tools/` only; acceptance: an SPRT run on a known +gain pair such as `ABC-208`'s door
@@ -737,6 +992,10 @@ evidence.
 - *Dated 2026-11-01 (`arch-adr0056-100ms-fold`):* the "On Q-3K-2/3" line is superseded. The M0 ticket is the
   fixed-count lane (`ABC-255` re-scoped, size S), with acceptance as D5's dated block lists it. The SPRT H1/H0
   acceptance is withdrawn.
+- *Dated 2026-11-01 (`arch-adr0056-owner-answers`):* `ABC-255` item 2 and its acceptance change, as D5's block "the
+  owner's three answers" lists them: `r --budget-ms 500` in place of `rpair` at 100 ms, plus an S′ row. The size stays
+  S. `ABC-256` is recommended dropped. G-1 (a source-scan row, XS, test-only) and G-2 (the Levels deep lane's trigger,
+  a records line) are offered for cutting.
 
 ## Alternatives
 
@@ -784,6 +1043,19 @@ evidence.
     - per strength change ≈ 0.4 h (C2′), and per epic ≈ 1.0–1.6 h (C3′), both owner-set;
     - the anchors and the claim as before, asked of the owner first;
     - no SPRT cost.
+- *Dated 2026-11-01 (`arch-adr0056-owner-answers`):*
+  - **Moot now:** games per hour for the C3′ pair against Stockfish. skytalix's E at 100 ms is wanted only when A0
+    is asked.
+  - **Added `UNKNOWN - verify`:**
+    - skytalix's overshoot at 500 ms (`ABC-255`'s first S′ reports it);
+    - skytalix's expected S′ score at E 1 650 (estimated at 67–83 %);
+    - S′'s wall time (estimated at about 10 min);
+    - how far C3″'s four games per opening fall short of independent games.
+  - **New risk, the owner's choice:** with both reads self-play, self-play non-transfer is unseen between 40/15
+    readings. Pooling the S′ scores is the cheap mitigation (C3″).
+  - **Host cost, re-stated (estimates):**
+    - per strength change ≈ 0.7 h: C2′ ≈ 0.4 h, S′ ≈ 10 min, the Levels deep lane ≈ 9 min;
+    - per epic ≈ 2.1 h: C3″ ≈ 1.55 h, S′, and three lanes of about 30 min together.
 
 ## Rollback
 
