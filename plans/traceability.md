@@ -1674,3 +1674,4 @@ _Updated: 2026-08-19 by BA/PM (task `cut-agents-md-cap-2026-08-19`, Workflow 07)
 | arch-adr0056-owner-fold (merge) | ADR-0056 accepted in direction; 40/15 claim plan; fast SPRT control; order ruling | records 4b538aea | — | merged 2026-11-01, not pushed | Done (Orchestrator) |
 | bapm-epic011-dedupe (merge) | EPIC-011 created; dedupe audit; tickets re-homed; ABC-255..258 cut; EPIC-006 closed | records 358be1ec | — | merged c596aad5 2026-11-01, not pushed | Done (Orchestrator) |
 | arch-adr0003-amend (merge) | ADR-0003 clauses 1/3 amended for lazy legality (ABC-254); (1-R) ruling | records 45b22a89 | — | merged 2026-11-01, not pushed | Done (Orchestrator) |
+| bapm-ABC-254-ready (merge) | ABC-254 DoR 10/10; back in EPIC-010 milestone 1b, first | records d9014849 | — | merged 2026-11-01, not pushed | Done (Orchestrator) |
