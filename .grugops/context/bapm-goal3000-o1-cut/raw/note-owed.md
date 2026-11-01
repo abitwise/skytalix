@@ -1,0 +1,10 @@
+# `bapm-goal3000-o1-cut`: what is owed after this cut, and to whom
+
+- **Owner (via the Orchestrator):**
+  - **Q-SP-3** (`ADR-0055` D5): yes or no to amending the owner-ratified `ADR-0003` clauses 1 and 3 so lazy legality ((c2)) is built now. `ABC-254` waits on it (9/10). On no, it closes as declined and O1 is ≈ 1.08–1.35×.
+  - **Q-SP-2** (information): `ADR-0055` D3's bars are used only by `ABC-250` A4 and apply as written unless he resets them before the reading.
+  - **Q6** (after `arch-algo-analysis` reports): the 3 000 goal's scale, and whether it becomes a measure and how it is read (MQ-3000). Default: no ticket, gate or measure bound; M2 "not LOSS".
+- **Orchestrator:** board rows for `ABC-250`–`ABC-254`; `Backlog → Ready` for `ABC-250` (10/10) and `ABC-253` (10/10, pull after the O1-b chain); pull order `ABC-250` → `ABC-251` → `ABC-252` → `ABC-253`, with `ABC-254` first only if the owner's yes and its ADR arrive before `ABC-250` enters development; `ABC-249` recommended before `ABC-251`. Each nps reading needs an ALONE window (≈ 1 h each, estimate). The trace render from the artifacts note's refs. The board header and EPIC-010 board line still say "goal >= 2 700" (board line 1244); updating them is the Orchestrator's.
+- **Architect/Design:** (1) at design, confirm value-identity for each ticket (the `arch-ABC-235` role), and that `ADR-0003` clause 1 is read as "make/test/unmake stays the strategy" for `ABC-250`/`ABC-252` (they pack moves, not change legality); if read literally, those tickets wait on that reading. (2) On the owner's Q-SP-3 yes, the ADR amending `ADR-0003` for `ABC-254`. (3) `arch-algo-analysis` owns MQ-3000 (its item 5) and the algorithm side; BA/PM cuts nothing there until it reports.
+- **BA/PM (later hops):** fix `ABC-251`'s form and re-score it on `ABC-250`'s A4 reading; re-score `ABC-252` on `ABC-251`'s merge (or drop it); re-score `ABC-254` on the owner's word.
+- **Not owed:** nothing on `ABC-231`…`ABC-239`; no ADR edit by BA/PM.
