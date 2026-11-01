@@ -1,3 +1,4 @@
+_Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — OWNER: "go ahead, you can work in-parallel apart from running tests, the machine has 24 threads on 12 cores". Rule: coding/records in parallel; every test/build/timing run waits for `host-clear` (set when the timing probe ends) and is serialized by `flock host-test.lock`; QE timing reads hold the lock for their whole window. ABC-249 and ABC-254 pulled → `se-ABC-249`, `se-ABC-254`. Running: `qe-tc-depth-probe` (ALONE timing). Width 3/3._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — `bapm-epic009-close` merged: **EPIC-009 CLOSED** (milestone 2 MET). Owed LOW (next BA/PM hop): EPIC-011 § Close-out still says ABC-223 In Development; EPIC-006 page front matter still `status: backlog`. Open epics: EPIC-010 only (then EPIC-011). Running: `qe-tc-depth-probe` (ALONE). Width 1/3._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a, …2896c6eb) — OWNER: **no SPRT. Per strength change: 100 games at 100 ms (new vs base); per epic: 400 games at 100 ms.** Owner-set, so no further > 1 h ask for these two; value-identical tickets keep their nps reading. Records owed after `qe-tc-depth-probe`: Architect (ADR-0056 C2/C3) and BA/PM (EPIC-010/011 merge rule; ABC-255 re-scope). Width 2/3._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — **ABC-223 DONE** (qe-ABC-223 PASS_WITH_GAPS; merged b45162fc). QE-223-a: a foreign vitest (another Claude session's repo, plus a /app platform-tooling vitest) ran in 48.8 % of samples → owner told again. `qe-tc-depth-probe` claimed (ALONE ≤ 45 min, wait-clear) + `bapm-epic009-close` (records: ABC-223 page, EPIC-009 milestone 2 grade and close). Next: ABC-249 → ABC-254 → ABC-250… Width 2/3._
@@ -1290,11 +1291,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## Ready (WIP 4/8)
-- [ABC-254] Lazy legality: make/test/unmake only for king moves, en passant, pinned pieces and checks (ADR-0055 O1-d; size: M, priority: P2; DoR 10/10; milestone 1b; **owner YES 2026-11-01 (…f7a50e95)**; → Ready when `arch-adr0003-amend` merges) **Stays EPIC-010 milestone 1b, first once arch-adr0003-amend merges** (ABC-254 page exception: owner yes + amending ADR before ABC-250 enters development) **→ Ready 2026-11-01 (bapm-ABC-254-ready; first in 1b)**
+## Ready (WIP 2/8)
 - [ABC-250] Moves packed into integers in reused typed arrays for generation, legality and make/unmake, read on perft first (ADR-0055 O1-b part 1; size: M, priority: P2, value-identical S2, 0 games; DoR 10/10; EPIC-010 milestone 1b; bars ≥ 1.25× merge / below → not merged, ABC-251 narrows, ABC-252 dropped; Architect to confirm ADR-0003 clause 1 reading at design; after ABC-223 and ABC-249)
 - [ABC-253] Zobrist keys travel as two 32-bit halves in the search, the TT and the repetition scan; bigint at the API (ADR-0055 O1-a; size: M, priority: P3, value-identical S2; DoR 10/10; milestone 1b; ≥ 1.02×; pull after the O1-b tickets)
-- [ABC-249] A pre-root repetition met four or more plies into the search scores 0, so QPLY4 turns the lane red (QE-248-c; size: XS, priority: P3, test-only, UAT waived; DoR 10/10; cut by bapm-ABC-248-close; one src/engine.test.ts row ≤ 100 ms; after ABC-223 (host-alone order))
 
 
 
@@ -1310,7 +1309,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 2/3)
+- [ABC-249] A pre-root repetition met four or more plies into the search scores 0, so QPLY4 turns the lane red (QE-248-c; size: XS, priority: P3, test-only, UAT waived; DoR 10/10; cut by bapm-ABC-248-close; one src/engine.test.ts row ≤ 100 ms; after ABC-223 (host-alone order)) **pulled 2026-11-01 → `se-ABC-249` (parallel coding; tests serialized by host-test.lock after the probe)**
+- [ABC-254] Lazy legality: make/test/unmake only for king moves, en passant, pinned pieces and checks (ADR-0055 O1-d; size: M, priority: P2; DoR 10/10; milestone 1b; **owner YES 2026-11-01 (…f7a50e95)**; → Ready when `arch-adr0003-amend` merges) **Stays EPIC-010 milestone 1b, first once arch-adr0003-amend merges** (ABC-254 page exception: owner yes + amending ADR before ABC-250 enters development) **→ Ready 2026-11-01 (bapm-ABC-254-ready; first in 1b)** **pulled 2026-11-01 → `se-ABC-254` (parallel coding; tests serialized by host-test.lock after the probe)**
 
 
 
