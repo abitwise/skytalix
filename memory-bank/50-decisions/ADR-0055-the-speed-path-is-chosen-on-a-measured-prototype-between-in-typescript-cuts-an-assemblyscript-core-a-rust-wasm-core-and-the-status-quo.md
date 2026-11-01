@@ -25,6 +25,9 @@ id: ADR-0055
     O2 or O3 needs a new owner word and the D3 prototype first.
   - The order of O1 against the algorithm work toward the owner's new goal (3 000 Elo, same note) is proposed in
     `ADR-0056` (PROPOSED). It does not change this ADR.
+- *2026-11-01, dated status line by Architect/Design (task `arch-d3-under-load`, records only, at `main` `83b0ff2d`).*
+  D3's **validity rule**, as O1 tickets cite it for their node-rate criteria, is amended for a shared host: see
+  § Addendum — 2026-11-01. Forward-only. The D3 prototype itself stays not accepted. No bar, NFR or scope moves.
 
 *Original status, kept:* **PROPOSED** 2026-11-01 by Architect/Design (task `arch-speed-path-spike`, records and reading only, at `main`
 `3e35b667`). **Nothing is decided here.** Nothing was run, built, installed or timed: `qe-ABC-223` holds the host
@@ -43,6 +46,115 @@ its basis and confidence. An estimate is not a reading.
 - **What this ADR amends if accepted:** nothing yet. Each option names the ADRs it would amend (§ Decision, D5).
   Accepting this ADR accepts only the prototype (D3) and the order (D4). Each later step brings its own ADR or
   ticket to the owner or the Orchestrator, as D5 says.
+
+## Addendum — 2026-11-01: D3's validity rule on a shared host (task `arch-d3-under-load`, QE-254-a)
+
+**Why.** Two A4 reads of `ABC-254` started ALONE and came back UNRESOLVED under D3's 5 % spread rule. They are
+`qe-ABC-254` (`…1c801504`, `…09221f68`) and `qe-ABC-254-a4` (`…ab3062eb`, `…d9649ce2`, `…f704f071`). In both, foreign
+load arrived within about a minute of the start. Most of it came from processes shorter than one 4 s run. The rule
+as adapted grades a not-clear pair's second attempt whatever it reads. So one burst inside 5 runs breaks the range,
+and the board voids twice.
+
+**What the seen runs show** (the 194 run records of both reads, read with `git show`; nothing was run by this hop):
+- **The loss is per cycle, not lost time slices.** Each probe's own CPU time is 4.30–4.54 s for a 4.0 s search,
+  whatever the load. The process is not descheduled. The run at 5.15 foreign cores read 667 079 nps by wall time and
+  600 576 nodes per CPU-second. Both are about 15 % below that board's clean runs.
+- **Slowdown tracks the per-run foreign-cores reading.** Taken from each board and build's median at ≤ 0.6 foreign
+  cores:
+  - 130 runs at ≤ 0.8 deviate −4.3 % to +2.4 %;
+  - 16 runs at 1.0–1.5 deviate by a median of −2.8 %;
+  - 37 runs at 1.5–2.5 by −5.6 %;
+  - 9 runs above 2.5 by −9.1 %.
+- **The host** (read from sysfs this hop): 4 Zen 5 cores (CPUs 0–3, SMT siblings 12–15, 5.16 GHz max) and 8 Zen 5c
+  cores (4–11 and 16–23, 3.29 GHz max). Foreign bursts compete for the four fast cores. Which mechanism costs the
+  probe is `UNKNOWN - verify`: a move to a slow core, a shared SMT sibling, or lost boost.
+- **These numbers calibrate the rule only.** No hypothetical grade of either read under the rule below was computed.
+
+**Ruling (D3-V2).** Read D3's validity, wherever a ticket cites it for a node-rate A/B criterion, as follows. That
+covers `ABC-254` A4 and the speed rows of `ABC-250`, `ABC-251`, `ABC-253` and later O1 tickets.
+- **Unchanged:**
+  - the bars;
+  - the statistic: per board, head's median nps ÷ base's median nps;
+  - 5 graded runs per build per board, one fresh process per run, base and head paired and interleaved;
+  - (v1) values;
+  - the 5 % spread bar, as (max − min) / median per build and board;
+  - one board re-run, then VOID;
+  - (v3) thermal, the start precondition, the gate waits, the host lock and the SHARED label.
+- **1. Discard, never force.** A pair is **admitted** only when, after it, all of these hold:
+  - no foreign vitest or `cutechess-cli` is present;
+  - both runs read foreign cores ≤ **0.8**. Foreign cores = (host busy CPU-s from `/proc/stat` − the probe's own
+    CPU-s) / wall. The threshold was 1.0. In the seen runs, no pair that was clear at 1.0 had a run between 0.8 and
+    1.0;
+  - both runs' after-run Tctl is below 85 °C.
+
+  A pair that is not admitted is **discarded**. It is logged with its foreign-cores readings and never enters a
+  median, a spread or a ratio. "The second attempt is graded whatever it reads" is struck.
+- **2. Blind admission, fixed count.**
+  - Admission reads host counters and the probe's CPU time only, never nodes, nps, depth or a ratio.
+  - A board's reading is its first 5 admitted pairs. No attempt runs past the fifth admitted pair, and no attempt is
+    chosen or dropped by its value.
+  - Order: the next attempt runs base first when the board's admitted count is even, and head first when it is odd.
+    A retry keeps the discarded attempt's order. So the admitted pairs alternate 3 : 2.
+- **3. Cap.**
+  - A board gets at most **15 attempts** per schedule (main or re-run).
+  - Boards still go round by round, as today.
+  - A board with fewer than 5 admitted pairs at its cap is **VOID-LOAD**: not a result and not a miss. The
+    ticket's miss rule does not fire.
+  - Worst case, by estimate: about 8.3 min per schedule over four boards, so about 17 min with one board re-run.
+- **4. Agreement guard.**
+  - The median of the 5 admitted paired ratios (head ÷ base) is reported for every board.
+  - If it and the graded ratio fall on different sides of any bar the board is read against, the board takes D3's
+    one re-run, then VOID. The bars: 1.10, 1.00, and 0.97 for the in-check guard.
+- **5. Forward-only.** This applies only to a fresh read whose pre-registration is sealed after this addendum.
+  - It does not re-grade `qe-ABC-254` or `qe-ABC-254-a4`. Both stay UNRESOLVED as graded.
+  - Their runs are never pooled into a fresh read, and the fresh read is graded on its own runs alone.
+  - Earlier MET readings (`ABC-235`, `ABC-240`) stand as read.
+
+**False-pass risk against today's rule.**
+- **No bias in expectation.** Admission is blind to build and outcome, and order alternates, so discarding pairs
+  does not tilt the ratio.
+- **Residual contamination** below 0.8 foreign cores reaches about −4 % on one run. In the seen runs, 5 of 130 runs at
+  ≤ 0.8 were below −3 %.
+  - To move a median of 5, such hits must land on base and spare head in at least 3 of 5 admitted pairs.
+  - Then only a true ratio of about 1.06 or more can cross 1.10.
+  - Assuming independence (`UNKNOWN - verify`), that is about 10 × 0.04³ ≈ 6 × 10⁻⁴ per board.
+  - The agreement guard cuts the cases near a bar further.
+- **Today's rule** carries the same 5 % envelope and the same statistic. Forced dirty attempts make it void, not
+  pass, so its false-pass rate is low mainly because it rarely grades under load.
+- **Net:**
+  - The false-pass risk per graded board is about equal to today's.
+  - The rule grades more boards, so absolute false passes can rise with them, at about 10⁻³ per board.
+  - Its tightened threshold is stricter than today's.
+- **Disclosed:** the threshold and the cap were set by an Architect who had seen `ABC-254`'s numbers. They bind only
+  fresh runs, and no term loosens a bar.
+
+**Rejected.**
+- **CPU-time nps:** the loss is per cycle (above), and helper-thread CPU (GC, compiler) varies by build.
+- **Paired-ratio median as the graded statistic:** clean paired ratios on `position-6` spread up to about 8.4 %, so a
+  spread bar on it would be a new number, which is a bar change. It stays as the guard in item 4.
+- **A 10 % spread bar:** it loosens the instrument.
+- **More runs with a trimmed range:** more host time, and the contaminated runs stay in.
+- **`taskset` pinning to the fast cores:** it changes what is measured (V8 helper threads) and is untried here. It is
+  the next step if a fresh read voids for load.
+
+**What an ALONE window needs (the Orchestrator's duties).**
+- **Before dispatch:**
+  - Every hop of this session has returned, records hops included. Their `git` and `node` seal processes are the
+    short bursts the snapshot cannot name.
+  - The board's "Running:" list names only the timed hop.
+  - No background job of this session is alive.
+- **During the window:**
+  - Nothing else is dispatched.
+  - The Orchestrator runs no command and waits on the hop's completion notification.
+  - The host lock orders only the hops that take it, so it does not make a window ALONE.
+- **The brief records it:** the window's start and end UTC, and that no other hop ran.
+- **Foreign sessions are outside this control:** the owner's `grugops` vitest (seen in `qe-ABC-254`) and other repos.
+  The start precondition and item 1 absorb their bursts. If a fresh read returns VOID-LOAD, the Orchestrator either:
+  - asks the owner for a named quiet window, which is a host ask and not a ruling change; or
+  - routes back here for the pinning step.
+
+**Owner?** Not owed. No bar, NFR bound, requirement or scope moves. One threshold tightens and forced grading becomes
+discard. The D3 prototype stays not accepted.
 
 ## Context
 
