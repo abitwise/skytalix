@@ -1,3 +1,4 @@
+_Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — ABC-248 SE done (no STOP; all four levers met their conditions; 4 rows to ENGINE_DEEP, 2 stay as sole WRONGSIDE killers; informal G8 9.03 s vs 9.36 s), code review PASS → In Review; `qe-ABC-248` ALONE (W1; SE-248-a escaped -t; SE-248-b; P-2 five-mutant read). Width 1/3._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — ABC-246 DONE (qe-ABC-246 PASS; UAT waived; G8 H 9.51 s / B 9.38 s; merged 0ce5041d, not pushed). EPIC-009 QE-221-a closed. ABC-248 pulled → `se-ABC-248` ALONE (tranche 2). Next: qe-ABC-248 (W1) → qe-qehop-growth → ABC-223. Width 1/3._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — `bapm-page-closes` merged: ABC-243/244/245 pages closed. Rulings (delivery): P-1 (two stale labels in src/transposition.test.ts NFR-009 deep row) → carried, folds into the next ticket that edits that file (no ticket now); P-2 (S241M5, QPARITY, QCLOCK, QPLY4, QPATHOFF over the whole default lane) → rides in `qe-ABC-248`'s brief; QE-244-a and QE-245-b carriers = ABC-248. Owed LOW: ABC-248 page front matter reads column Backlog (fold at its close). Running: `qe-ABC-246` (ALONE). Width 1/3._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — `bapm-m1-batch-fold` merged: **EPIC-010 milestone 1 DONE (MET)**; trend reference 72.00 % ± 6.11 (flag 52.00 %), 4 000 ms pool opens empty; tickets table rows folded; QE-M1B2-b rule (batch harness launched detached); ABC-247 page closed. Owed LOW: ABC-243/244/245/248 page front matter (BA/PM fold), ADR-0053 d10 wall line 22.22 h (Architect, optional). Running: `qe-ABC-246` (ALONE). Width 1/3._
@@ -1281,8 +1282,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-248] The default lane sheds about 0.3 s and loses no coverage (ADR-0046 tranche 2: T2c + T2a narrow + T2d; test-only) (size: S, priority: P1, DoR 10/10; cut by bapm-tranche2-ruling; after ABC-246 (same file); W1 applies at its gate; **pulled 2026-11-01** → `se-ABC-248` ALONE; carries QE-244-a, QE-245-b; P-2 rides in its QE)
+## In Development (WIP 0/3)
 
 
 
@@ -1310,7 +1310,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-248] The default lane sheds about 0.3 s and loses no coverage (ADR-0046 tranche 2: T2c + T2a narrow + T2d; test-only) (size: S, priority: P1, DoR 10/10; cut by bapm-tranche2-ruling; after ABC-246 (same file); W1 applies at its gate; **pulled 2026-11-01** → `se-ABC-248` ALONE; carries QE-244-a, QE-245-b; P-2 rides in its QE; SE done 71700836 (branch @ 18bad5fb; T2c-a/b kept, T2a 4 moved / 2 stayed (sole WRONGSIDE killers), T2d A4-a2 step 1 000; 2 362 tests; informal G8 −0.33 s); code review PASS → `qe-ABC-248` ALONE (W1))
 
 
 
