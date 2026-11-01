@@ -11,6 +11,19 @@ epic: EPIC-010
 
 # ABC-225: an interleaved R pair in the rating harness
 
+> **USED 2026-11-01, folded by BA/PM** (task `bapm-m1-batch-fold`, records only, at `main` `832ff246`; nothing run).
+> **The page stays Done.** `rpair` (with `ABC-247`'s `Skill Level` 6) ran `EPIC-010`'s milestone-1 batch
+> (`qe-EPIC-010-m1-batch-2`, verdict `…1a53a7f9`): **NOT LOSS (NEUTRAL), X −58.3 ± 77.9**, base `ca6e675c` 78.25 %,
+> head `51902be5` 72.00 %, 400 / 400 games, 0 faults, 0 time losses, no `halted:` line. QE's own recomputation from the
+> PGNs equals the tool's lines to the digit.
+>
+> - **The wall, read:** session 22.22 h at width 1, 18.0 games/h (3.33 min a game), 0 pauses, inside the restated
+>   21.7–24.1 h. The withdrawn 18.5 h stays withdrawn.
+> - **The tool has no pause or resume of its own.** The batch's thermal pause was QE's watcher sending `SIGSTOP` to the
+>   harness, and run 1 died when the agent's task runner saw the stopped child (QE-M1B2-b, VOID at 48 min). Later batch
+>   PREREGs launch the harness detached; the rule is on `EPIC-010` § The batch: what. No tool change is asked.
+> - Notes: `.grugops/context/bapm-m1-batch-fold/notes/`.
+
 > **RESTATED 2026-10-31 by BA/PM** (task `bapm-rpair-level6-cut`, records only, at `main` `278a9bb7`; nothing run, built or
 > timed). Source: `qe-EPIC-010-m1-batch` `…5967dfc1` (QE-M1B-a HIGH, QE-M1B-b MEDIUM) and the Orchestrator's route (A)
 > (`orch-2026-10-30a` `…fb0c8978`). **The page stays Done, and A1–A6 stay MET as written.**

@@ -1,0 +1,28 @@
+# bapm-m1-batch-fold: what changed where (records commit f0b57fc0), and what is left owed: four stale ticket pages, one board-template glitch, one optional ADR-0053 d10 line
+
+Recorded as an observation, not an artifact-ref: no §14 gate run backs it.
+
+## Files changed (commit `f0b57fc0`, branch `grugops/bapm-m1-batch-fold`)
+- `plans/epics/EPIC-010-…md`: a MILESTONE 1 DONE block at the top (verdict, grade table, QE-M1B2-b/c/d, trend
+  reference, wall); dated lines in § What 10 games can and cannot see, layer 2's flag cell, the trend's own error,
+  § The batch: when, § The batch: what (the QE-M1B2-b rule), § After a passing batch, the ledger's reference line, the
+  ledger's "until milestone 1's batch" bullet (closed), a new bullet "The 4 000 ms pool", § Cost on this host per batch,
+  and the milestones table's close row; tickets-table rows 7, 8, 19–23 and one footer line.
+- `plans/tickets/ABC-225-…md`: a USED block (the batch's reading and wall); page stays Done.
+- `plans/tickets/ABC-247-…md`: front matter `ready` → `done`, `Ready` → `Done`, a `closed:` line; a CLOSED block.
+- Not touched: `src/`, `tools/`, `data/`, ADRs, `AGENTS.md`, `plans/board.md`, `plans/traceability.md` (the Orchestrator
+  writes the merge row there; the trace row is in the brief's § Result).
+
+## Owed, not done here (outside the brief's Do list)
+- **Stale ticket pages:** `ABC-243` (`status: ready`, `column: Ready`; Done `3628fe99`), `ABC-244` (`ready` / `Backlog`;
+  Done `24b22339`), `ABC-245` (`ready` / `Ready`; Done `2cce84e0`), `ABC-248` (`column: Backlog`; Ready on the board).
+  Each close needs its QE gaps dispositioned, so it is a separate BA/PM fold. LOW.
+- **Board (the Orchestrator's):** the `ABC-246` row sits at `plans/board.md` line 1152, inside the HEADING FORMAT
+  template comment, while `## In Development` reads `(WIP 0/3)` and `se-ABC-246` runs. The same glitch was fixed once
+  before for `ABC-225` / `ABC-235` (board line of 2026-10-30). LOW.
+- **Optional, for the Architect:** `ADR-0053` d10 says "The batch's wall time grows by `UNKNOWN - verify`". It is now
+  read: 22.22 h at width 1, 4 000 ms both sides, via `Skill Level` 6 (`ABC-247`; d10 does not name level 6). A one-line
+  dated note would close that `UNKNOWN`. Not needed for any finding here; no ADR edit was made.
+- **For the owner, information only (via the Orchestrator):** QE-M1B2-c (host shared with another repository's
+  `vitest`) and QE-M1B2-d (negative point estimate, −58.3 Elo, inside the reference from now on). No decision is
+  pending from this fold.

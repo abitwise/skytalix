@@ -10,6 +10,54 @@ owner: BA/PM
 
 # EPIC-010: the verified engine gaps, closed one measured change at a time, against an outside opponent
 
+> **MILESTONE 1 DONE 2026-11-01, graded by BA/PM** (task `bapm-m1-batch-fold`, records only, at `main` `832ff246`;
+> nothing run, built or timed; `src/`, `tools/`, `data/`, the board, the ADRs and `AGENTS.md` untouched). Source:
+> `qe-EPIC-010-m1-batch-2` (PREREG `…316833e1`, VOID run 1 `…3fb3b1fd`, verdict `…1a53a7f9`, run `…428e3797`, findings
+> `…f9a3c308`), merged `5325a0f0`.
+>
+> **Milestone 1's batch reads NOT LOSS (NEUTRAL): X = −58.3, Y = 77.9, X + Y = +19.6 ≥ 0.** Base `ca6e675c` (main just
+> before `ABC-230`) 151/38/11 = **78.25 % ± 5.48 points**. Head `51902be5` (main at spawn, with `ABC-247`) 141/53/6 =
+> **72.00 % ± 6.11 points**. 200 + 200 games at 4 000 ms on both sides (`Skill Level` 6), against Stockfish 19 E 1 910,
+> width 1. 0 faults, 0 time losses, 400 / 400 games. The block-01 guard passed on both builds, and all 20 PGNs show 0
+> skytalix moves at 3.0 s.
+>
+> **The grade, by the milestone's own rule** (§ The batch: when and what: "not LOSS (X + Y ≥ 0) passes"): **milestone 1
+> is DONE and MET.** Every order row is Done (`ABC-226`, `227`, `225`, `228`, `229`, `230`, `235`, `240`, `241`), and
+> its close, the batch, is not LOSS.
+>
+> | # | measure | read at milestone 1 | grade | source |
+> |---|---|---|---|---|
+> | close | the batch is not LOSS | X + Y = +19.6 | **MET** | `…1a53a7f9` |
+> | M1 | every value-changing merge passed the rule | 4 of 4 met S-1 to S-4 (`ABC-230` D 5.5 / R 8.0, `ABC-228` 5.0 / 7.0, `ABC-241` 6.0 / 6.5, `ABC-229` 4.5 / 9.0; 0 faults, 0 time losses). 2 of 2 value-identical merges met S2 (`ABC-235` `…c575d703`, `ABC-240` `…19068f9d`) | **MET** (milestone 1's part) | § The smoke ledger |
+> | M2 | not weaker outside, at the close | not read. M2 is the epic-close batch; this reading stands as M2 only if the epic stops here (§ The batch: what) | — | — |
+> | M3, M4 | the gaps are closed; nothing regressed | read on `main` at the epic's close | — | — |
+> | M5 | the owner's decisions stayed his | `ADR-0053`, `ADR-0054` and `ADR-0020` § AMENDMENT accepted on his word; level 5's 4 000 ms on his OQ-228-1 (ii); Q1 deferred and Q3 answered by him; `ABC-247` was `tools/` only, with no ADR (Orchestrator `…fb0c8978`) | **MET so far** | § Owner questions |
+>
+> - **QE-M1B2-d (INFO): what the grade does not say.** The point estimate is negative. The head scored 6.25 points
+>   (−58.3 Elo) below the base, and only the pair's ± 77.9 keeps it out of LOSS (margin +19.6). A fall of tens of Elo
+>   stays invisible at 200 + 200 games (`RISK-EPIC010-01`). The new reference is read on this head, so a real fall of
+>   that size, if there is one, sits inside the reference, and the trend cannot see it. A bigger batch (400 + 400) or
+>   the owner's longer-thinking games run only on his word (§ The batch). Information for the owner; nothing is asked.
+> - **The new 4 000 ms trend reference is 72.00 % ± 6.11 points** (head `51902be5`, 200 R games, 141/53/6). **The flag
+>   reads 52.00 %:** ≥ 30 pooled R games at or below 52.00 % pull the next batch forward. **The pool restarts here,
+>   empty.** The waiting rows of `ABC-228`, `ABC-241` and `ABC-229` (22.5 / 30 at 4 000 ms) are inside this head, so they
+>   close unpooled and are never judged. § "Did things get worse?" and § The smoke ledger carry dated lines. The
+>   3 000 ms reference (64.75 %, flag 44.75 %) closed on 2026-10-30 and stays on record only.
+> - **QE-M1B2-b (MEDIUM, QE method): a rule for every later batch PREREG**, placed in § The batch: what (dated line).
+>   No ADR edit is needed: it says how the harness is launched, not what the batch measures.
+> - **QE-M1B2-c (MEDIUM, host): recorded.** The batch was briefed STRICTLY ALONE, but another repository on the host
+>   ran `vitest` in bursts: 102 of 1 332 watcher ticks (7.7 %), and three block-runs above 25 % (base b01 34 %, base
+>   b04 30 %, candidate b05 42 %). It drove run 1's thermal pause and, through QE-M1B2-b, its VOID. It was logged and
+>   never killed. It is not a cause under the PREREG, and no block shows a fault, a time loss or a clock off 4.0 s. Its
+>   effect on the scores is `UNKNOWN - verify` (it fell on both sides). The Orchestrator routed it to the owner. **No
+>   ticket:** the host is shared outside this repository, and the PREREG's wait-clear, contamination log and thermal
+>   pause already guard a batch.
+> - **The wall:** session 22.22 h (18.0 games/h, 0 pauses), inside the restated 21.7–24.1 h. The hop took 23.17 h,
+>   counting VOID run 1 (48 min). § Cost on this host and `ABC-225`'s page carry a dated line.
+> - **Tickets table:** rows 7 (`ABC-235`), 8 (`ABC-240`), 19 (`ABC-243`), 20 (`ABC-244`), 21 (`ABC-245`) and 22
+>   (`ABC-247`) read Done, and row 23 (`ABC-248`) reads Ready, as the board does. `ABC-247`'s page is closed.
+> - The notes are in `.grugops/context/bapm-m1-batch-fold/notes/`.
+
 > **CUT AND RESTATED 2026-10-31 by BA/PM** (task `bapm-rpair-level6-cut`, records only, at `main` `278a9bb7`; nothing
 > run, built or timed, because `qe-ABC-245` holds the host ALONE; `src/`, `tools/`, `data/`, the board and the ADRs
 > untouched). Source: QE's STOP of milestone 1's batch before game 1 (`qe-EPIC-010-m1-batch` `…5967dfc1`,
@@ -354,7 +402,9 @@ is re-run once (`RISK-EPIC009-04`). Both use today's harness as it is: no `tools
 BA/PM's arithmetic (exact over win/draw/loss, from the recorded scores; not a measurement):
 
 - `main`'s R reference is `EPIC-008`'s R(close): 64.75 % (W/L/D 125/66/9) at `38536a34`. `main`'s `src/` and `data/`
-  are identical to that build today (`git diff` empty).
+  are identical to that build today (`git diff` empty). *(2026-11-01, `bapm-m1-batch-fold`: that 3 000 ms reference
+  closed on 2026-10-30. The R reference is now 72.00 % ± 6.11 at 4 000 ms (head `51902be5`, milestone 1's batch). The
+  odds below were worked at 64.75 % and are not re-derived at 72.00 %.)*
 - **10 R games read the score to about ± 29 points of percentage (95 %), so ± 200 Elo or wider.**
 - An unchanged candidate is stopped by S-4 about 7 times in 10 000, and by S-3 about 1 time in 60 to 160 (it depends on
   the D draw rate, 30–50 %).
@@ -369,14 +419,14 @@ Three layers answer it. Each sees a different size of fall, and none sees a fall
 | layer | what it reads | what it can see | what it does |
 |---|---|---|---|
 | **1. The smoke** (per ticket) | S-1 to S-4 | a fault, a loss on time, a collapse (≈ 250 Elo or more at R) | the ticket does not merge |
-| **2. The trend** (across tickets) | the **pooled R smoke score** of every value-changing merge since the last batch, in § The smoke ledger, against the R reference | a cumulative fall of **≈ 140 Elo** or more, once ≥ 30 R games are pooled | **The trend flag:** pooled ≥ 30 games and pooled score ≤ reference − 20 points (≤ 44.75 % today; *2026-10-30: that 3 000 ms reference closed at `ABC-228`'s merge. The next is milestone 1's passing batch head at 4 000 ms, and its flag is that score − 20 points. Until then no flag is evaluable*). The batch is then pulled forward, and no further value-changing merge happens until it reads |
+| **2. The trend** (across tickets) | the **pooled R smoke score** of every value-changing merge since the last batch, in § The smoke ledger, against the R reference | a cumulative fall of **≈ 140 Elo** or more, once ≥ 30 R games are pooled | **The trend flag:** pooled ≥ 30 games and pooled score ≤ reference − 20 points (≤ 44.75 % today; *2026-10-30: that 3 000 ms reference closed at `ABC-228`'s merge. The next is milestone 1's passing batch head at 4 000 ms, and its flag is that score − 20 points. Until then no flag is evaluable*; *2026-11-01, `bapm-m1-batch-fold`: the 4 000 ms reference is 72.00 % ± 6.11 (head `51902be5`, milestone 1's batch, NOT LOSS), so the flag reads ≤ 52.00 %; the pool restarted empty*). The batch is then pulled forward, and no further value-changing merge happens until it reads |
 | **3. The batch** (major validation) | an interleaved R pair (`ABC-225`): the batch's head against its base, 200 + 200 games | a fall larger than **≈ 70–75 Elo**, the pair's half-width at `EPIC-008`'s Y | not LOSS (X + Y ≥ 0) passes. LOSS: see below |
 
 - **The trend's own error** (same arithmetic): with nothing changed, the flag fires about 1 time in 100 per check. At a
   true fall to 44.75 % (≈ 140 Elo) it fires about half the time; at 40 %, about 7 times in 10. A fall to 55 % (≈ 70
-  Elo) fires it about 1 time in 9.
+  Elo) fires it about 1 time in 9. *(2026-11-01: worked against 64.75 %; not re-derived against 72.00 %.)*
 - **The batch: when.** At each milestone's close, after its value-changing merges (milestone 1: after `ABC-228`,
-  `ABC-229`, `ABC-230` and `ABC-241`). Earlier if the trend flag fires, or on the owner's word. The epic-close batch is M2.
+  `ABC-229`, `ABC-230` and `ABC-241`; *read 2026-11-01: NOT LOSS (NEUTRAL), `qe-EPIC-010-m1-batch-2` `…1a53a7f9`*). Earlier if the trend flag fires, or on the owner's word. The epic-close batch is M2.
 - **The batch: what.** Base = `main` just before the batch's first value-changing merge (for the first batch, the
   epic's first merge-base, so milestone 1's batch is also M2 if the epic stops there). E = 1 910, 3 000 ms *(4 000 ms
   on both sides from `ABC-228`'s merge, `ADR-0053` d10; the added wall time is `UNKNOWN - verify`)*, the R
@@ -386,7 +436,16 @@ Three layers answer it. Each sees a different size of fall, and none sees a fall
   on both sides: `ABC-247`, route (A), `…fb0c8978`. Each batch PREREG checks that level 6 is still rate 0 with a
   budget ≥ 4 000 ms at both SHAs, and reads 4.0 s clocks on both builds after block 01 (`ABC-247` Test note 3). At
   width 1 and 4 000 ms the batch is ≈ 21.7–24.1 h ALONE plus ≈ 1 h of QE.)*
+  *(2026-11-01, `bapm-m1-batch-fold`, from QE-M1B2-b (MEDIUM): **every later batch PREREG whose thermal pause works
+  by a signal (`SIGSTOP` / `SIGCONT`) launches the harness, and its watcher, detached from any agent job-control
+  parent** (`setsid -f`, as milestone 1's re-run did), **and records the harness's parent pid before game 1; it must
+  not be an agent task runner's process.** Launched as an agent's background task, the pause becomes a kill: milestone
+  1's run 1 was torn down at the first `SIGSTOP` and was VOID at 48 min (`…3fb3b1fd`). The pause path is still
+  unexercised on a real batch, so the PREREG also records a `SIGSTOP` / `SIGCONT` test on a detached process before
+  game 1, as QE did.)*
 - **After a passing batch,** its head's own R score becomes the trend's reference, and the pool restarts.
+  *(2026-11-01: milestone 1's batch passed. The reference is 72.00 % ± 6.11 points, head `51902be5`, 200 R games at
+  4 000 ms; the flag reads 52.00 %; the pool restarted empty. § The smoke ledger.)*
 - **A batch that reads LOSS** cannot say which merge caused it. Then no further value-changing merge of this epic
   happens. The ledger names the suspects, the merges in the batch with their R smoke scores, for information only.
   BA/PM frames three options for the owner: (i) revert the suspects; (ii) bisect with one R pair per merge, ≈ 10 h
@@ -406,7 +465,9 @@ always before a batch. The pooled score and the flag are QE's to compute at each
 | `ABC-241` | `d1a2d5cd` | `e42b637b` | 4/2/4 (6.0) | 6/3/1 (6.5) **at 4 000 ms; recorded, not pooled** | 0 | 0 | none computed: there is no 4 000 ms reference until milestone 1's batch (the 3 000 ms pool closed at `ABC-228`'s merge). Rows waiting at 4 000 ms: `ABC-228` 7.0 / 10 and `ABC-241` 6.5 / 10 (13.5 / 20, INFO only, never judged) | not evaluable (no reference) | D 74.38 / 83.6 °C; R 74.63 / 85.5 °C (width 1) |
 | `ABC-229` | `e196a281` | `b92a3394` | 2/3/5 (4.5) | 9/1/0 (9.0) **at 4 000 ms; recorded, not pooled** | 0 | 0 | none computed: no 4 000 ms reference until milestone 1's batch. Rows waiting at 4 000 ms: `ABC-228` 7.0 / 10, `ABC-241` 6.5 / 10 and `ABC-229` 9.0 / 10 (22.5 / 30, INFO only, never judged) | not evaluable (no reference) | D 74.75 / 83.0 °C; R 78.44 / 87.5 °C (width 1) |
 
-*Reference: R(close) 64.75 % at `38536a34` (`EPIC-008`), at 3 000 ms.* *Folded 2026-10-30 by BA/PM
+*Reference: R(close) 64.75 % at `38536a34` (`EPIC-008`), at 3 000 ms.* *(Retired 2026-11-01, `bapm-m1-batch-fold`:
+it closed at `ABC-228`'s merge and stays on record. The reference is now 72.00 % ± 6.11 at 4 000 ms; see the 4 000 ms
+pool below.)* *Folded 2026-10-30 by BA/PM
 (`bapm-ABC-228-merge-fold`), copied from QE's smoke notes: `qe-ABC-230` `…a715c1d8` and `qe-ABC-228-ii` `…2123617d`.
 Both rows ran at width 1 (the Orchestrator's delivery call after the width-2 thermal stop), not at the table's R width 2.*
 *`ABC-241`'s row was folded 2026-10-30 by BA/PM (`bapm-ABC-241-merge-fold`), copied verbatim from QE's smoke note
@@ -427,7 +488,21 @@ labelled; every D at 1 500 ms on both sides.*
   with the 3 000 ms row.
 - **From this merge until milestone 1's batch:** each value-changing ticket's R row is recorded at 4 000 ms and waits.
   No pool is computed and no flag is evaluable, because there is no 4 000 ms reference yet. The batch runs both sides
-  at 4 000 ms; if it passes, its head score is the reference and a new pool opens.
+  at 4 000 ms; if it passes, its head score is the reference and a new pool opens. *(Closed 2026-11-01: milestone 1's
+  batch passed, NOT LOSS (NEUTRAL), `qe-EPIC-010-m1-batch-2` `…1a53a7f9`.)*
+- **The 4 000 ms pool (open from 2026-11-01, `bapm-m1-batch-fold`).**
+  - **Reference: 72.00 % ± 6.11 points**, the R score of milestone 1's batch head `51902be5` (141/53/6 over 200 games,
+    100 openings, both colours), against Stockfish 19 `UCI_LimitStrength` E 1 910, 4 000 ms, width 1.
+  - **Flag: ≥ 30 pooled R games scoring ≤ 52.00 %** (72.00 − 20). It pulls the next batch forward, as layer 2 says.
+  - **Pool: empty, 0 games, flag not evaluable.** The next value-changing merge's R row opens it. QE computes the pool
+    and the flag at each smoke, as before.
+  - **The waiting rows close unpooled:** `ABC-228` 7.0 / 10, `ABC-241` 6.5 / 10 and `ABC-229` 9.0 / 10 (22.5 / 30) were
+    played on builds that are inside this batch's head, not merged since it. They stay on record, INFO only, never
+    judged.
+  - **Comparability:** a per-ticket R smoke runs `r` (level 5), and the batch ran `rpair` (level 6). At any SHA from
+    `e42b637b` on, both search `go movetime 4000` for 4 000 ms at rate 0 (QE, `…1a53a7f9`), so a later R row compares
+    with this reference. The R smokes since `ABC-230` ran at width 1, as the batch did. If `LEVELS[5]` is ever rolled
+    back to 3 000 ms (`ADR-0053` d10 § Rollback), this reference is stale.
 
 ### Cost on this host
 
@@ -438,7 +513,9 @@ labelled; every D at 1 500 ms on both sides.*
   (the owner's "one at a time" for `ABC-225`, extended to the batch by the Orchestrator's ruling of 2026-10-30), at
   **≈ 18.5 h ALONE (17.5–19.4 h) plus ≈ 1 h of QE**, from `ABC-225` A6.)* *(2026-10-31, `bapm-rpair-level6-cut`: **≈ 21.7–24.1 h
   ALONE plus ≈ 1 h of QE** at 4 000 ms on both sides (QE-M1B-b, from the 4 000 ms R smokes' 3.26–3.61 min a game).
-  A6's 21.67 games/h was a 3 000 ms rate, so 18.5 h is withdrawn.)*
+  A6's 21.67 games/h was a 3 000 ms rate, so 18.5 h is withdrawn.)* *(**Read 2026-11-01**, milestone 1's batch
+  (`…1a53a7f9`): session 22.22 h at width 1, 18.0 games/h, 0 pauses, inside the 21.7–24.1 h estimate; the hop took
+  23.17 h with its VOID run 1 (48 min).)*
 - **Against the framed options:** (b) was ≈ 19–27 h per ticket; (a) was ≈ 9–17 h.
 
 ## Measurement first: the options as framed for Q4 (history; the owner picked (e), extended, 2026-10-29)
@@ -512,7 +589,7 @@ asked that this lesson be carried here as a rule for him to set (`…183a5bbc`).
 | 7 | `ABC-235` | Value-identical, so S2 and no playing reading: the cheapest engine change. Behind `ABC-227` |
 | 8 | `ABC-240` | Split from `ABC-235` (2026-10-29, cut 6). Value-identical, S2, no smoke. After `ABC-235`, so its reading has a quiet host and a base that holds it. It must land before milestone 2's `ABC-233`/`ABC-234`, which edit the same `orderMoves`. If its A3 misses, it is dropped and the order closes up |
 | 9 | `ABC-241` | Q3 (c), cut 2026-10-30: the repetition key drops an uncapturable ep file in the game-end count and the prior keys. After `ABC-230`, whose prior-key builders it edits. Value-changing, S |
-| close | the batch | An interleaved R pair (`ABC-225`), milestone 1's head against the epic's first merge-base (§ The merge rule) |
+| close | the batch | An interleaved R pair (`ABC-225`), milestone 1's head against the epic's first merge-base (§ The merge rule). *Read 2026-11-01: NOT LOSS (NEUTRAL), X −58.3 ± 77.9, base `ca6e675c` 78.25 %, head `51902be5` 72.00 % (`…1a53a7f9`); milestone 1 DONE (the block at the top)* |
 
 **Milestone 1, re-costed 2026-10-29 under Q4 = (e)** (this host; the `G6` real-clock gates each ticket owes are the
 same under every option and are not counted):
@@ -644,8 +721,8 @@ mates", ≥ 6 "a quiet promotion decides". It reads `quiesce` and `chooseMove` a
 | 4 | `ABC-228` | In check, quiescence searches every evasion and scores none as mate | M | P2 | **Done** (2026-10-30, `e42b637b`) | — | `ADR-0053` (ACCEPTED 2026-10-30); OQ-228-1 reading (ii), built | done: QE PASS_WITH_GAPS under (ii) `…e39d190c` (`G6` 8 = 8, 10 = 10; D 5.0, R 7.0 at 4 000 ms); its gaps are `ABC-243` |
 | 5 | `ABC-229` | Quiescence searches quiet promotions to a queen | S | P2 | **Done** (2026-10-30, `5953c631`) | — | `ADR-0053` (ACCEPTED 2026-10-30) decisions 5–8; door; `ABC-228` (Done, `e42b637b`) | done: QE PASS_WITH_GAPS `…2afef8bf` signs UAT (`G6` 8 = 8, 10 = 10 at 4 000 ms; D 4.5, R 9.0 at 4 000 ms, not pooled); QE-229-a is `ABC-244` (Done) and now `ABC-248`; QE-229-b/c/d dispositioned on its page (2026-10-31) |
 | 6 | `ABC-230` | The game's earlier positions reach the search, from the CLI and from UCI, so it sees a repetition the game already holds | M | P2 | **Done** (2026-10-30, `24f3e322`) | — | `ADR-0054` (ACCEPTED 2026-10-30) | done: QE PASS_WITH_GAPS `…ba5a249a`; its gap QE-230-a is `ABC-242` |
-| 7 | `ABC-235` | Value-identical cuts in cost per node, from `ABC-227`'s profile: **cuts 1, 3, 5** (scoped 2026-10-29) | M | P2 | In Development (`se-ABC-235`) | **10/10** | `ABC-227` (Done); Architect `…7fc1b90c` (1, 3, 5 value-identical; no ADR) | nothing |
-| 8 | `ABC-240` | Move ordering without per-move allocation, value-identical (cut 6, split from `ABC-235`) | S | P3 | **Ready** | **10/10** | Architect `…7fc1b90c` C1–C4; no ADR | pull order only: after `ABC-235` merges; before `ABC-233`/`ABC-234` |
+| 7 | `ABC-235` | Value-identical cuts in cost per node, from `ABC-227`'s profile: **cuts 1, 3, 5** (scoped 2026-10-29) | M | P2 | **Done** (2026-10-30, `baf99a7c`) | — | `ABC-227` (Done); Architect `…7fc1b90c` (1, 3, 5 value-identical; no ADR) | done: QE PASS on S2, no smoke (`qe-ABC-235` `…c575d703`; nps tip/base 1.262 / 1.284 / 1.200) |
+| 8 | `ABC-240` | Move ordering without per-move allocation, value-identical (cut 6, split from `ABC-235`) | S | P3 | **Done** (2026-10-30, `5311f5bd`) | — | Architect `…7fc1b90c` C1–C4; no ADR | done: QE PASS on S2, no smoke (`qe-ABC-240` `…19068f9d`; nps tip/base 1.122 / 1.109 / 1.089); QE-240-a LOW |
 | 9 | `ABC-241` | A repetition against the game's earlier positions ignores an en-passant square no pawn can legally take (Q3 (c)); the hash does not change | S | P2 | **Done** (2026-10-30, `1f6abec4`) | — | `ADR-0020` § AMENDMENT 2026-10-30 (ACCEPTED on the owner's word) | done: QE PASS_WITH_GAPS `…2368b03f` (D 6.0, R 6.5 at 4 000 ms); its gap QE-241-a is folded into `ABC-243` |
 | 10 | `ABC-242` | On a blunder level (1–4), a root move that makes the third occurrence of a game position scores exactly 0 (QE-230-a) | S | P3 | **Done** (2026-10-31, `af5b2b49`) | — | `ADR-0054` § amendment 2026-10-30 and its `ADR-0032` d1 bullet (ACCEPTED) | done: QE PASS_WITH_GAPS `…f24601b8` signs UAT; QE-242-a pending with the Architect (`arch-qe242a-ruling`); QE-242-b is `ABC-245` |
 | 11 | `ABC-231` | The king table is tapered by phase, alone, with no king-safety term | S | P3 | Backlog | **9/10** | `ADR-0031` addendum scope; door | the ADR ruling |
@@ -656,11 +733,11 @@ mates", ≥ 6 "a quiet promotion decides". It reads `quiesce` and `chooseMove` a
 | 16 | `ABC-237` | The transposition table prefers deeper entries when it replaces | S | P3 | Backlog | **9/10** | `ADR-0025` (falsifier `T2`) | the ADR |
 | 17 | `ABC-238` | A deeper stored entry may cut off a shallower search | M | P3 | Backlog | **9/10** | `ABC-081` `A1` revised; `ADR-0025`; door | the ADR; after `ABC-237` |
 | 18 | `ABC-239` | Evaluation weights tuned offline by a stated method, emitted as constants, validated outside | L | P3 | Backlog | **8/10** | `ADR-0048` data licence; new ADR | milestone 2's evaluation done; the licence; the ADR. Its batch is read **before** its merge (its `A6`) |
-| 19 | `ABC-243` | The setoption-Hash row reads a bare `go` (level 5 = 4 000 ms), and the TT `A7` title names the budget it reads (test-only, from `ABC-228`'s QE gaps); *2026-10-30:* plus a UCI row for a FEN that carries an uncapturable ep square (QE-241-a) | XS | P3 | **Ready** | **10/10** | `ABC-228` and `ABC-241` Done; no ADR; `src/uci-session.test.ts` and `src/transposition.test.ts` only | nothing: `ABC-241` merged `1f6abec4`. `ABC-220`'s rows in the same file are rebase order only |
-| 20 | `ABC-244` | Time-blind virtual-clock rows in `src/cli.test.ts` and `src/uci-session.test.ts` take the coarsest step that keeps QE's caught-mutant set (`ADR-0046` § Addendum 2026-10-30, tranche 1; test-only, from `QE-229-a`) | S | **P1** | Backlog (cut 2026-10-30; recommended Ready) | **10/10** | `ADR-0046` § Addendum 2026-10-30 R1–R4 (PROPOSED, `5fd3eee7`; BA/PM's word given on its page); `ABC-230`/`ABC-241` Done | nothing but the merges. **Pulled before `ABC-242` (row 10), `ABC-243` (row 19) and `EPIC-009`'s `ABC-221`** (shared test files). A8/A9 timed reads ALONE |
-| 21 | `ABC-245` | A blunder-level row reads a third occurrence whose earlier occurrences lie more than 50 plies back, so lowering the 100-key cap turns the lane red; the `src/levels.test.ts` header count is corrected (test-only, from QE-242-b and SE-242-f) | XS | P3 | **Ready** (re-scored 2026-10-31, `bapm-ABC-245-rescore`) | **10/10** | `ABC-242` Done (`af5b2b49`); `ADR-0046` § Addendum R1–R4 and § Ruling 2026-10-31 (`10492743`: per level call, step 10) | nothing. Order only: `ABC-221`'s diff against `src/levels.test.ts` is checked at the pull |
-| 22 | `ABC-247` | `rpair` passes `Skill Level` 6 to skytalix on both builds, so `go movetime 4000` searches 4 000 ms on a base whose level 5 is 3 000 ms; the `r` and `d` paths are unchanged (tools only, from QE-M1B-a; route (A), `…fb0c8978`) | XS | **P1** | **Ready** (cut 2026-10-31, `bapm-rpair-level6-cut`) | **10/10** | `ABC-225` Done (`59dc3ab4`); no ADR (`ADR-0053` d10's intent kept) | order only: after `qe-ABC-245` (ALONE). **Blocks milestone 1's batch.** A2's probe runs ALONE |
-| 23 | `ABC-248` | The default lane sheds about 0.3 s and loses no coverage: `QE-208-a` sampled more sparsely and `QE-208-b` on a cheaper root, `ABC-167` A5's duplicated searches moved to `ENGINE_DEEP` under default-lane kill parity, and A4-a2 on R2 (`ADR-0046` tranche 2; test-only, from `QE-245-b`) | S | **P1** | Backlog (cut 2026-10-31, `bapm-tranche2-ruling`; recommended Ready) | **10/10** | `ADR-0046` § Addendum 2026-10-31 T2-R, accepted with amendments in its § BA/PM ruling 2026-10-31; W1 given its word | order only: **after `ABC-246`** (same file, `src/uci-session.test.ts`). A8/A9 and W1's window ALONE |
+| 19 | `ABC-243` | The setoption-Hash row reads a bare `go` (level 5 = 4 000 ms), and the TT `A7` title names the budget it reads (test-only, from `ABC-228`'s QE gaps); *2026-10-30:* plus a UCI row for a FEN that carries an uncapturable ep square (QE-241-a) | XS | P3 | **Done** (2026-10-31, `3628fe99`) | — | `ABC-228` and `ABC-241` Done; no ADR; `src/uci-session.test.ts` and `src/transposition.test.ts` only | done: QE PASS (`qe-ABC-243` `…2d790e40`; `G8` H 9.28 s); UAT waived (test-only) |
+| 20 | `ABC-244` | Time-blind virtual-clock rows in `src/cli.test.ts` and `src/uci-session.test.ts` take the coarsest step that keeps QE's caught-mutant set (`ADR-0046` § Addendum 2026-10-30, tranche 1; test-only, from `QE-229-a`) | S | **P1** | **Done** (2026-10-30, `24b22339`) | — | `ADR-0046` § Addendum 2026-10-30 R1–R4 (PROPOSED, `5fd3eee7`; BA/PM's word given on its page); `ABC-230`/`ABC-241` Done | done: QE PASS (`qe-ABC-244` `…4fe9bfe1`; `G8` H 9.25 s, ≤ 9.4 s target met) and Security/NFR PASS (`secnfr-ABC-244` `…9087cb39`); UAT waived (test-only) |
+| 21 | `ABC-245` | A blunder-level row reads a third occurrence whose earlier occurrences lie more than 50 plies back, so lowering the 100-key cap turns the lane red; the `src/levels.test.ts` header count is corrected (test-only, from QE-242-b and SE-242-f) | XS | P3 | **Done** (2026-10-31, `2cce84e0`) | — | `ABC-242` Done (`af5b2b49`); `ADR-0046` § Addendum R1–R4 and § Ruling 2026-10-31 (`10492743`: per level call, step 10) | done: QE PASS (`qe-ABC-245` `…b2ebc183`; `G8` H 9.82 s, which opened tranche 2, now `ABC-248`); QE-242-b closed; UAT waived (test-only) |
+| 22 | `ABC-247` | `rpair` passes `Skill Level` 6 to skytalix on both builds, so `go movetime 4000` searches 4 000 ms on a base whose level 5 is 3 000 ms; the `r` and `d` paths are unchanged (tools only, from QE-M1B-a; route (A), `…fb0c8978`) | XS | **P1** | **Done** (2026-10-31, `3af97f71`) | — | `ABC-225` Done (`59dc3ab4`); no ADR (`ADR-0053` d10's intent kept) | done: QE PASS (`qe-ABC-247` `…236bbe39`); tools only, no UAT. Milestone 1's batch ran on it: block-01 guard PASS on both builds (`…428e3797`) |
+| 23 | `ABC-248` | The default lane sheds about 0.3 s and loses no coverage: `QE-208-a` sampled more sparsely and `QE-208-b` on a cheaper root, `ABC-167` A5's duplicated searches moved to `ENGINE_DEEP` under default-lane kill parity, and A4-a2 on R2 (`ADR-0046` tranche 2; test-only, from `QE-245-b`) | S | **P1** | **Ready** (2026-10-31, the Orchestrator, `eca4812f`) | **10/10** | `ADR-0046` § Addendum 2026-10-31 T2-R, accepted with amendments in its § BA/PM ruling 2026-10-31; W1 given its word | order only: **after `ABC-246`** (same file, `src/uci-session.test.ts`). A8/A9 and W1's window ALONE |
 
 *Re-scored 2026-10-29 (`bapm-owner-words-b`): Q4 is removed from every wait. Each value-changing ticket's DoR row 4
 is now ✅, because its reading is the smoke pair. No ticket but `ABC-225` changes column on this hop. `ABC-227` (Done)
@@ -695,6 +772,10 @@ was added at the end: it is test-only and not one of the fifteen engine changes.
 it is P1 and pulled after `ABC-246`. Rows 19 (`ABC-243`, merged `3628fe99`), 20 (`ABC-244`, `24b22339`) and 21
 (`ABC-245`, `2cce84e0`) are Done on the board and stale here; they were not folded on this hop. The board holds the
 live state.*
+*Folded 2026-11-01 (`bapm-m1-batch-fold`): rows 7 (`ABC-235`), 8 (`ABC-240`), 19 (`ABC-243`), 20 (`ABC-244`), 21
+(`ABC-245`) and 22 (`ABC-247`) read Done, and row 23 (`ABC-248`) reads Ready, each as the board holds it. Every other
+row was checked against the board and agrees. The pages of `ABC-243`, `ABC-244`, `ABC-245` and `ABC-248` still carry
+their old `status` / `column`; their closes are a separate fold, not done here. The board holds the live state.*
 
 ## Observations (not tickets)
 
