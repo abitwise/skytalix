@@ -1,3 +1,4 @@
+_Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — `qe-qehop-growth` merged 8fecca09: **T-QEHOP-GROWTH MET** (4 272 notes; +0.455 s CPU under 650 ms; PREREG blob 3aab3adc intact) → `arch-qehop-threshold` (records: write reading, next threshold — QE-QHG-d: 75 % rule would re-fire within a week). **ABC-223 pulled → `qe-ABC-223` STRICTLY ALONE (~5 h games).** Next: ABC-249. Width 2/3._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — `arch-adr-folds-nov1` merged (ADR-0046 condition 4 `-t` spelling + status: tranche 2 delivered; ADR-0053 d10 wall 22.22 h). Running: `qe-qehop-growth` (ALONE). Next: ABC-223 → ABC-249. Width 1/3._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — `bapm-ABC-248-close` merged: ABC-248 page closed; ruling 6 `-t` escaped; SE-248-b floor (no Architect reading owed now); **ABC-249 cut (XS, QPLY4) → Ready**. `arch-adr-folds-nov1` (records: ADR-0046 condition 4 + status line, ADR-0053 d10 wall) beside `qe-qehop-growth` (ALONE). Queue (ALONE, one at a time): qe-qehop-growth → ABC-223 → ABC-249. Width 2/3._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — ABC-248 DONE (qe-ABC-248 PASS_WITH_GAPS; G8 H 9.09 s / B 9.37 s, ~−0.28 s; merged ef4cd095, not pushed): **ADR-0046 tranche 2 delivered.** `qe-qehop-growth` ALONE (T-QEHOP-GROWTH: 4 272 notes ≥ 4 000). Beside: `bapm-ABC-248-close` (records: page close, QE-248-a ruling-6 `-t` fix, QE-248-c QPLY4 survivor, SE-248-b). Next: ABC-223 (~5 h games, ALONE). Width 2/3._
@@ -1268,9 +1269,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 - [EPIC-006] Game session and packaging  (owner: BA/PM, **size: XL — corrected from `L`; 9 tickets / 20 points across both halves, ~1.5x the 13 `L` was assigned, and it hit that ceiling BEFORE distribution was priced**, priority: P1, since: 2026-07-22, **BOTH HALVES NOW CUT: the runnable half `ABC-041`…`ABC-046` (2026-08-13) and the second half `ABC-100`…`ABC-102` (2026-08-16) — only THREE tickets, because the scope of packaging is a FUNCTION of a distribution channel nobody has chosen.** `ABC-100` cuts the DECISION, never the ANSWER: a superseding ADR per `ADR-0007` `D5`, on the owner's word, verbatim and dated. **Acceptance criterion 1 (`npx <package>`) remains unmeetable by any ticket. Recommendation NOT taken, standing for the owner: this should probably be two epics** — the halves share no dependency in either direction and their blockers differ in kind)
 
-## Ready (WIP 2/8)
+## Ready (WIP 1/8)
 - [ABC-249] A pre-root repetition met four or more plies into the search scores 0, so QPLY4 turns the lane red (QE-248-c; size: XS, priority: P3, test-only, UAT waived; DoR 10/10; cut by bapm-ABC-248-close; one src/engine.test.ts row ≤ 100 ms; after ABC-223 (host-alone order))
-- [ABC-223] Smoke reading: uci-clock-mode, 5 games at 40/15 (<= 10 for coverage), 0 losses on time, closest call >= 500 ms, >= 75 % clock use, longest move <= 60 s (owner: QE/E2E, size: S, priority: P3, DoR 10/10 2026-10-31 (bapm-ABC-221-fold; ABC-221 merged af32f82c); ALONE <= ~5 h; → Ready; ALONE, after the milestone-1 batch; never beside ABC-245/246 G8)
 
 
 
@@ -1286,7 +1286,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+- [ABC-223] Smoke reading: uci-clock-mode, 5 games at 40/15 (<= 10 for coverage), 0 losses on time, closest call >= 500 ms, >= 75 % clock use, longest move <= 60 s (owner: QE/E2E, size: S, priority: P3, DoR 10/10 2026-10-31 (bapm-ABC-221-fold; ABC-221 merged af32f82c); ALONE <= ~5 h; → Ready; ALONE, after the milestone-1 batch; never beside ABC-245/246 G8; **pulled 2026-11-01** → `qe-ABC-223` STRICTLY ALONE ~5 h)
 
 
 
