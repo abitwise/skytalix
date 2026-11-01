@@ -1,0 +1,8 @@
+lock-requested 2026-11-01T18:57:48Z
+lock-acquired 2026-11-01T18:57:48Z
+clear-deadline 2026-11-01T19:42:48Z
+main-start 2026-11-01T18:57:48Z
+main-end rc=0 2026-11-01T19:00:43Z
+rerun-owed []
+done 2026-11-01T19:00:43Z
+job-exit 0 2026-11-01T19:00:43Z
