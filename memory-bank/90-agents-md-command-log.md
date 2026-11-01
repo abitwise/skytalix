@@ -49,7 +49,7 @@ this table names.
 | Perft deep counts (opt-in slow suite) | — | — |
 | Search deep lane (opt-in, ABC-077) | Run at QE and after any src/search.ts change. | § "Search deep lane" |
 | Engine deep lane (opt-in, ABC-078) | Run after any src/engine.ts or src/virtual-clock.ts change. | § "Engine deep lane" |
-| Levels deep lane (ABC-087, `src/levels.test.ts`) | Run after any src/levels.ts, src/engine.ts or src/virtual-clock.ts change. | § "Levels deep lane" |
+| Levels deep lane (ABC-087, `src/levels.test.ts`) | Run after any src/levels.ts, src/engine.ts, src/virtual-clock.ts, src/search.ts (move ordering, `orderMoves`, included), src/evaluate.ts, src/quiescence.ts or src/transposition.ts change. Owed per strength ticket (ADR-0056 owner-answers, R-TC). | § "Levels deep lane" |
 | Input-seam deep lane (opt-in, ABC-037) | Run after any src/line-input.ts change. | § "Input-seam deep lane" |
 | Transposition deep lanes (ABC-081, `src/transposition.test.ts`), the `SEARCH_DEEP=1` line | — | § "Transposition deep lanes" |
 | Transposition deep lanes (ABC-081, `src/transposition.test.ts`), the `ENGINE_DEEP=1` line | — | § "Transposition deep lanes" |
@@ -320,6 +320,8 @@ Moved from `AGENTS.md` § Commands by `ABC-164` (2026-10-21), word for word, com
 
 Holds A4's evidence (ENDGAMES 204 + perft/puzzles 242 moves), A2 on a virtual clock, A3 (31
   vs 54 of 58). Run after any src/levels.ts, src/engine.ts or src/virtual-clock.ts change.
+
+_Trigger widened 2026-11-01 (ADR-0056 gap G-2): the list above is the original; the live list is the Levels row of the On-demand commands table._
 
 ## Input-seam deep lane (`ABC-037`) — `INPUT_DEEP=1 NODE_OPTIONS=--expose-gc npx vitest run src/line-input.test.ts`
 
