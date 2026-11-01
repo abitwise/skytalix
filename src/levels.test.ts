@@ -1012,7 +1012,7 @@ describe("ABC-259 — R-TC item 2: the engine core reads the budget only as the 
         );
       }
     }
-    expect(violations).toEqual([]);
+    expect(violations.join("\n")).toBe(""); // the message names the file and the rule
   });
 
   it("environment rule: no core file reads `process.`, `argv` or `import.meta.env`", () => {
@@ -1021,7 +1021,7 @@ describe("ABC-259 — R-TC item 2: the engine core reads the budget only as the 
         (hit) => `${file}: environment rule — ${hit}`,
       ),
     );
-    expect(violations).toEqual([]);
+    expect(violations.join("\n")).toBe(""); // the message names the file and the rule
   });
 
   it("test-flag rule: no core file names `VITEST`, `NODE_ENV` or an identifier ending in `_DEEP`", () => {
@@ -1030,7 +1030,7 @@ describe("ABC-259 — R-TC item 2: the engine core reads the budget only as the 
         (hit) => `${file}: test-flag rule — ${hit}`,
       ),
     );
-    expect(violations).toEqual([]);
+    expect(violations.join("\n")).toBe(""); // the message names the file and the rule
   });
 });
 
