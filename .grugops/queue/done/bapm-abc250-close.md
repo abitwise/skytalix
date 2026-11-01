@@ -42,10 +42,15 @@ Sealed notes (task bapm-abc250-close, contextRoot = worktree's .grugops/context,
     estimate.
   - **Test notes:** 6 (QE-259-c) and 7 (QE-260-a) are kept. Note 8 is added: generation order is bound by
     `ABC-261`'s and `ABC-262`'s rows.
-  - **DoR 9/10, Backlog.** Row 10 waits on `arch-abc250-close`: item 4 is a design input or none, and item 2 is
-    QE-250-a's bearing on the read.
-  - If the Architect says none, or adds only a forward-only read rule, DoR is 10/10 on that merge and the Ready
-    recommendation applies with no further BA/PM hop. Otherwise BA/PM folds the input first.
+  - ~~**DoR 9/10, Backlog.** Row 10 waits on `arch-abc250-close`.~~ **Later in this hop, `arch-abc250-close` merged
+    on `main` (`eed51a35`) and gave a design input that changes scope. It is folded** (commit `4e66c113`, note
+    `…0cc274ab`):
+    - **2a, profile first.** If the helper frames do not show, inline nothing. **BA/PM's stop:** stop before any ALONE
+      read if neither half is measurable, or if only the `Budget` half is left (expected under 1 %, below the bar).
+      Then the Orchestrator drops the ticket, "nothing to cut", not graded.
+    - **2b:** inline at the profiled sites only. **2c:** `Budget`'s six fields are written out. **2d:** the fence.
+    - **A3:** D3-V2 as written, guard 1.03 / 1.00; QE-250-a is not needed now.
+  - **DoR 10/10, `Backlog → Ready` recommended.** `EPIC-010` row 26 and the trace row were updated to match.
 - **`EPIC-010`:**
   - A dated top block is added.
   - Rows 25–27 are re-stated. The stale status cells of rows 24 and 29–32 are set to Done with their merges.
@@ -58,10 +63,15 @@ Sealed notes (task bapm-abc250-close, contextRoot = worktree's .grugops/context,
     owner ask.
   - **BA/PM's reading:** a downward re-pin goes to the owner (the Orchestrator may correct this).
   - "The packed base" is re-read as "the base milestone 1b leaves".
-- **Commits:** claim `24f6caae`; records `c64a9672`. The notes, this Result and the move to done/ are in the closing
-  commit.
+- **Commits:** claim `24f6caae`; records `c64a9672`; the first notes, Result and move to done/ `92e12586`; the
+  Architect fold `4e66c113`. The fold note and this Result update are in the last commit.
+- **Merge note for the Orchestrator:** `main` moved during this hop (`arch-abc250-close` merged `eed51a35`, board
+  `9765250c`). Both sides append to `plans/traceability.md`, so expect an append-only conflict at its tail: keep both
+  sides. No other file overlaps.
 - **Notes** (sealed, contextRoot = this worktree's `.grugops/context`, `at` from `date -u` 2026-11-01T20:25:35Z):
-  decision `20261101T202535Z-ba-pm-decision-081194a8`, observation `20261101T202535Z-ba-pm-observation-6878dbe1`.
+  decision `20261101T202535Z-ba-pm-decision-081194a8`, observation `20261101T202535Z-ba-pm-observation-6878dbe1`, and
+  the fold decision `20261101T202731Z-ba-pm-decision-0cc274ab` (`at` 2026-11-01T20:27:31Z; it supersedes `…081194a8`
+  on `ABC-251`'s DoR only).
 - **Trace rows** appended to `plans/traceability.md`: `ABC-250`, `ABC-251`, `ABC-252` and `bapm-abc250-close`. The
   refs are on both notes.
 - **Not touched:** the board, `memory-bank/`, `src/`, `tools/`, `data/`, the ADRs. Nothing was run, built, timed,
