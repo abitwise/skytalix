@@ -1,8 +1,9 @@
 ---
 id: ABC-262
 title: "The lazy-legality rows read the board shapes they missed: `hasLegalMove`'s early exit on a pawns-first board, and the in-check quiet queen promotion with black to move (test-only, from QE-261-a and QE-261-b)"
-status: backlog
-column: Backlog
+status: done
+column: Done
+closed: "2026-11-01, merged to main at 2cf2bb69; QE PASS_WITH_GAPS (qe-ABC-262, ed4d02a5; A4 waived by the Orchestrator); test-only, UAT waived; front matter aligned to the board by bapm-epic010-close"
 size: XS
 priority: P3
 epic: EPIC-011

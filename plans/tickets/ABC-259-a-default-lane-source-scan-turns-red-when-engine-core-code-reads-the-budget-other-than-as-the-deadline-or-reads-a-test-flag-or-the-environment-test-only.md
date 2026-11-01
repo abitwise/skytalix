@@ -1,8 +1,9 @@
 ---
 id: ABC-259
 title: "One default-lane source scan turns red when engine-core code reads the search budget other than as the deadline, or reads a test flag or the environment (test-only, `ADR-0056` R-TC item 2, gap G-1)"
-status: backlog
-column: Backlog
+status: done
+column: Done
+closed: "2026-11-01, merged to main at 2091d301; QE PASS_WITH_GAPS (qe-ABC-259, f47bc0aa); test-only, UAT waived; front matter aligned to the board by bapm-epic010-close"
 size: XS
 priority: P2
 epic: EPIC-010

@@ -1,8 +1,9 @@
 ---
 id: ABC-254
 title: "Lazy legality: the full make/test/unmake runs only for king moves, en passant, pinned pieces and positions in check (ADR-0055 O1-d = ADR-0003 menu item (c2); value-identical; ADR-0003 amended 2026-11-01)"
-status: backlog
-column: Backlog
+status: done
+column: Done
+closed: "2026-11-01, merged to main at 3bfe180e (code 600d8de3); QE PASS_WITH_GAPS (qe-ABC-254-a4v2, 623a62e2; A4 MET under ADR-0055 D3-V2, 1.112 / 1.120 / 1.106), which signs UAT under the owner delegation; front matter aligned to the board by bapm-epic010-close"
 size: M
 priority: P2
 epic: EPIC-010

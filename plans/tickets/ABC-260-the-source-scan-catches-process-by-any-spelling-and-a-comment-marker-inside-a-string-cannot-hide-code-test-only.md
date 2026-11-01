@@ -1,8 +1,9 @@
 ---
 id: ABC-260
 title: "The R-TC source scan catches `process` by any spelling, and a comment marker inside a string literal cannot hide code from it or from `ABC-087` A8 (test-only, from QE-259-a and QE-259-b)"
-status: backlog
-column: Backlog
+status: done
+column: Done
+closed: "2026-11-01, merged to main at 59842f9f; QE PASS_WITH_GAPS (qe-ABC-260, b38c86b3); test-only, UAT waived; front matter aligned to the board by bapm-epic010-close"
 size: XS
 priority: P2
 epic: EPIC-010
