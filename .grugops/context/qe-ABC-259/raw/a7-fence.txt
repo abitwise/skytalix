@@ -1,0 +1,39 @@
+## git diff 8f2fc9b5 e1c10e19 --name-only
+.grugops/queue/claimed/se-ABC-259.claim.md
+.grugops/queue/claimed/se-ABC-259.md
+src/levels.test.ts
+## git diff 496a8941 e1c10e19 --name-only
+src/levels.test.ts
+## git diff 8f2fc9b5 4dbfde26 --name-only (delivered branch tip)
+.grugops/context/se-ABC-259/notes/20261101T165554Z-software-engineer-decision-1a6787f8.md
+.grugops/context/se-ABC-259/notes/20261101T165554Z-software-engineer-observation-727bc11a.md
+.grugops/context/se-ABC-259/notes/20261101T165603Z-software-engineer-observation-1b9a99af.md
+.grugops/queue/done/se-ABC-259.claim.md
+.grugops/queue/done/se-ABC-259.md
+.grugops/queue/pending/se-ABC-259.md
+src/levels.test.ts
+## numstat 8f2fc9b5..e1c10e19 -- src
+64	1	src/levels.test.ts
+## removed lines
+- * - DEFAULT (`npm test`, 46 tests): `A1`, `A6`, `A7`, `A8`, `A9`, `A10`, `A4`'s byte-identity row
+## changed it(/describe(/expect( among removed lines
+0
+## ids in added comment lines
+      1 A1
+      1 A10
+      1 A4
+      1 A6
+      1 A7
+      2 A8
+      1 A9
+      1 ABC-259
+      1 ADR-0056
+      1 R-TC
+## UAT waiver grep (e1c10e19~1..e1c10e19)
+rc=1 (1 = empty)
+## UAT waiver grep (f40665b1~1..f40665b1)
+rc=1 (1 = empty)
+## waiver grep over the whole range 8f2fc9b5..4dbfde26
+rc=1
+## main vs base, lane inputs
+src/engine.test.ts

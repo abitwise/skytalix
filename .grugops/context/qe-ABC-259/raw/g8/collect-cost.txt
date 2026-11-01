@@ -1,0 +1,1 @@
+describe-body read+strip of 5 files, ms (cold first): 0.24 0.12 0.11 0.34 0.10

@@ -1,0 +1,16 @@
+window start 17:18:35
+lint rc=0
+typecheck rc=0
+build rc=0
+lane-inventory rc=0
+skip-count capture (AGENTS.md spelling): 0 rc=0
+skip-integrity rc=0
+gates end 17:18:48
+run 1 base rc=0 wall=9.10s cpu=29.82s vitest_duration=8.76s (transform 0ms, setup 0ms, import 6.32s, tests 6.64s, environment 5ms) load1_before=1.68 load1_after=1.89 tctl_before=48.5 tctl_after=78.5 alone_before=true waited_s=290 foreign_vitest_after=none :: 2362 passed (2362)
+run 2 head rc=0 wall=9.10s cpu=29.61s vitest_duration=8.72s (transform 0ms, setup 0ms, import 6.25s, tests 6.62s, environment 5ms) load1_before=1.69 load1_after=2.26 tctl_before=51.1 tctl_after=77.0 alone_before=true waited_s=15 foreign_vitest_after=none :: 2365 passed (2365)
+run 3 head rc=0 wall=9.15s cpu=29.67s vitest_duration=8.80s (transform 0ms, setup 0ms, import 6.38s, tests 6.66s, environment 5ms) load1_before=1.94 load1_after=2.18 tctl_before=45.8 tctl_after=75.9 alone_before=true waited_s=30 foreign_vitest_after=none :: 2365 passed (2365)
+run 4 base rc=0 wall=9.06s cpu=29.92s vitest_duration=8.72s (transform 0ms, setup 0ms, import 6.41s, tests 6.53s, environment 5ms) load1_before=1.77 load1_after=2.05 tctl_before=43.4 tctl_after=75.9 alone_before=true waited_s=15 foreign_vitest_after=none :: 2362 passed (2362)
+run 5 base rc=0 wall=9.56s cpu=31.12s vitest_duration=9.20s (transform 0ms, setup 0ms, import 6.72s, tests 6.78s, environment 5ms) load1_before=1.67 load1_after=2.19 tctl_before=42.3 tctl_after=79.1 alone_before=true waited_s=15 foreign_vitest_after=none :: 2362 passed (2362)
+run 6 head rc=0 wall=9.52s cpu=31.35s vitest_duration=9.17s (transform 0ms, setup 0ms, import 6.60s, tests 6.82s, environment 6ms) load1_before=1.75 load1_after=2.11 tctl_before=42.5 tctl_after=67.1 alone_before=true waited_s=30 foreign_vitest_after=none :: 2365 passed (2365)
+median wall: base 9.10 s, head 9.15 s, delta 0.04 s; median cpu: base 29.92 s, head 29.67 s; admissible (rc 0, load1 <= 8 before and after every run, alone before every run): true; tctl median 59.1 C (max 79.1), thermal stop (> 85 C): false
+g8 rc=0 end 17:26:19

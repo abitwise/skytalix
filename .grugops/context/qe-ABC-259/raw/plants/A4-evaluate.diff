@@ -1,0 +1,17 @@
+diff -ru src/evaluate.ts /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-259/plants/A4-evaluate//src/evaluate.ts
+--- src/evaluate.ts	2026-11-01 16:57:47.389597696 +0000
++++ /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-259/plants/A4-evaluate//src/evaluate.ts	2026-11-01 17:17:55.022654342 +0000
+@@ -192,11 +192,13 @@
+ const BLACK_PAWN = PAWN | BLACK;
+ 
+ /**
++const SEARCH_DEEP = false;
+  * True when no ENEMY pawn stands ahead of the pawn on `square` on its own file or an adjacent
+  * one — "ahead" in the pawn's own direction of travel. An enemy pawn behind it, or beside it on
+  * the same rank, cannot stop it; nor can a piece. `square` must hold a pawn.
+  */
+ export function isPassedPawn(board: Uint8Array, square: number): boolean {
++  if (SEARCH_DEEP) return false;
+   const pawn = board[square] as number;
+   const enemyPawn = pawn ^ BLACK;
+   const step = isBlack(pawn) ? -1 : 1;

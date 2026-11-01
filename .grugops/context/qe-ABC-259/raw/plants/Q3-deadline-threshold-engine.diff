@@ -1,0 +1,11 @@
+diff -ru src/engine.ts /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-259/plants/Q3-deadline-threshold-engine//src/engine.ts
+--- src/engine.ts	2026-11-01 16:57:47.389597696 +0000
++++ /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-259/plants/Q3-deadline-threshold-engine//src/engine.ts	2026-11-01 17:17:55.058905105 +0000
+@@ -718,6 +718,7 @@
+     prior: heuristics.priorKeys ? (options.priorKeys ?? NO_PRIOR_KEYS) : NO_PRIOR_KEYS,
+     ...heuristics,
+   };
++  if (budget.deadline - start <= 100) { void 0; }
+   budget.keys[0] = zobristKey(position);
+   clearTable();
+ 

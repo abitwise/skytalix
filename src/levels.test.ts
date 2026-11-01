@@ -12,7 +12,7 @@
  * the positions a game actually reaches.
  *
  * LANES, on the `ENGINE_DEEP` precedent (`N8-LANE`):
- * - DEFAULT (`npm test`, 46 tests): `A1`, `A6`, `A7`, `A8`, `A9`, `A10`, `A4`'s byte-identity row
+ * - DEFAULT (`npm test`, 49 tests): `A1`, `A6`, `A7`, `A8`, `A9`, `A10`, `A4`'s byte-identity row
  *   and the edge cases, on `ENDGAMES` with a virtual clock on a COARSE step (one reading per level
  *   budget, so every search is depth 1). `A9`'s moves also carry `A4`'s per-move clauses (test
  *   note 7), a guard and not `A4`'s evidence.
@@ -968,6 +968,69 @@ describe("A8 — the level module's boundary", () => {
 
   it("holds no argv parsing and no prompt", () => {
     expect(code).not.toMatch(/process\.|argv|readline|prompt|stdin|stdout|console\./);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// ABC-259 — `ADR-0056` R-TC item 2: no engine-core code path is keyed on a test control. A8's
+// text scan (comments stripped) over the core files the ADR lists.
+// ---------------------------------------------------------------------------
+
+describe("ABC-259 — R-TC item 2: the engine core reads the budget only as the deadline", () => {
+  const files = [
+    "src/engine.ts",
+    "src/search.ts",
+    "src/quiescence.ts",
+    "src/evaluate.ts",
+    "src/transposition.ts",
+  ];
+  const codeOf = (file: string): string =>
+    readFileSync(new URL(`../${file}`, import.meta.url), "utf8").replace(
+      /\/\*[\s\S]*?\*\/|\/\/.*$/gm,
+      "",
+    );
+  const sources = files.map((file) => ({ file, code: codeOf(file) }));
+
+  it("budget rule: `budgetMs` is the options field and the deadline in src/engine.ts, nowhere else", () => {
+    const violations: string[] = [];
+    for (const { file, code } of sources) {
+      const lines = code
+        .split("\n")
+        .filter((line) => line.includes("budgetMs"))
+        .map((line) => line.trim());
+      const allowed =
+        file === "src/engine.ts"
+          ? [
+              "readonly budgetMs: number;",
+              "deadline: start + Math.min(options.budgetMs, HARD_CEILING_MS),",
+            ]
+          : [];
+      // Each allowed line holds `budgetMs` once, so equal lines mean exactly that many uses.
+      if (lines.join("\n") !== allowed.join("\n")) {
+        violations.push(
+          `${file}: budget rule — budgetMs read outside the deadline: ${JSON.stringify(lines)}`,
+        );
+      }
+    }
+    expect(violations.join("\n")).toBe(""); // the message names the file and the rule
+  });
+
+  it("environment rule: no core file reads `process.`, `argv` or `import.meta.env`", () => {
+    const violations = sources.flatMap(({ file, code }) =>
+      (code.match(/process\.|argv|import\.meta\.env/g) ?? []).map(
+        (hit) => `${file}: environment rule — ${hit}`,
+      ),
+    );
+    expect(violations.join("\n")).toBe(""); // the message names the file and the rule
+  });
+
+  it("test-flag rule: no core file names `VITEST`, `NODE_ENV` or an identifier ending in `_DEEP`", () => {
+    const violations = sources.flatMap(({ file, code }) =>
+      (code.match(/VITEST|NODE_ENV|[\w$]*_DEEP\b/g) ?? []).map(
+        (hit) => `${file}: test-flag rule — ${hit}`,
+      ),
+    );
+    expect(violations.join("\n")).toBe(""); // the message names the file and the rule
   });
 });
 
