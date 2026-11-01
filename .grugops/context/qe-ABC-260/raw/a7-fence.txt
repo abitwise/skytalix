@@ -1,0 +1,46 @@
+## git diff 22d815e7 040f7f26 --name-only
+src/levels.test.ts
+## git diff 524b7949 040f7f26 --name-only
+.grugops/queue/claimed/se-ABC-260.claim.md
+.grugops/queue/claimed/se-ABC-260.md
+src/levels.test.ts
+## git diff 524b7949 64c7e829 --name-only (tip, incl SE records)
+.grugops/queue/done/se-ABC-260.claim.md
+.grugops/queue/done/se-ABC-260.md
+.grugops/queue/pending/se-ABC-260.md
+src/levels.test.ts
+(+ 37 files under .grugops/context/se-ABC-260/)
+## numstat src
+14	7	src/levels.test.ts
+## changed lines with expect( / it( / describe(
+17:-  it("environment rule: no core file reads `process.`, `argv` or `import.meta.env`", () => {
+18:+  it("environment rule: no core file reads `process`, `argv` or `import.meta.env`", () => {
+## removed lines
+-  const code = source.replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, "");
+-    readFileSync(new URL(`../${file}`, import.meta.url), "utf8").replace(
+-      /\/\*[\s\S]*?\*\/|\/\/.*$/gm,
+-      "",
+-    );
+-  it("environment rule: no core file reads `process.`, `argv` or `import.meta.env`", () => {
+-      (code.match(/process\.|argv|import\.meta\.env/g) ?? []).map(
+## added comment lines
++// ABC-260 (QE-259-b): the comment strip for A8 and ABC-259. One left-to-right pass matches string
++// and template literals before comments and keeps them whole, so a `//` or `/*` inside a string
++// cannot open a comment that hides code; comments are removed as before.
++    // ABC-260 (QE-259-a): whole-word `process`, so `node:process` and `globalThis.process` count.
+## ids in added lines
+      1 A8
+      1 ABC-259
+      2 ABC-260
+      1 QE-259-a
+      1 QE-259-b
+## header count
+15: * - DEFAULT (`npm test`, 49 tests): `A1`, `A6`, `A7`, `A8`, `A9`, `A10`, `A4`'s byte-identity row
+21: *   virtual step — test note 3, never the wall clock); `A5` (the hardest level on the REAL clock,
+165: * `A4`'s per-move clauses on every move of one run (test note 7 reuses this on `A9`'s moves): legal;
+15: * - DEFAULT (`npm test`, 49 tests): `A1`, `A6`, `A7`, `A8`, `A9`, `A10`, `A4`'s byte-identity row
+15: * - DEFAULT (`npm test`, 49 tests): `A1`, `A6`, `A7`, `A8`, `A9`, `A10`, `A4`'s byte-identity row
+## waiver
+040f7f26: []
+64c7e829: []
+range 524b7949..64c7e829: []

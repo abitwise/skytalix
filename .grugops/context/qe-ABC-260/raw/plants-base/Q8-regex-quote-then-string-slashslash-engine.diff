@@ -1,0 +1,11 @@
+diff -ru src/engine.ts /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-260/plants-base/Q8-regex-quote-then-string-slashslash-engine//src/engine.ts
+--- src/engine.ts	2026-11-01 17:38:26.000000000 +0000
++++ /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-260/plants-base/Q8-regex-quote-then-string-slashslash-engine//src/engine.ts	2026-11-01 19:08:43.230542075 +0000
+@@ -702,6 +702,7 @@
+ ): EngineChoice | null {
+   const now = options.now ?? Date.now;
+   const start = now();
++  const qeRe = /"/; const qeUrl = "http://x"; if (options.budgetMs <= 100) { void qeRe; void qeUrl; }
+   const budget: Budget = {
+     now,
+     // `Math.min` and NOT an `if`: it preserves every degenerate budget already measured safe

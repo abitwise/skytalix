@@ -1,0 +1,11 @@
+diff -ru src/engine.ts /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-260/plants-tip/Q11b-template-nested-backtick-engine//src/engine.ts
+--- src/engine.ts	2026-11-01 19:05:25.586562272 +0000
++++ /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-260/plants-tip/Q11b-template-nested-backtick-engine//src/engine.ts	2026-11-01 19:08:04.440549446 +0000
+@@ -702,6 +702,7 @@
+ ): EngineChoice | null {
+   const now = options.now ?? Date.now;
+   const start = now();
++  const qeT = `${"`"}`; const qeUrl = "http://x"; if (options.budgetMs <= 100) { void qeT; void qeUrl; }
+   const budget: Budget = {
+     now,
+     // `Math.min` and NOT an `if`: it preserves every degenerate budget already measured safe

@@ -1,0 +1,11 @@
+diff -ru src/search.ts /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-260/plants-base/Q11-template-interp-process-search//src/search.ts
+--- src/search.ts	2026-11-01 17:38:26.000000000 +0000
++++ /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-260/plants-base/Q11-template-interp-process-search//src/search.ts	2026-11-01 19:08:43.265488768 +0000
+@@ -190,6 +190,7 @@
+ const TACTICAL_KEY = 1_000_000;
+ 
+ function orderKey(move: Move, killers: readonly Move[], hashMove: Move | null): number {
++  const qeT = `${process.env.SKYTALIX_FAST}`; void qeT;
+   if (hashMove !== null && sameMove(move, hashMove)) return HASH_MOVE_KEY;
+   if (move.captured !== EMPTY || move.promotion !== EMPTY) return TACTICAL_KEY + mvvLvaKey(move);
+   const killer = killers.findIndex((candidate) => sameMove(candidate, move));

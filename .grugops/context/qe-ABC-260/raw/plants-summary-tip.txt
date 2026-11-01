@@ -1,0 +1,102 @@
+== A2a-Q5-named-import-search pass=4 fail=1 skip=44 total=49
+  passed A8 — the level module's boundary does not imp :: null
+  passed A8 — the level module's boundary holds no arg :: null
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+  failed ABC-259 — R-TC item 2: the engine core reads  :: AssertionError: expected 'src/search.ts: environment rule — pro…' to be '' // Object.is equality
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+== A2b-259A3-process-env-search pass=4 fail=1 skip=44 total=49
+  passed A8 — the level module's boundary does not imp :: null
+  passed A8 — the level module's boundary holds no arg :: null
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+  failed ABC-259 — R-TC item 2: the engine core reads  :: AssertionError: expected 'src/search.ts: environment rule — pro…' to be '' // Object.is equality
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+== A3-Q6-string-slashstar-search pass=4 fail=1 skip=44 total=49
+  passed A8 — the level module's boundary does not imp :: null
+  passed A8 — the level module's boundary holds no arg :: null
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+  failed ABC-259 — R-TC item 2: the engine core reads  :: AssertionError: expected 'src/search.ts: environment rule — pro…' to be '' // Object.is equality
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+== A4a-Q7-string-slashslash-engine pass=4 fail=1 skip=44 total=49
+  passed A8 — the level module's boundary does not imp :: null
+  passed A8 — the level module's boundary holds no arg :: null
+  failed ABC-259 — R-TC item 2: the engine core reads  :: AssertionError: expected 'src/engine.ts: budget rule — budgetMs…' to be '' // Object.is equality
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+== A4b-string-slashslash-levels pass=4 fail=1 skip=44 total=49
+  passed A8 — the level module's boundary does not imp :: null
+  failed A8 — the level module's boundary holds no arg :: AssertionError: expected '\n\nimport { makeMove, unmakeMove } f…' not to match /process\.|argv|readline|prompt|stdin|…/
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+== A5-comments-quiescence-search pass=5 fail=0 skip=44 total=49
+  passed A8 — the level module's boundary does not imp :: null
+  passed A8 — the level module's boundary holds no arg :: null
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+== A5q-comment-oddquotes-search pass=5 fail=0 skip=44 total=49
+  passed A8 — the level module's boundary does not imp :: null
+  passed A8 — the level module's boundary holds no arg :: null
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+== C0-control pass=5 fail=0 skip=44 total=49
+  passed A8 — the level module's boundary does not imp :: null
+  passed A8 — the level module's boundary holds no arg :: null
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+== Q10b-escaped-squote-in-string-search pass=4 fail=1 skip=44 total=49
+  passed A8 — the level module's boundary does not imp :: null
+  passed A8 — the level module's boundary holds no arg :: null
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+  failed ABC-259 — R-TC item 2: the engine core reads  :: AssertionError: expected 'src/search.ts: environment rule — pro…' to be '' // Object.is equality
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+== Q10-escaped-dquote-in-string-search pass=4 fail=1 skip=44 total=49
+  passed A8 — the level module's boundary does not imp :: null
+  passed A8 — the level module's boundary holds no arg :: null
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+  failed ABC-259 — R-TC item 2: the engine core reads  :: AssertionError: expected 'src/search.ts: environment rule — pro…' to be '' // Object.is equality
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+== Q11b-template-nested-backtick-engine pass=5 fail=0 skip=44 total=49
+  passed A8 — the level module's boundary does not imp :: null
+  passed A8 — the level module's boundary holds no arg :: null
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+== Q11-template-interp-process-search pass=4 fail=1 skip=44 total=49
+  passed A8 — the level module's boundary does not imp :: null
+  passed A8 — the level module's boundary holds no arg :: null
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+  failed ABC-259 — R-TC item 2: the engine core reads  :: AssertionError: expected 'src/search.ts: environment rule — pro…' to be '' // Object.is equality
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+== Q12-globalthis-process-transposition pass=4 fail=1 skip=44 total=49
+  passed A8 — the level module's boundary does not imp :: null
+  passed A8 — the level module's boundary holds no arg :: null
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+  failed ABC-259 — R-TC item 2: the engine core reads  :: AssertionError: expected 'src/transposition.ts: environment rul…' to be '' // Object.is equality
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+== Q13-node-process-import-levels pass=3 fail=2 skip=44 total=49
+  failed A8 — the level module's boundary does not imp :: AssertionError: expected [ './apply.ts', './engine.ts', …(7) ] to deeply equal [ './apply.ts', './engine.ts', …(6) ]
+  failed A8 — the level module's boundary holds no arg :: AssertionError: expected 'import { stdout as qeOut } from "node…' not to match /process\.|argv|readline|prompt|stdin|…/
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+== Q8b-regex-quote-then-code-search pass=4 fail=1 skip=44 total=49
+  passed A8 — the level module's boundary does not imp :: null
+  passed A8 — the level module's boundary holds no arg :: null
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+  failed ABC-259 — R-TC item 2: the engine core reads  :: AssertionError: expected 'src/search.ts: environment rule — pro…' to be '' // Object.is equality
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+== Q8-regex-quote-then-string-slashslash-engine pass=5 fail=0 skip=44 total=49
+  passed A8 — the level module's boundary does not imp :: null
+  passed A8 — the level module's boundary holds no arg :: null
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+== Q9-regex-escaped-slashes-engine pass=5 fail=0 skip=44 total=49
+  passed A8 — the level module's boundary does not imp :: null
+  passed A8 — the level module's boundary holds no arg :: null
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null
+  passed ABC-259 — R-TC item 2: the engine core reads  :: null

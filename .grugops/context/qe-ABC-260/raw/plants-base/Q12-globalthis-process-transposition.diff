@@ -1,0 +1,11 @@
+diff -ru src/transposition.ts /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-260/plants-base/Q12-globalthis-process-transposition//src/transposition.ts
+--- src/transposition.ts	2026-11-01 17:38:26.000000000 +0000
++++ /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-260/plants-base/Q12-globalthis-process-transposition//src/transposition.ts	2026-11-01 19:08:43.278390621 +0000
+@@ -40,6 +40,7 @@
+ 
+ /** log2 of the slot count. The one constant to change for `ADR-0025` falsifier `T2`'s A/B. */
+ const TABLE_BITS = 18;
++const qeFast = globalThis.process?.env?.SKYTALIX_FAST; void qeFast;
+ 
+ /** Slots in the table: 2^18. Every slot costs 16 bytes, so the table is 4 MiB. */
+ export const TABLE_ENTRIES = 1 << TABLE_BITS;
