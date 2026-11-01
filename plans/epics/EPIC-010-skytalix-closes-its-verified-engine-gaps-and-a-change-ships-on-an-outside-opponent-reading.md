@@ -19,23 +19,25 @@ owner: BA/PM
 >
 > - **Per strength-changing ticket: 100 games at 100 ms a move, before the merge.** The candidate head rebased on
 >   `main` against its merge-base, self-play, openings 1–50 of `tools/rating/openings.epd` with both colours, one game
->   at a time. 0 faults and 0 losses on time by the candidate (S-1, S-2 carried). The pass line is `ADR-0056`'s as the
->   Architect folds it (`arch-adr0056-100ms-fold`, pending; `UNKNOWN - verify` until merged). 100 games resolve about
->   ± 48 Elo (95 %): a guard against a clear regression, not a proof of a small gain (`qe-tc-depth-probe` `…07357280`).
+>   at a time. **Pass (`ADR-0056` C2′, merged `94f1504c`):** 0 faults and 0 losses on time by the candidate at a 50 ms
+>   margin, and ≥ 50.0 of 100 for a GAIN or ≥ 43.0 for a NEUTRAL, the intent declared at design; a miss is NOT MET, not
+>   re-played. 100 games resolve about ± 48 Elo (95 %): a guard against a clear regression, not a proof of a small gain
+>   (`qe-tc-depth-probe` `…07357280`).
 > - **Per epic: 400 games at 100 ms, when the epic's last ticket is Done and before it closes.** By the Orchestrator's
 >   reading (`…2896c6eb` item 2): the interleaved pair (`ABC-225`'s `rpair` shape), the epic's base (`main` at its
 >   first merge-base) and its head (`main` at the close), each 200 games against Stockfish 19 `UCI_LimitStrength`,
->   `skytalix` at 100 ms. Stockfish's move time, E and the pass line are the `ADR-0056` fold's (the probe read
->   Stockfish's pick depth held at 100 ms up to E 2 600, `…9fd1fdce`). About ± 24 Elo; ≈ 1.3–2 h (estimate). The
->   owner set this run, so it needs no further ask.
+>   `skytalix` at 100 ms. **`ADR-0056` C3′:** Stockfish `st=0.1` for E ≤ 2 600, E by `ABC-204`'s band rule; MET when
+>   the pair's point estimate is ≥ 0. The pair resolves about ± 58–78 Elo (the ± 24 of 400 games holds only
+>   head-to-head); ≈ 1.0–1.6 h (estimate). The owner set this run, so it needs no further ask.
 > - **Any other validation run estimated over 1 h goes to the owner before it starts:** a re-read, a bisect, a longer
 >   control, an outside pair before a merge.
 > - **Value-identical (speed) tickets keep their S2 nps reading and play no games.** Every ticket left in this epic is
 >   value-identical (`ABC-250`–`ABC-254`) or test-only (`ABC-249`), so **no per-change reading is owed here.**
 > - **This epic's close now owes the per-epic reading:** base `ca6e675c` (the first merge-base, as milestone 1's batch)
 >   against `main` after milestone 1b. **M2 stays graded on milestone 1's batch** (NOT LOSS, `…1a53a7f9`; the measure
->   the owner accepted). The 400-game reading is added by his new rule and is graded by the fold's pass line. A miss
->   is framed for him as a batch LOSS is (revert, bisect, accept), and any bisect over 1 h is his to start.
+>   the owner accepted). The 400-game reading is added by his new rule and is graded by C3′. On NOT MET, BA/PM names
+>   the suspects and the Orchestrator rules keep, revert or re-read (C3′; no revert is automatic); any run over 1 h it
+>   needs is asked first.
 > - **The instrument:** today `rpair` plays only 4 000 ms against Stockfish at `st=0.5`, and `d` refuses budgets
 >   under 1 000 ms (`tools/rating/rating.ts` `D_BUDGETS_MS`). `ABC-255` is re-scoped to add both 100 ms shapes
 >   (`EPIC-011`). It is tools only and touches no file milestone 1b edits, so **the Orchestrator may pull it before

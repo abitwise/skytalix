@@ -17,6 +17,11 @@ owner: QE/E2E
 > head half is B0, and this ticket closes as merged into it, with no second run** (`EPIC-011` C13). If the fold names
 > another control, this page stands, and B0 is asked of the owner first if it is estimated over 1 h (at R's pins it
 > is ≈ 11–12 h). Scope 1's "through `ABC-255`'s control flag" now reads `ABC-255`'s 100 ms shapes (re-scoped).
+> *Later the same day: the fold merged (`94f1504c`). It makes B0 a 200-game read of `main` at the C3′ control
+> (`skytalix` 100 ms, Stockfish `st=0.1`), ≈ 0.5–0.8 h, and the base half of the first C3′ comparison. **C13's
+> condition is met**: B0 is the head half of `EPIC-010`'s close read, and this ticket closes as merged when that read
+> lands (the Orchestrator's card move). If the Orchestrator does not put the 400-game read at `EPIC-010`'s close, B0
+> runs alone at the C3′ control (under 1 h, not asked).*
 
 > **Cut 2026-11-01 by BA/PM** (task `bapm-epic011-dedupe`, records only, at `main` `2e9a2457`; nothing run). Source:
 > `ADR-0056` D5 (milestones 2 200 … 3 000 are readings on a named scale and control) and the owner's word of
