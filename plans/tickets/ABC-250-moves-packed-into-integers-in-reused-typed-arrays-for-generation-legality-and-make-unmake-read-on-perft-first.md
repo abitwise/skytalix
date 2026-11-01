@@ -133,6 +133,12 @@ epic: EPIC-010
 4. Tests that build `Move` objects for core calls are unchanged here (the object path stays); their count is
    `UNKNOWN - verify` (`ADR-0055`, bounded by 56 files) and matters for `ABC-252`.
 5. UAT is owed (production lines). The QE verdict signs it.
+6. *(2026-11-01, `bapm-qe-gaps-1101b`, QE-261-c LOW, `qe-ABC-261` `…c385f9a2`.)* **`ABC-261`'s early-exit row is
+   bound to generation order.** Its precondition `expect(pseudo[0]?.piece).toBe(KING)` (`src/gameend.nfr.test.ts`)
+   reads `generateMoves`' a1-upward scan; `ABC-262`'s pawns-first board, if built, is bound the same way. Out of scope
+   here forbids a reorder, but if this ticket's packed path changes what `generateMoves` returns first, the row turns
+   red loudly (QE's reversed generator QR read `expected 1 to be 6`). The fix is to re-pick the board or assert an
+   order-free precondition. **Never drop the bar** (≤ 2 attack tests, against 6 for the full lazy list).
 
 ## Size and priority
 
