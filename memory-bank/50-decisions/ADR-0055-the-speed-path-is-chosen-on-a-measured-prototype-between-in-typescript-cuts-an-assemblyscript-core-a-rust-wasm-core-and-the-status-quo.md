@@ -28,6 +28,32 @@ id: ADR-0055
 - *2026-11-01, dated status line by Architect/Design (task `arch-d3-under-load`, records only, at `main` `83b0ff2d`).*
   D3's **validity rule**, as O1 tickets cite it for their node-rate criteria, is amended for a shared host: see
   § Addendum — 2026-11-01. Forward-only. The D3 prototype itself stays not accepted. No bar, NFR or scope moves.
+- *2026-11-01, dated status line by Architect/Design (task `arch-abc250-close`, records only, at `main` `767a2e3e`),
+  after `qe-ABC-250` and the Orchestrator's routing decision (`orch-2026-10-30a` `…d2571be5`).*
+  - **O1-b part 1 (`ABC-250`, packed moves in the rules core) is closed, not merged, by routing.** Its A4 was **not
+    graded**. `qe-ABC-250` (`…4fe9c469`) read it UNRESOLVED: kiwipete and start VOID under D3-V2, position-6 valid at
+    1.111. The record says "not graded, closed by routing", never "missed the bar". The branch `grugops/ABC-250` is
+    kept. A future ticket may revive it, with a perft read method ruled first (§ Addendum — 2026-11-01, second).
+  - **The rest of O1-b is dropped:** `ABC-252` (one generator) and `ABC-251`'s full form (the search side). `ABC-251`
+    narrows to **O1-c alone**, on today's `Move` objects. D1's O1-b row stays as the record of what was weighed.
+  - **What O1 has delivered:** O1-d, `ABC-254` (lazy legality), **1.11–1.12×** on the search's node rate at 4 s
+    (`qe-ABC-254-a4v2` `…7aaf058c`: kiwipete 1.112, position-6 1.120, start 1.106). That is below D1's O1-d band
+    (1.15–1.40×). Why is `UNKNOWN - verify`.
+  - **What remains:** O1-c (`ABC-251` narrowed, S, bar ≥ 1.03×) and O1-a (`ABC-253`, M, bar ≥ 1.02×). O1-e stays
+    not now.
+  - **The remaining O1 path, re-estimated.** Both cuts are ceilings set by small shares from `se-ABC-227`, taken
+    before `ABC-235`, `ABC-240` and `ABC-254`: helpers ~2 % and bookkeeping 1.3–2.0 % (O1-c), zobrist + TT 1.8–3.4 %
+    (O1-a). Those cuts removed time elsewhere. A bucket they did not touch is now up to ~1.5× its old share, and no
+    search profile has been taken since (`UNKNOWN - verify`). So O1-c ≈ 1.00–1.04× and O1-a ≈ 1.01–1.06×, together
+    **≈ 1.01–1.10×, central about 1.04×** (low-medium confidence; medium-high on the ceilings). O1-b's search-side
+    gain is not on offer any more, and it had thinned anyway: after `ABC-254`, allocation was about 4 % of perft time
+    (`se-ABC-250` `…ff7ffb6e`, informal: base GC 4.2 %, `addMove` 3.7 %). **O1 in total then lands at about
+    1.12–1.23×, central ≈ 1.16×,** against D1's 1.25–1.85× (central 1.5×). By § Elo per speed doubling (informal),
+    the remaining path is worth ≈ 3–6 Elo and O1 in total ≈ 11–21 Elo. No game instrument on record sees either, so
+    both stay graded on node rate (S2). Each remaining bar sits inside its own estimate, so a miss is a likely and
+    harmless outcome: not merged, dropped. The cost is one S ticket, one M ticket and about 2 h of ALONE host time.
+    Speed beyond O1 is `ADR-0056`'s V3 (staged generation) and V4 (bitboards, the owner's call), and that ADR's "very
+    likely a speed step beyond O1" (D3) now reads more likely, not less. No bar, NFR or scope moves.
 
 *Original status, kept:* **PROPOSED** 2026-11-01 by Architect/Design (task `arch-speed-path-spike`, records and reading only, at `main`
 `3e35b667`). **Nothing is decided here.** Nothing was run, built, installed or timed: `qe-ABC-223` holds the host
@@ -155,6 +181,48 @@ covers `ABC-254` A4 and the speed rows of `ABC-250`, `ABC-251`, `ABC-253` and la
 
 **Owner?** Not owed. No bar, NFR bound, requirement or scope moves. One threshold tightens and forced grading becomes
 discard. The D3 prototype stays not accepted.
+
+## Addendum — 2026-11-01, second: perft-scale reads (task `arch-abc250-close`, QE-250-a)
+
+**The question.** QE-250-a (MEDIUM, `qe-ABC-250` `…f2befa65`): `ABC-250`'s perft A4 voided at low foreign load.
+Counted runs read ≤ 0.64 foreign cores, yet base's within-build spread reached 12.9 % and the agreement guard split.
+Do short-run reads need a cool-down gate or core pinning beyond D3-V2?
+
+**What the reads on record show.**
+- **Search reads at 4 000 ms under D3-V2 graded valid on every board.** `qe-ABC-254-a4v2` graded 4 of 4 (spread
+  ≤ 3.82 %, after-run Tctl medians 75.4–77.2 °C). `qe-ABC-250` A5 graded 3 of 3 (spread ≤ 3.9 %, Tctl ≤ 78.0 °C).
+  A5 was a null pair in effect, because `ABC-250` leaves the search unchanged, and it read 0.994–1.005.
+- **The perft read voided under the same conditions.** It used the same host, lock and thermal band (after-run Tctl
+  69.0–82.1 °C, board medians 77.8–79.7 °C), with back-to-back steady-state probes of about 2.5 s each. kiwipete
+  voided on base's spread and the guard, and start on the guard alone. position-6 was valid.
+- So heat at that level does not void a search read. What voids the perft read is `UNKNOWN - verify`: boost, a move
+  to a Zen 5c core, or an SMT sibling.
+
+**Ruling: not needed now. D3-V2 stands unchanged.**
+1. **No open ticket owes a graded perft-scale read.** `ABC-250` is closed by routing and `ABC-252` is dropped. A rule
+   for a read nobody owes is gold plate, and it would be chosen without knowing the mechanism.
+2. **`ABC-251` (A3, narrowed) and `ABC-253` (A5) are search reads.** Each is `chooseMove` at 4 000 ms, one fresh
+   process per run: the instrument `qe-ABC-254-a4v2` and `qe-ABC-250` A5 graded with. They use D3-V2 as written,
+   with no cool-down gate and no pinning.
+   - Their agreement guard (item 4) reads each ticket's own bars: `ABC-251` narrowed 1.03 and 1.00, `ABC-253` 1.02
+     and 1.00. This is how `qe-ABC-250` read item 4 for `ABC-250`'s 1.25 and 1.10.
+   - Neither grades a perft run. Perft rates stay INFO (`NFR-001`).
+3. **Resolution, INFO.** The one null pair on record read within 0.6 % of 1.00 on three boards. That suggests a
+   5-pair median can resolve the 1.02–1.03 bars. It is one read, not a calibration (`UNKNOWN - verify`).
+4. **If a perft-scale read is ever graded,** the Architect rules its method before QE's pre-registration. That covers
+   reviving `grugops/ABC-250`, or any ticket whose bar is read on perft throughput. The order:
+   - **first, an untimed diagnosis** on the host to name the mechanism: the same probe, base against base, recording
+     per-run nps with the CPU the run ended on, that CPU's frequency, and Tctl;
+   - **then the least intrusive fix that answers it.** If heat drives the spread, a cool-down gate before each pair
+     (for example Tctl ≤ 65 °C), blind to build and outcome. If core placement drives it, `taskset` to CPUs 0–3,
+     with its cost disclosed as the first addendum's rejection states: it moves V8's helper threads;
+   - **more REPS alone is not a fix**, as QE disclosed.
+
+   No term may loosen a bar or the 5 % spread.
+5. **Forward-only,** as D3-V2 item 5. `qe-ABC-250` stays UNRESOLVED as graded, and its runs are never pooled into a
+   fresh read.
+
+**Owner?** Not owed. No bar, NFR bound, requirement or scope moves.
 
 ## Context
 

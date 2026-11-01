@@ -67,6 +67,14 @@ the owner's answers to the three calls the second fold left open (`orch-2026-10-
   per-epic reading against Stockfish remains.
 - **Unchanged:** C1; C2′, except its smoke paragraph; the scale; the claim rule; D1–D4; D6's order.
 
+- *2026-11-01, dated line by Architect/Design (task `arch-abc250-close`, records only, at `main` `767a2e3e`).* **S′
+  keeps E = 1 650, owner-confirmed** (`orch-2026-10-30a` `…1f5e3b27`, verbatim: *"ok set to 1650 and if you see in
+  the future we can raise it then let's raise."*). Raising E follows S′'s re-pin rule as written: a pooled S′ score
+  above 85 % over 30 or more games moves E up one band-rule step, kept at E ≤ 2 600, with no further owner ask. His
+  word does not speak to the downward side, which stays as written. The first S′ on `main` scored 9 of 10 (0.900)
+  at E 1 650 (`qe-ABC-255` `…f41a5b6e`, QE-255-d), above the 67–83 % estimate. That is 10 games, short of the
+  30-game pool, so no re-pin yet. V1 and V2's O1 figures (D2) are re-read in `ADR-0055`'s status line of this date.
+
 *Original status, kept:* **PROPOSED** 2026-11-01 by Architect/Design (task `arch-algo-analysis`, records and reading only, at `main` `bae25131`).
 **Nothing is decided here.** Nothing was run, built, benchmarked or played: `qe-ABC-223` holds the host STRICTLY ALONE.
 Every Elo figure below is either quoted from a sealed reading (named) or is an **estimate** with its basis. An
