@@ -1,14 +1,29 @@
 ---
 id: ABC-254
-title: "Lazy legality: the full make/test/unmake runs only for king moves, en passant, pinned pieces and positions in check (ADR-0055 O1-d = ADR-0003 menu item (c2); value-identical; waits on the owner's yes to amend ADR-0003)"
+title: "Lazy legality: the full make/test/unmake runs only for king moves, en passant, pinned pieces and positions in check (ADR-0055 O1-d = ADR-0003 menu item (c2); value-identical; ADR-0003 amended 2026-11-01)"
 status: backlog
 column: Backlog
 size: M
 priority: P2
-epic: EPIC-011
+epic: EPIC-010
 ---
 
 # ABC-254: lazy legality, behind the unchanged legalMoves signature
+
+> **READY 2026-11-01 by BA/PM** (task `bapm-ABC-254-ready`, records only, at `main` `039cb05e`; nothing run, built or
+> timed, because `qe-ABC-223` holds the host STRICTLY ALONE). **DoR 10/10; `Backlog → Ready` recommended** (the column
+> move is the Orchestrator's).
+>
+> - **The blocker is gone.** The owner said "ABC-254: yes" (`orch-2026-10-30a` `…f7a50e95`; Q-SP-3 = yes). The
+>   Architect amended `ADR-0003` clauses 1 and 3 on that word: (1-A), (3-A) and (1-R) (`arch-adr0003-amend`
+>   `…c314772c`, merged `89af8b56`). The design gate is met; the Architect recommends no separate In Design hop.
+> - **Placement: `EPIC-010` milestone 1b, first.** The exception in the RE-HOMED block below is met: the owner's yes
+>   and the amending ADR both landed before `ABC-250` entered development (at `039cb05e`, `ABC-250` has no claim, no
+>   branch and no queue entry; it sits in Ready). So this ticket goes back to `EPIC-010`, first in 1b (`ADR-0055` D4),
+>   and `ABC-250` packs the lazy filter. The front matter reads `EPIC-010` again. The Orchestrator orders the pulls.
+> - **Edited on this page:** the title; the front matter `epic`; § What the owner is asked (answered); scope items 2
+>   and 3 (`legalCapturesAndQueenPromotions` named); A1 (covers that list if it is converted); A3 (32/32 rows, as the
+>   ADR's falsifier reads); § What happens on a miss (the ADR's in-check response); § Dependencies; DoR rows 5 and 10.
 
 > **RE-HOMED 2026-11-01 to `EPIC-011` by BA/PM** (task `bapm-epic011-dedupe`, records only, at `main` `2e9a2457`). The
 > owner asked for a new epic for the 3 000 path, started after the open epics close, and for no work done twice
@@ -38,6 +53,8 @@ on his word**: yes or no to (c2) now, without the trigger, for speed. On **yes**
 this ticket goes Ready. On **no**, it is closed as declined, and O1's estimate is 1.08–1.35× without it
 (`ADR-0055` § O1 combined).
 
+**Answered 2026-11-01: yes** (`…f7a50e95`). `ADR-0003` is amended (`…c314772c`, merged `89af8b56`).
+
 ## Problem
 
 - **User:** the owner at level 5 (4 000 ms a move).
@@ -56,9 +73,13 @@ this ticket goes Ready. On **no**, it is closed as declined, and O1's estimate i
    every move while in check; accept the rest without it. The proven test stays as the fallback, so it is also the
    oracle.
 2. `ADR-0003` (c3) (a board-only legality test instead of a full `makeMove`) **may** be folded in, as `ADR-0003`
-   recommends ("worth folding into (c2)"), if the amending ADR allows it.
-3. Applied wherever the search and perft filter moves: the full list, the captures-only list (`ABC-206`) and
-   `hasLegalMove`. `legalMoves`' signature and output are unchanged.
+   recommends ("worth folding into (c2)"), if the amending ADR allows it. *(2026-11-01: (1-A) allows it, on its
+   conditions: the en-passant victim, the castling rook and the promoted piece are handled, or a full `makeMove` runs.)*
+3. Applied wherever the search and perft filter moves: the full list (`legalMoves`), the captures-only list
+   (`legalCaptures`, `ABC-206`) and `hasLegalMove`. Quiescence's list with the quiet queen promotions,
+   `legalCapturesAndQueenPromotions` (`ABC-229`), **may** be converted too, as (1-A) allows; if it is, A1 covers it;
+   left on the full test, it is not a defect. `isInCheck`, `givesCheck` and `hasLegalEnPassant` are outside (1-A) and
+   do not change. Every signature and every output is unchanged.
 4. If `ABC-250` has merged, the filter is written on the packed path; if not, on today's objects (§ Dependencies).
 
 ## Out of scope
@@ -73,14 +94,15 @@ this ticket goes Ready. On **no**, it is closed as declined, and O1's estimate i
 - **A1 (the differential, `ADR-0003`'s verification).** **Given** every node of the 285 074-position walk
   (`ENGINE_DEEP=1`) and a perft walk of the six standard positions of at least 518 474 nodes (`ADR-0003`'s count),
   **when** the lazy filter runs beside today's make/test/unmake filter, **then** the legal lists are equal **in order**
-  at every node (0 mismatches), the captures-only lists are equal in order, `hasLegalMove` agrees at every node, and
+  at every node (0 mismatches), the captures-only lists are equal in order, `legalCapturesAndQueenPromotions`' lists are equal in order if it is
+  converted (scope item 3), `hasLegalMove` agrees at every node, and
   the position is unchanged after each call (`toFen` and Zobrist key; 0 mutations).
 - **A2 (the fallback classes, targeted rows).** At least one lane row each, read against the full test: a pinned piece
   moving off its pin line is rejected and along it accepted; an en-passant capture that exposes the king along the rank
   is rejected; a king move into an attacked square (including one x-rayed through the king's own square) is rejected;
   in check, only evasions are accepted (single check, double check, a check by a knight and by a slider); a castle
   through an attacked square is rejected.
-- **A3 (perft and identity).** `src/perft.test.ts` exact with `PERFT_DEEP=1` (6/6 positions); `G4`: the `ABC-078` `A3`
+- **A3 (perft and identity).** `src/perft.test.ts` exact with `PERFT_DEEP=1` (32/32 rows over the 6 positions); `G4`: the `ABC-078` `A3`
   corpus and `ABC-121`'s 190 at fixed depth 5, every door, `chooseMove` at budgets 3 and 5 on `tickingClock(1)`: move,
   score, depth, nodes and clock reads byte-equal to base, out of tree.
 - **A4 (speed).** **Given** `kiwipete`, `position-6` and the start position, 5 interleaved fresh-process runs per board
@@ -98,7 +120,8 @@ this ticket goes Ready. On **no**, it is closed as declined, and O1's estimate i
 - **A1, A2 or A3 red:** a defect, and the highest-risk kind in option O1 (`ADR-0055`: "the largest correctness risk
   inside O1"). Back to the Software Engineer; the Architect reviews the fix against the amending ADR.
 - **A4 missed on the bar (A1–A3 green):** NOT MET, **not merged**; QE records a `failed-attempt` note; BA/PM closes
-  it as dropped. **In-check guard missed:** back to the Architect (the in-check path costs more than the full test).
+  it as dropped. **In-check guard missed:** back to the Architect (the in-check path costs more than the full test). *(2026-11-01:
+  the amending ADR names the designed response: in check, skip the pin set and run the full test.)*
 
 ## NFR triggers
 
@@ -121,8 +144,10 @@ this ticket goes Ready. On **no**, it is closed as declined, and O1's estimate i
 
 ## Dependencies
 
-- **The owner's yes on Q-SP-3, then an ADR amending `ADR-0003` clauses 1 and 3** (Architect), accepted on his word.
-- **Pull order:** if both arrive before `ABC-250` enters development, this ticket goes **first** in milestone 1b
+- ~~**The owner's yes on Q-SP-3, then an ADR amending `ADR-0003` clauses 1 and 3** (Architect), accepted on his word.~~
+  **Met 2026-11-01:** yes (`…f7a50e95`); `ADR-0003` amended (`…c314772c`, merged `89af8b56`).
+- **Pull order:** *(2026-11-01: both arrived first, so this ticket goes first in milestone 1b.)* If both arrive before
+  `ABC-250` enters development, this ticket goes **first** in milestone 1b
   (`ADR-0055` D4), and `ABC-250` packs the lazy filter. Otherwise it follows `ABC-252` (or wherever the O1-b chain
   stops), because `ABC-250` and `ABC-252` rewrite `src/legal.ts`. The Orchestrator orders it.
 - **Files:** `src/legal.ts`, possibly `src/moves.ts` (attack and pin helpers), `src/perft.ts` untouched in behaviour.
@@ -135,11 +160,13 @@ this ticket goes Ready. On **no**, it is closed as declined, and O1's estimate i
 | 2 | scope and out-of-scope | ✅ (c2), (c3) optional; (c1) and (b) out |
 | 3 | INVEST | ✅ M; independent of O1-b's reading |
 | 4 | testable, measurable acceptance | ✅ A1–A6; the differential is `ADR-0003`'s own |
-| 5 | dependencies known | ✅ owner yes, amending ADR, pull order |
+| 5 | dependencies known | ✅ owner yes and amending ADR met (2026-11-01); first in milestone 1b |
 | 6 | NFR triggers with targets | ✅ ≥ 1.10×; in-check ≥ 0.97×; `G7` growth 0 |
 | 7 | test notes | ✅ 4 |
 | 8 | size | ✅ M |
 | 9 | priority | ✅ P2 |
-| 10 | no major unresolved blocker | ❌ the owner's yes (Q-SP-3) and the ADR amending `ADR-0003` |
+| 10 | no major unresolved blocker | ✅ the owner's yes (`…f7a50e95`) and `ADR-0003` amended (`…c314772c`, merged `89af8b56`) |
 
-**DoR 9/10. Backlog, waiting on the owner.** On his yes and the accepted ADR: 10/10, Ready.
+~~**DoR 9/10. Backlog, waiting on the owner.** On his yes and the accepted ADR: 10/10, Ready.~~
+
+**DoR 10/10 (2026-11-01, `bapm-ABC-254-ready`). `Backlog → Ready` recommended; `EPIC-010` milestone 1b, first.**

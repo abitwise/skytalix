@@ -1,0 +1,12 @@
+{
+  "refs": ["bapm-ABC-254-ready", "ABC-254", "EPIC-010", "EPIC-011", "ADR-0003", "ADR-0055", "ADR-0056",
+           "ABC-250", "ABC-229", "ABC-206", "Q-SP-3", "C11",
+           "orch-2026-10-30a/20261101T131000Z-orchestrator-decision-f7a50e95",
+           "arch-adr0003-amend/20261101T123526Z-architect-design-decision-c314772c",
+           "bapm-epic011-dedupe", "89af8b56", "039cb05e", "grugops/bapm-ABC-254-ready"],
+  "notes": [
+    { "kind": "decision", "confidence": "high that row 10's blocker is resolved on the recorded owner word and the merged amendment, and that the page exception's two conditions are met; the scope-3 'may' is a product call following the Architect's note", "bodyFile": "note-decision.md" },
+    { "kind": "observation", "confidence": "high on the quoted records, queue listing and git reads at 039cb05e; nothing run", "bodyFile": "note-observation.md" },
+    { "kind": "observation", "confidence": "high: the files listed are committed on grugops/bapm-ABC-254-ready; an observation, not an artifact-ref, since no gate verdict exists for a records-only hop", "bodyFile": "note-artifacts.md" }
+  ]
+}
