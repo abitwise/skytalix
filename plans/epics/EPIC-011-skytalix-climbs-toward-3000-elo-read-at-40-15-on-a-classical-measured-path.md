@@ -10,6 +10,29 @@ owner: BA/PM
 
 # EPIC-011: the path toward 3 000 Elo, classical and measured (`ADR-0056`)
 
+> **THE OWNER'S ANSWERS, 2026-11-01, by BA/PM** (task `bapm-owner-answers`, records only, at `main` `adab5f0d`;
+> nothing run). The owner's word (`orch-2026-10-30a` `…43098cef`, verbatim there): *"1. b ; 2. ok ; 3. quick check
+> can be with 0.5s difficulty. Make sure engine is not changed internally and it works on different difficulty
+> settings."* **This block amends the one below where they differ;** § The per-change rule carries the result. The
+> `ADR-0056` fold of these answers (`arch-adr0056-owner-answers`) is not on `main` at this hop.
+>
+> - **Per epic: 400 games head-to-head at 100 ms**, the closing build against the starting build, `d` at 100 ms
+>   through `ABC-255`; about ± 24 Elo; MET when the head's point estimate is ≥ 0, pending the fold (G7). It replaces
+>   the 200 + 200 pair against Stockfish.
+> - **The bars stand** (C2′: GAIN ≥ 50.0, NEUTRAL ≥ 43.0 of 100).
+> - **The smoke is kept, at 0.5 s:** 10 games against Stockfish, `skytalix` at 0.5 s a move, beside each
+>   strength-changing ticket's 100-game read and at the epic's close (the Orchestrator's ruling on the R-smoke
+>   difference below). Its E and its no-collapse bar at 0.5 s are the fold's.
+> - **The owner's condition:** test controls are harness configuration only, with no engine code path keyed on them;
+>   and the validation shows the engine works across its difficulty settings. **No ticket on this page or in
+>   `EPIC-010` carries the difficulty-settings check today;** the Architect names it in the fold.
+> - **`ABC-255` re-scoped again:** `d` at 100 ms (100 and 400 games) and the 0.5 s control on `r` and `rpair`; the
+>   100 ms control on `rpair` / `r` is dropped. DoR 9/10 (row 5 waits on the fold). **C13 is void:** `ABC-256` does not
+>   merge into `EPIC-010`'s close read, which no longer plays Stockfish.
+> - **Waiting on the fold, beyond the two above:** whether any routine reading against Stockfish remains for B0
+>   (`ABC-256`), G2's milestone readings R1–R3 and C1's claim timing (`ADR-0056` re-pointed it at "the latest C3′ head
+>   figure", which a head-to-head read does not produce).
+
 > **THE OWNER'S VALIDATION RULE, 2026-11-01, by BA/PM** (task `bapm-100-400-rule`, records only, at `main`
 > `452415bd`; nothing run). The owner's word (`orch-2026-10-30a` `…2896c6eb`, verbatim there): no SPRT; *"We can just
 > run 100 games that's it and 400 games after each epic is done on 100ms."* With it: one core (`…f7a50e95`), and any
@@ -18,13 +41,13 @@ owner: BA/PM
 > - **Q-3K-2 is answered: no SPRT.** The per-change rule is 100 games at 100 ms (§ The per-change rule, rewritten).
 >   **Q-3K-3 is answered: one core**, one game at a time.
 > - **Per epic: 400 games at 100 ms before this epic closes** (§ The per-change rule; § Success measures, G7).
-> - **`ABC-255` is re-scoped** from the SPRT lane to the harness's two 100 ms shapes: 100 games new against base, and
+> - *(2026-11-01, `bapm-owner-answers`: re-scoped again, the block above.)* **`ABC-255` is re-scoped** from the SPRT lane to the harness's two 100 ms shapes: 100 games new against base, and
 >   the 400-game pair against Stockfish, as the `ADR-0056` fold rules (`arch-adr0056-100ms-fold`, merged `94f1504c`
 >   during this hop and folded here the same day). It may be pulled before `EPIC-010` closes (C12).
 > - **Aligned:** the reading row of `ABC-231`, `232`, `233`, `234`, `236`, `237`, `238`, `239`, `257` and `258`.
->   `ABC-256` gets a dedupe line (C13, condition met). The pass lines are `ADR-0056` C2′ (per change) and C3′ (per
+>   `ABC-256` gets a dedupe line (C13, condition met; *void 2026-11-01, `bapm-owner-answers`*). The pass lines are `ADR-0056` C2′ (per change) and C3′ (per
 >   epic).
-> - **Where BA/PM and the fold differ:** the fold recommends keeping the 10-game R smoke at 4 s beside C2′ and leaves
+> - *(Ruled 2026-11-01 on the owner's answer 3: the smoke is kept, at 0.5 s; the block above.)* **Where BA/PM and the fold differ:** the fold recommends keeping the 10-game R smoke at 4 s beside C2′ and leaves
 >   it to this record and the Orchestrator. This page drops it, on the owner's "100 games that's it"; the epic read is
 >   the outside check. **The Orchestrator rules, or asks the owner** (`ADR-0056` lists it as his if he wants it).
 > - **What 100 ms can see** (`qe-tc-depth-probe` `…b505d675`): depth 6 median (5 cold), against 10 at 4 s. A change
@@ -92,7 +115,7 @@ owner: BA/PM
 | Stockfish's side at high E | its time or depth such that its strength holds at E ≈ 3 000 (`ADR-0056` D5 item 3: at `st=0.5` the pick depth may not be reached) | the Architect's (`arch-adr0056-owner-fold` item 2); `UNKNOWN - verify` until it lands |
 | Claim rule | milestone M is MET when a 200-game reading at E = M scores ≥ 50 %; the interval is reported, not graded | *[proposed]* `ADR-0056` D5 item 5; the owner's call |
 | Milestones | 2 200, 2 400, 2 600, 2 800, 3 000 on the chosen scale; each a **reading** after a block of work, **never a gate on a ticket** | *[proposed]* `ADR-0056` D5 |
-| Routine readings | shorter controls, down to 0.5 s a move, for the per-change test (M0) and the milestone trend. ***2026-11-01:** 100 ms a move: 100 games per strength change, 400 per epic, no SPRT* | confirmed in principle (owner); ***2026-11-01:** control and counts set by the owner (`…2896c6eb`); pass lines and Stockfish `st=0.1` (E ≤ 2 600): `ADR-0056` C2′ / C3′ (`94f1504c`)* |
+| Routine readings | shorter controls, down to 0.5 s a move, for the per-change test (M0) and the milestone trend. ***2026-11-01:** 100 ms a move: 100 games per strength change, 400 per epic, no SPRT* | confirmed in principle (owner); ***2026-11-01:** control and counts set by the owner (`…2896c6eb`); pass lines and Stockfish `st=0.1` (E ≤ 2 600): `ADR-0056` C2′ / C3′ (`94f1504c`)*; ***2026-11-01 (`bapm-owner-answers`):** the epic read is head-to-head (owner, answer 1); the Stockfish smoke at 0.5 s (answer 3)* |
 | What a routine reading can say about 40/15 | it predicts the trend, not the level: an engine's gain at a short control is not its gain at a long one, and a fixed-depth Stockfish pick does not scale with time the way `skytalix` does | the Architect states the caveat in the fold; this page claims nothing at 40/15 from a shorter reading |
 
 **Cost of a 40/15 reading (BA/PM arithmetic, an estimate, not a reading; the Architect's figure in `ADR-0056` governs
@@ -107,7 +130,8 @@ and why Q-3K-3 (width) is his.
    proves itself by stopping H1 on a known gain (`ABC-208`'s null move) and H0 on an identical pair. Without it, no
    later change can be told from noise (`ADR-0056` D3, "Without M0 the climb cannot be steered").~~ *2026-11-01, the
    owner's rule (no SPRT):* the harness plays the owner's two reads at 100 ms, 100 games new against base and the
-   400-game pair against Stockfish, so every later change gets its read from one command.
+   400-game pair against Stockfish, so every later change gets its read from one command. *2026-11-01 (`bapm-owner-answers`): the
+   epic read is 400 games head-to-head (`d` at 100 ms), and the smoke runs at 0.5 s against Stockfish (`r`).*
 2. **B0** (`ABC-256`): one baseline reading on the routine milestone control, on `main` after `EPIC-010` closes, so the
    milestones have a starting point on the control they will be read on.
 3. **The TT block** (`ABC-238`, `ABC-237`, `ABC-257`, `ABC-258`): one file, cheap, the "cheapest real gap in the
@@ -124,7 +148,7 @@ reorders made here are named in the "why" column.
 
 | phase | `ADR-0056` row | ticket | page | why here |
 |---|---|---|---|---|
-| **0, instrument** | M0 | **`ABC-255`** ~~SPRT self-play lane~~ the owner's 100 / 400 reads at 100 ms (re-scoped 2026-11-01) | full page (new) | every later strength change and the epic's close are read on it; `tools/` only, no file collision; may be pulled before `EPIC-010` closes (C12) |
+| **0, instrument** | M0 | **`ABC-255`** ~~SPRT self-play lane~~ the owner's 100 / 400 reads at 100 ms (re-scoped 2026-11-01; *and again: 400 head-to-head, the 0.5 s smoke, `bapm-owner-answers`*) | full page (new) | every later strength change and the epic's close are read on it; `tools/` only, no file collision; may be pulled before `EPIC-010` closes (C12) |
 | 0 | (D5 item 2) | **`ABC-256`** B0: baseline reading on the routine milestone control | full page (new) | the milestones need a starting point on the control they are read on. It runs even if that control is R's pins: milestone 1b is value-identical but faster, so at a fixed time the 2 074 figure is stale |
 | **1, the TT** | T1 | `ABC-238` deeper stored entry may cut a shallower search | full page (moved in) | `ADR-0056`: the cheapest real gap, +15–40 (estimate). **First:** `ADR-0056` D6 order, adopted over `EPIC-010`'s `ABC-237` → `ABC-238` (§ Dedupe audit, C2) |
 | 1 | T2 | `ABC-237` depth-preferred replacement | full page (moved in) | after T1 (same file) |
@@ -185,9 +209,30 @@ reorders made here are named in the "why" column.
     firing rate at 100 ms at design. Reported: W/L/D, score, `cutechess-cli`'s Elo ± error, `G11`. **What it can
     see:** about ± 48 Elo at 95 %. It stops a clear regression; it does not prove a small gain, and the owner accepted
     that ("the effort is not worth it").
-  - **The R smoke (10 games at 4 s against Stockfish) is not part of this rule.** The fold recommends keeping it; the
-    owner's "that's it" drops it. The Orchestrator rules or asks the owner.
-  - **Per epic, before the close: 400 games at 100 ms.** By the Orchestrator's reading (`…2896c6eb` item 2): the
+  - ~~**The R smoke (10 games at 4 s against Stockfish) is not part of this rule.** The fold recommends keeping it; the
+    owner's "that's it" drops it. The Orchestrator rules or asks the owner.~~
+  - **2026-11-01, the owner's answer 3 (`…43098cef`; `bapm-owner-answers`): the Stockfish smoke, beside the 100-game
+    read and at the epic's close.** 10 games, the candidate (at the close: the closing build) against Stockfish 19
+    `UCI_LimitStrength`, `skytalix` at 0.5 s a move and Stockfish at `r`'s `st=0.5`, openings 1–5 with both colours,
+    one game at a time: `r <build> <out> --elo E --rounds 5 --concurrency 1` with `ABC-255`'s 0.5 s control. Passes on
+    10 of 10 complete, 0 faults (S-1's states) and 0 losses on time (S-2), and the no-collapse bar the fold names for
+    0.5 s with its E (`UNKNOWN - verify` until the fold merges; S-4's ≥ 3.0 of 10 at E 1 910 was set for 4 s). A
+    collapse miss is NOT MET; a fault or time loss is a defect, back to the Software Engineer. ≈ 10 min (estimate).
+    It sees only a collapse (± 200 Elo or wider at 10 games, `EPIC-010` § What 10 games can and cannot see).
+  - **2026-11-01, the owner's condition (answer 3):** the 100 ms and 0.5 s controls are harness configuration only.
+    They reach `skytalix` as `cutechess-cli`'s `st=` at the shipped level 5, below its 4 000 ms cap; no engine code
+    path is keyed on a test control, and no strength-changing ticket adds one. The validation also shows the engine
+    works across its difficulty settings: **no ticket carries that check today**; the Architect names it in the fold.
+  - **2026-11-01, the owner's answer 1 ("b"): per epic, before the close, 400 games head-to-head at 100 ms.** The
+    closing build (head = `main` at the close) against the starting build (base = `main` before this epic's first
+    strength-changing merge), self-play, `d <head> <base> <out> --budget-ms 100 --rounds 200 --concurrency 1` through
+    `ABC-255` (200 rounds over the 100 openings, both colours). About ± 24 Elo at 95 % (the probe's ± 48 for 100 games
+    over √4; arithmetic). **MET when 400 of 400 games complete, neither build faults or loses on time at the 50 ms
+    margin, and the head's point estimate against the base is ≥ 0 (≥ 200.0 of 400), pending the `ADR-0056`
+    owner-answers fold.** On NOT MET the next epic's strength tickets wait until BA/PM names the suspects and the
+    Orchestrator rules keep, revert or re-read. ≈ 1.6 h (estimate). Owner-set, so no further ask. Plus the 0.5 s
+    smoke on the head. It replaces the bullet below.
+  - *(Superseded 2026-11-01 by the bullet above, `bapm-owner-answers`.)* **Per epic, before the close: 400 games at 100 ms.** By the Orchestrator's reading (`…2896c6eb` item 2): the
     interleaved pair (`rpair` shape), base = `main` before this epic's first strength-changing merge, head = `main`
     at the close, each 200 games against Stockfish 19 `UCI_LimitStrength` at E, 100 openings with both colours,
     `skytalix` at 100 ms (**`ADR-0056` C3′**): Stockfish `st=0.1` for E ≤ 2 600 (above it, an R5-style probe first),
@@ -198,7 +243,7 @@ reorders made here are named in the "why" column.
   - **Value-identical tickets** keep the S2 nps reading and play no games.
   - **Any other validation run estimated over 1 h** goes to the owner before it starts: a re-read, a bisect, a
     longer control, R1–R3, an outside pair before a merge (`ABC-239`), C4's anchors, the 40/15 claim. (B0 at the C3′
-    control is ≈ 0.5–0.8 h and is not asked; C13.)
+    control is ≈ 0.5–0.8 h and is not asked; C13.) *(2026-11-01, `bapm-owner-answers`: C13 void; B0's control waits on the fold.)*
 - **`G6` "≥ base" binds as today** (his word `…2ae5fc12`) until Q-3K-4 is answered. `NFR-005`'s depth-6 floor never
   moves.
 - **Common gates:** `EPIC-008` § Common gates `G1`–`G11`, by reference, as `EPIC-010` uses them. Each ticket names
@@ -239,18 +284,18 @@ reorders made here are named in the "why" column.
 | G4 | **Never loses on time at 40/15** | 0 losses on time and closest call ≥ 500 ms in every 40/15 reading (`EPIC-009` M1's bar, carried) | the 40/15 readings' PGNs; this replaces `EPIC-009`'s later "major validation" (§ Dedupe audit, C6) |
 | G5 | **Nothing regressed** | `G1` ≥ 54/58, `G5`, `G7`, `G8`, `G9` green on `main` at each milestone reading | the gates' own instruments |
 | G6 | **The owner's decisions stayed his** | 0 NFR bounds moved without his word; Q-3K-2…8 and Q-SP-3 answered before a ticket that waits on them leaves Backlog | ADR pages, owner-word notes |
-| G7 | *(2026-11-01)* **The epic's 400-game reading** | 400 games at 100 ms, base and head each against Stockfish (§ The per-change rule): the pair's point estimate ≥ 0 (`ADR-0056` C3′) | QE, ALONE, before the close; owner-set, no further ask |
+| G7 | *(2026-11-01)* **The epic's 400-game reading** | ~~400 games at 100 ms, base and head each against Stockfish (§ The per-change rule): the pair's point estimate ≥ 0 (`ADR-0056` C3′)~~ *(2026-11-01, `bapm-owner-answers`, the owner's answer 1)* 400 games head-to-head at 100 ms, closing build against starting build (§ The per-change rule): 400 / 400 complete, 0 faults, 0 losses on time, the head's point estimate ≥ 0 (pending the `ADR-0056` owner-answers fold); and the 10-game Stockfish smoke at 0.5 s on the head | QE, ALONE, before the close; owner-set, no further ask |
 
 **Close:** G1 MET, or the owner stops the epic after a milestone reading. *2026-11-01: either way, the per-epic
-400-game reading at 100 ms (G7) is read before the close.* If the curve flattens below 3 000 after
+400-game reading at 100 ms (G7) is read before the close (head-to-head, with the 0.5 s smoke: `bapm-owner-answers`).* If the curve flattens below 3 000 after
 Phase 5, the next question is V4 and it is his (`ADR-0056` D6 item 7).
 
 ## Tickets
 
 | order | id | title | size | priority | column | DoR | waits on |
 |---|---|---|---|---|---|---|---|
-| 1 | `ABC-255` | M0: ~~a self-play SPRT lane on the rating harness that stops H1 on a known gain and H0 on an identical pair~~ *(re-scoped 2026-11-01)* the rating harness plays the owner's two reads at 100 ms: 100 games new against base, and the 400-game pair against Stockfish | ~~M~~ S | P1 | Backlog (Ready recommended) | 10/10 | ~~`EPIC-006`/`009`/`010` closed; Q-3K-2 (its use as a gate), Q-3K-3 (width); the Architect's routine control~~ none (`ADR-0056` fold merged `94f1504c`); may be pulled before `EPIC-010` closes (C12) |
-| 2 | `ABC-256` | B0: baseline reading of `main` on the routine milestone control, after `EPIC-010` closes | S | P2 | Backlog | 8/10 | the Architect's routine control; `EPIC-010` closed; *2026-11-01:* closes as merged into `EPIC-010`'s 400-game close reading (C13; condition met by the fold, `94f1504c`) |
+| 1 | `ABC-255` | M0: ~~a self-play SPRT lane on the rating harness that stops H1 on a known gain and H0 on an identical pair~~ *(re-scoped 2026-11-01)* the rating harness plays the owner's two reads at 100 ms: 100 games new against base, and the 400-game ~~pair against Stockfish~~ *head-to-head read; and the 10-game Stockfish smoke at 0.5 s (`bapm-owner-answers`)* | ~~M~~ S | P1 | Backlog ~~(Ready recommended)~~ | ~~10/10~~ 9/10 *(row 5: the owner-answers fold)* | ~~`EPIC-006`/`009`/`010` closed; Q-3K-2 (its use as a gate), Q-3K-3 (width); the Architect's routine control~~ none (`ADR-0056` fold merged `94f1504c`); may be pulled before `EPIC-010` closes (C12) |
+| 2 | `ABC-256` | B0: baseline reading of `main` on the routine milestone control, after `EPIC-010` closes | S | P2 | Backlog | 8/10 | the Architect's routine control; `EPIC-010` closed; *2026-11-01:* ~~closes as merged into `EPIC-010`'s 400-game close reading (C13; condition met by the fold, `94f1504c`)~~ *C13 void (`bapm-owner-answers`): the close read is head-to-head; B0's control and fate wait on the owner-answers fold* |
 | 3 | `ABC-238` | A deeper stored entry may cut off a shallower search (T1) | M | P2 *(was P3)* | Backlog | 9/10 | the ADR revising `ABC-081` `A1`; `ABC-255` (if Q-3K-2 yes) |
 | 4 | `ABC-237` | The TT prefers deeper entries when it replaces (T2) | S | P3 | Backlog | 9/10 | `ADR-0025` amendment; `ABC-238` merged or closed |
 | 5 | `ABC-257` | The TT is kept across the moves of one game, re-tried after T1 and T2 (T3) | S | P3 | Backlog | 8/10 | `ABC-238`, `ABC-237`; `ADR-0025` d4 amendment (accepted 2026-10-26, not in force) re-read |
@@ -336,8 +381,8 @@ line, id unchanged), **merge into X**, **supersede**, **drop**, **close** (the e
 | C8 | `EPIC-010` Q5 "no Elo target" vs the 3 000 goal | no conflict: `EPIC-010` M2 stays "not LOSS"; the goal is `EPIC-011`'s |
 | C9 | `EPIC-010` Q6 (the 3 000 scale and measure) | moved here; its time-control half is answered (40/15); the scale and the claim rule stay *[proposed]* |
 | C10 | The R smoke (E = 1 910) loses meaning as the engine climbs (a 2 400 engine scores ≈ 95 % against it; S-4's 3.0 of 10 then guards nothing) | risk `RISK-EPIC011-03`; the Architect or QE proposes E for the smoke when a milestone reading moves past 2 200 (the game counts and pins inside the owner's rule are delivery, `EPIC-010` § Owner questions) |
-| C12 | *(2026-11-01)* `EPIC-010`'s close owes the 400-game reading at 100 ms, and today only `ABC-255` (this epic) would make it one command; the owner's order closes `EPIC-010` before this epic starts | the Orchestrator may pull `ABC-255` before `EPIC-010` closes: it is tools only, touches no file milestone 1b edits, and is the instrument of the close reading. Otherwise QE reads the close from a scratch command, as `qe-tc-depth-probe` did, and `ABC-255` waits |
-| C13 | *(2026-11-01)* `ABC-256` (B0) reads `main` after milestone 1b against Stockfish; the head half of `EPIC-010`'s 400-game close reading plays the same build against Stockfish | if the `ADR-0056` fold names 100 ms the milestone control, the close reading's head half is B0, and `ABC-256` closes as merged into it (no second run). If it names another control, `ABC-256` stands, and a B0 over 1 h is asked first. *Condition met (fold `94f1504c`: B0 is a 200-game read at the C3′ control and the base half of the first C3′ comparison)* |
+| C12 | *(2026-11-01)* `EPIC-010`'s close owes the 400-game reading at 100 ms, and today only `ABC-255` (this epic) would make it one command; the owner's order closes `EPIC-010` before this epic starts | the Orchestrator may pull `ABC-255` before `EPIC-010` closes: it is tools only, touches no file milestone 1b edits, and is the instrument of the close reading. Otherwise QE reads the close from a scratch command, as `qe-tc-depth-probe` did, and `ABC-255` waits. *2026-11-01 (`bapm-owner-answers`): confirmed by the Orchestrator; the close read is now `d` at 100 ms head-to-head plus the 0.5 s smoke through `r`, both `ABC-255`'s* |
+| C13 | *(2026-11-01)* `ABC-256` (B0) reads `main` after milestone 1b against Stockfish; the head half of `EPIC-010`'s 400-game close reading plays the same build against Stockfish | if the `ADR-0056` fold names 100 ms the milestone control, the close reading's head half is B0, and `ABC-256` closes as merged into it (no second run). If it names another control, `ABC-256` stands, and a B0 over 1 h is asked first. *Condition met (fold `94f1504c`: B0 is a 200-game read at the C3′ control and the base half of the first C3′ comparison)*. ***Void 2026-11-01 (`bapm-owner-answers`):** the owner's answer 1 makes the close read head-to-head, with no Stockfish half, so B0 has nothing to merge into. `ABC-256` stays in Backlog; whether any routine Stockfish reading remains for it is the owner-answers fold's. BA/PM recommends closing it as superseded if the fold keeps none* |
 | C11 | `ADR-0055` D4 puts O1-d (`ABC-254`) first in O1; `ADR-0056` D6 puts it "whenever the owner says yes (after O1-b)" | `ADR-0056`'s placement adopted (it is in `EPIC-011`), with `ADR-0055` D4's order kept as the exception on `ABC-254`'s page: yes plus ADR before `ABC-250` enters development pulls it back into `EPIC-010` 1b, first. **2026-11-01: met** (yes `…f7a50e95`; `ADR-0003` amended, `89af8b56`; `ABC-250` not yet in development); `ABC-254` is back in `EPIC-010` 1b, first |
 
 ## Close-out of the open epics (the owner: finish them first)
@@ -387,6 +432,8 @@ line, id unchanged), **merge into X**, **supersede**, **drop**, **close** (the e
   value-identical by `G4`, so that batch stands as M2 at the close. This saves a ≈ 23 h ALONE batch.
   *2026-11-01 (`bapm-100-400-rule`): the owner's per-epic rule adds the 400-game reading at 100 ms at this close
   (base `ca6e675c`, head `main` after 1b; `ADR-0056` C3′, ≈ 1.0–1.6 h, estimate). M2 stays graded on the batch. `EPIC-010`'s top block.*
+  *2026-11-01 (`bapm-owner-answers`): that read is now 400 games head-to-head at 100 ms (head against `ca6e675c`, ≈ 1.6 h,
+  estimate), plus the 10-game Stockfish smoke at 0.5 s on the head.*
 
 ## Owner questions (open; the Orchestrator takes them to him)
 
@@ -420,10 +467,12 @@ line, id unchanged), **merge into X**, **supersede**, **drop**, **close** (the e
 - **`RISK-EPIC011-02`: host hours.** A 40/15 reading is of the order of 100–200 h at width 1 (estimate); SPRT tests ≈
   10–30 h each (`ADR-0056` D5). Mitigated by fast routine readings (owner) and Q-3K-3. *2026-11-01: no SPRT; a
   change read is ≈ 0.4 h and an epic read ≈ 1.0–1.6 h at 100 ms (estimates, `ADR-0056` C2′ / C3′); width 1 (one core); any other run over 1 h
-  is asked first.*
+  is asked first.* *2026-11-01 (`bapm-owner-answers`): the head-to-head epic read ≈ 1.6 h; each 0.5 s smoke ≈ 10 min (estimates).*
 - **`RISK-EPIC011-03`: the R smoke stops guarding** as strength rises (C10).
 - **`RISK-EPIC011-04`: self-play gains do not transfer outside** (`RISK-EPIC008-03`). Mitigated by the milestone R
-  readings.
+  readings. *2026-11-01 (`bapm-owner-answers`): the risk rises. With the epic read head-to-head (the owner's answer 1), every
+  routine read is self-play but the 10-game smoke at 0.5 s, which sees only a collapse. The outside checks left are
+  that smoke, the 40/15 claim readings and any milestone reading the fold keeps.*
 - **`RISK-EPIC011-05`: short-control gains do not carry to 40/15.** Mitigated by keeping the claim at 40/15 and
   reading nothing at 40/15 from a shorter control. *2026-11-01, measured (`qe-tc-depth-probe` `…1889e3b0`): at 100 ms
   `skytalix` completes depth 6 (5 on a cold first move), against 10 at 4 s. A change that acts only at depth 7 or more

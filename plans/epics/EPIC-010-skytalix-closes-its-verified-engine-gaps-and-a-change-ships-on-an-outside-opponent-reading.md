@@ -10,11 +10,48 @@ owner: BA/PM
 
 # EPIC-010: the verified engine gaps, closed one measured change at a time, against an outside opponent
 
+> **THE OWNER'S ANSWERS, 2026-11-01, by BA/PM** (task `bapm-owner-answers`, records only, at `main` `adab5f0d`;
+> nothing run). The owner's word (`orch-2026-10-30a` `…43098cef`, verbatim there): *"1. b ; 2. ok ; 3. quick check
+> can be with 0.5s difficulty. Make sure engine is not changed internally and it works on different difficulty
+> settings."* The Orchestrator's rulings with it: the Stockfish smoke is kept at 0.5 s; this epic's close owes the
+> per-epic read; `ABC-255` may be pulled before the close (`EPIC-011` C12). **This block amends the one below where
+> they differ.** The `ADR-0056` fold of these answers (`arch-adr0056-owner-answers`) is not on `main` at this hop.
+>
+> - **Per epic (answer 1, "b"): 400 games head-to-head at 100 ms, the epic's closing build against its starting
+>   build.** Self-play in `d`'s shape, through `ABC-255`: `d <head> <base> <out> --budget-ms 100 --rounds 200
+>   --concurrency 1` (`d`'s default 200 rounds over the 100 openings of `tools/rating/openings.epd`, both colours; one
+>   game at a time). About ± 24 Elo at 95 % (the probe's ± 48 for 100 games, `…07357280`, over √4; arithmetic).
+>   **Pass:** 400 of 400 games complete, neither build makes a fault or loses on time at the 50 ms margin, and **the
+>   head's point estimate against the base is ≥ 0 (a score ≥ 200.0 of 400), pending the `ADR-0056` owner-answers
+>   fold.** On NOT MET, BA/PM names the suspects and the Orchestrator rules keep, revert or re-read; no revert is
+>   automatic. ≈ 1.6 h (4 × the 0.4 h change read; estimate). Owner-set, so no further ask. **It replaces the 200 +
+>   200 pair against Stockfish** of the block below.
+> - **The bars (answer 2, "ok"):** C2′'s GAIN (≥ 50.0 of 100) and NEUTRAL (≥ 43.0 of 100) stand, with their stated
+>   blind spot.
+> - **The smoke (answer 3): 10 games against Stockfish, `skytalix` at 0.5 s a move, beside every strength-changing
+>   ticket's 100-game read, and at every epic's close on the closing build.** `r <build> <out> --elo E --rounds 5
+>   --concurrency 1` with the 0.5 s control (`ABC-255`; today `r` plays `skytalix` only at 4 000 ms); Stockfish at
+>   `r`'s own `st=0.5`. It carries S-1 (0 faults) and S-2 (0 losses on time) of § The merge rule. **Its E and its
+>   no-collapse bar at 0.5 s are the fold's** (S-4's ≥ 3.0 of 10 at E 1 910 was set for 4 s): `UNKNOWN - verify` until
+>   the fold merges. ≈ 10 min (estimate, ≈ 85 plies a game). This restores the R smoke the block below dropped, at
+>   0.5 s and not 4 s.
+> - **The owner's condition, "engine is not changed internally":** every test control (100 ms, 0.5 s) is harness
+>   configuration only. It reaches `skytalix` as `cutechess-cli`'s `st=` (`go movetime`) at the shipped level 5, whose
+>   cap is above both (4 000 ms today, 3 000 ms at `ca6e675c`; `src/levels.ts`). No engine code path is keyed on a
+>   test control, and `ABC-255` changes no `src/` or `data/` file (its A6).
+> - **"It works on different difficulty settings":** the validation must show the engine plays correctly across its
+>   levels and time controls, not only at the test control. **No ticket in this epic or in `EPIC-011` carries that
+>   check today.** The Architect names it in the fold; no ticket is cut on this hop.
+> - **This epic's close:** the 400-game head-to-head read (head = `main` after milestone 1b, base = `ca6e675c`) and the
+>   0.5 s smoke on the head. M2 stays graded on milestone 1's batch. `ABC-256` (B0) **no longer** merges into this
+>   read, because it has no Stockfish half (`EPIC-011` C13, void).
+
 > **THE OWNER'S VALIDATION RULE, 2026-11-01, by BA/PM** (task `bapm-100-400-rule`, records only, at `main`
 > `452415bd`; nothing run). The owner's word (`orch-2026-10-30a` `…2896c6eb`, verbatim there): no SPRT; *"We can just
 > run 100 games that's it and 400 games after each epic is done on 100ms."* Earlier the same day: games on one core
 > (`…f7a50e95`), and any validation run estimated over 1 h is asked of him first (`…aab3b5f4`). **From this date it
-> replaces § The merge rule's smoke pair, trend and batch for every merge still to come.** Rows below that name them
+> replaces § The merge rule's smoke pair, trend and batch for every merge still to come.** *(2026-11-01,
+> `bapm-owner-answers`: the R smoke returns, at 0.5 s; the block above.)* Rows below that name them
 > are history and stay on record.
 >
 > - **Per strength-changing ticket: 100 games at 100 ms a move, before the merge.** The candidate head rebased on
@@ -23,7 +60,8 @@ owner: BA/PM
 >   margin, and ≥ 50.0 of 100 for a GAIN or ≥ 43.0 for a NEUTRAL, the intent declared at design; a miss is NOT MET, not
 >   re-played. 100 games resolve about ± 48 Elo (95 %): a guard against a clear regression, not a proof of a small gain
 >   (`qe-tc-depth-probe` `…07357280`).
-> - **Per epic: 400 games at 100 ms, when the epic's last ticket is Done and before it closes.** By the Orchestrator's
+> - *(Superseded 2026-11-01, `bapm-owner-answers`: the owner's answer 1 makes it head-to-head, closing build against
+>   starting build; the block above.)* **Per epic: 400 games at 100 ms, when the epic's last ticket is Done and before it closes.** By the Orchestrator's
 >   reading (`…2896c6eb` item 2): the interleaved pair (`ABC-225`'s `rpair` shape), the epic's base (`main` at its
 >   first merge-base) and its head (`main` at the close), each 200 games against Stockfish 19 `UCI_LimitStrength`,
 >   `skytalix` at 100 ms. **`ADR-0056` C3′:** Stockfish `st=0.1` for E ≤ 2 600, E by `ABC-204`'s band rule; MET when
@@ -33,12 +71,13 @@ owner: BA/PM
 >   control, an outside pair before a merge.
 > - **Value-identical (speed) tickets keep their S2 nps reading and play no games.** Every ticket left in this epic is
 >   value-identical (`ABC-250`–`ABC-254`) or test-only (`ABC-249`), so **no per-change reading is owed here.**
-> - **This epic's close now owes the per-epic reading:** base `ca6e675c` (the first merge-base, as milestone 1's batch)
+> - *(Its shape and pass line superseded 2026-11-01, `bapm-owner-answers`: head-to-head; the block above.)* **This epic's close now owes the per-epic reading:** base `ca6e675c` (the first merge-base, as milestone 1's batch)
 >   against `main` after milestone 1b. **M2 stays graded on milestone 1's batch** (NOT LOSS, `…1a53a7f9`; the measure
 >   the owner accepted). The 400-game reading is added by his new rule and is graded by C3′. On NOT MET, BA/PM names
 >   the suspects and the Orchestrator rules keep, revert or re-read (C3′; no revert is automatic); any run over 1 h it
 >   needs is asked first.
-> - **The instrument:** today `rpair` plays only 4 000 ms against Stockfish at `st=0.5`, and `d` refuses budgets
+> - *(2026-11-01, `bapm-owner-answers`: the two shapes are now `d` at 100 ms and `r` / `rpair` at 0.5 s; `ABC-255`.)*
+>   **The instrument:** today `rpair` plays only 4 000 ms against Stockfish at `st=0.5`, and `d` refuses budgets
 >   under 1 000 ms (`tools/rating/rating.ts` `D_BUDGETS_MS`). `ABC-255` is re-scoped to add both 100 ms shapes
 >   (`EPIC-011`). It is tools only and touches no file milestone 1b edits, so **the Orchestrator may pull it before
 >   this epic closes** (`EPIC-011` C12). Otherwise QE reads the close from a scratch command, as the probe did.
@@ -476,7 +515,9 @@ The epic can stop after any ticket and hold only changes that passed the owner's
 ## The merge rule (in force from 2026-10-29: owner Q4 = (e), extended)
 
 > **Superseded 2026-11-01 for every merge still to come** (`bapm-100-400-rule`, the owner's word `…2896c6eb`): 100
-> games at 100 ms per strength-changing ticket, 400 at 100 ms per epic, no SPRT; the top block of this page. This
+> games at 100 ms per strength-changing ticket, 400 at 100 ms per epic, no SPRT; the top block of this page. *(2026-11-01,
+> `bapm-owner-answers`: the epic read is head-to-head and a 10-game Stockfish smoke at 0.5 s sits beside each
+> 100-game read; the first block of this page.)* This
 > section stays as the record of the rule milestone 1 was merged under.
 
 **The owner's word** (`…278e149b`): *"Selecting Q4 option e, extend a bit, let's set 10 games self-play + 10 games vs

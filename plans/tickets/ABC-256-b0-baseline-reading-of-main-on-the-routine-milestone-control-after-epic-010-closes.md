@@ -11,6 +11,15 @@ owner: QE/E2E
 
 # ABC-256: the baseline reading (B0)
 
+> **Dated line 2026-11-01 by BA/PM** (task `bapm-owner-answers`, records only, at `main` `adab5f0d`; nothing run).
+> **C13 is void; the dedupe line below no longer holds.** The owner's answer 1 (`orch-2026-10-30a` `…43098cef`: "b")
+> makes `EPIC-010`'s close read 400 games head-to-head at 100 ms (`main` after milestone 1b against `ca6e675c`), with
+> no Stockfish half, so this ticket has nothing to merge into. The same note reads the outside check as left only in
+> the 10-game smoke at 0.5 s and the 40/15 claim readings. **This ticket stays in Backlog, DoR 8/10**; row 5 now
+> waits on the `ADR-0056` owner-answers fold (`arch-adr0056-owner-answers`, not on `main`), which says whether any
+> routine reading against Stockfish remains for B0. **BA/PM recommends closing it as superseded if the fold keeps
+> none** (a 10-game smoke cannot place E); the call is the Orchestrator's.
+
 > **Dated line 2026-11-01 by BA/PM** (task `bapm-100-400-rule`, records only; nothing run). The owner's rule
 > (`…2896c6eb`) puts a 400-game read at 100 ms at `EPIC-010`'s close, and its head half plays this ticket's build
 > (`main` after milestone 1b) against Stockfish. **If the `ADR-0056` fold names 100 ms the milestone control, that
@@ -91,7 +100,7 @@ owner: QE/E2E
 | 2 | scope and out-of-scope | ✅ |
 | 3 | INVEST | ✅ S |
 | 4 | testable, measurable acceptance | ✅ 200 games, 0 faults, 0 time losses, in band 25–75 % |
-| 5 | dependencies known | ⚠️ the control is the Architect's fold (in flight) |
+| 5 | dependencies known | ⚠️ the control is the Architect's fold (in flight) *(2026-11-01: now the owner-answers fold, which says whether B0 stays)* |
 | 6 | NFR triggers with targets | ✅ none |
 | 7 | test notes | ✅ |
 | 8 | size | ✅ S |
