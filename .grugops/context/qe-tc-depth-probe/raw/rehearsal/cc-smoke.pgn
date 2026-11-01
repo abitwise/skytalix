@@ -1,0 +1,39 @@
+[Event "?"]
+[Site "?"]
+[Date "2026.11.01"]
+[Round "1"]
+[White "sky-a"]
+[Black "sky-b"]
+[Result "1/2-1/2"]
+[FEN "rnbqk1nr/ppppppbp/6p1/8/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 1"]
+[GameDuration "00:00:00"]
+[GameEndTime "2026-11-01T13:04:40.274 UTC"]
+[GameStartTime "2026-11-01T13:04:40.059 UTC"]
+[PlyCount "8"]
+[SetUp "1"]
+[Termination "adjudication"]
+[TimeControl "0.1/move"]
+
+1. d4 c5 2. Bc4 cxd4 3. Nxd4 Qa5+ 4. c3 {+0.16/5 0.10s}
+Nf6 {-0.16/4 0.10s, Draw by adjudication: maximal game length} 1/2-1/2
+
+[Event "?"]
+[Site "?"]
+[Date "2026.11.01"]
+[Round "1"]
+[White "sky-b"]
+[Black "sky-a"]
+[Result "1/2-1/2"]
+[FEN "rnbqk1nr/ppppppbp/6p1/8/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 1"]
+[GameDuration "00:00:00"]
+[GameEndTime "2026-11-01T13:04:40.740 UTC"]
+[GameStartTime "2026-11-01T13:04:40.329 UTC"]
+[PlyCount "8"]
+[SetUp "1"]
+[Termination "adjudication"]
+[TimeControl "0.1/move"]
+
+1. d4 c5 2. Be3 Qa5+ 3. Nc3 {+0.55/5 0.10s} Qb4 {-0.55/4 0.10s}
+4. a3 {+1.28/6 0.10s}
+Qa5 {-1.08/5 0.10s, Draw by adjudication: maximal game length} 1/2-1/2
+
