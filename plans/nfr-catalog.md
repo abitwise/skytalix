@@ -1,4 +1,5 @@
 # NFR Catalog
+_Updated: 2026-11-01 by Architect/Design (task `arch-qehop-threshold`, records only, after `qe-qehop-growth` merged as `8fecca09`): **NO TABLE ROW TOUCHED. NO LEVEL MOVED.** All twelve `NFR-` rows hash `39291dcf…9d83` before and after, and the eight `NFR-001`–`NFR-008` rows hash `983e7e7f…46f9bb`. Insertions only, no line deleted. (1) **`T-QEHOP-GROWTH` reads MET** at `37a93b76`, 4 272 note files: H−B +0.455 s CPU (+0.440..+0.490), twin +0.010 s, R 0.030 s, n = 8. A new subsection ends the section "`N8-LANE` at `ABC-105`". (2) **It re-arms at 5,500 note files**, by a lead-time rule that replaces B3's "same arithmetic" (≈ 4 700, under a week out). (3) **The floors block:** the set starts a new series on `oeselg-dev`, `F` = 0.030 s CPU / 0.020 s wall; the M3 0.020 / 0.020 is M3 history. Source: `ADR-0035` § Addendum 2026-11-01 (after qe-qehop-growth) C1–C5. Nothing was measured. Note: `.grugops/context/arch-qehop-threshold/notes/`._
 _Updated: 2026-10-31 by Security/NFR (task `secnfr-hostname`, records only, on the owner's word `orch-2026-10-30a` `…c2752305`, verbatim *"hostname spelling: oeselg-dev"*): **THE REFERENCE MACHINE'S LABEL IS `oeselg-dev`, NOT `oeselg-devl`. THE MACHINE (THE UBUNTU LINUX HOST) IS UNCHANGED. NO LEVEL, BAR, TARGET OR MEASURED FIGURE MOVED.** 22 spellings on 18 lines read `oeselg-dev` now, in the `NFR-004`, `NFR-005`, `NFR-008`, `NFR-009` and `NFR-011` rows (text only), § `ABC-074`'s scope line, the per-set `F` list, § `ADR-0035` item 3, § `NFR-008` stack, `AR-UCI-BUSY`, the re-base section and `ABC-221`'s scope line. `SEC-REBASE-a` is CLOSED: its two lines are struck and kept, each with a dated line. Kept as written: the owner's 2026-10-30 words, quoted verbatim three times, and the 2026-10-30 `secnfr-catalog-rebase` `_Updated` line, which is history. `NFR-001`–`NFR-003`, `NFR-006`, `NFR-007`, `NFR-010` and `NFR-012` are BYTE-IDENTICAL, each row hashed before and after. Nothing was run or timed. See the last section of this file._
 _Updated: 2026-10-31 by Security/NFR (task `secnfr-ABC-221`, records only, at `ABC-221`'s gate; code `grugops/ABC-221` `c48a6f83`, base `d58f2d77`): **GATE PASS (PASS_WITH_RISKS in the role's words): NO REQUIRED FIX. `NFR-004` GETS ITS 60 s `uci-clock-mode` CLAUSE, AND CLAUSE B'S RAW-CALL BOUND MOVES 32 s → 60 s, BOTH BY THE OWNER'S Q5. NO OTHER LEVEL, BAR OR TARGET MOVED.** `NFR-004`: one clause in `Target` (`ADR-0052` § Consequences, verbatim, a pure insertion), one dated line, two dated clamp notes and one mechanism line in `Target`, one dated line in `Verified by`. `NFR-009`: one dated line in `Verified by` (MET at 59.5 s on the SE's reading, pending QE). `AR-UCI-BUSY`: one dated bullet (≤ 60 s holds exactly). `AR-NFR004-A` re-read at 59.5 s in the last section. `NFR-001`–`NFR-003`, `NFR-005`–`NFR-008` and `NFR-010`–`NFR-012` are BYTE-IDENTICAL, each row hashed before and after. Nothing was run or timed. See the last section of this file._
 _Updated: 2026-10-30 by Security/NFR (task `secnfr-ABC-244`, records only, at `ABC-244`'s gate; candidate `grugops/qe-ABC-244` `a66d20ab`, code `25282ad4`): **GATE PASS. NO LEVEL, BAR, TARGET OR CAP MOVED.** Dated lines only: `NFR-008` (the `ABC-244` `G8` reading, MET at head 9.25 s; the stale "function of core count" sentence struck and kept, on `ADR-0035` § Addendum 2026-10-30); the per-set `F` list (the two-file set `src/cli.test.ts` + `src/uci-session.test.ts` gets its first admissible `F`, 0.250 s CPU). `NFR-001`–`NFR-007` and `NFR-009`–`NFR-012` are BYTE-IDENTICAL, each row hashed before and after. Nothing was run or timed at this hop. See the last section of this file._
@@ -1803,6 +1804,15 @@ files is owed to the protocol's owner, Architect/Design. No verdict hangs on it.
         0.020 s for each unit.
       - QE4 w2 stays uncounted (A1 is forward-only). Counted, it would make CPU `F` 0.030 s.
       - Source: `ADR-0035` § Addendum 2026-10-12 (after ABC-154) B2.
+    - **2026-11-01 (Architect/Design, `arch-qehop-threshold`): on `oeselg-dev` the set starts a new series, and
+      `F` = 0.030 s CPU / 0.020 s wall.**
+      - The host change moves per-file cost (B 0.575 s on the M3, 0.370 s here), so the series breaks by `ADR-0042`
+        ruling 6 / `ADR-0040` decision 4. The 0.020 / 0.020 above is M3 history, kept and not struck.
+      - The new series has one admissible reading, `qe-qehop-growth` w1 at `37a93b76` (vitest 4.1.12, heap 400):
+        R 0.030 / 0.020. With fewer than three, the largest governs. Continuing the old series would give the same
+        figures.
+      - That twin is admitted only by A1's one-tick floor. 650 ms is 21.7 × the CPU `F`.
+      - Source: `ADR-0035` § Addendum 2026-11-01 (after qe-qehop-growth) C3.
   - **2026-10-30 (Security/NFR, `secnfr-ABC-244`): the two-file set `src/cli.test.ts` + `src/uci-session.test.ts`,
     `F` = 0.250 s CPU / 0.100 s wall** on `oeselg-dev` (the declared stack), `maxWorkers: 2`, heap 128.
     - It is the set's first admissible reading: `qe-ABC-244` A8's identity twin (`…3c2ac5a2`), n = 8, k = 2, base
@@ -2215,6 +2225,50 @@ Written by Architect/Design (task `wave-2026-09-25`, subtask `design-ABC-154-clo
   ≈ 5,960 notes, or ≈ 5,590 from the interval's upper end.
 - **If a second test file reads the record,** this becomes `N8-LANE` text (A3). At `b89b3fd2` this file is still
   the only one.
+
+**Fence.** No table row was touched and no level moved. No ticket page, board, `src/`, `tools/` or `AGENTS.md`
+byte changed. **`RISK-ABC144-FCAP` is unchanged.**
+
+### `T-QEHOP-GROWTH`, 2026-11-01: **MET** at `37a93b76` (4 272 note files). The next threshold is **5,500 note files**
+
+Written by Architect/Design (task `arch-qehop-threshold`) after `qe-qehop-growth` merged as `8fecca09`. **Nothing was
+measured.** Every figure was recomputed from QE's raw TSV (`.grugops/context/qe-qehop-growth/probe/w1/n8-qeg.tsv`)
+and agrees with QE's `…625483bc`. The rulings are `ADR-0035` § Addendum 2026-11-01 (after qe-qehop-growth) C1–C5.
+
+**The reading** (`qe-qehop-growth` w1). The trigger fired at 4 272 ≥ 4,000.
+
+| item | value |
+|---|---|
+| code read | `main` `37a93b76`. The set's blob `bf0ea7d5` is the one `qe-ABC-154` read; only the record grew (2 656 → 4 272) |
+| host and stack | `oeselg-dev`, node v26.12.1, vitest 4.1.12, `maxWorkers: 2`, heap 400 |
+| pre-registration | `833192d7` + addendum 1 `8dfbabf5`, before the first run; blob `3aab3adc` on `main` (B1 met) |
+| arms | `git archive 37a93b76`, 4 272 note files each. n = 8, round 0 discarded, 0 rounds void |
+| twin T − B CPU | **+0.010 s (+2.703 % of 0.370 s)**, inside max(5.55 ms, 10 ms) only by A1's tick. Non-zero signs +4/−3, p 1.000. **R 0.030 s** |
+| treatment H − B CPU | **+0.455 s, x(2)..x(7) +0.440..+0.490** |
+| wall (reported, not graded) | H − B +0.270 s (+0.260..+0.310); twin +0.005 s, R 0.020 s |
+| **state at 650 ms CPU** | **MET**: admissible, R 0.030 ≤ 0.650, median +0.455 ≤ 0.650, lower end +0.440 not > 0.650 |
+
+- **Not compared** with `qe-ABC-154`'s +0.380 s (M3 history, vitest 4.1.11). No slope is taken across the re-base.
+- **No margin is written.** The bound is a rate limit (`ADR-0014` decision 4).
+
+**The 4,000 trigger is discharged. `T-QEHOP-GROWTH` re-arms at 5,500 note files** (C2), counted by
+`find .grugops/context -path '*/notes/*.md' | wc -l` on `main`. The count is 4 287 at `28e46464`.
+- **The rule, from 2026-11-01** (it replaces "by the same arithmetic"): the largest multiple of 100 not above
+  N0 + (0.650 − hi) / s − 7 × r. hi is the latest MET's upper end, s the steeper of A3's slope (81.75 µs a note) and
+  any same-host two-point slope, and r the faster of the 7- and 14-day growth rates. Today: 6 229 − 7 × 104 = 5 501.
+- **Why not ≈ 4 700** (the 75 % rule, `QE-QHG-d`): at 74–104 notes a day it fires within a week and spends an ALONE
+  window on a near-certain MET. The rule is stated as lead time before the crossing instead.
+- **Projection, not a reading:** at 5,500, +0.555 s from the median and +0.590 s from the upper end. The crossings are
+  ≈ 6 657 and ≈ 6 229. The trigger is 12–16 days out at today's rates and leaves 7–10 days before the upper-end
+  crossing.
+- **Does:** unchanged. MET: write the reading, and Architect/Design sets the next threshold by the rule above.
+  NOT MET: it goes to the owner; the lever is the count of whole-tree reads. NOT READ: the trigger stays armed.
+- **Method** (C4): `qe-qehop-growth`'s Linux port, named by sha256 in C4, with the read's own pre-registration (B1).
+- **`F`** (C3): a new series on `oeselg-dev`, 0.030 s CPU / 0.020 s wall (the floors block).
+- **Watch** (C5, `QE-QHG-a`): if the next read's interval comes within 0.030 s of 650 ms, A1's timer route is owed
+  before the read after it.
+- **Roles and severity** are unchanged: Architect/Design owns the record, QE/E2E reads, the Orchestrator dispatches.
+  Severity LOW. The lift clause (A3) has not fired.
 
 **Fence.** No table row was touched and no level moved. No ticket page, board, `src/`, `tools/` or `AGENTS.md`
 byte changed. **`RISK-ABC144-FCAP` is unchanged.**
