@@ -1,0 +1,19 @@
+[Event "?"]
+[Site "?"]
+[Date "2026.11.01"]
+[Round "1"]
+[White "skytalix-a"]
+[Black "skytalix-b"]
+[Result "1/2-1/2"]
+[FEN "rnbqk1nr/ppppppbp/6p1/8/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 1"]
+[GameDuration "00:00:00"]
+[GameEndTime "2026-11-01T08:50:56.096 UTC"]
+[GameStartTime "2026-11-01T08:50:55.254 UTC"]
+[PlyCount "8"]
+[SetUp "1"]
+[Termination "adjudication"]
+[TimeControl "40/20"]
+
+1. d4 c5 2. Bc4 cxd4 3. Nxd4 Qa5+ 4. c3 {-0.02/7 0.41s}
+Nf6 {+0.02/6 0.41s, Draw by adjudication: maximal game length} 1/2-1/2
+
