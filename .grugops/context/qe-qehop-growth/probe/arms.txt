@@ -1,0 +1,9 @@
+arms built 2026-11-01T08:39:55Z from git archive 37a93b76
+diff -r --no-dereference B T: identical
+B placeholder cmp 0
+H test cmp 0 to 37a93b76
+H tool cmp 0 to 37a93b76
+arm B notes 4272 node_modules -> /home/olger/projects/public/skytalix/node_modules
+arm H notes 4272 node_modules -> /home/olger/projects/public/skytalix/node_modules
+arm T notes 4272 node_modules -> /home/olger/projects/public/skytalix/node_modules
+B vs H: only the test file differs

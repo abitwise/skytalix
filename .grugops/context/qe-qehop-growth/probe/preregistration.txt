@@ -98,3 +98,12 @@ NEXT-THRESHOLD ARITHMETIC (B3 "by the same arithmetic"; reported to the Architec
 LIFT CLAUSE (A3 / B3; static, no run)
   grep of src/ and tools/ test files at 37a93b76 for `.grugops/context`: tools/grugops/qe-hop-integrity.test.ts reads it;
   the eight src/*.test.ts hits are comments naming probe paths. The set is still the only reader.
+
+ADDENDUM 1 (2026-11-01T08:41Z, committed before the pre-flight and before window 1; changes no rule)
+  - Harness defect found by reading, before any run: each window runs in <scratch>/lane/<wN> with <wN>/arms a symlink to
+    the one shared <scratch>/lane/arms, but window-qeg.sh gave the sampler "$D/arms" unresolved, while /proc/<pid>/cwd is
+    always the resolved path. The lane's own vitest would then read as foreign and void every round. Fix: the sampler gets
+    "$(realpath "$D/arms")". One line in window-qeg.sh; lane, gate, readout and every rule unchanged.
+  - The header's "written 2026-11-01T08:45Z" is a slip: the file was written before its commit, 833192d7 at
+    2026-11-01T08:39:42Z, which is the authority for the order.
+  - Arms built 08:39:55Z (probe/arms.txt): B/T identical, H cmp 0 to 37a93b76, 4272 note files in each arm.

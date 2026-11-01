@@ -21,7 +21,7 @@ topnow() { top -b -n 2 -d 1 -w 200 | awk '/^top -/{n++} n==2' | head -24; }
   echo "--- top before the gate (second iteration, 1 s)"; topnow
 } > "$D/window-once.txt" 2>&1
 rm -f "$D/STOP"
-node "$P/sampler-qeg.mjs" "$D/arms" "$D" & SPID=$!
+node "$P/sampler-qeg.mjs" "$(realpath "$D/arms")" "$D" & SPID=$!  # ADDENDUM 1: realpath, so a symlinked wN/arms still matches /proc/<pid>/cwd
 echo "sampler_pid $SPID" >> "$D/window-once.txt"
 echo "gate_start $(ts) STREAK=$STREAK GMAX=$GMAX" >> "$D/window-once.txt"
 if ! node "$P/gate-qeg.mjs" "$D" settle "$STREAK" "$GMAX"; then
