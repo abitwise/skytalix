@@ -1,0 +1,7 @@
+{
+  "refs": ["bapm-spike-accel", "ABC-263", "ABC-251", "ABC-262", "ABC-253", "ABC-239", "ABC-209", "ABC-256", "ABC-250", "EPIC-011", "EPIC-010", "EPIC-004", "ADR-0055", "ADR-0056", "ADR-0044", "ADR-0025", "ADR-0026", "ADR-0003", "NFR-004", "NFR-005", "NFR-008", "NFR-009", "RISK-EPIC011-01", "Q-3K-3", "QE-262-a", "QE-262-b", "QE-262-c", "orch-2026-10-30a/20261101T204330Z-orchestrator-decision-78c476bf", "orch-2026-10-30a/20261101T204013Z-orchestrator-decision-1f6ed15a", "orch-2026-10-30a/20261101T131000Z-orchestrator-decision-f7a50e95", "se-ABC-251/20261101T203909Z-software-engineer-decision-4342e5b5", "qe-ABC-262/20261101T203402Z-qe-e2e-decision-ed4d02a5", "qe-ABC-262/20261101T203402Z-qe-e2e-observation-16924bec", "qe-ABC-262/20261101T203402Z-qe-e2e-observation-918ca02e", "7c67d3ad", "cc55ce93", "424e0087", "d87f30f7", "d46ed7ec", "2cf2bb69"],
+  "notes": [
+    {"kind": "decision", "confidence": "high on the cut matching the owner's word and the brief (read at 7c67d3ad); high on the two closes (Orchestrator and QE notes read); host and runtime facts are UNKNOWN - verify, the spike's to settle; nothing run, built or timed", "bodyFile": "note-decision.md"},
+    {"kind": "observation", "confidence": "high: files and commits as written; facts read by file reads, grep and git log/show, no test run (recorded as an observation: no gate run backs an artifact-ref here)", "bodyFile": "note-observation.md"}
+  ]
+}

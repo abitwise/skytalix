@@ -1,14 +1,32 @@
 ---
 id: ABC-251
 title: "O1-c alone: the hot-path helpers isBlack and pieceType are inlined (or made provably inlinable) and the engine's per-search record keeps one constant shape, on today's Move objects (ADR-0055 O1-c, value-identical; narrowed 2026-11-01 from O1-b part 2 with O1-c)"
-status: backlog
-column: Backlog
+status: dropped
+column: Done
 size: S
 priority: P2
 epic: EPIC-010
 ---
 
 # ABC-251: O1-c alone, inlinable hot-path helpers and a constant-shape search record, on today's `Move` objects
+
+> **CLOSED AS DROPPED, "NOTHING TO CUT", 2026-11-01 by BA/PM** (task `bapm-spike-accel`, records only, at `main`
+> `7c67d3ad`; nothing run, built or timed). **Not delivered, and not a graded miss.** The build stopped at item 2a
+> (profile first), under this page's stop rule, before any edit and before any ALONE read
+> (`se-ABC-251` `…4342e5b5`, evidence `…687c4af7`, artifacts `…d1e5f719`; records merged `d87f30f7`). The Orchestrator
+> closed it (`orch-2026-10-30a` `…1f6ed15a`). **No `failed-attempt` note is owed.**
+> - **The helper half has no call to remove.** TurboFan already inlines `isBlack` and `pieceType` at all 68 call sites
+>   it considered (0 refused, 0 deopts). The profiler frames are source attribution for inlined code, not calls.
+> - **The `Budget` half is already monomorphic.** The spread object keeps one map across the doors. `deepen` takes
+>   0.01–0.03 % self time. That is this page's "only the `Budget` half is left" case.
+> - **Informal corroboration** (not A3, not a grade): a scratch hand-inline read 1.016 / 0.996 / 1.013×. That is
+>   noise, below 1.03× on every board.
+> - **No `src/` change.** The branch `grugops/ABC-251` carries records only. `ADR-0055`'s O1-c share reads about 0 on
+>   today's `main`; the next Architect hop records that (owed, `…1f6ed15a`).
+>
+> Front matter: `status: dropped`, `column: Done`, as this repository closes a ticket not delivered (`ABC-209`,
+> `ABC-256`, `ABC-250`). The board card is already in Done (Orchestrator, `d46ed7ec`). Nothing else on this page
+> changes; it stays as history.
 
 > **RE-SCOPED 2026-11-01 by BA/PM to the narrowed form, O1-c alone** (task `bapm-abc250-close`, records only, at `main`
 > `767a2e3e`; nothing run, built or timed). `ABC-250` is **closed and not merged, by routing**. Its A4 was not graded
