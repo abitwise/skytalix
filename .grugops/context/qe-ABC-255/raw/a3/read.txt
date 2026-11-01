@@ -1,0 +1,26 @@
+== think time (cutechess -debug clock), budget 100 ms for skytalix/base ==
+skytalix: go lines {"go movetime 100":5368}; searched 5282, book 86; think median 101 p99 102 max 105 ms; overshoot over 100 ms: median 1 p99 2 MAX 5 ms; >0: 3388, >5: 0, >10: 0, >12: 0, >25: 0, >50: 0
+base: go lines {"go movetime 100":5363}; searched 5275, book 88; think median 101 p99 103 max 105 ms; overshoot over 100 ms: median 1 p99 3 MAX 5 ms; >0: 3380, >5: 0, >10: 0, >12: 0, >25: 0, >50: 0
+== results ==
+finished 100; time losses 0; faults 0
+terminations: {"White mates":25,"Black mates":31,"Draw by 3-fold repetition":44}
+Score of skytalix vs base: W/L/D 30/26/44; points 52 of 100 [0.520]
+Elo difference 13.9 +/- 51.3; LOS 70.4 %; draw ratio 44.0 %
+== pgn ==
+games 100; plies mean 107.3 [30-184]; first start -> last end 1078 s; games/hour 333.8
+host.log: before -> end 1082 s (incl. builds); cutechess start -> end 1078 s; games/hour (cutechess wall) 334.0
+== harness summary.txt ==
+Elo difference: 13.9 +/- 51.3, LOS: 70.4 %, DrawRatio: 44.0 %
+W/L/D: 30/26/44  score: 0.520  games: 100 of 100
+draw ratio: 44.0 %
+faults: 0  unclassified: 0  move-cap draws: 0
+skytalix.stderr: 0 bytes
+base.stderr: 0 bytes
+state: NEUTRAL
+== machine.txt control line == harness: <worktree> at 73ec55456f9907587fd5b4e148b6a061456e4d9f | concurrency: 1 (default 3) | control: skytalix and base st=0.1 timemargin=50
+== host (block samples, 10 s) ==
+samples 108; with real foreign vitest 6 (5.6 %); with foreign cutechess 0; with a foreign process >= 20 % CPU 1; load1 median 1.47 max 2.09; Tctl median 76.1 max 85.5
+2026-11-01T18:05:25.999Z a3 block start; cmd: node tools/rating/rating.ts d b5c67ab7 12270c02 <scratch>/qe-255/out-a3 --budget-ms 100 --rounds 50 --concurrency 1
+2026-11-01T18:05:41.021Z a3 ALONE clear at poll 2 after 15 s load1=1.79 tctl=42.9
+2026-11-01T18:05:41.024Z a3 spawned pid 3157960
+2026-11-01T18:23:43.919Z a3 exit rc=0 sig=null wall=1098 s run=1083 s

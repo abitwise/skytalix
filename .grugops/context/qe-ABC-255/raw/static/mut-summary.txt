@@ -1,0 +1,19 @@
+M0 (unmutated) rc=0 
+M1 rc=1  KILLED
+M2 rc=1  KILLED
+M3 rc=1  KILLED
+M4 rc=1  KILLED
+M5 rc=1  KILLED
+M6 rc=1  KILLED
+M7 rc=1  KILLED
+M8 rc=0  SURVIVED
+restored == worktree
+worktree tools/ untouched
+M1: ℹ pass 30 ℹ fail 2 
+M2: ℹ pass 30 ℹ fail 2 
+M3: ℹ pass 31 ℹ fail 1 
+M4: ℹ pass 29 ℹ fail 3 
+M5: ℹ pass 31 ℹ fail 1 
+M6: ℹ pass 31 ℹ fail 1 
+M7: ℹ pass 30 ℹ fail 2 
+M8: ℹ pass 32 ℹ fail 0 

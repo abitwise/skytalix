@@ -1,0 +1,38 @@
+e01-d-default rc base=0 head=0 EQUAL :: d b5c67ab7 8f2fc9b5 <scratch>/qe-255/nonexistent-out
+e-d-3000 rc base=0 head=0 EQUAL :: d b5c67ab7 8f2fc9b5 <scratch>/qe-255/nonexistent-out --budget-ms 3000
+e-d-2500 rc base=0 head=0 EQUAL :: d b5c67ab7 8f2fc9b5 <scratch>/qe-255/nonexistent-out --budget-ms 2500
+e-d-2000 rc base=0 head=0 EQUAL :: d b5c67ab7 8f2fc9b5 <scratch>/qe-255/nonexistent-out --budget-ms 2000
+e-d-1500 rc base=0 head=0 EQUAL :: d b5c67ab7 8f2fc9b5 <scratch>/qe-255/nonexistent-out --budget-ms 1500
+e-d-1000 rc base=0 head=0 EQUAL :: d b5c67ab7 8f2fc9b5 <scratch>/qe-255/nonexistent-out --budget-ms 1000
+e08-d-1000-r50-c1 rc base=0 head=0 EQUAL :: d b5c67ab7 8f2fc9b5 <scratch>/qe-255/nonexistent-out --budget-ms 1000 --rounds 50 --concurrency 1
+e09-d-r200-c1 rc base=0 head=0 EQUAL :: d b5c67ab7 8f2fc9b5 <scratch>/qe-255/nonexistent-out --rounds 200 --concurrency 1
+e10-r-default rc base=0 head=0 EQUAL :: r b5c67ab7 <scratch>/qe-255/nonexistent-out
+e11-r-elo1910 rc base=0 head=0 EQUAL :: r b5c67ab7 <scratch>/qe-255/nonexistent-out --elo 1910
+e12-r-r5-c1 rc base=0 head=0 EQUAL :: r b5c67ab7 <scratch>/qe-255/nonexistent-out --rounds 5 --concurrency 1
+e13-r-elo1650-r10-c2 rc base=0 head=0 EQUAL :: r b5c67ab7 <scratch>/qe-255/nonexistent-out --elo 1650 --rounds 10 --concurrency 2
+e14-rpair-default rc base=0 head=0 EQUAL :: rpair 8f2fc9b5 b5c67ab7 <scratch>/qe-255/nonexistent-out
+e15-rpair-elo1650 rc base=0 head=0 EQUAL :: rpair 8f2fc9b5 b5c67ab7 <scratch>/qe-255/nonexistent-out --elo 1650
+e16-rpair-r10-c1 rc base=0 head=0 EQUAL :: rpair 8f2fc9b5 b5c67ab7 <scratch>/qe-255/nonexistent-out --rounds 10 --concurrency 1
+e17-rpair-r40-elo1910-c2 rc base=0 head=0 EQUAL :: rpair 8f2fc9b5 b5c67ab7 <scratch>/qe-255/nonexistent-out --rounds 40 --elo 1910 --concurrency 2
+e18-rpair-budget500 rc base=1 head=1 DIFF :: rpair 8f2fc9b5 b5c67ab7 <scratch>/qe-255/nonexistent-out --budget-ms 500
+e19-rpair-budget100 rc base=1 head=1 DIFF :: rpair 8f2fc9b5 b5c67ab7 <scratch>/qe-255/nonexistent-out --budget-ms 100
+n01-d100-r50 rc head=0 base=1 :: d b5c67ab7 8f2fc9b5 <scratch>/qe-255/nonexistent-out --budget-ms 100 --rounds 50 --concurrency 1 :: st=0.1
+n02-d100-r200 rc head=0 base=1 :: d b5c67ab7 8f2fc9b5 <scratch>/qe-255/nonexistent-out --budget-ms 100 --rounds 200 --concurrency 1 :: st=0.1
+n03-r500 rc head=0 base=1 :: r b5c67ab7 <scratch>/qe-255/nonexistent-out --budget-ms 500 --rounds 5 --concurrency 1 :: st=0.5
+n04-r500-default-rounds rc head=0 base=1 :: r b5c67ab7 <scratch>/qe-255/nonexistent-out --budget-ms 500 :: st=0.5
+x01-r4000 rc head=1 base=1 :: r b5c67ab7 <scratch>/qe-255/nonexistent-out --budget-ms 4000 :: Error: --budget-ms 4000: r takes o
+x02-r100 rc head=1 base=1 :: r b5c67ab7 <scratch>/qe-255/nonexistent-out --budget-ms 100 :: Error: --budget-ms 100: r takes o
+x03-r1000 rc head=1 base=1 :: r b5c67ab7 <scratch>/qe-255/nonexistent-out --budget-ms 1000 :: Error: --budget-ms 1000: r takes o
+x04-r0 rc head=1 base=1 :: r b5c67ab7 <scratch>/qe-255/nonexistent-out --budget-ms 0 :: Error: --budget-ms 0: r takes o
+x05-r499 rc head=1 base=1 :: r b5c67ab7 <scratch>/qe-255/nonexistent-out --budget-ms 499 :: Error: --budget-ms 499: r takes o
+x06-r501 rc head=1 base=1 :: r b5c67ab7 <scratch>/qe-255/nonexistent-out --budget-ms 501 :: Error: --budget-ms 501: r takes o
+x07-r500.0 rc head=0 base=1 :: r b5c67ab7 <scratch>/qe-255/nonexistent-out --budget-ms 500.0 :: st=0.5
+x08-r5e2 rc head=0 base=1 :: r b5c67ab7 <scratch>/qe-255/nonexistent-out --budget-ms 5e2 :: st=0.5
+x09-r0x1F4 rc head=0 base=1 :: r b5c67ab7 <scratch>/qe-255/nonexistent-out --budget-ms 0x1F4 :: st=0.5
+x10-rneg rc head=1 base=1 :: r b5c67ab7 <scratch>/qe-255/nonexistent-out --budget-ms -500 :: Error: --budget-ms -500: r takes o
+x11-rabc rc head=1 base=1 :: r b5c67ab7 <scratch>/qe-255/nonexistent-out --budget-ms abc :: Error: --budget-ms abc: r takes o
+x12-d500 rc head=1 base=1 :: d b5c67ab7 8f2fc9b5 <scratch>/qe-255/nonexistent-out --budget-ms 500 :: Error: --budget-ms 500: 
+x13-d50 rc head=1 base=1 :: d b5c67ab7 8f2fc9b5 <scratch>/qe-255/nonexistent-out --budget-ms 50 :: Error: --budget-ms 50: 
+x14-d1e2 rc head=0 base=1 :: d b5c67ab7 8f2fc9b5 <scratch>/qe-255/nonexistent-out --budget-ms 1e2 :: st=0.1
+x15-d4000 rc head=1 base=1 :: d b5c67ab7 8f2fc9b5 <scratch>/qe-255/nonexistent-out --budget-ms 4000 :: Error: --budget-ms 4000: 
+x16-d200 rc head=1 base=1 :: d b5c67ab7 8f2fc9b5 <scratch>/qe-255/nonexistent-out --budget-ms 200 :: Error: --budget-ms 200: 

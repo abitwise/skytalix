@@ -1,0 +1,26 @@
+== think time (cutechess -debug clock), budget 100 ms for skytalix/base ==
+skytalix: go lines {"go movetime 100":7077}; searched 6976, book 101; think median 101 p99 102 max 104 ms; overshoot over 100 ms: median 1 p99 2 MAX 4 ms; >0: 3495, >5: 0, >10: 0, >12: 0, >25: 0, >50: 0
+base: go lines {"go movetime 100":7081}; searched 6982, book 99; think median 100 p99 102 max 105 ms; overshoot over 100 ms: median 0 p99 2 MAX 5 ms; >0: 3456, >5: 0, >10: 0, >12: 0, >25: 0, >50: 0
+== results ==
+finished 100; time losses 0; faults 0
+terminations: {"Draw by 3-fold repetition":16,"White mates":23,"Black mates":44,"Draw by insufficient mating material":4,"Draw by fifty moves rule":13}
+Score of skytalix vs base: W/L/D 29/38/33; points 45.5 of 100 [0.455]
+Elo difference -31.4 +/- 56.3; LOS 13.6 %; draw ratio 33.0 %
+== pgn ==
+games 100; plies mean 141.6 [39-291]; first start -> last end 1421 s; games/hour 253.3
+host.log: before -> end 1426 s (incl. builds); cutechess start -> end 1421 s; games/hour (cutechess wall) 253.3
+== harness summary.txt ==
+Elo difference: -31.4 +/- 56.3, LOS: 13.6 %, DrawRatio: 33.0 %
+W/L/D: 29/38/33  score: 0.455  games: 100 of 100
+draw ratio: 33.0 %
+faults: 0  unclassified: 0  move-cap draws: 0
+skytalix.stderr: 0 bytes
+base.stderr: 0 bytes
+state: NEUTRAL
+== machine.txt control line == harness: <worktree> at 73ec55456f9907587fd5b4e148b6a061456e4d9f | concurrency: 1 (default 3) | control: skytalix and base st=0.1 timemargin=50
+== host (block samples, 10 s) ==
+samples 142; with real foreign vitest 22 (15.5 %); with foreign cutechess 0; with a foreign process >= 20 % CPU 1; load1 median 1.56 max 4.07; Tctl median 76.5 max 84.9
+2026-11-01T18:24:28.765Z a4 block start; cmd: node tools/rating/rating.ts d becf571a becf571a <scratch>/qe-255/out-a4 --budget-ms 100 --rounds 50 --concurrency 1
+2026-11-01T18:24:43.785Z a4 ALONE clear at poll 2 after 15 s load1=1.85 tctl=44.0
+2026-11-01T18:24:43.787Z a4 spawned pid 3225504
+2026-11-01T18:48:29.990Z a4 exit rc=0 sig=null wall=1441 s run=1426 s
