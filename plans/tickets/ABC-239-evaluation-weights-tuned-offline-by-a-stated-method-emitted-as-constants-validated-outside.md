@@ -5,10 +5,19 @@ status: backlog
 column: Backlog
 size: L
 priority: P3
-epic: EPIC-010
+epic: EPIC-011
 ---
 
 # ABC-239: offline tuning of the evaluation weights
+
+> **RE-HOMED 2026-11-01 to `EPIC-011` by BA/PM** (task `bapm-epic011-dedupe`, records only, at `main` `2e9a2457`). The
+> owner asked for a new epic for the 3 000 path, started after the open epics close, and for no work done twice
+> (`orch-2026-10-30a` `…022fb66f`). `ADR-0056` D4 maps this ticket to its gap list, so it leaves `EPIC-010` rather
+> than holding that epic's close. **Id unchanged; nothing below this block is edited.** `ADR-0056` row E2, "the
+> largest single eval lever". `EPIC-011` Phase 4, after E1. **Its wait on "milestone 2's evaluation" becomes a wait on
+> E1** (the full taper, which folds `ABC-231`/`ABC-232`). The data question is now the owner's Q-3K-7 (own games
+> allowed by default, as its `A1`; Lichess CC0 exports; a Stockfish-labelled set raises a product-identity question).
+> `ADR-0056`: M0's games (`ABC-255`) may serve as data.
 
 > **Cut 2026-10-29 by BA/PM** (task `bapm-epic010-improvements`, records only, at `main` `f45aea95`). § B item 8,
 > verified (SA `…306a4012` rows 8a, 8b): every table is written from a stated rule, never tuned. Never tried.

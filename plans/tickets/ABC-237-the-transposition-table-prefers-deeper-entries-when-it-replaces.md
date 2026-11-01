@@ -5,10 +5,19 @@ status: backlog
 column: Backlog
 size: S
 priority: P3
-epic: EPIC-010
+epic: EPIC-011
 ---
 
 # ABC-237: depth-preferred TT replacement
+
+> **RE-HOMED 2026-11-01 to `EPIC-011` by BA/PM** (task `bapm-epic011-dedupe`, records only, at `main` `2e9a2457`). The
+> owner asked for a new epic for the 3 000 path, started after the open epics close, and for no work done twice
+> (`orch-2026-10-30a` `…022fb66f`). `ADR-0056` D4 maps this ticket to its gap list, so it leaves `EPIC-010` rather
+> than holding that epic's close. **Id unchanged; nothing below this block is edited.** `ADR-0056` row T2. `EPIC-011`
+> Phase 1, **second: after `ABC-238`** (`ADR-0056` D6 orders T1 → T2, "T1 order free"; the only coupling is the shared
+> `src/transposition.ts`). `EPIC-010`'s order `ABC-237` → `ABC-238` is replaced. Keeping the table across moves is
+> `ABC-257`, size is `ABC-258`; both stay out of scope here. Line cites are re-read at refinement (`ABC-253` moves the
+> TT keys to two 32-bit halves first).
 
 > **Cut 2026-10-29 by BA/PM** (task `bapm-epic010-improvements`, records only, at `main` `f45aea95`). § B item 9, the
 > replacement half (SA `…306a4012` rows 9a, 9b). **Not `ABC-209`:** the table is still cleared per search

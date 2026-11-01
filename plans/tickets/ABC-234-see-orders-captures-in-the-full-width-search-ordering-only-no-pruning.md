@@ -5,10 +5,18 @@ status: backlog
 column: Backlog
 size: M
 priority: P3
-epic: EPIC-010
+epic: EPIC-011
 ---
 
 # ABC-234: SEE for capture ordering
+
+> **RE-HOMED 2026-11-01 to `EPIC-011` by BA/PM** (task `bapm-epic011-dedupe`, records only, at `main` `2e9a2457`). The
+> owner asked for a new epic for the 3 000 path, started after the open epics close, and for no work done twice
+> (`orch-2026-10-30a` `…022fb66f`). `ADR-0056` D4 maps this ticket to its gap list, so it leaves `EPIC-010` rather
+> than holding that epic's close. **Id unchanged; nothing below this block is edited.** `ADR-0056` row O3s. `EPIC-011`
+> Phase 3, after `ABC-233`. Its `ADR-0024` d4 re-open evidence wait stands. SEE **pruning** (Q1) is a separate
+> `EPIC-011` stub that needs this ticket; it stays out of this ticket's scope. Line cites are re-read at refinement
+> (milestone 1b moves the capture path).
 
 > **Cut 2026-10-29 by BA/PM** (task `bapm-epic010-improvements`, records only, at `main` `f45aea95`). § B item 6, the
 > SEE half (SA `…306a4012` row 6c). **SEE is fenced** by `ADR-0024` decision 4. Its own re-open condition: the

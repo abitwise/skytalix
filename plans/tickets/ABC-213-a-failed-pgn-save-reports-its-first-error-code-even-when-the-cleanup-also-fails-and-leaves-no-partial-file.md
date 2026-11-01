@@ -1,8 +1,8 @@
 ---
 id: ABC-213
 title: "A failed PGN save reports its first error code even when the cleanup also fails, and a single fault leaves no partial file: guard the cleanup unlink and pin both"
-status: in-development
-column: In Development
+status: done
+column: Done
 size: XS
 priority: P3
 epic: EPIC-006
@@ -10,6 +10,11 @@ feature: PGN export (ABC-203, ADR-0047)
 ---
 
 # ABC-213: guard the cleanup `unlinkSync` in `src/pgn-file.ts`, report the first code, and pin "no partial file" and the double fault
+
+> **FRONT MATTER FOLDED 2026-11-01 by BA/PM** (task `bapm-epic011-dedupe`, records only, at `main` `2e9a2457`):
+> `status` and `column` read Done, as the board holds this ticket: merged `77032cda` (the board's Done row: "Done
+> 2026-10-24, merged 77032cda"). The page still read an earlier column, which invites the same work twice. No other
+> line on this page is changed.
 
 > **Cut 2026-10-24 by BA/PM** (task `bapm-cut-levels-6-7`, records only, at `main` `6c0ab29e`). The rulings are in
 > `.grugops/context/bapm-cut-levels-6-7/notes/`. This hop ran no test and no probe.

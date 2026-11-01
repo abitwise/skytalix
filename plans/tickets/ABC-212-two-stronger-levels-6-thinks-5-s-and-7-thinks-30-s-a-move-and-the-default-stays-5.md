@@ -1,8 +1,8 @@
 ---
 id: ABC-212
 title: "Two stronger levels: 6 thinks 5 s and 7 thinks 30 s a move, at every surface, and the default stays 5"
-status: in-review
-column: In Review
+status: done
+column: Done
 size: M
 priority: P2
 epic: EPIC-004
@@ -10,6 +10,11 @@ feature: difficulty levels (ABC-087 mechanism, ABC-101 selection, ABC-171 Skill 
 ---
 
 # ABC-212: levels 6 (5 s) and 7 (30 s), blunder rate 0, at every surface; the default stays 5
+
+> **FRONT MATTER FOLDED 2026-11-01 by BA/PM** (task `bapm-epic011-dedupe`, records only, at `main` `2e9a2457`):
+> `status` and `column` read Done, as the board holds this ticket: merged `a6f37771` (Orchestrator `9433c5f9`:
+> "ABC-212 Done"). The page still read an earlier column, which invites the same work twice. No other line on this
+> page is changed.
 
 > **Cut 2026-10-24 by BA/PM** (task `bapm-cut-levels-6-7`, records only, at `main` `6c0ab29e`). The rulings are in
 > `.grugops/context/bapm-cut-levels-6-7/notes/`. This hop ran no test, took no timing and ran no probe.

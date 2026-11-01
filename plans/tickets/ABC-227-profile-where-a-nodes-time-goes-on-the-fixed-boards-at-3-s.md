@@ -1,14 +1,19 @@
 ---
 id: ABC-227
 title: "Profile: where a node's time goes on the fixed boards at 3 s, and which cuts are worth a value-identical ticket"
-status: ready
-column: Ready
+status: done
+column: Done
 size: S
 priority: P2
 epic: EPIC-010
 ---
 
 # ABC-227: profile where a node's time goes
+
+> **FRONT MATTER FOLDED 2026-11-01 by BA/PM** (task `bapm-epic011-dedupe`, records only, at `main` `2e9a2457`):
+> `status` and `column` read Done, as the board holds this ticket: Done 2026-10-29, merged `f4301d0c` (`se-ABC-227`;
+> the board's Done row and `EPIC-010` tickets row 2). The page still read an earlier column, which invites the same
+> work twice. No other line on this page is changed.
 
 > **Cut 2026-10-29 by BA/PM** (task `bapm-epic010-improvements`, records only, at `main` `f45aea95`). § B item 7
 > stands in part (SA `…837e6fa8`): captures-only legality is done (`ABC-206`); full pseudo-legal generation, the board

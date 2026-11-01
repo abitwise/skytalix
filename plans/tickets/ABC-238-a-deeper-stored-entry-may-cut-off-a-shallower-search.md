@@ -4,11 +4,20 @@ title: "A deeper stored entry may cut off a shallower search, revising ABC-081 A
 status: backlog
 column: Backlog
 size: M
-priority: P3
-epic: EPIC-010
+priority: P2
+epic: EPIC-011
 ---
 
 # ABC-238: deeper-entry TT cutoffs
+
+> **RE-HOMED 2026-11-01 to `EPIC-011` by BA/PM** (task `bapm-epic011-dedupe`, records only, at `main` `2e9a2457`). The
+> owner asked for a new epic for the 3 000 path, started after the open epics close, and for no work done twice
+> (`orch-2026-10-30a` `…022fb66f`). `ADR-0056` D4 maps this ticket to its gap list, so it leaves `EPIC-010` rather
+> than holding that epic's close. **Id unchanged; nothing below this block is edited.** `ADR-0056` row T1, "the
+> cheapest real gap in the search". `EPIC-011` Phase 1, **first. Priority P3 → P2.** **The wait "`ABC-237` merged or
+> closed first" is removed:** `ADR-0056` D6 orders T1 → T2, and `ABC-237` now follows this ticket on the shared file.
+> The ADR revising `ABC-081` `A1` is still owed. Its reading is `EPIC-011` § The per-change rule. Line cites are
+> re-read at refinement (`ABC-253` changes the TT keys first).
 
 > **Cut 2026-10-29 by BA/PM** (task `bapm-epic010-improvements`, records only, at `main` `f45aea95`). § B item 9 (SA
 > `…306a4012` row 9c). **This revises a rule:** `ABC-081` `A1`, "the table changes the work, never the value". Using a

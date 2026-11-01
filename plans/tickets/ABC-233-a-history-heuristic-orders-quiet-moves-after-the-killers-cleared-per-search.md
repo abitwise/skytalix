@@ -5,10 +5,19 @@ status: backlog
 column: Backlog
 size: M
 priority: P3
-epic: EPIC-010
+epic: EPIC-011
 ---
 
 # ABC-233: history heuristic for quiet moves
+
+> **RE-HOMED 2026-11-01 to `EPIC-011` by BA/PM** (task `bapm-epic011-dedupe`, records only, at `main` `2e9a2457`). The
+> owner asked for a new epic for the 3 000 path, started after the open epics close, and for no work done twice
+> (`orch-2026-10-30a` `…022fb66f`). `ADR-0056` D4 maps this ticket to its gap list, so it leaves `EPIC-010` rather
+> than holding that epic's close. **Id unchanged; nothing below this block is edited.** `ADR-0056` row O1h. `EPIC-011`
+> Phase 3, first. Countermove and continuation history (O2c) build on it and are a separate stub, out of this ticket's
+> scope. Its reading is `EPIC-011` § The per-change rule (today `EPIC-010` § The merge rule, by reference; plus
+> `ABC-255`'s SPRT if the owner says yes to Q-3K-2). Line cites in `src/` are re-read at refinement: milestone 1b
+> (`ABC-251`) rewrites `orderMoves` first.
 
 > **Cut 2026-10-29 by BA/PM** (task `bapm-epic010-improvements`, records only, at `main` `f45aea95`). § B item 6,
 > verified (SA `…306a4012` rows 6a, 6b, and the LMR constraint under 6c). Never tried. **Waits in Backlog on** an ADR

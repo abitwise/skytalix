@@ -1,8 +1,8 @@
 ---
 id: ABC-203
 title: "At game end, `npm run chess` writes the game as a standard PGN file under `games/` (EPIC-006, PGN export)"
-status: in-security-nfr
-column: In Security/NFR
+status: done
+column: Done
 size: M
 priority: P1
 epic: EPIC-006
@@ -10,6 +10,11 @@ feature: —
 ---
 
 # ABC-203: at game end, write the game as a PGN file the owner can open in an analysis tool
+
+> **FRONT MATTER FOLDED 2026-11-01 by BA/PM** (task `bapm-epic011-dedupe`, records only, at `main` `2e9a2457`):
+> `status` and `column` read Done, as the board holds this ticket: merged per the board's Done row (Orchestrator
+> `e226f889`, 2026-10-24: "ABC-203 Done"). The page still read an earlier column, which invites the same work twice.
+> No other line on this page is changed.
 
 > **Cut 2026-10-23 by BA/PM** (task `bapm-cut-pgn-export`, records only, at `main` `f4eec73d`). The ruling is in
 > `.grugops/context/bapm-cut-pgn-export/notes/`. This hop ran no test and took no timing. It ran one read-only npm

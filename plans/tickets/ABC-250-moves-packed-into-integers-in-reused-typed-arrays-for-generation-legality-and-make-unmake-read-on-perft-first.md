@@ -10,6 +10,11 @@ epic: EPIC-010
 
 # ABC-250: packed moves in the rules core, read on perft before the search is touched
 
+> **DATED LINE 2026-11-01** (BA/PM, `bapm-epic011-dedupe`): `ABC-254` moved to `EPIC-011` (it waits on Q-SP-3 and
+> would hold `EPIC-010`'s close). § Dependencies' "`ABC-254` goes first" case stands only as the exception written on
+> `ABC-254`'s page (the owner's yes and its ADR before this ticket enters development); otherwise `ABC-254` follows
+> the O1-b chain. Nothing else on this page changes.
+
 > **Cut 2026-11-01 by BA/PM** (task `bapm-goal3000-o1-cut`, records only, at `main` `bae25131`; nothing run, built or
 > timed, because `qe-ABC-223` holds the host STRICTLY ALONE). Source: `ADR-0055` option **O1-b** (§ D1, the O1 table;
 > § D6, "O1-b (L, split into generation, legality and make/unmake; search, quiescence, ordering and TT; the shell

@@ -1,0 +1,25 @@
+# `bapm-epic011-dedupe`: EPIC-011 created; close-out plans for EPIC-006, EPIC-009, EPIC-010; dedupe verdicts
+
+Source: owner 2026-11-01 (`orch-2026-10-30a` `…022fb66f`, `…74216a44`). Records only at `main` `2e9a2457`; nothing run.
+Authoritative text: `plans/epics/EPIC-011-…` § Dedupe audit, § Close-out of the open epics, § Phases.
+
+## Dedupe verdicts (duplicates and conflicts found, and how each is resolved)
+- **Move to EPIC-011 (ids unchanged, dated lines):** ABC-231, 232, 233, 234, 236, 237, 238 (EPIC-010 milestone 2), ABC-239 (milestone 3), ABC-254 (waits Q-SP-3; would hold EPIC-010's close). ADR-0056 D4 maps all of them to its gap list.
+- **Merge:** ABC-231 into E1 (full taper); ABC-232 into E1 (phase scaling) and E4 (passer terms); both stay pages until E1 is cut, then close as merged. EPIC-009's "major validation" (≥ 100 games at 40/15) merged into EPIC-011's 40/15 readings (G4 counts losses on time and the closest call): one set of games, no separate ticket.
+- **Supersede:** ABC-209 (dropped) by new ABC-257 (T3, re-try after T1/T2; its NEUTRAL was read under exact-depth cutoffs). ABC-218 (dropped) superseded by EPIC-011's 40/15 readings.
+- **Stay dropped, re-tried only in a new form:** ABC-210 (X1 = every-depth extension; the horizon form is not re-run), ABC-205 (taper half in E1, king-attack half in E3), ABC-207 (E5 by the tuner, never hand weights). ABC-211, 219, 074, 038, 052, 060, 108, 111 stay dropped (unrelated).
+- **Keep:** EPIC-010 milestone 1b (ABC-250..253) and ABC-249 in EPIC-010; ABC-223 in EPIC-009; ABC-204/225 reused as M0's and the milestones' harness (no second harness); ABC-121, 208, 215, 081 are extended by P1, P5, E2, T1 (no re-runs).
+- **Conflicts:** C1 EPIC-010 fences vs ADR-0056 (resolved: EPIC-011 scope, EPIC-010 keeps its fence); C2 ABC-237→238 vs T1→T2 (ADR-0056 order adopted; ABC-238 P3→P2); C3 O1-a vs O1-b order (with the Architect; ABC-250 stays first); C4 EPIC-009 "more time on a hard move" vs W1 (W1 in EPIC-011, before the first 40/15 reading); C5 EPIC-009 Q6 40/15 strength later (EPIC-011's claim); C6 major validation (merged); C7 ABC-231/232 vs E1 (merged); C8 EPIC-010 Q5 no Elo target vs 3 000 (no conflict); C9 EPIC-010 Q6 (moved); C10 R smoke at E 1 910 stops guarding as strength rises (risk; E proposed by Architect/QE); C11 ADR-0055 D4 O1-d first vs ADR-0056 D6 after O1-b (ADR-0056 adopted; ADR-0055's order kept as an exception on ABC-254).
+- **Stale page front matter** (Done on the board, pages read Ready/In Review/In Dev): ABC-203, 212, 213, 214, 216, 226, 227, 246 folded to Done.
+
+## Close-out plans
+- **EPIC-006:** nothing cut is open (24 pages, all Done; ABC-060 dropped); acceptance 1-4 met. Save/resume (negotiable) not earned by the play-test log → not built (BA/PM ruling, reversible). No exit reading. Close = Orchestrator card move.
+- **EPIC-009:** remains ABC-223 (qe-ABC-223 now) → BA/PM grades milestone 2 → close. Moved out: W1, the 40/15 strength reading, the major validation (none were tickets).
+- **EPIC-010:** remains ABC-249, ABC-250 → 251 → 252 → 253. Exit readings: S2 nps per 1b ticket (≈ 4 h ALONE, estimate), ABC-249 G8, a close hop reading M3 (Q-SET) and M4 (G1 ≥ 54/58, G5–G9). **M2 needs no new batch:** milestone 1's batch (51902be5 vs ca6e675c, NOT LOSS) read the last value change; `git log 51902be5..2e9a2457` shows no production src change; 1b is value-identical (G4). Saves ≈ 23 h ALONE.
+- **Milestone 1b placement:** stays in EPIC-010, last (ADR-0055 D2/D4 and ADR-0056 D6 put O1 before every algorithm ticket; the owner closes EPIC-010 first).
+
+## EPIC-011 shape
+- Goal 3 000; claim at 40/15 in uci-clock-mode (confirmed); scale Stockfish 19 UCI_Elo, claim rule (≥ 50 % over 200 at E = M), milestones 2 200/2 400/2 600/2 800/3 000 *[proposed]*; routine controls down to 0.5 s/move (owner), values the Architect's fold.
+- Phase 0: ABC-255 M0 SPRT lane (M, P1, 8/10), ABC-256 B0 baseline (S, P2, 8/10). Phase 1: ABC-238 T1 → ABC-237 T2 → ABC-257 T3 (S, P3, 8/10) → ABC-258 T4 (S, P3, 8/10). Phase 2 stubs P2, P1, P4, P3, P5, P6 → R1. Phase 3: ABC-233, O2c stub, ABC-234, Q1/Q2 stubs, ABC-236. Phase 4: E1 stub (folds 231/232), ABC-239, E3–E7 stubs → R2. Phase 5: X1, X2, W1 stubs, ABC-254, V3 stub → R3 + 40/15 claim. V4 = Q-3K-8.
+- Per-change rule: EPIC-010 § The merge rule by reference until Q-3K-2; G6 "≥ base" until Q-3K-4.
+- Ids ABC-255..258 used; ABC-224 stays in the pool.

@@ -5,10 +5,17 @@ status: backlog
 column: Backlog
 size: S
 priority: P3
-epic: EPIC-010
+epic: EPIC-011
 ---
 
 # ABC-232: passed pawns by phase
+
+> **RE-HOMED 2026-11-01 to `EPIC-011` by BA/PM** (task `bapm-epic011-dedupe`, records only, at `main` `2e9a2457`). The
+> owner asked for a new epic for the 3 000 path, started after the open epics close, and for no work done twice
+> (`orch-2026-10-30a` `…022fb66f`). `ADR-0056` D4 maps this ticket to its gap list, so it leaves `EPIC-010` rather
+> than holding that epic's close. **Id unchanged; nothing below this block is edited.** `ADR-0056` rows E1 (phase
+> scaling) and E4 (passer terms). **Verdict: merge into E1** (its phase scaling) **and E4** (any passer term beyond
+> it) at `EPIC-011` Phase 4's refinement; closes as merged then. Its wait on `ABC-231` becomes a wait on E1.
 
 > **Cut 2026-10-29 by BA/PM** (task `bapm-epic010-improvements`, records only, at `main` `f45aea95`). § B item 5, the
 > passed-pawn half (SA `…306a4012` row 5b). Rook activity by phase is not cut (scope). **Waits in Backlog on**

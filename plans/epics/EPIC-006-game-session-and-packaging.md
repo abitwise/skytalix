@@ -10,6 +10,24 @@ owner: BA/PM
 
 # EPIC-006 — Game session and packaging
 
+> **CLOSE-OUT PLAN 2026-11-01 by BA/PM** (task `bapm-epic011-dedupe`, records only, at `main` `2e9a2457`; nothing
+> run). Source: the owner's word of 2026-11-01 (`orch-2026-10-30a` `…022fb66f`): finish the open epics before the new
+> 3 000 epic (`EPIC-011`), and do no work twice.
+>
+> - **Nothing cut is open.** All 24 ticket pages with `epic: EPIC-006` sit in the board's Done column (`ABC-060`
+>   dropped). Acceptance 1 is MET (`ABC-201`, 2026-10-23), 2 (`ABC-102`), 3 (`ABC-044`), 4 (`ABC-101`, `ABC-200`).
+>   The pages of `ABC-203`, `ABC-213` and `ABC-216` still read an earlier column; their front matter is folded to Done
+>   at this hop.
+> - **Save/resume (the negotiable slice) is not built at the close.** § Negotiable slice builds it "only if
+>   play-testing shows people abandon games mid-way". The log holds one relayed engine-against-engine game, which "says
+>   little about abandonment". Not earned, so not built (BA/PM ruling under the owner's delivery delegation;
+>   reversible). It comes back as its own ticket only if a play-test row shows an abandoned game with "would have
+>   saved: y".
+> - **3 000-path work in this epic:** none. **Exit reading owed:** none. The 2026-08-13 recommendation that this be
+>   two epics is moot and withdrawn.
+> - **The close is the Orchestrator's card move.** The board line still says acceptance 1 is unmeetable, which
+>   `ADR-0018` and `ABC-201` overtook. The notes are in `.grugops/context/bapm-epic011-dedupe/notes/`.
+
 > **2026-10-24, BA/PM (`bapm-cut-readme`, at `main` `2a1a7c93`): the README is cut as `ABC-216`** (Ready, XS, P2), on
 > the owner's word `…619938c5` item 4. The repository is public (`ADR-0049`), and GitHub shows no README. `ABC-216`
 > adds one short `README.md` with an ASCII-art title for the clone channel (`ADR-0018`). It shows no publish path
