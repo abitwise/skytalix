@@ -1,0 +1,9 @@
+
+ RUN  v4.1.12 <scratch>/se-261/plant/PL3a
+
+
+ Test Files  1 passed (1)
+      Tests  43 passed (43)
+   Start at  19:07:18
+   Duration  267ms (transform 0ms, setup 0ms, import 41ms, tests 143ms, environment 0ms)
+

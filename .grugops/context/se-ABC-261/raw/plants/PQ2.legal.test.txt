@@ -1,0 +1,42 @@
+
+ RUN  v4.1.12 <scratch>/se-261/plant/PQ2
+
+ ❯ src/legal.test.ts (43 tests | 1 failed) 139ms
+     × equals the full filter in check: a non-blocking promotion is absent, a blocking one present 3ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/legal.test.ts > ABC-261 — legalCapturesAndQueenPromotions in check tests its quiet queen promotions > equals the full filter in check: a non-blocking promotion is absent, a blocking one present
+AssertionError: P1, promotion off the check line: expected [ { from: 96, to: 112, …(4) } ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   {
++     "captured": 0,
++     "flags": 4,
++     "from": 96,
++     "piece": 1,
++     "promotion": 5,
++     "to": 112,
++   },
++ ]
+
+ ❯ src/legal.test.ts:874:26
+    872|
+    873|       const lazy = legalCapturesAndQueenPromotions(position);
+    874|       expect(lazy, name).toEqual(fullLegalCapturesAndQueenPromotions(p…
+       |                          ^
+    875|       const promotes = lazy.some(
+    876|         (m) => m.from === from && m.to === to && m.captured === EMPTY …
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 42 passed (43)
+   Start at  19:07:18
+   Duration  236ms (transform 0ms, setup 0ms, import 33ms, tests 139ms, environment 0ms)
+
