@@ -10,6 +10,16 @@ epic: EPIC-011
 
 # ABC-255: the owner's 100 / 400 reads at 100 ms and the 0.5 s smoke (M0)
 
+> **ALIGNED TO THE MERGED `ADR-0056` FOLD 2026-11-01 by BA/PM** (task `bapm-reconcile-adr0056`, records only, at
+> `main` `bd29dd50`; nothing run). The owner-answers fold is on `main` (merge `a0f9297e`, ADR commit `fe50a11f`; its §
+> "`ABC-255` re-pointed again"). **Item 1 stays** (`d --budget-ms 100`, `timemargin` 50 ms; it carries C2′ with
+> `--rounds 50` and C3″ with `--rounds 200`). **Item 2 is now `r --budget-ms 500` only:** `skytalix` `st=0.5` with
+> `timemargin` 50 ms; Stockfish's pins unchanged (`st=0.5`, 2 000 ms); `--elo` keeps its default 1 650. **`rpair` gains
+> no control** (no per-epic pair is left). Acceptance: a dry-run row for each of the three command lines (C2′, C3″, S′),
+> the two C2′ reads as before, one S′ on `main` reported and not graded (score and largest overshoot at 0.5 s), and
+> 0 lines under `src/` (R-TC item 4). Size stays S. **DoR 9/10 → 10/10: row 5 is met; Ready recommended** (the column
+> move is the Orchestrator's). Rows below are rewritten in place under this task's name.
+
 > **RE-SCOPED AGAIN 2026-11-01 by BA/PM** (task `bapm-owner-answers`, records only, at `main` `adab5f0d`; nothing run).
 > The owner's answers (`orch-2026-10-30a` `…43098cef`, verbatim there): *"1. b ; 2. ok ; 3. quick check can be with
 > 0.5s difficulty. Make sure engine is not changed internally and it works on different difficulty settings."*
@@ -52,9 +62,13 @@ epic: EPIC-011
    that budget; Q1's 5 000 − budget stays for every other budget. The change read is `--rounds 50` (100 games,
    openings 1–50, both colours); the epic read is `--rounds 200` (400 games, `d`'s default rounds over the 100
    openings of today's `tools/rating/openings.epd`), head against base.
-2. **The 0.5 s smoke control on `r` and `rpair` (the owner's answer 3):** `skytalix` `st=0.5` with a `timemargin`
+2. ~~**The 0.5 s smoke control on `r` and `rpair` (the owner's answer 3):** `skytalix` `st=0.5` with a `timemargin`
    fixed at design (or by the fold, if it names one); Stockfish keeps `r`'s `st=0.5` and `timemargin=2000`. The
-   smoke is `r <build> <out> --elo E --rounds 5 --concurrency 1` with that control (flag name fixed at design).
+   smoke is `r <build> <out> --elo E --rounds 5 --concurrency 1` with that control (flag name fixed at design).~~
+   *(2026-11-01, `bapm-reconcile-adr0056`, `ADR-0056` S′.)* **`r` accepts `--budget-ms 500` (the owner's answer 3):**
+   `skytalix` gets `st=0.5` and `timemargin=50`; Stockfish keeps `r`'s `st=0.5` and `timemargin=2000`; `--elo` keeps
+   its default of 1 650. The smoke is `r <candidate> <out> --budget-ms 500 --rounds 5 --concurrency 1`. `rpair` is not
+   changed. Every existing `r`, `d` and `rpair` default, pin and dry-run output stays byte-equal.
 3. **Records:** as `ABC-204` / `ABC-225` write them (PGN, `cutechess-cli` log, host log, `SHA256SUMS`), plus the
    control.
 
@@ -62,13 +76,17 @@ epic: EPIC-011
 
 - **SPRT in any form** (the owner, 2026-11-01). No Elo or pass-line maths in repo code (`ABC-204` § Out of scope):
   the harness reports and QE grades.
-- **The 100 ms control on `rpair` and `r`** (dropped 2026-11-01: the epic read no longer plays Stockfish). If the
-  fold keeps a 100 ms Stockfish reading (C1's claim timing, C4's anchors, a milestone reading), it is added then.
+- **The 100 ms control on `rpair` and `r`** (dropped 2026-11-01: the epic read no longer plays Stockfish). ~~If the
+  fold keeps a 100 ms Stockfish reading (C1's claim timing, C4's anchors, a milestone reading), it is added then.~~
+  *(`bapm-reconcile-adr0056`: the fold cuts `r` at 100 ms with C4's anchor A0, when the owner is asked for it; not
+  here.)*
+- **Any control on `rpair`** (`bapm-reconcile-adr0056`: the fold names none; `rpair` stays byte-equal).
 - A larger opening set: 100 games use 50 openings; 400 games use the 100 openings in 200 rounds, as `d`'s default does.
 - **Any change to `src/`, `data/`, `vitest.config.ts`** (the owner's condition), or to the existing defaults and pins
   of `d`, `r` and `rpair`.
-- A harness check that the engine works across its difficulty settings: the Architect names that check in the fold;
-  it is not this ticket's.
+- A harness check that the engine works across its difficulty settings: ~~the Architect names that check in the fold;
+  it is not this ticket's.~~ *(`bapm-reconcile-adr0056`: the fold names it, `ADR-0056` R-TC part 2: QE's deep lanes,
+  per strength ticket and per epic, not the harness.)*
 - Width above 1 by default (one core, the owner, `…f7a50e95`). `--concurrency` stays as it is.
 - A second harness or a new binary.
 
@@ -78,23 +96,33 @@ epic: EPIC-011
   --concurrency 1 --dry-run`, and the same with `--rounds 200`, each print a `cutechess-cli` argument vector with
   `st=0.1` and `timemargin=50` on both engines, `-games 2 -rounds 50` (resp. `-rounds 200`) `-concurrency 1`, and
   today's opening file with `order=sequential` and `-repeat`. The dry run of the default and of each of today's
-  budgets (3 000, 2 500, 2 000, 1 500, 1 000) is byte-equal to base's.
-- **A2 (the 0.5 s control).** `r <build> <out> --elo E --rounds 5 --concurrency 1 --dry-run` with the 0.5 s control
+  budgets (3 000, 2 500, 2 000, 1 500, 1 000) is byte-equal to base's. *(`bapm-reconcile-adr0056`: these are the
+  C2′ (`--rounds 50`) and C3″ (`--rounds 200`) dry-run rows.)*
+- ~~**A2 (the 0.5 s control).** `r <build> <out> --elo E --rounds 5 --concurrency 1 --dry-run` with the 0.5 s control
   prints a vector with `st=0.5` and the design's `timemargin` for `skytalix`, no `option.Skill Level` on `skytalix`,
   and `st=0.5`, `timemargin=2000` for Stockfish. `rpair` with the same control prints the same `st=` and `timemargin=` on both
-  engines in every block, its `option.Skill Level=6` (`ABC-247`) unchanged. Without the control, every `r` and `rpair` dry run is byte-equal to base's (4 000 ms, `st=0.5`).
+  engines in every block, its `option.Skill Level=6` (`ABC-247`) unchanged. Without the control, every `r` and `rpair` dry run is byte-equal to base's (4 000 ms, `st=0.5`).~~
+- **A2 (the S′ dry-run row; `bapm-reconcile-adr0056`).** `node tools/rating/rating.ts r <candidate> <out>
+  --budget-ms 500 --rounds 5 --concurrency 1 --dry-run` prints a vector with `st=0.5` and `timemargin=50` for
+  `skytalix`, no `option.Skill Level` on `skytalix`, and `st=0.5`, `timemargin=2000` and `option.UCI_Elo=1650` for
+  Stockfish, `-rounds 5 -games 2 -concurrency 1`. Without `--budget-ms`, every `r` dry run is byte-equal to base's
+  (4 000 ms, `st=0.5`), and every `rpair` dry run, with or without any flag it accepts today, is byte-equal to base's
+  (its `option.Skill Level=6`, `ABC-247`, unchanged). `r --budget-ms` with a value other than 500 is refused with
+  a non-zero exit, as `d` refuses a budget outside `D_BUDGETS_MS` today.
 - **A3 (sanity read on a known pair, reported, not graded).** QE runs A1's 100-game command without `--dry-run` on
   `ABC-208`'s merge `b5c67ab7` against its first parent, host ALONE (≈ 25 min). Reported: W/L/D, score, Elo ± error,
   and whether the GAIN bar (≥ 50.0 of 100) is met (if its +38 holds at 100 ms it passes 94 % of the time, `ADR-0056`).
 - **A4 (identical pair, reported, not graded).** QE runs A1's 100-game command on candidate = base = `main` at the
   hop, host ALONE (≈ 25 min): 100 of 100 games complete, 0 faults, 0 losses on time. Reported: games per hour and the
   draw ratio at 100 ms.
-- **A5 (one real smoke, reported, not graded).** QE runs A2's `r` command without `--dry-run` on `main` at the hop,
-  E = 1 910 unless the fold names another, host ALONE (≈ 10 min): 10 of 10 games complete, 0 faults, 0 losses on
-  time. Reported: W/L/D, score, games per hour, and Stockfish's depth per move (for the fold's E).
+- **A5 (one real S′, reported, not graded).** QE runs A2's `r` command without `--dry-run` on `main` at the hop,
+  E = 1 650 (`r`'s default; ~~1 910 unless the fold names another~~, `bapm-reconcile-adr0056`), host ALONE (≈ 10 min):
+  10 of 10 games complete, 0 faults, 0 losses on time. Reported: W/L/D, score, games per hour, Stockfish's depth per
+  move, and **`skytalix`'s largest overshoot over 500 ms, in ms** (`ADR-0056` S′: if it is over 12 ms, a quarter of the
+  margin, the Architect re-sets the margin before any graded S′).
 - **A6 (the owner's condition: the engine is not changed).** `git diff --name-only <base> <head> -- src/ data/` is
-  empty, and in every A1 and A2 vector the control reaches `skytalix` only as `st=` and `timemargin=` (no new
-  `option.` on `skytalix`).
+  empty (0 lines under `src/`, `ADR-0056` R-TC item 4, read from the PR's numstat at review), and in every A1 and A2
+  vector the control reaches `skytalix` only as `st=` and `timemargin=` (no new `option.` on `skytalix`).
 - **A7 (gates).** `npm run lint`, `typecheck`, `test`, `build` green at every commit. New lane rows ≤ 0.1 s (`G8`
   ≤ 10 s). `git diff` touches `tools/rating/` and its tests only.
 - **A8 (the reading).** A `## Reading` section on this page with A3, A4 and A5, and QE's sealed note.
@@ -121,14 +149,16 @@ epic: EPIC-011
 
 ## Size and priority
 
-- **Size: S.** One budget on `d`, one control on `r` (which `rpair` reuses).
+- **Size: S.** One budget on `d`, one control on `r` ~~(which `rpair` reuses)~~ (`rpair` unchanged, `bapm-reconcile-adr0056`).
 - **Priority: P1.** `EPIC-010`'s close read and every later strength change are read on it.
 
 ## Dependencies
 
 - `ABC-204`, `ABC-225` and `ABC-247` Done.
-- **Architect:** `ADR-0056` C2′ (merged `94f1504c`) for the 100 ms margin; **the owner-answers fold
-  (`arch-adr0056-owner-answers`, in flight)** for anything it names on the 0.5 s control (margin, E).
+- **Architect:** `ADR-0056` C2′ (merged `94f1504c`) for the 100 ms margin; ~~**the owner-answers fold
+  (`arch-adr0056-owner-answers`, in flight)** for anything it names on the 0.5 s control (margin, E).~~ the
+  owner-answers fold (merged `a0f9297e`): S′'s margin 50 ms and E 1 650, C3″'s round count
+  (`bapm-reconcile-adr0056`).
 - **Owner:** none new (answers 1–3 given, `…43098cef`).
 
 ## Definition of Ready
@@ -138,13 +168,16 @@ epic: EPIC-011
 | 1 | problem clear | ✅ none of the three reads can be played today |
 | 2 | scope and out-of-scope | ✅ |
 | 3 | INVEST | ✅ S; independent of every engine ticket |
-| 4 | testable, measurable acceptance | ✅ byte-equal dry runs, the exact vectors, 100 / 400 / 10 games, 0 faults, 0 time losses, an empty `src/` / `data/` diff |
-| 5 | dependencies known | ⚠️ the owner-answers fold is not on `main`; it may name the 0.5 s margin and the smoke's E *(2026-11-01; was ✅ on the first fold, `94f1504c`)* |
+| 4 | testable, measurable acceptance | ✅ byte-equal dry runs, the exact vectors, 100 / 400 / 10 games, 0 faults, 0 time losses, an empty `src/` / `data/` diff *(2026-11-01: plus the overshoot in ms at 0.5 s)* |
+| 5 | dependencies known | ~~⚠️ the owner-answers fold is not on `main`; it may name the 0.5 s margin and the smoke's E *(2026-11-01; was ✅ on the first fold, `94f1504c`)*~~ ✅ the fold merged (`a0f9297e`): margin 50 ms, E 1 650, `rpair` unchanged *(`bapm-reconcile-adr0056`)* |
 | 6 | NFR triggers with targets | ✅ ≤ 0.1 s lane |
 | 7 | test notes | ✅ |
 | 8 | size | ✅ S |
 | 9 | priority | ✅ P1 |
 | 10 | no major unresolved blocker | ✅ may be pulled before `EPIC-010` closes (`EPIC-011` C12, confirmed by the Orchestrator) |
 
-**DoR 9/10 (re-scored 2026-11-01, `bapm-owner-answers`). Ready once the owner-answers fold merges and does not
-change the shapes above; the column move is the Orchestrator's.**
+~~**DoR 9/10 (re-scored 2026-11-01, `bapm-owner-answers`). Ready once the owner-answers fold merges and does not
+change the shapes above; the column move is the Orchestrator's.**~~
+
+**DoR 10/10 (re-scored 2026-11-01, `bapm-reconcile-adr0056`): the fold merged and item 2 follows it. Ready
+recommended; the column move is the Orchestrator's.**
