@@ -1,0 +1,26 @@
+kiwipete run 1: samples 15993, nps 864227, depth 9, load1 1.22 | zobristHalvesAfterMove=0.26% probeHalves=0.79% storeHalves=0.11% repeatsInPathH=0.04% zobristKeyAfterMove=0.00% zobristKeyAfterNullMove=0.00% zobristKey=0.01% probeTable=0.00% storeEntry=0.00% repeatsInPath=0.00% repeatsBeforeRoot=0.08% negamax=0.70% searchNode=0.00% (garbage collector)=1.02%
+   16.51% whiteMinusBlack (other):482
+   14.53% isSquareAttackedBy (other):242
+   10.04% squaresReached (other):244
+   7.08% raySliderAttacks (other):217
+   6.05% generateCaptures (other):402
+   4.99% kingExposure (other):282
+   4.82% generateMoves (other):356
+   3.90% kingSquareOf (other):61
+   2.87% addMove (other):83
+   2.41% filterLazily (other):305
+   2.40% isBlack (other):55
+   2.16% quiesce (other):169
+position-6 run 1: samples 15986, nps 877767, depth 10, load1 1.28 | zobristHalvesAfterMove=0.28% probeHalves=0.95% storeHalves=0.11% repeatsInPathH=0.03% zobristKeyAfterMove=0.00% zobristKeyAfterNullMove=0.00% zobristKey=0.00% probeTable=0.00% storeEntry=0.00% repeatsInPath=0.00% repeatsBeforeRoot=0.09% negamax=0.52% searchNode=0.00% (garbage collector)=0.98%
+   16.27% whiteMinusBlack (other):482
+   14.81% isSquareAttackedBy (other):242
+   9.03% squaresReached (other):244
+   7.08% generateCaptures (other):402
+   5.85% generateMoves (other):356
+   4.47% kingSquareOf (other):61
+   4.46% raySliderAttacks (other):217
+   3.72% kingExposure (other):282
+   3.60% addMove (other):83
+   3.17% filterLazily (other):305
+   2.16% isBlack (other):55
+   2.16% addPawnMoves (other):145
