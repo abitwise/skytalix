@@ -108,6 +108,21 @@ owner's word *"hostname spelling: oeselg-dev"* (`orch-2026-10-30a` `…c2752305`
 corrected: the addendum paragraph above and two lines in `§ Addendum 2026-10-30 (SEC-REBASE-b)`. They said
 `oeselg-devl`. The host is the same, and no decision, figure or band moves.
 
+**Addendum 2026-11-01 (`arch-qehop-threshold`, after `qe-qehop-growth` merged as `8fecca09`).** Five items, in
+`§ Addendum 2026-11-01 (after qe-qehop-growth)` at the end of this file:
+- **C1:** `T-QEHOP-GROWTH` reads **MET** at `37a93b76`, 4 272 note files: H−B +0.455 s CPU (+0.440..+0.490), twin
+  +0.010 s, R 0.030 s, n = 8. The 4,000 trigger is discharged.
+- **C2 (`QE-QHG-d`):** the next threshold is **5,500 note files**. B3's "same arithmetic" (≈ 4 700, under a week out)
+  is replaced by a lead-time rule: one week of the fastest recent growth short of the projected upper-end crossing.
+  It is this role's rule; nothing goes to the owner.
+- **C3 (`QE-QHG-b`):** the host change starts a new `F` series. `F` = 0.030 s CPU / 0.020 s wall on `oeselg-dev`; the
+  M3 `F` is M3 history.
+- **C4 (`QE-QHG-c`):** the next read's method is `qe-qehop-growth`'s Linux port (`833192d7` + `8dfbabf5`), by sha256.
+- **C5 (`QE-QHG-a`):** the MET depends on A1's one-tick floor. Noted, with a three-tick watch for the next read.
+
+No level, bound or `N8-LANE` text moved, and nothing was measured. Notes are in
+`.grugops/context/arch-qehop-threshold/notes/`.
+
 **Proposal text amended 2026-10-10 (`design-owed-rulings-2026-10-10`).** Decision 3's `F` is keyed
 per narrow set (the block under decision 3). The status is still `proposed`, and the owner's question
 is unchanged.
@@ -785,3 +800,177 @@ count. Figures from the M3 and from `oeselg-dev` are therefore not comparable ac
 says each figure keeps its label.
 
 **Rollback.** Strike this addendum. The qualifier's text never changed.
+
+## § Addendum 2026-11-01 (after `qe-qehop-growth`)
+
+Written by Architect/Design (task `arch-qehop-threshold`), the owner of this protocol and of `T-QEHOP-GROWTH`'s record
+(B3), after `qe-qehop-growth` merged as `8fecca09`. This is a record only. **Nothing was run, timed or built at this
+hop**, because `qe-ABC-223` held the host alone.
+- **Source of the figures.** This hop recomputed the window from QE's raw per-run TSV
+  (`.grugops/context/qe-qehop-growth/probe/w1/n8-qeg.tsv`) in integer centiseconds. It agrees with QE's `…625483bc` on
+  every figure. The projections are recomputed from the same inputs and agree with QE's `…21479114`.
+- Notes are in `.grugops/context/arch-qehop-threshold/notes/`.
+
+### C1. `T-QEHOP-GROWTH` reads MET at `37a93b76`, 4 272 note files. The reading is written and the 4,000 trigger is discharged
+
+| item | value |
+|---|---|
+| trigger | `find .grugops/context -path '*/notes/*.md' \| wc -l` on `main` `37a93b76` = 4 272 (≥ 4,000) |
+| set | `tools/grugops/qe-hop-integrity.test.ts`, blob `bf0ea7d5`, the same blob `qe-ABC-154` read. Tool `cc0f4157`. 2 whole-tree reads a run |
+| host and stack | `oeselg-dev`, node v26.12.1, vitest 4.1.12, `pool: "threads"`, `maxWorkers: 2`, heap 400 (the ONE-FILE row) |
+| pre-registration | `833192d7` with addendum 1 `8dfbabf5`, both before the first run, on a commit that has `e7d8a09f` as an ancestor. Blob `3aab3adc` on `main`, unchanged (B1 met) |
+| arms | `git archive 37a93b76`, 4 272 note files each; B and T the placeholder, H the file. n = 8, round 0 discarded, 0 rounds void |
+| twin T − B CPU | **+0.010 s (+2.703 % of B 0.370 s)**. The limit is max(5.55 ms, one tick 10 ms) = 10 ms. Non-zero signs +4/−3, p 1.000. **R 0.030 s** |
+| treatment H − B CPU | **+0.455 s, x(2)..x(7) +0.440..+0.490 s** |
+| wall (reported, not graded) | H − B +0.270 s (+0.260..+0.310); twin +0.005 s, R 0.020 s |
+| **state at 650 ms CPU** | **MET**: admissible, R 0.030 ≤ 0.650, median +0.455 ≤ 0.650, lower end +0.440 not > 0.650 |
+
+- **B3's MET branch applies:** the reading is written (here and in the catalog), and this role sets the next threshold
+  (C2). Nothing goes to the owner.
+- **Not compared with `qe-ABC-154`'s +0.380 s.** That reading is M3 history on vitest 4.1.11 (§ Addendum 2026-10-30).
+  The growth from +0.380 to +0.455 s cannot be split between the record, the stack and the host, and no slope is taken
+  from it.
+- **Not affected:** `NFR-008`'s level, `N8-LANE`'s 650 ms, and every catalog row.
+
+### C2. `QE-QHG-d`: the next threshold is **5,500 note files**, set by a lead-time rule that replaces "the same arithmetic"
+
+**The question.** B3 says "Architect/Design sets the next threshold by the same arithmetic". QE worked it out: a 75 %
+of bound rule, or the same headroom in notes, both land at ≈ 4 640–4 700. At today's growth that fires again in
+4–5 days.
+
+**The inputs**, all from the pre-registration and QE's threshold note:
+- M = +0.455 s, hi = x(7) = +0.490 s, N0 = 4 272.
+- s = A3's slope, 0.215 s / 2 630 notes = **81.75 µs a note** at 2 reads. It was read on the M3, and the `oeselg-dev`
+  slope is `UNKNOWN - verify`. It is the steeper of the two on record (the two-point 46 µs spans the re-base and is not
+  comparable), so it is the conservative one.
+- The record grows **74 notes a day over 7 days and 104 over 14** (QE's `git ls-tree` counts). A3 assumed ~39.
+- Projected crossings of 650 ms: **≈ 6 657 notes** from the median and **≈ 6 229** from the upper end.
+
+**Why "the same arithmetic" is the wrong rule now.**
+- A3 put 4,000 where the projection read ~0.48 s, matching the first MET's share of the bound (73–74 %), for a stated
+  reason: "a re-read at the trigger still has room to land under the bound". At ~39 notes a day that point was also
+  about five weeks out. The share was the means; room and time before the crossing were the purpose.
+- At 74–104 notes a day the 75 % point is only ~400 notes on. A read there costs a QE hop ALONE on the host, and it
+  can say almost nothing new: it projects 0.488 s (0.523 s from the upper end), 0.13 s from the bound. On a slope
+  check, ~400 notes is worth ~0.033 s at A3's slope, which is inside one window's interval. It would read MET and be
+  set again a week later.
+- A re-read is worth its window when it can still land on either side with time left to act. So the rule should be
+  stated in **lead time before the projected crossing**, not as a share of the bound.
+
+**Ruled. The next threshold is the largest multiple of 100 not above**
+
+> N0 + (b − hi) / s − 7 × r
+
+where b is the bound (0.650 s), hi is the latest MET's upper end x(7), s is the steeper of A3's slope and any
+same-host two-point slope on record, and r is the faster of the 7-day and 14-day growth rates on `main` at the time
+of writing. In words: re-read when the record is **one week of its fastest recent growth short of the upper-end
+crossing**.
+
+**Applied today:** 4 272 + 1 957 − 7 × 104 = 6 229 − 728 = 5 501, so the threshold is **5,500 note files**, counted by
+`find .grugops/context -path '*/notes/*.md' | wc -l` on `main`.
+- **When it fires.** `main` holds 4 287 at `28e46464`. 1 213 notes is 12–16 days at 104–74 a day, about
+  2026-11-13 to 2026-11-17. That is a projection, not a date.
+- **What the read is expected to see.** At A3's slope, +0.555 s from the median (85 % of the bound) and +0.590 s from
+  the upper end (91 %). The upper end sits 0.060 s, six ticks, under 650 ms.
+- **What it leaves.** 729 notes to the upper-end crossing (7–10 days at today's rates) and 1 157 to the median
+  crossing (11–16 days), for the Orchestrator to dispatch the read and, on NOT MET, for the owner and the lever.
+- **It is robust to the slope.** If the true slope on this host is 50 % steeper than A3's, the read projects
+  +0.606 s (+0.641 s from the upper end), which still grades on the median. If it is the 46 µs the unpaired pair
+  suggests, it projects +0.511 s, and the following threshold moves out by the same rule.
+- **What it buys beyond the grade.** With this window at 4 272 and the next at ~5 500, the set gets its first
+  same-host slope, over ~1 230 notes (~0.10 s at A3's slope, against ~0.06 s at 46 µs). Then s in the rule becomes the
+  steeper of the two, so the projection is re-anchored on this host rather than on the M3.
+- **If the rule's result is at or below the count when it is set,** the re-read is owed at once.
+
+**Alternatives rejected.**
+- **The 75 % rule or the same-headroom rule (≈ 4 640–4 700).** It fires in under a week and spends an ALONE window on
+  a near-certain MET. The reason is above.
+- **The crossing itself (≈ 6 200–6 600).** It leaves no time between the read and the bound. It also lets a
+  steeper-than-assumed slope cross unread.
+- **A two-week lead (≈ 4 700).** At today's rate it is almost the 75 % point again. A missed crossing on this set is a
+  LOW drift record (B3's severity): no gate fails, and the bound is a rate limit, not a ceiling the lane hits. One
+  week of the fastest recent growth is enough to dispatch a read.
+- **A calendar backstop beside the count.** The count is what moves the cost. If growth speeds up, the count fires
+  sooner by itself. A date adds a second clock that can only fire a read the count says is not due.
+- **Pulling the lever now** (cutting the 2 whole-tree reads). B3 names it for NOT MET only. The state is MET.
+- **Adding a fourth arm** (an H at the 4 272-note tree) for a paired slope in one window. It changes a method this
+  hop names unchanged in C4, and its readout has no self-test. The unpaired same-host pair above is enough to
+  re-anchor s.
+
+**Whose word.** This is a rule change, not arithmetic. B3 is this role's text: the threshold is a scheduled re-read on
+one set, severity LOW, and it moves no level, no bound and no `F`. B3's only route to the owner is NOT MET. So it
+needs no one's word but this role's, and nothing goes to the owner.
+
+**The wording, read from this date.** B3's "MET: write the reading. Architect/Design sets the next threshold by the
+same arithmetic" is kept above. From 2026-11-01 it reads: "MET: write the reading. Architect/Design sets the next
+threshold by C2's lead-time rule." NOT MET and NOT READ are unchanged. A changing ticket's own reading still resets
+nothing, and the threshold stays 5,500.
+
+### C3. `QE-QHG-b`: the host change starts a new `F` series for the set. **`F` = 0.030 s CPU / 0.020 s wall on `oeselg-dev`**
+
+**The rule that decides it.** A series breaks when a change moves per-file cost or file queueing (`ADR-0042` ruling 6,
+`ADR-0040` decision 4, as applied in § Status "Per-set floors, 2026-10-23").
+
+**Ruled: it breaks.**
+- The move from the M3 to `oeselg-dev` moves per-file cost. The same placeholder costs B 0.575 s CPU on the M3
+  (`qe-ABC-154`) and 0.370 s here.
+- The catalog's re-base rule says the same: an M3 figure is M3 history, keeps its label, and is not converted
+  (`plans/nfr-catalog.md` § "THE REFERENCE MACHINE IS RE-BASED TO `oeselg-dev`"). § Addendum 2026-10-30 says figures
+  across the re-base are not comparable. A median of three that mixes two M3 Rs with one `oeselg-dev` R would compare
+  them.
+- **This differs from § Status 2026-10-23,** where the 4.1.11 → 4.1.12 patch bump was ruled no break. There the
+  config was identical and a paired bisect read no shift. Here the machine changed and B's cost moved by a third.
+
+**The value.** The new series has one admissible reading, `qe-qehop-growth` w1: R 0.030 s CPU / 0.020 s wall. With
+fewer than three readings the largest governs, so **`F` = 0.030 s CPU / 0.020 s wall** on `oeselg-dev`. From the third
+admissible reading on this host, the median of the three most recent governs.
+- **The M3 `F` (0.020 / 0.020, B2) stays on record as M3 history.** It is not struck.
+- **The ruling decides the basis, not the number.** Continuing the series would give the median of QE3 w3,
+  `qe-ABC-154` w1 and this window: CPU 0.030 s, wall 0.020 s. The same figures.
+- **One condition, stated.** The window's twin is admitted only by A1's one-tick floor (C5). So this `F` comes from a
+  floor-admitted window.
+- **What it changes at the cut.** Nothing: 650 ms is 21.7 × 0.030 s. The grade above does not depend on `F`.
+
+### C4. `QE-QHG-c`: the next `T-QEHOP-GROWTH` read uses `qe-qehop-growth`'s Linux port as its method
+
+**Ruled.** The method B3 names, "the method of the `qe-ABC-154` pre-registration", is replaced for this set on
+`oeselg-dev` by **`qe-qehop-growth`'s pre-registration**: `833192d7` with addendum 1 `8dfbabf5`, blob `3aab3adc` of
+`.grugops/context/qe-qehop-growth/probe/preregistration.txt` on `main`.
+- **Harness, by sha256** (equal on `main` at `28e46464` and in `probe/w1/window-once.txt`):
+  - `lane-qeg.mjs` `0c23701b…f521f5`;
+  - `host-qeg.mjs` `c3dda32f…56a260`;
+  - `gate-qeg.mjs` `576481d3…3fba6f`;
+  - `sampler-qeg.mjs` `c7058df6…cfcfa78`;
+  - `window-qeg.sh` `738d3a62…b27b7`;
+  - `readout-qeg.py` `ea2ac1aa…29e574`;
+  - placeholder `placeholder.test.ts` `f730fdb2…ba515e3e`.
+- **Why.** `qe-ABC-154`'s harness (`lane144b.mjs`, `gate.sh`) calls `sysctl`, `pmset` and `notifyutil` and cannot run
+  on the reference. The port keeps its shape. Its readout reproduces `qe-ABC-154` w1 line for line (two labels apart),
+  and it has now graded one admissible window. A fresh port per read would be a new instrument each time.
+- **What stays per read.** The next window writes its own pre-registration, committed before its first run on a
+  commit with this addendum as an ancestor, and it reaches `main` with the same blob (B1). It names the harness by the
+  hashes above, the tip and count it reads, and any adaptation with its reason. A changed harness file is an
+  adaptation, stated, never silent.
+- **The next read's arithmetic** is C2's rule, with that window's M, hi and N0, the steeper of A3's slope and the new
+  same-host two-point slope, and the growth rate at the time.
+
+### C5. `QE-QHG-a`: this MET depends on A1's one-tick floor. Noted. No action
+
+- The CPU twin median is +0.010 s (2.703 % of B 0.370 s). Under the pre-A1 1.5 % limit (5.55 ms) the window would be
+  inadmissible. Every read of this set on `oeselg-dev` will sit in the floor's regime, because B is far under 0.667 s.
+- **A1's rollback test has not fired.** It asks for a floor-admitted twin followed by readings that flip sides of a
+  bound. This reading is 0.195 s under 650 ms at the median and 0.160 s at the upper end.
+- **The watch for the next read.** C2 projects its upper end at 0.060 s under the bound, six ticks. A1 names the timer
+  route (microsecond `getrusage`) "if a bound is ever cut within a few ticks of a reading". If the next read's interval
+  reaches within 0.030 s (three ticks) of 650 ms, that route is owed before the read after it. This role writes it
+  then. Nothing is owed now.
+
+**A3's lift clause is carried unchanged.** QE found the set still the only test file that reads the record at
+`37a93b76`. The eight `src/*.test.ts` hits are comments.
+
+**Rollback.**
+- C1 is a record of a reading.
+- C2: restore "by the same arithmetic". The threshold becomes ≈ 4 700 and fires on the next count past it.
+- C3: continue the series instead. The figures do not change (0.030 / 0.020).
+- C4: name `qe-ABC-154`'s method again. It cannot run on the reference, so the next read would need a fresh port.
+- C5 adds nothing to roll back.
