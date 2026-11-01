@@ -10,6 +10,24 @@ owner: BA/PM
 
 # EPIC-011: the path toward 3 000 Elo, classical and measured (`ADR-0056`)
 
+> **THE SMOKE'S E 1 650 CONFIRMED BY THE OWNER; `ABC-250` CLOSED, 2026-11-01, by BA/PM** (task `bapm-abc250-close`,
+> records only, at `main` `767a2e3e`; nothing run). `EPIC-010`'s block of the same date carries the detail.
+>
+> - **S′ keeps E 1 650** (`orch-2026-10-30a` `…1f5e3b27`, verbatim: *"ok set to 1650 and if you see in the future we
+>   can raise it then let's raise."*).
+>   - The "may revert to 1 910" line in the `ADR-0056` fold block below is superseded.
+>   - **The raise rule** is C10's re-pin trigger: a pooled S′ score above 85 % over ≥ 30 games re-pins E **upward** by
+>     one band-rule step (E ≤ 2 600), with no owner ask.
+>   - First reading, cited by the Orchestrator: `qe-ABC-255` A5, 9/10. That is one smoke, under 30 games.
+>   - A downward re-pin (pooled below 60 %) is outside the owner's word. BA/PM reads it as a question for the owner.
+>   - `RISK-EPIC011-03` stands. This rule is how it is watched.
+> - **"The packed base"** on this page (§ Close-out of the open epics, § Dependencies) now reads **the base `EPIC-010`'s
+>   milestone 1b leaves**. `ABC-250` (O1-b) closed and did not merge (by routing, A4 not graded), and `ABC-252` was
+>   dropped. So Phase 1+ tickets are written on today's `Move` objects with `ABC-254`'s lazy filter, plus O1-c
+>   (`ABC-251`, narrowed) and O1-a (`ABC-253`) if they merge. No ticket here changes for this.
+> - **`ABC-262`** (row 14, M0) does not change. Its test notes bind generation order, which no live ticket now plans
+>   to change. `ABC-251`'s test note 8 carries that bar.
+
 > **THE `ADR-0056` OWNER-ANSWERS FOLD, ON THIS PAGE, 2026-11-01, by BA/PM** (task `bapm-reconcile-adr0056`, records
 > only, at `main` `bd29dd50`; nothing run). The fold is on `main` (merge `a0f9297e`, ADR commit `fe50a11f`; notes
 > `arch-adr0056-owner-answers` `…d3c756d1`, `…c8c38f1e`). **Its figures replace every "pending the fold" line in the
