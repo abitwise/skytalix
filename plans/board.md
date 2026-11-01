@@ -1,3 +1,4 @@
+_Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — ABC-263 spike delivered: **ADR-0057 PROPOSED** (threads before devices). Owner asked OQ-1..OQ-6. Running: qe-EPIC-010-close (lanes after the 400 games)._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — **ABC-253 DONE (dropped, nothing to cut). EPIC-010 milestone 1b CLOSED.** EPIC-010 close reads → `qe-EPIC-010-close` (400 head-to-head at 100 ms vs ca6e675c — owner-set; 0.5 s smoke vs E1650; Levels deep, ladder short, UCI session deep; ~2–2.5 h host). Then a BA/PM close hop. Running: arch-ABC-263, qe-EPIC-010-close._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — `bapm-spike-accel` merged: **ABC-263 spike** cut and pulled → `arch-ABC-263` (records; ≤ 5 min prototypes under the lock). ABC-251 page dropped; ABC-262 A4 waived. Owed (LOW, next BA/PM): stale front matter on ABC-249/254/259/260/261/262; EPIC-010 milestone-1b ABC-251 row. Running: se-ABC-253, arch-ABC-263._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a, …78c476bf) — OWNER: spike ticket for the Architect in EPIC-011 — NPU/GPU use, multi-threaded Node.js search, sharing search info via shared/video memory. → `bapm-spike-accel` (cut the ticket; also closes ABC-251 page and marks ABC-262 A4 waived). Running: se-ABC-253._
@@ -1191,7 +1192,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   one hop at pull, when it checks `Ready for Dev`'s exit at that moment; the row records the pull.
 
   HEADING FORMAT (spec §6.1): each column is an H2 heading carrying its live/limit WIP count,
-  e.g. `## In Development (WIP 1/3)` — the left number is how many tickets are in the column
+  e.g. `## In Development (WIP 0/3)` — the left number is how many tickets are in the column
   now, the right number is the limit from config. Unlimited columns read `(WIP unlimited)`;
   Blocked is visible and time-tracked (no WIP limit) and reads `(visible, time-tracked)`.
   INVARIANT: the column H2 headings and the rows of the `## Columns` table are the same 13 names in the
@@ -1201,10 +1202,10 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 1/3)
+    ## In Development (WIP 0/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
-    ## In Review (WIP 0/3)
+    ## In Review (WIP 1/3)
     - [ABC-012] Portfolio FX conversion  (PR: #41, QE: running)
 
   BOARD <-> TICKET CONTRACT: each ticket file (`plans/tickets/<prefix>-xxx.md`) carries a
@@ -1330,8 +1331,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-263] SPIKE: can skytalix use the NPU, the iGPU and more CPU threads from Node.js on this host, and share search info between them? (records only; Architect; EPIC-011, any time; size: M, priority: P2; DoR 10/10; owner 2026-11-01 …78c476bf) **→ Ready → pulled → `arch-ABC-263`. Rulings: a ≤ 5 min multi-core scaling prototype is not a validation game (one-core rule binds games), runs alone under the lock; "a few minutes" = ≤ 5 min per run.**
+## In Development (WIP 0/3)
 
 
 
@@ -1359,7 +1359,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-263] SPIKE: can skytalix use the NPU, the iGPU and more CPU threads from Node.js on this host, and share search info between them? (records only; Architect; EPIC-011, any time; size: M, priority: P2; DoR 10/10; owner 2026-11-01 …78c476bf) **→ Ready → pulled → `arch-ABC-263`. Rulings: a ≤ 5 min multi-core scaling prototype is not a validation game (one-core rule binds games), runs alone under the lock; "a few minutes" = ≤ 5 min per run.** **→ In Review 2026-11-01 (arch-ABC-263 done: ADR-0057 PROPOSED "threads before devices"; Q1 devices blocked — olger not in render group; WebGPU round trip 45–65 µs on lavapipe; Q2 Lazy SMP measured 1.8×@2, 3.3–3.6×@4, 5.6–6.0×@8, 6.7–7.5×@12 workers; Q3 device-shared TT not feasible from Node; Q4 open → owner OQ-1..6). QE A1–A8 records check owed; owner questions asked.**
 
 
 
