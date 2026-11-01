@@ -22,8 +22,43 @@ epic: EPIC-010
 > **Every dependency on packed generation is removed:** no packed move, no per-ply move array, no `ABC-250` base and no
 > `ABC-252`. The title and this heading now name the narrowed form. The file name keeps the original slug, so links
 > still resolve. Struck text stays visible as history. The review notes (test notes 6 and 7) are kept as written.
-> **DoR 9/10, Backlog:** row 10 waits on `arch-abc250-close`, which rules whether O1-c needs a design input and how
-> QE-250-a bears on A3's read (§ Definition of Ready).
+> ~~**DoR 9/10, Backlog:** row 10 waits on `arch-abc250-close`, which rules whether O1-c needs a design input and how
+> QE-250-a bears on A3's read (§ Definition of Ready).~~ *(Same hop, later: the ruling merged; block below.)*
+
+> **ARCHITECT'S DESIGN INPUT FOLDED 2026-11-01 by BA/PM** (same task, `bapm-abc250-close`). `arch-abc250-close` merged
+> on `main` while this hop ran (merge `eed51a35`; notes `…a07418ac`, design input, and `…aeb470f4`, rulings). It
+> changes scope, so this page's DoR rule had BA/PM fold it here first. Folded:
+> - **Value identity by construction; no ADR.**
+> - **Profile first, with a stop rule (new item 2a).** Before editing, the Software Engineer takes one informal CPU
+>   profile under the host lock: `chooseMove` at 4 s on kiwipete and position-6, on base `main`.
+>   - If `isBlack` / `pieceType` do not show as self-time frames, the helper half has nothing to cut. Inline nothing,
+>     and say so in the build note.
+>   - **BA/PM's stop rule (delivery):** the build stops and is reported **before any ALONE read is spent** if neither
+>     half shows a measurable frame. **It also stops if only the `Budget` half is left.** The Architect expects that
+>     half under 1 % (the spread runs once per `chooseMove`), and 1.03× cannot be met by it. The Orchestrator then
+>     closes the ticket as dropped with "nothing to cut". That is a design outcome, not a graded miss, and no
+>     `failed-attempt` note is written.
+> - **Helpers, where (item 2b).**
+>   - Inline only at the hot-path sites the profile names.
+>   - Both exports stay in `src/position.ts`.
+>   - `src/evaluate.ts` is touched only if the profile names it there, and that is what owes `G2`/`G3`.
+>   - Match each file's style; no new helper module.
+> - **`Budget`, constant shape (item 2c).** In `deepen` (`src/engine.ts`, the literal at about `:705–720`),
+>   `...heuristics` is replaced by the six fields written out in `Heuristics`' order: `pvs`, `reductions`, `nullMove`,
+>   `priorKeys`, `quiescenceEvasions`, `quietPromotions`. `visit`, `killers`, `keys` and `prior` stay as they are.
+> - **Fence (item 2d).**
+>   - No other "monomorphisation": no `Move`, `KillerTable` or `UndoRecord` shape change.
+>   - No packed moves, no `countNode` restructuring, no key work (`ABC-253`).
+>   - C1–C4 are moot.
+> - **A3's read: QE-250-a is "not needed now".** D3-V2 is used as written (`ADR-0055` § Addendum, second): no
+>   cool-down gate, no pinning. The agreement-guard bars are 1.03 / 1.00. No perft run is graded.
+> - **Order against `ABC-253`:** both edit `Budget` (`ABC-253` retypes `keys` / `prior`), and either order rebases in a
+>   few lines. The page order stands (`ABC-251` first). The Orchestrator may swap them, notably if this ticket stops at
+>   item 2a.
+> - **Estimate** (Architect `…f5f41888`, not a reading): O1-c 1.00–1.04×, so the bar sits inside it. What remains of O1
+>   is worth about 3–6 Elo (informal).
+>
+> **DoR 10/10. `Backlog → Ready` recommended** (the column move is the Orchestrator's).
 
 > **Cut 2026-11-01 by BA/PM** (task `bapm-goal3000-o1-cut`, records only, at `main` `bae25131`; nothing run, built or
 > timed). Source: `ADR-0055` options **O1-b** (its second part, § D6: "search, quiescence, ordering and TT") and
@@ -65,9 +100,10 @@ items 1, 3 and 4's ordering are struck. **Item 2 is this ticket's whole scope.**
 2. **O1-c (the scope).** `isBlack` and `pieceType` inlined by hand on the hot path (or made provably inlinable), and constant
    record shapes in the engine's bookkeeping (no spread into `Budget`), as `ADR-0055` O1-c names. If O1-c touches
    `src/evaluate.ts`, `G2`/`G3` are owed (A5). *(2026-11-01: on today's `Move` objects. `chooseMove`, `search`,
-   `EngineChoice`, every `ADR-0026` door and every exported signature keep their shape. The Architect's ruling
+   `EngineChoice`, every `ADR-0026` door and every exported signature keep their shape. ~~The Architect's ruling
    (`arch-abc250-close`) picks hand-inlining versus "provably inlinable". Until that ruling, either form is in scope if
-   A1–A5 hold.)*
+   A1–A5 hold.~~ **Items 2a–2d in the design-input block above are the scope:** profile first and stop; inline at the
+   profiled sites only; write out `Budget`'s six fields; the fence.)*
 3. ~~The `arch-ABC-235` conditions carried by `ABC-240` stay in force on the new form: **C1** ties keep generation order;
    **C2** ordering keys stay float64 (or an integer form the Architect proves order-equal on the walk); **C3** the
    input list is never mutated where a later read needs its generation order (`moves[0]`, `entryMove`); **C4** no
@@ -118,7 +154,8 @@ BA/PM re-scores the page on that reading; nothing else is re-cut. *(**Applied 20
     **This is the bar.**
   - QE's interleaved reading on a sealed pre-registration decides. Bytes per node are reported as INFO.
   - *(2026-11-01)* **The read method:** `ADR-0055` D3 with its D3-V2 addendum, as `ABC-254` was read (`3bfe180e`).
-    It also follows any forward-only rule `arch-abc250-close` adds for QE-250-a. For INFO only: in `qe-ABC-250`, the
+    ~~It also follows any forward-only rule `arch-abc250-close` adds for QE-250-a.~~ *(Ruled: QE-250-a is not
+    needed now. D3-V2 as written, with agreement-guard bars 1.03 / 1.00 (`…aeb470f4`).)* For INFO only: in `qe-ABC-250`, the
     same shape of read (search at 4 000 ms, three boards, under D3-V2) was valid on every board with no re-run
     (A5, `…94b58687`). The VOIDs were on the 2.5 s single-thread perft reads (`…677d4d41`). If a read voids, it is
     VOID and goes back to QE (§ What happens on a miss). It is never graded as a miss.
@@ -143,6 +180,9 @@ BA/PM re-scores the page on that reading; nothing else is re-cut. *(**Applied 20
 - **A3 missed, narrowed form:** NOT MET, not merged, **dropped** (`ABC-240`'s rule: a value-identical change has
   nothing to re-tune). Nothing waits on it. *(2026-11-01: QE records a `failed-attempt` note with the medians, the
   ratios, load1 and Tctl, so a blind retry is stopped. Milestone 1b then closes without it.)*
+- *(2026-11-01, design input)* **Stopped at the profile (item 2a):** no ALONE read is spent. The Orchestrator closes
+  the ticket as dropped, "nothing to cut". It is not graded, so it is not a miss, and no `failed-attempt` note is
+  written.
 - *(2026-11-01)* **A3 VOID** (a validity rule fails after the allowed re-run): not a result. It goes back to QE and
   the Orchestrator routes it, as `ABC-250`'s UNRESOLVED was routed. It is never recorded as a miss.
 
@@ -220,8 +260,8 @@ BA/PM re-scores the page on that reading; nothing else is re-cut. *(**Applied 20
 - *(2026-11-01)* **`ABC-262`** (test-only, in development) reads generation order (test note 8). It has no file in
   common with this ticket.
 - No ADR (value-identical). Architect/Design confirms value-identity at design, as `arch-ABC-235` did. *(2026-11-01:
-  **a design input may be owed.** `arch-abc250-close` item 4 rules whether O1-c needs one; its item 2 rules on
-  QE-250-a, which may add to A3's read. DoR row 10.)*
+  ~~**a design input may be owed.**~~ **Given and folded:** `arch-abc250-close` `…a07418ac` (value identity by
+  construction, no ADR; items 2a–2d) and `…aeb470f4` (QE-250-a not needed now), merged `eed51a35`.)*
 - **Host:** A3 and `G6` run ALONE, under the host lock.
 
 ## Definition of Ready
@@ -240,9 +280,10 @@ waited on `ABC-250`'s reading, which is now resolved by routing.*
 | 7 | test notes | ✅ 8 (6 and 7 kept as written; 8 added) |
 | 8 | size | ✅ S |
 | 9 | priority | ✅ P2 (the epic-close path, not the gain) |
-| 10 | no major unresolved blocker | ⚠ **`arch-abc250-close` has not merged.** Its item 4 (a design input for O1-c, or none) and its item 2 (QE-250-a's bearing on A3's read) are open |
+| 10 | no major unresolved blocker | ~~⚠ **`arch-abc250-close` has not merged.** Its item 4 (a design input for O1-c, or none) and its item 2 (QE-250-a's bearing on A3's read) are open~~ ✅ merged `eed51a35`; design input folded (items 2a–2d); QE-250-a not needed now |
 
-**DoR 9/10. Backlog.** Row 10 turns ✅ when `arch-abc250-close` merges:
+~~**DoR 9/10. Backlog.**~~ **DoR 10/10. `Backlog → Ready` recommended** *(2026-11-01, after the fold; the column move
+is the Orchestrator's)*. The rule this hop first wrote, kept as history:
 - **If it says "no design input" and adds nothing to A3's read beyond D3-V2,** or adds only a forward-only read rule:
   DoR is 10/10 on that merge. This page's `Backlog → Ready` recommendation applies from then, with no further BA/PM
   hop; the column move is the Orchestrator's. A3 already defers to that rule.
