@@ -1,0 +1,36 @@
+# BA/PM, bapm-ABC-254-ready: ABC-254 is DoR 10/10, Ready recommended, and back in EPIC-010 milestone 1b, first
+
+Records only, at `main` `039cb05e`. Nothing was run, built or timed; the only process run was the seal script.
+`qe-ABC-223` holds the host STRICTLY ALONE. Only `ABC-254`'s page, `EPIC-010`, `EPIC-011` and this context were edited.
+
+## Decision
+
+1. **DoR row 10 flips to ✅. `ABC-254` is 10/10; `Backlog → Ready` recommended.** The one blocker was the owner's
+   yes (Q-SP-3) and an ADR amending `ADR-0003` clauses 1 and 3. Both are on record: "ABC-254: yes"
+   (`orch-2026-10-30a/…f7a50e95`) and `ADR-0003` (1-A), (3-A), (1-R) (`arch-adr0003-amend/…c314772c`, merged
+   `89af8b56`). The Architect calls the design gate met and recommends no separate In Design hop. The column move is
+   the Orchestrator's. Row 5 now reads "met"; rows 1–4 and 6–9 are unchanged.
+2. **Placement: `EPIC-010` milestone 1b, first.** The page's exception (`EPIC-011` C11) asked for two things before
+   `ABC-250` entered development: the yes and the amending ADR. Both landed, and at `039cb05e` `ABC-250` is not in
+   development (observation note). So the ticket goes back to `EPIC-010`, first in 1b (`ADR-0055` D4), and `ABC-250`
+   packs the lazy filter. The front matter reads `epic: EPIC-010`. 1b's order: `ABC-254` → `ABC-250` → `ABC-251` →
+   `ABC-252` → `ABC-253`, as the board's top line (`039cb05e`) already has it. (1-R) makes either order safe; the
+   pull order stays the Orchestrator's.
+3. **Scope item 3 names `legalCapturesAndQueenPromotions` (`ABC-229`) as optional.** (1-A) allows the lazy test on it;
+   the Architect says leaving it on the full test is not a defect. I keep it a "may", so the ticket does not grow:
+   if the engineer converts it, A1 must show its lists equal in order at every node. The page also says
+   `isInCheck`, `givesCheck` and `hasLegalEnPassant` are outside (1-A).
+4. **Three alignments with the amended ADR, each one phrase:** scope item 2 says (1-A) allows (c3) on its conditions;
+   A3 reads "32/32 rows over the 6 positions" (the ADR's falsifier says 32/32; "6/6 positions" stays true); the
+   in-check miss names the ADR's designed response (in check, skip the pin set, run the full test). No bar, number or
+   NFR moved.
+5. **Folded:** every `EPIC-010` and `EPIC-011` line that put `ABC-254` in `EPIC-011` Phase 5 is struck or dated, and
+   Q-SP-3 is marked answered on both pages. Each epic has a dated top block. `EPIC-011` keeps V3 (staged generation),
+   which now follows `ABC-254` across the epic line; `EPIC-010` closes first, so the order holds.
+
+## Owed to the Orchestrator (the board and trace are his)
+
+- Board: `ABC-254` `Backlog → Ready` (DoR 10/10), `EPIC-010` milestone 1b, first. Suggested line: "[ABC-254] Lazy
+  legality … (ADR-0055 O1-d; M, P2; DoR 10/10; EPIC-010 milestone 1b, first; ADR-0003 amended 89af8b56)".
+- `EPIC-010` close: one more S2 nps reading (about 1 h ALONE, estimate) for `ABC-254`; `EPIC-011`'s Q-SP-3 is closed.
+- Trace: the refs on these notes carry `ABC-254`, `EPIC-010`, `EPIC-011`, `ADR-0003`; a render picks them up.
