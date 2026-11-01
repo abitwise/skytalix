@@ -1,0 +1,104 @@
+== R1 fresh, one process per search ==
+rows 125; clean 71; foreign busy minutes []
+budget | set | n | depth med [min-max] | nodes med | nps med | over med | over p95 | over max | engine_ms med | clean
+100 | all | 25 | 6 [3-10] | 47,131 | 466,644 | 1.49 | 3.19 | 3.50 | 101 | 15/25
+100 | named | 5 | 6 [3-7] | 40,974 | 405,683 | 2.21 | 3.50 | 3.50 | 101 | 4/5
+100 | sampled | 20 | 5.5 [4-10] | 47,136 | 467,906 | 1.19 | 2.26 | 2.67 | 100.5 | 11/20
+250 | all | 25 | 7 [5-11] | 152,096 | 605,960 | 1.34 | 2.30 | 2.31 | 250 | 15/25
+250 | named | 5 | 7 [5-9] | 153,618 | 612,024 | 1.96 | 2.30 | 2.30 | 251 | 4/5
+250 | sampled | 20 | 7.0 [6-11] | 150,306 | 600,012 | 1.26 | 1.75 | 2.31 | 250.0 | 11/20
+500 | all | 25 | 8 [5-12] | 317,555 | 633,842 | 1.48 | 2.45 | 2.68 | 500 | 15/25
+500 | named | 5 | 9 [5-10] | 315,410 | 629,561 | 1.77 | 2.23 | 2.23 | 500 | 4/5
+500 | sampled | 20 | 8.0 [6-12] | 318,050 | 634,829 | 1.39 | 2.45 | 2.68 | 500.0 | 11/20
+1000 | all | 25 | 9 [7-13] | 685,600 | 685,600 | 1.41 | 2.37 | 3.23 | 1000 | 14/25
+1000 | named | 5 | 10 [7-11] | 706,578 | 706,578 | 1.28 | 3.23 | 3.23 | 1000 | 4/5
+1000 | sampled | 20 | 9.0 [7-13] | 682,270 | 682,270 | 1.46 | 2.34 | 2.37 | 1000.0 | 10/20
+4000 | all | 25 | 10 [8-14] | 2,806,820 | 701,530 | 1.64 | 2.61 | 2.77 | 4001 | 12/25
+4000 | named | 5 | 11 [8-12] | 3,048,466 | 761,926 | 1.64 | 2.33 | 2.33 | 4001 | 3/5
+4000 | sampled | 20 | 10.0 [8-14] | 2,792,738 | 698,097 | 1.67 | 2.61 | 2.77 | 4001.0 | 9/20
+per position depth at 100/250/500/1000/4000:
+  start: 6 7 9 10 11
+  kiwipete: 3 5 5 7 8
+  position-6: 5 6 7 8 10
+  endgame-cpw3: 7 9 10 11 12
+  in-check: 6 7 9 10 11
+  S01: 5 6 7 7 9
+  S02: 7 8 9 9 11
+  S03: 5 6 8 9 10
+  S04: 5 6 7 7 9
+  S05: 4 6 6 7 8
+  S06: 5 6 7 8 9
+  S07: 5 7 7 7 9
+  S08: 6 8 8 10 11
+  S09: 5 6 6 7 8
+  S10: 5 7 7 8 10
+  S11: 6 6 7 8 10
+  S12: 5 7 8 9 10
+  S13: 7 8 8 10 12
+  S14: 7 9 9 10 12
+  S15: 6 8 9 9 11
+  S16: 5 7 7 8 9
+  S17: 8 9 10 10 12
+  S18: 6 7 8 9 10
+  S19: 10 11 12 13 14
+  S20: 7 8 9 9 10
+doublings: median nodes ratio vs 100 ms: {100: 1.0, 250: 3.23, 500: 6.74, 1000: 14.55, 4000: 59.55}
+== R2 warm-up at 100 ms ==
+positions 25; warm/cold nodes ratio median 1.47 [min 0.79 max 2.94]; depth diff median 0; gain>=1 ply 9; lose>=1 ply 0
+cold depth med 5, warm depth med 6; cold nps med 379,680, warm nps med 585,820
+overshoot cold med 1.62 max 3.54; warm med 0.53 max 1.75; clean 0/50
+  start: cold d5 16404 / warm d6 48148
+  kiwipete: cold d3 43757 / warm d4 77549
+  position-6: cold d5 41755 / warm d5 70427
+  endgame-cpw3: cold d7 32786 / warm d7 48146
+  in-check: cold d6 25614 / warm d7 57358
+  S01: cold d4 30857 / warm d5 61577
+  S02: cold d6 39972 / warm d6 45092
+  S03: cold d5 32288 / warm d5 50720
+  S04: cold d5 35920 / warm d5 40016
+  S05: cold d4 28738 / warm d4 44098
+  S06: cold d5 29811 / warm d5 60531
+  S07: cold d5 26726 / warm d6 55243
+  S08: cold d5 41174 / warm d6 58582
+  S09: cold d4 28789 / warm d5 63605
+  S10: cold d5 47175 / warm d5 63559
+  S11: cold d6 54309 / warm d6 70693
+  S12: cold d5 56979 / warm d5 68243
+  S13: cold d7 38926 / warm d7 54286
+  S14: cold d7 47168 / warm d7 56384
+  S15: cold d6 51482 / warm d6 49434
+  S16: cold d5 37968 / warm d5 49232
+  S17: cold d7 31771 / warm d8 67611
+  S18: cold d6 29900 / warm d7 59596
+  S19: cold d10 92162 / warm d10 72706
+  S20: cold d7 64516 / warm d7 64516
+== R3 noise, named x 3 fresh at 100 ms ==
+  start: depth [6, 6, 6] nodes [23798, 25620, 27668] over [0.7, 0.97, 2.9]
+  kiwipete: depth [4, 3, 4] nodes [53997, 37613, 55021] over [1.95, 2.56, 0.2]
+  position-6: depth [5, 5, 5] nodes [42779, 48923, 48923] over [0.99, 1.49, 1.85]
+  endgame-cpw3: depth [7, 7, 7] nodes [52242, 33810, 48146] over [1.35, 2.48, 1.67]
+  in-check: depth [6, 6, 6] nodes [24590, 39950, 30734] over [1.21, 1.01, 1.47]
+== R5 Stockfish 19 time to pick depth (go depth D) ==
+E | level | D | n | wall p50 | p95 | max | need (p95 up to 10 ms) | ADR C1 rule max(4xp95, 500) | >100 ms | depth reached | clean
+1910 | 3.826 | 4 | 40 | 1.8 | 3.9 | 4.3 | 10 | 500 | 0 | 40/40 | 0/40
+2000 | 4.185 | 5 | 40 | 2.2 | 5.5 | 7.3 | 10 | 500 | 0 | 40/40 | 0/40
+2100 | 4.583 | 5 | 40 | 2.1 | 4.5 | 6.3 | 10 | 500 | 0 | 40/40 | 0/40
+2200 | 5.015 | 6 | 40 | 2.7 | 6.0 | 8.9 | 10 | 500 | 0 | 40/40 | 10/40
+2300 | 5.513 | 6 | 40 | 3.2 | 7.3 | 9.6 | 10 | 500 | 0 | 40/40 | 40/40
+2400 | 6.113 | 7 | 40 | 4.4 | 10.1 | 13.5 | 20 | 500 | 0 | 40/40 | 40/40
+2500 | 6.849 | 7 | 40 | 4.5 | 13.3 | 16.1 | 20 | 500 | 0 | 40/40 | 30/40
+2600 | 7.754 | 8 | 40 | 7.1 | 19.1 | 29.2 | 20 | 500 | 0 | 40/40 | 18/40
+== R4 b3-sanity-100 (budget 100 ms) ==
+games 20; W/D/L (white POV) 4/9/7; draw ratio 0.45; plies mean 137.6 [min 74 max 249]; time forfeits (cutechess) 0
+terminations: {'0.00/8 0.10s, Draw by 3-fold repetition': 1, '+M1/7 0.10s, Black mates': 1, '+M1/5 0.10s, Black mates': 1, '0.00/16 0.10s, Draw by insufficient mating material': 1, '+M1/5 0.099s, White mates': 1, '+M1/6 0.10s, Black mates': 3, '0.00/10 0.099s, Draw by insufficient mating material': 1, '0.00/15 0.10s, Draw by insufficient mating material': 1, '+M1/7 0.099s, White mates': 1, '+M1/11 0.10s, Black mates': 1, '0.00/20 0.10s, Draw by 3-fold repetition': 1, '0.00/9 0.099s, Draw by 3-fold repetition': 1, '+M1/5 0.10s, White mates': 1, '0.00/11 0.10s, Draw by 3-fold repetition': 1, '0.00/9 0.10s, Draw by 3-fold repetition': 1, '+M1/7 0.10s, White mates': 1, '0.00/10 0.10s, Draw by 3-fold repetition': 1, '+M1/6 0.099s, Black mates': 1}
+moves: searched 2725, book 27; overshoot med 1 p99 2 max 4 ms; >0 ms: 1437; >10 ms: 0; >25 ms: 0; >50 ms: 0; >100 ms: 0
+block start -> last game end 278 s; games/hour 259.2; mean s/game 13.9
+host samples 28; with foreign vitest 13; foreign busy minutes 1; Tctl median 79.0 max 85.2; CAPPED False; THERMAL False
+== R4 b4-sanity-500 (budget 500 ms) ==
+games 16; W/D/L (white POV) 4/9/3; draw ratio 0.56; plies mean 163.7 [min 72 max 234]; time forfeits (cutechess) 0
+terminations: {'-2.04/11 0.50s, Draw by fifty moves rule': 1, '+M1/10 0.50s, Black mates': 1, '0.00/12 0.50s, Draw by 3-fold repetition': 2, '+M1/8 0.50s, Black mates': 1, '+M1/7 0.50s, Black mates': 1, '+M1/7 0.50s, White mates': 2, '-1.97/10 0.50s, Draw by fifty moves rule': 1, '+M1/8 0.50s, White mates': 2, '-0.04/9 0.50s, Draw by fifty moves rule': 1, '0.00/11 0.50s, Draw by 3-fold repetition': 1, '+5.91/9 0.50s, Draw by fifty moves rule': 1, '+3.20/10 0.50s, Draw by fifty moves rule': 1, '+3.75/9 0.50s, Draw by fifty moves rule': 1}
+moves: searched 2630, book 26; overshoot med 1.0 p99 2 max 3 ms; >0 ms: 1436; >10 ms: 0; >25 ms: 0; >50 ms: 0; >100 ms: 0
+block start -> last game end 1302 s; games/hour 44.2; mean s/game 81.4
+host samples 129; with foreign vitest 84; foreign busy minutes 6; Tctl median 81.1 max 90.5; CAPPED True; THERMAL False
+pooled draw ratio 0.500; gph 100 259.2; gph 500 44.2
+== host, probe-wide: samples 185; Tctl median 80.2 max 90.5 ==

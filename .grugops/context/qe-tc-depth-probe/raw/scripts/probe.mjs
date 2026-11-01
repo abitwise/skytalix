@@ -8,7 +8,7 @@
 // outside the timed window. No path is written to the output.
 import { spawn, execFileSync } from "node:child_process";
 import { readFileSync, appendFileSync, readdirSync } from "node:fs";
-import { join } from "node:path";
+import { join, resolve } from "node:path";
 
 const CONTROLS = [100, 250, 500, 1000, 4000];
 const ELOS = [1910, 2000, 2100, 2200, 2300, 2400, 2500, 2600];
@@ -107,7 +107,7 @@ const out = a[a.length - 1];
 const write = (row) => appendFileSync(out, `${JSON.stringify({ at: new Date().toISOString(), ...row })}\n`);
 
 if (mode === "fresh" || mode === "repeat") {
-  const [clone, posFile, namedFile] = a;
+  const [cloneArg, posFile, namedFile] = a; const clone = resolve(cloneArg);
   const all = loadPositions(posFile, namedFile);
   const list = mode === "fresh" ? all : [...all.slice(0, 5), ...all.slice(0, 5), ...all.slice(0, 5)];
   const controls = mode === "fresh" ? CONTROLS : [100];
@@ -118,7 +118,7 @@ if (mode === "fresh" || mode === "repeat") {
     write({ mode, pos: p.id, ...r, exit: x.code, stderr_bytes: e.stderr.length });
   }
 } else if (mode === "warm") {
-  const [clone, posFile, namedFile] = a;
+  const [cloneArg, posFile, namedFile] = a; const clone = resolve(cloneArg);
   const all = loadPositions(posFile, namedFile);
   for (let i = 0; i < all.length; i++) {
     const e = await skyStart(clone);
