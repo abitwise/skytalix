@@ -1,3 +1,4 @@
+_Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — `bapm-abc250-close` merged: ABC-250/252 pages closed (routing / dropped); ABC-251 narrowed to O1-c (S, DoR 10/10) and pulled → `se-ABC-251`. Milestone 1b remaining: ABC-251 → ABC-253 (shared files, sequential). Running: qe-ABC-262, se-ABC-251._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — `arch-abc250-close` merged: ADR-0055 status (O1-d delivered 1.11–1.12×; remaining O1-c ≈ 1.00–1.04×, O1-a ≈ 1.01–1.06×; O1 total ≈ 1.16× central vs 1.5× planned); perft-read addendum (no rule needed now; ABC-251/253 reads are search reads under D3-V2); ADR-0056 E1650 + raise rule; ABC-251 design input (profile first, stop rule) …a07418ac. Running: bapm-abc250-close, qe-ABC-262._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — OWNER (…1f5e3b27): smoke stays at **E1650**; raise it when pooled smoke shows it too easy (≥ 30 games outside 60–85 %). **ABC-250 closed NOT MERGED by routing** (…d2571be5; A4 unresolved, GO unreachable on the evidence; not a graded miss); ABC-252 dropped; ABC-251 narrows to O1-c. Records hops: `bapm-abc250-close`, `arch-abc250-close`. Pulled `se-ABC-262`._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — `bapm-qe-gaps-1101b` merged: ABC-262 (EPIC-011 M0, XS) in Backlog; QE-255-a declined (diminishing returns; re-open trigger recorded); notes on ABC-250/251/252. No other hop running → ALONE window: `qe-ABC-250` dispatched; nothing else until it returns._
@@ -1185,7 +1186,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   one hop at pull, when it checks `Ready for Dev`'s exit at that moment; the row records the pull.
 
   HEADING FORMAT (spec §6.1): each column is an H2 heading carrying its live/limit WIP count,
-  e.g. `## In Development (WIP 0/3)` — the left number is how many tickets are in the column
+  e.g. `## In Development (WIP 1/3)` — the left number is how many tickets are in the column
   now, the right number is the limit from config. Unlimited columns read `(WIP unlimited)`;
   Blocked is visible and time-tracked (no WIP limit) and reads `(visible, time-tracked)`.
   INVARIANT: the column H2 headings and the rows of the `## Columns` table are the same 13 names in the
@@ -1195,7 +1196,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 0/3)
+    ## In Development (WIP 1/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
     ## In Review (WIP 1/3)
@@ -1278,7 +1279,6 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [EPIC-011] skytalix climbs toward 3 000 Elo, read at 40/15, on a classical measured path (owner: BA/PM, size: XL, priority: P2, since 2026-11-01; ADR-0056 accepted in direction; ADR-0055 O1; starts after EPIC-009 and EPIC-010 close; phases 0–5; milestones 2 200…3 000 (proposed); open owner calls Q-3K-2, Q-3K-4, Q-3K-6, Q-3K-7, Q-3K-8, rest of Q-3K-1)
 - [ABC-257] T3: the TT is kept across the moves of one game, re-tried after deeper cutoffs and depth-preferred replacement (supersedes dropped ABC-209) (EPIC-011 Phase 1; size: S, priority: P3, DoR 8/10)
 - [ABC-258] T4: a larger TT, 8 MiB inside NFR-009 (more only on the owner's word) (EPIC-011 Phase 1; size: S, priority: P3, DoR 8/10)
-- [ABC-251] The search walks packed moves and builds a Move only at its return, with inlined helpers (ADR-0055 O1-b part 2 + O1-c; size: L (S if narrowed), priority: P2; DoR 9/10; milestone 1b; waits ABC-250's reading) **2026-11-01: narrows to O1-c alone (ABC-250 closed not merged) → re-scope by `bapm-abc250-close`**
 - [EPIC-010] skytalix closes its verified engine gaps; a change ships on an outside-opponent smoke (owner: BA/PM, size: L, priority: P2, since: 2026-10-29, accepted 2026-10-29 (Q5, no Elo target); Q4 = (e): 10 D + 10 R smoke per value-changing ticket + batched R pair per milestone; Q2 answered (~1700 non-goal removed; ~~goal >= 2 700 aspirational~~ → **goal 3 000 Elo** (owner 2026-11-01, …74216a44; scale open, MQ-3000)); Q1, Q3 open (defaults)) **2026-11-01: goal text moved to EPIC-011; remaining = ABC-249, ABC-254 (if its ADR lands first), ABC-250 → 251 → 252 → 253; M2 stands on milestone 1's batch (no new batch); close hop owed for M3/M4.**
 - [ABC-231] King table tapered by phase, alone (size: S, priority: P3, DoR 9/10; milestone 2; waits ADR ruling) **→ EPIC-011 2026-11-01 (bapm-epic011-dedupe; id kept)** (folds into E1 full taper at Phase 4)
 - [ABC-232] Passed pawns by phase (size: S, priority: P3, DoR 9/10; milestone 2; after ABC-231) **→ EPIC-011 2026-11-01 (bapm-epic011-dedupe; id kept)** (folds into E1/E4 at Phase 4)
@@ -1326,7 +1326,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+- [ABC-251] The search walks packed moves and builds a Move only at its return, with inlined helpers (ADR-0055 O1-b part 2 + O1-c; size: L (S if narrowed), priority: P2; DoR 9/10; milestone 1b; waits ABC-250's reading) **2026-11-01: narrows to O1-c alone (ABC-250 closed not merged) → re-scope by `bapm-abc250-close`** **2026-11-01 re-scoped (bapm-abc250-close): O1-c alone, size S, DoR 10/10 → Ready → pulled → `se-ABC-251` (profile first; stop before any timed read if nothing measurable)**
 
 
 
