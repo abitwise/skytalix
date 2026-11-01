@@ -1665,3 +1665,4 @@ _Updated: 2026-08-19 by BA/PM (task `cut-agents-md-cap-2026-08-19`, Workflow 07)
 | ABC-246 (merge) | uci-clock-mode rows: hard stop 1 900, movetime-first 5 000; SE-221-g comment | test 3c5e05fd | qe-ABC-246 PASS (G8 H 9.51 s / B 9.38 s) | merged 0ce5041d 2026-11-01, not pushed | Done (Orchestrator) |
 | ABC-248 (merge) | ADR-0046 tranche 2: T2c-a/b, T2a narrow (4 rows to ENGINE_DEEP), T2d A4-a2 step 1 000 | test 71700836 | qe-ABC-248 PASS_WITH_GAPS (G8 H 9.09 s / B 9.37 s) | merged ef4cd095 2026-11-01, not pushed | Done (Orchestrator) |
 | bapm-ABC-248-close (merge) | ABC-248 closed; tranche 2 delivered; QE-248-a ruling-6 fix; SE-248-b floor; ABC-249 cut | records 1d01e77b | — | merged 2026-11-01, not pushed | Done (Orchestrator) |
+| arch-adr-folds-nov1 (merge) | ADR-0046 condition 4 spelling + status line; ADR-0053 d10 wall | records 2ad41af5 | — | merged 2026-11-01, not pushed | Done (Orchestrator) |
