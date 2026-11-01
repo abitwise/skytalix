@@ -1,0 +1,12 @@
+## git diff --name-only 832ff246 3c5e05fd
+src/engine.test.ts
+src/uci-session.test.ts
+## 3c5e05fd..a1942ea0 src/tools/data/package*/vitest.config (empty = none)
+## uci-session.test.ts numstat
+18	0	src/uci-session.test.ts
+## zero-production-lines (AGENTS.md unfiltered form) 832ff246..a1942ea0 (empty = waiver holds)
+grep rc=1
+## delivered-commit form: 3c5e05fd~1..3c5e05fd
+grep rc=1
+## hunk header
+@@ -2511,0 +2512,18 @@ describe("ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4)", () => {

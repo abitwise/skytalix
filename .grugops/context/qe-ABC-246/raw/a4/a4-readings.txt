@@ -1,0 +1,4 @@
+{"HARD_CEILING_MS":60000,"NODES_PER_CLOCK_CHECK":1024,"fen":"r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1","readings":9,"nodes":6893,"depth":2,"elapsedMs":8}
+readings at a 1 ms step up to the 60000 ms deadline (arithmetic): 60000
+BASE {"HARD_CEILING_MS":60000,"NODES_PER_CLOCK_CHECK":1024,"fen":"r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1","readings":9,"nodes":6893,"depth":2,"elapsedMs":8}
+BASE readings at a 1 ms step up to the 60000 ms deadline (arithmetic): 60000

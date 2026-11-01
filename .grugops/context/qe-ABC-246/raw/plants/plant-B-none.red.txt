@@ -1,0 +1,2 @@
+B none rc=0 files=63 total=2364 passed=2364 failed=0 skipped=0 wall=9.3s
+

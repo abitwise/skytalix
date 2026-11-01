@@ -1,0 +1,9 @@
+changed lines: 5 (removed 1, added 4)
+  -  /** The ceiling, on a 1 ms step: about 5 000 consultations, so the clock never binds first. */
+  +  /**
+  +   * The ceiling (`HARD_CEILING_MS`, 60 000 ms), on a 1 ms step: about 60 000 clock readings before the
+  +   * deadline, while the node budget ends the search after about 10, so the clock never binds first.
+  +   */
+non-comment changed lines: 0
+code tokens (comments stripped, whitespace collapsed) equal at base and head: true
+A4(a) MET
