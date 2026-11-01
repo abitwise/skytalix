@@ -192,7 +192,7 @@ describe("ABC-167 A4 — bad input holds no position", () => {
   });
 
   it("A4-a2: an echoed control character in a go value is dropped from the info string", () => {
-    const { perLine } = talk(["position startpos", "go depth \x1b[31m"], 100);
+    const { perLine } = talk(["position startpos", "go depth \x1b[31m"], 1_000);
     const lines = perLine[1] as string[];
     expect(lines).toHaveLength(3);
     expect(lines[0]).toMatch(/^info string /);
@@ -218,23 +218,14 @@ describe("ABC-167 A5 — the D4 time rule, read from the info line's time", () =
    * reading at or past the deadline is at most one step late, and the reading at return adds
    * one more, so `G <= time <= G + 2s`.
    */
+  // ABC-248 (ADR-0046 § Addendum 2026-10-31, T2a): "movetime 100", "G = 3 500", "a bare go" and
+  // "A5-b3" run in the ENGINE_DEEP block below; every mutant they kill, a row here also kills.
   const rows: ReadonlyArray<readonly [string, string, number, number]> = [
-    ["movetime 100", `position fen ${START_FEN}`, 100, 10], // step 10: ABC-173, owner 2026-10-19
     ["white reads wtime", "position startpos", 50, 1],
     ["black reads btime", "position startpos moves e2e4", 450, 10],
     ["a short clock", "position startpos", 1, 1],
-    // ABC-228 (ADR-0053 d10, reading (ii)): level 5 is 4 000, so G = 3 500 binds, not the level.
-    ["G = 3 500, under the default level 5's 4 000", "position startpos", 3_500, 100],
-    ["a bare go", "position startpos", 4_000, 100],
   ];
-  const goes = [
-    "go movetime 100",
-    "go wtime 1000 btime 9000",
-    "go wtime 1000 btime 9000",
-    "go wtime 40 btime 40",
-    "go wtime 60000 btime 60000 winc 1000 binc 1000",
-    "go",
-  ];
+  const goes = ["go wtime 1000 btime 9000", "go wtime 1000 btime 9000", "go wtime 40 btime 40"];
   for (const [index, [name, position, budget, step]] of rows.entries()) {
     const go = goes[index] as string;
     it(`${name}: ${go} -> ${budget} ms (within 2 x ${step} ms)`, () => {
@@ -259,7 +250,6 @@ describe("ABC-167 A5 — the D4 time rule, read from the info line's time", () =
       100,
       100,
     ],
-    ["A5-b3", "position startpos", "go wtime 1000 btime 1000 movestogo 5", 200, 10],
     ["A5-b4", "position startpos", "go wtime 1000 btime 1000 movetime 300", 300, 100],
     ["A5-b5", "position startpos", "go movetime 300 wtime 60000 btime 60000", 300, 100],
     ["A5-c1", "position startpos", "go wtime 100 btime 100 winc 1000 binc 1000", 50, 10],
@@ -2628,6 +2618,47 @@ if (RUN_ENGINE_DEEP) {
           `(KEY_ARRAY_CAPACITY tripwire 100: ${maxDepth >= 100 ? "REACHED, to the Architect" : "not reached"})`,
       );
     }, 360_000);
+  });
+}
+
+/**
+ * `ABC-248` (`ADR-0046` § Addendum 2026-10-31, T2a): four of `ABC-167` `A5`'s searched rows, each moved
+ * only under default-lane kill parity (every mutant it kills at base, a default-lane row still kills).
+ * OPT-IN: `ENGINE_DEEP=1`. Unset, these cases are NOT DEFINED (the `ABC-119` form). Titles and bodies
+ * are `A5`'s, and the block sits before `A11`, so its M4 sweep still reads their lines.
+ */
+if (RUN_ENGINE_DEEP) {
+  describe("ABC-167 A5 — the D4 time rule, read from the info line's time [deep, ENGINE_DEEP=1]", () => {
+    const rows: ReadonlyArray<readonly [string, string, number, number]> = [
+      ["movetime 100", `position fen ${START_FEN}`, 100, 10], // step 10: ABC-173, owner 2026-10-19
+      // ABC-228 (ADR-0053 d10, reading (ii)): level 5 is 4 000, so G = 3 500 binds, not the level.
+      ["G = 3 500, under the default level 5's 4 000", "position startpos", 3_500, 100],
+      ["a bare go", "position startpos", 4_000, 100],
+    ];
+    const goes = ["go movetime 100", "go wtime 60000 btime 60000 winc 1000 binc 1000", "go"];
+    for (const [index, [name, position, budget, step]] of rows.entries()) {
+      const go = goes[index] as string;
+      it(`${name}: ${go} -> ${budget} ms (within 2 x ${step} ms)`, () => {
+        const { out } = talk([position, go], step);
+        expect(out).toHaveLength(2);
+        const { time } = parseInfo(out[0]);
+        expect(time).toBeGreaterThanOrEqual(budget);
+        expect(time).toBeLessThanOrEqual(budget + 2 * step);
+      });
+    }
+
+    const pinned: ReadonlyArray<readonly [string, string, string, number, number]> = [
+      ["A5-b3", "position startpos", "go wtime 1000 btime 1000 movestogo 5", 200, 10],
+    ];
+    for (const [row, position, go, budget, step] of pinned) {
+      it(`${row}: ${position}, ${go} -> ${budget} ms (within 2 x ${step} ms)`, () => {
+        const { out } = talk([position, go], step);
+        expect(out).toHaveLength(2);
+        const { time } = parseInfo(out[0]);
+        expect(time).toBeGreaterThanOrEqual(budget);
+        expect(time).toBeLessThanOrEqual(budget + 2 * step);
+      });
+    }
   });
 }
 
