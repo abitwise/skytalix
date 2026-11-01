@@ -1,3 +1,4 @@
+_Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — **ABC-254 DONE** (lazy legality; A4 MET under D3-V2, 1.11–1.12×; merged; post-merge 2 372/2 372). Alone window closed. Pulled: `se-ABC-261` (lazy-legality rows), `se-ABC-250` (packed moves). `qe-ABC-260` dispatched. Worktree cleanup after._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — **ABC-255 DONE** (100/400 + 0.5 s smoke harness live). No hop of this session running → ALONE window opens: `qe-ABC-254-a4v2` dispatched; nothing else dispatched until it returns. Then qe-ABC-260._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — `arch-d3-under-load` merged: ADR-0055 addendum **D3-V2** (pairs counted only under ≤ 0.8 foreign cores, blind to results; first 5 counted pairs; cap 15; VOID-LOAD ≠ miss; agreement check; forward-only; applies to ABC-250/251/253 too). `qe-ABC-254-a4v2` queued — dispatched only in an ALONE window once qe-ABC-255 and se-ABC-260 return; no other hop during it._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — ABC-254 A4 voided twice (spread rule under bursty foreign load). `arch-d3-under-load` queued (forward-only ruling on ADR-0055 D3 for a shared host); next A4 read fresh, with no other hop of this session running. Running: qe-ABC-255, se-ABC-260._
@@ -1178,7 +1179,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   one hop at pull, when it checks `Ready for Dev`'s exit at that moment; the row records the pull.
 
   HEADING FORMAT (spec §6.1): each column is an H2 heading carrying its live/limit WIP count,
-  e.g. `## In Development (WIP 0/3)` — the left number is how many tickets are in the column
+  e.g. `## In Development (WIP 2/3)` — the left number is how many tickets are in the column
   now, the right number is the limit from config. Unlimited columns read `(WIP unlimited)`;
   Blocked is visible and time-tracked (no WIP limit) and reads `(visible, time-tracked)`.
   INVARIANT: the column H2 headings and the rows of the `## Columns` table are the same 13 names in the
@@ -1188,10 +1189,10 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 0/3)
+    ## In Development (WIP 2/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
-    ## In Review (WIP 2/3)
+    ## In Review (WIP 1/3)
     - [ABC-012] Portfolio FX conversion  (PR: #41, QE: running)
 
   BOARD <-> TICKET CONTRACT: each ticket file (`plans/tickets/<prefix>-xxx.md`) carries a
@@ -1269,7 +1270,6 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 ## Backlog (WIP unlimited)
 - [EPIC-011] skytalix climbs toward 3 000 Elo, read at 40/15, on a classical measured path (owner: BA/PM, size: XL, priority: P2, since 2026-11-01; ADR-0056 accepted in direction; ADR-0055 O1; starts after EPIC-009 and EPIC-010 close; phases 0–5; milestones 2 200…3 000 (proposed); open owner calls Q-3K-2, Q-3K-4, Q-3K-6, Q-3K-7, Q-3K-8, rest of Q-3K-1)
-- [ABC-261] The default lane sees hasLegalMove lose its early exit and reads quiet queen promotions while in check (test-only; EPIC-010 milestone 1b; size: XS, priority: P3; DoR 10/10 once ABC-254 merges; QE-254-b/c; cut 2026-11-01 bapm-qe-gaps-1101; dropped if ABC-254 is dropped)
 - [ABC-257] T3: the TT is kept across the moves of one game, re-tried after deeper cutoffs and depth-preferred replacement (supersedes dropped ABC-209) (EPIC-011 Phase 1; size: S, priority: P3, DoR 8/10)
 - [ABC-258] T4: a larger TT, 8 MiB inside NFR-009 (more only on the owner's word) (EPIC-011 Phase 1; size: S, priority: P3, DoR 8/10)
 - [ABC-251] The search walks packed moves and builds a Move only at its return, with inlined helpers (ADR-0055 O1-b part 2 + O1-c; size: L (S if narrowed), priority: P2; DoR 9/10; milestone 1b; waits ABC-250's reading)
@@ -1304,8 +1304,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## Ready (WIP 2/8)
-- [ABC-250] Moves packed into integers in reused typed arrays for generation, legality and make/unmake, read on perft first (ADR-0055 O1-b part 1; size: M, priority: P2, value-identical S2, 0 games; DoR 10/10; EPIC-010 milestone 1b; bars ≥ 1.25× merge / below → not merged, ABC-251 narrows, ABC-252 dropped; Architect to confirm ADR-0003 clause 1 reading at design; after ABC-223 and ABC-249)
+## Ready (WIP 1/8)
 - [ABC-253] Zobrist keys travel as two 32-bit halves in the search, the TT and the repetition scan; bigint at the API (ADR-0055 O1-a; size: M, priority: P3, value-identical S2; DoR 10/10; milestone 1b; ≥ 1.02×; pull after the O1-b tickets)
 
 
@@ -1322,7 +1321,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 2/3)
+- [ABC-261] The default lane sees hasLegalMove lose its early exit and reads quiet queen promotions while in check (test-only; EPIC-010 milestone 1b; size: XS, priority: P3; DoR 10/10 once ABC-254 merges; QE-254-b/c; cut 2026-11-01 bapm-qe-gaps-1101; dropped if ABC-254 is dropped) **→ Ready (ABC-254 merged) → pulled 2026-11-01 → `se-ABC-261`**
+- [ABC-250] Moves packed into integers in reused typed arrays for generation, legality and make/unmake, read on perft first (ADR-0055 O1-b part 1; size: M, priority: P2, value-identical S2, 0 games; DoR 10/10; EPIC-010 milestone 1b; bars ≥ 1.25× merge / below → not merged, ABC-251 narrows, ABC-252 dropped; Architect to confirm ADR-0003 clause 1 reading at design; after ABC-223 and ABC-249) **→ pulled 2026-11-01 → `se-ABC-250` (on top of ABC-254; speed rows under D3-V2)**
 
 
 
@@ -1350,9 +1351,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 2/3)
+## In Review (WIP 1/3)
 - [ABC-260] The source scan catches `process` by any spelling and a comment marker inside a string cannot hide code (test-only; EPIC-010 milestone 1b; size: XS, priority: P2; DoR 10/10; QE-259-a/b; cut 2026-11-01 bapm-qe-gaps-1101) **→ Ready → pulled 2026-11-01 → `se-ABC-260` (before ABC-251)** **→ In Review 2026-11-01 (se-ABC-260 done 64c7e829; whole-word `process`, string-aware comment strip shared by A8 and ABC-259; plants Q5/Q6/Q7 red; review OK — LOW: strings are kept, so a string literal naming `process` in core files now trips the env row (stricter, accepted); regex literals with quotes unhandled) → `qe-ABC-260` queued AFTER the ABC-254 alone window**
-- [ABC-254] Lazy legality: make/test/unmake only for king moves, en passant, pinned pieces and checks (ADR-0055 O1-d; size: M, priority: P2; DoR 10/10; milestone 1b; **owner YES 2026-11-01 (…f7a50e95)**; → Ready when `arch-adr0003-amend` merges) **Stays EPIC-010 milestone 1b, first once arch-adr0003-amend merges** (ABC-254 page exception: owner yes + amending ADR before ABC-250 enters development) **→ Ready 2026-11-01 (bapm-ABC-254-ready; first in 1b)** **pulled 2026-11-01 → `se-ABC-254` (parallel coding; tests serialized by host-test.lock after the probe)** **→ In Review 2026-11-01 (se-ABC-254 done fe53dbda; A1/A2/perft green; npm test 2 368/0; out-of-ticket edit: gameend.nfr.test.ts bars tightened 1/8→0, reviewed OK) → `qe-ABC-254` (A3/G4, A4 ALONE nps, G1/G5/G6/G8/G9)** **2026-11-01 qe-ABC-254 UNRESOLVED (branch 15eadd7a): A1/A2/A3/A5 MET (G4 byte-equal 7 827 rows; 777k-position differential 0 mismatches; perft 32/32; G8 9.01 vs 9.59 s); A4 ungraded — kiwipete 1.115 and position-4 1.102 valid, position-6 and start voided by the 5 % spread rule under foreign load (every round 1.067–1.192). QE-254-a BLOCKING → `qe-ABC-254-a4` re-read (~15 min, ALONE, after qe-ABC-255). QE-254-b/c LOW test-only → BA/PM. Not merged.** **2026-11-01 qe-ABC-254-a4 UNRESOLVED again (branch c5da6514): kiwipete 1.120 and start 1.105 valid; position-6 and position-4 voided by spread (bursty short-lived foreign load within ~1 min of an ALONE start). INFO: 35/35 pairs ≥ 1.02. → `arch-d3-under-load` (forward-only validity ruling), then a fresh read with no other hop of this session running.**
 
 
 
@@ -1412,6 +1412,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+- [ABC-254] Lazy legality: make/test/unmake only for king moves, en passant, pinned pieces and checks (ADR-0055 O1-d; size: M, priority: P2; DoR 10/10; milestone 1b; **owner YES 2026-11-01 (…f7a50e95)**; → Ready when `arch-adr0003-amend` merges) **Stays EPIC-010 milestone 1b, first once arch-adr0003-amend merges** (ABC-254 page exception: owner yes + amending ADR before ABC-250 enters development) **→ Ready 2026-11-01 (bapm-ABC-254-ready; first in 1b)** **pulled 2026-11-01 → `se-ABC-254` (parallel coding; tests serialized by host-test.lock after the probe)** **→ In Review 2026-11-01 (se-ABC-254 done fe53dbda; A1/A2/perft green; npm test 2 368/0; out-of-ticket edit: gameend.nfr.test.ts bars tightened 1/8→0, reviewed OK) → `qe-ABC-254` (A3/G4, A4 ALONE nps, G1/G5/G6/G8/G9)** **2026-11-01 qe-ABC-254 UNRESOLVED (branch 15eadd7a): A1/A2/A3/A5 MET (G4 byte-equal 7 827 rows; 777k-position differential 0 mismatches; perft 32/32; G8 9.01 vs 9.59 s); A4 ungraded — kiwipete 1.115 and position-4 1.102 valid, position-6 and start voided by the 5 % spread rule under foreign load (every round 1.067–1.192). QE-254-a BLOCKING → `qe-ABC-254-a4` re-read (~15 min, ALONE, after qe-ABC-255). QE-254-b/c LOW test-only → BA/PM. Not merged.** **2026-11-01 qe-ABC-254-a4 UNRESOLVED again (branch c5da6514): kiwipete 1.120 and start 1.105 valid; position-6 and position-4 voided by spread (bursty short-lived foreign load within ~1 min of an ALONE start). INFO: 35/35 pairs ≥ 1.02. → `arch-d3-under-load` (forward-only validity ruling), then a fresh read with no other hop of this session running.** **→ Done 2026-11-01 (qe-ABC-254-a4v2 PASS_WITH_GAPS: A4 MET under ADR-0055 D3-V2 — kiwipete 1.112, position-6 1.120, start 1.106, guard position-4 1.095; ALONE window 18:52–19:03Z; UAT signed by QE verdict under owner delegation; merged; post-merge npm test 2 372/2 372, typecheck 0). Gaps → ABC-261 (QE-254-b/c), QE-254-d INFO.**
 - [ABC-255] M0: a self-play SPRT lane on the rating harness (H1 on a known gain, H0 on an identical pair) (EPIC-011 Phase 0; size: M, priority: P1, DoR 8/10) **2026-11-01: re-scoped to the 100/400 + 0.5 s smoke harness (size S, DoR 10/10; bapm-reconcile-adr0056) → Ready → pulled → `se-ABC-255` (tools/ only; tests under the lock)** **→ In Review 2026-11-01 (se-ABC-255 done a08ba9be; A1/A2/A6/A7 met on dry runs; 14 existing shapes byte-identical; 0 lines src/data; review OK) → `qe-ABC-255` (A3 100-game sanity, A4 100-game identical pair, A5 smoke; ~1 h play, owner-set counts)** **→ Done 2026-11-01 (qe-ABC-255 PASS_WITH_GAPS, tools-only; A3 ABC-208 sanity 52.0/100 ALONE, A4 identical 45.5/100 SHARED, A5 smoke 9/10 vs E1650 SHARED; 0 faults, 0 time losses, max overshoot 5 ms; 334 games/h at 100 ms; merged). Gaps: QE-255-a LOW (no offline row for machine.txt control: line), b–e INFO (loose number parsing; host.log flock count; smoke 0.90 above 67–83 % estimate — pool before re-pinning E).**
 - [ABC-259] A default-lane source scan turns red when engine-core code reads the budget other than as the deadline, or reads a test flag or the environment (EPIC-010 milestone 1b; size: XS, priority: P2; test-only; DoR 10/10; owner rule R-TC, ADR-0056 G-1; cut 2026-11-01 bapm-reconcile-adr0056) **→ Ready → pulled 2026-11-01 → `se-ABC-259` (before ABC-251)** **→ In Review 2026-11-01 (se-ABC-259 done 4dbfde26; 3 scan rows, planted violations red, comments green, 0.83 ms; review OK — note: alias reads of the budget under another name are out of scope by design) → `qe-ABC-259`** **→ Done 2026-11-01 (qe-ABC-259 PASS_WITH_GAPS, UAT waived test-only; G8 head 9.15 / base 9.10 s, ALONE; merged). Gaps → next BA/PM hop: QE-259-a MEDIUM (env rule misses `import { env } from "node:process"`; widen to \bprocess\b), QE-259-b LOW (comment strip ignores strings; A8 shares it), QE-259-c LOW (budget aliases; review habit on ABC-251), QE-259-d INFO. Post-merge npm test (expect 2 366) owed under the lock.**
 - [ABC-249] A pre-root repetition met four or more plies into the search scores 0, so QPLY4 turns the lane red (QE-248-c; size: XS, priority: P3, test-only, UAT waived; DoR 10/10; cut by bapm-ABC-248-close; one src/engine.test.ts row ≤ 100 ms; after ABC-223 (host-alone order)) **pulled 2026-11-01 → `se-ABC-249` (parallel coding; tests serialized by host-test.lock after the probe)** **→ In Review 2026-11-01 (se-ABC-249 done dd66bfee; one row, QPLY4 red / production green, 3.93 ms; review OK — LOW: row pins score 404/497, will need re-pin when eval changes in EPIC-011) → `qe-ABC-249` (QPLY4 re-read, G8)** **→ Done 2026-11-01 (qe-ABC-249 PASS_WITH_GAPS, UAT waived test-only; G8 head 9.15 s / base 9.45 s; merged to local main). Gaps: QE-249-a LOW (row discriminates only at depth 4–5; add relational assert note to ABC-233/236/237/238 — next BA/PM hop), QE-249-b INFO (no ply ≥ 4 draw-score row), QE-249-c INFO (QE harness pgrep counts flock waiters)**
