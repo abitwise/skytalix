@@ -1177,7 +1177,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   one hop at pull, when it checks `Ready for Dev`'s exit at that moment; the row records the pull.
 
   HEADING FORMAT (spec §6.1): each column is an H2 heading carrying its live/limit WIP count,
-  e.g. `## In Development (WIP 1/3)` — the left number is how many tickets are in the column
+  e.g. `## In Development (WIP 0/3)` — the left number is how many tickets are in the column
   now, the right number is the limit from config. Unlimited columns read `(WIP unlimited)`;
   Blocked is visible and time-tracked (no WIP limit) and reads `(visible, time-tracked)`.
   INVARIANT: the column H2 headings and the rows of the `## Columns` table are the same 13 names in the
@@ -1187,10 +1187,10 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 1/3)
+    ## In Development (WIP 0/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
-    ## In Review (WIP 2/3)
+    ## In Review (WIP 3/3)
     - [ABC-012] Portfolio FX conversion  (PR: #41, QE: running)
 
   BOARD <-> TICKET CONTRACT: each ticket file (`plans/tickets/<prefix>-xxx.md`) carries a
@@ -1321,8 +1321,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-260] The source scan catches `process` by any spelling and a comment marker inside a string cannot hide code (test-only; EPIC-010 milestone 1b; size: XS, priority: P2; DoR 10/10; QE-259-a/b; cut 2026-11-01 bapm-qe-gaps-1101) **→ Ready → pulled 2026-11-01 → `se-ABC-260` (before ABC-251)**
+## In Development (WIP 0/3)
 
 
 
@@ -1350,7 +1349,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 2/3)
+## In Review (WIP 3/3)
+- [ABC-260] The source scan catches `process` by any spelling and a comment marker inside a string cannot hide code (test-only; EPIC-010 milestone 1b; size: XS, priority: P2; DoR 10/10; QE-259-a/b; cut 2026-11-01 bapm-qe-gaps-1101) **→ Ready → pulled 2026-11-01 → `se-ABC-260` (before ABC-251)** **→ In Review 2026-11-01 (se-ABC-260 done 64c7e829; whole-word `process`, string-aware comment strip shared by A8 and ABC-259; plants Q5/Q6/Q7 red; review OK — LOW: strings are kept, so a string literal naming `process` in core files now trips the env row (stricter, accepted); regex literals with quotes unhandled) → `qe-ABC-260` queued AFTER the ABC-254 alone window**
 - [ABC-255] M0: a self-play SPRT lane on the rating harness (H1 on a known gain, H0 on an identical pair) (EPIC-011 Phase 0; size: M, priority: P1, DoR 8/10) **2026-11-01: re-scoped to the 100/400 + 0.5 s smoke harness (size S, DoR 10/10; bapm-reconcile-adr0056) → Ready → pulled → `se-ABC-255` (tools/ only; tests under the lock)** **→ In Review 2026-11-01 (se-ABC-255 done a08ba9be; A1/A2/A6/A7 met on dry runs; 14 existing shapes byte-identical; 0 lines src/data; review OK) → `qe-ABC-255` (A3 100-game sanity, A4 100-game identical pair, A5 smoke; ~1 h play, owner-set counts)**
 - [ABC-254] Lazy legality: make/test/unmake only for king moves, en passant, pinned pieces and checks (ADR-0055 O1-d; size: M, priority: P2; DoR 10/10; milestone 1b; **owner YES 2026-11-01 (…f7a50e95)**; → Ready when `arch-adr0003-amend` merges) **Stays EPIC-010 milestone 1b, first once arch-adr0003-amend merges** (ABC-254 page exception: owner yes + amending ADR before ABC-250 enters development) **→ Ready 2026-11-01 (bapm-ABC-254-ready; first in 1b)** **pulled 2026-11-01 → `se-ABC-254` (parallel coding; tests serialized by host-test.lock after the probe)** **→ In Review 2026-11-01 (se-ABC-254 done fe53dbda; A1/A2/perft green; npm test 2 368/0; out-of-ticket edit: gameend.nfr.test.ts bars tightened 1/8→0, reviewed OK) → `qe-ABC-254` (A3/G4, A4 ALONE nps, G1/G5/G6/G8/G9)** **2026-11-01 qe-ABC-254 UNRESOLVED (branch 15eadd7a): A1/A2/A3/A5 MET (G4 byte-equal 7 827 rows; 777k-position differential 0 mismatches; perft 32/32; G8 9.01 vs 9.59 s); A4 ungraded — kiwipete 1.115 and position-4 1.102 valid, position-6 and start voided by the 5 % spread rule under foreign load (every round 1.067–1.192). QE-254-a BLOCKING → `qe-ABC-254-a4` re-read (~15 min, ALONE, after qe-ABC-255). QE-254-b/c LOW test-only → BA/PM. Not merged.** **2026-11-01 qe-ABC-254-a4 UNRESOLVED again (branch c5da6514): kiwipete 1.120 and start 1.105 valid; position-6 and position-4 voided by spread (bursty short-lived foreign load within ~1 min of an ALONE start). INFO: 35/35 pairs ≥ 1.02. → `arch-d3-under-load` (forward-only validity ruling), then a fresh read with no other hop of this session running.**
 
