@@ -1,3 +1,4 @@
+_Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — `bapm-qe-gaps-1101` merged: ABC-260 (scan hardening, XS) pulled → `se-ABC-260`; ABC-261 (lazy-legality rows, XS) in Backlog until ABC-254 merges. Running: qe-ABC-255 (games), qe-ABC-254-a4 (waits, then ALONE)._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — qe-ABC-254 UNRESOLVED on A4 only (two boards voided by spread under foreign load: grugops-repo vitest 20+ min runs, other sessions' node/git); re-read `qe-ABC-254-a4` queued (waits for qe-ABC-255's games, then holds the lock alone ~15 min). Owner asked to pause the other project's test runs for that window._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — **ABC-259 DONE** (PASS_WITH_GAPS; merged). Owed to next BA/PM hop: QE-249-a, QE-259-a/b/c. Running: qe-ABC-254 (A4 timing), qe-ABC-255 (real reads)._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — **ABC-249 DONE** (qe-ABC-249 PASS_WITH_GAPS; merged). Owed to next BA/PM hop: QE-249-a test note on ABC-233/236/237/238. Running: qe-ABC-254, se-ABC-255, se-ABC-259._
@@ -1174,7 +1175,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   one hop at pull, when it checks `Ready for Dev`'s exit at that moment; the row records the pull.
 
   HEADING FORMAT (spec §6.1): each column is an H2 heading carrying its live/limit WIP count,
-  e.g. `## In Development (WIP 0/3)` — the left number is how many tickets are in the column
+  e.g. `## In Development (WIP 1/3)` — the left number is how many tickets are in the column
   now, the right number is the limit from config. Unlimited columns read `(WIP unlimited)`;
   Blocked is visible and time-tracked (no WIP limit) and reads `(visible, time-tracked)`.
   INVARIANT: the column H2 headings and the rows of the `## Columns` table are the same 13 names in the
@@ -1184,7 +1185,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 0/3)
+    ## In Development (WIP 1/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
     ## In Review (WIP 2/3)
@@ -1265,6 +1266,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 ## Backlog (WIP unlimited)
 - [EPIC-011] skytalix climbs toward 3 000 Elo, read at 40/15, on a classical measured path (owner: BA/PM, size: XL, priority: P2, since 2026-11-01; ADR-0056 accepted in direction; ADR-0055 O1; starts after EPIC-009 and EPIC-010 close; phases 0–5; milestones 2 200…3 000 (proposed); open owner calls Q-3K-2, Q-3K-4, Q-3K-6, Q-3K-7, Q-3K-8, rest of Q-3K-1)
+- [ABC-261] The default lane sees hasLegalMove lose its early exit and reads quiet queen promotions while in check (test-only; EPIC-010 milestone 1b; size: XS, priority: P3; DoR 10/10 once ABC-254 merges; QE-254-b/c; cut 2026-11-01 bapm-qe-gaps-1101; dropped if ABC-254 is dropped)
 - [ABC-257] T3: the TT is kept across the moves of one game, re-tried after deeper cutoffs and depth-preferred replacement (supersedes dropped ABC-209) (EPIC-011 Phase 1; size: S, priority: P3, DoR 8/10)
 - [ABC-258] T4: a larger TT, 8 MiB inside NFR-009 (more only on the owner's word) (EPIC-011 Phase 1; size: S, priority: P3, DoR 8/10)
 - [ABC-251] The search walks packed moves and builds a Move only at its return, with inlined helpers (ADR-0055 O1-b part 2 + O1-c; size: L (S if narrowed), priority: P2; DoR 9/10; milestone 1b; waits ABC-250's reading)
@@ -1317,7 +1319,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+- [ABC-260] The source scan catches `process` by any spelling and a comment marker inside a string cannot hide code (test-only; EPIC-010 milestone 1b; size: XS, priority: P2; DoR 10/10; QE-259-a/b; cut 2026-11-01 bapm-qe-gaps-1101) **→ Ready → pulled 2026-11-01 → `se-ABC-260` (before ABC-251)**
 
 
 
