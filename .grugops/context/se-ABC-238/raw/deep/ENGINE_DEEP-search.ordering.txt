@@ -1,0 +1,11 @@
+
+ RUN  v4.1.12 <worktree>
+
+ ✓ src/search.ordering.test.ts (30 tests) 3428ms
+     ✓ on ABC-206's 285 074-position walk to depth 3 [deep, ENGINE_DEEP=1]  3329ms
+
+ Test Files  1 passed (1)
+      Tests  30 passed (30)
+   Start at  23:32:43
+   Duration  3.60s (transform 0ms, setup 0ms, import 77ms, tests 3.43s, environment 0ms)
+

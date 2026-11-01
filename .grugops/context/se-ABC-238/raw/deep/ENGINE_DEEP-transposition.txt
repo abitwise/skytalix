@@ -1,0 +1,14 @@
+
+ RUN  v4.1.12 <worktree>
+
+stdout | src/transposition.test.ts > A7 — the table holds a fixed 4 MiB, whatever the search > heapUsed and arrayBuffers each grow <= 1 MiB between a 1 s and a DEFAULT_BUDGET_MS (4 s) search [deep, ENGINE_DEEP=1]
+ABC-081 A7 / NFR-009 kiwipete: 1 s (depth 7) heapUsed 9.14 MiB, arrayBuffers 4.51 MiB; 3 s (depth 9) heapUsed 9.15 MiB, arrayBuffers 4.51 MiB
+
+ ✓ src/transposition.test.ts (36 tests) 5174ms
+     ✓ heapUsed and arrayBuffers each grow <= 1 MiB between a 1 s and a DEFAULT_BUDGET_MS (4 s) search [deep, ENGINE_DEEP=1]  5079ms
+
+ Test Files  1 passed (1)
+      Tests  36 passed (36)
+   Start at  23:32:37
+   Duration  5.32s (transform 0ms, setup 0ms, import 67ms, tests 5.17s, environment 0ms)
+

@@ -1,0 +1,24 @@
+
+ RUN  v4.1.12 <worktree>
+
+stdout | src/cli.real-engine.test.ts > ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine
+[CLI_DEEP] (cwd /tmp/abc095-book-absent-bS3zjV) <home>/.nvm/versions/node/v26.12.1/bin/node --max-old-space-size=400 /tmp/abc095-book-absent-bS3zjV/src/cli.ts --colour black --ascii <<< "" — wall 4074 ms, exit 0, signal null
+[CLI_DEEP] (cwd /tmp/abc095-book-absent-bS3zjV) <home>/.nvm/versions/node/v26.12.1/bin/node --max-old-space-size=400 /tmp/abc095-book-absent-bS3zjV/src/cli.ts --colour black --ascii <<< "zz9\n" — wall 4102 ms, exit 0, signal null
+
+stdout | src/cli.real-engine.test.ts > ABC-095 — CLI_DEEP: the book in a real session
+[CLI_DEEP] (cwd /tmp/abc095-book-absent-bS3zjV) <home>/.nvm/versions/node/v26.12.1/bin/node --max-old-space-size=400 /tmp/abc095-book-absent-bS3zjV/src/cli.ts --colour black --ascii <<< "quit\nquit\n" — wall 4103 ms, exit 0, signal null
+[CLI_DEEP] (cwd /tmp/abc162-neutral-cwd-bB8i1s) <home>/.nvm/versions/node/v26.12.1/bin/node --max-old-space-size=400 <worktree>/src/cli.ts --colour white --ascii <<< "e2e4\n" — wall 82 ms, exit 0, signal null
+
+stdout | src/cli.real-engine.test.ts > ABC-101 — CLI_DEEP: the chosen level plays a real session
+[CLI_DEEP] (cwd /tmp/abc095-book-absent-bS3zjV) <home>/.nvm/versions/node/v26.12.1/bin/node --max-old-space-size=400 /tmp/abc095-book-absent-bS3zjV/src/cli.ts --colour black --difficulty 1 --ascii <<< "quit\nquit\n" — wall 176 ms, exit 0, signal null
+
+stdout | src/cli.real-engine.test.ts > ABC-173 — CLI_DEEP: the child's heap ceiling, read in the child > A6 — a child built as this lane builds its children reports heap_size_limit at most the admitted row
+[CLI_DEEP] (cwd /tmp/abc095-book-absent-bS3zjV) <home>/.nvm/versions/node/v26.12.1/bin/node --max-old-space-size=400 -e process.stdout.write(String(require('node:v8').getHeapStatistics().heap_size_limit)) <<< "" — wall 17 ms, exit 0, signal null
+
+ ✓ src/cli.real-engine.test.ts (11 tests) 12583ms
+
+ Test Files  1 passed (1)
+      Tests  11 passed (11)
+   Start at  23:33:35
+   Duration  12.70s (transform 0ms, setup 0ms, import 38ms, tests 12.58s, environment 0ms)
+
