@@ -1,0 +1,8 @@
+all runs:
+  kiwipete: n=7 base med 869819 (spread 4.2%) probe med 884155 (spread 3.2%) ratio 1.016
+  position-6: n=7 base med 881607 (spread 2.7%) probe med 878279 (spread 4.9%) ratio 0.996
+  start: n=4 base med 680880 (spread 2.2%) probe med 689838.5 (spread 3.3%) ratio 1.013
+excluding the first (cold) pair of each batch (r1, r4 kiwipete):
+  kiwipete: n=5 base med 874683 (spread 2.8%) probe med 882875 (spread 1.4%) ratio 1.009
+  position-6: n=7 base med 881607 (spread 2.7%) probe med 878279 (spread 4.9%) ratio 0.996
+  start: n=4 base med 680880 (spread 2.2%) probe med 689838.5 (spread 3.3%) ratio 1.013

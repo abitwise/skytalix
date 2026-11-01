@@ -1,0 +1,27 @@
+TurboFan --trace-turbo-inlining, chooseMove 4 s kiwipete, base main 51b803c0: considered 68 inlined 68 refused 0
+12 Inlining  { <SharedFunctionInfo isBlack>} into  { <SharedFunctionInfo whiteMinusBlack>}
+8 Inlining  { <SharedFunctionInfo isBlack>} into  { <SharedFunctionInfo generateCaptures>}
+6 Inlining  { <SharedFunctionInfo pieceType>} into  { <SharedFunctionInfo whiteMinusBlack>}
+4 Inlining  { <SharedFunctionInfo pieceType>} into  { <SharedFunctionInfo orderMoves>}
+4 Inlining  { <SharedFunctionInfo pieceType>} into  { <SharedFunctionInfo isSquareAttackedBy>}
+4 Inlining  { <SharedFunctionInfo isBlack>} into  { <SharedFunctionInfo isSquareAttackedBy>}
+3 Inlining  { <SharedFunctionInfo isBlack>} into  { <SharedFunctionInfo squaresReached>}
+3 Inlining  { <SharedFunctionInfo isBlack>} into  { <SharedFunctionInfo generateMoves>}
+2 Inlining  { <SharedFunctionInfo pieceType>} into  { <SharedFunctionInfo quiesce>}
+2 Inlining  { <SharedFunctionInfo pieceType>} into  { <SharedFunctionInfo orderKey>}
+2 Inlining  { <SharedFunctionInfo pieceType>} into  { <SharedFunctionInfo orderCaptures>}
+2 Inlining  { <SharedFunctionInfo pieceType>} into  { <SharedFunctionInfo leafScore>}
+2 Inlining  { <SharedFunctionInfo pieceType>} into  { <SharedFunctionInfo generateCaptures>}
+2 Inlining  { <SharedFunctionInfo isBlack>} into  { <SharedFunctionInfo pawnStructure>}
+1 Inlining  { <SharedFunctionInfo pieceType>} into  { <SharedFunctionInfo squaresReached>}
+1 Inlining  { <SharedFunctionInfo pieceType>} into  { <SharedFunctionInfo raySliderAttacks>}
+1 Inlining  { <SharedFunctionInfo pieceType>} into  { <SharedFunctionInfo nullMoveReduction>}
+1 Inlining  { <SharedFunctionInfo pieceType>} into  { <SharedFunctionInfo makeMove>}
+1 Inlining  { <SharedFunctionInfo pieceType>} into  { <SharedFunctionInfo isInsufficientMaterial>}
+1 Inlining  { <SharedFunctionInfo pieceType>} into  { <SharedFunctionInfo generateMoves>}
+1 Inlining  { <SharedFunctionInfo isBlack>} into  { <SharedFunctionInfo raySliderAttacks>}
+1 Inlining  { <SharedFunctionInfo isBlack>} into  { <SharedFunctionInfo nullMoveReduction>}
+1 Inlining  { <SharedFunctionInfo isBlack>} into  { <SharedFunctionInfo makeMove>}
+1 Inlining  { <SharedFunctionInfo isBlack>} into  { <SharedFunctionInfo isPassedPawn>}
+1 Inlining  { <SharedFunctionInfo isBlack>} into  { <SharedFunctionInfo addPawnMoves>}
+1 Inlining  { <SharedFunctionInfo isBlack>} into  { <SharedFunctionInfo addPawnCaptures>}

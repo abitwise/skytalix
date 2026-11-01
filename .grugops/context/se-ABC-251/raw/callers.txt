@@ -1,0 +1,35 @@
+== kiwipete
+0.57% isBlack <- squaresReached src/evaluate.ts:244
+0.53% isBlack <- raySliderAttacks src/moves.ts:217
+0.48% isBlack <- whiteMinusBlack src/evaluate.ts:482
+0.31% isBlack <- generateCaptures src/moves.ts:402
+0.20% isBlack <- addRayMoves src/moves.ts:119
+0.12% isBlack <- generateMoves src/moves.ts:356
+0.10% pieceType <- whiteMinusBlack src/evaluate.ts:482
+0.05% isBlack <- addPawnCaptures src/moves.ts:445
+0.05% pieceType <- mvvLvaKey src/quiescence.ts:83
+0.03% isBlack <- addPawnMoves src/moves.ts:145
+0.02% pieceType <- generateMoves src/moves.ts:356
+0.02% pieceType <- raySliderAttacks src/moves.ts:217
+0.01% pieceType <- makeMove src/apply.ts:122
+0.01% pieceType <- nullMoveReduction src/search.ts:354
+0.01% isBlack <- enPassantCaptureSquare src/apply.ts:78
+0.01% pieceType <- generateCaptures src/moves.ts:402
+0.00% isBlack <- nullMoveReduction src/search.ts:354
+== position-6
+0.54% isBlack <- squaresReached src/evaluate.ts:244
+0.50% isBlack <- whiteMinusBlack src/evaluate.ts:482
+0.44% isBlack <- raySliderAttacks src/moves.ts:217
+0.43% isBlack <- generateCaptures src/moves.ts:402
+0.17% pieceType <- whiteMinusBlack src/evaluate.ts:482
+0.14% isBlack <- generateMoves src/moves.ts:356
+0.13% isBlack <- addRayMoves src/moves.ts:119
+0.07% pieceType <- mvvLvaKey src/quiescence.ts:83
+0.05% isBlack <- addPawnMoves src/moves.ts:145
+0.04% isBlack <- addPawnCaptures src/moves.ts:445
+0.02% pieceType <- generateCaptures src/moves.ts:402
+0.02% pieceType <- raySliderAttacks src/moves.ts:217
+0.02% isBlack <- nullMoveReduction src/search.ts:354
+0.01% pieceType <- generateMoves src/moves.ts:356
+0.00% isBlack <- (root) ?:0
+0.00% pieceType <- isInsufficientMaterial src/gameend.ts:99
