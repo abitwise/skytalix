@@ -566,6 +566,7 @@ describe("A6 — no move is selected without a caller-supplied depth", () => {
     // added `orderScratchByteLength`, a number for `NFR-009` (a)'s byte sum that picks nothing.
     // ABC-228 added one more door of that shape (`searchWithoutQuiescenceEvasions`, `ADR-0053`
     // decision 6), and `ABC-229` one more (`searchWithoutQuietPromotions`, the same decision).
+    // ABC-238 added one more (`searchWithoutDeeperCutoffs`, `ADR-0058` decision 3).
     // Still nothing here picks a move without being told how deep.
     expect(Object.keys(searchModule).sort()).toEqual([
       "KEY_ARRAY_CAPACITY",
@@ -577,6 +578,7 @@ describe("A6 — no move is selected without a caller-supplied depth", () => {
       "orderScratchByteLength",
       "repeatsInPath",
       "search",
+      "searchWithoutDeeperCutoffs",
       "searchWithoutKillers",
       "searchWithoutNullMove",
       "searchWithoutOrdering",
@@ -603,6 +605,7 @@ describe("A6 — no move is selected without a caller-supplied depth", () => {
     expect(searchModule.searchWithoutTable.length).toBe(2);
     expect(searchWithoutReductions.length).toBe(2);
     expect(searchWithoutPvsOrReductions.length).toBe(2);
+    expect(searchModule.searchWithoutDeeperCutoffs.length).toBe(2);
     // The predicate's depth is the node's remaining depth, required like every other.
     expect(searchModule.lateMoveReduction.length).toBe(5);
   });

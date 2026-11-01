@@ -93,6 +93,13 @@
  * above turns it off, and a fifth TEST-ONLY door, `chooseMoveWithoutQuietPromotions` (evasions
  * on), is the pre-`ABC-229` `chooseMove`, node for node. It takes no depth.
  *
+ * DEEPER-ENTRY TABLE CUTOFFS (`ABC-238`, `ADR-0058`) are `src/search.ts`'s rule too: an entry
+ * searched to at least the remaining depth settles a node, by a `deeperCutoffs` switch handed to
+ * the one `tableCutoff`. Iterative deepening keeps every earlier iteration's entries, so this is
+ * the recursion where they meet most often. It changes the VALUE, so every door above turns it
+ * off, and a sixth TEST-ONLY door, `chooseMoveWithoutDeeperCutoffs`, is the pre-`ABC-238`
+ * `chooseMove`, node for node. It takes no depth.
+ *
  * NOT HERE, each owned elsewhere: difficulty selection and how a level persists (`EPIC-006`), the
  * budget-to-level mapping (`ABC-087`), aspiration windows and threading (none requested;
  * `ADR-0005` F6 leaves threading to Architect/Design).
@@ -246,7 +253,7 @@ export function trimPriorKeys(keys: readonly bigint[], halfmoveClock: number): b
 const ABORTED = Symbol("engine: the budget is spent");
 
 /**
- * The `ABC-121`, `ABC-208` and `ABC-230` switches, `src/search.ts`'s rule: on in `chooseMove`, off
+ * The `ABC-121`, `ABC-208`, `ABC-230`, `ABC-228`, `ABC-229` and `ABC-238` switches, `src/search.ts`'s rule: on in `chooseMove`, off
  * in its doors.
  */
 interface Heuristics {
@@ -265,6 +272,12 @@ interface Heuristics {
   readonly quiescenceEvasions: boolean;
   /** Quiet queen promotions inside quiescence (`ABC-229`, `ADR-0053`): true on `chooseMove` only. */
   readonly quietPromotions: boolean;
+  /**
+   * Deeper-entry table cutoffs (`ABC-238`, `ADR-0058`), `tableCutoff`'s `deeper` argument: true on
+   * `chooseMove` only; `chooseMoveWithoutDeeperCutoffs` and every older door cut at the exact
+   * stored depth.
+   */
+  readonly deeperCutoffs: boolean;
 }
 
 /** The quiescence rules this recursion hands `quiesce` (`ADR-0053` decision 6): constants, never built per leaf. */
@@ -398,7 +411,7 @@ function negamax(
 
   const slot = probeTable(key);
   if (slot !== -1) {
-    const settled = tableCutoff(slot, remaining, alpha, beta, ply);
+    const settled = tableCutoff(slot, remaining, alpha, beta, ply, budget.deeperCutoffs);
     if (settled !== null) return settled;
   }
 
@@ -591,6 +604,29 @@ export function chooseMove(position: Position, options: EngineOptions): EngineCh
     priorKeys: true,
     quiescenceEvasions: true,
     quietPromotions: true,
+    deeperCutoffs: true,
+  });
+}
+
+/**
+ * TEST-ONLY. The pre-`ABC-238` `chooseMove`, node for node: deeper-entry table cutoffs off, so an
+ * entry cuts only at its exact stored depth, and everything else on, the prior keys included —
+ * the engine side of `ABC-238`'s bounded drift oracle, and the shipped side of every older row
+ * that measures its own heuristic alone (`ADR-0058` decisions 3 and 5). It takes no depth. Not
+ * an engine option; nothing in production calls it.
+ */
+export function chooseMoveWithoutDeeperCutoffs(
+  position: Position,
+  options: EngineOptions,
+): EngineChoice | null {
+  return deepen(position, options, {
+    pvs: true,
+    reductions: true,
+    nullMove: true,
+    priorKeys: true,
+    quiescenceEvasions: true,
+    quietPromotions: true,
+    deeperCutoffs: false,
   });
 }
 
@@ -612,6 +648,7 @@ export function chooseMoveWithoutQuietPromotions(
     priorKeys: true,
     quiescenceEvasions: true,
     quietPromotions: false,
+    deeperCutoffs: false,
   });
 }
 
@@ -632,6 +669,7 @@ export function chooseMoveWithoutQuiescenceEvasions(
     priorKeys: true,
     quiescenceEvasions: false,
     quietPromotions: false,
+    deeperCutoffs: false,
   });
 }
 
@@ -652,6 +690,7 @@ export function chooseMoveWithoutNullMove(
     priorKeys: false,
     quiescenceEvasions: false,
     quietPromotions: false,
+    deeperCutoffs: false,
   });
 }
 
@@ -672,6 +711,7 @@ export function chooseMoveWithoutReductions(
     priorKeys: false,
     quiescenceEvasions: false,
     quietPromotions: false,
+    deeperCutoffs: false,
   });
 }
 
@@ -691,10 +731,11 @@ export function chooseMoveWithoutPvsOrReductions(
     priorKeys: false,
     quiescenceEvasions: false,
     quietPromotions: false,
+    deeperCutoffs: false,
   });
 }
 
-/** The deepening loop behind `chooseMove` and its five doors; they differ in `heuristics` only. */
+/** The deepening loop behind `chooseMove` and its six doors; they differ in `heuristics` only. */
 function deepen(
   position: Position,
   options: EngineOptions,

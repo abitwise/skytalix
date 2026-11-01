@@ -149,9 +149,16 @@ export function storeEntry(
 
 /**
  * The value a table entry settles at `depth` inside `(alpha, beta)`, or `null` when it settles
- * nothing. An entry cuts ONLY at the depth it was searched to, never a deeper one: a value from a
- * deeper search is a different number, and `ABC-081` `A1` requires the table to change the work
- * and never the value.
+ * nothing. The bound rules are the same either way: an exact entry returns its score, a lower
+ * bound at or above `beta` and an upper bound at or below `alpha` return theirs, as stored
+ * (fail-soft), restored to `ply`.
+ *
+ * `deeper` is the recursion's `deeperCutoffs` switch (`ABC-238`, `ADR-0058`). On, an entry
+ * searched to AT LEAST `depth` settles the node: a deeper search's bound is at least as well
+ * informed, and that changes values, judged by `ADR-0058` decision 6's bounded oracle. Off, an
+ * entry cuts ONLY at the depth it was searched to — `ABC-081` `A1`'s exact-depth table, where the
+ * table changes the work and never the value; every door that predates `ABC-238` reads it so.
+ * A shallower entry never settles a node.
  */
 export function tableCutoff(
   slot: number,
@@ -159,8 +166,10 @@ export function tableCutoff(
   alpha: number,
   beta: number,
   ply: number,
+  deeper: boolean,
 ): number | null {
-  if (entryDepth(slot) !== depth) return null;
+  const stored = entryDepth(slot);
+  if (deeper ? stored < depth : stored !== depth) return null;
   const score = entryScore(slot, ply);
   const bound = entryBound(slot);
   if (bound === BOUND_EXACT) return score;

@@ -10,7 +10,8 @@
  * probes and verified hits (`A2`), switch the table off INSIDE the engine (`A3`'s baseline: the
  * same iterative deepening with the table off and the ordering still on), and stop `chooseMove`
  * exactly when a chosen iteration completes. The wrap only counts and switches; with the switch
- * off, every probe and store is the real one. Both recursions import both functions from
+ * off, every probe and store is the real one. `tableCutoff` is wrapped too, call-through, to count
+ * the nodes a deeper entry settles (`ABC-238`, `ADR-0058` decision 9). Both recursions import both functions from
  * `./transposition.ts`, so both are observed.
  *
  * LANES, on the `SEARCH_DEEP` / `ENGINE_DEEP` precedent (`N8-LANE`). The criteria's own positions
@@ -24,18 +25,28 @@
 import { spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { chooseMove, chooseMoveWithoutPvsOrReductions, DEFAULT_BUDGET_MS } from "./engine.ts";
+import { makeMove, unmakeMove } from "./apply.ts";
+import {
+  chooseMove,
+  chooseMoveWithoutDeeperCutoffs,
+  chooseMoveWithoutPvsOrReductions,
+  DEFAULT_BUDGET_MS,
+  type EngineChoice,
+} from "./engine.ts";
 import { pawnCacheByteLength } from "./evaluate.ts";
-import { parseFen } from "./fen.ts";
+import { parseFen, toFen } from "./fen.ts";
+import { gameStatus } from "./gameend.ts";
 import { legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
 import { EMPTY, squareName } from "./position.ts";
 import { captureScratchByteLength, QUIESCENCE_MAX_PLY } from "./quiescence.ts";
+import { MATE_CORPUS } from "./search.mate-corpus.ts";
 import {
   KEY_ARRAY_CAPACITY,
   MATE_SCORE,
   orderScratchByteLength,
   search,
+  searchWithoutDeeperCutoffs,
   searchWithoutPvsOrReductions,
   searchWithoutTable,
 } from "./search.ts";
@@ -66,6 +77,12 @@ const seen = vi.hoisted(() => ({
   off: false,
   /** Called with the depth of every ROOT store: one per completed iteration or search. */
   onRootStore: null as ((depth: number) => void) | null,
+  /**
+   * `ABC-238` (`ADR-0058` decision 9): nodes settled by a DEEPER entry — `tableCutoff` with the
+   * switch on returned a score that the exact-depth rule would not have. A test-side count, never
+   * a production counter.
+   */
+  deeperCuts: 0,
 }));
 vi.mock("./transposition.ts", async (importOriginal) => {
   const actual = await importOriginal<typeof import("./transposition.ts")>();
@@ -77,6 +94,14 @@ vi.mock("./transposition.ts", async (importOriginal) => {
       const slot = actual.probeTable(key);
       if (slot !== -1) seen.hits++;
       return slot;
+    },
+    tableCutoff: (...args: Parameters<typeof actual.tableCutoff>) => {
+      const settled = actual.tableCutoff(...args);
+      if (settled !== null && args[5]) {
+        const [slot, depth, alpha, beta, ply] = args;
+        if (actual.tableCutoff(slot, depth, alpha, beta, ply, false) === null) seen.deeperCuts++;
+      }
+      return settled;
     },
     storeEntry: (...args: Parameters<typeof actual.storeEntry>) => {
       if (args[4] === 0) seen.onRootStore?.(args[1]);
@@ -103,6 +128,14 @@ const PERFT_CORPUS: ReadonlyArray<{ name: string; fen: string }> = [
     fen: "r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10",
   },
 ];
+
+/**
+ * `ABC-238`'s default-lane board and depth: where both recursions settle nodes by a deeper entry
+ * (the rule alive) at a lane-cheap cost. Measured at the build: kiwipete's `search()` settles none
+ * even at depth 6, so the rule's liveness is read on the endgame.
+ */
+const DEEPER_FEN = "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1"; // position-3: 4 and 3 deeper cuts at the build
+const DEEPER_DEPTH = 5;
 
 const fenOf = (name: string): string =>
   (PERFT_CORPUS.find((entry) => entry.name === name) as { fen: string }).fen;
@@ -160,8 +193,10 @@ describe("A4 — a mate score is correct at every ply the position is reached at
     const move = legalMoves(parseFen(fenOf("startpos")))[0] as Move;
     storeEntry(key, 3, BOUND_EXACT, MATE_SCORE - 4, 1, move);
     const slot = probeTable(key);
-    expect(tableCutoff(slot, 3, -Infinity, Infinity, 1)).toBe(MATE_SCORE - 4);
-    expect(tableCutoff(slot, 3, -Infinity, Infinity, 3)).toBe(MATE_SCORE - 6);
+    for (const deeper of [false, true]) {
+      expect(tableCutoff(slot, 3, -Infinity, Infinity, 1, deeper)).toBe(MATE_SCORE - 4);
+      expect(tableCutoff(slot, 3, -Infinity, Infinity, 3, deeper)).toBe(MATE_SCORE - 6);
+    }
   });
 
   it("a mated-in-2 stored at ply 2 reads -(MATE_SCORE - 6) at ply 2 and -(MATE_SCORE - 8) at ply 4", () => {
@@ -170,8 +205,10 @@ describe("A4 — a mate score is correct at every ply the position is reached at
     const move = legalMoves(parseFen(fenOf("kiwipete")))[0] as Move;
     storeEntry(key, 4, BOUND_EXACT, 0 - (MATE_SCORE - 6), 2, move);
     const slot = probeTable(key);
-    expect(tableCutoff(slot, 4, -Infinity, Infinity, 2)).toBe(0 - (MATE_SCORE - 6));
-    expect(tableCutoff(slot, 4, -Infinity, Infinity, 4)).toBe(0 - (MATE_SCORE - 8));
+    for (const deeper of [false, true]) {
+      expect(tableCutoff(slot, 4, -Infinity, Infinity, 2, deeper)).toBe(0 - (MATE_SCORE - 6));
+      expect(tableCutoff(slot, 4, -Infinity, Infinity, 4, deeper)).toBe(0 - (MATE_SCORE - 8));
+    }
   });
 
   it("leaves an ordinary score alone at every ply", () => {
@@ -179,7 +216,9 @@ describe("A4 — a mate score is correct at every ply the position is reached at
     const key = zobristKey(parseFen(fenOf("position-3")));
     const move = legalMoves(parseFen(fenOf("position-3")))[0] as Move;
     storeEntry(key, 2, BOUND_EXACT, 9_000, 3, move);
-    expect(tableCutoff(probeTable(key), 2, -Infinity, Infinity, 7)).toBe(9_000);
+    for (const deeper of [false, true]) {
+      expect(tableCutoff(probeTable(key), 2, -Infinity, Infinity, 7, deeper)).toBe(9_000);
+    }
   });
 
   it("MATE_FLOOR sits below every mate score the search can report", () => {
@@ -233,10 +272,90 @@ describe("A4 — a mate score is correct at every ply the position is reached at
 });
 
 // ---------------------------------------------------------------------------
+// ABC-238 (`ADR-0058` decisions 1 and 6) — a deeper stored entry settles a shallower node, with
+// the bound rules unchanged; the predicate rows the rule's correctness rests on, the switch on and
+// off. The search-level oracle (drift, the mate sign floor, `A4`) is in `src/search.deeper-cutoffs.test.ts`.
+// ---------------------------------------------------------------------------
+
+describe("ABC-238 — a deeper stored entry may cut off a shallower search (the predicate)", () => {
+  const position = () => parseFen(fenOf("position-3"));
+  const key = () => zobristKey(position());
+  const move = () => legalMoves(position())[0] as Move;
+  const store = (depth: number, bound: number, score: number, ply = 0): number => {
+    clearTable();
+    storeEntry(key(), depth, bound, score, ply, move());
+    return probeTable(key());
+  };
+
+  it("A2: an exact entry stored at depth 8 settles a depth-5 probe with the stored score; the door's rule does not", () => {
+    const slot = store(8, BOUND_EXACT, 40);
+    expect(tableCutoff(slot, 5, -Infinity, Infinity, 0, true)).toBe(40);
+    expect(tableCutoff(slot, 5, -Infinity, Infinity, 0, false)).toBeNull();
+  });
+
+  it("a shallower entry never settles a node, switch on or off", () => {
+    const slot = store(3, BOUND_EXACT, 40);
+    for (const deeper of [false, true]) {
+      expect(tableCutoff(slot, 4, -Infinity, Infinity, 0, deeper)).toBeNull();
+      expect(tableCutoff(slot, 8, -Infinity, Infinity, 0, deeper)).toBeNull();
+    }
+  });
+
+  it("at the stored depth the two rules agree, every bound", () => {
+    for (const bound of [BOUND_EXACT, BOUND_LOWER, BOUND_UPPER]) {
+      const slot = store(5, bound, 50);
+      for (const [alpha, beta] of [
+        [0, 50],
+        [0, 51],
+        [50, 100],
+        [49, 100],
+        [-Infinity, Infinity],
+      ] as const) {
+        expect(tableCutoff(slot, 5, alpha, beta, 0, true)).toBe(
+          tableCutoff(slot, 5, alpha, beta, 0, false),
+        );
+      }
+    }
+  });
+
+  it("a deeper exact entry returns its score whatever the window, fail-soft, never clamped", () => {
+    const slot = store(8, BOUND_EXACT, 50);
+    expect(tableCutoff(slot, 5, 100, 200, 0, true)).toBe(50);
+    expect(tableCutoff(slot, 5, -200, -100, 0, true)).toBe(50);
+  });
+
+  it("a deeper lower bound cuts only at or above beta, as stored; never at or below alpha", () => {
+    const slot = store(8, BOUND_LOWER, 50);
+    expect(tableCutoff(slot, 5, 0, 50, 0, true)).toBe(50);
+    expect(tableCutoff(slot, 5, 0, 40, 0, true)).toBe(50); // fail-soft: 50, not beta's 40
+    expect(tableCutoff(slot, 5, 0, 51, 0, true)).toBeNull();
+    expect(tableCutoff(slot, 5, 60, 100, 0, true)).toBeNull(); // below alpha: a lower bound says nothing
+    for (const beta of [40, 50, 51]) expect(tableCutoff(slot, 5, 0, beta, 0, false)).toBeNull();
+  });
+
+  it("a deeper upper bound cuts only at or below alpha, as stored; never at or above beta", () => {
+    const slot = store(8, BOUND_UPPER, 50);
+    expect(tableCutoff(slot, 5, 50, 100, 0, true)).toBe(50);
+    expect(tableCutoff(slot, 5, 60, 100, 0, true)).toBe(50); // fail-soft: 50, not alpha's 60
+    expect(tableCutoff(slot, 5, 49, 100, 0, true)).toBeNull();
+    expect(tableCutoff(slot, 5, 0, 40, 0, true)).toBeNull(); // above beta: an upper bound says nothing
+    for (const alpha of [60, 50, 49]) expect(tableCutoff(slot, 5, alpha, 100, 0, false)).toBeNull();
+  });
+
+  it("a deeper mate entry is restored to the probing ply: mate-in-2 stored at ply 1, depth 8, reads MATE_SCORE - 6 at ply 3, depth 5", () => {
+    const slot = store(8, BOUND_EXACT, MATE_SCORE - 4, 1);
+    expect(tableCutoff(slot, 5, -Infinity, Infinity, 3, true)).toBe(MATE_SCORE - 6);
+    expect(tableCutoff(slot, 5, -Infinity, Infinity, 3, false)).toBeNull();
+    const mated = store(8, BOUND_UPPER, 0 - (MATE_SCORE - 6), 2);
+    expect(tableCutoff(mated, 1, 0, 1, 4, true)).toBe(0 - (MATE_SCORE - 8));
+  });
+});
+
+// ---------------------------------------------------------------------------
 // The table itself — the logic beneath A1/A2/A7, one rule per case.
 // ---------------------------------------------------------------------------
 
-describe("the table — verified keys, always-replace, cutoffs only at the stored depth", () => {
+describe("the table — verified keys, always-replace, and with deeper cutoffs off (the doors) cutoffs only at the stored depth", () => {
   const position = () => parseFen(fenOf("position-3"));
   const key = () => zobristKey(position());
   const move = () => legalMoves(position())[0] as Move;
@@ -264,23 +383,25 @@ describe("the table — verified keys, always-replace, cutoffs only at the store
     expect(probeTable(key())).toBe(-1);
   });
 
-  it("settles a node only at the depth the entry was searched to", () => {
+  it("with deeper cutoffs off, settles a node only at the depth the entry was searched to", () => {
     clearTable();
     storeEntry(key(), 3, BOUND_EXACT, 40, 0, move());
     const slot = probeTable(key());
-    expect(tableCutoff(slot, 3, -Infinity, Infinity, 0)).toBe(40);
-    expect(tableCutoff(slot, 2, -Infinity, Infinity, 0)).toBeNull();
-    expect(tableCutoff(slot, 4, -Infinity, Infinity, 0)).toBeNull();
+    expect(tableCutoff(slot, 3, -Infinity, Infinity, 0, false)).toBe(40);
+    expect(tableCutoff(slot, 2, -Infinity, Infinity, 0, false)).toBeNull();
+    expect(tableCutoff(slot, 4, -Infinity, Infinity, 0, false)).toBeNull();
   });
 
   it("cuts on a lower bound only at or above beta, on an upper bound only at or below alpha", () => {
     clearTable();
-    storeEntry(key(), 2, BOUND_LOWER, 50, 0, move());
-    expect(tableCutoff(probeTable(key()), 2, 0, 50, 0)).toBe(50);
-    expect(tableCutoff(probeTable(key()), 2, 0, 51, 0)).toBeNull();
-    storeEntry(key(), 2, BOUND_UPPER, 50, 0, move());
-    expect(tableCutoff(probeTable(key()), 2, 50, 100, 0)).toBe(50);
-    expect(tableCutoff(probeTable(key()), 2, 49, 100, 0)).toBeNull();
+    for (const deeper of [false, true]) {
+      storeEntry(key(), 2, BOUND_LOWER, 50, 0, move());
+      expect(tableCutoff(probeTable(key()), 2, 0, 50, 0, deeper)).toBe(50);
+      expect(tableCutoff(probeTable(key()), 2, 0, 51, 0, deeper)).toBeNull();
+      storeEntry(key(), 2, BOUND_UPPER, 50, 0, move());
+      expect(tableCutoff(probeTable(key()), 2, 50, 100, 0, deeper)).toBe(50);
+      expect(tableCutoff(probeTable(key()), 2, 49, 100, 0, deeper)).toBeNull();
+    }
   });
 
   it("classifies a fail-soft result against the window the node was entered with", () => {
@@ -702,3 +823,216 @@ describe("A7 — the table holds a fixed 4 MiB, whatever the search", () => {
     }, 60_000);
   }
 });
+
+// ---------------------------------------------------------------------------
+// ABC-238 (`ADR-0058`) in the search — the switch literals, the rule alive in both recursions, and,
+// under `SEARCH_DEEP=1`, the bounded oracle (decision 6), `A4`, and the firing rate (decision 9).
+// `A1` (the doors node for node against the pre-ticket shipped path, `G4`) compares two builds and
+// runs out of tree, as `ABC-208` / `ABC-229`'s did.
+// ---------------------------------------------------------------------------
+
+/** `chooseMove`-shaped `choose` on a frozen clock, deepened to exactly `depth`. */
+const deepenWith = (choose: typeof chooseMove, fen: string, depth: number): EngineChoice =>
+  choose(parseFen(fen), { budgetMs: 1_000, now: () => 0, maxDepth: depth }) as EngineChoice;
+
+/** Nodes a deeper entry settled while `body` ran. */
+function deeperCutsDuring(body: () => unknown): number {
+  seen.deeperCuts = 0;
+  body();
+  return seen.deeperCuts;
+}
+
+describe("ABC-238 — deeperCutoffs is on in search() and chooseMove only, and a deeper entry settles nodes there", () => {
+  const ENTRIES = [
+    { path: "./search.ts", call: "searchRoot(position, depth, {", on: "search" },
+    { path: "./engine.ts", call: "deepen(position, options, {", on: "chooseMove" },
+  ];
+  for (const { path, call, on } of ENTRIES) {
+    it(`${path}: each exported entry passes exactly one deeperCutoffs literal, and only ${on}'s is true`, () => {
+      const flat = readFileSync(new URL(path, import.meta.url), "utf8").replace(/\s+/g, " ");
+      const found: Array<[string, string]> = [];
+      for (const chunk of flat.split("export function ").slice(1)) {
+        if (!chunk.includes(call)) continue;
+        const literals = [...chunk.matchAll(/deeperCutoffs: (true|false)\b/g)].map((m) => m[1]);
+        const name = chunk.slice(0, chunk.indexOf("("));
+        expect(literals, name).toHaveLength(1);
+        found.push([name, literals[0] as string]);
+      }
+      expect(found.length).toBeGreaterThanOrEqual(path === "./search.ts" ? 13 : 7);
+      expect(found.filter(([, value]) => value === "true")).toEqual([[on, "true"]]);
+    });
+  }
+
+  it("search() and chooseMove settle nodes by a deeper entry on DEEPER_FEN; their doors settle none", () => {
+    expect(deeperCutsDuring(() => search(parseFen(DEEPER_FEN), DEEPER_DEPTH))).toBeGreaterThan(0);
+    expect(
+      deeperCutsDuring(() => searchWithoutDeeperCutoffs(parseFen(DEEPER_FEN), DEEPER_DEPTH)),
+    ).toBe(0);
+    expect(
+      deeperCutsDuring(() => deepenWith(chooseMove, DEEPER_FEN, DEEPER_DEPTH)),
+    ).toBeGreaterThan(0);
+    expect(
+      deeperCutsDuring(() => deepenWith(chooseMoveWithoutDeeperCutoffs, DEEPER_FEN, DEEPER_DEPTH)),
+    ).toBe(0);
+  });
+});
+
+if (RUN_SEARCH_DEEP) {
+  const isMate = (score: number): boolean => Math.abs(score) > MATE_SCORE - 1_000;
+
+  /** `src/engine.test.ts`'s mate- and stalemate-adjacent endgames: the 190's last six. */
+  const ENDGAMES = [
+    "k7/8/1K6/8/8/8/8/1Q6 w - - 0 1",
+    "k7/8/1K6/8/8/8/8/1R6 w - - 0 1",
+    "7k/8/6K1/8/8/8/8/6Q1 w - - 0 1",
+    "8/8/8/4k3/8/8/4P3/4K3 w - - 0 1",
+    "8/8/8/8/8/k7/8/KR6 w - - 0 1",
+    "8/6p1/8/8/8/8/1P6/k1K5 w - - 0 1",
+  ];
+
+  /** `ABC-121`'s 190: the six roots, each one's in-progress children, the endgames. */
+  const corpus190 = (): { name: string; fen: string }[] => {
+    const out: { name: string; fen: string }[] = [];
+    for (const { name, fen } of PERFT_CORPUS) {
+      out.push({ name, fen });
+      const position = parseFen(fen);
+      for (const move of legalMoves(position)) {
+        const undo = makeMove(position, move);
+        if (gameStatus(position).result === "in-progress") {
+          out.push({ name: `${name}/${label(move)}`, fen: toFen(position) });
+        }
+        unmakeMove(position, move, undo);
+      }
+    }
+    return [...out, ...ENDGAMES.map((fen, i) => ({ name: `endgame-${i}`, fen }))];
+  };
+
+  /**
+   * `A3`'s bar on the 190: >= 95 % of the non-mate rows within 25 cp of the door, and no score
+   * where either side is a mate changes sign. The largest drift is a REPORT (`ADR-0058` decision 6:
+   * a deeper entry legitimately reports what a deeper search saw), as is the mate-status count.
+   */
+  const driftBar = (
+    on: (fen: string) => number,
+    door: (fen: string) => number,
+    what: string,
+  ): void => {
+    const deltas: Array<[number, string]> = [];
+    const signFlips: string[] = [];
+    let statusChanges = 0;
+    for (const { name, fen } of corpus190()) {
+      const ref = door(fen);
+      const got = on(fen);
+      if (isMate(ref) || isMate(got)) {
+        if (Math.sign(ref) !== Math.sign(got)) signFlips.push(`${name}: ${ref} -> ${got}`);
+        if (isMate(ref) !== isMate(got)) statusChanges++;
+        continue;
+      }
+      deltas.push([Math.abs(got - ref), `${name}: ${ref} -> ${got}`]);
+    }
+    deltas.sort((a, b) => b[0] - a[0]);
+    const within25 = deltas.filter(([delta]) => delta <= 25).length / deltas.length;
+    console.log(
+      `ABC-238 A3 ${what}: ${(100 * within25).toFixed(2)}% within 25 cp of ${deltas.length}, ` +
+        `max ${deltas[0]?.[0] ?? 0} cp (${deltas[0]?.[1] ?? ""}), a report; ` +
+        `moved ${deltas.filter(([delta]) => delta > 0).length}; mate sign flips ${signFlips.length}; ` +
+        `mate-status changes ${statusChanges} (a report)`,
+    );
+    expect(deltas.length).toBeGreaterThanOrEqual(100);
+    expect(within25).toBeGreaterThanOrEqual(0.95);
+    expect(signFlips).toEqual([]);
+  };
+
+  describe("ABC-238 A3 — bounded drift against the deeper-cutoff doors, depth 5, the 190 [deep, SEARCH_DEEP=1]", () => {
+    it("the corpus is the 190", () => {
+      expect(corpus190()).toHaveLength(190);
+    });
+
+    it("search() against searchWithoutDeeperCutoffs at fixed depth 5: >= 95% within 25 cp, 0 mate sign flips [deep, SEARCH_DEEP=1]", () => {
+      driftBar(
+        (fen) => search(parseFen(fen), 5).score,
+        (fen) => searchWithoutDeeperCutoffs(parseFen(fen), 5).score,
+        "search() d5",
+      );
+    }, 600_000);
+
+    it("chooseMove against chooseMoveWithoutDeeperCutoffs deepened to 5: >= 95% within 25 cp, 0 mate sign flips [deep, SEARCH_DEEP=1]", () => {
+      driftBar(
+        (fen) => deepenWith(chooseMove, fen, 5).score,
+        (fen) => deepenWith(chooseMoveWithoutDeeperCutoffs, fen, 5).score,
+        "chooseMove to d5",
+      );
+    }, 600_000);
+  });
+
+  describe("ABC-238 — the mate sign floor on the 287 at depth 5 [deep, SEARCH_DEEP=1]", () => {
+    it("every mate searchWithoutDeeperCutoffs scores at depth 5, search() scores as a mate of the same sign; the distance is reported [deep, SEARCH_DEEP=1]", () => {
+      let mates = 0;
+      let distanceChanged = 0;
+      const violations: string[] = [];
+      for (const fen of MATE_CORPUS) {
+        const ref = searchWithoutDeeperCutoffs(parseFen(fen), 5).score;
+        if (!isMate(ref)) continue;
+        mates++;
+        const got = search(parseFen(fen), 5).score;
+        if (!isMate(got) || Math.sign(got) !== Math.sign(ref)) {
+          violations.push(`${fen}: ${ref} on the door, ${got} shipped, depth 5`);
+        } else if (got !== ref) {
+          distanceChanged++;
+        }
+      }
+      console.log(
+        `ABC-238 mate sign floor d5: ${violations.length} of ${mates} violated; ` +
+          `${distanceChanged} mate distances changed (a report)`,
+      );
+      expect(mates).toBeGreaterThanOrEqual(100);
+      expect(violations).toEqual([]);
+    }, 300_000);
+  });
+
+  describe("ABC-238 A4 — search(…, 8).nodes against the door on kiwipete and position-6, REPORTED [deep, SEARCH_DEEP=1]", () => {
+    /**
+     * `A4`'s bar is nodes <= 0.95 x the door's on both boards (`ADR-0058` falsifier F4). It is NOT
+     * MET at this build: kiwipete 1 109 987 / 1 116 785 = 0.9939 x, position-6 1 595 656 /
+     * 1 602 457 = 0.9958 x (`se-ABC-238`). The ratio is printed and the row holds only that the
+     * rule never adds work here and leaves score and move alone; the 0.95 x verdict is recorded in
+     * the notes, not hidden in a re-levelled bar.
+     */
+    for (const name of ["kiwipete", "position-6"]) {
+      it(`${name} at depth 8 [deep, SEARCH_DEEP=1]`, () => {
+        const head = search(parseFen(fenOf(name)), 8);
+        const door = searchWithoutDeeperCutoffs(parseFen(fenOf(name)), 8);
+        console.log(
+          `ABC-238 A4 ${name} d8: ${head.nodes} / ${door.nodes} = ${(head.nodes / door.nodes).toFixed(4)}x ` +
+            `(bar 0.95x); score ${door.score} -> ${head.score}`,
+        );
+        expect(head.nodes).toBeLessThan(door.nodes);
+      }, 120_000);
+    }
+  });
+
+  describe("ABC-238 — the firing rate at depth 6 on the 190, REPORTED (ADR-0058 decision 9) [deep, SEARCH_DEEP=1]", () => {
+    it("the share of probes a deeper entry settles, search() at fixed depth 6 and chooseMove deepened to 6 [deep, SEARCH_DEEP=1]", () => {
+      for (const [what, run] of [
+        ["search() d6", (fen: string) => search(parseFen(fen), 6)],
+        ["chooseMove to d6", (fen: string) => deepenWith(chooseMove, fen, 6)],
+      ] as const) {
+        let probes = 0;
+        let hits = 0;
+        let cuts = 0;
+        for (const { fen } of corpus190()) {
+          seen.probes = 0;
+          seen.hits = 0;
+          cuts += deeperCutsDuring(() => run(fen));
+          probes += seen.probes;
+          hits += seen.hits;
+        }
+        console.log(
+          `ABC-238 firing rate ${what}: ${cuts} deeper cuts / ${probes} probes = ` +
+            `${((100 * cuts) / probes).toFixed(3)}% (${((100 * cuts) / hits).toFixed(3)}% of ${hits} hits)`,
+        );
+        expect(cuts).toBeGreaterThan(0);
+      }
+    }, 600_000);
+  });
+}

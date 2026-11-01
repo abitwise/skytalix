@@ -79,6 +79,13 @@
  * switch, `quietPromotions`, joins `quiescenceEvasions` in picking the constant record. It changes
  * the VALUE, so every door older than `ABC-229` turns it off, and `search()` is held to the
  * TEST-ONLY door `searchWithoutQuietPromotions`, the pre-`ABC-229` `search()`, by a bounded oracle.
+ *
+ * DEEPER-ENTRY TABLE CUTOFFS (ABC-238, `ADR-0058`): an entry searched to at least the remaining
+ * depth settles a node, with the bound rules unchanged; the root still never cuts, and the probe
+ * still follows the repetition check. Its switch, `deeperCutoffs`, reaches `tableCutoff` as an
+ * argument. It changes the VALUE, so every door older than `ABC-238` turns it off and cuts at the
+ * exact stored depth only, and `search()` is held to the TEST-ONLY door
+ * `searchWithoutDeeperCutoffs`, the pre-`ABC-238` `search()`, by a bounded oracle (decision 6).
  */
 
 import { makeMove, makeNullMove, unmakeMove, unmakeNullMove } from "./apply.ts";
@@ -302,6 +309,13 @@ interface Switches {
    * `search()` only; every older door, `searchWithoutQuiescenceEvasions` included, turns it off.
    */
   readonly quietPromotions: boolean;
+  /**
+   * Deeper-entry table cutoffs (`ABC-238`, `ADR-0058`): an entry searched to at least the remaining
+   * depth settles a node, by `tableCutoff`'s `deeper` argument. True on `search()` only; its door
+   * `searchWithoutDeeperCutoffs` and every older door turn it off, so each cuts at the exact stored
+   * depth and reproduces its pre-`ABC-238` self node for node (`ADR-0058` decisions 3 and 4).
+   */
+  readonly deeperCutoffs: boolean;
 }
 
 /** The least remaining depth, and the least 0-based index in the ordered list, a reduced move has. */
@@ -471,7 +485,7 @@ function negamax(
 
   const slot = switches.table ? probeTable(key) : -1;
   if (slot !== -1) {
-    const settled = tableCutoff(slot, depth, alpha, beta, ply);
+    const settled = tableCutoff(slot, depth, alpha, beta, ply, switches.deeperCutoffs);
     if (settled !== null) return settled;
   }
 
@@ -739,6 +753,29 @@ export function search(position: Position, depth: number): SearchResult {
     nullMove: true,
     quiescenceEvasions: true,
     quietPromotions: true,
+    deeperCutoffs: true,
+  });
+}
+
+/**
+ * TEST-ONLY. The pre-`ABC-238` `search()`, node for node: deeper-entry table cutoffs off, so an
+ * entry cuts only at its exact stored depth, and everything else on. It is the reference
+ * `ABC-238`'s bounded drift oracle compares `search()` against, and the shipped side of every
+ * older row that measures its own heuristic alone (`ADR-0058` decisions 3 and 5). Not an engine
+ * option; nothing in production calls it.
+ */
+export function searchWithoutDeeperCutoffs(position: Position, depth: number): SearchResult {
+  return searchRoot(position, depth, {
+    prune: true,
+    quiescence: true,
+    ordering: "full",
+    table: true,
+    pvs: true,
+    reductions: true,
+    nullMove: true,
+    quiescenceEvasions: true,
+    quietPromotions: true,
+    deeperCutoffs: false,
   });
 }
 
@@ -760,6 +797,7 @@ export function searchWithoutQuietPromotions(position: Position, depth: number):
     nullMove: true,
     quiescenceEvasions: true,
     quietPromotions: false,
+    deeperCutoffs: false,
   });
 }
 
@@ -780,6 +818,7 @@ export function searchWithoutQuiescenceEvasions(position: Position, depth: numbe
     nullMove: true,
     quiescenceEvasions: false,
     quietPromotions: false,
+    deeperCutoffs: false,
   });
 }
 
@@ -800,6 +839,7 @@ export function searchWithoutNullMove(position: Position, depth: number): Search
     nullMove: false,
     quiescenceEvasions: false,
     quietPromotions: false,
+    deeperCutoffs: false,
   });
 }
 
@@ -824,6 +864,7 @@ export function searchWithoutPruning(position: Position, depth: number): SearchR
     nullMove: false,
     quiescenceEvasions: false,
     quietPromotions: false,
+    deeperCutoffs: false,
   });
 }
 
@@ -846,6 +887,7 @@ export function searchWithoutQuiescence(position: Position, depth: number): Sear
     nullMove: false,
     quiescenceEvasions: false,
     quietPromotions: false,
+    deeperCutoffs: false,
   });
 }
 
@@ -870,6 +912,7 @@ export function searchWithoutPruningOrQuiescence(position: Position, depth: numb
     nullMove: false,
     quiescenceEvasions: false,
     quietPromotions: false,
+    deeperCutoffs: false,
   });
 }
 
@@ -890,6 +933,7 @@ export function searchWithoutOrdering(position: Position, depth: number): Search
     nullMove: false,
     quiescenceEvasions: false,
     quietPromotions: false,
+    deeperCutoffs: false,
   });
 }
 
@@ -909,6 +953,7 @@ export function searchWithoutKillers(position: Position, depth: number): SearchR
     nullMove: false,
     quiescenceEvasions: false,
     quietPromotions: false,
+    deeperCutoffs: false,
   });
 }
 
@@ -929,6 +974,7 @@ export function searchWithoutTable(position: Position, depth: number): SearchRes
     nullMove: false,
     quiescenceEvasions: false,
     quietPromotions: false,
+    deeperCutoffs: false,
   });
 }
 
@@ -949,6 +995,7 @@ export function searchWithoutReductions(position: Position, depth: number): Sear
     nullMove: false,
     quiescenceEvasions: false,
     quietPromotions: false,
+    deeperCutoffs: false,
   });
 }
 
@@ -969,5 +1016,6 @@ export function searchWithoutPvsOrReductions(position: Position, depth: number):
     nullMove: false,
     quiescenceEvasions: false,
     quietPromotions: false,
+    deeperCutoffs: false,
   });
 }

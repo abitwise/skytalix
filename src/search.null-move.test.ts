@@ -424,13 +424,14 @@ describe("the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn
   }
 });
 
-describe("QE-208-c — every door's nullMove switch literal is false; only the shipped path and the ABC-228 and ABC-229 doors turn it on", () => {
+describe("QE-208-c — every door's nullMove switch literal is false; only the shipped path and the ABC-228, ABC-229 and ABC-238 doors turn it on", () => {
   const MODULES = [
     {
       path: "./search.ts",
       call: "searchRoot(position, depth, {",
       doors: {
         search: "true",
+        searchWithoutDeeperCutoffs: "true",
         searchWithoutQuietPromotions: "true",
         searchWithoutQuiescenceEvasions: "true",
         searchWithoutNullMove: "false",
@@ -449,6 +450,7 @@ describe("QE-208-c — every door's nullMove switch literal is false; only the s
       call: "deepen(position, options, {",
       doors: {
         chooseMove: "true",
+        chooseMoveWithoutDeeperCutoffs: "true",
         chooseMoveWithoutQuietPromotions: "true",
         chooseMoveWithoutQuiescenceEvasions: "true",
         chooseMoveWithoutNullMove: "false",
@@ -459,7 +461,7 @@ describe("QE-208-c — every door's nullMove switch literal is false; only the s
   ];
 
   for (const { path, call, doors } of MODULES) {
-    it(`${path}: each exported entry passes exactly one nullMove literal, and only the shipped one and its ABC-228 and ABC-229 doors are true`, () => {
+    it(`${path}: each exported entry passes exactly one nullMove literal, and only the shipped one and its ABC-228, ABC-229 and ABC-238 doors are true`, () => {
       const flat = readFileSync(new URL(path, import.meta.url), "utf8").replace(/\s+/g, " ");
       const found: Record<string, string> = {};
       for (const chunk of flat.split("export function ").slice(1)) {
