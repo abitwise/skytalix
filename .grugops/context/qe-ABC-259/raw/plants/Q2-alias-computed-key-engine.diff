@@ -1,0 +1,11 @@
+diff -ru src/engine.ts /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-259/plants/Q2-alias-computed-key-engine//src/engine.ts
+--- src/engine.ts	2026-11-01 16:57:47.389597696 +0000
++++ /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-259/plants/Q2-alias-computed-key-engine//src/engine.ts	2026-11-01 17:17:55.049916167 +0000
+@@ -702,6 +702,7 @@
+ ): EngineChoice | null {
+   const now = options.now ?? Date.now;
+   const start = now();
++  if ((options as unknown as Record<string, number>)["budget" + "Ms"] <= 100) { void 0; }
+   const budget: Budget = {
+     now,
+     // `Math.min` and NOT an `if`: it preserves every degenerate budget already measured safe

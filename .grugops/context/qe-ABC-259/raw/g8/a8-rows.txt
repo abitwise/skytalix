@@ -1,0 +1,6 @@
+g8-1-base.last-run.json total 2362 passed 2362 failed 0 pending+todo 0 | levels passed 46 skipped 0 | ABC-259 rows 0  sum 0.00 ms
+g8-2-head.last-run.json total 2365 passed 2365 failed 0 pending+todo 0 | levels passed 49 skipped 0 | ABC-259 rows 3 passed:0.27 passed:0.14 passed:0.53 sum 0.95 ms
+g8-3-head.last-run.json total 2365 passed 2365 failed 0 pending+todo 0 | levels passed 49 skipped 0 | ABC-259 rows 3 passed:0.28 passed:0.17 passed:0.46 sum 0.91 ms
+g8-4-base.last-run.json total 2362 passed 2362 failed 0 pending+todo 0 | levels passed 46 skipped 0 | ABC-259 rows 0  sum 0.00 ms
+g8-5-base.last-run.json total 2362 passed 2362 failed 0 pending+todo 0 | levels passed 46 skipped 0 | ABC-259 rows 0  sum 0.00 ms
+g8-6-head.last-run.json total 2365 passed 2365 failed 0 pending+todo 0 | levels passed 49 skipped 0 | ABC-259 rows 3 passed:0.27 passed:0.17 passed:0.41 sum 0.85 ms

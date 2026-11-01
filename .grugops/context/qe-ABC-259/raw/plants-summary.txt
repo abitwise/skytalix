@@ -1,0 +1,56 @@
+A2b-search-true-read pass=2 fail=1 skip=46 total=49
+    FAILED budget rule  :: AssertionError: expected 'src/search.ts: budget rule — budgetMs…' to be '' // Object.is equality
+    PASS environment rule 
+    PASS test-flag rule 
+A2-engine pass=2 fail=1 skip=46 total=49
+    FAILED budget rule  :: AssertionError: expected 'src/engine.ts: budget rule — budgetMs…' to be '' // Object.is equality
+    PASS environment rule 
+    PASS test-flag rule 
+A2-search pass=3 fail=0 skip=46 total=49
+    PASS budget rule 
+    PASS environment rule 
+    PASS test-flag rule 
+A3-search pass=2 fail=1 skip=46 total=49
+    PASS budget rule 
+    FAILED environment rule  :: AssertionError: expected 'src/search.ts: environment rule — pro…' to be '' // Object.is equality
+    PASS test-flag rule 
+A4-evaluate pass=2 fail=1 skip=46 total=49
+    PASS budget rule 
+    PASS environment rule 
+    FAILED test-flag rule  :: AssertionError: expected 'src/evaluate.ts: test-flag rule — SEA…' to be '' // Object.is equality
+A5-quiescence pass=3 fail=0 skip=46 total=49
+    PASS budget rule 
+    PASS environment rule 
+    PASS test-flag rule 
+C0-control pass=3 fail=0 skip=46 total=49
+    PASS budget rule 
+    PASS environment rule 
+    PASS test-flag rule 
+Q1-alias-destructure-engine pass=2 fail=1 skip=46 total=49
+    FAILED budget rule  :: AssertionError: expected 'src/engine.ts: budget rule — budgetMs…' to be '' // Object.is equality
+    PASS environment rule 
+    PASS test-flag rule 
+Q2-alias-computed-key-engine pass=3 fail=0 skip=46 total=49
+    PASS budget rule 
+    PASS environment rule 
+    PASS test-flag rule 
+Q3-deadline-threshold-engine pass=3 fail=0 skip=46 total=49
+    PASS budget rule 
+    PASS environment rule 
+    PASS test-flag rule 
+Q4-deep-const-transposition pass=2 fail=1 skip=46 total=49
+    PASS budget rule 
+    PASS environment rule 
+    FAILED test-flag rule  :: AssertionError: expected 'src/transposition.ts: test-flag rule …' to be '' // Object.is equality
+Q5-env-named-import-search pass=3 fail=0 skip=46 total=49
+    PASS budget rule 
+    PASS environment rule 
+    PASS test-flag rule 
+Q6-string-slashstar-hides-search pass=3 fail=0 skip=46 total=49
+    PASS budget rule 
+    PASS environment rule 
+    PASS test-flag rule 
+Q7-string-slashslash-hides-engine pass=3 fail=0 skip=46 total=49
+    PASS budget rule 
+    PASS environment rule 
+    PASS test-flag rule 
