@@ -1,0 +1,379 @@
+{
+ "base": "46365ed0",
+ "frozenAt": "2026-11-01T07:23:59.612Z",
+ "mutants": [
+  {
+   "id": "engine-no-finally",
+   "source": "qe-ABC-208 plants.mjs",
+   "edits": [
+    {
+     "file": "src/engine.ts",
+     "find": "} finally {\n        unmakeNullMove(position, nullUndo);\n      }",
+     "repl": "} catch (e) {\n        throw e;\n      }\n      unmakeNullMove(position, nullUndo);"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "search-stale-null-key",
+   "source": "qe-ABC-208 plants.mjs",
+   "edits": [
+    {
+     "file": "src/search.ts",
+     "find": "      keys[ply + 1] = zobristKeyAfterNullMove(key, nullUndo);\n",
+     "repl": ""
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "engine-stale-null-key",
+   "source": "qe-ABC-208 plants.mjs",
+   "edits": [
+    {
+     "file": "src/engine.ts",
+     "find": "        keys[ply + 1] = zobristKeyAfterNullMove(key, nullUndo);\n",
+     "repl": ""
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "null-in-check",
+   "source": "qe-ABC-208 plants.mjs",
+   "edits": [
+    {
+     "file": "src/search.ts",
+     "find": "  if (isInCheck(position)) return 0;\n  const board",
+     "repl": "  const board"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "double-null",
+   "source": "qe-ABC-208 plants.mjs",
+   "edits": [
+    {
+     "file": "src/search.ts",
+     "find": "if (ply === 0 || afterNull || depth",
+     "repl": "if (ply === 0 || depth"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "return-null-score",
+   "source": "qe-ABC-208 plants.mjs",
+   "edits": [
+    {
+     "file": "src/search.ts",
+     "find": "if (nullScore >= beta) return beta;",
+     "repl": "if (nullScore >= beta) return nullScore;"
+    },
+    {
+     "file": "src/engine.ts",
+     "find": "if (nullScore >= beta) return beta;",
+     "repl": "if (nullScore >= beta) return nullScore;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "no-halfmove-reset",
+   "source": "qe-ABC-208 plants.mjs",
+   "edits": [
+    {
+     "file": "src/apply.ts",
+     "find": "  position.halfmoveClock = 0;\n  if (position.blackToMove) position.fullmoveNumber++;",
+     "repl": "  if (position.blackToMove) position.fullmoveNumber++;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "no-material-guard",
+   "source": "qe-ABC-208 plants.mjs",
+   "edits": [
+    {
+     "file": "src/search.ts",
+     "find": "  const board = position.board;\n  let pieces = 0;",
+     "repl": "  return NULL_MOVE_REDUCTION;\n  const board = position.board;\n  let pieces = 0;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "guard-1",
+   "source": "qe-ABC-208 plants.mjs",
+   "edits": [
+    {
+     "file": "src/search.ts",
+     "find": "const NULL_MOVE_MIN_PIECES = 3;",
+     "repl": "const NULL_MOVE_MIN_PIECES = 1;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "guard-2",
+   "source": "qe-ABC-208 plants.mjs",
+   "edits": [
+    {
+     "file": "src/search.ts",
+     "find": "const NULL_MOVE_MIN_PIECES = 3;",
+     "repl": "const NULL_MOVE_MIN_PIECES = 2;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "guard-4",
+   "source": "qe-ABC-208 plants.mjs",
+   "edits": [
+    {
+     "file": "src/search.ts",
+     "find": "const NULL_MOVE_MIN_PIECES = 3;",
+     "repl": "const NULL_MOVE_MIN_PIECES = 4;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "R-2",
+   "source": "qe-ABC-208 plants.mjs",
+   "edits": [
+    {
+     "file": "src/search.ts",
+     "find": "const NULL_MOVE_REDUCTION = 3;",
+     "repl": "const NULL_MOVE_REDUCTION = 2;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "R-5",
+   "source": "qe-ABC-208 plants.mjs",
+   "edits": [
+    {
+     "file": "src/search.ts",
+     "find": "const NULL_MOVE_REDUCTION = 3;",
+     "repl": "const NULL_MOVE_REDUCTION = 5;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "min-depth-3",
+   "source": "qe-ABC-208 plants.mjs",
+   "edits": [
+    {
+     "file": "src/search.ts",
+     "find": "const NULL_MOVE_MIN_DEPTH = 2;",
+     "repl": "const NULL_MOVE_MIN_DEPTH = 3;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "null-everywhere-finite-beta",
+   "source": "qe-ABC-208 plants.mjs",
+   "edits": [
+    {
+     "file": "src/search.ts",
+     "find": "if (switches.nullMove && alpha + 1 === beta) {",
+     "repl": "if (switches.nullMove && Number.isFinite(beta)) {"
+    },
+    {
+     "file": "src/engine.ts",
+     "find": "if (budget.nullMove && alpha + 1 === beta) {",
+     "repl": "if (budget.nullMove && Number.isFinite(beta)) {"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "cut-without-search",
+   "source": "qe-ABC-208 plants.mjs",
+   "edits": [
+    {
+     "file": "src/search.ts",
+     "find": "if (nullScore >= beta) return beta;",
+     "repl": "return beta;"
+    },
+    {
+     "file": "src/engine.ts",
+     "find": "if (nullScore >= beta) return beta;",
+     "repl": "return beta;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "key-without-ep",
+   "source": "qe-ABC-208 plants.mjs",
+   "edits": [
+    {
+     "file": "src/zobrist.ts",
+     "find": "let key = keyBefore ^ BLACK_TO_MOVE;\n  if (undo.epSquare !== NO_SQUARE) key ^= EP_FILE[fileOf(undo.epSquare)] as bigint;",
+     "repl": "let key = keyBefore ^ BLACK_TO_MOVE;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "null-no-ep-clear",
+   "source": "qe-ABC-208 plants.mjs",
+   "edits": [
+    {
+     "file": "src/apply.ts",
+     "find": "  position.epSquare = NO_SQUARE;\n  position.halfmoveClock = 0;",
+     "repl": "  position.halfmoveClock = 0;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "null-no-fullmove",
+   "source": "qe-ABC-208 plants.mjs",
+   "edits": [
+    {
+     "file": "src/apply.ts",
+     "find": "  if (position.blackToMove) position.fullmoveNumber++;\n  position.blackToMove = !position.blackToMove;\n  return undo;",
+     "repl": "  position.blackToMove = !position.blackToMove;\n  return undo;"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "engine-R-2",
+   "source": "qe-ABC-208 plants.mjs",
+   "edits": [
+    {
+     "file": "src/engine.ts",
+     "find": "remaining - 1 - nullReduction,",
+     "repl": "remaining - nullReduction,"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "count-opponent",
+   "source": "qe-ABC-208 plants.mjs",
+   "edits": [
+    {
+     "file": "src/search.ts",
+     "find": "isBlack(piece) !== position.blackToMove) continue;\n    const type",
+     "repl": "isBlack(piece) === position.blackToMove) continue;\n    const type"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "engine-pv-nodes-too",
+   "source": "qe-ABC-208 plants.mjs",
+   "edits": [
+    {
+     "file": "src/engine.ts",
+     "find": "if (budget.nullMove && alpha + 1 === beta) {",
+     "repl": "if (budget.nullMove) {"
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "door-on:searchWithoutNullMove",
+   "source": "qe-ABC-208 plants.mjs",
+   "edits": [
+    {
+     "file": "src/search.ts",
+     "find": "nullMove: false,",
+     "repl": "nullMove: true,",
+     "anchor": "export function searchWithoutNullMove("
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "door-on:searchWithoutReductions",
+   "source": "qe-ABC-208 plants.mjs",
+   "edits": [
+    {
+     "file": "src/search.ts",
+     "find": "nullMove: false,",
+     "repl": "nullMove: true,",
+     "anchor": "export function searchWithoutReductions("
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "door-on:searchWithoutPvsOrReductions",
+   "source": "qe-ABC-208 plants.mjs",
+   "edits": [
+    {
+     "file": "src/search.ts",
+     "find": "nullMove: false,",
+     "repl": "nullMove: true,",
+     "anchor": "export function searchWithoutPvsOrReductions("
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "door-on:searchWithoutTable",
+   "source": "qe-ABC-208 plants.mjs",
+   "edits": [
+    {
+     "file": "src/search.ts",
+     "find": "nullMove: false,",
+     "repl": "nullMove: true,",
+     "anchor": "export function searchWithoutTable("
+    }
+   ],
+   "applies": true
+  },
+  {
+   "id": "door-on:chooseMoveWithoutNullMove",
+   "source": "qe-ABC-208 plants.mjs",
+   "edits": [
+    {
+     "file": "src/engine.ts",
+     "find": "nullMove: false })",
+     "repl": "nullMove: true })",
+     "anchor": "export function chooseMoveWithoutNullMove("
+    }
+   ],
+   "applies": false,
+   "notApplicable": "0 occurrences in src/engine.ts"
+  },
+  {
+   "id": "door-on:chooseMoveWithoutReductions",
+   "source": "qe-ABC-208 plants.mjs",
+   "edits": [
+    {
+     "file": "src/engine.ts",
+     "find": "nullMove: false })",
+     "repl": "nullMove: true })",
+     "anchor": "export function chooseMoveWithoutReductions("
+    }
+   ],
+   "applies": false,
+   "notApplicable": "0 occurrences in src/engine.ts"
+  },
+  {
+   "id": "door-on:chooseMoveWithoutPvsOrReductions",
+   "source": "qe-ABC-208 plants.mjs",
+   "edits": [
+    {
+     "file": "src/engine.ts",
+     "find": "nullMove: false })",
+     "repl": "nullMove: true })",
+     "anchor": "export function chooseMoveWithoutPvsOrReductions("
+    }
+   ],
+   "applies": false,
+   "notApplicable": "0 occurrences in src/engine.ts"
+  }
+ ]
+}

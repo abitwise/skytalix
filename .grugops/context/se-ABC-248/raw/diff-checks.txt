@@ -1,0 +1,42 @@
+## git diff --name-only 46365ed0 71700836
+.grugops/context/se-ABC-248/raw/PREREG.txt
+.grugops/context/se-ABC-248/raw/probe/freeze.mjs
+.grugops/context/se-ABC-248/raw/probe/frozen-plants.json
+.grugops/context/se-ABC-248/raw/probe/frozen-uci.json
+.grugops/context/se-ABC-248/raw/probe/mut.mjs
+.grugops/context/se-ABC-248/raw/probe/src-qe177-refrozen-mutants.json
+.grugops/context/se-ABC-248/raw/probe/t2c-base.json
+.grugops/context/se-ABC-248/raw/probe/t2c.probe.test.ts
+src/search.null-move.test.ts
+src/uci-session.test.ts
+## numstat
+47	0	.grugops/context/se-ABC-248/raw/PREREG.txt
+115	0	.grugops/context/se-ABC-248/raw/probe/freeze.mjs
+379	0	.grugops/context/se-ABC-248/raw/probe/frozen-plants.json
+2123	0	.grugops/context/se-ABC-248/raw/probe/frozen-uci.json
+67	0	.grugops/context/se-ABC-248/raw/probe/mut.mjs
+1357	0	.grugops/context/se-ABC-248/raw/probe/src-qe177-refrozen-mutants.json
+400	0	.grugops/context/se-ABC-248/raw/probe/t2c-base.json
+91	0	.grugops/context/se-ABC-248/raw/probe/t2c.probe.test.ts
+13	8	src/search.null-move.test.ts
+45	14	src/uci-session.test.ts
+## expect( lines changed (removed/added): 0 removed; the 6 added are the deep block's copies of the two A5 loop bodies
++        expect(out).toHaveLength(2);
++        expect(time).toBeGreaterThanOrEqual(budget);
++        expect(time).toBeLessThanOrEqual(budget + 2 * step);
++        expect(out).toHaveLength(2);
++        expect(time).toBeGreaterThanOrEqual(budget);
++        expect(time).toBeLessThanOrEqual(budget + 2 * step);
+## helpers (base vs tip text of each definition)
+uci-session.test.ts function dialogue( IDENTICAL
+uci-session.test.ts function talk( IDENTICAL
+uci-session.test.ts function parseInfo( IDENTICAL
+uci-session.test.ts function rig( IDENTICAL
+uci-session.test.ts function session220( IDENTICAL
+search.null-move.test.ts const instrument = vi.hoisted IDENTICAL
+search.null-move.test.ts const probes = vi.hoisted IDENTICAL
+search.null-move.test.ts const fenOf = IDENTICAL
+src/virtual-clock.ts: production, untouched (not in the diff)
+A5 row body occurrences (the five body lines, exact bytes): base 2 (rows loop + pinned loop); tip at the base indent 2 (the same two default loops); tip at +2 indent 2 (the deep block's two loops). [corrected: the first print subtracted the deep count by mistake]
+title template base 1 tip 2
+title template base 1 tip 2

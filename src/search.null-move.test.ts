@@ -483,10 +483,10 @@ describe("QE-208-a — an abort inside a null move's subtree still hands the roo
    * Iteration 2 tries no null move (`ABC-078` `A7`'s byte-identity row aborts there), so the sweep
    * runs into iteration 3 and beyond.
    */
-  const sweep = (fen: string, last: number) => {
+  const sweep = (fen: string, readings: readonly number[]) => {
     const mutated: string[] = [];
     let insideNull = 0;
-    for (let at = 3; at <= last; at++) {
+    for (const at of readings) {
       const position = parseFen(fen);
       const before = structuredClone(position);
       instrument.open = 0;
@@ -504,8 +504,12 @@ describe("QE-208-a — an abort inside a null move's subtree still hands the roo
     return { mutated, insideNull };
   };
 
-  it("position-6, readings 3 to 25: 0 mutated roots, and aborts landing inside a null subtree", () => {
-    const { mutated, insideNull } = sweep(fenOf("position-6"), 25);
+  // ABC-248 (ADR-0046 § Addendum 2026-10-31, T2c): the even readings only, Σ 154 of 3..25's 322.
+  it("position-6, the even readings 4 to 24: 0 mutated roots, and aborts landing inside a null subtree", () => {
+    const { mutated, insideNull } = sweep(
+      fenOf("position-6"),
+      [4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24],
+    );
     expect(mutated).toEqual([]);
     expect(insideNull).toBeGreaterThanOrEqual(3); // not vacuous: the abort lands under a pass
   });
@@ -533,15 +537,16 @@ describe("QE-208-b — the null child's key is written: every table probe reads 
     return { underNull, stale };
   };
 
-  it("search() on position-6 at depth 6", () => {
-    const position = parseFen(fenOf("position-6"));
+  // ABC-248 (ADR-0046 § Addendum 2026-10-31, T2c): re-rooted on the cheaper startpos, still at depth 6.
+  it("search() on startpos at depth 6", () => {
+    const position = parseFen(fenOf("startpos"));
     const { underNull, stale } = watch(position, () => search(position, 6));
     expect(stale).toEqual([]);
     expect(underNull).toBeGreaterThan(0); // not vacuous: null children probe
   });
 
-  it("chooseMove on position-6 deepened to 6", () => {
-    const position = parseFen(fenOf("position-6"));
+  it("chooseMove on startpos deepened to 6", () => {
+    const position = parseFen(fenOf("startpos"));
     const { underNull, stale } = watch(position, () =>
       chooseMove(position, { budgetMs: 1_000, now: () => 0, maxDepth: 6 }),
     );

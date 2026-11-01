@@ -1,0 +1,6 @@
+{"label":"H-p2","id":"CONTROL","rc":0,"ran":2362,"failed":[],"suiteErrors":0,"pending":0}
+{"label":"H-p2","id":"S241M5","rc":1,"ran":2362,"failed":["src/turn-loop.test.ts :: ABC-021 acceptance — transition 16, the draw claim > A8 — the ONE derive the loop makes on its own, ledgered: `repetitionKeyHistory` (`keyHistory` until `ABC-241`) fires on the REFUSED claim, and on no advancing ply, allowed claim or take-back (`ABC-120` `A3`-`A5`)","src/turn-loop.test.ts :: ABC-241 A3 — claimShortfall reads the repetition-key count > after 3.Ng1 a refused claim reads `repetition 2 of 3`; the twin with a legal d4xe3 reads 1"],"suiteErrors":0,"pending":0}
+{"label":"H-p2","id":"QPARITY","rc":0,"ran":2362,"failed":[],"suiteErrors":0,"pending":0}
+{"label":"H-p2","id":"QCLOCK","rc":1,"ran":2362,"failed":["src/engine.test.ts :: ABC-230 A9 and A5 — the clock and the 100-key cap bound what the search reads > A9: on the A1 fixtures with the root clock set to 0, the same keys are node-equal to base","src/engine.test.ts :: ABC-230 A9 and A5 — the clock and the 100-key cap bound what the search reads > A5: a prior key older than the root clock is never matched"],"suiteErrors":0,"pending":0}
+{"label":"H-p2","id":"QPLY4","rc":0,"ran":2362,"failed":[],"suiteErrors":0,"pending":0}
+{"label":"H-p2","id":"QPATHOFF","rc":124,"ran":0,"failed":[],"suiteErrors":0,"pending":0}

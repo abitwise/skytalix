@@ -1,0 +1,10 @@
+  for (const [index, [name, position, budget, step]] of rows.entries()) {
+    const go = goes[index] as string;
+    it(`${name}: ${go} -> ${budget} ms (within 2 x ${step} ms)`, () => {
+      const { out } = talk([position, go], step);
+      expect(out).toHaveLength(2);
+      const { time } = parseInfo(out[0]);
+      expect(time).toBeGreaterThanOrEqual(budget);
+      expect(time).toBeLessThanOrEqual(budget + 2 * step);
+    });
+  }

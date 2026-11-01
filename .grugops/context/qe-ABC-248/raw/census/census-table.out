@@ -1,0 +1,12 @@
+T2d	34836	1044	-33792	fewer	searches 1/1	A4-a2: an echoed control character in a go value is dropped 
+T2a MOVED	5140	(deep)	-5140	leaves	searches 1/-	movetime 100: go movetime 100 -> 100 ms (within 2 x 10 ms)
+T2a STAYED	45076	45076	0	same	searches 1/1	white reads wtime: go wtime 1000 btime 9000 -> 50 ms (within
+T2a STAYED	39966	39966	0	same	searches 1/1	black reads btime: go wtime 1000 btime 9000 -> 450 ms (withi
+T2a MOVED	29716	(deep)	-29716	leaves	searches 1/-	G = 3 500, under the default level 5's 4 000: go wtime 60000
+T2a MOVED	34836	(deep)	-34836	leaves	searches 1/-	a bare go: go -> 4000 ms (within 2 x 100 ms)
+T2a MOVED	15380	(deep)	-15380	leaves	searches 1/-	A5-b3: position startpos, go wtime 1000 btime 1000 movestogo
+T2c-a	265237	126881	-138356	fewer	searches 23/11	position-6, readings 3 to 25: 0 mutated roots, and aborts la
+T2c-b	154466	26703	-127763	fewer	searches 1/1	search() on position-6 at depth 6
+T2c-b	73867	23798	-50069	fewer	searches 1/1	chooseMove on position-6 deepened to 6
+H-only names not mapped: 0; other rows with a node difference: 0
+two-file default-lane nodes: B 1689340 H 1254288 delta -435052; changed rows not strictly fewer: 0

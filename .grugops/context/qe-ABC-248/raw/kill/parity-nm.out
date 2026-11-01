@@ -1,0 +1,10 @@
+CONTROL B ran 38 failed 0 pending 0 | H ran 38 failed 0 pending 0
+same ids in same order: true (26)
+killed B 26 H 26; LOST {-}; gained {-}
+survivors B {}
+survivors H {}
+suite errors B - H -
+SAME  "QE-208-a": B {engine-no-finally,min-depth-3,null-no-fullmove} H {engine-no-finally,min-depth-3,null-no-fullmove}
+SAME  "QE-208-b — the null child's key is written: every table probe reads the key of the position it probes > search()": B {R-5,key-without-ep,null-no-ep-clear,search-stale-null-key} H {R-5,key-without-ep,null-no-ep-clear,search-stale-null-key}
+SAME  "QE-208-b — the null child's key is written: every table probe reads the key of the position it probes > chooseMove": B {R-5,engine-stale-null-key,key-without-ep,null-no-ep-clear} H {R-5,engine-stale-null-key,key-without-ep,null-no-ep-clear}
+PARITY HOLDS (file level)

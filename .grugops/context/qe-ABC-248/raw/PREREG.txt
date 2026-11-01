@@ -1,0 +1,37 @@
+qe-ABC-248 PREREG — committed before any QE kill run, plant run or timed run (2026-11-01T08:03Z).
+Base B = git archive 46365ed0 (main, carries ABC-246). Head H = git archive 18bad5fb (branch tip; code 71700836,
+the only src/ tools/ data/ difference from B is src/search.null-move.test.ts + src/uci-session.test.ts; 71700836..18bad5fb
+touches no src/). One node_modules symlink to the main checkout (package.json / lock / configs equal at B, H, main).
+
+LISTS (reused, NOT re-frozen by QE; verified before use)
+- SE frozen-uci.json   sha256 013a860f500bd168fb04631b58f97a4d1029f4d4879ca51a1c5f7eba8b165c8f (161, 137 apply; WRONGSIDE,
+  WS-WHITE, WS-BLACK, MOVETIME-OFF, MOVESTOGO-1, M01–M11 with M06r/M07r). Committed in 7e9ab524, an ancestor of 71700836,
+  and unchanged between the two (git diff empty). 7e9ab524 touches no src/ file.
+- SE frozen-plants.json sha256 23811b194325720c7071227d162fe799924a9210c32f4155b56744452224525d (29, 26 apply; the three
+  ADR-0050 plants first: engine-no-finally, search-stale-null-key, engine-stale-null-key).
+- P-2: qe-ABC-244 frozen-mutants.json sha256 9cbf279f0684d73ca256aec013ff673fe3efcee2ae060fdaf2467d7af1942fdb, ids S241M5,
+  QPARITY, QCLOCK, QPLY4, QPATHOFF only. Each edit occurs exactly once in H's production (checked 08:02Z).
+Why reuse: the lists were frozen before any head run and carry the ruling-3 set; the independence of this hop is a fresh
+runner (qe-scripts/mut.mjs, sha256 66c2541a…e949, written by QE, not the SE's) and fresh base AND tip runs.
+
+RUNS (no timing; not ALONE-dependent)
+- K-UCI: frozen-uci all, src/uci-session.test.ts, default lane, at B then H.
+- K-NM:  frozen-plants all, src/search.null-move.test.ts, default lane, at B then H.
+- P-2:   the five, LANE (= `npm test` as spelled) at H, each alone, CONTROL first.
+- Non-vacuity: scratch copies of the two QE-208 describes with a console.log of insideNull / underNull / stale.
+- A7 node census: deepen's return counted in a scratch copy of production (B and H), per changed row.
+
+RULES (fixed now)
+- T2a: PASS iff killed(H) ⊇ killed(B) on K-UCI (file level), and each staying A5 row kills the same ids at B and H, and
+  WS-WHITE / WS-BLACK / WRONGSIDE are each killed at H by a default-lane row. A moved row's sole-killer status is
+  re-derived from B's per-row sets.
+- T2d: PASS iff A4-a2's kill set at H equals its kill set at B exactly (ids), and 4 000 ms / 1 000 = 4 ≥ 2 intervals.
+- T2c-a: PASS iff insideNull ≥ 3 at H, mutated [] at H, and engine-no-finally reds QE-208-a at H as at B.
+- T2c-b: PASS iff underNull > 0 in both rows at H, stale [] at H, search-stale-null-key reds the search() row and
+  engine-stale-null-key reds the chooseMove row at H as at B; startpos has ≥ 3 non-pawn pieces per side.
+- Plant parity: every plant killed at B is killed at H (file level); the three QE-208 rows kill the same ids at B and H.
+- P-2: a mutant is KILLED iff npm test exits non-zero with ≥ 1 failed row or suite error; else SURVIVED (a finding,
+  not a FAIL of ABC-248).
+- G8 (A9): npm test as spelled, b h h b b h, wait-clear before each run (0 foreign vitest, 0 cutechess-cli, load1 ≤ 2.0,
+  Tctl ≤ 60 °C). Admissible iff rc 0 and load1 ≤ 8 before/after each. H median > 9.7 s -> W1: 3 head runs in a second
+  window ≥ 30 min later, median of the 6 head runs decides vs 9.7; H > 10 s -> STOP, owner. Thermal stop Tctl median > 85.

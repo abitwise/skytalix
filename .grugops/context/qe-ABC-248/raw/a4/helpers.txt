@@ -1,0 +1,9 @@
+src/uci-session.test.ts talk: defs B 1 H 1 lines 9 BYTE-IDENTICAL
+src/uci-session.test.ts dialogue: defs B 1 H 1 lines 17 BYTE-IDENTICAL
+src/uci-session.test.ts rig: defs B 1 H 1 lines 34 BYTE-IDENTICAL
+src/uci-session.test.ts session220: defs B 1 H 1 lines 6 BYTE-IDENTICAL
+src/uci-session.test.ts parseInfo: defs B 1 H 1 lines 13 BYTE-IDENTICAL
+src/search.null-move.test.ts instrument: defs B 1 H 1 lines 1 BYTE-IDENTICAL
+src/search.null-move.test.ts probes: defs B 1 H 1 lines 1 BYTE-IDENTICAL
+src/search.null-move.test.ts fenOf: defs B 1 H 1 lines 52 BYTE-IDENTICAL
+virtualClock: not defined in either test file (imported or production)

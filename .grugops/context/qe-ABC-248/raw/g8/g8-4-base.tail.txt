@@ -1,0 +1,8 @@
+ ✓ src/uci.real-engine.test.ts (1 test) 3ms
+ ✓ src/glyph-mode.nfr.test.ts (3 tests) 2ms
+
+ Test Files  63 passed (63)
+      Tests  2366 passed (2366)
+   Start at  08:24:40
+   Duration  9.12s (transform 0ms, setup 0ms, import 6.35s, tests 7.31s, environment 5ms)
+

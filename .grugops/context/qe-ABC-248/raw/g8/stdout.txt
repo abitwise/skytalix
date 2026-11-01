@@ -1,0 +1,8 @@
+run 1 base rc=0 wall=9.32s cpu=30.60s vitest_duration=8.99s (transform 0ms, setup 0ms, import 6.17s, tests 7.21s, environment 5ms) load1_before=0.55 load1_after=0.85 tctl_before=37.1 tctl_after=73.4 :: 2366 passed (2366)
+run 2 head rc=0 wall=9.11s cpu=29.84s vitest_duration=8.76s (transform 0ms, setup 0ms, import 6.35s, tests 6.61s, environment 5ms) load1_before=0.75 load1_after=1.09 tctl_before=38.0 tctl_after=74.1 :: 2362 passed (2362)
+run 3 head rc=0 wall=9.09s cpu=29.83s vitest_duration=8.77s (transform 0ms, setup 0ms, import 6.28s, tests 6.62s, environment 4ms) load1_before=0.84 load1_after=1.72 tctl_before=38.6 tctl_after=73.3 :: 2362 passed (2362)
+run 4 base rc=0 wall=9.46s cpu=30.54s vitest_duration=9.12s (transform 0ms, setup 0ms, import 6.35s, tests 7.31s, environment 5ms) load1_before=1.34 load1_after=1.47 tctl_before=39.0 tctl_after=72.0 :: 2366 passed (2366)
+run 5 base rc=0 wall=9.37s cpu=30.57s vitest_duration=9.02s (transform 0ms, setup 0ms, import 6.33s, tests 7.10s, environment 5ms) load1_before=1.14 load1_after=1.28 tctl_before=39.9 tctl_after=74.0 :: 2366 passed (2366)
+run 6 head rc=0 wall=9.01s cpu=29.68s vitest_duration=8.68s (transform 0ms, setup 0ms, import 6.35s, tests 6.57s, environment 5ms) load1_before=0.99 load1_after=1.15 tctl_before=39.6 tctl_after=73.0 :: 2362 passed (2362)
+median wall: base 9.37 s, head 9.09 s, delta -0.28 s; median cpu: base 30.57 s, head 29.83 s; admissible (rc 0, load1 <= 8 before and after every run): true; tctl median 55.9 C (max 74.1), thermal stop (> 85 C): false
+g8 exit 0

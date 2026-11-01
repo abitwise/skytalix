@@ -1,0 +1,9 @@
+  for (const [row, position, go, budget, step] of pinned) {
+    it(`${row}: ${position}, ${go} -> ${budget} ms (within 2 x ${step} ms)`, () => {
+      const { out } = talk([position, go], step);
+      expect(out).toHaveLength(2);
+      const { time } = parseInfo(out[0]);
+      expect(time).toBeGreaterThanOrEqual(budget);
+      expect(time).toBeLessThanOrEqual(budget + 2 * step);
+    });
+  }

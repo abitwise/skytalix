@@ -1,0 +1,7 @@
+ ✓ src/uci-session.test.ts > ABC-167 A5 — the D4 time rule, read from the info line's time [deep, ENGINE_DEEP=1] > movetime 100: go movetime 100 -> 100 ms (within 2 x 10 ms) 29ms
+ ✓ src/uci-session.test.ts > ABC-167 A5 — the D4 time rule, read from the info line's time [deep, ENGINE_DEEP=1] > G = 3 500, under the default level 5's 4 000: go wtime 60000 btime 60000 winc 1000 binc 1000 -> 3500 ms (within 2 x 100 ms) 71ms
+ ✓ src/uci-session.test.ts > ABC-167 A5 — the D4 time rule, read from the info line's time [deep, ENGINE_DEEP=1] > a bare go: go -> 4000 ms (within 2 x 100 ms) 68ms
+ ✓ src/uci-session.test.ts > ABC-167 A5 — the D4 time rule, read from the info line's time [deep, ENGINE_DEEP=1] > A5-b3: position startpos, go wtime 1000 btime 1000 movestogo 5 -> 200 ms (within 2 x 10 ms) 31ms
+      Tests  4 passed | 237 skipped (241)
+rc=0
+ENGINE_DEEP unset: total 230 pending 0 deep-titled collected 0

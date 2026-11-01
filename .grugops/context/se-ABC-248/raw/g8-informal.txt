@@ -1,0 +1,8 @@
+b rc=0 wall=9.38 load1=0.58 Tctl=+37.6°C tests(total pass fail skip files)=2366 2366 0 0 63 foreign=[ 6.2 abtop; 2.0 claude; 1.6 claude;] 2026-11-01T07:56:03Z
+h rc=0 wall=9.0 load1=0.87 Tctl=+72.4°C tests(total pass fail skip files)=2362 2362 0 0 63 foreign=[ 100 ps; 6.2 abtop; 2.0 claude;] 2026-11-01T07:56:12Z
+h rc=0 wall=9.06 load1=1.28 Tctl=+73.9°C tests(total pass fail skip files)=2362 2362 0 0 63 foreign=[ 6.2 abtop; 2.0 claude; 1.6 claude;] 2026-11-01T07:56:21Z
+b rc=0 wall=9.33 load1=1.86 Tctl=+74.4°C tests(total pass fail skip files)=2366 2366 0 0 63 foreign=[ 100 ps; 6.2 abtop; 2.0 claude;] 2026-11-01T07:56:30Z
+g8-b-1793519753.820418243.log:    Duration  9.05s (transform 0ms, setup 0ms, import 6.22s, tests 7.31s, environment 5ms)
+g8-b-1793519781.575330121.log:    Duration  9.03s (transform 0ms, setup 0ms, import 6.13s, tests 7.25s, environment 5ms)
+g8-h-1793519763.336007711.log:    Duration  8.70s (transform 0ms, setup 0ms, import 6.17s, tests 6.69s, environment 5ms)
+g8-h-1793519772.417944911.log:    Duration  8.74s (transform 0ms, setup 0ms, import 6.30s, tests 6.53s, environment 5ms)

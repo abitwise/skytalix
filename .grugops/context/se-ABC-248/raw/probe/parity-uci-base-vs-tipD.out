@@ -1,0 +1,5 @@
+CONTROL base ran 234 failed 0 | tip ran 234 failed 0
+same id list run: true (137 mutants)
+killed base 120 tip 120; LOST at tip: {-}; gained: {-}
+SAME row "A4-a2": base {167-M24,167-M29,167-M46,171-S28,167-M45b,174-M10,174-M11,174-M17} tip {167-M24,167-M29,167-M46,171-S28,167-M45b,174-M10,174-M11,174-M17}
+PARITY HOLDS (file level)
