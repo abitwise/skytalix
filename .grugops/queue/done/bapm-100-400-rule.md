@@ -25,7 +25,8 @@ Sealed notes (task bapm-100-400-rule, contextRoot = worktree), commit, ## Result
 **2026-11-01, BA/PM. The owner's rule is in EPIC-010 and EPIC-011, ABC-255 is re-scoped (pending the ADR-0056 fold),
 ten reading rows are aligned, and both stale lines are fixed. Branch `grugops/bapm-100-400-rule` (worktree
 `.claude/worktrees/bapm-100-400-rule`, from `main` `452415bd`, one board-only commit past the brief's `376473fe`):
-claim `24c7d10f`, pages `58bb2471`, notes `905a4f21`. Records only: nothing run. No board, `memory-bank/`, `src/`, `tools/`,
+claim `24c7d10f`, pages `58bb2471`, notes `905a4f21`; **ADR-0056 fold reconciliation** (the fold merged to `main` at
+`94f1504c` during this hop): pages `3522566f`, notes `caca3af8`. Records only: nothing run. No board, `memory-bank/`, `src/`, `tools/`,
 `data/` edit. Not merged, nothing pushed.**
 
 - **The rule (both epics):** per strength-changing ticket, 100 games at 100 ms before the merge (candidate vs merge-base,
@@ -42,8 +43,8 @@ claim `24c7d10f`, pages `58bb2471`, notes `905a4f21`. Records only: nothing run.
   `ABC-255` before EPIC-010 closes (tools only; it is the close read's instrument; else QE uses a scratch command as the
   probe did); **C13** `ABC-256` closes as merged into EPIC-010's close read if the fold names 100 ms the milestone
   control.
-- **ABC-255:** SPRT lane → `d` at 100 ms (100 games) and `rpair` at 100 ms with a Stockfish move time (400 games), an E
-  band guard (≤ 2 600 below 500 ms until the fold), A1–A7; M → S; DoR 9/10 (row 5: the fold). File name kept.
+- **ABC-255:** SPRT lane → `d` at 100 ms (100 games) and the 100 ms control on `rpair` (400 games) and `r`; M → S;
+  final form per the fold (below), DoR 10/10. File name kept.
 - **Aligned reading rows:** `ABC-231` A6, `232` A5, `233` A6, `234` A5, `236` A5, `237` A6, `238` A6 (smoke pair → 100-game
   read); `ABC-239` A6 + scope 3 (smoke pair + 200 + 200 R pair at 4 s → 100-game read + an owner-asked 400-game outside
   pair); `ABC-257` A6 (smoke/SPRT → 100-game read); `ABC-258` A4 (SPRT/design control → 100-game read, guard-only note;
@@ -53,11 +54,23 @@ claim `24c7d10f`, pages `58bb2471`, notes `905a4f21`. Records only: nothing run.
   uses `done` plus `closed:`, so that was followed.
 - **Interpretations the Orchestrator may reverse:** (a) the per-epic 400 applies to EPIC-010's close; (b) the 100-game
   read replaces both smokes (D and R).
-- **Notes:** `…ad006634` (rule fold), `…be4194cd` (ABC-255 re-scope), `…f516b847` (ticket alignment), `…ad258d74` (stale
-  fixes + artifacts; an observation, since an artifact-ref needs gate provenance).
-- **Re-check owed when `arch-adr0056-100ms-fold` merges:** the pass lines, Stockfish's time and band, the per-epic
-  opponent; `ABC-255` row 5 → Ready; whether C13 fires.
+- **Notes:** `…ad006634` (rule fold), `…be4194cd` (ABC-255 re-scope, superseded by `…33d46616`), `…f516b847` (ticket
+  alignment), `…ad258d74` (stale fixes + artifacts; an observation, since an artifact-ref needs gate provenance),
+  `…33d46616` (ABC-255 aligned to the fold), `…25a62150` (fold reconciliation, R-smoke difference).
+- **The fold merged mid-hop (`94f1504c`) and is folded in (`3522566f`):** C2′ pass line in every aligned row and both
+  epics (50 ms margin; GAIN ≥ 50.0 / NEUTRAL ≥ 43.0 of 100, intent declared at design; a miss NOT MET, not re-played).
+  C3′ for the epic read: Stockfish `st=0.1` for E ≤ 2 600; MET = pair point estimate ≥ 0; **the pair resolves ± 58–78,
+  so the ± 24 first written is withdrawn**; 1.0–1.6 h. `ABC-255` follows the fold's re-scope list (`d` 100 ms with a
+  50 ms margin, the 100 ms control on `rpair` and `r`, an `ABC-208` sanity read and an identical-pair read, both
+  ungraded; the E-band guard dropped): **DoR 10/10, Ready recommended**. **C13 met:** `ABC-256` merges into EPIC-010's
+  close read. `ABC-236` got the depth-gated note.
+- **For the Orchestrator to rule (or ask the owner):** the fold recommends keeping the 10-game R smoke at 4 s beside
+  C2′. These pages drop it, on the owner's "100 games that's it". `ADR-0056` says the Orchestrator rules where BA/PM
+  and the Architect differ.
+- **Slip (mine, repaired before commit):** the first admission of the two reconciliation notes cited a pages sha I
+  wrote before the commit existed (`4ec32c41`). Those two uncommitted files were deleted and admitted again citing
+  `3522566f`.
 
 ### Trace row (10 cells, header order)
 
-| bapm-100-400-rule | Owner's validation rule folded (100 games at 100 ms per strength change, 400 at 100 ms per epic, no SPRT, other runs > 1 h asked first); ABC-255 re-scoped to the 100 ms shapes; EPIC-010 close owes the 400-game read | EPIC-010, EPIC-011 (EPIC-006 front matter) | ABC-231, 232, 233, 234, 236, 237, 238, 239, 255, 256, 257, 258 | none moved (NFR-005 floor unchanged) | `grugops/bapm-100-400-rule` @ `58bb2471` (pages), `905a4f21` (notes …ad006634, …be4194cd, …f516b847, …ad258d74) | records only; nothing run | — (records; pass lines pending the ADR-0056 fold) | — | DONE; merge is the Orchestrator's |
+| bapm-100-400-rule | Owner's validation rule folded (100 games at 100 ms per strength change, 400 at 100 ms per epic, no SPRT, other runs > 1 h asked first); ABC-255 re-scoped to the 100 ms shapes; EPIC-010 close owes the 400-game read | EPIC-010, EPIC-011 (EPIC-006 front matter) | ABC-231, 232, 233, 234, 236, 237, 238, 239, 255, 256, 257, 258 | none moved (NFR-005 floor unchanged) | `grugops/bapm-100-400-rule` @ `58bb2471` + `3522566f` (pages), `905a4f21` + `caca3af8` (notes …ad006634, …be4194cd, …f516b847, …ad258d74, …33d46616, …25a62150) | records only; nothing run | — (records; pass lines ADR-0056 C2′ / C3′, `94f1504c`) | — | DONE; merge is the Orchestrator's |
