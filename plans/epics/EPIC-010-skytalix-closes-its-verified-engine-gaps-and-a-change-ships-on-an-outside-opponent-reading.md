@@ -10,41 +10,93 @@ owner: BA/PM
 
 # EPIC-010: the verified engine gaps, closed one measured change at a time, against an outside opponent
 
+> **THE `ADR-0056` OWNER-ANSWERS FOLD, ON THIS PAGE, 2026-11-01, by BA/PM** (task `bapm-reconcile-adr0056`, records
+> only, at `main` `bd29dd50`; nothing run). The Architect's fold of the owner's three answers is on `main` (merge
+> `a0f9297e`, ADR commit `fe50a11f`; notes `arch-adr0056-owner-answers` `…d3c756d1`, `…c8c38f1e`). **Its figures
+> replace every "pending the fold" and "`UNKNOWN - verify` until the fold merges" line in the block below;** those lines
+> are rewritten in place under this task's name. The Orchestrator's rulings with it: "0.5s difficulty" is `skytalix` at
+> `st=0.5` on level 5 (a time setting, not a level); the smoke's E is 1 650 as the ADR sets it (the owner has been told
+> and may revert to 1 910); `ABC-256` closes as superseded by C3″ (`EPIC-011`).
+>
+> - **Per epic, `ADR-0056` C3″:** 400 games head to head at 100 ms, `d <head> <base> <out> --budget-ms 100 --rounds
+>   200 --concurrency 1`. Valid when 400 of 400 complete and neither build faults or loses on time at the 50 ms margin
+>   (else UNRESOLVED, re-run once). **MET at ≥ 200.0 of 400** (point estimate ≥ 0); the interval is reported, not
+>   graded. ≈ 1.55 h plus two builds (estimate; pre-approved).
+> - **The smoke, `ADR-0056` S′:** 10 games, the candidate against Stockfish 19 `UCI_LimitStrength` at **E 1 650**;
+>   `skytalix` `st=0.5` on level 5, `timemargin` **50 ms**; Stockfish `st=0.5`, `timemargin` 2 000 ms; openings 1–5,
+>   both colours: `r <candidate> <out> --budget-ms 500 --rounds 5 --concurrency 1` (`ABC-255` item 2). **Bars:** S-1
+>   (0 faults), S-2 (0 losses on time) and S-4 (≥ 3.0 of 10; below that, 10 more games and ≥ 7.0 of 20), as § The merge
+>   rule states them; S-3 is C2′'s now. **Before any graded S′,** `ABC-255`'s one S′ on `main` reports the largest
+>   overshoot at 500 ms; if it is over 12 ms, the Architect re-sets the margin first. **Pooling** (the ADR's
+>   recommendation, recorded here as the rule): S′ scores pool in § The smoke ledger, and when the pooled score leaves
+>   60–85 % over ≥ 30 games, E is re-pinned by one band-rule step (E ≤ 2 600). Owed per strength-changing ticket
+>   beside its C2′ read and per epic on the closing head; never for a value-identical ticket. ≈ 10 min (estimate).
+> - **The owner's condition, `ADR-0056` R-TC.** Part 1: a test control is harness configuration only, and the budget
+>   enters the engine core only as the deadline; review reads each strength diff against R-TC item 2, and `ABC-259`
+>   (new, below) makes that a default-lane row. Part 2, *"it works on different difficulty settings"*: **per
+>   strength-changing ticket, the Levels deep lane** on the candidate head, beside C2′:
+>   `ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/levels.test.ts --reporter=verbose`, QE,
+>   host alone, ≈ 9 min; passes on exit 0 with every test passed (41 at the ADR's count; QE counts its own run).
+>   **Per epic, on the closing head, beside C3″:** the Levels deep lane, the ladder in short mode
+>   (`LADDER_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/ladder.test.ts`, 848 s on a loaded host)
+>   and the UCI session deep lane (`ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run
+>   src/uci-session.test.ts`, ≈ 5 min, estimate), each exit 0 with every test passed; ≈ 30 min together, under 1 h,
+>   not asked.
+> - **This epic's close, then:** C3″ (head = `main` after milestone 1b, base = `ca6e675c`), S′ on the head, and the
+>   three lanes on the head. M2 stays graded on milestone 1's batch. Every ticket left here is value-identical or
+>   test-only, so no per-ticket C2′, S′ or Levels deep lane is owed inside this epic.
+> - **`ABC-259` cut (G-1; milestone 1b; test-only, XS, P2):** one default-lane source-scan row that turns red when
+>   engine-core code reads the budget other than as the deadline, or reads a test flag or the environment. Row 30 of §
+>   Tickets. Placed here, not in `EPIC-011` M0: milestone 1b rewrites the search, legality and key files the scan
+>   reads, and this epic's close is the first read graded under R-TC.
+> - **G-2 is not on any `plans/` page.** The Levels deep lane's trigger list ("after any src/levels.ts, src/engine.ts
+>   or src/virtual-clock.ts change") lives in `memory-bank/90-agents-md-command-log.md` (§ On-demand commands),
+>   outside this hop's fence; the Scribe owes the line. The per-ticket duty above binds whatever that line says.
+> - **`RISK-EPIC010-08` (new, § Risks):** C3″ plays each opening four times, so its ± 24 Elo flatters. QE checks it at
+>   this epic's close read, the first C3″. The shape does not change.
+
 > **THE OWNER'S ANSWERS, 2026-11-01, by BA/PM** (task `bapm-owner-answers`, records only, at `main` `adab5f0d`;
 > nothing run). The owner's word (`orch-2026-10-30a` `…43098cef`, verbatim there): *"1. b ; 2. ok ; 3. quick check
 > can be with 0.5s difficulty. Make sure engine is not changed internally and it works on different difficulty
 > settings."* The Orchestrator's rulings with it: the Stockfish smoke is kept at 0.5 s; this epic's close owes the
 > per-epic read; `ABC-255` may be pulled before the close (`EPIC-011` C12). **This block amends the one below where
 > they differ.** The `ADR-0056` fold of these answers (`arch-adr0056-owner-answers`) is not on `main` at this hop.
+> *(Merged since, `a0f9297e`: the block above, `bapm-reconcile-adr0056`.)*
 >
 > - **Per epic (answer 1, "b"): 400 games head-to-head at 100 ms, the epic's closing build against its starting
 >   build.** Self-play in `d`'s shape, through `ABC-255`: `d <head> <base> <out> --budget-ms 100 --rounds 200
 >   --concurrency 1` (`d`'s default 200 rounds over the 100 openings of `tools/rating/openings.epd`, both colours; one
 >   game at a time). About ± 24 Elo at 95 % (the probe's ± 48 for 100 games, `…07357280`, over √4; arithmetic).
 >   **Pass:** 400 of 400 games complete, neither build makes a fault or loses on time at the 50 ms margin, and **the
->   head's point estimate against the base is ≥ 0 (a score ≥ 200.0 of 400), pending the `ADR-0056` owner-answers
->   fold.** On NOT MET, BA/PM names the suspects and the Orchestrator rules keep, revert or re-read; no revert is
+>   head's point estimate against the base is ≥ 0 (a score ≥ 200.0 of 400), `ADR-0056` C3″** *(was "pending the
+>   owner-answers fold"; merged `a0f9297e`, `bapm-reconcile-adr0056`)*. On NOT MET, BA/PM names the suspects and the Orchestrator rules keep, revert or re-read; no revert is
 >   automatic. ≈ 1.6 h (4 × the 0.4 h change read; estimate). Owner-set, so no further ask. **It replaces the 200 +
 >   200 pair against Stockfish** of the block below.
 > - **The bars (answer 2, "ok"):** C2′'s GAIN (≥ 50.0 of 100) and NEUTRAL (≥ 43.0 of 100) stand, with their stated
 >   blind spot.
 > - **The smoke (answer 3): 10 games against Stockfish, `skytalix` at 0.5 s a move, beside every strength-changing
->   ticket's 100-game read, and at every epic's close on the closing build.** `r <build> <out> --elo E --rounds 5
->   --concurrency 1` with the 0.5 s control (`ABC-255`; today `r` plays `skytalix` only at 4 000 ms); Stockfish at
->   `r`'s own `st=0.5`. It carries S-1 (0 faults) and S-2 (0 losses on time) of § The merge rule. **Its E and its
->   no-collapse bar at 0.5 s are the fold's** (S-4's ≥ 3.0 of 10 at E 1 910 was set for 4 s): `UNKNOWN - verify` until
->   the fold merges. ≈ 10 min (estimate, ≈ 85 plies a game). This restores the R smoke the block below dropped, at
+>   ticket's 100-game read, and at every epic's close on the closing build.** `r <build> <out> --budget-ms 500
+>   --rounds 5 --concurrency 1` (`ABC-255` item 2; today `r` plays `skytalix` only at 4 000 ms), `skytalix` with
+>   `timemargin` 50 ms; Stockfish at `r`'s own `st=0.5`. It carries S-1 (0 faults) and S-2 (0 losses on time) of § The
+>   merge rule. **Its E is 1 650 and its no-collapse bar is S-4: ≥ 3.0 of 10, below that 10 more games and ≥ 7.0 of
+>   20** (`ADR-0056` S′) *(was "the fold's … `UNKNOWN - verify` until the fold merges"; merged `a0f9297e`,
+>   `bapm-reconcile-adr0056`)*. ≈ 10 min (estimate, ≈ 85 plies a game). This restores the R smoke the block below dropped, at
 >   0.5 s and not 4 s.
 > - **The owner's condition, "engine is not changed internally":** every test control (100 ms, 0.5 s) is harness
 >   configuration only. It reaches `skytalix` as `cutechess-cli`'s `st=` (`go movetime`) at the shipped level 5, whose
 >   cap is above both (4 000 ms today, 3 000 ms at `ca6e675c`; `src/levels.ts`). No engine code path is keyed on a
 >   test control, and `ABC-255` changes no `src/` or `data/` file (its A6).
 > - **"It works on different difficulty settings":** the validation must show the engine plays correctly across its
->   levels and time controls, not only at the test control. **No ticket in this epic or in `EPIC-011` carries that
->   check today.** The Architect names it in the fold; no ticket is cut on this hop.
+>   levels and time controls, not only at the test control. ~~**No ticket in this epic or in `EPIC-011` carries that
+>   check today.** The Architect names it in the fold; no ticket is cut on this hop.~~ *(2026-11-01,
+>   `bapm-reconcile-adr0056`: the fold names it, `ADR-0056` R-TC part 2: the Levels deep lane per strength-changing
+>   ticket, plus the ladder short mode and the UCI session deep lane per epic. Every strength ticket's reading row and
+>   each epic's close carry it; the block above.)*
 > - **This epic's close:** the 400-game head-to-head read (head = `main` after milestone 1b, base = `ca6e675c`) and the
->   0.5 s smoke on the head. M2 stays graded on milestone 1's batch. `ABC-256` (B0) **no longer** merges into this
->   read, because it has no Stockfish half (`EPIC-011` C13, void).
+>   0.5 s smoke on the head *(and, `bapm-reconcile-adr0056`, the Levels deep lane, the ladder short mode and the UCI
+>   session deep lane on the head; the block above)*. M2 stays graded on milestone 1's batch. `ABC-256` (B0) **no
+>   longer** merges into this read, because it has no Stockfish half (`EPIC-011` C13, void) *(and is closed as
+>   superseded by C3″, `bapm-reconcile-adr0056`)*.
 
 > **THE OWNER'S VALIDATION RULE, 2026-11-01, by BA/PM** (task `bapm-100-400-rule`, records only, at `main`
 > `452415bd`; nothing run). The owner's word (`orch-2026-10-30a` `…2896c6eb`, verbatim there): no SPRT; *"We can just
@@ -77,6 +129,8 @@ owner: BA/PM
 >   the suspects and the Orchestrator rules keep, revert or re-read (C3′; no revert is automatic); any run over 1 h it
 >   needs is asked first.
 > - *(2026-11-01, `bapm-owner-answers`: the two shapes are now `d` at 100 ms and `r` / `rpair` at 0.5 s; `ABC-255`.)*
+>   *(2026-11-01, `bapm-reconcile-adr0056`: per the merged fold, `d --budget-ms 100` and `r --budget-ms 500`;
+>   `rpair` gains no control.)*
 >   **The instrument:** today `rpair` plays only 4 000 ms against Stockfish at `st=0.5`, and `d` refuses budgets
 >   under 1 000 ms (`tools/rating/rating.ts` `D_BUDGETS_MS`). `ABC-255` is re-scoped to add both 100 ms shapes
 >   (`EPIC-011`). It is tools only and touches no file milestone 1b edits, so **the Orchestrator may pull it before
@@ -798,7 +852,8 @@ sits inside the batch's ± 78, so speed is graded on nps, not games).
 - **Order against milestone 2:** milestone 1b goes first (`ADR-0055` D2, D4), so milestone 2's value-changing tickets
   are written on the packed base and their smokes read a faster base (fair to both sides of a pair). Milestone 2's own
   order and content wait on `arch-algo-analysis` (no change here). `ABC-249` (test-only) is recommended before
-  `ABC-251`.
+  `ABC-251`. *(2026-11-01, `bapm-reconcile-adr0056`: so is `ABC-259` (test-only, G-1), so that `ABC-251`'s rewrite of
+  the search is a change the scan already reads.)*
 - **Close:** milestone 1b closes when its last ticket is merged, dropped or (for `ABC-254`) declined. **There is no
   batch:** value-identical merges move no value, so the 4 000 ms trend pool and reference are untouched.
 - **Cost on this host (estimate):** 0 games. One QE nps reading per ticket, about 1 h ALONE with `G6` each (the
@@ -977,6 +1032,7 @@ mates", ≥ 6 "a quiet promotion decides". It reads `quiesce` and `chooseMove` a
 | 27 | `ABC-252` | One move generator: the shell's move calls build their `Move` lists from the packed path through one converter, and the object generator is removed (milestone 1b, O1-b part 3, value-identical) | M | P3 | Backlog | **9/10** | `ABC-250` GO, `ABC-251` full form | `ABC-251`'s merge; dropped if `ABC-250` is dropped |
 | 28 | `ABC-253` | Zobrist keys travel as two 32-bit halves in the search, the TT and the repetition scan, and stay `bigint` at the API (milestone 1b, O1-a, value-identical) | M | P3 | Backlog (Ready recommended) | **10/10** | none (`ADR-0025`, `ADR-0054` kept) | none; pulled after the O1-b chain (`ADR-0055` D4), bar ≥ 1.02× |
 | 29 | `ABC-254` | Lazy legality: the full make/test/unmake only for king moves, en passant, pinned pieces and positions in check (milestone 1b, O1-d = `ADR-0003` (c2), value-identical) | M | P2 | Backlog (Ready recommended); ~~**Moved to `EPIC-011`**~~ back 2026-11-01 | **10/10** | `ADR-0003` amended (clauses 1 and 3; `…c314772c`, merged `89af8b56`) | none; ~~**the owner's yes (Q-SP-3)** and that ADR~~ yes `…f7a50e95`; **first in milestone 1b** |
+| 30 | `ABC-259` | One default-lane source scan turns red when engine-core code reads the search budget other than as the deadline, or reads a test flag or the environment (`ADR-0056` R-TC item 2, gap G-1; milestone 1b; test-only) | XS | P2 | Backlog (Ready recommended) | **10/10** | `ADR-0056` R-TC (merged `a0f9297e`); no ADR of its own | none; recommended before `ABC-251` (which rewrites the scanned search files), beside `ABC-249` |
 
 *Re-scored 2026-10-29 (`bapm-owner-words-b`): Q4 is removed from every wait. Each value-changing ticket's DoR row 4
 is now ✅, because its reading is the smoke pair. No ticket but `ABC-225` changes column on this hop. `ABC-227` (Done)
@@ -1024,6 +1080,10 @@ gives it (`ABC-254` first only if the owner's yes and its ADR come in time; then
 `ABC-253`). No other row was changed. The board holds the live state; the column moves are the Orchestrator's.*
 *Folded 2026-11-01 (`bapm-ABC-254-ready`): row 29 (`ABC-254`) is back in this epic, DoR 10/10, first in milestone 1b,
 because the owner's yes and the amending ADR came before `ABC-250` entered development. No other row was changed.*
+*Cut 2026-11-01 (`bapm-reconcile-adr0056`): row 30 (`ABC-259`, `ADR-0056` gap G-1) was added at the end. It is
+test-only and not one of the fifteen engine changes; it guards the owner's condition (R-TC item 2) for milestone 1b's
+rewrites and for every strength change after them. Its row number is not its pull order. No other row was changed;
+the column move is the Orchestrator's.*
 
 ## Observations (not tickets)
 
@@ -1106,6 +1166,14 @@ because the owner's yes and the amending ADR came before `ABC-250` entered devel
 - **`RISK-EPIC010-05`: self-play tuning repeats non-transfer** (`ABC-239`). Its validation is outside, by rule.
 - **`RISK-EPIC010-06`: history keys widen the UCI input surface** (`ABC-230`): a `position … moves` list of any length
   now feeds the search. `KEY_ARRAY_CAPACITY` (128) bounds the per-ply array; the hand-over must be bounded too.
+- **`RISK-EPIC010-08` (new 2026-11-01, `bapm-reconcile-adr0056`): the per-epic read's ± 24 Elo is optimistic.**
+  C3″ plays each of the 100 openings four times (twice per colour, `d`'s default 200 rounds). The four games differ
+  (identical 100 ms searches vary by a ply and up to ± 25 % in nodes), but they are not independent, so the true 95 %
+  interval is wider than ± 24 by an amount that is `UNKNOWN - verify` (`ADR-0056` § Consequences). **QE checks it at
+  this epic's close read, the first C3″,** and reports it beside the interval (for example, from the spread between
+  the four games of each opening, or the per-opening paired error as `ABC-225` reports it; the method is QE's). The
+  read's shape and its MET line do not change on this hop; a finding that the interval is much wider goes to the
+  Architect.
 
 ## NFR triggers
 

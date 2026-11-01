@@ -1,8 +1,8 @@
 ---
 id: ABC-256
 title: "B0: a baseline reading of main on the routine milestone control, after EPIC-010 closes, so the 2 200 … 3 000 milestones have a starting point (reading only)"
-status: backlog
-column: Backlog
+status: dropped
+column: Done
 size: S
 priority: P2
 epic: EPIC-011
@@ -10,6 +10,16 @@ owner: QE/E2E
 ---
 
 # ABC-256: the baseline reading (B0)
+
+> **CLOSED AS SUPERSEDED 2026-11-01 by BA/PM** (task `bapm-reconcile-adr0056`, records only, at `main` `bd29dd50`;
+> nothing run). **Not delivered; superseded by `ADR-0056` C3″.** The owner-answers fold (merge `a0f9297e`, ADR commit
+> `fe50a11f`) makes the per-epic read 400 games head to head at 100 ms, and keeps no routine reading against Stockfish:
+> *"No routine per-epic reading against Stockfish remains"* (its status block). B0 was C3′'s base half, so it has no
+> routine use; the Architect recommended dropping it, and the Orchestrator ruled it closed as superseded
+> (brief `bapm-reconcile-adr0056`). The 100 ms reading against Stockfish that C4's anchors and C1 need is cut with
+> anchor A0, when the owner is asked for it (`EPIC-011`). Front matter: `status: dropped`, `column: Done`, as this
+> repository closes a ticket not delivered (`ABC-209`). The board card move is the Orchestrator's. Nothing else on this
+> page changes; it stays as history.
 
 > **Dated line 2026-11-01 by BA/PM** (task `bapm-owner-answers`, records only, at `main` `adab5f0d`; nothing run).
 > **C13 is void; the dedupe line below no longer holds.** The owner's answer 1 (`orch-2026-10-30a` `…43098cef`: "b")
@@ -107,4 +117,4 @@ owner: QE/E2E
 | 9 | priority | ✅ P2 |
 | 10 | no major unresolved blocker | ❌ waits `EPIC-010` closing |
 
-**DoR 8/10. Backlog.**
+~~**DoR 8/10. Backlog.**~~ **Closed as superseded, 2026-11-01 (`bapm-reconcile-adr0056`); no DoR is owed.**
