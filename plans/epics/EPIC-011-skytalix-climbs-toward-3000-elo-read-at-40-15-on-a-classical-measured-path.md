@@ -241,6 +241,7 @@ reorders made here are named in the "why" column.
 | 5 | V3 | *stub:* staged move generation (hash move before generating; captures before quiets) | title only | after V2 (`ABC-254`, in `EPIC-010` since 2026-11-01) |
 | — | reading | **R3**, milestone reading; and **the 40/15 claim reading** when a routine reading points at 3 000 | (QE readings) | `ADR-0056` D6 item 7 |
 | later | V4 | (not a stub) bitboards: re-opening `ADR-0001` | — | **Q-3K-8, the owner's**, only if the curve flattens below 3 000 after Phase 5 |
+| any time | (owner, `…78c476bf`) | **`ABC-263`** SPIKE: NPU, iGPU and CPU threads from Node.js, and search info shared between them (records only, Architect) | full page (new, `bapm-spike-accel`) | independent of the classical phases: it writes records only, gates no phase and is gated by none. It recommends; any thread or net it favours stays out of scope (§ Out of scope) until the owner opens it |
 
 - **Milestone readings report which milestone (2 200 … 3 000) a reading meets; they gate nothing.** The 40/15 reading
   is taken for the claim and for any milestone the Architect's fold names; otherwise milestones are read on the
@@ -385,7 +386,8 @@ Phase 5, the next question is V4 and it is his (`ADR-0056` D6 item 7).
 | 11 | `ABC-232` | Passed pawns by phase | S | P3 | Backlog | 9/10 | **to be merged into E1** (phase scaling) and E4 (passer terms) |
 | 12 | `ABC-239` | Weights tuned offline, constants only, validated outside (E2) | L | P3 | Backlog | 8/10 | E1; Q-3K-7; `ADR-0048` licence; the method ADR |
 | ~~13~~ | `ABC-254` | Lazy legality (V2, O1-d) | M | P2 | **Returned to `EPIC-010`** 2026-11-01 (milestone 1b, first) | 10/10 | ~~**Q-SP-3**; the ADR amending `ADR-0003`; `EPIC-010`'s `ABC-252` (or where the O1-b chain stops)~~ none (yes `…f7a50e95`; `ADR-0003` amended, `89af8b56`) |
-| 14 | `ABC-262` | The lazy-legality rows read the board shapes they missed: `hasLegalMove`'s early exit on a pawns-first board, and the in-check quiet queen promotion with black to move (phase 0, M0; test-only, from QE-261-a and QE-261-b, both LOW; cut 2026-11-01, `bapm-qe-gaps-1101b`) | XS | P3 | Backlog (Ready recommended) | **10/10** | `ABC-261` merged (`12e78c4d`); no ADR of its own; recommended after `ABC-250` merges or is dropped, before `EPIC-010`'s `ABC-252`; does not hold `EPIC-010`'s close |
+| 14 | `ABC-262` | The lazy-legality rows read the board shapes they missed: `hasLegalMove`'s early exit on a pawns-first board, and the in-check quiet queen promotion with black to move (phase 0, M0; test-only, from QE-261-a and QE-261-b, both LOW; cut 2026-11-01, `bapm-qe-gaps-1101b`) | XS | P3 | ~~Backlog (Ready recommended)~~ **Done** 2026-11-01 (merged `2cf2bb69`; QE PASS_WITH_GAPS `…ed4d02a5`; A4 waived by the Orchestrator, marked on the page by `bapm-spike-accel`) | **10/10** | `ABC-261` merged (`12e78c4d`); no ADR of its own; recommended after `ABC-250` merges or is dropped, before `EPIC-010`'s `ABC-252`; does not hold `EPIC-010`'s close |
+| 15 | `ABC-263` | **SPIKE** (records only, Architect): can `skytalix` use the NPU, the iGPU and more CPU threads from Node.js on this host, and share search info between them? Q1 accelerators (with and without a net), Q2 threads (Lazy SMP, shared TT), Q3 shared or device memory on the APU, Q4 the owner's rules it would meet; it recommends and changes no rule (owner `…78c476bf`; cut 2026-11-01, `bapm-spike-accel`) | M | P2 | Backlog | **10/10** | none hard. **Where it sits:** outside phases 0–5, any time, records only; no phase ticket waits on it and it waits on none. Its follow-ups need the owner to open scope (§ Out of scope: threads, neural) |
 
 The stubs of § Phases get ids when their phase is refined. **Ids `ABC-255`…`ABC-258` are taken here; `ABC-224` stays in
 the Orchestrator's pool.** No moved ticket was renumbered.
@@ -432,6 +434,7 @@ line, id unchanged), **merge into X**, **supersede**, **drop**, **close** (the e
 | `ABC-218` Skill 7 at 40/15 (dropped) | the 40/15 claim reading | stays dropped; **superseded** by `EPIC-011`'s 40/15 readings | the owner closed it; `uci-clock-mode` is the 40/15 setting now |
 | `ABC-219` CLI tournament level (dropped) | none | stays dropped | CLI parity out of scope (`EPIC-009`) |
 | `ABC-074` non-M3 spike (dropped) | none | stays dropped | hardware; unrelated |
+| `ABC-263` accelerator and threads spike (new, 2026-11-01) | `ADR-0055` (speed path; O2/O3 not pursued, owner); § Out of scope (threads, neural); `ADR-0044` D5; `ABC-239` (offline tuning, which Q1 may place on a device) | **keep** (new; records only) | no ticket covers device or thread use; it re-opens nothing, recommends only, and touches no `ABC-239` scope |
 | `ABC-038`, `052`, `060`, `108`, `111` (dropped) | none | stay dropped | unrelated to the engine path |
 | `ABC-204` rating harness (Done) | M0 | **keep**; M0 builds on it | `ABC-204` fenced SPRT out of its own scope; M0 adds it as a mode of the same harness, not a second harness |
 | `ABC-225` R pair (Done) | milestone readings, B0 | **keep**; reused | the milestone instrument |

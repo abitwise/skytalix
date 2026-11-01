@@ -11,6 +11,20 @@ feature: —
 
 # ABC-262: two more default-lane rows for the lazy legality filter (QE-261-a, QE-261-b)
 
+> **A4 WAIVED; dated line 2026-11-01 by BA/PM** (task `bapm-spike-accel`, records only, at `main` `7c67d3ad`; nothing
+> run). It closes QE-262-b (`qe-ABC-262` gaps `…16924bec`), so this page is no contract the code silently breaks.
+> **`ABC-262` is Done,** merged `2cf2bb69` on QE's PASS_WITH_GAPS (`qe-ABC-262` verdict `…ed4d02a5`). A4 read NOT MET
+> as written and was **WAIVED by the Orchestrator** (brief `qe-ABC-262`, § Orchestrator ruling on A4).
+> - **Why the waiver holds:** production is correct. `src/legal.ts:429` reads `(inCheck || pinStamp[from] === epoch)`,
+>   so in check `inCheck ||` short-circuits and every quiet queen promotion is tested (`qe-ABC-262` `…918ca02e`).
+> - **Why QB survives the row:** the hole is in the plant. In check `epoch` stays 0, and a never-stamped `pinStamp`
+>   square reads 0, so QB's leftover operand still takes the test on P1′.
+> - **Where QB dies:** the `ENGINE_DEEP` `ABC-254` A1 walk turns red on it (`kiwipete 20-65 39-22 65-99`, an extra
+>   black g2–g1=Q). QE's own QBe (QB without the alias) turns this row red on P1′, and QKb turns it red on P2′
+>   (`…064f5f07`).
+> - **What stays open:** QE-262-a (LOW) is carried to any rewrite of the quiet-promotion guard or `pinStamp`/`epoch`
+>   (`ABC-252` is dropped, so it is "any rewrite"). Nothing else on this page changes.
+
 > **Cut 2026-11-01 by BA/PM** (task `bapm-qe-gaps-1101b`, records only, at `main` `aaccbbf8`; nothing run, built or
 > timed). Source: `qe-ABC-261` gaps note `…c385f9a2` and verdict `…4c6e9ee5` (PASS_WITH_GAPS; both gaps LOW). Counts
 > below are from QE's probe at that hop (`qe-ABC-261` `raw/plants/*.probe.json`). **`EPIC-011` phase 0 (M0), tickets
@@ -68,7 +82,8 @@ in a scratch copy of the tip.
 - **`A3` (QX2, QX1 and PL3a turn red).** The early-exit row's bar is **≤ 1** attack test. **Given** each of QE's plants
   QX2, QX1 and PL3a (`qe-ABC-261` `raw/plants/*.diff`, or equivalents), **then** the early-exit row fails. The build
   note reports production's count and each plant's count on B2. QE's probe read production 1, QX1 2, PL3a 9, QX2 10.
-- **`A4` (QB turns red).** **Given** QE's plant QB (`raw/plants/QB.diff`: `(inCheck || pinStamp[from] === epoch)`
+- ~~**`A4` (QB turns red).**~~ **WAIVED 2026-11-01 (Orchestrator; top block): NOT MET as written; production correct at
+  `src/legal.ts:429`; QB caught by the `ENGINE_DEEP` `ABC-254` A1 walk.** **Given** QE's plant QB (`raw/plants/QB.diff`: `(inCheck || pinStamp[from] === epoch)`
   becomes `((inCheck && !moverIsBlack) || pinStamp[from] === epoch)`), **then** the promotion row fails on P1′.
 - **`A5` (plants never committed).** A3 and A4 are read out of tree by the SE and re-read by QE. The build note lists
   each plant and the failing row. No plant is in any commit.
