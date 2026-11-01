@@ -1,0 +1,25 @@
+# ABC-255 dry-run prints. base = tools/rating/rating.ts at main 8f2fc9b5 (byte-identical to main 8a69a06b at the run: tools/ unchanged since), copied beside head in the same checkout; head = grugops/ABC-255 working tree. Same args, same REPO, same env.
+# Shas passed: 8a69a06b6d4e (main at the run) and 2600fe7e14af (its parent). X = <scratch>/x, never created. CUTECHESS_CLI/STOCKFISH = any readable file (dry runs start nothing). Run under the host lock.
+# columns: case | base exit | head exit | base vs head stdout
+01 | base 0 | head 0 | byte-equal | r 8a69a06b6d4e <scratch>/x --dry-run
+02 | base 0 | head 0 | byte-equal | r 8a69a06b6d4e <scratch>/x --elo 1910 --dry-run
+03 | base 0 | head 0 | byte-equal | r 8a69a06b6d4e <scratch>/x --rounds 5 --concurrency 1 --dry-run
+04 | base 0 | head 0 | byte-equal | r 8a69a06b6d4e <scratch>/x --elo 1320 --rounds 7 --concurrency 4 --dry-run
+05 | base 0 | head 0 | byte-equal | d 8a69a06b6d4e 2600fe7e14af <scratch>/x --dry-run
+06 | base 0 | head 0 | byte-equal | d 8a69a06b6d4e 2600fe7e14af <scratch>/x --budget-ms 3000 --dry-run
+07 | base 0 | head 0 | byte-equal | d 8a69a06b6d4e 2600fe7e14af <scratch>/x --budget-ms 2500 --dry-run
+08 | base 0 | head 0 | byte-equal | d 8a69a06b6d4e 2600fe7e14af <scratch>/x --budget-ms 2000 --dry-run
+09 | base 0 | head 0 | byte-equal | d 8a69a06b6d4e 2600fe7e14af <scratch>/x --budget-ms 1500 --dry-run
+10 | base 0 | head 0 | byte-equal | d 8a69a06b6d4e 2600fe7e14af <scratch>/x --budget-ms 1000 --dry-run
+11 | base 0 | head 0 | byte-equal | d 8a69a06b6d4e 2600fe7e14af <scratch>/x --budget-ms 1000 --rounds 50 --concurrency 1 --dry-run
+12 | base 0 | head 0 | byte-equal | rpair 2600fe7e14af 8a69a06b6d4e <scratch>/x --dry-run
+13 | base 0 | head 0 | byte-equal | rpair 2600fe7e14af 8a69a06b6d4e <scratch>/x --elo 1650 --rounds 10 --concurrency 1 --dry-run
+14 | base 0 | head 0 | byte-equal | rpair 2600fe7e14af 8a69a06b6d4e <scratch>/x --rounds 30 --dry-run
+15 | base 1 | head 0 | DIFF | d 8a69a06b6d4e 2600fe7e14af <scratch>/x --budget-ms 100 --rounds 50 --concurrency 1 --dry-run
+16 | base 1 | head 0 | DIFF | d 8a69a06b6d4e 2600fe7e14af <scratch>/x --budget-ms 100 --rounds 200 --concurrency 1 --dry-run
+17 | base 1 | head 0 | DIFF | r 8a69a06b6d4e <scratch>/x --budget-ms 500 --rounds 5 --concurrency 1 --dry-run
+18 | base 1 | head 1 | byte-equal | r 8a69a06b6d4e <scratch>/x --budget-ms 4000 --dry-run
+19 | base 1 | head 1 | byte-equal | r 8a69a06b6d4e <scratch>/x --budget-ms 100 --dry-run
+20 | base 1 | head 1 | byte-equal | r 8a69a06b6d4e <scratch>/x --budget-ms 1000 --dry-run
+21 | base 1 | head 1 | byte-equal | d 8a69a06b6d4e 2600fe7e14af <scratch>/x --budget-ms 500 --dry-run
+22 | base 1 | head 1 | byte-equal | rpair 2600fe7e14af 8a69a06b6d4e <scratch>/x --budget-ms 500 --dry-run

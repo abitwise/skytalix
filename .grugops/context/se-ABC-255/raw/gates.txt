@@ -1,0 +1,26 @@
+# gates rerun after biome --write (format only), under the host lock
+== 2026-11-01T16:53:03Z load1=7.69 acquired
+== 2026-11-01T16:53:03Z load1=7.69 biome write rc=0
+== 2026-11-01T16:53:10Z load1=7.47 pair-check rc=0
+== 2026-11-01T16:53:10Z load1=7.47 lint rc=0
+== 2026-11-01T16:53:12Z load1=7.11 typecheck rc=0
+== 2026-11-01T16:53:13Z load1=7.11 build rc=0
+== 2026-11-01T16:53:23Z load1=7.01 test rc=0 wall=9.499514643
+== 2026-11-01T16:53:23Z load1=7.01 skip-integrity rc=0
+== 2026-11-01T16:53:23Z load1=7.01 lane-inventory rc=0
+== 2026-11-01T16:53:23Z load1=7.01 released
+Checked 1 file in 33ms. Fixed 1 file.
+Checked 131 files in 132ms. No fixes applied.
+No findings.
+No findings.
+# first run (before format fix): lint rc=1 (biome format, pair-check.ts three long call lines), all else rc=0
+== 2026-11-01T16:13:57Z load1=2.38 acquired
+== 2026-11-01T16:13:58Z load1=2.38 npm ci rc=0
+== 2026-11-01T16:14:04Z load1=2.43 pair-check rc=0
+== 2026-11-01T16:14:04Z load1=2.43 lint rc=1
+== 2026-11-01T16:14:06Z load1=2.56 typecheck rc=0
+== 2026-11-01T16:14:07Z load1=2.56 build rc=0
+== 2026-11-01T16:14:16Z load1=2.47 test rc=0 wall=8.808052527
+== 2026-11-01T16:14:16Z load1=2.47 skip-integrity rc=0
+== 2026-11-01T16:14:16Z load1=2.47 lane-inventory rc=0
+== 2026-11-01T16:14:16Z load1=2.47 released
