@@ -1,0 +1,72 @@
+qe-EPIC-010-close PREREG — sealed before any run. Written 2026-11-01T20:55:43Z by qe-e2e (claude-opus-5-5).
+Brief: .grugops/queue/claimed/qe-EPIC-010-close.md (main 608ebfa4). Branch grugops/qe-EPIC-010-close (worktree
+.claude/worktrees/qe-EPIC-010-close, from main 608ebfa4; claim commit 97c283c9).
+
+SUBJECTS
+- head = 053733d2 (main after milestone 1b). main 608ebfa4 differs from 053733d2 only in .grugops/queue, plans/board.md
+  (0 files under src/, tools/, package*). base = ca6e675c (EPIC-010's first merge-base).
+- Lanes run in this worktree (608ebfa4), whose src/ equals 053733d2.
+- Harness: tools/rating/rating.ts at this worktree (tools/ equal to 053733d2). CUTECHESS_CLI / STOCKFISH as qe-ABC-255.
+
+RUNS (one at a time; each block wrapped in flock <scratchpad>/host-test.lock; lock released between blocks so
+arch-ABC-263 may interleave). Order: 1 C3'', 2 S', 3 Levels, 4 UCI session, 5 Ladder short.
+1. C3'': node tools/rating/rating.ts d 053733d2 ca6e675c <out> --budget-ms 100 --rounds 200 --concurrency 1   (400 games)
+2. S'  : node tools/rating/rating.ts r 053733d2 <out> --budget-ms 500 --rounds 5 --concurrency 1   (10 games, E 1650)
+3. Levels deep lane : ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/levels.test.ts --reporter=verbose
+4. UCI session deep : ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/uci-session.test.ts
+5. Ladder short mode: LADDER_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/ladder.test.ts
+   Lanes 3-5 add only reporters: --reporter=verbose --reporter=json --outputFile.json=<scratch> (the json gives the
+   counts; verbose prints passing tests' console lines). Neither changes which tests run.
+
+TIME ESTIMATE (estimates, from receipts)
+- C3'': 400 games at 253-334 games/h (qe-ABC-255 A4 SHARED / A3 ALONE at 100 ms) = 1.2-1.6 h, plus two clone
+  builds (~2-5 min). Owner-set and pre-approved (~1.2-1.6 h). Runaway cap 180 min (kills own play only).
+- S': 10 games at ~94 games/h (qe-ABC-255 A5) = ~6-7 min + one build -> ~8-12 min. Cap 40 min.
+- Levels deep lane: ~555 s (ADR-0056 R-TC, 41 tests) -> ~9-11 min. Cap 40 min.
+- UCI session deep lane: ~5 min (ADR estimate; A11 5x22 s + A10 3x59.5 s = ~4.8 min of searches) -> ~5-9 min. Cap 40 min.
+- Ladder short mode: 848 s on a loaded host (command log) -> ~10-18 min. Cap 45 min.
+- Total ~1.8-2.6 h of play/lanes plus waits. No run other than C3'' is estimated > 60 min, so no STOP.
+
+HOST / ADMISSIBILITY
+- Per block (block.mjs from qe-ABC-255): wait-clear poll 15 s for 0 real foreign vitest (node* with /vitest in args;
+  flock waiters and shells not counted, QE-249-c), 0 foreign cutechess-cli, load1 <= 2.0, Tctl <= 60 C; wait cap
+  10 min (WAIT_MIN=10), then proceed flagged SHARED. Strength reads do not need ALONE (brief); admissibility is
+  recorded as ALONE (clear at start and < 20 % of 10 s samples with a foreign vitest) or SHARED otherwise.
+- 10 s samples: load1, Tctl, foreign vitest pids, foreign cutechess, foreign processes >= 20 % CPU.
+- THERMAL STOP: median of last 30 Tctl samples > 85 C -> SIGTERM own play (never a foreign process). The read is VOID.
+- QE never kills a foreign process.
+
+GRADING (as written; nothing re-interpreted)
+C3'' (ADR-0056 D5 C3''; EPIC-010 "This epic's close"):
+- Valid: 400 of 400 games complete AND 0 faults (harness summary 'faults', cutechess terminations illegal /
+  disconnect / stall / crash / no result) AND 0 losses on time by either build at the 50 ms margin.
+  Else UNRESOLVED -> re-run once (part of the rule). A second invalid read -> report UNRESOLVED and stop.
+  A thermal VOID or harness crash counts as invalid the same way.
+- MET: head (first-named, 'skytalix') >= 200.0 of 400. NOT MET: < 200.0. The interval is reported, not graded.
+- Reported: W/L/D, score, cutechess Elo +/-, draw ratio, max overshoot per side (cutechess -debug clock, go -> bestmove,
+  book replies excluded), games/h, terminations.
+RISK-EPIC010-08 (effective resolution; method fixed here, cluster.mjs):
+- Per-game head score s in {0, .5, 1}; opening index = (Round-1) mod 100 (checked against the FEN tag).
+- SE_iid = sd(s)/sqrt(400) (should reproduce cutechess's +/-); SE_pair = sd(colour-swapped pair means)/sqrt(200);
+  SE_open = sd(per-opening 4-game means)/sqrt(100) = the cluster-robust SE -> EFFECTIVE RESOLUTION.
+  Elo +/- = 1.96 * SE * 400 / (ln10 * S(1-S)); design effect = (SE/SE_iid)^2; effective games = 400/deff.
+- Also: repeat pairs (same opening, same colours, round r vs r+100): share with identical result and identical
+  movetext; per-opening correlation of rounds 1-100 vs 101-200.
+- Reading rule: SE_open-based +/- reported beside cutechess's. If it is > 1.25x the iid +/- (or > 30 Elo), that is a
+  gap routed to the Architect (EPIC-010 RISK-EPIC010-08 says "a finding that the interval is much wider goes to the
+  Architect"). Neither changes MET/NOT MET.
+S' (ADR-0056 S'; EPIC-010 merge rule bars):
+- S-1: 0 faults. S-2: 0 losses on time (skytalix at 50 ms margin). S-4: >= 3.0 of 10; below that 10 more games and
+  >= 7.0 of 20 (the extra 10 games would be a second r run with the same command; ~10 min).
+- Reported: W/L/D, score, Stockfish depth per move (median/min), skytalix max overshoot over 500 ms (flag 12 ms).
+- Pooled S' ledger (500 ms, E 1650): qe-ABC-255 A5 9/10 (becf571a) + this smoke. Re-pin up when pooled > 85 % over
+  >= 30 games; < 60 % over >= 30 games is a question for the owner (BA/PM reading). 20 games < 30 -> no re-pin.
+Lanes: each passes on exit 0 with every test passed and 0 failed, 0 skipped/todo (counts from my run's json).
+  A failure is reported exactly as it ran; not re-run for luck. A run killed by the thermal stop or a harness fault
+  (not a test failure) is re-run once and labelled.
+
+VERDICT RULE
+- EPIC-010 close MET = C3'' valid and MET, AND S' passes S-1/S-2/S-4, AND all three lanes pass.
+- C3'' NOT MET -> EPIC-010 miss path: the next epic's strength tickets wait until BA/PM names suspects and the
+  Orchestrator rules keep / revert / re-read. A lane or S' failure -> NOT MET with the failing item as a defect gap.
+- QE verdict wording: PASS / PASS_WITH_GAPS / FAIL, with gap ids QE-E010C-<letter>.
