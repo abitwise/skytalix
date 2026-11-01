@@ -1,3 +1,4 @@
+_Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — **ABC-251 DONE (dropped, nothing to cut)**: TurboFan already inlines the helpers. ABC-253 pulled → `se-ABC-253`, last in milestone 1b; then the EPIC-010 close hop. Owed to next BA/PM: ABC-251 page close, ABC-262 A4-waived mark (QE-262-b). Owed to next Architect: O1-c ≈ 0 on ADR-0055. Scratch quota freed (~8 GB of finished hops' scratch removed)._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — **ABC-262 DONE** (merged; first EPIC-011 M0 ticket done). Running: se-ABC-251._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — `bapm-abc250-close` merged: ABC-250/252 pages closed (routing / dropped); ABC-251 narrowed to O1-c (S, DoR 10/10) and pulled → `se-ABC-251`. Milestone 1b remaining: ABC-251 → ABC-253 (shared files, sequential). Running: qe-ABC-262, se-ABC-251._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — `arch-abc250-close` merged: ADR-0055 status (O1-d delivered 1.11–1.12×; remaining O1-c ≈ 1.00–1.04×, O1-a ≈ 1.01–1.06×; O1 total ≈ 1.16× central vs 1.5× planned); perft-read addendum (no rule needed now; ABC-251/253 reads are search reads under D3-V2); ADR-0056 E1650 + raise rule; ABC-251 design input (profile first, stop rule) …a07418ac. Running: bapm-abc250-close, qe-ABC-262._
@@ -1310,8 +1311,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## Ready (WIP 1/8)
-- [ABC-253] Zobrist keys travel as two 32-bit halves in the search, the TT and the repetition scan; bigint at the API (ADR-0055 O1-a; size: M, priority: P3, value-identical S2; DoR 10/10; milestone 1b; ≥ 1.02×; pull after the O1-b tickets)
+## Ready (WIP 0/8)
 
 
 
@@ -1328,7 +1328,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 ## In Development (WIP 1/3)
-- [ABC-251] The search walks packed moves and builds a Move only at its return, with inlined helpers (ADR-0055 O1-b part 2 + O1-c; size: L (S if narrowed), priority: P2; DoR 9/10; milestone 1b; waits ABC-250's reading) **2026-11-01: narrows to O1-c alone (ABC-250 closed not merged) → re-scope by `bapm-abc250-close`** **2026-11-01 re-scoped (bapm-abc250-close): O1-c alone, size S, DoR 10/10 → Ready → pulled → `se-ABC-251` (profile first; stop before any timed read if nothing measurable)**
+- [ABC-253] Zobrist keys travel as two 32-bit halves in the search, the TT and the repetition scan; bigint at the API (ADR-0055 O1-a; size: M, priority: P3, value-identical S2; DoR 10/10; milestone 1b; ≥ 1.02×; pull after the O1-b tickets) **→ pulled 2026-11-01 → `se-ABC-253` (last in milestone 1b; A5 search read under D3-V2)**
 
 
 
@@ -1416,6 +1416,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+- [ABC-251] The search walks packed moves and builds a Move only at its return, with inlined helpers (ADR-0055 O1-b part 2 + O1-c; size: L (S if narrowed), priority: P2; DoR 9/10; milestone 1b; waits ABC-250's reading) **2026-11-01: narrows to O1-c alone (ABC-250 closed not merged) → re-scope by `bapm-abc250-close`** **2026-11-01 re-scoped (bapm-abc250-close): O1-c alone, size S, DoR 10/10 → Ready → pulled → `se-ABC-251` (profile first; stop before any timed read if nothing measurable)** **→ Done (dropped — "nothing to cut") 2026-11-01 (…1f6ed15a): profile STOP — helpers already inlined by TurboFan (68/68), Budget monomorphic; no src change, no timed read. Not a miss.**
 - [ABC-262] The early-exit row reads a pawns-first board and the in-check promotion row reads black to move (test-only; EPIC-011 phase 0; size: XS, priority: P3; DoR 10/10; QE-261-a/b; cut 2026-11-01 bapm-qe-gaps-1101b; after ABC-250 resolves, before ABC-252) **→ Ready → pulled 2026-11-01 → `se-ABC-262`** **→ In Review 2026-11-01 (se-ABC-262 done bb399321; A1–A3, A5–A8 met; A4 STOP: QB survives because in check epoch stays 0 and unstamped pinStamp squares read 0 — production is correct (`inCheck ||` short-circuits, src/legal.ts:429). Orchestrator ruling: A4 WAIVED — no setup call on module-private state; QB stays covered by the ENGINE_DEEP ABC-254 A1 walk) → `qe-ABC-262`** **→ Done 2026-11-01 (qe-ABC-262 PASS_WITH_GAPS, A4 waived, UAT waived test-only; QB confirmed caught by the ENGINE_DEEP walk; line 429 production reasoning confirmed; G8 8.94 / 8.94 s ALONE; merged). Gaps: QE-262-a LOW (re-plant QB/QBe/QKb if the guard or pin set is rewritten), b INFO (mark A4 waived on the page — next BA/PM hop), c INFO (scratch quota).**
 - [ABC-250] Moves packed into integers in reused typed arrays for generation, legality and make/unmake, read on perft first (ADR-0055 O1-b part 1; size: M, priority: P2, value-identical S2, 0 games; DoR 10/10; EPIC-010 milestone 1b; bars ≥ 1.25× merge / below → not merged, ABC-251 narrows, ABC-252 dropped; Architect to confirm ADR-0003 clause 1 reading at design; after ABC-223 and ABC-249) **→ pulled 2026-11-01 → `se-ABC-250` (on top of ABC-254; speed rows under D3-V2)** **→ In Review 2026-11-01 (se-ABC-250 done 35139b31; packed int32 moves, typed-array undo stack, perft on fixed buffers; A1 perft 45/45, A2 285 074-node walk 0 mismatches; 2 381/2 381; review OK. RISK: informal perft 1.07–1.14× vs GO bar 1.25× — likely HOLD/NO-GO; search nps 1.00× (search not yet on the packed path, by scope)) → `qe-ABC-250` (A4 under D3-V2 in an ALONE window, after bapm-qe-gaps-1101b returns)** **→ Done 2026-11-01 — CLOSED NOT MERGED by routing (…d2571be5), NOT a graded miss: qe-ABC-250 UNRESOLVED on A4 (kiwipete/start VOID; position-6 valid 1.111 < 1.25; no kiwipete pair ≥ 1.25); A1/A2/A3/A5/G1/G4–G9 green. Branch grugops/ABC-250 kept (revivable). Consequences per page: ABC-251 narrows to O1-c; ABC-252 dropped. QE-250-a (perft reads void on a hot host) → Architect.**
 - [ABC-252] One move generator: legalMoves builds its list from the packed generator through one converter (O1-b part 3; size: M, priority: P3; DoR 9/10; milestone 1b; dropped if ABC-250 is dropped) **→ Done (dropped) 2026-11-01 — consequence of ABC-250 closed not merged (…d2571be5)**
