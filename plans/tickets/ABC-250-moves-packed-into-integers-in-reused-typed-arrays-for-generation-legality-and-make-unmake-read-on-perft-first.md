@@ -1,14 +1,54 @@
 ---
 id: ABC-250
 title: "Moves packed into integers in reused typed arrays for generation, legality and make/unmake, read on perft first; the search is not touched yet (ADR-0055 O1-b part 1, value-identical)"
-status: backlog
-column: Backlog
+status: dropped
+column: Done
 size: M
 priority: P2
 epic: EPIC-010
 ---
 
 # ABC-250: packed moves in the rules core, read on perft before the search is touched
+
+> **CLOSED NOT MERGED BY ROUTING 2026-11-01 by BA/PM** (task `bapm-abc250-close`, records only, at `main` `767a2e3e`;
+> nothing run, built or timed). **Not delivered. A4 was not graded: it read UNRESOLVED** (`qe-ABC-250` verdict
+> `…4fe9c469`; A4 `…677d4d41`). kiwipete and start were VOID under § A4's validity rule after D3-V2's one re-run;
+> position-6 read validly at 1.111×. **This ticket did not miss its bar.** Neither HOLD nor NO-GO was read, so there is
+> no `failed-attempt` note and none is owed. The Orchestrator closed it by routing, under the owner's delegation of
+> 2026-10-22 (`orch-2026-10-30a` `…d2571be5`). It applied § What happens on a miss's consequences as a routing choice,
+> not as a grade:
+> - `ABC-251` narrows to O1-c alone (re-scoped on its page by this task).
+> - `ABC-252` is dropped.
+>
+> **The reason, from that note:** GO needs two of the three boards at ≥ 1.25×. position-6 is validly below the bar, and
+> no counted kiwipete pair reached 1.25 in either schedule (max 1.217). Another ALONE read could therefore only end
+> UNRESOLVED or in the drop. It would also first need an Architect cool-down rule beyond D3-V2 (QE-250-a, routed to
+> `arch-abc250-close`) and about 40 min of host time.
+>
+> Front matter: `status: dropped`, `column: Done`, as this repository closes a ticket not delivered (`ABC-209`,
+> `ABC-256`). The board card is already in Done (Orchestrator, `a9fa76c5`).
+>
+> - **Green at head `2e04eee5`** (branch `grugops/ABC-250`, tip `35139b31`; QE `…81a2c477`, `…94b58687`):
+>   - **A1 and A2:** MET (spot).
+>   - **A3 / `G4`:** MET, 7 827 + 264 rows byte-equal out of tree.
+>   - **A5:** MET, kiwipete 1.003×, position-6 0.994×, start 1.005×. All three runs were valid, with no re-run.
+>   - **Gates:** `G1` 54/58 with rows equal; `G5` instrument part; `G6` 9 = 9 and 10 = 10; `G7` growth 0; `G8`
+>     8.76 s (new rows 51.0 ms); `G9` empty. lint, typecheck and build exit 0. `npm test` 2 381/2 381 ×3, skips 0.
+>   - **QE plants and relay:** 6 of 6 QE plants red; the QE-261-c relay holds.
+> - **Not graded:** A4, as above. So A7 (S2) is **neither met nor missed**.
+> - **What the evidence says about the prize (INFO):** the informal perft readings were 1.11–1.14× cold and
+>   1.07–1.09× steady (`se-ABC-250` `…ff7ffb6e`). In base's profile, GC was 4.2 % and `addMove` 3.7 % once `ABC-254`
+>   landed. Allocation is a smaller share than `ADR-0055`'s profile assumed.
+> - **Kept, reversible:** the branch `grugops/ABC-250` (code `2e04eee5`) is kept. Reversal path, from `…d2571be5`: a
+>   future ticket may revive the branch with an Architect-ruled read method. The re-open triggers in § What happens
+>   on a miss are written for a graded HOLD or NO-GO; this close is neither.
+> - **QE gaps routed:** QE-250-a (MEDIUM, the perft instrument) is with the Architect (`arch-abc250-close`). QE-250-b
+>   (LOW, the window was not alone) is the Orchestrator's host question. QE-250-c and QE-250-e are INFO. QE-250-d (two
+>   load-bearing oracles until `ABC-252`) falls away, because the packed path does not merge.
+> - **UAT:** not owed, because nothing merges.
+>
+> The rest of this page stays as history. Its "Backlog → Ready recommended" line and its GO / HOLD / NO-GO text are
+> not a live state.
 
 > **DATED LINE 2026-11-01** (BA/PM, `bapm-epic011-dedupe`): `ABC-254` moved to `EPIC-011` (it waits on Q-SP-3 and
 > would hold `EPIC-010`'s close). § Dependencies' "`ABC-254` goes first" case stands only as the exception written on

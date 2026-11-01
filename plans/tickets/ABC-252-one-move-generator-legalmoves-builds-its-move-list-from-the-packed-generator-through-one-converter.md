@@ -1,14 +1,31 @@
 ---
 id: ABC-252
 title: "One move generator: legalMoves and the shell's other move calls build their Move lists from the packed path through one converter, and the object generator is removed (ADR-0055 O1-b part 3, the shell adapter; value-identical)"
-status: backlog
-column: Backlog
+status: dropped
+column: Done
 size: M
 priority: P3
 epic: EPIC-010
 ---
 
 # ABC-252: one move generator, and the shell reaches it through one converter
+
+> **DROPPED 2026-11-01 by BA/PM** (task `bapm-abc250-close`, records only, at `main` `767a2e3e`; nothing run). **Not
+> delivered, and nothing was built.** This is the consequence § Dependencies names: `ABC-250` is closed and not merged
+> (by routing, with A4 not graded; `orch-2026-10-30a` `…d2571be5`). So the packed path this ticket would have merged
+> into the object path never reaches `main`, and there is already one generator. Nothing about this ticket was read
+> or missed.
+>
+> - Front matter: `status: dropped`, `column: Done`, as this repository closes a ticket not delivered (`ABC-209`,
+>   `ABC-256`). The board card is already in Done (Orchestrator, `a9fa76c5`).
+> - **Nothing waits on it.** `ABC-251` no longer depends on it (re-scoped to O1-c alone by this task). `ABC-254` merged
+>   before it (`3bfe180e`).
+> - **Test note 5 lapses:** `generateMoves` keeps its export and its order. The re-board rule for `ABC-261`'s and
+>   `ABC-262`'s rows ("never drop the bar") still binds any later ticket that reorders generation.
+> - **Revival:** only with `ABC-250`'s branch (`grugops/ABC-250`), if a future ticket revives it with an Architect-ruled
+>   read method. That ticket would then re-cut this one.
+>
+> The rest of this page stays as history.
 
 > **Cut 2026-11-01 by BA/PM** (task `bapm-goal3000-o1-cut`, records only, at `main` `bae25131`; nothing run, built or
 > timed). Source: `ADR-0055` option **O1-b**, its third part (§ D6, "the shell adapter"; § D1 O1-b, "tests through an
