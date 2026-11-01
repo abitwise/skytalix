@@ -879,3 +879,34 @@ describe("ABC-261 — legalCapturesAndQueenPromotions in check tests its quiet q
     }
   });
 });
+
+// ABC-262 (QE-261-b): the ABC-261 row above reads white to move only. These are its colour mirrors,
+// black to move and in check: lazy equals full, the non-blocking promotion absent, the blocking one
+// present.
+describe("ABC-262 — legalCapturesAndQueenPromotions in check tests black's quiet queen promotions", () => {
+  it("equals the full filter with black in check: a non-blocking promotion is absent, a blocking one present", () => {
+    const boards: [name: string, fen: string, pawn: string, ahead: string, present: boolean][] = [
+      // P1′: the e1 rook checks up the e-file; a1 neither blocks nor captures.
+      ["P1′, promotion off the check line", "4k3/8/8/8/8/8/p7/4R2K b - - 0 1", "a2", "a1", false],
+      // P2′: the a1 rook checks along the first rank; b1 blocks it.
+      ["P2′, promotion blocks the check", "7K/8/8/8/8/8/1p6/R3k3 b - - 0 1", "b2", "b1", true],
+    ];
+    for (const [name, fen, pawn, ahead, present] of boards) {
+      const position = parseFen(fen);
+      const from = parseSquareName(pawn);
+      const to = parseSquareName(ahead);
+      expect(position.blackToMove, name).toBe(true);
+      expect(isInCheck(position), name).toBe(true);
+      expect(position.board[from], name).toBe(PAWN | BLACK);
+      expect(from >> 4, name).toBe(1); // black's seventh rank
+      expect(position.board[to], name).toBe(EMPTY);
+
+      const lazy = legalCapturesAndQueenPromotions(position);
+      expect(lazy, name).toEqual(fullLegalCapturesAndQueenPromotions(position));
+      const promotes = lazy.some(
+        (m) => m.from === from && m.to === to && m.captured === EMPTY && m.promotion === QUEEN,
+      );
+      expect(promotes, name).toBe(present);
+    }
+  });
+});

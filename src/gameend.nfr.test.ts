@@ -60,7 +60,7 @@ import {
   legalMoves,
 } from "./legal.ts";
 import { FLAG_NONE, generateCaptures, generateMoves, isSquareAttackedBy } from "./moves.ts";
-import { EMPTY, KING, parseSquareName } from "./position.ts";
+import { EMPTY, KING, PAWN, parseSquareName } from "./position.ts";
 import { QUIESCENCE_MAX_PLY, quiesce } from "./quiescence.ts";
 import { lateMoveReduction } from "./search.ts";
 import { zobristKey } from "./zobrist.ts";
@@ -247,6 +247,26 @@ describe("ABC-206 — the search leaf's game-end check stays cheap (call counts,
     const attackTests = vi.mocked(isSquareAttackedBy).mock.calls.length;
     expect(attackTests).toBeGreaterThan(0); // the spy sees legal.ts's calls, so the bar is live
     expect(attackTests).toBeLessThanOrEqual(2);
+  });
+
+  // ABC-262 (QE-261-a): the ABC-261 row above reads a king-first board only. Here the first
+  // generated move is a pawn move, which out of check answers untested at once: production makes 1
+  // call (the check test). A lost early exit pays the lazy list over the 8 king moves, and an
+  // untested move that does not return at once pays one more test. Bound, like ABC-261's
+  // precondition, to `generateMoves`' scan order.
+  it("hasLegalMove out of check answers a pawn-first board at once: at most 1 attack test", () => {
+    const position = parseFen("4k3/8/8/8/8/4K3/PPP5/8 w - - 0 1");
+    const pseudo = generateMoves(position);
+    const kingMoves = pseudo.filter((move) => move.piece === KING).length;
+    expect(isInCheck(position)).toBe(false);
+    expect(pseudo[0]?.piece).toBe(PAWN); // the first generated move is a pawn move
+    expect(kingMoves).toBeGreaterThanOrEqual(3); // so a lazy list without the early exit tests more
+    vi.clearAllMocks();
+
+    expect(hasLegalMove(position)).toBe(true);
+    const attackTests = vi.mocked(isSquareAttackedBy).mock.calls.length;
+    expect(attackTests).toBeGreaterThan(0); // the spy sees legal.ts's calls, so the bar is live
+    expect(attackTests).toBeLessThanOrEqual(1);
   });
 
   it("legalCaptures on kiwipete plays none of the pseudo-legal captures (all of them before ABC-254)", () => {
