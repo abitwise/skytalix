@@ -5,7 +5,11 @@ import { readdirSync, readFileSync } from "node:fs";
 import { loadavg } from "node:os";
 import { join } from "node:path";
 export const pids = (args) => { try { return execFileSync("pgrep", args, { encoding: "utf8" }).trim().split("\n").filter(Boolean).map(Number); } catch { return []; } };
-export const vitestPids = () => pids(["-f", "[/]vitest"]);
+// A RUNNING vitest only: the matched process must itself be node (or vitest). A `flock … ./node_modules/.bin/vitest`
+// waiter queued on host-test.lock (and its bash wrapper) is not a running vitest; counting it deadlocks with the
+// lock holder (seen 15:53Z: two waiters for our own lock). QE-254 post-PREREG detector fix, disclosed.
+const commOf = (pid) => { try { return readFileSync(`/proc/${pid}/comm`, "utf8").trim(); } catch { return ""; } };
+export const vitestPids = () => pids(["-f", "[/]vitest"]).filter((pid) => /^(node|vitest)/.test(commOf(pid)));
 export const cutechessCount = () => pids(["-x", "cutechess-cli"]).length;
 export const load1 = () => loadavg()[0];
 export const tctl = () => {

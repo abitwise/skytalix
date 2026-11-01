@@ -1,0 +1,5 @@
+start 2026-11-01T16:58:04Z
+PQ2 ENGINE_DEEP A1 rc=1
+FP restored
+deep start 2026-11-01T16:58:23Z
+end 2026-11-01T17:17:48Z

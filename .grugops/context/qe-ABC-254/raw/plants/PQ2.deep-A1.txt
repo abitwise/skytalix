@@ -1,0 +1,6 @@
+     × on ABC-206's 285 074-position walk to depth 3 [deep, ENGINE_DEEP=1] 3475ms
+     × on the six perft roots, ADR-0003's 518 474-node walk [deep, ENGINE_DEEP=1] 14916ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: kiwipete 20-65 39-22 65-99: expected [ { from: 81, to: 99, …(4) }, …(3) ] to deeply equal [ { from: 81, to: 99, …(4) }, …(2) ]
+AssertionError: kiwipete 20-65 39-22 65-99: expected [ { from: 81, to: 99, …(4) }, …(3) ] to deeply equal [ { from: 81, to: 99, …(4) }, …(2) ]
+      Tests  2 failed | 1 passed | 45 skipped (48)
