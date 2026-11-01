@@ -1,8 +1,9 @@
 ---
 id: EPIC-006
 title: Game session and packaging
-status: backlog
-column: Backlog
+status: done
+column: Done
+closed: "2026-11-01, by the Orchestrator on BA/PM's close-out plan (bapm-epic011-dedupe, merged c596aad5): every cut ticket Done, ABC-060 dropped; acceptance 1-4 MET; save/resume not earned, not built. Front matter folded 2026-11-01 (bapm-100-400-rule)"
 priority: P1
 size: L
 owner: BA/PM

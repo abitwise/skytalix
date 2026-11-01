@@ -40,7 +40,7 @@ epic: EPIC-011
 1. A tuning tool under `tools/` (not shipped in `dist/`): a stated method (for example logistic fit of game results
    against the static eval), on a position set with a recorded licence, split into training and validation.
 2. Its output: a constants file in `src/` with the provenance header `ABC-215` set.
-3. Validation outside, never self-play alone (`RISK-EPIC010-05`): the smoke pair and, before the merge, its batched R pair (A6).
+3. Validation outside, never self-play alone (`RISK-EPIC010-05`): ~~the smoke pair and, before the merge, its batched R pair (A6)~~ *2026-11-01:* the 100-game read and, asked of the owner first, the 400-game pair against Stockfish before the merge (A6).
 
 ## Out of scope
 
@@ -55,11 +55,7 @@ epic: EPIC-011
 - **A3 (constants only).** `dist/` holds no tuning code (`git diff` on the built tree); `src/` gains constants only.
 - **A4 (relations).** `G3` mirror and purity; `G2` ≤ base × 1.02 (only constants change).
 - **A5 (gates).** `G1`, `G5`, `G6` "≥ base" (floor 6), `G8`, `G9`, `G10`.
-- **A6 (the reading).** The smoke pair of `EPIC-010` § The merge rule (owner Q4 = (e), extended, 2026-10-29), on the candidate head rebased on `main`, before the merge: S-1 0 faults, S-2 0 losses on time, S-3 D ≥ 3.0 of 10 (else ≥ 7.0 of 20), S-4 R ≥ 3.0 of 10 (else ≥ 7.0 of 20). **And its batched validation is read before the merge, not after:** an interleaved R
-  pair (`ABC-225`), the candidate head against its merge-base, 200 + 200 games; merge only if it is not LOSS
-  (X + Y ≥ 0). Why: a tuned set judged by self-play alone repeats `EPIC-008`'s failure, and this ticket is alone in
-  milestone 3, so its batch costs the same hours before the merge as after it, and needs no revert. BA/PM's delivery
-  call (2026-10-29), inside the owner's rule. Reported: each smoke's W/L/D and score, the ledger's pooled R score since the last batch, the pair's X ± Y and pentanomial, `G11`.
+- **A6 (the reading).** *(2026-11-01, the owner's rule, `bapm-100-400-rule`; replaces the smoke pair and the 200 + 200 R pair at 4 000 ms that this row named.)* One 100-game read at 100 ms a move before the merge (`EPIC-011` § The per-change rule): the candidate head rebased on `main` against its merge-base, self-play, openings 1–50 with both colours, one game at a time, through `ABC-255`. 100 of 100 games complete, the candidate makes 0 faults and loses 0 games on time, and the score meets the `ADR-0056` fold's pass line (`arch-adr0056-100ms-fold`, pending; `UNKNOWN - verify` until merged). **And an outside read before the merge** (a tuned set judged by self-play alone repeats `EPIC-008`'s failure, `RISK-EPIC010-05`): the 400-game pair at 100 ms against Stockfish, the candidate head against its merge-base (`EPIC-011` § The per-change rule, the epic shape), graded by the fold's epic pass line. It is not the owner-set epic read and is estimated over 1 h (≈ 1.3–2 h), so **it is asked of the owner before it starts**; if he declines, this ticket merges on the 100-game read and the epic's 400-game read is its outside check. Reported: W/L/D, score and Elo ± error of each read, the pair's X ± Y, `G11`.
 
 ## NFR triggers
 
@@ -89,7 +85,7 @@ epic: EPIC-011
 | 1 | problem clear | ✅ SA 8b |
 | 2 | scope and out-of-scope | ✅ constants only |
 | 3 | INVEST | ⚠ L; depends on milestone 2 |
-| 4 | testable, measurable acceptance | ✅ every row measurable; A6 is the smoke pair (`EPIC-010` § The merge rule, S-1–S-4) |
+| 4 | testable, measurable acceptance | ✅ every row measurable; A6 is the 100-game read plus, on the owner's yes, the 400-game outside pair (pass lines: the `ADR-0056` fold's, pending) *(2026-11-01)* |
 | 5 | dependencies known | ✅ |
 | 6 | NFR triggers with targets | ✅ `G2` ≤ 1.02 × |
 | 7 | test notes | ✅ 2 |

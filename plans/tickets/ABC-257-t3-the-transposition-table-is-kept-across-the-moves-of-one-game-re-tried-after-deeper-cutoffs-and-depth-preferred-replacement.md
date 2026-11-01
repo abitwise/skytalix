@@ -48,9 +48,7 @@ adr: "ADR-0025 decision 4 amendment of 2026-10-26: ACCEPTED by the owner (…2ae
   the next move; `NFR-009` size and growth, including `heapUsed` ≤ 1 MiB over a 40-move game; `G1`, `G4` with the clear
   door, `G5`, `G6`, `G8`, `G9`; the ADR records that it was reported to the owner), re-read at refinement against the
   base this ticket is written on.
-- **A6 (the reading, replacing `ABC-209`'s S1).** The per-change rule in force at the pull (`EPIC-011` § The per-change
-  rule): today the smoke pair of `EPIC-010` § The merge rule (S-1 to S-4); if the owner said yes to Q-3K-2, also
-  `ABC-255`'s SPRT at `[0, 5]` stopping H1. An H0 closes the ticket; it is not re-tuned without the owner's word.
+- **A6 (the reading, replacing `ABC-209`'s S1).** *(2026-11-01, the owner's rule, `bapm-100-400-rule`; replaces the smoke pair and the SPRT this row named.)* One 100-game read at 100 ms a move before the merge (`EPIC-011` § The per-change rule): the candidate head rebased on `main` against its merge-base, self-play, openings 1–50 with both colours, one game at a time, through `ABC-255`. 100 of 100 games complete, the candidate makes 0 faults and loses 0 games on time, and the score meets the `ADR-0056` fold's pass line (`arch-adr0056-100ms-fold`, pending; `UNKNOWN - verify` until merged). Reported: W/L/D, score, `cutechess-cli`'s Elo ± error. A miss of the pass line closes the ticket; it is not re-tuned without the owner's word.
 - **A8 (it pays where it should).** On a 10-move sequence of one game at a fixed depth (QE fixes both before the first
   build; a 40/15 move is not a lane row), the summed nodes of moves 2–10 are ≤ 0.90 × the clear door's.
 
@@ -71,7 +69,7 @@ adr: "ADR-0025 decision 4 amendment of 2026-10-26: ACCEPTED by the owner (…2ae
 
 - `ABC-238` and `ABC-237` merged or closed (same file, `src/transposition.ts`; the precondition this re-try rests on).
 - **Architect:** re-read the accepted `ADR-0025` d4 amendment on the new base and give it its in-force line at merge.
-- **Owner:** none new (the amendment is his, accepted 2026-10-26). Q-3K-2 only shapes A6.
+- **Owner:** none new (the amendment is his, accepted 2026-10-26). Q-3K-2 only shapes A6. *(2026-11-01: answered, no SPRT; A6 is the 100-game read.)*
 
 ## Definition of Ready
 

@@ -10,6 +10,37 @@ owner: BA/PM
 
 # EPIC-010: the verified engine gaps, closed one measured change at a time, against an outside opponent
 
+> **THE OWNER'S VALIDATION RULE, 2026-11-01, by BA/PM** (task `bapm-100-400-rule`, records only, at `main`
+> `452415bd`; nothing run). The owner's word (`orch-2026-10-30a` `…2896c6eb`, verbatim there): no SPRT; *"We can just
+> run 100 games that's it and 400 games after each epic is done on 100ms."* Earlier the same day: games on one core
+> (`…f7a50e95`), and any validation run estimated over 1 h is asked of him first (`…aab3b5f4`). **From this date it
+> replaces § The merge rule's smoke pair, trend and batch for every merge still to come.** Rows below that name them
+> are history and stay on record.
+>
+> - **Per strength-changing ticket: 100 games at 100 ms a move, before the merge.** The candidate head rebased on
+>   `main` against its merge-base, self-play, openings 1–50 of `tools/rating/openings.epd` with both colours, one game
+>   at a time. 0 faults and 0 losses on time by the candidate (S-1, S-2 carried). The pass line is `ADR-0056`'s as the
+>   Architect folds it (`arch-adr0056-100ms-fold`, pending; `UNKNOWN - verify` until merged). 100 games resolve about
+>   ± 48 Elo (95 %): a guard against a clear regression, not a proof of a small gain (`qe-tc-depth-probe` `…07357280`).
+> - **Per epic: 400 games at 100 ms, when the epic's last ticket is Done and before it closes.** By the Orchestrator's
+>   reading (`…2896c6eb` item 2): the interleaved pair (`ABC-225`'s `rpair` shape), the epic's base (`main` at its
+>   first merge-base) and its head (`main` at the close), each 200 games against Stockfish 19 `UCI_LimitStrength`,
+>   `skytalix` at 100 ms. Stockfish's move time, E and the pass line are the `ADR-0056` fold's (the probe read
+>   Stockfish's pick depth held at 100 ms up to E 2 600, `…9fd1fdce`). About ± 24 Elo; ≈ 1.3–2 h (estimate). The
+>   owner set this run, so it needs no further ask.
+> - **Any other validation run estimated over 1 h goes to the owner before it starts:** a re-read, a bisect, a longer
+>   control, an outside pair before a merge.
+> - **Value-identical (speed) tickets keep their S2 nps reading and play no games.** Every ticket left in this epic is
+>   value-identical (`ABC-250`–`ABC-254`) or test-only (`ABC-249`), so **no per-change reading is owed here.**
+> - **This epic's close now owes the per-epic reading:** base `ca6e675c` (the first merge-base, as milestone 1's batch)
+>   against `main` after milestone 1b. **M2 stays graded on milestone 1's batch** (NOT LOSS, `…1a53a7f9`; the measure
+>   the owner accepted). The 400-game reading is added by his new rule and is graded by the fold's pass line. A miss
+>   is framed for him as a batch LOSS is (revert, bisect, accept), and any bisect over 1 h is his to start.
+> - **The instrument:** today `rpair` plays only 4 000 ms against Stockfish at `st=0.5`, and `d` refuses budgets
+>   under 1 000 ms (`tools/rating/rating.ts` `D_BUDGETS_MS`). `ABC-255` is re-scoped to add both 100 ms shapes
+>   (`EPIC-011`). It is tools only and touches no file milestone 1b edits, so **the Orchestrator may pull it before
+>   this epic closes** (`EPIC-011` C12). Otherwise QE reads the close from a scratch command, as the probe did.
+
 > **`ABC-254` BACK IN MILESTONE 1b, FIRST, 2026-11-01 by BA/PM** (task `bapm-ABC-254-ready`, records only, at `main`
 > `039cb05e`; nothing run, built or timed, because `qe-ABC-223` holds the host STRICTLY ALONE). The owner said
 > "ABC-254: yes" (`orch-2026-10-30a` `…f7a50e95`; Q-SP-3 = yes), and the Architect amended `ADR-0003` clauses 1 and 3
@@ -441,6 +472,10 @@ owner: BA/PM
 The epic can stop after any ticket and hold only changes that passed the owner's rule.
 
 ## The merge rule (in force from 2026-10-29: owner Q4 = (e), extended)
+
+> **Superseded 2026-11-01 for every merge still to come** (`bapm-100-400-rule`, the owner's word `…2896c6eb`): 100
+> games at 100 ms per strength-changing ticket, 400 at 100 ms per epic, no SPRT; the top block of this page. This
+> section stays as the record of the rule milestone 1 was merged under.
 
 **The owner's word** (`…278e149b`): *"Selecting Q4 option e, extend a bit, let's set 10 games self-play + 10 games vs
 stockfish"*, and for Q5 *"accept without elo target … but try to understand if things get worse."* His `EPIC-009` word
@@ -970,6 +1005,8 @@ because the owner's yes and the amending ADR came before `ABC-250` entered devel
 | Q-SP-3 (`ADR-0055`, ~~open~~ answered) | Amend the owner-ratified `ADR-0003` clauses 1 and 3 so lazy legality ((c2)) may be built now, for speed | — Not answered explicitly on 2026-11-01 (Orchestrator `…74216a44`, item 2). **Later 2026-11-01: "ABC-254: yes"** (`…f7a50e95`); `ADR-0003` amended (`…c314772c`, merged `89af8b56`); `ABC-254` 10/10, first in milestone 1b | `ABC-254` waits in Backlog (9/10); on yes, the Architect writes the amending ADR and it goes Ready; on no, it is closed as declined |
 | Q-SP-2 (`ADR-0055`, open) | `ADR-0055` D3's bars, as written or reset | — | Used only by `ABC-250` A4 (perft A1 / A0: GO ≥ 1.25×, HOLD 1.10–1.25×, NO-GO < 1.10×). **They apply as written unless he resets them before the reading** |
 
+- **Q4 superseded 2026-11-01** (`bapm-100-400-rule`): the owner's word `…2896c6eb` replaces (e), extended, with 100
+  games at 100 ms per strength-changing ticket and 400 at 100 ms per epic (the top block). M1 and M2 stand as graded.
 - **The cut's text of Q1–Q5**, with the options and defaults, is in git at `542e8219` and in note
   `bapm-epic010-improvements` `…5ada23af`.
 - **Not questions for him:** which form an ADR takes, the door's shape, `Q-SET`'s extra rows, and the game counts
