@@ -1180,7 +1180,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   one hop at pull, when it checks `Ready for Dev`'s exit at that moment; the row records the pull.
 
   HEADING FORMAT (spec §6.1): each column is an H2 heading carrying its live/limit WIP count,
-  e.g. `## In Development (WIP 2/3)` — the left number is how many tickets are in the column
+  e.g. `## In Development (WIP 1/3)` — the left number is how many tickets are in the column
   now, the right number is the limit from config. Unlimited columns read `(WIP unlimited)`;
   Blocked is visible and time-tracked (no WIP limit) and reads `(visible, time-tracked)`.
   INVARIANT: the column H2 headings and the rows of the `## Columns` table are the same 13 names in the
@@ -1190,10 +1190,10 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 2/3)
+    ## In Development (WIP 1/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
-    ## In Review (WIP 1/3)
+    ## In Review (WIP 2/3)
     - [ABC-012] Portfolio FX conversion  (PR: #41, QE: running)
 
   BOARD <-> TICKET CONTRACT: each ticket file (`plans/tickets/<prefix>-xxx.md`) carries a
@@ -1322,8 +1322,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 2/3)
-- [ABC-261] The default lane sees hasLegalMove lose its early exit and reads quiet queen promotions while in check (test-only; EPIC-010 milestone 1b; size: XS, priority: P3; DoR 10/10 once ABC-254 merges; QE-254-b/c; cut 2026-11-01 bapm-qe-gaps-1101; dropped if ABC-254 is dropped) **→ Ready (ABC-254 merged) → pulled 2026-11-01 → `se-ABC-261`**
+## In Development (WIP 1/3)
 - [ABC-250] Moves packed into integers in reused typed arrays for generation, legality and make/unmake, read on perft first (ADR-0055 O1-b part 1; size: M, priority: P2, value-identical S2, 0 games; DoR 10/10; EPIC-010 milestone 1b; bars ≥ 1.25× merge / below → not merged, ABC-251 narrows, ABC-252 dropped; Architect to confirm ADR-0003 clause 1 reading at design; after ABC-223 and ABC-249) **→ pulled 2026-11-01 → `se-ABC-250` (on top of ABC-254; speed rows under D3-V2)**
 
 
@@ -1352,7 +1351,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
+## In Review (WIP 2/3)
+- [ABC-261] The default lane sees hasLegalMove lose its early exit and reads quiet queen promotions while in check (test-only; EPIC-010 milestone 1b; size: XS, priority: P3; DoR 10/10 once ABC-254 merges; QE-254-b/c; cut 2026-11-01 bapm-qe-gaps-1101; dropped if ABC-254 is dropped) **→ Ready (ABC-254 merged) → pulled 2026-11-01 → `se-ABC-261`** **→ In Review 2026-11-01 (se-ABC-261 done 06d6d987; early-exit row (PL3a 6 calls vs bar 2) and in-check promotion row (PQ2 red); 2 374/2 374; review OK — claim paths in the code commit accepted, as on ABC-259) → `qe-ABC-261`**
 - [ABC-260] The source scan catches `process` by any spelling and a comment marker inside a string cannot hide code (test-only; EPIC-010 milestone 1b; size: XS, priority: P2; DoR 10/10; QE-259-a/b; cut 2026-11-01 bapm-qe-gaps-1101) **→ Ready → pulled 2026-11-01 → `se-ABC-260` (before ABC-251)** **→ In Review 2026-11-01 (se-ABC-260 done 64c7e829; whole-word `process`, string-aware comment strip shared by A8 and ABC-259; plants Q5/Q6/Q7 red; review OK — LOW: strings are kept, so a string literal naming `process` in core files now trips the env row (stricter, accepted); regex literals with quotes unhandled) → `qe-ABC-260` queued AFTER the ABC-254 alone window**
 
 
