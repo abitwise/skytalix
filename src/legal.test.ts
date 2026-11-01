@@ -2,11 +2,16 @@ import { describe, expect, it } from "vitest";
 import { makeMove, unmakeMove } from "./apply.ts";
 import { parseFenGrammarOnly as parseFen, toFen } from "./fen.ts";
 import {
+  fullHasLegalMove,
+  fullLegalCaptures,
+  fullLegalCapturesAndQueenPromotions,
+  fullLegalMoves,
   givesCheck,
   hasLegalEnPassant,
   hasLegalMove,
   isInCheck,
   legalCaptures,
+  legalCapturesAndQueenPromotions,
   legalMoves,
 } from "./legal.ts";
 import {
@@ -17,6 +22,7 @@ import {
   type Move,
 } from "./moves.ts";
 import { BLACK, EMPTY, KING, type Position, parseSquareName } from "./position.ts";
+import { zobristKey } from "./zobrist.ts";
 
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
@@ -630,4 +636,216 @@ describe("ABC-235 cut 1 — the hoisted king square answers what the per-move sc
   if (RUN_DEEP) {
     it("the same three, to depth 3 [deep, ENGINE_DEEP=1]", cutOneRow(3), 600_000);
   }
+});
+
+// ---------------------------------------------------------------------------
+// ABC-254 — lazy legality (ADR-0003 (1-A)). The full make/test/unmake filters stay in legal.ts
+// as the oracle; every lazy filter must return the full filter's list, in order, and leave the
+// position unchanged (toFen and Zobrist key). A1 walks: ABC-206's roots (the 285 074-position walk
+// at depth 3) and the six perft roots at ADR-0003's depths (518 474 nodes), both under
+// `ENGINE_DEEP=1`, depth 1 in the lane. Children come from the FULL filter, so the walk does not
+// lean on what it tests. A2: one targeted row per fallback class.
+// ---------------------------------------------------------------------------
+
+/** The six perft roots at the depths whose walk visits ADR-0003's 518 474 nodes (root included). */
+const ADR_0003_WALK_DEPTHS: Readonly<Record<string, number>> = {
+  start: 4,
+  kiwipete: 3,
+  "position-3": 4,
+  "position-4": 3,
+  "position-5": 3,
+  "position-6": 3,
+};
+
+interface LazyTally {
+  nodes: number;
+  inCheck: number;
+  enPassant: number;
+  pinnedRejected: number;
+  promotionsAppended: number;
+}
+
+/** Asserts A1 at one node: four lists equal in order, hasLegalMove agrees, nothing mutated. */
+function checkLazyNode(position: Position, where: string, tally: LazyTally): void {
+  const fen = toFen(position);
+  const key = zobristKey(position);
+  const before = fullState(position);
+
+  const want = fullLegalMoves(position);
+  expect(legalMoves(position), where).toEqual(want);
+  expect(legalCaptures(position), where).toEqual(fullLegalCaptures(position));
+  const qWant = fullLegalCapturesAndQueenPromotions(position);
+  expect(legalCapturesAndQueenPromotions(position), where).toEqual(qWant);
+  expect(hasLegalMove(position), where).toBe(fullHasLegalMove(position));
+  expect(hasLegalMove(position), where).toBe(want.length > 0);
+
+  expect(toFen(position), where).toBe(fen);
+  expect(zobristKey(position), where).toBe(key);
+  expect(fullState(position), where).toBe(before);
+
+  // Denominators: the classes the lazy filter must send to the test were reached.
+  tally.nodes++;
+  const king = KING | (position.blackToMove ? BLACK : 0);
+  const inCheck = isInCheck(position);
+  if (inCheck) tally.inCheck++;
+  for (const move of generateMoves(position)) {
+    if (move.flags === FLAG_EN_PASSANT) tally.enPassant++;
+    if (
+      !inCheck &&
+      move.piece !== king &&
+      move.flags !== FLAG_EN_PASSANT &&
+      !want.some((m) => m.from === move.from && m.to === move.to && m.promotion === move.promotion)
+    ) {
+      tally.pinnedRejected++;
+    }
+  }
+  tally.promotionsAppended += qWant.filter((m) => m.captured === EMPTY).length;
+}
+
+/** Walks `roots` to `depthOf(name)` plies by the FULL filter, calling `checkLazyNode` at every node. */
+function walkLazy(
+  roots: ReadonlyArray<readonly [name: string, fen: string]>,
+  depthOf: (name: string) => number,
+): LazyTally {
+  const tally: LazyTally = {
+    nodes: 0,
+    inCheck: 0,
+    enPassant: 0,
+    pinnedRejected: 0,
+    promotionsAppended: 0,
+  };
+  const walk = (position: Position, where: string, left: number): void => {
+    checkLazyNode(position, where, tally);
+    if (left === 0) return;
+    for (const move of fullLegalMoves(position)) {
+      const undo = makeMove(position, move);
+      walk(position, `${where} ${move.from}-${move.to}`, left - 1);
+      unmakeMove(position, move, undo);
+    }
+  };
+  for (const [name, fen] of roots) walk(parseFen(fen), name, depthOf(name));
+  return tally;
+}
+
+describe("ABC-254 A1 — the lazy filters equal the full make/test/unmake filters", () => {
+  it("on ABC-206's roots to depth 1: four lists in order, hasLegalMove, p unchanged", () => {
+    const tally = walkLazy([...PERFT_POSITIONS, ...A2_TERMINAL_FENS], () => 1);
+    expect(tally.nodes).toBeGreaterThan(200);
+    expect(tally.inCheck).toBeGreaterThan(0);
+  });
+
+  if (RUN_DEEP) {
+    it("on ABC-206's 285 074-position walk to depth 3 [deep, ENGINE_DEEP=1]", () => {
+      const tally = walkLazy([...PERFT_POSITIONS, ...A2_TERMINAL_FENS], () => 3);
+      expect(tally.nodes).toBe(285_074);
+      expect(tally.inCheck).toBeGreaterThan(0);
+      expect(tally.enPassant).toBeGreaterThan(0);
+      expect(tally.pinnedRejected).toBeGreaterThan(0);
+      expect(tally.promotionsAppended).toBeGreaterThan(0);
+    }, 600_000);
+
+    it("on the six perft roots, ADR-0003's 518 474-node walk [deep, ENGINE_DEEP=1]", () => {
+      const tally = walkLazy(PERFT_POSITIONS, (name) => ADR_0003_WALK_DEPTHS[name] as number);
+      expect(tally.nodes).toBe(518_474);
+      expect(tally.inCheck).toBeGreaterThan(0);
+      expect(tally.enPassant).toBeGreaterThan(0);
+      expect(tally.pinnedRejected).toBeGreaterThan(0);
+    }, 600_000);
+  }
+});
+
+describe("ABC-254 A2 — each fallback class answers as the full test does", () => {
+  /** Is `from`-`to` in `moves`? */
+  const has = (moves: readonly Move[], from: string, to: string): boolean =>
+    moves.some((m) => m.from === parseSquareName(from) && m.to === parseSquareName(to));
+
+  /** Lazy equals full on every filter and leaves p unchanged; returns the lazy legal list. */
+  const lazyEqualsFull = (name: string, fen: string): Move[] => {
+    const position = parseFen(fen);
+    const tally: LazyTally = {
+      nodes: 0,
+      inCheck: 0,
+      enPassant: 0,
+      pinnedRejected: 0,
+      promotionsAppended: 0,
+    };
+    checkLazyNode(position, name, tally);
+    return legalMoves(position);
+  };
+
+  it("a pinned piece moving off its pin line is rejected, and along it accepted", () => {
+    const rook = lazyEqualsFull("rook pinned on the e-file", "k3r3/8/8/8/4R3/8/8/4K3 w - - 0 1");
+    expect(has(rook, "e4", "e5")).toBe(true);
+    expect(has(rook, "e4", "e8")).toBe(true);
+    expect(has(rook, "e4", "d4")).toBe(false);
+    const bishop = lazyEqualsFull(
+      "bishop pinned on a diagonal",
+      "k7/8/8/8/8/2b5/3B4/4K3 w - - 0 1",
+    );
+    expect(has(bishop, "d2", "c3")).toBe(true);
+    expect(has(bishop, "d2", "e3")).toBe(false);
+    // A promoting pawn pinned on a diagonal: the push (a quiet queen promotion, quiescence's list)
+    // is off the line, the capture of the pinner is along it.
+    const diagonal = "4b2k/3P4/8/8/K7/8/8/8 w - - 0 1";
+    const promoter = lazyEqualsFull("promoting pawn pinned on a diagonal", diagonal);
+    expect(has(promoter, "d7", "d8")).toBe(false);
+    expect(has(promoter, "d7", "e8")).toBe(true);
+    const qList = legalCapturesAndQueenPromotions(parseFen(diagonal));
+    expect(has(qList, "d7", "d8")).toBe(false);
+    expect(has(qList, "d7", "e8")).toBe(true);
+    // Pinned along the seventh rank: every promotion is off the line.
+    const rank = lazyEqualsFull(
+      "promoting pawn pinned on the rank",
+      "7k/K2P3r/8/8/8/8/8/8 w - - 0 1",
+    );
+    expect(has(rank, "d7", "d8")).toBe(false);
+  });
+
+  it("an en-passant capture that exposes the king along the rank is rejected", () => {
+    const exposed = lazyEqualsFull("ep exposes the rank", "8/8/8/K2pP2r/8/8/8/7k w - d6 0 1");
+    expect(has(exposed, "e5", "d6")).toBe(false);
+    const fine = lazyEqualsFull("ep with no rook on the rank", "8/8/8/K2pP3/8/8/8/7k w - d6 0 1");
+    expect(has(fine, "e5", "d6")).toBe(true);
+  });
+
+  it("a king move into an attacked square is rejected, x-rayed through its own square too", () => {
+    const rank = lazyEqualsFull("rook covers the second rank", "4k3/8/8/8/8/8/r7/4K3 w - - 0 1");
+    expect(has(rank, "e1", "e2")).toBe(false);
+    expect(has(rank, "e1", "d2")).toBe(false);
+    expect(has(rank, "e1", "d1")).toBe(true);
+    const xray = lazyEqualsFull(
+      "king steps away along the checking ray",
+      "4k3/8/8/8/8/8/8/r3K3 w - - 0 1",
+    );
+    expect(has(xray, "e1", "f1")).toBe(false);
+    expect(has(xray, "e1", "e2")).toBe(true);
+  });
+
+  it("in check only evasions are accepted: slider, knight and double check", () => {
+    const slider = lazyEqualsFull(
+      "rook check, block or capture",
+      "4k3/8/8/8/8/1N6/8/r3K3 w - - 0 1",
+    );
+    expect(has(slider, "b3", "a1")).toBe(true);
+    expect(has(slider, "b3", "c1")).toBe(true);
+    expect(has(slider, "b3", "d2")).toBe(false);
+    expect(has(slider, "e1", "d1")).toBe(false);
+    expect(has(slider, "e1", "e2")).toBe(true);
+    const knight = lazyEqualsFull("knight check", "4k3/8/8/8/8/3n4/8/4K2R w K - 0 1");
+    expect(knight.every((m) => m.from === parseSquareName("e1"))).toBe(true);
+    expect(has(knight, "e1", "f2")).toBe(false);
+    expect(has(knight, "e1", "g1")).toBe(false);
+    const double = lazyEqualsFull(
+      "double check, knight and rook",
+      "4r1k1/8/8/8/8/3n4/8/R3K3 w Q - 0 1",
+    );
+    expect(double.length).toBeGreaterThan(0);
+    expect(double.every((m) => m.from === parseSquareName("e1"))).toBe(true);
+  });
+
+  it("a castle through an attacked square is rejected", () => {
+    const through = lazyEqualsFull("f8 attacked", "r3k2r/8/8/8/8/8/8/5R1K b kq - 0 1");
+    expect(has(through, "e8", "g8")).toBe(false);
+    expect(has(through, "e8", "c8")).toBe(true);
+  });
 });
