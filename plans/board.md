@@ -1,3 +1,4 @@
+_Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — **ABC-262 DONE** (merged; first EPIC-011 M0 ticket done). Running: se-ABC-251._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — `bapm-abc250-close` merged: ABC-250/252 pages closed (routing / dropped); ABC-251 narrowed to O1-c (S, DoR 10/10) and pulled → `se-ABC-251`. Milestone 1b remaining: ABC-251 → ABC-253 (shared files, sequential). Running: qe-ABC-262, se-ABC-251._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — `arch-abc250-close` merged: ADR-0055 status (O1-d delivered 1.11–1.12×; remaining O1-c ≈ 1.00–1.04×, O1-a ≈ 1.01–1.06×; O1 total ≈ 1.16× central vs 1.5× planned); perft-read addendum (no rule needed now; ABC-251/253 reads are search reads under D3-V2); ADR-0056 E1650 + raise rule; ABC-251 design input (profile first, stop rule) …a07418ac. Running: bapm-abc250-close, qe-ABC-262._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — OWNER (…1f5e3b27): smoke stays at **E1650**; raise it when pooled smoke shows it too easy (≥ 30 games outside 60–85 %). **ABC-250 closed NOT MERGED by routing** (…d2571be5; A4 unresolved, GO unreachable on the evidence; not a graded miss); ABC-252 dropped; ABC-251 narrows to O1-c. Records hops: `bapm-abc250-close`, `arch-abc250-close`. Pulled `se-ABC-262`._
@@ -1199,7 +1200,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
     ## In Development (WIP 1/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
-    ## In Review (WIP 1/3)
+    ## In Review (WIP 0/3)
     - [ABC-012] Portfolio FX conversion  (PR: #41, QE: running)
 
   BOARD <-> TICKET CONTRACT: each ticket file (`plans/tickets/<prefix>-xxx.md`) carries a
@@ -1355,8 +1356,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
-- [ABC-262] The early-exit row reads a pawns-first board and the in-check promotion row reads black to move (test-only; EPIC-011 phase 0; size: XS, priority: P3; DoR 10/10; QE-261-a/b; cut 2026-11-01 bapm-qe-gaps-1101b; after ABC-250 resolves, before ABC-252) **→ Ready → pulled 2026-11-01 → `se-ABC-262`** **→ In Review 2026-11-01 (se-ABC-262 done bb399321; A1–A3, A5–A8 met; A4 STOP: QB survives because in check epoch stays 0 and unstamped pinStamp squares read 0 — production is correct (`inCheck ||` short-circuits, src/legal.ts:429). Orchestrator ruling: A4 WAIVED — no setup call on module-private state; QB stays covered by the ENGINE_DEEP ABC-254 A1 walk) → `qe-ABC-262`**
+## In Review (WIP 0/3)
 
 
 
@@ -1416,6 +1416,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+- [ABC-262] The early-exit row reads a pawns-first board and the in-check promotion row reads black to move (test-only; EPIC-011 phase 0; size: XS, priority: P3; DoR 10/10; QE-261-a/b; cut 2026-11-01 bapm-qe-gaps-1101b; after ABC-250 resolves, before ABC-252) **→ Ready → pulled 2026-11-01 → `se-ABC-262`** **→ In Review 2026-11-01 (se-ABC-262 done bb399321; A1–A3, A5–A8 met; A4 STOP: QB survives because in check epoch stays 0 and unstamped pinStamp squares read 0 — production is correct (`inCheck ||` short-circuits, src/legal.ts:429). Orchestrator ruling: A4 WAIVED — no setup call on module-private state; QB stays covered by the ENGINE_DEEP ABC-254 A1 walk) → `qe-ABC-262`** **→ Done 2026-11-01 (qe-ABC-262 PASS_WITH_GAPS, A4 waived, UAT waived test-only; QB confirmed caught by the ENGINE_DEEP walk; line 429 production reasoning confirmed; G8 8.94 / 8.94 s ALONE; merged). Gaps: QE-262-a LOW (re-plant QB/QBe/QKb if the guard or pin set is rewritten), b INFO (mark A4 waived on the page — next BA/PM hop), c INFO (scratch quota).**
 - [ABC-250] Moves packed into integers in reused typed arrays for generation, legality and make/unmake, read on perft first (ADR-0055 O1-b part 1; size: M, priority: P2, value-identical S2, 0 games; DoR 10/10; EPIC-010 milestone 1b; bars ≥ 1.25× merge / below → not merged, ABC-251 narrows, ABC-252 dropped; Architect to confirm ADR-0003 clause 1 reading at design; after ABC-223 and ABC-249) **→ pulled 2026-11-01 → `se-ABC-250` (on top of ABC-254; speed rows under D3-V2)** **→ In Review 2026-11-01 (se-ABC-250 done 35139b31; packed int32 moves, typed-array undo stack, perft on fixed buffers; A1 perft 45/45, A2 285 074-node walk 0 mismatches; 2 381/2 381; review OK. RISK: informal perft 1.07–1.14× vs GO bar 1.25× — likely HOLD/NO-GO; search nps 1.00× (search not yet on the packed path, by scope)) → `qe-ABC-250` (A4 under D3-V2 in an ALONE window, after bapm-qe-gaps-1101b returns)** **→ Done 2026-11-01 — CLOSED NOT MERGED by routing (…d2571be5), NOT a graded miss: qe-ABC-250 UNRESOLVED on A4 (kiwipete/start VOID; position-6 valid 1.111 < 1.25; no kiwipete pair ≥ 1.25); A1/A2/A3/A5/G1/G4–G9 green. Branch grugops/ABC-250 kept (revivable). Consequences per page: ABC-251 narrows to O1-c; ABC-252 dropped. QE-250-a (perft reads void on a hot host) → Architect.**
 - [ABC-252] One move generator: legalMoves builds its list from the packed generator through one converter (O1-b part 3; size: M, priority: P3; DoR 9/10; milestone 1b; dropped if ABC-250 is dropped) **→ Done (dropped) 2026-11-01 — consequence of ABC-250 closed not merged (…d2571be5)**
 - [ABC-261] The default lane sees hasLegalMove lose its early exit and reads quiet queen promotions while in check (test-only; EPIC-010 milestone 1b; size: XS, priority: P3; DoR 10/10 once ABC-254 merges; QE-254-b/c; cut 2026-11-01 bapm-qe-gaps-1101; dropped if ABC-254 is dropped) **→ Ready (ABC-254 merged) → pulled 2026-11-01 → `se-ABC-261`** **→ In Review 2026-11-01 (se-ABC-261 done 06d6d987; early-exit row (PL3a 6 calls vs bar 2) and in-check promotion row (PQ2 red); 2 374/2 374; review OK — claim paths in the code commit accepted, as on ABC-259) → `qe-ABC-261`** **→ Done 2026-11-01 (qe-ABC-261 PASS_WITH_GAPS, UAT waived test-only; merge-tree 2 374; G8 8.84 / 8.90 s ALONE; merged). Gaps LOW → next BA/PM hop (bundle or decline): QE-261-a (add a pawns-first board to the early-exit row), QE-261-b (colour-mirrored promotion boards); QE-261-c LOW carried to ABC-250 (generator reorder breaks the row precondition — re-board, never drop the bar); d INFO.**
