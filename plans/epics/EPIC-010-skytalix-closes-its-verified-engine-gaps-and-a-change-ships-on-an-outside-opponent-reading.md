@@ -10,6 +10,31 @@ owner: BA/PM
 
 # EPIC-010: the verified engine gaps, closed one measured change at a time, against an outside opponent
 
+> **GOAL RESTATED AND MILESTONE 1b CUT 2026-11-01 by BA/PM** (task `bapm-goal3000-o1-cut`, records only, at `main`
+> `bae25131`; nothing run, built or timed, because `qe-ABC-223` holds the host STRICTLY ALONE; `src/`, `tools/`,
+> `data/`, the board, the trace, the ADRs and `AGENTS.md` untouched). Source: the owner's word of 2026-11-01, verbatim
+> in Orchestrator `orch-2026-10-30a` `…74216a44`: *"my call is let's go with 1, least effort and risk. Analyze current
+> state of algorithms, maybe this needs separate spike ticket, also I remember some tickets addressing similar topics,
+> check if they are done and do we need to analyze algorithm side. As we can see it is possible to reach 3000 elo
+> rating without neural engine? Set the goal to 3000 elo rating from current goal."*
+>
+> - **The product goal is now 3 000 Elo**, replacing 2026-10-29's "2 700 Elo or more" (§ Product goal, dated; the old
+>   text is struck and kept). **Its scale is still `UNKNOWN - verify`** (he names none). **What reading would show it
+>   is open** (MQ-3000, § Product goal), routed to the Architect's running analysis (`arch-algo-analysis`), not settled
+>   here. No ticket, gate or measure is bound to it yet; M2 stays "not LOSS".
+> - **Milestone 1b, value-identical speed (`ADR-0055` option O1), is cut:** `ABC-250` (O1-b part 1: packed moves in
+>   the rules core, read on perft; M, P2, DoR 10/10, Ready recommended), `ABC-251` (O1-b part 2 with O1-c: the search
+>   on packed moves, inlined helpers; L, P2, 9/10, waits `ABC-250`'s reading), `ABC-252` (O1-b part 3: one generator,
+>   the shell adapter; M, P3, 9/10, only on `ABC-250` GO), `ABC-253` (O1-a: BigInt off the hot path; M, P3, 10/10,
+>   Ready recommended, after the O1-b chain) and `ABC-254` (O1-d: lazy legality; M, P2, 9/10, **Backlog, waits the
+>   owner's yes on amending `ADR-0003`**, Q-SP-3). **O1-e is not cut** (`ADR-0055`: "not proposed now"). All are S2,
+>   0 games. § Milestone 1b gives the order, the placement reason and the cost; tickets table rows 25–29.
+> - **No algorithm ticket is cut or changed.** `ABC-231`…`ABC-239` stay as they are until `arch-algo-analysis` reports.
+> - **Owner calls named:** Q-SP-3 (amend `ADR-0003` for `ABC-254`); Q-SP-2 (`ADR-0055` D3's bars, used by `ABC-250`
+>   A4, apply as written unless he resets them); Q6, the 3 000 goal's scale and whether it becomes a measure (after
+>   `arch-algo-analysis`). § Owner questions.
+> - The notes are in `.grugops/context/bapm-goal3000-o1-cut/notes/`.
+
 > **FOLDED 2026-11-01 by BA/PM** (task `bapm-ABC-248-close`, records only, at `main` `37a93b76`; nothing run, built
 > or timed, because `qe-qehop-growth` holds the host ALONE; `src/`, `tools/`, `data/`, the board and `AGENTS.md`
 > untouched).
@@ -632,10 +657,47 @@ no smoke), pulled after `ABC-241` once its Architect reading is in. It does not 
 2026-10-30 (`bapm-ABC-242-225-owner`): `ABC-241` is Done, the reading is merged and the owner accepted it. Ready 10/10.
 2026-10-31 (`bapm-ABC-242-close`): Done, merged `af5b2b49`, 0 smoke games as ruled. QE-242-a is with the Architect.*
 
+**Milestone 1b, "value-identical speed" (`ADR-0055` option O1; owner 2026-11-01, `…74216a44`; cut 2026-11-01 by
+BA/PM, `bapm-goal3000-o1-cut`).** Every ticket is value-identical, graded on S2 (identity, perft, node-rate bar,
+`G1`–`G9`), and plays **0 games**, as `ABC-235` and `ABC-240` did (`ADR-0055` § Elo per speed doubling: a 1.5× speed-up
+sits inside the batch's ± 78, so speed is graded on nps, not games).
+
+| order | id | `ADR-0055` cut | size, priority | why here |
+|---|---|---|---|---|
+| (first, only if allowed in time) | `ABC-254` | O1-d, lazy legality (`ADR-0003` (c2)), est. 1.15–1.40× | M, P2 | The largest single prize; `ADR-0055` D4 puts it first. **Waits the owner's yes on amending `ADR-0003` (Q-SP-3) and the amending ADR.** If they arrive before `ABC-250` enters development, it goes first; otherwise after `ABC-252`, because both rewrite `src/legal.ts` |
+| 1 | `ABC-250` | O1-b part 1: packed moves in generation, legality, make/unmake; read on perft | M, P2 | Reads O1-b's data-layout gain on perft before the search is spent, with `ADR-0055` D3's A1 / A0 bars (GO ≥ 1.25×; HOLD 1.10–1.25×; NO-GO < 1.10×). The AssemblyScript prototype is not run, so this is where that reading happens. Not merged on HOLD or NO-GO |
+| 2 | `ABC-251` | O1-b part 2 with O1-c: the search, quiescence, ordering and killers on packed moves; inlined helpers | L (S if narrowed), P2 | On GO: the full form, bar ≥ 1.10×. On HOLD / NO-GO: narrowed to O1-c alone, bar ≥ 1.03× (`ADR-0055`'s HOLD row: "only the cheap parts (O1-a, O1-c)") |
+| 3 | `ABC-252` | O1-b part 3: one generator; the shell through one converter | M, P3 | Removes the second move path `ABC-250` stages; dropped if `ABC-250` is dropped |
+| 4 | `ABC-253` | O1-a: keys as two 32-bit halves in the hot path; `bigint` at the API | M, P3 | `ADR-0055` D4's last O1 step. Independent of `ABC-250`'s reading; shares the search, TT and key files, so it rebases on the chain |
+| — | (not cut) | O1-e, incremental material + PST | — | `ADR-0055`: "S; not proposed now" (`arch-ABC-235`: "low net, wide reach, collides with `ABC-231`"). Recorded, not cut |
+
+- **Placement: a milestone of this epic, not a new epic.** (1) This page already carries the S2 rule for
+  value-identical tickets (§ The merge rule) and the two precedents (`ABC-235`, `ABC-240`, milestone 1 rows 7–8); a
+  new epic would restate the gates, the merge rule and the NFR triggers. (2) Milestone 1b and milestone 2 **collide on
+  files** (`orderMoves`, `src/evaluate.ts`, the search, the TT, `src/legal.ts`; `ADR-0055` D2), and § Dependencies is
+  where this epic orders collisions; splitting the pages would split that ordering. (3) `ADR-0055` D2's order, cheap
+  value-identical speed first and then milestone 2, is a statement about this epic's sequence. (4) Five tickets with no
+  success measure of their own beyond S2 do not earn an epic. **Against:** this page is long; the speed work is named
+  in one section and one block, so it reads on its own.
+- **Order against milestone 2:** milestone 1b goes first (`ADR-0055` D2, D4), so milestone 2's value-changing tickets
+  are written on the packed base and their smokes read a faster base (fair to both sides of a pair). Milestone 2's own
+  order and content wait on `arch-algo-analysis` (no change here). `ABC-249` (test-only) is recommended before
+  `ABC-251`.
+- **Close:** milestone 1b closes when its last ticket is merged, dropped or (for `ABC-254`) declined. **There is no
+  batch:** value-identical merges move no value, so the 4 000 ms trend pool and reference are untouched.
+- **Cost on this host (estimate):** 0 games. One QE nps reading per ticket, about 1 h ALONE with `G6` each (the
+  `qe-ABC-235` / `qe-ABC-240` shape), so about 4–5 h ALONE across the milestone. Expected gain, `ADR-0055` § O1
+  combined: **1.08–1.35× without O1-d, 1.25–1.85× with it** (low-medium confidence; central guesses ≈ 1.2× and
+  ≈ 1.5×). Informally ≈ 16–58 Elo for 1.25–1.5× (`ADR-0055` § Elo per speed doubling), invisible to the batch.
+- **Not decided here:** the language port (O2, O3: not pursued, owner 2026-11-01); the prototype (Q-SP-1: not run);
+  Q-SP-4 and Q-SP-5 fall away (Orchestrator `…74216a44`).
+
 **Milestone 2, "evaluation by phase, ordering, TT and window"** (each value-changing, each with its own smoke pair, each
 `Backlog` on an ADR; Q4 no longer holds them since 2026-10-29): `ABC-231` → `ABC-232` (evaluation; after milestone 1's quiescence changes settle the node
 budget that `G6` reads, because `ABC-205` failed on exactly that), `ABC-233`, `ABC-234` (ordering; `ABC-234` behind
-`ADR-0024` d4's own re-open condition), `ABC-236`, `ABC-237`, `ABC-238` (TT and window).
+`ADR-0024` d4's own re-open condition), `ABC-236`, `ABC-237`, `ABC-238` (TT and window). *(2026-11-01,
+`bapm-goal3000-o1-cut`: after milestone 1b, on its packed base. Its content and order are unchanged here and wait on
+the Architect's `arch-algo-analysis`, which maps `ABC-231`…`ABC-239` against the 3 000 goal.)*
 
 **Milestone 3:** `ABC-239`, offline tuning. Item 8 itself says "after the phase-aware design settles". It is the
 costliest (High in § B), it needs a data licence ruling (`ADR-0048`), and self-play non-transfer (`…0c5d62f4`) bears
@@ -648,13 +710,42 @@ directly on how a tuned set is judged.
   item 5's last try failed on cost. Records and probes (0 games) come before builds (each ≈ 1.2 h of smokes under (e); ≈ 10–27 h under the cut's options).
 - Item 4 is `EPIC-009`'s. Its `ABC-218` reading and this epic's readings both run ALONE; the Orchestrator orders them.
 
-## Product goal (owner, 2026-10-29, Q2): aspirational, with no ticket bound to it
+## Product goal (owner, 2026-10-29, Q2; restated by the owner 2026-11-01: 3 000 Elo): no ticket bound to it
+
+**2026-11-01, the owner's word** (Orchestrator `orch-2026-10-30a` `…74216a44`, verbatim; recorded by BA/PM,
+`bapm-goal3000-o1-cut`): *"As we can see it is possible to reach 3000 elo rating without neural engine? Set the goal to
+3000 elo rating from current goal."*
+
+- **The goal, from 2026-11-01:** `skytalix` aims at **3 000 Elo**. It **replaces** "2 700 Elo or more" (2026-10-29,
+  below, struck and kept). The rest of the 2026-10-29 goal is not withdrawn by his word: the best vibe-engineered /
+  TypeScript-based chess engine, with no neural network (his question assumes none; `EPIC-004`'s permanent non-goal and
+  § Out of scope stand). A Rust rewrite stays out of scope.
+- **Still no ticket, gate or measure bound to it.** He set "the goal", not a measure of this epic. Q5's "no Elo
+  target" on M2 stands until he says otherwise. Whether 3 000 becomes a measure, and of what, is his call, informed by
+  the Architect's `arch-algo-analysis` (Q6, § Owner questions).
+- **Its scale stays `UNKNOWN - verify`.** He names no rating list, time control or field. This page does not pick one.
+- **MQ-3000, the open measurement question (for `arch-algo-analysis`, item 5 of its brief; not settled here):**
+  - **Today's only outside number is R:** `skytalix` level 5 at **4 000 ms a move** against Stockfish 19
+    `UCI_LimitStrength` at `UCI_Elo` **1 910**, Stockfish at **0.5 s a move** (`tools/rating/rating.ts`: `st=0.5`), so
+    `skytalix` plays at **8× time odds**. Milestone 1's batch head read **72.00 % ± 6.11** (`…1a53a7f9`), which is
+    **≈ +164** over 1 910 by the logistic formula (BA/PM's arithmetic, not a reading). That is a figure on Stockfish's
+    `UCI_Elo` scale **under those odds**. It is not a rating on any list, and this page compares it with none.
+  - **Stockfish's `UCI_Elo` tops out at 3 190**, so the R ladder has little room near 3 000, and at 8× odds its
+    figures do not say what an equal-time reading would.
+  - **What is open:** which scale 3 000 is on (the owner's); at what time control and odds a reading is taken; which
+    opponents (E steps up to the cap, at equal time, or engines with a published rating); how many games, at what
+    precision; and what the next milestones' measures should be. The Architect proposes; the owner owns the scale.
+- **Recorded, not answered:** his "As we can see it is possible to reach 3000 elo rating without neural engine?" is a
+  question about classical engines. Whether and how `skytalix` can get there is `arch-algo-analysis`'s gap list.
+
+**2026-10-29 (Q2), kept as recorded:**
 
 - **His words** (`…278e149b`): *"remove that goal, I would set another goal - be the best vibe-engineered or
   TypeScript-based chess-engine (not sure what exists out there, we can put goal to 2700 elo rating or more, world
   record is 3650). It can be that in the future we need to rewrite to Rust, but let it be for now, this is big
   undertaking."*
-- **The goal:** `skytalix` aims to be the best vibe-engineered / TypeScript-based chess engine, at 2 700 Elo or more.
+- ~~**The goal:** `skytalix` aims to be the best vibe-engineered / TypeScript-based chess engine, at 2 700 Elo or more.~~
+  *(2026-11-01: "2 700 Elo or more" is replaced by **3 000 Elo** on the owner's word, `…74216a44`; the block above.)*
 - **It is aspirational.** No ticket, measure or gate of this epic is bound to it. M2 stays "not LOSS", with no Elo
   target (Q5). No ticket is cut to chase it.
 - **Its scale is `UNKNOWN - verify`.** He does not name the scale or rating list that 2 700, or his "world record
@@ -677,6 +768,9 @@ directly on how a tuned set is judged.
   changing: fourteen engine changes, twelve value-changing.)* *(2026-10-30: plus `ABC-242`, QE-230-a: value-changing on the
   blunder path (levels 1–4) only, node-equal at every smoke and batch pin, so BA/PM reads it under S2 (the Orchestrator to confirm): fifteen engine
   changes.)*
+  *(2026-11-01, `bapm-goal3000-o1-cut`: plus milestone 1b, five value-identical speed tickets from `ADR-0055` option O1,
+  `ABC-250`–`ABC-254`, each on S2 with 0 games; `ABC-254` waits on the owner's yes to amend `ADR-0003`. They add
+  `src/moves.ts`, `src/apply.ts`, `src/zobrist.ts`, `src/perft.ts` and `src/perft-bench.ts` to the files below.)*
 - `src/quiescence.ts`, `src/search.ts`, `src/engine.ts`, `src/evaluate.ts`, `src/transposition.ts`, `src/legal.ts`,
   `src/uci-session.ts`, `src/cli.ts` change, each only in the ticket that names it.
 
@@ -702,8 +796,10 @@ directly on how a tuned set is judged.
   positions is now in scope as `ABC-241` (`ADR-0020` § AMENDMENT 2026-10-30). Still out: normalising `epSquare` in
   the hash or upstream in `apply.ts`, and the in-tree and ep-root cases that stay one late (C4).)*
 - **A user-visible Elo, rating lists, CCRL entry** (`EPIC-008` § Out of scope, unchanged).
-- **A Rust rewrite** (Q2, 2026-10-29: "let it be for now"). **Any ticket, gate or measure bound to the ≥ 2 700 goal**
-  (§ Product goal: aspirational).
+- **A Rust rewrite** (Q2, 2026-10-29: "let it be for now"). ~~**Any ticket, gate or measure bound to the ≥ 2 700 goal**
+  (§ Product goal: aspirational).~~ *(2026-11-01, `bapm-goal3000-o1-cut`: **any ticket, gate or measure bound to the
+  3 000 goal**, until the owner sets a measure (Q6; § Product goal). A language port (`ADR-0055` O2, O3) is not
+  pursued, owner 2026-11-01.)*
 - **A neural network or any learned runtime component** (`EPIC-004` permanent non-goal; § B assumes none). `ABC-239`
   emits constants only.
 
@@ -758,6 +854,11 @@ mates", ≥ 6 "a quiet promotion decides". It reads `quiesce` and `chooseMove` a
 | 22 | `ABC-247` | `rpair` passes `Skill Level` 6 to skytalix on both builds, so `go movetime 4000` searches 4 000 ms on a base whose level 5 is 3 000 ms; the `r` and `d` paths are unchanged (tools only, from QE-M1B-a; route (A), `…fb0c8978`) | XS | **P1** | **Done** (2026-10-31, `3af97f71`) | — | `ABC-225` Done (`59dc3ab4`); no ADR (`ADR-0053` d10's intent kept) | done: QE PASS (`qe-ABC-247` `…236bbe39`); tools only, no UAT. Milestone 1's batch ran on it: block-01 guard PASS on both builds (`…428e3797`) |
 | 23 | `ABC-248` | The default lane sheds about 0.3 s and loses no coverage: `QE-208-a` sampled more sparsely and `QE-208-b` on a cheaper root, `ABC-167` A5's duplicated searches moved to `ENGINE_DEEP` under default-lane kill parity, and A4-a2 on R2 (`ADR-0046` tranche 2; test-only, from `QE-245-b`) | S | **P1** | **Done** (2026-11-01, `ef4cd095`) | — | `ADR-0046` § Addendum 2026-10-31 T2-R, accepted with amendments in its § BA/PM ruling 2026-10-31; W1 given its word | done: QE PASS_WITH_GAPS (`qe-ABC-248` `…cf9bdabf`; `G8` H 9.09 s, ≤ 9.4 s target met, W1 not triggered); **tranche 2 delivered**; QE-248-a fixed on its page and the ADR; QE-248-c is `ABC-249`; UAT waived (test-only) |
 | 24 | `ABC-249` | A position that stood twice before the root, met four or more plies into the search, scores exactly 0, so turning the pre-root scan off at depth (`QPLY4`) turns the default lane red (test-only, from QE-248-c) | XS | P3 | Backlog (Ready recommended) | **10/10** | `ABC-230` Done (`24f3e322`); `ADR-0054` decision 3; `src/engine.test.ts` only | none; recommended before milestone 2's search tickets (`ABC-233`, `236`, `237`, `238`). `G8` ALONE |
+| 25 | `ABC-250` | Moves packed into integers in reused typed arrays for generation, legality and make/unmake, read on perft first; the search is not touched yet (milestone 1b, `ADR-0055` O1-b part 1, value-identical) | M | P2 | Backlog (Ready recommended) | **10/10** | `ADR-0055` (option O1 chosen by the owner 2026-11-01); no ADR; Architect confirms at design | none. Its A4 perft reading (GO ≥ 1.25× / HOLD / NO-GO) picks `ABC-251`'s form and whether `ABC-252` exists. ALONE |
+| 26 | `ABC-251` | The search, quiescence, ordering and killers walk the packed moves and build a `Move` only at `chooseMove`'s return, with hand-inlined helpers (milestone 1b, O1-b part 2 with O1-c, value-identical) | L (S narrowed) | P2 | Backlog | **9/10** | `ABC-250` | `ABC-250`'s A4 reading (full form on GO, bar ≥ 1.10×; O1-c alone otherwise, bar ≥ 1.03×) |
+| 27 | `ABC-252` | One move generator: the shell's move calls build their `Move` lists from the packed path through one converter, and the object generator is removed (milestone 1b, O1-b part 3, value-identical) | M | P3 | Backlog | **9/10** | `ABC-250` GO, `ABC-251` full form | `ABC-251`'s merge; dropped if `ABC-250` is dropped |
+| 28 | `ABC-253` | Zobrist keys travel as two 32-bit halves in the search, the TT and the repetition scan, and stay `bigint` at the API (milestone 1b, O1-a, value-identical) | M | P3 | Backlog (Ready recommended) | **10/10** | none (`ADR-0025`, `ADR-0054` kept) | none; pulled after the O1-b chain (`ADR-0055` D4), bar ≥ 1.02× |
+| 29 | `ABC-254` | Lazy legality: the full make/test/unmake only for king moves, en passant, pinned pieces and positions in check (milestone 1b, O1-d = `ADR-0003` (c2), value-identical) | M | P2 | Backlog | **9/10** | an ADR amending `ADR-0003` clauses 1 and 3 | **the owner's yes (Q-SP-3)** and that ADR; first in milestone 1b if in time, else after `ABC-252` |
 
 *Re-scored 2026-10-29 (`bapm-owner-words-b`): Q4 is removed from every wait. Each value-changing ticket's DoR row 4
 is now ✅, because its reading is the smoke pair. No ticket but `ABC-225` changes column on this hop. `ABC-227` (Done)
@@ -799,6 +900,10 @@ their old `status` / `column`; their closes are a separate fold, not done here. 
 *Folded 2026-11-01 (`bapm-ABC-248-close`): row 23 (`ABC-248`) reads Done (`ef4cd095`), as the board holds it, and
 row 24 (`ABC-249`) was added at the end: it is test-only and not one of the fifteen engine changes. Its page is cut,
 not pulled; the column move is the Orchestrator's. The board holds the live state.*
+*Cut 2026-11-01 (`bapm-goal3000-o1-cut`): rows 25–29 (`ABC-250`–`ABC-254`, milestone 1b) were added at the end. They
+are value-identical engine changes outside the fifteen. **Their row numbers are not their pull order:** § Milestone 1b
+gives it (`ABC-254` first only if the owner's yes and its ADR come in time; then `ABC-250` → `ABC-251` → `ABC-252` →
+`ABC-253`). No other row was changed. The board holds the live state; the column moves are the Orchestrator's.*
 
 ## Observations (not tickets)
 
@@ -815,10 +920,13 @@ not pulled; the column move is the Orchestrator's. The board holds the live stat
 | Q | asked | answer | what it changed |
 |---|---|---|---|
 | Q1 | Syzygy (§ B item 10) against `EPIC-004`'s permanent non-goal: (a) keep out, (b) re-open as a later epic | "not sure, explain" (2026-10-29). **2026-10-30: "ok defer Syzygy tables"** | **Deferred**, out of this epic. The tablebase non-goal stands, and nothing is cut |
-| Q2 | `EPIC-004`'s "Strength above ~1700": (a) cite his `EPIC-008` word, (b) amend the line | **2026-10-29:** "remove that goal", and a new goal: the best vibe-engineered / TypeScript-based engine, 2 700 Elo or more; Rust "let it be for now" | The non-goal is **removed** by a dated amendment on `EPIC-004`. § Product goal: aspirational, no ticket bound, scale `UNKNOWN - verify`. A Rust rewrite is out of scope |
+| Q2 | `EPIC-004`'s "Strength above ~1700": (a) cite his `EPIC-008` word, (b) amend the line | **2026-10-29:** "remove that goal", and a new goal: the best vibe-engineered / TypeScript-based engine, 2 700 Elo or more; Rust "let it be for now" | The non-goal is **removed** by a dated amendment on `EPIC-004`. § Product goal: aspirational, no ticket bound, scale `UNKNOWN - verify`. A Rust rewrite is out of scope. ***2026-11-01:** the owner restated the goal: "Set the goal to 3000 elo rating from current goal" (`…74216a44`). 3 000 replaces "2 700 or more"; § Product goal (dated); Q6 below* |
 | Q3 | Re-open `ADR-0020` d2 (the ep repetition key)? (a) keep, (b) re-open | "not sure, explain" (2026-10-29); 2026-10-30: "I need more info to answer". The Orchestrator gave it in session (`arch-ABC-230-reading` `…90a3aa31` § 3: (a) keep, (b) ep-legal key, (c) normalise history only). **2026-10-30: "Q3: c"** (`…c4ab73de`) | **(c):** `ADR-0020` § AMENDMENT 2026-10-30 (ACCEPTED on his word; the hash, TT and book unchanged). **`ABC-241` cut** (S, P2, after `ABC-230`). SA `…cc53fc79` A6 was the information: in 22 D games, cutechess counted the threefold one occurrence before the repository's key would |
 | Q4 | The pre-merge outside-opponent rule: (a)–(d), and (e) from his `EPIC-009` word | **2026-10-29: (e), extended:** "10 games self-play + 10 games vs stockfish" | § The merge rule: S-1 to S-4 per value-changing ticket, the trend, and a batched R pair. `ABC-225` re-scoped. Q4 is removed from every ticket's wait |
 | Q5 | Accept this epic and M1–M5, no Elo target | **2026-10-29: accepted, no Elo target:** "elo target is hard to reach, but try to understand if things get worse" | `proposed` → `backlog`. M1–M5 stand as written. The "worse" question is answered by § The merge rule's three layers |
+| Q6 (open, 2026-11-01) | The 3 000 goal: (a) which scale it is on (rating list, time control, field); (b) whether it becomes a measure of this epic or a later one, and read how (MQ-3000, § Product goal) | — **Asked after `arch-algo-analysis` reports**, which proposes the measurement; the Orchestrator takes it to him | Default until he answers: no ticket, gate or measure bound to 3 000; M2 stays "not LOSS"; scale `UNKNOWN - verify` |
+| Q-SP-3 (`ADR-0055`, open) | Amend the owner-ratified `ADR-0003` clauses 1 and 3 so lazy legality ((c2)) may be built now, for speed | — Not answered explicitly on 2026-11-01 (Orchestrator `…74216a44`, item 2) | `ABC-254` waits in Backlog (9/10); on yes, the Architect writes the amending ADR and it goes Ready; on no, it is closed as declined |
+| Q-SP-2 (`ADR-0055`, open) | `ADR-0055` D3's bars, as written or reset | — | Used only by `ABC-250` A4 (perft A1 / A0: GO ≥ 1.25×, HOLD 1.10–1.25×, NO-GO < 1.10×). **They apply as written unless he resets them before the reading** |
 
 - **The cut's text of Q1–Q5**, with the options and defaults, is in git at `542e8219` and in note
   `bapm-epic010-improvements` `…5ada23af`.
@@ -841,6 +949,13 @@ not pulled; the column move is the Orchestrator's. The board holds the live stat
   `ABC-237` → `ABC-238` share `src/transposition.ts`; `ABC-231` → `ABC-232` share `src/evaluate.ts`; `ABC-230` →
   `ABC-241` share the prior-key builders (`src/cli.ts`, `src/uci-session.ts`). A value-changing
   merge stales any D or R read on the old base (`EPIC-008` § When a D reading goes stale).
+- **Milestone 1b (2026-11-01, `bapm-goal3000-o1-cut`):** `ABC-250` → `ABC-251` → `ABC-252` share `src/moves.ts`,
+  `src/legal.ts`, `src/apply.ts` and `src/zobrist.ts` (the core) and `src/search.ts`, `src/engine.ts`,
+  `src/quiescence.ts`, `src/transposition.ts` (the search); `ABC-253` shares the search, TT and key files, so it follows
+  the chain; `ABC-254` shares `src/legal.ts` (first if allowed in time, else after `ABC-252`). **Against milestone 2:**
+  `ABC-251` edits the `orderMoves` that `ABC-233`/`ABC-234` change, the search and TT that `ABC-236`–`ABC-238` change,
+  and possibly `src/evaluate.ts` (`ABC-231`/`ABC-232`); milestone 1b goes first, so milestone 2 is written on it. A
+  value-identical merge does not stale a D or R reading's verdict, but each nps reading needs its own ALONE window.
 
 ## Risks
 
@@ -878,7 +993,10 @@ not pulled; the column move is the Orchestrator's. The board holds the live stat
 - **`NFR-009` (≤ 16 MiB search memory, ≤ 1 MiB growth):** `ABC-230` (history keys), `ABC-233` (history table),
   `ABC-237`/`238` (TT). 2^19 entries fits; 2^20 is a re-level, the owner's.
 - **`NFR-008` (`npm test` wall ≤ 10 s at load1 ≤ 8):** new rows on the virtual clock or at fixed depth only; 0
-  real-clock rows in the default lane.
+  real-clock rows in the default lane. *(2026-11-01: each milestone 1b ticket adds ≤ 0.1 s of lane rows; its walks run
+  under `ENGINE_DEEP=1`. `G8` headroom is 0.6–0.9 s, `ABC-248`.)*
+- **`NFR-001` (perft ≥ 1 000 000 nodes/s, a diagnostic since `ADR-0003` clause 2):** re-read as INFO by `ABC-250` and
+  `ABC-254` on this host (`UNKNOWN - verify` here). No bar moves. *(Added 2026-11-01, `bapm-goal3000-o1-cut`.)*
 - **Security (ASVS L1):** `ABC-230` is the only new input path (the UCI move list and the CLI's game history reach the
   search). Bounded length, no new parsing; Security/NFR confirms at its gate. No other ticket adds input.
 
