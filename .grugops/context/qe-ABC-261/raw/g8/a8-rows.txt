@@ -1,0 +1,1 @@
+A8 rows (vitest JSON, head runs 2/3/6): 0.534 / 0.468 / 0.406 ms; median 0.468 ms (<= 30 ms)

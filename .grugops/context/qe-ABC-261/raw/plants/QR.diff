@@ -1,0 +1,13 @@
+diff -ru src/moves.ts /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-261/plants/QR//src/moves.ts
+--- src/moves.ts	2026-11-01 19:13:12.492029537 +0000
++++ /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-261/plants/QR//src/moves.ts	2026-11-01 19:18:39.437653636 +0000
+@@ -354,6 +354,9 @@
+ 
+ /** Every pseudo-legal move for the side to move, in no guaranteed order. */
+ export function generateMoves(position: Position): Move[] {
++  return qeGen(position).reverse(); // PLANT QR
++}
++function qeGen(position: Position): Move[] {
+   const moves: Move[] = [];
+   const black = position.blackToMove;
+ 

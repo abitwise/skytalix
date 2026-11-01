@@ -1,0 +1,26 @@
+planted PL3a
+planted PQ2
+planted PL1
+planted QX1
+planted QX2
+planted QN
+planted QB
+planted QR
+C0-control gameend.nfr rc=0 ::  Tests 11 passed (11)
+C0-control legal rc=0 ::  Tests 43 passed (43)
+PL1 gameend.nfr rc=1 ::  Tests 2 failed | 9 passed (11)
+PL1 legal rc=0 ::  Tests 43 passed (43)
+PL3a gameend.nfr rc=1 ::  Tests 1 failed | 10 passed (11)
+PL3a legal rc=0 ::  Tests 43 passed (43)
+PQ2 gameend.nfr rc=0 ::  Tests 11 passed (11)
+PQ2 legal rc=1 ::  Tests 1 failed | 42 passed (43)
+QB gameend.nfr rc=0 ::  Tests 11 passed (11)
+QB legal rc=0 ::  Tests 43 passed (43)
+QN gameend.nfr rc=0 ::  Tests 11 passed (11)
+QN legal rc=1 ::  Tests 1 failed | 42 passed (43)
+QR gameend.nfr rc=1 ::  Tests 1 failed | 10 passed (11)
+QR legal rc=1 ::  Tests 2 failed | 41 passed (43)
+QX1 gameend.nfr rc=0 ::  Tests 11 passed (11)
+QX1 legal rc=0 ::  Tests 43 passed (43)
+QX2 gameend.nfr rc=0 ::  Tests 11 passed (11)
+QX2 legal rc=0 ::  Tests 43 passed (43)

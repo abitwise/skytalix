@@ -21,7 +21,7 @@ import {
   isSquareAttackedBy,
   type Move,
 } from "./moves.ts";
-import { BLACK, EMPTY, KING, type Position, parseSquareName } from "./position.ts";
+import { BLACK, EMPTY, KING, PAWN, type Position, parseSquareName, QUEEN } from "./position.ts";
 import { zobristKey } from "./zobrist.ts";
 
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -847,5 +847,35 @@ describe("ABC-254 A2 — each fallback class answers as the full test does", () 
     const through = lazyEqualsFull("f8 attacked", "r3k2r/8/8/8/8/8/8/5R1K b kq - 0 1");
     expect(has(through, "e8", "g8")).toBe(false);
     expect(has(through, "e8", "c8")).toBe(true);
+  });
+});
+
+// ABC-261 (QE-254-c): the quiet queen promotions of `legalCapturesAndQueenPromotions` in check. Out
+// of check a quiet promotion takes the test only when its pawn is pinned (ABC-254); in check it
+// must always take it, and no row above put a promoting pawn in check.
+describe("ABC-261 — legalCapturesAndQueenPromotions in check tests its quiet queen promotions", () => {
+  it("equals the full filter in check: a non-blocking promotion is absent, a blocking one present", () => {
+    const boards: [name: string, fen: string, pawn: string, ahead: string, present: boolean][] = [
+      // P1: the e8 rook checks down the e-file; a8 neither blocks nor captures.
+      ["P1, promotion off the check line", "4r2k/P7/8/8/8/8/8/4K3 w - - 0 1", "a7", "a8", false],
+      // P2: the a8 rook checks along the eighth rank; b8 blocks it.
+      ["P2, promotion blocks the check", "r3K3/1P6/8/8/8/8/8/7k w - - 0 1", "b7", "b8", true],
+    ];
+    for (const [name, fen, pawn, ahead, present] of boards) {
+      const position = parseFen(fen);
+      const from = parseSquareName(pawn);
+      const to = parseSquareName(ahead);
+      expect(isInCheck(position), name).toBe(true);
+      expect(position.board[from], name).toBe(PAWN);
+      expect(from >> 4, name).toBe(6); // white's seventh rank
+      expect(position.board[to], name).toBe(EMPTY);
+
+      const lazy = legalCapturesAndQueenPromotions(position);
+      expect(lazy, name).toEqual(fullLegalCapturesAndQueenPromotions(position));
+      const promotes = lazy.some(
+        (m) => m.from === from && m.to === to && m.captured === EMPTY && m.promotion === QUEEN,
+      );
+      expect(promotes, name).toBe(present);
+    }
   });
 });

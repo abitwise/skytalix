@@ -1,0 +1,26 @@
+
+ RUN  v4.1.12 <scratch>/se-261/plant/PL3a
+
+ ❯ src/gameend.nfr.test.ts (11 tests | 1 failed) 22ms
+     × hasLegalMove out of check stops at the first legal king move: at most 2 attack tests 5ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/gameend.nfr.test.ts > ABC-206 — the search leaf's game-end check stays cheap (call counts, spied) > hasLegalMove out of check stops at the first legal king move: at most 2 attack tests
+AssertionError: expected 6 to be less than or equal to 2
+ ❯ <anonymous> src/gameend.nfr.test.ts:249:25
+    247|     const attackTests = vi.mocked(isSquareAttackedBy).mock.calls.lengt…
+    248|     expect(attackTests).toBeGreaterThan(0); // the spy sees legal.ts's…
+    249|     expect(attackTests).toBeLessThanOrEqual(2);
+       |                         ^
+    250|   });
+    251|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 10 passed (11)
+   Start at  19:07:17
+   Duration  198ms (transform 0ms, setup 0ms, import 74ms, tests 22ms, environment 0ms)
+

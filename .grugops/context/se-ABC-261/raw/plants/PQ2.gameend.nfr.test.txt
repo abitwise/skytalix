@@ -1,0 +1,9 @@
+
+ RUN  v4.1.12 <scratch>/se-261/plant/PQ2
+
+
+ Test Files  1 passed (1)
+      Tests  11 passed (11)
+   Start at  19:07:18
+   Duration  133ms (transform 0ms, setup 0ms, import 57ms, tests 12ms, environment 0ms)
+

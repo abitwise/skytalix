@@ -1,0 +1,11 @@
+C0-control probe rc=0
+QX1 probe rc=0
+QX2 probe rc=0
+PL3a probe rc=0
+PL1 probe rc=0
+PL1 npm test rc=1 ::  Test Files 1 failed | 62 passed (63)  Tests 2 failed | 2372 passed (2374) 
+     × hasLegalMove on the start position plays NO move (it was exactly one before ABC-254) 5ms
+     × legalCaptures on kiwipete plays none of the pseudo-legal captures (all of them before ABC-254) 1ms
+QX1 npm test rc=0 ::  Test Files 63 passed (63)  Tests 2374 passed (2374) 
+QX2 npm test rc=0 ::  Test Files 63 passed (63)  Tests 2374 passed (2374) 
+QB npm test rc=0 ::  Test Files 63 passed (63)  Tests 2374 passed (2374) 

@@ -1,0 +1,10 @@
+head-1.last-run.json passed 0.24 hasLegalMove out of check stops at the f
+head-1.last-run.json passed 0.17 equals the full filter in check: a non-b
+found=2 sum=0.40ms total=2374 skipped=0 todo=0
+head-2.last-run.json passed 0.27 hasLegalMove out of check stops at the f
+head-2.last-run.json passed 0.16 equals the full filter in check: a non-b
+found=2 sum=0.43ms total=2374 skipped=0 todo=0
+head-3.last-run.json passed 0.25 hasLegalMove out of check stops at the f
+head-3.last-run.json passed 0.17 equals the full filter in check: a non-b
+found=2 sum=0.42ms total=2374 skipped=0 todo=0
+median sum ms: 0.42 sums: 0.40 0.42 0.43

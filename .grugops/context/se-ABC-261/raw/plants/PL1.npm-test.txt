@@ -1,0 +1,339 @@
+
+> skytalix@0.0.0 test
+> NODE_OPTIONS=--max-old-space-size=128 node tools/grugops/run-bounded.js 60000 vitest run --reporter=default --reporter=./tools/grugops/result-file-reporter.js --outputFile.json=.test-results/last-run.json
+
+
+ RUN  v4.1.12 <scratch>/se-261/plant/PL1
+
+ ❯ src/gameend.nfr.test.ts (11 tests | 2 failed) 28ms
+     ✓ generates the legal moves EXACTLY once, on every call shape 5ms
+     ✓ reads the Zobrist key exactly ONCE when the counts map is consulted 1ms
+     ✓ reads the Zobrist key NOT AT ALL when a cheaper branch already decides 1ms
+     ✓ leafEndReason never builds the move list or reads a key: hasLegalMove exactly once 1ms
+     ✓ quiesce never builds the full move list: captures come from legalCaptures 12ms
+     ✓ lateMoveReduction never plays an unflagged move to learn whether it gives check 1ms
+     × hasLegalMove on the start position plays NO move (it was exactly one before ABC-254) 4ms
+     ✓ hasLegalMove out of check stops at the first legal king move: at most 2 attack tests 1ms
+     × legalCaptures on kiwipete plays none of the pseudo-legal captures (all of them before ABC-254) 1ms
+     ✓ legalCaptures runs generateCaptures once and generateMoves never 0ms
+     ✓ quiesce out of check generates once per node with quiet promotions on: one generateCaptures, no generateMoves 1ms
+ ✓ src/pgn.test.ts (24 tests) 35ms
+ ❯ tools/grugops/qe-hop-integrity.test.ts (32 tests | 11 failed) 30ms
+     ✓ holds the 38 ids, including ABC-061 and ABC-062, excluding ABC-031 and ABC-076 3ms
+     × ABC-061 exits 0 out of scope on the committed snapshot, and 1 with it removed 5ms
+     × ABC-031 exits 0 and names its covering note under quality-gate-ABC-031-qe-2026-08-17/notes/ 1ms
+     × ABC-076 exits 0 and names its covering note under quality-gate-ABC-076-qe-2026-08-17/notes/ 1ms
+     × ABC-076's covering notes cite it only as a path, so an exact-element reading would fail 1ms
+     × a qe-e2e decision under quality-gate-ABC-066-qe cites ABC-062 in refs (the trap exists) 1ms
+     × ABC-062 exits 0 on the committed snapshot, and 1 with it removed: the folder does not name it 1ms
+     × coverage() over EVERY real note (no --ticket folder filter) reads ABC-062 and ABC-073 as findings 0ms
+     × ABC-072 exits 0 with the substitute label and its secnfr-ABC-072 note 1ms
+     × ABC-073 exits 1 (its verdict sits in a folder naming ABC-072), and 0 only if grandfathered 1ms
+     × --sweep lists ABC-073 as a finding 1ms
+     × prints each count line and every finding by id, exits 1; 0 when every row is grandfathered 0ms
+     ✓ parses only the line-leading `- [ABC-xxx]` rows of `## Done` 1ms
+     ✓ matches abc031-… to ABC-031, case-insensitive, optional hyphen, zero-padded 1ms
+     ✓ does not match ABC-006 to …abc0066… in the folder or in refs 0ms
+     ✓ rejects T's own ticket-to-pr-* folder and a non-decision kind 0ms
+     ✓ a well-formed tree exits 0 2ms
+     ✓ malformed front matter (the first line is not ---) is an UNKNOWN - verify finding with its path 1ms
+     ✓ malformed front matter (no closing --- line) is an UNKNOWN - verify finding with its path 1ms
+     ✓ malformed front matter (line 3 is neither "key: value") is an UNKNOWN - verify finding with its path 1ms
+     ✓ under --ticket only malformed notes in a folder naming T are reported 1ms
+     ✓ missing board, missing snapshot and an unreadable note each exit 2 with a stderr message 1ms
+     ✓ refuses a symbolic link under .grugops/context with exit 2 and does not follow it 1ms
+     ✓ refuses a symbolic link at the notes/ directory with exit 2 and does not follow it 1ms
+     ✓ refuses a symbolic link at a note file with exit 2 and does not follow it 1ms
+     ✓ refuses ["--sweep","--force"] with exit 2 0ms
+     ✓ refuses ["--ticket","ABC-061","--skip"] with exit 2 0ms
+     ✓ refuses ["--sweep","--allow","ABC-061"] with exit 2 0ms
+     ✓ refuses ["--sweep","--snapshot","x.txt"] with exit 2 0ms
+     ✓ refuses [] with exit 2 0ms
+     ✓ refuses ["--sweep","--ticket","ABC-061"] with exit 2 0ms
+     ✓ refuses ["--ticket","61"] with exit 2 0ms
+ ✓ src/search.null-move.test.ts (38 tests) 942ms
+ ✓ src/uci-session.test.ts (230 tests) 1438ms
+ ✓ src/engine.test.ts (65 tests) 614ms
+stdout | src/levels.test.ts > A9 — different seeds actually differ > ≥ 5 seeds over the same ≥ 30 positions give ≥ 2 distinct blunder-decision sequences
+A9: 5 distinct sequences over 5 seeds
+
+ ✓ src/levels.test.ts (49 tests) 164ms
+ ✓ src/legal.test.ts (43 tests) 182ms
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap reading, level 180x
+A5 kiwipete depth 1: 878 nodes with quiescence / 49 without = 17.92x
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap reading, level 10x
+A5 position-6 depth 1: 421 nodes with quiescence / 47 without = 8.96x
+
+ ✓ src/quiescence.test.ts (98 tests) 146ms
+ ✓ src/book.test.ts (35 tests) 146ms
+ ✓ src/search.test.ts (28 tests) 154ms
+ ✓ src/zobrist.test.ts (32 tests) 139ms
+ ✓ src/search.ordering.test.ts (29 tests) 111ms
+ ✓ src/history-pane.nfr.test.ts (12 tests) 99ms
+ ✓ src/san.test.ts (22 tests) 81ms
+ ✓ src/transposition.test.ts (25 tests) 104ms
+ ✓ src/perft.test.ts (24 tests) 82ms
+ ✓ src/cli.test.ts (109 tests) 675ms
+stdout | src/search.pvs-lmr.test.ts > A5 — search() visits fewer nodes than searchWithoutPvsOrReductions at depth 4 > position-3 at depth 4 — the default lane's standing guard
+ABC-121 A5 position-3 d4: 1099 / 1377 = 79.8%
+
+ ✓ src/search.pvs-lmr.test.ts (20 tests) 82ms
+ ✓ src/evaluate.king-mobility.test.ts (9 tests) 58ms
+ ✓ src/moves.castling.hardening.test.ts (134 tests) 55ms
+ ✓ src/turn-loop.nfr.test.ts (4 tests) 57ms
+ ✓ src/turn-loop.test.ts (64 tests) 56ms
+ ✓ src/command-input.test.ts (188 tests) 48ms
+ ✓ src/history-pane.test.ts (26 tests) 56ms
+ ✓ src/render-seam.test.ts (28 tests) 51ms
+ ✓ src/san.qualifier.hardening.test.ts (20 tests) 43ms
+ ✓ src/evaluate.pawns.test.ts (43 tests) 42ms
+ ✓ src/frame.test.ts (34 tests) 29ms
+ ✓ src/book-engine.test.ts (5 tests) 43ms
+ ✓ src/gameend.test.ts (57 tests) 38ms
+ ✓ src/engine.capacity.test.ts (1 test) 35ms
+ ✓ src/moves.enpassant.hardening.test.ts (120 tests) 50ms
+ ✓ src/render.test.ts (30 tests) 41ms
+stdout | tools/opening-book/book.test.ts > the delivered artifact (data/opening-book/book.json) > A2 — every book move is legal in its keyed position, over every entry
+ABC-093 A2: examined 5390 entries of 5390; 5825 moves; 0 illegal
+
+stdout | tools/opening-book/book.test.ts > the delivered artifact (data/opening-book/book.json) > A3 — the longest line is >= 8 plies and never deeper than maxPly (<= 12)
+ABC-093 A3: longest book line 12 plies; maxPly 12
+
+stdout | tools/opening-book/book.test.ts > the delivered artifact (data/opening-book/book.json) > A4 — after 1. e4 the book carries >= 3 distinct replies with non-zero weight
+ABC-093 A4: 19 weighted replies to 1. e4
+
+stdout | tools/opening-book/book.test.ts > the delivered artifact (data/opening-book/book.json) > A5 — NFR-006: the artifact on disk is <= 1,048,576 bytes
+ABC-093 A5: 356526 bytes of 1048576 (34.0%)
+
+ ✓ tools/opening-book/book.test.ts (19 tests) 15ms
+ ✓ src/puzzle-suite.test.ts (12 tests) 43ms
+ ✓ src/line-input.test.ts (30 tests) 17ms
+ ✓ src/move-input.test.ts (50 tests) 18ms
+ ✓ src/san.parse.test.ts (30 tests) 22ms
+ ✓ src/rejection.test.ts (53 tests) 16ms
+ ✓ src/moves.test.ts (37 tests) 16ms
+ ✓ src/startup-questions.test.ts (26 tests) 19ms
+ ✓ src/search.qe.test.ts (8 tests) 18ms
+ ✓ src/history.test.ts (17 tests) 28ms
+ ✓ src/result-screen.test.ts (13 tests) 9ms
+ ✓ src/moves.enpassant.test.ts (58 tests) 22ms
+ ✓ src/evaluate.test.ts (36 tests) 14ms
+ ✓ src/status-panel.nfr.test.ts (6 tests) 12ms
+ ✓ src/apply.test.ts (24 tests) 11ms
+ ✓ src/fen.test.ts (82 tests) 10ms
+ ✓ src/coordinate-move.test.ts (45 tests) 9ms
+ ✓ src/ladder.test.ts (13 tests) 9ms
+ ✓ src/status-panel.test.ts (29 tests) 11ms
+ ✓ src/frame.overflow-bound.test.ts (25 tests) 12ms
+ ✓ src/moves.castling.test.ts (33 tests) 7ms
+ ✓ src/cli.real-engine.test.ts (1 test) 15ms
+ ✓ src/san.suffix.hardening.test.ts (4 tests) 7ms
+ ✓ src/glyph-mode.test.ts (21 tests) 4ms
+ ✓ src/search.capacity.test.ts (1 test) 6ms
+ ✓ src/zobrist.nfr.test.ts (3 tests) 5ms
+ ✓ src/glyph-mode.nfr.test.ts (3 tests) 2ms
+ ✓ src/uci.real-engine.test.ts (1 test) 2ms
+ ✓ src/san.nfr.test.ts (5 tests) 4ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 13 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/gameend.nfr.test.ts > ABC-206 — the search leaf's game-end check stays cheap (call counts, spied) > hasLegalMove on the start position plays NO move (it was exactly one before ABC-254)
+AssertionError: expected "vi.fn()" to be called +0 times, but got 1 times
+ ❯ <anonymous> src/gameend.nfr.test.ts:228:22
+    226|
+    227|     expect(hasLegalMove(position)).toBe(true);
+    228|     expect(makeMove).toHaveBeenCalledTimes(0);
+       |                      ^
+    229|   });
+    230|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/13]⎯
+
+ FAIL  src/gameend.nfr.test.ts > ABC-206 — the search leaf's game-end check stays cheap (call counts, spied) > legalCaptures on kiwipete plays none of the pseudo-legal captures (all of them before ABC-254)
+AssertionError: expected "vi.fn()" to be called +0 times, but got 8 times
+ ❯ <anonymous> src/gameend.nfr.test.ts:263:22
+    261|
+    262|     legalCaptures(position);
+    263|     expect(makeMove).toHaveBeenCalledTimes(0);
+       |                      ^
+    264|   });
+    265|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/13]⎯
+
+ FAIL  tools/grugops/qe-hop-integrity.test.ts > ABC-105 A1 — it catches the measured failure (real notes) > ABC-061 exits 0 out of scope on the committed snapshot, and 1 with it removed
+AssertionError: expected 2 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 2
+
+ ❯ tools/grugops/qe-hop-integrity.test.ts:71:28
+     69|   it("ABC-061 exits 0 out of scope on the committed snapshot, and 1 wi…
+     70|     const committed = run(["--ticket", "ABC-061"]);
+     71|     expect(committed.code).toBe(0);
+       |                            ^
+     72|     expect(committed.stdout).toContain("ABC-061: out-of-scope (pre-cut…
+     73|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/13]⎯
+
+ FAIL  tools/grugops/qe-hop-integrity.test.ts > ABC-105 A2 — it passes a real QE hop (real notes) > ABC-031 exits 0 and names its covering note under quality-gate-ABC-031-qe-2026-08-17/notes/
+ FAIL  tools/grugops/qe-hop-integrity.test.ts > ABC-105 A2 — it passes a real QE hop (real notes) > ABC-076 exits 0 and names its covering note under quality-gate-ABC-076-qe-2026-08-17/notes/
+AssertionError: expected 2 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 2
+
+ ❯ tools/grugops/qe-hop-integrity.test.ts:86:20
+     84|   ])("%s exits 0 and names its covering note under %s", (id, folder) =…
+     85|     const r = run(["--ticket", id]);
+     86|     expect(r.code).toBe(0);
+       |                    ^
+     87|     expect(r.stdout).toContain(`${id}: covered (qe-e2e).`);
+     88|     expect(r.stdout).toContain(`Covering note: .grugops/context/${fold…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/13]⎯
+
+ FAIL  tools/grugops/qe-hop-integrity.test.ts > ABC-105 A2 — it passes a real QE hop (real notes) > ABC-076's covering notes cite it only as a path, so an exact-element reading would fail
+Error: ENOENT: no such file or directory, scandir '<scratch>/se-261/plant/PL1/.grugops/context'
+ ❯ readNotes tools/grugops/qe-hop-integrity.js:143:24
+    141|     throw new Error(`refusing to follow the symbolic link ${p}`);
+    142|   };
+    143|   for (const folder of readdirSync(contextDir, { withFileTypes: true }…
+       |                        ^
+    144|     if (folder.isSymbolicLink()) refuseLink(join(CONTEXT, folder.name)…
+    145|     if (!folder.isDirectory() || (folderFilter && !folderFilter(folder…
+ ❯ tools/grugops/qe-hop-integrity.test.ts:93:19
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/13]⎯
+
+ FAIL  tools/grugops/qe-hop-integrity.test.ts > ABC-105 A3 — the refs-only false pass is closed (real notes) > a qe-e2e decision under quality-gate-ABC-066-qe cites ABC-062 in refs (the trap exists)
+Error: ENOENT: no such file or directory, scandir '<scratch>/se-261/plant/PL1/.grugops/context'
+ ❯ readNotes tools/grugops/qe-hop-integrity.js:143:24
+    141|     throw new Error(`refusing to follow the symbolic link ${p}`);
+    142|   };
+    143|   for (const folder of readdirSync(contextDir, { withFileTypes: true }…
+       |                        ^
+    144|     if (folder.isSymbolicLink()) refuseLink(join(CONTEXT, folder.name)…
+    145|     if (!folder.isDirectory() || (folderFilter && !folderFilter(folder…
+ ❯ tools/grugops/qe-hop-integrity.test.ts:106:19
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/13]⎯
+
+ FAIL  tools/grugops/qe-hop-integrity.test.ts > ABC-105 A3 — the refs-only false pass is closed (real notes) > ABC-062 exits 0 on the committed snapshot, and 1 with it removed: the folder does not name it
+AssertionError: expected 2 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 2
+
+ ❯ tools/grugops/qe-hop-integrity.test.ts:114:47
+    112|
+    113|   it("ABC-062 exits 0 on the committed snapshot, and 1 with it removed…
+    114|     expect(run(["--ticket", "ABC-062"]).code).toBe(0);
+       |                                               ^
+    115|     const removed = run(["--ticket", "ABC-062"], { snapshotIds: minus(…
+    116|     expect(removed.code).toBe(1);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/13]⎯
+
+ FAIL  tools/grugops/qe-hop-integrity.test.ts > ABC-105 A3 — the refs-only false pass is closed (real notes) > coverage() over EVERY real note (no --ticket folder filter) reads ABC-062 and ABC-073 as findings
+Error: ENOENT: no such file or directory, scandir '<scratch>/se-261/plant/PL1/.grugops/context'
+ ❯ readNotes tools/grugops/qe-hop-integrity.js:143:24
+    141|     throw new Error(`refusing to follow the symbolic link ${p}`);
+    142|   };
+    143|   for (const folder of readdirSync(contextDir, { withFileTypes: true }…
+       |                        ^
+    144|     if (folder.isSymbolicLink()) refuseLink(join(CONTEXT, folder.name)…
+    145|     if (!folder.isDirectory() || (folderFilter && !folderFilter(folder…
+ ❯ allNotes tools/grugops/qe-hop-integrity.test.ts:54:42
+ ❯ tools/grugops/qe-hop-integrity.test.ts:124:17
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/13]⎯
+
+ FAIL  tools/grugops/qe-hop-integrity.test.ts > ABC-105 A9 — the security-nfr substitute is visible, not silent (real notes) > ABC-072 exits 0 with the substitute label and its secnfr-ABC-072 note
+AssertionError: expected 2 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 2
+
+ ❯ tools/grugops/qe-hop-integrity.test.ts:139:20
+    137|   it("ABC-072 exits 0 with the substitute label and its secnfr-ABC-072…
+    138|     const r = run(["--ticket", "ABC-072"]);
+    139|     expect(r.code).toBe(0);
+       |                    ^
+    140|     expect(r.stdout).toContain(
+    141|       "ABC-072: covered (security-nfr substitute — docs-only rule).\n"…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/13]⎯
+
+ FAIL  tools/grugops/qe-hop-integrity.test.ts > ABC-105 A9 — the security-nfr substitute is visible, not silent (real notes) > ABC-073 exits 1 (its verdict sits in a folder naming ABC-072), and 0 only if grandfathered
+AssertionError: expected 2 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 2
+
+ ❯ tools/grugops/qe-hop-integrity.test.ts:148:20
+    146|   it("ABC-073 exits 1 (its verdict sits in a folder naming ABC-072), a…
+    147|     const r = run(["--ticket", "ABC-073"]);
+    148|     expect(r.code).toBe(1);
+       |                    ^
+    149|     expect(r.stdout).toContain("ABC-073: finding.");
+    150|     expect(run(["--ticket", "ABC-073"], { snapshotIds: [...snapshotIds…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/13]⎯
+
+ FAIL  tools/grugops/qe-hop-integrity.test.ts > ABC-105 A9 — the security-nfr substitute is visible, not silent (real notes) > --sweep lists ABC-073 as a finding
+AssertionError: expected 2 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 2
+
+ ❯ tools/grugops/qe-hop-integrity.test.ts:155:20
+    153|   it("--sweep lists ABC-073 as a finding", () => {
+    154|     const r = plainSweep();
+    155|     expect(r.code).toBe(1);
+       |                    ^
+    156|     expect(r.stdout).toContain("  ABC-073: no QE verdict note was foun…
+    157|     // ABC-154: positive control on the plain sweep's own whole-tree r…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/13]⎯
+
+ FAIL  tools/grugops/qe-hop-integrity.test.ts > ABC-105 A4 — the sweep's counts partition the Done rows (real board) > prints each count line and every finding by id, exits 1; 0 when every row is grandfathered
+Error: ENOENT: no such file or directory, scandir '<scratch>/se-261/plant/PL1/.grugops/context'
+ ❯ readNotes tools/grugops/qe-hop-integrity.js:143:24
+    141|     throw new Error(`refusing to follow the symbolic link ${p}`);
+    142|   };
+    143|   for (const folder of readdirSync(contextDir, { withFileTypes: true }…
+       |                        ^
+    144|     if (folder.isSymbolicLink()) refuseLink(join(CONTEXT, folder.name)…
+    145|     if (!folder.isDirectory() || (folderFilter && !folderFilter(folder…
+ ❯ allNotes tools/grugops/qe-hop-integrity.test.ts:54:42
+ ❯ tools/grugops/qe-hop-integrity.test.ts:165:51
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/13]⎯
+
+
+ Test Files  2 failed | 61 passed (63)
+      Tests  13 failed | 2361 passed (2374)
+   Start at  19:07:53
+   Duration  8.93s (transform 0ms, setup 0ms, import 6.53s, tests 6.34s, environment 5ms)
+
