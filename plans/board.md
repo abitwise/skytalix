@@ -1,3 +1,4 @@
+_Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — `bapm-reconcile-adr0056` merged: pages carry ADR-0056 figures (epic pass ≥ 200.0/400; smoke E1650, S-1/S-2/S-4); levels deep lane in every strength ticket; RISK-EPIC010-08 (±24 optimistic, QE checks at first epic read). **ABC-256 → Done (dropped).** **ABC-259 cut** (R-TC source scan, XS). Pulled: `se-ABC-255` (tools only), `se-ABC-259` (test only). G-2 (levels lane trigger list in memory-bank/90-agents-md-command-log.md) → `scribe-levels-trigger`. Running: qe-ABC-254, qe-ABC-249. Tests serialized by lock._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — `bapm-owner-answers` merged (cafb83d5); it ran before the ADR fold landed, so `bapm-reconcile-adr0056` queued: ADR figures into pages, ABC-256 closed as superseded, ABC-255 → DoR 10/10, levels deep lane in strength-ticket reading rows, G-1 cut (source-scan row), G-2 trigger list._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — `arch-adr0056-owner-answers` merged: C3″ per-epic = 400 head-to-head at 100 ms (`d --budget-ms 100 --rounds 200`), pass ≥ 200.0/400; GAIN/NEUTRAL owner-accepted; smoke = 10 games vs SF **E1650** at 0.5 s (E1910 would stop unchanged builds); rule R-TC (no engine path keyed on control; tools/-only harness tickets); difficulty check = levels deep lane per strength ticket (~9 min), + ladder short + UCI deep per epic. Owed to BA/PM: G-1 (source-scan row, XS), G-2 (levels lane trigger list), ABC-256 drop recommended. Running: `qe-ABC-254`, `qe-ABC-249`, `bapm-owner-answers`._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — `bapm-100-400-rule` merged (cf5a3477): rule in EPIC-010/011, ABC-255 re-scoped (S, DoR 10/10), reading rows aligned, EPIC-006/011 stale lines fixed. Rulings: SF smoke kept at 0.5 s (owner); EPIC-010 close owes the 400-game head-to-head; ABC-255 may be pulled before EPIC-010 closes. Owner-answer folds queued: `arch-adr0056-owner-answers`, `bapm-owner-answers`._
@@ -1170,7 +1171,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   one hop at pull, when it checks `Ready for Dev`'s exit at that moment; the row records the pull.
 
   HEADING FORMAT (spec §6.1): each column is an H2 heading carrying its live/limit WIP count,
-  e.g. `## In Development (WIP 0/3)` — the left number is how many tickets are in the column
+  e.g. `## In Development (WIP 2/3)` — the left number is how many tickets are in the column
   now, the right number is the limit from config. Unlimited columns read `(WIP unlimited)`;
   Blocked is visible and time-tracked (no WIP limit) and reads `(visible, time-tracked)`.
   INVARIANT: the column H2 headings and the rows of the `## Columns` table are the same 13 names in the
@@ -1180,7 +1181,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 0/3)
+    ## In Development (WIP 2/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
     ## In Review (WIP 2/3)
@@ -1261,8 +1262,6 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 ## Backlog (WIP unlimited)
 - [EPIC-011] skytalix climbs toward 3 000 Elo, read at 40/15, on a classical measured path (owner: BA/PM, size: XL, priority: P2, since 2026-11-01; ADR-0056 accepted in direction; ADR-0055 O1; starts after EPIC-009 and EPIC-010 close; phases 0–5; milestones 2 200…3 000 (proposed); open owner calls Q-3K-2, Q-3K-4, Q-3K-6, Q-3K-7, Q-3K-8, rest of Q-3K-1)
-- [ABC-255] M0: a self-play SPRT lane on the rating harness (H1 on a known gain, H0 on an identical pair) (EPIC-011 Phase 0; size: M, priority: P1, DoR 8/10)
-- [ABC-256] B0: baseline reading of main on the routine milestone control after EPIC-010 closes (EPIC-011 Phase 0; size: S, priority: P2, DoR 8/10)
 - [ABC-257] T3: the TT is kept across the moves of one game, re-tried after deeper cutoffs and depth-preferred replacement (supersedes dropped ABC-209) (EPIC-011 Phase 1; size: S, priority: P3, DoR 8/10)
 - [ABC-258] T4: a larger TT, 8 MiB inside NFR-009 (more only on the owner's word) (EPIC-011 Phase 1; size: S, priority: P3, DoR 8/10)
 - [ABC-251] The search walks packed moves and builds a Move only at its return, with inlined helpers (ADR-0055 O1-b part 2 + O1-c; size: L (S if narrowed), priority: P2; DoR 9/10; milestone 1b; waits ABC-250's reading)
@@ -1315,7 +1314,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 2/3)
+- [ABC-255] M0: a self-play SPRT lane on the rating harness (H1 on a known gain, H0 on an identical pair) (EPIC-011 Phase 0; size: M, priority: P1, DoR 8/10) **2026-11-01: re-scoped to the 100/400 + 0.5 s smoke harness (size S, DoR 10/10; bapm-reconcile-adr0056) → Ready → pulled → `se-ABC-255` (tools/ only; tests under the lock)**
+- [ABC-259] A default-lane source scan turns red when engine-core code reads the budget other than as the deadline, or reads a test flag or the environment (EPIC-010 milestone 1b; size: XS, priority: P2; test-only; DoR 10/10; owner rule R-TC, ADR-0056 G-1; cut 2026-11-01 bapm-reconcile-adr0056) **→ Ready → pulled 2026-11-01 → `se-ABC-259` (before ABC-251)**
 
 
 
@@ -1405,6 +1406,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+- [ABC-256] B0: baseline reading of main on the routine milestone control after EPIC-010 closes (EPIC-011 Phase 0; size: S, priority: P2, DoR 8/10) **→ Done (dropped, superseded by ADR-0056 C3″) 2026-11-01 (bapm-reconcile-adr0056)**
 - [EPIC-009] skytalix plays a 40/15 tournament clock: simple-tournament then uci-clock-mode, uses the clock, never loses on time (owner: BA/PM, size: M, priority: P2, since: 2026-10-29, accepted 2026-10-29 (Q8); M1–M4; MVP ABC-220, 222 (milestone 1), ABC-221, 223 (milestone 2; ADR-0052 PROPOSED folded 2026-10-29; owner OQ-0052-1 open) **2026-11-01: closes on ABC-223's grade (milestone 2); W1 time management, 40/15 strength reading and major validation moved to EPIC-011.** **2026-11-01 CLOSED (bapm-epic009-close): milestone 2 MET (M1–M4 + 60 s ceiling); W1, the 40/15 strength reading and the major validation live in EPIC-011.**
 - [ABC-223] Smoke reading: uci-clock-mode, 5 games at 40/15 (<= 10 for coverage), 0 losses on time, closest call >= 500 ms, >= 75 % clock use, longest move <= 60 s (owner: QE/E2E, size: S, priority: P3, DoR 10/10 2026-10-31 (bapm-ABC-221-fold; ABC-221 merged af32f82c); ALONE <= ~5 h; → Ready; ALONE, after the milestone-1 batch; never beside ABC-245/246 G8; **pulled 2026-11-01** → `qe-ABC-223` STRICTLY ALONE ~5 h) **QE PASS_WITH_GAPS** qe-ABC-223 (signs UAT; 5/5 games, 0 time losses, closest call 1 099 ms, period use ≥ 99.88 %, longest 25 285 ms; QE-223-a host shared 48.8 % of samples) → merged b45162fc 2026-11-01, not pushed
 - [EPIC-006] Game session and packaging  (owner: BA/PM, **size: XL — corrected from `L`; 9 tickets / 20 points across both halves, ~1.5x the 13 `L` was assigned, and it hit that ceiling BEFORE distribution was priced**, priority: P1, since: 2026-07-22, **BOTH HALVES NOW CUT: the runnable half `ABC-041`…`ABC-046` (2026-08-13) and the second half `ABC-100`…`ABC-102` (2026-08-16) — only THREE tickets, because the scope of packaging is a FUNCTION of a distribution channel nobody has chosen.** `ABC-100` cuts the DECISION, never the ANSWER: a superseding ADR per `ADR-0007` `D5`, on the owner's word, verbatim and dated. **Acceptance criterion 1 (`npx <package>`) remains unmeetable by any ticket. Recommendation NOT taken, standing for the owner: this should probably be two epics** — the halves share no dependency in either direction and their blockers differ in kind) **2026-11-01 CLOSED (bapm-epic011-dedupe): all 24 cut pages Done, ABC-060 dropped, acceptance 1–4 met; save/resume not built (its rule builds it only on abandoned-game evidence; none); delivery ruling, reversible.**
