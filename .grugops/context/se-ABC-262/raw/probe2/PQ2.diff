@@ -1,0 +1,12 @@
+diff -ru src/legal.ts /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/se-262/plants/PQ2/src/legal.ts
+--- src/legal.ts	2026-11-01 20:17:27.122082710 +0000
++++ /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/se-262/plants/PQ2/src/legal.ts	2026-11-01 20:20:01.340346721 +0000
+@@ -426,7 +426,7 @@
+     };
+     // A pawn move never moves the king, so the mover's king stands on its hoisted square.
+     if (
+-      (inCheck || pinStamp[from] === epoch) &&
++      (!inCheck && pinStamp[from] === epoch) && // PLANT PQ2
+       !staysSafe(position, move, kingHome, moverIsBlack)
+     ) {
+       continue;

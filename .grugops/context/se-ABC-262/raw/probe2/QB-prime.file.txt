@@ -1,0 +1,85 @@
+
+ RUN  v4.1.12 /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/se-262/plants/QB-prime
+
+ ✓ src/legal.test.ts > ABC-005 acceptance > returns exactly 20 legal moves from the starting position 2ms
+ ✓ src/legal.test.ts > ABC-005 acceptance > returns no move for an absolutely pinned knight 0ms
+ ✓ src/legal.test.ts > ABC-005 acceptance > in check from a rook, returns only captures, blocks, or king moves — nothing else 0ms
+ ✓ src/legal.test.ts > ABC-005 acceptance > in check from a knight, allows only captures or king moves — a knight check cannot be blocked 0ms
+ ✓ src/legal.test.ts > ABC-005 acceptance > omits the en-passant capture when it would expose the king along the rank 0ms
+ ✓ src/legal.test.ts > ABC-005 acceptance > never leaves the mover's own king in check, for every legal move on every perft position 2ms
+ ✓ src/legal.test.ts > isInCheck > is false in the starting position 0ms
+ ✓ src/legal.test.ts > isInCheck > is true when a rook gives check down an open file 0ms
+ ✓ src/legal.test.ts > isInCheck > reports check for whichever side is to move 0ms
+ ✓ src/legal.test.ts > ABC-005 QE edge probes > pins a bishop to its diagonal — it may slide along the pin but never leave it 0ms
+ ✓ src/legal.test.ts > ABC-005 QE edge probes > forbids the king from stepping onto an attacked square 0ms
+ ✓ src/legal.test.ts > ABC-005 QE edge probes > lets a capture of the checker resolve the check 0ms
+ ✓ src/legal.test.ts > hasLegalEnPassant — ABC-011 > is true when the ep capture is genuinely playable 0ms
+ ✓ src/legal.test.ts > hasLegalEnPassant — ABC-011 > is false when no ep square is set 0ms
+ ✓ src/legal.test.ts > hasLegalEnPassant — ABC-011 > is false when the ep square is set but no pawn stands beside it 0ms
+ ✓ src/legal.test.ts > hasLegalEnPassant — ABC-011 > is FALSE when the only ep capture is pseudo-legal but illegal — the strict FIDE reading 0ms
+ ✓ src/legal.test.ts > hasLegalEnPassant — ABC-011 > agrees with legalMoves — its definition — on every shape above 0ms
+ ✓ src/legal.test.ts > hasLegalEnPassant — ABC-011 > leaves the position byte-identical across the call, on every shape above 0ms
+ ✓ src/legal.test.ts > ABC-011 QE edge probes > keeps looking when the lower-file candidate capturer is pinned — white 0ms
+ ✓ src/legal.test.ts > ABC-011 QE edge probes > keeps looking when the lower-file candidate capturer is pinned — black 0ms
+ ✓ src/legal.test.ts > hasLegalEnPassant — ABC-011 the probe's precondition > answers false and touches nothing (no pawn to capture at all) 0ms
+ ✓ src/legal.test.ts > hasLegalEnPassant — ABC-011 the probe's precondition > answers false and touches nothing (a WHITE pawn where the captured black one should be) 0ms
+ ✓ src/legal.test.ts > hasLegalEnPassant — ABC-011 the probe's precondition > answers false and touches nothing (an ep square on the wrong rank for the side to move) 0ms
+ ✓ src/legal.test.ts > hasLegalEnPassant — ABC-011 the probe's precondition > answers false and touches nothing (a white pawn standing ON the ep target) 0ms
+ ✓ src/legal.test.ts > hasLegalEnPassant — ABC-011 the probe's precondition > answers false and touches nothing (the ep target occupied by an enemy knight) 0ms
+ ✓ src/legal.test.ts > hasLegalEnPassant — ABC-011 the probe's precondition > answers false and touches nothing (the same, mirrored) 0ms
+ ✓ src/legal.test.ts > hasLegalEnPassant — ABC-011 the probe's precondition > is pure for EVERY ep square value, not merely the reachable ones 5ms
+ ✓ src/legal.test.ts > hasLegalEnPassant — ABC-011 QE the guards name a piece, not a side > answers false and touches nothing (an enemy KNIGHT, not a pawn, on the ep capture square) 0ms
+ ✓ src/legal.test.ts > hasLegalEnPassant — ABC-011 QE the guards name a piece, not a side > answers false and touches nothing (an enemy ROOK, not a pawn, on the ep capture square) 0ms
+ ✓ src/legal.test.ts > hasLegalEnPassant — ABC-011 QE the guards name a piece, not a side > answers false and touches nothing (the mover's OWN knight standing on the ep target) 0ms
+ ✓ src/legal.test.ts > hasLegalEnPassant — ABC-011 QE the guards name a piece, not a side > answers false and touches nothing (the same, mirrored) 0ms
+ ✓ src/legal.test.ts > ABC-206 A2 — the faster pieces equal what they replace > hasLegalMove(p) === legalMoves(p).length > 0, and p is unchanged 5ms
+ ✓ src/legal.test.ts > ABC-206 A2 — the faster pieces equal what they replace > legalCaptures(p) is legalMoves(p).filter(capture), as the same ordered list 6ms
+ ✓ src/legal.test.ts > ABC-206 A2 — the faster pieces equal what they replace > givesCheck(p, m) equals make, isInCheck, unmake for every legal move, and p is unchanged 75ms
+ ✓ src/legal.test.ts > ABC-235 cut 1 — the hoisted king square answers what the per-move scan answered > legalMoves, legalCaptures and hasLegalMove equal the per-move-scan reference, p unchanged 15ms
+ ✓ src/legal.test.ts > ABC-235 cut 1 — the hoisted king square answers what the per-move scan answered > a king in check, a pinned piece, and a castle each answer as the reference does 0ms
+ ✓ src/legal.test.ts > ABC-254 A1 — the lazy filters equal the full make/test/unmake filters > on ABC-206's roots to depth 1: four lists in order, hasLegalMove, p unchanged 19ms
+ ✓ src/legal.test.ts > ABC-254 A2 — each fallback class answers as the full test does > a pinned piece moving off its pin line is rejected, and along it accepted 1ms
+ ✓ src/legal.test.ts > ABC-254 A2 — each fallback class answers as the full test does > an en-passant capture that exposes the king along the rank is rejected 0ms
+ ✓ src/legal.test.ts > ABC-254 A2 — each fallback class answers as the full test does > a king move into an attacked square is rejected, x-rayed through its own square too 0ms
+ ✓ src/legal.test.ts > ABC-254 A2 — each fallback class answers as the full test does > in check only evasions are accepted: slider, knight and double check 0ms
+ ✓ src/legal.test.ts > ABC-254 A2 — each fallback class answers as the full test does > a castle through an attacked square is rejected 0ms
+ ✓ src/legal.test.ts > ABC-261 — legalCapturesAndQueenPromotions in check tests its quiet queen promotions > equals the full filter in check: a non-blocking promotion is absent, a blocking one present 0ms
+ × src/legal.test.ts > ABC-262 — legalCapturesAndQueenPromotions in check tests black's quiet queen promotions > equals the full filter with black in check: a non-blocking promotion is absent, a blocking one present 3ms
+   → P1′, promotion off the check line: expected [ Array(1) ] to deeply equal []
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/legal.test.ts > ABC-262 — legalCapturesAndQueenPromotions in check tests black's quiet queen promotions > equals the full filter with black in check: a non-blocking promotion is absent, a blocking one present
+AssertionError: P1′, promotion off the check line: expected [ Array(1) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   {
++     "captured": 0,
++     "flags": 4,
++     "from": 16,
++     "piece": 9,
++     "promotion": 5,
++     "to": 0,
++   },
++ ]
+
+ ❯ src/legal.test.ts:905:26
+    903|
+    904|       const lazy = legalCapturesAndQueenPromotions(position);
+    905|       expect(lazy, name).toEqual(fullLegalCapturesAndQueenPromotions(p…
+       |                          ^
+    906|       const promotes = lazy.some(
+    907|         (m) => m.from === from && m.to === to && m.captured === EMPTY …
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 43 passed (44)
+   Start at  20:20:04
+   Duration  244ms (transform 0ms, setup 0ms, import 32ms, tests 138ms, environment 0ms)
+

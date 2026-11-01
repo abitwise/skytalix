@@ -1,0 +1,2 @@
+ M src/gameend.nfr.test.ts
+ M src/legal.test.ts

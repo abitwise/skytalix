@@ -1,0 +1,11 @@
+diff -ru src/gameend.nfr.test.ts /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/se-262/plants/C0-control//src/gameend.nfr.test.ts
+--- src/gameend.nfr.test.ts	2026-11-01 20:18:11.130824949 +0000
++++ /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/se-262/plants/C0-control//src/gameend.nfr.test.ts	2026-11-01 20:19:02.490809141 +0000
+@@ -266,6 +266,7 @@
+     expect(hasLegalMove(position)).toBe(true);
+     const attackTests = vi.mocked(isSquareAttackedBy).mock.calls.length;
+     expect(attackTests).toBeGreaterThan(0); // the spy sees legal.ts's calls, so the bar is live
++    console.log("B2COUNT", attackTests); // SCRATCH PROBE
+     expect(attackTests).toBeLessThanOrEqual(1);
+   });
+ 
