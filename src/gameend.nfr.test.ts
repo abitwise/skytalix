@@ -41,6 +41,7 @@ vi.mock("./moves.ts", async (importOriginal) => {
     ...actual,
     generateMoves: vi.fn(actual.generateMoves),
     generateCaptures: vi.fn(actual.generateCaptures),
+    isSquareAttackedBy: vi.fn(actual.isSquareAttackedBy),
   };
 });
 
@@ -53,12 +54,13 @@ import { makeMove } from "./apply.ts";
 import { gameStatus, leafEndReason } from "./gameend.ts";
 import {
   hasLegalMove,
+  isInCheck,
   legalCaptures,
   legalCapturesAndQueenPromotions,
   legalMoves,
 } from "./legal.ts";
-import { FLAG_NONE, generateCaptures, generateMoves } from "./moves.ts";
-import { EMPTY, parseSquareName } from "./position.ts";
+import { FLAG_NONE, generateCaptures, generateMoves, isSquareAttackedBy } from "./moves.ts";
+import { EMPTY, KING, parseSquareName } from "./position.ts";
 import { QUIESCENCE_MAX_PLY, quiesce } from "./quiescence.ts";
 import { lateMoveReduction } from "./search.ts";
 import { zobristKey } from "./zobrist.ts";
@@ -224,6 +226,27 @@ describe("ABC-206 — the search leaf's game-end check stays cheap (call counts,
 
     expect(hasLegalMove(position)).toBe(true);
     expect(makeMove).toHaveBeenCalledTimes(0);
+  });
+
+  // ABC-261 (QE-254-b): the bar above cannot tell the early exit from `legalMoves(p).length > 0`,
+  // because the lazy list plays no `makeMove` on the start position either. The attack tests can:
+  // out of check, the early exit tests the first king move only, and the lazy list tests every king
+  // move (the ABC-217 A2 / ABC-206 class). On this board production makes 2 calls (the check test
+  // and the first king move); the lazy list makes 1 + 5.
+  it("hasLegalMove out of check stops at the first legal king move: at most 2 attack tests", () => {
+    const position = parseFen("4k3/8/8/8/8/8/PPP5/4K3 w - - 0 1");
+    const pseudo = generateMoves(position);
+    const kingMoves = pseudo.filter((move) => move.piece === KING).length;
+    expect(isInCheck(position)).toBe(false);
+    expect(pseudo[0]?.piece).toBe(KING); // the first generated move is a king move...
+    expect(legalMoves(position)).toContainEqual(pseudo[0]); // ...and it is legal
+    expect(kingMoves).toBeGreaterThanOrEqual(3); // so a full lazy list tests at least 1 + 3
+    vi.clearAllMocks();
+
+    expect(hasLegalMove(position)).toBe(true);
+    const attackTests = vi.mocked(isSquareAttackedBy).mock.calls.length;
+    expect(attackTests).toBeGreaterThan(0); // the spy sees legal.ts's calls, so the bar is live
+    expect(attackTests).toBeLessThanOrEqual(2);
   });
 
   it("legalCaptures on kiwipete plays none of the pseudo-legal captures (all of them before ABC-254)", () => {
