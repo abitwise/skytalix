@@ -6,7 +6,23 @@ id: ADR-0003
 
 ## Status
 
-**accepted** — ratified by a named human on 2026-07-30. No agent may move an ADR to `accepted`; a
+**ACCEPTED, clauses 1 and 3 AMENDED 2026-11-01** on the owner's word: lazy legality, menu item (c2), is
+authorized now (`ABC-254`, `ADR-0055` O1-d, Q-SP-3).
+
+- *2026-11-01, dated status line by Architect/Design (task `arch-adr0003-amend`, records only, at `main`
+  `0ca365b3`). It records the owner's word as the Orchestrator recorded it (`orch-2026-10-30a` `…f7a50e95`,
+  verbatim inside: "ABC-254: yes"). That answers `ADR-0055` D5 Q-SP-3: yes. An agent wrote these lines. The
+  acceptance is the owner's word quoted here, not the agent's.*
+  - **Clause 1** is amended as **(1-A)**: make/test/unmake stays the legality test, but it runs only for king
+    moves, en-passant captures, moves by a pinned piece and every move while in check. The result must be
+    value-identical. The reading of clause 1 (`OD-206-1`, the owner did not veto it on 2026-10-24) is now
+    written on this page as **(1-R)**.
+  - **Clause 3** is amended as **(3-A)**: (c2) is authorized without the trigger. (c1) and (b) stay as written.
+    The falsifiers come from `ABC-254`'s acceptance.
+  - **Clause 2** (as amended 2026-07-30) is not touched.
+  - The 2026-07-30 text of each clause is kept word for word above its amendment. Nothing was deleted.
+
+*Original status, kept:* **accepted** — ratified by a named human on 2026-07-30. No agent may move an ADR to `accepted`; a
 human did.
 
 This ADR was written as a proposal: it presented a decision rather than taking one. `src/legal.ts`
@@ -40,6 +56,25 @@ draft of clause 2 was **not** ratified as written, and this file must not be rea
 
 The ratified wording is the amended clause 2 in the Decision section. The draft's own phrasing is
 quoted in the three amendments above, so this record can be read without the file's history.
+
+### Amendment record — 2026-11-01, clauses 1 and 3 (lazy legality)
+
+*Architect/Design, task `arch-adr0003-amend`. The owner's word is "ABC-254: yes" (`orch-2026-10-30a`
+`…f7a50e95`).*
+
+- **What changed:** two things. Clause 1 is amended as (1-A), with its reading written down as (1-R). Clause 3 is
+  amended as (3-A), with the falsifiers. Both sit in the Decision section, under the text they amend.
+- **What did not change:**
+  - clause 2 and `NFR-005`;
+  - (c1) and (b), which are still not authorized;
+  - every measurement in this file;
+  - `ADR-0002`;
+  - the `ABC-009` interaction (a castle is a king move, so it keeps the full test, and (c2) still does not fix
+    that defect).
+- **The figures are not refreshed.** Context still describes July 2026: a 55-line `src/legal.ts`, measured on
+  one Apple M3. At `0ca365b3`, `src/legal.ts` is 299 lines after `ABC-206`, `ABC-235` and `ABC-229` edited it
+  under (1-R). On this host every speed figure here is `UNKNOWN - verify`. `ABC-254` A4 is the reading that
+  counts.
 
 ## Context
 
@@ -159,9 +194,90 @@ And the exchange rate is brutal: at EBF 6, **a 3x speedup buys 0.61 ply**; 5x bu
 **Ratified: keep make / test / unmake. Change the target, not the code** — clauses 1 and 3 as
 proposed, clause 2 as amended (see the ratification record in Status). Concretely, three clauses:
 
+*2026-11-01: "not the code" no longer holds for clause 1. The owner's word changes the code through
+(1-A) and (3-A), delivered by `ABC-254`. Clause 2's target is unchanged.*
+
 **1. `src/legal.ts` is not changed.** Make/test/unmake stays the legality strategy. It is
 proven-correct at depth, it is 55 lines, and the measurements above say the throughput it costs is
 not the binding constraint on anything this product has promised.
+
+*Amended 2026-11-01 on the owner's word (`…f7a50e95`, "ABC-254: yes"). Clause 1 now reads as (1-A),
+and (1-R) is its written-down reading. The sentence above is kept as the record of what was ratified
+on 2026-07-30.*
+
+**(1-A) Make/test/unmake stays the legality test, but it runs only where a move can be illegal.**
+Each legality call works out three things once, before its loop:
+
+- the mover's king square;
+- whether the mover is in check;
+- the set of the mover's absolutely pinned pieces.
+
+It then runs the existing make/test/unmake (or the board-only form below) for exactly four classes
+of move:
+
+1. every king move, castling included;
+2. every en-passant capture;
+3. every move by a pinned piece;
+4. every move while the mover is in check, which covers double check.
+
+Every other pseudo-legal move is accepted without the test. Six rules bind this:
+
+- **It is value-identical.** On every legal position, each converted filter returns the same moves
+  in the same order as the full make/test/unmake filter. `hasLegalMove` gives the same answer. The
+  position is unchanged after each call, by `toFen` and by Zobrist key. Any difference is a defect,
+  not a tradeoff. The filter walks the same generated list in the same order and only skips the
+  test. It never reorders or groups the classes (for example, no "safe moves first").
+- **The classes may include too much, never too little.** Here is why the four classes are
+  complete. Take a move by a piece other than the king, made while the mover is not in check. It can
+  leave its own king attacked only by opening a line to that king. Opening the line by moving one
+  piece means that piece stood alone between the king and an enemy slider of that line's kind: it
+  was pinned. Opening it by removing two pieces at once is something only en passant does, because
+  the captured pawn leaves too. Putting a piece on a square never creates an attack on its own
+  king. So a pin detector that marks extra pieces (for example, every own piece on a line with an
+  enemy slider behind it) costs only speed. A detector that misses a real pin is a defect.
+- **The full filter stays in `src/`, as the fallback and as the oracle.** The four classes call it,
+  and `ABC-254` A1 reads against it. This amendment does not allow deleting it. Deleting it would
+  delete the oracle, and that needs a new ADR.
+- **(c3) may be folded in.** The fallback may use the board-only make/test/unmake (menu item (c3))
+  instead of a full `makeMove`. That is the form this ADR measured folded into (c2). The in-check
+  figure depends on it: 1.21× with it, 0.97× without. The condition: the board-only form must place
+  and remove every piece that the full `makeMove` places or removes for that move (the en-passant
+  victim, the castling rook, the promoted piece), and it must restore the board byte-exact. Any kind
+  of move it does not handle takes the full `makeMove`. `ABC-254` A1 and A2 are its proof. No
+  argument here stands in for them.
+- **Where it may apply.** These filters in `src/legal.ts` may use it: `legalMoves`, `hasLegalMove`,
+  `legalCaptures` and `legalCapturesAndQueenPromotions` (`ABC-229`). Every converted filter is in
+  `ABC-254` A1's differential. A filter left on the full test is not a defect. `isInCheck`,
+  `givesCheck` and `hasLegalEnPassant` are not legality filters, and this clause does not govern
+  them.
+- **Signatures and state stay as they are.** Every filter keeps its signature and its output.
+  Nothing is cached on `Position` (`ADR-0020`). The king square, the check flag and the pin set live
+  inside the call, or in one fixed-size module scratch that is reused (`G7`, growth 0). A shared
+  scratch is safe only while no filter calls another filter in the middle of its loop. If one ever
+  does, the scratch moves into the call.
+
+**(1-R) What clause 1 means, written down.** This is `OD-206-1`, which the owner did not veto on
+2026-10-24. It is ruled here for `ABC-250` and `ABC-252`.
+
+- **Clause 1 governs how legality is decided.** It does not freeze the bytes of `src/legal.ts`, and
+  it does not govern how a move or an undo record is stored. The 2026-07-30 words "`src/legal.ts` is
+  not changed" mean "the legality strategy is not changed". `ABC-206` edited the file on that
+  reading, and the owner did not veto it. `ABC-235` and `ABC-229` then edited it on the same reading.
+  The strategy is now (1-A).
+- **`ABC-250` (packed moves in reused typed arrays) and `ABC-252` (one generator through one
+  converter) are not blocked by this ADR.** They change how moves are represented, not the test.
+  Their own list-equality oracles (`ABC-250` A2, `ABC-252`'s) already hold the line that matters: a
+  change to what is legal, or to the order of the list, would break clause 1 and is a defect.
+- **(c4) does not block `ABC-250`.** This ADR set (c4) aside in July ("no throughput argument
+  supports it"). `ADR-0055` O1-b, accepted 2026-11-01, takes the other direction and names the
+  disagreement. `ABC-250` A4's perft reading settles it. ADR-0003 does not.
+- **Whichever ticket lands first, the other carries the strategy as it stands then.** If `ABC-254`
+  merges first, `ABC-250` packs the lazy filter with the same classes and rules. If
+  `ABC-250`/`ABC-252` merge first, `ABC-254` is written on the packed path. The order is the
+  Orchestrator's (`ADR-0055` D4; the `ABC-250` and `ABC-254` pages).
+- **What clause 1 still forbids without a new ADR:** replacing the make/test/unmake test with case
+  analysis ((b), pin-aware generation). Pseudo-legal search (c1) needs no change to this file, but it
+  stays unauthorized under clause 3.
 
 **2. `NFR-005` is re-derived from `NFR-004` rather than inherited from the spike.** Its
 `>= 500,000 nodes/sec` was derived from an invalid proxy and is not testable as written. The
@@ -220,6 +336,43 @@ safest first, and only as far as needed:
 
 This ADR authorizes none of the three. It records which one to reach for, in what order, and on
 what evidence — so the choice is not made under time pressure mid-`EPIC-004`.
+
+*Amended 2026-11-01 on the owner's word (`…f7a50e95`, "ABC-254: yes"). Clause 3 now reads as (3-A).
+The text above is kept as the record of what was ratified on 2026-07-30.*
+
+**(3-A) (c2) is authorized now, without the trigger. (c1) and (b) stay as written.**
+
+- **(c2), lazy legality in the form (1-A) gives (with (c3) folded in as (1-A) allows), is authorized
+  for speed now.** It is authorized on the owner's word, ahead of (c1), and without the named
+  trigger (a missed depth floor), which has not fired. Only `ABC-254` delivers it.
+- **(c1) and (b) stay unauthorized, behind the same trigger and in the same order:** (c1) first, (b)
+  last. (b) is still last for the same reason: its measured ceiling over (c2) is about 1.5×.
+- **(c4) is not a menu item.** `ADR-0055` O1-b and `ABC-250` handle it (see (1-R)).
+
+**The falsifiers.** These come from `ABC-254`'s acceptance. Each says what happens to (1-A) and (3-A)
+if it fires:
+
+1. **Perft.** With `PERFT_DEEP=1`, `src/perft.test.ts` must pass 32/32 exact over the six standard
+   positions (`ABC-254` A3). One miss is a defect, and the ticket is not merged.
+2. **The differential on the six standard positions.** The perft walk of the six standard roots is
+   at least 518,474 nodes. The 285,074-position walk runs under `ENGINE_DEEP=1`. Every converted
+   filter must equal the full filter in order. The captures lists must be equal. `hasLegalMove` must
+   agree. There must be 0 mutations (`ABC-254` A1). The A2 class rows must hold. One mismatch is a
+   defect and goes back to the Software Engineer. The Architect reviews the fix against (1-A).
+3. **The in-check guard.** On `position-4`, which is in check, head's nodes per second must be at
+   least **0.97×** base's. QE reads it ALONE on a sealed pre-registration (`ABC-254` A4). A miss means
+   the in-check path costs more than the full test, and it comes back to the Architect. The response
+   is already designed: when the mover is in check, skip the pin set and run the full test on every
+   move. Class 4 already sends those moves to the full test, so the only cost left over today's
+   filter is the check flag.
+4. **The speed bar.** Head must reach at least 1.10× on two of `kiwipete`, `position-6` and the start
+   position, and at least 1.00× on the third (`ABC-254` A4). If it misses while 1–3 are green, the
+   ticket is not merged and is dropped, and QE records a `failed-attempt` note. (1-A) and (3-A) then
+   stay on record as an authorization nobody used, and `src/legal.ts` keeps the full test. A retry
+   needs a new form, named by the Architect, that answers the recorded attempt.
+5. **After the merge.** If any legal position ever gives a different list from the full filter, the
+   response is to revert `ABC-254`'s commits (see Rollback). The full filter is still in `src/`, so
+   the revert is local.
 
 **The follow-up this ADR held back — taken on ratification:** `plans/nfr-catalog.md`'s `NFR-005` row
 needed the clause-2 correction, and this ADR deliberately did not edit it while `proposed`. That edit
@@ -409,6 +562,19 @@ under 24% in the best case.
 
 ## Consequences
 
+*2026-11-01 (the amendment to clauses 1 and 3):*
+
+- **The first bullet below no longer holds for clause 1.** One ticket is owed: `ABC-254`. It
+  changes `src/legal.ts` under (1-A), behind A1–A6, graded S2 with no smoke. The perft 32/32 proof
+  stays the gate. The full filter stays in `src/` as the oracle.
+- **No NFR moves.** `NFR-005` (clause 2) is read as `G6` "≥ base", with the floor at 6. `NFR-001`'s
+  perft rate is INFO. `NFR-009` is held by `G7`, growth 0. No new NFR.
+- **`ADR-0002` still needs no edit.** Its re-measurement, which "becomes owed" if (c2) is ratified,
+  is not a gate on `ABC-254`. `ABC-254` does not touch who owns game history. This ADR already
+  measured the penalty under (c2) (1.93× at kiwipete, 0.99× at startpos), and `ADR-0002` clause 1
+  holds on it. It is owed only if a ticket proposes attaching history to the core's make/unmake.
+- **`ABC-009` is unchanged.** A castle is a king move and keeps the full test (see the table below).
+
 - **Nothing in `src/` changes and no ticket is owed by this ADR.** The 55-line `legal.ts`, the
   perft 32/32 proof, and the 143/143 suite all stand exactly as merged.
 - **The nodes/sec figure stops being the gate and becomes a diagnostic; `NFR-005` itself stays
@@ -451,6 +617,15 @@ finding that a well-formed position is unaffected. **I did not test any invalid 
 no new information about `ABC-009`.**
 
 ## Rollback
+
+*2026-11-01 (the amendment to clauses 1 and 3):*
+
+- **Rolling back the code** means reverting `ABC-254`'s commits. That is cheap and local, because
+  (1-A) keeps the full filter in `src/` and leaves every signature unchanged.
+- **If `ABC-250`/`ABC-252` have packed the lazy filter by then,** the revert falls back to the packed
+  full filter. It does not fall back to the object one.
+- **Rolling back the record** means restoring the 2026-07-30 reading of clauses 1 and 3. That needs
+  the owner's word, as the amendment did.
 
 Clauses 1 and 3 cost zero lines, so reversing them means editing this file — cheap now, cheap
 later, because nothing is built on them. Clause 2 is the one with a cost curve: once `EPIC-004` is
