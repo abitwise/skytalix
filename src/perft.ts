@@ -13,22 +13,45 @@
  * harness prints the rate with that caveat, and NFR-001 is read against it accordingly.
  */
 
-import { makeMove, unmakeMove } from "./apply.ts";
-import { legalMoves } from "./legal.ts";
-import type { Move } from "./moves.ts";
+import { createUndoStack, makeMovePacked, unmakeMovePacked } from "./apply.ts";
+import { legalMovesPacked } from "./legal.ts";
+import { packedFrom, packedPromotion, packedTo } from "./moves.ts";
 import { BISHOP, KNIGHT, type Position, QUEEN, ROOK, squareName } from "./position.ts";
+
+/**
+ * ABC-250 (ADR-0055 O1-b part 1): perft runs on the PACKED path. Each ply's legal moves are written
+ * into one preallocated move stack, the child's window starting where the parent's list ends, and
+ * each ply's undo state into one preallocated undo stack. Both are fixed-size and reused (`G7`,
+ * growth 0): `MAX_PLY` plies and `MAX_PLY * 256` move slots (≈ 128 KiB); a deeper perft, or a list
+ * run past the end, throws a RangeError rather than truncating. Not re-entrant: `perftDivide` calls
+ * the inner walk, never `perft`, inside its loop.
+ */
+const MAX_PLY = 128;
+const moveStack = new Int32Array(MAX_PLY * 256);
+const undoStack = createUndoStack(MAX_PLY);
+
+function perftFrom(position: Position, depth: number, ply: number, start: number): number {
+  if (depth === 0) return 1;
+
+  const end = legalMovesPacked(position, moveStack, start);
+  let nodes = 0;
+  for (let i = start; i < end; i++) {
+    const move = moveStack[i] as number;
+    makeMovePacked(position, move, undoStack, ply);
+    nodes += perftFrom(position, depth - 1, ply + 1, end);
+    unmakeMovePacked(position, move, undoStack, ply);
+  }
+  return nodes;
+}
+
+function assertDepth(depth: number): void {
+  if (depth > MAX_PLY) throw new RangeError(`perft depth ${depth} exceeds ${MAX_PLY} plies`);
+}
 
 /** Leaf nodes of the legal move tree at `depth`. `perft(_, 0)` is 1 by definition. */
 export function perft(position: Position, depth: number): number {
-  if (depth === 0) return 1;
-
-  let nodes = 0;
-  for (const move of legalMoves(position)) {
-    const undo = makeMove(position, move);
-    nodes += perft(position, depth - 1);
-    unmakeMove(position, move, undo);
-  }
-  return nodes;
+  assertDepth(depth);
+  return perftFrom(position, depth, 0, 0);
 }
 
 const PROMOTION_LETTER: Readonly<Record<number, string>> = {
@@ -44,8 +67,8 @@ const PROMOTION_LETTER: Readonly<Record<number, string>> = {
  * so nothing is appended. Deliberately NOT SAN (`O-O`, `e8=Q`) — that is EPIC-003; divide only
  * needs an unambiguous move key.
  */
-function moveLabel(move: Move): string {
-  return `${squareName(move.from)}${squareName(move.to)}${PROMOTION_LETTER[move.promotion] ?? ""}`;
+function moveLabel(move: number): string {
+  return `${squareName(packedFrom(move))}${squareName(packedTo(move))}${PROMOTION_LETTER[packedPromotion(move)] ?? ""}`;
 }
 
 export interface DivideEntry {
@@ -61,11 +84,14 @@ export interface DivideEntry {
  * comparing this against a reference engine's divide and descending into the move that differs.
  */
 export function perftDivide(position: Position, depth: number): DivideEntry[] {
+  assertDepth(depth);
   const entries: DivideEntry[] = [];
-  for (const move of legalMoves(position)) {
-    const undo = makeMove(position, move);
-    entries.push({ move: moveLabel(move), nodes: perft(position, depth - 1) });
-    unmakeMove(position, move, undo);
+  const end = legalMovesPacked(position, moveStack, 0);
+  for (let i = 0; i < end; i++) {
+    const move = moveStack[i] as number;
+    makeMovePacked(position, move, undoStack, 0);
+    entries.push({ move: moveLabel(move), nodes: perftFrom(position, depth - 1, 1, end) });
+    unmakeMovePacked(position, move, undoStack, 0);
   }
   return entries;
 }

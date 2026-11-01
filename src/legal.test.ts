@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { makeMove, unmakeMove } from "./apply.ts";
+import {
+  createUndoStack,
+  makeMove,
+  makeMovePacked,
+  unmakeMove,
+  unmakeMovePacked,
+} from "./apply.ts";
 import { parseFenGrammarOnly as parseFen, toFen } from "./fen.ts";
 import {
   fullHasLegalMove,
@@ -12,14 +18,19 @@ import {
   isInCheck,
   legalCaptures,
   legalCapturesAndQueenPromotions,
+  legalCapturesPacked,
   legalMoves,
+  legalMovesPacked,
 } from "./legal.ts";
 import {
   FLAG_EN_PASSANT,
   FLAG_NONE,
   generateMoves,
+  generateMovesPacked,
   isSquareAttackedBy,
   type Move,
+  packMove,
+  unpackMove,
 } from "./moves.ts";
 import { BLACK, EMPTY, KING, type Position, parseSquareName } from "./position.ts";
 import { zobristKey } from "./zobrist.ts";
@@ -847,5 +858,146 @@ describe("ABC-254 A2 — each fallback class answers as the full test does", () 
     const through = lazyEqualsFull("f8 attacked", "r3k2r/8/8/8/8/8/8/5R1K b kq - 0 1");
     expect(has(through, "e8", "g8")).toBe(false);
     expect(has(through, "e8", "c8")).toBe(true);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// ABC-250 A2 — the packed path equals the object path (ADR-0055 O1-b part 1). At every node: the
+// decoded packed legal list equals `legalMoves` in order, the packed captures equal
+// `legalCaptures` in order, each packed word is `packMove` of its object move, and every packed
+// make/unmake pair leaves the board the object `makeMove` leaves and restores the position (by
+// `toFen`, Zobrist key and full state). The lane walks the six perft roots at depth 1; under
+// `ENGINE_DEEP=1`, ABC-206's 285 074-position walk at depth 3. Children come from the OBJECT
+// `legalMoves`, the reference while it exists. Mismatches are counted, the first one named.
+// ---------------------------------------------------------------------------
+
+interface PackedTally {
+  nodes: number;
+  pairs: number;
+  captures: number;
+  flagged: number;
+  mismatches: number;
+  mutations: number;
+  first: string;
+}
+
+/** Packed lists start mid-buffer, so a window that does not begin at 0 is what is read. */
+const PACKED_MOVES_AT = 37;
+const PACKED_CAPTURES_AT = 600;
+const packedBuffer = new Int32Array(1024);
+const packedUndo = createUndoStack(4);
+
+function checkPackedNode(position: Position, where: string, tally: PackedTally): void {
+  const fen = toFen(position);
+  const key = zobristKey(position);
+  const before = fullState(position);
+  const miss = (what: string): void => {
+    if (tally.mismatches === 0) tally.first = `${where}: ${what}`;
+    tally.mismatches++;
+  };
+  const mutate = (what: string): void => {
+    if (tally.mutations === 0 && tally.mismatches === 0) tally.first = `${where}: ${what}`;
+    tally.mutations++;
+  };
+
+  const want = legalMoves(position);
+  const end = legalMovesPacked(position, packedBuffer, PACKED_MOVES_AT);
+  if (end - PACKED_MOVES_AT !== want.length) miss(`legal count ${end - PACKED_MOVES_AT}`);
+  const wantCaptures = legalCaptures(position);
+  const capturesEnd = legalCapturesPacked(position, packedBuffer, PACKED_CAPTURES_AT);
+  if (capturesEnd - PACKED_CAPTURES_AT !== wantCaptures.length) miss("capture count");
+  for (let i = 0; i < wantCaptures.length; i++) {
+    const packed = packedBuffer[PACKED_CAPTURES_AT + i] as number;
+    if (packed !== packMove(wantCaptures[i] as Move)) miss(`capture ${i}`);
+    tally.captures++;
+  }
+  if (toFen(position) !== fen || fullState(position) !== before) mutate("list calls");
+
+  for (let i = 0; i < want.length; i++) {
+    const move = want[i] as Move;
+    const packed = packedBuffer[PACKED_MOVES_AT + i] as number;
+    const decoded = unpackMove(packed);
+    if (
+      packed !== packMove(move) ||
+      decoded.from !== move.from ||
+      decoded.to !== move.to ||
+      decoded.piece !== move.piece ||
+      decoded.captured !== move.captured ||
+      decoded.flags !== move.flags ||
+      decoded.promotion !== move.promotion
+    ) {
+      miss(`move ${i} ${move.from}-${move.to}`);
+    }
+    if (move.flags !== FLAG_NONE) tally.flagged++;
+
+    const undo = makeMove(position, move);
+    const afterObject = fullState(position);
+    unmakeMove(position, move, undo);
+
+    makeMovePacked(position, packed, packedUndo, 2);
+    if (fullState(position) !== afterObject) miss(`make ${move.from}-${move.to}`);
+    unmakeMovePacked(position, packed, packedUndo, 2);
+    if (toFen(position) !== fen || zobristKey(position) !== key || fullState(position) !== before) {
+      mutate(`unmake ${move.from}-${move.to}`);
+    }
+    tally.pairs++;
+  }
+  tally.nodes++;
+}
+
+function walkPacked(
+  roots: ReadonlyArray<readonly [name: string, fen: string]>,
+  depth: number,
+): PackedTally {
+  const tally: PackedTally = {
+    nodes: 0,
+    pairs: 0,
+    captures: 0,
+    flagged: 0,
+    mismatches: 0,
+    mutations: 0,
+    first: "",
+  };
+  const walk = (position: Position, where: string, left: number): void => {
+    checkPackedNode(position, where, tally);
+    if (left === 0) return;
+    for (const move of legalMoves(position)) {
+      const undo = makeMove(position, move);
+      walk(position, `${where} ${move.from}-${move.to}`, left - 1);
+      unmakeMove(position, move, undo);
+    }
+  };
+  for (const [name, fen] of roots) walk(parseFen(fen), name, depth);
+  return tally;
+}
+
+describe("ABC-250 A2 — the packed generator, filter and make/unmake equal the object ones", () => {
+  it("on the six perft roots to depth 1: lists in order, make/unmake identical, 0 mutations", () => {
+    const tally = walkPacked(PERFT_POSITIONS, 1);
+    expect(tally.first).toBe("");
+    expect(tally.mismatches).toBe(0);
+    expect(tally.mutations).toBe(0);
+    expect(tally.nodes).toBe(1 + 20 + 1 + 48 + 1 + 14 + 1 + 6 + 1 + 44 + 1 + 46);
+    expect(tally.captures).toBeGreaterThan(0);
+    expect(tally.flagged).toBeGreaterThan(0);
+  });
+
+  if (RUN_DEEP) {
+    it("on ABC-206's 285 074-position walk to depth 3 [deep, ENGINE_DEEP=1]", () => {
+      const tally = walkPacked([...PERFT_POSITIONS, ...A2_TERMINAL_FENS], 3);
+      expect(tally.first).toBe("");
+      expect(tally.mismatches).toBe(0);
+      expect(tally.mutations).toBe(0);
+      expect(tally.nodes).toBe(285_074);
+      expect(tally.captures).toBeGreaterThan(0);
+      expect(tally.flagged).toBeGreaterThan(0);
+    }, 600_000);
+  }
+
+  it("a packed generator run past its buffer throws instead of truncating", () => {
+    expect(() => generateMovesPacked(parseFen(START_FEN), new Int32Array(24), 5)).toThrow(
+      RangeError,
+    );
+    expect(generateMovesPacked(parseFen(START_FEN), new Int32Array(25), 5)).toBe(25);
   });
 });

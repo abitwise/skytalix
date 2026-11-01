@@ -13,7 +13,18 @@
  * move and capture untouched, and only a flagged move pays for the special handling.
  */
 
-import { FLAG_EN_PASSANT, FLAG_NONE, FLAG_PROMOTION, type Move } from "./moves.ts";
+import {
+  FLAG_EN_PASSANT,
+  FLAG_NONE,
+  FLAG_PROMOTION,
+  type Move,
+  packedCaptured,
+  packedFlags,
+  packedFrom,
+  packedPiece,
+  packedPromotion,
+  packedTo,
+} from "./moves.ts";
 import {
   BLACK,
   CASTLE_BK,
@@ -192,4 +203,121 @@ export function unmakeNullMove(position: Position, undo: NullUndo): void {
   if (position.blackToMove) position.fullmoveNumber--;
   position.epSquare = undo.epSquare;
   position.halfmoveClock = undo.halfmoveClock;
+}
+
+// ---------------------------------------------------------------------------
+// ABC-250 (ADR-0055 O1-b part 1): make/unmake on a packed move (`src/moves.ts`), with the undo
+// state in per-ply typed arrays instead of an `UndoRecord` object. `makeMove` / `unmakeMove` above
+// are unchanged and stay the object path the search calls; these two do exactly what they do, field
+// for field, and `ABC-250` A2 reads them against each other.
+// ---------------------------------------------------------------------------
+
+/**
+ * Per-ply undo state for the packed make/unmake: slot `ply` holds what `UndoRecord` holds. `state`
+ * packs the captured piece (bits 0-3), the castling rights (4-7) and the en-passant square plus one
+ * (8-15, so NO_SQUARE is 0). The halfmove clock has its own `Float64Array`, because a FEN may give
+ * it any integer that round-trips, beyond int32. Fixed-size: allocate once, reuse (`G7`).
+ */
+export interface UndoStack {
+  readonly state: Int32Array;
+  readonly clock: Float64Array;
+}
+
+/** A fresh undo stack with `plies` slots. */
+export function createUndoStack(plies: number): UndoStack {
+  return { state: new Int32Array(plies), clock: new Float64Array(plies) };
+}
+
+export const undoCaptured = (undo: UndoStack, ply: number): number =>
+  (undo.state[ply] as number) & 15;
+export const undoCastling = (undo: UndoStack, ply: number): number =>
+  ((undo.state[ply] as number) >> 4) & 15;
+export const undoEpSquare = (undo: UndoStack, ply: number): number =>
+  (((undo.state[ply] as number) >> 8) & 0xff) - 1;
+
+/** `CASTLE_LOSS` as a 128-entry table: the castling rights vacating or capturing on a square removes. */
+const CASTLE_LOSS_TABLE = Uint8Array.from({ length: 128 }, (_, square) => castlingLoss(square));
+
+/** The rook's leg of a castle from the king's destination: h-side rook to f, a-side rook to d. */
+const castleRookFrom = (kingTo: number): number => ((kingTo & 7) === 6 ? kingTo + 1 : kingTo - 2);
+const castleRookTo = (kingTo: number): number => ((kingTo & 7) === 6 ? kingTo - 1 : kingTo + 1);
+
+/**
+ * `makeMove` for a packed move: applies it to `position` in place and writes what
+ * `unmakeMovePacked` needs into `undo`'s slot `ply`.
+ */
+export function makeMovePacked(
+  position: Position,
+  move: number,
+  undo: UndoStack,
+  ply: number,
+): void {
+  const board = position.board;
+  const from = packedFrom(move);
+  const to = packedTo(move);
+  const piece = packedPiece(move);
+  const flags = packedFlags(move);
+  const captured = board[to] as number;
+
+  undo.state[ply] = captured | (position.castling << 4) | ((position.epSquare + 1) << 8);
+  undo.clock[ply] = position.halfmoveClock;
+
+  board[to] = piece;
+  board[from] = EMPTY;
+
+  if (flags !== FLAG_NONE) {
+    if ((flags & FLAG_PROMOTION) !== 0) {
+      board[to] = packedPromotion(move) | (piece & BLACK);
+    } else if ((flags & FLAG_EN_PASSANT) !== 0) {
+      board[to + ((piece & BLACK) !== 0 ? 16 : -16)] = EMPTY;
+    } else {
+      const rookFrom = castleRookFrom(to);
+      board[castleRookTo(to)] = board[rookFrom] as number;
+      board[rookFrom] = EMPTY;
+    }
+  }
+
+  const isPawn = (piece & 7) === PAWN;
+  position.halfmoveClock = isPawn || captured !== EMPTY ? 0 : position.halfmoveClock + 1;
+  position.epSquare = isPawn && Math.abs(to - from) === DOUBLE_PUSH ? (from + to) / 2 : NO_SQUARE;
+  position.castling &= ~((CASTLE_LOSS_TABLE[from] as number) | (CASTLE_LOSS_TABLE[to] as number));
+
+  if (position.blackToMove) position.fullmoveNumber++;
+  position.blackToMove = !position.blackToMove;
+}
+
+/** `unmakeMove` for a packed move: reverses `makeMovePacked` exactly from `move` and slot `ply`. */
+export function unmakeMovePacked(
+  position: Position,
+  move: number,
+  undo: UndoStack,
+  ply: number,
+): void {
+  position.blackToMove = !position.blackToMove;
+  if (position.blackToMove) position.fullmoveNumber--;
+
+  const board = position.board;
+  const from = packedFrom(move);
+  const to = packedTo(move);
+  const piece = packedPiece(move);
+  const flags = packedFlags(move);
+  const state = undo.state[ply] as number;
+
+  board[from] = piece;
+  board[to] = state & 15;
+
+  if (flags !== FLAG_NONE && (flags & FLAG_PROMOTION) === 0) {
+    if ((flags & FLAG_EN_PASSANT) !== 0) {
+      board[to + ((piece & BLACK) !== 0 ? 16 : -16)] = packedCaptured(move);
+    } else {
+      const rookFrom = castleRookFrom(to);
+      const rookTo = castleRookTo(to);
+      board[rookFrom] = board[rookTo] as number;
+      board[rookTo] = EMPTY;
+    }
+  }
+
+  position.castling = (state >> 4) & 15;
+  position.epSquare = ((state >> 8) & 0xff) - 1;
+  position.halfmoveClock = undo.clock[ply] as number;
 }

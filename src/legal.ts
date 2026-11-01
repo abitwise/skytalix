@@ -20,15 +20,27 @@
  * as the oracle; the lazy filters keep every signature and return the same lists in the same order.
  */
 
-import { makeMove, unmakeMove } from "./apply.ts";
+import {
+  createUndoStack,
+  makeMove,
+  makeMovePacked,
+  unmakeMove,
+  unmakeMovePacked,
+} from "./apply.ts";
 import {
   FLAG_EN_PASSANT,
   FLAG_NONE,
   FLAG_PROMOTION,
   generateCaptures,
+  generateCapturesPacked,
   generateMoves,
+  generateMovesPacked,
   isSquareAttackedBy,
   type Move,
+  packedFlags,
+  packedFrom,
+  packedPiece,
+  packedTo,
 } from "./moves.ts";
 import {
   BISHOP,
@@ -435,6 +447,94 @@ export function legalCapturesAndQueenPromotions(position: Position): Move[] {
   }
 
   return moves;
+}
+
+// ---------------------------------------------------------------------------
+// ABC-250 (ADR-0055 O1-b part 1): the same lazy filter (ADR-0003 (1-A), the same four classes, the
+// same pin set and the same two-byte test) over a PACKED list (`src/moves.ts`). It compacts the
+// generator's window `out[start, end)` in place and returns the new end, so the kept moves are the
+// object filter's moves in the object filter's order. Perft reads these; the search keeps the
+// object filters above until `ABC-251`. The make/test/unmake fallback's undo slot is one fixed
+// module scratch (`G7`, growth 0), safe because the test never nests.
+// ---------------------------------------------------------------------------
+
+const packedTestUndo = createUndoStack(1);
+
+/** `staysSafe` for a packed move: the two-byte test when unflagged, else the packed make/unmake. */
+function staysSafePacked(
+  position: Position,
+  move: number,
+  kingSquare: number,
+  moverIsBlack: boolean,
+): boolean {
+  if (packedFlags(move) === FLAG_NONE) {
+    const board = position.board;
+    const from = packedFrom(move);
+    const to = packedTo(move);
+    const piece = packedPiece(move);
+    const captured = board[to] as number;
+    board[to] = piece;
+    board[from] = EMPTY;
+    const safe = !isSquareAttackedBy(position, kingSquare, !moverIsBlack);
+    board[from] = piece;
+    board[to] = captured;
+    return safe;
+  }
+  makeMovePacked(position, move, packedTestUndo, 0);
+  const safe = !isSquareAttackedBy(position, kingSquare, !moverIsBlack);
+  unmakeMovePacked(position, move, packedTestUndo, 0);
+  return safe;
+}
+
+/** `filterLazily` over `out[start, end)`: keeps, in order, what the full filter keeps; returns the new end. */
+function filterLazilyPacked(
+  position: Position,
+  out: Int32Array,
+  start: number,
+  end: number,
+): number {
+  const moverIsBlack = position.blackToMove;
+  const king = KING | (moverIsBlack ? BLACK : 0);
+  const kingHome = kingSquareOf(position, moverIsBlack);
+  let kept = start;
+
+  if (isSquareAttackedBy(position, kingHome, !moverIsBlack)) {
+    // Class 4: in check, every move takes the test (double check included). No pin set.
+    for (let i = start; i < end; i++) {
+      const move = out[i] as number;
+      const kingSquare = packedPiece(move) === king ? packedTo(move) : kingHome;
+      if (staysSafePacked(position, move, kingSquare, moverIsBlack)) out[kept++] = move;
+    }
+    return kept;
+  }
+
+  const epoch = markPins(position.board, kingHome, moverIsBlack);
+  for (let i = start; i < end; i++) {
+    const move = out[i] as number;
+    if (packedPiece(move) === king) {
+      if (!staysSafePacked(position, move, packedTo(move), moverIsBlack)) continue; // class 1
+    } else if (packedFlags(move) === FLAG_EN_PASSANT || pinStamp[packedFrom(move)] === epoch) {
+      if (!staysSafePacked(position, move, kingHome, moverIsBlack)) continue; // classes 2 and 3
+    }
+    out[kept++] = move;
+  }
+  return kept;
+}
+
+/**
+ * `legalMoves`, packed: the legal moves for the side to move, written into `out` from `start` in
+ * `legalMoves`' order. Returns the index one past the last. The position is unchanged on return.
+ */
+export function legalMovesPacked(position: Position, out: Int32Array, start: number): number {
+  return filterLazilyPacked(position, out, start, generateMovesPacked(position, out, start));
+}
+
+/**
+ * `legalCaptures`, packed: the legal captures, written into `out` from `start` in `legalCaptures`'
+ * order. Returns the index one past the last. The position is unchanged on return.
+ */
+export function legalCapturesPacked(position: Position, out: Int32Array, start: number): number {
+  return filterLazilyPacked(position, out, start, generateCapturesPacked(position, out, start));
 }
 
 /**

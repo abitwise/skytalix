@@ -481,3 +481,287 @@ function addPawnCaptures(
     }
   }
 }
+
+// ---------------------------------------------------------------------------
+// ABC-250 (ADR-0055 O1-b part 1): packed moves. A move is one integer, written into a caller's
+// preallocated `Int32Array` instead of a fresh `Move[]`. For this ticket's life the rules core
+// holds two move paths, object and packed: the search, quiescence, ordering, the TT and every
+// shell module keep the object functions above, unchanged; perft reads the packed path. The
+// packed generators below walk EXACTLY as `generateMoves` / `generateCaptures` walk (squares
+// 0..127, the same table order, the same pawn and castling order), so the decoded list equals
+// the object list in order. `ABC-250` A2's list-equality oracle holds the two paths together
+// until `ABC-252` removes the duplicate.
+//
+// Layout (28 bits): from 0-6 | to 7-13 | piece 14-17 | captured 18-21 | flags 22-24 |
+// promotion 25-27. Every field is a small non-negative integer, so the word is a positive int32.
+// ---------------------------------------------------------------------------
+
+const TO_SHIFT = 7;
+const PIECE_SHIFT = 14;
+const CAPTURED_SHIFT = 18;
+const FLAGS_SHIFT = 22;
+const PROMOTION_SHIFT = 25;
+
+/** Packs the six fields of a move into one integer (the layout above). */
+export const encodeMove = (
+  from: number,
+  to: number,
+  piece: number,
+  captured: number,
+  flags: number,
+  promotion: number,
+): number =>
+  from |
+  (to << TO_SHIFT) |
+  (piece << PIECE_SHIFT) |
+  (captured << CAPTURED_SHIFT) |
+  (flags << FLAGS_SHIFT) |
+  (promotion << PROMOTION_SHIFT);
+
+export const packedFrom = (move: number): number => move & 0x7f;
+export const packedTo = (move: number): number => (move >> TO_SHIFT) & 0x7f;
+export const packedPiece = (move: number): number => (move >> PIECE_SHIFT) & 15;
+export const packedCaptured = (move: number): number => (move >> CAPTURED_SHIFT) & 15;
+export const packedFlags = (move: number): number => (move >> FLAGS_SHIFT) & 7;
+export const packedPromotion = (move: number): number => (move >> PROMOTION_SHIFT) & 7;
+
+/** The packed form of a `Move` object. */
+export const packMove = (move: Move): number =>
+  encodeMove(move.from, move.to, move.piece, move.captured, move.flags, move.promotion);
+
+/** The `Move` object a packed move stands for: the same six fields `generateMoves` would emit. */
+export function unpackMove(move: number): Move {
+  return {
+    from: packedFrom(move),
+    to: packedTo(move),
+    piece: packedPiece(move),
+    captured: packedCaptured(move),
+    flags: packedFlags(move),
+    promotion: packedPromotion(move),
+  };
+}
+
+/** Throws when a generator ran past its buffer: a typed array drops such writes silently. */
+function assertFits(out: Int32Array, end: number): number {
+  if (end > out.length) {
+    throw new RangeError(`packed move buffer overflow: ${end} moves into ${out.length} slots`);
+  }
+  return end;
+}
+
+/** A pawn's promotions, Q, R, B, N, as `addPromotions` emits them. `base` carries from/to/piece/captured. */
+function writePromotions(out: Int32Array, n: number, base: number): number {
+  const promoting = base | (FLAG_PROMOTION << FLAGS_SHIFT);
+  out[n] = promoting | (QUEEN << PROMOTION_SHIFT);
+  out[n + 1] = promoting | (ROOK << PROMOTION_SHIFT);
+  out[n + 2] = promoting | (BISHOP << PROMOTION_SHIFT);
+  out[n + 3] = promoting | (KNIGHT << PROMOTION_SHIFT);
+  return n + 4;
+}
+
+/**
+ * `addPawnMoves`' capture half, packed: sides -1 then +1, each a capture (promotion captures
+ * emit Q, R, B, N) or else the en-passant check with ABC-022's two guards.
+ */
+function writePawnCaptures(
+  out: Int32Array,
+  n: number,
+  board: Uint8Array,
+  from: number,
+  piece: number,
+  black: boolean,
+  epSquare: number,
+): number {
+  const forward = black ? -16 : 16;
+  const push = from + forward;
+  const promotionRank = black ? BLACK_PROMOTION_RANK : WHITE_PROMOTION_RANK;
+  const base = from | (piece << PIECE_SHIFT);
+
+  for (let side = -1; side <= 1; side += 2) {
+    const to = push + side;
+    if ((to & 0x88) !== 0) continue;
+
+    const target = board[to] as number;
+    if (target !== EMPTY && (target & BLACK) !== (black ? BLACK : 0)) {
+      const move = base | (to << TO_SHIFT) | (target << CAPTURED_SHIFT);
+      if (to >> 4 === promotionRank) n = writePromotions(out, n, move);
+      else out[n++] = move;
+      continue;
+    }
+
+    if (to === epSquare) {
+      const capturedPawn = PAWN | (black ? 0 : BLACK);
+      if (target === EMPTY && board[to - forward] === capturedPawn) {
+        out[n++] =
+          base |
+          (to << TO_SHIFT) |
+          (capturedPawn << CAPTURED_SHIFT) |
+          (FLAG_EN_PASSANT << FLAGS_SHIFT);
+      }
+    }
+  }
+  return n;
+}
+
+/** `addPawnMoves`, packed: the push (promotion or single, then double), then the two capture sides. */
+function writePawnMoves(
+  out: Int32Array,
+  n: number,
+  board: Uint8Array,
+  from: number,
+  piece: number,
+  black: boolean,
+  epSquare: number,
+): number {
+  const forward = black ? -16 : 16;
+  const push = from + forward;
+  const base = from | (piece << PIECE_SHIFT);
+
+  if ((push & 0x88) === 0 && board[push] === EMPTY) {
+    if (push >> 4 === (black ? BLACK_PROMOTION_RANK : WHITE_PROMOTION_RANK)) {
+      n = writePromotions(out, n, base | (push << TO_SHIFT));
+    } else {
+      out[n++] = base | (push << TO_SHIFT);
+      const doublePush = push + forward;
+      if (
+        from >> 4 === (black ? BLACK_PAWN_RANK : WHITE_PAWN_RANK) &&
+        board[doublePush] === EMPTY
+      ) {
+        out[n++] = base | (doublePush << TO_SHIFT);
+      }
+    }
+  }
+
+  return writePawnCaptures(out, n, board, from, piece, black, epSquare);
+}
+
+/** `addCastlingMoves`, packed: the same options in the same order, with the same five tests. */
+function writeCastlingMoves(
+  out: Int32Array,
+  n: number,
+  position: Position,
+  black: boolean,
+): number {
+  const options = black ? BLACK_CASTLES : WHITE_CASTLES;
+  const board = position.board;
+  const king = KING | (black ? BLACK : 0);
+  const rook = ROOK | (black ? BLACK : 0);
+
+  for (const option of options) {
+    if ((position.castling & option.right) === 0) continue;
+    if (board[option.kingFrom] !== king) continue;
+    if (board[option.rookFrom] !== rook) continue;
+    if (option.empty.some((square) => board[square] !== EMPTY)) continue;
+    if (option.kingPath.some((square) => isSquareAttackedBy(position, square, !black))) continue;
+    out[n++] = encodeMove(option.kingFrom, option.kingTo, king, EMPTY, FLAG_CASTLE, EMPTY);
+  }
+  return n;
+}
+
+/**
+ * Every pseudo-legal move for the side to move, packed into `out` from index `start`, in
+ * `generateMoves`' order. Returns the index one past the last move written.
+ */
+export function generateMovesPacked(position: Position, out: Int32Array, start: number): number {
+  const board = position.board;
+  const black = position.blackToMove;
+  const own = black ? BLACK : 0;
+  const epSquare = position.epSquare;
+  let n = start;
+
+  for (let from = 0; from < 128; from++) {
+    if ((from & 0x88) !== 0) continue;
+
+    const piece = board[from] as number;
+    if (piece === EMPTY || (piece & BLACK) !== own) continue;
+
+    const type = piece & 7;
+    if (type === PAWN) {
+      n = writePawnMoves(out, n, board, from, piece, black, epSquare);
+      continue;
+    }
+
+    const base = from | (piece << PIECE_SHIFT);
+    if (type === KNIGHT || type === KING) {
+      const steps = type === KNIGHT ? KNIGHT_LEAPS : ALL_DIRECTIONS;
+      for (let i = 0; i < steps.length; i++) {
+        const to = from + (steps[i] as number);
+        if ((to & 0x88) !== 0) continue;
+        const target = board[to] as number;
+        if (target !== EMPTY && (target & BLACK) === own) continue;
+        out[n++] = base | (to << TO_SHIFT) | (target << CAPTURED_SHIFT);
+      }
+      continue;
+    }
+
+    const rays = type === BISHOP ? DIAGONALS : type === ROOK ? ORTHOGONALS : ALL_DIRECTIONS;
+    for (let i = 0; i < rays.length; i++) {
+      const offset = rays[i] as number;
+      for (let to = from + offset; (to & 0x88) === 0; to += offset) {
+        const target = board[to] as number;
+        if (target === EMPTY) {
+          out[n++] = base | (to << TO_SHIFT);
+          continue;
+        }
+        if ((target & BLACK) !== own)
+          out[n++] = base | (to << TO_SHIFT) | (target << CAPTURED_SHIFT);
+        break;
+      }
+    }
+  }
+
+  n = writeCastlingMoves(out, n, position, black);
+  return assertFits(out, n);
+}
+
+/**
+ * The captures of `generateMovesPacked`, and nothing else, in the same order: `generateCaptures`,
+ * packed into `out` from index `start`. Returns the index one past the last move written.
+ */
+export function generateCapturesPacked(position: Position, out: Int32Array, start: number): number {
+  const board = position.board;
+  const black = position.blackToMove;
+  const own = black ? BLACK : 0;
+  const epSquare = position.epSquare;
+  let n = start;
+
+  for (let from = 0; from < 128; from++) {
+    if ((from & 0x88) !== 0) continue;
+
+    const piece = board[from] as number;
+    if (piece === EMPTY || (piece & BLACK) !== own) continue;
+
+    const type = piece & 7;
+    if (type === PAWN) {
+      n = writePawnCaptures(out, n, board, from, piece, black, epSquare);
+      continue;
+    }
+
+    const base = from | (piece << PIECE_SHIFT);
+    if (type === KNIGHT || type === KING) {
+      const steps = type === KNIGHT ? KNIGHT_LEAPS : ALL_DIRECTIONS;
+      for (let i = 0; i < steps.length; i++) {
+        const to = from + (steps[i] as number);
+        if ((to & 0x88) !== 0) continue;
+        const target = board[to] as number;
+        if (target === EMPTY || (target & BLACK) === own) continue;
+        out[n++] = base | (to << TO_SHIFT) | (target << CAPTURED_SHIFT);
+      }
+      continue;
+    }
+
+    const rays = type === BISHOP ? DIAGONALS : type === ROOK ? ORTHOGONALS : ALL_DIRECTIONS;
+    for (let i = 0; i < rays.length; i++) {
+      const offset = rays[i] as number;
+      for (let to = from + offset; (to & 0x88) === 0; to += offset) {
+        const target = board[to] as number;
+        if (target === EMPTY) continue;
+        if ((target & BLACK) !== own)
+          out[n++] = base | (to << TO_SHIFT) | (target << CAPTURED_SHIFT);
+        break;
+      }
+    }
+  }
+
+  return assertFits(out, n);
+}

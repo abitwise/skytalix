@@ -1,6 +1,16 @@
 import { describe, expect, it } from "vitest";
+import {
+  createUndoStack,
+  makeMove,
+  makeMovePacked,
+  unmakeMove,
+  unmakeMovePacked,
+} from "./apply.ts";
 import { parseFen } from "./fen.ts";
+import { legalMoves, legalMovesPacked } from "./legal.ts";
 import { perft, perftDivide } from "./perft.ts";
+import type { Position } from "./position.ts";
+import { zobristKey, zobristKeyAfterMove, zobristKeyAfterMovePacked } from "./zobrist.ts";
 
 /**
  * The six standard perft positions and their published leaf-node counts, transcribed from the
@@ -130,5 +140,102 @@ describe("ABC-006 — perftDivide", () => {
 describe("perft base case", () => {
   it("counts one node at depth 0 (the position itself)", () => {
     expect(perft(parseFen(START_FEN), 0)).toBe(1);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// ABC-250 A1 — perft and key identity on the packed path (ADR-0055 O1-b part 1, D3 validity rows 1
+// and 2). `perft` itself now runs packed, so every count row above reads the packed path. Here the
+// XOR of every leaf's Zobrist key, carried down by the packed key delta, must equal the XOR the
+// OBJECT path carries down (`legalMoves`, `makeMove`, `zobristKeyAfterMove`), and both leaf counts
+// must equal the published count. The lane reads depth 2 and also checks each packed delta against
+// a fresh `zobristKey`; `PERFT_DEEP=1` reads `src/perft-bench.ts`'s depths.
+// ---------------------------------------------------------------------------
+
+/** `src/perft-bench.ts`'s depth per position. */
+const BENCH_DEPTH: Readonly<Record<string, number>> = {
+  startpos: 4,
+  kiwipete: 4,
+  "position-3": 5,
+  "position-4": 4,
+  "position-5": 4,
+  "position-6": 4,
+};
+
+interface LeafXor {
+  leaves: number;
+  xor: bigint;
+  freshMismatches: number;
+}
+
+function objectLeafXor(position: Position, depth: number): LeafXor {
+  const tally: LeafXor = { leaves: 0, xor: 0n, freshMismatches: 0 };
+  const walk = (key: bigint, left: number): void => {
+    if (left === 0) {
+      tally.leaves++;
+      tally.xor ^= key;
+      return;
+    }
+    for (const move of legalMoves(position)) {
+      const undo = makeMove(position, move);
+      walk(zobristKeyAfterMove(key, position, move, undo), left - 1);
+      unmakeMove(position, move, undo);
+    }
+  };
+  walk(zobristKey(position), depth);
+  return tally;
+}
+
+const xorMoves = new Int32Array(128 * 256);
+const xorUndo = createUndoStack(128);
+
+function packedLeafXor(position: Position, depth: number, checkFresh: boolean): LeafXor {
+  const tally: LeafXor = { leaves: 0, xor: 0n, freshMismatches: 0 };
+  const walk = (key: bigint, left: number, ply: number, start: number): void => {
+    if (left === 0) {
+      tally.leaves++;
+      tally.xor ^= key;
+      return;
+    }
+    const end = legalMovesPacked(position, xorMoves, start);
+    for (let i = start; i < end; i++) {
+      const move = xorMoves[i] as number;
+      makeMovePacked(position, move, xorUndo, ply);
+      const after = zobristKeyAfterMovePacked(key, position, move, xorUndo, ply);
+      if (checkFresh && after !== zobristKey(position)) tally.freshMismatches++;
+      walk(after, left - 1, ply + 1, end);
+      unmakeMovePacked(position, move, xorUndo, ply);
+    }
+  };
+  walk(zobristKey(position), depth, 0, 0);
+  return tally;
+}
+
+describe("ABC-250 A1 — leaf-key XOR on the packed path equals the object path", () => {
+  for (const { name, fen, counts } of PERFT_SUITE) {
+    it(`${name} depth 2: counts, leaf-key XOR, every packed key delta equals a fresh key`, () => {
+      const packed = packedLeafXor(parseFen(fen), 2, true);
+      const object = objectLeafXor(parseFen(fen), 2);
+      expect(packed.freshMismatches).toBe(0);
+      expect(packed.leaves).toBe(counts[1]);
+      expect(object.leaves).toBe(counts[1]);
+      expect(packed.xor).toBe(object.xor);
+    });
+
+    if (RUN_DEEP) {
+      const depth = BENCH_DEPTH[name] as number;
+      it(`${name} depth ${depth} (perft-bench): counts and leaf-key XOR [deep, PERFT_DEEP=1]`, () => {
+        const packed = packedLeafXor(parseFen(fen), depth, false);
+        const object = objectLeafXor(parseFen(fen), depth);
+        expect(packed.leaves).toBe(counts[depth - 1]);
+        expect(object.leaves).toBe(counts[depth - 1]);
+        expect(packed.xor).toBe(object.xor);
+      }, 600_000);
+    }
+  }
+
+  it("refuses a depth beyond its fixed stack instead of overrunning it", () => {
+    expect(() => perft(parseFen(START_FEN), 129)).toThrow(RangeError);
+    expect(() => perftDivide(parseFen(START_FEN), 129)).toThrow(RangeError);
   });
 });

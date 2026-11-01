@@ -24,8 +24,24 @@
  * is deliberately avoided: a table that varied per run would make hashes unreproducible.
  */
 
-import type { NullUndo, UndoRecord } from "./apply.ts";
-import { FLAG_CASTLE, FLAG_EN_PASSANT, type Move } from "./moves.ts";
+import {
+  type NullUndo,
+  type UndoRecord,
+  type UndoStack,
+  undoCaptured,
+  undoCastling,
+  undoEpSquare,
+} from "./apply.ts";
+import {
+  FLAG_CASTLE,
+  FLAG_EN_PASSANT,
+  type Move,
+  packedCaptured,
+  packedFlags,
+  packedFrom,
+  packedPiece,
+  packedTo,
+} from "./moves.ts";
 import {
   CASTLE_BK,
   CASTLE_BQ,
@@ -149,6 +165,60 @@ export function zobristKeyAfterMove(
   }
 
   if (undo.epSquare !== NO_SQUARE) key ^= EP_FILE[fileOf(undo.epSquare)] as bigint;
+  if (position.epSquare !== NO_SQUARE) key ^= EP_FILE[fileOf(position.epSquare)] as bigint;
+
+  return key;
+}
+
+/**
+ * `zobristKeyAfterMove` for a packed move (`ABC-250`): the key of `position` AFTER
+ * `makeMovePacked(position, move, undo, ply)`, from the key BEFORE, by the same six components in
+ * the same order. Pure. Perft's leaf-key check (`ABC-250` A1) reads it; the search keeps the object
+ * form above until `ABC-251`.
+ */
+export function zobristKeyAfterMovePacked(
+  keyBefore: bigint,
+  position: Position,
+  move: number,
+  undo: UndoStack,
+  ply: number,
+): bigint {
+  const board = position.board;
+  const from = packedFrom(move);
+  const to = packedTo(move);
+  const piece = packedPiece(move);
+  const flags = packedFlags(move);
+  const captured = undoCaptured(undo, ply);
+  let key = keyBefore ^ BLACK_TO_MOVE;
+
+  key ^= PIECE_SQUARE[(piece << 7) | from] as bigint;
+  key ^= PIECE_SQUARE[((board[to] as number) << 7) | to] as bigint;
+
+  if ((flags & FLAG_EN_PASSANT) !== 0) {
+    const square = to + ((piece & 8) !== 0 ? 16 : -16);
+    key ^= PIECE_SQUARE[(packedCaptured(move) << 7) | square] as bigint;
+  } else if (captured !== EMPTY) {
+    key ^= PIECE_SQUARE[(captured << 7) | to] as bigint;
+  }
+
+  if ((flags & FLAG_CASTLE) !== 0) {
+    const kingside = fileOf(to) === 6;
+    const rookFrom = kingside ? to + 1 : to - 2;
+    const rookTo = kingside ? to - 1 : to + 1;
+    const rook = board[rookTo] as number;
+    key ^= PIECE_SQUARE[(rook << 7) | rookFrom] as bigint;
+    key ^= PIECE_SQUARE[(rook << 7) | rookTo] as bigint;
+  }
+
+  const castlingChanged = undoCastling(undo, ply) ^ position.castling;
+  if (castlingChanged !== 0) {
+    for (let i = 0; i < CASTLE_FLAGS.length; i++) {
+      if ((castlingChanged & (CASTLE_FLAGS[i] as number)) !== 0) key ^= CASTLE_KEYS[i] as bigint;
+    }
+  }
+
+  const epBefore = undoEpSquare(undo, ply);
+  if (epBefore !== NO_SQUARE) key ^= EP_FILE[fileOf(epBefore)] as bigint;
   if (position.epSquare !== NO_SQUARE) key ^= EP_FILE[fileOf(position.epSquare)] as bigint;
 
   return key;
