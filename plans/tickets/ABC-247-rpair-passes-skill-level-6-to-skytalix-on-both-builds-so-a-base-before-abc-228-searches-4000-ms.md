@@ -1,14 +1,32 @@
 ---
 id: ABC-247
 title: "`rpair` passes `Skill Level` 6 to skytalix on both builds, so `go movetime 4000` searches 4 000 ms on a base whose level 5 is 3 000 ms; the `r` and `d` paths are unchanged (tools only)"
-status: ready
-column: Ready
+status: done
+column: Done
+closed: "2026-10-31, merged to main at 3af97f71; QE PASS (qe-ABC-247, 236bbe39); tools only, no UAT"
 size: XS
 priority: P1
 epic: EPIC-010
 ---
 
 # ABC-247: `rpair` plays both builds at `Skill Level` 6
+
+> **CLOSED, Done, folded 2026-11-01 by BA/PM** (task `bapm-m1-batch-fold`, records only, at `main` `832ff246`;
+> nothing run). The page read `ready` after the merge; this fold closes it. QE's verdict is **PASS** (`qe-ABC-247`
+> `…236bbe39`, PREREG committed at `3050c636` before any check). It was **merged at `3af97f71`** on 2026-10-31.
+> `tools/` only, so **no UAT** (Test note 1).
+>
+> - **A1–A4 MET** as QE re-ran them at `cec9c252`: `pair-check` 25 / 25; mutation M1 red (3 tests); `r` / `d` argvs
+>   byte-equal to `main`; the batch command gains exactly 20 `option.Skill Level=6` lines. A2 (ALONE): base 0 moves at
+>   3.0 s and 84 at 4.0 s, head 0 and 125; the control without the token 95 at 3.0 s and 0 at 4.0 s.
+> - **Test note 3 held in the batch it was cut for** (`qe-EPIC-010-m1-batch-2` `…428e3797`): levels 5 / 6 read rate 0
+>   at both SHAs with `LEVELS[6]` = 5 000 ms; block 01 read 943 (base) and 951 (head) skytalix moves at 4.0 s and 0 at
+>   3.0 s; all 20 PGNs read 0 at 3.0 s. The batch read NOT LOSS (NEUTRAL) (`…1a53a7f9`).
+> - **QE's five INFO findings, dispositioned:** QE-247-a (the clock reader's regex) was fixed in QE's reader and reused
+>   by the batch. QE-247-b (redact dry-run prints) was applied in the batch PREREG. QE-247-c (two off-path `skill`
+>   lines) needs nothing. QE-247-d (probe build method) is moot: the batch built its own clones and recorded their dist
+>   trees. QE-247-e (head SHA) is moot: the batch named its own head. No follow-up ticket.
+> - Notes: `.grugops/context/bapm-m1-batch-fold/notes/`.
 
 > **Cut 2026-10-31 by BA/PM** (task `bapm-rpair-level6-cut`, records only, at `main` `278a9bb7`; nothing run, built
 > or timed, because `qe-ABC-245` holds the host ALONE; `src/`, `tools/`, `data/`, the board and the ADRs untouched).
