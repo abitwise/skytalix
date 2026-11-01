@@ -10,6 +10,25 @@ owner: BA/PM
 
 # EPIC-010: the verified engine gaps, closed one measured change at a time, against an outside opponent
 
+> **FOLDED 2026-11-01 by BA/PM** (task `bapm-ABC-248-close`, records only, at `main` `37a93b76`; nothing run, built
+> or timed, because `qe-qehop-growth` holds the host ALONE; `src/`, `tools/`, `data/`, the board and `AGENTS.md`
+> untouched).
+>
+> - **`ADR-0046` tranche 2 is delivered.** `ABC-248` is **Done**, merged `ef4cd095` (code `71700836`); QE
+>   PASS_WITH_GAPS, no gap blocking (`qe-ABC-248` `…cf9bdabf`); UAT waived (0 production lines). **`G8` H 9.09 s,
+>   B 9.37 s** (H − B −0.28 s): `NFR-008` MET, the 9.4 s design target MET, W1 not triggered, so no tranche 3 opens.
+>   The ADR carries the dated line in its § BA/PM ruling 2026-10-31. Its page is closed.
+> - **QE-248-a (MEDIUM):** ruling 6 / A10's `-t` form ran 0 tests with exit 0 (unescaped "[deep, …]"). Corrected on the
+>   page and in the ADR (escaped brackets; the check is "4 passed"). The Architect's condition 4 text is owed a matching
+>   co-edit (LOW, not blocking).
+> - **SE-248-b / QE-248-b:** ruled met as written; a floor is added for later depth-sensitive step moves (in-search
+>   node checks ≥ 2, else the step holds until the Architect rules the unit). Nothing is owed now.
+> - **`ABC-249` cut** (XS, P3, test-only, DoR 10/10, Ready recommended), from QE-248-c (LOW): one `src/engine.test.ts`
+>   row where a position that stood twice before the root is met at ply ≥ 4, so `QPLY4` turns the lane red. Tickets
+>   table: row 24. QE-248-d (`QPARITY` likely equivalent) and QE-248-e/f/g are closed on `ABC-248`'s page.
+> - Tickets table: row 23 (`ABC-248`) reads Done, as the board does, and row 24 (`ABC-249`) is added. The notes are in
+>   `.grugops/context/bapm-ABC-248-close/notes/`.
+
 > **MILESTONE 1 DONE 2026-11-01, graded by BA/PM** (task `bapm-m1-batch-fold`, records only, at `main` `832ff246`;
 > nothing run, built or timed; `src/`, `tools/`, `data/`, the board, the ADRs and `AGENTS.md` untouched). Source:
 > `qe-EPIC-010-m1-batch-2` (PREREG `…316833e1`, VOID run 1 `…3fb3b1fd`, verdict `…1a53a7f9`, run `…428e3797`, findings
@@ -737,7 +756,8 @@ mates", ≥ 6 "a quiet promotion decides". It reads `quiesce` and `chooseMove` a
 | 20 | `ABC-244` | Time-blind virtual-clock rows in `src/cli.test.ts` and `src/uci-session.test.ts` take the coarsest step that keeps QE's caught-mutant set (`ADR-0046` § Addendum 2026-10-30, tranche 1; test-only, from `QE-229-a`) | S | **P1** | **Done** (2026-10-30, `24b22339`) | — | `ADR-0046` § Addendum 2026-10-30 R1–R4 (PROPOSED, `5fd3eee7`; BA/PM's word given on its page); `ABC-230`/`ABC-241` Done | done: QE PASS (`qe-ABC-244` `…4fe9bfe1`; `G8` H 9.25 s, ≤ 9.4 s target met) and Security/NFR PASS (`secnfr-ABC-244` `…9087cb39`); UAT waived (test-only) |
 | 21 | `ABC-245` | A blunder-level row reads a third occurrence whose earlier occurrences lie more than 50 plies back, so lowering the 100-key cap turns the lane red; the `src/levels.test.ts` header count is corrected (test-only, from QE-242-b and SE-242-f) | XS | P3 | **Done** (2026-10-31, `2cce84e0`) | — | `ABC-242` Done (`af5b2b49`); `ADR-0046` § Addendum R1–R4 and § Ruling 2026-10-31 (`10492743`: per level call, step 10) | done: QE PASS (`qe-ABC-245` `…b2ebc183`; `G8` H 9.82 s, which opened tranche 2, now `ABC-248`); QE-242-b closed; UAT waived (test-only) |
 | 22 | `ABC-247` | `rpair` passes `Skill Level` 6 to skytalix on both builds, so `go movetime 4000` searches 4 000 ms on a base whose level 5 is 3 000 ms; the `r` and `d` paths are unchanged (tools only, from QE-M1B-a; route (A), `…fb0c8978`) | XS | **P1** | **Done** (2026-10-31, `3af97f71`) | — | `ABC-225` Done (`59dc3ab4`); no ADR (`ADR-0053` d10's intent kept) | done: QE PASS (`qe-ABC-247` `…236bbe39`); tools only, no UAT. Milestone 1's batch ran on it: block-01 guard PASS on both builds (`…428e3797`) |
-| 23 | `ABC-248` | The default lane sheds about 0.3 s and loses no coverage: `QE-208-a` sampled more sparsely and `QE-208-b` on a cheaper root, `ABC-167` A5's duplicated searches moved to `ENGINE_DEEP` under default-lane kill parity, and A4-a2 on R2 (`ADR-0046` tranche 2; test-only, from `QE-245-b`) | S | **P1** | **Ready** (2026-10-31, the Orchestrator, `eca4812f`) | **10/10** | `ADR-0046` § Addendum 2026-10-31 T2-R, accepted with amendments in its § BA/PM ruling 2026-10-31; W1 given its word | order only: **after `ABC-246`** (same file, `src/uci-session.test.ts`). A8/A9 and W1's window ALONE |
+| 23 | `ABC-248` | The default lane sheds about 0.3 s and loses no coverage: `QE-208-a` sampled more sparsely and `QE-208-b` on a cheaper root, `ABC-167` A5's duplicated searches moved to `ENGINE_DEEP` under default-lane kill parity, and A4-a2 on R2 (`ADR-0046` tranche 2; test-only, from `QE-245-b`) | S | **P1** | **Done** (2026-11-01, `ef4cd095`) | — | `ADR-0046` § Addendum 2026-10-31 T2-R, accepted with amendments in its § BA/PM ruling 2026-10-31; W1 given its word | done: QE PASS_WITH_GAPS (`qe-ABC-248` `…cf9bdabf`; `G8` H 9.09 s, ≤ 9.4 s target met, W1 not triggered); **tranche 2 delivered**; QE-248-a fixed on its page and the ADR; QE-248-c is `ABC-249`; UAT waived (test-only) |
+| 24 | `ABC-249` | A position that stood twice before the root, met four or more plies into the search, scores exactly 0, so turning the pre-root scan off at depth (`QPLY4`) turns the default lane red (test-only, from QE-248-c) | XS | P3 | Backlog (Ready recommended) | **10/10** | `ABC-230` Done (`24f3e322`); `ADR-0054` decision 3; `src/engine.test.ts` only | none; recommended before milestone 2's search tickets (`ABC-233`, `236`, `237`, `238`). `G8` ALONE |
 
 *Re-scored 2026-10-29 (`bapm-owner-words-b`): Q4 is removed from every wait. Each value-changing ticket's DoR row 4
 is now ✅, because its reading is the smoke pair. No ticket but `ABC-225` changes column on this hop. `ABC-227` (Done)
@@ -776,6 +796,9 @@ live state.*
 (`ABC-245`) and 22 (`ABC-247`) read Done, and row 23 (`ABC-248`) reads Ready, each as the board holds it. Every other
 row was checked against the board and agrees. The pages of `ABC-243`, `ABC-244`, `ABC-245` and `ABC-248` still carry
 their old `status` / `column`; their closes are a separate fold, not done here. The board holds the live state.*
+*Folded 2026-11-01 (`bapm-ABC-248-close`): row 23 (`ABC-248`) reads Done (`ef4cd095`), as the board holds it, and
+row 24 (`ABC-249`) was added at the end: it is test-only and not one of the fifteen engine changes. Its page is cut,
+not pulled; the column move is the Orchestrator's. The board holds the live state.*
 
 ## Observations (not tickets)
 
