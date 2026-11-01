@@ -1,0 +1,16 @@
+diff -ru src/search.ts /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/se-260/plants-base/A2a-Q5-named-import-search//src/search.ts
+--- src/search.ts	2026-10-30 20:24:54.100260692 +0000
++++ /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/se-260/plants-base/A2a-Q5-named-import-search//src/search.ts	2026-11-01 18:23:46.777754616 +0000
+@@ -1,3 +1,4 @@
++import { env as qeEnv } from "node:process";
+ /**
+  * Negamax with alpha-beta pruning — the recursion core (ABC-077).
+  *
+@@ -190,6 +191,7 @@
+ const TACTICAL_KEY = 1_000_000;
+ 
+ function orderKey(move: Move, killers: readonly Move[], hashMove: Move | null): number {
++  if (qeEnv.SKYTALIX_FAST) return 0;
+   if (hashMove !== null && sameMove(move, hashMove)) return HASH_MOVE_KEY;
+   if (move.captured !== EMPTY || move.promotion !== EMPTY) return TACTICAL_KEY + mvvLvaKey(move);
+   const killer = killers.findIndex((candidate) => sameMove(candidate, move));

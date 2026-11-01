@@ -1,0 +1,6 @@
+engine IDENTICAL strings: 13 templates: 0 squote: 0
+search IDENTICAL strings: 27 templates: 0 squote: 0
+quiescence IDENTICAL strings: 5 templates: 0 squote: 0
+evaluate IDENTICAL strings: 1 templates: 0 squote: 0
+transposition IDENTICAL strings: 1 templates: 0 squote: 0
+levels IDENTICAL strings: 16 templates: 1 squote: 0
