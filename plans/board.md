@@ -1311,9 +1311,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 2/3)
+## In Development (WIP 1/3)
 - [ABC-249] A pre-root repetition met four or more plies into the search scores 0, so QPLY4 turns the lane red (QE-248-c; size: XS, priority: P3, test-only, UAT waived; DoR 10/10; cut by bapm-ABC-248-close; one src/engine.test.ts row ≤ 100 ms; after ABC-223 (host-alone order)) **pulled 2026-11-01 → `se-ABC-249` (parallel coding; tests serialized by host-test.lock after the probe)**
-- [ABC-254] Lazy legality: make/test/unmake only for king moves, en passant, pinned pieces and checks (ADR-0055 O1-d; size: M, priority: P2; DoR 10/10; milestone 1b; **owner YES 2026-11-01 (…f7a50e95)**; → Ready when `arch-adr0003-amend` merges) **Stays EPIC-010 milestone 1b, first once arch-adr0003-amend merges** (ABC-254 page exception: owner yes + amending ADR before ABC-250 enters development) **→ Ready 2026-11-01 (bapm-ABC-254-ready; first in 1b)** **pulled 2026-11-01 → `se-ABC-254` (parallel coding; tests serialized by host-test.lock after the probe)**
 
 
 
@@ -1341,7 +1340,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-254] Lazy legality: make/test/unmake only for king moves, en passant, pinned pieces and checks (ADR-0055 O1-d; size: M, priority: P2; DoR 10/10; milestone 1b; **owner YES 2026-11-01 (…f7a50e95)**; → Ready when `arch-adr0003-amend` merges) **Stays EPIC-010 milestone 1b, first once arch-adr0003-amend merges** (ABC-254 page exception: owner yes + amending ADR before ABC-250 enters development) **→ Ready 2026-11-01 (bapm-ABC-254-ready; first in 1b)** **pulled 2026-11-01 → `se-ABC-254` (parallel coding; tests serialized by host-test.lock after the probe)** **→ In Review 2026-11-01 (se-ABC-254 done fe53dbda; A1/A2/perft green; npm test 2 368/0; out-of-ticket edit: gameend.nfr.test.ts bars tightened 1/8→0, reviewed OK) → `qe-ABC-254` (A3/G4, A4 ALONE nps, G1/G5/G6/G8/G9)**
 
 
 
