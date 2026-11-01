@@ -1,14 +1,23 @@
 ---
 id: ABC-255
-title: "M0: a self-play SPRT lane on the rating harness that stops H1 on a known gain and H0 on an identical pair (tools only)"
+title: "M0: the rating harness plays the owner's two reads at 100 ms a move: 100 games new against base, and the 400-game pair against Stockfish (tools only)"
 status: backlog
 column: Backlog
-size: M
+size: S
 priority: P1
 epic: EPIC-011
 ---
 
-# ABC-255: the SPRT lane (M0)
+# ABC-255: the owner's 100 / 400 reads at 100 ms (M0)
+
+> **RE-SCOPED 2026-11-01 by BA/PM** (task `bapm-100-400-rule`, records only, at `main` `452415bd`; nothing run). The
+> owner's word (`orch-2026-10-30a` `…2896c6eb`): no SPRT; *"We can just run 100 games that's it and 400 games after
+> each epic is done on 100ms."* **The SPRT lane is dropped**, and the page below is rewritten for the two reads he set.
+> The SPRT text is in git at `452415bd`. **Aligned to the owner's rule and to the `ADR-0056` fold**
+> (`arch-adr0056-100ms-fold`, merged `94f1504c` during this hop; its § "ABC-255 (M0): re-scope it" is followed
+> here). The file name keeps "sprt" so that every reference to this page still resolves. Size M → S (no SPRT, no
+> new opening file). It may be pulled before `EPIC-010` closes, because that epic's close reading needs it (`EPIC-011`
+> C12).
 
 > **Cut 2026-11-01 by BA/PM** (task `bapm-epic011-dedupe`, records only, at `main` `2e9a2457`; nothing run, built or
 > timed). Source: `ADR-0056` D2 row M0 ("SPRT self-play lane … none — new ticket"), D5 § Per-change measure, D8 ("On
@@ -18,107 +27,99 @@ epic: EPIC-011
 
 ## Problem
 
-- **User:** the owner and every later `EPIC-011` ticket.
-- **Pain:** the climb toward 3 000 is made of changes worth +5 to +40 Elo each, and no instrument on record sees them:
-  the smoke pair sees ≈ 250 Elo collapses, a 200 + 200 R pair resolves ± 78, and `EPIC-008`'s 800-game D resolved
-  ± 16–23 at ≈ 34 h (`ADR-0056` § The measurement problem). Two outside point estimates in a row were negative, and no
-  reading could say which change caused them.
-- **Value:** a sequential test that stops as soon as the evidence is enough: early on a clear gain or loss, later on a
-  small one, so each change is kept or dropped on evidence and not on a guess.
+- **User:** the owner, QE, and every strength-changing ticket from here on, in `EPIC-010`'s close and in `EPIC-011`.
+- **Pain:** the owner's rule asks for two reads at 100 ms a move, and the harness can play neither. `d` (new against
+  base) refuses any budget under 1 000 ms (`tools/rating/rating.ts` `D_BUDGETS_MS`), and `rpair` (base and head each
+  against Stockfish) plays `skytalix` at 4 000 ms against Stockfish at `st=0.5`. `qe-tc-depth-probe` had to play its
+  100 ms games from a scratch script (`…07357280`).
+- **Value:** each read is one pinned command with its records, so a change read (≈ 0.4 h) and an epic read
+  (≈ 1.0–1.6 h, `ADR-0056` C3′, estimate) are reproducible, not hand-built.
 
 ## Scope
 
-1. **An `sprt` mode in `tools/rating/`** (beside `r`, `d`, `rpair`): candidate against base, self-play, through
-   `cutechess-cli` 1.5.1's own SPRT, with `elo0`, `elo1`, `alpha`, `beta` as flags. Defaults: `[0, 5]` for a gain and
-   `[−5, 0]` for a simplification or speed change (`ADR-0056` D5), `alpha = beta = 0.05`. **No Elo or LLR maths in
-   repo code** (`ABC-204` § Out of scope, kept). A games cap, after which the run reports INCONCLUSIVE.
-2. **The routine control** selectable in `sprt` and also in `r` / `rpair` (so `ABC-256` and the milestone readings
-   need no further `tools/` change): a fixed time a move (down to 0.5 s, the owner's floor), a clock (for example
-   10 s + 0.1 s), or fixed nodes. The default is the one the Architect's fold of `ADR-0056` names
-   (`arch-adr0056-owner-fold` item 3).
-3. **An opening set large enough for thousands of games:** today's `tools/rating/openings.epd` holds 100 positions, and
-   at fixed nodes a deterministic pair would replay the same 200 games. A larger set (size named at design, at least
-   1 000 positions), drawn from the in-repo CC0 book source (`ADR-0023`) as `ABC-204` drew the first, committed with
-   its sha256.
-4. **The run's records:** PGN, the `cutechess-cli` log with its SPRT lines, the host log (load, Tctl, frequency) as
-   `ABC-225` writes it, and `SHA256SUMS`, in a directory the caller names outside the working tree.
+1. **The change read (`ADR-0056` C2′):** `d` accepts `--budget-ms 100`, with `timemargin` 50 ms at that budget; Q1's
+   5 000 − budget stays for every other budget. 100 games = `--rounds 50` (openings 1–50 of today's
+   `tools/rating/openings.epd`, both colours).
+2. **The epic read (C3′):** `rpair` and `r` accept the 100 ms control: `skytalix` `st=0.1` with `timemargin` 50 ms,
+   Stockfish `st=0.1` with its 2 000 ms margin. 400 games = `rpair`'s default `--rounds 100` (200 per build) at
+   `--concurrency 1`.
+3. **Records:** as `ABC-204` / `ABC-225` write them (PGN, `cutechess-cli` log, host log, `SHA256SUMS`), plus the
+   control.
 
 ## Out of scope
 
-- Any change to `src/`, `data/`, `vitest.config.ts`, or the existing `r`, `d`, `rpair` defaults (the owner's rule and
-  every past reading keep their pins).
-- Deciding whether SPRT grades merges: that is **Q-3K-2**, the owner's. Until he answers, this lane reports and grades
-  nothing.
-- Width above 1 by default: **Q-3K-3**. `--concurrency` exists (as in `r`/`d`) and defaults to 1.
-- A second harness, `fastchess`, or any new binary. If the pinned `cutechess-cli` 1.5.1 lacks `-sprt`
-  (`UNKNOWN - verify` at design), the Architect rules, and a new binary is a download question for the owner.
+- **SPRT in any form** (the owner, 2026-11-01). No Elo or pass-line maths in repo code (`ABC-204` § Out of scope):
+  the harness reports and QE grades by `ADR-0056` C2′ / C3′.
+- A larger opening set: 100 games use 50 openings, and the epic read uses all 100 per build.
+- Any change to `src/`, `data/`, `vitest.config.ts`, or the existing defaults and pins of `d`, `r` and `rpair`.
+- A harness-side guard on E above 2 600: the fold puts an R5-style probe before any C3′ read whose E exceeds 2 600,
+  and `ABC-204`'s depth guard makes a read UNRESOLVED if Stockfish misses its pick depth.
+- Width above 1 by default (one core, the owner, `…f7a50e95`). `--concurrency` stays as it is.
+- A second harness or a new binary.
 
 ## Acceptance criteria
 
-- **A1 (the mode).** `node tools/rating/rating.ts sprt <candidate-sha> <base-sha> <out> [--elo0 E0] [--elo1 E1]
-  [--alpha A] [--beta B] [--control …] [--max-games N] [--concurrency C] [--dry-run]` (flag names fixed at design).
-  `--dry-run` prints the `cutechess-cli` argument vector, and it carries `-sprt elo0=… elo1=… alpha=… beta=…`, the
-  control, the opening file with both colours, and `-concurrency C`.
-- **A2 (known gain → H1).** **Given** candidate `b5c67ab7` (`ABC-208`'s merge: null move, D GAIN +38.4 ± 23.3) and base
-  its first parent, at the default control, `[0, 5]`, width 1, **then** the run stops with **H1 accepted** within the
-  games cap. QE reports games to decision, the final LLR line and the score.
-- **A3 (identical pair → H0).** **Given** candidate = base = `main` at the hop, the same bounds and control, **then**
-  the run stops with **H0 accepted**. An H1 here is re-run once (alpha = 5 % allows one false H1 in twenty); a second H1
-  is a defect.
-- **A4 (throughput, the number `ADR-0056` lacks).** QE reports games per hour at the default control at width 1, and
-  games to decision in A2 and A3, so a typical test's host hours are read, not guessed (`ADR-0056` D5: "≈ 10–30 h
-  (estimate)").
-- **A5 (both bound sets).** `--dry-run` with `--elo0 -5 --elo1 0` prints those bounds; a unit row pins both defaults.
-- **A6 (openings).** The new opening file has ≥ 1 000 distinct positions (no two FENs equal), each legal and not over
-  (a unit row reads them through the rules core), sha256 recorded; `r`, `d` and `rpair` still default to the 100-position
-  file (their `--dry-run` output is byte-equal to base's).
-- **A7 (gates).** `npm run lint`, `typecheck`, `test`, `build` green at every commit. New lane rows ≤ 0.1 s (`G8`
+- **A1 (change shape).** `node tools/rating/rating.ts d <candidate> <base> <out> --budget-ms 100 --rounds 50
+  --concurrency 1 --dry-run` prints a `cutechess-cli` argument vector with `st=0.1` and `timemargin=50` on both
+  engines, `-games 2 -rounds 50 -concurrency 1`, and today's opening file with `order=sequential` and `-repeat`. The
+  dry run of the default and of each of today's budgets (3 000, 2 500, 2 000, 1 500, 1 000) is byte-equal to base's.
+- **A2 (epic shape).** `rpair <base> <head> <out> --elo E --rounds 100 --concurrency 1 --dry-run` with the 100 ms
+  control (flag name fixed at design) prints a schedule of 400 games, 200 per build, and every block's vector carries
+  `st=0.1` and `timemargin=50` for `skytalix` and `st=0.1`, `timemargin=2000` for Stockfish. `r` with the same control
+  prints the same two engine shapes. Without the control, every `rpair` and `r` dry run is byte-equal to base's
+  (4 000 ms, `st=0.5`).
+- **A3 (sanity read on a known pair, reported, not graded).** QE runs A1's command without `--dry-run` on `ABC-208`'s
+  merge `b5c67ab7` against its first parent, host ALONE (≈ 25 min). Reported: W/L/D, score, Elo ± error, and whether
+  the GAIN bar (≥ 50.0 of 100) is met (if its +38 holds at 100 ms it passes 94 % of the time, `ADR-0056`).
+- **A4 (identical pair, reported, not graded).** QE runs A1's command on candidate = base = `main` at the hop, host
+  ALONE (≈ 25 min): 100 of 100 games complete, 0 faults, 0 losses on time. Reported: games per hour and the draw ratio
+  at 100 ms.
+- **A5 (gates).** `npm run lint`, `typecheck`, `test`, `build` green at every commit. New lane rows ≤ 0.1 s (`G8`
   ≤ 10 s). `git diff` touches `tools/rating/` and its tests only.
-- **A8 (the reading).** A `## Reading` section on this page with A2, A3 and A4, and QE's sealed note.
+- **A6 (the reading).** A `## Reading` section on this page with A3 and A4, and QE's sealed note.
 
 ## What happens on a miss
 
-- **A2 stops H0 or INCONCLUSIVE:** the lane cannot see a known +38; QE records a `failed-attempt` note, and the
-  Architect re-reads the control (a short control may flatten the gain). Not merged until A2 passes.
-- **A3 stops H1 twice:** a defect in the pairing or the openings. Back to the Software Engineer.
+- **A4 shows a fault, a loss on time or an incomplete run:** a defect in the shape or the pairing. Back to the Software
+  Engineer. A3 grades nothing: a low score is reported with `ADR-0056`'s depth-gated caveat and does not block.
 
 ## NFR triggers
 
-- **`NFR-008`:** ≤ 0.1 s of new lane rows; the run itself never enters `npm test`.
-- **Host:** each A2/A3 run is ALONE (heat log as `ABC-225`). **Security:** builds only the SHAs it is given, as
-  `ABC-204` does; no new input path in the engine.
+- **`NFR-008`:** ≤ 0.1 s of new lane rows; no run enters `npm test`.
+- **Host:** A3 and A4 (≈ 25 min each) run ALONE, logged as `ABC-225`. Both are under 1 h (estimates); if design shows
+  one over 1 h, it is asked of the owner first. **Security:** builds only the SHAs it is given, as `ABC-204` does; no new
+  input path in the engine.
 
 ## Test notes
 
-1. Unit rows: argument vector (`--dry-run`), bound defaults, opening-file validity.
-2. A2 and A3 run in QE's scratch clone, ALONE; cost `UNKNOWN - verify` (that is A4's point).
+1. Unit rows: the dry-run vectors of `d`, `rpair` and `r`, and the byte-equal defaults.
+2. A3 and A4 run in QE's scratch clone, ALONE.
 3. No UAT: tools only (as `ABC-225`, `ABC-247`).
 
 ## Size and priority
 
-- **Size: M.** One mode, one control flag on three modes, one opening file.
-- **Priority: P1.** Every later ticket in `EPIC-011` is graded on it if the owner says yes to Q-3K-2, and the milestones
-  need its control.
+- **Size: S.** One budget on `d`, one control on `rpair` and `r`.
+- **Priority: P1.** `EPIC-010`'s close read and every later strength change are read on it.
 
 ## Dependencies
 
-- `ABC-204` (the harness) and `ABC-225` (the host log) Done. `EPIC-010` closed (the owner's order).
-- **Architect:** the default control (fold of `ADR-0056`); confirms `-sprt` on the pinned binary at design.
-- **Owner:** Q-3K-2 (its use as a gate), Q-3K-3 (width). Neither blocks the build.
+- `ABC-204`, `ABC-225` and `ABC-247` Done.
+- **Architect:** `ADR-0056` C2′ / C3′ and its § "ABC-255 (M0)" (merged `94f1504c`). Nothing open.
+- **Owner:** none new.
 
 ## Definition of Ready
 
 | # | check | state |
 |---|---|---|
-| 1 | problem clear | ✅ `ADR-0056` § The measurement problem |
+| 1 | problem clear | ✅ neither read can be played today |
 | 2 | scope and out-of-scope | ✅ |
-| 3 | INVEST | ✅ M; independent of every engine ticket |
-| 4 | testable, measurable acceptance | ✅ H1 on a known pair, H0 on an identical pair, distinct-FEN count, byte-equal dry runs |
-| 5 | dependencies known | ⚠️ the default control is the Architect's fold (in flight); `-sprt` on 1.5.1 `UNKNOWN - verify` |
+| 3 | INVEST | ✅ S; independent of every engine ticket |
+| 4 | testable, measurable acceptance | ✅ byte-equal dry runs, the exact vectors, 100 / 400 games, 0 faults, 0 time losses |
+| 5 | dependencies known | ✅ `ADR-0056` fold merged (`94f1504c`) |
 | 6 | NFR triggers with targets | ✅ ≤ 0.1 s lane |
 | 7 | test notes | ✅ |
-| 8 | size | ✅ M |
+| 8 | size | ✅ S |
 | 9 | priority | ✅ P1 |
-| 10 | no major unresolved blocker | ❌ waits `EPIC-006`/`009`/`010` closing (owner's order) |
+| 10 | no major unresolved blocker | ✅ may be pulled before `EPIC-010` closes (`EPIC-011` C12) |
 
-**DoR 8/10. Backlog.**
+**DoR 10/10 (re-scored 2026-11-01). Ready recommended; the column move is the Orchestrator's.**

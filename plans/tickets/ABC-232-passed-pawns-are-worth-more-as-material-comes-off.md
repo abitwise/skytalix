@@ -49,7 +49,7 @@ epic: EPIC-011
 - **A2 (relations).** `G3` mirror and purity.
 - **A3 (cost).** `G2` ≤ base × 1.03.
 - **A4 (gates).** `G1`, `G5`, `G6` (floor 6), `G8`, `G9`, `G10`.
-- **A5 (the reading).** The smoke pair of `EPIC-010` § The merge rule (owner Q4 = (e), extended, 2026-10-29), on the candidate head rebased on `main`, before the merge: S-1 0 faults, S-2 0 losses on time, S-3 D ≥ 3.0 of 10 (else ≥ 7.0 of 20), S-4 R ≥ 3.0 of 10 (else ≥ 7.0 of 20). Reported: each smoke's W/L/D and score, the ledger's pooled R score since the last batch, `G11`.
+- **A5 (the reading).** *(2026-11-01, the owner's rule, `bapm-100-400-rule`; replaces the smoke pair of `EPIC-010` § The merge rule.)* One 100-game read at 100 ms a move before the merge (`EPIC-011` § The per-change rule): the candidate head rebased on `main` against its merge-base, self-play, openings 1–50 with both colours, one game at a time, through `ABC-255`. 100 of 100 games complete, the candidate makes 0 faults and loses 0 games on time at the 50 ms margin, and the score meets `ADR-0056` C2′ (merged `94f1504c`): ≥ 50.0 of 100 for a GAIN, ≥ 43.0 for a NEUTRAL, the intent declared at design. A miss is NOT MET and is not re-played. Reported: W/L/D, score, `cutechess-cli`'s Elo ± error, `G11`.
 
 ## NFR triggers
 
@@ -74,7 +74,7 @@ epic: EPIC-011
 | 1 | problem clear | ✅ SA 5b |
 | 2 | scope and out-of-scope | ✅ |
 | 3 | INVEST | ✅ S; own reading |
-| 4 | testable, measurable acceptance | ✅ every row measurable; A5 is the smoke pair (`EPIC-010` § The merge rule, S-1–S-4) |
+| 4 | testable, measurable acceptance | ✅ every row measurable; A5 is the 100-game read at 100 ms (`EPIC-011` § The per-change rule; its pass line is `ADR-0056` C2′) *(2026-11-01)* |
 | 5 | dependencies known | ✅ `ABC-231` |
 | 6 | NFR triggers with targets | ✅ `G2` ≤ 1.03 × |
 | 7 | test notes | ✅ 1 |

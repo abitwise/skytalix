@@ -43,9 +43,7 @@ epic: EPIC-011
   `ucinewgame` is ≤ base + 5 ms in a lane row on the virtual clock (zero-fill cost is named at design).
 - **A3 (gates).** `G1`, `G4` (a size door reproduces base node for node on the `ABC-078` `A3` corpus), `G6`, `G7`,
   `G8`, `G9`.
-- **A4 (the reading).** The per-change rule in force (`EPIC-011` § The per-change rule); with SPRT, `[0, 5]` H1. **Note
-  for QE:** a fixed-depth or short-control reading may not show a TT-size gain; the Architect names the control at
-  design (a clock or longer fixed time), else A4 reads at the routine control and the result is reported as such.
+- **A4 (the reading).** *(2026-11-01, the owner's rule, `bapm-100-400-rule`; replaces the SPRT and the design-named control this row named.)* One 100-game read at 100 ms a move before the merge (`EPIC-011` § The per-change rule): the candidate head rebased on `main` against its merge-base, self-play, openings 1–50 with both colours, one game at a time, through `ABC-255`. 100 of 100 games complete, the candidate makes 0 faults and loses 0 games on time at the 50 ms margin, and the score meets `ADR-0056` C2′ (merged `94f1504c`): ≥ 50.0 of 100 for a GAIN, ≥ 43.0 for a NEUTRAL, the intent declared at design. A miss is NOT MET and is not re-played. Reported: W/L/D, score, `cutechess-cli`'s Elo ± error. **Note for QE:** this read guards against breakage and cannot show a size gain: at 100 ms a search visits ≈ 47 k nodes (467 k nodes/s median × 0.1 s, `qe-tc-depth-probe` `…1889e3b0`; arithmetic), fewer than today's 262 144 entries. A read at a longer control is an other run, asked of the owner first if it is estimated over 1 h.
 
 ## NFR triggers
 
@@ -73,11 +71,11 @@ epic: EPIC-011
 | 2 | scope and out-of-scope | ✅ |
 | 3 | INVEST | ✅ S |
 | 4 | testable, measurable acceptance | ✅ 8 MiB; ≤ 16 MiB; growth ≤ 1 MiB; ≤ base + 5 ms |
-| 5 | dependencies known | ⚠️ A4's control is named at design |
+| 5 | dependencies known | ✅ *(2026-11-01)* A4's control is the owner's 100 ms; a longer read is asked first |
 | 6 | NFR triggers with targets | ✅ |
 | 7 | test notes | ✅ |
 | 8 | size | ✅ S |
 | 9 | priority | ✅ P3 |
 | 10 | no major unresolved blocker | ❌ `ABC-257`; `EPIC-011` not started |
 
-**DoR 8/10. Backlog.**
+**DoR 9/10 (re-scored 2026-11-01: row 5). Backlog.**
