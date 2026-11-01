@@ -1,8 +1,9 @@
 ---
 id: ABC-223
 title: "Smoke reading: `uci-clock-mode` plays 5 games at 40/15 over UCI with 0 losses on time, closest call ≥ 500 ms and ≥ 75 % clock use"
-status: ready
-column: Ready
+status: done
+column: Done
+closed: "2026-11-01, merged to main at b45162fc; QE PASS_WITH_GAPS (qe-ABC-223, 767b4959), no blocking gap, which signs UAT"
 size: S
 priority: P3
 epic: EPIC-009
@@ -10,6 +11,43 @@ owner: QE/E2E
 ---
 
 # ABC-223: smoke reading of `uci-clock-mode` at 40/15: `EPIC-009` M1, M2 and the 60 s ceiling, in 5 games
+
+> **CLOSED 2026-11-01, Done, folded by BA/PM** (task `bapm-epic009-close`, records only, at `main` `38c787be`; nothing
+> run). QE's verdict is **PASS_WITH_GAPS** (`qe-ABC-223` `…767b4959`) by the pre-registered rule (PREREG `…caae8984`,
+> sealed at `fe866192` before game 1), **with no blocking gap**. Merged at `b45162fc`. **The QE verdict signs UAT**
+> (owner delegation, 2026-10-22). The merge changes no production line. Reading `…2c62a346`, artifacts `…247a14c4`,
+> observations `…5c8f2995`.
+>
+> - **Build:** `main` `28e46464`. Its diff from `af32f82c` over `src` and `data` is 4 `*.test.ts` files only, so by
+>   the RE-SCORED rule it is `ABC-221`'s build.
+> - **A1 MET** (pins; `setoption name TimeMode value uci-clock-mode` reached both engines, 5 of 5 games, 0 refusals).
+>   **A2 MET** (5 of 5 kept, 0 faults, 0 kills after a result). **A3 MET (M1):** 0 losses on time, closest call
+>   **1 099 ms** (≥ 500). **A4 MET (M2):** 12 side-periods, least use **99.88 %** (≥ 75 %). **A5 MET:** longest move
+>   **25 285 ms** (≤ 60 000), 0 budgets at the 59 500 cap. **A6** clocks left at period ends were 1 099–1 101 ms;
+>   `movestogo` was on 629 of 629 `go` lines; 0 `isready` arrived during a search; overhead median +0.6 ms, max
+>   +2.5 ms over 614 searches. **A7 GAP:** not ALONE (QE-223-a), on mains, Tctl median 78.1 °C (max 93.1 °C),
+>   frequency fell by at most 0.26 %, 3.93 h of play.
+> - **Test note 2 did not fire.** Nothing goes back to `ABC-221`, and no re-tune or re-run is owed.
+> - **Dispositions (QE-223-a…g):**
+>   - **a (MEDIUM, host): accepted, non-blocking; no ticket.** Another repository's `vitest` ran in 48.8 % of samples.
+>     PREREG § 5's window rule did not fire (no move left < 1 000 ms; none took ≥ 59 900 ms), so A3 and A5 stand.
+>     The host is shared outside this repository, so this is not a defect here. **Owner informed by the
+>     Orchestrator** (board, `38c787be`: "owner told again"), as for `EPIC-010` QE-M1B2-c. Its effect on search depth
+>     is `UNKNOWN - verify` and out of scope (no strength reading).
+>   - **b (INFO, A3): accepted.** 1 100 − δ at all 12 period ends is `ADR-0052` D2's margin, read live. In this
+>     smoke's scope it closes `RISK-EPIC009-01` for `uci-clock-mode`. A forfeit rate is bounded only by `EPIC-011`'s
+>     40/15 readings (G4; C6).
+>   - **c (INFO, A5): accepted, no action.** The cap is not approached at 40/15. Its hard stop is held by `ABC-221`
+>     A10 (59 500.8 ms) and `ABC-246`'s rows.
+>   - **d (INFO, `AR-NFR004-A`): accepted.** +2.5 ms max at 22.4–25.3 s budgets is under ~31 ms. The figure is
+>     Security/NFR's to place at its next catalog hop; no catalog edit is owed here.
+>   - **e (INFO): accepted, no action.** `RISK-EPIC009-02`/`-03` were not exercised. They stay covered by
+>     `AR-UCI-BUSY` and the `ABC-220`/`ABC-221` virtual-clock rows.
+>   - **f (INFO, method): recorded, no action.** The thermal stop was SIGTERM, so `EPIC-010` QE-M1B2-b's pause clause
+>     did not apply. The harness was launched detached anyway.
+>   - **g (INFO): recorded.** 2 games reached the cap and 12 side-periods completed (4 needed). The play took 3.93 h,
+>     inside the ≤ ~5 h bound (`RISK-EPIC009-04`).
+> - **`EPIC-009` milestone 2 is graded MET on this reading and `ABC-221`'s.** The epic is closed (its page).
 
 > **RE-SCORED 2026-10-31 by BA/PM** (task `bapm-ABC-221-fold`, records only, at `main` `9c008db4`; nothing run). **The
 > wait is met: `ABC-221` merged** at `af32f82c` (code `c48a6f83`) and `9395d8dc`, on QE PASS_WITH_GAPS (`qe-ABC-221`
@@ -163,4 +201,4 @@ per 80 moves, so ≤ 60 min a game.
 | 10 | no major unresolved blocker | ✅ `ABC-221` merged at `af32f82c` (2026-10-31). *(Was ❌: nothing to read until `ABC-221` merges.)* |
 
 **DoR 10/10 (re-scored 2026-10-31, `bapm-ABC-221-fold`). Ready.** It runs ALONE, ≤ ~5 h. *(Was: "DoR 9/10. Backlog
-until `ABC-221` merges.")*
+until `ABC-221` merges.")* *(2026-11-01: **Done**, merged `b45162fc`; see the CLOSED block at the top.)*
