@@ -1,0 +1,3 @@
+++ env -u ENGINE_DEEP NODE_OPTIONS=--max-old-space-size=400 node_modules/.bin/vitest run src/uci-session.test.ts --reporter=json --outputFile=/tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-248/deep/unset.json
+JSON report written to /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-248/deep/unset.json
+rc=0

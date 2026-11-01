@@ -1,0 +1,15 @@
+B: files 63 total 2366 passed 2366 failed 0 pending 0 todo 0 -> skip count 0
+H: files 63 total 2362 passed 2362 failed 0 pending 0 todo 0 -> skip count 0
+src/search.null-move.test.ts: B 38 H 38
+  only B: QE-208-a — an abort inside a null move's subtree still hands the root back byte-identical > position-6, readings 3 to 25: 0 mutated roots, and aborts landing inside a null subtree
+  only B: QE-208-b — the null child's key is written: every table probe reads the key of the position it probes > chooseMove on position-6 deepened to 6
+  only B: QE-208-b — the null child's key is written: every table probe reads the key of the position it probes > search() on position-6 at depth 6
+  only H: QE-208-a — an abort inside a null move's subtree still hands the root back byte-identical > position-6, the even readings 4 to 24: 0 mutated roots, and aborts landing inside a null subtree
+  only H: QE-208-b — the null child's key is written: every table probe reads the key of the position it probes > chooseMove on startpos deepened to 6
+  only H: QE-208-b — the null child's key is written: every table probe reads the key of the position it probes > search() on startpos at depth 6
+src/uci-session.test.ts: B 234 H 230
+  only B: ABC-167 A5 — the D4 time rule, read from the info line's time > A5-b3: position startpos, go wtime 1000 btime 1000 movestogo 5 -> 200 ms (within 2 x 10 ms)
+  only B: ABC-167 A5 — the D4 time rule, read from the info line's time > G = 3 500, under the default level 5's 4 000: go wtime 60000 btime 60000 winc 1000 binc 1000 -> 3500 ms (within 2 x 100 ms)
+  only B: ABC-167 A5 — the D4 time rule, read from the info line's time > a bare go: go -> 4000 ms (within 2 x 100 ms)
+  only B: ABC-167 A5 — the D4 time rule, read from the info line's time > movetime 100: go movetime 100 -> 100 ms (within 2 x 10 ms)
+files whose sorted names differ: listed above; all other 63 files equal

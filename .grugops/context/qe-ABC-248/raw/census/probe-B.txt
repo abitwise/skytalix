@@ -1,0 +1,4 @@
+ABC-167 A4 — bad input holds no position > A4-a2: an echoed control character in a go value is dropped from the info string	["info string go depth needs an integer >= 1, got [31m; ignored","info depth 6 score cp 0 nodes 34836 time 4100 nps 8497 pv b1c3","bestmove b1c3"]
+QE-208-a — an abort inside a null move's subtree still hands the root back byte-identical > position-6, readings 3 to 25: 0 mutated roots, and aborts landing inside a null subtree	{"insideNull":5,"mutated":[]}
+QE-208-b — the null child's key is written: every table probe reads the key of the position it probes > search() on position-6 at depth 6	{"underNull":44,"stale":[]}
+QE-208-b — the null child's key is written: every table probe reads the key of the position it probes > chooseMove on position-6 deepened to 6	{"underNull":44,"stale":[]}

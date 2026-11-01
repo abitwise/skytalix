@@ -1,0 +1,27 @@
+CONTROL B ran 234 failed 0 pending 0 | H ran 230 failed 0 pending 0
+same ids in same order: true (137)
+killed B 120 H 120; LOST {-}; gained {-}
+survivors B {167-M09,167-M10,167-M35,167-M38,167-M40,167-M41,167-M42,171-N08,171-S03,171-S09,171-S29,171-S43,171-S46,171-S47,174-M12,174-M13,174-M14}
+survivors H {167-M09,167-M10,167-M35,167-M38,167-M40,167-M41,167-M42,171-N08,171-S03,171-S09,171-S29,171-S43,171-S46,171-S47,174-M12,174-M13,174-M14}
+suite errors B - H -
+SAME  "ABC-167 A4 — bad input holds no position > A4-a2": B {167-M24,167-M29,167-M45b,167-M46,171-S28,174-M10,174-M11,174-M17} H {167-M24,167-M29,167-M45b,167-M46,171-S28,174-M10,174-M11,174-M17}
+SAME  "> white reads wtime": B {167-M01,167-M08,167-M45b,167-M46,171-S17r,171-S19r,171-S28,174-M10,174-M11,174-M17,WRONGSIDE,WS-WHITE} H {167-M01,167-M08,167-M45b,167-M46,171-S17r,171-S19r,171-S28,174-M10,174-M11,174-M17,WRONGSIDE,WS-WHITE}
+SAME  "> black reads btime": B {167-M01,167-M08,167-M45b,167-M46,171-S17r,171-S19r,171-S28,174-M10,174-M11,174-M17,WRONGSIDE,WS-BLACK} H {167-M01,167-M08,167-M45b,167-M46,171-S17r,171-S19r,171-S28,174-M10,174-M11,174-M17,WRONGSIDE,WS-BLACK}
+SAME  "> a short clock": B {167-M45b,167-M46,171-S17r,171-S19r,171-S28,174-M10,174-M11,174-M17} H {167-M45b,167-M46,171-S17r,171-S19r,171-S28,174-M10,174-M11,174-M17}
+SAME  "> A5-b1": B {167-M03,167-M04,167-M06r,167-M45b,167-M46,171-S17r,171-S19r,171-S28,174-M10,174-M11,174-M17} H {167-M03,167-M04,167-M06r,167-M45b,167-M46,171-S17r,171-S19r,171-S28,174-M10,174-M11,174-M17}
+SAME  "> A5-b2": B {167-M06r,167-M45b,167-M46,171-S17r,171-S19r,171-S28,174-M10,174-M11,174-M17} H {167-M06r,167-M45b,167-M46,171-S17r,171-S19r,171-S28,174-M10,174-M11,174-M17}
+SAME  "> A5-b4": B {167-M11,167-M45b,167-M46,171-S17r,171-S19r,171-S28,174-M10,174-M11,174-M17,MOVETIME-OFF} H {167-M11,167-M45b,167-M46,171-S17r,171-S19r,171-S28,174-M10,174-M11,174-M17,MOVETIME-OFF}
+SAME  "> A5-b5": B {167-M11,167-M45b,167-M46,171-S17r,171-S19r,171-S28,174-M10,174-M11,174-M17,MOVETIME-OFF} H {167-M11,167-M45b,167-M46,171-S17r,171-S19r,171-S28,174-M10,174-M11,174-M17,MOVETIME-OFF}
+SAME  "> A5-c1": B {167-M02,167-M03,167-M45b,167-M46,171-S17r,171-S19r,171-S28,174-M10,174-M11,174-M17,OVERHEAD-100} H {167-M02,167-M03,167-M45b,167-M46,171-S17r,171-S19r,171-S28,174-M10,174-M11,174-M17,OVERHEAD-100}
+MOVED "read from the info line's time > movetime 100": B {167-M45b,167-M46,171-S17r,171-S19r,171-S28,174-M10,174-M11,174-M17,MOVETIME-OFF} H {-}
+MOVED "read from the info line's time > G = 3 500": B {167-M01,167-M03,167-M04,167-M45b,167-M46,171-S17r,171-S19r,171-S28,174-M10,174-M11,174-M17,L5-3000} H {-}
+MOVED "read from the info line's time > a bare go": B {167-M07r,167-M45b,167-M46,171-S19r,171-S28,174-M10,174-M11,174-M17,L5-3000,L5-4500} H {-}
+MOVED "read from the info line's time > A5-b3": B {167-M05,167-M45b,167-M46,171-S17r,171-S19r,171-S28,174-M10,174-M11,174-M17,MOVESTOGO-1} H {-}
+moved "movetime 100": B kills 9; killed at H by the default lane: 9; uncovered {-}
+moved "G = 3 500": B kills 12; killed at H by the default lane: 12; uncovered {-}
+moved "a bare go": B kills 10; killed at H by the default lane: 10; uncovered {-}
+moved "A5-b3": B kills 10; killed at H by the default lane: 10; uncovered {-}
+WRONGSIDE at H killed by: ABC-167 A5 — the D4 time rule, read from the info line's time > white reads wtime: go wtime 1000 btime 9000 -> 50 ms (within 2 x 1 ms) | ABC-167 A5 — the D4 time rule, read from the info line's time > black reads btime: go wtime 1000 btime 9000 -> 450 ms (within 2 x 10 ms)
+WS-WHITE at H killed by: ABC-167 A5 — the D4 time rule, read from the info line's time > white reads wtime: go wtime 1000 btime 9000 -> 50 ms (within 2 x 1 ms)
+WS-BLACK at H killed by: ABC-167 A5 — the D4 time rule, read from the info line's time > black reads btime: go wtime 1000 btime 9000 -> 450 ms (within 2 x 10 ms)
+PARITY HOLDS (file level)

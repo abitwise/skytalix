@@ -1,0 +1,20 @@
+{
+  "refs": ["qe-ABC-248", "ABC-248", "EPIC-010", "ADR-0046", "ADR-0050", "ADR-0035", "NFR-008", "N8-LANE", "W1",
+           "ABC-167", "ABC-244", "ABC-245", "QE-208-a", "QE-208-b",
+           "SE-248-a", "SE-248-b", "SE-248-c", "SE-248-d",
+           "QE-248-a", "QE-248-b", "QE-248-c", "QE-248-d", "QE-248-e", "QE-248-f", "QE-248-g",
+           "QE-244-a", "QE-244-c", "QE-245-b", "P-2", "bapm-tranche2-ruling", "bapm-page-closes",
+           "se-ABC-248/20261101T075832Z-software-engineer-decision-237b57fb",
+           "se-ABC-248/20261101T075832Z-software-engineer-observation-b9dc61b6",
+           "se-ABC-248/20261101T075832Z-software-engineer-observation-64b1718e",
+           "se-ABC-248/20261101T075832Z-software-engineer-observation-aedad93f",
+           "grugops/ABC-248", "18bad5fb", "71700836", "7e9ab524", "46365ed0", "grugops/qe-ABC-248", "af00650c",
+           "src/search.null-move.test.ts", "src/uci-session.test.ts"],
+  "notes": [
+    { "kind": "decision", "confidence": "high: every lever condition and A3-A11 run in this hop as pre-registered (PREREG af00650c); verdict PASS_WITH_GAPS, no gap blocking", "bodyFile": "note-decision.md" },
+    { "kind": "observation", "confidence": "high: fresh base and tip kill runs on a QE-written runner, 137 mutants and 26 plants, all base before any tip; node census and non-vacuity read in scratch", "bodyFile": "note-parity.md" },
+    { "kind": "observation", "confidence": "high for gates, names, deep lane, N8-LANE and G8 as measured ALONE (wait-clear, admissible, no foreign vitest); N8-LANE Tctl median 80.8 C logged, not gated", "bodyFile": "note-timing.md" },
+    { "kind": "observation", "confidence": "high on what was run; QE-248-d (equivalence of QPARITY) is reasoning from the code, UNKNOWN - verify as a proof; none blocking", "bodyFile": "note-findings.md" },
+    { "kind": "observation", "confidence": "high: files listed are committed on grugops/qe-ABC-248 (an observation, not an artifact-ref: no §14-gate run to bind)", "bodyFile": "note-artifacts.md" }
+  ]
+}

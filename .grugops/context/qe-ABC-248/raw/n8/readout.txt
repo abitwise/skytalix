@@ -1,0 +1,12 @@
+n = 8 scored rounds (round 0 discarded), 0 harness errors, load1 before 0.91..1.64, foreign vitest on 0 runs
+B: cpu median 4.930 s, wall median 2.160 s, tests 272
+T: cpu median 4.945 s, wall median 2.175 s, tests 272
+H: cpu median 4.295 s, wall median 1.945 s, tests 268
+T-B cpu: median 0.020 s, sign +4/-3 (p 1.000), k 2, interval [-0.050, 0.080], R 0.080
+T-B wall: median 0.010 s, sign +5/-3 (p 0.727), k 2, interval [-0.090, 0.080], R 0.090
+H-B cpu: median -0.635 s, sign +0/-8 (p 0.008), k 2, interval [-0.720, -0.420], R 0.720
+H-B wall: median -0.215 s, sign +0/-8 (p 0.008), k 2, interval [-0.270, -0.180], R 0.270
+twin: |median| 0.020 s vs 1.5 % of base cpu 0.074 s; sign p 1.000 -> admissible true
+resolves 0.650 s: twin R 0.080 <= 0.650 -> true
+charge (H-B cpu median) -0.635 s, at most -0.420 s -> N8-LANE STATE at 650 ms CPU: MET
+F (provisional 16 % of base cpu, UNKNOWN - verify) = 0.789 s; "650 ms >= F" is false

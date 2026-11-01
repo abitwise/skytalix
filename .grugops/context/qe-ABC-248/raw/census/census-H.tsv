@@ -1,0 +1,268 @@
+the null move — makeNullMove / unmakeNullMove and zobristKeyAfterNullMove > passes: the side flips, the ep square clears, the halfmove clock is 0, fullmove moves as makeMove's	0	0
+the null move — makeNullMove / unmakeNullMove and zobristKeyAfterNullMove > unmakeNullMove leaves every position byte-identical	0	0
+the null move — makeNullMove / unmakeNullMove and zobristKeyAfterNullMove > zobristKeyAfterNullMove(zobristKey(before), undo) === zobristKey(after), ep square or not	0	0
+nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces > the allowed case, at the thresholds: depth 2, ply 1 -> 3	0	0
+nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces > far above them — still exactly 3: depth 20, ply 30 -> 3	0	0
+nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces > Black to move with three: depth 6, ply 3 -> 3	0	0
+nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces > a middlegame: depth 5, ply 2 -> 3	0	0
+nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces > the root: depth 6, ply 0 -> 0	0	0
+nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces > directly after a null move: depth 6, ply 3, after a null -> 0	0	0
+nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces > remaining depth 1, below 2: depth 1, ply 3 -> 0	0	0
+nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces > in check: depth 6, ply 3 -> 0	0	0
+nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces > two non-pawn pieces: depth 6, ply 3 -> 0	0	0
+nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces > the OTHER side has the three: depth 6, ply 3 -> 0	0	0
+nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces > pawns only: depth 6, ply 3 -> 0	0	0
+nullMoveReduction — R is 3, and 0 at the root, after a null, below depth 2, in check, below three non-pawn pieces > the fixtures bite: each board really is what its row says	0	0
+both recursions try the null move through the predicate, at null-window nodes, and return beta > ./search.ts: calls nullMoveReduction once, gates on alpha + 1 === beta, subtracts its value and returns beta	0	0
+both recursions try the null move through the predicate, at null-window nodes, and return beta > ./engine.ts: calls nullMoveReduction once, gates on alpha + 1 === beta, subtracts its value and returns beta	0	0
+the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn null move off, as every older door does > the doors take what search() and chooseMove take, and no depth on the engine side	0	0
+ABC-167 A1-A2 — handshake and ready > A1: uci writes id name, id author, then (ABC-171 A1, ABC-220 A1) the three option lines, then uciok	0	0
+ABC-167 A1-A2 — handshake and ready > A2: isready writes exactly readyok	0	0
+ABC-167 A3 — a move from a position > writes one info line then one bestmove, the same legal move	6173	1
+ABC-167 A3 — a move from a position > A3-h1: nps = round(N x 1000 / max(1, T))	6173	1
+ABC-167 A4 — bad input holds no position > position fen 8/8/8 w - - 0 1: one printable info string, then go answers bestmove 0000	0	0
+ABC-167 A4 — bad input holds no position > position startpos moves e2e5: one printable info string, then go answers bestmove 0000	0	0
+ABC-167 A4 — bad input holds no position > a control character in a refused FEN is filtered from the info string	0	0
+ABC-167 A4 — bad input holds no position > A4-a1: an echoed control character is dropped from the info string	0	0
+ABC-167 A4 — bad input holds no position > A4-a2: an echoed control character in a go value is dropped from the info string	1044	1
+ABC-167 A4 — bad input holds no position > a held stalemate answers go with bestmove 0000	0	0
+the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn null move off, as every older door does > searchWithoutQuiescenceEvasions makes null moves on position-6 at depth 4, and changes the work	0	0
+the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn null move off, as every older door does > chooseMoveWithoutQuiescenceEvasions makes null moves on position-6 deepened to 4, and changes the work	39119	2
+ABC-167 A5 — the D4 time rule, read from the info line's time > white reads wtime: go wtime 1000 btime 9000 -> 50 ms (within 2 x 1 ms)	45076	1
+the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn null move off, as every older door does > searchWithoutNullMove makes no null move on position-6 at depth 4	0	0
+the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn null move off, as every older door does > searchWithoutReductions makes no null move on position-6 at depth 4	0	0
+ABC-167 A5 — the D4 time rule, read from the info line's time > black reads btime: go wtime 1000 btime 9000 -> 450 ms (within 2 x 10 ms)	39966	1
+ABC-167 A5 — the D4 time rule, read from the info line's time > a short clock: go wtime 40 btime 40 -> 1 ms (within 2 x 1 ms)	20	1
+ABC-167 A5 — the D4 time rule, read from the info line's time > A5-b1: position startpos, go wtime 2000 btime 2000 winc 1000 binc 0 -> 600 ms (within 2 x 100 ms)	2068	1
+ABC-167 A5 — the D4 time rule, read from the info line's time > A5-b2: position startpos moves e2e4, go wtime 2000 btime 2000 winc 1000 binc 0 -> 100 ms (within 2 x 100 ms)	30	1
+ABC-167 A5 — the D4 time rule, read from the info line's time > A5-b4: position startpos, go wtime 1000 btime 1000 movetime 300 -> 300 ms (within 2 x 100 ms)	214	1
+the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn null move off, as every older door does > chooseMoveWithoutNullMove makes no null move on position-6 deepened to 4	24687	1
+ABC-167 A5 — the D4 time rule, read from the info line's time > A5-b5: position startpos, go movetime 300 wtime 60000 btime 60000 -> 300 ms (within 2 x 100 ms)	214	1
+ABC-167 A5 — the D4 time rule, read from the info line's time > A5-c1: position startpos, go wtime 100 btime 100 winc 1000 binc 1000 -> 50 ms (within 2 x 10 ms)	1343	1
+ABC-167 A6 — infinite waits for stop > go infinite holds the bestmove until stop; a second stop writes nothing	1044	1
+ABC-167 A6 — infinite waits for stop > go infinite holds the bestmove until ponderhit; a second ponderhit writes nothing	1044	1
+ABC-167 A6 — infinite waits for stop > a stop with nothing held writes nothing	0	0
+ABC-167 A6 — infinite waits for stop > ABC-178 R1: a hold left in one session is not released by a fresh session	1044	1
+the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn null move off, as every older door does > chooseMoveWithoutReductions makes no null move on position-6 deepened to 4	24938	1
+QE-208-c — every door's nullMove switch literal is false; only the shipped path and the ABC-228 and ABC-229 doors turn it on > ./search.ts: each exported entry passes exactly one nullMove literal, and only the shipped one and its ABC-228 and ABC-229 doors are true	0	0
+QE-208-c — every door's nullMove switch literal is false; only the shipped path and the ABC-228 and ABC-229 doors turn it on > ./engine.ts: each exported entry passes exactly one nullMove literal, and only the shipped one and its ABC-228 and ABC-229 doors are true	0	0
+ABC-167 A6 — infinite waits for stop > A6-d1: go ponder holds at the capped ceiling; ponderhit releases once	34836	1
+ABC-167 A6 — infinite waits for stop > A6-e1: a new go writes the held bestmove first; two bestmoves in all	1064	2
+ABC-167 A6 — infinite waits for stop > A6-e2: position startpos writes the held bestmove first, in the position it searched	31765	2
+ABC-167 A6 — infinite waits for stop > A6-e3: ucinewgame writes the held bestmove first, in the position it searched	31765	2
+ABC-167 A6 — infinite waits for stop > A6-j1: a refused position writes the held bestmove first, then its info string	1044	1
+ABC-167 A6 — infinite waits for stop > A6-e4: quit writes the held bestmove and returns quit	1044	1
+ABC-167 A6 — infinite waits for stop > A6-e5: isready, an unknown line and setoption leave the bestmove held	1044	1
+QE-208-a — an abort inside a null move's subtree still hands the root back byte-identical > position-6, the even readings 4 to 24: 0 mutated roots, and aborts landing inside a null subtree	126881	11
+ABC-167 A7 — the D12 limits > go depth 3 reports depth 3 on a clock where an unlimited go reaches depth >= 5	35050	2
+QE-208-b — the null child's key is written: every table probe reads the key of the position it probes > search() on startpos at depth 6	26703	1
+ABC-167 A7 — the D12 limits > go nodes 20000 -> nodes <= 21 024, unless depth 1 alone took more	20520	2
+ABC-167 A7 — the D12 limits > QE-170-g: a tiny go nodes 1 still writes one info line and a legal depth-1 bestmove	20	1
+ABC-167 A7 — the D12 limits > go mate 2 on the smothered mate -> score mate 2 and bestmove d5g8	1349	1
+ABC-167 A7 — the D12 limits > go depth 3 mate 5 -> depth 3 (the smaller one wins)	234	2
+ABC-167 A7 — the D12 limits > go depth 0: one info string, the token dropped, one bestmove	1044	1
+ABC-167 A7 — the D12 limits > go nodes x: one info string, the token dropped, one bestmove	1044	1
+ABC-167 A7 — the D12 limits > go depth 2.5: one info string, the token dropped, one bestmove	1044	1
+ABC-167 A7 — the D12 limits > go mate 0: one info string, the token dropped, one bestmove	1044	1
+ABC-167 A7 — the D12 limits > go nodes -5: one info string, the token dropped, one bestmove	1044	1
+ABC-167 A7 — the D12 limits > go depth: one info string, the token dropped, one bestmove	1044	1
+QE-208-b — the null child's key is written: every table probe reads the key of the position it probes > chooseMove on startpos deepened to 6	23798	1
+A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth > seven rows, each with its source, at depths 8 to 12	0	0
+ABC-167 A7 — the D12 limits > ABC-197 R2: go depth 0 on step 100 searches G = 4 000, time in [4 000, 4 200]	34836	1
+ABC-167 A7 — the D12 limits > go movetime 1000 searchmoves e2e4 -> one info string, all moves searched	30760	2
+ABC-167 A7 — the D12 limits > A7-f1: a keyword is never a value (go depth movetime 100)	20	1
+A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth > zugzwang.001: chooseMove on a frozen clock to depth 9 plays e1f1	78946	1
+A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth > kpk-b6c6: chooseMove on a frozen clock to depth 8 plays b6c6	2998	1
+A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth > kpk-c6d6: chooseMove on a frozen clock to depth 8 plays c6d6	4271	1
+A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth > kpk-d6e6: chooseMove on a frozen clock to depth 8 plays d6e6	4201	1
+A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth > kpk-e6f6: chooseMove on a frozen clock to depth 8 plays e6f6	3548	1
+ABC-167 A7 — the D12 limits > A7-f2: go movetime with no value searches as a bare go	34836	1
+ABC-167 A7 — the D12 limits > A7-f3: go movetime 1e2 and movestogo 0 are dropped with one info string	34856	2
+ABC-167 A7 — the D12 limits > A7-h1: searchmoves stops at the next go keyword, so movetime is honoured	20	1
+ABC-167 A7 — the D12 limits > A7-i1: go movetime depth 3 -> one info string naming movetime, then depth 3	214	1
+ABC-167 A7 — the D12 limits > A7-i2: go wtime 1000 btime 1000 movestogo movetime 300 -> 300 ms	214	1
+ABC-167 A7 — the D12 limits > A7-i3: go wtime 1000 btime 1000 depth winc 1000 -> 550 ms	2068	1
+ABC-167 A7 — the D12 limits > A7-i4: go searchmoves e2e4 depth 3 -> searchmoves stops at depth, so depth 3	214	1
+ABC-167 A7 — the D12 limits > A7-i5: go depth infinite holds the bestmove until stop	1044	1
+ABC-167 A7 — the D12 limits > A7-i6: go searchmoves e2e4 infinite holds the bestmove until stop	1044	1
+ABC-167 A8 — mate scores > being mated next move reports score mate -1	568	1
+ABC-167 A8 — mate scores > M = ceil((MATE_SCORE - |score|) / 2) is the rule both rows read	0	0
+ABC-167 A9 — ignored and reset > setoption, debug, register, an unknown command and an empty line write nothing	0	0
+ABC-167 A9 — ignored and reset > ucinewgame sets the position back to the start	5140	1
+ABC-167 A9 — ignored and reset > A9-h1: a new session with no position line starts at the start position	5140	1
+ABC-167 A10 — quit > handleLine("quit") returns "quit" and writes nothing	0	0
+ABC-171 A1 — the option lines > uci writes exactly 6 lines, the three options after the id lines and before uciok	0	0
+ABC-171 A2 — setoption > precondition: under seededRandom(1) the first level-1 go takes the engine path	0	0
+ABC-171 A2 — setoption > setoption name skill level value 1 (lower case) writes nothing and sets level 1	20	1
+ABC-171 A2 — setoption > setoption name OwnBook value false writes nothing (A4 holds afterwards, in A4)	0	0
+ABC-171 A2 — setoption > Skill Level value 0: one info string, the old value (1) kept	20	1
+ABC-171 A2 — setoption > Skill Level value 8: one info string, the old value (1) kept	20	1
+ABC-171 A2 — setoption > Skill Level value 2.5: one info string, the old value (1) kept	20	1
+ABC-171 A2 — setoption > Skill Level value x: one info string, the old value (1) kept	20	1
+ABC-171 A2 — setoption > Skill Level value constructor: one info string, the old value (1) kept	20	1
+ABC-171 A2 — setoption > OwnBook value maybe: one info string, the old value (false) kept	5140	1
+ABC-171 A2 — setoption > setoption name Hash value 64 writes nothing and changes nothing	34836	1
+ABC-171 A3 — a book hit (EPIC-007 M6) > position startpos, go movetime 1000 -> exactly info string book, bestmove e2e4	0	0
+ABC-171 A3 — a book hit (EPIC-007 M6) > position fen <the start FEN> hits the same entry (keyed by position, not move list)	0	0
+ABC-171 A3 — a book hit (EPIC-007 M6) > the position after the moves is probed (D10)	0	0
+ABC-171 A4 — OwnBook off > OwnBook false before isready/go: a search, no book line, read called 0 times	5140	1
+ABC-171 A5 — the book is read once, and at the right time > 0 after uci, 1 after the first isready, still 1 after isready, go and ucinewgame	0	0
+ABC-171 A5 — the book is read once, and at the right time > a session that never gets isready reads at the first go	0	0
+ABC-171 A5 — the book is read once, and at the right time > the first isready WITH OwnBook on reads; one with it off does not	0	0
+ABC-171 A6 — a level change is observable (EPIC-007 M7) > level 1: go wtime 60000 btime 60000 winc 1000 binc 1000 -> 100 ms (within 2 x 100 ms)	20	1
+ABC-171 A6 — a level change is observable (EPIC-007 M7) > level 3: go wtime 60000 btime 60000 winc 1000 binc 1000 -> 330 ms (within 2 x 100 ms)	1044	1
+A2 — the instrumented search makes 0 null moves in check, and 0 below three non-pawn pieces > search() to depth 4 and chooseMove deepened to 4: every null move is made out of check, with three or more pieces	122813	7
+ABC-171 A6 — a level change is observable (EPIC-007 M7) > level 5: go wtime 60000 btime 60000 winc 1000 binc 1000 -> 3500 ms (within 2 x 100 ms)	29716	1
+ABC-171 A7 — the blunder path > precondition: seededRandom(2)'s three gos take both paths (blunder, engine, engine)	0	0
+A2 — the instrumented search makes 0 null moves in check, and 0 below three non-pawn pieces > the in-check root really is in check, and its search still finds null-window nodes to pass at	0	0
+A2 — the instrumented search makes 0 null moves in check, and 0 below three non-pawn pieces > the pawn-only endgames: no null move at all, in either recursion, to depth 6	2462	2
+ABC-171 A7 — the blunder path > two sessions on the same seededRandom(k) write the same bestmove sequence	51702	94
+ABC-171 A7 — the blunder path > go depth 3 at level 1: one info string naming the dropped limit, then a bestmove	5140	1
+ABC-171 A7 — the blunder path > go depth 3 at level 5 reports depth 3 (ABC-167 A7; level 3 now drops the limit)	214	1
+ABC-171 A8 — no reseed, and one draw per blunder-level search > ucinewgame draws 0 times; each level-1 go draws exactly one seed; level 5 draws none	60	3
+ABC-171 A8 — no reseed, and one draw per blunder-level search > every blunder level's searched go draws exactly one seed (a book hit draws 0: A13b)	6312	4
+ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12) > the Skill Level line's default is DEFAULT_LEVEL, built from the constant	0	0
+ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12) > the Skill Level line is literally default 5 min 1 max 7	0	0
+ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12) > at the default, a bare go takes the chooseMove path: score, and time within 4 000 ms	34836	1
+ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12) > at the default, go depth 3 reports depth 3 (D12)	214	1
+ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12) > at skill 3, go depth 3: one info string naming depth, a level line with no score, bestmove	1044	1
+ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12) > at skill 4, go depth 3: one info string naming depth, a level line with no score, bestmove	5140	1
+ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path > uci lists Skill Level default 5 min 1 max 7, max read from HARDEST_LEVEL	0	0
+ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path > setoption name Skill Level value 7 sets 7: a bare go searches 30 000 ms	24596	1
+ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path > a bare go at 6 hands the engine 5 000 ms	0	0
+ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path > go movetime 60000 at 7 hands the engine 30 000 (the level caps G)	0	0
+ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path > go movetime 1000 at 7 hands the engine 1 000 (G caps the level)	0	0
+ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path > go wtime 600000 btime 600000 at 7 hands the engine min(600 000 ÷ 20, 30 000) = 30 000	0	0
+ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path > go depth 3 at 7 stops at depth 3 (D12: rate 0), and the info line carries a score	214	1
+ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path > Skill Level value 0 at 7 keeps 7, with the 1-7 info string	0	0
+ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path > Skill Level value 8 at 7 keeps 7, with the 1-7 info string	0	0
+ABC-171 A9 — a bad book > read throws: three gos each write one legal bestmove, never throw, warn exactly once	60	3
+ABC-171 A9 — a bad book > bytes that are not the schema: three gos each write one legal bestmove, never throw, warn exactly once	60	3
+ABC-171 A10 — infinite with a book hit > go infinite writes info string book and holds bestmove until stop	0	0
+ABC-171 A13a — the seed oracle floor(random() * 2^32) (QE-171-a) > non-vacuous: the oracle's moves are not all equal over k = 1..8	0	0
+ABC-171 A13a — the seed oracle floor(random() * 2^32) (QE-171-a) > non-vacuous: on some k the 2^16 seed gives a different move from the oracle's	1762	65
+ABC-171 A13a — the seed oracle floor(random() * 2^32) (QE-171-a) > seededRandom(1): level 1's bestmove equals the oracle's	20	1
+ABC-171 A13a — the seed oracle floor(random() * 2^32) (QE-171-a) > seededRandom(2): level 1's bestmove equals the oracle's	554	20
+ABC-171 A13a — the seed oracle floor(random() * 2^32) (QE-171-a) > seededRandom(3): level 1's bestmove equals the oracle's	20	1
+ABC-171 A13a — the seed oracle floor(random() * 2^32) (QE-171-a) > seededRandom(4): level 1's bestmove equals the oracle's	554	20
+ABC-171 A13a — the seed oracle floor(random() * 2^32) (QE-171-a) > seededRandom(5): level 1's bestmove equals the oracle's	20	1
+ABC-171 A13a — the seed oracle floor(random() * 2^32) (QE-171-a) > seededRandom(6): level 1's bestmove equals the oracle's	554	20
+ABC-171 A13a — the seed oracle floor(random() * 2^32) (QE-171-a) > seededRandom(7): level 1's bestmove equals the oracle's	554	20
+ABC-171 A13a — the seed oracle floor(random() * 2^32) (QE-171-a) > seededRandom(8): level 1's bestmove equals the oracle's	20	1
+ABC-171 A13b — a book hit at a blunder level draws 0 seeds (QE-171-b) > precondition: at least one level blunders	0	0
+ABC-171 A13b — a book hit at a blunder level draws 0 seeds (QE-171-b) > level 1: exactly info string book, bestmove e2e4; no search; random drawn 0 times	0	0
+ABC-171 A13b — a book hit at a blunder level draws 0 seeds (QE-171-b) > level 2: exactly info string book, bestmove e2e4; no search; random drawn 0 times	0	0
+ABC-171 A13b — a book hit at a blunder level draws 0 seeds (QE-171-b) > level 3: exactly info string book, bestmove e2e4; no search; random drawn 0 times	0	0
+ABC-171 A13b — a book hit at a blunder level draws 0 seeds (QE-171-b) > level 4: exactly info string book, bestmove e2e4; no search; random drawn 0 times	0	0
+ABC-171 A13c — the dropped-limit line names nodes and mate, as one line (QE-171-c) > go nodes 100: one info string naming nodes, a level info line, a bestmove	20	1
+ABC-171 A13c — the dropped-limit line names nodes and mate, as one line (QE-171-c) > go depth 3 nodes 100 mate 2: exactly one info string naming depth, nodes and mate	20	1
+ABC-171 A13d — an invalid OwnBook keeps true (QE-171-d) > OwnBook value maybe on a fresh session: one info string, then the book still answers	0	0
+ABC-171 A11 — book.ts is a type-only import > every import from ./book.ts is import type	0	0
+ABC-230 A2, A3, A5 — the session hands the search the game's prior keys > A2: `position fen F moves …` then `go depth 4` plays the third occurrence at cp 0	2371	8
+ABC-230 A2, A3, A5 — the session hands the search the game's prior keys > A2: bestmove is byte-equal to the CLI level seam's move on the same game and clock	836	8
+ABC-230 A2, A3, A5 — the session hands the search the game's prior keys > A2: `position startpos moves …` hands the replayed keys, trimmed, and the search reads them	3707	2
+ABC-230 A2, A3, A5 — the session hands the search the game's prior keys > A3: a bare FEN, a bare startpos and `ucinewgame` hand an empty list	69	3
+ABC-230 A2, A3, A5 — the session hands the search the game's prior keys > A3: a refused `position` holds no position and no keys; `go` does not search	0	0
+ABC-230 A2, A3, A5 — the session hands the search the game's prior keys > A5: from a 600-ply move list, only the last 100 keys before the root are handed	26	1
+ABC-230 A2, A3, A5 — the session hands the search the game's prior keys > A5: the window starts at the last pawn move; a castling-rights change does not cut it	29	1
+ABC-241 A4, A5 — UCI: the prior keys are repetition keys > A4: the move that makes the third occurrence scores exactly 0; with a legal ep capture, no draw	3458	3
+ABC-241 A4, A5 — UCI: the prior keys are repetition keys > A5: the list handed is the repetition-key list, trimmed: the h7h5 key normalised, the rest raw	13	2
+ABC-241 A4, A5 — UCI: the prior keys are repetition keys > A5: the CLI level seam's injected list equals UCI's, key for key, and both play d8e8	55310	2
+ABC-241 A4, A5 — UCI: the prior keys are repetition keys > A6: a FEN carrying an uncapturable ep square: its own key counts, d1e1 scores exactly 0; base's list does not	861	2
+ABC-241 A4, A5 — UCI: the prior keys are repetition keys > A8: the session's one new import is gameend.ts (`ADR-0044` D2, the dated line)	0	0
+ABC-242 A4 — Skill Level 1: the CLI seam, UCI and a direct createLevel call agree > A4: the same move from all three; UCI's nodes and depth are the direct call's, whose list carries the 0	5049	60
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A1 — offered, off by default > uci writes the TimeMode combo byte-exact, after Skill Level (byte-identical) and before uciok	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A2 — no clock gives T > go hands the search 22 000 ms	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A2 — no clock gives T > go infinite hands the search 22 000 ms	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A2 — no clock gives T > go depth 4 hands the search 22 000 ms	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A3-A5 — whole periods on one replayed clock > A3: one 40/15 period from 900 000 ms, movestogo 40..1, no book: T on every move, 18 760 ms left, 97.9 % used	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A3-A5 — whole periods on one replayed clock > A4: the same period with its first 6 moves from the book: 83.2 % used, every move leaves >= 18 000 ms	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A3-A5 — whole periods on one replayed clock > A5: no movestogo, 40 moves from 900 000 ms: every move leaves >= 1 000 ms, >= 75 % used; T binds for 21 moves, then C	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A6 — the hard ceiling: no go hands the search more than 22 000 ms > go movetime 30000 -> 22000; the engine's deadline is start + 22000 <= start + 22 000	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A6 — the hard ceiling: no go hands the search more than 22 000 ms > go infinite -> 22000; the engine's deadline is start + 22000 <= start + 22 000	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A6 — the hard ceiling: no go hands the search more than 22 000 ms > go -> 22000; the engine's deadline is start + 22000 <= start + 22 000	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A6 — the hard ceiling: no go hands the search more than 22 000 ms > go wtime 3600000 btime 3600000 movestogo 40 -> 22000; the engine's deadline is start + 22000 <= start + 22 000	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A6 — the hard ceiling: no go hands the search more than 22 000 ms > go movetime 5000 -> 5000; the engine's deadline is start + 5000 <= start + 22 000	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A6 — the hard ceiling: no go hands the search more than 22 000 ms > the 1-hour clock's C is 89 875, so T binds there	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A6 — the hard ceiling: no go hands the search more than 22 000 ms > the real engine on a step-1 000 clock: a bare go reports time in [22 000, 22 000 + 2 x 1 000]	16414	1
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A7 — the safe share C binds a short clock > go wtime 3000 btime 3000 movestogo 1 -> 1 900 ms, and the move leaves 1 069 ms	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A7 — the safe share C binds a short clock > the increment comes back whole: go wtime 10000 btime 10000 winc 2000 binc 2000 movestogo 10 -> 2 800 ms	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A7 — the safe share C binds a short clock > A12 (ABC-221): Black to move, winc 0 binc 2000, go wtime 10000 btime 10000 winc 0 binc 2000 movestogo 10 -> 2800	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A7 — the safe share C binds a short clock > A12 (ABC-221): Black to move, winc 2000 binc 0, go wtime 10000 btime 10000 winc 2000 binc 0 movestogo 10 -> 800	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A7 — the safe share C binds a short clock > A12 (ABC-221): White to move, winc 2000 binc 0, go wtime 10000 btime 10000 winc 2000 binc 0 movestogo 10 -> 2800	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A7 — the safe share C binds a short clock > A12 (ABC-221): White to move, winc 0 binc 2000, go wtime 10000 btime 10000 winc 0 binc 2000 movestogo 10 -> 800	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A7 — the safe share C binds a short clock > the side to move's clock: black reads btime and binc (go wtime 900000 btime 3000 winc 9000 binc 0 movestogo 1 -> 1 900)	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A7 — the safe share C binds a short clock > the hard stop on the clock left: go wtime 3000 btime 3000 winc 500 binc 500 movestogo 1 -> 1 900, not the spread's 2 400	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A7 — the safe share C binds a short clock > go wtime 800 btime 800 -> 1 ms	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A7 — the safe share C binds a short clock > go wtime 800 btime 800 on the real engine still returns a legal move (its unabortable depth 1)	30	1
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A7 — the safe share C binds a short clock > tc=40/60 over 3 periods (60 000 ms, movestogo 40..1, +60 000 after moves 40 and 80): C binds on every move, every move leaves >= 1 000 ms	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A8 — levels unchanged (EPIC-009 M3) > LEVELS, DEFAULT_LEVEL and the Skill Level default hold their base values; HARD_CEILING_MS is 60 000 (ABC-221)	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A8 — levels unchanged (EPIC-009 M3) > precondition: NO_BLUNDER's seed draws above every blunder rate	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A8 — levels unchanged (EPIC-009 M3) > TimeMode unset, Skill Level 1: A3's period gives base's budget on every go, row for row	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A8 — levels unchanged (EPIC-009 M3) > TimeMode unset, Skill Level 2: A3's period gives base's budget on every go, row for row	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A8 — levels unchanged (EPIC-009 M3) > TimeMode unset, Skill Level 3: A3's period gives base's budget on every go, row for row	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A8 — levels unchanged (EPIC-009 M3) > TimeMode unset, Skill Level 4: A3's period gives base's budget on every go, row for row	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A8 — levels unchanged (EPIC-009 M3) > TimeMode unset, Skill Level 5: A3's period gives base's budget on every go, row for row	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A8 — levels unchanged (EPIC-009 M3) > TimeMode unset, Skill Level 6: A3's period gives base's budget on every go, row for row	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A8 — levels unchanged (EPIC-009 M3) > TimeMode unset, Skill Level 7: A3's period gives base's budget on every go, row for row	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A8 — levels unchanged (EPIC-009 M3) > TimeMode level, Skill Level 1: A3's period gives base's budget on every go, row for row	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A8 — levels unchanged (EPIC-009 M3) > TimeMode level, Skill Level 2: A3's period gives base's budget on every go, row for row	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A8 — levels unchanged (EPIC-009 M3) > TimeMode level, Skill Level 3: A3's period gives base's budget on every go, row for row	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A8 — levels unchanged (EPIC-009 M3) > TimeMode level, Skill Level 4: A3's period gives base's budget on every go, row for row	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A8 — levels unchanged (EPIC-009 M3) > TimeMode level, Skill Level 5: A3's period gives base's budget on every go, row for row	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A8 — levels unchanged (EPIC-009 M3) > TimeMode level, Skill Level 6: A3's period gives base's budget on every go, row for row	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A8 — levels unchanged (EPIC-009 M3) > TimeMode level, Skill Level 7: A3's period gives base's budget on every go, row for row	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A9 — rate 0: Skill Level is not read while TimeMode is not level > Skill Level 1, 10 non-book moves of A3's period: random is called 0 times, every budget is A3's	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A9 — rate 0: Skill Level is not read while TimeMode is not level > Skill Level 7: go movetime 30000 is capped by T, not by the level's 30 000	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A9 — rate 0: Skill Level is not read while TimeMode is not level > Skill Level 1, go depth 3 on the real engine: the rate-0 line (a score), depth <= 3, no dropped-limit line, no draw	370	1
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A9 — rate 0: Skill Level is not read while TimeMode is not level > Skill Level 6 set in the setting takes effect when TimeMode returns to level: a bare go is level 6's 5 000	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A10 — the option's refusals > setoption name timemode value simple-tournament (lower-case name) is accepted, silently	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A10 — the option's refusals > value Simple-Tournament from level: exactly one info string naming the offered values and the value got; level kept	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A10 — the option's refusals > value Simple-Tournament from simple-tournament: exactly one info string naming the offered values and the value got; simple-tournament kept	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A10 — the option's refusals > value Uci-Clock-Mode from level: exactly one info string naming the offered values and the value got; level kept	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A10 — the option's refusals > value Uci-Clock-Mode from simple-tournament: exactly one info string naming the offered values and the value got; simple-tournament kept	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A10 — the option's refusals > value 7 from level: exactly one info string naming the offered values and the value got; level kept	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A10 — the option's refusals > value 7 from simple-tournament: exactly one info string naming the offered values and the value got; simple-tournament kept	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A10 — the option's refusals > no value: one info string naming nothing; a control character in a value is dropped from the line	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A10 — the option's refusals > the setting survives ucinewgame	0	0
+ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) > A13 — busy isready (ADR-0052 D7), default lane > isready that arrives mid-search is answered once, after the bestmove, in order	38942	1
+ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) > A1 — offered, off by default > uci writes the three-value TimeMode combo byte-exact, after Skill Level (byte-identical) and before uciok	0	0
+ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) > A1 — offered, off by default > off by default: go movetime 30000 is the default level's 4 000; after setoption ... uci-clock-mode (silent) it is 30 000	0	0
+ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) > A1 — offered, off by default > a refused value keeps uci-clock-mode with the three-value line, and the mode survives ucinewgame	0	0
+ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) > A1 — offered, off by default > Skill Level is not read in the mode: at 1 and at 7, go movetime 45000 is 45 000 and random is called 0 times	0	0
+ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) > A2-A4 — whole 40/15 periods on one replayed clock > A2: one period from 900 000 ms, movestogo 40..1, no book: min(59 500, C) on every move, >= 1 000 ms left after each (1 069), 99.9 % used	0	0
+ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) > A2-A4 — whole 40/15 periods on one replayed clock > A3: the same period with its first 6 moves from the book: the banked time is spent, >= 1 000 ms left after each (1 069), the 34 searched moves use 99.9 %	0	0
+ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) > A2-A4 — whole 40/15 periods on one replayed clock > A4: 120 moves over 3 periods (+900 000 ms after moves 40 and 80): >= 1 000 ms left after each, each period uses >= 85 %	0	0
+ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) > A5 — the hard stop > go wtime 3000 btime 3000 movestogo 1 -> 1 900 ms, and the move leaves 1 069 ms of the 3 000	0	0
+ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) > A5 — the hard stop > go wtime 800 btime 800 -> 1 ms	0	0
+ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) > A5 — the hard stop > go wtime 800 btime 800 on the real engine (step 10): a legal move at depth 1, and the clock used is 2 readings, 20 ms	30	1
+ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) > A6 — no movestogo > go wtime 900000 btime 900000, 80 moves, no added time: C over 20 on every move, >= 1 000 ms left after each (17 205 after move 80)	0	0
+ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) > A6 — no movestogo > the alloc.txt shape (+900 000 ms after move 40, still no movestogo): the closest call is 117 735 ms, after move 40	0	0
+ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) > A7 — the ceiling: no go hands the search more than 59 500 ms > go wtime 3600000 btime 3600000 movestogo 40 -> 59500; the engine's deadline is start + 59500 <= start + 60 000	0	0
+ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) > A7 — the ceiling: no go hands the search more than 59 500 ms > go movetime 90000 -> 59500; the engine's deadline is start + 59500 <= start + 60 000	0	0
+ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) > A7 — the ceiling: no go hands the search more than 59 500 ms > go movetime 5000 -> 5000; the engine's deadline is start + 5000 <= start + 60 000	0	0
+ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) > A7 — the ceiling: no go hands the search more than 59 500 ms > go -> 22000; the engine's deadline is start + 22000 <= start + 60 000	0	0
+ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) > A7 — the ceiling: no go hands the search more than 59 500 ms > go infinite -> 22000; the engine's deadline is start + 22000 <= start + 60 000	0	0
+ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) > A7 — the ceiling: no go hands the search more than 59 500 ms > the 1-hour clock's C is 89 875, so 59 500 binds there	0	0
+ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) > A7 — the ceiling: no go hands the search more than 59 500 ms > the real engine on a step-5 000 clock: go movetime 90000 reports time in [59 500, 59 500 + 2 x 5 000], past the old 32 000 clamp	7198	1
+ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) > A8 — levels value-identical (EPIC-009 M3) > every level budget is under the clamp, so min(budget, 60 000) = min(budget, 32 000) = the budget	0	0
+ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) > A8 — levels value-identical (EPIC-009 M3) > TimeMode unset: a bare go at Skill Level 1-7 is each level's budget, and go movetime 60000 at 7 is 30 000	0	0
+ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) > A8 — levels value-identical (EPIC-009 M3) > TimeMode level: a bare go at Skill Level 1-7 is each level's budget, and go movetime 60000 at 7 is 30 000	0	0
+ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) > A11 — busy isready in the mode (ADR-0052 D7), default lane > isready that arrives mid-search is answered once, after the bestmove, in order	2078	1
+ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) > A12 — the side to move reads its own increment, in the mode > Black to move, winc 0 binc 2000, go wtime 10000 btime 10000 winc 0 binc 2000 movestogo 10 -> 2800	0	0
+ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) > A12 — the side to move reads its own increment, in the mode > Black to move, winc 2000 binc 0, go wtime 10000 btime 10000 winc 2000 binc 0 movestogo 10 -> 800	0	0
+ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) > A12 — the side to move reads its own increment, in the mode > White to move, winc 2000 binc 0, go wtime 10000 btime 10000 winc 2000 binc 0 movestogo 10 -> 2800	0	0
+ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) > A12 — the side to move reads its own increment, in the mode > White to move, winc 0 binc 2000, go wtime 10000 btime 10000 winc 0 binc 2000 movestogo 10 -> 800	0	0
+ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) > ABC-246 (QE-221-a) — the hard stop with an increment, and movetime over a clock, in the mode > A1: go wtime 3000 btime 3000 winc 500 binc 500 movestogo 1 -> 1 900 (the hard stop t - 1 100), not the spread's 2 400	0	0
+ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) > ABC-246 (QE-221-a) — the hard stop with an increment, and movetime over a clock, in the mode > A2: go wtime 900000 btime 900000 movestogo 40 movetime 5000 -> 5 000 (movetime is read first), not the clock's 22 375	0	0
+ABC-167 A11 — capability-free, and M4 > holds no process.	0	0
+ABC-167 A11 — capability-free, and M4 > holds no from "node:	0	0
+ABC-167 A11 — capability-free, and M4 > holds no spawn	0	0
+ABC-167 A11 — capability-free, and M4 > holds no exec(	0	0
+ABC-167 A11 — capability-free, and M4 > holds no fetch(	0	0
+ABC-167 A11 — capability-free, and M4 > holds no eval(	0	0
+ABC-167 A11 — capability-free, and M4 > holds no new Function	0	0
+ABC-167 A11 — capability-free, and M4 > holds no Date.now	0	0
+ABC-167 A11 — capability-free, and M4 > holds no Math.random	0	0
+ABC-167 A11 — capability-free, and M4 > A11-g1: imports none of the fenced modules, in any import form or quote	0	0
+ABC-167 A11 — capability-free, and M4 > every line written in every row starts with an M4 prefix	0	0
