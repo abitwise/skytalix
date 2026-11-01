@@ -1,0 +1,91 @@
+{
+ "root": "6k1/RR3ppp/5q2/8/8/7P/PP4P1/1N3K2 w - - 8 5",
+ "priorLen": 8,
+ "hmc": 8,
+ "priorPositionsOfX": [
+  0,
+  4
+ ],
+ "xOnPathBefore": 0,
+ "pathDistinct": 4,
+ "d3": {
+  "keys": {
+   "move": "f1g1",
+   "score": 507,
+   "depth": 3,
+   "nodes": 294
+  },
+  "withheld": {
+   "move": "f1g1",
+   "score": 507,
+   "depth": 3,
+   "nodes": 294
+  },
+  "onceOnly": {
+   "move": "f1g1",
+   "score": 507,
+   "depth": 3,
+   "nodes": 294
+  }
+ },
+ "d4": {
+  "keys": {
+   "move": "f1e1",
+   "score": 404,
+   "depth": 4,
+   "nodes": 1642
+  },
+  "withheld": {
+   "move": "f1g1",
+   "score": 497,
+   "depth": 4,
+   "nodes": 767
+  },
+  "onceOnly": {
+   "move": "f1g1",
+   "score": 497,
+   "depth": 4,
+   "nodes": 767
+  }
+ },
+ "d5": {
+  "keys": {
+   "move": "f1e1",
+   "score": 446,
+   "depth": 5,
+   "nodes": 4324
+  },
+  "withheld": {
+   "move": "f1g1",
+   "score": 507,
+   "depth": 5,
+   "nodes": 1672
+  },
+  "onceOnly": {
+   "move": "f1g1",
+   "score": 507,
+   "depth": 5,
+   "nodes": 1672
+  }
+ },
+ "d6": {
+  "keys": {
+   "move": "f1e1",
+   "score": 494,
+   "depth": 6,
+   "nodes": 8097
+  },
+  "withheld": {
+   "move": "f1e1",
+   "score": 494,
+   "depth": 6,
+   "nodes": 11739
+  },
+  "onceOnly": {
+   "move": "f1e1",
+   "score": 494,
+   "depth": 6,
+   "nodes": 11739
+  }
+ }
+}

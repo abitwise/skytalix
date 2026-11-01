@@ -1,0 +1,10 @@
+--- /home/olger/projects/public/skytalix/.claude/worktrees/qe-ABC-249/src/engine.ts	2026-11-01 15:28:27.954726098 +0000
++++ QPLY4/src/engine.ts	2026-11-01 15:30:58.537992739 +0000
+@@ -354,6 +354,7 @@
+   halfmoveClock: number,
+ ): boolean {
+   const oldest = Math.max(ply - halfmoveClock, -Math.min(prior.length, PRIOR_KEYS_WINDOW));
++  if (ply >= 4) return false;
+   let matches = 0;
+   for (let earlier = Math.min(ply - 4, (ply & 1) - 2); earlier >= oldest; earlier -= 2) {
+     if (prior[prior.length + earlier] === key && ++matches === 2) return true;

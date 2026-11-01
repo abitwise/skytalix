@@ -1,0 +1,37 @@
+
+ RUN  v4.1.12 /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe-249/QPLY4
+
+ ❯ src/engine.test.ts (65 tests | 1 failed | 64 skipped) 6ms
+     × Qe5+ at ply 4 stood twice before the root: Ke1 at 404 with the keys, Kg1 at 497 without 5ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/engine.test.ts > ABC-249 — a pre-root repetition met four plies deep scores 0 (QE-248-c) > Qe5+ at ply 4 stood twice before the root: Ke1 at 404 with the keys, Kg1 at 497 without
+AssertionError: expected { move: 'f1g1', score: 497 } to deeply equal { move: 'f1e1', score: 404 }
+
+- Expected
++ Received
+
+  {
+-   "move": "f1e1",
+-   "score": 404,
++   "move": "f1g1",
++   "score": 497,
+  }
+
+ ❯ src/engine.test.ts:1729:79
+    1727|     const withKeys = chooseMove(game.position, { ...fixedDepth(4), pri…
+    1728|     expect(toFen(game.position)).toBe(root);
+    1729|     expect(withKeys && { move: label(withKeys.move), score: withKeys.s…
+       |                                                                               ^
+    1730|       move: "f1e1",
+    1731|       score: 404,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 64 skipped (65)
+   Start at  15:29:29
+   Duration  263ms (transform 0ms, setup 0ms, import 181ms, tests 6ms, environment 0ms)
+
