@@ -2509,6 +2509,24 @@ describe("ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4)", () => {
       });
     }
   });
+
+  describe("ABC-246 (QE-221-a) — the hard stop with an increment, and movetime over a clock, in the mode", () => {
+    it("A1: go wtime 3000 btime 3000 winc 500 binc 500 movestogo 1 -> 1 900 (the hard stop t - 1 100), not the spread's 2 400", () => {
+      const rig221 = session220();
+      rig221.send(CLOCK_MODE);
+      rig221.send("position startpos moves e2e4");
+      rig221.send("go wtime 3000 btime 3000 winc 500 binc 500 movestogo 1");
+      expect(rig221.handed.map(({ budgetMs }) => budgetMs)).toEqual([1_900]);
+    });
+
+    it("A2: go wtime 900000 btime 900000 movestogo 40 movetime 5000 -> 5 000 (movetime is read first), not the clock's 22 375", () => {
+      const rig221 = session220();
+      rig221.send(CLOCK_MODE);
+      rig221.send("position startpos moves e2e4");
+      rig221.send("go wtime 900000 btime 900000 movestogo 40 movetime 5000");
+      expect(rig221.handed.map(({ budgetMs }) => budgetMs)).toEqual([5_000]);
+    });
+  });
 });
 
 /**

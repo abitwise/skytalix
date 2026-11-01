@@ -1293,7 +1293,10 @@ describe("ABC-170 A1 — maxDepth stops deepening once that depth has completed"
 
 describe("ABC-170 A2 — maxNodes aborts, and the last COMPLETED iteration is played", () => {
   const kiwipete = () => parseFen(fenOf("kiwipete"));
-  /** The ceiling, on a 1 ms step: about 5 000 consultations, so the clock never binds first. */
+  /**
+   * The ceiling (`HARD_CEILING_MS`, 60 000 ms), on a 1 ms step: about 60 000 clock readings before the
+   * deadline, while the node budget ends the search after about 10, so the clock never binds first.
+   */
   const LONG_MS = HARD_CEILING_MS;
   // ON 6 000 NODES SINCE `ABC-199` (`QE-198-a`; owner, 2026-10-19, `…6e1d9b47`: "Lighten the
   // rows, keep cap"). On 20 000 the abort landed in depth 4 and row 2's three searches ran
