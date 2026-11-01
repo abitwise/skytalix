@@ -115,6 +115,13 @@ BA/PM re-scores the page on that reading; nothing else is re-cut.
    threshold on `deadline - start` (`deadline - start <= 100` is the forbidden 100 ms branch in other words); only
    an AST would. This ticket rewrites the scanned search, so its review reads the diff for both and the build note
    says so. `ABC-260` (recommended before this ticket) closes the scan's `process` and string holes, not this class.
+7. *(2026-11-01, `bapm-qe-gaps-1101b`, QE-260-a LOW, `qe-ABC-260` `…be1935aa`.)* **Review habit, not a row.**
+   After `ABC-260`, a regex literal can still hide code from the source scan: a quote inside it flips the string
+   pairing, so a later string's `//` reads as a comment (QE's Q8), and `\/\/` inside it reads as `//` (Q9). A template
+   literal whose `${}` holds a backtick does the same (QE-260-b, Q11b). The six scanned files hold no regex literal
+   today. This ticket rewrites the scanned search, so its review reads the diff for any new regex literal or `${}`
+   template in those files and the build note says so. If one is added, the review sends it to BA/PM (QE's remedy: a
+   guard row, or a tokenizer that knows regex literals); this ticket does not grow a scan row.
 
 ## Size and priority
 

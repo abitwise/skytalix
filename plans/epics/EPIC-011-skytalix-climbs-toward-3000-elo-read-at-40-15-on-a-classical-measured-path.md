@@ -190,6 +190,7 @@ reorders made here are named in the "why" column.
 |---|---|---|---|---|
 | **0, instrument** | M0 | **`ABC-255`** ~~SPRT self-play lane~~ the owner's 100 / 400 reads at 100 ms (re-scoped 2026-11-01; *and again: 400 head-to-head, the 0.5 s smoke, `bapm-owner-answers`*) | full page (new) | every later strength change and the epic's close are read on it; `tools/` only, no file collision; may be pulled before `EPIC-010` closes (C12) |
 | 0 | (D5 item 2) | **`ABC-256`** B0: baseline reading on the routine milestone control | full page (new) | the milestones need a starting point on the control they are read on. It runs even if that control is R's pins: milestone 1b is value-identical but faster, so at a fixed time the 2 074 figure is stale |
+| 0 | (QE-261-a/b) | **`ABC-262`** two default-lane rows for the lazy legality filter: a pawns-first early-exit board and black-to-move in-check promotions (test-only) | full page (new, `bapm-qe-gaps-1101b`) | the Orchestrator's rule for this hop: it does not have to land before `ABC-251` (which touches neither `src/legal.ts` nor generation order), so it sits here, not in `EPIC-010` milestone 1b; test files only, no value change |
 | **1, the TT** | T1 | `ABC-238` deeper stored entry may cut a shallower search | full page (moved in) | `ADR-0056`: the cheapest real gap, +15–40 (estimate). **First:** `ADR-0056` D6 order, adopted over `EPIC-010`'s `ABC-237` → `ABC-238` (§ Dedupe audit, C2) |
 | 1 | T2 | `ABC-237` depth-preferred replacement | full page (moved in) | after T1 (same file) |
 | 1 | T3 | **`ABC-257`** TT kept across the moves of a game, re-tried after T1 and T2 | full page (new; re-try of dropped `ABC-209`) | `ABC-209`'s NEUTRAL was read under exact-depth cutoffs, where a kept entry almost never cuts (`ADR-0056` D2 T3) |
@@ -366,6 +367,7 @@ Phase 5, the next question is V4 and it is his (`ADR-0056` D6 item 7).
 | 11 | `ABC-232` | Passed pawns by phase | S | P3 | Backlog | 9/10 | **to be merged into E1** (phase scaling) and E4 (passer terms) |
 | 12 | `ABC-239` | Weights tuned offline, constants only, validated outside (E2) | L | P3 | Backlog | 8/10 | E1; Q-3K-7; `ADR-0048` licence; the method ADR |
 | ~~13~~ | `ABC-254` | Lazy legality (V2, O1-d) | M | P2 | **Returned to `EPIC-010`** 2026-11-01 (milestone 1b, first) | 10/10 | ~~**Q-SP-3**; the ADR amending `ADR-0003`; `EPIC-010`'s `ABC-252` (or where the O1-b chain stops)~~ none (yes `…f7a50e95`; `ADR-0003` amended, `89af8b56`) |
+| 14 | `ABC-262` | The lazy-legality rows read the board shapes they missed: `hasLegalMove`'s early exit on a pawns-first board, and the in-check quiet queen promotion with black to move (phase 0, M0; test-only, from QE-261-a and QE-261-b, both LOW; cut 2026-11-01, `bapm-qe-gaps-1101b`) | XS | P3 | Backlog (Ready recommended) | **10/10** | `ABC-261` merged (`12e78c4d`); no ADR of its own; recommended after `ABC-250` merges or is dropped, before `EPIC-010`'s `ABC-252`; does not hold `EPIC-010`'s close |
 
 The stubs of § Phases get ids when their phase is refined. **Ids `ABC-255`…`ABC-258` are taken here; `ABC-224` stays in
 the Orchestrator's pool.** No moved ticket was renumbered.

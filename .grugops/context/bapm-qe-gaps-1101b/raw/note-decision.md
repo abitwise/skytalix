@@ -1,0 +1,48 @@
+# BA/PM routing of the second batch of QE gaps (all LOW/INFO): one XS test-only ticket, `ABC-262` (QE-261-a + QE-261-b), cut into `EPIC-011` phase 0 (M0); QE-261-c carried as re-board notes on `ABC-250` and `ABC-252`; QE-260-a carried as a review note on `ABC-251`; QE-255-a declined
+
+Records only, at `main` `aaccbbf8`; nothing run, built or timed. Claim `770a5046`, records `f4621970` on
+`grugops/bapm-qe-gaps-1101b`. Sources: `qe-ABC-261` gaps `…c385f9a2` (verdict `…4c6e9ee5`; the rows merged
+`12e78c4d`, code `dd8b17ea`), `qe-ABC-260` gaps `…be1935aa` (verdict `…b38c86b3`), `qe-ABC-255` gaps `…f41a5b6e`
+(verdict `…cc9d4bad`). Board counts are from QE's probe JSON in `qe-ABC-261` `raw/plants/`.
+
+## Cut: `ABC-262` (QE-261-a + QE-261-b), XS, P3, DoR 10/10, Ready recommended
+- **One ticket, because the bundle is natural.** Both gaps are board-shape holes in the two rows `ABC-261` just added.
+  They use the same two test files, the same spy pattern and QE's existing plant diffs.
+- **Early-exit row on B2** `4k3/8/8/8/8/4K3/PPP5/8 w - - 0 1` (pawns first, out of check, king with 8 moves). The bar
+  is **≤ 1** attack test. QE's probe read production 1, QX1 2, PL3a 9 and QX2 10, so all three plants turn red. QE
+  said ≤ 2 catches QX2 and PL3a, and ≤ 1 also catches QX1, so ≤ 1 is chosen. If production does not read exactly 1 at
+  the base, the SE stops.
+- **Black-to-move promotion row** on the colour mirrors P1′ `4k3/8/8/8/8/8/p7/4R2K b - - 0 1` (absent) and P2′
+  `7K/8/8/8/8/8/1p6/R3k3 b - - 0 1` (present). Lazy equals full, and QB turns it red. QE marked the FENs
+  `UNKNOWN - verify`. BA/PM checked them by hand; A2's asserts verify them at build, under a stop rule.
+- **New rows, not edits.** `ABC-261`'s rows and `expect(` lines stay frozen. QE-260-c's lesson is applied: no criterion
+  asks a frozen line to print a message it cannot print.
+- **Placement: `EPIC-011` phase 0 (M0)**, under the Orchestrator's rule for this hop (1b only if it must land before
+  `ABC-251`). `ABC-251` is search-side: it touches neither `src/legal.ts` nor generation order, so nothing forces it
+  ahead. The recommended pull order (not binding) is after `ABC-250` merges or is dropped, and before `ABC-252`. It
+  does not hold `EPIC-010`'s close. **P3:** both LOW; QB is already caught by the `ENGINE_DEEP` lane.
+
+## Notes carried, no ticket
+- **QE-261-c (LOW):** dated test note 6 on `ABC-250`, and note 5 on `ABC-252`. `ABC-261`'s king-first precondition,
+  and `ABC-262`'s pawns-first one, are bound to `generateMoves`' a1-upward order. On a reorder, or if `ABC-252` stops
+  exporting `generateMoves`, re-pick the board or assert an order-free precondition. Never drop the bar.
+  **Not on `ABC-251`:** its scope is the search side. Its § Scope item 3 C1 keeps generation order, and it does not
+  touch `generateMoves`. `ABC-250`'s own out-of-scope already forbids a reorder; the note covers an accidental one.
+  **Relay:** `se-ABC-250` is running, so the Orchestrator may pass this note to it before this branch merges.
+- **QE-260-a (LOW):** dated review note 7 on `ABC-251`, beside QE-259-c's note 6. Regex literals (Q8, Q9) can still
+  hide code from the scan, and 0 exist today. A new one in the six scanned files goes to BA/PM; `ABC-251` does not
+  grow a scan row. QE-260-b (backtick inside `${}`, Q11b, same remedy) rides the same note in one clause. It was not
+  in the brief and costs one sentence.
+
+## Declined: QE-255-a (LOW), no ticket and no bundle
+- **Not natural to bundle.** It is `tools/rating/` (`pair-check`), not `src/`. It belongs to another lane and epic
+  (`EPIC-011` M0 harness, Done).
+- **Alone, diminishing returns.** It would be an XS for a records line (`machine.txt`'s `control:`) that QE saw present
+  and correct in all three real reads. The line changes no reading.
+- **What stays uncaught:** mutant **M8** (the `control:` line dropped from `machine.txt`) passes all 32 pair-check
+  tests and stays uncaught offline.
+- **Re-open trigger:** a ticket that edits `rating.ts`'s `machine.txt` writer, or a recorded reading whose
+  `machine.txt` lacks the line.
+
+## Not this hop's
+QE-260-c/d/e, QE-261-d, and QE-255-b/c/d/e (INFO) are recorded, with no action.

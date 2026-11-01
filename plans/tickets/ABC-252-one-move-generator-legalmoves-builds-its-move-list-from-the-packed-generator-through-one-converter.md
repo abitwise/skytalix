@@ -84,6 +84,12 @@ epic: EPIC-010
 2. A2's reference is base's public output; it is read cross-build, out of tree, as the `G4` sweep is.
 3. The count of test files touched is reported; `ADR-0055` bounds it by 56.
 4. UAT is owed (production lines). The QE verdict signs it.
+5. *(2026-11-01, `bapm-qe-gaps-1101b`, QE-261-c LOW, `qe-ABC-261` `…c385f9a2`.)* **`ABC-261`'s early-exit row (and
+   `ABC-262`'s, if built) is bound to `generateMoves`' order.** Its precondition reads `pseudo[0]` from
+   `generateMoves`, and the spies in `src/gameend.nfr.test.ts` mock it. If this ticket stops exporting `generateMoves`
+   or changes what comes first, re-pick the board or assert an order-free precondition (for example, the first king
+   move in the list is legal and comes before every other tested-class move). **Never drop the bar** (≤ 2 attack
+   tests on `ABC-261`'s board; ≤ 1 on `ABC-262`'s).
 
 ## Size and priority
 

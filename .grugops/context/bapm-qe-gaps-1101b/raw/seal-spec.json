@@ -1,0 +1,7 @@
+{
+  "refs": ["bapm-qe-gaps-1101b", "ABC-262", "EPIC-011", "EPIC-010", "ABC-261", "ABC-254", "ABC-250", "ABC-251", "ABC-252", "ABC-255", "ABC-260", "ABC-259", "ADR-0003", "ADR-0056", "R-TC", "NFR-008", "NFR-001", "QE-261-a", "QE-261-b", "QE-261-c", "QE-261-d", "QE-260-a", "QE-260-b", "QE-260-c", "QE-255-a", "QX1", "QX2", "PL3a", "QB", "M8", "qe-ABC-261/20261101T192723Z-qe-e2e-observation-c385f9a2", "qe-ABC-261/20261101T192723Z-qe-e2e-decision-4c6e9ee5", "qe-ABC-260/20261101T191823Z-qe-e2e-observation-be1935aa", "qe-ABC-260/20261101T191823Z-qe-e2e-decision-b38c86b3", "qe-ABC-255/20261101T184957Z-qe-e2e-observation-f41a5b6e", "qe-ABC-255/20261101T184957Z-qe-e2e-decision-cc9d4bad", "aaccbbf8", "770a5046", "f4621970", "12e78c4d", "dd8b17ea"],
+  "notes": [
+    {"kind": "decision", "confidence": "high on the routing (QE notes, plant diffs and probe JSON read at aaccbbf8); P1'/P2' FENs checked by hand only, verified at build by A2 under a stop rule; nothing run, built or timed", "bodyFile": "note-decision.md"},
+    {"kind": "observation", "confidence": "high: files and commits as written; facts read by git show and file reads, no test run (recorded as an observation: no gate run backs an artifact-ref here)", "bodyFile": "note-observation.md"}
+  ]
+}
