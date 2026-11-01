@@ -1676,3 +1676,4 @@ _Updated: 2026-08-19 by BA/PM (task `cut-agents-md-cap-2026-08-19`, Workflow 07)
 | arch-adr0003-amend (merge) | ADR-0003 clauses 1/3 amended for lazy legality (ABC-254); (1-R) ruling | records 45b22a89 | — | merged 2026-11-01, not pushed | Done (Orchestrator) |
 | bapm-ABC-254-ready (merge) | ABC-254 DoR 10/10; back in EPIC-010 milestone 1b, first | records d9014849 | — | merged 2026-11-01, not pushed | Done (Orchestrator) |
 | ABC-223 (merge) | uci-clock-mode smoke: 5 games at 40/15 | — | qe-ABC-223 PASS_WITH_GAPS (0 time losses; closest 1 099 ms) | merged b45162fc 2026-11-01, not pushed | Done (Orchestrator) |
+| bapm-epic009-close (merge) | ABC-223 closed; EPIC-009 milestone 2 MET; EPIC-009 closed | records abc3851d | — | merged 2026-11-01, not pushed | Done (Orchestrator) |
