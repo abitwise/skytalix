@@ -1,0 +1,4 @@
+qe-ABC-264-p2 smoke latency (go -> bestmove, cutechess clock, ms; INFO)
+skytalix moves 438 median 500.0 max 503 >550ms 0
+stockfish moves 436 median 500.0 max 501 >550ms 0
+pooled S-prime: 18.0/20 (qe-EPIC-010-close) + 7.0/10 = 25.0/30 = 83.3 % (<= 85 %: upward re-pin does not fire)
