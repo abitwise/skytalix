@@ -1,0 +1,12 @@
+QP8 planted
+--- /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe268/head/src/engine.ts	2026-11-02 17:44:58.000000000 +0000
++++ src/engine.ts	2026-11-02 18:41:19.632970375 +0000
+@@ -454,7 +454,7 @@
+   let bestMove = moves[0] as Move;
+   let index = 0;
+   for (const move of orderMoves(moves, budget.killers.at(ply), hashMove)) {
+-    if (futile && futileMove(position, move, index)) {
++    if (futile && futileMove(position, move, index + 1)) {
+       index++;
+       continue;
+     }

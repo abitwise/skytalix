@@ -1,0 +1,60 @@
+P0 margin-compare-off-by-one (<= -> <): exit 1; 6 failed / 167; RED
+    - futilityNode — eval + 150 / 350 / 550 <= alpha at a null-window node of depth 1-3; false at the root, at a PV window, at depth 0 and 4, in check, and with alpha or beta in the mate band depth 1, ply 1
+    - futilityNode — eval + 150 / 350 / 550 <= alpha at a null-window node of depth 1-3; false at the root, at a PV window, at depth 0 and 4, in check, and with alpha or beta in the mate band depth 2, ply 1
+    - futilityNode — eval + 150 / 350 / 550 <= alpha at a null-window node of depth 1-3; false at the root, at a PV window, at depth 0 and 4, in check, and with alpha or beta in the mate band depth 3, ply 1
+    - futilityNode — eval + 150 / 350 / 550 <= alpha at a null-window node of depth 1-3; false at the root, at a PV window, at depth 0 and 4, in check, and with alpha or beta in the mate band depth 1, ply 3
+    - futilityNode — eval + 150 / 350 / 550 <= alpha at a null-window node of depth 1-3; false at the root, at a PV window, at depth 0 and 4, in check, and with alpha or beta in the mate band depth 2, ply 3
+    - futilityNode — eval + 150 / 350 / 550 <= alpha at a null-window node of depth 1-3; false at the root, at a PV window, at depth 0 and 4, in check, and with alpha or beta in the mate band depth 3, ply 4
+P1 margin-value-off-by-one (350 -> 351): exit 1; 3 failed / 167; RED
+    - futilityNode — eval + 150 / 350 / 550 <= alpha at a null-window node of depth 1-3; false at the root, at a PV window, at depth 0 and 4, in check, and with alpha or beta in the mate band depth 2, ply 1
+    - futilityNode — eval + 150 / 350 / 550 <= alpha at a null-window node of depth 1-3; false at the root, at a PV window, at depth 0 and 4, in check, and with alpha or beta in the mate band depth 2, ply 3
+    - FUTILITY_MARGIN reads [0, 150, 350, 550], is module-private, and no line in src/ writes it after load the declaration, in src/search.ts
+P2 margin-index-off-by-one (M[depth-1]): exit 1; 7 failed / 167; RED
+    - futilityNode — eval + 150 / 350 / 550 <= alpha at a null-window node of depth 1-3; false at the root, at a PV window, at depth 0 and 4, in check, and with alpha or beta in the mate band depth 1, ply 1
+    - futilityNode — eval + 150 / 350 / 550 <= alpha at a null-window node of depth 1-3; false at the root, at a PV window, at depth 0 and 4, in check, and with alpha or beta in the mate band depth 2, ply 1
+    - futilityNode — eval + 150 / 350 / 550 <= alpha at a null-window node of depth 1-3; false at the root, at a PV window, at depth 0 and 4, in check, and with alpha or beta in the mate band depth 3, ply 1
+    - futilityNode — eval + 150 / 350 / 550 <= alpha at a null-window node of depth 1-3; false at the root, at a PV window, at depth 0 and 4, in check, and with alpha or beta in the mate band depth 1, ply 3
+    - futilityNode — eval + 150 / 350 / 550 <= alpha at a null-window node of depth 1-3; false at the root, at a PV window, at depth 0 and 4, in check, and with alpha or beta in the mate band depth 2, ply 3
+    - futilityNode — eval + 150 / 350 / 550 <= alpha at a null-window node of depth 1-3; false at the root, at a PV window, at depth 0 and 4, in check, and with alpha or beta in the mate band depth 3, ply 4
+P3 guard-root dropped: exit 1; 1 failed / 167; RED
+    - futilityNode — eval + 150 / 350 / 550 <= alpha at a null-window node of depth 1-3; false at the root, at a PV window, at depth 0 and 4, in check, and with alpha or beta in the mate band guarded — the 
+P4 guard-null-window dropped: exit 1; 1 failed / 167; RED
+    - futilityNode — eval + 150 / 350 / 550 <= alpha at a null-window node of depth 1-3; false at the root, at a PV window, at depth 0 and 4, in check, and with alpha or beta in the mate band guarded — a PV
+P5 guard-depth-0 dropped: exit 1; 1 failed / 167; RED
+    - futilityNode — eval + 150 / 350 / 550 <= alpha at a null-window node of depth 1-3; false at the root, at a PV window, at depth 0 and 4, in check, and with alpha or beta in the mate band guarded — rema
+P6 guard-depth-4: range widened to 4 with a 750 margin: exit 1; 1 failed / 167; RED
+    - futilityNode — eval + 150 / 350 / 550 <= alpha at a null-window node of depth 1-3; false at the root, at a PV window, at depth 0 and 4, in check, and with alpha or beta in the mate band guarded — rema
+P7 guard-alpha-band dropped: exit 1; 1 failed / 167; RED
+    - futilityNode — eval + 150 / 350 / 550 <= alpha at a null-window node of depth 1-3; false at the root, at a PV window, at depth 0 and 4, in check, and with alpha or beta in the mate band guarded — alph
+P8 guard-beta-band dropped: exit 1; 1 failed / 167; RED
+    - futilityNode — eval + 150 / 350 / 550 <= alpha at a null-window node of depth 1-3; false at the root, at a PV window, at depth 0 and 4, in check, and with alpha or beta in the mate band guarded — beta
+P9 guard-in-check dropped: exit 1; 1 failed / 167; RED
+    - futilityNode — eval + 150 / 350 / 550 <= alpha at a null-window node of depth 1-3; false at the root, at a PV window, at depth 0 and 4, in check, and with alpha or beta in the mate band guarded — the 
+P10 guard-band edge (> instead of >=): exit 1; 1 failed / 167; RED
+    - futilityNode — eval + 150 / 350 / 550 <= alpha at a null-window node of depth 1-3; false at the root, at a PV window, at depth 0 and 4, in check, and with alpha or beta in the mate band guarded — alph
+P11 move-index-0 clause dropped: exit 1; 3 failed / 167; RED
+    - ABC-229 — the doors: searchWithoutQuietPromotions and chooseMoveWithoutQuietPromotions Q-SET's INFO row kpk-b6c6 through search() at depth 8: 902 shipped, 186 on the door, both b6c6
+    - ABC-229 — the doors: searchWithoutQuietPromotions and chooseMoveWithoutQuietPromotions chooseMove reads the INFO row the same way at depth 8; its door does not see the queen
+    - futileMove — true for a quiet, non-checking move at index >= 1; false at index 0, for a capture, a promotion and a quiet check a quiet, non-checking move: true at index 1 and later, false at index 0
+P12 move-capture clause dropped: exit 1; 1 failed / 167; RED
+    - futileMove — true for a quiet, non-checking move at index >= 1; false at index 0, for a capture, a promotion and a quiet check a capture: false, at any index
+P13 move-promotion clause dropped: exit 1; 1 failed / 167; RED
+    - futileMove — true for a quiet, non-checking move at index >= 1; false at index 0, for a capture, a promotion and a quiet check each promotion (none captures, none checks): false, at any index
+P14 move-gives-check clause dropped: exit 1; 1 failed / 167; RED
+    - futileMove — true for a quiet, non-checking move at index >= 1; false at index 0, for a capture, a promotion and a quiet check a quiet move that gives check: false, at any index
+P15 wiring: search.ts skip without advancing the index: exit 1; 1 failed / 167; RED
+    - both recursions test the node once, with the entry window, after the table probe and the null move, and skip exactly the moves futileMove names ./search.ts: one futilityNode call gated on switches.fut
+P16 wiring: engine.ts current alpha in place of the entry window: exit 1; 1 failed / 167; RED
+    - both recursions test the node once, with the entry window, after the table probe and the null move, and skip exactly the moves futileMove names ./engine.ts: one futilityNode call gated on budget.futil
+P17 wiring: engine.ts switch unwired (rule never tested): exit 1; 2 failed / 167; RED
+    - both recursions test the node once, with the entry window, after the table probe and the null move, and skip exactly the moves futileMove names ./engine.ts: one futilityNode call gated on budget.futil
+    - the doors — searchWithoutFutility and chooseMoveWithoutFutility turn futility off, as every older door does the rule changes the work: search() at depth 4 and chooseMove deepened to 4 on position-6 vi
+P18 wiring: engine.ts remaining - 1: exit 1; 1 failed / 167; RED
+    - both recursions test the node once, with the entry window, after the table probe and the null move, and skip exactly the moves futileMove names ./engine.ts: one futilityNode call gated on budget.futil
+P19 door: searchWithoutFutility futility true: exit 1; 2 failed / 167; RED
+    - the doors — searchWithoutFutility and chooseMoveWithoutFutility turn futility off, as every older door does ./search.ts: each exported entry passes exactly one futility literal, and only search's is t
+    - the doors — searchWithoutFutility and chooseMoveWithoutFutility turn futility off, as every older door does the rule changes the work: search() at depth 4 and chooseMove deepened to 4 on position-6 vi
+P20 door: older door chooseMoveWithoutNullMove futility true: exit 1; 1 failed / 167; RED
+    - the doors — searchWithoutFutility and chooseMoveWithoutFutility turn futility off, as every older door does ./engine.ts: each exported entry passes exactly one futility literal, and only chooseMove's 
+restored; git diff below
+

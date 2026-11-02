@@ -1,0 +1,36 @@
+# qe-ABC-268 rows (part 1): A1 MET (QE's own cross-build sample, 0 differ on 23 pairs, history pair included); A2 file reviewed, MET; A3 MET (drift max 10 / 0 cp, mate 0/189, zugzwang 7/7); A4 MET, every count to the node; re-pointed ABC-229 rows unchanged
+
+QE/E2E, task `qe-ABC-268`, at `df984484` (worktree = branch tip `4ca819c3` + QE records; `src/` tree `98075412`, byte-equal), base `ca6e8506` (`src/` tree `f2388e40`, the probe's tree, so no re-derived count), PREREG `…fae528bd`. Every run under `flock host-test.lock`, one at a time; plain `node` out of tree on scratch `git archive` trees. Raw in `raw/a1/`, `raw/a34/`, `raw/deep/`.
+
+## A1 (G4, F7): MET — QE's own sample (`qe-a1.mjs`), not SE's script
+- New doors against base's shipped path, move + score + nodes (+ depth): `searchWithoutFutility` vs base `search()` d5 and d6 on the 12 roots (shas `c1de7edd…`, `8d961697…`) and d3 on the 287 mate corpus (`04c90c3c…`); `chooseMoveWithoutFutility` vs base `chooseMove` to 5 on the 12 roots (`e88fae30…`) and at `maxNodes` 47 000 on the 190 (`b3c05c1a…`). **0 differ.**
+- **With game history:** `priorKeys` = four reversible two-ply grandchildren of each root, each twice at even offsets (`ADR-0054` d3 needs two pre-root occurrences), root clock 20: `chooseMoveWithoutFutility` vs base `chooseMove` to 5, 12 roots, **0 differ** (`33feee79…`); non-vacuity: head `chooseMove` with those keys differs from without on **8 / 12**. (Two earlier spellings of this pair were vacuous, 0 / 12, and are not counted: clock 0, then single occurrences; see the host note.)
+- Every older door against its base self, 0 differ: the 8 cheaper search doors at **d4** (null move live there: `…WithoutNullMove` `ddfb9eee…` ≠ `…WithoutReductions` `542c8157…`, unlike SE's d3 reading where the two coincide), the 3 minimax-scale doors at d3, the 5 older engine doors to 5.
+- Non-vacuity on the shipped path at 5 on the 12 roots: `search()` differs from base on 7, `chooseMove` on 6.
+- Export diff: `src/search.ts` 20 → 23, added exactly `futileMove`, `futilityNode`, `searchWithoutFutility`; `src/engine.ts` 11 → 12, added exactly `chooseMoveWithoutFutility`; nothing removed. The in-repo export rows (`ABC-077` A6, `ABC-078` A4) are green in `npm test`.
+
+## A2: MET (default lane green; file reviewed row by row against the page)
+- `src/search.futility.test.ts` default rows green in all three graded `npm test` runs. Against the page's A2 list: boundary true at alpha = eval + M[d], false at − 1, for d = 1, 2, 3, White and Black — present; the seven guard rows (ply 0, PV window, d 0, d 4, in check, alpha in band via a stubbed eval, beta in band), each asserting the margin alone would prune, each paying 0 evaluations — present; band edges one centipawn inside — present; `futileMove` false at index 0 / capture / four promotions / quiet check, true for one quiet silent move at 1, 2, 40 — present; purity by `structuredClone` on five boards — present; constant declaration, not exported, no write in any production module — present; source rows for both `negamax` bodies and the switch's homes — present.
+- Thin spots, found by QE plants (plants note): `futileMove`'s true row is one queen move (no en-passant, no king, pawn or castling row); no row pins the fail-soft return at a futile node; no in-repo row pins the new engine door's `priorKeys`. Gaps `QE-268-a/b/c`.
+
+## A3: MET
+- Deep lane (`SEARCH_DEEP=1` `search.futility` 47/47): drift d5 on the 190, `search()` **100.00 % of 187 within 25 cp, max 10 cp** (position-3/b4b2 41 → 51), `chooseMove` **100.00 %, max 0 cp**, 0 mate sign flips, 0 mate-status flips; mate floor **0 of 189**, 0 longer, 0 shorter; zugzwang report rows play their moves.
+- Independent (`qe-a34.mjs`): head shipped vs head door AND vs base shipped give the same per-row signature (`search()` `76fbf743…`, `chooseMove` `85834caf…`): `search()` 187 compared, 1 score changed (the 10 cp row), 1 root move differs; `chooseMove` 0 changed, 0 moves differ. Mate floor: `search()` 0 / 189 (BAR); engine side 0 / 188 (INFO, not barred).
+- Zugzwang (bar on the shipped `chooseMove`, `search.null-move` lane 44/44; and `qe-a34.mjs`): **7 / 7** at their recorded depths 9/11/12/8/8/8/8, no depth re-pinned. Nodes head / door: zugzwang.001 56 156 / 78 946 (0.711×); **zugzwang.004 905 900 / 587 282 (1.543×, still h3h4)**; zugzwang.005 1 310 019 / 2 412 618 (0.543×); kpk-b6c6 2 605 / 2 998; kpk-c6d6 3 369 / 4 271; kpk-d6e6 3 289 / 4 201; kpk-e6f6 2 718 / 3 548 — the probe's figures exactly.
+- A3 (d), the cut audit: see the audit note (MET, counts exact).
+
+## A4: MET — every count to the node
+| reading | head | door | base shipped | ratio | bar ≤ 0.88 |
+|---|---:|---:|---:|---:|---|
+| `search()` d8 kiwipete | 888 786 | 1 116 785 | 1 116 785 | 0.7958 | met |
+| `search()` d8 position-6 | 1 262 046 | 1 602 457 | 1 602 457 | 0.7876 | met |
+| `chooseMove` to 8 kiwipete | 1 306 981 | 1 575 537 | 1 575 537 | 0.8295 | met |
+| `chooseMove` to 8 position-6 | 391 451 | 476 244 | 476 244 | 0.8220 | met |
+- Root move and score unchanged on all four (e2a6 −60 / −59, c3d5 74 / 74); door = base in nodes, score and move on all four.
+- (b) Reach at 47 000 nodes on the 190: door **5.558** (= base) → head **5.837**, **+0.279** (bar ≥ +0.20, met); 54 deeper, 1 shallower, 6 root moves differ. Equal to the probe and to the deep row.
+- (c) G6: gates note.
+
+## Re-pointed `ABC-229` rows: figures unchanged (MET)
+- A3 d6 ratio, head `searchWithoutFutility` / head `searchWithoutQuietPromotions` = base `search()` / base `searchWithoutQuietPromotions`: kiwipete 330 314 / 324 162 = **1.019×** both; position-6 154 466 / 154 464 = **1.000×** both.
+- d5 drift rows, re-pointed vs pre-ticket, identical signatures: `search()` 100 %, max 8 cp (kiwipete/d2e3 350 → 358) both (`14175108…`); `chooseMove` 100 %, max 8 cp both (`52335289…`).
+- `SEARCH_DEEP=1` quiescence lane 116/116, printing the same figures. Cosmetic only: the re-pointed drift rows still log the label "search() d5" / "chooseMove to d5".

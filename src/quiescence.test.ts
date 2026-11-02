@@ -34,6 +34,7 @@ import { describe, expect, it } from "vitest";
 import { makeMove, unmakeMove } from "./apply.ts";
 import {
   chooseMove,
+  chooseMoveWithoutFutility,
   chooseMoveWithoutQuiescenceEvasions,
   chooseMoveWithoutQuietPromotions,
   type EngineChoice,
@@ -57,6 +58,7 @@ import { MATE_CORPUS } from "./search.mate-corpus.ts";
 import {
   MATE_SCORE,
   search,
+  searchWithoutFutility,
   searchWithoutPvsOrReductions,
   searchWithoutQuiescence,
   searchWithoutQuiescenceEvasions,
@@ -1182,12 +1184,15 @@ const SWITCH_MODULES = [
     call: "searchRoot(position, depth, {",
     on: "search",
     door: "searchWithoutQuietPromotions",
+    /** `ABC-268`'s door (`ADR-0061` decision 4): the shipped path less futility, both quiescence switches on. */
+    fut: "searchWithoutFutility",
   },
   {
     path: "./engine.ts",
     call: "deepen(position, options, {",
     on: "chooseMove",
     door: "chooseMoveWithoutQuietPromotions",
+    fut: "chooseMoveWithoutFutility",
   },
 ];
 
@@ -1229,13 +1234,15 @@ describe("ABC-228 — the doors: searchWithoutQuiescenceEvasions and chooseMoveW
   });
 
   // The sibling of `QE-208-c`: one `quiescenceEvasions` literal per entry, true on the shipped
-  // pair only (`ADR-0053` decision 7) — and, since `ABC-229`, on its doors, which keep evasions on.
-  for (const { path, on, door } of SWITCH_MODULES) {
-    it(`${path}: each exported entry passes exactly one quiescenceEvasions literal, true on ${on} and ${door} only`, () => {
+  // pair only (`ADR-0053` decision 7) — and, since `ABC-229`, on its doors, which keep evasions on;
+  // and, since `ABC-268`, on its doors, which keep both quiescence switches on (`ADR-0061` d4).
+  for (const { path, on, door, fut } of SWITCH_MODULES) {
+    it(`${path}: each exported entry passes exactly one quiescenceEvasions literal, true on ${on}, ${fut} and ${door} only`, () => {
       const found = switchLiterals(path, "quiescenceEvasions");
       expect(Object.keys(found).length).toBeGreaterThanOrEqual(path === "./search.ts" ? 12 : 6);
       expect(Object.entries(found).filter(([, value]) => value === "true")).toEqual([
         [on, "true"],
+        [fut, "true"],
         [door, "true"],
       ]);
     });
@@ -1510,12 +1517,16 @@ describe("ABC-229 — the doors: searchWithoutQuietPromotions and chooseMoveWith
   });
 
   // The sibling of `QE-208-c` for the second switch: one `quietPromotions` literal per entry, true
-  // on the shipped pair only (`ADR-0053` decision 7).
-  for (const { path, on } of SWITCH_MODULES) {
-    it(`${path}: each exported entry passes exactly one quietPromotions literal, and only ${on}'s is true`, () => {
+  // on the shipped pair only (`ADR-0053` decision 7) — and, since `ABC-268`, on its doors, the
+  // shipped path less futility (`ADR-0061` decision 4).
+  for (const { path, on, fut } of SWITCH_MODULES) {
+    it(`${path}: each exported entry passes exactly one quietPromotions literal, and only ${on}'s and ${fut}'s are true`, () => {
       const found = switchLiterals(path, "quietPromotions");
       expect(Object.keys(found).length).toBeGreaterThanOrEqual(path === "./search.ts" ? 12 : 6);
-      expect(Object.entries(found).filter(([, value]) => value === "true")).toEqual([[on, "true"]]);
+      expect(Object.entries(found).filter(([, value]) => value === "true")).toEqual([
+        [on, "true"],
+        [fut, "true"],
+      ]);
     });
   }
 });
@@ -1629,7 +1640,9 @@ if (RUN_DEEP) {
   describe("ABC-229 A3 — search(…, 6).nodes <= 1.2x its door on kiwipete and position-6 [deep, SEARCH_DEEP=1]", () => {
     for (const name of ["kiwipete", "position-6"]) {
       it(`${name} at depth 6 [deep, SEARCH_DEEP=1]`, () => {
-        const head = search(parseFen(fenOf(name)), 6).nodes;
+        // `ABC-268` (`ADR-0061` decision 6): the shipped side reads `ABC-268`'s door, the
+        // pre-`ABC-268` `search()`, so the ratio keeps measuring quiet promotions alone.
+        const head = searchWithoutFutility(parseFen(fenOf(name)), 6).nodes;
         const door = searchWithoutQuietPromotions(parseFen(fenOf(name)), 6).nodes;
         console.log(`ABC-229 A3 ${name} d6: ${head} / ${door} = ${(head / door).toFixed(3)}x`);
         expect(head).toBeLessThanOrEqual(1.2 * door);
@@ -1640,18 +1653,20 @@ if (RUN_DEEP) {
   describe("ABC-229 — bounded drift against the quiet-promotion doors, depth 5, the 190 [deep, SEARCH_DEEP=1]", () => {
     const bars = { within25: 0.95, max: 12, ticket: "ABC-229" };
 
-    it("search() against searchWithoutQuietPromotions at fixed depth 5: >= 95% within 25 cp, none beyond 12 cp [deep, SEARCH_DEEP=1]", () => {
+    // `ABC-268` (`ADR-0061` decision 6): the shipped side of both rows reads `ABC-268`'s doors,
+    // the pre-`ABC-268` shipped path, so 12 cp keeps measuring quiet promotions alone.
+    it("searchWithoutFutility against searchWithoutQuietPromotions at fixed depth 5: >= 95% within 25 cp, none beyond 12 cp [deep, SEARCH_DEEP=1]", () => {
       drift(
-        (fen) => search(parseFen(fen), 5).score,
+        (fen) => searchWithoutFutility(parseFen(fen), 5).score,
         (fen) => searchWithoutQuietPromotions(parseFen(fen), 5).score,
         "search() d5",
         bars,
       );
     }, 600_000);
 
-    it("chooseMove against chooseMoveWithoutQuietPromotions deepened to 5: >= 95% within 25 cp, none beyond 12 cp [deep, SEARCH_DEEP=1]", () => {
+    it("chooseMoveWithoutFutility against chooseMoveWithoutQuietPromotions deepened to 5: >= 95% within 25 cp, none beyond 12 cp [deep, SEARCH_DEEP=1]", () => {
       drift(
-        (fen) => deepenWith(chooseMove, fen, 5).score,
+        (fen) => deepenWith(chooseMoveWithoutFutility, fen, 5).score,
         (fen) => deepenWith(chooseMoveWithoutQuietPromotions, fen, 5).score,
         "chooseMove to d5",
         bars,

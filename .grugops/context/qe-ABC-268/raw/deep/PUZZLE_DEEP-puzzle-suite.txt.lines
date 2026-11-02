@@ -1,0 +1,5 @@
+ RUN  v4.1.12 /home/olger/projects/public/skytalix/.claude/worktrees/qe-ABC-268
+PUZZLES shipped: solved 54/58, baseline 54/58, budget 25 step 1, wall 1.82 s
+ ✓ src/puzzle-suite.test.ts > the gating run [deep, PUZZLE_DEEP=1] > ABC-131 A6 — every recorded unsolved name is a PUZZLES row, and solved + |unsolved| = total 0ms
+ Test Files  1 passed (1)
+      Tests  18 passed (18)

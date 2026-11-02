@@ -1,0 +1,8 @@
+start 2026-11-02T20:01:01Z load1=0.78
+lint rc=0 2026-11-02T20:01:02Z
+typecheck rc=0 2026-11-02T20:01:03Z
+build rc=0 2026-11-02T20:01:04Z
+test rc=0 2026-11-02T20:01:13Z
+ Test Files 64 passed (64)
+ Tests 2417 passed (2417)
+ Duration 8.61s (transform 0ms, setup 0ms, import 6.14s, tests 6.33s, environment 5ms)

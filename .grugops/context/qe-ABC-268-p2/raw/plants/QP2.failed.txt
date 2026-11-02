@@ -1,0 +1,2 @@
+     × en passant: false, at any index — it captures 7ms
+ FAIL  src/search.futility.test.ts > QE-268-c — futileMove on the other move kinds: en passant is a capture (false); a quiet pawn push, a quiet king move and castling are quiet (true at index >= 1) > en passant: false, at any index — it captures

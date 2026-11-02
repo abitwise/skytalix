@@ -1,0 +1,76 @@
+{
+ "g6": {
+  "kiwipete": {
+   "B": [
+    9,
+    9,
+    9,
+    9,
+    9
+   ],
+   "H": [
+    9,
+    9,
+    9,
+    9,
+    9
+   ],
+   "medB": 9,
+   "medH": 9,
+   "geBase": true,
+   "min": 9,
+   "warn": 0,
+   "nodesMedB": 3522285,
+   "nodesMedH": 3515117
+  },
+  "position-6": {
+   "B": [
+    10,
+    10,
+    10,
+    10,
+    10
+   ],
+   "H": [
+    10,
+    10,
+    10,
+    10,
+    10
+   ],
+   "medB": 10,
+   "medH": 10,
+   "geBase": true,
+   "min": 10,
+   "warn": 0,
+   "nodesMedB": 3526427,
+   "nodesMedH": 3425051
+  }
+ },
+ "g6Met": true,
+ "g5": {
+  "reads": 30,
+  "maxMs": 4001.3,
+  "over4000": 19,
+  "over5000": 0
+ },
+ "g11": [
+  "4.Qa4 base d3 d11 56",
+  "4.Qa4 head d3 d11 56",
+  "8.e5 base Be2 d9 62",
+  "8.e5 head Be2 d9 62",
+  "10.Ne4 base exd6 d10 5",
+  "10.Ne4 head exd6 d10 5",
+  "13.d4 base d4 d11 -109",
+  "13.d4 head d4 d12 -173",
+  "17.Kc1 base Kc1 d11 -215",
+  "17.Kc1 head Kc1 d11 -215"
+ ],
+ "host": {
+  "load1": [
+   0.39,
+   1.27
+  ],
+  "tctlMax": 73.875
+ }
+}

@@ -1,0 +1,85 @@
+
+ RUN  v4.1.12 <scratch>/qe268p2/plant
+
+ ❯ src/search.futility.test.ts (37 tests | 4 failed) 152ms
+     × a quiet pawn push, a quiet king move and castling: true at index 1 and later, false at index 0 7ms
+     × the fixture bites: the node is futile at the window its parent hands it, and the skipped moves hold a better score 3ms
+     × search() at depth 3: the futile node's entry is an upper bound of -554, Ke2's score, strictly below its alpha of 1010 1ms
+     × chooseMove deepened to 3: the futile node's entry is an upper bound of -554, Ke2's score, strictly below its alpha of 1010 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/search.futility.test.ts > QE-268-c — futileMove on the other move kinds: en passant is a capture (false); a quiet pawn push, a quiet king move and castling are quiet (true at index >= 1) > a quiet pawn push, a quiet king move and castling: true at index 1 and later, false at index 0
+AssertionError: e1d2: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ <anonymous> src/search.futility.test.ts:390:58
+    388|     for (const move of [pawnPush, kingMove, castle]) {
+    389|       expect(futileMove(position, move, 0), label(move)).toBe(false);
+    390|       expect(futileMove(position, move, 1), label(move)).toBe(true);
+       |                                                          ^
+    391|       expect(futileMove(position, move, 9), label(move)).toBe(true);
+    392|     }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  src/search.futility.test.ts > QE-268-b — a futile node returns the best score among the moves it searched, fail-soft: below its alpha, never alpha itself > the fixture bites: the node is futile at the window its parent hands it, and the skipped moves hold a better score
+AssertionError: expected [ Array(3) ] to deeply equal [ Array(3) ]
+
+- Expected
++ Received
+
+  [
+-   -554,
++   -544,
+    [
+      "e1e2",
+-   ],
+-   [
+      "e1f1",
+      "e1f2",
+    ],
++   [],
+  ]
+
+ ❯ <anonymous> src/search.futility.test.ts:621:39
+    619|     expect([root.score, label(root.move)]).toEqual([ALPHA, "d1d5"]);
+    620|     const { best, searched, skipped } = bestSearched();
+    621|     expect([best, searched, skipped]).toEqual([-554, ["e1e2"], ["e1f1"…
+       |                                       ^
+    622|     // Full width the node scores higher: the skipped moves were bette…
+    623|     expect(search(parseFen(NODE), 1).score).toBe(-544);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  src/search.futility.test.ts > QE-268-b — a futile node returns the best score among the moves it searched, fail-soft: below its alpha, never alpha itself > search() at depth 3: the futile node's entry is an upper bound of -554, Ke2's score, strictly below its alpha of 1010
+ FAIL  src/search.futility.test.ts > QE-268-b — a futile node returns the best score among the moves it searched, fail-soft: below its alpha, never alpha itself > chooseMove deepened to 3: the futile node's entry is an upper bound of -554, Ke2's score, strictly below its alpha of 1010
+AssertionError: expected -544 to be -554 // Object.is equality
+
+- Expected
++ Received
+
+- -554
++ -544
+
+ ❯ <anonymous> src/search.futility.test.ts:634:22
+    632|       expect([result.score, label(result.move)]).toEqual([ALPHA, "d1d5…
+    633|       const stored = storedUpper();
+    634|       expect(stored).toBe(-554);
+       |                      ^
+    635|       expect(stored).toBeLessThan(ALPHA);
+    636|       expect(stored).toBe(bestSearched().best);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+
+ Test Files  1 failed | 4 passed (5)
+      Tests  4 failed | 266 passed (270)
+   Start at  20:00:42
+   Duration  1.37s (transform 0ms, setup 0ms, import 396ms, tests 1.91s, environment 0ms)
+

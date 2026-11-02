@@ -1,0 +1,10 @@
+{ "refs": ["qe-ABC-268","ABC-268","ADR-0061","ADR-0050","ADR-0054","ADR-0026","ADR-0056","EPIC-011","EPIC-008","NFR-004","NFR-005","NFR-008","ABC-229","ABC-230","grugops/ABC-268","grugops/qe-ABC-268","df984484","ca6e8506","4ca819c3","src/search.futility.test.ts","QE-268-a","QE-268-b","QE-268-c","QE-268-d","QE-268-e","QE-268-f","QE-268-g","20261102T181603Z-qe-e2e-decision-fae528bd","se-ABC-268/20261102T180901Z-software-engineer-observation-68b320a6","se-ABC-268/20261102T180901Z-software-engineer-observation-6f57c250","se-ABC-268/20261102T180901Z-software-engineer-decision-a787198c","se-ABC-268/20261102T180901Z-software-engineer-observation-2e7e2a0f","arch-phase2-p3/20261102T171413Z-architect-design-observation-55f7725e","arch-phase2-p3/20261102T171413Z-architect-design-decision-004b35ed"],
+  "notes": [
+    { "kind": "observation", "confidence": "high: deterministic readings under the lock; QE's own A1 sample and independent script agree with the deep lanes to the node", "bodyFile": "note-rows.md" },
+    { "kind": "observation", "confidence": "high: QE-written hook on the df984484 build; counts exact; sample byte-equal to the probe instrument's", "bodyFile": "note-audit.md" },
+    { "kind": "observation", "confidence": "high: each plant run and reverted, copy diffed equal to head at the end; void first run re-run in full", "bodyFile": "note-plants.md" },
+    { "kind": "observation", "confidence": "high: every gate ran as stated under the lock; G6 graded by the PREREG rule (grade56.mjs)", "bodyFile": "note-gates.md" },
+    { "kind": "observation", "confidence": "high: gaps named from this hop's readings; severities by the PREREG rule", "bodyFile": "note-gaps.md" },
+    { "kind": "observation", "confidence": "high: paths, commits and window as recorded (observation: an artifact-ref needs a gate_run)", "bodyFile": "note-host.md" },
+    { "kind": "decision", "confidence": "high: verdict by the PREREG rule; GAPS (QE-268-a/b/c LOW), no blocking gap", "bodyFile": "note-decision.md" }
+  ] }

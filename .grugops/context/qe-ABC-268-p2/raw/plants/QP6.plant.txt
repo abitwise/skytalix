@@ -1,0 +1,11 @@
+QP6 planted
+--- <scratch>/qe268p2/head/src/search.ts	2026-11-02 19:02:13.000000000 +0000
++++ src/search.ts	2026-11-02 20:00:42.010151903 +0000
+@@ -433,6 +433,7 @@
+  */
+ export function futileMove(position: Position, move: Move, index: number): boolean {
+   if (index < 1) return false;
++  if (pieceType(move.piece) === KING) return false;
+   if (move.captured !== EMPTY || move.promotion !== EMPTY) return false;
+   return !givesCheck(position, move);
+ }

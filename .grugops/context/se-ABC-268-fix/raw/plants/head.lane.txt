@@ -1,0 +1,9 @@
+
+ RUN  v4.1.12 /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/se268fix/head
+
+
+ Test Files  5 passed (5)
+      Tests  270 passed (270)
+   Start at  19:00:18
+   Duration  1.58s (transform 0ms, setup 0ms, import 426ms, tests 1.84s, environment 0ms)
+

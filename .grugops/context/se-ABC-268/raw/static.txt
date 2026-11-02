@@ -1,0 +1,16 @@
+> biome check .
+
+Checked 132 files in 161ms. No fixes applied.
+lint=0
+> skytalix@0.0.0 typecheck
+> tsc --noEmit
+
+typecheck=0
+> skytalix@0.0.0 build
+> tsc -p tsconfig.build.json
+
+build=0
+The lane collects 64 test files; git tracks 64.
+No findings.
+laneinv=0
+g9-diff-done

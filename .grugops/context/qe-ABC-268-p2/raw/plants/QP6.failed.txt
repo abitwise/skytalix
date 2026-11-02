@@ -1,0 +1,8 @@
+     × a quiet pawn push, a quiet king move and castling: true at index 1 and later, false at index 0 7ms
+     × the fixture bites: the node is futile at the window its parent hands it, and the skipped moves hold a better score 3ms
+     × search() at depth 3: the futile node's entry is an upper bound of -554, Ke2's score, strictly below its alpha of 1010 1ms
+     × chooseMove deepened to 3: the futile node's entry is an upper bound of -554, Ke2's score, strictly below its alpha of 1010 1ms
+ FAIL  src/search.futility.test.ts > QE-268-c — futileMove on the other move kinds: en passant is a capture (false); a quiet pawn push, a quiet king move and castling are quiet (true at index >= 1) > a quiet pawn push, a quiet king move and castling: true at index 1 and later, false at index 0
+ FAIL  src/search.futility.test.ts > QE-268-b — a futile node returns the best score among the moves it searched, fail-soft: below its alpha, never alpha itself > the fixture bites: the node is futile at the window its parent hands it, and the skipped moves hold a better score
+ FAIL  src/search.futility.test.ts > QE-268-b — a futile node returns the best score among the moves it searched, fail-soft: below its alpha, never alpha itself > search() at depth 3: the futile node's entry is an upper bound of -554, Ke2's score, strictly below its alpha of 1010
+ FAIL  src/search.futility.test.ts > QE-268-b — a futile node returns the best score among the moves it searched, fail-soft: below its alpha, never alpha itself > chooseMove deepened to 3: the futile node's entry is an upper bound of -554, Ke2's score, strictly below its alpha of 1010

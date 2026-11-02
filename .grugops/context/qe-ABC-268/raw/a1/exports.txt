@@ -1,0 +1,2 @@
+{"module":"src/search.ts","base":20,"head":23,"added":["futileMove","futilityNode","searchWithoutFutility"],"removed":[]}
+{"module":"src/engine.ts","base":11,"head":12,"added":["chooseMoveWithoutFutility"],"removed":[]}

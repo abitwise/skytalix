@@ -1,0 +1,11 @@
+QP3 planted
+--- /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe268/head/src/search.ts	2026-11-02 17:44:58.000000000 +0000
++++ src/search.ts	2026-11-02 18:36:53.165289234 +0000
+@@ -617,6 +617,7 @@
+     }
+   }
+ 
++  if (futile && best < alphaIn) best = alphaIn;
+   if (switches.table) storeEntry(key, depth, boundOf(best, alphaIn, beta), best, ply, bestMove);
+   return best;
+ }

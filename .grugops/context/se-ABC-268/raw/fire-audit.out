@@ -1,0 +1,11 @@
+2026-11-02T17:45:09Z
+{"depth":6,"rows":190,"headNodes":14311902,"doorNodes":17826686,"ratio":0.8028,"head":{"fired":30272,"pruned":901655},"door":{"fired":0,"pruned":0}}
+fire-rc=0
+2026-11-02T17:46:16Z
+{"depth":6,"every":10,"rows":190,"fired":30272,"sampled":2943}
+{"key":"all","n":2943,"flips":0,"ffl":0,"ffh":0,"e100":0,"e200":0,"e300":0,"e500":0,"unstable":0,"doorNoise":0,"flipPct":0}
+{"key":"fut@d1","n":1918,"flips":0,"ffl":0,"ffh":0,"e100":0,"e200":0,"e300":0,"e500":0,"unstable":0,"doorNoise":0,"flipPct":0}
+{"key":"fut@d2","n":966,"flips":0,"ffl":0,"ffh":0,"e100":0,"e200":0,"e300":0,"e500":0,"unstable":0,"doorNoise":0,"flipPct":0}
+{"key":"fut@d3","n":59,"flips":0,"ffl":0,"ffh":0,"e100":0,"e200":0,"e300":0,"e500":0,"unstable":0,"doorNoise":0,"flipPct":0}
+audit-rc=0
+2026-11-02T17:46:37Z

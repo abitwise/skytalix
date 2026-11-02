@@ -1,0 +1,33 @@
+
+ RUN  v4.1.12 <scratch>/qe268p2/plant
+
+ ❯ src/search.futility.test.ts (37 tests | 1 failed) 155ms
+     × en passant: false, at any index — it captures 7ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/search.futility.test.ts > QE-268-c — futileMove on the other move kinds: en passant is a capture (false); a quiet pawn push, a quiet king move and castling are quiet (true at index >= 1) > en passant: false, at any index — it captures
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ <anonymous> src/search.futility.test.ts:383:48
+    381|
+    382|   it("en passant: false, at any index — it captures", () => {
+    383|     expect(futileMove(position, enPassant, 1)).toBe(false);
+       |                                                ^
+    384|     expect(futileMove(position, enPassant, 9)).toBe(false);
+    385|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 4 passed (5)
+      Tests  1 failed | 269 passed (270)
+   Start at  20:00:35
+   Duration  1.33s (transform 0ms, setup 0ms, import 382ms, tests 1.87s, environment 0ms)
+

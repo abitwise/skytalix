@@ -1,0 +1,11 @@
+QP6 planted
+--- /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe268/head/src/search.ts	2026-11-02 17:44:58.000000000 +0000
++++ src/search.ts	2026-11-02 18:40:11.069620198 +0000
+@@ -433,6 +433,7 @@
+  */
+ export function futileMove(position: Position, move: Move, index: number): boolean {
+   if (index < 1) return false;
++  if (pieceType(move.piece) === KING) return false;
+   if (move.captured !== EMPTY || move.promotion !== EMPTY) return false;
+   return !givesCheck(position, move);
+ }

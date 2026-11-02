@@ -1,0 +1,26 @@
+{"label":"searchWithoutFutility vs base search() d5, 12 roots","rows":12,"diff":0,"base":"c1de7edde218494f","head":"c1de7edde218494f","first":[],"s":"0.8"}
+{"label":"searchWithoutFutility vs base search() d6, 12 roots","rows":12,"diff":0,"base":"8d96169752e9d1bd","head":"8d96169752e9d1bd","first":[],"s":"2.4"}
+{"label":"searchWithoutFutility vs base search() d3, 287 mate corpus","rows":287,"diff":0,"base":"04c90c3cd3e043fe","head":"04c90c3cd3e043fe","first":[],"s":"2.6"}
+{"label":"chooseMoveWithoutFutility vs base chooseMove to 5, 12 roots","rows":12,"diff":0,"base":"e88fae30e4423d77","head":"e88fae30e4423d77","first":[],"s":"3.2"}
+{"label":"chooseMoveWithoutFutility vs base chooseMove maxNodes 47000, the 190","rows":190,"diff":0,"base":"b3c05c1a26b084df","head":"b3c05c1a26b084df","first":[],"s":"25.4"}
+{"label":"chooseMoveWithoutFutility vs base chooseMove to 5 WITH priorKeys (8 grandchild keys), 12 roots","rows":12,"diff":0,"base":"e88fae30e4423d77","head":"e88fae30e4423d77","first":[],"s":"25.9"}
+{"label":"non-vacuity: head chooseMove to 5 with priorKeys differs from without","moved":0,"of":12}
+{"label":"searchWithoutQuietPromotions d4 (self), 12 roots","rows":12,"diff":0,"base":"dd46d8a3f3321727","head":"dd46d8a3f3321727","first":[],"s":"26.5"}
+{"label":"searchWithoutQuiescenceEvasions d4 (self), 12 roots","rows":12,"diff":0,"base":"4275c2d3b8a86449","head":"4275c2d3b8a86449","first":[],"s":"26.6"}
+{"label":"searchWithoutNullMove d4 (self), 12 roots","rows":12,"diff":0,"base":"ddfb9eee10e15470","head":"ddfb9eee10e15470","first":[],"s":"26.8"}
+{"label":"searchWithoutReductions d4 (self), 12 roots","rows":12,"diff":0,"base":"542c81575bf4ac00","head":"542c81575bf4ac00","first":[],"s":"26.9"}
+{"label":"searchWithoutPvsOrReductions d4 (self), 12 roots","rows":12,"diff":0,"base":"d531c38e8f057a71","head":"d531c38e8f057a71","first":[],"s":"27.1"}
+{"label":"searchWithoutTable d4 (self), 12 roots","rows":12,"diff":0,"base":"960fe91a04fbd3b9","head":"960fe91a04fbd3b9","first":[],"s":"27.3"}
+{"label":"searchWithoutKillers d4 (self), 12 roots","rows":12,"diff":0,"base":"ad064782a20ed7f2","head":"ad064782a20ed7f2","first":[],"s":"27.5"}
+{"label":"searchWithoutQuiescence d4 (self), 12 roots","rows":12,"diff":0,"base":"543edb6513b1fdd4","head":"543edb6513b1fdd4","first":[],"s":"27.6"}
+{"label":"searchWithoutPruning d3 (self), 12 roots","rows":12,"diff":0,"base":"ffc53fc9694a747e","head":"ffc53fc9694a747e","first":[],"s":"161.9"}
+{"label":"searchWithoutPruningOrQuiescence d3 (self), 12 roots","rows":12,"diff":0,"base":"9b27a2da57bc5306","head":"9b27a2da57bc5306","first":[],"s":"162.7"}
+{"label":"searchWithoutOrdering d3 (self), 12 roots","rows":12,"diff":0,"base":"986d0d3f4ce65d07","head":"986d0d3f4ce65d07","first":[],"s":"163.8"}
+{"label":"chooseMoveWithoutQuietPromotions to 5 (self), 12 roots","rows":12,"diff":0,"base":"c83b56e9edeb4461","head":"c83b56e9edeb4461","first":[],"s":"164.3"}
+{"label":"chooseMoveWithoutQuiescenceEvasions to 5 (self), 12 roots","rows":12,"diff":0,"base":"e69afa13a725c902","head":"e69afa13a725c902","first":[],"s":"164.6"}
+{"label":"chooseMoveWithoutNullMove to 5 (self), 12 roots","rows":12,"diff":0,"base":"aa09eccbcf195fd6","head":"aa09eccbcf195fd6","first":[],"s":"165.0"}
+{"label":"chooseMoveWithoutReductions to 5 (self), 12 roots","rows":12,"diff":0,"base":"57fc73d116479659","head":"57fc73d116479659","first":[],"s":"165.8"}
+{"label":"chooseMoveWithoutPvsOrReductions to 5 (self), 12 roots","rows":12,"diff":0,"base":"5a4046a8639fec0f","head":"5a4046a8639fec0f","first":[],"s":"166.8"}
+{"label":"non-vacuity: head shipped differs from base shipped at 5 on the 12 roots","search":7,"chooseMove":6,"of":12}
+QE A1: ALL EQUAL
+rc=0 secs=168

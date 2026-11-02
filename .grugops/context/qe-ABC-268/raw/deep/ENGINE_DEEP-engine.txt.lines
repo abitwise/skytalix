@@ -1,0 +1,4 @@
+ RUN  v4.1.12 /home/olger/projects/public/skytalix/.claude/worktrees/qe-ABC-268
+A1 worst case: startpos/g1h3 4001 ms at completed depth 11; over 4000 ms: 10/30
+ Test Files  1 passed (1)
+      Tests  78 passed (78)

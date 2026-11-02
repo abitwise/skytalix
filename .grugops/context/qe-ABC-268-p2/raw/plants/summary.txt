@@ -1,0 +1,7 @@
+head rc=0  Tests 270 passed (270) 2026-11-02T20:00:35Z
+QP2 rc=1  Tests 1 failed | 269 passed (270) failing-rows=2 2026-11-02T20:00:37Z
+QP3 rc=1  Tests 1 failed | 269 passed (270) failing-rows=2 2026-11-02T20:00:38Z
+QP4 rc=1  Tests 1 failed | 269 passed (270) failing-rows=2 2026-11-02T20:00:40Z
+QP5 rc=1  Tests 4 failed | 266 passed (270) failing-rows=8 2026-11-02T20:00:41Z
+QP6 rc=1  Tests 4 failed | 266 passed (270) failing-rows=8 2026-11-02T20:00:43Z
+plant copy src == head src: yes

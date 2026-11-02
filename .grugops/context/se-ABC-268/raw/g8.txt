@@ -1,0 +1,6 @@
+g8-base-1 rc=0 load=2.21       Tests  2376 passed (2376)    Duration  8.56s (transform 0ms, setup 0ms, import 6.19s, tests 6.22s, environment 5ms)
+g8-head-1 rc=0 load=2.57       Tests  2407 passed (2407)    Duration  8.72s (transform 0ms, setup 0ms, import 6.29s, tests 6.46s, environment 5ms)
+g8-head-2 rc=0 load=2.96       Tests  2407 passed (2407)    Duration  8.68s (transform 0ms, setup 0ms, import 6.25s, tests 6.37s, environment 5ms)
+g8-base-2 rc=0 load=3.18       Tests  2376 passed (2376)    Duration  8.38s (transform 0ms, setup 0ms, import 6.19s, tests 6.15s, environment 5ms)
+g8-base-3 rc=0 load=3.60       Tests  2376 passed (2376)    Duration  8.47s (transform 0ms, setup 0ms, import 6.25s, tests 6.16s, environment 5ms)
+g8-head-3 rc=0 load=3.79       Tests  2407 passed (2407)    Duration  8.51s (transform 0ms, setup 0ms, import 6.26s, tests 6.43s, environment 5ms)

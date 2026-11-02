@@ -1,0 +1,2 @@
+     × search() at depth 3: the futile node's entry is an upper bound of -554, Ke2's score, strictly below its alpha of 1010 10ms
+ FAIL  src/search.futility.test.ts > QE-268-b — a futile node returns the best score among the moves it searched, fail-soft: below its alpha, never alpha itself > search() at depth 3: the futile node's entry is an upper bound of -554, Ke2's score, strictly below its alpha of 1010

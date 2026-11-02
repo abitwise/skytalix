@@ -1,0 +1,11 @@
+qe-ABC-268-p2 (computed from r.out before deletion; INFO)
+go -> bestmove latency (cutechess clock, ms; includes book moves):
+skytalix  moves 466 median 500.0 max 502 >750ms 0
+stockfish moves 463 median 500 max 501 >750ms 0
+opening-pair scores for skytalix (0, 0.5, 1, 1.5, 2): 0, 0, 2, 0, 3  sum 8.0
+terminations: mates 10
+time forfeits: 0 []
+faults: 0 []
+candidate skytalix: W/D/L 8/0/2 score 8.0 / 10
+by colour: as white 4.0/5, as black 4.0/5
+pooled S-prime if merged: 18.0/20 (prior pool, merged builds) + 8.0/10 = 26.0/30 = 86.7 % (> 85 %: the upward re-pin trigger would FIRE if this build merges; reported, not acted on)
