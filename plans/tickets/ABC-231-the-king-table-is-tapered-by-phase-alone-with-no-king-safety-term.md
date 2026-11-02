@@ -1,14 +1,28 @@
 ---
 id: ABC-231
 title: "The king table is tapered by phase, alone: today's table while material is on, a centralising table as it comes off, and no king-safety term"
-status: backlog
-column: Backlog
+status: done
+column: Done
+closed: "2026-11-02, merged into ABC-269 (E1, the full taper; not delivered on its own). ADR-0064 (PROPOSED, arch-E1 …d8150777) folds this ticket whole: the king's endgame half 40 − 15 m is ADR-0064 d3. A1 → ABC-269 B7 (graded per Q-3K-4; B0 its frozen-clock pre-check); A2 → B1 (b) (exactly equal at phase 24, stronger than within 2 cp) and B1 (d) (≥ 20 cp, unchanged); A3 → B1 (a); A4 → B6 (≤ 1.05 ×); A5 → B4's gate line plus G7; A6 → B8 unchanged. Front matter by bapm-E1-cut; the board move is the Orchestrator's. Was: backlog, DoR 9/10 (bapm-epic010-improvements, re-scored 2026-10-29)"
 size: S
 priority: P3
 epic: EPIC-011
 ---
 
 # ABC-231: a tapered king table, alone
+
+> **CLOSED 2026-11-02 AS MERGED INTO `ABC-269` (E1) by BA/PM** (task `bapm-E1-cut`, records only, at `main` `2bef4d31`;
+> nothing run). This is the RE-HOMED block's verdict carried out: E1 is cut, so this page closes. Sources: `ADR-0064`
+> (PROPOSED, `arch-E1` `…d8150777` § 4 item 1) and the Orchestrator's ruling *"next pull E1 (full taper, ABC-231/232
+> folded)"* (board, 2026-11-02).
+> - **Folded whole.** The king's endgame half (40 − 15 m, the `ADR-0031` addendum's rule) is `ADR-0064` d3, on its
+>   linear phase (d1). No row is lost. Each row's new home is `ABC-269` § Acceptance criteria, "What changes from the
+>   folded pages": A1 → B7 (graded per `Q-3K-4`), A2 → B1 (b) and B1 (d), A3 → B1 (a), A4 → B6, A5 → B4 plus `G7`,
+>   A6 → B8.
+> - **The Architect's ruling this page waited on is given:** a new ADR (`ADR-0064`), not the `ADR-0031` addendum as it
+>   stands. It revises `ABC-083`'s "untapered by decision".
+> - **Not `ABC-205` again**, still: no king-safety term (E3). `ABC-205` stays dropped.
+> - Front matter: `status: done`, `column: Done`, `closed:` merged into `ABC-269`. Nothing below this block is edited.
 
 > **RE-HOMED 2026-11-01 to `EPIC-011` by BA/PM** (task `bapm-epic011-dedupe`, records only, at `main` `2e9a2457`). The
 > owner asked for a new epic for the 3 000 path, started after the open epics close, and for no work done twice

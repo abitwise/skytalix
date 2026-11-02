@@ -1,14 +1,32 @@
 ---
 id: ABC-232
 title: "Passed pawns are worth more as material comes off, on ABC-231's phase"
-status: backlog
-column: Backlog
+status: done
+column: Done
+closed: "2026-11-02, merged into ABC-269 (E1; its phase scaling) and E4 (any passer term beyond it); not delivered on its own. ADR-0064 (PROPOSED, arch-E1 …d8150777) d3: the passed pawn's endgame half is 2 × today's bonus by rank. A1 → ABC-269 B1 (e) (≥ 1.5 × at phase ≤ 6; exact at phase 24; ≤ 1.25 × at phase ≥ 18; the within-5-cp clause is false by construction for an advanced passer); A2 → B1 (a); A3 → B6 (≤ 1.05 ×, the 1.03 × folds in); A4 → B4's gate line plus G7; A5 → B8 unchanged. King distance, free path, unstoppable, connected and backward pawns → E4 (stub). Front matter by bapm-E1-cut; the board move is the Orchestrator's. Was: backlog, DoR 9/10"
 size: S
 priority: P3
 epic: EPIC-011
 ---
 
 # ABC-232: passed pawns by phase
+
+> **CLOSED 2026-11-02 AS MERGED INTO `ABC-269` (E1) AND E4 by BA/PM** (task `bapm-E1-cut`, records only, at `main`
+> `2bef4d31`; nothing run). This is the RE-HOMED block's verdict carried out. Sources: `ADR-0064` (PROPOSED, `arch-E1`
+> `…d8150777` § 4 item 1) and the Orchestrator's ruling *"next pull E1 (full taper, ABC-231/232 folded)"* (board,
+> 2026-11-02).
+> - **Into E1 (`ABC-269`): the phase scaling.** The passed pawn's endgame half is 2 × today's bonus by rank (0, 10, 20,
+>   40, 70, 120, 200), `ADR-0064` d3, blended on E1's phase. The pawn memo stores the passed endgame part (d5).
+> - **Row changes** (`ABC-269` § Acceptance criteria, "What changes from the folded pages"):
+>   - A1's "≥ 1.5 × at phase ≤ 0.25" → B1 (e), ≥ 1.5 × at phase ≤ 6 of 24.
+>   - A1's "within 5 cp of base at phase ≥ 0.75" → B1 (e), exact at phase 24 and ≤ 1.25 × at phase ≥ 18. The old clause
+>     cannot hold for an advanced passer: a passer one step from promotion (100 cp) reads 125 at phase 18.
+>   - A2 → B1 (a). A3's 1.03 × → B6, one `G2` row at ≤ 1.05 ×. A4 → B4 plus `G7`. A5 → B8.
+> - **Into E4 (stub, `EPIC-011` Phase 4): every other passer term** (king distance, free path, unstoppable, connected,
+>   backward). E4 gets its id at its refinement. Rook activity stays out (not cut).
+> - Its wait on `ABC-231` is void: both are folded into one ticket.
+> - Front matter: `status: done`, `column: Done`, `closed:` merged into `ABC-269` and E4. Nothing below this block is
+>   edited.
 
 > **RE-HOMED 2026-11-01 to `EPIC-011` by BA/PM** (task `bapm-epic011-dedupe`, records only, at `main` `2e9a2457`). The
 > owner asked for a new epic for the 3 000 path, started after the open epics close, and for no work done twice

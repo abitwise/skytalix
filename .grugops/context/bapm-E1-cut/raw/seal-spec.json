@@ -1,0 +1,53 @@
+{
+ "refs": [
+  "bapm-E1-cut",
+  "grugops/bapm-E1-cut",
+  "EPIC-011",
+  "ABC-269",
+  "E1",
+  "E4",
+  "ABC-231",
+  "ABC-232",
+  "ABC-205",
+  "ABC-239",
+  "ABC-265",
+  "ABC-255",
+  "P5",
+  "R1",
+  "ADR-0064",
+  "ADR-0056",
+  "ADR-0061",
+  "ADR-0031",
+  "ADR-0025",
+  "NFR-005",
+  "NFR-009",
+  "NFR-008",
+  "NFR-001",
+  "Q-3K-4",
+  "2bef4d31",
+  "58fa3eb4",
+  "6e11bd97",
+  "605874b8",
+  "87484808",
+  "f99b5d24",
+  "arch-E1/20261102T214348Z-architect-design-decision-01c2d6a5",
+  "arch-E1/20261102T215541Z-architect-design-observation-c524a01d",
+  "arch-E1/20261102T215541Z-architect-design-decision-d8150777",
+  "arch-next-pull/20261102T213500Z-architect-design-decision-7e3ace66",
+  "arch-next-pull/20261102T213500Z-architect-design-observation-d0f1a5fc",
+  "orch-2026-10-30a/20261102T191000Z-orchestrator-decision-773be7de",
+  "qe-ABC-265/20261102T170102Z-qe-e2e-decision-d9879b9c"
+ ],
+ "notes": [
+  {
+   "kind": "decision",
+   "confidence": "high on the ticket's rows (each is ADR-0064 d8's bar with the Architect's probe figure, cited not re-measured) and on the page folds (merge shas read from git log); the G7 line and P2 priority are BA/PM judgements; Elo is an estimate",
+   "bodyFile": "note-decision.md"
+  },
+  {
+   "kind": "observation",
+   "confidence": "high (the diff of commit f99b5d24; front matter parsed as YAML)",
+   "bodyFile": "note-observation.md"
+  }
+ ]
+}
