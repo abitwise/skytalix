@@ -143,6 +143,11 @@ shelter gate (`A3`), not the blend, carries the depth-8 tree growth (+3.2 to +5.
 variant of these forms is predicted to clear "≥ base" (`…912bcb0d`; Orchestrator `…154f2ced`). The forms stay on
 `grugops/ABC-205-final` (`b5d5cea5`), unmerged; a re-open starts there.
 
+*Dated 2026-11-02 (`arch-E1`, records only):* **the taper half is carried by `ADR-0064` (E1, PROPOSED).** It keeps this
+addendum's phase weights (N 1, B 1, R 2, Q 4, clamped to 24) and its king endgame rule (40 − 15 m). The blend is
+truncated once, over the white-minus-black sum, rather than per king. The queen scale (`A1`) and the shelter gate
+(`A3`) stay accepted, not shipped. They are input to E3 (`ADR-0056` D2), not to E1.
+
 **ACCEPTED** 2026-10-24 by the owner, on this text with `A6` and `A7`: verbatim *"accept your recommendations,
 other session paused"* (`…fb0468ff`). `OD-205-1` and `OD-205-2` are accepted. Recorded by Architect/Design (task
 `arch-accept-owner-words-2026-10-24`).

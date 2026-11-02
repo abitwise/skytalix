@@ -1,0 +1,91 @@
+{
+ "sbestEqual": 145,
+ "positions": 145,
+ "BASE": {
+  "scored": 145,
+  "meanLoss": 54.1,
+  "medianLoss": 14,
+  "sfBestPct": 46.2,
+  "err50": 48,
+  "err150": 15,
+  "err300": 7,
+  "meanDepth": 6.09,
+  "p20": {
+   "n": 50,
+   "err50": 17,
+   "meanLoss": 45.4
+  },
+  "p40": {
+   "n": 50,
+   "err50": 18,
+   "meanLoss": 82.3
+  },
+  "p60": {
+   "n": 45,
+   "err50": 13,
+   "meanLoss": 32.5
+  }
+ },
+ "L": {
+  "scored": 145,
+  "meanLoss": 55.7,
+  "medianLoss": 14,
+  "sfBestPct": 46.2,
+  "err50": 49,
+  "err150": 16,
+  "err300": 7,
+  "meanDepth": 6.1,
+  "p20": {
+   "n": 50,
+   "err50": 16,
+   "meanLoss": 41.8
+  },
+  "p40": {
+   "n": 50,
+   "err50": 17,
+   "meanLoss": 84.3
+  },
+  "p60": {
+   "n": 45,
+   "err50": 16,
+   "meanLoss": 39.4
+  },
+  "vsBase": {
+   "better": 17,
+   "worse": 12,
+   "fixedErr50": 4,
+   "newErr50": 5
+  }
+ },
+ "P": {
+  "scored": 145,
+  "meanLoss": 51.8,
+  "medianLoss": 0,
+  "sfBestPct": 52.4,
+  "err50": 39,
+  "err150": 16,
+  "err300": 9,
+  "meanDepth": 6.03,
+  "p20": {
+   "n": 50,
+   "err50": 13,
+   "meanLoss": 39.3
+  },
+  "p40": {
+   "n": 50,
+   "err50": 15,
+   "meanLoss": 77.6
+  },
+  "p60": {
+   "n": 45,
+   "err50": 11,
+   "meanLoss": 36.9
+  },
+  "vsBase": {
+   "better": 28,
+   "worse": 11,
+   "fixedErr50": 11,
+   "newErr50": 2
+  }
+ }
+}

@@ -3,7 +3,7 @@
 // Usage: node e1probe.ts <mode> <FORM> [arg]
 import { readFileSync } from "node:fs";
 import { makeMove, unmakeMove } from "./src/apply.ts";
-import { chooseMove } from "./src/engine.ts";
+import { chooseMove, chooseMoveWithoutFutility } from "./src/engine.ts";
 import { E1CFG, evaluate } from "./src/evaluate.ts";
 import { buildCorpus, mirrorPosition } from "./src/evaluate.mirror-corpus.ts";
 import { parseFen, toFen } from "./src/fen.ts";
@@ -11,7 +11,7 @@ import { gameStatus } from "./src/gameend.ts";
 import { legalMoves } from "./src/legal.ts";
 import { pieceType, squareName } from "./src/position.ts";
 import { MATE_CORPUS } from "./src/search.mate-corpus.ts";
-import { MATE_SCORE, search } from "./src/search.ts";
+import { MATE_SCORE, search, searchWithoutFutility } from "./src/search.ts";
 
 const FORMS: Record<string, { on: number; phMg: number; phEg: number }> = {
   BASE: { on: 0, phMg: 24, phEg: 0 },
@@ -189,4 +189,34 @@ if (mode === "nodes") {
     const c = chooseMove(parseFen(fen), { budgetMs: 1e9, now: () => 0, maxNodes: N }) as unknown as { move: any; score: number; depth: number; nodes: number };
     console.log(JSON.stringify({ id, move: uci(c.move), score: c.score, depth: c.depth, nodes: c.nodes }));
   }
+}
+if (mode === "fut") {
+  // REPORT added after batch C (not pre-registered; decides nothing): ADR-0061's decision 8 rows re-read on the form's
+  // scale (its Consequences "eval-scale coupling"): drift at d5 on the 190, shipped vs the futility door, both
+  // recursions, with the form on both sides; and the mate floor on the 287 at d5 (door mate -> shipped same-sign mate).
+  setForm(form);
+  const opts = (d: number) => ({ budgetMs: 1e9, now: () => 0, maxDepth: d });
+  for (const which of ["search", "choose"]) {
+    let n = 0, within = 0, max = 0, maxName = "", mateFlip = 0, signFlip = 0;
+    for (const [name, fen] of corpus()) {
+      const a = which === "search" ? searchWithoutFutility(parseFen(fen), 5) : (chooseMoveWithoutFutility(parseFen(fen), opts(5)) as any);
+      const b = which === "search" ? search(parseFen(fen), 5) : (chooseMove(parseFen(fen), opts(5)) as any);
+      if (isMate(a.score) !== isMate(b.score)) { mateFlip++; continue; }
+      if (isMate(a.score)) { if (Math.sign(a.score) !== Math.sign(b.score)) signFlip++; continue; }
+      n++;
+      const dd = Math.abs(a.score - b.score);
+      if (dd <= 25) within++;
+      if (dd > max) { max = dd; maxName = `${name} ${a.score}->${b.score}`; }
+    }
+    console.log(JSON.stringify({ form, futilityDrift: which, nonMate: n, withinPct: +(100 * within / n).toFixed(2), max, maxName, mateFlip, signFlip }));
+  }
+  let mates = 0, viol = 0;
+  for (const fen of MATE_CORPUS) {
+    const a = searchWithoutFutility(parseFen(fen), 5);
+    if (!isMate(a.score)) continue;
+    mates++;
+    const b = search(parseFen(fen), 5);
+    if (!isMate(b.score) || Math.sign(b.score) !== Math.sign(a.score)) viol++;
+  }
+  console.log(JSON.stringify({ form, futilityMateFloor: { mates, viol } }));
 }

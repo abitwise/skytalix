@@ -1,0 +1,3 @@
+{"form":"BASE","rec":"choose","name":"kiwipete","d":7,"nodes":650620,"score":-59,"move":"e2a6","evalCalls":590924,"piecesPerCall":25.75,"pawnsPerCall":13.43,"reachPerCall":0,"callsPerNode":0.908}
+{"form":"BASE","rec":"choose","name":"kiwipete","d":8,"nodes":1306981,"score":-59,"move":"e2a6","evalCalls":1176170,"piecesPerCall":25.46,"pawnsPerCall":13.22,"reachPerCall":0,"callsPerNode":0.9}
+{"form":"BASE","rec":"choose","name":"kiwipete","d":9,"nodes":2842284,"score":-72,"move":"e2a6","evalCalls":2537459,"piecesPerCall":25.16,"pawnsPerCall":13.02,"reachPerCall":0,"callsPerNode":0.893}

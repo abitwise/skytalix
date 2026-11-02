@@ -63,6 +63,12 @@ sub(ev, """      score += black ? -value : value;
       }
 """)
 
+# Counter only (added after batch A, where this sub was missing and reachPerCall read 0; no value is touched).
+sub(ev, """      const reached = squaresReached(board, square, piece);
+""", """      const reached = squaresReached(board, square, piece);
+      if (E1CFG.count) E1CFG.reach += reached;
+""")
+
 sub(ev, """  return score + (structure + passedPart) + kingSafety + mobilityScore;
 }""",
 """  const total = score + (structure + passedPart) + kingSafety + mobilityScore;

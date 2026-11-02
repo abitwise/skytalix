@@ -1,0 +1,2 @@
+{"form":"P","rec":"search","name":"kiwipete","d":8,"nodes":1096692,"score":-89,"move":"d5e6","evalCalls":977135,"piecesPerCall":24.61,"pawnsPerCall":12.62,"reachPerCall":0,"callsPerNode":0.891}
+{"form":"P","rec":"search","name":"position-6","d":8,"nodes":1252144,"score":74,"move":"c3d5","evalCalls":1066805,"piecesPerCall":26.09,"pawnsPerCall":14.56,"reachPerCall":0,"callsPerNode":0.852}
