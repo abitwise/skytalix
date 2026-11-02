@@ -1,3 +1,4 @@
+_Updated: 2026-11-02 Orchestrator (orch-2026-10-30a) — **ABC-265 built** (se-ABC-265 cad6ae13; identity 0 diffs over 12 186 rows; G6 met) → In Review → `qe-ABC-265`. Running: qe-ABC-265, arch-ADR-0060-reopen, arch-phase2-p3._
 _Updated: 2026-11-02 Orchestrator (orch-2026-10-30a) — `arch-phase2-rebase` merged: **ADR-0059 accepted, not in force; ABC-264 retry DROP** (44/100 is ~99 % against the +30–60 estimate; +0.70 ply reach still lost → value-side, likely depth-1 cut skips forks). **ADR-0060 RE-OPENED**: on main A4(a) pos-6 chooseMove 0.8699 > 0.85 and A3 drift 63 cp > 27 cp; build NOT started; owner NOT asked to accept it yet. → `arch-ADR-0060-reopen` (forms under unchanged bars) and `arch-phase2-p3` (P3/P4/P5/P6 on main; fallback ADR). Owed to BA/PM: close ABC-264 page as dropped, stub P1 page. Running: se-ABC-265 + the two._
 _Updated: 2026-11-02 Orchestrator (orch-2026-10-30a) — `arch-phase2-p1` merged: **ADR-0060 PROPOSED** (P1 LMR log table, cap 2 plies, PV one ply less; on the ABC-264 base: 0.68–0.80× nodes at depth 8, +0.305 ply at 100 ms; GAIN). Base was ABC-264, which is not merging → `arch-phase2-rebase` (ADR-0059 not-in-force + retry ruling; ADR-0060 re-measured on main). Owner asked: accept ADR-0060 (gates its read and merge). Running: se-ABC-265, arch-phase2-rebase._
 _Updated: 2026-11-02 Orchestrator (orch-2026-10-30a, …d39f74ef) — `bapm-ABC-265-rows` merged (ABC-265 DoR 10/10 (b); ABC-264 page records A6 miss; S′ pools merged builds only). **ABC-264 → Blocked** (retry ruling to Architect). **ABC-265 → In Development → `se-ABC-265`** (build; merge waits owner acceptance of the ADR-0025 amendment). Running: arch-phase2-p1, se-ABC-265._
@@ -1354,8 +1355,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-265] TH-1: one lockless shared transposition table (4×Uint32 slot, XOR check), node-equal at Threads 1 (EPIC-011 threads; size: M; P2; DoR 9/10 — ADR-0025 amendment owed → `arch-ABC-265`; pullable beside Phase 2) **2026-11-02: DoR 10/10 (b) → pulled → `se-ABC-265` (build; merge waits owner acceptance of the ADR-0025 amendment).**
+## In Development (WIP 0/3)
 
 
 
@@ -1383,7 +1383,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-265] TH-1: one lockless shared transposition table (4×Uint32 slot, XOR check), node-equal at Threads 1 (EPIC-011 threads; size: M; P2; DoR 9/10 — ADR-0025 amendment owed → `arch-ABC-265`; pullable beside Phase 2) **2026-11-02: DoR 10/10 (b) → pulled → `se-ABC-265` (build; merge waits owner acceptance of the ADR-0025 amendment).** **→ In Review 2026-11-02 (se-ABC-265 done cad6ae13): all rows met incl. T10 ×2; ABC-081/122/208 unedited green; identity 12 186 rows / 149.9 M nodes 0 diffs; G6 met (9/9, 10/10); store ~2× per call, probe flat; npm test 2 387; 6 plants red → `qe-ABC-265`. Merge waits owner acceptance of the ADR-0025 amendment.**
 
 
 
