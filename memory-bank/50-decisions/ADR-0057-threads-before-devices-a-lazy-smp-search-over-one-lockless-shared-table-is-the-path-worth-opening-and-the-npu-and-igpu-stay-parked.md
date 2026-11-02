@@ -33,6 +33,11 @@ run.
 - **The order, re-read:** D6 put threads "after `EPIC-011` phase 1". Phase 1 is now paused (owner, *"P yes"*). The new
   place is in D6's dated line and in `ADR-0056` D6's dated line of the same fold.
 - **What BA/PM needs to cut the tickets:** § Inputs for the thread tickets, below D7.
+- *2026-11-02 (`arch-ABC-265`):* TH-1's ADR is written: the **PROPOSED** amendment at the end of `ADR-0025`, the
+  owner's to accept. It writes D2.3 into that ADR and adds one rule D2.3 does not state: a cutoff uses the data and
+  score words the XOR check verified, read once at the probe, never a second read of the slot. It also records the
+  Architect's answer on `ABC-265`'s S2 question: no nps reading on top of `G6` and the profile. Nothing in this ADR
+  changes.
 
 *First status, kept:* **PROPOSED** 2026-11-01. Spike `ABC-263`, records only. Written by Architect/Design (task `arch-ABC-263`), on branch
 `grugops/arch-ABC-263` from `main` `44c99531`.
