@@ -7,10 +7,23 @@ size: M
 priority: P2
 epic: EPIC-011
 feature: —
-adr: "Owed: an amendment to ADR-0025 decision 2 (the layout) and decision 4's last bullet (one shared table, not one table per worker), the Architect's. Changing an accepted ADR is the owner's; it is asked when written. Under reading (b) the build may proceed while it is PROPOSED. Source: ADR-0057 (ACCEPTED 2026-11-02) D2.3 and § Inputs for the thread tickets"
+adr: "ADR-0025 § Proposed amendment 2026-11-02 (ABC-265, TH-1): decision 2's first bullet and decision 4's last bullet, PROPOSED (arch-ABC-265 …e396e5ab, merged c0f3cbad); falsifiers T8–T10; no S2 reading (its § The read ABC-265 owes; the Orchestrator's ruling). Acceptance is the owner's. Reading (b): the build may start; the merge waits on his acceptance. Source: ADR-0057 (ACCEPTED 2026-11-02) D2.3 and § Inputs for the thread tickets"
 ---
 
 # ABC-265: one lockless shared transposition table (TH-1)
+
+> **REFINED 2026-11-02 by BA/PM: DoR 10/10, reading (b)** (task `bapm-ABC-265-rows`, records only, at `main`
+> `f312e9d7`; nothing run). The design is written: the `ADR-0025` shared-table amendment, PROPOSED (`arch-ABC-265`
+> `…e396e5ab`, probe `…6b1aba14`). It adds one rule `ADR-0057` D2.3 does not state: **the verified copy**. A cutoff
+> uses the data and score words the probe verified, not a second read of the slot.
+> - **A2 gains the T10 row** (another key's entry written between `probeTable` and `tableCutoff`).
+> - **A7 and the `adr:` line cite the amendment.**
+> - **The Orchestrator's ruling: no S2 nps reading for this ticket** (`orch-2026-10-30a`, brief `bapm-ABC-265-rows`;
+>   the Architect's recommendation, the amendment's § The read `ABC-265` owes). A7 carries it. `EPIC-011` § The
+>   per-change rule names it as an exception.
+> - **Scope 7** gains the header comment lines `:11-15`, `:17-20` and `:36` that the amendment names.
+> - **The build may start. The merge waits on the owner's acceptance of the amendment.** With no answer, decisions 2
+>   and 4 stand as written, and this ticket is not merged. The board move is the Orchestrator's.
 
 > **Cut 2026-11-02 by BA/PM** (task `bapm-threads-cut`, records only, at `main` `48f3fc01`; nothing run). Source:
 > the owner's answers (`orch-2026-10-30a` `…81ae2db4`, verbatim: *"R yes, P yes, A accept, B park, C yes; 1 yes, 2 a,
@@ -44,10 +57,16 @@ adr: "Owed: an amendment to ADR-0025 decision 2 (the layout) and decision 4's la
    relativity (`ADR-0025` d3), quiescence never probing (d5), the hash move's legality check before use.
 6. **A handle to the buffer** that `ABC-266` hands to each worker once. Its name and shape are the Engineer's. It is
    not an `EngineOptions` field and not module state any recursion reads (`ADR-0026` decision 2's rejections).
-7. **Two comments in `src/transposition.ts`**, owed with the next edit of that file:
+7. **~~Two~~ Four comments in `src/transposition.ts`**, owed with the next edit of that file:
    - the "under 10 000 (a full board of queens)" comment at lines 58–60 is false. It is corrected to the derived
      bound, |`evaluate`| ≤ 10 885 cp within legal promotion (`ADR-0059` d2's dated bullet, `QE-264-b`);
-   - the "threading stays `UNKNOWN - verify`" line is replaced by a pointer to this layout (`ADR-0057` D5).
+   - the "threading stays `UNKNOWN - verify`" line *(`:36`)* is replaced by a pointer to this layout (`ADR-0057` D5)
+     *and to the `ADR-0025` amendment*;
+   - *(2026-11-02, `bapm-ABC-265-rows`; the amendment's § Consequences.)* the header's storage paragraph (`:11-15`,
+     "an 8-byte key, a 4-byte packed word, a 4-byte score") is rewritten to the four-word slot;
+   - *(same.)* the lifetime paragraph's "Clearing zeroes the packed words only" (`:17-20`) is rewritten if the clear
+     changes.
+   - Line numbers are as at `main` `f312e9d7`. No test reads these comments.
 
 ## Out of scope
 
@@ -78,6 +97,13 @@ adr: "Owed: an amendment to ADR-0025 decision 2 (the layout) and decision 4's la
     the test through the A1 handle), **then** a probe for A misses and a probe for B misses.
   - **Given** a key whose `keyLo` and `keyHi` each have bit 31 set, **then** a stored entry hits. This row catches a
     signed compare.
+  - *(2026-11-02, `bapm-ABC-265-rows`; the `ADR-0025` amendment's verified copy, falsifier T10.)* **Given** an entry
+    stored for key K as exact at depth d with score s_K, and `probeTable(K)` returning its slot, **when** the test
+    writes another key K′'s entry into that slot through the A1 handle (all four words, as `storeEntry` would) before
+    `tableCutoff` runs, **then** `tableCutoff(slot, d, …)` returns **s_K**, not K′'s score.
+    - Two cases, one row each: K′ exact at depth d with a score s_K′ ≠ s_K (a live score read returns s_K′); K′ at
+      depth d + 1 (a live depth read returns `null`).
+    - Like the torn-slot row, it needs no second thread. The multi-writer form is `ABC-267`'s.
 - **A3 (identity, `G4`).** `Threads 1` is the only mode in this ticket.
   - Node-equal, cross-build, on the `ABC-078` `A3` corpus: `search()` and `chooseMove` equal base's in move, score and
     nodes at every depth the sweep reads. Every test-only door that exists before this ticket equals its pre-ticket
@@ -94,14 +120,26 @@ adr: "Owed: an amendment to ADR-0025 decision 2 (the layout) and decision 4's la
   `G8` (`N8-LANE` reported), `G9`.
 - **A7 (the read): none.** Value-identical at `Threads 1`, proved by A3, and no games are played. Its cost is read by
   A4, the cost bar `ADR-0057` names. `EPIC-011` § The per-change rule also keeps an S2 nps reading for value-identical
-  tickets (≈ 1 h ALONE, `estimate`). Whether that reading is owed on top of A4 is the Orchestrator's ruling. This is
+  tickets (≈ 1 h ALONE, `estimate`). ~~Whether that reading is owed on top of A4 is the Orchestrator's ruling.~~ This is
   not a speed ticket.
+  - *(2026-11-02, `bapm-ABC-265-rows`.)* **Ruled: no S2 nps reading is owed.** The Orchestrator's ruling
+    (`orch-2026-10-30a`), on the Architect's recommendation in the `ADR-0025` amendment's § The read `ABC-265` owes.
+    Nothing goes to the owner.
+    - S2 is "the ticket meets its own mechanical bar" (`EPIC-008`). This ticket claims identity, not speed. Its cost
+      bar is A4: `G6` plus the profile.
+    - `probeTable` plus `storeEntry` take 0.95–1.44 % of samples (`se-ABC-253`'s base profile). A doubled cost moves
+      node rate by at most about 1.5 %, under the host's 1.8–5.9 % A/B spread. An nps reading would report noise.
+    - **The fallback trigger stays `G6` below base** (F2, the amendment's T9). The profile is reported, not graded.
+  - `EPIC-011` § The per-change rule names this ticket as an exception to its S2 line.
 - **Falsifiers.**
   - **F1:** A1, A2, A3 or A5 red is a defect, back to the Software Engineer.
   - **F2:** `G6` below base fires D2.3's fallback: carry `se-ABC-253`'s full halves path (+10–20 h, `estimate`). The
     fallback re-points `ABC-081`'s, `ABC-122`'s and `ABC-208`'s rows, which needs an Architect ruling under
     `ADR-0026` first. BA/PM re-scores the size from M to L.
   - **F3:** an undetected corrupt hit in A2's torn-slot row is a defect in the check.
+  - *(2026-11-02, `bapm-ABC-265-rows`.)* **The amendment's falsifiers map here:** T8 = A3 (F1); T9 = A4's `G6` (F2);
+    T10 = A2's torn-slot row and its verified-copy row (F1, F3). T8 or T10 firing is a defect, back to the Software
+    Engineer. The `ADR-0025` amendment's table is authoritative.
 
 ## NFR triggers
 
@@ -119,6 +157,9 @@ adr: "Owed: an amendment to ADR-0025 decision 2 (the layout) and decision 4's la
    race is `ABC-267`'s.
 4. **The PR lists every row it touches.** The target is none of `ABC-081`, `ABC-122` or `ABC-208`'s (A3).
 5. UAT: value-identical and no product surface, so the QE verdict signs it (owner delegation `…5aaf7cec` item 2).
+6. *(2026-11-02, `bapm-ABC-265-rows`.)* A2's verified-copy row writes into the buffer like the torn-slot row. Build
+   note from the amendment's § Consequences: under TypeScript 5.9, declare the view `Uint32Array<ArrayBufferLike>` or
+   `Uint32Array<SharedArrayBuffer>`. The inferred `Uint32Array<ArrayBuffer>` fails the typecheck (TS2322 in the probe).
 
 ## Size and priority
 
@@ -132,6 +173,8 @@ adr: "Owed: an amendment to ADR-0025 decision 2 (the layout) and decision 4's la
   "its ADR"). **Owner:** OQ-1 named only `ADR-0044` D5, so this amendment changes an accepted ADR and goes to him when
   written. Reading (b): the build may start once it is written. The merge waits on his acceptance. Whether OQ-1
   already covers it is the Orchestrator's call (`arch-owner-answers-1102` `…c0591ef8`, open question 1).
+  *(2026-11-02, `bapm-ABC-265-rows`: **written, PROPOSED** (`arch-ABC-265`, merged `c0f3cbad`). The Orchestrator has
+  asked the owner to accept or decline it (board, 2026-11-02). His answer gates the merge only.)*
 - **Place:** after Phase 2 and R1, before Phase 3; or beside Phase 2 by width. No Phase 2 ticket edits
   `src/transposition.ts` (`ADR-0056` D6's 2026-11-02 line).
 - **Shares `src/transposition.ts`** with `ABC-257` (paused) and `ABC-258` / `ABC-237` (parked). Only one at a time.
@@ -147,12 +190,14 @@ adr: "Owed: an amendment to ADR-0025 decision 2 (the layout) and decision 4's la
 | 2 | scope and out-of-scope | ✅ |
 | 3 | INVEST | ✅ M; value-identical, so it merges alone; it waits on no other thread ticket |
 | 4 | testable, measurable acceptance | ✅ each row is a byte count, a hit or a miss, node equality, a depth or a source fact |
-| 5 | dependencies known | ✅ the `ADR-0025` amendment; the owner's acceptance of it; the shared file |
+| 5 | dependencies known | ✅ the `ADR-0025` amendment; the owner's acceptance of it; the shared file *(2026-11-02: written, PROPOSED; acceptance gates the merge only)* |
 | 6 | NFR triggers with targets | ✅ 4 MiB (4 194 304 B); `G6` ≥ base, floor 6; `G7` ≤ 16 MiB, growth ≤ 1 MiB |
-| 7 | test notes | ✅ 1–5 |
+| 7 | test notes | ✅ ~~1–5~~ 1–6 |
 | 8 | size | ✅ M (L on F2) |
 | 9 | priority | ✅ P2 |
-| 10 | no major unresolved blocker | ❌ the `ADR-0025` amendment (decision 2, decision 4's last bullet) is not written |
+| 10 | no major unresolved blocker | ~~❌ the `ADR-0025` amendment (decision 2, decision 4's last bullet) is not written~~ ✅ *2026-11-02: the amendment is written, PROPOSED (`arch-ABC-265` `…e396e5ab`); A2 carries T10; A7 carries the no-S2 ruling; reading (b): build may start, merge waits on the owner's acceptance* |
 
-**DoR 9/10. Backlog.** It reaches Ready when the Architect writes the `ADR-0025` amendment (reading (b)). The board
-move is the Orchestrator's.
+~~**DoR 9/10. Backlog.** It reaches Ready when the Architect writes the `ADR-0025` amendment (reading (b)). The board
+move is the Orchestrator's.~~
+**DoR 10/10 (re-scored 2026-11-02, `bapm-ABC-265-rows`, reading (b)).** It may leave Backlog for Ready. The build may
+start. The merge waits on the owner's acceptance of the `ADR-0025` amendment. The board move is the Orchestrator's.
