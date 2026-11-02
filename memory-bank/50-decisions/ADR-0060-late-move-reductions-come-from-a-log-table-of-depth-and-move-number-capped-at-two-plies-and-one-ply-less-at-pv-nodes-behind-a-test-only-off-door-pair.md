@@ -6,6 +6,14 @@ id: ADR-0060
 
 ## Status
 
+*2026-11-02, the owner's answer* (`orch-2026-10-30a` `…773be7de`, verbatim *"61 yes, 25 yes, park threads"*): **the
+cap question below was not answered, so its default stands: A3's 27 cp cap is kept and P1 stays parked on `main`.**
+This is the default the question names ("keep the cap"), not new owner words. Still PROPOSED, RE-OPENED; no rule is
+written in, no bar moves, and the build does not start. The flat 1-ply LMR stays on `main`. The suggested next step
+is unchanged: re-measure decision 1 unchanged, under the same bars, on the `main` that `ABC-268` (P3, `ADR-0061`,
+accepted the same day) merges into, if it merges. Recorded by Architect/Design (task `arch-owner-answers-1102b`,
+records only, on `grugops/arch-owner-answers-1102b` from `main` `b47adfbb`). Nothing was run.
+
 **PROPOSED, RE-OPENED; RE-OPEN PROBE 2026-11-02: no form in a pre-registered set of nine meets every bar on `main`.
 No rule is written in, no bar moves, and the build does not start. One question goes to the owner.** Recorded by
 Architect/Design (task `arch-ADR-0060-reopen`, records only, on `grugops/arch-ADR-0060-reopen` from `main`

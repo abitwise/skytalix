@@ -6,6 +6,21 @@ id: ADR-0025
 
 ## Status
 
+*2026-11-02, the owner's answer:* the TH-1 shared-table amendment at the end of this file is **ACCEPTED, and IN FORCE
+on `main`**. His words, verbatim (`orch-2026-10-30a` `…773be7de`): *"25 yes"*. `ABC-265` merged to local `main` at
+`605874b8` (QE PASS_WITH_GAPS, no blocking gap; `G6` head equal to base, so D2.3's fallback did not fire).
+- **What now reads on `main`:** decision 2's first bullet and decision 4's last bullet as the amendment writes them.
+  The table is one lockless `SharedArrayBuffer` table, four `Uint32` words a slot with an XOR check, still 2^18 slots
+  and 4 MiB.
+- **What stands as written:** decisions 1, 3, 5, 6 and 7; decision 2's size and replacement bullets (always-replace);
+  decision 4's other bullets (allocated once, cleared at every `chooseMove` and `search()` entry).
+- **What stays as it was:** the 2026-10-26 decision 4 amendment (accepted, not in force), the T2 amendment (parked)
+  and `ADR-0058` (accepted, not in force).
+- **One writer only.** Today the engine runs one thread: `ADR-0062` (the worker pool) is parked by the same answer,
+  and `ADR-0044` D5 stands. The shared layout is in force; a second writer is not.
+- Recorded by Architect/Design (task `arch-owner-answers-1102b`, records only, on `grugops/arch-owner-answers-1102b`
+  from `main` `b47adfbb`). Nothing was run.
+
 *2026-11-02, `ABC-265` (TH-1):* a **PROPOSED** amendment to decision 2's first bullet and decision 4's last bullet is
 at the end of this file. It makes the table one lockless `SharedArrayBuffer` table: four `Uint32` words a slot with
 an XOR check, still 2^18 slots and 4 MiB, node-for-node equal to today at `Threads 1`. Acceptance is the owner's.
@@ -561,11 +576,17 @@ back to the Engineer.
 - **After it ships:** set `depthPreferred` to false in `search()` and `chooseMove`, two booleans. The shipped path is
   then the door, node for node. Removing the switch, the doors and the re-points afterwards is a revert of one ticket.
 
-## Proposed amendment 2026-11-02 (`ABC-265`, TH-1): one shared table, four `Uint32` words a slot with an XOR check. PROPOSED
+## Proposed amendment 2026-11-02 (`ABC-265`, TH-1): one shared table, four `Uint32` words a slot with an XOR check. ACCEPTED, IN FORCE on `main` (2026-11-02)
 
 ### Status
 
-**PROPOSED** 2026-11-02 by Architect/Design (task `arch-ABC-265`, records plus scratch probes, on `grugops/arch-ABC-265`
+**ACCEPTED 2026-11-02 by the owner, and IN FORCE on `main`** at `ABC-265`'s merge (`605874b8`). His words, verbatim
+(`orch-2026-10-30a` `…773be7de`): *"25 yes"*. QE PASS_WITH_GAPS (`qe-ABC-265` `…d9879b9c`), QE-265-a closed before
+the merge. The bullets below are the text as proposed and are kept. "Acceptance is the owner's", "the merge waits"
+and "default without an answer" are settled by this line. The "if `ABC-265` does not merge" bullet does not apply.
+Recorded by Architect/Design (task `arch-owner-answers-1102b`, records only).
+
+*As proposed, kept:* **PROPOSED** 2026-11-02 by Architect/Design (task `arch-ABC-265`, records plus scratch probes, on `grugops/arch-ABC-265`
 from `main` `2a61bd3f`). Nothing in `src/` or the tests moved. No clock was read: every probe figure below is a
 deterministic count.
 
