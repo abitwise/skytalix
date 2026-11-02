@@ -44,6 +44,16 @@ run.
   shorten worker 0's path to a depth (ratios 0.87–1.75 against alone; 64 of 64 runs reached the same depth in
   1 000 000 nodes), so D2.5's η is not supported by counts at these depths. `ADR-0062` D12 asks for one timing probe
   before the build. Nothing in this ADR changes.
+- *2026-11-02 (`arch-ABC-266-repropose`):* the D12 timing probe MISSED (`qe-ABC-266-d12` `…9f9aeb87`): median played
+  depth 7 at `Threads` 1, 4 and 12 at 100 ms, with the workers in lockstep. At 12 workers a worker runs at about 0.7 of
+  one thread.
+  - No helper-diversity, deeper-entry or 4-fast-core form passed the Architect's pre-registered re-proposal rule
+    (`arch-ABC-266-repropose` verdict).
+  - **D2.5's Elo estimate for threads (+100 to +300 at 100 ms) is not supported on this engine as it stands.** The
+    +55 to +150 at 40/15 is unread.
+  - The Threads row of D6 is unchanged in direction ("pursue"). Its next step, `ABC-266`, is recommended parked (the
+    owner decides).
+  - `ABC-265`'s shared table does not depend on this. Nothing else in this ADR changes.
 
 **Reviewed 2026-11-02** by Architect/Design (task `arch-accel-review`, records only, on `grugops/arch-accel-review`
 from `main` `2ef3aadc`; one informal probe, no timing). **Still ACCEPTED, and no decision, strand or owner answer

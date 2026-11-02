@@ -30,6 +30,38 @@ Every probe figure below is a count or a property; no clock was read.
 - **`ABC-267` folds into `ABC-266`** (D13). Its rows join `ABC-266`'s acceptance, with one case added and one seam
   dropped.
 
+*2026-11-02 (`arch-ABC-266-repropose`):* **D12 MISSED, and the re-proposal found no winning form. Still PROPOSED.
+The `ABC-266` build does not start. The Architect recommends parking `ABC-266` with `Threads` at 1.**
+
+- **The D12 miss** (`qe-ABC-266-d12` `…9f9aeb87`, not loaded): the median played depth at 100 ms was 7 at `Threads`
+  1, 4 and 12, with the workers in lockstep.
+- **The re-proposal.** Candidates were pre-registered and sealed before any corpus run (`…decision-3c920b97`):
+  - helper skip blocks (Stockfish's pre-2018 schedule);
+  - `ADR-0058`'s deeper-entry cutoffs at `Threads ≥ 2`;
+  - root move-order perturbation in helpers;
+  - `Threads 4` pinned to CPUs 0–3;
+  - and their combinations.
+
+  The rule is a strict median-depth gain with a quality guard, or a quality-proxy gain (agreement with a 5 s
+  `Threads 1` move) of two positions of 20. A winner had to be confirmed in an unloaded fresh run.
+- **The outcome: no WIN.**
+  - Plain pools replicate D12.
+  - Only skip + deeper + perturbation added a ply of median depth: `Threads 4` and `Threads 12`, four reads. Every
+    read lost 1.7–2 positions of 20 on the quality proxy.
+  - The confirmation was loaded by the pre-registered block test.
+  - The deeper-entry rule alone inflates the reported depth at `Threads 1`.
+  - Evidence: `arch-ABC-266-repropose`'s results observation and verdict decision.
+- **The design of record still stands.** D1–D11 and D13 are unchanged, and the mechanics hold (identity, D5's order,
+  D6).
+  - **If the owner accepts this ADR while `ABC-266` is parked,** it reads "accepted, not in force on `main`" (the
+    `ADR-0026` decision 9 form).
+  - **Without a build,** `ADR-0044` D3 and D5 stand.
+- **What reopens it** (each with its own probe):
+  - `ADR-0058` in force through `ABC-257`;
+  - an owner-asked probe of the skip + deeper + perturbation form at `Threads 12`, with a repaired load test and a
+    larger, unceilinged quality sample;
+  - a later search change that breaks the lockstep.
+
 ## Context
 
 ### What is fixed before this ADR
@@ -367,6 +399,9 @@ defaults (§ Alternatives).
   - **Reading.** If `Threads 12`'s played depth is not above `Threads 1`'s on the median at 100 ms, the Architect
     re-proposes before the build: helper diversity (D3), or `ADR-0058`'s deeper-entry rule at `Threads ≥ 2` only, each
     with its own probe. Otherwise the build goes ahead as written. It is a probe, not a gate, and it is not A7.
+  - *2026-11-02:* **The outcome was a MISS, and the re-proposal found no winning form** (§ Status, dated line of
+    `arch-ABC-266-repropose`). D3's "helper diversity: none in this build" stands, because no diversity form passed.
+    The build does not start on this ADR as written or amended.
 
 ### D13. `ABC-267` folds into `ABC-266`
 

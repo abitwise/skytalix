@@ -1,0 +1,65 @@
+{
+ "ref": {
+  "n": 20,
+  "depthMedian": 11.5,
+  "depths": "11 11 10 10 10 12 12 12 12 11 10 10 11 11 13 15 15 13 16 14",
+  "foreignCores": 0.36,
+  "tctl": 74.375
+ },
+ "runs": {
+  "confirm-T4SDP.jsonl": {
+   "file": "confirm-T4SDP.jsonl",
+   "movetime": 100,
+   "passes": 3,
+   "affinity": "0-3",
+   "cells": {
+    "T1": {
+     "n": 60,
+     "D": 7,
+     "meanDepth": 7.4,
+     "Q": 18,
+     "perPosDepthMedian": "6 7 5 5 5 8 8 7 7 6 6 6 6 6 9 10 11 9 11 10",
+     "nodesMedian": 80209,
+     "wallMsMax": 101
+    },
+    "T4SDP": {
+     "n": 60,
+     "D": 8,
+     "meanDepth": 8.767,
+     "Q": 16.333,
+     "perPosDepthMedian": "8 7 6 5 5 9 9 8 8 8 6 6 7 6 10 12 13 11 19 12",
+     "nodesMedian": 312076,
+     "wallMsMax": 104,
+     "perWorkerRate": 0.973,
+     "allSameDepth": 0,
+     "playedAboveW0": 3,
+     "w0D": 8,
+     "w0Q": 16.333
+    }
+   },
+   "load": {
+    "vitestOrCutechess": false,
+    "foreignCores": 0.565,
+    "blocksOver08": "14/60",
+    "blockFcMax": 2.705,
+    "hot": [],
+    "tctlEnd": 80.125,
+    "startTctl": 44.375,
+    "startHot": [
+     "abtop:1578058:21%"
+    ],
+    "LOADED": true
+   },
+   "rule": {
+    "T4SDP": {
+     "dD": 1,
+     "dQ": -1.667,
+     "depthPass": true,
+     "qualityPass": false,
+     "outcome": "PASS (SHARED)"
+    }
+   }
+  }
+ },
+ "selection": []
+}
