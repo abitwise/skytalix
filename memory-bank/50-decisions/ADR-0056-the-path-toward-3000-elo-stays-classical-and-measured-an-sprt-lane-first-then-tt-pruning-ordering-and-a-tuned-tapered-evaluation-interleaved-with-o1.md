@@ -67,6 +67,21 @@ the owner's answers to the three calls the second fold left open (`orch-2026-10-
   per-epic reading against Stockfish remains.
 - **Unchanged:** C1; C2′, except its smoke paragraph; the scale; the claim rule; D1–D4; D6's order.
 
+**Folded 2026-11-02, fourth time** (task `arch-owner-answers-1102`, records only, at `main` `7daf8086`; nothing run):
+the owner's answers of 2026-11-02 (`orch-2026-10-30a` `…81ae2db4`).
+
+- **His words, verbatim:** *"R yes, P yes, A accept, B park, C yes; 1 yes, 2 a, 3 c, 4 a, 5 no, 6 later"*. R, A and
+  B are `ADR-0059`, `ADR-0058` and `ADR-0025`'s T2 amendment; 1–6 are `ADR-0057`'s OQ-1 to OQ-6.
+- **What changes here:**
+  - **"P yes":** Phase 1 (the TT) is paused, and Phase 2 (pruning) goes first. D6's 2026-11-02 line is now his
+    order, not only the order being worked. See D6's dated line of this fold.
+  - **"C yes":** the NEUTRAL bar (≥ 43.0 of 100) may grade a change that cannot be seen at 100 ms, together with the
+    ticket's own measured bar. The ticket's page names it, before the read. See C2′'s dated line.
+  - **`ADR-0057` accepted (threads):** the threads strand joins `EPIC-011`. Its place in the order is in D6's dated
+    line. Q-3K-3's reading is now OQ-2 (a), and the 40/15 claim is read at `Threads 1` and `Threads N` separately
+    (OQ-3 (c)). See D7's and C1's dated lines.
+- **Unchanged:** the GAIN bar, C1's rule and scale, C3″, S′, R-TC, D1–D4, and Phases 2–5's order.
+
 - *2026-11-01, dated line by Architect/Design (task `arch-abc250-close`, records only, at `main` `767a2e3e`).* **S′
   keeps E = 1 650, owner-confirmed** (`orch-2026-10-30a` `…1f5e3b27`, verbatim: *"ok set to 1650 and if you see in
   the future we can raise it then let's raise."*). Raising E follows S′'s re-pin rule as written: a pooled S′ score
@@ -395,6 +410,12 @@ hour and game count below is an **estimate**, with its basis named. None is a re
     `UNKNOWN - verify`: nothing on record has run longer than 22.22 h.
 - **When to spend it:** only when a 4 s trend reading, plus the measured 40/15 offset (C4), puts the point estimate
   at or above 3 000. Otherwise the 3 days buy a known NOT MET.
+- *Dated 2026-11-02 (`ADR-0057` OQ-3 (c), owner `…81ae2db4`; `arch-owner-answers-1102`).* **The claim is read and
+  reported at `Threads 1` and at `Threads N` separately, `Threads 1` first.** Each result is labelled "1 CPU" or "N
+  CPU", with N and the cores used stated. No "3 000" is quoted without the label. Stockfish stays at `Threads 1`: its
+  limited play is pinned by depth. The `Threads 1` claim keeps every rule in this block. The `Threads N` claim's
+  "when to spend it" and its PREREG are the Architect's, written when the threads strand has merged (named, not
+  decided here).
 
 **C2. The per-change SPRT, the fast routine control** (the tool is M0; whether its verdict enters the per-change rule
 is still Q-3K-2):
@@ -526,6 +547,25 @@ bounds and the overshoot figures upper bounds. Every hour and Elo figure not quo
     - **NEUTRAL** (a correctness fix or simplification that changes values): **≥ 43.0 of 100**, which is
       ≈ −49 Elo, the lower edge of the 95 % interval at 50 %: "no clear loss".
     - *Owner-accepted 2026-11-01 (`…43098cef`, "2. ok"): both bars stand, with the blind spot stated below.*
+    - *Dated 2026-11-02 (owner `…81ae2db4`, "C yes"; `arch-owner-answers-1102`).* **NEUTRAL for a change invisible
+      at 100 ms.** A strength change whose mechanism cannot be seen at 100 ms may be read on the NEUTRAL bar
+      (≥ 43.0 of 100) in place of GAIN. It never stands alone: the ticket's own measured bar must pass too.
+      - **Who names it: the ticket's page, before the read.** Its intent line reads "NEUTRAL (invisible at 100 ms)".
+        BA/PM writes it from the ticket's design note, at or before Ready, and it is fixed before the read starts.
+        No ticket is re-classed after a score is seen. QE grades on the intent the page held when the read began.
+      - **What qualifies:** the design names the depth at which the mechanism acts and its firing at 100 ms,
+        measured or derived (the depth-gated rule below). The mechanism qualifies only if that figure shows it barely
+        fires at 100 ms. Examples on record: T4 by construction; T2 (at most 8.5 % of stores meet another position's
+        entry); S1, X2 and P5 by their depth gates. A change whose design expects its gain to show at 100 ms keeps
+        GAIN. `ABC-264` (P2) cuts 5.8 % of nodes at depth 6, so it is GAIN.
+      - **The ticket's own measured bar:** pre-registered on the page, read where the mechanism does fire. Examples:
+        a fixed-depth node ratio, a completed depth at a longer budget, or held-out lines (`ABC-257` A8′, `ABC-237`
+        A3). It is not loosened after Ready, and a miss is NOT MET, as a score miss is.
+      - **Everything else stands:** C-1 and C-2, S′ and the Levels deep lane. The correctness-fix NEUTRAL above is
+        unchanged.
+      - **The cost, stated:** a NEUTRAL change may lose up to about 49 Elo at 100 ms unseen (P(pass | −20) = 0.88,
+        the table below). The mechanism bar shows that it works, not that it gains. C3″ is the net check across the
+        epic.
   - **A miss is NOT MET.** QE records a `failed-attempt`, and the ticket goes back to BA/PM. A miss is not re-played
     for luck, and the 100 games are not extended. A changed form may come back as a new attempt, and that is a new
     read.
@@ -959,6 +999,25 @@ evidence.
   recommended phase order, so it goes to the owner with `ADR-0058` and `ADR-0059`. Until he answers, item 2 stands as
   written and this line records the order actually being worked.
 
+*Dated 2026-11-02 (`arch-owner-answers-1102`; owner `…81ae2db4`, "P yes" and `ADR-0057` accepted):*
+- **"P yes": the pause is his order.** Phase 1 is paused and Phase 2 goes first, P2 (`ABC-264`) then P1 → P4 → P3 →
+  P5 → P6. `ABC-237` (T2) and `ABC-258` (T4) are parked. `ABC-257` (T1 + T3) is paused; its old trigger, the
+  NEUTRAL-bar question, is answered, so the pause alone holds it. Lifting it is the Orchestrator's call within "P".
+- **The threads strand (`ADR-0057`, about three tickets) has a place.** `ADR-0057` D6 put it after Phase 1. Phase 1
+  is paused with no end date, so that slot no longer exists. The Architect's recommendation, the Orchestrator's and
+  BA/PM's to set (the reorder paragraph under item 7 allows it):
+  1. **After Phase 2 and its R1 reading, before Phase 3.** The owner's "pruning first" holds.
+  2. **The shared-table ticket may be pulled earlier, beside Phase 2, by width.** It touches `src/transposition.ts`
+     only, which no Phase 2 ticket edits. It is node-for-node equal to today at `Threads 1`, so it moves no Phase 2
+     base and stales no C2′ read.
+  3. **All three land before W1 and before any 40/15 reading.** W1's time rules must be written against the worker
+     pool, and the claim is read at both thread counts (C1's dated line).
+  4. **The parked T2 and T4 are re-asked after the worker-pool ticket,** on the shared table. Several workers loading
+     one table is the pressure they need (`ADR-0025` T2 status). `ABC-257`, if resumed later, ports its rule onto
+     the shared layout (`ADR-0058` status).
+  5. **Every Phase 2–5 read stays `Threads 1` against `Threads 1`** (`ADR-0057` OQ-2 (a)). A threads merge is
+     value-identical at `Threads 1`, so it does not make any read stale.
+
 ### D7. What is the owner's call
 
 - **Q-3K-1, the scale and the time** a "3 000" is read on (D5 items 1, 2 and 5). The proposal is Stockfish 19
@@ -1018,6 +1077,14 @@ evidence.
   - the lanes R-TC part 2 names.
   None of them is a new owner call.
 - **Q-3K-4, Q-3K-6, Q-3K-7, Q-3K-8: still open.**
+
+*Dated 2026-11-02 (`arch-owner-answers-1102`; his word `…81ae2db4`):*
+- **Q-3K-3, refined by `ADR-0057` OQ-2 (a).** "One core, width 1, one game at a time" reads: one game at a time;
+  the engine may use several cores inside a game; every 100 / 400 read stays at `Threads 1` on both sides.
+- **The C2′ NEUTRAL-bar question: answered, "C yes"** (C2′'s dated line).
+- **The Phase 1 pause: answered, "P yes"** (D6's dated line).
+- **Q-3K-4, Q-3K-6, Q-3K-7, Q-3K-8: still open.** `ADR-0057` OQ-4 (a) does not move `NFR-009`'s level, so it does not
+  answer Q-3K-6.
 
 ### D8. What BA/PM would cut on a yes
 

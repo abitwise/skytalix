@@ -6,7 +6,35 @@ id: ADR-0057
 
 ## Status
 
-**PROPOSED** 2026-11-01. Spike `ABC-263`, records only. Written by Architect/Design (task `arch-ABC-263`), on branch
+**ACCEPTED** 2026-11-02 by the owner, with his answers to OQ-1 to OQ-6. Recorded by Architect/Design (task
+`arch-owner-answers-1102`, records only, on `grugops/arch-owner-answers-1102` from `main` `7daf8086`). Nothing was
+run.
+
+- **His words, verbatim** (`orch-2026-10-30a` `…81ae2db4`): *"1 yes, 2 a, 3 c, 4 a, 5 no, 6 later"*, the answers to
+  OQ-1 to OQ-6 in that order.
+- **What acceptance covers:** the analysis (D1–D4), the recommendations (D6) and the answers below. It writes no code
+  and amends no other ADR by itself. Each later step brings its own ticket, and its own ADR where an accepted decision
+  changes (the first status block).
+- **The answers:**
+  - **OQ-1, yes.** Threads are in `EPIC-011`'s scope. BA/PM lifts the "Threads" half of § Out of scope's "Threads,
+    pondering" line; pondering stays out. The reversal of `ADR-0044` D5 (one thread, no worker) is accepted for the
+    threads tickets. The amending ADR comes with the worker-pool ticket. `ADR-0044` carries a pointer line.
+  - **OQ-2, (a).** One game at a time. The engine may use several cores inside a game. Every 100 / 400 read stays at
+    `Threads 1` on both sides. Q-3K-3's reading is updated in `ADR-0056` D7.
+  - **OQ-3, (c).** The 40/15 claim is read and reported for `Threads 1` and `Threads N` separately, `Threads 1`
+    first (`ADR-0056` C1's dated line).
+  - **OQ-4, (a).** `NFR-009` counts retained search growth, not each worker's V8 baseline heap. About 4 MiB for the
+    shared table once, plus about 0.5 MiB a worker: about 10 MiB at 12 workers (`estimate`, SP6), inside 16 MiB.
+    `NFR-009`'s level does not move, so Q-3K-6 stays open.
+  - **OQ-5, no.** No `render` group change. The accelerator strand stays parked (D6), and nothing measures the iGPU or
+    the NPU.
+  - **OQ-6, later.** NNUE on the CPU is re-asked on `ADR-0056`'s V4 trigger: the curve flattening below 3 000 after
+    Phase 5. `EPIC-004`'s neural non-goal and `EPIC-011` § Out of scope's neural line stand.
+- **The order, re-read:** D6 put threads "after `EPIC-011` phase 1". Phase 1 is now paused (owner, *"P yes"*). The new
+  place is in D6's dated line and in `ADR-0056` D6's dated line of the same fold.
+- **What BA/PM needs to cut the tickets:** § Inputs for the thread tickets, below D7.
+
+*First status, kept:* **PROPOSED** 2026-11-01. Spike `ABC-263`, records only. Written by Architect/Design (task `arch-ABC-263`), on branch
 `grugops/arch-ABC-263` from `main` `44c99531`.
 
 - **Nothing here is decided.** This ADR recommends. It changes no rule, no NFR bound, no scope line and no other ADR.
@@ -389,7 +417,24 @@ changes none of them.**
 That way the claim can be read both ways (OQ-3). The per-change reads of phases 2–5 stay at `Threads 1` (D4), so
 threads do not muddy any phase's own reading.
 
+*Dated 2026-11-02 (`arch-owner-answers-1102`; owner `…81ae2db4`).* **The threads row now reads `pursue`, and its
+place moves.** "After phase 1" assumed Phase 1 would settle the table's replacement, lifetime and size. Phase 1 is
+paused with no end date (*"P yes"*): T1 closed unmerged (`ADR-0058` accepted, not in force), T2 and T4 parked, T3
+paused. So the table on `main` is stable: exact-depth cutoffs, always-replace, cleared per search, 2^18 slots. The
+alternative "threads now, before phase 1" was rejected because the table would change four times; that no longer
+holds. The parked items are policy changes (hit rule, replacement, lifetime, size), and each ports to the shared
+layout without rewriting it. The recommendation, the Orchestrator's and BA/PM's to set by width:
+- **After Phase 2 and its R1 reading, before Phase 3** (the owner's "pruning first").
+- **The shared-table ticket may be pulled earlier, beside Phase 2.** It edits only `src/transposition.ts`, no Phase 2
+  ticket edits that file, and it is node-for-node equal to today at `Threads 1`.
+- **All three before W1 and before any 40/15 reading** (OQ-3 (c) reads both thread counts).
+- **T2 and T4 are re-asked after the worker-pool ticket,** on the shared table, where several workers raise the
+  table pressure they need (`ADR-0025` T2 status).
+
 ### D7. Questions for the owner (yes/no or a choice)
+
+*Answered 2026-11-02 (owner `…81ae2db4`): OQ-1 yes, OQ-2 (a), OQ-3 (c), OQ-4 (a), OQ-5 no, OQ-6 later. See § Status.
+The questions are kept as asked.*
 
 - **OQ-1, threads in scope.** Lift `EPIC-011` § Out of scope's "Threads" line, so BA/PM can cut a Lazy SMP ticket
   after phase 1? **yes / no.** Recommended: yes. *(corrected 2026-11-01)* A yes also accepts reversing `ADR-0044` D5
@@ -409,6 +454,34 @@ threads do not muddy any phase's own reading.
 - **OQ-6, a neural net on the CPU.** Re-open `EPIC-004`'s neural non-goal for an NNUE-style evaluation in TypeScript
   on the CPU (workload a, no device)? **yes / no / later** (later = on the same trigger as `ADR-0056`'s V4, bitboards, which re-opens `ADR-0001`: if the curve
   flattens below 3 000 after phase 5, that is the next question; *corrected 2026-11-01:* V4 defined here). Recommended: later.
+
+### Inputs for the thread tickets (2026-11-02, `arch-owner-answers-1102`)
+
+What BA/PM needs to cut the three tickets. It cites D2–D5 and does not restate them. Sizes are D2's estimate (L,
+32–65 h in all; 42–85 h with D2.3's fallback). The order is TH-1 → TH-2 → TH-3; TH-3 may be cut into TH-2.
+
+| | TH-1, the shared table | TH-2, the worker pool and `Threads` | TH-3, the tests and lanes |
+|---|---|---|---|
+| **scope** | D2.3: one `Uint32Array` of four words over a `SharedArrayBuffer`, 16 B a slot, 2^18 slots, 4 MiB. The XOR check. The key split inside `probeTable` and `storeEntry`; their `bigint` signatures do not change. Store order 2, 3, 0, 1. Plain accesses, no `Atomics`. Replacement, the exact-depth hit rule and the per-search clear are unchanged | D2.2: `worker_threads`, one search a worker, the table handed over once. The stop slot (an `Int32Array` over a small `SharedArrayBuffer`) read through the injected clock, `ADR-0044` D5's pre-design. Own killers, history and scratch per worker. A UCI `Threads` spin option, default 1 | D4's `G4`, `NFR-008` and `NFR-009` rows: the multi-worker property rows (a legal move, a bounded time, no thrown error, no corrupt hit), the torn-entry stress (SP2's form), the `NFR-009` instrument summed over workers, the default lane's wall before and after |
+| **its ADR** | an amendment to `ADR-0025` decision 2 (the layout) and decision 4's last bullet ("one table per worker by construction" becomes one shared table). **Changing an accepted ADR is the owner's.** OQ-1 named only `ADR-0044` D5, so this amendment is asked when written. Reading (b) lets the build proceed while it is PROPOSED | a new ADR amending `ADR-0044` D3 (the option rows) and D5. **The D5 reversal is pre-accepted** (OQ-1). The ADR's text is still reported to the owner | none; it follows `ADR-0026` (test method) and the TH-2 ADR |
+| **the identity bar** | `Threads 1` node-for-node equal to `main` (the `G4` door on `ABC-078` `A3`'s corpus). `ABC-081`, `ABC-122` and `ABC-208` rows run unedited; if any needs an edit, that is an Architect ruling under `ADR-0026` (D2.3) | `Threads 1` node-for-node equal to `main`, and every UCI session lane unchanged at `Threads 1` | — |
+| **the cost bar** | `G6` by its rule (≥ base, floor 6) at `Threads 1`, plus the `Threads 1` profile against `main` reported (`se-ABC-253` `raw/profile.sh`, `raw/analyse.mts`). **`G6` below base triggers D2.3's fallback** (the full halves path, +10–20 h) | — | `NFR-008`: the default lane ≤ 10 s with at most one small 2-worker row; multi-worker rows behind a deep-lane flag |
+| **the read** | none: value-identical at `Threads 1`, proved by the door. C2′ grades strength changes only (`ADR-0056` D5) | one read, `Threads N` against `Threads 1` at 100 ms, GAIN (≥ 50.0 of 100), labelled a hardware gain and reported in wall time and core-seconds (D4). S′ and the Levels deep lane stay at `Threads 1` | none |
+| **NFRs** | `NFR-009`: 4 MiB, unchanged. `NFR-005`: `G6` | `NFR-009` read as OQ-4 (a). `NFR-004`: each worker checks the clock at `NODES_PER_CLOCK_CHECK`, as today. `AR-UCI-BUSY`: unchanged at `Threads 1` | `NFR-008`, `NFR-009` |
+
+**Design choices left to the TH-2 ADR, each with the Architect's recommendation:**
+- **Does `Threads 1` spawn a worker?** Recommended: no. `Threads 1` runs today's in-thread path, so the default
+  product, its timing and `AR-UCI-BUSY` stay exactly as today. The worker path serves `Threads` ≥ 2, and D5's side gain
+  (`isready` and `stop` answered during a search) arrives with it.
+- **The option's maximum.** Recommended: 12, one per physical core (D2.4). The owner may ask for 8 to leave the host
+  room.
+- **Which result is played.** Recommended: worker 0's best move; helpers only fill the table. Helper diversity (odd
+  start depths or a permuted root order) is the ADR's to pick and measure.
+- **The terminal game.** Recommended: unchanged, `Threads 1`, no new surface (`ADR-0044` D7).
+
+**Owed by other roles, named here:** BA/PM lifts the "Threads" half of `EPIC-011` § Out of scope and places TH-1 to
+TH-3 in § Phases (D6's dated line). `NFR-009`'s file may need one line stating OQ-4 (a)'s reading; that is the TH-2
+design hop's, with Security/NFR. Phase 2 tickets keep `Threads 1` reads with no change.
 
 ## Alternatives
 
