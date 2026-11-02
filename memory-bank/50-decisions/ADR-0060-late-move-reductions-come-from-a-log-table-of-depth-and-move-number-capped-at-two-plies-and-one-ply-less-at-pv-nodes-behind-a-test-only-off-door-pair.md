@@ -6,6 +6,18 @@ id: ADR-0060
 
 ## Status
 
+*2026-11-02, dated line by Architect/Design (task `arch-ABC-233`, records only, at `main` `60b76b52`).* **O1h's table
+is measured (`ADR-0063`, PROPOSED, premise not met on `main`). P1 stays parked.**
+- **The diagnostic** was not pre-registered, so it carries no verdict (`ADR-0063` § Context). Decision 1, unchanged,
+  was measured over the history table as its door.
+  - It meets `A4` (a): 0.7505 / 0.7952 / 0.7166 / 0.7749.
+  - It meets reach: +0.348.
+  - It meets the 27 cp cap: drift max 25, where `main` reads 63.
+  - It meets the mate floor: 0 / 163.
+  - **It loses two zugzwang rows, `.001` and `.004` (5 / 7).** F3 applies, and F3 is never a re-pin.
+- **What would re-open P1:** decision 11's history term, measured in a joint pre-registered probe with this table,
+  with zugzwang as the hard gate. A re-measure of decision 1 alone over history is not owed.
+
 **2026-11-02, RE-MEASURED AFTER P3: decision 1 misses three bars on `main` `e72487e1`, with futility in force. P1
 STAYS PARKED.** This ADR is still PROPOSED and re-opened. No rule is written in, no bar moves, and the build does not
 start. Recorded by Architect/Design (task `arch-post-268`, records only, on `grugops/arch-post-268` from `main`

@@ -1,0 +1,16 @@
+{"depth":6,"every":10,"fired":447443,"sampled":44657}
+{"key":"all","n":44615,"flips":81,"ffl":11,"ffh":70,"e100":0,"e200":0,"e300":0,"e500":0,"unstable":32,"doorNoise":41,"flipPct":0.18,"e200Pct":0,"e300Pct":0}
+{"key":"d1","n":38175,"flips":0,"ffl":0,"ffh":0,"e100":0,"e200":0,"e300":0,"e500":0,"unstable":0,"doorNoise":0,"flipPct":0,"e200Pct":0,"e300Pct":0}
+{"key":"d2","n":3697,"flips":0,"ffl":0,"ffh":0,"e100":0,"e200":0,"e300":0,"e500":0,"unstable":0,"doorNoise":0,"flipPct":0,"e200Pct":0,"e300Pct":0}
+{"key":"d3","n":2016,"flips":64,"ffl":3,"ffh":61,"e100":0,"e200":0,"e300":0,"e500":0,"unstable":21,"doorNoise":25,"flipPct":3.17,"e200Pct":0,"e300Pct":0}
+{"key":"d4","n":478,"flips":9,"ffl":8,"ffh":1,"e100":0,"e200":0,"e300":0,"e500":0,"unstable":8,"doorNoise":11,"flipPct":1.88,"e200Pct":0,"e300Pct":0}
+{"key":"d5","n":249,"flips":8,"ffl":0,"ffh":8,"e100":0,"e200":0,"e300":0,"e500":0,"unstable":3,"doorNoise":5,"flipPct":3.21,"e200Pct":0,"e300Pct":0}
+{"key":"hh","n":44615,"flips":81,"ffl":11,"ffh":70,"e100":0,"e200":0,"e300":0,"e500":0,"unstable":32,"doorNoise":41,"flipPct":0.18,"e200Pct":0,"e300Pct":0}
+{"top":{"err":40,"kind":"hh","depth":3,"fen":"r1bqkbnr/ppp1pppp/2np4/8/8/2N2N2/PPPPPPPP/R1BQKB1R w KQkq - 2 3","a":47,"h":48,"dnw":47,"v":8}}
+{"top":{"err":38,"kind":"hh","depth":3,"fen":"r1bqkb1r/pppppppp/2n2n2/8/8/1PN5/P1PPPPPP/R1BQKBNR w KQkq - 3 3","a":9,"h":10,"dnw":9,"v":-28}}
+{"top":{"err":28,"kind":"hh","depth":3,"fen":"rnbqkb1r/1ppppppp/p4n2/8/8/N4N2/PPPPPPPP/R1BQKB1R w KQkq - 2 3","a":37,"h":38,"dnw":37,"v":10}}
+{"top":{"err":28,"kind":"hh","depth":3,"fen":"rnb1kbnr/pppp1ppp/4pq2/8/5P2/2N5/PPPPP1PP/R1BQKBNR w KQkq - 2 3","a":-4,"h":1,"dnw":-4,"v":-31}}
+{"top":{"err":27,"kind":"hh","depth":3,"fen":"r1bqkb1r/pppppppp/2n2n2/8/8/2N2N2/PPPPPPPP/R1BQKB1R w KQkq - 4 3","a":34,"h":48,"dnw":34,"v":8}}
+{"top":{"err":23,"kind":"hh","depth":3,"fen":"rnbqkb1r/pppp1ppp/5n2/4p3/8/P1N5/1PPPPPPP/R1BQKBNR w KQkq - 2 3","a":7,"h":13,"dnw":7,"v":-15}}
+{"top":{"err":22,"kind":"hh","depth":3,"fen":"r1bqkbnr/pppp1ppp/2n5/4p3/8/2P2N2/PP1PPPPP/RNBQKB1R w KQkq e6 0 3","a":1,"h":7,"dnw":1,"v":-20}}
+{"top":{"err":22,"kind":"hh","depth":5,"fen":"rnbqkbnr/1ppppppp/8/p7/4P3/8/PPPP1PPP/RNBQKBNR w KQkq a6 0 2","a":60,"h":61,"dnw":60,"v":39}}
