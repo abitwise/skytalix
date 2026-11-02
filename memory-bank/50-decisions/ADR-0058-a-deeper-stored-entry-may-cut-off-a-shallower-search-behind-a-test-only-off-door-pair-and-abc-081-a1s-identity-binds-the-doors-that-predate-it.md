@@ -6,6 +6,24 @@ id: ADR-0058
 
 ## Status
 
+*2026-11-02:* **F4 fired; still PROPOSED, pending the owner.** Written by Architect/Design (task `arch-phase1-replan`,
+records only, on `grugops/arch-phase1-replan` from `grugops/ABC-238` `772153a7`). The measurements were taken on
+scratch patches outside the repository, and nothing was committed to `src/`.
+- **What fired:** `ABC-238` built the rule correctly (`se-ABC-238` `…3beb1ada`). At fixed depth 8, `search()` read
+  0.9939× on kiwipete and 0.9958× on position-6, against a bar of ≤ 0.95× (`…db17e44b`). `ABC-238` does not merge.
+  F4 is not loosened.
+- **Why (measured, `arch-phase1-replan` notes):** a deeper entry for the probed key exists on only 0.29 % of probes
+  (depth 6, the 190). Eviction loses almost none of them, so the Context section's three sources do not produce
+  deeper entries at a useful rate. Every source searches shallow first.
+  - At depth 6, 65–80 % of deeper cuts come from LMR transpositions and 20–35 % from transpositions across plies.
+  - Null move adds deeper cuts only at depth 8.
+- **On the owner's word:** if he accepts, this ADR reads **"accepted, not in force on `main`"**, as § Status already
+  provides. If he declines, it is withdrawn.
+  - **The Architect recommends accepting.** Decision 7's derivation and the built doors are the base of the paused
+    combined attempt (T1 with the table kept across moves).
+  - That attempt's bar is pre-registered in decision `…64e95bfa` of `arch-phase1-replan`, and its premise was measured at
+    about 0.90× there. The Phase 1 TT strand is paused.
+
 **PROPOSED** 2026-11-01 by Architect/Design. Task `arch-epic011-phase1`, records only, at `main` `13627d0f`. Nothing
 was run, built or timed.
 

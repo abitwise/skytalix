@@ -6,6 +6,11 @@ id: ADR-0025
 
 ## Status
 
+*2026-11-02:* the T2 amendment at the end of this file **stays PROPOSED, pending the owner. The Architect recommends
+parking it** (task `arch-phase1-replan`, records only). At a depth-8 search on today's 2^18 table, T2 changes nothing
+measurable, but on a loaded table it pays. Details are in that amendment's own status line. Decisions 1–7 stand on
+`main` as written.
+
 *2026-11-01:* a **PROPOSED** amendment to decision 2's replacement bullet for `ABC-237` (depth-preferred
 replacement, T2) is at the end of this file. Acceptance is the owner's. Until he accepts it and `ABC-237` merges,
 decision 2's "the replacement policy is the Engineer's" and the delivered always-replace stand on `main`. Written by
@@ -363,6 +368,27 @@ work has his go-ahead, and the Orchestrator reports this text to him when it lan
 ## Proposed amendment 2026-11-01 (`ABC-237`, T2): a store keeps the deeper entry of another position. PROPOSED
 
 ### Status
+
+*2026-11-02:* **still PROPOSED, pending the owner. Recommended: park it with `ABC-258` (T4), and do not build it now.**
+Architect/Design, task `arch-phase1-replan`, measured on scratch patches outside the repository.
+- **The premise (deeper entries are evicted) does not hold on a lightly loaded table.**
+  - Of the probes where a deeper result for the key had been computed earlier in the search, another key evicted 12
+    on the 190 at depth 6, and 0–1 per depth-8 search.
+  - T2's own drops: 0.3–1.5 % of stores at depth 8, and 1.1 % on the 190 at depth 6.
+- **Node ratios at fixed depth 8, against the door:**
+  - T2 alone: `search()` 1.0004× / 1.0028×; `chooseMove` 0.9940× / 1.0012× (kiwipete / position-6).
+  - T1 + T2: 0.9943× / 0.9950× and 0.9466× / 1.0013×.
+  - Across three short games, T2 alone pooled 0.9726× (geometric mean 0.9834×, per-search sd of the log 0.12), which
+    is chaos-level noise.
+- **The Context's pressure arithmetic overstates the load.** It counts every node as a store. Only 3–5 % of nodes
+  store, because quiescence nodes never do.
+  - Per search, that is about 2 k stores at 100 ms and about 0.1 M at 4 s, against 262 144 slots. "≤ 91 % at 4 s"
+    is about 18 % on the same formula.
+  - Real pressure comes at 40/15 (about 0.4–1.0 M stores a search) or with the table kept across moves.
+- **Where T2 pays:** on a 2^14 table (about 3 stores a slot a search), T2 alone pooled **0.7712×** and T1 + T2
+  **0.7408×** over the same three games. So T2 is a remedy for pressure, and it belongs with the table-size question
+  (`ABC-258`) and the kept table (`ABC-257`). It cannot be seen at the 100 ms read.
+- **T6 was not run.** No `ABC-237` build exists.
 
 **PROPOSED** 2026-11-01 by Architect/Design. Task `arch-epic011-phase1`, records only, at `main` `13627d0f`. Nothing
 was run, built or timed.
