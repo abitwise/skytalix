@@ -1,3 +1,4 @@
+_Updated: 2026-11-02 Orchestrator (orch-2026-10-30a) — `arch-ABC-266` merged: **ADR-0062 PROPOSED** (UCI Threads 1–12, default 1; Threads 1 spawns no worker; deepest completed iteration played; table handed at spawn; zero real-worker rows in default lane, THREADS_DEEP lane). **Finding: helpers barely shorten worker 0 to a depth — the +55–150 Elo estimate is unsupported** → D12 timing probe (≤ 15 min, ALONE) gates the build: `qe-ABC-266-d12` queued for the next ALONE window. Ruling: ABC-267 folds into ABC-266. → `bapm-ABC-266-rows`. Owner asked: ADR-0062 (max 12 / 8 / decline); THREADS_DEEP on up to M cores. Running: qe-ABC-265, arch-phase2-p3, bapm-ABC-266-rows._
 _Updated: 2026-11-02 Orchestrator (orch-2026-10-30a) — free slot → `arch-ABC-266` (TH-2 design: worker pool + Threads; ADR-0062 amending ADR-0044 D3/D5). Running: qe-ABC-265, arch-phase2-p3, arch-ABC-266._
 _Updated: 2026-11-02 Orchestrator (orch-2026-10-30a) — `bapm-phase2-records` merged: **ABC-264 → Done (dropped)**; P2 out of Phase 2; P1 parked as title-only stub (re-measure after P3 or O1h); RISK-EPIC011-08 (Phase 2 lost its two largest estimates). Running: qe-ABC-265, arch-phase2-p3._
 _Updated: 2026-11-02 Orchestrator (orch-2026-10-30a) — `arch-ADR-0060-reopen` merged: 9 pre-registered LMR forms, **none meets every unchanged bar on main** (each misses A4(a), the 27 cp cap, A4(b) reach or zugzwang.004). Default: **P1 parked**, flat 1-ply LMR stays; re-measure decision 1 after P3 merges. Owner question (optional; default = keep the cap): re-derive A3 cap to 94 cp? — alone it unlocks no form; recommended keep. Running: qe-ABC-265, arch-phase2-p3._
@@ -1352,7 +1353,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## In Analysis (WIP 0/2)
 
 
-## In Design (WIP 2/2)
+## In Design (WIP 1/2)
 
 
 ## Ready for Dev (WIP 0/6)
