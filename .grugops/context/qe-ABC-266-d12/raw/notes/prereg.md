@@ -1,0 +1,39 @@
+# qe-ABC-266-d12 PRE-REGISTRATION (sealed before any corpus result is read): ADR-0062 D12 timing probe, the rule, the load voids, the instrument
+
+QE/E2E, task `qe-ABC-266-d12`, ALONE window (the brief: no other hop of this session runs). Worktree `grugops/qe-ABC-266-d12` from `main` `5432f3f5`; claim `b082549a`. Sealed BEFORE the measured run. The only run so far is a smoke on the non-corpus warm-up board (17:19:27–17:19:32Z, 5 s), read for structure only (exit 0, each go returned a move, 4 and 12 worker results, 276/20 corpus). No corpus depth has been read.
+
+## Scope
+ADR-0062 D12's one timing probe before the `ABC-266` build. It is a probe, not a gate, and not A7. Nothing in `src/` of any worktree moves.
+
+## Instrument
+- **Tree:** `git archive 28ad3a8d` (`grugops/ABC-265-fix`, the shared table) `src package.json tsconfig.json`, under the session scratchpad. One scratch edit, `raw/probe/scratch-edit.diff`: `adoptTable(buffer)` in `transposition.ts` with D4's contract (it binds the view, a borrowing thread's `clearTable` resets only the verified copy, and a wrong byte length throws). The main thread never calls it.
+- **Threads 1:** today's `chooseMove(parseFen(fen), { budgetMs })` on the main thread, with the wall clock and no worker (D2).
+- **Threads k = 4, 12:** k `worker_threads`, each `adoptTable(main's tableBuffer())` once at start (D4). Per go, D5 runs in order:
+  - the main thread calls `clearTable()`, then `Atomics.store(stop, 0, 0)`, takes `goAt = Date.now()` and posts to every worker;
+  - each worker runs `chooseMove(pos, { budgetMs: max(1, budget − (Date.now() − goAt)), now: stopClock })`;
+  - on the first result the main thread sets the slot to 1, then waits for all k.
+- **Played (D6):** the deepest completed depth among the k results, tie to the lowest index. `nodes` is summed over the k workers. Also logged (info): which worker supplied the played depth, worker 0's depth, every depth, the first finisher, and the wall time from `goAt` to the last result.
+- **`go movetime x` → budget = x:** level mode and the default Skill Level 5 (budget 4 000, blunder 0). So `parseGo` gives G = movetime, and `min(G, 4000)` = movetime for 100 and 1 000.
+- **Positions:** `ABC-078` `A3`'s corpus, built exactly as `qe-ABC-265` `a3q.mjs` builds it (12 roots and every in-progress child, 276 positions). The sample is indices `i % 14 == 0`: 0, 14, …, 266, which is 20 positions. The driver refuses to run on any other count.
+- **Driver:** `raw/probe/driver.mjs` and `raw/probe/worker.mjs`, Node v26.12.1, host `oeselg-dev` (Ryzen AI 9 HX 370, 12 cores / 24 threads, 4 Zen 5 + 8 Zen 5c). One process, run as `flock <scratchpad>/host-test.lock timeout 600 node driver.mjs <tree> <out> full`. The 4-pool and the 12-pool are spawned once and stay idle on their ports between gos.
+- **Warm-up:** one `go movetime 300` per thread count on a board outside the corpus (game-1 move 4), discarded.
+- **Order:** the 100 ms phase, then the 1 000 ms phase. Inside each phase there is one block per position, with three gos: T1, T4, T12, rotated by position (`i % 3`: [1,4,12], [4,12,1], [12,1,4]). One go per (movetime, position, k). No repeat.
+
+## The statistic and the rule (pre-registered)
+- **Statistic:** the median over the 20 positions of the played depth, as the mean of the 10th and 11th sorted values.
+- **Rule (ADR-0062 D12, the brief):** **PASS iff median(T12, 100 ms) > median(T1, 100 ms), strictly.** Otherwise **MISS**: the Architect re-proposes before any build (helper diversity, D3, or ADR-0058's deeper-entry rule at `Threads ≥ 2`, each with its own probe).
+- **LOADED:** the 100 ms phase is LOADED when any one of these holds:
+  - (a) a running foreign vitest or `cutechess-cli` is seen at any block check of the phase;
+  - (b) the phase's foreign cores exceed 0.8, where foreign cores = (host busy jiffies from `/proc/stat` − this process's own CPU from `process.cpuUsage`, workers included) ÷ wall, D3-V2's threshold;
+  - (c) more than 4 of the 20 blocks of the phase read block foreign cores above 0.8.
+- **LOADED and not above → VOID-LOAD,** in place of MISS: not a result and not a miss.
+- **LOADED and above → PASS (SHARED), disclosed.** Foreign load costs the 12-worker pool more than one thread, because the pool fills every physical core.
+- **Not LOADED → PASS or MISS as read.** No hand grade.
+- **Information only, not in the rule:** T4 at 100 ms, every thread count at 1 000 ms, nodes, worker 0's depth, which worker played, and wall time.
+- **Re-run:** only on a crash or worker `error` event, once, for the whole schedule, disclosed. No re-run on a result.
+- **Never:** a kill of any process this hop did not start. Host time ≤ 15 min (the measured run is expected at ≈ 1 min).
+
+## Risks
+- **One go per cell.** Depth near an iteration boundary flips by ±1 on timing noise. The median over 20 damps that, but not fully. That is why it is a probe, not a gate.
+- **The prototype is not the build.** There is no UCI session and no `info` line, and a message round trip replaces the session's handling. Pool start-up is absorbed before the gos (D3's `isready`).
+- **The OS places the workers.** No pinning, as in production.
