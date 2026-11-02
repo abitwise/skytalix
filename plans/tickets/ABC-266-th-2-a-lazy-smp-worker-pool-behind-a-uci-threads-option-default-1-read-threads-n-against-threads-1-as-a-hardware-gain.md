@@ -12,6 +12,28 @@ adr: "ADR-0062 (PROPOSED 2026-11-02, arch-ABC-266 …4f828986): Threads 1-12, de
 
 # ABC-266: the worker pool and `Threads` (TH-2), with `ABC-267`'s rows folded in
 
+> **THE D12 PROBE READ MISS; DEVELOPMENT BLOCKED PENDING THE ARCHITECT'S RE-PROPOSAL; `RISK-EPIC011-09` REALISED,
+> 2026-11-02, by BA/PM** (task `bapm-P3-page`, records only, at `main` `6413f91f`; nothing run). Source:
+> `qe-ABC-266-d12`, verdict by the sealed rule `…9f9aeb87` (pre-registration `…6231db75`, committed `d7aaea5e` before
+> the run), results `…cc1de664`; merged `3105a5b0`.
+> - **D12: MISS, not loaded.** Median played depth at 100 ms over the 20 corpus positions: **`Threads 12` = 7,
+>   `Threads 1` = 7** (`Threads 4` = 7). The rule was "PASS iff T12 > T1, strictly". Phase foreign cores 0.454, 2 of 20
+>   blocks above 0.8, no foreign vitest or `cutechess-cli`, so it is not VOID-LOAD.
+>   - Per position at 100 ms, T12 against T1: above on 1, equal on 15, below on 4. At 1 000 ms (information only):
+>     10 against 10, above on 2, below on none.
+>   - The 12 workers completed the same depth in 19 of 20 searches. D6's deepest-completed rule changed the played
+>     depth once at T12 and never at T4.
+>   - A worker at T12 ran at about 0.69 of a single thread's nodes (0.98 at T4). The cause is not separated
+>     (`UNKNOWN - verify`).
+> - **Development is blocked.** By `ADR-0062` D12 and this page's Dependencies, the Architect re-proposes before any
+>   build: `arch-ABC-266-repropose` (queued 2026-11-02; helper diversity, `ADR-0058`'s rule at `Threads ≥ 2`,
+>   move-order perturbation, a 4-fast-core cap, each pre-registered). **This page is re-cut when that lands.** No row,
+>   bar or scope item changes here before then. `ADR-0062` stays PROPOSED as written.
+> - **`RISK-EPIC011-09` is realised.** As written today, A7 would read about 50 of 100 and miss about half the time on
+>   noise, and F4 allows no replay. The value line stays unsupported. No bar is loosened.
+> - **DoR stays 9/10, and row 10 now has two blockers:** `ABC-265`'s merge, and the design's return to the Architect.
+>   The board move is the Orchestrator's (board, 2026-11-02: "ABC-266 build blocked").
+
 > **ALIGNED TO `ADR-0062`; `ABC-267` FOLDED IN; M = N = 12; DoR 9/10, 2026-11-02, by BA/PM** (task
 > `bapm-ABC-266-rows`, records only, at `main` `09306a14`; nothing run, built or timed). Sources: `ADR-0062`
 > (PROPOSED, `arch-ABC-266`, merged `a3a300e0`), the Architect's notes `…4f828986` (decision; its "BA/PM for DoR 10/10"
@@ -53,6 +75,8 @@ adr: "ADR-0062 (PROPOSED 2026-11-02, arch-ABC-266 …4f828986): Threads 1-12, de
     1 000 000 nodes, worker 0 reached its solo depth in 64 of 64 runs, and a helper went one ply
     deeper in 2 of 64 (`…0c8cf7d0`; counts, no clock). D6's deepest-completed rule is meant to turn the faster cores
     into depth. Whether it does is `UNKNOWN - verify`: the D12 probe reads it first, then A7.
+  - *2026-11-02 (`bapm-P3-page`):* **D12 read MISS** (`…9f9aeb87`): median played depth 7 at `Threads 1`, 4 and 12 at
+    100 ms. The estimate stays unsupported, and the design returns to the Architect (top block).
 
 ## Scope
 
@@ -111,7 +135,8 @@ adr: "ADR-0062 (PROPOSED 2026-11-02, arch-ABC-266 …4f828986): Threads 1-12, de
 - **`ABC-267`'s 2^10-slot test seam** (dropped, D13). A8 runs on the production table at its production size.
 - **Helper diversity** (odd helpers deeper, a permuted root order) and **`ADR-0058`'s deeper-entry rule at
   `Threads ≥ 2`**. They are the Architect's re-proposal if the D12 probe reads "not above" (D3, D12), each with its own
-  probe.
+  probe. *(2026-11-02, `bapm-P3-page`: D12 read MISS; the re-proposal is `arch-ABC-266-repropose`. What it adopts
+  enters this page at the re-cut.)*
 - **`resourceLimits` on production workers** (`ADR-0062` § Alternatives). Production keeps V8's defaults.
 - `Threads` on `r` and `rpair`, and a `Threads` value from `os.availableParallelism()`.
 - Pondering (`EPIC-011` § Out of scope). Several games at once (Q-3K-3 under OQ-2 (a)). Any device (OQ-5 no; `ADR-0057`
@@ -305,6 +330,8 @@ src/uci.threads.test.ts`. *Every real-worker row runs in a Node child, `node --m
   records the played depth and which worker supplied it. **If `Threads 12`'s median played depth at 100 ms is not above
   `Threads 1`'s, the Architect re-proposes before the build**, and this page is re-cut. It is a probe, not a gate, and
   not A7.
+  *(2026-11-02, `bapm-P3-page`: **read, MISS**, not loaded: 7 against 7 (`…9f9aeb87`, `…cc1de664`). Development is
+  blocked until the Architect's re-proposal (`arch-ABC-266-repropose`) and this page's re-cut.)*
 - **Owner: `ADR-0062` acceptance gates the merge** *(2026-11-02)*. *"accept ADR-0062 (max 12)"*, *"accept ADR-0062
   with max 8"*, or *"decline"*. It names D6's played result and D1's maximum. The D5 reversal is pre-accepted (OQ-1).
   Under reading (b), the build may start once `ABC-265` has merged and the D12 probe has read. Without an answer,
@@ -335,10 +362,12 @@ src/uci.threads.test.ts`. *Every real-worker row runs in a Node child, `node --m
 | 7 | test notes | ✅ 1–7 |
 | 8 | size | ✅ L, 20–45 h |
 | 9 | priority | ✅ P2 |
-| 10 | no major unresolved blocker | ❌ ~~the ADR amending `ADR-0044` D3 and D5 is not written;~~ *2026-11-02:* the ADR is written (reading (b)); **`ABC-265` is not merged** |
+| 10 | no major unresolved blocker | ❌ ~~the ADR amending `ADR-0044` D3 and D5 is not written;~~ *2026-11-02:* the ADR is written (reading (b)); **`ABC-265` is not merged** *2026-11-02 (`bapm-P3-page`): **and the D12 probe read MISS**, so the design returns to the Architect (`arch-ABC-266-repropose`) and this page is re-cut before Development* |
 
 **DoR 9/10. Backlog.** *(2026-11-02, `bapm-ABC-266-rows`.)* Row 10 now waits only on **`ABC-265`'s merge**. At that
 merge this page reads 10/10 and may go to Ready. **The pull into Development also waits on the D12 probe**: a "not
 above" reading sends the design back to the Architect and this page back for a re-cut. The merge waits on the owner's
 acceptance of `ADR-0062` and on A7. The board moves are the Orchestrator's.
 ~~It reaches Ready when the ADR is written (reading (b)), M and N are fixed on this page, and `ABC-265` has merged.~~
+*(2026-11-02, `bapm-P3-page`.)* **D12 read MISS.** DoR 9/10 stands, with row 10 blocked twice: `ABC-265`'s merge and
+the Architect's re-proposal. `ABC-265`'s merge alone no longer brings this page to 10/10; the re-cut is scored afresh.
