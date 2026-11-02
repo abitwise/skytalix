@@ -1700,6 +1700,31 @@ describe("ABC-230 A3 and A4 — no prior keys is base, node for node, and the do
   });
 });
 
+// QE-268-a: the ABC-268 door is futility off and EVERYTHING ELSE on (`ADR-0061` decision 4), the
+// prior keys included — it is the shipped side of every older row, so it must read them.
+describe("QE-268-a — chooseMoveWithoutFutility reads prior keys, as chooseMove does", () => {
+  for (const fixture of THIRD_OCCURRENCE) {
+    it(`${fixture.name}: ${fixture.repeat} at 0 with the prior keys, another move without them`, () => {
+      const game = gameOf(fixture.fen, fixture.moves);
+      const root = toFen(game.position);
+      const prior = priorKeysOf(game);
+      expect(occurrencesAfter(game.position, fixture.repeat, prior)).toBe(2);
+
+      const door = engineModule.chooseMoveWithoutFutility;
+      const withKeys = door(game.position, { ...fixedDepth(4), priorKeys: prior });
+      expect(toFen(game.position)).toBe(root);
+      expect(withKeys && { move: label(withKeys.move), score: withKeys.score }).toEqual({
+        move: fixture.repeat,
+        score: 0,
+      });
+      // Non-vacuity: without the keys the door plays another move at another score.
+      const without = door(parseFen(root), fixedDepth(4));
+      expect(without && label(without.move)).not.toBe(fixture.repeat);
+      expect(without?.score).not.toBe(0);
+    });
+  }
+});
+
 // ---------------------------------------------------------------------------
 // ABC-249 (`ADR-0054` decision 3, QE-248-c) — the pre-root half of the scan holds at depth. A
 // queen gives perpetual check; the position after Black's fourth reply, four plies into the

@@ -31,11 +31,19 @@ import { evaluate } from "./evaluate.ts";
 import { parseFen, toFen } from "./fen.ts";
 import { gameStatus } from "./gameend.ts";
 import { givesCheck, isInCheck, legalMoves } from "./legal.ts";
-import type { Move } from "./moves.ts";
+import { FLAG_CASTLE, FLAG_EN_PASSANT, type Move } from "./moves.ts";
 import { EMPTY, type Position, squareName } from "./position.ts";
 import { MATE_CORPUS } from "./search.mate-corpus.ts";
-import { futileMove, futilityNode, MATE_SCORE, search, searchWithoutFutility } from "./search.ts";
-import { MATE_FLOOR } from "./transposition.ts";
+import {
+  futileMove,
+  futilityNode,
+  MATE_SCORE,
+  orderMoves,
+  search,
+  searchWithoutFutility,
+} from "./search.ts";
+import { MATE_FLOOR, probeTable, tableCutoff } from "./transposition.ts";
+import { zobristKey } from "./zobrist.ts";
 
 const RUN_DEEP = process.env.SEARCH_DEEP === "1";
 
@@ -334,6 +342,57 @@ describe("futileMove — true for a quiet, non-checking move at index >= 1; fals
   });
 });
 
+describe("QE-268-c — futileMove on the other move kinds: en passant is a capture (false); a quiet pawn push, a quiet king move and castling are quiet (true at index >= 1)", () => {
+  /**
+   * White K e1, R h1, P a2, P e5; Black K a8, P d5 just played (en passant on d6). None of exd6,
+   * a3, Kd2 and O-O gives check; exd6 is the only capture.
+   */
+  const FIXTURE = "k7/8/8/3pP3/8/8/P7/4K2R w K d6 0 1";
+  const position = parseFen(FIXTURE);
+  const find = (from: string, to: string): Move => {
+    const move = legalMoves(position).find(
+      (m) => squareName(m.from) === from && squareName(m.to) === to,
+    );
+    if (move === undefined) throw new Error(`no ${from}${to} in ${FIXTURE}`);
+    return move;
+  };
+  const enPassant = find("e5", "d6");
+  const pawnPush = find("a2", "a3");
+  const kingMove = find("e1", "d2");
+  const castle = find("e1", "g1");
+
+  it("the fixtures bite: each move really is what its row says", () => {
+    expect(isInCheck(position)).toBe(false);
+    // En passant: the captured pawn is not on the target square, but the move still captures.
+    expect(position.board[enPassant.to]).toBe(EMPTY);
+    expect([enPassant.captured !== EMPTY, enPassant.flags, enPassant.promotion]).toEqual([
+      true,
+      FLAG_EN_PASSANT,
+      EMPTY,
+    ]);
+    expect(castle.flags).toBe(FLAG_CASTLE);
+    for (const move of [enPassant, pawnPush, kingMove, castle]) {
+      expect(givesCheck(position, move), label(move)).toBe(false);
+    }
+    for (const move of [pawnPush, kingMove, castle]) {
+      expect([move.captured, move.promotion], label(move)).toEqual([EMPTY, EMPTY]);
+    }
+  });
+
+  it("en passant: false, at any index — it captures", () => {
+    expect(futileMove(position, enPassant, 1)).toBe(false);
+    expect(futileMove(position, enPassant, 9)).toBe(false);
+  });
+
+  it("a quiet pawn push, a quiet king move and castling: true at index 1 and later, false at index 0", () => {
+    for (const move of [pawnPush, kingMove, castle]) {
+      expect(futileMove(position, move, 0), label(move)).toBe(false);
+      expect(futileMove(position, move, 1), label(move)).toBe(true);
+      expect(futileMove(position, move, 9), label(move)).toBe(true);
+    }
+  });
+});
+
 describe("purity — each predicate leaves the position byte-identical (ADR-0061 decision 2)", () => {
   it("futilityNode on a pruning node and a guarded one, and futileMove on every legal move of five boards", () => {
     for (const { fen } of [...ROOTS.slice(1), { fen: "8/P6k/8/8/3n4/8/8/3QK3 w - - 0 1" }]) {
@@ -506,6 +565,77 @@ describe("the doors — searchWithoutFutility and chooseMoveWithoutFutility turn
       ]);
     }
   });
+});
+
+// ---------------------------------------------------------------------------
+// QE-268-b — fail-soft at a futile node, in both recursions. The futile node's own table entry,
+// read back after the search through the module's public probe, holds the best score among the
+// moves it searched — not its entry alpha.
+// ---------------------------------------------------------------------------
+
+describe("QE-268-b — a futile node returns the best score among the moves it searched, fail-soft: below its alpha, never alpha itself", () => {
+  /**
+   * White K e1, Q d1; Black K e8, R d5 hanging. Qxd5 is the root's first move and scores 1010.
+   * After the later root move Qd3 and the reply Rxd3, White (K e1 against K e8, R d3) stands at
+   * ply 2 with one ply left and the null window (1010, 1011) — futile at 150 cp. Its first move
+   * Ke2 is searched; Kf1 and Kf2 are quiet and skipped. Nothing re-searches the node: Black's
+   * null-window node above it cuts on Rxd3, and the root move it answers fails low.
+   */
+  const ROOT = "4k3/8/8/3r4/8/8/8/3QK3 w - - 0 1";
+  const NODE = "4k3/8/8/8/8/3r4/8/4K3 w - - 0 2";
+  const ALPHA = 1010;
+
+  /** The node's stored entry at depth 1, ply 2, read as an upper bound: `null` if it is none. */
+  const storedUpper = (): number | null => {
+    const slot = probeTable(zobristKey(parseFen(NODE)));
+    expect(slot, "the futile node has an entry").not.toBe(-1);
+    // A lower or exact entry would settle a window below every score; an upper bound settles none.
+    expect(tableCutoff(slot, 1, -1_000_001, -1_000_000, 2), "not a lower bound").toBeNull();
+    return tableCutoff(slot, 1, ALPHA, ALPHA + 1, 2);
+  };
+
+  /** The best score among the moves the futile node searches: index 0, and nothing futileMove skips. */
+  const bestSearched = (): { best: number; searched: string[]; skipped: string[] } => {
+    const position = parseFen(NODE);
+    let best = Number.NEGATIVE_INFINITY;
+    const searched: string[] = [];
+    const skipped: string[] = [];
+    orderMoves(legalMoves(position), [], null).forEach((move, index) => {
+      if (futileMove(position, move, index)) {
+        skipped.push(label(move));
+        return;
+      }
+      searched.push(label(move));
+      const undo = makeMove(position, move);
+      best = Math.max(best, 0 - search(position, 0).score);
+      unmakeMove(position, move, undo);
+    });
+    return { best, searched, skipped };
+  };
+
+  it("the fixture bites: the node is futile at the window its parent hands it, and the skipped moves hold a better score", () => {
+    expect(futilityNode(parseFen(NODE), 1, 2, ALPHA, ALPHA + 1)).toBe(true);
+    const root = search(parseFen(ROOT), 3);
+    expect([root.score, label(root.move)]).toEqual([ALPHA, "d1d5"]);
+    const { best, searched, skipped } = bestSearched();
+    expect([best, searched, skipped]).toEqual([-554, ["e1e2"], ["e1f1", "e1f2"]]);
+    // Full width the node scores higher: the skipped moves were better, and the rule did skip them.
+    expect(search(parseFen(NODE), 1).score).toBe(-544);
+  });
+
+  for (const [name, run] of [
+    ["search() at depth 3", () => search(parseFen(ROOT), 3)],
+    ["chooseMove deepened to 3", () => deepenTo(chooseMove, ROOT, 3)],
+  ] as const) {
+    it(`${name}: the futile node's entry is an upper bound of -554, Ke2's score, strictly below its alpha of ${ALPHA}`, () => {
+      const result = run();
+      expect([result.score, label(result.move)]).toEqual([ALPHA, "d1d5"]);
+      const stored = storedUpper();
+      expect(stored).toBe(-554);
+      expect(stored).toBeLessThan(ALPHA);
+      expect(stored).toBe(bestSearched().best);
+    });
+  }
 });
 
 // ---------------------------------------------------------------------------
