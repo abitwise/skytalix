@@ -1,0 +1,9 @@
+58, budget 25 step 1, wall 1.94 s
+quiescence.test.ts > ABC-229 A3 — search(…, 6).nodes <= 1.2x its door on kiwipete and position-6 [deep, SEARCH_DEEP=1] > kiwipete at depth 6 [deep, SEARCH_DEEP=1]
+ 324162 = 1.019x
+quiescence.test.ts > ABC-229 A3 — search(…, 6).nodes <= 1.2x its door on kiwipete and position-6 [deep, SEARCH_DEEP=1] > kiwipete at depth 6 [deep, SEARCH_DEEP=1] 701ms
+quiescence.test.ts > ABC-229 A3 — search(…, 6).nodes <= 1.2x its door on kiwipete and position-6 [deep, SEARCH_DEEP=1] > position-6 at depth 6 [deep, SEARCH_DEEP=1]
+ 154464 = 1.000x
+quiescence.test.ts > ABC-229 A3 — search(…, 6).nodes <= 1.2x its door on kiwipete and position-6 [deep, SEARCH_DEEP=1] > position-6 at depth 6 [deep, SEARCH_DEEP=1] 358ms
+d2e3: 350 -> 358); mate-status flips on the 190: 0 (a report, not a bar)
+d2e3: 350 -> 358); mate-status flips on the 190: 0 (a report, not a bar)

@@ -1,0 +1,17 @@
+ RUN  v4.1.12 /home/olger/projects/public/skytalix/.claude/worktrees/se-ABC-268
+ABC-268 A3 search() d5: 100.00% within 25 cp of 187, max 10 cp (position-3/b4b2: 41 -> 51); mate sign flips 0; mate-status flips 0 (a report, not a bar)
+ABC-268 A3 chooseMove to d5: 100.00% within 25 cp of 187, max 0 cp (startpos: 38 -> 38); mate sign flips 0; mate-status flips 0 (a report, not a bar)
+ABC-268 A3 mate floor d5: 0 of 189 violated; 0 longer, 0 shorter (a report, not a bar)
+ABC-268 A3 zugzwang zugzwang.001 d9: head e1f1 56156 / door e1f1 78946 = 0.711x
+ABC-268 A3 zugzwang zugzwang.004 d11: head h3h4 905900 / door h3h4 587282 = 1.543x
+ABC-268 A3 zugzwang zugzwang.005 d12: head f4d5 1310019 / door f4d5 2412618 = 0.543x
+ABC-268 A3 zugzwang kpk-b6c6 d8: head b6c6 2605 / door b6c6 2998 = 0.869x
+ABC-268 A3 zugzwang kpk-c6d6 d8: head c6d6 3369 / door c6d6 4271 = 0.789x
+ABC-268 A3 zugzwang kpk-d6e6 d8: head d6e6 3289 / door d6e6 4201 = 0.783x
+ABC-268 A3 zugzwang kpk-e6f6 d8: head e6f6 2718 / door e6f6 3548 = 0.766x
+ABC-268 A4 search() kiwipete d8: 888786 / 1116785 = 0.7958x; head e2a6 -60, door e2a6 -60
+ABC-268 A4 chooseMove kiwipete to 8: 1306981 / 1575537 = 0.8295x; head e2a6 -59, door e2a6 -59
+ABC-268 A4 search() position-6 d8: 1262046 / 1602457 = 0.7876x; head c3d5 74, door c3d5 74
+ABC-268 A4 chooseMove position-6 to 8: 391451 / 476244 = 0.8220x; head c3d5 74, door c3d5 74
+ABC-268 A4 reach at 47 000 nodes on 190: door 5.558 -> head 5.837 (+0.279); 54 deeper, 1 shallower, 6 root moves differ
+      Tests  47 passed (47)
