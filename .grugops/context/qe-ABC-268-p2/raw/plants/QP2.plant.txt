@@ -1,0 +1,12 @@
+QP2 planted
+--- <scratch>/qe268p2/head/src/search.ts	2026-11-02 19:02:13.000000000 +0000
++++ src/search.ts	2026-11-02 20:00:35.668646770 +0000
+@@ -433,7 +433,7 @@
+  */
+ export function futileMove(position: Position, move: Move, index: number): boolean {
+   if (index < 1) return false;
+-  if (move.captured !== EMPTY || move.promotion !== EMPTY) return false;
++  if ((move.captured !== EMPTY && move.flags !== 1) || move.promotion !== EMPTY) return false;
+   return !givesCheck(position, move);
+ }
+ 

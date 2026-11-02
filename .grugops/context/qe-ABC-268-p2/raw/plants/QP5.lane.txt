@@ -1,0 +1,109 @@
+
+ RUN  v4.1.12 <scratch>/qe268p2/plant
+
+ ❯ src/engine.test.ts (69 tests | 4 failed) 583ms
+     × KQ v K, Black to move: d8e8 at 0 with the prior keys, another move without them 4ms
+     × K v KQ, White to move: d1e1 at 0 with the prior keys, another move without them 1ms
+     × KR v K, Black to move: d8e8 at 0 with the prior keys, another move without them 1ms
+     × K v KR, White to move: d1e1 at 0 with the prior keys, another move without them 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/engine.test.ts > QE-268-a — chooseMoveWithoutFutility reads prior keys, as chooseMove does > KQ v K, Black to move: d8e8 at 0 with the prior keys, another move without them
+AssertionError: expected { move: 'd8c8', score: -1006 } to deeply equal { move: 'd8e8', score: +0 }
+
+- Expected
++ Received
+
+  {
+-   "move": "d8e8",
+-   "score": 0,
++   "move": "d8c8",
++   "score": -1006,
+  }
+
+ ❯ src/engine.test.ts:1716:81
+    1714|       const withKeys = door(game.position, { ...fixedDepth(4), priorKe…
+    1715|       expect(toFen(game.position)).toBe(root);
+    1716|       expect(withKeys && { move: label(withKeys.move), score: withKeys…
+       |                                                                                 ^
+    1717|         move: fixture.repeat,
+    1718|         score: 0,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  src/engine.test.ts > QE-268-a — chooseMoveWithoutFutility reads prior keys, as chooseMove does > K v KQ, White to move: d1e1 at 0 with the prior keys, another move without them
+AssertionError: expected { move: 'd1c1', score: -1006 } to deeply equal { move: 'd1e1', score: +0 }
+
+- Expected
++ Received
+
+  {
+-   "move": "d1e1",
+-   "score": 0,
++   "move": "d1c1",
++   "score": -1006,
+  }
+
+ ❯ src/engine.test.ts:1716:81
+    1714|       const withKeys = door(game.position, { ...fixedDepth(4), priorKe…
+    1715|       expect(toFen(game.position)).toBe(root);
+    1716|       expect(withKeys && { move: label(withKeys.move), score: withKeys…
+       |                                                                                 ^
+    1717|         move: fixture.repeat,
+    1718|         score: 0,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  src/engine.test.ts > QE-268-a — chooseMoveWithoutFutility reads prior keys, as chooseMove does > KR v K, Black to move: d8e8 at 0 with the prior keys, another move without them
+AssertionError: expected { move: 'd8c7', score: -556 } to deeply equal { move: 'd8e8', score: +0 }
+
+- Expected
++ Received
+
+  {
+-   "move": "d8e8",
+-   "score": 0,
++   "move": "d8c7",
++   "score": -556,
+  }
+
+ ❯ src/engine.test.ts:1716:81
+    1714|       const withKeys = door(game.position, { ...fixedDepth(4), priorKe…
+    1715|       expect(toFen(game.position)).toBe(root);
+    1716|       expect(withKeys && { move: label(withKeys.move), score: withKeys…
+       |                                                                                 ^
+    1717|         move: fixture.repeat,
+    1718|         score: 0,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  src/engine.test.ts > QE-268-a — chooseMoveWithoutFutility reads prior keys, as chooseMove does > K v KR, White to move: d1e1 at 0 with the prior keys, another move without them
+AssertionError: expected { move: 'd1c1', score: -556 } to deeply equal { move: 'd1e1', score: +0 }
+
+- Expected
++ Received
+
+  {
+-   "move": "d1e1",
+-   "score": 0,
++   "move": "d1c1",
++   "score": -556,
+  }
+
+ ❯ src/engine.test.ts:1716:81
+    1714|       const withKeys = door(game.position, { ...fixedDepth(4), priorKe…
+    1715|       expect(toFen(game.position)).toBe(root);
+    1716|       expect(withKeys && { move: label(withKeys.move), score: withKeys…
+       |                                                                                 ^
+    1717|         move: fixture.repeat,
+    1718|         score: 0,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  1 failed | 4 passed (5)
+      Tests  4 failed | 266 passed (270)
+   Start at  20:00:40
+   Duration  1.38s (transform 0ms, setup 0ms, import 368ms, tests 1.88s, environment 0ms)
+

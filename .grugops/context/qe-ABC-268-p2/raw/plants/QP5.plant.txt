@@ -1,0 +1,12 @@
+QP5 planted
+--- <scratch>/qe268p2/head/src/engine.ts	2026-11-02 19:02:13.000000000 +0000
++++ src/engine.ts	2026-11-02 20:00:40.411450816 +0000
+@@ -631,7 +631,7 @@
+     pvs: true,
+     reductions: true,
+     nullMove: true,
+-    priorKeys: true,
++    priorKeys: false,
+     quiescenceEvasions: true,
+     quietPromotions: true,
+     futility: false,

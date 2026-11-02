@@ -1,0 +1,8 @@
+     × KQ v K, Black to move: d8e8 at 0 with the prior keys, another move without them 4ms
+     × K v KQ, White to move: d1e1 at 0 with the prior keys, another move without them 1ms
+     × KR v K, Black to move: d8e8 at 0 with the prior keys, another move without them 1ms
+     × K v KR, White to move: d1e1 at 0 with the prior keys, another move without them 1ms
+ FAIL  src/engine.test.ts > QE-268-a — chooseMoveWithoutFutility reads prior keys, as chooseMove does > KQ v K, Black to move: d8e8 at 0 with the prior keys, another move without them
+ FAIL  src/engine.test.ts > QE-268-a — chooseMoveWithoutFutility reads prior keys, as chooseMove does > K v KQ, White to move: d1e1 at 0 with the prior keys, another move without them
+ FAIL  src/engine.test.ts > QE-268-a — chooseMoveWithoutFutility reads prior keys, as chooseMove does > KR v K, Black to move: d8e8 at 0 with the prior keys, another move without them
+ FAIL  src/engine.test.ts > QE-268-a — chooseMoveWithoutFutility reads prior keys, as chooseMove does > K v KR, White to move: d1e1 at 0 with the prior keys, another move without them
