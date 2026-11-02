@@ -1,0 +1,28 @@
+== zug
+{"name":"zugzwang.001","d":9,"played":"e1f1","want":"e1f1","ok":true,"nodes":63619}
+{"name":"kpk-b6c6","d":8,"played":"b6c6","want":"b6c6","ok":true,"nodes":3153}
+{"name":"kpk-c6d6","d":8,"played":"c6d6","want":"c6d6","ok":true,"nodes":3964}
+{"name":"kpk-d6e6","d":8,"played":"d6e6","want":"d6e6","ok":true,"nodes":3857}
+{"name":"kpk-e6f6","d":8,"played":"e6f6","want":"e6f6","ok":true,"nodes":3292}
+{"name":"zugzwang.004","d":11,"played":"h3h4","want":"h3h4","ok":true,"nodes":627208}
+{"name":"zugzwang.005","d":12,"played":"f4d5","want":"f4d5","ok":true,"nodes":835655}
+== zugd
+{"d":10,"played":"g7f6","score":23,"nodes":85991}
+{"d":11,"played":"h3h4","score":451,"nodes":627208}
+== zugd door
+{"d":10,"played":"h3h4","score":286,"nodes":462401}
+{"d":11,"played":"h3h4","score":451,"nodes":587282}
+== fire d6
+{"depth":6,"headNodes":15031887,"doorNodes":17826686,"ratio":0.8432,"head":{"tries":2206433,"reduced":242201,"sumR":341173,"hist":[1964232,143229,98972,0,0,0,0,0]},"door":{"tries":2461585,"reduced":244172,"sumR":244172,"hist":[2217413,244172,0,0,0,0,0,0]}}
+== other roots d8
+{"name":"position-4","label":"door","depth":8,"search":{"nodes":513640,"score":-456,"move":"c4c5"},"choose":{"nodes":241438,"score":-456,"move":"c4c5","depth":8},"lmr":{"tries":71800,"reduced":14999,"sumR":14999,"hist":[56801,14999,0,0,0,0,0,0],"fut":0}}
+{"name":"position-4","label":"head","depth":8,"search":{"nodes":418253,"score":-456,"move":"c4c5"},"choose":{"nodes":171931,"score":-456,"move":"c4c5","depth":8},"lmr":{"tries":52117,"reduced":9770,"sumR":13224,"hist":[42347,6316,3454,0,0,0,0,0],"fut":0}}
+{"name":"position-5","label":"door","depth":8,"search":{"nodes":114482,"score":524,"move":"d7c8"},"choose":{"nodes":124683,"score":544,"move":"d7c8","depth":8},"lmr":{"tries":38487,"reduced":7137,"sumR":7137,"hist":[31350,7137,0,0,0,0,0,0],"fut":0}}
+{"name":"position-5","label":"head","depth":8,"search":{"nodes":75594,"score":504,"move":"d7c8"},"choose":{"nodes":99284,"score":525,"move":"d7c8","depth":8},"lmr":{"tries":24270,"reduced":4261,"sumR":6886,"hist":[20009,1636,2625,0,0,0,0,0],"fut":0}}
+{"name":"startpos","label":"door","depth":8,"search":{"nodes":222090,"score":27,"move":"d2d4"},"choose":{"nodes":160002,"score":23,"move":"b1c3","depth":8},"lmr":{"tries":93832,"reduced":11203,"sumR":11203,"hist":[82629,11203,0,0,0,0,0,0],"fut":0}}
+{"name":"startpos","label":"head","depth":8,"search":{"nodes":139339,"score":15,"move":"b1c3"},"choose":{"nodes":119683,"score":12,"move":"e2e3","depth":8},"lmr":{"tries":58129,"reduced":7648,"sumR":11139,"hist":[50481,4157,3491,0,0,0,0,0],"fut":0}}
+== d6
+{"name":"kiwipete","label":"door","depth":6,"search":{"nodes":330314,"score":-59,"move":"e2a6"},"choose":{"nodes":398146,"score":-59,"move":"e2a6","depth":6},"lmr":{"tries":24513,"reduced":1974,"sumR":1974,"hist":[22539,1974,0,0,0,0,0,0],"fut":0}}
+{"name":"kiwipete","label":"head","depth":6,"search":{"nodes":191662,"score":-59,"move":"e2a6"},"choose":{"nodes":262990,"score":-59,"move":"e2a6","depth":6},"lmr":{"tries":16820,"reduced":1971,"sumR":3490,"hist":[14849,452,1519,0,0,0,0,0],"fut":0}}
+{"name":"position-6","label":"door","depth":6,"search":{"nodes":154466,"score":87,"move":"c3d5"},"choose":{"nodes":73867,"score":87,"move":"c3d5","depth":6},"lmr":{"tries":24749,"reduced":2056,"sumR":2056,"hist":[22693,2056,0,0,0,0,0,0],"fut":0}}
+{"name":"position-6","label":"head","depth":6,"search":{"nodes":126160,"score":87,"move":"c3d5"},"choose":{"nodes":61676,"score":87,"move":"c3d5","depth":6},"lmr":{"tries":22962,"reduced":2002,"sumR":2687,"hist":[20960,1317,685,0,0,0,0,0],"fut":0}}

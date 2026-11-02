@@ -1,0 +1,35 @@
+== uncapped
+{"name":"kiwipete","label":"head","depth":8,"search":{"nodes":764821,"score":-60,"move":"e2a6"},"choose":{"nodes":942985,"score":-68,"move":"e2a6","depth":8},"lmr":{"tries":83825,"reduced":14549,"sumR":27755,"hist":[69276,3566,9316,1111,556,0,0,0],"fut":0}}
+{"name":"position-6","label":"head","depth":8,"search":{"nodes":1110730,"score":74,"move":"c3d5"},"choose":{"nodes":366213,"score":74,"move":"c3d5","depth":8},"lmr":{"tries":200885,"reduced":30277,"sumR":44398,"hist":[170608,19273,8355,2181,468,0,0,0],"fut":0}}
+{"which":"search","depth":5,"rows":190,"nonMate":187,"withinPct":99.47,"max":63,"maxName":"position-6/g5h6 319->382","mateFlip":0,"signFlip":0,"moveDiff":4}
+{"which":"choose","depth":5,"rows":190,"nonMate":187,"withinPct":100,"max":18,"maxName":"startpos/g2g4 54->36","mateFlip":0,"signFlip":0,"moveDiff":3}
+== uncapped-k1
+{"name":"kiwipete","label":"head","depth":8,"search":{"nodes":775410,"score":-60,"move":"e2a6"},"choose":{"nodes":963572,"score":-68,"move":"e2a6","depth":8},"lmr":{"tries":85270,"reduced":14500,"sumR":27385,"hist":[70770,3838,8995,1111,556,0,0,0],"fut":0}}
+{"name":"position-6","label":"head","depth":8,"search":{"nodes":1163675,"score":74,"move":"c3d5"},"choose":{"nodes":393319,"score":74,"move":"c3d5","depth":8},"lmr":{"tries":202578,"reduced":30694,"sumR":44793,"hist":[171884,19753,8262,2200,479,0,0,0],"fut":0}}
+{"which":"search","depth":5,"rows":190,"nonMate":187,"withinPct":99.47,"max":63,"maxName":"position-6/g5h6 319->382","mateFlip":0,"signFlip":0,"moveDiff":5}
+{"which":"choose","depth":5,"rows":190,"nonMate":187,"withinPct":100,"max":21,"maxName":"position-5/e1f2 -207->-228","mateFlip":0,"signFlip":0,"moveDiff":3}
+== textbook
+{"name":"kiwipete","label":"head","depth":8,"search":{"nodes":859899,"score":-60,"move":"e2a6"},"choose":{"nodes":1094618,"score":-68,"move":"e2a6","depth":8},"lmr":{"tries":94790,"reduced":14605,"sumR":26114,"hist":[80185,4307,9087,1211,0,0,0,0],"fut":0}}
+{"name":"position-6","label":"head","depth":8,"search":{"nodes":1194813,"score":74,"move":"c3d5"},"choose":{"nodes":464327,"score":74,"move":"c3d5","depth":8},"lmr":{"tries":210129,"reduced":30234,"sumR":41078,"hist":[179895,20974,7683,1570,7,0,0,0],"fut":0}}
+{"which":"search","depth":5,"rows":190,"nonMate":187,"withinPct":99.47,"max":28,"maxName":"position-5/e1f2 -231->-203","mateFlip":0,"signFlip":0,"moveDiff":3}
+{"which":"choose","depth":5,"rows":190,"nonMate":187,"withinPct":99.47,"max":26,"maxName":"kiwipete/e5g4 335->361","mateFlip":0,"signFlip":0,"moveDiff":5}
+== noadj
+{"name":"kiwipete","label":"head","depth":8,"search":{"nodes":798029,"score":-60,"move":"e2a6"},"choose":{"nodes":1005030,"score":-59,"move":"e2a6","depth":8},"lmr":{"tries":86062,"reduced":14546,"sumR":26888,"hist":[71516,3599,9552,1395,0,0,0,0],"fut":0}}
+{"name":"position-6","label":"head","depth":8,"search":{"nodes":1099357,"score":74,"move":"c3d5"},"choose":{"nodes":326817,"score":74,"move":"c3d5","depth":8},"lmr":{"tries":202017,"reduced":29468,"sumR":42625,"hist":[172549,18682,8431,2339,16,0,0,0],"fut":0}}
+{"which":"search","depth":5,"rows":190,"nonMate":187,"withinPct":98.93,"max":63,"maxName":"position-6/g5h6 319->382","mateFlip":0,"signFlip":0,"moveDiff":8}
+{"which":"choose","depth":5,"rows":190,"nonMate":187,"withinPct":100,"max":23,"maxName":"position-5/e1g1 -81->-58","mateFlip":0,"signFlip":0,"moveDiff":1}
+== 100-175
+{"name":"kiwipete","label":"head","depth":8,"search":{"nodes":729693,"score":-60,"move":"e2a6"},"choose":{"nodes":910673,"score":-68,"move":"e2a6","depth":8},"lmr":{"tries":82691,"reduced":14702,"sumR":28300,"hist":[67989,3884,8991,874,953,0,0,0],"fut":0}}
+{"name":"position-6","label":"head","depth":8,"search":{"nodes":959660,"score":74,"move":"c3d5"},"choose":{"nodes":366837,"score":74,"move":"c3d5","depth":8},"lmr":{"tries":173229,"reduced":26345,"sumR":39436,"hist":[146884,16957,6511,2070,788,19,0,0],"fut":0}}
+{"which":"search","depth":5,"rows":190,"nonMate":187,"withinPct":98.93,"max":63,"maxName":"position-6/g5h6 319->382","mateFlip":0,"signFlip":0,"moveDiff":7}
+{"which":"choose","depth":5,"rows":190,"nonMate":187,"withinPct":100,"max":11,"maxName":"position-3/b4e4 6->17","mateFlip":0,"signFlip":0,"moveDiff":2}
+== flat21
+{"name":"kiwipete","label":"head","depth":8,"search":{"nodes":892721,"score":-60,"move":"e2a6"},"choose":{"nodes":1161915,"score":-59,"move":"e2a6","depth":8},"lmr":{"tries":100227,"reduced":16739,"sumR":27132,"hist":[83488,6346,10393,0,0,0,0,0],"fut":0}}
+{"name":"position-6","label":"head","depth":8,"search":{"nodes":1454621,"score":74,"move":"c3d5"},"choose":{"nodes":413055,"score":74,"move":"c3d5","depth":8},"lmr":{"tries":248898,"reduced":37202,"sumR":47084,"hist":[211696,27320,9882,0,0,0,0,0],"fut":0}}
+{"which":"search","depth":5,"rows":190,"nonMate":187,"withinPct":99.47,"max":30,"maxName":"startpos/h2h3 30->0","mateFlip":0,"signFlip":0,"moveDiff":3}
+{"which":"choose","depth":5,"rows":190,"nonMate":187,"withinPct":100,"max":21,"maxName":"startpos/g2g4 54->33","mateFlip":0,"signFlip":0,"moveDiff":0}
+== floor1
+{"name":"kiwipete","label":"head","depth":8,"search":{"nodes":841091,"score":-60,"move":"e2a6"},"choose":{"nodes":1058802,"score":-59,"move":"e2a6","depth":8},"lmr":{"tries":92887,"reduced":14955,"sumR":26464,"hist":[77932,4657,9087,1211,0,0,0,0],"fut":0}}
+{"name":"position-6","label":"head","depth":8,"search":{"nodes":1267134,"score":74,"move":"c3d5"},"choose":{"nodes":426284,"score":74,"move":"c3d5","depth":8},"lmr":{"tries":228307,"reduced":34517,"sumR":45799,"hist":[193790,24948,7863,1699,7,0,0,0],"fut":0}}
+{"which":"search","depth":5,"rows":190,"nonMate":187,"withinPct":99.47,"max":30,"maxName":"startpos/h2h3 30->0","mateFlip":0,"signFlip":0,"moveDiff":4}
+{"which":"choose","depth":5,"rows":190,"nonMate":187,"withinPct":100,"max":21,"maxName":"startpos/g2g4 54->33","mateFlip":0,"signFlip":0,"moveDiff":0}

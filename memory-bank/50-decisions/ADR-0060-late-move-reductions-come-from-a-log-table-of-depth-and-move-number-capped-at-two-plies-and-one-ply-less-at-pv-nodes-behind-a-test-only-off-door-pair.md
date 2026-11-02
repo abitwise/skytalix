@@ -6,7 +6,103 @@ id: ADR-0060
 
 ## Status
 
-**PROPOSED** 2026-11-02 by Architect/Design (task `arch-phase2-p1`, records only, on `grugops/arch-phase2-p1` from
+**PROPOSED, RE-OPENED 2026-11-02: re-measured on `main`, the rule misses two of its own bars there, and the build
+does not start.** Recorded by Architect/Design (task `arch-phase2-rebase`, records only, on
+`grugops/arch-phase2-rebase` from `main` `5ffbae25`).
+- **Why re-measure.** `ABC-264` did not merge (`ADR-0059` F5: 44.0 / 100). So this ADR's door is now `main`'s own
+  search: the flat `ABC-121` rule with no reverse futility. `main`'s `src/` equals `0b73f51d`, `ABC-264`'s
+  merge-base. § Consequences said it: "the premise is re-measured on `main` … The bars stay."
+- **The instrument.** The same driver (`raw/probe/probe.ts` of `arch-phase2-p1`) ran on a scratch `git archive` of
+  `main`'s `src/`, outside the repository. The patch was adapted to `main`: the P1 predicate is unchanged; the P3/P5
+  ranking knobs are dropped, because they gated on reverse futility. Every batch ran under the host lock, took
+  ≤ 5 min and read deterministic counts only, with no timing. The scratch copy is deleted. The patch, the driver
+  and the outputs are kept under `.grugops/context/arch-phase2-rebase/raw/`.
+- **Instrument check: exact.** The door reproduces `main`'s pre-`ABC-264` counts to the node: 1 116 785 /
+  1 602 457 (`search()` depth 8, kiwipete / position-6) and 1 575 537 / 476 244 (`chooseMove` to 8). These are
+  `ADR-0059`'s door counts, which QE confirmed.
+
+**Every A3 / A4 / G1 figure, on `main` against the `4d1c0616` base it was first measured on:**
+
+| figure | on `4d1c0616` | **on `main`** | bar | on `main` |
+|---|---|---|---|---|
+| `A4` (a) `search()` d8 kiwipete | 0.7238 | **0.7605** (849 358 / 1 116 785) | ≤ 0.85 | met |
+| `A4` (a) `search()` d8 position-6 | 0.7086 | **0.7385** (1 183 439 / 1 602 457) | ≤ 0.85 | met |
+| `A4` (a) `chooseMove` d8 kiwipete | 0.6795 | **0.7334** (1 155 460 / 1 575 537) | ≤ 0.85 | met |
+| `A4` (a) `chooseMove` d8 position-6 | 0.8020 | **0.8699** (414 286 / 476 244) | ≤ 0.85 | **MISSED** |
+| `A4` (b) reach at 47 000 nodes, 190 | 6.237 → 6.542 (+0.305) | **5.558 → 5.811 (+0.2526)**; 44 deeper, 2 shallower, 15 moves differ | ≥ +0.25 | met by 0.0026 (48 position-plies against 47.5 needed) |
+| `A3` drift d5 `search()` | 100 %, max 16 cp | **99.47 %, max 63 cp** (position-6/g5h6, 319 → 382); 0 sign, 0 mate-status flips | ≥ 95 %, ≤ 27 cp | **MISSED** (the 27 cp cap) |
+| `A3` drift d5 `chooseMove` | 100 %, max 18 cp | **100 %, max 18 cp** (startpos/g2g4); 0 / 0 | ≥ 95 %, ≤ 27 cp | met |
+| `A3` mate floor, door d4 vs head d5 | 0 / 163 | **0 / 163** | 0 | met |
+| same-depth mate report (d5) | 2 / 189 | 2 / 189 | report | — |
+| `A3` zugzwang, seven rows | 7 / 7 | **7 / 7** (node counts as before; `zugzwang.004` 627 208 at d11) | 7 / 7 | met |
+| `A5` `G1` | 54 / 58 | **54 / 58**, no NEWLY line (door 54 / 58) | ≥ 54, no NEWLY | met |
+| `A4` (c) `G6` | not read | not read (timing; a build's gate) | ≥ base | — |
+
+- Reports on `main`. At depth 8, the other roots read (`search()` / `chooseMove`): position-4 0.814 / 0.712,
+  position-5 0.660 / 0.796, startpos 0.627 / 0.748. At depth 6: kiwipete 0.580 / 0.661, position-6 0.817 / 0.835.
+  Root moves at depth 8 are unchanged on kiwipete and position-6 in both recursions. Firing at depth 6 on the 190
+  (`search()`): 242 201 of 2 206 433 non-first moves reduced (11.0 %), 40.9 % of them by two plies (door 9.9 %,
+  all by one); nodes 0.843×. Reach at 20 000 nodes: 4.426 → 4.642 (+0.216).
+- **The new instrument-check counts on `main`** (they replace decision 9's `4d1c0616` counts): 849 358 / 1 183 439
+  (`search()`), 1 155 460 / 414 286 (`chooseMove`), and reach 5.558 / 5.811 (sums 1 056 / 1 104 over 190).
+- **The door counts on `main`:** 1 116 785 / 1 602 457 (`search()`), 1 575 537 / 476 244 (`chooseMove`).
+
+**What it means, said plainly.**
+- **Two bars miss on `main`:**
+  - `A3`'s 27 cp cap: 63 cp in `search()` at position-6/g5h6.
+  - `A4` (a) on `chooseMove` position-6: 0.8699 against 0.85.
+  - `A4` (b) holds by less than one position-ply.
+- **No bar moves.** The 27 cp, 0.85×, +0.25 ply, 95 % / 25 cp, 0 sign flips, the mate floor, 7 / 7 and 54 / 58 all
+  stand as pre-registered. None is loosened here.
+- **The F-rules apply as written:**
+  - **F1** (drift red on a predicate that matches decision 1 exactly): **NOT MET, and this ADR is re-opened with a
+    new probe.** No fallback is pre-chosen.
+  - **F4** (`A4` (a) above 0.85× on any reading): the ticket would not merge.
+- **So the build does not start from `main` on this text.** Decision 9 says a faithful build reproduces the probe's
+  counts to the node. These readings are deterministic, so a build of decision 1 on `main` would read exactly these
+  figures and fail `A3` and `A4` before any game is played.
+- **The variants, re-read on `main`, do not rescue it.** On the same instrument, no rule in § What the probe
+  measured meets both missed bars on `main`:
+
+  | variant | `search()` kiwi / pos-6 | `chooseMove` kiwi / pos-6 | drift d5 `search()` / `chooseMove` (max cp) |
+  |---|---|---|---|
+  | chosen (cap 2, PV −1) | 0.761 / 0.739 | 0.733 / **0.870** | **63** / 18 |
+  | uncapped | 0.685 / 0.693 | 0.599 / 0.769 | **63** / 18 |
+  | uncapped, killer −1 | 0.694 / 0.726 | 0.612 / 0.826 | **63** / 21 |
+  | textbook 0.75 / 2.25, PV −1, killer −1 | 0.770 / 0.746 | 0.695 / **0.975** | **28** / 26 |
+  | 0.75 / 2.25, no PV or killer term | 0.715 / 0.686 | 0.638 / 0.686 | **63** / 23 |
+  | 1.0 / 1.75, PV −1, killer −1 | 0.653 / 0.599 | 0.578 / 0.770 | **63** / 11 |
+  | flat 2 / 1, cap 2 | 0.799 / **0.908** | 0.738 / **0.867** | **30** / 21 |
+  | textbook, never below 1 | 0.753 / 0.791 | 0.672 / **0.895** | **30** / 21 |
+
+  Every variant keeps ≥ 98.93 % within 25 cp and 0 sign flips. The same position, position-6/g5h6 (319 → 382), is
+  the maximum in five of the eight. The three without it (textbook, flat 2 / 1, never below 1) reduce less at PV
+  nodes.
+  - **One diagnostic run, not a candidate:** decision 1 with two plies less at PV nodes (PV −2). The 63 cp row
+    goes, so it comes from two-ply reductions at PV nodes.
+  - But the drift maximum is still 28 / 26 cp, 1 cp over the cap in `search()`.
+  - And position-6 saves nothing: 1.037× in `search()` and 0.930× in `chooseMove` (kiwipete 0.842 / 0.772).
+  - So moving the PV term trades one missed bar for another. Uncapped and the textbook
+  forms also lose `zugzwang.004`; that was measured on `4d1c0616` and is not re-read here.
+- **Why `main` differs from `4d1c0616`** (a judgement, not measured). That probe's door included reverse futility,
+  which cuts at remaining depth 1–3. Those cuts removed shallow subtrees before a reduction could matter. On `main`
+  those subtrees are searched, so the same table acts on a different tree. Measured: the saving on `chooseMove`
+  position-6 moves from 0.80× to 0.87×, and one line moves 63 cp.
+- **What changes in the text when the rule is re-opened** (decision 4's "reverse futility included", decision 5's
+  door list, and decision 6's `ABC-264` re-point example):
+  - On `main` the doors carry no reverse futility. Decision 5's list is the doors `main` has.
+  - No `ABC-264` row exists to re-point.
+  - Nothing else in decisions 2–8 depends on the base.
+- **The re-open is a new design hop, not this one.** It is a new probe on `main`, and it chooses its rule on its
+  merits: reach, zugzwang, `G1`, the mate floor. It must not tune the rule to pass the bars on the same two boards
+  that define them: a rule fitted to its own bar measures nothing. Every bar number above carries over.
+  - **Open, the owner's:** the 27 cp cap was ⌊1.5 × 18⌋, from one base's maximum. On `main` one position of 187
+    moves 63 cp, so the cap has proved base-fragile. Re-deriving it on `main` by `ADR-0050` d8's method would raise
+    the number. That is a loosening, so it is his word, not the Architect's.
+- **Status for the owner.** The question "accept ADR-0060" is **not put** on this text, since it fails on `main`. It is
+  put again after the re-open. The default without an answer is unchanged: the flat 1-ply LMR stays on `main`.
+
+*Earlier status, kept:* **PROPOSED** 2026-11-02 by Architect/Design (task `arch-phase2-p1`, records only, on `grugops/arch-phase2-p1` from
 `main` `0d7b9d2f`). The probe ran on a scratch copy of `grugops/ABC-264-fix` `4d1c0616`'s `src/`, outside the
 repository, under the host lock. The copy is deleted. Nothing was committed to `src/`.
 
@@ -224,6 +320,10 @@ figures: `.grugops/context/arch-phase2-p1/` observation `…35bd3967` (the probe
      to the node: 476 991 / 723 582 (`search()`) and 660 887 / 239 944 (`chooseMove`), plus the 6.542 / 6.237
      reach. If `ABC-264` merges at a different tree, the Engineer first re-reads the door's counts on `main`. A count
      that differs is explained in the PR before `A4` is read.
+     - *Dated 2026-11-02 (`arch-phase2-rebase`).* `ABC-264` did not merge. On `main` the door reads 1 116 785 /
+       1 602 457 / 1 575 537 / 476 244, and decision 1's head reads 849 358 / 1 183 439 / 1 155 460 / 414 286, with
+       reach 5.558 / 5.811. `chooseMove` position-6 reads **0.8699, above (a)'s 0.85**. See § Status: F4 and F1
+       apply, and the build does not start on this text.
    - **`G1` (`A5`):** ≥ 54/58 with no NEWLY-MISSED line (measured 54/58).
 10. **The read and the reports (`A6`, `ADR-0056` D5 as folded):** C2′ 100 games at 100 ms against the merge-base, S′
     10 games at 0.5 s against Stockfish 19 at E 1 650, and the Levels deep lane on the candidate head, all by
@@ -301,6 +401,8 @@ figures: `.grugops/context/arch-phase2-p1/` observation `…35bd3967` (the probe
 - **The order with `ABC-264`.** The code waits for `ABC-264`'s merge (the same two files). The probe measured on its
   head, so the door is the post-`ABC-264` search. If `ABC-264` does not merge, the premise is re-measured on `main`
   and decision 9's counts are re-derived by a dated line here. The bars stay.
+  - *Dated 2026-11-02 (`arch-phase2-rebase`):* re-measured on `main`. Two bars miss (`A3`'s 27 cp cap,
+    `A4` (a) on `chooseMove` position-6), so the ADR is re-opened (F1). See § Status.
 - **Threads (`ABC-265`–`ABC-267`):** no interaction. This ticket edits no `src/transposition.ts` line. The rule is
   per node, so every worker applies it alike.
 - **P4 coupling (named, not decided).** Move-count pruning reads the same move number and depth. Its ADR decides

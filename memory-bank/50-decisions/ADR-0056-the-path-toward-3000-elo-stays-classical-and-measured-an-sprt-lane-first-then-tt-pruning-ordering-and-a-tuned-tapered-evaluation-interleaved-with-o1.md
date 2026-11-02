@@ -296,6 +296,22 @@ terms E3–E7, each best added under the tuner; then X2 singular extensions and 
 - **P1 stays next after P2.** At depth 8, on the same instrument, P3 futility read 0.88–0.91× and P5 depth-grown R
   0.83–0.99×, against P1's 0.68–0.80×. The order P2 → P1 → P4 → P3 → P5 → P6 is unchanged.
 
+*Dated 2026-11-02 (`arch-phase2-rebase`, records only; probes on scratch copies of `main` and `4d1c0616`): rows P2 and P1.*
+- **Row P2: dropped.** `ABC-264` read 44.0 / 100 (−41.9 ± 58.5), NOT MET, and was not merged. `ADR-0059` is
+  accepted, not in force.
+  - The read contradicts the row's +30–60 at about 99 %. The rule bought +0.70 ply at the 100 ms node budget and
+    still lost, so the cost is on the value side.
+  - No retry on today's `main`. A re-cut needs a new premise: E1 / E2, O1h, a 500 ms read, or a changed form.
+    `ADR-0059` § Status gives the ruling, its reasons and the re-cut's bars.
+  - Code on `grugops/ABC-264-fix` `4d1c0616`.
+- **Row P1: `ADR-0060` re-opened.** Re-measured on `main`, its rule misses two of its own bars:
+  - `A3`'s 27 cp drift cap (63 cp in `search()`);
+  - `A4` (a) on `chooseMove` position-6 (0.8699 against 0.85).
+  - F1 applies, and the build does not start on that text (`ADR-0060` § Status).
+- **The order is now P1 (re-opened) → P4 → P3 → P5 → P6.** P4 still depends on P1. Whether P3 goes ahead of the
+  re-opened P1 is the Orchestrator's call: P3's untuned form read 0.88–0.91× on the `4d1c0616` base, and it is not
+  re-read on `main`.
+
 ### D3. Is 3 000 reachable without a neural network?
 
 - **For a classical engine, yes, in principle.** Stockfish 11, the last hand-crafted Stockfish, reads ≈ 3 430 CCRL

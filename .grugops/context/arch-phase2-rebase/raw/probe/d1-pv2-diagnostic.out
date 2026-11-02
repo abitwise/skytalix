@@ -1,0 +1,5 @@
+== pv-2 (diagnostic)
+{"name":"kiwipete","label":"head","depth":8,"search":{"nodes":940439,"score":-68,"move":"e2a6"},"choose":{"nodes":1215704,"score":-68,"move":"e2a6","depth":8},"lmr":{"tries":102832,"reduced":15074,"sumR":25885,"hist":[87758,4263,10811,0,0,0,0,0],"fut":0}}
+{"name":"position-6","label":"head","depth":8,"search":{"nodes":1661852,"score":71,"move":"c3d5"},"choose":{"nodes":443061,"score":71,"move":"c3d5","depth":8},"lmr":{"tries":286330,"reduced":30894,"sumR":41009,"hist":[255436,20779,10115,0,0,0,0,0],"fut":0}}
+{"which":"search","depth":5,"rows":190,"nonMate":187,"withinPct":99.47,"max":28,"maxName":"position-5/e1f2 -231->-203","mateFlip":0,"signFlip":0,"moveDiff":5}
+{"which":"choose","depth":5,"rows":190,"nonMate":187,"withinPct":99.47,"max":26,"maxName":"kiwipete/e5g4 335->361","mateFlip":0,"signFlip":0,"moveDiff":5}

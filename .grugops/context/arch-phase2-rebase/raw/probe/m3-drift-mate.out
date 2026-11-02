@@ -1,0 +1,4 @@
+{"which":"search","depth":5,"rows":190,"nonMate":187,"withinPct":99.47,"max":63,"maxName":"position-6/g5h6 319->382","mateFlip":0,"signFlip":0,"moveDiff":4}
+{"which":"choose","depth":5,"rows":190,"nonMate":187,"withinPct":100,"max":18,"maxName":"startpos/g2g4 54->36","mateFlip":0,"signFlip":0,"moveDiff":3}
+{"d":4,"plus":1,"mates":163,"viol":0,"longer":0}
+{"d":5,"plus":0,"mates":189,"viol":2,"longer":0}

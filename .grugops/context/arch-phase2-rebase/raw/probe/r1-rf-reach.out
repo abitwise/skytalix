@@ -1,0 +1,6 @@
+== rf120
+{"maxNodes":47000,"rows":184,"doorSum":1003,"headSum":1132,"doorMean":5.451,"headMean":6.152,"gain":0.7011,"deeper":112,"shallower":0,"moveDiff":9}
+{"maxNodes":20000,"rows":184,"doorSum":796,"headSum":930,"doorMean":4.326,"headMean":5.054,"gain":0.7283,"deeper":115,"shallower":0,"moveDiff":2}
+== rf150
+{"maxNodes":47000,"rows":184,"doorSum":1003,"headSum":1116,"doorMean":5.451,"headMean":6.065,"gain":0.6141,"deeper":103,"shallower":0,"moveDiff":6}
+{"maxNodes":20000,"rows":184,"doorSum":796,"headSum":919,"doorMean":4.326,"headMean":4.995,"gain":0.6685,"deeper":109,"shallower":0,"moveDiff":2}

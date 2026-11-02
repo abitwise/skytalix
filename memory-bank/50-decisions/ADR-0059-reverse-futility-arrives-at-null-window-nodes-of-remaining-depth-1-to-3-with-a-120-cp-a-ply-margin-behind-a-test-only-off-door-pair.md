@@ -6,7 +6,103 @@ id: ADR-0059
 
 ## Status
 
-**ACCEPTED** 2026-11-02 by the owner. **Not yet in force on `main`:** it comes into force at `ABC-264`'s merge.
+**ACCEPTED, NOT IN FORCE ON `main`, 2026-11-02.** F5 fired: `ABC-264`'s 100-game read scored **44.0 / 100**
+(W/D/L 30 / 28 / 42, `cutechess-cli` −41.9 ± 58.5 Elo, LOS 7.9 %) against the GAIN bar of 50.0. `ABC-264` is not
+merged, and there is no reverse futility on `main`. Recorded by Architect/Design (task `arch-phase2-rebase`, records
+only, on `grugops/arch-phase2-rebase` from `main` `5ffbae25`). The source is `qe-ABC-264-p2`: verdict FAIL
+`…4a487d20`, per row `…3af11ebd`, read by the PREREG `…a63b4c37`. The code stays on `grugops/ABC-264-fix`
+`4d1c0616`.
+- **Not a defect.** `A1`–`A4` were MET (`qe-ABC-264` `…b19fef14`), and the four `A4` counts equal the probe's to
+  the node. The smoke (7.0 / 10), the Levels deep lane (57 / 57) and the gates were green. Nothing is red against the
+  code.
+- **`QE-264-e`, named here (INFO, a design residual; `qe-ABC-264` `…3a95d391`).** A cut node is never checked for
+  "no legal moves". A side to move that is not in check, holds three or more non-pawn pieces and has no legal move is
+  stalemated. It returns beta instead of 0. This is the null move's class (`ADR-0050`); § Consequences named the
+  repetition and 75-move classes but not this one.
+  - It is not measured. A stalemate with three or more non-pawn pieces and no legal move is vanishingly rare.
+  - It does not explain the read (below).
+  - With the ADR not in force, nothing is owed. Any re-cut carries it as a named residual, or adds the guard. The
+    re-cut's ADR decides which.
+
+**The retry ruling: DROP. No retry of this rule, and no re-cut with F1's 150 cp fallback, on today's `main`.** The
+reasons, from the evidence:
+
+1. **Noise does not explain the miss of the premise. It explains only a miss of a change worth about nothing.** The
+   score's standard deviation over these 100 games is 4.2 points (draw ratio 0.28). The chance of 44.0 or less,
+   given the true effect, is:
+
+   | true effect (Elo) | +60 | +40 | +30 | +20 | +10 | 0 | −20 | −42 |
+   |---|---|---|---|---|---|---|---|---|
+   | P(score ≤ 44) | < 0.001 | 0.004 | 0.010 | 0.023 | 0.049 | 0.095 | 0.27 | 0.55 |
+
+   - `ADR-0056` D2's estimate for P2 was +30–60 Elo. That range is contradicted at about 99 %. A gain of +20 or more
+     is unlikely (p ≈ 0.02). The read is consistent with a true effect from about −100 to +17 (`cutechess-cli`'s
+     95 % interval).
+   - **Retrying the same rule is a coin flip at best.** At a true 0, a fresh read passes with P = 0.50 (C2′'s table),
+     and a pass then would mostly be the winner's curse. C2′ says a miss is not re-played for luck.
+2. **No bug class is indicated.**
+   - **Stalemate (`QE-264-e`)** needs three or more non-pawn pieces and no legal move. Across 100 games that cannot
+     cost 42 Elo.
+   - **The eval bound** (`QE-264-b`) is sound: |`evaluate`| ≤ 10 885 is far below `MATE_FLOOR`. The mate-band guard
+     was planted twice and caught twice.
+   - **Time:** 0 losses on time. The candidate's latency had a median of 100 ms and a max of 105 ms.
+   - **Identity and wiring:** `A1` was node-equal, 7 of 8 QE plants were caught, and `QE-264-a` is a test-only gap
+     on the door.
+   - **Colour (`QE-264-p2-c`):** 0.360 as White, 0.520 as Black over 50 games each. That is noise-sized.
+3. **The pay is real at 100 ms, so "too shallow to gain" is not the reason.** It fires at 100 ms (part 1: 0.32–4.82 %
+   of nodes, almost all at remaining depth 1).
+   - **Measured this hop:** a scratch copy of `4d1c0616`, deterministic, `chooseMove` against its door at
+     `maxNodes`, frozen clock (`.grugops/context/arch-phase2-rebase/raw/probe/r1-rf-reach.out`).
+   - **At 47 000 nodes (the 100 ms median): mean completed depth 5.451 → 6.152, +0.70 ply.** 112 positions are
+     deeper and 0 shallower. At 20 000 nodes: +0.73.
+   - **Rows:** these are the 184 non-endgame rows of `ABC-121`'s 190. In the six endgames the side to move holds
+     fewer than three non-pawn pieces, so the rule cannot fire. Over all 190 the gain is +0.68, by that argument.
+   - **Compared with P1:** that is more than twice P1's +0.305 on the same corpus (`ADR-0060`).
+   - **So the depth was bought, and the games still lost about 42 Elo.** The loss is on the value side.
+4. **The likeliest cost is the guess itself: a margin below a minor piece, at remaining depth 1** (a judgement,
+   `UNKNOWN - verify`).
+   - At depth 1 a cut returns beta without the one-ply search and quiescence that would see a threat against the
+     side to move: a fork, a pinned or trapped piece. 120 cp is less than the threat it skips.
+   - The drift oracle cannot see this. It compares root scores at fixed depth 5, where minimax mutes the errors
+     (97.33 % within 25 cp).
+   - Strong engines pair such a margin with "improving" and history terms, and they search far deeper than depth 6.
+     This engine has neither yet: O1h (`ABC-233`) is Phase 3, and E1 / E2 re-scale the evaluation.
+5. **F1's 150 cp fallback is the wrong lever for this miss.**
+   - F1 pre-chose 150 cp for a drift red. This was a strength miss with every drift row green.
+   - 150 cp is still below any piece a skipped threat wins, so it narrows the guess without closing the class.
+   - It also saves less: 0.64–0.71× at depth 8 against 0.59–0.64×. At 47 000 nodes it reaches +0.61 ply against
+     120 cp's +0.70, on the same instrument and rows. So it buys less depth while keeping the same class of guess.
+   - Repurposing a fallback chosen for another falsifier, after seeing a score, is the re-classing C2′ forbids.
+
+**What would justify a re-cut (a new ticket, never a re-play of `4d1c0616`).** Any one of these is a new premise:
+- E1 / E2 have landed, and the margin is re-read on the re-scaled evaluation (§ Consequences).
+- O1h (`ABC-233`) has landed. That gives a history table, so an "improving" or history term can gate the cut.
+- The owner asks for a 500 ms read, a run over 1 h (`ADR-0056` C2′, depth-gated rule), because the pay grows with
+  depth.
+- Or a design probe shows the depth-1 guess is the cost, for example a tactical-line probe at the 100 ms node budget.
+  A changed form, such as depth 2–3 only or a guard on a piece en prise, would then come back as a new attempt with
+  a new read.
+
+**Its pre-registered bars, if cut.** Every `ABC-264` bar carries over unchanged, and none is loosened:
+- `A1`: node-equal doors on the `ABC-078` `A3` corpus, and the export lists +3.
+- `A2`: the predicate table and the guard rows.
+- `A3`: drift at depth 5 on the 190 in both recursions, ≥ 95 % within 25 cp, none beyond 160 cp, 0 sign changes; the
+  mate floor on the 287 at 0 violations; the seven zugzwang rows at depths 9, 11, 12, 8, 8, 8, 8.
+- `A4`: nodes ≤ 0.75× the door at depth 8 on kiwipete and position-6, in both recursions; `G6` ≥ base.
+- `A5`: `G1` ≥ 54 / 58 with no NEWLY line.
+- `A6`: C2′ **GAIN ≥ 50.0 of 100** at 100 ms, S′ ≥ 3.0 / 10 at E 1 650, and the Levels deep lane.
+- **Added, not loosening:** reach at 47 000 nodes on the 190 ≥ the door's + 0.25 ply (`ADR-0060` d9 (b)'s form).
+- **Added, not loosening:** `QE-264-e`'s stalemate case is guarded, or carried as a named residual.
+- The intent stays GAIN. It fires at 100 ms, so NEUTRAL is not open to it (C2′'s "C yes" line).
+- The new form's own margin may set a tighter drift cap, never a looser one.
+
+**Consequences on record.**
+- `ADR-0060` (P1) was measured on the `ABC-264` head. It is re-measured on `main` (its § Status, same date).
+- The S′ 7.0 / 10 is not pooled (BA/PM, `EPIC-011` § Close-out).
+- `ADR-0056` D2 row P2 gets a dated line (same date): dropped.
+- The Phase 2 order is the Orchestrator's to restate, without P2.
+
+*Earlier status, kept:* **ACCEPTED** 2026-11-02 by the owner. **Not yet in force on `main`:** it comes into force at `ABC-264`'s merge.
 Recorded by Architect/Design (task `arch-owner-answers-1102`, records only, on `grugops/arch-owner-answers-1102` from
 `main` `7daf8086`). Nothing was run.
 
