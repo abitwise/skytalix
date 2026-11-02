@@ -260,6 +260,17 @@ deeper cutoffs (each S–M, each +15–100); then E1 + E2, the taper and the tun
 largest block); then O1h history, T2/T3/T4 (S, cheap once T1 is in), Q1 SEE pruning, S1 aspiration; then the eval
 terms E3–E7, each best added under the tuner; then X2 singular extensions and V3/V4 speed.
 
+*Dated 2026-11-02 (`arch-ABC-264`, records only, at `main` `ecc0331f`): two corrections to this table.*
+- **Row T3's rationale is wrong.** "A kept entry almost never cuts" under exact-depth cutoffs is false: measured with
+  the table kept across a short game's searches, entries from earlier moves supplied **17–23 % of exact cuts**
+  (kiwipete 38 081 of 227 253; position-6 35 051 of 151 274; `arch-phase1-replan` `…5ea73b5c`). T3 alone still read
+  only 0.975× pooled at depth 8, so `ABC-209`'s NEUTRAL is not explained by "never cuts". The row's estimate and its
+  dependency on T1 are not re-derived here; T1 + T3 is the paused combined attempt (`ABC-257`, bar pre-registered in
+  `…64e95bfa`).
+- **Row P2 has a ticket and an ADR:** `ABC-264`, `ADR-0059` (PROPOSED). Its premise is measured: at fixed depth 8 the
+  rule needs 0.59–0.64× the door's nodes on kiwipete and position-6 in both recursions (`ADR-0059` § Context). The
+  Elo column stays an estimate until C2′ reads it.
+
 ### D3. Is 3 000 reachable without a neural network?
 
 - **For a classical engine, yes, in principle.** Stockfish 11, the last hand-crafted Stockfish, reads ≈ 3 430 CCRL
@@ -937,6 +948,16 @@ evidence.
 - **Readings, item 7:** after each epic, C3″ (400 games head to head at 100 ms), plus S′, the Levels deep lane, the
   ladder in short mode and the UCI session deep lane on the closing head. Then C4's anchors, each with its own 100 ms
   outside reading, and the C1 claim. The order is unchanged.
+
+*Dated 2026-11-02 (`arch-ABC-264`, records only; ruling `arch-phase1-replan` `…64e95bfa`):*
+- **Phase 1 is paused; Phase 2 is next, pending the owner.** `ABC-238` (T1) missed its bar (F4, `ADR-0058`) and is
+  closed unmerged; `ABC-237` (T2) is parked with `ABC-258` (T4); `ABC-257` is re-scoped to T1 + T3 and paused until
+  the owner answers the C2′ NEUTRAL-bar question or allows a longer read. Item 2's order "T1 → T2 → T3 → T4" is
+  therefore not being worked.
+- **Phase 2 starts with P2,** `ABC-264` under `ADR-0059` (PROPOSED), then P1 → P4 → P3 → P5 → P6 as item 3 says.
+- **This is the Orchestrator's reorder by evidence** (the paragraph under item 7 allows it), but the pause changes the
+  recommended phase order, so it goes to the owner with `ADR-0058` and `ADR-0059`. Until he answers, item 2 stands as
+  written and this line records the order actually being worked.
 
 ### D7. What is the owner's call
 
