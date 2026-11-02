@@ -1705,6 +1705,24 @@ describe("ABC-230 A3 and A4 — no prior keys is base, node for node, and the do
       );
     }
   });
+
+  it("ABC-264's door reads prior keys, as chooseMove does: the A1 repetition at 0 with them, not without (QE-264-a)", () => {
+    // `chooseMoveWithoutReverseFutility` is the pre-`ABC-264` `chooseMove` (`ADR-0059`
+    // decision 4), prior keys included; no literal-map row pins its `priorKeys`.
+    const fixture = THIRD_OCCURRENCE[0];
+    const game = gameOf(fixture.fen, fixture.moves);
+    const prior = priorKeysOf(game);
+    const root = toFen(game.position);
+    const door = engineModule.chooseMoveWithoutReverseFutility;
+    const withKeys = door(parseFen(root), { ...fixedDepth(4), priorKeys: prior });
+    expect(withKeys && { move: label(withKeys.move), score: withKeys.score }).toEqual({
+      move: fixture.repeat,
+      score: 0,
+    });
+    const without = door(parseFen(root), fixedDepth(4));
+    expect(without && label(without.move)).not.toBe(fixture.repeat);
+    expect(without?.score).not.toBe(0);
+  });
 });
 
 // ---------------------------------------------------------------------------
