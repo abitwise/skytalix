@@ -93,6 +93,14 @@
  * above turns it off, and a fifth TEST-ONLY door, `chooseMoveWithoutQuietPromotions` (evasions
  * on), is the pre-`ABC-229` `chooseMove`, node for node. It takes no depth.
  *
+ * FUTILITY PRUNING (`ABC-268`, `ADR-0061`) is `src/search.ts`'s too, at null-window nodes of
+ * remaining depth 1 to 3, by that module's TWO predicates, `futilityNode` (once per node, with the
+ * entry window, after the table probe and the null move) and `futileMove` (per move), imported
+ * rather than copied. A skipped move is not made, not searched and not counted; the index still
+ * advances. Its switch is `futility`. It changes the VALUE, so every door above turns it off, and a
+ * sixth TEST-ONLY door, `chooseMoveWithoutFutility`, is the pre-`ABC-268` `chooseMove`, node for
+ * node. It takes no depth.
+ *
  * NOT HERE, each owned elsewhere: difficulty selection and how a level persists (`EPIC-006`), the
  * budget-to-level mapping (`ABC-087`), aspiration windows and threading (none requested;
  * `ADR-0005` F6 leaves threading to Architect/Design).
@@ -105,6 +113,8 @@ import type { Move } from "./moves.ts";
 import type { Position } from "./position.ts";
 import { type QuiescenceRules, type QuiescenceVisitor, quiesce } from "./quiescence.ts";
 import {
+  futileMove,
+  futilityNode,
   KEY_ARRAY_CAPACITY,
   KillerTable,
   lateMoveReduction,
@@ -246,8 +256,8 @@ export function trimPriorKeys(keys: readonly bigint[], halfmoveClock: number): b
 const ABORTED = Symbol("engine: the budget is spent");
 
 /**
- * The `ABC-121`, `ABC-208` and `ABC-230` switches, `src/search.ts`'s rule: on in `chooseMove`, off
- * in its doors.
+ * The `ABC-121`, `ABC-208`, `ABC-230`, `ABC-228`, `ABC-229` and `ABC-268` switches,
+ * `src/search.ts`'s rule: on in `chooseMove`, off in its doors.
  */
 interface Heuristics {
   /** Principal-variation search: false on `chooseMoveWithoutPvsOrReductions` only. */
@@ -265,6 +275,11 @@ interface Heuristics {
   readonly quiescenceEvasions: boolean;
   /** Quiet queen promotions inside quiescence (`ABC-229`, `ADR-0053`): true on `chooseMove` only. */
   readonly quietPromotions: boolean;
+  /**
+   * Futility pruning (`ABC-268`, `ADR-0061`), by `futilityNode` and `futileMove`, at null-window
+   * nodes: true on `chooseMove` only.
+   */
+  readonly futility: boolean;
 }
 
 /** The quiescence rules this recursion hands `quiesce` (`ADR-0053` decision 6): constants, never built per leaf. */
@@ -433,10 +448,16 @@ function negamax(
 
   const alphaIn = alpha;
   const hashMove = slot === -1 ? null : entryMove(slot, moves);
+  // Futility (`ABC-268`): once per node, with the entry window; a skipped move still takes its index.
+  const futile = budget.futility && futilityNode(position, remaining, ply, alphaIn, beta);
   let best = Number.NEGATIVE_INFINITY;
   let bestMove = moves[0] as Move;
   let index = 0;
   for (const move of orderMoves(moves, budget.killers.at(ply), hashMove)) {
+    if (futile && futileMove(position, move, index)) {
+      index++;
+      continue;
+    }
     const reduction = budget.reductions
       ? lateMoveReduction(position, move, remaining, index, false)
       : 0;
@@ -591,6 +612,29 @@ export function chooseMove(position: Position, options: EngineOptions): EngineCh
     priorKeys: true,
     quiescenceEvasions: true,
     quietPromotions: true,
+    futility: true,
+  });
+}
+
+/**
+ * TEST-ONLY. The pre-`ABC-268` `chooseMove`, node for node: futility pruning off, everything else
+ * on, null move, both quiescence switches and the prior keys included — the engine side of
+ * `ABC-268`'s bounded drift oracle, and the shipped side of every older row that measures its own
+ * heuristic alone (`ADR-0061` decisions 4 and 6). It takes no depth. Not an engine option; nothing
+ * in production calls it.
+ */
+export function chooseMoveWithoutFutility(
+  position: Position,
+  options: EngineOptions,
+): EngineChoice | null {
+  return deepen(position, options, {
+    pvs: true,
+    reductions: true,
+    nullMove: true,
+    priorKeys: true,
+    quiescenceEvasions: true,
+    quietPromotions: true,
+    futility: false,
   });
 }
 
@@ -612,6 +656,7 @@ export function chooseMoveWithoutQuietPromotions(
     priorKeys: true,
     quiescenceEvasions: true,
     quietPromotions: false,
+    futility: false,
   });
 }
 
@@ -632,6 +677,7 @@ export function chooseMoveWithoutQuiescenceEvasions(
     priorKeys: true,
     quiescenceEvasions: false,
     quietPromotions: false,
+    futility: false,
   });
 }
 
@@ -652,6 +698,7 @@ export function chooseMoveWithoutNullMove(
     priorKeys: false,
     quiescenceEvasions: false,
     quietPromotions: false,
+    futility: false,
   });
 }
 
@@ -672,6 +719,7 @@ export function chooseMoveWithoutReductions(
     priorKeys: false,
     quiescenceEvasions: false,
     quietPromotions: false,
+    futility: false,
   });
 }
 
@@ -691,10 +739,11 @@ export function chooseMoveWithoutPvsOrReductions(
     priorKeys: false,
     quiescenceEvasions: false,
     quietPromotions: false,
+    futility: false,
   });
 }
 
-/** The deepening loop behind `chooseMove` and its five doors; they differ in `heuristics` only. */
+/** The deepening loop behind `chooseMove` and its six doors; they differ in `heuristics` only. */
 function deepen(
   position: Position,
   options: EngineOptions,

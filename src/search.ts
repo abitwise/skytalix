@@ -79,6 +79,17 @@
  * switch, `quietPromotions`, joins `quiescenceEvasions` in picking the constant record. It changes
  * the VALUE, so every door older than `ABC-229` turns it off, and `search()` is held to the
  * TEST-ONLY door `searchWithoutQuietPromotions`, the pre-`ABC-229` `search()`, by a bounded oracle.
+ *
+ * FUTILITY PRUNING (ABC-268, `ADR-0061`) sits in the same frame, at null-window nodes near the
+ * leaves: at a node of remaining depth 1 to 3, not the root, not in check, with alpha and beta both
+ * outside the mate band, whose static evaluation plus `FUTILITY_MARGIN[depth]` (150 / 350 / 550 cp)
+ * is still at or below alpha, every move after the first that neither captures nor promotes nor
+ * gives check is skipped: not made, not searched, not counted. The index still advances past it, and
+ * the node returns the best score among the moves searched, stored as before. The rule is TWO pure
+ * predicates both recursions call: `futilityNode` (once per node, with the entry window, after the
+ * table probe and the null move) and `futileMove` (per move). Its switch is `futility`. It changes
+ * the VALUE, so every door older than `ABC-268` turns it off, and `search()` is held to the
+ * TEST-ONLY door `searchWithoutFutility`, the pre-`ABC-268` `search()`, by a bounded oracle.
  */
 
 import { makeMove, makeNullMove, unmakeMove, unmakeNullMove } from "./apply.ts";
@@ -93,6 +104,7 @@ import {
   boundOf,
   clearTable,
   entryMove,
+  MATE_FLOOR,
   probeTable,
   storeEntry,
   tableCutoff,
@@ -302,6 +314,12 @@ interface Switches {
    * `search()` only; every older door, `searchWithoutQuiescenceEvasions` included, turns it off.
    */
   readonly quietPromotions: boolean;
+  /**
+   * Futility pruning (`ABC-268`, `ADR-0061`), by `futilityNode` and `futileMove`. True on
+   * `search()` only. It acts at null-window nodes only, inside PVS's frame, so it acts only where
+   * `pvs` is on (decision 1); every older door turns it off (decision 5).
+   */
+  readonly futility: boolean;
 }
 
 /** The least remaining depth, and the least 0-based index in the ordered list, a reduced move has. */
@@ -371,6 +389,52 @@ export function nullMoveReduction(
     }
   }
   return 0;
+}
+
+/**
+ * The futility margins by remaining depth (`ADR-0061` decision 2): 150 cp at depth 1, 350 at 2
+ * (above a minor piece) and 550 at 3 (above a rook); index 0 is never read. Never written after load.
+ */
+const FUTILITY_MARGIN: readonly number[] = [0, 150, 350, 550];
+
+/**
+ * THE futility node test (`ABC-268`, `ADR-0061` decisions 1 and 2): true when a node of remaining
+ * `depth` at `ply`, entered with the window `(alphaIn, beta)`, may skip its late quiet moves. Both
+ * recursions call it once per node, with the entry window, after the table probe and the null move.
+ *
+ * True exactly when every clause holds: not the root (`ply > 0`); a null window
+ * (`alphaIn + 1 === beta`); remaining depth 1, 2 or 3; alpha and beta both strictly inside
+ * (-`MATE_FLOOR`, `MATE_FLOOR`); the side to move not in check; and
+ * `evaluate(position) + FUTILITY_MARGIN[depth] <= alphaIn`. Check and the static score are derived
+ * HERE, from the position; the caller supplies only what no position carries. The evaluation is
+ * last, so a guarded node pays none. Pure: it reads the position and changes nothing.
+ */
+export function futilityNode(
+  position: Position,
+  depth: number,
+  ply: number,
+  alphaIn: number,
+  beta: number,
+): boolean {
+  if (ply === 0 || alphaIn + 1 !== beta) return false;
+  if (depth < 1 || depth > 3) return false;
+  if (alphaIn >= MATE_FLOOR || alphaIn <= 0 - MATE_FLOOR) return false;
+  if (beta >= MATE_FLOOR || beta <= 0 - MATE_FLOOR) return false;
+  if (isInCheck(position)) return false;
+  return evaluate(position) + (FUTILITY_MARGIN[depth] as number) <= alphaIn;
+}
+
+/**
+ * THE futility move test (`ABC-268`, `ADR-0061` decision 2): true when `move`, at `index` (0-based)
+ * in the ordered list of a node `futilityNode` passed, is skipped — index 1 or later, and the move
+ * neither captures nor promotes nor gives check. The first move is always searched. It asks
+ * `givesCheck`, which answers without playing an unflagged move (`ABC-206`), so the position is
+ * byte-identical on return.
+ */
+export function futileMove(position: Position, move: Move, index: number): boolean {
+  if (index < 1) return false;
+  if (move.captured !== EMPTY || move.promotion !== EMPTY) return false;
+  return !givesCheck(position, move);
 }
 
 /** The move list in the order `switches.ordering` asks for, at `ply`. */
@@ -510,10 +574,16 @@ function negamax(
 
   const alphaIn = alpha;
   const hashMove = slot === -1 ? null : entryMove(slot, moves);
+  // Futility (`ABC-268`): once per node, with the entry window; a skipped move still takes its index.
+  const futile = switches.futility && futilityNode(position, depth, ply, alphaIn, beta);
   let best = Number.NEGATIVE_INFINITY;
   let bestMove = moves[0] as Move;
   let index = 0;
   for (const move of ordered(moves, ply, switches, killers, hashMove)) {
+    if (futile && futileMove(position, move, index)) {
+      index++;
+      continue;
+    }
     const reduction = switches.reductions
       ? lateMoveReduction(position, move, depth, index, false)
       : 0;
@@ -739,6 +809,29 @@ export function search(position: Position, depth: number): SearchResult {
     nullMove: true,
     quiescenceEvasions: true,
     quietPromotions: true,
+    futility: true,
+  });
+}
+
+/**
+ * TEST-ONLY. The pre-`ABC-268` `search()`, node for node: futility pruning off, everything else on,
+ * null move and both quiescence switches included. It is the reference `ABC-268`'s bounded drift
+ * oracle compares `search()` against, and the shipped side of every older row that measures its
+ * own heuristic alone (`ADR-0061` decisions 4 and 6). Not an engine option; nothing in production
+ * calls it.
+ */
+export function searchWithoutFutility(position: Position, depth: number): SearchResult {
+  return searchRoot(position, depth, {
+    prune: true,
+    quiescence: true,
+    ordering: "full",
+    table: true,
+    pvs: true,
+    reductions: true,
+    nullMove: true,
+    quiescenceEvasions: true,
+    quietPromotions: true,
+    futility: false,
   });
 }
 
@@ -760,6 +853,7 @@ export function searchWithoutQuietPromotions(position: Position, depth: number):
     nullMove: true,
     quiescenceEvasions: true,
     quietPromotions: false,
+    futility: false,
   });
 }
 
@@ -780,6 +874,7 @@ export function searchWithoutQuiescenceEvasions(position: Position, depth: numbe
     nullMove: true,
     quiescenceEvasions: false,
     quietPromotions: false,
+    futility: false,
   });
 }
 
@@ -800,6 +895,7 @@ export function searchWithoutNullMove(position: Position, depth: number): Search
     nullMove: false,
     quiescenceEvasions: false,
     quietPromotions: false,
+    futility: false,
   });
 }
 
@@ -824,6 +920,7 @@ export function searchWithoutPruning(position: Position, depth: number): SearchR
     nullMove: false,
     quiescenceEvasions: false,
     quietPromotions: false,
+    futility: false,
   });
 }
 
@@ -846,6 +943,7 @@ export function searchWithoutQuiescence(position: Position, depth: number): Sear
     nullMove: false,
     quiescenceEvasions: false,
     quietPromotions: false,
+    futility: false,
   });
 }
 
@@ -870,6 +968,7 @@ export function searchWithoutPruningOrQuiescence(position: Position, depth: numb
     nullMove: false,
     quiescenceEvasions: false,
     quietPromotions: false,
+    futility: false,
   });
 }
 
@@ -890,6 +989,7 @@ export function searchWithoutOrdering(position: Position, depth: number): Search
     nullMove: false,
     quiescenceEvasions: false,
     quietPromotions: false,
+    futility: false,
   });
 }
 
@@ -909,6 +1009,7 @@ export function searchWithoutKillers(position: Position, depth: number): SearchR
     nullMove: false,
     quiescenceEvasions: false,
     quietPromotions: false,
+    futility: false,
   });
 }
 
@@ -929,6 +1030,7 @@ export function searchWithoutTable(position: Position, depth: number): SearchRes
     nullMove: false,
     quiescenceEvasions: false,
     quietPromotions: false,
+    futility: false,
   });
 }
 
@@ -949,6 +1051,7 @@ export function searchWithoutReductions(position: Position, depth: number): Sear
     nullMove: false,
     quiescenceEvasions: false,
     quietPromotions: false,
+    futility: false,
   });
 }
 
@@ -969,5 +1072,6 @@ export function searchWithoutPvsOrReductions(position: Position, depth: number):
     nullMove: false,
     quiescenceEvasions: false,
     quietPromotions: false,
+    futility: false,
   });
 }
