@@ -12,6 +12,28 @@ adr: "ADR-0062 (PROPOSED 2026-11-02, arch-ABC-266 …4f828986): Threads 1-12, de
 
 # ABC-266: the worker pool and `Threads` (TH-2), with `ABC-267`'s rows folded in
 
+> **PARKED 2026-11-02 BY THE OWNER ("park threads"); `ADR-0062` STAYS PROPOSED, NOT IN FORCE; `Threads` STAYS 1, by
+> BA/PM** (task `bapm-records-1102c`, records only, at `main` `a6039c5b`; nothing run). Sources: the Architect's
+> re-proposal `arch-ABC-266-repropose` `…b6305641` (sealed rule `…3c920b97`), the Orchestrator's notes `…773be7de`
+> (the owner's words, verbatim: *"61 yes, 25 yes, park threads"*) and the board (2026-11-02, `arch-owner-answers-1102b`
+> merged).
+> - **The re-proposal found NO WIN** under its sealed rule. Only T4SDP passed once, and its confirmation was voided by
+>   load. Every S+D+P read at 100 ms paid for its extra ply with a quality loss of 1.67–2 positions of 20. The
+>   deeper-entry rule alone inflates the reported depth. The Architect recommended parking.
+> - **The owner parked the thread strand.** This ticket is **parked**: the build does not start, and the page is not
+>   re-cut. `ADR-0062` stays PROPOSED as the design of record, **not in force**. `ADR-0044` D3 and D5 stand, and the
+>   product stays at `Threads 1`. The owner's `ADR-0062` acceptance question and the `THREADS_DEEP` core question are
+>   moot while it is parked (`EPIC-011` § Owner questions).
+> - **The ~30 min re-probe is not funded** (`…773be7de`).
+> - **`ABC-265` (TH-1) is not affected.** It merged on its own (`605874b8`, the owner's *"25 yes"*); it is node-for-node
+>   today's engine at one writer. So DoR row 10's first blocker is gone. The second, the design, is now the park.
+> - **What would re-open it** (`…b6305641`, each with its own pre-registration): (a) `ADR-0058` comes into force through
+>   `ABC-257`; (b) the owner funds the S+D+P re-probe at `Threads 12`; (c) a later search change breaks the workers'
+>   lockstep.
+> - **S′ line re-pointed** to E 1 810 (`--elo 1810`, `ADR-0056` S′ amendment of 2026-11-02), as on every open strength
+>   ticket. No other row changes. **DoR 9/10. Backlog, parked.** Front matter keeps `status: backlog` (this
+>   repository's form for a parked ticket, as `ABC-237`). The board already reads parked (the Orchestrator's).
+
 > **THE D12 PROBE READ MISS; DEVELOPMENT BLOCKED PENDING THE ARCHITECT'S RE-PROPOSAL; `RISK-EPIC011-09` REALISED,
 > 2026-11-02, by BA/PM** (task `bapm-P3-page`, records only, at `main` `6413f91f`; nothing run). Source:
 > `qe-ABC-266-d12`, verdict by the sealed rule `…9f9aeb87` (pre-registration `…6231db75`, committed `d7aaea5e` before
@@ -244,8 +266,9 @@ src/uci.threads.test.ts`. *Every real-worker row runs in a Node child, `node --m
   - **Reported:** labelled **"hardware gain, N CPU against 1 CPU"**. W/L/D, the score and `cutechess-cli`'s Elo ±
     error, in wall time **and** in core-seconds (N × wall for the N side; `ADR-0057` D4). This read gives η × E_d
     together (`ADR-0057` § Consequences). `machine.txt` shows `threads: skytalix 12, base 1`.
-  - **Beside it, at `Threads 1`:** S′ (10 games at 0.5 s against Stockfish 19 at E 1 650, `r <candidate> <out>
-    --budget-ms 500 --rounds 5 --concurrency 1`, `timemargin` 50 ms; 10 of 10 complete, 0 faults, 0 losses on time,
+  - **Beside it, at `Threads 1`:** S′ (10 games at 0.5 s against Stockfish 19 at ~~E 1 650~~ *E 1 810 (2026-11-02,
+    `bapm-records-1102c`)*, ~~`r <candidate> <out> --budget-ms 500 --rounds 5 --concurrency 1`~~ `r <candidate> <out>
+    --elo 1810 --budget-ms 500 --rounds 5 --concurrency 1`, `timemargin` 50 ms; 10 of 10 complete, 0 faults, 0 losses on time,
     ≥ 3.0 of 10, below that 10 more and ≥ 7.0 of 20). Also the Levels deep lane (`ENGINE_DEEP=1
     NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/levels.test.ts --reporter=verbose`, exit 0, every test
     passed).
@@ -362,7 +385,7 @@ src/uci.threads.test.ts`. *Every real-worker row runs in a Node child, `node --m
 | 7 | test notes | ✅ 1–7 |
 | 8 | size | ✅ L, 20–45 h |
 | 9 | priority | ✅ P2 |
-| 10 | no major unresolved blocker | ❌ ~~the ADR amending `ADR-0044` D3 and D5 is not written;~~ *2026-11-02:* the ADR is written (reading (b)); **`ABC-265` is not merged** *2026-11-02 (`bapm-P3-page`): **and the D12 probe read MISS**, so the design returns to the Architect (`arch-ABC-266-repropose`) and this page is re-cut before Development* |
+| 10 | no major unresolved blocker | ❌ ~~the ADR amending `ADR-0044` D3 and D5 is not written;~~ *2026-11-02:* the ADR is written (reading (b)); **`ABC-265` is not merged** *2026-11-02 (`bapm-P3-page`): **and the D12 probe read MISS**, so the design returns to the Architect (`arch-ABC-266-repropose`) and this page is re-cut before Development* *2026-11-02 (`bapm-records-1102c`): `ABC-265` merged (`605874b8`); the re-proposal found no win, and **the owner parked the strand** ("park threads"). Row 10 now reads: parked; `ADR-0062` not in force* |
 
 **DoR 9/10. Backlog.** *(2026-11-02, `bapm-ABC-266-rows`.)* Row 10 now waits only on **`ABC-265`'s merge**. At that
 merge this page reads 10/10 and may go to Ready. **The pull into Development also waits on the D12 probe**: a "not

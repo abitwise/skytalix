@@ -1,0 +1,52 @@
+{
+ "refs": [
+  "bapm-records-1102c",
+  "grugops/bapm-records-1102c",
+  "EPIC-011",
+  "ABC-268",
+  "ABC-233",
+  "ABC-266",
+  "ABC-265",
+  "ABC-255",
+  "ABC-231",
+  "ABC-232",
+  "ABC-234",
+  "ABC-236",
+  "ABC-237",
+  "ABC-239",
+  "ABC-257",
+  "ABC-258",
+  "P1",
+  "P3",
+  "P4",
+  "O1h",
+  "O2c",
+  "TH-2",
+  "ADR-0056",
+  "ADR-0060",
+  "ADR-0061",
+  "ADR-0062",
+  "ADR-0063",
+  "NFR-009",
+  "RISK-EPIC011-03",
+  "a6039c5b",
+  "e72487e1",
+  "605874b8",
+  "d54dfe19",
+  "orch-2026-10-30a/20261102T205000Z-orchestrator-decision-77a82ec1",
+  "orch-2026-10-30a/20261102T210500Z-orchestrator-decision-8ce2fd23",
+  "orch-2026-10-30a/20261102T191000Z-orchestrator-decision-773be7de",
+  "arch-post-268/20261102T205950Z-architect-design-decision-1bc554fb",
+  "arch-ABC-233/20261102T212011Z-architect-design-decision-f3a4dac0",
+  "arch-ABC-266-repropose/20261102T174241Z-architect-design-decision-b6305641",
+  "qe-ABC-268/20261102T185311Z-qe-e2e-decision-b58a6a29",
+  "qe-ABC-268-p2/20261102T204714Z-qe-e2e-decision-186a743e"
+ ],
+ "notes": [
+  {
+   "kind": "observation",
+   "confidence": "high: files and commit as written (git show --stat d54dfe19); recorded as an observation because no §14 gate run backs an artifact-ref here (the artifact-ref admission was refused for missing sha / gate_run / content_hash)",
+   "bodyFile": "note-artifact.md"
+  }
+ ]
+}
