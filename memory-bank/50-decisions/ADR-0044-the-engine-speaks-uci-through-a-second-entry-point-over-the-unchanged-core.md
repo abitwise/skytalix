@@ -16,6 +16,12 @@ resolve. Since the 2026-10-18 revision that slug is no longer true: see § Revis
 > workers, with the stop flag in a `SharedArrayBuffer` slot, as D5's pre-design says) and D3 (a `Threads` spin
 > option, default 1). **Until that ADR is accepted and its ticket merges, D5 stands on `main` as written:** one
 > thread, no worker. No other decision here moves.
+>
+> *2026-11-02 (`arch-ABC-266`):* **the amending ADR is written: `ADR-0062`, PROPOSED**, the owner's to accept (reading
+> (b): `ABC-266`'s build may start; the merge waits). It moves D3 (one `Threads` spin line, default 1, max 12, and
+> `Threads` leaves the ignored list), D5 (`Threads 1` keeps this decision exactly; `Threads ≥ 2` runs a worker pool and
+> answers `isready` and `stop` during a search), D6's `Threads` row and D8's emit set (the worker entry). Until it is
+> accepted and `ABC-266` merges, D3 and D5 stand on `main` as written.
 
 > **Amended 2026-10-19 by `ADR-0045` (accepted by the owner, note `…1a9c7f42`; folded by BA/PM, subtask
 > `bapm-adr0045-cut`).** D11's `default 3` and D3's option line now read `default 5`: the `default` is
