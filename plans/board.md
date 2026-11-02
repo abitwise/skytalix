@@ -1,3 +1,4 @@
+_Updated: 2026-11-02 Orchestrator (orch-2026-10-30a) — `bapm-P3-page` merged: **ABC-268 (P3 futility) cut, DoR 10/10 (b) → pulled → `se-ABC-268`** (build only). ABC-265 page citations fixed; ABC-266 page records the D12 MISS. Running: arch-ABC-266-repropose, se-ABC-268._
 _Updated: 2026-11-02 Orchestrator (orch-2026-10-30a) — **qe-ABC-266-d12 MISS** (not loaded): played depth median 7 / 7 / 7 at 100 ms for Threads 1 / 4 / 12 (1000 ms: 10 / 9.5 / 10); workers in lockstep 19/20; per-worker rate 0.69× at T12. ABC-266 build blocked → `arch-ABC-266-repropose` (helper diversity, ADR-0058 at T≥2, 4-fast-core cap; pre-registered). ALONE window closed. → `bapm-P3-page` (cut the futility ticket). Running: those two._
 _Updated: 2026-11-02 Orchestrator (orch-2026-10-30a) — `arch-phase2-p3` merged: **ADR-0061 PROPOSED — P3 futility pruning** (null-window, depth 1–3, margins 150/350/550 cp; 0.79–0.83× nodes at d8, +0.279 ply at 47 000; drift max 10 cp; cut audit 0 flips). P4 fails drift/audit, P6 loses zugzwang + 345 cp drift, P5 barely acts at 100 ms. New cut audit finds no fork-skipping in ABC-264 (cause of −42 unknown; DROP stands). Ruling: P3 ahead of parked P1. Owner asked: accept ADR-0061. **ALONE window opens: `qe-ABC-266-d12` dispatched; nothing else until it returns.** Then bapm P3 page + se build._
 _Updated: 2026-11-02 Orchestrator (orch-2026-10-30a) — `se-ABC-265-fix` done (grugops/ABC-265-fix 28ad3a8d): QE-265-a closed (one row; QP4 red, head 12/12; npm test 2 388). **ABC-265 merge-ready from grugops/ABC-265-fix — waits only owner acceptance of the ADR-0025 amendment.** Running: arch-phase2-p3; then ALONE window for qe-ABC-266-d12._
@@ -1363,7 +1364,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+- [ABC-268] P3: futility pruning skips late quiet moves at null-window nodes of remaining depth 1–3 (150/350/550 cp) behind an off-door pair (EPIC-011 Phase 2; size: S; P2; GAIN; DoR 10/10 (b)) **2026-11-02: pulled → `se-ABC-268` (build only; A6 read and merge wait owner acceptance of ADR-0061).**
 
 
 
