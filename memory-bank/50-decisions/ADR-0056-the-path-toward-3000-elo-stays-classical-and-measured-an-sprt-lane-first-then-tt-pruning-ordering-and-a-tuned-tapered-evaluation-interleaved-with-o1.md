@@ -312,6 +312,26 @@ terms E3–E7, each best added under the tuner; then X2 singular extensions and 
   re-opened P1 is the Orchestrator's call: P3's untuned form read 0.88–0.91× on the `4d1c0616` base, and it is not
   re-read on `main`.
 
+*Dated 2026-11-02 (`arch-phase2-p3`, records only; probe on a scratch copy of `main`'s `src/` `f2388e40`): rows P3, P4, P5 and P6.*
+- **Measured on `main`, each item alone.** Figures are depth-8 nodes against the door (`search()` / `chooseMove`,
+  kiwipete and position-6) and the gain in reach at 47 000 nodes on the 190. The full table, with drift, mate,
+  zugzwang and the cut audit, is in `ADR-0061` § Context.
+  - **P3:** 0.79–0.83× and +0.279 ply. Clean on every row: audit 0 of 2 943 flips.
+  - **P4:** 0.64–0.97× and +0.34 to +0.50 ply. But drift is 87.7 % within 25 cp, the audit shows 11.5 % flips with
+    piece-sized errors, and the depth-1 form costs nodes on position-6.
+  - **P5:** 0.88–0.95× and +0.06 ply. Clean, but depth-gated.
+  - **P6:** 0.79–0.83× and +0.305 ply. But it loses `zugzwang.004`, drifts up to 345 cp, and shows 1.98 % audit
+    flips.
+- **Row P3 has an ADR: `ADR-0061` (PROPOSED).** Margins are 150 / 350 / 550 cp at remaining depth 1 / 2 / 3, so every
+  margin from depth 2 up is above a minor piece. It sits behind an off-door pair, with intent GAIN. Its "depends on
+  P2" was sequencing, not mechanism: it was measured without P2, and it needs neither P1 nor P2.
+- **Row P4's real dependency is a quiet-move order (O1h, `ABC-233`),** more than P1. Without history it prunes
+  generation-order quiet moves (the measurement above).
+- **Row P5:** a NEUTRAL (invisible at 100 ms) candidate with a deep-depth bar, as C2′'s depth-gated rule names it.
+- **Row P6:** rejected on today's evaluation.
+- **The suggested order** (the Orchestrator's call): P3 (`ADR-0061`) now, independent of the P1 re-open → P1 if the
+  owner's cap answer re-opens it green → P5 (NEUTRAL) → P4 after O1h → P6 not before E1 / E2.
+
 ### D3. Is 3 000 reachable without a neural network?
 
 - **For a classical engine, yes, in principle.** Stockfish 11, the last hand-crafted Stockfish, reads ≈ 3 430 CCRL

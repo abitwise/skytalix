@@ -74,6 +74,22 @@ reasons, from the evidence:
      120 cp's +0.70, on the same instrument and rows. So it buys less depth while keeping the same class of guess.
    - Repurposing a fallback chosen for another falsifier, after seeing a score, is the re-classing C2′ forbids.
 
+*Dated 2026-11-02 (`arch-phase2-p3`, records only): item 4's judgement measured. It is not supported.*
+- **The instrument:** a cut audit on a scratch copy of `main`'s `src/`, with this ADR's rule rebuilt. It reproduces
+  `4d1c0616`'s head counts to the node (658 971 / 1 021 190 / 972 596 / 299 183).
+  - `search()` ran at depth 6 over the 190 plus 6 endgames, and every 20th cut was sampled.
+  - Each sampled cut was searched fresh with the rule at its null window, without the rule at that window, and
+    without the rule at a full window (the reference).
+- **The result:** 24 of 28 486 cuts (0.08 %) fall on the other side of beta from the door's own search at that depth.
+  5 err by 100 cp or more, 1 by 200 cp or more (201), and none by 300 cp or more. By depth: 23 of 24 380 at depth 1,
+  1 of 3 731 at depth 2, 0 of 375 at depth 3.
+- **The instrument is sensitive.** The flip rate is 0.25 % at 40 cp a ply, with a 386 cp promotion threat caught, and
+  0.42 % at a zero margin.
+- **So "a margin under a piece skipped forks" does not explain the −42 at the cut nodes.** What remains is either
+  noise (P(≤ 44 | 0) = 0.095) or a cost outside the cut verdicts that nothing here has measured.
+- **The retry ruling (DROP) is unchanged.** The listed re-cut premises stand. The audit is now `ADR-0061`
+  decision 8 (d)'s tactical check.
+
 **What would justify a re-cut (a new ticket, never a re-play of `4d1c0616`).** Any one of these is a new premise:
 - E1 / E2 have landed, and the margin is re-read on the re-scaled evaluation (§ Consequences).
 - O1h (`ABC-233`) has landed. That gives a history table, so an "improving" or history term can gate the cut.

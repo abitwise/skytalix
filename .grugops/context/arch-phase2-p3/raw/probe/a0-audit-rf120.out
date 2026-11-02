@@ -1,0 +1,10 @@
+{"depth":6,"every":100,"fired":571398,"sampled":5626}
+{"key":"all","n":5626,"flips":4,"ffl":0,"ffh":4,"e100":2,"e200":1,"e300":0,"e500":0,"unstable":0,"doorNoise":0,"flipPct":0.07,"e200Pct":0.02,"e300Pct":0}
+{"key":"rf","n":5626,"flips":4,"ffl":0,"ffh":4,"e100":2,"e200":1,"e300":0,"e500":0,"unstable":0,"doorNoise":0,"flipPct":0.07,"e200Pct":0.02,"e300Pct":0}
+{"key":"rf@d1","n":4793,"flips":4,"ffl":0,"ffh":4,"e100":2,"e200":1,"e300":0,"e500":0,"unstable":0,"doorNoise":0,"flipPct":0.08,"e200Pct":0.02,"e300Pct":0}
+{"key":"rf@d2","n":753,"flips":0,"ffl":0,"ffh":0,"e100":0,"e200":0,"e300":0,"e500":0,"unstable":0,"doorNoise":0,"flipPct":0,"e200Pct":0,"e300Pct":0}
+{"key":"rf@d3","n":80,"flips":0,"ffl":0,"ffh":0,"e100":0,"e200":0,"e300":0,"e500":0,"unstable":0,"doorNoise":0,"flipPct":0,"e200Pct":0,"e300Pct":0}
+{"top":{"err":201,"kind":"rf","depth":1,"fen":"r3k2r/Pppp1ppp/5nbN/nPb5/Bq1NP3/8/P2P2PP/Q4RK1 w kq - 0 4","a":-800,"h":-799,"dnw":-801,"v":-1000}}
+{"top":{"err":110,"kind":"rf","depth":1,"fen":"rn1q1k1r/pB2bppp/2p5/8/2B5/8/PPP1NnPP/RNB2RK1 b - - 2 10","a":8,"h":9,"dnw":-101,"v":-101}}
+{"top":{"err":64,"kind":"rf","depth":1,"fen":"r3k2r/p1pp1pb1/Bn3np1/3Pqp2/1p2P3/2N5/PPPB1PpP/2R1K2R w Kkq - 0 4","a":-1444,"h":-1443,"dnw":-1452,"v":-1507}}
+{"top":{"err":51,"kind":"rf","depth":1,"fen":"r3k2r/p1pp1pb1/1n2qnp1/4N3/1p2P3/2N1Q3/PPPBKPpP/R6R w kq - 0 4","a":-512,"h":-511,"dnw":-512,"v":-562}}
