@@ -67,8 +67,7 @@ Real commands only, with flags, preferring fast single-file variants. If a comma
 
 ### Test
 
-Full RUN receipts for every command below (dates, exit codes, counts, traps): `memory-bank/90-agents-md-command-log.md`.
-Perft, the opening-book regeneration, each lane's trigger and trap, and the coverage notes: `memory-bank/90-agents-md-command-log.md` § "On-demand commands".
+Full RUN receipts for every command below (dates, exit codes, counts, traps), plus perft, the opening-book regeneration, each lane's trigger and trap, and the coverage notes (§ "On-demand commands"): `memory-bank/90-agents-md-command-log.md`.
 
 **Never wait on a lane with `pgrep -f "<text>"` / `until ! pgrep -f …`** — the pattern matches the
 waiting shell's own command line and never exits. Wait on the PID you started or the tool's
@@ -80,11 +79,11 @@ In a script, poll the job's output file or `kill -0 <pid>`; never `while pgrep -
   `npx vitest run` directly, never through `npm test`. -->
 - Heap flag (ABC-173): `--max-old-space-size=400` is for ONE-file vitest runs only. Whole-suite or
   multi-file runs use 128, as `npm test` sets itself; the heap guard refuses 400 there.
-- No `npm run` script runs a `*_DEEP` lane: `npm test` pins heap 128 and a 60 s bound, and a deep lane needs 400 and runs longer. The `*_DEEP` lines below, spelled with npx, are the only verified spelling. A brief that fences out npx cannot run them; the Orchestrator routes the lane to a hop that may, or records `UNKNOWN - verify`.
+- No `npm run` script runs a `*_DEEP` lane: `npm test` pins heap 128 and a 60 s bound; a deep lane needs 400 and longer. The npx `*_DEEP` lines below are the only verified spelling. A brief that fences out npx cannot run them: route the lane to a hop that may, or record `UNKNOWN - verify`.
 - Worker cap (ABC-144, ADR-0040 addendum 2): `vitest.config.ts` `test.maxWorkers: 2`, pinned by value in
   `src/cli.test.ts`; `isolate` stays on; no `projects`/`poolOptions`. Never raise it or pass a higher
-  `--maxWorkers`; env may only lower it: `VITEST_MAX_WORKERS` 1..2. The env note, the module
-  runner and the negative-value risk: `memory-bank/90-agents-md-command-log.md` § "Vitest worker cap and module runner".
+  `--maxWorkers`; env may only lower it: `VITEST_MAX_WORKERS` 1..2. Env note, module
+  runner, negative-value risk: `memory-bank/90-agents-md-command-log.md` § "Vitest worker cap and module runner".
 - Search deep lane (opt-in, ABC-077): `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/search.test.ts`
 - Engine deep lane (opt-in, ABC-078): `ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/engine.test.ts`
 - Levels deep lane (ABC-087, `src/levels.test.ts`): `ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/levels.test.ts --reporter=verbose`
@@ -97,7 +96,8 @@ In a script, poll the job's output file or `kill -0 <pid>`; never `while pgrep -
 - Puzzle suite, strength gate (opt-in, ABC-084): `PUZZLE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/puzzle-suite.test.ts`
 - PVS/LMR deep lane (ABC-121, `src/search.pvs-lmr.test.ts`): `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run
   src/search.pvs-lmr.test.ts`
-- Null-move deep lane (opt-in, ABC-208, door / zugzwang guard / oracle rows, 44 rows): `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/search.null-move.test.ts`
+- Null-move deep lane (opt-in, ABC-208, 44 rows): `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/search.null-move.test.ts`
+- Futility deep lane (ABC-268, 47 tests): `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/search.futility.test.ts`
 - Real-engine CLI lane (opt-in, ABC-119): `CLI_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/cli.real-engine.test.ts`
 - UCI session deep lane (opt-in, ABC-220 A11, 22 s walls; ABC-221 A10, 3 x 59.5 s; one row: add `-t "ABC-221 A10"`): `ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/uci-session.test.ts`. A spawn here: `ENGINE_DEEP` only, sync, argument array (ADR-0052 D8).
 - Real-engine UCI lane (opt-in, ABC-168): `UCI_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/uci.real-engine.test.ts`
