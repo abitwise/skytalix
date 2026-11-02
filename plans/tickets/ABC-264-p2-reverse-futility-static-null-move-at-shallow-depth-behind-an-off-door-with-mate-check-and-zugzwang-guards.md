@@ -1,8 +1,9 @@
 ---
 id: ABC-264
 title: "P2: reverse futility (static null move) at shallow remaining depth in both recursions, behind an ADR-0026 test-only off-door pair, with mate, check and zugzwang guards"
-status: in-development
-column: In Development
+status: blocked
+column: In Review
+blocked: "2026-11-02, closed-not-merged pending the Architect's retry ruling: A6 NOT MET, 44.0 / 100 against the GAIN bar of 50.0 (qe-ABC-264-p2 FAIL …4a487d20); not merged per ADR-0059 F5; no re-play; code kept on grugops/ABC-264-fix 4d1c0616. Front matter by bapm-ABC-265-rows; column as the board shows it; the board move is the Orchestrator's"
 size: S
 priority: P2
 epic: EPIC-011
@@ -11,6 +12,31 @@ adr: "ADR-0059 (ACCEPTED 2026-11-02 by the owner, …81ae2db4 \"R yes\"; in forc
 ---
 
 # ABC-264: reverse futility (P2)
+
+> **A6 NOT MET; NOT MERGED; BLOCKED, CLOSED-NOT-MERGED PENDING THE ARCHITECT'S RETRY RULING, 2026-11-02, by BA/PM**
+> (task `bapm-ABC-265-rows`, records only, at `main` `f312e9d7`; nothing run). Source: `qe-ABC-264-p2`, verdict
+> **FAIL** `…4a487d20`, per row `…3af11ebd`, gaps `…5c6d88c4`, read by the PREREG `…a63b4c37` (committed `e32b4745`
+> before any result was read). Candidate `4d1c0616`, base `0b73f51d`.
+> - **A6, the 100-game read: NOT MET.** **44.0 / 100** (W/D/L 30 / 28 / 42), `cutechess-cli` Elo **−41.9 ± 58.5**,
+>   against the GAIN bar of ≥ 50.0. 100 of 100 games, 0 faults, **0 losses on time**. Not re-played (A6: a miss is
+>   not re-played).
+>   - The harness prints `state: NEUTRAL` (its ≥ 43.0 band). It does not apply. This page's intent is GAIN, and the
+>     owner's NEUTRAL bar is for changes invisible at 100 ms only. Reverse futility fires there (`ADR-0059` d10;
+>     part 1: 0.32–4.82 % of nodes). `QE-264-p2-b`, INFO.
+> - **The smoke beside it: MET.** 7.0 / 10 against Stockfish 19 at E 1 650 (bar 3.0), 10 of 10, 0 faults, 0 losses
+>   on time. **Not pooled** into `EPIC-011`'s S′ pool, because this candidate is not merged (BA/PM's ruling,
+>   `EPIC-011` § Close-out, the S′ pool row).
+> - **The Levels deep lane: MET.** 57 / 57, rc 0. **Gates green:** `npm test` 2 404 / 2 404; lint, typecheck, build
+>   rc 0.
+> - **Disposition (A6's falsifier line, `ADR-0059` F5): not merged.** It is not a defect. A1–A4 were MET in part 1, and
+>   nothing is red against the code. It does not go back to the Software Engineer. The code stays on
+>   `grugops/ABC-264-fix` `4d1c0616`. `ADR-0059`'s "accepted, not in force" line is the Architect's.
+> - **Status: Blocked, closed-not-merged, pending the Architect's retry ruling.** Any retry is a new decision, for
+>   example `ADR-0059` F1's 150 cp a ply fallback by a dated amendment (the owner's), or a new ticket. BA/PM does not
+>   decide it here. The interval does not exclude a small gain. The rule allows no second read of this candidate.
+> - **Open gaps carried:** `QE-264-p2-a` HIGH (A6 NOT MET, blocks the merge); `QE-264-p2-b` INFO (the harness label);
+>   `QE-264-p2-c` INFO (0.360 as White, 0.520 as Black, noise-sized at n = 50); `QE-264-b` LOW (records, part 1).
+> - **UAT is not signed.** The QE verdict is FAIL. The board move is the Orchestrator's.
 
 > **`ADR-0059` ACCEPTED; A2'S STATIC-SCORE ROW RE-WORDED, 2026-11-02, by BA/PM** (task `bapm-threads-cut`, records
 > only, at `main` `48f3fc01`; nothing run). The owner's word (`orch-2026-10-30a` `…81ae2db4`, verbatim *"R yes"*)
@@ -129,11 +155,16 @@ adr: "ADR-0059 (ACCEPTED 2026-11-02 by the owner, …81ae2db4 \"R yes\"; in forc
   **And the Levels deep lane on the candidate head:** `ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest
   run src/levels.test.ts --reporter=verbose`, QE, host alone: exit 0 with every test passed (57 at `EPIC-010`'s close
   read, `qe-EPIC-010-close` `…388b3044`; QE counts its own run).
+  - *(2026-11-02, `bapm-ABC-265-rows`; `qe-ABC-264-p2` `…4a487d20`.)* **Read: NOT MET.** 44.0 / 100 (30 / 28 / 42),
+    −41.9 ± 58.5 Elo, 0 faults, 0 losses on time; latency median 100 ms, max 105 ms. Smoke **MET**, 7.0 / 10 at
+    E 1 650, recorded and not pooled. Levels deep lane **MET**, 57 / 57.
 - **Falsifier dispositions.** A1, A2 or A3 red, or a lane red that no recorded re-pin explains — a defect, back to the
   Software Engineer. A4 missed, A6 NOT MET, or an S′ collapse — not merged; the ADR reads "accepted, not in force".
   *(2026-11-02, `ADR-0059` F1–F7; its table is authoritative.)* One exception: an A3 drift red on a predicate that
   matches `ADR-0059` d2 exactly is NOT MET, not a defect. The first fallback is 150 cp a ply, by a dated amendment
   to the ADR (the owner's).
+  *(2026-11-02, `bapm-ABC-265-rows`: **A6 NOT MET fired.** Not merged; `ADR-0059` reads "accepted, not in force" once
+  the Architect writes the dated line. The retry is the Architect's ruling, not decided here.)*
 
 ## NFR triggers
 
@@ -185,3 +216,5 @@ adr: "ADR-0059 (ACCEPTED 2026-11-02 by the owner, …81ae2db4 \"R yes\"; in forc
 ~~**DoR 9/10. Backlog.** It reaches Ready when the ADR is written (reading (b)); the board move is the Orchestrator's.~~
 **DoR 10/10 (re-scored 2026-11-02, `bapm-ABC-264-rows`, reading (b)).** In Development: the Orchestrator's pull,
 `0b73f51d`.
+*(2026-11-02, `bapm-ABC-265-rows`.)* The DoR stands. The ticket is **Blocked, closed-not-merged**, on A6 NOT MET,
+pending the Architect's retry ruling. It is not returned to Backlog by this hop.
