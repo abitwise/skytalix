@@ -6,6 +6,14 @@ id: ADR-0025
 
 ## Status
 
+*2026-11-02, the owner's answer:* the T2 amendment at the end of this file is **PARKED with `ABC-258`**. His word,
+verbatim (`orch-2026-10-30a` `…81ae2db4`): *"B park"*, the Orchestrator's reading "parked with `ABC-258` (larger
+table / threads)". It is neither accepted nor declined, and nothing is built for it. Decisions 1–7 stand on `main` as
+written, always-replace included. Recorded by Architect/Design (task `arch-owner-answers-1102`, records only, on
+`grugops/arch-owner-answers-1102` from `main` `7daf8086`). Details are in that amendment's own status line.
+`ADR-0057` (accepted the same day) names amendments to decisions 2 and 4 that the threads strand's shared-table
+ticket will bring; they are not written here yet.
+
 *2026-11-02:* the T2 amendment at the end of this file **stays PROPOSED, pending the owner. The Architect recommends
 parking it** (task `arch-phase1-replan`, records only). At a depth-8 search on today's 2^18 table, T2 changes nothing
 measurable, but on a loaded table it pays. Details are in that amendment's own status line. Decisions 1–7 stand on
@@ -365,9 +373,22 @@ work has his go-ahead, and the Orchestrator reports this text to him when it lan
 - **After it ships** (not reached: `ABC-209` was not merged, 2026-10-27; nothing to roll back on `main`): `prepareTable(options.game)` becomes `clearTable()` again, and the two trackers and the
   optional field are deleted. About ten production lines; no data or format is involved.
 
-## Proposed amendment 2026-11-01 (`ABC-237`, T2): a store keeps the deeper entry of another position. PROPOSED
+## Proposed amendment 2026-11-01 (`ABC-237`, T2): a store keeps the deeper entry of another position. PARKED (2026-11-02)
 
 ### Status
+
+**PARKED** 2026-11-02 by the owner, with `ABC-258` (*"B park"*, `orch-2026-10-30a` `…81ae2db4`). Recorded by
+Architect/Design (task `arch-owner-answers-1102`, records only). Nothing was run.
+- **What parked means here:** the text below is kept as written and is not accepted. `ABC-237` is not built. Its
+  status stays PROPOSED in form, and it is re-asked only when it is unparked.
+- **When it comes back, and with what:** with `ABC-258` (T4, the larger table) or with the threads strand's shared
+  table (`ADR-0057`, accepted 2026-11-02), whichever loads the table first. Both raise table pressure, and pressure is
+  the only place T2 was measured to pay (0.77× at 2^14, below). Several workers storing into one table multiply the
+  stores a search makes. The re-ask brings a fresh measurement on that base. The 2026-11-02 figures below are on a
+  single-threaded 2^18 table and do not carry over.
+- **The open question at the end of § The read `ABC-237` owes is answered** (*"C yes"*; `ADR-0056` D5 C2′ dated
+  line). A change that cannot be seen at 100 ms may be read on the NEUTRAL bar, together with its own measured bar.
+  So on unparking, T2's page may name NEUTRAL before its read, with `A3`'s mechanism rows as its own bar.
 
 *2026-11-02:* **still PROPOSED, pending the owner. Recommended: park it with `ABC-258` (T4), and do not build it now.**
 Architect/Design, task `arch-phase1-replan`, measured on scratch patches outside the repository.
@@ -493,6 +514,7 @@ was run, built or timed.
 - **Open question for the Orchestrator** (a C2′ change, so the owner's if asked): may a mechanism that cannot fire at
   the read's control be read on the NEUTRAL bar, with its gain shown by its own mechanism rows? This applies to T2
   and T4 (`ABC-258`) alike. Without an answer, the GAIN bar applies as above.
+  - *Answered 2026-11-02 (owner, "C yes"; this amendment's status line and `ADR-0056` D5 C2′'s dated line): yes.*
 
 ### Falsifiers added or re-read
 

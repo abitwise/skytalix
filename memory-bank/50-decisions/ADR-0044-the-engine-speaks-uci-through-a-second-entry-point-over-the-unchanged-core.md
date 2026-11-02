@@ -9,6 +9,14 @@ resolve. Since the 2026-10-18 revision that slug is no longer true: see § Revis
 
 ## Status
 
+> **Amendment coming, 2026-11-02 (`ADR-0057` accepted by the owner, OQ-1 yes, note `…81ae2db4`; pointer added by
+> Architect/Design, task `arch-owner-answers-1102`).** The owner accepted the **reversal of D5** (one thread, no
+> worker) for the threads tickets of `EPIC-011`. The amending ADR is not written yet. It comes with the worker-pool
+> ticket (`ADR-0057` § Inputs for the thread tickets, TH-2). It will move D5 (the search runs in `worker_threads`
+> workers, with the stop flag in a `SharedArrayBuffer` slot, as D5's pre-design says) and D3 (a `Threads` spin
+> option, default 1). **Until that ADR is accepted and its ticket merges, D5 stands on `main` as written:** one
+> thread, no worker. No other decision here moves.
+
 > **Amended 2026-10-19 by `ADR-0045` (accepted by the owner, note `…1a9c7f42`; folded by BA/PM, subtask
 > `bapm-adr0045-cut`).** D11's `default 3` and D3's option line now read `default 5`: the `default` is
 > `DEFAULT_LEVEL`, which `ADR-0045` D2 moves from 3 to 5, and `LEVELS[5]` is `{ 3000, 0 }`, the shipped engine at

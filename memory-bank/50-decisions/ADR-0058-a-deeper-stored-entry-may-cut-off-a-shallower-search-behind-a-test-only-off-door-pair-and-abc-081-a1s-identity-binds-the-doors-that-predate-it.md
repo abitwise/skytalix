@@ -6,6 +6,30 @@ id: ADR-0058
 
 ## Status
 
+**ACCEPTED, NOT IN FORCE on `main`** 2026-11-02 by the owner. Recorded by Architect/Design (task
+`arch-owner-answers-1102`, records only, on `grugops/arch-owner-answers-1102` from `main` `7daf8086`). Nothing was
+run.
+
+- **His word, verbatim** (`orch-2026-10-30a` `…81ae2db4`): *"A accept"*. The Orchestrator's reading: "accepted, not in
+  force — switched on only if `ABC-257` (T1 + T3) meets A8′ ≤ 0.93×".
+- **On `main` today:** `tableCutoff` stays exact-depth (`src/transposition.ts:163`), as before. `ABC-238` stays
+  closed unmerged; its code `3abaefdd` is kept.
+- **The one switch-on path:** `ABC-257` (T1 with the table kept across the moves of a game). It carries decisions 1–7
+  and the doors. This ADR comes into force at `ABC-257`'s merge, and only if:
+  - A8′ is met: ≤ 0.93× pooled over searches 2–9 on the held-out lines, no game above 1.00× (`ABC-257` page,
+    pre-registered in `arch-phase1-replan` `…64e95bfa` item 3); and
+  - its game read passes (C2′ and S′, and the Levels deep lane, as the page states).
+  A miss on A8′ closes `ABC-257` and ends the strand. This ADR then stays accepted, not in force, with no further
+  line owed.
+- **Decision 9's read is `ABC-238`'s and lapses with it.** `ABC-257`'s page holds its own read. Decision 8 (the
+  revision of `ABC-081` `A1`) applies only when this ADR comes into force.
+- **When `ABC-257` may run:** it stays paused under the owner's *"P yes"* (the Phase 1 TT strand paused, pruning
+  first). Its old trigger, the C2′ NEUTRAL-bar question, is now answered (*"C yes"*, `ADR-0056` D5 C2′ dated line).
+  So the pause is the only thing holding it. Lifting it is the Orchestrator's call within *"P"*.
+- **If the shared table of `ADR-0057` lands first,** decisions 1–7 port to the new layout unchanged. The rule is the
+  hit test (a stored depth at least the remaining depth, in place of exactly equal), not the layout. `ABC-257`'s design re-reads the doors on
+  that base.
+
 *2026-11-02:* **F4 fired; still PROPOSED, pending the owner.** Written by Architect/Design (task `arch-phase1-replan`,
 records only, on `grugops/arch-phase1-replan` from `grugops/ABC-238` `772153a7`). The measurements were taken on
 scratch patches outside the repository, and nothing was committed to `src/`.

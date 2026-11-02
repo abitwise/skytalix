@@ -6,7 +6,29 @@ id: ADR-0059
 
 ## Status
 
-**PROPOSED** 2026-11-02 by Architect/Design (task `arch-ABC-264`, on `grugops/arch-ABC-264` from `main` `ecc0331f`).
+**ACCEPTED** 2026-11-02 by the owner. **Not yet in force on `main`:** it comes into force at `ABC-264`'s merge.
+Recorded by Architect/Design (task `arch-owner-answers-1102`, records only, on `grugops/arch-owner-answers-1102` from
+`main` `7daf8086`). Nothing was run.
+
+- **His word, verbatim** (`orch-2026-10-30a` `…81ae2db4`): *"R yes"*, the answer to "accept / decline ADR-0059".
+- **What it releases:** `ABC-264` part 2. That is `A6` (C2′, 100 games at 100 ms against the merge-base, GAIN
+  ≥ 50.0 of 100), S′ (10 games at 0.5 s against Stockfish 19 at E 1 650) and the Levels deep lane. Then the merge to
+  local `main`. Reading (b) ends here: the read and the merge no longer wait on him.
+- **If `ABC-264` does not merge** (F4 or F5 fires), a dated line here records "accepted, not in force on `main`", as
+  the first status block says. Nothing else changes.
+- **One premise corrected, `QE-264-b`** (`qe-ABC-264` `…3a95d391`, LOW, records). Decision 2's static-score bullet
+  said "a static evaluation is under 10 000 (asserted in `src/transposition.test.ts`)". Both halves were wrong:
+  - **The premise is false at the extremes.** QE measured `evaluate` = **−10 535** on
+    `QQQQQQQQ/QRRBBNN1/8/8/8/8/8/K6k b`.
+  - **Nothing asserts it.** `src/transposition.test.ts:188` asserts `MATE_FLOOR > 10 000`, a relation between
+    constants. The evaluation's range is only in a comment.
+  - **The conclusion stands.** Decision 2 now states the true bound, derived by reading `src/evaluate.ts` at
+    `7daf8086`. It is far below `MATE_FLOOR`, so the beta-only band test is sound. See decision 2's dated bullet.
+  - **Owed elsewhere, not by this hop:** the page's `A2` wording (BA/PM) and the comment at
+    `src/transposition.ts:58-60` (the Engineer, with the next `src/transposition.ts` edit). The comment still reads
+    "under 10 000 (a full board of queens)".
+
+*First status, kept:* **PROPOSED** 2026-11-02 by Architect/Design (task `arch-ABC-264`, on `grugops/arch-ABC-264` from `main` `ecc0331f`).
 Records only. The probe ran on a scratch copy of `main`'s `src/`, outside the repository, under the host lock; the copy
 is deleted. Nothing was committed to `src/`.
 
@@ -128,6 +150,21 @@ Every variant kept the 287 mate floor at 0 violations.
    - **The static score's mate band** (the ticket's "or the static score is a mate score"): a static evaluation is
      under 10 000 (`src/transposition.ts:56-64`, asserted in `src/transposition.test.ts`), so it is never in the band.
      The predicate does not test it, and `A2`'s row for it is met by that asserted relation plus the beta row.
+   - *Corrected 2026-11-02 (`arch-owner-answers-1102`; `QE-264-b`).* The bullet above overstates its premise. The
+     10 000 figure is false at the extremes (QE measured −10 535), and the test asserts only `MATE_FLOOR > 10 000`.
+     The true bound, derived by reading `src/evaluate.ts` at `7daf8086` (not measured):
+     - **|`evaluate`| ≤ 10 885 cp** on any board where neither side holds more than legal promotion allows. That is
+       at most 15 non-king pieces, at most 8 of them promoted.
+     - The largest case is 9 Q, 2 R, 2 B and 2 N against a bare king. Material plus square tables give at most 10 630.
+       The bare king's square table adds at most 50, mobility at most 100 (its clamp), and king safety at most 105
+       (3 files × (15 + 20)). A pawn in place of a queen scores at most 230 (100 + 30 + a passer's 100), less than
+       the queen's 910, so no mix of pawns beats the all-queens case.
+     - QE's −10 535 sits inside it. 10 885 is under `MATE_FLOOR` (20 000) by more than 9 000.
+     - **So the static score is never in the mate band.** The predicate does not test it, and `A2`'s row for it is
+       met by this derived bound plus the beta row. No test row is owed for it.
+     - **Named limit, not owed here.** The FEN reader (`ADR-0033` decision 3) does not bound piece counts. A
+       constructed board with about 22 or more queens a side would reach `MATE_FLOOR`. No game reaches such a board.
+       The limit belongs to `ADR-0033` and the table's mate test as a whole, not to this predicate.
 3. **One switch, `reverseFutility`, in BOTH recursions:** `src/search.ts`'s `Switches` and `src/engine.ts`'s
    `Heuristics`. It is on in `search()` and `chooseMove` only. It reaches the recursion as a switch, never as module
    state, an `EngineOptions` field or a parameter of `search()` (`ADR-0026` decision 2's rejections).
