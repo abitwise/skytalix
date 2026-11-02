@@ -1,0 +1,6 @@
+{
+  "refs": ["arch-ADR-0060-reopen", "grugops/arch-ADR-0060-reopen", "EPIC-011", "P1", "ADR-0060", "ADR-0050", "ADR-0026", "ABC-121", "arch-phase2-rebase/20261102T151839Z-architect-design-decision-f9f440c9", "arch-phase2-rebase/20261102T151839Z-architect-design-observation-d5870a7a", "arch-phase2-p1/20261102T144713Z-architect-design-observation-35bd3967"],
+  "notes": [
+    { "kind": "decision", "confidence": "high (a pre-registration: the set, bars and rule are fixed before any candidate result; the bars are quoted from ADR-0060 d8/d9 unchanged)", "bodyFile": "notes/prereg.md" }
+  ]
+}
