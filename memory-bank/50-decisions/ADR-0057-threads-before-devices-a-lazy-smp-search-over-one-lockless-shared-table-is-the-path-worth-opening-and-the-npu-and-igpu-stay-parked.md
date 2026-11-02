@@ -34,6 +34,16 @@ run.
   place is in D6's dated line and in `ADR-0056` D6's dated line of the same fold.
 - **What BA/PM needs to cut the tickets:** § Inputs for the thread tickets, below D7.
 
+**Reviewed 2026-11-02** by Architect/Design (task `arch-accel-review`, records only, on `grugops/arch-accel-review`
+from `main` `2ef3aadc`; one informal probe, no timing). **Still ACCEPTED, and no decision, strand or owner answer
+changes.** The owner asked for his Gemini analysis
+(`memory-bank/analysis/using-npu-or-gpu-for-search-algorithm.md`, added `f0a1b494`, renamed `27a8d9f6`) to be
+checked against this ADR. Its three architectures and its starting advice are checked claim by claim in **D8**. Each
+one needs device access (OQ-5 no). B and C, and A's evaluation, are only worth anything with a neural net (OQ-6
+later). On this host's figures none of them beats the threads strand. One idea transfers to the CPU, and it is already
+on the path: aspiration windows (`ADR-0056` S1, `ABC-236`). A second is recorded as a Phase 4 candidate: lazy
+evaluation, with a measured share. No change to `ABC-265`, `ABC-266` or `ABC-267`.
+
 *First status, kept:* **PROPOSED** 2026-11-01. Spike `ABC-263`, records only. Written by Architect/Design (task `arch-ABC-263`), on branch
 `grugops/arch-ABC-263` from `main` `44c99531`.
 
@@ -431,10 +441,18 @@ layout without rewriting it. The recommendation, the Orchestrator's and BA/PM's 
 - **T2 and T4 are re-asked after the worker-pool ticket,** on the shared table, where several workers raise the
   table pressure they need (`ADR-0025` T2 status).
 
+*Dated 2026-11-02 (`arch-accel-review`).* **No row changes.** The owner's Gemini analysis was checked against this
+table (D8). The accelerator row stays `park` with its two re-open triggers. D8.6 adds one precision: a WebGPU round
+trip of 10 µs or less would re-open device work, but it would not make any of that analysis's architectures
+buildable.
+
 ### D7. Questions for the owner (yes/no or a choice)
 
 *Answered 2026-11-02 (owner `…81ae2db4`): OQ-1 yes, OQ-2 (a), OQ-3 (c), OQ-4 (a), OQ-5 no, OQ-6 later. See § Status.
 The questions are kept as asked.*
+
+*Added 2026-11-02 (`arch-accel-review`): OQ-7 and OQ-8 re-ask OQ-5 and OQ-6 in the light of the owner's Gemini
+analysis. They are in D8.8. Both are recommended to stay as answered.*
 
 - **OQ-1, threads in scope.** Lift `EPIC-011` § Out of scope's "Threads" line, so BA/PM can cut a Lazy SMP ticket
   after phase 1? **yes / no.** Recommended: yes. *(corrected 2026-11-01)* A yes also accepts reversing `ADR-0044` D5
@@ -482,6 +500,162 @@ What BA/PM needs to cut the three tickets. It cites D2–D5 and does not restate
 **Owed by other roles, named here:** BA/PM lifts the "Threads" half of `EPIC-011` § Out of scope and places TH-1 to
 TH-3 in § Phases (D6's dated line). `NFR-009`'s file may need one line stating OQ-4 (a)'s reading; that is the TH-2
 design hop's, with Security/NFR. Phase 2 tickets keep `Threads 1` reads with no change.
+
+### D8. Addendum 2026-11-02: the owner's Gemini analysis, checked (`arch-accel-review`)
+
+**What was checked.** `memory-bank/analysis/using-npu-or-gpu-for-search-algorithm.md`. It is owner-supplied output
+from another model ("Argon"), added in `f0a1b494` and cited here, not edited. It argues that bounds and tables shared
+through shared RAM or VRAM can make a GPU or NPU alpha-beta search reach "3000 to 3500+ Elo". It gives three
+architectures (A, B, C), a fourth row in its table (D) and advice on where to start. **Every figure in it was treated
+as unverified.** Each claim is marked **verified**, **contradicted** or **`UNKNOWN - verify`**, with what settles it.
+The yardsticks are this ADR's own: one node 1.1–1.6 µs; one WebGPU round trip 45–65 µs (p50, lavapipe; the 890M
+itself `UNKNOWN - verify`); no coherent CPU–device shared memory and no cross-device atomics from Node.js (D3); the
+NPU reachable only through ORT plus the Vitis AI EP (D1.1); no `render` group (OQ-5 no). `ABC-264`'s 44.0/100 read
+(not merged) is not used anywhere below.
+
+#### D8.1 The one probe, PR-1 (`measured (informal)`, no timing)
+
+- **What:** a scratch copy of `src/` at `main` `2ef3aadc`, outside the repository and deleted at hop end. One counter
+  was added at the quiescence stand-pat, the only `evaluate` call on the shipped path (`src/quiescence.ts`). It counts
+  how often the stand-pat falls outside the window by more than a margin. It also counts how often
+  `evaluateWithoutMobility` alone already lies outside it. `search(position, 7)` was run on four positions.
+- **Window:** `flock host-test.lock timeout 300 node probe.mjs`, 2026-11-02T14:33:23Z–14:34:06Z, 43 s. Nothing timed.
+
+| position | stand-pats | at a null window | outside [α − 120, β + 120] | outside ± 200 | without mobility, outside ± 200 | max \|full − without mobility\| |
+|---|---|---|---|---|---|---|
+| start position | 29 277 | 99.5 % | **40.6 %** | 30.6 % | 28.6 % | 100 |
+| kiwipete | 515 518 | 98.2 % | **83.0 %** | 71.9 % | 70.0 % | 100 |
+| position 3 (endgame) | 22 746 | 98.6 % | **50.8 %** | 34.0 % | 32.7 % | 100 |
+| position 6 | 503 356 | 97.9 % | **78.2 %** | 69.9 % | 68.1 % | 100 |
+
+The 100 in the last column is by construction: `src/evaluate.ts` clamps the mobility total to ±100 cp
+(`MOBILITY_CAP`).
+
+#### D8.2 The hardware premises (the analysis's § 1)
+
+| claim | verdict | basis, and what settles an open one |
+|---|---|---|
+| Alpha-beta and PVS cut the tree from O(b^d) to about O(b^(d/2)) | **verified**, as alpha-beta's best case with perfect ordering | `documented`: Knuth and Moore (1975), chessprogramming wiki "Alpha-Beta" (not re-read this hop) |
+| Siblings launched before the first move sets the bound do redundant work | **verified** in principle | `documented`: the search overhead of parallel alpha-beta. It is why D2.1 weighed YBWC against Lazy SMP |
+| Global VRAM costs 300–600 cycles | **`UNKNOWN - verify`** for the 890M, and moot here | no source given. Settled only by a device microbenchmark after OQ-5. The 890M has no VRAM of its own anyway: its "VRAM" is a 1 GiB carve-out of system DRAM (`measured`, D3) |
+| On-chip shared memory is 64–228 KB a CU or SM, at 20–30 cycles | **partly verified**: the 890M lists 128 KiB of LDS. Its latency is **`UNKNOWN - verify`** | `documented`: the ROCm GPU specs table gives gfx1150 "LDS (KiB) 128", not saying per CU or per WGP. Latency is settled only on the device after OQ-5 |
+| 1-cycle warp shuffles (`__shfl_sync`) over 32 threads | **contradicted as written for this stack.** That is a CUDA intrinsic. WGSL has `subgroupShuffle` and `subgroupBallot` behind `enable subgroups`, and RDNA 3.5 runs waves of 32 or 64 | `documented`: WGSL § 17.12; ROCm table ("Wavefront Size 32 or 64"). Whether `webgpu` 0.6.2 on RADV exposes `subgroups` is `UNKNOWN - verify`, settled by requesting the feature after OQ-5 |
+| Unified memory gives cache-coherent zero-copy CPU↔device ring buffers at 80–120 ns, against 10–20 µs over PCIe | **contradicted for every path reachable from Node.js.** Physically shared DRAM is **verified** | `measured` (D3: one DRAM). `documented` (D3: `writeBuffer` copies; `getMappedRange` returns an `ArrayBuffer` that is detached at `unmap`; ORT takes a tensor each run). Our measured figures are 86–369 ns between CPU cores (SP3) and 45–65 µs for a device round trip (SP5). The APU has no PCIe hop. The cost is dispatch and sync, not transfer |
+| A GPU branches and chases pointers; an NPU runs a static tensor graph and cannot probe a hash table | **verified for the reachable path**: ORT plus the Vitis AI EP runs a fixed graph (D3). **Overstated for the silicon** (`UNKNOWN - verify`): XDNA's tiles are programmable through MLIR-AIE | settled by AMD's AIE-ML architecture manual. Moot: no MLIR-AIE path exists from Node.js |
+| "Three triple-checked architectures … realistically reach 3000 to 3500+ Elo" | **`UNKNOWN - verify`**: no evidence is offered | `documented`: the chessprogramming "GPU" page names no GPU alpha-beta engine with a strength figure. The GPU engine it names at top strength, Lc0, is MCTS with a large net (D1.2 (b)) |
+
+#### D8.3 Architecture A: warp-cooperative YBWC in a persistent GPU megakernel
+
+| claim | verdict | basis |
+|---|---|---|
+| Earlier GPU alpha-beta failed because one node was mapped to one thread | **`UNKNOWN - verify`** | plausible. The chessprogramming "GPU" page lists Zeta and the papers with no results. Settled by reading Strnad and Guid (2011) or the Zeta threads |
+| One node to one warp: two squares a lane, divergence-free move generation and SEE in about 45 cycles | **`UNKNOWN - verify`**, with no source | it is also a new engine. skytalix is a 0x88 mailbox with `Move` objects (`ADR-0001`); bitboards are V4, parked on Q-3K-8 |
+| A (768 → 256) × 2 → 1 NNUE fits in the SM's on-chip memory | **contradicted** for the 890M, by arithmetic | the feature transformer alone is 768 × 256 = 196 608 weights: 384 KiB at INT16, 192 KiB at INT8. Both exceed the 128 KiB of LDS listed for gfx1150. It is also a neural net (OQ-6 later) |
+| Split points and atomic `alpha` / `abort_flag` in shared memory; warps abort in about 30 cycles | **`UNKNOWN - verify`** for WebGPU, the only GPU path here | `documented`: WGSL has workgroup memory and atomics, but "Recursion is disallowed" (§ 11.4), so the search needs an explicit stack. Workgroups execute independently, "one workgroup can't block another", and barriers do not sync across workgroups (gpuweb discussion 3935). So a persistent kernel that spins on other workgroups has no progress guarantee. Settled only on RADV after OQ-5, together with the amdgpu job timeout for a dispatch that lasts a whole 22 s move |
+| A global lockless TT updated with coalesced 128-bit atomics | **contradicted for WebGPU** | `documented`: WGSL atomics are `atomic<i32>` and `atomic<u32>` only. A lockless table needs no atomics: D2.3's XOR check on 32-bit words, which TH-1 (`ABC-265`) builds on the CPU |
+| LMR, null move and PVS stay intact. 15–80 M nodes/s. "easily clears 3200 to 3400+" | **`UNKNOWN - verify`**, with no source | no engine is shown. Nothing here could settle it without OQ-5 and a second engine written in WGSL |
+
+**Verdict A: adds nothing.** It is a second engine written in a GPU language. It is blocked by OQ-5, by three WGSL
+limits that no latency figure removes (no recursion, 32-bit atomics only, no progress guarantee across workgroups),
+and, for its evaluation, by OQ-6. CUDA, ROCm and raw Vulkan need a native addon (D1.1; `ADR-0044` rejected
+alternative 18). Its sound parts are a lockless shared table and an abort flag. TH-1's table and TH-2's stop slot
+already build those on the CPU. Its YBWC split points were rejected for this engine in D2.1.
+
+#### D8.4 Architecture B: "shadow-bound" speculative PVS over unified RAM (CPU + NPU or iGPU)
+
+| claim | verdict | basis |
+|---|---|---|
+| A 20–40 µs dispatch for each leaf caps the engine at 25 000 nodes/s | **verified in direction; ours is worse** | 1 / 40 µs = 25 000 a second. Our measured round trip is 45–65 µs, so 15 000–22 000 a second (SP5 and arithmetic) |
+| CPU and NPU share physical RAM, so a lockless ring buffer in shared RAM can feed the NPU | DRAM: **verified**. The ring buffer from Node.js: **contradicted** | D3: ORT tensors are handed over each run (`UNKNOWN - verify`, expected no zero-copy). The analysis also contradicts itself: § 1 says the NPU cannot probe a hash table, yet B has the NPU write TT entries and set an atomic flag. The buildable form is a CPU thread that calls the device in batches and writes the results back itself |
+| The CPU runs PVS at 10–15 M nodes/s with an L1-resident "L0 nano-eval" | **contradicted** for this engine | 0.63–0.90 M nodes/s (`ADR-0055`; SP1 0.87–0.89 M) |
+| About 85 % of leaves fall outside [α − Δ, β + Δ], Δ ≈ 120 cp | **contradicted as a constant.** Close only in tactical middlegames | PR-1: 40.6–83.0 % by position (start position 40.6, endgame 50.8, position 6 78.2, kiwipete 83.0) |
+| The NPU gives 40+ TOPS | **verified**: 50 INT8 TOPS for the HX 370's XDNA 2 | `documented` (spec pages). Beside the point: per-leaf work is bound by latency, not throughput |
+| NPU results land in the shared TT with a `TT_EXACT_NPU` flag, and the search uses them | **contradicted for our table** | quiescence never probes the table (`ADR-0025` d5), and a hit needs the exact depth (D6's dated line). A depth-0 evaluation entry would never be read. It would need an evaluation cache, a new structure |
+| A PV-disruption flag sends the CPU back to re-search the branch | **`UNKNOWN - verify`** on cost; it breaks determinism | the move would then depend on device timing even at `Threads 1`, so the `G4` door (`ADR-0026`; D4) cannot hold. The search has already left the branch, so the "re-search" is in practice the next iteration or a root re-search. No source gives its cost |
+| A deep transformer or big NNUE on the NPU | out of scope | `EPIC-004`'s neural non-goal; OQ-6 later |
+| "The CPU never stalls … this solves the sequential dependency paradox" | **`UNKNOWN - verify`** as a gain | the CPU never waits because it searches on the cheap score. The big net then acts only through re-searches and later iterations. No reading or source is given |
+
+**Verdict B: adds nothing now.** It is recorded as the one parked device shape that keeps alpha-beta intact (D8.6).
+It needs OQ-5 and OQ-6 both reversed. What transfers to the CPU is lazy evaluation (D8.7).
+
+#### D8.5 Architecture C (tensorized "soft-minimax" micro-trees), row D and the starting advice
+
+| claim | verdict | basis |
+|---|---|---|
+| The NPU backs up a 2-ply minimax with `Score_parent(i) = −max_j(−Score_leaf(i, j))` | **contradicted** by the formula itself | −max(−s) = min(s). That is one ply of backup. A 2-ply value needs a second pooling stage (the max of the mins). Nor is it "soft": it is a hard max |
+| MaxPool and negation run natively on every NPU | **`UNKNOWN - verify`** | ORT has MaxPool. Settled by the Vitis AI EP's operator-support list and a placement report after OQ-5 |
+| 1–3 M effective nodes/s | **`UNKNOWN - verify`**, and **contradicted on our figures** (`estimate`) | the CPU still generates the 72 positions of an 8 × 8 micro-tree: 72 × 1.1–1.6 µs = 79–115 µs. A device can save at most the 64 leaf evaluations, 64 × 0.3–0.5 µs = 19–32 µs (the evaluation share is itself `UNKNOWN - verify`, § Context), against one round trip of 45–65 µs: a slowdown. Batching four frontier nodes saves 77–128 µs per round trip, at most about 1.2× on 320–460 µs of work, and serial alpha-beta does not hand out four frontier nodes at once without speculation |
+| Expand the top K = 8 captures, checks and killers, and evaluate the leaves statically | **contradicted** as a quality claim (the analysis admits a part of it) | static evaluation of capture and check leaves without quiescence is the horizon effect `src/quiescence.ts` exists to remove. The K = 8 cut is forward pruning with no re-search |
+| Row D: a VRAM-resident DAG MCTS at 100–400 K neural nodes/s | adds nothing | it is D1.2 workload (b), already rejected inside `EPIC-011`. Its figures are `UNKNOWN - verify` (D1.2) |
+| Start with B: an `mmap` or pinned ring buffer beside the TT, and an NPU worker **process** that upgrades TT entries in place | **contradicted on this host** | no device access (`measured`; OQ-5 no). A `SharedArrayBuffer` is shared between `worker_threads` of one process, not between processes (`documented`, Node.js). Node has no built-in `mmap`, so it would need a native addon (`ADR-0044` alt 18). And the TT cannot carry evaluation entries (D8.4) |
+| Keep the existing UCI alpha-beta engine and use the classical evaluation as the L0 bound | consistent with `ADR-0056` | with no big evaluation behind it, the "L0" is simply the evaluation |
+| Or write raw GPU kernels in CUDA, ROCm or Vulkan compute | **not reachable** from Node.js without a native addon | D1.1. WebGPU is the only binding that runs here, and it runs on lavapipe |
+
+**Verdict C: adds nothing.** On our own figures it is a slowdown, it is tactically unsound, and without a net it has
+nothing for the device to compute. **Row D and the starting advice: add nothing.**
+
+#### D8.6 Verdict per idea, and what changes in this ADR
+
+| idea | changes ADR-0057? | new parked option? | runs on the CPU threads path now? |
+|---|---|---|---|
+| A, warp-cooperative YBWC on the GPU | no | no | no. Its lockless table and stop flag are TH-1 and TH-2 already |
+| B, shadow-bound speculative PVS | no | **yes, recorded below (PK-B)** | its kernel, lazy evaluation, is single-threaded and needs no device (D8.7) |
+| C, tensorized micro-trees | no | no | no |
+| D, VRAM DAG MCTS | no (it is D1.2 (b)) | no | no |
+| "use shared RAM / VRAM to share bounds" | no. D3 and D6 already hold its faithful form: the CPU-shared table | no | yes: TH-1 (`ABC-265`) and TH-2 (`ABC-266`) |
+
+- **The re-open trigger, made precise.** D6's second trigger stands: a measured WebGPU round trip of 10 µs or less on
+  the 890M, from Node.js, after the `render` change. Meeting it would re-open device work of the D1.2 (c) and (d)
+  kind. It would **not** make A buildable: A also needs recursion, wider atomics and a cross-workgroup progress
+  guarantee, and WGSL gives none of them. B and C need the neural non-goal lifted, under D6's first trigger.
+- **PK-B, a parked shape** (no ticket; re-read only if OQ-5 and OQ-6 both turn yes). The one device pattern in the
+  analysis that keeps alpha-beta intact is: a CPU search on a cheap evaluation; one CPU worker thread that batches
+  window leaves to the device; results written by that thread into an **evaluation cache**, not the TT; read from the
+  next iteration on. No re-search trigger, so `Threads 1` stays deterministic when the device is off. It is recorded
+  so that a later re-open does not redo this review.
+
+#### D8.7 What transfers to the CPU path
+
+- **Speculative, narrowed bounds become aspiration windows.** They are already on the path: `ADR-0056` S1, started by
+  `ABC-236` at depth 5. Nothing is added.
+- **The two-tier "uncertainty band" becomes lazy evaluation.** A cheap first stage; the rest is skipped when the cheap
+  score is far enough outside the window (`documented`: chessprogramming "Lazy Evaluation"; Stockfish's 2020 hybrid,
+  which used the classical evaluation for unbalanced material and NNUE otherwise, is the same principle). On today's
+  evaluation (PR-1): mobility is clamped to ±100 cp, so skipping it when the rest is at least β + 100, or at most
+  α − 100, cannot change the stand-pat test. The rest alone already lies outside **± 200** in **28.6–70.0 %** of
+  stand-pats, so at least that share would pass the ± 100 skip. **Its worth is `UNKNOWN - verify`.** Mobility's share
+  of self time is not measured, and mobility is counted in the same board walk as other terms, so a skip saves less
+  than that share. Settled by a `chooseMove` profile at `main` (`se-ABC-253`'s `raw/profile.sh`, `raw/analyse.mts`).
+  It is not node-for-node: fail-soft returns change, so it would need an off-door pair (`ADR-0026`; `ADR-0050` d4)
+  and a C2′ read. **Recommended place: a Phase 4 candidate, weighed when E3, E5 or E6 make the evaluation costlier.**
+  `ADR-0055` O1-e (incremental material + PST, "not proposed now") would be its cheap first stage. No ticket now.
+- **Lazy SMP helpers: nothing new.** The analysis's "never stall, share through memory" is Lazy SMP over TH-1's table.
+  Helper diversity stays the TH-2 ADR's to choose (§ Inputs). Its ± 120 cp band is not read as evidence for any
+  pruning margin.
+
+#### D8.8 Tickets for BA/PM, and two owner questions
+
+- **`ABC-265`, `ABC-266`, `ABC-267`: no change.** No new spike: OQ-5 is no, and nothing here needs a device read.
+- **One optional line for BA/PM** in `EPIC-011`'s Phase 4 notes (its "Not cut, recorded" list): "lazy evaluation of
+  the mobility term (and of later costly terms), `ADR-0057` D8.7; worth `UNKNOWN - verify` until the profile". Not a
+  stub, no ticket.
+- **OQ-7 (re-asks OQ-5).** Does this analysis change your "no" on adding `olger` to the `render` group? Every
+  architecture in it needs the device. **yes / no. Recommended: no.** On our figures none of them beats the threads
+  strand, and A is blocked by WGSL whatever the latency. On a yes, the smallest step is re-running SP5 on RADV
+  (≤ 5 min), read against D6's 10 µs trigger.
+- **OQ-8 (re-asks OQ-6).** Does this analysis change your "later" on a neural net? B and C, and A's evaluation, are
+  worth something only with a large net. **yes / no / later. Recommended: later**, on `ADR-0056`'s V4 trigger, as
+  you answered.
+- **If neither is answered, both earlier answers stand.** Nothing here waits on them.
+
+#### D8.9 Open `UNKNOWN - verify` items this addendum adds, each with what settles it
+
+- the 890M's LDS latency, its global-memory latency, and whether `webgpu` 0.6.2 on RADV exposes `subgroups`: SP5-style
+  device probes, only after OQ-5;
+- a persistent WGSL kernel's progress and the amdgpu job timeout: a RADV test, only after OQ-5. Not proposed;
+- whether the Vitis AI EP places MaxPool on the NPU: its operator-support list and a placement report, after OQ-5;
+- XDNA tile programmability outside fixed graphs: AMD's AIE-ML architecture manual. Moot from Node.js;
+- the worth of lazy evaluation: the mobility share in a `chooseMove` profile at `main` (D8.7).
 
 ## Alternatives
 
@@ -561,3 +735,16 @@ design hop's, with Security/NFR. Phase 2 tickets keep `Threads 1` reads with no 
   https://chess.com/news/view/stockfish-12-released-130-elo-points-stronger; FGRL https://talkchess.com/viewtopic.php?p=861463
 - Cwtch (NNUE in JavaScript): https://talkchess.com/viewtopic.php?p=966009; Lozza: https://github.com/op12no2/lozza
 - XRT per-call overhead on XDNA (papers): https://arxiv.org/pdf/2509.06794; https://www.csl.cornell.edu/~zhiruz/pdfs/vla2npu-fccm2026.pdf
+
+*Added 2026-11-02 (`arch-accel-review`), read 2026-11-02, for D8:*
+
+- WGSL, § 11.4 ("Recursion is disallowed because cycles are not permitted among any kinds of declarations") and
+  § 17.12 (subgroup built-ins): https://www.w3.org/TR/WGSL/
+- WGSL atomic types, `i32` or `u32` only: https://google.github.io/tour-of-wgsl/types/atomics/atomic-types
+- WebGPU, no barrier sync across workgroups; workgroups execute independently: https://github.com/gpuweb/gpuweb/discussions/3935
+- ROCm GPU specs (Radeon 890M, gfx1150: 16 CUs, wave 32 or 64, LDS 128 KiB, L2 2 MiB): https://rocm.docs.amd.com/en/latest/reference/gpu-arch-specs.html
+- Ryzen AI 9 HX 370, XDNA 2 at 50 TOPS: https://www.notebookcheck.net/AMD-Ryzen-AI-9-HX-370-Processor-Benchmarks-and-Specs.836729.0.html
+- GPU chess engines (Zeta, papers, Lc0): https://www.chessprogramming.org/GPU
+- Lazy evaluation: https://www.chessprogramming.org/Lazy_Evaluation
+- Stockfish NNUE, the 2020 hybrid evaluation: https://chessprogramming.org/Stockfish_NNUE
+- The analysis checked (owner-supplied, not a source of fact): `memory-bank/analysis/using-npu-or-gpu-for-search-algorithm.md`
