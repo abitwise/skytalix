@@ -1,17 +1,48 @@
 ---
 id: ABC-264
 title: "P2: reverse futility (static null move) at shallow remaining depth in both recursions, behind an ADR-0026 test-only off-door pair, with mate, check and zugzwang guards"
-status: blocked
-column: In Review
-blocked: "2026-11-02, closed-not-merged pending the Architect's retry ruling: A6 NOT MET, 44.0 / 100 against the GAIN bar of 50.0 (qe-ABC-264-p2 FAIL …4a487d20); not merged per ADR-0059 F5; no re-play; code kept on grugops/ABC-264-fix 4d1c0616. Front matter by bapm-ABC-265-rows; column as the board shows it; the board move is the Orchestrator's"
+status: dropped
+column: Done
+closed: "2026-11-02, dropped, not merged, on ADR-0059 F5 (A6 NOT MET, 44.0 / 100 against the GAIN bar of 50.0; qe-ABC-264-p2 FAIL …4a487d20); the Architect's retry ruling is DROP (arch-phase2-rebase …f9f440c9); ADR-0059 accepted, not in force on main; a re-cut is a new ticket under a named new premise; code kept as reference on grugops/ABC-264-fix 4d1c0616. Front matter by bapm-phase2-records; the board move is the Orchestrator's. Was: blocked, closed-not-merged pending the retry ruling (bapm-ABC-265-rows)"
 size: S
 priority: P2
 epic: EPIC-011
 feature: —
-adr: "ADR-0059 (ACCEPTED 2026-11-02 by the owner, …81ae2db4 \"R yes\"; in force at this ticket's merge; ADR-0026 d10 off-door pair). Was PROPOSED (arch-ABC-264), reading (b)"
+adr: "ADR-0059 (ACCEPTED 2026-11-02 by the owner, …81ae2db4 \"R yes\"; NOT IN FORCE on main, 2026-11-02, F5 fired: arch-phase2-rebase; ADR-0026 d10 off-door pair). Was PROPOSED (arch-ABC-264), reading (b)"
 ---
 
 # ABC-264: reverse futility (P2)
+
+> **CLOSED AS DROPPED, NOT MERGED, 2026-11-02, by BA/PM** (task `bapm-phase2-records`, records only, at `main`
+> `4849c4ab`; nothing run). Source: the Architect's retry ruling, `arch-phase2-rebase` decision `…f9f440c9` with its
+> artifacts `…e4680ed2`, written into `ADR-0059` § Status and `ADR-0056` D2's dated line (row P2: dropped).
+> - **Not delivered.** A1–A4 were MET in part 1 and nothing is red against the code. A6 read **44.0 / 100** against the
+>   GAIN bar of 50.0, so `ADR-0059` F5 fired. Front matter: `status: dropped`, `column: Done`, as this repository
+>   closes a ticket not delivered (`ABC-238`, `ABC-209`). The board card move is the Orchestrator's.
+> - **The retry ruling is DROP.** There is no re-play of this rule and no 150 cp re-cut on today's `main`. The reasons
+>   are the Architect's (`ADR-0059` § Status). This page does not restate them.
+> - **`ADR-0059`: accepted, not in force on `main`.** It is not a defect.
+> - **A re-cut is a new ticket with a named new premise.** It does not re-open this page. The premises named are:
+>   - E1 / E2 landed, so the margin is re-read;
+>   - O1h (`ABC-233`) landed, giving an improving or history gate;
+>   - a 500 ms read the owner asks for;
+>   - a probe showing the depth-1 guess is the cost, with a changed form.
+>
+>   Its bars are this page's bars, unchanged, plus reach at 47 000 nodes ≥ door + 0.25 ply and `QE-264-e` guarded or
+>   carried. Intent GAIN. The list is `ADR-0059` § Status's; that is the single source.
+> - **The code stays as the reference:** `grugops/ABC-264-fix` `4d1c0616`, branch kept, not merged.
+> - **Gaps, where each goes:**
+>   - `QE-264-p2-a` (HIGH, A6 NOT MET): closed by this disposition. The ticket is not merged.
+>   - `QE-264-p2-b` (INFO): **stays open, for tools.** The harness prints NEUTRAL at ≥ 43.0, and that label can
+>     mislead the next GAIN read.
+>   - `QE-264-p2-c` (INFO, colour split): recorded. It is noise-sized at n = 50, so no action follows.
+>   - `QE-264-a`: moot while the code is not merged.
+>   - `QE-264-b`: folded on 2026-11-02 (`bapm-threads-cut`, A2's static-score row).
+>   - `QE-264-e` (INFO, design residual, named in `ADR-0059`): a stalemated cut node returns beta. It is owed by
+>     nothing while the ADR is not in force. Any re-cut guards it or carries it.
+> - **S′: the 7.0 / 10 stays unpooled.** The S′ pool counts merged builds only (`EPIC-011` § Close-out).
+> - **`EPIC-011`:** P2 is dropped from Phase 2. The order is P1 → P4 → P3 → P5 → P6 (`ADR-0056` D2), with P1 parked
+>   on `main` (see that page). Nothing else on this page changes. It stays as history.
 
 > **A6 NOT MET; NOT MERGED; BLOCKED, CLOSED-NOT-MERGED PENDING THE ARCHITECT'S RETRY RULING, 2026-11-02, by BA/PM**
 > (task `bapm-ABC-265-rows`, records only, at `main` `f312e9d7`; nothing run). Source: `qe-ABC-264-p2`, verdict
@@ -218,3 +249,6 @@ adr: "ADR-0059 (ACCEPTED 2026-11-02 by the owner, …81ae2db4 \"R yes\"; in forc
 `0b73f51d`.
 *(2026-11-02, `bapm-ABC-265-rows`.)* The DoR stands. The ticket is **Blocked, closed-not-merged**, on A6 NOT MET,
 pending the Architect's retry ruling. It is not returned to Backlog by this hop.
+*(2026-11-02, `bapm-phase2-records`.)* The retry ruling is DROP (`…f9f440c9`). The ticket is **closed as dropped,
+not merged** (`status: dropped`, `column: Done`; top block). The DoR is history. A re-cut is scored afresh on its own
+page.
