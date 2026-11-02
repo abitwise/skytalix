@@ -173,6 +173,12 @@ describe("ABC-265 A2 — the XOR check", () => {
     expect(tableCutoff(slot, 7, -Infinity, Infinity, 0)).toBe(-12_345);
   });
 
+  it("a cleared slot never hits, even for key 0n whose XOR equations it satisfies (a zero data word is empty)", () => {
+    clearTable();
+    expect(wordsOf(0)).toEqual([0, 0, 0, 0]);
+    expect(probeTable(0n)).toBe(-1);
+  });
+
   describe("T10 — the verified copy: a store into the slot between probeTable and tableCutoff", () => {
     const d = 5;
     const sK = 123;
