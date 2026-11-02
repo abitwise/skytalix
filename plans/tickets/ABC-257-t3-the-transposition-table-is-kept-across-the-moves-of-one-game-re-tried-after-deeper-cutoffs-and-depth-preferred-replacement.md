@@ -1,15 +1,35 @@
 ---
 id: ABC-257
-title: "T1 + T3: the transposition table is kept across the moves of one game together with ABC-238's deeper-entry cutoffs, its size unchanged, read on a pre-registered held-out bar; PAUSED until the owner answers C2' or allows a longer read"
+title: "T1 + T3: the transposition table is kept across the moves of one game together with ABC-238's deeper-entry cutoffs, its size unchanged, read on a pre-registered held-out bar; PAUSED by the owner's order (\"P yes\", 2026-11-02); ADR-0058 accepted, not in force until this ticket meets A8'"
 status: backlog
 column: Backlog
 size: M
 priority: P3
 epic: EPIC-011
-adr: "ADR-0025 decision 4 amendment of 2026-10-26: ACCEPTED by the owner (…2ae5fc12 item 1), NOT in force on main (ABC-209 closed unmerged); the Architect re-reads it on the combined T1+T3 base; ADR-0058 (PROPOSED; recommended accepted, not in force) is the combined attempt's base, decision 7 and its doors"
+adr: "ADR-0025 decision 4 amendment of 2026-10-26: ACCEPTED by the owner (…2ae5fc12 item 1), NOT in force on main (ABC-209 closed unmerged); the Architect re-reads it on the combined T1+T3 base; ADR-0058 (ACCEPTED, NOT IN FORCE, 2026-11-02, owner \"A accept\" …81ae2db4; in force only at this ticket's merge with A8' met and its game read passed) is the combined attempt's base, decision 7 and its doors"
 ---
 
 # ABC-257: keep the TT across moves, re-tried (T3)
+
+> **STATUS 2026-11-02, by BA/PM: PAUSED BY THE OWNER'S ORDER (P); `ADR-0058` ACCEPTED, NOT IN FORCE (A)** (task
+> `bapm-threads-cut`, records only, at `main` `48f3fc01`; nothing run). His words (`orch-2026-10-30a` `…81ae2db4`,
+> verbatim): *"R yes, P yes, A accept, B park, C yes; …"*.
+> - **P, paused.** The Phase 1 TT strand is paused by his order, and pruning (Phase 2) goes first. **The old trigger is
+>   spent:** C2′'s NEUTRAL question is answered (*"C yes"*). So the pause alone holds this ticket, and lifting it is
+>   the Orchestrator's call within P (`ADR-0058` § Status; `ADR-0056` D6's 2026-11-02 line). The block below that
+>   reads "paused until the owner answers C2′ yes or allows a longer read" is superseded on its trigger. Its scope and
+>   A8′ stand.
+> - **A, accepted, not in force.** `ADR-0058` comes into force **only at this ticket's merge**, and only if A8′ is met
+>   (≤ 0.93× pooled over searches 2–9 on the held-out lines, no game above 1.00×) and its game read passes. **An A8′
+>   miss closes this ticket and ends the strand,** and `ADR-0058` then stays accepted, not in force. Decision 9's read
+>   lapsed with `ABC-238`; this page holds its own read.
+> - **C, the intent line, is owed at resume, not now.** `ADR-0056` C2′'s 2026-11-02 line lets a change invisible at
+>   100 ms be read on NEUTRAL (≥ 43.0 of 100) together with its own pre-registered bar. BA/PM names it on this page
+>   from the design note, at or before Ready, before the read. A8′ is the natural own bar. The premise is the
+>   depth-8 synergy, and at depth 6 T1 adds nothing over T3 (block below). Nothing is named while the ticket is paused.
+> - **If the shared table (`ABC-265`) merges first,** decisions 1–7 port to the new layout unchanged, and this
+>   ticket's design re-reads the doors on that base (`ADR-0058` § Status).
+> - Row 10 now reads P. DoR stays 8/10.
 
 > **RE-SCOPED AND PAUSED 2026-11-02 by BA/PM** (task `bapm-phase1-pause`, records only, at `main` `e8495fc5`; nothing
 > run). Source: the ruling `arch-phase1-replan` `…64e95bfa`, item 3, and the variants `…c0e9f5a0`.
@@ -136,6 +156,6 @@ adr: "ADR-0025 decision 4 amendment of 2026-10-26: ACCEPTED by the owner (…2ae
 | 7 | test notes | ✅ |
 | 8 | size | ✅ ~~S~~ M *(2026-11-02)* |
 | 9 | priority | ✅ P3 |
-| 10 | no major unresolved blocker | ❌ ~~`ABC-238`, `ABC-237`~~; ~~`EPIC-011` not started~~ *(started 2026-11-01)*; ~~the three re-checks above~~ *2026-11-02: PAUSED on the owner's trigger (C2′ yes, or a longer read); re-checks 1–2 (re-check 3 moot)* |
+| 10 | no major unresolved blocker | ❌ ~~`ABC-238`, `ABC-237`~~; ~~`EPIC-011` not started~~ *(started 2026-11-01)*; ~~the three re-checks above~~ *2026-11-02: PAUSED on the owner's trigger (C2′ yes, or a longer read); re-checks 1–2 (re-check 3 moot)* *2026-11-02 (`bapm-threads-cut`): the trigger is answered ("C yes"); **PAUSED by the owner's order (P)**, lifted only by the Orchestrator within P; the intent line (C2′) is owed at resume* |
 
 **DoR 8/10** (row 4's carried rows are re-read at refinement). ~~**Backlog.**~~ **Backlog, PAUSED** *(2026-11-02, `bapm-phase1-pause`)*.

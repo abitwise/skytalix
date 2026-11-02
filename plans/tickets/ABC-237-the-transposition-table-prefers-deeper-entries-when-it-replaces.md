@@ -10,6 +10,21 @@ epic: EPIC-011
 
 # ABC-237: depth-preferred TT replacement
 
+> **STATUS 2026-11-02, by BA/PM: PARKED BY THE OWNER (B), WITH `ABC-258`; PHASE 1 PAUSED BY HIS ORDER (P)** (task
+> `bapm-threads-cut`, records only, at `main` `48f3fc01`; nothing run). His words (`orch-2026-10-30a` `…81ae2db4`,
+> verbatim): *"… P yes, A accept, B park, C yes; …"*.
+> - **B, parked.** The `ADR-0025` T2 amendment, this ticket's design, is **PARKED with `ABC-258`**. It is neither
+>   accepted nor declined, and this ticket is not built (`ADR-0025` § Status and the amendment's own status line). The
+>   block below that reads "stays PROPOSED; the Architect recommends the owner park it" is now his decision.
+> - **When it comes back:** with `ABC-258` (T4), or with the threads strand's shared table and worker pool (`ABC-265`,
+>   `ABC-266`), whichever loads the table first. The re-ask brings a fresh measurement on that base. The 2026-11-02
+>   figures (1.00× at 2^18, 0.77× at 2^14) are single-threaded and do not carry over (`ADR-0025` T2 status). If
+>   `ABC-265` has merged, the rule is written on the shared layout.
+> - **C, the intent line, is owed at re-ask, not now.** On unparking, this page may name "NEUTRAL (invisible at
+>   100 ms)" before its read, with A3's mechanism rows as its own bar (`ADR-0025` T2 status; `ADR-0056` C2′'s
+>   2026-11-02 line, which names T2 as an example).
+> - Row 10 now reads the owner's park. DoR stays 9/10.
+
 > **PARKED 2026-11-02 by BA/PM, to be re-read with `ABC-258`** (task `bapm-phase1-pause`, records only, at `main`
 > `e8495fc5`; nothing run). The ruling `arch-phase1-replan` `…64e95bfa` pauses `EPIC-011`'s Phase 1 TT strand.
 > - **Why parked:** no deeper entry was evicted by another key on today's 2^18 table at depth 8 or less (12 of 3 275
@@ -131,6 +146,6 @@ epic: EPIC-011
 | 7 | test notes | ✅ 1 |
 | 8 | size | ✅ S |
 | 9 | priority | ✅ P3 |
-| 10 | no major unresolved blocker | ❌ ~~ADR~~ *2026-11-01: the ADR half is met (amendment written, PROPOSED; reading (b)). ~~Held by sequence: `ABC-238` merged or closed (`EPIC-011`)~~* *2026-11-02 (`bapm-phase1-pause`): parked with the paused Phase 1 strand, re-read with `ABC-258` (`…64e95bfa`)* |
+| 10 | no major unresolved blocker | ❌ ~~ADR~~ *2026-11-01: the ADR half is met (amendment written, PROPOSED; reading (b)). ~~Held by sequence: `ABC-238` merged or closed (`EPIC-011`)~~* *2026-11-02 (`bapm-phase1-pause`): parked with the paused Phase 1 strand, re-read with `ABC-258` (`…64e95bfa`)* *2026-11-02 (`bapm-threads-cut`): the amendment **PARKED by the owner** with `ABC-258` ("B park"); re-asked with `ABC-258` or after the shared table and worker pool (`ABC-265`, `ABC-266`)* |
 
 **DoR 9/10 (re-scored 2026-10-29; re-read 2026-11-01, `bapm-phase1-wording`: row 10 now a sequence hold only; re-read 2026-11-02, `bapm-phase1-pause`: row 10 is the park). Backlog, parked.**
