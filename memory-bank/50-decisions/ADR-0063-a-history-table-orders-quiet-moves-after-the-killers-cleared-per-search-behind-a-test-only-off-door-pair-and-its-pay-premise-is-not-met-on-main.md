@@ -6,6 +6,17 @@ id: ADR-0063
 
 ## Status
 
+*2026-11-02, dated line by Architect/Design (task `arch-next-pull`, records only, at `main` `a6039c5b`).*
+**Re-open premise 1 is measured and not met.** That premise was a P1 design taking history as its input, measured
+jointly.
+- **The probe:** this ADR's H1 table, plus `ADR-0060` decision 1, plus one of four pre-registered history terms (J1–J4).
+  Zugzwang was the hard gate, and every `ADR-0060` bar was read unchanged. PREREG `…4de572aa`, commit `b6deb4e4`.
+- **The result:** every form loses `zugzwang.004` at d11, and every form drifts 69 cp in `chooseMove` (cap 27). J3 is the closest: it meets `A4` (a) and reach, and misses only those two.
+- **Where it leaves this ADR:**
+  - It stays PROPOSED with its premise not met. `ABC-233` stays parked.
+  - Premises 2 and 3 (an ordering change that leaves history more cutoffs; an instrument for depth-gated pay) stay open and unmeasured.
+  - Details: `ADR-0060` § Status, the dated line of `arch-next-pull`.
+
 **PROPOSED 2026-11-02. PREMISE NOT MET ON `main`; THE BUILD DOES NOT START.** Recorded by Architect/Design (task
 `arch-ABC-233`, records only, on `grugops/arch-ABC-233` from `main` `60b76b52`). The probe ran on a scratch copy of
 `main`'s `src/` (tree `58fa3eb4`, `e72487e1`'s, futility in force), outside the repository, under the host lock. The

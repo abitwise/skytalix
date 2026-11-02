@@ -7,7 +7,7 @@ labels = ["1x 47000", "2x 94000", "4x 188000"]
 ids = [i for i in sf if all(sf[i]["loss"].get(p[i]["move"]) is not None for p in plays)]
 out = {"positions": len(sf), "scored": len(ids)}
 loss = {lab: [sf[i]["loss"][p[i]["move"]] for i in ids] for lab, p in zip(labels, plays)}
-for lab in labels:
+for lab, p in zip(labels, plays):  # fixed after the run: p was out of scope (a NameError; no metric changed)
     L = loss[lab]
     out[lab] = {"meanLoss": round(st.mean(L), 1), "medianLoss": st.median(L), "sfBestPct": round(100 * sum(x == 0 for x in L) / len(L), 1),
                 "err50": sum(x >= 50 for x in L), "err150": sum(x >= 150 for x in L), "err300": sum(x >= 300 for x in L),
