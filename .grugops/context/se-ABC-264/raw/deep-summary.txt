@@ -1,0 +1,27 @@
+START search 00:47:59 load=1.56
+END search rc=0 secs=3       Tests  57 passed (57)
+START nullmove 00:48:02 load=1.92
+END nullmove rc=0 secs=30       Tests  44 passed (44)
+START pvslmr 00:48:32 load=2.37
+END pvslmr rc=0 secs=311       Tests  29 passed (29)
+START quiescence 00:53:43 load=2.24
+END quiescence rc=0 secs=49       Tests  116 passed (116)
+START tt-search 00:54:32 load=2.35
+END tt-search rc=0 secs=4       Tests  40 passed (40)
+START tt-engine 00:54:36 load=2.35
+END tt-engine rc=0 secs=5       Tests  26 passed (26)
+START engine 00:54:41 load=2.22
+END engine rc=1 secs=180       Tests  1 failed | 77 passed (78)
+START puzzle 00:57:41 load=3.06
+END puzzle rc=0 secs=3       Tests  18 passed (18)
+START zobrist 00:57:44 load=3.06
+END zobrist rc=0 secs=7       Tests  33 passed (33)
+START cli 00:57:51 load=3.12
+END cli rc=0 secs=13       Tests  11 passed (11)
+START uci 00:58:04 load=2.80
+END uci rc=0 secs=6       Tests  13 passed (13)
+START uci-session 00:58:10 load=2.65
+END uci-session rc=0 secs=292       Tests  241 passed (241)
+START ladder 01:03:02 load=1.44
+END ladder rc=0 secs=24       Tests  18 passed (18)
+DONE

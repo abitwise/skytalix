@@ -1,0 +1,6 @@
+g8-base-1.log  Tests 2376 passed (2376)  Duration 8.58s (transform 0ms, setup 0ms, import 6.35s, tests 6.23s, environment 5ms) 
+g8-base-2.log  Tests 2376 passed (2376)  Duration 8.46s (transform 0ms, setup 0ms, import 6.37s, tests 6.16s, environment 5ms) 
+g8-base-3.log  Tests 2376 passed (2376)  Duration 8.38s (transform 0ms, setup 0ms, import 6.29s, tests 6.14s, environment 5ms) 
+g8-head-1.log  Tests 2403 passed (2403)  Duration 8.82s (transform 0ms, setup 0ms, import 6.31s, tests 6.42s, environment 5ms) 
+g8-head-2.log  Tests 2403 passed (2403)  Duration 8.65s (transform 0ms, setup 0ms, import 6.12s, tests 6.66s, environment 5ms) 
+g8-head-3.log  Tests 2403 passed (2403)  Duration 8.67s (transform 0ms, setup 0ms, import 6.19s, tests 6.65s, environment 5ms) 
