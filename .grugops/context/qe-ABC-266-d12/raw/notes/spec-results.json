@@ -1,0 +1,6 @@
+{ "refs": ["ABC-266", "qe-ABC-266-d12", "grugops/qe-ABC-266-d12", "5432f3f5", "b082549a", "d7aaea5e", "qe-ABC-266-d12/20261102T172016Z-qe-e2e-decision-6231db75", "ADR-0062", "ADR-0057", "ADR-0058", "ADR-0055", "grugops/ABC-265-fix", "28ad3a8d", "arch-ABC-266/20261102T161450Z-architect-design-observation-0c8cf7d0", "EPIC-011"],
+  "notes": [
+    { "kind": "observation", "confidence": "high for the depths, nodes and load as measured (one pass, one go per cell); the 0.69 cause UNKNOWN - verify", "bodyFile": "obs-results.md" },
+    { "kind": "decision", "confidence": "high: outcome by the sealed rule, no hand grade", "bodyFile": "dec-verdict.md" },
+    { "kind": "artifact-ref", "confidence": "high", "bodyFile": "art.md" }
+  ] }

@@ -1,0 +1,178 @@
+{
+ "cells": {
+  "100ms T1": {
+   "n": 20,
+   "median": 7,
+   "min": 5,
+   "max": 11,
+   "depths": "6 7 5 5 5 8 8 7 7 6 6 6 6 6 9 11 11 9 11 10",
+   "nodesMedian": 81696,
+   "nodesSum": 1664975,
+   "wallMsMedian": 100,
+   "wallMsMax": 101
+  },
+  "100ms T4": {
+   "n": 20,
+   "median": 7,
+   "min": 5,
+   "max": 11,
+   "depths": "6 7 5 5 5 8 8 7 7 6 6 6 6 6 9 11 11 9 11 9",
+   "nodesMedian": 321152,
+   "nodesSum": 6512411,
+   "wallMsMedian": 101,
+   "wallMsMax": 102,
+   "w0Median": 7,
+   "playedAboveW0": 0,
+   "byNonZero": 0,
+   "helperNodesPerWorkerMedian": 80288
+  },
+  "100ms T12": {
+   "n": 20,
+   "median": 7,
+   "min": 5,
+   "max": 11,
+   "depths": "7 7 5 5 5 7 8 7 7 6 6 6 5 6 9 10 11 9 11 9",
+   "nodesMedian": 672594,
+   "nodesSum": 13666716,
+   "wallMsMedian": 101,
+   "wallMsMax": 103,
+   "w0Median": 7,
+   "playedAboveW0": 1,
+   "byNonZero": 1,
+   "helperNodesPerWorkerMedian": 56049.5
+  },
+  "1000ms T1": {
+   "n": 20,
+   "median": 10,
+   "min": 8,
+   "max": 13,
+   "depths": "10 8 8 8 8 11 11 10 10 9 8 8 8 8 11 13 13 11 13 11",
+   "nodesMedian": 812287.5,
+   "nodesSum": 17225679,
+   "wallMsMedian": 1000,
+   "wallMsMax": 1001
+  },
+  "1000ms T4": {
+   "n": 20,
+   "median": 9.5,
+   "min": 8,
+   "max": 14,
+   "depths": "9 8 8 8 8 11 11 10 10 9 8 8 8 8 11 13 13 11 14 12",
+   "nodesMedian": 3203444,
+   "nodesSum": 68464443,
+   "wallMsMedian": 1000.5,
+   "wallMsMax": 1001,
+   "w0Median": 9.5,
+   "playedAboveW0": 0,
+   "byNonZero": 0,
+   "helperNodesPerWorkerMedian": 800861
+  },
+  "1000ms T12": {
+   "n": 20,
+   "median": 10,
+   "min": 8,
+   "max": 13,
+   "depths": "10 9 8 8 8 11 11 10 10 9 8 8 8 8 11 13 13 11 13 12",
+   "nodesMedian": 6806744.5,
+   "nodesSum": 145645747,
+   "wallMsMedian": 1001,
+   "wallMsMax": 1002,
+   "w0Median": 10,
+   "playedAboveW0": 1,
+   "byNonZero": 1,
+   "helperNodesPerWorkerMedian": 567228.7083333333
+  }
+ },
+ "perPos 100ms": {
+  "T12vsT1": {
+   "above": 1,
+   "equal": 15,
+   "below": 4
+  },
+  "T4vsT1": {
+   "above": 0,
+   "equal": 19,
+   "below": 1
+  }
+ },
+ "perPos 1000ms": {
+  "T12vsT1": {
+   "above": 2,
+   "equal": 18,
+   "below": 0
+  },
+  "T4vsT1": {
+   "above": 2,
+   "equal": 17,
+   "below": 1
+  }
+ },
+ "load100": {
+  "foreignVitestOrCutechess": false,
+  "phaseForeignCores": 0.454,
+  "blocksOver08": 2,
+  "blockFcMax": 1.357,
+  "hot": [],
+  "tctl": 70.5,
+  "LOADED": false
+ },
+ "load1000": {
+  "phaseForeignCores": 0.371,
+  "blocksOver08": 0,
+  "blockFcMax": 0.491,
+  "vitestOrCutechess": false,
+  "hot": [],
+  "tctl": 79
+ },
+ "rule": {
+  "medianT12_100": 7,
+  "medianT1_100": 7,
+  "above": false,
+  "outcome": "MISS"
+ },
+ "start": {
+  "t": "2026-11-02T17:20:27.179Z",
+  "ev": "start",
+  "node": "v26.12.1",
+  "load": [
+   0.58,
+   0.65,
+   0.89
+  ],
+  "tctl": 37.25,
+  "vitest": 0,
+  "cutechess": 0,
+  "hot3s": []
+ },
+ "done": {
+  "t": "2026-11-02T17:21:37.390Z",
+  "ev": "done",
+  "totalS": 73.215,
+  "load": [
+   5.37,
+   2.15,
+   1.4
+  ],
+  "tctl": 79,
+  "vitest": 0,
+  "cutechess": 0
+ },
+ "warmup": [
+  {
+   "k": 1,
+   "depth": 7,
+   "wallMs": 302
+  },
+  {
+   "k": 4,
+   "depth": 7,
+   "wallMs": 302
+  },
+  {
+   "k": 12,
+   "depth": 6,
+   "wallMs": 311
+  }
+ ],
+ "errors": 0
+}
