@@ -1,14 +1,26 @@
 ---
 id: ABC-255
 title: "M0: the rating harness plays the owner's reads: 100 games new against base and 400 games head-to-head at 100 ms a move, and a 10-game Stockfish smoke at 0.5 s a move (tools only)"
-status: backlog
-column: Backlog
+status: done
+column: Done
+closed: "2026-11-01, merged to local main at 87484808 (merge(qe-ABC-255), carrying the harness change in tools/rating/rating.ts and tools/rating/pair-check.ts); QE PASS_WITH_GAPS (qe-ABC-255 …cc9d4bad; QE-255-a LOW, later declined by bapm-qe-gaps-1101b; b–e INFO), which signs UAT; the board read Done the same day (f4a85039). Front matter by bapm-E1-cut, 2026-11-02 (page drift since the merge). Was: backlog, DoR 10/10 (bapm-reconcile-adr0056)"
 size: S
 priority: P1
 epic: EPIC-011
 ---
 
 # ABC-255: the owner's 100 / 400 reads at 100 ms and the 0.5 s smoke (M0)
+
+> **CLOSED 2026-11-01, DONE; front matter folded 2026-11-02 by BA/PM** (task `bapm-E1-cut`, records only, at `main`
+> `2bef4d31`; nothing run). The page still read `backlog` after the merge (the Orchestrator's LOW, board 2026-11-02).
+> - **Merged to local `main` at `87484808`** (`merge(qe-ABC-255)`), which carries the harness change in
+>   `tools/rating/rating.ts` and `tools/rating/pair-check.ts`. The board read Done on 2026-11-01 (`f4a85039`). Not
+>   pushed.
+> - **QE PASS_WITH_GAPS** (`qe-ABC-255` `…cc9d4bad`, § Reading below): A3 52.0 / 100, A4 45.5 / 100 on the identical
+>   pair (100 / 100, 0 faults, 0 time losses), A5 9.0 / 10 at E 1 650. `QE-255-a` (LOW) was declined by
+>   `bapm-qe-gaps-1101b`; `QE-255-b`–`e` are INFO. The verdict signs UAT.
+> - Every later strength read in `EPIC-011` runs through it (`d` at 100 ms, `r` at 0.5 s; S′ now `--elo 1810`).
+> - Front matter: `status: done`, `column: Done`, with a `closed:` line. Nothing below this block is edited.
 
 > **ALIGNED TO THE MERGED `ADR-0056` FOLD 2026-11-01 by BA/PM** (task `bapm-reconcile-adr0056`, records only, at
 > `main` `bd29dd50`; nothing run). The owner-answers fold is on `main` (merge `a0f9297e`, ADR commit `fe50a11f`; its §

@@ -1,16 +1,30 @@
 ---
 id: ABC-265
 title: "TH-1: the transposition table becomes one lockless shared table, four Uint32 words a slot over a SharedArrayBuffer with an XOR check, still 2^18 slots and 4 MiB, node-for-node equal to main at Threads 1"
-status: backlog
-column: Backlog
+status: done
+column: Done
+closed: "2026-11-02, merged to local main at 605874b8 (merge(ABC-265), from grugops/ABC-265-fix 28ad3a8d; build cad6ae13, code e5694864, QE-265-a row 7d9c8695) on the owner's \"25 yes\" (orch-2026-10-30a …773be7de). QE PASS_WITH_GAPS (qe-ABC-265 …d9879b9c; QE-265-a LOW closed by se-ABC-265-fix; b–e INFO), which signs UAT; post-merge npm test 2 388 / 2 388 (board). Front matter by bapm-E1-cut (page drift since the merge; the board already read Done). Was: backlog, DoR 10/10 (bapm-ABC-265-rows)"
 size: M
 priority: P2
 epic: EPIC-011
 feature: —
-adr: "ADR-0025 § Proposed amendment 2026-11-02 (ABC-265, TH-1): decision 2's first bullet and decision 4's last bullet, PROPOSED (arch-ABC-265 …e396e5ab, merged c0f3cbad); falsifiers T8–T10; no S2 reading (its § The read ABC-265 owes; the Orchestrator's ruling). Acceptance is the owner's. Reading (b): the build may start; the merge waits on his acceptance. Source: ADR-0057 (ACCEPTED 2026-11-02) D2.3 and § Inputs for the thread tickets"
+adr: "ADR-0025 § amendment 2026-11-02 (ABC-265, TH-1): ACCEPTED by the owner (\"25 yes\", orch-2026-10-30a …773be7de) and IN FORCE on main since 605874b8 (arch-owner-answers-1102b). Was: decision 2's first bullet and decision 4's last bullet, PROPOSED (arch-ABC-265 …e396e5ab, merged c0f3cbad); falsifiers T8–T10; no S2 reading (its § The read ABC-265 owes; the Orchestrator's ruling). Acceptance is the owner's. Reading (b): the build may start; the merge waits on his acceptance. Source: ADR-0057 (ACCEPTED 2026-11-02) D2.3 and § Inputs for the thread tickets"
 ---
 
 # ABC-265: one lockless shared transposition table (TH-1)
+
+> **CLOSED 2026-11-02, DONE, by BA/PM** (task `bapm-E1-cut`, records only, at `main` `2bef4d31`; nothing run). A
+> front-matter fold only: the page still read `backlog` after the merge (the Orchestrator's LOW, board 2026-11-02).
+> - **Merged to local `main` at `605874b8`** from `grugops/ABC-265-fix` (`28ad3a8d`) on the owner's *"25 yes"*
+>   (`orch-2026-10-30a` `…773be7de`): the `ADR-0025` shared-table amendment is **accepted and in force**
+>   (`arch-owner-answers-1102b`, board 2026-11-02). Not pushed.
+> - **QE PASS_WITH_GAPS** (`qe-ABC-265` `…d9879b9c`): A1–A5 MET, every gate green, `G6` head = base on both boards.
+>   `QE-265-a` (LOW) was closed by `se-ABC-265-fix` (`7d9c8695`); `QE-265-b`–`e` are INFO. The verdict signs UAT.
+> - **Post-merge:** `npm test` 2 388 / 2 388 (board).
+> - **The thread strand it opened is parked** by the owner (*"park threads"*): `ABC-266` is parked and `Threads`
+>   stays 1. This ticket stands on its own (`EPIC-011` § Tickets row 17).
+> - Front matter: `status: done`, `column: Done`, with a `closed:` line; the `adr:` line now reads accepted. Nothing
+>   below this block is edited.
 
 > **REFINED 2026-11-02 by BA/PM: DoR 10/10, reading (b)** (task `bapm-ABC-265-rows`, records only, at `main`
 > `f312e9d7`; nothing run). The design is written: the `ADR-0025` shared-table amendment, PROPOSED (`arch-ABC-265`
