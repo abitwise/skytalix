@@ -1,8 +1,9 @@
 ---
 id: ABC-267
 title: "TH-3: multi-worker property rows across thread counts, a multi-writer torn-entry stress, NFR-009 summed over workers as a standing row, and the default lane's wall before and after its one 2-worker row (test-only)"
-status: backlog
-column: Backlog
+status: done
+column: Done
+closed: "2026-11-02, folded into ABC-266 (merged into it; not delivered on its own). The Orchestrator's ruling (board, 2026-11-02), on ADR-0062 D13 (PROPOSED, arch-ABC-266 …4f828986). A1 → ABC-266 A3; A2 → ABC-266 A8 with the probe-then-cutoff case added; A3 → ABC-266 A5 as a standing THREADS_DEEP row; A4 settled at zero default-lane rows (ABC-266 A6 G8); A5 → ABC-266 A6 determinism source row; F2/F3 → ABC-266 F5/F6; scope 5 (the 2^10-slot seam) dropped. Front matter by bapm-ABC-266-rows; the board move is the Orchestrator's. Was: backlog, DoR 9/10 (bapm-threads-cut)"
 size: S
 priority: P2
 epic: EPIC-011
@@ -11,6 +12,24 @@ adr: "None of its own. It follows ADR-0026 (test method) and ABC-266's ADR (M, t
 ---
 
 # ABC-267: the thread tests and lanes (TH-3, test-only)
+
+> **CLOSED AS FOLDED INTO `ABC-266`, 2026-11-02, by BA/PM** (task `bapm-ABC-266-rows`, records only, at `main`
+> `09306a14`; nothing run). Source: the Orchestrator's ruling *"ABC-267 folds into ABC-266"* (board, 2026-11-02), on
+> `ADR-0062` D13 (PROPOSED, `arch-ABC-266` `…4f828986`). The reason is the Architect's: `ABC-266` is the merge that
+> creates several writers, so the race guard lands with the race, and one QE hop reads both.
+> - **Where each row went** (`ABC-266`'s page carries them; this page is history):
+>   - A1 → `ABC-266` A3 (`Threads` ∈ {2, 4, M}, every corpus position, `go movetime 200`, in `THREADS_DEEP`);
+>   - A2 → `ABC-266` A8, on the **production** table through `adoptTable` (4 096 keys into 1 024 slots of the 2^18-slot
+>     table), with the **probe-then-cutoff case added**;
+>   - A3 → `ABC-266` A5, a standing `THREADS_DEEP` row read as `ADR-0062` D10 says;
+>   - A4 → settled at **zero** default-lane rows (`ADR-0062` D11: a worker inherits the lane's heap flag, and the suite
+>     shape is already at 2 016 of 2 048 MiB). The before and after `N8-LANE` figures are still read (`ABC-266` A6 `G8`);
+>   - A5 → `ABC-266` A6, as a determinism source row;
+>   - F2 and F3 → `ABC-266` F5 and F6. F1 and F4 are covered by `ABC-266` F1 and `NFR-008`'s reading.
+> - **Dropped:** scope 5, the 2^10-slot test seam. Keys chosen into 1 024 slots give the same contention at the
+>   production size, so no test-only export is needed.
+> - **Size and value move to `ABC-266`** (L, about 20–45 h, `estimate`). Front matter `status: done`, `column: Done`,
+>   with a `closed:` line reading folded, not delivered on its own. The board card move is the Orchestrator's.
 
 > **Cut 2026-11-02 by BA/PM** (task `bapm-threads-cut`, records only, at `main` `48f3fc01`; nothing run). Source:
 > the owner's answers `…81ae2db4` (*"1 yes"*, *"4 a"*) and `ADR-0057` § Inputs for the thread tickets, column TH-3
@@ -120,5 +139,8 @@ adr: "None of its own. It follows ADR-0026 (test method) and ABC-266's ADR (M, t
 | 9 | priority | ✅ P2 |
 | 10 | no major unresolved blocker | ❌ `ABC-266`'s ADR (M, the deep flag) is not written, and `ABC-266` is not merged |
 
-**DoR 9/10. Backlog.** It reaches Ready when `ABC-266`'s ADR is written and `ABC-266` has merged, or at once if the
-Orchestrator folds it into `ABC-266`. The board move is the Orchestrator's.
+~~**DoR 9/10. Backlog.** It reaches Ready when `ABC-266`'s ADR is written and `ABC-266` has merged, or at once if the
+Orchestrator folds it into `ABC-266`. The board move is the Orchestrator's.~~
+
+**Closed, folded into `ABC-266`** *(2026-11-02, `bapm-ABC-266-rows`)*. No DoR is scored here any more: the rows are
+scored on `ABC-266`'s page (DoR 9/10, waiting on `ABC-265`'s merge). The board move is the Orchestrator's.
