@@ -6,7 +6,62 @@ id: ADR-0060
 
 ## Status
 
-**PROPOSED, RE-OPENED 2026-11-02: re-measured on `main`, the rule misses two of its own bars there, and the build
+**PROPOSED, RE-OPENED; RE-OPEN PROBE 2026-11-02: no form in a pre-registered set of nine meets every bar on `main`.
+No rule is written in, no bar moves, and the build does not start. One question goes to the owner.** Recorded by
+Architect/Design (task `arch-ADR-0060-reopen`, records only, on `grugops/arch-ADR-0060-reopen` from `main`
+`cfff6993`).
+- **Method.** The set, the bars and the selection rule were sealed and committed before any run (decision
+  `…0481036d`, commit `0df9b672`). The rule: the eligible form with the most reach at 47 000 nodes wins. The instrument
+  is `arch-phase2-rebase`'s, plus one PV-only cap knob. It ran on a scratch `git archive` of `main`'s `src/`, under the
+  host lock, each batch ≤ 5 min, node counts only. The door reproduces 1 116 785 / 1 602 457 / 1 575 537 / 476 244 to
+  the node, and decision 1 reproduces 849 358 / 1 183 439 / 1 155 460 / 414 286. The scratch copy is deleted. Raw:
+  `.grugops/context/arch-ADR-0060-reopen/raw/probe/`.
+- **Results on `main`** (eligible needs every bar: A4 (a) ≤ 0.85 on four readings, A4 (b) ≥ +0.25, A3 ≥ 95 % / ≤ 27 cp
+  / 0 sign flips, mate floor 0 / 163, zugzwang 7 / 7, `G1` ≥ 54 / 58; `G6` is timing and is not read):
+
+  | form | A4 (a) `search()` kiwi / pos-6, `chooseMove` kiwi / pos-6 | A3 max cp `search()` / `chooseMove` | A4 (b) | zugzwang | misses |
+  |---|---|---|---|---|---|
+  | R0 decision 1 (PV −1, cap 2) | 0.761 / 0.739, 0.733 / **0.870** | **63** / 18 | +0.253 | 7 / 7 | cap, A4 (a) |
+  | C1 no PV reduction, cap 2 | **0.953** / **1.280**, **0.893** / **1.088** | **63** / **63** | — | — | A4 (a), cap |
+  | C2 PV ≤ 1 ply, cap 2 | 0.801 / **0.913**, 0.753 / **0.866** | 5 / 2 | — | — | A4 (a) |
+  | C3 PV flat 1, cap 2 | 0.800 / **0.909**, 0.738 / **0.866** | **30** / 21 | — | — | A4 (a), cap |
+  | C4 PV ≤ 1, cap 3 | 0.764 / 0.835, 0.657 / 0.806 | 5 / 2 | **+0.168** | **6 / 7** | A4 (b), `zugzwang.004` |
+  | C5 PV flat 1, cap 3 | 0.762 / 0.830, 0.645 / 0.805 | **30** / 21 | **+0.137** | **6 / 7** | cap, A4 (b), `.004` |
+  | C6 PV ≤ 1, uncapped | 0.722 / 0.824, 0.629 / 0.787 | 5 / 2 | **+0.174** | **6 / 7** | A4 (b), `.004` |
+  | C7 C4 with index ≥ 2 | 0.763 / 0.835, 0.657 / 0.812 | 10 / 2 | **+0.189** | **5 / 7** | A4 (b), `.001`, `.004` |
+  | C8 C4 with divisor 1.75 | 0.761 / 0.822, 0.636 / 0.799 | **30** / 21 | **+0.163** | **6 / 7** | cap, A4 (b), `.004` |
+
+  - Every form keeps ≥ 96.79 % within 25 cp, with 0 sign and 0 mate-status flips. Root moves at depth 8 are unchanged.
+  - For C4–C8: mate floor 0 / 163 and `G1` 54 / 58, no NEWLY line.
+  - Stage B was not read for C1–C3, which A4 (a) already rules out. R0's stage-B figures are `arch-phase2-rebase`'s.
+  - `zugzwang.004` at depth 11: C4 plays g7f6 after 156 620 nodes.
+  - C2, C4 and C6 read alike at depth 5, because the clamp r ≤ d − 2 never lets a cap of 3 bind there. The drift net
+    cannot see a deeper cap; the zugzwang rows can.
+- **What it means, said plainly.**
+  - **No form passes.** Capping PV reductions at one ply clears A3 and A4 (a), but reach falls to +0.17–0.19 and
+    `zugzwang.004` is lost. Decision 1 keeps reach and 7 / 7, but misses the cap and A4 (a).
+  - **On `main` the reach comes with the two-ply PV reductions,** the same ones that move position-6/g5h6 by 63 cp.
+  - **No form misses only the 27 cp cap.**
+- **The owner question:** *may `A3`'s 27 cp cap be re-derived on `main` by `ADR-0050` d8's method?*
+  - **The number:** 94 cp (⌊1.5 × 63⌋, decision 1's larger maximum on `main`).
+  - **But a "yes" alone admits no form.** Decision 1 would still miss A4 (a) (0.8699 against 0.85). Passing it would
+    also need 0.85 moved after the score, which no method derives. C4, C6 and C7 lose `zugzwang.004`, which is F3 and
+    never a re-pin.
+  - **The Architect's recommendation: keep the cap, and park P1 on `main`.**
+    - The cap flags the very trade-off that buys the reach.
+    - `ABC-264` showed that reach without value loses games (+0.70 ply, −42 Elo).
+    - Suggested next step (the Orchestrator's call): P3 next. Then re-measure decision 1 unchanged on that `main`, by
+      a dated line here, under the same bars. On `4d1c0616`, whose door had reverse futility cutting at depth 1–3,
+      decision 1 met every bar. That P3's futility does the same is a judgement, `UNKNOWN - verify`. O1h's history
+      table (decision 11) is the other named premise.
+  - **Answers that settle it:**
+    - "Keep the cap" is the default: P1 stays parked, and the flat 1-ply LMR stays on `main`.
+    - "Re-derive the cap and A4 (a)": decision 1 is re-proposed with 94 cp and his A4 (a) number.
+    - "Decline ADR-0060".
+- **Unchanged:** decisions 1–11, F1–F8 and every bar. Decision 1 stays the measured reference, not a rule cleared to
+  build.
+
+*Earlier status (`arch-phase2-rebase`), kept:* **PROPOSED, RE-OPENED 2026-11-02: re-measured on `main`, the rule misses two of its own bars there, and the build
 does not start.** Recorded by Architect/Design (task `arch-phase2-rebase`, records only, on
 `grugops/arch-phase2-rebase` from `main` `5ffbae25`).
 - **Why re-measure.** `ABC-264` did not merge (`ADR-0059` F5: 44.0 / 100). So this ADR's door is now `main`'s own
@@ -324,6 +379,9 @@ figures: `.grugops/context/arch-phase2-p1/` observation `…35bd3967` (the probe
        1 602 457 / 1 575 537 / 476 244, and decision 1's head reads 849 358 / 1 183 439 / 1 155 460 / 414 286, with
        reach 5.558 / 5.811. `chooseMove` position-6 reads **0.8699, above (a)'s 0.85**. See § Status: F4 and F1
        apply, and the build does not start on this text.
+     - *Dated 2026-11-02 (`arch-ADR-0060-reopen`).* The re-open probe re-read these counts to the node. Of nine
+       pre-registered forms, none meets every bar on `main` (§ Status). No rule replaces decision 1, so no new head
+       counts are pinned.
    - **`G1` (`A5`):** ≥ 54/58 with no NEWLY-MISSED line (measured 54/58).
 10. **The read and the reports (`A6`, `ADR-0056` D5 as folded):** C2′ 100 games at 100 ms against the merge-base, S′
     10 games at 0.5 s against Stockfish 19 at E 1 650, and the Levels deep lane on the candidate head, all by
