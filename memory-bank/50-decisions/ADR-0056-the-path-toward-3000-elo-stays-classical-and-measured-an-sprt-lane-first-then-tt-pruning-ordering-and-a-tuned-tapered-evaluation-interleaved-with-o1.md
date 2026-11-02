@@ -139,6 +139,44 @@ the owner's answers of 2026-11-02 (`orch-2026-10-30a` `…81ae2db4`).
       estimate. That is a 30-game point estimate, not a rating.
   - **Records owed elsewhere** (not this hop's fence): BA/PM records the new E and the reset in `EPIC-011` § Close-out
     (the S′ pool row) and C10. The strength tickets' S′ lines then read E 1 980.
+- *2026-11-02, dated amendment by Architect/Design (task `arch-ABC-233`, records only, at `main` `60b76b52`). It
+  supersedes the E 1 980 of the line above.* **The re-pin step aims at the centre of S′'s trigger band, so S′'s
+  opponent is E = 1 810, not 1 980.** The Orchestrator ruled it (`orch-2026-10-30a` `…8ce2fd23`), adopting option (b)
+  of `arch-post-268`'s open question 1 (`…1bc554fb`). This is a measurement setting, inside delivery and inside the
+  owner's upward pre-authorisation (`…1f5e3b27`). The Orchestrator informs the owner.
+  - **Why.** The band-rule step of the line above aims at about 50 %, but the trigger band is 60–85 %. A pool near
+    50 % would then raise the downward question after 30 games by construction, and S-4 would stop an unchanged
+    build about 5 % of the time. Aiming at the band's centre fixes both.
+  - **The rule, written once and symmetric.** When the pooled S′ score p over 30 or more games leaves 60–85 %:
+    - X = −400 · log₁₀(1 / p − 1), cutechess-cli's formula (`tools/rating/pair.ts`), is the pool's Elo against E;
+    - C = −400 · log₁₀(1 / 0.725 − 1) = **+168.4** is the Elo at the band's centre, 72.5 %;
+    - **E′ = E + X − C**, rounded to 10 and clamped to 1 320–3 190.
+    - The same formula serves both directions. Upward (p > 85 %) it applies with no owner ask, up to E 2 600.
+      Downward (p < 60 %) it gives the proposed E′, but applying it stays the owner's question, because his word
+      covers the upward side only. Above E 2 600 the R5-style probe still runs first (S′'s Stockfish bullet).
+  - **This step.** The E 1 650 pool, 26/4/0, gives p = 0.8667 and X = +325.2 (± 292.3 at 95 %). So E′ = 1 650 +
+    325.2 − 168.4 = 1 806.8, which rounds to **1 810**. Neither the clamp nor the cap binds.
+  - **The new setting:** Stockfish 19, `UCI_LimitStrength` true, **`UCI_Elo` 1 810**. Everything else in S′ is
+    unchanged: `st=0.5`, `timemargin` 2 000 ms, `Threads 1`, `Hash 16`, `restart=on`; skytalix at `st=0.5` with a
+    50 ms margin; openings 1–5, both colours; the bars S-1, S-2 and S-4.
+    - The depth guard follows E: at 1 810, Stockfish picks at depth **4** (level 3.40 by `sf_19`'s formula in
+      `rating.ts`'s `pickDepth`). `rating.ts` computes it from `--elo`.
+  - **The command:** `node tools/rating/rating.ts r <candidate> <out> --elo 1810 --budget-ms 500 --rounds 5
+    --concurrency 1`.
+    - `r`'s default stays 1 650 in code, and no code changes. So **`--elo 1810` must be written out**. A run at any
+      other E does not pool.
+    - `--dry-run` at `e72487e1` printed `option.UCI_Elo=1810`, `st=0.5` for both engines, `timemargin` 50 / 2 000,
+      and 5 rounds of 2 games (`.grugops/context/arch-ABC-233/raw/s-prime-dry-run-1810.txt`).
+  - **The pool starts empty at E 1 810.** The E 1 980 pool never opened: no S′ was played at 1 980 (no build merged
+    between the two rulings). The E 1 650 pool stays closed at 26.0 / 30 as history. The first S′ of the next merged
+    build opens the 1 810 pool. A candidate's S′ is graded at once by S-4 and pools only if the build merges. The
+    trigger is read again at 30 or more games, by the rule above.
+  - **What 1 810 expects** (an estimate, not a reading). The pool puts the merged engine near 1 975 at 0.5 s, which
+    gives about **72 %** against E 1 810. At ± 292 the true expectation could lie anywhere from about 33 % to 93 %. At
+    72 %, S-4's ≥ 3.0 of 10 stops an unchanged build about 0.1 % of the time.
+  - **Records owed elsewhere** (not this hop's fence): BA/PM records E 1 810 and the empty pool in `EPIC-011`
+    § Close-out (the S′ pool row) and C10. Each open strength ticket's S′ line reads E 1 810 with `--elo 1810`;
+    `ABC-233`'s A6 still reads "S-4 at E 1 650" with no `--elo`.
 
 *Original status, kept:* **PROPOSED** 2026-11-01 by Architect/Design (task `arch-algo-analysis`, records and reading only, at `main` `bae25131`).
 **Nothing is decided here.** Nothing was run, built, benchmarked or played: `qe-ABC-223` holds the host STRICTLY ALONE.
@@ -381,6 +419,17 @@ terms E3–E7, each best added under the tuner; then X2 singular extensions and 
 - **Row P6:** rejected on today's evaluation.
 - **The suggested order** (the Orchestrator's call): P3 (`ADR-0061`) now, independent of the P1 re-open → P1 if the
   owner's cap answer re-opens it green → P5 (NEUTRAL) → P4 after O1h → P6 not before E1 / E2.
+
+*Dated 2026-11-02 (`arch-ABC-233`, records only; probe on a scratch copy of `main`'s `src/` `58fa3eb4`, futility in force): row O1h.*
+- **Row O1h has an ADR: `ADR-0063` (PROPOSED, premise not met on `main`).** Measured at depth 8, the history table
+  reads 0.78–1.00× in `search()` and 0.97–1.00× in `chooseMove`, with +0.08 to +0.11 ply at 47 000 nodes. Every
+  form misses the pre-registered pay gate (≤ 0.95× on all four readings). It is safe on every row.
+- **Why the pay is small here:** the hash move and the two killers already take most cutoffs. 82 % of cutoffs fall
+  on the first move, and the killers hold 90 % of quiet cutoffs. History re-orders what is left. The row's +20–50
+  is not supported as a standalone change on this search (estimate; `ADR-0063` § Context).
+- **As an enabler, the evidence is mixed.** Over the history table, `ADR-0060` decision 1 meets `A4` (a), reach and
+  the 27 cp cap, which it misses on `main`. But it loses two zugzwang rows instead of one. That is a diagnostic, not
+  pre-registered (`ADR-0063` § Context). P4 over history is not measured.
 
 ### D3. Is 3 000 reachable without a neural network?
 
@@ -883,6 +932,9 @@ a reading is an **estimate**, with its basis named. Nothing was run.
   - Above E 2 600, the R5-style probe in the 100 ms block runs first, and `st` = the larger of 0.5 s and 4 × p95.
 - *2026-11-02 (`arch-post-268`): **re-pinned to E = 1 980** by the trigger below (pool 26.0 / 30). The command
   carries `--elo 1980`. § Status, dated line of this date.*
+- *2026-11-02 (`arch-ABC-233`): **amended to E = 1 810.** The step now aims at the band's centre: E′ = E + X − 168.4,
+  in either direction. The command carries `--elo 1810`, and the pool starts empty at 1 810. § Status, dated
+  amendment of this date. It supersedes the 1 980 above.*
 - **E = 1 650** (`r`'s default, `ABC-204`'s first pin), not the R smoke's 1 910.
   - The basis (estimate): skytalix at 0.5 s is three time doublings under 4 s (≈ 2 074). At 50–100 Elo a doubling it
     sits at about 1 775–1 925.
@@ -892,6 +944,8 @@ a reading is an **estimate**, with its basis named. Nothing was run.
   - E is re-pinned when the pooled S′ score leaves 60–85 % over 30 or more pooled games: one band-rule step, kept at
     E ≤ 2 600. That is `EPIC-011` C10's re-pin, now with a trigger. The expected score is `UNKNOWN - verify` until the
     first S′ on `main`.
+    - *2026-11-02 (`arch-ABC-233`): the step is now the band-centre step, E′ = E + X − 168.4, in both directions
+      (§ Status, dated amendment). A downward step is still the owner's question.*
 - **The bars:** S-1, S-2 and S-4 as `EPIC-010` states them (S-4: ≥ 3.0 of 10; below that, 10 more games and ≥ 7.0 of
   20). S-3 is C2′'s now. BA/PM records the rule.
 - **The command:** `r <candidate> <out> --budget-ms 500 --rounds 5 --concurrency 1` (openings 1–5, both colours).

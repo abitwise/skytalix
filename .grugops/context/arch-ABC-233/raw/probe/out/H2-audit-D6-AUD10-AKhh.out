@@ -1,0 +1,16 @@
+{"depth":6,"every":10,"fired":351247,"sampled":35036}
+{"key":"all","n":35009,"flips":79,"ffl":14,"ffh":65,"e100":0,"e200":0,"e300":0,"e500":0,"unstable":34,"doorNoise":48,"flipPct":0.23,"e200Pct":0,"e300Pct":0}
+{"key":"d1","n":29564,"flips":0,"ffl":0,"ffh":0,"e100":0,"e200":0,"e300":0,"e500":0,"unstable":0,"doorNoise":0,"flipPct":0,"e200Pct":0,"e300Pct":0}
+{"key":"d2","n":3019,"flips":0,"ffl":0,"ffh":0,"e100":0,"e200":0,"e300":0,"e500":0,"unstable":0,"doorNoise":0,"flipPct":0,"e200Pct":0,"e300Pct":0}
+{"key":"d3","n":1740,"flips":62,"ffl":1,"ffh":61,"e100":0,"e200":0,"e300":0,"e500":0,"unstable":24,"doorNoise":30,"flipPct":3.56,"e200Pct":0,"e300Pct":0}
+{"key":"d4","n":433,"flips":11,"ffl":11,"ffh":0,"e100":0,"e200":0,"e300":0,"e500":0,"unstable":7,"doorNoise":14,"flipPct":2.54,"e200Pct":0,"e300Pct":0}
+{"key":"d5","n":253,"flips":6,"ffl":2,"ffh":4,"e100":0,"e200":0,"e300":0,"e500":0,"unstable":3,"doorNoise":4,"flipPct":2.37,"e200Pct":0,"e300Pct":0}
+{"key":"hh","n":35009,"flips":79,"ffl":14,"ffh":65,"e100":0,"e200":0,"e300":0,"e500":0,"unstable":34,"doorNoise":48,"flipPct":0.23,"e200Pct":0,"e300Pct":0}
+{"top":{"err":40,"kind":"hh","depth":3,"fen":"rnbqkb1r/1ppppppp/p4n2/8/8/2N2N2/PPPPPPPP/R1BQKB1R w KQkq - 2 3","a":77,"h":78,"dnw":77,"v":38}}
+{"top":{"err":39,"kind":"hh","depth":3,"fen":"rnbqkbnr/pppp1ppp/4p3/8/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2","a":-1,"h":2,"dnw":-1,"v":-39}}
+{"top":{"err":34,"kind":"hh","depth":3,"fen":"rnbqkbnr/1ppp1ppp/p3p3/8/8/2N4N/PPPPPPPP/R1BQKB1R w KQkq - 0 3","a":49,"h":56,"dnw":49,"v":16}}
+{"top":{"err":31,"kind":"hh","depth":3,"fen":"rnbqkbnr/1ppppppp/p7/8/8/2P2N2/PP1PPPPP/RNBQKB1R b KQkq - 1 2","a":-22,"h":-15,"dnw":-22,"v":-52}}
+{"top":{"err":30,"kind":"hh","depth":3,"fen":"rnbqkb1r/pppppppp/5n2/8/8/2N1P3/PPPP1PPP/R1BQKBNR b KQkq - 2 2","a":-1,"h":0,"dnw":-1,"v":-30}}
+{"top":{"err":29,"kind":"hh","depth":3,"fen":"rnbqkb1r/pppp1ppp/5n2/4p3/8/2PP4/PP2PPPP/RNBQKBNR w KQkq e6 0 3","a":1,"h":4,"dnw":1,"v":-27}}
+{"top":{"err":28,"kind":"hh","depth":3,"fen":"rnbqkb1r/1ppppppp/p4n2/8/8/N4N2/PPPPPPPP/R1BQKB1R w KQkq - 2 3","a":37,"h":38,"dnw":37,"v":10}}
+{"top":{"err":28,"kind":"hh","depth":3,"fen":"rnb1kbnr/pppp1ppp/4pq2/8/5P2/2N5/PPPPP1PP/R1BQKBNR w KQkq - 2 3","a":-4,"h":1,"dnw":-4,"v":-31}}
