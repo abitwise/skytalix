@@ -79,6 +79,16 @@
  * switch, `quietPromotions`, joins `quiescenceEvasions` in picking the constant record. It changes
  * the VALUE, so every door older than `ABC-229` turns it off, and `search()` is held to the
  * TEST-ONLY door `searchWithoutQuietPromotions`, the pre-`ABC-229` `search()`, by a bounded oracle.
+ *
+ * REVERSE FUTILITY (ABC-264, `ADR-0059`) sits in the same frame, at null-window nodes only, after
+ * the table probe and BEFORE the null move: when the static evaluation less 120 cp per ply of
+ * remaining depth (depth 1 to 3) is still at least beta, the node returns beta without generating
+ * a move, and stores nothing. The rule is ONE pure predicate, `reverseFutilityCut`, which both
+ * recursions call: false at the root, above remaining depth 3, when beta is in the mate band, in
+ * check, and when the side to move has fewer than three non-pawn pieces (the null move's zugzwang
+ * guard). Its switch is `reverseFutility`. It changes the VALUE, so every door older than
+ * `ABC-264` turns it off, and `search()` is held to the TEST-ONLY door
+ * `searchWithoutReverseFutility`, the pre-`ABC-264` `search()`, by a bounded oracle (decision 8).
  */
 
 import { makeMove, makeNullMove, unmakeMove, unmakeNullMove } from "./apply.ts";
@@ -93,6 +103,7 @@ import {
   boundOf,
   clearTable,
   entryMove,
+  MATE_FLOOR,
   probeTable,
   storeEntry,
   tableCutoff,
@@ -302,6 +313,12 @@ interface Switches {
    * `search()` only; every older door, `searchWithoutQuiescenceEvasions` included, turns it off.
    */
   readonly quietPromotions: boolean;
+  /**
+   * Reverse futility (`ABC-264`, `ADR-0059`), by `reverseFutilityCut`. True on `search()` only. It
+   * is tried at null-window nodes only, inside PVS's frame, so it acts only where `pvs` is on
+   * (decision 1); every older door turns it off (decision 5).
+   */
+  readonly reverseFutility: boolean;
 }
 
 /** The least remaining depth, and the least 0-based index in the ordered list, a reduced move has. */
@@ -359,6 +376,15 @@ export function nullMoveReduction(
 ): number {
   if (ply === 0 || afterNull || depth < NULL_MOVE_MIN_DEPTH) return 0;
   if (isInCheck(position)) return 0;
+  return passesZugzwangGuard(position) ? NULL_MOVE_REDUCTION : 0;
+}
+
+/**
+ * The zugzwang guard both pruning predicates share (`ADR-0050` decision 6, `ADR-0059` decision 2):
+ * true when the side to move has at least three non-pawn pieces (knights, bishops, rooks and
+ * queens). It stops counting at the third.
+ */
+function passesZugzwangGuard(position: Position): boolean {
   const board = position.board;
   let pieces = 0;
   for (let square = 0; square < 128; square++) {
@@ -366,11 +392,39 @@ export function nullMoveReduction(
     const piece = board[square] as number;
     if (piece === EMPTY || isBlack(piece) !== position.blackToMove) continue;
     const type = pieceType(piece);
-    if (type !== PAWN && type !== KING && ++pieces === NULL_MOVE_MIN_PIECES) {
-      return NULL_MOVE_REDUCTION;
-    }
+    if (type !== PAWN && type !== KING && ++pieces === NULL_MOVE_MIN_PIECES) return true;
   }
-  return 0;
+  return false;
+}
+
+/** The deepest remaining depth reverse futility acts at, and its margin per ply of it. */
+const REVERSE_FUTILITY_MAX_DEPTH = 3;
+const REVERSE_FUTILITY_MARGIN = 120;
+
+/**
+ * THE reverse-futility rule (`ABC-264`, `ADR-0059` decision 2): true when a node of remaining
+ * `depth` at `ply`, searched against `beta`, returns beta without searching its moves. Both
+ * recursions call it, at null-window nodes, after the table probe and before the null move.
+ *
+ * False when any of these holds, in this order: the root (`ply` 0); remaining depth above 3; beta
+ * in the mate band (`|beta| >= MATE_FLOOR`); the side to move is in check; or it has fewer than
+ * three non-pawn pieces (the zugzwang guard). Otherwise true exactly when
+ * `evaluate(position) - 120 * depth >= beta`. A static evaluation is never in the mate band
+ * (`src/transposition.ts`'s `MATE_FLOOR`), so it is not tested. Check, material and the static
+ * score are derived HERE, from the position; the evaluation is last, so a guarded node pays none.
+ * Pure: it reads the position and changes nothing.
+ */
+export function reverseFutilityCut(
+  position: Position,
+  depth: number,
+  ply: number,
+  beta: number,
+): boolean {
+  if (ply === 0 || depth > REVERSE_FUTILITY_MAX_DEPTH) return false;
+  if (beta >= MATE_FLOOR || beta <= 0 - MATE_FLOOR) return false;
+  if (isInCheck(position)) return false;
+  if (!passesZugzwangGuard(position)) return false;
+  return evaluate(position) - REVERSE_FUTILITY_MARGIN * depth >= beta;
 }
 
 /** The move list in the order `switches.ordering` asks for, at `ply`. */
@@ -473,6 +527,15 @@ function negamax(
   if (slot !== -1) {
     const settled = tableCutoff(slot, depth, alpha, beta, ply);
     if (settled !== null) return settled;
+  }
+
+  // Reverse futility (`ABC-264`): a static guess, so beta and never the evaluation; nothing stored.
+  if (
+    switches.reverseFutility &&
+    alpha + 1 === beta &&
+    reverseFutilityCut(position, depth, ply, beta)
+  ) {
+    return beta;
   }
 
   if (switches.nullMove && alpha + 1 === beta) {
@@ -739,6 +802,29 @@ export function search(position: Position, depth: number): SearchResult {
     nullMove: true,
     quiescenceEvasions: true,
     quietPromotions: true,
+    reverseFutility: true,
+  });
+}
+
+/**
+ * TEST-ONLY. The pre-`ABC-264` `search()`, node for node: reverse futility off, everything else on,
+ * null move and both quiescence switches included. It is the reference `ABC-264`'s bounded drift
+ * oracle compares `search()` against, and the shipped side of every older row that measures its
+ * own heuristic alone (`ADR-0059` decisions 4 and 6). Not an engine option; nothing in production
+ * calls it.
+ */
+export function searchWithoutReverseFutility(position: Position, depth: number): SearchResult {
+  return searchRoot(position, depth, {
+    prune: true,
+    quiescence: true,
+    ordering: "full",
+    table: true,
+    pvs: true,
+    reductions: true,
+    nullMove: true,
+    quiescenceEvasions: true,
+    quietPromotions: true,
+    reverseFutility: false,
   });
 }
 
@@ -760,6 +846,7 @@ export function searchWithoutQuietPromotions(position: Position, depth: number):
     nullMove: true,
     quiescenceEvasions: true,
     quietPromotions: false,
+    reverseFutility: false,
   });
 }
 
@@ -780,6 +867,7 @@ export function searchWithoutQuiescenceEvasions(position: Position, depth: numbe
     nullMove: true,
     quiescenceEvasions: false,
     quietPromotions: false,
+    reverseFutility: false,
   });
 }
 
@@ -800,6 +888,7 @@ export function searchWithoutNullMove(position: Position, depth: number): Search
     nullMove: false,
     quiescenceEvasions: false,
     quietPromotions: false,
+    reverseFutility: false,
   });
 }
 
@@ -824,6 +913,7 @@ export function searchWithoutPruning(position: Position, depth: number): SearchR
     nullMove: false,
     quiescenceEvasions: false,
     quietPromotions: false,
+    reverseFutility: false,
   });
 }
 
@@ -846,6 +936,7 @@ export function searchWithoutQuiescence(position: Position, depth: number): Sear
     nullMove: false,
     quiescenceEvasions: false,
     quietPromotions: false,
+    reverseFutility: false,
   });
 }
 
@@ -870,6 +961,7 @@ export function searchWithoutPruningOrQuiescence(position: Position, depth: numb
     nullMove: false,
     quiescenceEvasions: false,
     quietPromotions: false,
+    reverseFutility: false,
   });
 }
 
@@ -890,6 +982,7 @@ export function searchWithoutOrdering(position: Position, depth: number): Search
     nullMove: false,
     quiescenceEvasions: false,
     quietPromotions: false,
+    reverseFutility: false,
   });
 }
 
@@ -909,6 +1002,7 @@ export function searchWithoutKillers(position: Position, depth: number): SearchR
     nullMove: false,
     quiescenceEvasions: false,
     quietPromotions: false,
+    reverseFutility: false,
   });
 }
 
@@ -929,6 +1023,7 @@ export function searchWithoutTable(position: Position, depth: number): SearchRes
     nullMove: false,
     quiescenceEvasions: false,
     quietPromotions: false,
+    reverseFutility: false,
   });
 }
 
@@ -949,6 +1044,7 @@ export function searchWithoutReductions(position: Position, depth: number): Sear
     nullMove: false,
     quiescenceEvasions: false,
     quietPromotions: false,
+    reverseFutility: false,
   });
 }
 
@@ -969,5 +1065,6 @@ export function searchWithoutPvsOrReductions(position: Position, depth: number):
     nullMove: false,
     quiescenceEvasions: false,
     quietPromotions: false,
+    reverseFutility: false,
   });
 }

@@ -501,7 +501,8 @@ describe("A4 — no fixed depth anywhere in the delivered engine", () => {
     // (`chooseMoveWithoutNullMove`, `ADR-0050` decision 2). `ABC-230` added the prior-key trim
     // (`trimPriorKeys`, `ADR-0054` decision 1): a key list and a clock, no depth. `ABC-228` added a
     // fourth door (`chooseMoveWithoutQuiescenceEvasions`, `ADR-0053` decision 6), and `ABC-229` a
-    // fifth (`chooseMoveWithoutQuietPromotions`, the same decision).
+    // fifth (`chooseMoveWithoutQuietPromotions`, the same decision). `ABC-264` added a sixth
+    // (`chooseMoveWithoutReverseFutility`, `ADR-0059` decision 4).
     expect(Object.keys(engineModule).sort()).toEqual([
       "DEFAULT_BUDGET_MS",
       "HARD_CEILING_MS",
@@ -512,6 +513,7 @@ describe("A4 — no fixed depth anywhere in the delivered engine", () => {
       "chooseMoveWithoutQuiescenceEvasions",
       "chooseMoveWithoutQuietPromotions",
       "chooseMoveWithoutReductions",
+      "chooseMoveWithoutReverseFutility",
       "createEngine",
       "trimPriorKeys",
     ]);
@@ -523,6 +525,7 @@ describe("A4 — no fixed depth anywhere in the delivered engine", () => {
     expect(engineModule.chooseMoveWithoutNullMove.length).toBe(2);
     expect(engineModule.chooseMoveWithoutQuiescenceEvasions.length).toBe(2);
     expect(engineModule.chooseMoveWithoutQuietPromotions.length).toBe(2);
+    expect(engineModule.chooseMoveWithoutReverseFutility.length).toBe(2);
     expect(createEngine.length).toBe(1);
     expect(source).not.toMatch(/export function \w+\([^)]*depth/i);
   });
@@ -1192,13 +1195,20 @@ if (RUN_DEEP) {
      * on some positions (three at the `ABC-086` base: `position-3/e2e4`, `position-4/d2d4`,
      * `position-4/f3d4`), asserted below. Moved here from the default lane by the `N8-LANE`
      * re-cut (`recut-abc086-lane`), unchanged.
+     *
+     * RE-PINNED at `ABC-264` (`ADR-0059` decision 6, `ADR-0028` fixture first): engine B's budget
+     * 3 -> 5 virtual ms. With reverse futility on, the 3 ms engine completes depth 2 where it
+     * completed 1 and plays the 1 ms engine's move on all ten positions, so the non-vacuity line
+     * below read 0. At 5 ms the two disagree on two (`position-4`'s third and fourth children:
+     * a3b4 against b2a1 and a3e3). The pre-ticket build, measured on the door, disagreed on one at
+     * 3 ms. The assertion and its bound are unchanged.
      */
     const corpus = [PERFT_CORPUS[2], PERFT_CORPUS[3]].flatMap((entry) => {
       const { name, fen } = entry as { name: string; fen: string };
       return [{ name, position: parseFen(fen) }, ...childrenOf(name, parseFen(fen)).slice(0, 4)];
     });
     const makeA = () => createEngine({ budgetMs: 1, now: virtualClock(1) });
-    const makeB = () => createEngine({ budgetMs: 3, now: virtualClock(1) });
+    const makeB = () => createEngine({ budgetMs: 5, now: virtualClock(1) });
 
     it("each engine chooses 10/10 what it chooses alone", async () => {
       expect(corpus).toHaveLength(10);

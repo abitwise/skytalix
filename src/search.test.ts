@@ -566,6 +566,9 @@ describe("A6 — no move is selected without a caller-supplied depth", () => {
     // added `orderScratchByteLength`, a number for `NFR-009` (a)'s byte sum that picks nothing.
     // ABC-228 added one more door of that shape (`searchWithoutQuiescenceEvasions`, `ADR-0053`
     // decision 6), and `ABC-229` one more (`searchWithoutQuietPromotions`, the same decision).
+    // ABC-264 added one more (`searchWithoutReverseFutility`, `ADR-0059` decision 4) and the
+    // reverse-futility rule both recursions share, `reverseFutilityCut` (decision 2), which
+    // answers "does this node return beta unsearched" for a node it is handed and picks nothing.
     // Still nothing here picks a move without being told how deep.
     expect(Object.keys(searchModule).sort()).toEqual([
       "KEY_ARRAY_CAPACITY",
@@ -576,6 +579,7 @@ describe("A6 — no move is selected without a caller-supplied depth", () => {
       "orderMoves",
       "orderScratchByteLength",
       "repeatsInPath",
+      "reverseFutilityCut",
       "search",
       "searchWithoutKillers",
       "searchWithoutNullMove",
@@ -587,6 +591,7 @@ describe("A6 — no move is selected without a caller-supplied depth", () => {
       "searchWithoutQuiescenceEvasions",
       "searchWithoutQuietPromotions",
       "searchWithoutReductions",
+      "searchWithoutReverseFutility",
       "searchWithoutTable",
     ]);
   });
@@ -603,6 +608,7 @@ describe("A6 — no move is selected without a caller-supplied depth", () => {
     expect(searchModule.searchWithoutTable.length).toBe(2);
     expect(searchWithoutReductions.length).toBe(2);
     expect(searchWithoutPvsOrReductions.length).toBe(2);
+    expect(searchModule.searchWithoutReverseFutility.length).toBe(2);
     // The predicate's depth is the node's remaining depth, required like every other.
     expect(searchModule.lateMoveReduction.length).toBe(5);
   });
