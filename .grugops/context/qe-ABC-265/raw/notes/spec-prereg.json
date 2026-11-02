@@ -1,0 +1,2 @@
+{ "refs": ["qe-ABC-265", "ABC-265", "EPIC-011", "ADR-0025", "ADR-0057", "ADR-0026", "NFR-005", "NFR-009", "NFR-008", "grugops/qe-ABC-265", "grugops/ABC-265", "e5694864", "cad6ae13", "94be445f", "src/transposition.ts", "src/transposition.shared.test.ts", "se-ABC-265/20261102T152900Z-software-engineer-observation-df9a3b3a"],
+  "notes": [ {"kind": "decision", "confidence": "high: fixed before any graded or timed run; nothing graded yet", "bodyFile": "note-prereg.md"} ] }

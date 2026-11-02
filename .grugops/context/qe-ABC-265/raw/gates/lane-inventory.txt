@@ -1,0 +1,3 @@
+The lane collects 64 test files; git tracks 64.
+No findings.
+lane-inventory rc=0

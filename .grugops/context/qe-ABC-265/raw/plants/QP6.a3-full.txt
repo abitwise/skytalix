@@ -1,0 +1,33 @@
+doors: search 11 (base 11), engine 5 (base 5); same door set: true; search.ts/engine.ts export lists equal: true/true
+sample sizes: corpus 276, grandchildren 202, puzzles 58, g11 3
+search() d5, corpus every 4th (off 1): 69 rows, 0 differ, 1596843 head nodes; base 415dcf8d069b5e9f head 415dcf8d069b5e9f (4 s)
+chooseMove fixed to 5, corpus every 4th (off 3): 69 rows, 0 differ, 1179708 head nodes; base c2c2a9c759807bac head c2c2a9c759807bac (3 s)
+search() d3-4, 2-ply descendants of the perft roots: 404 rows, 0 differ, 6560066 head nodes; base 7869d616c19b38b2 head 7869d616c19b38b2 (15 s)
+chooseMove fixed to 4, 2-ply descendants: 202 rows, 0 differ, 5165080 head nodes; base 7a54251ad5cabc07 head 7a54251ad5cabc07 (11 s)
+search() d4, shipped puzzles: 58 rows, 0 differ, 157182 head nodes; base 2a99c428617042d5 head 2a99c428617042d5 (0 s)
+chooseMove fixed to 5, shipped puzzles: 58 rows, 0 differ, 415299 head nodes; base 3a4798a7397d0e94 head 3a4798a7397d0e94 (1 s)
+chooseMove fixed to 7, game-1 positions: 3 rows, 0 differ, 473309 head nodes; base 7a134c56c6e47b4f head 7a134c56c6e47b4f (1 s)
+search() d8-9, mate and endgame roots (high table load, mate relativity): 12 rows, 0 differ, 708684 head nodes; base 613fedfb565e9f67 head 613fedfb565e9f67 (1 s)
+chooseMove fixed to 10-12, mate and endgame roots: 12 rows, 0 differ, 24428340 head nodes; base 940c27d1ec4c900d head 940c27d1ec4c900d (41 s)
+chooseMove fixed to 9, startpos/kiwipete/position-3/position-6: 4 rows, 0 differ, 5043047 head nodes; base 27cc500dea70e855 head 27cc500dea70e855 (12 s)
+search() d8, startpos/position-3/position-6: 3 rows, 0 differ, 1913238 head nodes; base bbf3904bcc73222a head bbf3904bcc73222a (5 s)
+searchWithoutKillers d4 (self), corpus every 8th (off 5): 34 rows, 0 differ, 724840 head nodes; base 0547dd71b91dcd5d head 0547dd71b91dcd5d (1 s)
+searchWithoutNullMove d4 (self), corpus every 8th (off 5): 34 rows, 0 differ, 317158 head nodes; base cd048efd05bed01a head cd048efd05bed01a (1 s)
+searchWithoutOrdering d4 (self), corpus every 8th (off 5): 34 rows, 0 differ, 51985093 head nodes; base db7d6e625782d409 head db7d6e625782d409 (84 s)
+searchWithoutPruning d3 (self), endgame roots: 6 rows, 0 differ, 2817 head nodes; base c68bec771135d7e2 head c68bec771135d7e2 (0 s)
+searchWithoutPruningOrQuiescence d3 (self), endgame roots: 6 rows, 0 differ, 2672 head nodes; base eada79d43761a4bd head eada79d43761a4bd (0 s)
+searchWithoutPvsOrReductions d4 (self), corpus every 8th (off 5): 34 rows, 0 differ, 576250 head nodes; base c34479cb3d1b0fcf head c34479cb3d1b0fcf (1 s)
+searchWithoutQuiescence d4 (self), corpus every 8th (off 5): 34 rows, 0 differ, 149316 head nodes; base 81c00980f4c67e66 head 81c00980f4c67e66 (0 s)
+searchWithoutQuiescenceEvasions d4 (self), corpus every 8th (off 5): 34 rows, 0 differ, 250405 head nodes; base 397ec8b89e9bceb7 head 397ec8b89e9bceb7 (1 s)
+searchWithoutQuietPromotions d4 (self), corpus every 8th (off 5): 34 rows, 0 differ, 367629 head nodes; base 4173b11f04c77c63 head 4173b11f04c77c63 (1 s)
+searchWithoutReductions d4 (self), corpus every 8th (off 5): 34 rows, 0 differ, 363631 head nodes; base 7b30657b1e56cdf0 head 7b30657b1e56cdf0 (1 s)
+searchWithoutTable d4 (self), corpus every 8th (off 5): 34 rows, 0 differ, 679256 head nodes; base 82f0e018f245474d head 82f0e018f245474d (1 s)
+chooseMoveWithoutNullMove to 5 (self), corpus every 8th (off 6): 34 rows, 0 differ, 607020 head nodes; base 831a30e94ad9bbe5 head 831a30e94ad9bbe5 (1 s)
+chooseMoveWithoutPvsOrReductions to 5 (self), corpus every 8th (off 6): 34 rows, 0 differ, 1422074 head nodes; base ceffba72d91d21ac head ceffba72d91d21ac (3 s)
+chooseMoveWithoutQuiescenceEvasions to 5 (self), corpus every 8th (off 6): 34 rows, 0 differ, 450642 head nodes; base ff81b444c24bc740 head ff81b444c24bc740 (1 s)
+chooseMoveWithoutQuietPromotions to 5 (self), corpus every 8th (off 6): 34 rows, 0 differ, 666546 head nodes; base 626ce885db86ed80 head 626ce885db86ed80 (2 s)
+chooseMoveWithoutReductions to 5 (self), corpus every 8th (off 6): 34 rows, 0 differ, 1184190 head nodes; base 1c1d4b41a59cee42 head 1c1d4b41a59cee42 (3 s)
+chooseMove tick clock (12 roots x 7/60/1200/6000 ticks, step 3, x prior none/rep): 96 rows, 0 differ
+in-process games (4 roots, 30-40 plies, tick clock, priorKeys, search()+door interleaved): 140 plies, 0 differ
+total fixed-depth rows 1382, head nodes 107390335; wall 804 s
+A3 IDENTITY (QE sample): ALL EQUAL

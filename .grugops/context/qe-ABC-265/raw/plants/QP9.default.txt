@@ -1,0 +1,203 @@
+
+ RUN  v4.1.12 /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/q265/P
+
+ ❯ src/transposition.shared.test.ts (11 tests | 1 failed) 8ms
+     × a key whose keyLo and keyHi each have bit 31 set hits (catches a signed compare) 2ms
+ ❯ src/engine.test.ts (65 tests | 2 failed) 575ms
+     × agrees with search() on move and score across the mate/stalemate endgames 27ms
+     × Qe5+ at ply 4 stood twice before the root: Ke1 at 404 with the keys, Kg1 at 497 without 5ms
+ ❯ src/search.null-move.test.ts (38 tests | 1 failed) 1141ms
+     × zugzwang.001: chooseMove on a frozen clock to depth 9 plays e1f1 207ms
+ ❯ src/transposition.test.ts (25 tests | 2 failed) 109ms
+     × a mated-in-2 stored at ply 2 reads -(MATE_SCORE - 6) at ply 2 and -(MATE_SCORE - 8) at ply 4 5ms
+     × position-3 at depth 4 — the same score, and the work changes: 1 377 nodes with the table, 1 533 without 15ms
+ ❯ src/search.pvs-lmr.test.ts (20 tests | 3 failed) 114ms
+     × kp-vs-k at depth 4 — the default lane's standing guard 29ms
+     × search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions 12ms
+     × chooseMove(): the same, deepened to depth 4 in the engine's own recursion 15ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 9 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/engine.test.ts > A3 (identity) — the completed iteration equals search() in move AND score > agrees with search() on move and score across the mate/stalemate endgames
+AssertionError: expected [ …(2) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "kp-vs-k @ depth 4: move e1f2 (scores 137) vs search e2e3 (scores 120)",
++   "kp-vs-k @ depth 4: score 137 vs search 120",
++ ]
+
+ ❯ src/engine.test.ts:480:62
+    478|     // reaches depth 4 (the stalemate is inside the horizon). Both are…
+    479|     // alone reds both of the drift mutants QE found surviving the del…
+    480|     expect(identityDivergences(DEFAULT_LANE_CORPUS, [3, 5])).toEqual([…
+       |                                                              ^
+    481|   });
+    482| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/9]⎯
+
+ FAIL  src/engine.test.ts > ABC-249 — a pre-root repetition met four plies deep scores 0 (QE-248-c) > Qe5+ at ply 4 stood twice before the root: Ke1 at 404 with the keys, Kg1 at 497 without
+AssertionError: expected { move: 'f1g1', score: 239 } to deeply equal { move: 'f1e1', score: 404 }
+
+- Expected
++ Received
+
+  {
+-   "move": "f1e1",
+-   "score": 404,
++   "move": "f1g1",
++   "score": 239,
+  }
+
+ ❯ src/engine.test.ts:1729:79
+    1727|     const withKeys = chooseMove(game.position, { ...fixedDepth(4), pri…
+    1728|     expect(toFen(game.position)).toBe(root);
+    1729|     expect(withKeys && { move: label(withKeys.move), score: withKeys.s…
+       |                                                                               ^
+    1730|       move: "f1e1",
+    1731|       score: 404,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/9]⎯
+
+ FAIL  src/search.null-move.test.ts > A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth > zugzwang.001: chooseMove on a frozen clock to depth 9 plays e1f1
+AssertionError: expected 'e1e6' to be 'e1f1' // Object.is equality
+
+Expected: "e1f1"
+Received: "e1e6"
+
+ ❯ <anonymous> src/search.null-move.test.ts:651:78
+    649|       expect(choice?.depth).toBe(depth);
+    650|       const played = choice as EngineChoice;
+    651|       expect(`${squareName(played.move.from)}${squareName(played.move.…
+       |                                                                              ^
+    652|       // A side with no non-pawn piece never passes: the K+P rows make…
+    653|       if (name.startsWith("kpk-")) expect(nulls).toHaveLength(0);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/9]⎯
+
+ FAIL  src/search.pvs-lmr.test.ts > PVS identity — searchWithoutReductions scores what searchWithoutPvsOrReductions scores > kp-vs-k at depth 4 — the default lane's standing guard
+AssertionError: expected [ Array(1) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "kp-vs-k: 120 with PVS, 137 without",
++ ]
+
+ ❯ <anonymous> src/search.pvs-lmr.test.ts:206:42
+    204|     const positions = ENDGAMES.filter(({ name }) => name === "kp-vs-k"…
+    205|     expect(positions).toHaveLength(1);
+    206|     expect(pvsDivergences(positions, 4)).toEqual([]);
+       |                                          ^
+    207|   });
+    208|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/9]⎯
+
+ FAIL  src/search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one > search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions
+AssertionError: expected +0 to be 5 // Object.is equality
+
+- Expected
++ Received
+
+- 5
++ 0
+
+ ❯ <anonymous> src/search.pvs-lmr.test.ts:499:27
+    497|       "no reduced fail-high was re-searched at a null-window node",
+    498|     ).toBeGreaterThan(0);
+    499|     expect(shipped.score).toBe(reference.score);
+       |                           ^
+    500|     expect(label(shipped.move as Move)).toBe(label(reference.move as M…
+    501|     expect([shipped.score, label(shipped.move as Move)]).toEqual([4, "…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/9]⎯
+
+ FAIL  src/search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one > chooseMove(): the same, deepened to depth 4 in the engine's own recursion
+AssertionError: expected -7 to be 4 // Object.is equality
+
+- Expected
++ Received
+
+- 4
++ -7
+
+ ❯ <anonymous> src/search.pvs-lmr.test.ts:516:27
+    514|       "no reduced fail-high was re-searched at a null-window node",
+    515|     ).toBeGreaterThan(0);
+    516|     expect(shipped.score).toBe(reference.score);
+       |                           ^
+    517|     expect(label(shipped.move)).toBe(label(reference.move));
+    518|     expect([shipped.score, label(shipped.move)]).toEqual([-7, "b3f3"]);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/9]⎯
+
+ FAIL  src/transposition.shared.test.ts > ABC-265 A2 — the XOR check > a key whose keyLo and keyHi each have bit 31 set hits (catches a signed compare)
+AssertionError: expected 4294954951 to be -12345 // Object.is equality
+
+- Expected
++ Received
+
+- -12345
++ 4294954951
+
+ ❯ src/transposition.shared.test.ts:173:58
+    171|     const slot = probeTable(high);
+    172|     expect(slot).toBe(0x0abc);
+    173|     expect(tableCutoff(slot, 7, -Infinity, Infinity, 0)).toBe(-12_345);
+       |                                                          ^
+    174|   });
+    175|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/9]⎯
+
+ FAIL  src/transposition.test.ts > A4 — a mate score is correct at every ply the position is reached at > a mated-in-2 stored at ply 2 reads -(MATE_SCORE - 6) at ply 2 and -(MATE_SCORE - 8) at ply 4
+AssertionError: expected 4294937298 to be -29994 // Object.is equality
+
+- Expected
++ Received
+
+- -29994
++ 4294937298
+
+ ❯ <anonymous> src/transposition.test.ts:173:58
+    171|     storeEntry(key, 4, BOUND_EXACT, 0 - (MATE_SCORE - 6), 2, move);
+    172|     const slot = probeTable(key);
+    173|     expect(tableCutoff(slot, 4, -Infinity, Infinity, 2)).toBe(0 - (MAT…
+       |                                                          ^
+    174|     expect(tableCutoff(slot, 4, -Infinity, Infinity, 4)).toBe(0 - (MAT…
+    175|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/9]⎯
+
+ FAIL  src/transposition.test.ts > A1 — table-on and table-off scores are identical > position-3 at depth 4 — the same score, and the work changes: 1 377 nodes with the table, 1 533 without
+AssertionError: expected 1336 to be 1377 // Object.is equality
+
+- Expected
++ Received
+
+- 1377
++ 1336
+
+ ❯ <anonymous> src/transposition.test.ts:378:22
+    376|     const off = searchWithoutTable(parseFen(fenOf("position-3")), 4);
+    377|     expect(on.score).toBe(off.score);
+    378|     expect(on.nodes).toBe(1_377);
+       |                      ^
+    379|     expect(off.nodes).toBe(1_533);
+    380|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/9]⎯
+
+
+ Test Files  5 failed | 3 passed (8)
+      Tests  9 failed | 180 passed (189)
+   Start at  16:25:24
+   Duration  1.67s (transform 0ms, setup 0ms, import 584ms, tests 2.13s, environment 1ms)
+

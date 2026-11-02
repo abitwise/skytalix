@@ -1,0 +1,1 @@
+QP5: '  hitScore = score | 0;\n' -> '  // QP5: hitScore not refreshed\n'

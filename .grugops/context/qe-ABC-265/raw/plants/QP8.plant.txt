@@ -1,0 +1,1 @@
+QP8: '  table.fill(0);\n' -> '  for (let i = 2; i < table.length; i += 4) table[i] = 0;\n'

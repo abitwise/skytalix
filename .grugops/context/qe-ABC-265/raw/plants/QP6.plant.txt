@@ -1,0 +1,1 @@
+QP6: '  const packed = (table[(slot << 2) + 2] as number) & MOVE_BITS;\n' -> '  const packed = (slot === hitSlot ? hitData : (table[(slot << 2) + 2] as number)) & MOVE_BITS;\n'

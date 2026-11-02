@@ -1,0 +1,7 @@
+SEARCH_DEEP-transposition rc=0 secs=17 load1=2.94  Tests 40 passed (40)
+ENGINE_DEEP-transposition rc=0 secs=55 load1=2.21  Tests 26 passed (26)
+SEARCH_DEEP-search.null-move rc=0 secs=66 load1=2.18  Tests 44 passed (44)
+SEARCH_DEEP-search.pvs-lmr rc=0 secs=58 load1=1.55  Tests 29 passed (29)
+SEARCH_DEEP-search rc=0 secs=43 load1=1.37  Tests 57 passed (57)
+PUZZLE_DEEP-puzzle-suite rc=0 secs=15 load1=1.37  Tests 18 passed (18)
+ENGINE_DEEP-engine rc=0 secs=190 load1=1.41  Tests 78 passed (78)
