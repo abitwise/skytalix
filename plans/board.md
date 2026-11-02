@@ -1,3 +1,4 @@
+_Updated: 2026-11-02 Orchestrator (orch-2026-10-30a) — **ABC-268 built** (all counts exact; 21/21 plants red) → In Review → `qe-ABC-268` part 1. Owed (Scribe, at merge): AGENTS.md line for src/search.futility.test.ts under SEARCH_DEEP=1. Running: qe-ABC-268._
 _Updated: 2026-11-02 Orchestrator (orch-2026-10-30a) — `arch-ABC-266-repropose` merged: **NO WIN** (11 cells, sealed rule; T4/T12 plain = depth 7 like T1; T12SDP/T4SDP depth 8 but lose 1.7–2 of 20 on move quality; deeper-entry rule inflates depth alone). **ABC-266 PARKED; Threads stay 1.** ADR-0062 stays PROPOSED (not in force); ADR-0057 D2.5 estimate marked unsupported. ABC-265 (shared table) stands on its own. Owner option: fund a ~30 min re-probe. Running: se-ABC-268._
 _Updated: 2026-11-02 Orchestrator (orch-2026-10-30a) — `bapm-P3-page` merged: **ABC-268 (P3 futility) cut, DoR 10/10 (b) → pulled → `se-ABC-268`** (build only). ABC-265 page citations fixed; ABC-266 page records the D12 MISS. Running: arch-ABC-266-repropose, se-ABC-268._
 _Updated: 2026-11-02 Orchestrator (orch-2026-10-30a) — **qe-ABC-266-d12 MISS** (not loaded): played depth median 7 / 7 / 7 at 100 ms for Threads 1 / 4 / 12 (1000 ms: 10 / 9.5 / 10); workers in lockstep 19/20; per-worker rate 0.69× at T12. ABC-266 build blocked → `arch-ABC-266-repropose` (helper diversity, ADR-0058 at T≥2, 4-fast-core cap; pre-registered). ALONE window closed. → `bapm-P3-page` (cut the futility ticket). Running: those two._
@@ -1364,8 +1365,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-268] P3: futility pruning skips late quiet moves at null-window nodes of remaining depth 1–3 (150/350/550 cp) behind an off-door pair (EPIC-011 Phase 2; size: S; P2; GAIN; DoR 10/10 (b)) **2026-11-02: pulled → `se-ABC-268` (build only; A6 read and merge wait owner acceptance of ADR-0061).**
+## In Development (WIP 0/3)
 
 
 
@@ -1393,7 +1393,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
+## In Review (WIP 2/3)
+- [ABC-268] P3: futility pruning skips late quiet moves at null-window nodes of remaining depth 1–3 (150/350/550 cp) behind an off-door pair (EPIC-011 Phase 2; size: S; P2; GAIN; DoR 10/10 (b)) **2026-11-02: pulled → `se-ABC-268` (build only; A6 read and merge wait owner acceptance of ADR-0061).** **→ In Review 2026-11-02 (se-ABC-268 done 4ca819c3): A1–A5 met; every count exact (A4 0.796/0.788/0.830/0.822×, reach +0.279; audit 30 272/2 943/0 flips); 21/21 plants red; G6 9/9, 10/10; npm test 2 407 → `qe-ABC-268` part 1 (A6 waits owner acceptance of ADR-0061).**
 - [ABC-265] TH-1: one lockless shared transposition table (4×Uint32 slot, XOR check), node-equal at Threads 1 (EPIC-011 threads; size: M; P2; DoR 9/10 — ADR-0025 amendment owed → `arch-ABC-265`; pullable beside Phase 2) **2026-11-02: DoR 10/10 (b) → pulled → `se-ABC-265` (build; merge waits owner acceptance of the ADR-0025 amendment).** **→ In Review 2026-11-02 (se-ABC-265 done cad6ae13): all rows met incl. T10 ×2; ABC-081/122/208 unedited green; identity 12 186 rows / 149.9 M nodes 0 diffs; G6 met (9/9, 10/10); store ~2× per call, probe flat; npm test 2 387; 6 plants red → `qe-ABC-265`. Merge waits owner acceptance of the ADR-0025 amendment.** **2026-11-02 qe-ABC-265 PASS_WITH_GAPS (6a4b0d37; …d9879b9c): A1–A5 met; own identity sample 0 diffs (1 382 rows / 107 M nodes + 96 tick-clock + 140 game plies); G6 9/9, 10/10; npm test 2 387 ×3; QE verdict signs UAT. QE-265-a LOW (zero-data-word row) → `se-ABC-265-fix`; b–e INFO. **Merge waits owner acceptance of the ADR-0025 amendment.**
 
 
