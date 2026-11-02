@@ -1203,7 +1203,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   one hop at pull, when it checks `Ready for Dev`'s exit at that moment; the row records the pull.
 
   HEADING FORMAT (spec §6.1): each column is an H2 heading carrying its live/limit WIP count,
-  e.g. `## In Development (WIP 1/3)` — the left number is how many tickets are in the column
+  e.g. `## In Development (WIP 0/3)` — the left number is how many tickets are in the column
   now, the right number is the limit from config. Unlimited columns read `(WIP unlimited)`;
   Blocked is visible and time-tracked (no WIP limit) and reads `(visible, time-tracked)`.
   INVARIANT: the column H2 headings and the rows of the `## Columns` table are the same 13 names in the
@@ -1213,10 +1213,10 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 1/3)
+    ## In Development (WIP 0/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
-    ## In Review (WIP 0/3)
+    ## In Review (WIP 1/3)
     - [ABC-012] Portfolio FX conversion  (PR: #41, QE: running)
 
   BOARD <-> TICKET CONTRACT: each ticket file (`plans/tickets/<prefix>-xxx.md`) carries a
@@ -1340,8 +1340,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-264] P2: reverse futility (static null move) at shallow depth behind an off-door, with mate, check and zugzwang guards (EPIC-011 Phase 2, first; size: S, priority: P2; GAIN; DoR 9/10 — ADR owed → `arch-ABC-264`) **2026-11-02: ADR-0059 PROPOSED (arch-ABC-264 …b48c5a3e): probe 0.59–0.64× nodes at depth 8, drift 97.3 % ≤ 25 cp, 0 mate flips, zugzwang 7/7; A4 bar 0.75×, A3 cap 160 cp. DoR 10/10 on reading (b) → pulled → `se-ABC-264` (build; read/merge wait for owner acceptance of ADR-0059); page rows → `bapm-ABC-264-rows`.**
+## In Development (WIP 0/3)
 
 
 
@@ -1369,7 +1368,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-264] P2: reverse futility (static null move) at shallow depth behind an off-door, with mate, check and zugzwang guards (EPIC-011 Phase 2, first; size: S, priority: P2; GAIN; DoR 9/10 — ADR owed → `arch-ABC-264`) **2026-11-02: ADR-0059 PROPOSED (arch-ABC-264 …b48c5a3e): probe 0.59–0.64× nodes at depth 8, drift 97.3 % ≤ 25 cp, 0 mate flips, zugzwang 7/7; A4 bar 0.75×, A3 cap 160 cp. DoR 10/10 on reading (b) → pulled → `se-ABC-264` (build; read/merge wait for owner acceptance of ADR-0059); page rows → `bapm-ABC-264-rows`.** **→ In Review 2026-11-02 (se-ABC-264 done 4e6a59ee; A1 0 diffs on 1 380 door rows; A2 predicate table + 9 planted defects red; A3 drift 97.33 % / max 107 cp, 0 mate flips, zugzwang 7/7; A4 0.590 / 0.637 / 0.617 / 0.628× = probe counts exactly; 2 403/2 403; review OK — ABC-086 A6 fixture budget 3→5 ms re-pin accepted (assertion unchanged)) → `qe-ABC-264` part 1 (all but A6 games); A6 waits owner acceptance of ADR-0059**
 
 
 
