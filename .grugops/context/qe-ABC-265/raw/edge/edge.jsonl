@@ -1,0 +1,2 @@
+{"tree":"base","preByteLength":"0","preBuffer":"\"no tableBuffer export\"","preProbe0n":"throws TypeError","preProbeK":"throws TypeError","preStore":"throws TypeError","preProbeKAfterStore":"throws TypeError","postProbe0n":"-1","store0nThenProbe":"0","cut0n":"5","bigKeyProbe":"-1","bigKeyProbeTrunc":"5"}
+{"tree":"head","preByteLength":"0","preBuffer":"null","preProbe0n":"0","preProbeK":"-1","preProbeKAfterStore":"-1","postProbe0n":"-1","store0nThenProbe":"0","cut0n":"5","bigKeyProbe":"-1","bigKeyProbeTrunc":"5"}

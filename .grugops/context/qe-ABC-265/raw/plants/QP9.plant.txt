@@ -1,0 +1,1 @@
+QP9: '  hitScore = score | 0;\n' -> '  hitScore = score;\n'

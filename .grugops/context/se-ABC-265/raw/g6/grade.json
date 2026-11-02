@@ -1,0 +1,65 @@
+{
+ "g6": {
+  "kiwipete": {
+   "B": [
+    9,
+    9,
+    8,
+    9,
+    8
+   ],
+   "H": [
+    8,
+    9,
+    9,
+    9,
+    9
+   ],
+   "medB": 9,
+   "medH": 9,
+   "geBase": true,
+   "min": 8,
+   "warn": 0,
+   "nodesMedB": 3495661,
+   "nodesMedH": 3516141
+  },
+  "position-6": {
+   "B": [
+    10,
+    10,
+    10,
+    10,
+    10
+   ],
+   "H": [
+    10,
+    10,
+    10,
+    10,
+    10
+   ],
+   "medB": 10,
+   "medH": 10,
+   "geBase": true,
+   "min": 10,
+   "warn": 0,
+   "nodesMedB": 3486491,
+   "nodesMedH": 3541787
+  }
+ },
+ "g6Met": true,
+ "g5": {
+  "reads": 20,
+  "maxMs": 4000.8,
+  "over4000": 12,
+  "over5000": 0
+ },
+ "g11": [],
+ "host": {
+  "load1": [
+   0.53,
+   1.08
+  ],
+  "tctlMax": 74.875
+ }
+}

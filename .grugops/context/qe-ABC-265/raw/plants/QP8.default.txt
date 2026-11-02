@@ -1,0 +1,40 @@
+
+ RUN  v4.1.12 /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/q265/P
+
+ ❯ src/transposition.shared.test.ts (11 tests | 1 failed) 13ms
+     × the store's words are keyLo ^ data, keyHi ^ score, data, score; a clear zeroes them 4ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/transposition.shared.test.ts > ABC-265 A1 — the layout: four Uint32 words a slot over one SharedArrayBuffer > the store's words are keyLo ^ data, keyHi ^ score, data, score; a clear zeroes them
+AssertionError: expected [ 2593572068, 3989547207, +0, …(1) ] to deeply equal [ +0, +0, +0, +0 ]
+
+- Expected
++ Received
+
+  [
+-   0,
+-   0,
+-   0,
++   2593572068,
++   3989547207,
+    0,
++   4294966975,
+  ]
+
+ ❯ src/transposition.shared.test.ts:109:27
+    107|     expect((w2 >>> 17) & 3).toBe(BOUND_EXACT);
+    108|     clearTable();
+    109|     expect(wordsOf(slot)).toEqual([0, 0, 0, 0]);
+       |                           ^
+    110|     expect(probeTable(k)).toBe(-1);
+    111|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 7 passed (8)
+      Tests  1 failed | 188 passed (189)
+   Start at  16:25:11
+   Duration  1.62s (transform 0ms, setup 0ms, import 590ms, tests 1.93s, environment 1ms)
+

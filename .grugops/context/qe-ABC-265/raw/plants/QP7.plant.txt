@@ -1,0 +1,1 @@
+QP7: 'if (slot !== hitSlot || hitData >>> DEPTH_SHIFT !== depth) return null;' -> 'if (hitData >>> DEPTH_SHIFT !== depth) return null;'

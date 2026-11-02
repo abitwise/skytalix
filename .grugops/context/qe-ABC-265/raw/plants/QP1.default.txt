@@ -1,0 +1,500 @@
+
+ RUN  v4.1.12 /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/q265/P
+
+ ❯ src/engine.test.ts (65 tests | 13 failed) 268ms
+     × returns identical move, score, depth, nodes and elapsedMs on perft root kiwipete 26ms
+     × returns identical move, score, depth, nodes and elapsedMs on perft root position-3 16ms
+     × returns identical move, score, depth, nodes and elapsedMs on perft root position-4 16ms
+     × returns identical move, score, depth, nodes and elapsedMs on perft root position-6 19ms
+     × at budgetMs 5, maxDepth 50 returns the same depth and move as no maxDepth 6ms
+     × KQ v K, Black to move: d8e8 would stand a second time; node-equal to base 1ms
+     × K v KQ, White to move: d1e1 would stand a second time; node-equal to base 1ms
+     × A9 (probe H4): untrimmed prior keys at root clock 0 are node-equal to base 2ms
+     × A9: on the A1 fixtures with the root clock set to 0, the same keys are node-equal to base 1ms
+     × A5: the search reads at most the last 100 prior keys, whatever it is handed 1ms
+     × A4: an empty list is node-equal to an absent one over the endgames and the thirty 4ms
+     × the three test-only doors ignore prior keys: node-equal with and without them 2ms
+     × Qe5+ at ply 4 stood twice before the root: Ke1 at 404 with the keys, Kg1 at 497 without 3ms
+ ❯ src/search.null-move.test.ts (38 tests | 2 failed) 761ms
+     × position-6, the even readings 4 to 24: 0 mutated roots, and aborts landing inside a null subtree 149ms
+     × the in-check root really is in check, and its search still finds null-window nodes to pass at 1ms
+ ❯ src/transposition.test.ts (25 tests | 3 failed) 73ms
+     × is empty after clearTable 5ms
+     × position-3 at depth 4 — the same score, and the work changes: 1 377 nodes with the table, 1 533 without 12ms
+     × search(), depth 4: the perpetual scores exactly 0 and is played — in 7 295 nodes 16ms
+ ❯ src/transposition.shared.test.ts (11 tests | 1 failed) 6ms
+     × the store's words are keyLo ^ data, keyHi ^ score, data, score; a clear zeroes them 3ms
+stdout | src/search.pvs-lmr.test.ts > A5 — search() visits fewer nodes than searchWithoutPvsOrReductions at depth 4 > position-3 at depth 4 — the default lane's standing guard
+ABC-121 A5 position-3 d4: 17 / 15 = 113.3%
+
+ ❯ src/search.pvs-lmr.test.ts (20 tests | 1 failed) 49ms
+     × position-3 at depth 4 — the default lane's standing guard 6ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 20 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/engine.test.ts > ABC-170 A3 — absent limits are today's engine, clock read for clock read > returns identical move, score, depth, nodes and elapsedMs on perft root kiwipete
+AssertionError: expected { name: 'kiwipete', …(5) } to deeply equal { name: 'kiwipete', …(5) }
+
+- Expected
++ Received
+
+  {
+-   "depth": 2,
++   "depth": 3,
+    "elapsedMs": 55,
+    "move": {
+      "captured": 11,
+      "flags": 0,
+      "from": 20,
+      "piece": 3,
+      "promotion": 0,
+      "to": 80,
+    },
+    "name": "kiwipete",
+-   "nodes": 9965,
++   "nodes": 8941,
+    "score": 30,
+  }
+
+ ❯ src/engine.test.ts:1371:33
+    1369|         maxNodes: Number.MAX_SAFE_INTEGER,
+    1370|       });
+    1371|       expect({ name, ...huge }).toEqual({ name, ...absent });
+       |                                 ^
+    1372|     });
+    1373|   }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/20]⎯
+
+ FAIL  src/engine.test.ts > ABC-170 A3 — absent limits are today's engine, clock read for clock read > returns identical move, score, depth, nodes and elapsedMs on perft root position-3
+AssertionError: expected { name: 'position-3', …(5) } to deeply equal { name: 'position-3', …(5) }
+
+- Expected
++ Received
+
+  {
+-   "depth": 5,
++   "depth": 6,
+    "elapsedMs": 55,
+    "move": {
+      "captured": 9,
+      "flags": 0,
+      "from": 49,
+      "piece": 4,
+      "promotion": 0,
+      "to": 53,
+    },
+    "name": "position-3",
+-   "nodes": 5138,
++   "nodes": 4114,
+    "score": 97,
+  }
+
+ ❯ src/engine.test.ts:1371:33
+    1369|         maxNodes: Number.MAX_SAFE_INTEGER,
+    1370|       });
+    1371|       expect({ name, ...huge }).toEqual({ name, ...absent });
+       |                                 ^
+    1372|     });
+    1373|   }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/20]⎯
+
+ FAIL  src/engine.test.ts > ABC-170 A3 — absent limits are today's engine, clock read for clock read > returns identical move, score, depth, nodes and elapsedMs on perft root position-4
+AssertionError: expected { name: 'position-4', …(5) } to deeply equal { name: 'position-4', …(5) }
+
+- Expected
++ Received
+
+  {
+-   "depth": 3,
++   "depth": 4,
+    "elapsedMs": 55,
+    "move": {
+      "captured": 0,
+      "flags": 0,
+      "from": 50,
+      "piece": 1,
+      "promotion": 0,
+      "to": 66,
+    },
+    "name": "position-4",
+-   "nodes": 8279,
+-   "score": -352,
++   "nodes": 7255,
++   "score": -456,
+  }
+
+ ❯ src/engine.test.ts:1371:33
+    1369|         maxNodes: Number.MAX_SAFE_INTEGER,
+    1370|       });
+    1371|       expect({ name, ...huge }).toEqual({ name, ...absent });
+       |                                 ^
+    1372|     });
+    1373|   }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/20]⎯
+
+ FAIL  src/engine.test.ts > ABC-170 A3 — absent limits are today's engine, clock read for clock read > returns identical move, score, depth, nodes and elapsedMs on perft root position-6
+AssertionError: expected { name: 'position-6', …(5) } to deeply equal { name: 'position-6', …(5) }
+
+- Expected
++ Received
+
+@@ -8,8 +8,8 @@
+      "piece": 2,
+      "promotion": 0,
+      "to": 67,
+    },
+    "name": "position-6",
+-   "nodes": 7579,
++   "nodes": 7874,
+    "score": 85,
+  }
+
+ ❯ src/engine.test.ts:1371:33
+    1369|         maxNodes: Number.MAX_SAFE_INTEGER,
+    1370|       });
+    1371|       expect({ name, ...huge }).toEqual({ name, ...absent });
+       |                                 ^
+    1372|     });
+    1373|   }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/20]⎯
+
+ FAIL  src/engine.test.ts > ABC-170 A5 — the limits only shorten; the ceiling still holds > at budgetMs 5, maxDepth 50 returns the same depth and move as no maxDepth
+AssertionError: expected 5 to be 4 // Object.is equality
+
+- Expected
++ Received
+
+- 4
++ 5
+
+ ❯ src/engine.test.ts:1415:28
+    1413|         maxDepth: 50,
+    1414|       }) as EngineChoice;
+    1415|       expect(capped.depth).toBe(free.depth);
+       |                            ^
+    1416|       expect(label(capped.move)).toBe(label(free.move));
+    1417|     }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/20]⎯
+
+ FAIL  src/engine.test.ts > ABC-230 A8 — a second occurrence before the root is not a draw (probe H2) > KQ v K, Black to move: d8e8 would stand a second time; node-equal to base
+AssertionError: expected { move: 'd8c8', score: -1006, …(2) } to deeply equal { move: 'd8c8', score: -1006, …(2) }
+
+- Expected
++ Received
+
+  {
+    "depth": 4,
+    "move": "d8c8",
+-   "nodes": 253,
++   "nodes": 269,
+    "score": -1006,
+  }
+
+ ❯ src/engine.test.ts:1578:33
+    1576|       const withKeys = chooseMove(game.position, { ...fixedDepth(4), p…
+    1577|       const base = chooseMove(parseFen(root), fixedDepth(4));
+    1578|       expect(figures(withKeys)).toEqual(figures(base));
+       |                                 ^
+    1579|       // H2's figures: the one-match rule would play the repetition at…
+    1580|       expect(base && { move: label(base.move), score: base.score }).to…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/20]⎯
+
+ FAIL  src/engine.test.ts > ABC-230 A8 — a second occurrence before the root is not a draw (probe H2) > K v KQ, White to move: d1e1 would stand a second time; node-equal to base
+AssertionError: expected { move: 'd1c1', score: -1006, …(2) } to deeply equal { move: 'd1c1', score: -1006, …(2) }
+
+- Expected
++ Received
+
+  {
+    "depth": 4,
+    "move": "d1c1",
+-   "nodes": 229,
++   "nodes": 247,
+    "score": -1006,
+  }
+
+ ❯ src/engine.test.ts:1578:33
+    1576|       const withKeys = chooseMove(game.position, { ...fixedDepth(4), p…
+    1577|       const base = chooseMove(parseFen(root), fixedDepth(4));
+    1578|       expect(figures(withKeys)).toEqual(figures(base));
+       |                                 ^
+    1579|       // H2's figures: the one-match rule would play the repetition at…
+    1580|       expect(base && { move: label(base.move), score: base.score }).to…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/20]⎯
+
+ FAIL  src/engine.test.ts > ABC-230 A9 and A5 — the clock and the 100-key cap bound what the search reads > A9 (probe H4): untrimmed prior keys at root clock 0 are node-equal to base
+AssertionError: expected { move: 'a7a6', score: -1032, …(2) } to deeply equal { move: 'a7a6', score: -1032, …(2) }
+
+- Expected
++ Received
+
+  {
+    "depth": 4,
+    "move": "a7a6",
+-   "nodes": 281,
++   "nodes": 1271,
+    "score": -1032,
+  }
+
+ ❯ src/engine.test.ts:1595:92
+    1593|     expect(untrimmed).toHaveLength(9);
+    1594|     const root = toFen(game.position);
+    1595|     expect(figures(chooseMove(game.position, { ...fixedDepth(4), prior…
+       |                                                                                            ^
+    1596|       figures(chooseMove(parseFen(root), fixedDepth(4))),
+    1597|     );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/20]⎯
+
+ FAIL  src/engine.test.ts > ABC-230 A9 and A5 — the clock and the 100-key cap bound what the search reads > A9: on the A1 fixtures with the root clock set to 0, the same keys are node-equal to base
+AssertionError: KQ v K, Black to move: expected { move: 'd8c8', score: -1006, …(2) } to deeply equal { move: 'd8c8', score: -1006, …(2) }
+
+- Expected
++ Received
+
+  {
+    "depth": 4,
+    "move": "d8c8",
+-   "nodes": 253,
++   "nodes": 286,
+    "score": -1006,
+  }
+
+ ❯ src/engine.test.ts:1608:9
+    1606|         figures(chooseMove(parseFen(root), { ...fixedDepth(4), priorKe…
+    1607|         fixture.name,
+    1608|       ).toEqual(figures(chooseMove(parseFen(root), fixedDepth(4))));
+       |         ^
+    1609|     }
+    1610|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/20]⎯
+
+ FAIL  src/engine.test.ts > ABC-230 A9 and A5 — the clock and the 100-key cap bound what the search reads > A5: the search reads at most the last 100 prior keys, whatever it is handed
+AssertionError: expected { move: 'd8c8', score: -1006, …(2) } to deeply equal { move: 'd8c8', score: -1006, …(2) }
+
+- Expected
++ Received
+
+  {
+    "depth": 4,
+    "move": "d8c8",
+-   "nodes": 253,
++   "nodes": 254,
+    "score": -1006,
+  }
+
+ ❯ src/engine.test.ts:1654:27
+    1652|       priorKeys: [...prior, ...filler(100)],
+    1653|     });
+    1654|     expect(figures(past)).toEqual(figures(chooseMove(parseFen(root), f…
+       |                           ^
+    1655|   });
+    1656|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/20]⎯
+
+ FAIL  src/engine.test.ts > ABC-230 A3 and A4 — no prior keys is base, node for node, and the doors take none > A4: an empty list is node-equal to an absent one over the endgames and the thirty
+AssertionError: kq-corner: expected { move: 'b1e4', score: 29997, …(2) } to deeply equal { move: 'b1e4', score: 29997, …(2) }
+
+- Expected
++ Received
+
+  {
+    "depth": 4,
+    "move": "b1e4",
+-   "nodes": 1464,
++   "nodes": 1458,
+    "score": 29997,
+  }
+
+ ❯ src/engine.test.ts:1680:36
+    1678|         priorKeys: [],
+    1679|       });
+    1680|       expect(figures(empty), name).toEqual(figures(absent));
+       |                                    ^
+    1681|     }
+    1682|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/20]⎯
+
+ FAIL  src/engine.test.ts > ABC-230 A3 and A4 — no prior keys is base, node for node, and the doors take none > the three test-only doors ignore prior keys: node-equal with and without them
+AssertionError: expected { move: 'd8c7', score: -1006, …(2) } to deeply equal { move: 'd8c7', score: -1006, …(2) }
+
+- Expected
++ Received
+
+  {
+    "depth": 4,
+    "move": "d8c7",
+-   "nodes": 321,
++   "nodes": 1127,
+    "score": -1006,
+  }
+
+ ❯ src/engine.test.ts:1693:85
+    1691|       chooseMoveWithoutPvsOrReductions,
+    1692|     ]) {
+    1693|       expect(figures(door(parseFen(root), { ...fixedDepth(4), priorKey…
+       |                                                                                     ^
+    1694|         figures(door(parseFen(root), fixedDepth(4))),
+    1695|       );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/20]⎯
+
+ FAIL  src/engine.test.ts > ABC-249 — a pre-root repetition met four plies deep scores 0 (QE-248-c) > Qe5+ at ply 4 stood twice before the root: Ke1 at 404 with the keys, Kg1 at 497 without
+AssertionError: expected { move: 'f1e1', score: 404 } to deeply equal { move: 'f1g1', score: 497 }
+
+- Expected
++ Received
+
+  {
+-   "move": "f1g1",
+-   "score": 497,
++   "move": "f1e1",
++   "score": 404,
+  }
+
+ ❯ src/engine.test.ts:1738:67
+    1736|     const base = chooseMove(position, fixedDepth(4));
+    1737|     expect(toFen(position)).toBe(root);
+    1738|     expect(base && { move: label(base.move), score: base.score }).toEq…
+       |                                                                   ^
+    1739|       move: "f1g1",
+    1740|       score: 497,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/20]⎯
+
+ FAIL  src/search.null-move.test.ts > QE-208-a — an abort inside a null move's subtree still hands the root back byte-identical > position-6, the even readings 4 to 24: 0 mutated roots, and aborts landing inside a null subtree
+AssertionError: expected 2 to be greater than or equal to 3
+ ❯ <anonymous> src/search.null-move.test.ts:514:24
+    512|     );
+    513|     expect(mutated).toEqual([]);
+    514|     expect(insideNull).toBeGreaterThanOrEqual(3); // not vacuous: the …
+       |                        ^
+    515|   });
+    516| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/20]⎯
+
+ FAIL  src/search.null-move.test.ts > A2 — the instrumented search makes 0 null moves in check, and 0 below three non-pawn pieces > the in-check root really is in check, and its search still finds null-window nodes to pass at
+AssertionError: expected 0 to be greater than 0
+ ❯ <anonymous> src/search.null-move.test.ts:679:78
+    677|   it("the in-check root really is in check, and its search still finds…
+    678|     expect(isInCheck(parseFen(IN_CHECK_ROOT))).toBe(true);
+    679|     expect(nullMovesDuring(() => search(parseFen(IN_CHECK_ROOT), 4)).l…
+       |                                                                              ^
+    680|   });
+    681|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/20]⎯
+
+ FAIL  src/search.pvs-lmr.test.ts > A5 — search() visits fewer nodes than searchWithoutPvsOrReductions at depth 4 > position-3 at depth 4 — the default lane's standing guard
+AssertionError: expected 17 to be less than 15
+ ❯ <anonymous> src/search.pvs-lmr.test.ts:549:21
+    547|   it("position-3 at depth 4 — the default lane's standing guard", () =…
+    548|     const { shipped, pre } = nodesAtDepth4((ROOTS[2] as { fen: string …
+    549|     expect(shipped).toBeLessThan(pre);
+       |                     ^
+    550|   });
+    551|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/20]⎯
+
+ FAIL  src/transposition.shared.test.ts > ABC-265 A1 — the layout: four Uint32 words a slot over one SharedArrayBuffer > the store's words are keyLo ^ data, keyHi ^ score, data, score; a clear zeroes them
+AssertionError: expected [ 2593572068, 3989547207, …(2) ] to deeply equal [ +0, +0, +0, +0 ]
+
+- Expected
++ Received
+
+  [
+-   0,
+-   0,
+-   0,
+-   0,
++   2593572068,
++   3989547207,
++   2759188,
++   4294966975,
+  ]
+
+ ❯ src/transposition.shared.test.ts:109:27
+    107|     expect((w2 >>> 17) & 3).toBe(BOUND_EXACT);
+    108|     clearTable();
+    109|     expect(wordsOf(slot)).toEqual([0, 0, 0, 0]);
+       |                           ^
+    110|     expect(probeTable(k)).toBe(-1);
+    111|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/20]⎯
+
+ FAIL  src/transposition.test.ts > the table — verified keys, always-replace, cutoffs only at the stored depth > is empty after clearTable
+AssertionError: expected 100457 to be -1 // Object.is equality
+
+- Expected
++ Received
+
+- -1
++ 100457
+
+ ❯ <anonymous> src/transposition.test.ts:264:31
+    262|     storeEntry(key(), 2, BOUND_EXACT, 40, 0, move());
+    263|     clearTable();
+    264|     expect(probeTable(key())).toBe(-1);
+       |                               ^
+    265|   });
+    266|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/20]⎯
+
+ FAIL  src/transposition.test.ts > A1 — table-on and table-off scores are identical > position-3 at depth 4 — the same score, and the work changes: 1 377 nodes with the table, 1 533 without
+AssertionError: expected 1725 to be 1377 // Object.is equality
+
+- Expected
++ Received
+
+- 1377
++ 1725
+
+ ❯ <anonymous> src/transposition.test.ts:378:22
+    376|     const off = searchWithoutTable(parseFen(fenOf("position-3")), 4);
+    377|     expect(on.score).toBe(off.score);
+    378|     expect(on.nodes).toBe(1_377);
+       |                      ^
+    379|     expect(off.nodes).toBe(1_533);
+    380|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[19/20]⎯
+
+ FAIL  src/transposition.test.ts > A5 — the only non-losing line repeats, and it scores exactly 0 > search(), depth 4: the perpetual scores exactly 0 and is played — in 7 295 nodes
+AssertionError: expected 28 to be 7295 // Object.is equality
+
+- Expected
++ Received
+
+- 7295
++ 28
+
+ ❯ <anonymous> src/transposition.test.ts:512:79
+    510|     // RE-MEASURED at `ABC-083` (king safety and mobility): 7 251 beca…
+    511|     // RE-PINNED at `ABC-215` (the evaluation values made by rule): 7 …
+    512|     expect(searchWithoutPvsOrReductions(parseFen(REPEATS_AT_PLY_4), 4)…
+       |                                                                               ^
+    513|   });
+    514|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[20/20]⎯
+
+
+ Test Files  5 failed | 3 passed (8)
+      Tests  20 failed | 169 passed (189)
+   Start at  16:12:10
+   Duration  1.19s (transform 0ms, setup 0ms, import 526ms, tests 1.28s, environment 1ms)
+

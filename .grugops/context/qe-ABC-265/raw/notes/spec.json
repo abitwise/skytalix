@@ -1,0 +1,10 @@
+{ "refs": ["qe-ABC-265", "ABC-265", "EPIC-011", "ADR-0025", "ADR-0057", "ADR-0026", "ABC-081", "ABC-122", "ABC-208", "ABC-266", "NFR-005", "NFR-009", "NFR-008", "grugops/qe-ABC-265", "grugops/ABC-265", "e5694864", "cad6ae13", "94be445f", "src/transposition.ts", "src/transposition.shared.test.ts", "QE-265-a", "QE-265-b", "QE-265-c", "QE-265-d", "QE-265-e", "qe-ABC-265/20261102T153933Z-qe-e2e-decision-1aca37a5", "se-ABC-265/20261102T152900Z-software-engineer-observation-df9a3b3a"],
+  "notes": [
+    {"kind": "decision", "confidence": "high: verdict by the PREREG rule; PASS_WITH_GAPS (QE-265-a LOW, b-e INFO), no blocking gap", "bodyFile": "note-verdict.md"},
+    {"kind": "observation", "confidence": "high: deterministic cross-build and unit readings under the lock; QE's own A3 sample, independent of the SE's", "bodyFile": "note-rows.md"},
+    {"kind": "observation", "confidence": "high: every gate ran as stated under the lock; G6 graded by the PREREG rule (grade56.mjs)", "bodyFile": "note-gates.md"},
+    {"kind": "observation", "confidence": "high: each plant run and reverted, P src diffed equal to head at the end", "bodyFile": "note-plants.md"},
+    {"kind": "observation", "confidence": "high: gaps named from this hop's readings; weights are QE's", "bodyFile": "note-gaps.md"},
+    {"kind": "observation", "confidence": "medium: a review of the SE's profile, arithmetic re-done; per-call figures are estimates; nothing graded", "bodyFile": "note-profile.md"},
+    {"kind": "observation", "confidence": "high: paths, commits and window as recorded (observation: an artifact-ref needs a gate_run)", "bodyFile": "note-artifacts.md"}
+  ] }

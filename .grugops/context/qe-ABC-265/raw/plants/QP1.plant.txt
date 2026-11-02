@@ -1,0 +1,1 @@
+QP1: '  table.fill(0);\n' -> '  // QP1: no fill\n'

@@ -1,0 +1,9 @@
+doors: search 11 (base 11), engine 5 (base 5); same set: true
+corpus 276 positions
+search() d1-4, ABC-078 A3 corpus: 1104 rows, 0 differ, 4652976 head nodes; base 98c554876f946df4 head 98c554876f946df4
+chooseMove fixed to 1-4, ABC-078 A3 corpus: 1104 rows, 0 differ, 4909606 head nodes; base 0656ed8e6429d83b head 0656ed8e6429d83b
+search() d5-7, perft roots: 18 rows, 0 differ, 2620305 head nodes; base 5339ad58b0ca19d1 head 5339ad58b0ca19d1
+chooseMove fixed to 5-8, perft roots: 24 rows, 0 differ, 4778155 head nodes; base aeb63a25c266b11d head aeb63a25c266b11d
+searchWithoutKillers d1-3 (self), corpus: 828 rows, 0 differ, 1133675 head nodes; base 86496375f6cc3e67 head 86496375f6cc3e67
+searchWithoutNullMove d1-3 (self), corpus: 828 rows, 0 differ, 1010810 head nodes; base 69873c390973c62c head 69873c390973c62c
+searchWithoutOrdering d1-3 (self), corpus: 828 rows, 0 differ, 19218921 head nodes; base 570764a53aaeca5b head 570764a53aaeca5b

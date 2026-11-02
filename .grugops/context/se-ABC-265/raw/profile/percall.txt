@@ -1,0 +1,12 @@
+base kiwipete run 1: nodes 3401453 depth 8 | probeTable 0.87% ~161 ns/call | storeEntry 0.11% ~35 ns/call
+base kiwipete run 2: nodes 3475181 depth 9 | probeTable 0.89% ~161 ns/call | storeEntry 0.09% ~28 ns/call
+base position-6 run 1: nodes 3532571 depth 10 | probeTable 1.18% ~156 ns/call | storeEntry 0.11% ~25 ns/call
+base position-6 run 2: nodes 3407643 depth 10 | probeTable 0.99% ~135 ns/call | storeEntry 0.11% ~26 ns/call
+head kiwipete run 1: nodes 3483373 depth 9 | probeTable 0.98% ~177 ns/call | storeEntry 0.2% ~63 ns/call
+head kiwipete run 2: nodes 3477229 depth 9 | probeTable 0.84% ~152 ns/call | storeEntry 0.2% ~63 ns/call
+head position-6 run 1: nodes 3540763 depth 10 | probeTable 1.23% ~162 ns/call | storeEntry 0.31% ~69 ns/call
+head position-6 run 2: nodes 3439387 depth 10 | probeTable 1.08% ~146 ns/call | storeEntry 0.29% ~67 ns/call
+MEAN base kiwipete: probeTable ~161 ns/call, storeEntry ~32 ns/call
+MEAN base position-6: probeTable ~145 ns/call, storeEntry ~25 ns/call
+MEAN head kiwipete: probeTable ~164 ns/call, storeEntry ~63 ns/call
+MEAN head position-6: probeTable ~154 ns/call, storeEntry ~68 ns/call

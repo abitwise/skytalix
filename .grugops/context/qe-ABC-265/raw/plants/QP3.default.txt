@@ -1,0 +1,99 @@
+
+ RUN  v4.1.12 /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/q265/P
+
+ ❯ src/transposition.shared.test.ts (11 tests | 4 failed) 10ms
+     × the store's words are keyLo ^ data, keyHi ^ score, data, score; a clear zeroes them 2ms
+     × a torn slot (words 0 and 1 from entry A, words 2 and 3 from entry B) misses for A and for B 1ms
+       × K' exact at depth d with another score: the cutoff returns s_K, not s_K' (a live score read fails) 2ms
+       × K' at depth d + 1: the cutoff still returns s_K (a live depth read returns null) 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/transposition.shared.test.ts > ABC-265 A1 — the layout: four Uint32 words a slot over one SharedArrayBuffer > the store's words are keyLo ^ data, keyHi ^ score, data, score; a clear zeroes them
+AssertionError: expected +0 to be -321 // Object.is equality
+
+- Expected
++ Received
+
+- -321
++ 0
+
+ ❯ src/transposition.shared.test.ts:103:20
+    101|     const slot = 0x9abc_def0 & MASK;
+    102|     const [w0, w1, w2, w3] = wordsOf(slot) as [number, number, number,…
+    103|     expect(w3 | 0).toBe(-321);
+       |                    ^
+    104|     expect((w0 ^ w2) >>> 0).toBe(0x9abc_def0);
+    105|     expect((w1 ^ w3) >>> 0).toBe(0x1234_5678);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  src/transposition.shared.test.ts > ABC-265 A2 — the XOR check > a torn slot (words 0 and 1 from entry A, words 2 and 3 from entry B) misses for A and for B
+AssertionError: expected 66 to be -1 // Object.is equality
+
+- Expected
++ Received
+
+- -1
++ 66
+
+ ❯ src/transposition.shared.test.ts:155:27
+    153|     writeWords(slot, [a[0], a[1], b[2], b[3]] as number[]);
+    154|     expect(probeTable(A)).toBe(-1);
+    155|     expect(probeTable(B)).toBe(-1);
+       |                           ^
+    156|     // The other mix: words 0 and 1 from B, 2 and 3 from A.
+    157|     writeWords(slot, [b[0], b[1], a[2], a[3]] as number[]);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  src/transposition.shared.test.ts > ABC-265 A2 — the XOR check > T10 — the verified copy: a store into the slot between probeTable and tableCutoff > K' exact at depth d with another score: the cutoff returns s_K, not s_K' (a live score read fails)
+AssertionError: expected [ +0, +0, +0 ] to deeply equal [ 201268, 1431655765, -456 ]
+
+- Expected
++ Received
+
+  [
+-   201268,
+-   1431655765,
+-   -456,
++   0,
++   0,
++   0,
+  ]
+
+ ❯ src/transposition.shared.test.ts:197:58
+    195|       // The slot now holds K' whole (read through the handle, not a p…
+    196|       const [w0, w1, w2, w3] = wordsOf(slot) as [number, number, numbe…
+    197|       expect([(w0 ^ w2) >>> 0, (w1 ^ w3) >>> 0, w3 | 0]).toEqual([0x00…
+       |                                                          ^
+    198|       expect(tableCutoff(slot, d, -Infinity, Infinity, 0)).toBe(sK);
+    199|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  src/transposition.shared.test.ts > ABC-265 A2 — the XOR check > T10 — the verified copy: a store into the slot between probeTable and tableCutoff > K' at depth d + 1: the cutoff still returns s_K (a live depth read returns null)
+AssertionError: expected +0 to be 6 // Object.is equality
+
+- Expected
++ Received
+
+- 6
++ 0
+
+ ❯ src/transposition.shared.test.ts:208:51
+    206|       expect(slot).toBe(slotOf(K));
+    207|       writeWords(slot, kPrimeWords);
+    208|       expect((wordsOf(slot)[2] as number) >>> 19).toBe(d + 1);
+       |                                                   ^
+    209|       expect(tableCutoff(slot, d, -Infinity, Infinity, 0)).toBe(sK);
+    210|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  1 failed | 7 passed (8)
+      Tests  4 failed | 185 passed (189)
+   Start at  16:12:55
+   Duration  1.63s (transform 0ms, setup 0ms, import 565ms, tests 1.98s, environment 1ms)
+

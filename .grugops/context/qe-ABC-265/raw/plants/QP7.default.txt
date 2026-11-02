@@ -1,0 +1,9 @@
+
+ RUN  v4.1.12 /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/q265/P
+
+
+ Test Files  8 passed (8)
+      Tests  189 passed (189)
+   Start at  16:20:58
+   Duration  1.60s (transform 0ms, setup 0ms, import 525ms, tests 1.95s, environment 1ms)
+

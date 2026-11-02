@@ -1,0 +1,1 @@
+QP10: 'export function clearTable(): void {\n  hitSlot = -1;\n' -> 'export function clearTable(): void {\n'

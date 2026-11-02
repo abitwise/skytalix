@@ -1,0 +1,4 @@
+QP2 a3 plant mode: 47 mismatch lines; A3 IDENTITY (QE sample): DIFFERENCES FOUND
+QP3 a3 plant mode: 32 mismatch lines; A3 IDENTITY (QE sample): DIFFERENCES FOUND
+QP6 a3 FULL: 0 mismatch lines; A3 IDENTITY (QE sample): ALL EQUAL
+P src restored == head src

@@ -1,0 +1,2 @@
+QP2: '  const keyLo = Number(key & LOW_HALF);\n  const slot = keyLo & INDEX_MASK;\n' -> '  const keyLo = Number(key & LOW_HALF);\n  const slot = Number(key >> 32n) & INDEX_MASK;\n'
+QP2: '  const base = (keyLo & INDEX_MASK) << 2;\n' -> '  const base = (Number(key >> 32n) & INDEX_MASK) << 2;\n'

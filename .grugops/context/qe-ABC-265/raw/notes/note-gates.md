@@ -1,0 +1,22 @@
+# qe-ABC-265 gates: lint/typecheck/build 0; npm test 2 387/2 387 x3; skips 0, integrity and inventory clean; G1 54/58; G5 MET (max 4 001.3 ms, 0 > 5 000; engine lane 78/78); G6 MET graded (kiwipete 9 = 9, position-6 10 = 10, min 8; F2 does not fire); G7 MET; G8 head median 9.15 s; G9 empty; G11 same move at all five
+
+Every command ran under `flock host-test.lock`, at head `e5694864`. The worktree's `src/` is byte-equal to it: `git diff --name-only e5694864 HEAD -- src` is empty. Rules from the PREREG (`…1aca37a5`). Raw: `raw/gates/`, `raw/deep/`, `raw/g6/`, `raw/g7/`.
+
+- **Mandatory gates:** `npm run lint` 0 (132 files, no fixes); `npm run typecheck` 0; `npm run build` 0 (`dist` removed after). 15:43–15:44Z.
+- **npm test x3 and G8:** the runs went in the order b h h b b h, each timed inside the lock after a wait-clear (0 foreign vitest, load1 ≤ 8).
+  - Head: **2 387 passed (2 387)** in all 3 runs, 0 failed. Walls 9.02 / 9.32 / 9.15 s, **median 9.15 s ≤ 10 s: G8 MET.**
+  - Base: 2 376 passed ×3. Walls 8.92 / 8.70 / 8.74 s, median 8.74 s.
+  - Load1 at the runs was 1.37–2.41. Another agent's probe runs shared the host between my runs, under the same lock.
+  - **`N8-LANE`:** the new file's own time in head run 6 was 6.5 ms for its 11 rows (`.test-results/last-run.json`). Head − base median wall = +0.41 s. That is a whole-suite difference, not a pure lane reading.
+- **Skips / integrity / inventory:** the skip count, by the AGENTS.md spelling with the local binary, is **0**. `test-skip-integrity.js --skip-count 0` reports "No findings." (rc 0). `lane-inventory.js` reports "The lane collects 64 test files; git tracks 64. No findings." (rc 0).
+- **G1:** `PUZZLE_DEEP=1` puzzle-suite 18/18, "PUZZLES shipped: solved **54/58**, baseline 54/58". No NEWLY line. **MET.**
+- **G9:** `git diff 94be445f e5694864 -- src/levels.ts` is 0 bytes. **MET.**
+- **Deep lanes:** `SEARCH_DEEP` transposition 40/40 (17 s), `ENGINE_DEEP` transposition 26/26 (55 s), `SEARCH_DEEP` search.null-move 44/44 (66 s), search.pvs-lmr 29/29 (58 s), search 57/57 (43 s), `ENGINE_DEEP` engine 78/78 (190 s). All green.
+- **G6 (graded, A4, T9): MET.** Session 16:29:47–16:39:21Z, held under the lock throughout. 5 interleaved rounds (base first in odd rounds), one fresh process per search, `chooseMove` at 4 000 ms on the real clock. Wait-clear before every read: load1 0.42–0.98, Tctl before each read 39.0–44.6 °C, session median 56.4, max 76.4 (after-read samples), no thermal stop.
+  - kiwipete, by round: base 9 8 9 9 9, head 9 9 9 9 9. **Median 9 / 9.** Median nodes 3 501 805 / 3 499 757.
+  - position-6: base 10 ×5, head 10 ×5. **Median 10 / 10.** Median nodes 3 526 427 / 3 502 875.
+  - Minimum run 8, 0 runs below 7, floor 6 held. **Head ≥ base on both boards, so F2 (the fallback) does not fire.**
+- **G5: MET.** 30 reads (G6 and G11), max wall **4 001.3 ms**, 25 over 4 000 ms by at most 1.3 ms, **0 over 5 000 ms**. The `ENGINE_DEEP` engine lane, which holds the real-clock rows, is 78/78.
+- **G7 (A5): MET.** Growth from 1 s to 4 s is at most +14 728 B in `heapUsed` and 0 in `arrayBuffers`. `arrayBuffers` is 4 732 211 B and the fixed sum 4 592 648 B, both ≤ 16 MiB. `tableByteLength()` is 4 194 304, and the ABC-081 A7 deep row is green. Detail is in the rows note.
+- **G11 (reported, not graded):** base and head chose the same move at the same depth and score at all five positions: 4.Qa4 → d3 (d11, 56); 8.e5 → Be2 (d9, 62); 10.Ne4 → exd6 (d10, 5); 13.d4 → d4 (d11, −109); 17.Kc1 → Kc1 (d11, −215).
+- **G4:** A3, in the rows note. **G8:** above. **Not run:** the Levels lane, the smoke and games (no game read is owed); S2 (ruled none); `uci-session` (no table-value row; the SE's run was green).

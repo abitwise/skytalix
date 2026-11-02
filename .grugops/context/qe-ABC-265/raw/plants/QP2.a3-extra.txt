@@ -1,0 +1,80 @@
+doors: search 11 (base 11), engine 5 (base 5); same door set: true; search.ts/engine.ts export lists equal: true/true
+sample sizes: corpus 276, grandchildren 202, puzzles 58, g11 3
+  MISMATCH rnbqkbnr/pppppppp/8/8/8/2N5/PPPPPPPP/R1BQKBNR b KQkq - 1 1 d5: base 10803|0|113-82-0| head 10801|0|113-82-0|
+  MISMATCH rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR b KQkq - 0 1 d5: base 8672|30|99-83-0| head 8671|30|99-83-0|
+  MISMATCH rnbqkbnr/pppppppp/8/8/8/2P5/PP1PPPPP/RNBQKBNR b KQkq - 0 1 d5: base 11395|36|99-83-0| head 11300|36|99-83-0|
+search() d5, corpus every 4th (off 1): 3 rows, 3 differ, 30772 head nodes; base e1694c735f700bc5 head 9641fe729bfabe03 (0 s)
+  MISMATCH rnbqkbnr/pppppppp/8/8/8/1P6/P1PPPPPP/RNBQKBNR b KQkq - 0 1 d5: base 2711|28|113-82-0|5 head 2712|28|113-82-0|5
+chooseMove fixed to 5, corpus every 4th (off 3): 3 rows, 1 differ, 11707 head nodes; base b6f98704ea4da1c2 head f5236367cba05cd7 (0 s)
+  MISMATCH rnbqkbnr/p1pppppp/8/1p6/8/2N5/PPPPPPPP/R1BQKBNR w KQkq b6 0 2 d4: base 2328|94|34-65-0| head 2327|94|34-65-0|
+search() d3-4, 2-ply descendants of the perft roots: 6 rows, 1 differ, 10235 head nodes; base bd4f4a460c0d583c head c9416b27606d7a11 (0 s)
+chooseMove fixed to 4, 2-ply descendants: 3 rows, 0 differ, 6244 head nodes; base caa11dbfd2d431e0 head caa11dbfd2d431e0 (0 s)
+search() d4, shipped puzzles: 3 rows, 0 differ, 6751 head nodes; base 3cae9a815f3422aa head 3cae9a815f3422aa (0 s)
+chooseMove fixed to 5, shipped puzzles: 3 rows, 0 differ, 14729 head nodes; base fbd24bdaab5ae3ff head fbd24bdaab5ae3ff (0 s)
+  MISMATCH rnbqkb1r/p2ppppp/1p3n2/2p5/2P5/2N2N2/PP1PPPPP/R1BQKB1R w KQkq - 0 4 d7: base 59013|60|19-35-0|7 head 59001|60|19-35-0|7
+  MISMATCH rn1q1rk1/pb1pbppp/1p2pn2/2p5/Q1P1PB2/2NP1N2/PP3PPP/R3KB1R w KQ - 1 8 d7: base 191651|78|5-20-0|7 head 185979|78|5-20-0|7
+  MISMATCH rn1q1rk1/pb2bppp/1p1pp3/2p1P2n/Q1P5/2NPBN2/PP3PPP/R3KB1R w KQ - 0 10 d7: base 222645|20|68-83-0|7 head 222899|20|68-83-0|7
+chooseMove fixed to 7, game-1 positions: 3 rows, 3 differ, 467879 head nodes; base 7a134c56c6e47b4f head c7fb12da019a023b (1 s)
+  MISMATCH k7/8/1K6/8/8/8/8/1Q6 w - - 0 1 d8: base 68957|29997|1-17-0| head 69139|29997|1-17-0|
+  MISMATCH k7/8/1K6/8/8/8/8/1Q6 w - - 0 1 d9: base 207607|29997|1-17-0| head 210815|29997|1-17-0|
+  MISMATCH k7/8/1K6/8/8/8/8/1R6 w - - 0 1 d8: base 24100|29997|1-3-0| head 24115|29997|1-3-0|
+search() d8-9, mate and endgame roots (high table load, mate relativity): 6 rows, 6 differ, 635557 head nodes; base 21012bb522c0499a head d686fdc6956c5a5c (1 s)
+  MISMATCH k7/8/1K6/8/8/8/8/1Q6 w - - 0 1 d10: base 772462|29997|1-52-0|10 head 784386|29997|1-52-0|10
+  MISMATCH k7/8/1K6/8/8/8/8/1Q6 w - - 0 1 d12: base 10078610|29997|1-52-0|12 head 10215146|29997|1-52-0|12
+  MISMATCH k7/8/1K6/8/8/8/8/1R6 w - - 0 1 d10: base 168048|29997|1-3-0|10 head 169437|29997|1-3-0|10
+chooseMove fixed to 10-12, mate and endgame roots: 6 rows, 6 differ, 23419715 head nodes; base 4e6529dcfdb33032 head f97a208ab962a0d1 (39 s)
+  MISMATCH rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 d9: base 230719|20|1-34-0|9 head 229001|18|1-34-0|9
+  MISMATCH r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1 d9: base 3450205|-72|20-80-0|9 head 3514131|-72|20-80-0|9
+  MISMATCH 8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1 d9: base 114210|55|49-53-0|9 head 138804|55|49-53-0|9
+chooseMove fixed to 9, startpos/kiwipete/position-3/position-6: 3 rows, 3 differ, 3881936 head nodes; base 1829d575c9724f72 head fdbd3ad3ec5f939c (9 s)
+  MISMATCH rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 d8: base 222090|27|19-51-0| head 260824|27|19-51-0|
+  MISMATCH 8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1 d8: base 88691|44|49-53-0| head 88697|44|49-53-0|
+  MISMATCH r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10 d8: base 1602457|74|34-67-0| head 1608533|74|34-67-0|
+search() d8, startpos/position-3/position-6: 3 rows, 3 differ, 1958054 head nodes; base bbf3904bcc73222a head 37fc4f6dc8cdb8e1 (5 s)
+searchWithoutKillers d4 (self), corpus every 8th (off 5): 3 rows, 0 differ, 63037 head nodes; base d3fee2cab3dd1c72 head d3fee2cab3dd1c72 (0 s)
+  MISMATCH rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR b KQkq - 0 1 d4: base 2880|-8|113-82-0| head 2879|-8|113-82-0|
+  MISMATCH r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1 d4: base 18079|8|20-80-0| head 18081|8|20-80-0|
+searchWithoutNullMove d4 (self), corpus every 8th (off 5): 3 rows, 2 differ, 25613 head nodes; base bdb5a03bfd2936b6 head 5978dedce6b7ecc8 (0 s)
+searchWithoutOrdering d4 (self), corpus every 8th (off 5): 3 rows, 0 differ, 1440635 head nodes; base 6e8ce1e3ad4f9af8 head 6e8ce1e3ad4f9af8 (2 s)
+searchWithoutPruning d3 (self), endgame roots: 3 rows, 0 differ, 1793 head nodes; base c76c9790695d0dd2 head c76c9790695d0dd2 (0 s)
+searchWithoutPruningOrQuiescence d3 (self), endgame roots: 3 rows, 0 differ, 1762 head nodes; base debb962f68c66761 head debb962f68c66761 (0 s)
+  MISMATCH rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR b KQkq - 0 1 d4: base 5179|-8|113-82-0| head 5178|-8|113-82-0|
+  MISMATCH r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1 d4: base 23802|8|20-80-0| head 23811|8|20-80-0|
+searchWithoutPvsOrReductions d4 (self), corpus every 8th (off 5): 3 rows, 2 differ, 38598 head nodes; base 0d5898fb60ad1fad head 6a32fae2e47d5bdc (0 s)
+  MISMATCH rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR b KQkq - 0 1 d4: base 5071|-8|113-82-0| head 5070|-8|113-82-0|
+  MISMATCH r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1 d4: base 6055|-74|20-80-0| head 6057|-74|20-80-0|
+searchWithoutQuiescence d4 (self), corpus every 8th (off 5): 3 rows, 2 differ, 18916 head nodes; base 9f836f854396e4a6 head 76b4fcf296e5b664 (0 s)
+  MISMATCH rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR b KQkq - 0 1 d4: base 2644|-8|113-82-0| head 2643|-8|113-82-0|
+searchWithoutQuiescenceEvasions d4 (self), corpus every 8th (off 5): 3 rows, 1 differ, 25805 head nodes; base 4e2c9616ee08bf61 head 9078345439c66296 (0 s)
+  MISMATCH rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR b KQkq - 0 1 d4: base 2645|-8|113-82-0| head 2644|-8|113-82-0|
+searchWithoutQuietPromotions d4 (self), corpus every 8th (off 5): 3 rows, 1 differ, 31125 head nodes; base f22647e02fe11a77 head 2b3ff74d84bf2929 (0 s)
+  MISMATCH rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR b KQkq - 0 1 d4: base 5210|-8|113-82-0| head 5209|-8|113-82-0|
+  MISMATCH r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1 d4: base 18941|8|20-80-0| head 18943|8|20-80-0|
+searchWithoutReductions d4 (self), corpus every 8th (off 5): 3 rows, 2 differ, 34674 head nodes; base d04c9a229462a85e head 8ddbdce7889faa82 (0 s)
+searchWithoutTable d4 (self), corpus every 8th (off 5): 3 rows, 0 differ, 42667 head nodes; base 5f36155e8d093d99 head 5f36155e8d093d99 (0 s)
+  MISMATCH rnbqkbnr/pppppppp/8/8/P7/8/1PPPPPPP/RNBQKBNR b KQkq a3 0 1 d5: base 5973|30|113-82-0|5 head 5976|30|113-82-0|5
+  MISMATCH rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1 d5: base 7881|13|113-82-0|5 head 7885|13|113-82-0|5
+  MISMATCH r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/1R2K2R b Kkq - 1 1 d5: base 42530|305|49-34-0|5 head 42730|305|49-34-0|5
+chooseMoveWithoutNullMove to 5 (self), corpus every 8th (off 6): 3 rows, 3 differ, 56591 head nodes; base 2d2273d8f46720ac head 0b137b68818993f4 (0 s)
+  MISMATCH rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1 d5: base 17158|13|113-82-0|5 head 17180|13|113-82-0|5
+  MISMATCH r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/1R2K2R b Kkq - 1 1 d5: base 96338|305|49-34-0|5 head 96800|305|49-34-0|5
+chooseMoveWithoutPvsOrReductions to 5 (self), corpus every 8th (off 6): 3 rows, 2 differ, 127081 head nodes; base c19170c97cd573ea head dac62996f241e69f (0 s)
+  MISMATCH rnbqkbnr/pppppppp/8/8/P7/8/1PPPPPPP/RNBQKBNR b KQkq a3 0 1 d5: base 2672|30|113-82-0|5 head 2673|30|113-82-0|5
+  MISMATCH r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/1R2K2R b Kkq - 1 1 d5: base 43227|305|49-34-0|5 head 43220|305|49-34-0|5
+chooseMoveWithoutQuiescenceEvasions to 5 (self), corpus every 8th (off 6): 3 rows, 2 differ, 50310 head nodes; base 23fec068f8566b18 head 4d4bd23776e869e1 (0 s)
+  MISMATCH rnbqkbnr/pppppppp/8/8/P7/8/1PPPPPPP/RNBQKBNR b KQkq a3 0 1 d5: base 2673|30|113-82-0|5 head 2674|30|113-82-0|5
+  MISMATCH r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/1R2K2R b Kkq - 1 1 d5: base 58999|305|49-34-0|5 head 59052|305|49-34-0|5
+chooseMoveWithoutQuietPromotions to 5 (self), corpus every 8th (off 6): 3 rows, 2 differ, 66344 head nodes; base defa50a5a6a78693 head dccd513a7dfbeeff (0 s)
+  MISMATCH rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1 d5: base 16093|13|113-82-0|5 head 16095|13|113-82-0|5
+  MISMATCH r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/1R2K2R b Kkq - 1 1 d5: base 73718|305|49-34-0|5 head 74012|305|49-34-0|5
+chooseMoveWithoutReductions to 5 (self), corpus every 8th (off 6): 3 rows, 2 differ, 102560 head nodes; base c987e8d220888c58 head e3e36492fbaa8dce (0 s)
+  MISMATCH tick rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1200 none: ["1-34-0",20,9,400404,1206] ["1-34-0",18,9,400404,1206]
+  MISMATCH tick rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1200 rep: ["1-34-0",20,9,400404,1206] ["1-34-0",18,9,400404,1206]
+  MISMATCH tick rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 6000 none: ["1-34-0",9,11,2036756,6006] ["1-34-0",13,10,2037780,6006]
+  MISMATCH tick rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 6000 rep: ["1-34-0",9,11,2036756,6006] ["1-34-0",13,10,2037780,6006]
+chooseMove tick clock (12 roots x 7/60/1200/6000 ticks, step 3, x prior none/rep): 24 rows, 4 differ
+  MISMATCH game r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1 ply 3: 84-67-0|76|9|1527001|1502| 84-67-0|76|8|1527973|1502|
+  MISMATCH game r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1 ply 17: 81-112-0|-193|10|1525784|1502| 81-112-0|-245|11|1524760|1502|
+in-process games (4 roots, 30-40 plies, tick clock, priorKeys, search()+door interleaved): 24 plies, 2 differ
+total fixed-depth rows 90, head nodes 32571090; wall 188 s
+A3 IDENTITY (QE sample): DIFFERENCES FOUND

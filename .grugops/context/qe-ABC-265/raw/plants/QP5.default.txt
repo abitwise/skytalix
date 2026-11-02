@@ -1,0 +1,528 @@
+
+ RUN  v4.1.12 /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/q265/P
+
+ ❯ src/transposition.test.ts (25 tests | 7 failed) 92ms
+     × a mate-in-2 stored at ply 1 reads MATE_SCORE - 4 at ply 1 and MATE_SCORE - 6 at ply 3 7ms
+     × a mated-in-2 stored at ply 2 reads -(MATE_SCORE - 6) at ply 2 and -(MATE_SCORE - 8) at ply 4 1ms
+     × leaves an ordinary score alone at every ply 1ms
+     × settles a node only at the depth the entry was searched to 1ms
+     × cuts on a lower bound only at or above beta, on an upper bound only at or below alpha 1ms
+     × position-3 at depth 4 — the same score, and the work changes: 1 377 nodes with the table, 1 533 without 10ms
+     × search(), depth 4: the perpetual scores exactly 0 and is played — in 7 295 nodes 25ms
+ ❯ src/engine.test.ts (65 tests | 7 failed) 611ms
+     × agrees with search() on move and score across the mate/stalemate endgames 27ms
+     × KQ v K, Black to move: d8e8 at 0 with the prior keys, base's move without them 4ms
+     × K v KQ, White to move: d1e1 at 0 with the prior keys, base's move without them 3ms
+     × KR v K, Black to move: d8e8 at 0 with the prior keys, base's move without them 2ms
+     × KQ v K, Black to move: d8e8 would stand a second time; node-equal to base 3ms
+     × K v KQ, White to move: d1e1 would stand a second time; node-equal to base 3ms
+     × Qe5+ at ply 4 stood twice before the root: Ke1 at 404 with the keys, Kg1 at 497 without 4ms
+ ❯ src/search.null-move.test.ts (38 tests | 5 failed) 1207ms
+     × zugzwang.001: chooseMove on a frozen clock to depth 9 plays e1f1 299ms
+     × kpk-b6c6: chooseMove on a frozen clock to depth 8 plays b6c6 16ms
+     × kpk-c6d6: chooseMove on a frozen clock to depth 8 plays c6d6 16ms
+     × kpk-d6e6: chooseMove on a frozen clock to depth 8 plays d6e6 9ms
+     × kpk-e6f6: chooseMove on a frozen clock to depth 8 plays e6f6 6ms
+ ❯ src/search.pvs-lmr.test.ts (20 tests | 2 failed) 109ms
+     × kp-vs-k at depth 4 — the default lane's standing guard 18ms
+     × search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions 21ms
+ ❯ src/transposition.shared.test.ts (11 tests | 4 failed) 9ms
+     × an entry stored for K hits for K, returning its move, bound, depth and score 2ms
+     × a key whose keyLo and keyHi each have bit 31 set hits (catches a signed compare) 1ms
+       × K' exact at depth d with another score: the cutoff returns s_K, not s_K' (a live score read fails) 1ms
+       × K' at depth d + 1: the cutoff still returns s_K (a live depth read returns null) 1ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 25 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/engine.test.ts > A3 (identity) — the completed iteration equals search() in move AND score > agrees with search() on move and score across the mate/stalemate endgames
+AssertionError: expected [ …(2) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "kp-vs-k @ depth 4: move e1f2 (scores 137) vs search e2e3 (scores 120)",
++   "kp-vs-k @ depth 4: score 137 vs search 120",
++ ]
+
+ ❯ src/engine.test.ts:480:62
+    478|     // reaches depth 4 (the stalemate is inside the horizon). Both are…
+    479|     // alone reds both of the drift mutants QE found surviving the del…
+    480|     expect(identityDivergences(DEFAULT_LANE_CORPUS, [3, 5])).toEqual([…
+       |                                                              ^
+    481|   });
+    482| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/25]⎯
+
+ FAIL  src/engine.test.ts > ABC-230 A1 — a third occurrence scores exactly 0 at the root; base scores it otherwise > KQ v K, Black to move: d8e8 at 0 with the prior keys, base's move without them
+AssertionError: expected { move: 'd8c7', score: -1000 } to deeply equal { move: 'd8c8', score: -1006 }
+
+- Expected
++ Received
+
+  {
+-   "move": "d8c8",
+-   "score": -1006,
++   "move": "d8c7",
++   "score": -1000,
+  }
+
+ ❯ src/engine.test.ts:1558:69
+    1556|
+    1557|       const base = chooseMove(parseFen(root), fixedDepth(4));
+    1558|       expect(base && { move: label(base.move), score: base.score }).to…
+       |                                                                     ^
+    1559|       // Base's own score of the repeating move, read on its child: no…
+    1560|       const child = parseFen(root);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/25]⎯
+
+ FAIL  src/engine.test.ts > ABC-230 A1 — a third occurrence scores exactly 0 at the root; base scores it otherwise > K v KQ, White to move: d1e1 at 0 with the prior keys, base's move without them
+AssertionError: expected { move: 'd1c2', score: -1000 } to deeply equal { move: 'd1c1', score: -1006 }
+
+- Expected
++ Received
+
+  {
+-   "move": "d1c1",
+-   "score": -1006,
++   "move": "d1c2",
++   "score": -1000,
+  }
+
+ ❯ src/engine.test.ts:1558:69
+    1556|
+    1557|       const base = chooseMove(parseFen(root), fixedDepth(4));
+    1558|       expect(base && { move: label(base.move), score: base.score }).to…
+       |                                                                     ^
+    1559|       // Base's own score of the repeating move, read on its child: no…
+    1560|       const child = parseFen(root);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/25]⎯
+
+ FAIL  src/engine.test.ts > ABC-230 A1 — a third occurrence scores exactly 0 at the root; base scores it otherwise > KR v K, Black to move: d8e8 at 0 with the prior keys, base's move without them
+AssertionError: expected { move: 'd8c8', score: -546 } to deeply equal { move: 'd8c7', score: -556 }
+
+- Expected
++ Received
+
+  {
+-   "move": "d8c7",
+-   "score": -556,
++   "move": "d8c8",
++   "score": -546,
+  }
+
+ ❯ src/engine.test.ts:1558:69
+    1556|
+    1557|       const base = chooseMove(parseFen(root), fixedDepth(4));
+    1558|       expect(base && { move: label(base.move), score: base.score }).to…
+       |                                                                     ^
+    1559|       // Base's own score of the repeating move, read on its child: no…
+    1560|       const child = parseFen(root);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/25]⎯
+
+ FAIL  src/engine.test.ts > ABC-230 A8 — a second occurrence before the root is not a draw (probe H2) > KQ v K, Black to move: d8e8 would stand a second time; node-equal to base
+AssertionError: expected { move: 'd8c7', score: -1000 } to deeply equal { move: 'd8c8', score: -1006 }
+
+- Expected
++ Received
+
+  {
+-   "move": "d8c8",
+-   "score": -1006,
++   "move": "d8c7",
++   "score": -1000,
+  }
+
+ ❯ src/engine.test.ts:1580:69
+    1578|       expect(figures(withKeys)).toEqual(figures(base));
+    1579|       // H2's figures: the one-match rule would play the repetition at…
+    1580|       expect(base && { move: label(base.move), score: base.score }).to…
+       |                                                                     ^
+    1581|     });
+    1582|   }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/25]⎯
+
+ FAIL  src/engine.test.ts > ABC-230 A8 — a second occurrence before the root is not a draw (probe H2) > K v KQ, White to move: d1e1 would stand a second time; node-equal to base
+AssertionError: expected { move: 'd1c2', score: -1000 } to deeply equal { move: 'd1c1', score: -1006 }
+
+- Expected
++ Received
+
+  {
+-   "move": "d1c1",
+-   "score": -1006,
++   "move": "d1c2",
++   "score": -1000,
+  }
+
+ ❯ src/engine.test.ts:1580:69
+    1578|       expect(figures(withKeys)).toEqual(figures(base));
+    1579|       // H2's figures: the one-match rule would play the repetition at…
+    1580|       expect(base && { move: label(base.move), score: base.score }).to…
+       |                                                                     ^
+    1581|     });
+    1582|   }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/25]⎯
+
+ FAIL  src/engine.test.ts > ABC-249 — a pre-root repetition met four plies deep scores 0 (QE-248-c) > Qe5+ at ply 4 stood twice before the root: Ke1 at 404 with the keys, Kg1 at 497 without
+AssertionError: expected { move: 'f1g1', score: 239 } to deeply equal { move: 'f1e1', score: 404 }
+
+- Expected
++ Received
+
+  {
+-   "move": "f1e1",
+-   "score": 404,
++   "move": "f1g1",
++   "score": 239,
+  }
+
+ ❯ src/engine.test.ts:1729:79
+    1727|     const withKeys = chooseMove(game.position, { ...fixedDepth(4), pri…
+    1728|     expect(toFen(game.position)).toBe(root);
+    1729|     expect(withKeys && { move: label(withKeys.move), score: withKeys.s…
+       |                                                                               ^
+    1730|       move: "f1e1",
+    1731|       score: 404,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/25]⎯
+
+ FAIL  src/search.null-move.test.ts > A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth > zugzwang.001: chooseMove on a frozen clock to depth 9 plays e1f1
+AssertionError: expected 'e1e6' to be 'e1f1' // Object.is equality
+
+Expected: "e1f1"
+Received: "e1e6"
+
+ ❯ <anonymous> src/search.null-move.test.ts:651:78
+    649|       expect(choice?.depth).toBe(depth);
+    650|       const played = choice as EngineChoice;
+    651|       expect(`${squareName(played.move.from)}${squareName(played.move.…
+       |                                                                              ^
+    652|       // A side with no non-pawn piece never passes: the K+P rows make…
+    653|       if (name.startsWith("kpk-")) expect(nulls).toHaveLength(0);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/25]⎯
+
+ FAIL  src/search.null-move.test.ts > A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth > kpk-b6c6: chooseMove on a frozen clock to depth 8 plays b6c6
+AssertionError: expected 'c5c6' to be 'b6c6' // Object.is equality
+
+Expected: "b6c6"
+Received: "c5c6"
+
+ ❯ <anonymous> src/search.null-move.test.ts:651:78
+    649|       expect(choice?.depth).toBe(depth);
+    650|       const played = choice as EngineChoice;
+    651|       expect(`${squareName(played.move.from)}${squareName(played.move.…
+       |                                                                              ^
+    652|       // A side with no non-pawn piece never passes: the K+P rows make…
+    653|       if (name.startsWith("kpk-")) expect(nulls).toHaveLength(0);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/25]⎯
+
+ FAIL  src/search.null-move.test.ts > A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth > kpk-c6d6: chooseMove on a frozen clock to depth 8 plays c6d6
+AssertionError: expected 'c6b5' to be 'c6d6' // Object.is equality
+
+Expected: "c6d6"
+Received: "c6b5"
+
+ ❯ <anonymous> src/search.null-move.test.ts:651:78
+    649|       expect(choice?.depth).toBe(depth);
+    650|       const played = choice as EngineChoice;
+    651|       expect(`${squareName(played.move.from)}${squareName(played.move.…
+       |                                                                              ^
+    652|       // A side with no non-pawn piece never passes: the K+P rows make…
+    653|       if (name.startsWith("kpk-")) expect(nulls).toHaveLength(0);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/25]⎯
+
+ FAIL  src/search.null-move.test.ts > A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth > kpk-d6e6: chooseMove on a frozen clock to depth 8 plays d6e6
+AssertionError: expected 'd6d5' to be 'd6e6' // Object.is equality
+
+Expected: "d6e6"
+Received: "d6d5"
+
+ ❯ <anonymous> src/search.null-move.test.ts:651:78
+    649|       expect(choice?.depth).toBe(depth);
+    650|       const played = choice as EngineChoice;
+    651|       expect(`${squareName(played.move.from)}${squareName(played.move.…
+       |                                                                              ^
+    652|       // A side with no non-pawn piece never passes: the K+P rows make…
+    653|       if (name.startsWith("kpk-")) expect(nulls).toHaveLength(0);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/25]⎯
+
+ FAIL  src/search.null-move.test.ts > A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth > kpk-e6f6: chooseMove on a frozen clock to depth 8 plays e6f6
+AssertionError: expected 'f5f6' to be 'e6f6' // Object.is equality
+
+Expected: "e6f6"
+Received: "f5f6"
+
+ ❯ <anonymous> src/search.null-move.test.ts:651:78
+    649|       expect(choice?.depth).toBe(depth);
+    650|       const played = choice as EngineChoice;
+    651|       expect(`${squareName(played.move.from)}${squareName(played.move.…
+       |                                                                              ^
+    652|       // A side with no non-pawn piece never passes: the K+P rows make…
+    653|       if (name.startsWith("kpk-")) expect(nulls).toHaveLength(0);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/25]⎯
+
+ FAIL  src/search.pvs-lmr.test.ts > PVS identity — searchWithoutReductions scores what searchWithoutPvsOrReductions scores > kp-vs-k at depth 4 — the default lane's standing guard
+AssertionError: expected [ Array(1) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "kp-vs-k: 120 with PVS, 137 without",
++ ]
+
+ ❯ <anonymous> src/search.pvs-lmr.test.ts:206:42
+    204|     const positions = ENDGAMES.filter(({ name }) => name === "kp-vs-k"…
+    205|     expect(positions).toHaveLength(1);
+    206|     expect(pvsDivergences(positions, 4)).toEqual([]);
+       |                                          ^
+    207|   });
+    208|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/25]⎯
+
+ FAIL  src/search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one > search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions
+AssertionError: expected 'b3c3' to be 'e2e4' // Object.is equality
+
+Expected: "e2e4"
+Received: "b3c3"
+
+ ❯ <anonymous> src/search.pvs-lmr.test.ts:500:41
+    498|     ).toBeGreaterThan(0);
+    499|     expect(shipped.score).toBe(reference.score);
+    500|     expect(label(shipped.move as Move)).toBe(label(reference.move as M…
+       |                                         ^
+    501|     expect([shipped.score, label(shipped.move as Move)]).toEqual([4, "…
+    502|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/25]⎯
+
+ FAIL  src/transposition.shared.test.ts > ABC-265 A2 — the XOR check > an entry stored for K hits for K, returning its move, bound, depth and score
+AssertionError: expected null to be 77 // Object.is equality
+
+- Expected:
+77
+
++ Received:
+null
+
+ ❯ src/transposition.shared.test.ts:125:44
+    123|     expect(entryMove(slot, MOVES)).toBe(MOVE_B);
+    124|     // Depth: settles only at 4. Bound: a lower bound settles at or ab…
+    125|     expect(tableCutoff(slot, 4, 0, 77, 0)).toBe(77);
+       |                                            ^
+    126|     expect(tableCutoff(probeTable(K), 4, 0, 78, 0)).toBeNull();
+    127|     expect(tableCutoff(probeTable(K), 3, 0, 77, 0)).toBeNull();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/25]⎯
+
+ FAIL  src/transposition.shared.test.ts > ABC-265 A2 — the XOR check > a key whose keyLo and keyHi each have bit 31 set hits (catches a signed compare)
+AssertionError: expected +0 to be -12345 // Object.is equality
+
+- Expected
++ Received
+
+- -12345
++ 0
+
+ ❯ src/transposition.shared.test.ts:173:58
+    171|     const slot = probeTable(high);
+    172|     expect(slot).toBe(0x0abc);
+    173|     expect(tableCutoff(slot, 7, -Infinity, Infinity, 0)).toBe(-12_345);
+       |                                                          ^
+    174|   });
+    175|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/25]⎯
+
+ FAIL  src/transposition.shared.test.ts > ABC-265 A2 — the XOR check > T10 — the verified copy: a store into the slot between probeTable and tableCutoff > K' exact at depth d with another score: the cutoff returns s_K, not s_K' (a live score read fails)
+AssertionError: expected +0 to be 123 // Object.is equality
+
+- Expected
++ Received
+
+- 123
++ 0
+
+ ❯ src/transposition.shared.test.ts:198:60
+    196|       const [w0, w1, w2, w3] = wordsOf(slot) as [number, number, numbe…
+    197|       expect([(w0 ^ w2) >>> 0, (w1 ^ w3) >>> 0, w3 | 0]).toEqual([0x00…
+    198|       expect(tableCutoff(slot, d, -Infinity, Infinity, 0)).toBe(sK);
+       |                                                            ^
+    199|     });
+    200|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/25]⎯
+
+ FAIL  src/transposition.shared.test.ts > ABC-265 A2 — the XOR check > T10 — the verified copy: a store into the slot between probeTable and tableCutoff > K' at depth d + 1: the cutoff still returns s_K (a live depth read returns null)
+AssertionError: expected +0 to be 123 // Object.is equality
+
+- Expected
++ Received
+
+- 123
++ 0
+
+ ❯ src/transposition.shared.test.ts:209:60
+    207|       writeWords(slot, kPrimeWords);
+    208|       expect((wordsOf(slot)[2] as number) >>> 19).toBe(d + 1);
+    209|       expect(tableCutoff(slot, d, -Infinity, Infinity, 0)).toBe(sK);
+       |                                                            ^
+    210|     });
+    211|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/25]⎯
+
+ FAIL  src/transposition.test.ts > A4 — a mate score is correct at every ply the position is reached at > a mate-in-2 stored at ply 1 reads MATE_SCORE - 4 at ply 1 and MATE_SCORE - 6 at ply 3
+AssertionError: expected +0 to be 29996 // Object.is equality
+
+- Expected
++ Received
+
+- 29996
++ 0
+
+ ❯ <anonymous> src/transposition.test.ts:163:58
+    161|     storeEntry(key, 3, BOUND_EXACT, MATE_SCORE - 4, 1, move);
+    162|     const slot = probeTable(key);
+    163|     expect(tableCutoff(slot, 3, -Infinity, Infinity, 1)).toBe(MATE_SCO…
+       |                                                          ^
+    164|     expect(tableCutoff(slot, 3, -Infinity, Infinity, 3)).toBe(MATE_SCO…
+    165|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[19/25]⎯
+
+ FAIL  src/transposition.test.ts > A4 — a mate score is correct at every ply the position is reached at > a mated-in-2 stored at ply 2 reads -(MATE_SCORE - 6) at ply 2 and -(MATE_SCORE - 8) at ply 4
+AssertionError: expected +0 to be -29994 // Object.is equality
+
+- Expected
++ Received
+
+- -29994
++ 0
+
+ ❯ <anonymous> src/transposition.test.ts:173:58
+    171|     storeEntry(key, 4, BOUND_EXACT, 0 - (MATE_SCORE - 6), 2, move);
+    172|     const slot = probeTable(key);
+    173|     expect(tableCutoff(slot, 4, -Infinity, Infinity, 2)).toBe(0 - (MAT…
+       |                                                          ^
+    174|     expect(tableCutoff(slot, 4, -Infinity, Infinity, 4)).toBe(0 - (MAT…
+    175|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[20/25]⎯
+
+ FAIL  src/transposition.test.ts > A4 — a mate score is correct at every ply the position is reached at > leaves an ordinary score alone at every ply
+AssertionError: expected +0 to be 9000 // Object.is equality
+
+- Expected
++ Received
+
+- 9000
++ 0
+
+ ❯ <anonymous> src/transposition.test.ts:182:69
+    180|     const move = legalMoves(parseFen(fenOf("position-3")))[0] as Move;
+    181|     storeEntry(key, 2, BOUND_EXACT, 9_000, 3, move);
+    182|     expect(tableCutoff(probeTable(key), 2, -Infinity, Infinity, 7)).to…
+       |                                                                     ^
+    183|   });
+    184|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[21/25]⎯
+
+ FAIL  src/transposition.test.ts > the table — verified keys, always-replace, cutoffs only at the stored depth > settles a node only at the depth the entry was searched to
+AssertionError: expected +0 to be 40 // Object.is equality
+
+- Expected
++ Received
+
+- 40
++ 0
+
+ ❯ <anonymous> src/transposition.test.ts:271:58
+    269|     storeEntry(key(), 3, BOUND_EXACT, 40, 0, move());
+    270|     const slot = probeTable(key());
+    271|     expect(tableCutoff(slot, 3, -Infinity, Infinity, 0)).toBe(40);
+       |                                                          ^
+    272|     expect(tableCutoff(slot, 2, -Infinity, Infinity, 0)).toBeNull();
+    273|     expect(tableCutoff(slot, 4, -Infinity, Infinity, 0)).toBeNull();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22/25]⎯
+
+ FAIL  src/transposition.test.ts > the table — verified keys, always-replace, cutoffs only at the stored depth > cuts on a lower bound only at or above beta, on an upper bound only at or below alpha
+AssertionError: expected null to be 50 // Object.is equality
+
+- Expected:
+50
+
++ Received:
+null
+
+ ❯ <anonymous> src/transposition.test.ts:279:57
+    277|     clearTable();
+    278|     storeEntry(key(), 2, BOUND_LOWER, 50, 0, move());
+    279|     expect(tableCutoff(probeTable(key()), 2, 0, 50, 0)).toBe(50);
+       |                                                         ^
+    280|     expect(tableCutoff(probeTable(key()), 2, 0, 51, 0)).toBeNull();
+    281|     storeEntry(key(), 2, BOUND_UPPER, 50, 0, move());
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[23/25]⎯
+
+ FAIL  src/transposition.test.ts > A1 — table-on and table-off scores are identical > position-3 at depth 4 — the same score, and the work changes: 1 377 nodes with the table, 1 533 without
+AssertionError: expected 1336 to be 1377 // Object.is equality
+
+- Expected
++ Received
+
+- 1377
++ 1336
+
+ ❯ <anonymous> src/transposition.test.ts:378:22
+    376|     const off = searchWithoutTable(parseFen(fenOf("position-3")), 4);
+    377|     expect(on.score).toBe(off.score);
+    378|     expect(on.nodes).toBe(1_377);
+       |                      ^
+    379|     expect(off.nodes).toBe(1_533);
+    380|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[24/25]⎯
+
+ FAIL  src/transposition.test.ts > A5 — the only non-losing line repeats, and it scores exactly 0 > search(), depth 4: the perpetual scores exactly 0 and is played — in 7 295 nodes
+AssertionError: expected 7282 to be 7295 // Object.is equality
+
+- Expected
++ Received
+
+- 7295
++ 7282
+
+ ❯ <anonymous> src/transposition.test.ts:512:79
+    510|     // RE-MEASURED at `ABC-083` (king safety and mobility): 7 251 beca…
+    511|     // RE-PINNED at `ABC-215` (the evaluation values made by rule): 7 …
+    512|     expect(searchWithoutPvsOrReductions(parseFen(REPEATS_AT_PLY_4), 4)…
+       |                                                                               ^
+    513|   });
+    514|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[25/25]⎯
+
+
+ Test Files  5 failed | 3 passed (8)
+      Tests  25 failed | 164 passed (189)
+   Start at  16:16:38
+   Duration  1.76s (transform 0ms, setup 0ms, import 545ms, tests 2.26s, environment 1ms)
+

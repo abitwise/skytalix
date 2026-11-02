@@ -1,0 +1,5 @@
+batch2 start 2026-11-02T15:49:52Z load1=3.19
+deep done 2026-11-02T15:57:16Z
+g7 done 2026-11-02T15:58:31Z
+a3 done 2026-11-02T16:12:09Z
+plants done 2026-11-02T16:29:23Z load1=1.36
