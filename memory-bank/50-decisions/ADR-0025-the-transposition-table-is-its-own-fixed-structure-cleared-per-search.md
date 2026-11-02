@@ -6,6 +6,14 @@ id: ADR-0025
 
 ## Status
 
+*2026-11-02, `ABC-265` (TH-1):* a **PROPOSED** amendment to decision 2's first bullet and decision 4's last bullet is
+at the end of this file. It makes the table one lockless `SharedArrayBuffer` table: four `Uint32` words a slot with
+an XOR check, still 2^18 slots and 4 MiB, node-for-node equal to today at `Threads 1`. Acceptance is the owner's.
+Under reading (b) the `ABC-265` build may proceed while it is PROPOSED, and the merge waits on his acceptance. Until
+then decisions 1–7 stand on `main` as written. Written by Architect/Design (task `arch-ABC-265`, records plus scratch
+probes, on `grugops/arch-ABC-265` from `main` `2a61bd3f`). This answers the previous paragraph's "they are not
+written here yet".
+
 *2026-11-02, the owner's answer:* the T2 amendment at the end of this file is **PARKED with `ABC-258`**. His word,
 verbatim (`orch-2026-10-30a` `…81ae2db4`): *"B park"*, the Orchestrator's reading "parked with `ABC-258` (larger
 table / threads)". It is neither accepted nor declined, and nothing is built for it. Decisions 1–7 stand on `main` as
@@ -552,3 +560,212 @@ back to the Engineer.
 - **Before acceptance:** mark this section `withdrawn`. The status line at the top goes with it.
 - **After it ships:** set `depthPreferred` to false in `search()` and `chooseMove`, two booleans. The shipped path is
   then the door, node for node. Removing the switch, the doors and the re-points afterwards is a revert of one ticket.
+
+## Proposed amendment 2026-11-02 (`ABC-265`, TH-1): one shared table, four `Uint32` words a slot with an XOR check. PROPOSED
+
+### Status
+
+**PROPOSED** 2026-11-02 by Architect/Design (task `arch-ABC-265`, records plus scratch probes, on `grugops/arch-ABC-265`
+from `main` `2a61bd3f`). Nothing in `src/` or the tests moved. No clock was read: every probe figure below is a
+deterministic count.
+
+- **Acceptance is the owner's.** Changing an accepted ADR is his (2026-10-22 delegation, `…5aaf7cec` item 3).
+  `ADR-0057` OQ-1 named only `ADR-0044` D5, so this amendment is asked when written (`ADR-0057` § Inputs, TH-1's "its
+  ADR" row). Whether OQ-1 already covers it is the Orchestrator's call; the Architect recommends asking.
+- **The answer that settles it:** *"accept the ADR-0025 shared-table amendment"* or *"decline it"*.
+- **Reading (b)** (the `ABC-208` / `ABC-209` / `ABC-237` precedent): the build of `ABC-265` and its gates may proceed
+  while this is PROPOSED. **The merge waits on his acceptance.** `ABC-265` owes no game read (below).
+- **Default without an answer:** decisions 2 and 4 stand as written, and `ABC-265` is not merged.
+- **If `ABC-265` does not merge,** a dated line here records "accepted, not in force on `main`" (`ADR-0026` decision 9's
+  form).
+- **What this amendment touches:**
+  - **Decision 2, first bullet** (the entry and how a hit is verified). The second bullet (2^18 slots × 16 B = 4 MiB)
+    stands. The third bullet (the replacement policy; always-replace on `main`) stands.
+  - **Decision 4, last bullet** ("one table per worker by construction"; "threading stays `UNKNOWN - verify`"). Its
+    other bullets stand: allocated once per process on first use, cleared at every `chooseMove` and `search()` entry,
+    spanning the iterations of one move.
+  - **Nothing else.** Decisions 1, 3, 5, 6 and 7 are untouched. So are the 2026-10-26 decision 4 amendment (accepted,
+    not in force), the T2 amendment (parked) and `ADR-0058` (accepted, not in force). Each is a policy that ports to this
+    layout without rewriting it (§ Couplings).
+- **Why an amendment and not a new ADR.** Two bullets of one structure's rules change. Decision 4 named the threading
+  question itself and left it open. Every source cite reads "`ADR-0025` Decision 2" or "Decision 4", as the
+  2026-10-26 amendment argued.
+- **Source.** `ADR-0057` (ACCEPTED 2026-11-02) D2.3 and § Inputs for the thread tickets, column TH-1. This amendment
+  writes that design into the table's own ADR. It adds one rule D2.3 does not state (the verified copy, below).
+
+### Decision 2, first bullet, as amended
+
+- **The entry is four `Uint32` words in one `Uint32Array` over one `SharedArrayBuffer`.** 16 bytes a slot, so the
+  design point stays 2^18 slots × 16 B = 4 MiB (4 194 304 B), and `tableByteLength()` stays 4 194 304.
+
+  | word | holds |
+  |---|---|
+  | 0 | `keyLo ^ data` |
+  | 1 | `keyHi ^ score` |
+  | 2 | `data`: move (17 bits), bound (2 bits), depth (13 bits), today's packing |
+  | 3 | `score`, as an unsigned 32-bit pattern (`score >>> 0`; read back as `w3 \| 0`) |
+
+  No `BigUint64Array` or `BigInt64Array` holds a table column. ECMAScript does not make plain 64-bit element accesses
+  tear-free (`ADR-0057` D2.3), and `Uint32` accesses are.
+- **The key is split at the table boundary, and only there.** Inside `probeTable(key)` and `storeEntry(key, …)`:
+  `keyLo = Number(key & 0xffffffffn)`, `keyHi = Number(key >> 32n)`. Both signatures stay `bigint`. The key is 64-bit
+  `bigint` everywhere else: the per-ply key array, `zobrist.ts`, the repetition scans.
+- **The slot is `keyLo & mask`.** That is the same slot as today's `key & mask`, because the mask is below 2^32.
+- **A hit needs a non-zero data word and both XOR equations:** `w2 !== 0`, `((w0 ^ w2) >>> 0) === keyLo` and
+  `((w1 ^ w3) >>> 0) === keyHi`. Compare unsigned: `^` yields a signed 32-bit result (the trap D2.3 names).
+  - **At one writer this is today's test, exactly.** A store writes `w0 = keyLo ^ data` and `w2 = data`, so
+    `w0 ^ w2 = keyLo`. The same holds for the high half. So the check passes exactly when the stored key equals the
+    probed key, which is today's `keys[slot] === key`. The non-zero data word is today's empty-slot test.
+  - **The score round trip equals today's `Int32Array`.** `(s >>> 0) | 0` is ECMAScript's ToInt32, which is what an
+    `Int32Array` store and load apply. It holds for every number, including a non-integer or a non-finite one.
+- **A store writes words 2, 3, 0, 1, with plain writes.** No lock, no `Atomics`. The order is D2.3's. The check, not
+  the order, is what makes a torn slot read as a miss.
+- **A cutoff uses the words the check verified, read once at the probe. (New here; D2.3 does not state it.)**
+  - **Why.** `probeTable` returns a slot, and `tableCutoff(slot, …)` reads the depth, bound and score afterwards. With
+    several writers, another worker may store into that slot between the two calls. `tableCutoff` would then read the
+    other position's depth, bound and score for this position. That is a corrupt cutoff that the XOR check never saw.
+    The check guards only the words it was computed on.
+  - **The rule.** The depth, bound and score that `tableCutoff` uses are the data and score words the probe verified.
+    No second read of words 2 or 3 sits between the check and the cutoff. The copy is the calling thread's own module
+    state. Each `worker_threads` worker has its own module state (`ADR-0057` D2.2), so the copy is never shared. Its form
+    is the Engineer's (for example, a module-private copy that a hit sets). Two constraints:
+    - `tableCutoff`'s signature does not change. `ABC-081`'s rows call it as `tableCutoff(slot, …)`.
+    - `probeTable`'s return stays the slot or −1. The `vi.mock` wrappers count `slot !== -1` as a hit.
+  - **At `Threads 1` it changes nothing.** Neither recursion stores between `probeTable` and `tableCutoff`
+    (`src/engine.ts:399-402`, `src/search.ts:472-475`), so the copy equals the live words.
+  - **Probe** (scratch copies of `main` `2a61bd3f`, never `src/`; deterministic counts). A prototype of this layout
+    read node-for-node equal to base on **90 of 90** fixed-depth rows: `search()` at depths 1–7 and `chooseMove` at
+    fixed depths 1–8 on the six perft roots, in move, score and nodes. That is 7 698 099 nodes a build; kiwipete
+    `chooseMove` at depth 8 is 1 575 537 nodes in both. This is evidence for the design, not `A3`.
+- **The hash move stays a live read of word 2.** `entryMove(slot, moves)` reads word 2 when it is called, as today.
+  - **Why it is not taken from the copy.** It is called after the null-move search, and that subtree can itself store
+    into the same slot. Today's code then reads whatever the slot holds by then. Reproducing that read is part of
+    `Threads 1`'s node-for-node identity. In the probe the slot was overwritten between the probe and `entryMove`
+    **0 times in 40 455** hits that did not cut (a counting build of `main`, the same 90 rows). So the probe cannot
+    tell the two reads apart at these depths. A 4 s search has far larger null-move subtrees, and an overwrite can happen there. A
+    live read is today's read by construction, at any depth.
+  - **Why a live read is safe under sharing.** The move is a hint. It is used only if it matches a move in this node's
+    legal list, as today (`ADR-0057` D2.3: "every hit is still treated as a hint"). One `Uint32` read cannot tear.
+- **The per-search clear leaves every slot's word 2 at zero.** Clearing the whole 4 MiB, or only word 2 of each slot,
+  is the Engineer's choice; both give the same hits. A new `SharedArrayBuffer` is zero-filled, so a cleared table
+  equals a fresh one, as before.
+- **A handle to the buffer, for `ABC-266`.** One accessor returns the `SharedArrayBuffer`, so the pool can hand it to
+  each worker once. A2's torn-slot row writes through it. Its name and shape are the Engineer's. It is not an
+  `EngineOptions` field, and it is not a hook the recursion reads (`ADR-0026` decision 2's rejections). How a worker
+  adopts the buffer is the TH-2 ADR's.
+
+### Decision 4, last bullet, as amended
+
+- **One table per process, shared by every search worker.** The table is one `SharedArrayBuffer`, allocated once by
+  the thread that first clears it and handed to each worker once (`ABC-266`). No worker allocates a table of its own.
+  - **The race it accepts is a torn entry.** Two workers can store into one slot at once and leave words from both.
+    Decision 2's check reads that slot as a miss. A miss costs search effort, never correctness. A torn slot passes the
+    check only if the mixed words satisfy both equations by chance, about 2^-64 for unrelated payloads (`ADR-0057`
+    D2.3; SP2 read 0 undetected corrupt hits in 97 M probes).
+  - **At `Threads 1`** there is one search and one writer. The table behaves exactly as decisions 1–7 say.
+  - **The clear stays one per search.** With workers, it must happen before any worker of the new search writes, and
+    after every worker of the previous search has stopped writing. How the pool orders that is the TH-2 ADR's (named,
+    not decided here).
+  - **Threading is no longer `UNKNOWN - verify`.** `ADR-0057` D2 settles the model: Lazy SMP, one shared table, no
+    lock. `ADR-0005` F6 does not fire: each worker searches its own `Position`, and only the table is shared.
+
+### Couplings (named, not decided)
+
+- **`ADR-0058` (deeper-entry cutoffs; accepted, not in force).** Its hit rule reads the depth from the verified copy,
+  like today's exact-depth rule. It ports to this layout with no layout change.
+- **The T2 amendment (depth-preferred replacement; parked).** It stays layout-neutral, as its own § Consequences says.
+  Its same-key test (b) needs the stored key, which `storeEntry` recovers from words 0–3 by the same XOR. A lost race
+  between two workers costs a replacement decision, never correctness.
+- **The 2026-10-26 decision 4 amendment (the game token; accepted, not in force).** Its last bullet reads
+  "*(Unchanged.)*". If `ABC-257` revives that amendment, its last bullet is this one.
+- **`ABC-257` and `ABC-258`** share `src/transposition.ts`. Whichever comes after `ABC-265` is written on this layout
+  (`ABC-265` § Dependencies).
+
+### Alternatives considered at this hop
+
+- **Keep the `BigUint64Array` key column and share it.** Rejected: the spec does not make plain 64-bit accesses
+  tear-free, so a shared key could tear (D2.3).
+- **`Atomics.load` / `Atomics.store` per word.** Rejected: SP2 measured 2.6× the cost, and torn slots still
+  appeared, because a per-word atomic does not make a four-word entry atomic.
+- **A lock or a sequence counter per slot.** Rejected: it needs `Atomics` and a retry loop on the hot path, and Lazy
+  SMP needs neither. A miss is cheap.
+- **`se-ABC-253`'s full halves path** (32-bit halves in `zobrist.ts`, the key array and the repetition scans).
+  Rejected as the first build: it re-points `ABC-081`'s, `ABC-122`'s and `ABC-208`'s rows. Kept as D2.3's fallback
+  (`ABC-265` F2).
+- **Take the hash move from the verified copy too.** Rejected: it changes node counts at `Threads 1` wherever the
+  null-move subtree has overwritten the slot, so `ABC-265` `A3` could red in a longer search. The probe never saw it
+  happen: 0 overwrites in 40 455, and the variant read 90 of 90 rows equal. The move is a legality-checked
+  hint, so the copy buys nothing for it.
+- **`probeTable` returns the entry's words instead of a slot.** Rejected: its return contract changes, and the
+  `vi.mock` wrappers read it.
+- **`tableCutoff` re-verifies, taking the key.** Rejected: its signature changes, and `ABC-081`'s rows call it
+  directly. An edited row stops the work for a ruling under `ADR-0026` (`ABC-265` `A3`).
+- **One table per worker** (decision 4 as written). Rejected by `ADR-0057` (accepted): the shared table is Lazy SMP's
+  lever.
+
+### The read `ABC-265` owes
+
+- **No game read.** `ABC-265` is value-identical at `Threads 1`, and `A3`'s node-for-node door proves it. C2′ grades
+  strength changes only (`ADR-0056` D5).
+- **No S2 nps reading on top of `A4`.** The Architect's answer to `ABC-265` `A7`'s open question, with the reasons:
+  - **S2 is "the ticket meets its own mechanical bar"** (`EPIC-008` § ship rules). For a speed ticket that bar is a
+    node-rate figure, which is why `EPIC-010` and `EPIC-011` say value-identical (speed) tickets "keep the S2 nps
+    reading". `ABC-265` claims identity, not speed. Its own bars are `A1`–`A5`. Its cost bar is `A4`, which `ADR-0057`
+    (accepted after the `EPIC-011` line was written, and specific to this ticket) names.
+  - **An nps reading cannot see the effect in question.** In `se-ABC-253`'s base profile (`chooseMove`, 4 s, two runs
+    a board), `probeTable` plus `storeEntry` took 1.07 % / 0.95 % of samples on kiwipete and 1.44 % / 1.32 % on
+    position-6. Even if the split doubled both functions, whole-engine node rate would move by at most about 1.5 %.
+    The same host's interleaved nps A/B spread was 1.8–5.9 % a board over five rounds (`se-ABC-253`
+    `raw/ab-summary.txt`). So the ≈ 1 h ALONE reading would report noise.
+  - **`A4`'s profile measures it directly:** `probeTable` and `storeEntry` self time, head against base.
+  - **There is nothing cheaper to fall back to for a small cost.** The fallback (the full halves path) read 1.004× /
+    0.992× / 1.015× of `main` overall in the same informal A/B.
+  - **So `A7` stays "none".** Nothing is asked of the owner. The ruling on the `EPIC-011` line stays the Orchestrator's;
+    this is the Architect's recommendation for it.
+- **What "the profile shows a cost" means for D2.3's fallback.** The operational trigger is `G6` below base (the TH-1
+  cost-bar row of § Inputs, and `ABC-265` F2). The profile is reported, not graded. It settles D2.3's cost
+  `UNKNOWN - verify`, and it is the evidence QE cites if `G6` misses.
+
+### Falsifiers added
+
+| # | clause | what would falsify it | how to check |
+|---|---|---|---|
+| **T8** | 2 as amended — `Threads 1` is node-for-node today's | any move, score or node mismatch between base and head on `ABC-078` `A3`'s corpus, or a pre-existing door that differs from its pre-ticket self | `ABC-265` `A3` (QE, out of tree) |
+| **T9** | 2 as amended — the split costs nothing that matters | `G6` below base at `Threads 1` on kiwipete or position-6 | `ABC-265` `A4`; fires D2.3's fallback (`ABC-265` F2) |
+| **T10** | 2 as amended — the check and the verified copy guard every cutoff | a torn slot that hits (`A2`), or a cutoff that returns another position's value after its slot was overwritten between the probe and the cutoff | `ABC-265` `A2`; under several writers, `ABC-267`'s stress |
+
+T8 or T10 firing is a defect, back to the Engineer. T9 firing fires the fallback, and its row re-points need a ruling
+under `ADR-0026` first.
+
+### Consequences
+
+- **`NFR-009`:** unchanged. 4 MiB, counted once however many workers share it (`ADR-0057` OQ-4 (a)). `process.memoryUsage().arrayBuffers` counts a `SharedArrayBuffer`. In the probe, allocating one of 4 MiB raised it by exactly 4 194 304 B after `gc()` (Node v26.12.1). So `ABC-081` `A7` and `G7` read the shared table as they read today's three arrays.
+- **`NFR-005`:** `G6` at `Threads 1` (`ABC-265` `A4`). The depth-6 floor does not move.
+- **`NFR-004`, security:** untouched. The buffer is process-internal, and no input path is added.
+- **`ABC-081`'s, `ABC-122`'s and `ABC-208`'s rows.** On the scratch prototype, the five files that hold them (`src/transposition.test.ts`,
+  `src/engine.capacity.test.ts`, `src/search.capacity.test.ts`, `src/search.null-move.test.ts`,
+  `src/search.pvs-lmr.test.ts`) ran **unedited, 85 of 85 passed**, as on base. That was the default lane only;
+  the deep rows were not run. `ABC-265` `A3`'s run is still owed. `UNKNOWN - verify` is narrowed to the deep rows.
+- **A typing trap for the build.** `new Uint32Array(0)` infers `Uint32Array<ArrayBuffer>` under TypeScript 5.9, and
+  assigning a view over a `SharedArrayBuffer` to it fails the typecheck. Declare the view as
+  `Uint32Array<ArrayBufferLike>` or `Uint32Array<SharedArrayBuffer>`. With that one annotation, the prototype passed
+  `tsc --noEmit`.
+- **Source comments to rewrite in the build** (`src/transposition.ts`):
+  - the header's storage paragraph (`:11-15`, "an 8-byte key, a 4-byte packed word, a 4-byte score");
+  - the lifetime paragraph's "Clearing zeroes the packed words only" (`:17-20`), if the clear changes;
+  - the threading line (`:36`), replaced by a pointer to this amendment;
+  - the `MATE_FLOOR` comment (`:58-60`), already owed by `ABC-265` Scope 7.
+- **Migration:** none. Nothing is persisted.
+- **Page deltas owed by BA/PM (named, not applied here):**
+  - `ABC-265` `A2` gains one unit row for T10. **Given** an entry stored for K and a probe for K that hits, **when**
+    the test writes another key's entry into that slot through the handle before `tableCutoff` runs, **then**
+    `tableCutoff` returns K's settled value, not the other key's. Like the torn-slot row, it needs no second thread.
+  - `ABC-265` `A7` and its `adr:` line cite this amendment: written, PROPOSED, and no S2 reading (§ The read).
+  - `ABC-267` `A2`'s stress may add the probe-then-cutoff case under several writers. That is the TH-3 design hop's
+    call.
+
+### Rollback
+
+- **Before acceptance:** mark this section `withdrawn`. The status line at the top goes with it.
+- **After `ABC-265` ships:** revert its one ticket. `Threads 1` play is node-for-node the same before and after, so
+  the revert changes no move. Once `ABC-266` relies on the handle, revert `ABC-266` first.
