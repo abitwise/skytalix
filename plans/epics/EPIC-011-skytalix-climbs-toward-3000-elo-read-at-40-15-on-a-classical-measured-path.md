@@ -10,6 +10,27 @@ owner: BA/PM
 
 # EPIC-011: the path toward 3 000 Elo, classical and measured (`ADR-0056`)
 
+> **`ABC-264` CLOSED AS DROPPED; P2 OUT OF PHASE 2; P1 PARKED ON `main`; ONE OPTIONAL OWNER QUESTION, 2026-11-02, by
+> BA/PM** (task `bapm-phase2-records`, records only, at `main` `4849c4ab`; nothing run). Sources: `arch-phase2-rebase`
+> `…f9f440c9` and `…e4680ed2`; `arch-ADR-0060-reopen` `…e17a23f4` and `…79be958e`; `ADR-0059`, `ADR-0060` and
+> `ADR-0056` D2 (dated lines).
+> - **`ABC-264` (P2): closed as dropped, not merged.**
+>   - The Architect's retry ruling is **DROP**, and `ADR-0059` is accepted, not in force on `main`.
+>   - A re-cut is a new ticket with a named new premise (`ADR-0059` § Status). `QE-264-p2-b` stays open for tools.
+>   - The S′ 7.0 / 10 stays unpooled.
+>   - Page `status: dropped`, `column: Done`. § Tickets row 16.
+> - **P2 is dropped from Phase 2.** The order is **P1 → P4 → P3 → P5 → P6** (`ADR-0056` D2's dated line).
+>   - P3's and P6's "after P2" waits are void.
+>   - P4 still depends on P1, so it waits with it.
+>   - Which item is pulled next is the Orchestrator's call. `arch-phase2-p3` is queued.
+> - **P1 is PARKED on `main`.** The `ADR-0060` re-open ran a pre-registered set of nine forms; none meets every bar,
+>   so no rule is written in and the build does not start.
+>   - The stub is in § Phases, "P1, parked". It is title-only and holds no id (BA/PM's call; the reasons are there).
+>   - **Its trigger:** re-measure `ADR-0060` decision 1, unchanged and under every bar, after P3 merges or after O1h
+>     (`ABC-233`) lands. The owner's acceptance follows.
+> - **Optional owner question:** may A3's 27 cp cap be re-derived to 94 cp? The default is **keep**, and a "yes" alone
+>   admits no form. § Owner questions.
+
 > **`ABC-264` A6 NOT MET, NOT MERGED; `ABC-265` DoR 10/10; THE S′ POOL TAKES MERGED BUILDS ONLY, 2026-11-02, by
 > BA/PM** (task `bapm-ABC-265-rows`, records only, at `main` `f312e9d7`; nothing run).
 > - **`ABC-264` (P2):** `qe-ABC-264-p2` FAIL (`…4a487d20`). A6 **44.0 / 100** (30 / 28 / 42, −41.9 ± 58.5 Elo, 0 losses
@@ -286,12 +307,12 @@ reorders made here are named in the "why" column.
 | 1 | T2 | `ABC-237` depth-preferred replacement | full page (moved in) | ~~after T1 (same file)~~ *2026-11-02: **paused, parked**, re-read with `ABC-258` (pays only on a loaded table: 0.77× at 2^14, 1.00× at 2^18)* |
 | 1 | T3 | **`ABC-257`** TT kept across the moves of a game, ~~re-tried after T1 and T2~~ *combined with T1 (2026-11-02)* | full page (new; re-try of dropped `ABC-209`) | ~~`ABC-209`'s NEUTRAL was read under exact-depth cutoffs, where a kept entry almost never cuts (`ADR-0056` D2 T3)~~ *2026-11-02, corrected: kept entries supply 17–23 % of exact cuts (`…5ea73b5c`), so "never cuts" does not explain `ABC-209`'s NEUTRAL. The premise is the combination: T1 + T3 0.904× over searches 2–9 at depth 8, against 0.973× for T3 alone. **Paused** until the owner answers C2′ yes or allows a longer read; bar pre-registered (≤ 0.93×, held out, no game > 1.00×)* |
 | 1 | T4 | **`ABC-258`** a larger TT | full page (new) | at 40/15 (≈ 22 s, ≈ 14–20 M nodes a move at today's 0.63–0.90 M nodes/s) ~~a 2^18-slot table (262 144 entries) is far too small~~ *2026-11-02: only 3–5 % of nodes store, ≈ 0.4–1.0 M stores a search, 1.6–3.8 a slot (`…5ea73b5c`); T2 folded in as the alternative remedy; **paused***; 8 MiB fits `NFR-009` today, more is Q-3K-6 |
-| **2, pruning and reductions** *(NEXT, 2026-11-02)* | P2 | ~~*stub:*~~ **`ABC-264`** reverse futility (static null move) | ~~title only~~ full page (new, `bapm-phase1-pause`) | top expected Elo per cost (`ADR-0056` D2); acts at remaining depth 1–3, so the 100 ms read sees it. *2026-11-02: first of Phase 2, the ruling's next ticket; ~~owes its ADR~~ `ADR-0059` PROPOSED (`arch-ABC-264`): 120 cp a ply, depth 1–3, null-window; A4 ≤ 0.75× both recursions; DoR 10/10 (reading (b)), In Development (`bapm-ABC-264-rows`)* *2026-11-02 (`bapm-threads-cut`): `ADR-0059` **ACCEPTED** ("R yes"); A6 and the merge no longer wait on the owner* *2026-11-02 (`bapm-ABC-265-rows`): **A6 NOT MET** (44.0 / 100, `qe-ABC-264-p2` `…4a487d20`); not merged (`ADR-0059` F5); Blocked, closed-not-merged, pending the Architect's retry ruling* |
-| 2 | P1 | *stub:* LMR by a log table of depth × move index, history-adjusted (amends `ABC-121`'s flat 1-ply LMR, `ADR-0026`) | title only | |
-| 2 | P4 | *stub:* late-move (move-count) pruning | title only | after P1 |
-| 2 | P3 | *stub:* futility pruning near the leaves | title only | after P2 |
+| **2, pruning and reductions** *(NEXT, 2026-11-02)* | P2 | ~~*stub:*~~ **`ABC-264`** reverse futility (static null move) | ~~title only~~ full page (new, `bapm-phase1-pause`) | top expected Elo per cost (`ADR-0056` D2); acts at remaining depth 1–3, so the 100 ms read sees it. *2026-11-02: first of Phase 2, the ruling's next ticket; ~~owes its ADR~~ `ADR-0059` PROPOSED (`arch-ABC-264`): 120 cp a ply, depth 1–3, null-window; A4 ≤ 0.75× both recursions; DoR 10/10 (reading (b)), In Development (`bapm-ABC-264-rows`)* *2026-11-02 (`bapm-threads-cut`): `ADR-0059` **ACCEPTED** ("R yes"); A6 and the merge no longer wait on the owner* *2026-11-02 (`bapm-ABC-265-rows`): **A6 NOT MET** (44.0 / 100, `qe-ABC-264-p2` `…4a487d20`); not merged (`ADR-0059` F5); Blocked, closed-not-merged, pending the Architect's retry ruling* *2026-11-02 (`bapm-phase2-records`): **DROPPED from Phase 2.** The retry ruling is DROP (`arch-phase2-rebase` `…f9f440c9`); `ADR-0059` accepted, not in force; `ABC-264` closed as dropped, not merged; a re-cut is a new ticket with a named new premise* |
+| 2 | P1 | *stub:* LMR by a log table of depth × move index~~, history-adjusted~~ (amends `ABC-121`'s flat 1-ply LMR, `ADR-0026`) *(2026-11-02: "history-adjusted" struck by `ADR-0060` d11; the history term waits for O1h)* | title only; ***parked*** *(§ P1, parked, below)* | *2026-11-02 (`bapm-phase2-records`): first in the order (`ADR-0056` D2's dated line). **PARKED on `main`**: in the `ADR-0060` re-open, no form in the pre-registered set of nine meets every bar (`…e17a23f4`). Re-measured after P3 merges or after O1h* |
+| 2 | P4 | *stub:* late-move (move-count) pruning | title only | after P1 *(2026-11-02: so it waits while P1 is parked)* |
+| 2 | P3 | *stub:* futility pruning near the leaves | title only | ~~after P2~~ *2026-11-02: P2 dropped, so no wait. P1's re-measure is triggered when P3 merges. Next pull is the Orchestrator's (`arch-phase2-p3` queued)* |
 | 2 | P5 | *stub:* null move whose R grows with depth and eval margin (amends `ADR-0050`; `ABC-208`'s fixed R = 3) | title only | |
-| 2 | P6 | *stub:* razoring | title only | after P2 |
+| 2 | P6 | *stub:* razoring | title only | ~~after P2~~ *2026-11-02: P2 dropped, so no wait* |
 | — | reading | **R1**, milestone reading on the routine control | (a QE reading; ticket cut when Phase 2 closes) | `ADR-0056` D6 item 7 |
 | **threads** *(2026-11-02, `ADR-0057`; owner OQ-1 yes)* | TH-1 | **`ABC-265`** one lockless shared table: four `Uint32` words a slot over a `SharedArrayBuffer`, XOR check, 2^18 slots, 4 MiB, node-equal at `Threads 1` | full page (new, `bapm-threads-cut`) | after Phase 2 and R1, before Phase 3; **may be pulled beside Phase 2 by width** (edits only `src/transposition.ts`, which no Phase 2 ticket edits; value-identical, so it stales no C2′ read). ~~Owes its `ADR-0025` amendment (the owner's when written)~~ *2026-11-02 (`bapm-ABC-265-rows`): the amendment is written, PROPOSED (`arch-ABC-265`); DoR 10/10 (reading (b)); no S2 reading (the Orchestrator's ruling)* |
 | threads | TH-2 | **`ABC-266`** a Lazy SMP worker pool behind a UCI `Threads` option, default 1; read once, `Threads N` against `Threads 1`, labelled a hardware gain | full page (new) | after `ABC-265`; owes its ADR amending `ADR-0044` D3 and D5 (D5's reversal pre-accepted). The only `Threads N` read; every phase read stays `Threads 1` against `Threads 1` (OQ-2 (a)) |
@@ -329,6 +350,52 @@ reorders made here are named in the "why" column.
   in § The per-change rule.
 - **Not cut, recorded:** `ADR-0055` O1-e (incremental material + PST): "not proposed now"; after E1 the evaluation has
   two halves, so it is re-read then, not here.
+
+### P1, parked (stub; 2026-11-02, `bapm-phase2-records`)
+
+- **Title:** P1: late-move reductions from a log table of remaining depth × move index, replacing `ABC-121`'s flat 1-ply
+  LMR (`ADR-0026`), behind a test-only off-door pair. The title drops "history-adjusted" (`ADR-0060` d11). It names no
+  PV term and no cap, because no form is written into `ADR-0060` as its rule.
+- **State:** Backlog, **parked**. Not refined, and not Ready. It cannot reach Ready on today's `ADR-0060` text. The
+  re-open found no form meeting every bar on `main` (`arch-ADR-0060-reopen` `…e17a23f4`, `…79be958e`).
+- **No id (BA/PM's call).** The id and the full page come at its refinement, by § Phases' rule ("stubs get an id and a
+  full page at their phase's refinement, not before"). Reasons:
+  - Phase 2 gives an id only to the item about to be pulled: P2 became `ABC-264` when it was next. P3–P6 stay
+    title-only.
+  - P1 is not next, and there is no rule to build. A page now would carry acceptance rows against a form that does not
+    exist.
+  - The bars already have one home, `ADR-0060` d8 and d9. A page would copy them and could drift from them.
+  - No parked ticket here was parked before it was refined. `ABC-237` and `ABC-258` were full pages first.
+
+  `arch-phase2-rebase` `…e4680ed2` suggested the stub hold an id. The brief left the call to BA/PM, and it is taken
+  here. When the trigger below passes, BA/PM cuts the page with the next free id.
+- **Intent: GAIN.** LMR fires at 100 ms: 11.0 % of non-first moves are reduced at depth 6 on `main`
+  (`arch-phase2-rebase`). It is not a NEUTRAL candidate. **Size:** S–M (`ADR-0056` D2). **Priority:** P2, the largest
+  Phase 2 estimate, +40–100 (estimate, `ADR-0056` D2; not a reading).
+- **Bars carried, unchanged, by reference** (`ADR-0060` d8, d9 and the re-open's decision 2; listed here so the stub is
+  checkable, and the ADR governs):
+  - `A1`: export lists +2 (`ABC-077` `A6`) and +1 (`ABC-078` `A4`).
+  - `A2`: the table cells, each exclusion, the two-ply re-search row and the source row.
+  - `A3`: ≥ 95 % within 25 cp, none beyond 27 cp, 0 sign changes, both recursions at d5 on the 190. The mate floor is
+    one ply deeper (door d4, head d5) at 0 violations. The seven zugzwang rows are played at their recorded depths,
+    never re-pinned deeper.
+  - `A4`: (a) ≤ 0.85× at d8 on kiwipete and position-6 in both recursions. (b) Mean completed depth at maxNodes 47 000
+    on the 190 ≥ door + 0.25 ply. (c) `G6` ≥ base.
+  - `A5`: `G1` ≥ 54 / 58, no NEWLY line.
+  - `A6`: C2′ GAIN ≥ 50.0 of 100, S′, and the Levels deep lane.
+
+  Base facts: the base is `main`, with no reverse futility. The door counts are 1 116 785 / 1 602 457 (`search()` d8)
+  and 1 575 537 / 476 244 (`chooseMove` to 8). There are no `ABC-264` rows to re-point.
+- **Dependencies, in order:**
+  1. **The re-measure trigger:** P3 merged, or O1h (`ABC-233`) landed. Then `ADR-0060` decision 1 is re-measured
+     unchanged, under every bar unchanged, by a dated line in `ADR-0060` (the Architect's). That P3 restores the
+     margin is a judgement (`UNKNOWN - verify`). If decision 1 meets every bar, BA/PM cuts the page.
+  2. **The owner's acceptance of `ADR-0060`.** It gates C2′ and the merge (reading (b)).
+
+  Under "keep the cap" (the default), P1 waits here and the flat 1-ply LMR stays on `main`. If the re-measure misses
+  too, the cap question comes back in the same shape (`…e17a23f4`, Risks).
+- **Still BA/PM's, not decided here:** whether `ABC-233`'s page carries a history term in LMR, or a follow-up does
+  (`ADR-0060` d11).
 
 ## The per-change rule (what a value-changing ticket needs before it merges)
 
@@ -501,7 +568,7 @@ Phase 5, the next question is V4 and it is his (`ADR-0056` D6 item 7).
 | ~~13~~ | `ABC-254` | Lazy legality (V2, O1-d) | M | P2 | **Returned to `EPIC-010`** 2026-11-01 (milestone 1b, first) | 10/10 | ~~**Q-SP-3**; the ADR amending `ADR-0003`; `EPIC-010`'s `ABC-252` (or where the O1-b chain stops)~~ none (yes `…f7a50e95`; `ADR-0003` amended, `89af8b56`) |
 | 14 | `ABC-262` | The lazy-legality rows read the board shapes they missed: `hasLegalMove`'s early exit on a pawns-first board, and the in-check quiet queen promotion with black to move (phase 0, M0; test-only, from QE-261-a and QE-261-b, both LOW; cut 2026-11-01, `bapm-qe-gaps-1101b`) | XS | P3 | ~~Backlog (Ready recommended)~~ **Done** 2026-11-01 (merged `2cf2bb69`; QE PASS_WITH_GAPS `…ed4d02a5`; A4 waived by the Orchestrator, marked on the page by `bapm-spike-accel`) | **10/10** | `ABC-261` merged (`12e78c4d`); no ADR of its own; recommended after `ABC-250` merges or is dropped, before `EPIC-010`'s `ABC-252`; does not hold `EPIC-010`'s close |
 | 15 | `ABC-263` | **SPIKE** (records only, Architect): can `skytalix` use the NPU, the iGPU and more CPU threads from Node.js on this host, and share search info between them? Q1 accelerators (with and without a net), Q2 threads (Lazy SMP, shared TT), Q3 shared or device memory on the APU, Q4 the owner's rules it would meet; it recommends and changes no rule (owner `…78c476bf`; cut 2026-11-01, `bapm-spike-accel`) | M | P2 | Backlog | **10/10** | none hard. **Where it sits:** outside phases 0–5, any time, records only; no phase ticket waits on it and it waits on none. Its follow-ups need the owner to open scope (§ Out of scope: threads, neural). *2026-11-02 (`bapm-threads-cut`): `ADR-0057` ACCEPTED; threads opened and cut as rows 17–19; neural later (OQ-6)* |
-| 16 | `ABC-264` | P2: reverse futility (static null move) at remaining depth 1–3, behind an `ADR-0026` off-door pair, with mate, check and zugzwang guards (Phase 2, first; cut 2026-11-02, `bapm-phase1-pause`) | S | P2 | ~~Backlog~~ **In Development** *(2026-11-02, the Orchestrator's pull `0b73f51d`; page by `bapm-ABC-264-rows`)* | ~~9/10~~ **10/10** | ~~the ADR (margin, depth range, guards, door names; `ADR-0026` d10) — the Architect's; then Ready~~ *2026-11-02:* `ADR-0059` written, PROPOSED; reading (b): build now, read (A6) and merge on the owner's acceptance *2026-11-02 (`bapm-threads-cut`): **ACCEPTED** ("R yes"); A2's static-score sentence re-worded (≤ 10 885 cp, `QE-264-b`)* *2026-11-02 (`bapm-ABC-265-rows`): **A6 NOT MET**, 44.0 / 100 (30 / 28 / 42, −41.9 ± 58.5 Elo, 0 time losses); smoke 7.0 / 10 MET (not pooled); Levels 57 / 57 MET; **not merged** (`ADR-0059` F5); **Blocked, closed-not-merged, pending the Architect's retry ruling** (not decided here); code on `grugops/ABC-264-fix` `4d1c0616`* |
+| 16 | `ABC-264` | P2: reverse futility (static null move) at remaining depth 1–3, behind an `ADR-0026` off-door pair, with mate, check and zugzwang guards (Phase 2, first; cut 2026-11-02, `bapm-phase1-pause`) | S | P2 | ~~Backlog~~ ~~**In Development** *(2026-11-02, the Orchestrator's pull `0b73f51d`; page by `bapm-ABC-264-rows`)*~~ **dropped: closed, not merged, retry DROP** *(2026-11-02, `bapm-phase2-records`; page `status: dropped`; the board move is the Orchestrator's; code `4d1c0616` kept)* | ~~9/10~~ **10/10** | ~~the ADR (margin, depth range, guards, door names; `ADR-0026` d10) — the Architect's; then Ready~~ *2026-11-02:* `ADR-0059` written, PROPOSED; reading (b): build now, read (A6) and merge on the owner's acceptance *2026-11-02 (`bapm-threads-cut`): **ACCEPTED** ("R yes"); A2's static-score sentence re-worded (≤ 10 885 cp, `QE-264-b`)* *2026-11-02 (`bapm-ABC-265-rows`): **A6 NOT MET**, 44.0 / 100 (30 / 28 / 42, −41.9 ± 58.5 Elo, 0 time losses); smoke 7.0 / 10 MET (not pooled); Levels 57 / 57 MET; **not merged** (`ADR-0059` F5); **Blocked, closed-not-merged, pending the Architect's retry ruling** (not decided here); code on `grugops/ABC-264-fix` `4d1c0616`* *2026-11-02 (`bapm-phase2-records`): the Architect's retry ruling is **DROP** (`arch-phase2-rebase` `…f9f440c9`); `ADR-0059` accepted, not in force; waits on nothing. A re-cut is a new ticket with a named new premise (`ADR-0059` § Status); `QE-264-p2-b` open for tools; S′ unpooled* |
 | 17 | `ABC-265` | **TH-1:** one lockless shared table, four `Uint32` words a slot over a `SharedArrayBuffer` with an XOR check, 2^18 slots, 4 MiB, node-equal to `main` at `Threads 1` (value-identical; no game read; `G4`, `G6` and the profile) (cut 2026-11-02, `bapm-threads-cut`) | M (L on its fallback) | P2 | Backlog | ~~9/10~~ **10/10** *(2026-11-02, `bapm-ABC-265-rows`)* | ~~the `ADR-0025` amendment (decision 2, decision 4's last bullet), the Architect's; the owner's when written (reading (b))~~ *2026-11-02:* the amendment is written, PROPOSED (`arch-ABC-265`); A2 gains T10; no S2 reading (the Orchestrator's ruling); reading (b): build may start, merge waits on the owner's acceptance. Pullable beside Phase 2 |
 | 18 | `ABC-266` | **TH-2:** a Lazy SMP worker pool behind a UCI `Threads` option, default 1; `Threads 1` node-equal; read once, `Threads N` against `Threads 1` at 100 ms, GAIN, labelled a hardware gain (cut 2026-11-02) | L | P2 | Backlog | **9/10** | `ABC-265` merged; a new ADR amending `ADR-0044` D3 and D5 (D5's reversal pre-accepted, OQ-1); M and N fixed on the page; whether `d` sets `Threads` per side (`UNKNOWN - verify`) |
 | 19 | `ABC-267` | **TH-3:** multi-worker property rows across thread counts, the multi-writer torn-entry stress, `NFR-009` summed over workers, the default lane's wall before and after its one 2-worker row (test-only; cut 2026-11-02) | S | P2 | Backlog | **9/10** | `ABC-266` merged and its ADR (M, the deep flag); **may fold into `ABC-266`** (the Orchestrator's call) |
@@ -667,6 +734,7 @@ line, id unchanged), **merge into X**, **supersede**, **drop**, **close** (the e
 | ~~**Q-SP-3**~~ | Amend `ADR-0003` so lazy legality may be built | **answered yes 2026-11-01** (`…f7a50e95`); `ADR-0003` amended | nothing (`ABC-254` is in `EPIC-010`) |
 | ~~**`ADR-0057` OQ-1–OQ-6**~~ | Threads in scope; the reading of "one core"; the claim's thread count; `NFR-009` for workers; the host change; NNUE on the CPU | **answered 2026-11-02** (`…81ae2db4`): 1 yes, 2 a, 3 c, 4 a, 5 no, 6 later (top block) | nothing (`ABC-265`–`ABC-267` cut) |
 | **TH-1's `ADR-0025` amendment** *(new 2026-11-02, `arch-owner-answers-1102` open question 1)* | Accept the shared-table amendment to `ADR-0025` decision 2 and decision 4's last bullet, an accepted ADR that OQ-1 did not name | asked when written (recommended); or the Orchestrator reads OQ-1 as covering it. *2026-11-02 (`bapm-ABC-265-rows`): written, PROPOSED (`arch-ABC-265`, merged `c0f3cbad`); the Orchestrator has asked the owner (board, 2026-11-02)* | `ABC-265`'s merge (its build may start under reading (b)) |
+| **P1's 27 cp cap** *(new 2026-11-02, `arch-ADR-0060-reopen` `…e17a23f4` decision 4; recorded by `bapm-phase2-records`; **optional**)* | May `ADR-0060` A3's 27 cp drift cap be re-derived on `main` by `ADR-0050` d8's method? It would become **94 cp** (⌊1.5 × 63⌋, decision 1's larger maximum on `main`). **A "yes" alone admits no form:** decision 1 still misses A4 (a) on `chooseMove` position-6 (0.8699 against 0.85), and no form in the set misses only the cap. The answers that settle it: "keep the cap"; "re-derive the cap and A4 (a)" (decision 1 re-proposed with 94 cp and his A4 (a) number); or "decline `ADR-0060`" | **keep the cap** (the Architect's recommendation, which BA/PM adopts). P1 stays parked, the flat 1-ply LMR stays on `main`, and decision 1 is re-measured unchanged after P3 merges or after O1h | nothing today. Under the default, P1 waits on its re-measure trigger (§ Phases, "P1, parked") |
 | (part of Q-3K-1) | Confirm the scale (Stockfish 19 `UCI_Elo`) and the claim rule (≥ 50 % over 200 games at E = M) | *[proposed]* as written | G1's wording |
 
 ## Dependencies
@@ -713,6 +781,11 @@ line, id unchanged), **merge into X**, **supersede**, **drop**, **close** (the e
 - **`RISK-EPIC011-07` (2026-11-02): a multi-worker lane that flakes.** Lazy SMP above one worker is not deterministic.
   Mitigated by testing properties only at `Threads ≥ 2`, by `Threads 1` staying node-equal (every oracle holds), and by
   at most one 2-worker row in the default lane (`ABC-266` test note 1, `ABC-267` A4–A5).
+- **`RISK-EPIC011-08` (2026-11-02, `bapm-phase2-records`): Phase 2 has lost its two largest estimates for now.** P2
+  (+30–60) is dropped and P1 (+40–100) is parked (`ADR-0056` D2 estimates, not readings). P4 (+20–40) waits on P1.
+  That leaves P3, P5 and P6 (+15–40, +10–30 and +5–15) pullable on today's `main`, so R1 may read a
+  small Phase 2. Mitigated by P1's named re-measure trigger (P3 merged, or O1h) under unchanged bars, and by
+  `ADR-0059`'s named re-cut premises for P2. No bar is loosened to recover either one.
 
 ## NFR triggers
 
