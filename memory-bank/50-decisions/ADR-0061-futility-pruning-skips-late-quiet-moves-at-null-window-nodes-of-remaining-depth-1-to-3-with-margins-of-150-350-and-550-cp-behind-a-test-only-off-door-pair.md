@@ -362,6 +362,12 @@ errors of 200 cp or more.
 - **Eval-scale coupling, named.** The margins are in the evaluation's centipawns. E1 / E2 (taper, tuning) re-scale
   it, so the margins are re-read on the new scale by a dated amendment, with the audit and drift rows re-run. The
   piece values (325 / 500) they sit above are in `src/evaluate.ts`.
+  - *Dated 2026-11-02 (`arch-E1`, records only; probe on a scratch copy of `main`'s `src/` `58fa3eb4`): E1's scale.*
+    E1 (`ADR-0064`) keeps every material value and every middlegame value, so it is identical to `main` at phase 24.
+    Decision 8's drift and mate-floor rows were re-read with E1's evaluation on both sides, BASE as the control
+    (which reproduced 100 % / max 10 and 0 / 189): 100 % within 25 cp, max 0, in both recursions; mate floor 0 / 190.
+    The margins hold on E1's scale. The cut audit (d) is owed by the E1 build as a QE scratch reading
+    (`ADR-0064` decision 8 B5), with its bars unchanged. E2 re-scales the evaluation, so it owes the full re-read.
 - **P1 coupling:** file collision only (`src/search.ts`, `src/engine.ts`). The rule reads no move number or reduction.
   The second to merge re-reads its door counts (decision 9).
 - **P4 coupling, later.** Move-count pruning would share this node test's guards. Its ADR decides whether it shares

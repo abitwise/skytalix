@@ -1,0 +1,4 @@
+{"form":"L","rec":"choose","name":"position-6","d":7,"nodes":193802,"score":78,"move":"c3d5","evalCalls":169120,"piecesPerCall":27.05,"pawnsPerCall":14.71,"reachPerCall":0,"callsPerNode":0.873}
+{"form":"L","rec":"choose","name":"position-6","d":8,"nodes":404930,"score":74,"move":"c3d5","evalCalls":353140,"piecesPerCall":26.85,"pawnsPerCall":14.7,"reachPerCall":0,"callsPerNode":0.872}
+{"form":"L","rec":"choose","name":"position-6","d":9,"nodes":926005,"score":76,"move":"c3d5","evalCalls":799949,"piecesPerCall":26.74,"pawnsPerCall":14.67,"reachPerCall":0,"callsPerNode":0.864}
+{"form":"L","rec":"choose","name":"position-6","d":10,"nodes":1692669,"score":73,"move":"c3d5","evalCalls":1457169,"piecesPerCall":26.51,"pawnsPerCall":14.66,"reachPerCall":0,"callsPerNode":0.861}

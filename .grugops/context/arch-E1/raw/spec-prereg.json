@@ -1,0 +1,6 @@
+{
+  "refs": ["arch-E1", "grugops/arch-E1", "EPIC-011", "E1", "E2", "ABC-231", "ABC-232", "ABC-239", "ABC-205", "ADR-0056", "ADR-0031", "ADR-0050", "NFR-005", "Q-3K-4", "a2b593d5", "58fa3eb4", "arch-next-pull/20261102T212832Z-architect-design-decision-4de572aa", "arch-next-pull/20261102T213500Z-architect-design-observation-d0f1a5fc", "arch-next-pull/20261102T213500Z-architect-design-decision-7e3ace66"],
+  "notes": [
+    { "kind": "decision", "confidence": "high (a pre-registration: instrument, closed form set, instrument check, readings, choice rule and what decides nothing fixed before any measured run)", "bodyFile": "notes/prereg.md" }
+  ]
+}

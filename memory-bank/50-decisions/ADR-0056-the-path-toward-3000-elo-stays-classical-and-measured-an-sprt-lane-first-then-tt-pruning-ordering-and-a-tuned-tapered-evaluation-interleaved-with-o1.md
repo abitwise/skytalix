@@ -420,6 +420,14 @@ terms E3–E7, each best added under the tuner; then X2 singular extensions and 
 - **The suggested order** (the Orchestrator's call): P3 (`ADR-0061`) now, independent of the P1 re-open → P1 if the
   owner's cap answer re-opens it green → P5 (NEUTRAL) → P4 after O1h → P6 not before E1 / E2.
 
+*Dated 2026-11-02 (`arch-post-268`; written by `arch-E1`, the line `arch-post-268` named as owed): row P1, parked after P3.*
+- **Row P1: parked after P3.** `ADR-0060` decision 1 was re-measured on `main` `e72487e1`, with futility (P3,
+  `ADR-0061`) in force. It misses three bars: `A4` (a) on `chooseMove` position-6 (0.8528 against 0.85), `A3`'s 27 cp
+  cap (63 cp, position-6/g5h6) and zugzwang 7 / 7 (`zugzwang.004` g7f6 at d11). `ADR-0060` § Status (dated
+  `arch-post-268`) has the readings. The owner's cap question is moot.
+- The joint O1h + P1 probe (`arch-next-pull`, the block below) did not re-open it. P1 re-opens only on a new named
+  premise with a new pre-registered probe, for example an evaluation change that changes the tree (E1 / E2).
+
 *Dated 2026-11-02 (`arch-ABC-233`, records only; probe on a scratch copy of `main`'s `src/` `58fa3eb4`, futility in force): row O1h.*
 - **Row O1h has an ADR: `ADR-0063` (PROPOSED, premise not met on `main`).** Measured at depth 8, the history table
   reads 0.78–1.00× in `search()` and 0.97–1.00× in `chooseMove`, with +0.08 to +0.11 ply at 47 000 nodes. Every
@@ -448,6 +456,19 @@ terms E3–E7, each best added under the tuner; then X2 singular extensions and 
   3. then P5 (NEUTRAL), O3s (`ABC-234`) and S1 (`ABC-236`), each estimated 0–15 Elo here.
   - D6 allows this reorder by evidence. The owner is told, not asked.
   - `Q-3K-4` (`G6` "≥ base") is now live for E1 and should be put to him (decision `arch-next-pull` § 3).
+
+*Dated 2026-11-02 (`arch-E1`, records only; probe on a scratch copy of `main`'s `src/` `58fa3eb4`): row E1.*
+- **Row E1 has an ADR: `ADR-0064` (PROPOSED).** One phase (N 1, B 1, R 2, Q 4, out of 24, linear). Every term is a
+  middlegame / endgame pair in one data-only parameter table, `src/evaluate-params.ts` (E2's seam). At E1 only the
+  king (40 − 15 m, `ABC-231`) and the passers (2 × by rank, `ABC-232`) get endgame halves. It sits behind a test-only
+  off-door pair, with intent GAIN.
+- **Measured** (node counts; no timing):
+  - E1 is identical to `main` at phase 24;
+  - `chooseMove` trees on the `G6` boards: 0.96–1.035 × at d8–d10;
+  - per-node work: about 30 operations a call, estimated at 1–2 % of node time (`UNKNOWN - verify`, `G2` reads it);
+  - mate floor 0, zugzwang 7 / 7, `G1` 54 / 58.
+- **Designed for both `Q-3K-4` answers** (`ADR-0064` decision 8 B7). The plateau form read better on the evaluation
+  instrument (information only) and is left to E2's tuner.
 
 ### D3. Is 3 000 reachable without a neural network?
 
