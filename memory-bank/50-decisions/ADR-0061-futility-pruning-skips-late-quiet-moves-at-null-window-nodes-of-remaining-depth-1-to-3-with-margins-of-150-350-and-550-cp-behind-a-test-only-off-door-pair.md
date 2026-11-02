@@ -6,7 +6,19 @@ id: ADR-0061
 
 ## Status
 
-**PROPOSED** 2026-11-02 by Architect/Design (task `arch-phase2-p3`, records only, on `grugops/arch-phase2-p3` from
+**ACCEPTED 2026-11-02 by the owner. NOT IN FORCE on `main` until `ABC-268` merges.** His words, verbatim
+(`orch-2026-10-30a` `…773be7de`): *"61 yes"*. Recorded by Architect/Design (task `arch-owner-answers-1102b`, records
+only, on `grugops/arch-owner-answers-1102b` from `main` `b47adfbb`). Nothing was run.
+- **What acceptance releases:** `ABC-268` part 2, from `grugops/ABC-268-fix`. Part 2 is the QE re-check of QE-268-a,
+  -b and -c; `A6`, 100 games at 100 ms against the base, GAIN ≥ 50.0; S′, a 10-game smoke at 0.5 s against E 1 650;
+  and the Levels deep lane.
+- **When it comes into force:** at `ABC-268`'s merge, which happens only if part 2 passes, `A6` included.
+- **If `ABC-268` does not merge** (an `A6` miss included), a dated line here reads "accepted, not in force on `main`"
+  (`ADR-0026` decision 9's form). `main` then keeps no futility pruning, as the default below says.
+- **Until the merge,** `main` has no futility pruning, and the PROPOSED text below is the rule `ABC-268` builds.
+  "Acceptance is the owner's" and "the read and the merge wait for acceptance" are settled by this line.
+
+*As proposed, kept:* **PROPOSED** 2026-11-02 by Architect/Design (task `arch-phase2-p3`, records only, on `grugops/arch-phase2-p3` from
 `main` `cfff6993`). The probe ran on a scratch copy of the branch's `src/` (tree `f2388e40`, the same as `main`'s at
 dispatch and at this commit), outside the repository, under the host lock. The copy is deleted. Nothing was committed
 to `src/`. The patch, the driver and every output are under `.grugops/context/arch-phase2-p3/raw/probe/`.

@@ -22,6 +22,13 @@ resolve. Since the 2026-10-18 revision that slug is no longer true: see § Revis
 > `Threads` leaves the ignored list), D5 (`Threads 1` keeps this decision exactly; `Threads ≥ 2` runs a worker pool and
 > answers `isready` and `stop` during a search), D6's `Threads` row and D8's emit set (the worker entry). Until it is
 > accepted and `ABC-266` merges, D3 and D5 stand on `main` as written.
+>
+> *2026-11-02 (`arch-owner-answers-1102b`; owner `…773be7de`, verbatim "park threads"):* **the D5 reversal is not
+> exercised. D3, D5 and D6's `Threads` row stay in force on `main` as written:** one thread, no worker. `ADR-0062` is
+> proposed, parked and not in force, and `ABC-266` is parked. The reversal stays accepted in principle (`ADR-0057`
+> OQ-1). It moves nothing until the threads strand re-opens on a new premise and `ADR-0062`, or its successor, is
+> accepted and merged. No other decision here moves. The `ADR-0025` shared-table amendment (in force, `ABC-265`)
+> touches no decision here.
 
 > **Amended 2026-10-19 by `ADR-0045` (accepted by the owner, note `…1a9c7f42`; folded by BA/PM, subtask
 > `bapm-adr0045-cut`).** D11's `default 3` and D3's option line now read `default 5`: the `default` is

@@ -6,7 +6,24 @@ id: ADR-0062
 
 ## Status
 
-**PROPOSED** 2026-11-02 by Architect/Design (task `arch-ABC-266`, records plus scratch probes, on
+**PROPOSED, PARKED; NOT IN FORCE** (2026-11-02, the owner's answer). His words, verbatim (`orch-2026-10-30a`
+`…773be7de`): *"park threads"*. Recorded by Architect/Design (task `arch-owner-answers-1102b`, records only, on
+`grugops/arch-owner-answers-1102b` from `main` `b47adfbb`). Nothing was run.
+- **This ADR is neither accepted nor declined.** It stays the design of record (D1–D11, D13) for the day threads
+  re-open. Its two named choices (D1's maximum, 12 or 8, and D6's played result) are not answered and are not
+  read as answered.
+- **`ABC-266` is parked.** Its build does not start. `Threads` stays at 1, and no worker is spawned.
+- **`ADR-0044` D3, D5 and D6's `Threads` row stand on `main` as written.** D5's reversal (`ADR-0057` OQ-1) stays
+  accepted in principle but is not exercised.
+- **The ~30 min re-probe is not funded.** It is item (b) of the re-open list in the `arch-ABC-266-repropose` dated
+  line below: the S+D+P form at `Threads 12`, with a repaired load test.
+- **What re-opens this ADR is a new premise,** each with its own pre-registered probe and the owner's word:
+  `ADR-0058` in force through `ABC-257`; a later search change that breaks the workers' lockstep; or the owner asking
+  for that probe after all.
+- **Not touched:** the `ADR-0025` shared-table amendment. It was accepted by the same answer and is in force on
+  `main` (`ABC-265`, `605874b8`). At one thread it is today's engine node for node.
+
+*As proposed, kept:* **PROPOSED** 2026-11-02 by Architect/Design (task `arch-ABC-266`, records plus scratch probes, on
 `grugops/arch-ABC-266` from `main` `22b38478`). Nothing in `src/`, the tests, `tools/`, `plans/` or the board moved.
 Every probe figure below is a count or a property; no clock was read.
 

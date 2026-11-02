@@ -6,6 +6,23 @@ id: ADR-0057
 
 ## Status
 
+*2026-11-02, the owner's answer* (`orch-2026-10-30a` `…773be7de`, verbatim *"61 yes, 25 yes, park threads"*):
+**Still ACCEPTED. The threads strand is PARKED on `ADR-0062` D12's MISS and the re-proposal's NO WIN. It re-opens only
+on a new premise.** Recorded by Architect/Design (task `arch-owner-answers-1102b`, records only, on
+`grugops/arch-owner-answers-1102b` from `main` `b47adfbb`). Nothing was run.
+- **Parked:** `ABC-266` (TH-2, the worker pool and `Threads`, with TH-3 folded in). `ADR-0062` reads "proposed,
+  parked; not in force". `Threads` stays at 1, and `ADR-0044` D5 stays in force.
+- **Done:** TH-1. The `ADR-0025` shared-table amendment is accepted and in force (`ABC-265`, `605874b8`). It is
+  today's engine node for node at one writer, so it stands without the pool.
+- **The new premises,** each with its own pre-registered probe and the owner's word: `ADR-0058` in force through
+  `ABC-257`; a later search change that breaks the workers' lockstep; or the owner asking for the ~30 min S+D+P probe
+  at `Threads 12` (not funded now).
+- **D2.5's threads estimate stays unsupported** (the `arch-ABC-266-repropose` line below). D6's threads row reads
+  `parked` (D6 dated line). No other decision, strand or answer changes.
+- **OQ-7 and OQ-8 (D8.8) were not answered,** so their defaults stand: OQ-7 **no** (no `render` group; the
+  accelerator strand stays parked), OQ-8 **later** (a neural net is re-asked on `ADR-0056`'s V4 trigger). These are
+  the defaults D8.8 names, not new owner words.
+
 **ACCEPTED** 2026-11-02 by the owner, with his answers to OQ-1 to OQ-6. Recorded by Architect/Design (task
 `arch-owner-answers-1102`, records only, on `grugops/arch-owner-answers-1102` from `main` `7daf8086`). Nothing was
 run.
@@ -467,6 +484,12 @@ table (D8). The accelerator row stays `park` with its two re-open triggers. D8.6
 trip of 10 µs or less would re-open device work, but it would not make any of that analysis's architectures
 buildable.
 
+*Dated 2026-11-02* (`arch-owner-answers-1102b`; owner `…773be7de`, *"park threads"*). **The threads row now reads
+`parked`.** Its re-open trigger: a new premise with its own pre-registered probe. The premises named so far are
+`ADR-0058` in force (`ABC-257`), a search change that breaks the workers' lockstep, or the owner's ~30 min S+D+P probe
+at `Threads 12`. The shared table (TH-1) is built and in force; only the worker pool is parked. The accelerator row
+stays `park`; the shared-memory row stays as written.
+
 ### D7. Questions for the owner (yes/no or a choice)
 
 *Answered 2026-11-02 (owner `…81ae2db4`): OQ-1 yes, OQ-2 (a), OQ-3 (c), OQ-4 (a), OQ-5 no, OQ-6 later. See § Status.
@@ -668,6 +691,8 @@ nothing for the device to compute. **Row D and the starting advice: add nothing.
   worth something only with a large net. **yes / no / later. Recommended: later**, on `ADR-0056`'s V4 trigger, as
   you answered.
 - **If neither is answered, both earlier answers stand.** Nothing here waits on them.
+- *2026-11-02 (`arch-owner-answers-1102b`; owner `…773be7de`):* neither was answered, so both defaults stand:
+  OQ-7 no, OQ-8 later.
 
 #### D8.9 Open `UNKNOWN - verify` items this addendum adds, each with what settles it
 
