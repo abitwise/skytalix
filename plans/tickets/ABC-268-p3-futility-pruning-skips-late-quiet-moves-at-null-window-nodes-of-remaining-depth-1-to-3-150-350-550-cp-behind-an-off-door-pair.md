@@ -1,16 +1,47 @@
 ---
 id: ABC-268
 title: "P3: futility pruning skips the late quiet moves at null-window nodes of remaining depth 1 to 3, with margins of 150 / 350 / 550 cp, in both recursions, behind an ADR-0026 test-only off-door pair"
-status: backlog
-column: Backlog
+status: done
+column: Done
+closed: "2026-11-02, merged to local main at e72487e1 (from grugops/ABC-268-fix; candidate 1169c024, code df984484); QE part 1 GAPS (qe-ABC-268 …b58a6a29, QE-268-a/b/c closed by se-ABC-268-fix) and part 2 PASS_WITH_GAPS (qe-ABC-268-p2 …186a743e), which signs UAT; A6 58.0 / 100 (GAIN met); post-merge npm test 2 429 / 2 429 (orch-2026-10-30a …77a82ec1). Front matter by bapm-records-1102c"
 size: S
 priority: P2
 epic: EPIC-011
 feature: —
-adr: "ADR-0061 (PROPOSED 2026-11-02, arch-phase2-p3 …004b35ed, probe …55f7725e, merged 2f9c32f4). Acceptance is the owner's: \"accept ADR-0061\" or \"decline it\". Reading (b), the ABC-208 / ABC-238 / ADR-0059 precedent: the build and its gates may start; the read (A6) and the merge wait on his acceptance. Default without an answer: no futility pruning on main. Follows ADR-0026 d10's pattern; amends no ADR"
+adr: "ADR-0061: ACCEPTED 2026-11-02 by the owner (\"61 yes\", orch-2026-10-30a …773be7de); IN FORCE on main since e72487e1 (arch-post-268 …1bc554fb). Was PROPOSED (arch-phase2-p3 …004b35ed, probe …55f7725e, merged 2f9c32f4), reading (b). Follows ADR-0026 d10's pattern; amends no ADR"
 ---
 
 # ABC-268: futility pruning near the leaves (P3)
+
+> **CLOSED 2026-11-02, DONE, by BA/PM** (task `bapm-records-1102c`, records only, at `main` `a6039c5b`; nothing run,
+> built or timed). **Merged to local `main` at `e72487e1`** from `grugops/ABC-268-fix` (candidate `1169c024`, code
+> `df984484`). Not pushed. The first Phase 2 gain in `EPIC-011`. Sources: the Orchestrator `…77a82ec1` (merge and
+> ruling), QE `qe-ABC-268` `…b58a6a29` and `qe-ABC-268-p2` `…186a743e`, the Architect `arch-post-268` `…1bc554fb`.
+> - **The owner accepted `ADR-0061`** (*"61 yes"*, `…773be7de`). It is **in force on `main` since `e72487e1`**.
+> - **QE part 1: GAPS, then closed.** A1–A4 MET with every count to the node: exports +3 / +1; drift max 10 cp
+>   (`search()`) and 0 cp (`chooseMove`), 0 sign flips; mate floor 0 / 189; zugzwang 7 / 7; the cut audit re-run at
+>   30 272 firing, 2 943 sampled (1 918 / 966 / 59), 0 flips; A4 (a) 0.7958 / 0.7876 / 0.8295 / 0.8220, reach +0.279
+>   (5.558 → 5.837); `G1` 54 / 58, no NEWLY. The three LOW plant gaps `QE-268-a/b/c` were closed with test rows by
+>   `se-ABC-268-fix` (no production change) and re-checked red in part 2.
+> - **QE part 2: PASS_WITH_GAPS. It signs UAT** (test note 5).
+>   - **A6 MET (GAIN):** **58.0 / 100** (W/D/L 41 / 34 / 25), Elo +56.1 ± 56.1 (LOS 97.6 %), 100 of 100 complete,
+>     0 faults, 0 losses on time. The point estimate is ≥ 0; the interval crosses 0, so it is not a proven gain
+>     (`ADR-0061` d10).
+>   - **S′ MET at E 1 650:** 8.0 / 10, 0 faults, 0 losses on time. It was read at E 1 650 and stays recorded so; the
+>     A6 S′ line below is history, not re-pointed.
+>   - **Levels deep lane MET:** 57 / 57, exit 0.
+>   - **`QE-268-p2-a` (LOW):** foreign `vitest` processes ran during games 24–64. The Orchestrator's ruling: the read
+>     stands, no re-play (load bounded, 0 time losses, and the candidate scored lower inside the window, 21.5 / 40,
+>     than outside it, 36.5 / 60).
+> - **Post-merge on `main`** (with `ABC-265`): typecheck 0, lint clean, `npm test` 2 429 / 2 429. That closes
+>   `QE-268-p2-e`.
+> - **What the merge set off** (records elsewhere, not this page):
+>   - The S′ pool reached 26.0 / 30 = 86.7 % and the upward re-pin fired. S′ is now **E 1 810** by the band-centre rule
+>     (`ADR-0056` S′ amendment, `arch-ABC-233`), with an empty pool. `EPIC-011` § Close-out.
+>   - P1's re-measure trigger fired. Decision 1 missed three bars on the new `main`, so **P1 stays parked**
+>     (`ADR-0060` § Status, `…1bc554fb`). `EPIC-011` § P1, parked.
+> - Front matter: `status: done`, `column: Done`, with a `closed:` line. The board already reads Done (the
+>   Orchestrator's, 2026-11-02). Nothing below this block is edited.
 
 > **Cut 2026-11-02 by BA/PM: DoR 10/10 on reading (b)** (task `bapm-P3-page`, records only, at `main` `6413f91f`;
 > nothing run, built or timed). Source: `ADR-0061` (PROPOSED, `arch-phase2-p3`) and the Architect's notes `…004b35ed`
