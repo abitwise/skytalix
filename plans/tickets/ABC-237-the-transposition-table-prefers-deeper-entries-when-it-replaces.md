@@ -10,6 +10,18 @@ epic: EPIC-011
 
 # ABC-237: depth-preferred TT replacement
 
+> **PARKED 2026-11-02 by BA/PM, to be re-read with `ABC-258`** (task `bapm-phase1-pause`, records only, at `main`
+> `e8495fc5`; nothing run). The ruling `arch-phase1-replan` `…64e95bfa` pauses `EPIC-011`'s Phase 1 TT strand.
+> - **Why parked:** no deeper entry was evicted by another key on today's 2^18 table at depth 8 or less (12 of 3 275
+>   deeper results at depth 6 on the 190; 0–1 per depth-8 search, `…64bcf436`). T2 adds no measurable gain on a lightly
+>   loaded table: alone 1.0004× / 1.0028× at depth 8 (`…c0e9f5a0`). **It pays only under table pressure:** 0.77× pooled
+>   at 2^14 (`…5ea73b5c`). Pressure is `ABC-258`'s question, and the 100 ms read cannot see it. So this ticket is
+>   re-read with `ABC-258`, where T2 is folded in as the alternative remedy, measured alongside.
+> - **The wait "`ABC-238` merged or closed" is dropped.** `ABC-238` closed unmerged on F4 (2026-11-02), so the
+>   sequence hold is moot.
+> - The `ADR-0025` T2 amendment stays PROPOSED; the Architect recommends the owner park it with `ABC-258`.
+> - **Row 10 now reads the park.** DoR stays 9/10. Backlog, parked.
+
 > **REFINED 2026-11-01 by BA/PM: DoR 9/10, Backlog, held by sequence only** (task `bapm-phase1-wording`, records only,
 > at `main` `b19af469`; nothing run). The design is written: the `ADR-0025` T2 amendment, PROPOSED
 > (`arch-epic011-phase1` `…3209a6d0`, `…1dcdd8c7`). **Reading (b):** once this ticket is pulled, the build and its gates
@@ -102,7 +114,7 @@ epic: EPIC-011
 ## Dependencies
 
 - **Architect/Design:** an `ADR-0025` amendment (its falsifier `T2` is the measurement that would change
-  always-replace). Reported to the owner. *(2026-11-01: written, PROPOSED, `…3209a6d0`.)* **Owner:** Q4 answered 2026-10-29: (e), extended (`orch-2026-10-29g` `…278e149b`). ~~Before `ABC-238` (shared file).~~ *(reversed 2026-11-01 by the re-home: after `ABC-238`, merged or closed.)* *(2026-11-01:)* acceptance of the amendment before the read and the merge (reading (b)).
+  always-replace). Reported to the owner. *(2026-11-01: written, PROPOSED, `…3209a6d0`.)* **Owner:** Q4 answered 2026-10-29: (e), extended (`orch-2026-10-29g` `…278e149b`). ~~Before `ABC-238` (shared file).~~ ~~*(reversed 2026-11-01 by the re-home: after `ABC-238`, merged or closed.)*~~ *(2026-11-02, `bapm-phase1-pause`: dropped, `ABC-238` closed unmerged; parked, re-read with `ABC-258`.)* *(2026-11-01:)* acceptance of the amendment before the read and the merge (reading (b)).
 - *(2026-11-01, couplings named in `…1dcdd8c7`, not decided here:)* `ABC-257` owes an age rule, or a measured
   statement that none is needed, once the table is kept across moves (its page).
 
@@ -114,11 +126,11 @@ epic: EPIC-011
 | 2 | scope and out-of-scope | ✅ size and retention out |
 | 3 | INVEST | ✅ S |
 | 4 | testable, measurable acceptance | ✅ every row measurable; A6 is the 100-game read at 100 ms (`EPIC-011` § The per-change rule; its pass line is `ADR-0056` C2′) *(2026-11-01)* *2026-11-01 (`bapm-owner-answers`): plus the 10-game Stockfish smoke at 0.5 s; its no-collapse bar is the owner-answers fold's, scored as the C2′ line was while pending (the ticket leaves Backlog only after that fold merges).* *2026-11-01 (`bapm-reconcile-adr0056`): the fold merged (`a0f9297e`); the bar is S′'s S-4 at E 1 650, and the row adds the Levels deep lane (exit 0, every test passed). Score unchanged.* |
-| 5 | dependencies known | ✅ *2026-11-01: amendment PROPOSED; after `ABC-238`* |
+| 5 | dependencies known | ✅ *2026-11-01: amendment PROPOSED; ~~after `ABC-238`~~* *2026-11-02: re-read with `ABC-258`* |
 | 6 | NFR triggers with targets | ✅ ≤ 16 MiB; nodes ≤ 0.97 × |
 | 7 | test notes | ✅ 1 |
 | 8 | size | ✅ S |
 | 9 | priority | ✅ P3 |
-| 10 | no major unresolved blocker | ❌ ~~ADR~~ *2026-11-01: the ADR half is met (amendment written, PROPOSED; reading (b)). Held by sequence: `ABC-238` merged or closed (`EPIC-011`)* |
+| 10 | no major unresolved blocker | ❌ ~~ADR~~ *2026-11-01: the ADR half is met (amendment written, PROPOSED; reading (b)). ~~Held by sequence: `ABC-238` merged or closed (`EPIC-011`)~~* *2026-11-02 (`bapm-phase1-pause`): parked with the paused Phase 1 strand, re-read with `ABC-258` (`…64e95bfa`)* |
 
-**DoR 9/10 (re-scored 2026-10-29; re-read 2026-11-01, `bapm-phase1-wording`: row 10 now a sequence hold only). Backlog.**
+**DoR 9/10 (re-scored 2026-10-29; re-read 2026-11-01, `bapm-phase1-wording`: row 10 now a sequence hold only; re-read 2026-11-02, `bapm-phase1-pause`: row 10 is the park). Backlog, parked.**

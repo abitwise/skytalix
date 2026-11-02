@@ -10,11 +10,17 @@ epic: EPIC-011
 
 # ABC-236: aspiration windows at the root
 
+> **T1 DEPENDENCY LIFTED 2026-11-02 by BA/PM** (task `bapm-phase1-pause`, records only, at `main` `e8495fc5`; nothing
+> run). `ABC-238` (T1) closed unmerged on `ADR-0058` F4 and the Phase 1 TT strand is paused (`arch-phase1-replan`
+> `…64e95bfa`). **While T1 is not in force, this ticket no longer waits on it.** The fail-soft instability coupling
+> (Dependencies, third bullet) returns with T1: if T1 lands later (the combined attempt, `ABC-257`), this ticket's ADR
+> or a re-check names the fail-high-then-fail-low tolerance then. Row 10 keeps one hold: the new ADR. DoR stays 9/10.
+
 > **RE-HOMED 2026-11-01 to `EPIC-011` by BA/PM** (task `bapm-epic011-dedupe`, records only, at `main` `2e9a2457`). The
 > owner asked for a new epic for the 3 000 path, started after the open epics close, and for no work done twice
 > (`orch-2026-10-30a` `…022fb66f`). `ADR-0056` D4 maps this ticket to its gap list, so it leaves `EPIC-010` rather
 > than holding that epic's close. **Id unchanged; nothing below this block is edited.** `ADR-0056` row S1. `EPIC-011`
-> Phase 3, last; **it now also waits on `ABC-238`** (`ADR-0056` D2: S1 depends on T1). Its reading is `EPIC-011` § The
+> Phase 3, last; ~~**it now also waits on `ABC-238`** (`ADR-0056` D2: S1 depends on T1).~~ *(2026-11-02: lifted, T1 not in force.)* Its reading is `EPIC-011` § The
 > per-change rule.
 
 > **Cut 2026-10-29 by BA/PM** (task `bapm-epic010-improvements`, records only, at `main` `f45aea95`). § B item 9, the
@@ -80,6 +86,7 @@ epic: EPIC-011
 - *(2026-11-01, `bapm-phase1-wording`, carried from `arch-epic011-phase1` `…1dcdd8c7`; named, not decided.)* **The
   instability coupling with `ABC-238`:** deeper cutoffs under fail-soft raise PVS search instability, so this ticket's
   ADR names how the widening re-search tolerates a fail high followed by a fail low on the same iteration.
+  *(2026-11-02, `bapm-phase1-pause`: dormant while T1 is not in force; it returns with T1.)*
 
 ## Definition of Ready
 

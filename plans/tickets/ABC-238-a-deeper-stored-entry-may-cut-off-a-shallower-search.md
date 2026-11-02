@@ -1,14 +1,32 @@
 ---
 id: ABC-238
 title: "A deeper stored entry may cut off a shallower search, revising ABC-081 A1, behind an off-door"
-status: ready
-column: Ready
+status: dropped
+column: Done
+closed: "2026-11-02, closed unmerged on ADR-0058 F4 (A4 nodes 0.9939x / 0.9958x at depth 8 vs <= 0.95x; se-ABC-238 db17e44b; ruling arch-phase1-replan 64e95bfa); code kept as reference on grugops/ABC-238 3abaefdd; front matter by bapm-phase1-pause, the board move is the Orchestrator's"
 size: M
 priority: P2
 epic: EPIC-011
 ---
 
 # ABC-238: deeper-entry TT cutoffs
+
+> **CLOSED UNMERGED ON F4, 2026-11-02, by BA/PM** (task `bapm-phase1-pause`, records only, at `main` `e8495fc5`;
+> nothing run). **Not delivered.** The build was complete and every other row was met, but **A4 missed**: at fixed
+> depth 8, `search()` read **0.9939×** (kiwipete, 1 109 987 / 1 116 785) and **0.9958×** (position-6, 1 595 656 /
+> 1 602 457) of the door, against ≤ 0.95× on both (`se-ABC-238` failed-attempt `…db17e44b`). `chooseMove` frozen to
+> depth 8 read 0.9587× / 0.9986×, also a miss. Deeper entries settle only **0.212 %** (`search()`) and **0.176 %**
+> (`chooseMove`) of probes at depth 6 on the 190. That is `ADR-0058` **F4**: not merged; the ADR reads "accepted, not in
+> force" once the owner accepts it (his call; the Architect recommends it, `arch-phase1-replan` `…64e95bfa`).
+> - **F4 is not loosened** (the ruling, item 1). The 100-game read, the smoke and the Levels lane were never run.
+> - **Why** (`…64bcf436`, measured): each source searches the shallow copy first, so a deeper entry for the same key is
+>   rarely in the table; eviction is not the cause. Adding T2 does not change it (`…c0e9f5a0`).
+> - **The code stays as the reference:** `grugops/ABC-238` `3abaefdd`, branch kept, not merged. A combined T1 + T3
+>   attempt carries this ticket's rule and doors under `ABC-257` (re-scoped and paused on its page).
+> - **`ABC-081` `A1`** gains a dated "not in force" line (its page). `ABC-237`'s and `ABC-236`'s waits on this ticket
+>   are lifted on their pages.
+> - Front matter: `status: dropped`, `column: Done`, as this repository closes a ticket not delivered (`ABC-209`,
+>   `ABC-250`, `ABC-256`). The board card's move is the Orchestrator's. **Nothing below this block is edited.**
 
 > **REFINED 2026-11-01 by BA/PM: DoR 10/10, READY** (task `bapm-phase1-wording`, records only, at `main` `b19af469`;
 > nothing run). The design is written: `ADR-0058`, PROPOSED (`arch-epic011-phase1` `…2c2c1df6`, `…1dcdd8c7`).
