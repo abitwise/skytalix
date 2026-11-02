@@ -1,3 +1,4 @@
+_Updated: 2026-11-02 Orchestrator (orch-2026-10-30a) — qe-ABC-269-freeze finished (already running at the stop). Nothing running. On resume: Architect rules QE-269-a + folds ADR-0064/Q-3K-4; BA/PM folds pages; then se-ABC-269 on grugops/ABC-269._
 _Updated: 2026-11-02 Orchestrator (orch-2026-10-30a, …cc7db847) — OWNER: **ADR-0064 accepted; Q-3K-4 = (b)** (eval tickets judged on play with NFR-005 depth-6 floor; G6 ≥ base reported, not graded). **STOP for tonight** — no new hops. qe-ABC-269-freeze (already running) may finish; `se-ABC-269` NOT dispatched until the owner resumes. Owed on resume: Architect/BA-PM folds of the two answers (ADR-0056, ADR-0064, EPIC-011, ABC-269), then se-ABC-269._
 _Updated: 2026-11-02 Orchestrator (orch-2026-10-30a) — `bapm-E1-cut` merged: **ABC-269 (E1 taper) cut, DoR 10/10 (b)**; ABC-231/232 → Done (folded); ABC-265/255 pages fixed. ABC-269 pulled → `qe-ABC-269-freeze` (QE freezes fixtures before the build), then `se-ABC-269`. Owner pending: accept ADR-0064; Q-3K-4._
 _Updated: 2026-11-02 Orchestrator (orch-2026-10-30a) — `arch-E1` merged: **ADR-0064 PROPOSED** (tapered eval: one linear phase, every term an mg/eg pair in src/evaluate-params.ts; at E1 only king eg half 40−15m and passer eg half 2× change; equal at phase 24; nodes 0.96–1.03× main; zugzwang 7/7, mate floor 0, G1 54/58; GAIN). → `bapm-E1-cut` (ticket; folds ABC-231/232; fixes ABC-265/255 page status). Owner asked: accept ADR-0064; Q-3K-4. Running: bapm-E1-cut._
@@ -1377,7 +1378,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 ## In Development (WIP 1/3)
-- [ABC-269] E1: the evaluation is tapered by one linear phase; king and passers get endgame halves; one parameter table (EPIC-011 Phase 4 pulled forward; size: M; P2; GAIN; DoR 10/10 (b)) **2026-11-02: pulled → `qe-ABC-269-freeze` (QE freezes positions first) → then `se-ABC-269` (build; B8 + merge wait owner acceptance of ADR-0064; B7 graded per Q-3K-4).**
+- [ABC-269] E1: the evaluation is tapered by one linear phase; king and passers get endgame halves; one parameter table (EPIC-011 Phase 4 pulled forward; size: M; P2; GAIN; DoR 10/10 (b)) **2026-11-02: pulled → `qe-ABC-269-freeze` (QE freezes positions first) → then `se-ABC-269` (build; B8 + merge wait owner acceptance of ADR-0064; B7 graded per Q-3K-4).** **2026-11-02 qe-ABC-269-freeze done (grugops/ABC-269 c9c27910; PREREG …1b856350): fixtures frozen in src/evaluate.taper-corpus.ts (30 mirror rows, 6 graded KP endings + 3 shelter-stress, 36 passer pairs); npm test 2 429. QE-269-a MEDIUM → Architect on resume (castled-corner stress endings forecast +13/+13/+23 < 20 cp: limit the claim or re-open); QE-269-b LOW (delta form, sign of zero) for the build. Build NOT dispatched (owner stop).**
 
 
 
