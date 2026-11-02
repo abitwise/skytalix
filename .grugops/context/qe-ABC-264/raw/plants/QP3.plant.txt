@@ -1,0 +1,1 @@
+QP3: search.ts: 'return evaluate(position) - REVERSE_FUTILITY_MARGIN * depth >= beta;' -> 'return evaluate(position) - REVERSE_FUTILITY_MARGIN * depth > beta;'

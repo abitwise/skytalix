@@ -1,0 +1,9 @@
+ABC-264 A3 search() d5: 97.33% within 25 cp of 187, max 107 cp (kiwipete/f3g4: 1142 -> 1035); mate sign flips 0; mate-status flips 0 (a report, not a bar)
+ ✓ src/search.reverse-futility.test.ts > A2 — the zugzwang guard holds in the tree: below three non-pawn pieces for both sides, the shipped path IS the door, node for node > search() at depth 6 and chooseMove deepened to 6: move, score and nodes equal the door's 186ms
+ABC-264 A3 chooseMove to d5: 97.33% within 25 cp of 187, max 107 cp (kiwipete/f3g4: 1142 -> 1035); mate sign flips 0; mate-status flips 0 (a report, not a bar)
+ABC-264 A3 mate floor d5: 0 of 189 violated; 0 longer, 0 shorter (a report, not a bar)
+ABC-264 A4 search() kiwipete d8: 658971 / 1116785 = 0.5901x
+ABC-264 A4 chooseMove kiwipete to 8: 972596 / 1575537 = 0.6173x
+ABC-264 A4 search() position-6 d8: 1021190 / 1602457 = 0.6373x
+ABC-264 A4 chooseMove position-6 to 8: 299183 / 476244 = 0.6282x
+      Tests  35 passed (35)

@@ -1,0 +1,10 @@
+{ "refs": ["qe-ABC-264","ABC-264","ADR-0059","ADR-0050","ADR-0026","ADR-0028","EPIC-011","EPIC-008","NFR-004","NFR-005","NFR-008","ABC-086","ABC-229","ABC-230","grugops/ABC-264","grugops/qe-ABC-264","358b5f4a","0b73f51d","4e6a59ee","src/search.reverse-futility.test.ts","QE-264-a","QE-264-b","QE-264-c","QE-264-d","QE-264-e","20261102T011645Z-qe-e2e-decision-4e787c10","se-ABC-264/20261102T010954Z-software-engineer-observation-470e5bf6","se-ABC-264/20261102T010954Z-software-engineer-observation-d18a94a0","se-ABC-264/20261102T010954Z-software-engineer-decision-1fad1ebe"],
+  "notes": [
+    { "kind": "observation", "confidence": "high: deterministic readings under the lock; independent script and deep lane agree to the node", "bodyFile": "note-rows.md" },
+    { "kind": "observation", "confidence": "high: each plant run and reverted, copy diffed equal to head at the end", "bodyFile": "note-plants.md" },
+    { "kind": "observation", "confidence": "high: every gate ran as stated under the lock; G6 graded by the PREREG rule (grade56.mjs)", "bodyFile": "note-gates.md" },
+    { "kind": "observation", "confidence": "high for the counts on the scratch instrument (checked to the node); INFO, not a grade; warm-game rate UNKNOWN - verify", "bodyFile": "note-firing.md" },
+    { "kind": "observation", "confidence": "high: gaps named from this hop's readings; QE-264-e not measured", "bodyFile": "note-gaps.md" },
+    { "kind": "observation", "confidence": "high: paths, commits and window as recorded (observation: an artifact-ref needs a gate_run)", "bodyFile": "note-host.md" },
+    { "kind": "decision", "confidence": "high: verdict by the PREREG rule; GAPS (QE-264-a/b LOW), no blocking gap", "bodyFile": "note-decision.md" }
+  ] }

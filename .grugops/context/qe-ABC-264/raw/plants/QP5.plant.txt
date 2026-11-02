@@ -1,0 +1,1 @@
+QP5: search.ts: gate moved above 'const slot = switches.table ? probeTable(key) : -1;'

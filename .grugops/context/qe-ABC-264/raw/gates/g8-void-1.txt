@@ -1,0 +1,6 @@
+run=1 tree=b rc=1 wall=8.69s load1=0.55/1.31  Tests 2344 passed (2344) |  Duration 8.39s (transform 0ms, setup 0ms, import 6.21s, tests 5.73s, environment 5ms)
+run=2 tree=h rc=0 wall=9.20s load1=1.31/1.73  Tests 2403 passed (2403) |  Duration 8.89s (transform 0ms, setup 0ms, import 6.35s, tests 6.54s, environment 5ms)
+run=3 tree=h rc=0 wall=9.07s load1=1.73/1.69  Tests 2403 passed (2403) |  Duration 8.78s (transform 0ms, setup 0ms, import 6.31s, tests 6.45s, environment 5ms)
+run=4 tree=b rc=1 wall=8.56s load1=1.69/1.64  Tests 2344 passed (2344) |  Duration 8.25s (transform 0ms, setup 0ms, import 6.19s, tests 5.75s, environment 5ms)
+run=5 tree=b rc=1 wall=8.77s load1=1.64/1.69  Tests 2344 passed (2344) |  Duration 8.48s (transform 0ms, setup 0ms, import 6.26s, tests 5.89s, environment 5ms)
+run=6 tree=h rc=0 wall=8.97s load1=1.69/2.13  Tests 2403 passed (2403) |  Duration 8.70s (transform 0ms, setup 0ms, import 6.21s, tests 6.62s, environment 5ms)

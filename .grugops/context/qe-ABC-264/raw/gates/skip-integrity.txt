@@ -1,0 +1,2 @@
+No findings.
+skip-integrity rc=0

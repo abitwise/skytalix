@@ -1,0 +1,1 @@
+QP4: engine.ts: gate moved above 'const slot = probeTable(key);'

@@ -1,0 +1,21 @@
+search(B) vs searchWithoutReverseFutility(H) d5: 12 roots, 0 differ, base nodes 308334
+chooseMove(B) vs chooseMoveWithoutReverseFutility(H) d5: 12 roots, 0 differ, base nodes 228333
+searchWithoutKillers self d5: 12 roots, 0 differ, base nodes 817552
+searchWithoutNullMove self d5: 12 roots, 0 differ, base nodes 190169
+searchWithoutPvsOrReductions self d5: 12 roots, 0 differ, base nodes 454931
+searchWithoutQuiescence self d5: 12 roots, 0 differ, base nodes 351533
+searchWithoutQuiescenceEvasions self d5: 12 roots, 0 differ, base nodes 200224
+searchWithoutQuietPromotions self d5: 12 roots, 0 differ, base nodes 286548
+searchWithoutReductions self d5: 12 roots, 0 differ, base nodes 348481
+searchWithoutTable self d5: 12 roots, 0 differ, base nodes 591432
+chooseMoveWithoutNullMove self d5: 12 roots, 0 differ, base nodes 174955
+chooseMoveWithoutPvsOrReductions self d5: 12 roots, 0 differ, base nodes 381534
+chooseMoveWithoutQuiescenceEvasions self d5: 12 roots, 0 differ, base nodes 162966
+chooseMoveWithoutQuietPromotions self d5: 12 roots, 0 differ, base nodes 220528
+chooseMoveWithoutReductions self d5: 12 roots, 0 differ, base nodes 325554
+non-vacuity: head search() d5 differs from base on 5/12 roots
+ALL EQUAL
+
+real	0m13.710s
+user	0m14.429s
+sys	0m0.054s

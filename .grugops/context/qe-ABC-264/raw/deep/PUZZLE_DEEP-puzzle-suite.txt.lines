@@ -1,0 +1,3 @@
+PUZZLES shipped: solved 54/58, baseline 54/58, budget 25 step 1, wall 1.80 s
+ ✓ src/puzzle-suite.test.ts > the gating run [deep, PUZZLE_DEEP=1] > ABC-131 A6 — every recorded unsolved name is a PUZZLES row, and solved + |unsolved| = total 0ms
+      Tests  18 passed (18)
