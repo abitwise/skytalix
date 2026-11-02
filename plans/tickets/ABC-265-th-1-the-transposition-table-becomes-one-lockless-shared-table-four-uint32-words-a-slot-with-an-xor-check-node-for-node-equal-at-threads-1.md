@@ -71,7 +71,8 @@ adr: "ADR-0025 § Proposed amendment 2026-11-02 (ABC-265, TH-1): decision 2's fi
 ## Out of scope
 
 - The worker pool, the `Threads` option and any multi-worker search (`ABC-266`). Multi-writer stress and lanes
-  (`ABC-267`).
+  ~~(`ABC-267`)~~ (`ABC-266` A8, the multi-writer stress, and its `THREADS_DEEP` rows). *(2026-11-02, `bapm-P3-page`:
+  `ABC-267` is closed as folded into `ABC-266`, `ADR-0062` D13.)*
 - Any policy change: depth-preferred replacement (T2, `ABC-237`, parked), a larger table (T4, `ABC-258`, parked), a
   table kept across moves (`ABC-257`, paused), deeper-entry cutoffs (`ADR-0058`, accepted, not in force). Each ports
   to this layout later without rewriting it (`ADR-0057` D6's dated line).
@@ -103,7 +104,8 @@ adr: "ADR-0025 § Proposed amendment 2026-11-02 (ABC-265, TH-1): decision 2's fi
     `tableCutoff` runs, **then** `tableCutoff(slot, d, …)` returns **s_K**, not K′'s score.
     - Two cases, one row each: K′ exact at depth d with a score s_K′ ≠ s_K (a live score read returns s_K′); K′ at
       depth d + 1 (a live depth read returns `null`).
-    - Like the torn-slot row, it needs no second thread. The multi-writer form is `ABC-267`'s.
+    - Like the torn-slot row, it needs no second thread. The multi-writer form is ~~`ABC-267`'s~~ `ABC-266` A8's
+      probe-then-cutoff case *(2026-11-02, `bapm-P3-page`: `ABC-267` folded into `ABC-266`)*.
 - **A3 (identity, `G4`).** `Threads 1` is the only mode in this ticket.
   - Node-equal, cross-build, on the `ABC-078` `A3` corpus: `search()` and `chooseMove` equal base's in move, score and
     nodes at every depth the sweep reads. Every test-only door that exists before this ticket equals its pre-ticket
@@ -154,7 +156,7 @@ adr: "ADR-0025 § Proposed amendment 2026-11-02 (ABC-265, TH-1): decision 2's fi
 1. Reuse sourced fixtures: the `ABC-078` `A3` corpus, `kiwipete`, `position-6`. No hand-labelled rows.
 2. Deterministic mode (`ADR-0027`) holds. A single writer never leaves a torn entry, so `Threads 1` is exact.
 3. A2's torn slot is written directly into the buffer. No second thread is needed in this ticket. The multi-writer
-   race is `ABC-267`'s.
+   race is ~~`ABC-267`'s~~ `ABC-266` A8's *(2026-11-02, `bapm-P3-page`: `ABC-267` folded into `ABC-266`)*.
 4. **The PR lists every row it touches.** The target is none of `ABC-081`, `ABC-122` or `ABC-208`'s (A3).
 5. UAT: value-identical and no product surface, so the QE verdict signs it (owner delegation `…5aaf7cec` item 2).
 6. *(2026-11-02, `bapm-ABC-265-rows`.)* A2's verified-copy row writes into the buffer like the torn-slot row. Build
