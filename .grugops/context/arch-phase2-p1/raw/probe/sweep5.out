@@ -1,0 +1,19 @@
+== G1 R
+{"solved":54,"total":58,"newlyMissed":[],"newlySolved":[]}
+== drift d5
+{"which":"search","depth":5,"rows":190,"nonMate":187,"withinPct":100,"max":16,"maxName":"startpos/b2b4 60->76","mateFlip":0,"signFlip":0,"moveDiff":3}
+{"which":"choose","depth":5,"rows":190,"nonMate":187,"withinPct":100,"max":18,"maxName":"startpos/g2g4 54->36","mateFlip":0,"signFlip":0,"moveDiff":3}
+== mate
+{"d":5,"plus":0,"mates":189,"viol":2,"longer":0}
+{"d":4,"plus":1,"mates":163,"viol":0,"longer":0}
+== fire d6
+{"depth":6,"headNodes":8540908,"doorNodes":9917583,"ratio":0.8612,"head":{"tries":1966342,"reduced":239074,"sumR":343353,"hist":[1727268,139031,95807,4236,0,0,0,0]},"door":{"tries":2219993,"reduced":242081,"sumR":242081,"hist":[1977912,242081,0,0,0,0,0,0]}}
+== nodes other roots d8
+{"name":"position-4","label":"door","depth":8,"search":{"nodes":235428,"score":-456,"move":"c4c5"},"choose":{"nodes":83775,"score":-456,"move":"c4c5","depth":8},"lmr":{"tries":63342,"reduced":15048,"sumR":15048,"hist":[48294,15048,0,0,0,0,0,0],"fut":0}}
+{"name":"position-4","label":"head","depth":8,"search":{"nodes":169236,"score":-456,"move":"c4c5"},"choose":{"nodes":51644,"score":-456,"move":"c4c5","depth":8},"lmr":{"tries":44347,"reduced":9644,"sumR":14770,"hist":[34703,6252,1731,1588,73,0,0,0],"fut":0}}
+{"name":"position-5","label":"door","depth":8,"search":{"nodes":41794,"score":511,"move":"d7c8"},"choose":{"nodes":53279,"score":525,"move":"d7c8","depth":8},"lmr":{"tries":21024,"reduced":4773,"sumR":4773,"hist":[16251,4773,0,0,0,0,0,0],"fut":0}}
+{"name":"position-5","label":"head","depth":8,"search":{"nodes":35298,"score":511,"move":"d7c8"},"choose":{"nodes":39936,"score":525,"move":"d7c8","depth":8},"lmr":{"tries":21099,"reduced":3959,"sumR":7941,"hist":[17140,1390,1532,661,376,0,0,0],"fut":0}}
+{"name":"startpos","label":"door","depth":8,"search":{"nodes":205628,"score":17,"move":"b1c3"},"choose":{"nodes":165597,"score":23,"move":"b1c3","depth":8},"lmr":{"tries":92876,"reduced":11459,"sumR":11459,"hist":[81417,11459,0,0,0,0,0,0],"fut":0}}
+{"name":"startpos","label":"head","depth":8,"search":{"nodes":202641,"score":11,"move":"g1f3"},"choose":{"nodes":88147,"score":21,"move":"g1f3","depth":8},"lmr":{"tries":82959,"reduced":11009,"sumR":17222,"hist":[71950,5318,5172,516,3,0,0,0],"fut":0}}
+== reach roots only
+{"maxNodes":47000,"rows":6,"doorMeanDepth":6.167,"headMeanDepth":6.667,"deeper":3,"shallower":0,"moveDiff":1}

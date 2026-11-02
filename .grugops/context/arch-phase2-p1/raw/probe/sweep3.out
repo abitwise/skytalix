@@ -1,0 +1,15 @@
+== V1
+{"d":5,"plus":0,"mates":189,"viol":0,"longer":0}
+{"d":4,"plus":1,"mates":163,"viol":0,"longer":0}
+{"maxNodes":47000,"rows":190,"doorMeanDepth":6.237,"headMeanDepth":6.363,"deeper":31,"shallower":8,"moveDiff":17}
+{"depth":6,"headNodes":9274014,"doorNodes":9917583,"ratio":0.9351,"head":{"tries":2157874,"reduced":228019,"sumR":311218,"hist":[1929855,146704,79431,1884,0,0,0,0]},"door":{"tries":2219993,"reduced":242081,"sumR":242081,"hist":[1977912,242081,0,0,0,0,0,0]}}
+== V3
+{"d":5,"plus":0,"mates":189,"viol":14,"longer":0}
+{"d":4,"plus":1,"mates":163,"viol":0,"longer":0}
+{"maxNodes":47000,"rows":190,"doorMeanDepth":6.237,"headMeanDepth":6.589,"deeper":62,"shallower":0,"moveDiff":18}
+{"depth":6,"headNodes":8287987,"doorNodes":9917583,"ratio":0.8357,"head":{"tries":1881108,"reduced":243052,"sumR":352685,"hist":[1638056,139683,97105,6264,0,0,0,0]},"door":{"tries":2219993,"reduced":242081,"sumR":242081,"hist":[1977912,242081,0,0,0,0,0,0]}}
+== V5
+{"d":5,"plus":0,"mates":189,"viol":2,"longer":0}
+{"d":4,"plus":1,"mates":163,"viol":0,"longer":0}
+{"maxNodes":47000,"rows":190,"doorMeanDepth":6.237,"headMeanDepth":6.568,"deeper":57,"shallower":2,"moveDiff":12}
+{"depth":6,"headNodes":8537803,"doorNodes":9917583,"ratio":0.8609,"head":{"tries":1957882,"reduced":235026,"sumR":338528,"hist":[1722856,135731,95088,4207,0,0,0,0]},"door":{"tries":2219993,"reduced":242081,"sumR":242081,"hist":[1977912,242081,0,0,0,0,0,0]}}

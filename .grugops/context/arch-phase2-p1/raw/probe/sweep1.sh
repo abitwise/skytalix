@@ -1,0 +1,15 @@
+cd "$1"
+run() { echo "== $1"; node probe.ts nodes "$2" | grep head; }
+run V1-075-225-pv1-k1 '{"lmr":"log","base":0.75,"div":2.25}'
+run V2-050-250 '{"lmr":"log","base":0.5,"div":2.5}'
+run V3-075-225-noadj '{"lmr":"log","base":0.75,"div":2.25,"pvLess":0,"killerLess":0}'
+run V4-075-225-floor1 '{"lmr":"log","base":0.75,"div":2.25,"floorOne":true}'
+run V5-100-200 '{"lmr":"log","base":1.0,"div":2.0}'
+run V6-025-300 '{"lmr":"log","base":0.25,"div":3.0}'
+run V7-075-225-idx2 '{"lmr":"log","base":0.75,"div":2.25,"minIndex":2}'
+run V8-075-225-clamp0 '{"lmr":"log","base":0.75,"div":2.25,"clampMin":0}'
+run V9-050-250-floor1 '{"lmr":"log","base":0.5,"div":2.5,"floorOne":true}'
+run P3-fut100 '{"fut":100,"futDepth":2}'
+run P3-fut150 '{"fut":150,"futDepth":2}'
+run P5-nmp-d4 '{"nmpDiv":4}'
+run P5-nmp-d6 '{"nmpDiv":6}'
