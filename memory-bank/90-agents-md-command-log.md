@@ -57,6 +57,7 @@ this table names.
 | Quiescence deep lane (ABC-079) | — | § "Quiescence deep lane" |
 | Puzzle suite, strength gate (opt-in, ABC-084) | TRIGGER (owner, option B, 2026-10-09): QE runs it during review when the change touches engine code (`src/engine.ts`, `src/search*.ts`, `src/evaluate*.ts`, `src/quiescence.ts`, `src/transposition.ts`, move ordering). | § "Puzzle-suite strength gate" |
 | PVS/LMR deep lane (ABC-121, `src/search.pvs-lmr.test.ts`) | Run after any PVS/LMR change to src/search.ts or src/engine.ts. | § "PVS/LMR deep lane" |
+| Futility deep lane (ABC-268, `src/search.futility.test.ts`) | — | § "Futility deep lane" |
 | Real-engine CLI lane (opt-in, ABC-119) | Run at QE and after any src/cli.ts or src/engine.ts change. | § "Real-engine CLI lane" |
 | Real-engine UCI lane (opt-in, ABC-168) | Run at QE and after any change to `src/uci.ts`, `src/uci-session.ts`, `src/book-file.ts` or `src/engine.ts`. Unset: NOT DEFINED, not skipped. | § "Real-engine UCI lane" |
 | Self-play ladder lane (opt-in, ABC-085, ADR-0038) | — | § "Self-play ladder lane" |
@@ -212,6 +213,8 @@ hops shared the host). `AGENTS.md` now reads 56/1743 and carries no time figure;
 `real` / 5.73 s `Duration`, is in the `ABC-152` pass below (taken at 1741 tests). The +2 over 1741 is
 `ABC-145`'s two tests in `tools/opening-book/book.test.ts` (QE: base 56/1741, head 56/1743). `ABC-148`,
 `ABC-117` and `ABC-116` added no tests. Moving figure: ... -> 53/1680 -> 56/1741 -> 56/1743.
+
+RE-MEASURED once more, 2026-11-02, `scribe-futility-lane`, `main` `e72487e1` (`ABC-268` merged, `ABC-265` before it): `npm test` **64 files, 2429 tests, ~9 s**. The figure is the Orchestrator's brief reading; nothing was run in this hop. The default lane now holds `src/transposition.shared.test.ts` (`ABC-265`). Moving figure: ... -> 56/1743 -> 57/1775 -> ... -> 64/2429 (intermediate readings not re-listed).
 
 ## Vitest worker cap and module runner
 
@@ -373,6 +376,8 @@ passed (25 default), 4.8 s. Holds A7's 1 s vs 3 s `heapUsed`/`arrayBuffers` grow
 vars as `src/search.test.ts` / `src/engine.test.ts` above, applied to this file; unset, NOT DEFINED
 rather than skipped, same shape as `PERFT_DEEP`.
 
+NOTE 2026-11-02 (`scribe-futility-lane`): `src/transposition.shared.test.ts` (`ABC-265`) is a separate file in the default lane (`npm test`), with no `*_DEEP` gate and no command line of its own. The two deep lines above name `src/transposition.test.ts` only.
+
 ## Zobrist deep lane (`ABC-075`) — `ZOBRIST_DEEP=1 npx vitest run src/zobrist.test.ts`
 
 RUN 2026-09-25 at `54565e8`: exit 0, 33 passed (32 default), 37.0 s. Unset, NOT DEFINED rather than
@@ -407,6 +412,10 @@ Moved from `AGENTS.md` § Commands by `ABC-164` (2026-10-21), word for word, com
 
 Run after any PVS/LMR
   change to src/search.ts or src/engine.ts.
+
+## Futility deep lane (`ABC-268`, `src/search.futility.test.ts`) — `SEARCH_DEEP=1 npx vitest run src/search.futility.test.ts`
+
+NOT run here (records-only hop). The lane is **47 tests** (Orchestrator brief `scribe-futility-lane`, post-merge `e72487e1`; QE verdict on `ABC-268` PASS_WITH_GAPS). Same var as `src/search.test.ts` / `src/search.pvs-lmr.test.ts` above, applied to this file; unset, NOT DEFINED rather than skipped. No wall time and no per-lane trigger are recorded yet; the table above says `—`. Full command, as `AGENTS.md` § Test spells it: `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/search.futility.test.ts`.
 
 ## Puzzle-suite strength gate (`ABC-084`, `ABC-127`) — `PUZZLE_DEEP=1 npx vitest run src/puzzle-suite.test.ts`
 
@@ -1110,3 +1119,17 @@ AGENTS.md Scribe, task `scribe-lane-figures`. One file changed: this one. `AGENT
 | UCI session deep lane | "about 5 min (estimate)" in `ADR-0056` / `EPIC-010` / `EPIC-011` | **241 passed of 241, 291 s**, exit 0; host ALONE (0 of 29 samples) | this row only: the lane has no section in this file and `AGENTS.md`'s line carries no figure |
 
 The old text of each is kept as dated history. Stale elsewhere, not edited (the Architect and BA/PM own them): `ADR-0056` (Levels 41 tests / ~555 s, "41 passed", ladder 848 s, UCI "about 5 min"), `EPIC-010` (41, 848 s, "≈ 5 min, estimate") and `EPIC-011` (41, 848 s, "≈ 5 min, estimate").
+
+## `scribe-futility-lane` pass, 2026-11-02 (`ABC-265`, `ABC-268` merged; Orchestrator brief `scribe-futility-lane`; branch `grugops/scribe-futility-lane` from `main` `56b3782d`)
+
+AGENTS.md Scribe, task `scribe-futility-lane`. Two files: `AGENTS.md` and this one. Zero `src/`, `plans/` and `package*.json` lines. No new `-->` closer. `AGENTS.md` 18,421 -> **18,429 B** (+8; budget 18,432, pinned by `src/cli.test.ts` `ABC-109` `A5`). Nothing was run: the figures (47 tests, 64 files / 2429 tests / ~9 s) are the brief's, from the `e72487e1` merge.
+
+| where | before | after |
+|---|---|---|
+| `AGENTS.md` § Test | no futility lane line | `Futility deep lane (ABC-268, 47 tests)`: `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/search.futility.test.ts`, after the null-move line (+139 B) |
+| this file, § On-demand table | no futility row | one row, trigger `—`, heading § "Futility deep lane" |
+| this file, § Futility deep lane | none | new section, NOT run here, 47 tests |
+| this file, § Test (all) | last reading 57/1775 (and 62 files, 2,057 tests in a branch line) | dated RE-MEASURED paragraph: 64 files, 2429 tests, ~9 s (brief's reading) |
+| this file, § Transposition deep lanes | names `src/transposition.test.ts` only | dated NOTE: `src/transposition.shared.test.ts` (`ABC-265`) is a default-lane file with no `*_DEEP` gate |
+
+`AGENTS.md` has no default-lane list and carries no test count, so `src/transposition.shared.test.ts` is named in this file only. To fit the futility line under the budget, 131 B of prose were trimmed (no command line touched): the null-move line lost "door / zugzwang guard / oracle rows" (44 rows kept), the "No `npm run` script runs a `*_DEEP` lane" bullet and the worker-cap pointer were tightened, and the two receipts-pointer lines were merged into one. No Threads / `THREADS_DEEP` line (`ABC-266` parked).
