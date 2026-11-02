@@ -38,6 +38,12 @@ run.
   score words the XOR check verified, read once at the probe, never a second read of the slot. It also records the
   Architect's answer on `ABC-265`'s S2 question: no nps reading on top of `G6` and the profile. Nothing in this ADR
   changes.
+- *2026-11-02 (`arch-ABC-266`):* TH-2's ADR is written: **`ADR-0062`, PROPOSED**, amending `ADR-0044` D3 and D5. It
+  settles the four choices § Inputs left to it, with one change of recommendation: the played result is the deepest
+  completed iteration among the workers, not worker 0's. A scratch probe (counts only) found that helpers barely
+  shorten worker 0's path to a depth (ratios 0.87–1.75 against alone; 64 of 64 runs reached the same depth in
+  1 000 000 nodes), so D2.5's η is not supported by counts at these depths. `ADR-0062` D12 asks for one timing probe
+  before the build. Nothing in this ADR changes.
 
 **Reviewed 2026-11-02** by Architect/Design (task `arch-accel-review`, records only, on `grugops/arch-accel-review`
 from `main` `2ef3aadc`; one informal probe, no timing). **Still ACCEPTED, and no decision, strand or owner answer
