@@ -1,0 +1,12 @@
+== V1
+{"which":"search","depth":5,"rows":190,"nonMate":187,"withinPct":99.47,"max":28,"maxName":"position-5/e1f2 -231->-203","mateFlip":0,"signFlip":0,"moveDiff":3}
+{"which":"choose","depth":5,"rows":190,"nonMate":187,"withinPct":100,"max":20,"maxName":"position-5/h1f1 -175->-155","mateFlip":0,"signFlip":0,"moveDiff":4}
+== V3-noadj
+{"which":"search","depth":5,"rows":190,"nonMate":187,"withinPct":99.47,"max":30,"maxName":"startpos/h2h3 30->0","mateFlip":0,"signFlip":0,"moveDiff":7}
+{"which":"choose","depth":5,"rows":190,"nonMate":187,"withinPct":100,"max":23,"maxName":"position-5/e1g1 -81->-58","mateFlip":0,"signFlip":0,"moveDiff":1}
+== V4-floor1
+{"which":"search","depth":5,"rows":190,"nonMate":187,"withinPct":99.47,"max":30,"maxName":"startpos/h2h3 30->0","mateFlip":0,"signFlip":0,"moveDiff":4}
+{"which":"choose","depth":5,"rows":190,"nonMate":187,"withinPct":100,"max":21,"maxName":"startpos/g2g4 54->33","mateFlip":0,"signFlip":0,"moveDiff":0}
+== V5-100-200
+{"which":"search","depth":5,"rows":190,"nonMate":187,"withinPct":100,"max":16,"maxName":"startpos/b2b4 60->76","mateFlip":0,"signFlip":0,"moveDiff":4}
+{"which":"choose","depth":5,"rows":190,"nonMate":187,"withinPct":100,"max":21,"maxName":"position-5/e1f2 -207->-228","mateFlip":0,"signFlip":0,"moveDiff":3}

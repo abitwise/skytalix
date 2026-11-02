@@ -1,0 +1,8 @@
+{
+  "refs": ["arch-phase2-p1", "grugops/arch-phase2-p1", "EPIC-011", "P1", "ADR-0060", "ADR-0026", "ADR-0056", "ADR-0059", "ADR-0050", "ABC-121", "ABC-233", "ABC-264", "4d1c0616", "NFR-005", "NFR-008", "NFR-009"],
+  "notes": [
+    { "kind": "observation", "confidence": "high (deterministic fixed-depth, maxDepth and maxNodes runs on a scratch copy of 4d1c0616; door counts reproduce ADR-0059's head counts to the node); P3/P5 forms untuned, ranking only", "bodyFile": "obs-probe.md" },
+    { "kind": "decision", "confidence": "high on the measured premise; the Elo effect is an estimate until C2' reads it", "bodyFile": "dec.md" },
+    { "kind": "observation", "confidence": "high (files in this branch)", "bodyFile": "art.md" }
+  ]
+}

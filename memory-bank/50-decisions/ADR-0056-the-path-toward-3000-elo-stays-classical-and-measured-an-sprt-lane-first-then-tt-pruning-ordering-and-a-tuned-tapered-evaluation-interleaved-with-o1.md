@@ -286,6 +286,16 @@ terms E3–E7, each best added under the tuner; then X2 singular extensions and 
   rule needs 0.59–0.64× the door's nodes on kiwipete and position-6 in both recursions (`ADR-0059` § Context). The
   Elo column stays an estimate until C2′ reads it.
 
+*Dated 2026-11-02 (`arch-phase2-p1`, records only, probe on `grugops/ABC-264-fix` `4d1c0616`): row P1.*
+- **Row P1 has an ADR: `ADR-0060` (PROPOSED).** The rule: ⌊1.0 + ln d × ln m / 2.0⌋, one ply less at a PV node,
+  capped at two plies, child depth ≥ 1, behind an off-door pair. Measured at depth 8: 0.68–0.80× the door's nodes in
+  both recursions, and +0.305 ply at the 100 ms node budget (47 000 nodes).
+- **"History-adjusted" is not buildable yet.** There is no history table; that is O1h (`ABC-233`). P1 ships the log
+  table without it, and the history term is O1h's (`ADR-0060` decision 11). The row's +40–100 assumed the history
+  term; the history-free, capped form is expected nearer the low end (estimate).
+- **P1 stays next after P2.** At depth 8, on the same instrument, P3 futility read 0.88–0.91× and P5 depth-grown R
+  0.83–0.99×, against P1's 0.68–0.80×. The order P2 → P1 → P4 → P3 → P5 → P6 is unchanged.
+
 ### D3. Is 3 000 reachable without a neural network?
 
 - **For a classical engine, yes, in principle.** Stockfish 11, the last hand-crafted Stockfish, reads ≈ 3 430 CCRL

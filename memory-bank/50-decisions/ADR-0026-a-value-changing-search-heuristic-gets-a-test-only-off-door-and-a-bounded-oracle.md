@@ -154,6 +154,14 @@ position one move away, and six endgames.
      depths 4 and 5 (`…7c1d05ab`, variants `tactical` and `r2`). Only the predicate's table test
      can red those two bugs, and it can red a mis-wired tactical fact only if the recursion
      cannot supply that fact itself.
+
+   *Dated 2026-11-02 (`arch-phase2-p1`): `ADR-0060` (PROPOSED) would amend this decision for the
+   SHIPPED path only.* With its switch on, `search()` and `chooseMove` would reduce by a second
+   predicate, `lateMoveReductionByTable`: 0, 1 or 2 plies from a log table, one ply less at a PV
+   node. It takes one more caller-supplied fact, `pvNode` (a window fact no position carries); its
+   tactical facts stay derived inside it. The flat predicate above, its "0 or 1" contract and its
+   table test stay unchanged and serve the doors. Nothing here moves until `ADR-0060` is accepted
+   and its ticket merges.
 7. **VALUE and behaviour rows on the shipped path stay where they are, with PVS and LMR on.**
    - Examples: mate found, shorter mate preferred (the depth-5 and depth-7 mate rows already
      exercise LMR), stalemate and repetition exactly 0, legal root move, position unchanged, the

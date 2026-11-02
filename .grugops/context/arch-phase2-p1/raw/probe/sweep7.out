@@ -1,0 +1,15 @@
+== simple2 nodes
+{"name":"kiwipete","label":"head","depth":8,"search":{"nodes":508459,"score":-59,"move":"e2a6"},"choose":{"nodes":675499,"score":-59,"move":"e2a6","depth":8},"lmr":{"tries":98925,"reduced":17261,"sumR":27662,"hist":[81664,6860,10401,0,0,0,0,0],"fut":0}}
+{"name":"position-6","label":"head","depth":8,"search":{"nodes":804031,"score":74,"move":"c3d5"},"choose":{"nodes":257901,"score":74,"move":"c3d5","depth":8},"lmr":{"tries":217693,"reduced":36850,"sumR":47255,"hist":[180843,26445,10405,0,0,0,0,0],"fut":0}}
+== reach
+{"maxNodes":47000,"rows":190,"doorMeanDepth":6.237,"headMeanDepth":6.411,"deeper":31,"shallower":3,"moveDiff":18}
+== zug
+6
+== G1
+{"solved":54,"total":58,"newlyMissed":[],"newlySolved":[]}
+== mate
+{"d":5,"plus":0,"mates":189,"viol":0,"longer":0}
+{"d":4,"plus":1,"mates":163,"viol":0,"longer":0}
+== drift
+{"which":"search","depth":5,"rows":190,"nonMate":187,"withinPct":99.47,"max":30,"maxName":"startpos/h2h3 30->0","mateFlip":0,"signFlip":0,"moveDiff":3}
+{"which":"choose","depth":5,"rows":190,"nonMate":187,"withinPct":100,"max":21,"maxName":"startpos/g2g4 54->33","mateFlip":0,"signFlip":0,"moveDiff":0}

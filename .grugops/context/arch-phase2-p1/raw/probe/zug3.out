@@ -1,0 +1,18 @@
+== door
+{"d":9,"played":"g7f6","score":47,"nodes":65554}
+{"d":10,"played":"h3h4","score":286,"nodes":462401}
+{"d":11,"played":"h3h4","score":451,"nodes":587282}
+{"d":12,"played":"h3h4","score":445,"nodes":905536}
+== R
+{"d":9,"played":"g7f6","score":47,"nodes":36734}
+{"d":10,"played":"g7f6","score":23,"nodes":70551}
+{"d":11,"played":"g7f6","score":57,"nodes":157817}
+{"d":12,"played":"g7f6","score":23,"nodes":282821}
+{"d":13,"played":"h3h4","score":454,"nodes":2526967}
+{"d":14,"played":"h3h4","score":450,"nodes":2821410}
+== R-max2 nodes/reach/mate/G1
+{"name":"kiwipete","label":"head","depth":8,"search":{"nodes":476991,"score":-59,"move":"e2a6"},"choose":{"nodes":660887,"score":-68,"move":"e2a6","depth":8},"lmr":{"tries":84208,"reduced":15013,"sumR":25981,"hist":[69195,4045,10968,0,0,0,0,0],"fut":0}}
+{"name":"position-6","label":"head","depth":8,"search":{"nodes":723582,"score":74,"move":"c3d5"},"choose":{"nodes":239944,"score":74,"move":"c3d5","depth":8},"lmr":{"tries":193755,"reduced":33301,"sumR":44461,"hist":[160454,22141,11160,0,0,0,0,0],"fut":0}}
+{"maxNodes":47000,"rows":190,"doorMeanDepth":6.237,"headMeanDepth":6.542,"deeper":53,"shallower":3,"moveDiff":13}
+{"d":5,"plus":0,"mates":189,"viol":2,"longer":0}
+{"solved":54,"total":58,"newlyMissed":[],"newlySolved":[]}

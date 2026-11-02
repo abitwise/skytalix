@@ -1,0 +1,14 @@
+door {"name":"zugzwang.004","d":11,"played":"h3h4","want":"h3h4","ok":true,"nodes":587282} {"name":"zugzwang.005","d":12,"played":"f4d5","want":"f4d5","ok":true,"nodes":2403060} 
+V1 {"name":"zugzwang.004","d":11,"played":"g7f6","want":"h3h4","ok":false,"nodes":193324} {"name":"zugzwang.005","d":12,"played":"f4d5","want":"f4d5","ok":true,"nodes":1514215} 
+V1k0 {"name":"zugzwang.004","d":11,"played":"g7f6","want":"h3h4","ok":false,"nodes":197861} {"name":"zugzwang.005","d":12,"played":"f4d5","want":"f4d5","ok":true,"nodes":1059054} 
+V5 {"name":"zugzwang.004","d":11,"played":"g7f6","want":"h3h4","ok":false,"nodes":170175} {"name":"zugzwang.005","d":12,"played":"f4d5","want":"f4d5","ok":true,"nodes":648754} 
+V3 {"name":"zugzwang.004","d":11,"played":"g7f6","want":"h3h4","ok":false,"nodes":170699} {"name":"zugzwang.005","d":12,"played":"f4d5","want":"f4d5","ok":true,"nodes":760950} 
+V10 {"name":"zugzwang.004","d":11,"played":"g7f6","want":"h3h4","ok":false,"nodes":148052} {"name":"zugzwang.005","d":12,"played":"f4d5","want":"f4d5","ok":true,"nodes":606992} 
+R-floor1 {"name":"zugzwang.004","d":11,"played":"g7f6","want":"h3h4","ok":false,"nodes":157422} {"name":"zugzwang.005","d":12,"played":"f4d5","want":"f4d5","ok":true,"nodes":1509203} 
+R-clamp2 {"name":"zugzwang.004","d":11,"played":"g7f6","want":"h3h4","ok":false,"nodes":255874} {"name":"zugzwang.005","d":12,"played":"f4d5","want":"f4d5","ok":true,"nodes":1473739} 
+R-mind4 {"name":"zugzwang.004","d":11,"played":"g7f6","want":"h3h4","ok":false,"nodes":223104} {"name":"zugzwang.005","d":12,"played":"f4d5","want":"f4d5","ok":true,"nodes":1672266} 
+R-max2 {"name":"zugzwang.004","d":11,"played":"h3h4","want":"h3h4","ok":true,"nodes":627208} {"name":"zugzwang.005","d":12,"played":"f4d5","want":"f4d5","ok":true,"nodes":835611} 
+R-max3 {"name":"zugzwang.004","d":11,"played":"g7f6","want":"h3h4","ok":false,"nodes":162269} {"name":"zugzwang.005","d":12,"played":"f4d5","want":"f4d5","ok":true,"nodes":649589} 
+B085-200 {"name":"zugzwang.004","d":11,"played":"g7f6","want":"h3h4","ok":false,"nodes":163220} {"name":"zugzwang.005","d":12,"played":"f4d5","want":"f4d5","ok":true,"nodes":712797} 
+B100-225 {"name":"zugzwang.004","d":11,"played":"g7f6","want":"h3h4","ok":false,"nodes":167560} {"name":"zugzwang.005","d":12,"played":"f4d5","want":"f4d5","ok":true,"nodes":682352} 
+B075-200 {"name":"zugzwang.004","d":11,"played":"g7f6","want":"h3h4","ok":false,"nodes":211771} {"name":"zugzwang.005","d":12,"played":"f4d5","want":"f4d5","ok":true,"nodes":754941} 
