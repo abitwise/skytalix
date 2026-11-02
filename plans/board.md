@@ -1,3 +1,4 @@
+_Updated: 2026-11-02 Orchestrator (orch-2026-10-30a) — free slot → `arch-ABC-266` (TH-2 design: worker pool + Threads; ADR-0062 amending ADR-0044 D3/D5). Running: qe-ABC-265, arch-phase2-p3, arch-ABC-266._
 _Updated: 2026-11-02 Orchestrator (orch-2026-10-30a) — `bapm-phase2-records` merged: **ABC-264 → Done (dropped)**; P2 out of Phase 2; P1 parked as title-only stub (re-measure after P3 or O1h); RISK-EPIC011-08 (Phase 2 lost its two largest estimates). Running: qe-ABC-265, arch-phase2-p3._
 _Updated: 2026-11-02 Orchestrator (orch-2026-10-30a) — `arch-ADR-0060-reopen` merged: 9 pre-registered LMR forms, **none meets every unchanged bar on main** (each misses A4(a), the 27 cp cap, A4(b) reach or zugzwang.004). Default: **P1 parked**, flat 1-ply LMR stays; re-measure decision 1 after P3 merges. Owner question (optional; default = keep the cap): re-derive A3 cap to 94 cp? — alone it unlocks no form; recommended keep. Running: qe-ABC-265, arch-phase2-p3._
 _Updated: 2026-11-02 Orchestrator (orch-2026-10-30a) — **ABC-265 built** (se-ABC-265 cad6ae13; identity 0 diffs over 12 186 rows; G6 met) → In Review → `qe-ABC-265`. Running: qe-ABC-265, arch-ADR-0060-reopen, arch-phase2-p3._
@@ -1351,7 +1352,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## In Analysis (WIP 0/2)
 
 
-## In Design (WIP 1/2)
+## In Design (WIP 2/2)
 
 
 ## Ready for Dev (WIP 0/6)
