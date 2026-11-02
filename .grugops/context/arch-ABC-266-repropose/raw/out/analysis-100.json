@@ -1,0 +1,302 @@
+{
+ "ref": {
+  "n": 20,
+  "depthMedian": 11.5,
+  "depths": "11 11 10 10 10 12 12 12 12 11 10 10 11 11 13 15 15 13 16 14",
+  "foreignCores": 0.36,
+  "tctl": 74.375
+ },
+ "runs": {
+  "r1-p12-100.jsonl": {
+   "file": "r1-p12-100.jsonl",
+   "movetime": 100,
+   "passes": 3,
+   "affinity": "0-23",
+   "cells": {
+    "T1": {
+     "n": 60,
+     "D": 7,
+     "meanDepth": 7.383,
+     "Q": 18,
+     "perPosDepthMedian": "6 7 5 5 5 8 8 6 7 6 6 6 6 6 9 10 11 9 11 10",
+     "nodesMedian": 79185,
+     "wallMsMax": 102
+    },
+    "T1D": {
+     "n": 60,
+     "D": 7,
+     "meanDepth": 7.883,
+     "Q": 17,
+     "perPosDepthMedian": "6 7 5 5 5 8 8 7 7 6 6 6 6 6 10 11 12 10 16 11",
+     "nodesMedian": 80672,
+     "wallMsMax": 101
+    },
+    "T12": {
+     "n": 60,
+     "D": 7,
+     "meanDepth": 7.233,
+     "Q": 18.333,
+     "perPosDepthMedian": "6 6 5 5 5 7 8 7 7 6 6 6 5 6 9 10 10 9 11 9",
+     "nodesMedian": 697728,
+     "wallMsMax": 103,
+     "perWorkerRate": 0.734,
+     "allSameDepth": 57,
+     "playedAboveW0": 0,
+     "w0D": 7,
+     "w0Q": 18.333
+    },
+    "T12S": {
+     "n": 60,
+     "D": 7,
+     "meanDepth": 7.633,
+     "Q": 17.667,
+     "perPosDepthMedian": "7 7 6 5 6 8 8 7 7 7 6 6 6 6 9 11 11 9 11 10",
+     "nodesMedian": 694853.5,
+     "wallMsMax": 103,
+     "perWorkerRate": 0.731,
+     "allSameDepth": 0,
+     "playedAboveW0": 5,
+     "w0D": 7,
+     "w0Q": 17.667
+    },
+    "T12D": {
+     "n": 60,
+     "D": 7,
+     "meanDepth": 7.75,
+     "Q": 16.667,
+     "perPosDepthMedian": "6 7 5 5 5 8 8 7 7 6 6 6 5 6 9 11 12 10 15 11",
+     "nodesMedian": 701312,
+     "wallMsMax": 103,
+     "perWorkerRate": 0.738,
+     "allSameDepth": 56,
+     "playedAboveW0": 1,
+     "w0D": 7,
+     "w0Q": 16.667
+    },
+    "T12P": {
+     "n": 60,
+     "D": 7,
+     "meanDepth": 7.6,
+     "Q": 17,
+     "perPosDepthMedian": "7 8 6 5 5 9 8 7 7 7 6 6 6 6 9 10 10 9 11 10",
+     "nodesMedian": 711698,
+     "wallMsMax": 103,
+     "perWorkerRate": 0.749,
+     "allSameDepth": 48,
+     "playedAboveW0": 1,
+     "w0D": 7,
+     "w0Q": 17
+    },
+    "T12SD": {
+     "n": 60,
+     "D": 7,
+     "meanDepth": 8.617,
+     "Q": 17,
+     "perPosDepthMedian": "8 7 6 5 6 8 9 7 7 7 6 6 6 6 11 13 14 11 18 12",
+     "nodesMedian": 695378,
+     "wallMsMax": 103,
+     "perWorkerRate": 0.732,
+     "allSameDepth": 0,
+     "playedAboveW0": 2,
+     "w0D": 7,
+     "w0Q": 17
+    },
+    "T12SDP": {
+     "n": 60,
+     "D": 8,
+     "meanDepth": 9.017,
+     "Q": 16,
+     "perPosDepthMedian": "8 7 6 5 6 9 9 8 8 8 6 6 7 7 11 13 14 11 19 12",
+     "nodesMedian": 694295,
+     "wallMsMax": 103,
+     "perWorkerRate": 0.731,
+     "allSameDepth": 0,
+     "playedAboveW0": 1,
+     "w0D": 8,
+     "w0Q": 16
+    },
+    "T4SD": {
+     "n": 60,
+     "D": 7,
+     "meanDepth": 8.417,
+     "Q": 16,
+     "perPosDepthMedian": "8 7 6 5 5 9 8 7 7 7 6 6 6 6 11 12 13 11 17 12",
+     "nodesMedian": 310458,
+     "wallMsMax": 102,
+     "perWorkerRate": 0.98,
+     "allSameDepth": 0,
+     "playedAboveW0": 1,
+     "w0D": 7,
+     "w0Q": 16
+    }
+   },
+   "load": {
+    "vitestOrCutechess": false,
+    "foreignCores": 0.448,
+    "blocksOver08": "5/60",
+    "blockFcMax": 1.312,
+    "hot": [],
+    "tctlEnd": 75.75,
+    "startTctl": 49.5,
+    "startHot": [],
+    "LOADED": false
+   },
+   "rule": {
+    "T12S": {
+     "dD": 0,
+     "dQ": -0.333,
+     "depthPass": false,
+     "qualityPass": false,
+     "outcome": "MISS"
+    },
+    "T12D": {
+     "dD": 0,
+     "dQ": -1.333,
+     "depthPass": false,
+     "qualityPass": false,
+     "outcome": "MISS"
+    },
+    "T12P": {
+     "dD": 0,
+     "dQ": -1,
+     "depthPass": false,
+     "qualityPass": false,
+     "outcome": "MISS"
+    },
+    "T12SD": {
+     "dD": 0,
+     "dQ": -1,
+     "depthPass": false,
+     "qualityPass": false,
+     "outcome": "MISS"
+    },
+    "T12SDP": {
+     "dD": 1,
+     "dQ": -2,
+     "depthPass": false,
+     "qualityPass": false,
+     "outcome": "MISS"
+    },
+    "T4SD": {
+     "dD": 0,
+     "dQ": -2,
+     "depthPass": false,
+     "qualityPass": false,
+     "outcome": "MISS"
+    }
+   },
+   "attribution": {
+    "T1D_minus_T1": {
+     "dD": 0,
+     "dQ": -1
+    }
+   }
+  },
+  "r2-p4-100.jsonl": {
+   "file": "r2-p4-100.jsonl",
+   "movetime": 100,
+   "passes": 3,
+   "affinity": "0-3",
+   "cells": {
+    "T1": {
+     "n": 60,
+     "D": 7,
+     "meanDepth": 7.4,
+     "Q": 18,
+     "perPosDepthMedian": "6 7 5 5 5 8 8 7 7 6 6 6 6 6 9 10 11 9 11 10",
+     "nodesMedian": 78470.5,
+     "wallMsMax": 101
+    },
+    "T4": {
+     "n": 60,
+     "D": 7,
+     "meanDepth": 7.517,
+     "Q": 18,
+     "perPosDepthMedian": "7 7 5 5 5 8 8 7 7 7 6 6 6 6 9 11 11 9 11 10",
+     "nodesMedian": 309627.5,
+     "wallMsMax": 103,
+     "perWorkerRate": 0.986,
+     "allSameDepth": 54,
+     "playedAboveW0": 2,
+     "w0D": 7,
+     "w0Q": 18
+    },
+    "T4SD": {
+     "n": 60,
+     "D": 7,
+     "meanDepth": 8.483,
+     "Q": 17.333,
+     "perPosDepthMedian": "8 7 6 5 5 9 8 7 7 7 6 6 6 6 11 12 13 11 18 12",
+     "nodesMedian": 307459,
+     "wallMsMax": 102,
+     "perWorkerRate": 0.98,
+     "allSameDepth": 0,
+     "playedAboveW0": 0,
+     "w0D": 7,
+     "w0Q": 17.333
+    },
+    "T4SDP": {
+     "n": 60,
+     "D": 8,
+     "meanDepth": 8.8,
+     "Q": 16.333,
+     "perPosDepthMedian": "8 8 6 5 5 9 8 8 8 8 6 6 7 6 11 13 13 11 19 12",
+     "nodesMedian": 305200,
+     "wallMsMax": 102,
+     "perWorkerRate": 0.972,
+     "allSameDepth": 0,
+     "playedAboveW0": 2,
+     "w0D": 8,
+     "w0Q": 16
+    }
+   },
+   "load": {
+    "vitestOrCutechess": false,
+    "foreignCores": 0.642,
+    "blocksOver08": "18/60",
+    "blockFcMax": 1.677,
+    "hot": [],
+    "tctlEnd": 91.625,
+    "startTctl": 54.875,
+    "startHot": [],
+    "LOADED": true
+   },
+   "rule": {
+    "T4": {
+     "dD": 0,
+     "dQ": 0,
+     "depthPass": false,
+     "qualityPass": false,
+     "outcome": "VOID-LOAD"
+    },
+    "T4SD": {
+     "dD": 0,
+     "dQ": -0.667,
+     "depthPass": false,
+     "qualityPass": false,
+     "outcome": "VOID-LOAD"
+    },
+    "T4SDP": {
+     "dD": 1,
+     "dQ": -1.667,
+     "depthPass": true,
+     "qualityPass": false,
+     "outcome": "PASS (SHARED)"
+    }
+   }
+  }
+ },
+ "selection": [
+  {
+   "run": "r2-p4-100.jsonl",
+   "cell": "T4SDP",
+   "dD": 1,
+   "dQ": -1.667,
+   "depthPass": true,
+   "qualityPass": false,
+   "outcome": "PASS (SHARED)",
+   "k": 4,
+   "knobs": 3
+  }
+ ]
+}

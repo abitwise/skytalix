@@ -1,0 +1,6 @@
+{ "refs": ["ABC-266", "arch-ABC-266-repropose", "grugops/arch-ABC-266-repropose", "6413f91f", "6e749801", "7f110a31", "arch-ABC-266-repropose/20261102T173019Z-architect-design-decision-3c920b97", "ADR-0062", "ADR-0058", "ADR-0057", "ADR-0044", "grugops/ABC-265-fix", "28ad3a8d", "qe-ABC-266-d12/20261102T172256Z-qe-e2e-decision-9f9aeb87", "qe-ABC-266-d12/20261102T172256Z-qe-e2e-observation-cc1de664", "ABC-257", "EPIC-011"],
+  "notes": [
+    { "kind": "observation", "confidence": "high for depths, Q, nodes and load as measured (scratch prototype, 20 positions); the (c)-artifact reading and Q's ceiling are judgement", "bodyFile": "obs-results.md" },
+    { "kind": "decision", "confidence": "high: outcome by the sealed rule, no hand grade; the recommendation is the Architect's judgement", "bodyFile": "dec-verdict.md" },
+    { "kind": "observation", "confidence": "high (artifact list)", "bodyFile": "art.md" }
+  ] }
