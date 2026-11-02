@@ -1,0 +1,2 @@
+{ "refs": ["ABC-266", "qe-ABC-266-d12", "grugops/qe-ABC-266-d12", "5432f3f5", "b082549a", "ADR-0062", "ADR-0057", "ADR-0055", "grugops/ABC-265-fix", "28ad3a8d", "arch-ABC-266/20261102T161450Z-architect-design-observation-0c8cf7d0", "arch-d3-under-load/20261101T181555Z-architect-design-decision-6f646a39", "EPIC-011"],
+  "notes": [{ "kind": "decision", "confidence": "high: pre-registration, sealed before the measured run", "bodyFile": "prereg.md" }] }

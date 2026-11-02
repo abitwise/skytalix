@@ -1,0 +1,27 @@
+--- a/src/transposition.ts	2026-11-02 17:05:51.000000000 +0000
++++ b/src/transposition.ts	2026-11-02 17:18:37.641970892 +0000
+@@ -98,6 +98,7 @@
+  */
+ export function clearTable(): void {
+   hitSlot = -1;
++  if (borrowed) return; // qe-ABC-266-d12 SCRATCH (ADR-0062 D4): a borrowing thread resets only the verified copy
+   if (buffer === null) {
+     buffer = new SharedArrayBuffer(TABLE_ENTRIES * 16);
+     table = new Uint32Array(buffer);
+@@ -106,6 +107,16 @@
+   table.fill(0);
+ }
+ 
++/** qe-ABC-266-d12 SCRATCH (ADR-0062 D4): bind this thread's view to the owner's buffer, once, before any search. */
++let borrowed = false;
++export function adoptTable(b: SharedArrayBuffer): void {
++  if (b.byteLength !== TABLE_ENTRIES * 16) throw new Error(`adoptTable: byteLength ${b.byteLength}`);
++  buffer = b;
++  table = new Uint32Array(b);
++  borrowed = true;
++  hitSlot = -1;
++}
++
+ /** The bytes the table holds: fixed from its first allocation, 0 before it. `A7`'s reading. */
+ export function tableByteLength(): number {
+   return table.byteLength;
