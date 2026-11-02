@@ -1,0 +1,33 @@
+
+ RUN  v4.1.12 /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/se268fix/QP4
+
+ ❯ src/search.futility.test.ts (37 tests | 1 failed) 202ms
+     × chooseMove deepened to 3: the futile node's entry is an upper bound of -554, Ke2's score, strictly below its alpha of 1010 10ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/search.futility.test.ts > QE-268-b — a futile node returns the best score among the moves it searched, fail-soft: below its alpha, never alpha itself > chooseMove deepened to 3: the futile node's entry is an upper bound of -554, Ke2's score, strictly below its alpha of 1010
+AssertionError: expected 1010 to be -554 // Object.is equality
+
+- Expected
++ Received
+
+- -554
++ 1010
+
+ ❯ <anonymous> src/search.futility.test.ts:634:22
+    632|       expect([result.score, label(result.move)]).toEqual([ALPHA, "d1d5…
+    633|       const stored = storedUpper();
+    634|       expect(stored).toBe(-554);
+       |                      ^
+    635|       expect(stored).toBeLessThan(ALPHA);
+    636|       expect(stored).toBe(bestSearched().best);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 4 passed (5)
+      Tests  1 failed | 269 passed (270)
+   Start at  19:00:22
+   Duration  1.39s (transform 0ms, setup 0ms, import 426ms, tests 1.89s, environment 0ms)
+

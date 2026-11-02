@@ -1,0 +1,11 @@
+QP3 (qe-plant.py, scratch copy of fad0fb7c tree with the new rows)
+--- head/src/search.ts	2026-11-02 18:53:47.000000000 +0000
++++ QP3/src/search.ts	2026-11-02 18:57:44.554017387 +0000
+@@ -617,6 +617,7 @@
+     }
+   }
+ 
++  if (futile && best < alphaIn) best = alphaIn;
+   if (switches.table) storeEntry(key, depth, boundOf(best, alphaIn, beta), best, ply, bestMove);
+   return best;
+ }

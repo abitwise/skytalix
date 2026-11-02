@@ -1,0 +1,12 @@
+QP2 (qe-plant.py, scratch copy of fad0fb7c tree with the new rows)
+--- head/src/search.ts	2026-11-02 18:53:47.000000000 +0000
++++ QP2/src/search.ts	2026-11-02 18:57:44.536341892 +0000
+@@ -433,7 +433,7 @@
+  */
+ export function futileMove(position: Position, move: Move, index: number): boolean {
+   if (index < 1) return false;
+-  if (move.captured !== EMPTY || move.promotion !== EMPTY) return false;
++  if ((move.captured !== EMPTY && move.flags !== 1) || move.promotion !== EMPTY) return false;
+   return !givesCheck(position, move);
+ }
+ 

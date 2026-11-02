@@ -1,0 +1,11 @@
+QP4 (qe-plant.py, scratch copy of fad0fb7c tree with the new rows)
+--- head/src/engine.ts	2026-11-02 18:53:47.000000000 +0000
++++ QP4/src/engine.ts	2026-11-02 18:57:44.567755135 +0000
+@@ -484,6 +484,7 @@
+ 
+   // Never reached by an aborted subtree: the abort throws past this line, so a partial result
+   // is never stored.
++  if (futile && best < alphaIn) best = alphaIn;
+   storeEntry(key, remaining, boundOf(best, alphaIn, beta), best, ply, bestMove);
+   return best;
+ }
