@@ -1,0 +1,8 @@
+     × K v KR, White to move: d1e1 at 0 with the prior keys, base's move without them 7ms
+     × depth 1, ply 3, Black to move: true at alpha = eval + 150 exactly, false at alpha - 1 5ms
+     × depth 2, ply 3, Black to move: true at alpha = eval + 350 exactly, false at alpha - 1 0ms
+     × depth 3, ply 40, Black to move: true at alpha = eval + 550 exactly, false at alpha - 1 0ms
+ FAIL  src/engine.test.ts > ABC-230 A1 — a third occurrence scores exactly 0 at the root; base scores it otherwise > K v KR, White to move: d1e1 at 0 with the prior keys, base's move without them
+ FAIL  src/search.futility.test.ts > futilityNode — eval + 150 / 350 / 550 <= alpha at a null-window node of depth 1-3; false at the root, at a PV window, at depth 0 and 4, in check, and with alpha or beta in the mate band > depth 1, ply 3, Black to move: true at alpha = eval + 150 exactly, false at alpha - 1
+ FAIL  src/search.futility.test.ts > futilityNode — eval + 150 / 350 / 550 <= alpha at a null-window node of depth 1-3; false at the root, at a PV window, at depth 0 and 4, in check, and with alpha or beta in the mate band > depth 2, ply 3, Black to move: true at alpha = eval + 350 exactly, false at alpha - 1
+ FAIL  src/search.futility.test.ts > futilityNode — eval + 150 / 350 / 550 <= alpha at a null-window node of depth 1-3; false at the root, at a PV window, at depth 0 and 4, in check, and with alpha or beta in the mate band > depth 3, ply 40, Black to move: true at alpha = eval + 550 exactly, false at alpha - 1

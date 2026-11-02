@@ -1,0 +1,2 @@
+{"rows":190,"nodes":14311902,"fired":30272,"pruned":901655,"sampled":2943,"sampleSha":"cd47105e57539d6c"}
+rc=0 secs=18

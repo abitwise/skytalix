@@ -1,0 +1,4 @@
+     × ./engine.ts: one futilityNode call gated on budget.futility, before the move loop, after the null move; futileMove skips and advances the index 6ms
+     × chooseMove reads the INFO row the same way at depth 8; its door does not see the queen 7ms
+ FAIL  src/quiescence.test.ts > ABC-229 — the doors: searchWithoutQuietPromotions and chooseMoveWithoutQuietPromotions > chooseMove reads the INFO row the same way at depth 8; its door does not see the queen
+ FAIL  src/search.futility.test.ts > both recursions test the node once, with the entry window, after the table probe and the null move, and skip exactly the moves futileMove names > ./engine.ts: one futilityNode call gated on budget.futility, before the move loop, after the null move; futileMove skips and advances the index

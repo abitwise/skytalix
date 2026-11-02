@@ -1,0 +1,2 @@
+{"mode":"fire","depth":6,"rows":190,"headNodes":14311902,"doorNodes":17826686,"ratio":0.8028,"head":{"firing":30272,"skipped":901655},"door":{"firing":0,"skipped":0}}
+rc=0 secs=38

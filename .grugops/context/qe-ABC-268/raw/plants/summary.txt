@@ -1,0 +1,9 @@
+QP1 default rc=1  Tests 4 failed | 256 passed (260) 2026-11-02T18:35:46Z
+QP2 default rc=0  Tests 260 passed (260) | deep futility rc=0  Tests 47 passed (47) 2026-11-02T18:36:53Z
+QP3 default rc=0  Tests 260 passed (260) | deep futility rc=0  Tests 47 passed (47) 2026-11-02T18:37:58Z
+QP4 default rc=0  Tests 260 passed (260) | deep futility rc=0  Tests 47 passed (47) 2026-11-02T18:39:04Z
+QP5 default rc=0  Tests 260 passed (260) | deep futility rc=0  Tests 47 passed (47) | qe-a1 history: 0 pair(s) diff 0; QE A1: DIFFERENCES FOUND 2026-11-02T18:40:11Z
+QP6 default rc=0  Tests 260 passed (260) | deep futility rc=0  Tests 47 passed (47) 2026-11-02T18:41:18Z
+QP7 default rc=1  Tests 2 failed | 258 passed (260) 2026-11-02T18:41:19Z
+QP8 default rc=1  Tests 2 failed | 258 passed (260) 2026-11-02T18:41:21Z
+plant copy src == head src: yes

@@ -1,0 +1,4 @@
+     × guarded — alpha in the mate band (alphaIn = -MATE_FLOOR): false, and no evaluation is paid 6ms
+     × guarded — beta in the mate band (beta = MATE_FLOOR): false, and no evaluation is paid 1ms
+ FAIL  src/search.futility.test.ts > futilityNode — eval + 150 / 350 / 550 <= alpha at a null-window node of depth 1-3; false at the root, at a PV window, at depth 0 and 4, in check, and with alpha or beta in the mate band > guarded — alpha in the mate band (alphaIn = -MATE_FLOOR): false, and no evaluation is paid
+ FAIL  src/search.futility.test.ts > futilityNode — eval + 150 / 350 / 550 <= alpha at a null-window node of depth 1-3; false at the root, at a PV window, at depth 0 and 4, in check, and with alpha or beta in the mate band > guarded — beta in the mate band (beta = MATE_FLOOR): false, and no evaluation is paid

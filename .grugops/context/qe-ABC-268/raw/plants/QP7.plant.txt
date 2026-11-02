@@ -1,0 +1,14 @@
+QP7 planted
+--- /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe268/head/src/search.ts	2026-11-02 17:44:58.000000000 +0000
++++ src/search.ts	2026-11-02 18:41:18.106930343 +0000
+@@ -418,8 +418,8 @@
+ ): boolean {
+   if (ply === 0 || alphaIn + 1 !== beta) return false;
+   if (depth < 1 || depth > 3) return false;
+-  if (alphaIn >= MATE_FLOOR || alphaIn <= 0 - MATE_FLOOR) return false;
+-  if (beta >= MATE_FLOOR || beta <= 0 - MATE_FLOOR) return false;
++  if (alphaIn >= MATE_SCORE || alphaIn <= 0 - MATE_SCORE) return false;
++  if (beta >= MATE_SCORE || beta <= 0 - MATE_SCORE) return false;
+   if (isInCheck(position)) return false;
+   return evaluate(position) + (FUTILITY_MARGIN[depth] as number) <= alphaIn;
+ }

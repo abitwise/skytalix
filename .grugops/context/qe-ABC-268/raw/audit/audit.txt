@@ -1,0 +1,6 @@
+{"mode":"audit","depth":6,"every":10,"rows":190,"firing":30272,"sampled":2943,"sampleSha":"cd47105e57539d6c"}
+{"key":"all","n":2943,"flips":0,"ffl":0,"ffh":0,"e100":0,"e200":0,"e300":0,"e500":0,"unstable":0,"doorNoise":0,"nullWindow":2943,"skippedBand":0,"flipPct":0}
+{"key":"d1","n":1918,"flips":0,"ffl":0,"ffh":0,"e100":0,"e200":0,"e300":0,"e500":0,"unstable":0,"doorNoise":0,"nullWindow":1918,"skippedBand":0,"flipPct":0}
+{"key":"d2","n":966,"flips":0,"ffl":0,"ffh":0,"e100":0,"e200":0,"e300":0,"e500":0,"unstable":0,"doorNoise":0,"nullWindow":966,"skippedBand":0,"flipPct":0}
+{"key":"d3","n":59,"flips":0,"ffl":0,"ffh":0,"e100":0,"e200":0,"e300":0,"e500":0,"unstable":0,"doorNoise":0,"nullWindow":59,"skippedBand":0,"flipPct":0}
+rc=0 secs=21

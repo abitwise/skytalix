@@ -1,0 +1,3 @@
+{"label":"chooseMoveWithoutFutility vs base chooseMove to 5 WITH priorKeys (4 reversible grandchild keys each twice, clock 20), 12 roots","rows":12,"diff":0,"base":"33feee79694b2aba","head":"33feee79694b2aba","first":[],"s":"0.6"}
+{"label":"non-vacuity: head chooseMove to 5 with priorKeys differs from without","moved":8,"of":12}
+QE A1: ALL EQUAL

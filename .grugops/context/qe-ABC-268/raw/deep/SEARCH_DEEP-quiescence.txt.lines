@@ -1,0 +1,11 @@
+ RUN  v4.1.12 /home/olger/projects/public/skytalix/.claude/worktrees/qe-ABC-268
+stdout | src/quiescence.test.ts > ABC-229 A3 — search(…, 6).nodes <= 1.2x its door on kiwipete and position-6 [deep, SEARCH_DEEP=1] > kiwipete at depth 6 [deep, SEARCH_DEEP=1]
+ABC-229 A3 kiwipete d6: 330314 / 324162 = 1.019x
+ ✓ src/quiescence.test.ts > ABC-229 A3 — search(…, 6).nodes <= 1.2x its door on kiwipete and position-6 [deep, SEARCH_DEEP=1] > kiwipete at depth 6 [deep, SEARCH_DEEP=1] 696ms
+stdout | src/quiescence.test.ts > ABC-229 A3 — search(…, 6).nodes <= 1.2x its door on kiwipete and position-6 [deep, SEARCH_DEEP=1] > position-6 at depth 6 [deep, SEARCH_DEEP=1]
+ABC-229 A3 position-6 d6: 154466 / 154464 = 1.000x
+ ✓ src/quiescence.test.ts > ABC-229 A3 — search(…, 6).nodes <= 1.2x its door on kiwipete and position-6 [deep, SEARCH_DEEP=1] > position-6 at depth 6 [deep, SEARCH_DEEP=1] 355ms
+ABC-229 search() d5: 100.00% within 25 cp of 187, max 8 cp (kiwipete/d2e3: 350 -> 358); mate-status flips on the 190: 0 (a report, not a bar)
+ABC-229 chooseMove to d5: 100.00% within 25 cp of 187, max 8 cp (kiwipete/d2e3: 350 -> 358); mate-status flips on the 190: 0 (a report, not a bar)
+ Test Files  1 passed (1)
+      Tests  116 passed (116)
