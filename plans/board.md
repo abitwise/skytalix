@@ -1,3 +1,4 @@
+_Updated: 2026-11-02 Orchestrator (orch-2026-10-30a) — **ADR-0059 PROPOSED** (reverse futility; measured ~40 % fewer nodes at depth 8). ABC-264 pulled → `se-ABC-264` (build only); `bapm-ABC-264-rows` (four page rows). Owner asked: accept ADR-0059 (gates the 100-game read and merge) + pending P/A/B/C/OQ-1..6._
 _Updated: 2026-11-02 Orchestrator (orch-2026-10-30a) — `bapm-phase1-pause` merged: ABC-238 Done (dropped, F4); ABC-237/258 parked; ABC-257 re-scoped T1+T3 and paused; **ABC-264 (P2 reverse futility) cut** → `arch-ABC-264` design (also fixes ADR-0056 D2 T3 rationale). Owner pending: P (pause), A, B, C, OQ-1..6._
 _Updated: 2026-11-02 Orchestrator (orch-2026-10-30a) — `arch-phase1-replan` records merged (branch not merged: it carries ABC-238 src): **Phase 1 TT strand paused**; ADR-0058 recommend "accepted, not in force"; ADR-0025 T2 parked with ABC-258; T3 rationale in ADR-0056/EPIC-011 found false (kept entries supply 17–23 % of exact cuts). → `bapm-phase1-pause` (page changes + cut P2 reverse futility). Owner asked: pause, ADR-0058, T2 park, C2′, ADR-0057 OQ-1..6._
 _Updated: 2026-11-01 Orchestrator (orch-2026-10-30a) — **ABC-238 stopped on its pre-registered falsifier F4** (node saving 0.4–0.6 % vs ≥ 5 % needed; deeper entries rarely exist with always-replace and a per-search table). Not merged; Blocked. → `arch-phase1-replan`: measure probe statistics for T1 alone vs T1+T2 vs T1+T2+T3 on the ABC-238 branch BEFORE any new build._
@@ -1202,7 +1203,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   one hop at pull, when it checks `Ready for Dev`'s exit at that moment; the row records the pull.
 
   HEADING FORMAT (spec §6.1): each column is an H2 heading carrying its live/limit WIP count,
-  e.g. `## In Development (WIP 0/3)` — the left number is how many tickets are in the column
+  e.g. `## In Development (WIP 1/3)` — the left number is how many tickets are in the column
   now, the right number is the limit from config. Unlimited columns read `(WIP unlimited)`;
   Blocked is visible and time-tracked (no WIP limit) and reads `(visible, time-tracked)`.
   INVARIANT: the column H2 headings and the rows of the `## Columns` table are the same 13 names in the
@@ -1212,7 +1213,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 0/3)
+    ## In Development (WIP 1/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
     ## In Review (WIP 0/3)
@@ -1293,7 +1294,6 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 ## Backlog (WIP unlimited)
 - [EPIC-011] skytalix climbs toward 3 000 Elo, read at 40/15, on a classical measured path (owner: BA/PM, size: XL, priority: P2, since 2026-11-01; ADR-0056 accepted in direction; ADR-0055 O1; starts after EPIC-009 and EPIC-010 close; phases 0–5; milestones 2 200…3 000 (proposed); open owner calls Q-3K-2, Q-3K-4, Q-3K-6, Q-3K-7, Q-3K-8, rest of Q-3K-1) **2026-11-01: STARTED (EPIC-010 closed). Phase 0 done (ABC-255, ABC-262; ABC-256 dropped). Phase 1 first: ABC-238 (T1) then ABC-237 (T2) — design owed: the ADR revising ABC-081 A1 and the ADR-0025 amendment → `arch-epic011-phase1`. Threads (ADR-0057 PROPOSED) wait owner OQ-1.**
-- [ABC-264] P2: reverse futility (static null move) at shallow depth behind an off-door, with mate, check and zugzwang guards (EPIC-011 Phase 2, first; size: S, priority: P2; GAIN; DoR 9/10 — ADR owed → `arch-ABC-264`)
 - [ABC-257] T3: the TT is kept across the moves of one game, re-tried after deeper cutoffs and depth-preferred replacement (supersedes dropped ABC-209) (EPIC-011 Phase 1; size: S, priority: P3, DoR 8/10) **2026-11-02: RE-SCOPED to combined T1+T3 (size M, DoR 8/10), bar A8′ ≤ 0.93× on fresh lines; PAUSED until owner answers C2′ or allows a longer read.**
 - [ABC-258] T4: a larger TT, 8 MiB inside NFR-009 (more only on the owner's word) (EPIC-011 Phase 1; size: S, priority: P3, DoR 8/10) **2026-11-02: premise restated (3–5 % store fraction), T2 folded in; PAUSED (DoR 9/10).**
 - [ABC-231] King table tapered by phase, alone (size: S, priority: P3, DoR 9/10; milestone 2; waits ADR ruling) **→ EPIC-011 2026-11-01 (bapm-epic011-dedupe; id kept)** (folds into E1 full taper at Phase 4)
@@ -1340,7 +1340,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+- [ABC-264] P2: reverse futility (static null move) at shallow depth behind an off-door, with mate, check and zugzwang guards (EPIC-011 Phase 2, first; size: S, priority: P2; GAIN; DoR 9/10 — ADR owed → `arch-ABC-264`) **2026-11-02: ADR-0059 PROPOSED (arch-ABC-264 …b48c5a3e): probe 0.59–0.64× nodes at depth 8, drift 97.3 % ≤ 25 cp, 0 mate flips, zugzwang 7/7; A4 bar 0.75×, A3 cap 160 cp. DoR 10/10 on reading (b) → pulled → `se-ABC-264` (build; read/merge wait for owner acceptance of ADR-0059); page rows → `bapm-ABC-264-rows`.**
 
 
 
