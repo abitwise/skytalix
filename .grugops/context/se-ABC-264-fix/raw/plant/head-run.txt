@@ -1,0 +1,15 @@
+
+> skytalix@0.0.0 test
+> NODE_OPTIONS=--max-old-space-size=128 node tools/grugops/run-bounded.js 60000 vitest run --reporter=default --reporter=./tools/grugops/result-file-reporter.js --outputFile.json=.test-results/last-run.json src/engine.test.ts -t QE-264-a
+
+
+ RUN  v4.1.12 /home/olger/projects/public/skytalix/.claude/worktrees/qe-ABC-264
+
+ ✓ src/engine.test.ts (66 tests | 65 skipped) 4ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed | 65 skipped (66)
+   Start at  01:57:22
+   Duration  288ms (transform 0ms, setup 0ms, import 185ms, tests 4ms, environment 0ms)
+
+rc=0

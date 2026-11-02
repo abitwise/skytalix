@@ -1,0 +1,7 @@
+qe-ABC-264-p2 A6 (computed from d.out / d.pgn before deletion; INFO)
+go movetime 100 -> bestmove latency (cutechess clock, ms):
+skytalix moves 7192 median 100.0 max 105 >150ms 0
+base     moves 7193 median 100   max 104 >150ms 0
+opening-pair scores for skytalix (0, 0.5, 1, 1.5, 2): 8, 8, 25, 6, 3  sum 44.0
+terminations (both sides): mates 72, 3-fold 16, fifty-move 9, insufficient material 3; time forfeits 0; faults 0
+median plies 133

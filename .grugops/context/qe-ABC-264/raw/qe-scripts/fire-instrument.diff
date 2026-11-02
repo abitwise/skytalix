@@ -1,0 +1,27 @@
+--- /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe264/head/src/engine.ts	2026-11-02 01:08:42.000000000 +0000
++++ /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/qe264/F/src/engine.ts	2026-11-02 01:22:33.338458712 +0000
+@@ -251,6 +251,15 @@
+ }
+ 
+ /** Thrown from inside the recursion when the budget is spent, caught by the deepening loop. */
++// qe-ABC-264 SCRATCH INSTRUMENT (never production): counts the predicate's tries and cuts by remaining depth.
++const qeRfp = ((globalThis as any).qeRfp ??= { tries: [0, 0, 0, 0, 0], cuts: [0, 0, 0, 0, 0] });
++function qeRfpCount(position: Position, depth: number, ply: number, beta: number): boolean {
++  const d = Math.min(depth, 4);
++  qeRfp.tries[d]++;
++  const cut = reverseFutilityCut(position, depth, ply, beta);
++  if (cut) qeRfp.cuts[d]++;
++  return cut;
++}
+ const ABORTED = Symbol("engine: the budget is spent");
+ 
+ /**
+@@ -419,7 +428,7 @@
+   if (
+     budget.reverseFutility &&
+     alpha + 1 === beta &&
+-    reverseFutilityCut(position, remaining, ply, beta)
++    qeRfpCount(position, remaining, ply, beta)
+   ) {
+     return beta;
+   }

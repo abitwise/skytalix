@@ -1,0 +1,1 @@
+QP2: search.ts: 'if (beta >= MATE_FLOOR || beta <= 0 - MATE_FLOOR) return false;' -> 'if (beta >= MATE_FLOOR) return false;'

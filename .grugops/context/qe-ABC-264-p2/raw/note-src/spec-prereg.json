@@ -1,0 +1,4 @@
+{ "refs": ["qe-ABC-264-p2","ABC-264","ADR-0059","ADR-0056","EPIC-011","grugops/qe-ABC-264-p2","4d1c0616","0b73f51d","orch-2026-10-30a/20261102T134058Z-orchestrator-decision-81ae2db4","qe-ABC-264/20261102T011645Z-qe-e2e-decision"],
+  "notes": [
+    {"kind": "decision", "confidence": "high: fixed before any part-2 result was read", "bodyFile": "prereg.md"}
+  ] }

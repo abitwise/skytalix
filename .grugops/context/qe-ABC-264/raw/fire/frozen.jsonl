@@ -1,0 +1,4 @@
+{"board":"startpos","mode":"frozen:6","ms":80.7,"depth":6,"nodes":23768,"tries":5587,"cuts":45,"cutPerNode":0.19,"cutPerTry":0.81,"triesByDepth":[4649,681,193],"cutsByDepth":[45,0,0],"over3":64}
+{"board":"kiwipete","mode":"frozen:4","ms":56.5,"depth":4,"nodes":27239,"tries":2181,"cuts":1750,"cutPerNode":6.42,"cutPerTry":80.24,"triesByDepth":[2036,98,47],"cutsByDepth":[1746,4,0],"over3":0}
+{"board":"position-6","mode":"frozen:6","ms":79.6,"depth":6,"nodes":43859,"tries":3974,"cuts":2690,"cutPerNode":6.13,"cutPerTry":67.69,"triesByDepth":[2948,753,166],"cutsByDepth":[2265,403,22],"over3":107}
+{"board":"kiwipete","mode":"frozen:6","ms":296.8,"depth":6,"nodes":235381,"tries":17882,"cuts":13480,"cutPerNode":5.73,"cutPerTry":75.38,"triesByDepth":[14872,2320,547],"cutsByDepth":[12327,1106,47],"over3":143}

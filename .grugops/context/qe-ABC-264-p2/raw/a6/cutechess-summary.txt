@@ -1,0 +1,124 @@
+Finished game 1 (skytalix vs base): 1/2-1/2 {Draw by insufficient mating material}
+Finished game 2 (base vs skytalix): 0-1 {Black mates}
+Finished game 3 (skytalix vs base): 1/2-1/2 {Draw by fifty moves rule}
+Finished game 4 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+Finished game 5 (skytalix vs base): 0-1 {Black mates}
+Finished game 6 (base vs skytalix): 1-0 {White mates}
+Finished game 7 (skytalix vs base): 0-1 {Black mates}
+Finished game 8 (base vs skytalix): 0-1 {Black mates}
+Finished game 9 (skytalix vs base): 1-0 {White mates}
+Finished game 10 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+Finished game 11 (skytalix vs base): 0-1 {Black mates}
+Finished game 12 (base vs skytalix): 0-1 {Black mates}
+Finished game 13 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+Finished game 14 (base vs skytalix): 1-0 {White mates}
+Finished game 15 (skytalix vs base): 0-1 {Black mates}
+Finished game 16 (base vs skytalix): 0-1 {Black mates}
+Finished game 17 (skytalix vs base): 0-1 {Black mates}
+Finished game 18 (base vs skytalix): 1-0 {White mates}
+Finished game 19 (skytalix vs base): 0-1 {Black mates}
+Finished game 20 (base vs skytalix): 1/2-1/2 {Draw by fifty moves rule}
+Finished game 21 (skytalix vs base): 0-1 {Black mates}
+Finished game 22 (base vs skytalix): 0-1 {Black mates}
+Finished game 23 (skytalix vs base): 0-1 {Black mates}
+Finished game 24 (base vs skytalix): 0-1 {Black mates}
+Finished game 25 (skytalix vs base): 0-1 {Black mates}
+Finished game 26 (base vs skytalix): 1-0 {White mates}
+Finished game 27 (skytalix vs base): 0-1 {Black mates}
+Finished game 28 (base vs skytalix): 0-1 {Black mates}
+Finished game 29 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+Finished game 30 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+Finished game 31 (skytalix vs base): 1-0 {White mates}
+Finished game 32 (base vs skytalix): 1-0 {White mates}
+Finished game 33 (skytalix vs base): 1/2-1/2 {Draw by fifty moves rule}
+Finished game 34 (base vs skytalix): 0-1 {Black mates}
+Finished game 35 (skytalix vs base): 0-1 {Black mates}
+Finished game 36 (base vs skytalix): 1/2-1/2 {Draw by fifty moves rule}
+Finished game 37 (skytalix vs base): 1-0 {White mates}
+Finished game 38 (base vs skytalix): 1-0 {White mates}
+Finished game 39 (skytalix vs base): 1/2-1/2 {Draw by fifty moves rule}
+Finished game 40 (base vs skytalix): 0-1 {Black mates}
+Finished game 41 (skytalix vs base): 1-0 {White mates}
+Finished game 42 (base vs skytalix): 1-0 {White mates}
+Finished game 43 (skytalix vs base): 1-0 {White mates}
+Finished game 44 (base vs skytalix): 0-1 {Black mates}
+Finished game 45 (skytalix vs base): 1/2-1/2 {Draw by fifty moves rule}
+Finished game 46 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+Finished game 47 (skytalix vs base): 0-1 {Black mates}
+Finished game 48 (base vs skytalix): 0-1 {Black mates}
+Finished game 49 (skytalix vs base): 1-0 {White mates}
+Finished game 50 (base vs skytalix): 0-1 {Black mates}
+Finished game 51 (skytalix vs base): 0-1 {Black mates}
+Finished game 52 (base vs skytalix): 0-1 {Black mates}
+Finished game 53 (skytalix vs base): 0-1 {Black mates}
+Finished game 54 (base vs skytalix): 0-1 {Black mates}
+Finished game 55 (skytalix vs base): 1-0 {White mates}
+Finished game 56 (base vs skytalix): 1-0 {White mates}
+Finished game 57 (skytalix vs base): 0-1 {Black mates}
+Finished game 58 (base vs skytalix): 0-1 {Black mates}
+Finished game 59 (skytalix vs base): 1/2-1/2 {Draw by fifty moves rule}
+Finished game 60 (base vs skytalix): 1/2-1/2 {Draw by fifty moves rule}
+Finished game 61 (skytalix vs base): 0-1 {Black mates}
+Finished game 62 (base vs skytalix): 1-0 {White mates}
+Finished game 63 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+Finished game 64 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+Finished game 65 (skytalix vs base): 0-1 {Black mates}
+Finished game 66 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+Finished game 67 (skytalix vs base): 0-1 {Black mates}
+Finished game 68 (base vs skytalix): 1-0 {White mates}
+Finished game 69 (skytalix vs base): 0-1 {Black mates}
+Finished game 70 (base vs skytalix): 1-0 {White mates}
+Finished game 71 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+Finished game 72 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+Finished game 73 (skytalix vs base): 0-1 {Black mates}
+Finished game 74 (base vs skytalix): 1-0 {White mates}
+Finished game 75 (skytalix vs base): 0-1 {Black mates}
+Finished game 76 (base vs skytalix): 0-1 {Black mates}
+Finished game 77 (skytalix vs base): 0-1 {Black mates}
+Finished game 78 (base vs skytalix): 0-1 {Black mates}
+Finished game 79 (skytalix vs base): 0-1 {Black mates}
+Finished game 80 (base vs skytalix): 1-0 {White mates}
+Finished game 81 (skytalix vs base): 1/2-1/2 {Draw by fifty moves rule}
+Finished game 82 (base vs skytalix): 1-0 {White mates}
+Finished game 83 (skytalix vs base): 1/2-1/2 {Draw by insufficient mating material}
+Finished game 84 (base vs skytalix): 0-1 {Black mates}
+Finished game 85 (skytalix vs base): 1-0 {White mates}
+Finished game 86 (base vs skytalix): 1-0 {White mates}
+Finished game 87 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+Finished game 88 (base vs skytalix): 1-0 {White mates}
+Finished game 89 (skytalix vs base): 1/2-1/2 {Draw by insufficient mating material}
+Finished game 90 (base vs skytalix): 0-1 {Black mates}
+Finished game 91 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+Finished game 92 (base vs skytalix): 1-0 {White mates}
+Finished game 93 (skytalix vs base): 1-0 {White mates}
+Finished game 94 (base vs skytalix): 0-1 {Black mates}
+Finished game 95 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+Finished game 96 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+Finished game 97 (skytalix vs base): 0-1 {Black mates}
+Finished game 98 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+Finished game 99 (skytalix vs base): 1-0 {White mates}
+Finished game 100 (base vs skytalix): 1-0 {White mates}
+Score of skytalix vs base: 30 - 42 - 28  [0.440] 100
+...      skytalix playing White: 10 - 24 - 16  [0.360] 50
+...      skytalix playing Black: 20 - 18 - 12  [0.520] 50
+...      White vs Black: 28 - 44 - 28  [0.420] 100
+Elo difference: -41.9 +/- 58.5, LOS: 7.9 %, DrawRatio: 28.0 %
+SPRT: llr 0 (0.0%), lbound -inf, ubound inf
+
+Player: skytalix
+   "Draw by 3-fold repetition": 16
+   "Draw by fifty moves rule": 9
+   "Draw by insufficient mating material": 3
+   "Loss: Black mates": 24
+   "Loss: White mates": 18
+   "Win: Black mates": 20
+   "Win: White mates": 10
+Player: base
+   "Draw by 3-fold repetition": 16
+   "Draw by fifty moves rule": 9
+   "Draw by insufficient mating material": 3
+   "Loss: Black mates": 20
+   "Loss: White mates": 10
+   "Win: Black mates": 24
+   "Win: White mates": 18
+Finished match

@@ -1,0 +1,9 @@
+# qe-ABC-264 part 1 verdict: GAPS (QE-264-a LOW, QE-264-b LOW), no blocking gap. A1-A4 MET, the four A4 counts equal the probe to the node, every part-1 gate green. A6 may proceed once the owner accepts ADR-0059
+
+QE/E2E, task `qe-ABC-264`, at `grugops/ABC-264` code `358b5f4a` (tip `4e6a59ee`), base `0b73f51d`, graded by the rule in the PREREG `…4e787c10`.
+
+- **Rows:** A1 MET (cross-build node-equal, 276 positions plus a QE d5 spot on 15 door pairs; export lists +3). A2 MET (the file reviewed; 7 of 8 QE plants red, the mate-band guard planted twice and red twice). A3 MET (drift 97.33 % / max 107 cp in both recursions, cap 160; mate floor 0/189, engine 0/188 INFO; zugzwang 7/7). A4 MET (0.5901 / 0.6373 / 0.6173 / 0.6282, bar 0.75; 658 971 / 1 021 190 / 972 596 / 299 183 to the node). The `ABC-086` A6 re-pin (3 -> 5 ms) is justified under `ADR-0028`.
+- **Gates:** lint, typecheck, build 0; npm test 2 403/2 403 x3; skips 0, integrity and inventory "No findings."; G1 54/58; G5 MET (max 4 001.2 ms); G6 MET graded (9 = 9, 10 -> 11); G8 9.18 s; G9 empty; G11 reported (same move at all five); 7 deep lanes green.
+- **Firing at 100 ms (INFO):** cuts per node 0.32 % startpos, 3.66 % kiwipete, 4.82 % position-6.
+- **Why GAPS and not READY-FOR-A6:** the PREREG requires every plant red; QP6 survives (`QE-264-a`), and the A2 static-score argument rests on an unasserted, overstated premise (`QE-264-b`). Both are LOW and test/records-only: neither touches the shipped path or any A-row bar. **Neither blocks A6 or the merge**; the Orchestrator may route `QE-264-a` to the Engineer (one row) and `QE-264-b` to the Architect/BA-PM (wording) in parallel with the owner's answer.
+- **UAT:** owed (production lines). This is the part-1 verdict only; the signing verdict needs part 2 (A6, the smoke, the Levels lane) after the owner accepts `ADR-0059`.

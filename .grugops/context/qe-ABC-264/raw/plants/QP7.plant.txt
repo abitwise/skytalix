@@ -1,0 +1,1 @@
+QP7: search.ts: 'if (ply === 0 || depth > REVERSE_FUTILITY_MAX_DEPTH) return false;' -> 'if (ply <= 1 || depth > REVERSE_FUTILITY_MAX_DEPTH) return false;'

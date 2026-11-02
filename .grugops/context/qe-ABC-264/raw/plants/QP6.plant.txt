@@ -1,0 +1,1 @@
+QP6: engine.ts: chooseMoveWithoutReverseFutility priorKeys: false

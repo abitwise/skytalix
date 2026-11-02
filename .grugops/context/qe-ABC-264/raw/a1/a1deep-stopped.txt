@@ -1,0 +1,10 @@
+search(B) vs searchWithoutReverseFutility(H) d5: 12 roots, 0 differ, base nodes 308334
+chooseMove(B) vs chooseMoveWithoutReverseFutility(H) d5: 12 roots, 0 differ, base nodes 228333
+searchWithoutKillers self d5: 12 roots, 0 differ, base nodes 817552
+searchWithoutNullMove self d5: 12 roots, 0 differ, base nodes 190169
+searchWithoutOrdering self d5: 12 roots, 0 differ, base nodes 80541992
+Terminated                 flock $L node $S/scripts/a1deep.mjs $S/base $S/head
+
+real	3m13.201s
+user	0m0.001s
+sys	0m0.000s

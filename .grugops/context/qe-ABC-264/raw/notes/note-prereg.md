@@ -1,0 +1,29 @@
+# qe-ABC-264 PREREG (part 1): how A1-A4, the plants, G1/G5/G6/G8/G9/G11, the gates and the 100 ms firing rate are read, fixed before any timed or graded run
+
+QE/E2E, task `qe-ABC-264`, on `grugops/qe-ABC-264` from `grugops/ABC-264` `4e6a59ee` (code `358b5f4a`, base `0b73f51d`). Part 1 only: **no 100-game read, no Stockfish smoke, no Levels lane** (they wait on the owner's acceptance of `ADR-0059`). Every run is wrapped in `flock <host-test.lock>`; local `./node_modules/.bin/vitest`, never npx. Trees: base = `git archive 0b73f51d`, head = `git archive 358b5f4a` (the branch tip's `src/` is byte-equal), plain `node` imports out of tree.
+
+## Criteria (contract: `ABC-264` page on `main` as aligned to `ADR-0059`)
+- **A1:** SE's `a1.mjs` (reviewed; 276-position corpus, 6 roots + 6 endgames + in-progress children) re-run by QE, base tree against head tree: 0 differ on every pair; non-vacuity > 0 on both shipped paths. Plus a QE export diff: head's `src/search.ts` exports = base's + {`reverseFutilityCut`, `searchWithoutReverseFutility`}, `src/engine.ts` = base's + {`chooseMoveWithoutReverseFutility`}, nothing removed (3 names).
+- **A2:** the default-lane file `src/search.reverse-futility.test.ts` green, reviewed row by row against the page's A2 list; **QE plants (declared now, each on a scratch copy of head, restored after):** QP1 mate band strict (`>` / `<`); QP2 mate band upper side only; QP3 margin strict (`>`); QP4 engine gate before the table probe; QP5 search gate before the table probe; QP6 `chooseMoveWithoutReverseFutility` with `priorKeys: false`; QP7 root guard over-wide (`ply <= 1`); QP8 depth range 1-2 (`depth >= 3` returns false). Each is run on the default lane of the five touched test files; a plant green there is run on `SEARCH_DEEP=1` `search.reverse-futility`. Expected red: all; a plant that survives every lane is a gap, named.
+- **A3:** the `SEARCH_DEEP=1` rows of `search.reverse-futility` (drift d5 on the 190 both recursions, bars >= 95 % within 25 cp, none > 160 cp, 0 mate sign flips; mate floor on the 287) and `search.null-move` (the seven `ADR-0050` d9 zugzwang rows). Plus an independent QE script, out of tree: head shipped against BASE shipped (equal to head's door by A1) at d5 on the 190 in both recursions, and the mate floor on the 287 in BOTH recursions (the page bars `search()` only; the engine side is INFO).
+- **A4:** the deep rows, and the independent script reproducing the four head counts **658 971 / 1 021 190 (`search()` d8) / 972 596 / 299 183 (`chooseMove` to 8, frozen clock)** to the node; a different count is a finding before A4 is read. Each ratio <= 0.75.
+- **ABC-086 A6 re-pin (3 -> 5 virtual ms):** read against `ADR-0028` (fixture first); confirmed by running the row (`ENGINE_DEEP=1 -t "ABC-086 A6"`) at 5 ms (green) and at 3 ms on a scratch copy (expected red on the non-vacuity line only).
+
+## Gates
+- **Mandatory:** `npm run lint`, `npm run typecheck`, `npm run build` exit 0 (dist removed after).
+- **npm test x3 and G8:** `npm test` as spelled, order b h h b b h (base tree / worktree), wait for 0 foreign vitest and load1 <= 8 before each. Head: 3 runs, each 2 403 passed / 0 failed. G8: head median wall <= 10 s.
+- **Skips / integrity / inventory:** skip count by the AGENTS.md spelling (local vitest); `test-skip-integrity.js --skip-count <N>`; `lane-inventory.js`. Expected 0 / "No findings." / "No findings.".
+- **G1:** `PUZZLE_DEEP=1` puzzle-suite, solved >= 54/58 (base 54/58).
+- **G9:** `git diff 0b73f51d 358b5f4a -- src/levels.ts` empty.
+- **Deep lanes (regression):** SEARCH_DEEP search, search.null-move, search.reverse-futility, quiescence, search.pvs-lmr; ENGINE_DEEP engine; PUZZLE_DEEP. Not run: uci-session (292 s, no search value row; SE green), the Levels lane (A6, owner-gated).
+- **G6 (graded, `EPIC-008` row as read 2026-10-25, owner word `…2ae5fc12`):** 5 rounds; each a kiwipete pair then a position-6 pair; base first in odd rounds, head first in even; one fresh plain-node process per search (`timed.mjs`, qe-ABC-229's, unchanged); `chooseMove` at `LEVELS[5].budgetMs` = 4 000 ms on the real clock on both builds (it refuses otherwise); completed depth = `choice.depth`. **MET** iff head's median >= base's on both boards and no run < 6. Runs < 7 reported as WARN. Wait-clear before EVERY read (0 foreign vitest, 0 cutechess-cli, load1 <= 2.0, Tctl <= 60.0 °C; poll 15 s, 60 min max); thermal stop at session median Tctl > 85.0. Every run counts; no discards, no re-runs.
+- **G11 (reported, not graded):** the five game-1 positions (`plans/uat/EPIC-006-game-1.pgn`, qe-ABC-210's FEN file), base then head, one run each at 4 000 ms, same harness.
+- **G5:** MET iff every G6 and G11 read's `chooseMove` wall <= 5 000 ms (the level 1-5 ceiling; the max is reported against 4 000 ms) AND the `ENGINE_DEEP=1` engine lane (its real-clock rows) is green.
+
+## Firing rate at 100 ms (INFO, never a grade)
+A scratch copy of head's `src/` whose `src/engine.ts` calls the predicate through a counting wrapper (tries, cuts) and counts nodes; never a production edit. Instrument check first: the copy reproduces 972 596 nodes for `chooseMove` to 8 on kiwipete on a frozen clock. Then, per board (startpos, kiwipete, position-6), 5 fresh processes of `chooseMove` at `budgetMs: 100` on the real clock: report depth, nodes, tries, cuts, cuts/nodes and cuts/tries (medians and ranges), plus one deterministic frozen-clock reading at each board's median depth.
+
+## Verdict rule (part 1)
+- **READY-FOR-A6:** A1-A4 MET, the re-pin justified, every plant red, every gate above green, no gap above LOW.
+- **GAPS (ids):** all of the above met except one or more named non-blocking gaps (a surviving plant, an UNKNOWN), each with a QE-264-x id.
+- **FAIL:** A1, A2 or A3 red (a defect, back to the Engineer), A4 missed or a count off the probe unexplained, or a gate red (G1 < 54, G5, G6, G8, a lane red with no recorded re-pin).

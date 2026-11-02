@@ -1,0 +1,15 @@
+<!-- GENERATED — do not hand-edit. Re-run: node scripts/context-io.js render <task> -->
+# Context: qe-ABC-264
+
+## Current state
+
+| at | kind | by | confidence | verified_by | note |
+| --- | --- | --- | --- | --- | --- |
+| 2026-11-02T01:16:45Z | decision | qe-e2e | high: fixed before any graded or timed run; nothing measured yet |  | # qe-ABC-264 PREREG (part 1): how A1-A4, the plants, G1/G5/G6/G8/G9/G11, the gates and the 100 ms firing rate are read, fixed before any timed or graded run |
+| 2026-11-02T01:53:26Z | decision | qe-e2e | high: verdict by the PREREG rule; GAPS (QE-264-a/b LOW), no blocking gap |  | # qe-ABC-264 part 1 verdict: GAPS (QE-264-a LOW, QE-264-b LOW), no blocking gap. A1-A4 MET, the four A4 counts equal the probe to the node, every part-1 gate green. A6 may proceed once the owner accepts ADR-0059 |
+| 2026-11-02T01:53:26Z | observation | qe-e2e | high: every gate ran as stated under the lock; G6 graded by the PREREG rule (grade56.mjs) |  | # qe-ABC-264 gates (part 1): lint/typecheck/build 0; npm test 2 403/2 403 x3; skips 0, integrity and inventory clean; G1 54/58; G5 MET (max 4 001.2 ms, 0 > 5 000; engine lane 78/78); G6 MET graded (kiwipete 9 = 9, position-6 11 > 10, min 8); G8 head median 9.18 s; G9 empty; G11 same move at all five; 7 deep lanes green |
+| 2026-11-02T01:53:26Z | observation | qe-e2e | high: gaps named from this hop's readings; QE-264-e not measured |  | # qe-ABC-264 gaps (part 1): QE-264-a LOW (the new engine door's priorKeys is pinned by no row; plant QP6 survives), QE-264-b LOW (the static-score mate-band argument cites a constant assertion and a premise that is false at the extremes); QE-264-c/d/e INFO. None blocks A6 |
+| 2026-11-02T01:53:26Z | observation | qe-e2e | high for the counts on the scratch instrument (checked to the node); INFO, not a grade; warm-game rate UNKNOWN - verify |  | # qe-ABC-264 firing rate at 100 ms (INFO, not a grade): cuts per node median 0.32 % startpos (d6), 3.66 % kiwipete (d4), 4.82 % position-6 (d6); the predicate cuts on 1.3 % / 78 % / 65 % of its tries |
+| 2026-11-02T01:53:26Z | observation | qe-e2e | high: deterministic readings under the lock; independent script and deep lane agree to the node |  | # qe-ABC-264 per row (part 1): A1 MET (cross-build node-equal, export lists +3), A2 MET (file reviewed; 7 of 8 QE plants red), A3 MET (97.33 % / max 107 cp both recursions; mate floor 0/189, engine side 0/188 INFO; zugzwang 7/7), A4 MET with the probe's four counts to the node; ABC-086 A6 re-pin justified |
+| 2026-11-02T01:53:26Z | observation | qe-e2e | high: each plant run and reverted, copy diffed equal to head at the end |  | # qe-ABC-264 plants: 8 QE defects declared in the PREREG, 7 red on the default lane, 1 survives every lane (QP6, the new engine door's priorKeys: gap QE-264-a); the mate-band guard planted twice, red both times |
+| 2026-11-02T01:53:26Z | observation | qe-e2e | high: paths, commits and window as recorded (observation: an artifact-ref needs a gate_run) |  | # qe-ABC-264 host, window and artifacts (filed as observation; an artifact-ref needs a gate_run this hop has not got) |
