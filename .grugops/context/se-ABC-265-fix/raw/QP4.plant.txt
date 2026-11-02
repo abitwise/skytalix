@@ -1,0 +1,1 @@
+QP4: 'if (data === 0 || ((table[base]' -> 'if (((table[base]'

@@ -1,0 +1,33 @@
+
+ RUN  v4.1.12 <scratch P>
+
+ ❯ src/transposition.shared.test.ts (12 tests | 1 failed) 9ms
+     × a cleared slot never hits, even for key 0n whose XOR equations it satisfies (a zero data word is empty) 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/transposition.shared.test.ts > ABC-265 A2 — the XOR check > a cleared slot never hits, even for key 0n whose XOR equations it satisfies (a zero data word is empty)
+AssertionError: expected +0 to be -1 // Object.is equality
+
+- Expected
++ Received
+
+- -1
++ 0
+
+ ❯ src/transposition.shared.test.ts:179:28
+    177|     clearTable();
+    178|     expect(wordsOf(0)).toEqual([0, 0, 0, 0]);
+    179|     expect(probeTable(0n)).toBe(-1);
+       |                            ^
+    180|   });
+    181|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 11 passed (12)
+   Start at  17:04:40
+   Duration  99ms (transform 0ms, setup 0ms, import 24ms, tests 9ms, environment 0ms)
+

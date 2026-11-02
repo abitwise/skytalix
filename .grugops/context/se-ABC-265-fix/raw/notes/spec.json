@@ -1,0 +1,6 @@
+{ "refs": ["se-ABC-265-fix", "ABC-265", "EPIC-011", "ADR-0025", "QE-265-a", "grugops/ABC-265-fix", "7d9c8695", "6a4b0d37", "e5694864", "src/transposition.shared.test.ts", "src/transposition.ts", "qe-ABC-265/20261102T170102Z-qe-e2e-observation-ace42c34", "qe-ABC-265/20261102T170102Z-qe-e2e-observation-9d77019b"],
+  "notes": [
+    {"kind": "decision", "confidence": "high: as committed in 7d9c8695; QE's suggested row", "bodyFile": "row.md"},
+    {"kind": "observation", "confidence": "high: plant on a scratch copy and every gate run under the lock at 7d9c8695", "bodyFile": "plant-gates.md"},
+    {"kind": "observation", "confidence": "high: pointer note (filed as observation; artifact-ref needs gate_run)", "bodyFile": "artifacts.md"}
+  ] }
