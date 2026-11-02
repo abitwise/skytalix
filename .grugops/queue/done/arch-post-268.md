@@ -1,0 +1,29 @@
+---
+by: orchestrator (claude-opus-5-5, orch-2026-10-30a)
+at: 2026-11-02T20:48:53Z
+subtask: arch-post-268
+role: architect-design
+ref: .grugops/context/arch-post-268/
+branch: new grugops/arch-post-268 from main (at dispatch) — worktree .claude/worktrees/arch-post-268
+width: records; probes ≤ 5 min each wrapped in `flock /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/host-test.lock <cmd>`, node counts only, no timing.
+---
+# After ABC-268's merge: ADR-0061 in force, S′ re-pin, P1 re-measure
+Read Orchestrator note …77a82ec1, qe-ABC-268-p2 notes (…186a743e, …d582d7dd), ADR-0056 (S′ / E1650 re-pin rule), ADR-0060 (P1 parked; re-measure trigger "after P3 merges").
+1. ADR-0061: dated line ACCEPTED, IN FORCE on main (e72487e1) with the A6/smoke/Levels figures.
+2. S′ re-pin: pool 26/30 = 86.7 % > 85 % (merged builds only) fires the upward re-pin, owner pre-authorised. Apply ADR-0056's rule: name the new Stockfish Elo setting, the exact `r` command, and when the pool resets. Record it in ADR-0056.
+3. ADR-0060 decision 1, UNCHANGED, re-measured on today's main (with futility): every bar as pre-registered (A4 a/b/c, A3 drift ≤ 27 cp, mate floor, zugzwang 7/7, G1, plus ADR-0061's cut audit as information). Verdict: meets all → ADR-0060 ready for owner acceptance; misses → stays parked, say which bar.
+Fences: memory-bank/50-decisions and your records only; no src/tests/plans/board. No push, force, amend, rebase, merge into main. Delete scratch; leave nothing running.
+Publish: sealed notes (task arch-post-268, contextRoot = worktree's .grugops/context); queue moves inside your worktree; commit; ## Result + trace row; brief + claim to done/.
+
+## Result
+- **By:** Architect/Design (claude-opus-5-5), branch `grugops/arch-post-268` from `main` `56b3782d` (`src/` = `e72487e1`). Records only. Probes ran on a scratch `git archive e72487e1 src` outside the repository, four batches each `flock <host-test.lock> timeout 300` (13 s, 36 s, 21 s, 5 s), every job exit 0, node counts only. Scratch deleted; nothing left running. Raw under `.grugops/context/arch-post-268/raw/`.
+- **1. ADR-0061: ACCEPTED, IN FORCE on `main` `e72487e1`** (dated status): A6 58.0 / 100 (41/34/25, +56.1 ± 56.1, LOS 97.6 %, 0 faults, 0 time losses), S′ 8.0 / 10 at E 1 650, Levels 57 / 57; post-merge 2 429 / 2 429. Its d9 counts are now `main`'s, re-read to the node.
+- **2. S′ re-pin (ADR-0056 dated status + pointer at S′'s E):** pool (merged only) 9/1/0 + 9/1/0 + 8/2/0 = 26/4/0 = 86.7 % > 85 % over 30. Band-rule step E' = E + X: X = +325.2 (± 292.3), E' = 1 975.2 -> **E = 1 980** (`UCI_Elo` 1980, all other pins unchanged; depth guard now 5). **Command:** `node tools/rating/rating.ts r <candidate> <out> --elo 1980 --budget-ms 500 --rounds 5 --concurrency 1` (`--elo` must be written; `r`'s default stays 1 650; dry-run verified). **Pool resets now:** the E 1 650 pool closes at 26.0 / 30; a new empty pool opens at E 1 980 with the next merged S′, re-read at >= 30 games.
+- **3. ADR-0060 decision 1 on today's `main` (PREREG `…3a0aac14`, committed `d65e4bfb` before any run): misses three bars, P1 STAYS PARKED.** Door exact (888 786 / 1 262 046 / 1 306 981 / 391 451; reach 5.837). A4 (a) 0.7538 / 0.7718 / 0.7195 / **0.8528** (chooseMove pos-6 > 0.85, MISSED); A4 (b) **+0.384** met; A4 (c) G6 not read (timing); A3 `search()` 99.47 %, **max 63 cp** (pos-6/g5h6, MISSED cap), `chooseMove` 100 %, max 18 met, 0 sign flips; mate floor 0 / 163 met; zugzwang **6 / 7** (`zugzwang.004` g7f6 at d11, h3h4 only from d12; MISSED, F3); G1 54 / 58 no NEWLY met. Audit (information): 2 930 marked, 205 read, 11 flips (5.37 %), max error 48 cp, 0 >= 100 cp. The owner's cap question is moot; "accept ADR-0060" is not put.
+- **Notes** (sealed via `admitAndAppend`, contextRoot = this worktree's `.grugops/context`, `at` from the UTC clock; 3 of 3 read back): decision `20261102T205431Z-architect-design-decision-3a0aac14` (PREREG); observation `20261102T205950Z-architect-design-observation-9a7f24af` (results); decision `20261102T205950Z-architect-design-decision-1bc554fb` (rulings + open questions).
+- **Commits:** claim `a03511cb`; PREREG `d65e4bfb`; ADRs + notes + raw `fcd12b53`; this Result, trace row and move to done/ in the closing commit. Not pushed, not merged.
+- **Open (Orchestrator):** (1) S′'s 60-85 % trigger band no longer brackets the ~50 % the band-rule step aims at, so a downward question is likely after 30 games at 1 980; recommendation: a dated ADR-0056 amendment stepping to the band centre (E 1 810) before the next S′; 1 980 stands until ruled. (2) BA/PM records the new E / reset in `EPIC-011` (S′ pool row, C10) and the strength tickets' S′ lines. (3) Next Phase 2 item (P5 NEUTRAL or O1h first). (4) ADR-0056 D2's P1 row may want a "parked after P3" line.
+
+### Trace row (10 cells, header order)
+
+| arch-post-268 | After ABC-268's merge: ADR-0061 IN FORCE (e72487e1; A6 58.0/100, S′ 8/10, Levels 57/57); S′ re-pinned E 1650 -> 1980 (merged pool 26/4/0 = 86.7 %, X +325.2 ± 292.3; `r <c> <out> --elo 1980 --budget-ms 500 --rounds 5 --concurrency 1`; pool resets at 1980); ADR-0060 d1 re-measured on main with futility (prereg sealed + committed first): A4a chooseMove pos-6 0.8528, A3 cap 63 cp, zugzwang.004 lost at d11 -> P1 stays parked; A4b +0.384, mate 0/163, G1 54/58 met; audit 5.37 % flips, max 48 cp (info) | EPIC-011 | ADR-0061 (in force), ADR-0056 (S′ re-pin dated line), ADR-0060 (PROPOSED, re-opened; post-P3 dated status, d9 dated line) | NFR-005 (A4 bars unchanged), NFR-008; no NFR file | `grugops/arch-post-268` (records only; claim `a03511cb`, prereg `d65e4bfb`, ADRs + notes `fcd12b53`) | scratch measurements only (deleted; raw kept); door reproduces ADR-0061 d9 counts to the node | — (records) | — | Records done (Architect); Orchestrator: S′ band/step question, next Phase 2 item; BA/PM: EPIC-011 S′ row and C10 |
