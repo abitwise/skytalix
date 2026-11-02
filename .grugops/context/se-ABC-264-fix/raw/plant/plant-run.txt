@@ -1,0 +1,107 @@
+
+> skytalix@0.0.0 test
+> NODE_OPTIONS=--max-old-space-size=128 node tools/grugops/run-bounded.js 60000 vitest run --reporter=default --reporter=./tools/grugops/result-file-reporter.js --outputFile.json=.test-results/last-run.json src/engine.test.ts -t QE-264-a
+
+
+ RUN  v4.1.12 /home/olger/projects/public/skytalix/.claude/worktrees/qe-ABC-264
+
+ ❯ src/engine.test.ts (66 tests | 1 failed | 65 skipped) 6ms
+     ↓ returns a legal move at a 50 ms budget in the middlegame position
+     ↓ stops within 2x the budget on the clock it was given
+     ↓ visits only a bounded number of nodes past the deadline — the in-recursion check
+     ↓ aborts INSIDE depth 3 — the run really did enter the iteration it discards
+     ↓ returns the completed depth-2 move, which is NOT the depth-3 move
+     ↓ agrees with search() on move and score across the mate/stalemate endgames
+     ↓ reads the delivered module — src/engine.ts, not nothing
+     ↓ exports the two entry points and the two named values, and nothing that takes a depth
+     ↓ takes a TIME budget, in milliseconds, and requires it
+     ↓ carries no depth default and no depth constant
+     ↓ is driven by the clock and not by a ceiling — the deepening loop has no constant upper bound
+     ↓ goes DEEPER than any small hard-coded ceiling would allow — the behavioural half
+     ↓ names the ceiling as an exported constant
+     ↓ stops at start + HARD_CEILING_MS when handed twice that budget
+     ↓ makes any budget above the ceiling indistinguishable from the ceiling itself
+     ↓ terminates on an infinite budget — the module's only unbounded path, closed
+     ↓ leaves every degenerate budget exactly as it was — Math.min, not an if
+     ↓ never goes shallower as the budget grows
+     ↓ actually goes deeper somewhere across the three budgets
+     ↓ is assignable to EngineSeam and answers with a Promise<Move>
+     ↓ plays a scripted game to end-of-input with the loop driving it
+     ↓ covers 200+ positions — the denominator, asserted rather than trusted
+     ↓ returns a legal move in every one of them — never null, never a throw
+     ↓ leaves every searched position byte-identical, aborted iteration or not
+     ↓ is identical 2/2 on 15 positions, each completing root depth >= 2 — 30/30, 15/15
+     ↓ (i′) the shipped construction passes no clock, and its default level is the shipped engine
+     ↓ (ii) src/cli.ts does not import the virtual-clock module, directly or transitively
+     ↓ keeps each clock's state in its own instance — a second clock starts at 0
+     ↓ keeps each clock's own step — two live clocks at steps 1 and 0.5, read interleaved (ABC-125)
+     ↓ throws on a step that is not finite or not greater than 0 — 5/5
+     ↓ reads exactly 0, 0.5, 1 at a step of 0.5
+     ↓ reads exactly 0, 1, 2 at a step of 1
+     ↓ carries no real-clock read and no entropy source
+     ↓ is a real stop: unlimited, the same budget completes depth 6 or more
+     ↓ reports depth 3 at maxDepth 3, with search(position, 3)'s move and score
+     ↓ reports depth 1 and a legal move at maxDepth 1
+     ↓ stops within one clock-check interval of the node budget
+     ↓ plays search(position, d)'s move and score at the reported depth d — the abort is discarded
+     ↓ still completes the first iteration at maxNodes 1: non-null, legal, depth 1
+     ↓ returns identical move, score, depth, nodes and elapsedMs on perft root startpos
+     ↓ returns identical move, score, depth, nodes and elapsedMs on perft root kiwipete
+     ↓ returns identical move, score, depth, nodes and elapsedMs on perft root position-3
+     ↓ returns identical move, score, depth, nodes and elapsedMs on perft root position-4
+     ↓ returns identical move, score, depth, nodes and elapsedMs on perft root position-5
+     ↓ returns identical move, score, depth, nodes and elapsedMs on perft root position-6
+     ↓ on an infinite budget, maxDepth 1000 returns within the same consultation count
+     ↓ at budgetMs 5, maxDepth 50 returns the same depth and move as no maxDepth
+     ↓ keeps the last min(clock, 100) keys before the root, oldest first
+     ↓ is empty at clock 0 and for a lone root
+     ↓ A5: never more than 100 keys from a 600-key list, the root's own key excluded
+     ↓ does not change the list it is handed
+     ↓ KQ v K, Black to move: d8e8 at 0 with the prior keys, base's move without them
+     ↓ K v KQ, White to move: d1e1 at 0 with the prior keys, base's move without them
+     ↓ KR v K, Black to move: d8e8 at 0 with the prior keys, base's move without them
+     ↓ K v KR, White to move: d1e1 at 0 with the prior keys, base's move without them
+     ↓ KQ v K, Black to move: d8e8 would stand a second time; node-equal to base
+     ↓ K v KQ, White to move: d1e1 would stand a second time; node-equal to base
+     ↓ A9 (probe H4): untrimmed prior keys at root clock 0 are node-equal to base
+     ↓ A9: on the A1 fixtures with the root clock set to 0, the same keys are node-equal to base
+     ↓ A5: a prior key older than the root clock is never matched
+     ↓ A5: the search reads at most the last 100 prior keys, whatever it is handed
+     ↓ the engine reads the caller's list and does not change it
+     ↓ A4: an empty list is node-equal to an absent one over the endgames and the thirty
+     ↓ the three test-only doors ignore prior keys: node-equal with and without them
+     × ABC-264's door reads prior keys, as chooseMove does: the A1 repetition at 0 with them, not without (QE-264-a) 5ms
+     ↓ Qe5+ at ply 4 stood twice before the root: Ke1 at 404 with the keys, Kg1 at 497 without
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/engine.test.ts > ABC-230 A3 and A4 — no prior keys is base, node for node, and the doors take none > ABC-264's door reads prior keys, as chooseMove does: the A1 repetition at 0 with them, not without (QE-264-a)
+AssertionError: expected { move: 'd8c8', score: -1006 } to deeply equal { move: 'd8e8', score: +0 }
+
+- Expected
++ Received
+
+  {
+-   "move": "d8e8",
+-   "score": 0,
++   "move": "d8c8",
++   "score": -1006,
+  }
+
+ ❯ src/engine.test.ts:1718:79
+    1716|     const door = engineModule.chooseMoveWithoutReverseFutility;
+    1717|     const withKeys = door(parseFen(root), { ...fixedDepth(4), priorKey…
+    1718|     expect(withKeys && { move: label(withKeys.move), score: withKeys.s…
+       |                                                                               ^
+    1719|       move: fixture.repeat,
+    1720|       score: 0,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 65 skipped (66)
+   Start at  01:56:19
+   Duration  299ms (transform 0ms, setup 0ms, import 195ms, tests 6ms, environment 0ms)
+
+rc=1

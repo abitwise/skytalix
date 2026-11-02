@@ -1,0 +1,7 @@
+{ "refs": ["se-ABC-264-fix","ABC-264","QE-264-a","ADR-0059","ADR-0054","ABC-230","grugops/ABC-264-fix","grugops/qe-ABC-264","1dede4f2","bcc82866","src/engine.test.ts","qe-ABC-264/20261102T015326Z-qe-e2e-observation-3a95d391"],
+  "notes": [
+    {"kind": "decision", "confidence": "high: as committed in bcc82866", "bodyFile": "decision.md"},
+    {"kind": "observation", "confidence": "high: plant and head runs under the lock, raw in raw/plant; sha256 equal before/after", "bodyFile": "plant.md"},
+    {"kind": "observation", "confidence": "high: every gate run as stated under the lock; raw in raw/gates", "bodyFile": "gates.md"},
+    {"kind": "observation", "confidence": "high: pointer note (filed as observation; artifact-ref needs gate_run)", "bodyFile": "artifacts.md"}
+  ] }
