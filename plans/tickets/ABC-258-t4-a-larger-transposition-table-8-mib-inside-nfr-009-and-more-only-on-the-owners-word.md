@@ -10,6 +10,24 @@ epic: EPIC-011
 
 # ABC-258: a larger TT (T4)
 
+> **STATUS 2026-11-02, by BA/PM: PAUSED BY THE OWNER'S ORDER (P); THE T2 AMENDMENT PARKED WITH IT (B)** (task
+> `bapm-threads-cut`, records only, at `main` `48f3fc01`; nothing run). His words (`orch-2026-10-30a` `…81ae2db4`,
+> verbatim): *"… P yes, A accept, B park, C yes; …"*.
+> - **P, paused.** The Phase 1 TT strand is paused by his order, and pruning goes first. Lifting it is the
+>   Orchestrator's call within P.
+> - **B, parked with this ticket.** The `ADR-0025` T2 amendment (`ABC-237`, folded in here as Scope 3 and A5) is
+>   **PARKED with `ABC-258`**. It is neither accepted nor declined, and nothing is built for it (`ADR-0025` § Status).
+> - **When this comes back:** after the threads worker pool (`ABC-266`), on the shared table (`ABC-265`). That is where
+>   several workers raise the table pressure T2 and T4 need (`ADR-0057` D6's dated line; `ADR-0056` D6's 2026-11-02
+>   line, item 4). It may also come back earlier on its own trigger. The re-ask brings fresh figures, because the
+>   2026-11-02 figures are single-threaded on 2^18 slots and do not carry over. If `ABC-265` has merged, this ticket is
+>   written on the shared layout.
+> - **C, the intent line, is owed at re-ask, not now.** T4 is "invisible at 100 ms by construction" (`ADR-0056` C2′'s
+>   2026-11-02 line, its example). So at re-ask its page may name NEUTRAL (≥ 43.0 of 100) before the read, together
+>   with its own pre-registered measured bar. BA/PM writes that line from the design note at or before Ready.
+> - **Q-3K-6 is still open.** `ADR-0057` OQ-4 (a) does not move `NFR-009`'s level, so nothing above 8 MiB is allowed.
+> - Row 10 now reads P and B. DoR stays 9/10.
+
 > **PREMISE RESTATED, T2 FOLDED IN, PAUSED, 2026-11-02 by BA/PM** (task `bapm-phase1-pause`, records only, at `main`
 > `e8495fc5`; nothing run). Source: the ruling `arch-phase1-replan` `…64e95bfa` and the pressure note `…5ea73b5c`.
 > - **The premise, restated with the store fraction.** Only **3–5 % of nodes store** (quiescence nodes never store,
@@ -101,6 +119,6 @@ epic: EPIC-011
 | 7 | test notes | ✅ |
 | 8 | size | ✅ S |
 | 9 | priority | ✅ P3 |
-| 10 | no major unresolved blocker | ❌ `ABC-257`; ~~`EPIC-011` not started~~ *2026-11-02: PAUSED with the Phase 1 TT strand (`…64e95bfa`); `ABC-237` re-read here* |
+| 10 | no major unresolved blocker | ❌ `ABC-257`; ~~`EPIC-011` not started~~ *2026-11-02: PAUSED with the Phase 1 TT strand (`…64e95bfa`); `ABC-237` re-read here* *2026-11-02 (`bapm-threads-cut`): **paused by the owner's order (P)**; T2 amendment **parked** with this ticket (B); re-asked after `ABC-266`, on the shared table* |
 
 **DoR 9/10 (re-scored 2026-11-01: row 5). ~~Backlog.~~ Backlog, PAUSED** *(2026-11-02, `bapm-phase1-pause`: premise restated, T2 folded in as Scope 3 and A5)*.

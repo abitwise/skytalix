@@ -7,10 +7,19 @@ size: S
 priority: P2
 epic: EPIC-011
 feature: —
-adr: "ADR-0059 (PROPOSED 2026-11-02, arch-ABC-264; ADR-0026 d10 off-door pair). New ADRs are the owner's to accept; reading (b)"
+adr: "ADR-0059 (ACCEPTED 2026-11-02 by the owner, …81ae2db4 \"R yes\"; in force at this ticket's merge; ADR-0026 d10 off-door pair). Was PROPOSED (arch-ABC-264), reading (b)"
 ---
 
 # ABC-264: reverse futility (P2)
+
+> **`ADR-0059` ACCEPTED; A2'S STATIC-SCORE ROW RE-WORDED, 2026-11-02, by BA/PM** (task `bapm-threads-cut`, records
+> only, at `main` `48f3fc01`; nothing run). The owner's word (`orch-2026-10-30a` `…81ae2db4`, verbatim *"R yes"*)
+> accepts `ADR-0059`, so **reading (b) ends here: A6 (C2′ GAIN, S′, the Levels deep lane) and the merge no longer wait
+> on him** (`ADR-0059` § Status). With `QE-264-b` (`qe-ABC-264` `…3a95d391`, LOW), A2's sentence on the static score is
+> struck and replaced by the bound `ADR-0059` d2's dated bullet derives: **|`evaluate`| ≤ 10 885 cp** within legal
+> promotion, by reading, not measured. No row, bar or test changes, and no test row is owed. The comment at
+> `src/transposition.ts:58-60` is the Engineer's with the next edit of that file, carried by `ABC-265` scope 7. Intent
+> stays **GAIN** (`ADR-0056` C2′'s 2026-11-02 line names this ticket GAIN: 5.8 % of nodes cut at depth 6).
 
 > **REFINED 2026-11-02 by BA/PM: DoR 10/10, reading (b)** (task `bapm-ABC-264-rows`, records only, at `main`
 > `0b73f51d`; nothing run). The design is written: `ADR-0059`, PROPOSED (`arch-ABC-264` `…b48c5a3e`, probe
@@ -73,8 +82,15 @@ adr: "ADR-0059 (PROPOSED 2026-11-02, arch-ABC-264; ADR-0026 d10 off-door pair). 
     a ply (120 / 240 / 360); the mate band is `|beta| ≥ MATE_FLOOR`; the zugzwang guard is fewer than three non-pawn
     pieces for the side to move. The guard rows call `reverseFutilityCut` directly, one row per clause (ply 0, depth 4,
     `beta` at `+MATE_FLOOR` and at `-MATE_FLOOR`, in check, two non-pawn pieces), each on a position where every other
-    clause would cut. **The static score's mate row is met by argument:** a static evaluation is under 10 000
-    (asserted in `src/transposition.test.ts`), so it never enters the band, and the predicate does not test it. The
+    clause would cut. **The static score's mate row is met by argument:** ~~a static evaluation is under 10 000
+    (asserted in `src/transposition.test.ts`), so it never enters the band, and the predicate does not test it.~~
+    *(2026-11-02, `bapm-threads-cut`; `ADR-0059` d2's dated bullet, `QE-264-b`.)* |`evaluate`| ≤ **10 885 cp** on any
+    board where neither side holds more than legal promotion allows. The bound is derived by reading `src/evaluate.ts`
+    at `7daf8086`, not measured and not asserted by a test. QE's −10 535 sits inside it. It is under `MATE_FLOOR`
+    (20 000) by more than 9 000, so the static score never enters the band, and the predicate does not test it. The
+    row is met by this bound plus the beta rows, and no test row is owed for it. The named limit is a FEN with about
+    22 or more queens a side. The FEN reader does not bound piece counts, so such a board could reach `MATE_FLOOR`.
+    That limit is `ADR-0033`'s residual, not this row's. The
     "0 child moves" row uses a call-through `vi.mock(path, { spy: true })` of `./legal.ts` or `./apply.ts`. A source
     row reads both `negamax` bodies: each gates on `alpha + 1 === beta`, calls the predicate before the null move,
     and returns `beta`.
@@ -145,7 +161,8 @@ adr: "ADR-0059 (PROPOSED 2026-11-02, arch-ABC-264; ADR-0026 d10 off-door pair). 
   null-window-only or not, its order against null move in the node, the door names, the drift bound (A3) and the A4
   figure. **Owner:** acceptance of that ADR before the read and the merge (reading (b), the `ABC-208` / `ABC-238`
   precedent); the build may start once it is written. *(2026-11-02: written, `ADR-0059`, PROPOSED; the owner's
-  acceptance gates A6 and the merge only.)*
+  acceptance gates A6 and the merge only.)* *(2026-11-02, `bapm-threads-cut`: **accepted** by the owner, *"R yes"*; nothing
+  gates A6 or the merge but the rows themselves.)*
 - **Eval scale (`ADR-0056` D2):** the margin is in today's centipawns. E1/E2 (`ABC-239`) re-scale the evaluation, so
   the margin is re-read when they land (named here, not decided).
 - Shares `src/search.ts` and `src/engine.ts` with every Phase 2 stub and `ABC-236`: one at a time. P3 and P6 follow it.
