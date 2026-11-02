@@ -10,6 +10,22 @@ owner: BA/PM
 
 # EPIC-011: the path toward 3 000 Elo, classical and measured (`ADR-0056`)
 
+> **PHASE 1 (THE TT) PAUSED; PHASE 2 NEXT, 2026-11-02, by BA/PM** (task `bapm-phase1-pause`, records only, at `main`
+> `e8495fc5`; nothing run). Source: the ruling `arch-phase1-replan` `…64e95bfa`, with `…c0e9f5a0`, `…64bcf436`,
+> `…5ea73b5c`, and `se-ABC-238` `…db17e44b`.
+> - **`ABC-238` (T1) closed unmerged on `ADR-0058` F4:** 0.9939× / 0.9958× at depth 8 against ≤ 0.95×. Code kept,
+>   `grugops/ABC-238` `3abaefdd`. `ABC-081` `A1` gains its "not in force" line.
+> - **Phase 1 rows T1–T4 are paused** under the ruling. `ABC-237` (T2) is parked, re-read with `ABC-258`.
+>   `ABC-257` is re-scoped to the combined T1 + T3 attempt with a pre-registered held-out bar (≤ 0.93× over searches
+>   2–9, no game > 1.00×), and paused until the owner answers C2′ yes or allows a longer read. `ABC-258`'s premise is
+>   restated (3–5 % of nodes store) and T2 folded in; paused. `ABC-236` no longer waits on T1.
+> - **Row T3's rationale is corrected:** kept entries do cut under exact depth, 17–23 % of exact cuts (`…5ea73b5c`).
+>   `ADR-0056` D2's same line is owed by a later Architect hop on `ADR-0056`.
+> - **Phase 2 is next: P2, reverse futility, cut as `ABC-264`** (§ Tickets row 16). Its ADR is the Architect's. If a
+>   full page is wanted sooner, `ABC-233` (DoR 9/10, owes its ADR) is the ruling's fallback.
+> - **This changes `ADR-0056` D6's Phase 1 order**, so the owner hears the pause with the ADR answers (the
+>   Orchestrator's). The board is the Orchestrator's.
+
 > **THE SMOKE'S E 1 650 CONFIRMED BY THE OWNER; `ABC-250` CLOSED, 2026-11-01, by BA/PM** (task `bapm-abc250-close`,
 > records only, at `main` `767a2e3e`; nothing run). `EPIC-010`'s block of the same date carries the detail.
 >
@@ -209,11 +225,11 @@ reorders made here are named in the "why" column.
 | **0, instrument** | M0 | **`ABC-255`** ~~SPRT self-play lane~~ the owner's 100 / 400 reads at 100 ms (re-scoped 2026-11-01; *and again: 400 head-to-head, the 0.5 s smoke, `bapm-owner-answers`*) | full page (new) | every later strength change and the epic's close are read on it; `tools/` only, no file collision; may be pulled before `EPIC-010` closes (C12) |
 | 0 | (D5 item 2) | **`ABC-256`** B0: baseline reading on the routine milestone control | full page (new) | the milestones need a starting point on the control they are read on. It runs even if that control is R's pins: milestone 1b is value-identical but faster, so at a fixed time the 2 074 figure is stale |
 | 0 | (QE-261-a/b) | **`ABC-262`** two default-lane rows for the lazy legality filter: a pawns-first early-exit board and black-to-move in-check promotions (test-only) | full page (new, `bapm-qe-gaps-1101b`) | the Orchestrator's rule for this hop: it does not have to land before `ABC-251` (which touches neither `src/legal.ts` nor generation order), so it sits here, not in `EPIC-010` milestone 1b; test files only, no value change |
-| **1, the TT** | T1 | `ABC-238` deeper stored entry may cut a shallower search | full page (moved in) | `ADR-0056`: the cheapest real gap, +15–40 (estimate). **First:** `ADR-0056` D6 order, adopted over `EPIC-010`'s `ABC-237` → `ABC-238` (§ Dedupe audit, C2) |
-| 1 | T2 | `ABC-237` depth-preferred replacement | full page (moved in) | after T1 (same file) |
-| 1 | T3 | **`ABC-257`** TT kept across the moves of a game, re-tried after T1 and T2 | full page (new; re-try of dropped `ABC-209`) | `ABC-209`'s NEUTRAL was read under exact-depth cutoffs, where a kept entry almost never cuts (`ADR-0056` D2 T3) |
-| 1 | T4 | **`ABC-258`** a larger TT | full page (new) | at 40/15 (≈ 22 s, ≈ 14–20 M nodes a move at today's 0.63–0.90 M nodes/s) a 2^18-slot table (262 144 entries) is far too small; 8 MiB fits `NFR-009` today, more is Q-3K-6 |
-| **2, pruning and reductions** | P2 | *stub:* reverse futility (static null move) | title only | top expected Elo per cost (`ADR-0056` D2) |
+| **1, the TT** *(PAUSED 2026-11-02, `…64e95bfa`)* | T1 | `ABC-238` deeper stored entry may cut a shallower search | full page (moved in) | `ADR-0056`: the cheapest real gap, +15–40 (estimate). **First:** `ADR-0056` D6 order, adopted over `EPIC-010`'s `ABC-237` → `ABC-238` (§ Dedupe audit, C2) *2026-11-02: **closed unmerged on F4** (0.9939× / 0.9958× vs ≤ 0.95×); its rule travels with `ABC-257`* |
+| 1 | T2 | `ABC-237` depth-preferred replacement | full page (moved in) | ~~after T1 (same file)~~ *2026-11-02: **paused, parked**, re-read with `ABC-258` (pays only on a loaded table: 0.77× at 2^14, 1.00× at 2^18)* |
+| 1 | T3 | **`ABC-257`** TT kept across the moves of a game, ~~re-tried after T1 and T2~~ *combined with T1 (2026-11-02)* | full page (new; re-try of dropped `ABC-209`) | ~~`ABC-209`'s NEUTRAL was read under exact-depth cutoffs, where a kept entry almost never cuts (`ADR-0056` D2 T3)~~ *2026-11-02, corrected: kept entries supply 17–23 % of exact cuts (`…5ea73b5c`), so "never cuts" does not explain `ABC-209`'s NEUTRAL. The premise is the combination: T1 + T3 0.904× over searches 2–9 at depth 8, against 0.973× for T3 alone. **Paused** until the owner answers C2′ yes or allows a longer read; bar pre-registered (≤ 0.93×, held out, no game > 1.00×)* |
+| 1 | T4 | **`ABC-258`** a larger TT | full page (new) | at 40/15 (≈ 22 s, ≈ 14–20 M nodes a move at today's 0.63–0.90 M nodes/s) ~~a 2^18-slot table (262 144 entries) is far too small~~ *2026-11-02: only 3–5 % of nodes store, ≈ 0.4–1.0 M stores a search, 1.6–3.8 a slot (`…5ea73b5c`); T2 folded in as the alternative remedy; **paused***; 8 MiB fits `NFR-009` today, more is Q-3K-6 |
+| **2, pruning and reductions** *(NEXT, 2026-11-02)* | P2 | ~~*stub:*~~ **`ABC-264`** reverse futility (static null move) | ~~title only~~ full page (new, `bapm-phase1-pause`) | top expected Elo per cost (`ADR-0056` D2); acts at remaining depth 1–3, so the 100 ms read sees it. *2026-11-02: first of Phase 2, the ruling's next ticket; owes its ADR* |
 | 2 | P1 | *stub:* LMR by a log table of depth × move index, history-adjusted (amends `ABC-121`'s flat 1-ply LMR, `ADR-0026`) | title only | |
 | 2 | P4 | *stub:* late-move (move-count) pruning | title only | after P1 |
 | 2 | P3 | *stub:* futility pruning near the leaves | title only | after P2 |
@@ -375,22 +391,23 @@ Phase 5, the next question is V4 and it is his (`ADR-0056` D6 item 7).
 |---|---|---|---|---|---|---|---|
 | 1 | `ABC-255` | M0: ~~a self-play SPRT lane on the rating harness that stops H1 on a known gain and H0 on an identical pair~~ *(re-scoped 2026-11-01)* the rating harness plays the owner's two reads at 100 ms: 100 games new against base, and the 400-game ~~pair against Stockfish~~ *head-to-head read; and the 10-game Stockfish smoke at 0.5 s (`bapm-owner-answers`)* | ~~M~~ S | P1 | Backlog *(Ready recommended, `bapm-reconcile-adr0056`)* | ~~10/10~~ ~~9/10 *(row 5: the owner-answers fold)*~~ **10/10** *(fold merged `a0f9297e`)* | ~~`EPIC-006`/`009`/`010` closed; Q-3K-2 (its use as a gate), Q-3K-3 (width); the Architect's routine control~~ none (`ADR-0056` fold merged `94f1504c`); may be pulled before `EPIC-010` closes (C12) |
 | 2 | `ABC-256` | ~~B0: baseline reading of `main` on the routine milestone control, after `EPIC-010` closes~~ **Closed as superseded by C3″** (2026-11-01, `bapm-reconcile-adr0056`) | S | P2 | ~~Backlog~~ **dropped** (page `status: dropped`; the board move is the Orchestrator's) | ~~8/10~~ — | the Architect's routine control; `EPIC-010` closed; *2026-11-01:* ~~closes as merged into `EPIC-010`'s 400-game close reading (C13; condition met by the fold, `94f1504c`)~~ *C13 void (`bapm-owner-answers`): the close read is head-to-head; B0's control and fate wait on the owner-answers fold* *(answered: the fold keeps no routine Stockfish reading; closed as superseded, `bapm-reconcile-adr0056`)* |
-| 3 | `ABC-238` | A deeper stored entry may cut off a shallower search (T1) | M | P2 *(was P3)* | ~~Backlog~~ **Ready** *(2026-11-01, `bapm-phase1-wording`; moves past Ready are the Orchestrator's)* | ~~9/10~~ **10/10** | ~~the ADR revising `ABC-081` `A1`; `ABC-255` (if Q-3K-2 yes)~~ *2026-11-01:* `ADR-0058` written, PROPOSED; reading (b): build now, read and merge on the owner's acceptance |
-| 4 | `ABC-237` | The TT prefers deeper entries when it replaces (T2) | S | P3 | Backlog | 9/10 | ~~`ADR-0025` amendment~~ *(written 2026-11-01, PROPOSED; read and merge on the owner's acceptance)*; `ABC-238` merged or closed |
-| 5 | `ABC-257` | The TT is kept across the moves of one game, re-tried after T1 and T2 (T3) | S | P3 | Backlog | 8/10 | `ABC-238`, `ABC-237`; `ADR-0025` d4 amendment (accepted 2026-10-26, not in force) re-read |
-| 6 | `ABC-258` | A larger transposition table: 8 MiB inside `NFR-009`, more only on the owner's word (T4) | S | P3 | Backlog | 8/10 | `ABC-257`; Q-3K-6 for > 8 MiB |
+| 3 | `ABC-238` | A deeper stored entry may cut off a shallower search (T1) | M | P2 *(was P3)* | ~~Backlog~~ ~~**Ready** *(2026-11-01, `bapm-phase1-wording`; moves past Ready are the Orchestrator's)*~~ **dropped: closed unmerged on F4** *(2026-11-02, `bapm-phase1-pause`; page `status: dropped`; the board move is the Orchestrator's; code `3abaefdd` kept)* | ~~9/10~~ **10/10** | ~~the ADR revising `ABC-081` `A1`; `ABC-255` (if Q-3K-2 yes)~~ *2026-11-01:* `ADR-0058` written, PROPOSED; reading (b): build now, read and merge on the owner's acceptance |
+| 4 | `ABC-237` | The TT prefers deeper entries when it replaces (T2) | S | P3 | Backlog, **parked** *(2026-11-02)* | 9/10 | ~~`ADR-0025` amendment~~ *(written 2026-11-01, PROPOSED; read and merge on the owner's acceptance)*; ~~`ABC-238` merged or closed~~ *2026-11-02: re-read with `ABC-258` (the amendment recommended parked with it)* |
+| 5 | `ABC-257` | The TT is kept across the moves of one game, ~~re-tried after T1 and T2 (T3)~~ *together with `ABC-238`'s deeper cutoffs (T1 + T3), on a pre-registered held-out bar (2026-11-02)* | ~~S~~ M | P3 | Backlog, **PAUSED** | 8/10 | ~~`ABC-238`, `ABC-237`;~~ *the owner: C2′ yes, or a longer read;* `ADR-0025` d4 amendment (accepted 2026-10-26, not in force) re-read; `ADR-0058` as base |
+| 6 | `ABC-258` | A larger transposition table: 8 MiB inside `NFR-009`, more only on the owner's word (T4) *; T2 measured alongside (2026-11-02)* | S | P3 | Backlog, **PAUSED** | ~~8/10~~ 9/10 *(the page's score since 2026-11-01)* | `ABC-257`; Q-3K-6 for > 8 MiB |
 | 7 | `ABC-233` | History heuristic after the killers (O1h) | M | P3 | Backlog | 9/10 | the ADR (`ADR-0026` d10) |
 | 8 | `ABC-234` | SEE orders captures, ordering only (O3s) | M | P3 | Backlog | 8/10 | `ADR-0024` d4 re-open evidence; the ADR |
-| 9 | `ABC-236` | Aspiration windows at the root (S1) | M | P3 | Backlog | 9/10 | new ADR; `ABC-238` |
+| 9 | `ABC-236` | Aspiration windows at the root (S1) | M | P3 | Backlog | 9/10 | new ADR; ~~`ABC-238`~~ *(lifted 2026-11-02: T1 not in force; the instability coupling returns with T1)* |
 | 10 | `ABC-231` | King table tapered by phase, alone | S | P3 | Backlog | 9/10 | **to be merged into E1** at Phase 4's refinement |
 | 11 | `ABC-232` | Passed pawns by phase | S | P3 | Backlog | 9/10 | **to be merged into E1** (phase scaling) and E4 (passer terms) |
 | 12 | `ABC-239` | Weights tuned offline, constants only, validated outside (E2) | L | P3 | Backlog | 8/10 | E1; Q-3K-7; `ADR-0048` licence; the method ADR |
 | ~~13~~ | `ABC-254` | Lazy legality (V2, O1-d) | M | P2 | **Returned to `EPIC-010`** 2026-11-01 (milestone 1b, first) | 10/10 | ~~**Q-SP-3**; the ADR amending `ADR-0003`; `EPIC-010`'s `ABC-252` (or where the O1-b chain stops)~~ none (yes `…f7a50e95`; `ADR-0003` amended, `89af8b56`) |
 | 14 | `ABC-262` | The lazy-legality rows read the board shapes they missed: `hasLegalMove`'s early exit on a pawns-first board, and the in-check quiet queen promotion with black to move (phase 0, M0; test-only, from QE-261-a and QE-261-b, both LOW; cut 2026-11-01, `bapm-qe-gaps-1101b`) | XS | P3 | ~~Backlog (Ready recommended)~~ **Done** 2026-11-01 (merged `2cf2bb69`; QE PASS_WITH_GAPS `…ed4d02a5`; A4 waived by the Orchestrator, marked on the page by `bapm-spike-accel`) | **10/10** | `ABC-261` merged (`12e78c4d`); no ADR of its own; recommended after `ABC-250` merges or is dropped, before `EPIC-010`'s `ABC-252`; does not hold `EPIC-010`'s close |
 | 15 | `ABC-263` | **SPIKE** (records only, Architect): can `skytalix` use the NPU, the iGPU and more CPU threads from Node.js on this host, and share search info between them? Q1 accelerators (with and without a net), Q2 threads (Lazy SMP, shared TT), Q3 shared or device memory on the APU, Q4 the owner's rules it would meet; it recommends and changes no rule (owner `…78c476bf`; cut 2026-11-01, `bapm-spike-accel`) | M | P2 | Backlog | **10/10** | none hard. **Where it sits:** outside phases 0–5, any time, records only; no phase ticket waits on it and it waits on none. Its follow-ups need the owner to open scope (§ Out of scope: threads, neural) |
+| 16 | `ABC-264` | P2: reverse futility (static null move) at remaining depth 1–3, behind an `ADR-0026` off-door pair, with mate, check and zugzwang guards (Phase 2, first; cut 2026-11-02, `bapm-phase1-pause`) | S | P2 | Backlog | 9/10 | the ADR (margin, depth range, guards, door names; `ADR-0026` d10) — the Architect's; then Ready |
 
 The stubs of § Phases get ids when their phase is refined. **Ids `ABC-255`…`ABC-258` are taken here; `ABC-224` stays in
-the Orchestrator's pool.** No moved ticket was renumbered.
+the Orchestrator's pool.** *(2026-11-02: `ABC-264` taken for P2.)* No moved ticket was renumbered.
 
 ## Dedupe audit (2026-11-01; every epic, every ticket not plainly Done, and every Done ticket `ADR-0056` touches)
 
@@ -555,7 +572,7 @@ line, id unchanged), **merge into X**, **supersede**, **drop**, **close** (the e
 - `EPIC-009`'s `uci-clock-mode` (`ADR-0052`): the 40/15 setting.
 - `ABC-204`'s pinned host tools (`cutechess-cli` 1.5.1, Stockfish 19); paths out of the records (`ADR-0049` d4).
 - `EPIC-010` closed: 1b's packed base is what every Phase 1+ ticket edits.
-- Within the epic: `ABC-238` → `ABC-237` → `ABC-257` → `ABC-258` share `src/transposition.ts`; `ABC-233` → O2c →
+- Within the epic: ~~`ABC-238` → `ABC-237` → `ABC-257` → `ABC-258`~~ *(2026-11-02: `ABC-257` (T1 + T3) → `ABC-258` (with T2), both paused)* share `src/transposition.ts`; `ABC-233` → O2c →
   `ABC-234` → Q1 share `orderMoves` and the capture path; E1 → `ABC-239` → E3–E7 share `src/evaluate.ts`; `ABC-254` →
   V3 share `src/legal.ts` and `src/moves.ts` (`ABC-254` in `EPIC-010` since 2026-11-01, so it lands first).
 

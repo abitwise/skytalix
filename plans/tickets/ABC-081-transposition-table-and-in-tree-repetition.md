@@ -86,6 +86,8 @@ FAIL — checked by this ticket's own `A1`.
   today). With deeper cutoffs on (`ABC-238`), a deeper stored entry may change a value; that change is judged by
   `ADR-0058` decision 6's bounded oracle and by `ADR-0056` C2′, never by identity. **The rows under `A1` do not
   change: they bind the older doors,** each of which turns deeper cutoffs off (`ADR-0058` decision 4).
+  *(2026-11-02, `bapm-phase1-pause`: **not in force: `ADR-0058` not in force, `ABC-238` closed unmerged** on `ADR-0058`
+  F4, `arch-phase1-replan` `…64e95bfa`. `A1` reads as originally written: table on and off score identically.)*
 - **`A2` (it hits, and the hit rate is reported).** **Given** `kiwipete` and `position-6` at depth 5,
   **then** the table hit rate is reported and is **≥ 15%**. *(A table that never hits is a
   memory leak with a lookup.)*
