@@ -1,0 +1,8 @@
+{
+  "refs": ["arch-phase2-p3", "grugops/arch-phase2-p3", "EPIC-011", "P3", "P4", "P5", "P6", "P1", "P2", "ADR-0061", "ADR-0056", "ADR-0059", "ADR-0060", "ADR-0050", "ADR-0026", "ABC-264", "ABC-121", "ABC-233", "f2388e40", "cfff6993", "4d1c0616", "arch-phase2-rebase/20261102T151839Z-architect-design-decision-f9f440c9", "arch-phase2-p1/20261102T144713Z-architect-design-observation-35bd3967", "NFR-005", "NFR-008"],
+  "notes": [
+    { "kind": "observation", "confidence": "high (deterministic fixed-depth, maxDepth and maxNodes runs on a scratch copy of main src f2388e40; the door reproduces ADR-0059's door counts and the rebuilt reverse-futility knob 4d1c0616's head counts to the node); the audit samples the 190-row corpus, not games", "bodyFile": "notes/obs-probe.md" },
+    { "kind": "decision", "confidence": "high on the measured premise and bars; the Elo effect is an estimate until C2' reads it; the cause of ABC-264's loss stays unmeasured", "bodyFile": "notes/dec.md" },
+    { "kind": "observation", "confidence": "high (files in this branch)", "bodyFile": "notes/art.md" }
+  ]
+}
