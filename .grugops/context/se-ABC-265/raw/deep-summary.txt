@@ -1,0 +1,28 @@
+== engine.engine.txt
+ Test Files  1 passed (1)
+      Tests  78 passed (78)
+   Duration  178.52s (transform 0ms, setup 0ms, import 223ms, tests 178.22s, environment 0ms)
+== search.null-move.search.txt
+ Test Files  1 passed (1)
+      Tests  44 passed (44)
+   Duration  29.02s (transform 0ms, setup 0ms, import 77ms, tests 28.87s, environment 0ms)
+== search.pvs-lmr.search.txt
+ Test Files  1 passed (1)
+      Tests  29 passed (29)
+   Duration  54.01s (transform 0ms, setup 0ms, import 60ms, tests 53.88s, environment 0ms)
+== search.search.txt
+ Test Files  1 passed (1)
+      Tests  57 passed (57)
+   Duration  3.09s (transform 0ms, setup 0ms, import 45ms, tests 2.96s, environment 0ms)
+== transposition.engine.txt
+ Test Files  1 passed (1)
+      Tests  26 passed (26)
+   Duration  5.35s (transform 0ms, setup 0ms, import 77ms, tests 5.18s, environment 0ms)
+== transposition.search.txt
+ Test Files  1 passed (1)
+      Tests  40 passed (40)
+   Duration  4.07s (transform 0ms, setup 0ms, import 60ms, tests 3.94s, environment 0ms)
+== puzzle.txt (PUZZLE_DEEP=1)
+PUZZLES shipped: solved 54/58, baseline 54/58, budget 25 step 1, wall 1.74 s
+ ✓ src/puzzle-suite.test.ts > the gating run [deep, PUZZLE_DEEP=1] > ABC-131 A6 — every recorded unsolved name is a PUZZLES row, and solved + |unsolved| = total 0ms
+      Tests  18 passed (18)

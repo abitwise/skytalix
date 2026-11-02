@@ -1,0 +1,7 @@
+{ "refs": ["se-ABC-265", "ABC-265", "EPIC-011", "ADR-0025", "ADR-0057", "ADR-0026", "ADR-0059", "ABC-081", "ABC-122", "ABC-208", "ABC-266", "NFR-005", "NFR-009", "NFR-008", "grugops/ABC-265", "e5694864", "94be445f", "src/transposition.ts", "src/transposition.shared.test.ts", "arch-ABC-265/20261102T143310Z-architect-design-decision-e396e5ab"],
+  "notes": [
+    {"kind": "decision", "confidence": "high: as committed in e5694864; the ADR-0025 amendment as written", "bodyFile": "design.md"},
+    {"kind": "observation", "confidence": "high: deterministic cross-build and unit readings under the lock; G6/profile are SE readings, graded G6 is QE's; per-call figures are estimates", "bodyFile": "acceptance.md"},
+    {"kind": "observation", "confidence": "high: every gate run under the lock at e5694864; QE-owned gates not run", "bodyFile": "gates.md"},
+    {"kind": "observation", "confidence": "high: pointer note (filed as observation; artifact-ref needs gate_run)", "bodyFile": "artifacts.md"}
+  ] }

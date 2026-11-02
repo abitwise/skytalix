@@ -1,0 +1,22 @@
+== P1 live score read in tableCutoff: rc=1 ['Tests  1 failed | 10 passed (11)']
+    × K' exact at depth d with another score: the cutoff returns s_K, not s_K' (a live score read fails) 2ms
+    FAIL  src/transposition.shared.test.ts > ABC-265 A2 — the XOR check > T10 — the verified copy: a store into the slot between probeTable and tableCutoff > K' exact at depth d with another score: the cutoff returns s_K, not s_K' (a live score read fails)
+== P2 live depth read in tableCutoff: rc=1 ['Tests  1 failed | 10 passed (11)']
+    × K' at depth d + 1: the cutoff still returns s_K (a live depth read returns null) 2ms
+    FAIL  src/transposition.shared.test.ts > ABC-265 A2 — the XOR check > T10 — the verified copy: a store into the slot between probeTable and tableCutoff > K' at depth d + 1: the cutoff still returns s_K (a live depth read returns null)
+== P3 no XOR: raw key halves stored and compared: rc=1 ['Tests  3 failed | 8 passed (11)']
+    × the store's words are keyLo ^ data, keyHi ^ score, data, score; a clear zeroes them 2ms
+    × a torn slot (words 0 and 1 from entry A, words 2 and 3 from entry B) misses for A and for B 1ms
+    × K' exact at depth d with another score: the cutoff returns s_K, not s_K' (a live score read fails) 1ms
+    FAIL  src/transposition.shared.test.ts > ABC-265 A1 — the layout: four Uint32 words a slot over one SharedArrayBuffer > the store's words are keyLo ^ data, keyHi ^ score, data, score; a clear zeroes them
+    FAIL  src/transposition.shared.test.ts > ABC-265 A2 — the XOR check > a torn slot (words 0 and 1 from entry A, words 2 and 3 from entry B) misses for A and for B
+    FAIL  src/transposition.shared.test.ts > ABC-265 A2 — the XOR check > T10 — the verified copy: a store into the slot between probeTable and tableCutoff > K' exact at depth d with another score: the cutoff returns s_K, not s_K' (a live score read fails)
+== P4 keyHi equation dropped: rc=1 ['Tests  1 failed | 10 passed (11)']
+    × misses for K' in the same slot with a different keyHi, and for K'' whose keyLo differs above the mask 2ms
+    FAIL  src/transposition.shared.test.ts > ABC-265 A2 — the XOR check > misses for K' in the same slot with a different keyHi, and for K'' whose keyLo differs above the mask
+== P5 signed compare (no >>> 0): rc=1 ['Tests  1 failed | 10 passed (11)']
+    × a key whose keyLo and keyHi each have bit 31 set hits (catches a signed compare) 2ms
+    FAIL  src/transposition.shared.test.ts > ABC-265 A2 — the XOR check > a key whose keyLo and keyHi each have bit 31 set hits (catches a signed compare)
+== P6 store order 0,1,2,3: rc=1 ['Tests  1 failed | 10 passed (11)']
+    × storeEntry writes word 2, then 3, then 0, then 1 (a source row) 3ms
+    FAIL  src/transposition.shared.test.ts > ABC-265 A1 — the layout: four Uint32 words a slot over one SharedArrayBuffer > storeEntry writes word 2, then 3, then 0, then 1 (a source row)

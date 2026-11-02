@@ -1,0 +1,2 @@
+kiwipete chooseMove fixed to 9: nodes 3450205, probeTable 219601 (0.0636/node), storeEntry 126644 (0.0367/node)
+position-6 chooseMove fixed to 10: nodes 2340567, probeTable 201126 (0.0859/node), storeEntry 118080 (0.0504/node)

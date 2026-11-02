@@ -1,0 +1,26 @@
+doors: search 11 (base 11), engine 5 (base 5); same set: true
+corpus 276 positions
+search() d1-4, ABC-078 A3 corpus: 1104 rows, 0 differ, 4652976 head nodes; base 98c554876f946df4 head 98c554876f946df4
+chooseMove fixed to 1-4, ABC-078 A3 corpus: 1104 rows, 0 differ, 4909606 head nodes; base 0656ed8e6429d83b head 0656ed8e6429d83b
+search() d5-7, perft roots: 18 rows, 0 differ, 2620305 head nodes; base 5339ad58b0ca19d1 head 5339ad58b0ca19d1
+chooseMove fixed to 5-8, perft roots: 24 rows, 0 differ, 4778155 head nodes; base aeb63a25c266b11d head aeb63a25c266b11d
+searchWithoutKillers d1-3 (self), corpus: 828 rows, 0 differ, 1133675 head nodes; base 86496375f6cc3e67 head 86496375f6cc3e67
+searchWithoutNullMove d1-3 (self), corpus: 828 rows, 0 differ, 1010810 head nodes; base 69873c390973c62c head 69873c390973c62c
+searchWithoutOrdering d1-3 (self), corpus: 828 rows, 0 differ, 19218921 head nodes; base 570764a53aaeca5b head 570764a53aaeca5b
+searchWithoutPruning d1-2 (self), corpus: 552 rows, 0 differ, 89895832 head nodes; base 06db620b1fb1202c head 06db620b1fb1202c
+searchWithoutPruningOrQuiescence d1-2 (self), corpus: 552 rows, 0 differ, 294666 head nodes; base b858f2c34cc5ff7b head b858f2c34cc5ff7b
+searchWithoutPvsOrReductions d1-3 (self), corpus: 828 rows, 0 differ, 1060791 head nodes; base 0924321030aabee8 head 0924321030aabee8
+searchWithoutQuiescence d1-3 (self), corpus: 828 rows, 0 differ, 330149 head nodes; base 0395f3f739e8dc49 head 0395f3f739e8dc49
+searchWithoutQuiescenceEvasions d1-3 (self), corpus: 828 rows, 0 differ, 1151591 head nodes; base b5bb579c942beab1 head b5bb579c942beab1
+searchWithoutQuietPromotions d1-3 (self), corpus: 828 rows, 0 differ, 1563602 head nodes; base 91acbadfd0fa635e head 91acbadfd0fa635e
+searchWithoutReductions d1-3 (self), corpus: 828 rows, 0 differ, 1010810 head nodes; base 69873c390973c62c head 69873c390973c62c
+searchWithoutTable d1-3 (self), corpus: 828 rows, 0 differ, 1060939 head nodes; base 6e50f278cfe8dd38 head 6e50f278cfe8dd38
+chooseMoveWithoutNullMove to 4 (self), corpus: 276 rows, 0 differ, 2729084 head nodes; base 18b0849f412c3f37 head 18b0849f412c3f37
+chooseMoveWithoutPvsOrReductions to 4 (self), corpus: 276 rows, 0 differ, 4265327 head nodes; base dd8cbb57a71c22d2 head dd8cbb57a71c22d2
+chooseMoveWithoutQuiescenceEvasions to 4 (self), corpus: 276 rows, 0 differ, 2138193 head nodes; base aa3b9cfae2b2631b head aa3b9cfae2b2631b
+chooseMoveWithoutQuietPromotions to 4 (self), corpus: 276 rows, 0 differ, 3089500 head nodes; base 32a44406418cfd09 head 32a44406418cfd09
+chooseMoveWithoutReductions to 4 (self), corpus: 276 rows, 0 differ, 2957099 head nodes; base bcfb47874dcc3e63 head bcfb47874dcc3e63
+chooseMove tick clock (6 roots x 3/5/400/3000 x prior none/6): 48 rows, 0 differ
+total fixed-depth rows 12186, head nodes 149872031
+A3 IDENTITY: ALL EQUAL
+rc=0
