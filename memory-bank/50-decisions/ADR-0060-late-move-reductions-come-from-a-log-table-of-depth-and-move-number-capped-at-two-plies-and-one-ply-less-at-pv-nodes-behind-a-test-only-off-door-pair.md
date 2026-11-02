@@ -6,7 +6,72 @@ id: ADR-0060
 
 ## Status
 
-*2026-11-02, the owner's answer* (`orch-2026-10-30a` `…773be7de`, verbatim *"61 yes, 25 yes, park threads"*): **the
+**2026-11-02, RE-MEASURED AFTER P3: decision 1 misses three bars on `main` `e72487e1`, with futility in force. P1
+STAYS PARKED.** This ADR is still PROPOSED and re-opened. No rule is written in, no bar moves, and the build does not
+start. Recorded by Architect/Design (task `arch-post-268`, records only, on `grugops/arch-post-268` from `main`
+`56b3782d`, whose `src/` is `e72487e1`'s).
+- **The trigger** was this section's own next step: "re-measure decision 1 unchanged, under the same bars, on the
+  `main` that `ABC-268` merges into". `ABC-268` merged (`ADR-0061`, in force).
+- **The method.**
+  - The instrument, the head, the door, the bars and the verdict rule were sealed and committed before any run
+    (decision `…3a0aac14`, commit `d65e4bfb`).
+  - The head is decision 1 exactly: the reopen's R0, with the PV node one ply less, the cap at 2, and r ≤ d − 2. The
+    door is today's `main`: the flat rule, with futility on.
+  - The instrument is `arch-ADR-0060-reopen`'s driver and predicate. The patch is re-anchored, because each call
+    site now sits after the futility skip. `arch-phase2-p3`'s cut audit was added.
+  - It ran on a scratch `git archive` of `e72487e1`'s `src/`. There were four batches, each under the host lock and
+    each under 5 min. They read node counts only. The scratch copy is deleted. Raw:
+    `.grugops/context/arch-post-268/raw/probe/`.
+- **The instrument is exact.** The door reproduces `ADR-0061` d9's counts to the node: 888 786 / 1 262 046 /
+  1 306 981 / 391 451, with reach 5.837.
+
+| bar (d8 / d9, unchanged) | before P3 (`arch-phase2-rebase`) | **on `e72487e1`** | state |
+|---|---|---|---|
+| `A4` (a) `search()` d8 kiwipete | 0.7605 | **0.7538** (669 982 / 888 786) | met |
+| `A4` (a) `search()` d8 position-6 | 0.7385 | **0.7718** (974 021 / 1 262 046) | met |
+| `A4` (a) `chooseMove` d8 kiwipete | 0.7334 | **0.7195** (940 419 / 1 306 981) | met |
+| `A4` (a) `chooseMove` d8 position-6, ≤ 0.85 | 0.8699 | **0.8528** (333 830 / 391 451) | **MISSED** by 0.0028 |
+| `A4` (b) reach at 47 000, ≥ +0.25 | +0.2526 | **+0.384** (5.837 → 6.221; 67 deeper, 1 shallower, 16 moves differ) | met |
+| `A4` (c) `G6` | not read | not read (timing, a build's gate) | — |
+| `A3` drift d5 `search()`, ≥ 95 %, ≤ 27 cp, 0 sign flips | 99.47 %, max 63 | **99.47 %, max 63** (position-6/g5h6, 319 → 382); 0 sign, 0 mate-status flips | **MISSED** (cap) |
+| `A3` drift d5 `chooseMove` | 100 %, max 18 | **100 %, max 18** (startpos/g2g4); 0 / 0 | met |
+| mate floor, door d4 → head d5 | 0 / 163 | **0 / 163** (same-depth report 2 / 189) | met |
+| zugzwang, seven rows | 7 / 7 | **6 / 7: `zugzwang.004` plays g7f6 at d11** (151 797 nodes; door h3h4 at 905 900) | **MISSED** (F3) |
+| `G1` ≥ 54 / 58, no NEWLY | 54 / 58 | **54 / 58**, none newly missed or solved (door 54 / 58) | met |
+
+- **Reports.**
+  - At d8 on the other roots (`search()` / `chooseMove`): position-4 0.833 / 0.719, position-5 0.601 / 0.918,
+    startpos 0.641 / 0.733.
+  - Reach at 20 000 nodes: 4.842 → 5.095 (+0.253).
+  - Firing at d6 on the 190 (`search()`): 226 104 of 1 438 291 non-first moves are reduced (15.7 %), 43.9 % of them
+    by two plies. Nodes 0.858×.
+  - **Diagnostic, added after the zugzwang miss and not pre-registered:** on `zugzwang.004` the head plays g7f6 at
+    d10 and d11, and h3h4 from d12. The door plays h3h4 from d11. Decision 1 needs one ply more. F3 says that is
+    never a re-pin.
+- **`ADR-0061`'s cut audit, as information (not a bar here).**
+  - The sample: 2 930 null-window nodes where decision 1 reduces a searched move deeper than the flat rule does
+    (none reduces less, since the PV term never acts at a null window). Every 10th was taken: 210 sampled, 205 read.
+  - **Result: 11 flips (5.37 %).** 8 are false fail-lows at d4 and 3 are false fail-highs at d5. The largest error is
+    48 cp, and **0 errors are of 100 cp or more**. In 5 nodes the door itself disagrees with the full-window value.
+  - On `ADR-0061`'s scale (≤ 0.5 % flips, 0 of 200 cp or more), the flip rate is ten times futility's bar, but no
+    error is piece-sized. Deeper reductions move bounds by tens of centipawns, not by a piece.
+- **What it means, said plainly.**
+  - **P3 did not restore the margin that reverse futility gave on `4d1c0616`.** Futility closes most of `A4` (a)'s
+    gap (0.8699 → 0.8528) and lifts reach (+0.25 → +0.38).
+  - But the 63 cp line at position-6/g5h6 is unchanged to the centipawn.
+  - And `zugzwang.004`, which decision 1 kept on the old `main`, is now lost at its recorded depth. Futility's
+    shallow skips and the two-ply reductions together delay h3h4 by one ply.
+  - **No bar moves.** F1 (the cap), F3 (zugzwang) and F4 (`A4` (a)) apply as written.
+- **The owner's cap question is now moot.** Re-deriving the 27 cp cap (to 94) would still leave `A4` (a) and
+  `zugzwang.004`. F3 is never a re-pin, so a "yes" admits nothing. The default stands: keep the cap.
+- **What re-opens P1:** a new named premise, with a new pre-registered probe. Decision 11's history term (O1h,
+  `ABC-233`) is the one on record. A re-measure on an unchanged premise is not owed again.
+  - Which Phase 2 item goes next is the Orchestrator's call. `ADR-0061` F6 names P5 as NEUTRAL with a deep bar; P4
+    waits for O1h.
+  - The flat 1-ply LMR stays on `main`.
+- **Status for the owner:** "accept ADR-0060" is **not put**. It fails on `main`.
+
+*Earlier status, kept:* *2026-11-02, the owner's answer* (`orch-2026-10-30a` `…773be7de`, verbatim *"61 yes, 25 yes, park threads"*): **the
 cap question below was not answered, so its default stands: A3's 27 cp cap is kept and P1 stays parked on `main`.**
 This is the default the question names ("keep the cap"), not new owner words. Still PROPOSED, RE-OPENED; no rule is
 written in, no bar moves, and the build does not start. The flat 1-ply LMR stays on `main`. The suggested next step
@@ -389,6 +454,11 @@ figures: `.grugops/context/arch-phase2-p1/` observation `…35bd3967` (the probe
        apply, and the build does not start on this text.
      - *Dated 2026-11-02 (`arch-ADR-0060-reopen`).* The re-open probe re-read these counts to the node. Of nine
        pre-registered forms, none meets every bar on `main` (§ Status). No rule replaces decision 1, so no new head
+       counts are pinned.
+     - *Dated 2026-11-02 (`arch-post-268`).* On `main` `e72487e1`, with futility in force, the door reads 888 786 /
+       1 262 046 / 1 306 981 / 391 451 (`ADR-0061` d9's counts, to the node). Decision 1's head reads 669 982 /
+       974 021 / 940 419 / 333 830, with reach 5.837 → 6.221. `chooseMove` position-6 is **0.8528, still above
+       0.85**. With the 63 cp cap miss and `zugzwang.004`, see § Status. The build does not start, and no head
        counts are pinned.
    - **`G1` (`A5`):** ≥ 54/58 with no NEWLY-MISSED line (measured 54/58).
 10. **The read and the reports (`A6`, `ADR-0056` D5 as folded):** C2′ 100 games at 100 ms against the merge-base, S′

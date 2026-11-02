@@ -1,0 +1,6 @@
+{
+  "refs": ["arch-post-268", "grugops/arch-post-268", "EPIC-011", "P1", "P3", "ABC-268", "ABC-265", "ADR-0060", "ADR-0061", "ADR-0050", "ADR-0026", "e72487e1", "56b3782d", "orch-2026-10-30a/20261102T205000Z-orchestrator-decision-77a82ec1", "arch-ADR-0060-reopen/20261102T153114Z-architect-design-decision-e17a23f4", "arch-ADR-0060-reopen/20261102T152416Z-architect-design-decision-0481036d"],
+  "notes": [
+    { "kind": "decision", "confidence": "high (a pre-registration: instrument, head, door, bars and verdict rule fixed before any probe run; bars quoted from ADR-0060 d8/d9 unchanged)", "bodyFile": "notes/prereg.md" }
+  ]
+}

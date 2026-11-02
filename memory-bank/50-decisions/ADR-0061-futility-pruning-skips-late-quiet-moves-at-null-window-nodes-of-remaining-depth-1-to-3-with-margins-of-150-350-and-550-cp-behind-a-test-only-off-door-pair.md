@@ -6,7 +6,28 @@ id: ADR-0061
 
 ## Status
 
-**ACCEPTED 2026-11-02 by the owner. NOT IN FORCE on `main` until `ABC-268` merges.** His words, verbatim
+**ACCEPTED, IN FORCE on `main` since 2026-11-02**, at the `ABC-268` merge `e72487e1`. Recorded by Architect/Design
+(task `arch-post-268`, records only, on `grugops/arch-post-268` from `main` `56b3782d`).
+- **The merge:** the Orchestrator merged on `qe-ABC-268-p2`'s PASS_WITH_GAPS (`…186a743e`), by the owner's "merge on
+  pass" (`orch-2026-10-30a` `…77a82ec1`).
+- **The part-2 reads, as QE recorded them** (`…d582d7dd`):
+  - **`A6` C2′:** 58.0 / 100 against the base `ca6e8506` at 100 ms, so GAIN is MET (bar ≥ 50.0). W/D/L 41/34/25,
+    Elo +56.1 ± 56.1, LOS 97.6 %, 0 faults, 0 losses on time.
+  - **S′:** 8.0 / 10 against E 1 650 (8/0/2). MET.
+  - **Levels deep lane:** 57 / 57, 0 skipped. MET.
+- **After the merge, on `main`** (the Orchestrator, `…77a82ec1`): typecheck 0, lint clean, `npm test` 2 429 / 2 429.
+  That closes `QE-268-p2-e`. The Orchestrator ruled on `QE-268-p2-a`: the read stands and is not re-played.
+- **What 58.0 means** (decision 10): a point estimate ≥ 0. The ± 56.1 interval crosses 0, so it is not a proven
+  gain.
+- **The shipped search now:** `main`'s `search()` and `chooseMove` carry futility. Their d8 counts are this ADR's
+  instrument-check counts (decision 9): 888 786 / 1 262 046 for `search()` and 1 306 981 / 391 451 for
+  `chooseMove`, with reach 5.837 at 47 000 nodes. `arch-post-268`'s probe door read all of them again, to the node.
+- **What follows from it:**
+  - The S′ pool reaches 26 / 30, which fires the upward re-pin (`ADR-0056`, dated line of this date).
+  - `ADR-0060`'s decision 1 was re-measured on this `main`. P1 stays parked (`ADR-0060`, dated status of this date).
+- **Rollback** is as § Rollback states: two booleans.
+
+*Earlier status, kept:* **ACCEPTED 2026-11-02 by the owner. NOT IN FORCE on `main` until `ABC-268` merges.** His words, verbatim
 (`orch-2026-10-30a` `…773be7de`): *"61 yes"*. Recorded by Architect/Design (task `arch-owner-answers-1102b`, records
 only, on `grugops/arch-owner-answers-1102b` from `main` `b47adfbb`). Nothing was run.
 - **What acceptance releases:** `ABC-268` part 2, from `grugops/ABC-268-fix`. Part 2 is the QE re-check of QE-268-a,

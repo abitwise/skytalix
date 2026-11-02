@@ -89,6 +89,56 @@ the owner's answers of 2026-11-02 (`orch-2026-10-30a` `…81ae2db4`).
   word does not speak to the downward side, which stays as written. The first S′ on `main` scored 9 of 10 (0.900)
   at E 1 650 (`qe-ABC-255` `…f41a5b6e`, QE-255-d), above the 67–83 % estimate. That is 10 games, short of the
   30-game pool, so no re-pin yet. V1 and V2's O1 figures (D2) are re-read in `ADR-0055`'s status line of this date.
+- *2026-11-02, dated line by Architect/Design (task `arch-post-268`, records only, at `main` `56b3782d`).* **S′ is
+  re-pinned upward, from E = 1 650 to E = 1 980.** The rule fired, and the owner pre-authorised an upward move
+  (`…1f5e3b27`). It was applied as written, with no owner ask.
+  - **The trigger.** `ABC-268` merged at `e72487e1` (`orch-2026-10-30a` `…77a82ec1`), so its smoke joins the pool,
+    which takes merged builds only. The pool is now:
+    - `qe-ABC-255` A5, `becf571a`: 9/1/0;
+    - `qe-EPIC-010-close`, `053733d2`: 9/1/0;
+    - `qe-ABC-268-p2`, `1169c024`, merged as `e72487e1`: 8/2/0 (`…d582d7dd`).
+    - That is W/L/D **26/4/0 = 26.0 / 30 = 86.7 %**, above 85 % over 30 games.
+    - `ABC-264`'s 7.0 / 10 stays out of the pool, because `ABC-264` did not merge.
+  - **The step,** one band-rule step (`ABC-204` `A4`'s rule: E′ = E + X, rounded to 10, clamped to 1 320–3 190, and
+    E ≤ 2 600 here).
+    - X is cutechess-cli's formula on the pooled score: −400 · log₁₀(1 / 0.8667 − 1) = **+325.2**. Its 95 % error
+      on 26/4/0 is ± 292.3. It was computed with `tools/rating/pair.ts`'s `cutechessElo` formula; no game was played.
+    - E′ = 1 650 + 325.2 = 1 975.2, which rounds to **1 980**. Neither the clamp nor the 2 600 cap binds.
+  - **The new setting:** Stockfish 19, `UCI_LimitStrength` true, **`UCI_Elo` 1 980**. Everything else in S′ is
+    unchanged:
+    - `st=0.5`, `timemargin` 2 000 ms, `Threads 1`, `Hash 16`, `restart=on`;
+    - skytalix at `st=0.5` with a 50 ms margin;
+    - openings 1–5, both colours;
+    - the bars S-1, S-2 and S-4 (≥ 3.0 of 10; below that, 10 more games and ≥ 7.0 of 20).
+    - The depth guard follows E: at 1 980 Stockfish picks at depth 5 (level 4.11 by `sf_19`'s formula), not 3.
+      `rating.ts` computes it from `--elo`. `st=0.5` keeps its headroom, since C1's 0.5 s floor holds up to
+      E 2 600.
+  - **The command:** `node tools/rating/rating.ts r <candidate> <out> --elo 1980 --budget-ms 500 --rounds 5
+    --concurrency 1`.
+    - The `r` default in `tools/rating/rating.ts` stays 1 650, and no code changes. So **`--elo 1980` must be written
+      out**. A run without it is an S′ at the old E, and it does not pool.
+    - `--dry-run` at `e72487e1` printed `option.UCI_Elo=1980` and `st=0.5` for both engines
+      (`.grugops/context/arch-post-268/raw/s-prime-dry-run.txt`).
+  - **When the pool resets: now.** The E 1 650 pool closes at 26.0 / 30 and is kept as history. Scores taken at two
+    different values of E are never pooled.
+    - A new pool opens at E 1 980 with the next merged build's S′, whether per ticket or per epic. It is empty until
+      then.
+    - The trigger is read again once it holds 30 or more games. Above 85 %, it steps up again by the same rule, up
+      to E 2 600. Below 60 %, it is the owner's question, because his word covers the upward side only.
+    - A candidate's S′ at E 1 980 is graded at once by S-4. It pools only if the build merges.
+  - **What 1 980 expects, said plainly** (an estimate, not a reading).
+    - The band-rule step aims at about 50 % for the engine as merged. At ± 292 that aim is coarse: the true X could
+      be anywhere from about +150 to +600.
+    - At 50 %, S-4's ≥ 3.0 of 10 stops an unchanged build about 5 % of the time on the first 10 games. The 20-game
+      rule clears most of those.
+    - **The trigger band, 60–85 %, no longer brackets the expected score.** A pool near 50 % would raise the downward
+      question after 30 games, by construction. This is an open question for the Orchestrator (`arch-post-268`
+      notes), and nothing is changed here.
+    - For scale: S′'s own text estimated skytalix at 0.5 s at about 1 775–1 925. At E 1 910 it expected 31–52 %, so
+      S-4 "would often stop an unchanged build". The pool now places the merged engine near 1 975, above that
+      estimate. That is a 30-game point estimate, not a rating.
+  - **Records owed elsewhere** (not this hop's fence): BA/PM records the new E and the reset in `EPIC-011` § Close-out
+    (the S′ pool row) and C10. The strength tickets' S′ lines then read E 1 980.
 
 *Original status, kept:* **PROPOSED** 2026-11-01 by Architect/Design (task `arch-algo-analysis`, records and reading only, at `main` `bae25131`).
 **Nothing is decided here.** Nothing was run, built, benchmarked or played: `qe-ABC-223` holds the host STRICTLY ALONE.
@@ -831,6 +881,8 @@ a reading is an **estimate**, with its basis named. Nothing was run.
     95th percentile is ≤ 19.1 ms (`…9fd1fdce` R5), so the floor decides: 0.5 s, equal time with skytalix.
   - It is `r`'s existing Stockfish pin, unchanged. `ABC-204`'s depth guard stays.
   - Above E 2 600, the R5-style probe in the 100 ms block runs first, and `st` = the larger of 0.5 s and 4 × p95.
+- *2026-11-02 (`arch-post-268`): **re-pinned to E = 1 980** by the trigger below (pool 26.0 / 30). The command
+  carries `--elo 1980`. § Status, dated line of this date.*
 - **E = 1 650** (`r`'s default, `ABC-204`'s first pin), not the R smoke's 1 910.
   - The basis (estimate): skytalix at 0.5 s is three time doublings under 4 s (≈ 2 074). At 50–100 Elo a doubling it
     sits at about 1 775–1 925.
