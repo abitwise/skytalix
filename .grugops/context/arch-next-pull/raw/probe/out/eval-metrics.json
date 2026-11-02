@@ -1,0 +1,52 @@
+{
+ "positions": 145,
+ "scored": 145,
+ "1x 47000": {
+  "meanLoss": 54.1,
+  "medianLoss": 14,
+  "sfBestPct": 46.2,
+  "err50": 48,
+  "err150": 15,
+  "err300": 7,
+  "meanDepth": 6.09
+ },
+ "2x 94000": {
+  "meanLoss": 45.7,
+  "medianLoss": 6,
+  "sfBestPct": 48.3,
+  "err50": 37,
+  "err150": 13,
+  "err300": 5,
+  "meanDepth": 6.92
+ },
+ "4x 188000": {
+  "meanLoss": 52.8,
+  "medianLoss": 0,
+  "sfBestPct": 51.0,
+  "err50": 34,
+  "err150": 12,
+  "err300": 5,
+  "meanDepth": 7.72
+ },
+ "persist": {
+  "err50At1x": 48,
+  "stillErr50At2x": 35,
+  "stillErr50At4x": 31,
+  "persistShare4x": 0.646,
+  "err150At1x": 15,
+  "stillErr150At4x": 9
+ },
+ "doublingGain": {
+  "meanLoss1to2": 8.4,
+  "meanLoss2to4": -7.1
+ },
+ "assess": {
+  "n": 141,
+  "pearson": 0.896,
+  "maeRaw": 148.8,
+  "slopeSfOnSky": 1.491,
+  "maeFit": 123.6,
+  "signDisagreeSfAbove100": 3,
+  "sfAbove100": 80
+ }
+}

@@ -1,0 +1,6 @@
+{
+  "refs": ["arch-next-pull", "grugops/arch-next-pull", "EPIC-011", "O1h", "P1", "P4", "P5", "ABC-233", "ABC-234", "ABC-236", "ABC-231", "ABC-232", "ABC-239", "E1", "E2", "ADR-0063", "ADR-0060", "ADR-0061", "ADR-0056", "ADR-0055", "ADR-0050", "RISK-EPIC011-08", "e72487e1", "a6039c5b", "arch-ABC-233/20261102T210820Z-architect-design-decision-4d5a0fe3", "arch-ABC-233/20261102T212011Z-architect-design-observation-9f0b5da7", "arch-ABC-233/20261102T212011Z-architect-design-decision-f3a4dac0"],
+  "notes": [
+    { "kind": "decision", "confidence": "high (a pre-registration: instrument, closed form set, doors, gates, choice rule, verdict rule and the evaluation probe's metrics and reading rule fixed before any measured run)", "bodyFile": "notes/prereg.md" }
+  ]
+}

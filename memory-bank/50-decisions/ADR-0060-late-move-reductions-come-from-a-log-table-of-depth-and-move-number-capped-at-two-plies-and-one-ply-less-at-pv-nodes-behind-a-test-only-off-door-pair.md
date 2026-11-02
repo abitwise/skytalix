@@ -6,6 +6,29 @@ id: ADR-0060
 
 ## Status
 
+*2026-11-02, dated line by Architect/Design (task `arch-next-pull`, records only, at `main` `a6039c5b`).* **The joint
+probe that this section named, decision 11's history term together with `ADR-0063`'s table and zugzwang as the hard
+gate, is measured. No form meets every bar, so P1 STAYS PARKED and no joint ADR is written.**
+- **The method:**
+  - The set, the doors, the gates and the verdict rule were sealed and committed before any run (decision
+    `…4de572aa`, commit `b6deb4e4`).
+  - Every bar here was read against this ADR's door in the joint ladder, H1 (history on, flat LMR). Against `main`,
+    `A4` (a) and drift were also read, as stricter additions.
+  - The instrument reproduces `arch-ABC-233`'s P1-over-H1 counts to the node.
+  - Raw: `.grugops/context/arch-next-pull/raw/probe/`.
+- **The four forms:** H1, plus decision 1, plus one history term:
+  - J1: h > 0 → one ply less;
+  - J2: ± 1 by the sign of h;
+  - J3: J2, with the cap at 3 for h < 0;
+  - J4: h > 0 → not reduced.
+- **Every form loses `zugzwang.004` at d11** (F3). J1 and J2 also lose `.001`, and J1 loses `.005` as well.
+- **Every form drifts 69 cp in `chooseMove`** at position-6/f3h4, against the 27 cp cap (F1).
+- **J3 is the closest.** It meets `A4` (a) (≤ 0.8169 vs H1, ≤ 0.7800 vs `main`), reach (+0.321), the mate floor (0 / 163) and `G1` (56 / 58). It still misses the cap and `.004`.
+- **J1, J2 and J4** also miss `A4` (a) on `chooseMove` position-6 (0.8787, 0.8772 and 1.0104). J1 and J4 also miss reach (+0.232, +0.211).
+- **What re-opens P1 now:** a new named premise. Examples: an evaluation change that changes the tree (E1 / E2), an
+  extension (X1), or an ordering change that leaves history more cutoffs. The history term is no longer an open
+  premise. No bar moved, and no form was tuned after the read.
+
 *2026-11-02, dated line by Architect/Design (task `arch-ABC-233`, records only, at `main` `60b76b52`).* **O1h's table
 is measured (`ADR-0063`, PROPOSED, premise not met on `main`). P1 stays parked.**
 - **The diagnostic** was not pre-registered, so it carries no verdict (`ADR-0063` § Context). Decision 1, unchanged,

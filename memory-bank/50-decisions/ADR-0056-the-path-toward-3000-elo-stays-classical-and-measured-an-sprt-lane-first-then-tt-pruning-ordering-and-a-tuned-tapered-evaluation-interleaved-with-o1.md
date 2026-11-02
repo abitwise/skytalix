@@ -431,6 +431,24 @@ terms E3–E7, each best added under the tuner; then X2 singular extensions and 
   the 27 cp cap, which it misses on `main`. But it loses two zugzwang rows instead of one. That is a diagnostic, not
   pre-registered (`ADR-0063` § Context). P4 over history is not measured.
 
+*Dated 2026-11-02 (`arch-next-pull`, records only; probes on a scratch copy of `main`'s `src/` `58fa3eb4`): rows P1 / O1h, and the ranking.*
+- **The joint O1h + P1 probe failed.** It was the H1 table plus decision 1 plus four pre-registered history terms,
+  with zugzwang as the hard gate.
+  - Every form loses `zugzwang.004` and drifts 69 cp in `chooseMove`.
+  - P1 and O1h stay parked (`ADR-0060` and `ADR-0063` § Status, dated lines).
+- **The evaluation-lever probe** (information, pre-registered in `…4de572aa`):
+  - The sample: 145 positions from 50 self-play games at 0.1 s, labelled by Stockfish 19 at depth 16.
+  - Skytalix makes 48 errors of 50 cp or more at 47 000 nodes, 37 at 94 000 and 34 at 188 000.
+  - **31 of the 48 (65 %) persist through two node doublings**, and 11 of 13 persist after 60 plies.
+  - By the pre-registered rule, **evaluation is now the bigger lever**. The open pruning and ordering items each buy
+    well under one doubling.
+- **The "top gaps" order above is revised by evidence** (estimates, Architect; the Orchestrator's call):
+  1. **E1 next**, with `ABC-231` and `ABC-232` folded in;
+  2. then E2 (`ABC-239`);
+  3. then P5 (NEUTRAL), O3s (`ABC-234`) and S1 (`ABC-236`), each estimated 0–15 Elo here.
+  - D6 allows this reorder by evidence. The owner is told, not asked.
+  - `Q-3K-4` (`G6` "≥ base") is now live for E1 and should be put to him (decision `arch-next-pull` § 3).
+
 ### D3. Is 3 000 reachable without a neural network?
 
 - **For a classical engine, yes, in principle.** Stockfish 11, the last hand-crafted Stockfish, reads ≈ 3 430 CCRL
