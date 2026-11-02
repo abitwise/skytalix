@@ -1299,6 +1299,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 ## Backlog (WIP unlimited)
 - [EPIC-011] skytalix climbs toward 3 000 Elo, read at 40/15, on a classical measured path (owner: BA/PM, size: XL, priority: P2, since 2026-11-01; ADR-0056 accepted in direction; ADR-0055 O1; starts after EPIC-009 and EPIC-010 close; phases 0–5; milestones 2 200…3 000 (proposed); open owner calls Q-3K-2, Q-3K-4, Q-3K-6, Q-3K-7, Q-3K-8, rest of Q-3K-1) **2026-11-01: STARTED (EPIC-010 closed). Phase 0 done (ABC-255, ABC-262; ABC-256 dropped). Phase 1 first: ABC-238 (T1) then ABC-237 (T2) — design owed: the ADR revising ABC-081 A1 and the ADR-0025 amendment → `arch-epic011-phase1`. Threads (ADR-0057 PROPOSED) wait owner OQ-1.**
+- [ABC-265] TH-1: one lockless shared transposition table (4×Uint32 slot, XOR check), node-equal at Threads 1 (EPIC-011 threads; size: M; P2; DoR 9/10 — ADR-0025 amendment owed → `arch-ABC-265`; pullable beside Phase 2)
+- [ABC-266] TH-2: Lazy SMP worker pool behind UCI Threads (default 1); read Threads N vs Threads 1 as a hardware gain (EPIC-011 threads; size: L; P2; DoR 9/10 — ADR amending ADR-0044 D3/D5 owed; after ABC-265)
+- [ABC-267] TH-3: multi-worker property rows, torn-entry stress, NFR-009 summed over workers, default-lane wall (test-only; size: S; P2; DoR 9/10; after ABC-266, may fold into it)
 - [ABC-257] T3: the TT is kept across the moves of one game, re-tried after deeper cutoffs and depth-preferred replacement (supersedes dropped ABC-209) (EPIC-011 Phase 1; size: S, priority: P3, DoR 8/10) **2026-11-02: RE-SCOPED to combined T1+T3 (size M, DoR 8/10), bar A8′ ≤ 0.93× on fresh lines; PAUSED until owner answers C2′ or allows a longer read.**
 - [ABC-258] T4: a larger TT, 8 MiB inside NFR-009 (more only on the owner's word) (EPIC-011 Phase 1; size: S, priority: P3, DoR 8/10) **2026-11-02: premise restated (3–5 % store fraction), T2 folded in; PAUSED (DoR 9/10).**
 - [ABC-231] King table tapered by phase, alone (size: S, priority: P3, DoR 9/10; milestone 2; waits ADR ruling) **→ EPIC-011 2026-11-01 (bapm-epic011-dedupe; id kept)** (folds into E1 full taper at Phase 4)
@@ -1339,7 +1342,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## In Analysis (WIP 0/2)
 
 
-## In Design (WIP 0/2)
+## In Design (WIP 2/2)
 
 
 ## Ready for Dev (WIP 0/6)
