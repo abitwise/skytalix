@@ -1,0 +1,28 @@
+skytalix 1169c024dcf68d231f810117c499038542059bf5 dist/ (22 files) tree sha256 a979f16a392fb77365688614e147e18126d2aeb0ac2dbe996a41925e2e770c38
+  758bbd2d1eeef8bbbfb9dadf9a24cf72ad8e9f746d9e1ddc9c8f90ace5bc1971  ./apply.js
+  66da0f17f14c38aa4f60b180ab7c9bca90f4b6dd8c14ae391ffa2fd991ac12db  ./book-file.js
+  04bd131e37355954d647ad5c01459b2c40c7fffc885662488b0257ec189df374  ./book.js
+  2e7199d9b1254772476681d2e9bcc417820bf06da7920317cf7c8992bab582c5  ./coordinate-move.js
+  e88d06516ed8f1765d92219dcdaea74407b217e01c4af7853bd678e8e7ac44e3  ./engine.js
+  754cdfb00119b1c6317a36a79c608e00f0e9637846a189b7678b5e0b85e52ed9  ./evaluate.js
+  5d7b981fdcdb5d52046be15e3d6d7c93cb24274daba884439732d3460d258ec4  ./fen.js
+  708580df293a2fe49e7aba412c579a8601f9cde264b46c7a09ba3c294a48a72f  ./frame.js
+  93e9ac2a7eaa665a54daaba3490cfd4b0ee22cac36d997a81f5526fc1170d05b  ./gameend.js
+  74821da4c44d1650855cf91d50e1a2d50d499dfaadf65cc9334b735d2f7f4a98  ./history.js
+  029e56824f673b75c977de3fb6a13ed122971c5a97eb2382096639595b836476  ./legal.js
+  e577a4f9c8e3ccaa1be8ee5e75bc41a74a66f992c4f6dfca96b492b98c852eb6  ./levels.js
+  54ef9d62be11abb309e8eb8cd5be3547311b79642402f6900708ef7bf4b53181  ./moves.js
+  c921e5f2663dabdfdc5088cc47554ba00077da2f2dd91a9f3b98a3f33f6fe253  ./position.js
+  1fa5c79dfe1d943eec6adef0c1587cf1f5a9adc7e97f187c57fffb28c90cb79c  ./quiescence.js
+  29100100c7ff5a4145ec9083213def6d2ff8c8210cf68987231ff020094b6333  ./render.js
+  19fdb51e080425e935b85d24856f06a5e1770632aca0c908148339f90dddfe09  ./search.js
+  2141a394f13b0967b20086ff6347b510b3d50a3065e3d992b352bd72e2c564e3  ./transposition.js
+  f39000177b5b01e5b708f4622ae9a0f7f77a3f0e8cea4cd69180b92a9a4e8523  ./turn-loop.js
+  64b1e34ae2aca9567aa1a591222ca8e724995faa706d7d8ac93a3f88b547212f  ./uci-session.js
+  877e9595746aead5019a2e604da2ef0021e2d688168b275d809e572fe8a9b98d  ./uci.js
+  017cbcf93e86c515c3050cbbbbc1a6f8be842593556ef83bb34758d0068ed24c  ./zobrist.js
+  id name skytalix
+  id author Olger Oeselg
+  option name OwnBook type check default true
+  option name Skill Level type spin default 5 min 1 max 7
+  option name TimeMode type combo default level var level var simple-tournament var uci-clock-mode

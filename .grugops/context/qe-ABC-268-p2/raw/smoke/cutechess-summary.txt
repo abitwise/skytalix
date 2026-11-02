@@ -1,0 +1,22 @@
+Finished game 1 (skytalix vs stockfish): 0-1 {Black mates}
+Score of skytalix vs stockfish: 0 - 1 - 0  [0.000] 1
+Finished game 2 (stockfish vs skytalix): 0-1 {Black mates}
+Score of skytalix vs stockfish: 1 - 1 - 0  [0.500] 2
+Finished game 3 (skytalix vs stockfish): 1-0 {White mates}
+Score of skytalix vs stockfish: 2 - 1 - 0  [0.667] 3
+Finished game 4 (stockfish vs skytalix): 0-1 {Black mates}
+Score of skytalix vs stockfish: 3 - 1 - 0  [0.750] 4
+Finished game 5 (skytalix vs stockfish): 1-0 {White mates}
+Score of skytalix vs stockfish: 4 - 1 - 0  [0.800] 5
+Finished game 6 (stockfish vs skytalix): 0-1 {Black mates}
+Score of skytalix vs stockfish: 5 - 1 - 0  [0.833] 6
+Finished game 7 (skytalix vs stockfish): 1-0 {White mates}
+Score of skytalix vs stockfish: 6 - 1 - 0  [0.857] 7
+Finished game 8 (stockfish vs skytalix): 0-1 {Black mates}
+Score of skytalix vs stockfish: 7 - 1 - 0  [0.875] 8
+Finished game 9 (skytalix vs stockfish): 1-0 {White mates}
+Score of skytalix vs stockfish: 8 - 1 - 0  [0.889] 9
+Finished game 10 (stockfish vs skytalix): 1-0 {White mates}
+Score of skytalix vs stockfish: 8 - 2 - 0  [0.800] 10
+Elo difference: 240.8 +/- nan, LOS: 97.1 %, DrawRatio: 0.0 %
+Finished match

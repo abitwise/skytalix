@@ -1,0 +1,202 @@
+Finished game 1 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+Finished game 2 (base vs skytalix): 1/2-1/2 {Draw by fifty moves rule}
+Finished game 3 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+Finished game 4 (base vs skytalix): 0-1 {Black mates}
+Finished game 5 (skytalix vs base): 1/2-1/2 {Draw by fifty moves rule}
+Finished game 6 (base vs skytalix): 1-0 {White mates}
+Finished game 7 (skytalix vs base): 1-0 {White mates}
+Finished game 8 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+Finished game 9 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+Finished game 10 (base vs skytalix): 0-1 {Black mates}
+Finished game 11 (skytalix vs base): 1/2-1/2 {Draw by fifty moves rule}
+Finished game 12 (base vs skytalix): 0-1 {Black mates}
+Finished game 13 (skytalix vs base): 1-0 {White mates}
+Finished game 14 (base vs skytalix): 1/2-1/2 {Draw by fifty moves rule}
+Finished game 15 (skytalix vs base): 1-0 {White mates}
+Finished game 16 (base vs skytalix): 0-1 {Black mates}
+Finished game 17 (skytalix vs base): 1-0 {White mates}
+Finished game 18 (base vs skytalix): 1-0 {White mates}
+Finished game 19 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+Finished game 20 (base vs skytalix): 1-0 {White mates}
+Finished game 21 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+Finished game 22 (base vs skytalix): 0-1 {Black mates}
+Finished game 23 (skytalix vs base): 1-0 {White mates}
+Finished game 24 (base vs skytalix): 1/2-1/2 {Draw by fifty moves rule}
+Finished game 25 (skytalix vs base): 1-0 {White mates}
+Finished game 26 (base vs skytalix): 0-1 {Black mates}
+Finished game 27 (skytalix vs base): 1-0 {White mates}
+Finished game 28 (base vs skytalix): 0-1 {Black mates}
+Finished game 29 (skytalix vs base): 1/2-1/2 {Draw by stalemate}
+Finished game 30 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+Finished game 31 (skytalix vs base): 1-0 {White mates}
+Finished game 32 (base vs skytalix): 1/2-1/2 {Draw by insufficient mating material}
+Finished game 33 (skytalix vs base): 0-1 {Black mates}
+Finished game 34 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+Finished game 35 (skytalix vs base): 1-0 {White mates}
+Finished game 36 (base vs skytalix): 1-0 {White mates}
+Finished game 37 (skytalix vs base): 1-0 {White mates}
+Finished game 38 (base vs skytalix): 1-0 {White mates}
+Finished game 39 (skytalix vs base): 1-0 {White mates}
+Finished game 40 (base vs skytalix): 0-1 {Black mates}
+Finished game 41 (skytalix vs base): 1-0 {White mates}
+Finished game 42 (base vs skytalix): 1-0 {White mates}
+Finished game 43 (skytalix vs base): 0-1 {Black mates}
+Finished game 44 (base vs skytalix): 0-1 {Black mates}
+Finished game 45 (skytalix vs base): 1-0 {White mates}
+Finished game 46 (base vs skytalix): 1-0 {White mates}
+Finished game 47 (skytalix vs base): 1/2-1/2 {Draw by fifty moves rule}
+Finished game 48 (base vs skytalix): 0-1 {Black mates}
+Finished game 49 (skytalix vs base): 1/2-1/2 {Draw by fifty moves rule}
+Finished game 50 (base vs skytalix): 0-1 {Black mates}
+Finished game 51 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+Finished game 52 (base vs skytalix): 1-0 {White mates}
+Finished game 53 (skytalix vs base): 0-1 {Black mates}
+Finished game 54 (base vs skytalix): 1-0 {White mates}
+Finished game 55 (skytalix vs base): 1/2-1/2 {Draw by insufficient mating material}
+Finished game 56 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+Finished game 57 (skytalix vs base): 1/2-1/2 {Draw by fifty moves rule}
+Finished game 58 (base vs skytalix): 1-0 {White mates}
+Finished game 59 (skytalix vs base): 0-1 {Black mates}
+Finished game 60 (base vs skytalix): 0-1 {Black mates}
+Finished game 61 (skytalix vs base): 0-1 {Black mates}
+Finished game 62 (base vs skytalix): 0-1 {Black mates}
+Finished game 63 (skytalix vs base): 0-1 {Black mates}
+Finished game 64 (base vs skytalix): 1/2-1/2 {Draw by fifty moves rule}
+Finished game 65 (skytalix vs base): 0-1 {Black mates}
+Finished game 66 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+Finished game 67 (skytalix vs base): 1-0 {White mates}
+Finished game 68 (base vs skytalix): 1-0 {White mates}
+Finished game 69 (skytalix vs base): 1-0 {White mates}
+Finished game 70 (base vs skytalix): 1/2-1/2 {Draw by insufficient mating material}
+Finished game 71 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+Finished game 72 (base vs skytalix): 0-1 {Black mates}
+Finished game 73 (skytalix vs base): 1-0 {White mates}
+Finished game 74 (base vs skytalix): 0-1 {Black mates}
+Finished game 75 (skytalix vs base): 1-0 {White mates}
+Finished game 76 (base vs skytalix): 1/2-1/2 {Draw by fifty moves rule}
+Finished game 77 (skytalix vs base): 1/2-1/2 {Draw by insufficient mating material}
+Finished game 78 (base vs skytalix): 0-1 {Black mates}
+Finished game 79 (skytalix vs base): 1-0 {White mates}
+Finished game 80 (base vs skytalix): 1/2-1/2 {Draw by insufficient mating material}
+Finished game 81 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+Finished game 82 (base vs skytalix): 1-0 {White mates}
+Finished game 83 (skytalix vs base): 1-0 {White mates}
+Finished game 84 (base vs skytalix): 1-0 {White mates}
+Finished game 85 (skytalix vs base): 1-0 {White mates}
+Finished game 86 (base vs skytalix): 1-0 {White mates}
+Finished game 87 (skytalix vs base): 1/2-1/2 {Draw by fifty moves rule}
+Finished game 88 (base vs skytalix): 0-1 {Black mates}
+Finished game 89 (skytalix vs base): 1/2-1/2 {Draw by fifty moves rule}
+Finished game 90 (base vs skytalix): 1-0 {White mates}
+Finished game 91 (skytalix vs base): 1/2-1/2 {Draw by insufficient mating material}
+Finished game 92 (base vs skytalix): 1-0 {White mates}
+Finished game 93 (skytalix vs base): 1-0 {White mates}
+Finished game 94 (base vs skytalix): 1-0 {White mates}
+Finished game 95 (skytalix vs base): 1/2-1/2 {Draw by 3-fold repetition}
+Finished game 96 (base vs skytalix): 0-1 {Black mates}
+Finished game 97 (skytalix vs base): 0-1 {Black mates}
+Finished game 98 (base vs skytalix): 1/2-1/2 {Draw by 3-fold repetition}
+Finished game 99 (skytalix vs base): 1-0 {White mates}
+Finished game 100 (base vs skytalix): 0-1 {Black mates}
+Score of skytalix vs base: 0 - 0 - 1  [0.500] 1
+Score of skytalix vs base: 0 - 0 - 2  [0.500] 2
+Score of skytalix vs base: 0 - 0 - 3  [0.500] 3
+Score of skytalix vs base: 1 - 0 - 3  [0.625] 4
+Score of skytalix vs base: 1 - 0 - 4  [0.600] 5
+Score of skytalix vs base: 1 - 1 - 4  [0.500] 6
+Score of skytalix vs base: 2 - 1 - 4  [0.571] 7
+Score of skytalix vs base: 2 - 1 - 5  [0.563] 8
+Score of skytalix vs base: 2 - 1 - 6  [0.556] 9
+Score of skytalix vs base: 3 - 1 - 6  [0.600] 10
+Score of skytalix vs base: 3 - 1 - 7  [0.591] 11
+Score of skytalix vs base: 4 - 1 - 7  [0.625] 12
+Score of skytalix vs base: 5 - 1 - 7  [0.654] 13
+Score of skytalix vs base: 5 - 1 - 8  [0.643] 14
+Score of skytalix vs base: 6 - 1 - 8  [0.667] 15
+Score of skytalix vs base: 7 - 1 - 8  [0.688] 16
+Score of skytalix vs base: 8 - 1 - 8  [0.706] 17
+Score of skytalix vs base: 8 - 2 - 8  [0.667] 18
+Score of skytalix vs base: 8 - 2 - 9  [0.658] 19
+Score of skytalix vs base: 8 - 3 - 9  [0.625] 20
+Score of skytalix vs base: 8 - 3 - 10  [0.619] 21
+Score of skytalix vs base: 9 - 3 - 10  [0.636] 22
+Score of skytalix vs base: 10 - 3 - 10  [0.652] 23
+Score of skytalix vs base: 10 - 3 - 11  [0.646] 24
+Score of skytalix vs base: 11 - 3 - 11  [0.660] 25
+Score of skytalix vs base: 12 - 3 - 11  [0.673] 26
+Score of skytalix vs base: 13 - 3 - 11  [0.685] 27
+Score of skytalix vs base: 14 - 3 - 11  [0.696] 28
+Score of skytalix vs base: 14 - 3 - 12  [0.690] 29
+Score of skytalix vs base: 14 - 3 - 13  [0.683] 30
+Score of skytalix vs base: 15 - 3 - 13  [0.694] 31
+Score of skytalix vs base: 15 - 3 - 14  [0.688] 32
+Score of skytalix vs base: 15 - 4 - 14  [0.667] 33
+Score of skytalix vs base: 15 - 4 - 15  [0.662] 34
+Score of skytalix vs base: 16 - 4 - 15  [0.671] 35
+Score of skytalix vs base: 16 - 5 - 15  [0.653] 36
+Score of skytalix vs base: 17 - 5 - 15  [0.662] 37
+Score of skytalix vs base: 17 - 6 - 15  [0.645] 38
+Score of skytalix vs base: 18 - 6 - 15  [0.654] 39
+Score of skytalix vs base: 19 - 6 - 15  [0.662] 40
+Score of skytalix vs base: 20 - 6 - 15  [0.671] 41
+Score of skytalix vs base: 20 - 7 - 15  [0.655] 42
+Score of skytalix vs base: 20 - 8 - 15  [0.640] 43
+Score of skytalix vs base: 21 - 8 - 15  [0.648] 44
+Score of skytalix vs base: 22 - 8 - 15  [0.656] 45
+Score of skytalix vs base: 22 - 9 - 15  [0.641] 46
+Score of skytalix vs base: 22 - 9 - 16  [0.638] 47
+Score of skytalix vs base: 23 - 9 - 16  [0.646] 48
+Score of skytalix vs base: 23 - 9 - 17  [0.643] 49
+Score of skytalix vs base: 24 - 9 - 17  [0.650] 50
+Score of skytalix vs base: 24 - 9 - 18  [0.647] 51
+Score of skytalix vs base: 24 - 10 - 18  [0.635] 52
+Score of skytalix vs base: 24 - 11 - 18  [0.623] 53
+Score of skytalix vs base: 24 - 12 - 18  [0.611] 54
+Score of skytalix vs base: 24 - 12 - 19  [0.609] 55
+Score of skytalix vs base: 24 - 12 - 20  [0.607] 56
+Score of skytalix vs base: 24 - 12 - 21  [0.605] 57
+Score of skytalix vs base: 24 - 13 - 21  [0.595] 58
+Score of skytalix vs base: 24 - 14 - 21  [0.585] 59
+Score of skytalix vs base: 25 - 14 - 21  [0.592] 60
+Score of skytalix vs base: 25 - 15 - 21  [0.582] 61
+Score of skytalix vs base: 26 - 15 - 21  [0.589] 62
+Score of skytalix vs base: 26 - 16 - 21  [0.579] 63
+Score of skytalix vs base: 26 - 16 - 22  [0.578] 64
+Score of skytalix vs base: 26 - 17 - 22  [0.569] 65
+Score of skytalix vs base: 26 - 17 - 23  [0.568] 66
+Score of skytalix vs base: 27 - 17 - 23  [0.575] 67
+Score of skytalix vs base: 27 - 18 - 23  [0.566] 68
+Score of skytalix vs base: 28 - 18 - 23  [0.572] 69
+Score of skytalix vs base: 28 - 18 - 24  [0.571] 70
+Score of skytalix vs base: 28 - 18 - 25  [0.570] 71
+Score of skytalix vs base: 29 - 18 - 25  [0.576] 72
+Score of skytalix vs base: 30 - 18 - 25  [0.582] 73
+Score of skytalix vs base: 31 - 18 - 25  [0.588] 74
+Score of skytalix vs base: 32 - 18 - 25  [0.593] 75
+Score of skytalix vs base: 32 - 18 - 26  [0.592] 76
+Score of skytalix vs base: 32 - 18 - 27  [0.591] 77
+Score of skytalix vs base: 33 - 18 - 27  [0.596] 78
+Score of skytalix vs base: 34 - 18 - 27  [0.601] 79
+Score of skytalix vs base: 34 - 18 - 28  [0.600] 80
+Score of skytalix vs base: 34 - 18 - 29  [0.599] 81
+Score of skytalix vs base: 34 - 19 - 29  [0.591] 82
+Score of skytalix vs base: 35 - 19 - 29  [0.596] 83
+Score of skytalix vs base: 35 - 20 - 29  [0.589] 84
+Score of skytalix vs base: 36 - 20 - 29  [0.594] 85
+Score of skytalix vs base: 36 - 21 - 29  [0.587] 86
+Score of skytalix vs base: 36 - 21 - 30  [0.586] 87
+Score of skytalix vs base: 37 - 21 - 30  [0.591] 88
+Score of skytalix vs base: 37 - 21 - 31  [0.590] 89
+Score of skytalix vs base: 37 - 22 - 31  [0.583] 90
+Score of skytalix vs base: 37 - 22 - 32  [0.582] 91
+Score of skytalix vs base: 37 - 23 - 32  [0.576] 92
+Score of skytalix vs base: 38 - 23 - 32  [0.581] 93
+Score of skytalix vs base: 38 - 24 - 32  [0.574] 94
+Score of skytalix vs base: 38 - 24 - 33  [0.574] 95
+Score of skytalix vs base: 39 - 24 - 33  [0.578] 96
+Score of skytalix vs base: 39 - 25 - 33  [0.572] 97
+Score of skytalix vs base: 39 - 25 - 34  [0.571] 98
+Score of skytalix vs base: 40 - 25 - 34  [0.576] 99
+Score of skytalix vs base: 41 - 25 - 34  [0.580] 100
+Elo difference: 56.1 +/- 56.1, LOS: 97.6 %, DrawRatio: 34.0 %
+Finished match
