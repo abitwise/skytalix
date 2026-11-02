@@ -1,0 +1,7 @@
+{
+  "refs": ["arch-post-268", "grugops/arch-post-268", "EPIC-011", "P1", "P3", "ABC-268", "ABC-265", "ABC-264", "ABC-233", "ABC-204", "ADR-0060", "ADR-0061", "ADR-0056", "ADR-0050", "ADR-0026", "RISK-EPIC011-03", "QE-268-p2-d", "e72487e1", "56b3782d", "d65e4bfb", "orch-2026-10-30a/20261102T205000Z-orchestrator-decision-77a82ec1", "qe-ABC-268-p2/20261102T204714Z-qe-e2e-decision-186a743e", "qe-ABC-268-p2/20261102T204714Z-qe-e2e-observation-d582d7dd", "arch-post-268/20261102T205431Z-architect-design-decision-3a0aac14", "arch-ADR-0060-reopen/20261102T153114Z-architect-design-decision-e17a23f4", "NFR-005", "NFR-008"],
+  "notes": [
+    { "kind": "observation", "confidence": "high (deterministic fixed-depth and maxNodes runs on a scratch copy of e72487e1's src; the door reproduces ADR-0061 d9's counts to the node; every job exit 0)", "bodyFile": "notes/obs-results.md" },
+    { "kind": "decision", "confidence": "high on P1 parked (pre-registered verdict rule, measured) and on E 1 980 (the rule as written, arithmetic from the pooled W/L/D); the expected score at 1 980 is an estimate (± 292 Elo on X)", "bodyFile": "notes/dec.md" }
+  ]
+}
