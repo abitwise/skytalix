@@ -1,0 +1,18 @@
+{
+ "stats": {
+  "games.read": 5438,
+  "games.drop.player": 1399,
+  "games.kept": 3431,
+  "pos.seen": 388632,
+  "pos.drop.book": 6509,
+  "pos.drop.check": 28181,
+  "pos.drop.noisy": 84225,
+  "pos.kept": 254485,
+  "pos.drop.mate": 15232,
+  "games.drop.duplicate": 608
+ },
+ "gateWorstAbsDiff": 0.9583333333333712,
+ "files": 17,
+ "setHash": "00dc0695903b1250790fdb8ea0de8ea2c9fa8fd657ee9ef8bf575ccc0bb8ec30",
+ "seconds": 8.543
+}

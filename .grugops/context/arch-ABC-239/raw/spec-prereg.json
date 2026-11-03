@@ -1,0 +1,6 @@
+{
+  "refs": ["arch-ABC-239", "grugops/arch-ABC-239", "ABC-239", "E2", "EPIC-011", "ADR-0067", "ADR-0064", "ADR-0056", "ADR-0048", "ABC-269", "Q-3K-7", "af15cbc9", "b7a8fc3a", "bapm-epic011-cut/20261103T094553Z-ba-pm-observation-0fd882f7", "bapm-epic011-cut/20261103T094553Z-ba-pm-decision-08584853"],
+  "notes": [
+    { "kind": "decision", "confidence": "high (a pre-registration: data rule, model, identity gate, K fit, two configurations, choice rule, bars and verdict rule fixed before any measured run)", "bodyFile": "notes/prereg.md" }
+  ]
+}

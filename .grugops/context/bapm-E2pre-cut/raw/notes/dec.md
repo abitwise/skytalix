@@ -1,0 +1,36 @@
+# bapm-E2pre-cut decisions: `ABC-274` (E2-pre) cut, size S, P2, DoR 9/10, Backlog. `ABC-239` aligned to `ADR-0067` (PROPOSED), DoR 8/10 unchanged. `EPIC-011` Phase 4 order `ABC-269` → `ABC-274` → `ABC-239` → `ABC-270` / `ABC-271`, `ABC-272` free. Owner items PENDING, not assumed: `ADR-0067` acceptance, Q-3K-7 (a) / (b) / (c), B-T8
+
+- **`ABC-274` (E2-pre), new page.** Every term enters `ADR-0064` d2's delta blend, with a packed score recommended. It is value-identical at E1's table. Source: `ADR-0067` d8 and `…e4c34239` § 5.
+  - Bars:
+    - A1: node identity, `ABC-269` B0's 11 readings exact plus the 190 cross-build (nodes, score, move) at 0 mismatches against the pre-ticket head (`main` with `ABC-269` merged);
+    - A2: `evaluate` and `evaluateWithoutTaper` equal under `Object.is` on `G3`'s corpus, the taper corpus and the 190;
+    - A3 (BA/PM's row): the blend is live for every term family, exact against mg + trunc(Δ × (24 − w) / 24) on an offset table;
+    - A4: `G3`;
+    - A5: `G2` ≤ 1.05 ×;
+    - A6: `G6` "≥ base" graded, with every run ≥ 6;
+    - A7: 0 test expectations moved;
+    - A8: no games.
+  - `Q-3K-4` (b) does not apply: this is not a value change (`ADR-0056` D7 dated 2026-11-03; `ADR-0067` d8).
+  - `src/evaluate-params.ts` is byte-unchanged (`ADR-0067` d7, "present shape"). No new switch or door.
+  - Waits on `ABC-269` merged, which is held on `ADR-0064` F3 (`arch-ABC-269-F3`). The owner's *"accept ADR-0067"* gates the merge only (reading (b), `ADR-0067` § Status).
+  - DoR row 10 ❌ until `ABC-269` merges and the Architect writes an E2-pre falsifier / disposition line in `ADR-0067`, which has no E2-pre row today.
+  - S2 nps: the Orchestrator's ruling, pending. BA/PM recommends the `ABC-265` exception. Default: reported, no speed bar.
+  - Coupling: if F3's cut is the packed score, part of scope 2 lands in `ABC-269`. If `ABC-269` does not merge, its structure folds into this ticket and the page is re-cut (`ADR-0067` § Consequences 1).
+- **`ABC-239` page.** Front-matter `adr:` line and a dated top block. The § 5 lines were applied:
+  - A1 → B-T0: own games by default; Lichess training only on a recorded yes; (b) and (c) not used without a yes.
+  - A2 → B-T2: split by opening with the split strings; integer-set cross-entropy < 1.000 × base. The "≤ → <" conflict is recorded, and the stricter bar governs. B-T3 reproducibility; B-T1 identity gate.
+  - A3 / A4: hold once `ABC-274` merges (B-T4, with the `ABC-215` A2 provenance-row exception). A5 → B-T5 / B-T6 (`G6` under (b)). A6 → B-T7 / B-T8 (B-T8 pending).
+  - Intent GAIN. Test note 1 (manifest sha256, split strings, no RNG). Scope 1 / 2 (one tool module; the provenance row replaces `ABC-215` A2's rule rows).
+  - Size: the split rule does not fire. Dependencies: `ABC-269` → `ABC-274` → this. DoR rows 3 / 5 / 6 / 10 dated; 8/10 unchanged.
+  - Priority stays P3, while its prerequisite `ABC-274` is P2. Raising it is the Orchestrator's call at its pull.
+- **`EPIC-011`.**
+  - A dated top block.
+  - § Phases: a new E2-pre row; the E2, E3, E4 and E7 rows dated with the order, the stall clause and the king-table finding.
+  - § Tickets: row 12 dated, a new row 26, rows 22–24 dated, the id line.
+  - § Owner questions: Q-3K-7 split into (a) / (b) / (c), plus new `ADR-0067` acceptance and B-T8 rows, each pending with the Architect's recommendation and the default.
+  - § Dependencies: the order line. § Risks: `RISK-EPIC011-12` (own-games pull may be too small to read; F6 may fire). The "Open owner calls" line.
+- **`ABC-270` / `ABC-271`:** dated dependency lines. Both come after `ABC-239` in the recommended order: `ABC-270` with the stall clause and the king-table finding as supporting information, `ABC-271` because king distance and free path become fitted weights.
+- **The king-table finding, stated by the evidence:** the fits scale the king's square tables **up** about 3–3.6 × (mg) and 2.2–2.8 × (eg) against E1's rule tables. D4 has king mg −178 where `KING_TABLE` has −50 (`src/evaluate.ts:139`). So the rule tables weight the king about 3 × too lightly. *The brief's wording, "fits weight king tables ~3× lighter", is the inverse. The page follows the results note and the D4 output.*
+- **Not touched:** `board.md`, ADRs, `src/`. Owed elsewhere:
+  - the Architect: `ADR-0056` (row E2 → `ADR-0067`; Q-3K-7 re-framed; D6 Phase 4), `ADR-0064` d4 / d6 pointers, and the new E2-pre disposition line in `ADR-0067`;
+  - the Orchestrator: the board (Backlog line for `ABC-274`) and the S2 ruling.

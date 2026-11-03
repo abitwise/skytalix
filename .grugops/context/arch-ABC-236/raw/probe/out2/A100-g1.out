@@ -1,0 +1,1 @@
+{"solved":54,"total":58,"newlyMissed":[],"newlySolved":[],"c":{"iters":363,"windowed":158,"mateGuard":29,"passes":172,"failLow":1,"failHigh":13,"flip":0,"itersFailed":10,"nodesAll":1116768,"nodesGated":988980,"nodesWindowed":785820,"nodesFailed":55769,"abortedInWindow":43,"maxPasses":3}}

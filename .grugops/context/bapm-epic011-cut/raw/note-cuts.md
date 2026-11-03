@@ -1,0 +1,31 @@
+# bapm-epic011-cut decisions: four tickets cut under EPIC-011, each DoR 9/10 in Backlog (ABC-270 E3a king safety by phase, M, P2; ABC-271 E4a passer rules, M, P3; ABC-272 E7a mop-up and drawish scaling, premise-gated, M, P3; ABC-273 R1 reading, S, P3); the owner's 2026-11-02 answers folded into EPIC-011 and ABC-269 (ADR-0064 accepted; Q-3K-4 = (b)) with a marked QE-269-a placeholder; ABC-263's page reads Done
+
+BA/PM, task `bapm-epic011-cut`, records only, at `main` `17725732`; pages in `53c286cc`. Ranking: the gap-analysis note of this task. Owner's words: `orch-2026-10-30a` `…cc7db847` (*"64 yes, Q-3K-4 b"*).
+
+## The cuts (next free ids; none duplicates `ABC-234` / `236` / `239` / `269` or a parked ticket)
+| id | title (short) | size | prio | intent | DoR | waits on |
+|---|---|---|---|---|---|---|
+| `ABC-270` | E3a: king safety by phase: exposure terms get endgame halves; the `ADR-0031` addendum's queen scale (× 3 with an enemy queen) and shelter gate re-read over E1; off-door pair | M | P2 | GAIN | 9/10 | `ABC-269` merged; the ADR (dated re-open of the addendum, or new; reading (b)); `QE-269-a` ruling (scope 1's home) |
+| `ABC-271` | E4a: passers read the kings and the path: endgame-only king distance, free path, the rule of the square in pawn endings; off-door pair | M | P3 | GAIN (NEUTRAL only if the ADR names it before Ready) | 9/10 | `ABC-269` merged; a new ADR |
+| `ABC-272` | E7a: mop-up in pawnless wins (KQK, KRK, KBNK) and a scale toward 0 for drawish material; each half premise-gated | M (S per half) | P3 | named by the ADR before Ready | 9/10 | `ABC-269` merged; the pre-registered premise probe (mop-up only if base mates in ≤ 10 of 12 at 47 000 nodes; scaling only if base reads ≥ 100 cp on ≥ 5 of 10 known draws; both fail → dropped); then a new ADR |
+| `ABC-273` | R1: the first milestone reading: 200 games at 100 ms vs Stockfish 19 at the band-rule E, after E1 merges, before the next evaluation merge; X ± Y and the highest milestone met | S | P3 | reading | 9/10 | `ABC-269` merged; the control ruling (R1–R3's survival; the exact `r` / `rpair` command) |
+
+- **Pre-registered bars on every strength cut** (`EPIC-011` § The per-change rule, by reference): C2′ 100 games at 100 ms, GAIN ≥ 50.0 (NEUTRAL ≥ 43.0 only when named before Ready with its own measured bar); S′ `r <candidate> <out> --elo 1810 --budget-ms 500 --rounds 5 --concurrency 1` (or the E in force), S-4; the Levels deep lane exit 0; plus node identity with the design, mirror `Object.is`, mate floor 0, zugzwang 7 / 7, `G1` ≥ 54 / 58, `ADR-0061`'s cut audit ≤ 0.5 % and 0 ≥ 200 cp, `G2` ≤ 1.05 ×, `G6` on the depth-6 floor (`Q-3K-4` (b)). Each page carries its falsifier table.
+- **"Waits ADR"** on all three evaluation cuts: the Architect designs `ABC-234`, `ABC-236`, `ABC-239` first (owner, 2026-11-03); these follow unless the Orchestrator re-orders.
+- **Not cut, with reasons:** E3b / E5 / E6 (tuner weights; ids at E2's merge), Q2 (re-measure on `main` first), O1-e and lazy evaluation (cost cuts, recorded), X1 / X2 / W1 / V3 (Phase 5 stubs), R2 / R3 / anchors / claim (later, asked first). No parked item re-opened.
+
+## The folds
+- **`EPIC-011`:** a dated top block (gap summary, ranking, flags, cuts, owner answers); § Phases rows R1, E3, E4, E6 (E5 / E6 not cut), E7, X2 (void wait), W1 (moot wait); "Not cut, recorded" gains the lazy-evaluation line (`ADR-0057` D8.8, owed since 2026-11-02) and the Q2 line; § The per-change rule's `G6` line → `Q-3K-4` (b) for evaluation tickets (other value-changing tickets keep "≥ base" until ruled, `UNKNOWN - verify`); § Tickets rows 15 (Done), 21 (answers), new 22–25, id line; § Owner questions: `Q-3K-4` and `ADR-0064` rows answered; § Dependencies; `RISK-EPIC011-10` (depth erosion under (b)) and `RISK-EPIC011-11` (small instrument); § NFR triggers `NFR-005`.
+- **`ABC-269`:** `adr:` line ACCEPTED; a dated top block; B7 graded on its alternative branch; B8 and merge no longer wait on the owner; F3's `G6` half void; Dependencies and DoR row 10 dated. **`QE-269-a` placeholder** (marked): ruling (i) → B1 (d) scoped to the 6 graded endings, S1–S3 a report, fix in `ABC-270`; ruling (ii) → S1–S3 join B1 (d), `ADR-0064` re-opens, `ABC-270` scope 1 folds into `ABC-269`. No bar moved.
+- **`ABC-263`:** `status: done`, `column: Done`, `closed:` line, dated block (Done on the board 2026-11-01).
+
+## Proposed board lines (the Orchestrator places them; `plans/board.md` not edited)
+Backlog:
+- [ABC-270] E3a: king safety by phase — exposure endgame halves + the ADR-0031 addendum's queen scale / shelter gate re-read over E1, judged on play (Q-3K-4 b) (EPIC-011 Phase 4; size: M, priority: P2, DoR 9/10; GAIN; waits ABC-269 merged + ADR + QE-269-a ruling) **cut 2026-11-03 (bapm-epic011-cut)**
+- [ABC-271] E4a: passed pawns read the kings and the path — king distance, free path, rule of the square (EPIC-011 Phase 4; size: M, priority: P3, DoR 9/10; GAIN unless the ADR names NEUTRAL; waits ABC-269 merged + ADR) **cut 2026-11-03 (bapm-epic011-cut)**
+- [ABC-272] E7a: mop-up for pawnless wins + drawish-material scaling, premise-gated (EPIC-011 Phase 4; size: M, priority: P3, DoR 9/10; waits ABC-269 merged + premise probe (≤ 10/12 mates; ≥ 100 cp on ≥ 5/10 draws) + ADR; both premises fail → dropped) **cut 2026-11-03 (bapm-epic011-cut)**
+- [ABC-273] R1: first EPIC-011 milestone reading after E1 — 200 games at 100 ms vs Stockfish 19 at the band-rule E (EPIC-011 readings; size: S, priority: P3, DoR 9/10; QE reading, records only; waits ABC-269 merged + control ruling) **cut 2026-11-03 (bapm-epic011-cut)**
+
+## Questions
+- **Architect:** `QE-269-a` (in flight); note the `ADR-0064` d9 rationale finding; the scope of `Q-3K-4` (b) beyond evaluation tickets in the `ADR-0056` fold; `ABC-239`'s page still grades `G6` "≥ base" in A5 (BA/PM line owed after its design; not edited here by the fence).
+- **Orchestrator:** place the four cards; the R1 control ruling (or route it to the Architect); `ABC-270`'s design slot against the owner's 234 → 236 → 239 order.

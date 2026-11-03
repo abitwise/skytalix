@@ -1,0 +1,39 @@
+# bapm-ABC-269-fold ledger of the Architect's owed page lines (`arch-ABC-269-rule` `…1c2ca5ff`): `ABC-269` items A1–A14 and `EPIC-011` items B1–B9, each marked applied, completed, or already covered by `bapm-epic011-cut` (not double-written)
+
+BA/PM, task `bapm-ABC-269-fold` (follow-on to `bapm-epic011-cut`), records only. Read from the pages at `main` `2c304327` before the edit and from `85a7dcbf` after.
+
+## `ABC-269` (A1–A14)
+| item | state before | this hop |
+|---|---|---|
+| A1 `adr:` front matter | ACCEPTED, but kept the stale "Acceptance is the owner's … wait on his acceptance … graded by Q-3K-4's answer" text | rewritten to the Architect's form; "not in force until this ticket merges"; `QE-269-a` ruled (a); tail kept |
+| A2 new dated banner | the 2026-11-03 owner block existed, with the placeholder | new banner for the ruling; placeholder bullet replaced by branch (i) |
+| A3 cut-block "the build may start …" bullet | unchanged | struck; "B8 and the merge are released; B7 graded under (b)" |
+| A4 scope 2 "bit for bit" | unchanged | dated line: delta form only (`QE-269-b`) |
+| A5 out of scope, king safety | unchanged | dated line: S1–S3 castled-corner residual is E3's, `ABC-270` |
+| A6 B1 (d) scope sub-bullet | absent | added (D1–D6 graded; S1–S3 report printed in PR, read against +13 / +13 / +23) |
+| A7 B1 (e) "≥ 1.75 × by construction" | unchanged | struck → "≥ 1.6 × under trunc, rank 2 at phases 5–6" (`QE-269-c`) |
+| A8 B7 heading and branches | a dated line only | heading "graded under (b), 2026-11-02"; default branch struck, "not graded; medians reported"; alternative "Graded" |
+| A9 B8 heading | already struck and dated by `bapm-epic011-cut` | not double-written |
+| A10 F3 row | a dated parenthetical only | "fires when" replaced; tail "A second miss: not merged. No value is tuned to pass `G2` or B7"; the Q-3K-4 clause struck |
+| A11 NFR-005 | "B7 under each answer" | → "B7 under `Q-3K-4` = (b)" |
+| A12 Dependencies owner bullets | struck as answered (dated "2026-11-03 fold") | dates corrected to the answer date 2026-11-02; the `QE-269-a` bullet and the coupling line resolved |
+| A13 test note 1 | unchanged | dated line: S1–S3 frozen apart (PREREG `…1b856350`), ruled out of B1 (d) |
+| A14 DoR rows 5, 10, closing | row 10 had a dated line; row 5 and closing stale | row 4 (d) and B7 cells, row 5, row 10 tail, closing paragraph: ACCEPTED, (b), ruled (a); 10/10 |
+
+## `EPIC-011` (B1–B9)
+| item | state before | this hop |
+|---|---|---|
+| B1 dated banner | owner answers in the 2026-11-03 gap block; no ruling, no P1/D6 line | new banner: ruling, scope ruling, P1 line now in `ADR-0056` D6 |
+| B2 Q-3K-4 row | struck, answered | completed: graded set (C2′ + S′ + Levels + floor at `LEVELS[5]`), scope as recorded |
+| B3 `ADR-0064` row | struck, answered | completed: "not in force until `ABC-269` merges" |
+| B4 the `G6` line | struck, answered, with `UNKNOWN - verify` on scope | mark replaced by the Orchestrator's ruling |
+| B5 "Open owner calls" | still listed Q-3K-2, -3, -4 | Q-3K-2, -3 (answered 2026-11-01 per § Owner questions) and Q-3K-4 struck; Q-3K-6, -7, -8 open |
+| B6 § Phases E3 | Q-3K-4 struck, "judged on play" present | added: S1–S3 at ≥ 20 cp its first graded rows, in `ABC-270` K1 (b) |
+| B7 § Phases E1, § Tickets row 21 | row 21 had accepted + (b); E1 row did not | E1 row dated; row 21's placeholder struck, ruling + wording fixes added |
+| B8 § NFR triggers NFR-005 | already "graded on the floor only; ≥ base reported" | not double-written |
+| B9 dedupe `ABC-205` (optional) | unchanged | dated line: re-try under E3 judged on play |
+
+Also: the 2026-11-03 gap block's `QE-269-a` placeholder and scope `UNKNOWN - verify` struck with dated lines; § Tickets row 22 (`ABC-270`) wait resolved.
+
+## Not touched (fences)
+`plans/board.md`, `ADR-*`, `src/`, any page but `ABC-269`, `ABC-270`, `EPIC-011`, `plans/traceability.md` (one row appended).

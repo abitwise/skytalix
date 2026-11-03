@@ -1,0 +1,8 @@
+{
+  "refs": ["arch-ABC-239", "grugops/arch-ABC-239", "ABC-239", "E2", "E2-pre", "EPIC-011", "ADR-0067", "ADR-0064", "ADR-0056", "ADR-0048", "ADR-0023", "ADR-0050", "ADR-0061", "ABC-269", "ABC-270", "ABC-271", "ABC-272", "ABC-273", "ABC-215", "ABC-207", "ABC-205", "ABC-255", "Q-3K-7", "Q-3K-4", "NFR-005", "NFR-008", "NFR-009", "G2", "G6", "RISK-EPIC010-05", "af15cbc9", "b7a8fc3a", "arch-ABC-239/20261103T102308Z-architect-design-decision-9ed1db11", "arch-ABC-239/20261103T104045Z-architect-design-decision-255e9bcf", "arch-ABC-239/20261103T104220Z-architect-design-decision-f8d36d73", "bapm-epic011-cut/20261103T094553Z-ba-pm-decision-08584853", "bapm-epic011-cut/20261103T094553Z-ba-pm-observation-0fd882f7", "arch-next-pull/20261102T213500Z-architect-design-observation-d0f1a5fc"],
+  "notes": [
+    { "kind": "observation", "confidence": "high on the figures (deterministic scratch runs under pre-registered rules; the fit re-run byte-identical); medium on the readings of why (a data hypothesis supported by four diagnostics on one corpus)", "bodyFile": "notes/results.md" },
+    { "kind": "decision", "confidence": "high on the method, gate, emission and order (each tied to a measured prototype figure or an accepted ADR); medium on the expected size (an estimate); the data answer and acceptance are the owner's", "bodyFile": "notes/decisions.md" },
+    { "kind": "observation", "confidence": "high (paths in this commit; published as an observation because an artifact-ref needs a gate_run, and no gate ran)", "bodyFile": "notes/artifact.md" }
+  ]
+}

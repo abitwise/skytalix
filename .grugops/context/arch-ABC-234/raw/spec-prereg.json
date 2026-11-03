@@ -1,0 +1,6 @@
+{
+  "refs": ["arch-ABC-234", "grugops/arch-ABC-234", "ABC-234", "EPIC-011", "O3s", "Q1", "ADR-0065", "ADR-0024", "ADR-0056", "ADR-0061", "ADR-0063", "ADR-0050", "ADR-0026", "e72487e1", "17725732", "arch-ABC-233/20261102T210820Z-architect-design-decision-4d5a0fe3"],
+  "notes": [
+    { "kind": "decision", "confidence": "high (a pre-registration: instrument, premise counters, forms, gates, choice rule, bar-derivation rules and verdict rule fixed before any measured run)", "bodyFile": "notes/prereg.md" }
+  ]
+}

@@ -1,0 +1,11 @@
+<!-- GENERATED — do not hand-edit. Re-run: node scripts/context-io.js render <task> -->
+# Context: arch-ABC-236
+
+## Current state
+
+| at | kind | by | confidence | verified_by | note |
+| --- | --- | --- | --- | --- | --- |
+| 2026-11-03T09:58:21Z | decision | architect-design | high (a pre-registration: instrument, forms, gates, choice rule, bar-derivation rules, intent rule and verdict rule fixed before any measured run) |  | # arch-ABC-236 PREREG: S1 (root aspiration windows, `chooseMove` only) on `main`'s search (`src/` tree `58fa3eb4`, futility in force): instrument, four forms, two gates, the choice rule, the bar-derivation rules, the intent rule and the verdict rule, sealed and committed before any measured run |
+| 2026-11-03T10:15:43Z | decision | architect-design | high on the verdict and the firing figure (pre-registered rules, measured); medium on the structural reading of why and on the re-open conditions; the effort is an estimate |  | # arch-ABC-236 decisions: `ADR-0066` is written PROPOSED, **premise not met on `main`** (F4: A100 `chooseMove` d8 0.9836 / 0.9913 > 0.95; every form misses). S1 fires at 100 ms (70.4 % of nodes at 47 000), so `ADR-0056`'s "S1 is depth-gated" is wrong and a re-open is GAIN. Recommendation: **park `ABC-236`**. Lines are owed to `ADR-0056`, `EPIC-011` and the ticket page (listed below; not edited here) |
+| 2026-11-03T10:15:43Z | observation | architect-design | high (deterministic maxDepth and maxNodes chooseMove runs on a scratch copy of main's src 58fa3eb4; the door reproduces ADR-0061 d9's and ADR-0065's counts to the node; 51 jobs, every exit 0) |  | # arch-ABC-236 results: S1 (root aspiration windows, `chooseMove`) on `main` (src `58fa3eb4`, futility in force). Every form is safe, but every form misses the pay gate. The closest, A100, reads d8 0.9836 / 0.9913 (≤ 0.95 needed on both). The mechanism fires at 100 ms: 70.4 % of nodes at 47 000 are inside aspiration passes |
+| 2026-11-03T10:15:43Z | observation | architect-design | high (paths in this commit; published as an observation because an artifact-ref needs a gate_run, and no gate ran) |  | # arch-ABC-236 artifacts: `ADR-0066` (PROPOSED, premise not met on `main`) and the reproducible probe |

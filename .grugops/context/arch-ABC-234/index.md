@@ -1,0 +1,11 @@
+<!-- GENERATED — do not hand-edit. Re-run: node scripts/context-io.js render <task> -->
+# Context: arch-ABC-234
+
+## Current state
+
+| at | kind | by | confidence | verified_by | note |
+| --- | --- | --- | --- | --- | --- |
+| 2026-11-03T09:32:40Z | decision | architect-design | high (a pre-registration: instrument, premise counters, forms, gates, choice rule, bar-derivation rules and verdict rule fixed before any measured run) |  | # arch-ABC-234 PREREG: O3s (SEE orders captures, ordering only) on `main`'s search (`src/` tree `58fa3eb4`, futility in force): premise counters, three forms, two gates, the choice rule, the bar-derivation rules and the verdict rule, sealed and committed before any measured run |
+| 2026-11-03T09:50:12Z | decision | architect-design | high on the verdict (pre-registered rule, measured) and the A0 reading; medium on the A0 ruling's reading of ADR-0024 d4's intent and on the Q1 evidence (a diagnostic, not pre-registered); the effort is an estimate |  | # arch-ABC-234 decisions: `ADR-0065` is written PROPOSED, **premise not met on `main`** (F4: S1m `chooseMove` 0.9864 / 0.9548 > 0.95). A0 is ruled: `ADR-0024` d4 fences Q1 (SEE pruning in quiescence), not O3s. Recommendation: **park `ABC-234`**. The SEE lever on this engine is Q1 (diagnostic +0.88 ply of reach), which is the Orchestrator's to weigh. Lines are owed to `ADR-0056`, `EPIC-011` and the ticket page (listed below; not edited here) |
+| 2026-11-03T09:50:12Z | observation | architect-design | high (deterministic fixed-depth and maxNodes runs on a scratch copy of main's src 58fa3eb4; the door reproduces ADR-0061 d9's counts to the node; 42 + 8 jobs, every exit 0) |  | # arch-ABC-234 results: O3s (SEE ordering only) on `main` (src `58fa3eb4`, futility in force). The premise mechanism is real, but every form misses the pay gate. S1m reads d8 0.9011 / 0.9428 in `search()` and 0.9864 / 0.9548 in `chooseMove` (≤ 0.95 needed on all four). Every form is safe. DIAGNOSTIC: Q1 (SEE pruning in quiescence) reads +0.88 ply of reach |
+| 2026-11-03T09:50:20Z | observation | architect-design | high (paths in this commit; published as an observation because an artifact-ref needs a gate_run, and no gate ran) |  | # arch-ABC-234 artifacts: `ADR-0065` (PROPOSED, premise not met on `main`) and the reproducible probe |

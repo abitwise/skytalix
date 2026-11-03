@@ -1,0 +1,14 @@
+# bapm-ABC-234-park: `ABC-234` recorded PARKED (`ADR-0065` PROPOSED, premise not met on `main`; A0 ruled; DoR 8/10 → 9/10, Backlog); `EPIC-011` row O3s parked, the Q1 stub re-stated (carries `see` itself; needs `ADR-0024` d4 opened, owner asked 2026-11-03, pending as `Q-3K-9`), the Q1 diagnostic recorded as not pre-registered
+
+BA/PM, task `bapm-ABC-234-park`, records only, at `main` `32b807c7`; nothing run. Pages in `6a2e0ca2`. Sources: `arch-ABC-234` decision `…a4ed96aa` § 5 (worked item by item), results `…ffe76d35`, PREREG `…9ac61a7a`; `ADR-0065` § Status, decisions 1, 2, 8, 10, 11; the Orchestrator's ruling "ABC-234 PARKED" and its owner ask (board, 2026-11-03, `32b807c7`).
+
+## What was decided on the pages
+1. **`ABC-234` page:** a dated PARKED banner; front matter `adr:` line (status stays `backlog`, the `ABC-233` form). A0 answered by `ADR-0065` decision 1 (not met as worded; d4 governs Q1, not O3s; so "closed unbuilt" does not follow, the measured premise decides). DoR row 2 ⚠ → ✅; row 10 → "`ADR-0065`: premise not met on `main` (F4) … Parked"; DoR 9/10. Re-open conditions named: Q1 built first (O3s re-measured over it), staged move generation (V3), a time-per-move instrument by the owner's ruling, each with a new PREREG. Intent GAIN on any re-open (A5; C2′ closes NEUTRAL to O3s). On re-open only: A3 re-pinned to d8, both recursions, four readings (decision 10 (a)); A1's fixture starts from decision 8's rows (row 4 = 0). Dependencies line re-stated.
+2. **`EPIC-011`:** new top block; § Phases row O3s "parked: `ADR-0065` premise not met on `main`"; row Q1 "~~after `ABC-234`~~ carries `see` itself; needs `ADR-0024` d4 opened (`Q-3K-9`, pending)" plus the diagnostic; § Tickets row 8 (9/10, parked); § Dedupe audit `ABC-234`; § Dependencies (the `ABC-234` → Q1 arrow no longer orders them); the "Open owner calls" line.
+3. **`Q-3K-9` (new owner-question id, given by BA/PM for tracking):** "Open `ADR-0024` d4 for Q1?" Asked by the Orchestrator 2026-11-03; **unanswered**. Default until answered: not opened, Q1 stays fenced. Blocks Q1's PREREG/ADR/ticket and `ABC-234`'s re-open premise 1. Nothing assumes the answer.
+4. **The Q1 diagnostic is recorded as evidence, not a reading:** +0.884 ply reach at 47 000 nodes, d8 0.22–0.68× nodes, mate floor 0, zugzwang 7/7, `G1` 54/58, drift max 69 cp; not pre-registered; quiescence half only. Ranking Q1 ahead of S1 (`ABC-236`) is left to the Orchestrator; no order changed.
+
+## Not done here (owed elsewhere)
+- `ADR-0056` lines (a)–(e) of `…a4ed96aa` § 5: the Architect's, at the next `ADR-0056` fold.
+- `board.md`: the Orchestrator's (its line 2 already records the park).
+- `EPIC-011` top block of `bapm-epic011-cut` still says `ABC-239`'s design is owed "after `ABC-234` and `ABC-236`"; left as history (the `ABC-234` design hop is complete, parked).
