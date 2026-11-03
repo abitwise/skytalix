@@ -39,6 +39,7 @@ import {
   searchWithoutPvsOrReductions,
   searchWithoutTable,
 } from "./search.ts";
+import { seeScratchByteLength } from "./see.ts";
 import {
   BOUND_EXACT,
   BOUND_LOWER,
@@ -649,12 +650,15 @@ describe("A7 — the table holds a fixed 4 MiB, whatever the search", () => {
     // and counted in (a)'s sum.
     expect(orderScratchByteLength()).toBe(256 * 8);
     expect(captureScratchByteLength()).toBe(256 * 8);
+    // ABC-279: the static exchange evaluator's scratch is fixed (`ADR-0069` decision 4).
+    expect(seeScratchByteLength()).toBe(288);
     expect(
       tableByteLength() +
         keyArrayBytes +
         pawnCacheByteLength() +
         orderScratchByteLength() +
-        captureScratchByteLength(),
+        captureScratchByteLength() +
+        seeScratchByteLength(),
     ).toBeLessThanOrEqual(16 * 1024 * 1024);
   });
 

@@ -11,18 +11,30 @@
  *   moves `isLosingCapture` names, only on the stand-pat branch; a caller's own record does not opt in.
  * - (d) The in-check row: a losing capture among the evasions is searched.
  * - (e) Purity and memory: the board is byte-identical after `see`; the scratch is 288 bytes.
+ *
+ * DEEP, `SEARCH_DEEP=1` (`N8-LANE`; unset, these cases are NOT DEFINED rather than skipped): `A3`
+ * (a) the depth-5 drift on the 190 in both recursions against the doors, (b) the same-depth mate
+ * floor on the 287, and `A4` (a) depth 8 on kiwipete and position-6 in both recursions with the
+ * instrument's exact counts, (b) the reach at 47 000 nodes on the 190. Each row is deterministic:
+ * a fixed depth, or `chooseMove` on a frozen clock with `maxDepth` or `maxNodes`. `A3` (c), the
+ * zugzwang bar, is `ADR-0050` decision 9's seven rows, which `src/search.null-move.test.ts` runs on
+ * the shipped `chooseMove` at their recorded depths; no depth is re-pinned.
  */
 
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { makeMove, unmakeMove } from "./apply.ts";
+import { chooseMove, chooseMoveWithoutSeePruning, type EngineChoice } from "./engine.ts";
 import { evaluateAtPhase, phaseOf } from "./evaluate.ts";
 import { parseFen, toFen } from "./fen.ts";
+import { gameStatus } from "./gameend.ts";
 import { isInCheck, legalCapturesAndQueenPromotions, legalMoves } from "./legal.ts";
 import { FLAG_EN_PASSANT, type Move } from "./moves.ts";
 import { KING, PAWN, type Position, squareName } from "./position.ts";
 import { HANGING_CORPUS } from "./puzzle-corpus.ts";
 import { orderCaptures, type QuiescenceRules, quiesce } from "./quiescence.ts";
+import { MATE_CORPUS } from "./search.mate-corpus.ts";
+import { MATE_SCORE, search, searchWithoutSeePruning } from "./search.ts";
 import * as seeModule from "./see.ts";
 import { isLosingCapture, see, seeScratchByteLength } from "./see.ts";
 
@@ -449,3 +461,196 @@ describe("ABC-279 — one switch, seePruning, and two test-only doors (ADR-0069 
     }
   });
 });
+
+// ---------------------------------------------------------------------------
+// A3 — the bounded oracle (`ADR-0069` decision 11) and A4 — it pays (decision 12). Deep only.
+// ---------------------------------------------------------------------------
+
+if (process.env.SEARCH_DEEP === "1") {
+  const ROOTS: ReadonlyArray<{ name: string; fen: string }> = [
+    { name: "startpos", fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" },
+    {
+      name: "kiwipete",
+      fen: "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1",
+    },
+    { name: "position-3", fen: "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1" },
+    { name: "position-4", fen: "r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1" },
+    { name: "position-5", fen: "rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8" },
+    {
+      name: "position-6",
+      fen: "r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10",
+    },
+  ];
+  const ENDGAMES: ReadonlyArray<{ name: string; fen: string }> = [
+    { name: "kq-corner", fen: "k7/8/1K6/8/8/8/8/1Q6 w - - 0 1" },
+    { name: "kr-corner", fen: "k7/8/1K6/8/8/8/8/1R6 w - - 0 1" },
+    { name: "kqk-h8", fen: "7k/8/6K1/8/8/8/8/6Q1 w - - 0 1" },
+    { name: "kp-vs-k", fen: "8/8/8/4k3/8/8/4P3/4K3 w - - 0 1" },
+    { name: "krk-a-file", fen: "8/8/8/8/8/k7/8/KR6 w - - 0 1" },
+    { name: "pawn-race", fen: "8/6p1/8/8/8/8/1P6/k1K5 w - - 0 1" },
+  ];
+  /** `ABC-121`'s 190 (`src/search.futility.test.ts`'s copy): each root, its in-progress children, the endgames. */
+  const corpus = (): { name: string; fen: string }[] => {
+    const out: { name: string; fen: string }[] = [];
+    for (const { name, fen } of ROOTS) {
+      out.push({ name, fen });
+      const position = parseFen(fen);
+      for (const move of legalMoves(position)) {
+        const undo = makeMove(position, move);
+        if (gameStatus(position).result === "in-progress") {
+          out.push({ name: `${name}/${label(move)}`, fen: toFen(position) });
+        }
+        unmakeMove(position, move, undo);
+      }
+    }
+    return [...out, ...ENDGAMES];
+  };
+  const fenOf = (name: string): string =>
+    (ROOTS.find((root) => root.name === name) as { fen: string }).fen;
+  const isMate = (score: number): boolean => Math.abs(score) > MATE_SCORE - 1_000;
+  const deepenTo = (choose: typeof chooseMove, fen: string, maxDepth: number): EngineChoice =>
+    choose(parseFen(fen), { budgetMs: 1e9, now: () => 0, maxDepth }) as EngineChoice;
+
+  describe("ABC-279 A3 (a) — bounded drift against the doors, depth 5, the 190 [deep, SEARCH_DEEP=1]", () => {
+    const drift = (on: (fen: string) => number, reference: (fen: string) => number) => {
+      const deltas: Array<[number, string]> = [];
+      let signFlips = 0;
+      for (const { name, fen } of corpus()) {
+        const ref = reference(fen);
+        const got = on(fen);
+        if (isMate(ref) || isMate(got)) {
+          if (Math.sign(ref) !== Math.sign(got)) signFlips++;
+          continue;
+        }
+        deltas.push([Math.abs(got - ref), `${name}: ${ref} -> ${got}`]);
+      }
+      deltas.sort((a, b) => b[0] - a[0]);
+      return {
+        compared: deltas.length,
+        within25: deltas.filter(([delta]) => delta <= 25).length / deltas.length,
+        max: deltas[0]?.[0] ?? 0,
+        worst: deltas[0]?.[1] ?? "",
+        signFlips,
+      };
+    };
+    const bar = (what: string, result: ReturnType<typeof drift>): void => {
+      console.log(
+        `ABC-279 A3 ${what}: ${(100 * result.within25).toFixed(2)}% within 25 cp of ` +
+          `${result.compared}, max ${result.max} cp (${result.worst}); mate sign flips ${result.signFlips}`,
+      );
+      expect(result.compared).toBeGreaterThanOrEqual(100);
+      expect(result.within25).toBeGreaterThanOrEqual(0.93);
+      expect(result.max).toBeLessThanOrEqual(144);
+      expect(result.signFlips).toBe(0);
+    };
+
+    it("the corpus is the 190", () => {
+      expect(corpus()).toHaveLength(190);
+    });
+
+    it("search() against searchWithoutSeePruning at depth 5: >= 93% within 25 cp, none beyond 144, 0 mate sign changes [deep, SEARCH_DEEP=1]", () => {
+      bar(
+        "search() d5",
+        drift(
+          (fen) => search(parseFen(fen), 5).score,
+          (fen) => searchWithoutSeePruning(parseFen(fen), 5).score,
+        ),
+      );
+    }, 600_000);
+
+    it("chooseMove against chooseMoveWithoutSeePruning deepened to 5: >= 93% within 25 cp, none beyond 144, 0 mate sign changes [deep, SEARCH_DEEP=1]", () => {
+      bar(
+        "chooseMove to d5",
+        drift(
+          (fen) => deepenTo(chooseMove, fen, 5).score,
+          (fen) => deepenTo(chooseMoveWithoutSeePruning, fen, 5).score,
+        ),
+      );
+    }, 600_000);
+  });
+
+  describe("ABC-279 A3 (b) — the same-depth mate floor on the 287 [deep, SEARCH_DEEP=1]", () => {
+    it("every mate searchWithoutSeePruning scores at depth 5, search() scores as a mate of the same sign at depth 5 [deep, SEARCH_DEEP=1]", () => {
+      let mates = 0;
+      const violations: string[] = [];
+      for (const fen of MATE_CORPUS) {
+        const ref = searchWithoutSeePruning(parseFen(fen), 5).score;
+        if (!isMate(ref)) continue;
+        mates++;
+        const got = search(parseFen(fen), 5).score;
+        if (!isMate(got) || Math.sign(got) !== Math.sign(ref))
+          violations.push(`${fen}: ${ref} -> ${got}`);
+      }
+      console.log(`ABC-279 A3 mate floor d5: ${violations.length} of ${mates} violated`);
+      expect(mates).toBeGreaterThanOrEqual(100);
+      expect(violations).toEqual([]);
+    }, 300_000);
+  });
+
+  describe("ABC-279 A4 (a) — depth 8 on kiwipete and position-6, nodes <= 0.78x the door's in both recursions [deep, SEARCH_DEEP=1]", () => {
+    // The instrument check (`ADR-0069` decision 12, not a bar): on `src/` tree `4cb84035` a faithful
+    // build reads these exact counts; the doors read `ABC-269` B0's. A re-derived count is a dated
+    // line in the ADR, never a moved bar.
+    const READ = {
+      kiwipete: { search: [605_117, 839_514], choose: [766_275, 1_296_788] },
+      "position-6": { search: [406_787, 1_533_901], choose: [87_475, 404_930] },
+    } as const;
+    for (const name of ["kiwipete", "position-6"] as const) {
+      it(`${name}: search() at depth 8 [deep, SEARCH_DEEP=1]`, () => {
+        const head = search(parseFen(fenOf(name)), 8);
+        const door = searchWithoutSeePruning(parseFen(fenOf(name)), 8);
+        console.log(
+          `ABC-279 A4 search() ${name} d8: ${head.nodes} / ${door.nodes} = ` +
+            `${(head.nodes / door.nodes).toFixed(4)}x; head ${label(head.move as Move)} ${head.score}, ` +
+            `door ${label(door.move as Move)} ${door.score}`,
+        );
+        expect([head.nodes, door.nodes]).toEqual(READ[name].search);
+        expect(head.nodes).toBeLessThanOrEqual(0.78 * door.nodes);
+      }, 300_000);
+
+      it(`${name}: chooseMove deepened to 8 on a frozen clock [deep, SEARCH_DEEP=1]`, () => {
+        const head = deepenTo(chooseMove, fenOf(name), 8);
+        const door = deepenTo(chooseMoveWithoutSeePruning, fenOf(name), 8);
+        expect([head.depth, door.depth]).toEqual([8, 8]);
+        console.log(
+          `ABC-279 A4 chooseMove ${name} to 8: ${head.nodes} / ${door.nodes} = ` +
+            `${(head.nodes / door.nodes).toFixed(4)}x; head ${label(head.move)} ${head.score}, ` +
+            `door ${label(door.move)} ${door.score}`,
+        );
+        expect([head.nodes, door.nodes]).toEqual(READ[name].choose);
+        expect(head.nodes).toBeLessThanOrEqual(0.78 * door.nodes);
+      }, 300_000);
+    }
+  });
+
+  describe("ABC-279 A4 (b) — the mean completed depth at 47 000 nodes on the 190 is >= the door's + 0.55 ply [deep, SEARCH_DEEP=1]", () => {
+    it("chooseMove against chooseMoveWithoutSeePruning, maxNodes 47 000, frozen clock [deep, SEARCH_DEEP=1]", () => {
+      const rows = corpus();
+      const reach = (choose: typeof chooseMove) =>
+        rows.map(({ fen }) => {
+          const choice = choose(parseFen(fen), {
+            budgetMs: 1_000,
+            now: () => 0,
+            maxNodes: 47_000,
+          }) as EngineChoice;
+          return { depth: choice.depth, move: label(choice.move) };
+        });
+      const door = reach(chooseMoveWithoutSeePruning);
+      const head = reach(chooseMove);
+      const mean = (xs: Array<{ depth: number }>) =>
+        xs.reduce((sum, x) => sum + x.depth, 0) / xs.length;
+      const deeper = head.filter((x, i) => x.depth > (door[i] as { depth: number }).depth).length;
+      const shallower = head.filter(
+        (x, i) => x.depth < (door[i] as { depth: number }).depth,
+      ).length;
+      const moved = head.filter((x, i) => x.move !== (door[i] as { move: string }).move).length;
+      console.log(
+        `ABC-279 A4 reach at 47 000 nodes on ${rows.length}: door ${mean(door).toFixed(3)} -> head ` +
+          `${mean(head).toFixed(3)} (+${(mean(head) - mean(door)).toFixed(3)}); ${deeper} deeper, ` +
+          `${shallower} shallower, ${moved} root moves differ`,
+      );
+      expect(rows).toHaveLength(190);
+      expect(mean(head)).toBeGreaterThanOrEqual(mean(door) + 0.55);
+    }, 600_000);
+  });
+}
