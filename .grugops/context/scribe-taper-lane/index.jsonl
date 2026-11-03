@@ -1,0 +1,2 @@
+{"id":"20261103T124150Z-agents-md-scribe-decision-6603cd44","kind":"decision","by":"agents-md-scribe","at":"2026-11-03T12:41:50Z","verified_by":"","confidence":"high","refs":["AGENTS.md","ABC-269","src/evaluate.taper.test.ts","src/cli.test.ts","scribe-taper-lane"],"supersedes":null}
+{"id":"20261103T124154Z-agents-md-scribe-observation-67882379","kind":"observation","by":"agents-md-scribe","at":"2026-11-03T12:41:54Z","verified_by":"","confidence":"high","refs":["AGENTS.md","ABC-269","src/evaluate.taper.test.ts","src/cli.test.ts","scribe-taper-lane"],"supersedes":null}
