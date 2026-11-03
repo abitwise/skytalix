@@ -723,26 +723,30 @@ if (RUN_DEEP) {
     expect(result.signFlips).toBe(0);
   };
 
+  // `ABC-269` (`ADR-0064` decision 7): A3 (a), A4 (a) and A4 (b) measure futility alone against
+  // its doors, so their shipped side re-points to the shipped path less the taper
+  // (`searchWithoutTaper`, `chooseMoveWithoutTaper`); their figures do not change. A3 (b) and
+  // A3 (c) (the mate floor, zugzwang) are value and behaviour rows and stay on the shipped path.
   describe("A3 (a) — bounded drift against the futility doors, depth 5, the 190 [deep, SEARCH_DEEP=1]", () => {
     it("the corpus is the 190", () => {
       expect(corpus()).toHaveLength(190);
     });
 
-    it("search() against searchWithoutFutility at fixed depth 5: every non-mate score within 25 cp, 0 mate sign flips [deep, SEARCH_DEEP=1]", () => {
+    it("searchWithoutTaper against searchWithoutFutility at fixed depth 5: every non-mate score within 25 cp, 0 mate sign flips [deep, SEARCH_DEEP=1]", () => {
       reportAndBar(
-        "search() d5",
+        "searchWithoutTaper d5",
         drift(
-          (fen) => search(parseFen(fen), 5).score,
+          (fen) => searchWithoutTaper(parseFen(fen), 5).score,
           (fen) => searchWithoutFutility(parseFen(fen), 5).score,
         ),
       );
     }, 600_000);
 
-    it("chooseMove against chooseMoveWithoutFutility deepened to 5: every non-mate score within 25 cp, 0 mate sign flips [deep, SEARCH_DEEP=1]", () => {
+    it("chooseMoveWithoutTaper against chooseMoveWithoutFutility deepened to 5: every non-mate score within 25 cp, 0 mate sign flips [deep, SEARCH_DEEP=1]", () => {
       reportAndBar(
-        "chooseMove to d5",
+        "chooseMoveWithoutTaper to d5",
         drift(
-          (fen) => deepenTo(chooseMove, fen, 5).score,
+          (fen) => deepenTo(chooseMoveWithoutTaper, fen, 5).score,
           (fen) => deepenTo(chooseMoveWithoutFutility, fen, 5).score,
         ),
       );
@@ -804,23 +808,23 @@ if (RUN_DEEP) {
 
   describe("A4 (a) — at depth 8 on kiwipete and position-6, nodes <= 0.88x the door's in both recursions [deep, SEARCH_DEEP=1]", () => {
     for (const name of ["kiwipete", "position-6"]) {
-      it(`${name}: search() at depth 8 [deep, SEARCH_DEEP=1]`, () => {
-        const head = search(parseFen(fenOf(name)), 8);
+      it(`${name}: searchWithoutTaper at depth 8 [deep, SEARCH_DEEP=1]`, () => {
+        const head = searchWithoutTaper(parseFen(fenOf(name)), 8);
         const door = searchWithoutFutility(parseFen(fenOf(name)), 8);
         console.log(
-          `ABC-268 A4 search() ${name} d8: ${head.nodes} / ${door.nodes} = ` +
+          `ABC-268 A4 searchWithoutTaper ${name} d8: ${head.nodes} / ${door.nodes} = ` +
             `${(head.nodes / door.nodes).toFixed(4)}x; head ${label(head.move)} ${head.score}, ` +
             `door ${label(door.move)} ${door.score}`,
         );
         expect(head.nodes).toBeLessThanOrEqual(0.88 * door.nodes);
       }, 300_000);
 
-      it(`${name}: chooseMove deepened to 8 on a frozen clock [deep, SEARCH_DEEP=1]`, () => {
-        const head = deepenTo(chooseMove, fenOf(name), 8);
+      it(`${name}: chooseMoveWithoutTaper deepened to 8 on a frozen clock [deep, SEARCH_DEEP=1]`, () => {
+        const head = deepenTo(chooseMoveWithoutTaper, fenOf(name), 8);
         const door = deepenTo(chooseMoveWithoutFutility, fenOf(name), 8);
         expect([head.depth, door.depth]).toEqual([8, 8]);
         console.log(
-          `ABC-268 A4 chooseMove ${name} to 8: ${head.nodes} / ${door.nodes} = ` +
+          `ABC-268 A4 chooseMoveWithoutTaper ${name} to 8: ${head.nodes} / ${door.nodes} = ` +
             `${(head.nodes / door.nodes).toFixed(4)}x; head ${label(head.move)} ${head.score}, ` +
             `door ${label(door.move)} ${door.score}`,
         );
@@ -830,7 +834,7 @@ if (RUN_DEEP) {
   });
 
   describe("A4 (b) — the mean completed depth at 47 000 nodes on the 190 is >= the door's + 0.20 ply [deep, SEARCH_DEEP=1]", () => {
-    it("chooseMove against chooseMoveWithoutFutility, maxNodes 47 000, frozen clock [deep, SEARCH_DEEP=1]", () => {
+    it("chooseMoveWithoutTaper against chooseMoveWithoutFutility, maxNodes 47 000, frozen clock [deep, SEARCH_DEEP=1]", () => {
       const rows = corpus();
       const reach = (choose: typeof chooseMove) =>
         rows.map(({ fen }) => {
@@ -842,7 +846,7 @@ if (RUN_DEEP) {
           return { depth: choice.depth, move: label(choice.move) };
         });
       const door = reach(chooseMoveWithoutFutility);
-      const head = reach(chooseMove);
+      const head = reach(chooseMoveWithoutTaper);
       const mean = (xs: Array<{ depth: number }>) =>
         xs.reduce((sum, x) => sum + x.depth, 0) / xs.length;
       const deeper = head.filter((x, i) => x.depth > (door[i] as { depth: number }).depth).length;

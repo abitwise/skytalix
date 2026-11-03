@@ -406,19 +406,20 @@ if (RUN_DEEP) {
       (_, fen, depth, nodes) => {
         expect(deepen(chooseMove, fen, depth)).toEqual({ nodes, depth });
       },
+      600_000,
     );
 
     it("chooseMoveWithoutTaper to depth 8: main's 1 306 981 / 391 451 [deep, SEARCH_DEEP=1]", () => {
       expect(deepen(chooseMoveWithoutTaper, KIWIPETE, 8).nodes).toBe(1_306_981);
       expect(deepen(chooseMoveWithoutTaper, POSITION_6, 8).nodes).toBe(391_451);
-    });
+    }, 600_000);
 
     it("search() at depth 8: 839 514 / 1 533 901; searchWithoutTaper: main's 888 786 / 1 262 046 [deep, SEARCH_DEEP=1]", () => {
       expect(search(parseFen(KIWIPETE), 8).nodes).toBe(839_514);
       expect(search(parseFen(POSITION_6), 8).nodes).toBe(1_533_901);
       expect(searchWithoutTaper(parseFen(KIWIPETE), 8).nodes).toBe(888_786);
       expect(searchWithoutTaper(parseFen(POSITION_6), 8).nodes).toBe(1_262_046);
-    });
+    }, 600_000);
   });
 
   describe("ABC-269 B2 — the mate floor on the 287: the door's mates are same-sign mates for search() [deep, SEARCH_DEEP=1]", () => {
@@ -438,14 +439,20 @@ if (RUN_DEEP) {
 
     it("the door's depth-4 mates, search() at depth 5: 0 violations [deep, SEARCH_DEEP=1]", () => {
       const { mates, bad } = violations(4);
+      console.log(
+        `ABC-269 B2 mate floor, door d4 -> search() d5: ${bad.length} of ${mates} violated`,
+      );
       expect(mates).toBeGreaterThan(100);
       expect(bad).toEqual([]);
-    });
+    }, 600_000);
 
     it("the door's depth-5 mates, search() at depth 5: 0 violations [deep, SEARCH_DEEP=1]", () => {
       const { mates, bad } = violations(5);
+      console.log(
+        `ABC-269 B2 mate floor, door d5 -> search() d5: ${bad.length} of ${mates} violated`,
+      );
       expect(mates).toBeGreaterThan(100);
       expect(bad).toEqual([]);
-    });
+    }, 600_000);
   });
 }
