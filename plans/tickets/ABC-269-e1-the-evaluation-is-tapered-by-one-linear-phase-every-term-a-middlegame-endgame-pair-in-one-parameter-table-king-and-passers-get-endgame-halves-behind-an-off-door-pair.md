@@ -1,16 +1,66 @@
 ---
 id: ABC-269
 title: "E1: the evaluation is tapered by one linear phase (N 1, B 1, R 2, Q 4, out of 24). Every term is a middlegame / endgame pair in one data-only parameter table, and at E1 only the king square and the passed pawns get endgame halves of their own, behind a test-only off-door pair"
-status: backlog
-column: Backlog
+status: done
+column: Done
+closed: "2026-11-03, merged to local main at 54dee3f2 (from grugops/ABC-269, candidate be87a2f1; code 561fc028 = cut C1 over b7a8fc3a); QE PASS_WITH_GAPS (qe-ABC-269 …eff2fe64), which signs UAT; B6 G2 1.0373 × (≤ 1.0500), B8 57.0 / 100 (GAIN met; +49.0 ± 59.5 Elo, interval crosses 0), S′ 7.0 / 10 at E 1 810, Levels 57 / 57; post-merge npm test 2 566 / 2 566 (the Orchestrator, board 2026-11-03, 128e3c6c). Front matter by bapm-269-done"
 size: M
 priority: P2
 epic: EPIC-011
 feature: —
-adr: "ADR-0064 (ACCEPTED 2026-11-02 by the owner, \"64 yes\", orch-2026-10-30a …cc7db847; not in force until this ticket merges; arch-E1 …d8150777, results …c524a01d, PREREG …01c2d6a5 sealed b11b802f; merged 6e11bd97). Q-3K-4 = (b): B7 graded on NFR-005's floor, \"≥ base\" reported. QE-269-a ruled (a) (arch-ABC-269-rule …8ccb561f): B1 (d) is the 6 graded endings D1–D6; S1–S3 a report, E3's (ABC-270). Follows ADR-0026 d10's pattern; revises ABC-083's \"untapered by decision\"; carries the taper half of the ADR-0031 addendum"
+adr: "ADR-0064 (ACCEPTED 2026-11-02 by the owner, \"64 yes\", orch-2026-10-30a …cc7db847; in force on main from this ticket's merge 54dee3f2 by its own § Status, the Architect's dated in-force line owed by arch-post-269; was: not in force until this ticket merges; arch-E1 …d8150777, results …c524a01d, PREREG …01c2d6a5 sealed b11b802f; merged 6e11bd97). Q-3K-4 = (b): B7 graded on NFR-005's floor, \"≥ base\" reported. QE-269-a ruled (a) (arch-ABC-269-rule …8ccb561f): B1 (d) is the 6 graded endings D1–D6; S1–S3 a report, E3's (ABC-270). Follows ADR-0026 d10's pattern; revises ABC-083's \"untapered by decision\"; carries the taper half of the ADR-0031 addendum"
 ---
 
 # ABC-269: one tapered evaluation, the king and the passers by phase (E1)
+
+> **CLOSED 2026-11-03, DONE, by BA/PM** (task `bapm-269-done`, records only, at `main` `128e3c6c`; nothing run, built
+> or timed). **Merged to local `main` at `54dee3f2`** from `grugops/ABC-269` (candidate `be87a2f1`; code `b7a8fc3a`,
+> then cut C1 `561fc028`). Not pushed. The first `EPIC-011` evaluation change, and the first Phase 4 merge. Sources:
+> QE `qe-ABC-269` `…eff2fe64` (verdict), `…cebf49fe` (`G2`), `…48b34063` (B5 / B7), `…2c51ee30` (B8),
+> `…3fb121de` (step 3), `…9ba289c2` (gaps); the Architect `arch-ABC-269-F3` `…a0468a78` / PREREG `…e36ee7ca`; the
+> Engineer `se-ABC-269` `…669f366c`, `se-ABC-269-cut` `…c9da2d0f`; the Orchestrator's board line (`128e3c6c`).
+>
+> **Result**
+> - **F3 fired once, and the one allowed cut passed.** The first build read B6 (`G2`) at 1.071 × / 1.067 × against
+>   ≤ 1.05 × (`…669f366c`). The Architect ordered cut C1: the phase leaves the board walk and rides the recursion as
+>   one integer, node-equal by B0 (`…a0468a78`). The Engineer built it with P1–P7 all met and zero re-pins
+>   (`…c9da2d0f`). QE's single re-read under PREREG `…e36ee7ca`: sessions 1.0186 and 1.0560, **mean 1.0373 ≤ 1.0500,
+>   MET** (controls 1.0200 / 0.9974). No bar moved.
+> - **QE: PASS_WITH_GAPS, no gap blocking. It signs UAT** (test note 7; owner delegation `…5aaf7cec` item 2).
+>
+>   | row | bar | read | result |
+>   |---|---|---|---|
+>   | B0 | 11 counts exact | 11 / 11 (re-read by QE) | MET |
+>   | B1–B4 | as § Acceptance criteria | the Engineer's (`…669f366c`, `…c9da2d0f`); B1 (d) D1–D6 +75 / +34 / +85 / +44 / +55 / +35, re-read by QE | MET |
+>   | B5 cut audit | flips ≤ 0.5 %, 0 ≥ 200 cp | 1 / 2 986 (0.033 %), max 17 cp | MET |
+>   | B6 `G2` | mean of two sessions ≤ 1.0500 | 1.0373 | MET |
+>   | B7 `G6` (`Q-3K-4` = (b)) | every run depth ≥ 6 | kiwipete 9 × 5, position-6 10 × 5; WARN 0; medians equal base (reported) | MET |
+>   | B8 C2′ (GAIN) | 100 / 100, 0 faults, 0 time losses, ≥ 50.0 | **57.0 / 100** (W / L / D 44 / 30 / 26), +49.0 ± 59.5 Elo, LOS 94.8 % | MET |
+>   | B8 S′ | 10 / 10, 0 faults, 0 time losses, ≥ 3.0 at E 1 810 | **7.0 / 10** (7 / 3 / 0) | MET |
+>   | B8 Levels | exit 0, all pass | 57 / 57 | MET |
+>   | S1–S3 (report) | forecast +13 / +13 / +23 | +13 / +13 / +23 | equal; `ABC-270`'s graded rows |
+>
+>   - Falsifiers: F3 fired on the first build and cleared on the cut; F1, F5 and F6 do not fire.
+>   - **B8 is a pass, not a proven gain.** The Elo interval crosses 0 (`QE-269-i`). `EPIC-011` C3″ (G7) is the net
+>     check across the epic.
+> - **Post-merge on `main`:** `npm test` 2 566 / 2 566 (the Orchestrator's board line). `ADR-0064` is in force on `main`
+>   from this merge by its own § Status; the Architect's dated in-force line is owed by `arch-post-269`.
+> - **QE's gaps, each with its owner** (`…9ba289c2`; none blocks; nothing is owed for this ticket):
+>
+>   | id | level | what | owner and where it goes |
+>   |---|---|---|---|
+>   | `QE-269-f` | LOW | `G2` met by about one session's spread (session 2 alone 1.0560; margin 0.0127) | Architect/Design: guidance for `ABC-274`'s `G2` PREREG in `ADR-0067` F8 / A5's line (`arch-post-269` item 2); the 1.0500 bar does not move |
+>   | `QE-269-g` | INFO | "odd rounds reversed" in the PREREG against `g2b.ts`'s 0-based `r % 2` | Architect/Design: the wording for later PREREGs (`arch-post-269` item 2) |
+>   | `QE-269-h` | INFO | the cut costs +2.4–4.5 % ns per node against `main` (report) | none owed; recorded here. B7 shows no depth lost at 4 000 ms. It is the base `ABC-274`'s A5 reads against |
+>   | `QE-269-i` | INFO | B8's interval crosses 0 | none owed; recorded here and on `EPIC-011`; C3″ at the epic's close is the net check |
+>   | `QE-269-j` | INFO | the rating tool needs `CUTECHESS_CLI` and `STOCKFISH` set, with no default | Orchestrator: a line in the QE brief template or runbook. The Architect names the variables in R1's command (`arch-post-269` item 4) |
+>   | `QE-269-k` | INFO | S′ 7.0 / 10 at E 1 810 joins the S′ pool now that this ticket merged | Architect/Design: the pool and whether a step fires, in `ADR-0056` S′ (`arch-post-269` item 3). `EPIC-011` § Close-out points there and does not compute it |
+>
+> - **What the merge releases** (records elsewhere): `ABC-274` (E2-pre) DoR row 10 met, 10/10; `ABC-270`, `ABC-271`,
+>   `ABC-272` and `ABC-273` no longer wait on this merge; `ABC-239`'s first hard wait is met. `EPIC-011` § Phases and
+>   § Tickets.
+> - Front matter: `status: done`, `column: Done`, with a `closed:` line. The board reads Done (the Orchestrator's,
+>   2026-11-03). Nothing below this block is edited.
 
 > **`QE-269-a` RULED (a), NO BAR MOVED; THE ARCHITECT'S OWED LINES FOLDED, 2026-11-03, by BA/PM** (task
 > `bapm-ABC-269-fold`, records only, at `main` `2c304327`; nothing run). Owner: `ADR-0064` accepted, `Q-3K-4` = (b)

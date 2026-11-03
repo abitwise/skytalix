@@ -12,6 +12,13 @@ adr: "ADR-0056 D5 / D6 item 7 (R milestone readings) and C4's 100 ms outside-rea
 
 # ABC-273: R1, the first milestone reading of the climb
 
+> **`ABC-269` MERGED, 2026-11-03, by BA/PM** (task `bapm-269-done`, records only, at `main` `128e3c6c`; nothing run).
+> `ABC-269` (E1) merged to local `main` at `54dee3f2` (QE PASS_WITH_GAPS `qe-ABC-269` `…eff2fe64`), so this page's wait
+> on that merge is **met**. DoR stays 9/10: row 10 is the control ruling alone, which the Architect is writing
+> (`arch-post-269` item 4: R1–R3's survival, the exact command with `CUTECHESS_CLI` and `STOCKFISH` set, `QE-269-j`, and
+> whether its host time needs the owner's ask). **R1's window is open:** it reads `main` after `ABC-269` and before
+> `ABC-239` merges. `ABC-274` changes no value, so it does not close the window (`EPIC-011` § Dependencies).
+
 > **Cut 2026-11-03 by BA/PM: DoR 9/10, Backlog** (task `bapm-epic011-cut`, records only, at `main` `17725732`; nothing
 > run). Source: `EPIC-011` § Phases (R1, *"read after E1"*, the Orchestrator's ruling of 2026-11-02: "R1 reading
 > deferred to after E1 (saves host time)") and this task's gap analysis. **A reading, not a strength change:** it is
@@ -76,7 +83,7 @@ adr: "ADR-0056 D5 / D6 item 7 (R milestone readings) and C4's 100 ms outside-rea
 
 ## Dependencies
 
-- **`ABC-269` merged.** Hard.
+- **`ABC-269` merged.** Hard. *Met 2026-11-03: merged to local `main` at `54dee3f2` (`bapm-269-done`).*
 - **The control ruling** (the Orchestrator or the Architect): that R1 survives the owner-answers fold in C4's 100 ms
   shape, and the exact `r` / `rpair` command (Stockfish `st=0.1` or the 0.5 s S′ control).
 
