@@ -1,0 +1,21 @@
+start 2026-11-03T12:06:49Z  12:06:49 up 4 days,  4:24,  1 user,  load average: 2.00, 1.66, 1.41
+chip: AMD Ryzen AI 9 HX 370 w/ Radeon 890M
+linux: 7.0.0-42-generic
+node: /home/olger/.nvm/versions/node/v26.12.1/bin/node v26.12.1
+cutechess-cli: cutechess-cli 1.5.1 sha256 dc77690113d9ae130f5d1b4c76fefb28f42620ac45a2bd4abb7dd8eb2154f40a = pin
+stockfish: id name Stockfish 19 sha256 c78c22a924e8d452e1089ec8d47826f7a276aba69373185e82cbac4593e352d2 = pin
+openings: /home/olger/projects/public/skytalix/.claude/worktrees/se-ABC-269/tools/rating/openings.epd sha256 0d7f7a72678cbf54c2c309dc5d664e7aac5de2c15bc54fe4247a437f51e82666
+harness: /home/olger/projects/public/skytalix/.claude/worktrees/se-ABC-269 at be87a2f173a28a7d514da631f30065253df75b03
+concurrency: 1 (default 2)
+control: skytalix st=0.5 timemargin=50
+Elo difference: 147.2 +/- 385.0, LOS: 89.7 %, DrawRatio: 0.0 %
+W/L/D: 7/3/0  score: 0.700  games: 10 of 10
+draw ratio: 0.0 %
+faults: 0  unclassified: 0  move-cap draws: 0
+skytalix.stderr: 0 bytes
+stockfish.stderr: 0 bytes
+stockfish depth guard: 0 of 329 moves below depth 4
+state: rating E + X ± Y = 1810 + 147.2 ± 385.0 = 1957.2 ± 385.0
+
+exit=0
+end 2026-11-03T12:12:11Z  12:12:11 up 4 days,  4:30,  1 user,  load average: 1.16, 1.41, 1.37

@@ -1,0 +1,9 @@
+D1 none door -55 frozen -55 E1 75
+D2 partial door -96 frozen -96 E1 34
+D3 none door -45 frozen -45 E1 85
+D4 partial door -86 frozen -86 E1 44
+D5 none door -35 frozen -35 E1 55
+D6 none door -55 frozen -55 E1 35
+S1 full door -117 frozen -117 E1 13
+S2 full door -117 frozen -117 E1 13
+S3 full door -107 frozen -107 E1 23

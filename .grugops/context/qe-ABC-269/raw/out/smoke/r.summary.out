@@ -1,0 +1,47 @@
+Started game 1 of 10 (skytalix vs stockfish)
+Finished game 1 (skytalix vs stockfish): 1-0 {White mates}
+Score of skytalix vs stockfish: 1 - 0 - 0  [1.000] 1
+Started game 2 of 10 (stockfish vs skytalix)
+Finished game 2 (stockfish vs skytalix): 0-1 {Black mates}
+Score of skytalix vs stockfish: 2 - 0 - 0  [1.000] 2
+Started game 3 of 10 (skytalix vs stockfish)
+Finished game 3 (skytalix vs stockfish): 1-0 {White mates}
+Score of skytalix vs stockfish: 3 - 0 - 0  [1.000] 3
+Started game 4 of 10 (stockfish vs skytalix)
+Finished game 4 (stockfish vs skytalix): 1-0 {White mates}
+Score of skytalix vs stockfish: 3 - 1 - 0  [0.750] 4
+Started game 5 of 10 (skytalix vs stockfish)
+Finished game 5 (skytalix vs stockfish): 1-0 {White mates}
+Score of skytalix vs stockfish: 4 - 1 - 0  [0.800] 5
+Started game 6 of 10 (stockfish vs skytalix)
+Finished game 6 (stockfish vs skytalix): 0-1 {Black mates}
+Score of skytalix vs stockfish: 5 - 1 - 0  [0.833] 6
+Started game 7 of 10 (skytalix vs stockfish)
+Finished game 7 (skytalix vs stockfish): 0-1 {Black mates}
+Score of skytalix vs stockfish: 5 - 2 - 0  [0.714] 7
+Started game 8 of 10 (stockfish vs skytalix)
+Finished game 8 (stockfish vs skytalix): 0-1 {Black mates}
+Score of skytalix vs stockfish: 6 - 2 - 0  [0.750] 8
+Started game 9 of 10 (skytalix vs stockfish)
+Finished game 9 (skytalix vs stockfish): 0-1 {Black mates}
+Score of skytalix vs stockfish: 6 - 3 - 0  [0.667] 9
+Started game 10 of 10 (stockfish vs skytalix)
+Finished game 10 (stockfish vs skytalix): 0-1 {Black mates}
+Score of skytalix vs stockfish: 7 - 3 - 0  [0.700] 10
+...      skytalix playing White: 3 - 2 - 0  [0.600] 5
+...      skytalix playing Black: 4 - 1 - 0  [0.800] 5
+...      White vs Black: 4 - 6 - 0  [0.400] 10
+Elo difference: 147.2 +/- 385.0, LOS: 89.7 %, DrawRatio: 0.0 %
+SPRT: llr 0 (0.0%), lbound -inf, ubound inf
+
+Player: skytalix
+   "Loss: Black mates": 2
+   "Loss: White mates": 1
+   "Win: Black mates": 4
+   "Win: White mates": 3
+Player: stockfish
+   "Loss: Black mates": 4
+   "Loss: White mates": 3
+   "Win: Black mates": 2
+   "Win: White mates": 1
+Finished match

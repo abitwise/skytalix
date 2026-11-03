@@ -1,0 +1,18 @@
+{
+ "refs": [
+  "qe-ABC-269", "grugops/ABC-269", "ABC-269", "EPIC-011", "E1", "ADR-0064", "ADR-0031", "ADR-0061", "NFR-005", "Q-3K-4",
+  "B5", "B6", "B7", "B8", "G2", "G6", "F3", "F5", "F6", "C1",
+  "561fc028", "be87a2f1", "01a67c5d", "4d6b117b", "58fa3eb4", "110292d4", "b8b44ff3",
+  "src/evaluate.ts", "src/search.ts", "src/engine.ts", "src/quiescence.ts",
+  "arch-ABC-269-F3/20261103T105957Z-architect-design-decision-e36ee7ca",
+  "arch-ABC-269-F3/20261103T105957Z-architect-design-decision-a0468a78",
+  "se-ABC-269-cut/20261103T112851Z-software-engineer-decision-8e00e712",
+  "se-ABC-269-cut/20261103T112851Z-software-engineer-observation-c9da2d0f"
+ ],
+ "notes": [
+  {"kind": "observation", "bodyFile": "note-g2.md",
+   "confidence": "high: read once exactly per the sealed PREREG (arms, N, rounds, order, statistic); both sessions valid on the C control; MET by 0.0127 on the unrounded mean; single host, ALONE window, load1 0.58-1.22"},
+  {"kind": "decision", "bodyFile": "note-prereg.md",
+   "confidence": "high: bars copied verbatim from the ABC-269 ticket and ADR-0064 d8 before any B8 / S-prime / Levels run; commands fixed; nothing loosened"}
+ ]
+}

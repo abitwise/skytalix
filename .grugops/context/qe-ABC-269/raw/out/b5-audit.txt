@@ -1,0 +1,9 @@
+start 2026-11-03T11:34:33Z  11:34:33 up 4 days,  3:52,  1 user,  load average: 0.69, 0.85, 0.96
+{"mode":"audit","depth":6,"every":10,"rows":190,"firing":30689,"sampled":2986,"sampleSha":"c6f4f678a2bdc64b"}
+{"key":"all","n":2986,"flips":1,"ffl":1,"ffh":0,"e100":0,"e200":0,"e300":0,"e500":0,"unstable":0,"doorNoise":0,"nullWindow":2986,"skippedBand":0,"flipPct":0.033}
+{"key":"d1","n":1945,"flips":0,"ffl":0,"ffh":0,"e100":0,"e200":0,"e300":0,"e500":0,"unstable":0,"doorNoise":0,"nullWindow":1945,"skippedBand":0,"flipPct":0}
+{"key":"d2","n":977,"flips":1,"ffl":1,"ffh":0,"e100":0,"e200":0,"e300":0,"e500":0,"unstable":0,"doorNoise":0,"nullWindow":977,"skippedBand":0,"flipPct":0.102}
+{"key":"d3","n":64,"flips":0,"ffl":0,"ffh":0,"e100":0,"e200":0,"e300":0,"e500":0,"unstable":0,"doorNoise":0,"nullWindow":64,"skippedBand":0,"flipPct":0}
+{"flip":{"err":17,"fen":"r3k2r/p1ppqpb1/1n3np1/3pN3/1p2PQ2/7P/PPPBNP1P/R3K2R b KQkq - 0 3","depth":2,"alpha":415,"beta":416,"h":415,"dnw":420,"v":432}}
+exit=0
+end 2026-11-03T11:34:56Z  11:34:56 up 4 days,  3:53,  1 user,  load average: 0.78, 0.86, 0.96
