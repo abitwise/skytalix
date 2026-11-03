@@ -1,0 +1,8 @@
+{
+  "refs": ["ABC-278", "EPIC-011", "qe-ABC-278", "grugops/ABC-278", "d7c0b3ce", "c4a2bf97", "b9b50811", "se-ABC-278/20261103T153716Z-software-engineer-decision-5b424fec", "se-ABC-278/20261103T153716Z-software-engineer-observation-476142cf", "se-ABC-278/20261103T153716Z-software-engineer-observation-ada9e5a7", "qe-ABC-277/20261103T151952Z-qe-e2e-observation-7d149fbd", "ADR-0049", "QE-277-a", "QE-277-b", "QE-277-c", "QE-277-d", "QE-277-e", "QE-277-f", "QE-278-a", "QE-278-b", "QE-278-c", "NFR-008", "tools/grugops/records-path-check.js", "tools/grugops/records-path-check.proof.js", "memory-bank/70-runbook.md", ".grugops/context/qe-ABC-278/raw/scripts/harness.mjs", ".grugops/context/qe-ABC-278/raw/scripts/fa-recount.mjs", ".grugops/context/qe-ABC-278/raw/out/harness-run.txt", ".grugops/context/qe-ABC-278/raw/out/harness-run-main-check.txt", ".grugops/context/qe-ABC-278/raw/out/qe277-harness-rerun.txt", ".grugops/context/qe-ABC-278/raw/out/fa-recount-361a5af3.txt", ".grugops/context/qe-ABC-278/raw/out/fa-recount-fdc8d0dc.txt"],
+  "notes": [
+    { "kind": "decision", "confidence": "high (every row re-run by QE under the host lock with QE's own run-time fixtures, CLI spawned with no seam, red baseline on main's check; verdict and severities are QE's judgement)", "bodyFile": "notes/verdict.md" },
+    { "kind": "observation", "confidence": "high (commands as run 2026-11-03 under the host lock)", "bodyFile": "notes/runs.md" },
+    { "kind": "observation", "confidence": "high on the facts (run and counted); severities and owners are QE's judgement", "bodyFile": "notes/gaps.md" }
+  ]
+}

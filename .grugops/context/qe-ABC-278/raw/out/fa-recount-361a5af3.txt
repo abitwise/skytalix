@@ -1,0 +1,4 @@
+rev 361a5af3: 16421 blobs; text 16223; skipped NUL 1; skipped .gz/.xz 197; foreign-argv lines before 77, after 80; newly hit 3; no longer hit 0
+new .grugops/context/qe-ABC-174/probe/window1.out:16 also-other
+new .grugops/context/qe-ABC-174/probe/window1.out:23 also-other
+new .grugops/context/secnfr-ABC-122/notes/20260925T151100Z-security-nfr-observation-abc122-n8lane-met-plus-670ms-gross-350ms-net-sign-8of8-wrapper-unresolvable-2ff3a7b8.md:62 only-argv
