@@ -19,3 +19,20 @@ Source: Orchestrator note `20261103T200613Z-orchestrator-decision-af126c04` (own
 memory-bank/50-decisions, that one summary.txt line, and your records. Do NOT edit ticket pages or EPIC-011 — list owed lines in a note for BA/PM. No push, force, amend, rebase, merge into main.
 ## Publish
 Sealed notes (task arch-owner-answers-1103, contextRoot = worktree's .grugops/context, `at` from `date -u`); queue moves inside your worktree; commit; ## Result + trace row; brief + claim to done/. Run `node tools/grugops/records-path-check.js --base main` before your last commit; it must exit 0.
+
+## Result
+by: architect-design (claude-opus-5-5), at: 2026-11-03T20:21:22Z. Records only. The one run was a data-size probe under the host lock (the export's index files plus HTTP HEAD, under 2 s; `.grugops/context/arch-owner-answers-1103/raw/lichess-probe.txt`).
+- **ADR-0067: ACCEPTED 2026-11-03, IN FORCE as the method.** E2-pre (`ABC-274`) merged at `2410d4f7` (QE `…fa87f74d`); F8 did not fire. Decision-log rows, a decision 9 pointer, B-T8 approved, and a § Consequences dated line (item 8: `ABC-270`'s design starts now; the build order is the Orchestrator's).
+- **ADR-0067 § Addendum 2026-11-03, the data pin:** `lichess_db_standard_rated_2017-03.pgn.zst` (2 169 142 067 B, 11 346 745 games, sha256 `b319297e…4320`).
+  - Game filters: rated standard, base ≥ 180 s, both ratings ≥ 2000 with a gap ≤ 200, `Termination` Normal, no BOT, legal replay, de-dup.
+  - Positions: ply ≥ 16, key-hash mod 8, not in check, quiet; leakage dropped on the Lichess side only.
+  - Cap 1 000 000 positions; STOP below 250 000. The file is streamed via `node:zlib` zstd. Heap flag 3000 MB. One run is estimated at 10–15 min, with a hard limit of 30 min.
+  - Validation is own games only. **Own games carry 0.5 of the loss.** K is fitted per source. Material stays frozen.
+  - Provenance: URL, bytes and sha256 in the manifest (never a local path); the tool refuses a wrong hash.
+  - B-T0–B-T8 and F1–F7 re-read: **no bar moved.**
+- **ADR-0056:** status fold, D2 and D7 dated lines. Q-3K-7 (a) yes / (b) no / (c) no, B-T8 approved, Q-3K-9 yes. Still open: Q-3K-6 and Q-3K-8.
+- **ADR-0024:** d4 is open for **Q1's design only**. A build ships on C2′, 100 games at 100 ms.
+- **ADR-0048:** Lichess CC0 data is admitted for tuning. It is data, not code, with its provenance in the tool's output. `NOTICE` is unchanged.
+- **SEC-HP-2 (`ABC-277` A7):** line 5 is now `foreign=[<foreign: vitest> count=3]`, a one-line commit `1e558566`. A7's page says "2 processes", but the line held 3 (owed to BA/PM).
+- **Notes:** `arch-owner-answers-1103` `20261103T202041Z-architect-design-decision-ab9f83a3`, `20261103T202049Z-architect-design-observation-08beac19` (artifacts), `20261103T202049Z-architect-design-observation-e81f6b25` (owed lines: BA/PM's `ABC-239` / `ABC-277` / `EPIC-011` / Q1; Architect later: `ADR-0064` pointer, `ADR-0067` decision 9 label).
+- **Owner questions: none.**
