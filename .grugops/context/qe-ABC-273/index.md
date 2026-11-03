@@ -1,0 +1,11 @@
+<!-- GENERATED — do not hand-edit. Re-run: node scripts/context-io.js render <task> -->
+# Context: qe-ABC-273
+
+## Current state
+
+| at | kind | by | confidence | verified_by | note |
+| --- | --- | --- | --- | --- | --- |
+| 2026-11-03T13:11:38Z | decision | qe-e2e | high: bars and outcome consequences copied from ABC-273 R1-A1..A3, ABC-204 A4 and arch-post-269 before any game; time 0.4-0.9 h is an estimate (UNKNOWN - verify until the run) |  | # qe-ABC-273 PREREG for R1, sealed before any game: one run of 200 games (`r` at 100 ms, E 1 810) on `main`'s `src/` tree `4d6b117b`, estimated 0.4–0.9 h (under 1 h, so not asked). The validity bars, the figures and the band-rule consequence of each outcome are fixed here. A miss is reported, never re-played |
+| 2026-11-03T13:51:41Z | decision | qe-e2e | high: read once per sealed PREREG 3cda6a60; 200/200 valid, 0 faults, 0 time losses, depth guard 0; figure 1806.5 +/- 47.4 is one 200-game sample on its own scale; gates nothing |  | # qe-ABC-273 R1 reading on `main` `85a304ff` (`src/` `4d6b117b`, after E1): **VALID. 99.0 / 200 (49.5 %) against Stockfish 19 at E 1 810, Elo −3.5 ± 47.4, so X = 1 806.5 ± 47.4** (opening-cluster ± 48.4). 0 faults, 0 time losses, depth guard 0 of 10 508. Inside the 25–75 % band, so **E 1 810 is confirmed: no step, no second run, no owner ask.** Highest milestone met: **none** (E < 2 200). Read once under PREREG `…3cda6a60` |
+| 2026-11-03T13:51:41Z | observation | qe-e2e | high: commands as run under the host lock 2026-11-03 13:11-13:48Z; timings and host samples from the run's own logs |  | # qe-ABC-273 runs: commands as run, host, test data and checks (one 200-game run plus G11; nothing re-played, nothing left running) |
+| 2026-11-03T13:51:41Z | observation | qe-e2e | high on the facts (read and run); severities are QE's judgement |  | # qe-ABC-273 gaps: **none blocking (this reading gates nothing).** QE-273-a INFO (Orchestrator): a foreign vitest ran in 10 % of an ALONE window's samples. QE-273-b LOW (Security/NFR, then BA/PM): `r` writes `cmd.txt` / `machine.txt` with raw host paths, and 101 committed `raw/` files carry the home path. QE-273-c INFO (BA/PM): R1-A1's "re-run once" conflicts with R1-A3's ask. QE-273-d INFO: a colour split, reported only |

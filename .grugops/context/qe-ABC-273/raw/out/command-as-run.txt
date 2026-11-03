@@ -1,0 +1,3 @@
+launched 2026-11-03T13:12:07Z, ended 2026-11-03T13:47:36Z, exit 0 (driver raw/scripts/run.sh, under flock <scratch>/host-test.lock)
+CUTECHESS_CLI=<cutechess-cli> STOCKFISH=<stockfish> node tools/rating/rating.ts r 85a304ff <out> --elo 1810 --budget-ms 100 --rounds 100 --concurrency 1
+(both variables set to the pinned binaries; sha256 = pin on both machine.txt lines; paths redacted per ADR-0049 d4)
