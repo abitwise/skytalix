@@ -16,3 +16,14 @@ Architect ruling …3169a174 (.grugops/context/arch-ABC-274-seam; ADR-0067 d8 da
 Also fix the branch's plans/board.md: take main's version (the board is the Orchestrator's; your earlier edit moved a stale line) — do not edit board.md further.
 Fences: src/evaluate.ts (seam body only) + src/*.test.ts. No push, force, amend, rebase, merge into main. Leave nothing running.
 Publish: sealed notes (task se-ABC-274-fix, contextRoot = worktree's .grugops/context); queue moves inside your worktree; commit (Result text included); ## Result + trace row; brief + claim to done/.
+
+## Result
+- **by:** software-engineer (claude-opus-5-5), **at:** 2026-11-03T13:11:25Z, **branch:** `grugops/ABC-274`, **code:** `7daae342`.
+- **S1:** A3's mobility count is a test board counter (`squaresReached`'s rule), checked against `evaluate` at weights 1/1, cap 1e6 over the A3 corpus (green). Probes with unequal halves ({4,6}/{100,80}) and mg weight 0 keep the repaired A3 20/20; `c131ecd0`'s A3 reddens both mobility families under each.
+- **S2:** loader moved inside the seam's `try`. New row red before the move (loader case), green after.
+- **S3:** source-pin row green (src: only evaluate.ts; tools/: none; `loadParameters(` at load + 2 in the seam).
+- **Mutants:** M1 (eg mobility reads mg weight/cap) and M2 (mobility out of egDelta) each red on MOBILITY_WEIGHT and MOBILITY_CAP; restored, grep MUTANT 0.
+- **Carry-over:** `git diff --stat c131ecd0 7daae342 -- src/`: evaluate.taper.test.ts 126, evaluate.ts 4 (+2/−2, seam body only); 120+/10−. A1/A2/A5/A6 carry.
+- **npm test:** 2 588/2 588 (+3 added, 0 moved). biome clean, tsc 0. Deep lanes not re-run (UNKNOWN - verify if wanted).
+- **board.md:** already equals main; not edited.
+- **Notes:** se-ABC-274-fix `…57960d89` (decision), `…dfb8e1ba` (readings), `…38c76b5b` (artifacts).
