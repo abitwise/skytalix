@@ -1,0 +1,8 @@
+{
+  "refs": ["ABC-278", "EPIC-011", "se-ABC-278", "grugops/ABC-278", "d7c0b3ce", "ADR-0049", "qe-ABC-277/20261103T151952Z-qe-e2e-observation-7d149fbd", "QE-277-a", "QE-277-b", "QE-277-c", "QE-277-d", "QE-277-e", "QE-277-f", "NFR-008", "tools/grugops/records-path-check.js", "tools/grugops/records-path-check.proof.js", "memory-bank/70-runbook.md", ".grugops/context/se-ABC-278/raw/fa-measure.mjs", ".grugops/context/se-ABC-278/raw/out/fa-measure-361a5af3.txt"],
+  "notes": [
+    { "kind": "decision", "confidence": "high (design as built; each fix guarded by a row that goes red without it)", "bodyFile": "notes/decision.md" },
+    { "kind": "observation", "confidence": "high (every row and gate run under the host lock and read as printed)", "bodyFile": "notes/acceptance.md" },
+    { "kind": "observation", "confidence": "high", "bodyFile": "notes/branch.md" }
+  ]
+}
