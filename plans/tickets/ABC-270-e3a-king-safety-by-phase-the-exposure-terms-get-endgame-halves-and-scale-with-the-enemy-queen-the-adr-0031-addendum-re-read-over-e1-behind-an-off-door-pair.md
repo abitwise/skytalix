@@ -12,6 +12,16 @@ adr: "ADR-0068: ACCEPTED 2026-11-03 by the owner (\"yes, accept ADR-0068 and ADR
 
 # ABC-270: king safety by phase, the queen-on structure (E3a)
 
+> **THE PHASE-24 TWINS CARRY LITERAL FENS, 2026-11-03, by BA/PM** (task `bapm-ABC-239-rulings`, records only, at
+> `main` `4230d409`; nothing run). Source: the Architect's owed lines `arch-ABC-239-rulings` `…c54dda72` and
+> `ADR-0067` ruling (b) ("the rows' FENs are constants in `tools/tune`, and a source row checks that each FEN appears
+> literally in its test file"). **No bar moved. DoR stays 10/10.** The column is the Orchestrator's (In Development,
+> `se-ABC-270`).
+> - **K1 (e) gains one line, and so does test note 7:** each phase-24 twin of `ABC-083` A2 (b) and A3 (b) carries its
+>   FEN as one full string literal in its test file. `ABC-239`'s fit may turn a twin into a bound (A2 (b)'s twin is
+>   forecast red on `da3f8599`'s mg values, `UNKNOWN - verify`), and `tools/tune` then pins that row by its FEN text.
+> - **Order unchanged:** `ABC-239`'s fit of record waits on this ticket's merge (`ADR-0068` d7).
+
 > **STRUCTURE ONLY, BY `ADR-0068` (ACCEPTED); DoR 10/10, READY; SIZE M → S, 2026-11-03, by BA/PM** (task
 > `bapm-owner-answers-1103b`, records only, at `main` `0bf243df`, `src/` tree `4cb84035`; nothing run). Sources: the
 > owner's *"yes, accept ADR-0068 and ADR-0069"* (`orch-2026-10-30a` `…401c3d09`), `ADR-0068` and the Architect's
@@ -175,6 +185,10 @@ struck, because the build is value-identical. Its play value is read only inside
   - **(d) The range row** (`ABC-274` A9) reads the new pairs' maxima, and the packed int16 range holds.
   - **(e) The re-found rows** (scope 5): each phase-24 twin of `ABC-083` A2 (b) / A3 (b) is green on the build and
     **red with its term zeroed**.
+    *2026-11-03 (`bapm-ABC-239-rulings`; `ADR-0067` ruling (b)):* **and each twin's FEN is literal.** **Given** the
+    test file that holds the twins, **when** it is read as text, **then** each twin's FEN appears in it as one full
+    string literal, not built by a helper, a template or a concatenation. That is because `ABC-239`'s `tools/tune` pins
+    a bound row by a source row that finds the FEN literally in its test file.
   - **A source row:** the queen flags come from the walk's existing non-pawn branch, and no new per-piece operation
     is added.
 - **K2 (zero re-pins).** In every lane, default and deep, **0** expectations are re-pinned. A row that needs one means
@@ -232,6 +246,10 @@ struck, because the build is value-identical. Its play value is read only inside
    not waived, although the build is value-identical (`…c858b5a5` § 5).*
 6. *2026-11-03 (`bapm-owner-answers-1103b`):* the PR lists the K0 counts it read, both sets if `main` moved, and the
    S2 nps figure as a report.
+7. *2026-11-03 (`bapm-ABC-239-rulings`; `arch-ABC-239-rulings` `…c54dda72`; `ADR-0067` ruling (b)):* **the phase-24
+   twins of `ABC-083` A2 (b) and A3 (b) (`ADR-0068` d5) carry their FENs as literal strings in the test file** (K1
+   (e)). If `ABC-239`'s fit turns a twin into an F3 bound, `tools/tune` holds that FEN as a constant, and a source row
+   checks that it appears literally in the test file. A twin whose FEN is computed would break that source row.
 
 ## Size and priority
 
@@ -272,7 +290,7 @@ struck, because the build is value-identical. Its play value is read only inside
 | 4 | testable, measurable acceptance | ✅ K0 seven exact counts; K1 0 mismatches, `Object.is` on the frozen corpora, exactly 3 × on ≥ 6 pairs, the range row, red-when-zeroed twins; K2 0 re-pins; K3 ≤ 1.05 ×; K4 median ≥ base and every run ≥ 6 |
 | 5 | dependencies known | ✅ `ADR-0068` accepted; `ABC-269` / `ABC-274` merged; before `ABC-239`'s fit; QE's freeze; collisions (`ABC-239`, `ABC-271`, `ABC-272`; `ABC-279` re-read rule) |
 | 6 | NFR triggers with targets | ✅ `NFR-005` K4 (≥ 6, median ≥ base); `G2` ≤ 1.05 ×; `NFR-009` six integers; `NFR-008` ≤ 10 s, units only in the default lane |
-| 7 | test notes | ✅ 1–6 |
+| 7 | test notes | ✅ 1–6 *(2026-11-03, `bapm-ABC-239-rulings`: 7, the twins' literal FENs)* |
 | 8 | size | ✅ S (was M) |
 | 9 | priority | ✅ P2 |
 | 10 | no major unresolved blocker | ✅ `ADR-0068` is written and ACCEPTED (`…401c3d09`); K0's counts are fixed; scope 3 is out by reading; the form of scope 2 is additive pairs |
