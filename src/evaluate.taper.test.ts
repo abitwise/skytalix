@@ -23,7 +23,7 @@
  * § Decision log). Their readings are in the build's notes, not asserted here.
  */
 
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync, statSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { makeMove, makeNullMove, unmakeMove, unmakeNullMove } from "./apply.ts";
 import { chooseMove, chooseMoveWithoutTaper } from "./engine.ts";
@@ -37,22 +37,28 @@ import {
   TAPER_PASSER_PHASES,
 } from "./evaluate.taper-corpus.ts";
 import {
+  type EvaluationParameters,
   evaluate,
   evaluateAtPhase,
+  evaluateWithoutMobility,
   evaluateWithoutTaper,
+  isPassedPawn,
   phaseAfterMove,
   phaseOf,
   VALUE_TABLES_FOR_TEST,
+  withParametersForTest,
 } from "./evaluate.ts";
 import * as PARAMS from "./evaluate-params.ts";
-import { parseFen } from "./fen.ts";
+import { parseFen, toFen } from "./fen.ts";
 import { legalMoves } from "./legal.ts";
 import { FLAG_CASTLE, FLAG_EN_PASSANT, type Move } from "./moves.ts";
 import {
   BISHOP,
+  BLACK,
   EMPTY,
   isBlack,
   isOnBoard,
+  KING,
   KNIGHT,
   PAWN,
   type Position,
@@ -783,3 +789,443 @@ if (RUN_DEEP) {
     }, 600_000);
   });
 }
+
+// ---------------------------------------------------------------------------
+// ABC-274 (E2-pre, `ADR-0067` decision 8): every term's two halves enter the blend, value-identical
+// at E1's table. A3 (the blend is live for every family) and A9 (the packed sums fit in int16).
+// ---------------------------------------------------------------------------
+
+/** White's point of view of a side-to-move score. */
+const whitePov = (position: Position, score: number): number =>
+  position.blackToMove ? 0 - score : score;
+
+/** Pawns of one colour per file (index 0 = a), ranks 2–7. */
+function pawnFiles(position: Position, black: boolean): number[] {
+  const files = [0, 0, 0, 0, 0, 0, 0, 0];
+  const own = black ? PAWN | BLACK : PAWN;
+  for (let rank = 1; rank <= 6; rank++) {
+    for (let file = 0; file < 8; file++) {
+      if (position.board[rank * 16 + file] === own) files[file] = (files[file] as number) + 1;
+    }
+  }
+  return files;
+}
+
+/** ABC-082's doubled count: pawns beyond the first on each file. */
+const doubledCount = (position: Position, black: boolean): number =>
+  pawnFiles(position, black).reduce((sum, n) => sum + Math.max(0, n - 1), 0);
+
+/** ABC-082's isolated count: pawns with no own pawn on an adjacent file. */
+function isolatedCount(position: Position, black: boolean): number {
+  const files = pawnFiles(position, black);
+  let count = 0;
+  for (let file = 0; file < 8; file++) {
+    const left = file > 0 ? (files[file - 1] as number) : 0;
+    const right = file < 7 ? (files[file + 1] as number) : 0;
+    if (left === 0 && right === 0) count += files[file] as number;
+  }
+  return count;
+}
+
+function passedCount(position: Position, black: boolean): number {
+  const own = black ? PAWN | BLACK : PAWN;
+  let count = 0;
+  for (let rank = 1; rank <= 6; rank++) {
+    for (let file = 0; file < 8; file++) {
+      const square = rank * 16 + file;
+      if (position.board[square] === own && isPassedPawn(position.board, square)) count++;
+    }
+  }
+  return count;
+}
+
+/** ABC-083's three king-file counts for one king, by the rule in `src/evaluate.ts`. */
+function kingFileCounts(
+  position: Position,
+  black: boolean,
+): { shelter: number; halfOpen: number; open: number } {
+  const board = position.board;
+  const king = board.indexOf(black ? KING | BLACK : KING);
+  const own = black ? PAWN | BLACK : PAWN;
+  const enemy = own ^ BLACK;
+  const step = black ? -1 : 1;
+  const counts = { shelter: 0, halfOpen: 0, open: 0 };
+  const kingFile = king & 7;
+  for (let file = Math.max(0, kingFile - 1); file <= Math.min(7, kingFile + 1); file++) {
+    const r1 = (king >> 4) + step;
+    const r2 = r1 + step;
+    const sheltered =
+      (r1 >= 0 && r1 <= 7 && board[r1 * 16 + file] === own) ||
+      (r2 >= 0 && r2 <= 7 && board[r2 * 16 + file] === own);
+    if (!sheltered) counts.shelter++;
+    let hasOwn = false;
+    let hasEnemy = false;
+    for (let rank = 1; rank <= 6; rank++) {
+      if (board[rank * 16 + file] === own) hasOwn = true;
+      else if (board[rank * 16 + file] === enemy) hasEnemy = true;
+    }
+    if (!hasOwn) {
+      if (hasEnemy) counts.halfOpen++;
+      else counts.open++;
+    }
+  }
+  return counts;
+}
+
+/**
+ * S1: mobility's count m, white minus black, by `ADR-0031` d2's attack-map rule as
+ * `squaresReached` states it: each non-pawn piece (the king too) counts the empty squares it
+ * reaches, plus the first occupied square on each line when it holds an enemy piece.
+ */
+function mobilityCount(position: Position): number {
+  const board = position.board;
+  const knight = [33, 31, 18, 14, -14, -18, -31, -33];
+  const king = [17, 16, 15, 1, -1, -15, -16, -17];
+  const diagonals = [17, 15, -15, -17];
+  const lines = [16, 1, -1, -16];
+  let count = 0;
+  for (let square = 0; square < 128; square++) {
+    if (!isOnBoard(square)) continue;
+    const piece = board[square] as number;
+    if (piece === EMPTY) continue;
+    const type = pieceType(piece);
+    if (type === PAWN) continue;
+    const black = isBlack(piece);
+    const reachable = (target: number): boolean => target === EMPTY || isBlack(target) !== black;
+    let reached = 0;
+    if (type === KNIGHT || type === KING) {
+      for (const step of type === KNIGHT ? knight : king) {
+        const to = square + step;
+        if (isOnBoard(to) && reachable(board[to] as number)) reached++;
+      }
+    } else {
+      const rays = type === BISHOP ? diagonals : type === ROOK ? lines : [...diagonals, ...lines];
+      for (const ray of rays) {
+        for (let at = square + ray; isOnBoard(at); at += ray) {
+          const target = board[at] as number;
+          if (reachable(target)) reached++;
+          if (target !== EMPTY) break;
+        }
+      }
+    }
+    count += black ? -reached : reached;
+  }
+  return count;
+}
+
+/** Pieces of `type` on files a–d (the A3 offset's squares), white minus black. */
+function queensideCount(position: Position, type: number): number {
+  let count = 0;
+  for (let rank = 0; rank < 8; rank++) {
+    for (let file = 0; file < 4; file++) {
+      const piece = position.board[rank * 16 + file] as number;
+      if (piece !== EMPTY && pieceType(piece) === type) count += isBlack(piece) ? -1 : 1;
+    }
+  }
+  return count;
+}
+
+function nonKingCount(position: Position): number {
+  let count = 0;
+  for (let square = 0; square < 128; square++) {
+    if (!isOnBoard(square)) continue;
+    const piece = position.board[square] as number;
+    if (piece === EMPTY || pieceType(piece) === KING) continue;
+    count += isBlack(piece) ? -1 : 1;
+  }
+  return count;
+}
+
+describe("ABC-274 A3 — the blend is live for every term family (ADR-0067 decision 8, scope 1)", () => {
+  /** The offset on one family's endgame half: a multiple of D, so a non-zero count always moves Δ. */
+  const C = 24;
+  const SPAN = PARAMS.PHASE_MG - PARAMS.PHASE_EG;
+  const plus = (values: readonly number[], at: (i: number) => boolean): number[] =>
+    values.map((value, i) => (at(i) ? value + C : value));
+  const queenside = (i: number): boolean => (i & 7) < 4;
+  const clamp = (value: number, cap: number): number => Math.max(-cap, Math.min(cap, value));
+  const weight = PARAMS.MOBILITY_WEIGHT.eg;
+  const cap = PARAMS.MOBILITY_CAP.eg;
+
+  /**
+   * S1 (`arch-ABC-274-seam`): the mobility count m, white minus black, by the test's own board
+   * counter (the `squaresReached` rule), so it reads neither weight nor cap and does not need the
+   * two mobility halves to be equal. Checked against `evaluate` (weights 1/1, cap not binding)
+   * by its own row below.
+   */
+  const reach = (position: Position): number => mobilityCount(position);
+
+  /** Each family: its offset table, and the Δ shift (white's view) the offset must cause. */
+  const pieceFamilies = (["pawn", "knight", "bishop", "rook", "queen", "king"] as const).map(
+    (piece, index) => ({
+      name: `PST.${piece}`,
+      params: {
+        ...PARAMS,
+        PST: {
+          ...PARAMS.PST,
+          [piece]: { mg: PARAMS.PST[piece].mg, eg: plus(PARAMS.PST[piece].eg, queenside) },
+        },
+      } as EvaluationParameters,
+      shift: (p: Position): number | null => C * queensideCount(p, index + 1),
+    }),
+  );
+  const kingFamily = (
+    name: "KING_SHELTER_MISSING" | "KING_FILE_HALF_OPEN" | "KING_FILE_OPEN",
+    key: "shelter" | "halfOpen" | "open",
+    pair: { readonly mg: number; readonly eg: number },
+  ) => ({
+    name,
+    params: { ...PARAMS, [name]: { mg: pair.mg, eg: pair.eg + C } },
+    shift: (p: Position): number | null =>
+      -C * (kingFileCounts(p, false)[key] - kingFileCounts(p, true)[key]),
+  });
+  const FAMILIES: {
+    name: string;
+    params: EvaluationParameters;
+    shift: (p: Position) => number | null;
+  }[] = [
+    {
+      name: "MATERIAL",
+      params: {
+        ...PARAMS,
+        MATERIAL: { mg: PARAMS.MATERIAL.mg, eg: plus(PARAMS.MATERIAL.eg, (i) => i >= 1 && i <= 5) },
+      },
+      shift: (p) => C * nonKingCount(p),
+    },
+    ...pieceFamilies,
+    {
+      name: "DOUBLED",
+      params: { ...PARAMS, DOUBLED: { mg: PARAMS.DOUBLED.mg, eg: PARAMS.DOUBLED.eg + C } },
+      shift: (p) => -C * (doubledCount(p, false) - doubledCount(p, true)),
+    },
+    {
+      name: "ISOLATED",
+      params: { ...PARAMS, ISOLATED: { mg: PARAMS.ISOLATED.mg, eg: PARAMS.ISOLATED.eg + C } },
+      shift: (p) => -C * (isolatedCount(p, false) - isolatedCount(p, true)),
+    },
+    {
+      name: "PASSED",
+      params: {
+        ...PARAMS,
+        PASSED: { mg: PARAMS.PASSED.mg, eg: plus(PARAMS.PASSED.eg, (i) => i >= 1 && i <= 6) },
+      },
+      shift: (p) => C * (passedCount(p, false) - passedCount(p, true)),
+    },
+    kingFamily("KING_SHELTER_MISSING", "shelter", PARAMS.KING_SHELTER_MISSING),
+    kingFamily("KING_FILE_HALF_OPEN", "halfOpen", PARAMS.KING_FILE_HALF_OPEN),
+    kingFamily("KING_FILE_OPEN", "open", PARAMS.KING_FILE_OPEN),
+    {
+      name: "MOBILITY_WEIGHT",
+      params: { ...PARAMS, MOBILITY_WEIGHT: { mg: PARAMS.MOBILITY_WEIGHT.mg, eg: weight + C } },
+      shift: (p) => {
+        const m = reach(p);
+        return clamp((weight + C) * m, cap) - clamp(weight * m, cap);
+      },
+    },
+    {
+      name: "MOBILITY_CAP",
+      // Three times C: the cap's offset bites only where |weight × m| is above the new cap.
+      params: { ...PARAMS, MOBILITY_CAP: { mg: PARAMS.MOBILITY_CAP.mg, eg: cap - 3 * C } },
+      shift: (p) => {
+        const m = reach(p);
+        return clamp(weight * m, cap - 3 * C) - clamp(weight * m, cap);
+      },
+    },
+  ];
+
+  /**
+   * The positions: the frozen corpora already in the repository (`G3`'s 184 in `buildCorpus` order,
+   * QE's E1 door corpus, then the mate corpus, `ABC-269` `B2`'s 287), each family's first six at
+   * phases 1–23 where the term is present (its shift is not 0). Chosen by that rule alone.
+   */
+  const CORPUS = [
+    ...buildCorpus().map((entry) => entry.position),
+    ...TAPER_DOOR_CORPUS.map((row) => parseFen(row.fen)),
+    ...MATE_CORPUS.map((fen) => parseFen(fen)),
+  ];
+
+  it("names every family in scope 1: material, the six square tables, the pawn and king-file terms, mobility", () => {
+    expect(FAMILIES.map((family) => family.name)).toEqual([
+      "MATERIAL",
+      "PST.pawn",
+      "PST.knight",
+      "PST.bishop",
+      "PST.rook",
+      "PST.queen",
+      "PST.king",
+      "DOUBLED",
+      "ISOLATED",
+      "PASSED",
+      "KING_SHELTER_MISSING",
+      "KING_FILE_HALF_OPEN",
+      "KING_FILE_OPEN",
+      "MOBILITY_WEIGHT",
+      "MOBILITY_CAP",
+    ]);
+  });
+
+  for (const family of FAMILIES) {
+    it(`${family.name}: the score is mg + trunc((Δ + offset) × (D − w) / D), exactly, on ≥ 3 positions at phases 1–23`, () => {
+      const rows = CORPUS.filter((position) => {
+        const phase = phaseOf(position);
+        const shift = family.shift(position);
+        return phase >= 1 && phase <= 23 && shift !== null && shift !== 0;
+      }).slice(0, 6);
+      expect(rows.length).toBeGreaterThanOrEqual(3);
+
+      // Read outside the seam, at E1's table: mg, Δ (the blend at phase 0 minus mg) and the
+      // offset's shift of Δ.
+      const e1 = rows.map((position) => {
+        const mg = whitePov(position, evaluateWithoutTaper(position));
+        const delta = whitePov(position, evaluateAtPhase(position, 0)) - mg;
+        return { mg, delta, shift: family.shift(position) as number };
+      });
+
+      withParametersForTest(family.params, () => {
+        rows.forEach((position, i) => {
+          const { mg, delta, shift } = e1[i] as { mg: number; delta: number; shift: number };
+          const w = Math.max(0, Math.min(SPAN, phaseOf(position) - PARAMS.PHASE_EG));
+          const expected = mg + Math.trunc(((delta + shift) * (SPAN - w)) / SPAN);
+          const fen = toFen(position);
+          expect(Object.is(evaluate(position), whitePov(position, expected)), fen).toBe(true);
+          // The middlegame half does not move, and at phase 0 the whole offset is read: a blend
+          // that ignored this family's endgame half would read 0 here.
+          expect(whitePov(position, evaluateWithoutTaper(position)), fen).toBe(mg);
+          expect(whitePov(position, evaluateAtPhase(position, 0)) - (mg + delta), fen).toBe(shift);
+        });
+      });
+    });
+  }
+
+  it("the seam leaves E1's table in place: every score after it equals the score before it", () => {
+    const before = CORPUS.map((position) => evaluate(position));
+    withParametersForTest(FAMILIES[0]?.params as EvaluationParameters, () => {
+      expect(CORPUS.some((position, i) => evaluate(position) !== before[i])).toBe(true);
+    });
+    expect(CORPUS.every((position, i) => Object.is(evaluate(position), before[i]))).toBe(true);
+  });
+
+  it("S1: the test's mobility count is the engine's, read with weights 1/1 and a cap that never binds", () => {
+    const unit = {
+      ...PARAMS,
+      MOBILITY_WEIGHT: { mg: 1, eg: 1 },
+      MOBILITY_CAP: { mg: 1_000_000, eg: 1_000_000 },
+    };
+    withParametersForTest(unit, () => {
+      for (const position of CORPUS) {
+        const term = whitePov(position, evaluate(position) - evaluateWithoutMobility(position));
+        expect(term, toFen(position)).toBe(mobilityCount(position));
+      }
+    });
+  });
+
+  it("S2: a throwing run and a throwing loader each throw out of the seam, and every score after is Object.is the score before", () => {
+    const before = CORPUS.map((position) => evaluate(position));
+    expect(() =>
+      withParametersForTest(FAMILIES[0]?.params as EvaluationParameters, () => {
+        throw new Error("run throws");
+      }),
+    ).toThrow("run throws");
+    expect(CORPUS.every((position, i) => Object.is(evaluate(position), before[i]))).toBe(true);
+    // The square tables and terms load first, then the missing mobility pair throws: a loader
+    // outside the seam's `try` would leave the offset tables in place.
+    const broken = {
+      ...(FAMILIES[0]?.params as EvaluationParameters),
+      MOBILITY_WEIGHT: undefined,
+    } as unknown as EvaluationParameters;
+    expect(() => withParametersForTest(broken, () => 0)).toThrow(TypeError);
+    expect(CORPUS.every((position, i) => Object.is(evaluate(position), before[i]))).toBe(true);
+  });
+
+  it("S3: only src/evaluate.ts and src/*.test.ts name the seam, no tools/ file does, and loadParameters( runs at load and in the seam only", () => {
+    const srcDirectory = new URL(".", import.meta.url).pathname;
+    const namers = readdirSync(srcDirectory)
+      .filter((file) => file.endsWith(".ts") && !file.endsWith(".test.ts"))
+      .filter((file) =>
+        readFileSync(`${srcDirectory}${file}`, "utf8").includes("withParametersForTest"),
+      );
+    expect(namers).toEqual(["evaluate.ts"]);
+
+    const toolsDirectory = new URL("../tools/", import.meta.url).pathname;
+    const toolFiles = (readdirSync(toolsDirectory, { recursive: true }) as string[])
+      .map((file) => `${toolsDirectory}${file}`)
+      .filter((file) => statSync(file).isFile());
+    expect(toolFiles.length).toBeGreaterThan(0);
+    expect(
+      toolFiles.filter((file) => readFileSync(file, "utf8").includes("withParametersForTest")),
+    ).toEqual([]);
+
+    const source = readFileSync(`${srcDirectory}evaluate.ts`, "utf8");
+    const calls = source
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line.includes("loadParameters(") && !line.startsWith("*"));
+    expect(calls).toEqual([
+      "function loadParameters(parameters: EvaluationParameters): void {",
+      "loadParameters(PARAMETERS);",
+      "loadParameters(parameters);",
+      "loadParameters(PARAMETERS);",
+    ]);
+    // The first call sits at module load (column 0); the other two are inside the seam's body.
+    expect(source).toContain("\nloadParameters(PARAMETERS);\n");
+    const seam = source.slice(source.indexOf("export function withParametersForTest"));
+    expect(seam.match(/loadParameters\(/g)?.length).toBe(2);
+  });
+});
+
+describe("ABC-274 A9 — the packed sums fit in int16, bounded from src/evaluate-params.ts's own maxima", () => {
+  /**
+   * A bound on |Σ half| (white minus black) over the terms inside the packed sum: material and
+   * square tables (one king, at most 15 other pieces a side, any of them the largest entry), the
+   * three pawn terms (at most 8 pawns a side, each doubled, isolated and passed at once) and the
+   * three king-file terms (at most 3 files per king). The king's square table enters the packed
+   * sum by its middlegame half in both halves (its Δ is read after the walk). Mobility is outside
+   * the packed sum: it is clamped, so it is not linear, and is carried as a pair of its own.
+   */
+  const bound = (params: EvaluationParameters, half: "mg" | "eg"): number => {
+    const material = params.MATERIAL[half];
+    const entries = (type: number, table: readonly number[]): number[] =>
+      table.map((value) => (material[type] as number) + value);
+    const king = entries(6, params.PST.king.mg);
+    const others = [
+      entries(1, params.PST.pawn[half]),
+      entries(2, params.PST.knight[half]),
+      entries(3, params.PST.bishop[half]),
+      entries(4, params.PST.rook[half]),
+      entries(5, params.PST.queen[half]),
+    ].flat();
+    const sideMax = Math.max(...king) + 15 * Math.max(0, ...others);
+    const sideMin = Math.min(...king) + 15 * Math.min(0, ...others);
+    const passed = Math.max(...params.PASSED[half].map(Math.abs));
+    const pawns = 8 * (passed + Math.abs(params.DOUBLED[half]) + Math.abs(params.ISOLATED[half]));
+    const kingFiles =
+      3 *
+      (Math.abs(params.KING_SHELTER_MISSING[half]) +
+        Math.max(
+          Math.abs(params.KING_FILE_HALF_OPEN[half]),
+          Math.abs(params.KING_FILE_OPEN[half]),
+        ));
+    return sideMax - sideMin + 2 * pawns + 2 * kingFiles;
+  };
+
+  it("Σ mg and Σ eg, white minus black, each lie inside −32 768 … 32 767", () => {
+    for (const half of ["mg", "eg"] as const) {
+      const b = bound(PARAMS, half);
+      console.log(`ABC-274 A9: |Σ ${half}| <= ${b} (int16 limit 32767)`);
+      expect(b).toBeLessThanOrEqual(32_767);
+      expect(-b).toBeGreaterThanOrEqual(-32_768);
+    }
+  });
+
+  it("the bound reads the table: a queen endgame half of 3 000 would turn it red", () => {
+    const heavy = {
+      ...PARAMS,
+      MATERIAL: {
+        mg: PARAMS.MATERIAL.mg,
+        eg: PARAMS.MATERIAL.eg.map((v, i) => (i === 5 ? 3000 : v)),
+      },
+    };
+    expect(bound(heavy, "eg")).toBeGreaterThan(32_767);
+    expect(bound(heavy, "mg")).toBe(bound(PARAMS, "mg"));
+  });
+});

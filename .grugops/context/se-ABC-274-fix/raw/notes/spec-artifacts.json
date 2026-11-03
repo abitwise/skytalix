@@ -1,0 +1,28 @@
+{
+ "refs": [
+  "se-ABC-274-fix",
+  "grugops/ABC-274",
+  "ABC-274",
+  "EPIC-011",
+  "E2-pre",
+  "ADR-0067",
+  "arch-ABC-274-seam/20261103T130452Z-architect-design-decision-3169a174",
+  "S1",
+  "S2",
+  "S3",
+  "A3",
+  "Q1",
+  "withParametersForTest",
+  "src/evaluate.ts",
+  "src/evaluate.taper.test.ts",
+  "c131ecd0",
+  "7daae342"
+ ],
+ "notes": [
+  {
+   "kind": "observation",
+   "confidence": "high: git diff --stat read; artifact-ref refused by the writer (no gate_run on this install), recorded as observation as se-ABC-274 \u2026a11e7540 was",
+   "bodyFile": "artifacts.md"
+  }
+ ]
+}

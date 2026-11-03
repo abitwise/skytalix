@@ -1,0 +1,48 @@
+     × PST.pawn: the score is mg + trunc((Δ + offset) × (D − w) / D), exactly, on ≥ 3 positions at phases 1–23
+     × PST.knight: the score is mg + trunc((Δ + offset) × (D − w) / D), exactly, on ≥ 3 positions at phases 1–23
+     × PST.bishop: the score is mg + trunc((Δ + offset) × (D − w) / D), exactly, on ≥ 3 positions at phases 1–23
+     × PST.rook: the score is mg + trunc((Δ + offset) × (D − w) / D), exactly, on ≥ 3 positions at phases 1–23
+     × PST.queen: the score is mg + trunc((Δ + offset) × (D − w) / D), exactly, on ≥ 3 positions at phases 1–23
+      Tests  5 failed | 154 passed (159)
+---
+     × G3's 184 (buildCorpus)
+     × 'M-p23-L1' (raw phase 23)
+     × 'M-p22-L1' (raw phase 22)
+     × 'M-p21-L1' (raw phase 21)
+     × 'M-p20-L1' (raw phase 20)
+     × 'M-p19-L1' (raw phase 19)
+     × 'M-p18-L1' (raw phase 18)
+     × 'M-p17-L1' (raw phase 17)
+     × 'M-p16-L1' (raw phase 16)
+     × 'M-p15-L3' (raw phase 15)
+     × 'M-p13-L3' (raw phase 13)
+     × 'M-p11-L3' (raw phase 11)
+     × 'M-p9-L3' (raw phase 9)
+     × 'M-p14-L2' (raw phase 14)
+     × 'M-p12-L2' (raw phase 12)
+     × 'M-p10-L2' (raw phase 10)
+     × 'M-p8-L2' (raw phase 8)
+     × 'M-p7-L2' (raw phase 7)
+     × 'M-p6-L2' (raw phase 6)
+     × 'M-p5-L2' (raw phase 5)
+     × 'M-p4-L2' (raw phase 4)
+     × 'M-p3-L2' (raw phase 3)
+     × 'M-p2-L2' (raw phase 2)
+     × 'M-p1-L2' (raw phase 1)
+     × 'M-negzero-a' (raw phase 23)
+     × 'M-negzero-b' (raw phase 21)
+     × 'M-ep-p9' (raw phase 9)
+     × the frozen rows span phases 0 to 24, and the -0 traps are real (mg exactly 0 on the door)
+     × 'E-b2-p18': 'black' passer on 'e7', own rank 2, phase 18
+     × 'E-b5-p18': 'black' passer on 'e4', own rank 5, phase 18
+     × MATERIAL: the score is mg + trunc((Δ + offset) × (D − w) / D), exactly, on ≥ 3 positions at phases 1–23
+     × PST.pawn: the score is mg + trunc((Δ + offset) × (D − w) / D), exactly, on ≥ 3 positions at phases 1–23
+     × PST.knight: the score is mg + trunc((Δ + offset) × (D − w) / D), exactly, on ≥ 3 positions at phases 1–23
+     × PST.bishop: the score is mg + trunc((Δ + offset) × (D − w) / D), exactly, on ≥ 3 positions at phases 1–23
+     × PST.queen: the score is mg + trunc((Δ + offset) × (D − w) / D), exactly, on ≥ 3 positions at phases 1–23
+     × DOUBLED: the score is mg + trunc((Δ + offset) × (D − w) / D), exactly, on ≥ 3 positions at phases 1–23
+     × ISOLATED: the score is mg + trunc((Δ + offset) × (D − w) / D), exactly, on ≥ 3 positions at phases 1–23
+     × PASSED: the score is mg + trunc((Δ + offset) × (D − w) / D), exactly, on ≥ 3 positions at phases 1–23
+     × KING_SHELTER_MISSING: the score is mg + trunc((Δ + offset) × (D − w) / D), exactly, on ≥ 3 positions at phases 1–23
+     × MOBILITY_CAP: the score is mg + trunc((Δ + offset) × (D − w) / D), exactly, on ≥ 3 positions at phases 1–23
+      Tests  40 failed | 119 passed (159)

@@ -1,0 +1,9 @@
+All runs under flock host-test.lock; single file with NODE_OPTIONS=--max-old-space-size=400. No timing read.
+1. pre-fix  vitest src/evaluate.taper.test.ts -t "ABC-274": 1 failed | 21 passed — S2 red at the loader-throw check (line 1138, Object.is false).
+2. post-fix same: 22 passed.
+3. M1 (mobilityEg reads MOBILITY_TERMS[0]/[2]): 2 failed (MOBILITY_WEIGHT, MOBILITY_CAP) | 20 passed. Restored by cp; grep MUTANT = 0; cmp equal.
+4. M2 (mobility dropped from egDelta): 2 failed (MOBILITY_WEIGHT, MOBILITY_CAP) | 20 passed. Restored; grep MUTANT = 0.
+5. Probe P1 evaluate-params MOBILITY_WEIGHT {4,6}, MOBILITY_CAP {100,80} (temporary): repaired -t "ABC-274 A3" 20 passed; c131ecd0 copy 2 failed (both mobility families) | 15 passed.
+6. Probe P2 MOBILITY_WEIGHT {0,4}: repaired 20 passed; c131ecd0 copy 2 failed (both mobility families) | 15 passed. evaluate-params.ts restored (git diff empty); probe file removed.
+7. biome check . clean (after --write format of one line); tsc --noEmit exit 0.
+8. npm test: Test Files 66 passed (66); Tests 2588 passed (2588).
