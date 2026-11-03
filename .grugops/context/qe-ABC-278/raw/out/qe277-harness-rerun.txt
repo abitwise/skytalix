@@ -1,0 +1,79 @@
+{"id":"A1 hits","code":1,"expect":1,"ok":"OK","hits":17,"leaked":0,"ms":48,"classes":"foreign-argv,home-path,home-slug,scratch-path,users-path","errLines":0,"note":""}
+{"id":"A2.1 same","code":0,"expect":0,"ok":"OK","hits":0,"leaked":0,"ms":46,"classes":"","errLines":0,"note":""}
+{"id":"A2.2 legacy-touch","code":0,"expect":0,"ok":"OK","hits":0,"leaked":0,"ms":49,"classes":"","errLines":0,"note":""}
+{"id":"A2.3 rename (text+gz)","code":0,"expect":0,"ok":"OK","hits":0,"leaked":0,"ms":51,"classes":"","errLines":0,"note":""}
+{"id":"A2.4 outside","code":0,"expect":0,"ok":"OK","hits":0,"leaked":0,"ms":47,"classes":"","errLines":0,"note":""}
+{"id":"A2.5 placeholders","code":0,"expect":0,"ok":"OK","hits":0,"leaked":0,"ms":40,"classes":"","errLines":0,"note":""}
+{"id":"A3 --head main","code":0,"expect":0,"ok":"OK","hits":0,"leaked":0,"ms":40,"classes":"","errLines":0,"note":""}
+{"id":"A3 exit2 orphan","code":2,"expect":2,"ok":"OK","hits":0,"leaked":0,"ms":38,"classes":"","errLines":1,"note":""}
+{"id":"A3 exit2 no repo","code":2,"expect":2,"ok":"OK","hits":0,"leaked":0,"ms":37,"classes":"","errLines":1,"note":""}
+{"id":"A3 exit2 bad arg","code":2,"expect":2,"ok":"OK","hits":0,"leaked":0,"ms":36,"classes":"","errLines":2,"note":""}
+{"id":"A3 exit2 --base=main form","code":2,"expect":2,"ok":"OK","hits":0,"leaked":0,"ms":25,"classes":"","errLines":2,"note":""}
+{"id":"A3 exit2 missing ref","code":2,"expect":2,"ok":"OK","hits":0,"leaked":0,"ms":30,"classes":"","errLines":1,"note":""}
+{"id":"A3 exit2 --head no value","code":2,"expect":2,"ok":"OK","hits":0,"leaked":0,"ms":18,"classes":"","errLines":2,"note":""}
+{"id":"b01-home-sentence-end","code":1,"expect":"*","ok":"-","hits":1,"leaked":0,"ms":36,"classes":"home-path","errLines":0,"note":""}
+{"id":"b02-home-trailing-dash","code":1,"expect":"*","ok":"-","hits":1,"leaked":0,"ms":49,"classes":"home-path","errLines":0,"note":""}
+{"id":"b03-bare-cmd-flag-then-path","code":1,"expect":"*","ok":"-","hits":1,"leaked":0,"ms":47,"classes":"foreign-argv","errLines":0,"note":""}
+{"id":"b04-python-u-path","code":1,"expect":"*","ok":"-","hits":1,"leaked":0,"ms":47,"classes":"foreign-argv","errLines":0,"note":""}
+{"id":"b05-pgrep-abs-exe-path","code":1,"expect":"*","ok":"-","hits":1,"leaked":0,"ms":48,"classes":"foreign-argv","errLines":0,"note":""}
+{"id":"b06-ps-ef","code":1,"expect":"*","ok":"-","hits":1,"leaked":0,"ms":48,"classes":"foreign-argv","errLines":0,"note":""}
+{"id":"b07-ps-aux","code":1,"expect":"*","ok":"-","hits":1,"leaked":0,"ms":46,"classes":"foreign-argv","errLines":0,"note":""}
+{"id":"b08-ps-eo-pid-args","code":1,"expect":"*","ok":"-","hits":1,"leaked":0,"ms":37,"classes":"foreign-argv","errLines":0,"note":""}
+{"id":"b09-systemd-cgroup","code":1,"expect":"*","ok":"-","hits":1,"leaked":0,"ms":44,"classes":"foreign-argv","errLines":0,"note":""}
+{"id":"b10-abs-exe-no-args","code":1,"expect":"*","ok":"-","hits":1,"leaked":0,"ms":47,"classes":"foreign-argv","errLines":0,"note":""}
+{"id":"b11-xz-home","code":1,"expect":"*","ok":"-","hits":1,"leaked":0,"ms":52,"classes":"home-path","errLines":0,"note":""}
+{"id":"b12-gitattributes-diff-off","code":1,"expect":"*","ok":"-","hits":1,"leaked":0,"ms":42,"classes":"home-path","errLines":0,"note":""}
+{"id":"b13-nul-byte-text","code":1,"expect":"*","ok":"-","hits":1,"leaked":0,"ms":42,"classes":"home-path","errLines":0,"note":""}
+{"id":"b14-symlink-to-home","code":1,"expect":"*","ok":"-","hits":1,"leaked":0,"ms":49,"classes":"home-path","errLines":0,"note":""}
+{"id":"b15-gz-concat-members","code":1,"expect":"*","ok":"-","hits":1,"leaked":0,"ms":49,"classes":"home-path","errLines":0,"note":""}
+{"id":"b16-gz-not-gzip","code":1,"expect":"*","ok":"-","hits":1,"leaked":0,"ms":48,"classes":"UNKNOWN - verify (cannot decompress)","errLines":0,"note":""}
+{"id":"b17-gz-upper-ext","code":1,"expect":"*","ok":"-","hits":1,"leaked":0,"ms":52,"classes":"scratch-path","errLines":0,"note":""}
+{"id":"b18-crlf","code":1,"expect":"*","ok":"-","hits":1,"leaked":0,"ms":44,"classes":"home-path","errLines":0,"note":""}
+{"id":"b19-diff-like-lines","code":1,"expect":"*","ok":"-","hits":3,"leaked":0,"ms":46,"classes":"home-path,home-slug,scratch-path","errLines":0,"note":""}
+{"id":"b20-json-escaped-slash","code":0,"expect":"*","ok":"-","hits":0,"leaked":0,"ms":45,"classes":"","errLines":0,"note":""}
+{"id":"b21-copy-legacy-to-new","code":1,"expect":"*","ok":"-","hits":1,"leaked":0,"ms":40,"classes":"home-path","errLines":0,"note":""}
+{"id":"b22-move-plus-big-edit","code":0,"expect":"*","ok":"-","hits":0,"leaked":0,"ms":40,"classes":"","errLines":0,"note":""}
+{"id":"b23-gz-rename-edit","code":1,"expect":"*","ok":"-","hits":1,"leaked":0,"ms":50,"classes":"home-path","errLines":0,"note":""}
+{"id":"b24-path-hit-in-gz-name","code":1,"expect":"*","ok":"-","hits":1,"leaked":0,"ms":53,"classes":"home-slug","errLines":0,"note":""}
+{"id":"b25-quoted-path-tab","code":1,"expect":"*","ok":"-","hits":2,"leaked":0,"ms":47,"classes":"home-slug,scratch-path","errLines":0,"note":""}
+{"id":"b26-users-shared-and-windows","code":0,"expect":"*","ok":"-","hits":0,"leaked":0,"ms":46,"classes":"","errLines":0,"note":""}
+{"id":"fp01-http-log","code":1,"expect":"*","ok":"-","hits":1,"leaked":0,"ms":46,"classes":"foreign-argv","errLines":0,"note":""}
+{"id":"fp02-wc-l","code":1,"expect":"*","ok":"-","hits":1,"leaked":0,"ms":51,"classes":"foreign-argv","errLines":0,"note":""}
+{"id":"fp03-ls-l","code":0,"expect":"*","ok":"-","hits":0,"leaked":0,"ms":46,"classes":"","errLines":0,"note":""}
+{"id":"fp04-prose-counts","code":0,"expect":"*","ok":"-","hits":0,"leaked":0,"ms":47,"classes":"","errLines":0,"note":""}
+{"id":"fp05-df-line","code":0,"expect":"*","ok":"-","hits":0,"leaked":0,"ms":48,"classes":"","errLines":0,"note":""}
+{"id":"fp06-timeout-node","code":1,"expect":"*","ok":"-","hits":1,"leaked":0,"ms":44,"classes":"foreign-argv","errLines":0,"note":""}
+{"id":"fp07-du-tab","code":0,"expect":"*","ok":"-","hits":0,"leaked":0,"ms":41,"classes":"","errLines":0,"note":""}
+{"id":"fp08-port-route","code":1,"expect":"*","ok":"-","hits":1,"leaked":0,"ms":38,"classes":"foreign-argv","errLines":0,"note":""}
+{"id":"b23-gz-rename-edit","code":1,"expect":"*","ok":"-","hits":1,"leaked":0,"ms":48,"classes":"home-path","errLines":0,"note":"R<100 after 2nd commit"}
+{"id":"HOME override (A1 hits, HOME=/nonexistent-qe)","code":1,"expect":"*","ok":"-","hits":17,"leaked":0,"ms":53,"classes":"foreign-argv,home-path,home-slug,scratch-path,users-path","errLines":0,"note":""}
+{"id":"speed200","code":0,"expect":0,"ok":"OK","hits":0,"leaked":0,"ms":64,"classes":"","errLines":0,"note":""}
+---- A1 output (paths redacted by the tool; checked for 0 planted values above) ----
+.grugops/qe/<home-slug>-dir/clean.md: (file path): home-slug
+.grugops/qe/raw/x.out.gz (decompressed): line 2: home-path
+.grugops/qe/a.md: line 1: home-path
+.grugops/qe/a.md: line 2: home-slug
+.grugops/qe/a.md: line 3: users-path
+.grugops/qe/a.md: line 4: scratch-path
+.grugops/qe/a.md: line 5: foreign-argv
+memory-bank/qe/a.md: line 1: home-path
+memory-bank/qe/a.md: line 2: home-slug
+memory-bank/qe/a.md: line 3: users-path
+memory-bank/qe/a.md: line 4: scratch-path
+memory-bank/qe/a.md: line 5: foreign-argv
+plans/qe/a.md: line 1: home-path
+plans/qe/a.md: line 2: home-slug
+plans/qe/a.md: line 3: users-path
+plans/qe/a.md: line 4: scratch-path
+plans/qe/a.md: line 5: foreign-argv
+records-path-check: 17 finding(s). Replace each value with a placeholder (<home> <repo> <scratch> <out> <node> <cutechess-cli> <stockfish> <user>).
+
+---- b25 output ----
+plans/a	b <home-slug>.md: (file path): home-slug
+plans/a	b <home-slug>.md: line 1: scratch-path
+records-path-check: 2 finding(s). Replace each value with a placeholder (<home> <repo> <scratch> <out> <node> <cutechess-cli> <stockfish> <user>).
+
+---- b24 output ----
+.grugops/raw/<home-slug>.out.gz: (file path): home-slug
+records-path-check: 1 finding(s). Replace each value with a placeholder (<home> <repo> <scratch> <out> <node> <cutechess-cli> <stockfish> <user>).
+

@@ -1,0 +1,98 @@
+{"id":"a1-diff x4 checkouts","code":"0/0/1/1","expect":"1/1/1/1","ok":"MISMATCH","hits":"0/0/4/4","leaked":0,"ms":0,"classes":"","errLines":0,"note":"sets equal to each other and to the no-attribute branch: false"}
+{"id":"a1-binary x4 checkouts","code":"0/0/1/1","expect":"1/1/1/1","ok":"MISMATCH","hits":"0/0/4/4","leaked":0,"ms":0,"classes":"","errLines":0,"note":"sets equal to each other and to the no-attribute branch: false"}
+{"id":"a1-nested x4 checkouts","code":"0/0/1/1","expect":"1/1/1/1","ok":"MISMATCH","hits":"0/0/4/4","leaked":0,"ms":0,"classes":"","errLines":0,"note":"sets equal to each other and to the no-attribute branch: false"}
+{"id":"a1-nul","code":0,"expect":1,"ok":"MISMATCH","hits":0,"leaked":0,"ms":36,"classes":"","errLines":0,"note":"expects line 2: home-path"}
+{"id":"a1-info-attributes (own checkout)","code":0,"expect":1,"ok":"MISMATCH","hits":0,"leaked":0,"ms":36,"classes":"","errLines":0,"note":""}
+{"id":"a1-info-attributes (--head)","code":0,"expect":1,"ok":"MISMATCH","hits":0,"leaked":0,"ms":44,"classes":"","errLines":0,"note":""}
+{"id":"a1-core.attributesFile","code":0,"expect":1,"ok":"MISMATCH","hits":0,"leaked":0,"ms":40,"classes":"","errLines":0,"note":""}
+{"id":"a1-driver binary+textconv(true) in local config","code":1,"expect":1,"ok":"OK","hits":2,"leaked":0,"ms":44,"classes":"home-path,scratch-path","errLines":0,"note":""}
+{"id":"a1-utf16 (no claim in ticket)","code":0,"expect":"*","ok":"-","hits":0,"leaked":0,"ms":47,"classes":"","errLines":0,"note":""}
+{"id":"a1-gzip-bytes-under-.md (no claim)","code":0,"expect":"*","ok":"-","hits":0,"leaked":0,"ms":45,"classes":"","errLines":0,"note":""}
+{"id":"a2-add","code":0,"expect":1,"ok":"MISMATCH","hits":0,"leaked":0,"ms":43,"classes":"","errLines":0,"note":"exactly `x.xz (decompressed): line 3: home-path`"}
+{"id":"a2-r100","code":0,"expect":0,"ok":"OK","hits":0,"leaked":0,"ms":47,"classes":"","errLines":0,"note":""}
+{"id":"a2-add PATH without xz","code":0,"expect":1,"ok":"MISMATCH","hits":0,"leaked":0,"ms":50,"classes":"","errLines":0,"note":"exactly one UNKNOWN"}
+{"id":"a2-modify (M)","code":0,"expect":1,"ok":"MISMATCH","hits":0,"leaked":0,"ms":52,"classes":"","errLines":0,"note":""}
+{"id":"a2-move from outside the 3 paths","code":0,"expect":1,"ok":"MISMATCH","hits":0,"leaked":0,"ms":41,"classes":"","errLines":0,"note":""}
+{"id":"a2-upper .XZ","code":0,"expect":1,"ok":"MISMATCH","hits":0,"leaked":0,"ms":53,"classes":"","errLines":0,"note":""}
+{"id":"a2-not-xz","code":0,"expect":1,"ok":"MISMATCH","hits":0,"leaked":0,"ms":48,"classes":"","errLines":0,"note":"one UNKNOWN"}
+{"id":"a2-multistream","code":0,"expect":1,"ok":"MISMATCH","hits":0,"leaked":0,"ms":49,"classes":"","errLines":0,"note":""}
+{"id":"a2-lzma-alone named .xz","code":0,"expect":"*","ok":"-","hits":0,"leaked":0,"ms":58,"classes":"","errLines":0,"note":""}
+{"id":"a2-symlink named .xz","code":0,"expect":"*","ok":"-","hits":0,"leaked":0,"ms":49,"classes":"","errLines":0,"note":""}
+{"id":"a2-bomb 300 MiB","code":0,"expect":1,"ok":"MISMATCH","hits":0,"leaked":0,"ms":57,"classes":"","errLines":0,"note":"over the 256 MiB cap -> UNKNOWN"}
+{"id":"A3.1 pid node --max-old-space-size=N abs","code":"[]","expect":"[\"foreign-argv\"]","ok":"MISMATCH","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A3.1b pid node --inspect --trace-warnings abs","code":"[]","expect":"[\"foreign-argv\"]","ok":"MISMATCH","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A3.2 pid python3 -u abs","code":"[]","expect":"[\"foreign-argv\"]","ok":"MISMATCH","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A3.3 pid abs-exec end of line","code":"[]","expect":"[\"foreign-argv\"]","ok":"MISMATCH","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A3.3b pid abs-exec trailing spaces","code":"[]","expect":"[\"foreign-argv\"]","ok":"MISMATCH","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A3.3c pid abs-exec in [..]","code":"[]","expect":"[\"foreign-argv\"]","ok":"MISMATCH","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A3.3d pid abs-exec in backticks","code":"[]","expect":"[\"foreign-argv\"]","ok":"MISMATCH","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A3.4 ps -ef abs-exec arg","code":"[]","expect":"[\"foreign-argv\"]","ok":"MISMATCH","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A3.4b ps -ef CMD abs, ? tty, days","code":"[]","expect":"[\"foreign-argv\"]","ok":"MISMATCH","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A3.5 ps aux node abs","code":"[]","expect":"[\"foreign-argv\"]","ok":"MISMATCH","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A3.5b ps aux abs-exec, Ssl, Nov03, 12:34","code":"[]","expect":"[\"foreign-argv\"]","ok":"MISMATCH","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A3 excl count + relative path","code":"[]","expect":"[]","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A3 excl NODE_OPTIONS flock","code":"[]","expect":"[]","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A3 home + argv","code":"[\"home-path\",\"foreign-argv\"]","expect":"[\"home-path\",\"foreign-argv\"]","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe fp-http-log","code":"[\"foreign-argv\"]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe fp-size-dev-eol","code":"[]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe fp-code-span-exe","code":"[]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe fp-wc-l","code":"[]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe fp-du","code":"[]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe fp-du-space-eol","code":"[]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe fp-ls-l","code":"[]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe fp-df","code":"[]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe fp-md-table","code":"[]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe fp-prose-n-flag","code":"[]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe fp-list-numbered","code":"[]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe fp-grep-count","code":"[]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe miss-node-p-n","code":"[]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe miss-sudo-u","code":"[]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe miss-relative-exe","code":"[]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe miss-ps-ef-flags","code":"[]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe miss-ps-aux-flags","code":"[]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe miss-pid-1digit","code":"[]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe miss-abs-exec-then-paren","code":"[]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe miss-abs-exec-then-comma","code":"[]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A5 home. end","code":"[]","expect":"[\"home-path\"]","ok":"MISMATCH","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A5 home. space","code":"[]","expect":"[\"home-path\"]","ok":"MISMATCH","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A5 home-old","code":"[]","expect":"[\"home-path\"]","ok":"MISMATCH","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A5 home_bak","code":"[]","expect":"[\"home-path\"]","ok":"MISMATCH","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A5 home2 (non-hit)","code":"[]","expect":"[]","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A5 homeX letter (non-hit)","code":"[]","expect":"[]","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A5 home~ ","code":"[\"home-path\"]","expect":"[\"home-path\"]","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A5 home: ","code":"[\"home-path\"]","expect":"[\"home-path\"]","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A5 home end of line","code":"[\"home-path\"]","expect":"[\"home-path\"]","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A5 slug-dot","code":"[\"home-slug\"]","expect":"[\"home-slug\"]","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"a6-names","code":1,"expect":1,"ok":"MISMATCH","hits":8,"leaked":0,"ms":47,"classes":"home-slug,scratch-path","errLines":0,"note":"4 names, each path printed identically on its (file path) and line hit: 0/4; equals expected names: false; stray quote/TAB lines: 4"}
+{"id":"A6 unquote \"\\\"b/a\\\\tb\\\"\\t\"","code":"\"<not exported>\"","expect":"\"b/a\\tb\"","ok":"MISMATCH","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A6 unquote \"\\\"b/\\\\303\\\\251.md\\\"\"","code":"\"<not exported>\"","expect":"\"b/é.md\"","ok":"MISMATCH","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A6 unquote \"\\\"b/a\\\\\\\"b\\\"\"","code":"\"<not exported>\"","expect":"\"b/a\\\"b\"","ok":"MISMATCH","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A6 unquote \"\\\"b/a\\\\\\\\b\\\"\"","code":"\"<not exported>\"","expect":"\"b/a\\\\b\"","ok":"MISMATCH","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A6 unquote \"b/plain.md\"","code":"\"<not exported>\"","expect":"\"b/plain.md\"","ok":"MISMATCH","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A6 unquote \"b/sp ace.md\\t\"","code":"\"<not exported>\"","expect":"\"b/sp ace.md\"","ok":"MISMATCH","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A6 unquote \"\\\"\"","code":"\"<not exported>\"","expect":"\"\\\"\"","ok":"MISMATCH","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A6 unquote \"\\\"\\\"\"","code":"\"<not exported>\"","expect":"\"\"","ok":"MISMATCH","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A6 unquote \"\\\"b/\\\\001x\\\"\"","code":"\"<not exported>\"","expect":"\"b/\\u0001x\"","ok":"MISMATCH","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"a7 HOME=empty temp dir","code":1,"expect":1,"ok":"MISMATCH","hits":9,"leaked":0,"ms":56,"classes":"foreign-argv,scratch-path,users-path","errLines":0,"note":"set equals real-HOME set (16 findings): false"}
+{"id":"a7 HOME=/","code":1,"expect":1,"ok":"MISMATCH","hits":9,"leaked":0,"ms":66,"classes":"foreign-argv,scratch-path,users-path","errLines":0,"note":"set equals real-HOME set (16 findings): false"}
+{"id":"a7 HOME unset","code":1,"expect":1,"ok":"OK","hits":16,"leaked":0,"ms":56,"classes":"foreign-argv,home-path,home-slug,scratch-path,users-path","errLines":0,"note":"set equals real-HOME set (16 findings): true"}
+{"id":"a7 HOME=<home>/ (trailing slash)","code":1,"expect":1,"ok":"OK","hits":16,"leaked":0,"ms":50,"classes":"foreign-argv,home-path,home-slug,scratch-path,users-path","errLines":0,"note":"set equals real-HOME set (16 findings): true"}
+{"id":"a7 userInfo throws (seam)","code":1,"expect":1,"ok":"OK","hits":16,"leaked":0,"ms":0,"classes":"","errLines":0,"note":"not 2"}
+{"id":"speed200 (2 .xz)","code":0,"expect":0,"ok":"OK","hits":0,"leaked":0,"ms":70,"classes":"","errLines":0,"note":""}
+---- a2-add output ----
+records-path-check: clean (.grugops/ plans/ memory-bank/ added lines, merge base of main..a2-add).
+
+---- a6-names output (TAB shown as \t) ----
+.grugops/q/a\tb <home-slug>.md: (file path): home-slug
+.grugops/q/café <home-slug>.md: (file path): home-slug
+.grugops/q/q"uo\te <home-slug>.md: (file path): home-slug
+.grugops/q/sp ace <home-slug>.md: (file path): home-slug
+.grugops/q/a\tb <home-slug>.md": line 1: scratch-path
+.grugops/q/café <home-slug>.md\t: line 1: scratch-path
+.grugops/q/q"uo\te <home-slug>.md": line 1: scratch-path
+.grugops/q/sp ace <home-slug>.md\t: line 1: scratch-path
+records-path-check: 8 finding(s). Replace each value with a placeholder (<home> <repo> <scratch> <out> <node> <cutechess-cli> <stockfish> <user>).
+
+---- a1-diff own-checkout output ----
+records-path-check: clean (.grugops/ plans/ memory-bank/ added lines, merge base of main..HEAD).
+

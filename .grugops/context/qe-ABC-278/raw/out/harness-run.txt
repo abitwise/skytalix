@@ -1,0 +1,103 @@
+{"id":"a1-diff x4 checkouts","code":"1/1/1/1","expect":"1/1/1/1","ok":"OK","hits":"4/4/4/4","leaked":0,"ms":0,"classes":"home-path,scratch-path","errLines":0,"note":"sets equal to each other and to the no-attribute branch: true"}
+{"id":"a1-binary x4 checkouts","code":"1/1/1/1","expect":"1/1/1/1","ok":"OK","hits":"4/4/4/4","leaked":0,"ms":0,"classes":"home-path,scratch-path","errLines":0,"note":"sets equal to each other and to the no-attribute branch: true"}
+{"id":"a1-nested x4 checkouts","code":"1/1/1/1","expect":"1/1/1/1","ok":"OK","hits":"4/4/4/4","leaked":0,"ms":0,"classes":"home-path,scratch-path","errLines":0,"note":"sets equal to each other and to the no-attribute branch: true"}
+{"id":"a1-nul","code":1,"expect":1,"ok":"OK","hits":1,"leaked":0,"ms":44,"classes":"home-path","errLines":0,"note":"expects line 2: home-path"}
+{"id":"a1-info-attributes (own checkout)","code":1,"expect":1,"ok":"OK","hits":4,"leaked":0,"ms":45,"classes":"home-path,scratch-path","errLines":0,"note":""}
+{"id":"a1-info-attributes (--head)","code":1,"expect":1,"ok":"OK","hits":4,"leaked":0,"ms":45,"classes":"home-path,scratch-path","errLines":0,"note":""}
+{"id":"a1-core.attributesFile","code":1,"expect":1,"ok":"OK","hits":4,"leaked":0,"ms":49,"classes":"home-path,scratch-path","errLines":0,"note":""}
+{"id":"a1-driver binary+textconv(true) in local config","code":1,"expect":1,"ok":"OK","hits":2,"leaked":0,"ms":42,"classes":"home-path,scratch-path","errLines":0,"note":""}
+{"id":"a1-utf16 (no claim in ticket)","code":0,"expect":"*","ok":"-","hits":0,"leaked":0,"ms":46,"classes":"","errLines":0,"note":""}
+{"id":"a1-gzip-bytes-under-.md (no claim)","code":0,"expect":"*","ok":"-","hits":0,"leaked":0,"ms":49,"classes":"","errLines":0,"note":""}
+{"id":"a2-add","code":1,"expect":1,"ok":"OK","hits":1,"leaked":0,"ms":61,"classes":"home-path","errLines":0,"note":"exactly `x.xz (decompressed): line 3: home-path`"}
+{"id":"a2-r100","code":0,"expect":0,"ok":"OK","hits":0,"leaked":0,"ms":53,"classes":"","errLines":0,"note":""}
+{"id":"a2-add PATH without xz","code":1,"expect":1,"ok":"OK","hits":1,"leaked":0,"ms":51,"classes":"UNKNOWN - verify (cannot decompress)","errLines":0,"note":"exactly one UNKNOWN"}
+{"id":"a2-modify (M)","code":1,"expect":1,"ok":"OK","hits":1,"leaked":0,"ms":59,"classes":"home-path","errLines":0,"note":""}
+{"id":"a2-move from outside the 3 paths","code":1,"expect":1,"ok":"OK","hits":1,"leaked":0,"ms":51,"classes":"home-path","errLines":0,"note":""}
+{"id":"a2-upper .XZ","code":1,"expect":1,"ok":"OK","hits":1,"leaked":0,"ms":48,"classes":"scratch-path","errLines":0,"note":""}
+{"id":"a2-not-xz","code":1,"expect":1,"ok":"OK","hits":1,"leaked":0,"ms":54,"classes":"UNKNOWN - verify (cannot decompress)","errLines":0,"note":"one UNKNOWN"}
+{"id":"a2-multistream","code":1,"expect":1,"ok":"OK","hits":1,"leaked":0,"ms":54,"classes":"home-path","errLines":0,"note":""}
+{"id":"a2-lzma-alone named .xz","code":1,"expect":"*","ok":"-","hits":1,"leaked":0,"ms":60,"classes":"home-path","errLines":0,"note":""}
+{"id":"a2-symlink named .xz","code":1,"expect":"*","ok":"-","hits":1,"leaked":0,"ms":50,"classes":"UNKNOWN - verify (cannot decompress)","errLines":0,"note":""}
+{"id":"a2-bomb 300 MiB","code":1,"expect":1,"ok":"OK","hits":1,"leaked":0,"ms":583,"classes":"UNKNOWN - verify (cannot decompress)","errLines":0,"note":"over the 256 MiB cap -> UNKNOWN"}
+{"id":"A3.1 pid node --max-old-space-size=N abs","code":"[\"foreign-argv\"]","expect":"[\"foreign-argv\"]","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A3.1b pid node --inspect --trace-warnings abs","code":"[\"foreign-argv\"]","expect":"[\"foreign-argv\"]","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A3.2 pid python3 -u abs","code":"[\"foreign-argv\"]","expect":"[\"foreign-argv\"]","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A3.3 pid abs-exec end of line","code":"[\"foreign-argv\"]","expect":"[\"foreign-argv\"]","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A3.3b pid abs-exec trailing spaces","code":"[\"foreign-argv\"]","expect":"[\"foreign-argv\"]","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A3.3c pid abs-exec in [..]","code":"[\"foreign-argv\"]","expect":"[\"foreign-argv\"]","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A3.3d pid abs-exec in backticks","code":"[\"foreign-argv\"]","expect":"[\"foreign-argv\"]","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A3.4 ps -ef abs-exec arg","code":"[\"foreign-argv\"]","expect":"[\"foreign-argv\"]","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A3.4b ps -ef CMD abs, ? tty, days","code":"[\"foreign-argv\"]","expect":"[\"foreign-argv\"]","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A3.5 ps aux node abs","code":"[\"foreign-argv\"]","expect":"[\"foreign-argv\"]","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A3.5b ps aux abs-exec, Ssl, Nov03, 12:34","code":"[\"foreign-argv\"]","expect":"[\"foreign-argv\"]","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A3 excl count + relative path","code":"[]","expect":"[]","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A3 excl NODE_OPTIONS flock","code":"[]","expect":"[]","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A3 home + argv","code":"[\"home-path\",\"foreign-argv\"]","expect":"[\"home-path\",\"foreign-argv\"]","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe fp-http-log","code":"[\"foreign-argv\"]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe fp-size-dev-eol","code":"[\"foreign-argv\"]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe fp-code-span-exe","code":"[\"foreign-argv\"]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe fp-wc-l","code":"[\"foreign-argv\"]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe fp-du","code":"[]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe fp-du-space-eol","code":"[\"foreign-argv\"]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe fp-ls-l","code":"[]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe fp-df","code":"[]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe fp-md-table","code":"[]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe fp-prose-n-flag","code":"[]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe fp-list-numbered","code":"[\"foreign-argv\"]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe fp-grep-count","code":"[]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe miss-node-p-n","code":"[]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe miss-sudo-u","code":"[]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe miss-relative-exe","code":"[]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe miss-ps-ef-flags","code":"[]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe miss-ps-aux-flags","code":"[]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe miss-pid-1digit","code":"[]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe miss-abs-exec-then-paren","code":"[]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"probe miss-abs-exec-then-comma","code":"[]","expect":"*","ok":"-","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A5 home. end","code":"[\"home-path\"]","expect":"[\"home-path\"]","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A5 home. space","code":"[\"home-path\"]","expect":"[\"home-path\"]","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A5 home-old","code":"[\"home-path\"]","expect":"[\"home-path\"]","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A5 home_bak","code":"[\"home-path\"]","expect":"[\"home-path\"]","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A5 home2 (non-hit)","code":"[]","expect":"[]","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A5 homeX letter (non-hit)","code":"[]","expect":"[]","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A5 home~ ","code":"[\"home-path\"]","expect":"[\"home-path\"]","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A5 home: ","code":"[\"home-path\"]","expect":"[\"home-path\"]","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A5 home end of line","code":"[\"home-path\"]","expect":"[\"home-path\"]","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A5 slug-dot","code":"[\"home-slug\"]","expect":"[\"home-slug\"]","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"a6-names","code":1,"expect":1,"ok":"OK","hits":8,"leaked":0,"ms":52,"classes":"home-slug,scratch-path","errLines":0,"note":"4 names, each path printed identically on its (file path) and line hit: 4/4; equals expected names: true; stray quote/TAB lines: 0"}
+{"id":"A6 unquote \"\\\"b/a\\\\tb\\\"\\t\"","code":"\"b/a\\tb\"","expect":"\"b/a\\tb\"","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A6 unquote \"\\\"b/\\\\303\\\\251.md\\\"\"","code":"\"b/é.md\"","expect":"\"b/é.md\"","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A6 unquote \"\\\"b/a\\\\\\\"b\\\"\"","code":"\"b/a\\\"b\"","expect":"\"b/a\\\"b\"","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A6 unquote \"\\\"b/a\\\\\\\\b\\\"\"","code":"\"b/a\\\\b\"","expect":"\"b/a\\\\b\"","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A6 unquote \"b/plain.md\"","code":"\"b/plain.md\"","expect":"\"b/plain.md\"","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A6 unquote \"b/sp ace.md\\t\"","code":"\"b/sp ace.md\"","expect":"\"b/sp ace.md\"","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A6 unquote \"\\\"\"","code":"\"\\\"\"","expect":"\"\\\"\"","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A6 unquote \"\\\"\\\"\"","code":"\"\"","expect":"\"\"","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"A6 unquote \"\\\"b/\\\\001x\\\"\"","code":"\"b/\\u0001x\"","expect":"\"b/\\u0001x\"","ok":"OK","hits":0,"leaked":0,"ms":0,"classes":"","errLines":0,"note":""}
+{"id":"a7 HOME=empty temp dir","code":1,"expect":1,"ok":"OK","hits":16,"leaked":0,"ms":61,"classes":"foreign-argv,home-path,home-slug,scratch-path,users-path","errLines":0,"note":"set equals real-HOME set (16 findings): true"}
+{"id":"a7 HOME=/","code":1,"expect":1,"ok":"OK","hits":16,"leaked":0,"ms":52,"classes":"foreign-argv,home-path,home-slug,scratch-path,users-path","errLines":0,"note":"set equals real-HOME set (16 findings): true"}
+{"id":"a7 HOME unset","code":1,"expect":1,"ok":"OK","hits":16,"leaked":0,"ms":63,"classes":"foreign-argv,home-path,home-slug,scratch-path,users-path","errLines":0,"note":"set equals real-HOME set (16 findings): true"}
+{"id":"a7 HOME=<home>/ (trailing slash)","code":1,"expect":1,"ok":"OK","hits":16,"leaked":0,"ms":49,"classes":"foreign-argv,home-path,home-slug,scratch-path,users-path","errLines":0,"note":"set equals real-HOME set (16 findings): true"}
+{"id":"a7 userInfo throws (seam)","code":1,"expect":1,"ok":"OK","hits":16,"leaked":0,"ms":0,"classes":"","errLines":0,"note":"not 2"}
+{"id":"speed200 (2 .xz)","code":0,"expect":0,"ok":"OK","hits":0,"leaked":0,"ms":78,"classes":"","errLines":0,"note":""}
+---- a2-add output ----
+.grugops/qe/raw/x.xz (decompressed): line 3: home-path
+records-path-check: 1 finding(s). Replace each value with a placeholder (<home> <repo> <scratch> <out> <node> <cutechess-cli> <stockfish> <user>).
+
+---- a6-names output (TAB shown as \t) ----
+.grugops/q/a\tb <home-slug>.md: (file path): home-slug
+.grugops/q/café <home-slug>.md: (file path): home-slug
+.grugops/q/q"uo\te <home-slug>.md: (file path): home-slug
+.grugops/q/sp ace <home-slug>.md: (file path): home-slug
+.grugops/q/a\tb <home-slug>.md: line 1: scratch-path
+.grugops/q/café <home-slug>.md: line 1: scratch-path
+.grugops/q/q"uo\te <home-slug>.md: line 1: scratch-path
+.grugops/q/sp ace <home-slug>.md: line 1: scratch-path
+records-path-check: 8 finding(s). Replace each value with a placeholder (<home> <repo> <scratch> <out> <node> <cutechess-cli> <stockfish> <user>).
+
+---- a1-diff own-checkout output ----
+.grugops/q/a.md: line 1: home-path
+.grugops/q/a.md: line 2: scratch-path
+plans/q/b.md: line 1: home-path
+plans/q/b.md: line 2: scratch-path
+records-path-check: 4 finding(s). Replace each value with a placeholder (<home> <repo> <scratch> <out> <node> <cutechess-cli> <stockfish> <user>).
+
