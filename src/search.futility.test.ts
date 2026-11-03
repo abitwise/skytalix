@@ -560,26 +560,29 @@ describe("the doors — searchWithoutFutility and chooseMoveWithoutFutility turn
     expect(chooseMoveWithoutFutility.length).toBe(2);
   });
 
-  // `ABC-269`'s door (`ADR-0064` decision 7) is the shipped path less the taper, futility on.
+  // `ABC-269`'s door (`ADR-0064` decision 7) is the shipped path less the taper, futility on;
+  // `ABC-279`'s (`ADR-0069` decision 8) is the shipped path less the SEE skip, futility on.
   const MODULES = [
     {
       path: "./search.ts",
       call: "searchRoot(position, depth, {",
       on: "search",
+      see: "searchWithoutSeePruning",
       tap: "searchWithoutTaper",
-      least: 13,
+      least: 14,
     },
     {
       path: "./engine.ts",
       call: "deepen(position, options, {",
       on: "chooseMove",
+      see: "chooseMoveWithoutSeePruning",
       tap: "chooseMoveWithoutTaper",
-      least: 7,
+      least: 8,
     },
   ];
 
-  for (const { path, call, on, tap, least } of MODULES) {
-    it(`${path}: each exported entry passes exactly one futility literal, and only ${on}'s and ${tap}'s are true`, () => {
+  for (const { path, call, on, see, tap, least } of MODULES) {
+    it(`${path}: each exported entry passes exactly one futility literal, and only ${on}'s, ${see}'s and ${tap}'s are true`, () => {
       const flat = readFileSync(new URL(path, import.meta.url), "utf8").replace(/\s+/g, " ");
       const found: Record<string, string> = {};
       for (const chunk of flat.split("export function ").slice(1)) {
@@ -592,6 +595,7 @@ describe("the doors — searchWithoutFutility and chooseMoveWithoutFutility turn
       expect(Object.keys(found).length).toBeGreaterThanOrEqual(least);
       expect(Object.entries(found).filter(([, value]) => value === "true")).toEqual([
         [on, "true"],
+        [see, "true"],
         [tap, "true"],
       ]);
     });

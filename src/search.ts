@@ -130,8 +130,15 @@ const RULES_SHIPPED: QuiescenceRules = { evasions: true, quietPromotions: true }
 const RULES_NO_QUIET_PROMOTIONS: QuiescenceRules = { evasions: true, quietPromotions: false };
 const RULES_NO_EVASIONS: QuiescenceRules = { evasions: false, quietPromotions: true };
 const RULES_NEITHER: QuiescenceRules = { evasions: false, quietPromotions: false };
-/** `search()`'s record (`ABC-269`): both rules and the tapered stand pat. `taper` is on only there. */
+/** `searchWithoutSeePruning`'s record (`ABC-269`): both rules and the tapered stand pat. */
 const RULES_TAPERED: QuiescenceRules = { evasions: true, quietPromotions: true, taper: true };
+/** `search()`'s record (`ABC-279`, `ADR-0069` decision 6): the tapered record, losing captures skipped. */
+const RULES_SEE_PRUNING: QuiescenceRules = {
+  evasions: true,
+  quietPromotions: true,
+  taper: true,
+  seePruning: true,
+};
 
 export interface SearchResult {
   /** Centipawns, positive for the side to move. A mate reads `±(MATE_SCORE - ply)`. */
@@ -331,10 +338,17 @@ interface Switches {
   readonly futility: boolean;
   /**
    * The tapered evaluation (`ABC-269`, `ADR-0064` decision 7) at every call site the recursion has.
-   * True on `search()` only, where both quiescence switches are on too, so its rules record is
-   * `RULES_TAPERED`; every older door turns it off and reads the pre-`ABC-269` evaluation.
+   * True on `search()` and `searchWithoutSeePruning`, where both quiescence switches are on too, so
+   * its rules record is `RULES_SEE_PRUNING` or `RULES_TAPERED`; every older door turns it off and
+   * reads the pre-`ABC-269` evaluation.
    */
   readonly taper: boolean;
+  /**
+   * Quiescence skips a losing capture out of check (`ABC-279`, `ADR-0069` decisions 1-3, 6, 7). True
+   * on `search()` only, where the taper is on too, so its rules record is `RULES_SEE_PRUNING`;
+   * `searchWithoutSeePruning` and every older door turn it off (decision 8).
+   */
+  readonly seePruning: boolean;
 }
 
 /** The least remaining depth, and the least 0-based index in the ordered list, a reduced move has. */
@@ -499,7 +513,9 @@ function leafScore(
     }
     // Every capture node the quiescence search enters is a position visited, and is counted.
     const rules = switches.taper
-      ? RULES_TAPERED
+      ? switches.seePruning
+        ? RULES_SEE_PRUNING
+        : RULES_TAPERED
       : switches.quiescenceEvasions
         ? switches.quietPromotions
           ? RULES_SHIPPED
@@ -863,6 +879,31 @@ export function search(position: Position, depth: number): SearchResult {
     quietPromotions: true,
     futility: true,
     taper: true,
+    seePruning: true,
+  });
+}
+
+/**
+ * TEST-ONLY. The pre-`ABC-279` `search()`, node for node: quiescence's losing-capture skip off,
+ * everything else on, the taper, futility, null move and both quiescence switches included. It is
+ * the reference `ABC-279`'s bounded drift oracle compares `search()` against, and the shipped side
+ * of every older row that measures its own heuristic alone (`ADR-0069` decision 8). Not an engine
+ * option; nothing in production calls it.
+ */
+export function searchWithoutSeePruning(position: Position, depth: number): SearchResult {
+  return searchRoot(position, depth, {
+    prune: true,
+    quiescence: true,
+    ordering: "full",
+    table: true,
+    pvs: true,
+    reductions: true,
+    nullMove: true,
+    quiescenceEvasions: true,
+    quietPromotions: true,
+    futility: true,
+    taper: true,
+    seePruning: false,
   });
 }
 
@@ -886,6 +927,7 @@ export function searchWithoutTaper(position: Position, depth: number): SearchRes
     quietPromotions: true,
     futility: true,
     taper: false,
+    seePruning: false,
   });
 }
 
@@ -909,6 +951,7 @@ export function searchWithoutFutility(position: Position, depth: number): Search
     quietPromotions: true,
     futility: false,
     taper: false,
+    seePruning: false,
   });
 }
 
@@ -932,6 +975,7 @@ export function searchWithoutQuietPromotions(position: Position, depth: number):
     quietPromotions: false,
     futility: false,
     taper: false,
+    seePruning: false,
   });
 }
 
@@ -954,6 +998,7 @@ export function searchWithoutQuiescenceEvasions(position: Position, depth: numbe
     quietPromotions: false,
     futility: false,
     taper: false,
+    seePruning: false,
   });
 }
 
@@ -976,6 +1021,7 @@ export function searchWithoutNullMove(position: Position, depth: number): Search
     quietPromotions: false,
     futility: false,
     taper: false,
+    seePruning: false,
   });
 }
 
@@ -1002,6 +1048,7 @@ export function searchWithoutPruning(position: Position, depth: number): SearchR
     quietPromotions: false,
     futility: false,
     taper: false,
+    seePruning: false,
   });
 }
 
@@ -1026,6 +1073,7 @@ export function searchWithoutQuiescence(position: Position, depth: number): Sear
     quietPromotions: false,
     futility: false,
     taper: false,
+    seePruning: false,
   });
 }
 
@@ -1052,6 +1100,7 @@ export function searchWithoutPruningOrQuiescence(position: Position, depth: numb
     quietPromotions: false,
     futility: false,
     taper: false,
+    seePruning: false,
   });
 }
 
@@ -1074,6 +1123,7 @@ export function searchWithoutOrdering(position: Position, depth: number): Search
     quietPromotions: false,
     futility: false,
     taper: false,
+    seePruning: false,
   });
 }
 
@@ -1095,6 +1145,7 @@ export function searchWithoutKillers(position: Position, depth: number): SearchR
     quietPromotions: false,
     futility: false,
     taper: false,
+    seePruning: false,
   });
 }
 
@@ -1117,6 +1168,7 @@ export function searchWithoutTable(position: Position, depth: number): SearchRes
     quietPromotions: false,
     futility: false,
     taper: false,
+    seePruning: false,
   });
 }
 
@@ -1139,6 +1191,7 @@ export function searchWithoutReductions(position: Position, depth: number): Sear
     quietPromotions: false,
     futility: false,
     taper: false,
+    seePruning: false,
   });
 }
 
@@ -1161,5 +1214,6 @@ export function searchWithoutPvsOrReductions(position: Position, depth: number):
     quietPromotions: false,
     futility: false,
     taper: false,
+    seePruning: false,
   });
 }

@@ -570,7 +570,9 @@ describe("A6 — no move is selected without a caller-supplied depth", () => {
     // predicates both recursions share (decision 2): `futilityNode`, which answers "may this node
     // skip its late quiet moves" for a node it is handed, and `futileMove`, which answers "is this
     // move one of them" for a move it is handed. Neither picks a move. ABC-269 added one more door
-    // of that shape (`searchWithoutTaper`, `ADR-0064` decision 7).
+    // of that shape (`searchWithoutTaper`, `ADR-0064` decision 7), and ABC-279 one more
+    // (`searchWithoutSeePruning`, `ADR-0069` decision 8); its evaluator is its own module,
+    // `src/see.ts`, and nothing here re-exports it.
     // Still nothing here picks a move without being told how deep.
     expect(Object.keys(searchModule).sort()).toEqual([
       "KEY_ARRAY_CAPACITY",
@@ -595,6 +597,7 @@ describe("A6 — no move is selected without a caller-supplied depth", () => {
       "searchWithoutQuiescenceEvasions",
       "searchWithoutQuietPromotions",
       "searchWithoutReductions",
+      "searchWithoutSeePruning",
       "searchWithoutTable",
       "searchWithoutTaper",
     ]);

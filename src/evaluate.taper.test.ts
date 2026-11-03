@@ -372,18 +372,34 @@ describe("ABC-269 — one switch, taper, and three test-only doors (ADR-0064 dec
     expect(options.slice(0, options.indexOf("\n}")).includes("taper")).toBe(false);
   });
 
-  for (const [name, call, shipped, door] of [
-    ["search", "searchRoot(position, depth, {", "search", "searchWithoutTaper"],
-    ["engine", "deepen(position, options, {", "chooseMove", "chooseMoveWithoutTaper"],
+  // `ABC-279` (`ADR-0069` decision 8): its door, `searchWithoutSeePruning` / `chooseMoveWithoutSeePruning`,
+  // keeps the taper on and is now the shipped path less the newer switch, so `ABC-269`'s door is
+  // that door with taper off.
+  for (const [name, call, shipped, seeDoor, door] of [
+    [
+      "search",
+      "searchRoot(position, depth, {",
+      "search",
+      "searchWithoutSeePruning",
+      "searchWithoutTaper",
+    ],
+    [
+      "engine",
+      "deepen(position, options, {",
+      "chooseMove",
+      "chooseMoveWithoutSeePruning",
+      "chooseMoveWithoutTaper",
+    ],
   ] as const) {
-    it(`${name}: taper is on in ${shipped} only; ${door} is ${shipped} with taper off; every older door turns it off`, () => {
+    it(`${name}: taper is on in ${shipped} and ${seeDoor} only; ${door} is ${seeDoor} with taper off; every older door turns it off`, () => {
       const literals = literalsByEntry(SOURCES[name], call);
-      expect(Object.keys(literals).length).toBeGreaterThanOrEqual(name === "search" ? 14 : 8);
+      expect(Object.keys(literals).length).toBeGreaterThanOrEqual(name === "search" ? 15 : 9);
       for (const [entry, literal] of Object.entries(literals)) {
-        expect(literal, entry).toContain(entry === shipped ? "taper: true," : "taper: false,");
+        const on = entry === shipped || entry === seeDoor;
+        expect(literal, entry).toContain(on ? "taper: true," : "taper: false,");
       }
       const strip = (literal: string): string => literal.replace(/\s*taper: (true|false),/, "");
-      expect(strip(literals[door] as string)).toBe(strip(literals[shipped] as string));
+      expect(strip(literals[door] as string)).toBe(strip(literals[seeDoor] as string));
     });
   }
 

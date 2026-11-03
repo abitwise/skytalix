@@ -1180,12 +1180,16 @@ describe("ABC-228 — the rule rows (`ADR-0053` decision 9; each reds a planted 
       expect(flat).toContain(
         "const RULES_NEITHER: QuiescenceRules = { evasions: false, quietPromotions: false };",
       );
-      // `ABC-269` puts the tapered record first, picked by `taper` (on only where both switches are).
+      // `ABC-269` puts the tapered record first, picked by `taper` (on only where both switches are);
+      // `ABC-279` splits it by `seePruning` (on only where the taper is, `ADR-0069` decision 6).
       expect(flat).toContain(
         "const RULES_TAPERED: QuiescenceRules = { evasions: true, quietPromotions: true, taper: true };",
       );
+      expect(flat).toContain(
+        "const RULES_SEE_PRUNING: QuiescenceRules = { evasions: true, quietPromotions: true, taper: true, seePruning: true, };",
+      );
       expect(flat).toMatch(
-        /const rules = (switches|budget)\.taper \? RULES_TAPERED : \1\.quiescenceEvasions \? \1\.quietPromotions \? RULES_SHIPPED : RULES_NO_QUIET_PROMOTIONS : \1\.quietPromotions \? RULES_NO_EVASIONS : RULES_NEITHER;/,
+        /const rules = (switches|budget)\.taper \? \1\.seePruning \? RULES_SEE_PRUNING : RULES_TAPERED : \1\.quiescenceEvasions \? \1\.quietPromotions \? RULES_SHIPPED : RULES_NO_QUIET_PROMOTIONS : \1\.quietPromotions \? RULES_NO_EVASIONS : RULES_NEITHER;/,
       );
       const calls = [...flat.matchAll(/quiesce\(([^;]*?)\);/g)].map((m) => m[1]);
       expect(calls).toHaveLength(1);
@@ -1205,6 +1209,8 @@ const SWITCH_MODULES = [
     fut: "searchWithoutFutility",
     /** `ABC-269`'s door (`ADR-0064` decision 7): the shipped path less the taper, every other switch on. */
     tap: "searchWithoutTaper",
+    /** `ABC-279`'s door (`ADR-0069` decision 8): the shipped path less the SEE skip, every other switch on. */
+    see: "searchWithoutSeePruning",
   },
   {
     path: "./engine.ts",
@@ -1213,6 +1219,7 @@ const SWITCH_MODULES = [
     door: "chooseMoveWithoutQuietPromotions",
     fut: "chooseMoveWithoutFutility",
     tap: "chooseMoveWithoutTaper",
+    see: "chooseMoveWithoutSeePruning",
   },
 ];
 
@@ -1257,13 +1264,15 @@ describe("ABC-228 — the doors: searchWithoutQuiescenceEvasions and chooseMoveW
 
   // The sibling of `QE-208-c`: one `quiescenceEvasions` literal per entry, true on the shipped
   // pair only (`ADR-0053` decision 7) — and, since `ABC-229`, on its doors, which keep evasions on;
-  // and, since `ABC-268`, on its doors, which keep both quiescence switches on (`ADR-0061` d4).
-  for (const { path, on, door, fut, tap } of SWITCH_MODULES) {
-    it(`${path}: each exported entry passes exactly one quiescenceEvasions literal, true on ${on}, ${tap}, ${fut} and ${door} only`, () => {
+  // and, since `ABC-268`, on its doors, which keep both quiescence switches on (`ADR-0061` d4);
+  // and on `ABC-269`'s and `ABC-279`'s, which keep every switch but their own on.
+  for (const { path, on, door, fut, tap, see } of SWITCH_MODULES) {
+    it(`${path}: each exported entry passes exactly one quiescenceEvasions literal, true on ${on}, ${see}, ${tap}, ${fut} and ${door} only`, () => {
       const found = switchLiterals(path, "quiescenceEvasions");
       expect(Object.keys(found).length).toBeGreaterThanOrEqual(path === "./search.ts" ? 12 : 6);
       expect(Object.entries(found).filter(([, value]) => value === "true")).toEqual([
         [on, "true"],
+        [see, "true"],
         [tap, "true"],
         [fut, "true"],
         [door, "true"],
@@ -1548,12 +1557,14 @@ describe("ABC-229 — the doors: searchWithoutQuietPromotions and chooseMoveWith
   // on the shipped pair only (`ADR-0053` decision 7) — and, since `ABC-268`, on its doors, the
   // shipped path less futility (`ADR-0061` decision 4); and, since `ABC-269`, on its doors, the
   // shipped path less the taper (`ADR-0064` decision 7).
-  for (const { path, on, fut, tap } of SWITCH_MODULES) {
-    it(`${path}: each exported entry passes exactly one quietPromotions literal, and only ${on}'s, ${tap}'s and ${fut}'s are true`, () => {
+  // And, since `ABC-279`, on its doors, the shipped path less the SEE skip (`ADR-0069` decision 8).
+  for (const { path, on, fut, tap, see } of SWITCH_MODULES) {
+    it(`${path}: each exported entry passes exactly one quietPromotions literal, and only ${on}'s, ${see}'s, ${tap}'s and ${fut}'s are true`, () => {
       const found = switchLiterals(path, "quietPromotions");
       expect(Object.keys(found).length).toBeGreaterThanOrEqual(path === "./search.ts" ? 12 : 6);
       expect(Object.entries(found).filter(([, value]) => value === "true")).toEqual([
         [on, "true"],
+        [see, "true"],
         [tap, "true"],
         [fut, "true"],
       ]);

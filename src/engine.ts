@@ -263,7 +263,7 @@ export function trimPriorKeys(keys: readonly bigint[], halfmoveClock: number): b
 const ABORTED = Symbol("engine: the budget is spent");
 
 /**
- * The `ABC-121`, `ABC-208`, `ABC-230`, `ABC-228`, `ABC-229`, `ABC-268` and `ABC-269` switches,
+ * The `ABC-121`, `ABC-208`, `ABC-230`, `ABC-228`, `ABC-229`, `ABC-268`, `ABC-269` and `ABC-279` switches,
  * `src/search.ts`'s rule: on in `chooseMove`, off in its doors.
  */
 interface Heuristics {
@@ -288,10 +288,16 @@ interface Heuristics {
    */
   readonly futility: boolean;
   /**
-   * The tapered evaluation (`ABC-269`, `ADR-0064` decision 7): true on `chooseMove` only, where
-   * both quiescence switches are on too, so its rules record is `RULES_TAPERED`.
+   * The tapered evaluation (`ABC-269`, `ADR-0064` decision 7): true on `chooseMove` and
+   * `chooseMoveWithoutSeePruning`, where both quiescence switches are on too, so its rules record is
+   * `RULES_SEE_PRUNING` or `RULES_TAPERED`.
    */
   readonly taper: boolean;
+  /**
+   * Quiescence skips a losing capture out of check (`ABC-279`, `ADR-0069` decisions 1-3, 6, 7): true
+   * on `chooseMove` only, where the taper is on too, so its rules record is `RULES_SEE_PRUNING`.
+   */
+  readonly seePruning: boolean;
 }
 
 /** The quiescence rules this recursion hands `quiesce` (`ADR-0053` decision 6): constants, never built per leaf. */
@@ -299,8 +305,15 @@ const RULES_SHIPPED: QuiescenceRules = { evasions: true, quietPromotions: true }
 const RULES_NO_QUIET_PROMOTIONS: QuiescenceRules = { evasions: true, quietPromotions: false };
 const RULES_NO_EVASIONS: QuiescenceRules = { evasions: false, quietPromotions: true };
 const RULES_NEITHER: QuiescenceRules = { evasions: false, quietPromotions: false };
-/** `chooseMove`'s record (`ABC-269`): both rules and the tapered stand pat. `taper` is on only there. */
+/** `chooseMoveWithoutSeePruning`'s record (`ABC-269`): both rules and the tapered stand pat. */
 const RULES_TAPERED: QuiescenceRules = { evasions: true, quietPromotions: true, taper: true };
+/** `chooseMove`'s record (`ABC-279`, `ADR-0069` decision 6): the tapered record, losing captures skipped. */
+const RULES_SEE_PRUNING: QuiescenceRules = {
+  evasions: true,
+  quietPromotions: true,
+  taper: true,
+  seePruning: true,
+};
 
 /** The deepening loop's mutable state: the clock, the deadline, and when to consult again. */
 interface Budget extends Heuristics {
@@ -357,7 +370,9 @@ function leafScore(
   const reason = leafEndReason(position);
   if (reason === null) {
     const rules = budget.taper
-      ? RULES_TAPERED
+      ? budget.seePruning
+        ? RULES_SEE_PRUNING
+        : RULES_TAPERED
       : budget.quiescenceEvasions
         ? budget.quietPromotions
           ? RULES_SHIPPED
@@ -665,6 +680,31 @@ export function chooseMove(position: Position, options: EngineOptions): EngineCh
     quietPromotions: true,
     futility: true,
     taper: true,
+    seePruning: true,
+  });
+}
+
+/**
+ * TEST-ONLY. The pre-`ABC-279` `chooseMove`, node for node: quiescence's losing-capture skip off,
+ * everything else on, the taper, futility, null move, both quiescence switches and the prior keys
+ * included — the engine side of `ABC-279`'s bounded drift oracle, and the shipped side of every
+ * older row that measures its own heuristic alone (`ADR-0069` decision 8). It takes no depth. Not
+ * an engine option; nothing in production calls it.
+ */
+export function chooseMoveWithoutSeePruning(
+  position: Position,
+  options: EngineOptions,
+): EngineChoice | null {
+  return deepen(position, options, {
+    pvs: true,
+    reductions: true,
+    nullMove: true,
+    priorKeys: true,
+    quiescenceEvasions: true,
+    quietPromotions: true,
+    futility: true,
+    taper: true,
+    seePruning: false,
   });
 }
 
@@ -688,6 +728,7 @@ export function chooseMoveWithoutTaper(
     quietPromotions: true,
     futility: true,
     taper: false,
+    seePruning: false,
   });
 }
 
@@ -711,6 +752,7 @@ export function chooseMoveWithoutFutility(
     quietPromotions: true,
     futility: false,
     taper: false,
+    seePruning: false,
   });
 }
 
@@ -734,6 +776,7 @@ export function chooseMoveWithoutQuietPromotions(
     quietPromotions: false,
     futility: false,
     taper: false,
+    seePruning: false,
   });
 }
 
@@ -756,6 +799,7 @@ export function chooseMoveWithoutQuiescenceEvasions(
     quietPromotions: false,
     futility: false,
     taper: false,
+    seePruning: false,
   });
 }
 
@@ -778,6 +822,7 @@ export function chooseMoveWithoutNullMove(
     quietPromotions: false,
     futility: false,
     taper: false,
+    seePruning: false,
   });
 }
 
@@ -800,6 +845,7 @@ export function chooseMoveWithoutReductions(
     quietPromotions: false,
     futility: false,
     taper: false,
+    seePruning: false,
   });
 }
 
@@ -821,6 +867,7 @@ export function chooseMoveWithoutPvsOrReductions(
     quietPromotions: false,
     futility: false,
     taper: false,
+    seePruning: false,
   });
 }
 

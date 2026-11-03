@@ -503,7 +503,8 @@ describe("A4 — no fixed depth anywhere in the delivered engine", () => {
     // fourth door (`chooseMoveWithoutQuiescenceEvasions`, `ADR-0053` decision 6), and `ABC-229` a
     // fifth (`chooseMoveWithoutQuietPromotions`, the same decision). `ABC-268` added a sixth
     // (`chooseMoveWithoutFutility`, `ADR-0061` decision 4), and `ABC-269` a seventh
-    // (`chooseMoveWithoutTaper`, `ADR-0064` decision 7).
+    // (`chooseMoveWithoutTaper`, `ADR-0064` decision 7). `ABC-279` adds an eighth
+    // (`chooseMoveWithoutSeePruning`, `ADR-0069` decision 8): exactly one more.
     expect(Object.keys(engineModule).sort()).toEqual([
       "DEFAULT_BUDGET_MS",
       "HARD_CEILING_MS",
@@ -515,6 +516,7 @@ describe("A4 — no fixed depth anywhere in the delivered engine", () => {
       "chooseMoveWithoutQuiescenceEvasions",
       "chooseMoveWithoutQuietPromotions",
       "chooseMoveWithoutReductions",
+      "chooseMoveWithoutSeePruning",
       "chooseMoveWithoutTaper",
       "createEngine",
       "trimPriorKeys",
@@ -529,6 +531,7 @@ describe("A4 — no fixed depth anywhere in the delivered engine", () => {
     expect(engineModule.chooseMoveWithoutQuietPromotions.length).toBe(2);
     expect(engineModule.chooseMoveWithoutFutility.length).toBe(2);
     expect(engineModule.chooseMoveWithoutTaper.length).toBe(2);
+    expect(engineModule.chooseMoveWithoutSeePruning.length).toBe(2);
     expect(createEngine.length).toBe(1);
     expect(source).not.toMatch(/export function \w+\([^)]*depth/i);
   });
@@ -1267,7 +1270,7 @@ if (RUN_DEEP) {
  * Imported HERE rather than in the import block so `A4`'s diff fence holds: this file's edits sit
  * inside the `A4` `describe` plus appended rows.
  */
-const { search } = await import("./search.ts");
+const { search, searchWithoutSeePruning } = await import("./search.ts");
 
 describe("ABC-170 A1 — maxDepth stops deepening once that depth has completed", () => {
   // Re-found at `ABC-269` (`ADR-0064` decision 7, `ADR-0028` decision 2): on `kp-vs-k` the tapered
@@ -1330,18 +1333,26 @@ describe("ABC-170 A2 — maxNodes aborts, and the last COMPLETED iteration is pl
     expect(elapsedMs).toBeLessThan(LONG_MS);
   });
 
-  it("plays search(position, d)'s move and score at the reported depth d — the abort is discarded", () => {
-    const limited = choice();
+  // RE-POINTED at `ABC-279` (`ADR-0069` decision 8): the row measures the abort, not the SEE skip.
+  // On the shipped tree 6 000 nodes now runs out just as depth 2 completes (6 072 nodes, limited
+  // and depth-capped alike), so no iteration is entered and aborted and the row stops biting. It
+  // reads the door pair, the pre-ticket `chooseMove` and `search()`, and its figures do not change.
+  it("plays searchWithoutSeePruning(position, d)'s move and score at the reported depth d — the abort is discarded", () => {
+    const limited = engineModule.chooseMoveWithoutSeePruning(kiwipete(), {
+      budgetMs: LONG_MS,
+      now: tickingClock(1),
+      maxNodes: MAX_NODES,
+    }) as EngineChoice;
     // It really entered, and aborted, the iteration after `d`: stopped at depth `d` by a depth
     // cap instead, the same search visits fewer nodes. A build that returned the aborted
     // iteration's move would fail the identity below.
-    const completedOnly = chooseMove(kiwipete(), {
+    const completedOnly = engineModule.chooseMoveWithoutSeePruning(kiwipete(), {
       budgetMs: LONG_MS,
       now: tickingClock(1),
       maxDepth: limited.depth,
     }) as EngineChoice;
     expect(limited.nodes).toBeGreaterThan(completedOnly.nodes);
-    const reference = search(kiwipete(), limited.depth);
+    const reference = searchWithoutSeePruning(kiwipete(), limited.depth);
     expect(label(limited.move)).toBe(label(reference.move as Move));
     expect(limited.score).toBe(reference.score);
   });
