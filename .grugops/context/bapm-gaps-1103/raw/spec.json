@@ -1,0 +1,7 @@
+{
+  "refs": ["bapm-gaps-1103", "grugops/bapm-gaps-1103", "ABC-278", "ABC-276", "ABC-277", "ABC-225", "EPIC-011", "ADR-0049", "NFR-008", "SEC-HP-2", "QE-276-a", "QE-276-b", "QE-276-c", "QE-276-d", "QE-277-a", "QE-277-b", "QE-277-c", "QE-277-d", "QE-277-e", "QE-277-f", "QE-277-g", "tools/grugops/records-path-check.js", "tools/grugops/records-path-check.proof.js", "memory-bank/70-runbook.md", "tools/rating/rating.ts", "tools/rating/pair.ts", "8580bbd3", "3dd27cfc", "541ddf45", "f4c52d62", "861de9c5", "sec-host-paths/20261103T144802Z-security-nfr-decision-72b4070b", "qe-ABC-276/20261103T151750Z-qe-e2e-decision-a79db6c1", "qe-ABC-276/20261103T151750Z-qe-e2e-observation-1cbc2325", "qe-ABC-277/20261103T151952Z-qe-e2e-decision-98c1d275", "qe-ABC-277/20261103T151952Z-qe-e2e-observation-7d149fbd"],
+  "notes": [
+    { "kind": "decision", "confidence": "high: every gap and figure copied from sealed QE notes …7d149fbd / …1cbc2325; the check read at main 8580bbd3, not edited; A4's ≤ 10 budget, A7 (both homes) and the two declines are BA/PM's calls, stated with reasons; size S and P2 are the Orchestrator's brief", "bodyFile": "notes/cut.md" },
+    { "kind": "observation", "confidence": "high: results copied from QE verdicts …a79db6c1 / …98c1d275 and the board lines; merges 3dd27cfc / 541ddf45 read with git log; board read only", "bodyFile": "notes/records.md" }
+  ]
+}

@@ -1,8 +1,9 @@
 ---
 id: ABC-277
 title: "A records path check: over the lines a branch adds under `.grugops/`, `plans/` and `memory-bank/` (and every added or changed `.gz`, decompressed), it fails with the file and the class, never the value, on a home path, its slug form, a `/Users/<name>` path, the session scratch path or a `pgrep -a`-style foreign argv. The Orchestrator runs it before each merge. The placeholder rule, with the hostname exemption, is a standing ruling (`ADR-0049` D4; `SEC-HP-1`, `SEC-HP-2`)"
-status: ready
-column: Ready
+status: done
+column: Done
+closed: "2026-11-03, merged to local main at 541ddf45 (from grugops/ABC-277 at 0f188473, code 861de9c5); QE PASS_WITH_GAPS (qe-ABC-277 …98c1d275), which signs acceptance (tools and records, no UAT); A1-A6 MET; A7 not done (owner SEC-HP-2 pending, the ticket's skip path); QE-277-a…f routed to ABC-278 (bapm-gaps-1103). Front matter by bapm-gaps-1103"
 size: M
 priority: P2
 epic: EPIC-011
@@ -11,6 +12,30 @@ adr: "ADR-0049 D4. No new ADR: a check and a written convention for an accepted 
 ---
 
 # ABC-277: a branch cannot add a host path to the records unseen
+
+> **CLOSED 2026-11-03, DONE, by BA/PM** (task `bapm-gaps-1103`, records only, at `main` `8580bbd3`; nothing run but the
+> path check). **Merged to local `main` at `541ddf45`** from `grugops/ABC-277` at `0f188473` (code `861de9c5`). Not
+> pushed. Sources: QE `qe-ABC-277` verdict `…98c1d275` and gaps `…7d149fbd`; the Orchestrator's board line (post-merge
+> `npm test` 2 566 / 2 566; the check exits 0 on `main`). The Orchestrator runs it before every merge into `main` from
+> now on (board).
+>
+> **Result: QE PASS_WITH_GAPS**, which signs acceptance (test note 4, no UAT).
+>
+> | row | read | result |
+> |---|---|---|
+> | A1 | QE's own scratch repo, real home / uid, CLI with no seam: exit 1, 17 findings; 0 of 10 value strings printed in any of 52 runs | MET |
+> | A2 | 5 / 5 cases exit 0 (same, legacy touch, rename text and `.gz`, outside, placeholders) | MET |
+> | A3 | real branch and `--head main` exit 0; orphan, non-repo, missing ref, bad arguments exit 2 with a reason | MET |
+> | A4 | `70-runbook.md` § Before a merge into main and `40-contributing.md` § Conventions name the command, 0 / 1 / 2, who runs it, and the block | MET |
+> | A5 | `45-standing-rulings.md` gains exactly one dated entry (classes, placeholders, `$HOME`, foreign count, hostname exemption, sources) | MET |
+> | A6 | lint, typecheck, build green; `npm test` 2 566 / 2 566; lane 66 = 66; proof 18 / 18; 0 lines under `src/` / `data/` | MET |
+> | A7 | the owner has not answered SEC-HP-2 | **not done** (the ticket's skip path; not a gap) |
+> | NFR | 61 ms at 200 files, 169 ms at 287 (≤ 10 s); 0 lane rows; no value printed | MET |
+>
+> **Gaps, routed** (`bapm-gaps-1103`): **QE-277-a** (MEDIUM, `.gitattributes` / binary blind spot), **-b** (`.xz`),
+> **-c** (foreign-argv misses), **-d** (home before `.` / `-` / `_`), **-e** (quoted file name) and **-f** (the real
+> `HOME`: runbook line plus reading both homes) → **`ABC-278`** (S, P2, DoR 10/10, Ready). **QE-277-g** (INFO): accepted
+> by QE, unchanged. SEC-HP-2 (A7) stays an owner question on `EPIC-011`.
 
 > **Cut 2026-11-03 by BA/PM: DoR 10/10, Ready** (task `bapm-sec-cut`, records only, at `main` `5222a9b4`; nothing
 > run). Source: Security/NFR `sec-host-paths` decision `…72b4070b` (recommendation (b) REQUIRED; ticket text T2) and
