@@ -1,0 +1,6 @@
+{
+  "refs": ["arch-ABC-239", "grugops/arch-ABC-239", "ABC-239", "E2", "ADR-0067", "arch-ABC-239/20261103T104045Z-architect-design-decision-255e9bcf"],
+  "notes": [
+    { "kind": "decision", "confidence": "high (an addendum sealed before the run; D1-D3 figures quoted from the run output; inner split only, nothing graded)", "bodyFile": "notes/prereg-diag2.md" }
+  ]
+}
