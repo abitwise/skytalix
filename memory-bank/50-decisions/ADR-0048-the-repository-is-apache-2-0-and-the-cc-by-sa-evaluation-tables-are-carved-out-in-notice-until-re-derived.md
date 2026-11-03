@@ -6,6 +6,20 @@ id: ADR-0048
 
 ## Status
 
+**2026-11-03 — Lichess CC0 game data is admitted for tuning** (owner, `Q-3K-7` (a), `orch-2026-10-30a` `…af126c04`
+item 2; recorded by Architect/Design, task `arch-owner-answers-1103`, records only).
+- It is **data, not code.** One Lichess database export (`ADR-0067` § Addendum 2026-11-03) is read by `tools/tune`
+  as training input, outside the repository. It is never committed or bundled.
+- **Its provenance is recorded in the tool's output:** the header of `src/evaluate-params.ts` carries the export's
+  URL, its sha256 and a licence line, "Lichess database export, CC0 (database.lichess.org)".
+- The export page reads "Database exports are released under the Creative Commons CC0 license" (read 2026-11-03).
+  So decision 6 ("the CC0 and public-domain parts need nothing") covers it. **`NOTICE` does not change**, and the
+  tuned values are Apache-2.0 with the rest of the repository.
+- Its limits stay as the owner set them: no Stockfish-labelled targets (`Q-3K-7` (b), "no"), and no games against
+  Stockfish as training data (`Q-3K-7` (c), "no").
+- *This is an engineering reading, not legal advice.* Whether fitted weights carry any right from their training
+  data is `UNKNOWN - verify`. CC0 waives what there is.
+
 **2026-10-25 — the carve-out ended (decision 7 done by `ABC-215`, merged at `main` `5c91e2e4`).** The values are
 now made by rule. `NOTICE` and the `src/evaluate.ts` header no longer name CC BY-SA 3.0 (matches 0 and 0; base
 `cac2b4e9` had 5 and 4). Recorded by Architect/Design (task `arch-adr0048-status`), on QE `…c2c3540f` and
@@ -120,6 +134,8 @@ moves it to accepted.
 6. **The CC0 and public-domain parts need nothing**, as D13 already says: the opening book (`ADR-0023`,
    `data/opening-book/ATTRIBUTION.md`), mulberry32 and splitmix64. The perft positions and counts from the CPW
    "Perft Results" page are facts, probably unprotected (`UNKNOWN - verify`, INFO). `NOTICE` does not list them.
+   *(2026-11-03: the Lichess CC0 export that `tools/tune` trains on joins this item. It is data, kept outside the
+   repository, with its provenance in the tool's output (§ Status, first block).)*
 7. **The re-derivation replaces D13's precondition.**
    - D13 required "re-derive our own values first" before any distribution. Publication breached that
      (`LIC-PUB-1`). Under path A, the carve-out covers the tip now, and the re-derivation follows as its own

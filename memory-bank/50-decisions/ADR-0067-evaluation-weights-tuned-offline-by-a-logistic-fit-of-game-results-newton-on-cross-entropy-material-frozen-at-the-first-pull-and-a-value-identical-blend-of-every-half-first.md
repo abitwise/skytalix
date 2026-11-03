@@ -6,7 +6,28 @@ id: ADR-0067
 
 ## Status
 
-**PROPOSED 2026-11-03.** Recorded by Architect/Design (task `arch-ABC-239`, on `grugops/arch-ABC-239` from `main`
+**ACCEPTED 2026-11-03 by the owner. IN FORCE as the method** for `ABC-239` and every later pull. Recorded by
+Architect/Design (task `arch-owner-answers-1103`, records only, on `grugops/arch-owner-answers-1103` from `main`
+`dc7dc15d`). Nothing was run except a data-size probe (HTTP headers and the export's index files, under the host lock).
+- **His words, verbatim** (`orch-2026-10-30a` `…af126c04`): *"1. yes ; 2. yes ; 3. no ; 4. no ; 5. ok yes ; 6. yes ;
+  7. yes; 8. yes"*. Item 1 is this ADR. Items 2–5 touch it:
+  - **Q-3K-7 (a): yes.** The tuner may train on the public-domain (CC0) Lichess database export, beside own self-play.
+    Decision 9's Lichess block is now live, pinned by **§ Addendum 2026-11-03: the Lichess data pin**.
+  - **Q-3K-7 (b): no.** No Stockfish-labelled position is ever a training target. § Alternatives' "not used" is now
+    his rule, not only a recommendation.
+  - **Q-3K-7 (c): no.** Our games against Stockfish are never training data. They stay the outside measure (S′,
+    B-T8, C4's anchors).
+  - **B-T8: approved** ("5. ok yes"): the 200 + 200 outside pair (about 5 h) runs before `ABC-239` merges. Its bar
+    is unchanged.
+  - Item 8 (`ABC-270`'s design may start now) is read in § Consequences' dated line.
+- **E2-pre is in force on `main`:** `ABC-274` merged at **`2410d4f7`** (2026-11-03T20:07:05Z) on `qe-ABC-274`'s
+  PASS_WITH_GAPS (`…fa87f74d`), which signs UAT under the owner's delegation. QE read `G2` at **0.9897 ×** (sessions
+  0.9797 / 0.9997, controls valid), `G6` depth 9 / 10 equal to base, and 0 mismatches over A1's 9 120 and A2's
+  4 840 290 rows (the Orchestrator's board line). F8 did not fire. So `ABC-239`'s A3 and A4 hold as written.
+- **What is still not his yes:** nothing in this ADR waits on him now. `ABC-239`'s build, its fit and its reads go
+  ahead under decisions 1–11, the addendum and B-T0–B-T8.
+
+*Before acceptance:* **PROPOSED 2026-11-03.** Recorded by Architect/Design (task `arch-ABC-239`, on `grugops/arch-ABC-239` from `main`
 `af15cbc9`). **Acceptance is the owner's:** this is a new ADR (`memory-bank/45-standing-rulings.md`, 2026-10-22).
 `ADR-0056` (accepted in direction) lists E2. That covers the direction, not this text.
 
@@ -55,6 +76,9 @@ id: ADR-0067
 | 2026-11-03 | Architect/Design | F8 written (E2-pre's falsifier and disposition). `ADR-0064` F3's cut C1 read against d8: the packed form stays recommended | `arch-fold-1103b` |
 | 2026-11-03 | Architect/Design | `ABC-269` merged (`54dee3f2`), so A5's base exists. A5's PREREG content written ahead (`QE-269-f` / `-g`); no bar moved | `arch-post-269` `…3f30baf8` |
 | 2026-11-03 | Architect/Design | `ABC-274`'s A3 seam `withParametersForTest` accepted with S1–S3 (one test-only repair). `ABC-239` does not reuse it. A3's rule suffices, so QE freezes no rows (Q1–Q4); no bar moved | `arch-ABC-274-seam` `…3169a174` |
+| 2026-11-03 | Owner | **ACCEPTED.** Q-3K-7 (a) yes, (b) no, (c) no; B-T8 approved | `orch-2026-10-30a` `…af126c04` |
+| 2026-11-03 | Orchestrator | `ABC-274` (E2-pre) merged; F8 did not fire | `2410d4f7`; QE `…fa87f74d` |
+| 2026-11-03 | Architect/Design | ACCEPTED / IN FORCE line. § Addendum: the Lichess data pin (2017-03 export, ≤ 1 M positions, own share 0.5 of the loss). B-T0–B-T8 and F1–F7 re-read; no bar moved | `arch-owner-answers-1103` |
 
 ## Context
 
@@ -338,6 +362,9 @@ id: ADR-0067
      - **Every comment is ignored, `[%eval]` included,** so no engine label enters.
      - At most 1 M positions, sampled deterministically by hash.
      - **Validation stays own games** (held-out openings): the domain the product plays.
+     - *Dated 2026-11-03 (`arch-owner-answers-1103`): the owner said yes (`…af126c04` item 2). The export, the
+       slice, the filters, the split, the mix weight and the provenance are pinned in § Addendum 2026-11-03. Where
+       the addendum is more exact than the five lines above, the addendum governs. It loosens none of them.*
    - **Rules for any source:**
      - de-duplicate games (start FEN + moves), then positions (four FEN fields, labels averaged);
      - a position is kept only if it is not a book position (for own games, the move played from it carries an engine
@@ -371,7 +398,7 @@ id: ADR-0067
 | B-T5 | play safety on the shipped path: `ADR-0050` d9's zugzwang rows 7 / 7 at their depths; mate floor 0 violations (`ADR-0064` B2's form); `G1` ≥ 54 / 58 with no NEWLY-MISSED line; `ADR-0061`'s futility audit (flips ≤ 0.5 %, 0 flips ≥ 200 cp) | as written |
 | B-T6 | `NFR-005` (`Q-3K-4` = (b)): `G6` boards at `LEVELS[5]`, ≥ 5 interleaved rounds, every run at depth ≥ 6; depth 7 is a WARN; the median against base reported | FAIL below 6 |
 | B-T7 | A6: C2′ 100 games at 100 ms against the merge-base, GAIN ≥ 50.0, C-1 / C-2; S′ 10 games at 0.5 s against Stockfish 19 at E 1 810 (≥ 3.0 of 10, else 10 more and ≥ 7.0 of 20); the Levels deep lane exit 0 | `EPIC-011` § The per-change rule |
-| B-T8 | A6's outside pair, 200 + 200 at 0.5 s against Stockfish (≈ 5 h), **asked of the owner first** | point estimate ≥ 0 |
+| B-T8 | A6's outside pair, 200 + 200 at 0.5 s against Stockfish (≈ 5 h), **asked of the owner first** (*approved 2026-11-03, `…af126c04` item 5*) | point estimate ≥ 0 |
 
 ## What would falsify this
 
@@ -385,6 +412,178 @@ id: ADR-0067
 | **F6** | 11, the strength premise | C2′ < 50.0, an S′ collapse, or a red Levels lane | NOT MET, not re-played. **No set is ever re-fitted on play results**, and the configuration and λ are never chosen on play. A new attempt is a new data set or free set with a new pre-registration |
 | **F7** | 7: reproducibility | B-T3 not byte-identical | a defect |
 | **F8** | 8: E2-pre (`ABC-274`) is value-identical and cheap. *Added 2026-11-03 (`arch-fold-1103b`)* | (a) `ABC-274` A1 / A2 / A4 / A7: a node, score or move mismatch against the pre-ticket head, an `Object.is` miss, or a test expectation that has to move; (b) A5: `G2` above 1.05 × the pre-ticket head (the mean of two sessions, `ADR-0031` d3); (c) A6: a `G6` board's median depth below the pre-ticket head's, or any run below depth 6 | (a) a defect. It is fixed before any cost bar is read, and never re-pinned. (b) or (c): STOP to Architect/Design. **One value-identical cut is allowed, then one re-read of the bar that missed,** under a PREREG sealed before the re-read. If the build is not packed, the cut is the packed score. If it is already packed, the Architect names the cut. A second miss: **not merged**. No value is tuned to pass, and no bar moves. `ABC-239`'s A3 / A4 then cannot hold as written. Its re-plan (the blend folded into E2, § Alternatives) needs a new dated decision here, and the owner's word for any bar it changes. S2 nps is reported, never graded (`…690d3b30`). *Dated 2026-11-03 (`arch-post-269`, `QE-269-f` / `-g`):* A5's PREREG states the session spread and the round order ahead of the reading (decision 8's dated line). The bar stays 1.0500. *Dated 2026-11-03 (`arch-ABC-274-seam`):* A3's seam is accepted with S1–S3 (decision 8's dated line). A red S1–S3 row is A3's disposition, a defect: it is fixed and never re-pinned |
+
+## Addendum 2026-11-03: the Lichess data pin (Q-3K-7 (a))
+
+*Architect/Design, task `arch-owner-answers-1103`, records only, on `grugops/arch-owner-answers-1103` from `main`
+`dc7dc15d`. The owner's yes is `…af126c04` item 2. The only thing run was a data-size probe under the host lock: HTTP
+headers and the export's `counts.txt`, `list.txt` and `sha256sums.txt`, under 2 s. Nothing was downloaded beyond
+those index files.* This pins decision 9's Lichess block for `ABC-239`'s first pull. **No bar moves** (§ The re-read
+below).
+
+### The export: one month, `2017-03`
+- **File:** `lichess_db_standard_rated_2017-03.pgn.zst` at
+  `https://database.lichess.org/standard/lichess_db_standard_rated_2017-03.pgn.zst`.
+  - **2 169 142 067 bytes** (HTTP `Content-Length`, read 2026-11-03).
+  - **11 346 745 games** (the export's `counts.txt`).
+  - **sha256 `b319297e9270285635d615cbcd19a9b0d44747be3ff91d5b3eac41175b794320`** (the export's `sha256sums.txt`).
+- **Why this month:**
+  1. **It is the last month before clock comments begin, and the largest month without them.** The page reads:
+     "Games contain clock information … as PGN `%clk` comments since April 2017." `2017-04` has the same count
+     (11 348 506) at 3 481 200 992 bytes, which is 1.6 × the bytes for the same games. `2017-01` and `2017-02` are a
+     little smaller (1.90 and 1.80 GB) with fewer games (10.68 M and 10.19 M). The most games without clock text gives
+     the cap the widest pool. The latest month, `2026-10`, is 30 982 323 881 bytes and 95 395 628 games. That is 14 ×
+     the download for a slice capped at 1 M positions. The probe's table is
+     `.grugops/context/arch-owner-answers-1103/raw/lichess-probe.txt`.
+  2. **It clears the export's own known-issue list.** It comes after "everything before March 2016: some players could
+     play themselves in rated games" and after "up to August 2016: 7 games with illegal castling moves". It lies
+     outside the December 2016 evaluation issue, which would not matter anyway, because comments are not read. It
+     lies far from 2020–2021 (for example "12 March 2021: some games have incorrect results").
+     - **One issue does apply:** "up to December 2020: some exports lack the `Round` and `Date` tags and have missing
+       black move numbers after comments." So the reader needs neither tag, and it needs no black move numbers.
+  3. **It comes before the Bot API (2018).** No `BOT`-titled game is expected. The filter runs anyway, and its count
+     is reported.
+  4. **No month is free of engine labels:** "about 6% of the games include Stockfish analysis evaluations"
+     (`[%eval]`), in every month. So the guarantee for Q-3K-7 (b) is the reader, not the month. Every comment is
+     dropped unread (decision 9), and a test proves it (§ Test strategy below).
+- **The players' era does not matter here.** These are static evaluation weights, not an opening book. Ratings are
+  Lichess Glicko-2, on its 2017 scale.
+
+### The slice: at most 1 000 000 positions
+- **Game filters, in this order, each with a reported count:**
+  1. `Event` starts with "Rated ". There is no `Variant` tag (or it reads "Standard"), and no `FEN` or `SetUp` tag.
+  2. `TimeControl` is "B+I" with base **B ≥ 180 s** (decision 9). Correspondence ("-") is out.
+  3. **`WhiteElo` ≥ 2000 and `BlackElo` ≥ 2000** (decision 9), **and |`WhiteElo` − `BlackElo`| ≤ 200.**
+     - The gap bound is new, and it only narrows the set. A large gap predicts the result without the position, so
+       it adds noise to a label that is meant to grade the position.
+  4. `Termination` is "Normal". Time forfeit, abandoned, rules infraction and unterminated games are out.
+  5. `Result` is one of 1-0, 0-1 or 1/2-1/2.
+  6. Neither `WhiteTitle` nor `BlackTitle` is "BOT".
+  7. **Every move replays legally,** from the start position, through the engine's own move generator (SAN matched
+     against `legalMoves`). A game with any unmatched or ambiguous move is dropped whole and counted.
+  8. **De-duplicate games** by start FEN plus moves, across Lichess and own games (decision 9).
+- **Position rules, in this order:**
+  1. **Ply ≥ 16.** For Lichess this stands in for the book (decision 9).
+  2. **Sample by key, before the costly filters.** Keep a position iff fnv1a32("ABC-239/lichess/v1\n" + key) mod 8
+     = 0, where key is the four FEN fields (decision 9's position key).
+     - Every occurrence of a key is then taken or left together, so the label average below uses every game that
+       reached it.
+  3. **The side to move is not in check,** and it has a legal move.
+  4. **Quiet:** quiescence equals the static score, at the base values (decision 9). This is the engine's own search,
+     not an outside label.
+  5. **No mate-score filter.** For own games that filter reads the engine's comment. Lichess comments are not read, so
+     the signal does not exist. Rule 4 and the result label carry those positions.
+  6. **The label** is the game's result from White's side. Positions are de-duplicated by key with the labels
+     averaged (decision 9).
+  7. **Leakage runs one way:** a Lichess key that equals any own-validation key (outer or inner) leaves the Lichess
+     rows. Lichess never trims validation. Own training against own validation keeps decision 9's rule.
+     - **Why:** the validation rows are then exactly the own-only run's rows, so B-T2 reads the same rows whichever
+       data trained. Lichess's opening coverage would otherwise remove a sample-dependent share of validation.
+  8. **The cap.** If more than **1 000 000** keys survive, keep the 1 000 000 with the smallest rule-2 hash, with ties
+     broken by key string order. If fewer than **250 000** survive, **STOP to Architect/Design before any fit.** The
+     design assumed data broader than own games (about 153 000 training positions today). A smaller slice, or a second
+     month, is a new dated decision here.
+- **The expected size is `UNKNOWN - verify`.** It is an estimate: 1–3 % of 11.35 M games pass the game filters
+  (110 000–340 000 games). About 55 positions per game lie at ply 16 or later, so 6–19 M positions; ÷ 8 is 0.75–2.3
+  M. The quiet and check filters then keep about two thirds, as the prototype did (254 485 of 388 632 seen). That is
+  about 0.5–1.5 M, at or near the cap. No 2017 rating distribution was read for this. The tool reports every count.
+
+### What the host carries (the numbers)
+- **Disk:** 2.17 GB, kept outside the repository at `<data>/lichess/`. It is never decompressed to disk. The tool
+  streams it through `node:zlib`'s `createZstdDecompress` (present on the host's Node v26.12.1; checked
+  2026-11-03). No `zstd` binary is required. The host had 844 GB free at the probe.
+- **The decompressed stream:** about 7–10 GB of PGN text, at 700–900 bytes a game (`UNKNOWN - verify`). It is read
+  once and never held.
+- **Rows held:** at most 1 000 000 Lichess rows plus the own rows (153 165 training and 39 568 validation today), so
+  about 1.2 M.
+- **RAM:** the run stays inside the prototype's heap flag, `--max-old-space-size=3000`. The host has 29 GB (21 GB
+  available at the probe). The peak heap at 1.2 M rows is `UNKNOWN - verify`. The prototype held 254 485 rows inside
+  that flag. The Engineer records peak RSS. If the run cannot fit the flag, the fault is in the row storage. The slice
+  is not shrunk to make it fit.
+- **Time, one `extract | fit | emit` run: ≤ 30 min, hard.** Each stage runs under `timeout 1800`, as the prototype's
+  job did (1 700). The estimate is about 10–15 min, `UNKNOWN - verify`:
+  - extract about 5–12 min: the header scan of 11.35 M games, SAN replay of the qualifying games (about 19 M plies at
+    the top of the range), then quiescence, tracing and the identity gate on the sampled positions only. The
+    prototype ran about 45 000 positions a second through replay, quiescence and trace;
+  - fit about 1.5–3 min: the prototype took 18 s for 254 485 rows over C-S and C-F at three λ, which is linear in rows;
+  - emit: seconds.
+  - **Over 30 min is a STOP to Architect/Design,** with the stage times. The slice is not cut inside the build.
+  - B-T3 runs the whole thing twice, and each run has the same limit.
+
+### The split and the mix
+- **Outer validation: own games only,** by decision 9's opening split, unchanged ("ABC-239/split/v1", mod 5 = 0).
+- **The inner split** (the C-S / C-F choice and λ): own training openings only, by decision 9's mod 4 on
+  "ABC-239/inner/v1". **Every Lichess row is inner-training.** Every choice is read on own games, the domain the
+  product plays.
+- **The mix weight: own games carry 0.5 of the loss.**
+  - L(θ) = 0.5 · (mean cross-entropy over own training rows) + 0.5 · (mean cross-entropy over Lichess rows), plus
+    C-F's L2 term.
+  - **Fixed here, before any fit.** It is never chosen on validation or on play (F6).
+  - **Why 0.5:** by row count, Lichess would carry about 87 % (1 M against about 150 000). Own games are the domain
+    and the validation, and Lichess is the correction for their pull (queen 2 593). Equal shares give neither source
+    a majority. Choosing the weight on own inner-validation would favour own games by construction, and that is the
+    pull the yes was for.
+- **K is fitted per source: K_own and K_lichess.** Each one comes from decision 3's golden section, on that source's
+  training rows at the base values, and is then fixed. Both go into the header. Validation reads K_own.
+  - **Why:** 2000+ humans at blitz and this engine at 100 ms convert the same edge at different rates. One shared K
+    would bend the shared weights to fit both slopes. With each K fixed, the loss stays convex (decision 2).
+- **Material stays frozen. This is still the first pull** (decision 6). Moving material inside ± 25 % needs its own
+  PREREG, unchanged.
+- **C-S or C-F:** decision 6's inner rule, unchanged. On broader data C-F may win it. That is the rule's call.
+- **Emitted: the mixed fit.** Reported beside it, grading and deciding nothing:
+  - the own-only fit (the A1 default, the same rules) on the same outer rows;
+  - the emitted set's cross-entropy on the Lichess rows.
+
+  If the mixed fit misses B-T2, F2 fires. Swapping in the own-only fit is then a re-open with its own PREREG. It is
+  not a fallback.
+
+### Provenance: what the tool writes
+- **The data manifest** (decision 7's sha256) gains one Lichess entry: the file name, its URL, its byte length and its
+  sha256. The entry is recorded **by URL, never by local path**: no host path goes in a record (`45-standing-rulings.md`,
+  2026-11-03). The own PGNs stay repository-relative.
+- **The tool hashes the local file before `extract`.** If the hash is not the pinned sha256 above, it exits non-zero
+  and writes nothing.
+- **The header also records:**
+  - the count for each game filter (1–8) and each position rule (1–8), and the Lichess rows kept;
+  - rule 2's string and modulus, the cap, and the leakage drop count;
+  - K_own and K_lichess, the own weight 0.5, the configuration and λ;
+  - the licence line "Lichess database export, CC0 (database.lichess.org)" (`ADR-0048`'s dated line of this date).
+- **The download is a manual, documented step.** It uses the URL, then `sha256sum -c` against the export's line. It
+  happens outside the repository, before the run. The tool reads local files only (decision 9). The file is never
+  committed.
+
+### Test strategy (added to decision 10's list; `vitest run tools/tune`, outside the default lane)
+- **Comment blindness, the evidence for Q-3K-7 (b):** a fixture game carrying `[%eval]`, `[%clk]` and free-text
+  comments gives rows byte-identical to the same game with every comment stripped.
+- The export's known issue: a game with no `Round` or `Date` tag, and no black move numbers after comments, parses.
+- One fixture game per game-filter drop reason, with the expected counts.
+- The sha256 refusal: a byte-changed copy makes the tool exit non-zero and write nothing.
+- Leakage direction: a Lichess key equal to an own-validation key leaves the Lichess rows, and validation is
+  unchanged.
+- One small `.pgn.zst` fixture (CC0 games, or games written by hand) exercises the zstd stream.
+
+### The re-read: B-T0–B-T8 and F1–F7 against this data. No bar moves.
+
+| # | reading with Lichess | moves? |
+|---|---|---|
+| B-T0 | Holds. The Lichess entry joins the manifest, and the yes is recorded (`…af126c04`) | no |
+| B-T1 | Holds on the full set, Lichess rows included. The positions are more varied than own games, and the gate is the check. A miss is F1 | no |
+| B-T2 | Holds. Its rows are own outer validation, unchanged by Lichess (position rule 7). < 1.000 × as written. A mixed fit reading above the own-only fit on own rows is a report, not a miss | no |
+| B-T3 | Holds. The input is identified by sha256. Stream order is fixed, there is no random number generator, and the cap's tie-break makes it independent of order | no |
+| B-T4 | Holds: the diff is `src/evaluate-params.ts` only. `ABC-274`'s packed int16 range row reads the emitted table. With material frozen, its sums are expected well inside the range (`UNKNOWN - verify`). A red row takes decision 6's rule: it becomes a bound, with one refit | no |
+| B-T5 | Holds | no |
+| B-T6 | Holds (constants only) | no |
+| B-T7 | Holds. With own weight 0.5, the C2′-opening share of the loss falls from about 40 % to about 20 %, so § Consequences' C2′ bias (`RISK-EPIC010-05`) shrinks. That is an estimate | no |
+| B-T8 | Holds, now approved. Its games, like S′'s, never enter training (Q-3K-7 (c)). A1's source rule ("both players are this engine") already excludes them | no |
+| F1 | Holds. Game filter 7 is a separate reader check, run before any fit: over 0.1 % of games reaching replay dropped is a reader defect, fixed first | no |
+| F2 | Holds. An own-only refit after a miss is a re-open with its own PREREG | no |
+| F3–F5 | Hold | no |
+| F6 | Holds. The export, the filters, the cap, the 0.5 weight and K per source join the list of things never chosen on play | no |
+| F7 | Holds. A different export file is a different input (sha256) | no |
+
+- **The new stops are data-stage stops, not bars:** under 250 000 Lichess rows; reader drops over 0.1 %; a run over
+  30 min; a heap over the 3 000 MB flag. Each one goes to Architect/Design with its count. None of them is a pass or
+  a fail.
 
 ## Alternatives
 
@@ -451,6 +650,14 @@ id: ADR-0067
 - **Owed lines** (not edited here; decision `…e4c34239` § 5 lists them): `ABC-239` (A1 / A2 / A3 / A4 / DoR row 10 /
   dependencies / intent), a new E2-pre ticket, `ADR-0056` (row E2, Q-3K-7, Phase 4), `EPIC-011` (Phase 4), and a
   pointer in `ADR-0064` d4 / d6.
+- *Dated 2026-11-03 (`arch-owner-answers-1103`; `…af126c04`):*
+  - **Order item 2 is done:** E2-pre merged (`2410d4f7`). `ABC-239` is next, on the data of § Addendum.
+  - **Order item 4, read with his item 8:** `ABC-270`'s **design** may start now, ahead of `ABC-239`'s build. The
+    order of the **builds** is unchanged: `ABC-239` first. If `ABC-270` merges first on its rule values, the tuner's
+    first pull traces it (decision 5) under the stall clause above. Which build lands first is the Orchestrator's
+    call.
+  - **Host time:** a Lichess run is estimated at 10–15 min, with a hard limit of 30 min (§ Addendum). That replaces
+    "≤ 30 min, `UNKNOWN - verify`" above. B-T8's ≈ 5 h is now approved.
 
 ## Rollback
 
@@ -465,3 +672,9 @@ id: ADR-0067
 - Lichess open database: https://database.lichess.org/ ("Database exports are released under the Creative Commons CC0
   license", fetched 2026-11-03). Whether a given monthly file carries `[%eval]` comments is `UNKNOWN - verify`; the
   reader ignores every comment either way.
+  - *Read 2026-11-03 (`arch-owner-answers-1103`):* the Standard section says "About 6% of the games include
+    Stockfish analysis evaluations", "`%clk` comments since April 2017", and "The `WhiteElo` and `BlackElo` tags
+    contain Glicko2 ratings". Its known-issue list is quoted in § Addendum. So the `UNKNOWN - verify` above is
+    answered: every month carries `[%eval]` in some games.
+  - `https://database.lichess.org/standard/counts.txt`, `…/list.txt` and `…/sha256sums.txt` (read 2026-11-03): the
+    game count and the sha256 of `2017-03`. The byte length comes from an HTTP `HEAD` of the file.
