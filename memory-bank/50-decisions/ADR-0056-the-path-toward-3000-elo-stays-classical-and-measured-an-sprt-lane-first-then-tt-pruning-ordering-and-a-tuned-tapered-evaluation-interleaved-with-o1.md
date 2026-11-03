@@ -178,6 +178,15 @@ the owner's answers of 2026-11-02 (`orch-2026-10-30a` `…81ae2db4`).
     § Close-out (the S′ pool row) and C10. Each open strength ticket's S′ line reads E 1 810 with `--elo 1810`;
     `ABC-233`'s A6 still reads "S-4 at E 1 650" with no `--elo`.
 
+**Folded 2026-11-03** (task `arch-ABC-269-rule`, records only, on `grugops/arch-ABC-269-rule` from `main` `17725732`;
+nothing run): the owner's word of 2026-11-02 (`orch-2026-10-30a` `…cc7db847`).
+
+- **His words, verbatim:** *"64 yes, Q-3K-4 b"*.
+- **`Q-3K-4`: answered (b).** Value-changing evaluation tickets are judged on play, with `NFR-005`'s depth-6 floor and
+  depth-7 WARN. `G6` "≥ base" is reported for them, not graded. D7's dated line gives the rule and its scope.
+- **E1's ADR is accepted:** `ADR-0064`, not in force until `ABC-269` merges (D2's dated line).
+- **Still open (his):** Q-3K-6, Q-3K-7, Q-3K-8.
+
 *Original status, kept:* **PROPOSED** 2026-11-01 by Architect/Design (task `arch-algo-analysis`, records and reading only, at `main` `bae25131`).
 **Nothing is decided here.** Nothing was run, built, benchmarked or played: `qe-ABC-223` holds the host STRICTLY ALONE.
 Every Elo figure below is either quoted from a sealed reading (named) or is an **estimate** with its basis. An
@@ -469,6 +478,17 @@ terms E3–E7, each best added under the tuner; then X2 singular extensions and 
   - mate floor 0, zugzwang 7 / 7, `G1` 54 / 58.
 - **Designed for both `Q-3K-4` answers** (`ADR-0064` decision 8 B7). The plateau form read better on the evaluation
   instrument (information only) and is left to E2's tuner.
+
+*Dated 2026-11-03 (`arch-ABC-269-rule`, records only; owner `…cc7db847`): rows E1 and E3.*
+- **Row E1: `ADR-0064` ACCEPTED** 2026-11-02 ("64 yes"). It is not in force until `ABC-269` merges.
+  - Its `G6` row (B7) is graded under `Q-3K-4` = (b): every run at depth ≥ 6, "≥ base" reported.
+  - QE's pre-build gap `QE-269-a` is ruled (a): the claim is narrowed, and no bar moves. B1 (d)'s ≥ 20 cp covers a
+    corner king not behind both of its shelter pawns. On the castled corner E1 forecasts +13 to +23, because
+    `kingExposure` stays untapered at E1 (`ADR-0064` § Decision log).
+- **Row E3 inherits that residual.** Shelter and file terms by phase are king safety. QE's three castled-corner
+  endings (`TAPER_KP_SHELTER_STRESS` S1–S3, frozen on `grugops/ABC-269` `d6a57653`) are offered as E3's first graded
+  rows, at ≥ 20 cp. Row E3's "`ABC-205` died on `G6`" no longer gates it the same way: under `Q-3K-4` = (b), E3 is
+  judged on play.
 
 ### D3. Is 3 000 reachable without a neural network?
 
@@ -1209,6 +1229,18 @@ evidence.
   5. **Every Phase 2–5 read stays `Threads 1` against `Threads 1`** (`ADR-0057` OQ-2 (a)). A threads merge is
      value-identical at `Threads 1`, so it does not make any read stale.
 
+*Dated 2026-11-03 (`arch-ABC-269-rule`, records only; the order as worked, from D2's dated lines and the board):*
+- **Phase 2 is closed** (the Orchestrator's ruling, 2026-11-02). The lines above that read "P2 then P1 → P4 → P3 → P5 →
+  P6" no longer describe the work:
+  - P2 dropped (`ADR-0059`, 44.0 / 100);
+  - P3 done (`ABC-268`, `ADR-0061` in force);
+  - **P1 parked after P3** (`ADR-0060`: three bars missed on `main` `e72487e1`; D2's dated line);
+  - P5 deferred (NEUTRAL, ≈ 0 at 100 ms);
+  - P4 and P6 stay stubs.
+- **E1 (`ABC-269`) is pulled forward,** ahead of Phase 3, by the reorder paragraph under item 7 and on measured
+  evidence (`arch-next-pull`). R1 is read after E1. P1 re-opens only on a new named premise with a new
+  pre-registered probe, for example E1's changed tree after it merges (`ADR-0064` § Consequences).
+
 ### D7. What is the owner's call
 
 - **Q-3K-1, the scale and the time** a "3 000" is read on (D5 items 1, 2 and 5). The proposal is Stockfish 19
@@ -1276,6 +1308,21 @@ evidence.
 - **The Phase 1 pause: answered, "P yes"** (D6's dated line).
 - **Q-3K-4, Q-3K-6, Q-3K-7, Q-3K-8: still open.** `ADR-0057` OQ-4 (a) does not move `NFR-009`'s level, so it does not
   answer Q-3K-6.
+
+*Dated 2026-11-03 (`arch-ABC-269-rule`; his word `…cc7db847`, verbatim "64 yes, Q-3K-4 b"):*
+- **Q-3K-4: answered (b), judge on play.** For a value-changing evaluation ticket:
+  - **Graded:** C2′ (100 games at 100 ms, by its declared intent), with S′ and the Levels deep lane beside it
+    (R-TC), and **`NFR-005`'s floor**: at `LEVELS[5]` (4 000 ms), on `G6`'s boards and reading rule, every run
+    completes depth ≥ 6 (FAIL below), and depth 7 is a WARN.
+  - **Reported, not graded:** `G6`'s "median ≥ base".
+  - **Unchanged:** `NFR-005`'s level and `G6`'s reading rule (`ABC-205`'s: ≥ 5 interleaved rounds per board, width 1,
+    load recorded).
+- **Scope, as recorded.** The question above said "value-changing tickets". The Orchestrator recorded the answer for
+  "value-changing evaluation tickets" (D2's E rows; `ABC-269` first). Every other value-changing ticket keeps
+  `G6` "≥ base" binding until the Orchestrator records a wider reading of his word, or he gives one. A value-identical
+  ticket keeps its own cost bar as before.
+- **`ADR-0064` (E1): accepted** ("64 yes"). It is not in force until `ABC-269` merges.
+- **Q-3K-6, Q-3K-7, Q-3K-8: still open.**
 
 ### D8. What BA/PM would cut on a yes
 
