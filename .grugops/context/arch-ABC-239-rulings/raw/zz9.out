@@ -1,0 +1,4 @@
+cand d9: depth 9 move e1e5 score -417 nodes 51502 (107 ms)
+base d9: depth 9 move e1f1 score -390 nodes 84325 (145 ms)
+cand-g1 d9: depth 9 move e1e5 score -428 nodes 34932 (75 ms)
+base-g1 d9: depth 9 move e1e6 score -436 nodes 60826 (111 ms)

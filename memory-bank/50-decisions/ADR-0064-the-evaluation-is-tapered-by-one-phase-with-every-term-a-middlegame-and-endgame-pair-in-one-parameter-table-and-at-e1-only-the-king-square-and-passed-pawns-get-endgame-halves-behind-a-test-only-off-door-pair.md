@@ -464,6 +464,12 @@ measured run.
          trunc. The lowest ratio at phase ≤ 6 is **1.6 ×** (rank 2 at phases 5–6). Rank 3 reads 1.7 × and rank 5
          1.743 × at phase 6. At phase 18, ranks 4, 6 and 7 meet ≤ 1.25 × at equality. The bars (≥ 1.5 ×, exact,
          ≤ 1.25 ×) do not change.
+       - *Dated 2026-11-03 (`arch-ABC-239-rulings`):* **(e) retires at `ABC-239`, by `ADR-0067` d6's rule for E1's
+         rule rows.** Its band (≥ 1.5 × at phase ≤ 6, ≤ 1.25 × at ≥ 18, mg > 0) is E1's passer rule, eg = 2 × mg, read
+         through the blend, measured against the pre-E1 base. `ABC-215` A2's rule rows state the same rule, and d6 retires
+         them for tuned values. The blend itself stays graded for the passers on any table by `ABC-274` A3 and, at phase
+         24, by (b). (d) stays a relation; only its door literal (`mainCentreMinusCorner`) is re-pinned under
+         `ADR-0067` B-T4. The record is `ADR-0067` d6's dated line of the same task.
      - (e) replaces `ABC-232` A1's "within 5 cp at phase ≥ 0.75". That clause cannot hold for an advanced passer: a
        passer one step from promotion (100 cp) reads 125 at phase 18. Read (e) through the `VALUE_TABLES_FOR_TEST` arrays, or
        through a pair that differs only by the passer.
@@ -514,6 +520,8 @@ measured run.
       - *Dated 2026-11-03 (`arch-ABC-270`):* E3a is `ADR-0068` (PROPOSED). The queen-on exposure pairs land at 0,
         value-identical, before the tuner. `ABC-239` fits them with the exposure endgame halves. The shelter gate is
         out. S1–S3 (`QE-269-a`) become a report on the tuner's emitted set.
+      - *Dated 2026-11-03 (`arch-ABC-239-rulings`):* **`ADR-0068` is ACCEPTED 2026-11-03** by the owner
+        (`orch-2026-10-30a` `…401c3d09`). It is not in force until `ABC-270` merges.
     - no new passer term: no king distance, free path or unstoppable passer (E4);
     - no tuning (E2);
     - no endgame half without a rule, for any other term.

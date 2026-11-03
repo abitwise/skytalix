@@ -1,0 +1,30 @@
+=== go depth 26 
+id name Stockfish 19
+info depth 20 seldepth 81 multipv 1 score cp 231 nodes 996927 nps 2260605 hashfull 60 tbhits 0 time 441 pv e1f1 h4h3 a2a3 h5h4 c2c3 c6c5 b4c5 b5b4 c5c6 b4a3 b2a3 a6a5 c6c7 a5a4 c7c8q g1f1 f2e3 f1e1 e3f3 e1f1 f3e2 f1f2 e2e3 h1g2 c8e6
+info depth 21 seldepth 71 multipv 1 score cp 243 nodes 1173795 nps 2319752 hashfull 67 tbhits 0 time 506 pv e1f1 h4h3 a2a3 h5h4 c2c3 c6c5 b4c5 b5b4 c5c6 b4a3 b2a3 a6a5 c6c7 a5a4 c7c8q g1f1 f2e3 f1e1 e3f3 e1f1 f3e2 f1f2 e2e3 h1g1 c8g4 g1f1 g4h3 f1g1 h3h4
+info depth 22 seldepth 72 multipv 1 score cp 254 nodes 1498246 nps 2393364 hashfull 80 tbhits 0 time 626 pv e1f1 h4h3 a2a3 h5h4 c2c3 c6c5 b4c5 b5b4 c5c6 b4a3 b2a3 a6a5 c6c7 a5a4 c7c8q g1f1 f2e3 f1e1 e3f3 e1f1 f3e2 f1f2 e2e3 f2a2
+info depth 23 seldepth 78 multipv 1 score cp 255 nodes 1746757 nps 2426051 hashfull 88 tbhits 0 time 720 pv e1f1 h4h3 a2a3 h5h4 c2c3 c6c5 b4c5 b5b4 c5c6 b4a3 b2a3 a6a5 c6c7 a5a4 f1e1 g1e1 c7c8q e1f1 f2e3 f1e1 e3f3 e1e5
+info depth 24 seldepth 81 multipv 1 score cp 259 nodes 1985642 nps 2457477 hashfull 100 tbhits 0 time 808 pv e1f1 h4h3 a2a3 h5h4 c2c3 c6c5 b4c5 b5b4 c5c6 b4a3 b2a3 a6a5 c6c7 a5a4 f1e1 g1e1 c7c8q e1f1 f2e3 f1e1 e3f3 e1f1 f3e2 f1f2 e2e1
+info depth 25 seldepth 87 multipv 1 score cp 258 nodes 3623765 nps 2618327 hashfull 172 tbhits 0 time 1384 pv e1f1 h4h3 a2a3 h5h4 c2c3 c6c5 b4c5 b5b4 c5c6 b4a3 b2a3 a6a5 c6c7 a5a4 f1e1 g1e1 c7c8q e1f1 f2e2 f1f2 e2e3 h1g1 c8g4 g1f1 g4h3 f1g1 h3g4 g1f1 g4h4 f2b2
+info depth 26 seldepth 99 multipv 1 score cp 258 nodes 4235720 nps 2624361 hashfull 203 tbhits 0 time 1614 pv e1f1 h4h3 a2a3 h5h4 c2c3 c6c5 b4c5 b5b4 c5c6 b4a3 b2a3 a6a5 c6c7 a5a4 f1e1 g1e1 c7c8q e1f1 f2e2 f1f2 e2e3 h1g1 c8g4 g1f1 g4d1
+bestmove e1f1 ponder h4h3
+=== go depth 26 searchmoves e1f1
+id name Stockfish 19
+info depth 20 seldepth 18 multipv 1 score cp 540 nodes 63054 nps 1659315 hashfull 2 tbhits 0 time 38 pv e1f1 h4h3 b2b3 c6c5 b4c5 g1f1 f2f1 a6a5 c5c6 a5a4 c6c7 a4b3 c2b3 b5b4
+info depth 21 seldepth 20 multipv 1 score mate 10 nodes 70319 nps 1757975 hashfull 2 tbhits 0 time 40 pv e1f1 h4h3 b2b3 g1f1 f2f1 h5h4 c2c3 a6a5 b4a5 b5b4 c3b4 c6c5 a5a6 c5b4 a2a4 b4a3 a6a7 a3a2 a7a8q
+info depth 22 seldepth 20 multipv 1 score mate 10 nodes 74538 nps 1733441 hashfull 2 tbhits 0 time 43 pv e1f1 h4h3 b2b3 h5h4 c2c3 g1f1 f2f1 a6a5 b4a5 b5b4 c3b4 c6c5 b4b5 c5c4 a5a6 c4b3 a6a7 b3a2 a7a8b
+info depth 23 seldepth 20 multipv 1 score mate 10 nodes 76154 nps 1771023 hashfull 2 tbhits 0 time 43 pv e1f1 h4h3 b2b3 h5h4 c2c3 g1f1 f2f1 a6a5 b4a5 b5b4 c3b4 c6c5 b4b5 c5c4 a5a6 c4b3 a6a7 b3a2 a7a8b
+info depth 24 seldepth 20 multipv 1 score mate 10 nodes 78886 nps 1792863 hashfull 2 tbhits 0 time 44 pv e1f1 h4h3 b2b3 h5h4 c2c3 g1f1 f2f1 a6a5 b4a5 b5b4 c3b4 c6c5 b4b5 c5c4 a5a6 c4b3 a6a7 b3a2 a7a8b
+info depth 25 seldepth 20 multipv 1 score mate 10 nodes 80273 nps 1783844 hashfull 2 tbhits 0 time 45 pv e1f1 h4h3 b2b3 h5h4 c2c3 g1f1 f2f1 a6a5 b4a5 b5b4 c3b4 c6c5 b4b5 c5c4 a5a6 c4b3 a6a7 b3a2 a7a8b
+info depth 26 seldepth 20 multipv 1 score mate 10 nodes 81951 nps 1821133 hashfull 2 tbhits 0 time 45 pv e1f1 h4h3 b2b3 h5h4 c2c3 g1f1 f2f1 a6a5 b4a5 b5b4 c3b4 c6c5 b4b5 c5c4 a5a6 c4b3 a6a7 b3a2 a7a8b
+bestmove e1f1 ponder h4h3
+=== go depth 26 searchmoves e1e5
+id name Stockfish 19
+info depth 20 seldepth 75 multipv 1 score cp -607 nodes 2580095 nps 2279235 hashfull 173 tbhits 0 time 1132 pv e1e5 g1g2 f2f1 g2g4 e5f5 g4b4 f5f6 b4b2 f6c6 b2a2 c6f6 a2a4 f6f3 a4c4 c2c3 c4g4 f3f5 g4g3 f1f2 g3g2 f2f1 g2g4
+info depth 21 seldepth 25 multipv 1 score cp -607 nodes 2586654 nps 2278990 hashfull 174 tbhits 0 time 1135 pv e1e5 g1g2 f2f1 g2g4 e5f5 g4b4 f5f6 b4b2 f6c6 b2a2 c6f6 a2a4 f6f3 a4c4 c2c3 c4g4 f3f5 g4g3 f1f2 g3g2 f2f1
+info depth 22 seldepth 34 multipv 1 score cp -607 nodes 2602706 nps 2279077 hashfull 175 tbhits 0 time 1142 pv e1e5 g1g2 f2f1 g2g4 e5f5 g4b4 f5f6 b4b2 f6c6 b2a2 c6f6 a2a4 f6f3 a4b4 f1f2 b4g4 f3f5 g4g2 f2f1 g2g1 f1f2 g1g4
+info depth 23 seldepth 30 multipv 1 score cp -607 nodes 2610960 nps 2280314 hashfull 175 tbhits 0 time 1145 pv e1e5 g1g2 f2f1 g2g4 e5f5 g4b4 f5f6 b4b2 f6c6 b2a2 c6f6 a2a4 f1f2 a4g4 f6f5 g4g2 f2f1 g2c2 f5h5 c2c4 f1f2
+info depth 24 seldepth 30 multipv 1 score cp -606 nodes 2636925 nps 2281076 hashfull 177 tbhits 0 time 1156 pv e1e5 g1g2 f2f1 g2g4 e5f5 g4b4 f5f6 b4b2 f6c6 b2a2 c6f6 a6a5 f6f5 a2a4 f5f3 a4g4 f3f5 b5b4 f5f3
+info depth 25 seldepth 33 multipv 1 score cp -574 nodes 2713982 nps 2288349 hashfull 180 tbhits 0 time 1186 pv e1e5 g1g2 f2f1 g2g4 e5f5 g4b4 a2a3 b4b2 f5c5 b5b4 a3a4 b4b3 c2b3 b2b3 f1f2 b3b2 f2f3 b2g2 c5c6 g2g8 c6a6
+info depth 26 seldepth 50 multipv 1 score cp -633 nodes 3930527 nps 2332656 hashfull 245 tbhits 0 time 1685 pv e1e5 g1g2 f2f1 g2g4 e5f5 g4b4 a2a3 b4b2 f5c5 b5b4 a3a4 b4b3 c2b3 b2b3 f1f2 b3b2 f2f3 b2g2 c5c6 g2g8 c6c1 g8g1 c1c2 g1g3 f3f4 h1g1 c2d2 h2h1n d2d1 g1h2 d1d2 h2h3
+bestmove e1e5 ponder g1g2
