@@ -3,7 +3,7 @@ id: ABC-277
 title: "A records path check: over the lines a branch adds under `.grugops/`, `plans/` and `memory-bank/` (and every added or changed `.gz`, decompressed), it fails with the file and the class, never the value, on a home path, its slug form, a `/Users/<name>` path, the session scratch path or a `pgrep -a`-style foreign argv. The Orchestrator runs it before each merge. The placeholder rule, with the hostname exemption, is a standing ruling (`ADR-0049` D4; `SEC-HP-1`, `SEC-HP-2`)"
 status: done
 column: Done
-closed: "2026-11-03, merged to local main at 541ddf45 (from grugops/ABC-277 at 0f188473, code 861de9c5); QE PASS_WITH_GAPS (qe-ABC-277 …98c1d275), which signs acceptance (tools and records, no UAT); A1-A6 MET; A7 not done (owner SEC-HP-2 pending, the ticket's skip path); QE-277-a…f routed to ABC-278 (bapm-gaps-1103). Front matter by bapm-gaps-1103"
+closed: "2026-11-03, merged to local main at 541ddf45 (from grugops/ABC-277 at 0f188473, code 861de9c5); QE PASS_WITH_GAPS (qe-ABC-277 …98c1d275), which signs acceptance (tools and records, no UAT); A1-A6 MET; A7 not done (owner SEC-HP-2 pending, the ticket's skip path); QE-277-a…f routed to ABC-278 (bapm-gaps-1103). Front matter by bapm-gaps-1103. 2026-11-03 (bapm-owner-answers-1103): A7 done at 1e558566 on the owner's SEC-HP-2 yes (…af126c04 item 7); line 5 reads <foreign: vitest> count=3"
 size: M
 priority: P2
 epic: EPIC-011
@@ -12,6 +12,17 @@ adr: "ADR-0049 D4. No new ADR: a check and a written convention for an accepted 
 ---
 
 # ABC-277: a branch cannot add a host path to the records unseen
+
+> **A7 DONE, 2026-11-03, by BA/PM** (task `bapm-owner-answers-1103`, records only, at `main` `bdecb7e1`; nothing run
+> but a read of the commit). The owner answered SEC-HP-2 **yes** (`orch-2026-10-30a` `…af126c04` item 7: one-line
+> forward redaction, no history rewrite). The Architect's hop `arch-owner-answers-1103` made it in **`1e558566`**
+> (`…ab9f83a3`; owed lines `…e81f6b25`).
+> - **A7: MET** by the row's own words. `.grugops/context/se-ABC-262/raw/gates/summary.txt` line 5 now reads
+>   `foreign=[<foreign: vitest> count=3]`, a class and a count. `git diff --numstat 1e558566^ 1e558566` is `1 1` on that
+>   one file, so no other line changed. Read by BA/PM from the commit; a records-only line on a Done ticket, so no
+>   new QE hop.
+> - **Count corrected: 3, not 2.** A7 and `EPIC-011`'s SEC-HP-2 row said "2 processes". The old line held **3** process
+>   ids (one vitest runner and two fork workers), and the redaction says `count=3`. A7's wording is corrected below.
 
 > **CLOSED 2026-11-03, DONE, by BA/PM** (task `bapm-gaps-1103`, records only, at `main` `8580bbd3`; nothing run but the
 > path check). **Merged to local `main` at `541ddf45`** from `grugops/ABC-277` at `0f188473` (code `861de9c5`). Not
@@ -29,13 +40,13 @@ adr: "ADR-0049 D4. No new ADR: a check and a written convention for an accepted 
 > | A4 | `70-runbook.md` § Before a merge into main and `40-contributing.md` § Conventions name the command, 0 / 1 / 2, who runs it, and the block | MET |
 > | A5 | `45-standing-rulings.md` gains exactly one dated entry (classes, placeholders, `$HOME`, foreign count, hostname exemption, sources) | MET |
 > | A6 | lint, typecheck, build green; `npm test` 2 566 / 2 566; lane 66 = 66; proof 18 / 18; 0 lines under `src/` / `data/` | MET |
-> | A7 | the owner has not answered SEC-HP-2 | **not done** (the ticket's skip path; not a gap) |
+> | A7 | the owner has not answered SEC-HP-2 | **not done** (the ticket's skip path; not a gap) *2026-11-03 (`bapm-owner-answers-1103`): **MET** at `1e558566` (owner yes `…af126c04` item 7; line 5 `<foreign: vitest> count=3`; 1 line changed)* |
 > | NFR | 61 ms at 200 files, 169 ms at 287 (≤ 10 s); 0 lane rows; no value printed | MET |
 >
 > **Gaps, routed** (`bapm-gaps-1103`): **QE-277-a** (MEDIUM, `.gitattributes` / binary blind spot), **-b** (`.xz`),
 > **-c** (foreign-argv misses), **-d** (home before `.` / `-` / `_`), **-e** (quoted file name) and **-f** (the real
 > `HOME`: runbook line plus reading both homes) → **`ABC-278`** (S, P2, DoR 10/10, Ready). **QE-277-g** (INFO): accepted
-> by QE, unchanged. SEC-HP-2 (A7) stays an owner question on `EPIC-011`.
+> by QE, unchanged. SEC-HP-2 (A7) stays an owner question on `EPIC-011`. *(2026-11-03: answered yes; A7 done, top block.)*
 
 > **Cut 2026-11-03 by BA/PM: DoR 10/10, Ready** (task `bapm-sec-cut`, records only, at `main` `5222a9b4`; nothing
 > run). Source: Security/NFR `sec-host-paths` decision `…72b4070b` (recommendation (b) REQUIRED; ticket text T2) and
@@ -112,7 +123,8 @@ adr: "ADR-0049 D4. No new ADR: a check and a written convention for an accepted 
   hostname exemption stated in words, citing `ADR-0049` D4 and `sec-host-paths` `…72b4070b`. No other entry changes.
 - **A6 (gates).** `npm run lint`, `typecheck`, `test` and `build` green at every commit. `git diff --name-only <base>
   <head> -- src/ data/ vitest.config.ts` prints 0 lines.
-- **A7 (only on the owner's yes).** `summary.txt` line 5 reads `<foreign: CLASS>` with the 2 processes' class and
+- **A7 (only on the owner's yes).** `summary.txt` line 5 reads `<foreign: CLASS>` with the ~~2~~ *3 (2026-11-03,
+  `bapm-owner-answers-1103`: one vitest runner and two fork workers; the line held 3 process ids)* processes' class and
   count; no other line of that file changes. If the owner has not answered at build time, A7 is skipped and the PR
   says so.
 

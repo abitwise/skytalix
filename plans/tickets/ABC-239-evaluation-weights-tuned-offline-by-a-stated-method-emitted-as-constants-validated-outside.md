@@ -1,15 +1,34 @@
 ---
 id: ABC-239
 title: "The evaluation's weights are tuned offline by a stated method on a licensed position set, emitted as constants, and validated against an outside opponent"
-status: backlog
-column: Backlog
+status: ready
+column: Ready
 size: L
-priority: P3
+priority: P2
 epic: EPIC-011
-adr: "ADR-0067 (PROPOSED 2026-11-03, arch-ABC-239 decision …e4c34239, results …48ae6a93, PREREG …9ed1db11; acceptance is the owner's, PENDING). Data: ADR-0048 (licence) with Q-3K-7 (a)/(b)/(c) PENDING; own games by default. Waits ABC-269 → ABC-274 (E2-pre)"
+adr: "ADR-0067 (ACCEPTED 2026-11-03 by the owner, orch-2026-10-30a …af126c04 item 1; IN FORCE as the method; § Addendum 2026-11-03, the Lichess data pin; arch-owner-answers-1103 …ab9f83a3). Data: own self-play games plus the Lichess 2017-03 export, CC0 (ADR-0048 d6 dated 2026-11-03; Q-3K-7 (a) yes, (b) no, (c) no). ABC-269 merged 54dee3f2; ABC-274 (E2-pre) merged 2410d4f7. Was: ADR-0067 PROPOSED (arch-ABC-239 …e4c34239, results …48ae6a93, PREREG …9ed1db11)"
 ---
 
 # ABC-239: offline tuning of the evaluation weights
+
+> **OWNER ANSWERS FOLDED; DATA PINNED; DoR 10/10, READY, 2026-11-03, by BA/PM** (task `bapm-owner-answers-1103`,
+> records only, at `main` `bdecb7e1`; nothing run). Sources: the owner's answers `orch-2026-10-30a` `…af126c04`
+> ("1. yes ; 2. yes ; 3. no ; 4. no ; 5. ok yes ; …"), the Architect's fold `arch-owner-answers-1103` (decision
+> `…ab9f83a3`, owed lines `…e81f6b25`) and `ADR-0067` § Addendum 2026-11-03. **No bar on this page moved**
+> (the addendum's re-read: B-T0–B-T8 and F1–F7 hold).
+> - **`ADR-0067` ACCEPTED, in force as the method** (item 1). `ABC-274` (E2-pre) merged at `2410d4f7` on QE
+>   `…fa87f74d`; F8 did not fire, so A3 and A4 hold as written.
+> - **Data (A1):** own self-play games **plus** one Lichess month, `lichess_db_standard_rated_2017-03.pgn.zst`
+>   (2 169 142 067 bytes; sha256 `b319297e…4320`, full value in `ADR-0067` § Addendum), CC0, training only, at most
+>   1 000 000 positions, own games 0.5 of the loss (item 2). **No Stockfish-labelled position** (item 3) and **no game
+>   against Stockfish** (item 4) is ever training data.
+> - **A6:** B-T7 (100 games at 100 ms, S′, Levels) **and B-T8, the 200 + 200 outside pair, approved** (item 5); both
+>   run before the merge.
+> - **Four data-stage stops** (§ What happens on a miss), each a STOP to Architect/Design, not a bar.
+> - **DoR 8/10 → 10/10:** row 10 (the merges and the owner items) is answered; row 3 is met now that both
+>   predecessors merged (`ABC-215`'s precedent: L with a stated split that does not fire). **Front matter → Ready**,
+>   BA/PM's exit. The brief asks for **Ready for Dev**; that board move is the Orchestrator's.
+> - **Priority P3 → P2** (BA/PM, at this re-score): it is the next pull on the board, and `ABC-270` (P2) waits on it.
 
 > **ALIGNED TO `ADR-0067` (PROPOSED), 2026-11-03, by BA/PM** (task `bapm-E2pre-cut`, records only, at `main`
 > `0b87f2d5`; nothing run). Source: the Architect's `arch-ABC-239` decision `…e4c34239` § 5 (the owed lines for this
@@ -69,6 +88,9 @@ adr: "ADR-0067 (PROPOSED 2026-11-03, arch-ABC-239 decision …e4c34239, results 
    *2026-11-03 (`bapm-E2pre-cut`, `ADR-0067`):* the method is `ADR-0067` d1–d7 (logistic fit of game results, cross-entropy, K fixed first, Newton
    on a traced linear model behind the identity gate, material frozen, a sign-bounded free set). It is **one tool
    module**, `tools/tune/` (d10), so the split rule under § Size does not fire.
+   *2026-11-03 (`bapm-owner-answers-1103`):* the tool also reads the pinned Lichess export by `ADR-0067` § Addendum
+   (streamed through `node:zlib` zstd, never decompressed to disk; the game filters and position rules as written
+   there). Still the same module, so the split rule still does not fire.
 2. Its output: a constants file in `src/` with the provenance header `ABC-215` set.
    *2026-11-03 (`bapm-E2pre-cut`, `ADR-0067`):* only `src/evaluate-params.ts`, in its present shape, with `ADR-0067` d7's header (manifest sha256,
    split strings, K, configuration, λ, losses, tool commit). **`ABC-215` A2's rebuild-from-rule rows retire for the
@@ -91,6 +113,16 @@ adr: "ADR-0067 (PROPOSED 2026-11-03, arch-ABC-239 decision …e4c34239, results 
   Stockfish-labelled set (Q-3K-7 (b), PENDING) and games against Stockfish (Q-3K-7 (c), PENDING) are not used without
   his yes; `ADR-0067` d9 excludes (c) by default. The source, licence and data manifest's sha256 are in the PR before
   any fit.
+  *2026-11-03 (`bapm-owner-answers-1103`; owner `…af126c04` items 2–4; `ADR-0067` § Addendum):* **the data is own
+  self-play games plus the Lichess `2017-03` export** (`https://database.lichess.org/standard/lichess_db_standard_rated_2017-03.pgn.zst`,
+  2 169 142 067 bytes, sha256 as pinned in the addendum), CC0, admitted under `ADR-0048` d6's dated line. **Given** the
+  data manifest, **then** it carries the Lichess entry by URL, byte length and sha256 (never a local path), and the
+  provenance header carries every game-filter and position-rule count, K_own and K_lichess, the own weight 0.5 and the
+  licence line "Lichess database export, CC0 (database.lichess.org)". **When** the local file's sha256 differs from the
+  pin, **then** the tool exits non-zero and writes nothing. Lichess rows are training only; outer and inner validation
+  stay own games, unchanged, and a Lichess key equal to an own-validation key leaves the Lichess rows. **No
+  Stockfish-labelled position is a training target** (Q-3K-7 (b): no), **and no game against Stockfish is training
+  data** (Q-3K-7 (c): no); every PGN comment, `[%eval]` included, is dropped unread.
 - **A2 (split).** **Then** training and validation sets share no game; the fit's loss on validation is reported and
   is ≤ the hand weights' loss on the same set.
   *2026-11-03 (`bapm-E2pre-cut`, `ADR-0067`):* **B-T2.** The split is **by opening**: fnv1a32("ABC-239/split/v1\n" + start FEN) mod 5 = 0 is
@@ -117,6 +149,26 @@ adr: "ADR-0067 (PROPOSED 2026-11-03, arch-ABC-239 decision …e4c34239, results 
   (the outside pair, point estimate ≥ 0). **B-T8 was put to the owner 2026-11-03 (board): PENDING**, and the Architect
   recommends yes. A6's read and the merge also wait on *"accept ADR-0067"* (PENDING). F6: **no set is ever re-fitted on
   play results**, and the configuration and λ are never chosen on play.
+  *2026-11-03 (`bapm-owner-answers-1103`; owner `…af126c04` items 1 and 5):* **A6 reads, before the merge, in this
+  order:** (1) **B-T7**, the per-change rule: 100 games at 100 ms a move against the merge-base, intent GAIN, MET at
+  ≥ 50.0 of 100 (C2′), with the S′ smoke at E 1 810 and the Levels deep lane as written above; (2) **B-T8, approved by
+  the owner**: the candidate and its merge-base, each 200 games against Stockfish 19 at 0.5 s (≈ 5 h, QE, host alone),
+  MET on a point estimate ≥ 0. Both MET, or no merge. The "if he declines" branch above is void. Whether B-T8 runs as
+  `rpair` or as two `r` reads stays the Orchestrator's (`UNKNOWN - verify`, as above). `ADR-0067` is accepted, so
+  nothing here waits on the owner. B-T8's games, like S′'s, never enter training (Q-3K-7 (c)).
+
+## What happens on a miss
+
+*Added 2026-11-03 (`bapm-owner-answers-1103`).* A bar miss takes `ADR-0067` § What would falsify this (F1–F8), unchanged.
+**The four data-stage stops** (`ADR-0067` § Addendum, § The re-read) are not bars and grade nothing. Each one is a
+**STOP to Architect/Design** with its count, before any fit is read or any game is played:
+1. **Fewer than 250 000 Lichess rows** survive the position rules (before any fit). A smaller slice or a second month
+   is a new dated decision in `ADR-0067`.
+2. **The reader drops over 0.1 %** of the games that reach replay (game filter 7). A reader defect, fixed first (F1).
+3. **One `extract | fit | emit` run takes over 30 min** (each stage under `timeout 1800`); reported with the stage
+   times. The slice is not cut inside the build.
+4. **The heap goes over the 3 000 MB flag** (`--max-old-space-size=3000`). The fault is in the row storage; the slice
+   is not shrunk to fit.
 
 ## NFR triggers
 
@@ -126,6 +178,10 @@ adr: "ADR-0067 (PROPOSED 2026-11-03, arch-ABC-239 decision …e4c34239, results 
   split disjointness, emission round-trip). `G2` ≤ 1.02 × after `ABC-274`. `NFR-005`: B-T6. `NFR-009`: unchanged (no
   memory added). Security: every PGN comment is ignored on read, and the Lichess file, on a yes, stays outside the
   repository with its URL and sha256 recorded. No new NFR row.
+- *2026-11-03 (`bapm-owner-answers-1103`; `ADR-0067` § Addendum):* the data stage's targets: one `extract | fit | emit`
+  run ≤ 30 min (estimate 10–15 min, `UNKNOWN - verify`), inside `--max-old-space-size=3000`, with peak RSS recorded;
+  B-T3 runs it twice under the same limits. The 2.17 GB file is downloaded once by hand (URL, then `sha256sum -c`),
+  outside the repository, and is never committed; the tool makes no network call. No new NFR row.
 
 ## Test notes
 
@@ -141,6 +197,17 @@ adr: "ADR-0067 (PROPOSED 2026-11-03, arch-ABC-239 decision …e4c34239, results 
    18 only, DOUBLED 4 rows. Before the first fit is emitted, QE (or the Architect's brief) adds frozen rows only (no
    row changed, `ABC-274` A7) so each family reads ≥ 3 distinct positions at ≥ 2 distinct phases in 1–23. Not a DoR
    row; the Architect may rule it unnecessary in writing.
+4. *2026-11-03 (`bapm-owner-answers-1103`; `ADR-0067` § Addendum, § Test strategy):* `vitest run tools/tune`, outside
+   the default lane, gains six rows:
+   - **comment blindness** (the evidence for Q-3K-7 (b)): a fixture game carrying `[%eval]`, `[%clk]` and free-text
+     comments gives rows byte-identical to the same game with every comment stripped;
+   - **the export's known issue:** a game with no `Round` or `Date` tag, and no black move numbers after comments,
+     parses;
+   - **filter counts:** one fixture game per game-filter drop reason, with the expected counts;
+   - **the sha256 refusal:** a byte-changed copy makes the tool exit non-zero and write nothing;
+   - **leakage direction:** a Lichess key equal to an own-validation key leaves the Lichess rows, and validation is
+     unchanged;
+   - **the zstd stream:** one small `.pgn.zst` fixture (CC0 games, or games written by hand).
 
 ## Size and priority
 
@@ -149,8 +216,12 @@ adr: "ADR-0067 (PROPOSED 2026-11-03, arch-ABC-239 decision …e4c34239, results 
   pool. *2026-11-03 (`bapm-E2pre-cut`): `ADR-0067` d10 has one tool module, so the split does not fire. The blend change
   is cut apart as `ABC-274` (S), a `src/` ticket, not a tool module. Effort (`…e4c34239` § 6): the tool ≈ 800–1 000
   lines of TypeScript with tests; one fit takes minutes; the reads ≈ 0.7 h plus `G6` and the futility audit; B-T8 adds ≈
-  5 h if asked.*
-- **Priority: P3.**
+  5 h if asked.* *2026-11-03 (`bapm-owner-answers-1103`): still L, still one module. The Lichess reader adds the
+  streamed parse, the filters and six test rows inside `tools/tune/`; it ships nothing alone (its value is read only
+  through the fit), so it is not split out. B-T8 is now approved: ≈ 5 h of QE host time before the merge. One data run
+  ≤ 30 min (estimate 10–15 min, `UNKNOWN - verify`).*
+- **Priority: ~~P3~~ P2** *(2026-11-03, `bapm-owner-answers-1103`: the next pull on the board; `ABC-270`, P2, waits on
+  it).*
 
 ## Dependencies
 
@@ -167,6 +238,16 @@ adr: "ADR-0067 (PROPOSED 2026-11-03, arch-ABC-239 decision …e4c34239, results 
   - **After this ticket:** `ABC-270` (E3a) and `ABC-271` (E4a), so that their new terms get fitted weights (if this
     ticket stalls on data, `ABC-270` may go first on its rule values and the tuner traces it). `ABC-272` (E7a) in any
     order. `ABC-273` (R1) is read after E1 and before this ticket merges (`ADR-0067` § Consequences).
+- *2026-11-03 (`bapm-owner-answers-1103`), every hard dependency met:*
+  - **`ABC-269` merged** (`54dee3f2`) and **`ABC-274` (E2-pre) merged** (`2410d4f7`, QE `…fa87f74d`; F8 not fired).
+  - **`ADR-0067` ACCEPTED** 2026-11-03 (owner `…af126c04` item 1), in force as the method, with § Addendum.
+  - **Data answered:** Q-3K-7 (a) yes, (b) no, (c) no (items 2–4); `ADR-0048` d6 admits the CC0 export as data.
+  - **B-T8 approved** (item 5): it runs before the merge.
+  - **`ABC-273` (R1) is Done** (merged `20d539e1`), so its "before this ticket merges" order is met.
+  - **One manual precondition, not a blocker:** before the first extract, the Lichess file is downloaded by hand,
+    outside the repository, and checked with `sha256sum -c` against the pinned line (`ADR-0067` § Addendum).
+  - **After this ticket:** unchanged, except that `ABC-270`'s *design* may start now (owner item 8); the build order
+    stays this ticket first, under the stall clause, and which build lands first is the Orchestrator's.
 
 ## Definition of Ready
 
@@ -174,14 +255,18 @@ adr: "ADR-0067 (PROPOSED 2026-11-03, arch-ABC-239 decision …e4c34239, results 
 |---|---|---|
 | 1 | problem clear | ✅ SA 8b |
 | 2 | scope and out-of-scope | ✅ constants only |
-| 3 | INVEST | ⚠ L; depends on milestone 2 *2026-11-03 (`bapm-E2pre-cut`): L; depends on `ABC-269` and `ABC-274`; one tool module (the split rule does not fire)* |
+| 3 | INVEST | ~~⚠ L; depends on milestone 2~~ *2026-11-03 (`bapm-E2pre-cut`): L; depends on `ABC-269` and `ABC-274`; one tool module (the split rule does not fire)* *2026-11-03 (`bapm-owner-answers-1103`):* ✅ **independent now** (both predecessors merged); L with a stated split rule that does not fire (one module; the Lichess reader ships nothing alone), as `ABC-215`; valuable and testable by B-T0–B-T8 |
 | 4 | testable, measurable acceptance | ✅ every row measurable; A6 is the 100-game read plus, on the owner's yes, the 400-game outside pair (pass lines: `ADR-0056` C2′ and C3′) *(2026-11-01)* *2026-11-01 (`bapm-owner-answers`): plus the 0.5 s smoke; the outside pair is at 0.5 s and graded by C3′'s point-estimate rule; the smoke's bar is the owner-answers fold's, scored as the C2′ line was while pending.* *2026-11-01 (`bapm-reconcile-adr0056`): the fold merged (`a0f9297e`); the smoke's bar is S′'s S-4 at ~~E 1 650~~ E 1 810 (2026-11-02, `bapm-records-1102c`), the row adds the Levels deep lane (exit 0, every test passed), and the outside pair is two `r` reads unless `rpair` gains the control. Score unchanged.* |
-| 5 | dependencies known | ✅ *2026-11-03 (`bapm-E2pre-cut`): `ABC-269` → `ABC-274` → this; `ADR-0067` (PROPOSED; acceptance pending); Q-3K-7 (a)/(b)/(c) pending; B-T8 pending* |
+| 5 | dependencies known | ✅ *2026-11-03 (`bapm-E2pre-cut`): `ABC-269` → `ABC-274` → this; `ADR-0067` (PROPOSED; acceptance pending); Q-3K-7 (a)/(b)/(c) pending; B-T8 pending* *2026-11-03 (`bapm-owner-answers-1103`): `ABC-269` and `ABC-274` merged; `ADR-0067` ACCEPTED; Q-3K-7 (a) yes / (b) no / (c) no; B-T8 approved; the manual download and `sha256sum -c` named* |
 | 6 | NFR triggers with targets | ✅ `G2` ≤ 1.02 × *(after `ABC-274`; `NFR-005` floor 6 by B-T6; `NFR-008` out of the default lane)* |
-| 7 | test notes | ✅ 2 |
+| 7 | test notes | ✅ 2 *(2026-11-03: 4, with the addendum's six rows)* |
 | 8 | size | ✅ L |
-| 9 | priority | ✅ P3 |
-| 10 | no major unresolved blocker | ❌ ~~data licence; ADR; milestone 2~~ *2026-11-03 (`bapm-E2pre-cut`): method ADR → **`ADR-0067` PROPOSED** (reading (b): the build may start; A6's read and the merge wait on acceptance, PENDING); data → **Q-3K-7** (a)/(b)/(c) PENDING, own games allowed by default under `ADR-0048`, so it does not block the build; milestone 2 → **`ABC-269` and `ABC-274` not merged** (the blocker)* |
+| 9 | priority | ✅ ~~P3~~ P2 *(2026-11-03)* |
+| 10 | no major unresolved blocker | ✅ *2026-11-03 (`bapm-owner-answers-1103`): answered. `ADR-0067` ACCEPTED (`…af126c04` item 1); data pinned (`ADR-0067` § Addendum; Q-3K-7 answered); `ABC-269` (`54dee3f2`) and `ABC-274` (`2410d4f7`) merged; B-T8 approved. No owner item left* ~~❌~~ ~~data licence; ADR; milestone 2~~ *2026-11-03 (`bapm-E2pre-cut`): method ADR → **`ADR-0067` PROPOSED** (reading (b): the build may start; A6's read and the merge wait on acceptance, PENDING); data → **Q-3K-7** (a)/(b)/(c) PENDING, own games allowed by default under `ADR-0048`, so it does not block the build; milestone 2 → **`ABC-269` and `ABC-274` not merged** (the blocker)* |
 
 **DoR 8/10 (re-scored 2026-10-29). Backlog.** *2026-11-03 (`bapm-E2pre-cut`): **8/10, unchanged.** Row 10 now waits on
 `ABC-269` and `ABC-274` merging; the owner items are pending and gate A6's read and the merge only.*
+
+**DoR 10/10 (re-scored 2026-11-03, `bapm-owner-answers-1103`). Ready.** Rows 3 and 10 flip (both predecessors merged;
+`ADR-0067` accepted; data pinned; B-T8 approved). Rows 5, 7 and 9 updated. The board move to Ready for Dev is the
+Orchestrator's.

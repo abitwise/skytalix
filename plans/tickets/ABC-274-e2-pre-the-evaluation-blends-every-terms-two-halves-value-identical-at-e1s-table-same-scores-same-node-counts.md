@@ -1,16 +1,30 @@
 ---
 id: ABC-274
 title: "E2-pre: the evaluation blends every term's middlegame and endgame halves, not only the king's and the passers'. Value-identical at E1's table: the same scores and the same node counts, with a packed score recommended. No games"
-status: ready
-column: Ready
+status: done
+column: Done
+closed: "2026-11-03, merged to local main at 2410d4f7 (2026-11-03T20:07:05Z; from grugops/ABC-274 at e3ec7372, QE read on 2a2e1e02); QE PASS_WITH_GAPS (qe-ABC-274 …fa87f74d), which signs UAT under the owner's delegation; A1-A9 and S1-S3 MET; released by the owner's acceptance of ADR-0067 (orch-2026-10-30a …af126c04 item 1); F8 did not fire; post-merge npm test 2 588 / 2 588 (the Orchestrator's board line). Front matter by bapm-owner-answers-1103"
 size: S
 priority: P2
 epic: EPIC-011
 feature: —
-adr: "ADR-0067 decision 8 (PROPOSED 2026-11-03, arch-ABC-239 decision …e4c34239, results …48ae6a93; acceptance is the owner's, PENDING); falsifier and disposition F8 (arch-fold-1103b …e16881f5). Builds on ADR-0064 d2 (the delta form, unchanged), d4 (the parameter table) and d6 (\"the two-accumulator form … E2's\"). Q-3K-4 (b) does not apply: this is not a value change (ADR-0056 D7 dated 2026-11-03: \"a value-identical ticket keeps its own cost bar as before\"; ADR-0067 d8: G6 \"≥ base\")"
+adr: "ADR-0067 decision 8 (ACCEPTED 2026-11-03, owner orch-2026-10-30a …af126c04; PROPOSED 2026-11-03 by arch-ABC-239 decision …e4c34239, results …48ae6a93); falsifier and disposition F8 (arch-fold-1103b …e16881f5). Builds on ADR-0064 d2 (the delta form, unchanged), d4 (the parameter table) and d6 (\"the two-accumulator form … E2's\"). Q-3K-4 (b) does not apply: this is not a value change (ADR-0056 D7 dated 2026-11-03: \"a value-identical ticket keeps its own cost bar as before\"; ADR-0067 d8: G6 \"≥ base\")"
 ---
 
 # ABC-274: every term enters the blend, at E1's values (E2-pre)
+
+> **CLOSED 2026-11-03, DONE, by BA/PM** (task `bapm-owner-answers-1103`, records only, at `main` `bdecb7e1`; nothing
+> run). **Merged to local `main` at `2410d4f7`** (2026-11-03T20:07:05Z) from `grugops/ABC-274` at `e3ec7372` (a
+> records-only placeholder fix on top of QE's `2a2e1e02`). Not pushed. Sources: the owner's answers `orch-2026-10-30a`
+> `…af126c04` (item 1, *"accept ADR-0067"*: yes), QE `qe-ABC-274` verdict `…fa87f74d` and gaps `…d4c26218`, the
+> Orchestrator's board line (records path check clean; post-merge `npm test` 2 588 / 2 588), and the Architect's fold
+> `arch-owner-answers-1103` `…ab9f83a3`.
+> - **Result: QE PASS_WITH_GAPS**, which signs UAT (the block below: A1–A9 and S1–S3 MET). The merge waited only on
+>   *"accept ADR-0067"*; the owner accepted it, so it is no longer pending.
+> - **F8 did not fire** (`ADR-0067` § Status). So `ABC-239`'s A3 ("constants only") and A4 (`G2` ≤ 1.02 ×) hold as
+>   written, and `ABC-239`'s hard order is met.
+> - **Gaps:** `QE-274-a` → `EPIC-011` § Test notes (done); `QE-274-b` → `ABC-239` test note 3 (open, for `ABC-239`'s
+>   build); `QE-274-c` and `-d` as recorded below. None blocks.
 
 > **QE PASS_WITH_GAPS, UAT SIGNED; READY TO RELEASE; THE MERGE WAITS ON THE OWNER'S "ACCEPT ADR-0067", 2026-11-03, by
 > BA/PM** (task `bapm-sec-cut`, records only, at `main` `5222a9b4`; nothing run). Source: QE `qe-ABC-274` verdict
