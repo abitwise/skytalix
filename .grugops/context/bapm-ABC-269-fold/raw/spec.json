@@ -1,0 +1,7 @@
+{
+  "refs": ["bapm-ABC-269-fold", "grugops/bapm-ABC-269-fold", "ABC-269", "ABC-270", "EPIC-011", "E1", "E3", "E3a", "ADR-0064", "ADR-0056", "NFR-005", "Q-3K-4", "QE-269-a", "QE-269-b", "QE-269-c", "B1", "B7", "B8", "F3", "S1", "S2", "S3", "2c304327", "85a7dcbf", "d6a57653", "src/evaluate.taper-corpus.ts", "orch-2026-10-30a/20261102T221500Z-orchestrator-decision-cc7db847", "arch-ABC-269-rule/20261103T093305Z-architect-design-decision-8ccb561f", "arch-ABC-269-rule/20261103T093305Z-architect-design-observation-1c2ca5ff", "bapm-epic011-cut/20261103T094553Z-ba-pm-decision-68225039", "qe-ABC-269-freeze/20261102T222129Z-qe-e2e-observation-34cbabaf", "qe-ABC-269-freeze/20261102T222017Z-qe-e2e-decision-1b856350"],
+  "notes": [
+    { "kind": "decision", "confidence": "high: every fold line is read from the Architect's sealed ruling and owed-line notes and the owner record verbatim; page diffs in 85a7dcbf; no bar moved; the scope ruling is the Orchestrator's, recorded from its brief", "bodyFile": "notes/dec.md" },
+    { "kind": "observation", "confidence": "high: each item checked against the pages at 2c304327 before editing and 85a7dcbf after", "bodyFile": "notes/obs.md" }
+  ]
+}
