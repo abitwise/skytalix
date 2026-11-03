@@ -34,6 +34,17 @@ dropped:
 exit 0 clean / 1 finding / 2 cannot run;
   `--json`. Orchestrator runs `--ticket` at every move to `Done`.
 
+**No host path in the records; the check before each merge (`ABC-277`, 2026-11-03).** Nothing a branch adds under
+`.grugops/`, `plans/` or `memory-bank/` may carry the home path, its slug form, a `/Users/<name>` path, the session scratch
+path or a foreign process's argv; write the placeholders instead (the rule: `memory-bank/45-standing-rulings.md` §
+Dated entries (2026-11-03)). The Orchestrator runs `node tools/grugops/records-path-check.js` on the branch before each
+merge into `main` (from another checkout: `--head grugops/<task>`), beside the QE-hop check. It reads the branch's
+committed diff against its merge base with `main` (`--base`): the added lines of text files, and the whole decompressed
+content of each `.gz` the branch adds or changes; a pure rename adds nothing. Exit 0 clean, 1 a finding (the file, line
+and class are printed, never the value), 2 cannot run (not a git repository, no merge base, bad argument). **A finding
+blocks the merge** until the branch replaces the value with a placeholder in a new commit. Proof:
+`node --test tools/grugops/records-path-check.proof.js` (outside the lane).
+
 ## Branch and review flow
 
 ## Definition of done

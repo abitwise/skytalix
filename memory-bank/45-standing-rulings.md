@@ -215,3 +215,16 @@ goes to BA/PM as a defect. The owner's 2026-10-19 ruling that the per-test timeo
 - AR-1 check 4 must be spelled with `command diff`. It is fail-safe
   today. Apply it at the next touch of AR-1's record. Source: Orchestrator `…e459881c` (`security-nfr-ABC-200`). The AR-1 record
   (`…edd18e94`) is sealed and was not edited.
+
+## Dated entries (2026-11-03)
+
+**2026-11-03 — no host path in the records; placeholders instead (`ABC-277`).** Nothing committed under `.grugops/`,
+`plans/` or `memory-bank/` carries any of five classes: the literal home path; its slug form (`-home-<user>-`, the tool
+session directory name); a `/Users/<name>` path; the session scratch path (`/tmp/claude-<uid>/`); a foreign process's argv
+(a `pgrep -a`-style line). Write the placeholders `<home>`, `<repo>`, `<scratch>`, `<out>`, `<node>`, `<cutechess-cli>`,
+`<stockfish>`, `<user>`. Scripts use `$HOME` or environment variables, never expanded literals. A foreign process is
+logged as a count and a class only (the `SEC-177-1` practice). **The hostname label the owner ruled on (SEC-HP-3) is
+exempt: it is not one of the classes and may be recorded.** Forward-only: the files already committed stay (an accepted
+risk, owner Olger Oeselg). `tools/grugops/records-path-check.js` enforces it on each branch's diff before each merge into
+`main` (`memory-bank/70-runbook.md` § Before a merge into main). Authority: `ADR-0049` D4; Security/NFR `sec-host-paths`
+`…72b4070b`.

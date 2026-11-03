@@ -168,6 +168,20 @@ package is still `"private": true`, so nothing ships anywhere. The 2026-08-06 bu
 `exports` or `bin`; the build is `tsc --noEmit` and emits nothing"*) is dated history in the same way.
 The channel is unchanged. See `ADR-0018` § Note 2026-10-23 and `ADR-0044` D8.]**
 
+## Before a merge into main
+
+**[ADDED 2026-11-03 (`ABC-277`).]** Before each merge of a `grugops/<task>` branch into `main`, the Orchestrator runs,
+beside the QE-hop check:
+
+    node tools/grugops/records-path-check.js            # in the branch's checkout
+    node tools/grugops/records-path-check.js --head grugops/<task>   # from another checkout
+
+It checks the branch's committed diff against its merge base with `main` under `.grugops/`, `plans/` and `memory-bank/`
+(added lines; `.gz` decompressed) for the five host-path classes of `memory-bank/45-standing-rulings.md` § Dated
+entries (2026-11-03). Exit **0** clean: merge may go on. Exit **1** a finding (file, line, class; never the value):
+**the merge is blocked** until the branch replaces the value with a placeholder in a new commit. Exit **2** cannot run
+(not a git repository, no merge base, bad argument): the merge waits until it runs. Uncommitted changes are not read.
+
 ## Roll back
 
 **Nothing is deployed, so there is nothing to roll back.** No released artifact, no running instance,

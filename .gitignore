@@ -1,4 +1,5 @@
-node_modules/
+# No trailing slash, so a node_modules SYMLINK (a worktree borrowing the main checkout's) is ignored too (QE-274-d).
+node_modules
 dist/
 *.log
 .DS_Store
