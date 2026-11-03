@@ -1,7 +1,8 @@
 /**
  * `ABC-225` — the offline checks of `rating.ts rpair` (A1–A4); `ABC-247` adds its A1 (the
  * `Skill Level` 6 token on both builds, none on `r` or `d`); `ABC-255` adds `d` at 100 ms and `r` at
- * 500 ms, with today's prints unchanged. Not a lane file (`NFR-008`): its
+ * 500 ms, with today's prints unchanged; `ABC-275` adds `r` at 100 ms (R1), Stockfish at st=0.1, and
+ * `--elo` above 2 600 refused there. Not a lane file (`NFR-008`): its
  * name is not `*.test.*`, so `npm test` never collects it, and nothing in the lane imports it.
  *
  *   node --test tools/rating/pair-check.ts
@@ -415,12 +416,12 @@ describe("ABC-255: d at 100 ms (C2′, C3″) and r at 500 ms (S′); every othe
     );
   });
 
-  test("r refuses any --budget-ms but 500, d refuses 500, rpair refuses the flag", () => {
+  test("r refuses any --budget-ms but 500 and 100, d refuses 500, rpair refuses the flag", () => {
     const cases: [string[], RegExp][] = [
-      [["r", sha, files, "--budget-ms", "4000"], /--budget-ms 4000: r takes only 500/],
-      [["r", sha, files, "--budget-ms", "100"], /--budget-ms 100: r takes only 500/],
-      [["r", sha, files, "--budget-ms", "1000"], /--budget-ms 1000: r takes only 500/],
-      [["r", sha, files, "--budget-ms", "x"], /--budget-ms x: r takes only 500/],
+      [["r", sha, files, "--budget-ms", "4000"], /--budget-ms 4000: r takes only 500 or 100/],
+      [["r", sha, files, "--budget-ms", "1000"], /--budget-ms 1000: r takes only 500 or 100/],
+      [["r", sha, files, "--budget-ms", "50"], /--budget-ms 50: r takes only 500 or 100/],
+      [["r", sha, files, "--budget-ms", "x"], /--budget-ms x: r takes only 500 or 100/],
       [["d", sha, sha, files, "--budget-ms", "500"], /--budget-ms 500: not one of/],
       [["d", sha, sha, files, "--budget-ms", "50"], /--budget-ms 50: not one of/],
       [["rpair", sha, sha, files, "--budget-ms", "500"], /usage/],
@@ -431,6 +432,129 @@ describe("ABC-255: d at 100 ms (C2′, C3″) and r at 500 ms (S′); every othe
       assert.match(run.stderr, message, args.join(" "));
       assert.equal(existsSync(files), false);
     }
+  });
+});
+
+describe("ABC-275: r at 100 ms (R1): Stockfish at st=0.1, --elo above 2 600 refused; every other print as before", () => {
+  const sha = git("rev-parse", "--short=12", "HEAD");
+  const files = join(SCRATCH, "abc275");
+  const f = files.startsWith(homedir()) ? `<home>${files.slice(homedir().length)}` : files;
+  const argvOf = (...args: string[]): string[] => {
+    const run = harness(...args, "--dry-run");
+    assert.equal(run.status, 0, run.stderr);
+    assert.equal(existsSync(files), false);
+    const blocks = argvBlocks(run.stdout);
+    assert.equal(blocks.length, 1);
+    return blocks[0]?.argv ?? [];
+  };
+  /** R1's whole vector (`…8136b589` § 1 "Shape"); `cmd=` of Stockfish is read from the print. */
+  const r1 = (argv: readonly string[], elo: string, rounds: string, width: string): string[] => [
+    "<cutechess-cli>",
+    "-engine",
+    "name=skytalix",
+    "cmd=<node>",
+    `arg=${f}/clone-skytalix/dist/uci.js`,
+    `dir=${f}/clone-skytalix`,
+    "st=0.1",
+    "timemargin=50",
+    "restart=on",
+    `stderr=${f}/skytalix.stderr`,
+    "-engine",
+    "name=stockfish",
+    argv[argv.indexOf("name=stockfish") + 1] as string,
+    "st=0.1",
+    "timemargin=2000",
+    "restart=on",
+    "option.Threads=1",
+    "option.Hash=16",
+    "option.UCI_LimitStrength=true",
+    `option.UCI_Elo=${elo}`,
+    `stderr=${f}/stockfish.stderr`,
+    "-each",
+    "proto=uci",
+    "-openings",
+    "file=<repo>/tools/rating/openings.epd",
+    "format=epd",
+    "order=sequential",
+    "-repeat",
+    "-games",
+    "2",
+    "-rounds",
+    rounds,
+    "-concurrency",
+    width,
+    "-maxmoves",
+    "200",
+    "-pgnout",
+    `${f}/r.pgn`,
+    "-debug",
+    "all",
+  ];
+
+  test("A1: R1's command prints the whole vector: both sides st=0.1, skytalix timemargin=50, Stockfish 2000", () => {
+    const argv = argvOf(
+      "r",
+      sha,
+      files,
+      "--elo",
+      "1810",
+      "--budget-ms",
+      "100",
+      "--rounds",
+      "100",
+      "--concurrency",
+      "1",
+    );
+    assert.match(argv[argv.indexOf("name=stockfish") + 1] as string, /^cmd=/);
+    assert.deepEqual(argv, r1(argv, "1810", "100", "1"));
+  });
+
+  test("A1: at 100 the defaults hold: --elo 1650, --rounds 100, --concurrency 2", () => {
+    const argv = argvOf("r", sha, files, "--budget-ms", "100");
+    assert.deepEqual(argv, r1(argv, "1650", "100", "2"));
+  });
+
+  test("A4: at 100, --elo 2600 and 1320 print; at 500 and with no flag, 2601 and 3190 still print", () => {
+    for (const elo of ["2600", "1320"]) {
+      const argv = argvOf("r", sha, files, "--elo", elo, "--budget-ms", "100");
+      assert.deepEqual(argv, r1(argv, elo, "100", "2"));
+    }
+    for (const budget of [["--budget-ms", "500"], []])
+      for (const elo of ["2601", "3190"]) {
+        const argv = argvOf("r", sha, files, "--elo", elo, ...budget);
+        assert.ok(argv.includes(`option.UCI_Elo=${elo}`));
+        assert.ok(argv.includes("st=0.5"));
+        assert.equal(argv.includes("st=0.1"), false);
+      }
+  });
+
+  test("A3: at 100, --elo 2601 and 3190 are refused, naming the flag, the value and 2600", () => {
+    for (const elo of ["2601", "3190"]) {
+      const args = ["r", sha, files, "--budget-ms", "100", "--elo", elo, "--dry-run"];
+      const run = harness(...args);
+      assert.equal(run.status, 1, args.join(" "));
+      assert.match(run.stderr, new RegExp(`--elo ${elo}: above 2600 at --budget-ms 100`));
+      assert.equal(run.stdout.includes("cutechess-cli argv:"), false);
+      assert.equal(existsSync(files), false);
+    }
+  });
+
+  test("A3: rpair --budget-ms 100 is still refused with the usage text", () => {
+    const run = harness("rpair", sha, sha, files, "--budget-ms", "100", "--dry-run");
+    assert.equal(run.status, 1);
+    assert.match(run.stderr, /usage/);
+    assert.equal(run.stdout.includes("cutechess-cli argv:"), false);
+  });
+
+  test("A5: at 100 the control reaches skytalix only as st= and timemargin= (no new option)", () => {
+    const keys = (argv: readonly string[]): string[] =>
+      (engineGroups(argv)[0] ?? []).map((a) => a.split("=")[0] as string);
+    const r100 = argvOf("r", sha, files, "--budget-ms", "100");
+    assert.deepEqual(keys(r100), keys(argvOf("r", sha, files)));
+    assert.equal(
+      (engineGroups(r100)[0] ?? []).some((a) => a.startsWith("option.")),
+      false,
+    );
   });
 });
 
