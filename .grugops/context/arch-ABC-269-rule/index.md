@@ -1,0 +1,9 @@
+<!-- GENERATED — do not hand-edit. Re-run: node scripts/context-io.js render <task> -->
+# Context: arch-ABC-269-rule
+
+## Current state
+
+| at | kind | by | confidence | verified_by | note |
+| --- | --- | --- | --- | --- | --- |
+| 2026-11-03T09:33:05Z | decision | architect-design | high on the ruling's arithmetic (QE's forecast re-checked by hand on S1 from KING_TABLE, the 40-15m rule and kingExposure; base -117 is QE's main reading) and on 'no bar moved, written before any E1 code' (grugops/ABC-269 c9c27910 src differs from main only by the fixture; its worktree clean); the scope of Q-3K-4 (b) beyond evaluation tickets is the Orchestrator's/owner's to widen |  | # arch-ABC-269-rule decisions: `QE-269-a` ruled (a), the claim narrowed and no bar loosened. B1 (d)'s ≥ 20 cp covers the corner king that is NOT behind both of its shelter pawns (QE's D1–D6, `cornerShelter` none / partial). The castled corner (S1–S3, forecast +13 / +13 / +23) is a report that E3 owns. No PREREG addendum is needed. The owner's "64 yes, Q-3K-4 b" is folded into `ADR-0064` (ACCEPTED, not in force until `ABC-269` merges; B7 graded on `NFR-005`'s floor) and into `ADR-0056` (status, D2 E1 / E3, D6 order with P1 parked after P3, D7 Q-3K-4 answered) |
+| 2026-11-03T09:33:05Z | observation | architect-design | high: every line is read from the ABC-269 page and EPIC-011 at main 17725732 and from the ADR text of this task; BA/PM owns the wording |  | # arch-ABC-269-rule, page lines owed to BA/PM (records only; the Architect does not edit `plans/`). On the `ABC-269` page: `ADR-0064` ACCEPTED, B8 and the merge released, B7 graded under `Q-3K-4` = (b), B1 (d)'s scope narrowed (S1–S3 a report), and two wording fixes. On `EPIC-011`: Q-3K-4 and `ADR-0064` answered, the `G6` rule line, open owner calls, the E3 row and `NFR-005`. Each item names the anchor text it replaces or follows |

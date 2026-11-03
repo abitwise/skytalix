@@ -61,7 +61,7 @@ measured run.
 | 2026-11-02 | Architect/Design | PROPOSED, form L chosen by the pre-registered rule | `arch-E1` `…c524a01d`, `…d8150777` |
 | 2026-11-02 | QE/E2E | B1's position sets frozen before any E1 code; S1–S3 held apart pending a ruling | `qe-ABC-269-freeze` `…1b856350`, `d6a57653` |
 | 2026-11-02 | the owner | **ACCEPTED** ("64 yes"). **`Q-3K-4` = (b)** ("Q-3K-4 b") | `orch-2026-10-30a` `…cc7db847` |
-| 2026-11-03 | Architect/Design | **`QE-269-a` ruled (a)**, the claim narrowed. `QE-269-b` and `-c` wording. The owner's two answers folded | `arch-ABC-269-rule` (this fold) |
+| 2026-11-03 | Architect/Design | **`QE-269-a` ruled (a)**, the claim narrowed. `QE-269-b` and `-c` wording. The owner's two answers folded | `arch-ABC-269-rule` `…8ccb561f` |
 
 **2026-11-03, `QE-269-a`: ruling (a). The claim is narrowed; no bar is loosened or re-opened.**
 
