@@ -10,6 +10,21 @@ owner: BA/PM
 
 # EPIC-011: the path toward 3 000 Elo, classical and measured (`ADR-0056`)
 
+> **`ABC-236` (S1) PARKED: `ADR-0066` PROPOSED, PREMISE NOT MET ON `main`; S1 FIRES AT 100 ms, SO ANY RE-OPEN IS
+> GAIN, 2026-11-03, by BA/PM** (task `bapm-ABC-236-park`, records only, at `main` `06d4d0ee`; nothing run). Sources:
+> the Architect's `arch-ABC-236` decision `…0886976b` (§ 7, the page lines) and results note `…22d9d55f`; `ADR-0066`
+> § Status; the Orchestrator's ruling `…38f865c3` (`orch-2026-10-30a`).
+> - **`ABC-236` is parked.** Four forms probed; every one passes the safety gate and misses the pay gate (≤ 0.95×
+>   `chooseMove` nodes at d8); the design of record, A100, reads **0.9836 / 0.9913** (F4). *(The `781c11a2` merge
+>   message and the board line paired A100 with A25's position-6, "0.9836/0.9619"; the correct pair is 0.9836 /
+>   0.9913. Verdict unchanged.)* DoR 9/10, Backlog. The root is already PVS, so the ceiling is about 2 %.
+> - **S1 fires at 100 ms** (70.4 % of nodes at 47 000 inside aspiration passes); `ADR-0056` C2′'s depth-gated line is
+>   corrected (`arch-adr0056-fold-1103` `…df88abcf`). Intent on any re-open: **GAIN**.
+> - **Re-opens on** T1 landing (`ABC-257`) or a deeper shipped search, each under a new PREREG; named, not expected.
+>   E1 is not a re-open condition.
+> - **Rows touched:** § Phases row S1; § Tickets row 9; § Dedupe audit `ABC-236`; § Dependencies. Next in the owner's
+>   2026-11-03 order: `ABC-239` (E2) design (its rows untouched here).
+
 > **`ABC-234` (O3s) PARKED: `ADR-0065` PROPOSED, PREMISE NOT MET ON `main`; THE Q1 STUB RE-STATED (CARRIES `see`
 > ITSELF; NEEDS `ADR-0024` d4 OPENED, OWNER ASKED, PENDING); THE Q1 DIAGNOSTIC RECORDED, 2026-11-03, by BA/PM** (task
 > `bapm-ABC-234-park`, records only, at `main` `32b807c7`; nothing run). Sources: the Architect's `arch-ABC-234`
@@ -515,7 +530,7 @@ reorders made here are named in the "why" column.
 | 3 | O3s | `ABC-234` SEE orders captures, ordering only | full page (moved in) | *2026-11-03 (`bapm-ABC-234-park`): **parked: `ADR-0065` premise not met on `main`** (S1m `chooseMove` d8 0.9864 / 0.9548 > 0.95; every form safe); the Orchestrator's ruling. A0 ruled (`ADR-0065` decision 1: d4 fences Q1, not O3s). Re-opens on a named premise: Q1 built first, staged move generation (V3), or a time-per-move instrument (`ADR-0065` § Status); intent GAIN* |
 | 3 | Q1 | *stub:* SEE pruning of losing captures, in quiescence and the main search | title only | ~~after `ABC-234`~~; was fenced out of `EPIC-010` *2026-11-03 (`bapm-ABC-234-park`): **carries `see` itself** (`ADR-0065` decision 2; no longer waits on `ABC-234`); **needs `ADR-0024` d4 opened**, by evidence or the owner's word (`Q-3K-9`, asked 2026-11-03, **pending**). Diagnostic (quiescence half only, not pre-registered): +0.884 ply reach, d8 0.22–0.68× nodes, zugzwang 7 / 7, drift max 69 cp (top block). Needs its own PREREG and ADR* |
 | 3 | Q2 | *stub:* delta pruning in quiescence | title only | was fenced out of `EPIC-010` |
-| 3 | S1 | `ABC-236` aspiration windows at the root | full page (moved in) | after T1 (`ADR-0056` D2) |
+| 3 | S1 | `ABC-236` aspiration windows at the root | full page (moved in) | ~~after T1 (`ADR-0056` D2)~~ *2026-11-03 (`bapm-ABC-236-park`): **parked; `ADR-0066` PROPOSED, premise not met on `main`** (A100 `chooseMove` d8 0.9836 / 0.9913 > 0.95; every form safe); the Orchestrator's ruling (`…38f865c3`). Fires at 100 ms (70.4 % of nodes at 47 000), so intent GAIN on any re-open. Re-opens on T1 (`ABC-257`) or a deeper shipped search (`ADR-0066` § Status)* |
 | **4, evaluation** *(E1 **pulled forward** 2026-11-02, ahead of Phase 3 and the rest of Phase 2; `ADR-0056` D6's reorder rule; `bapm-E1-cut`)* | E1 | ~~*stub:*~~ **`ABC-269`** the full taper: one linear phase, every term a middlegame / endgame pair in one parameter table (`src/evaluate-params.ts`); at E1 only the king (40 − 15 m) and the passers (2 × by rank) get endgame halves. **Folds `ABC-231` and `ABC-232`** | ~~title only~~ full page (new, `bapm-E1-cut`) | `ABC-231`/`ABC-232` are subsets (§ Dedupe audit, C7) *2026-11-02 (`bapm-E1-cut`): **next pull** (`arch-next-pull` `…7e3ace66` ranks it first: 65 % of the ≥ 50 cp errors survive two node doublings, so evaluation is the bigger lever; the Orchestrator's ruling). `ADR-0064` PROPOSED (`arch-E1`): linear form chosen by the pre-registered rule (S 1.0344 against P's 1.1286); identical to `main` at phase 24; `chooseMove` 0.96–1.035× at d8–d10 on the `G6` boards; zugzwang 7 / 7, mate floor 0, `G1` 54 / 58. Intent GAIN; size M; P2. **DoR 10/10 on reading (b):** the build may start; B8 and the merge wait on the owner's acceptance of `ADR-0064`; B7 (`G6`) is graded per `Q-3K-4`. `ABC-231` and `ABC-232` closed as merged* *2026-11-03 (`bapm-ABC-269-fold`): **`ADR-0064` ACCEPTED 2026-11-02; B7 under `Q-3K-4` = (b)**; `QE-269-a` ruled (a): B1 (d) on D1–D6, S1–S3 E3's* |
 | 4 | E2 | `ABC-239` offline tuning, constants only | full page (moved in) | after E1; Q-3K-7 (data) |
 | 4 | E3 | *stub:* king attack: attackers on the king zone, weighted, tapered (re-try of dropped `ABC-205`'s term) | title only; ***first slice cut as `ABC-270`*** | under the tuner; ~~Q-3K-4 (`G6`)~~ *2026-11-03 (`bapm-epic011-cut`): the `Q-3K-4` wait is dissolved by (b). **E3a → `ABC-270`** (M, P2, DoR 9/10): the exposure terms get endgame halves and the `ADR-0031` addendum's queen scale and shelter gate (accepted 2026-10-24, never shipped; `ABC-205` died on `G6` cost alone) are re-read over E1, judged on play. **E3b**, the king-zone attacker term, stays this stub, after E2 (tuned weights)* *2026-11-03 (`bapm-ABC-269-fold`): judged on play (`Q-3K-4` = (b)). Its first graded rows: QE's castled-corner S1–S3 (`TAPER_KP_SHELTER_STRESS`, `grugops/ABC-269` `d6a57653`) at ≥ 20 cp, in `ABC-270` K1 (b) (`QE-269-a` ruled (a); `ADR-0064` § Decision log; `ADR-0056` D2 row E3)* |
@@ -786,7 +801,7 @@ Phase 5, the next question is V4 and it is his (`ADR-0056` D6 item 7).
 | 6 | `ABC-258` | A larger transposition table: 8 MiB inside `NFR-009`, more only on the owner's word (T4) *; T2 measured alongside (2026-11-02)* | S | P3 | Backlog, **PAUSED** | ~~8/10~~ 9/10 *(the page's score since 2026-11-01)* | `ABC-257`; Q-3K-6 for > 8 MiB; *2026-11-02 (`bapm-threads-cut`): **paused by the owner's order (P)**; the T2 amendment parked with it ("B park"); re-asked after `ABC-266`, on the shared table* |
 | 7 | `ABC-233` | History heuristic after the killers (O1h) | M | P3 | Backlog, **parked** *(2026-11-02, the Orchestrator's ruling; `bapm-records-1102c`)* | 9/10 | ~~the ADR (`ADR-0026` d10)~~ *2026-11-02: `ADR-0063` PROPOSED, **premise not met on `main`** (F4: d8 1.0011 / 0.7970 / 0.9751 / 0.9832 against ≤ 0.95× on four); no build, no read. DoR row 10 ❌ on F4; `NFR-009` 32 KiB; A3 superseded by `ADR-0063` d9; S′ `--elo 1810`. Re-opens on a new named premise and a new pre-registered probe (`ADR-0063` § Status)* |
 | 8 | `ABC-234` | SEE orders captures, ordering only (O3s) | M | P3 | Backlog *(parked 2026-11-03)* | ~~8/10~~ **9/10** | ~~`ADR-0024` d4 re-open evidence; the ADR~~ *2026-11-03 (`bapm-ABC-234-park`): A0 ruled; `ADR-0065` PROPOSED, premise not met on `main` (F4). **Parked** (the Orchestrator's ruling); re-opens on one of `ADR-0065` § Status's three premises. Intent GAIN on re-open* |
-| 9 | `ABC-236` | Aspiration windows at the root (S1) | M | P3 | Backlog | 9/10 | new ADR; ~~`ABC-238`~~ *(lifted 2026-11-02: T1 not in force; the instability coupling returns with T1)* |
+| 9 | `ABC-236` | Aspiration windows at the root (S1) | M | P3 | Backlog | 9/10 | ~~new ADR~~ *`ADR-0066`: premise not met (2026-11-03, `bapm-ABC-236-park`; **parked**, the Orchestrator's ruling `…38f865c3`)*; ~~`ABC-238`~~ *(lifted 2026-11-02: T1 not in force; the instability coupling returns with T1)* |
 | 10 | `ABC-231` | King table tapered by phase, alone | S | P3 | ~~Backlog~~ **closed: merged into `ABC-269` (E1)** *(2026-11-02, `bapm-E1-cut`; page `status: done`, `closed:` merged; the board move is the Orchestrator's)* | ~~9/10~~ — | ~~**to be merged into E1** at Phase 4's refinement~~ *folded: A1 → B7, A2 → B1 (b) / (d), A3 → B1 (a), A4 → B6, A5 → B4 + `G7`, A6 → B8* |
 | 11 | `ABC-232` | Passed pawns by phase | S | P3 | ~~Backlog~~ **closed: merged into `ABC-269` (E1) and E4** *(2026-11-02, `bapm-E1-cut`; page `status: done`, `closed:` merged; the board move is the Orchestrator's)* | ~~9/10~~ — | ~~**to be merged into E1** (phase scaling) and E4 (passer terms)~~ *folded: A1 → B1 (e) (the within-5-cp clause replaced), A2 → B1 (a), A3 → B6, A4 → B4 + `G7`, A5 → B8; other passer terms → E4* |
 | 12 | `ABC-239` | Weights tuned offline, constants only, validated outside (E2) | L | P3 | Backlog | 8/10 | E1; Q-3K-7; `ADR-0048` licence; the method ADR |
@@ -834,7 +849,7 @@ line, id unchanged), **merge into X**, **supersede**, **drop**, **close** (the e
 | `ABC-232` passers by phase | E1 (phase scaling), E4 (passer terms) | **move**, then **merge into E1 / E4** | same; its phase scaling is E1's, any passer term beyond it is E4's |
 | `ABC-233` history heuristic | O1h; O2c builds on it | **move** (Phase 3) | covered gap, no duplicate |
 | `ABC-234` SEE ordering | O3s; Q1 (SEE pruning) needs it | **move** (Phase 3) | covered gap; its `ADR-0024` d4 evidence wait stands *2026-11-03 (`bapm-ABC-234-park`): parked (`ADR-0065`, premise not met); A0 ruled (d4 governs Q1, not O3s); Q1 no longer needs it (carries `see`)* |
-| `ABC-236` aspiration | S1 | **move** (Phase 3, after T1) | covered gap; `ADR-0056` makes it depend on T1 |
+| `ABC-236` aspiration | S1 | **move** (Phase 3, after T1) | covered gap; `ADR-0056` makes it depend on T1 *2026-11-03 (`bapm-ABC-236-park`): `ADR-0066`: premise not met; **parked**, Backlog; T1 is now its re-open condition, not a wait* |
 | `ABC-237` TT replacement | T2; order against `ABC-238` | **move** (Phase 1, second) | covered gap; order C2 |
 | `ABC-238` deeper cutoffs | T1 | **move** (Phase 1, first; P3 → P2) | covered gap, the cheapest real one; order C2 |
 | `ABC-239` offline tuning | E2; Q-3K-7 | **move** (Phase 4, after E1) | covered gap; its wait on "milestone 2's evaluation" becomes E1 |
@@ -989,6 +1004,9 @@ line, id unchanged), **merge into X**, **supersede**, **drop**, **close** (the e
   `src/engine.ts` with the parked P1, one at a time, and the second to merge re-reads its door counts on the new `main`
   (`ADR-0061` d9); `ABC-266`'s Development is blocked after the D12 MISS, pending the Architect's re-proposal;* E1 *(`ABC-269`, 2026-11-02; also `src/search.ts`, `src/engine.ts` and `src/quiescence.ts` for its switch and doors, which only parked tickets touch)* → `ABC-239` → E3–E7 share `src/evaluate.ts`; *2026-11-03 (`bapm-epic011-cut`): `ABC-269` → { `ABC-270`, `ABC-271`, `ABC-272`, `ABC-239` } share `src/evaluate.ts` and `src/evaluate-params.ts`, one at a time in the Orchestrator's order, the second to merge re-reading its door counts; `ABC-273` (R1) reads `main` between `ABC-269`'s merge and the next of those;* `ABC-254` →
   V3 share `src/legal.ts` and `src/moves.ts` (`ABC-254` in `EPIC-010` since 2026-11-01, so it lands first).
+- *2026-11-03 (`bapm-ABC-236-park`):* `ABC-236` (S1) is parked (`ADR-0066`, premise not met), so it orders nothing.
+  On a re-open it edits `src/engine.ts` only and takes its turn after whichever ticket then holds that file; its T1
+  re-open condition puts it after `ABC-257`'s merge.
 
 ## Risks
 
