@@ -1,0 +1,30 @@
+# qe-ABC-276 runs: commands, test data and flaky risk (offline; no game, no real engine match; nothing left running)
+
+Every run below was wrapped in `flock <scratch>/host-test.lock`. Each command used one core.
+
+- **Gates** were run in the worktree at `b4f962c5`, with main's `node_modules` symlinked for the run and removed before commit:
+  - `node --test tools/rating/pair-check.ts`: 40/40, 0 skipped.
+  - `npm run lint` (136 files), `npm run typecheck`, `npm run build`: all green.
+  - `npm test`: 66 files, 2 566/2 566.
+- **Before/after tree.** One scratch `git clone` of the worktree, checked out at `5222a9b4` (the cut) and then at `b4f962c5` (the branch). The same path was used on both sides, so `<repo>` and the openings path are identical. `git checkout` restored the clone after each mutant.
+- **Fake tools.** Two bash scripts under `<scratch>/real/`, reached through symlinks in `<scratch>/given/`:
+  - **cutechess-cli:** `--version` prints `cutechess-cli 1.5.1`. Otherwise the script dumps its argv NUL-separated to a file outside `<out>` and prints a plant file. It also writes the plant file into each `stderr=` file and into the `-pgnout` PGN, then prints one `Finished game` line.
+  - **stockfish:** answers `uci` with `id name Stockfish 17` and `uciok`.
+  - The out dir is `<scratch>/outs/run`, where `outs` is a symlink to `outs-real`.
+  - The plant file is generated at run time from `$HOME`, the realpaths, `node -p process.execPath`, `id -un` and `hostname`. No literal is committed.
+- **Dry-run matrix (36 argvs, cut vs branch):**
+  - **22 prints:** r with no flag; `--elo 1810 --rounds 5 --concurrency 1`; 500 with and without `--elo 1810`; 500 at `--elo` 3190 and 2601; 100 with no E and at 2000, 2600 and 1320 (`--rounds 3 --concurrency 4`); `--elo 3190`. d at its default and at 3000, 2500, 2000, 1500, 1000 and 100, plus 100 with `--rounds 7 --concurrency 2`. rpair at its default, at `--rounds 20`, and at `--elo 2000 --rounds 10 --concurrency 1`.
+  - **10 refusals:** r at 4000, 1000, 50 and `x`; 100 at `--elo` 2601 and 3190; `--elo 1000`; d at 500; `--concurrency 9`; rpair `--rounds 15`.
+  - **5 usage cases:** no mode; `x …`; `r <sha>`; `d … --elo`; `rpair … --budget-ms 100`.
+  - **Result:** all stdout and exit codes are byte-equal. stderr differs only in stack-frame line numbers (the refusals) and in usage lines 1 and 5 (the usage cases).
+- **`cutechessArgs` matrix:** `<scratch>/scripts/args.mjs` imported each side's module. 23 vectors, compared as JSON: byte-equal.
+- **Real runs (10 labels × cut and branch = 20 runs):** each took 2–5 s and did a real clone, `npm ci`, build and UCI handshake of skytalix at `5222a9b4`. The labels were r at 4000 (`--rounds 1 --concurrency 1`), at 500 (`--elo 1810 --rounds 2`) and at 100 (`--elo 2000 --rounds 1`), and d at the default, at 3000 (twice) and at 2500, 2000, 1500, 1000 and 100 (`--rounds 1`).
+  - Each check compared the argv dump with `cmp`, ran `sha256sum -c` and compared the file sets.
+  - For leaks, `grep -F` counted each path value and `grep -P` counted each whole-word name, over every record and the stdout. A broad case-insensitive grep looked for the user name, the surname, `/tmp/` and `/home/`.
+  - QE's independent redaction (`indep.mjs`), applied to the cut's records, was compared with the branch's records.
+  - Each run's clone dirs (about 450 MB per build) were deleted after the run. The first batch hit the scratch disk quota at d2000. Those clones were deleted, the failed run was redone, and no result was taken from a quota-hit run.
+- **Mutants:** 7, applied in the scratch clone only (never the worktree) and each restored with `git checkout`. pair-check killed M1, M3 and M5. M2, M6 and M7 survived (QE-276-a). M2 was re-run as a real run: 70 leaks and no `SHA256SUMS`, so QE's run kills it. M4 and M6 are equivalent.
+- **Load:** `sealRecords` on a 68 MB `r.out` (from `qe-epic008-close` r2): 247 ms, 225 648 KB max RSS, sums OK.
+- **Redaction probe:** `<scratch>/scripts/dbl.mjs` called `pair.ts` `redact` once and twice on 10 user/host cases (QE-276-b).
+- **Flaky risk:** none seen. The A4 and A5 rows use a fresh module instance and temp dirs, and pass on both checkouts.
+- **Left running:** nothing. The scratch dir is deleted after the commit.
