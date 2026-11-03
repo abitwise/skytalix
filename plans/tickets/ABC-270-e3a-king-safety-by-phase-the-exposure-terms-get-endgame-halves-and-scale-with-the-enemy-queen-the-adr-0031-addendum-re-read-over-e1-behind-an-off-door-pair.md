@@ -180,6 +180,13 @@ after Ready.
   re-reads its door counts.
 - **E2 (`ABC-239`):** not a wait. If E2 merges first, this ticket keeps only the structure E2 cannot create (the
   queen scale, the gate) and E2's tuned halves stand.
+  *2026-11-03 (`bapm-E2pre-cut`):* **the recommended order now puts this ticket after `ABC-239`** (`ADR-0067` § Consequences 4, PROPOSED;
+  adopted on `EPIC-011` § Dependencies): `ABC-269` → `ABC-274` → `ABC-239` → this. Its new terms then enter traced,
+  with fitted weights (`ABC-207` lost on hand weights). **Stall clause:** if `ABC-239` stalls on data, this ticket
+  may go first on its rule values, and the tuner's first pull traces it. That is still not a hard wait. **Supporting
+  information, not a bar** (`arch-ABC-239` `…48ae6a93` reading 3): every tuner fit weights the king's square tables
+  about 3–3.6 × (mg) and 2.2–2.8 × (eg) above E1's rule tables (D4: king mg −178 against E1's −50). This is consistent
+  with this ticket's premise, and part of the gap may be a weight the tuner finds.
 
 ## Definition of Ready
 
