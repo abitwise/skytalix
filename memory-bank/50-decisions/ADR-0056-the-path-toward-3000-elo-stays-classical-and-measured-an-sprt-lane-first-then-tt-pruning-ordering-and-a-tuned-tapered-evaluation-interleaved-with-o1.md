@@ -240,6 +240,18 @@ run): after `ABC-269`'s merge `54dee3f2` (QE PASS_WITH_GAPS `…eff2fe64`). Note
   - "7. yes" is `SEC-HP-2` (`ABC-277` A7). It is not this ADR's.
 - **Still open (his):** Q-3K-6 (`NFR-009` above 16 MiB) and Q-3K-8 (bitboards, later).
 
+**Folded 2026-11-03, again** (task `arch-owner-answers-1103b`, records only, on `grugops/arch-owner-answers-1103b`
+from `main` `0bf243df`; nothing run): the owner's word `orch-2026-10-30a` `…401c3d09`.
+
+- **His words, verbatim:** *"yes, accept ADR-0068 and ADR-0069"*.
+- **What changes here:**
+  - **Row E3: E3a is `ADR-0068`, ACCEPTED.** It is not in force until `ABC-270` merges. See D2's dated line.
+  - **Row Q1: `ADR-0069`, ACCEPTED.** It is not in force until the Q1 ticket merges on its own read. It amends
+    `ADR-0024` d4. See D2's dated line.
+  - **D6 Phase 4's order:** `ABC-270` (structure) → `ABC-239`'s fit, with Q1 merging (or missing) before `ABC-239`'s
+    B-T7 / B-T8 freeze. See D6's dated line.
+- **Still open (his):** Q-3K-6 and Q-3K-8, unchanged.
+
 *Original status, kept:* **PROPOSED** 2026-11-01 by Architect/Design (task `arch-algo-analysis`, records and reading only, at `main` `bae25131`).
 **Nothing is decided here.** Nothing was run, built, benchmarked or played: `qe-ABC-223` holds the host STRICTLY ALONE.
 Every Elo figure below is either quoted from a sealed reading (named) or is an **estimate** with its basis. An
@@ -599,6 +611,28 @@ Q1.*
     `arch-Q1-see-pruning`.
   - The slot the Orchestrator recommended ("after `ABC-236`'s design and before `ABC-239`") is now the Orchestrator's to apply.
     This line does not set the order.
+
+*Dated 2026-11-03 (`arch-owner-answers-1103b`, records only, at `main` `0bf243df`; his word `…401c3d09`, verbatim
+"yes, accept ADR-0068 and ADR-0069"): rows E3 and Q1.*
+- **Row E3: E3a is `ADR-0068`, ACCEPTED** (not in force until `ABC-270` merges).
+  - `ABC-270` lands as structure only: three queen-on exposure pairs at 0, value-identical and node-identical to
+    `main` (K0–K4). It is size S and plays no games. Its S2 nps is reported only (the Orchestrator, `…401c3d09`).
+  - `ABC-239`'s first pull fits the pairs (mg free and ≥ 0, eg held at 0; `ADR-0067` d6's dated line). One read covers
+    both: `ABC-239`'s B-T7 / B-T8.
+  - The `ADR-0031` A1 rule values are not shipped: they fail the mate floor at d5 against d5. The shelter gate is out.
+  - The row's "depends on E2" now reads "**structure before E2's fit; values from E2**".
+- **Row Q1: `ADR-0069`, ACCEPTED, premise met** (not in force until the Q1 ticket merges on its own read).
+  - **Dependency:** "`ADR-0024` d4 (owner `Q-3K-9`, pending)" now reads "`ADR-0024` d4 opened by `Q-3K-9` yes
+    (`…af126c04`) and amended by `ADR-0069` (accepted `…401c3d09`)".
+  - **Basis gains:** "pre-registered: QS +0.837 ply reach, d8 0.22–0.72× (`arch-Q1-see-pruning`)".
+  - **Scope:** "quiescence only; the main-search rule was measured and not taken (QSM +0.042 ply over QS)".
+  - It is **the largest lever any `EPIC-011` probe has read, now pre-registered** (P1 +0.38, O1h +0.09, O3s +0.07,
+    E1 +0.042).
+  - **The slot:** Q1's build runs beside `ABC-239`'s tool build. It merges, or misses, before `ABC-239`'s candidate is
+    frozen for B-T7 / B-T8, and never between that freeze and `ABC-239`'s merge.
+  - It ships only on its own read: C2′ 100 games at 100 ms, GAIN ≥ 50.0, with S′ at E 1 810 and the Levels deep lane.
+  - **Superseded:** the 2026-11-03 line above, "Until he answers, d4 stays closed and Q1 stays fenced". He answered
+    (`…af126c04`), and he accepted the ADR (`…401c3d09`).
 
 ### D3. Is 3 000 reachable without a neural network?
 
@@ -1443,6 +1477,20 @@ which `ABC-273`'s DoR row 10 owes (`EPIC-011` § The owner's answers, "Still ope
 - **No owner item is created.** This is a measurement setting inside the accepted D5/C4 control. The `tools/` change is
   delivery, already designed in `ABC-255`'s re-scope.
 
+*Dated 2026-11-03 (`arch-owner-answers-1103b`; his word `…401c3d09` accepts `ADR-0068` and `ADR-0069`): **item 5, the
+Phase 4 order as it now stands.***
+1. `ABC-269` (E1): merged (`54dee3f2`).
+2. `ABC-274` (E2-pre): merged (`2410d4f7`).
+3. **`ABC-270` (E3a, structure only, `ADR-0068`)**, whose build runs beside `ABC-239`'s tool build.
+4. **`ABC-239` (E2):** its fit and emission are taken on a `main` that contains `ABC-270`. They fit the queen-on pairs.
+   One read covers both.
+5. `ABC-271` (E4a), after `ABC-239`, unchanged.
+- **Q1 (`ADR-0069`), a search-side row in this window:** its build runs beside `ABC-239`'s tool build. It merges, or
+  misses, before `ABC-239`'s candidate is frozen for B-T7 / B-T8.
+- `ABC-272` (E7a): any order after E1. It is also the structural candidate if B-T5's mate floor fires on KQK rows
+  (`ADR-0067`'s dated line under its bars).
+- **Superseded:** the 2026-11-03 line above (item 4, "`ABC-270` / `ABC-271` after `ABC-239`", and its stall clause).
+
 ### D7. What is the owner's call
 
 - **Q-3K-1, the scale and the time** a "3 000" is read on (D5 items 1, 2 and 5). The proposal is Stockfish 19
@@ -1555,6 +1603,11 @@ yes ; 6. yes ; 7. yes; 8. yes"):*
 - **`ADR-0067`: accepted** ("1. yes"). **B-T8: approved** ("5. ok yes"). Its bar is unchanged (point estimate ≥ 0).
 - **Q-3K-9: answered yes** ("6. yes"). `ADR-0024` d4 is open for Q1's design only. See D2's dated line.
 - **Q-3K-6 and Q-3K-8: still open.**
+
+*Dated 2026-11-03 (`arch-owner-answers-1103b`; his word `…401c3d09`, verbatim "yes, accept ADR-0068 and ADR-0069"):*
+- **`ADR-0068` (E3a): accepted.** **`ADR-0069` (Q1): accepted.** Each comes into force at its own ticket's merge.
+  Q1's merge waits on its own read.
+- **Q-3K-6 and Q-3K-8: still open.** No new owner item is created.
 
 ### D8. What BA/PM would cut on a yes
 

@@ -26,6 +26,10 @@ Architect/Design (task `arch-owner-answers-1103`, records only, on `grugops/arch
   4 840 290 rows (the Orchestrator's board line). F8 did not fire. So `ABC-239`'s A3 and A4 hold as written.
 - **What is still not his yes:** nothing in this ADR waits on him now. `ABC-239`'s build, its fit and its reads go
   ahead under decisions 1–11, the addendum and B-T0–B-T8.
+- *Dated 2026-11-03 (`arch-owner-answers-1103b`, records only, at `main` `0bf243df`; his word `…401c3d09`, verbatim
+  "yes, accept ADR-0068 and ADR-0069"):* **`ADR-0068` (E3a, `ABC-270`) and `ADR-0069` (Q1) are accepted.** The lines
+  `ADR-0068` d8 owes are written here: d4 / d5 and d6 (dated lines), B-T4's re-pin rule and B-T5's risk (under the bars
+  table), and § Consequences item 4's order. Decision 9's list number is restored. **No bar moves.**
 
 *Before acceptance:* **PROPOSED 2026-11-03.** Recorded by Architect/Design (task `arch-ABC-239`, on `grugops/arch-ABC-239` from `main`
 `af15cbc9`). **Acceptance is the owner's:** this is a new ADR (`memory-bank/45-standing-rulings.md`, 2026-10-22).
@@ -79,6 +83,8 @@ Architect/Design (task `arch-owner-answers-1103`, records only, on `grugops/arch
 | 2026-11-03 | Owner | **ACCEPTED.** Q-3K-7 (a) yes, (b) no, (c) no; B-T8 approved | `orch-2026-10-30a` `…af126c04` |
 | 2026-11-03 | Orchestrator | `ABC-274` (E2-pre) merged; F8 did not fire | `2410d4f7`; QE `…fa87f74d` |
 | 2026-11-03 | Architect/Design | ACCEPTED / IN FORCE line. § Addendum: the Lichess data pin (2017-03 export, ≤ 1 M positions, own share 0.5 of the loss). B-T0–B-T8 and F1–F7 re-read; no bar moved | `arch-owner-answers-1103` |
+| 2026-11-03 | Owner | `ADR-0068` and `ADR-0069` accepted: `ABC-270` lands as structure before the fit; Q1 merges or misses before `ABC-239`'s B-T7 / B-T8 freeze | `orch-2026-10-30a` `…401c3d09` |
+| 2026-11-03 | Architect/Design | `ADR-0068`'s owed lines: d4 / d5 tracer, d6 free set (queen-on mg ≥ 0, eg 0), B-T4 re-pin rule, B-T5 risk, Consequences order. Decision 9's number restored; no bar moved | `arch-owner-answers-1103b` |
 
 ## Context
 
@@ -179,6 +185,21 @@ Architect/Design (task `arch-owner-answers-1103`, records only, on `grugops/arch
    - **Before any fit,** on every position of the data set, |model(current values) − `evaluate`| < 1 cp, and the two are
      exactly equal where w = 24 (or where the general blend makes them so). One miss aborts the run.
    - Every PR that adds or changes a term extends the tracer, so the gate passes on that PR's head.
+   - *Dated 2026-11-03 (`arch-owner-answers-1103b`; `ADR-0068` accepted, its d1–d3 and d8): **the tracer traces
+     `ABC-270`'s three queen-on features.***
+     - **The features:** per king, each of the three exposure counts (shelter files missing, half-open files, open
+       files), counted only while the enemy has at least one queen. They are taken white minus black and enter both
+       halves by w, as the base exposure terms do. They are linear in `KING_SHELTER_MISSING_QUEEN`,
+       `KING_FILE_HALF_OPEN_QUEEN` and `KING_FILE_OPEN_QUEEN`, so d4's Newton model fits them unchanged.
+     - **The identity gate covers them, but B-T1 alone cannot see them:** at the base values the three pairs are 0.
+       Two checks close that gap. Neither is a bar, and neither moves one:
+       1. **A tracer row, added to decision 10's test list:** on the positions `ABC-270` K1 (c) froze (at least 6
+          pairs that differ only by the enemy queen), each queen-on count equals the matching base count when the
+          enemy has a queen, and is 0 when it has none.
+       2. **The gate runs once more on the emitted file** (its current values are now the fitted ones, so the queen-on
+          mg halves may be non-zero). A miss is F1, a defect.
+     - If `ABC-270` has not merged at fit time, the features are absent and the fit runs without them (`ADR-0068`
+       § Status).
 6. **The free set at the first pull: bounded.**
    - **Material is frozen** at the classical scale (P 100, N 325, B 325, R 500, Q 900, both halves). The king is 0.
      `PHASE_WEIGHT`, `PHASE_MG` / `PHASE_EG` and `MOBILITY_CAP` (100) are fixed.
@@ -198,6 +219,14 @@ Architect/Design (task `arch-owner-answers-1103`, records only, on `grugops/arch
      each tuned array equals the tool's output for the recorded data hash.
    - **Material moves only at a later pull,** on broader data, inside a box of ± 25 % of the classical value and with a
      minor > 3 pawns in each half. That pull needs its own pre-registration.
+   - *Dated 2026-11-03 (`arch-owner-answers-1103b`; `ADR-0068` accepted, its d8): **the free set gains `ABC-270`'s
+     three queen-on exposure pairs.***
+     - **mg: free and ≥ 0** (the penalty sign bound above).
+     - **eg: held at 0 at the first pull.** `arch-ABC-270`'s D5 fitted half-open-with-queen at eg 140 on own games.
+       That is the same data pathology as the queen at 2 593. It is freed only at a later pull, under its own
+       pre-registration.
+     - The three base exposure pairs stay free in both halves, as written above.
+     - The pairs count only if `ABC-270` has merged at fit time.
 7. **Integer emission and provenance.**
    - Values are rounded half away from zero, and the reported loss is the rounded set's.
    - `tools/tune` writes `src/evaluate-params.ts` in its present shape, mg / eg arrays and the same exports, and
@@ -349,6 +378,8 @@ Architect/Design (task `arch-owner-answers-1103`, records only, on `grugops/arch
            term. QE confirms by source read that the tapered return has one `Math.trunc`, over `egDelta`
            (`ADR-0064` d2's form).
        - QE may add frozen rows (rows added only, A7). They are not owed.
+9. **Data.** *(List number restored 2026-11-03, `arch-owner-answers-1103b`. It was lost in an edit of 2026-11-03
+   (`f554dba4`). The content is unchanged.)*
    - **Default (A1), today: own self-play games.**
      - Source: every PGN tracked at the fit commit whose two players are both this engine.
      - Each future C2′ / C3″ read adds 100–400 games through M0 (`ABC-255`).
@@ -394,11 +425,42 @@ Architect/Design (task `arch-owner-answers-1103`, records only, on `grugops/arch
 | B-T1 | identity gate (decision 5) on the full data set at the base values | 0 misses |
 | B-T2 | A2: the emitted integer set's outer-validation cross-entropy, against the base table's on the same rows | **< 1.000 ×** (A2 as written); the figure reported to 4 places, with training against validation |
 | B-T3 | reproducibility: `extract` + `fit` + `emit` run twice | byte-identical `src/evaluate-params.ts` |
-| B-T4 | A3 / A4: the diff under `src/` is that file only (plus the `ABC-215` A2 rows' replacement test); `G3` mirror; `G2` ≤ 1.02 × | after E2-pre |
-| B-T5 | play safety on the shipped path: `ADR-0050` d9's zugzwang rows 7 / 7 at their depths; mate floor 0 violations (`ADR-0064` B2's form); `G1` ≥ 54 / 58 with no NEWLY-MISSED line; `ADR-0061`'s futility audit (flips ≤ 0.5 %, 0 flips ≥ 200 cp) | as written |
+| B-T4 | A3 / A4: the diff under `src/` is that file only (plus the `ABC-215` A2 rows' replacement test); `G3` mirror; `G2` ≤ 1.02 × | after E2-pre. *Re-pin rule: dated line below the table (2026-11-03)* |
+| B-T5 | play safety on the shipped path: `ADR-0050` d9's zugzwang rows 7 / 7 at their depths; mate floor 0 violations (`ADR-0064` B2's form); `G1` ≥ 54 / 58 with no NEWLY-MISSED line; `ADR-0061`'s futility audit (flips ≤ 0.5 %, 0 flips ≥ 200 cp) | as written. *Risk: dated line below the table (2026-11-03)* |
 | B-T6 | `NFR-005` (`Q-3K-4` = (b)): `G6` boards at `LEVELS[5]`, ≥ 5 interleaved rounds, every run at depth ≥ 6; depth 7 is a WARN; the median against base reported | FAIL below 6 |
 | B-T7 | A6: C2′ 100 games at 100 ms against the merge-base, GAIN ≥ 50.0, C-1 / C-2; S′ 10 games at 0.5 s against Stockfish 19 at E 1 810 (≥ 3.0 of 10, else 10 more and ≥ 7.0 of 20); the Levels deep lane exit 0 | `EPIC-011` § The per-change rule |
 | B-T8 | A6's outside pair, 200 + 200 at 0.5 s against Stockfish (≈ 5 h), **asked of the owner first** (*approved 2026-11-03, `…af126c04` item 5*) | point estimate ≥ 0 |
+
+*Dated 2026-11-03 (`arch-owner-answers-1103b`; `ADR-0068` accepted, `…401c3d09`; its § Consequences): **B-T4's re-pin
+rule and B-T5's risk. No bar moves.***
+- **B-T4, the re-pin rule for a tuned table** (old → new, `ADR-0064` d7's rule, by reference).
+  - **Why it is needed.** A tuned table changes the numbers that tests pinned at the rule-made table. That holds on the
+    shipped path and on every older door, because the doors read the same table. `arch-ABC-270`'s batch E (QX's
+    rule values wired into every path) showed 28 reds in 7 files.
+  - **What B-T4 grades is unchanged.** `src/evaluate-params.ts` is the only non-test file under `src/` that changes,
+    plus `ABC-215` A2's replacement row. `dist/` holds no tuning code. A4's `G3` and `G2` ≤ 1.02 × stand.
+  - **Re-pinned, old → new in the PR:** a figure in `src/*.test.ts` that records the old table, such as a node count,
+    a score, a chosen move, a PV or an oracle value. Only the literal moves; the assertion's form stays.
+    `quiescence.test.ts`'s deep pins and `ORACLE_AT_DEPTH_3` re-pin only by re-running the oracle.
+  - **Never re-pinned:** a zugzwang depth, the mate floor, `G1`, the identity gate, and any relation test in
+    `src/evaluate*.test.ts`. A red relation takes d6's rule (a bound and one refit). A red safety row is F4.
+  - **A lost fixture property** is re-found under `ADR-0028` d2, as `ADR-0068` d5 does for `ABC-083`. The new row
+    must be red with its term zeroed. A row is never loosened.
+  - **A level that reddens** (`src/levels.test.ts`) follows `ADR-0028`: the fixture first, then one headroom, then the
+    owner.
+  - **The PR lists every re-pin** in one table (file, row, old → new). QE checks each one against this rule. A re-pin
+    outside it is a defect.
+  - **Why this is not a moved bar:** d6's "no test bar is edited" is read as the relation tests it sits among, plus
+    B-T5's safety rows. A pin is a record of the old table, not a level. Every bar it could be mistaken for is named
+    above as never re-pinned. *(If the Orchestrator reads a pin as a test bar, this line becomes an owner question.)*
+- **B-T5, the KQK mate risk.** On `ADR-0068`'s probe, the rule values lost same-depth KQK mates at d5 against d5:
+  X (three exposure endgame halves at 0) 1 / 190, QX 2 / 190. Both found them one ply deeper. The cause: the exposure
+  term charges a bare king up to 105 cp in a pawnless ending. A tuned set moves far more, so B-T5's mate floor may fire on pawnless rows.
+  - **The bar does not move.** If it fires: F4 as written. A defect check comes first. If the miss is real, the set is
+    NOT MET. It is never re-pinned and never read at a deeper depth.
+  - **The structural fix is `ABC-272` (E7a, the pawnless mop-up), not a re-pin.** A later pull over it is a new attempt
+    under its own pre-registration (F6's rule).
+  - **Recommended to QE (it grades nothing):** read B-T5 before B-T7 and B-T8, so that a miss spends no games.
 
 ## What would falsify this
 
@@ -658,6 +720,18 @@ below).
     call.
   - **Host time:** a Lichess run is estimated at 10–15 min, with a hard limit of 30 min (§ Addendum). That replaces
     "≤ 30 min, `UNKNOWN - verify`" above. B-T8's ≈ 5 h is now approved.
+- *Dated 2026-11-03 (`arch-owner-answers-1103b`; his word `…401c3d09` accepts `ADR-0068` and `ADR-0069`):* **order
+  item 4 now reads `ABC-270` (structure) → `ABC-239`.**
+  - `ABC-270` lands value-identical (`ADR-0068`). Its build runs beside `ABC-239`'s tool build. `ABC-239`'s fit and
+    emission are taken on a `main` that contains `ABC-270`. If `ABC-270` fails (`ADR-0068` F1 / F2), they are taken on
+    its disposition, and the fit runs without the queen-on terms. One read, B-T7 and B-T8, covers both.
+  - **Superseded:** item 4's "after `ABC-239`" and its stall clause, "`ABC-270` may go first on its rule values". The
+    rule values are not shipped (`ADR-0068`, choice rule 3). Also superseded: the dated line above, "the order of the
+    **builds** is unchanged: `ABC-239` first".
+  - **Q1 (`ADR-0069`):** its build runs beside `ABC-239`'s tool build. It merges, or misses, before `ABC-239`'s
+    candidate is frozen for B-T7 / B-T8, and never between that freeze and `ABC-239`'s merge. `ABC-239`'s quiet filter
+    calls `quiesce` with its own rules record, so a Q1 merge does not move its data (`ADR-0069` d6).
+  - Items 5–7 are unchanged.
 
 ## Rollback
 

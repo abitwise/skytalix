@@ -6,7 +6,24 @@ id: ADR-0069
 
 ## Status
 
-**PROPOSED 2026-11-03. PREMISE MET ON `main`; THE BUILD MAY START ONCE THE OWNER ACCEPTS.** Recorded by
+**ACCEPTED 2026-11-03 by the owner. THE BUILD MAY START. Not in force until the Q1 ticket merges on its own read.**
+Recorded by Architect/Design (task `arch-owner-answers-1103b`, records only, on `grugops/arch-owner-answers-1103b` from
+`main` `0bf243df`). Nothing was run.
+- **His words, verbatim** (`orch-2026-10-30a` `…401c3d09`): *"yes, accept ADR-0068 and ADR-0069"*.
+- **What it settles:** form QS. Out of check, quiescence skips a capture that is losing by decision 2 (`see < 0`). The
+  main search is unchanged. The switch `seePruning` sits behind a test-only off-door pair.
+- **`ADR-0024` d4 is amended** (decision 9): SEE pruning enters quiescence. Delta pruning and quiet checks stay fenced.
+  The dated pointer is now written in `ADR-0024` § Status and at its d4, as `ADR-0053` left one.
+- **It ships only on its own per-change read** (decision 13): 100 games at 100 ms against the merge-base, GAIN
+  ≥ 50.0 / 100, with S′ at E 1 810 and the Levels deep lane beside it. The bars of decisions 11 and 12 come first. A miss
+  is NOT MET and is not re-played.
+- **The slot** (`…401c3d09`): Q1's build runs beside `ABC-239`'s tool build. Q1 merges, or misses, before `ABC-239`'s
+  candidate is frozen for B-T7 / B-T8 (§ Consequences; decision `…5e73b0d4` § 3).
+- **Lines written with the acceptance:** `ADR-0024` (the pointer and d4), `ADR-0065` (re-open 1 and § Consequences),
+  `ADR-0056` (row Q1, D2's dated line). Still owed: `EPIC-011`, the Q1 ticket cut and the `ABC-239` / `ABC-270` lines
+  (BA/PM, decision `…5e73b0d4` § 5).
+
+*Before acceptance:* **PROPOSED 2026-11-03. PREMISE MET ON `main`; THE BUILD MAY START ONCE THE OWNER ACCEPTS.** Recorded by
 Architect/Design (task `arch-Q1-see-pruning`, records only, on `grugops/arch-Q1-see-pruning` from `main` `dc7dc15d`).
 The probe ran on a scratch copy of `main`'s `src/`, outside the repository, under the host lock, one job at a time. The
 scratch tree was `4cb84035`: E1 taper plus the `ABC-274` packed blend, with futility in force. Nothing was committed to
@@ -192,6 +209,8 @@ d8 ratios are head / door. Reach is the mean completed depth at 47 000 nodes on 
    decisions 1–3 of this ADR. Delta pruning (Q2) and quiet checks stay out. `src/quiescence.ts`'s header line "Not
    here … static exchange evaluation" is corrected in the build. A dated pointer in `ADR-0024` § Status is owed, as
    `ADR-0053` left one.
+   - *Dated 2026-11-03 (`arch-owner-answers-1103b`):* written, on the owner's acceptance (`…401c3d09`): a pointer
+     block in `ADR-0024` § Status and a dated line at its d4.
 10. **The rows it adds.**
     - **`A1`, SEE:** at least 20 hand-checked exchange positions committed as a fixture, x-rays on both sides
       included, with `see` equal to the hand value on every row. The six rows here and the 24 `HANGING_CORPUS` losing

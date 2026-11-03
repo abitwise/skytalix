@@ -6,7 +6,22 @@ id: ADR-0068
 
 ## Status
 
-**PROPOSED 2026-11-03.** Recorded by Architect/Design (task `arch-ABC-270`, on `grugops/arch-ABC-270` from `main`
+**ACCEPTED 2026-11-03 by the owner. Not in force until `ABC-270` merges.** Recorded by Architect/Design (task
+`arch-owner-answers-1103b`, records only, on `grugops/arch-owner-answers-1103b` from `main` `0bf243df`). Nothing was run.
+- **His words, verbatim** (`orch-2026-10-30a` `…401c3d09`): *"yes, accept ADR-0068 and ADR-0069"*.
+- **What it settles:** `ABC-270` (E3a) is a structure ticket of size S. It adds the three queen-on exposure pairs at
+  `{ 0, 0 }`, value-identical and node-identical to `main` (K0–K4), and plays no games. `ABC-239`'s first pull fits
+  them (queen-on mg halves free and ≥ 0, eg halves held at 0). One read, `ABC-239`'s B-T7 / B-T8, covers both.
+- **The Orchestrator's ruling, with the acceptance** (`…401c3d09`): `ABC-270` is exempt from S2 nps, which is reported
+  only, as for `ABC-274` (`…690d3b30`). See decision 6's dated line.
+- **The order** (`…401c3d09`): `ABC-270`'s build and Q1's build (`ADR-0069`) run beside `ABC-239`'s tool build.
+  `ABC-239`'s fit is taken on a `main` that contains `ABC-270`. Q1 merges, or misses, before `ABC-239`'s candidate is
+  frozen for B-T7 / B-T8.
+- **The owed `ADR-0067` lines are now written** there (d4 / d5, d6, B-T4, B-T5, § Consequences item 4), and so is
+  `ADR-0056` row E3 (D2's dated line). Still owed elsewhere: `EPIC-011` and the `ABC-270` / `ABC-239` pages
+  (BA/PM, decision `…c858b5a5` § 5).
+
+*Before acceptance:* **PROPOSED 2026-11-03.** Recorded by Architect/Design (task `arch-ABC-270`, on `grugops/arch-ABC-270` from `main`
 `dc7dc15d`). **Acceptance is the owner's:** this is a new ADR, and it changes `ABC-270`'s scope from a value-changing
 ticket to a structure ticket (`memory-bank/45-standing-rulings.md`, 2026-10-22).
 
@@ -37,6 +52,9 @@ ticket to a structure ticket (`memory-bank/45-standing-rulings.md`, 2026-10-22).
 | 2026-11-03 | Architect/Design | PREREG sealed before any measured run | `arch-ABC-270` `…117475f9`, `6bdd433b` |
 | 2026-11-03 | Architect/Design | A, B read; QX and X fail E3; choice rule 3; addendum before one diagnostic | `…3f24d8a0`, `9b3859be` |
 | 2026-11-03 | Architect/Design | PROPOSED; results and artifacts | `…c858b5a5`, `…947a9f3b`, `…401f8fcf` |
+| 2026-11-03 | Owner | **ACCEPTED** ("yes, accept ADR-0068 and ADR-0069") | `orch-2026-10-30a` `…401c3d09` |
+| 2026-11-03 | Orchestrator | `ABC-270` exempt from S2 nps (reported only), as `ABC-274`; the build order beside `ABC-239`'s tool build | `…401c3d09` |
+| 2026-11-03 | Architect/Design | ACCEPTED line; the owed `ADR-0067` and `ADR-0056` lines written; no bar moved | `arch-owner-answers-1103b` |
 
 ## Context
 
@@ -171,6 +189,8 @@ and ≥ 0:
      apply, because no value changes (as `ABC-274`).
    - **No games.** S2 nps is reported only, if the Orchestrator rules as for `ABC-274` (`…690d3b30`). That ruling is
      his.
+     - *Dated 2026-11-03 (`arch-owner-answers-1103b`):* he ruled it (`…401c3d09`). S2 nps is reported only, as for
+       `ABC-274`. K0–K4 are graded as written.
    - **A source row:** the queen flags come from the walk's existing non-pawn branch. No new per-piece operation.
 7. **The order against `ABC-239`: `ABC-270` (structure) first, then `ABC-239`'s first pull fits it, and one read covers
    both.**
@@ -183,6 +203,9 @@ and ≥ 0:
    - d4 / d5: the tracer traces the three features, and the identity gate covers them (trivially at 0);
    - `ABC-239`'s PR prints S1–S3 and game 1's move 13 on the emitted set, as reports;
    - B-T5's mate-floor risk (Consequences).
+   - *Dated 2026-11-03 (`arch-owner-answers-1103b`):* written in `ADR-0067` on this ADR's acceptance: d4 / d5's and
+     d6's dated lines, the B-T4 re-pin rule and the B-T5 risk (under its bars table), and § Consequences item 4's
+     order. The PR reports (S1–S3, game 1's move 13) are owed to the `ABC-239` page (BA/PM).
 
 ## Alternatives
 

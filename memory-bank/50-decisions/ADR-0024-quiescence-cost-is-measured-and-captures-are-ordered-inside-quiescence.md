@@ -17,6 +17,13 @@ kind: adr
 > pruning stays fenced, and so do checks in quiescence. Recorded by Architect/Design (task `arch-owner-answers-1103`,
 > records only). No other decision here moves.
 
+> **Amended 2026-11-03 by `ADR-0069` (accepted by the owner, `orch-2026-10-30a` `…401c3d09`, verbatim "yes, accept
+> ADR-0068 and ADR-0069"; pointer added by Architect/Design, task `arch-owner-answers-1103b`).** Decision 4 loses one
+> item: static exchange evaluation, for quiescence **pruning**. `ADR-0069` decisions 1–3 give the rule: out of check, a
+> capture that is losing by its decision 2 (`see < 0`) is skipped; in check, every evasion is searched. Delta pruning and
+> quiet checks stay on d4's list. In force on `main` at the Q1 ticket's merge, which waits on its own read (`ADR-0069`
+> decision 13). No other decision here moves: the MVV-LVA order (d2) and the cap of 8 (d5) are unchanged.
+
 **accepted** — by the project owner Olger Oeselg in session, 2026-09-19, verbatim: *"I accept ADR-0024"*. Transcribed by the Orchestrator (`human_admission` is `off`; a hand-authored record of a human's word, not a stamp). The re-hop that carries it (`grugops/ABC-079-quiescence` @ `fa80923`) is UNMERGED at the time of this flip: its default lane is green and every `A5` level holds, but `SEARCH_DEEP=1 npx vitest run src/search.test.ts` reads exit 1 (4 timeouts — the unpruned oracle opens a full-window quiescence at every leaf), which this ADR's own collateral ruling makes a merge condition. That is a further Architect/Design ruling, not a reversal of this one. One known deviation from the table below: the shipped `mvvLvaKey` carries a promotion term the probe lacked, so kiwipete counts read 5 878 / 10 249 / 405 945 (levels unaffected).
 
 **History — proposed** 2026-09-19 by Architect/Design (task `wave-2026-09-19`, subtask
@@ -130,6 +137,9 @@ in different places.
    merges.)*
    *(2026-11-03: SEE is opened for the design of Q1 by the owner's word, `Q-3K-9` (`…af126c04`). Design only. A build
    ships on its own evidence (§ Status, the second block). Delta pruning and checks in quiescence stay on this list.)*
+   *(2026-11-03: amended by `ADR-0069`, accepted by the owner (`…401c3d09`). SEE leaves this list for quiescence
+   pruning, by `ADR-0069` decisions 1–3. Delta pruning and quiet checks stay on it. In force at the Q1 ticket's merge
+   (§ Status, the third block).)*
 
 5. **The cap of 8 stays, as a guard, with its binding recorded.** Ordered, kiwipete still puts
    ~25% of its quiescence nodes at ply 8 (depth 3) and the capped depth-1 score differs from the

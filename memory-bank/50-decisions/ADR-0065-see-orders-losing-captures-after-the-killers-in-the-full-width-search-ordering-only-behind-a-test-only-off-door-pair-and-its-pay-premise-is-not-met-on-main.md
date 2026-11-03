@@ -41,6 +41,9 @@ output are under `.grugops/context/arch-ABC-234/raw/probe/`.
      Q1 is where the SEE lever is: 31 % of quiescence moves on `main` are losing captures, and 97 % of those are
      refuted. A diagnostic Q1 reads +0.88 ply of reach (§ Diagnostics). The one diagnostic reading of S1m over Q1
      still misses in `chooseMove` (0.961 / 1.095), so this condition is named, not expected.
+     - *Dated 2026-11-03 (`arch-owner-answers-1103b`; owner `…401c3d09`):* **Q1 designed (`ADR-0069`, accepted).**
+       Form QS: quiescence only, threshold `see < 0`, out of check. It is not built yet. An O3s re-open is a new
+       PREREG over the merged Q1, with Q1 as its door, and it re-reads the instrument counts on that `main`.
   2. **Staged move generation (V3)**, where a losing capture is not generated or scored until the quiet moves are
      exhausted, so ordering also saves generation work that a node count cannot see.
   3. **An instrument that reads time per move**, if the owner rules that node counts under-read an ordering change.
@@ -313,6 +316,11 @@ re-measures it under its own PREREG.
   not depend on it. A re-open re-reads the instrument counts on whatever `main` is then.
 - **`ABC-233` (history, parked)** shares `orderKey`. If both are ever built, they go one at a time, and the second
   re-measures over the first.
+- *Dated 2026-11-03 (`arch-owner-answers-1103b`; `ADR-0069` accepted, `…401c3d09`):* **`src/see.ts` will exist once
+  Q1 merges,** built to `ADR-0069` decision 4 with this ADR's decision 2 algorithm and Q1's threshold, 0, fixed. A
+  re-open adds its own −50 test (its own losing test) beside Q1's. It does not change Q1's threshold or its rows. If the
+  re-open reuses `see`, its scratch is Q1's 288 bytes, counted once in `NFR-009`, in place of the "about 256 bytes"
+  above.
 - **Migration:** none.
 
 ## Rollback
