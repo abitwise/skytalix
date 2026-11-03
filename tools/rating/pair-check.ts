@@ -2,7 +2,8 @@
  * `ABC-225` — the offline checks of `rating.ts rpair` (A1–A4); `ABC-247` adds its A1 (the
  * `Skill Level` 6 token on both builds, none on `r` or `d`); `ABC-255` adds `d` at 100 ms and `r` at
  * 500 ms, with today's prints unchanged; `ABC-275` adds `r` at 100 ms (R1), Stockfish at st=0.1, and
- * `--elo` above 2 600 refused there. Not a lane file (`NFR-008`): its
+ * `--elo` above 2 600 refused there. `ABC-276` adds `r` / `d`'s sealing step (A4) and the usage
+ * text (A5). Not a lane file (`NFR-008`): its
  * name is not `*.test.*`, so `npm test` never collects it, and nothing in the lane imports it.
  *
  *   node --test tools/rating/pair-check.ts
@@ -12,8 +13,17 @@
  */
 import assert from "node:assert/strict";
 import { execFileSync, spawnSync } from "node:child_process";
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
-import { homedir, tmpdir } from "node:os";
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  realpathSync,
+  rmSync,
+  symlinkSync,
+  writeFileSync,
+} from "node:fs";
+import { homedir, hostname, tmpdir, userInfo } from "node:os";
 import { join } from "node:path";
 import { after, describe, test } from "node:test";
 import { fileURLToPath } from "node:url";
@@ -814,5 +824,105 @@ describe("ADR-0049 d4: records carry placeholders, not host paths", () => {
       ],
     );
     assert.equal(red, "<out>/b01/r.pgn by <user> on <host> (Bu1x stays)");
+  });
+});
+
+describe("ABC-276: r and d seal their records as rpair does; usage names r's 100", () => {
+  const T = join(SCRATCH, "abc276");
+  mkdirSync(join(T, "real"), { recursive: true });
+  mkdirSync(join(T, "given"));
+  mkdirSync(join(T, "out-real"));
+  // Given path ≠ realpath for each tool and for the out dir, so both forms are planted.
+  for (const tool of ["cutechess-cli", "stockfish"]) {
+    writeFileSync(join(T, "real", tool), "");
+    symlinkSync(join(T, "real", tool), join(T, "given", tool));
+  }
+  symlinkSync(join(T, "out-real"), join(T, "out"));
+  const out = join(T, "out");
+
+  test("A4: the sealing step leaves no host path, user or host name, and SHA256SUMS verifies", async () => {
+    // A fresh module instance reads these tool paths at load; nothing is started.
+    process.env.CUTECHESS_CLI = join(T, "given", "cutechess-cli");
+    process.env.STOCKFISH = join(T, "given", "stockfish");
+    const specifier = "./rating.ts?abc276";
+    const fresh = (await import(specifier)) as typeof rating;
+    process.env.CUTECHESS_CLI = RATING;
+    process.env.STOCKFISH = RATING;
+
+    const paths: [string, string][] = [
+      [homedir(), "<home>"],
+      [realpathSync(REPO), "<repo>"],
+      [out, "<out>"],
+      [realpathSync(out), "<out>"],
+      [join(T, "given", "cutechess-cli"), "<cutechess-cli>"],
+      [realpathSync(join(T, "given", "cutechess-cli")), "<cutechess-cli>"],
+      [join(T, "given", "stockfish"), "<stockfish>"],
+      [realpathSync(join(T, "given", "stockfish")), "<stockfish>"],
+      [process.execPath, "<node>"],
+    ];
+    const words: [string, string][] = [
+      [userInfo().username, "<user>"],
+      [hostname(), "<host>"],
+    ];
+    const planted = [...paths, ...words].map(([value]) => `= ${value} =`).join("\n");
+    const names = ["machine.txt", "cmd.txt", "r.out", "r.pgn", "summary.txt"];
+    for (const name of names) writeFileSync(join(out, name), `${name}\n${planted}\n`);
+    mkdirSync(join(out, "clone-skytalix"));
+    writeFileSync(join(out, "clone-skytalix", "kept.txt"), planted);
+
+    // The step `r` and `d` run: every record redacted, then the sums over the top-level files.
+    fresh.sealRecords(out, fresh.topFiles);
+
+    const word = (w: string): RegExp =>
+      new RegExp(`(?<![\\w.-])${w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?![\\w-])`);
+    for (const name of [...names, "SHA256SUMS"]) {
+      const text = readFileSync(join(out, name), "utf8");
+      for (const [value] of paths) assert.equal(text.includes(value), false, `${name}: ${value}`);
+      for (const [value] of words) assert.doesNotMatch(text, word(value), name);
+    }
+    // Each value became its placeholder, line by line (the planted order).
+    const lines = readFileSync(join(out, "r.out"), "utf8").trim().split("\n").slice(1);
+    assert.deepEqual(
+      lines,
+      [...paths, ...words].map(([, label]) => `= ${label} =`),
+    );
+    // The clones are not records: left as written.
+    assert.equal(readFileSync(join(out, "clone-skytalix", "kept.txt"), "utf8"), planted);
+
+    // A2: written last, over the top-level files (SHA256SUMS excluded), and every line verifies.
+    const sums = readFileSync(join(out, "SHA256SUMS"), "utf8");
+    assert.deepEqual(
+      sums
+        .trim()
+        .split("\n")
+        .map((l) => l.split("  ")[1]),
+      [...names].sort(),
+    );
+    const check = spawnSync("sha256sum", ["-c", "SHA256SUMS"], { cwd: out, encoding: "utf8" });
+    assert.equal(check.status, 0, check.stdout + check.stderr);
+    assert.equal(check.stdout.includes("FAILED"), false);
+  });
+
+  test("A5: no mode, and rpair --budget-ms 100, print the usage text with r's 100", () => {
+    const sha = git("rev-parse", "--short=12", "HEAD");
+    const usage = [
+      "usage: node tools/rating/rating.ts r <sha> <out-dir> [--elo E] [--budget-ms 500|100] [--rounds N] [--concurrency C]",
+      "       node tools/rating/rating.ts d <candidate-sha> <base-sha> <out-dir> [--budget-ms B] [--rounds N] [--concurrency C]",
+      "       node tools/rating/rating.ts rpair <base-sha> <candidate-sha> <out-dir> [--elo E] [--rounds N] [--concurrency C]",
+      "       --concurrency: 1–8; default R 2, D 3, rpair 2",
+      "       --budget-ms: R 500 or 100 (default 4000); D 3000 (default), 2500, 2000, 1500, 1000 or 100",
+      "       rpair: --elo default 1910; --rounds 10–100 in tens, default 100 (10 = one block per build, 40 games)",
+      "       --dry-run (any mode): print the cutechess-cli arguments and stop",
+      "",
+    ].join("\n");
+    for (const args of [
+      [],
+      ["rpair", sha, sha, join(T, "never"), "--budget-ms", "100", "--dry-run"],
+    ]) {
+      const run = harness(...args);
+      assert.equal(run.status, 1, args.join(" "));
+      assert.equal(run.stderr, usage, args.join(" "));
+      assert.equal(run.stdout, "");
+    }
   });
 });
