@@ -1,0 +1,4 @@
+{"name":"kiwipete","label":"door","depth":8,"search":{"nodes":839514,"score":-81,"move":"e2a6"},"choose":{"nodes":1296788,"score":-81,"move":"e2a6","depth":8}}
+{"name":"kiwipete","label":"head","depth":8,"search":{"nodes":605117,"score":-89,"move":"d5e6"},"choose":{"nodes":766275,"score":-89,"move":"d5e6","depth":8}}
+{"name":"position-6","label":"door","depth":8,"search":{"nodes":1533901,"score":74,"move":"c3d5"},"choose":{"nodes":404930,"score":74,"move":"c3d5","depth":8}}
+{"name":"position-6","label":"head","depth":8,"search":{"nodes":406787,"score":74,"move":"c3d5"},"choose":{"nodes":87475,"score":71,"move":"c3d5","depth":8}}

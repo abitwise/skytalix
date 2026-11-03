@@ -1,0 +1,7 @@
+{"hanging":24,"of":24,"bad":[]}
+{"name":"undefended pawn","uci":"e1e5","see":100,"want":100,"ok":true}
+{"name":"x-rays both sides (CPW)","uci":"d3e5","see":-220,"want":-220,"ok":true}
+{"name":"QxP defended by P","uci":"e1e5","see":-800,"want":-800,"ok":true}
+{"name":"RxR, recaptured by R, x-ray Q, king takes Q","uci":"d2d7","see":0,"want":0,"ok":true}
+{"name":"equal trade NxN defended","uci":"e3d5","see":0,"want":0,"ok":true}
+{"name":"BxN defended by P","uci":"g2d5","see":-10,"want":-10,"ok":true}
