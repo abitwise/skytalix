@@ -1,0 +1,7 @@
+run1 extract wall 3:25.42 maxRSS 1467572 kB exit 0
+run1 fit wall 1:26.15 maxRSS 449140 kB exit 0
+run1 emit wall 0:00.09 maxRSS 91772 kB exit 0
+run2 extract wall 3:27.92 maxRSS 1504376 kB exit 0
+run2 fit wall 1:25.03 maxRSS 446920 kB exit 0
+run2 emit wall 0:00.11 maxRSS 92596 kB exit 0
+each stage under timeout 1800 and node --max-old-space-size=3000; host: 24 cpus, node v26.12.1; emitted sha256 71610196b0816825a6d22bbeb1fecb94dbb4d548063bf8ab2fe62f034fc058e2

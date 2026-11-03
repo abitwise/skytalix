@@ -1,0 +1,40 @@
+{
+ "refs": [
+  "se-ABC-239",
+  "grugops/ABC-239",
+  "ABC-239",
+  "EPIC-011",
+  "E2",
+  "ADR-0067",
+  "ADR-0048",
+  "ADR-0064",
+  "ADR-0069",
+  "B-T0",
+  "B-T1",
+  "B-T2",
+  "B-T3",
+  "B-T4",
+  "B-T5",
+  "F3",
+  "F4",
+  "NFR-008",
+  "441c547e",
+  "9eeb0314",
+  "03fcaaa0",
+  "da3f8599",
+  "tools/tune/tune.ts",
+  "tools/tune/tracer.ts",
+  "tools/tune/pgn.ts",
+  "tools/tune/tune.test.ts",
+  "src/evaluate-params.ts",
+  "src/evaluate.test.ts",
+  "src/evaluate.taper.test.ts"
+ ],
+ "notes": [
+  {
+   "kind": "observation",
+   "bodyFile": "note-artifacts.md",
+   "confidence": "high (git log and commands as run); published as observation: artifact-ref needs a §14 gate_run this hop does not have (se-ABC-274 precedent)"
+  }
+ ]
+}

@@ -1,0 +1,50 @@
+{
+ "refs": [
+  "se-ABC-239",
+  "grugops/ABC-239",
+  "ABC-239",
+  "EPIC-011",
+  "E2",
+  "ADR-0067",
+  "ADR-0048",
+  "ADR-0064",
+  "ADR-0069",
+  "B-T0",
+  "B-T1",
+  "B-T2",
+  "B-T3",
+  "B-T4",
+  "B-T5",
+  "F3",
+  "F4",
+  "NFR-008",
+  "441c547e",
+  "9eeb0314",
+  "03fcaaa0",
+  "da3f8599",
+  "tools/tune/tune.ts",
+  "tools/tune/tracer.ts",
+  "tools/tune/pgn.ts",
+  "tools/tune/tune.test.ts",
+  "src/evaluate-params.ts",
+  "src/evaluate.test.ts",
+  "src/evaluate.taper.test.ts"
+ ],
+ "notes": [
+  {
+   "kind": "decision",
+   "bodyFile": "note-design.md",
+   "confidence": "high (code read back; tool lane 11/11; B-T3 byte-identical); own-player rule UNKNOWN - verify with Architect"
+  },
+  {
+   "kind": "observation",
+   "bodyFile": "note-data.md",
+   "confidence": "high (every figure read from extract.json / fit.json / time -v of the two recorded runs)"
+  },
+  {
+   "kind": "failed-attempt",
+   "bodyFile": "note-blocked.md",
+   "confidence": "high for the counts (npm test result file); class labels by reading each failure message; zugzwang.001 soundness UNKNOWN - verify; deep lanes not run"
+  }
+ ]
+}

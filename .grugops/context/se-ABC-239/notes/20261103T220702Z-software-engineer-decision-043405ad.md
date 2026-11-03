@@ -1,0 +1,56 @@
+---
+id: 20261103T220702Z-software-engineer-decision-043405ad
+kind: decision
+by: software-engineer
+at: 2026-11-03T22:07:02Z
+verified_by: 
+confidence: high (code read back; tool lane 11/11; B-T3 byte-identical); own-player rule UNKNOWN - verify with Architect
+refs:
+  - se-ABC-239
+  - grugops/ABC-239
+  - ABC-239
+  - EPIC-011
+  - E2
+  - ADR-0067
+  - ADR-0048
+  - ADR-0064
+  - ADR-0069
+  - B-T0
+  - B-T1
+  - B-T2
+  - B-T3
+  - B-T4
+  - B-T5
+  - F3
+  - F4
+  - NFR-008
+  - 441c547e
+  - 9eeb0314
+  - 03fcaaa0
+  - da3f8599
+  - tools/tune/tune.ts
+  - tools/tune/tracer.ts
+  - tools/tune/pgn.ts
+  - tools/tune/tune.test.ts
+  - src/evaluate-params.ts
+  - src/evaluate.test.ts
+  - src/evaluate.taper.test.ts
+supersedes: 
+seal: sha256:67f8e93eeb3d8cfe54dfb08736398a8e650505b9e9f8ce71d3cf8654df3a7b48
+---
+
+# se-ABC-239 decisions: how `tools/tune/` implements `ADR-0067` (accepted) and its 2026-11-03 Lichess addendum
+
+Software Engineer, task `se-ABC-239`, on `grugops/ABC-239` from `main` `441c547e`. Tool commit `9eeb0314`, a test-only fix `03fcaaa0`, candidate `da3f8599`.
+
+1. **One module, three files plus one test file** (d10): `tools/tune/tracer.ts` (term counts, the linear model, the identity gate), `tools/tune/pgn.ts` (the reader), `tools/tune/tune.ts` (`extract | fit | emit`, the manifest, the CLI), `tools/tune/tune.test.ts`. It imports `src/` read-only and no TEST-ONLY export (ABC-274 S3 holds: its row is green on `03fcaaa0`). It makes no network call; the Lichess file was downloaded by hand and checked with `sha256sum -c`.
+2. **The base table is the `src/evaluate-params.ts` in place when `extract` runs** (E1's rule table, sha256 `cdc7de83…`, recorded in the header). The quiet filter runs at the base values (d9), so a B-T3 re-run restores that file first (`git checkout <base> -- src/evaluate-params.ts`). `fit` and `emit` read the base vectors from `extract.json`, not from the file.
+3. **The quiet filter names its rules record** (brief): `quiesce(full window, { evasions: true, quietPromotions: true, taper: true })`, which is `src/search.ts` `RULES_TAPERED` at `main` `441c547e`, written out in the tool as `QUIET_RULES`. A later Q1 switch (`ADR-0069`, PROPOSED) is absent there, so it is off and the filter does not move.
+4. **Comment blindness is structural.** In Lichess mode the lexer skips `{…}` to the closing brace and never captures its text; a trailing `!`/`?` glyph is stripped from the SAN. Own games are read with comments: the engine's own comment marks a searched move (no comment = book) and `M` marks a mate score, as in the prototype.
+5. **Own-game source rule:** both players are `skytalix` or `base` (the prototype's rule, the one behind `ADR-0067`'s 3 431 games). `sky-a`/`sky-b`/`skytalix-a`/`-b` probe games are not taken. That is a reading of "both players are this engine", **`UNKNOWN - verify`** with the Architect: those 58 games are small and do not change the bars.
+6. **Lichess filters and rules exactly as the addendum orders them.** Filter 7 (SAN replay against `legalMoves`) runs before filter 8 (game de-dup by sha256 of start FEN plus moves, across own games and Lichess). Rule 2 samples by key before the check and quiet tests, and a key's check/noisy outcome is cached, because it is a function of the board. Rule 7 drops a Lichess key equal to any own outer-validation key or any own inner-validation key. Rule 8 keeps the smallest rule-2 hashes, ties broken by key string.
+7. **Row storage:** traces are held as `Int16Array` (term, count) pairs. The rows file is JSONL, sorted by source then key, so it does not depend on stream order. The fit holds rows in typed arrays. Peak RSS 1.50 GB in extract and 0.45 GB in fit, both inside `--max-old-space-size=3000`.
+8. **Fit as d2–d6 and the addendum:** loss = 0.5 · CE(own training, K_own) + 0.5 · CE(Lichess, K_lichess), plus C-F's L2. K comes from golden section on [0.1, 5] (60 steps) per source at the base values. Projected Newton runs with the prototype's active-set rule (a bounded parameter at 0 with an outward gradient is held). It stops at a relative change < 1e-9 or after 50 steps. The free set: passed by rank 1–6, doubled, isolated and the three king-file terms (mg/eg, ≥ 0), and the mobility weight (mg/eg, ≥ 0). PSTs are either C-S (12 scales, ≥ 0) or C-F (cells tied left-right, pawn ranks 1/8 frozen, L2 to the base). Material, the phase constants and `MOBILITY_CAP` are frozen. The inner rule is C-F iff its best λ beats C-S by > 0.1 % on own inner validation; λ ∈ {1e-8, 1e-7, 1e-6}.
+9. **Emission:** values are rounded half away from zero (`+ 0`, so no −0 is written), and the file is written in the present shape and exports. Each table's comment reads "start (prior): <E1 rule>". The header also records **values sha256**: the sha256 of the JSON of the ten value exports in a fixed order. The provenance row in `src/evaluate.test.ts` rebuilds that hash from the module, which is how "each tuned array equals the tool's output for the recorded data hash" is checked in the default lane. `emit` refuses when `tools/tune` has uncommitted changes, and records `git log -1 -- tools/tune`.
+10. **Tests outside the default lane** (`NFR-008`): `TUNE_DEEP=1` registers the 10 deep rows; unset, one cheap source row runs (the `PERFT_DEEP` precedent; no skip is registered). `tsconfig.json` and `biome.json` gain `tools/tune/**/*.ts`, as `tools/rating` has. Data-stage stops 1 and 2 are code: `extract` writes `extract.stop.json` and exits non-zero. The 250 000 floor is an option, so the fixture tests can pass 0.
+11. **Allowed test edits only:** `ABC-215` A2's rebuild-from-rule row in `src/evaluate.test.ts` and the "ABC-215 A2's rule rows for the two endgame halves" block in `src/evaluate.taper.test.ts` are retired, replaced by the provenance row (`ADR-0067` d6). The A2 "names the arrays" and "differs from base" rows stay. **No other test was edited.** Their reds are reported in the `failed-attempt` note and were not re-pinned.
