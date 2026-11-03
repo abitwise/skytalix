@@ -1,3 +1,4 @@
+_Updated: 2026-11-03 Orchestrator (orch-2026-10-30a) — `bapm-R1-cut` merged: **ABC-275** (R1 harness, tools only, S, P2, 10/10) → In Development `se-ABC-275`; ABC-273 10/10 held on ABC-275, **raised to P2** (runs before the next value-changing merge); EPIC-011 R1–R3/G2 ruled at 100 ms; ABC-274 A5 cites ADR-0067 d8. Running: se-ABC-274, se-ABC-275._
 _Updated: 2026-11-03 Orchestrator (orch-2026-10-30a) — `scribe-taper-lane` merged (AGENTS.md taper deep lane, 146/146; duplicate clauses trimmed; 18 404 / 18 432 B, cli 109/109). Running: se-ABC-274, bapm-R1-cut._
 _Updated: 2026-11-03 Orchestrator (orch-2026-10-30a) — `arch-post-269` merged: **ADR-0064 IN FORCE**; ADR-0067 d8 pre-states G2 session spread for ABC-274 (QE-269-f); S′ pool @1810 = 7/10 (ABC-269 only; no step, < 30 games); **R1 ruled**: R1–R3 stay; 200 games at 100 ms vs SF19 at E1810 — needs a tools change (r accepts --budget-ms 100) first; ~0.4–0.9 h, no owner ask unless > 1 h. Ruling: R1 runs before the next value-changing merge. QE-269-j: QE briefs now set CUTECHESS_CLI/STOCKFISH. → `bapm-R1-cut` (ABC-275 tools ticket; ABC-273 page). Running: se-ABC-274, scribe-taper-lane, bapm-R1-cut._
 _Updated: 2026-11-03 Orchestrator (orch-2026-10-30a) — `bapm-269-done` merged (ABC-269 page Done; EPIC-011 E1 Done, G3 tally 2/2 value-changing merges passed; ABC-274 Ready 10/10; ABC-270..273 ABC-269 wait met, each 9/10 on own design). Board fix: ABC-269 card into Done, ABC-274 card into In Development (the previous edit had placed them in the wrong spots). QE-269-j: future QE briefs set CUTECHESS_CLI and STOCKFISH. Running: se-ABC-274, arch-post-269._
@@ -1361,7 +1362,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [ABC-270] E3a: king safety by phase — exposure endgame halves + the ADR-0031 addendum's queen scale / shelter gate re-read over E1, judged on play (Q-3K-4 b) (EPIC-011 Phase 4; size: M, priority: P2, DoR 9/10; GAIN; waits ABC-269 merged + ADR; S1–S3 its first graded rows) **cut 2026-11-03 (bapm-epic011-cut); design after the owner-ordered ABC-234 → 236 → 239**
 - [ABC-271] E4a: passed pawns read the kings and the path — king distance, free path, rule of the square (EPIC-011 Phase 4; size: M, priority: P3, DoR 9/10; GAIN unless the ADR names NEUTRAL; waits ABC-269 merged + ADR) **cut 2026-11-03 (bapm-epic011-cut)**
 - [ABC-272] E7a: mop-up for pawnless wins + drawish-material scaling, premise-gated (EPIC-011 Phase 4; size: M, priority: P3, DoR 9/10; waits ABC-269 merged + premise probe (≤ 10/12 mates; ≥ 100 cp on ≥ 5/10 draws) + ADR; both premises fail → dropped) **cut 2026-11-03 (bapm-epic011-cut)**
-- [ABC-273] R1: first EPIC-011 milestone reading after E1 — 200 games at 100 ms vs Stockfish 19 at the band-rule E (EPIC-011 readings; size: S, priority: P3, DoR 9/10; QE reading; waits ABC-269 merged + control ruling (Architect)) **cut 2026-11-03 (bapm-epic011-cut)**
+- [ABC-273] **2026-11-03: DoR 10/10; priority → P2 (Orchestrator); held on ABC-275 merge, then runs before the next value-changing merge.** R1: first EPIC-011 milestone reading after E1 — 200 games at 100 ms vs Stockfish 19 at the band-rule E (EPIC-011 readings; size: S, priority: P3, DoR 9/10; QE reading; waits ABC-269 merged + control ruling (Architect)) **cut 2026-11-03 (bapm-epic011-cut)**
 
 
 
@@ -1399,7 +1400,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
+## In Development (WIP 2/3)
+- [ABC-275] R1's harness: `r --budget-ms 100` (SF st=0.1; `--elo` ≤ 2600 at 100; else byte-equal), tools only (EPIC-011 readings; size: S, priority: P2, DoR 10/10; blocks ABC-273) **cut 2026-11-03 (bapm-R1-cut) → Ready → `se-ABC-275`**
 - [ABC-274] **2026-11-03: Ready (DoR 10/10) → In Development, `se-ABC-274` running; merge waits owner ADR-0067.** E2-pre: every term enters the blend, value-identical at E1's table (same scores, same node counts; no games) (EPIC-011 Phase 4; size: S, priority: P2, DoR 9/10; value-identical; bars node identity + G2 ≤ 1.05× + G6 ≥ base graded; S2 nps exempt (…690d3b30); waits ABC-269 merged + ADR-0067 E2-pre disposition row; merge waits owner acceptance of ADR-0067) **cut 2026-11-03 (bapm-E2pre-cut)**
 
 
