@@ -1,0 +1,20 @@
+{
+ "refs": [
+  "se-ABC-269-cut", "grugops/ABC-269", "ABC-269", "EPIC-011", "E1", "ADR-0064", "ADR-0020", "ADR-0002", "ADR-0061",
+  "C1", "F3", "B0", "B1", "B2", "B3", "B4", "G2", "P1", "P2", "P3", "P4", "P5", "P6", "P7",
+  "be1aa535", "b8b44ff3", "58fa3eb4", "561fc028",
+  "src/evaluate.ts", "src/quiescence.ts", "src/search.ts", "src/engine.ts", "src/evaluate.taper.test.ts",
+  "src/search.futility.test.ts", "src/search.null-move.test.ts", "src/puzzle-suite.test.ts", "src/evaluate.taper-corpus.ts",
+  "arch-ABC-269-F3/20261103T105957Z-architect-design-decision-a0468a78",
+  "se-ABC-269/20261103T104753Z-software-engineer-decision-7445784f",
+  "se-ABC-269/20261103T104753Z-software-engineer-observation-669f366c"
+ ],
+ "notes": [
+  {"kind": "decision", "bodyFile": "note-design.md",
+   "confidence": "high (diff read back; value identity proved by P1-P4 with 0 mismatches; untouched files read from git diff --stat); no timing claim made"},
+  {"kind": "observation", "bodyFile": "note-acceptance.md",
+   "confidence": "high (deterministic counts and Object.is readings, each a run under the host lock; plants applied alone in an isolated copy and restored, src re-diffed equal)"},
+  {"kind": "observation", "bodyFile": "note-migration.md",
+   "confidence": "high (every test edit listed from git diff; no figure changed: npm test 2566/2566 and deep lanes green, report lines equal to se-ABC-269's)"}
+ ]
+}

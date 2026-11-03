@@ -1,0 +1,4 @@
+{"rec":"P3","fixtureFens":176,"positions":550,"functions":4,"rows":2200,"mismatches":0,"atPhaseMismatches":0,"bad":[]}
+{"rec":"P4-shipped","positions":190,"rows":1140,"mismatches":0,"bad":[]}
+{"rec":"P4-doors-vs-uncut","searchDoors":13,"engineDoors":7,"rows":8360,"mismatches":0,"bad":[]}
+p34 exit=0
