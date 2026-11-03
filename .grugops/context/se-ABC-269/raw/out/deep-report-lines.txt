@@ -1,0 +1,22 @@
+puzzle2.txt:PUZZLES shipped: solved 54/58, baseline 54/58, budget 25 step 1, wall 1.87 s
+futility2.txt:ABC-268 A3 searchWithoutTaper d5: 100.00% within 25 cp of 187, max 10 cp (position-3/b4b2: 41 -> 51); mate sign flips 0; mate-status flips 0 (a report, not a bar)
+futility2.txt:ABC-268 A3 chooseMoveWithoutTaper to d5: 100.00% within 25 cp of 187, max 0 cp (startpos: 38 -> 38); mate sign flips 0; mate-status flips 0 (a report, not a bar)
+futility2.txt:ABC-268 A3 mate floor d5: 0 of 189 violated; 0 longer, 0 shorter (a report, not a bar)
+futility2.txt:ABC-268 A3 zugzwang zugzwang.001 d9: head e1f1 84325 / door e1f1 78946 = 1.068x
+futility2.txt:ABC-268 A3 zugzwang zugzwang.004 d11: head h3h4 697684 / door h3h4 587282 = 1.188x
+futility2.txt:ABC-268 A3 zugzwang zugzwang.005 d12: head f4d5 1044425 / door f4d5 2412618 = 0.433x
+futility2.txt:ABC-268 A3 zugzwang kpk-b6c6 d8: head b6c6 2829 / door b6c6 2998 = 0.944x
+futility2.txt:ABC-268 A3 zugzwang kpk-c6d6 d8: head c6d6 2981 / door c6d6 4271 = 0.698x
+futility2.txt:ABC-268 A3 zugzwang kpk-d6e6 d8: head d6e6 3065 / door d6e6 4201 = 0.730x
+futility2.txt:ABC-268 A3 zugzwang kpk-e6f6 d8: head e6f6 3051 / door e6f6 3548 = 0.860x
+futility2.txt:ABC-268 A4 searchWithoutTaper kiwipete d8: 888786 / 1116785 = 0.7958x; head e2a6 -60, door e2a6 -60
+futility2.txt:ABC-268 A4 chooseMoveWithoutTaper kiwipete to 8: 1306981 / 1575537 = 0.8295x; head e2a6 -59, door e2a6 -59
+futility2.txt:ABC-268 A4 searchWithoutTaper position-6 d8: 1262046 / 1602457 = 0.7876x; head c3d5 74, door c3d5 74
+futility2.txt:ABC-268 A4 chooseMoveWithoutTaper position-6 to 8: 391451 / 476244 = 0.8220x; head c3d5 74, door c3d5 74
+futility2.txt:ABC-268 A4 reach at 47 000 nodes on 190: door 5.558 -> head 5.837 (+0.279); 54 deeper, 1 shallower, 6 root moves differ
+taper2.txt:stdout | src/evaluate.taper.test.ts > ABC-269 B2 — the mate floor on the 287: the door's mates are same-sign mates for search() [deep, SEARCH_DEEP=1] > the door's depth-4 mates, search() at depth 5: 0 violations [deep, SEARCH_DEEP=1]
+taper2.txt:ABC-269 B2 mate floor, door d4 -> search() d5: 0 of 163 violated
+taper2.txt: ✓ src/evaluate.taper.test.ts > ABC-269 B2 — the mate floor on the 287: the door's mates are same-sign mates for search() [deep, SEARCH_DEEP=1] > the door's depth-4 mates, search() at depth 5: 0 violations [deep, SEARCH_DEEP=1] 726ms
+taper2.txt:stdout | src/evaluate.taper.test.ts > ABC-269 B2 — the mate floor on the 287: the door's mates are same-sign mates for search() [deep, SEARCH_DEEP=1] > the door's depth-5 mates, search() at depth 5: 0 violations [deep, SEARCH_DEEP=1]
+taper2.txt:ABC-269 B2 mate floor, door d5 -> search() d5: 0 of 189 violated
+taper2.txt: ✓ src/evaluate.taper.test.ts > ABC-269 B2 — the mate floor on the 287: the door's mates are same-sign mates for search() [deep, SEARCH_DEEP=1] > the door's depth-5 mates, search() at depth 5: 0 violations [deep, SEARCH_DEEP=1] 1280ms
