@@ -7,10 +7,32 @@ size: M
 priority: P2
 epic: EPIC-011
 feature: —
-adr: "ADR-0064 (PROPOSED 2026-11-02, arch-E1 …d8150777, results …c524a01d, PREREG …01c2d6a5 sealed b11b802f; merged 6e11bd97). Acceptance is the owner's (\"accept ADR-0064\" / \"decline it\"). Reading (b): the build and its gates may start; B8 (the read) and the merge wait on his acceptance. B7 (G6) is graded by Q-3K-4's answer. Follows ADR-0026 d10's pattern; revises ABC-083's \"untapered by decision\"; carries the taper half of the ADR-0031 addendum"
+adr: "ADR-0064: ACCEPTED 2026-11-02 by the owner (\"64 yes\", orch-2026-10-30a …cc7db847); B8 and the merge no longer wait on him. Q-3K-4 = (b) the same day: B7 is graded on NFR-005's floor, G6 \"≥ base\" reported, not graded. Was: PROPOSED 2026-11-02, arch-E1 …d8150777, results …c524a01d, PREREG …01c2d6a5 sealed b11b802f; merged 6e11bd97). Acceptance is the owner's (\"accept ADR-0064\" / \"decline it\"). Reading (b): the build and its gates may start; B8 (the read) and the merge wait on his acceptance. B7 (G6) is graded by Q-3K-4's answer. Follows ADR-0026 d10's pattern; revises ABC-083's \"untapered by decision\"; carries the taper half of the ADR-0031 addendum"
 ---
 
 # ABC-269: one tapered evaluation, the king and the passers by phase (E1)
+
+> **THE OWNER'S TWO ANSWERS FOLDED, 2026-11-03, by BA/PM** (task `bapm-epic011-cut`, records only, at `main` `17725732`;
+> nothing run). His words (`orch-2026-10-30a` `…cc7db847`, verbatim): *"64 yes, Q-3K-4 b"*. The Architect folds the
+> same into `ADR-0064` and `ADR-0056` (`arch-ABC-269-rule`, in flight); where its text lands, it governs.
+> - **`ADR-0064` is ACCEPTED.** B8 (the 100-game read, S′ at E 1 810, the Levels deep lane) and the merge no longer wait
+>   on the owner; they follow the build and QE. With no other change, F6's "accepted, not in force" applies only if B8
+>   misses.
+> - **`Q-3K-4` = (b):** *value-changing evaluation tickets are judged on play (the 100-game read) with `NFR-005`'s
+>   depth-6 floor and the depth-7 WARN; `G6` "≥ base" is reported, not graded* (the Orchestrator's transcription). **B7
+>   is graded on its pre-written alternative branch:** every run completes depth ≥ 6 (FAIL below), depth 7 is a WARN,
+>   and the median against base is reported. B7's default branch is not graded.
+>   - **F3 narrows with it:** its `G6` half ("under the default, `G6`'s median below base") does not fire. F3 still fires
+>     on B6 (`G2` > 1.05 ×), and a run below depth 6 is a B7 FAIL.
+> - **`QE-269-a` (MEDIUM, B1 (d)'s scope): PLACEHOLDER, the Architect's ruling owed** (`arch-ABC-269-rule`, in
+>   parallel). QE's frozen castled-corner stress endings S1–S3 forecast +13 / +13 / +23 cp against B1 (d)'s 20 cp
+>   (`qe-ABC-269-freeze` `…34cbabaf`). **Page effect, by ruling:** (i) out of E1's scope: B1 (d) gets a dated line
+>   scoping it to the 6 graded endings (a corner king not behind both its pawns); S1–S3 stay a report; the fix is
+>   **`ABC-270`** (E3a, king safety by phase), whose K1 (b) reads all 9 endings at ≥ 20 cp. (ii) in scope: S1–S3 join
+>   B1 (d) as frozen, `ADR-0064` re-opens, and `ABC-270`'s scope 1 folds here. **No bar on this page moves until the
+>   ruling lands;** a later BA/PM hop writes the chosen effect in place of this bullet.
+> - **DoR 10/10, unchanged.** Row 10 now reads: the build may start once QE's freeze is on the branch; nothing waits on
+>   the owner. The board (In Development) is the Orchestrator's.
 
 > **Cut 2026-11-02 by BA/PM: DoR 10/10 on reading (b)** (task `bapm-E1-cut`, records only, at `main` `2bef4d31`; `src/`
 > tree `58fa3eb4`; nothing run, built or timed). Source: `ADR-0064` (PROPOSED, `arch-E1`) and the Architect's notes
@@ -170,9 +192,11 @@ and are not loosened after Ready.** The ADR's falsifier table is authoritative.
     0.96 × at kiwipete d9). A miss is F3.
   - **Under the alternative (judged on play):** `NFR-005` alone. Every run completes depth ≥ 6 (FAIL below); depth 7 is
     a WARN level. "≥ base" is reported, not graded, and B8 decides.
+  - ***2026-11-03 (`bapm-epic011-cut`): `Q-3K-4` = (b) (`…cc7db847`). This alternative branch is the one graded; the
+    default branch above is not.***
   - **The named residual risk:** a board sitting on a depth edge can flip its median on 1–4 %. No value-changing
     evaluation can promise otherwise (`…d8150777` § 2). Where 4 000 ms lands on today's `main` is `UNKNOWN - verify`.
-- **B8 (the read; `EPIC-011` § The per-change rule, by reference). Waits on the owner's acceptance of `ADR-0064`.**
+- **B8 (the read; `EPIC-011` § The per-change rule, by reference).** ~~Waits on the owner's acceptance of `ADR-0064`.~~ *2026-11-03 (`bapm-epic011-cut`): `ADR-0064` accepted ("64 yes", `…cc7db847`); B8 follows the build and QE.*
   - **Intent: GAIN.** One 100-game read at 100 ms a move before the merge: the candidate head rebased on `main` against
     its merge-base, self-play, openings 1–50 with both colours, one game at a time, `Threads 1` against `Threads 1`,
     QE with the host ALONE, through `ABC-255`. **MET** on 100 of 100 games complete, 0 candidate faults, 0 losses on
@@ -211,7 +235,7 @@ and are not loosened after Ready.** The ADR's falsifier table is authoritative.
 |---|---|---|---|
 | F1 | B0's counts not reproduced | B0 | a defect: the build is not this design; fixed before any other bar is read |
 | F2 | a mirror mismatch; `evaluateWithoutTaper` ≠ `main`'s `evaluate`; a door or an older door not node-equal to its pre-ticket self | B1 (a)–(c), `G4` | a defect |
-| F3 | under the default, `G6`'s median below base on either board; or `G2` above 1.05 × | B6, B7 | STOP to Architect/Design. **One value-identical cost cut is allowed** (O1-e-style incremental phase, or a packed score), node-equal by B0, then one new `G6` reading. A second miss: not merged, and the Orchestrator puts `Q-3K-4` to the owner with both readings if unanswered. No value is tuned to pass `G6` |
+| F3 | under the default, `G6`'s median below base on either board; or `G2` above 1.05 × *(2026-11-03: under `Q-3K-4` (b) the `G6` half does not fire; `G2` > 1.05 × still does)* | B6, B7 | STOP to Architect/Design. **One value-identical cost cut is allowed** (O1-e-style incremental phase, or a packed score), node-equal by B0, then one new `G6` reading. A second miss: not merged, and the Orchestrator puts `Q-3K-4` to the owner with both readings if unanswered. No value is tuned to pass `G6` |
 | F4 | a zugzwang row not played at its depth, a mate-floor violation, or a NEWLY-MISSED `G1` line | B2–B4 | a defect check first; if real, NOT MET and `ADR-0064` re-opens. Never a re-pin to a deeper depth |
 | F5 | the futility audit above its bars | B5 | `ADR-0061`'s margins re-read on this scale by a dated amendment there, before E1 merges |
 | F6 | B8 below 50.0 of 100, an S′ collapse, or a red Levels lane | B8 | not merged; `ADR-0064` reads "accepted, not in force". The structure (d1, d2, d4, d5, d7) may be re-offered value-identical to `main` as E2's base: E2's ADR's call, not a re-play |
@@ -260,16 +284,17 @@ and are not loosened after Ready.** The ADR's falsifier table is authoritative.
 
 ## Dependencies
 
-- **Owner: acceptance of `ADR-0064`** (*"accept ADR-0064"* / *"decline it"*). It gates B8 and the merge only (reading
+- ~~**Owner: acceptance of `ADR-0064`**~~ *(answered 2026-11-03 fold: "64 yes", `…cc7db847`)* (*"accept ADR-0064"* / *"decline it"*). It gates B8 and the merge only (reading
   (b), the `ABC-208` / `ADR-0059` / `ADR-0061` precedent). Default: no taper on `main`. `EPIC-011` § Owner questions.
-- **Owner: `Q-3K-4`**, answered before B7 is graded. The build does not wait. The Architect recommends "judge on play"
+- ~~**Owner: `Q-3K-4`**~~ *(answered: (b), `…cc7db847`; B7 graded on the floor)*, answered before B7 is graded. The build does not wait. The Architect recommends "judge on play"
   with the depth-6 floor; the default is "≥ base" binds.
 - **Base:** `main` at `2bef4d31`, `src/` tree `58fa3eb4` (read, `git rev-parse`), the probe's tree. If `main`'s `src/`
   moves first, B0's counts are re-derived with `patch_e1.py` (B0).
 - **File collisions, one at a time:** `src/evaluate.ts` (no open ticket touches it); `src/search.ts`, `src/engine.ts`
   and `src/quiescence.ts` (the switch and the doors). The parked P1, the parked `ABC-233` and the parked `ABC-266`
   touch those files; none is moving. The second to merge re-reads its door counts.
-- **Couplings:** `ADR-0061` (B5); E2 (`ABC-239`) takes decision 4 as its seam, and `Q-3K-7` (data) goes live when E2 is
+- **`QE-269-a`:** the Architect's ruling on B1 (d)'s scope (`arch-ABC-269-rule`); see the top block's placeholder.
+- **Couplings:** `ADR-0061` (B5); `ABC-270` (E3a) is the named home of the shelter taper under ruling (i); E2 (`ABC-239`) takes decision 4 as its seam, and `Q-3K-7` (data) goes live when E2 is
   pulled; O1-e is re-read after E1 (`EPIC-011`); R1 is read after E1 (the Orchestrator's ruling).
 - **QE:** the freezes (test note 1) before the build; B5 on a scratch copy; B7 on the reference host; B8 with the host
   ALONE.
@@ -287,7 +312,9 @@ and are not loosened after Ready.** The ADR's falsifier table is authoritative.
 | 7 | test notes | ✅ 1–7 (QE freezes, migration bound, deep lanes owed) |
 | 8 | size | ✅ M |
 | 9 | priority | ✅ P2 |
-| 10 | no major unresolved blocker | ✅ the ADR is written, PROPOSED. Reading (b): the build may start; B8 and the merge wait on *"accept ADR-0064"*; B7 is graded once `Q-3K-4` is answered |
+| 10 | no major unresolved blocker | ✅ the ADR is written, PROPOSED. Reading (b): the build may start; B8 and the merge wait on *"accept ADR-0064"*; B7 is graded once `Q-3K-4` is answered. *2026-11-03 (`bapm-epic011-cut`): both answered ("64 yes", (b)); nothing waits on the owner; `QE-269-a`'s ruling is owed by the Architect and blocks nothing until it lands* |
+
+*2026-11-03 (`bapm-epic011-cut`): ADR-0064 accepted and `Q-3K-4` = (b); the line below is superseded where it waits on the owner.*
 
 **DoR 10/10 on reading (b). Backlog, Ready recommended** (the board move is the Orchestrator's). The build may start
 from `main` once QE has frozen test note 1's positions. B8 and the merge wait on *"accept ADR-0064"*; with no answer,
