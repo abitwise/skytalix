@@ -12,6 +12,11 @@ adr: "owed (the Architect's): a new ADR for E4a on ABC-269's base (the rules, th
 
 # ABC-271: passed pawns that know about the kings (E4a)
 
+> **`ABC-269` MERGED, 2026-11-03, by BA/PM** (task `bapm-269-done`, records only, at `main` `128e3c6c`; nothing run).
+> `ABC-269` (E1) merged to local `main` at `54dee3f2` (QE PASS_WITH_GAPS `qe-ABC-269` `…eff2fe64`), so this page's wait
+> on that merge is **met**. DoR stays 9/10: row 10 now waits on the ADR alone. Order unchanged: after `ABC-274` and
+> `ABC-239` (`EPIC-011` § Dependencies).
+
 > **Cut 2026-11-03 by BA/PM: DoR 9/10, Backlog** (task `bapm-epic011-cut`, records only, at `main` `17725732`; nothing
 > run, built or timed). Source: the owner's *"Analyze and create tickets under EPIC-011"* and this task's gap analysis
 > (`EPIC-011` top block of 2026-11-03). **Rank 2 of the uncut items.**
@@ -119,7 +124,7 @@ The ADR fixes exact counts before Ready; none of these bars is loosened after Re
 
 ## Dependencies
 
-- **`ABC-269` merged** (E1's passer halves and table). Hard.
+- **`ABC-269` merged** (E1's passer halves and table). Hard. *Met 2026-11-03: merged to local `main` at `54dee3f2` (`bapm-269-done`).*
 - **The ADR** (the Architect's), after the owner's 2026-11-03 design order (`ABC-234`, `ABC-236`, `ABC-239`) unless
   the Orchestrator re-orders.
 - **One at a time** with `ABC-270`, `ABC-272`, `ABC-239` on `src/evaluate.ts` / `src/evaluate-params.ts`.
@@ -143,6 +148,6 @@ The ADR fixes exact counts before Ready; none of these bars is loosened after Re
 | 7 | test notes | ✅ 1–3 |
 | 8 | size | ✅ M |
 | 9 | priority | ✅ P3 |
-| 10 | no major unresolved blocker | ❌ the ADR is owed (rules, values, P0 counts, intent check); `ABC-269` not merged |
+| 10 | no major unresolved blocker | ❌ the ADR is owed (rules, values, P0 counts, intent check); ~~`ABC-269` not merged~~ *(merged 2026-11-03, `54dee3f2`)* |
 
 **DoR 9/10. Backlog.**
