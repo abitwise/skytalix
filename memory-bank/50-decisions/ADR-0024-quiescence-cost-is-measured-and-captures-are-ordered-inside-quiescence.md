@@ -10,6 +10,13 @@ kind: adr
 > queen. `ADR-0053` decision 1 gives the new text. In force on `main` at `ABC-228`'s merge (evasions) and at
 > `ABC-229`'s merge (quiet queen promotions). No other decision here moves.
 
+> **Opened 2026-11-03 for design, by the owner's word (`Q-3K-9`; `orch-2026-10-30a` `…af126c04`, item 6, verbatim
+> "6. yes").** Decision 4's fence on SEE is lifted for the **design** of Q1, SEE pruning of losing captures
+> (`ADR-0056` row Q1). That design needs its own PREREG and its own ADR. **Design only:** a build ships on its own
+> evidence, the per-change rule of 100 games at 100 ms (`ADR-0056` C2′), with S′ and the Levels lane beside it. Delta
+> pruning stays fenced, and so do checks in quiescence. Recorded by Architect/Design (task `arch-owner-answers-1103`,
+> records only). No other decision here moves.
+
 **accepted** — by the project owner Olger Oeselg in session, 2026-09-19, verbatim: *"I accept ADR-0024"*. Transcribed by the Orchestrator (`human_admission` is `off`; a hand-authored record of a human's word, not a stamp). The re-hop that carries it (`grugops/ABC-079-quiescence` @ `fa80923`) is UNMERGED at the time of this flip: its default lane is green and every `A5` level holds, but `SEARCH_DEEP=1 npx vitest run src/search.test.ts` reads exit 1 (4 timeouts — the unpruned oracle opens a full-window quiescence at every leaf), which this ADR's own collateral ruling makes a merge condition. That is a further Architect/Design ruling, not a reversal of this one. One known deviation from the table below: the shipped `mvvLvaKey` carries a promotion term the probe lacked, so kiwipete counts read 5 878 / 10 249 / 405 945 (levels unaffected).
 
 **History — proposed** 2026-09-19 by Architect/Design (task `wave-2026-09-19`, subtask
@@ -121,6 +128,8 @@ in different places.
    *(2026-10-30: amended by `ADR-0053`, accepted by the owner (`…3dd61448`). Evasions from check and quiet promotions to
    a queen leave this list, and `ADR-0053` decision 1 gives the new text. In force at `ABC-228`'s and `ABC-229`'s
    merges.)*
+   *(2026-11-03: SEE is opened for the design of Q1 by the owner's word, `Q-3K-9` (`…af126c04`). Design only. A build
+   ships on its own evidence (§ Status, the second block). Delta pruning and checks in quiescence stay on this list.)*
 
 5. **The cap of 8 stays, as a guard, with its binding recorded.** Ordered, kiwipete still puts
    ~25% of its quiescence nodes at ply 8 (depth 3) and the capped depth-1 score differs from the

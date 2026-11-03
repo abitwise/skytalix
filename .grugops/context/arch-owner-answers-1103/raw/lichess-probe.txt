@@ -1,0 +1,15 @@
+# arch-owner-answers-1103 data-size probe (Lichess standard export), 2026-11-03
+# Under flock <scratch>/host-test.lock: curl of standard/{list,counts,sha256sums}.txt (2026-11-03T20:12:18Z .. 2026-11-03T20:12:19Z), then curl -I (HEAD) per candidate month for Content-Length. No game file downloaded.
+# month | games (counts.txt) | bytes (HEAD Content-Length) | sha256 (sha256sums.txt)
+2016-06 | 6136419 | 1093562696 | 97ccde214a81d5e58867bedbeb510dfdd99418d9fb31b0995f5320a74b7d4502
+2016-12 | 9433412 | 1698298025 | 285d09bcb7f47af2d58594ecee7da8c18f9e800fd7df2e0158b4fb5429f9a904
+2017-01 | 10680708 | 1902198021 | d1236dcd954089aee162c7b0d82f51162f7c912882343d47b77ba5c0e05512f6
+2017-02 | 10194939 | 1799107597 | 0d85d1c1ca6782fa3fae4aa2016835c0b60d51162aa84e6bfff8e4cb4af6285b
+2017-03 | 11346745 | 2169142067 | b319297e9270285635d615cbcd19a9b0d44747be3ff91d5b3eac41175b794320
+2017-04 | 11348506 | 3481200992 | 559222b0e933bc02281643724fbd9bd46690074b10d784c4f264e0bff6c5992c
+2017-05 | 11693919 | 3585539491 | c4b2e39a382fb8a9dc5e766bbae0201d123c5c0ccc27f6e852d9a69e6661ab2f
+2018-01 | 17945784 | 5472079625 | 8ac6ff9d722a4bba1c1d72c700523408dff2e09cc52cbfe4e454289ca60e8d6b
+2026-09 | 89616462 | 29224520887 | 1de8eb64fed443f4be310c779e8d60a13bcfc6e3b104bcb39a018eb056edec89
+2026-10 | 95395628 | 30982323881 | 043906ebfade1bfeb7c00087590fac505370936c028525e4722e2dbd4986ae86
+# pinned: 2017-03 (ADR-0067 § Addendum 2026-11-03)
+# host at probe: disk free 844G on the repo filesystem; RAM 29G total, 21G available; node v26.12.1, typeof zlib.createZstdDecompress === 'function'

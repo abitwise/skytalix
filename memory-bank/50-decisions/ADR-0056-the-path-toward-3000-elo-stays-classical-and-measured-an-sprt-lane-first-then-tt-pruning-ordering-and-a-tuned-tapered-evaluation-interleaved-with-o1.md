@@ -220,6 +220,26 @@ run): after `ABC-269`'s merge `54dee3f2` (QE PASS_WITH_GAPS `…eff2fe64`). Note
   0.4–0.9 h, under 1 h.
 - **Still open (his):** unchanged from the block above.
 
+**Folded 2026-11-03** (task `arch-owner-answers-1103`, records only, on `grugops/arch-owner-answers-1103` from `main`
+`dc7dc15d`; only a data-size probe was run): the owner's answers `orch-2026-10-30a` `…af126c04`.
+
+- **His words, verbatim:** *"1. yes ; 2. yes ; 3. no ; 4. no ; 5. ok yes ; 6. yes ; 7. yes; 8. yes"*.
+- **What changes here:**
+  - **"1. yes":** `ADR-0067` (row E2's method) is **ACCEPTED** and in force as the method. `ABC-274` (E2-pre) merged
+    at `2410d4f7`. See D2's dated line.
+  - **"2. yes", "3. no", "4. no": Q-3K-7 is answered.**
+    - (a) **yes:** the Lichess CC0 database export may be training data beside own self-play;
+    - (b) **no:** no Stockfish-labelled targets;
+    - (c) **no:** our games against Stockfish are never training data. They stay the outside measure.
+    - The data pin is `ADR-0067` § Addendum 2026-11-03. See D7's dated line.
+  - **"5. ok yes": B-T8 is approved,** the 200 + 200 outside pair (about 5 h) before `ABC-239` merges.
+  - **"6. yes": Q-3K-9 is answered.** `ADR-0024` d4 is opened for the **design** of Q1 (SEE pruning of losing
+    captures). A build ships only on its own evidence. See D2's dated line.
+  - **"8. yes":** `ABC-270`'s design (E3a) may start now, ahead of `ABC-239`'s build. The build order is the
+    Orchestrator's (`ADR-0067` § Consequences, dated line).
+  - "7. yes" is `SEC-HP-2` (`ABC-277` A7). It is not this ADR's.
+- **Still open (his):** Q-3K-6 (`NFR-009` above 16 MiB) and Q-3K-8 (bitboards, later).
+
 *Original status, kept:* **PROPOSED** 2026-11-01 by Architect/Design (task `arch-algo-analysis`, records and reading only, at `main` `bae25131`).
 **Nothing is decided here.** Nothing was run, built, benchmarked or played: `qe-ABC-223` holds the host STRICTLY ALONE.
 Every Elo figure below is either quoted from a sealed reading (named) or is an **estimate** with its basis. An
@@ -562,6 +582,23 @@ terms E3–E7, each best added under the tuner; then X2 singular extensions and 
 - **Row E3, supporting information only, not a bar:** in every fit the king's square tables come out about 3–3.6 ×
   (mg) and 2.2–2.8 × (eg) heavier than E1's rule tables. That is, E1's hand tables weight the king about 3 × too
   lightly (`ADR-0067` § Context, reading 4; the Orchestrator's correction `…690d3b30` item 2).
+
+*Dated 2026-11-03 (`arch-owner-answers-1103`, records only, at `main` `dc7dc15d`; his word `…af126c04`): rows E2 and
+Q1.*
+- **Row E2: `ADR-0067` is ACCEPTED** ("1. yes") and in force as the method. **E2-pre is done:** `ABC-274` merged at
+  `2410d4f7` on QE's PASS_WITH_GAPS (`…fa87f74d`). `ABC-239` is next.
+  - Its data is own games plus one Lichess CC0 monthly export (`2017-03`, at most 1 M positions, own games carrying
+    0.5 of the loss and serving as the only validation). The pin is `ADR-0067` § Addendum 2026-11-03.
+  - The row's "+100–250" stays an estimate. With broader data the bounded first pull may move more than own games'
+    0.4 %. Nobody has read it yet.
+- **Row Q1: `ADR-0024` d4 is open for design** (`Q-3K-9` answered yes, "6. yes"). The row's "`ADR-0024` d4 (owner
+  `Q-3K-9`, pending)" now reads "open for design (`…af126c04`)".
+  - **Design only.** A build ships on its own evidence: the per-change rule, 100 games at 100 ms (C2′), with S′ and
+    the Levels lane beside it (R-TC).
+  - It needs its own PREREG and ADR, as the 2026-11-03 line above says. The design task is the Orchestrator's
+    `arch-Q1-see-pruning`.
+  - The slot the Orchestrator recommended ("after `ABC-236`'s design and before `ABC-239`") is now the Orchestrator's to apply.
+    This line does not set the order.
 
 ### D3. Is 3 000 reachable without a neural network?
 
@@ -1504,6 +1541,20 @@ which `ABC-273`'s DoR row 10 owes (`EPIC-011` § The owner's answers, "Still ope
   gates `ABC-274`'s merge and `ABC-239`'s 100-game read and merge, not their builds (reading (b)). The other item is
   **B-T8**, the 200 + 200 outside pair (about 5 h) before `ABC-239` merges. **Recommend yes.**
 - **Q-3K-6, Q-3K-7 (a) / (b) / (c), Q-3K-8, Q-3K-9: still open.**
+
+*Dated 2026-11-03 (`arch-owner-answers-1103`; his word `…af126c04`, verbatim "1. yes ; 2. yes ; 3. no ; 4. no ; 5. ok
+yes ; 6. yes ; 7. yes; 8. yes"):*
+- **Q-3K-7: answered.**
+  - **(a) yes:** `ABC-239` may train on the public-domain (CC0) Lichess database export, beside own self-play. The
+    export, the slice, the filters, the split, the mix and the provenance are pinned in `ADR-0067` § Addendum
+    2026-11-03. Validation stays own games.
+  - **(b) no:** no Stockfish-labelled position is a training target. The tuner reads no comment, `[%eval]` included,
+    and a test proves it.
+  - **(c) no:** our games against Stockfish (S′, B-T8, C4's anchors, R1–R3) are never training data. They stay the
+    outside measure.
+- **`ADR-0067`: accepted** ("1. yes"). **B-T8: approved** ("5. ok yes"). Its bar is unchanged (point estimate ≥ 0).
+- **Q-3K-9: answered yes** ("6. yes"). `ADR-0024` d4 is open for Q1's design only. See D2's dated line.
+- **Q-3K-6 and Q-3K-8: still open.**
 
 ### D8. What BA/PM would cut on a yes
 
