@@ -1,0 +1,8 @@
+{
+  "refs": ["ABC-277", "EPIC-011", "qe-ABC-277", "grugops/ABC-277", "861de9c5", "0f188473", "se-ABC-277/20261103T150937Z-software-engineer-decision-95af648e", "se-ABC-277/20261103T150937Z-software-engineer-observation-0bad1e32", "se-ABC-277/20261103T150937Z-software-engineer-observation-f71efacd", "ADR-0049", "sec-host-paths/20261103T144802Z-security-nfr-decision-72b4070b", "SEC-HP-1", "SEC-HP-2", "SEC-HP-3", "SEC-177-1", "QE-274-d", "NFR-008", "QE-277-a", "QE-277-b", "QE-277-c", "QE-277-d", "QE-277-e", "QE-277-f", "QE-277-g", "tools/grugops/records-path-check.js", "tools/grugops/records-path-check.proof.js", ".grugops/context/qe-ABC-277/raw/scripts/harness.mjs", ".grugops/context/qe-ABC-277/raw/scripts/fprate.mjs", ".grugops/context/qe-ABC-277/raw/out/harness-run.txt"],
+  "notes": [
+    { "kind": "decision", "confidence": "high (every row re-run by QE under the host lock with QE's own fixtures, CLI spawned with no seam; verdict and severities are QE's judgement)", "bodyFile": "notes/verdict.md" },
+    { "kind": "observation", "confidence": "high (commands as run 2026-11-03 under the host lock; harness run twice, identical but for timings)", "bodyFile": "notes/runs.md" },
+    { "kind": "observation", "confidence": "high on the facts (run and counted); severities and owners are QE's judgement", "bodyFile": "notes/gaps.md" }
+  ]
+}
