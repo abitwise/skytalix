@@ -6,10 +6,29 @@ column: Ready
 size: L
 priority: P2
 epic: EPIC-011
-adr: "ADR-0067 (ACCEPTED 2026-11-03 by the owner, orch-2026-10-30a …af126c04 item 1; IN FORCE as the method; § Addendum 2026-11-03, the Lichess data pin; arch-owner-answers-1103 …ab9f83a3). Data: own self-play games plus the Lichess 2017-03 export, CC0 (ADR-0048 d6 dated 2026-11-03; Q-3K-7 (a) yes, (b) no, (c) no). ABC-269 merged 54dee3f2; ABC-274 (E2-pre) merged 2410d4f7. Was: ADR-0067 PROPOSED (arch-ABC-239 …e4c34239, results …48ae6a93, PREREG …9ed1db11)"
+adr: "ADR-0067 (ACCEPTED 2026-11-03 by the owner, orch-2026-10-30a …af126c04 item 1; IN FORCE as the method; § Addendum 2026-11-03, the Lichess data pin; arch-owner-answers-1103 …ab9f83a3). Data: own self-play games plus the Lichess 2017-03 export, CC0 (ADR-0048 d6 dated 2026-11-03; Q-3K-7 (a) yes, (b) no, (c) no). ABC-269 merged 54dee3f2; ABC-274 (E2-pre) merged 2410d4f7. Was: ADR-0067 PROPOSED (arch-ABC-239 …e4c34239, results …48ae6a93, PREREG …9ed1db11). 2026-11-03 (bapm-owner-answers-1103b): ADR-0068 ACCEPTED (E3a structure; the fit is taken on a main with ABC-270; queen-on mg free ≥ 0, eg held at 0) and ADR-0069 ACCEPTED (Q1, ABC-279; the filter keeps its own quiescence rules record; the candidate freeze waits on Q1), owner orch-2026-10-30a …401c3d09"
 ---
 
 # ABC-239: offline tuning of the evaluation weights
+
+> **`ADR-0068` AND `ADR-0069` ACCEPTED: THE FIT WAITS ON `ABC-270`, THE CANDIDATE FREEZE WAITS ON Q1 (`ABC-279`),
+> 2026-11-03, by BA/PM** (task `bapm-owner-answers-1103b`, records only, at `main` `0bf243df`; nothing run). Sources:
+> the owner's *"yes, accept ADR-0068 and ADR-0069"* (`orch-2026-10-30a` `…401c3d09`), `ADR-0068` d7–d8 and
+> `ADR-0069` d6 and § Consequences (the Architect's owed lines, `arch-ABC-270` `…c858b5a5` § 5 and
+> `arch-Q1-see-pruning` `…5e73b0d4` § 5). **No bar on this page moved. DoR stays 10/10.** The column is the
+> Orchestrator's (In Development, `se-ABC-239`).
+> - **The fit is taken on a `main` that contains `ABC-270`** (E3a structure: three queen-on exposure pairs at
+>   `{ 0, 0 }`), or after `ABC-270`'s failed disposition (`ADR-0068` d7, F2). The tool build does not wait; the fit
+>   that is graded and emitted does.
+> - **The first pull fits the queen-on pairs:** mg is free and ≥ 0; eg is held at 0 at the first pull (`ADR-0068` d8).
+>   The Architect folds this into `ADR-0067` d4–d6 (`arch-owner-answers-1103b`, in flight).
+> - **The position filter names the quiescence rules record it calls** (`ADR-0069` d6). With `seePruning` absent, a Q1
+>   merge does not move the data set. Opting in is a decision for this page, never an accident of merge order.
+> - **The PR prints, as reports on the emitted set:** S1–S3 (`TAPER_KP_SHELTER_STRESS`; `QE-269-a` moves here from
+>   `ABC-270`; whether they clear 20 cp is `UNKNOWN - verify`) and game 1's move 13 (`ADR-0068` d8, § Consequences).
+> - **The candidate is frozen for B-T7 / B-T8 only after Q1 (`ABC-279`) merges or misses** (the owner's order,
+>   `…401c3d09`). B-T8 runs as **one `rpair`**, paired in one session. That is the Orchestrator's ruling (board,
+>   2026-11-03; the `se-ABC-239` brief), and it closes this page's `UNKNOWN - verify` on `rpair` against two `r` reads.
 
 > **OWNER ANSWERS FOLDED; DATA PINNED; DoR 10/10, READY, 2026-11-03, by BA/PM** (task `bapm-owner-answers-1103`,
 > records only, at `main` `bdecb7e1`; nothing run). Sources: the owner's answers `orch-2026-10-30a` `…af126c04`
@@ -91,6 +110,10 @@ adr: "ADR-0067 (ACCEPTED 2026-11-03 by the owner, orch-2026-10-30a …af126c04 i
    *2026-11-03 (`bapm-owner-answers-1103`):* the tool also reads the pinned Lichess export by `ADR-0067` § Addendum
    (streamed through `node:zlib` zstd, never decompressed to disk; the game filters and position rules as written
    there). Still the same module, so the split rule still does not fire.
+   *2026-11-03 (`bapm-owner-answers-1103b`; `ADR-0069` d6, `ADR-0068` d8):* the "quiescence equals static" position
+   filter **names the quiescence rules record it passes to `quiesce`** (its own literal, with no `seePruning` field),
+   so Q1 (`ABC-279`) merging does not move the data set. The traced model gains
+   the three queen-on features (exposure count × enemy-queen flag), and the identity gate covers them (trivially at 0).
 2. Its output: a constants file in `src/` with the provenance header `ABC-215` set.
    *2026-11-03 (`bapm-E2pre-cut`, `ADR-0067`):* only `src/evaluate-params.ts`, in its present shape, with `ADR-0067` d7's header (manifest sha256,
    split strings, K, configuration, λ, losses, tool commit). **`ABC-215` A2's rebuild-from-rule rows retire for the
@@ -156,6 +179,14 @@ adr: "ADR-0067 (ACCEPTED 2026-11-03 by the owner, orch-2026-10-30a …af126c04 i
   MET on a point estimate ≥ 0. Both MET, or no merge. The "if he declines" branch above is void. Whether B-T8 runs as
   `rpair` or as two `r` reads stays the Orchestrator's (`UNKNOWN - verify`, as above). `ADR-0067` is accepted, so
   nothing here waits on the owner. B-T8's games, like S′'s, never enter training (Q-3K-7 (c)).
+  *2026-11-03 (`bapm-owner-answers-1103b`; owner `…401c3d09`; `ADR-0069` design note § 3):* **the candidate is frozen
+  for B-T7 and B-T8 only after Q1 (`ABC-279`) has merged or recorded NOT MET**, and that freeze is on a `main` that
+  contains `ABC-270` (or its failed disposition). So both reads are taken on the search and the structure that will
+  ship. B-T8 runs as **one `rpair`**, the candidate and its merge-base interleaved in one session (the Orchestrator's
+  ruling, board 2026-11-03). The `UNKNOWN - verify` above is closed. **Reports in the PR beside B-T7, not bars:** S1–S3
+  on the emitted set (`QE-269-a`, moved from `ABC-270` by `ADR-0068` § Consequences; if they read under 20 cp, QE
+  records the gap, and E3b or a later pull owns it) and game 1's move 13 (`plans/uat/EPIC-006-game-1.pgn`; the probe's
+  QX played Ng4, Stockfish's move, where `main` plays 13.d4).
 
 ## What happens on a miss
 
@@ -208,6 +239,9 @@ adr: "ADR-0067 (ACCEPTED 2026-11-03 by the owner, orch-2026-10-30a …af126c04 i
    - **leakage direction:** a Lichess key equal to an own-validation key leaves the Lichess rows, and validation is
      unchanged;
    - **the zstd stream:** one small `.pgn.zst` fixture (CC0 games, or games written by hand).
+5. *2026-11-03 (`bapm-owner-answers-1103b`; `ADR-0069` d6):* **a filter row:** the rules record the position filter
+   passes to `quiesce` has no `seePruning` field (or has it false), read from the source, so a Q1 merge leaves the
+   filtered row count unchanged.
 
 ## Size and priority
 
@@ -248,6 +282,15 @@ adr: "ADR-0067 (ACCEPTED 2026-11-03 by the owner, orch-2026-10-30a …af126c04 i
     outside the repository, and checked with `sha256sum -c` against the pinned line (`ADR-0067` § Addendum).
   - **After this ticket:** unchanged, except that `ABC-270`'s *design* may start now (owner item 8); the build order
     stays this ticket first, under the stall clause, and which build lands first is the Orchestrator's.
+- *2026-11-03 (`bapm-owner-answers-1103b`; owner `…401c3d09`; `ADR-0068` d7, `ADR-0069`):* **the order is now set.**
+  - **`ABC-270` (E3a structure, `ADR-0068` ACCEPTED) before the fit.** Its build runs beside this ticket's tool build.
+    The fit that is graded (B-T1–B-T6) and emitted is taken on a `main` that contains `ABC-270`, or after its failed
+    disposition. The stall clause above is void: `ABC-270` is now structure only, with no rule values to go first on.
+  - **Q1 (`ABC-279`, `ADR-0069` ACCEPTED) before the candidate freeze.** It merges or misses before this ticket's
+    candidate is frozen for B-T7 / B-T8, never between that freeze and this merge. There is no file collision:
+    `ABC-279` edits `src/see.ts`, `src/quiescence.ts`, `src/search.ts` and `src/engine.ts`.
+  - **File collision with `ABC-270`:** `src/evaluate.ts` and `src/evaluate-params.ts`. The tool writes the file's
+    present shape, which then includes the three queen-on pairs.
 
 ## Definition of Ready
 
@@ -270,3 +313,7 @@ adr: "ADR-0067 (ACCEPTED 2026-11-03 by the owner, orch-2026-10-30a …af126c04 i
 **DoR 10/10 (re-scored 2026-11-03, `bapm-owner-answers-1103`). Ready.** Rows 3 and 10 flip (both predecessors merged;
 `ADR-0067` accepted; data pinned; B-T8 approved). Rows 5, 7 and 9 updated. The board move to Ready for Dev is the
 Orchestrator's.
+
+*2026-11-03 (`bapm-owner-answers-1103b`): **10/10, unchanged.** Row 5 gains the order (`ABC-270` before the fit; Q1,
+`ABC-279`, before the candidate freeze; both ADRs ACCEPTED), and row 7 gains test note 5. Neither is a blocker: the
+tool build proceeds, and the two waits order the fit and the freeze, not the build.*
