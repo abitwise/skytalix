@@ -243,7 +243,7 @@ in `src/engine.ts` (`chooseMove` plus 5 doors), held together by the `ABC-078` i
 | Delta pruning, SEE, quiet checks in quiescence | **no** | "a recorded decision rather than an omission" | `quiescence.ts:40-44`; `ADR-0024` d4 |
 | Move ordering | yes | hash move (3 000 000) > captures and promotions by `mvvLvaKey` (victim + promotion − attacker/1000) > 2 killers per ply (quiet only, kept across iterations of one move) > generation order | `search.ts:163-243`; `quiescence.ts:75-89` |
 | History / countermove / continuation history | **no** | — (`ABC-233` Backlog) | — |
-| SEE for ordering | **no** | — (`ABC-234` Backlog, fenced) | — |
+| SEE for ordering | **no** | — (`ABC-234` Backlog, fenced; `ADR-0065`: premise not met, 2026-11-03) | — |
 | Transposition table | yes | 2^18 slots × 16 B = **4 MiB**; full 64-bit key verified; **cleared at every `chooseMove`**; **always replace**; **cutoff only at exactly the stored depth** (`entryDepth(slot) !== depth`); mate scores ply-adjusted; hash move matched against the legal list | `transposition.ts:17-33`, `:42-45`, `:79-87`, `:156-170` (`:163`) |
 | Repetition | yes | in-tree: one earlier occurrence on the path = 0; before the root: two earlier occurrences (`ABC-230`, `ADR-0054`); window ≤ 100 plies | `search.ts:146-153`; `engine.ts:228`, `:350-362`, `:388-394` |
 | 50/75-move, dead position at the leaf | yes | `leafEndReason`: no legal move, insufficient material, 75-move | `gameend.ts:206-211` |
@@ -290,8 +290,8 @@ One pass over the board; score for the side to move. **Nothing is tapered.**
 | `ABC-231` | king table tapered by phase, alone | `ADR-0031` addendum ruling | yes, but it is a subset of a full taper (D3, E1) |
 | `ABC-232` | passed pawns by phase | `ABC-231` | yes; subset of E1 |
 | `ABC-233` | history heuristic after killers, cleared per search | ADR (`ADR-0026` d10) | yes |
-| `ABC-234` | SEE for full-width capture ordering only | `ADR-0024` d4 re-open evidence (A0), ADR | yes; SEE pruning is fenced out of `EPIC-010` |
-| `ABC-236` | root aspiration windows from depth 5 | new ADR | yes |
+| `ABC-234` | SEE for full-width capture ordering only | `ADR-0065`: premise not met; parked (2026-11-03) | yes; SEE pruning is fenced out of `EPIC-010` |
+| `ABC-236` | root aspiration windows from depth 5 | `ADR-0066`: premise not met; parked (2026-11-03) | yes |
 | `ABC-237` | depth-preferred TT replacement | `ADR-0025` amendment | yes |
 | `ABC-238` | deeper stored entry may cut a shallower search | ADR revising `ABC-081` `A1`; after `ABC-237` | yes; **the cheapest real gap in the search** |
 | `ABC-239` | offline eval tuning, constants only, outside validation | milestone 2's eval, data licence (`ADR-0048`), method ADR | yes; the largest single eval lever |
@@ -348,10 +348,10 @@ repo's own readings; **[J]** Architect judgement from common practice (lowest co
 | P6 | razoring | +5–15 | [B] 8.0 | S | medium | P2 | none — new ticket |
 | O1h | history heuristic (+ malus) | +20–50 | [B] 6.0, 7.6 | M | low | — | `ABC-233` |
 | O2c | countermove / continuation history | +10–30 | [J] | M | low | O1h | none (out of `ABC-233` scope) |
-| O3s | SEE for capture ordering | +10–30 | [B] 7.1; [J] | M | low | — | `ABC-234` (fenced, A0) |
-| Q1 | SEE pruning of losing captures (quiescence and main) | +20–50 | [t] "see pruning"; [J] | S after O3s | medium | O3s; `ADR-0024` d4 | none (fenced out of `EPIC-010`) |
+| O3s | SEE for capture ordering | +10–30 | [B] 7.1; [J] | M | low | — | `ABC-234`: `ADR-0065` PROPOSED, premise not met on `main` (2026-11-03; S1m `chooseMove` d8 0.986 / 0.955); A0 ruled: d4 fences Q1, not O3s; parked |
+| Q1 | SEE pruning of losing captures (quiescence and main) | +20–50 | [t] "see pruning"; [J]; diagnostic +0.88 ply reach, d8 0.22–0.68× (`arch-ABC-234`, not pre-registered) | S–M, carrying `see` (`ADR-0065` decision 2) | medium | `ADR-0024` d4 (owner `Q-3K-9`, pending) | none (fenced out of `EPIC-010`) |
 | Q2 | delta pruning in quiescence | +5–20 | `ADR-0024` (1.5× trim measured) | S | low | — | none (fenced out of `EPIC-010`) |
-| S1 | aspiration windows | +10–30 | [J] | M | low | T1 | `ABC-236` |
+| S1 | aspiration windows | +10–30 | [J] | M | low | T1 | `ABC-236`: `ADR-0066` PROPOSED, premise not met on `main` (2026-11-03; A100 d8 0.9836 / 0.9913); fires at 100 ms; parked |
 | X1 | check extension at every depth (not `ABC-210`'s horizon form) | +10–30 | [J]; [R] `ABC-210` −4.8 ± 16.2 (other form) | S | medium | — | `ABC-210` re-cut, other form (owner: scope) |
 | X2 | singular extension (+ IIR) | +20–50 | [B] 8.0, 8.5.5 | M | high | T1 | none — new ticket |
 | W1 | time use: no doomed iteration started; keep a partial iteration's root move when it beat the incumbent; soft/hard limits under a clock | +10–40 | [B] 7.4 time management; [J] | S–M | low | — | none (`EPIC-009` built modes, not this) |
@@ -489,6 +489,33 @@ terms E3–E7, each best added under the tuner; then X2 singular extensions and 
   endings (`TAPER_KP_SHELTER_STRESS` S1–S3, frozen on `grugops/ABC-269` `d6a57653`) are offered as E3's first graded
   rows, at ≥ 20 cp. Row E3's "`ABC-205` died on `G6`" no longer gates it the same way: under `Q-3K-4` = (b), E3 is
   judged on play.
+
+*Dated 2026-11-03 (`arch-adr0056-fold-1103`, records only, at `main` `af15cbc9`; the lines owed by `arch-ABC-234` `…a4ed96aa` § 5): rows O3s and Q1, and the ranking.*
+- **Row O3s: parked** (the Orchestrator, 2026-11-03, `…24990015` ruling 1). `ADR-0065` is PROPOSED, premise not met
+  on `main`: every form is safe and misses the ≤ 0.95× pay gate; the closest, S1m, reads 0.9864 / 0.9548 in
+  `chooseMove` at depth 8. It fires at 100 ms, so a re-open is GAIN. A0 is ruled: `ADR-0024` d4 fences Q1 (SEE
+  pruning in quiescence), not O3s. It re-opens on Q1 built first, on staged generation (V3), or on a time-per-move
+  instrument (`ADR-0065` § Status).
+- **Row Q1 is where the SEE lever is on this engine** (a diagnostic, not pre-registered): +0.88 ply of reach at
+  47 000 nodes and d8 nodes 0.22–0.68×, with mate floor 0, zugzwang 7 / 7 and `G1` 54 / 58. That is the largest
+  single lever any `EPIC-011` probe has read (P1 +0.38, O1h +0.09, O3s +0.07). Q1 carries `see` itself, so its
+  "after O3s" no longer holds (the row above is amended). It needs its own PREREG and ADR, and `ADR-0024` d4 opened
+  by evidence or by the owner's word: **`Q-3K-9`, asked 2026-11-03, unanswered.** Until he answers, d4 stays closed
+  and Q1 stays fenced.
+- **The ranking (`arch-next-pull` item 3) as it now stands:** O3s is parked; S1 is parked (the line below). The
+  Orchestrator's recommended slot for Q1, if `Q-3K-9` opens d4, is after `ABC-236`'s design and before `ABC-239`
+  (`…24990015` ruling 3). This line does not change the order.
+
+*Dated 2026-11-03 (`arch-adr0056-fold-1103`, records only, at `main` `af15cbc9`; the lines owed by `arch-ABC-236` `…0886976b` § 7): row S1.*
+- **Row S1: parked** (the Orchestrator, 2026-11-03, this fold's brief). `ADR-0066` is PROPOSED, premise not met on
+  `main`: every form is safe and misses the ≤ 0.95× `chooseMove` pay gate at depth 8; the design of record, A100,
+  reads 0.9836 / 0.9913 (kiwipete / position-6). The root already runs PVS, so a window can narrow only the first
+  move's subtree; the ceiling is about 2 % (`ADR-0066` § Status).
+- **S1 is not depth-gated.** At 47 000 nodes, 70.4 % of all nodes are spent inside aspiration passes, on 186 of 190
+  rows (51.3 % at 20 000). C2′'s depth-gated list and its "C yes" examples are corrected below. A re-open's intent is
+  GAIN.
+- **It re-opens on T1 landing** (bound-aware cutoffs, `ABC-257`), which the row's "depends on T1" names, **or on a
+  deeper shipped search** (a read over 1 h is the owner's). E1 is not a re-open condition.
 
 ### D3. Is 3 000 reachable without a neural network?
 
@@ -760,8 +787,8 @@ bounds and the overshoot figures upper bounds. Every hour and Elo figure not quo
       - **What qualifies:** the design names the depth at which the mechanism acts and its firing at 100 ms,
         measured or derived (the depth-gated rule below). The mechanism qualifies only if that figure shows it barely
         fires at 100 ms. Examples on record: T4 by construction; T2 (at most 8.5 % of stores meet another position's
-        entry); S1, X2 and P5 by their depth gates. A change whose design expects its gain to show at 100 ms keeps
-        GAIN. `ABC-264` (P2) cuts 5.8 % of nodes at depth 6, so it is GAIN.
+        entry); X2 and P5 by their depth gates (S1 struck 2026-11-03: measured to fire, `ADR-0066`). A change
+        whose design expects its gain to show at 100 ms keeps GAIN. `ABC-264` (P2) cuts 5.8 % of nodes at depth 6, so it is GAIN.
       - **The ticket's own measured bar:** pre-registered on the page, read where the mechanism does fire. Examples:
         a fixed-depth node ratio, a completed depth at a longer budget, or held-out lines (`ABC-257` A8′, `ABC-237`
         A3). It is not loosened after Ready, and a miss is NOT MET, as a score miss is.
@@ -795,10 +822,12 @@ bounds and the overshoot figures upper bounds. Every hour and Elo figure not quo
   only deeper barely fires, so it reads as noise or as a loss:
   - X2 singular extension;
   - P5, null move with R grown by depth;
-  - S1 aspiration windows, which `ABC-236` starts at depth 5;
   - and T4, the larger TT, by construction. A median 100 ms search visits ≈ 47 000 nodes, against the 4 MiB table's
     262 144 slots, which are cleared at every move. A larger table cannot show (derivation from `…1889e3b0` R1).
-  - Rows that act at shallow depth fire at 100 ms: P1–P4, T1, T2, O1h, O3s, and the evaluation rows.
+  - Rows that act at shallow depth fire at 100 ms: P1–P4, T1, T2, O1h, O3s, S1, and the evaluation rows. S1 is
+    measured: 70.4 % of nodes at 47 000 inside aspiration passes (`arch-ABC-236`). *(2026-11-03,
+    `arch-adr0056-fold-1103`: S1 moved here from the list above, where it was "aspiration windows, which `ABC-236`
+    starts at depth 5".)*
   - **The rule:** the ticket's design names the depth at which its mechanism acts, and its firing rate at 100 ms if it
     is depth-gated. If it barely fires, the 100 ms read is reported with that limit stated. A read at a longer control
     (100 games at 500 ms ≈ 2.3 h) is a run over 1 h, so it is **asked of the owner** first. C2's "the Architect names
@@ -1157,7 +1186,8 @@ Ordered by expected Elo per cost, by file collisions (`ADR-0055` D2), and by wha
 2. **Phase 1, the TT (S–M, cheap, one file):** T1 (`ABC-238`) → T2 (`ABC-237`) → T3 (`ABC-209` re-try) → T4.
 3. **Phase 2, pruning and reductions (S each, the largest search block):** P2 → P1 → P4 → P3 → P5 → P6, each graded
    by M0.
-4. **Phase 3, ordering:** O1h (`ABC-233`) → O2c → O3s (`ABC-234`) → Q1, Q2. Then S1 (`ABC-236`).
+4. **Phase 3, ordering:** O1h (`ABC-233`) → O2c → O3s (`ABC-234`; parked 2026-11-03, `ADR-0065`) → Q1, Q2. Then S1
+   (`ABC-236`; parked 2026-11-03, `ADR-0066` premise not met).
 5. **Phase 4, evaluation:** E1 (the full taper, folding `ABC-231`/`ABC-232`) → E2 (`ABC-239`, the tuner; M0's games
    are its data, positions from the project's own games are allowed by default) → E3–E7, each added and re-tuned.
 6. **Phase 5:** X1, X2, W1. O1-d whenever the owner says yes (after O1-b). V3 after O1-d.

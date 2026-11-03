@@ -1,0 +1,6 @@
+# arch-adr0056-fold-1103: two source facts found while folding. The `ABC-236` park ruling has no sealed Orchestrator note (only this task's brief and merge `781c11a2`); and merge `781c11a2`'s "best d8 0.9836/0.9619" pairs A100's kiwipete with A25's position-6, while the design of record (A100) reads 0.9836 / 0.9913
+
+Architect/Design, task `arch-adr0056-fold-1103`, records only. Read from the repository at `main` `af15cbc9`.
+
+- **Park source.** `orch-2026-10-30a` `…24990015` rules `ABC-234` parked (ruling 1). No sealed Orchestrator note rules `ABC-236` parked; the ruling is in this task's brief (`.grugops/queue/…/arch-adr0056-fold-1103.md`, by orchestrator, 2026-11-03T10:17:03Z) and the merge message `781c11a2`. `ADR-0066`'s status line cites those two. A sealed Orchestrator decision for it is owed (the same gap `bapm-ABC-234-park` flagged for `ABC-234`).
+- **Figure.** `ADR-0066` § Status and `arch-ABC-236` `…0886976b` § 1: the design of record A100 reads 0.9836 / 0.9913 (kiwipete / position-6, `chooseMove` d8). 0.9619 is A25's position-6 (`ADR-0066` results table; observation `…22d9d55f`). The merge message's pair is a per-root best across forms; both values still exceed 0.95, so the verdict is unchanged. `ADR-0056` row S1 carries A100's pair.
