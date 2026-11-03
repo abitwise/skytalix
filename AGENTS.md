@@ -75,11 +75,10 @@ completion notification; if a pattern is unavoidable, bracket one character (`[v
 In a script, poll the job's output file or `kill -0 <pid>`; never `while pgrep -f <pattern>`.
 
 - Test (all): `npm test` <!-- `NODE_OPTIONS=--max-old-space-size=128 node tools/grugops/run-bounded.js 60000 vitest run` (ABC-122). A hung lane exits 124 at the 60 s bound — stop
-  with Ctrl-C/SIGTERM, never SIGKILL (R1: can orphan a hung vitest). `*_DEEP` lanes below run via
-  `npx vitest run` directly, never through `npm test`. -->
+  with Ctrl-C/SIGTERM, never SIGKILL (R1: can orphan a hung vitest). -->
 - Heap flag (ABC-173): `--max-old-space-size=400` is for ONE-file vitest runs only. Whole-suite or
   multi-file runs use 128, as `npm test` sets itself; the heap guard refuses 400 there.
-- No `npm run` script runs a `*_DEEP` lane: `npm test` pins heap 128 and a 60 s bound; a deep lane needs 400 and longer. The npx `*_DEEP` lines below are the only verified spelling. A brief that fences out npx cannot run them: route the lane to a hop that may, or record `UNKNOWN - verify`.
+- No `npm run` script runs a `*_DEEP` lane. The npx `*_DEEP` lines below are the only verified spelling. A brief that fences out npx cannot run them: route the lane to a hop that may, or record `UNKNOWN - verify`.
 - Worker cap (ABC-144, ADR-0040 addendum 2): `vitest.config.ts` `test.maxWorkers: 2`, pinned by value in
   `src/cli.test.ts`; `isolate` stays on; no `projects`/`poolOptions`. Never raise it or pass a higher
   `--maxWorkers`; env may only lower it: `VITEST_MAX_WORKERS` 1..2. Env note, module
@@ -98,6 +97,7 @@ In a script, poll the job's output file or `kill -0 <pid>`; never `while pgrep -
   src/search.pvs-lmr.test.ts`
 - Null-move deep lane (opt-in, ABC-208, 44 rows): `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/search.null-move.test.ts`
 - Futility deep lane (ABC-268, 47 tests): `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/search.futility.test.ts`
+- Taper deep lane (ABC-269, 146 tests): `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/evaluate.taper.test.ts`
 - Real-engine CLI lane (opt-in, ABC-119): `CLI_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/cli.real-engine.test.ts`
 - UCI session deep lane (opt-in, ABC-220 A11, 22 s walls; ABC-221 A10, 3 x 59.5 s; one row: add `-t "ABC-221 A10"`): `ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/uci-session.test.ts`. A spawn here: `ENGINE_DEEP` only, sync, argument array (ADR-0052 D8).
 - Real-engine UCI lane (opt-in, ABC-168): `UCI_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/uci.real-engine.test.ts`
