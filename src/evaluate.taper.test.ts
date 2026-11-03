@@ -23,7 +23,7 @@
  * § Decision log). Their readings are in the build's notes, not asserted here.
  */
 
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync, statSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { makeMove, makeNullMove, unmakeMove, unmakeNullMove } from "./apply.ts";
 import { chooseMove, chooseMoveWithoutTaper } from "./engine.ts";
@@ -872,6 +872,47 @@ function kingFileCounts(
   return counts;
 }
 
+/**
+ * S1: mobility's count m, white minus black, by `ADR-0031` d2's attack-map rule as
+ * `squaresReached` states it: each non-pawn piece (the king too) counts the empty squares it
+ * reaches, plus the first occupied square on each line when it holds an enemy piece.
+ */
+function mobilityCount(position: Position): number {
+  const board = position.board;
+  const knight = [33, 31, 18, 14, -14, -18, -31, -33];
+  const king = [17, 16, 15, 1, -1, -15, -16, -17];
+  const diagonals = [17, 15, -15, -17];
+  const lines = [16, 1, -1, -16];
+  let count = 0;
+  for (let square = 0; square < 128; square++) {
+    if (!isOnBoard(square)) continue;
+    const piece = board[square] as number;
+    if (piece === EMPTY) continue;
+    const type = pieceType(piece);
+    if (type === PAWN) continue;
+    const black = isBlack(piece);
+    const reachable = (target: number): boolean => target === EMPTY || isBlack(target) !== black;
+    let reached = 0;
+    if (type === KNIGHT || type === KING) {
+      for (const step of type === KNIGHT ? knight : king) {
+        const to = square + step;
+        if (isOnBoard(to) && reachable(board[to] as number)) reached++;
+      }
+    } else {
+      const rays = type === BISHOP ? diagonals : type === ROOK ? lines : [...diagonals, ...lines];
+      for (const ray of rays) {
+        for (let at = square + ray; isOnBoard(at); at += ray) {
+          const target = board[at] as number;
+          if (reachable(target)) reached++;
+          if (target !== EMPTY) break;
+        }
+      }
+    }
+    count += black ? -reached : reached;
+  }
+  return count;
+}
+
 /** Pieces of `type` on files a–d (the A3 offset's squares), white minus black. */
 function queensideCount(position: Position, type: number): number {
   let count = 0;
@@ -906,11 +947,13 @@ describe("ABC-274 A3 — the blend is live for every term family (ADR-0067 decis
   const weight = PARAMS.MOBILITY_WEIGHT.eg;
   const cap = PARAMS.MOBILITY_CAP.eg;
 
-  /** E1's mobility count (white minus black) where it is not clamped, else null. */
-  const reach = (position: Position): number | null => {
-    const term = whitePov(position, evaluate(position) - evaluateWithoutMobility(position));
-    return Math.abs(term) < PARAMS.MOBILITY_CAP.mg ? term / PARAMS.MOBILITY_WEIGHT.mg : null;
-  };
+  /**
+   * S1 (`arch-ABC-274-seam`): the mobility count m, white minus black, by the test's own board
+   * counter (the `squaresReached` rule), so it reads neither weight nor cap and does not need the
+   * two mobility halves to be equal. Checked against `evaluate` (weights 1/1, cap not binding)
+   * by its own row below.
+   */
+  const reach = (position: Position): number => mobilityCount(position);
 
   /** Each family: its offset table, and the Δ shift (white's view) the offset must cause. */
   const pieceFamilies = (["pawn", "knight", "bishop", "rook", "queen", "king"] as const).map(
@@ -976,7 +1019,7 @@ describe("ABC-274 A3 — the blend is live for every term family (ADR-0067 decis
       params: { ...PARAMS, MOBILITY_WEIGHT: { mg: PARAMS.MOBILITY_WEIGHT.mg, eg: weight + C } },
       shift: (p) => {
         const m = reach(p);
-        return m === null ? null : clamp((weight + C) * m, cap) - clamp(weight * m, cap);
+        return clamp((weight + C) * m, cap) - clamp(weight * m, cap);
       },
     },
     {
@@ -985,7 +1028,7 @@ describe("ABC-274 A3 — the blend is live for every term family (ADR-0067 decis
       params: { ...PARAMS, MOBILITY_CAP: { mg: PARAMS.MOBILITY_CAP.mg, eg: cap - 3 * C } },
       shift: (p) => {
         const m = reach(p);
-        return m === null ? null : clamp(weight * m, cap - 3 * C) - clamp(weight * m, cap);
+        return clamp(weight * m, cap - 3 * C) - clamp(weight * m, cap);
       },
     },
   ];
@@ -1060,6 +1103,73 @@ describe("ABC-274 A3 — the blend is live for every term family (ADR-0067 decis
       expect(CORPUS.some((position, i) => evaluate(position) !== before[i])).toBe(true);
     });
     expect(CORPUS.every((position, i) => Object.is(evaluate(position), before[i]))).toBe(true);
+  });
+
+  it("S1: the test's mobility count is the engine's, read with weights 1/1 and a cap that never binds", () => {
+    const unit = {
+      ...PARAMS,
+      MOBILITY_WEIGHT: { mg: 1, eg: 1 },
+      MOBILITY_CAP: { mg: 1_000_000, eg: 1_000_000 },
+    };
+    withParametersForTest(unit, () => {
+      for (const position of CORPUS) {
+        const term = whitePov(position, evaluate(position) - evaluateWithoutMobility(position));
+        expect(term, toFen(position)).toBe(mobilityCount(position));
+      }
+    });
+  });
+
+  it("S2: a throwing run and a throwing loader each throw out of the seam, and every score after is Object.is the score before", () => {
+    const before = CORPUS.map((position) => evaluate(position));
+    expect(() =>
+      withParametersForTest(FAMILIES[0]?.params as EvaluationParameters, () => {
+        throw new Error("run throws");
+      }),
+    ).toThrow("run throws");
+    expect(CORPUS.every((position, i) => Object.is(evaluate(position), before[i]))).toBe(true);
+    // The square tables and terms load first, then the missing mobility pair throws: a loader
+    // outside the seam's `try` would leave the offset tables in place.
+    const broken = {
+      ...(FAMILIES[0]?.params as EvaluationParameters),
+      MOBILITY_WEIGHT: undefined,
+    } as unknown as EvaluationParameters;
+    expect(() => withParametersForTest(broken, () => 0)).toThrow(TypeError);
+    expect(CORPUS.every((position, i) => Object.is(evaluate(position), before[i]))).toBe(true);
+  });
+
+  it("S3: only src/evaluate.ts and src/*.test.ts name the seam, no tools/ file does, and loadParameters( runs at load and in the seam only", () => {
+    const srcDirectory = new URL(".", import.meta.url).pathname;
+    const namers = readdirSync(srcDirectory)
+      .filter((file) => file.endsWith(".ts") && !file.endsWith(".test.ts"))
+      .filter((file) =>
+        readFileSync(`${srcDirectory}${file}`, "utf8").includes("withParametersForTest"),
+      );
+    expect(namers).toEqual(["evaluate.ts"]);
+
+    const toolsDirectory = new URL("../tools/", import.meta.url).pathname;
+    const toolFiles = (readdirSync(toolsDirectory, { recursive: true }) as string[])
+      .map((file) => `${toolsDirectory}${file}`)
+      .filter((file) => statSync(file).isFile());
+    expect(toolFiles.length).toBeGreaterThan(0);
+    expect(
+      toolFiles.filter((file) => readFileSync(file, "utf8").includes("withParametersForTest")),
+    ).toEqual([]);
+
+    const source = readFileSync(`${srcDirectory}evaluate.ts`, "utf8");
+    const calls = source
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line.includes("loadParameters(") && !line.startsWith("*"));
+    expect(calls).toEqual([
+      "function loadParameters(parameters: EvaluationParameters): void {",
+      "loadParameters(PARAMETERS);",
+      "loadParameters(parameters);",
+      "loadParameters(PARAMETERS);",
+    ]);
+    // The first call sits at module load (column 0); the other two are inside the seam's body.
+    expect(source).toContain("\nloadParameters(PARAMETERS);\n");
+    const seam = source.slice(source.indexOf("export function withParametersForTest"));
+    expect(seam.match(/loadParameters\(/g)?.length).toBe(2);
   });
 });
 

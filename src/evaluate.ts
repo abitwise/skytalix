@@ -677,9 +677,9 @@ export function evaluateWithoutTaper(position: Position): number {
  * production calls it (the `evaluateWithoutMobility` precedent).
  */
 export function withParametersForTest<T>(parameters: EvaluationParameters, run: () => T): T {
-  loadParameters(parameters);
-  clearPawnCacheForTest();
   try {
+    loadParameters(parameters);
+    clearPawnCacheForTest();
     return run();
   } finally {
     loadParameters(PARAMETERS);
