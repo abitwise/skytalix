@@ -1,0 +1,6 @@
+nodes exit 0
+zug exit 0
+mate exit 0
+drift-search exit 0
+drift-choose exit 0
+reach exit 0

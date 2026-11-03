@@ -1,0 +1,1 @@
+{"maxNodes":47000,"rows":190,"doorMeanDepth":5.879,"headMeanDepth":6.716,"gain":0.837,"deeper":121,"shallower":1,"moveDiff":22}
