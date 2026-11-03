@@ -36,6 +36,10 @@ id: ADR-0067
 - **Reading (b), the `ADR-0064` precedent:** the build (E2-pre, then the tool) may start while this ADR is PROPOSED.
   The 100-game read and the merge wait for acceptance.
 - **Default without an answer:** `main` keeps E1's rule-made table.
+- *Dated 2026-11-03 (`arch-fold-1103b`, records only, at `main` `239ac715`):* the general blend is its own ticket,
+  **`ABC-274` (E2-pre)**, cut by BA/PM (`bapm-E2pre-cut` `…a193625d`). Its falsifier is **F8**. The Orchestrator's
+  ruling `…690d3b30` is folded at decision 8. The owner items stay **pending**: acceptance of this ADR, Q-3K-7
+  (a) / (b) / (c), and B-T8.
 
 ## Decision log
 
@@ -46,6 +50,9 @@ id: ADR-0067
 | 2026-11-03 | Architect/Design | Addendum: D1–D3 on the inner split, sealed before running. The loss hypothesis is falsified | `…255e9bcf`, `acc97083` |
 | 2026-11-03 | Architect/Design | Addendum 2: D4 (bounded), sealed before running, the last diagnostic | `…f8d36d73`, `a2bbdee0` |
 | 2026-11-03 | Architect/Design | PROPOSED | `…e4c34239` |
+| 2026-11-03 | BA/PM | E2-pre cut as `ABC-274` (S, P2) | `bapm-E2pre-cut` `…a193625d` |
+| 2026-11-03 | Orchestrator | `ABC-274` exempt from S2 nps (reported only); `G2` ≤ 1.05 × and `G6` "≥ base" graded | `orch-2026-10-30a` `…690d3b30` |
+| 2026-11-03 | Architect/Design | F8 written (E2-pre's falsifier and disposition). `ADR-0064` F3's cut C1 read against d8: the packed form stays recommended | `arch-fold-1103b` |
 
 ## Context
 
@@ -189,6 +196,40 @@ id: ADR-0067
      - `G6` "≥ base", as for any value-identical ticket (`ADR-0056`'s dated `Q-3K-4` line).
    - **No games:** a value-identical ticket keeps its S2 reading (C2′). Recommended as its own small ticket (size S),
      cut by BA/PM. Then `ABC-239`'s A3 and A4 hold as written.
+   - *Dated 2026-11-03 (`arch-fold-1103b`): E2-pre is `ABC-274`. The bars are graded as the Orchestrator ruled
+     (`…690d3b30`). C1 leaves the recommended form unchanged. F8 holds the disposition.*
+     - **Graded:** node identity (A1), the same evaluation (A2), `G3` (A4), `G2` ≤ 1.05 × (A5), and `G6` "≥ base"
+       (A6): each board's median depth ≥ the pre-ticket head's, and every run at depth ≥ 6. `Q-3K-4` (b) does not apply,
+       because no value changes.
+     - **Not graded:** S2 nps, which is reported only. `ABC-274` is exempt from S2, as `ABC-265` was. "No games" above
+       is unchanged. Its words "keeps its S2 reading" are superseded for this ticket only.
+     - **The `G2` base is the pre-ticket head,** `main` with `ABC-269` merged, cut C1 included (the ticket page's
+       definition). The instrument has `arch-ABC-269-F3`'s PREREG `…e36ee7ca` shape. Both arms are each build's shipped
+       tapered entry, called `ev(position, phase)` with the phase computed once per root before timing, plus a
+       pre-ticket-head copy as the noise control. The ratio against `main`'s pre-E1 tree `58fa3eb4` is reported beside
+       it, not graded. It shows the cost E1 and E2-pre add together.
+     - **F3's cut was not the packed score.** `ADR-0064` F3's one cut on `ABC-269` is C1, an incremental **phase**
+       carried by the search's recursion (`arch-ABC-269-F3` `…a0468a78`). The sentence above, "That is the cost cut
+       `ADR-0064` F3 names", is history. The packed score is E2-pre's own form, not anyone's spent cut. Three
+       consequences follow:
+       1. **`ABC-274`'s scope stays whole.** BA/PM's coupling clause ("if F3's cut is the packed score, part of scope 2
+          lands in `ABC-269`") does not fire.
+       2. **The packed score stays the recommended form, and F3's evidence makes the reason stronger.** On `ABC-269`,
+          one extra per-piece operation in the walk (the phase add) cost about 7 % per call. The uncut build read
+          1.067–1.112 in five sessions, against v2's 1.0032 (`se-ABC-269` `g2-variants.txt`; `arch-ABC-269-F3`
+          `…a0468a78`). That is above 1.05 ×. An unpacked delta form puts the same kind of
+          operation back in the walk for every piece: a second table read and add. So it is forecast to miss A5. A
+          packed table entry keeps one read and one add per piece, which is `main`'s count. The variants v8 / v9 that
+          read 1.07 packed the **phase** into the mobility sum. That is still a separate per-piece operation, so they
+          are not a reading of a packed table entry. The packed form's cost is **`UNKNOWN - verify`**, and A5 reads it.
+       3. **The form keeps C1 intact.** The phase stays an argument, and no phase add returns to the walk (C1's P5
+          guard stays green). Once the king's table is packed, the king's Δ can come from the packed sum instead of
+          the read after the walk. That choice is the Engineer's, inside A1 / A2.
+     - **A condition on the packed form: a range row.** One test row bounds Σ mg and Σ eg (white minus black) inside
+       int16, computed from `src/evaluate-params.ts`'s own maxima. Mobility sits outside the packed sum unless the
+       Engineer shows it fits. The row exists so that a later table that would overflow (`ABC-239`'s emitted set)
+       turns it red instead of silently giving wrong values. It reads the table, so it moves no expectation (A7). It is
+       owed to the ticket page as a fold line (BA/PM).
 9. **Data.**
    - **Default (A1), today: own self-play games.**
      - Source: every PGN tracked at the fit commit whose two players are both this engine.
@@ -249,6 +290,7 @@ id: ADR-0067
 | **F5** | `NFR-005` | a `G6` run below depth 6 | NOT MET. There is no cost cut to take on a constants-only diff |
 | **F6** | 11, the strength premise | C2′ < 50.0, an S′ collapse, or a red Levels lane | NOT MET, not re-played. **No set is ever re-fitted on play results**, and the configuration and λ are never chosen on play. A new attempt is a new data set or free set with a new pre-registration |
 | **F7** | 7: reproducibility | B-T3 not byte-identical | a defect |
+| **F8** | 8: E2-pre (`ABC-274`) is value-identical and cheap. *Added 2026-11-03 (`arch-fold-1103b`)* | (a) `ABC-274` A1 / A2 / A4 / A7: a node, score or move mismatch against the pre-ticket head, an `Object.is` miss, or a test expectation that has to move; (b) A5: `G2` above 1.05 × the pre-ticket head (the mean of two sessions, `ADR-0031` d3); (c) A6: a `G6` board's median depth below the pre-ticket head's, or any run below depth 6 | (a) a defect. It is fixed before any cost bar is read, and never re-pinned. (b) or (c): STOP to Architect/Design. **One value-identical cut is allowed, then one re-read of the bar that missed,** under a PREREG sealed before the re-read. If the build is not packed, the cut is the packed score. If it is already packed, the Architect names the cut. A second miss: **not merged**. No value is tuned to pass, and no bar moves. `ABC-239`'s A3 / A4 then cannot hold as written. Its re-plan (the blend folded into E2, § Alternatives) needs a new dated decision here, and the owner's word for any bar it changes. S2 nps is reported, never graded (`…690d3b30`) |
 
 ## Alternatives
 

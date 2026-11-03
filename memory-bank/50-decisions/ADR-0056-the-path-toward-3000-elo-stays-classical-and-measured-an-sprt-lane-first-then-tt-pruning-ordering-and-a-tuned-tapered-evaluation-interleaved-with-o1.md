@@ -187,6 +187,16 @@ nothing run): the owner's word of 2026-11-02 (`orch-2026-10-30a` `…cc7db847`).
 - **E1's ADR is accepted:** `ADR-0064`, not in force until `ABC-269` merges (D2's dated line).
 - **Still open (his):** Q-3K-6, Q-3K-7, Q-3K-8.
 
+**Folded 2026-11-03** (task `arch-fold-1103b`, records only, on `grugops/arch-fold-1103b` from `main` `239ac715`;
+nothing run): the lines owed by `arch-ABC-239` `…e4c34239` § 5.
+
+- **Row E2 → `ADR-0067`** (PROPOSED). See D2's dated line.
+- **D6 Phase 4, as worked:** `ABC-269` → `ABC-274` → `ABC-239` → `ABC-270` / `ABC-271`, with `ABC-272` in any order.
+  See D6's dated line.
+- **Q-3K-7 is split into (a) / (b) / (c), each pending.** `ADR-0067` acceptance and B-T8 are new owner items, also
+  pending. See D7's dated line.
+- **Still open (his):** Q-3K-6, Q-3K-7 (a) / (b) / (c), Q-3K-8, Q-3K-9, `ADR-0067` acceptance, and B-T8.
+
 *Original status, kept:* **PROPOSED** 2026-11-01 by Architect/Design (task `arch-algo-analysis`, records and reading only, at `main` `bae25131`).
 **Nothing is decided here.** Nothing was run, built, benchmarked or played: `qe-ABC-223` holds the host STRICTLY ALONE.
 Every Elo figure below is either quoted from a sealed reading (named) or is an **estimate** with its basis. An
@@ -516,6 +526,19 @@ terms E3–E7, each best added under the tuner; then X2 singular extensions and 
   GAIN.
 - **It re-opens on T1 landing** (bound-aware cutoffs, `ABC-257`), which the row's "depends on T1" names, **or on a
   deeper shipped search** (a read over 1 h is the owner's). E1 is not a re-open condition.
+
+*Dated 2026-11-03 (`arch-fold-1103b`, records only, at `main` `239ac715`): rows E2 and E3.*
+- **Row E2 has an ADR: `ADR-0067` (PROPOSED; acceptance is the owner's, pending).** It sets a logistic fit of game
+  results, with cross-entropy as the loss, K fixed first, and Newton steps on a traced model behind an identity gate.
+  At the first pull material is frozen and the free set is sign-bounded. The tool writes only `src/evaluate-params.ts`.
+  - **Prototype** (own games, 254 485 rows): 0.9863 × E1's outer-validation cross-entropy unconstrained. The fitted
+    material is not safe to play (queen 2 593 / 137). Bounded, the gain is about 0.4 % of loss.
+  - **The row's "+100–250" stays an estimate,** and on own games alone it is likely too high. `ADR-0067`
+    § Consequences gives the discount. The data question is Q-3K-7 (D7's dated line).
+  - **A value-identical step comes first:** `ABC-274` (E2-pre), the blend of every half (`ADR-0067` d8, F8).
+- **Row E3, supporting information only, not a bar:** in every fit the king's square tables come out about 3–3.6 ×
+  (mg) and 2.2–2.8 × (eg) heavier than E1's rule tables. That is, E1's hand tables weight the king about 3 × too
+  lightly (`ADR-0067` § Context, reading 4; the Orchestrator's correction `…690d3b30` item 2).
 
 ### D3. Is 3 000 reachable without a neural network?
 
@@ -1271,6 +1294,19 @@ evidence.
   evidence (`arch-next-pull`). R1 is read after E1. P1 re-opens only on a new named premise with a new
   pre-registered probe, for example E1's changed tree after it merges (`ADR-0064` § Consequences).
 
+*Dated 2026-11-03 (`arch-fold-1103b`; `arch-ABC-239` `…e4c34239` § 3, folded by BA/PM in `bapm-E2pre-cut`
+`…a193625d`):*
+- **Item 5, the Phase 4 order as worked:**
+  1. **`ABC-269`** (E1). It is held on `ADR-0064` F3, with cut C1 and one `G2` re-read.
+  2. **`ABC-274`** (E2-pre, value-identical; `ADR-0067` d8 and F8).
+  3. **`ABC-239`** (E2, the tuner; `ADR-0067`).
+  4. **`ABC-270` / `ABC-271`** (E3a, E4a), after `ABC-239`. Their new terms then get fitted weights, not hand ones.
+     **If `ABC-239` stalls on data, `ABC-270` may go first** on its rule values, and the tuner's first pull traces it.
+  - **`ABC-272`** (E7a): any order after E1.
+  - `ABC-273` (R1) stays after E1, where BA/PM placed it.
+- "E3–E7, each added and re-tuned" in item 5 still stands. This line only names the tickets and puts E2-pre between
+  E1 and E2. The reorder paragraph under item 7 allows it.
+
 ### D7. What is the owner's call
 
 - **Q-3K-1, the scale and the time** a "3 000" is read on (D5 items 1, 2 and 5). The proposal is Stockfish 19
@@ -1353,6 +1389,22 @@ evidence.
   ticket keeps its own cost bar as before.
 - **`ADR-0064` (E1): accepted** ("64 yes"). It is not in force until `ABC-269` merges.
 - **Q-3K-6, Q-3K-7, Q-3K-8: still open.**
+
+*Dated 2026-11-03 (`arch-fold-1103b`, records only, at `main` `239ac715`; `ADR-0067` § Status and decision
+`arch-ABC-239` `…e4c34239` § 4):*
+- **Q-3K-7 is split into three parts.** Each part is **pending**. Each has a recommendation and a default; none is
+  assumed. The prototype's evidence (`ADR-0067` § Context) is behind each recommendation. On own games alone, the
+  unconstrained fit gives queen 2 593 / 137. With material frozen and sign bounds, about 0.4 % of loss is left to win.
+  - **(a) Lichess CC0 standard games, for training only** (one monthly export, comments ignored, own games kept as
+    validation; `ADR-0067` d9). **Recommend yes.** Default: own games only, a bounded first pull.
+  - **(b) A Stockfish-labelled position set.** **Recommend no:** the product-identity question; not needed.
+    Default: not used.
+  - **(c) Games against Stockfish as training data.** **Recommend no:** half the moves are Stockfish's, and the
+    results lean to losses. Default: excluded.
+- **New owner items from `ADR-0067`, each pending:** acceptance (*"accept ADR-0067"* or *"decline it"*). Acceptance
+  gates `ABC-274`'s merge and `ABC-239`'s 100-game read and merge, not their builds (reading (b)). The other item is
+  **B-T8**, the 200 + 200 outside pair (about 5 h) before `ABC-239` merges. **Recommend yes.**
+- **Q-3K-6, Q-3K-7 (a) / (b) / (c), Q-3K-8, Q-3K-9: still open.**
 
 ### D8. What BA/PM would cut on a yes
 
