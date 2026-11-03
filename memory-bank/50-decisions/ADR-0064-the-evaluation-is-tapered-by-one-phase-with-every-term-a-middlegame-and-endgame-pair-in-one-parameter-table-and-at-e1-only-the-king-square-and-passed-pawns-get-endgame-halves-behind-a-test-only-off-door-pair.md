@@ -381,6 +381,9 @@ measured run.
      - *Dated 2026-11-03 (`arch-fold-1103b`):* E2's method ADR is **`ADR-0067`** (PROPOSED; acceptance is the
        owner's, pending). It owns this file's provenance header (its d7). `tools/tune` writes this file in its present
        shape, with the same exports, and nothing else.
+     - *Dated 2026-11-03 (`arch-owner-answers-1103b`):* **`ADR-0067` is ACCEPTED 2026-11-03** by the owner
+       (`orch-2026-10-30a` `…af126c04`, "1. yes") and in force as the method. Its § Addendum pins the data. Under
+       `ADR-0068` (accepted `…401c3d09`) the file also gains three queen-on exposure pairs at 0, which the tuner fits.
    - `VALUE_TABLES_FOR_TEST` grows to expose the king's endgame half and the passed endgame half. `ABC-215` `A2`'s
      rebuild-from-rule row covers both.
 5. **The pawn memo stores the passed endgame part.**
@@ -399,6 +402,8 @@ measured run.
      - *Dated 2026-11-03 (`arch-fold-1103b`):* this blend is cut as **`ABC-274` (E2-pre)**, value-identical at
        E1's table, under **`ADR-0067`** d8 and F8. A packed score is recommended. `G2` ≤ 1.05 × and `G6` "≥ base" are
        graded against the pre-ticket head (`main` with `ABC-269` and cut C1). It plays no games.
+     - *Dated 2026-11-03 (`arch-owner-answers-1103b`):* **`ADR-0067` is ACCEPTED 2026-11-03** (`…af126c04`).
+       `ABC-274` merged at `2410d4f7`, so this blend is in force on `main` (QE `…fa87f74d`).
    - **No incremental state.** Phase, material and PST are not carried in `Position` or updated in make/unmake. That
      is O1-e (`ADR-0055`, 1.02–1.05×), which `EPIC-011` re-reads after E1 because the evaluation then has two halves.
      It is held as F3's single value-identical cost cut.
