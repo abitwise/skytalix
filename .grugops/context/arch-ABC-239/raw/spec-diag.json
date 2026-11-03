@@ -1,0 +1,6 @@
+{
+  "refs": ["arch-ABC-239", "grugops/arch-ABC-239", "ABC-239", "E2", "ADR-0067", "arch-ABC-239/20261103T102308Z-architect-design-decision-9ed1db11"],
+  "notes": [
+    { "kind": "decision", "confidence": "high (an addendum sealed before the diagnostic runs; it re-grades nothing and opens no outer-validation row)", "bodyFile": "notes/prereg-diag.md" }
+  ]
+}
