@@ -28,7 +28,7 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it, vi } from "vitest";
 import { makeMove, unmakeMove } from "./apply.ts";
 import type { EngineChoice, EngineOptions } from "./engine.ts";
-import { evaluate } from "./evaluate.ts";
+import { evaluate, evaluateAtPhase } from "./evaluate.ts";
 import { parseFen } from "./fen.ts";
 import { isInCheck, legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
@@ -36,7 +36,17 @@ import { EMPTY, isBlack, isOnBoard, type Position, pieceType, squareName } from 
 import { HANGING_CORPUS, PUZZLES, type Puzzle, type PuzzleTag } from "./puzzle-corpus.ts";
 import { virtualClock } from "./virtual-clock.ts";
 
-vi.mock("./evaluate.ts", { spy: true });
+// A call-through spy on the two evaluation entries only (`A3` replaces them). Not `{ spy: true }`:
+// that spies every export, and `ABC-269` cut C1's `phaseAfterMove` runs once per made move, so its
+// recorded calls alone exhaust the one-file heap row. No value changes.
+vi.mock("./evaluate.ts", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("./evaluate.ts")>();
+  return {
+    ...actual,
+    evaluate: vi.fn(actual.evaluate),
+    evaluateAtPhase: vi.fn(actual.evaluateAtPhase),
+  };
+});
 
 const MODE = process.env.PUZZLE_DEEP;
 
@@ -370,6 +380,8 @@ if (MODE === "1" || MODE === "weakened") {
   async function engineUnderTest(): Promise<Choose> {
     if (MODE === "weakened") {
       vi.mocked(evaluate).mockImplementation(() => 0);
+      // `ABC-269` cut C1: the recursions read the tapered entry `evaluateAtPhase`; it answers 0 too.
+      vi.mocked(evaluateAtPhase).mockImplementation(() => 0);
     }
     return (await import("./engine.ts")).chooseMove;
   }

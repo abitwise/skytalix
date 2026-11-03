@@ -502,7 +502,8 @@ describe("A4 — no fixed depth anywhere in the delivered engine", () => {
     // (`trimPriorKeys`, `ADR-0054` decision 1): a key list and a clock, no depth. `ABC-228` added a
     // fourth door (`chooseMoveWithoutQuiescenceEvasions`, `ADR-0053` decision 6), and `ABC-229` a
     // fifth (`chooseMoveWithoutQuietPromotions`, the same decision). `ABC-268` added a sixth
-    // (`chooseMoveWithoutFutility`, `ADR-0061` decision 4).
+    // (`chooseMoveWithoutFutility`, `ADR-0061` decision 4), and `ABC-269` a seventh
+    // (`chooseMoveWithoutTaper`, `ADR-0064` decision 7).
     expect(Object.keys(engineModule).sort()).toEqual([
       "DEFAULT_BUDGET_MS",
       "HARD_CEILING_MS",
@@ -514,6 +515,7 @@ describe("A4 — no fixed depth anywhere in the delivered engine", () => {
       "chooseMoveWithoutQuiescenceEvasions",
       "chooseMoveWithoutQuietPromotions",
       "chooseMoveWithoutReductions",
+      "chooseMoveWithoutTaper",
       "createEngine",
       "trimPriorKeys",
     ]);
@@ -526,6 +528,7 @@ describe("A4 — no fixed depth anywhere in the delivered engine", () => {
     expect(engineModule.chooseMoveWithoutQuiescenceEvasions.length).toBe(2);
     expect(engineModule.chooseMoveWithoutQuietPromotions.length).toBe(2);
     expect(engineModule.chooseMoveWithoutFutility.length).toBe(2);
+    expect(engineModule.chooseMoveWithoutTaper.length).toBe(2);
     expect(createEngine.length).toBe(1);
     expect(source).not.toMatch(/export function \w+\([^)]*depth/i);
   });
@@ -1267,7 +1270,11 @@ if (RUN_DEEP) {
 const { search } = await import("./search.ts");
 
 describe("ABC-170 A1 — maxDepth stops deepening once that depth has completed", () => {
-  const sparse = () => parseFen(endgameFen("kp-vs-k"));
+  // Re-found at `ABC-269` (`ADR-0064` decision 7, `ADR-0028` decision 2): on `kp-vs-k` the tapered
+  // `chooseMove` and `search` tie at depth 3 (107) and break the tie differently (e2e3 / e1d2).
+  // Same theme, the white king one step up on d3: both recursions read e2e4 at 163 tapered, and
+  // d3d2 at 137 on the doors; unlimited, the budget completes depth 7 (6 on the doors).
+  const sparse = () => parseFen("8/8/8/4k3/8/3K4/4P3/8 w - - 0 1");
   const options = { budgetMs: 10, now: tickingClock(1) };
 
   it("is a real stop: unlimited, the same budget completes depth 6 or more", () => {
@@ -1465,7 +1472,8 @@ function rootAtClock(game: GameHistory, clock: number): string {
 /**
  * `A1`'s fixtures: a shuffle where the losing side's king move `repeat` returns to a position that
  * already stood twice, both colours, queen and rook. `base` is the search with no prior keys at
- * depth 4 (probe H1 is the first row: Kc8 at -1006, against Ke8 at 0 with the keys).
+ * depth 4 (probe H1 is the first row: Kc8 at -1006, against Ke8 at 0 with the keys; re-pinned at
+ * `ABC-269`, the tapered evaluation, to Ke7 at -1010, old -> new beside each row).
  */
 const THIRD_OCCURRENCE = [
   {
@@ -1473,28 +1481,28 @@ const THIRD_OCCURRENCE = [
     fen: "4k3/8/8/8/8/8/8/Q3K3 w - - 0 1",
     moves: "a1a2 e8d8 a2a1 d8e8 a1a2 e8d8 a2a1",
     repeat: "d8e8",
-    base: { move: "d8c8", score: -1006 },
+    base: { move: "d8e7", score: -1010 }, // ABC-269 re-pin: d8c8 at -1006
   },
   {
     name: "K v KQ, White to move",
     fen: "q3k3/8/8/8/8/8/8/4K3 b - - 0 1",
     moves: "a8a7 e1d1 a7a8 d1e1 a8a7 e1d1 a7a8",
     repeat: "d1e1",
-    base: { move: "d1c1", score: -1006 },
+    base: { move: "d1e2", score: -1010 }, // ABC-269 re-pin: d1c1 at -1006
   },
   {
     name: "KR v K, Black to move",
     fen: "4k3/8/8/8/8/8/8/R3K3 w - - 0 1",
     moves: "a1a2 e8d8 a2a1 d8e8 a1a2 e8d8 a2a1",
     repeat: "d8e8",
-    base: { move: "d8c7", score: -556 },
+    base: { move: "d8d7", score: -564 }, // ABC-269 re-pin: d8c7 at -556
   },
   {
     name: "K v KR, White to move",
     fen: "r3k3/8/8/8/8/8/8/4K3 b - - 0 1",
     moves: "a8a7 e1d1 a7a8 d1e1 a8a7 e1d1 a7a8",
     repeat: "d1e1",
-    base: { move: "d1c1", score: -556 },
+    base: { move: "d1d2", score: -564 }, // ABC-269 re-pin: d1c1 at -556
   },
 ] as const;
 
@@ -1732,7 +1740,9 @@ describe("QE-268-a — chooseMoveWithoutFutility reads prior keys, as chooseMove
 // ---------------------------------------------------------------------------
 
 describe("ABC-249 — a pre-root repetition met four plies deep scores 0 (QE-248-c)", () => {
-  it("Qe5+ at ply 4 stood twice before the root: Ke1 at 404 with the keys, Kg1 at 497 without", () => {
+  // Re-pinned at `ABC-269` (the tapered evaluation): Ke1 404 -> 441 with the keys, Kg1 497 -> 520
+  // without; the moves, and so the property, are unchanged.
+  it("Qe5+ at ply 4 stood twice before the root: Ke1 at 441 with the keys, Kg1 at 520 without", () => {
     const game = gameOf(
       "6k1/RR3ppp/8/4q3/8/7P/PP4PK/1N6 w - - 0 1",
       "h2h1 e5e1 h1h2 e1e5 h2g1 e5d4 g1f1 d4f6",
@@ -1756,7 +1766,7 @@ describe("ABC-249 — a pre-root repetition met four plies deep scores 0 (QE-248
     expect(toFen(game.position)).toBe(root);
     expect(withKeys && { move: label(withKeys.move), score: withKeys.score }).toEqual({
       move: "f1e1",
-      score: 404,
+      score: 441,
     });
 
     // Withheld keys: Kg1 lets Black return to the twice-seen position, which is not a draw here.
@@ -1765,7 +1775,7 @@ describe("ABC-249 — a pre-root repetition met four plies deep scores 0 (QE-248
     expect(toFen(position)).toBe(root);
     expect(base && { move: label(base.move), score: base.score }).toEqual({
       move: "f1g1",
-      score: 497,
+      score: 520,
     });
   });
 });

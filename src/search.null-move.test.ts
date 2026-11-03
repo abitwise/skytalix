@@ -32,6 +32,7 @@ import {
   chooseMoveWithoutNullMove,
   chooseMoveWithoutQuiescenceEvasions,
   chooseMoveWithoutReductions,
+  chooseMoveWithoutTaper,
   type EngineChoice,
 } from "./engine.ts";
 import { parseFen, toFen } from "./fen.ts";
@@ -344,16 +345,27 @@ describe("both recursions try the null move through the predicate, at null-windo
         `const nullReduction = nullMoveReduction(position, ${depth}, ply, afterNull);`,
       );
       // The child: negated, R plies shallower than a normal child, the window (-beta, -beta + 1),
-      // and flagged as a null move's.
+      // flagged as a null move's, and (`ABC-269` cut C1) handed the node's own carried phase.
       const nullChild = new RegExp(
-        `nullScore = 0 - negamax\\( ?position, ${depth} - 1 - nullReduction, 0 - beta, 0 - beta \\+ 1, ply \\+ 1, [^)]*\\btrue,? ?\\)`,
+        `nullScore = 0 - negamax\\( ?position, ${depth} - 1 - nullReduction, 0 - beta, 0 - beta \\+ 1, ply \\+ 1, [^)]*\\btrue, phase,? ?\\)`,
       );
       expect(flat, path).toMatch(nullChild);
       // Every other child is a real move's: the flag is false on each of them. (Calls only — the
-      // declaration, `function negamax(`, is not one.)
-      const flags = [...flat.matchAll(/(?<!function) negamax\(([^)]*)\)/g)].map(
-        (match) => (match[1] as string).replace(/,\s*$/, "").split(",").at(-1)?.trim() ?? "",
+      // declaration, `function negamax(`, is not one.) The flag is the argument before the carried
+      // phase (`ABC-269` cut C1): `phase` on the null child, the made move's `childPhase` on the rest.
+      const args = [...flat.matchAll(/(?<!function) negamax\(([^)]*)\)/g)].map((match) =>
+        (match[1] as string)
+          .replace(/,\s*$/, "")
+          .split(",")
+          .map((arg) => arg.trim()),
       );
+      const flags = args.map((list) => list.at(-2) ?? "");
+      expect(
+        args
+          .map((list) => `${list.at(-2)} ${list.at(-1)}`)
+          .filter((pair) => pair !== "false childPhase"),
+        path,
+      ).toEqual(["true phase"]);
       expect(flags.length, path).toBeGreaterThanOrEqual(5);
       expect(
         flags.filter((flag) => flag === "true"),
@@ -424,13 +436,14 @@ describe("the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn
   }
 });
 
-describe("QE-208-c — every door's nullMove switch literal is false; only the shipped path and the ABC-228, ABC-229 and ABC-268 doors turn it on", () => {
+describe("QE-208-c — every door's nullMove switch literal is false; only the shipped path and the ABC-228, ABC-229, ABC-268 and ABC-269 doors turn it on", () => {
   const MODULES = [
     {
       path: "./search.ts",
       call: "searchRoot(position, depth, {",
       doors: {
         search: "true",
+        searchWithoutTaper: "true",
         searchWithoutFutility: "true",
         searchWithoutQuietPromotions: "true",
         searchWithoutQuiescenceEvasions: "true",
@@ -450,6 +463,7 @@ describe("QE-208-c — every door's nullMove switch literal is false; only the s
       call: "deepen(position, options, {",
       doors: {
         chooseMove: "true",
+        chooseMoveWithoutTaper: "true",
         chooseMoveWithoutFutility: "true",
         chooseMoveWithoutQuietPromotions: "true",
         chooseMoveWithoutQuiescenceEvasions: "true",
@@ -461,7 +475,7 @@ describe("QE-208-c — every door's nullMove switch literal is false; only the s
   ];
 
   for (const { path, call, doors } of MODULES) {
-    it(`${path}: each exported entry passes exactly one nullMove literal, and only the shipped one and its ABC-228, ABC-229 and ABC-268 doors are true`, () => {
+    it(`${path}: each exported entry passes exactly one nullMove literal, and only the shipped one and its ABC-228, ABC-229, ABC-268 and ABC-269 doors are true`, () => {
       const flat = readFileSync(new URL(path, import.meta.url), "utf8").replace(/\s+/g, " ");
       const found: Record<string, string> = {};
       for (const chunk of flat.split("export function ").slice(1)) {
@@ -485,7 +499,11 @@ describe("QE-208-a — an abort inside a null move's subtree still hands the roo
    * Iteration 2 tries no null move (`ABC-078` `A7`'s byte-identity row aborts there), so the sweep
    * runs into iteration 3 and beyond.
    */
-  const sweep = (fen: string, readings: readonly number[]) => {
+  const sweep = (
+    fen: string,
+    readings: readonly number[],
+    choose: typeof chooseMove = chooseMove,
+  ) => {
     const mutated: string[] = [];
     let insideNull = 0;
     for (const at of readings) {
@@ -498,7 +516,7 @@ describe("QE-208-a — an abort inside a null move's subtree still hands the roo
         if (readings === at && instrument.open > 0) insideNull++;
         return readings >= at ? 1_000_000_000 : 0;
       };
-      const choice = chooseMove(position, { budgetMs: 1_000, now });
+      const choice = choose(position, { budgetMs: 1_000, now });
       if (choice === null) mutated.push(`at ${at}: null`);
       if (position.blackToMove !== before.blackToMove) mutated.push(`at ${at}: side to move`);
       else if (JSON.stringify(position) !== JSON.stringify(before)) mutated.push(`at ${at}`);
@@ -507,13 +525,18 @@ describe("QE-208-a — an abort inside a null move's subtree still hands the roo
   };
 
   // ABC-248 (ADR-0046 § Addendum 2026-10-31, T2c): the even readings only, Σ 154 of 3..25's 322.
+  // `ABC-269` (`ADR-0064` decision 7): the row measures null move alone, so its sweep re-points to
+  // `chooseMoveWithoutTaper`, the shipped path less the taper, and its figures do not change. The
+  // tapered tree lands 2 of the 11 aborts under a pass (was 3), so the shipped `chooseMove` is
+  // swept beside it for the byte-identity alone.
+  const READINGS = [4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24];
   it("position-6, the even readings 4 to 24: 0 mutated roots, and aborts landing inside a null subtree", () => {
-    const { mutated, insideNull } = sweep(
-      fenOf("position-6"),
-      [4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24],
-    );
+    const { mutated, insideNull } = sweep(fenOf("position-6"), READINGS, chooseMoveWithoutTaper);
     expect(mutated).toEqual([]);
     expect(insideNull).toBeGreaterThanOrEqual(3); // not vacuous: the abort lands under a pass
+    const shipped = sweep(fenOf("position-6"), READINGS);
+    expect(shipped.mutated).toEqual([]);
+    expect(shipped.insideNull).toBeGreaterThanOrEqual(1);
   });
 });
 

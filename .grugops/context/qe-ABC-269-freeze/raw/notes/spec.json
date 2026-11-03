@@ -1,0 +1,31 @@
+{
+ "refs": [
+  "qe-ABC-269-freeze",
+  "grugops/ABC-269",
+  "ABC-269",
+  "EPIC-011",
+  "E1",
+  "E3",
+  "ADR-0064",
+  "ABC-082",
+  "G3",
+  "B1",
+  "58fa3eb4",
+  "d6a57653",
+  "src/evaluate.taper-corpus.ts",
+  "qe-ABC-269-freeze/20261102T222017Z-qe-e2e-decision-1b856350",
+  "arch-E1/20261102T215541Z-architect-design-decision-d8150777"
+ ],
+ "notes": [
+  {
+   "kind": "observation",
+   "confidence": "high on the arithmetic (deterministic, from ADR-0064 d1-d3 and main's evaluate); information only, not a reading of any build",
+   "bodyFile": "note-forecast.md"
+  },
+  {
+   "kind": "observation",
+   "confidence": "high on QE-269-a's arithmetic and on the -0 trap (checked with Object.is); the scope ruling on QE-269-a is the Architect's",
+   "bodyFile": "note-gaps.md"
+  }
+ ]
+}

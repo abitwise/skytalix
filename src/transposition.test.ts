@@ -525,14 +525,16 @@ describe("A5 — the only non-losing line repeats, and it scores exactly 0", () 
    * ticket's build: depth 4 at 6 injected ticks, score 0, Qf8+. An engine blind to repetition
    * reads −390; one whose root ignores the hash move is still at depth 3 (−470) at this budget.
    */
-  it("chooseMove(), 6 ticks: depth 4, the perpetual played and scored exactly 0", () => {
+  // Re-pinned at `ABC-269` (the tapered evaluation): the tree is smaller here, so 6 ticks now
+  // complete depth 5 (was 4); the perpetual and its exact 0 are unchanged.
+  it("chooseMove(), 6 ticks: depth 5, the perpetual played and scored exactly 0", () => {
     let ticks = 0;
     const choice = chooseMove(parseFen(REPEATS_AT_PLY_4), { budgetMs: 6, now: () => ticks++ }) as {
       move: Move;
       score: number;
       depth: number;
     };
-    expect(choice.depth).toBe(4);
+    expect(choice.depth).toBe(5);
     expect(choice.score).toBe(0);
     expect(label(choice.move)).toBe("f7f8");
   });
@@ -640,8 +642,9 @@ describe("A7 — the table holds a fixed 4 MiB, whatever the search", () => {
 
   it("stays inside NFR-009's 16 MiB with the key array, the pawn memo and the ordering scratch", () => {
     const keyArrayBytes = (KEY_ARRAY_CAPACITY + 1) * 8;
-    // ABC-235 cut 5: the pawn-structure memo is fixed at 384 KiB and counted in (a)'s sum.
-    expect(pawnCacheByteLength()).toBe(384 * 1024);
+    // ABC-235 cut 5: the pawn-structure memo is fixed and counted in (a)'s sum. ABC-269 adds its
+    // third part (`ADR-0064` decision 5): 384 -> 448 KiB.
+    expect(pawnCacheByteLength()).toBe(448 * 1024);
     // ABC-240: orderMoves' and quiescence's float64 key scratches are fixed at 256 slots each
     // and counted in (a)'s sum.
     expect(orderScratchByteLength()).toBe(256 * 8);

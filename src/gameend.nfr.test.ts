@@ -51,6 +51,7 @@ vi.mock("./zobrist.ts", async (importOriginal) => {
 });
 
 import { makeMove } from "./apply.ts";
+import { phaseOf } from "./evaluate.ts";
 import { gameStatus, leafEndReason } from "./gameend.ts";
 import {
   hasLegalMove,
@@ -187,6 +188,7 @@ describe("ABC-206 — the search leaf's game-end check stays cheap (call counts,
       0,
       { evasions: false, quietPromotions: false },
       () => visited++,
+      phaseOf(position),
     );
 
     expect(visited).toBeGreaterThan(0); // the capture search ran, so the zero below is earned
@@ -327,6 +329,7 @@ describe("ABC-206 — the search leaf's game-end check stays cheap (call counts,
         0,
         { evasions: true, quietPromotions: true },
         () => visited++,
+        phaseOf(position),
       );
       expect(visited, fen).toBeGreaterThan(1); // the node and at least one child, so it expanded
       expect(generateCaptures, fen).toHaveBeenCalledTimes(1);

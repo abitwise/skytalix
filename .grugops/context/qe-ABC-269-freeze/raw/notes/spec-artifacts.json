@@ -1,0 +1,26 @@
+{
+ "refs": [
+  "qe-ABC-269-freeze",
+  "grugops/ABC-269",
+  "ABC-269",
+  "EPIC-011",
+  "E1",
+  "E3",
+  "ADR-0064",
+  "ABC-082",
+  "G3",
+  "B1",
+  "58fa3eb4",
+  "d6a57653",
+  "src/evaluate.taper-corpus.ts",
+  "qe-ABC-269-freeze/20261102T222017Z-qe-e2e-decision-1b856350",
+  "arch-E1/20261102T215541Z-architect-design-decision-d8150777"
+ ],
+ "notes": [
+  {
+   "kind": "observation",
+   "confidence": "high (commands and exits as they ran); recorded as an observation because an artifact-ref needs a \u00a714-gate run id this freeze does not have",
+   "bodyFile": "note-artifacts.md"
+  }
+ ]
+}

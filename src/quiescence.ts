@@ -60,7 +60,7 @@
  */
 
 import { makeMove, unmakeMove } from "./apply.ts";
-import { evaluate } from "./evaluate.ts";
+import { evaluateAtPhase, evaluateWithoutTaper, phaseAfterMove } from "./evaluate.ts";
 import { isInCheck, legalCaptures, legalCapturesAndQueenPromotions, legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
 import { type Position, pieceType } from "./position.ts";
@@ -150,6 +150,12 @@ export interface QuiescenceRules {
   readonly evasions: boolean;
   /** Out of check: the legal quiet promotions to a queen join the captures (`ABC-229`). */
   readonly quietPromotions: boolean;
+  /**
+   * The stand pat reads the tapered `evaluate` (`ABC-269`, `ADR-0064` decision 7). True only in the
+   * record the shipped recursions pass; absent or false is `evaluateWithoutTaper`, the
+   * pre-`ABC-269` evaluation, so every record that predates the switch is an older door unchanged.
+   */
+  readonly taper?: boolean;
 }
 
 /**
@@ -165,6 +171,9 @@ export type QuiescenceVisitor = (qply: number) => void;
  * `qply` is 0 at the leaf the full-width search handed over; `ply` is that leaf's distance from
  * the root (0 on a direct call), read only by the mate score. Fail-soft: the result may fall
  * outside `[alpha, beta]`. The position is byte-identical on return, throw or no throw.
+ *
+ * `phase` is `phaseOf(position)`, carried by the caller (`ABC-269` cut C1): the tapered stand pat
+ * reads it, each child gets `phaseAfterMove(phase, move)`, and the untapered records ignore it.
  */
 export function quiesce(
   position: Position,
@@ -174,6 +183,7 @@ export function quiesce(
   ply: number,
   rules: QuiescenceRules,
   visit: QuiescenceVisitor,
+  phase: number,
 ): number {
   if (qply > 0) visit(qply);
 
@@ -186,7 +196,8 @@ export function quiesce(
     if (moves.length === 0) return 0 - (MATE_SCORE - (ply + qply));
     best = Number.NEGATIVE_INFINITY;
   } else {
-    const standPat = evaluate(position);
+    const standPat =
+      rules.taper === true ? evaluateAtPhase(position, phase) : evaluateWithoutTaper(position);
     if (standPat >= beta) return standPat; // standing still already refutes the opponent's line
     if (qply >= QUIESCENCE_MAX_PLY) return standPat; // the runaway guard: stand pat, do not expand
 
@@ -207,7 +218,18 @@ export function quiesce(
     const undo = makeMove(position, move);
     let score: number;
     try {
-      score = 0 - quiesce(position, 0 - beta, 0 - alpha, qply + 1, ply, rules, visit);
+      score =
+        0 -
+        quiesce(
+          position,
+          0 - beta,
+          0 - alpha,
+          qply + 1,
+          ply,
+          rules,
+          visit,
+          phaseAfterMove(phase, move),
+        );
     } finally {
       unmakeMove(position, move, undo);
     }

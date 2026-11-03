@@ -26,8 +26,13 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { makeMove, unmakeMove } from "./apply.ts";
-import { chooseMove, chooseMoveWithoutFutility, type EngineChoice } from "./engine.ts";
-import { evaluate } from "./evaluate.ts";
+import {
+  chooseMove,
+  chooseMoveWithoutFutility,
+  chooseMoveWithoutTaper,
+  type EngineChoice,
+} from "./engine.ts";
+import { evaluate, phaseOf } from "./evaluate.ts";
 import { parseFen, toFen } from "./fen.ts";
 import { gameStatus } from "./gameend.ts";
 import { givesCheck, isInCheck, legalMoves } from "./legal.ts";
@@ -41,6 +46,7 @@ import {
   orderMoves,
   search,
   searchWithoutFutility,
+  searchWithoutTaper,
 } from "./search.ts";
 import { MATE_FLOOR, probeTable, tableCutoff } from "./transposition.ts";
 import { zobristKey } from "./zobrist.ts";
@@ -51,7 +57,8 @@ const RUN_DEEP = process.env.SEARCH_DEEP === "1";
  * THE EVALUATION STUB: a call-through module mock of `src/evaluate.ts`. `calls` counts every
  * evaluation; with `value` set, `evaluate` answers it instead, so the node test can be handed a
  * static score far below the mate band — the one input that makes the lower `alphaIn` clause
- * observable on its own. No production hook is added.
+ * observable on its own. No production hook is added. `evaluateAtPhase` (`ABC-269` cut C1) is the
+ * tapered entry `futilityNode` reads, so it is stubbed the same way, on the same counter.
  */
 const evalStub = vi.hoisted(() => ({ value: null as number | null, calls: 0 }));
 vi.mock("./evaluate.ts", async (importOriginal) => {
@@ -61,6 +68,10 @@ vi.mock("./evaluate.ts", async (importOriginal) => {
     evaluate: (position: Position) => {
       evalStub.calls++;
       return evalStub.value ?? actual.evaluate(position);
+    },
+    evaluateAtPhase: (position: Position, phase: number) => {
+      evalStub.calls++;
+      return evalStub.value ?? actual.evaluateAtPhase(position, phase);
     },
   };
 });
@@ -146,7 +157,7 @@ describe("futilityNode — eval + 150 / 350 / 550 <= alpha at a null-window node
     expect(isInCheck(parseFen(IN_CHECK))).toBe(true);
     // A real static score is far from the mate band: the lower alpha row needs the stub.
     expect(Math.abs(staticScore(QUIET))).toBeLessThan(MATE_FLOOR - 1_000);
-    expect(futilityNode.length).toBe(5);
+    expect(futilityNode.length).toBe(7); // ABC-269 adds `taper`, and cut C1 the carried `phase`
   });
 
   const BOUNDARY: ReadonlyArray<{ fen: string; depth: 1 | 2 | 3; ply: number; side: string }> = [
@@ -162,10 +173,16 @@ describe("futilityNode — eval + 150 / 350 / 550 <= alpha at a null-window node
     it(`depth ${depth}, ply ${ply}, ${side} to move: true at alpha = eval + ${M[depth]} exactly, false at alpha - 1`, () => {
       const alpha = staticScore(fen) + M[depth];
       const position = parseFen(fen);
-      expect(futilityNode(position, depth, ply, alpha, alpha + 1)).toBe(true);
-      expect(futilityNode(position, depth, ply, alpha - 1, alpha)).toBe(false);
+      expect(futilityNode(position, depth, ply, alpha, alpha + 1, true, phaseOf(position))).toBe(
+        true,
+      );
+      expect(futilityNode(position, depth, ply, alpha - 1, alpha, true, phaseOf(position))).toBe(
+        false,
+      );
       // Far below alpha it still prunes; the margin is the only boundary.
-      expect(futilityNode(position, depth, ply, alpha + 900, alpha + 901)).toBe(true);
+      expect(
+        futilityNode(position, depth, ply, alpha + 900, alpha + 901, true, phaseOf(position)),
+      ).toBe(true);
     });
   }
 
@@ -255,7 +272,7 @@ describe("futilityNode — eval + 150 / 350 / 550 <= alpha at a null-window node
       );
       evalStub.calls = 0;
       const position = parseFen(fen);
-      expect(futilityNode(position, depth, ply, alpha, beta)).toBe(false);
+      expect(futilityNode(position, depth, ply, alpha, beta, true, phaseOf(position))).toBe(false);
       // The guards come first: a guarded node pays no evaluation.
       expect(evalStub.calls).toBe(0);
     });
@@ -263,9 +280,29 @@ describe("futilityNode — eval + 150 / 350 / 550 <= alpha at a null-window node
 
   it("the mate band's edges: one centipawn inside it on either side, the margin decides", () => {
     evalStub.value = 0 - 25_000;
-    expect(futilityNode(parseFen(QUIET), 1, 1, 0 - MATE_FLOOR + 1, 0 - MATE_FLOOR + 2)).toBe(true);
+    expect(
+      futilityNode(
+        parseFen(QUIET),
+        1,
+        1,
+        0 - MATE_FLOOR + 1,
+        0 - MATE_FLOOR + 2,
+        true,
+        phaseOf(parseFen(QUIET)),
+      ),
+    ).toBe(true);
     evalStub.value = null;
-    expect(futilityNode(parseFen(QUIET), 1, 1, MATE_FLOOR - 2, MATE_FLOOR - 1)).toBe(true);
+    expect(
+      futilityNode(
+        parseFen(QUIET),
+        1,
+        1,
+        MATE_FLOOR - 2,
+        MATE_FLOOR - 1,
+        true,
+        phaseOf(parseFen(QUIET)),
+      ),
+    ).toBe(true);
   });
 });
 
@@ -399,8 +436,8 @@ describe("purity — each predicate leaves the position byte-identical (ADR-0061
       const position = parseFen(fen);
       const before = structuredClone(position);
       const score = evaluate(position);
-      futilityNode(position, 2, 1, score + 400, score + 401);
-      futilityNode(position, 2, 0, score + 400, score + 401);
+      futilityNode(position, 2, 1, score + 400, score + 401, true, phaseOf(position));
+      futilityNode(position, 2, 0, score + 400, score + 401, true, phaseOf(position));
       expect(position, fen).toEqual(before);
       legalMoves(position).forEach((move, index) => {
         futileMove(position, move, index);
@@ -455,7 +492,7 @@ describe("both recursions test the node once, with the entry window, after the t
       expect((flat.match(/futilityNode\(/g) ?? []).length, path).toBe(calls);
       expect((flat.match(/futileMove\(/g) ?? []).length, path).toBe(moveCalls);
       // The node test: once per node, with the ENTRY window (alphaIn), the remaining depth and ply.
-      const node = `const futile = ${on}.futility && futilityNode(position, ${depth}, ply, alphaIn, beta);`;
+      const node = `const futile = ${on}.futility && futilityNode(position, ${depth}, ply, alphaIn, beta, ${on}.taper, phase);`;
       expect(flat, path).toContain(node);
       const at = flat.indexOf(node);
       // After the table cutoff and the null move, after the move list and the entry window exist.
@@ -523,13 +560,26 @@ describe("the doors — searchWithoutFutility and chooseMoveWithoutFutility turn
     expect(chooseMoveWithoutFutility.length).toBe(2);
   });
 
+  // `ABC-269`'s door (`ADR-0064` decision 7) is the shipped path less the taper, futility on.
   const MODULES = [
-    { path: "./search.ts", call: "searchRoot(position, depth, {", on: "search", least: 13 },
-    { path: "./engine.ts", call: "deepen(position, options, {", on: "chooseMove", least: 7 },
+    {
+      path: "./search.ts",
+      call: "searchRoot(position, depth, {",
+      on: "search",
+      tap: "searchWithoutTaper",
+      least: 13,
+    },
+    {
+      path: "./engine.ts",
+      call: "deepen(position, options, {",
+      on: "chooseMove",
+      tap: "chooseMoveWithoutTaper",
+      least: 7,
+    },
   ];
 
-  for (const { path, call, on, least } of MODULES) {
-    it(`${path}: each exported entry passes exactly one futility literal, and only ${on}'s is true`, () => {
+  for (const { path, call, on, tap, least } of MODULES) {
+    it(`${path}: each exported entry passes exactly one futility literal, and only ${on}'s and ${tap}'s are true`, () => {
       const flat = readFileSync(new URL(path, import.meta.url), "utf8").replace(/\s+/g, " ");
       const found: Record<string, string> = {};
       for (const chunk of flat.split("export function ").slice(1)) {
@@ -540,7 +590,10 @@ describe("the doors — searchWithoutFutility and chooseMoveWithoutFutility turn
         found[name] = literals[0] as string;
       }
       expect(Object.keys(found).length).toBeGreaterThanOrEqual(least);
-      expect(Object.entries(found).filter(([, value]) => value === "true")).toEqual([[on, "true"]]);
+      expect(Object.entries(found).filter(([, value]) => value === "true")).toEqual([
+        [on, "true"],
+        [tap, "true"],
+      ]);
     });
   }
 
@@ -554,9 +607,11 @@ describe("the doors — searchWithoutFutility and chooseMoveWithoutFutility turn
     expect(headChoice.nodes).toBeLessThan(doorChoice.nodes);
   });
 
-  it("depth 1 has no null-window node below the root: search() at depth 1 IS its door, node for node, on the 190's roots", () => {
+  // `ABC-269` (`ADR-0064` decision 7): the shipped side re-points to `searchWithoutTaper`, the
+  // shipped path less the taper, so the row keeps measuring futility alone.
+  it("depth 1 has no null-window node below the root: searchWithoutTaper at depth 1 IS its door, node for node, on the 190's roots", () => {
     for (const { fen } of [...ROOTS, ...ENDGAMES]) {
-      const head = search(parseFen(fen), 1);
+      const head = searchWithoutTaper(parseFen(fen), 1);
       const door = searchWithoutFutility(parseFen(fen), 1);
       expect([head.score, head.nodes, label(head.move)], fen).toEqual([
         door.score,
@@ -581,6 +636,11 @@ describe("QE-268-b — a futile node returns the best score among the moves it s
    * Ke2 is searched; Kf1 and Kf2 are quiet and skipped. Nothing re-searches the node: Black's
    * null-window node above it cuts on Rxd3, and the root move it answers fails low.
    */
+  //
+  // `ABC-269` (`ADR-0064` decision 7): the row measures futility alone, so it re-points to the
+  // shipped path less the taper (`searchWithoutTaper`, `chooseMoveWithoutTaper`, `futilityNode`'s
+  // `taper` false), and its figures do not change. On the tapered scale the fixture no longer
+  // bites: the searched Ke2 and the full-width node both read -532, so no skipped move is better.
   const ROOT = "4k3/8/8/3r4/8/8/8/3QK3 w - - 0 1";
   const NODE = "4k3/8/8/8/8/3r4/8/4K3 w - - 0 2";
   const ALPHA = 1010;
@@ -607,25 +667,27 @@ describe("QE-268-b — a futile node returns the best score among the moves it s
       }
       searched.push(label(move));
       const undo = makeMove(position, move);
-      best = Math.max(best, 0 - search(position, 0).score);
+      best = Math.max(best, 0 - searchWithoutTaper(position, 0).score);
       unmakeMove(position, move, undo);
     });
     return { best, searched, skipped };
   };
 
   it("the fixture bites: the node is futile at the window its parent hands it, and the skipped moves hold a better score", () => {
-    expect(futilityNode(parseFen(NODE), 1, 2, ALPHA, ALPHA + 1)).toBe(true);
-    const root = search(parseFen(ROOT), 3);
+    expect(
+      futilityNode(parseFen(NODE), 1, 2, ALPHA, ALPHA + 1, false, phaseOf(parseFen(NODE))),
+    ).toBe(true);
+    const root = searchWithoutTaper(parseFen(ROOT), 3);
     expect([root.score, label(root.move)]).toEqual([ALPHA, "d1d5"]);
     const { best, searched, skipped } = bestSearched();
     expect([best, searched, skipped]).toEqual([-554, ["e1e2"], ["e1f1", "e1f2"]]);
     // Full width the node scores higher: the skipped moves were better, and the rule did skip them.
-    expect(search(parseFen(NODE), 1).score).toBe(-544);
+    expect(searchWithoutTaper(parseFen(NODE), 1).score).toBe(-544);
   });
 
   for (const [name, run] of [
-    ["search() at depth 3", () => search(parseFen(ROOT), 3)],
-    ["chooseMove deepened to 3", () => deepenTo(chooseMove, ROOT, 3)],
+    ["searchWithoutTaper at depth 3", () => searchWithoutTaper(parseFen(ROOT), 3)],
+    ["chooseMoveWithoutTaper deepened to 3", () => deepenTo(chooseMoveWithoutTaper, ROOT, 3)],
   ] as const) {
     it(`${name}: the futile node's entry is an upper bound of -554, Ke2's score, strictly below its alpha of ${ALPHA}`, () => {
       const result = run();
@@ -692,26 +754,30 @@ if (RUN_DEEP) {
     expect(result.signFlips).toBe(0);
   };
 
+  // `ABC-269` (`ADR-0064` decision 7): A3 (a), A4 (a) and A4 (b) measure futility alone against
+  // its doors, so their shipped side re-points to the shipped path less the taper
+  // (`searchWithoutTaper`, `chooseMoveWithoutTaper`); their figures do not change. A3 (b) and
+  // A3 (c) (the mate floor, zugzwang) are value and behaviour rows and stay on the shipped path.
   describe("A3 (a) — bounded drift against the futility doors, depth 5, the 190 [deep, SEARCH_DEEP=1]", () => {
     it("the corpus is the 190", () => {
       expect(corpus()).toHaveLength(190);
     });
 
-    it("search() against searchWithoutFutility at fixed depth 5: every non-mate score within 25 cp, 0 mate sign flips [deep, SEARCH_DEEP=1]", () => {
+    it("searchWithoutTaper against searchWithoutFutility at fixed depth 5: every non-mate score within 25 cp, 0 mate sign flips [deep, SEARCH_DEEP=1]", () => {
       reportAndBar(
-        "search() d5",
+        "searchWithoutTaper d5",
         drift(
-          (fen) => search(parseFen(fen), 5).score,
+          (fen) => searchWithoutTaper(parseFen(fen), 5).score,
           (fen) => searchWithoutFutility(parseFen(fen), 5).score,
         ),
       );
     }, 600_000);
 
-    it("chooseMove against chooseMoveWithoutFutility deepened to 5: every non-mate score within 25 cp, 0 mate sign flips [deep, SEARCH_DEEP=1]", () => {
+    it("chooseMoveWithoutTaper against chooseMoveWithoutFutility deepened to 5: every non-mate score within 25 cp, 0 mate sign flips [deep, SEARCH_DEEP=1]", () => {
       reportAndBar(
-        "chooseMove to d5",
+        "chooseMoveWithoutTaper to d5",
         drift(
-          (fen) => deepenTo(chooseMove, fen, 5).score,
+          (fen) => deepenTo(chooseMoveWithoutTaper, fen, 5).score,
           (fen) => deepenTo(chooseMoveWithoutFutility, fen, 5).score,
         ),
       );
@@ -773,23 +839,23 @@ if (RUN_DEEP) {
 
   describe("A4 (a) — at depth 8 on kiwipete and position-6, nodes <= 0.88x the door's in both recursions [deep, SEARCH_DEEP=1]", () => {
     for (const name of ["kiwipete", "position-6"]) {
-      it(`${name}: search() at depth 8 [deep, SEARCH_DEEP=1]`, () => {
-        const head = search(parseFen(fenOf(name)), 8);
+      it(`${name}: searchWithoutTaper at depth 8 [deep, SEARCH_DEEP=1]`, () => {
+        const head = searchWithoutTaper(parseFen(fenOf(name)), 8);
         const door = searchWithoutFutility(parseFen(fenOf(name)), 8);
         console.log(
-          `ABC-268 A4 search() ${name} d8: ${head.nodes} / ${door.nodes} = ` +
+          `ABC-268 A4 searchWithoutTaper ${name} d8: ${head.nodes} / ${door.nodes} = ` +
             `${(head.nodes / door.nodes).toFixed(4)}x; head ${label(head.move)} ${head.score}, ` +
             `door ${label(door.move)} ${door.score}`,
         );
         expect(head.nodes).toBeLessThanOrEqual(0.88 * door.nodes);
       }, 300_000);
 
-      it(`${name}: chooseMove deepened to 8 on a frozen clock [deep, SEARCH_DEEP=1]`, () => {
-        const head = deepenTo(chooseMove, fenOf(name), 8);
+      it(`${name}: chooseMoveWithoutTaper deepened to 8 on a frozen clock [deep, SEARCH_DEEP=1]`, () => {
+        const head = deepenTo(chooseMoveWithoutTaper, fenOf(name), 8);
         const door = deepenTo(chooseMoveWithoutFutility, fenOf(name), 8);
         expect([head.depth, door.depth]).toEqual([8, 8]);
         console.log(
-          `ABC-268 A4 chooseMove ${name} to 8: ${head.nodes} / ${door.nodes} = ` +
+          `ABC-268 A4 chooseMoveWithoutTaper ${name} to 8: ${head.nodes} / ${door.nodes} = ` +
             `${(head.nodes / door.nodes).toFixed(4)}x; head ${label(head.move)} ${head.score}, ` +
             `door ${label(door.move)} ${door.score}`,
         );
@@ -799,7 +865,7 @@ if (RUN_DEEP) {
   });
 
   describe("A4 (b) — the mean completed depth at 47 000 nodes on the 190 is >= the door's + 0.20 ply [deep, SEARCH_DEEP=1]", () => {
-    it("chooseMove against chooseMoveWithoutFutility, maxNodes 47 000, frozen clock [deep, SEARCH_DEEP=1]", () => {
+    it("chooseMoveWithoutTaper against chooseMoveWithoutFutility, maxNodes 47 000, frozen clock [deep, SEARCH_DEEP=1]", () => {
       const rows = corpus();
       const reach = (choose: typeof chooseMove) =>
         rows.map(({ fen }) => {
@@ -811,7 +877,7 @@ if (RUN_DEEP) {
           return { depth: choice.depth, move: label(choice.move) };
         });
       const door = reach(chooseMoveWithoutFutility);
-      const head = reach(chooseMove);
+      const head = reach(chooseMoveWithoutTaper);
       const mean = (xs: Array<{ depth: number }>) =>
         xs.reduce((sum, x) => sum + x.depth, 0) / xs.length;
       const deeper = head.filter((x, i) => x.depth > (door[i] as { depth: number }).depth).length;

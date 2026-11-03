@@ -90,10 +90,17 @@
  * table probe and the null move) and `futileMove` (per move). Its switch is `futility`. It changes
  * the VALUE, so every door older than `ABC-268` turns it off, and `search()` is held to the
  * TEST-ONLY door `searchWithoutFutility`, the pre-`ABC-268` `search()`, by a bounded oracle.
+ *
+ * THE TAPERED EVALUATION (ABC-269, `ADR-0064` decision 7): the switch `taper` picks which evaluation
+ * the recursion reads at each of its call sites: the leaf with quiescence off, the futility node
+ * test (`futilityNode`'s `taper` argument) and quiescence's stand pat (the `taper` field of the
+ * constant rules record). True: the tapered `evaluate`. False: `evaluateWithoutTaper`, the
+ * pre-`ABC-269` evaluation. It changes the VALUE, so every door older than `ABC-269` turns it off,
+ * and `search()` is held to the TEST-ONLY door `searchWithoutTaper`, the pre-`ABC-269` `search()`.
  */
 
 import { makeMove, makeNullMove, unmakeMove, unmakeNullMove } from "./apply.ts";
-import { evaluate } from "./evaluate.ts";
+import { evaluateAtPhase, evaluateWithoutTaper, phaseAfterMove, phaseOf } from "./evaluate.ts";
 import { leafEndReason } from "./gameend.ts";
 import { givesCheck, isInCheck, legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
@@ -123,6 +130,8 @@ const RULES_SHIPPED: QuiescenceRules = { evasions: true, quietPromotions: true }
 const RULES_NO_QUIET_PROMOTIONS: QuiescenceRules = { evasions: true, quietPromotions: false };
 const RULES_NO_EVASIONS: QuiescenceRules = { evasions: false, quietPromotions: true };
 const RULES_NEITHER: QuiescenceRules = { evasions: false, quietPromotions: false };
+/** `search()`'s record (`ABC-269`): both rules and the tapered stand pat. `taper` is on only there. */
+const RULES_TAPERED: QuiescenceRules = { evasions: true, quietPromotions: true, taper: true };
 
 export interface SearchResult {
   /** Centipawns, positive for the side to move. A mate reads `±(MATE_SCORE - ply)`. */
@@ -320,6 +329,12 @@ interface Switches {
    * `pvs` is on (decision 1); every older door turns it off (decision 5).
    */
   readonly futility: boolean;
+  /**
+   * The tapered evaluation (`ABC-269`, `ADR-0064` decision 7) at every call site the recursion has.
+   * True on `search()` only, where both quiescence switches are on too, so its rules record is
+   * `RULES_TAPERED`; every older door turns it off and reads the pre-`ABC-269` evaluation.
+   */
+  readonly taper: boolean;
 }
 
 /** The least remaining depth, and the least 0-based index in the ordered list, a reduced move has. */
@@ -408,6 +423,10 @@ const FUTILITY_MARGIN: readonly number[] = [0, 150, 350, 550];
  * `evaluate(position) + FUTILITY_MARGIN[depth] <= alphaIn`. Check and the static score are derived
  * HERE, from the position; the caller supplies only what no position carries. The evaluation is
  * last, so a guarded node pays none. Pure: it reads the position and changes nothing.
+ *
+ * `taper` is the recursion's switch (`ABC-269`): true reads the tapered evaluation, false
+ * `evaluateWithoutTaper`, the pre-`ABC-269` evaluation. `phase` is the node's `phaseOf(position)`,
+ * carried by the recursion (`ABC-269` cut C1); the tapered read is `evaluateAtPhase(position, phase)`.
  */
 export function futilityNode(
   position: Position,
@@ -415,13 +434,16 @@ export function futilityNode(
   ply: number,
   alphaIn: number,
   beta: number,
+  taper: boolean,
+  phase: number,
 ): boolean {
   if (ply === 0 || alphaIn + 1 !== beta) return false;
   if (depth < 1 || depth > 3) return false;
   if (alphaIn >= MATE_FLOOR || alphaIn <= 0 - MATE_FLOOR) return false;
   if (beta >= MATE_FLOOR || beta <= 0 - MATE_FLOOR) return false;
   if (isInCheck(position)) return false;
-  return evaluate(position) + (FUTILITY_MARGIN[depth] as number) <= alphaIn;
+  const staticScore = taper ? evaluateAtPhase(position, phase) : evaluateWithoutTaper(position);
+  return staticScore + (FUTILITY_MARGIN[depth] as number) <= alphaIn;
 }
 
 /**
@@ -468,19 +490,24 @@ function leafScore(
   beta: number,
   switches: Switches,
   counter: NodeCounter,
+  phase: number,
 ): number {
   const reason = leafEndReason(position);
   if (reason === null) {
-    if (!switches.quiescence) return evaluate(position);
+    if (!switches.quiescence) {
+      return switches.taper ? evaluateAtPhase(position, phase) : evaluateWithoutTaper(position);
+    }
     // Every capture node the quiescence search enters is a position visited, and is counted.
-    const rules = switches.quiescenceEvasions
-      ? switches.quietPromotions
-        ? RULES_SHIPPED
-        : RULES_NO_QUIET_PROMOTIONS
-      : switches.quietPromotions
-        ? RULES_NO_EVASIONS
-        : RULES_NEITHER;
-    return quiesce(position, alpha, beta, 0, ply, rules, () => counter.nodes++);
+    const rules = switches.taper
+      ? RULES_TAPERED
+      : switches.quiescenceEvasions
+        ? switches.quietPromotions
+          ? RULES_SHIPPED
+          : RULES_NO_QUIET_PROMOTIONS
+        : switches.quietPromotions
+          ? RULES_NO_EVASIONS
+          : RULES_NEITHER;
+    return quiesce(position, alpha, beta, 0, ply, rules, () => counter.nodes++, phase);
   }
   if (reason === "checkmate") return 0 - (MATE_SCORE - ply);
   // Every other ended game is drawn: stalemate, dead position, seventy-five moves. Exactly 0,
@@ -510,6 +537,9 @@ function leafScore(
  * `afterNull` is true only on the null move's child (`ABC-208`): the flag is an argument, so
  * nothing is held between nodes. With `nullMove` on, a null-window node that the table did not
  * settle first tries the pass, before any move is generated.
+ *
+ * `phase` is this node's `phaseOf(position)`, written by the parent as `phaseAfterMove` (`ABC-269`
+ * cut C1): an argument like `afterNull`, never state. The null move's child keeps it.
  */
 function negamax(
   position: Position,
@@ -522,13 +552,14 @@ function negamax(
   killers: KillerTable,
   keys: BigUint64Array,
   afterNull: boolean,
+  phase: number,
 ): number {
   counter.nodes++;
 
   // In-tree repetition (`ABC-081` `A5`): EXACTLY 0, a literal, never a negated `-0`.
   if (repeatsInPath(keys, ply, position.halfmoveClock)) return 0;
   if (depth <= 0 || ply >= KEY_ARRAY_CAPACITY) {
-    return leafScore(position, ply, alpha, beta, switches, counter);
+    return leafScore(position, ply, alpha, beta, switches, counter, phase);
   }
   const prune = switches.prune;
   const key = keys[ply] as bigint;
@@ -557,6 +588,7 @@ function negamax(
           killers,
           keys,
           true,
+          phase,
         );
       unmakeNullMove(position, nullUndo);
       // Beta, never the null score: a mate found after a pass is no mate. Nothing is stored.
@@ -575,7 +607,8 @@ function negamax(
   const alphaIn = alpha;
   const hashMove = slot === -1 ? null : entryMove(slot, moves);
   // Futility (`ABC-268`): once per node, with the entry window; a skipped move still takes its index.
-  const futile = switches.futility && futilityNode(position, depth, ply, alphaIn, beta);
+  const futile =
+    switches.futility && futilityNode(position, depth, ply, alphaIn, beta, switches.taper, phase);
   let best = Number.NEGATIVE_INFINITY;
   let bestMove = moves[0] as Move;
   let index = 0;
@@ -601,6 +634,7 @@ function negamax(
       counter,
       killers,
       keys,
+      phaseAfterMove(phase, move),
     );
     unmakeMove(position, move, undo);
     index++;
@@ -636,6 +670,8 @@ function negamax(
  * null-window search runs that many plies shallower; if it fails high anyway, the move is searched
  * again with the same null window at FULL depth before anything else is believed. That re-search
  * is the line every LMR bug skips, and at a null-window node nothing else would repeat it (`A4`).
+ *
+ * `childPhase` is the made move's child's phase, `phaseAfterMove` of the node's (`ABC-269` cut C1).
  */
 function searchMove(
   position: Position,
@@ -649,6 +685,7 @@ function searchMove(
   counter: NodeCounter,
   killers: KillerTable,
   keys: BigUint64Array,
+  childPhase: number,
 ): number {
   const child = ply + 1;
   if (index === 0 || !switches.pvs) {
@@ -665,6 +702,7 @@ function searchMove(
         killers,
         keys,
         false,
+        childPhase,
       )
     );
   }
@@ -681,6 +719,7 @@ function searchMove(
       killers,
       keys,
       false,
+      childPhase,
     );
   if (score > alpha && reduction > 0) {
     score =
@@ -696,6 +735,7 @@ function searchMove(
         killers,
         keys,
         false,
+        childPhase,
       );
   }
   if (score > alpha && score < beta) {
@@ -712,6 +752,7 @@ function searchMove(
         killers,
         keys,
         false,
+        childPhase,
       );
   }
   return score;
@@ -742,7 +783,15 @@ function searchRoot(position: Position, depth: number, switches: Switches): Sear
   // recursion at a leaf, which would turn a missing depth into a depth-128 search (`QE-G1`).
   if (!(depth >= 1)) {
     const infinity = Number.POSITIVE_INFINITY;
-    const score = leafScore(position, 0, 0 - infinity, infinity, switches, counter);
+    const score = leafScore(
+      position,
+      0,
+      0 - infinity,
+      infinity,
+      switches,
+      counter,
+      phaseOf(position),
+    );
     return { score, move: null, nodes: counter.nodes };
   }
 
@@ -752,6 +801,8 @@ function searchRoot(position: Position, depth: number, switches: Switches): Sear
   }
 
   const rootKey = keys[0] as bigint;
+  // `ABC-269` cut C1: the phase is seeded ONCE per search, here, and carried down from this node.
+  const rootPhase = phaseOf(position);
   const slot = switches.table ? probeTable(rootKey) : -1;
   const hashMove = slot === -1 ? null : entryMove(slot, moves);
   let alpha = Number.NEGATIVE_INFINITY;
@@ -778,6 +829,7 @@ function searchRoot(position: Position, depth: number, switches: Switches): Sear
       counter,
       killers,
       keys,
+      phaseAfterMove(rootPhase, move),
     );
     unmakeMove(position, move, undo);
     index++;
@@ -810,6 +862,30 @@ export function search(position: Position, depth: number): SearchResult {
     quiescenceEvasions: true,
     quietPromotions: true,
     futility: true,
+    taper: true,
+  });
+}
+
+/**
+ * TEST-ONLY. The pre-`ABC-269` `search()`, node for node: the tapered evaluation off, everything
+ * else on, futility, null move and both quiescence switches included. It reads
+ * `evaluateWithoutTaper` at every call site, so it is `main`'s `search()` before `ABC-269`, and the
+ * shipped side of every older row that measures its own heuristic alone (`ADR-0064` decision 7).
+ * Not an engine option; nothing in production calls it.
+ */
+export function searchWithoutTaper(position: Position, depth: number): SearchResult {
+  return searchRoot(position, depth, {
+    prune: true,
+    quiescence: true,
+    ordering: "full",
+    table: true,
+    pvs: true,
+    reductions: true,
+    nullMove: true,
+    quiescenceEvasions: true,
+    quietPromotions: true,
+    futility: true,
+    taper: false,
   });
 }
 
@@ -832,6 +908,7 @@ export function searchWithoutFutility(position: Position, depth: number): Search
     quiescenceEvasions: true,
     quietPromotions: true,
     futility: false,
+    taper: false,
   });
 }
 
@@ -854,6 +931,7 @@ export function searchWithoutQuietPromotions(position: Position, depth: number):
     quiescenceEvasions: true,
     quietPromotions: false,
     futility: false,
+    taper: false,
   });
 }
 
@@ -875,6 +953,7 @@ export function searchWithoutQuiescenceEvasions(position: Position, depth: numbe
     quiescenceEvasions: false,
     quietPromotions: false,
     futility: false,
+    taper: false,
   });
 }
 
@@ -896,6 +975,7 @@ export function searchWithoutNullMove(position: Position, depth: number): Search
     quiescenceEvasions: false,
     quietPromotions: false,
     futility: false,
+    taper: false,
   });
 }
 
@@ -921,6 +1001,7 @@ export function searchWithoutPruning(position: Position, depth: number): SearchR
     quiescenceEvasions: false,
     quietPromotions: false,
     futility: false,
+    taper: false,
   });
 }
 
@@ -944,6 +1025,7 @@ export function searchWithoutQuiescence(position: Position, depth: number): Sear
     quiescenceEvasions: false,
     quietPromotions: false,
     futility: false,
+    taper: false,
   });
 }
 
@@ -969,6 +1051,7 @@ export function searchWithoutPruningOrQuiescence(position: Position, depth: numb
     quiescenceEvasions: false,
     quietPromotions: false,
     futility: false,
+    taper: false,
   });
 }
 
@@ -990,6 +1073,7 @@ export function searchWithoutOrdering(position: Position, depth: number): Search
     quiescenceEvasions: false,
     quietPromotions: false,
     futility: false,
+    taper: false,
   });
 }
 
@@ -1010,6 +1094,7 @@ export function searchWithoutKillers(position: Position, depth: number): SearchR
     quiescenceEvasions: false,
     quietPromotions: false,
     futility: false,
+    taper: false,
   });
 }
 
@@ -1031,6 +1116,7 @@ export function searchWithoutTable(position: Position, depth: number): SearchRes
     quiescenceEvasions: false,
     quietPromotions: false,
     futility: false,
+    taper: false,
   });
 }
 
@@ -1052,6 +1138,7 @@ export function searchWithoutReductions(position: Position, depth: number): Sear
     quiescenceEvasions: false,
     quietPromotions: false,
     futility: false,
+    taper: false,
   });
 }
 
@@ -1073,5 +1160,6 @@ export function searchWithoutPvsOrReductions(position: Position, depth: number):
     quiescenceEvasions: false,
     quietPromotions: false,
     futility: false,
+    taper: false,
   });
 }

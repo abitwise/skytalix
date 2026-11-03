@@ -101,12 +101,19 @@
  * sixth TEST-ONLY door, `chooseMoveWithoutFutility`, is the pre-`ABC-268` `chooseMove`, node for
  * node. It takes no depth.
  *
+ * THE TAPERED EVALUATION (`ABC-269`, `ADR-0064` decision 7) reaches it by a `taper` switch, as in
+ * `src/search.ts`: it picks the evaluation at quiescence's stand pat (the rules record's `taper`)
+ * and at the futility node test (`futilityNode`'s `taper` argument). It changes the VALUE, so every
+ * door above turns it off, and a seventh TEST-ONLY door, `chooseMoveWithoutTaper`, is the
+ * pre-`ABC-269` `chooseMove`, node for node. It takes no depth.
+ *
  * NOT HERE, each owned elsewhere: difficulty selection and how a level persists (`EPIC-006`), the
  * budget-to-level mapping (`ABC-087`), aspiration windows and threading (none requested;
  * `ADR-0005` F6 leaves threading to Architect/Design).
  */
 
 import { makeMove, makeNullMove, unmakeMove, unmakeNullMove } from "./apply.ts";
+import { phaseAfterMove, phaseOf } from "./evaluate.ts";
 import { leafEndReason } from "./gameend.ts";
 import { isInCheck, legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
@@ -256,7 +263,7 @@ export function trimPriorKeys(keys: readonly bigint[], halfmoveClock: number): b
 const ABORTED = Symbol("engine: the budget is spent");
 
 /**
- * The `ABC-121`, `ABC-208`, `ABC-230`, `ABC-228`, `ABC-229` and `ABC-268` switches,
+ * The `ABC-121`, `ABC-208`, `ABC-230`, `ABC-228`, `ABC-229`, `ABC-268` and `ABC-269` switches,
  * `src/search.ts`'s rule: on in `chooseMove`, off in its doors.
  */
 interface Heuristics {
@@ -280,6 +287,11 @@ interface Heuristics {
    * nodes: true on `chooseMove` only.
    */
   readonly futility: boolean;
+  /**
+   * The tapered evaluation (`ABC-269`, `ADR-0064` decision 7): true on `chooseMove` only, where
+   * both quiescence switches are on too, so its rules record is `RULES_TAPERED`.
+   */
+  readonly taper: boolean;
 }
 
 /** The quiescence rules this recursion hands `quiesce` (`ADR-0053` decision 6): constants, never built per leaf. */
@@ -287,6 +299,8 @@ const RULES_SHIPPED: QuiescenceRules = { evasions: true, quietPromotions: true }
 const RULES_NO_QUIET_PROMOTIONS: QuiescenceRules = { evasions: true, quietPromotions: false };
 const RULES_NO_EVASIONS: QuiescenceRules = { evasions: false, quietPromotions: true };
 const RULES_NEITHER: QuiescenceRules = { evasions: false, quietPromotions: false };
+/** `chooseMove`'s record (`ABC-269`): both rules and the tapered stand pat. `taper` is on only there. */
+const RULES_TAPERED: QuiescenceRules = { evasions: true, quietPromotions: true, taper: true };
 
 /** The deepening loop's mutable state: the clock, the deadline, and when to consult again. */
 interface Budget extends Heuristics {
@@ -338,17 +352,20 @@ function leafScore(
   alpha: number,
   beta: number,
   budget: Budget,
+  phase: number,
 ): number {
   const reason = leafEndReason(position);
   if (reason === null) {
-    const rules = budget.quiescenceEvasions
-      ? budget.quietPromotions
-        ? RULES_SHIPPED
-        : RULES_NO_QUIET_PROMOTIONS
-      : budget.quietPromotions
-        ? RULES_NO_EVASIONS
-        : RULES_NEITHER;
-    return quiesce(position, alpha, beta, 0, ply, rules, budget.visit);
+    const rules = budget.taper
+      ? RULES_TAPERED
+      : budget.quiescenceEvasions
+        ? budget.quietPromotions
+          ? RULES_SHIPPED
+          : RULES_NO_QUIET_PROMOTIONS
+        : budget.quietPromotions
+          ? RULES_NO_EVASIONS
+          : RULES_NEITHER;
+    return quiesce(position, alpha, beta, 0, ply, rules, budget.visit, phase);
   }
   if (reason === "checkmate") return 0 - (MATE_SCORE - ply);
   return 0;
@@ -386,6 +403,9 @@ function repeatsBeforeRoot(
  * leaves the caller's position byte-identical. The turn loop BORROWS `history.position`
  * (`history.ts:39-44`) — a search that unwound without unmaking would hand the loop a board
  * several plies into a line nobody played. The null move (`ABC-208`) is unmade the same way.
+ *
+ * `phase` is this node's `phaseOf(position)`, carried as an argument exactly as in `src/search.ts`
+ * (`ABC-269` cut C1): each child by `phaseAfterMove`, the null move's child unchanged.
  */
 function negamax(
   position: Position,
@@ -395,6 +415,7 @@ function negamax(
   ply: number,
   budget: Budget,
   afterNull: boolean,
+  phase: number,
 ): number {
   countNode(budget);
 
@@ -408,7 +429,7 @@ function negamax(
     return 0;
   }
   if (remaining <= 0 || ply >= KEY_ARRAY_CAPACITY) {
-    return leafScore(position, ply, alpha, beta, budget);
+    return leafScore(position, ply, alpha, beta, budget, phase);
   }
 
   const slot = probeTable(key);
@@ -434,6 +455,7 @@ function negamax(
             ply + 1,
             budget,
             true,
+            phase,
           );
       } finally {
         unmakeNullMove(position, nullUndo);
@@ -449,7 +471,8 @@ function negamax(
   const alphaIn = alpha;
   const hashMove = slot === -1 ? null : entryMove(slot, moves);
   // Futility (`ABC-268`): once per node, with the entry window; a skipped move still takes its index.
-  const futile = budget.futility && futilityNode(position, remaining, ply, alphaIn, beta);
+  const futile =
+    budget.futility && futilityNode(position, remaining, ply, alphaIn, beta, budget.taper, phase);
   let best = Number.NEGATIVE_INFINITY;
   let bestMove = moves[0] as Move;
   let index = 0;
@@ -465,7 +488,17 @@ function negamax(
     let score: number;
     try {
       keys[ply + 1] = zobristKeyAfterMove(key, position, move, undo);
-      score = searchMove(position, remaining, alpha, beta, ply, index, reduction, budget);
+      score = searchMove(
+        position,
+        remaining,
+        alpha,
+        beta,
+        ply,
+        index,
+        reduction,
+        budget,
+        phaseAfterMove(phase, move),
+      );
     } finally {
       unmakeMove(position, move, undo);
     }
@@ -494,6 +527,7 @@ function negamax(
  * gets the node's own window; with `pvs` on a later move gets the null window first, `reduction`
  * plies shallower; a reduced search that fails high is repeated at full depth with the same null
  * window; and the full window is searched again only when it fails high inside `(alpha, beta)`.
+ * `childPhase` is the made move's child's phase (`ABC-269` cut C1).
  */
 function searchMove(
   position: Position,
@@ -504,19 +538,34 @@ function searchMove(
   index: number,
   reduction: number,
   budget: Budget,
+  childPhase: number,
 ): number {
   const child = ply + 1;
   if (index === 0 || !budget.pvs) {
-    return 0 - negamax(position, remaining - 1, 0 - beta, 0 - alpha, child, budget, false);
+    return (
+      0 - negamax(position, remaining - 1, 0 - beta, 0 - alpha, child, budget, false, childPhase)
+    );
   }
   let score =
     0 -
-    negamax(position, remaining - 1 - reduction, 0 - alpha - 1, 0 - alpha, child, budget, false);
+    negamax(
+      position,
+      remaining - 1 - reduction,
+      0 - alpha - 1,
+      0 - alpha,
+      child,
+      budget,
+      false,
+      childPhase,
+    );
   if (score > alpha && reduction > 0) {
-    score = 0 - negamax(position, remaining - 1, 0 - alpha - 1, 0 - alpha, child, budget, false);
+    score =
+      0 -
+      negamax(position, remaining - 1, 0 - alpha - 1, 0 - alpha, child, budget, false, childPhase);
   }
   if (score > alpha && score < beta) {
-    score = 0 - negamax(position, remaining - 1, 0 - beta, 0 - alpha, child, budget, false);
+    score =
+      0 - negamax(position, remaining - 1, 0 - beta, 0 - alpha, child, budget, false, childPhase);
   }
   return score;
 }
@@ -548,6 +597,7 @@ function runIteration(
   moves: readonly Move[],
   remaining: number,
   budget: Budget,
+  rootPhase: number,
 ): Iteration {
   const rootKey = budget.keys[0] as bigint;
   const slot = probeTable(rootKey);
@@ -578,6 +628,7 @@ function runIteration(
         index,
         reduction,
         budget,
+        phaseAfterMove(rootPhase, move),
       );
     } finally {
       unmakeMove(position, move, undo);
@@ -613,6 +664,30 @@ export function chooseMove(position: Position, options: EngineOptions): EngineCh
     quiescenceEvasions: true,
     quietPromotions: true,
     futility: true,
+    taper: true,
+  });
+}
+
+/**
+ * TEST-ONLY. The pre-`ABC-269` `chooseMove`, node for node: the tapered evaluation off, everything
+ * else on, futility, null move, both quiescence switches and the prior keys included. It reads
+ * `evaluateWithoutTaper` at every call site, so it is `main`'s `chooseMove` before `ABC-269`, and
+ * the shipped side of every older row that measures its own heuristic alone (`ADR-0064` decision
+ * 7). It takes no depth. Not an engine option; nothing in production calls it.
+ */
+export function chooseMoveWithoutTaper(
+  position: Position,
+  options: EngineOptions,
+): EngineChoice | null {
+  return deepen(position, options, {
+    pvs: true,
+    reductions: true,
+    nullMove: true,
+    priorKeys: true,
+    quiescenceEvasions: true,
+    quietPromotions: true,
+    futility: true,
+    taper: false,
   });
 }
 
@@ -635,6 +710,7 @@ export function chooseMoveWithoutFutility(
     quiescenceEvasions: true,
     quietPromotions: true,
     futility: false,
+    taper: false,
   });
 }
 
@@ -657,6 +733,7 @@ export function chooseMoveWithoutQuietPromotions(
     quiescenceEvasions: true,
     quietPromotions: false,
     futility: false,
+    taper: false,
   });
 }
 
@@ -678,6 +755,7 @@ export function chooseMoveWithoutQuiescenceEvasions(
     quiescenceEvasions: false,
     quietPromotions: false,
     futility: false,
+    taper: false,
   });
 }
 
@@ -699,6 +777,7 @@ export function chooseMoveWithoutNullMove(
     quiescenceEvasions: false,
     quietPromotions: false,
     futility: false,
+    taper: false,
   });
 }
 
@@ -720,6 +799,7 @@ export function chooseMoveWithoutReductions(
     quiescenceEvasions: false,
     quietPromotions: false,
     futility: false,
+    taper: false,
   });
 }
 
@@ -740,10 +820,11 @@ export function chooseMoveWithoutPvsOrReductions(
     quiescenceEvasions: false,
     quietPromotions: false,
     futility: false,
+    taper: false,
   });
 }
 
-/** The deepening loop behind `chooseMove` and its six doors; they differ in `heuristics` only. */
+/** The deepening loop behind `chooseMove` and its seven doors; they differ in `heuristics` only. */
 function deepen(
   position: Position,
   options: EngineOptions,
@@ -773,7 +854,10 @@ function deepen(
   const rootMoves = legalMoves(position);
   if (rootMoves.length === 0) return null;
 
-  let best = runIteration(position, rootMoves, 1, budget);
+  // `ABC-269` cut C1: the phase is seeded ONCE per call, here; the position is byte-identical
+  // between iterations, so every iteration's root carries the same value down.
+  const rootPhase = phaseOf(position);
+  let best = runIteration(position, rootMoves, 1, budget, rootPhase);
   let reached = 1;
   budget.nextCheck = budget.nodes + NODES_PER_CLOCK_CHECK;
 
@@ -788,7 +872,7 @@ function deepen(
   ) {
     let deeper: Iteration;
     try {
-      deeper = runIteration(position, rootMoves, iteration, budget);
+      deeper = runIteration(position, rootMoves, iteration, budget, rootPhase);
     } catch (error) {
       // The register is written only here, from a value a COMPLETED iteration returned. An
       // aborted iteration leaves `best` and `reached` untouched, which is `A3`.

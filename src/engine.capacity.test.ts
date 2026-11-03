@@ -23,6 +23,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { makeMove } from "./apply.ts";
 import { chooseMove } from "./engine.ts";
+import { phaseOf } from "./evaluate.ts";
 import { parseFen, toFen } from "./fen.ts";
 import { gameStatus } from "./gameend.ts";
 import { legalMoves } from "./legal.ts";
@@ -88,6 +89,7 @@ function leafScoreAtCapacity(): number {
     KEY_ARRAY_CAPACITY,
     { evasions: true, quietPromotions: true },
     () => {},
+    phaseOf(position),
   );
 }
 

@@ -37,9 +37,10 @@ import {
   chooseMoveWithoutFutility,
   chooseMoveWithoutQuiescenceEvasions,
   chooseMoveWithoutQuietPromotions,
+  chooseMoveWithoutTaper,
   type EngineChoice,
 } from "./engine.ts";
-import { evaluate } from "./evaluate.ts";
+import { evaluate, evaluateWithoutTaper, phaseOf } from "./evaluate.ts";
 import { parseFen, toFen } from "./fen.ts";
 import { gameStatus } from "./gameend.ts";
 import { isInCheck, legalCaptures, legalCapturesAndQueenPromotions, legalMoves } from "./legal.ts";
@@ -63,6 +64,7 @@ import {
   searchWithoutQuiescence,
   searchWithoutQuiescenceEvasions,
   searchWithoutQuietPromotions,
+  searchWithoutTaper,
 } from "./search.ts";
 
 /** The six perft positions — `src/search.test.ts`'s corpus, the capture-dense ones included. */
@@ -141,6 +143,7 @@ function quiesceFully(position: Position): QuiesceRun {
       nodes++;
       if (qply > deepest) deepest = qply;
     },
+    phaseOf(position),
   );
   return { score, nodes, deepest };
 }
@@ -276,10 +279,12 @@ describe("A2 — stand-pat is a lower bound on the quiescence value, never a rep
       const run = quiesceFully(position);
 
       // `toBe` is Object.is: a `-0` from a stray negation would fail here, as it should.
-      expect(run.score).toBe(evaluate(position));
+      expect(run.score).toBe(evaluateWithoutTaper(position));
       expect(run.nodes).toBe(0); // it stood pat: no capture was searched, none existed
-      // Through the seam too: a depth-0 search is the leaf itself, quiescence and all.
+      // Through the seam too: a depth-0 search is the leaf itself, quiescence and all — the shipped
+      // leaf stands pat on the tapered evaluation (`ABC-269`), its door on the pre-ticket one.
       expect(search(position, 0).score).toBe(evaluate(position));
+      expect(searchWithoutTaper(position, 0).score).toBe(evaluateWithoutTaper(position));
     });
   }
 
@@ -289,7 +294,7 @@ describe("A2 — stand-pat is a lower bound on the quiescence value, never a rep
     const position = parseFen("4k3/8/8/3p4/8/8/8/3QK3 w - - 0 1");
     const run = quiesceFully(position);
 
-    expect(run.score).toBeGreaterThan(evaluate(position));
+    expect(run.score).toBeGreaterThan(evaluateWithoutTaper(position));
     expect(run.nodes).toBeGreaterThan(0);
     expect(search(position, 0).score).toBe(run.score);
   });
@@ -300,7 +305,7 @@ describe("A2 — stand-pat is a lower bound on the quiescence value, never a rep
     const position = parseFen("4k3/4r3/8/4p3/8/8/8/Q3K3 w - - 0 1");
     const run = quiesceFully(position);
 
-    expect(run.score).toBe(evaluate(position));
+    expect(run.score).toBe(evaluateWithoutTaper(position));
     expect(run.nodes).toBeGreaterThan(0); // the capture WAS searched, and rejected
   });
 });
@@ -592,6 +597,7 @@ describe("A6 — the searched position is unchanged on return", () => {
         (qply) => {
           if (qply >= 3) throw abort;
         },
+        phaseOf(position),
       ),
     ).toThrow(abort);
     expect(snapshot(position)).toEqual(before);
@@ -741,6 +747,7 @@ const quiesceAt = (fen: string, rules: QuiescenceRules, ply = 0, qply = 0): numb
     ply,
     rules,
     () => {},
+    phaseOf(parseFen(fen)),
   );
 
 /**
@@ -766,7 +773,7 @@ function bruteForce(position: Position, qply: number, ply: number, rules: Quiesc
     }
     return best;
   }
-  let best = evaluate(position);
+  let best = evaluateWithoutTaper(position);
   if (qply >= QUIESCENCE_MAX_PLY) return best;
   const moves = rules.quietPromotions
     ? legalMoves(position).filter((m) => m.captured !== EMPTY || m.promotion === QUEEN)
@@ -876,7 +883,7 @@ describe("ABC-228 A2 — in check, quiesce searches every evasion: Q-SET's in-ch
     it(`${name}: differs from the static score, equals the best evasion's and the brute force`, () => {
       const position = parseFen(fen);
       const score = quiesceAt(fen, SHIPPED);
-      expect(score).not.toBe(evaluate(position));
+      expect(score).not.toBe(evaluateWithoutTaper(position));
       // The best evasion's quiescence score, one ply deeper, each searched from a full window.
       let best = Number.NEGATIVE_INFINITY;
       for (const move of legalMoves(position)) {
@@ -892,6 +899,7 @@ describe("ABC-228 A2 — in check, quiesce searches every evasion: Q-SET's in-ch
               0,
               SHIPPED,
               () => {},
+              phaseOf(position),
             ),
         );
         unmakeMove(position, move, undo);
@@ -948,6 +956,7 @@ describe("ABC-228 A3 — a capture that mates scores mate, at the right sign and
         0,
         SHIPPED,
         () => {},
+        phaseOf(position),
       ),
     ).toBe(0 - (MATE_SCORE - 1));
   });
@@ -1029,7 +1038,7 @@ describe("ABC-228 QE-228-b — QE's Q-SET rows (qe-ABC-228), in src", () => {
   for (const { name, fen, score, stat, pre } of QE_IN_CHECK) {
     it(`${name}: reads ${score} (static ${stat}, pre-ticket ${pre}), the brute force agrees`, () => {
       expect(isInCheck(parseFen(fen))).toBe(true);
-      expect(evaluate(parseFen(fen))).toBe(stat);
+      expect(evaluateWithoutTaper(parseFen(fen))).toBe(stat);
       expect(quiesceAt(fen, SHIPPED)).toBe(score);
       expect(bruteForce(parseFen(fen), 0, 0, SHIPPED)).toBe(score);
       expect(quiesceAt(fen, PRE_ABC228)).toBe(pre);
@@ -1053,6 +1062,7 @@ describe("ABC-228 QE-228-b — QE's Q-SET rows (qe-ABC-228), in src", () => {
           0,
           SHIPPED,
           () => {},
+          phaseOf(position),
         ),
     ).toBe(row.score);
   });
@@ -1084,7 +1094,9 @@ describe("ABC-228 QE-228-b — QE's Q-SET rows (qe-ABC-228), in src", () => {
     expect(isInCheck(parseFen(QE_M3))).toBe(true);
     expect(quiesceAt(QE_M3, SHIPPED)).toBe(0 - MATE_SCORE);
     expect(quiesceAt(QE_M3, SHIPPED, 3)).toBe(0 - (MATE_SCORE - 3));
-    expect(quiesceAt(QE_M3, SHIPPED, 0, QUIESCENCE_MAX_PLY)).toBe(evaluate(parseFen(QE_M3)));
+    expect(quiesceAt(QE_M3, SHIPPED, 0, QUIESCENCE_MAX_PLY)).toBe(
+      evaluateWithoutTaper(parseFen(QE_M3)),
+    );
   });
 });
 
@@ -1095,14 +1107,14 @@ describe("ABC-228 — the rule rows (`ADR-0053` decision 9; each reds a planted 
   it("out of check the node still stands pat: Q3's free quiet promotion is not searched (pre-ABC-229 rules)", () => {
     const q3 = "8/P6k/8/8/8/8/8/K7 w - - 0 1";
     expect(isInCheck(parseFen(q3))).toBe(false);
-    expect(quiesceAt(q3, PRE_ABC229)).toBe(evaluate(parseFen(q3)));
+    expect(quiesceAt(q3, PRE_ABC229)).toBe(evaluateWithoutTaper(parseFen(q3)));
   });
 
   it("in check below the cap the static score is never returned: every in-check row, every qply 0..7", () => {
     for (const { name, fen } of Q_SET_IN_CHECK) {
       for (let qply = 0; qply < QUIESCENCE_MAX_PLY; qply++) {
         expect(quiesceAt(fen, SHIPPED, 0, qply), `${name} @ qply ${qply}`).not.toBe(
-          evaluate(parseFen(fen)),
+          evaluateWithoutTaper(parseFen(fen)),
         );
       }
     }
@@ -1119,6 +1131,7 @@ describe("ABC-228 — the rule rows (`ADR-0053` decision 9; each reds a planted 
       0,
       SHIPPED,
       () => entered++,
+      phaseOf(position),
     );
     expect(score).toBe(-548);
     expect(entered).toBe(1); // the node itself, at qply 8; nothing past it
@@ -1128,7 +1141,7 @@ describe("ABC-228 — the rule rows (`ADR-0053` decision 9; each reds a planted 
     const stalemate = "k7/8/1Q6/8/8/8/8/7K b - - 0 1";
     expect(legalMoves(parseFen(stalemate))).toHaveLength(0);
     expect(isInCheck(parseFen(stalemate))).toBe(false);
-    expect(quiesceAt(stalemate, SHIPPED)).toBe(evaluate(parseFen(stalemate)));
+    expect(quiesceAt(stalemate, SHIPPED)).toBe(evaluateWithoutTaper(parseFen(stalemate)));
   });
 
   it("no node past qply 8 is visited with evasions on, on every Q-SET row", () => {
@@ -1167,8 +1180,12 @@ describe("ABC-228 — the rule rows (`ADR-0053` decision 9; each reds a planted 
       expect(flat).toContain(
         "const RULES_NEITHER: QuiescenceRules = { evasions: false, quietPromotions: false };",
       );
+      // `ABC-269` puts the tapered record first, picked by `taper` (on only where both switches are).
+      expect(flat).toContain(
+        "const RULES_TAPERED: QuiescenceRules = { evasions: true, quietPromotions: true, taper: true };",
+      );
       expect(flat).toMatch(
-        /const rules = (switches|budget)\.quiescenceEvasions \? \1\.quietPromotions \? RULES_SHIPPED : RULES_NO_QUIET_PROMOTIONS : \1\.quietPromotions \? RULES_NO_EVASIONS : RULES_NEITHER;/,
+        /const rules = (switches|budget)\.taper \? RULES_TAPERED : \1\.quiescenceEvasions \? \1\.quietPromotions \? RULES_SHIPPED : RULES_NO_QUIET_PROMOTIONS : \1\.quietPromotions \? RULES_NO_EVASIONS : RULES_NEITHER;/,
       );
       const calls = [...flat.matchAll(/quiesce\(([^;]*?)\);/g)].map((m) => m[1]);
       expect(calls).toHaveLength(1);
@@ -1186,6 +1203,8 @@ const SWITCH_MODULES = [
     door: "searchWithoutQuietPromotions",
     /** `ABC-268`'s door (`ADR-0061` decision 4): the shipped path less futility, both quiescence switches on. */
     fut: "searchWithoutFutility",
+    /** `ABC-269`'s door (`ADR-0064` decision 7): the shipped path less the taper, every other switch on. */
+    tap: "searchWithoutTaper",
   },
   {
     path: "./engine.ts",
@@ -1193,6 +1212,7 @@ const SWITCH_MODULES = [
     on: "chooseMove",
     door: "chooseMoveWithoutQuietPromotions",
     fut: "chooseMoveWithoutFutility",
+    tap: "chooseMoveWithoutTaper",
   },
 ];
 
@@ -1219,8 +1239,10 @@ describe("ABC-228 — the doors: searchWithoutQuiescenceEvasions and chooseMoveW
     expect(chooseMoveWithoutQuiescenceEvasions.length).toBe(2);
   });
 
-  it("Q2 through the depth-0 seam: search() reads −536, its door the pre-ticket −548", () => {
-    expect(search(parseFen("4k3/8/8/8/8/8/4R3/4K3 b - - 0 1"), 0).score).toBe(-536);
+  // `ABC-269` (`ADR-0064` decision 7): the shipped side re-points to `searchWithoutTaper`, the
+  // shipped path less the taper; the figures do not change (`search()` itself reads −524).
+  it("Q2 through the depth-0 seam: searchWithoutTaper reads −536, its door the pre-ticket −548", () => {
+    expect(searchWithoutTaper(parseFen("4k3/8/8/8/8/8/4R3/4K3 b - - 0 1"), 0).score).toBe(-536);
     expect(
       searchWithoutQuiescenceEvasions(parseFen("4k3/8/8/8/8/8/4R3/4K3 b - - 0 1"), 0).score,
     ).toBe(-548);
@@ -1236,12 +1258,13 @@ describe("ABC-228 — the doors: searchWithoutQuiescenceEvasions and chooseMoveW
   // The sibling of `QE-208-c`: one `quiescenceEvasions` literal per entry, true on the shipped
   // pair only (`ADR-0053` decision 7) — and, since `ABC-229`, on its doors, which keep evasions on;
   // and, since `ABC-268`, on its doors, which keep both quiescence switches on (`ADR-0061` d4).
-  for (const { path, on, door, fut } of SWITCH_MODULES) {
-    it(`${path}: each exported entry passes exactly one quiescenceEvasions literal, true on ${on}, ${fut} and ${door} only`, () => {
+  for (const { path, on, door, fut, tap } of SWITCH_MODULES) {
+    it(`${path}: each exported entry passes exactly one quiescenceEvasions literal, true on ${on}, ${tap}, ${fut} and ${door} only`, () => {
       const found = switchLiterals(path, "quiescenceEvasions");
       expect(Object.keys(found).length).toBeGreaterThanOrEqual(path === "./search.ts" ? 12 : 6);
       expect(Object.entries(found).filter(([, value]) => value === "true")).toEqual([
         [on, "true"],
+        [tap, "true"],
         [fut, "true"],
         [door, "true"],
       ]);
@@ -1385,7 +1408,7 @@ describe("ABC-229 A2 — quiescence sees the queen: Q-SET's quiet-promotion rows
 
   for (const row of Q_SET_PROMOTIONS) {
     it(`${row.id} (${row.kind}): static ${row.stat}, pre-ABC-229 ${row.old}, shipped ${row.new}, and the brute force agrees`, () => {
-      expect(evaluate(parseFen(row.fen))).toBe(row.stat);
+      expect(evaluateWithoutTaper(parseFen(row.fen))).toBe(row.stat);
       expect(quiesceAt(row.fen, SHIPPED)).toBe(row.new);
       expect(quiesceAt(row.fen, PRE_ABC229)).toBe(row.old);
       expect(bruteForce(parseFen(row.fen), 0, 0, SHIPPED)).toBe(row.new);
@@ -1398,7 +1421,7 @@ describe("ABC-229 A2 — quiescence sees the queen: Q-SET's quiet-promotion rows
     expect(safe.map((row) => row.id)).toEqual(["QP-1", "QP-6", "QP-7", "QP-9"]);
     for (const row of safe) {
       expect(quiesceAt(row.fen, SHIPPED), row.id).toBeGreaterThanOrEqual(row.stat + 600);
-      expect(quiesceAt(row.fen, PRE_ABC229), row.id).toBe(evaluate(parseFen(row.fen)));
+      expect(quiesceAt(row.fen, PRE_ABC229), row.id).toBe(evaluateWithoutTaper(parseFen(row.fen)));
     }
   });
 
@@ -1431,6 +1454,7 @@ describe("ABC-229 A2 — quiescence sees the queen: Q-SET's quiet-promotion rows
         (qply) => {
           if (qply > deepest) deepest = qply;
         },
+        phaseOf(parseFen(fen)),
       );
       expect(deepest, id).toBeLessThanOrEqual(QUIESCENCE_MAX_PLY);
     }
@@ -1448,6 +1472,7 @@ describe("ABC-229 A2 — quiescence sees the queen: Q-SET's quiet-promotion rows
         0,
         SHIPPED,
         () => {},
+        phaseOf(position),
       );
       expect(matchesSnapshot(position, before), id).toBe(true);
     }
@@ -1497,13 +1522,15 @@ describe("ABC-229 — the doors: searchWithoutQuietPromotions and chooseMoveWith
     expect(chooseMoveWithoutQuietPromotions.length).toBe(2);
   });
 
-  it("Q3 through the depth-0 seam: search() reads 977, its door the pre-ticket 212", () => {
-    expect(search(parseFen(qpRow("QP-1").fen), 0).score).toBe(977);
+  // `ABC-269`: the shipped side re-points to `searchWithoutTaper`, figures unchanged (`search()` 957).
+  it("Q3 through the depth-0 seam: searchWithoutTaper reads 977, its door the pre-ticket 212", () => {
+    expect(searchWithoutTaper(parseFen(qpRow("QP-1").fen), 0).score).toBe(977);
     expect(searchWithoutQuietPromotions(parseFen(qpRow("QP-1").fen), 0).score).toBe(212);
   });
 
-  it("Q-SET's INFO row kpk-b6c6 through search() at depth 8: 902 shipped, 186 on the door, both b6c6", () => {
-    const head = search(parseFen(KPK_B6C6), 8);
+  // `ABC-269`: the shipped side re-points to `searchWithoutTaper`, figures unchanged (`search()` 917).
+  it("Q-SET's INFO row kpk-b6c6 through searchWithoutTaper at depth 8: 902 shipped, 186 on the door, both b6c6", () => {
+    const head = searchWithoutTaper(parseFen(KPK_B6C6), 8);
     const door = searchWithoutQuietPromotions(parseFen(KPK_B6C6), 8);
     expect([head.score, label(head.move)]).toEqual([902, "b6c6"]);
     expect([door.score, label(door.move)]).toEqual([186, "b6c6"]);
@@ -1511,20 +1538,23 @@ describe("ABC-229 — the doors: searchWithoutQuietPromotions and chooseMoveWith
     expect(searchWithoutQuiescenceEvasions(parseFen(KPK_B6C6), 8).score).toBe(186);
   });
 
-  it("chooseMove reads the INFO row the same way at depth 8; its door does not see the queen", () => {
-    expect(deepenWith(chooseMove, KPK_B6C6, 8).score).toBe(902);
+  // `ABC-269`: re-pointed to `chooseMoveWithoutTaper`, figures unchanged (`chooseMove` 917).
+  it("chooseMoveWithoutTaper reads the INFO row the same way at depth 8; its door does not see the queen", () => {
+    expect(deepenWith(chooseMoveWithoutTaper, KPK_B6C6, 8).score).toBe(902);
     expect(deepenWith(chooseMoveWithoutQuietPromotions, KPK_B6C6, 8).score).toBe(186);
   });
 
   // The sibling of `QE-208-c` for the second switch: one `quietPromotions` literal per entry, true
   // on the shipped pair only (`ADR-0053` decision 7) — and, since `ABC-268`, on its doors, the
-  // shipped path less futility (`ADR-0061` decision 4).
-  for (const { path, on, fut } of SWITCH_MODULES) {
-    it(`${path}: each exported entry passes exactly one quietPromotions literal, and only ${on}'s and ${fut}'s are true`, () => {
+  // shipped path less futility (`ADR-0061` decision 4); and, since `ABC-269`, on its doors, the
+  // shipped path less the taper (`ADR-0064` decision 7).
+  for (const { path, on, fut, tap } of SWITCH_MODULES) {
+    it(`${path}: each exported entry passes exactly one quietPromotions literal, and only ${on}'s, ${tap}'s and ${fut}'s are true`, () => {
       const found = switchLiterals(path, "quietPromotions");
       expect(Object.keys(found).length).toBeGreaterThanOrEqual(path === "./search.ts" ? 12 : 6);
       expect(Object.entries(found).filter(([, value]) => value === "true")).toEqual([
         [on, "true"],
+        [tap, "true"],
         [fut, "true"],
       ]);
     });
