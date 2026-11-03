@@ -1,0 +1,21 @@
+{
+ "refs": [
+  "qe-ABC-275", "grugops/ABC-275", "ABC-275", "ABC-273", "ABC-255", "ABC-247", "ABC-225", "EPIC-011", "ADR-0056", "NFR-008",
+  "R1", "C4", "C3-prime", "QE-255-b", "QE-255-a",
+  "b3436c3a", "ed52e5a2", "30d15584", "099f1d96",
+  "tools/rating/rating.ts", "tools/rating/pair-check.ts",
+  "arch-post-269/20261103T123540Z-architect-design-decision-8136b589",
+  "se-ABC-275/20261103T125536Z-software-engineer-decision-28ef48dc",
+  "se-ABC-275/20261103T125706Z-software-engineer-observation-6964eed1",
+  "se-ABC-275/20261103T125721Z-software-engineer-observation-512109eb"
+ ],
+ "notes": [
+  {"kind": "decision", "bodyFile": "note-verdict.md",
+   "confidence": "high: A1-A5 and A7 MET on QE's own offline runs (whole-vector diff, 34-argv before/after diff, refusals, 0 src lines, 38/38 + gates); 4/4 mutants killed; A6 UNKNOWN - verify at R1 by ruling; merge stays human"},
+  {"kind": "observation", "bodyFile": "note-gaps.md",
+   "refs": ["qe-ABC-275", "grugops/ABC-275", "ABC-275", "ABC-273", "QE-275-a", "QE-275-b", "QE-275-c", "QE-275-d", "QE-255-a", "QE-255-b", "b3436c3a", "tools/rating/rating.ts", "tools/rating/pair-check.ts", "se-ABC-275/20261103T125536Z-software-engineer-decision-28ef48dc"],
+   "confidence": "high on the facts (read and run); severity is QE's judgement: LOW for a doc-only stale usage line the ticket's A3 item 3 pins"},
+  {"kind": "observation", "bodyFile": "note-runs.md",
+   "confidence": "high: commands as run under the host lock, offline only, at 2026-11-03 ~12:59-13:03Z"}
+ ]
+}
