@@ -5,7 +5,7 @@ subtask: qe-ABC-274
 role: qe-e2e
 ref: .grugops/context/qe-ABC-274/
 branch: grugops/ABC-274 (162a4eed + main merged) — worktree .claude/worktrees/se-ABC-274
-width: wrap EVERY test/build/engine run in `flock /tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/host-test.lock <cmd>` — EVERY vitest run too (QE-273-a: an unlocked vitest run was seen during R1). One core. **ALONE window for A5 timing**; record uptime at each session start/end. Set CUTECHESS_CLI/STOCKFISH only if you run games (none expected). If node_modules is missing, symlink main's and remove before commit. Any single run forecast > 1 h: stop and ask.
+width: wrap EVERY test/build/engine run in `flock <scratch>/host-test.lock <cmd>` — EVERY vitest run too (QE-273-a: an unlocked vitest run was seen during R1). One core. **ALONE window for A5 timing**; record uptime at each session start/end. Set CUTECHESS_CLI/STOCKFISH only if you run games (none expected). If node_modules is missing, symlink main's and remove before commit. Any single run forecast > 1 h: stop and ask.
 ---
 # QE verdict on ABC-274 (E2-pre, value-identical)
 Read plans/tickets/ABC-274*.md (A1–A9), ADR-0067 d8 (+ QE-269-f line, seam ruling …3169a174, F8), se notes (…22e25cea, …c4eedfc0, …3219e70e; fix …57960d89, …dfb8e1ba).

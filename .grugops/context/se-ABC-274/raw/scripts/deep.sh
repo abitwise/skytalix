@@ -2,7 +2,7 @@
 # se-ABC-274 deep lanes (copied from se-ABC-269-cut), one at a time, each under the host lock; exit code is vitest's own.
 # usage: deep.sh <worktree> <outdir>
 cd "$1" || exit 1
-L=/tmp/claude-1000/-home-olger-projects-public-skytalix/20e3c19a-6adf-40ba-b854-737faf426551/scratchpad/host-test.lock
+L=<scratch>/host-test.lock
 D=$2; mkdir -p $D
 run() { local name=$1 envv=$2 file=$3
   echo "$(date -u +%TZ) start $name" >> $D/exits.txt
