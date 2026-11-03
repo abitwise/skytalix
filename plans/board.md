@@ -1,3 +1,4 @@
+_Updated: 2026-11-03 Orchestrator (orch-2026-10-30a) — `bapm-gaps-1103` merged (path check clean): **ABC-278** cut (S, P2, 10/10) → `se-ABC-278`; QE-276-a/b accepted LOW with re-open triggers; ABC-276/277 pages Done. Running: se-ABC-278._
 _Updated: 2026-11-03 Orchestrator (orch-2026-10-30a) — **ABC-277 DONE** (merged 541ddf45; post-merge npm test 2 566/2 566; records-path-check exit 0). **From now on the Orchestrator runs `node tools/grugops/records-path-check.js` (real HOME) before every merge into main.** → `bapm-gaps-1103` (ABC-278 hardening ticket for QE-277-a MEDIUM + b–e; 276-a/b routing; pages Done). Running: bapm-gaps-1103._
 _Updated: 2026-11-03 Orchestrator (orch-2026-10-30a) — **ABC-276 DONE** (merged 3dd27cfc; post-merge npm test 2 566/2 566). Owed BA/PM (batch with ABC-277's): QE-276-a/b LOW. Running: qe-ABC-277._
 _Updated: 2026-11-03 Orchestrator (orch-2026-10-30a) — **ABC-277 built** (tools/grugops/records-path-check.js; 5 classes; added lines + .gz; values never printed; runbook § Before a merge into main; standing ruling 2026-11-03; .gitignore symlink fix) → In Review → `qe-ABC-277`. Running: qe-ABC-276, qe-ABC-277._
@@ -1412,7 +1413,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+- [ABC-278] Records path check hardened: text diff whatever .gitattributes says (QE-277-a MEDIUM), .xz, wider foreign-argv, home before . - _, quoted names, both homes + runbook real-HOME line (EPIC-011 hygiene; size: S, priority: P2, DoR 10/10) **cut 2026-11-03 (bapm-gaps-1103) → `se-ABC-278`**
 
 
 
