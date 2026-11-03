@@ -125,6 +125,10 @@ The ADR fixes exact counts before Ready; none of these bars is loosened after Re
 - **One at a time** with `ABC-270`, `ABC-272`, `ABC-239` on `src/evaluate.ts` / `src/evaluate-params.ts`.
 - **E2:** not a wait. `ADR-0056` D2 lists E4 after E2; these three terms are rules, not fitted weights. The ADR may
   still order this after E2 if it shows a reason.
+  *2026-11-03 (`bapm-E2pre-cut`):* `ADR-0067` (PROPOSED, § Consequences 5) gives that reason: king distance and free path become weights
+  the tuner fits, while the rule of the square stays a rule. The recommended order (adopted on `EPIC-011`
+  § Dependencies) is `ABC-269` → `ABC-274` → `ABC-239` → this ticket. The design may still keep the terms as rule
+  values. That is the ADR's call.
 
 ## Definition of Ready
 
