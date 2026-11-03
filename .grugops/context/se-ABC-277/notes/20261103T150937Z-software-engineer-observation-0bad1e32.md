@@ -1,8 +1,8 @@
 ---
-id: 20261103T150842Z-software-engineer-observation-8efecc46
+id: 20261103T150937Z-software-engineer-observation-0bad1e32
 kind: observation
 by: software-engineer
-at: 2026-11-03T15:08:42Z
+at: 2026-11-03T15:09:37Z
 verified_by: 
 confidence: high (every row run under the host lock and read as printed)
 refs:
@@ -26,7 +26,7 @@ refs:
   - memory-bank/45-standing-rulings.md
   - .gitignore
 supersedes: 
-seal: sha256:ecbd971d61788efc65ace5c5b94d0799bac7a3d0ebf182706a5c47e91139b1d3
+seal: sha256:a2d0de427b70dda848a0616b2f80c5fdd47aede528f993cc3ccb389a118752dd
 ---
 
 # SE acceptance as run for ABC-277 (code commit 861de9c5, base main b62e8049): A1–A6 MET, A7 skipped (no owner answer)

@@ -1,8 +1,8 @@
 ---
-id: 20261103T150842Z-software-engineer-decision-c0e2df87
+id: 20261103T150937Z-software-engineer-decision-95af648e
 kind: decision
 by: software-engineer
-at: 2026-11-03T15:08:42Z
+at: 2026-11-03T15:09:37Z
 verified_by: 
 confidence: high (design choices as built; the foreign-argv pattern measured over the tip records)
 refs:
@@ -26,7 +26,7 @@ refs:
   - memory-bank/45-standing-rulings.md
   - .gitignore
 supersedes: 
-seal: sha256:fad17ed8d760a0ae5a8eb4d340105aee44acf17c6b2716cbd82188e8494c3916
+seal: sha256:1072c29dfb2799d4e8dec75619c5d748a2e59662867d54c0cf8a8433bc771bc0
 ---
 
 # SE decisions for ABC-277: the records path check is `tools/grugops/records-path-check.js`, proved outside the lane; A7 skipped
@@ -45,7 +45,7 @@ seal: sha256:fad17ed8d760a0ae5a8eb4d340105aee44acf17c6b2716cbd82188e8494c3916
 - **The `foreign-argv` pattern (Test note 2).** A 2–7 digit PID, not preceded by a letter, digit, `.`, `_`, `:`, `/`, `-` or `=`. Then EITHER an absolute path of 2+ segments and one more argument, OR a bare lower-case command name and an absolute path of 2+ segments. It is matched anywhere in the line.
   - **Changed from a line-start-only form.** The first form missed the SEC-HP-2 line itself. That line is a PID inside `[`, then a bare `node`, then the path.
   - **Excluded:** `=400 flock /…` (a flag value before a command) and `12 plans/x.md` (a count before a relative path).
-  - **Accepted false positives:** `4096 /dev/sda1 mounted`, `120 in /usr/lib/x` and `timeout 600 node /…`.
+  - **Accepted false positives:** `<n> /dev/<disk> mounted`, `<n> in /usr/<dir>/<x>` and `timeout <n> node /…`. They are written here with placeholders: in their literal form, this note itself failed the check at `b1e82928`. That was a live positive control, and it is also a warning: an example of the argv class must be written with placeholders too.
   - **Not seen:** a `ps aux` line, where the user comes first.
 - **The tests are outside the lane (`NFR-008`, its second form).** The tests are `tools/grugops/records-path-check.proof.js`, run by `node --test`. A `.proof.js` is not collected by vitest, so the change adds 0 lane rows.
 - **Synthetic fixtures (dispatch over Test note 1).** The fixtures use a made-up home, user, uid and PID, built in code at run time and passed through a `home` seam. One in-memory row proves that the default home is `os.homedir()`. No real path is written to any file.

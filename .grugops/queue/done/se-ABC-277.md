@@ -33,7 +33,8 @@ Publish: sealed notes (task se-ABC-277, contextRoot = worktree's .grugops/contex
 - **Positive controls on history:**
   - The SEC-HP-2 file, line 5, is caught as home-path and foreign-argv.
   - `--base HEAD~40` (281 files) gives 62 findings in 155 ms, with 0 values printed.
-- **Test note 2:** the foreign-argv pattern was broadened after it missed the SEC-HP-2 shape. The note `c0e2df87` names the pattern, the excluded case and the accepted false-positive cases.
+- **Test note 2:** the foreign-argv pattern was broadened after it missed the SEC-HP-2 shape. The note `95af648e` names the pattern, the excluded case and the accepted false-positive cases.
 - **Not done:** the board move from In Development to In Review is left to the Orchestrator, because of the parallel ABC-276 branch.
-- **Notes:** written with grugops `admitAndAppend` under the worktree context root, 0 findings, index rendered. They are `20261103T150842Z-software-engineer-decision-c0e2df87`, `…-observation-8efecc46` (acceptance as run) and `…-observation-c68b59ef` (branch and files).
+- **Notes:** written with grugops `admitAndAppend` under the worktree context root, 0 findings, index rendered. They are `20261103T150842Z-software-engineer-decision-95af648e`, `…-observation-0bad1e32` (acceptance as run) and `…-observation-f71efacd` (branch and files).
 - **STOP:** none. Nothing is left running, and the node_modules symlink is removed.
+- **Re-seal (self-caught):** at `b1e82928`, the check failed this branch's own decision note (foreign-argv, on the accepted-false-positive examples written literally). The examples now use placeholders. The three notes, which were never merged, were removed and sealed again under the ids above. After that the check on the branch exits 0.

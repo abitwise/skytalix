@@ -1,8 +1,8 @@
 ---
-id: 20261103T150842Z-software-engineer-observation-c68b59ef
+id: 20261103T150937Z-software-engineer-observation-f71efacd
 kind: observation
 by: software-engineer
-at: 2026-11-03T15:08:42Z
+at: 2026-11-03T15:09:37Z
 verified_by: 
 confidence: high
 refs:
@@ -26,7 +26,7 @@ refs:
   - memory-bank/45-standing-rulings.md
   - .gitignore
 supersedes: 
-seal: sha256:995f026e062b98e638e4e0722348ed769a8610a2a29c794a08f1a7d9b23b0831
+seal: sha256:80b1e4af3c41ade34be4244c6fc07359a4eba8f6ebfdd093d9acf16e773e482f
 ---
 
 # SE branch and files for ABC-277 (an observation, because there is no gate verdict for an artifact-ref)
