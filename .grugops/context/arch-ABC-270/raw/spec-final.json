@@ -1,0 +1,8 @@
+{
+  "refs": ["arch-ABC-270", "grugops/arch-ABC-270", "ABC-270", "E3", "EPIC-011", "ADR-0068", "ADR-0031", "ADR-0064", "ADR-0061", "ADR-0067", "ADR-0056", "ABC-239", "ABC-274", "ABC-272", "ABC-083", "QE-269-a", "Q-3K-4", "OD-205-1", "OD-205-2", "NFR-005", "NFR-001", "dc7dc15d", "arch-ABC-270/20261103T202104Z-architect-design-decision-117475f9", "arch-ABC-270/20261103T202530Z-architect-design-decision-3f24d8a0", "orch-2026-10-30a/20261103T200613Z-orchestrator-decision-af126c04"],
+  "notes": [
+    { "kind": "decision", "confidence": "high on the verdict (the pre-registered choice rule applied as written) and on the order (host-time arithmetic and the convex fit); medium on the forecasts (S1-S3 on the emitted set, B-T5's risk); acceptance is the owner's", "bodyFile": "notes/decisions.md" },
+    { "kind": "observation", "confidence": "high on the figures (deterministic scratch runs under a sealed PREREG; I1 and I2 exact); medium on the readings of why (the KQK pruning cause, D5 on one own-games corpus)", "bodyFile": "notes/results.md" },
+    { "kind": "observation", "confidence": "high (paths in this commit; an observation because an artifact-ref needs a gate_run, and no gate ran)", "bodyFile": "notes/artifact.md" }
+  ]
+}

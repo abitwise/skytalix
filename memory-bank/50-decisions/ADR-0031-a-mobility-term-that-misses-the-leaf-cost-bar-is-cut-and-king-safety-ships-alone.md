@@ -148,6 +148,16 @@ addendum's phase weights (N 1, B 1, R 2, Q 4, clamped to 24) and its king endgam
 truncated once, over the white-minus-black sum, rather than per king. The queen scale (`A1`) and the shelter gate
 (`A3`) stay accepted, not shipped. They are input to E3 (`ADR-0056` D2), not to E1.
 
+*Dated 2026-11-03 (`arch-ABC-270`, `ADR-0068` PROPOSED):* **A1's form is carried by `ADR-0068` as structure, with
+tuner-owned values; A1's rule values are not proposed; A3 is out.**
+- A1 as three queen-on exposure pairs at 0 (value-identical), which `ABC-239`'s first pull fits.
+- The rule values (× 3, with endgame halves 0) were probed under a sealed PREREG. They fail the mate floor at d5
+  against d5 (2 / 190, KQK mates found one ply deeper), so they are not proposed.
+- A3 gates "a positive middlegame king-table value", and `ABC-215`'s `KING_MG` has none (max 0 on b1 / g1). It gates
+  nothing on `main`. It re-opens only by its own ADR if a tuned `KING_MG` gains a positive cell.
+- `OD-205-1` / `OD-205-2` stay accepted text. They cannot move under `ADR-0068`, because they sit on older doors and the
+  build is value-identical.
+
 **ACCEPTED** 2026-10-24 by the owner, on this text with `A6` and `A7`: verbatim *"accept your recommendations,
 other session paused"* (`…fb0468ff`). `OD-205-1` and `OD-205-2` are accepted. Recorded by Architect/Design (task
 `arch-accept-owner-words-2026-10-24`).
