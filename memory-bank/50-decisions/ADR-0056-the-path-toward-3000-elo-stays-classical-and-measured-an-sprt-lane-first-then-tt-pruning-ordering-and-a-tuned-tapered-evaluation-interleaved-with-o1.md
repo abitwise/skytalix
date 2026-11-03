@@ -197,6 +197,29 @@ nothing run): the lines owed by `arch-ABC-239` `…e4c34239` § 5.
   pending. See D7's dated line.
 - **Still open (his):** Q-3K-6, Q-3K-7 (a) / (b) / (c), Q-3K-8, Q-3K-9, `ADR-0067` acceptance, and B-T8.
 
+**Folded 2026-11-03** (task `arch-post-269`, records only, on `grugops/arch-post-269` from `main` `128e3c6c`; nothing
+run): after `ABC-269`'s merge `54dee3f2` (QE PASS_WITH_GAPS `…eff2fe64`). Notes: the pool `…ee31f3ee`, the R1 ruling
+`…8136b589`.
+
+- **E1 is in force on `main`** (`ADR-0064`, status line of this date). Row E1 is done. D6 Phase 4 moves to `ABC-274`.
+- **The S′ pool at E 1 810 opens with one merged build.** The rule is this section's dated amendment of 2026-11-02
+  (`arch-ABC-233`): merged builds only, E′ = E + X − 168.4 once 30 or more pooled games leave 60–85 %.
+  - **The pool now:** `qe-ABC-269`, candidate `be87a2f1`, merged as `54dee3f2`: W/L/D **7/3/0** (`…2c51ee30`). That is
+    **7.0 / 10 = 70.0 %**. No other build has played S′ at E 1 810: `ABC-268`'s 8/2/0 closed the E 1 650 pool, and no
+    build merged between the 1 810 ruling and `ABC-269`.
+  - **No step fires.** The pool holds 10 games, below 30, so the trigger is not read. For scale, 70.0 % lies inside
+    60–85 % in any case. Its Elo against E is X = −400 · log₁₀(1 / 0.7 − 1) = +147.2, which equals cutechess-cli's
+    printed figure. That is a 10-game point estimate, ± 385 at 95 %.
+  - **What would fire it at 30 games.** If the next 20 pooled games score **≥ 19.0** (26.0 / 30 = 86.7 %), the pool
+    steps up with no owner ask. If they score **≤ 10.5** (17.5 / 30 = 58.3 %), the downward question goes to the owner.
+    Anything between moves nothing.
+  - `ABC-274` plays no games (value-identical), so it adds nothing to the pool. R1 is at 100 ms, a different control,
+    so its games never pool.
+- **R1–R3 survive, re-pointed to C4's 100 ms reading. R1's command needs one `tools/`-only change first.** The ruling
+  and the exact command are in D6's dated line of this date. R1 is not asked of the owner: it is estimated at
+  0.4–0.9 h, under 1 h.
+- **Still open (his):** unchanged from the block above.
+
 *Original status, kept:* **PROPOSED** 2026-11-01 by Architect/Design (task `arch-algo-analysis`, records and reading only, at `main` `bae25131`).
 **Nothing is decided here.** Nothing was run, built, benchmarked or played: `qe-ABC-223` holds the host STRICTLY ALONE.
 Every Elo figure below is either quoted from a sealed reading (named) or is an **estimate** with its basis. An
@@ -1195,6 +1218,8 @@ The settings in use:
 - **C1's "when to spend it":** the claim is spent only when a 100 ms reading of that kind on the latest head, plus the
   measured offset, reaches 3 000.
 - `r` at 100 ms (skytalix and Stockfish both at `st=0.1`) is cut with A0, not now.
+  - *Dated 2026-11-03 (`arch-post-269`): pulled forward. Its first user is R1 (`ABC-273`), not A0. The change is
+    `tools/` only, and its shape is in D6's dated line of this date. A0 and A1 later use the same command.*
 
 ### D6. The order proposed (speed and algorithms interleaved)
 
@@ -1306,6 +1331,80 @@ evidence.
   - `ABC-273` (R1) stays after E1, where BA/PM placed it.
 - "E3–E7, each added and re-tuned" in item 5 still stands. This line only names the tickets and puts E2-pre between
   E1 and E2. The reorder paragraph under item 7 allows it.
+
+*Dated 2026-11-03 (`arch-post-269`, records only, at `main` `128e3c6c`; nothing run): **the R1–R3 control ruling**,
+which `ABC-273`'s DoR row 10 owes (`EPIC-011` § The owner's answers, "Still open … R1–R3").*
+- **Item 1 is done.** `ABC-269` merged at `54dee3f2`, and E1 is in force (`ADR-0064`). `ABC-274` is next.
+- **R1–R3 survive, as `EPIC-011` G2's milestone readings.** Their control is C4's 100 ms reading against Stockfish
+  (D5, "C4 and C1 re-pointed"). Reasons:
+  1. The owner-answers fold restated item 7 without naming R1–R3, but it did not withdraw them. Item 7's "an R
+     milestone reading after Phases 2, 4 and 5" still stands, and D6's dated lines of 2026-11-02 and 2026-11-03 place
+     R1 after E1.
+  2. Nothing else gives G2 an outside number between the anchors. C3″ and C2′ are self-play. S′'s 10 games see only a
+     collapse. A0 and A1 run at 40/15 and are asked of the owner.
+  3. C1 is timed by "a 100 ms reading of that kind on the latest head, plus the measured offset". An R reading is that
+     reading. It tells the Orchestrator when asking for A1 or C1 is worth the owner's hours.
+  - **The shape:**
+    - one build, `main`, at 200 games: openings 1–100 with both colours, one game at a time;
+    - skytalix at `st=0.1` with `timemargin` 50 ms, at level 5 with no `Skill Level` sent, `restart=on`;
+    - Stockfish 19 at `UCI_LimitStrength`, `UCI_Elo` E, `st=0.1` with `timemargin` 2 000 ms, `Threads 1`, `Hash 16`,
+      `restart=on`;
+    - `ABC-204`'s depth guard;
+    - E by the band rule (25–75 %). Above E 2 600, C3′'s probe runs first.
+  - **The timing:** R1 after E1 (now), R2 when Phase 4 closes, R3 after Phase 5.
+  - **No duplicates:** an R reading and an anchor's 100 ms half on the same `main` SHA are one reading, not two.
+  - **The milestone named:** by D5's claim rule, M is met when a 200-game reading at E = M scores ≥ 50 %. A reading at a
+    band-rule E below 2 200 names **"none"** and reports X ± Y, as `ABC-273` scope 3 already says.
+- **R1 has no runnable command today.** This was read from `tools/rating/rating.ts` at `128e3c6c`, not run.
+  - `r` accepts only `--budget-ms 500`: `--budget-ms 100` throws "r takes only 500".
+  - Stockfish's `st=0.5` is fixed in `cutechessArgs`.
+  - `rpair` plays at 4 000 ms, and `d` is self-play. So `ABC-273` scope 2's "UNKNOWN - verify" resolves to: **a
+    harness gap**. `ABC-273`'s own § Out of scope sends that to a new ticket.
+- **The change (`tools/` only, size S; BA/PM cuts it, and `ABC-273` depends on it).** It is `ABC-255`'s item 2
+  narrowed to `r`. `rpair` has no user and is left alone.
+  1. `r` accepts `--budget-ms 100` as well as 500. At 100, skytalix gets `st=0.1` with `timemargin=50` (the existing
+     `SHORT_MARGIN_MS` entry), and Stockfish gets `st=0.1` with `timemargin=2000`, in place of `st=0.5`.
+  2. At 100, `--elo` above 2 600 is refused, until C3′'s probe gives a rule.
+  3. Without the flag, and at 500, every `r` argv, every default, every pin and every `--dry-run` output stays
+     byte-equal. `d` and `rpair` are untouched.
+  4. Acceptance:
+     - one `--dry-run` row for R1's command, printing both engines at `st=0.1` and `option.UCI_Elo=1810`;
+     - the existing dry-run rows unchanged;
+     - 0 lines under `src/` (R-TC).
+- **R1's command, once that change has merged** (QE, host ALONE, under the host lock; paths out of the records,
+  `ADR-0049` d4; `QE-269-j`):
+
+  ```sh
+  CUTECHESS_CLI=<cutechess-cli 1.5.1, sha256 dc776901…2154f40a> \
+  STOCKFISH=<Stockfish 19, sha256 c78c22a9…4593e352d2> \
+  node tools/rating/rating.ts r <main-sha> <out> --elo 1810 --budget-ms 100 --rounds 100 --concurrency 1
+  ```
+
+  - **Both environment variables must be set.** The tool has no default and stops before any build when either is
+    missing (`ABC-204`; `qe-ABC-269`'s first B8 launch).
+  - **`--concurrency 1` must be written out,** because `r` defaults to 2. `--rounds 100` is `r`'s default, written out
+    so the record shows 200 games.
+  - **E 1 810 is the starting value; QE confirms it in the PREREG.** At 0.5 s the S′ pool puts `main` near 1 957 ±
+    385. 100 ms is about 2.3 doublings slower, so at 50–100 Elo a doubling that is about 1 730–1 840. Against 1 810
+    that expects about 40–55 %, inside the band (an estimate). Stockfish's pick depth is 4, and `st=0.1` holds with
+    headroom below E 1 910 (C3′). Sharing S′'s E does not pool anything, because the control differs.
+- **Host time: about 0.4–0.9 h (estimate), so R1 is not asked of the owner** (`ABC-273` R1-A3; asked only over 1 h).
+  - The basis is two readings from `qe-ABC-269`'s B8. C2′ at 100 ms on both sides played 100 games in 23 min 50 s,
+    builds included: 14.3 s a game at about 71 moves a side. S′ games against Stockfish ran about 33 moves a side.
+  - At 0.1 s a move on both sides, a game is about 6.6–14.2 s, and 200 games take 22–47 min, plus one build.
+  - QE re-estimates in the PREREG. **If that estimate is over 1 h, the owner is asked before the start.**
+  - **If the band rule steps E,** the second 200 games are a new run. The two together pass 1 h, so the step's run is
+    asked of the owner first.
+- **Rejected:**
+  - **R1 at S′'s 0.5 s control, with today's tool and no code.** The command would be
+    `r <main-sha> <out> --elo 1810 --budget-ms 500 --rounds 100 --concurrency 1`. S′ measured 32.2 s a game (10 games
+    in 5 min 22 s), so 200 games take about **1.8 h**: over 1 h, so it would be asked. It also reads on a scale that
+    C1 and C4 do not use.
+  - **`rpair` at 4 s:** two builds and hours of host time, on the retired 4 s scale.
+  - **`d`:** self-play, so it gives no outside number.
+  - **Dropping R1–R3:** G2 would have no reading below the owner-asked anchors.
+- **No owner item is created.** This is a measurement setting inside the accepted D5/C4 control. The `tools/` change is
+  delivery, already designed in `ABC-255`'s re-scope.
 
 ### D7. What is the owner's call
 

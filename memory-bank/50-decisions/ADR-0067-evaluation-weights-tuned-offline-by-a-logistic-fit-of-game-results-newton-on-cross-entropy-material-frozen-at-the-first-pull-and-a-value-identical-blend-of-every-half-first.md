@@ -53,6 +53,7 @@ id: ADR-0067
 | 2026-11-03 | BA/PM | E2-pre cut as `ABC-274` (S, P2) | `bapm-E2pre-cut` `…a193625d` |
 | 2026-11-03 | Orchestrator | `ABC-274` exempt from S2 nps (reported only); `G2` ≤ 1.05 × and `G6` "≥ base" graded | `orch-2026-10-30a` `…690d3b30` |
 | 2026-11-03 | Architect/Design | F8 written (E2-pre's falsifier and disposition). `ADR-0064` F3's cut C1 read against d8: the packed form stays recommended | `arch-fold-1103b` |
+| 2026-11-03 | Architect/Design | `ABC-269` merged (`54dee3f2`), so A5's base exists. A5's PREREG content written ahead (`QE-269-f` / `-g`); no bar moved | `arch-post-269` `…3f30baf8` |
 
 ## Context
 
@@ -230,7 +231,30 @@ id: ADR-0067
        Engineer shows it fits. The row exists so that a later table that would overflow (`ABC-239`'s emitted set)
        turns it red instead of silently giving wrong values. It reads the table, so it moves no expectation (A7). It is
        owed to the ticket page as a fold line (BA/PM).
-9. **Data.**
+   - *Dated 2026-11-03 (`arch-post-269`, records only, at `main` `128e3c6c`; `qe-ABC-269` `QE-269-f` LOW and
+     `QE-269-g` INFO, `…9ba289c2`): **what A5's PREREG says before the reading.** The bar stays **≤ 1.0500**, and no
+     bar, session count or statistic moves.*
+     - **Why.** `ABC-269`'s `G2` met at R = 1.0373 by 0.0127. Session 2 alone read 1.0560. Between the two sessions r
+       moved 0.037 and the control c moved 0.023 (1.0200 → 0.9974). So that bar was met by about one session's
+       spread. A5 uses the same instrument, so its reading near 1.05 is just as coarse.
+     - **The A5 PREREG is sealed before anyone times `ABC-274`'s build**, by its reader (QE, as the ticket page
+       says), and it states:
+       1. **The bar and the statistic:** as `…e36ee7ca` had them. R = (r₁ + r₂) / 2 with r_s = mean(H) / mean(B), MET
+          iff R ≤ 1.0500 on the unrounded value. No third session and no tie-break. A miss is F8 (b).
+       2. **The arms:** as this decision's dated line of `arch-fold-1103b` says. H is `ABC-274`'s shipped tapered
+          entry. B is the pre-ticket head, `main` `54dee3f2` (or the later `main` it is built on, named). C is a copy
+          of B. All three are called `ev(position, phase)` with the phase computed once per root. The ratio against
+          `58fa3eb4` is reported, not graded.
+       3. **The void rule:** c_s outside [0.970, 1.030] voids that session. One re-run is allowed. A second void in the
+          same slot is a STOP to Architect/Design.
+       4. **The spread, stated ahead as a report:** each r_s, |r₁ − r₂|, and each arm's per-round min–max. The reference
+          spread is `qe-ABC-269`'s, 0.037 in r. If |R − 1.0500| ≤ 0.037, the verdict line adds "within one session
+          spread". The label grades nothing: MET stays MET and a miss stays a miss.
+       5. **The round order in words** (`QE-269-g`): "rounds 2, 4 and 6 (counted from 1) reverse the session's arm
+          list; round 1 is the dropped warm-up", which is how `g2b.ts`'s `r % 2` with a 0-based `r` runs.
+          Session 2 lists the arms in reverse (`ADR-0031` d3).
+     - **The forecast stays `UNKNOWN - verify`.** The packed form keeps one table read and one add per piece, which is
+       `main`'s count, so a reading near 1.00 × the pre-ticket head is expected. Nobody has measured it.
    - **Default (A1), today: own self-play games.**
      - Source: every PGN tracked at the fit commit whose two players are both this engine.
      - Each future C2′ / C3″ read adds 100–400 games through M0 (`ABC-255`).
@@ -290,7 +314,7 @@ id: ADR-0067
 | **F5** | `NFR-005` | a `G6` run below depth 6 | NOT MET. There is no cost cut to take on a constants-only diff |
 | **F6** | 11, the strength premise | C2′ < 50.0, an S′ collapse, or a red Levels lane | NOT MET, not re-played. **No set is ever re-fitted on play results**, and the configuration and λ are never chosen on play. A new attempt is a new data set or free set with a new pre-registration |
 | **F7** | 7: reproducibility | B-T3 not byte-identical | a defect |
-| **F8** | 8: E2-pre (`ABC-274`) is value-identical and cheap. *Added 2026-11-03 (`arch-fold-1103b`)* | (a) `ABC-274` A1 / A2 / A4 / A7: a node, score or move mismatch against the pre-ticket head, an `Object.is` miss, or a test expectation that has to move; (b) A5: `G2` above 1.05 × the pre-ticket head (the mean of two sessions, `ADR-0031` d3); (c) A6: a `G6` board's median depth below the pre-ticket head's, or any run below depth 6 | (a) a defect. It is fixed before any cost bar is read, and never re-pinned. (b) or (c): STOP to Architect/Design. **One value-identical cut is allowed, then one re-read of the bar that missed,** under a PREREG sealed before the re-read. If the build is not packed, the cut is the packed score. If it is already packed, the Architect names the cut. A second miss: **not merged**. No value is tuned to pass, and no bar moves. `ABC-239`'s A3 / A4 then cannot hold as written. Its re-plan (the blend folded into E2, § Alternatives) needs a new dated decision here, and the owner's word for any bar it changes. S2 nps is reported, never graded (`…690d3b30`) |
+| **F8** | 8: E2-pre (`ABC-274`) is value-identical and cheap. *Added 2026-11-03 (`arch-fold-1103b`)* | (a) `ABC-274` A1 / A2 / A4 / A7: a node, score or move mismatch against the pre-ticket head, an `Object.is` miss, or a test expectation that has to move; (b) A5: `G2` above 1.05 × the pre-ticket head (the mean of two sessions, `ADR-0031` d3); (c) A6: a `G6` board's median depth below the pre-ticket head's, or any run below depth 6 | (a) a defect. It is fixed before any cost bar is read, and never re-pinned. (b) or (c): STOP to Architect/Design. **One value-identical cut is allowed, then one re-read of the bar that missed,** under a PREREG sealed before the re-read. If the build is not packed, the cut is the packed score. If it is already packed, the Architect names the cut. A second miss: **not merged**. No value is tuned to pass, and no bar moves. `ABC-239`'s A3 / A4 then cannot hold as written. Its re-plan (the blend folded into E2, § Alternatives) needs a new dated decision here, and the owner's word for any bar it changes. S2 nps is reported, never graded (`…690d3b30`). *Dated 2026-11-03 (`arch-post-269`, `QE-269-f` / `-g`):* A5's PREREG states the session spread and the round order ahead of the reading (decision 8's dated line). The bar stays 1.0500 |
 
 ## Alternatives
 

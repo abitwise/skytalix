@@ -6,7 +6,39 @@ id: ADR-0064
 
 ## Status
 
-**ACCEPTED 2026-11-02 by the owner. NOT IN FORCE on `main` until `ABC-269` merges.** His words, verbatim
+**ACCEPTED, IN FORCE on `main` since 2026-11-03**, at the `ABC-269` merge `54dee3f2` (2026-11-03T12:25:48Z).
+Recorded by Architect/Design (task `arch-post-269`, records only, on `grugops/arch-post-269` from `main` `128e3c6c`).
+Nothing was run.
+- **The merge:** the Orchestrator merged on `qe-ABC-269`'s PASS_WITH_GAPS (`…eff2fe64`), which signs UAT under the
+  owner's delegation. No gap blocks; one is LOW (`QE-269-f`) and five are INFO (`…9ba289c2`). The candidate head was
+  `grugops/ABC-269` `be87a2f1`, with cut C1 in it.
+- **QE's readings, as recorded:**
+  - **B6, `G2`:** read once under the PREREG `…e36ee7ca`: R = (1.0186 + 1.0560) / 2 = **1.0373 ×** ≤ 1.0500, MET
+    (unrounded 1.0373360328). Both sessions were valid on the control (c = 1.0200, 0.9974) (`…cebf49fe`). The margin
+    is 0.0127, about one session's spread (`QE-269-f`, answered in `ADR-0067` decision 8's dated line of this date).
+  - **B5:** 1 flip in 2 986 sampled firing nodes, worst error 17 cp, none ≥ 100 cp. **B7** (`G6` at 4 000 ms,
+    `Q-3K-4` = (b)): every run at depth 9 / 10, no WARN, medians equal base (`…48b34063`).
+  - **B8:** C2′ **57.0 / 100** against the merge-base `01a67c5d` at 100 ms (W/L/D 44/30/26, Elo **+49.0 ± 59.5**,
+    LOS 94.8 %, 0 faults, 0 time losses), so GAIN is MET (bar ≥ 50.0). S′ **7.0 / 10** at E 1 810 (7/3/0), MET.
+    Levels deep lane **57 / 57**, MET (`…2c51ee30`).
+  - B0's 11 counts exact, `npm test` 2 566 / 2 566, S1–S3 +13 / +13 / +23 (a report; `ABC-270`'s first graded rows),
+    D1–D6 all ≥ 20 cp (`…3fb121de` is QE's re-read).
+- **After the merge, on `main`** (the Orchestrator, board line of 2026-11-03): `npm test` 2 566 / 2 566.
+- **What 57.0 means** (as for `ADR-0061`): a point estimate ≥ 0. The ± 59.5 interval crosses 0, so it is not a proven
+  gain (`QE-269-i`).
+- **The shipped evaluation now:** `main`'s `evaluate` is tapered by one phase (decisions 1–2), with endgame halves for
+  the king square and the passed pawns only. In the search the phase is carried by the recursion (cut C1), not by
+  `Position`. The door pair still turns it off in tests. Per `QE-269-h` (a report), the carried phase costs
+  +2.4–4.5 % ns per node against the pre-E1 `main`; B7 shows no depth lost.
+- **What follows from it:**
+  - **`ABC-274`'s base** (E2-pre, `ADR-0067` d8 / F8) is this `main`: `54dee3f2`, cut C1 included.
+  - **The S′ pool at E 1 810 opens** with this merge's 7.0 / 10. No step fires (`ADR-0056` S′, dated line of this
+    date).
+  - **R1 (`ABC-273`)'s window opens.** Its control is ruled in `ADR-0056` D6's dated line of this date.
+  - P1 re-opens only on a new named premise read against this tree (`ADR-0056` D6). None is named here.
+- **Rollback** is as § Rollback states: the switch and its doors.
+
+*Earlier status, kept:* **ACCEPTED 2026-11-02 by the owner. NOT IN FORCE on `main` until `ABC-269` merges.** His words, verbatim
 (`orch-2026-10-30a` `…cc7db847`): *"64 yes, Q-3K-4 b"*. Recorded 2026-11-03 by Architect/Design (task
 `arch-ABC-269-rule`, records only, on `grugops/arch-ABC-269-rule` from `main` `17725732`). Nothing was run.
 
@@ -68,6 +100,10 @@ measured run.
 | 2026-11-03 | Architect/Design | **`QE-269-a` ruled (a)**, the claim narrowed. `QE-269-b` and `-c` wording. The owner's two answers folded | `arch-ABC-269-rule` `…8ccb561f` |
 | 2026-11-03 | Software Engineer | Built; B0 exact, B1–B4 met; **B6 (`G2`) 1.0711 / 1.0672 ×, a miss: F3** | `se-ABC-269` `…7445784f`, `…669f366c` |
 | 2026-11-03 | Architect/Design | **F3 on `G2`:** the miss ruled real; the one cut ordered (C1, the phase leaves the walk); the one re-read pre-registered | `arch-ABC-269-F3` `…a0468a78`, PREREG `…e36ee7ca` |
+| 2026-11-03 | Software Engineer | Cut C1 built; P1–P7 green; B0 11 / 11 exact | `se-ABC-269-cut` `…8e00e712`, `…c9da2d0f` |
+| 2026-11-03 | QE/E2E | **`G2` MET 1.0373 ×** (read once); B5, B7, B8 MET; **PASS_WITH_GAPS**, signs UAT | `qe-ABC-269` `…cebf49fe`, `…eff2fe64`, gaps `…9ba289c2` |
+| 2026-11-03 | Orchestrator | **Merged** `54dee3f2`; post-merge `npm test` 2 566 / 2 566 | board line of 2026-11-03 |
+| 2026-11-03 | Architect/Design | **IN FORCE** line; `QE-269-f` answered in `ADR-0067` d8; `QE-269-g` wording fixed | `arch-post-269` `…3f30baf8` |
 
 **2026-11-03, `QE-269-a`: ruling (a). The claim is narrowed; no bar is loosened or re-opened.**
 
@@ -162,6 +198,11 @@ measured run.
   - ns per node is reported beside it, so that a cost moved rather than cut is visible.
   - **If it is met:** B5, B7 (graded on `NFR-005`'s floor under `Q-3K-4` = (b), median reported) and B8.
   - **If it is not met:** the second miss. **Not merged**, and this ADR gets its "accepted, not in force" line.
+  - *Dated 2026-11-03 (`arch-post-269`): it was met, 1.0373 × (`…cebf49fe`), and the build merged (§ Status).*
+  - *Dated 2026-11-03 (`arch-post-269`, `QE-269-g`, wording only):* the PREREG's "odd rounds run the arm list in
+    reverse" is read as `g2b.ts` runs it: `r % 2 === 1` with `r` counted from 0, that is, **rounds 2, 4 and 6 counted
+    from 1**. Round 1, the dropped warm-up, runs the session's listed order. QE ran it that way. The sealed note keeps
+    its text. A later PREREG of this shape says "rounds 2, 4 and 6 (counted from 1) reverse the session's list".
 - **Rollback of the cut alone:** revert its commit. It is value-identical, so nothing else moves.
 
 ## Context
