@@ -18,3 +18,31 @@ Decide and write ADR-0067 PROPOSED:
 - Dependencies: say plainly whether the build must wait for ABC-269's merge (expected yes) and whether ABC-270/271/272 should go before or after the tuner.
 Fences: memory-bank/50-decisions + your records + scratch under the scratchpad (no committed src/tools). Do NOT edit ADR-0056, EPIC-011 or ticket pages — list owed lines in a note. No push, force, amend, rebase, merge into main. Leave nothing running.
 Publish: sealed notes (task arch-ABC-239, contextRoot = worktree's .grugops/context); queue moves inside your worktree; commit; ## Result; brief + claim to done/.
+
+## Result
+*architect-design (claude-opus-5-5), 2026-11-03T10:50:42Z*
+- **`ADR-0067` PROPOSED** (acceptance is the owner's). It sets a logistic fit of game results (Texel-style), with
+  cross-entropy, K fixed first, and Newton steps on a traced linear model behind an identity gate.
+  - Material is frozen at the first pull, and the free set is sign-bounded (C-S or C-F by an inner-split rule).
+  - `tools/tune/` writes only `src/evaluate-params.ts`, byte-reproducible.
+  - E2-pre (blend every half, value-identical) goes first.
+  - Intent GAIN. Bars B-T0–B-T8, falsifiers F1–F7.
+- **Prototype** (scratch, on E1 `b7a8fc3a`, own self-play PGNs at `af15cbc9`: 3 431 games, 254 485 rows):
+  - G-P1 0 misses (worst 0.958 cp), G-P2 K 0.585, G-P3 **0.9863 ×** E1's outer cross-entropy. All hold, so the verdict
+    is "the loss moves on own games".
+  - The unconstrained fit is implausible (queen 2 593 / 137). The diagnostics put the cause in the data, not the loss.
+  - Bounded, the move is 0.9960 × (inner split). The king tables come out about 3 × under-weighted in every fit.
+  - About 1 min of host in all.
+- **Order:** `ABC-269` merge (the build waits: yes) → E2-pre (new ticket, S) → `ABC-239` → `ABC-270` and `ABC-271`
+  (after the tuner; `ABC-270` may go first if `ABC-239` stalls on data) → `ABC-272` order free.
+- **Notes:**
+  - PREREG `…9ed1db11` and addenda `…255e9bcf` and `…f8d36d73`;
+  - results `…48ae6a93`, decisions `…e4c34239` (owner questions § 4, owed lines § 5), artifacts `…ad30a5b9`.
+- **Commits:** claim and PREREG `ed922f3e`; addenda `acc97083`, `a2bbdee0`; ADR, notes and raw `7344fcc5`; this Result
+  and the move to done/ in the closing commit. Not pushed, not merged.
+- **Open:**
+  - Owner: Q-3K-7 (a) Lichess CC0 for training (recommend yes), (b) a Stockfish-labelled set (recommend no), (c)
+    games against Stockfish (recommend no); B-T8, the outside pair before merge (recommend yes); accepting
+    `ADR-0067`.
+  - BA/PM: cut E2-pre; the `ABC-239` page lines.
+  - Architect: the `ADR-0056` / `ADR-0064` pointer lines.
