@@ -1,0 +1,32 @@
+ABC-121 A1 chooseMove to d5: 97.86% within 25 cp of 187, max 63 cp (position-6/f3h4: 566 -> 629); mate-status flips on the 190: 0 (a report, not a bar)
+ABC-121 A1 mate floor d4 -> d5: 0 of 180 violated
+ABC-121 A1 search() d5: 97.86% within 25 cp of 187, max 63 cp (position-6/f3h4: 566 -> 629); mate-status flips on the 190: 0 (a report, not a bar)
+ABC-208 A3 chooseMoveWithoutQuiescenceEvasions to d5: 100.00% within 25 cp of 187, max 8 cp (position-6/f3d4: 565 -> 573); mate-status flips on the 190: 0 (a report, not a bar)
+ABC-208 A3 mate floor d5 -> d5: 0 of 189 violated
+ABC-208 A3 searchWithoutQuiescenceEvasions d5: 100.00% within 25 cp of 187, max 25 cp (position-5/e1f2: -228 -> -203); mate-status flips on the 190: 0 (a report, not a bar)
+ABC-228 A4 kiwipete d6: 324162 / 237007 = 1.368x
+ABC-228 A4 position-6 d6: 154464 / 109912 = 1.405x
+ABC-228 chooseMove to d5: 88.77% within 25 cp of 187, max 118 cp (position-4/f1f2: 708 -> 826); mate-status flips on the 190: 0 (a report, not a bar)
+ABC-228 mate floor d5: 0 of 189 violated
+ABC-228 search() d5: 89.30% within 25 cp of 187, max 118 cp (position-4/f1f2: 708 -> 826); mate-status flips on the 190: 0 (a report, not a bar)
+ABC-229 A3 kiwipete d6: 330314 / 324162 = 1.019x
+ABC-229 A3 position-6 d6: 154466 / 154464 = 1.000x
+ABC-229 chooseMove to d5: 100.00% within 25 cp of 187, max 8 cp (kiwipete/d2e3: 350 -> 358); mate-status flips on the 190: 0 (a report, not a bar)
+ABC-229 search() d5: 100.00% within 25 cp of 187, max 8 cp (kiwipete/d2e3: 350 -> 358); mate-status flips on the 190: 0 (a report, not a bar)
+ABC-268 A3 chooseMoveWithoutTaper to d5: 100.00% within 25 cp of 187, max 0 cp (startpos: 38 -> 38); mate sign flips 0; mate-status flips 0 (a report, not a bar)
+ABC-268 A3 mate floor d5: 0 of 189 violated; 0 longer, 0 shorter (a report, not a bar)
+ABC-268 A3 searchWithoutTaper d5: 100.00% within 25 cp of 187, max 10 cp (position-3/b4b2: 41 -> 51); mate sign flips 0; mate-status flips 0 (a report, not a bar)
+ABC-268 A3 zugzwang kpk-b6c6 d8: head b6c6 2829 / door b6c6 2998 = 0.944x
+ABC-268 A3 zugzwang kpk-c6d6 d8: head c6d6 2981 / door c6d6 4271 = 0.698x
+ABC-268 A3 zugzwang kpk-d6e6 d8: head d6e6 3065 / door d6e6 4201 = 0.730x
+ABC-268 A3 zugzwang kpk-e6f6 d8: head e6f6 3051 / door e6f6 3548 = 0.860x
+ABC-268 A3 zugzwang zugzwang.001 d9: head e1f1 84325 / door e1f1 78946 = 1.068x
+ABC-268 A3 zugzwang zugzwang.004 d11: head h3h4 697684 / door h3h4 587282 = 1.188x
+ABC-268 A3 zugzwang zugzwang.005 d12: head f4d5 1044425 / door f4d5 2412618 = 0.433x
+ABC-268 A4 chooseMoveWithoutTaper kiwipete to 8: 1306981 / 1575537 = 0.8295x; head e2a6 -59, door e2a6 -59
+ABC-268 A4 chooseMoveWithoutTaper position-6 to 8: 391451 / 476244 = 0.8220x; head c3d5 74, door c3d5 74
+ABC-268 A4 reach at 47 000 nodes on 190: door 5.558 -> head 5.837 (+0.279); 54 deeper, 1 shallower, 6 root moves differ
+ABC-268 A4 searchWithoutTaper kiwipete d8: 888786 / 1116785 = 0.7958x; head e2a6 -60, door e2a6 -60
+ABC-268 A4 searchWithoutTaper position-6 d8: 1262046 / 1602457 = 0.7876x; head c3d5 74, door c3d5 74
+ABC-269 B2 mate floor, door d4 -> search() d5: 0 of 163 violated
+ABC-269 B2 mate floor, door d5 -> search() d5: 0 of 189 violated

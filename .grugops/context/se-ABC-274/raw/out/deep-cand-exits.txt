@@ -1,0 +1,27 @@
+12:42:16Z start taper
+12:42:34Z taper exit=0  Tests 165 passed (165)
+12:42:34Z start nullmove
+12:43:01Z nullmove exit=0  Tests 44 passed (44)
+12:43:01Z start futility
+12:44:11Z futility exit=0  Tests 53 passed (53)
+12:44:11Z start search
+12:44:15Z search exit=0  Tests 57 passed (57)
+12:44:15Z start quiescence
+12:45:04Z quiescence exit=0  Tests 116 passed (116)
+12:45:04Z start tt-search
+12:45:08Z tt-search exit=0  Tests 40 passed (40)
+12:45:08Z start pvslmr
+12:46:02Z pvslmr exit=0  Tests 29 passed (29)
+12:46:02Z start ordering
+12:46:09Z ordering exit=0  Tests 43 passed (43)
+12:46:09Z start engine
+12:49:08Z engine exit=0  Tests 82 passed (82)
+12:49:08Z start tt-engine
+12:49:14Z tt-engine exit=0  Tests 26 passed (26)
+12:49:14Z start pawns
+12:49:17Z pawns exit=0  Tests 44 passed (44)
+12:49:17Z start puzzle
+12:49:20Z puzzle exit=0  Tests 18 passed (18)
+12:49:20Z start puzzle-weakened
+12:49:22Z puzzle-weakened exit=1  Tests 1 failed | 13 passed (14)
+12:49:22Z ALL DONE

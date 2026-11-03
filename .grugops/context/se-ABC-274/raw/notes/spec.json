@@ -1,0 +1,53 @@
+{
+ "refs": [
+  "se-ABC-274",
+  "grugops/ABC-274",
+  "ABC-274",
+  "EPIC-011",
+  "E2-pre",
+  "ADR-0067",
+  "ADR-0064",
+  "F8",
+  "C1",
+  "P5",
+  "A1",
+  "A2",
+  "A3",
+  "A4",
+  "A5",
+  "A6",
+  "A7",
+  "A8",
+  "A9",
+  "B0",
+  "G2",
+  "G3",
+  "G6",
+  "NFR-009",
+  "128e3c6c",
+  "54dee3f2",
+  "c131ecd0",
+  "src/evaluate.ts",
+  "src/evaluate.taper.test.ts",
+  "src/evaluate-params.ts",
+  "arch-fold-1103b/e16881f5",
+  "se-ABC-269-cut/20261103T112851Z-software-engineer-decision-8e00e712"
+ ],
+ "notes": [
+  {
+   "kind": "decision",
+   "bodyFile": "note-design.md",
+   "confidence": "high (diff read back; value identity proved by A1/A2 with 0 mismatches); packed cost UNKNOWN - verify (A5 is QE's); seam UNKNOWN - verify with Architect"
+  },
+  {
+   "kind": "observation",
+   "bodyFile": "note-acceptance.md",
+   "confidence": "high (deterministic counts and Object.is readings, each run under the host lock, candidate and pre-ticket head in one process or same session); no timing reading taken"
+  },
+  {
+   "kind": "observation",
+   "bodyFile": "note-migration.md",
+   "confidence": "high (test diff is additions only, read from git diff; A3 selection rule stated; QE freeze absent: UNKNOWN - verify)"
+  }
+ ]
+}

@@ -1,0 +1,7 @@
+before:  Test Files  66 passed (66)
+before:       Tests  2566 passed (2566)
+after: stdout | src/evaluate.taper.test.ts > ABC-274 A9 — the packed sums fit in int16, bounded from src/evaluate-params.ts's own maxima > Σ mg and Σ eg, white minus black, each lie inside −32 768 … 32 767
+after: ABC-274 A9: |Σ mg| <= 15910 (int16 limit 32767)
+after: ABC-274 A9: |Σ eg| <= 17510 (int16 limit 32767)
+after:  Test Files  66 passed (66)
+after:       Tests  2585 passed (2585)

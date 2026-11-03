@@ -1259,7 +1259,6 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
 
   HEADING FORMAT (spec §6.1): each column is an H2 heading carrying its live/limit WIP count,
   e.g. `## In Development (WIP 0/3)` — the left number is how many tickets are in the column
-- [ABC-274] **2026-11-03: Ready (DoR 10/10) → `se-ABC-274`; merge waits owner ADR-0067.** E2-pre: every term enters the blend, value-identical at E1's table (same scores, same node counts; no games) (EPIC-011 Phase 4; size: S, priority: P2, DoR 9/10; value-identical; bars node identity + G2 ≤ 1.05× + G6 ≥ base graded; S2 nps exempt (…690d3b30); waits ABC-269 merged + ADR-0067 E2-pre disposition row; merge waits owner acceptance of ADR-0067) **cut 2026-11-03 (bapm-E2pre-cut)**
   now, the right number is the limit from config. Unlimited columns read `(WIP unlimited)`;
   Blocked is visible and time-tracked (no WIP limit) and reads `(visible, time-tracked)`.
   INVARIANT: the column H2 headings and the rows of the `## Columns` table are the same 13 names in the
@@ -1398,7 +1397,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
+## In Development (WIP 0/3)
 
 
 
@@ -1426,7 +1425,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+
+- [ABC-274] **2026-11-03: In Development → In Review (`se-ABC-274`, branch `grugops/ABC-274`).** E2-pre built packed, value-identical: A1 B0 11/11 exact + cross-build 0/9 120; A2 0/25 620 `Object.is`; A3 15/15 families live; A9 |Σ mg| ≤ 15 910, |Σ eg| ≤ 17 510; npm test 2 585/2 585; zero re-pins. Next: QE A5 (`G2`) / A6 (`G6`) + UAT verdict; merge waits owner ADR-0067 (EPIC-011; S, P2)
 
 
 

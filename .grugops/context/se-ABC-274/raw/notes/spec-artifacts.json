@@ -1,0 +1,43 @@
+{
+ "refs": [
+  "se-ABC-274",
+  "grugops/ABC-274",
+  "ABC-274",
+  "EPIC-011",
+  "E2-pre",
+  "ADR-0067",
+  "ADR-0064",
+  "F8",
+  "C1",
+  "P5",
+  "A1",
+  "A2",
+  "A3",
+  "A4",
+  "A5",
+  "A6",
+  "A7",
+  "A8",
+  "A9",
+  "B0",
+  "G2",
+  "G3",
+  "G6",
+  "NFR-009",
+  "128e3c6c",
+  "54dee3f2",
+  "c131ecd0",
+  "src/evaluate.ts",
+  "src/evaluate.taper.test.ts",
+  "src/evaluate-params.ts",
+  "arch-fold-1103b/e16881f5",
+  "se-ABC-269-cut/20261103T112851Z-software-engineer-decision-8e00e712"
+ ],
+ "notes": [
+  {
+   "kind": "observation",
+   "bodyFile": "note-artifacts.md",
+   "confidence": "high (commit hash and diff stat read from git; commands as run); published as observation: artifact-ref needs a \u00a714 gate_run this hop does not have"
+  }
+ ]
+}
