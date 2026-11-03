@@ -1,3 +1,4 @@
+_Updated: 2026-11-03 Orchestrator (orch-2026-10-30a) — **ABC-279 built**, every offline bar MET → In Review → `qe-ABC-279` (C2′ 100 games at 100 ms ALONE, S′ E1810, Levels; N8-LANE re-read). Owed (Scribe, later): AGENTS.md lane line for SEARCH_DEEP see.test.ts. Running: se-ABC-270, qe-ABC-279._
 _Updated: 2026-11-03 Orchestrator (orch-2026-10-30a) — `bapm-ABC-239-rulings` merged (ABC-239 page carries the rulings and SE steps 0–9; own-games count 3 431 vs 3 531 — the tool header records what it reads; no bar). Running: se-ABC-279, se-ABC-270._
 _Updated: 2026-11-03 Orchestrator (orch-2026-10-30a) — `arch-ABC-239-rulings` merged a77999e7. Ruling …912ba57d: B1 (e) is a pin of E1's rule table, retires whole. → `bapm-ABC-239-rulings` (page lines). Running: se-ABC-279, se-ABC-270, bapm-ABC-239-rulings._
 _Updated: 2026-11-03 Orchestrator (orch-2026-10-30a) — `qe-ABC-270-freeze` merged 629f8ba0 (7 queen pairs + 1 control frozen). ABC-270 → In Development (`se-ABC-270`). Running: arch-ABC-239-rulings, se-ABC-279, se-ABC-270._
@@ -1424,9 +1425,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 2/3)
+## In Development (WIP 1/3)
 - [ABC-270] **2026-11-03: K1 (c) frozen (qe-ABC-270-freeze …fa82b3f3: 7 queen pairs + 1 control) → In Development → `se-ABC-270` (QE-270-a: test-only per-king read).** **2026-11-03: DoR 10/10, Ready for Dev (bapm-owner-answers-1103b); M → S. QE freezes K1 (c) ≥ 6 queen pairs first (`qe-ABC-270-freeze`), then se-ABC-270.** ADR-0068 ACCEPTED: structure only (3 queen-on pairs at {0,0}, value-identical); K0–K4; no games; S1–S3 → ABC-239 PR report; S2 nps report only. **2026-11-03: design done (arch-ABC-270, merged 9553a772): ADR-0068 PROPOSED — structure only (3 queen-on exposure pairs at 0, value-identical, K0–K4, no games; size M → S); fit by ABC-239. Waits owner acceptance; S2 nps exempt as ABC-274 (Orchestrator).** **2026-11-03: In Design (owner item 8) → `arch-ABC-270` (ADR-0068).** E3a: king safety by phase — exposure endgame halves + the ADR-0031 addendum's queen scale / shelter gate re-read over E1, judged on play (Q-3K-4 b) (EPIC-011 Phase 4; size: M, priority: P2, DoR 9/10; GAIN; waits ABC-269 merged + ADR; S1–S3 its first graded rows) **cut 2026-11-03 (bapm-epic011-cut); design after the owner-ordered ABC-234 → 236 → 239**
-- [ABC-279] **2026-11-03: cut, DoR 10/10 (bapm-owner-answers-1103b) → In Development → `se-ABC-279`.** Q1: quiescence skips SEE-losing captures out of check behind an off-door pair (ADR-0069 ACCEPTED). S–M (M), P2, GAIN. A4 d8 ≤ 0.78× ×4, reach ≥ +0.55; A6 C2′ ≥ 50.0 + S′ E1810 + Levels. Slot: merges or misses before ABC-239's B-T7/B-T8 freeze; miss = closed under S1, not shipped
 
 
 
@@ -1454,7 +1454,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-279] **2026-11-03: built (grugops/ABC-279 frozen 1feb7560; all offline bars MET: d8 0.72/0.27/0.59/0.22×, reach +0.837, mate floor 0/190, zugzwang 7/7, G1 54/58; npm test 2 631; deep lanes green) → In Review → `qe-ABC-279` (A6 ALONE). quiescence.ts/engine.ts seam edits ruled in scope. N8-LANE at the bound (base 9.96 s) — QE re-reads.** **2026-11-03: cut, DoR 10/10 (bapm-owner-answers-1103b) → In Development → `se-ABC-279`.** Q1: quiescence skips SEE-losing captures out of check behind an off-door pair (ADR-0069 ACCEPTED). S–M (M), P2, GAIN. A4 d8 ≤ 0.78× ×4, reach ≥ +0.55; A6 C2′ ≥ 50.0 + S′ E1810 + Levels. Slot: merges or misses before ABC-239's B-T7/B-T8 freeze; miss = closed under S1, not shipped
 
 
 
