@@ -21,7 +21,8 @@ import {
   mirrorPosition,
   PERFT_POSITIONS,
 } from "./evaluate.mirror-corpus.ts";
-import { evaluate, evaluateWithoutMobility } from "./evaluate.ts";
+import { evaluate, evaluateWithoutMobility, phaseOf, withParametersForTest } from "./evaluate.ts";
+import * as PARAMS from "./evaluate-params.ts";
 import { parseFen } from "./fen.ts";
 import { legalMoves } from "./legal.ts";
 import type { Position } from "./position.ts";
@@ -35,6 +36,24 @@ const G_PAWN_ON_G6 = "6k1/5ppp/6P1/8/8/8/5P1P/6K1 w - - 0 1";
 const F_HALF_OPEN = "6k1/5ppp/8/8/8/8/6PP/6K1 w - - 0 1";
 const F_CLOSED_F5 = "6k1/5ppp/8/5P2/8/8/6PP/6K1 w - - 0 1";
 const F_HALF_OPEN_E5 = "6k1/5ppp/8/4P3/8/8/6PP/6K1 w - - 0 1";
+
+/**
+ * `A2` (b) / `A3` (b) re-found at phase 24 (`ABC-270` scope 5, `ADR-0068` d5, `ADR-0028` d2): the
+ * same pawn shapes and the same equal material, plus a symmetric full set of pieces (each side
+ * R N B Q R and a second N and B on d2 / e2, d7 / e7: phase 24), so the rows grade the shelter
+ * and the half-open file where they are meant, in the middlegame, not in a pawn ending. Each
+ * reads red with its term zeroed (below), so the fixture bites.
+ */
+const SHELTERED_24 = "rnbq1rk1/3nbppp/8/8/8/8/3NBPPP/RNBQ1RK1 w - - 0 1";
+const G_PAWN_ON_G6_24 = "rnbq1rk1/3nbppp/6P1/8/8/8/3NBP1P/RNBQ1RK1 w - - 0 1";
+const F_CLOSED_F5_24 = "rnbq1rk1/3nbppp/8/5P2/8/8/3NB1PP/RNBQ1RK1 w - - 0 1";
+const F_HALF_OPEN_E5_24 = "rnbq1rk1/3nbppp/8/4P3/8/8/3NB1PP/RNBQ1RK1 w - - 0 1";
+
+/** The parameter table with one king-file term (both halves) at 0. */
+const zeroed = (name: "KING_SHELTER_MISSING" | "KING_FILE_HALF_OPEN") => ({
+  ...PARAMS,
+  [name]: { mg: 0, eg: 0 },
+});
 
 /**
  * `A4`: equal material, a mirror-symmetric king and pawn structure, and both rooks on squares
@@ -67,6 +86,10 @@ const KING_POSITIONS: readonly string[] = [
   "6k1/5ppp/8/8/4N3/8/5PPP/n5K1 b - - 0 1",
   "r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1",
   "r1bq1rk1/pp3ppp/2n5/3p4/3P4/2N5/PP3PPP/R1BQ1RK1 w - - 0 1",
+  "rnbq1rk1/3nbppp/8/8/8/8/3NBPPP/RNBQ1RK1 w - - 0 1",
+  "rnbq1rk1/3nbppp/6P1/8/8/8/3NBP1P/RNBQ1RK1 w - - 0 1",
+  "rnbq1rk1/3nbppp/8/5P2/8/8/3NB1PP/RNBQ1RK1 w - - 0 1",
+  "rnbq1rk1/3nbppp/8/4P3/8/8/3NB1PP/RNBQ1RK1 w - - 0 1",
 ];
 
 /** This ticket's mirror corpus: ABC-076's 184, then the king positions above. */
@@ -100,10 +123,17 @@ describe("A2 — a missing shelter pawn scores lower", () => {
     expect(score(G2_REMOVED)).toBeLessThan(score(SHELTERED));
   });
 
-  it("at EQUAL material too: the g-pawn on g6 instead of g2 scores strictly lower", () => {
-    // The row above is won by material alone. Here the tables and the pawn terms score g6 and
-    // g2 the same, so only the shelter can put g6 lower (red without the term).
-    expect(score(G_PAWN_ON_G6)).toBeLessThan(score(SHELTERED));
+  it("at EQUAL material too, at phase 24: the g-pawn on g6 instead of g2 scores strictly lower (ABC-270 re-find)", () => {
+    // The row above is won by material alone. Here the tables favour g6 (and the king gains g2),
+    // so only the shelter can put g6 lower. Re-found from the pawn ending (phase 0) to phase 24.
+    expect([phaseOf(parseFen(SHELTERED_24)), phaseOf(parseFen(G_PAWN_ON_G6_24))]).toEqual([24, 24]);
+    expect(score(G_PAWN_ON_G6_24)).toBeLessThan(score(SHELTERED_24));
+  });
+
+  it("the phase-24 twin bites: with the shelter term zeroed, g6 no longer scores lower (red without the term)", () => {
+    withParametersForTest(zeroed("KING_SHELTER_MISSING"), () => {
+      expect(score(G_PAWN_ON_G6_24)).toBeGreaterThanOrEqual(score(SHELTERED_24));
+    });
   });
 });
 
@@ -112,10 +142,19 @@ describe("A3 — a half-open file next to the king scores lower", () => {
     expect(score(F_HALF_OPEN)).toBeLessThan(score(SHELTERED));
   });
 
-  it("at EQUAL material, shelter equal: the f-pawn on e5 (f half-open) scores lower than on f5", () => {
-    // Neither square shelters the king, so only the file differs. The tables favour e5 by 15
-    // and the isolated term costs it 10, so without the term e5 scores 5 HIGHER.
-    expect(score(F_HALF_OPEN_E5)).toBeLessThan(score(F_CLOSED_F5));
+  it("at EQUAL material, shelter equal, at phase 24: the f-pawn on e5 (f half-open) scores lower than on f5 (ABC-270 re-find)", () => {
+    // Neither square shelters the king, so only the file differs. Re-found from the pawn ending
+    // (phase 0) to phase 24.
+    expect([phaseOf(parseFen(F_CLOSED_F5_24)), phaseOf(parseFen(F_HALF_OPEN_E5_24))]).toEqual([
+      24, 24,
+    ]);
+    expect(score(F_HALF_OPEN_E5_24)).toBeLessThan(score(F_CLOSED_F5_24));
+  });
+
+  it("the phase-24 twin bites: with the half-open term zeroed, e5 no longer scores lower (red without the term)", () => {
+    withParametersForTest(zeroed("KING_FILE_HALF_OPEN"), () => {
+      expect(score(F_HALF_OPEN_E5_24)).toBeGreaterThanOrEqual(score(F_CLOSED_F5_24));
+    });
   });
 });
 

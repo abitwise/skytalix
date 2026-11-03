@@ -258,6 +258,19 @@ export const KING_FILE_HALF_OPEN: MgEg<number> = { mg: 10, eg: 10 };
 export const KING_FILE_OPEN: MgEg<number> = { mg: 20, eg: 20 };
 
 /**
+ * E3a's queen-on king safety (`ABC-270`, `ADR-0068`): while the ENEMY has at least one queen, each
+ * pair is added, per file, to the matching king-file term above (shelter, half-open, open). The
+ * pairs are additive, not a factor, so the tuner fits each one as a feature: the king's exposure
+ * count × the enemy-queen flag (`ADR-0067` decision 4).
+ *
+ * Rule: start (prior): 0. The `ADR-0031` A1 rule, 2 × the base pair (× 3 in all), was probed and
+ * not shipped (`ADR-0068`). At 0 the evaluation is the one before `ABC-270`, bit for bit.
+ */
+export const KING_SHELTER_MISSING_QUEEN: MgEg<number> = { mg: 0, eg: 0 };
+export const KING_FILE_HALF_OPEN_QUEEN: MgEg<number> = { mg: 0, eg: 0 };
+export const KING_FILE_OPEN_QUEEN: MgEg<number> = { mg: 0, eg: 0 };
+
+/**
  * ABC-083's mobility: centipawns per square a non-pawn piece reaches, the total clamped to
  * ±`MOBILITY_CAP`, so mobility can never outvote a minor piece. Endgame halves: equal (no rule yet).
  */

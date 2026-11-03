@@ -303,6 +303,9 @@ describe("ABC-269 — src/evaluate-params.ts is the one parameter table, data on
       ["KING_SHELTER_MISSING", PARAMS.KING_SHELTER_MISSING],
       ["KING_FILE_HALF_OPEN", PARAMS.KING_FILE_HALF_OPEN],
       ["KING_FILE_OPEN", PARAMS.KING_FILE_OPEN],
+      ["KING_SHELTER_MISSING_QUEEN", PARAMS.KING_SHELTER_MISSING_QUEEN],
+      ["KING_FILE_HALF_OPEN_QUEEN", PARAMS.KING_FILE_HALF_OPEN_QUEEN],
+      ["KING_FILE_OPEN_QUEEN", PARAMS.KING_FILE_OPEN_QUEEN],
       ["MOBILITY_WEIGHT", PARAMS.MOBILITY_WEIGHT],
       ["MOBILITY_CAP", PARAMS.MOBILITY_CAP],
     ];
@@ -1178,7 +1181,8 @@ describe("ABC-274 A9 — the packed sums fit in int16, bounded from src/evaluate
    * A bound on |Σ half| (white minus black) over the terms inside the packed sum: material and
    * square tables (one king, at most 15 other pieces a side, any of them the largest entry), the
    * three pawn terms (at most 8 pawns a side, each doubled, isolated and passed at once) and the
-   * three king-file terms (at most 3 files per king). The king's square table enters the packed
+   * three king-file terms with their queen-on pairs (`ABC-270` K1 (d): at most 3 files per king,
+   * each paying its base term plus its queen-on pair). The king's square table enters the packed
    * sum by its middlegame half in both halves (its Δ is read after the walk). Mobility is outside
    * the packed sum: it is clamped, so it is not linear, and is carried as a pair of its own.
    */
@@ -1201,9 +1205,11 @@ describe("ABC-274 A9 — the packed sums fit in int16, bounded from src/evaluate
     const kingFiles =
       3 *
       (Math.abs(params.KING_SHELTER_MISSING[half]) +
+        Math.abs(params.KING_SHELTER_MISSING_QUEEN[half]) +
         Math.max(
-          Math.abs(params.KING_FILE_HALF_OPEN[half]),
-          Math.abs(params.KING_FILE_OPEN[half]),
+          Math.abs(params.KING_FILE_HALF_OPEN[half]) +
+            Math.abs(params.KING_FILE_HALF_OPEN_QUEEN[half]),
+          Math.abs(params.KING_FILE_OPEN[half]) + Math.abs(params.KING_FILE_OPEN_QUEEN[half]),
         ));
     return sideMax - sideMin + 2 * pawns + 2 * kingFiles;
   };
@@ -1227,5 +1233,19 @@ describe("ABC-274 A9 — the packed sums fit in int16, bounded from src/evaluate
     };
     expect(bound(heavy, "eg")).toBeGreaterThan(32_767);
     expect(bound(heavy, "mg")).toBe(bound(PARAMS, "mg"));
+  });
+
+  it("ABC-270 K1 (d): the bound reads the three queen-on pairs' maxima; a queen-on half of 6 000 would turn it red", () => {
+    for (const name of [
+      "KING_SHELTER_MISSING_QUEEN",
+      "KING_FILE_HALF_OPEN_QUEEN",
+      "KING_FILE_OPEN_QUEEN",
+    ] as const) {
+      const heavy = { ...PARAMS, [name]: { mg: 0, eg: 6000 } };
+      expect(bound(heavy, "eg"), name).toBeGreaterThan(32_767);
+      expect(bound(heavy, "mg"), name).toBe(bound(PARAMS, "mg"));
+      const light = { ...PARAMS, [name]: { mg: 30, eg: 30 } };
+      expect(bound(light, "mg"), name).toBeGreaterThan(bound(PARAMS, "mg"));
+    }
   });
 });
