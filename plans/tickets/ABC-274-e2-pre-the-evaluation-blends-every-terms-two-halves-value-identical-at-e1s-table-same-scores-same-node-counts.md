@@ -12,6 +12,17 @@ adr: "ADR-0067 decision 8 (PROPOSED 2026-11-03, arch-ABC-239 decision …e4c3423
 
 # ABC-274: every term enters the blend, at E1's values (E2-pre)
 
+> **A5's PREREG CONTENT IS WRITTEN (`QE-269-f` / `-g`), 2026-11-03, by BA/PM** (task `bapm-R1-cut`, records only, at
+> `main` `30d15584`; nothing run). Source: `ADR-0067` decision 8's dated line of 2026-11-03 (`arch-post-269`
+> `…3f30baf8` § 2–3), with the pointer in F8's row. **No bar moved:** R ≤ 1.0500 unrounded, two sessions, no third.
+> - A5 below cites that line. QE seals A5's PREREG before anyone times this build, and the PREREG states five
+>   things: the bar and statistic; the arms (B is `54dee3f2` or the later `main` named); the control void band
+>   [0.970, 1.030] with one re-run; **the spread, stated ahead as a report** (each r_s, |r₁ − r₂|, and each arm's
+>   per-round min–max, against the reference 0.037; "within one session spread" is added to the verdict line when
+>   |R − 1.0500| ≤ 0.037, and grades nothing); and the round order in words.
+> - The earlier block's "the Architect is writing the guidance" is now met. The status, Ready, and DoR 10/10 are
+>   unchanged.
+
 > **READY 2026-11-03: DoR 10/10. `ABC-269` MERGED**, by BA/PM (task `bapm-269-done`, records only, at `main`
 > `128e3c6c`; nothing run). `ABC-269` merged to local `main` at `54dee3f2` with its cut C1, on QE PASS_WITH_GAPS
 > (`qe-ABC-269` `…eff2fe64`; `G2` 1.0373 ×). No bar on this page moved.
@@ -162,6 +173,20 @@ from `ADR-0067` d8 and F8 and are not loosened after Ready.
     together), and C / B for each session.
   - *BA/PM's reading of the PREREG's shape:* **the reader is QE, not the Engineer.** The exact window is fixed in QE's reading note before the first session.
     The shape is fixed here.
+  - *2026-11-03 (`bapm-R1-cut`; `ADR-0067` d8's dated line of 2026-11-03, `arch-post-269`, `QE-269-f` LOW / `-g`
+    INFO):* **A5's PREREG is sealed by QE before anyone times this build**, and it states the following. The bar is
+    unchanged.
+    1. The bar and statistic as above: R = (r₁ + r₂) / 2, MET iff R ≤ 1.0500 unrounded, no third session, no
+       tie-break.
+    2. The arms as above. B is `main` `54dee3f2`, or the later `main` the build is based on, named. The ratio against
+       `58fa3eb4` is reported.
+    3. The void rule as above: [0.970, 1.030] on C, one re-run, a second void a STOP.
+    4. **The session spread, stated ahead as a report:** each r_s, |r₁ − r₂|, and each arm's per-round min–max,
+       against `qe-ABC-269`'s reference spread of 0.037 in r. If |R − 1.0500| ≤ 0.037, the verdict line adds "within
+       one session spread". **The label grades nothing:** MET stays MET, and a miss stays a miss (F8 (b)).
+    5. **The round order in words** (`QE-269-g`): rounds 2, 4 and 6, counted from 1, reverse the session's arm list.
+       Round 1 is the dropped warm-up. Session 2 lists the arms in reverse. The line "odd rounds reversed" above
+       means this, as `g2b.ts` runs it (`r % 2` with a 0-based `r`).
 - **A6 (`G6`, graded "≥ base"; `ADR-0067` d8; `NFR-005`).**
   - The rule: `ABC-205`'s, as `ABC-269` B7 applies it. Both `G6` boards (kiwipete, position-6), at `LEVELS[5]`
     (4 000 ms), plain `node`, on the reference host, ≥ 5 interleaved rounds per board per build, width 1, load
