@@ -1,0 +1,15 @@
+start 2026-11-03T14:00:24Z  14:00:24 up 4 days,  6:18,  1 user,  load average: 0.26, 0.35, 0.76
+{"name":"chooseMove kiwipete d8","H":"1296788|8|-81|e2a6","B":"1296788|8|-81|e2a6","equal":true}
+{"name":"chooseMove kiwipete d9","H":"2733330|9|-81|e2a6","B":"2733330|9|-81|e2a6","equal":true}
+{"name":"chooseMove position-6 d8","H":"404930|8|74|c3d5","B":"404930|8|74|c3d5","equal":true}
+{"name":"chooseMove position-6 d9","H":"926005|9|76|c3d5","B":"926005|9|76|c3d5","equal":true}
+{"name":"chooseMove position-6 d10","H":"1692669|10|73|c3d5","B":"1692669|10|73|c3d5","equal":true}
+{"name":"chooseMoveWithoutTaper kiwipete d8","H":"1306981|8|-59|e2a6","B":"1306981|8|-59|e2a6","equal":true}
+{"name":"search kiwipete d8","H":"839514|-|-81|e2a6","B":"839514|-|-81|e2a6","equal":true}
+{"name":"searchWithoutTaper kiwipete d8","H":"888786|-|-60|e2a6","B":"888786|-|-60|e2a6","equal":true}
+{"name":"chooseMoveWithoutTaper position-6 d8","H":"391451|8|74|c3d5","B":"391451|8|74|c3d5","equal":true}
+{"name":"search position-6 d8","H":"1533901|-|74|c3d5","B":"1533901|-|74|c3d5","equal":true}
+{"name":"searchWithoutTaper position-6 d8","H":"1262046|-|74|c3d5","B":"1262046|-|74|c3d5","equal":true}
+{"b0rows":11,"b0mismatches":0,"secs":30.37}
+{"positions":190,"sameDoorLists":true,"search":["search","searchWithoutFutility","searchWithoutKillers","searchWithoutNullMove","searchWithoutOrdering","searchWithoutPruning","searchWithoutPruningOrQuiescence","searchWithoutPvsOrReductions","searchWithoutQuiescence","searchWithoutQuiescenceEvasions","searchWithoutQuietPromotions","searchWithoutReductions","searchWithoutTable","searchWithoutTaper"],"engine":["chooseMove","chooseMoveWithoutFutility","chooseMoveWithoutNullMove","chooseMoveWithoutPvsOrReductions","chooseMoveWithoutQuiescenceEvasions","chooseMoveWithoutQuietPromotions","chooseMoveWithoutReductions","chooseMoveWithoutTaper"],"rows":9120,"doorRows":8360,"mismatches":0,"bad":[],"secs":248.937}
+a1 exit=0 end 2026-11-03T14:04:33Z  14:04:33 up 4 days,  6:22,  1 user,  load average: 1.48, 1.00, 0.94

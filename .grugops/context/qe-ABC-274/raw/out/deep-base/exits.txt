@@ -1,0 +1,28 @@
+2026-11-03T14:21:48Z begin 54dee3f2 src=4d6b117b  14:21:48 up 4 days,  6:39,  1 user,  load average: 1.60, 1.25, 1.03
+14:21:48Z start taper
+14:22:06Z taper exit=0  Tests 146 passed (146)
+14:22:06Z start nullmove
+14:22:33Z nullmove exit=0  Tests 44 passed (44)
+14:22:33Z start futility
+14:23:42Z futility exit=0  Tests 53 passed (53)
+14:23:42Z start search
+14:23:45Z search exit=0  Tests 57 passed (57)
+14:23:45Z start quiescence
+14:24:34Z quiescence exit=0  Tests 116 passed (116)
+14:24:34Z start tt-search
+14:24:39Z tt-search exit=0  Tests 40 passed (40)
+14:24:39Z start pvslmr
+14:25:32Z pvslmr exit=0  Tests 29 passed (29)
+14:25:32Z start ordering
+14:25:39Z ordering exit=0  Tests 43 passed (43)
+14:25:39Z start engine
+14:28:38Z engine exit=0  Tests 82 passed (82)
+14:28:38Z start tt-engine
+14:28:44Z tt-engine exit=0  Tests 26 passed (26)
+14:28:44Z start pawns
+14:28:47Z pawns exit=0  Tests 44 passed (44)
+14:28:47Z start puzzle
+14:28:50Z puzzle exit=0  Tests 18 passed (18)
+14:28:50Z start puzzle-weakened
+14:28:52Z puzzle-weakened exit=1  Tests 1 failed | 13 passed (14)
+2026-11-03T14:28:52Z ALL DONE  14:28:52 up 4 days,  6:46,  1 user,  load average: 1.45, 1.37, 1.16
