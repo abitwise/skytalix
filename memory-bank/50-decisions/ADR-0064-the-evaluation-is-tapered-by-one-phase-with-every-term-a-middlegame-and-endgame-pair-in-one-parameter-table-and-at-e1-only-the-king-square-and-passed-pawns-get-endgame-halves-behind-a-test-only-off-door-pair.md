@@ -337,6 +337,9 @@ measured run.
      only.
    - **Each table keeps the rule in its comment** until E2 replaces it. E2's method ADR then owns the file's provenance
      line (`ADR-0048`).
+     - *Dated 2026-11-03 (`arch-fold-1103b`):* E2's method ADR is **`ADR-0067`** (PROPOSED; acceptance is the
+       owner's, pending). It owns this file's provenance header (its d7). `tools/tune` writes this file in its present
+       shape, with the same exports, and nothing else.
    - `VALUE_TABLES_FOR_TEST` grows to expose the king's endgame half and the passed endgame half. `ABC-215` `A2`'s
      rebuild-from-rule row covers both.
 5. **The pawn memo stores the passed endgame part.**
@@ -352,6 +355,9 @@ measured run.
      call (§ Context).
    - **The two-accumulator form** (every PST read twice) is E2's, once E2 makes every half differ. It changes cost, so
      E2 reads `G2` and `G6` for it.
+     - *Dated 2026-11-03 (`arch-fold-1103b`):* this blend is cut as **`ABC-274` (E2-pre)**, value-identical at
+       E1's table, under **`ADR-0067`** d8 and F8. A packed score is recommended. `G2` ≤ 1.05 × and `G6` "≥ base" are
+       graded against the pre-ticket head (`main` with `ABC-269` and cut C1). It plays no games.
    - **No incremental state.** Phase, material and PST are not carried in `Position` or updated in make/unmake. That
      is O1-e (`ADR-0055`, 1.02–1.05×), which `EPIC-011` re-reads after E1 because the evaluation then has two halves.
      It is held as F3's single value-identical cost cut.
