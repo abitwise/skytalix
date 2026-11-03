@@ -22,7 +22,8 @@ describe("ABC-239 — tools/tune's source pins", () => {
       .map((f) => readFileSync(new URL(f, HERE), "utf8"));
     expect(sources.length).toBeGreaterThanOrEqual(3);
     for (const s of sources) {
-      expect(s).not.toMatch(/ForTest\b|withParametersForTest|VALUE_TABLES_FOR_TEST/);
+      // No literal seam name here: `ABC-274` S3 pins that no tools/ file names it.
+      expect(s).not.toMatch(/For[T]est\b|_FOR_[T]EST\b/);
       expect(s).not.toMatch(/node:(https?|net|dns|tls)\b|\bfetch\(/);
     }
   });
