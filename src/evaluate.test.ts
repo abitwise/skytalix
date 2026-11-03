@@ -19,6 +19,8 @@
  * or fails on the machine that runs it.
  */
 
+import { createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import {
   buildCorpus,
@@ -28,22 +30,16 @@ import {
   START_FEN,
 } from "./evaluate.mirror-corpus.ts";
 import { evaluate, VALUE_TABLES_FOR_TEST } from "./evaluate.ts";
+import * as PARAMS from "./evaluate-params.ts";
 import { parseFen } from "./fen.ts";
 import { legalMoves } from "./legal.ts";
 import {
-  BISHOP,
   CASTLE_BK,
   CASTLE_BQ,
   CASTLE_WK,
   CASTLE_WQ,
-  EMPTY,
-  KING,
-  KNIGHT,
   NO_SQUARE,
-  PAWN,
   type Position,
-  QUEEN,
-  ROOK,
   squareAt,
 } from "./position.ts";
 
@@ -174,78 +170,11 @@ describe("ABC-076 A5 — purity", () => {
 });
 
 /**
- * ABC-215 A2 — every value array is made by the rule in its comment.
- *
- * Each rule is implemented here a second time, independently: knight steps and diagonal squares
- * are COUNTED on an empty 8x8 grid, not copied from the comment's ranges. The rebuild is compared
- * with the array over all 64 entries (every `pieceType` index for `PIECE_VALUE`). One cell moved
- * by 1 in any table reddens its row.
- *
- * Table index `i` is rank-8-first, as the file lays the tables out: `i = 0` is a8, `i = 63` is h1.
- * `R` is the rank from WHITE's side (1 … 8), `e` the file's steps from the edge (a/h 0 … d/e 3),
- * `ring` the square's steps from the board's edge (0 … 3).
+ * ABC-215 A2 — the value arrays. Its rebuild-from-rule rows RETIRED at `ABC-239` (`ADR-0067` d6):
+ * the arrays are fitted now, and the provenance row below replaces those rows. The rule each array
+ * started from stays in `src/evaluate-params.ts` as its "start (prior)" comment.
  */
-describe("ABC-215 A2 — the value arrays are rebuilt from their stated rules", () => {
-  const R = (i: number): number => 8 - Math.floor(i / 8);
-  const col = (i: number): number => i % 8;
-  const e = (i: number): number => Math.min(col(i), 7 - col(i));
-  const ring = (i: number): number => Math.min(e(i), Math.min(R(i) - 1, 8 - R(i)));
-  const onBoard = (f: number, r: number): boolean => f >= 0 && f < 8 && r >= 1 && r <= 8;
-  // `+ 0` turns a rule's `-0` (the king's home squares: `-10 × 0 - 10 × 0`) into the literal's `0`.
-  const byRule = (rule: (i: number) => number): number[] =>
-    Array.from({ length: 64 }, (_, i) => rule(i) + 0);
-
-  const knightMoves = (i: number): number => {
-    const steps = [
-      [1, 2],
-      [2, 1],
-      [2, -1],
-      [1, -2],
-      [-1, -2],
-      [-2, -1],
-      [-2, 1],
-      [-1, 2],
-    ] as const;
-    return steps.filter(([df, dr]) => onBoard(col(i) + df, R(i) + dr)).length;
-  };
-  const diagonalSquares = (i: number): number => {
-    let n = 0;
-    for (const [df, dr] of [
-      [1, 1],
-      [1, -1],
-      [-1, 1],
-      [-1, -1],
-    ] as const) {
-      for (let k = 1; onBoard(col(i) + k * df, R(i) + k * dr); k++) n++;
-    }
-    return n;
-  };
-
-  const classicalPawns: Record<number, number> = {
-    [EMPTY]: 0,
-    [PAWN]: 1,
-    [KNIGHT]: 3,
-    [BISHOP]: 3,
-    [ROOK]: 5,
-    [QUEEN]: 9,
-    [KING]: 0,
-  };
-  const rebuilt = {
-    PIECE_VALUE: [EMPTY, PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING].map(
-      (type) =>
-        100 * (classicalPawns[type] as number) + (type === KNIGHT || type === BISHOP ? 25 : 0),
-    ),
-    PAWN_TABLE: byRule((i) => (R(i) === 1 || R(i) === 8 ? 0 : 2 * e(i) * (R(i) - 2))),
-    KNIGHT_TABLE: byRule((i) => 10 * knightMoves(i) - 50),
-    BISHOP_TABLE: byRule((i) => 5 * (diagonalSquares(i) - 9)),
-    ROOK_TABLE: byRule((i) => (R(i) === 7 ? 20 : 0)),
-    QUEEN_TABLE: byRule((i) => 5 * ring(i) - 5),
-    KING_TABLE: byRule((i) => {
-      const d = Math.min(Math.abs(col(i) - 1), Math.abs(col(i) - 6));
-      return Math.max(-50, -10 * d - 10 * (R(i) - 1));
-    }),
-  };
-
+describe("ABC-215 A2 — the value arrays (rule rows retired by ABC-239; provenance row below)", () => {
   // The values at this ticket's base (`ec9331e2`), kept only to show each array moved.
   // biome-ignore format: an 8x8 board is only readable as 8 rows of 8
   const BASE: Record<string, readonly number[]> = {
@@ -329,16 +258,48 @@ describe("ABC-215 A2 — the value arrays are rebuilt from their stated rules", 
     expect(Object.keys(VALUE_TABLES_FOR_TEST).sort()).toEqual([...NAMES, ...taper].sort());
   });
 
-  it.each(NAMES)("%s equals its rule over every entry", (name) => {
-    const actual = Array.from(VALUE_TABLES_FOR_TEST[name]);
-    expect(actual).toHaveLength(name === "PIECE_VALUE" ? 7 : 64);
-    expect(actual).toEqual(rebuilt[name]);
-  });
-
   it.each(NAMES)("%s differs from the base values in at least one entry", (name) => {
     const actual = VALUE_TABLES_FOR_TEST[name];
     const base = BASE[name] as readonly number[];
     expect(base).toHaveLength(actual.length);
     expect(actual.some((value, i) => value !== base[i])).toBe(true);
+  });
+});
+
+/**
+ * ABC-239 — the provenance row that replaces `ABC-215` A2's rule rows (`ADR-0067` d6, d7; B-T4):
+ * each tuned array is the tool's output for the recorded data. `tools/tune` writes the sha256 of
+ * the ten value exports (JSON, in the order below) into the header beside the data manifest's
+ * sha256; this row rebuilds that hash from the module itself, so a hand edit of any value reddens
+ * it. Re-running `extract`, `fit` and `emit` on the base table reproduces the file byte for byte
+ * (B-T3, read by `TUNE_DEEP=1 npx vitest run tools/tune` and the ticket's recorded double run).
+ */
+describe("ABC-239 — the tuned arrays are tools/tune's output for the recorded data", () => {
+  const source = readFileSync(new URL("./evaluate-params.ts", import.meta.url), "utf8");
+
+  it("the header names the tool, the ADR, the data manifest, the split strings and K", () => {
+    expect(source).toContain("TUNED by `tools/tune` (`ADR-0067`, `ABC-239`)");
+    expect(source).toMatch(/data manifest sha256 [0-9a-f]{64}/);
+    expect(source).toMatch(/tools\/tune at commit [0-9a-f]{40}/);
+    expect(source).toContain('"ABC-239/split/v1');
+    expect(source).toContain('"ABC-239/inner/v1');
+    expect(source).toMatch(/K_own \d/);
+  });
+
+  it("the values sha256 in the header is the sha256 of the module's own ten value exports", () => {
+    const values = JSON.stringify([
+      ["MATERIAL", PARAMS.MATERIAL],
+      ["PST", PARAMS.PST],
+      ["PASSED", PARAMS.PASSED],
+      ["DOUBLED", PARAMS.DOUBLED],
+      ["ISOLATED", PARAMS.ISOLATED],
+      ["KING_SHELTER_MISSING", PARAMS.KING_SHELTER_MISSING],
+      ["KING_FILE_HALF_OPEN", PARAMS.KING_FILE_HALF_OPEN],
+      ["KING_FILE_OPEN", PARAMS.KING_FILE_OPEN],
+      ["MOBILITY_WEIGHT", PARAMS.MOBILITY_WEIGHT],
+      ["MOBILITY_CAP", PARAMS.MOBILITY_CAP],
+    ]);
+    const recorded = /values sha256 ([0-9a-f]{64})/.exec(source)?.[1];
+    expect(recorded).toBe(createHash("sha256").update(values).digest("hex"));
   });
 });
