@@ -1,0 +1,5 @@
+{"form":"QX","moveNo":4,"played":"Qa4","fen":"rnbqkb1r/p2ppppp/1p3n2/2p5/2P5/2N2N2/PP1PPPPP/R1BQKB1R w KQkq - 0 4","whiteExposure":{"mg":0,"eg":0},"d7":{"move":"e2e3","score":43},"d8":{"move":"g2g3","score":38}}
+{"form":"QX","moveNo":8,"played":"e5","fen":"rn1q1rk1/pb1pbppp/1p2pn2/2p5/Q1P1PB2/2NP1N2/PP3PPP/R3KB1R w KQ - 1 8","whiteExposure":{"mg":45,"eg":0},"d7":{"move":"f1e2","score":81},"d8":{"move":"f1e2","score":64}}
+{"form":"QX","moveNo":10,"played":"Ne4","fen":"rn1q1rk1/pb2bppp/1p1pp3/2p1P2n/Q1P5/2NPBN2/PP3PPP/R3KB1R w KQ - 0 10","whiteExposure":{"mg":45,"eg":0},"d7":{"move":"f1e2","score":-9},"d8":{"move":"f1e2","score":15}}
+{"form":"QX","moveNo":13,"played":"d4","fen":"rn3rk1/pb3ppp/1p2pq2/2p1N2n/Q1P5/3PB3/PP3PPP/R3KB1R w KQ - 0 13","whiteExposure":{"mg":75,"eg":0},"d7":{"move":"e5g4","score":-132},"d8":{"move":"e5g4","score":-144}}
+{"form":"QX","moveNo":17,"played":"Kc1","fen":"rn1r2k1/pb3ppp/1p2p3/4N2n/Q1P1q3/2B5/PP1K1PPP/R4B1R w - - 5 17","whiteExposure":{"mg":180,"eg":0},"d7":{"move":"d2c1","score":-259},"d8":{"move":"d2c1","score":-285}}

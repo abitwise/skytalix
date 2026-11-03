@@ -1,0 +1,28 @@
+src/engine.test.ts :: ABC-230 A1 — a third occurrence scores exactly 0 at the root; base scores it otherwise K v KQ, White to move: d1e1 at 0 with the prior keys, base's move without them
+src/engine.test.ts :: ABC-230 A1 — a third occurrence scores exactly 0 at the root; base scores it otherwise KQ v K, Black to move: d8e8 at 0 with the prior keys, base's move without them
+src/engine.test.ts :: ABC-230 A8 — a second occurrence before the root is not a draw (probe H2) K v KQ, White to move: d1e1 would stand a second time; node-equal to base
+src/engine.test.ts :: ABC-230 A8 — a second occurrence before the root is not a draw (probe H2) KQ v K, Black to move: d8e8 would stand a second time; node-equal to base
+src/engine.test.ts :: ABC-249 — a pre-root repetition met four plies deep scores 0 (QE-248-c) Qe5+ at ply 4 stood twice before the root: Ke1 at 441 with the keys, Kg1 at 520 without
+src/evaluate.king-mobility.test.ts :: A2 — a missing shelter pawn scores lower at EQUAL material too: the g-pawn on g6 instead of g2 scores strictly lower
+src/evaluate.taper.test.ts :: ABC-269 B1 (a) — a position and its colour mirror score exactly equal, Object.is, at every phase the frozen rows span phases 0 to 24, and the -0 traps are real (mg exactly 0 on the door)
+src/evaluate.taper.test.ts :: ABC-269 B1 (c) — evaluateWithoutTaper is the pre-ticket evaluate, Object.is G3's 184 in buildCorpus order, against the frozen pre-ticket scores
+src/evaluate.taper.test.ts :: ABC-269 B1 (c) — evaluateWithoutTaper is the pre-ticket evaluate, Object.is QE's door corpus: 176 positions and their frozen pre-ticket scores
+src/evaluate.taper.test.ts :: ABC-274 A3 — the blend is live for every term family (ADR-0067 decision 8, scope 1) MATERIAL: the score is mg + trunc((Δ + offset) × (D − w) / D), exactly, on ≥ 3 positions at phases 1–23
+src/quiescence.test.ts :: A2 — stand-pat is a lower bound on the quiescence value, never a replacement a hanging pawn makes the quiescence value STRICTLY greater than the static evaluation
+src/quiescence.test.ts :: ABC-228 QE-228-b — QE's Q-SET rows (qe-ABC-228), in src QE-C3: the checker taken by a capturing promotion: reads 940 (static -349, pre-ticket 938), the brute force agrees
+src/quiescence.test.ts :: ABC-228 QE-228-b — QE's Q-SET rows (qe-ABC-228), in src QE-C4 discriminates: the shipped rule and the pre-ticket rule read different values
+src/quiescence.test.ts :: ABC-228 QE-228-b — QE's Q-SET rows (qe-ABC-228), in src QE-C4: Nf2+ forks Kh1 and Qd1; Rxf2 is the best evasion, the pre-ticket rule misses it: reads 475 (static 652, pre-ticket 652), the brute force agrees
+src/quiescence.test.ts :: ABC-229 A2 — quiescence sees the queen: Q-SET's quiet-promotion rows (QE-frozen) QP-1 (Q3, a safe quiet promotion): static 212, pre-ABC-229 212, shipped 977, and the brute force agrees
+src/quiescence.test.ts :: ABC-229 A2 — quiescence sees the queen: Q-SET's quiet-promotion rows (QE-frozen) QP-6 (KPK, c8=Q+ defended by Kb7): static 196, pre-ABC-229 196, shipped 947, and the brute force agrees
+src/quiescence.test.ts :: ABC-229 A2 — quiescence sees the queen: Q-SET's quiet-promotion rows (QE-frozen) QP-8 (the quiet promotion arrives at qply 2 (bxa7+, a king move, a8=Q)): static 554, pre-ABC-229 1152, shipped 1885, and the brute force agrees
+src/quiescence.test.ts :: ABC-229 A2 — quiescence sees the queen: Q-SET's quiet-promotion rows (QE-frozen) QP-9 (QP-1 colour-flipped, black promotes): static 212, pre-ABC-229 212, shipped 977, and the brute force agrees
+src/quiescence.test.ts :: ABC-229 — the doors: searchWithoutQuietPromotions and chooseMoveWithoutQuietPromotions Q-SET's INFO row kpk-b6c6 through searchWithoutTaper at depth 8: 902 shipped, 186 on the door, both b6c6
+src/quiescence.test.ts :: ABC-229 — the doors: searchWithoutQuietPromotions and chooseMoveWithoutQuietPromotions Q3 through the depth-0 seam: searchWithoutTaper reads 977, its door the pre-ticket 212
+src/quiescence.test.ts :: ABC-229 — the doors: searchWithoutQuietPromotions and chooseMoveWithoutQuietPromotions chooseMoveWithoutTaper reads the INFO row the same way at depth 8; its door does not see the queen
+src/search.futility.test.ts :: QE-268-b — a futile node returns the best score among the moves it searched, fail-soft: below its alpha, never alpha itself chooseMoveWithoutTaper deepened to 3: the futile node's entry is an upper bound of -554, Ke2's score, strictly below its alpha of 1010
+src/search.futility.test.ts :: QE-268-b — a futile node returns the best score among the moves it searched, fail-soft: below its alpha, never alpha itself searchWithoutTaper at depth 3: the futile node's entry is an upper bound of -554, Ke2's score, strictly below its alpha of 1010
+src/search.futility.test.ts :: QE-268-b — a futile node returns the best score among the moves it searched, fail-soft: below its alpha, never alpha itself the fixture bites: the node is futile at the window its parent hands it, and the skipped moves hold a better score
+src/search.ordering.test.ts :: A4 — each heuristic's node count, and the delete rule position-6 at depth 2: none 10 371, MVV-LVA 3 266, + killers 3 177
+src/transposition.test.ts :: A5 — the only non-losing line repeats, and it scores exactly 0 chooseMove(), 6 ticks: depth 5, the perpetual played and scored exactly 0
+src/transposition.test.ts :: A5 — the only non-losing line repeats, and it scores exactly 0 search(), depth 4: the perpetual scores exactly 0 and is played — in 7 295 nodes
+src/transposition.test.ts :: A5 — the only non-losing line repeats, and it scores exactly 0 the fixture bites: at depth 3 the repetition is past the horizon, and the rook down shows

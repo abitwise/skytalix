@@ -1,0 +1,2 @@
+D4r ce frozen K 0.5912 steps 4 CE 0.9960 MSE 0.9955 mat [[100,100],[325,325],[325,325],[500,500],[900,900]] rel passed mg r3 < r2 t 2.2
+D5 ce frozen K 0.5912 steps 6 CE 0.9953 MSE 0.9939 mat [[100,100],[325,325],[325,325],[500,500],[900,900]] rel passed mg r3 < r2 t 4.4

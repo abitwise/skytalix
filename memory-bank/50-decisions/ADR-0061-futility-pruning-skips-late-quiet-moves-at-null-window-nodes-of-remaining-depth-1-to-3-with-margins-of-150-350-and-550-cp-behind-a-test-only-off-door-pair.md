@@ -368,6 +368,12 @@ errors of 200 cp or more.
     (which reproduced 100 % / max 10 and 0 / 189): 100 % within 25 cp, max 0, in both recursions; mate floor 0 / 190.
     The margins hold on E1's scale. The cut audit (d) is owed by the E1 build as a QE scratch reading
     (`ADR-0064` decision 8 B5), with its bars unchanged. E2 re-scales the evaluation, so it owes the full re-read.
+  - *Dated 2026-11-03 (`arch-ABC-270`, an instrument note; no bar moves):* since `ABC-269`, `searchWithoutFutility` and
+    `chooseMoveWithoutFutility` also turn `taper` off (`ADR-0064` d7's ladder). So decision 8's drift row read through
+    the doors compares a tapered head against an untapered door, and it does not isolate futility on the tapered scale.
+    `arch-E1`'s `fut` mode run on `main` reproduces the taper drift (98.40 %, kiwipete/f3f4 494 → 555), not a futility
+    reading. E2's re-read needs a futility-off, taper-on path on a scratch copy. The cut audit (d) is unaffected: QE
+    reads it on a scratch copy.
 - **P1 coupling:** file collision only (`src/search.ts`, `src/engine.ts`). The rule reads no move number or reduction.
   The second to merge re-reads its door counts (decision 9).
 - **P4 coupling, later.** Move-count pruning would share this node test's guards. Its ADR decides whether it shares

@@ -506,6 +506,9 @@ measured run.
    - NEUTRAL is not open to it: the change acts at 100 ms.
 10. **What E1 is not:**
     - no king safety: no queen scale, no shelter gate, no king-zone attackers (E3, under the tuner);
+      - *Dated 2026-11-03 (`arch-ABC-270`):* E3a is `ADR-0068` (PROPOSED). The queen-on exposure pairs land at 0,
+        value-identical, before the tuner. `ABC-239` fits them with the exposure endgame halves. The shelter gate is
+        out. S1–S3 (`QE-269-a`) become a report on the tuner's emitted set.
     - no new passer term: no king distance, free path or unstoppable passer (E4);
     - no tuning (E2);
     - no endgame half without a rule, for any other term.
