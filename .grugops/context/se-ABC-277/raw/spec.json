@@ -1,0 +1,8 @@
+{
+  "refs": ["ABC-277", "EPIC-011", "se-ABC-277", "grugops/ABC-277", "861de9c5", "ADR-0049", "sec-host-paths/20261103T144802Z-security-nfr-decision-72b4070b", "SEC-HP-1", "SEC-HP-2", "SEC-HP-3", "SEC-177-1", "QE-274-d", "NFR-008", "tools/grugops/records-path-check.js", "tools/grugops/records-path-check.proof.js", "memory-bank/70-runbook.md", "memory-bank/40-contributing.md", "memory-bank/45-standing-rulings.md", ".gitignore"],
+  "notes": [
+    { "kind": "decision", "confidence": "high (design choices as built; the foreign-argv pattern measured over the tip records)", "bodyFile": "notes/decision.md" },
+    { "kind": "observation", "confidence": "high (every row run under the host lock and read as printed)", "bodyFile": "notes/acceptance.md" },
+    { "kind": "observation", "confidence": "high", "bodyFile": "notes/branch.md" }
+  ]
+}

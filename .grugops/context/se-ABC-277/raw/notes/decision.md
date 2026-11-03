@@ -1,0 +1,23 @@
+# SE decisions for ABC-277: the records path check is `tools/grugops/records-path-check.js`, proved outside the lane; A7 skipped
+
+- **Name and shape.** `node tools/grugops/records-path-check.js [--base main] [--head HEAD]`, node builtins only, run from inside the repository. It reads `git diff -M` of `merge-base(base, head)..head` under `.grugops/`, `plans/` and `memory-bank/`. Exit 0 clean, 1 a finding, 2 cannot run, the same codes as the QE-hop check.
+- **What it reads.** Text files: the added lines of `git diff -U0`. The parser consumes each hunk by its counts, so an added line reading `++ x` is never taken for a header. `.gz` files with status A, M, T or a rename/copy below 100 %: the whole blob at `head`, decompressed (cap 256 MiB). An R100 `.gz` is not opened. A `.gz` that does not decompress is a finding, `UNKNOWN - verify (cannot decompress)`.
+- **Committed objects only.** Uncommitted changes are not read. The runbook says so.
+- **File paths.** A path that carries a class is a finding of its own, `(file path)`. Every printed path has its class matches replaced by `<class>`, so no value is printed through a path either.
+- **The five classes.**
+  - `home-path`: `os.homedir()`, not followed by a name character.
+  - `home-slug`: the home path with every non-alphanumeric character turned into `-`.
+  - `users-path`: `/Users/<name>`, except `/Users/Shared`.
+  - `scratch-path`: `/tmp/claude-` plus digits.
+  - `foreign-argv`: see the next item.
+  - A home of `/` has no home or slug class.
+- **The `foreign-argv` pattern (Test note 2).** A 2–7 digit PID, not preceded by a letter, digit, `.`, `_`, `:`, `/`, `-` or `=`. Then EITHER an absolute path of 2+ segments and one more argument, OR a bare lower-case command name and an absolute path of 2+ segments. It is matched anywhere in the line.
+  - **Changed from a line-start-only form.** The first form missed the SEC-HP-2 line itself. That line is a PID inside `[`, then a bare `node`, then the path.
+  - **Excluded:** `=400 flock /…` (a flag value before a command) and `12 plans/x.md` (a count before a relative path).
+  - **Accepted false positives:** `<n> /dev/<disk> mounted`, `<n> in /usr/<dir>/<x>` and `timeout <n> node /…`. They are written here with placeholders: in their literal form, this note itself failed the check at `b1e82928`. That was a live positive control, and it is also a warning: an example of the argv class must be written with placeholders too.
+  - **Not seen:** a `ps aux` line, where the user comes first.
+- **The tests are outside the lane (`NFR-008`, its second form).** The tests are `tools/grugops/records-path-check.proof.js`, run by `node --test`. A `.proof.js` is not collected by vitest, so the change adds 0 lane rows.
+- **Synthetic fixtures (dispatch over Test note 1).** The fixtures use a made-up home, user, uid and PID, built in code at run time and passed through a `home` seam. One in-memory row proves that the default home is `os.homedir()`. No real path is written to any file.
+- **A7 skipped.** The owner has not answered SEC-HP-2, so the `summary.txt` redaction was not made.
+- **Wiring.** The runbook gets a new section, `§ Before a merge into main`. `40-contributing.md` § Conventions gets one paragraph. `45-standing-rulings.md` gets a new section, `## Dated entries (2026-11-03)`, with one entry; no other entry changed.
+- **QE-274-d.** In `.gitignore`, `node_modules/` became `node_modules`, so a symlink is now ignored too (read: `git status` no longer lists the symlink).
