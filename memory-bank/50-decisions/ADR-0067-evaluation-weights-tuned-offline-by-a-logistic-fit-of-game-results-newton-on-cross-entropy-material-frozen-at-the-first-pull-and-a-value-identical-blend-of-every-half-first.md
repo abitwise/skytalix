@@ -53,6 +53,8 @@ id: ADR-0067
 | 2026-11-03 | BA/PM | E2-pre cut as `ABC-274` (S, P2) | `bapm-E2pre-cut` `…a193625d` |
 | 2026-11-03 | Orchestrator | `ABC-274` exempt from S2 nps (reported only); `G2` ≤ 1.05 × and `G6` "≥ base" graded | `orch-2026-10-30a` `…690d3b30` |
 | 2026-11-03 | Architect/Design | F8 written (E2-pre's falsifier and disposition). `ADR-0064` F3's cut C1 read against d8: the packed form stays recommended | `arch-fold-1103b` |
+| 2026-11-03 | Architect/Design | `ABC-269` merged (`54dee3f2`), so A5's base exists. A5's PREREG content written ahead (`QE-269-f` / `-g`); no bar moved | `arch-post-269` `…3f30baf8` |
+| 2026-11-03 | Architect/Design | `ABC-274`'s A3 seam `withParametersForTest` accepted with S1–S3 (one test-only repair). `ABC-239` does not reuse it. A3's rule suffices, so QE freezes no rows (Q1–Q4); no bar moved | `arch-ABC-274-seam` `…3169a174` |
 
 ## Context
 
@@ -230,7 +232,99 @@ id: ADR-0067
        Engineer shows it fits. The row exists so that a later table that would overflow (`ABC-239`'s emitted set)
        turns it red instead of silently giving wrong values. It reads the table, so it moves no expectation (A7). It is
        owed to the ticket page as a fold line (BA/PM).
-9. **Data.**
+   - *Dated 2026-11-03 (`arch-post-269`, records only, at `main` `128e3c6c`; `qe-ABC-269` `QE-269-f` LOW and
+     `QE-269-g` INFO, `…9ba289c2`): **what A5's PREREG says before the reading.** The bar stays **≤ 1.0500**, and no
+     bar, session count or statistic moves.*
+     - **Why.** `ABC-269`'s `G2` met at R = 1.0373 by 0.0127. Session 2 alone read 1.0560. Between the two sessions r
+       moved 0.037 and the control c moved 0.023 (1.0200 → 0.9974). So that bar was met by about one session's
+       spread. A5 uses the same instrument, so its reading near 1.05 is just as coarse.
+     - **The A5 PREREG is sealed before anyone times `ABC-274`'s build**, by its reader (QE, as the ticket page
+       says), and it states:
+       1. **The bar and the statistic:** as `…e36ee7ca` had them. R = (r₁ + r₂) / 2 with r_s = mean(H) / mean(B), MET
+          iff R ≤ 1.0500 on the unrounded value. No third session and no tie-break. A miss is F8 (b).
+       2. **The arms:** as this decision's dated line of `arch-fold-1103b` says. H is `ABC-274`'s shipped tapered
+          entry. B is the pre-ticket head, `main` `54dee3f2` (or the later `main` it is built on, named). C is a copy
+          of B. All three are called `ev(position, phase)` with the phase computed once per root. The ratio against
+          `58fa3eb4` is reported, not graded.
+       3. **The void rule:** c_s outside [0.970, 1.030] voids that session. One re-run is allowed. A second void in the
+          same slot is a STOP to Architect/Design.
+       4. **The spread, stated ahead as a report:** each r_s, |r₁ − r₂|, and each arm's per-round min–max. The reference
+          spread is `qe-ABC-269`'s, 0.037 in r. If |R − 1.0500| ≤ 0.037, the verdict line adds "within one session
+          spread". The label grades nothing: MET stays MET and a miss stays a miss.
+       5. **The round order in words** (`QE-269-g`): "rounds 2, 4 and 6 (counted from 1) reverse the session's arm
+          list; round 1 is the dropped warm-up", which is how `g2b.ts`'s `r % 2` with a 0-based `r` runs.
+          Session 2 lists the arms in reverse (`ADR-0031` d3).
+     - **The forecast stays `UNKNOWN - verify`.** The packed form keeps one table read and one add per piece, which is
+       `main`'s count, so a reading near 1.00 × the pre-ticket head is expected. Nobody has measured it.
+   - *Dated 2026-11-03 (`arch-ABC-274-seam`, records only, at `main` `e2d99bc1`; it reads `grugops/ABC-274`, code
+     `c131ecd0`, and `se-ABC-274` `…22e25cea` / `…3219e70e`; nothing was run): **A3's test-only seam
+     `withParametersForTest(parameters, run)` is accepted, with three conditions (S1–S3).** No bar moves.*
+     - **Why it is allowed.**
+       - **It is not a door** (`ADR-0064` d7, `ADR-0026` d2–d3). It reproduces no older path and adds no switch. No
+         shipped call reads a flag or an argument for it. Scope 4 ("no new switch and no new door") holds.
+       - **It is not the "module-level hook" that `ADR-0026` d2 rejects.** That hook was a switch the shipped
+         recursion would read. This seam writes only the arrays that the shipped loader already writes at load. It
+         does so inside one synchronous call, and it rebuilds them from `src/evaluate-params.ts` in a `finally`.
+         `evaluate` still writes no module state (A4).
+       - **It is the kind of TEST-ONLY export `src/evaluate.ts` already has** (`clearPawnCacheForTest`,
+         `VALUE_TABLES_FOR_TEST`), and it tests `src/evaluate.ts` itself. The other route, a check outside `src/`,
+         would test a model of the blend.
+       - **`ADR-0002` does not govern it.** It adds nothing to `Position` or to make / unmake (clause 1, as `ADR-0064`
+         d6's dated line reads it).
+     - **Its price is on the shipped path, and A5 reads it.** The five scalar terms and mobility's four values now sit
+       in typed arrays so that the seam can refill them. That is about nine typed-array reads per call, where `main`
+       read module constants. The cost is inside A5's bar, and its size is **`UNKNOWN - verify`**. It is named here
+       as a known part of the cost, not as F8's cut. If F8 (b) fires, the Architect still names the cut then.
+     - **Its scope of use.** Inside `run`, a test calls the evaluation entries only. A search under the seam is not a
+       reading: Lazy SMP workers (`ADR-0062`) have their own module state, so they would read the shipped table.
+     - **The conditions, met before QE's verdict.** They are one test-only repair by the Engineer. No line of the
+       shipped path changes. So A1, A2, A5 and A6 readings taken on `c131ecd0` carry over to the repair's head **iff**
+       `git diff c131ecd0 <repair> -- src/` touches only `withParametersForTest`'s body and `src/*.test.ts`.
+       1. **S1: A3 reads the table, not E1's equal halves.**
+          - A3 reads the mobility count m as (`evaluate` − `evaluateWithoutMobility`) / `MOBILITY_WEIGHT.mg`. That
+            difference is the mg mobility term only while mobility's two halves are equal (E1: weight 4 / 4, cap
+            100 / 100). Under the tapered entry it is mob_mg + trunc((Δ′ + mob_eg − mob_mg)(D − w) / D) −
+            trunc(Δ′(D − w) / D), where Δ′ is the rest of Δ.
+          - `ABC-239` frees the mobility weight in both halves (d6), and it may edit no test (d6, B-T4). Its emitted
+            set would therefore turn A3's `MOBILITY_WEIGHT` and `MOBILITY_CAP` rows red with no defect in `evaluate`.
+            An mg weight of 0, which d6's bound "≥ 0" allows, divides by zero.
+          - So m is taken a way that holds for any table. One way is a counter in the test, by `squaresReached`'s
+            rule. Another is the seam itself, with both weights 1 and a cap that does not bind. Which one is the
+            Engineer's choice. The selection rule is otherwise unchanged, and the mutant check is re-run for the two
+            mobility families.
+       2. **S2: the seam restores on any throw.**
+          - `loadParameters(parameters)` is called before the `try`. A throw from the loader would leave the arrays
+            half-written for the rest of that test file. The call moves inside the `try`.
+          - One row: a `run` that throws, and a parameter object the loader throws on (a missing table, cast), each
+            make the seam throw. After each, every corpus score equals its score before (`Object.is`). The existing
+            restore row covers only the normal exit.
+       3. **S3: a source pin.**
+          - One row, in the form of `src/evaluate.pawns.test.ts`'s "no non-test module under src/ imports …" row.
+            No non-test file under `src/` other than `src/evaluate.ts` names `withParametersForTest`, and no file
+            under `tools/` does.
+          - In `src/evaluate.ts`, `loadParameters(` is called at module load and inside the seam only.
+     - **`ABC-239` does not reuse the seam.**
+       - Its identity gate (d5) compares the tracer with `evaluate` at the current values, and those are the shipped
+         file. After `emit`, the file is the values, so `evaluate` reads them with no seam.
+       - `tools/tune/` imports no TEST-ONLY export (S3 pins it).
+       - A3 and A9 then re-check the emitted set with no new row, and S1 is what makes A3 hold there.
+       - If a later tool needs `evaluate` at values that are not in the file, it needs a new dated decision here.
+     - **A3's positions: the Engineer's stated rule suffices, and QE does not freeze rows before the verdict.**
+       - Test note 1 asked QE to freeze the rows before the build, so that nothing could be changed afterwards to make
+         a row fit. That ordering was missed. A freeze made now would come after the build and would protect nothing
+         more.
+       - What protects the rows is that the selection is code. It is a filter over frozen corpora, on phase 1–23 and
+         on the test's own count, read at the shipped table and never inside the seam. It cannot pick rows by their
+         result.
+       - QE checks four things, Q1–Q4, and records the missed freeze as a LOW process gap, not a defect:
+         - **Q1:** the selection reads nothing inside `withParametersForTest` (source read).
+         - **Q2:** each family's row count (≥ 3, asserted) and its phase spread, reported.
+         - **Q3:** the mate corpus was added for a row count (`KING_FILE_OPEN` had no row), not for a result. The
+           corpora are whole files in a fixed order, and no position is dropped.
+         - **Q4:** C = 24 is a multiple of D, so A3 cannot always tell one trunc over the summed Δ from a trunc per
+           term. QE confirms by source read that the tapered return has one `Math.trunc`, over `egDelta`
+           (`ADR-0064` d2's form).
+       - QE may add frozen rows (rows added only, A7). They are not owed.
    - **Default (A1), today: own self-play games.**
      - Source: every PGN tracked at the fit commit whose two players are both this engine.
      - Each future C2′ / C3″ read adds 100–400 games through M0 (`ABC-255`).
@@ -290,7 +384,7 @@ id: ADR-0067
 | **F5** | `NFR-005` | a `G6` run below depth 6 | NOT MET. There is no cost cut to take on a constants-only diff |
 | **F6** | 11, the strength premise | C2′ < 50.0, an S′ collapse, or a red Levels lane | NOT MET, not re-played. **No set is ever re-fitted on play results**, and the configuration and λ are never chosen on play. A new attempt is a new data set or free set with a new pre-registration |
 | **F7** | 7: reproducibility | B-T3 not byte-identical | a defect |
-| **F8** | 8: E2-pre (`ABC-274`) is value-identical and cheap. *Added 2026-11-03 (`arch-fold-1103b`)* | (a) `ABC-274` A1 / A2 / A4 / A7: a node, score or move mismatch against the pre-ticket head, an `Object.is` miss, or a test expectation that has to move; (b) A5: `G2` above 1.05 × the pre-ticket head (the mean of two sessions, `ADR-0031` d3); (c) A6: a `G6` board's median depth below the pre-ticket head's, or any run below depth 6 | (a) a defect. It is fixed before any cost bar is read, and never re-pinned. (b) or (c): STOP to Architect/Design. **One value-identical cut is allowed, then one re-read of the bar that missed,** under a PREREG sealed before the re-read. If the build is not packed, the cut is the packed score. If it is already packed, the Architect names the cut. A second miss: **not merged**. No value is tuned to pass, and no bar moves. `ABC-239`'s A3 / A4 then cannot hold as written. Its re-plan (the blend folded into E2, § Alternatives) needs a new dated decision here, and the owner's word for any bar it changes. S2 nps is reported, never graded (`…690d3b30`) |
+| **F8** | 8: E2-pre (`ABC-274`) is value-identical and cheap. *Added 2026-11-03 (`arch-fold-1103b`)* | (a) `ABC-274` A1 / A2 / A4 / A7: a node, score or move mismatch against the pre-ticket head, an `Object.is` miss, or a test expectation that has to move; (b) A5: `G2` above 1.05 × the pre-ticket head (the mean of two sessions, `ADR-0031` d3); (c) A6: a `G6` board's median depth below the pre-ticket head's, or any run below depth 6 | (a) a defect. It is fixed before any cost bar is read, and never re-pinned. (b) or (c): STOP to Architect/Design. **One value-identical cut is allowed, then one re-read of the bar that missed,** under a PREREG sealed before the re-read. If the build is not packed, the cut is the packed score. If it is already packed, the Architect names the cut. A second miss: **not merged**. No value is tuned to pass, and no bar moves. `ABC-239`'s A3 / A4 then cannot hold as written. Its re-plan (the blend folded into E2, § Alternatives) needs a new dated decision here, and the owner's word for any bar it changes. S2 nps is reported, never graded (`…690d3b30`). *Dated 2026-11-03 (`arch-post-269`, `QE-269-f` / `-g`):* A5's PREREG states the session spread and the round order ahead of the reading (decision 8's dated line). The bar stays 1.0500. *Dated 2026-11-03 (`arch-ABC-274-seam`):* A3's seam is accepted with S1–S3 (decision 8's dated line). A red S1–S3 row is A3's disposition, a defect: it is fixed and never re-pinned |
 
 ## Alternatives
 

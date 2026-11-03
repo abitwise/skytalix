@@ -149,7 +149,8 @@ adr: "ADR-0067 (PROPOSED 2026-11-03, arch-ABC-239 decision …e4c34239, results 
 
 - `ABC-231`, `ABC-232` Done or closed. `ADR-0048` (data licence). A method ADR. **Owner:** Q4 answered 2026-10-29: (e), extended (`orch-2026-10-29g` `…278e149b`).
 - *2026-11-03 (`bapm-E2pre-cut`, `ADR-0067`):*
-  - **Order: `ABC-269` merged → `ABC-274` (E2-pre) merged → this ticket's build.** Both hard. `ABC-231` / `ABC-232`
+  - **Order: `ABC-269` merged → `ABC-274` (E2-pre) merged → this ticket's build.** Both hard. *2026-11-03
+    (`bapm-269-done`): the first is met, `ABC-269` merged at `54dee3f2`; `ABC-274` is In Development.* `ABC-231` / `ABC-232`
     are closed, folded into `ABC-269`. Today `ABC-269` is held on `ADR-0064` F3 (`arch-ABC-269-F3`).
   - **The method ADR is `ADR-0067`, PROPOSED.** *"accept ADR-0067"* / *"decline it"* is PENDING. Under reading (b)
     it gates A6's read and the merge, not the build. Default: `main` keeps E1's rule-made table.

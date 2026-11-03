@@ -12,6 +12,13 @@ adr: "owed (the Architect's): a dated re-open of the ADR-0031 § Addendum 2026-1
 
 # ABC-270: king safety by phase, and the queen scale (E3a)
 
+> **`ABC-269` MERGED, 2026-11-03, by BA/PM** (task `bapm-269-done`, records only, at `main` `128e3c6c`; nothing run).
+> `ABC-269` (E1) merged to local `main` at `54dee3f2` (QE PASS_WITH_GAPS `qe-ABC-269` `…eff2fe64`), so this page's wait
+> on that merge is **met**. DoR stays 9/10: row 10 now waits on the design alone. On the merged build QE read S1–S3,
+> this ticket's first graded rows (K1 (b), ≥ 20 cp), at **+13 / +13 / +23**, equal to the forecast (`…3fb121de`). That
+> is E1's starting point for them, not a reading of this ticket. Order unchanged: after `ABC-274` and `ABC-239`, with
+> the stall clause (`EPIC-011` § Dependencies).
+
 > **`QE-269-a` RULED (a), 2026-11-03, by BA/PM** (task `bapm-ABC-269-fold`, records only; nothing run). The Architect
 > (`arch-ABC-269-rule` `…8ccb561f`; `ADR-0064` § Decision log; `ADR-0056` D2 row E3): `ABC-269`'s B1 (d) is graded on
 > QE's D1–D6 only; the castled corner, **S1–S3** (`TAPER_KP_SHELTER_STRESS`, `grugops/ABC-269` `d6a57653`, E1 forecast
@@ -25,7 +32,7 @@ adr: "owed (the Architect's): a dated re-open of the ADR-0031 § Addendum 2026-1
 > - **`EPIC-011` Phase 4, row E3, first slice.** The rest of E3 (a king-zone attacker term) stays a stub, after E2.
 > - **Intent: GAIN (≥ 50.0 of 100).** The exposure terms act at every node, and the queen scale at every node with a
 >   queen on. NEUTRAL is not open to it. Named here, before any read, and never re-classed after a score is seen.
-> - **It waits on `ABC-269`'s merge and on the Architect's design.** The board move is the Orchestrator's.
+> - **It waits on ~~`ABC-269`'s merge and~~ the Architect's design** *(the merge is met, 2026-11-03)*. The board move is the Orchestrator's.
 
 ## Problem
 
@@ -168,7 +175,7 @@ after Ready.
 
 ## Dependencies
 
-- **`ABC-269` merged** (E1's phase, blend and parameter table). Hard.
+- **`ABC-269` merged** (E1's phase, blend and parameter table). Hard. *Met 2026-11-03: merged to local `main` at `54dee3f2` (`bapm-269-done`).*
 - **The Architect's design:** a dated re-open of the `ADR-0031` addendum on E1's base, or a new ADR. A change to A1
   or A3 as accepted is the owner's to accept (reading (b): build first, read and merge on acceptance). By the owner's
   2026-11-03 order the Architect designs `ABC-234`, `ABC-236` and `ABC-239` first; this design follows unless the
@@ -196,11 +203,12 @@ after Ready.
 | 2 | scope and out-of-scope | ✅ scope 1–5; attacker term, tuning, E4 / E7 out |
 | 3 | INVEST | ✅ M; one mechanism behind one switch; independent of every open ticket but `ABC-269` (its base) |
 | 4 | testable, measurable acceptance | ✅ K0 exact counts; K1 0 mismatches, ≥ 20 cp × 9, exactly 3 ×, `Object.is`; K2 0 violations; K3 7 / 7; K4 ≥ 54 / 58; K5 ≤ 0.5 % and 0 ≥ 200 cp; K6 ≤ 1.05 ×; K7 every run ≥ 6; K8 ≥ 50.0 of 100, S′, Levels |
-| 5 | dependencies known | ✅ `ABC-269`; the ADR; ~~`QE-269-a`~~ *(ruled (a) 2026-11-03)*; collisions |
+| 5 | dependencies known | ✅ `ABC-269` *(merged `54dee3f2`)*; the ADR; ~~`QE-269-a`~~ *(ruled (a) 2026-11-03)*; collisions |
 | 6 | NFR triggers with targets | ✅ `NFR-005` ≥ 6; `G2` ≤ 1.05 ×; `NFR-008` ≤ 10 s |
 | 7 | test notes | ✅ 1–5 |
 | 8 | size | ✅ M |
 | 9 | priority | ✅ P2 |
-| 10 | no major unresolved blocker | ❌ the design is owed (K0's counts, scope 3's in / out, the form of scope 2); `ABC-269` not merged |
+| 10 | no major unresolved blocker | ❌ the design is owed (K0's counts, scope 3's in / out, the form of scope 2); ~~`ABC-269` not merged~~ *(merged 2026-11-03, `54dee3f2`)* |
 
-**DoR 9/10. Backlog.** Ready once the ADR (or the addendum's dated re-open) is written and `ABC-269` has merged.
+**DoR 9/10. Backlog.** Ready once the ADR (or the addendum's dated re-open) is written ~~and `ABC-269` has merged~~ *(merged
+2026-11-03, `54dee3f2`)*.

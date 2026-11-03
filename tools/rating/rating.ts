@@ -106,9 +106,15 @@ const STOCKFISH = toolPath("STOCKFISH");
 const STOCKFISH_SHA256 = "c78c22a924e8d452e1089ec8d47826f7a276aba69373185e82cbac4593e352d2";
 /** Q4 budgets for D, each with Q1's `timemargin` = 5 000 − budget; `ABC-255` adds C2′'s 100 (`SHORT_MARGIN_MS`). */
 const D_BUDGETS_MS = [3000, 2500, 2000, 1500, 1000, 100];
-/** R's skytalix budget (design ruling), and the one `--budget-ms` R takes (`ABC-255`, `ADR-0056` S′). */
+/** R's skytalix budget (design ruling), and the `--budget-ms` values R takes (`ABC-255` S′; `ABC-275` R1's C4). */
 const R_BUDGET_MS = 4000;
 const R_SMOKE_BUDGET_MS = 500;
+const R_SHORT_BUDGET_MS = 100;
+const R_BUDGETS_MS = [R_SMOKE_BUDGET_MS, R_SHORT_BUDGET_MS];
+/** `ABC-275` (`ADR-0056` D5): at 100 ms, an E above this waits for C3′'s probe, so `r` refuses it. */
+const R_SHORT_ELO_MAX = 2600;
+/** Stockfish's `st` in `r`: 0.1 at R1's 100 ms (`ABC-275`), else 0.5; its `timemargin` is 2 000 at each. */
+const stockfishSt = (ms: number): number => (ms === R_SHORT_BUDGET_MS ? 0.1 : 0.5);
 const CEILING_MS = 5000;
 /** `ADR-0056` C2′ and S′: a short budget's fixed `timemargin`, not Q1's 5 000 − budget. */
 const SHORT_MARGIN_MS = new Map([
@@ -424,7 +430,7 @@ export function cutechessArgs(spec: ArgSpec): string[] {
           "-engine",
           "name=stockfish",
           `cmd=${STOCKFISH}`,
-          "st=0.5",
+          `st=${stockfishSt(budget)}`,
           "timemargin=2000",
           "restart=on",
           "option.Threads=1",
@@ -823,8 +829,12 @@ async function main(argv: string[]): Promise<void> {
   const rounds = Number(flags.get("--rounds") ?? (mode === "r" ? 100 : 200));
   if (!Number.isInteger(elo) || elo < 1320 || elo > 3190)
     throw new Error(`--elo ${elo}: not 1320–3190`);
-  if (mode === "r" && budgetFlag !== undefined && budget !== R_SMOKE_BUDGET_MS)
-    throw new Error(`--budget-ms ${budgetFlag}: r takes only ${R_SMOKE_BUDGET_MS}`);
+  if (mode === "r" && budgetFlag !== undefined && !R_BUDGETS_MS.includes(budget))
+    throw new Error(`--budget-ms ${budgetFlag}: r takes only ${R_BUDGETS_MS.join(" or ")}`);
+  if (mode === "r" && budget === R_SHORT_BUDGET_MS && elo > R_SHORT_ELO_MAX)
+    throw new Error(
+      `--elo ${elo}: above ${R_SHORT_ELO_MAX} at --budget-ms ${budgetFlag}; C3′'s probe runs first`,
+    );
   if (mode === "d" && !D_BUDGETS_MS.includes(budget))
     throw new Error(`--budget-ms ${budget}: not one of ${D_BUDGETS_MS}`);
   if (!Number.isInteger(rounds) || rounds < 1)
@@ -855,7 +865,11 @@ async function main(argv: string[]): Promise<void> {
     // ABC-255 scope 3: a short control is recorded; every other run's record is as before.
     ...(SHORT_MARGIN_MS.has(budget)
       ? [
-          `control: skytalix${mode === "d" ? " and base" : ""} st=${budget / 1000} timemargin=${timemarginMs(budget)}`,
+          `control: skytalix${mode === "d" ? " and base" : ""} st=${budget / 1000} timemargin=${timemarginMs(budget)}${
+            mode === "r" && budget === R_SHORT_BUDGET_MS
+              ? `, stockfish st=${stockfishSt(budget)} timemargin=2000`
+              : ""
+          }`,
         ]
       : []),
   ].join("\n");

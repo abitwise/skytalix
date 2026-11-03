@@ -1,8 +1,8 @@
 ---
 id: ABC-274
 title: "E2-pre: the evaluation blends every term's middlegame and endgame halves, not only the king's and the passers'. Value-identical at E1's table: the same scores and the same node counts, with a packed score recommended. No games"
-status: backlog
-column: Backlog
+status: ready
+column: Ready
 size: S
 priority: P2
 epic: EPIC-011
@@ -12,6 +12,32 @@ adr: "ADR-0067 decision 8 (PROPOSED 2026-11-03, arch-ABC-239 decision …e4c3423
 
 # ABC-274: every term enters the blend, at E1's values (E2-pre)
 
+> **A5's PREREG CONTENT IS WRITTEN (`QE-269-f` / `-g`), 2026-11-03, by BA/PM** (task `bapm-R1-cut`, records only, at
+> `main` `30d15584`; nothing run). Source: `ADR-0067` decision 8's dated line of 2026-11-03 (`arch-post-269`
+> `…3f30baf8` § 2–3), with the pointer in F8's row. **No bar moved:** R ≤ 1.0500 unrounded, two sessions, no third.
+> - A5 below cites that line. QE seals A5's PREREG before anyone times this build, and the PREREG states five
+>   things: the bar and statistic; the arms (B is `54dee3f2` or the later `main` named); the control void band
+>   [0.970, 1.030] with one re-run; **the spread, stated ahead as a report** (each r_s, |r₁ − r₂|, and each arm's
+>   per-round min–max, against the reference 0.037; "within one session spread" is added to the verdict line when
+>   |R − 1.0500| ≤ 0.037, and grades nothing); and the round order in words.
+> - The earlier block's "the Architect is writing the guidance" is now met. The status, Ready, and DoR 10/10 are
+>   unchanged.
+
+> **READY 2026-11-03: DoR 10/10. `ABC-269` MERGED**, by BA/PM (task `bapm-269-done`, records only, at `main`
+> `128e3c6c`; nothing run). `ABC-269` merged to local `main` at `54dee3f2` with its cut C1, on QE PASS_WITH_GAPS
+> (`qe-ABC-269` `…eff2fe64`; `G2` 1.0373 ×). No bar on this page moved.
+> - **DoR row 10: ✅.** Its only open half was `ABC-269`'s merge. **The pre-ticket head exists:** `main` at `54dee3f2`,
+>   `src/` tree `4d6b117b` (read, `git rev-parse`), the tree QE graded. If `main`'s `src/` moves before the build, the
+>   head at the build's branch point governs (test note 2: A1's counts are read, not copied).
+> - **Still pending, not assumed:** the owner's *"accept ADR-0067"*. It gates the merge only (reading (b)), so it does
+>   not block Ready or the build.
+> - **For A5 (`QE-269-f`, LOW, the Architect's):** `ABC-269`'s `G2` passed by about one session's spread (session 2
+>   alone 1.0560). The Architect is writing the guidance for this ticket's PREREG into `ADR-0067` F8 / A5's line
+>   (`arch-post-269`). Where it lands, it governs the method. The 1.0500 bar does not move. A5's base already carries
+>   C1's +2.4–4.5 % ns per node against the old `main` (`QE-269-h`, a report).
+> - **Board:** the Orchestrator moved it Ready → In Development (`se-ABC-274`, 2026-11-03). The column record is the
+>   board's; the front matter reads Ready, the BA/PM exit.
+
 > **Cut 2026-11-03 by BA/PM: DoR 9/10, Backlog** (task `bapm-E2pre-cut`, records only, at `main` `0b87f2d5`; `src/`
 > tree `58fa3eb4`; nothing run, built or timed). Source: `ADR-0067` decision 8 (PROPOSED) and the Architect's decision
 > note `arch-ABC-239` `…e4c34239` § 5 ("New ticket 'E2-pre' (BA/PM)") and § 3 (the order). The Orchestrator's brief
@@ -20,7 +46,7 @@ adr: "ADR-0067 decision 8 (PROPOSED 2026-11-03, arch-ABC-239 decision …e4c3423
 >   → `ABC-270` / `ABC-271`; `ABC-272` any order.
 > - **Intent: none. It is value-identical.** It plays no games (`ADR-0067` d8; `EPIC-011` § The per-change rule,
 >   "Value-identical tickets … play no games"). Its proof is node identity, and its cost bars are `G2` and `G6`.
-> - **Waits on:** `ABC-269` merged, for the build (hard). That merge is held today: `ADR-0064` F3 fired on `G2` (1.071 ×
+> - **Waits on:** ~~`ABC-269` merged, for the build (hard).~~ *Met 2026-11-03: merged `54dee3f2` (`bapm-269-done`).* That merge was held then: `ADR-0064` F3 fired on `G2` (1.071 ×
 >   / 1.067 ×), and ~~`arch-ABC-269-F3` is choosing the one allowed cost cut~~ *the one allowed cost cut is C1 (see the
 >   fold block below)*. The owner's *"accept ADR-0067"* gates the
 >   merge only (reading (b): `ADR-0067` § Status says "the build (E2-pre, then the tool) may start while this ADR is
@@ -147,6 +173,20 @@ from `ADR-0067` d8 and F8 and are not loosened after Ready.
     together), and C / B for each session.
   - *BA/PM's reading of the PREREG's shape:* **the reader is QE, not the Engineer.** The exact window is fixed in QE's reading note before the first session.
     The shape is fixed here.
+  - *2026-11-03 (`bapm-R1-cut`; `ADR-0067` d8's dated line of 2026-11-03, `arch-post-269`, `QE-269-f` LOW / `-g`
+    INFO):* **A5's PREREG is sealed by QE before anyone times this build**, and it states the following. The bar is
+    unchanged.
+    1. The bar and statistic as above: R = (r₁ + r₂) / 2, MET iff R ≤ 1.0500 unrounded, no third session, no
+       tie-break.
+    2. The arms as above. B is `main` `54dee3f2`, or the later `main` the build is based on, named. The ratio against
+       `58fa3eb4` is reported.
+    3. The void rule as above: [0.970, 1.030] on C, one re-run, a second void a STOP.
+    4. **The session spread, stated ahead as a report:** each r_s, |r₁ − r₂|, and each arm's per-round min–max,
+       against `qe-ABC-269`'s reference spread of 0.037 in r. If |R − 1.0500| ≤ 0.037, the verdict line adds "within
+       one session spread". **The label grades nothing:** MET stays MET, and a miss stays a miss (F8 (b)).
+    5. **The round order in words** (`QE-269-g`): rounds 2, 4 and 6, counted from 1, reverse the session's arm list.
+       Round 1 is the dropped warm-up. Session 2 lists the arms in reverse. The line "odd rounds reversed" above
+       means this, as `g2b.ts` runs it (`r % 2` with a 0-based `r`).
 - **A6 (`G6`, graded "≥ base"; `ADR-0067` d8; `NFR-005`).**
   - The rule: `ABC-205`'s, as `ABC-269` B7 applies it. Both `G6` boards (kiwipete, position-6), at `LEVELS[5]`
     (4 000 ms), plain `node`, on the reference host, ≥ 5 interleaved rounds per board per build, width 1, load
@@ -245,7 +285,8 @@ are not in F8.*
 
 ## Dependencies
 
-- **`ABC-269` merged** (hard): E1's table, phase and delta blend. Today `ADR-0064` F3 has fired on `G2`, and
+- **`ABC-269` merged** (hard): E1's table, phase and delta blend. *Met 2026-11-03: merged to local `main` at `54dee3f2`
+  with C1; `G2` re-read MET at 1.0373 × (`qe-ABC-269` `…eff2fe64`); `bapm-269-done`.* Until then `ADR-0064` F3 had fired on `G2`, and
   ~~`arch-ABC-269-F3` is choosing the one allowed cost cut~~ *the one allowed cost cut is C1, an incremental phase
   carried by the search's recursion (`…a0468a78`). The Orchestrator dispatched it to the Engineer (`…690d3b30` item 3).
   QE's single `G2` re-read is under PREREG `…e36ee7ca`, before B5 / B7 / B8. A second miss means not merged.*
@@ -276,13 +317,14 @@ are not in F8.*
 | 2 | scope and out-of-scope | ✅ scope 1–4 = `ADR-0067` d8; values, the tool, new terms, O1-e and lazy evaluation out |
 | 3 | INVEST | ✅ S; one function's blend; checkable alone by exact node identity; valuable as E2's gate (an enabler, said plainly) |
 | 4 | testable, measurable acceptance | ✅ A1 11 / 11 counts exact plus the 190 cross-build at 0 mismatches; A2 `Object.is` at 0 mismatches; A3 exact per family; A4 mirror; A5 R ≤ 1.0500 (mean of two sessions against the pre-ticket head, PREREG `…e36ee7ca`'s shape); A6 median ≥ base, every run ≥ 6; A7 0 expectations changed; A8 no games; A9 (packed build) Σ mg / Σ eg inside int16. ~~S2 is reported until the Orchestrator rules~~ *S2 reported only (ruled 2026-11-03)* |
-| 5 | dependencies known | ✅ `ABC-269` merged (F3 fired; cut C1 being built, QE's one re-read pending); *"accept ADR-0067"* (merge only, pending); ~~the Architect's disposition line; the S2 ruling~~ *F8 and the S2 ruling done 2026-11-03*; file collisions |
+| 5 | dependencies known | ✅ `ABC-269` merged ~~(F3 fired; cut C1 being built, QE's one re-read pending)~~ *(met 2026-11-03, `54dee3f2`)*; *"accept ADR-0067"* (merge only, pending); ~~the Architect's disposition line; the S2 ruling~~ *F8 and the S2 ruling done 2026-11-03*; file collisions |
 | 6 | NFR triggers with targets | ✅ `G2` ≤ 1.05 ×; `NFR-005` floor 6 with "≥ base" graded; `NFR-009` fixed size added at load, ≤ 16 MiB, reported (≈ 3 KiB arithmetic); `NFR-008` ≤ 10 s |
 | 7 | test notes | ✅ 1–6 (QE's A3 freeze; one-process A1; F3 coupling; UAT; A5's arms, A9, C1's P5 guard) |
 | 8 | size | ✅ S (scope whole: the coupling clause did not fire) |
 | 9 | priority | ✅ P2 |
-| 10 | no major unresolved blocker | ❌ `ABC-269` is not merged (`ADR-0064` F3 fired; ~~`arch-ABC-269-F3` open~~ *cut C1 dispatched, QE's single `G2` re-read pending*), and the build needs its head. ~~The E2-pre disposition line in `ADR-0067` is owed by the Architect.~~ *The falsifier half is met: `ADR-0067` F8 (2026-11-03).* `ADR-0067` acceptance gates the merge only (reading (b)), so it does not block Ready |
+| 10 | no major unresolved blocker | ✅ *2026-11-03 (`bapm-269-done`): `ABC-269` merged at `54dee3f2` with C1 (`G2` 1.0373 ×, QE `…eff2fe64`); the pre-ticket head is `main`, `src/` `4d6b117b`.* ~~❌ `ABC-269` is not merged~~ (`ADR-0064` F3 fired; ~~`arch-ABC-269-F3` open~~ *cut C1 dispatched, QE's single `G2` re-read pending*), and the build needs its head. ~~The E2-pre disposition line in `ADR-0067` is owed by the Architect.~~ *The falsifier half is met: `ADR-0067` F8 (2026-11-03).* `ADR-0067` acceptance gates the merge only (reading (b)), so it does not block Ready |
 
-**DoR 9/10. Backlog.** Ready once `ABC-269` merges (with C1). ~~and the Architect's E2-pre disposition line is in
+*2026-11-03 (`bapm-269-done`): row 10 met.* **DoR 10/10. Ready** (the BA/PM exit; the Orchestrator has pulled it to In
+Development, `se-ABC-274`). The merge waits on *"accept ADR-0067"* (pending). ~~**DoR 9/10. Backlog.** Ready once `ABC-269` merges (with C1).~~ ~~and the Architect's E2-pre disposition line is in
 `ADR-0067`~~ *F8 is in `ADR-0067` (2026-11-03).* If `ABC-269` does not merge, § Dependencies' re-cut branch applies
 instead. QE freezes A3's positions before the build. The board move is the Orchestrator's.

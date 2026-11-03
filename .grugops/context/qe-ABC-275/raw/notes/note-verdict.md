@@ -1,0 +1,17 @@
+# qe-ABC-275 verdict: **PASS_WITH_GAPS** on ABC-275 (R1 harness, tools only). QE's verdict signs acceptance (no UAT, ticket Test notes 3). 1 LOW gap, 3 INFO; none blocks merge. Merge stays human
+
+QE/E2E, task `qe-ABC-275`, branch `grugops/ABC-275` at `ed52e5a2` (code `b3436c3a`; `main` `099f1d96` merged in, docs only), against the cut `main` `30d15584`. Every run was offline (`--dry-run` prints and refusals) under the shared host lock. No engine, no `cutechess-cli`, no game. Authority: the ticket's `## Acceptance criteria` A1–A7 and the Architect's shape (`arch-post-269` `…8136b589` § 1–2). The Engineer's `## Scope` / `## Risks` are read from `se-ABC-275` `…28ef48dc` and `…6964eed1`. They were re-run, not trusted.
+
+| row | QE re-run | state |
+|---|---|---|
+| A1 | R1's command, `--elo 1810 --budget-ms 100 --rounds 100 --concurrency 1 --dry-run`: exit 0, `<out>` not created. The whole 40-token vector `diff`s empty against a vector QE wrote from the ticket's text (not from the code). Stockfish `cmd=<stockfish>` and openings `file=<repo>/tools/rating/openings.epd` | MET |
+| A2 | 34 argvs run on a `git archive` of `30d15584` and of `ed52e5a2`, with the same env and out path: 22 dry-run prints (the ticket's 12, plus extras), all byte-equal; 12 refusals, all message-equal. The only diff lines are Node stack-frame line numbers (`rating.ts:825`→`:831` and the like) | MET |
+| A3 | `r --budget-ms` 4000 / 1000 / 50 / x (plus 100.5, 0, -100 and empty): exit 1, no argv, "`--budget-ms V: r takes only 500 or 100`". `--budget-ms 100 --elo` 2601 / 3190 (either flag order): exit 1, no argv, "`--elo E: above 2600 at --budget-ms 100; C3′'s probe runs first`". `d --budget-ms 500`: "not one of". `rpair --budget-ms` 100 / 500: the usage text, byte-equal to the cut | MET |
+| A4 | At 100: `--elo 2600` and `1320` print `option.UCI_Elo=` that value, exit 0. 3191 / 1319 / 2600.5 hit the range check. At 500 and with no flag, 2601 and 3190 print with Stockfish `st=0.5`, exit 0 | MET |
+| A5 | `git diff --name-only` from `30d15584` and from `099f1d96` to HEAD, `-- src/ data/ vitest.config.ts`: 0 lines each. Code paths changed: `tools/rating/rating.ts` and `tools/rating/pair-check.ts` only. r@100 against r@4000 at the same E/rounds/width differs in 3 tokens only: skytalix `st`, skytalix `timemargin`, Stockfish `st`. 0 `option.` tokens on skytalix | MET |
+| A6 | Not offline (ruled to R1). The code path was read: `control: skytalix st=0.1 timemargin=50, stockfish st=0.1 timemargin=2000` at r 100 | UNKNOWN - verify at `ABC-273` R1-A2 |
+| A7 | `node --test tools/rating/pair-check.ts`: 38/38, 0 fail, 0 skipped, 0 todo. lint 136 files, no fixes. typecheck and build exit 0. `npm test`: 66 files, 2 566/2 566, `last-run.json` success, 0 pending / 0 todo. The lane is unchanged (pair-check not collected) | MET |
+
+- **Mutation check (QE's own, in a scratch copy).** Four mutants were run against the new rows, and all 4 were killed. (1) Stockfish st stays 0.5 at 100: 3 rows red. (2) E max 2601: the A3 row is red. (3) `>=` 2600: the A4 row is red. (4) st=0.1 at 500 in place of 100: the ABC-255 S′ row and 3 ABC-275 rows are red.
+- **The Engineer's "usage text still says R 500 only".** Judged a gap: `QE-275-a`, LOW, BA/PM. The Engineer's reading is the compliant one, because A3 item 3 pins rpair's refusal to today's usage text, so this is not a defect of the build. Details are in the gaps note.
+- **Board:** In Review → toward merge (tools only, no Security/NFR column triggered beyond NFR-008, which is MET). The column move is the Orchestrator's.
