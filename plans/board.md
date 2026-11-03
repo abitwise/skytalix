@@ -1377,7 +1377,6 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [ABC-236] **2026-11-03: PARKED — ADR-0066 premise not met on main.** Aspiration windows at the root (size: M, priority: P3, DoR 9/10; milestone 2; waits ADR) **→ EPIC-011 2026-11-01 (bapm-epic011-dedupe; id kept)**
 - [ABC-237] TT keeps deeper entries on replace (size: S, priority: P3, DoR 9/10; milestone 2; waits ADR-0025 amendment) **→ EPIC-011 2026-11-01 (bapm-epic011-dedupe; id kept)** **2026-11-02: PARKED with ABC-258.**
 - [ABC-239] **2026-11-03: ADR-0067 PROPOSED; waits owner acceptance + Q-3K-7, ABC-269, E2-pre.** Weights tuned offline, constants only, validated against Stockfish (size: L, priority: P3, DoR 8/10; milestone 3; waits ADR-0048 licence, ADR; its batch reads before merge) **→ EPIC-011 2026-11-01 (bapm-epic011-dedupe; id kept)**
-- [ABC-270] E3a: king safety by phase — exposure endgame halves + the ADR-0031 addendum's queen scale / shelter gate re-read over E1, judged on play (Q-3K-4 b) (EPIC-011 Phase 4; size: M, priority: P2, DoR 9/10; GAIN; waits ABC-269 merged + ADR; S1–S3 its first graded rows) **cut 2026-11-03 (bapm-epic011-cut); design after the owner-ordered ABC-234 → 236 → 239**
 - [ABC-271] E4a: passed pawns read the kings and the path — king distance, free path, rule of the square (EPIC-011 Phase 4; size: M, priority: P3, DoR 9/10; GAIN unless the ADR names NEUTRAL; waits ABC-269 merged + ADR) **cut 2026-11-03 (bapm-epic011-cut)**
 - [ABC-272] E7a: mop-up for pawnless wins + drawish-material scaling, premise-gated (EPIC-011 Phase 4; size: M, priority: P3, DoR 9/10; waits ABC-269 merged + premise probe (≤ 10/12 mates; ≥ 100 cp on ≥ 5/10 draws) + ADR; both premises fail → dropped) **cut 2026-11-03 (bapm-epic011-cut)**
 
@@ -1411,7 +1410,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## In Analysis (WIP 0/2)
 
 
-## In Design (WIP 2/2)
+## In Design (WIP 1/2)
+- [ABC-270] **2026-11-03: In Design (owner item 8) → `arch-ABC-270` (ADR-0068).** E3a: king safety by phase — exposure endgame halves + the ADR-0031 addendum's queen scale / shelter gate re-read over E1, judged on play (Q-3K-4 b) (EPIC-011 Phase 4; size: M, priority: P2, DoR 9/10; GAIN; waits ABC-269 merged + ADR; S1–S3 its first graded rows) **cut 2026-11-03 (bapm-epic011-cut); design after the owner-ordered ABC-234 → 236 → 239**
 
 
 ## Ready for Dev (WIP 0/6)
