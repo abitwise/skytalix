@@ -24,6 +24,7 @@
     "spike/**/*.ts",
     "tools/opening-book/**/*.ts",
     "tools/rating/**/*.ts",
+    "tools/tune/**/*.ts",
     "tools/grugops/qe-hop-integrity.test.ts",
     "vitest.config.ts"
   ]
