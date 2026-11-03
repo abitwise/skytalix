@@ -10,6 +10,32 @@ owner: BA/PM
 
 # EPIC-011: the path toward 3 000 Elo, classical and measured (`ADR-0056`)
 
+> **`ABC-234` (O3s) PARKED: `ADR-0065` PROPOSED, PREMISE NOT MET ON `main`; THE Q1 STUB RE-STATED (CARRIES `see`
+> ITSELF; NEEDS `ADR-0024` d4 OPENED, OWNER ASKED, PENDING); THE Q1 DIAGNOSTIC RECORDED, 2026-11-03, by BA/PM** (task
+> `bapm-ABC-234-park`, records only, at `main` `32b807c7`; nothing run). Sources: the Architect's `arch-ABC-234`
+> decision `…a4ed96aa` (§ 5, the page lines) and results note `…ffe76d35`; `ADR-0065` § Status and decisions 1–2; the
+> Orchestrator's ruling *"ABC-234 PARKED"* and its owner ask (board, 2026-11-03, `main` `32b807c7`).
+> - **`ABC-234` is parked.** Every probed form passes the safety gate and misses the pay gate (≤ 0.95× at d8 on four
+>   readings); the design of record, S1m, reads `chooseMove` **0.9864 / 0.9548** (F4). A0 is ruled by `ADR-0065`
+>   decision 1: `ADR-0024` d4 fences Q1 (SEE pruning in quiescence), not O3s. DoR 8/10 → 9/10, Backlog. Re-opens on one
+>   of three named premises (Q1 built first; staged move generation, V3; a time-per-move instrument by the owner's
+>   ruling), each under a new PREREG; intent GAIN on any re-open (C2′). § Phases row O3s, § Tickets row 8.
+> - **The Q1 stub no longer depends on `ABC-234`.** It carries `see` itself (`ADR-0065` decision 2). It **does** need
+>   `ADR-0024` d4 opened, by evidence or by the owner's word: the Orchestrator asked the owner 2026-11-03, and it is
+>   **unanswered (pending, `Q-3K-9`)**. Nothing here assumes the answer. The quiescence counters are evidence of cost,
+>   not of material lost (`ADR-0065` decision 1), so d4's own condition is not met by them.
+> - **The Q1 diagnostic** (`arch-ABC-234`, after the O3s miss; **not pre-registered**; it changes no verdict and is
+>   not a reading): quiescence skips `see < 0` captures out of check, over `main` (src `58fa3eb4`): reach 5.837 →
+>   6.721, **+0.884 ply** at 47 000 nodes (128 deeper, 1 shallower); d8 nodes **0.22–0.68×** (`search()` 0.6782 /
+>   0.3227, `chooseMove` 0.5876 / 0.2239); mate floor 0 / 163, **zugzwang 7 / 7**, `G1` 54 / 58; **drift** at d5
+>   96.26 % within 25 cp, **max 69 cp**. The largest single lever any EPIC-011 probe has read (P1 +0.38, O1h +0.09,
+>   O3s +0.07). On `main`, 31.3 % of quiescence moves are losing captures and 96.9 % of those are refuted. It needs its
+>   own PREREG and an ADR. Whether Q1 is ranked ahead of S1 (`ABC-236`) is the Orchestrator's call (`…a4ed96aa` § 4);
+>   this block changes no order.
+> - **Rows touched:** § Phases O3s, Q1; § Tickets row 8; § Dedupe audit `ABC-234`; § Owner questions (`Q-3K-9`, new);
+>   § Dependencies (`ABC-234` → Q1); the "Open owner calls" line. `ADR-0056`'s rows (O3s, the survey, the `EPIC-010`
+>   map, Q1, the dated ranking line) are the Architect's, owed at the next `ADR-0056` fold, not edited here.
+
 > **`QE-269-a` RULED (a); `Q-3K-4` (b)'S SCOPE RULED; THE ARCHITECT'S OWED LINES FOLDED, 2026-11-03, by BA/PM** (task
 > `bapm-ABC-269-fold`, records only, at `main` `2c304327`; nothing run). Sources: `arch-ABC-269-rule` `…8ccb561f`
 > (decision) and `…1c2ca5ff` (page lines); `ADR-0064` § Decision log; `ADR-0056` D2, D6, D7 (dated 2026-11-03); the
@@ -400,7 +426,8 @@ owner: BA/PM
 >   control and its game counts (the Architect's, `arch-adr0056-owner-fold` item 3).
 > - **Open owner calls:** ~~Q-3K-2, Q-3K-3, Q-3K-4,~~ Q-3K-6, Q-3K-7, Q-3K-8 ~~and Q-SP-3~~ (§ Owner questions; Q-SP-3
 >   answered yes 2026-11-01). *2026-11-03 (`bapm-ABC-269-fold`): Q-3K-2 and Q-3K-3 answered 2026-11-01, Q-3K-4
->   answered (b) 2026-11-02 (§ Owner questions); Q-3K-6, Q-3K-7 and Q-3K-8 stay open.*
+>   answered (b) 2026-11-02 (§ Owner questions); Q-3K-6, Q-3K-7 and Q-3K-8 stay open.* *2026-11-03
+>   (`bapm-ABC-234-park`): **Q-3K-9** (open `ADR-0024` d4 for Q1) asked 2026-11-03, pending.*
 > - **The dedupe audit** of every epic and ticket against `ADR-0056` and against each other is § Dedupe audit. No work
 >   on this page repeats work already done or held elsewhere.
 
@@ -485,8 +512,8 @@ reorders made here are named in the "why" column.
 | threads | TH-3 | **`ABC-267`** multi-worker property rows, the torn-entry stress, `NFR-009` summed over workers, the default lane's wall (test-only) | full page (new) | after `ABC-266`, or folded into it (the Orchestrator's call). **All three land before W1 and any 40/15 reading** *2026-11-02 (`bapm-ABC-266-rows`): **folded into `ABC-266`** (the Orchestrator's ruling, `ADR-0062` D13); page closed as folded. The strand is now two tickets, and both land before W1 and any 40/15 reading* |
 | **3, ordering** | O1h | `ABC-233` history heuristic after the killers | full page (moved in) | *2026-11-02 (`bapm-records-1102c`): **parked**, no longer a standalone first pull. `ADR-0063` PROPOSED, premise not met on `main` (every form misses ≤ 0.95× at d8; the killers hold 90 % of quiet cutoffs); the Orchestrator's ruling. It re-opens on a new named premise: a joint P1 / P4 probe with history as input, an ordering change that leaves more cutoffs to history (O2c, V3), or a depth-gated instrument (`ADR-0063` § Status)* |
 | 3 | O2c | *stub:* countermove and continuation history | title only | after `ABC-233` *(2026-11-02: `ABC-233` parked; O2c builds on its table, so it waits with it unless a re-open names O2c itself as the premise, `ADR-0063` § Status 2)* |
-| 3 | O3s | `ABC-234` SEE orders captures, ordering only | full page (moved in) | |
-| 3 | Q1 | *stub:* SEE pruning of losing captures, in quiescence and the main search | title only | after `ABC-234`; was fenced out of `EPIC-010` |
+| 3 | O3s | `ABC-234` SEE orders captures, ordering only | full page (moved in) | *2026-11-03 (`bapm-ABC-234-park`): **parked: `ADR-0065` premise not met on `main`** (S1m `chooseMove` d8 0.9864 / 0.9548 > 0.95; every form safe); the Orchestrator's ruling. A0 ruled (`ADR-0065` decision 1: d4 fences Q1, not O3s). Re-opens on a named premise: Q1 built first, staged move generation (V3), or a time-per-move instrument (`ADR-0065` § Status); intent GAIN* |
+| 3 | Q1 | *stub:* SEE pruning of losing captures, in quiescence and the main search | title only | ~~after `ABC-234`~~; was fenced out of `EPIC-010` *2026-11-03 (`bapm-ABC-234-park`): **carries `see` itself** (`ADR-0065` decision 2; no longer waits on `ABC-234`); **needs `ADR-0024` d4 opened**, by evidence or the owner's word (`Q-3K-9`, asked 2026-11-03, **pending**). Diagnostic (quiescence half only, not pre-registered): +0.884 ply reach, d8 0.22–0.68× nodes, zugzwang 7 / 7, drift max 69 cp (top block). Needs its own PREREG and ADR* |
 | 3 | Q2 | *stub:* delta pruning in quiescence | title only | was fenced out of `EPIC-010` |
 | 3 | S1 | `ABC-236` aspiration windows at the root | full page (moved in) | after T1 (`ADR-0056` D2) |
 | **4, evaluation** *(E1 **pulled forward** 2026-11-02, ahead of Phase 3 and the rest of Phase 2; `ADR-0056` D6's reorder rule; `bapm-E1-cut`)* | E1 | ~~*stub:*~~ **`ABC-269`** the full taper: one linear phase, every term a middlegame / endgame pair in one parameter table (`src/evaluate-params.ts`); at E1 only the king (40 − 15 m) and the passers (2 × by rank) get endgame halves. **Folds `ABC-231` and `ABC-232`** | ~~title only~~ full page (new, `bapm-E1-cut`) | `ABC-231`/`ABC-232` are subsets (§ Dedupe audit, C7) *2026-11-02 (`bapm-E1-cut`): **next pull** (`arch-next-pull` `…7e3ace66` ranks it first: 65 % of the ≥ 50 cp errors survive two node doublings, so evaluation is the bigger lever; the Orchestrator's ruling). `ADR-0064` PROPOSED (`arch-E1`): linear form chosen by the pre-registered rule (S 1.0344 against P's 1.1286); identical to `main` at phase 24; `chooseMove` 0.96–1.035× at d8–d10 on the `G6` boards; zugzwang 7 / 7, mate floor 0, `G1` 54 / 58. Intent GAIN; size M; P2. **DoR 10/10 on reading (b):** the build may start; B8 and the merge wait on the owner's acceptance of `ADR-0064`; B7 (`G6`) is graded per `Q-3K-4`. `ABC-231` and `ABC-232` closed as merged* *2026-11-03 (`bapm-ABC-269-fold`): **`ADR-0064` ACCEPTED 2026-11-02; B7 under `Q-3K-4` = (b)**; `QE-269-a` ruled (a): B1 (d) on D1–D6, S1–S3 E3's* |
@@ -758,7 +785,7 @@ Phase 5, the next question is V4 and it is his (`ADR-0056` D6 item 7).
 | 5 | `ABC-257` | The TT is kept across the moves of one game, ~~re-tried after T1 and T2 (T3)~~ *together with `ABC-238`'s deeper cutoffs (T1 + T3), on a pre-registered held-out bar (2026-11-02)* | ~~S~~ M | P3 | Backlog, **PAUSED** | 8/10 | ~~`ABC-238`, `ABC-237`;~~ ~~*the owner: C2′ yes, or a longer read;*~~ *2026-11-02 (`bapm-threads-cut`): C2′ answered ("C yes"); **paused by the owner's order (P)**, the Orchestrator lifts it within P; intent line owed at resume;* `ADR-0025` d4 amendment (accepted 2026-10-26, not in force) re-read; `ADR-0058` as base (**ACCEPTED, NOT IN FORCE**, "A accept"; in force only at this ticket's merge with A8′ met) |
 | 6 | `ABC-258` | A larger transposition table: 8 MiB inside `NFR-009`, more only on the owner's word (T4) *; T2 measured alongside (2026-11-02)* | S | P3 | Backlog, **PAUSED** | ~~8/10~~ 9/10 *(the page's score since 2026-11-01)* | `ABC-257`; Q-3K-6 for > 8 MiB; *2026-11-02 (`bapm-threads-cut`): **paused by the owner's order (P)**; the T2 amendment parked with it ("B park"); re-asked after `ABC-266`, on the shared table* |
 | 7 | `ABC-233` | History heuristic after the killers (O1h) | M | P3 | Backlog, **parked** *(2026-11-02, the Orchestrator's ruling; `bapm-records-1102c`)* | 9/10 | ~~the ADR (`ADR-0026` d10)~~ *2026-11-02: `ADR-0063` PROPOSED, **premise not met on `main`** (F4: d8 1.0011 / 0.7970 / 0.9751 / 0.9832 against ≤ 0.95× on four); no build, no read. DoR row 10 ❌ on F4; `NFR-009` 32 KiB; A3 superseded by `ADR-0063` d9; S′ `--elo 1810`. Re-opens on a new named premise and a new pre-registered probe (`ADR-0063` § Status)* |
-| 8 | `ABC-234` | SEE orders captures, ordering only (O3s) | M | P3 | Backlog | 8/10 | `ADR-0024` d4 re-open evidence; the ADR |
+| 8 | `ABC-234` | SEE orders captures, ordering only (O3s) | M | P3 | Backlog *(parked 2026-11-03)* | ~~8/10~~ **9/10** | ~~`ADR-0024` d4 re-open evidence; the ADR~~ *2026-11-03 (`bapm-ABC-234-park`): A0 ruled; `ADR-0065` PROPOSED, premise not met on `main` (F4). **Parked** (the Orchestrator's ruling); re-opens on one of `ADR-0065` § Status's three premises. Intent GAIN on re-open* |
 | 9 | `ABC-236` | Aspiration windows at the root (S1) | M | P3 | Backlog | 9/10 | new ADR; ~~`ABC-238`~~ *(lifted 2026-11-02: T1 not in force; the instability coupling returns with T1)* |
 | 10 | `ABC-231` | King table tapered by phase, alone | S | P3 | ~~Backlog~~ **closed: merged into `ABC-269` (E1)** *(2026-11-02, `bapm-E1-cut`; page `status: done`, `closed:` merged; the board move is the Orchestrator's)* | ~~9/10~~ — | ~~**to be merged into E1** at Phase 4's refinement~~ *folded: A1 → B7, A2 → B1 (b) / (d), A3 → B1 (a), A4 → B6, A5 → B4 + `G7`, A6 → B8* |
 | 11 | `ABC-232` | Passed pawns by phase | S | P3 | ~~Backlog~~ **closed: merged into `ABC-269` (E1) and E4** *(2026-11-02, `bapm-E1-cut`; page `status: done`, `closed:` merged; the board move is the Orchestrator's)* | ~~9/10~~ — | ~~**to be merged into E1** (phase scaling) and E4 (passer terms)~~ *folded: A1 → B1 (e) (the within-5-cp clause replaced), A2 → B1 (a), A3 → B6, A4 → B4 + `G7`, A5 → B8; other passer terms → E4* |
@@ -806,7 +833,7 @@ line, id unchanged), **merge into X**, **supersede**, **drop**, **close** (the e
 | `ABC-231` king taper alone | E1 (full taper); `ABC-205`'s taper half | **move**, then **merge into E1** | a subset of E1 (`ADR-0056` D2, D8: "`ABC-231` and `ABC-232` folded into E1"). Kept as a page until E1 is cut, so its acceptance rows (the `ABC-205` `G6` replay) carry over; then closed as merged |
 | `ABC-232` passers by phase | E1 (phase scaling), E4 (passer terms) | **move**, then **merge into E1 / E4** | same; its phase scaling is E1's, any passer term beyond it is E4's |
 | `ABC-233` history heuristic | O1h; O2c builds on it | **move** (Phase 3) | covered gap, no duplicate |
-| `ABC-234` SEE ordering | O3s; Q1 (SEE pruning) needs it | **move** (Phase 3) | covered gap; its `ADR-0024` d4 evidence wait stands |
+| `ABC-234` SEE ordering | O3s; Q1 (SEE pruning) needs it | **move** (Phase 3) | covered gap; its `ADR-0024` d4 evidence wait stands *2026-11-03 (`bapm-ABC-234-park`): parked (`ADR-0065`, premise not met); A0 ruled (d4 governs Q1, not O3s); Q1 no longer needs it (carries `see`)* |
 | `ABC-236` aspiration | S1 | **move** (Phase 3, after T1) | covered gap; `ADR-0056` makes it depend on T1 |
 | `ABC-237` TT replacement | T2; order against `ABC-238` | **move** (Phase 1, second) | covered gap; order C2 |
 | `ABC-238` deeper cutoffs | T1 | **move** (Phase 1, first; P3 → P2) | covered gap, the cheapest real one; order C2 |
@@ -943,6 +970,7 @@ line, id unchanged), **merge into X**, **supersede**, **drop**, **close** (the e
 | ~~**The 2-core rule for `THREADS_DEEP`**~~ *(new 2026-11-02, `ADR-0062` D11; recorded by `bapm-ABC-266-rows`; **moot 2026-11-02** while threads are parked; default (b) stands; `bapm-records-1102c`)* | His rule *"vitest needs to be capped to max 2 cpu cores"* is held today by `maxWorkers: 2`. May the opt-in `THREADS_DEEP` lane run an engine child on **up to M cores** for its rows? **(a)** yes, run with the host ALONE; or **(b)** no, the rows stay at `Threads 2` | **(b)** (the Architect recommends (a)). The standing rows run at `Threads 2` and W = 2. `Threads 4` and `Threads M` play only in `ABC-266` A7's 100 games. QE reads A5 and `G5` at `Threads M`, and A8 at W = 12, once out of tree with the same fixtures and flags, host ALONE. Both answers are written into `ABC-266`'s rows | nothing: it decides which `ABC-266` rows stand in the lane and which QE reads once |
 | ~~**P1's 27 cp cap**~~ *(new 2026-11-02, `arch-ADR-0060-reopen` `…e17a23f4` decision 4; recorded by `bapm-phase2-records`; **optional**; **moot 2026-11-02**: after P3, decision 1 misses A4 (a) and zugzwang too, so a "yes" admits nothing; the Orchestrator `…8ce2fd23`; the default, keep the cap, stands; `bapm-records-1102c`)* | May `ADR-0060` A3's 27 cp drift cap be re-derived on `main` by `ADR-0050` d8's method? It would become **94 cp** (⌊1.5 × 63⌋, decision 1's larger maximum on `main`). **A "yes" alone admits no form:** decision 1 still misses A4 (a) on `chooseMove` position-6 (0.8699 against 0.85), and no form in the set misses only the cap. The answers that settle it: "keep the cap"; "re-derive the cap and A4 (a)" (decision 1 re-proposed with 94 cp and his A4 (a) number); or "decline `ADR-0060`" | **keep the cap** (the Architect's recommendation, which BA/PM adopts). P1 stays parked, the flat 1-ply LMR stays on `main`, and decision 1 is re-measured unchanged after P3 merges or after O1h | nothing today. Under the default, P1 waits on its re-measure trigger (§ Phases, "P1, parked") |
 | ~~**`ADR-0061` acceptance**~~ *(new 2026-11-02, `arch-phase2-p3` `…004b35ed` decision 10; recorded by `bapm-P3-page`; **answered yes 2026-11-02**, "61 yes", `…773be7de`; `ABC-268` merged `e72487e1`; `bapm-records-1102c`)* | Accept `ADR-0061`, futility pruning (P3): late quiet, non-checking moves skipped at null-window nodes of remaining depth 1–3 when `evaluate + 150 / 350 / 550 cp ≤ alpha`, in both recursions, behind a test-only off-door pair. `ADR-0056` (accepted in direction) covers P3's direction, not this text. The answers that settle it: *"accept ADR-0061"* or *"decline it"* | **not accepted:** no futility pruning on `main`. Under reading (b), `ABC-268`'s build and gates may start now | `ABC-268`'s A6 (the 100-game read, S′, the Levels deep lane) and its merge |
+| **Q-3K-9** *(new 2026-11-03; asked by the Orchestrator 2026-11-03 (board, `main` `32b807c7`); **unanswered, pending**; id given here by BA/PM, `bapm-ABC-234-park`)* | Open `ADR-0024` decision 4 for Q1 (SEE pruning of losing captures in quiescence)? d4's own re-open condition (a lost defended-square capture) is not met (`ADR-0065` decision 1: all 24 `do-not-hang` rows solved); the evidence offered is cost: a diagnostic, not pre-registered, Q1 reads +0.884 ply reach, d8 0.22–0.68× nodes, zugzwang 7 / 7, drift max 69 cp (`arch-ABC-234` `…ffe76d35`) | **not opened:** Q1 stays fenced (`ADR-0024` d4; `EPIC-010` § Out of scope) | Q1's PREREG, ADR and ticket; `ABC-234`'s re-open premise 1 |
 | (part of Q-3K-1) | Confirm the scale (Stockfish 19 `UCI_Elo`) and the claim rule (≥ 50 % over 200 games at E = M) | *[proposed]* as written | G1's wording |
 
 ## Dependencies
@@ -952,7 +980,8 @@ line, id unchanged), **merge into X**, **supersede**, **drop**, **close** (the e
 - `ABC-204`'s pinned host tools (`cutechess-cli` 1.5.1, Stockfish 19); paths out of the records (`ADR-0049` d4).
 - `EPIC-010` closed: 1b's packed base is what every Phase 1+ ticket edits.
 - Within the epic: ~~`ABC-238` → `ABC-237` → `ABC-257` → `ABC-258`~~ *(2026-11-02: `ABC-257` (T1 + T3) → `ABC-258` (with T2), both paused)* share `src/transposition.ts`; `ABC-233` → O2c →
-  `ABC-234` → Q1 share `orderMoves` and the capture path; *2026-11-02 (`bapm-threads-cut`):* `ABC-265` → `ABC-266` →
+  `ABC-234` → Q1 share `orderMoves` and the capture path *(2026-11-03, `bapm-ABC-234-park`: `ABC-234` parked; Q1
+  carries `see` itself, so the arrow no longer orders them; if `ABC-234` re-opens on its premise 1, it follows Q1)*; *2026-11-02 (`bapm-threads-cut`):* `ABC-265` → `ABC-266` →
   `ABC-267` in order *(2026-11-02, `bapm-ABC-266-rows`: `ABC-267` folded into `ABC-266`, so `ABC-265` → `ABC-266`; the
   D12 timing probe before `ABC-266`'s Development)*; `ABC-265` shares `src/transposition.ts` with the paused `ABC-257` and the parked `ABC-258` (one at
   a time, and whichever follows it is written on the shared layout); `ABC-266` shares `src/engine.ts` and
