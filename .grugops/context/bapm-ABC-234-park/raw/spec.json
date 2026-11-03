@@ -1,0 +1,5 @@
+{ "refs": ["bapm-ABC-234-park","grugops/bapm-ABC-234-park","ABC-234","EPIC-011","O3s","Q1","S1m","Q-3K-9","ADR-0065","ADR-0024","ADR-0056","ABC-233","ABC-236","32b807c7","6a2e0ca2","arch-ABC-234/20261103T095012Z-architect-design-decision-a4ed96aa","arch-ABC-234/20261103T095012Z-architect-design-observation-ffe76d35","arch-ABC-234/20261103T093240Z-architect-design-decision-9ac61a7a"],
+  "notes": [
+    { "kind": "decision", "confidence": "high: every page line is read from the Architect's sealed § 5 list and ADR-0065 verbatim; the park ruling and owner ask are the Orchestrator's, from the board and brief; Q-3K-9 recorded pending, not assumed; no bar moved", "bodyFile": "notes/dec.md" },
+    { "kind": "observation", "confidence": "high: each item checked against the sources at 32b807c7 and the pages at 6a2e0ca2", "bodyFile": "notes/obs.md" }
+  ] }
