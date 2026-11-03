@@ -23,6 +23,14 @@
  * where Δ = eg − mg sums only the terms whose halves differ (at E1 the king's square and the
  * passed pawns). trunc is odd, so the mirror stays exact. `evaluateWithoutTaper` is the
  * pre-`ABC-269` evaluation exactly (the blend at phase 24).
+ *
+ * CUT C1 (`arch-ABC-269-F3`, `ADR-0064` "F3 on G2"): the phase is not gathered in the board walk.
+ * The search seeds it once at its root by `phaseOf` and carries it down its recursion as a number
+ * argument, each child by `phaseAfterMove`; the tapered entry `evaluateAtPhase(position, phase)`
+ * takes it. The king's Δ is read after the walk from the two king squares. `evaluate(position)` is
+ * `evaluateAtPhase(position, phaseOf(position))`, `Object.is`-exact, for every caller outside the
+ * search. Nothing is added to `Position`, `UndoRecord` or module state (`ADR-0002` clause 1,
+ * `ADR-0020` d3, `ADR-0064` d7).
  */
 
 import {
@@ -40,6 +48,7 @@ import {
   PHASE_WEIGHT,
   PST,
 } from "./evaluate-params.ts";
+import type { Move } from "./moves.ts";
 import {
   BISHOP,
   BLACK,
@@ -425,13 +434,45 @@ export function pawnCacheProbeForTest(position: Position): { slot: number; hit: 
 }
 
 /**
+ * The game phase of `position`: Σ `PHASE_WEIGHT` over the board (N 1, B 1, R 2, Q 4; pawns and
+ * kings 0), unclamped. The search's seed at its root, and the oracle `phaseAfterMove` is proved
+ * against (`ABC-269` cut C1). A walk of its own: the shipped recursions call it once per root
+ * call or iteration, never per node.
+ */
+export function phaseOf(position: Position): number {
+  const board = position.board;
+  let phase = 0;
+  for (let rank = 0; rank < 8; rank++) {
+    for (let file = 0; file < 8; file++) {
+      const piece = board[rank * 16 + file] as number;
+      if (piece !== EMPTY) phase += PHASE_WEIGHT[pieceType(piece)] as number;
+    }
+  }
+  return phase;
+}
+
+/**
+ * The phase after `move` is made from a node of phase `phase` (`ABC-269` cut C1): the captured
+ * piece's weight leaves, the promotion piece's weight arrives. Pure, branch-free, no undo.
+ * `PHASE_WEIGHT` is 0 for EMPTY, PAWN and KING, so a quiet move, castling and en passant change
+ * nothing, and `move.promotion` is EMPTY on every move but a promotion. Equal to `phaseOf` of the
+ * child by construction (`P2` in `src/evaluate.taper.test.ts` proves it on every move kind).
+ */
+export function phaseAfterMove(phase: number, move: Move): number {
+  return (
+    phase - (PHASE_WEIGHT[move.captured & 7] as number) + (PHASE_WEIGHT[move.promotion] as number)
+  );
+}
+
+/**
  * Score of a position from WHITE's point of view: white's material and placement minus
  * black's. Kept separate from the negamax flip so the sign convention lives in exactly one
  * place and the tables are read exactly once per piece.
  *
- * `taper` (`ABC-269`, `ADR-0064` decisions 1, 2 and 6): the phase is gathered in the walk's
- * non-pawn branch and the king's Δ where the king square is found, with no second walk and no new
- * board read; the blend is applied once, at the end, in the delta form mg + trunc(Δ × (D − w) / D).
+ * `taper` (`ABC-269`, `ADR-0064` decisions 1, 2 and 6): `phase` is the caller's, carried by the
+ * search (cut C1), and the king's Δ is read after the walk from the two king squares, so the walk
+ * holds no phase add and no king Δ; the blend is applied once, at the end, in the delta form
+ * mg + trunc(Δ × (D − w) / D). `phase` is read only when `taper` is true.
  * That form, and never trunc((mg × w + eg × (D − w)) / D), is built: the full form can return −0
  * on one side and +0 on its mirror (`QE-269-b`). With `taper` false the result is the middlegame
  * sum exactly, the pre-`ABC-269` evaluation.
@@ -441,6 +482,7 @@ function whiteMinusBlack(
   mobilityWeight: number,
   pawnCache: boolean,
   taper: boolean,
+  phase: number,
 ): number {
   const board = position.board;
   let score = 0;
@@ -450,8 +492,6 @@ function whiteMinusBlack(
   let whitePawns = 0;
   let blackPawns = 0;
   let pawnSlotWord = 0;
-  let phase = 0;
-  let egDelta = 0;
 
   for (let rank = 7; rank >= 0; rank--) {
     for (let file = 0; file < 8; file++) {
@@ -484,10 +524,6 @@ function whiteMinusBlack(
       if (type === KING) {
         if (black) blackKing = square;
         else whiteKing = square;
-        const delta = KING_EG_DELTA[tableIndex] as number;
-        egDelta += black ? -delta : delta;
-      } else {
-        phase += PHASE_WEIGHT[type] as number;
       }
     }
   }
@@ -503,9 +539,17 @@ function whiteMinusBlack(
   const mg = score + (structure + passedPart) + kingSafety + mobilityScore;
   if (!taper) return mg;
 
+  // The king's Δ, after the walk, by the walk's own table index (white rank 7 − r, black rank r).
+  // A missing king (square −1) adds 0, the in-walk form's value; one king per colour is the domain.
+  let egDelta = passedEgPart - passedPart;
+  if (whiteKing !== -1) {
+    egDelta += KING_EG_DELTA[(7 - (whiteKing >> 4)) * 8 + (whiteKing & 7)] as number;
+  }
+  if (blackKing !== -1) {
+    egDelta -= KING_EG_DELTA[(blackKing >> 4) * 8 + (blackKing & 7)] as number;
+  }
   // w = clamp(phase − PHASE_EG, 0, D), the phase clamped to 24 first. `mg + trunc(…)` is +0 when
   // mg is 0 and the product truncates to −0, so the mirror stays `Object.is`-exact.
-  egDelta += passedEgPart - passedPart;
   let w = (phase > 24 ? 24 : phase) - PHASE_EG;
   if (w < 0) w = 0;
   else if (w > PHASE_SPAN) w = PHASE_SPAN;
@@ -519,7 +563,16 @@ function whiteMinusBlack(
  * codebase does mutate transiently, which is why ABC-076's A5 asserts byte-identity here.)
  */
 export function evaluate(position: Position): number {
-  const score = whiteMinusBlack(position, MOBILITY_WEIGHT, true, true);
+  return evaluateAtPhase(position, phaseOf(position));
+}
+
+/**
+ * THE tapered entry the shipped recursions call (`ABC-269` cut C1): `evaluate` with the phase
+ * supplied by the caller, which must be `phaseOf(position)` — the search carries it down by
+ * `phaseAfterMove`. `evaluate(p)` ≡ `evaluateAtPhase(p, phaseOf(p))`, `Object.is`-exact.
+ */
+export function evaluateAtPhase(position: Position, phase: number): number {
+  const score = whiteMinusBlack(position, MOBILITY_WEIGHT, true, true, phase);
   // `0 - score`, not `-score`: negating a balanced position yields `-0`, which is `Object.is`
   // -distinct from `0` and so is NOT "exactly equal" to its mirror's score. Caught by A1 at
   // startpos-with-black-to-move; `0 - 0` is `+0`.
@@ -533,7 +586,7 @@ export function evaluate(position: Position): number {
  * `searchWithout…` doors' precedent).
  */
 export function evaluateWithoutMobility(position: Position): number {
-  const score = whiteMinusBlack(position, 0, true, true);
+  const score = whiteMinusBlack(position, 0, true, true, phaseOf(position));
   return position.blackToMove ? 0 - score : score;
 }
 
@@ -544,7 +597,7 @@ export function evaluateWithoutMobility(position: Position): number {
  * precedent).
  */
 export function evaluateWithoutPawnCache(position: Position): number {
-  const score = whiteMinusBlack(position, MOBILITY_WEIGHT, false, true);
+  const score = whiteMinusBlack(position, MOBILITY_WEIGHT, false, true, phaseOf(position));
   return position.blackToMove ? 0 - score : score;
 }
 
@@ -555,6 +608,6 @@ export function evaluateWithoutPawnCache(position: Position): number {
  * a recursion reaches this only with its `taper` switch off, which no shipped call turns off.
  */
 export function evaluateWithoutTaper(position: Position): number {
-  const score = whiteMinusBlack(position, MOBILITY_WEIGHT, true, false);
+  const score = whiteMinusBlack(position, MOBILITY_WEIGHT, true, false, 0);
   return position.blackToMove ? 0 - score : score;
 }

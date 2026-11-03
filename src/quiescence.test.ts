@@ -40,7 +40,7 @@ import {
   chooseMoveWithoutTaper,
   type EngineChoice,
 } from "./engine.ts";
-import { evaluate, evaluateWithoutTaper } from "./evaluate.ts";
+import { evaluate, evaluateWithoutTaper, phaseOf } from "./evaluate.ts";
 import { parseFen, toFen } from "./fen.ts";
 import { gameStatus } from "./gameend.ts";
 import { isInCheck, legalCaptures, legalCapturesAndQueenPromotions, legalMoves } from "./legal.ts";
@@ -143,6 +143,7 @@ function quiesceFully(position: Position): QuiesceRun {
       nodes++;
       if (qply > deepest) deepest = qply;
     },
+    phaseOf(position),
   );
   return { score, nodes, deepest };
 }
@@ -596,6 +597,7 @@ describe("A6 — the searched position is unchanged on return", () => {
         (qply) => {
           if (qply >= 3) throw abort;
         },
+        phaseOf(position),
       ),
     ).toThrow(abort);
     expect(snapshot(position)).toEqual(before);
@@ -745,6 +747,7 @@ const quiesceAt = (fen: string, rules: QuiescenceRules, ply = 0, qply = 0): numb
     ply,
     rules,
     () => {},
+    phaseOf(parseFen(fen)),
   );
 
 /**
@@ -896,6 +899,7 @@ describe("ABC-228 A2 — in check, quiesce searches every evasion: Q-SET's in-ch
               0,
               SHIPPED,
               () => {},
+              phaseOf(position),
             ),
         );
         unmakeMove(position, move, undo);
@@ -952,6 +956,7 @@ describe("ABC-228 A3 — a capture that mates scores mate, at the right sign and
         0,
         SHIPPED,
         () => {},
+        phaseOf(position),
       ),
     ).toBe(0 - (MATE_SCORE - 1));
   });
@@ -1057,6 +1062,7 @@ describe("ABC-228 QE-228-b — QE's Q-SET rows (qe-ABC-228), in src", () => {
           0,
           SHIPPED,
           () => {},
+          phaseOf(position),
         ),
     ).toBe(row.score);
   });
@@ -1125,6 +1131,7 @@ describe("ABC-228 — the rule rows (`ADR-0053` decision 9; each reds a planted 
       0,
       SHIPPED,
       () => entered++,
+      phaseOf(position),
     );
     expect(score).toBe(-548);
     expect(entered).toBe(1); // the node itself, at qply 8; nothing past it
@@ -1447,6 +1454,7 @@ describe("ABC-229 A2 — quiescence sees the queen: Q-SET's quiet-promotion rows
         (qply) => {
           if (qply > deepest) deepest = qply;
         },
+        phaseOf(parseFen(fen)),
       );
       expect(deepest, id).toBeLessThanOrEqual(QUIESCENCE_MAX_PLY);
     }
@@ -1464,6 +1472,7 @@ describe("ABC-229 A2 — quiescence sees the queen: Q-SET's quiet-promotion rows
         0,
         SHIPPED,
         () => {},
+        phaseOf(position),
       );
       expect(matchesSnapshot(position, before), id).toBe(true);
     }

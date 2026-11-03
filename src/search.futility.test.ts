@@ -32,7 +32,7 @@ import {
   chooseMoveWithoutTaper,
   type EngineChoice,
 } from "./engine.ts";
-import { evaluate } from "./evaluate.ts";
+import { evaluate, phaseOf } from "./evaluate.ts";
 import { parseFen, toFen } from "./fen.ts";
 import { gameStatus } from "./gameend.ts";
 import { givesCheck, isInCheck, legalMoves } from "./legal.ts";
@@ -57,7 +57,8 @@ const RUN_DEEP = process.env.SEARCH_DEEP === "1";
  * THE EVALUATION STUB: a call-through module mock of `src/evaluate.ts`. `calls` counts every
  * evaluation; with `value` set, `evaluate` answers it instead, so the node test can be handed a
  * static score far below the mate band — the one input that makes the lower `alphaIn` clause
- * observable on its own. No production hook is added.
+ * observable on its own. No production hook is added. `evaluateAtPhase` (`ABC-269` cut C1) is the
+ * tapered entry `futilityNode` reads, so it is stubbed the same way, on the same counter.
  */
 const evalStub = vi.hoisted(() => ({ value: null as number | null, calls: 0 }));
 vi.mock("./evaluate.ts", async (importOriginal) => {
@@ -67,6 +68,10 @@ vi.mock("./evaluate.ts", async (importOriginal) => {
     evaluate: (position: Position) => {
       evalStub.calls++;
       return evalStub.value ?? actual.evaluate(position);
+    },
+    evaluateAtPhase: (position: Position, phase: number) => {
+      evalStub.calls++;
+      return evalStub.value ?? actual.evaluateAtPhase(position, phase);
     },
   };
 });
@@ -152,7 +157,7 @@ describe("futilityNode — eval + 150 / 350 / 550 <= alpha at a null-window node
     expect(isInCheck(parseFen(IN_CHECK))).toBe(true);
     // A real static score is far from the mate band: the lower alpha row needs the stub.
     expect(Math.abs(staticScore(QUIET))).toBeLessThan(MATE_FLOOR - 1_000);
-    expect(futilityNode.length).toBe(6); // ABC-269 adds `taper`
+    expect(futilityNode.length).toBe(7); // ABC-269 adds `taper`, and cut C1 the carried `phase`
   });
 
   const BOUNDARY: ReadonlyArray<{ fen: string; depth: 1 | 2 | 3; ply: number; side: string }> = [
@@ -168,10 +173,16 @@ describe("futilityNode — eval + 150 / 350 / 550 <= alpha at a null-window node
     it(`depth ${depth}, ply ${ply}, ${side} to move: true at alpha = eval + ${M[depth]} exactly, false at alpha - 1`, () => {
       const alpha = staticScore(fen) + M[depth];
       const position = parseFen(fen);
-      expect(futilityNode(position, depth, ply, alpha, alpha + 1, true)).toBe(true);
-      expect(futilityNode(position, depth, ply, alpha - 1, alpha, true)).toBe(false);
+      expect(futilityNode(position, depth, ply, alpha, alpha + 1, true, phaseOf(position))).toBe(
+        true,
+      );
+      expect(futilityNode(position, depth, ply, alpha - 1, alpha, true, phaseOf(position))).toBe(
+        false,
+      );
       // Far below alpha it still prunes; the margin is the only boundary.
-      expect(futilityNode(position, depth, ply, alpha + 900, alpha + 901, true)).toBe(true);
+      expect(
+        futilityNode(position, depth, ply, alpha + 900, alpha + 901, true, phaseOf(position)),
+      ).toBe(true);
     });
   }
 
@@ -261,7 +272,7 @@ describe("futilityNode — eval + 150 / 350 / 550 <= alpha at a null-window node
       );
       evalStub.calls = 0;
       const position = parseFen(fen);
-      expect(futilityNode(position, depth, ply, alpha, beta, true)).toBe(false);
+      expect(futilityNode(position, depth, ply, alpha, beta, true, phaseOf(position))).toBe(false);
       // The guards come first: a guarded node pays no evaluation.
       expect(evalStub.calls).toBe(0);
     });
@@ -269,11 +280,29 @@ describe("futilityNode — eval + 150 / 350 / 550 <= alpha at a null-window node
 
   it("the mate band's edges: one centipawn inside it on either side, the margin decides", () => {
     evalStub.value = 0 - 25_000;
-    expect(futilityNode(parseFen(QUIET), 1, 1, 0 - MATE_FLOOR + 1, 0 - MATE_FLOOR + 2, true)).toBe(
-      true,
-    );
+    expect(
+      futilityNode(
+        parseFen(QUIET),
+        1,
+        1,
+        0 - MATE_FLOOR + 1,
+        0 - MATE_FLOOR + 2,
+        true,
+        phaseOf(parseFen(QUIET)),
+      ),
+    ).toBe(true);
     evalStub.value = null;
-    expect(futilityNode(parseFen(QUIET), 1, 1, MATE_FLOOR - 2, MATE_FLOOR - 1, true)).toBe(true);
+    expect(
+      futilityNode(
+        parseFen(QUIET),
+        1,
+        1,
+        MATE_FLOOR - 2,
+        MATE_FLOOR - 1,
+        true,
+        phaseOf(parseFen(QUIET)),
+      ),
+    ).toBe(true);
   });
 });
 
@@ -407,8 +436,8 @@ describe("purity — each predicate leaves the position byte-identical (ADR-0061
       const position = parseFen(fen);
       const before = structuredClone(position);
       const score = evaluate(position);
-      futilityNode(position, 2, 1, score + 400, score + 401, true);
-      futilityNode(position, 2, 0, score + 400, score + 401, true);
+      futilityNode(position, 2, 1, score + 400, score + 401, true, phaseOf(position));
+      futilityNode(position, 2, 0, score + 400, score + 401, true, phaseOf(position));
       expect(position, fen).toEqual(before);
       legalMoves(position).forEach((move, index) => {
         futileMove(position, move, index);
@@ -463,7 +492,7 @@ describe("both recursions test the node once, with the entry window, after the t
       expect((flat.match(/futilityNode\(/g) ?? []).length, path).toBe(calls);
       expect((flat.match(/futileMove\(/g) ?? []).length, path).toBe(moveCalls);
       // The node test: once per node, with the ENTRY window (alphaIn), the remaining depth and ply.
-      const node = `const futile = ${on}.futility && futilityNode(position, ${depth}, ply, alphaIn, beta, ${on}.taper);`;
+      const node = `const futile = ${on}.futility && futilityNode(position, ${depth}, ply, alphaIn, beta, ${on}.taper, phase);`;
       expect(flat, path).toContain(node);
       const at = flat.indexOf(node);
       // After the table cutoff and the null move, after the move list and the entry window exist.
@@ -645,7 +674,9 @@ describe("QE-268-b — a futile node returns the best score among the moves it s
   };
 
   it("the fixture bites: the node is futile at the window its parent hands it, and the skipped moves hold a better score", () => {
-    expect(futilityNode(parseFen(NODE), 1, 2, ALPHA, ALPHA + 1, false)).toBe(true);
+    expect(
+      futilityNode(parseFen(NODE), 1, 2, ALPHA, ALPHA + 1, false, phaseOf(parseFen(NODE))),
+    ).toBe(true);
     const root = searchWithoutTaper(parseFen(ROOT), 3);
     expect([root.score, label(root.move)]).toEqual([ALPHA, "d1d5"]);
     const { best, searched, skipped } = bestSearched();

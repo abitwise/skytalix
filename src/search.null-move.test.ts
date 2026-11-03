@@ -345,16 +345,27 @@ describe("both recursions try the null move through the predicate, at null-windo
         `const nullReduction = nullMoveReduction(position, ${depth}, ply, afterNull);`,
       );
       // The child: negated, R plies shallower than a normal child, the window (-beta, -beta + 1),
-      // and flagged as a null move's.
+      // flagged as a null move's, and (`ABC-269` cut C1) handed the node's own carried phase.
       const nullChild = new RegExp(
-        `nullScore = 0 - negamax\\( ?position, ${depth} - 1 - nullReduction, 0 - beta, 0 - beta \\+ 1, ply \\+ 1, [^)]*\\btrue,? ?\\)`,
+        `nullScore = 0 - negamax\\( ?position, ${depth} - 1 - nullReduction, 0 - beta, 0 - beta \\+ 1, ply \\+ 1, [^)]*\\btrue, phase,? ?\\)`,
       );
       expect(flat, path).toMatch(nullChild);
       // Every other child is a real move's: the flag is false on each of them. (Calls only — the
-      // declaration, `function negamax(`, is not one.)
-      const flags = [...flat.matchAll(/(?<!function) negamax\(([^)]*)\)/g)].map(
-        (match) => (match[1] as string).replace(/,\s*$/, "").split(",").at(-1)?.trim() ?? "",
+      // declaration, `function negamax(`, is not one.) The flag is the argument before the carried
+      // phase (`ABC-269` cut C1): `phase` on the null child, the made move's `childPhase` on the rest.
+      const args = [...flat.matchAll(/(?<!function) negamax\(([^)]*)\)/g)].map((match) =>
+        (match[1] as string)
+          .replace(/,\s*$/, "")
+          .split(",")
+          .map((arg) => arg.trim()),
       );
+      const flags = args.map((list) => list.at(-2) ?? "");
+      expect(
+        args
+          .map((list) => `${list.at(-2)} ${list.at(-1)}`)
+          .filter((pair) => pair !== "false childPhase"),
+        path,
+      ).toEqual(["true phase"]);
       expect(flags.length, path).toBeGreaterThanOrEqual(5);
       expect(
         flags.filter((flag) => flag === "true"),

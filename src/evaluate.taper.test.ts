@@ -12,14 +12,22 @@
  * the 287). `B3` (zugzwang) and `B4` (`G1`) stay where they live, on the shipped path
  * (`src/search.null-move.test.ts`, `src/puzzle-suite.test.ts`).
  *
+ * CUT C1 (`arch-ABC-269-F3` decision …a0468a78): `P2`, the phase oracle walk (`phaseAfterMove`
+ * against `phaseOf` after every make, unmake and null move over the perft set, depth 2 here and
+ * 3 under `SEARCH_DEEP=1`, plus targeted rows with the exact weight each move kind moves), `P3`'s
+ * in-file half (`evaluate` ≡ `evaluateAtPhase` at `phaseOf`), and `P5`, the source guard: the walk
+ * holds no phase add, the tapered call sites pass the carried phase, and `phaseOf` is called only
+ * at the roots.
+ *
  * S1–S3 (the castled corner) are a REPORT, not a row: `QE-269-a` was ruled (a) (`ADR-0064`
  * § Decision log). Their readings are in the build's notes, not asserted here.
  */
 
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
+import { makeMove, makeNullMove, unmakeMove, unmakeNullMove } from "./apply.ts";
 import { chooseMove, chooseMoveWithoutTaper } from "./engine.ts";
-import { buildCorpus, mirrorPosition } from "./evaluate.mirror-corpus.ts";
+import { buildCorpus, mirrorPosition, PERFT_POSITIONS } from "./evaluate.mirror-corpus.ts";
 import {
   G3_CORPUS_MAIN_EVALUATE,
   TAPER_DOOR_CORPUS,
@@ -28,10 +36,31 @@ import {
   TAPER_PASSER_PAIRS,
   TAPER_PASSER_PHASES,
 } from "./evaluate.taper-corpus.ts";
-import { evaluate, evaluateWithoutTaper, VALUE_TABLES_FOR_TEST } from "./evaluate.ts";
+import {
+  evaluate,
+  evaluateAtPhase,
+  evaluateWithoutTaper,
+  phaseAfterMove,
+  phaseOf,
+  VALUE_TABLES_FOR_TEST,
+} from "./evaluate.ts";
 import * as PARAMS from "./evaluate-params.ts";
 import { parseFen } from "./fen.ts";
-import { BISHOP, isOnBoard, KNIGHT, type Position, pieceType, QUEEN, ROOK } from "./position.ts";
+import { legalMoves } from "./legal.ts";
+import { FLAG_CASTLE, FLAG_EN_PASSANT, type Move } from "./moves.ts";
+import {
+  BISHOP,
+  EMPTY,
+  isBlack,
+  isOnBoard,
+  KNIGHT,
+  PAWN,
+  type Position,
+  pieceType,
+  QUEEN,
+  ROOK,
+  squareName,
+} from "./position.ts";
 import { MATE_CORPUS } from "./search.mate-corpus.ts";
 import { MATE_SCORE, search, searchWithoutTaper } from "./search.ts";
 
@@ -312,6 +341,13 @@ function literalsByEntry(source: string, call: string): Record<string, string> {
   return out;
 }
 
+/** `source` with its comments removed and its whitespace flattened: the code, as one line. */
+const code = (source: string): string =>
+  source
+    .replace(/\/\*[\s\S]*?\*\//g, "")
+    .replace(/\/\/.*$/gm, "")
+    .replace(/\s+/g, " ");
+
 describe("ABC-269 — one switch, taper, and three test-only doors (ADR-0064 decision 7)", () => {
   it("the doors take what their shipped twins take", () => {
     expect(evaluateWithoutTaper.length).toBe(1);
@@ -345,22 +381,22 @@ describe("ABC-269 — one switch, taper, and three test-only doors (ADR-0064 dec
     });
   }
 
-  it("the call sites: futilityNode is handed the switch, the leaf and the stand pat pick by it", () => {
+  it("the call sites: futilityNode is handed the switch and the carried phase, the leaf and the stand pat pick by the switch", () => {
     const flat = (source: string): string => source.replace(/\s+/g, " ");
     expect(flat(SOURCES.search)).toContain(
-      "futilityNode(position, depth, ply, alphaIn, beta, switches.taper)",
+      "futilityNode(position, depth, ply, alphaIn, beta, switches.taper, phase)",
     );
     expect(flat(SOURCES.engine)).toContain(
-      "futilityNode(position, remaining, ply, alphaIn, beta, budget.taper)",
+      "futilityNode(position, remaining, ply, alphaIn, beta, budget.taper, phase)",
     );
     expect(flat(SOURCES.search)).toContain(
-      "const staticScore = taper ? evaluate(position) : evaluateWithoutTaper(position);",
+      "const staticScore = taper ? evaluateAtPhase(position, phase) : evaluateWithoutTaper(position);",
     );
     expect(flat(SOURCES.search)).toContain(
-      "return switches.taper ? evaluate(position) : evaluateWithoutTaper(position);",
+      "return switches.taper ? evaluateAtPhase(position, phase) : evaluateWithoutTaper(position);",
     );
     expect(flat(SOURCES.quiescence)).toContain(
-      "const standPat = rules.taper === true ? evaluate(position) : evaluateWithoutTaper(position);",
+      "const standPat = rules.taper === true ? evaluateAtPhase(position, phase) : evaluateWithoutTaper(position);",
     );
     for (const source of [SOURCES.search, SOURCES.engine]) {
       expect(flat(source)).toContain(
@@ -368,13 +404,304 @@ describe("ABC-269 — one switch, taper, and three test-only doors (ADR-0064 dec
       );
       expect(source.match(/taper: true \}/g)).toHaveLength(1); // one tapered record per recursion
     }
-    // Every evaluate call in the recursions' code (comments aside) sits at one of those sites.
-    const code = (source: string): string =>
-      flat(source.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*$/gm, ""));
-    expect(code(SOURCES.search).match(/\bevaluate\(/g)).toHaveLength(2);
+    // Every evaluation call in the recursions' code (comments aside) sits at one of those sites,
+    // and none is the self-walking `evaluate` (`ABC-269` cut C1: the recursions carry the phase).
+    expect(code(SOURCES.search).match(/\bevaluate\(/g)).toBeNull();
+    expect(code(SOURCES.search).match(/\bevaluateAtPhase\(/g)).toHaveLength(2);
     expect(code(SOURCES.search).match(/\bevaluateWithoutTaper\(/g)).toHaveLength(2);
-    expect(code(SOURCES.engine).match(/\bevaluate(WithoutTaper)?\(/g)).toBeNull();
-    expect(code(SOURCES.quiescence).match(/\bevaluate\(/g)).toHaveLength(1);
+    expect(code(SOURCES.engine).match(/\bevaluate(AtPhase|WithoutTaper)?\(/g)).toBeNull();
+    expect(code(SOURCES.quiescence).match(/\bevaluate\(/g)).toBeNull();
+    expect(code(SOURCES.quiescence).match(/\bevaluateAtPhase\(/g)).toHaveLength(1);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Cut C1 (`arch-ABC-269-F3` …a0468a78): the phase leaves the board walk and rides the recursion.
+// ---------------------------------------------------------------------------
+
+/** The phase weight of a piece TYPE, written here from `ADR-0064` d1 and not read from the module. */
+const WEIGHT: Readonly<Record<number, number>> = {
+  [KNIGHT]: 1,
+  [BISHOP]: 1,
+  [ROOK]: 2,
+  [QUEEN]: 4,
+};
+const weightOf = (type: number): number => WEIGHT[type] ?? 0;
+
+/** The move kinds `P2`'s walk must see at least once each, and the targeted rows name. */
+function kindsOf(move: Move): string[] {
+  const kinds: string[] = [];
+  const side = isBlack(move.piece) ? "black" : "white";
+  if ((move.flags & FLAG_EN_PASSANT) !== 0) kinds.push(`en passant (${side})`);
+  if ((move.flags & FLAG_CASTLE) !== 0)
+    kinds.push(`castle ${squareName(move.from)}${squareName(move.to)}`);
+  if (move.promotion !== EMPTY) {
+    kinds.push(
+      `${move.captured === EMPTY ? "promotion" : "capture-promotion"} to ${move.promotion}`,
+    );
+  }
+  if (move.captured !== EMPTY) kinds.push(`capture of ${pieceType(move.captured)}`);
+  if (move.captured === EMPTY && move.promotion === EMPTY && move.flags === 0) kinds.push("quiet");
+  return kinds;
+}
+
+/**
+ * `P2`'s walk: every legal line from `position` to `depth`. After each `makeMove`,
+ * `phaseAfterMove(parent, move)` must equal `phaseOf` of the child; after each `unmakeMove`,
+ * `phaseOf` must equal the parent again; a null move at every interior node leaves it unchanged.
+ */
+function phaseWalk(
+  position: Position,
+  depth: number,
+  seen: Map<string, number>,
+  bad: string[],
+): number {
+  const parent = phaseOf(position);
+  let checked = 0;
+  const nullUndo = makeNullMove(position);
+  if (phaseOf(position) !== parent) bad.push(`null move changed the phase at depth ${depth}`);
+  unmakeNullMove(position, nullUndo);
+  for (const move of legalMoves(position)) {
+    const undo = makeMove(position, move);
+    const carried = phaseAfterMove(parent, move);
+    const walked = phaseOf(position);
+    if (carried !== walked)
+      bad.push(`${kindsOf(move).join("+")}: carried ${carried}, walked ${walked}`);
+    for (const kind of kindsOf(move)) seen.set(kind, (seen.get(kind) ?? 0) + 1);
+    checked++;
+    if (depth > 1) checked += phaseWalk(position, depth - 1, seen, bad);
+    unmakeMove(position, move, undo);
+    if (phaseOf(position) !== parent) bad.push(`unmake did not restore the phase (${parent})`);
+  }
+  return checked;
+}
+
+/** The kinds `P2` requires: every capture victim, both en passants, all four castlings, every promotion. */
+const REQUIRED_KINDS = [
+  "quiet",
+  ...[PAWN, KNIGHT, BISHOP, ROOK, QUEEN].map((type) => `capture of ${type}`),
+  "en passant (white)",
+  "en passant (black)",
+  "castle e1g1",
+  "castle e1c1",
+  "castle e8g8",
+  "castle e8c8",
+  ...[KNIGHT, BISHOP, ROOK, QUEEN].flatMap((type) => [
+    `promotion to ${type}`,
+    `capture-promotion to ${type}`,
+  ]),
+];
+
+describe("ABC-269 cut C1 P2 — the phase oracle walk: phaseAfterMove is phaseOf after every make, unmake and null move", () => {
+  it("phaseOf is ADR-0064 d1's raw phase, unclamped, over G3's 184 and QE's frozen sets", () => {
+    const positions = [
+      ...buildCorpus().map(({ position }) => position),
+      ...TAPER_DOOR_CORPUS.map(({ fen }) => parseFen(fen)),
+      ...TAPER_MIRROR_POSITIONS.map(({ fen }) => parseFen(fen)),
+      ...TAPER_PASSER_PAIRS.flatMap((row) => [
+        parseFen(row.withPasserFen),
+        parseFen(row.withoutPasserFen),
+      ]),
+    ];
+    expect(positions.length).toBeGreaterThan(184);
+    expect(positions.filter((position) => phaseOf(position) !== rawPhase(position))).toEqual([]);
+    for (const row of TAPER_MIRROR_POSITIONS)
+      expect(phaseOf(parseFen(row.fen)), row.id).toBe(row.rawPhase);
+    expect(phaseOf(parseFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"))).toBe(24);
+    // Unclamped: four white queens beside black's whole army read 28, never 24 (the clamp is the
+    // blend's, not the phase's).
+    expect(phaseOf(parseFen("qqqqk3/8/8/8/8/8/8/4K3 w - - 0 1"))).toBe(16);
+    expect(phaseOf(parseFen("rnbqkbnr/pppppppp/8/8/8/8/8/QQQQK3 w kq - 0 1"))).toBe(28);
+  });
+
+  const walkDepth = RUN_DEEP ? 3 : 2;
+  it(`the perft set to depth ${walkDepth}, and the targeted rows' boards: 0 mismatches, and every move kind seen at least once`, () => {
+    const seen = new Map<string, number>();
+    const bad: string[] = [];
+    let checked = 0;
+    for (const { fen } of PERFT_POSITIONS)
+      checked += phaseWalk(parseFen(fen), walkDepth, seen, bad);
+    // Every move of the published perft tables to that depth was checked: Σ d1 + d2 (+ d3).
+    expect(checked).toBe(RUN_DEEP ? 277_949 : 6_637);
+    // The targeted boards walked too (white's en passant first appears at perft depth 3).
+    let targeted = 0;
+    for (const fen of new Set(TARGETED.map((row) => row.fen))) {
+      targeted += phaseWalk(parseFen(fen), walkDepth, seen, bad);
+    }
+    expect(targeted).toBeGreaterThan(100);
+    expect(bad.slice(0, 10)).toEqual([]);
+    const missing = REQUIRED_KINDS.filter((kind) => (seen.get(kind) ?? 0) < 1);
+    expect(missing).toEqual([]);
+  }, 600_000);
+
+  /** Targeted rows: each move kind with the exact weight it moves, `ADR-0064` d1's, and the oracle. */
+  const TARGETED: ReadonlyArray<{ why: string; fen: string; kind: string; delta: number }> = [
+    ...[
+      ["white", "r1n1k3/1P6/8/8/8/8/8/4K3 w - - 0 1"],
+      ["black", "4k3/8/8/8/8/8/1p6/R1N1K3 b - - 0 1"],
+    ].flatMap(([side, fen]) =>
+      [KNIGHT, BISHOP, ROOK, QUEEN].flatMap((type) => [
+        {
+          why: `${side} promotes to ${type}`,
+          fen: fen as string,
+          kind: `promotion to ${type}`,
+          delta: weightOf(type),
+        },
+        {
+          why: `${side} promotes to ${type} taking a rook`,
+          fen: fen as string,
+          kind: `capture-promotion to ${type}+rook`,
+          delta: weightOf(type) - 2,
+        },
+        {
+          why: `${side} promotes to ${type} taking a knight`,
+          fen: fen as string,
+          kind: `capture-promotion to ${type}+knight`,
+          delta: weightOf(type) - 1,
+        },
+      ]),
+    ),
+    {
+      why: "white takes en passant",
+      fen: "4k3/8/8/3pP3/8/8/8/4K3 w - d6 0 1",
+      kind: "en passant (white)",
+      delta: 0,
+    },
+    {
+      why: "black takes en passant",
+      fen: "4k3/8/8/8/3Pp3/8/8/4K3 b - d3 0 1",
+      kind: "en passant (black)",
+      delta: 0,
+    },
+    ...["e1g1", "e1c1"].map((c) => ({
+      why: `castle ${c}`,
+      fen: "r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1",
+      kind: `castle ${c}`,
+      delta: 0,
+    })),
+    ...["e8g8", "e8c8"].map((c) => ({
+      why: `castle ${c}`,
+      fen: "r3k2r/8/8/8/8/8/8/R3K2R b KQkq - 0 1",
+      kind: `castle ${c}`,
+      delta: 0,
+    })),
+    ...[PAWN, KNIGHT, BISHOP, ROOK, QUEEN].flatMap((type) => {
+      const letter = ".pnbrq"[type] as string;
+      return [
+        {
+          why: `white rook takes a black ${letter}`,
+          fen: `4k3/8/8/${letter}7/8/8/8/R3K3 w - - 0 1`,
+          kind: `capture of ${type}`,
+          delta: 0 - weightOf(type),
+        },
+        {
+          why: `black rook takes a white ${letter.toUpperCase()}`,
+          fen: `r3k3/8/8/8/${letter.toUpperCase()}7/8/8/4K3 b - - 0 1`,
+          kind: `capture of ${type}`,
+          delta: 0 - weightOf(type),
+        },
+      ];
+    }),
+  ];
+
+  it.each(TARGETED)(
+    "$why: the phase moves by exactly $delta, and the oracle agrees",
+    ({ fen, kind, delta }) => {
+      const position = parseFen(fen);
+      const parent = phaseOf(position);
+      expect(parent).toBe(rawPhase(position));
+      const [first, second] = kind.split("+");
+      const victim = second === "rook" ? ROOK : second === "knight" ? KNIGHT : null;
+      const matching = legalMoves(position).filter(
+        (move) =>
+          kindsOf(move).includes(first as string) &&
+          (victim === null || pieceType(move.captured) === victim) &&
+          (!kind.startsWith("capture of") || pieceType(move.piece) === ROOK),
+      );
+      expect(matching.length, "the row's move exists").toBeGreaterThan(0);
+      for (const move of matching) {
+        expect(phaseAfterMove(parent, move)).toBe(parent + delta);
+        const undo = makeMove(position, move);
+        expect(phaseOf(position)).toBe(parent + delta);
+        unmakeMove(position, move, undo);
+        expect(phaseOf(position)).toBe(parent);
+      }
+    },
+  );
+});
+
+describe("ABC-269 cut C1 P3 (in file) — evaluate is evaluateAtPhase at phaseOf, Object.is", () => {
+  it("over G3's 184, QE's frozen sets, the passer pairs and the K+P endings", () => {
+    const positions = [
+      ...buildCorpus().map(({ position }) => position),
+      ...TAPER_DOOR_CORPUS.map(({ fen }) => parseFen(fen)),
+      ...TAPER_MIRROR_POSITIONS.map(({ fen }) => parseFen(fen)),
+      ...TAPER_KP_ENDINGS.flatMap((row) => [parseFen(row.centreFen), parseFen(row.cornerFen)]),
+      ...TAPER_PASSER_PAIRS.flatMap((row) => [
+        parseFen(row.withPasserFen),
+        parseFen(row.withoutPasserFen),
+      ]),
+    ];
+    expect(positions.length).toBeGreaterThan(184);
+    const bad = positions.filter(
+      (position) => !Object.is(evaluate(position), evaluateAtPhase(position, phaseOf(position))),
+    );
+    expect(bad.length).toBe(0);
+  });
+});
+
+describe("ABC-269 cut C1 P5 — the guard: no per-call phase walk on the shipped path", () => {
+  const EVALUATE = readFileSync(new URL("./evaluate.ts", import.meta.url), "utf8");
+  const walk = (): string => {
+    const at = EVALUATE.indexOf("function whiteMinusBlack(");
+    return code(EVALUATE.slice(at, EVALUATE.indexOf("\n}\n", at)));
+  };
+
+  it("the board walk holds no phase add and no king delta: both are read after it", () => {
+    const body = walk();
+    expect(body.length).toBeGreaterThan(500); // the function, not nothing
+    const loop = body.slice(
+      body.indexOf("for (let rank = 7;"),
+      body.indexOf("const mobilityScore"),
+    );
+    expect(loop.length).toBeGreaterThan(200);
+    expect(loop).not.toMatch(/PHASE_WEIGHT|phase|KING_EG_DELTA|egDelta/);
+    expect(body).not.toMatch(/PHASE_WEIGHT/);
+    expect(body).toContain("phase: number");
+    expect(body).toContain("KING_EG_DELTA[(7 - (whiteKing >> 4)) * 8 + (whiteKing & 7)]");
+    expect(body).toContain("egDelta -= KING_EG_DELTA[(blackKing >> 4) * 8 + (blackKing & 7)]");
+  });
+
+  it("phaseOf is called once per root (search: the root and the depth-less leaf; engine: once per call), and nowhere in quiescence", () => {
+    expect(code(SOURCES.search).match(/\bphaseOf\(/g)).toHaveLength(2);
+    expect(code(SOURCES.search)).toContain("const rootPhase = phaseOf(position);");
+    expect(code(SOURCES.engine).match(/\bphaseOf\(/g)).toHaveLength(1);
+    expect(code(SOURCES.engine)).toContain(
+      "const rootPhase = phaseOf(position); let best = runIteration(",
+    );
+    expect(code(SOURCES.quiescence).match(/\bphaseOf\(/g)).toBeNull();
+  });
+
+  it("each child is phaseAfterMove of its parent; the null move's child keeps the phase", () => {
+    expect(code(SOURCES.search).match(/phaseAfterMove\((phase|rootPhase), move\)/g)).toHaveLength(
+      2,
+    );
+    expect(code(SOURCES.engine).match(/phaseAfterMove\((phase|rootPhase), move\)/g)).toHaveLength(
+      2,
+    );
+    expect(code(SOURCES.quiescence).match(/phaseAfterMove\(phase, move\)/g)).toHaveLength(1);
+    expect(code(SOURCES.search)).toContain("killers, keys, true, phase, );");
+    expect(code(SOURCES.engine)).toContain("budget, true, phase, );");
+  });
+
+  it("the carrier is an argument: no phase on Position, UndoRecord or module state", () => {
+    for (const name of ["position.ts", "apply.ts"]) {
+      const source = readFileSync(new URL(`./${name}`, import.meta.url), "utf8");
+      expect(source.includes("phase"), name).toBe(false);
+    }
+    for (const source of [EVALUATE, SOURCES.search, SOURCES.engine, SOURCES.quiescence]) {
+      expect(source).not.toMatch(/^(let|var|const)\s+\w*[pP]hase\w*\s*=/m);
+    }
   });
 });
 

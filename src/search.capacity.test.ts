@@ -22,6 +22,7 @@
 
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { makeMove } from "./apply.ts";
+import { phaseOf } from "./evaluate.ts";
 import { parseFen, toFen } from "./fen.ts";
 import { gameStatus } from "./gameend.ts";
 import { legalMoves } from "./legal.ts";
@@ -75,6 +76,7 @@ function leafAtCapacity(): { score: number; captureNodes: number } {
     KEY_ARRAY_CAPACITY,
     { evasions: true, quietPromotions: true },
     () => captureNodes++,
+    phaseOf(position),
   );
   return { score, captureNodes };
 }
