@@ -2,7 +2,7 @@
  * `ABC-204` — the rating harness. It drives `cutechess-cli` 1.5.1 in two modes, with the pins of
  * the ABC-204 page's `## Design ruling`, and reads `EPIC-008` § The two readings:
  *
- *   node tools/rating/rating.ts r <sha> <out-dir> [--elo E] [--budget-ms 500] [--rounds N] [--concurrency C]
+ *   node tools/rating/rating.ts r <sha> <out-dir> [--elo E] [--budget-ms 500|100] [--rounds N] [--concurrency C]
  *   node tools/rating/rating.ts d <candidate-sha> <base-sha> <out-dir> [--budget-ms B] [--rounds N] [--concurrency C]
  *   node tools/rating/rating.ts rpair <base-sha> <candidate-sha> <out-dir> [--elo E] [--rounds N] [--concurrency C]
  *
@@ -43,6 +43,10 @@
  * `st=0.5` with `timemargin` 50 ms, Stockfish's pins unchanged. Every other budget keeps Q1's
  * 5 000 − budget, so `r` without the flag, every `rpair` and today's `d` budgets print as before.
  * The control reaches skytalix only as `st=` and `timemargin=` (`ADR-0056` R-TC).
+ *
+ * `ABC-276` — `r` and `d` seal their records as `rpair` does (`sealRecords`): host paths, user and
+ * host name become placeholders before `SHA256SUMS` is written, so the sums verify the committed
+ * bytes. The argument vector handed to `cutechess-cli` is unchanged; only its `cmd.txt` record is.
  */
 import { execFileSync, spawn } from "node:child_process";
 import { createHash } from "node:crypto";
@@ -151,11 +155,11 @@ const eloNumber = (text: string): number =>
 
 function usage(): never {
   console.error(
-    "usage: node tools/rating/rating.ts r <sha> <out-dir> [--elo E] [--budget-ms 500] [--rounds N] [--concurrency C]\n" +
+    "usage: node tools/rating/rating.ts r <sha> <out-dir> [--elo E] [--budget-ms 500|100] [--rounds N] [--concurrency C]\n" +
       "       node tools/rating/rating.ts d <candidate-sha> <base-sha> <out-dir> [--budget-ms B] [--rounds N] [--concurrency C]\n" +
       "       node tools/rating/rating.ts rpair <base-sha> <candidate-sha> <out-dir> [--elo E] [--rounds N] [--concurrency C]\n" +
       "       --concurrency: 1–8; default R 2, D 3, rpair 2\n" +
-      "       --budget-ms: R 500 only (default 4000); D 3000 (default), 2500, 2000, 1500, 1000 or 100\n" +
+      "       --budget-ms: R 500 or 100 (default 4000); D 3000 (default), 2500, 2000, 1500, 1000 or 100\n" +
       "       rpair: --elo default 1910; --rounds 10–100 in tens, default 100 (10 = one block per build, 40 games)\n" +
       "       --dry-run (any mode): print the cutechess-cli arguments and stop",
   );
@@ -662,6 +666,30 @@ function recordFiles(root: string, dir = root): string[] {
   return found;
 }
 
+/**
+ * `ADR-0049` d4 (`ABC-225`; `ABC-276` for `r` and `d`): every record under `out` but the clones gets
+ * host paths, user and host name as placeholders; then `SHA256SUMS` is written last, over the files
+ * `listed(out)` names (`SHA256SUMS` itself excluded), so the sums describe the bytes committed.
+ */
+export function sealRecords(out: string, listed: (out: string) => string[]): void {
+  for (const file of recordFiles(out)) {
+    const text = readFileSync(join(out, file), "utf8");
+    const clean = redacted(text, out);
+    if (clean !== text) writeFileSync(join(out, file), clean);
+  }
+  const files = listed(out)
+    .filter((f) => f !== "SHA256SUMS")
+    .sort();
+  writeFileSync(
+    join(out, "SHA256SUMS"),
+    files.map((f) => `${sha256File(join(out, f))}  ${f}\n`).join(""),
+  );
+}
+
+/** `r` and `d`'s sums: the top-level regular files of `out`, as before `ABC-276`. */
+export const topFiles = (out: string): string[] =>
+  readdirSync(out).filter((f) => statSync(join(out, f)).isFile());
+
 /** `rating.ts rpair`: the interleaved R pair (`ABC-225`). */
 async function rpair(positional: string[], flags: Map<string, string>, dryRun: boolean) {
   if (positional.length !== 4) usage();
@@ -789,19 +817,7 @@ async function rpair(positional: string[], flags: Map<string, string>, dryRun: b
   writeFileSync(join(out, "summary.txt"), summary);
   console.log(summary);
 
-  // ADR-0049 d4: every record but the clones, with host paths, user and host name as placeholders.
-  for (const file of recordFiles(out)) {
-    const text = readFileSync(join(out, file), "utf8");
-    const clean = red(text);
-    if (clean !== text) writeFileSync(join(out, file), clean);
-  }
-  const files = recordFiles(out)
-    .filter((f) => f !== "SHA256SUMS")
-    .sort();
-  writeFileSync(
-    join(out, "SHA256SUMS"),
-    files.map((f) => `${sha256File(join(out, f))}  ${f}\n`).join(""),
-  );
+  sealRecords(out, recordFiles);
 }
 
 async function main(argv: string[]): Promise<void> {
@@ -873,8 +889,9 @@ async function main(argv: string[]): Promise<void> {
         ]
       : []),
   ].join("\n");
-  writeFileSync(join(out, "machine.txt"), `${machine}\n`);
-  console.log(machine);
+  const red = (text: string): string => redacted(text, out);
+  writeFileSync(join(out, "machine.txt"), `${red(machine)}\n`);
+  console.log(red(machine));
   if (sha256File(OPENINGS) !== OPENINGS_SHA256) {
     throw new Error(`openings sha256 ${sha256File(OPENINGS)} is not the pin ${OPENINGS_SHA256}`);
   }
@@ -887,7 +904,7 @@ async function main(argv: string[]): Promise<void> {
   const outFile = join(out, `${mode}.out`);
   writeFileSync(
     join(out, "cmd.txt"),
-    `${[CUTECHESS, ...args].map(quote).join(" ")} > ${quote(outFile)} 2>&1\n`,
+    `${red(`${[CUTECHESS, ...args].map(quote).join(" ")} > ${quote(outFile)} 2>&1`)}\n`,
   );
 
   const stop = await play(out, args, outFile);
@@ -895,16 +912,9 @@ async function main(argv: string[]): Promise<void> {
     mode === "r" ? ["skytalix.stderr", "stockfish.stderr"] : ["skytalix.stderr", "base.stderr"];
   const summary = summarise({ mode, out, games: 2 * rounds, elo }, stop, stderrs).text;
   writeFileSync(join(out, "summary.txt"), summary);
-  console.log(summary);
+  console.log(red(summary));
 
-  const raw = readdirSync(out).filter((f) => f !== "SHA256SUMS" && statSync(join(out, f)).isFile());
-  writeFileSync(
-    join(out, "SHA256SUMS"),
-    raw
-      .sort()
-      .map((f) => `${sha256File(join(out, f))}  ${f}\n`)
-      .join(""),
-  );
+  sealRecords(out, topFiles);
 }
 
 // Run as a command; `pair-check.ts` imports the exports without starting one.
