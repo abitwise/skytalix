@@ -1,0 +1,30 @@
+11:18:53Z start taper
+11:19:11Z taper exit=0  Tests 146 passed (146)
+11:19:11Z start nullmove
+11:19:38Z nullmove exit=0  Tests 44 passed (44)
+11:19:38Z start futility
+11:20:47Z futility exit=0  Tests 53 passed (53)
+11:20:47Z start search
+11:20:50Z search exit=0  Tests 57 passed (57)
+11:20:50Z start quiescence
+11:21:39Z quiescence exit=0  Tests 116 passed (116)
+11:21:39Z start tt-search
+11:21:43Z tt-search exit=0  Tests 40 passed (40)
+11:21:43Z start pvslmr
+11:22:37Z pvslmr exit=0  Tests 29 passed (29)
+11:22:37Z start ordering
+11:22:44Z ordering exit=0  Tests 43 passed (43)
+11:22:44Z start engine
+11:25:44Z engine exit=0  Tests 82 passed (82)
+11:25:44Z start tt-engine
+11:25:49Z tt-engine exit=0  Tests 26 passed (26)
+11:25:49Z start pawns
+11:25:52Z pawns exit=0  Tests 44 passed (44)
+11:25:52Z start puzzle
+11:25:55Z puzzle exit=1 
+11:25:55Z start puzzle-weakened
+11:25:58Z puzzle-weakened exit=1 
+11:25:58Z ALL DONE
+# puzzle lanes after the puzzle-suite mock narrowing (first two runs above: worker heap exit, see the migration note)
+puzzle-1:  Tests 18 passed (18)
+puzzle-weakened:  Tests 1 failed | 13 passed (14)
