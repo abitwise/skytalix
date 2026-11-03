@@ -1,0 +1,26 @@
+{
+  "refs": [
+    "qe-ABC-270-freeze",
+    "grugops/qe-ABC-270-freeze",
+    "ABC-270",
+    "EPIC-011",
+    "E3a",
+    "ADR-0068",
+    "ADR-0064",
+    "ABC-083",
+    "K1",
+    "K0",
+    "4cb84035",
+    "00e99db8",
+    ".grugops/context/qe-ABC-270-freeze/raw/pairs.json",
+    "sha256:68769ea9712097ff1a366b6ad952a71376579fba94d6625c032062dd5e19c681",
+    "qe-ABC-270-freeze/20261103T222633Z-qe-e2e-decision-fa82b3f3"
+  ],
+  "notes": [
+    {
+      "kind": "observation",
+      "confidence": "high on the arithmetic (QP2 A's net seam delta is 0 by the frozen counts); the per-king read's form is the Engineer's",
+      "bodyFile": "note-gaps.md"
+    }
+  ]
+}

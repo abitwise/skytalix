@@ -1,0 +1,25 @@
+{
+  "refs": [
+    "qe-ABC-270-freeze",
+    "grugops/qe-ABC-270-freeze",
+    "ABC-270",
+    "EPIC-011",
+    "E3a",
+    "ADR-0068",
+    "ADR-0064",
+    "ABC-083",
+    "K1",
+    "K0",
+    "4cb84035",
+    "00e99db8",
+    ".grugops/context/qe-ABC-270-freeze/raw/pairs.json",
+    "sha256:68769ea9712097ff1a366b6ad952a71376579fba94d6625c032062dd5e19c681"
+  ],
+  "notes": [
+    {
+      "kind": "decision",
+      "confidence": "high (a pre-registration: every count derived by hand from the stated rule, then checked on main by a rule re-implementation and by main's evaluate per term; no ABC-270 code exists; K0 copied from ADR-0068 d6, not re-read)",
+      "bodyFile": "note-freeze.md"
+    }
+  ]
+}
