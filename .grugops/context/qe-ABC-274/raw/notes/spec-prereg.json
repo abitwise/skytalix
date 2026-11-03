@@ -1,0 +1,12 @@
+{
+ "refs": ["qe-ABC-274", "grugops/ABC-274", "ABC-274", "EPIC-011", "E2-pre", "ADR-0067", "ADR-0064", "ADR-0031", "NFR-001", "NFR-005", "F8", "A5", "A6", "S2", "G2", "G6", "C1",
+  "54dee3f2", "af214979", "4d6b117b", "2baeb905", "7daae342", "4cb84035", "58fa3eb4", "src/evaluate.ts",
+  "arch-ABC-269-F3/20261103T105957Z-architect-design-decision-e36ee7ca",
+  "arch-post-269/20261103T123540Z-architect-design-decision-3f30baf8",
+  "arch-ABC-274-seam/20261103T130452Z-architect-design-decision-3169a174",
+  "qe-ABC-269/20261103T114143Z-qe-e2e-observation-cebf49fe"],
+ "notes": [
+  {"kind": "decision", "bodyFile": "note-prereg.md",
+   "confidence": "high: sealed before any timing of the build by anyone; bars copied from the ticket's A5 / A6 and ADR-0067 d8 / F8 as written, none loosened; instrument is qe-ABC-269's g2q shape and qe-ABC-268's g6 scripts unchanged"}
+ ]
+}
