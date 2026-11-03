@@ -1,0 +1,6 @@
+{
+  "refs": ["arch-ABC-270", "grugops/arch-ABC-270", "ABC-270", "E3", "ADR-0064", "ADR-0067", "ABC-239", "arch-ABC-270/20261103T202104Z-architect-design-decision-117475f9"],
+  "notes": [
+    { "kind": "decision", "confidence": "high (the pre-registered rule applied as written; the diagnostic is sealed before it runs and decides nothing)", "bodyFile": "notes/prereg-add1.md" }
+  ]
+}

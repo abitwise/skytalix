@@ -251,3 +251,14 @@ if (mode === "nodes") {
     makeMove(p, r.move);
   }
 }
+if (mode === "matediag") {
+  // POST HOC (addendum …3f24d8a0; decides nothing): the d5-against-d5 violations, named, with the form at d6 and d7.
+  for (const fen of MATE_CORPUS) {
+    setForm("BASE"); const a = search(parseFen(fen), 5);
+    if (!isMate(a.score)) continue;
+    setForm(form); const b = search(parseFen(fen), 5);
+    if (isMate(b.score) && Math.sign(b.score) === Math.sign(a.score)) continue;
+    const c6 = search(parseFen(fen), 6), c7 = search(parseFen(fen), 7);
+    console.log(JSON.stringify({ form, fen, base5: { score: a.score, move: mv(a.move) }, form5: { score: b.score, move: mv(b.move) }, form6: { score: c6.score, mate: isMate(c6.score) }, form7: { score: c7.score, mate: isMate(c7.score) } }));
+  }
+}
