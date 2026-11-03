@@ -23,6 +23,10 @@ id: ADR-0064
   exact text, written before any E1 code exists.
 - **Two wording corrections, with no bar moved:** d2's "bit for bit" (`QE-269-b`) and B1 (e)'s "≥ 1.75 × by
   construction" (`QE-269-c`). Both are dated lines in place.
+- **F3 fired on `G2` (B6), 2026-11-03 (`arch-ABC-269-F3`).** The miss is real: 1.0711 / 1.0672 ×, mean 1.069. One
+  value-identical cut is ordered, C1: the phase leaves the board walk and rides the search's recursion. `Position` and
+  make/unmake are untouched. One new `G2` reading follows, by QE, under the sealed PREREG `…e36ee7ca`. A second miss:
+  not merged. No bar moved. § Decision log.
 
 *As proposed, kept:* **PROPOSED** 2026-11-02 by Architect/Design (task `arch-E1`, records only, on `grugops/arch-E1` from `main`
 `a2b593d5`). The probe ran on a scratch copy of `main`'s `src/` (tree `58fa3eb4`), outside the repository, under the
@@ -62,6 +66,8 @@ measured run.
 | 2026-11-02 | QE/E2E | B1's position sets frozen before any E1 code; S1–S3 held apart pending a ruling | `qe-ABC-269-freeze` `…1b856350`, `d6a57653` |
 | 2026-11-02 | the owner | **ACCEPTED** ("64 yes"). **`Q-3K-4` = (b)** ("Q-3K-4 b") | `orch-2026-10-30a` `…cc7db847` |
 | 2026-11-03 | Architect/Design | **`QE-269-a` ruled (a)**, the claim narrowed. `QE-269-b` and `-c` wording. The owner's two answers folded | `arch-ABC-269-rule` `…8ccb561f` |
+| 2026-11-03 | Software Engineer | Built; B0 exact, B1–B4 met; **B6 (`G2`) 1.0711 / 1.0672 ×, a miss: F3** | `se-ABC-269` `…7445784f`, `…669f366c` |
+| 2026-11-03 | Architect/Design | **F3 on `G2`:** the miss ruled real; the one cut ordered (C1, the phase leaves the walk); the one re-read pre-registered | `arch-ABC-269-F3` `…a0468a78`, PREREG `…e36ee7ca` |
 
 **2026-11-03, `QE-269-a`: ruling (a). The claim is narrowed; no bar is loosened or re-opened.**
 
@@ -114,6 +120,49 @@ measured run.
     bytes and force a QE re-freeze, which is not owed.
   - `arch-E1`'s PREREG `…01c2d6a5` governs only the probe's form choice. It is untouched.
   - QE pulls this ruling at the verdict.
+
+**2026-11-03, F3 on `G2` (B6): the miss is real, one cut is ordered, and one reading follows. No bar moves.**
+(`arch-ABC-269-F3` `…a0468a78`; PREREG `…e36ee7ca`; the build `grugops/ABC-269` `110292d4`.)
+
+- **The miss is real, and QE does not re-read the uncut build.**
+  - The two `G2` sessions read 1.0711 and 1.0672 ×. Their mean, 1.069, is the verdict under `ADR-0031` d3, and it is
+    above 1.05. Three more sessions of the same build read 1.08–1.11.
+  - The same sessions' controls: a second copy of `main` reads 0.9888, and the build without the walk's phase and
+    king adds reads 1.0032. So the cost is the per-piece phase add in the walk, not the memo or the blend.
+  - Both sessions started base-first, not in reverse order. That is recorded and decides nothing: each session
+    alternates every round, and the smallest excess (0.0172) is larger than the control's deviation (0.0112).
+  - A re-read could only pass by noise, and that would be shopping for a reading.
+- **The cut, C1: the phase leaves the walk** (O1-e-*style* incremental phase; phase only, not material or PST).
+  - The recursion carries the phase of the current node as one integer. The root is seeded once by `phaseOf`. A child
+    gets `phase − PHASE_WEIGHT[captured & 7] + PHASE_WEIGHT[promotion]`, which is exact without a branch because
+    EMPTY, PAWN and KING weigh 0. A null move keeps the phase.
+  - The tapered evaluation takes the phase as an argument. The king Δ is read from the two king squares after the
+    walk. So the walk is `main`'s walk again, which is the measured 1.0032 form.
+  - Files: `src/evaluate.ts`, `src/quiescence.ts`, `src/search.ts`, `src/engine.ts`, and the tests that call
+    `quiesce` / `futilityNode` directly. `src/position.ts`, `src/apply.ts`, `src/legal.ts`, `src/moves.ts` and
+    `src/evaluate-params.ts` are untouched.
+  - **The carrier is the recursion, not `Position`.** `ADR-0002` clause 1 adds no state to `Position`, and
+    `ADR-0020` d3 rejected a position-carried key for reasons that apply here unchanged: `UndoRecord` grows, the
+    legality filters pay for an update nobody reads, and every board writer must re-sync. `evaluate(position)` keeps
+    computing its own phase for every caller outside the search.
+  - **Not the packed score.** It packs Δ, not the phase. The variant that packed the phase into an accumulator read
+    1.0726 ×.
+- **Node-equal by construction, then proved.**
+  - The Engineer's rows P1–P7 (`…a0468a78`): B0's counts exact; a phase oracle walk over the perft set; `evaluate`
+    `Object.is`-equal to the uncut build; the shipped trees and the doors cross-build equal; a guard against a
+    per-call phase walk; zero re-pins in every lane; and the gates.
+  - A row that needs a re-pin means the cut is not value-identical. That is a defect, and it stops to
+    Architect/Design.
+  - The Engineer takes no timing of the cut.
+- **The one reading:** `G2`, by QE, under the PREREG `…e36ee7ca`.
+  - The instrument is the one that recorded the miss, with two sessions in reverse order and a `main`-copy control
+    that voids a session outside 0.970–1.030 (one re-run at most).
+  - The graded arm is the shipped tapered entry with the phase supplied. The verdict is the mean of the two
+    sessions, **≤ 1.0500**.
+  - ns per node is reported beside it, so that a cost moved rather than cut is visible.
+  - **If it is met:** B5, B7 (graded on `NFR-005`'s floor under `Q-3K-4` = (b), median reported) and B8.
+  - **If it is not met:** the second miss. **Not merged**, and this ADR gets its "accepted, not in force" line.
+- **Rollback of the cut alone:** revert its commit. It is value-identical, so nothing else moves.
 
 ## Context
 
@@ -306,6 +355,9 @@ measured run.
    - **No incremental state.** Phase, material and PST are not carried in `Position` or updated in make/unmake. That
      is O1-e (`ADR-0055`, 1.02–1.05×), which `EPIC-011` re-reads after E1 because the evaluation then has two halves.
      It is held as F3's single value-identical cost cut.
+     - *Dated 2026-11-03 (`arch-ABC-269-F3`, `…a0468a78`):* F3 fired on `G2`. The cut ordered is incremental
+       **phase** only. Its carrier is the search's recursion, not `Position` or make/unmake (`ADR-0002` clause 1,
+       `ADR-0020` d3). The king Δ moves after the walk. § Decision log.
 7. **One switch and a pair of doors** (`ADR-0026` decision 10's pattern).
    - **One switch, `taper`, in both recursions:** `src/search.ts`'s `Switches` and `src/engine.ts`'s `Heuristics`. It
      is on in `search()` and `chooseMove` only. It selects which evaluation the recursion calls at each of today's
@@ -375,6 +427,9 @@ measured run.
    - **B6, `G2`:** the complete evaluation ≤ **1.05 ×** base per call, in the same session, by `ABC-076`'s method as
      `ADR-0031` d3 applies it. This is `ABC-231` A4's level. `ABC-232` A3's 1.03 × was for a passer-only change and
      folds into this one.
+     - *Dated 2026-11-03 (`arch-ABC-269-F3`):* the build read 1.0711 / 1.0672 ×, a miss (F3). After cut C1, B6 reads
+       the shipped tapered entry as its call sites call it, with the phase supplied, against `main`'s `evaluate`. It
+       is read once, by QE, under the PREREG `…e36ee7ca`. The bar is unchanged at 1.05 ×.
    - **B7, `G6`, by `Q-3K-4`'s answer.** Both readings run at `LEVELS[5]` (4 000 ms), plain node, on the reference
      host, by `ABC-205`'s reading rule: at least 5 interleaved rounds per board per build, at width 1, with load
      recorded; medians compared; any single run below depth 6 is a FAIL.
@@ -414,7 +469,7 @@ measured run.
 |---|---|---|---|---|
 | **F1** | 1–6, the design as built | B0's counts not reproduced | B0 | a defect: the build is not this design. Fix it before any other bar is read |
 | **F2** | 2, 7: the mirror and the doors | a mirror mismatch; `evaluateWithoutTaper` not equal to `main`'s `evaluate`; a door or an older door not node-equal to its pre-ticket self | B1 (a)–(c), `G4` | a defect |
-| **F3** | 6, the cost premise | under the default, `G6`'s median below base on either board; or `G2` above 1.05 × | B6, B7 | STOP to Architect/Design. **One value-identical cost cut is allowed**: O1-e-style incremental phase, or a packed score. It is node-equal by B0, and it is followed by one new `G6` reading. A second miss: not merged, and the Orchestrator puts `Q-3K-4` to the owner with both readings (if he has not answered). No value is tuned to pass `G6`. *Dated 2026-11-03 (`Q-3K-4` = (b)):* the `G6` median clause no longer fires. F3 fires on `G2` above 1.05 ×, or on a B7 run below depth 6. Either one gets the same single value-identical cost cut, then one new reading of the bar that missed. A second miss: not merged. The "puts `Q-3K-4` to the owner" step is moot |
+| **F3** | 6, the cost premise | under the default, `G6`'s median below base on either board; or `G2` above 1.05 × | B6, B7 | STOP to Architect/Design. **One value-identical cost cut is allowed**: O1-e-style incremental phase, or a packed score. It is node-equal by B0, and it is followed by one new `G6` reading. A second miss: not merged, and the Orchestrator puts `Q-3K-4` to the owner with both readings (if he has not answered). No value is tuned to pass `G6`. *Dated 2026-11-03 (`Q-3K-4` = (b)):* the `G6` median clause no longer fires. F3 fires on `G2` above 1.05 ×, or on a B7 run below depth 6. Either one gets the same single value-identical cost cut, then one new reading of the bar that missed. A second miss: not merged. The "puts `Q-3K-4` to the owner" step is moot. *Dated 2026-11-03 (`arch-ABC-269-F3`):* **fired on `G2`** (1.0711 / 1.0672 ×). The cut ordered is C1: the phase leaves the walk and is carried by the recursion, not `Position`. The one new reading is `G2`, by QE, under the PREREG `…e36ee7ca`. § Decision log |
 | **F4** | 3, play safety | a zugzwang row not played at its depth, a mate-floor violation, or a NEWLY-MISSED `G1` line | B2–B4 | a defect check first. If it is real: NOT MET, and this ADR is re-opened. Never a re-pin to a deeper depth |
 | **F5** | `ADR-0061` coupling | the futility audit above its bars | B5 | `ADR-0061`'s margins are re-read on this scale, by a dated amendment there, before E1 merges |
 | **F6** | 9, the strength premise | C2′ NOT MET (< 50.0 of 100), an S′ collapse, or a red Levels lane | B8 | not merged; this ADR reads "accepted, not in force". The structure (decisions 1, 2, 4, 5, 7) may be re-offered with every endgame half equal to its middlegame half, value-identical to `main`, as E2's base. That is E2's ADR's call, not a re-play |
@@ -431,8 +486,13 @@ measured run.
   still equal. It becomes E2's form.
 - **A packed score** (mg and eg in one int32, one add per piece). Fewest operations once every half differs.
   Rejected now: it needs overflow reasoning, and only two terms differ. It is named as E2's option.
+  - *Dated 2026-11-03 (`arch-ABC-269-F3`):* not F3's cut. The measured cost is the per-piece phase add, and a packed
+    mg / eg score does not remove it. The Engineer's variant with the phase packed into an accumulator read 1.0726 ×.
 - **Incremental phase / material / PST in `Position`** (O1-e). It saves the phase adds, but it touches make/unmake
   (`ADR-0003`, the O1 files) for about 1 % of node time. Held as F3's single cost cut.
+  - *Dated 2026-11-03 (`arch-ABC-269-F3`):* ordered as F3's cut, for the phase alone, and **not in `Position`**. The
+    phase rides the search's recursion (`ADR-0020` d3's carrier), so make/unmake are not touched. Material and PST stay
+    in the walk. § Decision log.
 - **`ABC-231` alone, then `ABC-232`.** Each would be read inside the ± 56 a 100-game read resolves. Reading the
   evaluation in pieces costs three reads for one decision (`arch-next-pull` § 2).
 - **The `ADR-0031` addendum as it stands** (queen scale + shelter gate + taper). That is `ABC-205` again, and its gate
