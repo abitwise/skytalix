@@ -134,6 +134,13 @@ adr: "ADR-0067 (PROPOSED 2026-11-03, arch-ABC-239 decision …e4c34239, results 
    file hashes) and the **split strings** ("ABC-239/split/v1", "ABC-239/inner/v1") are recorded in the provenance
    header and the PR. Two runs give one file (B-T3).
 2. UAT is owed. The QE verdict signs it.
+3. *2026-11-03 (`bapm-sec-cut`; `QE-274-b`, INFO, `qe-ABC-274` gaps `…d4c26218` on `grugops/ABC-274`):* **widen
+   `ABC-274`'s A3 rows before tuning.** This ticket relies on `ABC-274` A3 (every family's offset blended exactly)
+   holding at the emitted values. Today five families (PST pawn, rook, king, ISOLATED, KING_FILE_HALF_OPEN) read all
+   six rows from one position and its 1-ply children at phase 4; KING_FILE_OPEN reads phase 2 only, PST queen phase
+   18 only, DOUBLED 4 rows. Before the first fit is emitted, QE (or the Architect's brief) adds frozen rows only (no
+   row changed, `ABC-274` A7) so each family reads ≥ 3 distinct positions at ≥ 2 distinct phases in 1–23. Not a DoR
+   row; the Architect may rule it unnecessary in writing.
 
 ## Size and priority
 

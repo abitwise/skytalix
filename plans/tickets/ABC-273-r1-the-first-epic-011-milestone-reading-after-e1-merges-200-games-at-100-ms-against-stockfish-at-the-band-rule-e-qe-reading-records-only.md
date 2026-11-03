@@ -1,16 +1,44 @@
 ---
 id: ABC-273
 title: "R1: the first EPIC-011 milestone reading, on main after E1 merges and before the next evaluation change: 200 games at 100 ms a move against Stockfish 19 UCI_LimitStrength at the band-rule E, reported as X ± Y on that scale with the highest milestone met named (QE reading, records only; no code)"
-status: backlog
-column: Backlog
+status: done
+column: Done
+closed: "2026-11-03, merged to local main at 20d539e1 (from grugops/ABC-273; records only, no code); QE qe-ABC-273 reading …07b3c794 VALID: 99.0 / 200 against Stockfish 19 at E 1 810, X = 1 806.5 ± 47.4, highest milestone none; R1-A1..A3 MET by QE, R1-A4 met by bapm-sec-cut (EPIC-011 R1 row and G2). Front matter by bapm-sec-cut"
 size: S
-priority: P3
+priority: P2
 epic: EPIC-011
 feature: —
 adr: "ADR-0056 D5 / D6 item 7 (R milestone readings) and C4's 100 ms outside-reading shape. Control RULED 2026-11-03 (arch-post-269 decision …8136b589, written into ADR-0056 D6's dated line of 2026-11-03): R1–R3 survive on C4's 100 ms reading; the command needs ABC-275 (r --budget-ms 100) first. Was: the control owed (UNKNOWN - verify)"
 ---
 
 # ABC-273: R1, the first milestone reading of the climb
+
+> **CLOSED 2026-11-03, DONE, by BA/PM** (task `bapm-sec-cut`, records only, at `main` `5222a9b4`; nothing run).
+> **Merged to local `main` at `20d539e1`** from `grugops/ABC-273` (records only). Not pushed. Source: QE `qe-ABC-273`
+> reading `…07b3c794` (PREREG `…3cda6a60`), runs `…00477b40`, gaps `…334a1bf6`; the Orchestrator's board line.
+> Priority reads **P2** (the Orchestrator raised it on 2026-11-03, `bapm-R1-cut` merge line; the page had kept P3).
+>
+> **Result: VALID, read once.** On `main` `85a304ff` (`src/` `4d6b117b`, after E1):
+>
+> | row | bar | read | result |
+> |---|---|---|---|
+> | R1-A1 | 200 / 200, 0 faults, 0 time losses | 200 / 200; faults 0; 0 time losses either side; depth guard 0 of 10 508 | MET |
+> | R1-A2 | every scope-3 figure; the command as run | W / D / L 95 / 8 / 97, **99.0 / 200 (49.5 %)**, Elo −3.5 ± 47.4 against E 1 810, **X = 1 806.5 ± 47.4** (opening-cluster ± 48.4), `G11` reported; highest milestone **none** (E < 2 200); both tool variables set, paths redacted | MET |
+> | R1-A3 | ≤ 1 h or asked | 0.59 h measured (estimate 0.4–0.9 h); band rule: E 1 810 confirmed, no step, no second run, no owner ask | MET |
+> | R1-A4 | `EPIC-011` § Phases R1 row and G2 cite the figure | written by this hop (`bapm-sec-cut`) | MET |
+> | `ABC-275` A6 | the `control:` line at R1 | byte-equal: `control: skytalix st=0.1 timemargin=50, stockfish st=0.1 timemargin=2000` | MET |
+>
+> - The figure is on its own scale (Stockfish 19 `UCI_Elo`, both sides at `st=0.1`, this host). It is never compared
+>   with the 4 s ≈ 2 074 or pooled into S′. It cannot show a change under about 50 Elo.
+> - **Gaps (QE, none blocking; this reading gates nothing):**
+>   - `QE-273-a` INFO (Orchestrator): a foreign vitest showed in 21 of 211 samples (10 %, under the sealed 20 % line)
+>     during the ALONE window. Recorded on the board ("lock every vitest run").
+>   - `QE-273-b` LOW (Security/NFR, then BA/PM): raw host paths in `r` / `d` records. Routed: `sec-host-paths`
+>     `…72b4070b` PASS_WITH_RISKS, cut as **`ABC-276`** (r / d redaction) and **`ABC-277`** (records path check and
+>     the placeholder rule), both P2.
+>   - `QE-273-c` INFO (BA/PM): R1-A1's "re-run once" vs R1-A3's ask. **Folded:** for R2 and R3 the wording is
+>     **"re-run once, asked of the owner first"** (R1-A1 below; `EPIC-011` § Phases R2 / R3). Not triggered at R1.
+>   - `QE-273-d` INFO: colour split 54.5 / 44.5 of 100, within noise; reported only.
 
 > **CONTROL RULED; DoR 10/10; HELD IN BACKLOG ON `ABC-275`, 2026-11-03, by BA/PM** (task `bapm-R1-cut`, records only,
 > at `main` `30d15584`; nothing run). Source: the Architect's R1 ruling (`arch-post-269` decision `…8136b589`, in
@@ -87,7 +115,7 @@ adr: "ADR-0056 D5 / D6 item 7 (R milestone readings) and C4's 100 ms outside-rea
 
 - **R1-A1 (validity).** **Given** the reading, **then** 200 / 200 games complete, `skytalix` makes 0 faults
   (`EPIC-010` S-1's states) and loses 0 games on time at the 50 ms margin. A base fault or a Stockfish fault makes the
-  reading UNRESOLVED (re-run once).
+  reading UNRESOLVED (re-run once). *2026-11-03 (`bapm-sec-cut`, `QE-273-c`): the re-run is asked of the owner first (R1-A3, `ADR-0056` D6). For R2 and R3 this row reads "re-run once, asked of the owner first".*
 - **R1-A2 (the report).** **Then** QE's note carries every figure of scope 3 and the command line as run, with the
   `main` sha and the E used. *2026-11-03 (`bapm-R1-cut`, `…1fa63931` item 1):* the command line as run shows both
   `CUTECHESS_CLI` and `STOCKFISH` set, with paths redacted. The run's `cmd.txt` shows Stockfish at `st=0.1
@@ -113,7 +141,7 @@ adr: "ADR-0056 D5 / D6 item 7 (R milestone readings) and C4's 100 ms outside-rea
 ## Size and priority
 
 - **Size: S** (one QE reading, one records hop).
-- **Priority: P3.** Its window is between E1's merge and the next evaluation merge; the Orchestrator places it.
+- **Priority: ~~P3~~ P2** *(raised by the Orchestrator 2026-11-03: R1 runs before the next value-changing merge)*. Its window is between E1's merge and the next evaluation merge; the Orchestrator places it.
 
 ## Dependencies
 
@@ -122,7 +150,7 @@ adr: "ADR-0056 D5 / D6 item 7 (R milestone readings) and C4's 100 ms outside-rea
   shape, and the exact `r` / `rpair` command (Stockfish `st=0.1` or the 0.5 s S′ control).~~ *Met 2026-11-03:
   `arch-post-269` `…8136b589` (R1–R3 survive at 100 ms; the command is in scope 2).*
 - **`ABC-275` merged** (`r --budget-ms 100`, Stockfish `st=0.1`; `tools/` only). Hard. *Added 2026-11-03,
-  `bapm-R1-cut`.*
+  `bapm-R1-cut`.* *Met 2026-11-03: merged `85a304ff`.*
 - **Before the next value-changing merge** (`ABC-239`, `ABC-270`, `ABC-271` or `ABC-272`). This is the Orchestrator's
   placement, not a hard dependency: if one merges first, R1 reads that `main` and names it.
 
@@ -138,10 +166,11 @@ adr: "ADR-0056 D5 / D6 item 7 (R milestone readings) and C4's 100 ms outside-rea
 | 6 | NFR triggers with targets | ✅ none on the product |
 | 7 | test notes | ✅ 1–2 |
 | 8 | size | ✅ S |
-| 9 | priority | ✅ P3 |
+| 9 | priority | ✅ ~~P3~~ P2 *(the Orchestrator, 2026-11-03)* |
 | 10 | no major unresolved blocker | ~~❌ the control ruling (R1–R3's survival and the exact command)~~ ✅ *2026-11-03 (`bapm-R1-cut`): ruled, `arch-post-269` `…8136b589` (`ADR-0056` D6). The command waits only on `ABC-275`'s merge (row 5)* |
 
 ~~**DoR 9/10. Backlog.**~~
 
-**DoR 10/10 (2026-11-03, `bapm-R1-cut`). Held in Backlog until `ABC-275` merges** (the Architect's line,
-`…1fa63931` item 1). Then Ready, by a records hop or the Orchestrator's move.
+~~**DoR 10/10 (2026-11-03, `bapm-R1-cut`). Held in Backlog until `ABC-275` merges** (the Architect's line, `…1fa63931` item 1). Then Ready, by a records hop or the Orchestrator's move.~~ *Met: `ABC-275` merged `85a304ff`; the Orchestrator moved it Ready and then ran it.*
+
+**DONE 2026-11-03** (merged `20d539e1`; QE `…07b3c794`; R1-A4 by `bapm-sec-cut`).
