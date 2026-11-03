@@ -1,8 +1,9 @@
 ---
 id: ABC-276
 title: "`tools/rating/rating.ts r` and `d` redact their records the way `rpair` does: host paths, the user name and the host name become placeholders before `SHA256SUMS` is written, so the sums describe the committed bytes. The executed `cutechess-cli` argv stays byte-equal. `usage()` names r's 100 (folds `QE-275-a`). Tools only (`ADR-0049` D4; `QE-273-b`, `SEC-HP-1`)"
-status: ready
-column: Ready
+status: done
+column: Done
+closed: "2026-11-03, merged to local main at 3dd27cfc (from grugops/ABC-276 at b4f962c5, code f4c52d62); QE PASS_WITH_GAPS (qe-ABC-276 …a79db6c1), which signs acceptance (tools only, no UAT); A1-A7 MET on 20 real r/d runs; QE-276-a/b accepted LOW with re-open triggers (bapm-gaps-1103). Front matter by bapm-gaps-1103"
 size: S
 priority: P2
 epic: EPIC-011
@@ -11,6 +12,45 @@ adr: "ADR-0049 D4 (\"a record names infrastructure by class and count only … a
 ---
 
 # ABC-276: `r` and `d` write records with no host path
+
+> **CLOSED 2026-11-03, DONE, by BA/PM** (task `bapm-gaps-1103`, records only, at `main` `8580bbd3`; nothing run but the
+> path check). **Merged to local `main` at `3dd27cfc`** from `grugops/ABC-276` at `b4f962c5` (code `f4c52d62`). Not
+> pushed. Sources: QE `qe-ABC-276` verdict `…a79db6c1` and gaps `…1cbc2325`; the Orchestrator's board line.
+>
+> **Result: QE PASS_WITH_GAPS**, which signs acceptance (test note 5, no UAT).
+>
+> | row | read | result |
+> |---|---|---|
+> | A1 | 10 real `r` / `d` runs (r at 4 000 / 500 / 100; d at 7 budgets), fake tools planting 11 values: 0 left on the branch, 92 (r) / 96 (d) on the cut | MET |
+> | A2 | `sha256sum -c` 10 / 10 out dirs, 0 FAILED; file set equal to the cut's | MET |
+> | A3 | played argv byte-equal in 10 runs (39 / 37 tokens); `cutechessArgs` JSON-equal on 23 vectors; 22 prints byte-equal, 10 refusals message-equal; pair-check 40 / 40 | MET |
+> | A4 | offline row, paths generated at test time; mutants M1, M3 killed | MET |
+> | A5 | usage differs from the cut only in lines 1 and 5; M5 killed | MET |
+> | A6 | 0 lines under `src/` / `data/` / `vitest.config.ts` | MET |
+> | A7 | lint, typecheck, build green; `npm test` 2 566 / 2 566; 0 lane rows | MET |
+>
+> **Gaps, routed** (`bapm-gaps-1103`):
+> - **QE-276-a, LOW: accepted, not cut.** No offline row covers `main()`'s `sealRecords(out, topFiles)` call or the
+>   redacted summary print (mutants M2, M7 survive pair-check). *Why not cut or fold into `ABC-278`:* the only row that
+>   sees the call site runs `rating.ts r` with fake tools, which costs a clone, `npm ci` and a build per run (about
+>   450 MB and 3 s, QE). It lives in `tools/rating/`, so folding it would give `ABC-278` a second file set and a second
+>   QE reading. The code is right today (QE's 10 real runs), and QE's next `r` / `d` reading greps the records (test
+>   note 4) as a second net. **Re-open trigger:** any diff to `rating.ts` `main()`'s `r` / `d` path (the seal call or
+>   the stdout prints): that PR adds the fake-tool row or QE runs its probe. Also re-open if a QE `r` / `d` reading's
+>   `sha256sum -c` or placeholder grep fails.
+> - **QE-276-b, LOW: accepted, not cut.** It is inherited from `rpair`'s word pass (`ABC-225`, `pair.ts` `redact`).
+>   A user or host named like a placeholder word, or `skytalix`, garbles placeholders or engine names. A name shorter
+>   than 3 characters is not redacted, so A1's "0 occurrences of the user or host name" holds for names of 3 or more
+>   characters only. *Why not cut or fold:* it cannot occur on this host (both names are 3 or more characters and clash
+>   with nothing), no path leaks in any case, and the sums stay right. The fix touches `rpair`'s redaction, whose
+>   `ABC-225` / `ABC-247` / `ABC-255` / `ABC-275` rows are a byte-equal net. That is another file set from `ABC-278`'s.
+>   **Re-open trigger:** `r`, `d` or `rpair` is run on a host whose user or host name is under 3 characters, or equals
+>   `home`, `repo`, `out`, `node`, `stockfish`, `cutechess-cli`, `user`, `host` or `skytalix`. Fix hint (QE): skip
+>   matches inside `<…>`; refuse or flag names under 3 characters.
+> - **QE-276-c, INFO:** QE at the next `r` / `d` reading (R2, C2′ or D): `sha256sum -c` and a placeholder grep before
+>   commit; verify before gzipping `r.out` / `d.out`, then re-sum or annotate.
+> - **QE-276-d, INFO:** no owner. `ABC-277`'s check (home-slug class) is the net for a slug-form path. The dry-run
+>   print keeps `<out>` raw by design (A3).
 
 > **Cut 2026-11-03 by BA/PM: DoR 10/10, Ready** (task `bapm-sec-cut`, records only, at `main` `5222a9b4`; nothing
 > run). Source: Security/NFR `sec-host-paths` decision `…72b4070b` (PASS_WITH_RISKS; recommendation (a) REQUIRED;
