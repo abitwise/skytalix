@@ -322,8 +322,11 @@ describe("ABC-215 A2 — the value arrays are rebuilt from their stated rules", 
     "KING_TABLE",
   ] as const;
 
-  it("names exactly the seven arrays the carve-out named", () => {
-    expect(Object.keys(VALUE_TABLES_FOR_TEST).sort()).toEqual([...NAMES].sort());
+  it("names exactly the seven arrays the carve-out named, plus ABC-269's endgame halves", () => {
+    // `ABC-269` adds the king's endgame half and the passed halves; their rule rows are in
+    // `src/evaluate.taper.test.ts`.
+    const taper = ["KING_TABLE_EG", "PASSED_PAWN_BONUS", "PASSED_PAWN_BONUS_EG"];
+    expect(Object.keys(VALUE_TABLES_FOR_TEST).sort()).toEqual([...NAMES, ...taper].sort());
   });
 
   it.each(NAMES)("%s equals its rule over every entry", (name) => {

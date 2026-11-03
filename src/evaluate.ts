@@ -12,13 +12,34 @@
  * keyed EXACTLY by the two pawn masks they are a pure function of (see `pawnStructureCached`). A
  * hit returns what a miss would compute, so the memo changes the cost and never the score.
  *
- * Every number below is HAND-TUNED and expected to move. Tests assert relations (a minor
+ * Every number is HAND-TUNED and expected to move. Tests assert relations (a minor
  * piece outweighs the whole positional term; a centralised knight beats a knight at home),
  * never totals — the one exception being the start position, which is exactly 0 by symmetry.
  *
- * `PIECE_VALUE` and the six tables are this project's own, each made by the rule written above it.
+ * TAPERED (`ABC-269`, `ADR-0064`; this revises `ABC-083`'s "untapered by decision"): every term is
+ * a middlegame / endgame pair in `src/evaluate-params.ts`, the data-only parameter table, each
+ * value made by the rule written above it there. One linear phase (N 1, B 1, R 2, Q 4 over both
+ * sides, clamped to 24) blends them, once per call: score = mg + trunc(Δ × (24 − phase) / 24),
+ * where Δ = eg − mg sums only the terms whose halves differ (at E1 the king's square and the
+ * passed pawns). trunc is odd, so the mirror stays exact. `evaluateWithoutTaper` is the
+ * pre-`ABC-269` evaluation exactly (the blend at phase 24).
  */
 
+import {
+  DOUBLED,
+  ISOLATED,
+  KING_FILE_HALF_OPEN,
+  KING_FILE_OPEN,
+  KING_SHELTER_MISSING,
+  MATERIAL,
+  MOBILITY_CAP as MOBILITY_CAP_PAIR,
+  MOBILITY_WEIGHT as MOBILITY_WEIGHT_PAIR,
+  PASSED,
+  PHASE_EG,
+  PHASE_MG,
+  PHASE_WEIGHT,
+  PST,
+} from "./evaluate-params.ts";
 import {
   BISHOP,
   BLACK,
@@ -35,117 +56,30 @@ import {
 } from "./position.ts";
 
 /**
- * Centipawn value per piece type, indexed by `pieceType` (PAWN=1 … KING=6). Index 0 is EMPTY
- * and is never read. The king is 0: both sides always have exactly one, so any value cancels,
- * and a finite one would only invite a search to "win" it.
+ * The flat lookup arrays, derived once at load from `src/evaluate-params.ts` (`ADR-0064` decision
+ * 4). The middlegame half of every term; where the endgame half differs (the king's square and the
+ * passed pawns), the difference is derived below and enters the blend's Δ. Never written after load.
  *
- * Rule: the classical scale of the chess primers, P 1, N 3, B 3, R 5, Q 9 pawns, times 100, plus
- * 25 on each minor piece, so that one minor outweighs three pawns. Bishop and knight are equal:
- * the bishop's wider reach is paid by mobility (ABC-083).
+ * `PIECE_VALUE` is indexed by `pieceType` (PAWN=1 … KING=6); index 0 is EMPTY and is never read.
+ * The tables are rank-8-first from WHITE's point of view; black reads them with the rank flipped.
  */
-const PIECE_VALUE: readonly number[] = [
-  0, // EMPTY
-  100, // PAWN
-  325, // KNIGHT
-  325, // BISHOP
-  500, // ROOK
-  900, // QUEEN
-  0, // KING
-];
+const PIECE_VALUE: readonly number[] = MATERIAL.mg;
+const PAWN_TABLE: readonly number[] = PST.pawn.mg;
+const KNIGHT_TABLE: readonly number[] = PST.knight.mg;
+const BISHOP_TABLE: readonly number[] = PST.bishop.mg;
+const ROOK_TABLE: readonly number[] = PST.rook.mg;
+const QUEEN_TABLE: readonly number[] = PST.queen.mg;
+const KING_TABLE: readonly number[] = PST.king.mg;
+const KING_TABLE_EG: readonly number[] = PST.king.eg;
 
-/**
- * One table per piece type, written from WHITE's point of view and read RANK-8-FIRST — the
- * layout below is the board as printed, a8 top-left. Black reads the same table with the rank
- * flipped, which is what makes the mirror exact and A1's symmetry property meaningful.
- *
- * Each table is written out from the rule in its comment, a formula over file, rank or reach.
- * No tapering, no endgame variants. In the rules, `R` is the rank counted from the piece's own
- * side (1 … 8), `e` is the file's steps from the edge (a/h 0, b/g 1, c/f 2, d/e 3), and `ring`
- * is the square's steps from the board's edge, `min(e, R - 1, 8 - R)` (0 … 3).
- */
-// Rule: `2 × e × (R − 2)`, and 0 on ranks 1 and 8. A pawn gains as it advances, more on the
-// central files. Shelter is left to king safety (ABC-083).
-// biome-ignore format: an 8x8 board is only readable as 8 rows of 8
-const PAWN_TABLE: readonly number[] = [
-    0,  0,  0,  0,  0,  0,  0,  0,
-    0, 10, 20, 30, 30, 20, 10,  0,
-    0,  8, 16, 24, 24, 16,  8,  0,
-    0,  6, 12, 18, 18, 12,  6,  0,
-    0,  4,  8, 12, 12,  8,  4,  0,
-    0,  2,  4,  6,  6,  4,  2,  0,
-    0,  0,  0,  0,  0,  0,  0,  0,
-    0,  0,  0,  0,  0,  0,  0,  0,
-];
+/** The king's endgame half minus its middlegame half, per table index: the king's share of Δ. */
+const KING_EG_DELTA = new Int32Array(64);
+for (let i = 0; i < 64; i++) {
+  KING_EG_DELTA[i] = (KING_TABLE_EG[i] as number) - (KING_TABLE[i] as number);
+}
 
-// Rule: `10 × n − 50`, where n is the number of knight moves from the square on an empty board
-// (2 … 8). A knight is worth its reach.
-// biome-ignore format: an 8x8 board is only readable as 8 rows of 8
-const KNIGHT_TABLE: readonly number[] = [
-  -30,-20,-10,-10,-10,-10,-20,-30,
-  -20,-10, 10, 10, 10, 10,-10,-20,
-  -10, 10, 30, 30, 30, 30, 10,-10,
-  -10, 10, 30, 30, 30, 30, 10,-10,
-  -10, 10, 30, 30, 30, 30, 10,-10,
-  -10, 10, 30, 30, 30, 30, 10,-10,
-  -20,-10, 10, 10, 10, 10,-10,-20,
-  -30,-20,-10,-10,-10,-10,-20,-30,
-];
-
-// Rule: `5 × (n − 9)`, where n is the number of squares on the square's diagonals on an empty
-// board (7 … 13); this equals `10 × ring − 10`. A bishop is worth its reach.
-// biome-ignore format: an 8x8 board is only readable as 8 rows of 8
-const BISHOP_TABLE: readonly number[] = [
-  -10,-10,-10,-10,-10,-10,-10,-10,
-  -10,  0,  0,  0,  0,  0,  0,-10,
-  -10,  0, 10, 10, 10, 10,  0,-10,
-  -10,  0, 10, 20, 20, 10,  0,-10,
-  -10,  0, 10, 20, 20, 10,  0,-10,
-  -10,  0, 10, 10, 10, 10,  0,-10,
-  -10,  0,  0,  0,  0,  0,  0,-10,
-  -10,-10,-10,-10,-10,-10,-10,-10,
-];
-
-// Rule: 20 on the seventh rank (`R = 7`), else 0. Open files are left to mobility, which counts
-// a rook's reach along them.
-// biome-ignore format: an 8x8 board is only readable as 8 rows of 8
-const ROOK_TABLE: readonly number[] = [
-    0,  0,  0,  0,  0,  0,  0,  0,
-   20, 20, 20, 20, 20, 20, 20, 20,
-    0,  0,  0,  0,  0,  0,  0,  0,
-    0,  0,  0,  0,  0,  0,  0,  0,
-    0,  0,  0,  0,  0,  0,  0,  0,
-    0,  0,  0,  0,  0,  0,  0,  0,
-    0,  0,  0,  0,  0,  0,  0,  0,
-    0,  0,  0,  0,  0,  0,  0,  0,
-];
-
-// Rule: `5 × ring − 5`. A small pull to the centre.
-// biome-ignore format: an 8x8 board is only readable as 8 rows of 8
-const QUEEN_TABLE: readonly number[] = [
-   -5, -5, -5, -5, -5, -5, -5, -5,
-   -5,  0,  0,  0,  0,  0,  0, -5,
-   -5,  0,  5,  5,  5,  5,  0, -5,
-   -5,  0,  5, 10, 10,  5,  0, -5,
-   -5,  0,  5, 10, 10,  5,  0, -5,
-   -5,  0,  5,  5,  5,  5,  0, -5,
-   -5,  0,  0,  0,  0,  0,  0, -5,
-   -5, -5, -5, -5, -5, -5, -5, -5,
-];
-
-// Rule: `max(−50, −10 × d − 10 × (R − 1))`, where d is the file distance to the nearer of the b-
-// and g-files. The castled squares b1 and g1 are home (0); each file toward the centre and each
-// rank up costs 10. Untapered.
-// biome-ignore format: an 8x8 board is only readable as 8 rows of 8
-const KING_TABLE: readonly number[] = [
-  -50,-50,-50,-50,-50,-50,-50,-50,
-  -50,-50,-50,-50,-50,-50,-50,-50,
-  -50,-50,-50,-50,-50,-50,-50,-50,
-  -50,-40,-50,-50,-50,-50,-40,-50,
-  -40,-30,-40,-50,-50,-40,-30,-40,
-  -30,-20,-30,-40,-40,-30,-20,-30,
-  -20,-10,-20,-30,-30,-20,-10,-20,
-  -10,  0,-10,-20,-20,-10,  0,-10,
-];
+/** The blend's span D = `PHASE_MG` − `PHASE_EG` (24 at E1, form L: w = phase). */
+const PHASE_SPAN = PHASE_MG - PHASE_EG;
 
 /** Indexed by `pieceType`, exactly like PIECE_VALUE. Index 0 is EMPTY and is never read. */
 const PIECE_SQUARE_TABLE: readonly (readonly number[])[] = [
@@ -159,9 +93,10 @@ const PIECE_SQUARE_TABLE: readonly (readonly number[])[] = [
 ];
 
 /**
- * TEST-ONLY. The seven value arrays by name, so `ABC-215` `A2` can rebuild each one from the rule
- * in its comment and compare every entry. Nothing in production reads it (the
- * `evaluateWithoutMobility` precedent).
+ * TEST-ONLY. The value arrays by name, so `ABC-215` `A2` can rebuild each one from the rule in its
+ * comment and compare every entry: the seven middlegame arrays, plus the two endgame halves that
+ * differ (`ABC-269`: the king's, `40 − 15 m`, and the passed pawns', `2 ×` by rank) beside the
+ * passed middlegame half. Nothing in production reads it (the `evaluateWithoutMobility` precedent).
  */
 export const VALUE_TABLES_FOR_TEST = {
   PIECE_VALUE,
@@ -171,23 +106,21 @@ export const VALUE_TABLES_FOR_TEST = {
   ROOK_TABLE,
   QUEEN_TABLE,
   KING_TABLE,
+  KING_TABLE_EG,
+  PASSED_PAWN_BONUS: PASSED.mg,
+  PASSED_PAWN_BONUS_EG: PASSED.eg,
 } as const;
 
 /**
- * ABC-082's three pawn terms, in centipawns. The epic names exactly these three; backward pawns,
- * chains, connected passers and storms are fenced out. Hand-tuned like everything above.
- *
- * DOUBLED: per pawn beyond the first on a file. ISOLATED: per pawn with no friendly pawn on
- * either adjacent file. Together they stay inside `A2`'s 50 cp cap for two pawns doubled on one
- * file (15 + 2 x 10 = 35): a structural term must not outweigh material.
- *
- * PASSED: by how far the pawn has come, indexed by rank counted from its OWN side (1 = its
- * starting rank, 6 = one step from promotion). Kept modest on the early ranks: a large bonus
- * there would eat `QE-G3`'s queen-for-a-pawn margin, where both black pawns are passed.
+ * ABC-082's three pawn terms, in centipawns (the values and their reasons: `src/evaluate-params.ts`).
+ * The epic names exactly these three; backward pawns, chains, connected passers and storms are
+ * fenced out. PASSED is indexed by rank counted from the pawn's OWN side; its endgame half differs
+ * (`ABC-269`) and is summed apart, so the blend can take it.
  */
-const DOUBLED_PAWN_PENALTY = 15;
-const ISOLATED_PAWN_PENALTY = 10;
-const PASSED_PAWN_BONUS: readonly number[] = [0, 5, 10, 20, 35, 60, 100, 0];
+const DOUBLED_PAWN_PENALTY = DOUBLED.mg;
+const ISOLATED_PAWN_PENALTY = ISOLATED.mg;
+const PASSED_PAWN_BONUS: readonly number[] = PASSED.mg;
+const PASSED_PAWN_BONUS_EG: readonly number[] = PASSED.eg;
 
 const BLACK_PAWN = PAWN | BLACK;
 
@@ -217,11 +150,12 @@ export function isPassedPawn(board: Uint8Array, square: number): boolean {
  * ABC-083's king safety, in centipawns, per file of the king's own file and the files either side
  * of it (two files for a king on the a- or h-file). SHELTER: no own pawn one or two ranks ahead
  * of the king on that file. FILE_HALF_OPEN: no own pawn anywhere on the file, an enemy pawn on it.
- * FILE_OPEN: no pawn of either colour on the file. Untapered by decision (the page's § Out of scope).
+ * FILE_OPEN: no pawn of either colour on the file. Its two halves are equal at E1: king safety by
+ * phase is E3's (`ADR-0064` decision 10; this was `ABC-083`'s "untapered by decision").
  */
-const KING_SHELTER_MISSING_PENALTY = 15;
-const KING_FILE_HALF_OPEN_PENALTY = 10;
-const KING_FILE_OPEN_PENALTY = 20;
+const KING_SHELTER_MISSING_PENALTY = KING_SHELTER_MISSING.mg;
+const KING_FILE_HALF_OPEN_PENALTY = KING_FILE_HALF_OPEN.mg;
+const KING_FILE_OPEN_PENALTY = KING_FILE_OPEN.mg;
 
 /**
  * ABC-083's mobility: centipawns per square a non-pawn piece reaches (empty, or holding an enemy
@@ -229,8 +163,8 @@ const KING_FILE_OPEN_PENALTY = 20;
  * no make/unmake, pins and checks ignored. The total is clamped to `A4`'s ±100 cp, so mobility can
  * never outvote a minor piece.
  */
-const MOBILITY_WEIGHT = 4;
-const MOBILITY_CAP = 100;
+const MOBILITY_WEIGHT = MOBILITY_WEIGHT_PAIR.mg;
+const MOBILITY_CAP = MOBILITY_CAP_PAIR.mg;
 
 const KNIGHT_STEPS: readonly number[] = [33, 31, 18, 14, -14, -18, -31, -33];
 const KING_STEPS: readonly number[] = [17, 16, 15, 1, -1, -15, -16, -17];
@@ -321,13 +255,16 @@ const adjacentFiles = (file: number): number => (((1 << file) << 1) | ((1 << fil
  * by phase outside the cache without re-keying it (the Architect's seam, `arch-ABC-235`).
  */
 let passedPart = 0;
+/** The passed-pawn sum by the ENDGAME half (`ABC-269`), set beside `passedPart`, the same way. */
+let passedEgPart = 0;
 
 /**
  * The three pawn terms from WHITE's point of view. Two passes over the six ranks a pawn can
  * stand on: the first finds which files each side has a pawn on (and counts the extra pawns that
  * make a file doubled), the second needs those complete file sets to judge isolation.
  *
- * Returns the doubled-and-isolated sum and leaves the passed-pawn sum in `passedPart`. Both are
+ * Returns the doubled-and-isolated sum and leaves the passed-pawn sum in `passedPart` (and its
+ * endgame half in `passedEgPart`). The first two are
  * integer sums, so their total is the single sum this function used to return, bit for bit.
  */
 function pawnStructure(board: Uint8Array): number {
@@ -335,6 +272,7 @@ function pawnStructure(board: Uint8Array): number {
   let blackFiles = 0;
   let score = 0;
   let passed = 0;
+  let passedEg = 0;
 
   for (let rank = 1; rank <= 6; rank++) {
     for (let file = 0; file < 8; file++) {
@@ -356,15 +294,22 @@ function pawnStructure(board: Uint8Array): number {
       const piece = board[square];
       if (piece === PAWN) {
         if ((whiteFiles & adjacentFiles(file)) === 0) score -= ISOLATED_PAWN_PENALTY;
-        if (isPassedPawn(board, square)) passed += PASSED_PAWN_BONUS[rank] as number;
+        if (isPassedPawn(board, square)) {
+          passed += PASSED_PAWN_BONUS[rank] as number;
+          passedEg += PASSED_PAWN_BONUS_EG[rank] as number;
+        }
       } else if (piece === BLACK_PAWN) {
         if ((blackFiles & adjacentFiles(file)) === 0) score += ISOLATED_PAWN_PENALTY;
-        if (isPassedPawn(board, square)) passed -= PASSED_PAWN_BONUS[7 - rank] as number;
+        if (isPassedPawn(board, square)) {
+          passed -= PASSED_PAWN_BONUS[7 - rank] as number;
+          passedEg -= PASSED_PAWN_BONUS_EG[7 - rank] as number;
+        }
       }
     }
   }
 
   passedPart = passed;
+  passedEgPart = passedEg;
   return score;
 }
 
@@ -375,7 +320,8 @@ function pawnStructure(board: Uint8Array): number {
  * black one. A 48-bit integer is exact in a double, so the KEY is the two masks themselves.
  *
  * - Direct-mapped: 2^14 slots in fixed typed arrays, allocated once per process. Each slot holds
- *   both masks and the two parts: 2^14 x (8 + 8 + 4 + 4) bytes = 384 KiB, fixed (`NFR-009`).
+ *   both masks and the three parts (the passed endgame part is `ABC-269`'s): 2^14 x (8 + 8 + 4 +
+ *   4 + 4) bytes = 448 KiB, fixed (`NFR-009`).
  * - A HIT needs BOTH masks equal — never the slot index alone. Empty slots hold -1, which no
  *   mask equals. A collision only overwrites; it can cost a recomputation, never a wrong score.
  * - Never cleared between searches: no value depends on it. `clearPawnCacheForTest` empties it
@@ -387,6 +333,7 @@ const pawnCacheWhite = new Float64Array(PAWN_CACHE_SLOTS).fill(-1);
 const pawnCacheBlack = new Float64Array(PAWN_CACHE_SLOTS).fill(-1);
 const pawnCacheStructure = new Int32Array(PAWN_CACHE_SLOTS);
 const pawnCachePassed = new Int32Array(PAWN_CACHE_SLOTS);
+const pawnCachePassedEg = new Int32Array(PAWN_CACHE_SLOTS);
 
 /**
  * Per 0x88 square: the square's bit in a pawn mask (2^0 … 2^47 over ranks 2-7), and a fixed
@@ -415,7 +362,7 @@ const PAWN_SLOT_WORD_BLACK = new Int32Array(128);
   }
 }
 
-/** `pawnStructure(board)`'s two parts, from the memo when both masks match; sets `passedPart`. */
+/** `pawnStructure(board)`'s parts, from the memo when both masks match; sets `passedPart` and `passedEgPart`. */
 function pawnStructureCached(
   board: Uint8Array,
   whiteMask: number,
@@ -425,6 +372,7 @@ function pawnStructureCached(
   const slot = slotWord & PAWN_CACHE_INDEX_MASK;
   if (pawnCacheWhite[slot] === whiteMask && pawnCacheBlack[slot] === blackMask) {
     passedPart = pawnCachePassed[slot] as number;
+    passedEgPart = pawnCachePassedEg[slot] as number;
     return pawnCacheStructure[slot] as number;
   }
   const structure = pawnStructure(board);
@@ -432,6 +380,7 @@ function pawnStructureCached(
   pawnCacheBlack[slot] = blackMask;
   pawnCacheStructure[slot] = structure;
   pawnCachePassed[slot] = passedPart;
+  pawnCachePassedEg[slot] = passedEgPart;
   return structure;
 }
 
@@ -447,7 +396,8 @@ export function pawnCacheByteLength(): number {
     pawnCacheWhite.byteLength +
     pawnCacheBlack.byteLength +
     pawnCacheStructure.byteLength +
-    pawnCachePassed.byteLength
+    pawnCachePassed.byteLength +
+    pawnCachePassedEg.byteLength
   );
 }
 
@@ -478,8 +428,20 @@ export function pawnCacheProbeForTest(position: Position): { slot: number; hit: 
  * Score of a position from WHITE's point of view: white's material and placement minus
  * black's. Kept separate from the negamax flip so the sign convention lives in exactly one
  * place and the tables are read exactly once per piece.
+ *
+ * `taper` (`ABC-269`, `ADR-0064` decisions 1, 2 and 6): the phase is gathered in the walk's
+ * non-pawn branch and the king's Δ where the king square is found, with no second walk and no new
+ * board read; the blend is applied once, at the end, in the delta form mg + trunc(Δ × (D − w) / D).
+ * That form, and never trunc((mg × w + eg × (D − w)) / D), is built: the full form can return −0
+ * on one side and +0 on its mirror (`QE-269-b`). With `taper` false the result is the middlegame
+ * sum exactly, the pre-`ABC-269` evaluation.
  */
-function whiteMinusBlack(position: Position, mobilityWeight: number, pawnCache = true): number {
+function whiteMinusBlack(
+  position: Position,
+  mobilityWeight: number,
+  pawnCache: boolean,
+  taper: boolean,
+): number {
   const board = position.board;
   let score = 0;
   let mobility = 0;
@@ -488,6 +450,8 @@ function whiteMinusBlack(position: Position, mobilityWeight: number, pawnCache =
   let whitePawns = 0;
   let blackPawns = 0;
   let pawnSlotWord = 0;
+  let phase = 0;
+  let egDelta = 0;
 
   for (let rank = 7; rank >= 0; rank--) {
     for (let file = 0; file < 8; file++) {
@@ -520,6 +484,10 @@ function whiteMinusBlack(position: Position, mobilityWeight: number, pawnCache =
       if (type === KING) {
         if (black) blackKing = square;
         else whiteKing = square;
+        const delta = KING_EG_DELTA[tableIndex] as number;
+        egDelta += black ? -delta : delta;
+      } else {
+        phase += PHASE_WEIGHT[type] as number;
       }
     }
   }
@@ -532,7 +500,16 @@ function whiteMinusBlack(position: Position, mobilityWeight: number, pawnCache =
   const structure = pawnCache
     ? pawnStructureCached(board, whitePawns, blackPawns, pawnSlotWord)
     : pawnStructure(board);
-  return score + (structure + passedPart) + kingSafety + mobilityScore;
+  const mg = score + (structure + passedPart) + kingSafety + mobilityScore;
+  if (!taper) return mg;
+
+  // w = clamp(phase − PHASE_EG, 0, D), the phase clamped to 24 first. `mg + trunc(…)` is +0 when
+  // mg is 0 and the product truncates to −0, so the mirror stays `Object.is`-exact.
+  egDelta += passedEgPart - passedPart;
+  let w = (phase > 24 ? 24 : phase) - PHASE_EG;
+  if (w < 0) w = 0;
+  else if (w > PHASE_SPAN) w = PHASE_SPAN;
+  return mg + Math.trunc((egDelta * (PHASE_SPAN - w)) / PHASE_SPAN);
 }
 
 /**
@@ -542,7 +519,7 @@ function whiteMinusBlack(position: Position, mobilityWeight: number, pawnCache =
  * codebase does mutate transiently, which is why ABC-076's A5 asserts byte-identity here.)
  */
 export function evaluate(position: Position): number {
-  const score = whiteMinusBlack(position, MOBILITY_WEIGHT);
+  const score = whiteMinusBlack(position, MOBILITY_WEIGHT, true, true);
   // `0 - score`, not `-score`: negating a balanced position yields `-0`, which is `Object.is`
   // -distinct from `0` and so is NOT "exactly equal" to its mirror's score. Caught by A1 at
   // startpos-with-black-to-move; `0 - 0` is `+0`.
@@ -556,7 +533,7 @@ export function evaluate(position: Position): number {
  * `searchWithout…` doors' precedent).
  */
 export function evaluateWithoutMobility(position: Position): number {
-  const score = whiteMinusBlack(position, 0);
+  const score = whiteMinusBlack(position, 0, true, true);
   return position.blackToMove ? 0 - score : score;
 }
 
@@ -567,6 +544,17 @@ export function evaluateWithoutMobility(position: Position): number {
  * precedent).
  */
 export function evaluateWithoutPawnCache(position: Position): number {
-  const score = whiteMinusBlack(position, MOBILITY_WEIGHT, false);
+  const score = whiteMinusBlack(position, MOBILITY_WEIGHT, false, true);
+  return position.blackToMove ? 0 - score : score;
+}
+
+/**
+ * TEST-ONLY, and the evaluation every door older than `ABC-269` calls (`ADR-0064` decision 7): the
+ * blend with w = D, which is the pre-`ABC-269` `evaluate` exactly, `Object.is` for `Object.is`
+ * (`B1` (c) reads it against the frozen pre-ticket scores). The shipped recursions call `evaluate`;
+ * a recursion reaches this only with its `taper` switch off, which no shipped call turns off.
+ */
+export function evaluateWithoutTaper(position: Position): number {
+  const score = whiteMinusBlack(position, MOBILITY_WEIGHT, true, false);
   return position.blackToMove ? 0 - score : score;
 }

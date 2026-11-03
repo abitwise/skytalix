@@ -522,9 +522,10 @@ describe("ABC-235 cut 5 — the pawn memo returns what a fresh pawnStructure ret
     }
   });
 
-  it("is a fixed 384 KiB: 2^14 slots of two 8-byte masks and two 4-byte parts", () => {
-    expect(pawnCacheByteLength()).toBe(2 ** 14 * (8 + 8 + 4 + 4));
-    expect(pawnCacheByteLength()).toBe(384 * 1024);
+  // Re-pinned at `ABC-269` (`ADR-0064` decision 5): a third part, the passed endgame sum. 384 -> 448 KiB.
+  it("is a fixed 448 KiB: 2^14 slots of two 8-byte masks and three 4-byte parts", () => {
+    expect(pawnCacheByteLength()).toBe(2 ** 14 * (8 + 8 + 4 + 4 + 4));
+    expect(pawnCacheByteLength()).toBe(448 * 1024);
   });
 
   if (process.env.ENGINE_DEEP === "1") {

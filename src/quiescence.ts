@@ -60,7 +60,7 @@
  */
 
 import { makeMove, unmakeMove } from "./apply.ts";
-import { evaluate } from "./evaluate.ts";
+import { evaluate, evaluateWithoutTaper } from "./evaluate.ts";
 import { isInCheck, legalCaptures, legalCapturesAndQueenPromotions, legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
 import { type Position, pieceType } from "./position.ts";
@@ -150,6 +150,12 @@ export interface QuiescenceRules {
   readonly evasions: boolean;
   /** Out of check: the legal quiet promotions to a queen join the captures (`ABC-229`). */
   readonly quietPromotions: boolean;
+  /**
+   * The stand pat reads the tapered `evaluate` (`ABC-269`, `ADR-0064` decision 7). True only in the
+   * record the shipped recursions pass; absent or false is `evaluateWithoutTaper`, the
+   * pre-`ABC-269` evaluation, so every record that predates the switch is an older door unchanged.
+   */
+  readonly taper?: boolean;
 }
 
 /**
@@ -186,7 +192,7 @@ export function quiesce(
     if (moves.length === 0) return 0 - (MATE_SCORE - (ply + qply));
     best = Number.NEGATIVE_INFINITY;
   } else {
-    const standPat = evaluate(position);
+    const standPat = rules.taper === true ? evaluate(position) : evaluateWithoutTaper(position);
     if (standPat >= beta) return standPat; // standing still already refutes the opponent's line
     if (qply >= QUIESCENCE_MAX_PLY) return standPat; // the runaway guard: stand pat, do not expand
 

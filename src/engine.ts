@@ -101,6 +101,12 @@
  * sixth TEST-ONLY door, `chooseMoveWithoutFutility`, is the pre-`ABC-268` `chooseMove`, node for
  * node. It takes no depth.
  *
+ * THE TAPERED EVALUATION (`ABC-269`, `ADR-0064` decision 7) reaches it by a `taper` switch, as in
+ * `src/search.ts`: it picks the evaluation at quiescence's stand pat (the rules record's `taper`)
+ * and at the futility node test (`futilityNode`'s `taper` argument). It changes the VALUE, so every
+ * door above turns it off, and a seventh TEST-ONLY door, `chooseMoveWithoutTaper`, is the
+ * pre-`ABC-269` `chooseMove`, node for node. It takes no depth.
+ *
  * NOT HERE, each owned elsewhere: difficulty selection and how a level persists (`EPIC-006`), the
  * budget-to-level mapping (`ABC-087`), aspiration windows and threading (none requested;
  * `ADR-0005` F6 leaves threading to Architect/Design).
@@ -256,7 +262,7 @@ export function trimPriorKeys(keys: readonly bigint[], halfmoveClock: number): b
 const ABORTED = Symbol("engine: the budget is spent");
 
 /**
- * The `ABC-121`, `ABC-208`, `ABC-230`, `ABC-228`, `ABC-229` and `ABC-268` switches,
+ * The `ABC-121`, `ABC-208`, `ABC-230`, `ABC-228`, `ABC-229`, `ABC-268` and `ABC-269` switches,
  * `src/search.ts`'s rule: on in `chooseMove`, off in its doors.
  */
 interface Heuristics {
@@ -280,6 +286,11 @@ interface Heuristics {
    * nodes: true on `chooseMove` only.
    */
   readonly futility: boolean;
+  /**
+   * The tapered evaluation (`ABC-269`, `ADR-0064` decision 7): true on `chooseMove` only, where
+   * both quiescence switches are on too, so its rules record is `RULES_TAPERED`.
+   */
+  readonly taper: boolean;
 }
 
 /** The quiescence rules this recursion hands `quiesce` (`ADR-0053` decision 6): constants, never built per leaf. */
@@ -287,6 +298,8 @@ const RULES_SHIPPED: QuiescenceRules = { evasions: true, quietPromotions: true }
 const RULES_NO_QUIET_PROMOTIONS: QuiescenceRules = { evasions: true, quietPromotions: false };
 const RULES_NO_EVASIONS: QuiescenceRules = { evasions: false, quietPromotions: true };
 const RULES_NEITHER: QuiescenceRules = { evasions: false, quietPromotions: false };
+/** `chooseMove`'s record (`ABC-269`): both rules and the tapered stand pat. `taper` is on only there. */
+const RULES_TAPERED: QuiescenceRules = { evasions: true, quietPromotions: true, taper: true };
 
 /** The deepening loop's mutable state: the clock, the deadline, and when to consult again. */
 interface Budget extends Heuristics {
@@ -341,13 +354,15 @@ function leafScore(
 ): number {
   const reason = leafEndReason(position);
   if (reason === null) {
-    const rules = budget.quiescenceEvasions
-      ? budget.quietPromotions
-        ? RULES_SHIPPED
-        : RULES_NO_QUIET_PROMOTIONS
-      : budget.quietPromotions
-        ? RULES_NO_EVASIONS
-        : RULES_NEITHER;
+    const rules = budget.taper
+      ? RULES_TAPERED
+      : budget.quiescenceEvasions
+        ? budget.quietPromotions
+          ? RULES_SHIPPED
+          : RULES_NO_QUIET_PROMOTIONS
+        : budget.quietPromotions
+          ? RULES_NO_EVASIONS
+          : RULES_NEITHER;
     return quiesce(position, alpha, beta, 0, ply, rules, budget.visit);
   }
   if (reason === "checkmate") return 0 - (MATE_SCORE - ply);
@@ -449,7 +464,8 @@ function negamax(
   const alphaIn = alpha;
   const hashMove = slot === -1 ? null : entryMove(slot, moves);
   // Futility (`ABC-268`): once per node, with the entry window; a skipped move still takes its index.
-  const futile = budget.futility && futilityNode(position, remaining, ply, alphaIn, beta);
+  const futile =
+    budget.futility && futilityNode(position, remaining, ply, alphaIn, beta, budget.taper);
   let best = Number.NEGATIVE_INFINITY;
   let bestMove = moves[0] as Move;
   let index = 0;
@@ -613,6 +629,30 @@ export function chooseMove(position: Position, options: EngineOptions): EngineCh
     quiescenceEvasions: true,
     quietPromotions: true,
     futility: true,
+    taper: true,
+  });
+}
+
+/**
+ * TEST-ONLY. The pre-`ABC-269` `chooseMove`, node for node: the tapered evaluation off, everything
+ * else on, futility, null move, both quiescence switches and the prior keys included. It reads
+ * `evaluateWithoutTaper` at every call site, so it is `main`'s `chooseMove` before `ABC-269`, and
+ * the shipped side of every older row that measures its own heuristic alone (`ADR-0064` decision
+ * 7). It takes no depth. Not an engine option; nothing in production calls it.
+ */
+export function chooseMoveWithoutTaper(
+  position: Position,
+  options: EngineOptions,
+): EngineChoice | null {
+  return deepen(position, options, {
+    pvs: true,
+    reductions: true,
+    nullMove: true,
+    priorKeys: true,
+    quiescenceEvasions: true,
+    quietPromotions: true,
+    futility: true,
+    taper: false,
   });
 }
 
@@ -635,6 +675,7 @@ export function chooseMoveWithoutFutility(
     quiescenceEvasions: true,
     quietPromotions: true,
     futility: false,
+    taper: false,
   });
 }
 
@@ -657,6 +698,7 @@ export function chooseMoveWithoutQuietPromotions(
     quiescenceEvasions: true,
     quietPromotions: false,
     futility: false,
+    taper: false,
   });
 }
 
@@ -678,6 +720,7 @@ export function chooseMoveWithoutQuiescenceEvasions(
     quiescenceEvasions: false,
     quietPromotions: false,
     futility: false,
+    taper: false,
   });
 }
 
@@ -699,6 +742,7 @@ export function chooseMoveWithoutNullMove(
     quiescenceEvasions: false,
     quietPromotions: false,
     futility: false,
+    taper: false,
   });
 }
 
@@ -720,6 +764,7 @@ export function chooseMoveWithoutReductions(
     quiescenceEvasions: false,
     quietPromotions: false,
     futility: false,
+    taper: false,
   });
 }
 
@@ -740,10 +785,11 @@ export function chooseMoveWithoutPvsOrReductions(
     quiescenceEvasions: false,
     quietPromotions: false,
     futility: false,
+    taper: false,
   });
 }
 
-/** The deepening loop behind `chooseMove` and its six doors; they differ in `heuristics` only. */
+/** The deepening loop behind `chooseMove` and its seven doors; they differ in `heuristics` only. */
 function deepen(
   position: Position,
   options: EngineOptions,
