@@ -7,10 +7,16 @@ size: M
 priority: P2
 epic: EPIC-011
 feature: —
-adr: "owed (the Architect's): a dated re-open of the ADR-0031 § Addendum 2026-10-24 on ABC-269's base, or a new ADR if the form changes (the owner's acceptance then, reading (b)). Inputs: ADR-0031 addendum A1 (queen scale) and A3 (shelter gate), accepted 2026-10-24, not shipped; ADR-0064 decisions 4 and 7 (the parameter table and the door pattern); ADR-0064 § Alternatives (shelter tapering named as E3's); the QE-269-a ruling (arch-ABC-269-rule, in flight)"
+adr: "owed (the Architect's): a dated re-open of the ADR-0031 § Addendum 2026-10-24 on ABC-269's base, or a new ADR if the form changes (the owner's acceptance then, reading (b)). Inputs: ADR-0031 addendum A1 (queen scale) and A3 (shelter gate), accepted 2026-10-24, not shipped; ADR-0064 decisions 4 and 7 (the parameter table and the door pattern); ADR-0064 § Alternatives (shelter tapering named as E3's); the QE-269-a ruling (arch-ABC-269-rule …8ccb561f, 2026-11-03: ruled (a); the castled corner S1–S3 is this ticket's, offered as its first graded rows at ≥ 20 cp; ADR-0064 § Decision log; ADR-0056 D2 row E3)"
 ---
 
 # ABC-270: king safety by phase, and the queen scale (E3a)
+
+> **`QE-269-a` RULED (a), 2026-11-03, by BA/PM** (task `bapm-ABC-269-fold`, records only; nothing run). The Architect
+> (`arch-ABC-269-rule` `…8ccb561f`; `ADR-0064` § Decision log; `ADR-0056` D2 row E3): `ABC-269`'s B1 (d) is graded on
+> QE's D1–D6 only; the castled corner, **S1–S3** (`TAPER_KP_SHELTER_STRESS`, `grugops/ABC-269` `d6a57653`, E1 forecast
+> +13 / +13 / +23), is E3's. **S1–S3 are this ticket's first graded rows, at ≥ 20 cp** (K1 (b)). Scope 1 stays here;
+> the "(ii)" fold-back branches below are struck. DoR stays 9/10 (row 10: the design and `ABC-269`'s merge).
 
 > **Cut 2026-11-03 by BA/PM: DoR 9/10, Backlog** (task `bapm-epic011-cut`, records only, at `main` `17725732`; nothing
 > run, built or timed). Source: the owner's *"Analyze and create tickets under EPIC-011"* (2026-11-03, the
@@ -52,8 +58,9 @@ The ADR governs each line. Every term keeps `ABC-215`'s provenance rule (a state
 
 1. **The exposure terms get endgame halves.** `KING_SHELTER_MISSING`, `KING_FILE_HALF_OPEN` and `KING_FILE_OPEN` in
    `src/evaluate-params.ts` (`ADR-0064` d4) get endgame halves by a rule the ADR states (candidate: 0), blended by
-   E1's phase. **If the Architect rules `QE-269-a` (ii)** and the shelter taper moves into `ABC-269`, this item
-   folds there and is struck here with a dated line.
+   E1's phase. ~~**If the Architect rules `QE-269-a` (ii)** and the shelter taper moves into `ABC-269`, this item
+   folds there and is struck here with a dated line.~~ *2026-11-03 (`bapm-ABC-269-fold`): `QE-269-a` ruled (a); this
+   item stays here.*
 2. **The queen scale** (`ADR-0031` addendum A1): each king's exposure penalty × 3 while the enemy has a queen, × 1
    otherwise; ceiling 3 × 105 = 315 cp, below a minor piece. Its form on E1's table (a factor, or an mg / eg pair) is
    the ADR's.
@@ -87,8 +94,10 @@ after Ready.
   - (a) **Mirror:** `G3`'s corpus plus `ABC-269`'s frozen mirror set, `Object.is`, 0 mismatches.
   - (b) **The castled king walks:** **given** QE's `TAPER_KP_SHELTER_STRESS` S1–S3 and `ABC-269`'s 6 B1 (d) endings
     (9 frozen king-and-pawn endings), **then** the centre king beats the corner king by **≥ 20 cp** on all 9, from
-    that king's side. (E1 forecasts +13 / +13 / +23 on S1–S3.) If scope 1 folds into `ABC-269`, (b) is read there and
-    this row reads 9 / 9 unchanged.
+    that king's side. (E1 forecasts +13 / +13 / +23 on S1–S3.) ~~If scope 1 folds into `ABC-269`, (b) is read there and
+    this row reads 9 / 9 unchanged.~~ *2026-11-03 (`bapm-ABC-269-fold`): **S1–S3 are this ticket's first graded
+    rows** (`QE-269-a` ruled (a); `ADR-0064` § Decision log). `ABC-269`'s PR prints their E1 readings as a report;
+    this row grades them, with D1–D6 kept at ≥ 20 cp.*
   - (c) **The queen scale:** **given** QE-frozen pairs that differ only by the enemy queen (≥ 6), **then** the
     exposure penalty with the queen is exactly 3 × the penalty without it, and the queenless score equals `ABC-269`'s.
   - (d) **Off is E1:** the evaluate door equals `ABC-269`'s `evaluate`, `Object.is`, over a frozen corpus (the run is
@@ -164,7 +173,8 @@ after Ready.
   or A3 as accepted is the owner's to accept (reading (b): build first, read and merge on acceptance). By the owner's
   2026-11-03 order the Architect designs `ABC-234`, `ABC-236` and `ABC-239` first; this design follows unless the
   Orchestrator re-orders.
-- **The `QE-269-a` ruling** (`arch-ABC-269-rule`, in flight) decides scope 1's home (here, or `ABC-269`).
+- ~~**The `QE-269-a` ruling** (`arch-ABC-269-rule`, in flight) decides scope 1's home (here, or `ABC-269`).~~
+  *2026-11-03: ruled (a) (`…8ccb561f`); scope 1 and S1–S3 are here. Not a wait.*
 - **File collisions, one at a time:** `src/evaluate.ts` and `src/evaluate-params.ts` with `ABC-271`, `ABC-272` and
   `ABC-239`; `src/search.ts`, `src/engine.ts`, `src/quiescence.ts` (the switch) with `ABC-269`. The second to merge
   re-reads its door counts.
@@ -179,7 +189,7 @@ after Ready.
 | 2 | scope and out-of-scope | ✅ scope 1–5; attacker term, tuning, E4 / E7 out |
 | 3 | INVEST | ✅ M; one mechanism behind one switch; independent of every open ticket but `ABC-269` (its base) |
 | 4 | testable, measurable acceptance | ✅ K0 exact counts; K1 0 mismatches, ≥ 20 cp × 9, exactly 3 ×, `Object.is`; K2 0 violations; K3 7 / 7; K4 ≥ 54 / 58; K5 ≤ 0.5 % and 0 ≥ 200 cp; K6 ≤ 1.05 ×; K7 every run ≥ 6; K8 ≥ 50.0 of 100, S′, Levels |
-| 5 | dependencies known | ✅ `ABC-269`; the ADR; `QE-269-a`; collisions |
+| 5 | dependencies known | ✅ `ABC-269`; the ADR; ~~`QE-269-a`~~ *(ruled (a) 2026-11-03)*; collisions |
 | 6 | NFR triggers with targets | ✅ `NFR-005` ≥ 6; `G2` ≤ 1.05 ×; `NFR-008` ≤ 10 s |
 | 7 | test notes | ✅ 1–5 |
 | 8 | size | ✅ M |
