@@ -85,6 +85,8 @@ Architect/Design (task `arch-owner-answers-1103`, records only, on `grugops/arch
 | 2026-11-03 | Architect/Design | ACCEPTED / IN FORCE line. § Addendum: the Lichess data pin (2017-03 export, ≤ 1 M positions, own share 0.5 of the loss). B-T0–B-T8 and F1–F7 re-read; no bar moved | `arch-owner-answers-1103` |
 | 2026-11-03 | Owner | `ADR-0068` and `ADR-0069` accepted: `ABC-270` lands as structure before the fit; Q1 merges or misses before `ABC-239`'s B-T7 / B-T8 freeze | `orch-2026-10-30a` `…401c3d09` |
 | 2026-11-03 | Architect/Design | `ADR-0068`'s owed lines: d4 / d5 tracer, d6 free set (queen-on mg ≥ 0, eg 0), B-T4 re-pin rule, B-T5 risk, Consequences order. Decision 9's number restored; no bar moved | `arch-owner-answers-1103b` |
+| 2026-11-03 | Orchestrator | B-T4: old-table test values are pins, re-pinned old → new; relations, zugzwang, mate floor, `G1`, identity never | `orch-2026-10-30a` `…42c82347` |
+| 2026-11-03 | Architect/Design | F3's bound form (the red row as one linear inequality, margin ½ ‖a‖₁) and the one refit; `zugzwang.001` e1e5 a safety failure (Stockfish 19 d26 −633, e1f1 mate in 10), the row stays; 58 probe games enter; two E1 rows retired. No bar moved | `arch-ABC-239-rulings` `…90b469ca` (PREREG), `…2b428ce8` |
 
 ## Context
 
@@ -227,6 +229,8 @@ Architect/Design (task `arch-owner-answers-1103`, records only, on `grugops/arch
        pre-registration.
      - The three base exposure pairs stay free in both halves, as written above.
      - The pairs count only if `ABC-270` has merged at fit time.
+   - *Dated 2026-11-03 (`arch-ABC-239-rulings`):* **the bound's form and the one refit** (F3) are written below the
+     bars table, with the two rows retired at `ABC-239`. The free set above is unchanged.
 7. **Integer emission and provenance.**
    - Values are rounded half away from zero, and the reported loss is the rounded set's.
    - `tools/tune` writes `src/evaluate-params.ts` in its present shape, mg / eg arrays and the same exports, and
@@ -405,6 +409,8 @@ Architect/Design (task `arch-owner-answers-1103`, records only, on `grugops/arch
        training leaves validation;
      - the inner split is mod 4 on "ABC-239/inner/v1";
      - Lichess games count as training openings.
+   - *Dated 2026-11-03 (`arch-ABC-239-rulings`):* the own-games player set is ruled below the bars table (ruling (d)):
+     the 58 `skytalix-a` / `-b` and `sky-a` / `-b` games enter.
    - **The tool reads local files only. No network at run time** (`ABC-239` NFR triggers).
 10. **The tool: one module, `tools/tune/`.**
     - `tune.ts` with three stages, `extract | fit | emit`, plus `tracer.ts`. About 800–1 000 lines of TypeScript.
@@ -461,6 +467,79 @@ rule and B-T5's risk. No bar moves.***
   - **The structural fix is `ABC-272` (E7a, the pawnless mop-up), not a re-pin.** A later pull over it is a new attempt
     under its own pre-registration (F6's rule).
   - **Recommended to QE (it grades nothing):** read B-T5 before B-T7 and B-T8, so that a miss spends no games.
+
+*Dated 2026-11-03 (`arch-ABC-239-rulings`; `se-ABC-239` `…f39f6eb5`; the Orchestrator's B-T4 ruling `…42c82347`;
+PREREG `…90b469ca`): **F3's bound form, `zugzwang.001` under F4, the own-games set, and two retired rows. No bar
+moves.***
+- **`da3f8599` is not the fit of record.** `ADR-0068` d7 takes the fit on a `main` that contains `ABC-270`. The next
+  hop fits again there. That fit is F3's "emitted set", and its refit is the one refit.
+- **(b) F3's bound is the red row itself, as one linear inequality on the parameters.**
+  - **The row's vector.** A row orders two positions: L must score below H. Then a = trace(L) − trace(H) under d4's
+    model. Each term's count difference enters × w/24 on its mg parameter and × (24 − w)/24 on its eg parameter, each
+    position at its own w. Δm enters on W_mg / W_eg at the mobility clamp's active set. Tied C-F cells sum. A row that
+    reads arrays is the same inequality on the parameters it reads. A threshold row (B1 (d)'s ≥ 20 cp) puts its
+    threshold on the right.
+  - **The margin.** The fit enforces the row tightened by ½ ‖a‖₁, because rounding half away from zero moves each
+    parameter by at most ½. Add 1 for each position with 0 < w < 24 (the blend's trunc; at w = 0 and w = 24 the model
+    equals `evaluate`), and 1 for a strict sign. So the emitted integer set holds the row by construction. A strict row
+    at w ∈ {0, 24} reads aᵀθ ≤ −1 − ½ ‖a‖₁.
+  - **The solve.** d4's projected Newton takes the rows as constraints. A row is active when a step would cross it.
+    Active rows are equalities in the Newton system on the free set. With v = −H_F⁻¹ g_F, U = H_F⁻¹ A_Fᵀ (the same
+    factor) and r the active rows' residual, μ = (A_F U)⁻¹ (A_F v − r) and Δ = v − U μ. A row whose μ < 0 leaves. The
+    box bounds keep their active-set rule. When a projection binds a new parameter, the step is re-solved with it held,
+    so the active rows stay equalities. The stop rule is unchanged. Order is fixed and there are no random numbers, so
+    B-T3 holds over it. For one active row with an unbounded C-F cell, eliminating that cell (a tie) gives the same
+    optimum and is allowed.
+  - **Why exact, not a freeze.** The loss is convex and the box-only optimum breaks the row, so the bounded optimum
+    lies on it. A row the box-only optimum holds changes nothing. A penalty term is inexact. Freezing every parameter
+    the row crosses would also freeze the mobility weights. Neither is used.
+  - **What `ABC-083` A2 (b) crosses** (measured, PREREG R1). On `da3f8599` at phase 0: pawn PST eg g6 (tied b6) 18,
+    minus g2 (tied b2) 19, shelter eg 0, and mobility eg 9 × Δm 1 (the king gains g2): **+8**. On the base table:
+    8 − 15 + 4 = −3. After `ABC-270`, A2 (b) is its phase-24 twin (`ADR-0068` d5). The twin crosses the mg halves of
+    the same terms, `KING_SHELTER_MISSING_QUEEN` mg if it holds an enemy queen, and W_mg. On `da3f8599`'s mg values it
+    is forecast red (PST 29 − (−31) = +60 against shelter 10). That stays **`UNKNOWN - verify`** until the twin exists.
+  - **Provenance and tests.** The header lists each bound row: test file, row, a's nonzero terms, right side, μ. The
+    rows' FENs are constants in `tools/tune`, and a source row checks that each FEN appears literally in its test file.
+    Decision 10's test list gains three rows. (1) A fixture whose box-only fit breaks a row: the bounded fit holds it on
+    the rounded set. (2) A row the box-only fit holds: the bounded fit is byte-identical to the box-only fit. (3) B-T3
+    over a bounded run.
+  - **The one refit, as a procedure.**
+    1. Fit box-only on the new base and emit to scratch, not committed.
+    2. Run the relation rows of `src/evaluate*.test.ts` (B-T4's relation class; a pin is not a relation).
+    3. Each red row is a bound. Refit once with all of them. That emission is the candidate.
+    4. A relation red on the candidate is F3's second red: **NOT MET**. If no relation is red at step 2, the first
+       emission is the candidate and no refit runs.
+- **(c) `zugzwang.001`: e1e5 is a safety failure, not a second sound move. The row stays e1f1 at depth 9** (PREREG R3,
+  rule 2).
+  - `ADR-0050` d9's instrument, Stockfish 19 at depth 26: root free, e1f1 at +258, as recorded there. Forced e1f1:
+    **mate in 10**. Forced e1e5: **−633**. Its PV runs Rg2, Kf1, Rg4, Rf5, Rxb4, and White's queenside falls.
+  - The candidate's shipped `chooseMove` plays e1e5 at depths 9, 10 and 11, and e1f1 at 12, three plies late. The base
+    table plays e1f1 at 9–12.
+  - The root holds one non-pawn piece a side, so the shipped null-move guard (three pieces) never fires there. The miss
+    comes from the evaluation, through the search. B-T5 grades it as a play-safety miss all the same. Report: the
+    page's floor-guard variant (one piece) plays e1e5 on the candidate table and e1e6 on the base table at depth 9.
+  - So there is no accept set, no re-pin and no depth change. The refit's candidate must play e1f1 at depth 9.
+    Otherwise F4 applies: a defect check first (the identity gate on the emitted file, B-T3), then **NOT MET** if the
+    miss is real. No set is re-fitted to pass it (F6: nothing is fitted on play).
+- **(d) The own-games set: the 58 probe games enter.** Decision 9's rule is "every PGN tracked at the fit commit whose
+  two players are both this engine".
+  - `skytalix-a` / `skytalix-b` (`qe-ABC-222`, `qe-ABC-223`, `qe-read-ABC-202`) and `sky-a` / `sky-b`
+    (`qe-tc-depth-probe`) are this engine playing itself, in QE smoke and time-control reads.
+  - The prototype's narrower set (`skytalix` / `base`) was a scratch choice, not the rule.
+  - The tool's player list is those six names, written in the header. Game de-duplication still applies. The change is
+    58 games beside 3 531. No bar moves.
+- **Retired at `ABC-239`, each named here** (B-T4's ruling: an Architect line names them):
+  1. `src/evaluate.taper.test.ts`, "every pair holds two halves of one shape; only the king's square and the passers
+     differ". Only its `differ` assertion retires: it is E1's structure, and `ABC-274` blends every half. The shape
+     assertions (the PST keys, each eg length equal to its mg length) stay, in a row renamed "every pair holds two
+     halves of one shape".
+  2. `src/evaluate.taper.test.ts`, "ABC-269 B1 (e) — the passers …": the 36 pair rows and "by array". The band is
+     E1's passer rule (eg = 2 × mg), read through the blend against the pre-E1 base. d6 retires that rule's `ABC-215`
+     A2 rows for tuned values, and this is the same rule. The blend stays graded for the passers by `ABC-274` A3, and at
+     phase 24 by `ADR-0064` B1 (b). *This is an Architect reading. If the Orchestrator reads B1 (e)'s band as a bar,
+     it becomes an owner question: holding it would bound the fit to 5/3 × mg ≤ eg ≤ 2 × mg at every rank.*
+  - **Kept:** B1 (d) is a relation, and green on `da3f8599` (PREREG R2: 106 to 227 cp on D1–D6, bar 20). Its
+    `mainCentreMinusCorner` literal is a pin and is re-pinned.
 
 ## What would falsify this
 

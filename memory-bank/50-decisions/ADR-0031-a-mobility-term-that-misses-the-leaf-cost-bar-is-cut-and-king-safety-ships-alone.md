@@ -158,6 +158,10 @@ tuner-owned values; A1's rule values are not proposed; A3 is out.**
 - `OD-205-1` / `OD-205-2` stay accepted text. They cannot move under `ADR-0068`, because they sit on older doors and the
   build is value-identical.
 
+*Dated 2026-11-03 (`arch-ABC-239-rulings`):* **`ADR-0068` is ACCEPTED 2026-11-03** by the owner (`orch-2026-10-30a`
+`…401c3d09`, "yes, accept ADR-0068 and ADR-0069"). It is not in force until `ABC-270` merges. The block above reads
+"`ADR-0068` PROPOSED" for the record.
+
 **ACCEPTED** 2026-10-24 by the owner, on this text with `A6` and `A7`: verbatim *"accept your recommendations,
 other session paused"* (`…fb0468ff`). `OD-205-1` and `OD-205-2` are accepted. Recorded by Architect/Design (task
 `arch-accept-owner-words-2026-10-24`).
