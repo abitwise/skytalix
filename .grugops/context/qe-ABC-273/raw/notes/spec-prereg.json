@@ -1,0 +1,37 @@
+{
+ "refs": [
+  "qe-ABC-273",
+  "grugops/ABC-273",
+  "ABC-273",
+  "ABC-275",
+  "ABC-269",
+  "ABC-204",
+  "ABC-255",
+  "EPIC-011",
+  "ADR-0056",
+  "ADR-0049",
+  "R1",
+  "C4",
+  "G2",
+  "G11",
+  "S-prime",
+  "QE-269-j",
+  "85a304ff",
+  "4d6b117b",
+  "09d934ae",
+  "7a5047b3",
+  "54dee3f2",
+  "tools/rating/rating.ts",
+  "arch-post-269/20261103T123540Z-architect-design-decision-8136b589",
+  "qe-ABC-275/20261103T130342Z-qe-e2e-decision-8d38c358",
+  "qe-ABC-269/20261103T122410Z-qe-e2e-observation-2c51ee30",
+  "bapm-R1-cut/20261103T124752Z-ba-pm-decision-142e0171"
+ ],
+ "notes": [
+  {
+   "kind": "decision",
+   "bodyFile": "note-prereg.md",
+   "confidence": "high: bars and outcome consequences copied from ABC-273 R1-A1..A3, ABC-204 A4 and arch-post-269 before any game; time 0.4-0.9 h is an estimate (UNKNOWN - verify until the run)"
+  }
+ ]
+}
