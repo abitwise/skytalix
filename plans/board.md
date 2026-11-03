@@ -1,3 +1,4 @@
+_Updated: 2026-11-03 Orchestrator (orch-2026-10-30a) — **ABC-275 built** (grugops/ABC-275 fcd40f58: r accepts 100 ms, SF st=0.1, --elo > 2600 refused at 100; all other prints byte-equal; 0 src lines; pair-check 38/38; npm test 2 566) → In Review → `qe-ABC-275`. Running: se-ABC-274, qe-ABC-275._
 _Updated: 2026-11-03 Orchestrator (orch-2026-10-30a) — `bapm-R1-cut` merged: **ABC-275** (R1 harness, tools only, S, P2, 10/10) → In Development `se-ABC-275`; ABC-273 10/10 held on ABC-275, **raised to P2** (runs before the next value-changing merge); EPIC-011 R1–R3/G2 ruled at 100 ms; ABC-274 A5 cites ADR-0067 d8. Running: se-ABC-274, se-ABC-275._
 _Updated: 2026-11-03 Orchestrator (orch-2026-10-30a) — `scribe-taper-lane` merged (AGENTS.md taper deep lane, 146/146; duplicate clauses trimmed; 18 404 / 18 432 B, cli 109/109). Running: se-ABC-274, bapm-R1-cut._
 _Updated: 2026-11-03 Orchestrator (orch-2026-10-30a) — `arch-post-269` merged: **ADR-0064 IN FORCE**; ADR-0067 d8 pre-states G2 session spread for ABC-274 (QE-269-f); S′ pool @1810 = 7/10 (ABC-269 only; no step, < 30 games); **R1 ruled**: R1–R3 stay; 200 games at 100 ms vs SF19 at E1810 — needs a tools change (r accepts --budget-ms 100) first; ~0.4–0.9 h, no owner ask unless > 1 h. Ruling: R1 runs before the next value-changing merge. QE-269-j: QE briefs now set CUTECHESS_CLI/STOCKFISH. → `bapm-R1-cut` (ABC-275 tools ticket; ABC-273 page). Running: se-ABC-274, scribe-taper-lane, bapm-R1-cut._
@@ -1401,7 +1402,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 ## In Development (WIP 2/3)
-- [ABC-275] R1's harness: `r --budget-ms 100` (SF st=0.1; `--elo` ≤ 2600 at 100; else byte-equal), tools only (EPIC-011 readings; size: S, priority: P2, DoR 10/10; blocks ABC-273) **cut 2026-11-03 (bapm-R1-cut) → Ready → `se-ABC-275`**
+- [ABC-275] R1's harness: `r --budget-ms 100` (SF st=0.1; `--elo` ≤ 2600 at 100; else byte-equal), tools only (EPIC-011 readings; size: S, priority: P2, DoR 10/10; blocks ABC-273) **cut 2026-11-03 (bapm-R1-cut) → built fcd40f58 (A1–A5, A7 met; npm test 2 566) → In Review → `qe-ABC-275`**
 - [ABC-274] **2026-11-03: Ready (DoR 10/10) → In Development, `se-ABC-274` running; merge waits owner ADR-0067.** E2-pre: every term enters the blend, value-identical at E1's table (same scores, same node counts; no games) (EPIC-011 Phase 4; size: S, priority: P2, DoR 9/10; value-identical; bars node identity + G2 ≤ 1.05× + G6 ≥ base graded; S2 nps exempt (…690d3b30); waits ABC-269 merged + ADR-0067 E2-pre disposition row; merge waits owner acceptance of ADR-0067) **cut 2026-11-03 (bapm-E2pre-cut)**
 
 
