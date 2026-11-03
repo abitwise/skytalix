@@ -6,7 +6,25 @@ id: ADR-0064
 
 ## Status
 
-**PROPOSED** 2026-11-02 by Architect/Design (task `arch-E1`, records only, on `grugops/arch-E1` from `main`
+**ACCEPTED 2026-11-02 by the owner. NOT IN FORCE on `main` until `ABC-269` merges.** His words, verbatim
+(`orch-2026-10-30a` `…cc7db847`): *"64 yes, Q-3K-4 b"*. Recorded 2026-11-03 by Architect/Design (task
+`arch-ABC-269-rule`, records only, on `grugops/arch-ABC-269-rule` from `main` `17725732`). Nothing was run.
+
+- **What acceptance releases:** `ABC-269`'s B8 (C2′, S′, the Levels deep lane) and its merge, after the build and QE.
+- **When it comes into force:** at `ABC-269`'s merge, and only if B0–B8 hold. If it does not merge, a dated line here
+  reads "accepted, not in force on `main`" (F6). Until then `main` keeps its untapered evaluation.
+- **Settled by this line, in the text kept below:** "Acceptance is the owner's", "The answer that settles it",
+  "Default without an answer", and "`Q-3K-4` is open and live".
+- **`Q-3K-4` = (b).** This is a value-changing evaluation ticket, so it is judged on play. B7 is graded by its
+  alternative: every run at depth ≥ 6, depth 7 a WARN, and "≥ base" reported, not graded. F3's `G6` clause does not
+  fire. See B7's and F3's dated lines and `ADR-0056` D7.
+- **`QE-269-a`, ruled (a): the claim is narrowed, and no bar moves.** B1 (d)'s ≥ 20 cp covers the corner king that is
+  not behind both of its shelter pawns. The castled corner is a report, and E3 owns the fix. § Decision log has the
+  exact text, written before any E1 code exists.
+- **Two wording corrections, with no bar moved:** d2's "bit for bit" (`QE-269-b`) and B1 (e)'s "≥ 1.75 × by
+  construction" (`QE-269-c`). Both are dated lines in place.
+
+*As proposed, kept:* **PROPOSED** 2026-11-02 by Architect/Design (task `arch-E1`, records only, on `grugops/arch-E1` from `main`
 `a2b593d5`). The probe ran on a scratch copy of `main`'s `src/` (tree `58fa3eb4`), outside the repository, under the
 host lock. The copy is deleted, and nothing was committed to `src/`. The patch, the driver and every output are under
 `.grugops/context/arch-E1/raw/probe/`. The PREREG `…01c2d6a5` was sealed and committed (`b11b802f`) before any
@@ -34,6 +52,68 @@ measured run.
     this scale and are clean (§ Context). The cut audit is owed by the build (decision 8, B5). A dated line there says
     so.
   - It follows `ADR-0026` decision 10's pattern: a switch, a pair of doors, off in every older door.
+
+## Decision log
+
+| date (UTC) | by | what | record |
+|---|---|---|---|
+| 2026-11-02 | Architect/Design | PREREG of the probe sealed before any measured run | `arch-E1` `…01c2d6a5`, `b11b802f` |
+| 2026-11-02 | Architect/Design | PROPOSED, form L chosen by the pre-registered rule | `arch-E1` `…c524a01d`, `…d8150777` |
+| 2026-11-02 | QE/E2E | B1's position sets frozen before any E1 code; S1–S3 held apart pending a ruling | `qe-ABC-269-freeze` `…1b856350`, `d6a57653` |
+| 2026-11-02 | the owner | **ACCEPTED** ("64 yes"). **`Q-3K-4` = (b)** ("Q-3K-4 b") | `orch-2026-10-30a` `…cc7db847` |
+| 2026-11-03 | Architect/Design | **`QE-269-a` ruled (a)**, the claim narrowed. `QE-269-b` and `-c` wording. The owner's two answers folded | `arch-ABC-269-rule` `…8ccb561f` |
+
+**2026-11-03, `QE-269-a`: ruling (a). The claim is narrowed; no bar is loosened or re-opened.**
+
+- **The narrowed claim, exact.** B1 (d)'s ≥ 20 cp bar covers king-and-pawn endings at phase 0 where the corner king
+  is **not** behind its own pawns on both files of its shelter. In the frozen fixture's terms that is
+  `cornerShelter` `"none"` or `"partial"`. These are the six graded rows D1–D6, unchanged. The claim "the king walks"
+  means exactly this: the centre square beats that corner by ≥ 20 cp. **The bar does not cover the castled corner.**
+  That is a corner king behind its own pawns on both of its shelter files while the centre king's three files are
+  bare (`cornerShelter` `"full"`, QE's S1–S3). E1 grades nothing there.
+- **Why the line falls there.** At E1 the king's square table is the only king term that tapers (d3). `kingExposure`
+  keeps equal halves (d10: no king safety). It charges 15 cp for each missing shelter pawn and 20 cp for each open file
+  (10 cp for a half-open one), over three files. At phase 0 the reading is the endgame half exactly. So E1 moves
+  centre minus corner by a fixed amount: **base + 130** for a corner on the king's own side (a1 / h1 for white, a8 /
+  h8 for black: an endgame swing of +90 against the middlegame table's −40), and **base + 90** in the opponent's
+  corners, where the two halves are equal. The bar holds wherever base ≥ −110 (own corner) or ≥ −70 (far corner).
+  - A castled corner with the centre files bare reads −117 on `main` (S1: square table −40, mobility +28, exposure
+    −105). So E1's own arithmetic forecasts **+13 / +13 / +23** on S1 / S2 / S3 (QE's forecasts `…aea4ceba`).
+    Checked here by hand on S1: the +130 swing from `KING_TABLE` and the rule, and the 105 cp exposure from
+    `kingExposure`. The −117 base is QE's reading on `main` (`verify.ts`).
+  - On those endings **the sign turns**. The centre beats the corner, where `main` reads −107 to −117. The margin is
+    under 20. The residual is the exposure term, which § Alternatives already named. The sentence there that went
+    too far ("so the king walks") gets a dated line.
+- **Why (a) and not (b).**
+  1. **The hole is in a term E1 leaves alone on purpose** (d10). The design is not wrong. The prose claim reached
+     past the probe's sample, which had no castled corner.
+  2. **Re-opening means tapering the shelter and file terms now.** That is either an endgame half with no stated rule
+     (d3 forbids it, and E2 overwrites it) or the `ADR-0031` addendum's shelter gate, the part of `ABC-205` that grew
+     the tree. It would void B0's counts, the `arch-E1` form choice and QE's forecasts. It would need a new probe and
+     a second acceptance, all for a slice of positions that the 100-game read cannot resolve on its own (± 56).
+  3. **Said plainly:** `Q-3K-4` = (b) removes `G6` "≥ base" as a reason against the shelter taper. The rejection in
+     § Alternatives now rests on two grounds: there is no rule to write the half by, and it is king safety (E3 under
+     the tuner).
+- **Not a loosening.**
+  - The bar is B1 (d)'s from the start: "6 king-and-pawn endings that QE freezes before the build", at ≥ 20 cp. QE
+    froze six graded rows, and they stay graded at ≥ 20 cp, byte for byte.
+  - S1–S3 were never inside B1 (d). QE froze them apart, with both outcomes written into its PREREG before this
+    ruling.
+  - This text is written before any E1 code exists. `grugops/ABC-269` at `c9c27910` differs from `main` under `src/`
+    only by QE's fixture, its worktree is clean, and `se-ABC-269` has not been dispatched.
+- **What happens to S1–S3.**
+  - They stay a **report** (QE's PREREG `…1b856350`, the branch "if it is out, they stay a reported reading").
+  - The Engineer prints their three readings in the PR beside B1 (d). QE reads them in its verdict against the
+    forecast +13 / +13 / +23. A difference is explained (`QE-269-e`), not graded. B0 already binds the build to this
+    design's arithmetic, so a graded sign row would catch nothing new.
+  - **E3 owns the fix.** S1–S3 are offered to E3 as its first graded rows, at ≥ 20 cp (a line owed to BA/PM).
+- **QE's frozen sets and PREREG need no addendum, and nobody writes one.**
+  - The ruling selects a branch QE pre-wrote. No row, bar or byte changes (the fixture sha256 stays
+    `05ed9e81…6e96339`).
+  - The fixture's docblock ("a REPORT until the Architect rules…") stays as frozen. Editing it would change the
+    bytes and force a QE re-freeze, which is not owed.
+  - `arch-E1`'s PREREG `…01c2d6a5` governs only the probe's form choice. It is untouched.
+  - QE pulls this ruling at the verdict.
 
 ## Context
 
@@ -178,6 +258,10 @@ measured run.
      term's two halves.
    - Because mg is an integer, this equals **mg + trunc(Δ × (D − w) / D)**, with Δ = eg − mg. **Build that form:** Δ
      sums only the terms whose halves differ. It is the same number, bit for bit.
+     - *Dated 2026-11-03 (`arch-ABC-269-rule`, `QE-269-b`):* the two forms give the same value, but not always the
+       same bits. When mg = 0 and |Δ × (D − w)| < D, the full form returns −0 on one side and +0 on its mirror. That
+       is an `Object.is` mismatch (QE's traps `M-negzero-a` and `M-negzero-b`). The delta form returns +0 on both.
+       **Only the delta form is built.** B1 (a) over QE's fixture catches the other.
    - trunc is odd, so a position and its colour mirror score exactly equal, as `G3` requires. Never `Math.floor`, and
      never a rounding that is not symmetric about 0. The negamax flip stays `0 − score`.
 3. **What tapers at E1, in value.** Each change has a stated rule, under `ABC-215`'s provenance rule.
@@ -266,8 +350,16 @@ measured run.
        `evaluate` and the build's `evaluateWithoutTaper` reads equal, `Object.is`;
      - (d) the king: on 6 king-and-pawn endings that QE freezes before the build, the centre king beats the corner
        king by **≥ 20 cp** (probe +44 to +95; base −35 to −86);
+       - *Dated 2026-11-03 (`arch-ABC-269-rule`, `QE-269-a` ruled (a)):* the six graded endings are QE's D1–D6, and
+         the bar is unchanged. It covers a corner king that is **not** behind its own pawns on both shelter files. The
+         castled corner (QE's S1–S3, forecast +13 / +13 / +23) is a report, not graded, and E3 owns it. § Decision
+         log has the exact claim and the reasons.
      - (e) the passers: the passed term's value at phase ≤ 6 is **≥ 1.5 ×** base's at the same rank (by construction
        ≥ 1.75 ×). At phase 24 it equals base's exactly. At phase ≥ 18 it is ≤ 1.25 × base's.
+       - *Dated 2026-11-03 (`arch-ABC-269-rule`, `QE-269-c`):* "by construction ≥ 1.75 ×" is not exact under
+         trunc. The lowest ratio at phase ≤ 6 is **1.6 ×** (rank 2 at phases 5–6). Rank 3 reads 1.7 × and rank 5
+         1.743 × at phase 6. At phase 18, ranks 4, 6 and 7 meet ≤ 1.25 × at equality. The bars (≥ 1.5 ×, exact,
+         ≤ 1.25 ×) do not change.
      - (e) replaces `ABC-232` A1's "within 5 cp at phase ≥ 0.75". That clause cannot hold for an advanced passer: a
        passer one step from promotion (100 cp) reads 125 at phase 18. Read (e) through the `VALUE_TABLES_FOR_TEST` arrays, or
        through a pair that differs only by the passer.
@@ -291,6 +383,10 @@ measured run.
        0.96 × at kiwipete d9). A miss is F3.
      - **The alternative, judged on play:** `NFR-005` alone. Every run completes depth ≥ 6 (FAIL below), and depth 7
        is a WARN level. "≥ base" is reported, not graded. B8 decides.
+     - *Dated 2026-11-03 (`arch-ABC-269-rule`; the owner, "Q-3K-4 b", `…cc7db847`):* **the alternative binds.** B7
+       is graded on `NFR-005` alone: every run completes depth ≥ 6 (FAIL below), and depth 7 is a WARN. Each board's
+       median against base is reported, not graded. The default bullet above no longer grades. B0 stays the
+       instrument check.
    - **B8, the read:** `EPIC-011` § The per-change rule, by reference: C2′'s 100 games at 100 ms against the
      merge-base, S′'s smoke, and the Levels deep lane. **The intent is GAIN (≥ 50.0 of 100).** It is named here and
      never re-classed after a score is seen.
@@ -318,7 +414,7 @@ measured run.
 |---|---|---|---|---|
 | **F1** | 1–6, the design as built | B0's counts not reproduced | B0 | a defect: the build is not this design. Fix it before any other bar is read |
 | **F2** | 2, 7: the mirror and the doors | a mirror mismatch; `evaluateWithoutTaper` not equal to `main`'s `evaluate`; a door or an older door not node-equal to its pre-ticket self | B1 (a)–(c), `G4` | a defect |
-| **F3** | 6, the cost premise | under the default, `G6`'s median below base on either board; or `G2` above 1.05 × | B6, B7 | STOP to Architect/Design. **One value-identical cost cut is allowed**: O1-e-style incremental phase, or a packed score. It is node-equal by B0, and it is followed by one new `G6` reading. A second miss: not merged, and the Orchestrator puts `Q-3K-4` to the owner with both readings (if he has not answered). No value is tuned to pass `G6` |
+| **F3** | 6, the cost premise | under the default, `G6`'s median below base on either board; or `G2` above 1.05 × | B6, B7 | STOP to Architect/Design. **One value-identical cost cut is allowed**: O1-e-style incremental phase, or a packed score. It is node-equal by B0, and it is followed by one new `G6` reading. A second miss: not merged, and the Orchestrator puts `Q-3K-4` to the owner with both readings (if he has not answered). No value is tuned to pass `G6`. *Dated 2026-11-03 (`Q-3K-4` = (b)):* the `G6` median clause no longer fires. F3 fires on `G2` above 1.05 ×, or on a B7 run below depth 6. Either one gets the same single value-identical cost cut, then one new reading of the bar that missed. A second miss: not merged. The "puts `Q-3K-4` to the owner" step is moot |
 | **F4** | 3, play safety | a zugzwang row not played at its depth, a mate-floor violation, or a NEWLY-MISSED `G1` line | B2–B4 | a defect check first. If it is real: NOT MET, and this ADR is re-opened. Never a re-pin to a deeper depth |
 | **F5** | `ADR-0061` coupling | the futility audit above its bars | B5 | `ADR-0061`'s margins are re-read on this scale, by a dated amendment there, before E1 merges |
 | **F6** | 9, the strength premise | C2′ NOT MET (< 50.0 of 100), an S′ collapse, or a red Levels lane | B8 | not merged; this ADR reads "accepted, not in force". The structure (decisions 1, 2, 4, 5, 7) may be re-offered with every endgame half equal to its middlegame half, value-identical to `main`, as E2's base. That is E2's ADR's call, not a re-play |
@@ -344,6 +440,12 @@ measured run.
 - **Tapering king shelter to 0 in the endgame.** It would free the centre king further. Rejected now: it is king
   safety (E3 / E2), and its halves are wired equal. Today the queenless exposure term still charges a centre king up
   to 105 cp against the endgame table's 90 cp range. The probe's endings still read +44 to +95, so the king walks.
+  - *Dated 2026-11-03 (`arch-ABC-269-rule`, `QE-269-a`):* "so the king walks" holds for a corner king that is not
+    behind both of its shelter pawns. All six probe endings were of that kind. On the castled corner with the centre
+    files bare, E1 forecasts +13 / +13 / +23 (QE's S1–S3). The sign turns, but the margin is under 20 cp, and B1 (d)
+    does not cover it (§ Decision log). Since `Q-3K-4` = (b), `G6` is no longer a reason against this alternative.
+    It stays rejected for E1 on the two other grounds: no rule to write the half by, and it is king safety (E3 under
+    the tuner).
 - **A material-weighted phase** (non-pawn material / 6 400). The same shape. 1 / 1 / 2 / 4 is the textbook form and
   the addendum's, and a small-table read costs the same.
 

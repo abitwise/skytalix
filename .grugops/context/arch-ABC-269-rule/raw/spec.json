@@ -1,0 +1,7 @@
+{
+  "refs": ["arch-ABC-269-rule", "grugops/arch-ABC-269-rule", "ABC-269", "EPIC-011", "E1", "E3", "ADR-0064", "ADR-0056", "ADR-0060", "NFR-005", "Q-3K-4", "QE-269-a", "QE-269-b", "QE-269-c", "B1", "B7", "17725732", "c9c27910", "d6a57653", "src/evaluate.taper-corpus.ts", "orch-2026-10-30a/20261102T221500Z-orchestrator-decision-cc7db847", "qe-ABC-269-freeze/20261102T222129Z-qe-e2e-observation-34cbabaf", "qe-ABC-269-freeze/20261102T222129Z-qe-e2e-observation-aea4ceba", "qe-ABC-269-freeze/20261102T222017Z-qe-e2e-decision-1b856350", "arch-E1/20261102T215541Z-architect-design-decision-d8150777", "arch-E1/20261102T214348Z-architect-design-decision-01c2d6a5"],
+  "notes": [
+    { "kind": "decision", "confidence": "high on the ruling's arithmetic (QE's forecast re-checked by hand on S1 from KING_TABLE, the 40-15m rule and kingExposure; base -117 is QE's main reading) and on 'no bar moved, written before any E1 code' (grugops/ABC-269 c9c27910 src differs from main only by the fixture; its worktree clean); the scope of Q-3K-4 (b) beyond evaluation tickets is the Orchestrator's/owner's to widen", "bodyFile": "notes/dec.md" },
+    { "kind": "observation", "confidence": "high: every line is read from the ABC-269 page and EPIC-011 at main 17725732 and from the ADR text of this task; BA/PM owns the wording", "bodyFile": "notes/obs-bapm.md" }
+  ]
+}
