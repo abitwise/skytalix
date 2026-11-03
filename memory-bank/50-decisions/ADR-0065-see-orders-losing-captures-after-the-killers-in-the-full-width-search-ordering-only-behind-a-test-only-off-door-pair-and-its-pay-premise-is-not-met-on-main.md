@@ -6,6 +6,10 @@ id: ADR-0065
 
 ## Status
 
+**PROPOSED, premise not met; ticket parked by the Orchestrator 2026-11-03** (`orch-2026-10-30a`
+`…24990015` ruling 1; `ABC-234` stays in Backlog). *Dated line by Architect/Design, task `arch-adr0056-fold-1103`,
+records only.*
+
 **PROPOSED 2026-11-03. PREMISE NOT MET ON `main`; THE BUILD DOES NOT START.** Recorded by Architect/Design (task
 `arch-ABC-234`, records only, on `grugops/arch-ABC-234` from `main` `17725732`). The probe ran on a scratch copy of
 `main`'s `src/` (tree `58fa3eb4`, `e72487e1`'s, futility in force; the tree `ADR-0063` measured), outside the
