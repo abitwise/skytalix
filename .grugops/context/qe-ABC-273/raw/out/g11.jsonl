@@ -1,0 +1,5 @@
+{"tree":"main","pos":"4.Qa4","budget":4000,"ms":4000.2,"depth":11,"nodes":2719773,"score":56,"san":"d3","at":"2026-11-03T13:48:07.229Z"}
+{"tree":"main","pos":"8.e5","budget":4000,"ms":4000,"depth":10,"nodes":3107979,"score":51,"san":"Be2","at":"2026-11-03T13:48:11.335Z"}
+{"tree":"main","pos":"10.Ne4","budget":4000,"ms":4000.3,"depth":10,"nodes":3156475,"score":10,"san":"exd6","at":"2026-11-03T13:48:15.486Z"}
+{"tree":"main","pos":"13.d4","budget":4000,"ms":4000.4,"depth":11,"nodes":2973979,"score":-122,"san":"d4","at":"2026-11-03T13:48:19.605Z"}
+{"tree":"main","pos":"17.Kc1","budget":4000,"ms":4000.2,"depth":11,"nodes":2788494,"score":-209,"san":"Kc1","at":"2026-11-03T13:48:23.723Z"}

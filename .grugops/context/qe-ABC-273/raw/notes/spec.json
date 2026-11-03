@@ -1,0 +1,56 @@
+{
+ "refs": [
+  "qe-ABC-273",
+  "grugops/ABC-273",
+  "ABC-273",
+  "ABC-275",
+  "ABC-269",
+  "ABC-204",
+  "EPIC-011",
+  "ADR-0056",
+  "R1",
+  "C4",
+  "G2",
+  "G11",
+  "85a304ff",
+  "4d6b117b",
+  "fa88e150",
+  "975241dc",
+  "tools/rating/rating.ts",
+  "qe-ABC-273/20261103T131138Z-qe-e2e-decision-3cda6a60",
+  "arch-post-269/20261103T123540Z-architect-design-decision-8136b589",
+  "qe-ABC-275/20261103T130342Z-qe-e2e-decision-8d38c358",
+  "qe-ABC-269/20261103T122410Z-qe-e2e-observation-2c51ee30"
+ ],
+ "notes": [
+  {
+   "kind": "decision",
+   "bodyFile": "note-reading.md",
+   "confidence": "high: read once per sealed PREREG 3cda6a60; 200/200 valid, 0 faults, 0 time losses, depth guard 0; figure 1806.5 +/- 47.4 is one 200-game sample on its own scale; gates nothing"
+  },
+  {
+   "kind": "observation",
+   "bodyFile": "note-runs.md",
+   "confidence": "high: commands as run under the host lock 2026-11-03 13:11-13:48Z; timings and host samples from the run's own logs"
+  },
+  {
+   "kind": "observation",
+   "bodyFile": "note-gaps.md",
+   "refs": [
+    "qe-ABC-273",
+    "grugops/ABC-273",
+    "ABC-273",
+    "ABC-275",
+    "ADR-0049",
+    "QE-273-a",
+    "QE-273-b",
+    "QE-273-c",
+    "QE-273-d",
+    "QE-275-c",
+    "tools/rating/rating.ts",
+    "qe-ABC-269/20261103T122410Z-qe-e2e-observation-2c51ee30"
+   ],
+   "confidence": "high on the facts (read and run); severities are QE's judgement"
+  }
+ ]
+}

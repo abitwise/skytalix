@@ -1,0 +1,8 @@
+Elo difference: -3.5 +/- 47.4, LOS: 44.3 %, DrawRatio: 4.0 %
+W/L/D: 95/97/8  score: 0.495  games: 200 of 200
+draw ratio: 4.0 %
+faults: 0  unclassified: 0  move-cap draws: 0
+skytalix.stderr: 0 bytes
+stockfish.stderr: 0 bytes
+stockfish depth guard: 0 of 10508 moves below depth 4
+state: rating E + X ± Y = 1810 + -3.5 ± 47.4 = 1806.5 ± 47.4
