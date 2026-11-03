@@ -1,8 +1,9 @@
 ---
 id: ABC-275
 title: "R1's harness: `tools/rating/rating.ts r` accepts `--budget-ms 100`, with skytalix at st=0.1 / timemargin 50 and Stockfish at st=0.1 / timemargin 2000. At 100 ms, `--elo` above 2 600 is refused. Every other argv, default, pin and dry-run print stays byte-equal (tools only; `ABC-255` item 2 narrowed to `r`)"
-status: ready
-column: Ready
+status: done
+column: Done
+closed: "2026-11-03, merged to local main at 85a304ff (from grugops/ABC-275, code b3436c3a); QE PASS_WITH_GAPS (qe-ABC-275 …8d38c358), which signs acceptance (tools only, no UAT); A1-A5, A7 MET offline; A6 MET at R1 (qe-ABC-273 …07b3c794); post-merge npm test 2 566 / 2 566 (the Orchestrator's board line). Front matter by bapm-sec-cut"
 size: S
 priority: P2
 epic: EPIC-011
@@ -11,6 +12,29 @@ adr: "ADR-0056 D6, dated line of 2026-11-03 (arch-post-269 decision …8136b589:
 ---
 
 # ABC-275: `r` plays Stockfish at 100 ms, so R1 can run
+
+> **CLOSED 2026-11-03, DONE, by BA/PM** (task `bapm-sec-cut`, records only, at `main` `5222a9b4`; nothing run).
+> **Merged to local `main` at `85a304ff`** from `grugops/ABC-275` (code `b3436c3a`). Not pushed. Sources: QE
+> `qe-ABC-275` verdict `…8d38c358` and its gaps note; QE `qe-ABC-273` `…07b3c794` (A6 at R1); the Orchestrator's
+> board line (post-merge `npm test` 2 566 / 2 566).
+>
+> **Result: QE PASS_WITH_GAPS**, which signs acceptance (test note 3, no UAT).
+>
+> | row | read | result |
+> |---|---|---|
+> | A1 | R1's dry run: exit 0, `<out>` not created; the 40-token vector equals QE's own vector from this page's text | MET |
+> | A2 | 22 dry-run prints byte-equal and 12 refusals message-equal against `30d15584` | MET |
+> | A3 / A4 | refusals and the 2 600 / 2 601 edge as written | MET |
+> | A5 | 0 lines under `src/` / `data/` / `vitest.config.ts`; `tools/rating/` only | MET |
+> | A6 | at R1: `control: skytalix st=0.1 timemargin=50, stockfish st=0.1 timemargin=2000`, byte-equal; `cmd.txt` shows Stockfish `st=0.1 timemargin=2000` | **MET at R1** (`…07b3c794`) |
+> | A7 | `pair-check.ts` 38 / 38; lint, typecheck, build exit 0; `npm test` 2 566 / 2 566; lane unchanged | MET |
+>
+> - **Gaps (none blocking):**
+>   - `QE-275-a` LOW (BA/PM): `usage()` still says `r` takes 500 only. **Folded into `ABC-276`** scope 5 / A5, with
+>     BA/PM's re-reading of A3 item 3 there (rpair's refusal is "the usage text", whatever its current bytes).
+>   - `QE-275-b` INFO: `1e2` / `0x64` forms accepted as 100, as `QE-255-b` stands. No owner.
+>   - `QE-275-c` INFO: A6 unverified offline. **Closed** at R1 (A6 MET).
+>   - `QE-275-d` INFO: the A1 rows do not pin Stockfish's `cmd=` token; QE's own vector does. No owner.
 
 > **Cut 2026-11-03 by BA/PM: DoR 10/10, Ready** (task `bapm-R1-cut`, records only, at `main` `30d15584`; nothing
 > run). Source: the Architect's R1 ruling (`arch-post-269` decision `…8136b589` § 2, "The change (`tools/` only, S;
@@ -170,3 +194,5 @@ All rows are offline: `--dry-run` prints or refusals. No engine and no `cuteches
 | 10 | no major unresolved blocker | ✅ none. No owner item is involved (`…8136b589` § 3: a measurement setting inside the accepted D5 / C4 control) |
 
 **DoR 10/10: Ready.** The column move is the Orchestrator's.
+
+**DONE 2026-11-03** (merged `85a304ff`; QE `…8d38c358`; A6 met at R1, `…07b3c794`).

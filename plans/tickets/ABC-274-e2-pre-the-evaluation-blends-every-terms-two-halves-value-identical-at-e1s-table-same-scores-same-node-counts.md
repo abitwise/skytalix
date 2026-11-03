@@ -12,6 +12,38 @@ adr: "ADR-0067 decision 8 (PROPOSED 2026-11-03, arch-ABC-239 decision …e4c3423
 
 # ABC-274: every term enters the blend, at E1's values (E2-pre)
 
+> **QE PASS_WITH_GAPS, UAT SIGNED; READY TO RELEASE; THE MERGE WAITS ON THE OWNER'S "ACCEPT ADR-0067", 2026-11-03, by
+> BA/PM** (task `bapm-sec-cut`, records only, at `main` `5222a9b4`; nothing run). Source: QE `qe-ABC-274` verdict
+> `…fa87f74d` and gaps `…d4c26218`, on `grugops/ABC-274` `2a2e1e02` (those notes are on that branch, not yet on
+> `main`), under PREREG `…4b732a08`; the Orchestrator's board line. No bar on this page moved.
+>
+> | row | bar | read | result |
+> |---|---|---|---|
+> | A1 | B0 11 counts exact; 0 cross-build mismatches | 11 / 11; 0 / 9 120 | MET |
+> | A2 | 0 `Object.is` misses | 0 / 4 840 290 | MET |
+> | A3 | every family blended exactly | 15 / 15; the seam ruling's Q1–Q4 met; mutant M1 caught by A3 alone | MET |
+> | A4 | `G3` mirror; purity | green; mirror 0 / 62 055 | MET |
+> | A5 `G2` | R ≤ 1.0500, mean of two sessions | 0.9797 / 0.9997 → **0.9897** (controls 0.9982 / 1.0001) | MET |
+> | A6 `G6` | median ≥ base; every run ≥ 6 | 9 × 5 / 10 × 5; medians = base; WARN 0 | MET |
+> | A7 | 0 expectations moved | `npm test` 2 588 / 2 588; deep lanes = base | MET |
+> | A8 / A9 | no games; Σ mg / Σ eg inside int16 | clean; 15 910 / 17 510 | MET |
+> | S1–S3 | the seam conditions (`…3169a174`) | present, green | MET |
+>
+> - **Board:** the Orchestrator moved it to **Ready to Release**. The front matter keeps Ready, the BA/PM exit. The
+>   merge is human and waits on *"accept ADR-0067"* (PENDING, the owner's). If `main` moves before the merge, `npm
+>   test` is re-run on the merged tree first (QE's carried line).
+> - **Gaps (none blocking):**
+>   - `QE-274-a` LOW (process): test note 1's QE freeze of A3 before the build was not dispatched. The Architect's Q1–Q4
+>     replaced it (`…3169a174`), and QE checked all four. No freeze now (it would postdate the build). **Owed forward:**
+>     no ticket template exists in this repo (only the kit's, read-only), so the rule is written on `EPIC-011`
+>     § Test notes: *"QE freeze before the build: when a test note puts a QE act before the build, the Orchestrator
+>     dispatches that QE act before the Engineer's first commit."*
+>   - `QE-274-b` INFO (Architect, for `ABC-239`): A3's rows are thin in phase and board (five families read one
+>     position at phase 4). Noted on `ABC-239`: widen A3's frozen set (added rows only) before tuning.
+>   - `QE-274-c` INFO: S2's formal ≈ 1 h protocol not run; the ruling asks only for the nps figure, which is reported.
+>   - `QE-274-d` INFO (whoever owns `.gitignore`; Orchestrator for briefs): a worktree's `node_modules` symlink is not
+>     ignored (`node_modules/` matches a directory only). Not in this fence; carried to the Orchestrator.
+
 > **A5's PREREG CONTENT IS WRITTEN (`QE-269-f` / `-g`), 2026-11-03, by BA/PM** (task `bapm-R1-cut`, records only, at
 > `main` `30d15584`; nothing run). Source: `ADR-0067` decision 8's dated line of 2026-11-03 (`arch-post-269`
 > `…3f30baf8` § 2–3), with the pointer in F8's row. **No bar moved:** R ≤ 1.0500 unrounded, two sessions, no third.
