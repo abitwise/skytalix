@@ -181,6 +181,7 @@ It checks the branch's committed diff against its merge base with `main` under `
 entries (2026-11-03). Exit **0** clean: merge may go on. Exit **1** a finding (file, line, class; never the value):
 **the merge is blocked** until the branch replaces the value with a placeholder in a new commit. Exit **2** cannot run
 (not a git repository, no merge base, bad argument): the merge waits until it runs. Uncommitted changes are not read.
+Run it with the real `HOME` (no override): the check also reads the account home, but an override is not the supported form (`ABC-278`).
 
 ## Roll back
 
