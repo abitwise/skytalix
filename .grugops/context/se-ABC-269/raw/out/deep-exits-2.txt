@@ -1,0 +1,6 @@
+10:13:57Z taper2 exit=0  Tests 99 passed (99)
+10:15:05Z futility2 exit=0  Tests 53 passed (53)
+10:15:08Z puzzle2 exit=0  Tests 18 passed (18)
+kp exit=0
+xbuild exit=124
+DONE

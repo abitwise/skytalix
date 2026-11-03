@@ -1,0 +1,7 @@
+test3.txt: Test Files  66 passed (66)
+test3.txt:      Tests  2519 passed (2519)
+test3.txt:   Duration  9.24s (transform 0ms, setup 0ms, import 6.22s, tests 7.69s, environment 5ms)
+test1.txt:⎯⎯⎯⎯⎯⎯ Failed Tests 55 ⎯⎯⎯⎯⎯⎯⎯
+test1.txt: Test Files  8 failed | 58 passed (66)
+test1.txt:      Tests  55 failed | 2464 passed (2519)
+test1.txt:   Duration  9.77s (transform 0ms, setup 0ms, import 6.71s, tests 7.71s, environment 6ms)
