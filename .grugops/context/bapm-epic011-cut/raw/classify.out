@@ -1,0 +1,81 @@
+scored 145 err1x 48 persist4x 31 persist4x and still err under E1-L@1x 30
+
+## phase (N1 B1 R2 Q4 of 24)
+phase 0-6 (endgame)          positions  22  err1x   6  persist4x   5  (22.7% of positions)  still-err E1-L   5
+phase 7-15                   positions  64  err1x  18  persist4x  14  (21.9% of positions)  still-err E1-L  14
+phase 16-24                  positions  59  err1x  24  persist4x  12  (20.3% of positions)  still-err E1-L  11
+
+## queens
+no queens                    positions  70  err1x  18  persist4x  15  (21.4% of positions)  still-err E1-L  15
+queens on                    positions  75  err1x  30  persist4x  16  (21.3% of positions)  still-err E1-L  15
+
+## passed pawns
+no passer                    positions 104  err1x  35  persist4x  22  (21.2% of positions)  still-err E1-L  21
+passer, adv rank<=4          positions  31  err1x  10  persist4x   6  (19.4% of positions)  still-err E1-L   6
+passer on rank 5-7           positions  10  err1x   3  persist4x   3  (30.0% of positions)  still-err E1-L   3
+
+## material imbalance (white-black cp)
+|imb| < 100                  positions  60  err1x  17  persist4x   8  (13.3% of positions)  still-err E1-L   8
+100<=|imb|<300               positions  57  err1x  25  persist4x  19  (33.3% of positions)  still-err E1-L  18
+|imb| >= 300                 positions  28  err1x   6  persist4x   4  (14.3% of positions)  still-err E1-L   4
+
+## SF eval size (side to move)
+|sf| < 100                   positions  61  err1x  18  persist4x   9  (14.8% of positions)  still-err E1-L   9
+100<=|sf|<400                positions  37  err1x  11  persist4x   8  (21.6% of positions)  still-err E1-L   8
+|sf| >= 400                  positions  47  err1x  19  persist4x  14  (29.8% of positions)  still-err E1-L  13
+
+## opposite bishops
+opposite-colour bishops      positions   6  err1x   2  persist4x   1  (16.7% of positions)  still-err E1-L   1
+not                          positions 139  err1x  46  persist4x  30  (21.6% of positions)  still-err E1-L  29
+
+## the persistent errors (4x), one line each
+g41p20 ply 20 phase 20 Q 2 passers 0 adv 0 imb 0 sf 74 loss1x/4x/E1L 70 70 70 
+g49p20 ply 20 phase 14 Q 0 passers 0 adv 0 imb 0 sf -9 loss1x/4x/E1L 63 63 63 
+g81p20 ply 20 phase 24 Q 2 passers 0 adv 0 imb 0 sf 284 loss1x/4x/E1L 227 227 227 
+g89p20 ply 20 phase 22 Q 2 passers 0 adv 0 imb 0 sf 194 loss1x/4x/E1L 90 90 90 
+g113p20 ply 20 phase 20 Q 2 passers 0 adv 0 imb -100 sf 578 loss1x/4x/E1L 388 268 388 
+g137p20 ply 20 phase 18 Q 1 passers 0 adv 0 imb 200 sf -607 loss1x/4x/E1L 65 65 65 
+g249p20 ply 20 phase 14 Q 0 passers 0 adv 0 imb 0 sf -9 loss1x/4x/E1L 63 63 63 
+g297p20 ply 20 phase 22 Q 2 passers 0 adv 0 imb 0 sf -48 loss1x/4x/E1L 134 134 134 
+g1p40 ply 40 phase 20 Q 2 passers 0 adv 0 imb -100 sf -340 loss1x/4x/E1L 342 129 342 
+g9p40 ply 40 phase 16 Q 2 passers 1 adv 3 imb 100 sf 657 loss1x/4x/E1L 444 444 444 
+g97p40 ply 40 phase 10 Q 0 passers 1 adv 4 imb 0 sf -10 loss1x/4x/E1L 100 90 100 ocb
+g113p40 ply 40 phase 20 Q 2 passers 0 adv 0 imb -100 sf 185 loss1x/4x/E1L 300 144 300 
+g153p40 ply 40 phase 6 Q 0 passers 0 adv 0 imb 100 sf -40 loss1x/4x/E1L 159 159 159 
+g193p40 ply 40 phase 20 Q 2 passers 0 adv 0 imb 100 sf 1097 loss1x/4x/E1L 417 449 417 
+g201p40 ply 40 phase 12 Q 0 passers 0 adv 0 imb 100 sf -121 loss1x/4x/E1L 211 211 211 
+g265p40 ply 40 phase 12 Q 0 passers 0 adv 0 imb 0 sf 4 loss1x/4x/E1L 71 71 71 
+g313p40 ply 40 phase 17 Q 2 passers 0 adv 0 imb 175 sf 498 loss1x/4x/E1L 85 85 25 
+g321p40 ply 40 phase 14 Q 2 passers 1 adv 3 imb 100 sf -662 loss1x/4x/E1L 297 141 292 
+g353p40 ply 40 phase 6 Q 0 passers 0 adv 0 imb 100 sf -40 loss1x/4x/E1L 159 159 159 
+g393p40 ply 40 phase 20 Q 2 passers 0 adv 0 imb 100 sf 1097 loss1x/4x/E1L 417 449 417 
+g17p60 ply 60 phase 12 Q 0 passers 0 adv 0 imb 100 sf -500 loss1x/4x/E1L 90 1000 90 
+g33p60 ply 60 phase 12 Q 0 passers 1 adv 5 imb -100 sf -437 loss1x/4x/E1L 234 234 234 
+g137p60 ply 60 phase 12 Q 1 passers 0 adv 0 imb 700 sf -893 loss1x/4x/E1L 110 54 110 
+g153p60 ply 60 phase 6 Q 0 passers 0 adv 0 imb 100 sf -197 loss1x/4x/E1L 108 108 108 
+g177p60 ply 60 phase 9 Q 1 passers 3 adv 5 imb -425 sf -837 loss1x/4x/E1L 57 57 57 
+g217p60 ply 60 phase 12 Q 0 passers 0 adv 0 imb 100 sf -500 loss1x/4x/E1L 90 1000 90 
+g241p60 ply 60 phase 9 Q 0 passers 1 adv 1 imb 425 sf -670 loss1x/4x/E1L 55 55 55 
+g273p60 ply 60 phase 10 Q 0 passers 5 adv 4 imb -100 sf 350 loss1x/4x/E1L 153 88 88 
+g353p60 ply 60 phase 6 Q 0 passers 0 adv 0 imb 100 sf -197 loss1x/4x/E1L 108 108 108 
+g377p60 ply 60 phase 9 Q 1 passers 3 adv 5 imb -425 sf -837 loss1x/4x/E1L 57 57 57 
+g385p60 ply 60 phase 6 Q 0 passers 2 adv 2 imb -200 sf -74 loss1x/4x/E1L 143 128 143 
+
+## duplicates
+positions 145 unique FEN (board+stm+castle+ep) 123 dup groups 22 extra copies 22
+games 50 game ids [1, 9, 17, 25, 33, 41, 49, 57, 65, 73, 81, 89, 97, 105, 113, 121, 129, 137, 145, 153, 161, 169, 177, 185, 193, 201, 209, 217, 225, 233, 241, 249, 257, 265, 273, 281, 289, 297, 305, 313, 321, 329, 337, 345, 353, 361, 369, 377, 385, 393]
+UNIQUE: scored 123 err1x 38 persist4x 25 (65.8%) still err under E1-L 24
+  UNIQUE phase 0-6        positions  17 err1x   4 persist4x   3
+  UNIQUE phase 7-15       positions  54 err1x  14 persist4x  11
+  UNIQUE phase 16-24      positions  52 err1x  20 persist4x  11
+  UNIQUE queens on        positions  64 err1x  24 persist4x  14
+  UNIQUE no queens        positions  59 err1x  14 persist4x  11
+  UNIQUE passer rank 5-7  positions   8 err1x   2 persist4x   2
+  UNIQUE |sf|>=400        positions  40 err1x  14 persist4x  11
+  UNIQUE |sf|<400         positions  83 err1x  24 persist4x  14
+UNIQUE err50 BASE@1x 38 E1-L@1x 39
+  UNIQUE after 20 plies: positions 41 err1x 13 persist4x 7
+  UNIQUE after 40 plies: positions 43 err1x 15 persist4x 10
+  UNIQUE after 60 plies: positions 39 err1x 10 persist4x 8
+  UNIQUE persistent with any passer: 8 of 25
+  UNIQUE persistent, queens on and phase>=7: 14

@@ -1,8 +1,9 @@
 ---
 id: ABC-263
 title: "SPIKE: can skytalix use the NPU, the iGPU and more CPU threads from Node.js on this host, and share search info between them? (records only; Architect; recommends, changes no rule)"
-status: backlog
-column: Backlog
+status: done
+column: Done
+closed: "2026-11-01, Done on the board (qe-ABC-263 PASS_WITH_GAPS …f9116735, records spike, UAT waived; merged 749a7fe3; the Orchestrator ff775417). It delivered ADR-0057 (ACCEPTED 2026-11-02, owner OQ-1..6 …81ae2db4). Front matter by bapm-epic011-cut 2026-11-03 (page drift since the close; the board already read Done). Was: backlog, DoR 10/10 (bapm-spike-accel)"
 size: M
 priority: P2
 epic: EPIC-011
@@ -11,6 +12,17 @@ owner: Architect/Design
 ---
 
 # ABC-263: SPIKE, accelerators and threads for skytalix on this host (records only)
+
+> **CLOSED 2026-11-01, DONE; page folded 2026-11-03 by BA/PM** (task `bapm-epic011-cut`, records only, at `main`
+> `17725732`; nothing run). A front-matter fold only: the page still read `backlog` after the close (the Orchestrator's
+> brief). No row, bar or scope line below moves.
+> - **Done on the board 2026-11-01:** QE PASS_WITH_GAPS against A1–A8 (`qe-ABC-263` `…f9116735`; observations
+>   `…a0f664f4`, `…89232ca8`, `…5e4c6533`), merged `749a7fe3`; a records spike, so UAT was waived. Its gaps went to
+>   `arch-adr0057-fix` (G1 MEDIUM, G3–G8 LOW), since folded.
+> - **What it delivered:** `ADR-0057` (threads before devices), **ACCEPTED** 2026-11-02 on the owner's OQ-1..6
+>   (`…81ae2db4`). Threads were opened and cut (`ABC-265` Done, `ABC-266` parked, `ABC-267` folded); devices parked
+>   (OQ-5 no); a net later (OQ-6). `ADR-0057` § D8 (2026-11-02, the owner's Gemini analysis) added no ticket.
+> - `EPIC-011` § Tickets row 15 reads Done.
 
 > **Cut 2026-11-01 by BA/PM** (task `bapm-spike-accel`, records only, at `main` `7c67d3ad`; nothing run, built or
 > timed). **Source: the owner's word** (`orch-2026-10-30a` `…78c476bf`, verbatim there): *"yeah make spike ticket for

@@ -1,0 +1,43 @@
+# bapm-epic011-cut GAP ANALYSIS of EPIC-011: per phase, what is done, dropped, parked, in flight and uncut; the uncut items ranked by evidence-backed expected gain per host hour; premises flagged. Top uncut: E3a king safety by phase (cut ABC-270), E4a passer rules (ABC-271), E7a mop-up and scaling (ABC-272, premise-gated); R1 reading ranked apart (ABC-273)
+
+BA/PM, task `bapm-epic011-cut`, records only, at `main` `17725732`. Inputs: `EPIC-011` page; `ADR-0056` D2 / D6 and dated lines; `ADR-0057` D8 (D8.7 lazy evaluation, D8.8); `ADR-0064`; `arch-next-pull` `…7e3ace66` / `…d0f1a5fc`; `qe-ABC-269-freeze` `…34cbabaf` (on `grugops/ABC-269`); the owner's answers `…cc7db847`; this task's re-classification (observation note of this task).
+
+## Per phase (state on 2026-11-03)
+| phase | done | dropped / closed | parked / paused | in flight | no ticket |
+|---|---|---|---|---|---|
+| 0 instrument | M0 `ABC-255`; `ABC-262` | B0 `ABC-256` (superseded by C3″) | — | — | — |
+| 1 TT (owner "P") | — | T1 `ABC-238` (F4) | T2 `ABC-237` parked; T3 `ABC-257`, T4 `ABC-258` paused | — | — |
+| 2 pruning (CLOSED) | P3 `ABC-268` | P2 `ABC-264` (C2′ 44.0) | P1 (stub, parked); P5 (stub, deferred, ≈ 0 at 100 ms) | — | P4 (stub; no live route: O1h parked), P6 (stub; rejected on today's eval, not before E1/E2) |
+| threads (owner "park") | TH-1 `ABC-265` | TH-3 `ABC-267` (folded) | TH-2 `ABC-266` | — | — |
+| 3 ordering | — | — | O1h `ABC-233` (`ADR-0063` F4) | O3s `ABC-234` (design now); S1 `ABC-236` (design next, owner order) | O2c (waits O1h), Q1 (after `ABC-234`), Q2 |
+| 4 evaluation | — | `ABC-231` / `ABC-232` (folded into E1) | — | E1 `ABC-269` (In Development, accepted); E2 `ABC-239` (design after 234/236) | E3, E4, E5, E6, E7; O1-e and lazy evaluation recorded, not stubs |
+| 5 ext / time / speed | V2 (`ABC-254`, in `EPIC-010`) | — | — | — | X1, X2, W1, V3 |
+| readings | — | — | — | — | R1 (ruled "after E1"), R2, R3, C4 anchors A0 / A1, the 40/15 claim |
+| any time | spike `ABC-263` (Done 2026-11-01; page fixed here) | — | devices (OQ-5 no), PK-B | — | — |
+
+## Ranking of the uncut items (expected Elo per host hour; estimates, not readings)
+Each strength item costs about 0.8 h of host for its read (C2′ ≈ 0.4 h, S′ ≈ 10 min, Levels ≈ 10 min, probes minutes), so the order is expected Elo × the strength of its premise. Evaluation first, as `arch-next-pull` ruled; the re-classification refines *which* evaluation items.
+
+| rank | item | est. | premise / evidence | host cost | action |
+|---|---|---|---|---|---|
+| — | E2 `ABC-239` | +100–250 (D2) | the broadest lever: acts on every weight; persistent errors spread over all phases | L, data, ≫ 1 h (asked) | has a ticket; design owed (owner order). Not duplicated |
+| 1 | **E3a** king safety by phase + queen scale | +15–50 (BA/PM; E3 row +40–100) | game 1 35 vs 360 cp; `QE-269-a` +13 / +13 / +23 < 20 on castled K+P endings; 14 of 25 unique persistent errors queens-on at phase ≥ 7 (consistent, not proof); `ABC-205` died on `G6` cost alone, not graded under (b); forms on `b5d5cea5`, owner levels accepted | ≈ 0.8 h | **cut `ABC-270`** (M, P2) |
+| 2 | **E4a** passers: king distance, free path, square rule | +10–30 (E4 row +20–60) | rules the tuner cannot create; E1 doubles passer eg by rank blind to the kings; 8 of 25 with a passer (weak) | ≈ 0.8 h | **cut `ABC-271`** (M, P3) |
+| 3 | **E7a** mop-up + drawish scaling | +10–30 (D2) | no tablebases (owner); 3 of 25 at phase ≤ 6, no pawnless win in corpus → weak; premise probe pre-registered | ≤ 15 min probe + ≈ 0.8 h | **cut `ABC-272`** (M, P3, premise-gated) |
+| 4 | Q2 delta pruning | +5–20 (D2) | `ADR-0024` 1.3–1.5 × qsearch trim, 2026-08 base, pre-futility; search lever ranked below eval | re-measure first | not cut; line in § Phases |
+| 5 | E3b attackers, E5 piece terms, E6 threats/tempo | +40–100 / +30–80 / +20–50 | weights from the tuner (`ABC-207` hand weights −18.3 ± 16.5) | after E2 | stubs; ids at E2's merge |
+| 6 | O1-e, lazy evaluation | ≈ 1.02–1.05 × / `UNKNOWN - verify` | cost cuts; under (b) a cost cut buys depth only, not `G6` | profile first | recorded, not cut (`ADR-0057` D8.8 line written) |
+| 7 | X1, V3, W1, X2 | +10–30 / +10–30 / claim precondition / +20–50 | X1 other form lost −4.8; V3 [J] (82 % first-move cutoffs suggest hash-move-first pays, `UNKNOWN - verify`); W1 invisible at `st=`; X2 dependency void | — | stubs |
+| 8 | P5; `ABC-234`, `ABC-236` | ≈ 0 at 100 ms; 0–15 each | already ranked by `arch-next-pull` | — | ticketed or deferred |
+| apart | **R1** reading | 0 Elo | the only outside read with resolution before E2; `RISK-EPIC011-04` | ≈ 0.5–0.8 h | **cut `ABC-273`** (S, P3; control owed) |
+
+## Premises flagged (nothing re-opened)
+- **New:** `ADR-0064` d9's "the king and the passers are where the instrument's surviving errors sit (late in the game)": not supported (E1-L fixes 1 of 25 unique persistent errors; 22 of 25 at phase ≥ 7). E1's GAIN is B8's to decide. "11 of 13 after 60 plies" reads 8 of 10 on unique positions; the 65 % headline holds (65.8 %). For the Architect (no ADR edited here).
+- **Dissolved:** the E3 stub's "`Q-3K-4` (`G6`)" wait.
+- **Void dependency:** X2 "after T1" (T1 closed on F4).
+- **Moot wait:** W1 "after the thread strand" (parked).
+- **No live route:** P4 (needs a quiet-move order; O1h parked).
+- **Already recorded, unchanged:** P2 (C2′ −42), P1 and joint O1h + P1, O1h standalone, P6 on today's evaluation, T1 (F4), the T3 "never cuts" rationale, the threads +55–150 estimate.
+
+## Recommended order (the Orchestrator's call)
+`ABC-269` (build, QE) → **`ABC-273`** (R1, in the window after E1's merge) → the next evaluation merge by readiness: **`ABC-270`** first (its design can reuse `ABC-205`'s forms and probes), `ABC-239` when its method ADR and data are settled, then `ABC-271`, `ABC-272` (after its premise probe). Architect capacity: the owner ordered `ABC-234`, `ABC-236`, `ABC-239` designs first; `ABC-270`'s design follows unless re-ordered.
