@@ -1,8 +1,9 @@
 ---
 id: ABC-239
 title: "The evaluation's weights are tuned offline by a stated method on a licensed position set, emitted as constants, and validated against an outside opponent"
-status: ready
-column: Ready
+status: done
+column: Done
+closed: "2026-11-04, CLOSED NOT MET (first pull), not shipped: step 6 on the fit of record 26d06118 read F3 (pawns A2 53 > 50) and F4 (zugzwang.001 e1e5 at d9–11) as written; path (iii), Orchestrator …4c76bf7a on arch-ABC-239-f3f4 …69f22167. main keeps E1's rule-made table; nothing from 26d06118 merges. The tool lands alone as ABC-280. A second pull is a new attempt under F6, after ABC-271 (bapm-ABC-239-close)"
 size: L
 priority: P2
 epic: EPIC-011
@@ -10,6 +11,20 @@ adr: "ADR-0067 (ACCEPTED 2026-11-03 by the owner, orch-2026-10-30a …af126c04 i
 ---
 
 # ABC-239: offline tuning of the evaluation weights
+
+> **CLOSED NOT MET (FIRST PULL), 2026-11-04. Not shipped. Done (closed, not shipped)**, by BA/PM (task
+> `bapm-ABC-239-close`, records only, at `main` `ac55ddf6`; nothing run). The pre-registered miss rule applied (§ What
+> happens on a miss, F3 and F4). The Orchestrator took path (iii) (`orch-2026-10-30a` `…4c76bf7a`) on the Architect's
+> rulings (`arch-ABC-239-f3f4` `…69f22167`, results `…4eae0fd3`; `ADR-0067`'s dated block of 2026-11-04). **No bar moved;
+> the owner is notified, and no owner word was needed.** See § Close.
+> - **Step 6 on `26d06118` (`se-ABC-239b` `…c3f94eab`):** B-T1, B-T2 (0.9905 ×) and B-T3 were MET. **F3:** pawns A2
+>   read 53 against a bar of ≤ 50. **F4:** `zugzwang.001` played e1e5 at depths 9–11, the third fitted set in a row
+>   to do so. Both are NOT MET as written.
+> - **`main` keeps E1's rule-made table.** Nothing from `26d06118` merges: no fitted table, no re-pin, no retirement.
+> - **The tool lands alone as `ABC-280`** (tools only, `src/` byte-identical to `main`), so a second pull starts from a
+>   merged, tested tool.
+> - **A second pull is a new attempt under F6**, with its own PREREG, on a `main` that has `ABC-271` (E4a). It needs the
+>   owner's word then on `ADR-0067` d6's amendment (every relation row bounded at once).
 
 > **RULINGS FOLDED: THE FIT WAITS ON `ABC-270`'S MERGE; F3'S BOUND IS WRITTEN; `zugzwang.001` STAYS e1f1; TWO ROWS
 > RETIRE, 2026-11-03, by BA/PM** (task `bapm-ABC-239-rulings`, records only, at `main` `4230d409`; nothing run).
@@ -453,3 +468,53 @@ procedure, and A5's `zugzwang.001` at e1f1, depth 9. Row 5 gains the single wait
 needed is made (`…42c82347`, `…912ba57d`, `ADR-0067` rulings (b)–(d)), and no owner question is open. The `ABC-270`
 wait is an ordered dependency with a written fallback, not an open question. The board's Blocked column is the
 Orchestrator's.*
+
+## Close
+
+> **BA/PM, 2026-11-04** (task `bapm-ABC-239-close`, records only, at `main` `ac55ddf6`). Inputs: the Orchestrator's
+> decision `orch-2026-10-30a` `…4c76bf7a`; the Architect's `arch-ABC-239-f3f4` results `…4eae0fd3` and rulings
+> `…69f22167` (with the owed lines for this page); `se-ABC-239b` failed attempt `…c3f94eab`; `ADR-0067`'s dated block
+> of 2026-11-04. Notes: `.grugops/context/bapm-ABC-239-close/notes/`.
+
+**The first pull is closed NOT MET under § What happens on a miss.** That section's rule is that F3 or F4 on the
+candidate is NOT MET and goes to Architect/Design. The Architect ruled both as written, and the Orchestrator closed the
+pull (path (iii)). Status Done means closed and not shipped, in the form of `ABC-210`'s S1 close. It does not mean
+merged.
+
+- **Step 6 on the fit of record `26d06118`** (`src/evaluate-params.ts` sha256 `10581fb5…95af`; `grugops/ABC-239b`, tip
+  `7e9fb4f7`):
+  - **MET before step 6:** B-T1 (0 misses over 1 488 071 keys; 0 over 1 212 172 rows on the emitted file), B-T2
+    (**0.9905 ×** on 45 158 own outer-validation rows) and B-T3 (two runs byte-identical). No data-stage stop fired.
+  - **F3, NOT MET:** pawns A2 (the doubled-pawn gap) read **53 against ≤ 50**. It was green at 49 on the box-only fit,
+    with a slack of 1 against its 2.5 margin, so the procedure did not bound it. The one refit moved it.
+  - **F4, NOT MET:** `zugzwang.001` played **e1e5 at depths 9, 10 and 11** (e1f1 from depth 12). The defect check was
+    clean. This is the third fitted set to play e1e5: `da3f8599`, the box-only set and `26d06118`.
+- **The cause, as the Architect measured it (`…4eae0fd3`):** it is joint, in the fitted endgame halves. Four pairs
+  drive it ({P, R}, {P, K}, {P, PASS} and {K, PASS}), and no single term does. At depth 9 the base plays e1f1 by an
+  evaluation preference of 29 cp. Neither table sees White's win up to depth 16. The passer part needs a feature the
+  engine lacks: whether a passer's path is free, and how far the kings are. That is `ABC-271` (E4a). Whether a fit over
+  E4a holds the row is `UNKNOWN - verify`.
+- **What stays and what goes:**
+  - `main` keeps E1's rule-made table. Nothing from `26d06118` merges, and none of its tests change. No row is
+    re-pinned and none retires.
+  - The tool commits (`625b75fe`, `5ce4f870`, `def26997`, `8c03b713`) land alone as **`ABC-280`**, with `src/`
+    byte-identical to `main`.
+  - `954d44fb` (`QE-270-e`, a test-only change to the K1 (e) bite rows) does not land. It goes red only once a fit frees
+    a queen-on mg, so it is owed by the second pull.
+  - The branches stay unmerged: `grugops/ABC-239` (`da3f8599`) and `grugops/ABC-239b` (`26d06118`).
+- **K1 (c), for any later step 7: form (A)** (`…69f22167` § 3). Each row runs inside `withParametersForTest`, with the
+  six king-file pairs at the values its literals were frozen at (15 / 10 / 20 in both halves, queen-on 0). Every literal
+  stays unchanged. Measured 5 / 5 green on `26d06118` and on the base. QE checks three things: the bite (each row is red
+  with the queen-on term zeroed), that the seam is used in test files only, and that the "{ 0, 0 }" row is re-pinned as
+  a pin. Re-pinning by halves is rejected.
+- **The second pull is a new attempt, not a re-open of this one:**
+  - It runs under F6's rule ("a new attempt is a new data set or free set with a new pre-registration"), with its own
+    PREREG, on a `main` that has `ABC-271`.
+  - **The owner's word is needed then** on `ADR-0067` d6's amendment: every relation row is bounded from the first fit,
+    each with its margin, in one fit with no refit step. Adding R1 (rank symmetry of the king's centralization) as a
+    relation row is also his.
+  - B-T8's approval (200 + 200) went unused. It carries to the next candidate only if the owner confirms it then.
+  - Paths not taken: (i) the re-open now (the owner's, forecast to fire F4 again), (ii) freezing the eg halves (a fit
+    chosen on the row) and (iv) moving the row's depth (a bar moved after a miss).
+- **Owed elsewhere, not on this page:** `ADR-0056` row E2's status line is `arch-ABC-271`'s. `plans/board.md` is the
+  Orchestrator's.
