@@ -1,0 +1,17 @@
+== candidate table
+ ✓ src/zz-d5-queen-on.test.ts > ABC-270 K1 (c) — the queen-on structure through the seam, per king (QE-270-a) and through evaluate > with the pairs at 0, each king's exposure is its base exposure in both halves, queen or no queen 2ms
+ ✓ src/zz-d5-queen-on.test.ts > ABC-270 K1 (c) — the queen-on structure through the seam, per king (QE-270-a) and through evaluate > with the pairs at 2 × base: the subject king's exposure is exactly 3 × its queenless exposure in each half, the other king's is equal, and the control moves nothing 1ms
+ ✓ src/zz-d5-queen-on.test.ts > ABC-270 K1 (c) — the queen-on structure through the seam, per king (QE-270-a) and through evaluate > each queen-on pair counts its own feature: the king's file count × the enemy-queen flag, mg and eg apart 2ms
+ ✓ src/zz-d5-queen-on.test.ts > ABC-270 K1 (c) — the queen-on structure through the seam, per king (QE-270-a) and through evaluate > through evaluate: pairs 0 → 2 × base moves white's view by QE's frozen net, in evaluate and evaluateWithoutTaper 1ms
+ ✓ src/zz-d5-queen-on.test.ts > ABC-270 K1 (c) — the queen-on structure through the seam, per king (QE-270-a) and through evaluate > the queen-on endgame halves enter the blend: eg = 24, mg = 0 moves only the phase-0 score, by −24 × (white's queen-on count − black's) 2ms
+ ↓ src/zz-d5-queen-on.test.ts > ABC-270 K1 (a) — the mirror stays Object.is-exact with the queen-on pairs live > G3 + TAPER_MIRROR_POSITIONS + QE's pairs, at 0 and at 2 × base: 0 mismatches
+      Tests  5 passed | 8 skipped (13)
+== base table
+ ✓ src/zz-d5-queen-on.test.ts > ABC-270 K1 (c) — the queen-on structure through the seam, per king (QE-270-a) and through evaluate > with the pairs at 0, each king's exposure is its base exposure in both halves, queen or no queen 2ms
+ ✓ src/zz-d5-queen-on.test.ts > ABC-270 K1 (c) — the queen-on structure through the seam, per king (QE-270-a) and through evaluate > with the pairs at 2 × base: the subject king's exposure is exactly 3 × its queenless exposure in each half, the other king's is equal, and the control moves nothing 1ms
+ ✓ src/zz-d5-queen-on.test.ts > ABC-270 K1 (c) — the queen-on structure through the seam, per king (QE-270-a) and through evaluate > each queen-on pair counts its own feature: the king's file count × the enemy-queen flag, mg and eg apart 1ms
+ ✓ src/zz-d5-queen-on.test.ts > ABC-270 K1 (c) — the queen-on structure through the seam, per king (QE-270-a) and through evaluate > through evaluate: pairs 0 → 2 × base moves white's view by QE's frozen net, in evaluate and evaluateWithoutTaper 1ms
+ ✓ src/zz-d5-queen-on.test.ts > ABC-270 K1 (c) — the queen-on structure through the seam, per king (QE-270-a) and through evaluate > the queen-on endgame halves enter the blend: eg = 24, mg = 0 moves only the phase-0 score, by −24 × (white's queen-on count − black's) 1ms
+ ↓ src/zz-d5-queen-on.test.ts > ABC-270 K1 (a) — the mirror stays Object.is-exact with the queen-on pairs live > G3 + TAPER_MIRROR_POSITIONS + QE's pairs, at 0 and at 2 × base: 0 mismatches
+      Tests  5 passed | 8 skipped (13)
+10581fb5dd0395f5

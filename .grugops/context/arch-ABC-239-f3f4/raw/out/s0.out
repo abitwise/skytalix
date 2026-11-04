@@ -1,0 +1,6 @@
+S0 gen-base.ts vs base.ts: keys 16/16 deepEqual true
+S0 gen-cand.ts vs cand.ts: keys 16/16 deepEqual true
+base-real d9: depth 9 move e1f1 score -390 nodes 72969 (135 ms)
+cand-real d9: depth 9 move e1e5 score -421 nodes 52311 (104 ms)
+base-gen d9: depth 9 move e1f1 score -390 nodes 72969 (143 ms)
+cand-gen d9: depth 9 move e1e5 score -421 nodes 52311 (110 ms)

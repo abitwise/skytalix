@@ -1,0 +1,2 @@
+base: R1 A(Kf1) -50 B(Kf8) -50 A-B 0 |A-B|<=20 GREEN
+cand: R1 A(Kf1) -59 B(Kf8) -5 A-B -54 |A-B|<=20 RED
