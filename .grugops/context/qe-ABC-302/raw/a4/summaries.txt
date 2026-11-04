@@ -1,0 +1,150 @@
+## B-cli-single
+ RUN  v4.1.12 <scratch>/qe302/arms/B
+ Test Files  1 passed (1)
+      Tests  109 passed (109)
+   Duration  4.53s (transform 0ms, setup 0ms, import 3.54s, tests 879ms, environment 0ms)
+## B-deep-capacity
+ RUN  v4.1.12 <scratch>/qe302/arms/B
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Duration  306ms (transform 0ms, setup 0ms, import 57ms, tests 139ms, environment 0ms)
+## B-deep-engine
+ RUN  v4.1.12 <scratch>/qe302/arms/B
+ Test Files  1 passed (1)
+      Tests  83 passed (83)
+   Duration  180.54s (transform 0ms, setup 0ms, import 193ms, tests 180.26s, environment 0ms)
+## B-deep-futility
+ RUN  v4.1.12 <scratch>/qe302/arms/B
+ Test Files  1 passed (1)
+      Tests  53 passed (53)
+   Duration  68.21s (transform 0ms, setup 0ms, import 70ms, tests 68.07s, environment 0ms)
+## B-deep-levels
+ RUN  v4.1.12 <scratch>/qe302/arms/B
+ Test Files  1 passed (1)
+      Tests  58 passed (58)
+   Duration  576.84s (transform 0ms, setup 0ms, import 95ms, tests 576.64s, environment 0ms)
+## B-deep-null
+ RUN  v4.1.12 <scratch>/qe302/arms/B
+ Test Files  1 passed (1)
+      Tests  45 passed (45)
+   Duration  26.43s (transform 0ms, setup 0ms, import 71ms, tests 26.30s, environment 0ms)
+## B-deep-uci
+ RUN  v4.1.12 <scratch>/qe302/arms/B
+ Test Files  1 passed (1)
+      Tests  241 passed (241)
+   Duration  291.78s (transform 0ms, setup 0ms, import 157ms, tests 291.55s, environment 0ms)
+## B-deep-zobrist
+ RUN  v4.1.12 <scratch>/qe302/arms/B
+ Test Files  1 passed (1)
+      Tests  33 passed (33)
+   Duration  6.49s (transform 0ms, setup 0ms, import 31ms, tests 6.40s, environment 0ms)
+## H-cli-single
+ RUN  v4.1.12 <scratch>/qe302/arms/H
+ Test Files  1 passed (1)
+      Tests  109 passed (109)
+   Duration  3.87s (transform 0ms, setup 0ms, import 3.19s, tests 606ms, environment 0ms)
+## H-deep-capacity
+ RUN  v4.1.12 <scratch>/qe302/arms/H
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Duration  286ms (transform 0ms, setup 0ms, import 53ms, tests 172ms, environment 0ms)
+## H-deep-engine
+ RUN  v4.1.12 <scratch>/qe302/arms/H
+ Test Files  1 passed (1)
+      Tests  84 passed (84)
+   Duration  180.11s (transform 0ms, setup 0ms, import 174ms, tests 179.88s, environment 0ms)
+## H-deep-futility
+ RUN  v4.1.12 <scratch>/qe302/arms/H
+ Test Files  1 passed (1)
+      Tests  53 passed (53)
+   Duration  67.05s (transform 0ms, setup 0ms, import 69ms, tests 66.92s, environment 0ms)
+## H-deep-levels
+ RUN  v4.1.12 <scratch>/qe302/arms/H
+ Test Files  1 passed (1)
+      Tests  58 passed (58)
+   Duration  576.77s (transform 0ms, setup 0ms, import 85ms, tests 576.61s, environment 0ms)
+## H-deep-null
+ RUN  v4.1.12 <scratch>/qe302/arms/H
+ Test Files  1 passed (1)
+      Tests  46 passed (46)
+   Duration  26.53s (transform 0ms, setup 0ms, import 70ms, tests 26.40s, environment 0ms)
+## H-deep-uci
+ RUN  v4.1.12 <scratch>/qe302/arms/H
+ Test Files  1 passed (1)
+      Tests  243 passed (243)
+   Duration  291.84s (transform 0ms, setup 0ms, import 153ms, tests 291.62s, environment 0ms)
+## H-deep-zobrist
+ RUN  v4.1.12 <scratch>/qe302/arms/H
+ Test Files  1 passed (1)
+      Tests  34 passed (34)
+   Duration  6.37s (transform 0ms, setup 0ms, import 31ms, tests 6.28s, environment 0ms)
+## H-rr-248
+ RUN  v4.1.12 <scratch>/qe302/arms/H
+ Test Files  1 passed (1)
+      Tests  4 passed | 239 skipped (243)
+   Duration  441ms (transform 0ms, setup 0ms, import 170ms, tests 203ms, environment 0ms)
+## H-rr-281R1
+ RUN  v4.1.12 <scratch>/qe302/arms/H
+ Test Files  1 passed (1)
+      Tests  1 passed | 45 skipped (46)
+   Duration  496ms (transform 0ms, setup 0ms, import 70ms, tests 365ms, environment 0ms)
+## H-rr-281R2
+ RUN  v4.1.12 <scratch>/qe302/arms/H
+ Test Files  1 passed (1)
+      Tests  1 passed | 83 skipped (84)
+   Duration  488ms (transform 0ms, setup 0ms, import 177ms, tests 243ms, environment 0ms)
+## H-rr-281R3
+ RUN  v4.1.12 <scratch>/qe302/arms/H
+ Test Files  1 passed (1)
+      Tests  1 passed | 57 skipped (58)
+   Duration  297ms (transform 0ms, setup 0ms, import 81ms, tests 153ms, environment 0ms)
+## H-t-R1
+ RUN  v4.1.12 <scratch>/qe302/arms/H
+ Test Files  1 passed (1)
+      Tests  1 passed | 45 skipped (46)
+   Duration  291ms (transform 0ms, setup 0ms, import 70ms, tests 153ms, environment 0ms)
+## H-t-R2
+ RUN  v4.1.12 <scratch>/qe302/arms/H
+ Test Files  1 passed (1)
+      Tests  1 passed | 242 skipped (243)
+   Duration  346ms (transform 0ms, setup 0ms, import 147ms, tests 126ms, environment 0ms)
+## H-t-R3
+ RUN  v4.1.12 <scratch>/qe302/arms/H
+ Test Files  1 passed (1)
+      Tests  1 passed | 52 skipped (53)
+   Duration  232ms (transform 0ms, setup 0ms, import 71ms, tests 88ms, environment 0ms)
+## H-t-R4
+ RUN  v4.1.12 <scratch>/qe302/arms/H
+ Test Files  1 passed (1)
+      Tests  1 passed | 33 skipped (34)
+   Duration  171ms (transform 0ms, setup 0ms, import 31ms, tests 79ms, environment 0ms)
+## H-t-R5
+ RUN  v4.1.12 <scratch>/qe302/arms/H
+ Test Files  1 passed (1)
+      Tests  1 passed | 83 skipped (84)
+   Duration  317ms (transform 0ms, setup 0ms, import 176ms, tests 77ms, environment 0ms)
+## H-t-R6
+ RUN  v4.1.12 <scratch>/qe302/arms/H
+ Test Files  1 passed (1)
+      Tests  1 passed | 57 skipped (58)
+   Duration  230ms (transform 0ms, setup 0ms, import 90ms, tests 77ms, environment 0ms)
+## H-t-R7
+ RUN  v4.1.12 <scratch>/qe302/arms/H
+ Test Files  1 passed (1)
+      Tests  1 passed | 57 skipped (58)
+   Duration  218ms (transform 0ms, setup 0ms, import 83ms, tests 71ms, environment 0ms)
+## H-t-R8
+ RUN  v4.1.12 <scratch>/qe302/arms/H
+ Test Files  1 passed (1)
+      Tests  1 passed | 242 skipped (243)
+   Duration  392ms (transform 0ms, setup 0ms, import 152ms, tests 174ms, environment 0ms)
+## H-t-R9
+ RUN  v4.1.12 <scratch>/qe302/arms/H
+ Test Files  1 passed (1)
+      Tests  1 passed | 1 skipped (2)
+   Duration  231ms (transform 0ms, setup 0ms, import 55ms, tests 112ms, environment 0ms)
+## H-t-R9-unescaped
+ RUN  v4.1.12 <scratch>/qe302/arms/H
+ Test Files  1 skipped (1)
+      Tests  2 skipped (2)
+   Duration  113ms (transform 0ms, setup 0ms, import 53ms, tests 0ms, environment 0ms)

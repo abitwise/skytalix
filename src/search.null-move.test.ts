@@ -710,9 +710,10 @@ describe("A2 — the instrumented search makes 0 null moves in check, and 0 belo
    */
   const IN_CHECK_ROOT = "r3k2r/p1pp1pb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBqPPP/R3K2R w KQkq - 0 2";
 
-  it("search() to depth 4 and chooseMove deepened to 4: every null move is made out of check, with three or more pieces", () => {
+  // ABC-302 (secnfr-nfr008-1104, arch-ABC-302): the in-check root and position-5 stay in the default lane; the six roots run under SEARCH_DEEP=1.
+  it("the in-check root and position-5, search() to depth 4 and chooseMove deepened to 4: every null move is made out of check, with three or more pieces", () => {
     const made: Position[] = [];
-    for (const fen of [...ROOTS.map((root) => root.fen), IN_CHECK_ROOT]) {
+    for (const fen of [IN_CHECK_ROOT, fenOf("position-5")]) {
       made.push(...nullMovesDuring(() => search(parseFen(fen), 4)));
       made.push(...nullMovesDuring(() => deepenTo(chooseMove, fen, 4)));
     }
@@ -720,6 +721,22 @@ describe("A2 — the instrumented search makes 0 null moves in check, and 0 belo
     expect(made.filter((position) => isInCheck(position)).map((p) => toFen(p))).toEqual([]);
     expect(made.filter((position) => nonPawnPieces(position) < 3).map((p) => toFen(p))).toEqual([]);
   });
+
+  if (RUN_DEEP) {
+    describe("A2 — the instrumented search makes 0 null moves in check, and 0 below three non-pawn pieces [deep, SEARCH_DEEP=1]", () => {
+      // biome-ignore format: ABC-302 keeps the moved body byte-identical to base, indent aside
+      it("search() to depth 4 and chooseMove deepened to 4: every null move is made out of check, with three or more pieces", () => {
+        const made: Position[] = [];
+        for (const fen of [...ROOTS.map((root) => root.fen), IN_CHECK_ROOT]) {
+          made.push(...nullMovesDuring(() => search(parseFen(fen), 4)));
+          made.push(...nullMovesDuring(() => deepenTo(chooseMove, fen, 4)));
+        }
+        expect(made.length).toBeGreaterThan(100);
+        expect(made.filter((position) => isInCheck(position)).map((p) => toFen(p))).toEqual([]);
+        expect(made.filter((position) => nonPawnPieces(position) < 3).map((p) => toFen(p))).toEqual([]);
+      });
+    });
+  }
 
   it("the in-check root really is in check, and its search still finds null-window nodes to pass at", () => {
     expect(isInCheck(parseFen(IN_CHECK_ROOT))).toBe(true);

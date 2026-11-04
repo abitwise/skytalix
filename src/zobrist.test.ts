@@ -161,21 +161,15 @@ function checkEpComponent(position: Position, plies: number): { checked: number;
 }
 
 describe("ABC-075 property — the ep component tracks the ep FIELD, not availability (ADR-0020)", () => {
-  it("holds at every node within 2 plies of every perft position", () => {
+  // ABC-302 (secnfr-nfr008-1104, arch-ABC-302): one ply stays in the default lane; two plies run under ZOBRIST_DEEP=1.
+  it("holds at every node 1 ply from every perft position", () => {
     let checked = 0;
     let carried = 0;
-
     for (const [, fen] of PERFT_POSITIONS) {
-      const walked = checkEpComponent(parseFen(fen), 2);
+      const walked = checkEpComponent(parseFen(fen), 1);
       checked += walked.checked;
       carried += walked.ep;
     }
-
-    // Neither half of the property may go unexercised. The walk must have seen nodes at all,
-    // at least one that carries an ep square (the component-present case) and at least one
-    // that does not (the collapse case) — a vacuous walk would otherwise pass green. Under
-    // ADR-0005 this counted 557 double pushes, 52 answered by a legal capture and 505 not; the
-    // 557 now all sit in `carried`, and the collapse half is every other node.
     expect(checked).toBeGreaterThan(0);
     expect(carried).toBeGreaterThan(0);
     expect(checked - carried).toBeGreaterThan(0);
@@ -337,6 +331,30 @@ describe("ABC-075 — zobristKey where the wrong piece contradicts the ep square
 // ---------------------------------------------------------------------------
 
 const RUN_DEEP = process.env.ZOBRIST_DEEP === "1";
+
+if (RUN_DEEP) {
+  describe("ABC-075 property — the ep component tracks the ep FIELD, not availability (ADR-0020) [deep, ZOBRIST_DEEP=1]", () => {
+    it("holds at every node within 2 plies of every perft position", () => {
+      let checked = 0;
+      let carried = 0;
+
+      for (const [, fen] of PERFT_POSITIONS) {
+        const walked = checkEpComponent(parseFen(fen), 2);
+        checked += walked.checked;
+        carried += walked.ep;
+      }
+
+      // Neither half of the property may go unexercised. The walk must have seen nodes at all,
+      // at least one that carries an ep square (the component-present case) and at least one
+      // that does not (the collapse case) — a vacuous walk would otherwise pass green. Under
+      // ADR-0005 this counted 557 double pushes, 52 answered by a legal capture and 505 not; the
+      // 557 now all sit in `carried`, and the collapse half is every other node.
+      expect(checked).toBeGreaterThan(0);
+      expect(carried).toBeGreaterThan(0);
+      expect(checked - carried).toBeGreaterThan(0);
+    });
+  });
+}
 
 /** What the oracle walk saw: enough to prove it was not vacuous on any delta component. */
 interface OracleTally {

@@ -1,0 +1,44 @@
+mutant	base_n	base_killed	tip_n	tip_killed	named_at_tip	named_ok	deep	deep_killed	arch_tip_tagged	tip_tagged	missing_vs_arch	verdict
+# control B: exit 0 total 2687 passed 2687 failed 0 skipped 0
+# control H2: exit 0 total 2684 passed 2684 failed 0 skipped 0
+# control deep-R1: exit 0 passed 1 failed 0
+# control deep-R2: exit 0 passed 1 failed 0
+# control deep-R3: exit 0 passed 1 failed 0
+# control deep-R4: exit 0 passed 1 failed 0
+# control deep-R5: exit 0 passed 1 failed 0
+# control deep-R6: exit 0 passed 1 failed 0
+# control deep-R7: exit 0 passed 1 failed 0
+# control deep-R8: exit 0 passed 1 failed 0
+# control deep-R9: exit 0 passed 1 failed 0
+# control deep-uci-full: exit 0 passed 243 failed 0
+M1	2	True	2	True	R1~	True	R1	yes	249,R1~	249,R1~		OK
+M2	1	True	1	True	R2~	True	R2	yes	R2~	R2~		OK
+M2s	7	True	7	True		True	-	-	R2~,R8~,cliA7	R2~,R8~,cli230A1,cliA7		OK
+M3	3	True	3	True	fut-lit,QE268b	True	-	-	QE268b,fut-lit	QE268b,fut-lit		OK
+M3s	2	True	2	True	fut-lit,QE268b	True	-	-	QE268b,fut-lit	QE268b,fut-lit		OK
+M4	19	True	19	True	R4~	True	R4	yes	R4~,R8~,cliA7,uciA4	R4~,R8~,cliA7,uciA4		OK
+M4z	22	True	22	True	R4~	True	R4	yes	R4~	R4~		OK
+M5	3	True	3	True	R5~	True	R5	yes	R5~	R5~		OK
+M5c	10	True	10	True	R5~	True	R5	yes	R5~	R5~		OK
+M6	23	True	21	True	A10,QE087d	True	R6	yes	A10,QE087d	A10,QE087d		OK
+M6t	19	True	17	True		True	-	-	249	249		OK
+M7	4	True	3	True	lvA6	True	R7	yes	QE087a,lvA6	QE087a,lvA6		OK
+M7n	3	True	2	True	lvA6	True	R7	yes	lvA6	lvA6		OK
+M8d	2	True	2	True	R8~	True	R8	yes	R2~,R8~	R2~,R8~		OK
+M9	1	True	1	True	R9~	True	R9	yes	R9~	R9~		OK
+M9r	1	True	1	True	R9~	True	R9	yes	R9~	R9~		OK
+F230	8	True	8	True	cliA7,cli230A1,R8~	True	-	-	R2~,R8~,cliA7	R2~,R8~,cli230A1,cliA7		OK
+QSEAMRAW	7	True	7	True	cliA7,cli230A1,R8~	True	-	-	R2~,R8~,cliA7	R2~,R8~,cli230A1,cliA7		OK
+QPRIOROFF	16	True	16	True	cliA7,cli230A1,R8~	True	-	-	249,R2~,R8~,cliA7,uciA4	249,R2~,R8~,cli230A1,cliA7,uciA4		OK
+QMATCH3	20	True	20	True	cliA7,cli230A1,R8~	True	-	-	249,R2~,R8~,cliA7,uciA4	249,R2~,R8~,cli230A1,cliA7,uciA4		OK
+QTRIM1	30	True	30	True	cliA7,cli230A1,R8~	True	-	-	249,R2~,R8~,cliA7,uciA4	249,R2~,R8~,cli230A1,cliA7,uciA4		OK
+REP0	18	True	18	True		True	-	-	R2~,R8~,uciA4	R2~,R8~,cli230A1,uciA4		OK
+S241M1	18	True	18	True		True	-	-	R2~,R8~,cliA7,uciA4	R2~,R8~,cliA7,uciA4		OK
+QMATCH1	8	True	8	True		True	-	-	249,R8~,uciA4	249,R8~,uciA4		OK
+UNTRIM	11	True	11	True		True	-	-	R2~,uciA4	R2~,uciA4		OK
+S241M6	4	True	4	True		True	-	-	R2~,uciA4	R2~,uciA4		OK
+QUCINOKEYS	10	True	10	True		True	-	-	R2~,uciA4	R2~,uciA4		OK
+# R3 deep line under M3 (recorded blindness, informational): exit 0 passed 1 failed 0
+# R3 deep line under M3s (recorded blindness, informational): exit 0 passed 1 failed 0
+# M8d, FULL uci-session ENGINE_DEEP lane: exit 1 failed 3; R8 deep row among killers: True; R2 deep row: True
+A6: ALL 27 KILLED AS THE MATRIX STATES

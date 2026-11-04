@@ -1,0 +1,39 @@
+== restore
+  default uci-session rc=0  Tests 230 passed (230)
+  deep R2 -t rc=0  Tests 1 passed | 242 skipped (243)
+  default cli rc=0  Tests 109 passed (109)
+  deep R8 -t rc=0  Tests 1 passed | 242 skipped (243)
+  default engine.capacity rc=0  Tests 1 passed (1)
+  deep R9 -t rc=0  Tests 1 passed | 1 skipped (2)
+== M2
+  default uci-session rc=1  Tests 1 failed | 229 passed (230)
+    killer: × A5 (slice): on a 500 ms virtual step, the CLI level seam's injected list equals UCI's, key for key, and both play d8e8 14ms
+    killer: FAIL  src/uci-session.test.ts > ABC-241 A4, A5 — UCI: the prior keys are repetition keys > A5 (slice): on a 500 ms virtual step, the CLI level seam's injected list equals UCI's, key for key, and both play d8e8
+  deep R2 -t rc=1  Tests 1 failed | 242 skipped (243)
+    killer: × A5: the CLI level seam's injected list equals UCI's, key for key, and both play d8e8 133ms
+    killer: FAIL  src/uci-session.test.ts > ABC-241 A4, A5 — UCI: the prior keys are repetition keys [deep, ENGINE_DEEP=1] > A5: the CLI level seam's injected list equals UCI's, key for key, and both play d8e8
+== M8d
+  default cli rc=1  Tests 1 failed | 108 passed (109)
+    killer: × A4 (slice): on a 500 ms virtual step, with repetitionKeyHistory injected the default level plays d8e8 at exactly 0; base does not 46ms
+    killer: FAIL  src/cli.test.ts > ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square > A4 (slice): on a 500 ms virtual step, with repetitionKeyHistory injected the default level plays d8e8 at exactly 0; base does not
+  deep R8 -t rc=1  Tests 1 failed | 242 skipped (243)
+    killer: × A4: with repetitionKeyHistory injected the default level plays d8e8 at exactly 0; base does not 130ms
+    killer: FAIL  src/uci-session.test.ts > ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square [deep, ENGINE_DEEP=1] > A4: with repetitionKeyHistory injected the default level plays d8e8 at exactly 0; base does not
+  default uci-session rc=1  Tests 1 failed | 229 passed (230)
+    killer: × A5 (slice): on a 500 ms virtual step, the CLI level seam's injected list equals UCI's, key for key, and both play d8e8 23ms
+    killer: FAIL  src/uci-session.test.ts > ABC-241 A4, A5 — UCI: the prior keys are repetition keys > A5 (slice): on a 500 ms virtual step, the CLI level seam's injected list equals UCI's, key for key, and both play d8e8
+== M9
+  default engine.capacity rc=1  Tests 1 failed (1)
+    killer: × on a clock spent after 2 x ITERATIONS (260) root passes, ends every line at ply 128 with a leaf's score: no node or key past it 47ms
+    killer: FAIL  src/engine.capacity.test.ts > ABC-122 A8: src/engine.ts's KEY_ARRAY_CAPACITY guard, reached through chooseMove() > on a clock spent after 2 x ITERATIONS (260) root passes, ends every line at ply 128 with a leaf's score: no node or key past it
+  deep R9 -t rc=1  Tests 1 failed | 1 skipped (2)
+    killer: × ends every line at ply 128 with a leaf's score once the deepening passes it: no node or key past it 115ms
+    killer: FAIL  src/engine.capacity.test.ts > ABC-122 A8: src/engine.ts's KEY_ARRAY_CAPACITY guard, reached through chooseMove() [deep, ENGINE_DEEP=1] > ends every line at ply 128 with a leaf's score once the deepening passes it: no node or key past it
+== M9r
+  default engine.capacity rc=1  Tests 1 failed (1)
+    killer: × on a clock spent after 2 x ITERATIONS (260) root passes, ends every line at ply 128 with a leaf's score: no node or key past it 39ms
+    killer: FAIL  src/engine.capacity.test.ts > ABC-122 A8: src/engine.ts's KEY_ARRAY_CAPACITY guard, reached through chooseMove() > on a clock spent after 2 x ITERATIONS (260) root passes, ends every line at ply 128 with a leaf's score: no node or key past it
+  deep R9 -t rc=1  Tests 1 failed | 1 skipped (2)
+    killer: × ends every line at ply 128 with a leaf's score once the deepening passes it: no node or key past it 54ms
+    killer: FAIL  src/engine.capacity.test.ts > ABC-122 A8: src/engine.ts's KEY_ARRAY_CAPACITY guard, reached through chooseMove() [deep, ENGINE_DEEP=1] > ends every line at ply 128 with a leaf's score once the deepening passes it: no node or key past it
+restored

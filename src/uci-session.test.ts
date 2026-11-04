@@ -1412,8 +1412,6 @@ describe("ABC-241 A4, A5 — UCI: the prior keys are repetition keys", () => {
   /** The same board with a white pawn on g5: g5xh6 e.p. is legal after h7h5. */
   const TWIN = "4k3/7p/8/6P1/8/8/8/Q3K3 b - - 0 1";
   const MOVES = "h7h5 a1a2 e8d8 a2a1 d8e8 a1a2 e8d8 a2a1";
-  // `ABC-244` (`ADR-0046` § Addendum 2026-10-30, R3): 100 kept, as in the CLI half.
-  const STEP_MS = 100;
   const lastHanded = () => vi.mocked(chooseMove).mock.calls.at(-1)?.[1].priorKeys;
   const gameOf = (fen: string) => {
     const game = newGame(fen);
@@ -1463,16 +1461,17 @@ describe("ABC-241 A4, A5 — UCI: the prior keys are repetition keys", () => {
     expect(lastHanded()).toEqual(trimPriorKeys(keyHistory(twin), twin.position.halfmoveClock));
   });
 
-  it("A5: the CLI level seam's injected list equals UCI's, key for key, and both play d8e8", async () => {
+  // ABC-302 (secnfr-nfr008-1104, arch-ABC-302): a 500 ms step (depth 8) stays in the default lane; 100 runs under ENGINE_DEEP=1.
+  it("A5 (slice): on a 500 ms virtual step, the CLI level seam's injected list equals UCI's, key for key, and both play d8e8", async () => {
     const game = gameOf(FEN);
     const seam = createLevelSeam(
       DEFAULT_LEVEL,
-      { seed: 1, now: virtualClock(STEP_MS) },
+      { seed: 1, now: virtualClock(500) },
       repetitionKeyHistory,
     );
     const cli = coordinateOf(await seam(game));
     const fromCli = lastHanded();
-    const { perLine } = talk([`position fen ${FEN} moves ${MOVES}`, "go"], STEP_MS);
+    const { perLine } = talk([`position fen ${FEN} moves ${MOVES}`, "go"], 500);
     expect(lastHanded()).toEqual(fromCli);
     expect(fromCli).toHaveLength(7);
     expect(cli).toBe("d8e8");
@@ -2707,3 +2706,78 @@ describe("ABC-167 A11 — capability-free, and M4", () => {
     }
   });
 });
+
+// ABC-302 (secnfr-nfr008-1104, arch-ABC-302): two full rows, each under ENGINE_DEEP=1 only. The second is
+// src/cli.test.ts's ABC-241 A4 row; this file's engine spy calls through, and each describe here installs no stub.
+if (RUN_ENGINE_DEEP) {
+  describe("ABC-241 A4, A5 — UCI: the prior keys are repetition keys [deep, ENGINE_DEEP=1]", () => {
+    const FEN = "4k3/7p/8/8/8/8/8/Q3K3 b - - 0 1";
+    const MOVES = "h7h5 a1a2 e8d8 a2a1 d8e8 a1a2 e8d8 a2a1";
+    // `ABC-244` (`ADR-0046` § Addendum 2026-10-30, R3): 100 kept, as in the CLI half.
+    const STEP_MS = 100;
+    const lastHanded = () => vi.mocked(chooseMove).mock.calls.at(-1)?.[1].priorKeys;
+    const gameOf = (fen: string) => {
+      const game = newGame(fen);
+      for (const text of MOVES.split(" ")) {
+        const move = legalMoves(game.position).find((m) => coordinateOf(m) === text);
+        if (move === undefined) throw new Error(`fixture: ${text} is not legal`);
+        playMove(game, move);
+      }
+      return game;
+    };
+
+    it("A5: the CLI level seam's injected list equals UCI's, key for key, and both play d8e8", async () => {
+      const game = gameOf(FEN);
+      const seam = createLevelSeam(
+        DEFAULT_LEVEL,
+        { seed: 1, now: virtualClock(STEP_MS) },
+        repetitionKeyHistory,
+      );
+      const cli = coordinateOf(await seam(game));
+      const fromCli = lastHanded();
+      const { perLine } = talk([`position fen ${FEN} moves ${MOVES}`, "go"], STEP_MS);
+      expect(lastHanded()).toEqual(fromCli);
+      expect(fromCli).toHaveLength(7);
+      expect(cli).toBe("d8e8");
+      expect(perLine[1]?.at(-1)).toBe("bestmove d8e8");
+      expect(parseInfo(perLine[1]?.[0]).score).toBe("cp 0");
+    });
+  });
+
+  describe("ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square [deep, ENGINE_DEEP=1]", () => {
+    const FEN = "4k3/7p/8/8/8/8/8/Q3K3 b - - 0 1";
+    const MOVES = "h7h5 a1a2 e8d8 a2a1 d8e8 a1a2 e8d8 a2a1";
+    const STEP_MS = 100;
+    const labelOf = (move: { from: number; to: number }) =>
+      `${squareName(move.from)}${squareName(move.to)}`;
+    const gameOf = (fen: string) => {
+      const game = newGame(fen);
+      for (const text of MOVES.split(" ")) {
+        const move = legalMoves(game.position).find((m) => labelOf(m) === text);
+        if (move === undefined) throw new Error(`fixture: ${text} is not legal`);
+        playMove(game, move);
+      }
+      return game;
+    };
+    const seamOf = (injected: typeof keyHistory) =>
+      createLevelSeam(DEFAULT_LEVEL, { seed: 1, now: virtualClock(STEP_MS) }, injected);
+    const scoreWith = (game: ReturnType<typeof gameOf>, list: typeof keyHistory) =>
+      chooseMove(parseFen(toFen(game.position)), {
+        budgetMs: LEVELS[DEFAULT_LEVEL].budgetMs,
+        now: virtualClock(STEP_MS),
+        priorKeys: trimPriorKeys(list(game), game.position.halfmoveClock),
+      });
+
+    it("A4: with repetitionKeyHistory injected the default level plays d8e8 at exactly 0; base does not", async () => {
+      const game = gameOf(FEN);
+      expect(labelOf(await seamOf(repetitionKeyHistory)(game))).toBe("d8e8");
+      const direct = scoreWith(game, repetitionKeyHistory);
+      expect(direct && { move: labelOf(direct.move), score: direct.score }).toEqual({
+        move: "d8e8",
+        score: 0,
+      });
+      // `ABC-230`'s injection (the hash list), same clock: no draw seen, a losing score.
+      expect(scoreWith(game, keyHistory)?.score).not.toBe(0);
+    });
+  });
+}
