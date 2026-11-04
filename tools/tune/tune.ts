@@ -52,9 +52,12 @@ import {
   PST_NAMES,
   SHIPPED,
   T_DBL,
+  T_FP,
   T_HALF,
   T_HALFQ,
   T_ISO,
+  T_KE,
+  T_KO,
   T_MAT,
   T_OPEN,
   T_OPENQ,
@@ -62,6 +65,7 @@ import {
   T_PST,
   T_SHEL,
   T_SHELQ,
+  T_UN,
   type Table,
   trace,
 } from "./tracer.ts";
@@ -1232,7 +1236,11 @@ export function termName(t: number): string {
     [T_SHELQ]: "KING_SHELTER_MISSING_QUEEN",
     [T_HALFQ]: "KING_FILE_HALF_OPEN_QUEEN",
     [T_OPENQ]: "KING_FILE_OPEN_QUEEN",
+    [T_UN]: "PASSED_UNSTOPPABLE",
   };
+  if (t >= T_FP && t < T_UN) return `PASSED_FREE[${t - T_FP + 1}]`;
+  if (t >= T_KO && t < T_FP) return `PASSED_KING_OWN[${t - T_KO + 1}]`;
+  if (t >= T_KE && t < T_KO) return `PASSED_KING_ENEMY[${t - T_KE + 1}]`;
   return names[t] ?? `term${t}`;
 }
 
@@ -1612,6 +1620,10 @@ function valuesOf(th: Table) {
   const arr = (from: number, n: number, half: "mg" | "eg"): number[] =>
     Array.from({ length: n }, (_, i) => at(from + i, half));
   const pair = (t: number) => ({ mg: at(t, "mg"), eg: at(t, "eg") });
+  const byRank = (t: number) => ({
+    mg: [0, ...arr(t, 6, "mg"), 0],
+    eg: [0, ...arr(t, 6, "eg"), 0],
+  });
   return {
     MATERIAL: { mg: [0, ...arr(0, 5, "mg"), 0], eg: [0, ...arr(0, 5, "eg"), 0] },
     PST: Object.fromEntries(
@@ -1621,6 +1633,10 @@ function valuesOf(th: Table) {
       ]),
     ),
     PASSED: { mg: [0, ...arr(T_PASS, 6, "mg"), 0], eg: [0, ...arr(T_PASS, 6, "eg"), 0] },
+    PASSED_KING_ENEMY: byRank(T_KE),
+    PASSED_KING_OWN: byRank(T_KO),
+    PASSED_FREE: byRank(T_FP),
+    PASSED_UNSTOPPABLE: pair(T_UN),
     DOUBLED: pair(T_DBL),
     ISOLATED: pair(T_ISO),
     KING_SHELTER_MISSING: pair(T_SHEL),
@@ -1634,12 +1650,16 @@ function valuesOf(th: Table) {
   };
 }
 
-/** JSON of the thirteen value exports, in this order, mg before eg. */
+/** JSON of the seventeen value exports, in this order, mg before eg. */
 export function canonicalValues(v: ReturnType<typeof valuesOf>): string {
   const names = [
     "MATERIAL",
     "PST",
     "PASSED",
+    "PASSED_KING_ENEMY",
+    "PASSED_KING_OWN",
+    "PASSED_FREE",
+    "PASSED_UNSTOPPABLE",
     "DOUBLED",
     "ISOLATED",
     "KING_SHELTER_MISSING",
@@ -1735,7 +1755,7 @@ export function emitSource(info: ExtractInfo, fitted: FitReport, toolCommit: str
     " * TUNED by `tools/tune` (`ADR-0067`, `ABC-239`). Written by `tools/tune/tune.ts emit`; do not edit",
     " * by hand. Re-run `extract`, `fit` and `emit` on the base table to reproduce it byte for byte.",
     ` * - tool: tools/tune at commit ${toolCommit}; values sha256 ${sha256(valuesForHash)}`,
-    ` * - base table: src/evaluate-params.ts sha256 ${info.baseTableSha256} (E1's rule-made values; ABC-270's queen-on pairs at 0)`,
+    ` * - base table: src/evaluate-params.ts sha256 ${info.baseTableSha256} (E1's rule-made values; ABC-270's queen-on pairs and ABC-271's E4a terms at 0)`,
     ` * - data manifest sha256 ${info.manifestSha256} (${info.manifest.length} files; own PGNs`,
     " *   repository-relative, the Lichess export by URL, bytes and sha256)",
   );
@@ -1763,7 +1783,8 @@ export function emitSource(info: ExtractInfo, fitted: FitReport, toolCommit: str
     ` * - outer validation cross-entropy base ${fmtLoss(fitted.val.base.ce)} → fit ${fmtLoss(fitted.val.fit.ce)} (${(fitted.ratio as number).toFixed(4)} ×);`,
     ` *   training ${fmtLoss(fitted.train.base.ce)} → ${fmtLoss(fitted.train.fit.ce)}`,
     " * - frozen (d6): material, PHASE_WEIGHT, PHASE_MG / PHASE_EG, MOBILITY_CAP; the three queen-on",
-    " *   eg halves held at 0 (d6's dated line, `ADR-0068` d8)",
+    " *   eg halves held at 0 (d6's dated line, `ADR-0068` d8); E4a's mg halves and",
+    " *   PASSED_UNSTOPPABLE held at 0 (d6's dated line, `ADR-0070` d1 and d7)",
     ...boundLines(fitted.bounds ?? []),
     " *",
     " * Tables are written from WHITE's point of view and read RANK-8-FIRST (a8 top-left); black reads",
@@ -1830,6 +1851,46 @@ export function emitSource(info: ExtractInfo, fitted: FitReport, toolCommit: str
     `  mg: [0, ${range(T_PASS, 6, "mg").join(", ")}, 0],`,
     `  eg: [0, ${range(T_PASS, 6, "eg").join(", ")}, 0],`,
     "};",
+    "",
+    "/**",
+    " * E4a (`ABC-271`, `ADR-0070`): passed pawns read the kings and the path. Endgame terms, indexed like",
+    " * `PASSED` by the passer's OWN rank R (1 = its starting rank, 6 = one step from promotion; 0 and 7",
+    " * are never read). Only the frontmost passer of each file is read. Q is its queening square, d the",
+    " * Chebyshev distance (king steps). Every middlegame half is 0, at the build and at every pull: the",
+    " * evaluation skips these terms at phase 24, which is exact only while those halves are 0.",
+    " *",
+    " * KING_ENEMY / KING_OWN: eg += `KING_ENEMY[R]` × min(d(enemy king, Q), 5) − `KING_OWN[R]` ×",
+    " * min(d(own king, Q), 5). Rule: start (prior): 0. The rule (below) was probed and not shipped",
+    " * (`ADR-0070`): `PASSED.eg[R] / 10` and `floor(PASSED.eg[R] / 20)`.",
+    " */",
+    "export const PASSED_KING_ENEMY: MgEg<readonly number[]> = {",
+    `  mg: [0, ${range(T_KE, 6, "mg").join(", ")}, 0],`,
+    `  eg: [0, ${range(T_KE, 6, "eg").join(", ")}, 0],`,
+    "};",
+    "export const PASSED_KING_OWN: MgEg<readonly number[]> = {",
+    `  mg: [0, ${range(T_KO, 6, "mg").join(", ")}, 0],`,
+    `  eg: [0, ${range(T_KO, 6, "eg").join(", ")}, 0],`,
+    "};",
+    "",
+    "/**",
+    " * E4a's free path: eg += `PASSED_FREE[R]` when every square ahead of the passer, up to and including",
+    " * Q, is empty. A piece of either colour blocks, a king included; attacked squares are not read.",
+    " * Rule: start (prior): 0. The rule (below) was probed and not shipped (`ADR-0070`): `PASSED.eg[R] / 2`.",
+    " */",
+    "export const PASSED_FREE: MgEg<readonly number[]> = {",
+    `  mg: [0, ${range(T_FP, 6, "mg").join(", ")}, 0],`,
+    `  eg: [0, ${range(T_FP, 6, "eg").join(", ")}, 0],`,
+    "};",
+    "",
+    "/**",
+    " * E4a's unstoppable passer, the rule of the square: at phase 0 only, a passer with a free path whose",
+    " * moves < d(defending king, Q) − (1 if the defender is to move), where moves = 5 from the start rank",
+    " * (the double step), else 7 − R; d is not capped. Added once per side, however many such passers.",
+    " * Rule: start (prior): 0. The rule (below) was probed and not shipped (`ADR-0070`): `Q − (P +",
+    " * PASSED.eg[6] + PASSED_FREE.eg[6] + 5 × PASSED_KING_ENEMY.eg[6])` = 400. Held at 0 through the",
+    " * second pull (`ADR-0070` decision 7): a later attempt with its own PREREG gives it a value.",
+    " */",
+    `export const PASSED_UNSTOPPABLE: MgEg<number> = ${pair(T_UN)};`,
     "",
     "/**",
     " * ABC-082's other two pawn terms. DOUBLED: per pawn beyond the first on a file. ISOLATED: per pawn",

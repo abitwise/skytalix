@@ -48,9 +48,9 @@ describe("ABC-239 — tools/tune's source pins", () => {
 });
 
 if (RUN_DEEP) {
-  const { copyFileSync, existsSync, mkdirSync, mkdtempSync, writeFileSync } = await import(
-    "node:fs"
-  );
+  const { copyFileSync, cpSync, existsSync, mkdirSync, mkdtempSync, symlinkSync, writeFileSync } =
+    await import("node:fs");
+  const { execFileSync } = await import("node:child_process");
   const { tmpdir } = await import("node:os");
   const { join } = await import("node:path");
   const { createHash } = await import("node:crypto");
@@ -62,9 +62,11 @@ if (RUN_DEEP) {
   const { legalMoves } = await import("../../src/legal.ts");
   const { toSan } = await import("../../src/san.ts");
   const { search } = await import("../../src/search.ts");
+  const P = await import("../../src/evaluate-params.ts");
   const T = await import("./tune.ts");
   const { gamesOf, lexMovetext, streamZstGames } = await import("./pgn.ts");
-  const { evaluateAt, gateMiss, kingCounts, SHIPPED, tableOf, trace } = await import("./tracer.ts");
+  const { evaluateAt, gateMiss, kingCounts, model, passerCounts, SHIPPED, tableOf, trace } =
+    await import("./tracer.ts");
 
   const START = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
   const RESULTS = ["1-0", "0-1", "1/2-1/2"];
@@ -323,6 +325,151 @@ if (RUN_DEEP) {
     });
   });
 
+  describe("ABC-301 QE-271-i: E4a traced and emitted (ADR-0067 d5's dated line) [deep, TUNE_DEEP=1]", () => {
+    // QE's frozen file. Its `seam` parts are the seam's own output at the probed values: the default
+    // lane's K1 (c) row holds them to it. No tools/ file may name the seam (`ABC-274` S3, `QE-271-g`),
+    // so this row reads the seam through that frozen record.
+    interface FrozenSide {
+      seam: { kd: number; free: number; un: number };
+      features: {
+        PASSED_KING_ENEMY: number[];
+        PASSED_KING_OWN: number[];
+        PASSED_FREE: number[];
+        PASSED_UNSTOPPABLE: number;
+      };
+    }
+    const FROZEN = JSON.parse(
+      readFileSync(new URL("../../src/evaluate.passer-fixtures.json", HERE), "utf8"),
+    ) as {
+      values: {
+        PASSED_KING_ENEMY: number[];
+        PASSED_KING_OWN: number[];
+        PASSED_FREE: number[];
+        PASSED_UNSTOPPABLE: number;
+      };
+      k1c: Array<{ id: string; fen: string; white: FrozenSide; black: FrozenSide }>;
+      k1a: Array<{ fen: string }>;
+    };
+    const V = FROZEN.values;
+    const dot = (a: readonly number[], b: readonly number[]): number =>
+      a.reduce((sum, x, i) => sum + x * (b[i] as number), 0);
+    const PROBED = tableOf({
+      ...P,
+      PASSED_KING_ENEMY: { mg: P.PASSED_KING_ENEMY.mg, eg: [...V.PASSED_KING_ENEMY, 0] },
+      PASSED_KING_OWN: { mg: P.PASSED_KING_OWN.mg, eg: [...V.PASSED_KING_OWN, 0] },
+      PASSED_FREE: { mg: P.PASSED_FREE.mg, eg: [...V.PASSED_FREE, 0] },
+      PASSED_UNSTOPPABLE: { mg: 0, eg: V.PASSED_UNSTOPPABLE },
+    });
+
+    it("the tracer row: on the 44 fixtures each side's traced counts are QE's frozen features, and count × probed value is the seam's frozen part", () => {
+      expect(FROZEN.k1c).toHaveLength(44);
+      for (const row of FROZEN.k1c) {
+        const got = passerCounts(parseFen(row.fen));
+        for (const side of ["white", "black"] as const) {
+          const c = got[side];
+          const frozen = row[side];
+          const name = `${row.id} ${side}`;
+          expect(c.enemy, name).toEqual(frozen.features.PASSED_KING_ENEMY);
+          expect(c.own, name).toEqual(frozen.features.PASSED_KING_OWN);
+          expect(c.free, name).toEqual(frozen.features.PASSED_FREE);
+          expect(c.unstoppable, name).toBe(frozen.features.PASSED_UNSTOPPABLE);
+          expect(
+            dot(c.enemy, V.PASSED_KING_ENEMY) - dot(c.own, V.PASSED_KING_OWN),
+            `${name} kd`,
+          ).toBe(frozen.seam.kd);
+          expect(dot(c.free, V.PASSED_FREE), `${name} free`).toBe(frozen.seam.free);
+          expect(c.unstoppable * V.PASSED_UNSTOPPABLE, `${name} un`).toBe(frozen.seam.un);
+        }
+      }
+    });
+
+    it("the trace reaches the model: the probed table moves it by the seam's frozen white minus black × (24 − w) / 24, on all 44", () => {
+      for (const row of FROZEN.k1c) {
+        const t = trace(parseFen(row.fen));
+        const part = ({ seam }: FrozenSide): number => seam.kd + seam.free + seam.un;
+        const moved = model(t.f, t.m, t.w, PROBED) - model(t.f, t.m, t.w, SHIPPED);
+        expect(moved, row.id).toBeCloseTo(
+          ((part(row.white) - part(row.black)) * (24 - t.w)) / 24,
+          9,
+        );
+      }
+    });
+
+    it("the gate holds on the 44 fixtures and QE's 12 passer positions, evaluateAt exact, at the base values", () => {
+      const positions = [...FROZEN.k1c, ...FROZEN.k1a].map(({ fen }) => parseFen(fen));
+      expect(positions).toHaveLength(56);
+      const misses = positions.filter((p) => {
+        const ev = evaluate(p);
+        const white = p.blackToMove ? 0 - ev : ev;
+        return gateMiss(trace(p), white, SHIPPED).miss || evaluateAt(trace(p), SHIPPED) !== white;
+      });
+      expect(misses.map((p) => toFen(p))).toEqual([]);
+    });
+
+    /** An emission of `main`'s table: the base values through `emitSource`, unfitted. */
+    const baseEmission = (): string => {
+      const ce = { ce: 0 };
+      return T.emitSource(
+        {
+          counts: {},
+          manifest: [],
+          manifestSha256: "0",
+          baseTableSha256: "0",
+          lichess: false,
+        },
+        {
+          table: {
+            mg: Array.from(SHIPPED.mg),
+            eg: Array.from(SHIPPED.eg),
+            wmg: SHIPPED.wmg,
+            weg: SHIPPED.weg,
+            cap: SHIPPED.cap,
+          },
+          rows: { ownTrain: 0, ownVal: 0, lichess: 0 },
+          K_own: 1,
+          K_lichess: null,
+          ownWeight: T.OWN_WEIGHT,
+          config: "C-S",
+          lambda: 0,
+          ratio: 1,
+          val: { base: ce, fit: ce },
+          train: { base: ce, fit: ce },
+        },
+        "0000000000000000000000000000000000000000",
+      );
+    };
+    const exportsOf = (source: string): string[] =>
+      Array.from(source.matchAll(/^export const (\w+)/gm), (m) => m[1] as string);
+
+    it("an emission at the base values has main's exports, 17 value exports and the 3 phase constants, equal value for value", async () => {
+      const source = baseEmission();
+      const main = readFileSync(new URL("../../src/evaluate-params.ts", HERE), "utf8");
+      const names = exportsOf(source);
+      expect(names).toEqual(exportsOf(main));
+      const values = names.filter((n) => !["PHASE_WEIGHT", "PHASE_MG", "PHASE_EG"].includes(n));
+      expect(values).toHaveLength(17);
+      const dir = tmp();
+      writeFileSync(join(dir, "evaluate-params.ts"), source);
+      const imported = await import(join(dir, "evaluate-params.ts"));
+      for (const name of names) expect(imported[name], name).toEqual(P[name as keyof typeof P]);
+      expect(imported.PASSED_UNSTOPPABLE).toEqual({ mg: 0, eg: 0 });
+    });
+
+    it("the project typechecks with that emission in src/evaluate-params.ts", () => {
+      const root = new URL("../../", HERE).pathname;
+      const copy = tmp();
+      for (const path of ["src", "spike", "tools", "tsconfig.json", "vitest.config.ts"]) {
+        cpSync(join(root, path), join(copy, path), { recursive: true });
+      }
+      symlinkSync(join(root, "node_modules"), join(copy, "node_modules"));
+      writeFileSync(join(copy, "src/evaluate-params.ts"), baseEmission());
+      const tsc = join(root, "node_modules/typescript/bin/tsc");
+      expect(() =>
+        execFileSync(process.execPath, [tsc, "--noEmit"], { cwd: copy, stdio: "pipe" }),
+      ).not.toThrow();
+    }, 120_000);
+  });
+
   describe("ABC-239 the reader (§ Addendum test strategy) [deep, TUNE_DEEP=1]", () => {
     it("comment blindness: [%eval], [%clk] and free text give rows byte-identical to the stripped game", async () => {
       const commented = LI_GAMES.map((g) => lichessPgn(g.sans, g.result, {}, EVAL_COMMENT)).join(
@@ -493,6 +640,10 @@ if (RUN_DEEP) {
         "MATERIAL",
         "PST",
         "PASSED",
+        "PASSED_KING_ENEMY",
+        "PASSED_KING_OWN",
+        "PASSED_FREE",
+        "PASSED_UNSTOPPABLE",
         "DOUBLED",
         "ISOLATED",
         "KING_SHELTER_MISSING",
