@@ -47,6 +47,7 @@ import {
   createEngine,
   DEFAULT_BUDGET_MS,
   type EngineChoice,
+  type EngineOptions,
   HARD_CEILING_MS,
   NODES_PER_CLOCK_CHECK,
   trimPriorKeys,
@@ -573,13 +574,15 @@ describe("A4 — no fixed depth anywhere in the delivered engine", () => {
 
   it("is driven by the clock and not by a ceiling — the deepening loop has no constant upper bound", () => {
     // AMENDED AT `ABC-170` (`ADR-0044` D12, `EPIC-007` `RISK-EPIC007-04`). The `for` that
-    // deepens is bounded by `now() < budget.deadline` FIRST — so an absent limit moves no clock
+    // deepens is bounded by `now() < iterationDeadline` FIRST — so an absent limit moves no clock
     // reading — and then by the two optional limits, which are `Infinity` when absent. A
     // `iteration <= SOMETHING` clause with a constant would be the depth constant this
     // criterion forbids. Whitespace is collapsed so the formatter's line breaks do not matter.
+    // RE-POINTED AT `ABC-282` (`ADR-0071` D7): `iterationDeadline` is the earlier of the deadline
+    // and the soft limit, so it is still one read; the rule this guards is unchanged.
     const flat = source.replace(/\s+/g, " ");
     expect(flat).toContain(
-      "for ( let iteration = 2; now() < budget.deadline && " +
+      "for ( let iteration = 2; now() < iterationDeadline && " +
         "iteration <= (options.maxDepth ?? Number.POSITIVE_INFINITY) && " +
         "budget.nodes < budget.maxNodes; iteration++ )",
     );
@@ -1848,3 +1851,275 @@ describe("ABC-249 — a pre-root repetition met four plies deep scores 0 (QE-248
     });
   });
 });
+
+// ---------------------------------------------------------------------------
+// ABC-282 (`ADR-0071`) — no doomed iteration, and the partial iteration. `A3` above stays as it is:
+// it is `ABC-078` A3 (i), with no soft limit. These rows are A3 (ii), on a virtual clock.
+// ---------------------------------------------------------------------------
+
+/** b, `src/uci-session.ts`'s private `ITERATION_GROWTH`, re-read on `22931005` (`…aadd2d48`). */
+const ITERATION_GROWTH = 2.3;
+
+describe("ABC-282 A1 — no iteration starts that the clock says cannot finish", () => {
+  const fen = fenOf("position-6");
+  const search = (budgetMs: number, softMs?: number) =>
+    chooseMove(parseFen(fen), {
+      budgetMs,
+      now: virtualClock(1),
+      ...(softMs === undefined ? {} : { softMs }),
+    }) as EngineChoice;
+  const completed = (depth: number) =>
+    chooseMove(parseFen(fen), { budgetMs: 60_000, now: () => 0, maxDepth: depth }) as EngineChoice;
+
+  it("(a) past the soft limit the search returns after iteration d, with 0 nodes of d + 1", () => {
+    const head = search(6, 6 / ITERATION_GROWTH);
+    const base = search(6);
+    expect(head.depth).toBe(3);
+    expect(head.nodes).toBe(completed(3).nodes);
+    // The base aborts inside d + 1 on this row, so the head saved real work.
+    expect(base.depth).toBe(3);
+    expect(base.nodes).toBeGreaterThan(head.nodes);
+  });
+
+  it("(b) under the soft limit iteration d + 1 is started", () => {
+    const budgetMs = 10;
+    const softMs = budgetMs / ITERATION_GROWTH;
+    // `elapsedMs` is the return's reading, so the boundary's own reading is one step before it.
+    const atBoundary =
+      (
+        chooseMove(parseFen(fen), {
+          budgetMs: 60_000,
+          now: virtualClock(1),
+          maxDepth: 3,
+        }) as EngineChoice
+      ).elapsedMs - 1;
+    expect(atBoundary).toBeLessThan(softMs);
+    expect(search(budgetMs, softMs).depth).toBeGreaterThan(3);
+  });
+});
+
+describe("ABC-282 A2 — a partial iteration's move is played only if it beat the incumbent", () => {
+  /**
+   * Each row is picked by `.grugops/context/se-ABC-282/raw/scan.mjs` on this base. `softMs` is the
+   * budget ÷ b where that row exists; the budget itself otherwise, which leaves the start test out
+   * of the way and reads the keep alone. The base is the same call with no `softMs`. `incumbent` is
+   * what it plays, iteration d's move and score. Both searches abort at the same node, so the
+   * head's overshoot past the hard limit is the base's, which `A2` bounds (`ABC-282` A3 (a)).
+   */
+  const ROWS: ReadonlyArray<{
+    readonly row: string;
+    readonly fen: string;
+    readonly budgetMs: number;
+    readonly softMs: number;
+    readonly depth: number;
+    readonly incumbent: readonly [string, number];
+    /** Absent when the incumbent is played, so the head reads the base. */
+    readonly kept?: readonly [string, number];
+  }> = [
+    {
+      row: "(a) a root move that beat the incumbent is played (candidate of K25, base/b09#8)",
+      fen: "r1b1k3/pppp2pp/8/8/1PB5/5r2/P2QNb1P/q1BK1R2 b q - 1 13",
+      budgetMs: 5,
+      softMs: 5 / ITERATION_GROWTH,
+      depth: 2,
+      incumbent: ["a1e5", 484],
+      kept: ["a1b1", 450],
+    },
+    {
+      row: "(b) stopped before any root move beat it, the incumbent is played",
+      fen: "r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1R1K b kq - 1 1",
+      budgetMs: 5,
+      softMs: 5 / ITERATION_GROWTH,
+      depth: 2,
+      incumbent: ["a3b4", 531],
+    },
+    {
+      row: "(c) a completed mate above the incumbent is played with its own score",
+      fen: "6r1/p6p/3p1Qpk/4p1N1/4B2P/3q2P1/5P1K/8 w - - 5 43",
+      budgetMs: 3,
+      softMs: 3,
+      depth: 2,
+      incumbent: ["e4d3", 1_070],
+      kept: ["g5f7", 29_997],
+    },
+    {
+      row: "(c) an incumbent scored as mated, nothing above it: iteration d's move and score",
+      fen: "7k/8/5K2/8/8/8/R7/8 b - - 1 1",
+      budgetMs: 5,
+      softMs: 5,
+      depth: 4,
+      incumbent: ["h8h7", -632],
+    },
+    {
+      row: "the incumbent is the completed iteration's best move, not an earlier iteration's",
+      fen: "8/6k1/8/5K2/8/8/8/R7 w - - 2 2",
+      budgetMs: 4,
+      softMs: 4,
+      depth: 3,
+      incumbent: ["a1h1", 613],
+      kept: ["a1a6", 607],
+    },
+    {
+      row: "D12: inside an aspiration window, on two exact scores",
+      fen: "8/8/1R6/8/k7/8/8/K7 w - - 2 2",
+      budgetMs: 5,
+      softMs: 5,
+      depth: 4,
+      incumbent: ["a1a2", 551],
+      kept: ["a1b2", 555],
+    },
+    {
+      row: "D12: a fail high above an exact incumbent stands while the next pass is aborted",
+      fen: "6R1/2Rb1k1p/1pN1p3/1PbN4/8/8/P1P2rPP/6K1 b - - 3 40",
+      budgetMs: 6,
+      softMs: 6,
+      depth: 4,
+      incumbent: ["f2c2", -141],
+      kept: ["f2f3", 50],
+    },
+    {
+      row: "D12: a pass in which the incumbent failed low gives no evidence",
+      fen: "rnbq1k1r/pp1Pbppp/2p5/1B6/8/8/PPP1NnPP/RNBQK2R b KQ - 2 8",
+      budgetMs: 8,
+      softMs: 8,
+      depth: 4,
+      incumbent: ["f2d1", 701],
+    },
+  ];
+
+  for (const { row, fen, budgetMs, softMs, depth, incumbent, kept } of ROWS) {
+    it(row, () => {
+      const head = chooseMove(parseFen(fen), {
+        budgetMs,
+        softMs,
+        now: virtualClock(1),
+      }) as EngineChoice;
+      const base = chooseMove(parseFen(fen), { budgetMs, now: virtualClock(1) }) as EngineChoice;
+      expect([label(base.move), base.score]).toEqual(incumbent);
+      expect(base.partial).toBeUndefined();
+      expect([label(head.move), head.score]).toEqual(kept ?? incumbent);
+      expect(head.partial).toBe(kept === undefined ? undefined : true);
+      // `depth` stays the deepest COMPLETED iteration, and the abort point does not move.
+      expect([head.depth, base.depth]).toEqual([depth, depth]);
+      expect(head.nodes).toBe(base.nodes);
+    });
+  }
+});
+
+// ---------------------------------------------------------------------------
+// ABC-282 (`ADR-0071`) — identity where W1 does not act, and the work it saves. OPT-IN: ENGINE_DEEP=1.
+// ---------------------------------------------------------------------------
+
+/**
+ * K25, `qe-tc-depth-probe` R1's 25 positions (`ADR-0071` D9): `raw/named.json`'s five, then
+ * `raw/positions.json`'s `skytalix` list, in file order. Frozen by QE before the build.
+ */
+const K25: readonly string[] = [
+  "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+  "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1",
+  "r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10",
+  "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1",
+  "rnbqk1nr/pppp1ppp/8/4P3/1b6/8/PPP1PPPP/RNBQKBNR w KQkq - 1 3",
+  "r3qrk1/ppp2p2/3bbn1p/2n1p3/1P5N/2P3Bp/P1QNBPP1/2KR3R b - b3 0 15",
+  "r6r/p3kpbp/2p1b1p1/8/4P3/2P2NP1/PP3P1P/R2nKB1R w KQ - 0 11",
+  "r1bqk2r/ppppbppp/2n5/4P3/Q5nP/2p2N2/PP2BPP1/RNB1K2R b KQkq - 1 5",
+  "r1b1k3/pppp2pp/8/8/1PB5/5r2/P2QNb1P/q1BK1R2 b q - 1 13",
+  "Nn1q3r/p5p1/1ppb1k1p/5b2/3P4/1Q6/PP2PPPP/R3KB1R w KQ - 1 10",
+  "r2q1rk1/pp1npp1p/2npb1p1/8/4P3/1NP1B2P/P1P1BPP1/R2Q1RK1 b - - 0 10",
+  "rnbqk2r/ppp1ppbp/5np1/3P4/3P4/5N2/PP2PPPP/RNBQKB1R w KQkq - 1 2",
+  "1n2q1k1/3b1r2/1P2pb2/2Pp2p1/3PpN2/B1N1P1P1/P4P2/1R1R2K1 w - - 0 19",
+  "2r3k1/p4pb1/4q1p1/7p/2P5/1P1P1Q2/P5PP/1K3R2 w - - 1 21",
+  "3q4/BQ4p1/p4pk1/3p2r1/1bP3P1/5P1b/PP6/3RR1K1 w - - 3 25",
+  "2k4r/pppb3p/3pBp1b/5P2/3N4/8/PPP2PPP/4R1K1 w - - 2 16",
+  "4r1k1/p2q2b1/1pr2pp1/3p2P1/P2Pp3/2N1RNQb/1PP2P2/4R1K1 w - - 0 22",
+  "5rb1/ppk3r1/2p1pp1p/2b5/P1n1PP1P/1PN1N1P1/1KP1R3/3R4 w - - 0 26",
+  "4k2r/pQp1qp2/2b1pN1p/2p1P3/3n3p/4r3/5RPP/3R2K1 b k - 7 25",
+  "R7/2Rb1k1p/1pN1p3/1PbN4/8/8/P1P2rPP/6K1 w - - 2 40",
+  "r4N2/2k3p1/6p1/3RPp2/6PP/4BP2/1PK5/8 w - - 1 38",
+  "6k1/p5p1/5bB1/2K4P/8/2p5/8/8 b - - 54 80",
+  "6r1/p6p/3p1Qpk/3qp1N1/4B2P/6P1/5P1K/8 b - - 4 42",
+  "6k1/R7/5K2/8/8/8/8/8 b - - 26 81",
+  "8/1P6/4p3/8/8/8/k1Q3K1/8 b - - 6 91",
+];
+
+if (RUN_DEEP) {
+  describe("ABC-282 A0 — identity where W1 does not act [deep, ENGINE_DEEP=1]", () => {
+    const read = (fen: string, options: EngineOptions) => {
+      const choice = chooseMove(parseFen(fen), options) as EngineChoice;
+      return {
+        move: label(choice.move),
+        score: choice.score,
+        depth: choice.depth,
+        nodes: choice.nodes,
+        partial: choice.partial,
+      };
+    };
+
+    // `main` `22931005`, read on the base before the change (`se-ABC-282` `…aadd2d48`).
+    const FROZEN: ReadonlyArray<readonly [string, number, string, number, number]> = [
+      ["kiwipete", 6, "e2a6", -59, 140_341],
+      ["kiwipete", 7, "d5e6", -82, 330_628],
+      ["kiwipete", 8, "d5e6", -89, 707_548],
+      ["position-6", 6, "c3d5", 87, 14_570],
+      ["position-6", 7, "c3d5", 79, 32_165],
+      ["position-6", 8, "c3d5", 71, 101_425],
+    ];
+    for (const [name, depth, move, score, nodes] of FROZEN) {
+      it(`A0-1: ${name} at maxDepth ${depth} reads the base, with softMs absent and with softMs 1`, () => {
+        const frozen = { budgetMs: 60_000, now: () => 0, maxDepth: depth };
+        const expected = { move, score, depth, nodes, partial: undefined };
+        expect(read(fenOf(name), frozen)).toEqual(expected);
+        expect(read(fenOf(name), { ...frozen, softMs: 1 })).toEqual(expected);
+      });
+    }
+
+    const STEPPING: ReadonlyArray<readonly [string, number, number, string, number, number]> = [
+      ["kiwipete", 50, 5, "e2a6", -59, 47_384],
+      ["kiwipete", 200, 6, "e2a6", -59, 199_960],
+      ["position-6", 50, 7, "c3d5", 79, 44_105],
+      ["position-6", 200, 8, "c3d5", 71, 196_681],
+    ];
+    for (const [name, budgetMs, depth, move, score, nodes] of STEPPING) {
+      it(`A0-2: ${name} at ${budgetMs} virtual ms reads the base with softMs absent`, () => {
+        expect(read(fenOf(name), { budgetMs, now: virtualClock(1) })).toEqual({
+          move,
+          score,
+          depth,
+          nodes,
+          partial: undefined,
+        });
+      });
+    }
+  });
+
+  describe("ABC-282 A1 (c) — the share of nodes thrown away, on K25 [deep, ENGINE_DEEP=1]", () => {
+    it("the head's median over 125 rows is strictly below the base's", () => {
+      const median = (values: readonly number[]): number =>
+        [...values].sort((a, b) => a - b)[(values.length - 1) / 2] as number;
+      const heads: number[] = [];
+      const bases: number[] = [];
+      for (const fen of K25) {
+        const completed = new Map<number, number>();
+        /** (nodes − N(depth)) / nodes, N(d) being the frozen-clock count at `maxDepth` d. */
+        const share = ({ nodes, depth }: EngineChoice): number => {
+          let reference = completed.get(depth);
+          if (reference === undefined) {
+            const frozen = { budgetMs: 60_000, now: () => 0, maxDepth: depth };
+            reference = (chooseMove(parseFen(fen), frozen) as EngineChoice).nodes;
+            completed.set(depth, reference);
+          }
+          return (nodes - reference) / nodes;
+        };
+        for (const budgetMs of [25, 50, 100, 200, 400]) {
+          const clocked = () => ({ budgetMs, now: virtualClock(1) });
+          const softMs = budgetMs / ITERATION_GROWTH;
+          heads.push(share(chooseMove(parseFen(fen), { ...clocked(), softMs }) as EngineChoice));
+          bases.push(share(chooseMove(parseFen(fen), clocked()) as EngineChoice));
+        }
+      }
+      expect(heads).toHaveLength(125);
+      console.log(`ABC-282 A1 (c): base median ${median(bases)}, head median ${median(heads)}`);
+      expect(median(heads)).toBeLessThan(median(bases));
+    }, 600_000);
+  });
+}
