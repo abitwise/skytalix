@@ -60,10 +60,10 @@ Publish: sealed notes (task qe-ABC-283, contextRoot = the worktree's .grugops/co
   - Medium: QE-283-a, NFR-008 headroom 0.40 s. R-N8H-1 returns to MEDIUM, and a Security/NFR hop follows the merge.
   - Low: QE-283-b, R-283-LMR carried (Architect). QE-283-c, no committed row has a mate found at iteration 5 exactly.
   - Information: QE-283-d, QE's driver formatter fix (zugzwang and G1 re-read, engine output identical); e, the harness tree; f, G6 nps 0.95–0.98×; g, the ticket page is on `main` only, with stale front matter; h, the Engineer's 9.81 s did not reproduce.
-- **Verdict:** `…de1dc511`.
+- **Verdict:** `…de1dc511`. **Correction:** `…7e0c6526`.
 - **Owed by the Orchestrator:**
   - the UAT `decision` naming `…de1dc511`;
-  - the merge on green (`main`'s `src/` is still `4fb3da04`, so no re-base is owed);
+  - **correction (note `…7e0c6526`, QE-283-i, MEDIUM, owed before the merge):** `main`'s `src/` moved after the read (`ABC-271` merged at `872e5ffc`, so `src/` is now `08e56302`). The verdict's "no re-base is owed" is stale. Merge `main` into `grugops/ABC-283` and re-read the counts on the merged tree (P0, the floor, zugzwang, G1, the lanes, NFR-008, the gates) before the merge on green. The game read is not re-run;
   - the bundle acceptance of `ADR-0063`, `ADR-0065` and `ADR-0066` (B5; the Architect writes the status lines);
   - the Security/NFR hop for R-N8H-1;
   - the ticket front matter (QE-283-g);

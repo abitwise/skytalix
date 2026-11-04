@@ -1,0 +1,9 @@
+{
+ "refs": ["qe-ABC-283", "grugops/ABC-283", "grugops/qe-ABC-283", "ABC-283", "ABC-271", "EPIC-011", "ADR-0070", "NFR-008", "R-N8H-1", "QE-283-a", "QE-283-i",
+  "872e5ffc", "08e56302", "4fb3da04", "0f0adfe3", "ab0a37b6", "09694a4e",
+  "src/evaluate.ts", "src/evaluate-params.ts", "src/evaluate.taper.test.ts", "src/transposition.test.ts",
+  "qe-ABC-283/20261104T164437Z-qe-e2e-decision-de1dc511", "qe-ABC-283/20261104T164437Z-qe-e2e-observation-f8f8c2cc",
+  "orch-2026-10-30a/20261104T151305Z-orchestrator-decision-c7609f51"],
+ "notes": [{"kind": "observation", "bodyFile": "note-main-moved.md",
+  "confidence": "high: git rev-parse and git diff of 0f0adfe3..main read after the verdict was sealed; the owed re-read is the ticket's Dependencies rule"}]
+}
