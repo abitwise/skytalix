@@ -269,6 +269,8 @@ Ready.
     row of ≥ 50 ms, by its duration in the tip's vitest JSON report, goes to its file's deep lane. **The identity slice
     above goes in `ENGINE_DEEP`, not the default lane.** That supersedes "optional default-lane" on that point. Over
     budget, the ticket goes back to the SE to move rows deep. No NFR level moves.*
+  - *2026-11-04 (`bapm-lines-1104`; `…f30bd604` 1): **the budget holds at ≤ +0.10 s,** read as the head-minus-base median wall. Added aim, not a gate: rows this ticket adds or changes sum to ≤ 90 ms
+    in-thread, none added to `src/cli.test.ts`. Rows of ≥ 50 ms go deep. No new default-lane file.*
 - **`NFR-005`** (the depth-6 floor at `LEVELS[5]`): under reading (b) only, by its rule (5 runs a board, every run ≥ 6,
   depth 7 a WARN, the median graded "≥ base").
 - **`NFR-009`:** no new table is expected. Any growth is stated by the ADR (≤ 16 MiB in all, ≤ 1 MiB growth).

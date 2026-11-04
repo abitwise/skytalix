@@ -153,6 +153,8 @@ precondition measurable.
     `N8-LANE` H − B median wall, with an admissible twin, at the gate. No new test file goes in the default lane. Any
     default-lane row of ≥ 50 ms, by its duration in the tip's vitest JSON report, goes to its file's deep lane. Over
     budget, the ticket goes back to the SE to move rows deep. No NFR level moves.*
+  - *2026-11-04 (`bapm-lines-1104`; `…f30bd604` 1): **the budget holds at ≤ +0.10 s,** read as the head-minus-base median wall. Added aim, not a gate: rows this ticket adds or changes sum to ≤ 90 ms
+    in-thread, none added to `src/cli.test.ts`. Rows of ≥ 50 ms go deep. No new default-lane file.*
 - **`NFR-009`:** unchanged; constants only.
 - **Security:** no new surface. The tool reads local files only, and the Lichess file stays outside the repository,
   checked against its pinned sha256.

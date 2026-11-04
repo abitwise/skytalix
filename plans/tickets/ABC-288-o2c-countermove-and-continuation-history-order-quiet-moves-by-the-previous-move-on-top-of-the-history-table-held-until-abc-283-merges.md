@@ -89,6 +89,10 @@ The ADR fixes exact counts and bars before Ready. None is loosened after Ready.
   ADR states the bytes. A form over 16 MiB in all is the owner's word (`Q-3K-6`'s shape), not this ticket's.
 - **`NFR-005`** (`G6`): "≥ base" binds.
 - **`NFR-008`** (≤ 10 s): units only in the default lane.
+  - *2026-11-04 (`bapm-lines-1104`; `…f30bd604` 1): **a default-lane budget of ≤ +0.10 s for bundle 1 as a whole**
+    (this ticket and `ABC-286` together, not each; named `…3b15b361` 3), read as the head-minus-base median wall.
+    Aim, not a gate: the rows the bundle adds or changes sum to ≤ 90 ms in-thread, none added to `src/cli.test.ts`.
+    Rows of ≥ 50 ms go deep. No new default-lane file.*
 
 ## Test notes
 
