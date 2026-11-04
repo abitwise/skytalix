@@ -1211,8 +1211,15 @@ const SWITCH_MODULES = [
     tap: "searchWithoutTaper",
     /** `ABC-279`'s door (`ADR-0069` decision 8): the shipped path less the SEE skip, every other switch on. */
     see: "searchWithoutSeePruning",
-    /** `ABC-283`'s doors: the shipped path less one or all of the bundle, every older switch on. */
-    bundle: ["searchWithoutHistory", "searchWithoutSeeOrdering", "searchWithoutBundle"],
+    /** `ABC-283`'s and `ABC-303`'s doors: the shipped path less one or all of a bundle, every older switch on. */
+    bundle: [
+      "searchWithoutMoveCountPruning",
+      "searchWithoutCountermove",
+      "searchWithoutQuietBundle",
+      "searchWithoutHistory",
+      "searchWithoutSeeOrdering",
+      "searchWithoutBundle",
+    ],
   },
   {
     path: "./engine.ts",
@@ -1223,6 +1230,9 @@ const SWITCH_MODULES = [
     tap: "chooseMoveWithoutTaper",
     see: "chooseMoveWithoutSeePruning",
     bundle: [
+      "chooseMoveWithoutMoveCountPruning",
+      "chooseMoveWithoutCountermove",
+      "chooseMoveWithoutQuietBundle",
       "chooseMoveWithoutHistory",
       "chooseMoveWithoutSeeOrdering",
       "chooseMoveWithoutAspiration",

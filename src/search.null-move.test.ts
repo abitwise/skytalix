@@ -347,25 +347,26 @@ describe("both recursions try the null move through the predicate, at null-windo
       // The child: negated, R plies shallower than a normal child, the window (-beta, -beta + 1),
       // flagged as a null move's, and (`ABC-269` cut C1) handed the node's own carried phase.
       const nullChild = new RegExp(
-        `nullScore = 0 - negamax\\( ?position, ${depth} - 1 - nullReduction, 0 - beta, 0 - beta \\+ 1, ply \\+ 1, [^)]*\\btrue, phase,? ?\\)`,
+        `nullScore = 0 - negamax\\( ?position, ${depth} - 1 - nullReduction, 0 - beta, 0 - beta \\+ 1, ply \\+ 1, [^)]*\\btrue, phase, null,? ?\\)`,
       );
       expect(flat, path).toMatch(nullChild);
       // Every other child is a real move's: the flag is false on each of them. (Calls only — the
       // declaration, `function negamax(`, is not one.) The flag is the argument before the carried
       // phase (`ABC-269` cut C1): `phase` on the null child, the made move's `childPhase` on the rest.
+      // Last comes the previous move (`ABC-303`): null on the null child, the made move on the rest.
       const args = [...flat.matchAll(/(?<!function) negamax\(([^)]*)\)/g)].map((match) =>
         (match[1] as string)
           .replace(/,\s*$/, "")
           .split(",")
           .map((arg) => arg.trim()),
       );
-      const flags = args.map((list) => list.at(-2) ?? "");
+      const flags = args.map((list) => list.at(-3) ?? "");
       expect(
         args
-          .map((list) => `${list.at(-2)} ${list.at(-1)}`)
-          .filter((pair) => pair !== "false childPhase"),
+          .map((list) => list.slice(-3).join(" "))
+          .filter((tail) => tail !== "false childPhase move"),
         path,
-      ).toEqual(["true phase"]);
+      ).toEqual(["true phase null"]);
       expect(flags.length, path).toBeGreaterThanOrEqual(5);
       expect(
         flags.filter((flag) => flag === "true"),
@@ -443,6 +444,9 @@ describe("QE-208-c — every door's nullMove switch literal is false; only the s
       call: "searchRoot(position, depth, {",
       doors: {
         search: "true",
+        searchWithoutMoveCountPruning: "true",
+        searchWithoutCountermove: "true",
+        searchWithoutQuietBundle: "true",
         searchWithoutHistory: "true",
         searchWithoutSeeOrdering: "true",
         searchWithoutBundle: "true",
@@ -467,6 +471,9 @@ describe("QE-208-c — every door's nullMove switch literal is false; only the s
       call: "deepen(position, options, {",
       doors: {
         chooseMove: "true",
+        chooseMoveWithoutMoveCountPruning: "true",
+        chooseMoveWithoutCountermove: "true",
+        chooseMoveWithoutQuietBundle: "true",
         chooseMoveWithoutHistory: "true",
         chooseMoveWithoutSeeOrdering: "true",
         chooseMoveWithoutAspiration: "true",

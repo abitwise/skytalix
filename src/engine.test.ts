@@ -337,7 +337,12 @@ const A3_FEN = "rnbqkbnr/ppp1pppp/3p4/8/6P1/8/PPPPPP1P/RNBQKBNR w KQkq - 0 2";
 
 describe("A3 — an aborted iteration's move is discarded, not returned", () => {
   const position = () => parseFen(A3_FEN);
-  const choice = chooseMove(position(), { budgetMs: 3, now: tickingClock(1) }) as {
+  // `ABC-303`: re-pointed to the all-off door (`ADR-0072` d7), figures unchanged. With both parts on
+  // the shipped path's depth 3 fits inside the clock's first check, so the premise is the door's.
+  const choice = engineModule.chooseMoveWithoutQuietBundle(position(), {
+    budgetMs: 3,
+    now: tickingClock(1),
+  }) as {
     move: Move;
     score: number;
     depth: number;
@@ -349,7 +354,7 @@ describe("A3 — an aborted iteration's move is discarded, not returned", () => 
     // Depths 1 and 2 cost 38 + 153 nodes; anything above that was spent inside the aborted
     // depth-3 iteration. Without this the criterion is satisfiable by never deepening at all.
     // The reference is `searchWithoutReductions` since `ABC-121` (`ADR-0026` decision 5): the
-    // engine side stays the shipped `chooseMove`, whose abort this row is about.
+    // engine side stays `chooseMove`'s path, now its all-off door, whose abort this row is about.
     expect(choice.nodes).toBeGreaterThan(
       searchWithoutReductions(position(), 1).nodes + searchWithoutReductions(position(), 2).nodes,
     );
@@ -507,7 +512,9 @@ describe("A4 — no fixed depth anywhere in the delivered engine", () => {
     // (`chooseMoveWithoutSeePruning`, `ADR-0069` decision 8). `ABC-283` adds four: one per part of
     // its bundle (`chooseMoveWithoutHistory`, `chooseMoveWithoutSeeOrdering`,
     // `chooseMoveWithoutAspiration`; `ADR-0063` d6, `ADR-0065` d7, `ADR-0066` d7) and the all-off
-    // `chooseMoveWithoutBundle`, each of `chooseMove`'s shape.
+    // `chooseMoveWithoutBundle`, each of `chooseMove`'s shape. `ABC-303` adds three of that shape:
+    // `chooseMoveWithoutMoveCountPruning`, `chooseMoveWithoutCountermove` and the all-off
+    // `chooseMoveWithoutQuietBundle` (`ADR-0072` d6, `ADR-0073` d7).
     expect(Object.keys(engineModule).sort()).toEqual([
       "DEFAULT_BUDGET_MS",
       "HARD_CEILING_MS",
@@ -515,11 +522,14 @@ describe("A4 — no fixed depth anywhere in the delivered engine", () => {
       "chooseMove",
       "chooseMoveWithoutAspiration",
       "chooseMoveWithoutBundle",
+      "chooseMoveWithoutCountermove",
       "chooseMoveWithoutFutility",
       "chooseMoveWithoutHistory",
+      "chooseMoveWithoutMoveCountPruning",
       "chooseMoveWithoutNullMove",
       "chooseMoveWithoutPvsOrReductions",
       "chooseMoveWithoutQuiescenceEvasions",
+      "chooseMoveWithoutQuietBundle",
       "chooseMoveWithoutQuietPromotions",
       "chooseMoveWithoutReductions",
       "chooseMoveWithoutSeeOrdering",
@@ -543,6 +553,9 @@ describe("A4 — no fixed depth anywhere in the delivered engine", () => {
     expect(engineModule.chooseMoveWithoutSeeOrdering.length).toBe(2);
     expect(engineModule.chooseMoveWithoutAspiration.length).toBe(2);
     expect(engineModule.chooseMoveWithoutBundle.length).toBe(2);
+    expect(engineModule.chooseMoveWithoutMoveCountPruning.length).toBe(2);
+    expect(engineModule.chooseMoveWithoutCountermove.length).toBe(2);
+    expect(engineModule.chooseMoveWithoutQuietBundle.length).toBe(2);
     expect(createEngine.length).toBe(1);
     expect(source).not.toMatch(/export function \w+\([^)]*depth/i);
   });

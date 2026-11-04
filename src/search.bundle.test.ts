@@ -21,6 +21,14 @@
  * rows run on the shipped path where they already stand: zugzwang 7 / 7 in
  * `src/search.null-move.test.ts` and `src/search.futility.test.ts`, `G1` in
  * `src/puzzle-suite.test.ts` (`PUZZLE_DEEP=1`). No zugzwang depth is re-pinned.
+ *
+ * ABC-303 — the quiet bundle (the owner's word of 2026-11-04): move-count pruning (`ADR-0072`, form
+ * M3) and the countermove (`ADR-0073`, form C1), one door each plus one all-off door. Default lane,
+ * direct calls only, no search above depth 2 (`ADR-0072` d7): `moveCountNode` clause by clause,
+ * `moveCountFrom`, the malus, the countermove's update, read, clear, bytes and tier, the doors'
+ * switches and the source rows. DEEP, `SEARCH_DEEP=1`: P0 (the ABC-283 counts above, re-pointed to
+ * the all-off doors, figures unchanged), the head's counts, and the same-depth floors in both
+ * recursions against the all-off doors.
  */
 
 import { readFileSync } from "node:fs";
@@ -29,7 +37,10 @@ import {
   chooseMove,
   chooseMoveWithoutAspiration,
   chooseMoveWithoutBundle,
+  chooseMoveWithoutCountermove,
   chooseMoveWithoutHistory,
+  chooseMoveWithoutMoveCountPruning,
+  chooseMoveWithoutQuietBundle,
   type EngineChoice,
 } from "./engine.ts";
 import { parseFen } from "./fen.ts";
@@ -39,17 +50,24 @@ import { BLACK, PAWN, type Position, squareName } from "./position.ts";
 import { MATE_CORPUS } from "./search.mate-corpus.ts";
 import {
   clearHistory,
+  countermoveAt,
+  countermoveByteLength,
   historyByteLength,
   historyScore,
   MATE_SCORE,
+  moveCountFrom,
+  moveCountNode,
   orderMoves,
   recordHistoryCutoff,
   search,
   searchWithoutBundle,
+  searchWithoutCountermove,
   searchWithoutHistory,
+  searchWithoutMoveCountPruning,
+  searchWithoutQuietBundle,
   searchWithoutSeeOrdering,
 } from "./search.ts";
-import { BOUND_LOWER } from "./transposition.ts";
+import { BOUND_LOWER, MATE_FLOOR } from "./transposition.ts";
 
 const RUN_DEEP = process.env.SEARCH_DEEP === "1";
 
@@ -236,17 +254,19 @@ describe("ABC-283 (h) — the history table (ADR-0063 decisions 1-5)", () => {
     const search = flat(SOURCE.search);
     const engine = flat(SOURCE.engine);
     expect(search).toContain(
-      "if (alpha >= beta) { if (switches.history) recordHistoryCutoff(position, list, index - 1, depth, futile); killers.record(ply, move); break; }",
+      "if (alpha >= beta) { if (switches.history) { recordHistoryCutoff(position, list, index - 1, depth, futile, previousCut, firstSkipped); } killers.record(ply, move); break; }",
     );
     expect(engine).toContain(
-      "if (alpha >= beta) { if (budget.history) recordHistoryCutoff(position, list, index - 1, remaining, futile); budget.killers.record(ply, move); break; }",
+      "if (alpha >= beta) { if (budget.history) { recordHistoryCutoff( position, list, index - 1, remaining, futile, previousCut, firstSkipped, ); } budget.killers.record(ply, move); break; }",
     );
     expect(search.match(/recordHistoryCutoff\(/g)).toHaveLength(2); // the declaration and negamax
     expect(engine.match(/recordHistoryCutoff\(/g)).toHaveLength(1);
     expect(search).toContain(
-      "if (switches.table) clearTable(); if (switches.history) clearHistory();",
+      "if (switches.table) clearTable(); if (switches.history) clearHistory(switches.countermove);",
     );
-    expect(engine).toContain("clearTable(); if (heuristics.history) clearHistory();");
+    expect(engine).toContain(
+      "clearTable(); if (heuristics.history) clearHistory(heuristics.countermove);",
+    );
     expect(SOURCE.quiescence).not.toMatch(/history/i);
     // The table is written by the gravity update and the clear only.
     expect(search.match(/HISTORY\[[^\]]*\] =/g)).toHaveLength(1);
@@ -301,7 +321,8 @@ describe("ABC-283 (a) — aspiration at the root of chooseMove (ADR-0066 decisio
   it("iterations 1-4 are the door's, node for node, and store no root lower bound", () => {
     for (const fen of [POSITION_6]) {
       rootStores.log = [];
-      const head = deepenTo(chooseMove, fen, 4);
+      // ABC-303: re-pointed to the all-off door, the older door's own shipped side (`ADR-0072` d7).
+      const head = deepenTo(chooseMoveWithoutQuietBundle, fen, 4);
       expect(rootStores.log.filter((store) => store.bound === BOUND_LOWER)).toEqual([]);
       expect(head.nodes).toBe(deepenTo(chooseMoveWithoutAspiration, fen, 4).nodes);
     }
@@ -362,6 +383,246 @@ describe("ABC-283 (a) — aspiration at the root of chooseMove (ADR-0066 decisio
   });
 });
 
+describe("ABC-303 (m) — move-count pruning (ADR-0072 decisions 1-4)", () => {
+  // White has a rook, a knight and a bishop: three non-pawn pieces, the rule's least.
+  const THREE = "4k3/8/8/8/8/8/8/RNB1K3 w - - 0 1";
+  const node = (fen: string, depth = 2, ply = 3, alpha = 10, beta = 11): number =>
+    moveCountNode(parseFen(fen), depth, ply, alpha, beta);
+
+  it("T = 4 / 7 / 12 at remaining depth 1 / 2 / 3, and none at 0 or 4", () => {
+    expect([0, 1, 2, 3, 4].map((depth) => node(THREE, depth))).toEqual([0, 4, 7, 12, 0]);
+  });
+
+  it("never at the root", () => {
+    expect(node(THREE, 2, 0)).toBe(0);
+  });
+
+  it("only with a null window", () => {
+    expect(node(THREE, 2, 3, 10, 12)).toBe(0);
+  });
+
+  it("only with alpha and beta strictly inside the mate floor", () => {
+    expect(node(THREE, 2, 3, MATE_FLOOR, MATE_FLOOR + 1)).toBe(0);
+    expect(node(THREE, 2, 3, MATE_FLOOR - 1, MATE_FLOOR)).toBe(0);
+    expect(node(THREE, 2, 3, 0 - MATE_FLOOR, 1 - MATE_FLOOR)).toBe(0);
+    expect(node(THREE, 2, 3, 0 - MATE_FLOOR - 1, 0 - MATE_FLOOR)).toBe(0);
+    expect(node(THREE, 2, 3, MATE_FLOOR - 2, MATE_FLOOR - 1)).toBe(7);
+    expect(node(THREE, 2, 3, 1 - MATE_FLOOR, 2 - MATE_FLOOR)).toBe(7);
+  });
+
+  it("never in check", () => {
+    expect(node("4r1k1/8/8/8/8/8/8/RNB1K3 w - - 0 1")).toBe(0);
+  });
+
+  it("needs three non-pawn pieces of the side to move: pawns, the king and the other side's pieces do not count", () => {
+    expect(node("4k3/8/8/8/8/8/8/RN2K3 w - - 0 1")).toBe(0);
+    expect(node("4k3/pppp4/8/8/8/8/PPPP4/RN2K3 w - - 0 1")).toBe(0);
+    expect(node("rnb1k3/8/8/8/8/8/8/R3K3 w - - 0 1")).toBe(0);
+    expect(node("rnb1k3/8/8/8/8/8/8/R3K3 b - - 0 1")).toBe(7);
+  });
+
+  it("moveCountFrom is the first key-0 index straight after the sort, and the count when no key is 0", () => {
+    const position = parseFen(START);
+    const moves = legalMoves(position);
+    const list = orderMoves(moves, [], null);
+    expect(moveCountFrom(list.length)).toBe(0);
+    clearHistory();
+    recordHistoryCutoff(position, list, 5, 2, false);
+    orderMoves(moves, [list[9] as Move], null, null, true);
+    expect(moveCountFrom(moves.length)).toBe(2); // the killer and the one positive cell
+    const single = parseFen("k7/8/8/8/8/8/1q6/K7 w - - 0 1");
+    const forced = orderMoves(legalMoves(single), [], null);
+    expect(forced.map(label)).toEqual(["a1b2"]);
+    expect(moveCountFrom(forced.length)).toBe(1);
+  });
+
+  it("the malus: from the first skipped index a move the rule skipped keeps its cell; a checking move, searched, does not", () => {
+    const position = parseFen("4k3/8/8/8/8/8/8/R2QK3 w - - 0 1");
+    const uci = ["a1a2", "a1a3", "a1a4", "d1e2", "e1f1", "a1a8"]; // d1e2 and a1a8 give check
+    const list = uci.map((move) => moveOf(position, move));
+    clearHistory();
+    recordHistoryCutoff(position, list, 5, 2, false, null, 2);
+    expect(list.map((move) => historyScore(move))).toEqual([-4, -4, 0, -4, 0, 4]);
+    clearHistory();
+    recordHistoryCutoff(position, list, 5, 2, false);
+    expect(list.map((move) => historyScore(move))).toEqual([-4, -4, -4, -4, -4, 4]);
+  });
+
+  it("source: both recursions read the node test and the tail once, skip by the move test, and keep the index", () => {
+    const limit = "const zeroFrom = moveLimit > 0 ? moveCountFrom(list.length) : 0;";
+    const skip =
+      "if (moveLimit > 0) { if (searchedQuiets >= moveLimit && index >= zeroFrom && futileMove(position, move, index)) { if (firstSkipped === -1) firstSkipped = index; index++; continue; } if (move.captured === EMPTY && move.promotion === EMPTY) searchedQuiets++; }";
+    const search = flat(SOURCE.search);
+    const engine = flat(SOURCE.engine);
+    expect(search).toContain(
+      `const moveLimit = switches.moveCount ? moveCountNode(position, depth, ply, alphaIn, beta) : 0; ${limit}`,
+    );
+    expect(engine).toContain(
+      `const moveLimit = budget.moveCount ? moveCountNode(position, remaining, ply, alphaIn, beta) : 0; ${limit}`,
+    );
+    expect(search).toContain(skip);
+    expect(engine).toContain(skip);
+    expect(search).toContain("const MOVE_COUNT_LIMIT: readonly number[] = [0, 4, 7, 12];");
+  });
+});
+
+describe("ABC-303 (c) — the countermove (ADR-0073 decisions 1-6)", () => {
+  const packed = (move: Move): number => move.from * 128 + move.to + 1;
+  // Black's reply a7a6 stands as the previous move of a white node.
+  const REPLY = parseFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1");
+  const previous = moveOf(REPLY, "a7a6");
+
+  it("is 12 × 64 cells of 32 bits: 3 072 bytes", () => {
+    expect(countermoveByteLength()).toBe(3_072);
+  });
+
+  it("a quiet cutter overwrites the previous move's cell; a capture cutter, or no previous move, writes nothing", () => {
+    const position = parseFen(START);
+    const list = orderMoves(legalMoves(position), [], null);
+    clearHistory(true);
+    recordHistoryCutoff(position, list, 4, 3, false, previous);
+    expect(countermoveAt(previous)).toBe(packed(list[4] as Move));
+    recordHistoryCutoff(position, list, 7, 3, false, previous);
+    expect(countermoveAt(previous)).toBe(packed(list[7] as Move));
+
+    const capture = parseFen("4k3/8/8/3p4/4P3/8/8/4K3 w - - 0 1");
+    const captures = orderMoves(legalMoves(capture), [], null);
+    recordHistoryCutoff(capture, captures, 0, 3, false, previous);
+    expect(countermoveAt(previous)).toBe(packed(list[7] as Move));
+    clearHistory(true);
+    recordHistoryCutoff(position, list, 4, 3, false, null);
+    expect(countermoveAt(previous)).toBe(0);
+  });
+
+  it("the read keys on the coloured piece and the to-square: a different piece, colour or square is another cell", () => {
+    const position = parseFen(START);
+    const list = orderMoves(legalMoves(position), [], null);
+    clearHistory(true);
+    recordHistoryCutoff(position, list, 4, 3, false, previous);
+    // The same square by the other colour, and by another piece; the same piece on another square.
+    for (const other of [
+      { ...previous, piece: previous.piece ^ BLACK },
+      { ...previous, piece: previous.piece + 1 },
+      { ...previous, to: previous.to - 16 },
+    ]) {
+      expect(countermoveAt(other as Move)).toBe(0);
+    }
+    expect(countermoveAt({ ...previous, from: previous.from + 1 } as Move)).toBe(
+      packed(list[4] as Move),
+    );
+  });
+
+  it("is cleared at every search() entry and chooseMove call with the switch on; a door with it off leaves the table", () => {
+    const position = parseFen(START);
+    const list = orderMoves(legalMoves(position), [], null);
+    const seed = (): void => recordHistoryCutoff(position, list, 4, 3, false, previous);
+    const cell = packed(list[4] as Move);
+    const ONE = "8/k7/8/2K5/8/8/8/1R6 w - - 2 2";
+    seed();
+    clearHistory();
+    expect(countermoveAt(previous)).toBe(cell);
+    for (const door of [searchWithoutCountermove, searchWithoutQuietBundle, searchWithoutBundle]) {
+      door(parseFen(ONE), 1);
+      expect(countermoveAt(previous)).toBe(cell);
+    }
+    for (const door of [chooseMoveWithoutCountermove, chooseMoveWithoutQuietBundle]) {
+      deepenTo(door, ONE, 1);
+      expect(countermoveAt(previous)).toBe(cell);
+    }
+    search(parseFen(ONE), 1);
+    expect(countermoveAt(previous)).toBe(0);
+    seed();
+    searchWithoutMoveCountPruning(parseFen(ONE), 1);
+    expect(countermoveAt(previous)).toBe(0);
+    seed();
+    deepenTo(chooseMove, ONE, 1);
+    expect(countermoveAt(previous)).toBe(0);
+    seed();
+    deepenTo(chooseMoveWithoutMoveCountPruning, ONE, 1);
+    expect(countermoveAt(previous)).toBe(0);
+  });
+
+  it("the tier: after both killers, above the losing captures and every history cell; a higher tier keeps its place", () => {
+    const position = parseFen("4k3/8/2p5/3p4/4n3/8/3Q2B1/4K3 w - - 0 1");
+    const moves = legalMoves(position);
+    const killers = [moveOf(position, "e1f1"), moveOf(position, "d2d3")];
+    const plain = orderMoves(moves, killers, null, position, true).map(label);
+    expect(plain.slice(0, 4)).toEqual(["g2e4", "e1f1", "d2d3", "d2d5"]);
+    const counter = moveOf(position, "g2f3");
+    clearHistory();
+    recordHistoryCutoff(position, [moveOf(position, "g2h3")], 0, 9, false); // a positive cell
+    const got = orderMoves(moves, killers, null, position, true, packed(counter)).map(label);
+    expect(got.slice(0, 6)).toEqual(["g2e4", "e1f1", "d2d3", "g2f3", "d2d5", "g2h3"]);
+    // A killer or the hash move named as the countermove keeps its tier; one not in the list adds nothing.
+    const list = (hash: Move | null, cm: number): string[] =>
+      orderMoves(moves, killers, hash, position, true, cm).map(label);
+    expect(list(null, packed(killers[1] as Move))).toEqual(list(null, 0));
+    expect(list(counter, packed(counter))).toEqual(list(counter, 0));
+    expect(list(null, 1)).toEqual(list(null, 0));
+    expect(list(null, 0)).toEqual(orderMoves(moves, killers, null, position, true).map(label));
+  });
+
+  it("source: the cell is read behind the switch, nothing at the root or after a null move; one write, one clear", () => {
+    const search = flat(SOURCE.search);
+    const engine = flat(SOURCE.engine);
+    expect(search).toContain("const previousCut = switches.countermove ? previous : null;");
+    expect(engine).toContain("const previousCut = budget.countermove ? previous : null;");
+    expect(search).toContain(
+      "const countermove = previousCut === null ? 0 : countermoveAt(previousCut);",
+    );
+    expect(engine).toContain("previousCut === null ? 0 : countermoveAt(previousCut),");
+    expect(search).toContain("ordered(position, moves, 0, switches, killers, hashMove, 0);");
+    expect(search).toContain("keys, true, phase, null, );");
+    expect(engine).toContain("budget, true, phase, null, );");
+    expect(search).toContain("const COUNTERMOVE_KEY = 400_000;");
+    expect(search.match(/COUNTERMOVE\[[^\]]*\] =/g)).toHaveLength(1);
+    expect(search.match(/COUNTERMOVE\.fill\(0\)/g)).toHaveLength(1);
+    expect(SOURCE.quiescence).not.toMatch(/countermove/i);
+  });
+});
+
+describe("ABC-303 — the doors (ADR-0072 decision 6, ADR-0073 decision 7)", () => {
+  const record = (source: string, door: string): string => {
+    const from = source.indexOf(`export function ${door}(`);
+    return source.slice(from, source.indexOf("\n}\n", from));
+  };
+  for (const [door, moveCount, countermove] of [
+    ["search", true, true],
+    ["searchWithoutMoveCountPruning", false, true],
+    ["searchWithoutCountermove", true, false],
+    ["searchWithoutQuietBundle", false, false],
+    ["chooseMove", true, true],
+    ["chooseMoveWithoutMoveCountPruning", false, true],
+    ["chooseMoveWithoutCountermove", true, false],
+    ["chooseMoveWithoutQuietBundle", false, false],
+  ] as const) {
+    it(`${door}: moveCount ${moveCount}, countermove ${countermove}, everything older as shipped`, () => {
+      const source = door.startsWith("search") ? SOURCE.search : SOURCE.engine;
+      const shipped = door.startsWith("search") ? "search" : "chooseMove";
+      const older = (text: string): string =>
+        text.slice(text.indexOf("{\n")).replace(/ {4}(moveCount|countermove): \w+,\n/g, "");
+      const body = record(source, door);
+      expect(body).toContain(`moveCount: ${moveCount},`);
+      expect(body).toContain(`countermove: ${countermove},`);
+      expect(older(body)).toBe(older(record(source, shipped)));
+    });
+  }
+
+  it("every other door in both modules turns both parts off", () => {
+    for (const source of [SOURCE.search, SOURCE.engine]) {
+      const doors = source.match(/export function (searchWithout|chooseMoveWithout)\w+/g) ?? [];
+      expect(doors.length).toBeGreaterThan(10);
+      for (const found of doors) {
+        const name = found.replace("export function ", "");
+        if (/MoveCountPruning|Countermove/.test(name)) continue;
+        expect(`${name} ${record(source, name).match(/moveCount: \w+|countermove: \w+/g)}`).toBe(
+          `${name} moveCount: false,countermove: false`,
+        );
+      }
+    }
+  });
+});
+
 if (RUN_DEEP) {
   describe("ABC-283 P0 — the all-off doors are main, node for node, at depth 8 [deep, SEARCH_DEEP=1]", () => {
     // `main` `09694a4e`'s search() and chooseMove (`ABC-279` A4's head figures).
@@ -379,15 +640,16 @@ if (RUN_DEEP) {
 
   describe("ABC-283 — the bundle's own counts at depth 8 (the instrument: information, not a bar) [deep, SEARCH_DEEP=1]", () => {
     // With history promoting only (ADR-0063 d4, dated 2026-11-04): arch-ABC-283-mate R3's figures.
+    // ABC-303: re-pointed to the all-off doors, figures unchanged: these are ABC-303's P0 counts.
     const READ = {
       kiwipete: { fen: KIWIPETE, search: 523_847, choose: 707_548 },
       "position-6": { fen: POSITION_6, search: 234_214, choose: 101_425 },
     } as const;
     for (const [name, { fen, search: searchNodes, choose }] of Object.entries(READ)) {
       it(`${name}: search() and chooseMove at depth 8 read ${searchNodes} / ${choose}, root move and score the door's [deep, SEARCH_DEEP=1]`, () => {
-        const head = search(parseFen(fen), 8);
+        const head = searchWithoutQuietBundle(parseFen(fen), 8);
         const door = searchWithoutBundle(parseFen(fen), 8);
-        const headChoice = deepenTo(chooseMove, fen, 8);
+        const headChoice = deepenTo(chooseMoveWithoutQuietBundle, fen, 8);
         const doorChoice = deepenTo(chooseMoveWithoutBundle, fen, 8);
         console.log(
           `ABC-283 ${name} d8: search() ${head.nodes} / ${door.nodes} = ${(head.nodes / door.nodes).toFixed(4)}x, ` +
@@ -432,6 +694,52 @@ if (RUN_DEEP) {
             violations.push(`${fen}: ${ref} -> ${got}`);
         }
         console.log(`ABC-283 mate floor ${what} d5: ${violations.length} of ${mates} violated`);
+        expect(mates).toBeGreaterThanOrEqual(100);
+        expect(violations).toEqual([]);
+      }, 600_000);
+    }
+  });
+
+  describe("ABC-303 — the bundle's own counts at depth 8 (the instrument: R7, information, not a bar) [deep, SEARCH_DEEP=1]", () => {
+    // arch-bundle-1's probe of C1+M3 on `0cc9afd1`, reproduced by the build.
+    const READ = {
+      kiwipete: { fen: KIWIPETE, search: 311_546, choose: 573_518 },
+      "position-6": { fen: POSITION_6, search: 163_523, choose: 94_911 },
+    } as const;
+    for (const [name, { fen, search: searchNodes, choose }] of Object.entries(READ)) {
+      it(`${name}: search() and chooseMove at depth 8 read ${searchNodes} / ${choose} [deep, SEARCH_DEEP=1]`, () => {
+        expect(search(parseFen(fen), 8).nodes).toBe(searchNodes);
+        expect(deepenTo(chooseMove, fen, 8).nodes).toBe(choose);
+      }, 300_000);
+    }
+  });
+
+  describe("ABC-303 — the same-depth mate floor on the 287, both recursions, against the all-off doors [deep, SEARCH_DEEP=1]", () => {
+    const isMate = (score: number): boolean => Math.abs(score) > MATE_SCORE - 1_000;
+    for (const [what, head, door] of [
+      [
+        "search()",
+        (fen: string) => search(parseFen(fen), 5).score,
+        (fen: string) => searchWithoutQuietBundle(parseFen(fen), 5).score,
+      ],
+      [
+        "chooseMove",
+        (fen: string) => deepenTo(chooseMove, fen, 5).score,
+        (fen: string) => deepenTo(chooseMoveWithoutQuietBundle, fen, 5).score,
+      ],
+    ] as const) {
+      it(`every mate the door scores at depth 5, ${what} scores as a mate of the same sign at depth 5 [deep, SEARCH_DEEP=1]`, () => {
+        let mates = 0;
+        const violations: string[] = [];
+        for (const fen of MATE_CORPUS) {
+          const ref = door(fen);
+          if (!isMate(ref)) continue;
+          mates++;
+          const got = head(fen);
+          if (!isMate(got) || Math.sign(got) !== Math.sign(ref))
+            violations.push(`${fen}: ${ref} -> ${got}`);
+        }
+        console.log(`ABC-303 mate floor ${what} d5: ${violations.length} of ${mates} violated`);
         expect(mates).toBeGreaterThanOrEqual(100);
         expect(violations).toEqual([]);
       }, 600_000);
