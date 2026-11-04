@@ -1,0 +1,10 @@
+{"head":"M1","door":"MAIN","which":"search","depth":5,"rows":190,"nonMate":187,"withinPct":90.91,"max":123,"maxName":"position-3 86->209","mateFlip":0,"signFlip":0,"moveDiff":35}
+{"head":"M2","door":"MAIN","which":"search","depth":5,"rows":190,"nonMate":187,"withinPct":90.91,"max":123,"maxName":"position-3 86->209","mateFlip":0,"signFlip":0,"moveDiff":35}
+{"head":"M3","door":"MAIN","which":"search","depth":5,"rows":190,"nonMate":187,"withinPct":93.05,"max":80,"maxName":"kiwipete/a1d1 232->312","mateFlip":0,"signFlip":0,"moveDiff":28}
+{"head":"M4","door":"MAIN","which":"search","depth":5,"rows":190,"nonMate":187,"withinPct":91.44,"max":123,"maxName":"position-3 86->209","mateFlip":0,"signFlip":0,"moveDiff":34}
+{"head":"M5","door":"MAIN","which":"search","depth":5,"rows":190,"nonMate":187,"withinPct":93.05,"max":80,"maxName":"position-3/g2g4 89->9","mateFlip":0,"signFlip":0,"moveDiff":20}
+{"head":"M1","door":"MAIN","which":"chooseMove","depth":5,"rows":190,"nonMate":187,"withinPct":93.58,"max":79,"maxName":"position-6/e2d2 91->12","mateFlip":0,"signFlip":0,"moveDiff":13}
+{"head":"M2","door":"MAIN","which":"chooseMove","depth":5,"rows":190,"nonMate":187,"withinPct":93.58,"max":79,"maxName":"position-6/e2d2 91->12","mateFlip":0,"signFlip":0,"moveDiff":13}
+{"head":"M3","door":"MAIN","which":"chooseMove","depth":5,"rows":190,"nonMate":187,"withinPct":94.12,"max":79,"maxName":"position-6/e2d2 91->12","mateFlip":0,"signFlip":0,"moveDiff":11}
+{"head":"M4","door":"MAIN","which":"chooseMove","depth":5,"rows":190,"nonMate":187,"withinPct":94.12,"max":79,"maxName":"position-6/e2d2 91->12","mateFlip":0,"signFlip":0,"moveDiff":15}
+{"head":"M5","door":"MAIN","which":"chooseMove","depth":5,"rows":190,"nonMate":187,"withinPct":96.26,"max":79,"maxName":"position-6/e2d2 91->12","mateFlip":0,"signFlip":0,"moveDiff":7}

@@ -1,0 +1,12 @@
+{
+  "MAIN": {},
+  "C1": { "cm": true },
+  "C2": { "ch1": true },
+  "C3": { "cm": true, "ch1": true },
+  "C4": { "cm": true, "ch1": true, "ch2": true },
+  "M1": { "lmp": [0, 4, 7, 12] },
+  "M2": { "lmp": [0, 4, 7, 12], "lmpZero": true },
+  "M3": { "lmp": [0, 4, 7, 12], "lmpZero": true, "lmpBig3": true },
+  "M4": { "lmp": [0, 4, 7, 0], "lmpZero": true },
+  "M5": { "lmp": [0, 8, 14, 24], "lmpZero": true }
+}

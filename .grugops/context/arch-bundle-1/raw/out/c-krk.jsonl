@@ -1,0 +1,9 @@
+{"head":"C1+M3","door":"MAIN","what":"search d5","corpus":600,"mates":17,"violations":0}
+{"head":"M3","door":"MAIN","what":"search d5","corpus":600,"mates":17,"violations":0}
+{"head":"C1","door":"MAIN","what":"search d5","corpus":600,"mates":17,"violations":0}
+{"head":"C1+M3","door":"MAIN","what":"chooseMove d5","corpus":600,"mates":17,"violations":0}
+{"head":"M3","door":"MAIN","what":"chooseMove d5","corpus":600,"mates":17,"violations":0}
+{"head":"C1","door":"MAIN","what":"chooseMove d5","corpus":600,"mates":17,"violations":0}
+{"head":"C1+M3","door":"MAIN","what":"chooseMove d6","corpus":600,"mates":29,"violations":0}
+{"head":"M3","door":"MAIN","what":"chooseMove d6","corpus":600,"mates":29,"violations":0}
+{"head":"C1","door":"MAIN","what":"chooseMove d6","corpus":600,"mates":29,"violations":0}

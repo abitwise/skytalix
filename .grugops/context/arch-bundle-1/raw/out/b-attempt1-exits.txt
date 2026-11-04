@@ -1,0 +1,14 @@
+s0-check check door=MAIN heads= exit=0 seconds=16
+a-nodes nodes door=MAIN heads=C1,C2,C3,C4 exit=0 seconds=12
+a-reach reach door=MAIN heads=C1,C2,C3,C4 exit=0 seconds=75
+a-drift drift door=MAIN heads=C1,C2,C3,C4 exit=0 seconds=30
+a-floor floor door=MAIN heads=C1,C2,C3,C4 exit=0 seconds=24
+a-zug zug door=MAIN heads=C1,C2,C3,C4 exit=0 seconds=10
+a-g1 g1 door=MAIN heads=C1,C2,C3,C4 exit=0 seconds=6
+b-nodes nodes door=MAIN heads=M1,M2,M3,M4,M5 exit=1 seconds=3
+b-reach reach door=MAIN heads=M1,M2,M3,M4,M5 exit=1 seconds=15
+b-drift drift door=MAIN heads=M1,M2,M3,M4,M5 exit=1 seconds=19
+b-floor floor door=MAIN heads=M1,M2,M3,M4,M5 exit=1 seconds=9
+b-zug zug door=MAIN heads=M1,M2,M3,M4,M5 exit=1 seconds=0
+b-g1 g1 door=MAIN heads=M1,M2,M3,M4,M5 exit=1 seconds=0
+b-audit audit door=MAIN heads=M1,M2,M3,M4,M5 exit=0 seconds=54

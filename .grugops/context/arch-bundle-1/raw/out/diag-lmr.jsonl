@@ -1,0 +1,12 @@
+{"form":"C2","rec":"search","d":5,"fen":"8/1k6/8/1K6/8/8/8/1Q6 w - - 2 2","noLmr":false,"score":1037}
+{"form":"C2","rec":"search","d":5,"fen":"8/1k6/8/1K6/8/8/8/1Q6 w - - 2 2","noLmr":true,"score":29995}
+{"form":"C3","rec":"search","d":5,"fen":"8/1k6/8/1K6/8/8/8/1Q6 w - - 2 2","noLmr":false,"score":1052}
+{"form":"C3","rec":"search","d":5,"fen":"8/1k6/8/1K6/8/8/8/1Q6 w - - 2 2","noLmr":true,"score":29995}
+{"form":"C3","rec":"choose","d":5,"fen":"8/6k1/8/6K1/8/8/8/6Q1 w - - 2 2","noLmr":false,"score":1046}
+{"form":"C3","rec":"choose","d":5,"fen":"8/6k1/8/6K1/8/8/8/6Q1 w - - 2 2","noLmr":true,"score":29995}
+{"form":"C4","rec":"choose","d":6,"fen":"k7/8/8/1K6/8/8/8/1Q6 b - - 1 1","noLmr":false,"score":-1037}
+{"form":"C4","rec":"choose","d":6,"fen":"k7/8/8/1K6/8/8/8/1Q6 b - - 1 1","noLmr":true,"score":-29994}
+{"form":"M1","rec":"choose","d":5,"fen":"6k1/R7/5K2/8/8/8/8/8 w - - 2 2","noLmr":false,"score":652}
+{"form":"M1","rec":"choose","d":5,"fen":"6k1/R7/5K2/8/8/8/8/8 w - - 2 2","noLmr":true,"score":29995}
+{"form":"M4","rec":"choose","d":5,"fen":"6k1/R7/5K2/8/8/8/8/8 w - - 2 2","noLmr":false,"score":652}
+{"form":"M4","rec":"choose","d":5,"fen":"6k1/R7/5K2/8/8/8/8/8 w - - 2 2","noLmr":true,"score":29995}

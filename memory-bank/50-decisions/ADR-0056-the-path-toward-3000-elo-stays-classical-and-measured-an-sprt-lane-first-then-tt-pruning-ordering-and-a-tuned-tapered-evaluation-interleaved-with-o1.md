@@ -252,6 +252,11 @@ from `main` `0bf243df`; nothing run): the owner's word `orch-2026-10-30a` `…40
     B-T7 / B-T8 freeze. See D6's dated line.
 - **Still open (his):** Q-3K-6 and Q-3K-8, unchanged.
 
+*2026-11-04, dated line by Architect/Design (task `arch-bundle-1`, on `grugops/arch-bundle-1` from `main` `0cc9afd1`).*
+**D5's bundle read is ACCEPTED** (the owner, `Q-3K-11` (a), `orch-2026-10-30a` `…3b15b361`), carrying R-BUNDLE-1
+(`…ce2883d8`). It is part of the per-change rule. Bundle 1 is named by him: `ABC-286` + `ABC-288`. No other change to
+the rule.
+
 *Original status, kept:* **PROPOSED** 2026-11-01 by Architect/Design (task `arch-algo-analysis`, records and reading only, at `main` `bae25131`).
 **Nothing is decided here.** Nothing was run, built, benchmarked or played: `qe-ABC-223` holds the host STRICTLY ALONE.
 Every Elo figure below is either quoted from a sealed reading (named) or is an **estimate** with its basis. An
@@ -1358,9 +1363,12 @@ The settings in use:
   - *Dated 2026-11-03 (`arch-post-269`): pulled forward. Its first user is R1 (`ABC-273`), not A0. The change is
     `tools/` only, and its shape is in D6's dated line of this date. A0 and A1 later use the same command.*
 
-#### Dated 2026-11-04 (`arch-second-pull-1104`), PROPOSED: the bundle read. Related changes built on one branch and judged by one C2′ read (an amendment of C2′, the per-change rule)
+#### Dated 2026-11-04 (`arch-second-pull-1104`), ACCEPTED 2026-11-04: the bundle read. Related changes built on one branch and judged by one C2′ read (an amendment of C2′, the per-change rule)
 
-**Status: PROPOSED. Acceptance is the owner's** (`Q-3K-11`): it changes the per-change rule (`EPIC-011` § The
+**Status: ACCEPTED 2026-11-04 by the owner (`Q-3K-11` (a), `orch-2026-10-30a` `…3b15b361`), as written, carrying
+R-BUNDLE-1** (`…ce2883d8`, his risk acceptance: a bundle's single read may hide a part with a small negative share).
+It is part of the per-change rule. Recorded by Architect/Design (task `arch-bundle-1`); no line of B1–B7 changed.
+*Was:* **PROPOSED. Acceptance is the owner's** (`Q-3K-11`): it changes the per-change rule (`EPIC-011` § The
 per-change rule). **Reading (b):** while PROPOSED it may be used only for a bundle the owner names. Records only, at
 `main` `fad72f17`; nothing was run.
 - **His direction, verbatim** (`orch-2026-10-30a` `…dda43b71`): *"super news about ABC-233, 234 and 236 together
