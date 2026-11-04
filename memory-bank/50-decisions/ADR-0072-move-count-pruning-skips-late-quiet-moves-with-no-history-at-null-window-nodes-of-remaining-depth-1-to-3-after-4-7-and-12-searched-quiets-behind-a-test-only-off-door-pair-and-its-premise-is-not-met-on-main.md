@@ -6,7 +6,37 @@ id: ADR-0072
 
 ## Status
 
-**PROPOSED 2026-11-04. PREMISE NOT MET ON `main`: F1 FIRED ON THE DRIFT AND AUDIT ROWS; THE BUILD DOES NOT START ON
+**ACCEPTED 2026-11-04 BY THE OWNER'S WORD, OVER A MISSED PREMISE. THE PREMISE IS NOT MET AND F1 STAYS FIRED. Part of bundle
+1; not in force until the bundle merges on its read.** Recorded by Architect/Design (task `arch-owner-answers-1104b`, records
+only, on `grugops/arch-owner-answers-1104b` from `main` `65e28f95`). Nothing was run.
+- **His word, verbatim** (`orch-2026-10-30a` `…3e73f9f9`): *"1. Bundle 1: (a)"*, answering OQ-0072-1 and OQ-0073-1 as one.
+  Option (a) overrides both missed premises and builds `ABC-286` in form M3 and `ABC-288` in form C1, with one read. He had
+  both warnings first.
+- **This is an override, not a pass.** L2 was missed, and it stays missed: drift 93.58 % / 94.12 % within 25 cp (bar ≥ 95 %),
+  80 / 79 cp (bar ≤ 75); audit 15.27 % (bar ≤ 0.5 %), 29 errors ≥ 200 cp (bar 0). No bar was re-read, moved or re-derived.
+  § Context, the F1 row and the verdict below stand as written. The title and file name keep "its premise is not met",
+  because that is still true and sealed notes cite the path.
+- **It goes past a safety guard, not only a pay gate.** In `ABC-283` the owner's word set aside pay gates. Here P4 enters past
+  `ADR-0061`'s audit and the drift rows, the rows it failed alone.
+- **R-BUNDLE-1, and what this override adds to it.** R-BUNDLE-1 (`…ce2883d8`) accepts that a bundle's single read may hide a
+  part with a small negative share. It was written about a part nobody could see. This override adds two risks the owner
+  takes knowingly:
+  1. **P4 enters past the audit and drift rows.** The bundle carries a part already read as outside those guards, with
+     piece-sized errors, not a part of unknown sign.
+  2. **The countermove has no measured pay** (`ADR-0073`, CH3 missed on all four). A pass cannot show that it earns its place.
+
+  C2′ cannot answer either: credit is to the bundle (B5), and 100 games cannot tell +10 from −10. R-BUNDLE-1's mitigations
+  stand and neither risk is mitigated further. Removing a part later is a value change with its own read.
+- **What acceptance does here.** It opens the build, and it fixes form M3. Option (a) as put (`…37b7fb23`) reads "On a pass
+  both ADRs are accepted as a bundle; on a miss both return to held", so:
+  - **In force** only when the bundle merges on its read.
+  - **On NOT MET,** B6 applies: this ADR returns to PROPOSED, premise not met, and `ABC-286` to held.
+  - **B5's line** naming the bundle ticket and the read is owed when QE's verdict lands. The ticket is not cut yet (B7).
+- **What the read holds:** `ADR-0056` D5's dated block of this task, tables 1–3. L2's drift share, cap and audit are
+  reported. L2's 0 mate sign changes, L3 and L4 stay bars. C2′ is 100 games, GAIN ≥ 50.0.
+- **The order:** bundle 1 reads before `ABC-289`, which reads alone (the same block).
+
+*Before acceptance:* **PROPOSED 2026-11-04. PREMISE NOT MET ON `main`: F1 FIRED ON THE DRIFT AND AUDIT ROWS; THE BUILD DOES NOT START ON
 ITS OWN.** Recorded by Architect/Design (task `arch-bundle-1`, on `grugops/arch-bundle-1` from `main` `0cc9afd1`). The
 probe ran on scratch copies of `src/`, under the host lock. Nothing was committed to `src/` or `tools/`. No game was
 played.
@@ -33,6 +63,8 @@ played.
 |---|---|---|---|
 | 2026-11-04 | Architect/Design | PREREG sealed before any run | `arch-bundle-1` `…aa5c4dc1`, `59a98278` |
 | 2026-11-04 | Architect/Design | PROPOSED. M3 carried. L3 and L4 met; L2 missed; F1 fired | `arch-bundle-1` `…ed82b408` (readings), `…37b7fb23` (decision) |
+| 2026-11-04 | Owner | (a): override both missed premises and build both; OQ-0072-1 answered | `orch-2026-10-30a` `…3e73f9f9` |
+| 2026-11-04 | Architect/Design | **ACCEPTED over a missed premise, not in force.** F1 stays fired. The rows the read holds are ruled in `ADR-0056` | `arch-owner-answers-1104b` |
 
 ## Context
 
@@ -141,6 +173,9 @@ The design of record is M3. It is the form a yes builds. It is not cleared to bu
    - (d) **Its measured bar: L2 and L4, on its own door.** L4 is met. L2 is missed, so (d) passes only by the owner's
      lift. Under a lift, drift and the audit are reported, each reproduced to the count on the build; a count that
      differs is explained before anything else is read.
+     *2026-11-04 (`arch-owner-answers-1104b`): the lift is given (`…3e73f9f9`). L2's drift share, cap and audit are reported;
+     L2's 0 mate sign changes and L4 stay bars. "Reproduced to the count" is ruled in `ADR-0056` D5's dated block of this
+     date: exact on an unmoved base, both sets in the PR on a moved one, no ceiling.*
    - (e) `G2`, `G6`, `NFR-008` with all parts on.
 9. **The bars the build carries, by the PREREG's rules.**
    - **L3:** the floors at 0, every row of Step C; zugzwang 7 / 7; `G1` ≥ 54 / 58, none new.
@@ -149,6 +184,8 @@ The design of record is M3. It is the form a yes builds. It is not cleared to bu
    - **Instrument counts, on `0cc9afd1`:** the bundle's d8 is 311 546 / 163 523 for `search()` and 573 518 / 94 911 for
      `chooseMove`, with reach 7.016. If `main` moves first, the door's counts are re-read and a re-derived count is a
      dated line here, never a moved bar.
+   - *2026-11-04 (`arch-owner-answers-1104b`):* "every row of Step C" reads as PREREG rows B1, B2 and every B3 row. `chooseMove`
+     d6 and `krk` stay reports, as the PREREG calls them. `ADR-0056` D5's dated block of this date is the list the briefs copy.
 10. **The read, the bundle's alone** (`ADR-0056` B4). One C2′, 100 games at 100 ms, all parts on against the merge-base,
     **GAIN ≥ 50.0**, S′ at E 1 810, the Levels deep lane, the PREREG sealed first, never re-played, no subset read
     instead. Credit is to the bundle (B5). On NOT MET both parts go back to held (B6).

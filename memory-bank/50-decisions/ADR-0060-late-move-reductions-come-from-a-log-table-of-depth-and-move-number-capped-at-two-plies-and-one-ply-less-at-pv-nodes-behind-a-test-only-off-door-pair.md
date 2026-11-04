@@ -6,6 +6,16 @@ id: ADR-0060
 
 ## Status
 
+*2026-11-04, dated line by Architect/Design (task `arch-owner-answers-1104b`, records only at `main` `65e28f95`; owed at
+acceptance by `arch-bundle-1` `…37b7fb23`).* **R-283-LMR gains bundle 1's rows. Nothing in this ADR changes.**
+- **The rows** (`arch-bundle-1` `…ed82b408`, exploratory, six rows, not a node trace): M1, M2 and M4 of P4 lose the KRK row
+  `6k1/R7/5K2/8/8/8/8/8 w` at d5 in `chooseMove`, and C2–C4 of O2c lose KQK rows. Six of those rows return the door's mate
+  with LMR off and every other switch unchanged, P4 still on in the M rows. The others were not re-read.
+- **The forms built do not lose them:** `C1+M3`, `M3` and `C1` each read 0 on every d5 row. On P4 that rests on the
+  three-piece clause (`ADR-0072`), not on construction.
+- **The rule stands:** if bundle 1 turns the d5 floor red, the lever is LMR, this ADR, not history, T or another form
+  (`ADR-0056` D5's dated block of this date).
+
 *2026-11-04, dated line by Architect/Design (task `arch-ABC-283-accept`, records only, at `main` `715beb1c`).*
 **R-283-LMR is carried here, where a P1 re-open (`ABC-284`) reads it. Nothing in this ADR changes, and P1 stays
 parked.**

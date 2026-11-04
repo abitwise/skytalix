@@ -1,0 +1,2 @@
+{ "refs": ["arch-owner-answers-1104b", "ABC-286", "ABC-288", "ADR-0056", "ADR-0072", "ADR-0073", "R-BUNDLE-1", "OQ-0072-1", "OQ-0073-1", "PREREG", "aa5c4dc1", "orch-2026-10-30a/20261104T215525Z-orchestrator-decision-3e73f9f9", "arch-bundle-1/20261104T201203Z-architect-design-decision-aa5c4dc1", "qe-ABC-283/20261104T152150Z-qe-e2e-decision-f774e6d9"],
+  "notes": [ { "kind": "decision", "confidence": "high: a shape only, copied from sealed records; nothing was run", "bodyFile": "prereg-shape.md" } ] }

@@ -6,7 +6,29 @@ id: ADR-0073
 
 ## Status
 
-**PROPOSED 2026-11-04. PREMISE NOT MET ON `main`: F1 FIRED ON CH3; THE BUILD DOES NOT START ON ITS OWN.** Recorded by
+**ACCEPTED 2026-11-04 BY THE OWNER'S WORD, OVER A MISSED PREMISE. THE PREMISE IS NOT MET AND F1 STAYS FIRED. Part of bundle
+1; not in force until the bundle merges on its read.** Recorded by Architect/Design (task `arch-owner-answers-1104b`, records
+only, on `grugops/arch-owner-answers-1104b` from `main` `65e28f95`). Nothing was run.
+- **His word, verbatim** (`orch-2026-10-30a` `…3e73f9f9`): *"1. Bundle 1: (a)"*, answering OQ-0072-1 and OQ-0073-1 as one.
+  Option (a) overrides both missed premises and builds `ABC-286` in form M3 and `ABC-288` in form C1, with one read. He had
+  both warnings first.
+- **This is an override, not a pass.** CH3 was missed on all four readings, and it stays missed: 1.0031 / 0.9999 / 1.0935 /
+  0.9989 against ≤ 0.95. **The countermove has no measured pay.** No bar was re-read, moved or re-derived. § Context, the F1
+  row and the verdict below stand as written. The title and file name keep "the pay premise is not met", because that is
+  still true and sealed notes cite the path.
+- **R-BUNDLE-1, and what this override adds to it:** stated once, in `ADR-0072` § Status. For this part: a pass cannot show that
+  the countermove earns its place. Nothing read says it does.
+- **The scope narrowing is his.** Option (a) names form C1, so `ABC-288` is the countermove alone. Continuation history is
+  rejected as this ADR's § Alternatives states. The page's title and scope are BA/PM's lines.
+- **What acceptance does here.** It opens the build, and it fixes form C1. As in `ADR-0072` § Status: in force only when the
+  bundle merges on its read; on NOT MET, B6 returns this ADR to PROPOSED, premise not met, and `ABC-288` to held; B5's line is
+  owed at QE's verdict.
+- **What the read holds:** `ADR-0056` D5's dated block of this task, tables 1–3. CH3 is reported. CH2's safety rows and its
+  drift bar on this part's own door stay bars. OQ-0073-1 lifted CH3 and nothing else.
+- **`ADR-0063`:** the dated pointer this section owes at acceptance is written (§ Status there, d2, d4). The two lines take
+  effect at the bundle's merge.
+
+*Before acceptance:* **PROPOSED 2026-11-04. PREMISE NOT MET ON `main`: F1 FIRED ON CH3; THE BUILD DOES NOT START ON ITS OWN.** Recorded by
 Architect/Design (task `arch-bundle-1`, on `grugops/arch-bundle-1` from `main` `0cc9afd1`). The probe ran on scratch
 copies of `src/`, under the host lock. Nothing was committed to `src/` or `tools/`. No game was played.
 - **The bundle.** Part of bundle 1, named by the owner (`orch-2026-10-30a` `…3b15b361`): `ABC-286` (`ADR-0072`) +
@@ -38,6 +60,8 @@ copies of `src/`, under the host lock. Nothing was committed to `src/` or `tools
 |---|---|---|---|
 | 2026-11-04 | Architect/Design | PREREG sealed before any run | `arch-bundle-1` `…aa5c4dc1`, `59a98278` |
 | 2026-11-04 | Architect/Design | PROPOSED. C1 picked; CH1 and CH2 rejected; safety met; CH3 missed; F1 fired | `arch-bundle-1` `…ed82b408` (readings), `…37b7fb23` (decision) |
+| 2026-11-04 | Owner | (a): override both missed premises and build both; OQ-0073-1 answered, `ABC-288` narrowed to C1 | `orch-2026-10-30a` `…3e73f9f9` |
+| 2026-11-04 | Architect/Design | **ACCEPTED over a missed premise, not in force.** F1 stays fired. The rows the read holds are ruled in `ADR-0056` | `arch-owner-answers-1104b` |
 
 ## Context
 
@@ -109,11 +133,14 @@ The design of record is C1. It is the form a yes builds. It is not cleared to bu
    - (a) Its door pair and rows. (c) The form above, fixed.
    - (d) **Its measured bar, CH3:** missed on all four, so it passes only by the owner's lift. Under a lift the four
      ratios are reported per part, as `ABC-283`'s were, on its own door and alone over `main`.
+     *2026-11-04 (`arch-owner-answers-1104b`): the lift is given (`…3e73f9f9`), so CH3 is reported, as this line says.*
    - (e) `G2`, `G6`, `NFR-008` with all parts on.
 10. **The bars the build carries, by the PREREG's rules.**
     - **CH2:** the floors at 0, zugzwang 7 / 7, `G1` ≥ 54 / 58 none new. Drift ≥ 95 % within 25 cp, none beyond **25 cp**
       (max(25, min(75, ⌊1.5 × 9⌋))), 0 sign changes.
     - **CH3:** ≤ **0.95 ×** on the four, or reported under a lift.
+    - *2026-11-04 (`arch-owner-answers-1104b`):* CH3 is reported. CH2 stands whole, the drift bar included, read on this
+      part's own door. A CH2 drift or sign-change red goes the way of F3 (`ADR-0056` D5's dated block of this date).
 11. **The read:** the bundle's, `ADR-0072` d10. GAIN ≥ 50.0, never re-played. **The intent:** GAIN. It fires at 100 ms:
     it changes the order at 8.74 % of full-width nodes, and a countermove is in the list at 33.55 %.
 12. **The merge interactions:** `ADR-0072` d11, with two lines of its own.
