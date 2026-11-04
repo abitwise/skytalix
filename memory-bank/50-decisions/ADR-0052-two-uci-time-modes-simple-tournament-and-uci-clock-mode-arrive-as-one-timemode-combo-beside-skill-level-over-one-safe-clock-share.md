@@ -428,6 +428,10 @@ real `δ` from cutechess's per-move times.
 | A9 | A different `movestogo` default (30, 40) for the modes | With cutechess sending `movestogo` (§ Context) the default is a fallback. 20 is D4.1's constant, and 80 moves of sudden death still leave ≥ 117 s *(2026-10-31: 17 205 ms; see D4's dated line)*. Tuning it is `ABC-222`'s to measure, not to argue |
 | A10 | A soft/hard split, early stop on a stable root, more time on a hard move | A search change with a strength reading. `EPIC-009` § Out of scope |
 
+*Dated 2026-11-04 (`arch-ABC-282`, records only).* A10's soft/hard split is taken up as that search change by
+`ADR-0071` (PROPOSED, `ABC-282`), in `uci-clock-mode` under a clock only. No decision here moves: `C`, T, both caps, the
+reserve, the overhead and the ceilings stay. Early stop on a stable root and more time on a hard move stay out.
+
 ## Consequences
 
 - **`NFR-004`, proposed text for the owner** (Security/NFR places it at each gate):

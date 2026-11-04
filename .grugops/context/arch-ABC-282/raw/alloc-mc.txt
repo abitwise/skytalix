@@ -1,0 +1,4 @@
+{"periodMs":900000,"book":0,"trials":10000,"period1Use":{"min":87.77,"p01":90.48,"median":95.37},"anyPeriodMinUse":87.77,"minClockLeftMs":1069,"constF049":{"use":[79.18,91.07,95.69],"minLeft":187414}}
+{"periodMs":900000,"book":6,"trials":10000,"period1Use":{"min":85.17,"p01":88.02,"median":93.87},"anyPeriodMinUse":85.17,"minClockLeftMs":1069,"constF049":{"use":[75.86,92.81,96.45],"minLeft":217244}}
+{"periodMs":8000,"book":0,"trials":10000,"period1Use":{"min":78.67,"p01":80.02,"median":83.17},"anyPeriodMinUse":78.67,"minClockLeftMs":1069,"constF049":{"use":[77.61,97.89,99.8],"minLeft":1791}}
+{"periodMs":8000,"book":6,"trials":10000,"period1Use":{"min":78.32,"p01":79.73,"median":83.02},"anyPeriodMinUse":78.32,"minClockLeftMs":1069,"constF049":{"use":[77.3,98.17,99.83],"minLeft":1816}}

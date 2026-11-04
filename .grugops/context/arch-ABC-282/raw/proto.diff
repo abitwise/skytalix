@@ -1,0 +1,119 @@
+--- <scratch>/base/src/engine.ts
++++ <scratch>/proto/src/engine.ts
+@@ -223,6 +223,8 @@
+    * the one without game history, node for node. The test-only doors below ignore it.
+    */
+   readonly priorKeys?: readonly bigint[];
++  /** PROTOTYPE W1: no iteration starts at or after start + softMs; an aborted iteration's root move may be kept. */
++  readonly softMs?: number;
+ }
+ 
+ export interface EngineChoice {
+@@ -236,8 +238,16 @@
+   readonly nodes: number;
+   /** `now()` at return minus `now()` at entry, on the caller's clock. */
+   readonly elapsedMs: number;
++  /** PROTOTYPE diagnostics. */
++  readonly nodesAtComplete?: number;
++  readonly partial?: boolean;
++  readonly firstNotIncumbent?: number;
++  readonly aborted?: boolean;
+ }
+ 
++/** PROTOTYPE: the partial register, written only from completed root-move returns. */
++interface Register { first: Move | null; firstScore: number; move: Move | null; score: number; completed: number; }
++
+ /**
+  * `ADR-0054` decision 1: the reversible window is capped at the fifty-move window, 100 plies. The
+  * prior-key list is trimmed to it, and the search reads no more of a list than this.
+@@ -613,6 +623,7 @@
+   remaining: number,
+   budget: Budget,
+   rootPhase: number,
++  register?: Register,
+ ): Iteration {
+   const rootKey = budget.keys[0] as bigint;
+   const slot = probeTable(rootKey);
+@@ -655,6 +666,15 @@
+       bestMove = move;
+     }
+     if (best > alpha) alpha = best;
++    if (register !== undefined) {
++      if (index === 1) {
++        register.first = move;
++        register.firstScore = score;
++      }
++      register.move = bestMove;
++      register.score = best;
++      register.completed = index;
++    }
+   }
+ 
+   storeEntry(rootKey, remaining, BOUND_EXACT, best, 0, bestMove);
+@@ -907,27 +927,50 @@
+   let best = runIteration(position, rootMoves, 1, budget, rootPhase);
+   let reached = 1;
+   budget.nextCheck = budget.nodes + NODES_PER_CLOCK_CHECK;
++  // PROTOTYPE W1: one clock read per boundary, compared with the earlier of the two limits.
++  const iterationDeadline =
++    options.softMs === undefined ? budget.deadline : Math.min(budget.deadline, start + options.softMs);
++  let nodesAtComplete = budget.nodes;
++  let partial = false;
++  let aborted = false;
++  let firstNotIncumbent = 0;
+ 
+   // The clock FIRST, so it is read exactly as often as before; the two limits (`ABC-170`) are
+   // plain comparisons after it, and absent they are `Infinity`, which never stops the loop.
+   for (
+     let iteration = 2;
+-    now() < budget.deadline &&
++    now() < iterationDeadline &&
+     iteration <= (options.maxDepth ?? Number.POSITIVE_INFINITY) &&
+     budget.nodes < budget.maxNodes;
+     iteration++
+   ) {
+     let deeper: Iteration;
++    const register: Register = { first: null, firstScore: 0, move: null, score: 0, completed: 0 };
+     try {
+-      deeper = runIteration(position, rootMoves, iteration, budget, rootPhase);
++      deeper = runIteration(position, rootMoves, iteration, budget, rootPhase, register);
+     } catch (error) {
+-      // The register is written only here, from a value a COMPLETED iteration returned. An
+-      // aborted iteration leaves `best` and `reached` untouched, which is `A3`.
+-      if (error === ABORTED) break;
++      if (error === ABORTED) {
++        aborted = true;
++        if (register.first !== null && register.first !== best.move) firstNotIncumbent++;
++        if (
++          options.softMs !== undefined &&
++          register.completed >= 2 &&
++          register.first === best.move &&
++          register.move !== null &&
++          register.move !== best.move &&
++          register.score > register.firstScore
++        ) {
++          best = { move: register.move, score: register.score };
++          partial = true;
++        }
++        break;
++      }
+       throw error;
+     }
++    if (register.first !== best.move) firstNotIncumbent++;
+     best = deeper;
+     reached = iteration;
++    nodesAtComplete = budget.nodes;
+   }
+ 
+   return {
+@@ -936,6 +979,10 @@
+     depth: reached,
+     nodes: budget.nodes,
+     elapsedMs: now() - start,
++    nodesAtComplete,
++    partial,
++    firstNotIncumbent,
++    aborted,
+   };
+ }
+ 
