@@ -469,7 +469,7 @@ if (RUN_DEEP) {
       let last = "";
       for (let k = 0; k < 2; k++) {
         const r = await run(fx);
-        await T.fitData(r.outDir);
+        await T.fitData(r.outDir, []);
         const target = join(r.outDir, "evaluate-params.ts");
         T.emit(r.outDir, target, "0000000000000000000000000000000000000000");
         outputs.push(readFileSync(target, "utf8"));
