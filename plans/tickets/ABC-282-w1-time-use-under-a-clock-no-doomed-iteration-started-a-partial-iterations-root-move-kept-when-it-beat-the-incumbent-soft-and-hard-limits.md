@@ -12,6 +12,16 @@ adr: "ADR-0071 ACCEPTED 2026-11-04 (owner, OQ-0071-1, form (a), as written; orch
 
 # ABC-282: time use under a clock (W1)
 
+> **A DEFAULT-LANE BUDGET OF ≤ +0.1 s; THE IDENTITY SLICE GOES DEEP; BUILDS AFTER `ABC-302` MERGES, 2026-11-04, by
+> BA/PM** (task `bapm-ABC-302-cut`, records only, at `main` `9ee778b9`; nothing run). Source: the Orchestrator's
+> ruling `orch-2026-10-30a` `…112cd856` items 2 and 3, on Security/NFR `secnfr-nfr008-1104` `…1184fec4` (`NFR-008`
+> 9.84 s graded, 0.16 s headroom).
+> - **Budget:** the default-lane delta is ≤ +0.10 s, read at this page's existing `N8-LANE` read. No new test file
+>   goes in the default lane. Any default-lane row of ≥ 50 ms goes to its file's deep lane. **The optional 0.09 s
+>   identity slice goes in `ENGINE_DEEP`**, not the default lane (§ NFR triggers, dated line).
+> - **Order:** this ticket builds after `ABC-302` (the headroom ticket) merges (§ Dependencies).
+> - No bar, row, size or priority moves. **DoR 10/10, unchanged.** The column move is the Orchestrator's.
+
 > **UNHELD 2026-11-04: `ABC-283` MERGED (`58e90d07`), by BA/PM** (task `bapm-ABC-283-done`, records only, at `main`
 > `fd6b595f`; nothing run). Source: the Orchestrator's disposition `orch-2026-10-30a` `…2409cec9` 5 ("after the merge,
 > ABC-282 (W1) is unheld") and the Architect's owed lines (`arch-ABC-283-accept` `…cbf0bc7b` § Owed, item 4).
@@ -254,6 +264,11 @@ Ready.
     **44 105 nodes** (about 0.09 s).
   - A1 (a) / (b) and A2 are small virtual-clock rows in the default lane.
   - The default lane is read before and after (`N8-LANE`).
+  - *2026-11-04 (`bapm-ABC-302-cut`; `…112cd856` ruling 2): **a default-lane budget of ≤ +0.10 s.** `N8-LANE`'s H − B
+    median wall, with an admissible twin, is ≤ +0.10 s. No new test file goes in the default lane. Any default-lane
+    row of ≥ 50 ms, by its duration in the tip's vitest JSON report, goes to its file's deep lane. **The identity slice
+    above goes in `ENGINE_DEEP`, not the default lane.** That supersedes "optional default-lane" on that point. Over
+    budget, the ticket goes back to the SE to move rows deep. No NFR level moves.*
 - **`NFR-005`** (the depth-6 floor at `LEVELS[5]`): under reading (b) only, by its rule (5 runs a board, every run ≥ 6,
   depth 7 a WARN, the median graded "≥ base").
 - **`NFR-009`:** no new table is expected. Any growth is stated by the ADR (≤ 16 MiB in all, ≤ 1 MiB growth).
@@ -296,6 +311,9 @@ Ready.
   merges. The build, A0–A5 and the gates do not wait on it. *2026-11-04: **merged `4ea39135`** (QE PASS_WITH_GAPS,
   `qe-ABC-300` `…fbda2ad6`). A6 runs on its `d --tc 40/8`. QE-300-a (`ABC-300`'s A6, `UNKNOWN - verify` there) is
   carried here and is read at this ticket's A6.*
+- **After `ABC-302`** *(2026-11-04, `bapm-ABC-302-cut`; `…112cd856` ruling 3)*: the headroom ticket (nine rows to
+  deep lanes, about −0.5 s) merges first, and this ticket builds after it. Both touch `src/engine.test.ts`, so this
+  ticket re-reads its line numbers on the new base.
 - **Threads** (`ABC-266`, parked): not a wait. If threads re-open, these limits are re-read against the pool.
 
 ## Definition of Ready
@@ -317,7 +335,9 @@ Ready.
 Ready for Dev waits on `ABC-283`'s merge or miss (D12); A6 waits on `ABC-300`. *2026-11-04
 (`bapm-owner-answers-1104`): `ABC-300` merged `4ea39135`, so A6 no longer waits on it; `ABC-283`'s merge or miss
 still holds the page.* *2026-11-04 (`bapm-ABC-283-done`): `ABC-283` merged `58e90d07`; nothing holds the page. It
-rebases on the merge-first branch (D12).*
+rebases on the merge-first branch (D12).* *2026-11-04 (`bapm-ABC-302-cut`): the build waits on `ABC-302`'s merge
+(`…112cd856` ruling 3). That is an ordering, not a DoR row. Row 6 gains the ≤ +0.10 s default-lane budget. **DoR
+10/10, unchanged.***
 
 ## As cut (superseded 2026-11-04 by `ADR-0071` PROPOSED; kept unedited for the record)
 
