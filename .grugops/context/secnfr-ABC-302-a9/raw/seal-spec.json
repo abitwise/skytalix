@@ -1,0 +1,22 @@
+{
+  "refs": ["secnfr-ABC-302-a9", "ABC-302", "EPIC-011", "NFR-008", "R-N8H-1", "R-N8H-2", "R-N8H-3", "Q-N8H-1",
+           "ABC-282", "ABC-301", "ABC-286", "ABC-288", "ADR-0035", "ADR-0046", "T-QEHOP-GROWTH", "plans/nfr-catalog.md",
+           "qe-ABC-302/20261104T202906Z-qe-e2e-observation-09d75ba8",
+           "qe-ABC-302/20261104T202949Z-qe-e2e-decision-051a910d",
+           "qe-ABC-302/20261104T183610Z-qe-e2e-decision-82650a68",
+           "orch-2026-10-30a/20261104T195654Z-orchestrator-decision-3b15b361",
+           "orch-2026-10-30a/20261104T203052Z-orchestrator-decision-264a280a",
+           "orch-2026-10-30a/20261104T172442Z-orchestrator-decision-112cd856",
+           "secnfr-nfr008-1104/20261104T172222Z-security-nfr-decision-1184fec4",
+           "secnfr-nfr008-1104/20261104T172222Z-security-nfr-observation-4e87dae2",
+           "secnfr-nfr008-1104/20261104T172222Z-security-nfr-observation-e2c442d3",
+           "secnfr-nfr008-1104/20261104T171458Z-security-nfr-decision-39f73707",
+           "secnfr-ABC-281-a9/20261104T042047Z-security-nfr-decision-2e3b747f",
+           "arch-ABC-302/20261104T181301Z-architect-design-decision-bcadd41d",
+           "arch-ABC-302/20261104T181301Z-architect-design-observation-8c8cfeed",
+           "a5651cbf", "bff22046", "ec4edd92", "6d9ce1d7", "fd6b595f"],
+  "notes": [
+    { "kind": "observation", "confidence": "high on every timing (QE's graded A8 or an earlier sealed reading) and on the git and find reads made here; the row leads are UNKNOWN - verify: no census of main after ABC-302 exists; nothing run", "bodyFile": "note-reading.md" },
+    { "kind": "decision", "confidence": "high on R-N8H-1's level (a pre-set one-sided mark) and on the Q-N8H-1 record; medium on the budget advice, which rests on the 0.45 rate and the 76 % forecast from one ticket; no level, bar, test or config moved", "bodyFile": "note-decision.md" }
+  ]
+}
