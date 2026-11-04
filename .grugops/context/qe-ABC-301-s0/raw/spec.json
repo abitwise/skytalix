@@ -1,0 +1,7 @@
+{ "refs": ["qe-ABC-301-s0","grugops/qe-ABC-301-s0","grugops/ABC-301","ABC-301","EPIC-011","ADR-0067","ADR-0070","ABC-274","E2","E4a","B-T1","NFR-008","QE-271-f","QE-271-g","QE-271-h","QE-271-i","QE-301-a","QE-301-b","QE-301-c","QE-301-d","QE-301-e","QE-301-f","704e331f","57e942fb","df7d07a2","se-ABC-301-s0/20261104T211909Z-software-engineer-decision-8fb36960","se-ABC-301-s0/20261104T211909Z-software-engineer-observation-f68982f4","se-ABC-301-s0/20261104T211909Z-software-engineer-observation-534a582c","arch-second-pull-1104/20261104T170627Z-architect-design-decision-4917f0f7","qe-ABC-271/20261104T162300Z-qe-e2e-observation-d0f7af61","qe-ABC-271/20261104T162300Z-qe-e2e-observation-2608eabc","orch-2026-10-30a/20261104T212001Z-orchestrator-decision-878035ca","src/evaluate.passer.test.ts","tools/tune/tracer.ts","tools/tune/tune.ts","tools/tune/tune.test.ts"],
+  "notes": [
+   {"kind":"decision","confidence":"high: every ruling read from runs QE made this hop; the P1 and tracer rulings are QE's judgement, reasons stated","bodyFile":"notes/verdict.md"},
+   {"kind":"observation","confidence":"high: every figure read from this hop's run outputs in raw/","bodyFile":"notes/results.md"},
+   {"kind":"observation","confidence":"high on the mutant and plant reads (run); severities are QE's judgement; one line marked by reading, not run","bodyFile":"notes/gaps.md"},
+   {"kind":"observation","confidence":"high (commands as run); observation because artifact-ref needs a section-14 gate_run this hop does not have","bodyFile":"notes/artifact.md"}
+  ] }

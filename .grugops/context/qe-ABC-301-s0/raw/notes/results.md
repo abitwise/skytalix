@@ -1,0 +1,52 @@
+# qe-ABC-301-s0 results: the three forms of P1 on 12 trees; P2's 16 plants; P3 by QE's own comparator, typecheck, TUNE_DEEP 22 passed, B-T1 0 misses over 1 494 610 keys; d5's row as written on 132 762 positions, 0 misses; default lane about +2.5 ms
+
+Every run was under the host lock, in one sequential loop. Mutants and plants ran on scratch copies (`git archive` of the tip, the main checkout's `node_modules` linked), never the worktree, with the mutated file hashed around each run. Copies were checked equal to the tip afterwards. `main`'s `src/`, `tools/` and config are unmoved since the Engineer's base `bbd0d54a`, and the tip's `src/evaluate.ts` and `src/evaluate-params.ts` equal `main`'s.
+
+**P1: the forms on one tree each** (`raw/formprobe.ts`, fixtures whose result is wrong; the forced form counts as killing only if its miss set differs from the clean 13):
+| tree | planted | forced, 44 | phase-0 only, 14 | own phase, 44 | the file's red rows |
+|---|---|---|---|---|---|
+| CLEAN | none | 13 (31 / 44) | 0 | **0 (44 / 44)** | none, 22 passed |
+| E14 | both sides' kings swapped | 39 | 10 | 34 | P1, text pin |
+| E15 | phase + 1: U never fires | 6 | 6 | 6 | P1, text pin |
+| E16 | side to move inverted | 11 | 6 | 6 | **P1 only** |
+| H1 | hot path passes 0 | 13: **blind** | 0: **blind** | 13 | P1, text pin |
+| H3 | E4a added after the blend, unweighted | 13: **blind** | 0: **blind** | 27 | **P1 only** |
+| H4 | hot U fires at true phase 1 as well | 13: **blind** | 0: **blind** | 7 | P1, text pin |
+| H5 | E4a dropped at phases 6–23 | 13: blind | 0: blind | **0: blind** | text pin only |
+| H6 | hot U fires at true phase 6 | 13: blind | 0: blind | **0: blind** | text pin only |
+| H7 | skipped unless both sides have a passer | 43 | 13 | 43 | P1, text pin |
+| H8 | the two passer words swapped | 43 | 13 | 43 | P1, text pin |
+| H9 | the sum's sign flipped | 43 | 13 | 43 | **P1 only** |
+
+- E14–E16 are QE's text from `qe-ABC-271`; H1 is the Engineer's; H3–H9 are this hop's.
+- Under E15 the forced form improves on clean, 38 / 44: its 13 misses vanish and six phase-0 misses appear. A forced form has no fixed baseline to read a fault against.
+- The clean read: 43 of 44 fixtures have e ≠ 0; U fires at the own phase on 7; every frozen `phase` equals `phaseOf`; `evaluateAtPhase(p, 24)` equals `evaluateWithoutTaper` on 44.
+- The independent square rule predicts the forced misses: 13 ids, each ± 400, 0 disagreements.
+- After a fit (`raw/fit-shape.txt`, the row alone): shipped KD and FP non-zero, U 0: green. The same with E14, E15, E16: each red. Shipped U 50, build right: red on 13 (`QE-301-d`).
+
+**P2** (`raw/plants.txt`). The row is clean, and 0 callers holds by `git grep` too.
+- Red, the file named: a deep `src/` file, a non-test helper in `src/`, a `tools/` Python file, a `tools/` test file, `spike/`, `vitest.config.ts`, `package.json`, a second call in `src/evaluate.ts`.
+- Green: `src/*.mjs`, `src/*.js`, `src/*.mts`, a root `.sh`, a root `.mjs`, `.github/`, an alias, a computed name (`QE-301-c`).
+
+**P3.**
+- **Exports:** QE's own comparator (`raw/emitprobe.ts`, `node:assert` `deepStrictEqual` per name, against `main`'s file): 20 `export const`, 17 value exports and the three phase constants, every one equal, U `{ mg: 0, eg: 0 }`.
+- **Typecheck:** `npm run typecheck` 0 at the tip. `tsc --noEmit` 0 with the emission in `src/evaluate-params.ts` on a scratch copy, at the base and at a fit-shaped table. Biome clean on both, with real extract counts. `src/evaluate.passer.test.ts` 22 passed on the base emission.
+- **`TUNE_DEEP`:** 22 passed, 0 failed, exit 0.
+- **B-T1:** QE re-ran it (extract only, no fit, no emit, the tool's pin check passed): exit 0, and a single miss aborts the run, so **0 misses over 1 494 610 gated keys, worst 0.9583 cp**. 211 s, 1 503 MiB peak. Every count, the manifest sha256 and the base-table sha256 equal the Engineer's read. As d5 says, B-T1 cannot see E4a at 0: the tracer table below carries that.
+
+**The tracer** (`raw/tracerdirect.json`, `raw/toolmut.txt`): d5's row as written, 3 value sets (probed; primes; a fit shape with U 0), 132 762 positions (the 56 frozen, G3, the taper and mate corpora, seeded legal walks, seeded endgame placements, each with its mirror):
+| set | side rows | seam misses | on the fixtures | gate misses | worst |
+|---|---|---|---|---|---|
+| probed | 265 524 | 0 | 0 of 96 | 0 | 0.9583 cp |
+| primes | 265 524 | 0 | 0 of 96 | 0 | 0.9583 cp |
+| fit shape | 265 524 | 0 | 0 of 96 | 0 | 0.9583 cp |
+
+`evaluateAt` was exact on every position at each set. Tool mutants on the `QE-271-i` rows, this hop's: T8 (start-rank moves), T9 (U's d capped), T10 (U at phase ≤ 1), T11 (black's defender flag), T12 (own cap dropped), T14 (U's net sign) all red, T14 on the model row only. M3, M4, M5: green (`QE-301-b`). The Engineer's T1–T7 were not re-run.
+
+**Default lane, item 4** (`raw/lane-cost.txt`). Seven alternating runs of the one file at base and tip, in-thread medians:
+- the new P1 row: 0 → **1.16 ms**;
+- the guard row: 0.685 → **1.987 ms**, so + 1.30 ms;
+- **added: about + 2.5 ms** (worst single read about + 3.0 ms), against the 90 ms aim and the ≤ 100 ms budget;
+- the file's wall from the JSON report: 25.7 → 28.1 ms, median, the same + 2.4 ms.
+
+2 684 → 2 685 rows, 71 files, 0 skipped, no new file, nothing in `src/cli.test.ts`, no row of ≥ 50 ms. The Engineer's + 2.4 ms stands. The new imports are one more name from a module the file already loads and three `node:fs` names.
