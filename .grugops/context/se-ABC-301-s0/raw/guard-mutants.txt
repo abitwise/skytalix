@@ -1,0 +1,6 @@
+CLEAN exit=0 1 0 []
+G1-src-caller-pawnStructure exit=1 0 1 ["AssertionError: expected [ 'src/zz.ts' ] to deeply equal []"]
+G2-tools-nested-caller exit=1 0 1 ["AssertionError: expected [ 'tools/zz/a.mjs' ] to deeply equal []"]
+G3-scripts-dir exit=1 0 1 ["AssertionError: expected [ 'scripts/a.sh' ] to deeply equal []"]
+G4-package-script exit=1 0 1 ["AssertionError: expected [ 'package.json' ] to deeply equal []"]
+G5-caller-in-evaluate exit=1 0 1 ['AssertionError: pawnStructureForTest( in src/evaluate.ts: its definition only: expected 2 to be 1 // Object.is']
