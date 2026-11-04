@@ -280,6 +280,19 @@ no intent class and no read. The figure is history and a forecast for the second
      - If `main`'s non-test `src/` moves by the build, the Engineer re-reads them on the new base and puts both in the
        PR. A re-derived count is a dated line here, never a moved bar.
      - Every existing door reads its pre-ticket counts.
+     - *Dated 2026-11-04 (`arch-ABC-303-open`, records only at `main` `c118a5cf`, one deep run; `se-ABC-303` `…dd8e56d8`):
+       **K0's seven rows are stale on `main`, and they re-point. They are not re-pinned.**
+       - **Read:** `SEARCH_DEEP=1 src/evaluate.passer.test.ts` on `c118a5cf`, `src/` tree `845f5662`: exit 1, 7 failed, 21
+         passed. The shipped path reads 707 548 / 1 595 095; 101 425 / 226 171 / 471 434; 523 847 / 234 214. Those are
+         `ABC-283`'s head. `evaluate` is not at fault: the rows ask the shipped path a pre-`ABC-283` question.
+       - **The form.** Rows' `chooseMove` → `chooseMoveWithoutBundle`, `search` → `searchWithoutBundle`, the pre-`ABC-283` pair.
+         The seven figures stay, and `src/evaluate.passer-fixtures.json` is untouched, so its sha256 row stands and no
+         re-freeze is owed. `se-ABC-283-merge` `…f7f63e1d` read all seven on those doors, 7 / 7, on the merged tree.
+       - **Why not a re-pin.** F1 says never. The row's claim is that the terms at 0 changed no node, and only the
+         tree without `ABC-283`'s parts can answer that against these figures. A re-pin to `ABC-283`'s head would make it a
+         shipped-path pin, red again at the next search merge. The door also survives `ABC-303`: an older door turns both
+         of its parts off.
+       - **Until the first emission only:** `ADR-0067`'s dated line of this date.
    - **K1, units (default lane):**
      - (a) the mirror, `Object.is`: `G3` + `TAPER_MIRROR_POSITIONS` + ≥ 10 new passer positions (frozen by QE before
        the build), 0 mismatches;
