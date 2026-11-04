@@ -1,0 +1,4 @@
+stm ignored exit 1 ['      Tests  3 failed | 18 passed (21)']
+walk stops before Q exit 1 ['      Tests  2 failed | 19 passed (21)']
+hit drops words exit 1 ['      Tests  1 failed | 20 passed (21)']
+U capped exit 1 ['      Tests  3 failed | 18 passed (21)']
