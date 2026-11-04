@@ -1,3 +1,4 @@
+_Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `bapm-ABC-301-cut` merged e932e46e: **ABC-301 (second pull) Ready** (DoR 10/10, L, P2, GAIN). Rulings …87b1a957: B-T8 = two `r --budget-ms 500` reads (200 each); endgame G2 > 1.02× is a B-T4 miss. ABC-301 scope 0 and ABC-282 wait on the NFR-008 headroom ruling. Running: secnfr-nfr008-1104. Owner: Q-3K-11 (+ bundle 1)._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `bapm-ABC-283-done` merged 8b43bc9b: ABC-233/234/236 cards → Done (delivered by ABC-283); ABC-282 unheld; ABC-286/288 unheld for probes. → `bapm-ABC-301-cut` (second pull). Running: secnfr-nfr008-1104, bapm-ABC-301-cut. Owner: Q-3K-11 (+ bundle 1)._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `arch-second-pull-1104` merged 48b98f43: ADR-0067 d6 amendment adopted (one bounded fit, no refit), B-T8 re-confirmed (~5 h), four preconditions; **bundle-read rule PROPOSED in ADR-0056 → owner Q-3K-11** (+ name bundle 1: ABC-286+288?). ABC-301 (second pull) cut owed to BA/PM after bapm-ABC-283-done (EPIC-011 lock). Running: secnfr-nfr008-1104, bapm-ABC-283-done._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — **ABC-283 DONE** (merged 58e90d07 with ABC-271 in; QE PASS_WITH_GAPS …de1dc511 signs UAT; C2′ 66.0/100, +115 ± 67; re-read identical; lane 9.77 s quiet). ADR-0063/0065/0066 now in force. ABC-233/234/236 delivered by ABC-283. → `secnfr-nfr008-1104` (R-N8H-1 / Q-N8H-1 fired), `bapm-ABC-283-done`. ABC-282 unheld. Running: arch-second-pull-1104, secnfr-nfr008-1104, bapm-ABC-283-done._
@@ -1468,7 +1469,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## Ready (WIP 1/8)
+## Ready (WIP 2/8)
+- [ABC-301] E2s second pull: one bounded fit on main with E4a's structure; KD/FP freed, U held 0; B-T0–B-T8 (B-T8 two r reads at 0.5 s, ~5 h, owner-approved). Scope 0 preconditions first (after NFR-008 headroom ruling).
 - [ABC-282] W1 time use under a clock (ADR-0071 ACCEPTED; DoR 10/10, L, P2). **Unheld** (ABC-283 merged). Builds after the NFR-008 headroom ruling (secnfr-nfr008-1104); A6 on ABC-300.
 - ~~[ABC-271]~~ → In Development E4a structure only at 0 (ADR-0070 ACCEPTED form (a); DoR 10/10, S, P3). QE freeze first (qe-ABC-271-freeze), then se-ABC-271. No games.
 
