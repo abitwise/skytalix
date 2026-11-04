@@ -1,0 +1,10 @@
+qe-ABC-279 (computed from d.out before deletion; INFO)
+go -> bestmove latency (cutechess clock, ms; includes book moves):
+skytalix  moves 6755 median 101 max 105 >150ms 0
+base      moves 6749 median 101 max 103 >150ms 0
+opening-pair scores for skytalix (0, 0.5, 1, 1.5, 2): 4, 7, 22, 11, 6  sum 54.0
+terminations: mates 76; Draw by 3-fold repetition 11; Draw by insufficient mating material 7; Draw by fifty moves rule 6
+time forfeits: 0 []
+faults: 0 []
+candidate skytalix: W/D/L 42/24/34 score 54.0 / 100
+by colour: as white 25.0/50, as black 29.0/50

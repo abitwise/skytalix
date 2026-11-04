@@ -1,0 +1,23 @@
+OK   Q1 PxP undefended: e4d5 see 100 hand 100 losing false
+OK   Q2 QxP def by P: d1d5 see -800 hand -800 losing true
+OK   Q3 RxP def by N: d1d5 see -400 hand -400 losing true
+OK   Q4 R battery vs R+K (x-ray own): d2d7 see -400 hand -400 losing true
+OK   Q5 black BxN, x-ray Q behind B: b7d5 see 90 hand 90 losing false
+OK   Q6 QxR def by B: b1b8 see -400 hand -400 losing true
+OK   Q7 BxN def by P: h2d6 see -10 hand -10 losing true
+OK   Q8 NxP 3v3 pawn/knight/bishop: f3e5 see -220 hand -220 losing true
+OK   Q9 black mirror of Q8: f6e4 see -220 hand -220 losing true
+OK   Q10 Q front of R vs P+R: d2d5 see -800 hand -800 losing true
+OK   Q11 R front of Q vs P+R: d2d5 see -400 hand -400 losing true
+OK   Q12 QxN, B x-ray behind Q, P defends: c3e5 see -480 hand -480 losing true
+OK   Q13 RxP def only by K, 2nd R behind: d2d7 see 100 hand 100 losing false
+OK   Q14 RxP def only by K, alone: d1d7 see -400 hand -400 losing true
+OK   e.p. capture: e5d6 losing false (want false) see 100
+OK   capturing promotion onto a defended square: c7d8=5 losing false (want false) see 220
+OK   capturing promotion onto a defended square: c7d8=4 losing false (want false) see 220
+OK   capturing promotion onto a defended square: c7d8=3 losing false (want false) see 220
+OK   capturing promotion onto a defended square: c7d8=2 losing false (want false) see 220
+OK   NxN defended by P (0): e4d6 losing false (want false) see 0
+OK   quiet move: d1d4 losing false (want false) see n/a
+OK   king clause (hand-built Kxd2 onto c3-pawn cover): see -19900 (hand -19900) losing false (want false); legal on that board: false
+{"seeScratchByteLength":288,"ok":22,"fails":[]}
