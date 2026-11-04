@@ -1,0 +1,9 @@
+limit 650	passes 650	depth 555	deepest 128	maxWrites 128	95.2ms
+limit 200	passes 200	depth 115	deepest 115	maxWrites 115	15.4ms
+limit 220	passes 221	depth 127	deepest 127	maxWrites 127	17.2ms
+limit 230	passes 230	depth 135	deepest 128	maxWrites 128	17.2ms
+limit 240	passes 240	depth 145	deepest 128	maxWrites 128	19.1ms
+limit 250	passes 250	depth 155	deepest 128	maxWrites 128	20.1ms
+limit 260	passes 260	depth 165	deepest 128	maxWrites 128	21.4ms
+limit 300	passes 300	depth 205	deepest 128	maxWrites 128	27.2ms
+leaf -1645 0.9ms

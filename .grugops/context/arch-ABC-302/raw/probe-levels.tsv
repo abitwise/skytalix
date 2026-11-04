@@ -1,0 +1,7 @@
+R6 first 5	blunders 2	eq true	10.5ms
+R6 first 10	blunders 5	eq true	21.8ms
+R6 first 15	blunders 8	eq true	35.1ms
+R7 seed 1 first 10	eq 10	draws<0.05 1:0.003	11.1ms
+R7 seed 87 first 10	eq 10	draws<0.05 0:0.046,4:0.040	8.8ms
+R7 seed 1 first 30	eq 30	draws<0.05 1:0.003,22:0.043	58.0ms
+R7 seed 87 first 30	eq 30	draws<0.05 0:0.046,4:0.040,26:0.042	29.6ms

@@ -1,0 +1,14 @@
+startpos	d3	search 19 7.0ms	choose 19 3.4ms
+startpos	d4	search 22 3.3ms	choose 56 9.1ms
+kiwipete	d3	search 47 20.0ms	choose 47 14.6ms
+kiwipete	d4	search 100 27.8ms	choose 142 34.0ms
+position-3	d3	search 0 0.8ms	choose 0 0.7ms
+position-3	d4	search 0 1.9ms	choose 0 1.7ms
+position-4	d3	search 5 11.4ms	choose 5 9.0ms
+position-4	d4	search 108 23.0ms	choose 32 12.9ms
+position-5	d3	search 43 2.1ms	choose 43 2.8ms
+position-5	d4	search 76 4.1ms	choose 119 6.2ms
+position-6	d3	search 44 3.0ms	choose 44 3.2ms
+position-6	d4	search 61 6.9ms	choose 100 6.5ms
+in-check	d3	search 1 3.4ms	choose 1 3.2ms
+in-check	d4	search 7 3.1ms	choose 8 5.4ms

@@ -1,0 +1,5 @@
+step 2500	consult 26/26	depth 6/6	nodes 18452	75.1ms	eq true
+step 10000	consult 8/8	depth 4/4	nodes 2068	8.4ms	eq true
+step 15000	consult 6/6	depth 3/3	nodes 1044	4.3ms	eq true
+step 20000	consult 5/5	depth 3/3	nodes 212	1.1ms	eq true
+step 30000	consult 4/4	depth 2/2	nodes 108	0.8ms	eq true
