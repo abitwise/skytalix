@@ -1,3 +1,4 @@
+_Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `bapm-ABC-282-adr` merged a90a04c8: **ABC-282 Ready** (L; held until ABC-283 merges or misses), **ABC-300 Ready → In Development** (`se-ABC-300`, tools only). BA/PM J1–J5 accepted. Owner: OQ-0071-1, Q-3K-10. Running: se-ABC-271, arch-ABC-283-mate, se-ABC-300._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `arch-ABC-282` merged 9471eb32: **ADR-0071 PROPOSED** (W1 in uci-clock-mode only; soft limit = budget ÷ 2.3; partial move kept if it beats the incumbent). Harness can't play under a clock → tools ticket ABC-300 to cut. **Owner asked: OQ-0071-1 (accept ADR-0071), Q-3K-10.** → `bapm-ABC-282-adr`. Running: se-ABC-271, arch-ABC-283-mate, bapm-ABC-282-adr._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — **ABC-283 BLOCKED** (se-ABC-283 4e7ddcca): all bars met except the ADR-0064 d7 mate floor (KRK, 1/190 search d5, 2/188 chooseMove d5; history alone). Ruling …19583086: no bar loosened → `arch-ABC-283-mate` (diagnose; structural fix or F2). No games yet. Running: arch-ABC-282, se-ABC-271, arch-ABC-283-mate._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `qe-ABC-271-freeze` merged 23169a3e (12 + 44 rows, K0 frozen). **ABC-271 → In Development** (`se-ABC-271`). Running: se-ABC-283, arch-ABC-282, se-ABC-271._
@@ -1321,7 +1322,8 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 1/3)
+    ## In Development (WIP 2/3)
+- [ABC-300] The harness plays a clock: `d --tc 40/8` (tools only, S, P2). se-ABC-300 running.
 - [ABC-271] E4a structure only at 0 (ADR-0070 form (a)); se-ABC-271 running on QE's frozen rows (qe-ABC-271-freeze 23169a3e).
 - ~~[ABC-283]~~ → Blocked. The O1h+O3s+S1 bundle (ABC-233 history, ABC-234 SEE ordering, ABC-236 root aspiration) on one branch; one read of 100 games at 100 ms, GAIN ≥ 50.0 (owner's word, …4c4cb03d). se-ABC-283 running; rulings …3851bf43.
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
@@ -1419,7 +1421,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [ABC-297] X2: singular extension and internal iterative reduction (IIR). A hash move that a reduced-depth exclusion sear (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
 - [ABC-298] V3: staged move generation. At a full-width node the hash move is tried before any move is generated, and capt (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
 - [ABC-299] R3: the third EPIC-011 milestone reading, on main after Phase 5: 200 games at 100 ms a move against Stockfish  (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
-- [ABC-282] W1: time use under a clock (size M, P2, DoR 9/10; ADR owed → arch-ABC-282; builds after ABC-283, both edit the deepening loop; must land before the first 40/15 reading). Cut by bapm-W1-bundle-cut 9be6befd.
+- ~~[ABC-282]~~ → Ready. W1 (was size M, P2, DoR 9/10; ADR owed → arch-ABC-282; builds after ABC-283, both edit the deepening loop; must land before the first 40/15 reading). Cut by bapm-W1-bundle-cut 9be6befd.
 - [ABC-271] **2026-11-04: design done (arch-ABC-271 df6a873f): ADR-0070 PROPOSED. Relation rows NOT MET (square 44/404, KD 312/2 123); Orchestrator ruling …e0ff0aeb: sealed choice rule 4 → structure only at 0 (ADR-0068 form); Architect proposed values route. Owner asked: accept ADR-0070 (structure-only recommended) or override to values.** **2026-11-04: In Design → `arch-ABC-271` (next: its terms are what zugzwang.001 needs before a second pull).** E4a: passed pawns read the kings and the path — king distance, free path, rule of the square (EPIC-011 Phase 4; size: M, priority: P3, DoR 9/10; GAIN unless the ADR names NEUTRAL; waits ABC-269 merged + ADR) **cut 2026-11-03 (bapm-epic011-cut)**
 - [EPIC-011] skytalix climbs toward 3 000 Elo, read at 40/15, on a classical measured path (owner: BA/PM, size: XL, priority: P2, since 2026-11-01; ADR-0056 accepted in direction; ADR-0055 O1; starts after EPIC-009 and EPIC-010 close; phases 0–5; milestones 2 200…3 000 (proposed); open owner calls Q-3K-2, Q-3K-4, Q-3K-6, Q-3K-7, Q-3K-8, rest of Q-3K-1) **2026-11-01: STARTED (EPIC-010 closed). Phase 0 done (ABC-255, ABC-262; ABC-256 dropped). Phase 1 first: ABC-238 (T1) then ABC-237 (T2) — design owed: the ADR revising ABC-081 A1 and the ADR-0025 amendment → `arch-epic011-phase1`. Threads (ADR-0057 PROPOSED) wait owner OQ-1.**
 - [ABC-257] T3: the TT is kept across the moves of one game, re-tried after deeper cutoffs and depth-preferred replacement (supersedes dropped ABC-209) (EPIC-011 Phase 1; size: S, priority: P3, DoR 8/10) **2026-11-02: RE-SCOPED to combined T1+T3 (size M, DoR 8/10), bar A8′ ≤ 0.93× on fresh lines; PAUSED until owner answers C2′ or allows a longer read.**
@@ -1450,7 +1452,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## Ready (WIP 0/8)
+## Ready (WIP 1/8)
+- [ABC-282] W1 time use under a clock (ADR-0071 PROPOSED; DoR 10/10, L, P2). Held: builds after ABC-283 merges or misses; A6 after ABC-300.
 - ~~[ABC-271]~~ → In Development E4a structure only at 0 (ADR-0070 ACCEPTED form (a); DoR 10/10, S, P3). QE freeze first (qe-ABC-271-freeze), then se-ABC-271. No games.
 
 
