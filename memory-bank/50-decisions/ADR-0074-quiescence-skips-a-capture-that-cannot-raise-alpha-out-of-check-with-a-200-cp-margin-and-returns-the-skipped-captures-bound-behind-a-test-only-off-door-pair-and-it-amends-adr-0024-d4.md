@@ -6,7 +6,19 @@ id: ADR-0074
 
 ## Status
 
-**PROPOSED 2026-11-04. PREMISE MET ON `main`. The owner accepts it; until then `ADR-0024` d4 stands as written.** Recorded
+**ACCEPTED 2026-11-04 by the owner's word (OQ-0074-1). PREMISE MET ON `main`. Not in force until `ABC-289` merges on its own
+read (decision 13).** Recorded by Architect/Design (task `arch-owner-answers-1104b`, records only, on
+`grugops/arch-owner-answers-1104b` from `main` `65e28f95`). Nothing was run.
+- **His word, verbatim** (`orch-2026-10-30a` `…3e73f9f9`): *"2. OQ-0074-1: yes accept."*
+- **What it settles:** form D200b as decisions 1–13 state it, with Q2 delta pruning at margin 200, returning the skipped
+  capture's bound. **No decision here changes.** F5's "accepted, not in force" now applies to a miss.
+- **`ADR-0024` d4 is amended,** by decision 9. The dated pointer in its § Status and the dated line at its d4 are written.
+  Delta pruning leaves d4's list. Quiet checks stay on it.
+- **The order** (`ADR-0056` D5's dated block of this task): bundle 1 first, then `ABC-289`, alone, with its own PREREG and C2′.
+  It is not in the bundle. Its build starts when bundle 1's merge or `failed-attempt` is recorded. The lines at § Consequences
+  state what that order does to this ADR's counts.
+
+*Before acceptance:* **PROPOSED 2026-11-04. PREMISE MET ON `main`. The owner accepts it; until then `ADR-0024` d4 stands as written.** Recorded
 by Architect/Design (task `arch-ABC-289`, records only, on `grugops/arch-ABC-289` from `main` `0cc9afd1`). The probe ran on
 a scratch copy of `main`'s `src/`, outside the repository, under the host lock, one job at a time. Nothing was committed to
 `src/`. The patch, the driver and every output are under `.grugops/context/arch-ABC-289/raw/probe/`.
@@ -29,6 +41,15 @@ a scratch copy of `main`'s `src/`, outside the repository, under the host lock, 
 - **What it amends:** `ADR-0024` d4. Delta pruning leaves its out-of-scope list, as decision 9 states. Quiet checks stay.
   No other ADR moves. Lines owed elsewhere are listed in this task's decision note, and none is edited here.
 - **Intent: GAIN.** The pay is read at the 100 ms node budget, and the rule fires there (decision 13).
+
+## Decision log
+
+| date (UTC) | by | what | record |
+|---|---|---|---|
+| 2026-11-04 | Architect/Design | PREREG sealed before any measured run | `arch-ABC-289` `…174760a3`, `9e07dae4` |
+| 2026-11-04 | Architect/Design | PROPOSED. Premise met; D200b the only form through both gates | `arch-ABC-289` `…ee8a8621` (readings), `…62012bbe` (decision) |
+| 2026-11-04 | Owner | OQ-0074-1: yes, accept | `orch-2026-10-30a` `…3e73f9f9` |
+| 2026-11-04 | Architect/Design | **ACCEPTED, not in force.** `ADR-0024` d4 amended by pointer; order after bundle 1 | `arch-owner-answers-1104b` |
 
 ### The nine items `ADR-0024` § Status, the fourth block, asks for
 
@@ -201,6 +222,7 @@ verdict does not change.
    on it. `src/quiescence.ts`'s header line "Not here … delta pruning" is corrected in the build. A dated pointer in
    `ADR-0024` § Status and a dated line at its d4 are owed **at the owner's acceptance**, as `ADR-0069` d9 wrote. Neither is
    written here.
+   *2026-11-04 (`arch-owner-answers-1104b`): both are written, on his word `…3e73f9f9`.*
 10. **The rows it adds, within the lane budget.** No new test file of any kind: a new file costs the default lane its load,
     and `src/quiescence.test.ts` already holds both lanes. A row of 50 ms or more goes behind `SEARCH_DEEP=1`.
     - **Default lane (`DP1`), each a hand board calling `quiesce` directly, no search:**
@@ -301,6 +323,18 @@ nothing about the same clause with the bound.
 - **Merge interaction, one at a time (`ADR-0056`):** `ABC-282` (in development) edits `src/engine.ts`, and bundle 1 edits
   `src/search.ts`'s doors and `negamax`. This ticket edits `src/quiescence.ts`, both `Switches` records and every door there.
   Whichever merges second re-reads its instrument counts, and the later switch is the top rung. The slot is the Orchestrator's.
+  *2026-11-04 (`arch-owner-answers-1104b`):* the order against bundle 1 is ruled (`ADR-0056` D5's dated block of this date). If
+  bundle 1 merges first, three things follow, and no bar moves:
+  - **The doors.** Decision 8's "every older door" gains `searchWithoutQuietBundle`, `chooseMoveWithoutQuietBundle` and the two
+    parts' door pairs. `deltaPruning` is the top rung.
+  - **The counts.** Decision 12's instrument counts are re-read on the new base, as that decision says. Bar (b) stays door +
+    0.15. Its "≥ 7.018" was that bar on a door of 6.868, and it re-derives with the door.
+  - **The joint tree is unread.** No probe has had P4 and this rule both on, so decision 11's drift and floor on that tree are
+    `UNKNOWN - verify`. If one trips, F1 or F2 governs.
+
+  **`ABC-282`, in either case:** this rule changes the tree's growth (d8 0.64–0.83×), so `ADR-0072` d11's line on b = 2.3 applies
+  here too. Whichever of W1 and this ticket lands second re-reads b by P1's method, reports it to the Orchestrator, and any
+  change to b is its own ticket.
 - **Migration:** none.
 
 ## Rollback

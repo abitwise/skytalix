@@ -59,6 +59,13 @@ kind: adr
 > - **If the premise is not met** (no trim over `main`), Q2 closes as dropped (`ABC-289` F2), and d4 keeps delta
 >   pruning on its list.
 
+> **Amended 2026-11-04 by `ADR-0074` (accepted by the owner, `orch-2026-10-30a` `…3e73f9f9`, verbatim "2. OQ-0074-1: yes
+> accept."; pointer added by Architect/Design, task `arch-owner-answers-1104b`).** Decision 4 loses one item: delta pruning.
+> `ADR-0074` decisions 1–5 give the rule: out of check, a capture that does not promote is skipped when stand pat + its
+> victim + 200 cp ≤ alpha, and the skip raises the node's value to that bound; in check, every evasion is searched. Quiet
+> checks stay on d4's list. In force on `main` at `ABC-289`'s merge, which waits on its own read (`ADR-0074` decision 13). No
+> other decision here moves: the MVV-LVA order (d2) and the cap of 8 (d5) are unchanged.
+
 **accepted** — by the project owner Olger Oeselg in session, 2026-09-19, verbatim: *"I accept ADR-0024"*. Transcribed by the Orchestrator (`human_admission` is `off`; a hand-authored record of a human's word, not a stamp). The re-hop that carries it (`grugops/ABC-079-quiescence` @ `fa80923`) is UNMERGED at the time of this flip: its default lane is green and every `A5` level holds, but `SEARCH_DEEP=1 npx vitest run src/search.test.ts` reads exit 1 (4 timeouts — the unpruned oracle opens a full-window quiescence at every leaf), which this ADR's own collateral ruling makes a merge condition. That is a further Architect/Design ruling, not a reversal of this one. One known deviation from the table below: the shipped `mvvLvaKey` carries a promotion term the probe lacked, so kiwipete counts read 5 878 / 10 249 / 405 945 (levels unaffected).
 
 **History — proposed** 2026-09-19 by Architect/Design (task `wave-2026-09-19`, subtask
@@ -178,6 +185,8 @@ in different places.
    *(2026-11-04: delta pruning is opened for the design of Q2 by the owner's word, `Q-3K-10` (`…7de79e90`). Design
    only. A build ships on its own evidence, and its ADR shows what § Status, the fourth block, lists. Delta pruning
    stays on this list until that ADR amends it. Quiet checks stay on it.)*
+   *(2026-11-04: amended by `ADR-0074`, accepted by the owner (`…3e73f9f9`). Delta pruning leaves this list, by `ADR-0074`
+   decisions 1–5. Quiet checks stay on it. In force at `ABC-289`'s merge (§ Status, the fifth block).)*
 
 5. **The cap of 8 stays, as a guard, with its binding recorded.** Ordered, kiwipete still puts
    ~25% of its quiescence nodes at ply 8 (depth 3) and the capped depth-1 score differs from the
