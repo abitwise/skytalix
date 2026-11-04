@@ -1,0 +1,2 @@
+{"r2":true,"name":"D12-failhigh","h":6,"kept":{"m":"f2f3","s":50,"failHigh":true},"again":[75]}
+{"tally":"r12x","rows":1288,"aborted":1216,"kept":63,"oracleBad":0,"r1Any":0,"r1Above":0,"r1Differs":0,"r2":1,"keptFromFailHigh":1,"keptAcrossPass":1,"abortedInAspiration":1032,"multiPassAborted":3}

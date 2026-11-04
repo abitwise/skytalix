@@ -1,0 +1,24 @@
+t302-R1 exit 0 wall 1s  Tests 1 passed | 45 skipped (46)
+t302-R2 exit 0 wall 0s  Tests 1 passed | 264 skipped (265)
+t302-R3 exit 0 wall 1s  Tests 1 passed | 52 skipped (53)
+t302-R4 exit 0 wall 0s  Tests 1 passed | 33 skipped (34)
+t302-R5 exit 0 wall 1s  Tests 1 passed | 104 skipped (105)
+t302-R6 exit 0 wall 0s  Tests 1 passed | 57 skipped (58)
+t302-R7 exit 0 wall 1s  Tests 1 passed | 57 skipped (58)
+t302-R8 exit 0 wall 1s  Tests 1 passed | 264 skipped (265)
+t302-R9 exit 0 wall 0s  Tests 1 passed | 1 skipped (2)
+engine exit 0 wall 261s  Tests 105 passed (105)
+ucisession exit 0 wall 324s  Tests 265 passed (265)
+nullmove exit 0 wall 39s  Tests 46 passed (46)
+pvslmr exit 0 wall 67s  Tests 29 passed (29)
+bundle exit 0 wall 25s  Tests 21 passed (21)
+puzzle exit 0 wall 3s  Tests 18 passed (18)
+uci exit 0 wall 6s  Tests 13 passed (13)
+cli exit 0 wall 23s  Tests 11 passed (11)
+npmtest exit 0 wall 434s
+typecheck exit 0 wall 2s
+lint exit 0 wall 0s
+build exit 0 wall 1s
+skip-count 0
+integrity exit 0 No findings. 
+DONE 2026-11-04T22:51:51Z  22:51:51 up 5 days, 15:09,  1 user,  load average: 3.41, 2.73, 2.49

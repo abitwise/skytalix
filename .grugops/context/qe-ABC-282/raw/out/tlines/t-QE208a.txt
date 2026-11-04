@@ -1,0 +1,9 @@
+
+ RUN  v4.1.12 /home/olger/projects/public/skytalix/.claude/worktrees/qe-ABC-282
+
+
+ Test Files  1 passed (1)
+      Tests  1 passed | 45 skipped (46)
+   Start at  23:01:30
+   Duration  557ms (transform 0ms, setup 0ms, import 76ms, tests 380ms, environment 0ms)
+
