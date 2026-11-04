@@ -1,0 +1,20 @@
+{
+ "refs": [
+  "qe-ABC-300", "grugops/ABC-300", "ABC-300", "ABC-282", "ABC-276", "EPIC-011", "ADR-0071", "ADR-0056", "NFR-008",
+  "QE-300-a", "QE-300-b", "QE-300-c", "QE-300-d",
+  "9835859d", "50f30cba", "19581ca1", "6af55341",
+  "tools/rating/rating.ts", "tools/rating/pair-check.ts",
+  "se-ABC-300/20261104T142409Z-software-engineer-decision-a0bef530",
+  "se-ABC-300/20261104T142409Z-software-engineer-observation-b0b970ed",
+  "se-ABC-300/20261104T142409Z-software-engineer-observation-33a60189"
+ ],
+ "notes": [
+  {"kind": "decision", "bodyFile": "note-verdict.md",
+   "confidence": "high: A1-A5 and A7 MET on QE's own runs (83-case dry-run matrix cut vs branch, 14-refusal process probe, cut rows vs branch 39/40, one fake-tool real run, 7 mutants, gates); A6 UNKNOWN - verify by design; merge stays human or Orchestrator-on-green"},
+  {"kind": "observation", "bodyFile": "note-gaps.md",
+   "refs": ["qe-ABC-300", "grugops/ABC-300", "ABC-300", "ABC-282", "ADR-0071", "QE-300-a", "QE-300-b", "QE-300-c", "QE-300-d", "9835859d", "19581ca1", "tools/rating/rating.ts", "tools/rating/pair-check.ts", "se-ABC-300/20261104T142409Z-software-engineer-decision-a0bef530"],
+   "confidence": "high on the facts (run and probed); severities are QE's judgement: LOW for two correct-today behaviours with no row, INFO for an inherited flag rule and a unit misreading in a note"},
+  {"kind": "observation", "bodyFile": "note-runs.md",
+   "confidence": "high: commands as run under the host lock, offline only (no game), 2026-11-04 ~14:28-14:44Z"}
+ ]
+}

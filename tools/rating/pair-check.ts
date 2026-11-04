@@ -3,7 +3,7 @@
  * `Skill Level` 6 token on both builds, none on `r` or `d`); `ABC-255` adds `d` at 100 ms and `r` at
  * 500 ms, with today's prints unchanged; `ABC-275` adds `r` at 100 ms (R1), Stockfish at st=0.1, and
  * `--elo` above 2 600 refused there. `ABC-276` adds `r` / `d`'s sealing step (A4) and the usage
- * text (A5). Not a lane file (`NFR-008`): its
+ * text (A5). `ABC-300` adds `d --tc 40/8` (A1, A2, A5). Not a lane file (`NFR-008`): its
  * name is not `*.test.*`, so `npm test` never collects it, and nothing in the lane imports it.
  *
  *   node --test tools/rating/pair-check.ts
@@ -907,10 +907,12 @@ describe("ABC-276: r and d seal their records as rpair does; usage names r's 100
     const sha = git("rev-parse", "--short=12", "HEAD");
     const usage = [
       "usage: node tools/rating/rating.ts r <sha> <out-dir> [--elo E] [--budget-ms 500|100] [--rounds N] [--concurrency C]",
-      "       node tools/rating/rating.ts d <candidate-sha> <base-sha> <out-dir> [--budget-ms B] [--rounds N] [--concurrency C]",
+      "       node tools/rating/rating.ts d <candidate-sha> <base-sha> <out-dir> [--budget-ms B | --tc 40/8] [--rounds N] [--concurrency C]",
       "       node tools/rating/rating.ts rpair <base-sha> <candidate-sha> <out-dir> [--elo E] [--rounds N] [--concurrency C]",
       "       --concurrency: 1–8; default R 2, D 3, rpair 2",
       "       --budget-ms: R 500 or 100 (default 4000); D 3000 (default), 2500, 2000, 1500, 1000 or 100",
+      // ABC-300 A4: the one existing row updated, to name d's --tc.
+      "       --tc: D only, 40/8: both sides tc=40/8 timemargin=0 TimeMode uci-clock-mode; not with --budget-ms",
       "       rpair: --elo default 1910; --rounds 10–100 in tens, default 100 (10 = one block per build, 40 games)",
       "       --dry-run (any mode): print the cutechess-cli arguments and stop",
       "",
@@ -923,6 +925,105 @@ describe("ABC-276: r and d seal their records as rpair does; usage names r's 100
       assert.equal(run.status, 1, args.join(" "));
       assert.equal(run.stderr, usage, args.join(" "));
       assert.equal(run.stdout, "");
+    }
+  });
+});
+
+describe("ABC-300: d --tc 40/8 plays a clock on both sides; other values and --budget-ms with it refused", () => {
+  const sha = git("rev-parse", "--short=12", "HEAD");
+  const files = join(SCRATCH, "abc300");
+  const dry = (...args: string[]) => harness(...args, "--dry-run");
+  const argvOf = (...args: string[]): string[] => {
+    const run = dry(...args);
+    assert.equal(run.status, 0, run.stderr);
+    assert.equal(existsSync(files), false);
+    const blocks = argvBlocks(run.stdout);
+    assert.equal(blocks.length, 1);
+    return blocks[0]?.argv ?? [];
+  };
+  const tail = ["--rounds", "50", "--concurrency", "1"];
+
+  test("A1: the whole vector is d --budget-ms 100's with the three token changes per engine block", () => {
+    const short = argvOf("d", sha, sha, files, "--budget-ms", "100", ...tail);
+    const clock = argvOf("d", sha, sha, files, "--tc", "40/8", ...tail);
+    // Built from the 100 ms vector: st=0.1 -> tc=40/8 and timemargin=50 -> timemargin=0 in place,
+    // and option.TimeMode=uci-clock-mode after restart=on, in each of the two engine blocks.
+    const expected = short.flatMap((arg) =>
+      arg === "st=0.1"
+        ? ["tc=40/8"]
+        : arg === "timemargin=50"
+          ? ["timemargin=0"]
+          : arg === "restart=on"
+            ? [arg, "option.TimeMode=uci-clock-mode"]
+            : [arg],
+    );
+    assert.equal(short.filter((a) => a === "st=0.1").length, 2);
+    assert.equal(short.filter((a) => a === "timemargin=50").length, 2);
+    assert.equal(short.filter((a) => a === "restart=on").length, 2);
+    assert.deepEqual(clock, expected);
+    const [skytalix, base] = engineGroups(clock);
+    assert.ok(skytalix?.includes("name=skytalix") && base?.includes("name=base"));
+  });
+
+  test("A2: any --tc but 40/8 is refused, naming --tc, the value and 40/8", () => {
+    for (const value of ["40/15", "40/8+0.1", "10+0.1", "x"]) {
+      const run = dry("d", sha, sha, files, "--tc", value);
+      assert.equal(run.status, 1, value);
+      assert.equal(argvBlocks(run.stdout).length, 0, value);
+      assert.ok(run.stderr.includes(`--tc ${value}: d takes only 40/8`), run.stderr);
+      assert.equal(existsSync(files), false);
+    }
+  });
+
+  test("A2: --tc 40/8 with --budget-ms is refused, naming both flags", () => {
+    for (const budget of ["100", "3000"]) {
+      for (const order of [
+        ["--tc", "40/8", "--budget-ms", budget],
+        ["--budget-ms", budget, "--tc", "40/8"],
+      ]) {
+        const run = dry("d", sha, sha, files, ...order);
+        assert.equal(run.status, 1, order.join(" "));
+        assert.equal(argvBlocks(run.stdout).length, 0, order.join(" "));
+        assert.match(run.stderr, /--tc and --budget-ms: d takes one or the other, not both/);
+        assert.equal(existsSync(files), false);
+      }
+    }
+  });
+
+  test("A2: r and rpair refuse --tc with the usage text, as any unknown flag", () => {
+    for (const args of [
+      ["r", sha, files, "--tc", "40/8"],
+      ["rpair", sha, sha, files, "--tc", "40/8"],
+    ]) {
+      const run = dry(...args);
+      assert.equal(run.status, 1, args.join(" "));
+      assert.equal(run.stdout, "", args.join(" "));
+      assert.match(run.stderr, /^usage: /, args.join(" "));
+      assert.equal(existsSync(files), false);
+    }
+  });
+
+  test("A5: the clock reaches each skytalix side only as tc=, timemargin= and the shipped TimeMode", () => {
+    const keys = (group: readonly string[]): string[] =>
+      group.map((a) => a.split("=")[0] as string);
+    const groups = engineGroups(argvOf("d", sha, sha, files, "--tc", "40/8"));
+    assert.equal(groups.length, 2);
+    for (const group of groups) {
+      assert.deepEqual(keys(group), [
+        "name",
+        "cmd",
+        "arg",
+        "dir",
+        "tc",
+        "timemargin",
+        "restart",
+        "option.TimeMode",
+        "stderr",
+      ]);
+      assert.equal(
+        group.filter((a) => a.startsWith("option.")).join(),
+        "option.TimeMode=uci-clock-mode",
+      );
     }
   });
 });
