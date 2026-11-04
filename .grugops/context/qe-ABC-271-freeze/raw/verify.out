@@ -1,0 +1,33 @@
+U1 A-B white kd 4 free 0 un 400 | black kd 0 free 0 un 0
+U2 A-B white kd 0 free 0 un 400 | black kd 0 free 0 un 0
+U3 A-B white kd 0 free 0 un 0 | black kd 7 free 0 un 400
+U4 A-B white kd 0 free 0 un 0 | black kd 12 free 0 un 400
+U5 A-B white kd 20 free 0 un 400 | black kd 0 free 0 un 0
+KD1 A-B white kd 7 free 0 un 0 | black kd 0 free 0 un 0
+KD2 A-B white kd -2 free 0 un 0 | black kd 0 free 0 un 0
+KD3 A-B white kd 0 free 0 un 0 | black kd 0 free 0 un 0
+KD4 A-B white kd -2 free 0 un 0 | black kd 0 free 0 un 0
+KD5 A-B white kd 0 free 0 un 0 | black kd 0 free 0 un 0
+KD6 A-B white kd 0 free 0 un 0 | black kd -6 free 0 un 0
+KD7 A-B white kd 0 free 0 un 0 | black kd 7 free 0 un 0
+KD8 A-B white kd 7 free 0 un 0 | black kd 0 free 0 un 0
+KD9 A-B white kd -7 free 0 un 0 | black kd -3 free 0 un 0
+FP1 A-B white kd 0 free -35 un 0 | black kd 0 free 0 un 0
+FP2 A-B white kd 0 free -20 un 0 | black kd 0 free 0 un 0
+FP3 A-B white kd 0 free 0 un 0 | black kd 0 free -60 un 0
+FP4 A-B white kd 0 free -5 un 0 | black kd 0 free 0 un 0
+FP5 A-B white kd 0 free -35 un 0 | black kd 0 free 0 un 0
+A01 phase 0 passers(main) 2 rule@probed W {"kd":-9,"free":70,"un":0} B {"kd":0,"free":0,"un":0}
+A02 phase 0 passers(main) 2 rule@probed W {"kd":10,"free":20,"un":400} B {"kd":0,"free":20,"un":0}
+A03 phase 0 passers(main) 1 rule@probed W {"kd":10,"free":20,"un":400} B {"kd":0,"free":0,"un":0}
+A04 phase 0 passers(main) 2 rule@probed W {"kd":20,"free":35,"un":400} B {"kd":0,"free":0,"un":0}
+A05 phase 1 passers(main) 1 rule@probed W {"kd":30,"free":100,"un":0} B {"kd":0,"free":0,"un":0}
+A06 phase 4 passers(main) 2 rule@probed W {"kd":13,"free":35,"un":0} B {"kd":-8,"free":35,"un":0}
+A07 phase 5 passers(main) 2 rule@probed W {"kd":6,"free":0,"un":0} B {"kd":30,"free":60,"un":0}
+A08 phase 24 passers(main) 2 rule@probed W {"kd":10,"free":35,"un":0} B {"kd":0,"free":0,"un":0}
+A09 phase 2 passers(main) 1 rule@probed W {"kd":0,"free":0,"un":0} B {"kd":30,"free":0,"un":0}
+A10 phase 0 passers(main) 2 rule@probed W {"kd":0,"free":0,"un":0} B {"kd":5,"free":5,"un":400}
+A11 phase 2 passers(main) 2 rule@probed W {"kd":2,"free":0,"un":0} B {"kd":16,"free":35,"un":0}
+A12 phase 0 passers(main) 2 rule@probed W {"kd":5,"free":5,"un":400} B {"kd":29,"free":35,"un":400}
+K0 (ADR-0070 d5, copied): 766275 / 1725150 / 87475 / 253724 / 533916 / 605117 / 406787
+k1c fixtures 44, pairs 19 (U 5, KD 9, FP 4+FP5), k1a 12, failures 0
