@@ -243,38 +243,9 @@ describe("ABC-269 B1 (e) — the passers: >= 1.5 x at phase <= 6, exact at 24, <
   });
 });
 
-describe("ABC-269 — ABC-215 A2's rule rows for the two endgame halves that differ", () => {
-  // Table index i is rank-8-first: i = 0 is a8, i = 63 is h1.
-  const fileOf = (i: number): number => i % 8;
-  const rankOf = (i: number): number => 7 - Math.floor(i / 8); // 0 = rank 1
-
-  it("KING_TABLE_EG is 40 - 15 m, m the Manhattan distance to the nearest of d4, e4, d5, e5", () => {
-    const centre = [
-      [3, 3],
-      [4, 3],
-      [3, 4],
-      [4, 4],
-    ] as const;
-    const rebuilt = Array.from({ length: 64 }, (_, i) => {
-      const m = Math.min(
-        ...centre.map(([f, r]) => Math.abs(fileOf(i) - f) + Math.abs(rankOf(i) - r)),
-      );
-      return 40 - 15 * m;
-    });
-    expect(Array.from(VALUE_TABLES_FOR_TEST.KING_TABLE_EG)).toEqual(rebuilt);
-    expect(Math.max(...rebuilt)).toBe(40);
-    expect(Math.min(...rebuilt)).toBe(-50);
-  });
-
-  it("PASSED_PAWN_BONUS_EG is 2 x the middlegame bonus by rank; the middlegame half is the pre-ticket table", () => {
-    expect(Array.from(VALUE_TABLES_FOR_TEST.PASSED_PAWN_BONUS)).toEqual([
-      0, 5, 10, 20, 35, 60, 100, 0,
-    ]);
-    expect(Array.from(VALUE_TABLES_FOR_TEST.PASSED_PAWN_BONUS_EG)).toEqual(
-      VALUE_TABLES_FOR_TEST.PASSED_PAWN_BONUS.map((value) => 2 * value),
-    );
-  });
-});
+// "ABC-269 — ABC-215 A2's rule rows for the two endgame halves that differ" (KING_TABLE_EG = 40 − 15 m,
+// PASSED_PAWN_BONUS_EG = 2 × mg) RETIRED at `ABC-239` (2026-11-04, `ADR-0067` d6): the halves are fitted now, and
+// the provenance row in `src/evaluate.test.ts` replaces them.
 
 describe("ABC-269 — src/evaluate-params.ts is the one parameter table, data only (ADR-0064 decision 4)", () => {
   it("no imports and no logic: no function, no loop, no call", () => {
