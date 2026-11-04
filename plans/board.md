@@ -1,3 +1,4 @@
+_Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — **ABC-300 built** (se-ABC-300 50f30cba; A1–A5, A7 met; A6 at ABC-282's A6; lane 9.27 s) → In Review → `qe-ABC-300`. Running: se-ABC-271, arch-ABC-283-mate, qe-ABC-300._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `bapm-ABC-282-adr` merged a90a04c8: **ABC-282 Ready** (L; held until ABC-283 merges or misses), **ABC-300 Ready → In Development** (`se-ABC-300`, tools only). BA/PM J1–J5 accepted. Owner: OQ-0071-1, Q-3K-10. Running: se-ABC-271, arch-ABC-283-mate, se-ABC-300._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `arch-ABC-282` merged 9471eb32: **ADR-0071 PROPOSED** (W1 in uci-clock-mode only; soft limit = budget ÷ 2.3; partial move kept if it beats the incumbent). Harness can't play under a clock → tools ticket ABC-300 to cut. **Owner asked: OQ-0071-1 (accept ADR-0071), Q-3K-10.** → `bapm-ABC-282-adr`. Running: se-ABC-271, arch-ABC-283-mate, bapm-ABC-282-adr._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — **ABC-283 BLOCKED** (se-ABC-283 4e7ddcca): all bars met except the ADR-0064 d7 mate floor (KRK, 1/190 search d5, 2/188 chooseMove d5; history alone). Ruling …19583086: no bar loosened → `arch-ABC-283-mate` (diagnose; structural fix or F2). No games yet. Running: arch-ABC-282, se-ABC-271, arch-ABC-283-mate._
@@ -1322,13 +1323,13 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 2/3)
-- [ABC-300] The harness plays a clock: `d --tc 40/8` (tools only, S, P2). se-ABC-300 running.
+    ## In Development (WIP 1/3)
 - [ABC-271] E4a structure only at 0 (ADR-0070 form (a)); se-ABC-271 running on QE's frozen rows (qe-ABC-271-freeze 23169a3e).
 - ~~[ABC-283]~~ → Blocked. The O1h+O3s+S1 bundle (ABC-233 history, ABC-234 SEE ordering, ABC-236 root aspiration) on one branch; one read of 100 games at 100 ms, GAIN ≥ 50.0 (owner's word, …4c4cb03d). se-ABC-283 running; rulings …3851bf43.
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
     ## In Review (WIP 1/3)
+- [ABC-300] The harness plays a clock (tools only). Built 50f30cba → qe-ABC-300.
     - [ABC-012] Portfolio FX conversion  (PR: #41, QE: running)
 
   BOARD <-> TICKET CONTRACT: each ticket file (`plans/tickets/<prefix>-xxx.md`) carries a
