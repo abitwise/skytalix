@@ -5,6 +5,41 @@ id: ADR-0063
 # ADR-0063: A history table orders the quiet moves after the killers. It is side × from × to, raised by d² on a quiet cutoff with a d² malus, bounded by gravity, cleared per search, in both recursions behind a test-only off-door pair. Its pay premise is not met on `main`
 
 ## Status
+**ACCEPTED 2026-11-04 by the owner's word, as a bundle with `ADR-0065` and `ADR-0066`, with K3. In force when
+`ABC-283` merges.** Recorded by Architect/Design (task `arch-ABC-283-accept`, records only, on
+`grugops/arch-ABC-283-accept` from `main` `715beb1c`). Nothing was run.
+- **His word** (`orch-2026-10-30a` `…4c4cb03d` ruling 2): the three parked designs are re-opened as one bundle,
+  *"merge ABC-233, ABC-234 and ABC-236 into one branch and do one test run"*. On a pass, the three are accepted as a
+  bundle.
+- **The not-met premise was overridden by the owner, not met.** F4 fired on 2026-11-02 (H1 d8 1.0011 / 0.9751 /
+  0.9832 against ≤ 0.95×) and stays fired as measured. The owner's word set it aside, requirement-level. No bar was
+  re-read or moved to make it pass.
+- **The read was the bundle's, not this ADR's.** `qe-ABC-283` verdict `…de1dc511` is PASS_WITH_GAPS, with no
+  blocking gap. C2′ read 59 / 27 / 14 = **66.0 / 100 ≥ 50.0** (Elo +115.2 ± 67.0), played once, with history, SEE
+  ordering and aspiration all on. No reading isolates history's share. S′ read 6.0 / 10 (information), so there is no
+  collapse. Under its NEUTRAL line (43.0), F5 does not fire.
+- **K3 is in force with this ADR** (ruling `…6c6fb0be`; design `arch-ABC-283-mate` `…05ef9fc9`). Decision 4's quiet
+  key is **max(0, h)**: history may promote a quiet move, never demote one. The table, the update, the lifetime and
+  the tiers above are unchanged. K3 is a structural fix, not a tune. The dated lines that state it in full arrive
+  with `ABC-283`'s merge (the 2026-11-04 `arch-ABC-283-mate` line below in this section, and the dated line under
+  decision 4).
+- **As built**, where the letter of the decisions differs (`se-ABC-283` `…d64042c4` decisions 1–5, confirmed by QE):
+  - the killers key at 500 000 + rank;
+  - with SEE ordering on, the losing captures sit between the killers and the history-ordered quiet moves (`ADR-0065`
+    d3);
+  - `src/search.ts` exports +7 (three doors and four history pieces, `clearHistory` and `recordHistoryCutoff` among
+    them), not +3;
+  - the all-off doors are `searchWithoutBundle` and `chooseMoveWithoutBundle`.
+- **R-283-LMR, carried, not graded** (ruling `…6c6fb0be`; QE gap QE-283-b, LOW). The d5 mate floor holds on the 287
+  and on QE's fresh probe, but not by construction: it depends on quiet-move order through LMR.
+  - At d6 `chooseMove` loses 2 / 209 on the 287, and loses the same two rows on base `main`.
+  - On QE's fresh seeded KRK / KQK probe it loses 1 / 30 at d6 (a KQK row).
+  - **If a later change turns the d5 floor red again, the lever is LMR (`ADR-0060`), not history.** The pointer is in
+    `ADR-0060` § Status, dated 2026-11-04.
+- **Pre-merge condition** (ruling `…2409cec9` 1, QE-283-i): `se-ABC-283-merge` re-reads the counts on the tree merged
+  with `ABC-271` before the merge. The acceptance takes effect at the merge, not before.
+- **The file name and title** keep the PROPOSED wording ("its pay premise is not met on `main`"), because sealed notes
+  cite the path. The premise is still not met as measured; it was overridden.
 
 *2026-11-02, dated line by Architect/Design (task `arch-next-pull`, records only, at `main` `a6039c5b`).*
 **Re-open premise 1 is measured and not met.** That premise was a P1 design taking history as its input, measured
@@ -39,6 +74,17 @@ copy is deleted. Nothing was committed to `src/`. The patch, the driver and ever
   3. or an instrument that reads depth-gated pay (the 40/15 lane). The depth-10 diagnostic below does not support
      this one.
 - **What it amends:** no ADR. It follows `ADR-0026` decision 10's pattern for the day it is built.
+
+## Decision log
+
+| date (UTC) | by | what | record |
+|---|---|---|---|
+| 2026-11-02 | Architect/Design | PROPOSED; F4 fired (the pay gate missed on three of four readings); the build does not start | `arch-ABC-233` `…4d5a0fe3`, `ec2ed472` |
+| 2026-11-02 | Architect/Design | Re-open premise 1 (a joint P1 probe) measured and not met | `arch-next-pull` `…4de572aa`, `b6deb4e4` |
+| 2026-11-04 | Owner | Re-opened as one bundle with `ADR-0065` and `ADR-0066` over the three not-met premises; accepted as a bundle on a pass | `orch-2026-10-30a` `…4c4cb03d` ruling 2 |
+| 2026-11-04 | Orchestrator | K3 ACCEPTED as the structural fix for F2: the quiet key is max(0, h). R-283-LMR carried | `…6c6fb0be`; `arch-ABC-283-mate` `…05ef9fc9` |
+| 2026-11-04 | QE/E2E | The bundle's read: PASS_WITH_GAPS, C2′ 66.0 / 100 ≥ 50.0; the verdict signs UAT | `qe-ABC-283` `…de1dc511`, gaps `…f8f8c2cc` |
+| 2026-11-04 | Architect/Design | **ACCEPTED as a bundle, with K3, in force when `ABC-283` merges.** The premise was overridden by the owner, not met. R-283-LMR carried to `ADR-0060` | `arch-ABC-283-accept`, on the Orchestrator's ruling `…2409cec9` 2 |
 
 ## Context
 
@@ -150,6 +196,9 @@ readings for H1.
 ## Decision
 
 The design of record is the one a re-open builds. It is not cleared to build on today's `main` (§ Status).
+*Dated 2026-11-04 (`arch-ABC-283-accept`):* the sentence above is superseded. The owner re-opened it in `ABC-283`,
+it was built there, and it is ACCEPTED with K3 (decision 4: the quiet key is max(0, h)), in force when `ABC-283`
+merges (§ Status).
 
 1. **The table.** One module-scope `Int32Array(2 × 64 × 64)` in `src/search.ts`, indexed by the moving piece's colour
    × from × to on 0–63 squares (`(sq & 7) | ((sq >> 4) << 3)` from 0x88). That is **32 768 bytes**. Both recursions

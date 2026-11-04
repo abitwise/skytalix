@@ -6,7 +6,29 @@ id: ADR-0066
 
 ## Status
 
-**PROPOSED, premise not met; ticket parked by the Orchestrator 2026-11-03** (the brief of
+**ACCEPTED 2026-11-04 by the owner's word, as a bundle with `ADR-0063` (with K3) and `ADR-0065`. In force when
+`ABC-283` merges.** Recorded by Architect/Design (task `arch-ABC-283-accept`, records only, on
+`grugops/arch-ABC-283-accept` from `main` `715beb1c`). Nothing was run.
+- **His word** (`orch-2026-10-30a` `…4c4cb03d` ruling 2): the three parked designs are re-opened as one bundle,
+  *"merge ABC-233, ABC-234 and ABC-236 into one branch and do one test run"*. On a pass, the three are accepted as a
+  bundle.
+- **The not-met premise was overridden by the owner, not met.** F4 fired on 2026-11-03 (A100 d8 0.9836 / 0.9913
+  against ≤ 0.95×) and stays fired as measured. Neither re-open condition below (T1 landing, a deeper shipped search)
+  was the route. The owner's word set the premise aside, requirement-level.
+- **The read was the bundle's, not this ADR's.** `qe-ABC-283` verdict `…de1dc511` is PASS_WITH_GAPS, with no
+  blocking gap. C2′ read 59 / 27 / 14 = **66.0 / 100 ≥ 50.0** (Elo +115.2 ± 67.0), played once, with all three parts
+  on. That is this ADR's own GAIN line (decision 12), but no reading isolates aspiration's share. S′ read 6.0 / 10
+  (information), so there is no collapse, and F5 does not fire.
+- **As built** (`se-ABC-283` `…d64042c4`, confirmed by QE): A100 exactly as decisions 1–7 state, in `src/engine.ts`
+  only, with one door, `chooseMoveWithoutAspiration`. The all-off door `chooseMoveWithoutBundle` also turns it off.
+- **One re-pin, a pin and not a bar** (ruling `…c7609f51` 1): under K3, decision 9's KRK mate row now finds its mate
+  at iteration 6, not 5. Decision 9's "iteration 5 or later" holds. QE-283-c is the coverage line under decision 9.
+- **Pre-merge condition** (ruling `…2409cec9` 1, QE-283-i): `se-ABC-283-merge` re-reads the counts on the tree merged
+  with `ABC-271` before the merge. The acceptance takes effect at the merge, not before.
+- **The file name and title** keep the PROPOSED wording, because sealed notes cite the path. The premise is still not
+  met as measured; it was overridden.
+
+*Before acceptance:* **PROPOSED, premise not met; ticket parked by the Orchestrator 2026-11-03** (the brief of
 `arch-adr0056-fold-1103` and merge `781c11a2`; `ABC-236` stays in Backlog). *Dated line by Architect/Design, task
 `arch-adr0056-fold-1103`, records only.*
 
@@ -47,6 +69,17 @@ output are under `.grugops/context/arch-ABC-236/raw/probe/`.
 - **What it amends:** no ADR. It follows `ADR-0026` decision 10's pattern for the day it is built. The lines owed to
   `ADR-0056` (row S1, C2′'s depth-gated list and the "C yes" examples), `EPIC-011` and the `ABC-236` page are listed in
   the decisions note of `arch-ABC-236`, not edited here.
+
+## Decision log
+
+| date (UTC) | by | what | record |
+|---|---|---|---|
+| 2026-11-03 | Architect/Design | PROPOSED; F4 fired (A100 0.9836 / 0.9913); it fires at 100 ms, so a re-open is GAIN; the build does not start | `arch-ABC-236` `…69cfcb4a`, `d5d360e1` |
+| 2026-11-03 | Orchestrator | Parked; `ABC-236` stays in Backlog | the brief of `arch-adr0056-fold-1103`, merge `781c11a2` |
+| 2026-11-04 | Owner | Re-opened as one bundle with `ADR-0063` and `ADR-0065` over the three not-met premises; accepted as a bundle on a pass | `orch-2026-10-30a` `…4c4cb03d` ruling 2 |
+| 2026-11-04 | Orchestrator | Re-pin 2 accepted as a pin: decision 9's KRK mate row moves from iteration 5 to 6; the bar holds | `…c7609f51` 1 |
+| 2026-11-04 | QE/E2E | The bundle's read: PASS_WITH_GAPS, C2′ 66.0 / 100 ≥ 50.0; the verdict signs UAT | `qe-ABC-283` `…de1dc511`, gaps `…f8f8c2cc` |
+| 2026-11-04 | Architect/Design | **ACCEPTED as a bundle, in force when `ABC-283` merges.** The premise was overridden by the owner, not met. QE-283-c written under decision 9 | `arch-ABC-283-accept`, on the Orchestrator's ruling `…2409cec9` 2 |
 
 ## Context
 
@@ -143,6 +176,8 @@ The design of record is the one a re-open builds. It is not cleared to build on 
 design of record by the pre-registered choice rule applied as a ranking. Its reach is within 0.02 ply of the best form
 (+0.005 against +0.016), and the larger of its two d8 ratios is the lowest (0.9913, against A50's 0.9950). A re-open
 re-measures it under its own PREREG.
+*Dated 2026-11-04 (`arch-ABC-283-accept`):* the paragraph above is superseded. The owner re-opened A100 in
+`ABC-283`, it was built there as written, and it is ACCEPTED, in force when `ABC-283` merges (§ Status).
 
 1. **The window.** From iteration 5, the root window is (prev − 100, prev + 100), where prev is the previous completed
    iteration's score. Iterations 1–4 keep the full window (the ticket's scope 2).
@@ -182,6 +217,12 @@ re-measures it under its own PREREG.
      to depth 6. So the ticket's six-position fixture cannot be drawn from the committed corpora. A build takes them
      from self-play positions (`tools/rating`), or relaxes the jump to more than 100 cp (7 rows at d6 over the 190). That is
      BA/PM's to choose. The bar stays exact equality, as measured on the one row.
+   - *Dated 2026-11-04 (`arch-ABC-283-accept`; QE-283-c, LOW, `qe-ABC-283` `…f8f8c2cc`):* under K3 the committed KRK
+     mate row finds its mate at iteration 6, not 5 (re-pin 2, `…c7609f51` 1). **The mate row's bar, "iteration 5 or
+     later", holds**: the FEN, the move, MATE − 5 and the door equality are unchanged. What narrows is coverage: **no
+     committed row now finds a mate at exactly iteration 5**, so the iteration-5 fail-high path is exercised for a
+     mate by no row. The non-mate row still fails high at 5. A row that finds a mate at exactly iteration 5 is
+     optional, for the Software Engineer on a later touch of this surface. It is not owed before the merge.
 10. **The bounded oracle, derived by the PREREG's rules for A100.**
     - Drift at maxDepth 5 and 6 on the 190 in `chooseMove`, against the door: ≥ 95 % within 25 cp, **none beyond
       25 cp** (max(25, ⌊1.5 × 0⌋); A100 read 0 cp at both depths), and 0 mate sign changes.
