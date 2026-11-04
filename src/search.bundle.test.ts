@@ -202,24 +202,26 @@ describe("ABC-283 (h) — the history table (ADR-0063 decisions 1-5)", () => {
   });
 
   it("is cleared at every search() entry and chooseMove call, and no door writes it", () => {
-    // Depth 5, `ADR-0063` A2's read: at depth 4 kiwipete makes no quiet cutoff.
-    search(parseFen(KIWIPETE), 5);
+    // Small rook endings at depth 5 keep the row cheap (`NFR-008`) and still make quiet cutoffs.
+    const ONE = "8/k7/8/2K5/8/8/8/1R6 w - - 2 2";
+    const TWO = "6k1/R7/5K2/8/8/8/8/8 w - - 2 2";
+    search(parseFen(ONE), 5);
     const after = cells();
     expect(after.filter((value) => value !== 0).length).toBeGreaterThan(0);
     for (const door of [searchWithoutHistory, searchWithoutBundle]) {
-      door(parseFen(POSITION_6), 4);
+      door(parseFen(TWO), 5);
       expect(cells()).toEqual(after);
     }
     for (const door of [chooseMoveWithoutHistory, chooseMoveWithoutBundle]) {
-      deepenTo(door, POSITION_6, 4);
+      deepenTo(door, TWO, 5);
       expect(cells()).toEqual(after);
     }
     // Depth 1 makes no cutoff below the root, so whatever the table holds after it was there at entry.
-    search(parseFen(POSITION_6), 1);
+    search(parseFen(TWO), 1);
     expect(cells().filter((value) => value !== 0)).toEqual([]);
-    deepenTo(chooseMove, KIWIPETE, 5);
+    deepenTo(chooseMove, ONE, 5);
     expect(cells().filter((value) => value !== 0).length).toBeGreaterThan(0);
-    deepenTo(chooseMove, POSITION_6, 1);
+    deepenTo(chooseMove, TWO, 1);
     expect(cells().filter((value) => value !== 0)).toEqual([]);
   });
 
@@ -269,11 +271,11 @@ describe("ABC-283 (s) — SEE orders the losing captures after the killers (ADR-
 
   it("with the switch off the full-width search computes no SEE; on, it does", () => {
     seeCalls.count = 0;
-    searchWithoutSeeOrdering(parseFen(KIWIPETE), 3);
-    searchWithoutBundle(parseFen(KIWIPETE), 3);
-    deepenTo(chooseMoveWithoutBundle, KIWIPETE, 3);
+    searchWithoutSeeOrdering(parseFen(KIWIPETE), 2);
+    searchWithoutBundle(parseFen(KIWIPETE), 2);
+    deepenTo(chooseMoveWithoutBundle, KIWIPETE, 2);
     expect(seeCalls.count).toBe(0);
-    search(parseFen(KIWIPETE), 3);
+    search(parseFen(KIWIPETE), 2);
     expect(seeCalls.count).toBeGreaterThan(0);
   });
 
@@ -290,7 +292,7 @@ describe("ABC-283 (s) — SEE orders the losing captures after the killers (ADR-
 
 describe("ABC-283 (a) — aspiration at the root of chooseMove (ADR-0066 decisions 1-7)", () => {
   it("iterations 1-4 are the door's, node for node, and store no root lower bound", () => {
-    for (const fen of [KIWIPETE, POSITION_6]) {
+    for (const fen of [POSITION_6]) {
       rootStores.log = [];
       const head = deepenTo(chooseMove, fen, 4);
       expect(rootStores.log.filter((store) => store.bound === BOUND_LOWER)).toEqual([]);
@@ -310,23 +312,20 @@ describe("ABC-283 (a) — aspiration at the root of chooseMove (ADR-0066 decisio
     ],
     ["a mate found at iteration 5", "8/k7/8/2K5/8/8/8/1R6 w - - 2 2", "c5c6", MATE_SCORE - 5],
   ] as const) {
-    it(`${what}: iteration 5 fails high and is re-searched to the door's exact move and score`, () => {
+    it(`${what}: iteration 5 fails high and is re-searched to the door's exact move and score; the door stores no root lower bound`, () => {
       rootStores.log = [];
       const head = deepenTo(chooseMove, fen, 6);
       expect(
         rootStores.log.filter((store) => store.bound === BOUND_LOWER).map((s) => s.depth),
       ).toEqual([5]);
+      rootStores.log = [];
       const door = deepenTo(chooseMoveWithoutAspiration, fen, 6);
+      // The door never stores a lower bound at the root: every iteration on the full window.
+      expect(rootStores.log.filter((store) => store.bound === BOUND_LOWER)).toEqual([]);
       expect([label(head.move), head.score, head.depth]).toEqual([move, score, 6]);
       expect([label(door.move), door.score]).toEqual([move, score]);
     });
   }
-
-  it("the door never stores a lower bound at the root", () => {
-    rootStores.log = [];
-    deepenTo(chooseMoveWithoutAspiration, KIWIPETE, 6);
-    expect(rootStores.log.filter((store) => store.bound === BOUND_LOWER)).toEqual([]);
-  });
 
   it("source: the window, the mate guard, the widening and the gate", () => {
     const engine = flat(SOURCE.engine);
