@@ -1,0 +1,11 @@
+head=109ecc25 src=fe6a0975 dirty=0 start 2026-11-04T00:23:44Z
+see-default exit 0 0s  Tests 43 passed (43)
+see-deep exit 0 54s  Tests 52 passed (52)
+quiescence-deep exit 0 50s  Tests 116 passed (116)
+puzzle exit 0 3s  Tests 18 passed (18)
+nullmove-deep exit 0 27s  Tests 44 passed (44)
+futility-deep exit 0 68s  Tests 53 passed (53)
+engine-deep exit 0 180s  Tests 82 passed (82)
+lint exit 0 1s
+typecheck exit 0 2s
+end 2026-11-04T00:30:09Z

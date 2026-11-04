@@ -1,0 +1,10 @@
+== ordering SEARCH_DEEP
+      Tests  43 passed (43)
+   Duration  6.48s (transform 0ms, setup 0ms, import 72ms, tests 6.34s, environment 0ms)
+== ordering ENGINE_DEEP
+      Tests  30 passed (30)
+   Duration  3.63s (transform 0ms, setup 0ms, import 74ms, tests 3.49s, environment 0ms)
+== capacity
+      Tests  1 passed (1)
+
+[exited with code 0]

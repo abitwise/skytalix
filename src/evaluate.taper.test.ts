@@ -26,7 +26,7 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { makeMove, makeNullMove, unmakeMove, unmakeNullMove } from "./apply.ts";
-import { chooseMove, chooseMoveWithoutTaper } from "./engine.ts";
+import { type chooseMove, chooseMoveWithoutSeePruning, chooseMoveWithoutTaper } from "./engine.ts";
 import { buildCorpus, mirrorPosition, PERFT_POSITIONS } from "./evaluate.mirror-corpus.ts";
 import {
   G3_CORPUS_MAIN_EVALUATE,
@@ -68,7 +68,7 @@ import {
   squareName,
 } from "./position.ts";
 import { MATE_CORPUS } from "./search.mate-corpus.ts";
-import { MATE_SCORE, search, searchWithoutTaper } from "./search.ts";
+import { MATE_SCORE, search, searchWithoutSeePruning, searchWithoutTaper } from "./search.ts";
 
 const RUN_DEEP = process.env.SEARCH_DEEP === "1";
 
@@ -372,18 +372,34 @@ describe("ABC-269 — one switch, taper, and three test-only doors (ADR-0064 dec
     expect(options.slice(0, options.indexOf("\n}")).includes("taper")).toBe(false);
   });
 
-  for (const [name, call, shipped, door] of [
-    ["search", "searchRoot(position, depth, {", "search", "searchWithoutTaper"],
-    ["engine", "deepen(position, options, {", "chooseMove", "chooseMoveWithoutTaper"],
+  // `ABC-279` (`ADR-0069` decision 8): its door, `searchWithoutSeePruning` / `chooseMoveWithoutSeePruning`,
+  // keeps the taper on and is now the shipped path less the newer switch, so `ABC-269`'s door is
+  // that door with taper off.
+  for (const [name, call, shipped, seeDoor, door] of [
+    [
+      "search",
+      "searchRoot(position, depth, {",
+      "search",
+      "searchWithoutSeePruning",
+      "searchWithoutTaper",
+    ],
+    [
+      "engine",
+      "deepen(position, options, {",
+      "chooseMove",
+      "chooseMoveWithoutSeePruning",
+      "chooseMoveWithoutTaper",
+    ],
   ] as const) {
-    it(`${name}: taper is on in ${shipped} only; ${door} is ${shipped} with taper off; every older door turns it off`, () => {
+    it(`${name}: taper is on in ${shipped} and ${seeDoor} only; ${door} is ${seeDoor} with taper off; every older door turns it off`, () => {
       const literals = literalsByEntry(SOURCES[name], call);
-      expect(Object.keys(literals).length).toBeGreaterThanOrEqual(name === "search" ? 14 : 8);
+      expect(Object.keys(literals).length).toBeGreaterThanOrEqual(name === "search" ? 15 : 9);
       for (const [entry, literal] of Object.entries(literals)) {
-        expect(literal, entry).toContain(entry === shipped ? "taper: true," : "taper: false,");
+        const on = entry === shipped || entry === seeDoor;
+        expect(literal, entry).toContain(on ? "taper: true," : "taper: false,");
       }
       const strip = (literal: string): string => literal.replace(/\s*taper: (true|false),/, "");
-      expect(strip(literals[door] as string)).toBe(strip(literals[shipped] as string));
+      expect(strip(literals[door] as string)).toBe(strip(literals[seeDoor] as string));
     });
   }
 
@@ -726,6 +742,10 @@ if (RUN_DEEP) {
     return { nodes: choice.nodes, depth: choice.depth };
   };
 
+  // RE-POINTED at `ABC-279` (`ADR-0069` decision 8): the shipped pair now skips losing captures in
+  // quiescence, so form L's counts are read on its doors, `chooseMoveWithoutSeePruning` and
+  // `searchWithoutSeePruning` (the pre-ticket pair); the figures do not change. The shipped d8
+  // counts are `ABC-279`'s, in `src/see.test.ts`.
   describe("ABC-269 B0 — node identity with the design: the probe's form-L counts, and the doors' pre-ticket counts [deep, SEARCH_DEEP=1]", () => {
     const B0: ReadonlyArray<[string, string, number, number]> = [
       ["kiwipete", KIWIPETE, 8, 1_296_788],
@@ -735,9 +755,9 @@ if (RUN_DEEP) {
       ["position-6", POSITION_6, 10, 1_692_669],
     ];
     it.each(B0)(
-      "chooseMove, %s, to depth %i: %i nodes [deep, SEARCH_DEEP=1]",
+      "chooseMoveWithoutSeePruning, %s, to depth %i: %i nodes [deep, SEARCH_DEEP=1]",
       (_, fen, depth, nodes) => {
-        expect(deepen(chooseMove, fen, depth)).toEqual({ nodes, depth });
+        expect(deepen(chooseMoveWithoutSeePruning, fen, depth)).toEqual({ nodes, depth });
       },
       600_000,
     );
@@ -747,9 +767,9 @@ if (RUN_DEEP) {
       expect(deepen(chooseMoveWithoutTaper, POSITION_6, 8).nodes).toBe(391_451);
     }, 600_000);
 
-    it("search() at depth 8: 839 514 / 1 533 901; searchWithoutTaper: main's 888 786 / 1 262 046 [deep, SEARCH_DEEP=1]", () => {
-      expect(search(parseFen(KIWIPETE), 8).nodes).toBe(839_514);
-      expect(search(parseFen(POSITION_6), 8).nodes).toBe(1_533_901);
+    it("searchWithoutSeePruning at depth 8: 839 514 / 1 533 901; searchWithoutTaper: main's 888 786 / 1 262 046 [deep, SEARCH_DEEP=1]", () => {
+      expect(searchWithoutSeePruning(parseFen(KIWIPETE), 8).nodes).toBe(839_514);
+      expect(searchWithoutSeePruning(parseFen(POSITION_6), 8).nodes).toBe(1_533_901);
       expect(searchWithoutTaper(parseFen(KIWIPETE), 8).nodes).toBe(888_786);
       expect(searchWithoutTaper(parseFen(POSITION_6), 8).nodes).toBe(1_262_046);
     }, 600_000);

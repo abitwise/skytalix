@@ -37,10 +37,20 @@
  * The rule is behind a second switch, `QuiescenceRules.quietPromotions`; every test-only door
  * older than `ABC-229`, `ABC-228`'s pair included, turns it off.
  *
+ * LOSING CAPTURES ARE SKIPPED OUT OF CHECK (`ABC-279`, `ADR-0069` decisions 1-3). At a node that
+ * stood pat, each move is tested in the loop, after the one sort, before it is made: a capture
+ * `isLosingCapture` (`src/see.ts`) names — no promotion, not the king, a lesser victim and a static
+ * exchange below 0 — is not made, not searched and not counted. A capture that gives check is
+ * skipped like any other. In check nothing is skipped: every evasion is searched. The stand pat is
+ * the floor of `best`, so a node whose every capture is skipped returns it, as a node with none
+ * does. The rule is behind a third field, `QuiescenceRules.seePruning`, true only in the record the
+ * shipped recursions pass; every test-only door turns it off.
+ *
  * Not here, each a recorded decision rather than an omission: quiet checks in quiescence, delta
- * pruning, static exchange evaluation, and QUIET UNDER-promotions (a capturing promotion, under-
- * promotions included, is a capture and is searched like any other; in check every under-promotion
- * is an evasion). No stalemate detection: a quiescence node out of check with no captures stands
+ * pruning, and QUIET UNDER-promotions (a capturing promotion, under-promotions included, is a
+ * capture and is searched like any other; in check every under-promotion is an evasion). Static
+ * exchange evaluation is here for pruning only (`ADR-0069`, amending `ADR-0024` decision 4), never
+ * for ordering. No stalemate detection: a quiescence node out of check with no captures stands
  * pat, and stalemate is the full-width search's to notice.
  *
  * CAPTURES ARE SEARCHED MOST-VALUABLE-VICTIM FIRST (`ADR-0024`), and that ordering is THIS
@@ -64,6 +74,7 @@ import { evaluateAtPhase, evaluateWithoutTaper, phaseAfterMove } from "./evaluat
 import { isInCheck, legalCaptures, legalCapturesAndQueenPromotions, legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
 import { type Position, pieceType } from "./position.ts";
+import { isLosingCapture } from "./see.ts";
 
 /**
  * Centipawn value per piece type for ORDERING only, indexed by `pieceType` like
@@ -156,6 +167,12 @@ export interface QuiescenceRules {
    * pre-`ABC-269` evaluation, so every record that predates the switch is an older door unchanged.
    */
   readonly taper?: boolean;
+  /**
+   * Out of check, a losing capture is skipped (`ABC-279`, `ADR-0069` decisions 1-3, 6). True only
+   * in the record the shipped recursions pass; absent or false searches every capture, so every
+   * record that predates the switch, and any record a caller builds for itself, is unchanged.
+   */
+  readonly seePruning?: boolean;
 }
 
 /**
@@ -189,6 +206,7 @@ export function quiesce(
 
   let best: number;
   let moves: Move[];
+  let skipLosing = false;
   if (rules.evasions && qply < QUIESCENCE_MAX_PLY && isInCheck(position)) {
     // In check (`ADR-0053` decision 2): no stand pat, so `best` starts below every real score
     // and only a searched move raises it. Every legal move is an evasion; none is mate here.
@@ -203,6 +221,7 @@ export function quiesce(
 
     best = standPat;
     if (best > alpha) alpha = best;
+    skipLosing = rules.seePruning === true;
 
     // The legal captures in generation order (ABC-206): only captures are tested for legality.
     // With quiet promotions on (`ABC-229`), the legal quiet queen promotions are appended after
@@ -215,6 +234,8 @@ export function quiesce(
   orderCaptures(moves);
 
   for (const move of moves) {
+    // Only on the stand-pat branch (`ADR-0069` decision 1): in check every evasion is searched.
+    if (skipLosing && isLosingCapture(position, move)) continue;
     const undo = makeMove(position, move);
     let score: number;
     try {

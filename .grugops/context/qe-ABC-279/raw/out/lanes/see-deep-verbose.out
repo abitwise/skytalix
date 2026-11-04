@@ -1,0 +1,85 @@
+
+ RUN  v4.1.12 <home>/projects/public/skytalix/.claude/worktrees/se-ABC-279
+
+stdout | src/see.test.ts > ABC-279 A3 (a) — bounded drift against the doors, depth 5, the 190 [deep, SEARCH_DEEP=1] > search() against searchWithoutSeePruning at depth 5: >= 93% within 25 cp, none beyond 144, 0 mate sign changes [deep, SEARCH_DEEP=1]
+ABC-279 A3 search() d5: 96.26% within 25 cp of 187, max 66 cp (kiwipete/a1d1: 298 -> 232); mate sign flips 0
+
+ ✓ src/see.test.ts > ABC-279 A1 (a) — see equals the hand value on every committed exchange > the fixture holds at least 20 rows, with x-rays on both sides 1ms
+ ✓ src/see.test.ts > ABC-279 A1 (a) — see equals the hand value on every committed exchange > R×P undefended: e1e5 reads 100 1ms
+ ✓ src/see.test.ts > ABC-279 A1 (a) — see equals the hand value on every committed exchange > N×P, x-rays both sides (CPW): d3e5 reads -220 0ms
+ ✓ src/see.test.ts > ABC-279 A1 (a) — see equals the hand value on every committed exchange > Q×P defended by P: e1e5 reads -800 0ms
+ ✓ src/see.test.ts > ABC-279 A1 (a) — see equals the hand value on every committed exchange > R×R, R recaptures, Q x-ray, K takes Q: d2d7 reads 0 0ms
+ ✓ src/see.test.ts > ABC-279 A1 (a) — see equals the hand value on every committed exchange > N×N defended by P: e3d5 reads 0 0ms
+ ✓ src/see.test.ts > ABC-279 A1 (a) — see equals the hand value on every committed exchange > B×N defended by P: g2d5 reads -10 0ms
+ ✓ src/see.test.ts > ABC-279 A1 (a) — see equals the hand value on every committed exchange > P×N undefended: e4d5 reads 320 0ms
+ ✓ src/see.test.ts > ABC-279 A1 (a) — see equals the hand value on every committed exchange > R×P, R recaptures, White's R x-ray: d2d5 reads 100 0ms
+ ✓ src/see.test.ts > ABC-279 A1 (a) — see equals the hand value on every committed exchange > R×P, x-rays both sides (R behind R, Q behind R): d2d5 reads -400 0ms
+ ✓ src/see.test.ts > ABC-279 A1 (a) — see equals the hand value on every committed exchange > B×P defended by P, Q x-ray behind B: g2d5 reads -130 0ms
+ ✓ src/see.test.ts > ABC-279 A1 (a) — see equals the hand value on every committed exchange > P×P defended by P: e4d5 reads 0 0ms
+ ✓ src/see.test.ts > ABC-279 A1 (a) — see equals the hand value on every committed exchange > Q×R undefended: d1d5 reads 500 0ms
+ ✓ src/see.test.ts > ABC-279 A1 (a) — see equals the hand value on every committed exchange > R×N defended by B, White's R x-ray: d2d4 reads 150 0ms
+ ✓ src/see.test.ts > ABC-279 A1 (a) — see equals the hand value on every committed exchange > Q×P defended by the king: d1d7 reads -800 0ms
+ ✓ src/see.test.ts > ABC-279 A1 (a) — see equals the hand value on every committed exchange > Q×P, the king may not recapture: R x-ray behind Q: d2d7 reads 100 0ms
+ ✓ src/see.test.ts > ABC-279 A1 (a) — see equals the hand value on every committed exchange > Black R×P defended by P: d8d4 reads -400 0ms
+ ✓ src/see.test.ts > ABC-279 A1 (a) — see equals the hand value on every committed exchange > Black R×P, R recaptures, Black's Q x-ray: d7d4 reads 100 0ms
+ ✓ src/see.test.ts > ABC-279 A1 (a) — see equals the hand value on every committed exchange > N×P defended twice by P, two knights: f3e5 reads -220 0ms
+ ✓ src/see.test.ts > ABC-279 A1 (a) — see equals the hand value on every committed exchange > P×Q defended by P: e4d5 reads 800 0ms
+ ✓ src/see.test.ts > ABC-279 A1 (a) — see equals the hand value on every committed exchange > Q×P defended by P, R x-ray behind Q: d2d5 reads -700 0ms
+ ✓ src/see.test.ts > ABC-279 A1 (a) — see equals the hand value on every committed exchange > N×P defended by B, Black's Q x-ray behind B: c3d5 reads -220 0ms
+ ✓ src/see.test.ts > ABC-279 A1 (a) — see equals the hand value on every committed exchange > Black Q×P, the king may not recapture: R x-ray behind Q: d7d2 reads 100 0ms
+ ✓ src/see.test.ts > ABC-279 A1 (a) — see equals the hand value on every committed exchange > N×B defended by R: c3d5 reads 10 0ms
+ ✓ src/see.test.ts > ABC-279 A1 (a) — see equals the hand value on every committed exchange > HANGING_CORPUS: each of the 24 losing moves reads see < 0 and is LOSING 1ms
+ ✓ src/see.test.ts > ABC-279 A1 (b) — the losing test, called directly (ADR-0069 decision 2) > a king capture is never losing, though see alone reads it as losing (K×P onto a defended square) 0ms
+ ✓ src/see.test.ts > ABC-279 A1 (b) — the losing test, called directly (ADR-0069 decision 2) > a capturing promotion onto a defended square is never losing 0ms
+ ✓ src/see.test.ts > ABC-279 A1 (b) — the losing test, called directly (ADR-0069 decision 2) > en passant onto a defended square is never losing 0ms
+ ✓ src/see.test.ts > ABC-279 A1 (b) — the losing test, called directly (ADR-0069 decision 2) > a capture of an equal or bigger piece onto a defended square is never losing 0ms
+ ✓ src/see.test.ts > ABC-279 A1 (b) — the losing test, called directly (ADR-0069 decision 2) > true for Q×P defended by a pawn (−800) and B×N defended by a pawn (−10); false for N×N defended (0) 0ms
+ ✓ src/see.test.ts > ABC-279 A1 (b) — the losing test, called directly (ADR-0069 decision 2) > a quiet move is never losing, even onto a square a pawn attacks 0ms
+ ✓ src/see.test.ts > ABC-279 A1 (c) — quiesce skips exactly the moves isLosingCapture names, on the stand-pat branch > seePruning on: the children are the whole sorted list less the losing captures, in order 6ms
+ ✓ src/see.test.ts > ABC-279 A1 (c) — quiesce skips exactly the moves isLosingCapture names, on the stand-pat branch > a record built without the field does not opt in: every capture is searched, in order 6ms
+ ✓ src/see.test.ts > ABC-279 A1 (c) — quiesce skips exactly the moves isLosingCapture names, on the stand-pat branch > a node whose every capture is losing returns its stand pat 0ms
+ ✓ src/see.test.ts > ABC-279 A1 (c) — quiesce skips exactly the moves isLosingCapture names, on the stand-pat branch > the source: one sort of the whole list, then the test in the loop, gated on the stand-pat branch 1ms
+ ✓ src/see.test.ts > ABC-279 A1 (d) — in check, nothing is skipped > a losing capture among the evasions is searched (Q×P defended by a knight, out of the pawn's check) 0ms
+ ✓ src/see.test.ts > ABC-279 A1 (e) — pure, and a fixed 288 bytes > the board is byte-identical after see, on every hand row and every hanging row 2ms
+ ✓ src/see.test.ts > ABC-279 A1 (e) — pure, and a fixed 288 bytes > seeScratchByteLength() is 288: Uint8Array(128) + Int32Array(32) + Uint8Array(32) 0ms
+ ✓ src/see.test.ts > ABC-279 A1 (e) — pure, and a fixed 288 bytes > src/see.ts has exactly three exports 0ms
+ ✓ src/see.test.ts > ABC-279 — one switch, seePruning, and two test-only doors (ADR-0069 decisions 6-8) > search: seePruning is on in search only; searchWithoutSeePruning is search with it off; every older door turns it off 1ms
+ ✓ src/see.test.ts > ABC-279 — one switch, seePruning, and two test-only doors (ADR-0069 decisions 6-8) > engine: seePruning is on in chooseMove only; chooseMoveWithoutSeePruning is chooseMove with it off; every older door turns it off 0ms
+ ✓ src/see.test.ts > ABC-279 — one switch, seePruning, and two test-only doors (ADR-0069 decisions 6-8) > seePruning is a field of Switches, Heuristics and QuiescenceRules, and of nothing else: no module state, no option 1ms
+ ✓ src/see.test.ts > ABC-279 — one switch, seePruning, and two test-only doors (ADR-0069 decisions 6-8) > R-TC: the rule reads the position, the move and the check state only — no budget, clock, flag or environment 0ms
+ ✓ src/see.test.ts > ABC-279 A3 (a) — bounded drift against the doors, depth 5, the 190 [deep, SEARCH_DEEP=1] > the corpus is the 190 2ms
+ ✓ src/see.test.ts > ABC-279 A3 (a) — bounded drift against the doors, depth 5, the 190 [deep, SEARCH_DEEP=1] > search() against searchWithoutSeePruning at depth 5: >= 93% within 25 cp, none beyond 144, 0 mate sign changes [deep, SEARCH_DEEP=1] 9527ms
+stdout | src/see.test.ts > ABC-279 A3 (a) — bounded drift against the doors, depth 5, the 190 [deep, SEARCH_DEEP=1] > chooseMove against chooseMoveWithoutSeePruning deepened to 5: >= 93% within 25 cp, none beyond 144, 0 mate sign changes [deep, SEARCH_DEEP=1]
+ABC-279 A3 chooseMove to d5: 95.72% within 25 cp of 187, max 96 cp (kiwipete/f3f4: 555 -> 459); mate sign flips 0
+
+ ✓ src/see.test.ts > ABC-279 A3 (a) — bounded drift against the doors, depth 5, the 190 [deep, SEARCH_DEEP=1] > chooseMove against chooseMoveWithoutSeePruning deepened to 5: >= 93% within 25 cp, none beyond 144, 0 mate sign changes [deep, SEARCH_DEEP=1] 8122ms
+stdout | src/see.test.ts > ABC-279 A3 (b) — the same-depth mate floor on the 287 [deep, SEARCH_DEEP=1] > every mate searchWithoutSeePruning scores at depth 5, search() scores as a mate of the same sign at depth 5 [deep, SEARCH_DEEP=1]
+ABC-279 A3 mate floor d5: 0 of 190 violated
+
+ ✓ src/see.test.ts > ABC-279 A3 (b) — the same-depth mate floor on the 287 [deep, SEARCH_DEEP=1] > every mate searchWithoutSeePruning scores at depth 5, search() scores as a mate of the same sign at depth 5 [deep, SEARCH_DEEP=1] 1384ms
+stdout | src/see.test.ts > ABC-279 A4 (a) — depth 8 on kiwipete and position-6, nodes <= 0.78x the door's in both recursions [deep, SEARCH_DEEP=1] > kiwipete: search() at depth 8 [deep, SEARCH_DEEP=1]
+ABC-279 A4 search() kiwipete d8: 605117 / 839514 = 0.7208x; head d5e6 -89, door e2a6 -81
+
+ ✓ src/see.test.ts > ABC-279 A4 (a) — depth 8 on kiwipete and position-6, nodes <= 0.78x the door's in both recursions [deep, SEARCH_DEEP=1] > kiwipete: search() at depth 8 [deep, SEARCH_DEEP=1] 1877ms
+stdout | src/see.test.ts > ABC-279 A4 (a) — depth 8 on kiwipete and position-6, nodes <= 0.78x the door's in both recursions [deep, SEARCH_DEEP=1] > kiwipete: chooseMove deepened to 8 on a frozen clock [deep, SEARCH_DEEP=1]
+ABC-279 A4 chooseMove kiwipete to 8: 766275 / 1296788 = 0.5909x; head d5e6 -89, door e2a6 -81
+
+ ✓ src/see.test.ts > ABC-279 A4 (a) — depth 8 on kiwipete and position-6, nodes <= 0.78x the door's in both recursions [deep, SEARCH_DEEP=1] > kiwipete: chooseMove deepened to 8 on a frozen clock [deep, SEARCH_DEEP=1] 2574ms
+stdout | src/see.test.ts > ABC-279 A4 (a) — depth 8 on kiwipete and position-6, nodes <= 0.78x the door's in both recursions [deep, SEARCH_DEEP=1] > position-6: search() at depth 8 [deep, SEARCH_DEEP=1]
+ABC-279 A4 search() position-6 d8: 406787 / 1533901 = 0.2652x; head c3d5 74, door c3d5 74
+
+ ✓ src/see.test.ts > ABC-279 A4 (a) — depth 8 on kiwipete and position-6, nodes <= 0.78x the door's in both recursions [deep, SEARCH_DEEP=1] > position-6: search() at depth 8 [deep, SEARCH_DEEP=1] 2625ms
+stdout | src/see.test.ts > ABC-279 A4 (a) — depth 8 on kiwipete and position-6, nodes <= 0.78x the door's in both recursions [deep, SEARCH_DEEP=1] > position-6: chooseMove deepened to 8 on a frozen clock [deep, SEARCH_DEEP=1]
+ABC-279 A4 chooseMove position-6 to 8: 87475 / 404930 = 0.2160x; head c3d5 71, door c3d5 74
+
+ ✓ src/see.test.ts > ABC-279 A4 (a) — depth 8 on kiwipete and position-6, nodes <= 0.78x the door's in both recursions [deep, SEARCH_DEEP=1] > position-6: chooseMove deepened to 8 on a frozen clock [deep, SEARCH_DEEP=1] 644ms
+stdout | src/see.test.ts > ABC-279 A4 (b) — the mean completed depth at 47 000 nodes on the 190 is >= the door's + 0.55 ply [deep, SEARCH_DEEP=1] > chooseMove against chooseMoveWithoutSeePruning, maxNodes 47 000, frozen clock [deep, SEARCH_DEEP=1]
+ABC-279 A4 reach at 47 000 nodes on 190: door 5.879 -> head 6.716 (+0.837); 121 deeper, 1 shallower, 22 root moves differ
+
+ ✓ src/see.test.ts > ABC-279 A4 (b) — the mean completed depth at 47 000 nodes on the 190 is >= the door's + 0.55 ply [deep, SEARCH_DEEP=1] > chooseMove against chooseMoveWithoutSeePruning, maxNodes 47 000, frozen clock [deep, SEARCH_DEEP=1] 26176ms
+
+ Test Files  1 passed (1)
+      Tests  52 passed (52)
+   Start at  00:34:39
+   Duration  53.06s (transform 0ms, setup 0ms, import 40ms, tests 52.95s, environment 0ms)
+

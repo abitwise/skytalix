@@ -19,7 +19,11 @@
 
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { makeMove, unmakeMove } from "./apply.ts";
-import { chooseMove, chooseMoveWithoutPvsOrReductions } from "./engine.ts";
+import {
+  chooseMove,
+  chooseMoveWithoutPvsOrReductions,
+  chooseMoveWithoutSeePruning,
+} from "./engine.ts";
 import { parseFen, toFen } from "./fen.ts";
 import { gameStatus } from "./gameend.ts";
 import { legalMoves } from "./legal.ts";
@@ -34,6 +38,7 @@ import {
   searchWithoutOrdering,
   searchWithoutPvsOrReductions,
   searchWithoutQuiescenceEvasions,
+  searchWithoutSeePruning,
   searchWithoutTable,
 } from "./search.ts";
 
@@ -553,26 +558,38 @@ describe("Scope — the engine orders its root exactly as search() does", () => 
    * reads a4b3 at −224 and the evasion-off ordering door −221, so a score gap no longer measures
    * ordering alone. The ordered side reads `searchWithoutQuiescenceEvasions`, the pre-`ABC-228`
    * `search()`, and the tie at −221 holds. `search()` still plays a4b3 (the engine row below).
+   *
+   * RE-POINTED at `ABC-279` (`ADR-0069` decision 8): with losing captures skipped in quiescence,
+   * `search()` and `chooseMove` both play a1b1 at depth 1, so a4b3 is read on the door pair
+   * (`searchWithoutSeePruning`, `chooseMoveWithoutSeePruning`, the pre-ticket pair; figures
+   * unchanged). The identity the engine row exists for, engine root = `search()` root, is read on
+   * both pairs.
    */
   const TIE_FEN = "r3k2r/Pppp1ppp/1b3nbN/1PB5/B1P1P3/qn3N2/Pp1P2PP/R2Q1RK1 w kq - 2 2";
 
   it("the fixture bites: ordered and unordered depth-1 searches break the tie differently", () => {
     const ordered = searchWithoutQuiescenceEvasions(parseFen(TIE_FEN), 1);
     const unordered = searchWithoutOrdering(parseFen(TIE_FEN), 1);
-    expect(label(search(parseFen(TIE_FEN), 1).move as Move)).toBe("a4b3");
+    expect(label(searchWithoutSeePruning(parseFen(TIE_FEN), 1).move as Move)).toBe("a4b3");
     expect(label(ordered.move as Move)).toBe("a4b3");
     expect(label(unordered.move as Move)).toBe("d1b3");
     expect(ordered.score).toBe(unordered.score);
   });
 
-  it("chooseMove's completed depth-1 iteration returns search()'s move, a4b3", () => {
-    let ticks = 0;
-    const choice = chooseMove(parseFen(TIE_FEN), { budgetMs: 1, now: () => ticks++ }) as {
-      move: Move;
-      depth: number;
-    };
-    expect(choice.depth).toBe(1);
-    expect(label(choice.move)).toBe("a4b3");
+  it("chooseMove's completed depth-1 iteration returns search()'s move: a4b3 on the door pair, a1b1 shipped", () => {
+    for (const [choose, searchAt, move] of [
+      [chooseMoveWithoutSeePruning, searchWithoutSeePruning, "a4b3"],
+      [chooseMove, search, "a1b1"],
+    ] as const) {
+      let ticks = 0;
+      const choice = choose(parseFen(TIE_FEN), { budgetMs: 1, now: () => ticks++ }) as {
+        move: Move;
+        depth: number;
+      };
+      expect(choice.depth).toBe(1);
+      expect(label(choice.move)).toBe(move);
+      expect(label(searchAt(parseFen(TIE_FEN), 1).move as Move)).toBe(move);
+    }
   });
 });
 

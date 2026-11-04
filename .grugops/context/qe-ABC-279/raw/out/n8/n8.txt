@@ -1,0 +1,12 @@
+start 2026-11-04T00:21:55Z  00:21:55 up 4 days, 16:40,  1 user,  load average: 0.82, 0.79, 1.21
+r1 base exit=0 load1_before=0.82  Tests 2588 passed (2588) | Duration 9.21s (transform 0ms, setup 0ms, import 6.42s, tests 7.39s, environment 5ms)
+r1 head exit=0 load1_before=0.91  Tests 2631 passed (2631) | Duration 9.26s (transform 0ms, setup 0ms, import 6.41s, tests 7.31s, environment 5ms)
+r2 head exit=0 load1_before=1.23  Tests 2631 passed (2631) | Duration 9.23s (transform 0ms, setup 0ms, import 6.44s, tests 7.45s, environment 5ms)
+r2 base exit=0 load1_before=1.35  Tests 2588 passed (2588) | Duration 9.39s (transform 0ms, setup 0ms, import 6.52s, tests 7.53s, environment 5ms)
+r3 base exit=0 load1_before=1.69  Tests 2588 passed (2588) | Duration 9.36s (transform 0ms, setup 0ms, import 6.39s, tests 7.58s, environment 5ms)
+r3 head exit=0 load1_before=1.82  Tests 2631 passed (2631) | Duration 9.42s (transform 0ms, setup 0ms, import 6.58s, tests 7.36s, environment 5ms)
+r4 head exit=0 load1_before=1.85  Tests 2631 passed (2631) | Duration 9.50s (transform 0ms, setup 0ms, import 6.60s, tests 7.36s, environment 5ms)
+r4 base exit=0 load1_before=2.09  Tests 2588 passed (2588) | Duration 9.29s (transform 0ms, setup 0ms, import 6.50s, tests 7.58s, environment 5ms)
+r5 base exit=0 load1_before=2.08  Tests 2588 passed (2588) | Duration 9.26s (transform 0ms, setup 0ms, import 6.48s, tests 7.33s, environment 5ms)
+r5 head exit=0 load1_before=2.68  Tests 2631 passed (2631) | Duration 9.48s (transform 0ms, setup 0ms, import 6.58s, tests 7.51s, environment 5ms)
+end 2026-11-04T00:23:32Z  00:23:32 up 4 days, 16:41,  1 user,  load average: 2.89, 1.44, 1.40

@@ -66,15 +66,16 @@ function leafAtCapacity(): { score: number; captureNodes: number } {
   expect(gameStatus(position).result).toBe("in-progress");
   let captureNodes = 0;
   const infinity = Number.POSITIVE_INFINITY;
-  // As the leaf at ply 128 is scored: the shipped rules (`ABC-228`, `ABC-229`), the leaf's ply
-  // for a mate.
+  // As the leaf at ply 128 is scored: the shipped rules (`ABC-228`, `ABC-229`; since `ABC-279` the
+  // losing-capture skip, `ADR-0069` decision 6, which re-pins the leaf's capture nodes 10 -> 0),
+  // the leaf's ply for a mate.
   const score = quiesce(
     position,
     0 - infinity,
     infinity,
     0,
     KEY_ARRAY_CAPACITY,
-    { evasions: true, quietPromotions: true },
+    { evasions: true, quietPromotions: true, taper: true, seePruning: true },
     () => captureNodes++,
     phaseOf(position),
   );
