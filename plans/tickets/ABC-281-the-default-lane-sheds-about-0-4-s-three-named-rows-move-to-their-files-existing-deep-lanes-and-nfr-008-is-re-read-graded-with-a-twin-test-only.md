@@ -1,8 +1,8 @@
 ---
 id: ABC-281
 title: "The default lane sheds about 0.4 s: three named rows move to their own files' existing deep lanes (`QE-208-a` position-6 to `SEARCH_DEEP`; `ABC-230` A4 and levels A9 to `ENGINE_DEEP`), and QE re-reads `NFR-008` graded, with a twin (test-only)"
-status: backlog
-column: Backlog
+status: ready
+column: Ready
 size: S
 priority: P2
 epic: EPIC-011
@@ -10,6 +10,25 @@ feature: —
 ---
 
 # ABC-281: three slow rows to their files' deep lanes, and a graded `NFR-008` re-read
+
+> **DoR 10 of 10, Ready: 2026-11-04, BA/PM** (task `bapm-ABC-281-dor`, records only, at `main` `748d4fa3`; nothing
+> run). Architect/Design met row 11 (`arch-ABC-281`, decision `…d7b2b02b`; `ADR-0046` § Dated 2026-11-04): **all three
+> rows take form S (slice).** Each full row moves to its file's deep lane, and a small default-lane remnant keeps the
+> row's unique kill. Default-lane kill parity was measured on seven mutants, so option (b) does not bind and there is
+> no owner question.
+>
+> - **What this changes on the page** (each line below is marked "all-S, 2026-11-04"):
+>   - § Scope: the three remnants, and R1's placement (the describe and its `sweep` stay);
+>   - A2: the `sweep` stays, one copy;
+>   - A3: the lane total and each file's count equal base's, and one name out, one in per file;
+>   - A4: each deep lane reads base + 1;
+>   - A6: the mutant list as the Architect recommended;
+>   - A8 and § NFR triggers: the expected value is about 9.4–9.55 s (base − 0.36 s);
+>   - `R-281-a`: closed for the measured mutants;
+>   - § The Architect's confirmation: BA/PM's "the seed is used" reading is corrected.
+> - **Where they differ, the `ADR-0046` dated section and its build conditions 1–5 win** over this page.
+> - The board shows the card **In Development** (Orchestrator, `748d4fa3`). Column moves are the Orchestrator's; this
+>   page records the `Backlog → Ready` exit only.
 
 > **Cut 2026-11-04 by BA/PM** (task `bapm-nfr008-rows`, records only, at `main` `3e87ceaf`). Nothing was run, built
 > or timed; every line number and title below was read with `grep` / `sed`. `src/`, `tools/`, `AGENTS.md`,
@@ -35,6 +54,8 @@ feature: —
     owner (`ADR-0035` D6). That is `R-N8H-1`, MEDIUM.
 - **Value:** about **−0.38 s of lane wall** (probe, paired median, 7 of 7 negative; −1.09 s CPU). The lane would sit
   near 9.4 s. This is an estimate until A8 reads it. No production line, NFR level, cap or lane command moves.
+  - **All-S, 2026-11-04:** the three remnants keep about 45 ms of the rows' 738 ms in-thread. The Architect's forecast
+    is about **−0.36 s** of wall (693 / 738 of the probe's −0.38 s), so the lane would sit near 9.4–9.55 s.
 
 ## Scope
 
@@ -50,6 +71,19 @@ are as read at `3e87ceaf`.
 - **Placement is the SE's.** It can go in the file's existing `if (RUN_DEEP)` block, or in a new `if (RUN_DEEP)` beside
   the row, using the same constant. With the flag unset the row is **not defined**, which is the files' pattern. It is
   not an `it.skip` or a `skipIf`.
+- **All-S, 2026-11-04: the default-lane remnants** (`ADR-0046` § Dated 2026-11-04, conditions 1–5). Each full row still
+  moves as the table says. One new default-lane row per file keeps that row's unique kill:
+
+  | row | the remnant (confirmed by Architect/Design) | where it sits | its title must name |
+  |---|---|---|---|
+  | R1 | the file's `sweep` on `chooseMoveWithoutTaper` at readings **8 and 10**: 0 mutated roots, and `insideNull` ≥ 1 asserted (2 at base). About 20 ms | **The R1 describe and its `sweep` stay in the default lane.** The remnant `it` takes the row's place. Inside the describe, an `if (RUN_DEEP)` holds a describe titled the describe's own title plus " [deep, SEARCH_DEEP=1]". It holds the full row: its `it` title plus the suffix, and its body byte-identical. **One copy of `sweep`, byte-identical; no duplicate** (condition 2). Another shape is the SE's only if it keeps one `sweep` and A4's `-t` line still prints "1 passed" | readings 8 and 10, and `chooseMoveWithoutTaper` |
+  | R2 | `[]` vs absent, `figures` equal, on **kr-corner, startpos and position-6**. About 21 ms | in the original describe, beside the byte-identical sibling (condition 3). The full row goes into the " [deep, ENGINE_DEEP=1]" describe as the table says | the three positions |
+  | R3 | `QE-087-d`'s draw check on **seed 1 over the first 10 of the thirty**, asserting at least one blunder and at least one engine move. About 4 ms | a new default-lane describe. The A9 describe moves whole, with " [deep]" (condition 4) | seed 1 and the first 10 of the thirty |
+
+  - **A different subset** needs the same evidence (condition 1): at the tip it kills every A6 mutant in the default
+    lane, and it asserts its own non-vacuity (R1: `insideNull` ≥ 1; R3: ≥ 1 blunder and ≥ 1 engine move).
+  - The remnant's exact title is the SE's, inside the "must name" column and A2's rule (it states exactly what it
+    samples).
 - **`AGENTS.md`:** of the three lane lines, only the null-move line carries a count ("Null-move deep lane (opt-in,
   ABC-208, 44 rows)"). That count becomes the tip's deep-lane total, expected 45. The engine and levels lines carry no
   count and no row names, so they need no edit. **How it fits:** `AGENTS.md` is 18 429 B against the 18 432 B budget
@@ -102,6 +136,15 @@ for this reason:**
   - R3 is the default lane's only row asserting that the seed is used (≥ 2 distinct sequences). It is also the only
     one asserting `QE-087-d`, one draw per move (`ADR-0032` d2): `grep` finds that assertion only at
     `src/levels.test.ts:906`. "A7 — seeded" checks that a fixed seed repeats, and catches neither defect.
+  - **Correction (all-S, 2026-11-04, BA/PM, from Architect/Design `…d7b2b02b` / `…e969c2f0`): "the seed is used" is
+    not single-held.** It was reasoned from `grep`, not run. Measured, the seed-ignored mutant (M3a, `seededRandom(0)`)
+    has **15 other default-lane killers** besides R3: levels A10 "the seed is threaded, not global", `ABC-242` A6, and
+    13 `src/uci-session.test.ts` rows. **The single-held property is the one draw per move (`QE-087-d`).** An extra
+    draw before the decision (M3b) is also killed by `ABC-242` A6, on move 1. An extra draw after the decision, on a
+    blunder (M3c, `ABC-087`'s `M5b` shape) or on an engine move (M3d), is killed by R3 alone. So R3's remnant keeps
+    `QE-087-d`, and "the seed is used" leaves the default lane only as breadth, with A10 still holding it. The
+    `QE-087-d` half of the sentence above stands. BA/PM's observation `bapm-nfr008-rows` `…d012231e` carries the same
+    reading, and this line corrects it.
   - Security/NFR's table states this plainly ("coverage that leaves the default lane").
 
 **So the confirmation is a DoR row, and the question is narrow.** Architect/Design picks one form per row and records it
@@ -119,6 +162,16 @@ partly). How often the `ENGINE_DEEP` lanes are run at gates is not on record her
 W. **If the Architect picks W for all three, the acceptance
 below stands as written** (the default lane drops by exactly 3).
 
+**The Architect's pick, 2026-11-04 (`arch-ABC-281` `…d7b2b02b`; `ADR-0046` § Dated 2026-11-04): S, S, S.** It
+supersedes the lean above. Under W, M1, M2, M3c and M3d would each lose their only default-lane killer. That fails
+`ADR-0046` § Consequences' kill parity, and it is option (b). Under S, the tip sketch's default lane reads 2 650 /
+2 650 green and kills all seven mutants, so parity holds. K would give up about 94 % of the saving for kills the
+remnants already hold. `ADR-0046` reads § Consequences' "only on the tranche-2 ticket" as carrying to `ABC-281` under
+the same parity condition, for these three rows only, with **this cut as BA/PM's word**, as the `ABC-248` ruling was
+for tranche 2. BA/PM gives that word here: the cut carries form S, and A6 checks parity. The `ENGINE_DEEP` run
+frequency stays `UNKNOWN - verify`, and under S no unique kill depends on it. **The acceptance below is now read
+under form S for all three rows** (the all-S lines).
+
 ## Acceptance criteria
 
 The base is `main` at the commit the build branches from. The tip is this ticket's delivered commit. "The form" is the
@@ -134,14 +187,16 @@ Architect's per-row pick (row 11). The criteria are written for W, with the S an
 - **`A2` (bodies byte-identical).** **Given** the diff, **then**:
   - each moved row's body, from the line after its `it(` header to its closing `});`, is byte-identical to base. Only
     its enclosing block and the titles in § Scope change;
-  - R1's `sweep` helper moves with its describe, byte-identical;
+  - R1's `sweep` helper moves with its describe, byte-identical. **All-S, 2026-11-04:** the `sweep` **stays**, one copy,
+    byte-identical, with no duplicate helper (condition 2);
   - no other row's title, body or `expect(` line changes. R2's sibling "the three test-only doors ignore prior keys…"
     and "A7 — seeded" are byte-identical;
   - each moved row is defined only under its file's existing `RUN_DEEP` constant. No `it.skip`, `skipIf` or new
     environment variable is added;
   - under form S, the remnant is the only new default-lane code, and its title states the readings or positions it
     keeps, exactly;
-  - added comments cite only `ABC-281` and `secnfr-nfr008-headroom`.
+  - added comments cite only `ABC-281` and `secnfr-nfr008-headroom`. **All-S, 2026-11-04:** `arch-ABC-281` and
+    `ADR-0046` may be cited too.
 - **`A3` (counts and names).** **Given** the vitest JSON report of `npm test` at base and at the tip, **then**:
   - **the lane total at the tip is base − 3**, with 0 skipped and all passing. At `main` `08843504` that is
     2 650 → 2 647; it is re-read at the build's base. Under form S or K, the total is base − (rows moved whole);
@@ -149,6 +204,14 @@ Architect's per-row pick (row 11). The criteria are written for W, with the S an
   - each file's sorted full names equal base's with exactly the moved title removed. Under S, the remnant's retitle is
     the only other difference;
   - the files collected are equal (69 at `08843504`), and `lane-inventory` reports no findings.
+  - **All-S, 2026-11-04 (this is what A3 reads):**
+    - the lane total at the tip **equals base's**, with 0 skipped and all passing. That is 2 650 → 2 650 at `ff07571f`
+      (`src/` tree `8adb0a18`, as at `08843504`). It is re-read at the build's base;
+    - **each of the three files' counts equals base's**;
+    - in each file, the sorted full names equal base's with **exactly one name out and one in**. Out goes the moved
+      row's full name. In comes the remnant's full name, which states what it samples (§ Scope, all-S table). No other
+      name differs. With the flag unset, no " [deep" title appears in the report;
+    - the files collected and `lane-inventory` read as above.
 - **`A4` (each moved row is green in its lane, by count, not by exit code).** **Given** the tip, **when** each line
   below runs, on one line, with the brackets escaped (vitest reads `-t` as a regular expression; `QE-248-a`), **then**
   each prints **"1 passed"** and 0 failed. Exit 0 with 0 tests fails the check. A brief that fences `npx` runs the same
@@ -162,6 +225,17 @@ Architect's per-row pick (row 11). The criteria are written for W, with the S an
 
   Also: each file's full deep lane, run as its `AGENTS.md` line spells it, exits 0 with 0 failed, and its passed
   count is base's deep count + 1. With the flag unset, the moved title is absent from A3's report.
+
+  **All-S, 2026-11-04:**
+  - The three `-t` lines stand as spelled, and each prints "1 passed". Under R1's nested placement, the inner
+    describe's title is the R1 describe's title plus " [deep, SEARCH_DEEP=1]". The `-t` matches that inner describe,
+    and only the full row sits inside it. The remnant's name has no " [deep" and is not matched. R2's and R3's `-t`
+    match their deep describes the same way.
+  - Each file's deep lane, run as its `AGENTS.md` line spells it with the flag set, exits 0 with 0 failed. Its passed
+    count is **base's count for that same command + 1**: the remnant replaces the row in the default part, and the
+    full row is added in the deep part.
+  - A5's null-move "44 rows" becomes that lane's passed count at the tip (condition 5). 45 is expected if base reads
+    44 (`UNKNOWN - verify`, as in § Scope).
 - **`A5` (`AGENTS.md`).** **Given** `AGENTS.md` at the tip, **then**:
   - the null-move line's row count equals that lane's passed count at the tip, as read in A4;
   - no other byte of `AGENTS.md` changes;
@@ -183,6 +257,25 @@ Architect's per-row pick (row 11). The criteria are written for W, with the S an
   Each is killed at base by the default lane, which is the control. **Every one is killed by its deep lane at the
   tip.** Under form W, a "not killed" by the default lane matches the Architect's line for that row; under form S, the
   default lane kills it. A mismatch is a STOP to Architect/Design, not a waiver.
+
+  **All-S, 2026-11-04: the list QE freezes** (as Architect/Design recommended in `ADR-0046` § Dated 2026-11-04; the
+  mutant ids are the Architect's, from `.grugops/context/arch-ABC-281/raw/mut.py`):
+  - **R1: M1.** `ADR-0050`'s plant: the null move is unmade without `finally`, so it is not unmade on abort.
+  - **R2: the M2c shape.** An empty `priorKeys` list turns the null move off. This shape needs the null move, so it is
+    invisible on the six endgames and seen on startpos and position-6. The M2 shape (an empty list leaves the table
+    uncleared) may be added; QE decides.
+  - **R3: the M3c shape (`ABC-087`'s `M5b`).** An extra draw after the decision, on a blunder move. **Not M3b**: an
+    extra draw before the decision has a second default-lane killer (`ABC-242` A6), so it tests nothing about A9.
+  - The original list's seed-ignored mutant (M3a) is **dropped**: it has 15 other default-lane killers (§ The
+    Architect's confirmation, correction), so it tests nothing about R3.
+
+  How each mutant reads under all-S:
+  - at base, the default lane kills it (the control);
+  - at the tip, the default lane kills it, **and the row's remnant is among its killers, named.** For M2c the
+    `QE-208-c` source-literal row also kills it, so a kill by that row alone does not count;
+  - at the tip, the row's deep lane kills it.
+
+  A remnant that does not kill its mutant is a STOP to Architect/Design (condition 1), not a waiver.
 - **`A7` (gates).** **Given** the tip, **then** lint, typecheck, unit and build are green. The default lane has 0
   skips. `test-skip-integrity` and `lane-inventory` report no findings.
 - **`A8` (`NFR-008`, graded: the twin re-read).** **Given** base and tip, **when** QE reads `npm test` as spelled,
@@ -207,6 +300,8 @@ Architect's per-row pick (row 11). The criteria are written for W, with the S an
     level moves to get under.
   - The expected value, not a bar, is ≈ 9.4 s (base − 0.38 s). An H median **≥ 9.6 s** is the Orchestrator's trigger
     to put `Q-N8H-1` (b) or (c) to the owner (Security/NFR's framing). It does not fail this ticket.
+  - **All-S, 2026-11-04:** the expected value, still not a bar, is **about 9.4–9.55 s (base − 0.36 s)**, the
+    Architect's forecast. The 9.6 s trigger is unchanged.
 - **`A9` (`R-N8H-1`).** **Given** A8, **then** Security/NFR records `R-N8H-1`'s state as closed or carried, with the
   reading cited. BA/PM does not rule it.
 
@@ -215,6 +310,8 @@ Architect's per-row pick (row 11). The criteria are written for W, with the S an
 - **`NFR-008`:** `npm test` median wall **≤ 10 s** at load1 ≤ 8 on the declared stack. Graded with an admissible
   identity twin (A8). CPU is reported.
 - **Expected:** H ≈ 9.4 s. Reported, not a bar. **≥ 9.6 s** is the `Q-N8H-1` trigger, which the Orchestrator holds.
+  **All-S, 2026-11-04:** H ≈ 9.4–9.55 s (base − 0.36 s; the remnants cost about 0.02 s of wall). Still reported, not a
+  bar.
 - **`NFR-010`** and the heap caps are untouched. No config, flag or worker count moves.
 - **`N8-LANE`:** not read. The ticket adds no default-lane cost, and A8 reads the change on the full lane.
 - **`AGENTS.md` budget:** ≤ 18 432 B (A5).
@@ -236,7 +333,9 @@ Architect's per-row pick (row 11). The criteria are written for W, with the S an
 
 ## Size and priority
 
-**`S`, low end.** The moves alone are `XS`: three rows, and one count. **Not `XS`:** A6's frozen mutants and A8's
+**`S`, low end.** The moves alone are `XS`: three rows, and one count. **All-S, 2026-11-04:** still `S`. The three
+remnants are small rows on helpers the files already have, and their subsets are confirmed, so nothing new is
+estimated. **Not `XS`:** A6's frozen mutants and A8's
 graded twin read, which needs an ALONE slot. **Not `M`:** the rows are named, and the files and lanes already exist.
 
 **`P2`.** `NFR-008` is MET (15 of 15 under 10 s), and no user-visible behaviour is wrong, so **not `P1`**. **Not
@@ -248,7 +347,7 @@ owner.
 ## Dependencies
 
 - **Architect/Design: DoR row 11, one form per row** (§ The Architect's confirmation). It is a records hop with
-  nothing to run.
+  nothing to run. **Met 2026-11-04** (`arch-ABC-281` `…d7b2b02b`): S, S, S.
 - **Files:** no open ticket's scope names these three rows. `ABC-239`'s redo (`se-ABC-239b`, pending) may re-pin
   value rows in test files. Whichever merges second re-reads its line numbers (test note 5).
 - **Host:** A8 waits for an ALONE slot.
@@ -268,12 +367,28 @@ owner.
 - **`R-281-a` (LOW, this cut):** moved coverage runs only when someone runs a deep lane. No `npm run` script runs a
   `*_DEEP` lane (`AGENTS.md`). Mitigation: A6 measures exactly what leaves the default lane, and the Architect's
   per-row form decides whether that is acceptable. Owner: Architect/Design (row 11).
+  - **All-S, 2026-11-04: closed for the measured mutants, and carried to A6's list** (`ADR-0046` § Dated 2026-11-04).
+    The tip sketch's default lane kills all seven mutants (M1, M2, M2c, M3a–M3d); A6 re-reads the frozen ones on the
+    real tip.
+  - What runs only deep under S is **breadth**, with no unique kill measured in it:
+    - R1: readings 4–24 other than 8 and 10;
+    - R2: 33 of the 36 positions;
+    - R3: four more seeds, 20 more moves on seed 1, and "the seed is used" (levels A10 still holds it in the default
+      lane).
 - **`Q-N8H-1`:** held by the Orchestrator, **not asked**. Security/NFR recommends (a): keep the 10 s level and keep
   moving heavy rows to deep lanes. Ask (b) or (c) only if A8 reads ≥ 9.6 s.
 
 ## Definition of Ready
 
 BA/PM, 2026-11-04, at `main` `3e87ceaf`. **Result: 9 of 10, plus row 11 open. Stays in `Backlog`.**
+
+**Re-read 2026-11-04, BA/PM (`bapm-ABC-281-dor`, at `main` `748d4fa3`): 10 of 10, row 11 met. Ready.** Rows 1–9 stand,
+re-read under all-S:
+- row 2: the remnants are named (§ Scope, all-S);
+- row 4: lane total equal to base's, one name out and one in per file, deep lane + 1, a frozen mutant list with the
+  remnant among the killers;
+- row 6: expected 9.4–9.55 s;
+- row 8: still `S`.
 
 | # | item | verdict |
 |---|---|---|
@@ -286,8 +401,11 @@ BA/PM, 2026-11-04, at `main` `3e87ceaf`. **Result: 9 of 10, plus row 11 open. St
 | 7 | test notes present | ✅ six |
 | 8 | size assigned | ✅ `S` (low end) |
 | 9 | priority assigned | ✅ `P2`, both directions argued |
-| 10 | no major unresolved blocker | ⏳ **row 11** |
-| 11 | **Architect/Design confirms the coverage moves** (Security/NFR `…8a4fb936`) | ⏳ **open: one form (W / S / K) per row.** Ruled needed: `ADR-0046`'s T2b census and § Consequences put coverage-losing moves at the owner's option (b), and R1's guard has no other default-lane holder |
+| 10 | no major unresolved blocker | ✅ 2026-11-04: row 11 met; no owner question (option (b) does not bind). A8's ALONE slot is scheduling, not a blocker |
+| 11 | **Architect/Design confirms the coverage moves** (Security/NFR `…8a4fb936`) | ✅ 2026-11-04, Architect/Design (`arch-ABC-281`; `ADR-0046` § Dated 2026-11-04): R1 **S** (readings 8 and 10 on `chooseMoveWithoutTaper`), R2 **S** (kr-corner, startpos, position-6), R3 **S** (`QE-087-d`, seed 1, the first 10 of the thirty). Default-lane kill parity measured on seven mutants, so option (b) does not bind and there is no owner question. Row 10 ✅. DoR 10 of 10: Ready. *(Was: ⏳ open, one form (W / S / K) per row; ruled needed because `ADR-0046`'s T2b census and § Consequences put coverage-losing moves at the owner's option (b), and R1's guard had no other default-lane holder.)* |
 
 **Recommended:** stays in `Backlog`. It goes **Ready on the Architect's dated line**, with no re-cut if the form is W, S
 or K per row. Column moves are the Orchestrator's.
+
+**2026-11-04: Ready.** The Architect's line is dated, the form is S on every row, and there was no re-cut: the all-S
+lines are this page's own S variants, filled in. The board shows In Development (Orchestrator, `748d4fa3`).
