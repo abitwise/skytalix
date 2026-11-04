@@ -1,0 +1,18 @@
+CLEAN exit=0 pass 1 fail 0 red:  :: 
+P-src-deep exit=1 pass 0 fail 1 red: the seams passerTermsForTest and pawnStructureForTest are called from  :: AssertionError: expected [ 'src/aa/bb/deep.ts' ] to deeply equal []
+P-src-helper exit=1 pass 0 fail 1 red: the seams passerTermsForTest and pawnStructureForTest are called from  :: AssertionError: expected [ 'src/evaluate.helper-fixture.ts' ] to deeply equal []
+P-tools-py exit=1 pass 0 fail 1 red: the seams passerTermsForTest and pawnStructureForTest are called from  :: AssertionError: expected [ 'tools/zz/a.py' ] to deeply equal []
+P-tools-test exit=1 pass 0 fail 1 red: the seams passerTermsForTest and pawnStructureForTest are called from  :: AssertionError: expected [ 'tools/zz/a.test.ts' ] to deeply equal []
+P-spike exit=1 pass 0 fail 1 red: the seams passerTermsForTest and pawnStructureForTest are called from  :: AssertionError: expected [ 'spike/a.ts' ] to deeply equal []
+P-config exit=1 pass 0 fail 1 red: the seams passerTermsForTest and pawnStructureForTest are called from  :: AssertionError: expected [ 'vitest.config.ts' ] to deeply equal []
+P-package exit=1 pass 0 fail 1 red: the seams passerTermsForTest and pawnStructureForTest are called from  :: AssertionError: expected [ 'package.json' ] to deeply equal []
+P-evaluate-call exit=1 pass 0 fail 1 red: the seams passerTermsForTest and pawnStructureForTest are called from  :: AssertionError: passerTermsForTest( in src/evaluate.ts: its definition only: expected 2 to be 1 // Object.is e
+P-src-mjs exit=0 pass 1 fail 0 red:  :: 
+P-src-js exit=0 pass 1 fail 0 red:  :: 
+P-src-mts exit=0 pass 1 fail 0 red:  :: 
+P-root-script exit=0 pass 1 fail 0 red:  :: 
+P-root-mjs exit=0 pass 1 fail 0 red:  :: 
+P-github exit=0 pass 1 fail 0 red:  :: 
+P-alias exit=0 pass 1 fail 0 red:  :: 
+P-dynamic exit=0 pass 1 fail 0 red:  :: 
+G restored

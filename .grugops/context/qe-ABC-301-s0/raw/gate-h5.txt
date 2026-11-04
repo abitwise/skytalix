@@ -1,0 +1,4 @@
+CLEAN 7788 {'probed': {'gateMiss': 0, 'seamMiss': 0}, 'primes': {'gateMiss': 0, 'seamMiss': 0}, 'fitShape': {'gateMiss': 0, 'seamMiss': 0}}
+H5 7788 {'probed': {'gateMiss': 2572, 'seamMiss': 0}, 'primes': {'gateMiss': 2572, 'seamMiss': 0}, 'fitShape': {'gateMiss': 2642, 'seamMiss': 0}}
+H6 7788 {'probed': {'gateMiss': 86, 'seamMiss': 0}, 'primes': {'gateMiss': 86, 'seamMiss': 0}, 'fitShape': {'gateMiss': 0, 'seamMiss': 0}}
+M restored

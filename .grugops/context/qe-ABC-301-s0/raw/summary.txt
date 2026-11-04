@@ -1,0 +1,14 @@
+CLEAN src=af4fe0f49b98 exit=0 pass 22 fail 0 red: 
+E14 src=2799eafd89df exit=1 pass 20 fail 2 red: evaluateAtPhase at each fixture's own phase is exact against the seam, on  | the king squares come from the walk: no new pass over the pieces
+E15 src=9b5c865610d5 exit=1 pass 20 fail 2 red: evaluateAtPhase at each fixture's own phase is exact against the seam, on  | the king squares come from the walk: no new pass over the pieces
+E16 src=ce2d254850b1 exit=1 pass 21 fail 1 red: evaluateAtPhase at each fixture's own phase is exact against the seam, on 
+H1 src=7b9883069edf exit=1 pass 20 fail 2 red: evaluateAtPhase at each fixture's own phase is exact against the seam, on  | the king squares come from the walk: no new pass over the pieces
+H3 src=7d02ed942eaf exit=1 pass 21 fail 1 red: evaluateAtPhase at each fixture's own phase is exact against the seam, on 
+H4 src=5492ce5020a7 exit=1 pass 20 fail 2 red: evaluateAtPhase at each fixture's own phase is exact against the seam, on  | the king squares come from the walk: no new pass over the pieces
+H5 src=e3e0386a2796 exit=1 pass 21 fail 1 red: the loop runs after the walk when w < D and a passer exists, with no fast 
+H6 src=918b9137a811 exit=1 pass 21 fail 1 red: the king squares come from the walk: no new pass over the pieces
+H7 src=7f35b0ad71f8 exit=1 pass 20 fail 2 red: evaluateAtPhase at each fixture's own phase is exact against the seam, on  | the loop runs after the walk when w < D and a passer exists, with no fast 
+H8 src=d974ba55a29a exit=1 pass 20 fail 2 red: evaluateAtPhase at each fixture's own phase is exact against the seam, on  | the king squares come from the walk: no new pass over the pieces
+H9 src=50ac56cdb390 exit=1 pass 21 fail 1 red: evaluateAtPhase at each fixture's own phase is exact against the seam, on 
+restored
+DONE
