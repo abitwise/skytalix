@@ -1,0 +1,14 @@
+start 2026-11-04T16:49:39Z  16:49:39 up 5 days,  9:07,  1 user,  load average: 0.52, 0.67, 1.05
+k0-base exit=0 7s
+k0-head exit=0 6s
+k0-headshipped exit=0 6s
+p0-base exit=0 5s
+p0-head exit=0 4s
+floor-base exit=0 4s
+floor-head exit=0 10s
+zug exit=0 3s
+g1 exit=0 1s
+g1-base exit=0 2s
+ratio exit=0 3s
+ratio-base exit=0 3s
+end 2026-11-04T16:50:33Z  16:50:33 up 5 days,  9:08,  1 user,  load average: 0.97, 0.78, 1.06
