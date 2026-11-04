@@ -1,3 +1,4 @@
+_Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — **ABC-283 built with K3** (se-ABC-283-k3 21ae5819): every figure equals the Architect's; mate floor 0/190, 0/188; P0 6/6; zugzwang 7/7; G1 54/58; drift 28 cp; npm test 2 665, lane median 9.81 s (≤ 10 s; R-N8H-1 trigger 9.5 s fired ungraded). Re-pins 2–3 accepted as pins (…c7609f51). → In Review → `qe-ABC-283` (one 100-game read, ALONE). Running: qe-ABC-271, qe-ABC-283._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — **ABC-300 DONE** (merged 4ea39135; QE PASS_WITH_GAPS …fbda2ad6, UAT waived; QE-300-a A6 carried to ABC-282 A6; QE-300-b LOW accepted (later tools/rating row); c, d INFO — `40/8` is 40 moves in 8 s). Stale pending briefs se-ABC-239/239b closed to done. Running: se-ABC-283-k3, qe-ABC-271._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — **ABC-271 built** (se-ABC-271 f96afb0d): K0 7/7 exact, K1 0 diffs, K2 two memo re-pins; K3 pre-read 1.0343× (endgame report set 1.11–1.13×, flagged); npm test 2 672 in 9.04 s. Unlocked 1 s vitest slip accepted LOW. → In Review → `qe-ABC-271`. Running: qe-ABC-300, se-ABC-283-k3, qe-ABC-271._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `arch-ABC-283-mate` done (…05ef9fc9): cause = history's negative cells push mating moves into LMR; fix **K3** (key max(0,h)) holds the mate floor, P0, zugzwang, G1, drift 28 cp. Ruling …6c6fb0be. **ABC-283 Blocked → In Development** (`se-ABC-283-k3`). Running: se-ABC-271, qe-ABC-300, se-ABC-283-k3._
@@ -1327,12 +1328,12 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 1/3)
-- [ABC-283] The O1h+O3s+S1 bundle with K3 (history never demotes); se-ABC-283-k3 running; then qe-ABC-283 (one 100-game read).
+    ## In Development (WIP 0/3)
 - ~~[ABC-283]~~ → Blocked. The O1h+O3s+S1 bundle (ABC-233 history, ABC-234 SEE ordering, ABC-236 root aspiration) on one branch; one read of 100 games at 100 ms, GAIN ≥ 50.0 (owner's word, …4c4cb03d). se-ABC-283 running; rulings …3851bf43.
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
-    ## In Review (WIP 1/3)
+    ## In Review (WIP 2/3)
+- [ABC-283] The O1h+O3s+S1 bundle with K3. Built 21ae5819 → qe-ABC-283 (C2′ 100 games at 100 ms, GAIN ≥ 50.0, PREREG first; verdict signs UAT).
 - [ABC-271] E4a structure only at 0. Built f96afb0d → qe-ABC-271 (K3/K4 graded ALONE; verdict signs UAT).
     - [ABC-012] Portfolio FX conversion  (PR: #41, QE: running)
 
