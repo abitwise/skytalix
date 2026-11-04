@@ -1,0 +1,46 @@
+{
+ "refs": [
+  "se-ABC-283-k3",
+  "grugops/ABC-283",
+  "ABC-283",
+  "ADR-0063",
+  "ADR-0066",
+  "ADR-0064",
+  "K3",
+  "F2",
+  "P0",
+  "G1",
+  "R-283-LMR",
+  "R-281-a",
+  "NFR-008",
+  "R-N8H-1",
+  "arch-ABC-283-mate",
+  "05ef9fc9",
+  "c8e90c3c",
+  "orch-2026-10-30a",
+  "6c6fb0be",
+  "3922394e",
+  "9e81db85",
+  "ab0a37b6",
+  "09694a4e",
+  "src/search.ts",
+  "src/search.bundle.test.ts"
+ ],
+ "notes": [
+  {
+   "kind": "decision",
+   "bodyFile": "note-decision.md",
+   "confidence": "high: the build follows lines 1–5 exactly; the two extra re-pins are measured and explained, and the Orchestrator rules on them"
+  },
+  {
+   "kind": "observation",
+   "bodyFile": "note-bars.md",
+   "confidence": "high on every deterministic count (fixed depth or frozen clock, under the host lock, identical to arch-ABC-283-mate's K3 outputs); medium on lane wall times (shared host)"
+  },
+  {
+   "kind": "observation",
+   "bodyFile": "note-artifacts.md",
+   "confidence": "high (git log and diff read back); sealed as an observation: an artifact-ref needs a §14-gate run id this install cannot issue"
+  }
+ ]
+}
