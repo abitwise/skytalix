@@ -1,3 +1,4 @@
+_Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `secnfr-ABC-302-a9` merged 4792ce78: NFR-008 9.505 s on the catalog; R-N8H-1 stays MEDIUM; Q-N8H-1 (a). Rulings …20:38:50Z: lane budgets ≤ +0.10 s each for ABC-282, ABC-301 and bundle 1; row census owed. **ABC-282 → In Development** (`se-ABC-282`). Running: arch-bundle-1, arch-ABC-289, se-ABC-282._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — **ABC-302 DONE** (merged ec4edd92; QE PASS_WITH_GAPS …051a910d, UAT waived; NFR-008 graded 9.505 s vs base 9.87 s; 9.4 s target missed, accepted). → `secnfr-ABC-302-a9` (R-N8H-1, lane budgets). Running: arch-bundle-1, arch-ABC-289, secnfr-ABC-302-a9._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — **owner: Q-N8H-1 (a) keep 10 s; Q-3K-11 (a) bundle read ACCEPTED; bundle 1 named (ABC-286 + ABC-288).** → `arch-bundle-1`, `arch-ABC-289` (Q2 re-measure). Running: qe-ABC-302 (resumed), arch-bundle-1, arch-ABC-289._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — session and agents killed by a disruption (owner). Audit: host up, main clean, lock free, only qe-ABC-302 was running; its A8 and A6 finished, A4 cut off. Resumed, not restarted (`qe-ABC-302-resume`). Owner: Q-N8H-1, Q-3K-11 (+ bundle 1)._
@@ -1349,7 +1350,8 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 0/3)
+    ## In Development (WIP 1/3)
+- [ABC-282] W1 time use under a clock (ADR-0071 ACCEPTED; L, P2). se-ABC-282 running; A6 on ABC-300.
 - ~~[ABC-283]~~ → Blocked. The O1h+O3s+S1 bundle (ABC-233 history, ABC-234 SEE ordering, ABC-236 root aspiration) on one branch; one read of 100 games at 100 ms, GAIN ≥ 50.0 (owner's word, …4c4cb03d). se-ABC-283 running; rulings …3851bf43.
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
@@ -1478,9 +1480,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## Ready (WIP 2/8)
+## Ready (WIP 1/8)
 - [ABC-301] E2s second pull: one bounded fit on main with E4a's structure; KD/FP freed, U held 0; B-T0–B-T8 (B-T8 two r reads at 0.5 s, ~5 h, owner-approved). Scope 0 preconditions first (after NFR-008 headroom ruling).
-- [ABC-282] W1 time use under a clock (ADR-0071 ACCEPTED; DoR 10/10, L, P2). **Unheld** (ABC-283 merged). Builds after the NFR-008 headroom ruling (secnfr-nfr008-1104); A6 on ABC-300.
 - ~~[ABC-271]~~ → In Development E4a structure only at 0 (ADR-0070 ACCEPTED form (a); DoR 10/10, S, P3). QE freeze first (qe-ABC-271-freeze), then se-ABC-271. No games.
 
 
