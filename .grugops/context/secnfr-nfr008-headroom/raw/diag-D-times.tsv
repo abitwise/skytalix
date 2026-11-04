@@ -1,0 +1,5 @@
+run	load1	exit	wall_s	user_s	sys_s	note
+D0	1.82	0	9.68	29.93	1.62	npx vitest run (128 heap, SUITE) + diag reporter; D0 warm-up
+D1	2.23	0	9.72	30.77	1.71	npx vitest run (128 heap, SUITE) + diag reporter; D0 warm-up
+D2	2.82	0	9.93	30.65	1.76	npx vitest run (128 heap, SUITE) + diag reporter; D0 warm-up
+D3	3.09	0	9.86	30.97	1.72	npx vitest run (128 heap, SUITE) + diag reporter; D0 warm-up
