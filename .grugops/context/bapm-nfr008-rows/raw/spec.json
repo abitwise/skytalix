@@ -1,0 +1,5 @@
+{ "refs": ["bapm-nfr008-rows","ABC-281","EPIC-011","NFR-008","NFR-010","R-N8H-1","R-N8H-2","R-N8H-3","R-281-a","Q-N8H-1","secnfr-nfr008-headroom","secnfr-nfr008-headroom/20261104T025651Z-security-nfr-decision-8a4fb936","secnfr-nfr008-headroom/20261104T025651Z-security-nfr-observation-f925027f","secnfr-nfr008-headroom/20261104T025651Z-security-nfr-observation-69126dca","ADR-0046","ADR-0050","ADR-0035","ADR-0032","ABC-248","ABC-109","QE-208-a","QE-087-d","ABC-230","ABC-078","src/search.null-move.test.ts","src/engine.test.ts","src/levels.test.ts","AGENTS.md","plans/tickets/ABC-281","3e87ceaf","85e8e6e3"],
+  "notes": [
+    { "kind": "decision", "confidence": "high: the cut and the ruling rest on the sealed Security/NFR notes and on ADR-0046's dated text, read at 3e87ceaf; nothing run", "bodyFile": "notes/dec.md" },
+    { "kind": "observation", "confidence": "medium: read from source with grep/sed, no mutant run; each 'only' is reasoned and A6 measures it", "bodyFile": "notes/obs.md" }
+  ] }

@@ -92,7 +92,7 @@ for this reason:**
     tranche-2 ticket".
 - **Security/NFR's "what stays" list does not hold R1's guard.** The decision lists `src/engine.test.ts` "leaves every
   searched position byte-identical, aborted iteration or not" (`:848`). That row is `ABC-078` A7. Its clock is spent
-  after the entry reading, so it aborts before any null move opens (`:812`–`:833`; `ADR-0046` census line, re-read
+  after the entry reading, so it aborts before any null move opens (`:813`–`:833`; `ADR-0046` census line, re-read
   here statically). It also lists "unmakeNullMove leaves every position byte-identical" (`:219`), a unit row with no
   abort. Neither one aborts inside a null subtree. This is reasoned from source, not a mutant run. A6's parity run
   decides it.
