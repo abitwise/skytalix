@@ -1361,6 +1361,7 @@ function newton(
   let steps = 0;
   let mu: Float64Array = new Float64Array(B === null ? 0 : B.bd.rows.length);
   let boundedSteps = 0;
+  let stop = "step cap";
   for (; steps < 50; steps++) {
     const g = new Float64Array(n);
     const H = new Float64Array(n * n);
@@ -1412,6 +1413,8 @@ function newton(
     let zn = z;
     let fn = Number.POSITIVE_INFINITY;
     let useBounded = B !== null && !feasible;
+    // The multipliers of this step: all 0 for a box-only one, which holds no row as an equality.
+    let stepMu: Float64Array = new Float64Array(mu.length);
     if (!useBounded) {
       const dir = cholSolve(H, g, n);
       let t = 1;
@@ -1430,11 +1433,10 @@ function newton(
         t /= 2;
       }
     }
-    if (!useBounded) mu = new Float64Array(mu.length);
     if (useBounded && B !== null) {
       boundedSteps++;
       const step = boundedStep(cfg, B, Hfull, gfull, z, n);
-      mu = step.mu;
+      stepMu = step.mu;
       if (!feasible) {
         // The start breaks a row: the full step lands on it (the rows are linear in z).
         zn = z.map((v, j) => {
@@ -1444,6 +1446,7 @@ function newton(
         fn = objective(cfg, lin, d, groups, zn, lam);
         z = zn;
         f = fn;
+        mu = stepMu;
         continue;
       }
       let t = 1;
@@ -1460,19 +1463,25 @@ function newton(
         t /= 2;
       }
     }
-    if (!(fn <= f)) break;
+    // A rejected step moves nothing, so `z` keeps the multipliers of the step that set it.
+    if (!(fn <= f)) {
+      stop = "line search";
+      break;
+    }
     const rel = (f - fn) / f;
     z = zn;
     f = fn;
+    mu = stepMu;
     if (rel < 1e-9) {
       steps++;
+      stop = "relative change";
       break;
     }
   }
   if (B !== null && worstResidual(B, z, n) > FEAS) {
     throw new Error("bounded fit ended with a bound row broken");
   }
-  return { z, f, steps, mu, boundedSteps };
+  return { z, f, steps, mu, boundedSteps, stop };
 }
 
 /** d7: half away from zero; `+ 0` so no −0 is ever written. */
@@ -1552,7 +1561,7 @@ function fitMix(
   const chosen = bestF < (inner["C-S"] as number) * (1 - 0.001) ? cF : cS;
   const lam = chosen === cF ? bestLam : 0;
   const r = newton(chosen, base, d, groupsFor(own), lam, bd);
-  log.push(`full ${chosen.name} steps ${r.steps} bounded steps ${r.boundedSteps}`);
+  log.push(`full ${chosen.name} steps ${r.steps} bounded steps ${r.boundedSteps} stop ${r.stop}`);
   const table = rounded(chosen.toTable(r.z));
   const B = bd !== null && bd.rows.length > 0 ? boundsFor(chosen, base, bd) : null;
   const bounds =

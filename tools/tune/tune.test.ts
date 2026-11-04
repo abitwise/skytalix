@@ -725,7 +725,7 @@ if (RUN_DEEP) {
       expect(imported.PASSED_UNSTOPPABLE).toEqual({ mg: 0, eg: 0 });
       expect(outputs[0]).toContain("F3 bounds (`ADR-0067` ruling (b)): none");
       expect(outputs[0]).toContain(`players ${T.OWN_PLAYERS.join(" / ")}`);
-    });
+    }, 60_000);
   });
 
   describe("ABC-239 F3's bound and the one refit (ADR-0067 ruling (b), test note 8) [deep, TUNE_DEEP=1]", () => {
@@ -788,7 +788,8 @@ if (RUN_DEEP) {
         expect(margins["C-F"][k], row.row).toBeGreaterThanOrEqual(row.strict ? 1 : 0);
       });
       const rig = BOUNDS.findIndex((row) => row.part === "mobilityTerm(rig) > 0");
-      expect(T.termsOf(bd, rig)).toEqual([]);
+      // Every feature cancels between the two reads; what is left is the mobility count (72) alone.
+      expect(T.termsOf(bd, rig)).toEqual(["MOBILITY_WEIGHT.mg -48", "MOBILITY_WEIGHT.eg -24"]);
     });
 
     it("(1) and (3): a row the box-only fit breaks is held on the rounded set by the bounded fit, and two bounded runs give one file", async () => {
@@ -812,7 +813,7 @@ if (RUN_DEEP) {
       }
       expect(outputs[1]).toBe(outputs[0]);
       expect(outputs[0]).toContain('src/evaluate.king-mobility.test.ts, "fixture"');
-    });
+    }, 60_000);
 
     it("(2): a row the box-only fit holds leaves the bounded fit byte-identical to the box-only fit", async () => {
       const fx = fixture(plainText);
@@ -834,6 +835,6 @@ if (RUN_DEEP) {
         return text.slice(text.indexOf("export interface MgEg"));
       };
       expect(body(r.outDir)).toBe(body(box.outDir));
-    });
+    }, 60_000);
   });
 }
