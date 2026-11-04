@@ -1,3 +1,4 @@
+_Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — **ABC-280 built** (A1–A7 met) → In Review → `qe-ABC-280`. Running: arch-ABC-271, qe-ABC-280._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `bapm-ABC-239-close` merged 2afa9be0: ABC-239 → Done (closed NOT MET, status dropped); **ABC-280** (tools/tune lands alone) → In Development (`se-ABC-280`). Running: arch-ABC-271, se-ABC-280._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — **ABC-239 first pull closed NOT MET** (path (iii), …4c76bf7a; no bar moved; E1 table stays). ABC-271 (E4a) next → `arch-ABC-271`; `bapm-ABC-239-close` (pages + tools-only tune landing ticket). Running: bapm-ABC-239-close, arch-ABC-271._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — **ABC-239 stopped at step 6** (F3 and F4 NOT MET on the fit of record; fit itself 0.9905× and reproducible) → Blocked → `arch-ABC-239-f3f4` (diagnose zugzwang.001, rule the bound procedure, recommend a path). Running: arch-ABC-239-f3f4._
@@ -1431,8 +1432,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-280] **2026-11-04: cut 10/10 (bapm-ABC-239-close) → In Development → `se-ABC-280`.** tools/tune lands alone — ABC-239's tuner from grugops/ABC-239b's 4 tool commits, src/ byte-identical to main; B-T1 0 misses + B-T3 byte-identical on main's table; tools only, UAT waived (EPIC-011 Phase 4; size: S, priority: P3)
+## In Development (WIP 0/3)
 
 
 
@@ -1460,7 +1460,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-280] **2026-11-04: built (grugops/ABC-280 frozen edb9fddd): A1–A7 met — 7 paths, src/ empty diff, npm test 2 650, TUNE_DEEP 17/17, B-T1 0 misses/1 488 071, B-T3 byte-identical → In Review → `qe-ABC-280`.** **2026-11-04: cut 10/10 (bapm-ABC-239-close) → In Development → `se-ABC-280`.** tools/tune lands alone — ABC-239's tuner from grugops/ABC-239b's 4 tool commits, src/ byte-identical to main; B-T1 0 misses + B-T3 byte-identical on main's table; tools only, UAT waived (EPIC-011 Phase 4; size: S, priority: P3)
 
 
 
