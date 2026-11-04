@@ -1,16 +1,32 @@
 ---
 id: ABC-288
-title: "O2c: countermove and continuation history. Quiet moves are also ordered by the move that answered the opponent's last move and by history keyed on the previous move(s), on top of the history table, behind a test-only off-door pair. Held on the Architect's probe and ADR (ABC-283 merged 58e90d07, putting O1h's history table on main)"
+title: "O2c: the countermove. Quiet moves are also ordered by the move that answered the opponent's last move, on top of the history table, behind a test-only off-door pair. ADR-0073 ACCEPTED over a missed premise, form C1; built and read in bundle 1 (ABC-303)"
 status: backlog
 column: Backlog
 size: M
 priority: P3
 epic: EPIC-011
 feature: —
-adr: "ADR-0073 PROPOSED, premise not met (arch-bundle-1: form C1, the countermove alone; CH3 missed, F1 fired). The build does not start on PROPOSED; it waits on the owner's word (OQ-0073-1, one answer with OQ-0072-1)"
+adr: "ADR-0073 ACCEPTED 2026-11-04 by the owner's word, OVER A MISSED PREMISE (OQ-0073-1, option (a); orch-2026-10-30a …3e73f9f9; Status line arch-owner-answers-1104b …88ca95bd). Form C1, the countermove alone; CH3 stays missed and F1 stays fired. Not in force until bundle 1 (ABC-303) merges on its read; on NOT MET, B6 returns it to PROPOSED, premise not met, and this page to held. (Was: PROPOSED, premise not met; arch-bundle-1.)"
 ---
 
-# ABC-288: countermove and continuation history (O2c)
+# ABC-288: the countermove (O2c)
+
+> **`ADR-0073` ACCEPTED OVER A MISSED PREMISE (THE OWNER, OQ-0073-1, OPTION (a)); THE PAGE NARROWS TO THE COUNTERMOVE; IT STAYS A
+> DESIGN PAGE; THE BUILD AND THE READ ARE `ABC-303`, 2026-11-04, by BA/PM** (task `bapm-bundle-1-cut`, records only, at `main` `3ad21218`;
+> nothing run). Sources: the owner's word `orch-2026-10-30a` `…3e73f9f9`, `arch-owner-answers-1104b` `…88ca95bd` § 6 item 2,
+> `ADR-0073` d1, d2, d9 and d10, and `ADR-0056` D5's dated block, tables 1–3.
+> - **This is an override, not a pass.** CH3 stays missed on all four and F1 stays fired. His word lifts CH3 and nothing else:
+>   CH2 stands whole, its drift bar included, on this part's own door. **The countermove has no measured pay.**
+> - **The scope narrowing is his** (option (a) names form C1). Continuation history is rejected (`ADR-0073` § Alternatives).
+> - **The build, the bars, the one read and the disposition are on `ABC-303`.** On NOT MET, B6 returns `ADR-0073` to PROPOSED,
+>   premise not met, and this page to held.
+> - **Lines changed:** the title and this heading; `adr:`; scope 1; CH1; CH3; F1's disposition; DoR rows 4 and 10; the closing
+>   line. The file name keeps its as-cut slug (sealed notes cite paths).
+> - **Not on this hop's list, and read with this block:** scope 2 and 3's and § NFR triggers' plural "tables", which is the
+>   one table now; CH4; § Dependencies. The blocks below this one are history.
+> - **DoR 10/10 as a design page.** `ABC-303` carries the Ready state, as `ABC-283` did for its parts. The board move is the
+>   Orchestrator's.
 
 > **THE `adr:` LINE NAMES `ADR-0073`, PROPOSED, PREMISE NOT MET; EVERYTHING ELSE WAITS ON THE OWNER'S ANSWER, 2026-11-04,
 > by BA/PM** (task `bapm-lines-1104b`, records only, at `main` `732a0cea`; nothing run). Sources: `arch-bundle-1`
@@ -59,8 +75,10 @@ adr: "ADR-0073 PROPOSED, premise not met (arch-bundle-1: form C1, the countermov
 
 The ADR governs each line.
 
-1. A countermove table and continuation-history tables, by the keys and entry widths the ADR names, raised on a quiet
-   cutoff by the rule it names.
+1. ~~A countermove table and continuation-history tables, by the keys and entry widths the ADR names, raised on a quiet
+   cutoff by the rule it names.~~ *2026-11-04 (`bapm-bundle-1-cut`; `ADR-0073` d1, d2):* one countermove table, `Int32Array(768)`, keyed by
+   the previous move's coloured piece × to-square. A main-tree beta cutoff by a quiet move overwrites the cell of the node's
+   previous move. Continuation history is dropped.
 2. Their place in the quiet-move order relative to the killers and the history table (`ABC-283`).
 3. Cleared on the rule the ADR names (`ADR-0063`'s table is cleared every search).
 4. One switch and a test-only off-door pair (`ADR-0026` d10). Older doors turn it off.
@@ -76,12 +94,15 @@ The ADR fixes exact counts and bars before Ready. None is loosened after Ready.
 
 - **CH0 (identity):** switch off, node counts equal `main`'s exactly; every pre-ticket door reproduces its counts
   (`G4`).
-- **CH1 (the tables):** units on the update, the read and the clear, one row each; the tables' byte size pinned.
+- **CH1 (the ~~tables~~ table):** units on the update, the read and the clear, one row each; the ~~tables'~~ table's byte size
+  pinned *at **3 072 bytes** (2026-11-04, `bapm-bundle-1-cut`; `ADR-0073` d1, F6; `ADR-0056` row P5)*.
 - **CH2 (safety, `ADR-0064` d7's list):** mate floor 0 violations; zugzwang 7 / 7 at recorded depths, none re-pinned;
   `G1` ≥ 54 / 58 with no NEWLY-missed line. Ordering changes no score at a fixed depth in a full-width search, but
   pruning and reductions read the index, so drift is read (`ADR-0063` decision 11's caveat).
-- **CH3 (pay, owed):** a pre-registered pay gate, `ADR-0063`'s shape (a fixed-depth node ratio on four readings) with
-  the ADR's number.
+- **CH3 (pay, ~~owed~~ **reported**):** a pre-registered pay gate, `ADR-0063`'s shape (a fixed-depth node ratio on four readings)
+  ~~with the ADR's number~~. *2026-11-04 (`bapm-bundle-1-cut`; `ADR-0073` d9 (d), d10; `ADR-0056` row R3):* the number was ≤ 0.95 × on the four,
+  and all four missed: 1.0031 / 0.9999 / 1.0935 / 0.9989. The lift is given, so CH3 is **reported,** on its own door and
+  alone over the all-off door. No verdict rides on it.
 - **CH4 (the read; `EPIC-011` § The per-change rule, by reference).** Intent named by the ADR before Ready. C2′ ≥ 50.0
   (GAIN) or ≥ 43.0 (NEUTRAL) of 100, S′ at E 1 810, the Levels deep lane.
 - **CH5:** `G6` "≥ base" (a search ticket).
@@ -90,7 +111,7 @@ The ADR fixes exact counts and bars before Ready. None is loosened after Ready.
 
 | # | fires when | disposition |
 |---|---|---|
-| F1 | CH3 missed on the probe | stays held, as `ADR-0063` was; no form is tuned after the read |
+| F1 | CH3 missed on the probe | ~~stays held, as `ADR-0063` was;~~ no form is tuned after the read *2026-11-04 (`bapm-bundle-1-cut`): **fired on all four, and it stays fired.** By the owner's word (a) the build enters over it in form C1, and CH3 is reported. On NOT MET, held again (B6)* |
 | F2 | CH0 red | a defect |
 | F3 | CH2 red | a defect check first; if real, NOT MET |
 | F4 | CH4 NOT MET | not merged |
@@ -129,12 +150,14 @@ The ADR fixes exact counts and bars before Ready. None is loosened after Ready.
 | 1 | problem clear | ✅ quiet order ignores the last move; the small-pay risk is stated; the value is an estimate |
 | 2 | scope and out-of-scope | ✅ scope 1–4 |
 | 3 | INVEST | ✅ M; one ordering change |
-| 4 | testable, measurable acceptance | ✅ CH0 exact; CH2 0 / 7 of 7 / ≥ 54; CH4 ≥ 50.0 or ≥ 43.0. CH3's number owed with the ADR (row 10) |
+| 4 | testable, measurable acceptance | ✅ CH0 exact; CH2 0 / 7 of 7 / ≥ 54; CH4 ≥ 50.0 or ≥ 43.0. ~~CH3's number owed with the ADR (row 10)~~ *2026-11-04 (`bapm-bundle-1-cut`): CH1 3 072 bytes; CH3 reported under the lift* |
 | 5 | dependencies known | ✅ `ABC-283`; the shared files |
 | 6 | NFR triggers with targets | ✅ `NFR-009` ≤ 16 MiB / ≤ 1 MiB; `NFR-005`; `NFR-008` ≤ 10 s |
 | 7 | test notes | ✅ 1–2 |
 | 8 | size | ✅ M |
 | 9 | priority | ✅ P3 |
-| 10 | no major unresolved blocker | ❌ ~~**held on `ABC-283`'s read**~~ **held on the Architect's probe**; the ADR is owed *(2026-11-04, `bapm-ABC-283-done`: `ABC-283` merged `58e90d07`)* |
+| 10 | no major unresolved blocker | ~~❌~~ ✅ ~~**held on `ABC-283`'s read**~~ ~~**held on the Architect's probe**; the ADR is owed~~ *(2026-11-04, `bapm-ABC-283-done`: `ABC-283` merged `58e90d07`)* *2026-11-04 (`bapm-bundle-1-cut`): the probe is read: CH3 missed, F1 fired and stays fired. OQ-0073-1 answered (a), so `ADR-0073` is ACCEPTED over a missed premise, not in force. Built and read only as `ABC-303`; on NOT MET, held again (B6)* |
 
-**DoR 9/10. Backlog, held.**
+~~**DoR 9/10. Backlog, held.**~~
+**DoR 10/10 as a design page** (2026-11-04, `bapm-bundle-1-cut`). `ABC-303` carries the Ready state; this page is not pulled on its own. The
+board move is the Orchestrator's.
