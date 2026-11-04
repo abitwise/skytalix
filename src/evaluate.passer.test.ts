@@ -24,7 +24,7 @@
 import { createHash } from "node:crypto";
 import { readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { chooseMove, type EngineChoice } from "./engine.ts";
+import { chooseMoveWithoutBundle, type EngineChoice } from "./engine.ts";
 import { buildCorpus, mirrorPosition, PERFT_POSITIONS } from "./evaluate.mirror-corpus.ts";
 import { TAPER_DOOR_CORPUS, TAPER_MIRROR_POSITIONS } from "./evaluate.taper-corpus.ts";
 import {
@@ -40,7 +40,7 @@ import {
 import * as PARAMS from "./evaluate-params.ts";
 import { parseFen, toFen } from "./fen.ts";
 import { squareName } from "./position.ts";
-import { search } from "./search.ts";
+import { searchWithoutBundle } from "./search.ts";
 
 const FIXTURES_FILE = new URL("./evaluate.passer-fixtures.json", import.meta.url);
 const FIXTURES_SHA256 = "bf3c205bf4106209e3151717d93542180d90d344cecfdfbb6f2a30c9d5db887a";
@@ -395,16 +395,22 @@ if (process.env.SEARCH_DEEP === "1") {
   describe("ABC-271 K0 — node identity with main: the seven counts, exact [deep, SEARCH_DEEP=1]", () => {
     const fenOf = (name: string): string =>
       (PERFT_POSITIONS.find((p) => p.name === name) as { fen: string }).fen;
+    // The rows ask the pre-`ABC-283` pair, a re-point and not a re-pin: `ADR-0070` d5's dated line
+    // of 2026-11-04. Row names stay, as the keys of `FROZEN.k0`.
     const deepenTo = (name: string, maxDepth: number): EngineChoice =>
-      chooseMove(parseFen(fenOf(name)), { budgetMs: 1e9, now: () => 0, maxDepth }) as EngineChoice;
+      chooseMoveWithoutBundle(parseFen(fenOf(name)), {
+        budgetMs: 1e9,
+        now: () => 0,
+        maxDepth,
+      }) as EngineChoice;
     const ROWS = [
       ["kiwipete_chooseMove_d8", () => deepenTo("kiwipete", 8).nodes],
       ["kiwipete_chooseMove_d9", () => deepenTo("kiwipete", 9).nodes],
       ["pos6_chooseMove_d8", () => deepenTo("position-6", 8).nodes],
       ["pos6_chooseMove_d9", () => deepenTo("position-6", 9).nodes],
       ["pos6_chooseMove_d10", () => deepenTo("position-6", 10).nodes],
-      ["kiwipete_search_d8", () => search(parseFen(fenOf("kiwipete")), 8).nodes],
-      ["pos6_search_d8", () => search(parseFen(fenOf("position-6")), 8).nodes],
+      ["kiwipete_search_d8", () => searchWithoutBundle(parseFen(fenOf("kiwipete")), 8).nodes],
+      ["pos6_search_d8", () => searchWithoutBundle(parseFen(fenOf("position-6")), 8).nodes],
     ] as const;
     for (const [name, read] of ROWS) {
       it(`${name} = ${FROZEN.k0[name]} [deep, SEARCH_DEEP=1]`, () => {

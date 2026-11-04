@@ -32,6 +32,7 @@ import type { Move } from "./moves.ts";
 import { EMPTY, squareName } from "./position.ts";
 import { captureScratchByteLength, QUIESCENCE_MAX_PLY } from "./quiescence.ts";
 import {
+  historyByteLength,
   KEY_ARRAY_CAPACITY,
   MATE_SCORE,
   orderScratchByteLength,
@@ -653,13 +654,16 @@ describe("A7 — the table holds a fixed 4 MiB, whatever the search", () => {
     expect(captureScratchByteLength()).toBe(256 * 8);
     // ABC-279: the static exchange evaluator's scratch is fixed (`ADR-0069` decision 4).
     expect(seeScratchByteLength()).toBe(288);
+    // ABC-283: the history table is fixed and counted in (a)'s sum (`ADR-0063` § Consequences' dated
+    // line of 2026-11-04). Its 32 768 is pinned in `src/search.bundle.test.ts`.
     expect(
       tableByteLength() +
         keyArrayBytes +
         pawnCacheByteLength() +
         orderScratchByteLength() +
         captureScratchByteLength() +
-        seeScratchByteLength(),
+        seeScratchByteLength() +
+        historyByteLength(),
     ).toBeLessThanOrEqual(16 * 1024 * 1024);
   });
 

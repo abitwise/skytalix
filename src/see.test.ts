@@ -558,11 +558,13 @@ if (process.env.SEARCH_DEEP === "1") {
       expect(corpus()).toHaveLength(190);
     });
 
+    // Both rows' shipped side is the all-off door, one rung above Q1's: `ADR-0069` d11's dated line
+    // of 2026-11-04 (`ADR-0072` d7's). Titles and bars stay.
     it("search() against searchWithoutSeePruning at depth 5: >= 93% within 25 cp, none beyond 144, 0 mate sign changes [deep, SEARCH_DEEP=1]", () => {
       bar(
         "search() d5",
         drift(
-          (fen) => search(parseFen(fen), 5).score,
+          (fen) => searchWithoutBundle(parseFen(fen), 5).score,
           (fen) => searchWithoutSeePruning(parseFen(fen), 5).score,
         ),
       );
@@ -572,7 +574,7 @@ if (process.env.SEARCH_DEEP === "1") {
       bar(
         "chooseMove to d5",
         drift(
-          (fen) => deepenTo(chooseMove, fen, 5).score,
+          (fen) => deepenTo(chooseMoveWithoutBundle, fen, 5).score,
           (fen) => deepenTo(chooseMoveWithoutSeePruning, fen, 5).score,
         ),
       );
