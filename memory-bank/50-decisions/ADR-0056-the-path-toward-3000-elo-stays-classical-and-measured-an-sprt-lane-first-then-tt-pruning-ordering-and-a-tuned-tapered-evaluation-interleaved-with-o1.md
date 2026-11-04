@@ -420,7 +420,7 @@ repo's own readings; **[J]** Architect judgement from common practice (lowest co
 | O2c | countermove / continuation history | +10–30 | [J] | M | low | O1h | none (out of `ABC-233` scope) |
 | O3s | SEE for capture ordering | +10–30 | [B] 7.1; [J] | M | low | — | `ABC-234`: `ADR-0065` PROPOSED, premise not met on `main` (2026-11-03; S1m `chooseMove` d8 0.986 / 0.955); A0 ruled: d4 fences Q1, not O3s; parked |
 | Q1 | SEE pruning of losing captures (quiescence and main) | +20–50 | [t] "see pruning"; [J]; diagnostic +0.88 ply reach, d8 0.22–0.68× (`arch-ABC-234`, not pre-registered) | S–M, carrying `see` (`ADR-0065` decision 2) | medium | `ADR-0024` d4 (owner `Q-3K-9`, pending) | none (fenced out of `EPIC-010`) |
-| Q2 | delta pruning in quiescence | +5–20 | `ADR-0024` (1.5× trim measured) | S | low | — | none (fenced out of `EPIC-010`) |
+| Q2 | delta pruning in quiescence | +5–20 | pre-registered: D200b +0.279 ply, d8 0.64–0.83× (`arch-ABC-289`, PREREG `…174760a3`); `ADR-0024`'s 1.5× trim predates futility, the taper and Q1 | S | low | `ADR-0024` d4 opened for design by `Q-3K-10` yes (`…7de79e90`) | `ABC-289` (`EPIC-011`): `ADR-0074` PROPOSED (2026-11-04), premise met on `main`; the owner's `OQ-0074-1` open |
 | S1 | aspiration windows | +10–30 | [J] | M | low | T1 | `ABC-236`: `ADR-0066` PROPOSED, premise not met on `main` (2026-11-03; A100 d8 0.9836 / 0.9913); fires at 100 ms; parked |
 | X1 | check extension at every depth (not `ABC-210`'s horizon form) | +10–30 | [J]; [R] `ABC-210` −4.8 ± 16.2 (other form) | S | medium | — | `ABC-210` re-cut, other form (owner: scope) |
 | X2 | singular extension (+ IIR) | +20–50 | [B] 8.0, 8.5.5 | M | high | T1 | none — new ticket |
@@ -704,6 +704,17 @@ on QE's pass `qe-ABC-283` `…de1dc511`): rows O1h, O3s and S1.*
 - **What it unholds** (the Orchestrator, `…2409cec9` 5): after the merge, `ABC-282` (W1) is unheld, and `ABC-286` (P4, over the
   history-ordered quiet list) and `ABC-288` (O2c, on the history table) are unheld for their probes. P1 (`ABC-284`) reads `R-283-LMR`
   (`ADR-0060` § Status, dated 2026-11-04).
+
+*Dated 2026-11-04 (`arch-records-1104`, records only at `main` `83894094`; owed by `arch-ABC-289` `…62012bbe` § 6, the
+Orchestrator's `…5ec6c124` 5 and `…0edae6fd` 1; `arch-bundle-1` released the file, merged `5fb58b95`): row Q2.*
+- **The row is rewritten in place.** Its basis cell now reads "pre-registered: D200b +0.279 ply, d8 0.64–0.83×", and its
+  dependency and ticket cells carry the line of `arch-owner-answers-1104` above, which had left them as written.
+- **The re-measure that line asked for is done, and the premise is met** on `main` `0cc9afd1` with Q1 in it: reach at
+  47 000 nodes 6.868 → 7.147; d8 0.6362 / 0.8263 in `search()` and 0.6484 / 0.8201 in `chooseMove`.
+- **The row's +5–20 stays an estimate.** +0.279 ply is about a third of Q1's reach, and C2′ cannot size the gain. The
+  build ships on its own read.
+- **Not settled here.** `ADR-0074` is PROPOSED and the owner accepts it; until then `ADR-0024` d4 stands as written.
+  `ABC-289`'s build is held on his answers (`…5ec6c124` 3). This line does not set Q2's slot.
 
 ### D3. Is 3 000 reachable without a neural network?
 

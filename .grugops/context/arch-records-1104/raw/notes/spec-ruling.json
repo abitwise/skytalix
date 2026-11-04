@@ -1,0 +1,10 @@
+{ "refs": ["arch-records-1104", "ABC-301", "ABC-271", "EPIC-011", "ADR-0067", "ADR-0070", "ADR-0064", "B-T4", "K1", "a1e19981", "83894094",
+  "orch-2026-10-30a/20261103T221607Z-orchestrator-decision-42c82347",
+  "orch-2026-10-30a/20261104T212001Z-orchestrator-decision-878035ca",
+  "orch-2026-10-30a/20261104T212555Z-orchestrator-decision-0edae6fd",
+  "qe-ABC-301-s0/20261104T213516Z-qe-e2e-decision-9fd32f43",
+  "qe-ABC-301-s0/20261104T213516Z-qe-e2e-observation-270757f7",
+  "qe-ABC-271-freeze/20261104T133856Z-qe-e2e-decision-67b5eeac",
+  "se-ABC-301-s0/20261104T211909Z-software-engineer-observation-534a582c",
+  "se-ABC-301-fit", "src/evaluate.passer.test.ts"],
+  "notes": [ { "kind": "decision", "confidence": "high on the two readings under B-T4's written rule; medium on 'held elsewhere', reasoned from the rows and QE's mutant trees at shipped 0; nothing run", "bodyFile": "ruling.md" } ] }
