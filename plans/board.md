@@ -1,3 +1,4 @@
+_Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — **ABC-302 built** (se-ABC-302 a5651cbf): lane 2 684; nine -t lines 1 passed; mutant spot-checks killed; ungraded median 9.52 s vs base 9.90 s (−0.39 s, 6/6). → In Review → `qe-ABC-302` (A8 graded ALONE). Owner: Q-N8H-1, Q-3K-11 (+ bundle 1)._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `arch-ABC-302` merged: six rows S, three W, R9 gated in its own file; kill parity on 27 mutants; forecast −0.50 s; no owner question. → `bapm-ABC-302-dor` + `se-ABC-302` (In Development). Owner: Q-N8H-1, Q-3K-11 (+ bundle 1)._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `bapm-ABC-302-cut` merged: **ABC-302** (NFR-008 headroom, −0.55 s, S, P1, DoR 9/10) → `arch-ABC-302` (remnants, R8/R9 placement). A8 9.4 s is a target, not a bar; no in-ticket offset. Running: arch-ABC-302. Owner: Q-N8H-1, Q-3K-11 (+ bundle 1)._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `secnfr-nfr008-1104` merged 7c4396a3: **NFR-008 MET 9.84 s graded (0.16 s headroom)**; R-N8H-1 → MEDIUM; R-281-a closed. Ruling …112cd856: headroom ticket ABC-302 (−0.55 s) next on the critical path; ABC-282 and ABC-301 scope 0 after it, each ≤ +0.1 s of lane. **Owner asked: Q-N8H-1, Q-3K-11 (+ bundle 1).** Running: bapm-ABC-302-cut._
@@ -1344,12 +1345,12 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 1/3)
-- [ABC-302] NFR-008 headroom (test-only, form S/W per arch-ABC-302). se-ABC-302 running.
+    ## In Development (WIP 0/3)
 - ~~[ABC-283]~~ → Blocked. The O1h+O3s+S1 bundle (ABC-233 history, ABC-234 SEE ordering, ABC-236 root aspiration) on one branch; one read of 100 games at 100 ms, GAIN ≥ 50.0 (owner's word, …4c4cb03d). se-ABC-283 running; rulings …3851bf43.
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
-    ## In Review (WIP 0/3)
+    ## In Review (WIP 1/3)
+- [ABC-302] NFR-008 headroom (test-only). Built a5651cbf → qe-ABC-302.
     - [ABC-012] Portfolio FX conversion  (PR: #41, QE: running)
 
   BOARD <-> TICKET CONTRACT: each ticket file (`plans/tickets/<prefix>-xxx.md`) carries a
