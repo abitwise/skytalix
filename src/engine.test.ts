@@ -1422,9 +1422,10 @@ describe("ABC-170 A5 — the limits only shorten; the ceiling still holds", () =
     return clock;
   };
 
-  it("on an infinite budget, maxDepth 1000 returns within the same consultation count", () => {
-    const without = countingClock(2_500, 64);
-    const withCap = countingClock(2_500, 64);
+  // ABC-302 (secnfr-nfr008-1104, arch-ABC-302): a 10 000 ms counting clock stays in the default lane; 2 500 runs under ENGINE_DEEP=1.
+  it("on an infinite budget and a 10 000 ms counting clock, maxDepth 1000 returns within the same consultation count", () => {
+    const without = countingClock(10_000, 64);
+    const withCap = countingClock(10_000, 64);
     const startpos = () => parseFen(fenOf("startpos"));
     const a = chooseMove(startpos(), { budgetMs: Number.POSITIVE_INFINITY, now: without.now });
     const b = chooseMove(startpos(), {
@@ -1432,9 +1433,28 @@ describe("ABC-170 A5 — the limits only shorten; the ceiling still holds", () =
       now: withCap.now,
       maxDepth: 1000,
     });
+    expect(without.consultations).toBeGreaterThan(2);
     expect(withCap.consultations).toBe(without.consultations);
     expect(b).toEqual(a);
   });
+
+  if (RUN_DEEP) {
+    describe("ABC-170 A5 — the limits only shorten; the ceiling still holds [deep, ENGINE_DEEP=1]", () => {
+      it("on an infinite budget, maxDepth 1000 returns within the same consultation count", () => {
+        const without = countingClock(2_500, 64);
+        const withCap = countingClock(2_500, 64);
+        const startpos = () => parseFen(fenOf("startpos"));
+        const a = chooseMove(startpos(), { budgetMs: Number.POSITIVE_INFINITY, now: without.now });
+        const b = chooseMove(startpos(), {
+          budgetMs: Number.POSITIVE_INFINITY,
+          now: withCap.now,
+          maxDepth: 1000,
+        });
+        expect(withCap.consultations).toBe(without.consultations);
+        expect(b).toEqual(a);
+      });
+    });
+  }
 
   it("at budgetMs 5, maxDepth 50 returns the same depth and move as no maxDepth", () => {
     for (const fen of [endgameFen("kp-vs-k"), fenOf("startpos")]) {

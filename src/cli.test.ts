@@ -4646,16 +4646,28 @@ describe("ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable
       priorKeys: trimPriorKeys(list(game), game.position.halfmoveClock),
     });
 
-  it("A4: with repetitionKeyHistory injected the default level plays d8e8 at exactly 0; base does not", async () => {
+  // ABC-302 (secnfr-nfr008-1104, arch-ABC-302): a 500 ms step (depth 8) stays here; the 100 ms row runs in src/uci-session.test.ts under ENGINE_DEEP=1.
+  it("A4 (slice): on a 500 ms virtual step, with repetitionKeyHistory injected the default level plays d8e8 at exactly 0; base does not", async () => {
     const game = gameOf(FEN);
-    expect(labelOf(await seamOf(repetitionKeyHistory)(game))).toBe("d8e8");
-    const direct = scoreWith(game, repetitionKeyHistory);
+    const at500 = (list: typeof keyHistory) =>
+      chooseMove(parseFen(toFen(game.position)), {
+        budgetMs: LEVELS[DEFAULT_LEVEL].budgetMs,
+        now: virtualClock(500),
+        priorKeys: trimPriorKeys(list(game), game.position.halfmoveClock),
+      });
+    const seam = createLevelSeam(
+      DEFAULT_LEVEL,
+      { seed: 1, now: virtualClock(500) },
+      repetitionKeyHistory,
+    );
+    expect(labelOf(await seam(game))).toBe("d8e8");
+    const direct = at500(repetitionKeyHistory);
     expect(direct && { move: labelOf(direct.move), score: direct.score }).toEqual({
       move: "d8e8",
       score: 0,
     });
-    // `ABC-230`'s injection (the hash list), same clock: no draw seen, a losing score.
-    expect(scoreWith(game, keyHistory)?.score).not.toBe(0);
+    expect(direct?.depth).toBeGreaterThanOrEqual(5);
+    expect(at500(keyHistory)?.score).not.toBe(0);
   });
 
   it("cli.ts imports repetitionKeyHistory from history.ts under its own name (no alias for keyHistory)", () => {

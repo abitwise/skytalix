@@ -612,15 +612,20 @@ describe("the doors — searchWithoutFutility and chooseMoveWithoutFutility turn
     });
   }
 
-  it("the rule changes the work: search() at depth 4 and chooseMove deepened to 4 on position-6 visit fewer nodes than their doors", () => {
-    const fen = fenOf("position-6");
-    const head = search(parseFen(fen), 4).nodes;
-    const door = searchWithoutFutility(parseFen(fen), 4).nodes;
-    expect(head).toBeLessThan(door);
-    const headChoice = deepenTo(chooseMove, fen, 4);
-    const doorChoice = deepenTo(chooseMoveWithoutFutility, fen, 4);
-    expect(headChoice.nodes).toBeLessThan(doorChoice.nodes);
-  });
+  // ABC-302 (secnfr-nfr008-1104, arch-ABC-302): form W, the row runs under SEARCH_DEEP=1 only.
+  if (RUN_DEEP) {
+    describe("the doors — searchWithoutFutility and chooseMoveWithoutFutility turn futility off, as every older door does [deep, SEARCH_DEEP=1]", () => {
+      it("the rule changes the work: search() at depth 4 and chooseMove deepened to 4 on position-6 visit fewer nodes than their doors", () => {
+        const fen = fenOf("position-6");
+        const head = search(parseFen(fen), 4).nodes;
+        const door = searchWithoutFutility(parseFen(fen), 4).nodes;
+        expect(head).toBeLessThan(door);
+        const headChoice = deepenTo(chooseMove, fen, 4);
+        const doorChoice = deepenTo(chooseMoveWithoutFutility, fen, 4);
+        expect(headChoice.nodes).toBeLessThan(doorChoice.nodes);
+      });
+    });
+  }
 
   // `ABC-269` (`ADR-0064` decision 7): the shipped side re-points to `searchWithoutTaper`, the
   // shipped path less the taper, so the row keeps measuring futility alone.

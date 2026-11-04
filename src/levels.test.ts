@@ -322,32 +322,35 @@ describe("ABC-212 A1 — levels 6 and 7 above the default (ADR-0045 § AMENDMENT
   });
 });
 
-describe("ABC-174 A3 — the default plays as the engine: chooseMove at 4 000 ms (ABC-228, ADR-0053 d10)", () => {
-  const level = LEVELS[DEFAULT_LEVEL];
-  const step = level.budgetMs / 3;
+// ABC-302 (secnfr-nfr008-1104, arch-ABC-302): form W, the describe runs under ENGINE_DEEP=1 only.
+if (RUN_DEEP) {
+  describe("ABC-174 A3 — the default plays as the engine: chooseMove at 4 000 ms (ABC-228, ADR-0053 d10) [deep]", () => {
+    const level = LEVELS[DEFAULT_LEVEL];
+    const step = level.budgetMs / 3;
 
-  it("move, depth and nodes are equal on 30 of 30 positions, for each of two seeds", () => {
-    expect(THIRTY).toHaveLength(30);
-    const reference = THIRTY.map((fen) =>
-      chooseMove(parseFen(fen), { budgetMs: 4_000, now: virtualClock(step) }),
-    );
-    for (const seed of [1, 87]) {
-      const equal = THIRTY.filter((fen, i) => {
-        const viaLevel = createLevel(level, { seed, now: virtualClock(step) })(parseFen(fen));
-        const viaEngine = reference[i];
-        return (
-          viaLevel !== null &&
-          viaEngine != null &&
-          viaLevel.kind === "engine" &&
-          label(viaLevel.move) === label(viaEngine.move) &&
-          viaLevel.depth === viaEngine.depth &&
-          viaLevel.nodes === viaEngine.nodes
-        );
-      });
-      expect(equal, `seed ${seed}`).toHaveLength(30);
-    }
+    it("move, depth and nodes are equal on 30 of 30 positions, for each of two seeds", () => {
+      expect(THIRTY).toHaveLength(30);
+      const reference = THIRTY.map((fen) =>
+        chooseMove(parseFen(fen), { budgetMs: 4_000, now: virtualClock(step) }),
+      );
+      for (const seed of [1, 87]) {
+        const equal = THIRTY.filter((fen, i) => {
+          const viaLevel = createLevel(level, { seed, now: virtualClock(step) })(parseFen(fen));
+          const viaEngine = reference[i];
+          return (
+            viaLevel !== null &&
+            viaEngine != null &&
+            viaLevel.kind === "engine" &&
+            label(viaLevel.move) === label(viaEngine.move) &&
+            viaLevel.depth === viaEngine.depth &&
+            viaLevel.nodes === viaEngine.nodes
+          );
+        });
+        expect(equal, `seed ${seed}`).toHaveLength(30);
+      }
+    });
   });
-});
+}
 
 describe("ABC-174 A4 — the mechanism's shape: a budget and a rate per level", () => {
   it("every level's keys are exactly [blunderRate, budgetMs]", () => {
@@ -934,13 +937,16 @@ if (RUN_DEEP) {
   });
 }
 
-describe("A7 — seeded, in deterministic mode", () => {
-  it("a fixed seed gives identical blunder decisions across runs", () => {
-    const first = decisions(playAll(easiest, 2026, THIRTY));
-    expect(first.some((d) => d.startsWith("B:"))).toBe(true);
-    expect(decisions(playAll(easiest, 2026, THIRTY))).toEqual(first);
+// ABC-302 (secnfr-nfr008-1104, arch-ABC-302): form W, the describe runs under ENGINE_DEEP=1 only.
+if (RUN_DEEP) {
+  describe("A7 — seeded, in deterministic mode [deep]", () => {
+    it("a fixed seed gives identical blunder decisions across runs", () => {
+      const first = decisions(playAll(easiest, 2026, THIRTY));
+      expect(first.some((d) => d.startsWith("B:"))).toBe(true);
+      expect(decisions(playAll(easiest, 2026, THIRTY))).toEqual(first);
+    });
   });
-});
+}
 
 describe("A10 — the seed is threaded, not global", () => {
   it("two instances, different seeds, called A, B, A, B, … play as each alone: 10/10 each", () => {

@@ -69,6 +69,9 @@ vi.mock("./search.ts", async (importOriginal) => {
   };
 });
 
+/** `ABC-302` (`arch-ABC-302`, option ii): the existing `ENGINE_DEEP` variable; unset, the full row is not defined. */
+const RUN_DEEP = process.env.ENGINE_DEEP === "1";
+
 const START = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const ITERATIONS = KEY_ARRAY_CAPACITY + 2;
 /**
@@ -111,13 +114,14 @@ beforeEach(() => {
 });
 
 describe("ABC-122 A8: src/engine.ts's KEY_ARRAY_CAPACITY guard, reached through chooseMove()", () => {
-  it("ends every line at ply 128 with a leaf's score once the deepening passes it: no node or key past it", () => {
+  // ABC-302 (secnfr-nfr008-1104, arch-ABC-302): a clock spent after 2 x ITERATIONS root passes stays in the default lane; PASSES runs under ENGINE_DEEP=1.
+  it("on a clock spent after 2 x ITERATIONS (260) root passes, ends every line at ply 128 with a leaf's score: no node or key past it", () => {
     const expected = leafScoreAtCapacity();
     expect(expected).not.toBe(0);
     const position = parseFen(START);
 
     // Virtual time: frozen until the deepening has STARTED `PASSES` root passes, then spent.
-    const now = () => (spy.iterationStarts.length < PASSES ? 0 : Number.MAX_SAFE_INTEGER);
+    const now = () => (spy.iterationStarts.length < 2 * ITERATIONS ? 0 : Number.MAX_SAFE_INTEGER);
     const choice = chooseMove(position, { budgetMs: 1_000, now });
 
     // The deepening really went past the capacity, so remaining depth was left at ply 128.
@@ -131,3 +135,27 @@ describe("ABC-122 A8: src/engine.ts's KEY_ARRAY_CAPACITY guard, reached through 
     expect(toFen(position)).toBe(START);
   });
 });
+
+if (RUN_DEEP) {
+  describe("ABC-122 A8: src/engine.ts's KEY_ARRAY_CAPACITY guard, reached through chooseMove() [deep, ENGINE_DEEP=1]", () => {
+    it("ends every line at ply 128 with a leaf's score once the deepening passes it: no node or key past it", () => {
+      const expected = leafScoreAtCapacity();
+      expect(expected).not.toBe(0);
+      const position = parseFen(START);
+
+      // Virtual time: frozen until the deepening has STARTED `PASSES` root passes, then spent.
+      const now = () => (spy.iterationStarts.length < PASSES ? 0 : Number.MAX_SAFE_INTEGER);
+      const choice = chooseMove(position, { budgetMs: 1_000, now });
+
+      // The deepening really went past the capacity, so remaining depth was left at ply 128.
+      expect(choice?.depth).toBeGreaterThan(KEY_ARRAY_CAPACITY);
+      // Return value: the deepest completed iteration scores exactly the leaf at the capacity.
+      expect(choice?.score).toBe(expected);
+      // Call spy: a node AT the capacity was entered, and none below it.
+      expect(spy.deepestPly).toBe(KEY_ARRAY_CAPACITY);
+      // Write spy: at most keys[1] … keys[128] in any one iteration. The array holds 129.
+      expect(Math.max(...writesPerIteration())).toBe(KEY_ARRAY_CAPACITY);
+      expect(toFen(position)).toBe(START);
+    });
+  });
+}
