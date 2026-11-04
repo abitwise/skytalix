@@ -1,0 +1,6 @@
+{
+ "refs": ["arch-ABC-283-mate", "ABC-283", "ABC-233", "ADR-0063", "ADR-0064", "F2", "orch-2026-10-30a", "19583086", "se-ABC-283", "0b0b135f", "0d3e1e5b", "d64042c4", "grugops/ABC-283", "4e7ddcca", "src/search.ts", "src/engine.ts", "PREREG"],
+ "notes": [
+  {"kind": "decision", "bodyFile": "note-prereg.md", "confidence": "high (written and sealed before any measured run; the rule and the bars are fixed here)"}
+ ]
+}
