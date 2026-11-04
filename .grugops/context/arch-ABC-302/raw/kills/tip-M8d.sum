@@ -1,0 +1,3 @@
+total 2684 passed 2682 failed 2 pending 0 todo 0 files 71 failedSuites 4
+KILL	cli.test.ts::ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square A4 (slice): on a 500 ms virtual step, with repetitionKeyHistory injected the default level plays d8e8 at exactly 0; base does not
+KILL	uci-session.test.ts::ABC-241 A4, A5 — UCI: the prior keys are repetition keys A5 (slice): on a 500 ms virtual step, the CLI level seam's injected list equals UCI's, key for key, and both play d8e8

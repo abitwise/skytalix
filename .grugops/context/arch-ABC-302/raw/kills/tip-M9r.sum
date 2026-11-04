@@ -1,0 +1,2 @@
+total 2684 passed 2683 failed 1 pending 0 todo 0 files 71 failedSuites 2
+KILL	engine.capacity.test.ts::ABC-122 A8: src/engine.ts's KEY_ARRAY_CAPACITY guard, reached through chooseMove() on a clock spent after 2 x ITERATIONS (260) root passes, ends every line at ply 128 with a leaf's score: no node or key past it

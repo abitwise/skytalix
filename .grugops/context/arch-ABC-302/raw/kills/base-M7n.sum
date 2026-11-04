@@ -1,0 +1,4 @@
+total 2687 passed 2684 failed 3 pending 0 todo 0 files 71 failedSuites 4
+KILL	levels.test.ts::ABC-174 A3 — the default plays as the engine: chooseMove at 4 000 ms (ABC-228, ADR-0053 d10) move, depth and nodes are equal on 30 of 30 positions, for each of two seeds
+KILL	levels.test.ts::A6 — the default level at rate 0 returns `chooseMove`'s move, depth, nodes and elapsed on the same clock
+KILL	levels.test.ts::ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A6: a non-blunder draw at level 1 is chooseMove's on the same keys, node for node

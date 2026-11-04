@@ -1,0 +1,24 @@
+total 2687 passed 2664 failed 23 pending 0 todo 0 files 71 failedSuites 17
+KILL	cli.test.ts::ABC-101 — --difficulty selects a level, and the played engine is that level A8′ — the seam built for each level moves exactly as `createLevel` does, on one seed and one injected clock
+KILL	cli.test.ts::ABC-242 A4 — the CLI seam at level 1: a blunder that reads the third occurrence as 0 A4: the seam plays a direct createLevel(LEVELS[1]) call's move; that call's list carries the 0
+KILL	levels.test.ts::ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A6: a non-blunder draw at level 1 is chooseMove's on the same keys, node for node
+KILL	levels.test.ts::QE-087-d (slice) — one draw per move: seed 1 over the first 10 of the thirty move k is a non-engine move iff the k-th draw of a fresh seededRandom(1) is below the rate
+KILL	levels.test.ts::A7 — seeded, in deterministic mode a fixed seed gives identical blunder decisions across runs
+KILL	levels.test.ts::A10 — the seed is threaded, not global two instances, different seeds, called A, B, A, B, … play as each alone: 10/10 each
+KILL	uci-session.test.ts::ABC-171 A2 — setoption setoption name skill level value 1 (lower case) writes nothing and sets level 1
+KILL	uci-session.test.ts::ABC-171 A2 — setoption Skill Level value x: one info string, the old value (1) kept
+KILL	uci-session.test.ts::ABC-171 A7 — the blunder path two sessions on the same seededRandom(k) write the same bestmove sequence
+KILL	uci-session.test.ts::ABC-171 A13a — the seed oracle floor(random() * 2^32) (QE-171-a) seededRandom(2): level 1's bestmove equals the oracle's
+KILL	uci-session.test.ts::ABC-171 A13a — the seed oracle floor(random() * 2^32) (QE-171-a) seededRandom(5): level 1's bestmove equals the oracle's
+KILL	uci-session.test.ts::ABC-171 A13a — the seed oracle floor(random() * 2^32) (QE-171-a) seededRandom(6): level 1's bestmove equals the oracle's
+KILL	uci-session.test.ts::ABC-171 A13a — the seed oracle floor(random() * 2^32) (QE-171-a) seededRandom(7): level 1's bestmove equals the oracle's
+KILL	uci-session.test.ts::ABC-242 A4 — Skill Level 1: the CLI seam, UCI and a direct createLevel call agree A4: the same move from all three; UCI's nodes and depth are the direct call's, whose list carries the 0
+KILL	uci-session.test.ts::ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) A8 — levels unchanged (EPIC-009 M3) TimeMode unset, Skill Level 1: A3's period gives base's budget on every go, row for row
+KILL	uci-session.test.ts::ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) A8 — levels unchanged (EPIC-009 M3) TimeMode unset, Skill Level 2: A3's period gives base's budget on every go, row for row
+KILL	uci-session.test.ts::ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) A8 — levels unchanged (EPIC-009 M3) TimeMode unset, Skill Level 3: A3's period gives base's budget on every go, row for row
+KILL	uci-session.test.ts::ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) A8 — levels unchanged (EPIC-009 M3) TimeMode unset, Skill Level 4: A3's period gives base's budget on every go, row for row
+KILL	uci-session.test.ts::ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) A8 — levels unchanged (EPIC-009 M3) TimeMode level, Skill Level 1: A3's period gives base's budget on every go, row for row
+KILL	uci-session.test.ts::ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) A8 — levels unchanged (EPIC-009 M3) TimeMode level, Skill Level 2: A3's period gives base's budget on every go, row for row
+KILL	uci-session.test.ts::ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) A8 — levels unchanged (EPIC-009 M3) TimeMode level, Skill Level 3: A3's period gives base's budget on every go, row for row
+KILL	uci-session.test.ts::ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) A8 — levels unchanged (EPIC-009 M3) TimeMode level, Skill Level 4: A3's period gives base's budget on every go, row for row
+KILL	uci-session.test.ts::ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A8 — levels value-identical (EPIC-009 M3) TimeMode unset: a bare go at Skill Level 1-7 is each level's budget, and go movetime 60000 at 7 is 30 000

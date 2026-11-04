@@ -1,0 +1,3 @@
+total 2684 passed 2682 failed 2 pending 0 todo 0 files 71 failedSuites 3
+KILL	levels.test.ts::A6 — the default level at rate 0 returns `chooseMove`'s move, depth, nodes and elapsed on the same clock
+KILL	levels.test.ts::ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A6: a non-blunder draw at level 1 is chooseMove's on the same keys, node for node

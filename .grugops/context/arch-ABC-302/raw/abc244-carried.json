@@ -1,0 +1,79 @@
+{
+ "F230": [
+  {
+   "file": "src/level-seam.ts",
+   "from": "keyHistory === undefined",
+   "to": "true || keyHistory === undefined"
+  }
+ ],
+ "UNTRIM": [
+  {
+   "file": "src/uci-session.ts",
+   "from": "return { position, priorKeys: trimPriorKeys(keys, position.halfmoveClock) };",
+   "to": "return { position, priorKeys: keys };"
+  }
+ ],
+ "REP0": [
+  {
+   "file": "src/engine.ts",
+   "from": "    repeatsBeforeRoot(budget.prior, key, ply, position.halfmoveClock)\n  ) {\n    return 0;",
+   "to": "    repeatsBeforeRoot(budget.prior, key, ply, position.halfmoveClock)\n  ) {\n    return 1;"
+  }
+ ],
+ "S241M1": [
+  {
+   "file": "src/gameend.ts",
+   "from": "  if (position.epSquare === NO_SQUARE || hasLegalEnPassant(position)) return key;\n  return key ^ epFileKey(position.epSquare);",
+   "to": "  return key;"
+  }
+ ],
+ "S241M6": [
+  {
+   "file": "src/uci-session.ts",
+   "from": "    keys.push(repetitionKey(position, zobristKey(position)));",
+   "to": "    keys.push(zobristKey(position));"
+  }
+ ],
+ "QSEAMRAW": [
+  {
+   "file": "src/level-seam.ts",
+   "from": ": trimPriorKeys(keyHistory(history), history.position.halfmoveClock);",
+   "to": ": keyHistory(history);"
+  }
+ ],
+ "QPRIOROFF": [
+  {
+   "file": "src/engine.ts",
+   "from": "  return deepen(position, options, {\n    pvs: true,\n    reductions: true,\n    nullMove: true,\n    priorKeys: true,\n    quiescenceEvasions: true,\n    quietPromotions: true,\n  });",
+   "to": "  return deepen(position, options, {\n    pvs: true,\n    reductions: true,\n    nullMove: true,\n    priorKeys: false,\n    quiescenceEvasions: true,\n    quietPromotions: true,\n  });"
+  }
+ ],
+ "QMATCH1": [
+  {
+   "file": "src/engine.ts",
+   "from": "++matches === 2",
+   "to": "++matches === 1"
+  }
+ ],
+ "QMATCH3": [
+  {
+   "file": "src/engine.ts",
+   "from": "++matches === 2",
+   "to": "++matches === 3"
+  }
+ ],
+ "QTRIM1": [
+  {
+   "file": "src/engine.ts",
+   "from": "return keys.slice(Math.max(0, root - Math.min(halfmoveClock, PRIOR_KEYS_WINDOW)), root);",
+   "to": "return keys.slice(Math.max(0, root - Math.min(halfmoveClock, PRIOR_KEYS_WINDOW)), root - 1);"
+  }
+ ],
+ "QUCINOKEYS": [
+  {
+   "file": "src/uci-session.ts",
+   "from": "        budgetMs,\n        now,\n        priorKeys,\n        ...(request.maxDepth",
+   "to": "        budgetMs,\n        now,\n        ...(request.maxDepth"
+  }
+ ]
+}

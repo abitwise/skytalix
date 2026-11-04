@@ -1,0 +1,4 @@
+step 100	eq true	len 7	cli d8e8	bestmove d8e8	info depth 13 score cp 0 nodes 27655 time 4100 nps 6745 pv d8e8	119.3ms
+step 1000	eq true	len 7	cli d8e8	bestmove d8e8	info depth 4 score cp 0 nodes 55 time 5000 nps 11 pv d8e8	1.0ms
+step 2000	eq true	len 7	cli d8e8	bestmove d8e8	info depth 2 score cp 0 nodes 18 time 6000 nps 3 pv d8e8	0.7ms
+step 4000	eq true	len 7	cli d8e8	bestmove d8e8	info depth 1 score cp 0 nodes 7 time 8000 nps 1 pv d8e8	0.6ms

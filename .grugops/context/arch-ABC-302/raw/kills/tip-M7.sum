@@ -1,0 +1,4 @@
+total 2684 passed 2681 failed 3 pending 0 todo 0 files 71 failedSuites 5
+KILL	cli.test.ts::ABC-101 — --difficulty selects a level, and the played engine is that level A8′ — the seam built for each level moves exactly as `createLevel` does, on one seed and one injected clock
+KILL	levels.test.ts::A6 — the default level at rate 0 returns `chooseMove`'s move, depth, nodes and elapsed on the same clock
+KILL	levels.test.ts::QE-087-a — the seed never reaches the engine (ADR-0027 d1) every call is `{ budgetMs, now }`; the engine path gets the level budget for any seed

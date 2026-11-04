@@ -1,0 +1,9 @@
+position-6	d2	search 802/4906 27.0ms	choose 946/5187 12.3ms
+position-6	d3	search 1515/12010 20.5ms	choose 1514/9363 20.4ms
+position-6	d4	search 3984/17859 29.8ms	choose 3461/19747 29.2ms
+kiwipete	d2	search 1302/3727 6.6ms	choose 2678/5499 12.0ms
+kiwipete	d3	search 3430/16837 25.9ms	choose 5781/22335 33.8ms
+kiwipete	d4	search 12392/24664 44.8ms	choose 17467/48899 77.3ms
+startpos	d2	search 89/89 0.8ms	choose 108/108 0.8ms
+startpos	d3	search 415/415 1.7ms	choose 212/214 1.1ms
+startpos	d4	search 392/426 1.8ms	choose 1152/1343 5.4ms

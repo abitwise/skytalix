@@ -1,0 +1,2 @@
+total 2684 passed 2683 failed 1 pending 0 todo 0 files 71 failedSuites 2
+KILL	uci-session.test.ts::ABC-241 A4, A5 — UCI: the prior keys are repetition keys A5 (slice): on a 500 ms virtual step, the CLI level seam's injected list equals UCI's, key for key, and both play d8e8

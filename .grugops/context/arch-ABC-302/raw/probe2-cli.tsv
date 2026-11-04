@@ -1,0 +1,7 @@
+step 100	seam d8e8 79.2ms	direct d8e8 0 d13	hash -983 d7	106.8ms
+step 200	seam d8e8 15.9ms	direct d8e8 0 d12	hash -983 d7	34.0ms
+step 250	seam d8e8 9.6ms	direct d8e8 0 d11	hash -972 d6	22.8ms
+step 300	seam d8e8 6.6ms	direct d8e8 0 d11	hash -972 d6	17.6ms
+step 400	seam d8e8 2.4ms	direct d8e8 0 d9	hash -957 d5	9.2ms
+step 500	seam d8e8 1.3ms	direct d8e8 0 d8	hash -957 d5	6.1ms
+step 800	seam d8e8 0.4ms	direct d8e8 0 d5	hash -946 d4	2.5ms

@@ -1,0 +1,5 @@
+total 2687 passed 2683 failed 4 pending 0 todo 0 files 71 failedSuites 3
+KILL	uci-session.test.ts::ABC-230 A2, A3, A5 — the session hands the search the game's prior keys A5: the window starts at the last pawn move; a castling-rights change does not cut it
+KILL	uci-session.test.ts::ABC-241 A4, A5 — UCI: the prior keys are repetition keys A4: the move that makes the third occurrence scores exactly 0; with a legal ep capture, no draw
+KILL	uci-session.test.ts::ABC-241 A4, A5 — UCI: the prior keys are repetition keys A5: the list handed is the repetition-key list, trimmed: the h7h5 key normalised, the rest raw
+KILL	uci-session.test.ts::ABC-241 A4, A5 — UCI: the prior keys are repetition keys A5: the CLI level seam's injected list equals UCI's, key for key, and both play d8e8

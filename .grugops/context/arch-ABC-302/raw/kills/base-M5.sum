@@ -1,0 +1,4 @@
+total 2687 passed 2684 failed 3 pending 0 todo 0 files 71 failedSuites 5
+KILL	engine.test.ts::A4 — no fixed depth anywhere in the delivered engine carries no depth default and no depth constant
+KILL	engine.test.ts::ABC-170 A5 — the limits only shorten; the ceiling still holds on an infinite budget, maxDepth 1000 returns within the same consultation count
+KILL	levels.test.ts::ABC-259 — R-TC item 2: the engine core reads the budget only as the deadline budget rule: `budgetMs` is the options field and the deadline in src/engine.ts, nowhere else
