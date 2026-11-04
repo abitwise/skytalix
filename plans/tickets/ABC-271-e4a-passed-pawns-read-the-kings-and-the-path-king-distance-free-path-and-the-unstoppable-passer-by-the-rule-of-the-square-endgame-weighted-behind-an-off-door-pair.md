@@ -1,8 +1,8 @@
 ---
 id: ABC-271
 title: "E4a, structure only: passed pawns read the kings and the path. Three endgame terms (king distance to the queening square, a free path, and the unstoppable passer by the rule of the square) enter the evaluation with every value 0, computed outside the pawn memo, so the build is value-identical and node-identical to main, with no switch, no doors and no games; the second tuning pull fits king distance and free path and holds the unstoppable passer at 0 (ADR-0070)"
-status: ready
-column: Ready
+status: done
+column: Done
 size: S
 priority: P3
 epic: EPIC-011
