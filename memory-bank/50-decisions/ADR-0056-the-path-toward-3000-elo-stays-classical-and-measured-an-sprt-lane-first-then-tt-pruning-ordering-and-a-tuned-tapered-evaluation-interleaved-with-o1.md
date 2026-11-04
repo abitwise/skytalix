@@ -1616,6 +1616,60 @@ of 10; below that, 10 more games and ≥ 7.0 of 20). Then **the Levels deep lane
 - **Both orders' re-reads.** Whichever lands second carries the first's instrument re-read, `ADR-0072` d9 or `ADR-0074` d12.
   The slots against `ABC-282` and `ABC-301` stay the Orchestrator's.
 
+#### Dated 2026-11-04 (`arch-ABC-303-open`, records only at `main` `c118a5cf`): `ABC-303` § Open 1 and 2, and the moved base. No bar moves
+
+**1. A candidate fault against "never re-played" (`ABC-303` § Open 1).** The records left this open. C-1 and C-2 pass the
+candidate only at 0 faults and 0 losses on time. The block above calls either "a defect", beside NOT MET. B4 says never
+re-played, and `…d776c0f0` § 6 has no candidate-fault line. What "never re-played" guards is a second draw after a score is
+seen, so that is what these lines keep shut. They are sealed before the read, and QE copies them into its PREREG's § 6. They
+add no bar.
+- **A candidate fault or a candidate loss on time ends that read with no pass, at any score.** Its score is not kept, high or
+  low.
+- **The verdict test comes first.** Count each game the candidate lost by fault or on time as a win for it. If the read
+  still misses its bar (C2′: 50.0; S′: S-4), the fault did not decide it. That is NOT MET, final, B6, and the defect is routed
+  as well.
+- **Otherwise it is a defect, with no verdict.** The Software Engineer names and reproduces the cause, and fixes it. No form,
+  T, tier or door moves (row P2). Tables 1 and 2 are read again.
+- **Then one new C2′,** on the fixed candidate, under a new PREREG with the same bars. It is final. It is not a re-play: the
+  first read returned no verdict, and this is another tree. A second candidate fault is NOT MET, B6.
+- **A cause nobody can reproduce** is a STOP to Architect/Design, with no new read.
+- **C2′ clean and MET, then an S′ fault or loss on time, or a Levels red.** A Levels red is read first by `ADR-0028`, as
+  `ADR-0064` d7 has it: the fixture, then one headroom, then the owner.
+  - **The fix is value-identical:** test or fixture only; or it reads no clock, and nodes, score and move stay equal on S1, S2
+    and R7. C2′ stands and is not played again.
+  - **Any other fix:** C2′ read another engine, so it does not stand. One new C2′ as above, final even if it lands lower.
+  - Either way the red part runs again, whole and once, on the fixed candidate: S′ by the verdict test above, Levels at exit 0.
+- **Unchanged:** a base fault is UNRESOLVED, re-run once. A harness error before the first game is not a read. Below 50.0 and an
+  S′ collapse are NOT MET.
+- **The weak point, stated.** B6's "the same parts with the same forms count as the same bundle" sits under "on a miss", and
+  this reading rests on a fault not being a miss. **If the Orchestrator reads the new C2′ as crossing B4, that line is the
+  owner's question.** Until he answers, the strict reading holds: a candidate fault closes the read unpassed, and B6 governs
+  the return.
+
+**2. S′'s E (`ABC-303` § Open 2).** E is a setting and the bar is S-1, S-2 and S-4, so the block's 1 810 is the value in force
+at its writing, not a level.
+- **QE fills § 6's blank with the E in force at the seal,** by S′'s rule. Today that is 1 810.
+- **The pool has reached 30 games, and no step fires.** `ABC-269` 7 / 3 / 0, `ABC-279` 5 / 4 / 1, `ABC-283` 6 / 4 / 0: all merged, all at
+  E 1 810, 18.5 / 30 = 61.7 %, inside 60–85 %. This line is the trigger's first read. `ABC-283`'s S′ was information for its
+  own bars and still pools: a merged build, at this E.
+- **The lower edge is close.** At 40 games, a next merged S′ below 5.5 / 10 leaves the band. 5.0 gives 23.5 / 40 = 58.8 %,
+  so E′ = 1 700 by the rule. That step is the owner's question, and without his word E stays 1 810. The upper edge cannot fire
+  at 40 games.
+- **A step before the seal** is a dated line here, which then governs, and a dated line on `ABC-303`'s page (BA/PM).
+- **A step after the seal does not reach this read.** It plays at the sealed E. An S′ at a superseded E does not pool.
+
+**3. The block's reasons on a base moved by `ABC-301`.** The order stands: no cause is shown. A fit lands under `ABC-289`'s read
+as much as under this one, so a moved base favours neither order. Two sentences narrow.
+- **Reason 1** keeps its point, the least room. "Keeps it on the tree it was measured on" no longer holds after a fit, either way.
+  What bundle-first still keeps is P4 read with no other pruning rule over it, and the precedent (futility) was one pruning rule
+  over another. A fit is not one. Whether +0.116 survives a fitted evaluation is `UNKNOWN - verify`: no probe has read it.
+- **Reason 2** narrows the same way. R1 and R2 will differ from what he was shown by the fit. Read first, they differ by that one
+  named merge, not by the fit and Q2 together, and `…3c67d3c4` 4 sends them to the Orchestrator before the seal.
+- **Reason 3** reads no base and stands.
+- **The one change of practice:** the hop that brings R1 and R2 on the new base also brings P3 and P4. They are table rows read
+  on that tree anyway, reach has the thinnest margin, and a red there is a STOP, cheapest before the seal. A lift stays the
+  owner's word.
+
 ### D6. The order proposed (speed and algorithms interleaved)
 
 Ordered by expected Elo per cost, by file collisions (`ADR-0055` D2), and by what each step needs measured.
