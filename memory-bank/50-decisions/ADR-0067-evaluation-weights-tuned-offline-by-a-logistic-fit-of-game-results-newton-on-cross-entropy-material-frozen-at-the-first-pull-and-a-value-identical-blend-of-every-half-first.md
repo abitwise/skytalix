@@ -109,6 +109,7 @@ Architect/Design (task `arch-owner-answers-1103`, records only, on `grugops/arch
 | 2026-11-04 | Owner | The d6 amendment adopted (every relation bounded at once, margin-aware, no refit); B-T8 re-confirmed for the second pull | `orch-2026-10-30a` `…dda43b71` |
 | 2026-11-04 | Architect/Design | d6's amendment and the second pull's step list; F3 restated; B-T8 re-confirmed; the second pull's carried bars, its four preconditions (`QE-271-f`, `-g`, `-h`, `-i`) and its endgame `G2` row. No bar level moved | `arch-second-pull-1104` |
 | 2026-11-04 | Architect/Design | The two `ABC-271` "every half 0" rows ruled under `…42c82347`: the by-rank row re-pinned on its eg line, "every part is 0" retired by name. No bar moved | `arch-records-1104` |
+| 2026-11-04 | Architect/Design | Precondition 1 reads `ADR-0070` d4's own-phase form. d5: the tracer reads the seam through QE's frozen fixtures, on condition `TUNE_DEEP` is green at the fit commit; check 2 stays a hard step. No bar moved | `arch-records-1104` |
 
 ## Context
 
@@ -241,6 +242,25 @@ Architect/Design (task `arch-owner-answers-1103`, records only, on `grugops/arch
           probed rule value, equals the part `passerTermsForTest` returns at that value inside
           `withParametersForTest`.
        2. **The gate runs once more on the emitted file.** A miss is F1, a defect.
+     - *Dated 2026-11-04 (`arch-records-1104`, records only, at `main` `83894094`; QE `qe-ABC-301-s0` `…9fd32f43` item 4;
+       the Orchestrator's `…878035ca` 2): **check 1's tracer row reads the seam through QE's frozen fixtures, on condition
+       that `TUNE_DEEP` is green at the fit commit. No bar moves.***
+       - **The row as built** (`tools/tune/tune.test.ts`): on the 44 fixtures, each traced count equals the frozen
+         `features` of `src/evaluate.passer-fixtures.json`, and count × probed value equals its frozen `seam` part.
+       - **Why not as written.** `ABC-274` S3 bars every `tools/` file from naming `withParametersForTest`, and `ABC-301`
+         P2 bars them from naming the seams. In `src/` the row would pull the tool into the default lane, against the
+         ticket's `NFR-008` line.
+       - **Nothing is unchecked on the fixtures.** K1 (c), in the default lane, holds the frozen record equal to the live
+         seam at the probed values, and the file is sha256-pinned by its own row. The two forms differ only when one of
+         those is red.
+       - **QE ran check 1 as written,** from scratch and outside `tools/`: 0 misses on the 44 fixtures, and 0 on 132 762
+         positions at each of three value sets. The identity gate at those values: 0 misses, worst 0.9583 cp. That was a
+         one-off read, not a standing row.
+       - **The condition.** The row lives in `TUNE_DEEP` only, so that lane must read green at the fit commit, and the
+         fit hop records the count. On a red, no fit is taken from that commit.
+       - **Check 2 stands as a hard step** (`QE-301-a`): it sees the hot path at phases 6–23, which no fixture reaches. It
+         does not see a crossed emitter column, because it reads `tableOf` and `evaluate` from the same file; that is
+         `QE-301-b`'s row, owed at scope 1.
      - If `ABC-271` has not merged at fit time, the features are absent and the fit runs without them.
 6. **The free set at the first pull: bounded.**
    - **Material is frozen** at the classical scale (P 100, N 325, B 325, R 500, Q 900, both halves). The king is 0.
@@ -737,6 +757,9 @@ level moves.***
     own-games count.
 - **Four preconditions, each met before the fit is taken,** so that no value moves before them:
   1. **`QE-271-h`:** the hot-path row (`ADR-0070` d4's dated line of this date). Default lane, test-only.
+     *Dated 2026-11-04 (`arch-records-1104`; QE `qe-ABC-301-s0` `…9fd32f43`): the row is the own-phase form of `ADR-0070`
+     d4's dated line of this hop, in QE's wording, not the forced `evaluateAtPhase(p, 0)`. Exact on 44 / 44; the level
+     does not move. Built at `57e942fb` on `grugops/ABC-301`, the branch the fit is taken on.*
   2. **`QE-271-g`:** the caller-guard row for `pawnStructureForTest` (the same line), in the same Software Engineer
      hop.
   3. **`QE-271-i`:** `tools/tune`'s emitter writes the four E4a exports (`PASSED_KING_ENEMY`, `PASSED_KING_OWN`,

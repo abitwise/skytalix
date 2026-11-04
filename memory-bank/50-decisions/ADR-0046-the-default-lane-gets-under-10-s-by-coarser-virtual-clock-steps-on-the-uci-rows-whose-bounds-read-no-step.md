@@ -56,6 +56,12 @@ does not bind, and no owner word is owed. R8 goes to `src/uci-session.test.ts`'s
 (ii), a gate in its own file. No NFR level, cap, pin, W, environment variable or `AGENTS.md` lane line moves. See the
 dated section of 2026-11-04 (`arch-ABC-302`) at the end of this file.
 
+**`QE-302`'s LOW carry, 2026-11-04 (`arch-records-1104`, records only).** Two things should change. The run rule's "four
+lines" now reads thirteen, with `ABC-302`'s nine rows; R3 should re-point to the door next to its own at the file's next
+touch. Deep-only breadth, R9's reach and the 27-mutant parity stay as they are. No NFR level, cap, pin, W, environment
+variable or `AGENTS.md` lane line moves. See the dated section of 2026-11-04 (`arch-records-1104`) at the end of this
+file.
+
 **proposed**, 2026-10-20, by Architect/Design (task `arch-lane-under-10s`). This ADR is the remedy that `R-174-1`
 option (a) asked for. The owner accepted (a) at `…bdff4d33`.
 
@@ -877,3 +883,55 @@ ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/engine.ca
 ```
 
 **Not decided here:** the board, the ticket page, and the build itself. The SE's build lines are in the decision note.
+
+### Dated 2026-11-04 (`arch-records-1104`): `QE-302`'s LOW carry. The run rule's "four lines" reads thirteen, and R3 should re-point; nothing else changes
+
+**Architect/Design, records only, at `main` `83894094`.** Nothing was run. The carry is `qe-ABC-302` `…051a910d`'s LOW
+gap, routed to this role by the Orchestrator (`…264a280a` 2), with `R-281-a` left closed (`secnfr-ABC-302-a9`
+`…0089724b`). Its three parts:
+
+| part | what should change |
+|---|---|
+| Moved breadth runs deep only; no `npm run` script reaches it; parity is read on the 27 mutants only | **The rule's wording, below. Nothing else.** Moving breadth deep is what S and W are for, and the run rule is the answer to who runs it. A `*_DEEP` script would be a new lane surface that nothing asks for. Parity is a property of a sealed list: widening it would be a new PREREG, and nothing has fired to ask for one |
+| R3 kills none of the 27; its line passes under M3 and M3s | **R3 should re-point, at the file's next touch.** Not urgent: "both recursions test the node once …" and `QE-268-b` hold both mutants in the default lane, at base and at the tip |
+| R9's full row is outside `AGENTS.md`'s engine deep line | **Nothing.** The run rule reaches it, by its `-t` line, at every trigger. `AGENTS.md` stays as it is (18 429 of 18 432 B), as `arch-ABC-302` recorded |
+
+**1. The run rule: "four" reads "every".**
+- `ABC-302`'s nine rows joined the table under rule item 3, but the rule's text still says "all four lines", "the four
+  test files above" and "the four lines". Each now reads every line of the set: the table's four and the nine below,
+  **thirteen**. A row moved later joins the same way.
+- The trigger's test files are the files those lines name.
+- The check is unchanged: the count, not the exit code. `ABC-167` A5 reads 4 passed, and every other line 1 passed.
+- `qe-ABC-302` read all thirteen at the tip (`raw/a4/a4.tsv`), each 0–1 s in whole seconds. That answers the rule's "the
+  first QE hop … records the wall", and it says the set costs seconds.
+- The nine, in one place for QE briefs (R1–R7 are `ABC-302` A4's lines; R8 and R9 repeat the block above):
+
+```
+SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/search.null-move.test.ts -t "A2 — the instrumented search makes 0 null moves in check, and 0 below three non-pawn pieces \[deep, SEARCH_DEEP=1\]"
+ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/uci-session.test.ts -t "ABC-241 A4, A5 — UCI: the prior keys are repetition keys \[deep, ENGINE_DEEP=1\]"
+SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/search.futility.test.ts -t "the doors — searchWithoutFutility and chooseMoveWithoutFutility turn futility off, as every older door does \[deep, SEARCH_DEEP=1\]"
+ZOBRIST_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/zobrist.test.ts -t "ABC-075 property — the ep component tracks the ep FIELD, not availability \(ADR-0020\) \[deep, ZOBRIST_DEEP=1\]"
+ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/engine.test.ts -t "ABC-170 A5 — the limits only shorten; the ceiling still holds \[deep, ENGINE_DEEP=1\]"
+ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/levels.test.ts -t "A7 — seeded, in deterministic mode \[deep\]"
+ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/levels.test.ts -t "ABC-174 A3 — the default plays as the engine: chooseMove at 4 000 ms \(ABC-228, ADR-0053 d10\) \[deep\]"
+ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/uci-session.test.ts -t "ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square \[deep, ENGINE_DEEP=1\]"
+ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/engine.capacity.test.ts -t "ABC-122 A8: src/engine\.ts's KEY_ARRAY_CAPACITY guard, reached through chooseMove\(\) \[deep, ENGINE_DEEP=1\]"
+```
+
+**2. R3: why it is blind, and the re-point.**
+- **The cause is older than `ABC-302`.** The row compares `search()` and `chooseMove` with `searchWithoutFutility` and
+  `chooseMoveWithoutFutility`. The ladder rule has every door turn off what came after it, so the row's two sides now
+  differ by the taper, SEE pruning, history, SEE ordering and aspiration as well. Those keep the head below the door with
+  futility dead. The row was not re-pointed under `ADR-0064` d7, as its neighbour at depth 1 was; `toBeLessThan` staying
+  green is the likely reason, though no record says so.
+- **The change:** the shipped side reads `searchWithoutTaper` and `chooseMoveWithoutTaper`, in that neighbour's form.
+  Those doors differ from the futility doors in `futility` alone (`src/search.ts`, `src/engine.ts`). The describe title,
+  which R3's `-t` line reads, stands.
+- **What it must show,** at that ticket, under its own QE: 1 passed unmutated, and red under M3 and under M3s. By reading
+  it should: each mutant kills futility in the recursion one half of the row reads, so that half reads equal. That is
+  `UNKNOWN - verify` until run. If either stays green, the row stays as it is, and the ticket reports it.
+- **Who:** BA/PM's, riding on the next ticket that touches `src/search.futility.test.ts`. It is test-only, in the deep
+  lane, at no default-lane cost. It does not earn a ticket of its own, and no bar waits on it.
+
+**The rest stands.** R3 stays W. `R-281-a` stays closed. No NFR level, cap, pin, W, row, environment variable or lane
+command moves.
