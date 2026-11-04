@@ -1,0 +1,8 @@
+stdout | src/search.pvs-lmr.test.ts > A1 — the mate-rich corpus is frozen, and the mate floor holds one ply deeper > all 287: every mate searchWithoutReductions sees at depth 4, search() sees at depth 5, same sign, no longer [deep, SEARCH_DEEP=1]
+ABC-121 A1 mate floor d4 -> d5: 0 of 180 violated
+ ✓ src/search.pvs-lmr.test.ts > A1 — the mate-rich corpus is frozen, and the mate floor holds one ply deeper > src/search.mate-corpus.ts holds 287 positions, the seven seeds among them — the length pin 1ms
+ ✓ src/search.pvs-lmr.test.ts > A1 — the mate-rich corpus is frozen, and the mate floor holds one ply deeper > the seven seeds at depth 4 [deep, SEARCH_DEEP=1] 22ms
+ ✓ src/search.pvs-lmr.test.ts > A1 — the mate-rich corpus is frozen, and the mate floor holds one ply deeper > all 287: every mate searchWithoutReductions sees at depth 4, search() sees at depth 5, same sign, no longer [deep, SEARCH_DEEP=1] 654ms
+ Test Files  1 passed (1)
+      Tests  29 passed (29)
+   Duration  54.08s (transform 0ms, setup 0ms, import 61ms, tests 53.96s, environment 0ms)

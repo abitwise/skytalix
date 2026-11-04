@@ -1,0 +1,6 @@
+stdout | src/search.futility.test.ts > A3 (b) — the same-depth mate floor on the 287 [deep, SEARCH_DEEP=1] > every mate searchWithoutFutility scores at depth 5, search() scores as a mate of the same sign at depth 5 (distance reported) [deep, SEARCH_DEEP=1]
+ABC-268 A3 mate floor d5: 0 of 189 violated; 0 longer, 0 shorter (a report, not a bar)
+ ✓ src/search.futility.test.ts > A3 (b) — the same-depth mate floor on the 287 [deep, SEARCH_DEEP=1] > every mate searchWithoutFutility scores at depth 5, search() scores as a mate of the same sign at depth 5 (distance reported) [deep, SEARCH_DEEP=1] 1249ms
+ Test Files  1 passed (1)
+      Tests  53 passed (53)
+   Duration  68.03s (transform 0ms, setup 0ms, import 67ms, tests 67.90s, environment 0ms)

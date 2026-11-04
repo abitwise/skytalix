@@ -1,0 +1,6 @@
+ "fail": 0,
+ "bad": []
+}
+K1 OK
+--- vitest
+      Tests  13 passed (13)

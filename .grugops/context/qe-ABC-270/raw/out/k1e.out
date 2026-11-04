@@ -1,0 +1,106 @@
+{
+ "literal": {
+  "SHELTERED": 2,
+  "G6": 2,
+  "F5": 2,
+  "E5": 2
+ },
+ "B": {
+  "phases": {
+   "SHELTERED": 24,
+   "G6": 24,
+   "F5": 24,
+   "E5": 24
+  },
+  "A2": {
+   "sheltered": 0,
+   "g6": -3,
+   "zeroed": {
+    "sheltered": 0,
+    "g6": 12
+   },
+   "green": true,
+   "redZeroed": true
+  },
+  "A3": {
+   "f5": 13,
+   "e5": 11,
+   "zeroed": {
+    "f5": 13,
+    "e5": 21
+   },
+   "green": true,
+   "redZeroed": true
+  },
+  "old": {
+   "A2": {
+    "sheltered": 0,
+    "g6": -3,
+    "g6Zeroed": 12,
+    "shelteredZeroed": 0
+   },
+   "A3": {
+    "f5": 1,
+    "e5": -13,
+    "e5Zeroed": -3,
+    "f5Zeroed": 1
+   }
+  }
+ },
+ "H": {
+  "phases": {
+   "SHELTERED": 24,
+   "G6": 24,
+   "F5": 24,
+   "E5": 24
+  },
+  "A2": {
+   "sheltered": 0,
+   "g6": -3,
+   "zeroed": {
+    "sheltered": 0,
+    "g6": 12
+   },
+   "green": true,
+   "redZeroed": true
+  },
+  "A3": {
+   "f5": 13,
+   "e5": 11,
+   "zeroed": {
+    "f5": 13,
+    "e5": 21
+   },
+   "green": true,
+   "redZeroed": true
+  },
+  "old": {
+   "A2": {
+    "sheltered": 0,
+    "g6": -3,
+    "g6Zeroed": 12,
+    "shelteredZeroed": 0
+   },
+   "A3": {
+    "f5": 1,
+    "e5": -13,
+    "e5Zeroed": -3,
+    "f5Zeroed": 1
+   }
+  },
+  "forward": {
+   "A2_baseZeroed_queenOn29": {
+    "sheltered": 0,
+    "g6": -17
+   },
+   "A3_baseZeroed_queenOnHalfOpen20": {
+    "f5": 13,
+    "e5": 1
+   },
+   "A2_biteRowWouldRead": "FAIL (the bite row turns red: the queen-on pair still carries the shelter)",
+   "A3_biteRowWouldRead": "FAIL (the bite row turns red)"
+  }
+ },
+ "fail": 0
+}
+K1e OK

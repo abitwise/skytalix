@@ -1,0 +1,9 @@
+00:59:45Z CLEAN k1: K1 OK | queen-on.test exit=0  Tests 13 passed (13)
+00:59:57Z Q1 k1: K1 FAIL 332266 | queen-on.test exit=1  Tests 3 failed | 10 passed (13)
+01:00:10Z Q2 k1: K1 FAIL 178248 | queen-on.test exit=1  Tests 3 failed | 10 passed (13)
+01:00:22Z Q3 k1: K1 FAIL 1942 | queen-on.test exit=1  Tests 2 failed | 11 passed (13)
+01:00:34Z Q4 k1: K1 FAIL 249690 | queen-on.test exit=1  Tests 4 failed | 9 passed (13)
+01:00:47Z Q5 k1: K1 FAIL 492093 | queen-on.test exit=1  Tests 4 failed | 9 passed (13)
+01:01:00Z Q6 k1: K1 FAIL 498309 | queen-on.test exit=1  Tests 4 failed | 9 passed (13)
+01:01:12Z Q7 k1: K1 FAIL 91384 | queen-on.test exit=1  Tests 2 failed | 11 passed (13)
+restored

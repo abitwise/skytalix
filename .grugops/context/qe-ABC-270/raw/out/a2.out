@@ -1,0 +1,10 @@
+{"distinctFens":62055,"g3":184,"taperFenStrings":296,"mate":287,"extreme":9,"randomPositions":61397,"positionsWithMirrors":124110,"entries":["evaluate","evaluateWithoutTaper","evaluateWithoutMobility","evaluateWithoutPawnCache"],"phaseRows":3847410,"rows":4840290,"mismatches":0,"phaseOfMismatches":0,"mirrorRows":62055,"mirrorMisses":0,"rejected":[],"bad":[]}
+{"f":"kn6/pp6/8/8/QQQQQQQQ/QQQQQQQ1/7K/8 w - - 0 1","H":13040,"B":13040,"eq":true}
+{"f":"kn6/pp6/8/8/QQQQQQQQ/QQQQQQQ1/7K/8 b - - 0 1","H":-13040,"B":-13040,"eq":true}
+{"f":"8/7k/qqqqqqq1/qqqqqqqq/8/8/PP6/KN6 b - - 0 1","H":13040,"B":13040,"eq":true}
+{"f":"8/7k/qqqqqqq1/qqqqqqqq/8/8/PP6/KN6 w - - 0 1","H":-13040,"B":-13040,"eq":true}
+{"f":"k7/2PPPPPP/8/8/8/8/PP6/4K3 w - - 0 1","H":2188,"B":2188,"eq":true}
+{"f":"4k3/8/8/8/8/8/2pppppp/K7 b - - 0 1","H":1988,"B":1988,"eq":true}
+{"f":"kn6/pp6/8/8/RRRRRRRR/RRRRRRR1/7K/8 w - - 0 1","H":7005,"B":7005,"eq":true}
+{"f":"k7/8/8/8/8/8/8/7K w - - 0 1","H":0,"B":0,"eq":true}
+{"f":"kn6/pp6/8/8/NNNNNNNN/BBBBBBB1/7K/8 w - - 0 1","H":4535,"B":4535,"eq":true}

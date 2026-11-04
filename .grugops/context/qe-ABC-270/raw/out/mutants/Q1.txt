@@ -1,0 +1,13 @@
+ "fail": 332266,
+ "bad": [
+  "QP1A evaluate net 0 != -50",
+  "QP1A evaluateWithoutTaper net 0 != -50",
+  "QP2B evaluate net 0 != 70",
+  "QP2B evaluateWithoutTaper net 0 != 70",
+  "QP3A evaluate net 0 != 50",
+  "QP3A evaluateWithoutTaper net 0 != 50",
+--- vitest
+     × through evaluate: pairs 0 → 2 × base moves white's view by QE's frozen net, in evaluate and evaluateWithoutTaper 3ms
+     × the queen-on endgame halves enter the blend: eg = 24, mg = 0 moves only the phase-0 score, by −24 × (white's queen-on count − black's) 0ms
+     × the walk: one type compare per non-pawn piece (type >= QUEEN), KING and QUEEN told apart inside it; no new per-piece operation 2ms
+      Tests  3 failed | 10 passed (13)

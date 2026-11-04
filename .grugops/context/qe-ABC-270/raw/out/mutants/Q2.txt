@@ -1,0 +1,13 @@
+ "fail": 178248,
+ "bad": [
+  "QP1B evaluate net -50 != 0",
+  "QP1B evaluateWithoutTaper net -50 != 0",
+  "QP2B evaluate net 0 != 70",
+  "QP2B evaluateWithoutTaper net 0 != 70",
+  "QP3B evaluate net 50 != 0",
+  "QP3B evaluateWithoutTaper net 50 != 0",
+--- vitest
+     × through evaluate: pairs 0 → 2 × base moves white's view by QE's frozen net, in evaluate and evaluateWithoutTaper 3ms
+     × the queen-on endgame halves enter the blend: eg = 24, mg = 0 moves only the phase-0 score, by −24 × (white's queen-on count − black's) 0ms
+     × each king reads the ENEMY's flag, and kingExposure adds the queen-on terms once, before its file loop 1ms
+      Tests  3 failed | 10 passed (13)

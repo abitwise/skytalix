@@ -1,0 +1,12 @@
+ "fail": 91384,
+ "bad": [
+  "seam delta white rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8: 39/41 != 39/53",
+  "seam delta black rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8: 12/16 != 12/28",
+  "seam delta white rnbqk2r/ppp1nNpp/8/2b5/8/2P5/PP1pBPPP/RNBQ1K1R b kq - 1 8: 12/16 != 12/28",
+  "seam delta black rnbqk2r/ppp1nNpp/8/2b5/8/2P5/PP1pBPPP/RNBQ1K1R b kq - 1 8: 39/41 != 39/53",
+  "seam delta white rnbq1k1r/pp1Pbppp/2p5/8/2B5/2N5/PPP1NnPP/R1BQK2R b KQ - 2 8: 39/41 != 39/53",
+  "seam delta black rnbq1k1r/pp1Pbppp/2p5/8/2B5/2N5/PPP1NnPP/R1BQK2R b KQ - 2 8: 12/16 != 12/28",
+--- vitest
+     × each queen-on pair counts its own feature: the king's file count × the enemy-queen flag, mg and eg apart 4ms
+     × the queen-on endgame halves enter the blend: eg = 24, mg = 0 moves only the phase-0 score, by −24 × (white's queen-on count − black's) 1ms
+      Tests  2 failed | 11 passed (13)

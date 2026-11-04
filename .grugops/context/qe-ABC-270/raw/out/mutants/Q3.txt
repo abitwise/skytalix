@@ -1,0 +1,12 @@
+ "fail": 1942,
+ "bad": [
+  "QP7A evaluate net -200 != -100",
+  "QP7A evaluateWithoutTaper net -200 != -100",
+  "QC8A evaluate net -200 != -100",
+  "QC8A evaluateWithoutTaper net -200 != -100",
+  "hot mg rnQq1k1r/pp2bppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R b KQ - 0 8: -20 != -32",
+  "hot mg@24 rnQq1k1r/pp2bppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R b KQ - 0 8: -20 != -32",
+--- vitest
+     × through evaluate: pairs 0 → 2 × base moves white's view by QE's frozen net, in evaluate and evaluateWithoutTaper 3ms
+     × the queen-on endgame halves enter the blend: eg = 24, mg = 0 moves only the phase-0 score, by −24 × (white's queen-on count − black's) 1ms
+      Tests  2 failed | 11 passed (13)

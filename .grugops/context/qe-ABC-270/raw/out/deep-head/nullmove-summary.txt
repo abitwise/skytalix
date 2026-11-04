@@ -1,0 +1,6 @@
+stdout | src/search.null-move.test.ts > A3 — the same-depth mate floor on the 287 [deep, SEARCH_DEEP=1] > every mate searchWithoutNullMove scores at depth 5, searchWithoutQuiescenceEvasions scores at depth 5: same sign, no longer [deep, SEARCH_DEEP=1]
+ABC-208 A3 mate floor d5 -> d5: 0 of 189 violated
+ ✓ src/search.null-move.test.ts > A3 — the same-depth mate floor on the 287 [deep, SEARCH_DEEP=1] > every mate searchWithoutNullMove scores at depth 5, searchWithoutQuiescenceEvasions scores at depth 5: same sign, no longer [deep, SEARCH_DEEP=1] 1059ms
+ Test Files  1 passed (1)
+      Tests  44 passed (44)
+   Duration  26.71s (transform 0ms, setup 0ms, import 71ms, tests 26.56s, environment 0ms)
