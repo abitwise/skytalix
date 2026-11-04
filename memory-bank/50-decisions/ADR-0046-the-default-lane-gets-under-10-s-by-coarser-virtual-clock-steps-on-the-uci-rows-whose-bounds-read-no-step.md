@@ -41,6 +41,10 @@ word is owed. Where the addendum says T2-R or W1 is PROPOSED or needs BA/PM's wo
 MET, W1 not triggered. No tranche 3 opens. W1 stays in force on every later admissible `G8` head median. Where the
 addendum line above says tranche 2 is OPEN, this line wins. See the dated line of 2026-11-01 at the end of this file.
 
+**`ABC-281`'s DoR row 11, 2026-11-04 (`arch-ABC-281`): form S (slice) for all three rows.** Option (b) does not
+bind, because default-lane kill parity holds, measured on seven mutants. No owner word is owed, and no NFR level, cap,
+pin, W or lane command moves. See the dated section of 2026-11-04 at the end of this file.
+
 **proposed**, 2026-10-20, by Architect/Design (task `arch-lane-under-10s`). This ADR is the remedy that `R-174-1`
 option (a) asked for. The owner accepted (a) at `…bdff4d33`.
 
@@ -688,3 +692,60 @@ insertions only. No NFR level, cap, pin, W, step set or lane command moves, and 
   - **If that count is below 2, the row keeps its current step** until the Architect rules condition 2's unit (clock
     reads or node checks). The floor never makes a step coarser; it can only hold one.
   - So the Architect's reading falls due only when a move trips the floor. It is owed to no one now.
+
+### Dated 2026-11-04 (`arch-ABC-281`): `ABC-281`'s DoR row 11. All three rows take form S, and option (b) does not bind, because default-lane kill parity holds, measured
+
+**Architect/Design, records plus scratch mutant reads.** The runs used a scratch copy of `main` `ff07571f` (`src/`
+tree `8adb0a18`, the same as `08843504`'s) under the host lock. Nothing was written to `src/` or `tools/`. The
+readings are in `.grugops/context/arch-ABC-281/` (observation `…e969c2f0`, decision `…d7b2b02b`, and `raw/`): seven mutants, each run on the
+whole default lane at base and on a tip sketch of the forms below. No lane wall was timed, because A8 is QE's.
+
+| row | form | the default-lane remnant (confirmed) | what the mutant reads showed |
+|---|---|---|---|
+| R1 `QE-208-a` position-6 → `SEARCH_DEEP` | **S** | the file's `sweep` on `chooseMoveWithoutTaper` at readings 8 and 10: 0 mutated roots, insideNull ≥ 1 (2 at base). About 20 ms of the row's 368 | `ADR-0050`'s plant (M1, the `finally` removed so the null move is not unmade on abort) has one default-lane killer at base: this row. Over readings 3–30 on both choosers, 15 of 15 aborts that land inside a null subtree mutate the root under M1, and 0 of 41 elsewhere do. The kill is per landing, so two landing readings are enough |
+| R2 `ABC-230` A4 → `ENGINE_DEEP` | **S** | `[]` vs absent, `figures` equal, on kr-corner, startpos and position-6. About 21 ms of 233 | M2 (an empty list leaves the table uncleared) has one default-lane killer: this row (33 of 36 positions). M2c (an empty list turns the null move off) is invisible on all six endgames, where the null move is guarded off, and seen on startpos and position-6. So the remnant holds one endgame and two null-move positions |
+| R3 levels A9 → `ENGINE_DEEP` | **S** | `QE-087-d`'s draw check on seed 1 over the first 10 of the thirty, with at least one blunder and one engine move asserted. About 4 ms of 137 | M3a (the seed ignored) has 15 other default-lane killers (A10, `ABC-242` A6 and 13 `uci-session` rows), so "the seed is used" is **not** single-held. The extra draw is. Before the decision (M3b) it is also caught by `ABC-242` A6, but only on move 1. After the decision, on a blunder (M3c, `ABC-087`'s `M5b` shape) or on an engine move (M3d), only A9 kills it. On every seed the first desync falls at move ≤ 4 |
+
+- **Why not W.** Under W, M1, M2, M3c and M3d each lose their only default-lane killer. That is a coverage-losing
+  move: it fails this addendum's § Consequences (kill parity), and it is option (b), which is the owner's.
+- **Why S, and why no owner question.** The tip sketch (three rows gated under their `RUN_DEEP`, three remnants
+  added) reads 2 650 / 2 650 green. Its default lane kills each of the seven mutants. Parity holds, so option (b)
+  does not bind.
+  - § Consequences' "only on the tranche-2 ticket" was that tranche's admission. It is read here as carrying to
+    `ABC-281`, under the same parity condition and for these three rows only. BA/PM's cut is the word, as its
+    `ABC-248` ruling was for tranche 2: the cut carries form S, and A6 checks parity.
+- **Why not K.** S keeps about 94 % of the saving for about 45 ms of remnant.
+- **Forecast (an estimate; A8 reads it).**
+  - In-thread: the rows cost 738 ms and the remnants about 45 ms, so about 693 ms is saved.
+  - Wall: about **−0.36 s**. That is the probe's −0.38 s scaled by 693 / 738, so the three kills cost about 0.02 s
+    of wall.
+  - `G8` head: expected about 9.4–9.55 s on `main`'s medians of 9.77 and 9.90 s. The 9.6 s `Q-N8H-1` trigger is
+    unchanged.
+- **Conditions on the build (binding with form S):**
+  1. **The remnants are as confirmed above.** A different subset by the SE needs the same evidence: it kills every
+     A6 mutant in the default lane at the tip, and it asserts its own non-vacuity.
+  2. **R1 placement.**
+     - There is one copy of `sweep`, byte-identical; no duplicate helper. Under S, A2's "the sweep moves with its
+       describe" reads "the sweep stays, one copy, byte-identical".
+     - The page's A4 `-t` line prints "1 passed" as spelled.
+     - One shape meets both. The describe and its `sweep` stay in the default lane, and the remnant `it` takes the
+       row's place. Inside the describe, an `if (RUN_DEEP)` holds a describe titled the describe's own title plus
+       " [deep, SEARCH_DEEP=1]". That inner describe holds the full row, its `it` title plus the suffix, and its body
+       byte-identical. Placement is otherwise the SE's.
+  3. **R2.** The full row goes into the page's " [deep, ENGINE_DEEP=1]" describe. The remnant sits in the original
+     describe, beside the byte-identical sibling.
+  4. **R3.** The A9 describe moves whole, its title plus " [deep]". The remnant is a new default-lane describe, and
+     its title names seed 1 and the first 10 of the thirty.
+  5. **Counts.** With all three on S, the lane total and each file's count at the tip equal base's (2 650 at
+     `ff07571f`). Each deep lane reads base's count + 1, and the null-move line's "44 rows" still becomes the tip's
+     count.
+- **Recommended to QE's A6 freeze (not binding):**
+  - R1: M1.
+  - R2: an empty-list mutant that needs the null move (the M2c shape), with or without the M2 shape.
+  - R3: the after-decision extra draw (`M5b` / M3c), not M3b. M3b has a second killer, so it tests nothing about A9.
+- **`R-281-a`: closed for the measured mutants, and carried to A6's list.** What runs only deep under S is breadth:
+  - readings 4–24 beyond 8 and 10;
+  - 33 of the 36 positions;
+  - four more seeds, 20 more moves on seed 1, and "the seed is used" (A10 holds it).
+- **Not decided here:** the board, the ticket page and the run frequency of the `ENGINE_DEEP` lanes (still
+  `UNKNOWN - verify`; under S no unique kill depends on it).

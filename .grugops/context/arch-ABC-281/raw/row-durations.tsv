@@ -1,0 +1,7 @@
+run	ms	file	title
+base	233	engine.test.ts	A4: an empty list is node-equal to an absent one over the endgames and the thirty
+base	137	levels.test.ts	≥ 5 seeds over the same ≥ 30 positions give ≥ 2 distinct blunder-decision sequences
+base	368	search.null-move.test.ts	position-6, the even readings 4 to 24: 0 mutated roots, and aborts landing inside a null subtree
+tip-restore	21	engine.test.ts	A4 (slice): an empty list is node-equal to an absent one on kr-corner, startpos and position-6
+tip-restore	4	levels.test.ts	move k is a non-engine move iff the k-th draw of a fresh seededRandom(1) is below the rate
+tip-restore	20	search.null-move.test.ts	position-6, readings 8 and 10 on chooseMoveWithoutTaper: 0 mutated roots, an abort inside a null subtree

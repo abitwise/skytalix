@@ -1,0 +1,11 @@
+{
+  "refs": ["arch-ABC-281", "ABC-281", "EPIC-011", "ADR-0046", "ADR-0050", "ADR-0032", "ADR-0035", "NFR-008", "R-N8H-1", "R-281-a", "Q-N8H-1", "QE-208-a", "QE-087-d", "ABC-230", "ABC-248", "ABC-087",
+           "src/search.null-move.test.ts", "src/engine.test.ts", "src/levels.test.ts",
+           "bapm-nfr008-rows/20261104T030622Z-ba-pm-decision-45c342fe", "bapm-nfr008-rows/20261104T030622Z-ba-pm-observation-d012231e",
+           "secnfr-nfr008-headroom/20261104T025651Z-security-nfr-decision-8a4fb936", "secnfr-nfr008-headroom/20261104T025651Z-security-nfr-observation-69126dca",
+           "ff07571f"],
+  "notes": [
+    { "kind": "observation", "confidence": "high: whole default lane at base and on a tip sketch, per mutant, under the host lock on a scratch copy of src tree 8adb0a18; durations are single in-thread reads, an estimate", "bodyFile": "note-readings.md" },
+    { "kind": "decision", "confidence": "high: every form rests on a measured kill set; the wall figure is a forecast scaled from the probe, which A8 grades", "bodyFile": "note-decision.md" }
+  ]
+}
