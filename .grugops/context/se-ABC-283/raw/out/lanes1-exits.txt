@@ -1,0 +1,17 @@
+search exit 0 wall 3s
+see exit 1 wall 53s
+futility exit 1 wall 69s
+nullmove exit 0 wall 26s
+pvslmr exit 0 wall 55s
+taper exit 1 wall 18s
+quiescence exit 0 wall 50s
+tt-search exit 0 wall 4s
+tt-engine exit 0 wall 6s
+engine exit 0 wall 180s
+levels exit 0 wall 577s
+puzzle exit 0 wall 4s
+zobrist exit 0 wall 6s
+tune exit 0 wall 10s
+cli exit 0 wall 13s
+uci exit 0 wall 5s
+ucisession exit 0 wall 292s
