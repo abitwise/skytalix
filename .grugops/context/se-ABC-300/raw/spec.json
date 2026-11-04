@@ -1,0 +1,8 @@
+{
+  "refs": ["se-ABC-300", "ABC-300", "ABC-282", "EPIC-011", "ADR-0071", "ADR-0056", "NFR-008", "R-281-a", "ABC-276", "tools/rating/rating.ts", "tools/rating/pair-check.ts", "grugops/ABC-300", "6af55341", "9835859d"],
+  "notes": [
+    { "kind": "decision", "confidence": "high: read from the diff; the rows and three scratch mutants confirm the shape", "bodyFile": "decision.md" },
+    { "kind": "observation", "confidence": "high: every result is from a run under the host lock at 9835859d; the lane wall is one ungraded run", "bodyFile": "observation-gates.md" },
+    { "kind": "observation", "confidence": "high (git, as run); observation because artifact-ref needs a section-14 gate_run this hop does not have", "bodyFile": "observation-artifact.md" }
+  ]
+}

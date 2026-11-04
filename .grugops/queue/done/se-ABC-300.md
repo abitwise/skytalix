@@ -18,3 +18,12 @@ Build exactly the page:
 Bars: the page's AC; typecheck and lint clean; the default npm test green and ≤ 10 s (NFR-008); every R-281-a moved-row `-t` line that your diff triggers.
 Fences: tools/, its tests, your records. No src, ticket, EPIC, ADR or board edits. No push, force, amend, rebase or merge into main. Leave nothing running.
 Publish: sealed notes (task se-ABC-300, contextRoot = the worktree's .grugops/context, `at` from `date -u`); queue moves; commit; ## Result + trace row; brief + claim to done/. Before your last commit, run `node tools/grugops/records-path-check.js --base main`; it must exit 0.
+
+## Result
+by: software-engineer (claude-opus-5-5), at: 2026-11-04T14:24:29Z. Branch `grugops/ABC-300` from `main` `6af55341`. Tools only; 0 lines under `src/`, `data/`, `vitest.config.ts`. No game played; nothing left running.
+- **Commits:** `e01c6a30` claim; `9835859d` feat (`tools/rating/rating.ts`, `tools/rating/pair-check.ts`); then records (this one).
+- **AC:** A1 MET (whole-vector row); A2 MET (4 bad values, both-flag refusal in both orders at 100 and 3 000, `r` / `rpair` usage); A3 MET (12 dry-run prints byte-equal before/after; only the usage text differs); A4 MET (one usage line changed, one added; ABC-276 A5 the one row updated); A5 MET (0 lines); A6 `UNKNOWN - verify` at `ABC-282` A6; A7 MET.
+- **Gates:** lint, typecheck, build exit 0; `npm test` 69 files, 2 650 / 2 650, 0 skipped, wall 9.27 s (vitest 9.01 s, one ungraded run); `pair-check` 45 / 45. Mutants M1–M3 each killed by the ABC-300 rows.
+- **R-281-a:** no lane input in the diff, so none of the four `-t` lines is triggered.
+- **Notes:** `…a0bef530` (decision), `…b0b970ed` (observation: AC and gates), `…33a60189` (artifact record, as an observation); raw in `.grugops/context/se-ABC-300/raw/`.
+- **Next:** QE hop (offline). No UAT (tools only). The Orchestrator moves the board.

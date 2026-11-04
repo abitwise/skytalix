@@ -1,0 +1,6 @@
+1345c1345
+<        node tools/rating/rating.ts d <candidate-sha> <base-sha> <out-dir> [--budget-ms B] [--rounds N] [--concurrency C]
+---
+>        node tools/rating/rating.ts d <candidate-sha> <base-sha> <out-dir> [--budget-ms B | --tc 40/8] [--rounds N] [--concurrency C]
+1348a1349
+>        --tc: D only, 40/8: both sides tc=40/8 timemargin=0 TimeMode uci-clock-mode; not with --budget-ms
