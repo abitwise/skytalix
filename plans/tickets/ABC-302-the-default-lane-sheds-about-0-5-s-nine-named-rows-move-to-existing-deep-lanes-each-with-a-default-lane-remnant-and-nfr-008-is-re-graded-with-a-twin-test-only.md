@@ -1,8 +1,8 @@
 ---
 id: ABC-302
 title: "The default lane sheds about 0.5 s: nine named rows move to existing deep lanes (eight within their own files, one across to `uci-session`'s `ENGINE_DEEP`); six keep a default-lane remnant (form S) and three move whole (form W), at kill parity the Architect measured on 27 mutants, and QE re-grades `NFR-008` with a twin, target median ≤ 9.4 s (test-only)"
-status: ready
-column: Ready
+status: done
+column: Done
 size: S
 priority: P1
 epic: EPIC-011
