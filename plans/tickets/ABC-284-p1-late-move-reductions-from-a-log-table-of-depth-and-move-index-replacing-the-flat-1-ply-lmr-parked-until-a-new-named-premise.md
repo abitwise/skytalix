@@ -33,6 +33,12 @@ adr: "ADR-0060 (PROPOSED; parked, premise not met on main, arch-ADR-0060-reopen 
 >     base `main`). If a later change turns the d5 floor red, the lever is LMR, this ticket, not history. A P1
 >     re-open's PREREG reads both floors, d5 as the bar and d6 as a report, over the history table now on `main`.
 >     **Still parked; DoR 9/10, Backlog.**
+>   - *2026-11-04 (`bapm-bundle-1-cut`; `arch-bundle-1` `…37b7fb23` § Owed, item 5; `ADR-0060` § Status, the dated line of that date):*
+>     **bundle 1's red forms add to R-283-LMR.** Forms not built: M1, M2 and M4 of P4 lose the KRK row
+>     `6k1/R7/5K2/8/8/8/8/8 w` at d5 in `chooseMove`, and C2–C4 of O2c lose KQK rows. Six of those rows return the door's
+>     mate with LMR off (exploratory, six rows, not a node trace). The forms built, `C1+M3`, `M3` and `C1`, read 0 on every d5
+>     row; on P4 that rests on the three-piece clause, not on construction. If bundle 1 (`ABC-303`) turns the d5 floor red, the
+>     lever is LMR. No bar, size or priority moves here. **Still parked; DoR 9/10, Backlog.**
 > - **The board move is the Orchestrator's.**
 
 ## Problem

@@ -7,10 +7,24 @@ size: S
 priority: P3
 epic: EPIC-011
 feature: —
-adr: "ADR-0072 PROPOSED, premise not met (arch-bundle-1: form M3 carried, L2 missed, F1 fired). The build does not start on PROPOSED; it waits on the owner's word (OQ-0072-1, one answer with OQ-0073-1)"
+adr: "ADR-0072 ACCEPTED 2026-11-04 by the owner's word, OVER A MISSED PREMISE (OQ-0072-1, option (a); orch-2026-10-30a …3e73f9f9; Status line arch-owner-answers-1104b …88ca95bd). Form M3; L2 stays missed and F1 stays fired. Not in force until bundle 1 (ABC-303) merges on its read; on NOT MET, B6 returns it to PROPOSED, premise not met, and this page to held. (Was: PROPOSED, premise not met; arch-bundle-1.)"
 ---
 
 # ABC-286: late-move pruning (P4)
+
+> **`ADR-0072` ACCEPTED OVER A MISSED PREMISE (THE OWNER, OQ-0072-1, OPTION (a)); THIS PAGE STAYS A DESIGN PAGE; THE BUILD AND
+> THE READ ARE `ABC-303`, 2026-11-04, by BA/PM** (task `bapm-bundle-1-cut`, records only, at `main` `3ad21218`; nothing run). Sources:
+> the owner's word `orch-2026-10-30a` `…3e73f9f9`, `arch-owner-answers-1104b` `…88ca95bd` § 6 item 1, `ADR-0072` d1, d6, d8
+> and d9, and `ADR-0056` D5's dated block, tables 1–3.
+> - **This is an override, not a pass.** L2 stays missed and F1 stays fired. His word lifts L2's drift share, cap and audit
+>   for bundle 1, and nothing else: L2's 0 mate sign changes, L3 and L4 stay bars.
+> - **The build, the bars, the one read and the disposition are on `ABC-303`.** On NOT MET, B6 returns `ADR-0072` to PROPOSED,
+>   premise not met, and this page to held.
+> - **Lines changed:** `adr:`; scope 1; L0; L2; L4; DoR rows 4 and 10; the closing line.
+> - **Not on this hop's list, and read with this block:** the title ("Held until…"), L5, F1's disposition and
+>   § Dependencies' probe line. The blocks below this one are history.
+> - **DoR 10/10 as a design page.** `ABC-303` carries the Ready state, as `ABC-283` did for its parts. The board move is the
+>   Orchestrator's.
 
 > **THE `adr:` LINE NAMES `ADR-0072`, PROPOSED, PREMISE NOT MET; EVERYTHING ELSE WAITS ON THE OWNER'S ANSWER, 2026-11-04,
 > by BA/PM** (task `bapm-lines-1104b`, records only, at `main` `732a0cea`; nothing run). Sources: `arch-bundle-1`
@@ -55,9 +69,21 @@ adr: "ADR-0072 PROPOSED, premise not met (arch-bundle-1: form M3 carried, L2 mis
 
 The ADR governs each line.
 
-1. At null-window nodes of low remaining depth, a quiet move past a move-count threshold by depth is skipped. The
+1. ~~At null-window nodes of low remaining depth, a quiet move past a move-count threshold by depth is skipped. The
    depths, the counts and the exclusions are the ADR's (futility's exclusions in `ADR-0061` are the nearest
-   precedent).
+   precedent).~~ *2026-11-04 (`bapm-bundle-1-cut`; `ADR-0072` d1, d2):* at a node in either recursion where every condition holds:
+   - it is not the root (`ply > 0`);
+   - it was entered with a null window (`alphaIn + 1 === beta`);
+   - the remaining depth d is 1, 2 or 3;
+   - alpha and beta are both strictly inside (−`MATE_FLOOR`, `MATE_FLOOR`);
+   - the side to move is not in check;
+   - the side to move has at least three non-pawn pieces (`NULL_MOVE_MIN_PIECES`, the null move's guard).
+
+   Then, once **T[d] quiet moves have been searched** at the node (T = 4 / 7 / 12 for d = 1 / 2 / 3), every later move in
+   the ordered list whose ordering key is 0 and that neither captures nor promotes nor gives check is skipped: not made,
+   not searched, not counted as a node. A skipped quiet move does not count as searched, and neither does a futility skip.
+   A quiet move that gives check is searched and counts. The index still advances past a skipped move. The node returns
+   the best score among the moves searched and stores it as today.
 2. The quiet moves are ordered by history (`ABC-283`) when the rule acts, so the skipped moves are the low-history
    ones.
 3. One switch and a test-only off-door pair (`ADR-0026` d10). Older doors turn it off.
@@ -70,14 +96,26 @@ The ADR governs each line.
 
 The ADR fixes exact counts and bars before Ready. None is loosened after Ready.
 
-- **L0 (identity):** switch off, node counts equal `main`'s exactly; every pre-ticket door reproduces its counts (`G4`).
+- **L0 (identity):** ~~switch off,~~ *2026-11-04 (`bapm-bundle-1-cut`; `…37b7fb23` § Owed 1; `ADR-0072` d6): **the all-off door,**
+  `searchWithoutQuietBundle` / `chooseMoveWithoutQuietBundle`:* node counts equal `main`'s exactly; every pre-ticket door
+  reproduces its counts (`G4`).
 - **L1 (the rule):** units on the count table and on each exclusion, one row each.
-- **L2 (drift and audit, owed):** a drift bar (share within 25 cp, a cap) and a cut audit (flip share, no piece-sized
-  error), each a number the ADR sets on the joint probe. These are the rows P4 failed alone.
+- **L2 (drift and audit, ~~owed~~):** ~~a drift bar (share within 25 cp, a cap) and a cut audit (flip share, no piece-sized
+  error), each a number the ADR sets on the joint probe.~~ These are the rows P4 failed alone. *2026-11-04 (`bapm-bundle-1-cut`;
+  `ADR-0072` d8 (d), § Context; `ADR-0056` tables 1 and 3):*
+  - **The numbers the probe was held to:** drift ≥ 95 % within 25 cp, ≤ 75 cp, 0 mate sign changes; audit flips ≤ 0.5 %, 0
+    errors ≥ 200 cp. **Read on P4's own door:** 93.58 % / 94.12 %, 80 / 79 cp; 288 of 1 886 (15.27 %), 29 errors ≥ 200 cp.
+    **Missed.**
+  - **Under his lift:** the drift share and cap are **reported** (row R1) and the audit is **reported** (row R2). No verdict
+    rides on them. What "reported" means is that block's: exact on an unmoved base, both sets in the PR on a moved one,
+    no ceiling.
+  - **L2's 0 mate sign changes stays a bar** (row S6).
 - **L3 (safety, `ADR-0064` d7's list):** mate floor 0 violations; zugzwang 7 / 7 at recorded depths, none re-pinned;
   `G1` ≥ 54 / 58 with no NEWLY-missed line.
-- **L4 (pay, owed):** a fixed-depth node ratio on kiwipete and position-6 in both recursions and a reach gain at 47 000
-  nodes, numbers the ADR's.
+- **L4 (pay, ~~owed~~):** a fixed-depth node ratio on kiwipete and position-6 in both recursions and a reach gain at 47 000
+  nodes~~, numbers the ADR's~~. *2026-11-04 (`bapm-bundle-1-cut`; `ADR-0072` d9; `ADR-0056` rows P3, P4):* **(a) d8 on P4's own door ≤ 0.89 × on
+  each of the four; (b) reach at 47 000 ≥ door + 0.10.** Read 0.6039 / 0.8170 / 0.7509 / 0.8363 and +0.116. Met, and it stays
+  a bar: the override does not reach it.
 - **L5 (the read; `EPIC-011` § The per-change rule, by reference).** Intent named by the ADR before Ready (the epic
   and `ADR-0056` state none). C2′ ≥ 50.0 (GAIN) or ≥ 43.0 (NEUTRAL) of 100, S′ at E 1 810, the Levels deep lane.
 - **L6:** `G6` "≥ base" (a search ticket).
@@ -124,12 +162,14 @@ The ADR fixes exact counts and bars before Ready. None is loosened after Ready.
 | 1 | problem clear | ✅ no move-count pruning; why it failed alone is measured; the value is an estimate |
 | 2 | scope and out-of-scope | ✅ scope 1–3 |
 | 3 | INVEST | ✅ S; one rule |
-| 4 | testable, measurable acceptance | ✅ L0 exact; L3 0 / 7 of 7 / ≥ 54; L5 ≥ 50.0 or ≥ 43.0. L2 and L4 numbers owed with the ADR (row 10) |
+| 4 | testable, measurable acceptance | ✅ L0 exact; L3 0 / 7 of 7 / ≥ 54; L5 ≥ 50.0 or ≥ 43.0. ~~L2 and L4 numbers owed with the ADR (row 10)~~ *2026-11-04 (`bapm-bundle-1-cut`): L2 reported under the lift, its 0 mate sign changes a bar; L4 ≤ 0.89 ×, reach ≥ door + 0.10* |
 | 5 | dependencies known | ✅ `ABC-283`; the probe; the shared files |
 | 6 | NFR triggers with targets | ✅ `NFR-005`, `NFR-008` ≤ 10 s, `NFR-009` |
 | 7 | test notes | ✅ 1–2 |
 | 8 | size | ✅ S |
 | 9 | priority | ✅ P3 |
-| 10 | no major unresolved blocker | ❌ ~~**held on `ABC-283` and the joint probe**~~ **held on the joint probe**; the ADR is owed *(2026-11-04, `bapm-ABC-283-done`: `ABC-283` merged `58e90d07`)* |
+| 10 | no major unresolved blocker | ~~❌~~ ✅ ~~**held on `ABC-283` and the joint probe**~~ ~~**held on the joint probe**; the ADR is owed~~ *(2026-11-04, `bapm-ABC-283-done`: `ABC-283` merged `58e90d07`)* *2026-11-04 (`bapm-bundle-1-cut`): the joint probe is read: L2 missed, F1 fired and stays fired. OQ-0072-1 answered (a), so `ADR-0072` is ACCEPTED over a missed premise, not in force. Built and read only as `ABC-303`; on NOT MET, held again (B6)* |
 
-**DoR 9/10. Backlog, held.**
+~~**DoR 9/10. Backlog, held.**~~
+**DoR 10/10 as a design page** (2026-11-04, `bapm-bundle-1-cut`). `ABC-303` carries the Ready state; this page is not pulled on its own. The
+board move is the Orchestrator's.
