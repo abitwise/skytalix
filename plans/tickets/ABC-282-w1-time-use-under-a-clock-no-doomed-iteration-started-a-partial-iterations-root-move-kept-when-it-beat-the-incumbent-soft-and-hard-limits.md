@@ -7,17 +7,30 @@ size: L
 priority: P2
 epic: EPIC-011
 feature: —
-adr: "ADR-0071 PROPOSED 2026-11-04 (arch-ABC-282); the owner accepts (OQ-0071-1); reading (b) lets the build start on PROPOSED"
+adr: "ADR-0071 ACCEPTED 2026-11-04 (owner, OQ-0071-1, form (a), as written; orch-2026-10-30a …7de79e90). Not in force until this ticket merges on A6."
 ---
 
 # ABC-282: time use under a clock (W1)
+
+> **`ADR-0071` ACCEPTED (THE OWNER, OQ-0071-1, FORM (a), AS WRITTEN); A6'S HARNESS `ABC-300` MERGED; STILL HELD UNTIL
+> `ABC-283` MERGES OR MISSES, 2026-11-04, by BA/PM** (task `bapm-owner-answers-1104`, records only, at `main`
+> `7dd241cf`; nothing run). Sources: the owner's word as the Orchestrator recorded it (`orch-2026-10-30a`
+> `…7de79e90`) and the Architect's owed lines (`arch-owner-answers-1104` `…d6345b29` § 4).
+> - **`adr:`** `ADR-0071` ACCEPTED 2026-11-04. Not in force until this ticket merges on A6. F7 reads "accepted, not in
+>   force" (`ADR-0071` § Status); an A6 miss is still not merged.
+> - **The merge sentence** in the block below now reads: it merges only on its read (A6). The owner's acceptance no
+>   longer holds it.
+> - **Dependencies:** A6 runs on `ABC-300`'s `d --tc 40/8` (merged `4ea39135`; QE-300-a, `ABC-300`'s A6, is carried
+>   here). The page still holds until `ABC-283` merges or misses (the Orchestrator, `…7de79e90`; `ADR-0071` D12).
+> - **Option (b) was not taken,** so no follow-up ticket is owed. No bar, row or size moves. **DoR 10/10, Ready,**
+>   unchanged. The board move is the Orchestrator's.
 
 > **`ADR-0071` PROPOSED, FOLDED IN; DoR 9/10 → 10/10, READY; SIZE M → L; THE HARNESS TICKET CUT AS `ABC-300`,
 > 2026-11-04, by BA/PM** (task `bapm-ABC-282-adr`, records only, at `main` `19581ca1`; nothing run). Sources:
 > `ADR-0071` (merged `9471eb32`), the Architect's owed lines (`arch-ABC-282` decision `…0187186b` § Owed lines 1–12)
 > and readings (observation `…1938110b`). Each owed line is applied below.
 > - **`adr:`** `ADR-0071` PROPOSED. The owner's acceptance is pending as **OQ-0071-1**. Reading (b): the build may start
->   on PROPOSED. It merges only on its read (A6) and the owner's acceptance (a new ADR is the owner's).
+>   on PROPOSED. It merges only on its read (A6). The owner accepted `ADR-0071` 2026-11-04.
 > - **Scope 4:** reading (a), narrowed by `ADR-0071` D1 to `uci-clock-mode` under a clock; `simple-tournament` is out.
 >   **Scope 5:** D5's reporting, in place of `UNKNOWN - verify`.
 > - **A0:** D8's rows A0-1, A0-2 and A0-3 with their counts. **A1 (c):** D9's corpus, clock, head, base, share and bar.
@@ -76,7 +89,8 @@ The ADR governs each line. Every value comes from a rule it states.
      use (f = 0.64) and **42.6 %** in the worst case (f = 1 / 2.3). The mode stays "22 s a move", node-identical to
      `main` with every token.
    - **Reading (b) is not taken:** at a fixed budget the head completes one ply less on 22 of 125 rows (P3). Scope 2 in
-     every mode is OQ-0071-1's option (b), a follow-up ticket of its own if the owner takes it.
+     every mode is OQ-0071-1's option (b), a follow-up ticket of its own if the owner takes it. *2026-11-04
+     (`bapm-owner-answers-1104`): not taken (the owner chose (a)); no follow-up ticket is owed.*
 5. **What is reported (`ADR-0071` D5):**
    - **`EngineChoice.depth`** keeps its meaning: the deepest COMPLETED iteration, d. `NFR-005`, `G6` and every depth
      reading are untouched.
@@ -256,15 +270,18 @@ Ready.
 
 ## Dependencies
 
-- **The ADR: `ADR-0071` PROPOSED** (`arch-ABC-282`, merged `9471eb32`). DoR row 10 is met. The owner's acceptance
-  (OQ-0071-1) is pending; reading (b) lets the build start now. The merge waits on A6 and on the acceptance.
+- **The ADR: `ADR-0071` ACCEPTED 2026-11-04** (the owner, OQ-0071-1, form (a), as written; `…7de79e90`; written
+  by `arch-ABC-282`, merged `9471eb32`). DoR row 10 is met. Not in force until this ticket merges on A6. The merge
+  waits on A6 only. *(Was: PROPOSED, the acceptance pending; the merge waited on A6 and on the acceptance.)*
 - **After `ABC-283` (`ADR-0071` D12), one at a time on `src/engine.ts`.** This ticket builds after `ABC-283` merges or
-  misses. If `ABC-283` merges first, this ticket rebases and carries: D4's test generalised per aspiration pass (the
+  misses. *2026-11-04: the page still holds until `ABC-283` merges or misses (the Orchestrator, `…7de79e90`).* If `ABC-283` merges first, this ticket rebases and carries: D4's test generalised per aspiration pass (the
   incumbent exact inside the pass's window, M exact or failing high above it); b re-read by P1's method and frozen
   before A1 (c); A0's counts re-read on the new merge-base; `ADR-0066` d5's dated line; the text conflicts in `deepen`
   and `runIteration`.
 - **`ABC-300` before A6:** the harness ticket (`tools/rating` `d --tc 40/8`, tools only, S, P2). A6 runs only after it
-  merges. The build, A0–A5 and the gates do not wait on it.
+  merges. The build, A0–A5 and the gates do not wait on it. *2026-11-04: **merged `4ea39135`** (QE PASS_WITH_GAPS,
+  `qe-ABC-300` `…fbda2ad6`). A6 runs on its `d --tc 40/8`. QE-300-a (`ABC-300`'s A6, `UNKNOWN - verify` there) is
+  carried here and is read at this ticket's A6.*
 - **Threads** (`ABC-266`, parked): not a wait. If threads re-open, these limits are re-read against the pool.
 
 ## Definition of Ready
@@ -275,7 +292,7 @@ Ready.
 | 2 | scope and out-of-scope | ✅ scope 1–5; the modes are reading (a) narrowed to `uci-clock-mode` under a clock (`ADR-0071` D1); pondering, threads, budget formulae and emergency time out |
 | 3 | INVEST | ✅ L; one rule in one loop, one mode; independent of evaluation and ordering; the harness split out as `ABC-300` |
 | 4 | testable, measurable acceptance | ✅ A0 exact counts (D8); A1 0 nodes / started / head median strictly below base on 125 rows; A2 the move named, the mate row stated; A3 node bound, ≤ ceiling, 1 ms floor; A4 0 time losses, ≥ 500 ms, ≥ 75 %; A5 7 / 7, no NEWLY; A6 at `tc=40/8`, ≥ 50.0 of 100, 0 time losses, 0 faults |
-| 5 | dependencies known | ✅ `ADR-0071` PROPOSED (OQ-0071-1 pending, reading (b)); after `ABC-283` (D12); `ABC-300` (the harness ticket) before A6 |
+| 5 | dependencies known | ✅ `ADR-0071` ~~PROPOSED (OQ-0071-1 pending, reading (b))~~ ACCEPTED 2026-11-04 (OQ-0071-1, (a)); after `ABC-283` (D12); `ABC-300` (the harness ticket, merged `4ea39135`) before A6 |
 | 6 | NFR triggers with targets | ✅ `NFR-004` ceilings, 1 ms floor; `NFR-008` ≤ 10 s, A0-1 / A0-2 / A1 (c) in `ENGINE_DEEP`; `NFR-005` untouched (scope 4); `NFR-009` ≤ 16 MiB, no table |
 | 7 | test notes | ✅ 1–4; note 3 names the old and new A3 rows |
 | 8 | size | ✅ L (was M) |
@@ -283,7 +300,9 @@ Ready.
 | 10 | no major unresolved blocker | ✅ 2026-11-04, Architect/Design (`arch-ABC-282`; `ADR-0071` PROPOSED): the rule (soft = budget ÷ 2.3, b measured), the limits per mode, the partial-iteration test, the modes (reading (a) narrowed to `uci-clock-mode` under a clock), the `ABC-078` A3 amendment, A0's counts, A1 (c)'s corpus and clock, the read's control (`tc=40/8`) and intent (GAIN) are fixed |
 
 **DoR 10/10. Ready** (2026-11-04, `bapm-ABC-282-adr`; was 9/10, Backlog). The column moves are the Orchestrator's.
-Ready for Dev waits on `ABC-283`'s merge or miss (D12); A6 waits on `ABC-300`.
+Ready for Dev waits on `ABC-283`'s merge or miss (D12); A6 waits on `ABC-300`. *2026-11-04
+(`bapm-owner-answers-1104`): `ABC-300` merged `4ea39135`, so A6 no longer waits on it; `ABC-283`'s merge or miss
+still holds the page.*
 
 ## As cut (superseded 2026-11-04 by `ADR-0071` PROPOSED; kept unedited for the record)
 
