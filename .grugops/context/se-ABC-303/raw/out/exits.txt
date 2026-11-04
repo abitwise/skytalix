@@ -1,0 +1,13 @@
+s1 exit=0 seconds=8
+s2 exit=0 seconds=242
+nodes exit=0 seconds=9
+reach exit=0 seconds=46
+drift exit=0 seconds=23
+floor exit=0 seconds=20
+zug exit=0 seconds=3
+g1 exit=0 seconds=2
+krk exit=0 seconds=25
+nps exit=0 seconds=19
+bytes exit=0 seconds=0
+audit exit=0 seconds=11
+fire exit=0 seconds=16

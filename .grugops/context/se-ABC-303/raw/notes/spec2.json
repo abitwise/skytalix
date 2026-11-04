@@ -1,0 +1,5 @@
+{"refs":["ABC-303","ABC-286","ABC-288","EPIC-011","ADR-0056","ADR-0072","ADR-0073","orch-2026-10-30a/20261104T222400Z-orchestrator-decision-3c67d3c4","orch-2026-10-30a/20261103T221607Z-orchestrator-decision-42c82347"],
+"notes":[
+{"kind":"observation","confidence":"high on the list; UNKNOWN - verify on whether ABC-279 A3 (a) may re-point, which is the Architect's","bodyFile":"obs-rows.md","supersedes":"20261104T232552Z-software-engineer-observation-391d599e"},
+{"kind":"observation","confidence":"high: the artifact record, sealed as an observation as se-ABC-302's was (an artifact-ref needs provenance fields this hop has none of)","bodyFile":"art.md"}
+]}
