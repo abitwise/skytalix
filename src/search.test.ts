@@ -572,21 +572,32 @@ describe("A6 — no move is selected without a caller-supplied depth", () => {
     // move one of them" for a move it is handed. Neither picks a move. ABC-269 added one more door
     // of that shape (`searchWithoutTaper`, `ADR-0064` decision 7), and ABC-279 one more
     // (`searchWithoutSeePruning`, `ADR-0069` decision 8); its evaluator is its own module,
-    // `src/see.ts`, and nothing here re-exports it.
+    // `src/see.ts`, and nothing here re-exports it. ABC-283 added three more doors of that shape
+    // (`searchWithoutHistory`, `searchWithoutSeeOrdering`, and the all-off `searchWithoutBundle`;
+    // `ADR-0063` decision 6, `ADR-0065` decision 7) and the history table's four pieces both
+    // recursions share (`ADR-0063` decisions 1-3, 6): `clearHistory` zeroes it, `recordHistoryCutoff`
+    // updates it at a cutoff it is handed, `historyByteLength` is a number for `NFR-009` (a)'s byte
+    // sum, and `historyScore` reads one cell for a move it is handed. None picks a move.
     // Still nothing here picks a move without being told how deep.
     expect(Object.keys(searchModule).sort()).toEqual([
       "KEY_ARRAY_CAPACITY",
       "KillerTable",
       "MATE_SCORE",
+      "clearHistory",
       "futileMove",
       "futilityNode",
+      "historyByteLength",
+      "historyScore",
       "lateMoveReduction",
       "nullMoveReduction",
       "orderMoves",
       "orderScratchByteLength",
+      "recordHistoryCutoff",
       "repeatsInPath",
       "search",
+      "searchWithoutBundle",
       "searchWithoutFutility",
+      "searchWithoutHistory",
       "searchWithoutKillers",
       "searchWithoutNullMove",
       "searchWithoutOrdering",
@@ -597,6 +608,7 @@ describe("A6 — no move is selected without a caller-supplied depth", () => {
       "searchWithoutQuiescenceEvasions",
       "searchWithoutQuietPromotions",
       "searchWithoutReductions",
+      "searchWithoutSeeOrdering",
       "searchWithoutSeePruning",
       "searchWithoutTable",
       "searchWithoutTaper",

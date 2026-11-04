@@ -1211,6 +1211,8 @@ const SWITCH_MODULES = [
     tap: "searchWithoutTaper",
     /** `ABC-279`'s door (`ADR-0069` decision 8): the shipped path less the SEE skip, every other switch on. */
     see: "searchWithoutSeePruning",
+    /** `ABC-283`'s doors: the shipped path less one or all of the bundle, every older switch on. */
+    bundle: ["searchWithoutHistory", "searchWithoutSeeOrdering", "searchWithoutBundle"],
   },
   {
     path: "./engine.ts",
@@ -1220,6 +1222,12 @@ const SWITCH_MODULES = [
     fut: "chooseMoveWithoutFutility",
     tap: "chooseMoveWithoutTaper",
     see: "chooseMoveWithoutSeePruning",
+    bundle: [
+      "chooseMoveWithoutHistory",
+      "chooseMoveWithoutSeeOrdering",
+      "chooseMoveWithoutAspiration",
+      "chooseMoveWithoutBundle",
+    ],
   },
 ];
 
@@ -1265,13 +1273,14 @@ describe("ABC-228 — the doors: searchWithoutQuiescenceEvasions and chooseMoveW
   // The sibling of `QE-208-c`: one `quiescenceEvasions` literal per entry, true on the shipped
   // pair only (`ADR-0053` decision 7) — and, since `ABC-229`, on its doors, which keep evasions on;
   // and, since `ABC-268`, on its doors, which keep both quiescence switches on (`ADR-0061` d4);
-  // and on `ABC-269`'s and `ABC-279`'s, which keep every switch but their own on.
-  for (const { path, on, door, fut, tap, see } of SWITCH_MODULES) {
-    it(`${path}: each exported entry passes exactly one quiescenceEvasions literal, true on ${on}, ${see}, ${tap}, ${fut} and ${door} only`, () => {
+  // and on `ABC-269`'s, `ABC-279`'s and `ABC-283`'s, which keep every switch but their own on.
+  for (const { path, on, door, fut, tap, see, bundle } of SWITCH_MODULES) {
+    it(`${path}: each exported entry passes exactly one quiescenceEvasions literal, true on ${on}, the ABC-283 doors, ${see}, ${tap}, ${fut} and ${door} only`, () => {
       const found = switchLiterals(path, "quiescenceEvasions");
       expect(Object.keys(found).length).toBeGreaterThanOrEqual(path === "./search.ts" ? 12 : 6);
       expect(Object.entries(found).filter(([, value]) => value === "true")).toEqual([
         [on, "true"],
+        ...bundle.map((entry) => [entry, "true"]),
         [see, "true"],
         [tap, "true"],
         [fut, "true"],
@@ -1557,13 +1566,15 @@ describe("ABC-229 — the doors: searchWithoutQuietPromotions and chooseMoveWith
   // on the shipped pair only (`ADR-0053` decision 7) — and, since `ABC-268`, on its doors, the
   // shipped path less futility (`ADR-0061` decision 4); and, since `ABC-269`, on its doors, the
   // shipped path less the taper (`ADR-0064` decision 7).
-  // And, since `ABC-279`, on its doors, the shipped path less the SEE skip (`ADR-0069` decision 8).
-  for (const { path, on, fut, tap, see } of SWITCH_MODULES) {
-    it(`${path}: each exported entry passes exactly one quietPromotions literal, and only ${on}'s, ${see}'s, ${tap}'s and ${fut}'s are true`, () => {
+  // And, since `ABC-279`, on its doors, the shipped path less the SEE skip (`ADR-0069` decision 8);
+  // and, since `ABC-283`, on its doors, the shipped path less one or all of the bundle.
+  for (const { path, on, fut, tap, see, bundle } of SWITCH_MODULES) {
+    it(`${path}: each exported entry passes exactly one quietPromotions literal, and only ${on}'s, the ABC-283 doors', ${see}'s, ${tap}'s and ${fut}'s are true`, () => {
       const found = switchLiterals(path, "quietPromotions");
       expect(Object.keys(found).length).toBeGreaterThanOrEqual(path === "./search.ts" ? 12 : 6);
       expect(Object.entries(found).filter(([, value]) => value === "true")).toEqual([
         [on, "true"],
+        ...bundle.map((entry) => [entry, "true"]),
         [see, "true"],
         [tap, "true"],
         [fut, "true"],

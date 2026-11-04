@@ -504,18 +504,25 @@ describe("A4 — no fixed depth anywhere in the delivered engine", () => {
     // fifth (`chooseMoveWithoutQuietPromotions`, the same decision). `ABC-268` added a sixth
     // (`chooseMoveWithoutFutility`, `ADR-0061` decision 4), and `ABC-269` a seventh
     // (`chooseMoveWithoutTaper`, `ADR-0064` decision 7). `ABC-279` adds an eighth
-    // (`chooseMoveWithoutSeePruning`, `ADR-0069` decision 8): exactly one more.
+    // (`chooseMoveWithoutSeePruning`, `ADR-0069` decision 8). `ABC-283` adds four: one per part of
+    // its bundle (`chooseMoveWithoutHistory`, `chooseMoveWithoutSeeOrdering`,
+    // `chooseMoveWithoutAspiration`; `ADR-0063` d6, `ADR-0065` d7, `ADR-0066` d7) and the all-off
+    // `chooseMoveWithoutBundle`, each of `chooseMove`'s shape.
     expect(Object.keys(engineModule).sort()).toEqual([
       "DEFAULT_BUDGET_MS",
       "HARD_CEILING_MS",
       "NODES_PER_CLOCK_CHECK",
       "chooseMove",
+      "chooseMoveWithoutAspiration",
+      "chooseMoveWithoutBundle",
       "chooseMoveWithoutFutility",
+      "chooseMoveWithoutHistory",
       "chooseMoveWithoutNullMove",
       "chooseMoveWithoutPvsOrReductions",
       "chooseMoveWithoutQuiescenceEvasions",
       "chooseMoveWithoutQuietPromotions",
       "chooseMoveWithoutReductions",
+      "chooseMoveWithoutSeeOrdering",
       "chooseMoveWithoutSeePruning",
       "chooseMoveWithoutTaper",
       "createEngine",
@@ -532,6 +539,10 @@ describe("A4 — no fixed depth anywhere in the delivered engine", () => {
     expect(engineModule.chooseMoveWithoutFutility.length).toBe(2);
     expect(engineModule.chooseMoveWithoutTaper.length).toBe(2);
     expect(engineModule.chooseMoveWithoutSeePruning.length).toBe(2);
+    expect(engineModule.chooseMoveWithoutHistory.length).toBe(2);
+    expect(engineModule.chooseMoveWithoutSeeOrdering.length).toBe(2);
+    expect(engineModule.chooseMoveWithoutAspiration.length).toBe(2);
+    expect(engineModule.chooseMoveWithoutBundle.length).toBe(2);
     expect(createEngine.length).toBe(1);
     expect(source).not.toMatch(/export function \w+\([^)]*depth/i);
   });

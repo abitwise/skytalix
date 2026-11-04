@@ -24,7 +24,12 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { makeMove, unmakeMove } from "./apply.ts";
-import { chooseMove, chooseMoveWithoutSeePruning, type EngineChoice } from "./engine.ts";
+import {
+  chooseMove,
+  chooseMoveWithoutBundle,
+  chooseMoveWithoutSeePruning,
+  type EngineChoice,
+} from "./engine.ts";
 import { evaluateAtPhase, phaseOf } from "./evaluate.ts";
 import { parseFen, toFen } from "./fen.ts";
 import { gameStatus } from "./gameend.ts";
@@ -34,7 +39,7 @@ import { KING, PAWN, type Position, squareName } from "./position.ts";
 import { HANGING_CORPUS } from "./puzzle-corpus.ts";
 import { orderCaptures, type QuiescenceRules, quiesce } from "./quiescence.ts";
 import { MATE_CORPUS } from "./search.mate-corpus.ts";
-import { MATE_SCORE, search, searchWithoutSeePruning } from "./search.ts";
+import { MATE_SCORE, search, searchWithoutBundle, searchWithoutSeePruning } from "./search.ts";
 import * as seeModule from "./see.ts";
 import { isLosingCapture, see, seeScratchByteLength } from "./see.ts";
 
@@ -426,18 +431,23 @@ describe("ABC-279 — one switch, seePruning, and two test-only doors (ADR-0069 
     ["search", "searchRoot(position, depth, {", "search", "searchWithoutSeePruning"],
     ["engine", "deepen(position, options, {", "chooseMove", "chooseMoveWithoutSeePruning"],
   ] as const) {
-    it(`${name}: seePruning is on in ${shipped} only; ${door} is ${shipped} with it off; every older door turns it off`, () => {
+    it(`${name}: seePruning is on in ${shipped} and the ABC-283 doors only; ${door} is the all-off ABC-283 door with it off; every older door turns it off`, () => {
       const literals = entryLiterals(SOURCE[name], call);
-      expect(Object.keys(literals).length).toBeGreaterThanOrEqual(name === "search" ? 15 : 9);
+      expect(Object.keys(literals).length).toBeGreaterThanOrEqual(name === "search" ? 18 : 13);
+      // `ABC-283`'s doors keep the skip on: the shipped path less one or all of the bundle. So
+      // `ABC-279`'s door is the all-off door, `searchWithoutBundle` / `chooseMoveWithoutBundle`,
+      // with the skip off.
+      const bundleDoor = name === "search" ? "searchWithoutBundle" : "chooseMoveWithoutBundle";
       for (const [entry, literal] of Object.entries(literals)) {
         const found = literal.match(/seePruning: (true|false),/g);
-        expect(found, entry).toEqual([
-          entry === shipped ? "seePruning: true," : "seePruning: false,",
-        ]);
+        const on =
+          entry === shipped ||
+          /^(search|chooseMove)Without(History|SeeOrdering|Aspiration|Bundle)$/.test(entry);
+        expect(found, entry).toEqual([on ? "seePruning: true," : "seePruning: false,"]);
       }
       const strip = (literal: string): string =>
         literal.replace(/\s*seePruning: (true|false),/, "");
-      expect(strip(literals[door] as string)).toBe(strip(literals[shipped] as string));
+      expect(strip(literals[door] as string)).toBe(strip(literals[bundleDoor] as string));
     });
   }
 
@@ -590,14 +600,16 @@ if (process.env.SEARCH_DEEP === "1") {
   describe("ABC-279 A4 (a) — depth 8 on kiwipete and position-6, nodes <= 0.78x the door's in both recursions [deep, SEARCH_DEEP=1]", () => {
     // The instrument check (`ADR-0069` decision 12, not a bar): on `src/` tree `4cb84035` a faithful
     // build reads these exact counts; the doors read `ABC-269` B0's. A re-derived count is a dated
-    // line in the ADR, never a moved bar.
+    // line in the ADR, never a moved bar. `ABC-283` re-points the head side to the all-off doors,
+    // `searchWithoutBundle` / `chooseMoveWithoutBundle` (the pre-ticket pair; `ADR-0050` d4,
+    // `ADR-0064` d7): the figures do not change.
     const READ = {
       kiwipete: { search: [605_117, 839_514], choose: [766_275, 1_296_788] },
       "position-6": { search: [406_787, 1_533_901], choose: [87_475, 404_930] },
     } as const;
     for (const name of ["kiwipete", "position-6"] as const) {
       it(`${name}: search() at depth 8 [deep, SEARCH_DEEP=1]`, () => {
-        const head = search(parseFen(fenOf(name)), 8);
+        const head = searchWithoutBundle(parseFen(fenOf(name)), 8);
         const door = searchWithoutSeePruning(parseFen(fenOf(name)), 8);
         console.log(
           `ABC-279 A4 search() ${name} d8: ${head.nodes} / ${door.nodes} = ` +
@@ -609,7 +621,7 @@ if (process.env.SEARCH_DEEP === "1") {
       }, 300_000);
 
       it(`${name}: chooseMove deepened to 8 on a frozen clock [deep, SEARCH_DEEP=1]`, () => {
-        const head = deepenTo(chooseMove, fenOf(name), 8);
+        const head = deepenTo(chooseMoveWithoutBundle, fenOf(name), 8);
         const door = deepenTo(chooseMoveWithoutSeePruning, fenOf(name), 8);
         expect([head.depth, door.depth]).toEqual([8, 8]);
         console.log(

@@ -107,9 +107,23 @@
  * door above turns it off, and a seventh TEST-ONLY door, `chooseMoveWithoutTaper`, is the
  * pre-`ABC-269` `chooseMove`, node for node. It takes no depth.
  *
+ * THE ORDERING BUNDLE (`ABC-283`) reaches it by three switches. `history` and `seeOrdering` are
+ * `src/search.ts`'s (`ADR-0063`, `ADR-0065`): that module's `orderMoves` reads them, and its ONE
+ * update, `recordHistoryCutoff`, is called at a quiet beta cutoff here as there; the table is
+ * cleared at this call's entry, beside the transposition table, and kept across its iterations.
+ * `aspiration` is this module's alone (`ADR-0066`): from iteration 5 the root window is the previous
+ * completed iteration's score ± 100 cp; a fail widens only the failed side, to the fail-soft score
+ * ∓ δ with δ doubling, and a side whose δ passes 400 cp, or whose bound reaches the mate band,
+ * becomes infinite; a previous score in the mate band takes the full window. A fail high stops the
+ * root loop and stores a lower bound with its move; a fail low stores nothing. No new clock read:
+ * an abort inside any pass discards the iteration as before. Four TEST-ONLY doors:
+ * `chooseMoveWithoutHistory`, `chooseMoveWithoutSeeOrdering`, `chooseMoveWithoutAspiration` (each
+ * the shipped `chooseMove` with one part off) and `chooseMoveWithoutBundle`, the pre-`ABC-283`
+ * `chooseMove`, node for node. Every older door turns all three off. None takes a depth.
+ *
  * NOT HERE, each owned elsewhere: difficulty selection and how a level persists (`EPIC-006`), the
- * budget-to-level mapping (`ABC-087`), aspiration windows and threading (none requested;
- * `ADR-0005` F6 leaves threading to Architect/Design).
+ * budget-to-level mapping (`ABC-087`), and threading (`ADR-0005` F6 leaves it to
+ * Architect/Design).
  */
 
 import { makeMove, makeNullMove, unmakeMove, unmakeNullMove } from "./apply.ts";
@@ -120,6 +134,7 @@ import type { Move } from "./moves.ts";
 import type { Position } from "./position.ts";
 import { type QuiescenceRules, type QuiescenceVisitor, quiesce } from "./quiescence.ts";
 import {
+  clearHistory,
   futileMove,
   futilityNode,
   KEY_ARRAY_CAPACITY,
@@ -128,13 +143,16 @@ import {
   MATE_SCORE,
   nullMoveReduction,
   orderMoves,
+  recordHistoryCutoff,
   repeatsInPath,
 } from "./search.ts";
 import {
   BOUND_EXACT,
+  BOUND_LOWER,
   boundOf,
   clearTable,
   entryMove,
+  MATE_FLOOR,
   probeTable,
   storeEntry,
   tableCutoff,
@@ -263,7 +281,7 @@ export function trimPriorKeys(keys: readonly bigint[], halfmoveClock: number): b
 const ABORTED = Symbol("engine: the budget is spent");
 
 /**
- * The `ABC-121`, `ABC-208`, `ABC-230`, `ABC-228`, `ABC-229`, `ABC-268`, `ABC-269` and `ABC-279` switches,
+ * The `ABC-121`, `ABC-208`, `ABC-230`, `ABC-228`, `ABC-229`, `ABC-268`, `ABC-269`, `ABC-279` and `ABC-283` switches,
  * `src/search.ts`'s rule: on in `chooseMove`, off in its doors.
  */
 interface Heuristics {
@@ -298,6 +316,21 @@ interface Heuristics {
    * on `chooseMove` only, where the taper is on too, so its rules record is `RULES_SEE_PRUNING`.
    */
   readonly seePruning: boolean;
+  /**
+   * The history table orders the quiet moves (`ABC-283`, `ADR-0063`): true on `chooseMove`,
+   * `chooseMoveWithoutSeeOrdering` and `chooseMoveWithoutAspiration`.
+   */
+  readonly history: boolean;
+  /**
+   * Losing captures sort after the killers (`ABC-283`, `ADR-0065`): true on `chooseMove`,
+   * `chooseMoveWithoutHistory` and `chooseMoveWithoutAspiration`.
+   */
+  readonly seeOrdering: boolean;
+  /**
+   * The root's aspiration window from iteration 5 (`ABC-283`, `ADR-0066`): true on `chooseMove`,
+   * `chooseMoveWithoutHistory` and `chooseMoveWithoutSeeOrdering`.
+   */
+  readonly aspiration: boolean;
 }
 
 /** The quiescence rules this recursion hands `quiesce` (`ADR-0053` decision 6): constants, never built per leaf. */
@@ -491,7 +524,14 @@ function negamax(
   let best = Number.NEGATIVE_INFINITY;
   let bestMove = moves[0] as Move;
   let index = 0;
-  for (const move of orderMoves(moves, budget.killers.at(ply), hashMove)) {
+  const list = orderMoves(
+    moves,
+    budget.killers.at(ply),
+    hashMove,
+    budget.seeOrdering ? position : null,
+    budget.history,
+  );
+  for (const move of list) {
     if (futile && futileMove(position, move, index)) {
       index++;
       continue;
@@ -525,6 +565,7 @@ function negamax(
     }
     if (best > alpha) alpha = best;
     if (alpha >= beta) {
+      if (budget.history) recordHistoryCutoff(position, list, index - 1, remaining, futile);
       budget.killers.record(ply, move);
       break;
     }
@@ -585,10 +626,15 @@ function searchMove(
   return score;
 }
 
-/** One completed iteration: the root move it chose and that move's exact score. */
+/**
+ * One completed iteration: the root move it chose and that move's exact score. `fail` is 0 then;
+ * under a finite aspiration window (`ABC-283`) it is 1 for a fail high (`score` is a lower bound)
+ * and -1 for a fail low (`score` is an upper bound), and the iteration is searched again.
+ */
 interface Iteration {
   readonly move: Move;
   readonly score: number;
+  readonly fail: number;
 }
 
 /**
@@ -613,6 +659,8 @@ function runIteration(
   remaining: number,
   budget: Budget,
   rootPhase: number,
+  alphaIn: number,
+  betaIn: number,
 ): Iteration {
   const rootKey = budget.keys[0] as bigint;
   const slot = probeTable(rootKey);
@@ -620,8 +668,10 @@ function runIteration(
     moves,
     budget.killers.at(0),
     slot === -1 ? null : entryMove(slot, moves),
+    budget.seeOrdering ? position : null,
+    budget.history,
   );
-  let alpha = Number.NEGATIVE_INFINITY;
+  let alpha = alphaIn;
   let best = Number.NEGATIVE_INFINITY;
   let bestMove = rootMoves[0] as Move;
 
@@ -638,7 +688,7 @@ function runIteration(
         position,
         remaining,
         alpha,
-        Number.POSITIVE_INFINITY,
+        betaIn,
         0,
         index,
         reduction,
@@ -655,10 +705,61 @@ function runIteration(
       bestMove = move;
     }
     if (best > alpha) alpha = best;
+    // `ABC-283` (`ADR-0066` decision 4): a fail high stops the root at once. Never with `betaIn`
+    // infinite, so the full window searches every root move exactly as before.
+    if (best >= betaIn) break;
   }
 
+  if (best >= betaIn) {
+    storeEntry(rootKey, remaining, BOUND_LOWER, best, 0, bestMove);
+    return { move: bestMove, score: best, fail: 1 };
+  }
+  // A fail low stores nothing, so the previous iteration's root entry and hash move stay.
+  if (best <= alphaIn) return { move: bestMove, score: best, fail: -1 };
   storeEntry(rootKey, remaining, BOUND_EXACT, best, 0, bestMove);
-  return { move: bestMove, score: best };
+  return { move: bestMove, score: best, fail: 0 };
+}
+
+/** `ADR-0066` decisions 1 and 3: the first windowed iteration, the first δ, and δ's cap. */
+const ASPIRATION_FROM = 5;
+const ASPIRATION_DELTA = 100;
+const ASPIRATION_CAP = 400;
+
+/**
+ * One iteration under the aspiration window (`ABC-283`, `ADR-0066` decisions 1-4): `previous` is
+ * the previous completed iteration's score. In the mate band (|previous| ≥ `MATE_FLOOR`) the
+ * window is full. Otherwise it is (previous − 100, previous + 100); on a fail δ doubles and only the
+ * failed side moves, to the fail-soft score ∓ δ, or to ±∞ once δ passes 400 or the bound reaches
+ * the mate band. So δ runs 100 → 200 → 400 → ∞, at most five passes, and a full side cannot fail.
+ * An abort in any pass throws past this function, as from `runIteration`.
+ */
+function aspirate(
+  position: Position,
+  moves: readonly Move[],
+  remaining: number,
+  budget: Budget,
+  rootPhase: number,
+  previous: number,
+): Iteration {
+  const infinity = Number.POSITIVE_INFINITY;
+  if (Math.abs(previous) >= MATE_FLOOR) {
+    return runIteration(position, moves, remaining, budget, rootPhase, 0 - infinity, infinity);
+  }
+  let delta = ASPIRATION_DELTA;
+  let alpha = previous - delta;
+  let beta = previous + delta;
+  for (;;) {
+    const result = runIteration(position, moves, remaining, budget, rootPhase, alpha, beta);
+    if (result.fail === 0) return result;
+    delta *= 2;
+    if (result.fail < 0) {
+      const lower = result.score - delta;
+      alpha = delta > ASPIRATION_CAP || lower <= 0 - MATE_FLOOR ? 0 - infinity : lower;
+    } else {
+      const upper = result.score + delta;
+      beta = delta > ASPIRATION_CAP || upper >= MATE_FLOOR ? infinity : upper;
+    }
+  }
 }
 
 /**
@@ -681,6 +782,111 @@ export function chooseMove(position: Position, options: EngineOptions): EngineCh
     futility: true,
     taper: true,
     seePruning: true,
+    history: true,
+    seeOrdering: true,
+    aspiration: true,
+  });
+}
+
+/**
+ * TEST-ONLY. `chooseMove` with the history table off (`ABC-283`, `ADR-0063` decision 6), the rest of
+ * the bundle and everything older on. It takes no depth. Not an engine option; nothing in
+ * production calls it.
+ */
+export function chooseMoveWithoutHistory(
+  position: Position,
+  options: EngineOptions,
+): EngineChoice | null {
+  return deepen(position, options, {
+    pvs: true,
+    reductions: true,
+    nullMove: true,
+    priorKeys: true,
+    quiescenceEvasions: true,
+    quietPromotions: true,
+    futility: true,
+    taper: true,
+    seePruning: true,
+    history: false,
+    seeOrdering: true,
+    aspiration: true,
+  });
+}
+
+/**
+ * TEST-ONLY. `chooseMove` with SEE ordering off (`ABC-283`, `ADR-0065` decision 7), the rest of the
+ * bundle and everything older on. It takes no depth. Not an engine option; nothing in production
+ * calls it.
+ */
+export function chooseMoveWithoutSeeOrdering(
+  position: Position,
+  options: EngineOptions,
+): EngineChoice | null {
+  return deepen(position, options, {
+    pvs: true,
+    reductions: true,
+    nullMove: true,
+    priorKeys: true,
+    quiescenceEvasions: true,
+    quietPromotions: true,
+    futility: true,
+    taper: true,
+    seePruning: true,
+    history: true,
+    seeOrdering: false,
+    aspiration: true,
+  });
+}
+
+/**
+ * TEST-ONLY. `chooseMove` with the root's aspiration window off (`ABC-283`, `ADR-0066` decision 7):
+ * every iteration on the full window, the rest of the bundle and everything older on. It takes no
+ * depth. Not an engine option; nothing in production calls it.
+ */
+export function chooseMoveWithoutAspiration(
+  position: Position,
+  options: EngineOptions,
+): EngineChoice | null {
+  return deepen(position, options, {
+    pvs: true,
+    reductions: true,
+    nullMove: true,
+    priorKeys: true,
+    quiescenceEvasions: true,
+    quietPromotions: true,
+    futility: true,
+    taper: true,
+    seePruning: true,
+    history: true,
+    seeOrdering: true,
+    aspiration: false,
+  });
+}
+
+/**
+ * TEST-ONLY. The pre-`ABC-283` `chooseMove`, node for node: the history table, SEE ordering and
+ * aspiration all off, everything else on, Q1's losing-capture skip and the prior keys included. It
+ * is the bundle's all-off door (`ABC-283` P0) and the shipped side of every older row that
+ * measures its own heuristic alone. It takes no depth. Not an engine option; nothing in production
+ * calls it.
+ */
+export function chooseMoveWithoutBundle(
+  position: Position,
+  options: EngineOptions,
+): EngineChoice | null {
+  return deepen(position, options, {
+    pvs: true,
+    reductions: true,
+    nullMove: true,
+    priorKeys: true,
+    quiescenceEvasions: true,
+    quietPromotions: true,
+    futility: true,
+    taper: true,
+    seePruning: true,
+    history: false,
+    seeOrdering: false,
+    aspiration: false,
   });
 }
 
@@ -705,6 +911,9 @@ export function chooseMoveWithoutSeePruning(
     futility: true,
     taper: true,
     seePruning: false,
+    history: false,
+    seeOrdering: false,
+    aspiration: false,
   });
 }
 
@@ -729,6 +938,9 @@ export function chooseMoveWithoutTaper(
     futility: true,
     taper: false,
     seePruning: false,
+    history: false,
+    seeOrdering: false,
+    aspiration: false,
   });
 }
 
@@ -753,6 +965,9 @@ export function chooseMoveWithoutFutility(
     futility: false,
     taper: false,
     seePruning: false,
+    history: false,
+    seeOrdering: false,
+    aspiration: false,
   });
 }
 
@@ -777,6 +992,9 @@ export function chooseMoveWithoutQuietPromotions(
     futility: false,
     taper: false,
     seePruning: false,
+    history: false,
+    seeOrdering: false,
+    aspiration: false,
   });
 }
 
@@ -800,6 +1018,9 @@ export function chooseMoveWithoutQuiescenceEvasions(
     futility: false,
     taper: false,
     seePruning: false,
+    history: false,
+    seeOrdering: false,
+    aspiration: false,
   });
 }
 
@@ -823,6 +1044,9 @@ export function chooseMoveWithoutNullMove(
     futility: false,
     taper: false,
     seePruning: false,
+    history: false,
+    seeOrdering: false,
+    aspiration: false,
   });
 }
 
@@ -846,6 +1070,9 @@ export function chooseMoveWithoutReductions(
     futility: false,
     taper: false,
     seePruning: false,
+    history: false,
+    seeOrdering: false,
+    aspiration: false,
   });
 }
 
@@ -868,10 +1095,13 @@ export function chooseMoveWithoutPvsOrReductions(
     futility: false,
     taper: false,
     seePruning: false,
+    history: false,
+    seeOrdering: false,
+    aspiration: false,
   });
 }
 
-/** The deepening loop behind `chooseMove` and its seven doors; they differ in `heuristics` only. */
+/** The deepening loop behind `chooseMove` and its doors; they differ in `heuristics` only. */
 function deepen(
   position: Position,
   options: EngineOptions,
@@ -897,14 +1127,16 @@ function deepen(
   };
   budget.keys[0] = zobristKey(position);
   clearTable();
+  if (heuristics.history) clearHistory();
 
   const rootMoves = legalMoves(position);
   if (rootMoves.length === 0) return null;
+  const infinity = Number.POSITIVE_INFINITY;
 
   // `ABC-269` cut C1: the phase is seeded ONCE per call, here; the position is byte-identical
   // between iterations, so every iteration's root carries the same value down.
   const rootPhase = phaseOf(position);
-  let best = runIteration(position, rootMoves, 1, budget, rootPhase);
+  let best = runIteration(position, rootMoves, 1, budget, rootPhase, 0 - infinity, infinity);
   let reached = 1;
   budget.nextCheck = budget.nodes + NODES_PER_CLOCK_CHECK;
 
@@ -919,7 +1151,10 @@ function deepen(
   ) {
     let deeper: Iteration;
     try {
-      deeper = runIteration(position, rootMoves, iteration, budget, rootPhase);
+      deeper =
+        heuristics.aspiration && iteration >= ASPIRATION_FROM
+          ? aspirate(position, rootMoves, iteration, budget, rootPhase, best.score)
+          : runIteration(position, rootMoves, iteration, budget, rootPhase, 0 - infinity, infinity);
     } catch (error) {
       // The register is written only here, from a value a COMPLETED iteration returned. An
       // aborted iteration leaves `best` and `reached` untouched, which is `A3`.

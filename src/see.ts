@@ -12,8 +12,10 @@
  * `ABC-240` rule): the removed-square mask, the gain list and the squares to restore are fixed
  * module scratch, `seeScratchByteLength()` bytes in all, counted in `NFR-009` (a)'s sum.
  *
- * Its one caller is `src/quiescence.ts`, through `isLosingCapture`, behind the `seePruning` rule
- * (`ADR-0069` decisions 1-3). The main search computes no SEE (decision 5).
+ * Its callers are `src/quiescence.ts`, through `isLosingCapture`, behind the `seePruning` rule
+ * (`ADR-0069` decisions 1-3), and, since `ABC-283`, `src/search.ts`'s move ordering, through its
+ * own losing test (threshold -50, `ADR-0065` decision 2) behind the `seeOrdering` switch. Q1's
+ * test and threshold here are unchanged.
  */
 
 import type { Move } from "./moves.ts";

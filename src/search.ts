@@ -97,6 +97,17 @@
  * constant rules record). True: the tapered `evaluate`. False: `evaluateWithoutTaper`, the
  * pre-`ABC-269` evaluation. It changes the VALUE, so every door older than `ABC-269` turns it off,
  * and `search()` is held to the TEST-ONLY door `searchWithoutTaper`, the pre-`ABC-269` `search()`.
+ *
+ * THE ORDERING BUNDLE (ABC-283, the owner's word of 2026-11-04): two of its three parts are here,
+ * in BOTH recursions, each behind its own switch. `history` (`ADR-0063`): a side × from × to table
+ * of quiet moves, raised by d² on a quiet beta cutoff with a d² malus to each quiet move searched
+ * before the cutter, bounded by gravity, cleared at every `search()` entry and `chooseMove` call;
+ * it orders the quiet moves after the killers. `seeOrdering` (`ADR-0065`): a capture whose static
+ * exchange (`src/see.ts`) is below -50 cp sorts after the killers and before every other quiet move;
+ * ordering only, quiescence unchanged. The third part, aspiration at the root (`ADR-0066`), is
+ * `chooseMove`'s alone (`src/engine.ts`). Each part has its own TEST-ONLY door
+ * (`searchWithoutHistory`, `searchWithoutSeeOrdering`), `searchWithoutBundle` turns both off and is
+ * the pre-`ABC-283` `search()` node for node, and every older door turns both off.
  */
 
 import { makeMove, makeNullMove, unmakeMove, unmakeNullMove } from "./apply.ts";
@@ -106,6 +117,7 @@ import { givesCheck, isInCheck, legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
 import { EMPTY, isBlack, isOnBoard, KING, PAWN, type Position, pieceType } from "./position.ts";
 import { MATE_SCORE, mvvLvaKey, type QuiescenceRules, quiesce } from "./quiescence.ts";
+import { see } from "./see.ts";
 import {
   BOUND_EXACT,
   boundOf,
@@ -213,15 +225,121 @@ export class KillerTable {
   }
 }
 
-/** Sort tiers: the hash move above every capture, every capture above every killer. */
+/**
+ * Sort tiers: the hash move above every capture, every capture above every killer, every killer
+ * above every losing capture (`ABC-283`, `ADR-0065` decision 3), and every losing capture above
+ * every other quiet move, whose key is its history value (`ADR-0063` decision 4), always within
+ * [-`HISTORY_BOUND`, `HISTORY_BOUND`]. With both switches off the keys are 0 below the
+ * killers, and the order is the pre-`ABC-283` order exactly: the killers' offset moves no
+ * relative order.
+ */
 const HASH_MOVE_KEY = 3_000_000;
 const TACTICAL_KEY = 1_000_000;
+const KILLER_KEY = 500_000;
+const LOSING_CAPTURE_KEY = 100_000;
 
-function orderKey(move: Move, killers: readonly Move[], hashMove: Move | null): number {
+/**
+ * The history table (`ABC-283`, `ADR-0063` decision 1): one cell per moving side × from × to, on
+ * 0-63 squares, 32 768 bytes. Data only, never a switch; both recursions share it, and only a
+ * recursion with `history` on reads or writes it.
+ */
+const HISTORY = new Int32Array(2 * 64 * 64);
+/**
+ * Gravity's bound: every cell stays within [-16 384, 16 384], with no clamp. The bound itself is a
+ * fixed point (+b - trunc(16 384 · b / 16 384) = 0), so `trunc` can land a cell on it, never past it.
+ */
+const HISTORY_BOUND = 16_384;
+
+/** `move`'s cell: the mover's colour, then from and to on 0-63 (`(sq & 7) | ((sq >> 4) << 3)`). */
+function historyIndex(move: Move): number {
+  const from = (move.from & 7) | ((move.from >> 4) << 3);
+  const to = (move.to & 7) | ((move.to >> 4) << 3);
+  return (isBlack(move.piece) ? 4096 : 0) + from * 64 + to;
+}
+
+/** Gravity (`ADR-0063` decision 2): h ← h + b − trunc(h · |b| / 16 384). */
+function addHistory(move: Move, bonus: number): void {
+  const index = historyIndex(move);
+  const value = HISTORY[index] as number;
+  HISTORY[index] = value + bonus - Math.trunc((value * Math.abs(bonus)) / HISTORY_BOUND);
+}
+
+/** Zero every cell: at every `search()` entry and every `chooseMove` call with `history` on. */
+export function clearHistory(): void {
+  HISTORY.fill(0);
+}
+
+/** The history table's fixed size in bytes, for `NFR-009` (a)'s byte-length sum. */
+export function historyByteLength(): number {
+  return HISTORY.byteLength;
+}
+
+/** TEST-ONLY read of `move`'s history cell. Not an engine option; nothing in production calls it. */
+export function historyScore(move: Move): number {
+  return HISTORY[historyIndex(move)] as number;
+}
+
+/**
+ * THE history update (`ABC-283`, `ADR-0063` decision 2), which both recursions call at a main-tree
+ * beta cutoff with `history` on: `list` is the node's ordered move list, `cutIndex` the cutter's
+ * index in it, `depth` the node's remaining depth and `futile` the node's futility answer. Only a
+ * QUIET cutter (no capture, no promotion) updates: it gets +d², and every quiet move before it
+ * that was searched gets -d². A move futility skipped was never searched and gets nothing; the
+ * test is `futileMove` again, which answers the same on the restored position. Nothing is updated
+ * in quiescence, at the root or on a null-move cutoff: no caller there.
+ */
+export function recordHistoryCutoff(
+  position: Position,
+  list: readonly Move[],
+  cutIndex: number,
+  depth: number,
+  futile: boolean,
+): void {
+  const cutter = list[cutIndex] as Move;
+  if (cutter.captured !== EMPTY || cutter.promotion !== EMPTY) return;
+  const bonus = depth * depth;
+  addHistory(cutter, bonus);
+  for (let index = 0; index < cutIndex; index++) {
+    const move = list[index] as Move;
+    if (move.captured !== EMPTY || move.promotion !== EMPTY) continue;
+    if (futile && futileMove(position, move, index)) continue;
+    addHistory(move, 0 - bonus);
+  }
+}
+
+/** A capture is losing for ordering below this static exchange (`ADR-0065` decision 2): -50 cp. */
+const SEE_ORDER_THRESHOLD = -50;
+
+/**
+ * `ADR-0065` decision 2's losing test, for ordering only, beside Q1's (`isLosingCapture`, threshold
+ * 0, unchanged): `capture` does not promote, is not made by the king, takes a lesser piece, and
+ * its `see` is below -50. "Lesser" compares piece types, whose order is `see`'s value order
+ * (P < N < B < R < Q), so SEE is computed only where the victim is worth less than the attacker.
+ */
+function losingForOrdering(position: Position, capture: Move): boolean {
+  if (capture.promotion !== EMPTY) return false;
+  const attacker = pieceType(capture.piece);
+  if (attacker === KING || pieceType(capture.captured) >= attacker) return false;
+  return see(position, capture) < SEE_ORDER_THRESHOLD;
+}
+
+function orderKey(
+  move: Move,
+  killers: readonly Move[],
+  hashMove: Move | null,
+  seePosition: Position | null,
+  history: boolean,
+): number {
   if (hashMove !== null && sameMove(move, hashMove)) return HASH_MOVE_KEY;
-  if (move.captured !== EMPTY || move.promotion !== EMPTY) return TACTICAL_KEY + mvvLvaKey(move);
+  if (move.captured !== EMPTY || move.promotion !== EMPTY) {
+    if (seePosition !== null && losingForOrdering(seePosition, move)) {
+      return LOSING_CAPTURE_KEY + mvvLvaKey(move);
+    }
+    return TACTICAL_KEY + mvvLvaKey(move);
+  }
   const killer = killers.findIndex((candidate) => sameMove(candidate, move));
-  return killer === -1 ? 0 : killers.length - killer;
+  if (killer !== -1) return KILLER_KEY + killers.length - killer;
+  return history ? (HISTORY[historyIndex(move)] as number) : 0;
 }
 
 /** More than any legal position's move count (218); a longer list allocates its own keys. */
@@ -240,6 +358,11 @@ export function orderScratchByteLength(): number {
  * every other move in generation order (the sort is stable). Returns a NEW array holding exactly
  * the moves it was handed — a killer or hash move absent from `moves` is ignored, never added.
  *
+ * `ABC-283`: `seePosition` is the node's position when `seeOrdering` is on, and `null` otherwise:
+ * with it, a losing capture (`losingForOrdering`) sorts after the killers. `history` true orders
+ * the other quiet moves by their history cells. Both default off, so a three-argument call is the
+ * pre-`ABC-283` comparator, and with both off nothing is computed.
+ *
  * NO PER-MOVE ALLOCATION (`ABC-240`, the Architect's four conditions): each key is computed once
  * into `ORDER_KEYS`, a fixed float64 module scratch (keys stay float64 — `mvvLvaKey`'s attacker
  * thousandths must not merge), and the one fresh output array is insertion-sorted beside it,
@@ -251,13 +374,15 @@ export function orderMoves(
   moves: readonly Move[],
   killers: readonly Move[],
   hashMove: Move | null,
+  seePosition: Position | null = null,
+  history = false,
 ): Move[] {
   const count = moves.length;
   const out = moves.slice();
   const keys = count <= ORDER_SCRATCH_LENGTH ? ORDER_KEYS : new Float64Array(count);
   for (let i = 0; i < count; i++) {
     const move = out[i] as Move;
-    const key = orderKey(move, killers, hashMove);
+    const key = orderKey(move, killers, hashMove, seePosition, history);
     let j = i;
     while (j > 0 && (keys[j - 1] as number) < key) {
       keys[j] = keys[j - 1] as number;
@@ -349,6 +474,18 @@ interface Switches {
    * `searchWithoutSeePruning` and every older door turn it off (decision 8).
    */
   readonly seePruning: boolean;
+  /**
+   * The history table orders the quiet moves after the killers (`ABC-283`, `ADR-0063` decisions
+   * 1-5). True on `search()` and `searchWithoutSeeOrdering`; `searchWithoutHistory`,
+   * `searchWithoutBundle` and every older door turn it off, and then nothing reads or writes it.
+   */
+  readonly history: boolean;
+  /**
+   * Losing captures sort after the killers (`ABC-283`, `ADR-0065` decisions 2-4). True on
+   * `search()` and `searchWithoutHistory`; `searchWithoutSeeOrdering`, `searchWithoutBundle` and
+   * every older door turn it off, and then no SEE is computed in the full-width search.
+   */
+  readonly seeOrdering: boolean;
 }
 
 /** The least remaining depth, and the least 0-based index in the ordered list, a reduced move has. */
@@ -473,8 +610,9 @@ export function futileMove(position: Position, move: Move, index: number): boole
   return !givesCheck(position, move);
 }
 
-/** The move list in the order `switches.ordering` asks for, at `ply`. */
+/** The move list in the order `switches.ordering` asks for, at `ply` of `position`. */
 function ordered(
+  position: Position,
   moves: readonly Move[],
   ply: number,
   switches: Switches,
@@ -483,7 +621,13 @@ function ordered(
 ): readonly Move[] {
   if (switches.ordering === "none") return moves;
   if (switches.ordering === "mvv-lva") return orderMoves(moves, NO_KILLERS, null);
-  return orderMoves(moves, killers.at(ply), hashMove);
+  return orderMoves(
+    moves,
+    killers.at(ply),
+    hashMove,
+    switches.seeOrdering ? position : null,
+    switches.history,
+  );
 }
 
 /**
@@ -628,7 +772,8 @@ function negamax(
   let best = Number.NEGATIVE_INFINITY;
   let bestMove = moves[0] as Move;
   let index = 0;
-  for (const move of ordered(moves, ply, switches, killers, hashMove)) {
+  const list = ordered(position, moves, ply, switches, killers, hashMove);
+  for (const move of list) {
     if (futile && futileMove(position, move, index)) {
       index++;
       continue;
@@ -662,6 +807,7 @@ function negamax(
     if (!prune) continue;
     if (best > alpha) alpha = best;
     if (alpha >= beta) {
+      if (switches.history) recordHistoryCutoff(position, list, index - 1, depth, futile);
       killers.record(ply, move);
       break; // the opponent would never allow this node; the rest cannot matter
     }
@@ -793,6 +939,7 @@ function searchRoot(position: Position, depth: number, switches: Switches): Sear
   const keys = new BigUint64Array(KEY_ARRAY_CAPACITY + 1);
   keys[0] = zobristKey(position);
   if (switches.table) clearTable();
+  if (switches.history) clearHistory();
 
   // `!(depth >= 1)` and not `depth < 1`: a depth-less call's `NaN` must land here too. Before the
   // key array it recursed until the stack overflowed; `KEY_ARRAY_CAPACITY` now stops that
@@ -823,7 +970,7 @@ function searchRoot(position: Position, depth: number, switches: Switches): Sear
   const hashMove = slot === -1 ? null : entryMove(slot, moves);
   let alpha = Number.NEGATIVE_INFINITY;
   let best = Number.NEGATIVE_INFINITY;
-  const rootMoves = ordered(moves, 0, switches, killers, hashMove);
+  const rootMoves = ordered(position, moves, 0, switches, killers, hashMove);
   let bestMove = rootMoves[0] as Move;
 
   let index = 0;
@@ -880,6 +1027,79 @@ export function search(position: Position, depth: number): SearchResult {
     futility: true,
     taper: true,
     seePruning: true,
+    history: true,
+    seeOrdering: true,
+  });
+}
+
+/**
+ * TEST-ONLY. `search()` with the history table off (`ABC-283`, `ADR-0063` decision 6), the rest of
+ * the bundle and everything older on. Not an engine option; nothing in production calls it.
+ */
+export function searchWithoutHistory(position: Position, depth: number): SearchResult {
+  return searchRoot(position, depth, {
+    prune: true,
+    quiescence: true,
+    ordering: "full",
+    table: true,
+    pvs: true,
+    reductions: true,
+    nullMove: true,
+    quiescenceEvasions: true,
+    quietPromotions: true,
+    futility: true,
+    taper: true,
+    seePruning: true,
+    history: false,
+    seeOrdering: true,
+  });
+}
+
+/**
+ * TEST-ONLY. `search()` with SEE ordering off (`ABC-283`, `ADR-0065` decision 7), the rest of the
+ * bundle and everything older on. Not an engine option; nothing in production calls it.
+ */
+export function searchWithoutSeeOrdering(position: Position, depth: number): SearchResult {
+  return searchRoot(position, depth, {
+    prune: true,
+    quiescence: true,
+    ordering: "full",
+    table: true,
+    pvs: true,
+    reductions: true,
+    nullMove: true,
+    quiescenceEvasions: true,
+    quietPromotions: true,
+    futility: true,
+    taper: true,
+    seePruning: true,
+    history: true,
+    seeOrdering: false,
+  });
+}
+
+/**
+ * TEST-ONLY. The pre-`ABC-283` `search()`, node for node: the history table and SEE ordering both
+ * off, everything else on, Q1's losing-capture skip included. It is the all-off door of the
+ * bundle (`ABC-283` P0) and the shipped side of every older row that measures its own heuristic
+ * alone. Not an engine option; nothing in production calls it.
+ */
+export function searchWithoutBundle(position: Position, depth: number): SearchResult {
+  return searchRoot(position, depth, {
+    prune: true,
+    quiescence: true,
+    ordering: "full",
+    table: true,
+    pvs: true,
+    reductions: true,
+    nullMove: true,
+    quiescenceEvasions: true,
+    quietPromotions: true,
+    futility: true,
+    taper: true,
+    seePruning: true,
+    history: false,
+    seeOrdering: false,
   });
 }
 
@@ -904,6 +1124,8 @@ export function searchWithoutSeePruning(position: Position, depth: number): Sear
     futility: true,
     taper: true,
     seePruning: false,
+    history: false,
+    seeOrdering: false,
   });
 }
 
@@ -928,6 +1150,8 @@ export function searchWithoutTaper(position: Position, depth: number): SearchRes
     futility: true,
     taper: false,
     seePruning: false,
+    history: false,
+    seeOrdering: false,
   });
 }
 
@@ -952,6 +1176,8 @@ export function searchWithoutFutility(position: Position, depth: number): Search
     futility: false,
     taper: false,
     seePruning: false,
+    history: false,
+    seeOrdering: false,
   });
 }
 
@@ -976,6 +1202,8 @@ export function searchWithoutQuietPromotions(position: Position, depth: number):
     futility: false,
     taper: false,
     seePruning: false,
+    history: false,
+    seeOrdering: false,
   });
 }
 
@@ -999,6 +1227,8 @@ export function searchWithoutQuiescenceEvasions(position: Position, depth: numbe
     futility: false,
     taper: false,
     seePruning: false,
+    history: false,
+    seeOrdering: false,
   });
 }
 
@@ -1022,6 +1252,8 @@ export function searchWithoutNullMove(position: Position, depth: number): Search
     futility: false,
     taper: false,
     seePruning: false,
+    history: false,
+    seeOrdering: false,
   });
 }
 
@@ -1049,6 +1281,8 @@ export function searchWithoutPruning(position: Position, depth: number): SearchR
     futility: false,
     taper: false,
     seePruning: false,
+    history: false,
+    seeOrdering: false,
   });
 }
 
@@ -1074,6 +1308,8 @@ export function searchWithoutQuiescence(position: Position, depth: number): Sear
     futility: false,
     taper: false,
     seePruning: false,
+    history: false,
+    seeOrdering: false,
   });
 }
 
@@ -1101,6 +1337,8 @@ export function searchWithoutPruningOrQuiescence(position: Position, depth: numb
     futility: false,
     taper: false,
     seePruning: false,
+    history: false,
+    seeOrdering: false,
   });
 }
 
@@ -1124,6 +1362,8 @@ export function searchWithoutOrdering(position: Position, depth: number): Search
     futility: false,
     taper: false,
     seePruning: false,
+    history: false,
+    seeOrdering: false,
   });
 }
 
@@ -1146,6 +1386,8 @@ export function searchWithoutKillers(position: Position, depth: number): SearchR
     futility: false,
     taper: false,
     seePruning: false,
+    history: false,
+    seeOrdering: false,
   });
 }
 
@@ -1169,6 +1411,8 @@ export function searchWithoutTable(position: Position, depth: number): SearchRes
     futility: false,
     taper: false,
     seePruning: false,
+    history: false,
+    seeOrdering: false,
   });
 }
 
@@ -1192,6 +1436,8 @@ export function searchWithoutReductions(position: Position, depth: number): Sear
     futility: false,
     taper: false,
     seePruning: false,
+    history: false,
+    seeOrdering: false,
   });
 }
 
@@ -1215,5 +1461,7 @@ export function searchWithoutPvsOrReductions(position: Position, depth: number):
     futility: false,
     taper: false,
     seePruning: false,
+    history: false,
+    seeOrdering: false,
   });
 }
