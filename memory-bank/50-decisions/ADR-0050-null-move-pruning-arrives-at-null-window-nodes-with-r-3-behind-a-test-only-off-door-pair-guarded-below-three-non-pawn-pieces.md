@@ -6,6 +6,13 @@ id: ADR-0050
 
 ## Status
 
+**2026-11-04 (`arch-ABC-281`, records only): the abort-restores-root guard (`QE-208-a`) keeps a default-lane
+remnant.** Under `ABC-281` form S, the full position-6 sweep (even readings 4 to 24, both choosers) moves to
+`SEARCH_DEEP`. The default lane keeps readings 8 and 10 on `chooseMoveWithoutTaper`, both of which land inside a null
+subtree. Measured on a scratch copy: this guard's plant (the null move not unmade on abort) is killed by that remnant.
+Its only default-lane killer at base was the full row. The readings are in `ADR-0046` § Dated 2026-11-04. No decision,
+plant or bar of this ADR moves.
+
 **2026-10-26: in force on `main` from merge `b5c67ab7`** (`ABC-208`, QE PASS `qe-ABC-208/…0477ac64` at `3a87f9d7`;
 merge recorded by Orchestrator `orch-2026-10-26q/…836cb92d`). Checked read-only: `git diff 3a87f9d7 b5c67ab7 -- src` is
 empty, so the code on `main` is the code QE measured. At `b5c67ab7` the null move is in `src/search.ts`, `src/engine.ts`,
