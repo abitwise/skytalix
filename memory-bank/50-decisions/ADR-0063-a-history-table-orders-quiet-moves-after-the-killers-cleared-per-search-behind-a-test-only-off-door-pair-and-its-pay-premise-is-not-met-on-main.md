@@ -5,6 +5,11 @@ id: ADR-0063
 # ADR-0063: A history table orders the quiet moves after the killers. It is side × from × to, raised by d² on a quiet cutoff with a d² malus, bounded by gravity, cleared per search, in both recursions behind a test-only off-door pair. Its pay premise is not met on `main`
 
 ## Status
+*2026-11-04, dated pointer by Architect/Design (task `arch-owner-answers-1104b`, records only at `main` `65e28f95`).*
+**`ADR-0073` (ACCEPTED over a missed premise, `…3e73f9f9`) amends decisions 2 and 4 by reference, at bundle 1's merge.**
+Decision 4's tiers gain the countermove at 400 000, after the killers, and decision 2's update call gains that table's
+write (`ADR-0073` d2, d5). K3 is untouched, and nothing here is re-read. On a NOT MET the pointer lapses (`ADR-0056` B6).
+
 **ACCEPTED 2026-11-04 by the owner's word, as a bundle with `ADR-0065` and `ADR-0066`, with K3. In force when
 `ABC-283` merges.** Recorded by Architect/Design (task `arch-ABC-283-accept`, records only, on
 `grugops/arch-ABC-283-accept` from `main` `715beb1c`). Nothing was run.
@@ -329,6 +334,10 @@ merges (§ Status).
 
 - **NFRs.**
   - `NFR-009`: 32 768 bytes, fixed, summed by `historyByteLength()`. The ticket's "16 KiB" changes to 32 KiB (BA/PM).
+    *Dated 2026-11-04 (`arch-ABC-303-open`, records only at `main` `c118a5cf`): **"summed" was not built.** `NFR-009` (a)'s sum row
+    in `src/transposition.test.ts` has no `historyByteLength()` term, on `main` since `58e90d07`. The row is green and
+    understates by 32 768 bytes, about 4.6 MiB against 16 MiB in all, so no level is near. The term is owed on `main`, by the
+    test-only hop that re-points `ABC-271` K0, not by `ABC-303`: a bundle that misses its read would leave it unwritten.*
   - `NFR-005`: `G6` reads it.
   - `NFR-008`: the table, update and order rows are default-lane units. Drift, mate, zugzwang and reach go behind the
     deep lanes.

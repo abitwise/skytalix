@@ -7,10 +7,21 @@ size: S
 priority: P3
 epic: EPIC-011
 feature: —
-adr: "ADR-0074 PROPOSED, premise met (arch-ABC-289); the owner accepts it (reading (b))"
+adr: "ADR-0074 ACCEPTED 2026-11-04 (the owner, OQ-0074-1; orch-2026-10-30a …3e73f9f9; Status line arch-owner-answers-1104b …88ca95bd). Premise met. It amends ADR-0024 d4. Not in force until this ticket merges on its own read (DP4). (Was: PROPOSED, premise met; arch-ABC-289.)"
 ---
 
 # ABC-289: delta pruning in quiescence (Q2)
+
+> **`ADR-0074` ACCEPTED (THE OWNER, OQ-0074-1); THE ORDER IS RULED: BUNDLE 1 FIRST, THIS TICKET ALONE AFTER IT, 2026-11-04, by
+> BA/PM** (task `bapm-bundle-1-cut`, records only, at `main` `3ad21218`; nothing run). Sources: the owner's word `orch-2026-10-30a`
+> `…3e73f9f9`, `arch-owner-answers-1104b` `…88ca95bd` § 4 and § 6 item 4, `ADR-0056` D5's dated block, and `ADR-0074`
+> § Status and § Consequences.
+> - **`adr:`** reads ACCEPTED. Not in force until this ticket merges on DP4.
+> - **§ Dependencies takes the order,** in place of "the build may start on PROPOSED". The build starts when `ABC-303`'s merge
+>   or `failed-attempt` is recorded, not before.
+> - **Lines changed:** `adr:`; § Dependencies; DoR rows 5 and 10; the closing line. The title's "PROPOSED" and "waits on the
+>   owner's acceptance" are not on this hop's list, and are read with this block.
+> - No bar, size or priority moves. **DoR 10/10, unchanged.** The column move and the build slot are the Orchestrator's.
 
 > **DP5 NAMES `G2`'S BYTE IDENTITY, 2026-11-04, by BA/PM** (task `bapm-lines-1104b`, records only, at `main` `732a0cea`;
 > nothing run). Source: the Orchestrator's ruling `orch-2026-10-30a` `…5ec6c124` 2, and `ADR-0074` d12 (d). It names a
@@ -166,17 +177,32 @@ The re-measure and the ADR fix exact counts before Ready. None is loosened after
 
 - ~~**`Q-3K-10`** (the owner).~~ *(Answered yes 2026-11-04, `…7de79e90`.)* ~~**The re-measure over Q1 and the new ADR
   that amends `ADR-0024` d4** (the Architect's; the owner accepts the ADR, reading (b)). DoR row 10.~~ *2026-11-04
-  (`bapm-lines-1104`): the re-measure is done and `ADR-0074` is written PROPOSED, premise met.* **OQ-0074-1** (the owner's) is
-  open. Under reading (b) the build may start on PROPOSED; the merge waits on his acceptance and on DP4.
+  (`bapm-lines-1104`): the re-measure is done and `ADR-0074` is written PROPOSED, premise met.* ~~**OQ-0074-1** (the owner's) is
+  open. Under reading (b) the build may start on PROPOSED; the merge waits on his acceptance and on DP4.~~ *2026-11-04
+  (`bapm-bundle-1-cut`): OQ-0074-1 answered yes (`…3e73f9f9`); `ADR-0074` is ACCEPTED. The order below replaces reading (b).*
 - **One at a time on `src/quiescence.ts`** with any ticket that edits it (Q1 merged; none open today).
   *2026-11-04 (`bapm-lines-1104`; `ADR-0074` § Consequences):* **one at a time with `ABC-282` and bundle 1** (`ABC-286` +
   `ABC-288`). `ABC-282` edits `src/engine.ts`, and bundle 1 edits `src/search.ts`'s doors and `negamax`. This ticket
   edits `src/quiescence.ts`, both `Switches` records and every door there. Whichever merges second re-reads its
   instrument counts, and the later switch is the top rung. The slot is the Orchestrator's.
-- **Not yet scheduled** *(2026-11-04, `…085f647c` 5)*: the build order after W1 is `ABC-301` scope 0, bundle 1, then
+- ~~**Not yet scheduled** *(2026-11-04, `…085f647c` 5)*: the build order after W1 is `ABC-301` scope 0, bundle 1, then
   this ticket. All three touch search or quiescence reads on the single test machine, and the row census gates the
-  second of them. `ABC-301`'s fit moves the stand pat, not `MATERIAL`: no margin is re-derived after it, and a fit that
+  second of them.~~ `ABC-301`'s fit moves the stand pat, not `MATERIAL`: no margin is re-derived after it, and a fit that
   trips `ADR-0074` F1 is read then.
+- **The order** *(2026-11-04, `bapm-bundle-1-cut`; `ADR-0056` D5's dated block; `ADR-0074` § Status, § Consequences)*: **bundle 1 (`ABC-303`)
+  reads first. This ticket reads alone, after it.**
+  - **Its build** starts when `ABC-303`'s merge or `failed-attempt` is recorded, not before. Both edit every door and both
+    `Switches` records, so they go one at a time.
+  - **Its base** is whatever `main` is when it is built: on top of the bundle if it merged, on `main` without it if NOT MET,
+    on the figures `ADR-0074` records.
+  - **It is not in the bundle.** It has its own PREREG, its own C2′ and its own bars (`ADR-0074` d11–d13).
+  - **If the bundle merges first,** three things follow, and no bar moves: every older door gains
+    `searchWithoutQuietBundle`, `chooseMoveWithoutQuietBundle` and the two parts' door pairs, with `deltaPruning` the top rung;
+    d12's instrument counts are re-read on the new base, and DP3's "≥ 7.018" re-derives with the door, the bar staying door +
+    0.15; and the joint tree is unread, so `ADR-0074` d11's drift and floor there are `UNKNOWN - verify`. If one trips, F1 or
+    F2 of `ADR-0074` governs.
+  - **`ABC-282`, in either case:** whichever of W1 and this ticket lands second re-reads b = 2.3 by P1's method and reports it
+    to the Orchestrator. Any change to b is its own ticket.
 
 ## Definition of Ready
 
@@ -186,13 +212,14 @@ The re-measure and the ADR fix exact counts before Ready. None is loosened after
 | 2 | scope and out-of-scope | ✅ scope 1–3; checks in quiescence, QSM, the cap out |
 | 3 | INVEST | ✅ S; one rule |
 | 4 | testable, measurable acceptance | ✅ DP0 exact, on `ADR-0074` d12's counts; DP1 (a)–(f); DP2 0 in both recursions / 7 of 7 / ≥ 54, drift ≥ 98 % within 25 cp, none beyond 30 cp; DP3 ≤ 0.88× on each of four, reach ≥ door + 0.15; DP4 ≥ 50.0 |
-| 5 | dependencies known | ✅ `Q-3K-10` answered yes; the re-measure done; OQ-0074-1 open, for the merge; one at a time with `ABC-282` and bundle 1; `src/quiescence.ts` |
+| 5 | dependencies known | ✅ `Q-3K-10` answered yes; the re-measure done; ~~OQ-0074-1 open, for the merge~~ OQ-0074-1 answered yes; one at a time with `ABC-282` and bundle 1; `src/quiescence.ts`; *2026-11-04 (`bapm-bundle-1-cut`): the build after `ABC-303`'s merge or `failed-attempt`* |
 | 6 | NFR triggers with targets | ✅ `NFR-005`, `NFR-008` ≤ 10 s and ≤ +0.10 s on the lane, `NFR-009` 0 bytes |
 | 7 | test notes | ✅ 1–2 |
 | 8 | size | ✅ S, confirmed 2026-11-04 |
 | 9 | priority | ✅ P3 |
-| 10 | no major unresolved blocker | ~~❌~~ ✅ ~~**`ADR-0024` d4 fences it** (`Q-3K-10`, the owner's);~~ ~~the re-measure and the ADR are owed.~~ *2026-11-04 (`bapm-owner-answers-1104`): d4 is open for Q2's design (`Q-3K-10` yes). Row 10 now waits only on the Architect's re-measure on `main` over Q1 (`ADR-0024` § Status, the fourth block, item 2) and the new ADR that amends d4* *2026-11-04 (`bapm-lines-1104`): both are done: premise met, `ADR-0074` PROPOSED (`arch-ABC-289`). OQ-0074-1 holds the merge, not the build (reading (b), as `ABC-282` stood on `ADR-0071` PROPOSED)* |
+| 10 | no major unresolved blocker | ~~❌~~ ✅ ~~**`ADR-0024` d4 fences it** (`Q-3K-10`, the owner's);~~ ~~the re-measure and the ADR are owed.~~ *2026-11-04 (`bapm-owner-answers-1104`): d4 is open for Q2's design (`Q-3K-10` yes). Row 10 now waits only on the Architect's re-measure on `main` over Q1 (`ADR-0024` § Status, the fourth block, item 2) and the new ADR that amends d4* *2026-11-04 (`bapm-lines-1104`): both are done: premise met, `ADR-0074` PROPOSED (`arch-ABC-289`). OQ-0074-1 holds the merge, not the build (reading (b), as `ABC-282` stood on `ADR-0071` PROPOSED)* *2026-11-04 (`bapm-bundle-1-cut`): OQ-0074-1 answered yes; `ADR-0074` ACCEPTED. The wait on `ABC-303` is an order, not a blocker* |
 
 ~~**DoR 9/10. Backlog, held** (2026-11-04: on the Architect's re-measure over Q1 and its ADR only).~~
-**DoR 10/10: Ready** (2026-11-04, `bapm-lines-1104`). The merge waits on OQ-0074-1 and DP4. The column move and the build slot
-are the Orchestrator's.
+**DoR 10/10: Ready** (2026-11-04, `bapm-lines-1104`). ~~The merge waits on OQ-0074-1 and DP4.~~ *2026-11-04 (`bapm-bundle-1-cut`): the build
+waits on `ABC-303`'s merge or `failed-attempt`; the merge waits on DP4.* The column move and the build slot are the
+Orchestrator's.

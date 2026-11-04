@@ -18,3 +18,17 @@ Read the Orchestrator notes of 2026-11-04T21:20:01Z and 21:25:55Z; qe-ABC-301-s0
 ADR-0066 d5's line waits for W1's merge; do not write it yet.
 Fences: memory-bank/50-decisions and your records only. No ticket, EPIC, board or src edits. No push, force, amend, rebase or merge into main. Leave nothing running.
 Publish: sealed notes (task arch-records-1104, contextRoot = the worktree's .grugops/context, `at` from `date -u`); queue moves; commit; ## Result + trace row; brief + claim to done/. Before your last commit, run `node tools/grugops/records-path-check.js --base main`; it must exit 0.
+
+## Result
+by: architect-design (claude-opus-5-5), at: 2026-11-04T21:45:43Z. Records only; nothing was run, and nothing is left running. No `src/`, `tools/`, ticket, EPIC or board edit.
+- **1. The two rows, ruled first** (`ADR-0067`, commit `a1e19981`; note `…c9056f1d`, commit `01040b65`).
+  - "… by own rank in PASSED's shape, every half 0": **RE-PINNED**, on its eg line only. `mg`, the shape and U's `{ 0, 0 }` stay as written.
+  - "at the shipped values (every half 0) every part is 0 on every fixture": **RETIRED** by name, with `ZERO`. B-T4's re-pin keeps the assertion's form, and one literal cannot hold 44 fixtures' outputs.
+  - Both apply at scope 4, on an emission with a non-zero E4a eg half.
+- **2. Dated lines** (commit `ca00e4a5`; note `…8c6e7ec0`).
+  - `ADR-0070` d4 and `ADR-0067` precondition 1: P1's own-phase form in QE's wording.
+  - `ADR-0067` d5: the tracer reads the seam through the frozen fixtures, on condition `TUNE_DEEP` is green at the fit commit.
+  - `ADR-0056` row Q2 and its D2 line.
+- **3. `ADR-0046`, QE-302's LOW carry.** The run rule's "four lines" reads thirteen. R3 should re-point to the taper doors at the file's next touch (`UNKNOWN - verify` until run). Deep-only breadth, R9's reach and the 27-mutant parity do not change.
+- **Not written:** `ADR-0066` d5, which waits for W1's merge.
+- **Owed by others:** BA/PM on `ABC-301` (P1 banner, test note 4) and R3's ticket; `se-ABC-301-fit` needs this branch on `main`.

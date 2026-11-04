@@ -257,6 +257,12 @@ from `main` `0bf243df`; nothing run): the owner's word `orch-2026-10-30a` `…40
 (`…ce2883d8`). It is part of the per-change rule. Bundle 1 is named by him: `ABC-286` + `ABC-288`. No other change to
 the rule.
 
+*2026-11-04, dated line by Architect/Design (task `arch-owner-answers-1104b`, records only at `main` `65e28f95`).*
+**Bundle 1 goes to the build by the owner's word (`…3e73f9f9`, "1. Bundle 1: (a)"), over two missed premises.** `ADR-0072`
+and `ADR-0073` are ACCEPTED, not in force. D5's dated block of this task states the rows its read holds and its order
+against `ABC-289`. `ADR-0074` is ACCEPTED ("2. OQ-0074-1: yes accept."), not in force. D2's dated line of this task gives
+the rows. No line of B1–B7 changes.
+
 *Original status, kept:* **PROPOSED** 2026-11-01 by Architect/Design (task `arch-algo-analysis`, records and reading only, at `main` `bae25131`).
 **Nothing is decided here.** Nothing was run, built, benchmarked or played: `qe-ABC-223` holds the host STRICTLY ALONE.
 Every Elo figure below is either quoted from a sealed reading (named) or is an **estimate** with its basis. An
@@ -413,14 +419,14 @@ repo's own readings; **[J]** Architect judgement from common practice (lowest co
 | P1 | LMR by a log table of depth × move index, history-adjusted | +40–100 | [B] 7.1 (LMR + futility + SEE +115.6 ± 25.1), 7.3; [t] | S–M | medium | ordering helps | **none — new ticket** |
 | P2 | reverse futility (static null move) | +30–60 | [B] 6.0 (RFP + history +80–100) | S | low–medium | eval scale | **none — new ticket** |
 | P3 | futility pruning near the leaves | +15–40 | [B] 7.1 | S | medium | P2 | **none — new ticket** |
-| P4 | late-move (move-count) pruning | +20–40 | [B] 7.5 (≈ +30) | S | medium | P1 | **none — new ticket** |
+| P4 | late-move (move-count) pruning | +20–40 | [B] 7.5 (≈ +30) | S | medium | P1 | `ABC-286` (`EPIC-011`): `ADR-0072` ACCEPTED over a missed premise (2026-11-04, `…3e73f9f9`), form M3, in bundle 1; not in force |
 | P5 | null move: R grows with depth (and eval margin) | +10–30 | [B] 7.3; [J] | S | low (`ADR-0050` amend) | — | none — new ticket |
 | P6 | razoring | +5–15 | [B] 8.0 | S | medium | P2 | none — new ticket |
 | O1h | history heuristic (+ malus) | +20–50 | [B] 6.0, 7.6 | M | low | — | `ABC-233` |
-| O2c | countermove / continuation history | +10–30 | [J] | M | low | O1h | none (out of `ABC-233` scope) |
+| O2c | countermove / continuation history | +10–30 | [J] | M | low | O1h | `ABC-288` (`EPIC-011`): `ADR-0073` ACCEPTED over a missed premise (2026-11-04, `…3e73f9f9`), form C1, the countermove alone, in bundle 1; not in force. Continuation history is rejected |
 | O3s | SEE for capture ordering | +10–30 | [B] 7.1; [J] | M | low | — | `ABC-234`: `ADR-0065` PROPOSED, premise not met on `main` (2026-11-03; S1m `chooseMove` d8 0.986 / 0.955); A0 ruled: d4 fences Q1, not O3s; parked |
 | Q1 | SEE pruning of losing captures (quiescence and main) | +20–50 | [t] "see pruning"; [J]; diagnostic +0.88 ply reach, d8 0.22–0.68× (`arch-ABC-234`, not pre-registered) | S–M, carrying `see` (`ADR-0065` decision 2) | medium | `ADR-0024` d4 (owner `Q-3K-9`, pending) | none (fenced out of `EPIC-010`) |
-| Q2 | delta pruning in quiescence | +5–20 | `ADR-0024` (1.5× trim measured) | S | low | — | none (fenced out of `EPIC-010`) |
+| Q2 | delta pruning in quiescence | +5–20 | pre-registered: D200b +0.279 ply, d8 0.64–0.83× (`arch-ABC-289`, PREREG `…174760a3`); `ADR-0024`'s 1.5× trim predates futility, the taper and Q1 | S | low | `ADR-0024` d4 opened for design by `Q-3K-10` yes (`…7de79e90`) | `ABC-289` (`EPIC-011`): `ADR-0074` ACCEPTED (2026-11-04, `…3e73f9f9`), premise met on `main`; not in force until `ABC-289` merges on its own read |
 | S1 | aspiration windows | +10–30 | [J] | M | low | T1 | `ABC-236`: `ADR-0066` PROPOSED, premise not met on `main` (2026-11-03; A100 d8 0.9836 / 0.9913); fires at 100 ms; parked |
 | X1 | check extension at every depth (not `ABC-210`'s horizon form) | +10–30 | [J]; [R] `ABC-210` −4.8 ± 16.2 (other form) | S | medium | — | `ABC-210` re-cut, other form (owner: scope) |
 | X2 | singular extension (+ IIR) | +20–50 | [B] 8.0, 8.5.5 | M | high | T1 | none — new ticket |
@@ -704,6 +710,27 @@ on QE's pass `qe-ABC-283` `…de1dc511`): rows O1h, O3s and S1.*
 - **What it unholds** (the Orchestrator, `…2409cec9` 5): after the merge, `ABC-282` (W1) is unheld, and `ABC-286` (P4, over the
   history-ordered quiet list) and `ABC-288` (O2c, on the history table) are unheld for their probes. P1 (`ABC-284`) reads `R-283-LMR`
   (`ADR-0060` § Status, dated 2026-11-04).
+
+*Dated 2026-11-04 (`arch-records-1104`, records only at `main` `83894094`; owed by `arch-ABC-289` `…62012bbe` § 6, the
+Orchestrator's `…5ec6c124` 5 and `…0edae6fd` 1; `arch-bundle-1` released the file, merged `5fb58b95`): row Q2.*
+- **The row is rewritten in place.** Its basis cell now reads "pre-registered: D200b +0.279 ply, d8 0.64–0.83×", and its
+  dependency and ticket cells carry the line of `arch-owner-answers-1104` above, which had left them as written.
+- **The re-measure that line asked for is done, and the premise is met** on `main` `0cc9afd1` with Q1 in it: reach at
+  47 000 nodes 6.868 → 7.147; d8 0.6362 / 0.8263 in `search()` and 0.6484 / 0.8201 in `chooseMove`.
+- **The row's +5–20 stays an estimate.** +0.279 ply is about a third of Q1's reach, and C2′ cannot size the gain. The
+  build ships on its own read.
+- **Not settled here.** `ADR-0074` is PROPOSED and the owner accepts it; until then `ADR-0024` d4 stands as written.
+  `ABC-289`'s build is held on his answers (`…5ec6c124` 3). This line does not set Q2's slot.
+
+*Dated 2026-11-04 (`arch-owner-answers-1104b`, records only at `main` `65e28f95`; his word `…3e73f9f9`, verbatim "1. Bundle 1:
+(a) ; 2. OQ-0074-1: yes accept."): rows P4, O2c and Q2.*
+- **Rows P4 and O2c: ACCEPTED over a missed premise,** in bundle 1 (`ADR-0072` M3, `ADR-0073` C1). Neither premise is met, and
+  F1 stays fired on both. The ticket cells above are rewritten in place. Their Elo estimates stay estimates, and bundle 1's
+  read will not split them (B5).
+- **Row O2c's name keeps "continuation history"** as the row was cut. The form is the countermove alone.
+- **Row Q2: `ADR-0074` ACCEPTED.** It supersedes "`ADR-0074` is PROPOSED" in the dated line above. `ADR-0024` d4 is amended (its
+  § Status and d4 carry the pointers), in force at `ABC-289`'s merge.
+- **The order:** bundle 1, then `ABC-289`, alone. D5's dated block of this task gives the reason.
 
 ### D3. Is 3 000 reachable without a neural network?
 
@@ -1465,6 +1492,183 @@ Not recommended as bundles:
 - `ABC-298` (V3): value-identical.
 - `ABC-282` (W1): its own clock read (`ADR-0071`).
 - The second pull (`ABC-301`): its scope and B-T8 are owner-confirmed as they stand.
+
+#### Dated 2026-11-04 (`arch-owner-answers-1104b`, records only at `main` `65e28f95`; his word `…3e73f9f9`): bundle 1's read, row by row, and its order against `ABC-289`
+
+His answer, verbatim: *"1. Bundle 1: (a)"*. He overrode both missed premises, `ABC-286`'s L2 (drift and audit) and
+`ABC-288`'s CH3, and named the forms: P4 M3 and the countermove C1. **No line of B1–B7 changes.** This block rules what
+the override leaves. The SE and QE briefs copy these rows and add none. PREREG `…aa5c4dc1` stays as sealed. The shape QE
+fills is `arch-owner-answers-1104b` `…d776c0f0`.
+
+**The doors.** All on is the shipped `search()` / `chooseMove`. The all-off door is `searchWithoutQuietBundle` /
+`chooseMoveWithoutQuietBundle`. P4's own door is `searchWithoutMoveCountPruning` / `chooseMoveWithoutMoveCountPruning`.
+O2c's own door is `searchWithoutCountermove` / `chooseMoveWithoutCountermove`. A row is read all on unless it names a door.
+Four-figure ratios run `search()` kiwipete, `chooseMove` kiwipete, `search()` position-6, `chooseMove` position-6. Figures
+are the probe's, on `0cc9afd1`.
+
+**Table 1: the safety bars.** Graded. Read all on, and per part only on a red (B3).
+
+| # | row | bar | on `0cc9afd1` |
+|---|---|---|---|
+| S1 | all-off identity (P0, B2 (b)): the all-off door against the merge-base, kiwipete and position-6, d6–d8, both recursions | nodes, score and move equal, exactly | d8 523 847 / 234 214 (`search()`), 707 548 / 101 425 (`chooseMove`) |
+| S2 | every older door, node-equal to itself (`G4`) | exact | as pinned |
+| S3 | the mate floor at the same depth on the 287, door to head: PREREG rows B1, B2 and every B3 row | 0 violations on each | 0 / 191; 0 / 189; 0 / 190, 189, 190, 189, 163; 0 / 188 |
+| S4 | zugzwang, `ADR-0050` d9's seven rows | 7 / 7 at recorded depths, none re-pinned | 7 / 7 |
+| S5 | `G1` | ≥ 54 / 58, none newly missed | 54 / 58 |
+| S6 | mate sign changes in the drift rows, depth 5 on the 190, both recursions: all on, and on each part's own door | 0 | 0 |
+| S7 | O2c's drift, CH2, on O2c's own door, both recursions | ≥ 95 % within 25 cp, none beyond 25 cp | 100 %, 9 / 100 %, 4 |
+
+**Table 2: the part bars and gates.** Graded, on the branch, before the read.
+
+| # | row | bar | on `0cc9afd1` |
+|---|---|---|---|
+| P1 | each part's door pair and rule rows (B2 (a)) | present and green | not built |
+| P2 | the forms (B2 (c)) | M3 and C1 as `ADR-0072` d1–d3 and `ADR-0073` d1–d6 state them | fixed |
+| P3 | L4 (a), d8 on P4's own door | ≤ **0.89 ×** on each of the four | 0.6039 / 0.8170 / 0.7509 / 0.8363 |
+| P4 | L4 (b), reach at 47 000 on P4's own door | ≥ door + **0.10** | +0.116 |
+| P5 | CH1, `NFR-009` | the table reads 3 072 bytes | 3 072 |
+| P6 | `G6`, all on | "≥ base" by the median, every run ≥ depth 6 | not read |
+| P7 | `NFR-008`, all on | the graded median ≤ 10 s, and **≤ +0.10 s for the bundle as a whole**, head minus base | not read |
+| P8 | typecheck, lint, build, the skip count, the run rule's `-t` lines | as the gates state them | not read |
+
+**Table 3: reported only.** Read on the build and printed beside the figure on `0cc9afd1`. No verdict rides on them.
+
+| # | row | read on | on `0cc9afd1` |
+|---|---|---|---|
+| R1 | L2 drift share and cap, depth 5 on the 190, both recursions | P4's own door, and all on | 93.58 %, 80 cp / 94.12 %, 79 cp, on each |
+| R2 | L2 audit: flips, and errors ≥ 200, ≥ 300, ≥ 500 cp, `ADR-0061` d8 (d)'s sample | P4's own door | 288 of 1 886 (15.27 %); 29, 9, 0 |
+| R3 | CH3, d8 | O2c's own door; O2c alone over the all-off door | 1.0031 / 0.9999 / 1.0935 / 0.9989; 0.9848 / 0.9922 / 0.9298 / 1.1190 |
+| R4 | `chooseMove` d6 on the 287 (PREREG R1), and `krk` | all on | 0 / 209; 0 / 17, 17, 29 |
+| R5 | `G2` (door / head) | all on | 0.9921 / 1.0537, mean 1.0229 |
+| R6 | d8 and reach against `main`; the firing figures; O2c's and P4's node ratios (B2 (e)) | all on | 0.5947 / 0.8106 / 0.6982 / 0.9358; +0.148; P4 fires at 5.91 nodes per 1 000 |
+| R7 | the head's counts, an instrument check | all on | d8 311 546 / 163 523 (`search()`), 573 518 / 94 911 (`chooseMove`); reach 7.016 |
+
+**The read.** One C2′, 100 games at 100 ms, all on against the merge-base, **GAIN ≥ 50.0 / 100**, with 100 of 100 complete,
+0 candidate faults and 0 losses on time. Never re-played, no subset. Then **S′ at E 1 810, a bar:** S-1, S-2 and S-4 (≥ 3.0
+of 10; below that, 10 more games and ≥ 7.0 of 20). Then **the Levels deep lane, a bar:** exit 0, every test passed.
+
+**The rows ruled here** (each was open on the records):
+- **S6, a bar.** The owner overrode what was missed. L2's third clause, 0 mate sign changes, was met on every form, so it
+  stands.
+- **S7, a bar.** `ADR-0073` d10 sets it and CH2 was met. OQ-0073-1 lifted CH3 and nothing else. L2's override is P4's, so
+  it does not reach O2c's own door.
+- **P3 and P4, bars.** Only L2 was overridden. L4 was met and stays graded (`ADR-0072` d8 (d)). Its reach margin is thin:
+  +0.116 against +0.10.
+- **R4, reports.** `ADR-0072` d9's "every row of Step C" reads as B1, B2 and the B3 rows. The sealed PREREG calls R1 and
+  `krk` reports, says no bar is new, and `ADR-0060` § Status keeps d6 a report.
+- **S′, a bar.** B4 says S′ follows as C2′ has it unless the owner's word for that bundle says otherwise, and his word here
+  does not. `ABC-283`'s "information only" was that ticket's ruling (`…3851bf43` 1) and does not carry. `ADR-0072` F4 reads a
+  collapse as NOT MET.
+- **P6, a bar.** `Q-3K-4` (b) covers evaluation tickets only, and `…3851bf43` 3 bound `ABC-283` alone.
+- **R5, a report.** `ADR-0072` § Consequences says so, and no ADR sets a `G2` bar for this bundle.
+- **B1's deep-depth exclusion does not bite on O2c.** CH3 is ungraded by the owner's word, the route B2 (d) names, and the
+  rule fires at 100 ms.
+
+**What "reported" means for R1 and R2.** `ADR-0072` d8 (d) has them reproduced to the count.
+- **On a base whose production `src/` equals `0cc9afd1`'s,** a count that differs is a defect in the wiring (`ADR-0072` F2),
+  explained before anything else is read.
+- **On a moved base,** the same rows are read on the new base and both sets go in the PR, with the merge that moved them
+  named. A re-derived count is a dated line in `ADR-0072`, never a moved bar.
+- **There is no ceiling.** His word is on the form, not on a figure, and a bar added now would be a new bar after a read.
+  So a worse R1 or R2 stops nobody. It goes in the Software Engineer's hand-off, before QE seals its PREREG. Whether a
+  figure far from the one he was shown goes back to him is the Orchestrator's call, not the SE's or QE's.
+- **The audit has no hook in the build.** It is read on a scratch copy of the built tree, in the shape of
+  `arch-bundle-1`'s `raw/probe/` audit mode, with nothing committed to `src/` or `tools/`. The SE reads R1 and R2, and QE
+  re-reads them with its own driver.
+
+**A red, by row.**
+- **S1, S2, P1, P2, P5:** a defect in the wiring, back to the Software Engineer.
+- **S3–S7:** B3. Read per part, name the cause; a structural dated line in that part's ADR; every safety row again. If no
+  single door clears it, a STOP to Architect/Design. **The lever is LMR (`R-283-LMR`), not history, T or another form.**
+- **P3, P4, P6 on an exact build:** a STOP to Architect/Design (B6: a red before the read is a STOP, not a miss). The
+  override does not reach them. Any lift is the owner's word.
+- **P7:** a row move first (`…f30bd604` 2).
+- **C2′ below 50.0, or an S′ collapse:** NOT MET, B6. **A fault, a loss on time or a Levels red:** a defect.
+
+**The order against `ABC-289`. Bundle 1 reads first. `ABC-289` reads alone, after it.** This confirms the Orchestrator's
+`…085f647c` 5, now with the reason.
+- **`ABC-289` is not in the bundle.** The owner named the parts, and this section's list keeps Q2 apart. It has its own
+  PREREG, its own C2′ and its own bars (`ADR-0074` d11–d13).
+- **Its base.** It reads against whatever `main` is when it is built. If bundle 1 merged, its base carries the bundle, so it
+  reads on top of it and the candidate differs from the base by Q2 alone. If bundle 1 was NOT MET, it reads on `main`
+  without the bundle, on the figures `ADR-0074` records.
+- **Its build** starts when bundle 1's merge or `failed-attempt` is recorded, not before. Both edit every door and both
+  `Switches` records (`ADR-0074` § Consequences), so they go one at a time. `…5ec6c124` 3's hold ended with his answers; this
+  order replaces it.
+- **Why not side by side.** Two reads on one base cannot both stand. The first merge makes the second stale, so the second is
+  read on top of the first either way. Only the order is open.
+- **Why the bundle goes first:**
+  1. **Its pay bar has the least room.** P4's reach is +0.116 against +0.10; `ABC-289`'s is +0.279 against +0.15, and its d8
+     0.8263 against 0.88. A pruning rule read over another has lost pay before: P4 fell from +0.34–0.50 to +0.116 with
+     futility in force (`ADR-0072` § Context). Reading P4 first keeps it on the tree it was measured on.
+  2. **The override rests on figures read without Q2.** Read first, R1 and R2 stay comparable with what he was shown.
+  3. **A joint red has one door.** Whichever goes second carries the first tree with P4 and Q2 both on. With `ABC-289`
+     second, a floor red is read with one door, `…WithoutDeltaPruning`. The other way round it needs per-part reads on a
+     floor `R-283-LMR` calls order-sensitive.
+- **What it costs.** The one premise that was met waits behind two that were not. And `ADR-0074` d11's drift bars are tight
+  by rule (≤ 30 cp from a reading of 20) and would be read on a tree with P4 in it. If one trips, `ADR-0074` F1 governs and
+  no bar moves.
+- **What the records do not settle.** No probe has had P4 and Q2 both on. Reason 1 is reasoned from margins and one
+  precedent, not measured, so the joint effect on either ticket's pay and drift is `UNKNOWN - verify`.
+- **The lane does not set the order.** Each budget of ≤ +0.10 s is head minus base on its own base, so the sum is the same
+  either way. The census ask with `ABC-289` is about −0.38 s: `…085f647c` 2's "more" worked out on `…f30bd604` 3's −0.28 s
+  target, an estimate. Whether the rows exist is `UNKNOWN - verify` until the census reads.
+- **Both orders' re-reads.** Whichever lands second carries the first's instrument re-read, `ADR-0072` d9 or `ADR-0074` d12.
+  The slots against `ABC-282` and `ABC-301` stay the Orchestrator's.
+
+#### Dated 2026-11-04 (`arch-ABC-303-open`, records only at `main` `c118a5cf`): `ABC-303` § Open 1 and 2, and the moved base. No bar moves
+
+**1. A candidate fault against "never re-played" (`ABC-303` § Open 1).** The records left this open. C-1 and C-2 pass the
+candidate only at 0 faults and 0 losses on time. The block above calls either "a defect", beside NOT MET. B4 says never
+re-played, and `…d776c0f0` § 6 has no candidate-fault line. What "never re-played" guards is a second draw after a score is
+seen, so that is what these lines keep shut. They are sealed before the read, and QE copies them into its PREREG's § 6. They
+add no bar.
+- **A candidate fault or a candidate loss on time ends that read with no pass, at any score.** Its score is not kept, high or
+  low.
+- **The verdict test comes first.** Count each game the candidate lost by fault or on time as a win for it. If the read
+  still misses its bar (C2′: 50.0; S′: S-4), the fault did not decide it. That is NOT MET, final, B6, and the defect is routed
+  as well.
+- **Otherwise it is a defect, with no verdict.** The Software Engineer names and reproduces the cause, and fixes it. No form,
+  T, tier or door moves (row P2). Tables 1 and 2 are read again.
+- **Then one new C2′,** on the fixed candidate, under a new PREREG with the same bars. It is final. It is not a re-play: the
+  first read returned no verdict, and this is another tree. A second candidate fault is NOT MET, B6.
+- **A cause nobody can reproduce** is a STOP to Architect/Design, with no new read.
+- **C2′ clean and MET, then an S′ fault or loss on time, or a Levels red.** A Levels red is read first by `ADR-0028`, as
+  `ADR-0064` d7 has it: the fixture, then one headroom, then the owner.
+  - **The fix is value-identical:** test or fixture only; or it reads no clock, and nodes, score and move stay equal on S1, S2
+    and R7. C2′ stands and is not played again.
+  - **Any other fix:** C2′ read another engine, so it does not stand. One new C2′ as above, final even if it lands lower.
+  - Either way the red part runs again, whole and once, on the fixed candidate: S′ by the verdict test above, Levels at exit 0.
+- **Unchanged:** a base fault is UNRESOLVED, re-run once. A harness error before the first game is not a read. Below 50.0 and an
+  S′ collapse are NOT MET.
+- **The weak point, stated.** B6's "the same parts with the same forms count as the same bundle" sits under "on a miss", and
+  this reading rests on a fault not being a miss. **If the Orchestrator reads the new C2′ as crossing B4, that line is the
+  owner's question.** Until he answers, the strict reading holds: a candidate fault closes the read unpassed, and B6 governs
+  the return.
+
+**2. S′'s E (`ABC-303` § Open 2).** E is a setting and the bar is S-1, S-2 and S-4, so the block's 1 810 is the value in force
+at its writing, not a level.
+- **QE fills § 6's blank with the E in force at the seal,** by S′'s rule. Today that is 1 810.
+- **The pool has reached 30 games, and no step fires.** `ABC-269` 7 / 3 / 0, `ABC-279` 5 / 4 / 1, `ABC-283` 6 / 4 / 0: all merged, all at
+  E 1 810, 18.5 / 30 = 61.7 %, inside 60–85 %. This line is the trigger's first read. `ABC-283`'s S′ was information for its
+  own bars and still pools: a merged build, at this E.
+- **The lower edge is close.** At 40 games, a next merged S′ below 5.5 / 10 leaves the band. 5.0 gives 23.5 / 40 = 58.8 %,
+  so E′ = 1 700 by the rule. That step is the owner's question, and without his word E stays 1 810. The upper edge cannot fire
+  at 40 games.
+- **A step before the seal** is a dated line here, which then governs, and a dated line on `ABC-303`'s page (BA/PM).
+- **A step after the seal does not reach this read.** It plays at the sealed E. An S′ at a superseded E does not pool.
+
+**3. The block's reasons on a base moved by `ABC-301`.** The order stands: no cause is shown. A fit lands under `ABC-289`'s read
+as much as under this one, so a moved base favours neither order. Two sentences narrow.
+- **Reason 1** keeps its point, the least room. "Keeps it on the tree it was measured on" no longer holds after a fit, either way.
+  What bundle-first still keeps is P4 read with no other pruning rule over it, and the precedent (futility) was one pruning rule
+  over another. A fit is not one. Whether +0.116 survives a fitted evaluation is `UNKNOWN - verify`: no probe has read it.
+- **Reason 2** narrows the same way. R1 and R2 will differ from what he was shown by the fit. Read first, they differ by that one
+  named merge, not by the fit and Q2 together, and `…3c67d3c4` 4 sends them to the Orchestrator before the seal.
+- **Reason 3** reads no base and stands.
+- **The one change of practice:** the hop that brings R1 and R2 on the new base also brings P3 and P4. They are table rows read
+  on that tree anyway, reach has the thinnest margin, and a red there is a STOP, cheapest before the seal. A lift stays the
+  owner's word.
 
 ### D6. The order proposed (speed and algorithms interleaved)
 

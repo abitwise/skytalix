@@ -108,6 +108,8 @@ Architect/Design (task `arch-owner-answers-1103`, records only, on `grugops/arch
 | 2026-11-04 | Architect/Design | `ADR-0070`'s owed lines: d5 tracer (E4a's features), d6 second-pull free set (KD / FP eg ≥ 0, mg 0, U held 0) and how they enter F3, item 5's order. The d6 amendment and B-T8's re-confirmation stay open (the owner's). No bar moved | `arch-ADR-0070-accept` |
 | 2026-11-04 | Owner | The d6 amendment adopted (every relation bounded at once, margin-aware, no refit); B-T8 re-confirmed for the second pull | `orch-2026-10-30a` `…dda43b71` |
 | 2026-11-04 | Architect/Design | d6's amendment and the second pull's step list; F3 restated; B-T8 re-confirmed; the second pull's carried bars, its four preconditions (`QE-271-f`, `-g`, `-h`, `-i`) and its endgame `G2` row. No bar level moved | `arch-second-pull-1104` |
+| 2026-11-04 | Architect/Design | The two `ABC-271` "every half 0" rows ruled under `…42c82347`: the by-rank row re-pinned on its eg line, "every part is 0" retired by name. No bar moved | `arch-records-1104` |
+| 2026-11-04 | Architect/Design | Precondition 1 reads `ADR-0070` d4's own-phase form. d5: the tracer reads the seam through QE's frozen fixtures, on condition `TUNE_DEEP` is green at the fit commit; check 2 stays a hard step. No bar moved | `arch-records-1104` |
 
 ## Context
 
@@ -240,6 +242,25 @@ Architect/Design (task `arch-owner-answers-1103`, records only, on `grugops/arch
           probed rule value, equals the part `passerTermsForTest` returns at that value inside
           `withParametersForTest`.
        2. **The gate runs once more on the emitted file.** A miss is F1, a defect.
+     - *Dated 2026-11-04 (`arch-records-1104`, records only, at `main` `83894094`; QE `qe-ABC-301-s0` `…9fd32f43` item 4;
+       the Orchestrator's `…878035ca` 2): **check 1's tracer row reads the seam through QE's frozen fixtures, on condition
+       that `TUNE_DEEP` is green at the fit commit. No bar moves.***
+       - **The row as built** (`tools/tune/tune.test.ts`): on the 44 fixtures, each traced count equals the frozen
+         `features` of `src/evaluate.passer-fixtures.json`, and count × probed value equals its frozen `seam` part.
+       - **Why not as written.** `ABC-274` S3 bars every `tools/` file from naming `withParametersForTest`, and `ABC-301`
+         P2 bars them from naming the seams. In `src/` the row would pull the tool into the default lane, against the
+         ticket's `NFR-008` line.
+       - **Nothing is unchecked on the fixtures.** K1 (c), in the default lane, holds the frozen record equal to the live
+         seam at the probed values, and the file is sha256-pinned by its own row. The two forms differ only when one of
+         those is red.
+       - **QE ran check 1 as written,** from scratch and outside `tools/`: 0 misses on the 44 fixtures, and 0 on 132 762
+         positions at each of three value sets. The identity gate at those values: 0 misses, worst 0.9583 cp. That was a
+         one-off read, not a standing row.
+       - **The condition.** The row lives in `TUNE_DEEP` only, so that lane must read green at the fit commit, and the
+         fit hop records the count. On a red, no fit is taken from that commit.
+       - **Check 2 stands as a hard step** (`QE-301-a`): it sees the hot path at phases 6–23, which no fixture reaches. It
+         does not see a crossed emitter column, because it reads `tableOf` and `evaluate` from the same file; that is
+         `QE-301-b`'s row, owed at scope 1.
      - If `ABC-271` has not merged at fit time, the features are absent and the fit runs without them.
 6. **The free set at the first pull: bounded.**
    - **Material is frozen** at the classical scale (P 100, N 325, B 325, R 500, Q 900, both halves). The king is 0.
@@ -736,6 +757,9 @@ level moves.***
     own-games count.
 - **Four preconditions, each met before the fit is taken,** so that no value moves before them:
   1. **`QE-271-h`:** the hot-path row (`ADR-0070` d4's dated line of this date). Default lane, test-only.
+     *Dated 2026-11-04 (`arch-records-1104`; QE `qe-ABC-301-s0` `…9fd32f43`): the row is the own-phase form of `ADR-0070`
+     d4's dated line of this hop, in QE's wording, not the forced `evaluateAtPhase(p, 0)`. Exact on 44 / 44; the level
+     does not move. Built at `57e942fb` on `grugops/ABC-301`, the branch the fit is taken on.*
   2. **`QE-271-g`:** the caller-guard row for `pawnStructureForTest` (the same line), in the same Software Engineer
      hop.
   3. **`QE-271-i`:** `tools/tune`'s emitter writes the four E4a exports (`PASSED_KING_ENEMY`, `PASSED_KING_OWN`,
@@ -749,6 +773,63 @@ level moves.***
   base SHA either way.
 - **Host time:** the fit takes minutes; B-T7 about 0.7 h; B-T8 about 5 h, approved. Recommended to QE, as written: B-T5
   before B-T7 and B-T8, so a safety miss spends no games.
+
+*Dated 2026-11-04 (`arch-records-1104`, records only, at `main` `83894094`; rulings `orch-2026-10-30a` `…42c82347`,
+`…878035ca` 3 and `…0edae6fd` 2): **the two `ABC-271` "every half 0" rows of `src/evaluate.passer.test.ts`. The first is
+re-pinned, the second retires. No bar moves.***
+- **"PASSED_KING_ENEMY, PASSED_KING_OWN, PASSED_FREE: by own rank in PASSED's shape, every half 0": RE-PINNED, on its eg
+  line only.**
+  - `expect(pair.eg)` records the old table, so it is a pin (B-T4's rule). The one literal the loop shares becomes three,
+    each export's emitted eg array: `[0, 0, 0, 0, 0, 0, 0, 0]` → the emission's, with a dated comment, in the PR table.
+    An eg half the fit leaves at 0 stays 0 in its literal.
+  - **The rest of the row is not a pin and stays as written:** `pair.mg` all 0 (`ADR-0070` d1, "at the build and at every
+    pull"), the `toHaveLength` shape, and `PASSED_UNSTOPPABLE` at `{ mg: 0, eg: 0 }` (`ADR-0070` d7's hold). A red on any
+    of these is a defect, never a re-pin.
+  - The row and its describe stop saying "every half 0". The row reads "mg 0, eg as fitted"; the describe, "four exports,
+    mg 0, U 0, eg as fitted".
+- **"at the shipped values (every half 0) every part is 0 on every fixture": RETIRED,** named here as `…42c82347` and
+  `…0edae6fd` 2 require.
+  - **It cannot be re-pinned under B-T4's rule,** which moves the literal and keeps the assertion's form. The row has one
+    literal, `ZERO`, for all 44 fixtures. With values in the table the seam returns a different triple per side per
+    fixture, so a re-pin would be a new row of 264 figures making a different claim. The row's own sentence is false once
+    the fit does what `ADR-0070` d7 asks: it stops making sense, which is `…0edae6fd` 2's test.
+  - **It is no bar.** QE's freeze (`qe-ABC-271-freeze` `…67b5eeac`) says of value 0, "These rows add no bar there", and it
+    is not a relation, the identity gate or a safety row, so B-T4's never-list does not reach it.
+  - **What it read is held elsewhere** (by reading; nothing was run here):
+    - the table: the re-pinned row above;
+    - U's hold: that row's `PASSED_UNSTOPPABLE` line;
+    - the seam: K1 (c), exact per side and per part on the 44 fixtures at the probed values, so a constant of the seam's
+      own shows there.
+    - It was never a killer: it stayed green on all 11 of QE's mutant trees (`qe-ABC-301-s0`, `raw/summary.txt`).
+  - **Rejected:** the 264 figures, which K1 (c) and the re-pinned row already imply and every later pull would have to
+    re-pin; the row under an all-zero table in `withParametersForTest`, which proves a state that no longer ships and
+    that K1 (c) covers; the row narrowed to `un`, which repeats the `PASSED_UNSTOPPABLE` line through the seam.
+  - `ZERO` goes with it: this row is its only use at `grugops/ABC-301`'s tip. The file has one row fewer.
+- **When this applies:** at `ABC-301` scope 4, on an emission with a non-zero E4a eg half. If every half stays 0, neither
+  row goes red and neither changes. If the pull does not merge, both stand as they are on `main`.
+- **The PR table** lists the first row old → new and the second as retired, citing this line. QE's check under the
+  ticket's test note 4 reads them so. The other retired rows, the K1 (b) literals and the P1 row are unchanged by this
+  line.
+
+*Dated 2026-11-04 (`arch-ABC-303-open`, records only at `main` `c118a5cf`; rulings `orch-2026-10-30a` `…42c82347` and
+`…0edae6fd` 2): **`ABC-271` K0's seven rows of `src/evaluate.passer.test.ts` retire at `ABC-301` scope 4, on an emission that
+moves any value. No bar moves.***
+- **Why they cannot stand.** B-T4's own reason: a tuned table moves node counts "on the shipped path and on every older
+  door, because the doors read the same table". So `ADR-0070` d5's re-point does not hold past a fit. K0's seven figures
+  go red on every door, and no door restores the old table.
+- **Not a re-pin.** A node count reads as a pin under B-T4's words, but K0 is not a record of a table. Its sentence is that
+  the terms at 0 changed no node, and a fit makes that sentence false: `…0edae6fd` 2's test, the test the "every part is 0"
+  row met above. Seven new figures would be a different claim, and the JSON is QE's frozen file.
+- **Not the identity gate.** B-T4's never-list means decision 5's tracer gate, B-T1, which stands. K0 shares the word only.
+  **If the Orchestrator reads K0 as that list's "identity", this line falls and K0 is a STOP at scope 4, back to
+  Architect/Design.**
+- **What it read is held elsewhere** (by reading; nothing was run): `ABC-271`'s claim was read and MET at its merge (`qe-ABC-271`
+  `…74da20bf`), and re-read on `ABC-283`'s merge. `ADR-0070` K1 (a)–(c) go on at the probed values. The fit's own
+  node pins (`ABC-279` A4 (a) and the rest) re-pin under B-T4.
+- **`FROZEN.k0` stays in the fixture file,** and its count row stays as it is: the JSON is not edited, only the deep block
+  goes.
+- **When this applies:** as the line above: on an emission that moves any value. If the pull does not merge, K0 stands,
+  re-pointed. The PR table lists the seven as retired, citing this line.
 
 ## What would falsify this
 

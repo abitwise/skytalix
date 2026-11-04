@@ -38,6 +38,9 @@ from `main` `7a9ee712`). Nothing was run.
   - d3: the endgame cost is restated (`QE-271-f`).
   - d4: the second test-only seam is accepted, and two test-only rows are owed before the second pull emits
     (`QE-271-g`, `QE-271-h`).
+- *Dated 2026-11-04 (`arch-records-1104`, records only, at `main` `83894094`; QE `qe-ABC-301-s0` `…9fd32f43`):* **d4's
+  hot-path row takes the own-phase form, QE's wording.** The written form reads 31 / 44, and the bar stays exact on
+  44 / 44. No bar moves.
 
 *Before acceptance:* **PROPOSED 2026-11-04** (task `arch-ABC-271`, on `grugops/arch-ABC-271` from `main` `ac55ddf6`;
 text of record `01d2434b`). It proposed choice rule 1: the three terms shipped on their rule values, judged on their
@@ -66,6 +69,7 @@ own 100-game read (GAIN), behind a test-only off-door pair, with P0–P8 as the 
 | 2026-11-04 | Architect/Design | Restated as ACCEPTED in form (a): the terms at 0, K0–K4, U held at 0 at the second pull. `ADR-0067` d5 / d6 / item 5, `ADR-0056` E4 / D6, `ADR-0064` d10 written. No bar moved | `arch-ADR-0070-accept` |
 | 2026-11-04 | Orchestrator | `ABC-271` Done (merged `872e5ffc`; QE PASS_WITH_GAPS `…74da20bf`). `QE-271-f`, `-g`, `-h` and `-i` carried to the second pull | `orch-2026-10-30a` `…264e420e` |
 | 2026-11-04 | Architect/Design | d3: the endgame cost restated (1.12 × per call against "about 1.085 ×"), graded at the second pull by `ADR-0067` B-T4's endgame row. d4: `pawnStructureForTest` accepted with a caller guard; the hot-path row's form. No bar moved | `arch-second-pull-1104` |
+| 2026-11-04 | Architect/Design | d4: `QE-271-h`'s row takes the own-phase form on QE's confirmation; the forced `evaluateAtPhase(p, 0)` reads 31 / 44 because U fires on the argument. The level did not move | `arch-records-1104` |
 
 ## Context
 
@@ -248,6 +252,26 @@ no intent class and no read. The figure is history and a forecast for the second
        - It kills E14, E15 and E16. It is a unit row with no search, in the default lane (`NFR-008`: `QE-271-j`
          puts the headroom at 0.6 s on the build).
        - At the shipped values of 0 it still bites, because the probed values come from the test's table.
+   - *Dated 2026-11-04 (`arch-records-1104`, records only, at `main` `83894094`; QE's confirmation `qe-ABC-301-s0`
+     `…9fd32f43`; the Orchestrator's `…878035ca` 1 and `…0edae6fd` 1): **`QE-271-h`'s row takes the own-phase form. The
+     bar's level does not move.***
+     - **The row, in QE's replacement wording:** white's view, each fixture at k = `phaseOf(p)`, `evaluateAtPhase(p, k)`
+       at the probed values equals mg + trunc((D + e) × (24 − k) / 24), where mg = `evaluateAtPhase(p, 24)` and
+       D = `evaluateAtPhase(p, 0)` − mg at the shipped values, and e is the seam's white minus black at the probed values
+       minus the same at the shipped values. Exact on 44 / 44.
+     - **This replaces the row above and its reason.** "At phase 0, w = 0, so the equality is exact" covers the blend and
+       not U. U fires on the phase argument (decision 2) and the seam reads `phaseOf`, so forcing 0 on a position of
+       phase 1–5 fires U on the hot side only. The written form reads 31 / 44 on the build, 13 misses of exactly ± 400.
+       The build is right, and the slip was in the row (`…d0f7af61`; QE owns it, `…270757f7`). Those calls are outside
+       `evaluateAtPhase`'s contract, and no production caller makes them.
+     - **The same bar.** The same 44 fixtures, probed values and seam, inside `withParametersForTest`, exact, no tolerance,
+       none out of the denominator. At k = 0 it is the written equation.
+     - **What it reads.** E14, E15, E16 and H1 are red on 34, 6, 6 and 13 fixtures. It also sees H3 and H4, which a forced
+       call cannot. It gives up one thing: on 6 of the 30 fixtures with k > 0 a ± 1 cp step truncates away, decision 1's
+       resolution limit.
+     - **What it does not read** (each read by QE, none a defect): the hot path at phases 6–23, for which the gate on the
+       emitted file answers (`QE-301-a`; `ADR-0067` d5). And D is a forced 0 at the shipped values, so the row assumes
+       shipped U = 0: whoever gives U a value re-reads it (`QE-301-d`; decision 7).
 5. **The bars of `ABC-271`, pre-registered** (fixed here; not loosened after Ready). The PROPOSED P0–P8 are not bars.
    - **K0, node identity:** `chooseMove`, frozen clock, kiwipete d8 / d9 **766 275 / 1 725 150**; position-6 d8 / d9 /
      d10 **87 475 / 253 724 / 533 916**; `search()` d8 **605 117 / 406 787**.
@@ -256,6 +280,19 @@ no intent class and no read. The figure is history and a forecast for the second
      - If `main`'s non-test `src/` moves by the build, the Engineer re-reads them on the new base and puts both in the
        PR. A re-derived count is a dated line here, never a moved bar.
      - Every existing door reads its pre-ticket counts.
+     - *Dated 2026-11-04 (`arch-ABC-303-open`, records only at `main` `c118a5cf`, one deep run; `se-ABC-303` `…dd8e56d8`):
+       **K0's seven rows are stale on `main`, and they re-point. They are not re-pinned.**
+       - **Read:** `SEARCH_DEEP=1 src/evaluate.passer.test.ts` on `c118a5cf`, `src/` tree `845f5662`: exit 1, 7 failed, 21
+         passed. The shipped path reads 707 548 / 1 595 095; 101 425 / 226 171 / 471 434; 523 847 / 234 214. Those are
+         `ABC-283`'s head. `evaluate` is not at fault: the rows ask the shipped path a pre-`ABC-283` question.
+       - **The form.** Rows' `chooseMove` → `chooseMoveWithoutBundle`, `search` → `searchWithoutBundle`, the pre-`ABC-283` pair.
+         The seven figures stay, and `src/evaluate.passer-fixtures.json` is untouched, so its sha256 row stands and no
+         re-freeze is owed. `se-ABC-283-merge` `…f7f63e1d` read all seven on those doors, 7 / 7, on the merged tree.
+       - **Why not a re-pin.** F1 says never. The row's claim is that the terms at 0 changed no node, and only the
+         tree without `ABC-283`'s parts can answer that against these figures. A re-pin to `ABC-283`'s head would make it a
+         shipped-path pin, red again at the next search merge. The door also survives `ABC-303`: an older door turns both
+         of its parts off.
+       - **Until the first emission only:** `ADR-0067`'s dated line of this date.
    - **K1, units (default lane):**
      - (a) the mirror, `Object.is`: `G3` + `TAPER_MIRROR_POSITIONS` + ≥ 10 new passer positions (frozen by QE before
        the build), 0 mismatches;

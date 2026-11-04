@@ -241,6 +241,26 @@ d8 ratios are head / door. Reach is the mean completed depth at 47 000 nodes on 
     - Zugzwang **7 / 7**. `G1` **≥ 54 / 58**, with no NEWLY-MISSED line.
     - The quiescence audit is information. Its sample is fixed as in § Context, so the counts reproduce on a
       deterministic build.
+    - *Dated 2026-11-04 (`arch-ABC-303-open`, records only at `main` `c118a5cf`; `se-ABC-303` `…75e4058e` item 4):
+      **`ABC-279` A3 (a) is this decision's drift bar. It stays a bar, and its shipped side may leave the shipped path.**
+      - **A bar, not a pin.** ≥ 93 %, ≤ 144 cp and 0 sign changes are derived levels, and F1 names them. No literal
+        moves, ever. A pin records a table's output; these record a tolerance.
+      - **Bar and re-point are separate questions.** A re-point moves which search stands on the row's shipped side. It
+        moves no level. Decision 8 sends this row to `ADR-0050` d4, `ADR-0058` d5, `ADR-0059` d6 and `ADR-0061` d6, and
+        those re-point "every row whose shipped side is `search()` or `chooseMove` and whose other side is an older
+        door", the d5 drift rows by name. `ADR-0058` d5 says why: "Without the re-point, they would measure their own
+        heuristic plus T1." Decision 8's "value and behaviour rows" are zugzwang, mates and `G1`, which compare with no
+        door.
+      - **The level belongs to Q1 alone.** ⌊95.72⌋ − 2 was derived from the skip against its own door. Graded on a stack
+        of later parts, it is a level nobody set.
+      - **F1 has not fired.** It reads Q1's build, and `ABC-279` read 96.26 % / 95.72 %, 66 / 96 cp, 0 changes (`qe-ABC-279`
+        `…6e99201a`).
+      - **The row sits one rung short.** `ABC-283` re-pointed A4 (a) to `searchWithoutBundle` / `chooseMoveWithoutBundle`
+        and left A3 (a) on the shipped path, so since `58e90d07` it has read Q1 plus history, SEE ordering and aspiration.
+        The drift rows of futility, null move, LMR and quiescence each stand on the door one rung above their own (futility's
+        is `ABC-269`'s `…WithoutTaper`), and none moved at `ABC-283`. The form of record for this row is `searchWithoutBundle` / `chooseMoveWithoutBundle`. It should read
+        this ADR's figures. That is `UNKNOWN - verify` until the lane runs; a red there comes back here. The row's bars do
+        not move either way.
 12. **The premise bars (`A3` / `A4`):**
     - **(a)** d8 nodes on kiwipete and position-6, both recursions: **≤ 0.78×** on each of the four readings
       (min(0.95, ⌈100 · (0.7208 + 0.05)⌉ / 100)).
