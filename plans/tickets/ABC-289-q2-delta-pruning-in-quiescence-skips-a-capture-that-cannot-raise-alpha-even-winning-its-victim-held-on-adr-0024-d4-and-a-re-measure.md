@@ -1,16 +1,31 @@
 ---
 id: ABC-289
-title: "Q2: delta pruning in quiescence. Out of check, a capture is skipped when the stand-pat score plus its victim's value and a margin cannot raise alpha, behind a test-only off-door pair. Held on ADR-0024 d4 (delta pruning stays fenced; opening it is the owner's word) and on an Architect re-measure on main"
+title: "Q2: delta pruning in quiescence. Out of check, a capture is skipped when the stand-pat score plus its victim's value and a margin cannot raise alpha, behind a test-only off-door pair. Held on the Architect's re-measure over Q1 and its ADR"
 status: backlog
 column: Backlog
 size: S
 priority: P3
 epic: EPIC-011
 feature: —
-adr: "owed: (1) the owner's word opening ADR-0024 d4 for Q2's design, as Q-3K-9 did for Q1 (asked as Q-3K-10); (2) the Architect's re-measure on main (quiescence's share of nodes, the trim over Q1's SEE pruning, drift, the mate floor); (3) a new ADR or an ADR-0024 amendment (the Architect's call): the margin, the exclusions, the door names, the firing figure at 100 ms and the intent. The owner accepts it (reading (b))"
+adr: "owed: (1) the Architect's re-measure on main (quiescence's share of nodes, the trim over Q1's SEE pruning, drift, the mate floor); (2) a new ADR that amends ADR-0024 d4 (the Architect's call, ADR-0024 § Status, 2026-11-04): the margin, the exclusions, the door names, the firing figure at 100 ms and the intent; it must show the nine items listed there. The owner accepts it (reading (b))"
 ---
 
 # ABC-289: delta pruning in quiescence (Q2)
+
+> **THE OWNER'S HOLD LIFTED (`Q-3K-10` ANSWERED YES); STILL HELD ON THE ARCHITECT'S RE-MEASURE OVER Q1 AND ITS ADR,
+> 2026-11-04, by BA/PM** (task `bapm-owner-answers-1104`, records only, at `main` `7dd241cf`; nothing run). Sources:
+> the owner's word as the Orchestrator recorded it (`orch-2026-10-30a` `…7de79e90`) and the Architect's owed lines
+> (`arch-owner-answers-1104` `…d6345b29` § 4).
+> - **Hold 1, the owner's, is lifted:** `Q-3K-10` answered yes 2026-11-04 (`…7de79e90`). `ADR-0024` d4 is open for
+>   Q2's **design**, as `Q-3K-9` opened it for Q1. A build ships on its own read (DP4).
+> - **What still holds it:**
+>   - (a) **the Architect's re-measure on `main` with Q1 in it** (hold 2): the premise reading of `ADR-0024`
+>     § Status, the fourth block, item 2, under a sealed PREREG;
+>   - (b) **a new ADR, by `ADR-0069`'s pattern, that amends d4,** and the owner's acceptance of it (reading (b) lets
+>     the build start on PROPOSED). It must show the nine items listed in `ADR-0024` § Status, the fourth block.
+> - **Lines changed:** the title; `adr:` (the owner's item dropped; the ADR is a new one amending d4); § Dependencies;
+>   DoR rows 5 and 10; F1 moot, struck through and kept. No bar, size or priority moves. **DoR 9/10, Backlog, held.**
+>   The file name keeps its as-cut slug. The board move is the Orchestrator's.
 
 > **Cut 2026-11-04 by BA/PM: DoR 9/10, Backlog, HELD** (task `bapm-epic011-areas`, records only, at `main` `b274711c`;
 > nothing run, built or timed). Source: the owner's ruling 3 (`orch-2026-10-30a` `…4c4cb03d`). `EPIC-011` Phase 3,
@@ -66,7 +81,7 @@ The re-measure and the ADR fix exact counts before Ready. None is loosened after
 
 | # | fires when | disposition |
 |---|---|---|
-| F1 | `Q-3K-10` no | closed: fenced by `ADR-0024` d4 |
+| F1 | ~~`Q-3K-10` no~~ | ~~closed: fenced by `ADR-0024` d4~~ *(moot 2026-11-04: `Q-3K-10` answered yes)* |
 | F2 | the re-measure shows no trim over `main` | closed as dropped (premise not met) |
 | F3 | DP0 red | a defect |
 | F4 | DP2 red | a defect check first; if real, NOT MET |
@@ -90,7 +105,8 @@ The re-measure and the ADR fix exact counts before Ready. None is loosened after
 
 ## Dependencies
 
-- **`Q-3K-10`** (the owner). **The re-measure and the ADR** (the Architect's). DoR row 10.
+- ~~**`Q-3K-10`** (the owner).~~ *(Answered yes 2026-11-04, `…7de79e90`.)* **The re-measure over Q1 and the new ADR
+  that amends `ADR-0024` d4** (the Architect's; the owner accepts the ADR, reading (b)). DoR row 10.
 - **One at a time on `src/quiescence.ts`** with any ticket that edits it (Q1 merged; none open today).
 
 ## Definition of Ready
@@ -101,11 +117,11 @@ The re-measure and the ADR fix exact counts before Ready. None is loosened after
 | 2 | scope and out-of-scope | ✅ scope 1–3; checks in quiescence, QSM, the cap out |
 | 3 | INVEST | ✅ S; one rule |
 | 4 | testable, measurable acceptance | ✅ DP0 exact; DP2 0 / 7 of 7 / ≥ 54; DP4 ≥ 50.0 or ≥ 43.0. DP3's and the drift numbers owed with the ADR |
-| 5 | dependencies known | ✅ `Q-3K-10`; the re-measure; `src/quiescence.ts` |
+| 5 | dependencies known | ✅ `Q-3K-10` answered yes; the re-measure; `src/quiescence.ts` |
 | 6 | NFR triggers with targets | ✅ `NFR-005`, `NFR-008` ≤ 10 s, `NFR-009` none |
 | 7 | test notes | ✅ 1–2 |
 | 8 | size | ✅ S |
 | 9 | priority | ✅ P3 |
-| 10 | no major unresolved blocker | ❌ **`ADR-0024` d4 fences it** (`Q-3K-10`, the owner's); the re-measure and the ADR are owed |
+| 10 | no major unresolved blocker | ❌ ~~**`ADR-0024` d4 fences it** (`Q-3K-10`, the owner's);~~ the re-measure and the ADR are owed. *2026-11-04 (`bapm-owner-answers-1104`): d4 is open for Q2's design (`Q-3K-10` yes). Row 10 now waits only on the Architect's re-measure on `main` over Q1 (`ADR-0024` § Status, the fourth block, item 2) and the new ADR that amends d4* |
 
-**DoR 9/10. Backlog, held.**
+**DoR 9/10. Backlog, held** (2026-11-04: on the Architect's re-measure over Q1 and its ADR only).
