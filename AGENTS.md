@@ -53,21 +53,21 @@ Real commands only, with flags, preferring fast single-file variants. If a comma
 ### Development
 
 - Dev / run: `npm run chess` <!-- prints the board and plays a game against the engine, default
-  level 5 (≤4 s/move, ADR-0053 d10, was 3 s under ADR-0045; no longer the hardest: levels 6 and 7 think 5 s and 30 s a move). Options:
+  level 5 (≤4 s/move, ADR-0053 d10; no longer the hardest: levels 6 and 7 think 5 s and 30 s a move). Options:
   `--colour white|black|random`, `--difficulty 1|2|3|4|5|6|7`, `--ascii`, `--unicode`. Pass an option AFTER `--`: `npm run chess -- --colour black` — the separator is
   load-bearing; without it npm eats the flag name (npm 11.20.0): a value-less flag (`--ascii`) is
   dropped and the game runs with defaults, exit 0; a value flag leaves its value behind as a stray
   argument and the CLI refuses it, exit 1. On a terminal, colour then difficulty are asked for
   when their flag is absent (Enter keeps the default; ABC-200); a flag skips its question, and a
   non-terminal stdin skips both. Exit 0 normal session, 1 refused command line, 70 internal error.
-  Writing rules for this slot and full receipts (RUN dates, byte-exact before/after the `--` trap): `memory-bank/90-agents-md-command-log.md` § "Dev / run". -->
+  Writing rules and receipts: `memory-bank/90-agents-md-command-log.md` § "Dev / run". -->
 - Perft deep counts (opt-in slow suite): `PERFT_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/perft.test.ts`
 - UCI engine entry (ABC-168): `npm run uci` <!-- `node src/uci.ts`: reads UCI on stdin, writes UCI on stdout; exit 0 on `quit` or end of input, 1 on any argument, 70 on an exception. Receipts: `memory-bank/90-agents-md-command-log.md` § "UCI entry point". -->
 - UCI time mode (ABC-220/221, ADR-0052): `setoption name TimeMode value level|simple-tournament|uci-clock-mode`; default `level`. `simple-tournament` searches a fixed T = 22 s a move, `min(T, C)` under a clock C. `uci-clock-mode` spends `min(59.5 s, C)`, ceiling 60 s. Both ignore `Skill Level`. `HARD_CEILING_MS` = 60 000. `isready` and `stop` mid-search answer up to one budget late (no worker).
 
 ### Test
 
-Full RUN receipts for every command below (dates, exit codes, counts, traps), plus perft, the opening-book regeneration, each lane's trigger and trap, and the coverage notes (§ "On-demand commands"): `memory-bank/90-agents-md-command-log.md`.
+Receipts for every command below, plus perft, the opening-book regeneration, each lane's trigger and trap, and the coverage notes (§ "On-demand commands"): `memory-bank/90-agents-md-command-log.md`.
 
 **Never wait on a lane with `pgrep -f "<text>"` / `until ! pgrep -f …`** — the pattern matches the
 waiting shell's own command line and never exits. Wait on the PID you started or the tool's
@@ -98,6 +98,8 @@ In a script, poll the job's output file or `kill -0 <pid>`; never `while pgrep -
 - Null-move deep lane (opt-in, ABC-208, 44 rows): `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/search.null-move.test.ts`
 - Futility deep lane (ABC-268, 47 tests): `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/search.futility.test.ts`
 - Taper deep lane (ABC-269, 146 tests): `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/evaluate.taper.test.ts`
+- SEE deep lane (ABC-279, ~55 s): `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/see.test.ts`
+- Tune deep lane (ABC-280): `TUNE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run tools/tune/tune.test.ts`
 - Real-engine CLI lane (opt-in, ABC-119): `CLI_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/cli.real-engine.test.ts`
 - UCI session deep lane (opt-in, ABC-220 A11, 22 s walls; ABC-221 A10, 3 x 59.5 s; one row: add `-t "ABC-221 A10"`): `ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/uci-session.test.ts`. A spawn here: `ENGINE_DEEP` only, sync, argument array (ADR-0052 D8).
 - Real-engine UCI lane (opt-in, ABC-168): `UCI_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/uci.real-engine.test.ts`
@@ -112,7 +114,7 @@ In a script, poll the job's output file or `kill -0 <pid>`; never `while pgrep -
 
 ### Test integrity
 
-- Skip-count capture: `NODE_OPTIONS=--max-old-space-size=128 npx vitest run --reporter=json 2>/dev/null | jq '.numPendingTests + .numTodoTests'` <!-- verified: returns an integer (0 with no tests). Undeterminable → `UNKNOWN - verify`, never a silent 0. Run it as spelled: quotes without its prefix (before ABC-173) are history; refused by the heap guard, they print no integer and exit non-zero (ABC-176). -->
+- Skip-count capture: `NODE_OPTIONS=--max-old-space-size=128 npx vitest run --reporter=json 2>/dev/null | jq '.numPendingTests + .numTodoTests'` <!-- verified: returns an integer (0 with no tests). Undeterminable → `UNKNOWN - verify`, never a silent 0. Run it as spelled: without its prefix the heap guard refuses it (no integer, non-zero exit; ABC-173, ABC-176). -->
 
 - Test-integrity check (the gate's step): `node tools/grugops/test-skip-integrity.js .grugops/test-skips.md --skip-count <N>` <!-- verified: `No findings.`, exit 0, at skip count 0. `.grugops/test-skips.md` is HUMAN-OWNED — an agent may READ and RUN this, never write a row into it. -->
 
@@ -152,7 +154,7 @@ files directly via built-in type stripping, so there is no bundler or transpile 
 
 ## Standing rulings
 
-The owner's rulings, in full with their evidence: `memory-bank/45-standing-rulings.md`, sections "Process rules (this project)", "Branching model", "Test and UAT authority", "QE validation authority", "Deployment posture". Read it when you review criteria, merge, run UAT, certify a ticket or touch deploy. The operative sentences, verbatim:
+Owner's rulings in full: `memory-bank/45-standing-rulings.md`, sections "Process rules (this project)", "Branching model", "Test and UAT authority", "QE validation authority", "Deployment posture". Read it when you review criteria, merge, run UAT, certify a ticket or touch deploy. The operative sentences, verbatim:
 
 - Criteria review happens at the `Ready for Dev` exit, not at a gate. Ticket prose has a size budget; overflow goes to context notes.
 - Merge to `main` in THIS project is allowed once all tests pass and the ticket is done, never before. The commit-side branch guard in `agent-factory/_commit-convention.md` still holds: commit on `grugops/<task>`, never `main` directly.
@@ -217,7 +219,7 @@ Andrej Karpathy's coding-agent rules — 12 rules grouped under four principles.
 
 ## Memory bank & plans
 
-- `memory-bank/*` — the agent-maintained working memory: read on start; `60-progress.md` is the running plan-of-record, `50-decisions/` holds ADRs, plus project brief, product, architecture, contributing, runbook, glossary.
+- `memory-bank/*` — the agent-maintained working memory: read on start; `60-progress.md` is the running plan-of-record, `50-decisions/` holds ADRs, plus brief, product, architecture, contributing, runbook, glossary.
 - `memory-bank/45-standing-rulings.md` — the owner's standing rulings in full (process, branching, test and UAT, QE, deployment); `memory-bank/90-agents-md-command-log.md` — on-demand commands, lane triggers and traps, and the receipts behind § Commands.
 - `plans/*` — the delivery state: `board.md` (status), `traceability.md` (requirement→ticket→code→test→UAT→release), `nfr-catalog.md`, plus `sprints/`, `releases/`, `epics/`, `features/`, `tickets/`.
 
