@@ -1,8 +1,9 @@
 ---
 id: ABC-280
 title: "tools/tune lands alone: ABC-239's tuner (tracer, PGN reader, bounds, fit, tests) merges with no src/ change. The identity gate (B-T1) and reproducibility (B-T3) are read on main's table. Tools only"
-status: ready
-column: Ready
+status: done
+column: Done
+closed: "2026-11-04, merged to local main at 0c8b385a (a merge commit; the src/ diff of the real merge is empty, QE-280-c met); QE PASS_WITH_GAPS (qe-ABC-280 …cf60119e); UAT waived (tools only); post-merge npm test 2 650 / 2 650 (the Orchestrator's board card). Front matter only, by bapm-W1-bundle-cut"
 size: S
 priority: P3
 epic: EPIC-011
