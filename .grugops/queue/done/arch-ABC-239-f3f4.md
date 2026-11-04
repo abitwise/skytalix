@@ -16,3 +16,16 @@ Diagnose and rule, as dated lines in ADR-0067 (no bar moves; a bar move or a met
 4. Recommend one path, with host cost: (i) re-open with all relations bounded + an F4 relation, one more refit; (ii) narrower free set (e.g. freeze the terms the F4 trace implicates) ; (iii) close ABC-239 NOT MET under its miss rule and keep E1's table; (iv) other. State which needs the owner.
 Fences: memory-bank/50-decisions, your records, scratch. No committed src/tools; no ticket/EPIC edits (list owed lines). No push, force, amend, rebase, merge into main. Leave nothing running.
 Publish: sealed notes (task arch-ABC-239-f3f4, contextRoot = worktree's .grugops/context, `at` from `date -u`); queue moves; commit; ## Result + trace row; brief + claim to done/. Run `node tools/grugops/records-path-check.js --base main` before your last commit; it must exit 0.
+
+## Result
+by: architect-design (claude-opus-5-5), at: 2026-11-04T02:01:26Z. PREREG `…9427005b` (`dcd4be1c`) and its addendum `…80a5bd21` (`f4febc1c`) were sealed and committed before the runs they cover. The reads ran on a scratch worktree of `26d06118` under the host lock, about 4 min of host time. `grugops/ABC-239b` was not touched; the scratch worktree and the symlink were removed.
+- **F4's root cause:** joint, in the fitted endgame halves. No single family drives e1e5. Four driver pairs do, each through their eg halves: {P, R}, {P, K}, {P, PASS} and {K, PASS}.
+  - The base passes depth 9 by 29 cp of evaluation preference (−390 against −419). Neither table scores White's win at any depth up to 16; both read e1f1 as 0 from depth 14.
+  - The king's eg table is now rank-asymmetric and supplies most of the gap between the lines.
+  - R1 (the king's centralization is rank-symmetric, CPW) qualifies: base 0, candidate −54. But it binds K only, and reverting K alone keeps e1e5.
+  - No passer relation exists on today's features: the h-pawns are frozen by the enemy king's reach, which no term reads. So the row is outside what a linear fit on this feature set can hold. E4a's free path and king distance are the missing class.
+- **F3 (a):** NOT MET as written. A row green by less than its margin cannot join the bound set under d6's procedure. The margin-aware form (every relation bounded at once, one fit) is recommended for any later pull. That is a re-open plus a d6 amendment, so it is the owner's word.
+- **K1 (c):** form (A). The rows run inside `withParametersForTest` at the frozen king-file pairs, with literals unchanged: 5 / 5 green on both tables. QE checks the bite.
+- **Path:** (iii), recommended. Close the first pull NOT MET; `main` keeps E1; host cost 0 now; it does not need the owner (he is notified). (i) is the owner's, about 1–2 h of engineer time plus about 20 min of host to step 6, and F4 is forecast to re-fire. (ii) is a fit chosen on the row, rejected. (iv) moves a bar after a miss, the owner's, not recommended. E4a comes before a second pull.
+- **No bar moved.** Records: the `ADR-0067` dated block and log row; notes `…9427005b`, `…80a5bd21`, `…4eae0fd3` (results) and `…69f22167` (rulings, path, owed lines).
+- **Owed lines** (not edited here): the `ABC-239` page, `EPIC-011` (E2, and the order E4a → second pull), the `ABC-271` dependency line, `ADR-0056` E2 status, and the board.
