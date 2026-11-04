@@ -811,6 +811,26 @@ re-pinned, the second retires. No bar moves.***
   ticket's test note 4 reads them so. The other retired rows, the K1 (b) literals and the P1 row are unchanged by this
   line.
 
+*Dated 2026-11-04 (`arch-ABC-303-open`, records only at `main` `c118a5cf`; rulings `orch-2026-10-30a` `…42c82347` and
+`…0edae6fd` 2): **`ABC-271` K0's seven rows of `src/evaluate.passer.test.ts` retire at `ABC-301` scope 4, on an emission that
+moves any value. No bar moves.***
+- **Why they cannot stand.** B-T4's own reason: a tuned table moves node counts "on the shipped path and on every older
+  door, because the doors read the same table". So `ADR-0070` d5's re-point does not hold past a fit. K0's seven figures
+  go red on every door, and no door restores the old table.
+- **Not a re-pin.** A node count reads as a pin under B-T4's words, but K0 is not a record of a table. Its sentence is that
+  the terms at 0 changed no node, and a fit makes that sentence false: `…0edae6fd` 2's test, the test the "every part is 0"
+  row met above. Seven new figures would be a different claim, and the JSON is QE's frozen file.
+- **Not the identity gate.** B-T4's never-list means decision 5's tracer gate, B-T1, which stands. K0 shares the word only.
+  **If the Orchestrator reads K0 as that list's "identity", this line falls and K0 is a STOP at scope 4, back to
+  Architect/Design.**
+- **What it read is held elsewhere** (by reading; nothing was run): `ABC-271`'s claim was read and MET at its merge (`qe-ABC-271`
+  `…74da20bf`), and re-read on `ABC-283`'s merge. `ADR-0070` K1 (a)–(c) go on at the probed values. The fit's own
+  node pins (`ABC-279` A4 (a) and the rest) re-pin under B-T4.
+- **`FROZEN.k0` stays in the fixture file,** and its count row stays as it is: the JSON is not edited, only the deep block
+  goes.
+- **When this applies:** as the line above: on an emission that moves any value. If the pull does not merge, K0 stands,
+  re-pointed. The PR table lists the seven as retired, citing this line.
+
 ## What would falsify this
 
 | # | clause | what would falsify it | if it fires |
