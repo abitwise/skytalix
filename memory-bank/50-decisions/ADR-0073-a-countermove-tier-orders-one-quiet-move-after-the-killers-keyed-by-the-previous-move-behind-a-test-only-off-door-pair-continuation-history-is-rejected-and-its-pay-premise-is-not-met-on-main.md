@@ -12,7 +12,7 @@ copies of `src/`, under the host lock. Nothing was committed to `src/` or `tools
 - **The bundle.** Part of bundle 1, named by the owner (`orch-2026-10-30a` `…3b15b361`): `ABC-286` (`ADR-0072`) +
   `ABC-288` (this ADR), under `ADR-0056` § the bundle read.
 - **The method.** PREREG `…aa5c4dc1` (commit `59a98278`), sealed before any run. The readings are observation
-  `arch-bundle-1` of this date.
+  `…ed82b408`, the design decision `…37b7fb23`.
 - **The verdict, by that rule.** Rule A picks C1, the countermove alone, as the only form meeting Safety. On its own
   door in the bundle it reads 1.0031 / 0.9999 / 1.0935 / 0.9989 against ≤ 0.95 on each: **all four miss.** No form is
   tuned after the read.
@@ -37,7 +37,7 @@ copies of `src/`, under the host lock. Nothing was committed to `src/` or `tools
 | date (UTC) | by | what | record |
 |---|---|---|---|
 | 2026-11-04 | Architect/Design | PREREG sealed before any run | `arch-bundle-1` `…aa5c4dc1`, `59a98278` |
-| 2026-11-04 | Architect/Design | PROPOSED. C1 picked; CH1 and CH2 rejected; safety met; CH3 missed; F1 fired | `arch-bundle-1`, this ADR's readings and decision notes |
+| 2026-11-04 | Architect/Design | PROPOSED. C1 picked; CH1 and CH2 rejected; safety met; CH3 missed; F1 fired | `arch-bundle-1` `…ed82b408` (readings), `…37b7fb23` (decision) |
 
 ## Context
 

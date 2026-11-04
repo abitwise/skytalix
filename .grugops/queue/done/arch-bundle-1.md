@@ -20,3 +20,17 @@ Owner 2026-11-04: read the Orchestrator's decision note of 2026-11-04T19:56:54Z 
 3. In your decision note, list the owed BA/PM lines and any owner question (acceptance of each new ADR).
 Fences: memory-bank/50-decisions, your records, scratch. No committed src or tools; no ticket, EPIC or board edits. Do not use ADR-0074 (arch-ABC-289 holds it). No push, force, amend, rebase or merge into main. Leave nothing running.
 Publish: sealed notes (task arch-bundle-1, contextRoot = the worktree's .grugops/context, `at` from `date -u`); queue moves; commit; ## Result + trace row; brief + claim to done/. Before your last commit, run `node tools/grugops/records-path-check.js --base main`; it must exit 0.
+
+## Result
+
+**2026-11-04, Architect/Design. The bundle read is ACCEPTED in `ADR-0056`. Bundle 1 is designed as `C1+M3`, and neither premise is met: `ADR-0072` and `ADR-0073` are PROPOSED with F1 fired, and the build waits for the owner's word. The mate floor reads 0 with both parts on and per part.**
+
+- **PREREG `…aa5c4dc1`,** sealed and committed (`59a98278`) before any measured run. Readings `…ed82b408`; design, owed lines and owner questions `…37b7fb23`.
+- **Forms by the rules:** O2c = C1, the countermove alone (continuation history fails Safety and buys no node). P4 = M3, T = 4 / 7 / 12, d ≤ 3, key-0 quiets, three non-pawn pieces (no form met every bar; M3 is carried).
+- **P4, own door:** safety and pay met (d8 0.6039 / 0.8170 / 0.7509 / 0.8363, reach +0.116). L2 missed: drift 93.58 % / 94.12 %, 80 / 79 cp; audit 15.27 %, 29 errors ≥ 200 cp.
+- **O2c, own door:** safety met. CH3 missed on all four: 1.0031 / 0.9999 / 1.0935 / 0.9989.
+- **Mate floor:** `C1+M3`, `M3` and `C1` each read 0 on every row (d5 0 / 191, 0 / 189; older rows 0; d6 0 / 209; fresh KRK / KQK 0). Other forms went red; six of those rows clear with LMR off (`R-283-LMR`'s class).
+- **The read, if the owner lifts:** one C2′, 100 games at 100 ms, GAIN ≥ 50.0, never re-played.
+- **Owner:** `OQ-0072-1`, `OQ-0073-1`, one answer: (a) lift both and read the bundle, recommended over two misses; (b) `ABC-286` alone; (c) hold both.
+- **Disclosed:** Step B's first attempt crashed on a missing import in the probe patch; it was fixed and all of Step B re-run. No form, bar or rule moved.
+- **Measured:** about 13.5 min of the 1 h cap. No games. Nothing committed to `src/` or `tools/`.

@@ -13,7 +13,7 @@ played.
 - **The bundle.** Part of bundle 1, named by the owner (`orch-2026-10-30a` `…3b15b361`): `ABC-286` (this ADR) +
   `ABC-288` (`ADR-0073`), under `ADR-0056` § the bundle read.
 - **The method.** PREREG `…aa5c4dc1` (commit `59a98278`) sealed the forms, bars and rules before any run. The readings
-  are observation `arch-bundle-1` of this date; the raw files are in `.grugops/context/arch-bundle-1/raw/`.
+  are observation `…ed82b408`, the design decision `…37b7fb23`; the raw files are in `.grugops/context/arch-bundle-1/raw/`.
 - **The verdict, by that rule.** No form of five meets every bar. M3 is carried by Rule B, as the only form meeting
   Safety and Pay. On its own door in the bundle it meets Safety and Pay and misses drift and the audit (§ Context).
   **No form is tuned after the read.**
@@ -32,7 +32,7 @@ played.
 | date (UTC) | by | what | record |
 |---|---|---|---|
 | 2026-11-04 | Architect/Design | PREREG sealed before any run | `arch-bundle-1` `…aa5c4dc1`, `59a98278` |
-| 2026-11-04 | Architect/Design | PROPOSED. M3 carried. L3 and L4 met; L2 missed; F1 fired | `arch-bundle-1`, this ADR's readings and decision notes |
+| 2026-11-04 | Architect/Design | PROPOSED. M3 carried. L3 and L4 met; L2 missed; F1 fired | `arch-bundle-1` `…ed82b408` (readings), `…37b7fb23` (decision) |
 
 ## Context
 
