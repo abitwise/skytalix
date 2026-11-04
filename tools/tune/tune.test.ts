@@ -35,14 +35,16 @@ describe("ABC-239 — tools/tune's source pins", () => {
     expect(record).not.toMatch(/seePruning/);
   });
 
-  it("the FEN source row: each bound row's FEN and name appear literally in its src/evaluate*.test.ts file (ADR-0067 ruling (b))", async () => {
+  it("the FEN source row: each bound row's FEN and name appear literally in its src/evaluate*.test.ts file, or its fenFile (ADR-0067 ruling (b)); 26 rows, ABC-301's PREREG", async () => {
     const { BOUNDS } = await import("./bounds.ts");
+    expect(BOUNDS).toHaveLength(26);
     for (const row of BOUNDS) {
       expect(row.file).toMatch(/^src\/evaluate[\w.-]*\.test\.ts$/);
       const text = readFileSync(new URL(`../../${row.file}`, HERE), "utf8");
       expect(text, row.row).toContain(row.row);
       expect(row.terms.length).toBeGreaterThanOrEqual(1);
-      for (const { fen } of row.terms) expect(text, `${row.row}: ${fen}`).toContain(`"${fen}"`);
+      const fens = readFileSync(new URL(`../../${row.fenFile ?? row.file}`, HERE), "utf8");
+      for (const { fen } of row.terms) expect(fens, `${row.row}: ${fen}`).toContain(`"${fen}"`);
     }
   });
 });
@@ -65,11 +67,43 @@ if (RUN_DEEP) {
   const P = await import("../../src/evaluate-params.ts");
   const T = await import("./tune.ts");
   const { gamesOf, lexMovetext, streamZstGames } = await import("./pgn.ts");
-  const { evaluateAt, gateMiss, kingCounts, model, passerCounts, SHIPPED, tableOf, trace } =
-    await import("./tracer.ts");
+  const {
+    evaluateAt,
+    gateMiss,
+    kingCounts,
+    model,
+    passerCounts,
+    SHIPPED,
+    T_FP,
+    T_KE,
+    T_KO,
+    T_UN,
+    tableOf,
+    trace,
+  } = await import("./tracer.ts");
 
   const START = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
   const RESULTS = ["1-0", "0-1", "1/2-1/2"];
+  /** The seventeen value exports, in the order `canonicalValues` hashes them. */
+  const EXPORT_NAMES = [
+    "MATERIAL",
+    "PST",
+    "PASSED",
+    "PASSED_KING_ENEMY",
+    "PASSED_KING_OWN",
+    "PASSED_FREE",
+    "PASSED_UNSTOPPABLE",
+    "DOUBLED",
+    "ISOLATED",
+    "KING_SHELTER_MISSING",
+    "KING_FILE_HALF_OPEN",
+    "KING_FILE_OPEN",
+    "KING_SHELTER_MISSING_QUEEN",
+    "KING_FILE_HALF_OPEN_QUEEN",
+    "KING_FILE_OPEN_QUEEN",
+    "MOBILITY_WEIGHT",
+    "MOBILITY_CAP",
+  ];
   const sha = (b: Buffer | string): string => createHash("sha256").update(b).digest("hex");
   const tmp = (): string => mkdtempSync(join(tmpdir(), "tune-test-"));
 
@@ -406,8 +440,8 @@ if (RUN_DEEP) {
       expect(misses.map((p) => toFen(p))).toEqual([]);
     });
 
-    /** An emission of `main`'s table: the base values through `emitSource`, unfitted. */
-    const baseEmission = (): string => {
+    /** An emission of a table through `emitSource`, unfitted; `main`'s by default. */
+    const baseEmission = (th: typeof SHIPPED = SHIPPED): string => {
       const ce = { ce: 0 };
       return T.emitSource(
         {
@@ -419,11 +453,11 @@ if (RUN_DEEP) {
         },
         {
           table: {
-            mg: Array.from(SHIPPED.mg),
-            eg: Array.from(SHIPPED.eg),
-            wmg: SHIPPED.wmg,
-            weg: SHIPPED.weg,
-            cap: SHIPPED.cap,
+            mg: Array.from(th.mg),
+            eg: Array.from(th.eg),
+            wmg: th.wmg,
+            weg: th.weg,
+            cap: th.cap,
           },
           rows: { ownTrain: 0, ownVal: 0, lichess: 0 },
           K_own: 1,
@@ -453,6 +487,34 @@ if (RUN_DEEP) {
       const imported = await import(join(dir, "evaluate-params.ts"));
       for (const name of names) expect(imported[name], name).toEqual(P[name as keyof typeof P]);
       expect(imported.PASSED_UNSTOPPABLE).toEqual({ mg: 0, eg: 0 });
+    });
+
+    it("QE-301-b: distinct non-zero E4a halves round-trip: each column reads back its own, and the values hash is over them", async () => {
+      const mg = Float64Array.from(SHIPPED.mg);
+      const eg = Float64Array.from(SHIPPED.eg);
+      const firsts = [T_KE, T_KO, T_FP];
+      firsts.forEach((first, c) => {
+        for (let r = 0; r < 6; r++) {
+          mg[first + r] = 100 + 10 * c + r;
+          eg[first + r] = 200 + 10 * c + r;
+        }
+      });
+      mg[T_UN] = 301;
+      eg[T_UN] = 302;
+      const th = { ...SHIPPED, mg, eg };
+      const dir = tmp();
+      const source = baseEmission(th);
+      writeFileSync(join(dir, "evaluate-params.ts"), source);
+      const imported = await import(join(dir, "evaluate-params.ts"));
+      const column = (base: number): number[] => [0, ...[0, 1, 2, 3, 4, 5].map((r) => base + r), 0];
+      expect(imported.PASSED_KING_ENEMY).toEqual({ mg: column(100), eg: column(200) });
+      expect(imported.PASSED_KING_OWN).toEqual({ mg: column(110), eg: column(210) });
+      expect(imported.PASSED_FREE).toEqual({ mg: column(120), eg: column(220) });
+      expect(imported.PASSED_UNSTOPPABLE).toEqual({ mg: 301, eg: 302 });
+      const back = tableOf(imported);
+      expect(Array.from(back.eg)).toEqual(Array.from(eg));
+      const values = JSON.stringify(EXPORT_NAMES.map((n) => [n, imported[n]]));
+      expect(source).toContain(`values sha256 ${sha(values)}`);
     });
 
     it("the project typechecks with that emission in src/evaluate-params.ts", () => {
@@ -636,26 +698,7 @@ if (RUN_DEEP) {
         weg: table.weg,
         cap: table.cap,
       }).toEqual(fitted.table);
-      const names = [
-        "MATERIAL",
-        "PST",
-        "PASSED",
-        "PASSED_KING_ENEMY",
-        "PASSED_KING_OWN",
-        "PASSED_FREE",
-        "PASSED_UNSTOPPABLE",
-        "DOUBLED",
-        "ISOLATED",
-        "KING_SHELTER_MISSING",
-        "KING_FILE_HALF_OPEN",
-        "KING_FILE_OPEN",
-        "KING_SHELTER_MISSING_QUEEN",
-        "KING_FILE_HALF_OPEN_QUEEN",
-        "KING_FILE_OPEN_QUEEN",
-        "MOBILITY_WEIGHT",
-        "MOBILITY_CAP",
-      ];
-      const values = JSON.stringify(names.map((n) => [n, imported[n]]));
+      const values = JSON.stringify(EXPORT_NAMES.map((n) => [n, imported[n]]));
       expect(outputs[0]).toContain(`values sha256 ${sha(values)}`);
       // Material and the phase constants are frozen (d6).
       expect(imported.MATERIAL).toEqual({
@@ -672,6 +715,14 @@ if (RUN_DEEP) {
         expect(imported[name].eg, name).toBe(0);
         expect(imported[name].mg, name).toBeGreaterThanOrEqual(0);
       }
+      // E4a (d6's dated line): king distance and free path free in eg at R 1 … 6 and ≥ 0; every mg
+      // half, the unused ranks and the unstoppable passer held at 0.
+      for (const name of ["PASSED_KING_ENEMY", "PASSED_KING_OWN", "PASSED_FREE"]) {
+        expect(imported[name].mg, name).toEqual([0, 0, 0, 0, 0, 0, 0, 0]);
+        expect([imported[name].eg[0], imported[name].eg[7]], name).toEqual([0, 0]);
+        for (const half of imported[name].eg) expect(half, name).toBeGreaterThanOrEqual(0);
+      }
+      expect(imported.PASSED_UNSTOPPABLE).toEqual({ mg: 0, eg: 0 });
       expect(outputs[0]).toContain("F3 bounds (`ADR-0067` ruling (b)): none");
       expect(outputs[0]).toContain(`players ${T.OWN_PLAYERS.join(" / ")}`);
     });
@@ -704,6 +755,41 @@ if (RUN_DEEP) {
         strict: true,
       },
     ];
+
+    it("ABC-301: every bound row holds on the table in place, read as its test reads it, and a plain term is evaluate itself", async () => {
+      const { BOUNDS } = await import("./bounds.ts");
+      for (const row of BOUNDS) {
+        const read = T.readBound(row, SHIPPED);
+        const label = `${row.row} ${row.part ?? ""}`;
+        if (row.strict) expect(read, label).toBeLessThan(row.rhs);
+        else expect(read, label).toBeLessThanOrEqual(row.rhs);
+        if (row.terms.every((term) => term.without === undefined)) {
+          const direct = row.terms.reduce(
+            (sum, term) => sum + term.coef * evaluate(parseFen(term.fen)),
+            0,
+          );
+          expect(read, label).toBe(direct);
+        }
+      }
+    });
+
+    it("ABC-301: a term's without removes its families from a, and the margin counts what is left", async () => {
+      const { BOUNDS } = await import("./bounds.ts");
+      const bd = T.boundData(BOUNDS);
+      const margins = T.boundMargins(bd, SHIPPED);
+      BOUNDS.forEach((row, k) => {
+        const named = T.termsOf(bd, k).join(" ");
+        for (const term of row.terms) {
+          for (const family of term.without ?? []) {
+            if (family !== "MOBILITY_WEIGHT") expect(named, row.row).not.toContain(`${family}.`);
+          }
+        }
+        expect(margins["C-S"][k], row.row).toBeGreaterThanOrEqual(row.strict ? 1 : 0);
+        expect(margins["C-F"][k], row.row).toBeGreaterThanOrEqual(row.strict ? 1 : 0);
+      });
+      const rig = BOUNDS.findIndex((row) => row.part === "mobilityTerm(rig) > 0");
+      expect(T.termsOf(bd, rig)).toEqual([]);
+    });
 
     it("(1) and (3): a row the box-only fit breaks is held on the rounded set by the bounded fit, and two bounded runs give one file", async () => {
       const fx = fixture(plainText);

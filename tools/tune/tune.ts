@@ -15,8 +15,8 @@
  *   `rows.jsonl` and `extract.json` (counts, manifest, base table).
  * - **fit**: K per source, then Newton on cross-entropy with material frozen and the free set
  *   sign-bounded (d2–d6), C-S or C-F by the inner rule, rounded half away from zero (d7). The rows
- *   of `tools/tune/bounds.ts` (F3's bound set, ruling (b)) enter every fit as linear inequalities,
- *   held exactly by the projected Newton's active set. Writes `fit.json`.
+ *   of `tools/tune/bounds.ts` (the bound set, d6's amendment) enter every fit from the first step as
+ *   linear inequalities, held exactly by the projected Newton's active set. Writes `fit.json`.
  * - **emit**: writes `src/evaluate-params.ts` in its present shape with the provenance header (d7).
  *
  * No random number generator; full batch, fixed order. The same inputs on the same Node major give
@@ -47,6 +47,7 @@ import { parseSan } from "../../src/san.ts";
 import { BOUNDS, type BoundRow } from "./bounds.ts";
 import { type Game, gamesOf, lexMovetext, streamZstGames } from "./pgn.ts";
 import {
+  evaluateAt,
   gateMiss,
   N_TERMS,
   PST_NAMES,
@@ -67,6 +68,7 @@ import {
   T_SHELQ,
   T_UN,
   type Table,
+  type Trace,
   trace,
 } from "./tracer.ts";
 
@@ -669,7 +671,14 @@ const WEG = WMG + 1; // 23
  */
 const QUEEN_TERMS = [T_SHELQ, T_HALFQ, T_OPENQ];
 const QMG = WEG + 1; // 24 … 26
-const NPRE = QMG + QUEEN_TERMS.length; // 27: every one of these is bounded ≥ 0 (d6's sign bounds)
+/**
+ * `ABC-271`'s king distance and free path (d6's dated line of 2026-11-04, `ADR-0070` d7): the eg half
+ * at R = 1 … 6 is free and ≥ 0. The mg halves and `T_UN` have no parameter, so they stay at the base
+ * value 0.
+ */
+const E4A_TERMS = [T_KE, T_KO, T_FP].flatMap((t) => [t, t + 1, t + 2, t + 3, t + 4, t + 5]);
+const E4A = QMG + QUEEN_TERMS.length; // 27 … 44
+const NPRE = E4A + E4A_TERMS.length; // 45: every one of these is bounded ≥ 0 (d6's sign bounds)
 
 const mirrorCell = (idx: number): number => {
   const r = idx >> 3;
@@ -714,6 +723,11 @@ function makeCfg(kind: "C-S" | "C-F", base: Table): Cfg {
     z0[QMG + i] = base.mg[t] as number;
     pm[t] = QMG + i;
     sm[t] = 1;
+  });
+  E4A_TERMS.forEach((t, i) => {
+    z0[E4A + i] = base.eg[t] as number;
+    pe[t] = E4A + i;
+    se[t] = 1;
   });
   for (let j = 0; j < NPRE; j++) bounded[j] = 1;
   let prior: Float64Array | null = null;
@@ -897,6 +911,44 @@ interface BoundData {
   at: Array<Array<{ i: number; coef: number }>>;
 }
 
+/** The term indexes of one `src/evaluate-params.ts` export a bound row reads without. */
+const WITHOUT_TERMS: Readonly<Record<string, number>> = {
+  KING_SHELTER_MISSING: T_SHEL,
+  KING_SHELTER_MISSING_QUEEN: T_SHELQ,
+  KING_FILE_HALF_OPEN: T_HALF,
+  KING_FILE_HALF_OPEN_QUEEN: T_HALFQ,
+};
+
+/** A trace with `without`'s families removed; `MOBILITY_WEIGHT` removes the mobility count. */
+function traceWithout(t: Trace, without: readonly string[]): Trace {
+  const drop = new Set<number>();
+  for (const name of without) {
+    if (name === "MOBILITY_WEIGHT") continue;
+    const term = WITHOUT_TERMS[name];
+    if (term === undefined) throw new Error(`bound row: unknown family ${name}`);
+    drop.add(term);
+  }
+  const f: number[] = [];
+  for (let i = 0; i < t.f.length; i += 2) {
+    if (!drop.has(t.f[i] as number)) f.push(t.f[i] as number, t.f[i + 1] as number);
+  }
+  return { f, m: without.includes("MOBILITY_WEIGHT") ? 0 : t.m, w: t.w };
+}
+
+/**
+ * A bound row read on a table, as its test reads it: Σ coef · `evaluate` from the side to move, by
+ * `evaluateAt`, the integer blend. On an integer table it is the test's own number.
+ */
+export function readBound(row: BoundRow, th: Table): number {
+  let sum = 0;
+  for (const { fen, coef, without } of row.terms) {
+    const p = parseFen(fen);
+    const white = evaluateAt(traceWithout(trace(p), without ?? []), th);
+    sum += coef * (p.blackToMove ? 0 - white : white);
+  }
+  return sum;
+}
+
 /** Traces every bound row's positions and gates each one against `evaluate` (d5). */
 export function boundData(rows: readonly BoundRow[], th: Table = SHIPPED): BoundData {
   const s: number[] = [];
@@ -907,12 +959,13 @@ export function boundData(rows: readonly BoundRow[], th: Table = SHIPPED): Bound
   const at: Array<Array<{ i: number; coef: number }>> = [];
   for (const row of rows) {
     const list: Array<{ i: number; coef: number }> = [];
-    for (const { fen, coef } of row.terms) {
+    for (const { fen, coef, without } of row.terms) {
       const p = parseFen(fen);
-      const t = trace(p);
+      const whole = trace(p);
       const ev = evaluate(p);
-      const g = gateMiss(t, p.blackToMove ? 0 - ev : ev, th);
+      const g = gateMiss(whole, p.blackToMove ? 0 - ev : ev, th);
       if (g.miss) throw new Error(`identity gate miss (d5) on bound position ${fen}: ${g.d}`);
+      const t = traceWithout(whole, without ?? []);
       list.push({ i: s.length, coef: p.blackToMove ? -coef : coef });
       s.push(0);
       w.push(t.w);
@@ -972,6 +1025,15 @@ function marginOf(cfg: Cfg, bd: BoundData, k: number): number {
   let l1 = 0;
   for (const v of sens.values()) l1 += Math.abs(v);
   return 0.5 * l1 + trunc + ((bd.rows[k] as BoundRow).strict ? 1 : 0);
+}
+
+/** Ruling (b)'s margin of every bound under each configuration, for the PREREG's list. */
+export function boundMargins(bd: BoundData, base: Table): Record<"C-S" | "C-F", number[]> {
+  const of = (kind: "C-S" | "C-F"): number[] => {
+    const cfg = makeCfg(kind, base);
+    return bd.rows.map((_, k) => marginOf(cfg, bd, k));
+  };
+  return { "C-S": of("C-S"), "C-F": of("C-F") };
 }
 
 /** The bounds under `cfg`: each row's right side after its margin. */
@@ -1505,7 +1567,7 @@ function fitMix(
           }
           return {
             file: row.file,
-            row: row.row,
+            row: row.part === undefined ? row.row : `${row.row} [${row.part}]`,
             rhs: row.rhs,
             strict: row.strict,
             margin: B.margin[k] as number,
