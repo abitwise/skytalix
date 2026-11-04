@@ -1,0 +1,28 @@
+mutant	base_n	base_tagged	tip_n	tip_tagged	cli_tip_killers
+M1	2	249,R1	2	249,R1,R1~	
+M2	1	R2	1	R2~	
+M2s	7	R2,R8,cliA7	7	R2~,R8~,cliA7	
+M3	3	QE268b,fut-lit	3	QE268b,fut-lit	
+M3s	2	QE268b,fut-lit	2	QE268b,fut-lit	
+M4	19	R4,R8,cliA7,uciA4	19	R4~,R8~,cliA7,uciA4	
+M4z	22	R4	22	R4~	
+M5	3	R5	3	R5~	
+M5c	10	R5	10	R5~	
+M6	23	A10,QE087d,R6	21	A10,QE087d	
+M6t	19	249,R5	17	249	
+M7	4	QE087a,R7,lvA6	3	QE087a,lvA6	
+M7n	3	R7,lvA6	2	lvA6	
+M8d	2	R2,R8	2	R2~,R8~	
+M9	1	R9	1	R9~	
+M9r	1	R9	1	R9~	
+F230	8	R2,R8,cliA7	8	R2~,R8~,cliA7	ABC-230 A1, A3 — the CLI's level seam hands the search the g | ABC-230 A1, A3 — the CLI's level seam hands the search the g | ABC-241 A4, A7 — the CLI: a third occurrence through an unca | ABC-241 A4, A7 — the CLI: a third occurrence through an unca | ABC-242 A4 — the CLI seam at level 1: a blunder that reads t
+QSEAMRAW	7	R2,R8,cliA7	7	R2~,R8~,cliA7	ABC-230 A1, A3 — the CLI's level seam hands the search the g | ABC-241 A4, A7 — the CLI: a third occurrence through an unca | ABC-241 A4, A7 — the CLI: a third occurrence through an unca | ABC-242 A4 — the CLI seam at level 1: a blunder that reads t
+QPRIOROFF	16	249,R2,R8,cliA7,uciA4	16	249,R2~,R8~,cliA7,uciA4	ABC-230 A1, A3 — the CLI's level seam hands the search the g | ABC-241 A4, A7 — the CLI: a third occurrence through an unca | ABC-241 A4, A7 — the CLI: a third occurrence through an unca
+QMATCH3	20	249,R2,R8,cliA7,uciA4	20	249,R2~,R8~,cliA7,uciA4	ABC-230 A1, A3 — the CLI's level seam hands the search the g | ABC-241 A4, A7 — the CLI: a third occurrence through an unca | ABC-241 A4, A7 — the CLI: a third occurrence through an unca
+QTRIM1	30	249,R2,R8,cliA7,uciA4	30	249,R2~,R8~,cliA7,uciA4	ABC-230 A1, A3 — the CLI's level seam hands the search the g | ABC-241 A4, A7 — the CLI: a third occurrence through an unca | ABC-241 A4, A7 — the CLI: a third occurrence through an unca | ABC-242 A4 — the CLI seam at level 1: a blunder that reads t
+REP0	18	R2,R8,uciA4	18	R2~,R8~,uciA4	
+S241M1	18	R2,R8,cliA7,uciA4	18	R2~,R8~,cliA7,uciA4	
+QMATCH1	8	249,R8,uciA4	8	249,R8~,uciA4	
+UNTRIM	11	R2,uciA4	11	R2~,uciA4	
+S241M6	4	R2,uciA4	4	R2~,uciA4	
+QUCINOKEYS	10	R2,uciA4	10	R2~,uciA4	

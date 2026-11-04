@@ -1,0 +1,9 @@
+   196.3	cli.test.ts::ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square A4: with repetitionKeyHistory injected the default level plays d8e8 at 
+   128.3	engine.capacity.test.ts::ABC-122 A8: src/engine.ts's KEY_ARRAY_CAPACITY guard, reached through chooseMove() ends every line at ply 128 with a leaf's score once the deepening p
+    89.7	engine.test.ts::ABC-170 A5 — the limits only shorten; the ceiling still holds on an infinite budget, maxDepth 1000 returns within the same consultation count
+    75.1	levels.test.ts::ABC-174 A3 — the default plays as the engine: chooseMove at 4 000 ms (ABC-228, ADR-0053 d10) move, depth and nodes are equal on 30 of 30 positions, fo
+    62.3	levels.test.ts::A7 — seeded, in deterministic mode a fixed seed gives identical blunder decisions across runs
+    79.7	search.futility.test.ts::the doors — searchWithoutFutility and chooseMoveWithoutFutility turn futility off, as every older door does the rule changes the work: search() at dep
+   132.8	search.null-move.test.ts::A2 — the instrumented search makes 0 null moves in check, and 0 below three non-pawn pieces search() to depth 4 and chooseMove deepened to 4: every nu
+   104.6	uci-session.test.ts::ABC-241 A4, A5 — UCI: the prior keys are repetition keys A5: the CLI level seam's injected list equals UCI's, key for key, and both play d8e8
+    79.5	zobrist.test.ts::ABC-075 property — the ep component tracks the ep FIELD, not availability (ADR-0020) holds at every node within 2 plies of every perft position

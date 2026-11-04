@@ -1,0 +1,18 @@
+total 2684 passed 2667 failed 17 pending 0 todo 0 files 71 failedSuites 13
+KILL	engine.test.ts::ABC-170 A3 — absent limits are today's engine, clock read for clock read returns identical move, score, depth, nodes and elapsedMs on perft root kiwipete
+KILL	engine.test.ts::ABC-170 A3 — absent limits are today's engine, clock read for clock read returns identical move, score, depth, nodes and elapsedMs on perft root position-3
+KILL	engine.test.ts::ABC-170 A3 — absent limits are today's engine, clock read for clock read returns identical move, score, depth, nodes and elapsedMs on perft root position-4
+KILL	engine.test.ts::ABC-170 A3 — absent limits are today's engine, clock read for clock read returns identical move, score, depth, nodes and elapsedMs on perft root position-5
+KILL	engine.test.ts::ABC-170 A3 — absent limits are today's engine, clock read for clock read returns identical move, score, depth, nodes and elapsedMs on perft root position-6
+KILL	engine.test.ts::ABC-230 A8 — a second occurrence before the root is not a draw (probe H2) KQ v K, Black to move: d8e8 would stand a second time; node-equal to base
+KILL	engine.test.ts::ABC-230 A8 — a second occurrence before the root is not a draw (probe H2) K v KQ, White to move: d1e1 would stand a second time; node-equal to base
+KILL	engine.test.ts::ABC-230 A9 and A5 — the clock and the 100-key cap bound what the search reads A9 (probe H4): untrimmed prior keys at root clock 0 are node-equal to base
+KILL	engine.test.ts::ABC-230 A9 and A5 — the clock and the 100-key cap bound what the search reads A9: on the A1 fixtures with the root clock set to 0, the same keys are node-equal to base
+KILL	engine.test.ts::ABC-230 A9 and A5 — the clock and the 100-key cap bound what the search reads A5: the search reads at most the last 100 prior keys, whatever it is handed
+KILL	engine.test.ts::ABC-230 A3 and A4 — no prior keys is base, node for node, and the doors take none A4 (slice): an empty list is node-equal to an absent one on kr-corner, startpos and position-6
+KILL	engine.test.ts::ABC-230 A3 and A4 — no prior keys is base, node for node, and the doors take none the three test-only doors ignore prior keys: node-equal with and without them
+KILL	engine.test.ts::ABC-249 — a pre-root repetition met four plies deep scores 0 (QE-248-c) Qe5+ at ply 4 stood twice before the root: Ke1 at 441 with the keys, Kg1 at 520 without
+KILL	quiescence.test.ts::ABC-229 — the doors: searchWithoutQuietPromotions and chooseMoveWithoutQuietPromotions chooseMoveWithoutTaper reads the INFO row the same way at depth 8; its door does not see the queen
+KILL	search.bundle.test.ts::ABC-283 (h) — the history table (ADR-0063 decisions 1-5) source: each negamax updates once, at its beta cutoff, behind the switch; the clear sits beside clearTable; quiescence never touches it
+KILL	search.bundle.test.ts::ABC-283 (a) — aspiration at the root of chooseMove (ADR-0066 decisions 1-7) iterations 1-4 are the door's, node for node, and store no root lower bound
+KILL	search.ordering.test.ts::G1 — chooseMove records a killer only on a beta cutoff position-3 at 3 injected ticks: depth 3 in exactly 342 nodes

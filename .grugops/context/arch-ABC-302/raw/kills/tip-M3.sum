@@ -1,0 +1,4 @@
+total 2684 passed 2681 failed 3 pending 0 todo 0 files 71 failedSuites 5
+KILL	search.futility.test.ts::both recursions test the node once, with the entry window, after the table probe and the null move, and skip exactly the moves futileMove names ./engine.ts: one futilityNode call gated on budget.futility, before the move loop, after the null move; futileMove skips and advances the index
+KILL	search.futility.test.ts::QE-268-b — a futile node returns the best score among the moves it searched, fail-soft: below its alpha, never alpha itself chooseMoveWithoutTaper deepened to 3: the futile node's entry is an upper bound of -554, Ke2's score, strictly below its alpha of 1010
+KILL	transposition.test.ts::A5 — the only non-losing line repeats, and it scores exactly 0 chooseMove(), 6 ticks: depth 5, the perpetual played and scored exactly 0

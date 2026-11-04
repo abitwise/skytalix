@@ -1,0 +1,20 @@
+total 2684 passed 2665 failed 19 pending 0 todo 0 files 71 failedSuites 24
+KILL	apply.test.ts::ABC-003 acceptance sets the en-passant target to e3 on the e2–e4 double push and clears it on undo
+KILL	apply.test.ts::QE edge probes sets the en-passant target behind a Black pawn's double push
+KILL	book-engine.test.ts::ABC-095 — the book in front of the engine's move choice A4 — the frame where the game leaves book has the same rows and no extra message line as the one before it
+KILL	book-engine.test.ts::ABC-095 — the book in front of the engine's move choice A5 (game half) — no book: 10 in-book positions all go to the search, one warning, no throw
+KILL	book.test.ts::ABC-094 A3 — variety after 1. e4 on seeds 1 to 10 ten seeds, one pick each, at least 3 distinct replies
+KILL	cli.test.ts::ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square A4 (slice): on a 500 ms virtual step, with repetitionKeyHistory injected the default level plays d8e8 at exactly 0; base does not
+KILL	cli.test.ts::ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square A7: the move the search scores 0 is the move after which gameStatusOf reports the claim
+KILL	gameend.test.ts::ABC-241 A1 — repetitionKey, the one helper F8: at every node of a 2-ply walk from three openings that carries an ep square, the key drops the file iff the generator offers no ep capture
+KILL	history.test.ts::ABC-241 A3 — the 1.e4 line: the claim at 5.Ng1 and the fivefold at 9.Ng1 the threefold claim after 5.Ng1 (base 7.Ng1) and the fivefold after 9.Ng1 (base 11.Ng1)
+KILL	history.test.ts::ABC-241 A3 — the 1.e4 line: the claim at 5.Ng1 and the fivefold at 9.Ng1 the repetition-key list differs from the hash list at exactly the 1.e4 key, and has its length
+KILL	history.test.ts::ABC-241 A3 — the 1.e4 line: the claim at 5.Ng1 and the fivefold at 9.Ng1 A6 (game side): a game with no uncapturable ep square has a repetition-key list equal to its hash list
+KILL	render-seam.test.ts::ABC-096 — the opening name in the message region A1 — the shipped book: key 75a8cd2e62c99edd shows Ruy Lopez, and the line to it shows each position's own family
+KILL	transposition.test.ts::A5 — the only non-losing line repeats, and it scores exactly 0 search(), depth 4: the perpetual scores exactly 0 and is played — in 7 295 nodes
+KILL	uci-session.test.ts::ABC-230 A2, A3, A5 — the session hands the search the game's prior keys A5: the window starts at the last pawn move; a castling-rights change does not cut it
+KILL	uci-session.test.ts::ABC-241 A4, A5 — UCI: the prior keys are repetition keys A4: the move that makes the third occurrence scores exactly 0; with a legal ep capture, no draw
+KILL	uci-session.test.ts::ABC-241 A4, A5 — UCI: the prior keys are repetition keys A5: the list handed is the repetition-key list, trimmed: the h7h5 key normalised, the rest raw
+KILL	zobrist.test.ts::ABC-075 property — the ep component tracks the ep FIELD, not availability (ADR-0020) holds at every node 1 ply from every perft position
+KILL	book.test.ts::the delivered artifact (data/opening-book/book.json) A2 — every book move is legal in its keyed position, over every entry
+KILL	book.test.ts::the delivered artifact (data/opening-book/book.json) A4 — after 1. e4 the book carries >= 3 distinct replies with non-zero weight

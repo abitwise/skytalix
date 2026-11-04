@@ -1,0 +1,11 @@
+total 2684 passed 2674 failed 10 pending 0 todo 0 files 71 failedSuites 4
+KILL	engine.test.ts::A4 — no fixed depth anywhere in the delivered engine carries no depth default and no depth constant
+KILL	engine.test.ts::A4 — no fixed depth anywhere in the delivered engine is driven by the clock and not by a ceiling — the deepening loop has no constant upper bound
+KILL	engine.test.ts::ABC-170 A3 — absent limits are today's engine, clock read for clock read returns identical move, score, depth, nodes and elapsedMs on perft root startpos
+KILL	engine.test.ts::ABC-170 A3 — absent limits are today's engine, clock read for clock read returns identical move, score, depth, nodes and elapsedMs on perft root kiwipete
+KILL	engine.test.ts::ABC-170 A3 — absent limits are today's engine, clock read for clock read returns identical move, score, depth, nodes and elapsedMs on perft root position-3
+KILL	engine.test.ts::ABC-170 A3 — absent limits are today's engine, clock read for clock read returns identical move, score, depth, nodes and elapsedMs on perft root position-4
+KILL	engine.test.ts::ABC-170 A3 — absent limits are today's engine, clock read for clock read returns identical move, score, depth, nodes and elapsedMs on perft root position-5
+KILL	engine.test.ts::ABC-170 A3 — absent limits are today's engine, clock read for clock read returns identical move, score, depth, nodes and elapsedMs on perft root position-6
+KILL	engine.test.ts::ABC-170 A5 — the limits only shorten; the ceiling still holds on an infinite budget and a 10 000 ms counting clock, maxDepth 1000 returns within the same consultation count
+KILL	engine.test.ts::ABC-170 A5 — the limits only shorten; the ceiling still holds at budgetMs 5, maxDepth 50 returns the same depth and move as no maxDepth

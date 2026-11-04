@@ -1,0 +1,9 @@
+total 2684 passed 2676 failed 8 pending 0 todo 0 files 71 failedSuites 8
+KILL	cli.test.ts::ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square A4 (slice): on a 500 ms virtual step, with repetitionKeyHistory injected the default level plays d8e8 at exactly 0; base does not
+KILL	cli.test.ts::ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square A4: with a legal ep capture available the same line is not a draw
+KILL	engine.test.ts::ABC-230 A8 — a second occurrence before the root is not a draw (probe H2) KQ v K, Black to move: d8e8 would stand a second time; node-equal to base
+KILL	engine.test.ts::ABC-230 A8 — a second occurrence before the root is not a draw (probe H2) K v KQ, White to move: d1e1 would stand a second time; node-equal to base
+KILL	engine.test.ts::ABC-230 A9 and A5 — the clock and the 100-key cap bound what the search reads A5: a prior key older than the root clock is never matched
+KILL	engine.test.ts::ABC-249 — a pre-root repetition met four plies deep scores 0 (QE-248-c) Qe5+ at ply 4 stood twice before the root: Ke1 at 441 with the keys, Kg1 at 520 without
+KILL	uci-session.test.ts::ABC-241 A4, A5 — UCI: the prior keys are repetition keys A4: the move that makes the third occurrence scores exactly 0; with a legal ep capture, no draw
+KILL	uci-session.test.ts::ABC-241 A4, A5 — UCI: the prior keys are repetition keys A6: a FEN carrying an uncapturable ep square: its own key counts, d1e1 scores exactly 0; base's list does not

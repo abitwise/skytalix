@@ -50,6 +50,12 @@ default lane under this ADR (`ABC-248`'s and `ABC-281`'s) run by their `-t` line
 a lane input, and once on `main` at each epic's close. No NFR level, cap, pin, W or lane command moves. See the last
 dated section of this file.
 
+**`ABC-302`'s DoR row 10, 2026-11-04 (`arch-ABC-302`): form S for six rows, W for three.** R1, R2, R4, R5, R8 and R9
+take S; R3, R6 and R7 take W. Default-lane kill parity was measured on 27 mutants under a sealed PREREG. Option (b)
+does not bind, and no owner word is owed. R8 goes to `src/uci-session.test.ts`'s `ENGINE_DEEP` block. R9 takes option
+(ii), a gate in its own file. No NFR level, cap, pin, W, environment variable or `AGENTS.md` lane line moves. See the
+dated section of 2026-11-04 (`arch-ABC-302`) at the end of this file.
+
 **proposed**, 2026-10-20, by Architect/Design (task `arch-lane-under-10s`). This ADR is the remedy that `R-174-1`
 option (a) asked for. The owner accepted (a) at `…bdff4d33`.
 
@@ -804,3 +810,70 @@ for the moved rows. As the residual's owner, Architect/Design reads it
 
 No NFR level, cap, pin, W, row or lane command moves. `AGENTS.md` is not edited (18 429 of 18 432 B). Where a pointer
 to this rule goes for QE briefs is the Orchestrator's call.
+
+### Dated 2026-11-04 (`arch-ABC-302`): `ABC-302`'s DoR row 10. Six rows take form S and three take W; parity is measured on 27 mutants, so option (b) does not bind
+
+**Architect/Design, records plus scratch mutant reads.**
+- The runs used a scratch copy of `main` `fed3f2b4` (`src/` tree `af2b77dc`) under the host lock.
+- The PREREG, with 28 mutants and the form rules, was sealed and committed before the first mutant read. It is
+  `.grugops/context/arch-ABC-302/` decision `…23abb6c5`. The readings are observation `…8c8cfeed` and decision
+  `…bcadd41d`, with `raw/`.
+- Each mutant ran on the whole default lane at base and on a tip sketch of the forms below. Base read
+  2 687 / 2 687 and the tip 2 684 / 2 684, both over 71 files. M1p is killed by no row, so it leaves the list under
+  PREREG rule (e).
+- Nothing was written to `src/` or `tools/`. No lane wall was timed, because A8 is QE's.
+
+| row | form | lane (`-t` line: 1 passed) | default-lane remnant (in-thread ms; the row's ms) | A6 mutant: base killers → tip killers |
+|---|---|---|---|---|
+| R1 null-move A2 (in check, three pieces) | **S** | `SEARCH_DEEP`, a nested describe | the in-check root and position-5, both recursions to depth 4, both asserts, made > 100 (22; 133) | M1, the in-check guard only above depth 3: R1 and `ABC-249` → the remnant and `ABC-249` |
+| R2 `uci` `ABC-241` A5 (seam list = UCI list) | **S** | `ENGINE_DEEP`, at the end of the file | the same asserts on a 500 ms virtual step, depth 8 (4; 105) | M2, the seam trims one key long: **R2 only** → the remnant only |
+| R3 futility "the rule changes the work" | **W** | `SEARCH_DEEP`, a nested describe | — | **None on the list.** R3 kills 0 of 27. Futility off in either recursion (M3, M3s) leaves it green, because its doors also turn off taper, SEE pruning, history, SEE ordering and aspiration. M3 and M3s are held by "both recursions test the node once …" and `QE-268-b`, at base and at the tip |
+| R4 `ABC-075` ep property | **S** | `ZOBRIST_DEEP`, after the file's `RUN_DEEP` | the same walk 1 ply deep, both halves non-vacuous (4; 80) | M4, ADR-0005's availability at the ep field (19 killers): the remnant is among them. M4z is likewise held |
+| R5 `ABC-170` A5 (∞ budget, maxDepth 1000) | **S** | `ENGINE_DEEP`, a sibling describe | the same equality on a 10 000 ms counting clock, depth 4, more than 2 readings (10; 90) | M5, no ceiling under maxDepth: R5 and two source rows → the remnant and the same two. M5c is likewise held |
+| R6 levels A7 (seeded determinism) | **W** | `ENGINE_DEEP`, " [deep]" | — | M6, a per-instance seed salt: held by A10, `QE-087-d (slice)` and 19 others |
+| R7 levels `ABC-174` A3 (the default is the engine) | **W** | `ENGINE_DEEP`, " [deep]" | — | M7n, the engine branch's nodes + 1: held by levels A6 ("at rate 0 returns `chooseMove`'s …") and `ABC-242` A6. M7, a floor rate of 0.05, is held by A6, `QE-087-a` and CLI `ABC-101` A8′ |
+| R8 `cli` `ABC-241` A4 (d8e8 at exactly 0) | **S** | `src/uci-session.test.ts`'s `ENGINE_DEEP`, its own describe | the same three reads on a 500 ms virtual step, with the direct call's depth ≥ 5 asserted (18; 196) | M8d, the prior keys dropped from iteration 5: **R2 and R8 only** → the R2 and R8 remnants |
+| R9 `engine.capacity` `ABC-122` A8 | **S**, option (ii) | `ENGINE_DEEP` in its own file, run only by its `-t` line | the same body on a clock spent after `2 * ITERATIONS` (260) root passes, depth 165 (43; 128) | M9, the guard one ply late: **R9 only** → the remnant only. M9r, the guard removed, is likewise held |
+
+- **Parity.** All 27 mutants that base's default lane kills are also killed by the tip's. Every S remnant is among
+  the killers of its row's A6 mutant. Each row's `-t` line prints 1 failed under that mutant, and 1 passed
+  unmutated. R3's line passes under M3, which is the blindness recorded above.
+- **`QE-244-a`'s carry is met.** F230, QSEAMRAW, QPRIOROFF, QMATCH3 and QTRIM1 are each killed at the tip by CLI
+  `ABC-241` A7 (still at step 100), by CLI `ABC-230` A1, and by R8's 500 ms remnant.
+- **Why S is the default, and W only for three rows.**
+  - W is taken where a staying behavioural row asserts the same property: A10 for R6, levels A6 for R7.
+  - It is also taken for R3, where the row kills nothing on the list, so a remnant could show no kill.
+  - R1, R4 and R5 also pass rule (b), but their other holders are incidental or literal. For R1 that is
+    `ABC-249`'s repetition row; for R5 it is two source-text rows. A remnant of 4–22 ms keeps a direct holder, so
+    they take S.
+- **R8's placement.** It goes in `src/uci-session.test.ts`, not `src/cli.real-engine.test.ts`.
+  - The file already imports everything the row's body needs at runtime.
+  - The spawn file would need about eight engine imports in its default-lane module graph.
+  - The file's `vi.mock("./engine.ts", { spy: true })` calls through. With the block switched on in the default lane
+    (scratch only), so that it runs after every describe that stubs and resets `chooseMove`, the row passes unmutated
+    and fails under REP0 and M8d. It reads the real search.
+- **R9: option (ii).** (i) cannot reach ply 128 in the real engine without the file's mocks. A `vi.doMock` re-import
+  in `src/engine.test.ts` would be new machinery. (iii) K would keep about 0.1 s that (ii) saves at measured parity.
+- **Is R9's gate a new lane line? No, under the ticket's rule:** no `AGENTS.md` line, no environment variable and no
+  file is added.
+  - The row is reachable only by its `-t` line below, which joins this ADR's run-rule table (rule item 3). That table
+    is where moved rows' lines live, and it runs at every QE hop on a lane input and at each epic close.
+  - `AGENTS.md`'s engine deep line does not reach it. That is recorded, not changed.
+- **A2 for R9 under (ii) is waived by name.** The file gains `const RUN_DEEP = process.env.ENGINE_DEEP === "1"`, an
+  existing variable under a new constant. The body is identical, indent aside.
+- **Forecast (an estimate; A8 reads it).**
+  - In-thread: the nine rows cost 948 ms and the remnants 100 ms, so about 848 ms (89 %) is saved.
+  - Wall: about **−0.50 s**, which is Security/NFR's −0.555 s probe scaled by 0.89. R8's 178 ms is on
+    `src/cli.test.ts`'s critical-path worker.
+  - `main` lands near 9.3 s on `…1184fec4`'s window. A8's 9.4 s is a target, not a bar (Orchestrator).
+- **`R-302-a` is closed** (owner: this role). R9 moves under (ii) at parity, and R8 reads the real search.
+
+**The `-t` lines** (rule item 3; each "1 passed"). R1 and R3–R7 are the ticket's A4 lines as cut. R2's describe is
+its cut line. Added here: R8 and R9.
+
+```
+ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/uci-session.test.ts -t "ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square \[deep, ENGINE_DEEP=1\]"
+ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/engine.capacity.test.ts -t "ABC-122 A8: src/engine\.ts's KEY_ARRAY_CAPACITY guard, reached through chooseMove\(\) \[deep, ENGINE_DEEP=1\]"
+```
+
+**Not decided here:** the board, the ticket page, and the build itself. The SE's build lines are in the decision note.

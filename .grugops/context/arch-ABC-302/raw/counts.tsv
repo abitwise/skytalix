@@ -1,0 +1,17 @@
+file	flag	base_defined	tip_defined
+search.null-move	default	38	38
+search.null-move	SEARCH_DEEP=1	45	46
+search.futility	default	37	36
+search.futility	SEARCH_DEEP=1	53	53
+zobrist	default	32	32
+zobrist	ZOBRIST_DEEP=1	33	34
+engine	default	69	69
+engine	ENGINE_DEEP=1	83	84
+levels	default	49	47
+levels	ENGINE_DEEP=1	58	58
+uci-session	default	230	230
+uci-session	ENGINE_DEEP=1	241	243
+engine.capacity	default	1	1
+engine.capacity	ENGINE_DEEP=1	1	2
+cli	default	109	109
+lane (npm test shape)	default	2687 (71 files)	2684 (71 files)

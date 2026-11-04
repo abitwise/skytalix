@@ -1,0 +1,2 @@
+total 2687 passed 2686 failed 1 pending 0 todo 0 files 71 failedSuites 2
+KILL	engine.capacity.test.ts::ABC-122 A8: src/engine.ts's KEY_ARRAY_CAPACITY guard, reached through chooseMove() ends every line at ply 128 with a leaf's score once the deepening passes it: no node or key past it
