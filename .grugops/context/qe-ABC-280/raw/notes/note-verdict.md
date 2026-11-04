@@ -1,0 +1,24 @@
+# qe-ABC-280 VERDICT: PASS_WITH_GAPS, no blocking gap. ABC-280 A1–A7 are MET on the frozen code tip `edb9fddd`, each re-read by QE's own runs. A5 and A6 come from a third, independent run through the tool's unchanged CLI. A8 is this note. UAT is waived by A2 (zero production lines)
+
+QE/E2E, task `qe-ABC-280`. The contract is the ticket's acceptance criteria A1–A8 (`plans/tickets/ABC-280-…md`). The Engineer's notes `…85c1bab5`, `…443095be` and `…bd5e26f5` were read, and each figure was re-taken, not inherited. Every run was under the host lock.
+
+| row | QE's reading | state |
+|---|---|---|
+| A1 contents | 7 non-record paths; `git diff 8c03b713 HEAD -- tools/tune` empty; `tsconfig.json` / `biome.json` +1 line each, the same as `625b75fe`'s; four `-x` provenance lines | MET |
+| A2 `src/` | `src` diff vs `main` empty, and the src tree ids are equal (`8adb0a18`); the reference form prints nothing on simulated merges with `main` `4e8ab57a` and `b2ae942b` | MET (on the delivered merge: owed, QE-280-c) |
+| A3 default lane | N = 2 647 (68 files) at `main`, then 2 650 / 2 650 at the tip (69 files, +3 from `tools/tune/tune.test.ts`); skips 0 = 0; `No findings.`; lint, typecheck, build exit 0; `dist/` 24 files, none from `tools/` | MET |
+| A4 tool lane | `TUNE_DEEP=1` … `vitest run tools/tune`: 17 passed, 0 skipped, exit 0 | MET |
+| A5 B-T1 | pin `sha256sum -c` OK; 0 misses over 1 488 071 keys, worst 0.9583 cp; no data-stage stop (1 000 000 rows; 0 / 289 145 drops; 4 min 59 s; 1.45 GiB peak) | MET |
+| A6 B-T3 | CLI `emit` in a scratch clone: sha256 `329452a3…5b14`, byte-identical to the Engineer's two; manifest `c9d777ef…5934`; ≠ `10581fb5…` by the header's tool-commit line only (reported) | MET |
+| A7 records | `records-path-check.js --base main` exit 0 at QE's last commit | MET |
+| A8 QE | this verdict | MET |
+
+- **The brief's extra checks:**
+  - **Comments are read unread, with no engine labels.** Lichess `{…}` comments are skipped without capture (probe P3: `[%eval]`, `[%clk]`, move text in comments, multi-line). Every label is the game result. This engine's own comments only drop book and mate positions.
+  - **A sha256 mismatch is refused.** P1a fed the CLI a file of the pin's exact byte length with the wrong content: exit 1, refused, nothing written. P1b, a 1-byte file: the same. These are `ABC-239` § Addendum's pin rows, read through the CLI path.
+- **The gate is not vacuous.** P2 put an untraced endgame-only +1 cp into a scratch clone's `evaluate`. Own-games `extract` then stopped on `identity gate miss (d5)`.
+- **The Engineer's A6 driver (`emit-to.ts`) is sound.** It calls the tool's `emit()` unchanged, with the commit `toolCommit()` would compute. QE's run through the CLI's own `emit` gives the same bytes.
+- **Tests added by QE:** none (ticket test note 1). The probes are scratch scripts kept in `raw/scripts/`, not suite rows, so A3's count is untouched.
+- **Gaps** (gaps note): 0 blocking, 0 high, 0 medium. Low: QE-280-a (an unterminated `{` truncates a game without a count), QE-280-b (`NFR-008` headroom: tip median 9.82 s, `main` 9.73 s, 2 of 8 tip reads at 10.04–10.05 s; not caused by this ticket), QE-280-c (the A2 read on the delivered merge is owed). Information: QE-280-d (a squash or rebase changes the emission's header hash), e (the refusal row's name says "exits"), f (A6 driver judged sound), g (the merge conflicts in `plans/traceability.md`, records only).
+- **UAT:** waived by A2's standing rule (zero production lines). This verdict is the QE hop that rule still requires. The Orchestrator records the waiver and this note in the Done note.
+- **Next:** the Orchestrator moves the board `In Review` → `Done` per the ruling. The merge is human: keep both sides' rows in `plans/traceability.md`, and prefer a merge commit or a fast-forward (QE-280-d). Then read A2's reference form on the delivered merge (QE-280-c). Security/NFR: QE-280-b, before the next default-lane addition.

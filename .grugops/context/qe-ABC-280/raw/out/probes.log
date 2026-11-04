@@ -1,0 +1,7 @@
+2026-11-04T02:37:15Z P1a same-length wrong-sha CLI rc=1 err=Lichess file refused: sha256 71729cc9abb7415a567ff07b4967cd7a97c49646c3943c3d530006cddc6ba02b (2169142067 bytes) is not the pin b319297e9270285635d615cbcd19a9b0d44747be3ff91d5b3eac41175b794320 (2169142067 bytes) outdir-exists=no
+2026-11-04T02:37:15Z P1b tiny-file CLI rc=1 err=Lichess file refused: sha256 2d711642b726b04401627ca9fbac32f5c8530fb1903cc4db02258717921a4881 (1 bytes) is not the pin b319297e9270285635d615cbcd19a9b0d44747be3ff91d5b3eac41175b794320 (2169142067 bytes) outdir-exists=no
+ src/evaluate.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+2026-11-04T02:37:16Z P2 mutated extract (own only) rc=1 msg=identity gate miss (d5): 3r2k1/pp3p1p/4n1p1/1P2B3/1PP5/7P/5PP1/R5K1 b - - 0 26 model differs by 1 wall 0:00.10
+2026-11-04T02:37:16Z clone restored clean
+2026-11-04T02:37:16Z done

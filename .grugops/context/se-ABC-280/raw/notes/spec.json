@@ -1,0 +1,8 @@
+{
+ "refs": ["se-ABC-280", "grugops/ABC-280", "ABC-280", "ABC-239", "EPIC-011", "ADR-0067", "B-T1", "B-T3", "NFR-008", "625b75fe", "5ce4f870", "def26997", "8c03b713", "ee4c4c84", "66798b22", "f831c04d", "edb9fddd", "26d06118", "dcc1bae0", "tools/tune/tune.ts", "tools/tune/tracer.ts", "tools/tune/pgn.ts", "tools/tune/bounds.ts", "tools/tune/tune.test.ts", "tsconfig.json", "biome.json"],
+ "notes": [
+  {"kind": "decision", "bodyFile": "note-design.md", "confidence": "high (cherry-picks clean; tools/tune diff vs 8c03b713 empty; comparison emission byte-equal to 26d06118's file)"},
+  {"kind": "observation", "bodyFile": "note-data.md", "confidence": "high (every figure read from the runs' logs, extract.json and reporter output named in raw/out)"},
+  {"kind": "observation", "bodyFile": "note-artifacts.md", "confidence": "high (git commands as run); observation because artifact-ref needs a section-14 gate_run this hop does not have"}
+ ]
+}

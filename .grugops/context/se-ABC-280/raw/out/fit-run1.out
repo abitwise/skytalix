@@ -1,0 +1,100 @@
+{
+ "rows": {
+  "ownTrain": 167014,
+  "ownVal": 45158,
+  "lichess": 1000000
+ },
+ "K_own": 0.6025377779813463,
+ "K_lichess": 0.8259717826759976,
+ "ownWeight": 0.5,
+ "config": "C-F",
+ "lambda": 1e-8,
+ "inner": {
+  "C-S": 0.5873085215382298,
+  "C-F λ=1e-8": 0.5864478833390793,
+  "C-F λ=1e-7": 0.5872777239720158,
+  "C-F λ=0.000001": 0.5882865663601369,
+  "base": 0.5898503102276121
+ },
+ "steps": 10,
+ "boundedSteps": 10,
+ "bounds": [
+  {
+   "file": "src/evaluate.king-mobility.test.ts",
+   "row": "at EQUAL material too, at phase 24: the g-pawn on g6 instead of g2 scores strictly lower (ABC-270 re-find)",
+   "rhs": 0,
+   "strict": true,
+   "margin": 3.5,
+   "enforced": -3.5,
+   "residual": 7.016609515630989e-14,
+   "mu": 9.58318486957291e-7,
+   "terms": [
+    "PST.pawn[g6].mg 1",
+    "PST.pawn[g2].mg -1",
+    "KING_SHELTER_MISSING.mg -1",
+    "KING_SHELTER_MISSING_QUEEN.mg -1",
+    "MOBILITY_WEIGHT.mg 1"
+   ],
+   "roundedModel": -3
+  }
+ ],
+ "val": {
+  "base": {
+   "ce": 0.590390153125103,
+   "mse": 0.0784145920720452
+  },
+  "fit": {
+   "ce": 0.5847675157404824,
+   "mse": 0.07635750812921026
+  }
+ },
+ "train": {
+  "base": {
+   "ce": 0.5879765368326274,
+   "mse": 0.0760739489763711
+  },
+  "fit": {
+   "ce": 0.582341293744038,
+   "mse": 0.07386167121154011
+  }
+ },
+ "ratio": 0.9904764038579261,
+ "lichessRows": {
+  "base": {
+   "ce": 0.5916107687873845,
+   "mse": 0.17154061795048786
+  },
+  "fit": {
+   "ce": 0.5855329431775238,
+   "mse": 0.1688923174723477
+  }
+ },
+ "ownOnly": {
+  "config": "C-S",
+  "lambda": 0,
+  "inner": {
+   "C-S": 0.5869339245022661,
+   "C-F λ=1e-8": 0.5873391734484635,
+   "C-F λ=1e-7": 0.5872462218634101,
+   "C-F λ=0.000001": 0.5885177442135205,
+   "base": 0.5898503102276121
+  },
+  "val": {
+   "ce": 0.5852964846837089,
+   "mse": 0.07693340055484003
+  },
+  "ratio": 0.9913723689082009
+ },
+ "log": [
+  "inner C-S steps 4",
+  "inner C-F λ=1e-8 steps 7",
+  "inner C-F λ=1e-7 steps 6",
+  "inner C-F λ=0.000001 steps 7",
+  "full C-F steps 10 bounded steps 10",
+  "inner C-S steps 5",
+  "inner C-F λ=1e-8 steps 4",
+  "inner C-F λ=1e-7 steps 6",
+  "inner C-F λ=0.000001 steps 7",
+  "full C-S steps 6 bounded steps 1"
+ ]
+}

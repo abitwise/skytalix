@@ -9,6 +9,7 @@
       "tools/**/*.js",
       "tools/opening-book/**/*.ts",
       "tools/rating/**/*.ts",
+      "tools/tune/**/*.ts",
       "tools/grugops/qe-hop-integrity.test.ts",
       "!tools/grugops/host-protection.js",
       "!.claude",

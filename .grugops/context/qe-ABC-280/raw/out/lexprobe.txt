@@ -1,0 +1,10 @@
+base true
+evalMate SAME
+moveTextInComment SAME
+multiLineComment SAME
+nagsAndMarks SAME
+braceAdjacent SAME
+semicolonComment DIFFERS {"sans":["e4","e5",";","a","rest-of-line","comment","Nf3","Nc6","Bb5","a6"],"comments":null}
+variation DIFFERS {"sans":["e4","e5","(1...","c5","Nf3)","Nf3","Nc6","Bb5","a6"],"comments":null}
+unterminated DIFFERS {"sans":["e4","e5","Nf3"],"comments":null}
+rc=0

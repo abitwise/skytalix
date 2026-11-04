@@ -1,0 +1,20 @@
+# run 1
+2026-11-04T02:16:09Z src/evaluate-params.ts sha256 e2db4f4b368c5e887faea4ac812a65ca5f4578c4c102dfe4e5e683804c2f3f55
+2026-11-04T02:16:09Z extract start
+2026-11-04T02:19:35Z extract exit 0 wall 3:26.03 maxRSS 1524788kB
+2026-11-04T02:19:35Z fit start
+2026-11-04T02:21:06Z fit exit 0 wall 1:31.77 maxRSS 446692kB
+2026-11-04T02:21:06Z emit start
+2026-11-04T02:21:07Z emit exit 0 wall 0:00.08 maxRSS 92468kB
+2026-11-04T02:21:07Z emitted sha256 329452a32af1097794a40289f012deaf3f26c03a74887a6b370540ecf2b35b14 (tool commit edb9fdddce394a5b56862018f8fa6635eea4aaaf)
+# run 2
+2026-11-04T02:21:07Z src/evaluate-params.ts sha256 e2db4f4b368c5e887faea4ac812a65ca5f4578c4c102dfe4e5e683804c2f3f55
+2026-11-04T02:21:07Z extract start
+2026-11-04T02:24:32Z extract exit 0 wall 3:25.79 maxRSS 1518156kB
+2026-11-04T02:24:32Z fit start
+2026-11-04T02:26:06Z fit exit 0 wall 1:33.19 maxRSS 445700kB
+2026-11-04T02:26:06Z emit start
+2026-11-04T02:26:06Z emit exit 0 wall 0:00.08 maxRSS 93028kB
+2026-11-04T02:26:06Z emitted sha256 329452a32af1097794a40289f012deaf3f26c03a74887a6b370540ecf2b35b14 (tool commit edb9fdddce394a5b56862018f8fa6635eea4aaaf)
+run1 vs run2: evaluate-params.ts, rows.jsonl, fit.json byte-identical (cmp)
+each stage: timeout 1800, node --max-old-space-size=3000, under the host lock; host 24 cpus, node v26.12.1

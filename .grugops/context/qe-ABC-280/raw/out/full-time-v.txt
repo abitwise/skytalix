@@ -1,0 +1,9 @@
+extract: 	Elapsed (wall clock) time (h:mm:ss or m:ss): 3:27.79
+extract: 	Maximum resident set size (kbytes): 1517312
+extract: 	Exit status: 0
+fit: 	Elapsed (wall clock) time (h:mm:ss or m:ss): 1:30.76
+fit: 	Maximum resident set size (kbytes): 444076
+fit: 	Exit status: 0
+emit: 	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.09
+emit: 	Maximum resident set size (kbytes): 93528
+emit: 	Exit status: 0
