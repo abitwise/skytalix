@@ -49,10 +49,15 @@ const G_PAWN_ON_G6_24 = "rnbq1rk1/3nbppp/6P1/8/8/8/3NBP1P/RNBQ1RK1 w - - 0 1";
 const F_CLOSED_F5_24 = "rnbq1rk1/3nbppp/8/5P2/8/8/3NB1PP/RNBQ1RK1 w - - 0 1";
 const F_HALF_OPEN_E5_24 = "rnbq1rk1/3nbppp/8/4P3/8/8/3NB1PP/RNBQ1RK1 w - - 0 1";
 
-/** The parameter table with one king-file term (both halves) at 0. */
+/**
+ * The parameter table with one king-file term (both halves) at 0, and its queen-on pair with it
+ * (`QE-270-e`, 2026-11-04, `ABC-239`): the phase-24 twins hold both queens, so the queen-on pair
+ * is part of the term once it is fitted above 0.
+ */
 const zeroed = (name: "KING_SHELTER_MISSING" | "KING_FILE_HALF_OPEN") => ({
   ...PARAMS,
   [name]: { mg: 0, eg: 0 },
+  [`${name}_QUEEN`]: { mg: 0, eg: 0 },
 });
 
 /**
