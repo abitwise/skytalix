@@ -176,7 +176,7 @@ describe("ABC-283 (h) — the history table (ADR-0063 decisions 1-5)", () => {
     expect(list.slice(0, 5).map((move) => historyScore(move))).toEqual([-4, 0, 0, 0, 4]);
   });
 
-  it("orders the quiet moves by their cells, below both killers, ties in generation order; off, generation order", () => {
+  it("orders the quiet moves by max(0, cell), below both killers, ties in generation order; off, generation order", () => {
     const position = parseFen(START);
     const moves = legalMoves(position);
     const plain = orderMoves(moves, [], null).map(label);
@@ -190,11 +190,18 @@ describe("ABC-283 (h) — the history table (ADR-0063 decisions 1-5)", () => {
     ]);
     const killer = list[10] as Move;
     const at = (indexes: number[]): string[] => indexes.map((i) => plain[i] as string);
-    expect(orderMoves(moves, [killer], null, null, true).map(label)).toEqual([
+    // History promotes, never demotes (ADR-0063 d4, dated 2026-11-04): the negative cells key 0.
+    const ordered = orderMoves(moves, [killer], null, null, true).map(label);
+    expect(ordered).toEqual([
       label(killer),
-      ...at([7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19]),
-      ...at([5, 6, 0, 1, 2, 3, 4]),
+      ...at([7]),
+      ...at([0, 1, 2, 3, 4, 5, 6, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19]),
     ]);
+    // A negative cell sorts level with a zero cell (generation order) and below every positive cell.
+    const rank = (i: number): number => ordered.indexOf(plain[i] as string);
+    expect([historyScore(list[6] as Move), historyScore(list[8] as Move)]).toEqual([-9, 0]);
+    expect(rank(6)).toBe(rank(8) - 1);
+    expect(rank(7)).toBeLessThan(Math.min(rank(0), rank(5), rank(6)));
     expect(orderMoves(moves, [killer], null).map(label)).toEqual([
       label(killer),
       ...plain.filter((_, i) => i !== 10),
@@ -300,24 +307,27 @@ describe("ABC-283 (a) — aspiration at the root of chooseMove (ADR-0066 decisio
     }
   });
 
-  // Rows of the 190 and the 287 where iteration 5 fails high at the root (a lower bound stored at
-  // ply 0, depth 5), found by a scan of both corpora at maxDepth 6 (se-ABC-283 notes). A non-mate
-  // jump (position-5 after Qd6) and a mate first found at iteration 5 (`ADR-0066` decision 9).
-  for (const [what, fen, move, score] of [
+  // Rows of the 190 and the 287 where an iteration from 5 on fails high at the root (a lower bound
+  // stored at ply 0 at that depth), found by a scan of both corpora at maxDepth 6 (se-ABC-283
+  // notes). A non-mate jump (position-5 after Qd6) and a mate first found at iteration 5 or later
+  // (`ADR-0066` decision 9): with history promoting only (ADR-0063 d4, dated 2026-11-04) the
+  // KRK row's mate is first found at iteration 6, as the door finds it (se-ABC-283-k3 notes).
+  for (const [what, fen, move, score, failHigh] of [
     [
       "a non-mate fail high",
       "rnbq1k1r/pp1Pbppp/2pQ4/8/2B5/8/PPP1NnPP/RNB1K2R b KQ - 2 8",
       "e7d6",
       472,
+      5,
     ],
-    ["a mate found at iteration 5", "8/k7/8/2K5/8/8/8/1R6 w - - 2 2", "c5c6", MATE_SCORE - 5],
+    ["a mate found at iteration 6", "8/k7/8/2K5/8/8/8/1R6 w - - 2 2", "c5c6", MATE_SCORE - 5, 6],
   ] as const) {
-    it(`${what}: iteration 5 fails high and is re-searched to the door's exact move and score; the door stores no root lower bound`, () => {
+    it(`${what}: iteration ${failHigh} fails high and is re-searched to the door's exact move and score; the door stores no root lower bound`, () => {
       rootStores.log = [];
       const head = deepenTo(chooseMove, fen, 6);
       expect(
         rootStores.log.filter((store) => store.bound === BOUND_LOWER).map((s) => s.depth),
-      ).toEqual([5]);
+      ).toEqual([failHigh]);
       rootStores.log = [];
       const door = deepenTo(chooseMoveWithoutAspiration, fen, 6);
       // The door never stores a lower bound at the root: every iteration on the full window.
@@ -368,9 +378,10 @@ if (RUN_DEEP) {
   });
 
   describe("ABC-283 — the bundle's own counts at depth 8 (the instrument: information, not a bar) [deep, SEARCH_DEEP=1]", () => {
+    // With history promoting only (ADR-0063 d4, dated 2026-11-04): arch-ABC-283-mate R3's figures.
     const READ = {
-      kiwipete: { fen: KIWIPETE, search: 514_521, choose: 703_710 },
-      "position-6": { fen: POSITION_6, search: 222_273, choose: 97_096 },
+      kiwipete: { fen: KIWIPETE, search: 523_847, choose: 707_548 },
+      "position-6": { fen: POSITION_6, search: 234_214, choose: 101_425 },
     } as const;
     for (const [name, { fen, search: searchNodes, choose }] of Object.entries(READ)) {
       it(`${name}: search() and chooseMove at depth 8 read ${searchNodes} / ${choose}, root move and score the door's [deep, SEARCH_DEEP=1]`, () => {
