@@ -17,3 +17,6 @@ Read plans/tickets/ABC-239*.md (DoR 10/10; A1–A6, test notes, "What happens on
 src/evaluate-params.ts, tools/tune/**, their tests, package scripts if needed, your records. No other src edits (ask). No push, force, amend, rebase, merge into main. Leave nothing running.
 ## Publish
 Sealed notes (task se-ABC-239, contextRoot = worktree's .grugops/context, `at` from `date -u`); queue moves inside your worktree; commit; ## Result + trace row; brief + claim to done/. Run `node tools/grugops/records-path-check.js --base main` before your last commit; it must exit 0.
+
+## Result
+by: orchestrator (orch-2026-10-30a), at: 2026-11-04T14:45:41Z. Closed by the Orchestrator as queue housekeeping: ABC-239 closed NOT MET (first pull; …4c76bf7a), status dropped. This brief was never moved off pending; the work it queued is recorded in its task notes and on the ABC-239 page.

@@ -1,8 +1,8 @@
 ---
 id: ABC-300
 title: "The harness plays a clock: `tools/rating/rating.ts d` accepts `--tc 40/8`, and both skytalix sides get tc=40/8, timemargin=0 and option.TimeMode=uci-clock-mode in place of st= and timemargin=, with a control: line in machine.txt. Any other --tc value, and --tc with --budget-ms, are refused. Every existing r, d and rpair dry-run print stays byte-equal (tools only; ABC-282 A6's harness, ADR-0071 D10)"
-status: ready
-column: Ready
+status: done
+column: Done
 size: S
 priority: P2
 epic: EPIC-011
