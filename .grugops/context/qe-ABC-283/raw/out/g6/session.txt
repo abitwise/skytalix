@@ -1,0 +1,2 @@
+start 2026-11-04T16:05:39Z  16:05:39 up 5 days,  8:23,  1 user,  load average: 3.60, 2.81, 2.25
+g6 exit=0 end 2026-11-04T16:12:32Z  16:12:32 up 5 days,  8:30,  1 user,  load average: 1.14, 1.27, 1.68

@@ -1,0 +1,10 @@
+qe-ABC-283 (computed from r.out before deletion; INFO)
+go -> bestmove latency (cutechess clock, ms; includes book moves):
+skytalix  moves 479 median 501 max 504 >750ms 0
+stockfish moves 478 median 500.0 max 501 >750ms 0
+opening-pair scores for skytalix (0, 0.5, 1, 1.5, 2): 1, 0, 2, 0, 2  sum 6.0
+terminations: mates 10
+time forfeits: 0 []
+faults: 0 []
+candidate skytalix: W/D/L 6/0/4 score 6.0 / 10
+by colour: as white 3.0/5, as black 3.0/5

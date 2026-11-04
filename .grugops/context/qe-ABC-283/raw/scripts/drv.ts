@@ -6,7 +6,8 @@ const S = await import(`${root}/src/search.ts`);
 const E = await import(`${root}/src/engine.ts`);
 const { parseFen, toFen } = await import(`${root}/src/fen.ts`);
 const { squareName } = await import(`${root}/src/position.ts`);
-const mv = (m: any) => (m ? squareName(m.from) + squareName(m.to) + (m.promotion ?? "") : "-");
+// v2 (qe-ABC-283): from+to, as src/puzzle-suite.test.ts labels a move; v1 appended the numeric promotion field (0 = none), so every UCI compare read false.
+const mv = (m: any) => (m ? squareName(m.from) + squareName(m.to) : "-");
 const ch = (fn: any, fen: string, d: number) => fn(parseFen(fen), { budgetMs: 1e9, now: () => 0, maxDepth: d });
 const out = (o: any) => console.log(JSON.stringify(o));
 const KIWI = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1";

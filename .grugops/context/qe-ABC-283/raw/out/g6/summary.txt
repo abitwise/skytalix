@@ -1,0 +1,4 @@
+kiwipete base n 5 depths [9, 9, 9, 9, 9] median 9 nodes med 2810136 ms max 4001.2 moves ['Bxa6'] load1 max 2
+kiwipete head n 5 depths [9, 9, 9, 9, 9] median 9 nodes med 2743576 ms max 4000.8 moves ['Bxa6'] load1 max 1.57
+position-6 base n 5 depths [12, 12, 12, 12, 12] median 12 nodes med 2625609 ms max 4001.3 moves ['Nd5'] load1 max 1.47
+position-6 head n 5 depths [12, 12, 12, 12, 12] median 12 nodes med 2500681 ms max 4001.7 moves ['Nd5'] load1 max 1.21

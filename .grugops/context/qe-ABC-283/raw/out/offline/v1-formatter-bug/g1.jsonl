@@ -1,0 +1,59 @@
+{"puzzle":"K+R: king steps up, rook mates","chosen":"f6f70","ok":false,"depth":6,"nodes":19481}
+{"puzzle":"smothered: Qg8+ Rxg8 Nf7#","chosen":"d5g80","ok":false,"depth":5,"nodes":20537}
+{"puzzle":"back rank: Re8+ Rxe8 Rxe8#","chosen":"e2e80","ok":false,"depth":6,"nodes":19485}
+{"puzzle":"two-rook ladder","chosen":"b1b70","ok":false,"depth":5,"nodes":20518}
+{"puzzle":"K+Q against the cornered king","chosen":"h1h70","ok":false,"depth":6,"nodes":19494}
+{"puzzle":"Anastasia: Qxh7+ Kxh7 Rh3#","chosen":"e7g60","ok":false,"depth":5,"nodes":20532}
+{"puzzle":"mirror: back rank, Re1+ Rxe1 Rxe1#","chosen":"e7e10","ok":false,"depth":6,"nodes":19486}
+{"puzzle":"mirror: smothered, Qg1+ Rxg1 Nf2#","chosen":"d4g10","ok":false,"depth":6,"nodes":19500}
+{"puzzle":"mirror: K+R, king steps up","chosen":"f3g30","ok":false,"depth":7,"nodes":19458}
+{"puzzle":"mirror: two-rook ladder","chosen":"a7a20","ok":false,"depth":5,"nodes":20519}
+{"puzzle":"knight fork: Ne7+ wins the queen","chosen":"d5e70","ok":false,"depth":9,"nodes":16418}
+{"puzzle":"pawn fork: e5 hits knight and rook","chosen":"e4e50","ok":false,"depth":8,"nodes":17430}
+{"puzzle":"pin: Re1 pins the queen to the king","chosen":"a1e10","ok":false,"depth":9,"nodes":16401}
+{"puzzle":"skewer: Ra6+ and Rxh6","chosen":"a1a60","ok":false,"depth":8,"nodes":17453}
+{"puzzle":"discovered check: the bishop moves, Rxd8","chosen":"d4c50","ok":false,"depth":7,"nodes":18566}
+{"puzzle":"queen fork: Qd5+ and Qxa8","chosen":"d1d50","ok":false,"depth":7,"nodes":18472}
+{"puzzle":"Q takes a pawn a rook defends","chosen":"a1a80","ok":true,"depth":6,"nodes":19491}
+{"puzzle":"R takes a pawn the king defends","chosen":"e1e20","ok":true,"depth":7,"nodes":18450}
+{"puzzle":"B takes a pawn a pawn defends","chosen":"e1d20","ok":true,"depth":8,"nodes":17421}
+{"puzzle":"N takes a pawn a pawn defends","chosen":"e1e20","ok":true,"depth":8,"nodes":17421}
+{"puzzle":"Q takes a knight a rook defends","chosen":"a1a60","ok":true,"depth":6,"nodes":19476}
+{"puzzle":"R takes a knight a pawn defends","chosen":"f1e20","ok":true,"depth":8,"nodes":17424}
+{"puzzle":"Q takes a rook the king defends","chosen":"a1e50","ok":true,"depth":6,"nodes":19488}
+{"puzzle":"Q takes a bishop a knight defends","chosen":"a1b10","ok":true,"depth":6,"nodes":19489}
+{"puzzle":"R takes a bishop a pawn defends","chosen":"a1b10","ok":true,"depth":7,"nodes":18450}
+{"puzzle":"R takes a pawn a bishop defends","chosen":"e1d20","ok":true,"depth":7,"nodes":18451}
+{"puzzle":"Q takes a pawn a knight defends","chosen":"a1d10","ok":true,"depth":6,"nodes":19513}
+{"puzzle":"B takes a pawn a rook defends","chosen":"e1e20","ok":true,"depth":8,"nodes":18172}
+{"puzzle":"mirror: q takes a pawn a rook defends","chosen":"a8a50","ok":true,"depth":6,"nodes":19492}
+{"puzzle":"mirror: r takes a pawn the king defends","chosen":"e8e70","ok":true,"depth":7,"nodes":18451}
+{"puzzle":"mirror: b takes a pawn a pawn defends","chosen":"b8a70","ok":true,"depth":8,"nodes":17421}
+{"puzzle":"mirror: n takes a pawn a pawn defends","chosen":"e8e70","ok":true,"depth":9,"nodes":16400}
+{"puzzle":"mirror: q takes a knight a rook defends","chosen":"a8a30","ok":true,"depth":6,"nodes":19477}
+{"puzzle":"mirror: r takes a knight a pawn defends","chosen":"f8e70","ok":true,"depth":8,"nodes":17437}
+{"puzzle":"mirror: q takes a rook the king defends","chosen":"a8e40","ok":true,"depth":6,"nodes":19488}
+{"puzzle":"mirror: q takes a bishop a knight defends","chosen":"a8b80","ok":true,"depth":6,"nodes":19492}
+{"puzzle":"mirror: r takes a bishop a pawn defends","chosen":"a8b80","ok":true,"depth":7,"nodes":18451}
+{"puzzle":"mirror: r takes a pawn a bishop defends","chosen":"e8d70","ok":true,"depth":7,"nodes":18451}
+{"puzzle":"mirror: q takes a pawn a knight defends","chosen":"a8d80","ok":true,"depth":6,"nodes":19504}
+{"puzzle":"mirror: b takes a pawn a rook defends","chosen":"e8e70","ok":true,"depth":7,"nodes":18454}
+{"puzzle":"mate in 3, seed 1: black Q+R against N","chosen":"a1f60","ok":false,"depth":5,"nodes":20530}
+{"puzzle":"mate in 3, seed 69: black 2R+B against 2P","chosen":"f1b10","ok":false,"depth":5,"nodes":20524}
+{"puzzle":"mate in 3, seed 1632: white Q+R+N against N+2P","chosen":"e7e20","ok":false,"depth":5,"nodes":20534}
+{"puzzle":"mate in 3, seed 1163: black 2R+B against N","chosen":"c6g60","ok":false,"depth":5,"nodes":20534}
+{"puzzle":"mate in 3, seed 24: black Q+N against P","chosen":"f6e60","ok":false,"depth":5,"nodes":20515}
+{"puzzle":"mate in 3, seed 234: white Q+R against P","chosen":"d8h80","ok":false,"depth":5,"nodes":20573}
+{"puzzle":"mate in 3, seed 288: white Q+B against a bare king","chosen":"a2h20","ok":false,"depth":5,"nodes":20521}
+{"puzzle":"mate in 3, seed 580: white Q+B against a bare king","chosen":"f1f40","ok":false,"depth":5,"nodes":20539}
+{"puzzle":"win material, seed 7: black Q+P against R+N","chosen":"d5g80","ok":false,"depth":6,"nodes":19530}
+{"puzzle":"win material, seed 111: black Q+R+B+P against 2R+B+P","chosen":"a2a50","ok":false,"depth":7,"nodes":18517}
+{"puzzle":"win material, seed 1700: black R+B+N+2P against 2B+2N+P","chosen":"g6g70","ok":false,"depth":6,"nodes":19723}
+{"puzzle":"win material, seed 1706: white Q+R+2P against Q+R+2P","chosen":"c2e40","ok":false,"depth":6,"nodes":19529}
+{"puzzle":"win material, seed 1811: white 2R+N+2P against 2B+N+2P","chosen":"c4d60","ok":false,"depth":5,"nodes":20660}
+{"puzzle":"win material, seed 5180: black R+N+P against Q+B+N","chosen":"h6h70","ok":false,"depth":6,"nodes":19481}
+{"puzzle":"win material, seed 5464: black B+P against B+N","chosen":"e1d20","ok":false,"depth":7,"nodes":18442}
+{"puzzle":"win material, seed 5147: white Q+B against B+N","chosen":"h6g70","ok":false,"depth":6,"nodes":19506}
+{"puzzle":"win material, seed 5527: black R+2B+2N+P against R+2N+3P","chosen":"e7c60","ok":false,"depth":6,"nodes":19603}
+{"puzzle":"win material, seed 279: black Q+3P against R+2N+P","chosen":"a1g70","ok":false,"depth":7,"nodes":18464}
+{"g1":24,"total":58,"missed":["K+R: king steps up, rook mates","smothered: Qg8+ Rxg8 Nf7#","back rank: Re8+ Rxe8 Rxe8#","two-rook ladder","K+Q against the cornered king","Anastasia: Qxh7+ Kxh7 Rh3#","mirror: back rank, Re1+ Rxe1 Rxe1#","mirror: smothered, Qg1+ Rxg1 Nf2#","mirror: K+R, king steps up","mirror: two-rook ladder","knight fork: Ne7+ wins the queen","pawn fork: e5 hits knight and rook","pin: Re1 pins the queen to the king","skewer: Ra6+ and Rxh6","discovered check: the bishop moves, Rxd8","queen fork: Qd5+ and Qxa8","mate in 3, seed 1: black Q+R against N","mate in 3, seed 69: black 2R+B against 2P","mate in 3, seed 1632: white Q+R+N against N+2P","mate in 3, seed 1163: black 2R+B against N","mate in 3, seed 24: black Q+N against P","mate in 3, seed 234: white Q+R against P","mate in 3, seed 288: white Q+B against a bare king","mate in 3, seed 580: white Q+B against a bare king","win material, seed 7: black Q+P against R+N","win material, seed 111: black Q+R+B+P against 2R+B+P","win material, seed 1700: black R+B+N+2P against 2B+2N+P","win material, seed 1706: white Q+R+2P against Q+R+2P","win material, seed 1811: white 2R+N+2P against 2B+N+2P","win material, seed 5180: black R+N+P against Q+B+N","win material, seed 5464: black B+P against B+N","win material, seed 5147: white Q+B against B+N","win material, seed 5527: black R+2B+2N+P against R+2N+3P","win material, seed 279: black Q+3P against R+2N+P"],"newlyMissedVsBaselineFile":["K+R: king steps up, rook mates","smothered: Qg8+ Rxg8 Nf7#","back rank: Re8+ Rxe8 Rxe8#","two-rook ladder","K+Q against the cornered king","Anastasia: Qxh7+ Kxh7 Rh3#","mirror: back rank, Re1+ Rxe1 Rxe1#","mirror: smothered, Qg1+ Rxg1 Nf2#","mirror: K+R, king steps up","mirror: two-rook ladder","knight fork: Ne7+ wins the queen","pawn fork: e5 hits knight and rook","pin: Re1 pins the queen to the king","skewer: Ra6+ and Rxh6","discovered check: the bishop moves, Rxd8","queen fork: Qd5+ and Qxa8","mate in 3, seed 1: black Q+R against N","mate in 3, seed 69: black 2R+B against 2P","mate in 3, seed 1632: white Q+R+N against N+2P","mate in 3, seed 1163: black 2R+B against N","win material, seed 7: black Q+P against R+N","win material, seed 111: black Q+R+B+P against 2R+B+P","win material, seed 1700: black R+B+N+2P against 2B+2N+P","win material, seed 1706: white Q+R+2P against Q+R+2P","win material, seed 1811: white 2R+N+2P against 2B+N+2P","win material, seed 5180: black R+N+P against Q+B+N","win material, seed 5464: black B+P against B+N","win material, seed 5147: white Q+B against B+N","win material, seed 5527: black R+2B+2N+P against R+2N+3P","win material, seed 279: black Q+3P against R+2N+P"]}

@@ -1,0 +1,8 @@
+{"zug":"zugzwang.001","d":9,"played":"e1f10","want":"e1f1","depth":9,"ok":false,"score":-392,"nodes":62290}
+{"zug":"zugzwang.004","d":11,"played":"h3h40","want":"h3h4","depth":11,"ok":false,"score":394,"nodes":379558}
+{"zug":"zugzwang.005","d":12,"played":"f4d50","want":"f4d5","depth":12,"ok":false,"score":81,"nodes":802768}
+{"zug":"kpk-b6c6","d":8,"played":"b6c60","want":"b6c6","depth":8,"ok":false,"score":917,"nodes":2841}
+{"zug":"kpk-c6d6","d":8,"played":"c6d60","want":"c6d6","depth":8,"ok":false,"score":926,"nodes":2867}
+{"zug":"kpk-d6e6","d":8,"played":"d6e60","want":"d6e6","depth":8,"ok":false,"score":926,"nodes":2981}
+{"zug":"kpk-e6f6","d":8,"played":"e6f60","want":"e6f6","depth":8,"ok":false,"score":917,"nodes":2902}
+{"zugzwang":0,"of":7}
