@@ -45,6 +45,11 @@ addendum line above says tranche 2 is OPEN, this line wins. See the dated line o
 bind, because default-lane kill parity holds, measured on seven mutants. No owner word is owed, and no NFR level, cap,
 pin, W or lane command moves. See the dated section of 2026-11-04 at the end of this file.
 
+**`R-281-a`'s run-frequency rule, 2026-11-04 (`arch-ADR-0070-accept`, records only).** The rows moved out of the
+default lane under this ADR (`ABC-248`'s and `ABC-281`'s) run by their `-t` lines at every QE hop whose ticket touches
+a lane input, and once on `main` at each epic's close. No NFR level, cap, pin, W or lane command moves. See the last
+dated section of this file.
+
 **proposed**, 2026-10-20, by Architect/Design (task `arch-lane-under-10s`). This ADR is the remedy that `R-174-1`
 option (a) asked for. The owner accepted (a) at `…bdff4d33`.
 
@@ -749,3 +754,53 @@ whole default lane at base and on a tip sketch of the forms below. No lane wall 
   - four more seeds, 20 more moves on seed 1, and "the seed is used" (A10 holds it).
 - **Not decided here:** the board, the ticket page and the run frequency of the `ENGINE_DEEP` lanes (still
   `UNKNOWN - verify`; under S no unique kill depends on it).
+
+### Dated 2026-11-04 (`arch-ADR-0070-accept`): `R-281-a`'s run-frequency rule. The moved rows run at every QE hop whose ticket touches a lane input, and once on `main` at each epic's close
+
+**Architect/Design, records only.** Nothing was run. `R-281-a` was carried LOW by QE (`qe-ABC-281` `…960d38ff`) and
+Security/NFR (`secnfr-ABC-281-a9` `…2e3b747f`), with this role as owner of the residual and of the rule. Their finding:
+how often the deep lanes run is `UNKNOWN - verify`, and no written rule says.
+
+**Scope: the rows moved out of the default lane under this ADR.** Today they are `ABC-248`'s (`ABC-167` A5) and
+`ABC-281`'s three. Each `-t` line below is the one their QE ran, and the count is the one it read:
+
+| moved rows | command (one line; vitest reads `-t` as a regular expression, so both brackets are escaped, `QE-248-a`) | passed |
+|---|---|---:|
+| `ABC-248`: `ABC-167` A5 | `ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/uci-session.test.ts -t "ABC-167 A5 — the D4 time rule, read from the info line's time \[deep, ENGINE_DEEP=1\]"` | 4 (`qe-ABC-248`) |
+| `ABC-281` R1: `QE-208-a` | `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/search.null-move.test.ts -t "QE-208-a — an abort inside a null move's subtree still hands the root back byte-identical \[deep, SEARCH_DEEP=1\]"` | 1 (`qe-ABC-281`) |
+| `ABC-281` R2: `ABC-230` A3 / A4 | `ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/engine.test.ts -t "ABC-230 A3 and A4 — no prior keys is base, node for node, and the doors take none \[deep, ENGINE_DEEP=1\]"` | 1 (`qe-ABC-281`) |
+| `ABC-281` R3: levels A9 | `ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/levels.test.ts -t "A9 — different seeds actually differ \[deep\]"` | 1 (`qe-ABC-281`) |
+
+**The rule.**
+1. **Per ticket.** The trigger is a delivered diff that touches a lane input, or one of the four test files above.
+   The lane inputs are any non-test `src/` file, `package.json`, `package-lock.json`, `vitest.config.ts` and
+   `tsconfig.json` (`R-N8H-1`'s list, `…2e3b747f`). Then the ticket's QE hop runs **all four lines** on the branch
+   tip, under the host lock, and records each passed count in its verdict.
+   - The check is the count, not the exit code: exit 0 with fewer passed, or with 0 tests, fails.
+   - A red or short row is a blocking gap, as a red default-lane row is.
+   - A ticket with no lane input in its diff (records, tools outside `src/`, other test files only) runs none.
+2. **Per epic.** When an epic closes, before the Orchestrator moves it to Done, QE runs the four lines once on
+   `main`'s tip and records the counts in the close. This catches a merge that skipped step 1.
+3. **A row moved later** under this ADR joins the table with its ticket. Its cut (BA/PM) names its `-t` line and
+   count, and its QE confirms them. No new dated line is needed here.
+
+**Why all four on any lane input, and not a map from source files to rows.**
+- The guards cross modules: the null move's abort in `src/search.ts`; prior keys through `src/engine.ts`,
+  `src/search.ts` and the table; the levels' draw order; the session's time rule in `src/uci-session.ts` and the
+  engine's budget. A per-file map would miss a cross-module change, and it would rot as files move.
+- They are cheap. The `ABC-281` rows cost about 0.74 s in-thread together. A5's four rows and the cost of starting
+  vitest for each file are `UNKNOWN - verify`, so the first QE hop under this rule records the wall of the four.
+
+**What this rule does not set.** The frequency of the files' full deep lanes (null-move 27 s, engine 180 s, levels
+577 s at `qe-ABC-281`; `uci-session` minutes). They hold rows that were born deep, not moved, and `R-281-a` is about
+the moved breadth. The `-t` lines run that breadth in full: every reading, position, seed and move the rows hold.
+
+**Who does what.** The Orchestrator puts the four lines in every QE brief the trigger fires on, and queues the
+epic-close run. QE runs them and records the counts. Architect/Design owns the rule.
+
+**`R-281-a`.** The rule answers its open part, the run frequency, which the section above left `UNKNOWN - verify`
+for the moved rows. As the residual's owner, Architect/Design reads it
+**closed from the first QE hop that applies this rule**. Security/NFR records that state at its next reading.
+
+No NFR level, cap, pin, W, row or lane command moves. `AGENTS.md` is not edited (18 429 of 18 432 B). Where a pointer
+to this rule goes for QE briefs is the Orchestrator's call.

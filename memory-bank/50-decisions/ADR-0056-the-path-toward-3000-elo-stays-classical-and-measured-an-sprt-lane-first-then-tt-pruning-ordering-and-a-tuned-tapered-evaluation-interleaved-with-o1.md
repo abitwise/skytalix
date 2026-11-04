@@ -657,6 +657,18 @@ copies of `main`'s `src/` `8adb0a18`): rows E2 and E4.*
   - The row's "depends on E1, E2" now reads "**E1; values by rule, read on play; E2's second pull fits king distance
     and free path after**".
 
+*Dated 2026-11-04 (`arch-ADR-0070-accept`, records only at `main` `7a9ee712`; his word `…e8a3b5df`, "a"): row E4.*
+- **`ADR-0070` is ACCEPTED in form (a), structure only** (`ADR-0068`'s form, the PREREG's choice rule 4, on the
+  Orchestrator's ruling `…e0ff0aeb`). The three terms land at 0, value-identical and node-identical to `main`, with no
+  switch, no doors and no games. They are computed outside the pawn memo, which grows to 576 KiB.
+- The second pull fits the eg halves of king distance and free path. The unstoppable passer is held at 0: its rule
+  value's pre-registered row missed (`ADR-0070` d7).
+- The probe's readings (191 cp on `zugzwang.001`, the firing figure 29.75 %) were rule values, not shipped. They are a
+  forecast for the second pull, not a reading of it.
+- The row's dependency now reads "**E1; structure at 0; values from E2's second pull, judged in its read**".
+- **Superseded:** the line above, "values by rule, read on play", and the 2026-11-04 bullet's "behind an off-door
+  pair".
+
 ### D3. Is 3 000 reachable without a neural network?
 
 - **For a classical engine, yes, in principle.** Stockfish 11, the last hand-crafted Stockfish, reads ≈ 3 430 CCRL
@@ -1523,6 +1535,16 @@ the Phase 4 order now.***
    of the square.
 - `ABC-272` (E7a): any order after E1, one at a time on the evaluation files.
 - **Superseded:** the 2026-11-03 line above, item 5 ("`ABC-271` (E4a), after `ABC-239`, unchanged").
+
+*Dated 2026-11-04 (`arch-ADR-0070-accept`; `ADR-0070` accepted in form (a), `…e8a3b5df`): **item 5's step 3
+changes form, not place.***
+3. **`ABC-271` (E4a, `ADR-0070`):** structure only, at 0, value-identical. No games and no read of its own.
+4. **E2's second pull**, a new attempt on a `main` with E4a's structure. It fits king distance and free path, and
+   holds the unstoppable passer at 0. Its read judges E4a's values with its own.
+- The order is unchanged. **Superseded:** step 3's "rule values, read on its own C2′ (GAIN)", and step 4's "holds the
+  rule of the square" where that meant the value 400.
+- Still the owner's before the second pull: `ADR-0067`'s d6 amendment (the margin-aware bound form) and B-T8's
+  re-confirmation.
 
 ### D7. What is the owner's call
 
