@@ -532,14 +532,27 @@ describe("QE-208-a — an abort inside a null move's subtree still hands the roo
   // tapered tree lands 2 of the 11 aborts under a pass (was 3), so the shipped `chooseMove` is
   // swept beside it for the byte-identity alone.
   const READINGS = [4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24];
-  it("position-6, the even readings 4 to 24: 0 mutated roots, and aborts landing inside a null subtree", () => {
-    const { mutated, insideNull } = sweep(fenOf("position-6"), READINGS, chooseMoveWithoutTaper);
+  // ABC-281 (secnfr-nfr008-headroom): the default lane keeps readings 8 and 10 on the no-taper
+  // chooser, both landing inside a null subtree; the full sweep runs under SEARCH_DEEP=1.
+  it("position-6, readings 8 and 10 on chooseMoveWithoutTaper: 0 mutated roots, aborts landing inside a null subtree", () => {
+    const { mutated, insideNull } = sweep(fenOf("position-6"), [8, 10], chooseMoveWithoutTaper);
     expect(mutated).toEqual([]);
-    expect(insideNull).toBeGreaterThanOrEqual(3); // not vacuous: the abort lands under a pass
-    const shipped = sweep(fenOf("position-6"), READINGS);
-    expect(shipped.mutated).toEqual([]);
-    expect(shipped.insideNull).toBeGreaterThanOrEqual(1);
+    expect(insideNull).toBeGreaterThanOrEqual(1); // not vacuous: the abort lands under a pass
   });
+
+  if (RUN_DEEP) {
+    describe("QE-208-a — an abort inside a null move's subtree still hands the root back byte-identical [deep, SEARCH_DEEP=1]", () => {
+      // biome-ignore format: ABC-281 keeps the moved body byte-identical to base, indent aside
+      it("position-6, the even readings 4 to 24: 0 mutated roots, and aborts landing inside a null subtree [deep, SEARCH_DEEP=1]", () => {
+        const { mutated, insideNull } = sweep(fenOf("position-6"), READINGS, chooseMoveWithoutTaper);
+        expect(mutated).toEqual([]);
+        expect(insideNull).toBeGreaterThanOrEqual(3); // not vacuous: the abort lands under a pass
+        const shipped = sweep(fenOf("position-6"), READINGS);
+        expect(shipped.mutated).toEqual([]);
+        expect(shipped.insideNull).toBeGreaterThanOrEqual(1);
+      });
+    });
+  }
 });
 
 describe("QE-208-b — the null child's key is written: every table probe reads the key of the position it probes", () => {

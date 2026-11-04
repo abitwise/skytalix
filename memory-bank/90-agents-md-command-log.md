@@ -1133,3 +1133,13 @@ AGENTS.md Scribe, task `scribe-futility-lane`. Two files: `AGENTS.md` and this o
 | this file, § Transposition deep lanes | names `src/transposition.test.ts` only | dated NOTE: `src/transposition.shared.test.ts` (`ABC-265`) is a default-lane file with no `*_DEEP` gate |
 
 `AGENTS.md` has no default-lane list and carries no test count, so `src/transposition.shared.test.ts` is named in this file only. To fit the futility line under the budget, 131 B of prose were trimmed (no command line touched): the null-move line lost "door / zugzwang guard / oracle rows" (44 rows kept), the "No `npm run` script runs a `*_DEEP` lane" bullet and the worker-cap pointer were tightened, and the two receipts-pointer lines were merged into one. No Threads / `THREADS_DEEP` line (`ABC-266` parked).
+
+## `se-ABC-281` pass, 2026-11-04 (`ABC-281` A5; Orchestrator brief `se-ABC-281`; branch `grugops/ABC-281` from `main` `748d4fa3`)
+
+Software Engineer, task `se-ABC-281`. `AGENTS.md` 18,429 -> **18,429 B** (0 B; budget 18,432, pinned by `src/cli.test.ts` `ABC-109` `A5`). One byte changed in `AGENTS.md`: the null-move lane count.
+
+| where | before | after |
+|---|---|---|
+| `AGENTS.md` § Test, null-move line | `Null-move deep lane (opt-in, ABC-208, 44 rows)` | `Null-move deep lane (opt-in, ABC-208, 45 rows)` |
+
+Why: `ABC-281` (form S, `ADR-0046` § Dated 2026-11-04) gates the full `QE-208-a` position-6 row under `SEARCH_DEEP=1` and keeps a two-reading remnant in the default lane, so the lane holds one more row. RUN 2026-11-04 at the branch tip (test commit `e526480d`), host lock: `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/search.null-move.test.ts` exit 0, **45 passed (45)**, 27 s wall; base's collect list read 44. The engine and levels lines carry no count and were not touched.

@@ -95,7 +95,7 @@ In a script, poll the job's output file or `kill -0 <pid>`; never `while pgrep -
 - Puzzle suite, strength gate (opt-in, ABC-084): `PUZZLE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/puzzle-suite.test.ts`
 - PVS/LMR deep lane (ABC-121, `src/search.pvs-lmr.test.ts`): `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run
   src/search.pvs-lmr.test.ts`
-- Null-move deep lane (opt-in, ABC-208, 44 rows): `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/search.null-move.test.ts`
+- Null-move deep lane (opt-in, ABC-208, 45 rows): `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/search.null-move.test.ts`
 - Futility deep lane (ABC-268, 47 tests): `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/search.futility.test.ts`
 - Taper deep lane (ABC-269, 146 tests): `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/evaluate.taper.test.ts`
 - SEE deep lane (ABC-279, ~55 s): `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/see.test.ts`

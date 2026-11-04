@@ -1,0 +1,21 @@
+arm	lane	mutant	exit	passed	failed	skipped	killers
+B	default	restore	0	2650	0	0	
+H2	default	restore	0	2650	0	0	
+H2	deep-row-null	restore	0	1	0	44	
+H2	deep-row-engine	restore	0	1	0	82	
+H2	deep-row-levels	restore	0	1	0	57	
+B	default	M1	1	2649	1	0	search.null-move.test.ts::QE-208-a — an abort inside a null move's subtree still hands the root back byte-identical position-6, the even readings 4 to 24: 0 mutated roots, and aborts landing inside a null subtree
+H2	default	M1	1	2649	1	0	search.null-move.test.ts::QE-208-a — an abort inside a null move's subtree still hands the root back byte-identical position-6, readings 8 and 10 on chooseMoveWithoutTaper: 0 mutated roots, aborts landing inside a null subtree
+H2	deep-row-null	M1	1	0	1	44	search.null-move.test.ts::QE-208-a — an abort inside a null move's subtree still hands the root back byte-identical QE-208-a — an abort inside a null move's subtree still hands the root back byte-identical [deep, SEARCH_DEEP=1] position-6, the even readings 4 to 24: 0 mutated roots, and aborts landing inside a null subtree [deep, SEARCH_DEEP=1]
+B	default	M2	1	2649	1	0	engine.test.ts::ABC-230 A3 and A4 — no prior keys is base, node for node, and the doors take none A4: an empty list is node-equal to an absent one over the endgames and the thirty
+H2	default	M2	1	2649	1	0	engine.test.ts::ABC-230 A3 and A4 — no prior keys is base, node for node, and the doors take none A4 (slice): an empty list is node-equal to an absent one on kr-corner, startpos and position-6
+H2	deep-row-engine	M2	1	0	1	82	engine.test.ts::ABC-230 A3 and A4 — no prior keys is base, node for node, and the doors take none [deep, ENGINE_DEEP=1] A4: an empty list is node-equal to an absent one over the endgames and the thirty
+B	default	M2c	1	2648	2	0	engine.test.ts::ABC-230 A3 and A4 — no prior keys is base, node for node, and the doors take none A4: an empty list is node-equal to an absent one over the endgames and the thirty ; search.null-move.test.ts::QE-208-c — every door's nullMove switch literal is false; only the shipped path and the ABC-228, ABC-229, ABC-268, ABC-269 and ABC-279 doors turn it on ./engine.ts: each exported entry passes exactly one nullMove literal, and only the shipped one and its ABC-228, ABC-229, ABC-268, ABC-269 and ABC-279 doors are true
+H2	default	M2c	1	2648	2	0	engine.test.ts::ABC-230 A3 and A4 — no prior keys is base, node for node, and the doors take none A4 (slice): an empty list is node-equal to an absent one on kr-corner, startpos and position-6 ; search.null-move.test.ts::QE-208-c — every door's nullMove switch literal is false; only the shipped path and the ABC-228, ABC-229, ABC-268, ABC-269 and ABC-279 doors turn it on ./engine.ts: each exported entry passes exactly one nullMove literal, and only the shipped one and its ABC-228, ABC-229, ABC-268, ABC-269 and ABC-279 doors are true
+H2	deep-row-engine	M2c	1	0	1	82	engine.test.ts::ABC-230 A3 and A4 — no prior keys is base, node for node, and the doors take none [deep, ENGINE_DEEP=1] A4: an empty list is node-equal to an absent one over the endgames and the thirty
+B	default	M3c	1	2649	1	0	levels.test.ts::A9 — different seeds actually differ ≥ 5 seeds over the same ≥ 30 positions give ≥ 2 distinct blunder-decision sequences
+H2	default	M3c	1	2649	1	0	levels.test.ts::QE-087-d (slice) — one draw per move: seed 1 over the first 10 of the thirty move k is a non-engine move iff the k-th draw of a fresh seededRandom(1) is below the rate
+H2	deep-row-levels	M3c	1	0	1	57	levels.test.ts::A9 — different seeds actually differ [deep] ≥ 5 seeds over the same ≥ 30 positions give ≥ 2 distinct blunder-decision sequences
+B	default	M3d	1	2649	1	0	levels.test.ts::A9 — different seeds actually differ ≥ 5 seeds over the same ≥ 30 positions give ≥ 2 distinct blunder-decision sequences
+H2	default	M3d	1	2649	1	0	levels.test.ts::QE-087-d (slice) — one draw per move: seed 1 over the first 10 of the thirty move k is a non-engine move iff the k-th draw of a fresh seededRandom(1) is below the rate
+H2	deep-row-levels	M3d	1	0	1	57	levels.test.ts::A9 — different seeds actually differ [deep] ≥ 5 seeds over the same ≥ 30 positions give ≥ 2 distinct blunder-decision sequences

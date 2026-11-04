@@ -896,25 +896,43 @@ describe("seededRandom — the generator", () => {
   });
 });
 
-describe("A9 — different seeds actually differ", () => {
-  it("≥ 5 seeds over the same ≥ 30 positions give ≥ 2 distinct blunder-decision sequences", () => {
-    expect(THIRTY).toHaveLength(30);
-    const sequences = [1, 2, 3, 4, 5].map((seed) => {
-      const choices = playAll(easiest, seed, THIRTY);
-      // Test note 7: `A4`'s per-move clauses on the moves already played. No new search.
-      assertPerMove(THIRTY, choices);
-      // QE-087-d: one draw per move (`ADR-0032` d2). Move k fires iff the k-th draw of a fresh
-      // generator on the same seed is below the rate; an extra draw anywhere desynchronises it.
-      const draws = seededRandom(seed);
-      for (const choice of choices) {
-        expect(choice.kind !== "engine").toBe(draws() < easiest.blunderRate);
-      }
-      return decisions(choices).join();
-    });
-    console.log(`A9: ${new Set(sequences).size} distinct sequences over 5 seeds`);
-    expect(new Set(sequences).size).toBeGreaterThanOrEqual(2);
+// ABC-281 (secnfr-nfr008-headroom): QE-087-d's one-draw-per-move check on seed 1 over the first 10
+// of the thirty stays in the default lane; A9's five seeds over all thirty run under ENGINE_DEEP=1.
+describe("QE-087-d (slice) — one draw per move: seed 1 over the first 10 of the thirty", () => {
+  it("move k is a non-engine move iff the k-th draw of a fresh seededRandom(1) is below the rate", () => {
+    const fens = THIRTY.slice(0, 10);
+    const choices = playAll(easiest, 1, fens);
+    const draws = seededRandom(1);
+    for (const choice of choices) {
+      expect(choice.kind !== "engine").toBe(draws() < easiest.blunderRate);
+    }
+    // not vacuous: the ten hold at least one blunder and one engine move
+    expect(choices.some((c) => c.kind !== "engine")).toBe(true);
+    expect(choices.some((c) => c.kind === "engine")).toBe(true);
   });
 });
+
+if (RUN_DEEP) {
+  describe("A9 — different seeds actually differ [deep]", () => {
+    it("≥ 5 seeds over the same ≥ 30 positions give ≥ 2 distinct blunder-decision sequences", () => {
+      expect(THIRTY).toHaveLength(30);
+      const sequences = [1, 2, 3, 4, 5].map((seed) => {
+        const choices = playAll(easiest, seed, THIRTY);
+        // Test note 7: `A4`'s per-move clauses on the moves already played. No new search.
+        assertPerMove(THIRTY, choices);
+        // QE-087-d: one draw per move (`ADR-0032` d2). Move k fires iff the k-th draw of a fresh
+        // generator on the same seed is below the rate; an extra draw anywhere desynchronises it.
+        const draws = seededRandom(seed);
+        for (const choice of choices) {
+          expect(choice.kind !== "engine").toBe(draws() < easiest.blunderRate);
+        }
+        return decisions(choices).join();
+      });
+      console.log(`A9: ${new Set(sequences).size} distinct sequences over 5 seeds`);
+      expect(new Set(sequences).size).toBeGreaterThanOrEqual(2);
+    });
+  });
+}
 
 describe("A7 — seeded, in deterministic mode", () => {
   it("a fixed seed gives identical blunder decisions across runs", () => {

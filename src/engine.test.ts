@@ -1686,11 +1686,17 @@ describe("ABC-230 A9 and A5 — the clock and the 100-key cap bound what the sea
 });
 
 describe("ABC-230 A3 and A4 — no prior keys is base, node for node, and the doors take none", () => {
-  it("A4: an empty list is node-equal to an absent one over the endgames and the thirty", () => {
+  // ABC-281 (secnfr-nfr008-headroom): the default lane keeps one endgame (kr-corner, null move
+  // guarded off) and two null-move positions; the full corpus runs under ENGINE_DEEP=1.
+  it("A4 (slice): an empty list is node-equal to an absent one on kr-corner, startpos and position-6", () => {
     const corpus = [
-      ...ENDGAME_CORPUS.map(({ name, fen }) => ({ name, position: parseFen(fen) })),
-      ...thirtyPositions(),
+      ...ENDGAME_CORPUS.filter(({ name }) => name === "kr-corner").map(({ name, fen }) => ({
+        name,
+        position: parseFen(fen),
+      })),
+      ...thirtyPositions().filter(({ name }) => name === "startpos" || name === "position-6"),
     ];
+    expect(corpus).toHaveLength(3); // not vacuous: every named position is found
     for (const { name, position } of corpus) {
       const fen = toFen(position);
       const absent = chooseMove(parseFen(fen), { budgetMs: 5, now: tickingClock(1) });
@@ -1718,6 +1724,27 @@ describe("ABC-230 A3 and A4 — no prior keys is base, node for node, and the do
     }
   });
 });
+
+if (RUN_DEEP) {
+  describe("ABC-230 A3 and A4 — no prior keys is base, node for node, and the doors take none [deep, ENGINE_DEEP=1]", () => {
+    it("A4: an empty list is node-equal to an absent one over the endgames and the thirty", () => {
+      const corpus = [
+        ...ENDGAME_CORPUS.map(({ name, fen }) => ({ name, position: parseFen(fen) })),
+        ...thirtyPositions(),
+      ];
+      for (const { name, position } of corpus) {
+        const fen = toFen(position);
+        const absent = chooseMove(parseFen(fen), { budgetMs: 5, now: tickingClock(1) });
+        const empty = chooseMove(parseFen(fen), {
+          budgetMs: 5,
+          now: tickingClock(1),
+          priorKeys: [],
+        });
+        expect(figures(empty), name).toEqual(figures(absent));
+      }
+    });
+  });
+}
 
 // QE-268-a: the ABC-268 door is futility off and EVERYTHING ELSE on (`ADR-0061` decision 4), the
 // prior keys included — it is the shipped side of every older row, so it must read them.
