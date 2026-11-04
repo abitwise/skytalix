@@ -92,6 +92,8 @@ The bars are `ADR-0069`'s (d10–d13), pre-registered there and not loosened aft
     the capture losing: a capturing promotion, a king capture, en passant, and a capture of an equal or bigger piece.
     It is **true** for Q×P defended by a pawn (−800) and for B×N defended by a pawn (−10). It is **false** for N×N
     defended (0).
+    *2026-11-04 (`bapm-ABC-271-ready`; pointer only, no bar moved):* how this row is read (`QE-279-a`) is `ADR-0069`
+    d10's dated line of 2026-11-04.
   - **(c) A source row:** `quiesce` with `seePruning` on skips exactly the moves `isLosingCapture` names, only on the
     stand-pat branch, and still sorts the whole list.
   - **(d) An in-check row:** a quiescence node in check with a losing capture among its evasions searches it.
