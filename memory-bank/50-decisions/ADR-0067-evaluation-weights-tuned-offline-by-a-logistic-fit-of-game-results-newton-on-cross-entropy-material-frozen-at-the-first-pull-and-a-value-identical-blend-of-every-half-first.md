@@ -87,6 +87,7 @@ Architect/Design (task `arch-owner-answers-1103`, records only, on `grugops/arch
 | 2026-11-03 | Architect/Design | `ADR-0068`'s owed lines: d4 / d5 tracer, d6 free set (queen-on mg ≥ 0, eg 0), B-T4 re-pin rule, B-T5 risk, Consequences order. Decision 9's number restored; no bar moved | `arch-owner-answers-1103b` |
 | 2026-11-03 | Orchestrator | B-T4: old-table test values are pins, re-pinned old → new; relations, zugzwang, mate floor, `G1`, identity never | `orch-2026-10-30a` `…42c82347` |
 | 2026-11-03 | Architect/Design | F3's bound form (the red row as one linear inequality, margin ½ ‖a‖₁) and the one refit; `zugzwang.001` e1e5 a safety failure (Stockfish 19 d26 −633, e1f1 mate in 10), the row stays; 58 probe games enter; two E1 rows retired. No bar moved | `arch-ABC-239-rulings` `…90b469ca` (PREREG), `…2b428ce8` |
+| 2026-11-04 | Architect/Design | Step 6 on `26d06118`: F3 and F4 NOT MET as written. F4's cause is the joint eg halves of P / PASS / K (no single driver); the row reads a 29 cp preference at depth 9. K1 (c) re-found in form (A). Recommended: close the first pull NOT MET, E4a before a second pull. No bar moved | `arch-ABC-239-f3f4` `…9427005b` / `…80a5bd21` (PREREG), `…4eae0fd3`, `…69f22167` |
 
 ## Context
 
@@ -540,6 +541,68 @@ moves.***
      it becomes an owner question: holding it would bound the fit to 5/3 × mg ≤ eg ≤ 2 × mg at every rank.*
   - **Kept:** B1 (d) is a relation, and green on `da3f8599` (PREREG R2: 106 to 227 cp on D1–D6, bar 20). Its
     `mainCentreMinusCorner` literal is a pin and is re-pinned.
+
+*Dated 2026-11-04 (`arch-ABC-239-f3f4`, records only, at `main` `232f234f`; `se-ABC-239b` `…c3f94eab`; PREREG `…9427005b`,
+addendum `…80a5bd21`; results `…4eae0fd3`; decision `…69f22167`): **step 6 on the fit of record `26d06118`. No bar moves.***
+- **F3 fires: NOT MET as written.** Pawns A2 read green at 49 on the box-only fit, with a slack of 1 against its margin
+  of 2.5, so the procedure did not bound it. The one refit moved it to 53 (bar ≤ 50). Step 4 of the procedure makes that
+  F3's second red.
+  - The procedure's text bounds only the rows red at step 2. So the answer to "may a row green by less than its margin
+    join the bound set" is **no, under this ADR**.
+  - **The margin-aware form is recommended for any later pull:** every relation row is bounded from the first fit, each
+    with ruling (b)'s margin, in one fit with no refit step.
+    - A row the optimum holds with slack ≥ its margin is inactive and changes nothing (tool row (2)).
+    - A red relation on the emitted set is then a defect, as F1 is.
+    - An infeasible bound set is a STOP to Architect/Design.
+  - **It replaces d6's "one refit" after a red was seen.** So it is a re-open with its own PREREG and an amendment of
+    this ADR. That is the owner's word, and it is not taken here.
+- **F4 fires: NOT MET as written.** The defect check is clean: the gate on the emitted file found 0 misses, and B-T3 is
+  byte-identical. The row is not re-pinned and its depth does not move.
+  - **The cause is joint, in the fitted endgame halves.**
+    - No single family drives e1e5. Four pairs do, each through their eg halves: {P, R}, {P, K}, {P, PASS} and
+      {K, PASS}. The pawn table and the passer bonus each produce e1e5 on their own when imported into the base.
+    - At the base's own leaves, the e1f1 pawn ending moves −59 cp and the e1e5 rook ending moves −26 cp. The base's
+      margin was 29 cp.
+    - The king's endgame table supplies most of the gap: −44.5 of −33. It is now rank-asymmetric. A king on its own
+      back rank is charged up to −115, and one on the enemy's back rank −47.
+  - **Neither table scores White's win at any depth up to 16.** Both read e1f1 as 0 from depth 14. So at depth 9 the base
+    passes by an evaluation preference, not by solving the zugzwang. The row stays B-T5's bar: e1e5 does lose (−633).
+  - **A relation carries only part of it.**
+    - R1 is the rank symmetry of the king's centralization (CPW "King Centralization"): |`evaluate`(Kf1) −
+      `evaluate`(Kf8)| ≤ 20 on a blocked d-pawn ending. It reads 0 on the base and −54 on the candidate, and meets the
+      PREREG's q1–q4.
+    - But reverting K alone keeps e1e5, so R1 alone is forecast not to hold the row (`UNKNOWN - verify`, not read).
+    - The passer part has no relation on today's features. Black's h-pawns are frozen only by White's king on g1 / g2,
+      and no term reads that. A pair that charged such passers would charge every advanced passer.
+    - **So the row is outside what a linear fit on this feature set can hold at this data.** The exception would be to
+      restrict the eg halves the row names, and that is a fit chosen on the row (ruling (c), F6).
+    - The missing class is `ABC-271`'s free path and king distance. All three h-passers have blocked paths. Whether a
+      fit over E4a holds the row is `UNKNOWN - verify`.
+- **K1 (c), if a later candidate reaches step 7: form (A).**
+  - Each row runs inside `withParametersForTest`, with the six king-file pairs at the values its literals were frozen at
+    (15 / 10 / 20 in both halves, queen-on 0, as named constants). The "before" reads run inside the seam.
+  - Every literal is unchanged. Measured: 5 / 5 green on `26d06118`, and 5 / 5 on the base.
+  - **QE checks:**
+    - each row turns red with the queen-on term zeroed (`ADR-0028` d2);
+    - the seam is used in test files only (`ABC-274` S3);
+    - the "{ 0, 0 }" data row is a pin, re-pinned under B-T4.
+  - **Re-pinning by halves is rejected.** The tuned base shelter and half-open pairs are 0, so the rows would lose their
+    bite.
+- **Recommended path: (iii).** Close `ABC-239`'s first pull NOT MET under F3 and F4 as written. `main` keeps E1's table,
+  and nothing from `26d06118` merges.
+  - **Host cost:** 0 now.
+  - **Not the owner's:** it applies pre-registered dispositions.
+  - **Rejected or not recommended:**
+    - (i), a re-open with every relation bounded plus R1. It is the owner's (the d6 amendment). It costs about 1–2 h of
+      engineer time and about 20 min of host to step 6. F4 is forecast to fire again.
+    - (ii), freezing the eg halves D3 names. It is a fit chosen on the row.
+    - (iv), moving the row's depth to 12. It is a bar moved after a miss, and the owner's.
+  - **Follow-ons:**
+    - BA/PM may cut a tools-only landing of `tools/tune`.
+    - `ABC-271` (E4a) comes before a second pull. That re-reads § Consequences item 5 ("after `ABC-239`"), and the
+      Orchestrator orders it.
+    - A second pull is a new attempt under F6's rule, with its own PREREG and the margin-aware bound set (the owner's
+      word then).
 
 ## What would falsify this
 
