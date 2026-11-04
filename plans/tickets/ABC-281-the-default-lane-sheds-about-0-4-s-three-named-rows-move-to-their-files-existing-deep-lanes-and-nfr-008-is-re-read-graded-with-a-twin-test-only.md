@@ -304,6 +304,11 @@ Architect's per-row pick (row 11). The criteria are written for W, with the S an
     Architect's forecast. The 9.6 s trigger is unchanged.
 - **`A9` (`R-N8H-1`).** **Given** A8, **then** Security/NFR records `R-N8H-1`'s state as closed or carried, with the
   reading cited. BA/PM does not rule it.
+  - **Ruled 2026-11-04 by Security/NFR** (`secnfr-ABC-281-a9`, `…2e3b747f` on `…52f74e3c`; QE A8 `…c7e298cd`): **`R-N8H-1`
+    carried, downgraded MEDIUM → LOW.** H is 9.42 s [9.33, 9.51], so headroom is 0.58 s, above the 0.3–0.5 s window spread by
+    only 0.08–0.28 s. Owner: Orchestrator; remedy owner: Architect/Design. Back to MEDIUM at any ALONE or graded median ≥ 9.5 s;
+    closed at a graded median ≤ 9.0 s. `R-N8H-2` and `R-N8H-3` are unchanged. `R-281-a` stays LOW: how often the deep lanes run
+    is `UNKNOWN - verify`, and Architect/Design owns that rule. `Q-N8H-1` stays held (9.42 s < 9.6 s). Result: PASS_WITH_RISKS.
 
 ## NFR triggers
 
