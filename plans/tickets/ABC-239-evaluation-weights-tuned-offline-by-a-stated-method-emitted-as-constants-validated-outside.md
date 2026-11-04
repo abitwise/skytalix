@@ -1,7 +1,7 @@
 ---
 id: ABC-239
 title: "The evaluation's weights are tuned offline by a stated method on a licensed position set, emitted as constants, and validated against an outside opponent"
-status: done
+status: dropped
 column: Done
 closed: "2026-11-04, CLOSED NOT MET (first pull), not shipped: step 6 on the fit of record 26d06118 read F3 (pawns A2 53 > 50) and F4 (zugzwang.001 e1e5 at d9–11) as written; path (iii), Orchestrator …4c76bf7a on arch-ABC-239-f3f4 …69f22167. main keeps E1's rule-made table; nothing from 26d06118 merges. The tool lands alone as ABC-280. A second pull is a new attempt under F6, after ABC-271 (bapm-ABC-239-close)"
 size: L
