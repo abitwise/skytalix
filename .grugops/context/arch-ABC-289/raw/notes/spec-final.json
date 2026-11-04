@@ -1,0 +1,7 @@
+{
+ "refs": ["arch-ABC-289", "ABC-289", "ADR-0074", "ADR-0024", "ADR-0069", "ADR-0056", "ADR-0053", "ADR-0026", "ADR-0063", "EPIC-011", "OQ-0074-1", "Q-3K-10", "174760a3", "9e07dae4", "ABC-279", "ABC-283", "ABC-282", "ABC-286", "ABC-288", "ABC-301", "NFR-005", "NFR-008", "NFR-009", "R-283-LMR", "orch-2026-10-30a", "f30bd604", "src/quiescence.ts", "src/search.ts", "src/engine.ts", "src/quiescence.test.ts"],
+ "notes": [
+  {"kind": "observation", "bodyFile": "observation.md", "confidence": "high: deterministic counts, 62 jobs exit 0, the instrument exact on every named count; the SEE-call ratio is stated as an upper bound only"},
+  {"kind": "decision", "bodyFile": "decision.md", "confidence": "high on the verdict (the sealed rule applied to deterministic counts); medium on the mechanism of the drift, which is reasoned; UNKNOWN - verify on wall-clock cost until G6"}
+ ]
+}
