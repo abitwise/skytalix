@@ -35,6 +35,16 @@ Architect/Design (task `arch-owner-answers-1103`, records only, on `grugops/arch
   the second pull. The lines it owes are written here: d5's and d6's dated lines of 2026-11-04, and § Consequences
   item 5's. **No bar moves.** Two items stay the owner's and are open: the d6 amendment (the margin-aware form, every
   relation bounded at once) and B-T8's re-confirmation for the second pull.
+- *Dated 2026-11-04 (`arch-second-pull-1104`, records only, at `main` `fad72f17`; his word `…dda43b71`, verbatim "1.
+  yes; 2. yes"):* **both open items are answered, for the second pull.**
+  - **The d6 amendment is adopted.** From the second pull on, every relation is bounded at once from the first fit, in
+    the margin-aware form, with no refit step. d6's dated line of this date gives the step list. F3 is restated in
+    § What would falsify this.
+  - **B-T8 is re-confirmed** for the second pull: the 200 + 200 outside pair at 0.5 s against Stockfish, about 5 h,
+    before it merges. His approval covers this run over 1 h. Its bar is unchanged.
+  - The second pull's carried bars, its four preconditions and its endgame cost row are in the dated line under the
+    bars table. **No bar level moves.** Nothing in this ADR waits on him now. The ticket is BA/PM's cut (next id
+    `ABC-301`).
 
 *Before acceptance:* **PROPOSED 2026-11-03.** Recorded by Architect/Design (task `arch-ABC-239`, on `grugops/arch-ABC-239` from `main`
 `af15cbc9`). **Acceptance is the owner's:** this is a new ADR (`memory-bank/45-standing-rulings.md`, 2026-10-22).
@@ -96,6 +106,8 @@ Architect/Design (task `arch-owner-answers-1103`, records only, on `grugops/arch
 | 2026-11-04 | Architect/Design | § Consequences item 5's order: `ABC-271` (E4a, `ADR-0070` PROPOSED, rule values on their own read) → the second pull; the free-set lines owed on acceptance. No bar moved | `arch-ABC-271` |
 | 2026-11-04 | Owner | `ADR-0070` accepted in form (a): E4a lands as structure at 0 before the second pull | `orch-2026-10-30a` `…e8a3b5df` |
 | 2026-11-04 | Architect/Design | `ADR-0070`'s owed lines: d5 tracer (E4a's features), d6 second-pull free set (KD / FP eg ≥ 0, mg 0, U held 0) and how they enter F3, item 5's order. The d6 amendment and B-T8's re-confirmation stay open (the owner's). No bar moved | `arch-ADR-0070-accept` |
+| 2026-11-04 | Owner | The d6 amendment adopted (every relation bounded at once, margin-aware, no refit); B-T8 re-confirmed for the second pull | `orch-2026-10-30a` `…dda43b71` |
+| 2026-11-04 | Architect/Design | d6's amendment and the second pull's step list; F3 restated; B-T8 re-confirmed; the second pull's carried bars, its four preconditions (`QE-271-f`, `-g`, `-h`, `-i`) and its endgame `G2` row. No bar level moved | `arch-second-pull-1104` |
 
 ## Context
 
@@ -286,6 +298,44 @@ Architect/Design (task `arch-owner-answers-1103`, records only, on `grugops/arch
           refit step (`arch-ABC-239-f3f4`'s dated line). Without his word the second pull runs F3 as written above.
        2. **B-T8's re-confirmation:** he approved the 200 + 200 outside pair for `ABC-239` (`…af126c04` item 5). The
           second pull is a new attempt, so whether that approval carries is his.
+       - *Answered 2026-11-04 (`…dda43b71`): item 1 yes (the dated line below), item 2 yes (the bars table, B-T8).*
+   - *Dated 2026-11-04 (`arch-second-pull-1104`; his word `…dda43b71` item 1, "1. yes"): **the d6 amendment is
+     adopted. From the second pull on, every relation is bounded at once from the first fit, in the margin-aware form,
+     and there is no refit step.***
+     - **What it replaces,** for the second pull and every later pull:
+       - d6's "that relation becomes a bound and the fit runs once more";
+       - B-T4's "a red relation takes d6's rule (a bound and one refit)";
+       - the procedure "the one refit" (ruling (b), steps 1–4, below the bars table);
+       - the line above, "a relation row … enters the bound set only if it is red at step 2".
+       - The first pull's record (`ABC-239`, closed NOT MET under those lines) is unchanged.
+     - **What stays:** ruling (b)'s row vector, its margin (½ ‖a‖₁, plus 1 per position with 0 < w < 24, plus 1 for a
+       strict sign), its solve and its provenance rows; the box and sign bounds; B-T4's relation class (a pin is not a
+       relation); decision 10's three tool rows; and the free set above.
+     - **The second pull's step list:**
+       1. **The bound set, listed before the fit.** Every relation row of `src/evaluate*.test.ts` at the fit commit
+          becomes one linear inequality with its margin. The PREREG lists each one (file, row, a's non-zero terms,
+          right side) and the count, before any fit. E4a's weights enter each a by the rule in the line above. Which
+          rows gain non-zero entries on them is read from the traces at this step, not from an emission. A relation
+          row that is not linear in the parameters under d4's model (`UNKNOWN - verify` whether any exists) is a
+          STOP to Architect/Design here, never a silent omission.
+       2. **One fit,** with the box, sign and relation bounds together (ruling (b)'s solve). Its emission is the
+          candidate. There is no box-only scratch fit and no second fit.
+       3. **The relation rows run on the emitted file.** Each holds by construction, so a red is a defect, as F1 is:
+          the tool, the tracer or a row's vector is wrong. The defect is fixed and the same procedure runs on the
+          fixed tool. That is the same fit corrected, not a refit on what the red showed. No row is dropped, loosened
+          or re-pinned.
+       4. **An infeasible bound set** (no point in the box meets every row) is a **STOP to Architect/Design,** with the
+          rows the solve names. No row is dropped to make it feasible. A changed row set is a new attempt (F6's rule).
+       5. Then the gates in their written order: the identity gate on the emitted file (d5), B-T3, B-T4, B-T5 (read
+          before B-T7 and B-T8), B-T6, B-T7 and B-T8. Unchanged.
+     - **What it does not do.** It bounds the relation rows and nothing else.
+       - `zugzwang.001` stays B-T5's safety row under F4. It is not a relation and is not bounded (ruling (c)).
+       - `arch-ABC-239-f3f4`'s R1 (the king's rank symmetry) is not a test row, so it is not in the set. If the
+         second pull's PREREG adds it, it is written before any fit as a relation row under `ADR-0028` d2. It is never
+         added after an emission is seen.
+     - **The cost, stated:** a row the box-only optimum holds with slack at least its margin is inactive and changes
+       nothing (tool row (2)). A row held by less than its margin, such as pawns A2 on `26d06118` (slack 1 against
+       2.5), now binds and costs a little loss. That is the amendment's purpose.
 7. **Integer emission and provenance.**
    - Values are rounded half away from zero, and the reported loss is the rounded set's.
    - `tools/tune` writes `src/evaluate-params.ts` in its present shape, mg / eg arrays and the same exports, and
@@ -490,7 +540,7 @@ Architect/Design (task `arch-owner-answers-1103`, records only, on `grugops/arch
 | B-T5 | play safety on the shipped path: `ADR-0050` d9's zugzwang rows 7 / 7 at their depths; mate floor 0 violations (`ADR-0064` B2's form); `G1` ≥ 54 / 58 with no NEWLY-MISSED line; `ADR-0061`'s futility audit (flips ≤ 0.5 %, 0 flips ≥ 200 cp) | as written. *Risk: dated line below the table (2026-11-03)* |
 | B-T6 | `NFR-005` (`Q-3K-4` = (b)): `G6` boards at `LEVELS[5]`, ≥ 5 interleaved rounds, every run at depth ≥ 6; depth 7 is a WARN; the median against base reported | FAIL below 6 |
 | B-T7 | A6: C2′ 100 games at 100 ms against the merge-base, GAIN ≥ 50.0, C-1 / C-2; S′ 10 games at 0.5 s against Stockfish 19 at E 1 810 (≥ 3.0 of 10, else 10 more and ≥ 7.0 of 20); the Levels deep lane exit 0 | `EPIC-011` § The per-change rule |
-| B-T8 | A6's outside pair, 200 + 200 at 0.5 s against Stockfish (≈ 5 h), **asked of the owner first** (*approved 2026-11-03, `…af126c04` item 5*) | point estimate ≥ 0 |
+| B-T8 | A6's outside pair, 200 + 200 at 0.5 s against Stockfish (≈ 5 h), **asked of the owner first** (*approved 2026-11-03, `…af126c04` item 5*; *re-confirmed 2026-11-04 for the second pull, `…dda43b71` item 2: about 5 h, before it merges*) | point estimate ≥ 0 |
 
 *Dated 2026-11-03 (`arch-owner-answers-1103b`; `ADR-0068` accepted, `…401c3d09`; its § Consequences): **B-T4's re-pin
 rule and B-T5's risk. No bar moves.***
@@ -658,13 +708,55 @@ addendum `…80a5bd21`; results `…4eae0fd3`; decision `…69f22167`): **step 6
     - A second pull is a new attempt under F6's rule, with its own PREREG and the margin-aware bound set (the owner's
       word then).
 
+*Dated 2026-11-04 (`arch-second-pull-1104`, records only, at `main` `fad72f17`; his word `…dda43b71`; the
+Orchestrator's dispositions `…264e420e`): **the second pull's bars, its preconditions and its endgame cost row. No bar
+level moves.***
+- **It is a new attempt under F6,** with its own PREREG, on a `main` that contains `ABC-271` (E4a's structure, merged
+  `872e5ffc`). Its ticket is BA/PM's cut (next id `ABC-301`).
+- **The bars are B-T0–B-T8, carried by reference at their levels.** What changes:
+  - **F3's form:** d6's amendment (its dated line of this date). B-T4's "a bound and one refit" reads "a defect".
+  - **B-T4 gains one graded row: the endgame `G2` (`QE-271-f`).** The level is B-T4's own, ≤ 1.02 ×. The set is the
+    endgame report set of `qe-ABC-271` (six positions, phases 3–8, each with a passer). The instrument is the `G2`
+    row's (A5: two sessions in reverse order, a `main`-copy control).
+    - **Why this row:** `G2`'s six roots never enter E4a's loop: five are at phase 24, and the sixth has no passer
+      (`qe-ABC-271` `…c55891e0`). The pull's diff is constants only, and the loop does the same work at any value
+      (`ADR-0070` d3: no fast path). Against its base the set should read about 1.00. The row grades that the pull
+      adds no cost where the loop runs.
+    - **Why E4a's own cost is not graded again:** its 1.12 × per call on that set is already on `main`, accepted under
+      `ADR-0070` K3. B-T7 plays on the clock, so its score prices that cost in. `ADR-0070` d3's dated line restates
+      the figure.
+    - **Reported, not graded:** ns per node in search on the same six at depth 9 (`qe-ABC-271`'s form).
+  - **B-T8:** re-confirmed (the table).
+  - **The free set** is decision 6 with its dated lines: the first pull's set, the queen-on mg pairs (`ABC-270`), and
+    E4a's king distance and free path (eg ≥ 0, mg 0), with U held at 0. The C-S / C-F rule re-runs on the pull's own
+    data.
+  - **The rows retired at `ABC-239`** (the two named above, and `ABC-215` A2's rows under d6) retire at the second
+    pull instead, by the same reading. `ABC-239` did not merge, so none has retired yet.
+  - **Data:** decision 9's rule and § Addendum's pin, at the fit commit. The PREREG lists the player names and the
+    own-games count.
+- **Four preconditions, each met before the fit is taken,** so that no value moves before them:
+  1. **`QE-271-h`:** the hot-path row (`ADR-0070` d4's dated line of this date). Default lane, test-only.
+  2. **`QE-271-g`:** the caller-guard row for `pawnStructureForTest` (the same line), in the same Software Engineer
+     hop.
+  3. **`QE-271-i`:** `tools/tune`'s emitter writes the four E4a exports (`PASSED_KING_ENEMY`, `PASSED_KING_OWN`,
+     `PASSED_FREE`, `PASSED_UNSTOPPABLE`) in the file's present shape: 13 exports become 17, and U is written at its
+     held 0. The tracer traces E4a's features (d5's dated line of 2026-11-04), and B-T1 holds at the base values. A
+     tool row: an emission at the base values gives exports equal to `main`'s value for value, and typecheck passes
+     on it.
+  4. **`QE-271-f`:** the endgame `G2` row above, written into the PREREG.
+- **B-T7's base** is `main` at the candidate freeze (C2′'s stale rule). A value-changing merge after the freeze makes
+  the read stale. `ABC-283` (QE passed, its merge brief open) is to land before the freeze; the PREREG names the
+  base SHA either way.
+- **Host time:** the fit takes minutes; B-T7 about 0.7 h; B-T8 about 5 h, approved. Recommended to QE, as written: B-T5
+  before B-T7 and B-T8, so a safety miss spends no games.
+
 ## What would falsify this
 
 | # | clause | what would falsify it | if it fires |
 |---|---|---|---|
 | **F1** | 4, 5: the traced model is the engine | an identity-gate miss | a defect, fixed before any fit is read |
 | **F2** | 1–3, 9: the data carries the signal | B-T2 ≥ 1.000 × | NOT MET at the data stage: no play read. A re-open needs a changed data set, pre-registered |
-| **F3** | 6: the bounds keep play sane | an `src/evaluate*` relation test red on the emitted set | that relation becomes a bound, one refit. A second red: NOT MET |
+| **F3** | 6: the bounds keep play sane | an `src/evaluate*` relation test red on the emitted set | that relation becomes a bound, one refit. A second red: NOT MET. *Dated 2026-11-04 (`arch-second-pull-1104`; the d6 amendment, `…dda43b71` item 1): from the second pull on, F3 reads: every relation row is a bound from the first fit, with ruling (b)'s margin, in one fit with no refit. A relation red on the emitted set is a defect, as F1: it is fixed and the same procedure re-runs on the fixed tool. An infeasible bound set is a STOP to Architect/Design. The disposition before this line is the first pull's, history* |
 | **F4** | play safety | B-T5 | a defect check first. If real: NOT MET. Never a re-pin. `ADR-0061`'s margins are re-read if the audit fires (`ADR-0064` F5's rule) |
 | **F5** | `NFR-005` | a `G6` run below depth 6 | NOT MET. There is no cost cut to take on a constants-only diff |
 | **F6** | 11, the strength premise | C2′ < 50.0, an S′ collapse, or a red Levels lane | NOT MET, not re-played. **No set is ever re-fitted on play results**, and the configuration and λ are never chosen on play. A new attempt is a new data set or free set with a new pre-registration |

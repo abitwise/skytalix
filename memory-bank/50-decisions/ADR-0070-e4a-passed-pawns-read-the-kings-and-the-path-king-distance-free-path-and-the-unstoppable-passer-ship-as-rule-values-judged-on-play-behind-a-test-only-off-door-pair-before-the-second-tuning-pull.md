@@ -31,6 +31,13 @@ from `main` `7a9ee712`). Nothing was run.
   - **Still owed** (BA/PM): the `ABC-271` page and `EPIC-011`. The lines are in this task's decision note.
 - **Still the owner's, and not decided here:** `ADR-0067`'s d6 amendment (every relation bounded at once, the
   margin-aware form) and the re-confirmation of B-T8 for the second pull (`ADR-0067` d6's dated line of 2026-11-04).
+  - *Answered 2026-11-04 (`…dda43b71`, "1. yes; 2. yes"): both yes. The lines are `ADR-0067`'s, dated that day
+    (`arch-second-pull-1104`).*
+- *Dated 2026-11-04 (`arch-second-pull-1104`, records only, at `main` `fad72f17`; `ABC-271` merged `872e5ffc`, QE
+  `…74da20bf`; the Orchestrator's dispositions `…264e420e`):* **two lines carried to the second pull. No bar moves.**
+  - d3: the endgame cost is restated (`QE-271-f`).
+  - d4: the second test-only seam is accepted, and two test-only rows are owed before the second pull emits
+    (`QE-271-g`, `QE-271-h`).
 
 *Before acceptance:* **PROPOSED 2026-11-04** (task `arch-ABC-271`, on `grugops/arch-ABC-271` from `main` `ac55ddf6`;
 text of record `01d2434b`). It proposed choice rule 1: the three terms shipped on their rule values, judged on their
@@ -57,6 +64,8 @@ own 100-game read (GAIN), behind a test-only off-door pair, with P0–P8 as the 
 | 2026-11-04 | Orchestrator | The sealed choice rule governs: E3 stays NOT MET, rule 1 is not taken, rule 4 (structure only, `ADR-0068` form). Owner asked | `orch-2026-10-30a` `…e0ff0aeb` |
 | 2026-11-04 | Owner | **ACCEPTED, form (a)** ("a") | `orch-2026-10-30a` `…e8a3b5df` |
 | 2026-11-04 | Architect/Design | Restated as ACCEPTED in form (a): the terms at 0, K0–K4, U held at 0 at the second pull. `ADR-0067` d5 / d6 / item 5, `ADR-0056` E4 / D6, `ADR-0064` d10 written. No bar moved | `arch-ADR-0070-accept` |
+| 2026-11-04 | Orchestrator | `ABC-271` Done (merged `872e5ffc`; QE PASS_WITH_GAPS `…74da20bf`). `QE-271-f`, `-g`, `-h` and `-i` carried to the second pull | `orch-2026-10-30a` `…264e420e` |
+| 2026-11-04 | Architect/Design | d3: the endgame cost restated (1.12 × per call against "about 1.085 ×"), graded at the second pull by `ADR-0067` B-T4's endgame row. d4: `pawnStructureForTest` accepted with a caller guard; the hot-path row's form. No bar moved | `arch-second-pull-1104` |
 
 ## Context
 
@@ -200,12 +209,45 @@ no intent class and no read. The figure is history and a forecast for the second
      emission pays.
    - **F2's single value-identical cost cut, named now:** the two distances from a 128 × 128 `Int8Array` (16 KiB,
      `NFR-009`), and the loop entered only for files with a set field (bit-scan of the words).
+   - *Dated 2026-11-04 (`arch-second-pull-1104`; `QE-271-f`, MEDIUM, carried by `…264e420e`): **the endgame cost is
+     about 1.12 × per call, not "about 1.085 ×".** No bar moves.*
+     - **Measured on the build** (`qe-ABC-271` `…78f353e7`, a host gated at 60 °C): `evaluateAtPhase` on the endgame
+       report set (six positions, phases 3–8, each with a passer) reads **1.1246 / 1.1169 ×**, mean 1.1207, about
+       25.5 ns a call. The Engineer's ungated 1.114 / 1.126 agrees. The probe's 1.084 / 1.086, which this decision
+       quoted, was low.
+     - **In search** on the same six at depth 9: **1.021 / 1.037 ×** ns per node, with nodes, scores and moves
+       identical. Evaluation is part of a node's cost, and the memo absorbs repeated pawn shapes.
+     - **K3's graded figure does not read it.** Of `G2`'s six roots, five are at phase 24, where the loop is skipped,
+       and the sixth has no passer. So R = 1.0187 reads the memo's two reads and one compare. K3 was met as written.
+     - **The second pull grades an endgame cost row:** `ADR-0067` B-T4 gains the endgame `G2` at ≤ 1.02 × against
+       the pull's base (its dated line under the bars table). That row reads what the pull adds where the loop runs.
+       E4a's own 1.12 × stays on `main` as accepted, and B-T7, played on the clock, prices it in.
+     - **The named cut stays named.** The distance table and the bit-scan form a value-identical speed change, cut by
+       BA/PM on its own S2 reading if the cost is wanted back. It is not a precondition of the second pull.
 4. **No switch and no doors** (`ADR-0068` d4's reason: a door would reproduce a path that does not differ).
    - `ABC-271`'s scope 5 (a switch and a door pair) is struck. With every value 0 the loop adds 0 on every path, so
      every existing door, older or newer, reads its pre-ticket counts (K0).
    - **One test-only seam, `passerTermsForTest(position)`,** returns each side's three eg parts (king distance, free,
      unstoppable) at the parameters in force. It follows the `kingExposureForTest` precedent, so inside
      `withParametersForTest` it reads the test's table. It is called only from test files.
+   - *Dated 2026-11-04 (`arch-second-pull-1104`; `QE-271-g` LOW and `QE-271-h` MEDIUM, carried by `…264e420e`): **a
+     second seam is accepted, and two test-only rows are owed.** Both rows land before the second pull's fit is taken
+     (`ADR-0067`'s dated line under its bars table). No bar moves.*
+     - **`pawnStructureForTest` is accepted** as the build has it (the Engineer's flagged reading 4). It is test-only,
+       it is called from `src/evaluate.passer.test.ts` alone, and its side effects are a production memo miss's
+       (`qe-ABC-271` `…fa3054e5`). It reads the memo words K1 (e) checks, so it earns its place.
+       - **Owed, `QE-271-g`:** the source row that holds `passerTermsForTest` to test files gains
+         `pawnStructureForTest`: no non-test file under `src/`, no `tools/` file and no script calls it.
+     - **Owed, `QE-271-h`: the hot-path row.** The build's rows read E4a's part only through the seam, which does its
+       own king scan and reads `phaseOf`. So a fault symmetric in colour on the hot path passes them: mutant E16
+       inverts the side to move on the hot path and passes all 21 rows (`…2608eabc`).
+       - **The row** (`qe-ABC-271` `…d0f7af61`): on the 44 fixtures QE froze, inside `withParametersForTest` at
+         decision 1's probed values, the white-POV `evaluateAtPhase(p, 0)`, minus the same at the shipped values,
+         equals the seam's white (king distance + free + unstoppable) minus its black. At phase 0, w = 0, so the
+         equality is exact.
+       - It kills E14, E15 and E16. It is a unit row with no search, in the default lane (`NFR-008`: `QE-271-j`
+         puts the headroom at 0.6 s on the build).
+       - At the shipped values of 0 it still bites, because the probed values come from the test's table.
 5. **The bars of `ABC-271`, pre-registered** (fixed here; not loosened after Ready). The PROPOSED P0–P8 are not bars.
    - **K0, node identity:** `chooseMove`, frozen clock, kiwipete d8 / d9 **766 275 / 1 725 150**; position-6 d8 / d9 /
      d10 **87 475 / 253 724 / 533 916**; `search()` d8 **605 117 / 406 787**.
