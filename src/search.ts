@@ -228,8 +228,10 @@ export class KillerTable {
 /**
  * Sort tiers: the hash move above every capture, every capture above every killer, every killer
  * above every losing capture (`ABC-283`, `ADR-0065` decision 3), and every losing capture above
- * every other quiet move, whose key is its history value (`ADR-0063` decision 4), always within
- * [-`HISTORY_BOUND`, `HISTORY_BOUND`]. With both switches off the keys are 0 below the
+ * every other quiet move. A quiet move's key is max(0, its cell): history promotes, never demotes
+ * (`ADR-0063` d4, dated 2026-11-04), so the key is always within [0, `HISTORY_BOUND`] and a move
+ * whose cell is at most 0 keeps generation order among the zero keys (the stable sort). With
+ * both switches off the keys are 0 below the
  * killers, and the order is the pre-`ABC-283` order exactly: the killers' offset moves no
  * relative order.
  */
@@ -323,6 +325,10 @@ function losingForOrdering(position: Position, capture: Move): boolean {
   return see(position, capture) < SEE_ORDER_THRESHOLD;
 }
 
+/**
+ * `move`'s sort key, by the tiers above. A quiet move's key is max(0, its cell): history promotes,
+ * never demotes (`ADR-0063` d4, dated 2026-11-04).
+ */
 function orderKey(
   move: Move,
   killers: readonly Move[],
@@ -339,7 +345,7 @@ function orderKey(
   }
   const killer = killers.findIndex((candidate) => sameMove(candidate, move));
   if (killer !== -1) return KILLER_KEY + killers.length - killer;
-  return history ? (HISTORY[historyIndex(move)] as number) : 0;
+  return history ? Math.max(0, HISTORY[historyIndex(move)] as number) : 0;
 }
 
 /** More than any legal position's move count (218); a longer list allocates its own keys. */
