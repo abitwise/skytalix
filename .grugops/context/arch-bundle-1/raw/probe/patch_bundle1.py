@@ -365,6 +365,8 @@ export function probeNode(position: Position, depth: number, alpha: number, beta
 }''')
 
 # --- engine.ts --------------------------------------------------------------------------------------------------
+# Added after Step B's first attempt crashed on the head's first P4 node in chooseMove (`EMPTY` not imported here).
+sub(E, 'import type { Position } from "./position.ts";', 'import { EMPTY, type Position } from "./position.ts";')
 sub(E, '''  orderMoves,
   recordHistoryCutoff,
   repeatsInPath,

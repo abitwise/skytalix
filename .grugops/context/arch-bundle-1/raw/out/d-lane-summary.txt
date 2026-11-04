@@ -1,0 +1,19 @@
+
+ Test Files  4 failed | 67 passed (71)
+      Tests  9 failed | 2622 passed (2631)
+   Start at  20:48:48
+   Duration  9.28s (transform 0ms, setup 0ms, import 6.56s, tests 6.74s, environment 6ms)
+
+
+failed rows (each from the copy having no AGENTS.md, plans/ or .grugops/, or from the counter's own process read):
+ FAIL  src/cli.test.ts > ABC-042 — a human can run it > A1 — AGENTS.md's `Dev / run` line is the command that was run
+ FAIL  src/cli.test.ts > ABC-059 — every claim AGENTS.md makes about `Dev / run` agrees with the delivered command > A1-A4 — no span says `UNKNOWN - v
+ FAIL  src/cli.test.ts > ABC-065 — AGENTS.md's `Dev / run` slot is reachable and its option list is the accepted set > A1 — the slot shows the separat
+ FAIL  src/cli.test.ts > ABC-065 — AGENTS.md's `Dev / run` slot is reachable and its option list is the accepted set > A3 — the documented option list
+ FAIL  src/cli.test.ts > ABC-065 — AGENTS.md's `Dev / run` slot is reachable and its option list is the accepted set > ABC-067 A1/A2/A4 — the window s
+ FAIL  src/cli.test.ts > ABC-065 — AGENTS.md's `Dev / run` slot is reachable and its option list is the accepted set > ABC-071 A1/A2/A3 — the slot lab
+ FAIL  src/cli.test.ts > ABC-109 — AGENTS.md stays inside its byte budget > A5 — AGENTS.md's size on disk, in BYTES, is at most the budget
+ FAIL  src/cli.test.ts > ABC-173 — every vitest run carries the V8 heap ceiling, read where it applies (ADR-0008 addendum 2026-10-19) > A3 — every vit
+ FAIL  src/levels.test.ts > ABC-259 — R-TC item 2: the engine core reads the budget only as the deadline > environment rule: no core file reads `proce
+ FAIL  src/pgn.test.ts [ src/pgn.test.ts ]
+ FAIL  tools/grugops/qe-hop-integrity.test.ts [ tools/grugops/qe-hop-integrity.test.ts ]

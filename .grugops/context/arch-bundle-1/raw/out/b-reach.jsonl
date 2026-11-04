@@ -1,0 +1,5 @@
+{"head":"M1","door":"MAIN","maxNodes":47000,"rows":190,"doorMean":6.868,"headMean":6.984,"gain":0.116,"deeper":34,"shallower":13,"moveDiff":26}
+{"head":"M2","door":"MAIN","maxNodes":47000,"rows":190,"doorMean":6.868,"headMean":6.995,"gain":0.127,"deeper":37,"shallower":14,"moveDiff":27}
+{"head":"M3","door":"MAIN","maxNodes":47000,"rows":190,"doorMean":6.868,"headMean":6.979,"gain":0.111,"deeper":33,"shallower":13,"moveDiff":25}
+{"head":"M4","door":"MAIN","maxNodes":47000,"rows":190,"doorMean":6.868,"headMean":7,"gain":0.132,"deeper":34,"shallower":13,"moveDiff":20}
+{"head":"M5","door":"MAIN","maxNodes":47000,"rows":190,"doorMean":6.868,"headMean":6.963,"gain":0.095,"deeper":26,"shallower":9,"moveDiff":18}

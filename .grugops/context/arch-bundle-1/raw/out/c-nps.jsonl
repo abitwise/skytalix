@@ -1,0 +1,4 @@
+{"arm":"MAIN","nps":{"kiwipete":685449.1593885876,"position-6":625954.6072345307},"clearMicros":0.2,"ratioToDoor":{"kiwipete":1,"position-6":1}}
+{"arm":"C1+M3","nps":{"kiwipete":690916.1715072315,"position-6":594027.332580789},"clearMicros":0.2,"ratioToDoor":{"kiwipete":0.9921,"position-6":1.0537}}
+{"arm":"M3","nps":{"kiwipete":694237.9466456342,"position-6":595704.0973907408},"clearMicros":0.1,"ratioToDoor":{"kiwipete":0.9873,"position-6":1.0508}}
+{"arm":"C1","nps":{"kiwipete":682597.6041300454,"position-6":620199.6325024138},"clearMicros":0.1,"ratioToDoor":{"kiwipete":1.0042,"position-6":1.0093}}
