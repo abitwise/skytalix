@@ -1,0 +1,62 @@
+{
+ "tree": "H",
+ "fixturesSha256": "bf3c205bf4106209e3151717d93542180d90d344cecfdfbb6f2a30c9d5db887a",
+ "part1": {
+  "rows": 44,
+  "pairs": 19
+ },
+ "part2": {
+  "distinctFens": 67093,
+  "named": 703,
+  "walks": 46479,
+  "placed": 20000,
+  "positions": 134186,
+  "withPasser": 97668,
+  "phase0": 14730,
+  "uLiveVP": 12430,
+  "uAtPhase0Hot": 103716,
+  "freeNonZero": 80744,
+  "seamRows": 805116,
+  "hotRows": 1610232,
+  "idRows": 1341860,
+  "memoRows": 402558,
+  "mirrorRows": 536744,
+  "collisionRows": 134186,
+  "V2": {
+   "KE": [
+    0,
+    3,
+    5,
+    7,
+    11,
+    13,
+    17,
+    0
+   ],
+   "KO": [
+    0,
+    2,
+    3,
+    5,
+    7,
+    11,
+    19,
+    0
+   ],
+   "F": [
+    0,
+    23,
+    29,
+    31,
+    37,
+    41,
+    43,
+    0
+   ],
+   "U": 97
+  }
+ },
+ "fail": 0,
+ "bad": []
+}
+K1 OK

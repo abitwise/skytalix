@@ -1,0 +1,9 @@
+kiwipete_chooseMove_d8 frozen=766275 H=766275/-89/67-840 B=766275/-89/67-840 OK
+kiwipete_chooseMove_d9 frozen=1725150 H=1725150/-114/20-800 B=1725150/-114/20-800 OK
+pos6_chooseMove_d8 frozen=87475 H=87475/71/34-670 B=87475/71/34-670 OK
+pos6_chooseMove_d9 frozen=253724 H=253724/78/34-670 B=253724/78/34-670 OK
+pos6_chooseMove_d10 frozen=533916 H=533916/79/34-670 B=533916/79/34-670 OK
+kiwipete_search_d8 frozen=605117 H=605117/-89/67-840 B=605117/-89/67-840 OK
+pos6_search_d8 frozen=406787 H=406787/74/34-670 B=406787/74/34-670 OK
+search d7 frozen rows: 112 positions, 0 differ, 2226344 nodes on H
+K0 OK
