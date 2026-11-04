@@ -1,3 +1,4 @@
+_Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `arch-ABC-281` merged (all-S, no owner question). ABC-281 → In Development. Running: se-ABC-281, bapm-ABC-281-dor. Owner: ADR-0070 form._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — ABC-281 cut (NFR-008 headroom; DoR 9/10) → `arch-ABC-281`. Owner: ADR-0070 form._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `secnfr-nfr008-headroom` merged: NFR-008 PASS_WITH_RISKS (median 9.77–9.90 s, 0/15 over); R-N8H-1 MEDIUM open (owner Orchestrator); Q-N8H-1 held. → `bapm-nfr008-rows` (move 3 rows to deep lanes, −0.38 s). Owner: ADR-0070 form._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `scribe-see-lane` merged (AGENTS.md SEE + tune deep lanes; 18 429 / 18 432 B; QE-279-g closed). Running: secnfr-nfr008-headroom. Owner: ADR-0070 form._
@@ -1431,14 +1432,14 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## In Analysis (WIP 0/2)
 
 
-## In Design (WIP 1/2)
-- [ABC-281] **2026-11-04: cut (bapm-nfr008-rows), DoR 9/10 → In Design → `arch-ABC-281` (row 11: W/S/K per row).** The default lane sheds ~0.4 s: three named rows move to their files' deep lanes; NFR-008 re-read graded with a twin (test-only; EPIC-011 lane hygiene; S, P2). R-N8H-1 MEDIUM open; Q-N8H-1 held (trigger: median ≥ 9.6 s after).
+## In Design (WIP 0/2)
 
 
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+- [ABC-281] **2026-11-04: row 11 done (arch-ABC-281 …d7b2b02b): all three rows form S, kill parity on 7 mutants, no owner question; forecast −0.36 s → DoR 10/10 → In Development → `se-ABC-281` (page lines `bapm-ABC-281-dor` in parallel).** **2026-11-04: cut (bapm-nfr008-rows), DoR 9/10 → In Design → `arch-ABC-281` (row 11: W/S/K per row).** The default lane sheds ~0.4 s: three named rows move to their files' deep lanes; NFR-008 re-read graded with a twin (test-only; EPIC-011 lane hygiene; S, P2). R-N8H-1 MEDIUM open; Q-N8H-1 held (trigger: median ≥ 9.6 s after).
 
 
 
