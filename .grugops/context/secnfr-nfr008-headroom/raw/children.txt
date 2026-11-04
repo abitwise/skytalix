@@ -1,0 +1,5 @@
+# Child start-up cost, read under the host lock, 3 rounds, cwd <worktree>, stdin </dev/null (ms, date +%s%N)
+# node src/cli.ts --colour purple (refused):   95 / 80 / 82
+# node src/cli.ts --colour white --unicode:    98 / 79 / 85
+# npm run chess:                              171 / 166 / 145
+# node -e heap_size_limit (heapProbe):          25 / 26 / 27
