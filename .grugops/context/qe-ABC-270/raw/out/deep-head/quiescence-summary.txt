@@ -1,0 +1,6 @@
+stdout | src/quiescence.test.ts > ABC-228 — the same-depth mate floor on the 287 [deep, SEARCH_DEEP=1] > every mate searchWithoutQuiescenceEvasions scores at depth 5, searchWithoutQuietPromotions scores at depth 5: same sign, no longer [deep, SEARCH_DEEP=1]
+ABC-228 mate floor d5: 0 of 189 violated
+ ✓ src/quiescence.test.ts > ABC-228 — the same-depth mate floor on the 287 [deep, SEARCH_DEEP=1] > every mate searchWithoutQuiescenceEvasions scores at depth 5, searchWithoutQuietPromotions scores at depth 5: same sign, no longer [deep, SEARCH_DEEP=1] 1077ms
+ Test Files  1 passed (1)
+      Tests  116 passed (116)
+   Duration  49.19s (transform 0ms, setup 0ms, import 42ms, tests 49.08s, environment 0ms)

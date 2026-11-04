@@ -21,7 +21,8 @@
  * value made by the rule written above it there. One linear phase (N 1, B 1, R 2, Q 4 over both
  * sides, clamped to 24) blends them, once per call: score = mg + trunc(Δ × (24 − phase) / 24),
  * where Δ = eg − mg sums EVERY term (`ABC-274`, `ADR-0067` decision 8: material, every square
- * table, doubled, isolated, passed, the three king-file terms and mobility). At E1's table only
+ * table, doubled, isolated, passed, the three king-file terms, their three queen-on pairs (`ABC-270`,
+ * `ADR-0068`, at 0) and mobility). At E1's table only
  * the king's square and the passed pawns have halves that differ, so the score is the one E1
  * computed, bit for bit. trunc is odd, so the mirror stays exact. `evaluateWithoutTaper` is the
  * pre-`ABC-269` evaluation exactly (the blend at phase 24).
@@ -56,6 +57,7 @@ import {
   PAWN,
   type Position,
   pieceType,
+  QUEEN,
   ROOK,
   rankOf,
 } from "./position.ts";
@@ -100,13 +102,16 @@ const PACKED_PIECE_SQUARE = new Int32Array(7 * 64);
 const KING_EG_DELTA = new Int32Array(64);
 /** Passed pawns by own rank, packed. */
 const PACKED_PASSED = new Int32Array(8);
-/** The five scalar terms, packed, at the indexes named below. */
-const PACKED_TERMS = new Int32Array(5);
+/** The eight scalar terms, packed, at the indexes named below (the last three: `ABC-270`'s queen-on). */
+const PACKED_TERMS = new Int32Array(8);
 const DOUBLED_AT = 0;
 const ISOLATED_AT = 1;
 const SHELTER_AT = 2;
 const HALF_OPEN_AT = 3;
 const OPEN_AT = 4;
+const SHELTER_QUEEN_AT = 5;
+const HALF_OPEN_QUEEN_AT = 6;
+const OPEN_QUEEN_AT = 7;
 /** Mobility, outside the packed sum: weight mg, weight eg, cap mg, cap eg. */
 const MOBILITY_TERMS = new Int32Array(4);
 
@@ -146,6 +151,9 @@ function loadParameters(parameters: EvaluationParameters): void {
   PACKED_TERMS[SHELTER_AT] = pair(parameters.KING_SHELTER_MISSING);
   PACKED_TERMS[HALF_OPEN_AT] = pair(parameters.KING_FILE_HALF_OPEN);
   PACKED_TERMS[OPEN_AT] = pair(parameters.KING_FILE_OPEN);
+  PACKED_TERMS[SHELTER_QUEEN_AT] = pair(parameters.KING_SHELTER_MISSING_QUEEN);
+  PACKED_TERMS[HALF_OPEN_QUEEN_AT] = pair(parameters.KING_FILE_HALF_OPEN_QUEEN);
+  PACKED_TERMS[OPEN_QUEEN_AT] = pair(parameters.KING_FILE_OPEN_QUEEN);
   MOBILITY_TERMS[0] = parameters.MOBILITY_WEIGHT.mg;
   MOBILITY_TERMS[1] = parameters.MOBILITY_WEIGHT.eg;
   MOBILITY_TERMS[2] = parameters.MOBILITY_CAP.mg;
@@ -210,7 +218,9 @@ export function isPassedPawn(board: Uint8Array, square: number): boolean {
  * of the king on that file. FILE_HALF_OPEN: no own pawn anywhere on the file, an enemy pawn on it.
  * FILE_OPEN: no pawn of either colour on the file. Its two halves are equal at E1: king safety by
  * phase is E3's (`ADR-0064` decision 10; this was `ABC-083`'s "untapered by decision"). Read
- * packed from `PACKED_TERMS`, so both halves enter the blend (`ABC-274`).
+ * packed from `PACKED_TERMS`, so both halves enter the blend (`ABC-274`). E3a (`ABC-270`,
+ * `ADR-0068`): while the enemy has a queen, each file term carries its queen-on pair too, 0 at
+ * start, so the tuner can fit queen-dependent king safety as three linear features.
  *
  * ABC-083's mobility: centipawns per square a non-pawn piece reaches (empty, or holding an enemy
  * piece) — the attack-map form of `ADR-0031` decision 2: counted on the board, no `Move` objects,
@@ -264,6 +274,9 @@ function squaresReached(board: Uint8Array, square: number, piece: number): numbe
  * The king-safety penalty for the king on `king` (positive = worse for that king's side), packed.
  * `ownPawn`/`enemyPawn` are the two coloured pawn codes and `step` is the king's forward
  * direction in ranks (+1 white, -1 black), which is what makes the term mirror-exact.
+ * `enemyQueen` is true while the enemy has at least one queen (a flag, not a count): then each
+ * file term carries its queen-on pair too (`ABC-270`, `ADR-0068` d3), added once per king, before
+ * the file loop, so the loop is unchanged.
  */
 function kingExposure(
   board: Uint8Array,
@@ -271,15 +284,21 @@ function kingExposure(
   ownPawn: number,
   enemyPawn: number,
   step: number,
+  enemyQueen: boolean,
 ): number {
   const kingFile = fileOf(king);
   const shelterRank1 = rankOf(king) + step;
   const shelterRank2 = shelterRank1 + step;
   const fromFile = kingFile === 0 ? 0 : kingFile - 1;
   const toFile = kingFile === 7 ? 7 : kingFile + 1;
-  const shelterMissing = PACKED_TERMS[SHELTER_AT] as number;
-  const fileHalfOpen = PACKED_TERMS[HALF_OPEN_AT] as number;
-  const fileOpen = PACKED_TERMS[OPEN_AT] as number;
+  let shelterMissing = PACKED_TERMS[SHELTER_AT] as number;
+  let fileHalfOpen = PACKED_TERMS[HALF_OPEN_AT] as number;
+  let fileOpen = PACKED_TERMS[OPEN_AT] as number;
+  if (enemyQueen) {
+    shelterMissing += PACKED_TERMS[SHELTER_QUEEN_AT] as number;
+    fileHalfOpen += PACKED_TERMS[HALF_OPEN_QUEEN_AT] as number;
+    fileOpen += PACKED_TERMS[OPEN_QUEEN_AT] as number;
+  }
   let penalty = 0;
 
   for (let file = fromFile; file <= toFile; file++) {
@@ -535,6 +554,8 @@ function whiteMinusBlack(
   let reach = 0;
   let whiteKing = -1;
   let blackKing = -1;
+  let whiteQueen = false;
+  let blackQueen = false;
   let whitePawns = 0;
   let blackPawns = 0;
   let pawnSlotWord = 0;
@@ -566,9 +587,14 @@ function whiteMinusBlack(
       }
       const reached = squaresReached(board, square, piece);
       reach += black ? -reached : reached;
-      if (type === KING) {
-        if (black) blackKing = square;
-        else whiteKing = square;
+      // One compare per non-pawn piece, as before `ABC-270`: it gathers the kings and the two
+      // queen flags (`ADR-0068` d3; QUEEN 5 and KING 6 are the two highest types).
+      if (type >= QUEEN) {
+        if (type === KING) {
+          if (black) blackKing = square;
+          else whiteKing = square;
+        } else if (black) blackQueen = true;
+        else whiteQueen = true;
       }
     }
   }
@@ -582,8 +608,8 @@ function whiteMinusBlack(
     ? Math.max(-capEg, Math.min(capEg, (MOBILITY_TERMS[1] as number) * reach))
     : 0;
   const kingSafety =
-    kingExposure(board, blackKing, BLACK_PAWN, PAWN, -1) -
-    kingExposure(board, whiteKing, PAWN, BLACK_PAWN, 1);
+    kingExposure(board, blackKing, BLACK_PAWN, PAWN, -1, whiteQueen) -
+    kingExposure(board, whiteKing, PAWN, BLACK_PAWN, 1, blackQueen);
 
   const structure = pawnCache
     ? pawnStructureCached(board, whitePawns, blackPawns, pawnSlotWord)
@@ -685,4 +711,44 @@ export function withParametersForTest<T>(parameters: EvaluationParameters, run: 
     loadParameters(PARAMETERS);
     clearPawnCacheForTest();
   }
+}
+
+/**
+ * TEST-ONLY (`ABC-270` K1 (c), `QE-270-a`): each king's exposure penalty, unpacked into its two
+ * halves (positive = worse for that king's side), computed by the same `kingExposure` that
+ * `evaluate` sums, with the same enemy-queen flags. `evaluate` reads only black minus white, so a
+ * row where both kings move alike (QE's QP2) is invisible to it; this read is not. It reads the
+ * packed arrays in force, so inside `withParametersForTest` it reads the test's table. Nothing in
+ * production calls it (the `evaluateWithoutMobility` precedent).
+ */
+export function kingExposureForTest(position: Position): {
+  white: { mg: number; eg: number };
+  black: { mg: number; eg: number };
+} {
+  const board = position.board;
+  let whiteKing = -1;
+  let blackKing = -1;
+  let whiteQueen = false;
+  let blackQueen = false;
+  for (let square = 0; square < 128; square++) {
+    if ((square & 0x88) !== 0) continue;
+    const piece = board[square] as number;
+    if (piece === EMPTY) continue;
+    const type = pieceType(piece);
+    if (type === KING) {
+      if (isBlack(piece)) blackKing = square;
+      else whiteKing = square;
+    } else if (type === QUEEN) {
+      if (isBlack(piece)) blackQueen = true;
+      else whiteQueen = true;
+    }
+  }
+  const halves = (packed: number): { mg: number; eg: number } => {
+    const mg = (packed << 16) >> 16;
+    return { mg, eg: (packed - mg) / PACK };
+  };
+  return {
+    white: halves(kingExposure(board, whiteKing, PAWN, BLACK_PAWN, 1, blackQueen)),
+    black: halves(kingExposure(board, blackKing, BLACK_PAWN, PAWN, -1, whiteQueen)),
+  };
 }

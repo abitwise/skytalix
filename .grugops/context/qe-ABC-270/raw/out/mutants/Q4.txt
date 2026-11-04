@@ -1,0 +1,14 @@
+ "fail": 249690,
+ "bad": [
+  "QP1A white at 2x: {\"mg\":55,\"eg\":55} != 75",
+  "QP1A evaluate net -30 != -50",
+  "QP1A evaluateWithoutTaper net -30 != -50",
+  "QP1 subject mg: A 55 != 3 x B 25",
+  "QP1 subject eg: A 55 != 3 x B 25",
+  "QP3A black at 2x: {\"mg\":55,\"eg\":55} != 75",
+--- vitest
+     × with the pairs at 2 × base: the subject king's exposure is exactly 3 × its queenless exposure in each half, the other king's is equal, and the control moves nothing 2ms
+     × each queen-on pair counts its own feature: the king's file count × the enemy-queen flag, mg and eg apart 1ms
+     × through evaluate: pairs 0 → 2 × base moves white's view by QE's frozen net, in evaluate and evaluateWithoutTaper 1ms
+     × the queen-on endgame halves enter the blend: eg = 24, mg = 0 moves only the phase-0 score, by −24 × (white's queen-on count − black's) 1ms
+      Tests  4 failed | 9 passed (13)

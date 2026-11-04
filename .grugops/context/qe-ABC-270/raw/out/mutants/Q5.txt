@@ -1,0 +1,14 @@
+ "fail": 492093,
+ "bad": [
+  "QP2A evaluate net -70 != 0",
+  "QP2A evaluateWithoutTaper net -70 != 0",
+  "QP2B evaluate net 0 != 70",
+  "QP2B evaluateWithoutTaper net 0 != 70",
+  "QP3A evaluate net 0 != 50",
+  "QP3A evaluateWithoutTaper net 0 != 50",
+--- vitest
+     × through evaluate: pairs 0 → 2 × base moves white's view by QE's frozen net, in evaluate and evaluateWithoutTaper 3ms
+     × the queen-on endgame halves enter the blend: eg = 24, mg = 0 moves only the phase-0 score, by −24 × (white's queen-on count − black's) 1ms
+     × G3 + TAPER_MIRROR_POSITIONS + QE's pairs, at 0 and at 2 × base: 0 mismatches 4ms
+     × each king reads the ENEMY's flag, and kingExposure adds the queen-on terms once, before its file loop 1ms
+      Tests  4 failed | 9 passed (13)

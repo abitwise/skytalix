@@ -1,0 +1,8 @@
+old-rows-base exit 0
+old-rows-head exit 0
+npm-test-base exit 0 wall 13.156893694 s;  Test Files 66 passed (66); Tests 2588 passed (2588); Duration 9.53s (transform 0ms, setup 0ms, import 6.49s, tests 7.91s, environment 5ms);
+npm-test-head exit 0 wall 59.636416852 s;  Test Files 67 passed (67); Tests 2604 passed (2604); Duration 9.69s (transform 0ms, setup 0ms, import 6.80s, tests 7.81s, environment 5ms);
+lint exit 0
+typecheck exit 0
+build exit 0
+DONE

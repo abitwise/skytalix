@@ -1,0 +1,5 @@
+PUZZLES weakened (evaluate = 0): solved 16/58, baseline 54/58, budget 25 step 1, wall 1.42 s
+ × src/puzzle-suite.test.ts > the gating run [deep, PUZZLE_DEEP=weakened] > the gate: solved >= the recorded baseline 1433ms
+ Test Files  1 failed (1)
+      Tests  1 failed | 13 passed (14)
+   Duration  1.58s (transform 0ms, setup 0ms, import 52ms, tests 1.46s, environment 0ms)

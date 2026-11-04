@@ -1,0 +1,87 @@
+{
+ "tree": "H",
+ "part1": [
+  {
+   "id": "QP1",
+   "kind": "pair",
+   "subject3x": "75/25 mg, 75/25 eg",
+   "netA": -50,
+   "netB": 0
+  },
+  {
+   "id": "QP2",
+   "kind": "pair",
+   "subject3x": "105/35 mg, 105/35 eg",
+   "netA": 0,
+   "netB": 70
+  },
+  {
+   "id": "QP3",
+   "kind": "pair",
+   "subject3x": "75/25 mg, 75/25 eg",
+   "netA": 50,
+   "netB": 0
+  },
+  {
+   "id": "QP4",
+   "kind": "pair",
+   "subject3x": "120/40 mg, 120/40 eg",
+   "netA": -40,
+   "netB": -120
+  },
+  {
+   "id": "QP5",
+   "kind": "pair",
+   "subject3x": "180/60 mg, 180/60 eg",
+   "netA": -40,
+   "netB": 80
+  },
+  {
+   "id": "QP6",
+   "kind": "pair",
+   "subject3x": "105/35 mg, 105/35 eg",
+   "netA": -70,
+   "netB": 0
+  },
+  {
+   "id": "QP7",
+   "kind": "pair",
+   "subject3x": "150/50 mg, 150/50 eg",
+   "netA": -100,
+   "netB": 0
+  },
+  {
+   "id": "QC8",
+   "kind": "control",
+   "subject3x": "control",
+   "netA": -100,
+   "netB": -100
+  }
+ ],
+ "part2": {
+  "distinctFens": 92066,
+  "positions": 184132,
+  "withFlag": 130122,
+  "bothFlags": 68934,
+  "featureHits": {
+   "sQ": 166014,
+   "hQ": 78444,
+   "oQ": 52074
+  },
+  "seamRows": 368264,
+  "hotRows": 552396,
+  "mirrorRows": 368264,
+  "values": [
+   7,
+   11,
+   13,
+   3,
+   5,
+   17
+  ]
+ },
+ "part1rows": 8,
+ "fail": 0,
+ "bad": []
+}
+K1 OK

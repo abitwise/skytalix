@@ -1,0 +1,24 @@
+stdout | src/evaluate.taper.test.ts > ABC-269 B2 — the mate floor on the 287: the door's mates are same-sign mates for search() [deep, SEARCH_DEEP=1] > the door's depth-4 mates, search() at depth 5: 0 violations [deep, SEARCH_DEEP=1]
+ABC-269 B2 mate floor, door d4 -> search() d5: 0 of 163 violated
+ ✓ src/evaluate.taper.test.ts > ABC-269 B2 — the mate floor on the 287: the door's mates are same-sign mates for search() [deep, SEARCH_DEEP=1] > the door's depth-4 mates, search() at depth 5: 0 violations [deep, SEARCH_DEEP=1] 721ms
+stdout | src/evaluate.taper.test.ts > ABC-269 B2 — the mate floor on the 287: the door's mates are same-sign mates for search() [deep, SEARCH_DEEP=1] > the door's depth-5 mates, search() at depth 5: 0 violations [deep, SEARCH_DEEP=1]
+ABC-269 B2 mate floor, door d5 -> search() d5: 0 of 189 violated
+ ✓ src/evaluate.taper.test.ts > ABC-269 B2 — the mate floor on the 287: the door's mates are same-sign mates for search() [deep, SEARCH_DEEP=1] > the door's depth-5 mates, search() at depth 5: 0 violations [deep, SEARCH_DEEP=1] 1219ms
+ ✓ src/evaluate.taper.test.ts > ABC-274 A3 — the blend is live for every term family (ADR-0067 decision 8, scope 1) > MATERIAL: the score is mg + trunc((Δ + offset) × (D − w) / D), exactly, on ≥ 3 positions at phases 1–23 2ms
+ ✓ src/evaluate.taper.test.ts > ABC-274 A3 — the blend is live for every term family (ADR-0067 decision 8, scope 1) > PST.pawn: the score is mg + trunc((Δ + offset) × (D − w) / D), exactly, on ≥ 3 positions at phases 1–23 1ms
+ ✓ src/evaluate.taper.test.ts > ABC-274 A3 — the blend is live for every term family (ADR-0067 decision 8, scope 1) > PST.knight: the score is mg + trunc((Δ + offset) × (D − w) / D), exactly, on ≥ 3 positions at phases 1–23 0ms
+ ✓ src/evaluate.taper.test.ts > ABC-274 A3 — the blend is live for every term family (ADR-0067 decision 8, scope 1) > PST.bishop: the score is mg + trunc((Δ + offset) × (D − w) / D), exactly, on ≥ 3 positions at phases 1–23 0ms
+ ✓ src/evaluate.taper.test.ts > ABC-274 A3 — the blend is live for every term family (ADR-0067 decision 8, scope 1) > PST.rook: the score is mg + trunc((Δ + offset) × (D − w) / D), exactly, on ≥ 3 positions at phases 1–23 0ms
+ ✓ src/evaluate.taper.test.ts > ABC-274 A3 — the blend is live for every term family (ADR-0067 decision 8, scope 1) > PST.queen: the score is mg + trunc((Δ + offset) × (D − w) / D), exactly, on ≥ 3 positions at phases 1–23 0ms
+ ✓ src/evaluate.taper.test.ts > ABC-274 A3 — the blend is live for every term family (ADR-0067 decision 8, scope 1) > PST.king: the score is mg + trunc((Δ + offset) × (D − w) / D), exactly, on ≥ 3 positions at phases 1–23 0ms
+ ✓ src/evaluate.taper.test.ts > ABC-274 A3 — the blend is live for every term family (ADR-0067 decision 8, scope 1) > DOUBLED: the score is mg + trunc((Δ + offset) × (D − w) / D), exactly, on ≥ 3 positions at phases 1–23 1ms
+ ✓ src/evaluate.taper.test.ts > ABC-274 A3 — the blend is live for every term family (ADR-0067 decision 8, scope 1) > ISOLATED: the score is mg + trunc((Δ + offset) × (D − w) / D), exactly, on ≥ 3 positions at phases 1–23 1ms
+ ✓ src/evaluate.taper.test.ts > ABC-274 A3 — the blend is live for every term family (ADR-0067 decision 8, scope 1) > PASSED: the score is mg + trunc((Δ + offset) × (D − w) / D), exactly, on ≥ 3 positions at phases 1–23 1ms
+ ✓ src/evaluate.taper.test.ts > ABC-274 A3 — the blend is live for every term family (ADR-0067 decision 8, scope 1) > KING_SHELTER_MISSING: the score is mg + trunc((Δ + offset) × (D − w) / D), exactly, on ≥ 3 positions at phases 1–23 1ms
+ ✓ src/evaluate.taper.test.ts > ABC-274 A3 — the blend is live for every term family (ADR-0067 decision 8, scope 1) > KING_FILE_HALF_OPEN: the score is mg + trunc((Δ + offset) × (D − w) / D), exactly, on ≥ 3 positions at phases 1–23 0ms
+ ✓ src/evaluate.taper.test.ts > ABC-274 A3 — the blend is live for every term family (ADR-0067 decision 8, scope 1) > KING_FILE_OPEN: the score is mg + trunc((Δ + offset) × (D − w) / D), exactly, on ≥ 3 positions at phases 1–23 1ms
+ ✓ src/evaluate.taper.test.ts > ABC-274 A3 — the blend is live for every term family (ADR-0067 decision 8, scope 1) > MOBILITY_WEIGHT: the score is mg + trunc((Δ + offset) × (D − w) / D), exactly, on ≥ 3 positions at phases 1–23 3ms
+ ✓ src/evaluate.taper.test.ts > ABC-274 A3 — the blend is live for every term family (ADR-0067 decision 8, scope 1) > MOBILITY_CAP: the score is mg + trunc((Δ + offset) × (D − w) / D), exactly, on ≥ 3 positions at phases 1–23 3ms
+ Test Files  1 passed (1)
+      Tests  169 passed (169)
+   Duration  17.78s (transform 0ms, setup 0ms, import 49ms, tests 17.67s, environment 0ms)
