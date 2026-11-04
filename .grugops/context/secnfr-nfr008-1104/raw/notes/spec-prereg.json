@@ -1,0 +1,13 @@
+{
+  "refs": ["secnfr-nfr008-1104", "NFR-008", "R-N8H-1", "Q-N8H-1", "ADR-0035", "ADR-0046", "ABC-283", "ABC-271", "ABC-281", "ABC-282", "EPIC-011",
+           "qe-ABC-283/20261104T164437Z-qe-e2e-observation-d15c2a10",
+           "se-ABC-283-merge/20261104T170008Z-software-engineer-observation-f7f63e1d",
+           "orch-2026-10-30a/20261104T151305Z-orchestrator-decision-c7609f51",
+           "orch-2026-10-30a/20261104T164704Z-orchestrator-decision-2409cec9",
+           "secnfr-nfr008-headroom/20261104T025651Z-security-nfr-decision-8a4fb936",
+           "qe-ABC-281/20261104T041512Z-qe-e2e-observation-c7e298cd",
+           "fd6b595f", "58e90d07", "ebd1263f", "ea08d7b6"],
+  "notes": [
+    { "kind": "decision", "confidence": "high: a pre-registration; sealed before any timing run; nothing measured yet", "bodyFile": "prereg.md" }
+  ]
+}

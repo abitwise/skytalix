@@ -1,0 +1,9 @@
+{
+  "refs": ["secnfr-nfr008-1104", "NFR-008", "R-N8H-1", "R-N8H-3", "ADR-0046", "ADR-0035", "ABC-281", "ABC-248", "ABC-241", "ABC-170", "ABC-174", "ABC-075", "ABC-122",
+           "secnfr-nfr008-1104/20261104T170654Z-security-nfr-decision-c7289371",
+           "src/search.null-move.test.ts", "src/uci-session.test.ts", "src/search.futility.test.ts", "src/zobrist.test.ts", "src/engine.test.ts", "src/levels.test.ts", "src/cli.test.ts", "src/engine.capacity.test.ts",
+           "fd6b595f"],
+  "notes": [
+    { "kind": "decision", "confidence": "high: a probe plan fixed before the probe runs; row costs are session 1's census medians", "bodyFile": "probe-plan.md" }
+  ]
+}
