@@ -25,6 +25,14 @@ adr: "ADR-0060 (PROPOSED; parked, premise not met on main, arch-ADR-0060-reopen 
 >   far: (1) E1's changed tree, **already on `main` since `54dee3f2`; no P1 re-probe on it is on record**
 >   (`UNKNOWN - verify`); (2) `ABC-283` merging, which puts a history table on `main` for `ADR-0060` d11's history
 >   term (`ADR-0063` decision 11); (3) E2's second pull merging.
+>   - *2026-11-04 (`bapm-ABC-283-done`; `arch-ABC-283-accept` `…cbf0bc7b` § Owed, item 4):* **trigger (2) has
+>     happened:** `ABC-283` merged `58e90d07`, with `ADR-0063`'s history (K3, max(0, h)) on `main`. It names the
+>     premise; it does not re-open P1, which is the Architect's (a dated `ADR-0060` line and a new PREREG). **Read
+>     R-283-LMR first** (`ADR-0060` § Status, 2026-11-04; QE-283-b, LOW): the same-depth mate floor depends on
+>     quiet-move order through LMR (d5 0 / 190 and 0 / 188 hold; d6 `chooseMove` loses 2 / 209, the same two rows as
+>     base `main`). If a later change turns the d5 floor red, the lever is LMR, this ticket, not history. A P1
+>     re-open's PREREG reads both floors, d5 as the bar and d6 as a report, over the history table now on `main`.
+>     **Still parked; DoR 9/10, Backlog.**
 > - **The board move is the Orchestrator's.**
 
 ## Problem
@@ -106,6 +114,8 @@ lists them so this page is checkable). None is loosened after Ready.
 - **One at a time on `src/search.ts` / `src/engine.ts`** with `ABC-283`, `ABC-286`, `ABC-296` and `ABC-297`; whichever
   merges second re-reads its door counts (`ADR-0061` d9).
 - **Premise (2) waits on `ABC-283`'s read.** If `ABC-283` misses, premise (2) is gone and (1) / (3) remain.
+  *2026-11-04 (`bapm-ABC-283-done`): `ABC-283` merged `58e90d07`; premise (2) is available to the Architect, with
+  R-283-LMR (`ADR-0060` § Status) read first.*
 
 ## Definition of Ready
 

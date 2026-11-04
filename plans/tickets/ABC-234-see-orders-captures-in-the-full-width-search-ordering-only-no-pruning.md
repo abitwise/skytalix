@@ -1,15 +1,32 @@
 ---
 id: ABC-234
 title: "SEE orders captures in the full-width search: losing captures go after the quiet moves; ordering only, no pruning"
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: M
 priority: P3
 epic: EPIC-011
-adr: "ADR-0065 (PROPOSED 2026-11-03, arch-ABC-234 …a4ed96aa; PREREG …9ac61a7a committed 9ca30923 before any run): PREMISE NOT MET on main (F4, S1m chooseMove d8 0.9864 / 0.9548 > 0.95); the build does not start; accept is not put to the owner. Ticket PARKED by the Orchestrator (board, 2026-11-03)"
+adr: "ADR-0063 (with K3) / ADR-0065 / ADR-0066 ACCEPTED 2026-11-04 as a bundle by the owner's word (orch-2026-10-30a …4c4cb03d ruling 2) on qe-ABC-283 PASS_WITH_GAPS …de1dc511 (C2′ 66.0 / 100); in force when ABC-283 merges (merged 58e90d07). The premise was overridden, not met. (Was: ADR-0065 PROPOSED 2026-11-03, arch-ABC-234 …a4ed96aa, PREREG …9ac61a7a; premise not met on main, F4; parked by the Orchestrator 2026-11-03.)"
 ---
 
 # ABC-234: SEE for capture ordering
+
+> **DONE 2026-11-04: DELIVERED BY `ABC-283` (MERGED `58e90d07`); `ADR-0065` ACCEPTED AS A BUNDLE, by BA/PM** (task
+> `bapm-ABC-283-done`, records only, at `main` `fd6b595f`; nothing run). Sources: the Architect's owed lines
+> (`arch-ABC-283-accept` `…cbf0bc7b` § Owed, item 1), the owner's word (`orch-2026-10-30a` `…4c4cb03d` ruling 2), QE's
+> verdict `qe-ABC-283` `…de1dc511` (PASS_WITH_GAPS, no blocking gap; it signs UAT) and the re-read on the merged tree
+> (`se-ABC-283-merge` `…f7f63e1d`).
+> - **Delivered by `ABC-283`.** O3s was built on `grugops/ABC-283` with O1h and S1, and was read once as the bundle:
+>   C2′ 59 / 27 / 14 = **66.0 / 100 ≥ 50.0** (Elo +115.2 ± 67.0), this ticket's GAIN line (A5). No reading isolates
+>   SEE ordering's share; the credit is the bundle's. The board move is the Orchestrator's (board 2026-11-04:
+>   "ABC-233/234/236 delivered by ABC-283"); the front matter is set to match it.
+> - **`adr:`** `ADR-0063` (with K3), `ADR-0065` and `ADR-0066` ACCEPTED 2026-11-04 as a bundle, in force at the merge.
+>   The premise (F4) was overridden by the owner, not met; it stays fired as measured.
+> - **The build reuses `src/see.ts` (`ABC-279`).** Scope 1's "own module" is Q1's, counted once (288 B scratch). Its
+>   −50 test is its own (`losingForOrdering`), beside Q1's threshold 0, which is unchanged (`ADR-0065` § Status, as
+>   built). The losing captures key at 100 000 + MVV-LVA: below the killers, above every history cell.
+> - **The re-open block and the PARKED banner below are superseded** by this line, which names `ABC-283` as the build.
+>   They stay as written, for the record. DoR row 10 reads "ADR accepted as a bundle (`ABC-283`)": **DoR 10/10.**
 
 > **2026-11-04, by BA/PM (task `bapm-W1-bundle-cut`, records only): RE-OPENED BY THE OWNER'S WORD AS PART OF
 > `ABC-283`.** The owner said *"merge ABC-233, ABC-234 and ABC-236 into one branch and do one test run"*
@@ -83,7 +100,9 @@ adr: "ADR-0065 (PROPOSED 2026-11-03, arch-ABC-234 …a4ed96aa; PREREG …9ac61a7
 
 ## Scope
 
-1. A static exchange evaluator (`see(move) → cp`), pure, in its own module.
+1. A static exchange evaluator (`see(move) → cp`), pure, in its own module. *2026-11-04 (`bapm-ABC-283-done`), as
+   built in `ABC-283`: `src/see.ts` from `ABC-279`, reused; the ordering test `losingForOrdering` (−50) is this
+   ticket's own, beside Q1's 0.*
 2. Full-width ordering only: captures with SEE < 0 go after the killers (or as the ADR rules). Quiescence ordering is
    unchanged.
 3. An `ADR-0026` d10 off-door pair.
@@ -144,6 +163,6 @@ adr: "ADR-0065 (PROPOSED 2026-11-03, arch-ABC-234 …a4ed96aa; PREREG …9ac61a7
 | 7 | test notes | ✅ 1 |
 | 8 | size | ✅ M |
 | 9 | priority | ✅ P3 |
-| 10 | no major unresolved blocker | ❌ ~~the fence's evidence is unread; ADR~~ *2026-11-03 (`bapm-ABC-234-park`):* `ADR-0065`: premise not met on `main` (F4); the build does not start. **Parked** (the Orchestrator's ruling) |
+| 10 | no major unresolved blocker | ~~❌~~ ✅ ~~the fence's evidence is unread; ADR~~ ~~*2026-11-03 (`bapm-ABC-234-park`):* `ADR-0065`: premise not met on `main` (F4); the build does not start. **Parked** (the Orchestrator's ruling)~~ *2026-11-04 (`bapm-ABC-283-done`):* ADR accepted as a bundle (`ABC-283`) |
 
-**DoR 8/10 (re-scored 2026-10-29). Backlog.** *2026-11-03 (`bapm-ABC-234-park`): DoR 9/10 (row 2 ✅); row 10 reads `ADR-0065`'s F4. **Backlog, parked.***
+**DoR 8/10 (re-scored 2026-10-29). Backlog.** *2026-11-03 (`bapm-ABC-234-park`): DoR 9/10 (row 2 ✅); row 10 reads `ADR-0065`'s F4. **Backlog, parked.*** *2026-11-04 (`bapm-ABC-283-done`): **DoR 10/10. Done, delivered by `ABC-283`** (merged `58e90d07`).*
