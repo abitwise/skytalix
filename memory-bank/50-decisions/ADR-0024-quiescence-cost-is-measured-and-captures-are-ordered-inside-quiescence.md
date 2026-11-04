@@ -24,6 +24,41 @@ kind: adr
 > quiet checks stay on d4's list. In force on `main` at the Q1 ticket's merge, which waits on its own read (`ADR-0069`
 > decision 13). No other decision here moves: the MVV-LVA order (d2) and the cap of 8 (d5) are unchanged.
 
+> **Opened 2026-11-04 for design, by the owner's word (`Q-3K-10`; `orch-2026-10-30a` `…7de79e90`, verbatim "Q-3K-10:
+> yes").** Decision 4's fence on delta pruning is lifted for the **design** of Q2, delta pruning in quiescence
+> (`ADR-0056` row Q2, `ABC-289`). That design needs its own PREREG and its own ADR. It is a new ADR that amends d4, as
+> `ADR-0069` did for Q1 (the Architect's call, which `ABC-289`'s `adr:` line left open). **Design only:** a build ships
+> on its own evidence, the per-change rule of 100 games at 100 ms (`ADR-0056` C2′), with S′ and the Levels lane beside
+> it. Quiet checks stay fenced. Recorded by Architect/Design (task `arch-owner-answers-1104`, records only). No other
+> decision here moves.
+> - **What Q2's ADR must show, by `ADR-0069`'s pattern:**
+>   1. **A PREREG, sealed and committed before any measured run.** It fixes the instrument, the forms, the gates, the
+>      choice rule, the bar rules and the verdict rule. The margin is part of a form: fixed before the read, never
+>      added or moved after it.
+>   2. **The premise, read on `main` with Q1 in it** (`ABC-279`, merged `7b70e268`). It reads the share of quiescence
+>      captures out of check that the rule would skip and `seePruning` does not already skip, and how many of those
+>      are refuted. This ADR's 1.5× was read by its own probe (2026-09-19), on a reimplementation, before
+>      futility, the taper and Q1, so it is not a premise. This is `ABC-289`'s hold 2, the re-measure.
+>   3. **An exact instrument check.** With the switch off the build is `main` node for node, and `ABC-279`'s door
+>      pair reads its pre-ticket counts.
+>   4. **The pay gate, in `ADR-0069`'s shape:** d8 nodes on kiwipete and position-6 in both recursions, and reach at
+>      47 000 nodes on the 190, each against `main`.
+>   5. **The safety gate, in `ADR-0069`'s shape:** drift at depth 5 on the 190 against the door, the mate floor at the
+>      same depth, zugzwang 7 / 7, and `G1` ≥ 54 / 58 with no NEWLY-MISSED line.
+>   6. **The rule's terms:** out of check only, with every evasion searched in check (`ADR-0053`). Also the margin,
+>      the exclusions (promotions, and any phase or material condition), the order of the test against
+>      `isLosingCapture`, and the value a node returns when it skips a capture by delta (the stand pat, as `ADR-0069`
+>      d1 returns, or the skipped capture's bound).
+>   7. **The seam:** one switch that reaches `quiesce` through `QuiescenceRules` (`ADR-0069` d6), in both recursions.
+>      A test-only off-door pair is the ladder's new top rung, and every older door turns the switch off (`ADR-0026`
+>      d3). The export-list growth is stated.
+>   8. **The bars and the read:** the bars derived by the PREREG's rules from the probe's own readings (`ADR-0069`
+>      d11, d12), and `G6` "≥ base". The intent (GAIN, or NEUTRAL with its firing figure at 100 ms) is named before
+>      Ready. Then C2′, S′ at E 1 810 and the Levels deep lane.
+>   9. **The d4 amendment,** with a dated pointer here and at d4, as `ADR-0069` d9 wrote.
+> - **If the premise is not met** (no trim over `main`), Q2 closes as dropped (`ABC-289` F2), and d4 keeps delta
+>   pruning on its list.
+
 **accepted** — by the project owner Olger Oeselg in session, 2026-09-19, verbatim: *"I accept ADR-0024"*. Transcribed by the Orchestrator (`human_admission` is `off`; a hand-authored record of a human's word, not a stamp). The re-hop that carries it (`grugops/ABC-079-quiescence` @ `fa80923`) is UNMERGED at the time of this flip: its default lane is green and every `A5` level holds, but `SEARCH_DEEP=1 npx vitest run src/search.test.ts` reads exit 1 (4 timeouts — the unpruned oracle opens a full-window quiescence at every leaf), which this ADR's own collateral ruling makes a merge condition. That is a further Architect/Design ruling, not a reversal of this one. One known deviation from the table below: the shipped `mvvLvaKey` carries a promotion term the probe lacked, so kiwipete counts read 5 878 / 10 249 / 405 945 (levels unaffected).
 
 **History — proposed** 2026-09-19 by Architect/Design (task `wave-2026-09-19`, subtask
@@ -140,6 +175,9 @@ in different places.
    *(2026-11-03: amended by `ADR-0069`, accepted by the owner (`…401c3d09`). SEE leaves this list for quiescence
    pruning, by `ADR-0069` decisions 1–3. Delta pruning and quiet checks stay on it. In force at the Q1 ticket's merge
    (§ Status, the third block).)*
+   *(2026-11-04: delta pruning is opened for the design of Q2 by the owner's word, `Q-3K-10` (`…7de79e90`). Design
+   only. A build ships on its own evidence, and its ADR shows what § Status, the fourth block, lists. Delta pruning
+   stays on this list until that ADR amends it. Quiet checks stay on it.)*
 
 5. **The cap of 8 stays, as a guard, with its binding recorded.** Ordered, kiwipete still puts
    ~25% of its quiescence nodes at ply 8 (depth 3) and the capped depth-1 score differs from the

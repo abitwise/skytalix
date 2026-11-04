@@ -6,7 +6,28 @@ id: ADR-0071
 
 ## Status
 
-**PROPOSED 2026-11-04** (task `arch-ABC-282`, records only, on `grugops/arch-ABC-282` from `main` `5853d17f`, `src/`
+**ACCEPTED 2026-11-04 by the owner, in form (a), as written (OQ-0071-1). Not in force until `ABC-282` merges on its
+read (A6, D10).** Recorded by Architect/Design (task `arch-owner-answers-1104`, records only, on
+`grugops/arch-owner-answers-1104` from `main` `5d402485`). Nothing was run.
+- **His words, verbatim** (`orch-2026-10-30a` `…7de79e90`): *"Accept the W1 time-use design (ADR-0071)"*. The
+  Orchestrator records it as OQ-0071-1, form (a).
+- **What it settles:** D1–D12 as written. W1 acts in `uci-clock-mode` under a clock only. No iteration starts past the
+  soft limit, budget ÷ 2.3, and the budget stays the hard limit. A partial iteration's root move is played when it beat
+  the incumbent (D4). `ABC-078` A3 is amended in that mode only (D7). **No decision here changes.**
+- **Option (b) is not taken.** The partial-move rule does not go into every mode, and no follow-up ticket is owed for
+  it. Every other mode stays node-identical to `main` (D1, A0).
+- **The harness ticket is done.** D10's tools ticket was cut as `ABC-300` and merged at `4ea39135` (QE PASS_WITH_GAPS
+  `qe-ABC-300` `…fbda2ad6`). A6 runs on its `d --tc 40/8`. QE carried `ABC-300` A6 (QE-300-a) to `ABC-282` A6.
+- **The hold** (the Orchestrator, `…7de79e90`): `ABC-282` stays held until `ABC-283` merges or misses. Whichever of
+  the two lands second does D12's items 1–6.
+- **F7 under acceptance.** F7's "this ADR stays PROPOSED with its read recorded" now reads "this ADR reads accepted,
+  not in force, with its read recorded", as `ADR-0069` F5 does. The disposition does not change: an A6 miss is not
+  merged.
+- **Lines written with the acceptance:** `ADR-0056` row W1 (D2's dated line of 2026-11-04,
+  `arch-owner-answers-1104`), and the log below. **Still owed** (BA/PM): the `ABC-282` page's `adr:` line and
+  `EPIC-011` § Owner questions. The lines are in this task's decision note.
+
+*Before acceptance:* **PROPOSED 2026-11-04** (task `arch-ABC-282`, records only, on `grugops/arch-ABC-282` from `main` `5853d17f`, `src/`
 tree `4fb3da04`). A new ADR is the owner's to accept (OQ-0071-1). `ABC-282`'s front matter records reading (b): the
 build may start on PROPOSED. Nothing here is in force until `ABC-282` merges on its read.
 
@@ -28,6 +49,16 @@ build may start on PROPOSED. Nothing here is in force until `ABC-282` merges on 
   `ADR-0052` decision moves: `C`, T, the 59 500 cap, the reserve and the overhead all stay.
 - **What it does not decide:** pondering, threads (`ABC-266`, parked), any budget formula or `NFR-004` ceiling, and an
   "emergency" rule that extends the soft limit on a falling score or an unstable root move (`ABC-282` § Out of scope).
+
+## Decision log
+
+| date (UTC) | by | what | record |
+|---|---|---|---|
+| 2026-11-04 | Architect/Design | PREREG sealed before any probe | `arch-ABC-282` `…5dbc040d`, `6424c272` |
+| 2026-11-04 | Architect/Design | P1–P3 and arithmetic A read; b = 2.3. PROPOSED, form (a) recommended | `…1938110b` (readings), `…0187186b` (decision); merged `9471eb32` |
+| 2026-11-04 | BA/PM, tools | Folded into `ABC-282` (Ready, L). D10's harness ticket cut as `ABC-300`, merged on QE PASS_WITH_GAPS | `bapm-ABC-282-adr`; `4ea39135`, `qe-ABC-300` `…fbda2ad6` |
+| 2026-11-04 | Owner | **ACCEPTED, form (a)** ("Accept the W1 time-use design (ADR-0071)") | `orch-2026-10-30a` `…7de79e90` |
+| 2026-11-04 | Architect/Design | Status restated as ACCEPTED, not in force until `ABC-282` merges on A6. `ADR-0056` row W1 written. No decision changed | `arch-owner-answers-1104` |
 
 ## Context
 
@@ -346,6 +377,8 @@ on the new merge-base by the same rows, before the change** (§ D12). The rows b
     `rpair` dry run stays byte-equal, and the `pair-check` rows stay unedited.
   - **0 lines under `src/`** (R-TC item 4).
   - Size XS–S, like `ABC-275`. Its id is BA/PM's. ABC-300 is the next free id on `main`, `UNKNOWN - verify` at the cut.
+    - *Dated 2026-11-04 (`arch-owner-answers-1104`): cut as `ABC-300` and merged at `4ea39135` (`qe-ABC-300`
+      `…fbda2ad6`). A6 plays its `d --tc 40/8`.*
   - `summarise` already counts "loses on time" as a fault (`FAULT_TEXT`), so C-2 needs no new parsing.
   - The reports (period-end clock left, `info string partial` share, mean completed depth) are QE's, read from
     `-debug all` as `ABC-223`'s PREREG did.
@@ -422,7 +455,7 @@ is designed against `main`. **Whichever of the two lands second rebases, and doe
 | F4 | A3 red, or any loss on time | a defect. The hard limit is unchanged, so this should not happen |
 | F5 | A4 M1 or M2 NOT MET | STOP to Architect/Design (D11): b, the soft limit's form or a last-move rule is re-opened, with a new read |
 | F6 | A5 red | a defect check first. Under D1, A5's rows run W1-off paths, so a real change there is F1 |
-| F7 | A6 NOT MET | not merged. `ABC-078` A3 stays as written, and this ADR stays PROPOSED with its read recorded |
+| F7 | A6 NOT MET | not merged. `ABC-078` A3 stays as written, and this ADR stays PROPOSED with its read recorded. *(2026-11-04, accepted: it reads "accepted, not in force", § Status)* |
 
 ## Consequences
 
@@ -479,3 +512,4 @@ is designed against `main`. **Whichever of the two lands second rebases, and doe
     - (c) decline.
   - **Recommendation: (a).** The build may start on PROPOSED (`ABC-282` front matter, reading (b)). It merges only on
     its read.
+  - *Answered 2026-11-04: (a), accepted as written (`orch-2026-10-30a` `…7de79e90`; § Status).*

@@ -669,6 +669,24 @@ copies of `main`'s `src/` `8adb0a18`): rows E2 and E4.*
 - **Superseded:** the line above, "values by rule, read on play", and the 2026-11-04 bullet's "behind an off-door
   pair".
 
+*Dated 2026-11-04 (`arch-owner-answers-1104`, records only at `main` `5d402485`; his word `…7de79e90`, verbatim
+"Accept the W1 time-use design (ADR-0071); Q-3K-10: yes"): rows W1 and Q2.*
+- **Row W1: `ADR-0071` is ACCEPTED, form (a), as written** (OQ-0071-1). It is not in force until `ABC-282` merges on
+  A6. The row's ticket cell now reads "`ABC-282`: `ADR-0071` ACCEPTED (2026-11-04, `…7de79e90`)", with the rest of the
+  cell unchanged.
+  - The harness ticket is done: `ABC-300` merged at `4ea39135`. A6 plays its `d --tc 40/8`, so "after a harness
+    ticket" now reads "on `ABC-300`'s `d --tc 40/8`".
+  - `ABC-282` stays held until `ABC-283` merges or misses (the Orchestrator, `…7de79e90`; `ADR-0071` D12).
+- **Row Q2: `ADR-0024` d4 is open for design** (`Q-3K-10` answered yes). The row's "depends on" cell, "—", now reads
+  "`ADR-0024` d4 opened for design by `Q-3K-10` yes (`…7de79e90`)". Its ticket cell, "none (fenced out of
+  `EPIC-010`)", now reads "`ABC-289` (`EPIC-011`)".
+  - **Design only,** as for Q1: its own PREREG and its own ADR, which amends d4. What that ADR must show is listed in
+    `ADR-0024` § Status, the fourth block. A build ships on its own read: C2′, with S′ and the Levels lane.
+  - **Its premise is re-measured first,** on `main` with Q1 in it (`ABC-279`, `7b70e268`). The row's basis, "1.5× trim
+    measured", predates futility, the taper and Q1. The row's +5–20 stays an estimate; after Q1 it is
+    `UNKNOWN - verify`.
+  - This line does not set Q2's slot. The order is the Orchestrator's.
+
 ### D3. Is 3 000 reachable without a neural network?
 
 - **For a classical engine, yes, in principle.** Stockfish 11, the last hand-crafted Stockfish, reads ≈ 3 430 CCRL
