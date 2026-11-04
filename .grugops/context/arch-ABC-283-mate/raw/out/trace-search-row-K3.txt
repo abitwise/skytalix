@@ -1,0 +1,151 @@
+{"candidate":"K3","fen":"6k1/R7/5K2/8/8/8/8/8 w - - 2 2","mode":"search","depth":5,"door":[29995,"a7b7"],"head":[29995,"a7b7"],"doorLine":"a7b7 g8h8 f6g6 h8g8 b7b8"}
+DOOR node [root] ply 0: 20 events
+   d5 f6g6 i0 =613
+   d5 f6e6 i1 =626
+   d5 f6f5 i2 =626
+   d5 f6e7 i3 =614
+   d5 f6g5 i4 =626
+   d5 f6e5 i5 =652
+   d5 a7a8 i6 =607
+   d5 a7b7 i7 =29995   <== line
+   d5 a7c7 i8 =29995
+   d5 a7d7 i9 =29995
+   d5 a7e7 i10 =29995
+   d5 a7f7 i11 =652
+   d5 a7g7 i12 =625
+   d5 a7h7 i13 =0
+   d5 a7a6 i14 =29995
+   d5 a7a5 i15 =29995
+   d5 a7a4 i16 =29995
+   d5 a7a3 i17 =29995
+   d5 a7a2 i18 =29995
+   d5 a7a1 i19 =29995
+DOOR node [a7b7] ply 1: 4 events
+   1 d4 g8f8 i0 =-29997 w(-653,-652)
+   1 d4 g8h8 i1 =-29995 w(-653,-652)   <== line
+   1 d4 g8h8 i0 =-29995 w(-Infinity,-652)   <== line
+   1 d4 g8f8 i1 =-29997 w(-Infinity,-652)
+DOOR node [a7b7 g8h8] ply 2: 24 events
+   2 d3 b7b8 i0 =612 w(652,653)
+   2 d3 f6f7 i1 =626 w(652,653)
+   2 d3 f6g6 i2 =29995 w(652,653)   <== line
+   2 d3 f6g6 i0 =29995 w(652,Infinity)   <== line
+   2 d3 b7b8 i1 =612 w(652,Infinity)
+   2 d3 f6f7 i2 =626 w(652,Infinity)
+   2 d3 f6e6 i3 R1 =638 w(652,Infinity)
+   2 d3 f6f5 i4 R1 =638 w(652,Infinity)
+   2 d3 f6e7 i5 R1 =575 w(652,Infinity)
+   2 d3 f6g5 i6 R1 =625 w(652,Infinity)
+   2 d3 f6e5 i7 R1 =652 w(652,Infinity)
+   2 d3 b7c7 i8 R1 =625 w(652,Infinity)
+   2 d3 b7d7 i9 R1 =625 w(652,Infinity)
+   2 d3 b7e7 i10 R1 =621 w(652,Infinity)
+   2 d3 b7f7 i11 R1 =597 w(652,Infinity)
+   2 d3 b7g7 i12 R1 =0 w(652,Infinity)
+   2 d3 b7h7 i13 =0 w(652,Infinity)
+   2 d3 b7a7 i14 R1 =0 w(652,Infinity)
+   2 d3 b7b6 i15 R1 =593 w(652,Infinity)
+   2 d3 b7b5 i16 R1 =605 w(652,Infinity)
+   2 d3 b7b4 i17 R1 =605 w(652,Infinity)
+   2 d3 b7b3 i18 R1 =605 w(652,Infinity)
+   2 d3 b7b2 i19 R1 =605 w(652,Infinity)
+   2 d3 b7b1 i20 R1 =605 w(652,Infinity)
+DOOR node [a7b7 g8h8 f6g6] ply 3: 2 events
+   3 d2 h8g8 i0 =-29995 w(-653,-652)   <== line
+   3 d2 h8g8 i0 =-29995 w(-Infinity,-652)   <== line
+DOOR node [a7b7 g8h8 f6g6 h8g8] ply 4: 20 events
+   4 d1 b7b8 i0 =29995 w(652,653)   <== line
+   4 d1 b7b8 i0 =29995 w(652,Infinity)   <== line
+   4 d1 g6h6 i1 =620 w(652,Infinity)
+   4 d1 g6f6 i2 =0 w(652,Infinity)
+   4 d1 g6g5 i3 =625 w(652,Infinity)
+   4 d1 g6h5 i4 =634 w(652,Infinity)
+   4 d1 g6f5 i5 =638 w(652,Infinity)
+   4 d1 b7c7 i6 =611 w(652,Infinity)
+   4 d1 b7d7 i7 =611 w(652,Infinity)
+   4 d1 b7e7 i8 =611 w(652,Infinity)
+   4 d1 b7f7 i9 =607 w(652,Infinity)
+   4 d1 b7g7 i10 =570 w(652,Infinity)
+   4 d1 b7h7 i11 =607 w(652,Infinity)
+   4 d1 b7a7 i12 =611 w(652,Infinity)
+   4 d1 b7b6 i13 =583 w(652,Infinity)
+   4 d1 b7b5 i14 =591 w(652,Infinity)
+   4 d1 b7b4 i15 =591 w(652,Infinity)
+   4 d1 b7b3 i16 =591 w(652,Infinity)
+   4 d1 b7b2 i17 =591 w(652,Infinity)
+   4 d1 b7b1 i18 =591 w(652,Infinity)
+HEAD node [root] ply 0: 20 events
+   d5 f6g6 i0 =613
+   d5 f6e6 i1 =626
+   d5 f6f5 i2 =626
+   d5 f6e7 i3 =614
+   d5 f6g5 i4 =626
+   d5 f6e5 i5 =652
+   d5 a7a8 i6 =607
+   d5 a7b7 i7 =29995   <== line
+   d5 a7c7 i8 =29995
+   d5 a7d7 i9 =29995
+   d5 a7e7 i10 =29995
+   d5 a7f7 i11 =652
+   d5 a7g7 i12 =625
+   d5 a7h7 i13 =0
+   d5 a7a6 i14 =29995
+   d5 a7a5 i15 =29995
+   d5 a7a4 i16 =29995
+   d5 a7a3 i17 =29995
+   d5 a7a2 i18 =29995
+   d5 a7a1 i19 =29995
+HEAD node [a7b7] ply 1: 4 events
+   1 d4 g8f8 i0 pre0 =-29997 w(-653,-652) h32
+   1 d4 g8h8 i1 pre1 =-29995 w(-653,-652) h-32   <== line
+   1 d4 g8h8 i0 pre0 =-29995 w(-Infinity,-652) h-32   <== line
+   1 d4 g8f8 i1 pre1 =-29997 w(-Infinity,-652) h32
+HEAD node [a7b7 g8h8] ply 2: 24 events
+   2 d3 b7b8 i0 pre0 =612 w(652,653) h10
+   2 d3 f6f7 i1 pre1 =626 w(652,653)
+   2 d3 f6g6 i2 pre2 =29995 w(652,653) h-9   <== line
+   2 d3 f6g6 i0 pre0 =29995 w(652,Infinity)   <== line
+   2 d3 b7b8 i1 pre1 =612 w(652,Infinity) h2
+   2 d3 f6f7 i2 pre2 =626 w(652,Infinity) h-9
+   2 d3 f6e6 i3 pre3 R1 =638 w(652,Infinity) h-9
+   2 d3 f6f5 i4 pre4 R1 =638 w(652,Infinity) h-9
+   2 d3 f6e7 i5 pre5 R1 =575 w(652,Infinity)
+   2 d3 f6g5 i6 pre6 R1 =625 w(652,Infinity) h-9
+   2 d3 f6e5 i7 pre7 R1 =652 w(652,Infinity) h-9
+   2 d3 b7c7 i8 pre8 R1 =625 w(652,Infinity)
+   2 d3 b7d7 i9 pre9 R1 =625 w(652,Infinity)
+   2 d3 b7e7 i10 pre10 R1 =621 w(652,Infinity)
+   2 d3 b7f7 i11 pre11 R1 =597 w(652,Infinity)
+   2 d3 b7g7 i12 pre12 R1 =0 w(652,Infinity)
+   2 d3 b7h7 i13 pre13 =0 w(652,Infinity)
+   2 d3 b7a7 i14 pre14 R1 =0 w(652,Infinity)
+   2 d3 b7b6 i15 pre15 R1 =593 w(652,Infinity)
+   2 d3 b7b5 i16 pre16 R1 =605 w(652,Infinity)
+   2 d3 b7b4 i17 pre17 R1 =605 w(652,Infinity)
+   2 d3 b7b3 i18 pre18 R1 =605 w(652,Infinity)
+   2 d3 b7b2 i19 pre19 R1 =605 w(652,Infinity)
+   2 d3 b7b1 i20 pre20 R1 =605 w(652,Infinity)
+HEAD node [a7b7 g8h8 f6g6] ply 3: 2 events
+   3 d2 h8g8 i0 pre0 =-29995 w(-653,-652) h32   <== line
+   3 d2 h8g8 i0 pre0 =-29995 w(-Infinity,-652) h32   <== line
+HEAD node [a7b7 g8h8 f6g6 h8g8] ply 4: 20 events
+   4 d1 b7b8 i0 pre0 =29995 w(652,653) h10   <== line
+   4 d1 b7b8 i0 pre0 =29995 w(652,Infinity) h2   <== line
+   4 d1 g6h6 i1 pre1 =620 w(652,Infinity)
+   4 d1 g6f6 i2 pre2 =0 w(652,Infinity)
+   4 d1 g6g5 i3 pre3 =625 w(652,Infinity)
+   4 d1 g6h5 i4 pre4 =634 w(652,Infinity)
+   4 d1 g6f5 i5 pre5 =638 w(652,Infinity)
+   4 d1 b7c7 i6 pre6 =611 w(652,Infinity)
+   4 d1 b7d7 i7 pre7 =611 w(652,Infinity)
+   4 d1 b7e7 i8 pre8 =611 w(652,Infinity)
+   4 d1 b7f7 i9 pre9 =607 w(652,Infinity)
+   4 d1 b7g7 i10 pre10 =570 w(652,Infinity)
+   4 d1 b7h7 i11 pre11 =607 w(652,Infinity)
+   4 d1 b7a7 i12 pre12 =611 w(652,Infinity)
+   4 d1 b7b6 i13 pre13 =583 w(652,Infinity)
+   4 d1 b7b5 i14 pre14 =591 w(652,Infinity)
+   4 d1 b7b4 i15 pre15 =591 w(652,Infinity)
+   4 d1 b7b3 i16 pre16 =591 w(652,Infinity)
+   4 d1 b7b2 i17 pre17 =591 w(652,Infinity)
+   4 d1 b7b1 i18 pre18 =591 w(652,Infinity)
