@@ -12,6 +12,13 @@ adr: "owed (the Architect's): a new ADR for E4a on ABC-269's base (the rules, th
 
 # ABC-271: passed pawns that know about the kings (E4a)
 
+> **NEXT, AND BEFORE A SECOND TUNING PULL, 2026-11-04, by BA/PM** (task `bapm-ABC-239-close`, records only, at `main`
+> `ac55ddf6`; nothing run). `ABC-239`'s first pull closed NOT MET (`orch-2026-10-30a` `…4c76bf7a`). The Architect traced
+> its F4 miss (`zugzwang.001`, e1e5 at depth 9) to the fitted endgame halves of the pawn, passer and king terms, and
+> found that the passer part needs this ticket's free-path and king-distance terms (`arch-ABC-239-f3f4` `…4eae0fd3`,
+> `…69f22167` § 1). The Orchestrator orders this ticket next, in design now (`arch-ABC-271`). See § Dependencies. **No
+> bar on this page moved. DoR stays 9/10** (row 10: the ADR).
+
 > **`ABC-269` MERGED, 2026-11-03, by BA/PM** (task `bapm-269-done`, records only, at `main` `128e3c6c`; nothing run).
 > `ABC-269` (E1) merged to local `main` at `54dee3f2` (QE PASS_WITH_GAPS `qe-ABC-269` `…eff2fe64`), so this page's wait
 > on that merge is **met**. DoR stays 9/10: row 10 now waits on the ADR alone. Order unchanged: after `ABC-274` and
@@ -134,6 +141,20 @@ The ADR fixes exact counts before Ready; none of these bars is loosened after Re
   the tuner fits, while the rule of the square stays a rule. The recommended order (adopted on `EPIC-011`
   § Dependencies) is `ABC-269` → `ABC-274` → `ABC-239` → this ticket. The design may still keep the terms as rule
   values. That is the ADR's call.
+- *2026-11-04 (`bapm-ABC-239-close`; Orchestrator `…4c76bf7a`; `arch-ABC-239-f3f4` `…69f22167`):* **the order flips:
+  this ticket goes before a second `ABC-239` pull, not after the first.** The first pull closed NOT MET, and
+  `main` keeps E1's table.
+  - **Why:** `zugzwang.001`'s F4 miss needs this ticket's **free-path and king-distance terms**. Black's three
+    h-passers there are frozen only because their paths are blocked and White's king covers g1 and g2, and no term on
+    `main` reads either. The Architect measured the cause (`…4eae0fd3`, D1–D4). Whether a fit over E4a holds the row is
+    `UNKNOWN - verify`.
+  - **The second pull** is a new attempt under `ADR-0067` F6, with its own PREREG, on a `main` that contains this
+    ticket. It needs the owner's word then on `ADR-0067` d6's amendment. It is not a wait of this ticket.
+  - **Whether the terms ship as hand values judged on play, or land structure-only for the tuner (`ADR-0068`'s form),**
+    is the ADR's call (the Orchestrator's brief `arch-ABC-271`).
+  - **`ABC-280`** (the tuner landing alone, tools only) edits no file this ticket edits. If this ticket adds terms to
+    `main` first, `ABC-280`'s identity gate may miss on them (its STOP). The tracer's extension to E4a belongs to the
+    second pull.
 
 ## Definition of Ready
 
