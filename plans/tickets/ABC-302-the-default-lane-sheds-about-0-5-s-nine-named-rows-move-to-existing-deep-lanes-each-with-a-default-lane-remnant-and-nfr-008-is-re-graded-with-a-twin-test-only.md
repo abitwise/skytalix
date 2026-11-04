@@ -1,15 +1,28 @@
 ---
 id: ABC-302
-title: "The default lane sheds about 0.5 s: nine named rows move to existing deep lanes (seven to their own files' lanes, two across to lanes the Architect places), each with a default-lane remnant the Architect confirms by mutant reads, and QE re-grades `NFR-008` with a twin, target median ≤ 9.4 s (test-only)"
-status: backlog
-column: Backlog
+title: "The default lane sheds about 0.5 s: nine named rows move to existing deep lanes (eight within their own files, one across to `uci-session`'s `ENGINE_DEEP`); six keep a default-lane remnant (form S) and three move whole (form W), at kill parity the Architect measured on 27 mutants, and QE re-grades `NFR-008` with a twin, target median ≤ 9.4 s (test-only)"
+status: ready
+column: Ready
 size: S
 priority: P1
 epic: EPIC-011
 feature: —
 ---
 
-# ABC-302: nine slow rows to existing deep lanes, with remnants, and a graded `NFR-008` re-read
+# ABC-302: nine slow rows to existing deep lanes, six with remnants, and a graded `NFR-008` re-read
+
+> **DoR 10 of 10, Ready: 2026-11-04, BA/PM** (task `bapm-ABC-302-dor`, records only, at `main` `bff22046`; nothing
+> run). Architect/Design met row 10 (`arch-ABC-302`, decision `…bcadd41d`, observation `…8c8cfeed`, PREREG
+> `…23abb6c5`; `ADR-0046` § Dated 2026-11-04 (`arch-ABC-302`)). **R1, R2, R4, R5, R8 and R9 take form S; R3, R6 and
+> R7 take W.** R8 goes to `src/uci-session.test.ts`'s `ENGINE_DEEP`. R9 takes option (ii) and stays in its own file.
+> Kill parity was measured on 27 mutants, so option (b) does not bind and there is no owner question.
+>
+> - **What this changes on the page** (each line below is marked "Row 10, 2026-11-04"): the title; § Problem's value;
+>   § Scope (forms, R8 / R9 placement, the futility count); A1–A6 and A8; § NFR triggers; `R-302-a`; § Definition of
+>   Ready.
+> - **Where they differ, `ADR-0046`'s dated section and the SE build lines in `…bcadd41d` win** over this page.
+> - The board shows the card **In Development** (Orchestrator, `bff22046`). Column moves are the Orchestrator's; this
+>   page records the `Backlog → Ready` exit only.
 
 > **Cut 2026-11-04 by BA/PM: DoR 9/10, Backlog** (task `bapm-ABC-302-cut`, records only, at `main` `9ee778b9`;
 > nothing run, built or timed; every title and line below was read with `grep` / `sed`).
@@ -35,6 +48,9 @@ feature: —
   Parts 1 + 2, both with the rows skipped, 8 / 8. The estimate with remnants is about −0.50 s (`ABC-281` kept about
   94 %). That puts `main` near **9.3 s**, so `R-N8H-1` would go to LOW. This form cannot close it (≤ 9.0 s). No
   production line, NFR level, cap or lane command moves.
+  - **Row 10, 2026-11-04:** the six remnants keep 100 ms of the nine rows' 948 ms in-thread, so about 89 % is saved.
+    The Architect's forecast is about **−0.50 s** of wall (the −0.555 s probe × 0.89), with `main` near **9.3 s**.
+    It is an estimate; A8 grades it.
 
 ## Scope
 
@@ -70,6 +86,33 @@ Line numbers are as read at `9ee778b9`. **Rows are identified by title, not by l
 - **Form per row** (`ABC-281`'s W / S / K): **S** is the cut's default (a remnant plus the full row deep). **W** (no
   remnant) is allowed only with default-lane kill parity measured by the Architect. **K** (the row stays) drops the row
   from this ticket. Choosing a form is the Architect's call, row by row.
+- **Row 10, 2026-11-04: the forms and remnants** (`…bcadd41d`; `ADR-0046` § Dated 2026-11-04 (`arch-ABC-302`)). The
+  SE builds to `…bcadd41d` § SE build lines 1–8. No K, so all nine rows stay in this ticket:
+
+  | row | form | full row's lane | the default-lane remnant (its title states what it samples) |
+  |---|---|---|---|
+  | R1 | S | `SEARCH_DEEP`, a nested deep describe | the in-check root and position-5, both recursions to depth 4, the asserts unchanged, made > 100 (210 at base) |
+  | R2 | S | `ENGINE_DEEP`, after `RUN_ENGINE_DEEP` | "A5 (slice): on a 500 ms virtual step, …": the same asserts, the seam and UCI `go` both at 500 |
+  | R3 | **W** | `SEARCH_DEEP`, a nested deep describe | none. R3 kills 0 of the 27 (its doors turn off more than futility) |
+  | R4 | S | `ZOBRIST_DEEP`, after `RUN_DEEP` | the same walk 1 ply deep (`checkEpComponent(…, 1)`), both halves non-vacuous |
+  | R5 | S | `ENGINE_DEEP`, a deep describe (see the note below the table) | the same equality on a 10 000 ms counting clock, `consultations` > 2 (8 at base) |
+  | R6 | **W** | `ENGINE_DEEP`, " [deep]" | none. Held by A10 and `QE-087-d (slice)` |
+  | R7 | **W** | `ENGINE_DEEP`, " [deep]" | none. Held by levels A6 ("at rate 0 returns `chooseMove`'s …") |
+  | R8 | S | **`src/uci-session.test.ts`'s `ENGINE_DEEP`**, its own describe | in `src/cli.test.ts`, "A4 (slice): on a 500 ms virtual step, …": seam, direct and hash-list calls at 500, plus the direct call's depth ≥ 5 (8 at base). The describe's A7 row stays at 100 |
+  | R9 | S, **option (ii)** | `ENGINE_DEEP` **in its own file**, reached only by its `-t` line | the same body on a clock spent after `2 * ITERATIONS` (260) root passes |
+
+  - **R8 reads the real search** in `uci-session` (its spy calls through; measured, `…8c8cfeed`). **R9 under (ii)**
+    adds `const RUN_DEEP = process.env.ENGINE_DEEP === "1"` to `src/engine.capacity.test.ts`: an existing variable
+    under a new constant. No `AGENTS.md` line, no environment variable and no file is added; its `-t` line joins
+    `ADR-0046`'s run-rule table (rule item 3). `AGENTS.md`'s engine deep line does not reach it, which is recorded,
+    not changed.
+  - **Placement after the constant:** the deep describes in `uci-session` and `zobrist` go after their constants
+    (about `:2159` and `:339`). A reference above a `const` throws at load.
+  - **R5's placement is read two ways.** `ADR-0046`'s table says "a sibling describe". `…bcadd41d` build line 3 nests
+    R5 inside the original describe, as it does R1 and R3, so `countingClock` stays one copy. BA/PM does not rule
+    this. Either shape meets A2 if `countingClock` stays one copy and A4's R5 line prints "1 passed".
+  - **The futility count is corrected:** "expected 48" above is wrong. Base already defines 53 in that lane, and W
+    leaves 53 (A5).
 - **No new test file, no new `AGENTS.md` lane line, no new environment variable** (`R-N8H-3`; `AGENTS.md` is 18 429
   of 18 432 B). No file is removed.
 - **`AGENTS.md` counts:** two lane lines carry a count, and each becomes the tip's passed count for that lane. They are
@@ -121,6 +164,9 @@ If the Architect picks a form this page already carries, the ticket goes Ready w
 **If a row's guard has no default-lane holder under any form, the move is option (b)**, the owner's. The Orchestrator
 routes it, and that row takes K meanwhile.
 
+**Met 2026-11-04** (`arch-ABC-302` `…bcadd41d`): every row takes a form this page carries, so there is no re-cut and no
+option (b). R8 reads the real search in `uci-session`; R9 takes (ii). The lines are marked "Row 10, 2026-11-04".
+
 ## Acceptance criteria
 
 The base is `main` at the commit the build branches from. The tip is this ticket's delivered commit.
@@ -131,6 +177,10 @@ The base is `main` at the commit the build branches from. The tip is this ticket
   the rows moved (§ Scope), plus the Part 2 target files, plus `AGENTS.md` and the command log for A5. No file is added
   or removed. `git -c core.quotePath=false diff --name-only <base> <tip> | grep -v '\.test\.ts$' | grep '^src/'` is
   **empty**.
+  - **Row 10, 2026-11-04: the list is these ten files and no others:** `src/search.null-move.test.ts`,
+    `src/uci-session.test.ts`, `src/search.futility.test.ts`, `src/zobrist.test.ts`, `src/engine.test.ts`,
+    `src/levels.test.ts`, `src/cli.test.ts`, `src/engine.capacity.test.ts`, `AGENTS.md` and
+    `memory-bank/90-agents-md-command-log.md`. The Part 2 targets are `uci-session` (R8) and R9's own file.
 - **`A2` (bodies byte-identical).** **Given** the diff, **then**:
   - each moved row's body, from the line after its `it(` header to its closing `});`, is byte-identical to base. The
     only exception is R9 under option (i), if the Architect names it;
@@ -139,6 +189,14 @@ The base is `main` at the commit the build branches from. The tip is this ticket
   - each moved row is defined only under an existing constant;
   - the remnants are the only new default-lane code;
   - added comments cite only `ABC-302`, `secnfr-nfr008-1104`, `arch-ABC-302` and `ADR-0046`.
+  - **Row 10, 2026-11-04 (`qe-ABC-281`'s ruling; `…bcadd41d`):**
+    - "byte-identical" reads **once the nesting indent is removed**. One `biome-ignore format` line, outside the body,
+      is allowed on R1's deep `it`;
+    - **R9 is waived by name** under option (ii): its file gains `const RUN_DEEP = process.env.ENGINE_DEEP === "1"`.
+      Its body is identical, indent aside;
+    - each deep describe may repeat its row's small fixtures (R2 and R8: FEN, MOVES, `STEP_MS = 100`, `gameOf`, and
+      `lastHanded` or `labelOf`, `seamOf`, `scoreWith`). They are not the row's body. No runtime import is added;
+    - the default describe's `STEP_MS` that R2's move leaves unused moves with the row.
 - **`A3` (counts and names).** **Given** the vitest JSON report of `npm test` at base and tip, **then**:
   - **the lane total at the tip equals base's minus the number of rows taken in form W**, with 0 skipped and all
     passing. The total is equal if every row takes S;
@@ -147,6 +205,12 @@ The base is `main` at the commit the build branches from. The tip is this ticket
   - no " [deep" title appears;
   - the files collected equal base's (71 per `…1184fec4`, re-read at the base), and `lane-inventory` reports no
     findings.
+  - **Row 10, 2026-11-04 (this is what A3 reads; three rows take W):**
+    - the lane total is **base − 3: 2 684** at `fed3f2b4`'s 2 687 (Architect's tip sketch, 71 files). It is re-read at
+      the build's base;
+    - `search.futility` goes −1 (37 → 36) and `levels` −2 (49 → 47): names out, none in;
+    - each S file has exactly one name out and one in: `search.null-move`, `uci-session` (R2), `zobrist`, `engine`,
+      `cli` (R8's remnant) and `engine.capacity`. `cli` stays 109, and `uci-session`'s default lane stays 230.
 - **`A4` (each moved row is green in its lane, by count).** **Given** the tip, **when** each line below runs, **then**
   it prints **"1 passed"** with 0 failed. Exit 0 with 0 tests fails. `-t` is a regular expression, so brackets and
   parentheses are escaped (`QE-248-a`). These are the rows' `ADR-0046` rule lines (rule item 3), and QE confirms them:
@@ -164,10 +228,37 @@ The base is `main` at the commit the build branches from. The tip is this ticket
   R8's and R9's lines are added by a dated line when `arch-ABC-302` places them. Also, each touched file's full deep
   lane, run as its `AGENTS.md` line spells it, exits 0 with 0 failed. Its passed count is base's count for that same
   command plus the number of rows moved into it. A row in form K has no line.
+
+  **Row 10, 2026-11-04 (`…bcadd41d`; no K, so nine lines):**
+  - The seven lines above stand as spelled; R2's names the page's describe. **Add R8's and R9's:**
+
+    ```
+    ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/uci-session.test.ts -t "ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square \[deep, ENGINE_DEEP=1\]"
+    ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/engine.capacity.test.ts -t "ABC-122 A8: src/engine\.ts's KEY_ARRAY_CAPACITY guard, reached through chooseMove\(\) \[deep, ENGINE_DEEP=1\]"
+    ```
+
+    R9's parentheses must stay escaped. Unescaped, `()` is an empty group, the pattern does not match, and the run
+    reports 0 tests. All nine lines join `ADR-0046`'s run-rule table (rule item 3).
+  - **"Plus the rows moved into it" reads:** base + the file's S remnants + the rows moved in from another file. W
+    adds 0. These are the defined counts at `fed3f2b4` (the Architect's `counts.tsv`). The passed counts are QE's to
+    read:
+
+    | lane (as `AGENTS.md` spells it) | base → tip |
+    |---|---|
+    | `SEARCH_DEEP` `src/search.null-move.test.ts` | 45 → **46** |
+    | `SEARCH_DEEP` `src/search.futility.test.ts` | 53 → **53** |
+    | `ZOBRIST_DEEP` `src/zobrist.test.ts` | 33 → **34** |
+    | `ENGINE_DEEP` `src/engine.test.ts` | 83 → **84** |
+    | `ENGINE_DEEP` `src/levels.test.ts` | 58 → **58** |
+    | `ENGINE_DEEP` `src/uci-session.test.ts` | 241 → **243** (R2's remnant, R8 moved in) |
+    | `ENGINE_DEEP` `src/engine.capacity.test.ts` | 1 → **2**. It has no `AGENTS.md` line; its `-t` line is its lane |
 - **`A5` (`AGENTS.md`).** **Given** `AGENTS.md` at the tip, **then**:
   - the null-move and futility counts equal those lanes' passed counts at the tip, as read in A4;
   - no other byte changes, and the size is ≤ 18 432 B (`ABC-109` A5 green);
   - the command log has one entry with bytes before and after. If neither count changes, neither file is touched.
+  - **Row 10, 2026-11-04:** null-move "45 rows" becomes **46**, and futility "47 tests" becomes **53**. The 47 was
+    already stale at base, and W leaves 53. Both changes are 0 B. The passed counts in A4 decide; these are the
+    expected values.
 
 **Gate (QE, then Security/NFR)**
 
@@ -179,6 +270,30 @@ The base is `main` at the commit the build branches from. The tip is this ticket
   - at the tip, the row's deep lane kills it.
 
   A miss is a STOP to Architect/Design, not a waiver.
+
+  **Row 10, 2026-11-04: the list QE freezes is the PREREG's 27 killed mutants** (`…23abb6c5`; definitions in
+  `.grugops/context/arch-ABC-302/raw/mut.py`, base and tip kill sets in `raw/kill-matrix.tsv`):
+  - the Architect's 16: M1, M2, M2s, M3, M3s, M4, M4z, M5, M5c, M6, M6t, M7, M7n, M8d, M9 and M9r;
+  - `QE-244-a`'s five: F230, QSEAMRAW, QPRIOROFF (re-anchored), QMATCH3 and QTRIM1;
+  - the rest of the `ABC-241` rows' sets: REP0, S241M1, QMATCH1, UNTRIM, S241M6 and QUCINOKEYS.
+
+  The control for each is base's default lane. M1p is out, because nothing kills it at base. Each row's mutant, and
+  the named killer at the tip:
+
+  | row | form | A6 mutant | named default-lane killer at the tip |
+  |---|---|---|---|
+  | R1 | S | M1 | R1's remnant (and `engine` `ABC-249`) |
+  | R2 | S | M2 | R2's remnant only |
+  | R3 | W | none on the list | M3 and M3s are carried as the holders' control: futility's "both recursions test the node once …" and `QE-268-b` (plus `transposition` A5 for M3). R3's deep line passes under M3 (the recorded blindness), so the deep-lane kill is not read for R3 |
+  | R4 | S | M4 (plus M4z) | R4's remnant, among 19 (M4z: 22) |
+  | R5 | S | M5 (plus M5c) | R5's remnant (and two source-text rows) |
+  | R6 | W | M6 | A10 and `QE-087-d (slice)` (and 19 more) |
+  | R7 | W | M7n (plus M7) | levels A6 (and `ABC-242` A6) |
+  | R8 | S | M8d | R8's remnant (and R2's) only |
+  | R9 | S | M9 (plus M9r) | R9's remnant only |
+
+  Every other mutant on the list must stay killed by the tip's default lane, by the holders `raw/kill-matrix.tsv`
+  names. For `QE-244-a`'s five, those include CLI `ABC-241` A7 (still at step 100), CLI `ABC-230` A1 and R8's remnant.
 - **`A7` (gates).** Lint, typecheck, unit and build are green. The default lane has 0 skips. `test-skip-integrity` and
   `lane-inventory` report no findings. **The `ADR-0046` run rule applies:** the diff touches the rule's files, so QE
   runs `ABC-248`'s and `ABC-281`'s four lines plus A4's lines, and records each passed count.
@@ -193,7 +308,8 @@ The base is `main` at the commit the build branches from. The tip is this ticket
 
   How a reading routes:
   - **Target: an H median ≤ 9.4 s**, graded, with an admissible twin. That meets this ticket's target. The probe
-    forecasts about 9.3 s.
+    forecasts about 9.3 s. **Row 10, 2026-11-04:** the expected head is **about 9.3 s (base − 0.50 s)**, the
+    Architect's forecast with the remnants counted. 9.4 s is a target, not a bar, as the Orchestrator ruled.
   - **9.4 s < H ≤ 10 s:** `NFR-008` is MET, and this ticket's target is missed. QE records it as a gap. The
     Orchestrator routes it with H − B and the B arm against its own graded reading. The read is not re-played to pass,
     and no row is added in this ticket.
@@ -207,7 +323,8 @@ The base is `main` at the commit the build branches from. The tip is this ticket
 ## NFR triggers
 
 - **`NFR-008`:** `npm test` median wall ≤ 10 s at load1 ≤ 8, graded with an admissible identity twin. **This ticket's
-  target is H ≤ 9.4 s** (A8). CPU is reported.
+  target is H ≤ 9.4 s** (A8). CPU is reported. **Row 10, 2026-11-04:** expected H ≈ 9.3 s (base − 0.50 s); no NFR
+  level, bar or trigger moves.
 - **`NFR-010`** and the heap caps are untouched. No config, flag or worker count moves.
 - **`AGENTS.md` budget:** ≤ 18 432 B (A5).
 - **Security:** not triggered. Test-only, with no input, auth, data or secret surface.
@@ -232,6 +349,7 @@ The base is `main` at the commit the build branches from. The tip is this ticket
 ## Dependencies
 
 - **`arch-ABC-302`** (DoR row 10): the forms, the remnants, A6's mutants, and R8 / R9 placement and `-t` lines.
+  **Met 2026-11-04** (`…bcadd41d`): six S, three W, R8 to `uci-session`, R9 option (ii).
 - **Blocks:** `ABC-282` and `ABC-301` scope 0 build after this merges (`…112cd856` ruling 3).
 - **Files:** `src/engine.test.ts` and `src/levels.test.ts` are shared with `ABC-282`'s and `ABC-301`'s rows. This
   ticket goes first (test note 4).
@@ -244,6 +362,8 @@ The base is `main` at the commit the build branches from. The tip is this ticket
   Architect/Design. A9 rules it.
 - **`R-302-a` (LOW, new):** R9's file-scoped mocks may force option (i) or K, and R8's spied file may need care. Under
   K for R9, the saving drops by up to about 0.1 s, and 9.4 s gets close. Owner: Architect/Design, at row 10.
+  - **Row 10, 2026-11-04: closed** (owner Architect/Design, `…bcadd41d`). R9 moves under option (ii) at measured
+    parity, and R8 reads the real search in `uci-session`.
 - **`R-N8H-3` (INFO):** about 0.1 s of start-up per new test file. Applied: no new file (A1).
 - **Moved breadth runs only deep.** Mitigation: `ADR-0046`'s run rule gains A4's lines (rule item 3), and A6 measures
   what leaves.
@@ -252,6 +372,13 @@ The base is `main` at the commit the build branches from. The tip is this ticket
 ## Definition of Ready
 
 BA/PM, 2026-11-04, at `main` `9ee778b9`. **9 of 10. Stays in `Backlog`.**
+
+**Re-read 2026-11-04, BA/PM (`bapm-ABC-302-dor`, at `main` `bff22046`): 10 of 10, row 10 met. Ready.** Rows 1–9
+stand, re-read under the Architect's forms:
+- row 2: the forms and remnants are named (§ Scope, row 10), and no row takes K;
+- row 4: lane total base − 3 (2 684); per-file deep counts; nine `-t` lines; 27 frozen mutants with the named killer;
+- row 6: expected about 9.3 s, target 9.4 s unchanged;
+- row 8: still `S`.
 
 | # | item | verdict |
 |---|---|---|
@@ -264,7 +391,10 @@ BA/PM, 2026-11-04, at `main` `9ee778b9`. **9 of 10. Stays in `Backlog`.**
 | 7 | test notes | ✅ five |
 | 8 | size | ✅ `S` |
 | 9 | priority | ✅ `P1`, argued |
-| 10 | no major unresolved blocker | ❌ **`arch-ABC-302` owed:** a form and a confirmed remnant per row by mutant reads (kill parity), A6's mutant list, and R8 / R9 placement with their `-t` lines. R9 cannot keep its body byte-identical in `src/engine.test.ts` because of its file-scoped mocks |
+| 10 | no major unresolved blocker | ✅ 2026-11-04, Architect/Design (`arch-ABC-302`; `ADR-0046` § Dated 2026-11-04 (`arch-ABC-302`)): R1, R2, R4, R5, R8 **S**; R3, R6, R7 **W**; R8's full row to `src/uci-session.test.ts`'s `ENGINE_DEEP` block; R9 **S** under option (ii). Default-lane kill parity was measured on 27 mutants (PREREG `…23abb6c5`), so option (b) does not bind and there is no owner question. DoR 10 of 10: Ready. *(Was: ❌ `arch-ABC-302` owed: a form and a confirmed remnant per row by mutant reads, A6's mutant list, and R8 / R9 placement with their `-t` lines.)* |
 
 **Recommended:** stays in `Backlog`. It goes **Ready on the Architect's dated line**, with no re-cut if each row takes
 S, W or K. Column moves are the Orchestrator's.
+
+**2026-11-04: Ready.** The Architect's line is dated, every row takes a form this page carries (S, W, or R9's option
+(ii)), and there was no re-cut. The board shows In Development (Orchestrator, `bff22046`).
