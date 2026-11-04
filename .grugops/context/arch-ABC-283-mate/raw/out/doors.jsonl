@@ -1,0 +1,29 @@
+{"identity":"6k1/R7/5K2/8/8/8/8/8 w - - 2 2","search":[8535,8535,true],"choose":[9030,9030,true]}
+{"identity":"8/7k/5K2/8/8/8/8/5R2 w - - 2 2","search":[6503,6503,true],"choose":[9090,9090,true]}
+{"identity":"8/k7/2K5/8/8/8/8/1R6 w - - 2 2","search":[7796,7796,true],"choose":[9866,9866,true]}
+{"identity":"r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1","search":[113403,113403,true],"choose":[140102,140102,true]}
+{"row":"search d5 6k1/R7/5K2/8/8/8/8/8 w - - 2 2","door":"shipped","move":"f6e5","score":652,"nodes":2544}
+{"row":"search d5 6k1/R7/5K2/8/8/8/8/8 w - - 2 2","door":"history off","move":"a7b7","score":29995,"nodes":2760}
+{"row":"search d5 6k1/R7/5K2/8/8/8/8/8 w - - 2 2","door":"LMR off","move":"a7a8","score":29995,"nodes":5856}
+{"row":"search d5 6k1/R7/5K2/8/8/8/8/8 w - - 2 2","door":"futility off","move":"f6e5","score":652,"nodes":2616}
+{"row":"search d5 6k1/R7/5K2/8/8/8/8/8 w - - 2 2","door":"PVS off","move":"a7a8","score":29995,"nodes":6198}
+{"row":"search d5 6k1/R7/5K2/8/8/8/8/8 w - - 2 2","door":"table off","move":"a7b7","score":652,"nodes":3590}
+{"row":"search d5 6k1/R7/5K2/8/8/8/8/8 w - - 2 2","door":"killers off (mvv-lva)","move":"a7b7","score":29995,"nodes":2697}
+{"row":"search d5 6k1/R7/5K2/8/8/8/8/8 w - - 2 2","door":"SEE ordering off","move":"f6e5","score":652,"nodes":2544}
+{"row":"search d5 6k1/R7/5K2/8/8/8/8/8 w - - 2 2","door":"LMR+futility off","move":"a7a8","score":29995,"nodes":5905}
+{"row":"chooseMove d5 8/7k/5K2/8/8/8/8/5R2 w - - 2 2","door":"shipped","move":"f1d1","score":652,"nodes":2928}
+{"row":"chooseMove d5 8/7k/5K2/8/8/8/8/5R2 w - - 2 2","door":"history off","move":"f1h1","score":29995,"nodes":3180}
+{"row":"chooseMove d5 8/7k/5K2/8/8/8/8/5R2 w - - 2 2","door":"LMR off","move":"f1d1","score":29995,"nodes":6805}
+{"row":"chooseMove d5 8/7k/5K2/8/8/8/8/5R2 w - - 2 2","door":"futility off","move":"f1d1","score":652,"nodes":2944}
+{"row":"chooseMove d5 8/7k/5K2/8/8/8/8/5R2 w - - 2 2","door":"PVS off","move":"f1d1","score":29995,"nodes":6757}
+{"row":"chooseMove d5 8/7k/5K2/8/8/8/8/5R2 w - - 2 2","door":"aspiration off","move":"f1d1","score":652,"nodes":3009}
+{"row":"chooseMove d5 8/7k/5K2/8/8/8/8/5R2 w - - 2 2","door":"SEE ordering off","move":"f1d1","score":652,"nodes":2928}
+{"row":"chooseMove d5 8/7k/5K2/8/8/8/8/5R2 w - - 2 2","door":"LMR+futility off","move":"f1d1","score":29995,"nodes":6805}
+{"row":"chooseMove d5 8/k7/2K5/8/8/8/8/1R6 w - - 2 2","door":"shipped","move":"b1f1","score":652,"nodes":3412}
+{"row":"chooseMove d5 8/k7/2K5/8/8/8/8/1R6 w - - 2 2","door":"history off","move":"b1a1","score":29995,"nodes":3448}
+{"row":"chooseMove d5 8/k7/2K5/8/8/8/8/1R6 w - - 2 2","door":"LMR off","move":"b1e1","score":29995,"nodes":7166}
+{"row":"chooseMove d5 8/k7/2K5/8/8/8/8/1R6 w - - 2 2","door":"futility off","move":"b1f1","score":652,"nodes":3483}
+{"row":"chooseMove d5 8/k7/2K5/8/8/8/8/1R6 w - - 2 2","door":"PVS off","move":"b1e1","score":29995,"nodes":7548}
+{"row":"chooseMove d5 8/k7/2K5/8/8/8/8/1R6 w - - 2 2","door":"aspiration off","move":"b1f1","score":652,"nodes":3431}
+{"row":"chooseMove d5 8/k7/2K5/8/8/8/8/1R6 w - - 2 2","door":"SEE ordering off","move":"b1f1","score":652,"nodes":3412}
+{"row":"chooseMove d5 8/k7/2K5/8/8/8/8/1R6 w - - 2 2","door":"LMR+futility off","move":"b1e1","score":29995,"nodes":7172}

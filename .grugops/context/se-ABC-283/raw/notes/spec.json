@@ -1,0 +1,74 @@
+{
+ "refs": [
+  "se-ABC-283",
+  "grugops/ABC-283",
+  "ABC-283",
+  "ABC-233",
+  "ABC-234",
+  "ABC-236",
+  "EPIC-011",
+  "O1h",
+  "O3s",
+  "S1",
+  "ADR-0063",
+  "ADR-0065",
+  "ADR-0066",
+  "ADR-0064",
+  "ADR-0069",
+  "ADR-0026",
+  "ADR-0050",
+  "ABC-279",
+  "ABC-122",
+  "ABC-084",
+  "P0",
+  "G1",
+  "F2",
+  "NFR-008",
+  "NFR-009",
+  "orch-2026-10-30a",
+  "4c4cb03d",
+  "09694a4e",
+  "0d573303",
+  "d15752cc",
+  "2b192331",
+  "src/search.ts",
+  "src/engine.ts",
+  "src/see.ts",
+  "src/search.bundle.test.ts",
+  "src/see.test.ts",
+  "src/engine.capacity.test.ts",
+  "src/search.futility.test.ts",
+  "src/evaluate.taper.test.ts",
+  "src/quiescence.test.ts",
+  "src/search.null-move.test.ts",
+  "src/search.test.ts",
+  "src/engine.test.ts"
+ ],
+ "notes": [
+  {
+   "kind": "decision",
+   "bodyFile": "note-design.md",
+   "confidence": "high (diff read back; P0 byte-identical against main at d6-d8 on both roots and recursions)"
+  },
+  {
+   "kind": "observation",
+   "bodyFile": "note-acceptance.md",
+   "confidence": "high on every deterministic count (fixed depth or frozen clock, under the host lock); medium on lane wall times (shared host; interleaved base/head)"
+  },
+  {
+   "kind": "observation",
+   "bodyFile": "note-migration.md",
+   "confidence": "high (each edit read from git diff main; npm test green; deep lanes green except the mate-floor rows named)"
+  },
+  {
+   "kind": "failed-attempt",
+   "bodyFile": "note-failed.md",
+   "confidence": "high on the measurement and the attribution (each part's door read on every miss); the cause beyond 'history reorders LMR/futility indices' is UNKNOWN - verify"
+  },
+  {
+   "kind": "observation",
+   "bodyFile": "note-artifacts.md",
+   "confidence": "high (git log and diff read back); sealed as an observation: an artifact-ref needs a \u00a714-gate run id this install cannot issue"
+  }
+ ]
+}

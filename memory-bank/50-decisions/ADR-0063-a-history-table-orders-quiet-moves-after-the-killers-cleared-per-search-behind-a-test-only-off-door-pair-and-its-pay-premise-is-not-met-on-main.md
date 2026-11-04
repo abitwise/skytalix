@@ -41,6 +41,33 @@ id: ADR-0063
 - **The file name and title** keep the PROPOSED wording ("its pay premise is not met on `main`"), because sealed notes
   cite the path. The premise is still not met as measured; it was overridden.
 
+*2026-11-04, dated line by Architect/Design (task `arch-ABC-283-mate`, on `grugops/arch-ABC-283-mate` from `grugops/ABC-283` `4e7ddcca`).*
+**F2 ruled (i): a structural fix, K3. Decision 4 is amended: a quiet move's key is max(0, h).** History may promote a
+quiet move, never demote one. **Still PROPOSED.**
+- **The miss** (`ABC-283` bundle, `se-ABC-283` `…0b0b135f`):
+  - `search()` d5 loses 1 / 190 KRK mates and `chooseMove` d5 loses 2 / 188.
+  - The cause is LMR on a mating quiet move that the malus sank below the zero-history moves.
+  - At a White depth-3 null-window node, the mating move is at pre-history index 1–2. History puts it at index 9–16.
+  - LMR reduces it, the reduced search scores ≤ α, and no re-search runs.
+  - The −9 cells come from mate-band cutoffs.
+  - Under it is a pre-existing property that history only unmasks. LMR makes the same-depth floor order-sensitive: the door with its quiet tier reversed loses 6 / 190, and with LMR off it loses 0.
+- **The method:** PREREG `…07f1eb6d` (commit `6ad10900`), sealed before any run, on a scratch copy of the branch.
+- **The candidates:**
+  - K2 (no update from a mate-band cutoff) misses zugzwang (`zugzwang.001`).
+  - K1 / K1L (LMR on the pre-history index) miss a KQK floor row. K1F changes nothing.
+  - **K3 meets every bar, all three parts on** (observation `…c8e90c3c`):
+    - floor `search()` d5 0 / 190 and `chooseMove` d5 0 / 188;
+    - the older rows 0 each;
+    - **P0 exact 6 / 6**;
+    - zugzwang 7 / 7;
+    - G1 54 / 58, none newly missed;
+    - decision 8's drift at 99.47 %, max 28 cp.
+  - Reports: `chooseMove` d6 2 / 209 (was 4). The build as it stands reads 44 cp drift, above decision 8's 42, and K3 clears that too.
+- **What does not change:** the table, the update (bonus, malus, gravity), the lifetime, the tiers above the quiet moves, LMR and futility. The fix is one line in `orderKey`.
+- **Residual risk:** the floor holds on the 287, not by construction. The d6 row stays a report.
+- **The build lines** are in decision `…05ef9fc9` of `arch-ABC-283-mate`.
+- **What follows:** the SE applies K3 on `grugops/ABC-283`. Then come QE's PREREG and the single 100-game read (Orchestrator `…19583086` item 2).
+
 *2026-11-02, dated line by Architect/Design (task `arch-next-pull`, records only, at `main` `a6039c5b`).*
 **Re-open premise 1 is measured and not met.** That premise was a P1 design taking history as its input, measured
 jointly.
@@ -223,6 +250,8 @@ merges (§ Status).
    - The insertion sort is stable, so equal values keep generation order. With history off the quiet key is 0, and
      the order is today's exactly (the killer offset moves no relative order).
    - The root is ordered by the same comparator. H1nr shows no reason to special-case it.
+   - *Dated 2026-11-04 (`arch-ABC-283-mate`, F2 ruled (i)):* the quiet key is **max(0, h)**, not h. A move whose
+     cell is ≤ 0 keeps generation order among the zero keys. The table and its updates are unchanged. § Status.
 5. **One switch, `history`, in BOTH recursions** (`Switches`, `Heuristics`), on in `search()` and `chooseMove` only.
    With it off, nothing is read or written, and the search is the pre-ticket search, node for node.
 6. **Two TEST-ONLY doors: `searchWithoutHistory(position, depth)` and `chooseMoveWithoutHistory(position, options)`.**
@@ -270,7 +299,7 @@ merges (§ Status).
 | # | clause | what would falsify it | how to check | if it fires |
 |---|---|---|---|---|
 | **F1** | 2, 4 — drift | a non-mate score beyond 42 cp, < 95 % within 25 cp, or a mate sign change, in either recursion | decision 8 | a defect first (the update or the key tiers). On an exact build: NOT MET |
-| **F2** | 2, 4 — mates | a door mate at d5 on the 287 not a same-sign mate for the head at d5 | decision 8 | a defect |
+| **F2** | 2, 4 — mates | a door mate at d5 on the 287 not a same-sign mate for the head at d5 | decision 8 | a defect. *2026-11-04:* the bundle as built read 1 / 190 and 2 / 188 (KRK). **Ruled (i), a structural fix, so F2 does not fire:** decision 4 is amended to max(0, h), and the floor reads 0 / 190 and 0 / 188 (§ Status) |
 | **F3** | 4 — zugzwang | any of `ADR-0050` d9's seven rows not played at its recorded depth | decision 8 | a defect. Never a re-pin |
 | **F4** | the premise, it pays | `A4` (a) above 0.95× on any of the four readings | decision 9 | **fired on 2026-11-02, on `main` `e72487e1`** (H1: 1.0011, 0.9751, 0.9832). The build does not start |
 | **F5** | the premise, strength | C2′ < 43.0 of 100, or an S′ collapse | decision 10 | not merged; this ADR reads "accepted, not in force" |

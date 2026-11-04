@@ -1,0 +1,4 @@
+ABC-283 kiwipete d8: search() 523847 / 605117 = 0.8657x, chooseMove 707548 / 766275 = 0.9234x
+ABC-283 position-6 d8: search() 234214 / 406787 = 0.5758x, chooseMove 101425 / 87475 = 1.1595x
+ABC-283 mate floor search() d5: 0 of 190 violated
+ABC-283 mate floor chooseMove d5: 0 of 188 violated

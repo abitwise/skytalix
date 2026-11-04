@@ -1,0 +1,8 @@
+{
+ "refs": ["se-ABC-283-merge", "grugops/ABC-283-merge", "grugops/qe-ABC-283", "ABC-283", "ABC-271", "QE-283-i", "QE-283-a", "QE-283-b", "QE-283-d", "ADR-0063", "ADR-0065", "ADR-0066", "ADR-0070", "K0", "K2", "P0", "G1", "NFR-008", "R-N8H-1", "Q-N8H-1", "R-281-a", "R-283-LMR", "62151993", "6a93d3e9", "715beb1c", "872e5ffc", "bc287789", "af2b77dc", "orch-2026-10-30a/20261104T164704Z-orchestrator-decision-2409cec9", "orch-2026-10-30a/20261104T151305Z-orchestrator-decision-c7609f51", "qe-ABC-283/20261104T164437Z-qe-e2e-decision-de1dc511", "qe-ABC-283/20261104T164437Z-qe-e2e-observation-f8f8c2cc", "qe-ABC-283/20261104T164437Z-qe-e2e-observation-3f370426", "qe-ABC-271/20261104T162300Z-qe-e2e-decision-74da20bf", "plans/traceability.md", "src/evaluate.taper.test.ts", "src/transposition.test.ts", "src/evaluate.pawns.test.ts", "src/evaluate.passer.test.ts"],
+ "notes": [
+  {"kind": "decision", "bodyFile": "note-decision.md", "confidence": "high: git auto-merged every src/ file; the one conflict (plans/traceability.md) kept both sides whole; the merged src/ diff against each parent read back"},
+  {"kind": "observation", "bodyFile": "note-bars.md", "confidence": "high on every deterministic count (fixed depth or frozen clock, out-of-tree arms, byte-identical to QE's outputs); medium on lane wall times (shared host, two reads, no twin)"},
+  {"kind": "observation", "bodyFile": "note-artifacts.md", "confidence": "high (git log and diff read back); sealed as an observation: an artifact-ref needs a gate run id this install cannot issue"}
+ ]
+}

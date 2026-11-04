@@ -1,0 +1,39 @@
+head=840a343d src=d051784f dirty=0 start 2026-11-04T16:22:55Z  16:22:55 up 5 days,  8:41,  1 user,  load average: 1.28, 1.42, 1.57
+t-A5 exit 0 wall 1s  Tests 4 passed | 237 skipped (241)
+t-QE208a exit 0 wall 0s  Tests 1 passed | 44 skipped (45)
+t-ABC230 exit 0 wall 1s  Tests 1 passed | 82 skipped (83)
+t-A9 exit 0 wall 1s  Tests 1 passed | 57 skipped (58)
+bundle exit 0 wall 11s  Tests 21 passed (21)
+search exit 0 wall 3s  Tests 57 passed (57)
+see exit 0 wall 54s  Tests 52 passed (52)
+futility exit 0 wall 73s  Tests 53 passed (53)
+taper exit 0 wall 30s  Tests 169 passed (169)
+nullmove exit 0 wall 27s  Tests 45 passed (45)
+pvslmr exit 0 wall 55s  Tests 29 passed (29)
+quiescence exit 0 wall 49s  Tests 116 passed (116)
+tt-search exit 0 wall 4s  Tests 40 passed (40)
+tt-engine exit 0 wall 6s  Tests 26 passed (26)
+ord-search exit 0 wall 6s  Tests 43 passed (43)
+ord-engine exit 0 wall 4s  Tests 30 passed (30)
+pvslmr-eng exit 0 wall 49s  Tests 21 passed (21)
+quies-eng exit 0 wall 1s  Tests 99 passed (99)
+engine exit 0 wall 180s  Tests 83 passed (83)
+pawns-eng exit 0 wall 3s  Tests 44 passed (44)
+legal-eng exit 0 wall 189s  Tests 50 passed (50)
+moves-eng exit 0 wall 5s  Tests 38 passed (38)
+gameend-eng exit 0 wall 4s  Tests 58 passed (58)
+puzzle exit 0 wall 3s  Tests 18 passed (18)
+zobrist exit 0 wall 6s  Tests 33 passed (33)
+perft exit 0 wall 3s  Tests 32 passed (32)
+input exit 0 wall 1s  Tests 34 passed (34)
+tune exit 0 wall 9s  Tests 17 passed (17)
+cli exit 0 wall 13s  Tests 11 passed (11)
+uci exit 0 wall 5s  Tests 13 passed (13)
+ucisession exit 0 wall 292s  Tests 241 passed (241)
+npmtest exit 0 wall 10s
+typecheck exit 0 wall 2s
+lint exit 0 wall 0s
+build exit 0 wall 1s
+skip-count 0
+integrity exit 0 No findings. 
+DONE 2026-11-04T16:41:25Z  16:41:25 up 5 days,  8:59,  1 user,  load average: 1.84, 1.51, 1.47

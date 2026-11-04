@@ -377,14 +377,16 @@ describe("ABC-269 — one switch, taper, and three test-only doors (ADR-0064 dec
 
   // `ABC-279` (`ADR-0069` decision 8): its door, `searchWithoutSeePruning` / `chooseMoveWithoutSeePruning`,
   // keeps the taper on and is now the shipped path less the newer switch, so `ABC-269`'s door is
-  // that door with taper off.
-  for (const [name, call, shipped, seeDoor, door] of [
+  // that door with taper off. `ABC-283`'s doors keep the taper on too (the shipped path less one or
+  // all of the bundle).
+  for (const [name, call, shipped, seeDoor, door, bundle] of [
     [
       "search",
       "searchRoot(position, depth, {",
       "search",
       "searchWithoutSeePruning",
       "searchWithoutTaper",
+      ["searchWithoutHistory", "searchWithoutSeeOrdering", "searchWithoutBundle"],
     ],
     [
       "engine",
@@ -392,13 +394,20 @@ describe("ABC-269 — one switch, taper, and three test-only doors (ADR-0064 dec
       "chooseMove",
       "chooseMoveWithoutSeePruning",
       "chooseMoveWithoutTaper",
+      [
+        "chooseMoveWithoutHistory",
+        "chooseMoveWithoutSeeOrdering",
+        "chooseMoveWithoutAspiration",
+        "chooseMoveWithoutBundle",
+      ],
     ],
   ] as const) {
-    it(`${name}: taper is on in ${shipped} and ${seeDoor} only; ${door} is ${seeDoor} with taper off; every older door turns it off`, () => {
+    it(`${name}: taper is on in ${shipped}, the ABC-283 doors and ${seeDoor} only; ${door} is ${seeDoor} with taper off; every older door turns it off`, () => {
       const literals = literalsByEntry(SOURCES[name], call);
-      expect(Object.keys(literals).length).toBeGreaterThanOrEqual(name === "search" ? 15 : 9);
+      expect(Object.keys(literals).length).toBeGreaterThanOrEqual(name === "search" ? 18 : 13);
       for (const [entry, literal] of Object.entries(literals)) {
-        const on = entry === shipped || entry === seeDoor;
+        const on =
+          entry === shipped || entry === seeDoor || (bundle as readonly string[]).includes(entry);
         expect(literal, entry).toContain(on ? "taper: true," : "taper: false,");
       }
       const strip = (literal: string): string => literal.replace(/\s*taper: (true|false),/, "");

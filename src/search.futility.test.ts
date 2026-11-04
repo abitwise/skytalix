@@ -478,8 +478,10 @@ describe("FUTILITY_MARGIN reads [0, 150, 350, 550], is module-private, and no li
 });
 
 describe("both recursions test the node once, with the entry window, after the table probe and the null move, and skip exactly the moves futileMove names", () => {
+  // `ABC-283`: search.ts's third `futileMove(` is the history update (`recordHistoryCutoff`), which
+  // asks it again so a skipped move gets no malus (`ADR-0063` decision 2); it skips nothing.
   const MODULES = [
-    { path: "./search.ts", depth: "depth", on: "switches", calls: 2, moveCalls: 2 },
+    { path: "./search.ts", depth: "depth", on: "switches", calls: 2, moveCalls: 3 },
     { path: "./engine.ts", depth: "remaining", on: "budget", calls: 1, moveCalls: 1 },
   ];
 
@@ -561,28 +563,36 @@ describe("the doors — searchWithoutFutility and chooseMoveWithoutFutility turn
   });
 
   // `ABC-269`'s door (`ADR-0064` decision 7) is the shipped path less the taper, futility on;
-  // `ABC-279`'s (`ADR-0069` decision 8) is the shipped path less the SEE skip, futility on.
+  // `ABC-279`'s (`ADR-0069` decision 8) is the shipped path less the SEE skip, futility on; and
+  // `ABC-283`'s doors are the shipped path less one or all of the bundle, futility on.
   const MODULES = [
     {
       path: "./search.ts",
       call: "searchRoot(position, depth, {",
       on: "search",
+      bundle: ["searchWithoutHistory", "searchWithoutSeeOrdering", "searchWithoutBundle"],
       see: "searchWithoutSeePruning",
       tap: "searchWithoutTaper",
-      least: 14,
+      least: 17,
     },
     {
       path: "./engine.ts",
       call: "deepen(position, options, {",
       on: "chooseMove",
+      bundle: [
+        "chooseMoveWithoutHistory",
+        "chooseMoveWithoutSeeOrdering",
+        "chooseMoveWithoutAspiration",
+        "chooseMoveWithoutBundle",
+      ],
       see: "chooseMoveWithoutSeePruning",
       tap: "chooseMoveWithoutTaper",
-      least: 8,
+      least: 12,
     },
   ];
 
-  for (const { path, call, on, see, tap, least } of MODULES) {
-    it(`${path}: each exported entry passes exactly one futility literal, and only ${on}'s, ${see}'s and ${tap}'s are true`, () => {
+  for (const { path, call, on, bundle, see, tap, least } of MODULES) {
+    it(`${path}: each exported entry passes exactly one futility literal, and only ${on}'s, the ABC-283 doors', ${see}'s and ${tap}'s are true`, () => {
       const flat = readFileSync(new URL(path, import.meta.url), "utf8").replace(/\s+/g, " ");
       const found: Record<string, string> = {};
       for (const chunk of flat.split("export function ").slice(1)) {
@@ -595,6 +605,7 @@ describe("the doors — searchWithoutFutility and chooseMoveWithoutFutility turn
       expect(Object.keys(found).length).toBeGreaterThanOrEqual(least);
       expect(Object.entries(found).filter(([, value]) => value === "true")).toEqual([
         [on, "true"],
+        ...bundle.map((entry) => [entry, "true"]),
         [see, "true"],
         [tap, "true"],
       ]);

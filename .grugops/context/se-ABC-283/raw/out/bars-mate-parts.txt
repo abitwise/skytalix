@@ -1,0 +1,6 @@
+8/7k/5K2/8/8/8/8/5R2 w - - 2 2 5 {"chooseMove":652,"chooseMoveWithoutHistory":29995,"chooseMoveWithoutSeeOrdering":652,"chooseMoveWithoutAspiration":652,"chooseMoveWithoutBundle":29995}
+8/k7/2K5/8/8/8/8/1R6 w - - 2 2 5 {"chooseMove":652,"chooseMoveWithoutHistory":29995,"chooseMoveWithoutSeeOrdering":652,"chooseMoveWithoutAspiration":652,"chooseMoveWithoutBundle":29995}
+7k/8/R4K2/8/8/8/8/8 b - - 1 1 6 {"chooseMove":-652,"chooseMoveWithoutHistory":-29994,"chooseMoveWithoutSeeOrdering":-652,"chooseMoveWithoutAspiration":-652,"chooseMoveWithoutBundle":-29994}
+7k/8/5K2/8/8/8/8/5R2 b - - 1 1 6 {"chooseMove":-652,"chooseMoveWithoutHistory":-29994,"chooseMoveWithoutSeeOrdering":-652,"chooseMoveWithoutAspiration":-652,"chooseMoveWithoutBundle":-29994}
+7k/8/5K2/8/8/8/8/6R1 b - - 1 1 6 {"chooseMove":-652,"chooseMoveWithoutHistory":-29994,"chooseMoveWithoutSeeOrdering":-652,"chooseMoveWithoutAspiration":-652,"chooseMoveWithoutBundle":-29994}
+k7/8/2K5/8/8/8/8/1R6 b - - 1 1 6 {"chooseMove":-652,"chooseMoveWithoutHistory":-29994,"chooseMoveWithoutSeeOrdering":-652,"chooseMoveWithoutAspiration":-652,"chooseMoveWithoutBundle":-29994}

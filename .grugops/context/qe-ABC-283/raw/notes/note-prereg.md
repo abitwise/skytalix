@@ -1,0 +1,51 @@
+# qe-ABC-283 PREREG, sealed and committed before any game and before any QE run: C2′ is 100 games at 100 ms, the bundle against the merge-base, GAIN ≥ 50.0 / 100. S′ is 10 games at 0.5 s against Stockfish E 1 810, for information only. The Levels deep lane is a bar. The bars are the owner's (`…4c4cb03d` ruling 2), copied into ticket B4, with the Orchestrator's rulings `…3851bf43` and `…c7609f51`. None is loosened. A miss is final: no re-play, no margin and no change of form
+
+QE/E2E, task `qe-ABC-283`. Worktree `.claude/worktrees/qe-ABC-283`, branch `grugops/qe-ABC-283`, cut from `grugops/ABC-283` `21ae5819`. This note was written before any game, any S′ game, any Levels run, any timing read and any offline read. It adds nothing to the bars. It fixes the builds, the commands, the order, the forecast and what gets reported.
+
+## Builds
+- **Candidate:** `grugops/ABC-283` `ab0a37b6`, the Engineer's last code and test commit (K3 built). Its `src/` tree is `d051784f`. The branch tip `21ae5819` adds records only and has the same `src/` tree.
+- **Base:** the merge-base `09694a4e` (`git merge-base main grugops/ABC-283`), with `src/` tree `4fb3da04`. `main` `0f0adfe3` has the same `src/` tree, `4fb3da04`. `main` has moved since by records and `tools/rating` (`ABC-300`) only, so the candidate is not re-based: its `src/` is what would merge.
+- **Production diff, base to candidate:** `src/search.ts`, `src/engine.ts`, and `src/see.ts` (a comment). UAT is not waived, and this verdict signs UAT (the 2026-10-22 delegation).
+- **Harness:** `tools/rating/` at this worktree (tree `5601c33c`, the merge-base's). `main`'s harness adds `ABC-300`'s `--tc` flag and leaves every other argv byte-equal. `CUTECHESS_CLI` and `STOCKFISH` come from a scratch tools file (QE-269-j). Both sha256 values were checked against the pins in `rating.ts` (`dc776901…`, `c78c22a9…`), and both match. A `--dry-run` of each command printed the argv below and nothing more: nothing was built or started, and no game was played.
+- **Out-of-tree arms in `<scratch>`:** B = `git archive 09694a4e`. H = `git archive ab0a37b6`. H2 = `cp -a` of H; `diff -r H H2` is clean. Each arm leaves out `.grugops/context/*/raw/` and borrows the main checkout's `node_modules` by symlink. H's `src/` equals this worktree's `src/` (`diff -r` is clean). B and H differ in 12 `src/` files.
+
+## Bars, as written
+- **C2′ (ticket B4; `ADR-0056` C2′; `EPIC-011` § The per-change rule):** `node tools/rating/rating.ts d ab0a37b6 09694a4e <out> --budget-ms 100 --rounds 50 --concurrency 1`. Both sides play at `st=0.1` with `timemargin` 50 ms. **The whole match runs in ONE `flock <scratch>/host-test.lock` hold**, with nothing else in it.
+  - **MET:** 100 of 100 games complete, 0 candidate faults, and a score ≥ 50.0 of 100. Intent: GAIN. The harness's `state:` label is not the verdict.
+  - **Below 50.0:** NOT MET, final. The ticket is not merged and the three ADRs stay parked (B5). The verdict is FAIL. There is no re-play, no margin, no change of form and no subset read.
+  - **A harness or launch error before the first game** is not a read. It is recorded, and the same command is run once more. Once a game has started, the read is the read.
+- **S′ (`…3851bf43` 1; INFORMATION ONLY, not a bar):** `node tools/rating/rating.ts r ab0a37b6 <out> --elo 1810 --budget-ms 500 --rounds 5 --concurrency 1`, in one `flock` hold. Reported: the score, W/L/D, faults, losses on time and cutechess's Elo ± error. **No second ten is played,** because S′ is information here and no bar hangs on it.
+- **Levels deep lane (`…3851bf43` 1, a bar):** `ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/levels.test.ts --reporter=verbose`, on H (the candidate's tree), ALONE. **MET at exit 0 with every test passed.**
+
+## Offline bars (re-read independently by QE's own driver `drv.ts`, not the Engineer's or the Architect's)
+Every read is at a fixed depth or on a frozen clock. Each part runs in its own process.
+- **B1 / P0, 6 / 6:** base `search()` and `chooseMove(maxDepth)` (computed fresh on B, not taken from the Engineer's `p0-main.jsonl`) against H's `searchWithoutBundle` / `chooseMoveWithoutBundle`. The positions are kiwipete and position-6, at d6, d7 and d8. MET when nodes, score, move and depth are byte-equal on all 6 rows.
+- **B2 (a), the mate floor, 0 violations:** on `MATE_CORPUS` (the 287), H `search()` d5 against `searchWithoutBundle` d5, and H `chooseMove` d5 against `chooseMoveWithoutBundle` d5. A violation is a door mate whose head score is not a same-sign mate. Also read against base `main`'s own d5 scores, and on the older rows: the futility, SEE-pruning and taper doors at d5, and taper d4 → d5. **Any violation on a d5 row is a FAIL** (the floor is never loosened, `…42c82347`, `…19583086`). The `chooseMove` d6 row is reported, not graded (`…05ef9fc9`, `R-283-LMR`). The committed deep rows (`src/search.bundle.test.ts` and the futility, see and taper lanes) must also be green.
+- **B2 (b), zugzwang 7 / 7:** `ADR-0050` d9's seven rows, copied from the ADR, at their recorded depths (9, 11, 12, 8, 8, 8, 8). Shipped `chooseMove`, frozen clock. MET when each plays the recorded move at that depth.
+- **B2 (c), G1, none newly missed:** the 58 puzzles at the baseline's budget and virtual clock. "Newly missed" is checked against `src/puzzle-suite.baseline.json`'s `unsolved` and against base `main`'s own run on B. No count floor is added (`…3851bf43` 4). The `PUZZLE_DEEP` lane must also be green.
+- **Drift (information, `…3851bf43` 2):** `ADR-0063` d8's form, history on against `…WithoutHistory`, at d5 on the six roots, their children and the six endings, in both recursions. Reported against 42 cp, not graded.
+- **Gates:** typecheck, lint and build exit 0. The skip count is 0. `test-skip-integrity.js` reports "No findings.", and `npm test` is green.
+- **R-281-a's four `-t` lines:** expected passed counts are ABC-167 A5 **4**, QE-208-a **1**, ABC-230 A3/A4 **1** and levels A9 **1**. **A short count blocks.**
+- **Every game-free deep lane** must exit 0 with 0 failed (`lanes.sh`). The ladder lane is not run, because it plays games.
+- **The three re-pins** (the order row; `ADR-0066`'s KRK row from iteration 5 to 6; the d8 information row) are read against the pin/bar rule. Each must be a pin and not a bar: no zugzwang, mate-floor, `G1`, `P0` or relation row may be moved.
+- **d8 node ratios** are information only.
+
+## NFR-008 (`…c7609f51` 3), graded with twin arms, ALONE
+- This is `qe-ABC-281`'s A8 form, byte for byte, except for the per-arm expected counts: B = 69 files / 2 650, H and H2 = 70 files / 2 665. The whole session runs in ONE `flock` hold, and `npm test` runs as spelled in each arm.
+- The order rotates B H H2 / H H2 B / H2 B H. Round 0 is discarded. Rounds continue until 8 complete scored rounds or 12 rounds in all.
+- **Twin admissible** when |median CPU delta H2 − H| ≤ max(1.5 % of H's median CPU, 0.01 s) and the sign is at chance.
+- **Routing:**
+  - admissible, H median ≤ 10 s and wall R ≤ 10 s → **MET, graded**;
+  - H median > 10 s → to the owner (`ADR-0035` D6), a blocking gap;
+  - inadmissible → VOID, with one re-read in a new lock session if the hop budget allows.
+- **Reported against 10 s and against R-N8H-1's 9.5 s trigger.** A graded median ≥ 9.5 s returns R-N8H-1 to MEDIUM. That is a gap for the Orchestrator and a Security/NFR hop after the merge, not a fail. Q-N8H-1's 9.6 s is reported too.
+
+## NFR-005 / G6 (`…3851bf43` 3), reported
+- `qe-ABC-268`'s `g6.mjs`, `timed.mjs` and `host.mjs`, unchanged, in `g6` mode only (no G11). There are 5 interleaved rounds per board per build at `LEVELS[5]` 4 000 ms, ALONE.
+- **Only a breach of NFR-005's stated limit (a run below depth 6) is a blocking gap.** Depth 7 is a WARN, and "≥ base" by the median is reported.
+
+## Order, discipline and forecast
+1. C2′, then S′, then Levels, then NFR-008, then G6, then the offline driver, then the lanes and gates (`chain.sh`). Each match or timing session runs in its own single `flock` hold, with `uptime` at start and end. Each lane runs in its own hold.
+2. **Game-time forecast:** C2′ about 23 min (`qe-ABC-279` took 22.6 min), and S′ about 8.5 min, for about 32 min in all, which is ≤ 1 h. The rest is about 10 min for Levels, 6 min for NFR-008, 4 min for G6, 2 min offline and about 25 min of lanes.
+3. **Fixed now:** no re-play of a miss, no game beyond the 100 + 10, and no dropped game.
+4. Script sha256s are in `raw/notes/scripts.sha256`, and the scripts are in `raw/scripts/`. The bars above do not depend on any figure the Engineer or the Architect read.

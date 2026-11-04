@@ -1,0 +1,6 @@
+{"name":"startpos","d":8,"search":{"nodes":136113,"score":17,"move":"b1c3"},"choose":{"nodes":122051,"score":23,"move":"b1c3","depth":8}}
+{"name":"kiwipete","d":8,"search":{"nodes":524383,"score":-89,"move":"d5e6"},"choose":{"nodes":708673,"score":-89,"move":"d5e6","depth":8}}
+{"name":"position-3","d":8,"search":{"nodes":53360,"score":50,"move":"b4c4"},"choose":{"nodes":39106,"score":50,"move":"b4c4","depth":8}}
+{"name":"position-4","d":8,"search":{"nodes":249443,"score":-464,"move":"c4c5"},"choose":{"nodes":110630,"score":-464,"move":"c4c5","depth":8}}
+{"name":"position-5","d":8,"search":{"nodes":31528,"score":521,"move":"d7c8"},"choose":{"nodes":52996,"score":519,"move":"d7c8","depth":8}}
+{"name":"position-6","d":8,"search":{"nodes":356558,"score":74,"move":"c3d5"},"choose":{"nodes":95334,"score":71,"move":"c3d5","depth":8}}

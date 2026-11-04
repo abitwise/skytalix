@@ -8,7 +8,8 @@
  * - `zobristKeyAfterMove` hands out a fresh key per call, so nothing repeats and no probe hits
  *   below the root.
  *
- * The injected clock lets the deepening run 130 iterations. Iteration 129 and beyond reach ply
+ * The injected clock lets the deepening run at least 130 iterations (`ABC-283`: counted in root
+ * passes, five per iteration, since aspiration may re-search one). Iteration 129 and beyond reach ply
  * 128 with depth still unspent, so only the capacity guard can stop them there. No depth guard is
  * involved: the engine takes no depth.
  *
@@ -16,8 +17,8 @@
  * - The CALL spy is `repeatsInPath`, which the engine imports from `src/search.ts` and calls once
  *   on entry to every full-width node, with that node's ply.
  * - The WRITE spy is `zobristKeyAfterMove`, called once per `keys[ply + 1] = …` write. It is
- *   split per iteration at each iteration's ply-1 entry. The root's keys[1] write lands just before
- *   that entry, so it opens its own iteration's count.
+ *   split per root pass at each pass's ply-1 entry. The root's keys[1] write lands just before
+ *   that entry, so it opens its own pass's count.
  */
 
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -70,6 +71,12 @@ vi.mock("./search.ts", async (importOriginal) => {
 
 const START = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const ITERATIONS = KEY_ARRAY_CAPACITY + 2;
+/**
+ * `ABC-283` (`ADR-0066` decision 3): from iteration 5 an iteration may search the root up to five
+ * times under its aspiration window, and each pass enters ply 1 once. So the clock is frozen for
+ * five passes per iteration, enough for `ITERATIONS` iterations whatever the windows do.
+ */
+const PASSES = 5 * ITERATIONS;
 
 /** `A6`'s oracle: the same line walked to ply 128 and scored as a leaf is, without the engine. */
 function leafScoreAtCapacity(): number {
@@ -93,7 +100,7 @@ function leafScoreAtCapacity(): number {
   );
 }
 
-/** The key writes each iteration made, keys[1] included, the last iteration up to the return. */
+/** The key writes each root pass made, keys[1] included, the last pass up to the return. */
 function writesPerIteration(): number[] {
   const starts = spy.iterationStarts;
   return starts.map((start, i) => (starts[i + 1] ?? spy.keyWrites + 1) - start);
@@ -109,8 +116,8 @@ describe("ABC-122 A8: src/engine.ts's KEY_ARRAY_CAPACITY guard, reached through 
     expect(expected).not.toBe(0);
     const position = parseFen(START);
 
-    // Virtual time: frozen until the deepening has STARTED `ITERATIONS` iterations, then spent.
-    const now = () => (spy.iterationStarts.length < ITERATIONS ? 0 : Number.MAX_SAFE_INTEGER);
+    // Virtual time: frozen until the deepening has STARTED `PASSES` root passes, then spent.
+    const now = () => (spy.iterationStarts.length < PASSES ? 0 : Number.MAX_SAFE_INTEGER);
     const choice = chooseMove(position, { budgetMs: 1_000, now });
 
     // The deepening really went past the capacity, so remaining depth was left at ply 128.

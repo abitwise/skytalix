@@ -1,0 +1,42 @@
+
+ RUN  v4.1.12 <worktree>
+
+ ✓ src/search.bundle.test.ts > ABC-283 (h) — the history table (ADR-0063 decisions 1-5) > is 2 × 64 × 64 cells of 32 bits: 32 768 bytes 1ms
+ ✓ src/search.bundle.test.ts > ABC-283 (h) — the history table (ADR-0063 decisions 1-5) > a quiet cutoff gives +d² to the cutter and -d² to each quiet move before it; a capture cutter changes nothing 2ms
+ ✓ src/search.bundle.test.ts > ABC-283 (h) — the history table (ADR-0063 decisions 1-5) > gravity bounds every cell to [-16 384, 16 384], with no clamp: the bound is a fixed point 0ms
+ ✓ src/search.bundle.test.ts > ABC-283 (h) — the history table (ADR-0063 decisions 1-5) > at a futile node a move futility skipped gets no malus; the first move, always searched, does 0ms
+ ✓ src/search.bundle.test.ts > ABC-283 (h) — the history table (ADR-0063 decisions 1-5) > orders the quiet moves by max(0, cell), below both killers, ties in generation order; off, generation order 0ms
+ ✓ src/search.bundle.test.ts > ABC-283 (h) — the history table (ADR-0063 decisions 1-5) > is cleared at every search() entry and chooseMove call, and no door writes it 50ms
+ ✓ src/search.bundle.test.ts > ABC-283 (h) — the history table (ADR-0063 decisions 1-5) > source: each negamax updates once, at its beta cutoff, behind the switch; the clear sits beside clearTable; quiescence never touches it 2ms
+ ✓ src/search.bundle.test.ts > ABC-283 (s) — SEE orders the losing captures after the killers (ADR-0065 decisions 2-4) > a capture below -50 sorts after both killers and before every other quiet move; -10 stays a capture 1ms
+ ✓ src/search.bundle.test.ts > ABC-283 (s) — SEE orders the losing captures after the killers (ADR-0065 decisions 2-4) > the hash move stays first even when it is a losing capture 0ms
+ ✓ src/search.bundle.test.ts > ABC-283 (s) — SEE orders the losing captures after the killers (ADR-0065 decisions 2-4) > with the switch off the full-width search computes no SEE; on, it does 22ms
+ ✓ src/search.bundle.test.ts > ABC-283 (s) — SEE orders the losing captures after the killers (ADR-0065 decisions 2-4) > source: every full-width call site hands the position only when seeOrdering is on 1ms
+ ✓ src/search.bundle.test.ts > ABC-283 (a) — aspiration at the root of chooseMove (ADR-0066 decisions 1-7) > iterations 1-4 are the door's, node for node, and store no root lower bound 18ms
+ ✓ src/search.bundle.test.ts > ABC-283 (a) — aspiration at the root of chooseMove (ADR-0066 decisions 1-7) > a non-mate fail high: iteration 5 fails high and is re-searched to the door's exact move and score; the door stores no root lower bound 35ms
+ ✓ src/search.bundle.test.ts > ABC-283 (a) — aspiration at the root of chooseMove (ADR-0066 decisions 1-7) > a mate found at iteration 6: iteration 6 fails high and is re-searched to the door's exact move and score; the door stores no root lower bound 23ms
+ ✓ src/search.bundle.test.ts > ABC-283 (a) — aspiration at the root of chooseMove (ADR-0066 decisions 1-7) > source: the window, the mate guard, the widening and the gate 1ms
+ ✓ src/search.bundle.test.ts > ABC-283 P0 — the all-off doors are main, node for node, at depth 8 [deep, SEARCH_DEEP=1] > kiwipete: searchWithoutBundle and chooseMoveWithoutBundle at depth 8 read main's 605117 / 766275 [deep, SEARCH_DEEP=1] 2015ms
+ ✓ src/search.bundle.test.ts > ABC-283 P0 — the all-off doors are main, node for node, at depth 8 [deep, SEARCH_DEEP=1] > position-6: searchWithoutBundle and chooseMoveWithoutBundle at depth 8 read main's 406787 / 87475 [deep, SEARCH_DEEP=1] 794ms
+stdout | src/search.bundle.test.ts > ABC-283 — the bundle's own counts at depth 8 (the instrument: information, not a bar) [deep, SEARCH_DEEP=1] > kiwipete: search() and chooseMove at depth 8 read 523847 / 707548, root move and score the door's [deep, SEARCH_DEEP=1]
+ABC-283 kiwipete d8: search() 523847 / 605117 = 0.8657x, chooseMove 707548 / 766275 = 0.9234x
+
+ ✓ src/search.bundle.test.ts > ABC-283 — the bundle's own counts at depth 8 (the instrument: information, not a bar) [deep, SEARCH_DEEP=1] > kiwipete: search() and chooseMove at depth 8 read 523847 / 707548, root move and score the door's [deep, SEARCH_DEEP=1] 3872ms
+stdout | src/search.bundle.test.ts > ABC-283 — the bundle's own counts at depth 8 (the instrument: information, not a bar) [deep, SEARCH_DEEP=1] > position-6: search() and chooseMove at depth 8 read 234214 / 101425, root move and score the door's [deep, SEARCH_DEEP=1]
+ABC-283 position-6 d8: search() 234214 / 406787 = 0.5758x, chooseMove 101425 / 87475 = 1.1595x
+
+ ✓ src/search.bundle.test.ts > ABC-283 — the bundle's own counts at depth 8 (the instrument: information, not a bar) [deep, SEARCH_DEEP=1] > position-6: search() and chooseMove at depth 8 read 234214 / 101425, root move and score the door's [deep, SEARCH_DEEP=1] 1377ms
+stdout | src/search.bundle.test.ts > ABC-283 — the same-depth mate floor on the 287, both recursions, against the all-off doors [deep, SEARCH_DEEP=1] > every mate the door scores at depth 5, search() scores as a mate of the same sign at depth 5 [deep, SEARCH_DEEP=1]
+ABC-283 mate floor search() d5: 0 of 190 violated
+
+ ✓ src/search.bundle.test.ts > ABC-283 — the same-depth mate floor on the 287, both recursions, against the all-off doors [deep, SEARCH_DEEP=1] > every mate the door scores at depth 5, search() scores as a mate of the same sign at depth 5 [deep, SEARCH_DEEP=1] 1314ms
+stdout | src/search.bundle.test.ts > ABC-283 — the same-depth mate floor on the 287, both recursions, against the all-off doors [deep, SEARCH_DEEP=1] > every mate the door scores at depth 5, chooseMove scores as a mate of the same sign at depth 5 [deep, SEARCH_DEEP=1]
+ABC-283 mate floor chooseMove d5: 0 of 188 violated
+
+ ✓ src/search.bundle.test.ts > ABC-283 — the same-depth mate floor on the 287, both recursions, against the all-off doors [deep, SEARCH_DEEP=1] > every mate the door scores at depth 5, chooseMove scores as a mate of the same sign at depth 5 [deep, SEARCH_DEEP=1] 1484ms
+
+ Test Files  1 passed (1)
+      Tests  21 passed (21)
+   Start at  16:22:58
+   Duration  11.19s (transform 0ms, setup 0ms, import 77ms, tests 11.01s, environment 0ms)
+

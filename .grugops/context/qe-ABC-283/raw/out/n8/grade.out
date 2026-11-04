@@ -1,0 +1,10 @@
+complete scored rounds n = 8 (rounds [1, 2, 3, 4, 5, 6, 7, 8]); k = 2
+B: wall median 9.45 s, interval [9.39, 9.54], max 9.58; CPU median 31.80 s
+H: wall median 9.60 s, interval [9.52, 9.71], max 9.76; CPU median 32.27 s
+H2: wall median 9.60 s, interval [9.54, 9.69], max 9.72; CPU median 32.51 s
+H-B wall_s: median +0.140 s, interval [+0.010, +0.340], positive 7/8, deltas [-0.06, 0.01, 0.02, 0.06, 0.22, 0.22, 0.34, 0.39]
+H-B cpu_s: median +0.840 s, interval [-0.030, +1.280], positive 6/8, deltas [-0.13, -0.03, 0.05, 0.63, 1.05, 1.2, 1.28, 1.9]
+twin H2-H wall_s: median +0.005 s, R 0.050 s, positive 4/7, deltas [-0.22, -0.04, -0.02, 0.0, 0.01, 0.05, 0.05, 0.17]
+twin H2-H cpu_s: median +0.085 s, R 0.680 s, positive 5/8, deltas [-0.81, -0.56, -0.28, 0.05, 0.12, 0.21, 0.68, 0.88]
+twin admissibility: |median CPU delta| 0.085 s = 0.26 % of H CPU 32.27 s (limit 0.484 s); sign 5/8 at chance: True; n >= 8: True -> ADMISSIBLE
+NFR-008 STATE: NFR-008 MET, graded; H median wall 9.60 s; Q-N8H-1 trigger (>= 9.6 s): YES; R-N8H-1 trigger (>= 9.5 s): YES
