@@ -1,3 +1,4 @@
+_Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `arch-ABC-283-mate` done (…05ef9fc9): cause = history's negative cells push mating moves into LMR; fix **K3** (key max(0,h)) holds the mate floor, P0, zugzwang, G1, drift 28 cp. Ruling …6c6fb0be. **ABC-283 Blocked → In Development** (`se-ABC-283-k3`). Running: se-ABC-271, qe-ABC-300, se-ABC-283-k3._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — **ABC-300 built** (se-ABC-300 50f30cba; A1–A5, A7 met; A6 at ABC-282's A6; lane 9.27 s) → In Review → `qe-ABC-300`. Running: se-ABC-271, arch-ABC-283-mate, qe-ABC-300._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `bapm-ABC-282-adr` merged a90a04c8: **ABC-282 Ready** (L; held until ABC-283 merges or misses), **ABC-300 Ready → In Development** (`se-ABC-300`, tools only). BA/PM J1–J5 accepted. Owner: OQ-0071-1, Q-3K-10. Running: se-ABC-271, arch-ABC-283-mate, se-ABC-300._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `arch-ABC-282` merged 9471eb32: **ADR-0071 PROPOSED** (W1 in uci-clock-mode only; soft limit = budget ÷ 2.3; partial move kept if it beats the incumbent). Harness can't play under a clock → tools ticket ABC-300 to cut. **Owner asked: OQ-0071-1 (accept ADR-0071), Q-3K-10.** → `bapm-ABC-282-adr`. Running: se-ABC-271, arch-ABC-283-mate, bapm-ABC-282-adr._
@@ -1323,7 +1324,8 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 1/3)
+    ## In Development (WIP 2/3)
+- [ABC-283] The O1h+O3s+S1 bundle with K3 (history never demotes); se-ABC-283-k3 running; then qe-ABC-283 (one 100-game read).
 - [ABC-271] E4a structure only at 0 (ADR-0070 form (a)); se-ABC-271 running on QE's frozen rows (qe-ABC-271-freeze 23169a3e).
 - ~~[ABC-283]~~ → Blocked. The O1h+O3s+S1 bundle (ABC-233 history, ABC-234 SEE ordering, ABC-236 root aspiration) on one branch; one read of 100 games at 100 ms, GAIN ≥ 50.0 (owner's word, …4c4cb03d). se-ABC-283 running; rulings …3851bf43.
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
@@ -1873,7 +1875,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [ABC-142] `npm test` keeps the failing test's name on disk when the console is truncated  (BA/PM, XS, P2, since: 2026-10-10, DoR 10/10; cut from QE-141-a + QE-093-e, two unnamed one-test flakes) **2026-10-10: cut → Ready → Ready for Dev → pulled → In Development (pass-through); build `ticket-to-pr-ABC-142`; zero `src/` expected.** **2026-10-10: engineer STOPPED pre-code — premise stale: `src/cli.test.ts:1665–1686` (ABC-042 A10) pins `scripts.test`; A5 forbade the one test line. Orchestrator routes option 1 (update the pin, zero production lines) → BA/PM amend `bapm-amend-abc142-2026-10-10`, then the build resumes.** **2026-10-10: A5 amended (merged `a559ca34`, DoR 10/10; new A6 keeps the pin exact) → build resumed.** **2026-10-10: BUILT `41abc389`/`ab8d0088`: A1–A6 met; 53/1680; `.test-results/last-run.json` names the failing test even through `| tail -3`. One deviation: vitest adds one console line (`JSON report written to …`) — Orchestrator reads it as acceptable IF no console consumer breaks (QE to verify) → In Review, QE `qe-ABC-142`.** **2026-10-10: QE PASS_WITH_GAPS (`8b0685de`; no console consumer breaks — the extra `JSON report written to …` line is ACCEPTED by the Orchestrator) → merged `addbc328` → Done (UAT WAIVED: test-only `src/`). Follow-ups next session (BA/PM): QE-142-a MEDIUM (unhandled error → exit 1 but file says success), QE-142-b/c LOW.**
 
 ## Blocked (visible, time-tracked)
-- [ABC-283] **since 2026-11-04T13:57Z**: mate floor (ADR-0064 d7) lost on KRK by the history part (se-ABC-283 …0b0b135f); SEE ordering and aspiration clean. → arch-ABC-283-mate (…19583086).
+- ~~[ABC-283]~~ unblocked 2026-11-04T14:25Z (K3). Was: mate floor (ADR-0064 d7) lost on KRK by the history part (se-ABC-283 …0b0b135f); SEE ordering and aspiration clean. → arch-ABC-283-mate (…19583086).
 - [ABC-266] TH-2: Lazy SMP worker pool behind UCI Threads (default 1); read Threads N vs Threads 1 as a hardware gain (EPIC-011 threads; size: L; P2; DoR 9/10 — ADR amending ADR-0044 D3/D5 owed; after ABC-265) **2026-11-02 PARKED (Orchestrator, on evidence): D12 MISS and re-proposal NO WIN (…b6305641) — plain pools run in lockstep (depth 7 = 7); only skip+deeper+perturbation adds a ply and it costs move quality. Threads stay 1. Re-open: owner-funded ~30 min probe (≥ 60 positions, ≥ 1 s load windows) or a new premise.**
 
 
