@@ -1,0 +1,5 @@
+{"checked":1212172,"misses":0,"worst":0.9583333333334849,"phase24":131746,"withQueenOnCount":448779,"queenOnMg":[14,29,0]}
+
+real	0m7.832s
+user	0m8.345s
+sys	0m0.338s

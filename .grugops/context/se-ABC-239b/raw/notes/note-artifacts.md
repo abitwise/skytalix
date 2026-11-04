@@ -1,0 +1,26 @@
+# se-ABC-239b artifact-ref: branch `grugops/ABC-239b`, the tool commits, the bound set, the candidate (red, frozen), files, tests and commands
+
+- **Branch** `grugops/ABC-239b` from `main` `a8fbade5`, worktree `.claude/worktrees/se-ABC-239b`. Not pushed, not merged.
+- **Commits:**
+  - `8e7279a3`: claim.
+  - `625b75fe` and `5ce4f870`: `9eeb0314` and `03fcaaa0`, cherry-picked clean. `da3f8599` dropped.
+  - `def26997`: the step-2 tool commit (queen-on tracer, six players, F3's linear bounds, Goldfarb–Idnani bounded step, tests).
+  - `954d44fb`: QE-270-e, test-only.
+  - `8c03b713`: the bound set, one row.
+  - **`26d06118`: the CANDIDATE, red at step 6.** `src/evaluate-params.ts` (sha256 `10581fb5…95af`), the provenance row, and `ABC-215` A2's rule rows retired under d6.
+  - Then the records commit.
+- **Files added:** `tools/tune/bounds.ts`. **Changed:** `tools/tune/tracer.ts`, `tools/tune/tune.ts`, `tools/tune/tune.test.ts`, `src/evaluate.king-mobility.test.ts` (QE-270-e), `src/evaluate-params.ts` (emitted), `src/evaluate.test.ts` (A2 rule rows retired; provenance describe, 2 rows, thirteen exports), `src/evaluate.taper.test.ts` (the two endgame-half rule rows retired). `tsconfig.json` / `biome.json` `tools/tune` entries come with the cherry-pick.
+- **Tests:** `tools/tune/tune.test.ts` holds 3 default-lane source rows (the S3 / no-network row, the quiet filter's record, the FEN source row) and 14 `TUNE_DEEP=1` rows. They include the K1 (c) count row, `evaluateAt` against `evaluate`, and bound rows (1)–(3).
+- **Commands**, each under `flock <host-test.lock>`:
+  - `sha256sum -c` on the Lichess file: OK;
+  - `TUNE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run tools/tune`: 17 / 17 on `def26997` and on `8c03b713`;
+  - `npm test` on `954d44fb` (base table plus tool): 69 files, 2 650 passed;
+  - `npm run typecheck` and `npx biome check` on the touched files: clean;
+  - `node --max-old-space-size=3000 tools/tune/tune.ts extract <out> --lichess <scratch>/lichess/lichess_db_standard_rated_2017-03.pgn.zst`, then `fit <out>`, then `emit <out>`, each under `timeout 1800` by `raw/scripts/run.sh`. Run once box-only (the base `bounds.ts`) and twice bounded (B-T3);
+  - `raw/scripts/gate.ts`: the gate on the emitted file;
+  - the five `src/evaluate*.test.ts` files with `--reporter=json`, on the box-only set (step 4) and on the candidate (step 6);
+  - `src/search.null-move.test.ts` on both sets;
+  - `raw/scripts/relread.ts`: relations behind pins;
+  - `raw/scripts/stopread.ts`: the two step-6 reds.
+- **Not run (STOP at step 6, before step 7):** re-pins, retirements (i) and (ii), the lost fixture re-finds, `npm test` on the candidate, the build, the deep lanes, B-T5 (mate floor, `G1`, futility audit), B-T4 `G3` / `G2` and B-T6 `G6`. Host time this hop was about 25 min of runs (three data runs at about 5 min each, plus the test files).
+- **Remaining work:** the Architect's rulings on F3 and F4 (failed-attempt note). Nothing goes to QE: no candidate is handed over. The Lichess file stays at `<scratch>/lichess/`, sha256-checked.

@@ -1,0 +1,9 @@
+{
+ "refs": ["se-ABC-239b", "grugops/ABC-239b", "ABC-239", "ABC-270", "ABC-279", "EPIC-011", "E2", "ADR-0067", "ADR-0068", "ADR-0069", "ADR-0048", "ADR-0028", "B-T0", "B-T1", "B-T2", "B-T3", "B-T4", "B-T5", "F3", "F4", "QE-270-e", "NFR-008", "a8fbade5", "625b75fe", "5ce4f870", "def26997", "954d44fb", "8c03b713", "26d06118", "arch-ABC-239-rulings/20261103T223637Z-architect-design-decision-2b428ce8", "orch-2026-10-30a/20261103T221607Z-orchestrator-decision-42c82347", "orch-2026-10-30a/20261103T223750Z-orchestrator-decision-912ba57d", "orch-2026-10-30a/20261104T010343Z-orchestrator-decision-d7605102", "se-ABC-239/20261103T220702Z-software-engineer-failed-attempt-f39f6eb5", "tools/tune/tune.ts", "tools/tune/tracer.ts", "tools/tune/bounds.ts", "tools/tune/tune.test.ts", "src/evaluate-params.ts", "src/evaluate.test.ts", "src/evaluate.taper.test.ts", "src/evaluate.king-mobility.test.ts", "src/evaluate.pawns.test.ts", "src/search.null-move.test.ts"],
+ "notes": [
+  {"kind": "decision", "bodyFile": "note-design.md", "confidence": "high (code read back; TUNE_DEEP lane 17/17; B-T3 byte-identical over the bounded refit); the bounded-step method is an engineer's choice inside ruling (b), recorded for the Architect"},
+  {"kind": "observation", "bodyFile": "note-data.md", "confidence": "high (every figure read from extract.json / fit.json / stage logs / the json reporter of the runs named)"},
+  {"kind": "failed-attempt", "bodyFile": "note-stop.md", "confidence": "high (both reds read twice: the test file and the tracer's integer blend / chooseMove at depths 9-12); the class labels of the non-bar reds by reading each failure, not acted on"},
+  {"kind": "observation", "bodyFile": "note-artifacts.md", "confidence": "high (git log and commands as run); published as observation: artifact-ref needs a section-14 gate_run this hop does not have (se-ABC-239 precedent)"}
+ ]
+}

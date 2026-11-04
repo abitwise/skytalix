@@ -1,0 +1,9 @@
+pawns A2 gap (c3/d3 - c3/c4) on base: 33  (bar: > 0 and <= 50)
+pawns A2 gap (c3/d3 - c3/c4) on box-only: 49  (bar: > 0 and <= 50)
+pawns A2 gap (c3/d3 - c3/c4) on candidate: 53  (bar: > 0 and <= 50)
+pawns A2 gap via evaluate on the file in place: 53
+pawns A2 as a row, a = trace(c3/c4) - trace(c3/d3): PST.pawn[c4].eg 1, DOUBLED.eg -1, ISOLATED.eg -2, PST.pawn[d3].eg -1 phase w 0 0
+zugzwang.001 candidate depth 9: e1e5 score -421 (depth read 9)
+zugzwang.001 candidate depth 10: e1e5 score -428 (depth read 10)
+zugzwang.001 candidate depth 11: e1e5 score -442 (depth read 11)
+zugzwang.001 candidate depth 12: e1f1 score -430 (depth read 12)

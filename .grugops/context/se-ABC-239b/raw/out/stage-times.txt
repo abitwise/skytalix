@@ -1,0 +1,26 @@
+# box-only (scratch emission, never committed)
+2026-11-04T01:19:27Z extract start
+2026-11-04T01:22:55Z extract exit 0 wall 3:27.33 maxRSS 1603420kB
+2026-11-04T01:22:55Z fit start
+2026-11-04T01:24:12Z fit exit 0 wall 1:17.19 maxRSS 444144kB
+2026-11-04T01:24:12Z emit start
+2026-11-04T01:24:12Z emit exit 0 wall 0:00.09 maxRSS 94076kB
+2026-11-04T01:24:12Z emitted sha256 54938760730d856de5fc7939d8cfc879b675fc86d64394a102a6d702910b4237
+# bounded refit, run 1 (the candidate)
+2026-11-04T01:26:32Z extract start
+2026-11-04T01:29:59Z extract exit 0 wall 3:26.76 maxRSS 1503172kB
+2026-11-04T01:29:59Z fit start
+2026-11-04T01:31:29Z fit exit 0 wall 1:30.58 maxRSS 442308kB
+2026-11-04T01:31:29Z emit start
+2026-11-04T01:31:29Z emit exit 0 wall 0:00.08 maxRSS 92728kB
+2026-11-04T01:31:29Z emitted sha256 10581fb5dd0395f577b5483f3b6ead9ec4a363374a68c0982acadf2b1c0995af
+# bounded refit, run 2 (B-T3)
+2026-11-04T01:31:29Z extract start
+2026-11-04T01:34:59Z extract exit 0 wall 3:29.33 maxRSS 1530796kB
+2026-11-04T01:34:59Z fit start
+2026-11-04T01:36:31Z fit exit 0 wall 1:32.24 maxRSS 445476kB
+2026-11-04T01:36:31Z emit start
+2026-11-04T01:36:31Z emit exit 0 wall 0:00.08 maxRSS 92820kB
+2026-11-04T01:36:31Z emitted sha256 10581fb5dd0395f577b5483f3b6ead9ec4a363374a68c0982acadf2b1c0995af
+B-T3: run 1 and run 2 evaluate-params.ts byte-identical; rows.jsonl identical across box-only, run 1, run 2; fit.json identical across run 1 and run 2
+each stage: timeout 1800, node --max-old-space-size=3000, under the host lock; host 24 cpus, node v26.12.1
