@@ -12,6 +12,16 @@ adr: "ADR-0067 (ACCEPTED 2026-11-03, in force as the method; the d6 amendment AD
 
 # ABC-301: E2's second pull, one bounded fit over E4a's structure, one read
 
+> **P1'S ROW FORM, PROVISIONAL UNTIL `qe-ABC-301-s0` READS IT; TEST NOTE 4 GAINS TWO PINS AT SCOPE 4, 2026-11-04, by
+> BA/PM** (task `bapm-lines-1104b`, records only, at `main` `732a0cea`; nothing run). Sources: the Orchestrator's ruling
+> `orch-2026-10-30a` `…878035ca` items 1, 3 and 5, and `se-ABC-301-s0` `…8fb36960`, `…534a582c`.
+> - **P1:** the written row reads 31 / 44 on the build. The row built runs each fixture at its own phase and reads
+>   44 / 44. This corrects the row's specification; the bar stays exact on 44 of 44. **Provisional:** because it changes
+>   a row after a red, QE confirms or rejects it before the fit. A rejection is a STOP. Scopes 1–4 follow the confirmation.
+> - **Test note 4:** the two `ABC-271` "every half 0" rows are pins of the value-0 table, handled at scope 4.
+> - **Not written here:** `ADR-0070` d4's dated line and `ADR-0067`'s precondition still spell the written form.
+> - No bar level, size or priority moves. **DoR 10/10, unchanged.** The column move is the Orchestrator's.
+
 > **A DEFAULT-LANE BUDGET OF ≤ +0.1 s; SCOPE 0 BUILDS AFTER `ABC-302` MERGES; THE `NFR-008` HEADROOM IS NOW KNOWN,
 > 2026-11-04, by BA/PM** (task `bapm-ABC-302-cut`, records only, at `main` `9ee778b9`; nothing run). Sources: the
 > Orchestrator's ruling `orch-2026-10-30a` `…112cd856` items 2 and 3, and Security/NFR `secnfr-nfr008-1104`
@@ -89,6 +99,14 @@ precondition measurable.
   inside `withParametersForTest` at `ADR-0070` d1's probed values, **then** the white-POV `evaluateAtPhase(p, 0)`
   minus the same at the shipped values equals the seam's white (king distance + free + unstoppable) minus its black,
   **exactly, on 44 / 44**. It kills mutants E14–E16. A unit row, no search, default lane.
+  - *2026-11-04 (`bapm-lines-1104b`; `…878035ca` 1): **the row's form, PROVISIONAL until `qe-ABC-301-s0` reads it.** The
+    sentence above stands until then; QE's confirmation replaces its equation with this one, and a rejection is a STOP.
+    As written it reads **31 / 44** on the build, all 13 misses exactly ± 400, on fixtures of phase 1–5: U fires on the
+    phase argument, and the seam reads `phaseOf`. **The form:** each fixture runs at its own phase k, white POV, and
+    `evaluateAtPhase(p, k)` at the probed values equals mg + trunc((D + e) × (24 − k) / 24), **exactly, on 44 / 44**. mg
+    is `evaluateAtPhase(p, 24)` and D is `evaluateAtPhase(p, 0)` − mg, both at the shipped values. e is the seam's white
+    minus black at the probed values, minus the same at the shipped values. At k = 0 this is the written equation. It
+    kills E14–E16 and H1 (a hot path that passes phase 0). The bar is not loosened: no tolerance, 44 of 44.*
 - **P2 (`QE-271-g`).** **Given** the source row that holds `passerTermsForTest` to test files, **then** it also
   names `pawnStructureForTest`, and it finds **0 callers** of either in any non-test file under `src/`, any `tools/`
   file or any script.
@@ -168,6 +186,11 @@ precondition measurable.
 4. **Retired rows, exactly those named in `ADR-0067`:** the `differ` assertion of E1's "only the king's square and the
    passers differ" row, the whole of `ABC-269` B1 (e), and `ABC-215` A2's rule rows for tuned arrays under d6
    (replaced by the provenance row). QE checks the PR retires exactly these.
+   *2026-11-04 (`bapm-lines-1104b`; `…878035ca` 3): **two further rows, outside `ADR-0067`'s list, are pins at scope 4.**
+   Both are in `src/evaluate.passer.test.ts`: "PASSED_KING_ENEMY, PASSED_KING_OWN, PASSED_FREE: by own rank in PASSED's
+   shape, every half 0" and "at the shipped values (every half 0) every part is 0 on every fixture". They pin the
+   value-0 table under ruling `…42c82347` and go red as soon as a fit frees king distance and free path. Each is
+   re-pinned or retired at scope 4 and listed old → new in the PR table. QE's check above covers these two as well.*
 5. **Carried from `ABC-239`'s close, not bars** (BA/PM judgment, flagged): `954d44fb` (`QE-270-e`, a test-only change
    to the K1 (e) bite rows) is owed by this pull, since it goes red once a fit frees a queen-on mg. If step 7 is
    reached, K1 (c) takes form (A) (`ABC-239` § Close).

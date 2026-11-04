@@ -7,10 +7,22 @@ size: S
 priority: P3
 epic: EPIC-011
 feature: —
-adr: "owed (the Architect's): a new ADR (ADR-0026 d10) after a pre-registered joint probe over the history table (ADR-0063 decision 11): the count table by depth, the exclusions, the door names, the drift, audit and pay bars, the firing figure at 100 ms and the intent. A new ADR is the owner's to accept (reading (b))"
+adr: "ADR-0072 PROPOSED, premise not met (arch-bundle-1: form M3 carried, L2 missed, F1 fired). The build does not start on PROPOSED; it waits on the owner's word (OQ-0072-1, one answer with OQ-0073-1)"
 ---
 
 # ABC-286: late-move pruning (P4)
+
+> **THE `adr:` LINE NAMES `ADR-0072`, PROPOSED, PREMISE NOT MET; EVERYTHING ELSE WAITS ON THE OWNER'S ANSWER, 2026-11-04,
+> by BA/PM** (task `bapm-lines-1104b`, records only, at `main` `732a0cea`; nothing run). Sources: `arch-bundle-1`
+> `…37b7fb23` and the Orchestrator's `orch-2026-10-30a` `…878035ca` 4.
+> - **The joint probe has run.** Form M3 is carried by Rule B. On its own door it meets L3 and L4 and misses **L2**: drift
+>   93.58 % / 94.12 % (≥ 95 %), 80 / 79 cp (≤ 75); audit 15.27 % (≤ 0.5 %), 29 errors ≥ 200 cp (0). **F1 fired.**
+> - **Open: OQ-0072-1,** one answer with OQ-0073-1, (a), (b) or (c) (`EPIC-011` § Owner questions). (c) is the default
+>   without an answer. The build does not start without his word.
+> - **Waiting on his answer, and not written here:** DoR row 10's text; L2 and L4's numbers (`ADR-0072` d9); scope 1's
+>   clauses (d1); L0's door; on (a), the bundle ticket. Lines below that still read "held on the joint probe" or "the
+>   ADR is owed" are read with this block.
+> - No bar moves. **DoR 9/10, Backlog, held, unchanged.** The board move is the Orchestrator's.
 
 > **UNHELD FOR ITS PROBE 2026-11-04: `ABC-283` MERGED (`58e90d07`), by BA/PM** (task `bapm-ABC-283-done`, records
 > only, at `main` `fd6b595f`; nothing run). Source: the Orchestrator's disposition `orch-2026-10-30a` `…2409cec9` 5
