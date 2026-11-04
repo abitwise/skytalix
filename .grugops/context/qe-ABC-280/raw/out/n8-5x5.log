@@ -1,0 +1,10 @@
+round 1 main load1=1.41 rc=0 wall 9.972860749  Tests 2647 passed (2647) 9.66s
+round 1 tip load1=1.88 rc=0 wall 9.723615632  Tests 2650 passed (2650) 9.40s
+round 2 main load1=2.43 rc=0 wall 9.618739405  Tests 2647 passed (2647) 9.33s
+round 2 tip load1=2.37 rc=0 wall 9.650135678  Tests 2650 passed (2650) 9.36s
+round 3 main load1=2.31 rc=0 wall 9.941659721  Tests 2647 passed (2647) 9.66s
+round 3 tip load1=2.34 rc=0 wall 9.930404652  Tests 2650 passed (2650) 9.66s
+round 4 main load1=2.68 rc=0 wall 9.642745317  Tests 2647 passed (2647) 9.37s
+round 4 tip load1=3.09 rc=0 wall 9.677436532  Tests 2650 passed (2650) 9.38s
+round 5 main load1=3.08 rc=0 wall 9.870404672  Tests 2647 passed (2647) 9.58s
+round 5 tip load1=3.15 rc=0 wall 10.036456464  Tests 2650 passed (2650) 9.73s

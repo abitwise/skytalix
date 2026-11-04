@@ -1,0 +1,6 @@
+round 1 main rc=0 wall 9.809431143  Tests 2647 passed (2647) 9.47s
+round 1 tip rc=0 wall 10.047250742  Tests 2650 passed (2650) 9.72s
+round 2 main rc=0 wall 9.576808059  Tests 2647 passed (2647) 9.30s
+round 2 tip rc=0 wall 9.713514298  Tests 2650 passed (2650) 9.44s
+round 3 main rc=0 wall 9.624352156  Tests 2647 passed (2647) 9.34s
+round 3 tip rc=0 wall 9.909456821  Tests 2650 passed (2650) 9.62s
