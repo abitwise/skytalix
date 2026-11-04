@@ -45,6 +45,8 @@ and class are printed, never the value), 2 cannot run (not a git repository, no 
 blocks the merge** until the branch replaces the value with a placeholder in a new commit. Proof:
 `node --test tools/grugops/records-path-check.proof.js` (outside the lane).
 
+**Moved deep-lane rows run at every QE hop whose ticket touches a lane input, and once on `main` at each epic's close (`R-281-a`, 2026-11-04).** The rule, the four `-t` lines and their counts: `ADR-0046` § "Dated 2026-11-04 (`arch-ADR-0070-accept`): `R-281-a`'s run-frequency rule".
+
 ## Branch and review flow
 
 ## Definition of done
