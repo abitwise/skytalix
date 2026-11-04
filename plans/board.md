@@ -1,3 +1,4 @@
+_Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `qe-ABC-271-freeze` merged 23169a3e (12 + 44 rows, K0 frozen). **ABC-271 → In Development** (`se-ABC-271`). Running: se-ABC-283, arch-ABC-282, se-ABC-271._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `bapm-epic011-areas` merged 181da9e3: EPIC-011's 16 uncut areas cut as **ABC-284..299** (Backlog). New owner question Q-3K-10 (open ADR-0024 d4 for Q2 delta pruning). → `arch-ABC-282` (W1 ADR). Running: se-ABC-283, qe-ABC-271-freeze, arch-ABC-282._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `bapm-ABC-271-ready` merged af0b0ae6: **ABC-271 DoR 10/10, Ready** (S; structure only at 0) → `qe-ABC-271-freeze`, then se-ABC-271. Rulings …6ccd8243 (incl. a disclosed stamp slip). Running: se-ABC-283, bapm-epic011-areas, qe-ABC-271-freeze._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — owner: ADR-0070 form (a) → `arch-ADR-0070-accept` merged (ACCEPTED, structure only; npm test 2 650/2 650); W1 cut as **ABC-282** (Backlog, ADR owed); the O1h+O3s+S1 bundle cut as **ABC-283** (Ready → In Development, `se-ABC-283`); ABC-283 § Open ruled …3851bf43. Running: se-ABC-283, bapm-ABC-271-ready, bapm-epic011-areas._
@@ -1318,7 +1319,8 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 1/3)
+    ## In Development (WIP 2/3)
+- [ABC-271] E4a structure only at 0 (ADR-0070 form (a)); se-ABC-271 running on QE's frozen rows (qe-ABC-271-freeze 23169a3e).
 - [ABC-283] The O1h+O3s+S1 bundle (ABC-233 history, ABC-234 SEE ordering, ABC-236 root aspiration) on one branch; one read of 100 games at 100 ms, GAIN ≥ 50.0 (owner's word, …4c4cb03d). se-ABC-283 running; rulings …3851bf43.
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
@@ -1446,8 +1448,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## Ready (WIP 1/8)
-- [ABC-271] E4a structure only at 0 (ADR-0070 ACCEPTED form (a); DoR 10/10, S, P3). QE freeze first (qe-ABC-271-freeze), then se-ABC-271. No games.
+## Ready (WIP 0/8)
+- ~~[ABC-271]~~ → In Development E4a structure only at 0 (ADR-0070 ACCEPTED form (a); DoR 10/10, S, P3). QE freeze first (qe-ABC-271-freeze), then se-ABC-271. No games.
 
 
 
