@@ -1,0 +1,29 @@
+## moved bodies (base body vs the tip's deep copy)
+IDENTICAL search.null-move -> search.null-move: +4 indent, 8 lines: search() to depth 4 and chooseMove deepened to 4: every null move is made out of
+IDENTICAL uci-session -> uci-session: +2 indent, 14 lines: A5: the CLI level seam's injected list equals UCI's, key for key, and both play 
+IDENTICAL search.futility -> search.futility: +4 indent, 7 lines: the rule changes the work: search() at depth 4 and chooseMove deepened to 4 on p
+IDENTICAL zobrist -> zobrist: +2 indent, 17 lines: holds at every node within 2 plies of every perft position
+IDENTICAL engine -> engine: +4 indent, 11 lines: on an infinite budget, maxDepth 1000 returns within the same consultation count
+IDENTICAL levels -> levels: +2 indent, 3 lines: a fixed seed gives identical blunder decisions across runs
+IDENTICAL levels -> levels: +2 indent, 19 lines: move, depth and nodes are equal on 30 of 30 positions, for each of two seeds
+IDENTICAL cli -> uci-session: +2 indent, 9 lines: A4: with repetitionKeyHistory injected the default level plays d8e8 at exactly 0
+IDENTICAL engine.capacity -> engine.capacity: +2 indent, 17 lines: ends every line at ply 128 with a leaf's score once the deepening passes it: no 
+IDENTICAL levels -> levels: +2 indent, 24 lines: ABC-174 A3 — the default plays as the engine: chooseMove at 4 000 ms (ABC-228, A
+## every other `it` in the touched files (title present at base and tip; body after the indent shift)
+search.null-move: it blocks base 25, tip 26; titles out 0, in 1, other bodies changed 0
+   in:  the in-check root and position-5, search() to depth 4 and chooseMove deepened to 4: every null move is made out of check, with three or more pieces
+uci-session: it blocks base 158, tip 160; titles out 0, in 2, other bodies changed 0
+   in:  A4: with repetitionKeyHistory injected the default level plays d8e8 at exactly 0; base does not
+   in:  A5 (slice): on a 500 ms virtual step, the CLI level seam's injected list equals UCI's, key for key, and both play d8e8
+search.futility: it blocks base 31, tip 31; titles out 0, in 0, other bodies changed 0
+zobrist: it blocks base 17, tip 18; titles out 0, in 1, other bodies changed 0
+   in:  holds at every node 1 ply from every perft position
+engine: it blocks base 71, tip 72; titles out 0, in 1, other bodies changed 0
+   in:  on an infinite budget and a 10 000 ms counting clock, maxDepth 1000 returns within the same consultation count
+levels: it blocks base 56, tip 56; titles out 0, in 0, other bodies changed 0
+cli: it blocks base 109, tip 109; titles out 1, in 1, other bodies changed 0
+   out: A4: with repetitionKeyHistory injected the default level plays d8e8 at exactly 0; base does not
+   in:  A4 (slice): on a 500 ms virtual step, with repetitionKeyHistory injected the default level plays d8e8 at exactly 0; base does not
+engine.capacity: it blocks base 1, tip 2; titles out 0, in 1, other bodies changed 0
+   in:  on a clock spent after 2 x ITERATIONS (260) root passes, ends every line at ply 128 with a leaf's score: no node or key past it
+A2 moved bodies and siblings: ALL IDENTICAL (indent aside)

@@ -1,0 +1,20 @@
+## re-read at the frozen tip a5651cbf, this hop
+# non-.grugops paths
+AGENTS.md
+memory-bank/90-agents-md-command-log.md
+plans/traceability.md
+src/cli.test.ts
+src/engine.capacity.test.ts
+src/engine.test.ts
+src/levels.test.ts
+src/search.futility.test.ts
+src/search.null-move.test.ts
+src/uci-session.test.ts
+src/zobrist.test.ts
+# non-M name-status outside .grugops
+# production filter (must be empty)
+# AGENTS.md
+ AGENTS.md | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+# command-log headings added
+1

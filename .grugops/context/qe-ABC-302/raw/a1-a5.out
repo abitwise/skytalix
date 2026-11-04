@@ -1,0 +1,37 @@
+## A1 git diff --name-only bff22046 7f4c513a
+.grugops/queue/claimed/se-ABC-302.claim.md
+.grugops/queue/claimed/se-ABC-302.md
+AGENTS.md
+memory-bank/90-agents-md-command-log.md
+src/cli.test.ts
+src/engine.capacity.test.ts
+src/engine.test.ts
+src/levels.test.ts
+src/search.futility.test.ts
+src/search.null-move.test.ts
+src/uci-session.test.ts
+src/zobrist.test.ts
+## name-status non-M:
+A	.grugops/queue/claimed/se-ABC-302.claim.md
+R100	.grugops/queue/pending/se-ABC-302.md	.grugops/queue/claimed/se-ABC-302.md
+## production filter (must be empty):
+## same on the delivered tip 44817c44~1..44817c44 (UAT rule):
+## A5
+bff22046 AGENTS.md 18429 B
+a5651cbf AGENTS.md 18429 B
+-45
++46
+-47
++53
++++ b/memory-bank/90-agents-md-command-log.md
++
++## `se-ABC-302` pass, 2026-11-04 (`ABC-302` A5; Orchestrator brief `se-ABC-302`; branch `grugops/ABC-302` from `main` `bff22046`)
++
++Software Engineer, task `se-ABC-302`. `AGENTS.md` 18,429 -> **18,429 B** (0 B; budget 18,432, pinned by `src/cli.test.ts` `ABC-109` `A5`). Two counts changed in `AGENTS.md`, nothing else.
++
++| where | before | after |
++|---|---|---|
++| `AGENTS.md` § Test, null-move line | `Null-move deep lane (opt-in, ABC-208, 45 rows)` | `Null-move deep lane (opt-in, ABC-208, 46 rows)` |
++| `AGENTS.md` § Test, futility line | `Futility deep lane (ABC-268, 47 tests)` | `Futility deep lane (ABC-268, 53 tests)` |
++
++Why: `ABC-302` (`arch-ABC-302`, `ADR-0046` § Dated 2026-11-04 (`arch-ABC-302`)) takes null-move's A2 row as form S, so that lane holds one more row, and futility's "the rule changes the work" row as form W, so that lane's count does not move. The 47 was already stale at base (`arch-ABC-302` read 53). RUN 2026-11-04 at the branch tip (test commit `44817c44`), host lock: `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/search.null-move.test.ts` exit 0, **46 passed (46)**, 27 s wall; `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/search.futility.test.ts` exit 0, **53 passed (53)**, 64 s wall. No other lane line carries a count; none was touched.
