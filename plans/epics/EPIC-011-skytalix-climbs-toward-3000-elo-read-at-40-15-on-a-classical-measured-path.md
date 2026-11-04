@@ -1014,8 +1014,9 @@ reorders made here are named in the "why" column.
   direction** (`orch-2026-10-30a` `…dda43b71` item 3): related changes may be built together and judged by one read,
   as `ABC-283` was. **The owner's risk acceptance R-BUNDLE-1** (`…ce2883d8`): a bundle's single read may hide a part
   with a small negative share. The rule, its guards and R-BUNDLE-1's text are the Architect's draft, a dated rule in
-  `ADR-0056`'s per-change rule (`arch-second-pull-1104`, in flight). Its acceptance is the owner's; reading (b) lets
-  it be used while PROPOSED for bundles the owner names.
+  `ADR-0056`'s per-change rule (`arch-second-pull-1104`; merged `48b98f43` after this line's base: § Dated 2026-11-04,
+  "the bundle read", PROPOSED). Its acceptance is the owner's (`Q-3K-11`); reading (b) lets it be used while PROPOSED
+  for bundles the owner names.
 
 ## Scope
 
