@@ -108,6 +108,7 @@ Architect/Design (task `arch-owner-answers-1103`, records only, on `grugops/arch
 | 2026-11-04 | Architect/Design | `ADR-0070`'s owed lines: d5 tracer (E4a's features), d6 second-pull free set (KD / FP eg ≥ 0, mg 0, U held 0) and how they enter F3, item 5's order. The d6 amendment and B-T8's re-confirmation stay open (the owner's). No bar moved | `arch-ADR-0070-accept` |
 | 2026-11-04 | Owner | The d6 amendment adopted (every relation bounded at once, margin-aware, no refit); B-T8 re-confirmed for the second pull | `orch-2026-10-30a` `…dda43b71` |
 | 2026-11-04 | Architect/Design | d6's amendment and the second pull's step list; F3 restated; B-T8 re-confirmed; the second pull's carried bars, its four preconditions (`QE-271-f`, `-g`, `-h`, `-i`) and its endgame `G2` row. No bar level moved | `arch-second-pull-1104` |
+| 2026-11-04 | Architect/Design | The two `ABC-271` "every half 0" rows ruled under `…42c82347`: the by-rank row re-pinned on its eg line, "every part is 0" retired by name. No bar moved | `arch-records-1104` |
 
 ## Context
 
@@ -749,6 +750,43 @@ level moves.***
   base SHA either way.
 - **Host time:** the fit takes minutes; B-T7 about 0.7 h; B-T8 about 5 h, approved. Recommended to QE, as written: B-T5
   before B-T7 and B-T8, so a safety miss spends no games.
+
+*Dated 2026-11-04 (`arch-records-1104`, records only, at `main` `83894094`; rulings `orch-2026-10-30a` `…42c82347`,
+`…878035ca` 3 and `…0edae6fd` 2): **the two `ABC-271` "every half 0" rows of `src/evaluate.passer.test.ts`. The first is
+re-pinned, the second retires. No bar moves.***
+- **"PASSED_KING_ENEMY, PASSED_KING_OWN, PASSED_FREE: by own rank in PASSED's shape, every half 0": RE-PINNED, on its eg
+  line only.**
+  - `expect(pair.eg)` records the old table, so it is a pin (B-T4's rule). The one literal the loop shares becomes three,
+    each export's emitted eg array: `[0, 0, 0, 0, 0, 0, 0, 0]` → the emission's, with a dated comment, in the PR table.
+    An eg half the fit leaves at 0 stays 0 in its literal.
+  - **The rest of the row is not a pin and stays as written:** `pair.mg` all 0 (`ADR-0070` d1, "at the build and at every
+    pull"), the `toHaveLength` shape, and `PASSED_UNSTOPPABLE` at `{ mg: 0, eg: 0 }` (`ADR-0070` d7's hold). A red on any
+    of these is a defect, never a re-pin.
+  - The row and its describe stop saying "every half 0". The row reads "mg 0, eg as fitted"; the describe, "four exports,
+    mg 0, U 0, eg as fitted".
+- **"at the shipped values (every half 0) every part is 0 on every fixture": RETIRED,** named here as `…42c82347` and
+  `…0edae6fd` 2 require.
+  - **It cannot be re-pinned under B-T4's rule,** which moves the literal and keeps the assertion's form. The row has one
+    literal, `ZERO`, for all 44 fixtures. With values in the table the seam returns a different triple per side per
+    fixture, so a re-pin would be a new row of 264 figures making a different claim. The row's own sentence is false once
+    the fit does what `ADR-0070` d7 asks: it stops making sense, which is `…0edae6fd` 2's test.
+  - **It is no bar.** QE's freeze (`qe-ABC-271-freeze` `…67b5eeac`) says of value 0, "These rows add no bar there", and it
+    is not a relation, the identity gate or a safety row, so B-T4's never-list does not reach it.
+  - **What it read is held elsewhere** (by reading; nothing was run here):
+    - the table: the re-pinned row above;
+    - U's hold: that row's `PASSED_UNSTOPPABLE` line;
+    - the seam: K1 (c), exact per side and per part on the 44 fixtures at the probed values, so a constant of the seam's
+      own shows there.
+    - It was never a killer: it stayed green on all 11 of QE's mutant trees (`qe-ABC-301-s0`, `raw/summary.txt`).
+  - **Rejected:** the 264 figures, which K1 (c) and the re-pinned row already imply and every later pull would have to
+    re-pin; the row under an all-zero table in `withParametersForTest`, which proves a state that no longer ships and
+    that K1 (c) covers; the row narrowed to `un`, which repeats the `PASSED_UNSTOPPABLE` line through the seam.
+  - `ZERO` goes with it: this row is its only use at `grugops/ABC-301`'s tip. The file has one row fewer.
+- **When this applies:** at `ABC-301` scope 4, on an emission with a non-zero E4a eg half. If every half stays 0, neither
+  row goes red and neither changes. If the pull does not merge, both stand as they are on `main`.
+- **The PR table** lists the first row old → new and the second as retired, citing this line. QE's check under the
+  ticket's test note 4 reads them so. The other retired rows, the K1 (b) literals and the P1 row are unchanged by this
+  line.
 
 ## What would falsify this
 
