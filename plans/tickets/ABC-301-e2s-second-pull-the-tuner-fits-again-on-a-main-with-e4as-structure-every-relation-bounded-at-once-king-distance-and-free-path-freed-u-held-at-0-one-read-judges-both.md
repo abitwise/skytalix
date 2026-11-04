@@ -12,6 +12,15 @@ adr: "ADR-0067 (ACCEPTED 2026-11-03, in force as the method; the d6 amendment AD
 
 # ABC-301: E2's second pull, one bounded fit over E4a's structure, one read
 
+> **A DEFAULT-LANE BUDGET OF ≤ +0.1 s; SCOPE 0 BUILDS AFTER `ABC-302` MERGES; THE `NFR-008` HEADROOM IS NOW KNOWN,
+> 2026-11-04, by BA/PM** (task `bapm-ABC-302-cut`, records only, at `main` `9ee778b9`; nothing run). Sources: the
+> Orchestrator's ruling `orch-2026-10-30a` `…112cd856` items 2 and 3, and Security/NFR `secnfr-nfr008-1104`
+> `…1184fec4` (`NFR-008` MET at 9.84 s graded, 0.16 s headroom; `R-N8H-1` MEDIUM).
+> - **Budget:** the default-lane delta is ≤ +0.10 s. No new test file goes in the default lane. Any default-lane row
+>   of ≥ 50 ms goes to its file's deep lane (§ NFR triggers, dated line).
+> - **Order:** scope 0 builds after `ABC-302` (the headroom ticket) merges (§ Dependencies). § Open item 3 is answered.
+> - No bar, row, size or priority moves. **DoR 10/10, unchanged.** The column move is the Orchestrator's.
+
 > **Cut 2026-11-04 by BA/PM: DoR 10/10, Ready** (task `bapm-ABC-301-cut`, records only, at `main` `d7cd6871`;
 > nothing run). Source: the Architect's owed lines `arch-second-pull-1104` `…4917f0f7` § 5, written here as given,
 > with § 1–4 of the same note and `ADR-0067`'s dated line of 2026-11-04 under its bars table. **No bar is added or
@@ -139,6 +148,11 @@ precondition measurable.
   `Q-N8H-1`'s trigger fired), and the merged tree read 9.77 s ungraded (`se-ABC-283-merge` `…f7f63e1d`). **The
   headroom is `UNKNOWN - verify`** until Security/NFR's `secnfr-nfr008-1104` (in flight) reports. That hop sizes the
   target for this pull's rows.
+  - *2026-11-04 (`bapm-ABC-302-cut`): **reported.** `NFR-008` is MET at 9.84 s graded, with 0.16 s of headroom
+    (`…1184fec4`). **This ticket's default-lane budget is ≤ +0.10 s** (`…112cd856` ruling 2). It is read as an
+    `N8-LANE` H − B median wall, with an admissible twin, at the gate. No new test file goes in the default lane. Any
+    default-lane row of ≥ 50 ms, by its duration in the tip's vitest JSON report, goes to its file's deep lane. Over
+    budget, the ticket goes back to the SE to move rows deep. No NFR level moves.*
 - **`NFR-009`:** unchanged; constants only.
 - **Security:** no new surface. The tool reads local files only, and the Lichess file stays outside the repository,
   checked against its pinned sha256.
@@ -173,6 +187,8 @@ precondition measurable.
   owner's yes (`…dda43b71`).
 - **The candidate freeze:** B-T7's base is `main` at the freeze. A value-changing merge after the freeze makes B-T7
   stale (C2′'s stale rule). The PREREG names the base SHA.
+- **After `ABC-302`** *(2026-11-04, `bapm-ABC-302-cut`; `…112cd856` ruling 3)*: scope 0 builds after the headroom
+  ticket (nine rows to deep lanes, about −0.5 s) merges.
 - **File collisions:** `src/evaluate.ts` and `src/evaluate-params.ts` with `ABC-272`, one at a time.
 - **Blocks:** `ABC-287` (P6, after this pull), `ABC-290`–`ABC-293` (after this pull merges or closes).
 
@@ -184,7 +200,8 @@ precondition measurable.
    verify`; the choice is the Orchestrator's.
 2. **The endgame `G2` row's miss disposition.** F1–F8 do not name one. If it reads above 1.02 ×, the Architect
    rules (`UNKNOWN - verify`).
-3. **`NFR-008` headroom:** `secnfr-nfr008-1104`, in flight.
+3. **`NFR-008` headroom:** `secnfr-nfr008-1104`, in flight. *2026-11-04 (`bapm-ABC-302-cut`): answered. 9.84 s
+   graded; a budget of ≤ +0.10 s (§ NFR triggers); after `ABC-302` (§ Dependencies).*
 
 ## Definition of Ready
 
@@ -201,4 +218,6 @@ precondition measurable.
 | 9 | priority | ✅ P2 |
 | 10 | no major unresolved blocker | ✅ `ADR-0067` (with the d6 amendment) and `ADR-0070` d7 accepted; B-T8 re-confirmed; no owner question open. § Open items do not block the build or the fit |
 
-**DoR 10/10: Ready.** The column move is the Orchestrator's.
+**DoR 10/10: Ready.** The column move is the Orchestrator's. *2026-11-04 (`bapm-ABC-302-cut`): scope 0 waits on
+`ABC-302`'s merge (`…112cd856` ruling 3). That is an ordering, not a DoR row. Row 6 gains the ≤ +0.10 s default-lane
+budget. **DoR 10/10, unchanged.***
