@@ -1,0 +1,8 @@
+{"form":"H","name":"zugzwang.001","d":9,"played":"e1f1","score":-263,"want":"e1f1","ok":true,"nodes":103144}
+{"form":"H","name":"kpk-b6c6","d":8,"played":"b6c6","score":917,"want":"b6c6","ok":true,"nodes":2035}
+{"form":"H","name":"kpk-c6d6","d":8,"played":"c6d6","score":926,"want":"c6d6","ok":true,"nodes":2316}
+{"form":"H","name":"kpk-d6e6","d":8,"played":"d6e6","score":926,"want":"d6e6","ok":true,"nodes":2647}
+{"form":"H","name":"kpk-e6f6","d":8,"played":"e6f6","score":917,"want":"e6f6","ok":true,"nodes":2501}
+{"form":"H","name":"zugzwang.004","d":11,"played":"h3h4","score":419,"want":"h3h4","ok":true,"nodes":666844}
+{"form":"H","name":"zugzwang.005","d":12,"played":"f4d5","score":81,"want":"f4d5","ok":true,"nodes":749165}
+{"form":"H","zugzwang":"7 / 7"}

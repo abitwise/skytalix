@@ -634,6 +634,29 @@ Q1.*
   - **Superseded:** the 2026-11-03 line above, "Until he answers, d4 stays closed and Q1 stays fenced". He answered
     (`…af126c04`), and he accepted the ADR (`…401c3d09`).
 
+*Dated 2026-11-04 (`arch-ABC-271`, records only on `grugops/arch-ABC-271` from `main` `ac55ddf6`; probe on scratch
+copies of `main`'s `src/` `8adb0a18`): rows E2 and E4.*
+- **Row E2, status: the first pull closed NOT MET** (`ABC-239`, `…4c76bf7a`). F3 and F4 fired on the fit of record
+  `26d06118` (`arch-ABC-239-f3f4` `…4eae0fd3`, `…69f22167`). `main` keeps E1's rule-made table. `ADR-0067` stays
+  accepted and in force as the method. The tool exists on `grugops/ABC-239b`.
+  - **E4a comes before a second pull.** F4's cause sits in the fitted endgame halves of P, R, K and PASS, and no
+    feature could tell a frozen passer from a free one.
+  - The second pull is a new attempt under `ADR-0067` F6 with its own PREREG, on a `main` with E4a. The margin-aware
+    bound form is the owner's word then.
+  - The row's "+100–250" stays an estimate. No pull has yet been read on play.
+- **Row E4: E4a has an ADR, `ADR-0070` (PROPOSED; acceptance is the owner's).**
+  - The terms: king distance to the queening square, a free path, and the unstoppable passer by the rule of the
+    square. They are endgame halves by stated rules, computed outside the pawn memo (576 KiB), behind an off-door
+    pair.
+  - The probe: every play-safety row holds, the mate floor 0 / 0, zugzwang 7 / 7, `G1` 54 / 58 and `G2` 1.0269.
+    E3's generated relations missed as pre-registered, explained by the other terms and by the blend's trunc; the
+    relation domain is restated, and no value moved.
+  - It fires on 29.75 % of the C2′ positions at ≥ 10 cp, so it is GAIN.
+  - On `zugzwang.001` at depth 9 it widens the held margin from 29 to 191 cp. On the first pull's fitted table it
+    turns e1e5 back to e1f1 (+150; not a fit).
+  - The row's "depends on E1, E2" now reads "**E1; values by rule, read on play; E2's second pull fits king distance
+    and free path after**".
+
 ### D3. Is 3 000 reachable without a neural network?
 
 - **For a classical engine, yes, in principle.** Stockfish 11, the last hand-crafted Stockfish, reads ≈ 3 430 CCRL
@@ -1490,6 +1513,16 @@ Phase 4 order as it now stands.***
 - `ABC-272` (E7a): any order after E1. It is also the structural candidate if B-T5's mate floor fires on KQK rows
   (`ADR-0067`'s dated line under its bars).
 - **Superseded:** the 2026-11-03 line above (item 4, "`ABC-270` / `ABC-271` after `ABC-239`", and its stall clause).
+
+*Dated 2026-11-04 (`arch-ABC-271`; `arch-ABC-239-f3f4` path (iii), taken by the Orchestrator `…4c76bf7a`): **item 5,
+the Phase 4 order now.***
+1. `ABC-269` (E1), `ABC-274` (E2-pre), `ABC-270` (E3a structure) and Q1 (`ABC-279`): merged.
+2. `ABC-239` (E2's first pull): **closed NOT MET**. `main` keeps E1's table.
+3. **`ABC-271` (E4a, `ADR-0070`):** rule values, read on its own C2′ (GAIN).
+4. **E2's second pull**, a new attempt on a `main` with E4a. It fits king distance and free path, and holds the rule
+   of the square.
+- `ABC-272` (E7a): any order after E1, one at a time on the evaluation files.
+- **Superseded:** the 2026-11-03 line above, item 5 ("`ABC-271` (E4a), after `ABC-239`, unchanged").
 
 ### D7. What is the owner's call
 

@@ -523,6 +523,9 @@ measured run.
       - *Dated 2026-11-03 (`arch-ABC-239-rulings`):* **`ADR-0068` is ACCEPTED 2026-11-03** by the owner
         (`orch-2026-10-30a` `…401c3d09`). It is not in force until `ABC-270` merges.
     - no new passer term: no king distance, free path or unstoppable passer (E4);
+      - *Dated 2026-11-04 (`arch-ABC-271`):* E4a is `ADR-0070` (PROPOSED). The three terms land as endgame halves
+        by rules beside `PASSED`, outside the pawn memo; the memo grows to 576 KiB. They come behind their own door,
+        `…WithoutPasserKings`, which every door of this ADR turns off.
     - no tuning (E2);
     - no endgame half without a rule, for any other term.
 
