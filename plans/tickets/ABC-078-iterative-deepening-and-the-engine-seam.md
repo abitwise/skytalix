@@ -68,6 +68,15 @@ satisfies `EngineSeam`, which `turn-loop.ts` has been waiting on since `ABC-019`
   mid-iteration at depth `n`, **then** the returned move equals the best move of the completed
   depth `n-1` iteration. *(Using a partial iteration's best move is worse than not searching it —
   it is a systematically biased sample of the move list.)*
+  *2026-11-04 (`bapm-ABC-282-adr`; `ADR-0071` D7, PROPOSED; **in force when `ABC-282` merges**, not before):
+  `A3` as amended reads (i) **Without a soft limit** (every search except `uci-clock-mode` under a clock,
+  `ADR-0071` D1): given an instrumented run aborted mid-iteration at depth `n`, then the returned move
+  equals the best move of the completed depth `n-1` iteration. Unchanged. (ii) **With a soft limit**
+  (`ADR-0071` D4): the returned move is the depth `n-1` best move unless another root move completed its
+  depth-`n` search with a score strictly above the depth `n-1` best move's own completed depth-`n` score.
+  In that case it is the latest such move. Rows: (i) is the old row, unchanged (`src/engine.test.ts` "A3 —
+  an aborted iteration's move is discarded, not returned" and its deep twin); (ii) is `ABC-282` A2
+  (a)–(c). If `ABC-282` misses its read (`ADR-0071` F7), `A3` stays as written above.*
 - **`A4` (no fixed depth anywhere — `RISK-002` as a criterion, not a comment).** **Then** the
   delivered engine entry point takes a **time budget** and **no depth argument or depth default**,
   and grep of the delivered `src/` diff finds **no depth constant** driving a per-move decision.
