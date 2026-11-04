@@ -1,0 +1,7 @@
+{
+  "refs": ["bapm-ABC-271-ready", "grugops/bapm-ABC-271-ready", "ABC-271", "ABC-279", "ABC-270", "ABC-274", "ABC-269", "ABC-280", "ABC-281", "EPIC-011", "E4a", "E2", "ADR-0070", "ADR-0067", "ADR-0068", "ADR-0069", "ADR-0064", "ADR-0046", "R-281-a", "QE-279-a", "K0", "K1", "K2", "K3", "K4", "NFR-009", "NFR-001", "NFR-005", "NFR-008", "G2", "G6", "7968c97f", "139d5cfa", "17c9f052", "4fb3da04", "8adb0a18", "tools/tune", "arch-ADR-0070-accept/20261104T130511Z-architect-design-decision-212d6a4c", "orch-2026-10-30a/20261104T132230Z-orchestrator-decision-730399e5", "orch-2026-10-30a/20261104T125139Z-orchestrator-decision-e8a3b5df", "orch-2026-10-30a/20261104T023719Z-orchestrator-decision-e0ff0aeb"],
+  "notes": [
+    { "kind": "decision", "confidence": "high: every line is applied from ADR-0070 d1-d7 and the Architect's owed lines (212d6a4c section 5) with the Orchestrator's rulings (730399e5); page diff 17c9f052; no bar moved; nothing run. Four judgments flagged (K1 (c) fixture floor carried from the as-cut page, P3 kept, no depth-7 WARN, the page length)", "bodyFile": "notes/dec.md" },
+    { "kind": "observation", "confidence": "high for what git and grep show at main 7968c97f; the emitter's effect on a later emission is expected, not run (UNKNOWN - verify)", "bodyFile": "notes/obs.md" }
+  ]
+}

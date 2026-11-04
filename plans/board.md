@@ -1,3 +1,4 @@
+_Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `bapm-ABC-271-ready` merged af0b0ae6: **ABC-271 DoR 10/10, Ready** (S; structure only at 0) → `qe-ABC-271-freeze`, then se-ABC-271. Rulings …6ccd8243 (incl. a disclosed stamp slip). Running: se-ABC-283, bapm-epic011-areas, qe-ABC-271-freeze._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — owner: ADR-0070 form (a) → `arch-ADR-0070-accept` merged (ACCEPTED, structure only; npm test 2 650/2 650); W1 cut as **ABC-282** (Backlog, ADR owed); the O1h+O3s+S1 bundle cut as **ABC-283** (Ready → In Development, `se-ABC-283`); ABC-283 § Open ruled …3851bf43. Running: se-ABC-283, bapm-ABC-271-ready, bapm-epic011-areas._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `secnfr-ABC-281-a9` merged: NFR-008 MET 9.42 s on the catalog; R-N8H-1 MEDIUM → LOW (re-MEDIUM at a median ≥ 9.5 s); R-281-a (deep-lane run frequency) owed by Architect. **Nothing running.** Owner: ADR-0070 form (structure-only recommended / values)._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — **ABC-281 DONE** (default lane 9.42 s graded; −0.37 s). Running: secnfr-ABC-281-a9 (records). Owner: ADR-0070 form. Host note: /tmp at 77 % (scratch 7.7 G, incl. the 2.1 G Lichess file kept for a second pull)._
@@ -1428,7 +1429,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## Ready (WIP 0/8)
+## Ready (WIP 1/8)
+- [ABC-271] E4a structure only at 0 (ADR-0070 ACCEPTED form (a); DoR 10/10, S, P3). QE freeze first (qe-ABC-271-freeze), then se-ABC-271. No games.
 
 
 
