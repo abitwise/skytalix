@@ -1143,3 +1143,14 @@ Software Engineer, task `se-ABC-281`. `AGENTS.md` 18,429 -> **18,429 B** (0 B; b
 | `AGENTS.md` § Test, null-move line | `Null-move deep lane (opt-in, ABC-208, 44 rows)` | `Null-move deep lane (opt-in, ABC-208, 45 rows)` |
 
 Why: `ABC-281` (form S, `ADR-0046` § Dated 2026-11-04) gates the full `QE-208-a` position-6 row under `SEARCH_DEEP=1` and keeps a two-reading remnant in the default lane, so the lane holds one more row. RUN 2026-11-04 at the branch tip (test commit `e526480d`), host lock: `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/search.null-move.test.ts` exit 0, **45 passed (45)**, 27 s wall; base's collect list read 44. The engine and levels lines carry no count and were not touched.
+
+## `se-ABC-302` pass, 2026-11-04 (`ABC-302` A5; Orchestrator brief `se-ABC-302`; branch `grugops/ABC-302` from `main` `bff22046`)
+
+Software Engineer, task `se-ABC-302`. `AGENTS.md` 18,429 -> **18,429 B** (0 B; budget 18,432, pinned by `src/cli.test.ts` `ABC-109` `A5`). Two counts changed in `AGENTS.md`, nothing else.
+
+| where | before | after |
+|---|---|---|
+| `AGENTS.md` § Test, null-move line | `Null-move deep lane (opt-in, ABC-208, 45 rows)` | `Null-move deep lane (opt-in, ABC-208, 46 rows)` |
+| `AGENTS.md` § Test, futility line | `Futility deep lane (ABC-268, 47 tests)` | `Futility deep lane (ABC-268, 53 tests)` |
+
+Why: `ABC-302` (`arch-ABC-302`, `ADR-0046` § Dated 2026-11-04 (`arch-ABC-302`)) takes null-move's A2 row as form S, so that lane holds one more row, and futility's "the rule changes the work" row as form W, so that lane's count does not move. The 47 was already stale at base (`arch-ABC-302` read 53). RUN 2026-11-04 at the branch tip (test commit `44817c44`), host lock: `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/search.null-move.test.ts` exit 0, **46 passed (46)**, 27 s wall; `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/search.futility.test.ts` exit 0, **53 passed (53)**, 64 s wall. No other lane line carries a count; none was touched.
