@@ -1,0 +1,3 @@
+b319297e9270285635d615cbcd19a9b0d44747be3ff91d5b3eac41175b794320  <scratch>/lichess/lichess_db_standard_rated_2017-03.pgn.zst
+<scratch>/lichess/lichess_db_standard_rated_2017-03.pgn.zst: OK
+rc=0

@@ -1,0 +1,9 @@
+{
+ "refs": ["qe-ABC-280", "grugops/ABC-280", "ABC-280", "ABC-239", "EPIC-011", "ADR-0067", "B-T1", "B-T3", "NFR-008", "se-ABC-280", "20261104T022726Z-software-engineer-decision-85c1bab5", "20261104T022726Z-software-engineer-observation-443095be", "20261104T022726Z-software-engineer-observation-bd5e26f5", "625b75fe", "5ce4f870", "def26997", "8c03b713", "ee4c4c84", "66798b22", "f831c04d", "edb9fddd", "d3080707", "4e8ab57a", "26d06118", "tools/tune/tune.ts", "tools/tune/tracer.ts", "tools/tune/pgn.ts", "tools/tune/bounds.ts", "tools/tune/tune.test.ts", "tsconfig.json", "biome.json"],
+ "notes": [
+  {"kind": "decision", "bodyFile": "note-verdict.md", "confidence": "high: every acceptance row re-read on the frozen code tip by QE's own runs; A5/A6 by an independent full run through the tool's unchanged CLI in a scratch clone"},
+  {"kind": "observation", "bodyFile": "note-regrade.md", "confidence": "high: git commands and gate runs as run, exit codes and reporter counts copied from raw/out"},
+  {"kind": "observation", "bodyFile": "note-data.md", "confidence": "high: figures read from the run's stages.log, extract/fit output and sha256sum; the mutation and refusal probes ran in a scratch clone, never on the branch"},
+  {"kind": "observation", "bodyFile": "note-gaps.md", "confidence": "high: each gap tied to a reading or a source line; none is a landing defect"}
+ ]
+}

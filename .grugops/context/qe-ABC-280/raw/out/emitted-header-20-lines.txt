@@ -1,0 +1,20 @@
+/**
+ * The evaluation's parameter table (`ABC-269`, `ADR-0064` decision 4): every term as a middlegame
+ * and an endgame half. DATA ONLY: no logic and no imports. `src/evaluate.ts` imports it and derives
+ * its packed lookup arrays from it once, at load.
+ *
+ * TUNED by `tools/tune` (`ADR-0067`, `ABC-239`). Written by `tools/tune/tune.ts emit`; do not edit
+ * by hand. Re-run `extract`, `fit` and `emit` on the base table to reproduce it byte for byte.
+ * - tool: tools/tune at commit edb9fdddce394a5b56862018f8fa6635eea4aaaf; values sha256 0a0284ca6ff656536b924dfdbfd8ce2a430da6223200163df8eda17efcd7f38a
+ * - base table: src/evaluate-params.ts sha256 e2db4f4b368c5e887faea4ac812a65ca5f4578c4c102dfe4e5e683804c2f3f55 (E1's rule-made values; ABC-270's queen-on pairs at 0)
+ * - data manifest sha256 c9d777ef56d395f453e50066cbc8ac3ef058d9f90039e1d6920c81738eb15934 (36 files; own PGNs
+ *   repository-relative, the Lichess export by URL, bytes and sha256)
+ * - Lichess: https://database.lichess.org/standard/lichess_db_standard_rated_2017-03.pgn.zst, 2169142067 bytes, sha256 b319297e9270285635d615cbcd19a9b0d44747be3ff91d5b3eac41175b794320;
+ *   licence "Lichess database export, CC0 (database.lichess.org)"; training only; comments never read
+ * - own games: players skytalix / base / skytalix-a / skytalix-b / sky-a / sky-b; own.games.drop.duplicate 617, own.games.drop.player 1561, own.games.drop.result 0, own.games.kept 3680, own.games.read 5858
+ * - own positions: own.pos.drop.book 7009, own.pos.drop.check 31182, own.pos.drop.mate 16476, own.pos.drop.noisy 90855, own.pos.kept 277227, own.pos.seen 422749; 1518 validation keys seen in training removed
+ * - openings 106 (validation 23); quiet rule: quiesce(full window) with { evasions: true, quietPromotions: true, taper: true }, no seePruning (src/search.ts RULES_TAPERED at main 441c547e; ADR-0069 d6)
+ * - Lichess game filters: li.g1.event 0, li.g2.timecontrol 3175054, li.g3.elo 7769697, li.g4.termination 112849, li.g5.result 0, li.g6.bot 0, li.g7.reachReplay 289145, li.g7.replay 0, li.g8.duplicate 278, li.games.kept 288867, li.games.read 11346745; games read 11346745, kept 288867
+ * - Lichess position rules: li.p1.ply 4613170, li.p2.sample 14420734, li.p3.check 148675, li.p4.noisy 581702, li.p6.keys 1274381, li.p6.occurrences 1320452, li.p7.leakage 26, li.p8.cap 274355, li.pos.seen 21084733; rule 2 fnv1a32("ABC-239/lichess/v1\n" + key) mod 8 = 0; cap 1000000
+ * - rows: own training 167014 (inner validation 48280), own validation 45158, Lichess 1000000
+ * - split: fnv1a32("ABC-239/split/v1\n" + start FEN) mod 5 = 0 validation; inner fnv1a32("ABC-239/inner/v1\n" + start FEN) mod 4 = 0
