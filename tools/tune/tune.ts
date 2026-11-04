@@ -7,14 +7,16 @@
  *   node --max-old-space-size=3000 tools/tune/tune.ts fit <out dir>
  *   node tools/tune/tune.ts emit <out dir>
  *
- * - **extract**: own self-play games (every tracked PGN whose two players are `skytalix` / `base`)
+ * - **extract**: own self-play games (every tracked PGN whose two players are both this engine:
+ *   `OWN_PLAYERS`, six names, `ADR-0067` ruling (d))
  *   plus, given `--lichess`, the pinned 2017-03 export, refused unless its sha256 is the pin. Game
  *   filters, position rules, dedupe, the opening split, leakage, the cap, the trace and the identity
  *   gate (d5), at the base values (the `src/evaluate-params.ts` present when it runs). Writes
  *   `rows.jsonl` and `extract.json` (counts, manifest, base table).
  * - **fit**: K per source, then Newton on cross-entropy with material frozen and the free set
- *   sign-bounded (d2–d6), C-S or C-F by the inner rule, rounded half away from zero (d7). Writes
- *   `fit.json`.
+ *   sign-bounded (d2–d6), C-S or C-F by the inner rule, rounded half away from zero (d7). The rows
+ *   of `tools/tune/bounds.ts` (F3's bound set, ruling (b)) enter every fit as linear inequalities,
+ *   held exactly by the projected Newton's active set. Writes `fit.json`.
  * - **emit**: writes `src/evaluate-params.ts` in its present shape with the provenance header (d7).
  *
  * No random number generator; full batch, fixed order. The same inputs on the same Node major give
@@ -42,6 +44,7 @@ import type { Move } from "../../src/moves.ts";
 import type { Position } from "../../src/position.ts";
 import { type QuiescenceRules, quiesce } from "../../src/quiescence.ts";
 import { parseSan } from "../../src/san.ts";
+import { BOUNDS, type BoundRow } from "./bounds.ts";
 import { type Game, gamesOf, lexMovetext, streamZstGames } from "./pgn.ts";
 import {
   gateMiss,
@@ -50,11 +53,15 @@ import {
   SHIPPED,
   T_DBL,
   T_HALF,
+  T_HALFQ,
   T_ISO,
+  T_MAT,
   T_OPEN,
+  T_OPENQ,
   T_PASS,
   T_PST,
   T_SHEL,
+  T_SHELQ,
   type Table,
   trace,
 } from "./tracer.ts";
@@ -78,17 +85,24 @@ export const LICHESS_CAP = 1_000_000;
 export const LICHESS_MIN = 250_000;
 export const LICHESS_FIRST_PLY = 16;
 export const OWN_WEIGHT = 0.5;
-export const OWN_PLAYERS = ["skytalix", "base"];
+/**
+ * The own-games set (`ADR-0067` d9, ruling (d)): every PGN tracked at the fit commit whose two
+ * players are both this engine. `skytalix` / `base` are the prototype's pair; `skytalix-a` /
+ * `skytalix-b` and `sky-a` / `sky-b` are this engine against itself in QE's smoke and time-control
+ * reads (`qe-ABC-222`, `qe-ABC-223`, `qe-read-ABC-202`, `qe-tc-depth-probe`).
+ */
+export const OWN_PLAYERS = ["skytalix", "base", "skytalix-a", "skytalix-b", "sky-a", "sky-b"];
 
 /**
- * The quiet filter's rules record (d9: quiescence equals the static score). It is `src/search.ts`'s
- * shipped `RULES_TAPERED` as it stands at `main` `441c547e`, written out here so that a later rule
- * added to the shipped record (`ADR-0069`'s Q1, PROPOSED) does not move this filter: an absent
- * switch is off.
+ * The quiet filter's rules record (d9: quiescence equals the static score), its own literal
+ * (`ADR-0069` d6). It is `src/search.ts`'s `RULES_TAPERED` as it stood at `main` `441c547e`, the
+ * record `chooseMoveWithoutSeePruning` still passes after Q1 (`ABC-279`). It has no `seePruning`
+ * field, and `quiesce` reads `seePruning === true`, so Q1's switch is off here and the data set
+ * does not move with Q1's merge.
  */
 export const QUIET_RULES: QuiescenceRules = { evasions: true, quietPromotions: true, taper: true };
 export const QUIET_RULES_NAME =
-  "quiesce(full window) with { evasions: true, quietPromotions: true, taper: true } (src/search.ts RULES_TAPERED at main 441c547e)";
+  "quiesce(full window) with { evasions: true, quietPromotions: true, taper: true }, no seePruning (src/search.ts RULES_TAPERED at main 441c547e; ADR-0069 d6)";
 
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
@@ -645,7 +659,13 @@ const SCALAR_TERMS = [
 const NS = SCALAR_TERMS.length; // 11
 const WMG = 2 * NS; // 22
 const WEG = WMG + 1; // 23
-const NPRE = WEG + 1; // 24: every one of these is bounded ≥ 0 (d6's sign bounds)
+/**
+ * `ABC-270`'s queen-on pairs (d6's dated line, `ADR-0068` d8): the mg half is free and ≥ 0; the eg
+ * half is held at the base value (0) at the first pull, so it has no parameter.
+ */
+const QUEEN_TERMS = [T_SHELQ, T_HALFQ, T_OPENQ];
+const QMG = WEG + 1; // 24 … 26
+const NPRE = QMG + QUEEN_TERMS.length; // 27: every one of these is bounded ≥ 0 (d6's sign bounds)
 
 const mirrorCell = (idx: number): number => {
   const r = idx >> 3;
@@ -686,6 +706,11 @@ function makeCfg(kind: "C-S" | "C-F", base: Table): Cfg {
   });
   z0[WMG] = base.wmg;
   z0[WEG] = base.weg;
+  QUEEN_TERMS.forEach((t, i) => {
+    z0[QMG + i] = base.mg[t] as number;
+    pm[t] = QMG + i;
+    sm[t] = 1;
+  });
   for (let j = 0; j < NPRE; j++) bounded[j] = 1;
   let prior: Float64Array | null = null;
   if (kind === "C-S") {
@@ -860,13 +885,412 @@ function cholSolve(H: Float64Array, g: Float64Array, n: number): Float64Array {
   return x;
 }
 
-/** d4: projected Newton with a backtracking line search; stops at relative change < 1e-9 or 50. */
-function newton(cfg: Cfg, base: Table, d: Data, groups: Group[], lam: number) {
+/** A bound row's positions, traced once (the same `Data` shape as the fit's rows). */
+interface BoundData {
+  rows: BoundRow[];
+  d: Data;
+  /** Per bound, its positions: row index in `d` and its coefficient from WHITE's side. */
+  at: Array<Array<{ i: number; coef: number }>>;
+}
+
+/** Traces every bound row's positions and gates each one against `evaluate` (d5). */
+export function boundData(rows: readonly BoundRow[], th: Table = SHIPPED): BoundData {
+  const s: number[] = [];
+  const w: number[] = [];
+  const m: number[] = [];
+  const start: number[] = [0];
+  const feat: number[] = [];
+  const at: Array<Array<{ i: number; coef: number }>> = [];
+  for (const row of rows) {
+    const list: Array<{ i: number; coef: number }> = [];
+    for (const { fen, coef } of row.terms) {
+      const p = parseFen(fen);
+      const t = trace(p);
+      const ev = evaluate(p);
+      const g = gateMiss(t, p.blackToMove ? 0 - ev : ev, th);
+      if (g.miss) throw new Error(`identity gate miss (d5) on bound position ${fen}: ${g.d}`);
+      list.push({ i: s.length, coef: p.blackToMove ? -coef : coef });
+      s.push(0);
+      w.push(t.w);
+      m.push(t.m);
+      feat.push(...t.f);
+      start.push(feat.length);
+    }
+    at.push(list);
+  }
+  const n = s.length;
+  return {
+    rows: [...rows],
+    d: {
+      n,
+      s: Uint8Array.from(s),
+      inner: new Uint8Array(n),
+      y: new Float64Array(n),
+      w: Uint8Array.from(w),
+      m: Int16Array.from(m),
+      start: Uint32Array.from(start),
+      feat: Int16Array.from(feat),
+    },
+    at,
+  };
+}
+
+/**
+ * Ruling (b)'s margin for one bound under `cfg`, fixed before the fit: ½ Σ |sensitivity| over the
+ * quantities rounding moves (each free scalar, mobility weight and C-F cell, its tied pair summed;
+ * each C-S cell apart, since a C-S scale rounds per cell), mobility taken unclamped (an upper
+ * bound); + |coef| per position with 0 < w < 24 (the blend's trunc); + 1 when strict.
+ */
+function marginOf(cfg: Cfg, bd: BoundData, k: number): number {
+  const sens = new Map<string, number>();
+  const add = (key: string, v: number): void => {
+    sens.set(key, (sens.get(key) ?? 0) + v);
+  };
+  let trunc = 0;
+  for (const { i, coef } of bd.at[k] as Array<{ i: number; coef: number }>) {
+    const w = bd.d.w[i] as number;
+    const wm = w / 24;
+    const we = 1 - wm;
+    if (w > 0 && w < 24) trunc += Math.abs(coef);
+    for (let q = bd.d.start[i] as number; q < (bd.d.start[i + 1] as number); q += 2) {
+      const t = bd.d.feat[q] as number;
+      const c = bd.d.feat[q + 1] as number;
+      const perCell = cfg.name === "C-S" && t >= T_PST && t < T_PASS;
+      const jm = cfg.pm[t] as number;
+      const je = cfg.pe[t] as number;
+      if (jm >= 0) add(perCell ? `t${t}m` : `z${jm}`, coef * c * wm);
+      if (je >= 0) add(perCell ? `t${t}e` : `z${je}`, coef * c * we);
+    }
+    const mm = bd.d.m[i] as number;
+    add(`z${WMG}`, coef * mm * wm);
+    add(`z${WEG}`, coef * mm * we);
+  }
+  let l1 = 0;
+  for (const v of sens.values()) l1 += Math.abs(v);
+  return 0.5 * l1 + trunc + ((bd.rows[k] as BoundRow).strict ? 1 : 0);
+}
+
+/** The bounds under `cfg`: each row's right side after its margin. */
+interface Bounds {
+  bd: BoundData;
+  lin: Linear;
+  b: Float64Array;
+  margin: Float64Array;
+}
+
+function boundsFor(cfg: Cfg, base: Table, bd: BoundData): Bounds {
+  const m = bd.rows.length;
+  const b = new Float64Array(m);
+  const margin = new Float64Array(m);
+  for (let k = 0; k < m; k++) {
+    margin[k] = marginOf(cfg, bd, k);
+    b[k] = (bd.rows[k] as BoundRow).rhs - (margin[k] as number);
+  }
+  return { bd, lin: new Linear(cfg, base), b, margin };
+}
+
+/** Row k at z: its gradient a (dense, length n) and its residual Σ coef · e(z) − b (≤ 0 holds). */
+function boundAt(B: Bounds, k: number, z: Float64Array, n: number): { a: Float64Array; r: number } {
+  const a = new Float64Array(n);
+  let e = 0;
+  for (const { i, coef } of B.bd.at[k] as Array<{ i: number; coef: number }>) {
+    B.lin.mark.fill(-1);
+    e += coef * B.lin.row(B.bd.d, i, z);
+    for (let u = 0; u < B.lin.count; u++) {
+      const j = B.lin.touched[u] as number;
+      a[j] = (a[j] as number) + coef * (B.lin.coef[u] as number);
+    }
+  }
+  return { a, r: e - (B.b[k] as number) };
+}
+
+const FEAS = 1e-7;
+
+function cholFactor(M: Float64Array, n: number): Float64Array {
+  const L = Float64Array.from(M);
+  for (let j = 0; j < n; j++) {
+    let s = L[j * n + j] as number;
+    for (let k = 0; k < j; k++) s -= (L[j * n + k] as number) ** 2;
+    if (s <= 0) throw new Error("Hessian not positive definite");
+    const dd = Math.sqrt(s);
+    L[j * n + j] = dd;
+    for (let i = j + 1; i < n; i++) {
+      let t = L[i * n + j] as number;
+      for (let k = 0; k < j; k++) t -= (L[i * n + k] as number) * (L[j * n + k] as number);
+      L[i * n + j] = t / dd;
+    }
+  }
+  return L;
+}
+
+function cholApply(L: Float64Array, g: Float64Array, n: number): Float64Array {
+  const y = new Float64Array(n);
+  for (let i = 0; i < n; i++) {
+    let t = g[i] as number;
+    for (let k = 0; k < i; k++) t -= (L[i * n + k] as number) * (y[k] as number);
+    y[i] = t / (L[i * n + i] as number);
+  }
+  const x = new Float64Array(n);
+  for (let i = n - 1; i >= 0; i--) {
+    let t = y[i] as number;
+    for (let k = i + 1; k < n; k++) t -= (L[k * n + i] as number) * (x[k] as number);
+    x[i] = t / (L[i * n + i] as number);
+  }
+  return x;
+}
+
+/** Gaussian elimination with partial pivoting (the m × m Schur system; m is a few rows). */
+function denseSolve(M: Float64Array, r: Float64Array, m: number): Float64Array {
+  const A = Float64Array.from(M);
+  const x = Float64Array.from(r);
+  for (let c = 0; c < m; c++) {
+    let p = c;
+    for (let i = c + 1; i < m; i++) {
+      if (Math.abs(A[i * m + c] as number) > Math.abs(A[p * m + c] as number)) p = i;
+    }
+    if (Math.abs(A[p * m + c] as number) < 1e-14) throw new Error("bound rows are dependent");
+    if (p !== c) {
+      for (let k = 0; k < m; k++) {
+        const t = A[c * m + k] as number;
+        A[c * m + k] = A[p * m + k] as number;
+        A[p * m + k] = t;
+      }
+      const t = x[c] as number;
+      x[c] = x[p] as number;
+      x[p] = t;
+    }
+    for (let i = c + 1; i < m; i++) {
+      const f = (A[i * m + c] as number) / (A[c * m + c] as number);
+      for (let k = c; k < m; k++)
+        A[i * m + k] = (A[i * m + k] as number) - f * (A[c * m + k] as number);
+      x[i] = (x[i] as number) - f * (x[c] as number);
+    }
+  }
+  for (let i = m - 1; i >= 0; i--) {
+    let t = x[i] as number;
+    for (let k = i + 1; k < m; k++) t -= (A[i * m + k] as number) * (x[k] as number);
+    x[i] = t / (A[i * m + i] as number);
+  }
+  return x;
+}
+
+/**
+ * Ruling (b)'s solve for one Newton step: the quadratic model min ½ ΔᵀHΔ + gᵀΔ under the bound rows
+ * (a_kᵀΔ ≤ −r_k, r_k the row's residual at z) and the box (Δ_j ≥ −z_j for a sign-bounded j), by
+ * Goldfarb and Idnani's dual active-set method (Math. Programming 27, 1983). It starts from the
+ * unconstrained Newton step, adds one violated constraint at a time, and drops an active one when
+ * its multiplier would turn negative ("a row whose μ < 0 leaves"), so the active rows hold as
+ * equalities and the box bounds keep their active set. Dense and from scratch at each change: n is
+ * a few hundred and the active set a few dozen. Returns Δ and each row's multiplier μ.
+ */
+function boundedStep(
+  cfg: Cfg,
+  B: Bounds,
+  H: Float64Array,
+  g: Float64Array,
+  z: Float64Array,
+  n: number,
+): { d: Float64Array; mu: Float64Array } {
+  const m = B.bd.rows.length;
+  const forms = Array.from({ length: m }, (_, k) => boundAt(B, k, z, n));
+  // Constraint i, in the ≥ form cᵢᵀΔ ≥ dᵢ: rows first (c = −a, d = r), then the box (c = e_j, d = −z_j).
+  const box: number[] = [];
+  for (let j = 0; j < n; j++) if (cfg.bounded[j] === 1) box.push(j);
+  const nc = m + box.length;
+  const dOf = (i: number): number =>
+    i < m ? (forms[i] as { r: number }).r : -(z[box[i - m] as number] as number);
+  const cDot = (i: number, x: Float64Array): number => {
+    if (i >= m) return x[box[i - m] as number] as number;
+    const a = (forms[i] as { a: Float64Array }).a;
+    let t = 0;
+    for (let j = 0; j < n; j++) t -= (a[j] as number) * (x[j] as number);
+    return t;
+  };
+  // H⁻¹ once (H is the step's full Hessian, ridge included, positive definite).
+  const L = cholFactor(H, n);
+  const Hinv: Float64Array[] = [];
+  for (let j = 0; j < n; j++) {
+    const e = new Float64Array(n);
+    e[j] = 1;
+    Hinv.push(cholApply(L, e, n));
+  }
+  const HinvC = new Map<number, Float64Array>();
+  const hinvC = (i: number): Float64Array => {
+    let v = HinvC.get(i);
+    if (v === undefined) {
+      if (i >= m) v = Hinv[box[i - m] as number] as Float64Array;
+      else {
+        const a = (forms[i] as { a: Float64Array }).a;
+        v = new Float64Array(n);
+        for (let j = 0; j < n; j++) {
+          const aj = a[j] as number;
+          if (aj === 0) continue;
+          const col = Hinv[j] as Float64Array;
+          for (let q = 0; q < n; q++) v[q] = (v[q] as number) - aj * (col[q] as number);
+        }
+      }
+      HinvC.set(i, v);
+    }
+    return v;
+  };
+  const d = cholApply(L, g, n).map((x) => -x);
+  const A: number[] = [];
+  let u: number[] = [];
+  const TOL = 1e-10;
+  for (let outer = 0; outer < 4 * nc + 8; outer++) {
+    // The most violated constraint not in A.
+    let p = -1;
+    let worst = -TOL;
+    for (let i = 0; i < nc; i++) {
+      if (A.includes(i)) continue;
+      const sv = cDot(i, d) - dOf(i);
+      if (sv < worst) {
+        worst = sv;
+        p = i;
+      }
+    }
+    if (p < 0) {
+      const mu = new Float64Array(m);
+      A.forEach((i, q) => {
+        if (i < m) mu[i] = u[q] as number;
+      });
+      return { d, mu };
+    }
+    let up = 0;
+    for (let inner = 0; inner < 4 * nc + 8; inner++) {
+      const hp = hinvC(p);
+      const q = A.length;
+      let r: Float64Array = new Float64Array(q);
+      const zdir = Float64Array.from(hp);
+      if (q > 0) {
+        // r = (NᵀH⁻¹N)⁻¹ NᵀH⁻¹ c_p; zdir = H⁻¹c_p − H⁻¹N r.
+        const M = new Float64Array(q * q);
+        const rhs = new Float64Array(q);
+        for (let a = 0; a < q; a++) {
+          rhs[a] = cDot(A[a] as number, hp);
+          const ha = hinvC(A[a] as number);
+          for (let b = 0; b < q; b++) M[a * q + b] = cDot(A[b] as number, ha);
+        }
+        r = denseSolve(M, rhs, q);
+        for (let a = 0; a < q; a++) {
+          const ha = hinvC(A[a] as number);
+          const ra = r[a] as number;
+          for (let j = 0; j < n; j++) zdir[j] = (zdir[j] as number) - ra * (ha[j] as number);
+        }
+      }
+      // Partial step t1 (an active multiplier reaches 0) and full step t2 (c_p becomes tight).
+      let t1 = Number.POSITIVE_INFINITY;
+      let drop = -1;
+      for (let a = 0; a < q; a++) {
+        if ((r[a] as number) > TOL) {
+          const t = (u[a] as number) / (r[a] as number);
+          if (t < t1) {
+            t1 = t;
+            drop = a;
+          }
+        }
+      }
+      const curv = cDot(p, zdir);
+      const sp = cDot(p, d) - dOf(p);
+      const t2 = curv > TOL ? -sp / curv : Number.POSITIVE_INFINITY;
+      const t = Math.min(t1, t2);
+      if (t === Number.POSITIVE_INFINITY)
+        throw new Error("bound rows cannot all hold (infeasible)");
+      if (t2 !== Number.POSITIVE_INFINITY) {
+        for (let j = 0; j < n; j++) d[j] = (d[j] as number) + t * (zdir[j] as number);
+      }
+      u = u.map((x, a) => x - t * (r[a] as number));
+      up += t;
+      if (t === t2) {
+        A.push(p);
+        u.push(up);
+        break;
+      }
+      A.splice(drop, 1);
+      u.splice(drop, 1);
+    }
+  }
+  throw new Error("bounded step: the active set did not settle");
+}
+
+const SQUARE = (idx: number): string => `${"abcdefgh"[idx & 7]}${8 - (idx >> 3)}`;
+
+/** A term's name in `src/evaluate-params.ts`'s words. */
+export function termName(t: number): string {
+  if (t < T_PST) return `MATERIAL[${["pawn", "knight", "bishop", "rook", "queen"][t - T_MAT]}]`;
+  if (t < T_PASS) {
+    const r = t - T_PST;
+    return `PST.${PST_NAMES[r >> 6]}[${SQUARE(r & 63)}]`;
+  }
+  if (t < T_DBL) return `PASSED[${t - T_PASS + 1}]`;
+  const names: Record<number, string> = {
+    [T_DBL]: "DOUBLED",
+    [T_ISO]: "ISOLATED",
+    [T_SHEL]: "KING_SHELTER_MISSING",
+    [T_HALF]: "KING_FILE_HALF_OPEN",
+    [T_OPEN]: "KING_FILE_OPEN",
+    [T_SHELQ]: "KING_SHELTER_MISSING_QUEEN",
+    [T_HALFQ]: "KING_FILE_HALF_OPEN_QUEEN",
+    [T_OPENQ]: "KING_FILE_OPEN_QUEEN",
+  };
+  return names[t] ?? `term${t}`;
+}
+
+/**
+ * Bound k's a in the table's words: Σ coef × count × w/24 on each term's mg half and × (24 − w)/24
+ * on its eg half, and Σ coef × m × the same on the mobility weights, nonzero entries only.
+ */
+export function termsOf(bd: BoundData, k: number): string[] {
+  const acc = new Map<string, number>();
+  const add = (key: string, v: number): void => {
+    acc.set(key, (acc.get(key) ?? 0) + v);
+  };
+  for (const { i, coef } of bd.at[k] as Array<{ i: number; coef: number }>) {
+    const w = bd.d.w[i] as number;
+    for (let q = bd.d.start[i] as number; q < (bd.d.start[i + 1] as number); q += 2) {
+      const t = bd.d.feat[q] as number;
+      const c = bd.d.feat[q + 1] as number;
+      if (w > 0) add(`${termName(t)}.mg`, (coef * c * w) / 24);
+      if (w < 24) add(`${termName(t)}.eg`, (coef * c * (24 - w)) / 24);
+    }
+    const mm = bd.d.m[i] as number;
+    if (w > 0) add("MOBILITY_WEIGHT.mg", (coef * mm * w) / 24);
+    if (w < 24) add("MOBILITY_WEIGHT.eg", (coef * mm * (24 - w)) / 24);
+  }
+  return [...acc.entries()]
+    .filter(([, v]) => Math.abs(v) > 1e-12)
+    .map(([k2, v]) => `${k2} ${Number(v.toFixed(6))}`);
+}
+
+/** The largest bound residual at z (≤ FEAS: every row holds). */
+function worstResidual(B: Bounds | null, z: Float64Array, n: number): number {
+  if (B === null) return Number.NEGATIVE_INFINITY;
+  let w = Number.NEGATIVE_INFINITY;
+  for (let k = 0; k < B.bd.rows.length; k++) w = Math.max(w, boundAt(B, k, z, n).r);
+  return w;
+}
+
+/**
+ * d4: projected Newton with a backtracking line search; stops at relative change < 1e-9 or 50.
+ * With no bound row active, the step is the box-only one, unchanged; a step that would cross a
+ * row, or a start that breaks one, takes the bounded step (ruling (b)).
+ */
+function newton(
+  cfg: Cfg,
+  base: Table,
+  d: Data,
+  groups: Group[],
+  lam: number,
+  bd: BoundData | null = null,
+) {
   const n = cfg.n;
   const lin = new Linear(cfg, base);
+  const B = bd !== null && bd.rows.length > 0 ? boundsFor(cfg, base, bd) : null;
   let z = Float64Array.from(cfg.z0);
   let f = objective(cfg, lin, d, groups, z, lam);
   let steps = 0;
+  let mu: Float64Array = new Float64Array(B === null ? 0 : B.bd.rows.length);
+  let boundedSteps = 0;
   for (; steps < 50; steps++) {
     const g = new Float64Array(n);
     const H = new Float64Array(n * n);
@@ -901,6 +1325,8 @@ function newton(cfg: Cfg, base: Table, d: Data, groups: Group[], lam: number) {
     // A tiny ridge keeps H positive definite on unvisited cells; it does not move a visited one.
     for (let j = 0; j < n; j++)
       H[j * n + j] = (H[j * n + j] as number) + 1e-12 + (H[j * n + j] === 0 ? 1 : 0);
+    const Hfull = B === null ? H : Float64Array.from(H);
+    const gfull = B === null ? g : Float64Array.from(g);
     // The active set: a bounded parameter at its bound with the gradient pushing out stays put.
     for (let j = 0; j < n; j++) {
       if (cfg.bounded[j] === 1 && (z[j] as number) <= 0 && (g[j] as number) > 0) {
@@ -912,18 +1338,57 @@ function newton(cfg: Cfg, base: Table, d: Data, groups: Group[], lam: number) {
         g[j] = 0;
       }
     }
-    const dir = cholSolve(H, g, n);
-    let t = 1;
-    let fn = Number.POSITIVE_INFINITY;
+    const feasible = worstResidual(B, z, n) <= FEAS;
     let zn = z;
-    for (let ls = 0; ls < 30; ls++) {
-      zn = z.map((v, j) => {
-        const x = v - t * (dir[j] as number);
-        return cfg.bounded[j] === 1 && x < 0 ? 0 : x;
-      });
-      fn = objective(cfg, lin, d, groups, zn, lam);
-      if (fn <= f) break;
-      t /= 2;
+    let fn = Number.POSITIVE_INFINITY;
+    let useBounded = B !== null && !feasible;
+    if (!useBounded) {
+      const dir = cholSolve(H, g, n);
+      let t = 1;
+      for (let ls = 0; ls < 30; ls++) {
+        zn = z.map((v, j) => {
+          const x = v - t * (dir[j] as number);
+          return cfg.bounded[j] === 1 && x < 0 ? 0 : x;
+        });
+        if (B !== null && worstResidual(B, zn, n) > FEAS) {
+          // The box-only step would cross a row: the row is active, take the bounded step.
+          useBounded = true;
+          break;
+        }
+        fn = objective(cfg, lin, d, groups, zn, lam);
+        if (fn <= f) break;
+        t /= 2;
+      }
+    }
+    if (!useBounded) mu = new Float64Array(mu.length);
+    if (useBounded && B !== null) {
+      boundedSteps++;
+      const step = boundedStep(cfg, B, Hfull, gfull, z, n);
+      mu = step.mu;
+      if (!feasible) {
+        // The start breaks a row: the full step lands on it (the rows are linear in z).
+        zn = z.map((v, j) => {
+          const x = v + (step.d[j] as number);
+          return cfg.bounded[j] === 1 && x < 0 ? 0 : x;
+        });
+        fn = objective(cfg, lin, d, groups, zn, lam);
+        z = zn;
+        f = fn;
+        continue;
+      }
+      let t = 1;
+      for (let ls = 0; ls < 30; ls++) {
+        zn = z.map((v, j) => {
+          const x = v + t * (step.d[j] as number);
+          return cfg.bounded[j] === 1 && x < 0 ? 0 : x;
+        });
+        fn =
+          worstResidual(B, zn, n) > FEAS
+            ? Number.POSITIVE_INFINITY
+            : objective(cfg, lin, d, groups, zn, lam);
+        if (fn <= f) break;
+        t /= 2;
+      }
     }
     if (!(fn <= f)) break;
     const rel = (f - fn) / f;
@@ -934,7 +1399,10 @@ function newton(cfg: Cfg, base: Table, d: Data, groups: Group[], lam: number) {
       break;
     }
   }
-  return { z, f, steps };
+  if (B !== null && worstResidual(B, z, n) > FEAS) {
+    throw new Error("bounded fit ended with a bound row broken");
+  }
+  return { z, f, steps, mu, boundedSteps };
 }
 
 /** d7: half away from zero; `+ 0` so no −0 is ever written. */
@@ -981,6 +1449,7 @@ function fitMix(
   Kown: number,
   Kli: number,
   log: string[],
+  bd: BoundData | null,
 ) {
   const ownInnerTrain = own.filter((i) => d.inner[i] === 0);
   const ownInnerVal = own.filter((i) => d.inner[i] === 1);
@@ -994,13 +1463,13 @@ function fitMix(
   const inner: Record<string, number> = {};
   const cS = makeCfg("C-S", base);
   const cF = makeCfg("C-F", base);
-  const rS = newton(cS, base, d, groupsFor(ownInnerTrain), 0);
+  const rS = newton(cS, base, d, groupsFor(ownInnerTrain), 0, bd);
   inner["C-S"] = lossOf(d, ownInnerVal, rounded(cS.toTable(rS.z)), Kown).ce;
   log.push(`inner C-S steps ${rS.steps}`);
   let bestLam = LAMBDAS[0] as number;
   let bestF = Number.POSITIVE_INFINITY;
   for (const lam of LAMBDAS) {
-    const r = newton(cF, base, d, groupsFor(ownInnerTrain), lam);
+    const r = newton(cF, base, d, groupsFor(ownInnerTrain), lam, bd);
     const l = lossOf(d, ownInnerVal, rounded(cF.toTable(r.z)), Kown).ce;
     inner[`C-F λ=${lam}`] = l;
     log.push(`inner C-F λ=${lam} steps ${r.steps}`);
@@ -1012,19 +1481,49 @@ function fitMix(
   inner.base = lossOf(d, ownInnerVal, base, Kown).ce;
   const chosen = bestF < (inner["C-S"] as number) * (1 - 0.001) ? cF : cS;
   const lam = chosen === cF ? bestLam : 0;
-  const r = newton(chosen, base, d, groupsFor(own), lam);
-  log.push(`full ${chosen.name} steps ${r.steps}`);
+  const r = newton(chosen, base, d, groupsFor(own), lam, bd);
+  log.push(`full ${chosen.name} steps ${r.steps} bounded steps ${r.boundedSteps}`);
+  const table = rounded(chosen.toTable(r.z));
+  const B = bd !== null && bd.rows.length > 0 ? boundsFor(chosen, base, bd) : null;
+  const bounds =
+    B === null
+      ? []
+      : bd?.rows.map((row, k) => {
+          const form = boundAt(B, k, r.z, chosen.n);
+          // The rounded set's read of the row under the model (its trunc slack aside).
+          let roundedModel = 0;
+          for (const { i, coef } of B.bd.at[k] as Array<{ i: number; coef: number }>) {
+            roundedModel += coef * modelRow(B.bd.d, i, table);
+          }
+          return {
+            file: row.file,
+            row: row.row,
+            rhs: row.rhs,
+            strict: row.strict,
+            margin: B.margin[k] as number,
+            enforced: B.b[k] as number,
+            residual: form.r,
+            mu: r.mu[k] as number,
+            terms: termsOf(B.bd, k),
+            roundedModel,
+          };
+        });
   return {
     config: chosen.name,
     lambda: lam,
     inner,
     steps: r.steps,
-    table: rounded(chosen.toTable(r.z)),
+    boundedSteps: r.boundedSteps,
+    table,
     z: Array.from(r.z),
+    bounds,
   };
 }
 
-export async function fitData(outDir: string): Promise<Record<string, unknown>> {
+export async function fitData(
+  outDir: string,
+  bounds: readonly BoundRow[] = BOUNDS,
+): Promise<Record<string, unknown>> {
   const t0 = Date.now();
   const info = JSON.parse(readFileSync(join(outDir, "extract.json"), "utf8"));
   const base = tableFrom(info.base);
@@ -1040,7 +1539,8 @@ export async function fitData(outDir: string): Promise<Record<string, unknown>> 
   const Kown = fitK(d, own, base);
   const Kli = li.length > 0 ? fitK(d, li, base) : null;
   const log: string[] = [];
-  const mixed = fitMix(d, base, own, li, Kown, Kli ?? 0, log);
+  const bd = bounds.length > 0 ? boundData(bounds, base) : null;
+  const mixed = fitMix(d, base, own, li, Kown, Kli ?? 0, log, bd);
   const report: Record<string, unknown> = {
     rows: { ownTrain: own.length, ownVal: val.length, lichess: li.length },
     K_own: Kown,
@@ -1050,6 +1550,8 @@ export async function fitData(outDir: string): Promise<Record<string, unknown>> 
     lambda: mixed.lambda,
     inner: mixed.inner,
     steps: mixed.steps,
+    boundedSteps: mixed.boundedSteps,
+    bounds: mixed.bounds,
     val: { base: lossOf(d, val, base, Kown), fit: lossOf(d, val, mixed.table, Kown) },
     train: { base: lossOf(d, own, base, Kown), fit: lossOf(d, own, mixed.table, Kown) },
     table: tableJson(mixed.table),
@@ -1062,7 +1564,7 @@ export async function fitData(outDir: string): Promise<Record<string, unknown>> 
       fit: lossOf(d, li, mixed.table, Kli as number),
     };
     // Reported beside, grading and deciding nothing (§ Addendum): the own-only fit, same rules.
-    const ownOnly = fitMix(d, base, own, new Uint32Array(0), Kown, 0, log);
+    const ownOnly = fitMix(d, base, own, new Uint32Array(0), Kown, 0, log, bd);
     const ov = lossOf(d, val, ownOnly.table, Kown);
     report.ownOnly = {
       config: ownOnly.config,
@@ -1124,12 +1626,15 @@ function valuesOf(th: Table) {
     KING_SHELTER_MISSING: pair(T_SHEL),
     KING_FILE_HALF_OPEN: pair(T_HALF),
     KING_FILE_OPEN: pair(T_OPEN),
+    KING_SHELTER_MISSING_QUEEN: pair(T_SHELQ),
+    KING_FILE_HALF_OPEN_QUEEN: pair(T_HALFQ),
+    KING_FILE_OPEN_QUEEN: pair(T_OPENQ),
     MOBILITY_WEIGHT: { mg: th.wmg + 0, eg: th.weg + 0 },
     MOBILITY_CAP: { mg: th.cap, eg: th.cap },
   };
 }
 
-/** JSON of the ten value exports, in this order, mg before eg. */
+/** JSON of the thirteen value exports, in this order, mg before eg. */
 export function canonicalValues(v: ReturnType<typeof valuesOf>): string {
   const names = [
     "MATERIAL",
@@ -1140,6 +1645,9 @@ export function canonicalValues(v: ReturnType<typeof valuesOf>): string {
     "KING_SHELTER_MISSING",
     "KING_FILE_HALF_OPEN",
     "KING_FILE_OPEN",
+    "KING_SHELTER_MISSING_QUEEN",
+    "KING_FILE_HALF_OPEN_QUEEN",
+    "KING_FILE_OPEN_QUEEN",
     "MOBILITY_WEIGHT",
     "MOBILITY_CAP",
   ] as const;
@@ -1177,6 +1685,30 @@ interface FitReport {
   ratio: number;
   val: { base: { ce: number }; fit: { ce: number } };
   train: { base: { ce: number }; fit: { ce: number } };
+  bounds?: Array<{
+    file: string;
+    row: string;
+    rhs: number;
+    strict: boolean;
+    margin: number;
+    mu: number;
+    terms: string[];
+  }>;
+}
+
+/** The header's bound rows (ruling (b)): test file, row, a's nonzero terms, right side and μ. */
+function boundLines(bounds: NonNullable<FitReport["bounds"]>): string[] {
+  if (bounds.length === 0) return [" * - F3 bounds (`ADR-0067` ruling (b)): none"];
+  const out = [
+    ` * - F3 bounds (\`ADR-0067\` ruling (b)), ${bounds.length}, each Σ coef · evaluate ≤ right side:`,
+  ];
+  for (const b of bounds) {
+    out.push(
+      ` *   - ${b.file}, "${b.row}": right side ${b.rhs}${b.strict ? " strict" : ""}, margin ${Number(b.margin.toFixed(6))}, μ ${Number(b.mu.toFixed(9))};`,
+      ` *     a: ${b.terms.join(", ")}`,
+    );
+  }
+  return out;
 }
 
 export function emitSource(info: ExtractInfo, fitted: FitReport, toolCommit: string): string {
@@ -1203,7 +1735,7 @@ export function emitSource(info: ExtractInfo, fitted: FitReport, toolCommit: str
     " * TUNED by `tools/tune` (`ADR-0067`, `ABC-239`). Written by `tools/tune/tune.ts emit`; do not edit",
     " * by hand. Re-run `extract`, `fit` and `emit` on the base table to reproduce it byte for byte.",
     ` * - tool: tools/tune at commit ${toolCommit}; values sha256 ${sha256(valuesForHash)}`,
-    ` * - base table: src/evaluate-params.ts sha256 ${info.baseTableSha256} (E1's rule-made values)`,
+    ` * - base table: src/evaluate-params.ts sha256 ${info.baseTableSha256} (E1's rule-made values; ABC-270's queen-on pairs at 0)`,
     ` * - data manifest sha256 ${info.manifestSha256} (${info.manifest.length} files; own PGNs`,
     " *   repository-relative, the Lichess export by URL, bytes and sha256)",
   );
@@ -1230,7 +1762,9 @@ export function emitSource(info: ExtractInfo, fitted: FitReport, toolCommit: str
     ` * - K_own ${fitted.K_own}; K_lichess ${fitted.K_lichess}; own weight ${fitted.ownWeight}; configuration ${fitted.config}; λ ${fitted.lambda}`,
     ` * - outer validation cross-entropy base ${fmtLoss(fitted.val.base.ce)} → fit ${fmtLoss(fitted.val.fit.ce)} (${(fitted.ratio as number).toFixed(4)} ×);`,
     ` *   training ${fmtLoss(fitted.train.base.ce)} → ${fmtLoss(fitted.train.fit.ce)}`,
-    " * - frozen (d6): material, PHASE_WEIGHT, PHASE_MG / PHASE_EG, MOBILITY_CAP",
+    " * - frozen (d6): material, PHASE_WEIGHT, PHASE_MG / PHASE_EG, MOBILITY_CAP; the three queen-on",
+    " *   eg halves held at 0 (d6's dated line, `ADR-0068` d8)",
+    ...boundLines(fitted.bounds ?? []),
     " *",
     " * Tables are written from WHITE's point of view and read RANK-8-FIRST (a8 top-left); black reads",
     " * the same table with the rank flipped. In the rules, `R` is the rank counted from the piece's own",
@@ -1313,6 +1847,17 @@ export function emitSource(info: ExtractInfo, fitted: FitReport, toolCommit: str
     `export const KING_SHELTER_MISSING: MgEg<number> = ${pair(T_SHEL)};`,
     `export const KING_FILE_HALF_OPEN: MgEg<number> = ${pair(T_HALF)};`,
     `export const KING_FILE_OPEN: MgEg<number> = ${pair(T_OPEN)};`,
+    "",
+    "/**",
+    " * E3a's queen-on king safety (`ABC-270`, `ADR-0068`): while the ENEMY has at least one queen, each",
+    " * pair is added, per file, to the matching king-file term above (shelter, half-open, open). The",
+    " * pairs are additive, not a factor, so the tuner fits each one as a feature: the king's exposure",
+    " * count × the enemy-queen flag (`ADR-0067` decision 4). Fitted: mg ≥ 0; eg held at 0 at the first",
+    " * pull (`ADR-0067` d6's dated line). start (prior): 0.",
+    " */",
+    `export const KING_SHELTER_MISSING_QUEEN: MgEg<number> = ${pair(T_SHELQ)};`,
+    `export const KING_FILE_HALF_OPEN_QUEEN: MgEg<number> = ${pair(T_HALFQ)};`,
+    `export const KING_FILE_OPEN_QUEEN: MgEg<number> = ${pair(T_OPENQ)};`,
     "",
     "/**",
     " * ABC-083's mobility: centipawns per square a non-pawn piece reaches, the total clamped to",

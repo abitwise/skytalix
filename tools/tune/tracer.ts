@@ -30,7 +30,16 @@ export const T_ISO = 396;
 export const T_SHEL = 397;
 export const T_HALF = 398;
 export const T_OPEN = 399;
-export const N_TERMS = 400;
+/**
+ * `ABC-270`'s three queen-on features (`ADR-0067` d5's dated line, `ADR-0068` d3): per king, each
+ * exposure count (shelter missing, half-open, open) while the ENEMY has at least one queen, white
+ * minus black like the base terms. Their parameters are `KING_SHELTER_MISSING_QUEEN`,
+ * `KING_FILE_HALF_OPEN_QUEEN` and `KING_FILE_OPEN_QUEEN`.
+ */
+export const T_SHELQ = 400;
+export const T_HALFQ = 401;
+export const T_OPENQ = 402;
+export const N_TERMS = 403;
 
 export const PST_NAMES = ["pawn", "knight", "bishop", "rook", "queen", "king"] as const;
 
@@ -38,6 +47,7 @@ const BLACK_PAWN = PAWN | BLACK;
 const KNIGHT_STEPS = [33, 31, 18, 14, -14, -18, -31, -33];
 const KING_STEPS = [17, 16, 15, 1, -1, -15, -16, -17];
 const RAYS = [17, 15, -15, -17, 16, 1, -1, -16];
+const QUEEN = 5;
 
 function reached(b: Uint8Array, sq: number, piece: number): number {
   const t = piece & 7;
@@ -112,6 +122,46 @@ function exposure(b: Uint8Array, k: number, own: number, en: number, step: numbe
   return [shelter, half, open];
 }
 
+/** Each king's exposure counts, and the same counts × the enemy-queen flag (`ABC-270`). */
+export interface KingCounts {
+  readonly base: readonly [number, number, number];
+  readonly queen: readonly [number, number, number];
+}
+
+/**
+ * Per king, the base exposure counts [shelter, half-open, open] and the queen-on counts: equal to
+ * the base counts while the enemy has a queen, else 0 (`ADR-0067` d5's K1 (c) tracer row).
+ */
+export function kingCounts(position: Position): { white: KingCounts; black: KingCounts } {
+  const b = position.board;
+  let wk = -1;
+  let bk = -1;
+  let wq = false;
+  let bq = false;
+  for (let sq = 0; sq < 128; sq++) {
+    if ((sq & 0x88) !== 0) continue;
+    const p = b[sq] as number;
+    if (p === EMPTY) continue;
+    const t = p & 7;
+    const black = (p & BLACK) !== 0;
+    if (t === KING) {
+      if (black) bk = sq;
+      else wk = sq;
+    } else if (t === QUEEN) {
+      if (black) bq = true;
+      else wq = true;
+    }
+  }
+  const of = (base: number[], enemyQueen: boolean): KingCounts => ({
+    base: [base[0] as number, base[1] as number, base[2] as number],
+    queen: enemyQueen ? [base[0] as number, base[1] as number, base[2] as number] : [0, 0, 0],
+  });
+  return {
+    white: of(exposure(b, wk, PAWN, BLACK_PAWN, 1), bq),
+    black: of(exposure(b, bk, BLACK_PAWN, PAWN, -1), wq),
+  };
+}
+
 /** One traced position: sparse (term, count) pairs, white minus black, in term order. */
 export interface Trace {
   readonly f: number[];
@@ -124,8 +174,6 @@ export function trace(position: Position): Trace {
   const c = new Int32Array(N_TERMS);
   let m = 0;
   let phase = 0;
-  let wk = -1;
-  let bk = -1;
   for (let rank = 7; rank >= 0; rank--) {
     for (let file = 0; file < 8; file++) {
       const sq = rank * 16 + file;
@@ -139,10 +187,7 @@ export function trace(position: Position): Trace {
       c[T_PST + (t - 1) * 64 + idx] = (c[T_PST + (t - 1) * 64 + idx] as number) + s;
       if (t === PAWN) continue;
       m += s * reached(b, sq, p);
-      if (t === KING) {
-        if (black) bk = sq;
-        else wk = sq;
-      } else phase += P.PHASE_WEIGHT[t] as number;
+      if (t !== KING) phase += P.PHASE_WEIGHT[t] as number;
     }
   }
   let wf = 0;
@@ -174,17 +219,23 @@ export function trace(position: Position): Trace {
       }
     }
   }
-  const eb = exposure(b, bk, BLACK_PAWN, PAWN, -1);
-  const ew = exposure(b, wk, PAWN, BLACK_PAWN, 1);
-  c[T_SHEL] = (c[T_SHEL] as number) + (eb[0] as number) - (ew[0] as number);
-  c[T_HALF] = (c[T_HALF] as number) + (eb[1] as number) - (ew[1] as number);
-  c[T_OPEN] = (c[T_OPEN] as number) + (eb[2] as number) - (ew[2] as number);
+  const k = kingCounts(position);
+  const [ws, wh, wo] = k.white.base;
+  const [bs, bh, bo] = k.black.base;
+  const [wsq, whq, woq] = k.white.queen;
+  const [bsq, bhq, boq] = k.black.queen;
+  c[T_SHEL] = (c[T_SHEL] as number) + bs - ws;
+  c[T_HALF] = (c[T_HALF] as number) + bh - wh;
+  c[T_OPEN] = (c[T_OPEN] as number) + bo - wo;
+  c[T_SHELQ] = (c[T_SHELQ] as number) + bsq - wsq;
+  c[T_HALFQ] = (c[T_HALFQ] as number) + bhq - whq;
+  c[T_OPENQ] = (c[T_OPENQ] as number) + boq - woq;
   const f: number[] = [];
   for (let t = 0; t < N_TERMS; t++) if (c[t] !== 0) f.push(t, c[t] as number);
   return { f, m, w: phase > 24 ? 24 : phase };
 }
 
-/** A table as vectors over the 400 terms, plus mobility's weights and cap. */
+/** A table as vectors over the 403 terms, plus mobility's weights and cap. */
 export interface Table {
   readonly mg: Float64Array;
   readonly eg: Float64Array;
@@ -219,6 +270,9 @@ export function tableOf(params: Params): Table {
     [T_SHEL, params.KING_SHELTER_MISSING],
     [T_HALF, params.KING_FILE_HALF_OPEN],
     [T_OPEN, params.KING_FILE_OPEN],
+    [T_SHELQ, params.KING_SHELTER_MISSING_QUEEN],
+    [T_HALFQ, params.KING_FILE_HALF_OPEN_QUEEN],
+    [T_OPENQ, params.KING_FILE_OPEN_QUEEN],
   ];
   for (const [t, pair] of scalars) {
     mg[t] = pair.mg;
@@ -252,6 +306,25 @@ export function model(f: readonly number[], m: number, w: number, th: Table): nu
   a += Math.max(-th.cap, Math.min(th.cap, th.wmg * m));
   e += Math.max(-th.cap, Math.min(th.cap, th.weg * m));
   return (w * a + (24 - w) * e) / 24;
+}
+
+/**
+ * `evaluate` from WHITE's side at table `th`, as `src/evaluate.ts` computes it from the same integer
+ * sums: mg + trunc((eg − mg) × (24 − w) / 24), each half with its own clamped mobility. For an
+ * integer table it is exact, so a test can read a relation on an emitted set without `src/`.
+ */
+export function evaluateAt(t: Trace, th: Table): number {
+  let a = 0;
+  let e = 0;
+  for (let i = 0; i < t.f.length; i += 2) {
+    const term = t.f[i] as number;
+    const c = t.f[i + 1] as number;
+    a += (th.mg[term] as number) * c;
+    e += (th.eg[term] as number) * c;
+  }
+  a += Math.max(-th.cap, Math.min(th.cap, th.wmg * t.m));
+  e += Math.max(-th.cap, Math.min(th.cap, th.weg * t.m));
+  return a + Math.trunc(((e - a) * (24 - t.w)) / 24) + 0;
 }
 
 /**

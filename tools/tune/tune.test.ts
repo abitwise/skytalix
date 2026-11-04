@@ -27,6 +27,24 @@ describe("ABC-239 — tools/tune's source pins", () => {
       expect(s).not.toMatch(/node:(https?|net|dns|tls)\b|\bfetch\(/);
     }
   });
+
+  it("the quiet filter's rules record has no seePruning field, read from the source (ADR-0069 d6, test note 5)", () => {
+    const tune = readFileSync(new URL("tune.ts", HERE), "utf8");
+    const record = /export const QUIET_RULES: QuiescenceRules = (\{[^}]*\});/.exec(tune)?.[1];
+    expect(record).toBe("{ evasions: true, quietPromotions: true, taper: true }");
+    expect(record).not.toMatch(/seePruning/);
+  });
+
+  it("the FEN source row: each bound row's FEN and name appear literally in its src/evaluate*.test.ts file (ADR-0067 ruling (b))", async () => {
+    const { BOUNDS } = await import("./bounds.ts");
+    for (const row of BOUNDS) {
+      expect(row.file).toMatch(/^src\/evaluate[\w.-]*\.test\.ts$/);
+      const text = readFileSync(new URL(`../../${row.file}`, HERE), "utf8");
+      expect(text, row.row).toContain(row.row);
+      expect(row.terms.length).toBeGreaterThanOrEqual(1);
+      for (const { fen } of row.terms) expect(text, `${row.row}: ${fen}`).toContain(`"${fen}"`);
+    }
+  });
 });
 
 if (RUN_DEEP) {
@@ -46,7 +64,7 @@ if (RUN_DEEP) {
   const { search } = await import("../../src/search.ts");
   const T = await import("./tune.ts");
   const { gamesOf, lexMovetext, streamZstGames } = await import("./pgn.ts");
-  const { gateMiss, SHIPPED, tableOf, trace } = await import("./tracer.ts");
+  const { evaluateAt, gateMiss, kingCounts, SHIPPED, tableOf, trace } = await import("./tracer.ts");
 
   const START = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
   const RESULTS = ["1-0", "0-1", "1/2-1/2"];
@@ -139,6 +157,89 @@ if (RUN_DEEP) {
         ? " [%clk 0:02:59] "
         : "Blunder. Qd8 was best. M3 [%eval #-3]";
 
+  /**
+   * `ABC-270` K1 (c)'s frozen positions (`src/evaluate.queen-on.test.ts`, QE's 7 pairs and 1
+   * control), with each king's counts as frozen there: [s, h, o, sQ, hQ, oQ].
+   */
+  const K1C: ReadonlyArray<readonly [string, string, number[], number[]]> = [
+    [
+      "QP1A",
+      "3q2k1/ppp2p1p/6p1/8/8/7P/PPP2P2/3Q2K1 w - - 0 1",
+      [1, 1, 0, 1, 1, 0],
+      [0, 0, 0, 0, 0, 0],
+    ],
+    [
+      "QP1B",
+      "6k1/ppp2p1p/6p1/8/8/7P/PPP2P2/3Q2K1 w - - 0 1",
+      [1, 1, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0],
+    ],
+    [
+      "QP2A",
+      "3qk3/ppp1pppp/8/8/8/8/PPP1PPPP/3QK3 w - - 0 1",
+      [1, 0, 1, 1, 0, 1],
+      [1, 0, 1, 1, 0, 1],
+    ],
+    [
+      "QP2B",
+      "4k3/ppp1pppp/8/8/8/8/PPP1PPPP/3QK3 w - - 0 1",
+      [1, 0, 1, 0, 0, 0],
+      [1, 0, 1, 1, 0, 1],
+    ],
+    [
+      "QP3A",
+      "3q2k1/ppp2p2/7p/8/8/6P1/PPP2P1P/3Q2K1 b - - 0 1",
+      [0, 0, 0, 0, 0, 0],
+      [1, 1, 0, 1, 1, 0],
+    ],
+    [
+      "QP3B",
+      "3q2k1/ppp2p2/7p/8/8/6P1/PPP2P1P/6K1 b - - 0 1",
+      [0, 0, 0, 0, 0, 0],
+      [1, 1, 0, 0, 0, 0],
+    ],
+    [
+      "QP4A",
+      "6k1/pp1q1p2/4p3/2p3p1/7P/4P3/PP2QPP1/2K5 w - - 0 1",
+      [2, 1, 1, 2, 1, 1],
+      [2, 1, 0, 2, 1, 0],
+    ],
+    [
+      "QP4B",
+      "6k1/pp1q1p2/4p3/2p3p1/7P/4P3/PP3PP1/2K5 w - - 0 1",
+      [2, 1, 1, 2, 1, 1],
+      [2, 1, 0, 0, 0, 0],
+    ],
+    [
+      "QP5A",
+      "6k1/pp1q1p2/4p3/2p3p1/7P/4P3/PP2QPP1/2K5 w - - 0 1",
+      [2, 1, 1, 2, 1, 1],
+      [2, 1, 0, 2, 1, 0],
+    ],
+    [
+      "QP5B",
+      "6k1/pp3p2/4p3/2p3p1/7P/4P3/PP2QPP1/2K5 w - - 0 1",
+      [2, 1, 1, 0, 0, 0],
+      [2, 1, 0, 2, 1, 0],
+    ],
+    [
+      "QP6A",
+      "2k5/ppp1q3/3p4/4p3/4P3/2P5/PP1Q2P1/7K w - - 0 1",
+      [1, 0, 1, 1, 0, 1],
+      [0, 0, 0, 0, 0, 0],
+    ],
+    [
+      "QP6B",
+      "2k5/ppp5/3p4/4p3/4P3/2P5/PP1Q2P1/7K w - - 0 1",
+      [1, 0, 1, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0],
+    ],
+    ["QP7A", "1kqq4/p1p5/1p6/8/7P/8/5PK1/8 w - - 0 1", [2, 0, 1, 2, 0, 1], [0, 0, 0, 0, 0, 0]],
+    ["QP7B", "1k6/p1p5/1p6/8/7P/8/5PK1/8 w - - 0 1", [2, 0, 1, 0, 0, 0], [0, 0, 0, 0, 0, 0]],
+    ["QC8A", "1kqq4/p1p5/1p6/8/7P/8/5PK1/8 w - - 0 1", [2, 0, 1, 2, 0, 1], [0, 0, 0, 0, 0, 0]],
+    ["QC8B", "1k1q4/p1p5/1p6/8/7P/8/5PK1/8 w - - 0 1", [2, 0, 1, 2, 0, 1], [0, 0, 0, 0, 0, 0]],
+  ];
+
   interface Fixture {
     root: string;
     zst: string;
@@ -181,9 +282,43 @@ if (RUN_DEEP) {
       expect(worst).toBeLessThan(1);
     });
 
+    it("evaluateAt (the integer blend from the trace) is evaluate exactly over G3's 184 and QE's queen pairs", () => {
+      const positions = [
+        ...buildCorpus().map((c) => c.position),
+        ...K1C.map(([, fen]) => parseFen(fen)),
+      ];
+      const misses = positions.filter((p) => {
+        const ev = evaluate(p);
+        return evaluateAt(trace(p), SHIPPED) !== (p.blackToMove ? 0 - ev : ev);
+      });
+      expect(misses.map((p) => toFen(p))).toEqual([]);
+    });
+
+    it("the K1 (c) tracer row: on QE's frozen queen pairs each queen-on count is the base count with an enemy queen, 0 without (ADR-0067 d5)", () => {
+      expect(K1C.length).toBe(16);
+      for (const [id, fen, white, black] of K1C) {
+        const k = kingCounts(parseFen(fen));
+        expect([...k.white.base, ...k.white.queen], `${id} white`).toEqual(white);
+        expect([...k.black.base, ...k.black.queen], `${id} black`).toEqual(black);
+        const p = parseFen(fen);
+        const queenOf = (black: boolean): boolean =>
+          Array.from(p.board).some((x) => (x & 7) === 5 && ((x & 8) !== 0) === black);
+        expect(k.white.queen, `${id}`).toEqual(queenOf(true) ? k.white.base : [0, 0, 0]);
+        expect(k.black.queen, `${id}`).toEqual(queenOf(false) ? k.black.base : [0, 0, 0]);
+      }
+    });
+
     it("extract gates every kept row: the fixture's rows pass with 0 misses", async () => {
       const r = await run(fixture(plainText));
-      expect(r.counts["gate.checked"]).toBe(r.rows.length);
+      // Every key is gated when first kept; a validation key later seen in training, a Lichess
+      // leakage key and a capped key leave the rows after their gate.
+      const c = r.counts;
+      expect(c["gate.checked"]).toBe(
+        r.rows.length +
+          (c["own.val.removed.seenInTraining"] as number) +
+          (c["li.p7.leakage"] as number) +
+          (c["li.p8.cap"] as number),
+      );
       expect(r.info.gateWorst as number).toBeLessThan(1);
     });
   });
@@ -363,6 +498,9 @@ if (RUN_DEEP) {
         "KING_SHELTER_MISSING",
         "KING_FILE_HALF_OPEN",
         "KING_FILE_OPEN",
+        "KING_SHELTER_MISSING_QUEEN",
+        "KING_FILE_HALF_OPEN_QUEEN",
+        "KING_FILE_OPEN_QUEEN",
         "MOBILITY_WEIGHT",
         "MOBILITY_CAP",
       ];
@@ -374,6 +512,91 @@ if (RUN_DEEP) {
         eg: [0, 100, 325, 325, 500, 900, 0],
       });
       expect(imported.MOBILITY_CAP).toEqual({ mg: 100, eg: 100 });
+      // The queen-on eg halves are held at 0 (d6's dated line); the mg halves are free and ≥ 0.
+      for (const name of [
+        "KING_SHELTER_MISSING_QUEEN",
+        "KING_FILE_HALF_OPEN_QUEEN",
+        "KING_FILE_OPEN_QUEEN",
+      ]) {
+        expect(imported[name].eg, name).toBe(0);
+        expect(imported[name].mg, name).toBeGreaterThanOrEqual(0);
+      }
+      expect(outputs[0]).toContain("F3 bounds (`ADR-0067` ruling (b)): none");
+      expect(outputs[0]).toContain(`players ${T.OWN_PLAYERS.join(" / ")}`);
+    });
+  });
+
+  describe("ABC-239 F3's bound and the one refit (ADR-0067 ruling (b), test note 8) [deep, TUNE_DEEP=1]", () => {
+    // An equal-material pair at phase 24 (ABC-083 A2 (b)'s twin shape): the g-pawn on g2 or on g6.
+    const L = "rnbq1rk1/3nbppp/6P1/8/8/8/3NBP1P/RNBQ1RK1 w - - 0 1";
+    const H = "rnbq1rk1/3nbppp/8/8/8/8/3NBPPP/RNBQ1RK1 w - - 0 1";
+    const read = (fitJson: string): number => {
+      const t = JSON.parse(readFileSync(fitJson, "utf8")).table;
+      const th = {
+        mg: Float64Array.from(t.mg),
+        eg: Float64Array.from(t.eg),
+        wmg: t.wmg,
+        weg: t.weg,
+        cap: t.cap,
+      };
+      return evaluateAt(trace(parseFen(L)), th) - evaluateAt(trace(parseFen(H)), th);
+    };
+    const rowWith = (rhs: number) => [
+      {
+        file: "src/evaluate.king-mobility.test.ts",
+        row: "fixture",
+        terms: [
+          { fen: L, coef: 1 },
+          { fen: H, coef: -1 },
+        ],
+        rhs,
+        strict: true,
+      },
+    ];
+
+    it("(1) and (3): a row the box-only fit breaks is held on the rounded set by the bounded fit, and two bounded runs give one file", async () => {
+      const fx = fixture(plainText);
+      const box = await run(fx);
+      await T.fitData(box.outDir, []);
+      const boxRead = read(join(box.outDir, "fit.json"));
+      // Demand 12 cp less than the box-only fit gives: red on the box-only fit by construction.
+      const bound = rowWith(boxRead - 12);
+      expect(boxRead).toBeGreaterThan(bound[0]?.rhs as number);
+      const outputs: string[] = [];
+      for (let k = 0; k < 2; k++) {
+        const r = await run(fx);
+        const fit = await T.fitData(r.outDir, bound);
+        const b = (fit.bounds as Array<{ mu: number; margin: number }>)[0];
+        expect(b?.mu as number).toBeGreaterThan(0);
+        expect(read(join(r.outDir, "fit.json"))).toBeLessThanOrEqual((bound[0]?.rhs as number) - 1);
+        const target = join(r.outDir, "evaluate-params.ts");
+        T.emit(r.outDir, target, "0000000000000000000000000000000000000000");
+        outputs.push(readFileSync(target, "utf8"));
+      }
+      expect(outputs[1]).toBe(outputs[0]);
+      expect(outputs[0]).toContain('src/evaluate.king-mobility.test.ts, "fixture"');
+    });
+
+    it("(2): a row the box-only fit holds leaves the bounded fit byte-identical to the box-only fit", async () => {
+      const fx = fixture(plainText);
+      const box = await run(fx);
+      await T.fitData(box.outDir, []);
+      const boxRead = read(join(box.outDir, "fit.json"));
+      const r = await run(fx);
+      await T.fitData(r.outDir, rowWith(boxRead + 400));
+      const strip = (path: string): unknown => {
+        const j = JSON.parse(readFileSync(path, "utf8"));
+        return { table: j.table, inner: j.inner, val: j.val, steps: j.steps, config: j.config };
+      };
+      expect(strip(join(r.outDir, "fit.json"))).toEqual(strip(join(box.outDir, "fit.json")));
+      // The emitted values are byte-identical; only the header's bound line names the row.
+      const body = (dir: string): string => {
+        const target = join(dir, "evaluate-params.ts");
+        T.emit(dir, target, "0000000000000000000000000000000000000000");
+        const text = readFileSync(target, "utf8");
+        return text.slice(text.indexOf("export interface MgEg"));
+      };
+      expect(body(r.outDir)).toBe(body(box.outDir));
     });
   });
 }
