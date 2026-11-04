@@ -6,7 +6,34 @@ id: ADR-0065
 
 ## Status
 
-**PROPOSED, premise not met; ticket parked by the Orchestrator 2026-11-03** (`orch-2026-10-30a`
+**ACCEPTED 2026-11-04 by the owner's word, as a bundle with `ADR-0063` (with K3) and `ADR-0066`. In force when
+`ABC-283` merges.** Recorded by Architect/Design (task `arch-ABC-283-accept`, records only, on
+`grugops/arch-ABC-283-accept` from `main` `715beb1c`). Nothing was run.
+- **His word** (`orch-2026-10-30a` `…4c4cb03d` ruling 2): the three parked designs are re-opened as one bundle,
+  *"merge ABC-233, ABC-234 and ABC-236 into one branch and do one test run"*. On a pass, the three are accepted as a
+  bundle.
+- **The not-met premise was overridden by the owner, not met.** F4 fired on 2026-11-03 (S1m `chooseMove` d8 0.9864 /
+  0.9548 against ≤ 0.95×) and stays fired as measured. None of the re-open conditions below (Q1 as the door, V3, a
+  time instrument) was the route. The owner's word set the premise aside, requirement-level.
+- **The read was the bundle's, not this ADR's.** `qe-ABC-283` verdict `…de1dc511` is PASS_WITH_GAPS, with no
+  blocking gap. C2′ read 59 / 27 / 14 = **66.0 / 100 ≥ 50.0** (Elo +115.2 ± 67.0), played once, with all three parts
+  on. That is this ADR's own GAIN line (decision 11), but no reading isolates SEE ordering's share. S′ read
+  6.0 / 10 (information), so there is no collapse, and F5 does not fire.
+- **As built** (`se-ABC-283` `…d64042c4`, confirmed by QE):
+  - it reuses `src/see.ts`'s `see` from `ABC-279` (Q1's module, so the scratch is Q1's 288 bytes, counted once, as
+    § Consequences' dated line said). The −50 test is this ADR's own (`losingForOrdering`), beside Q1's threshold 0,
+    which is unchanged;
+  - "lesser piece" is compared by piece type, so SEE runs only when the victim is worth less than the attacker;
+  - the losing captures key at 100 000 + MVV-LVA, below the killers (500 000 + rank) and above every history cell.
+    The relative order is decision 3's;
+  - with `ADR-0063`'s history on, the order is: hash move, captures that are not losing, killers, losing captures,
+    then the history-ordered quiet moves.
+- **Pre-merge condition** (ruling `…2409cec9` 1, QE-283-i): `se-ABC-283-merge` re-reads the counts on the tree merged
+  with `ABC-271` before the merge. The acceptance takes effect at the merge, not before.
+- **The file name and title** keep the PROPOSED wording, because sealed notes cite the path. The premise is still not
+  met as measured; it was overridden.
+
+*Before acceptance:* **PROPOSED, premise not met; ticket parked by the Orchestrator 2026-11-03** (`orch-2026-10-30a`
 `…24990015` ruling 1; `ABC-234` stays in Backlog). *Dated line by Architect/Design, task `arch-adr0056-fold-1103`,
 records only.*
 
@@ -51,6 +78,16 @@ output are under `.grugops/context/arch-ABC-234/raw/probe/`.
 - **What it amends:** no ADR. It follows `ADR-0026` decision 10's pattern for the day it is built. The lines owed to
   `ADR-0056` (rows O3s and Q1), `EPIC-011` and the `ABC-234` page are listed in the decisions note of
   `arch-ABC-234`, not edited here.
+
+## Decision log
+
+| date (UTC) | by | what | record |
+|---|---|---|---|
+| 2026-11-03 | Architect/Design | PROPOSED; F4 fired (`chooseMove` 0.9864 / 0.9548); A0 ruled (d4 fences Q1, not O3s); the build does not start | `arch-ABC-234` `…9ac61a7a`, `9ca30923` |
+| 2026-11-03 | Orchestrator | Parked; `ABC-234` stays in Backlog | `orch-2026-10-30a` `…24990015` ruling 1 |
+| 2026-11-04 | Owner | Re-opened as one bundle with `ADR-0063` and `ADR-0066` over the three not-met premises; accepted as a bundle on a pass | `…4c4cb03d` ruling 2 |
+| 2026-11-04 | QE/E2E | The bundle's read: PASS_WITH_GAPS, C2′ 66.0 / 100 ≥ 50.0; the verdict signs UAT | `qe-ABC-283` `…de1dc511`, gaps `…f8f8c2cc` |
+| 2026-11-04 | Architect/Design | **ACCEPTED as a bundle, in force when `ABC-283` merges.** The premise was overridden by the owner, not met | `arch-ABC-283-accept`, on the Orchestrator's ruling `…2409cec9` 2 |
 
 ## Context
 
@@ -199,6 +236,8 @@ One batch on a second scratch copy (`patch_diag_q1.py`, `batch4.sh`; 8 jobs, eve
 The design of record is the one a re-open builds. It is not cleared to build on today's `main` (§ Status). S1m is
 named as the design of record because, of the three pre-registered forms, it is the nearest to the gate. A re-open
 re-measures it under its own PREREG.
+*Dated 2026-11-04 (`arch-ABC-283-accept`):* the paragraph above is superseded. The owner re-opened S1m in
+`ABC-283`, it was built there, and it is ACCEPTED, in force when `ABC-283` merges. The as-built keys are in § Status.
 
 1. **A0 (the fence), ruled.**
    - **Read:** `G1` (`ABC-084`'s suite) is 54 / 58, and the four unsolved rows are mate-in-3 headroom rows. All 24

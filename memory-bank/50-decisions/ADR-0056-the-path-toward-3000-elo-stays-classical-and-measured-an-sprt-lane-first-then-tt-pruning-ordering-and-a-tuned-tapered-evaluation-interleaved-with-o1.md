@@ -687,6 +687,19 @@ copies of `main`'s `src/` `8adb0a18`): rows E2 and E4.*
     `UNKNOWN - verify`.
   - This line does not set Q2's slot. The order is the Orchestrator's.
 
+*Dated 2026-11-04 (`arch-ABC-283-accept`, records only at `main` `715beb1c`; the owner's word `…4c4cb03d` ruling 2,
+on QE's pass `qe-ABC-283` `…de1dc511`): rows O1h, O3s and S1.*
+- **Rows O1h, O3s and S1: ACCEPTED as a bundle** (`ADR-0063` with K3, `ADR-0065`, `ADR-0066`). They are in force when
+  `ABC-283` merges. Each ADR's pay premise was overridden by the owner, not met. The one read was the bundle's: C2′
+  66.0 / 100 ≥ 50.0 (Elo +115.2 ± 67.0) at 100 ms, all three on. No reading splits it by row.
+- **The ticket cells** of O1h, O3s and S1 now read "`ABC-283`: `ADR-0063` / `ADR-0065` / `ADR-0066` ACCEPTED as a
+  bundle (2026-11-04, `…4c4cb03d`; QE `…de1dc511`)". The parked text in the O3s and S1 cells is superseded, and so are
+  the 2026-11-03 "parked" lines above. The rows' Elo estimates stay estimates; the bundle's +115.2 is one read of
+  three rows together, not a per-row figure.
+- **What it unholds** (the Orchestrator, `…2409cec9` 5): after the merge, `ABC-282` (W1) is unheld, and `ABC-286` (P4, over the
+  history-ordered quiet list) and `ABC-288` (O2c, on the history table) are unheld for their probes. P1 (`ABC-284`) reads `R-283-LMR`
+  (`ADR-0060` § Status, dated 2026-11-04).
+
 ### D3. Is 3 000 reachable without a neural network?
 
 - **For a classical engine, yes, in principle.** Stockfish 11, the last hand-crafted Stockfish, reads ≈ 3 430 CCRL

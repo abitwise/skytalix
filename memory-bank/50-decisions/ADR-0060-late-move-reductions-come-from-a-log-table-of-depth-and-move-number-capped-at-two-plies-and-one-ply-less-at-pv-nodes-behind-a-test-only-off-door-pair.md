@@ -6,6 +6,24 @@ id: ADR-0060
 
 ## Status
 
+*2026-11-04, dated line by Architect/Design (task `arch-ABC-283-accept`, records only, at `main` `715beb1c`).*
+**R-283-LMR is carried here, where a P1 re-open (`ABC-284`) reads it. Nothing in this ADR changes, and P1 stays
+parked.**
+- **The risk** (ruling `orch-2026-10-30a` `…6c6fb0be`; `arch-ABC-283-mate` `…05ef9fc9`; QE gap QE-283-b, LOW,
+  `qe-ABC-283` `…f8f8c2cc`): the same-depth mate floor depends on quiet-move order through LMR. A mating quiet move
+  pushed late is reduced, the reduced search scores ≤ α, and no re-search runs. This predates history: on the door
+  with its quiet tier reversed the floor loses 6 / 190, and with LMR off it loses 0.
+- **The readings under the accepted bundle** (`ADR-0063` with K3, `ADR-0065`, `ADR-0066`; ACCEPTED 2026-11-04, in
+  force when `ABC-283` merges):
+  - d5, the bar: 0 / 190 in `search()` and 0 / 188 in `chooseMove`, against the all-off doors and base `main`. QE's
+    fresh seeded KRK / KQK probe reads 0 / 16 and 0 / 16.
+  - d6, a report: `chooseMove` loses 2 / 209 on the 287, the same two rows that base `main` loses. On QE's fresh probe
+    it loses 1 / 30 (a KQK row).
+- **The rule it sets:** if a later change turns the d5 floor red again, **the lever is LMR, this ADR, not history.**
+  The history key stays K3's max(0, h). A P1 re-open's PREREG reads both floors, d5 as the bar and d6 as a report,
+  over the history table that `ABC-283` puts on `main` (`ABC-284`'s named trigger 2; decision 11's history term).
+- **Not graded** here or anywhere yet. Its owner is Architect/Design.
+
 *2026-11-02, dated line by Architect/Design (task `arch-next-pull`, records only, at `main` `a6039c5b`).* **The joint
 probe that this section named, decision 11's history term together with `ADR-0063`'s table and zugzwang as the hard
 gate, is measured. No form meets every bar, so P1 STAYS PARKED and no joint ADR is written.**
