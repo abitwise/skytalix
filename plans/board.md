@@ -1,3 +1,4 @@
+_Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `bapm-bundle-1-cut` merged: **ABC-303 (bundle 1) Ready, DoR 10/10** → In Development, `se-ABC-303` (code only, no game). Owed to the Architect before the read: ABC-303 § Open 1, 2 and the moved-base question. Running: qe-ABC-282, se-ABC-301-fit, se-ABC-303._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `arch-owner-answers-1104b` merged: ADR-0072, 0073, 0074 ACCEPTED (0072/0073 over missed premises, in force only at the bundle's merge); bundle bars ruled in ADR-0056; bundle reads first, ABC-289 alone after it. Slot: bundle code may build now, its C2′ only after ABC-282 and ABC-301 settle. → `bapm-bundle-1-cut`._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — **owner: bundle 1 (a), build both over the missed premises; OQ-0074-1 yes** (…3e73f9f9). → `arch-owner-answers-1104b`. qe-ABC-282 and se-ABC-301-fit: agents ended with no report, their runs still alive; acting on the runs' exits._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `arch-records-1104` merged: the two E4a rows ruled (one re-pinned, one retired, at scope 4); P1 and tracer lines; ADR-0056 row Q2; run rule now thirteen lines. Running: qe-ABC-282, se-ABC-301-fit. Owner: bundle 1 (a/b/c), OQ-0074-1._
@@ -1491,7 +1492,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 ## Ready (WIP 1/8)
-- [ABC-289] Q2 delta pruning (ADR-0074 PROPOSED; DoR 10/10, S, P3). Build held for OQ-0074-1 and the bundle 1 answer.
+- [ABC-289] Q2 delta pruning (ADR-0074 ACCEPTED; DoR 10/10, S, P3). Reads alone after bundle 1; build starts when ABC-303's merge or failed-attempt is recorded.
 - ~~[ABC-301]~~ → In Development. E2s second pull: one bounded fit on main with E4a's structure; KD/FP freed, U held 0; B-T0–B-T8 (B-T8 two r reads at 0.5 s, ~5 h, owner-approved). Scope 0 preconditions first (after NFR-008 headroom ruling).
 - ~~[ABC-271]~~ → In Development E4a structure only at 0 (ADR-0070 ACCEPTED form (a); DoR 10/10, S, P3). QE freeze first (qe-ABC-271-freeze), then se-ABC-271. No games.
 
@@ -1509,7 +1510,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 2/3)
+- [ABC-301] E2s second pull: fit scopes 1–4 (se-ABC-301-fit), then QE's reads.
+- [ABC-303] Bundle 1, ABC-286 + ABC-288 (ADR-0072, 0073 ACCEPTED over missed premises; DoR 10/10, M, P3). Code only for now (`se-ABC-303`); C2′ only after ABC-282 and ABC-301 settle.
 
 
 
@@ -1537,7 +1540,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-282] W1 time use (ADR-0071 ACCEPTED): qe-ABC-282 reading A6, A4 and the lane.
 
 
 
