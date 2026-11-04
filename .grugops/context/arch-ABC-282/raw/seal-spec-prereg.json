@@ -1,0 +1,7 @@
+{
+  "refs": ["arch-ABC-282", "ABC-282", "EPIC-011", "ADR-0056", "ADR-0052", "ABC-078", "ABC-283", "NFR-004", "NFR-008",
+           "qe-tc-depth-probe/raw/named.json", "qe-tc-depth-probe/raw/positions.json", "5853d17f"],
+  "notes": [
+    { "kind": "decision", "confidence": "high: the probe plan, corpus, grid and derivation rule are fixed here before any run; nothing has been measured yet", "bodyFile": "note-prereg.md" }
+  ]
+}
