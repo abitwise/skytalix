@@ -12,6 +12,10 @@ adr: "ADR-0074 PROPOSED, premise met (arch-ABC-289); the owner accepts it (readi
 
 # ABC-289: delta pruning in quiescence (Q2)
 
+> **DP5 NAMES `G2`'S BYTE IDENTITY, 2026-11-04, by BA/PM** (task `bapm-lines-1104b`, records only, at `main` `732a0cea`;
+> nothing run). Source: the Orchestrator's ruling `orch-2026-10-30a` `…5ec6c124` 2, and `ADR-0074` d12 (d). It names a
+> bar the ADR already sets. **DoR 10/10, unchanged.** The column move and the build slot are the Orchestrator's.
+
 > **`ADR-0074` FOLDED: PREMISE MET, HOLD 2 CLEARED, F2 DID NOT FIRE; DoR 10/10, READY; THE BUILD MAY START ON PROPOSED,
 > THE MERGE WAITS ON THE OWNER'S ACCEPTANCE AND ITS READ, 2026-11-04, by BA/PM** (task `bapm-lines-1104`, records only, at
 > `main` `18fbc754`; nothing run). Sources: the Architect's twelve owed lines (`arch-ABC-289` `…62012bbe` § 6), `ADR-0074`,
@@ -117,7 +121,9 @@ The re-measure and the ADR fix exact counts before Ready. None is loosened after
   100** ~~(GAIN) or ≥ 43.0 (NEUTRAL) of 100~~, S′ at E 1 810, the Levels deep lane. A miss is NOT MET and is not
   re-played. Firing: at 47 000 nodes, the 100 ms budget, the rule skips **48.25 %** of the captures reached out of check
   (3 785 544 of 7 845 226), on 185 of 190 rows. 65.9 % of the skips are at quiescence ply 0, so it is not depth-gated.
-- **DP5:** `G6` "≥ base" (a search ticket).
+- **DP5:** `G6` "≥ base" (a search ticket). *2026-11-04 (`bapm-lines-1104b`; `…5ec6c124` 2; `ADR-0074` d12 (d)):* **`G2`:**
+  `src/evaluate.ts` and `src/evaluate-params.ts` stay byte-identical to base, so `G2` is not re-read. If either is
+  touched, `G2` is read by its rule.
 
 ### Falsifiers
 
