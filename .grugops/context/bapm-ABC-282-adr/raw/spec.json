@@ -1,0 +1,7 @@
+{
+  "refs": ["bapm-ABC-282-adr", "grugops/bapm-ABC-282-adr", "ABC-282", "ABC-300", "ABC-078", "ABC-283", "ABC-276", "ABC-275", "ABC-255", "ABC-223", "ABC-222", "ABC-266", "ABC-238", "EPIC-011", "EPIC-009", "W1", "ADR-0071", "ADR-0056", "ADR-0052", "ADR-0066", "R-TC", "OQ-0071-1", "R-0071-1", "R-0071-2", "R-0071-3", "R-0071-4", "QE-275-a", "NFR-004", "NFR-005", "NFR-008", "NFR-009", "tools/rating/rating.ts", "tools/rating/pair-check.ts", "src/engine.ts", "src/uci-session.ts", "src/engine.test.ts", "19581ca1", "9471eb32", "5853d17f", "4fb3da04", "d1575d7a", "arch-ABC-282/20261104T140129Z-architect-design-decision-0187186b", "arch-ABC-282/20261104T140129Z-architect-design-observation-1938110b", "arch-ABC-282/20261104T134523Z-architect-design-decision-5dbc040d"],
+  "notes": [
+    { "kind": "decision", "confidence": "high: every page line is applied from ADR-0071 and the Architect's owed lines (0187186b) with no bar moved; pages d1575d7a; nothing run. Five judgments flagged (J1 Ready while ordered after ABC-283, J2 A1 (a)/(b) reading line, J3 merge also waits on acceptance, J4 ABC-300 usage text and one pair-check row, J5 ABC-300 Ready on PROPOSED)", "bodyFile": "notes/dec.md" },
+    { "kind": "observation", "confidence": "high for what git, grep and sed show at main 19581ca1; nothing run", "bodyFile": "notes/obs.md" }
+  ]
+}
