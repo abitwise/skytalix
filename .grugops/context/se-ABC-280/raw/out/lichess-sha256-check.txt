@@ -1,0 +1,5 @@
+lichess_db_standard_rated_2017-03.pgn.zst: OK
+
+real	0m1.144s
+user	0m0.950s
+sys	0m0.194s

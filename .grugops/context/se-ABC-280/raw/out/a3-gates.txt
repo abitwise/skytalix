@@ -1,0 +1,40 @@
+# pre-ticket head (main dcc1bae0 + claim fb69c017)
+ ✓ src/cli.real-engine.test.ts (1 test) 9ms
+ ✓ src/uci.real-engine.test.ts (1 test) 3ms
+ Test Files  68 passed (68)
+      Tests  2647 passed (2647)
+real	0m9.758s
+# branch tip (edb9fddd)
+ ✓ tools/tune/tune.test.ts (3 tests) 3ms
+ ✓ src/cli.real-engine.test.ts (1 test) 11ms
+ ✓ src/uci.real-engine.test.ts (1 test) 2ms
+ Test Files  69 passed (69)
+      Tests  2650 passed (2650)
+real	0m9.834s
+# skip count (AGENTS.md capture): main 0, tip 0; test-skip-integrity --skip-count 0: No findings.
+# lint: Checked 146 files in 122ms. No fixes applied.
+# typecheck exit 0; build exit 0; dist/ files:
+dist/apply.js
+dist/book-file.js
+dist/book.js
+dist/coordinate-move.js
+dist/engine.js
+dist/evaluate.js
+dist/evaluate-params.js
+dist/fen.js
+dist/frame.js
+dist/gameend.js
+dist/history.js
+dist/legal.js
+dist/levels.js
+dist/moves.js
+dist/position.js
+dist/quiescence.js
+dist/render.js
+dist/search.js
+dist/see.js
+dist/transposition.js
+dist/turn-loop.js
+dist/uci.js
+dist/uci-session.js
+dist/zobrist.js
