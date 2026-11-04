@@ -1,0 +1,22 @@
+stdout | src/evaluate.passer.test.ts > ABC-271 K0 — node identity with main: the seven counts, exact [deep, SEARCH_DEEP=1] > kiwipete_chooseMove_d8 = 766275 [deep, SEARCH_DEEP=1]
+ABC-271 K0 kiwipete_chooseMove_d8: 766275
+ ✓ src/evaluate.passer.test.ts > ABC-271 K0 — node identity with main: the seven counts, exact [deep, SEARCH_DEEP=1] > kiwipete_chooseMove_d8 = 766275 [deep, SEARCH_DEEP=1] 1156ms
+stdout | src/evaluate.passer.test.ts > ABC-271 K0 — node identity with main: the seven counts, exact [deep, SEARCH_DEEP=1] > kiwipete_chooseMove_d9 = 1725150 [deep, SEARCH_DEEP=1]
+ABC-271 K0 kiwipete_chooseMove_d9: 1725150
+ ✓ src/evaluate.passer.test.ts > ABC-271 K0 — node identity with main: the seven counts, exact [deep, SEARCH_DEEP=1] > kiwipete_chooseMove_d9 = 1725150 [deep, SEARCH_DEEP=1] 2410ms
+stdout | src/evaluate.passer.test.ts > ABC-271 K0 — node identity with main: the seven counts, exact [deep, SEARCH_DEEP=1] > pos6_chooseMove_d8 = 87475 [deep, SEARCH_DEEP=1]
+ABC-271 K0 pos6_chooseMove_d8: 87475
+ ✓ src/evaluate.passer.test.ts > ABC-271 K0 — node identity with main: the seven counts, exact [deep, SEARCH_DEEP=1] > pos6_chooseMove_d8 = 87475 [deep, SEARCH_DEEP=1] 136ms
+stdout | src/evaluate.passer.test.ts > ABC-271 K0 — node identity with main: the seven counts, exact [deep, SEARCH_DEEP=1] > pos6_chooseMove_d9 = 253724 [deep, SEARCH_DEEP=1]
+ABC-271 K0 pos6_chooseMove_d9: 253724
+ ✓ src/evaluate.passer.test.ts > ABC-271 K0 — node identity with main: the seven counts, exact [deep, SEARCH_DEEP=1] > pos6_chooseMove_d9 = 253724 [deep, SEARCH_DEEP=1] 390ms
+stdout | src/evaluate.passer.test.ts > ABC-271 K0 — node identity with main: the seven counts, exact [deep, SEARCH_DEEP=1] > pos6_chooseMove_d10 = 533916 [deep, SEARCH_DEEP=1]
+ABC-271 K0 pos6_chooseMove_d10: 533916
+ ✓ src/evaluate.passer.test.ts > ABC-271 K0 — node identity with main: the seven counts, exact [deep, SEARCH_DEEP=1] > pos6_chooseMove_d10 = 533916 [deep, SEARCH_DEEP=1] 812ms
+stdout | src/evaluate.passer.test.ts > ABC-271 K0 — node identity with main: the seven counts, exact [deep, SEARCH_DEEP=1] > kiwipete_search_d8 = 605117 [deep, SEARCH_DEEP=1]
+ABC-271 K0 kiwipete_search_d8: 605117
+ ✓ src/evaluate.passer.test.ts > ABC-271 K0 — node identity with main: the seven counts, exact [deep, SEARCH_DEEP=1] > kiwipete_search_d8 = 605117 [deep, SEARCH_DEEP=1] 873ms
+stdout | src/evaluate.passer.test.ts > ABC-271 K0 — node identity with main: the seven counts, exact [deep, SEARCH_DEEP=1] > pos6_search_d8 = 406787 [deep, SEARCH_DEEP=1]
+ABC-271 K0 pos6_search_d8: 406787
+ ✓ src/evaluate.passer.test.ts > ABC-271 K0 — node identity with main: the seven counts, exact [deep, SEARCH_DEEP=1] > pos6_search_d8 = 406787 [deep, SEARCH_DEEP=1] 621ms
+      Tests  8 passed | 20 skipped (28)

@@ -22,7 +22,8 @@
  * sides, clamped to 24) blends them, once per call: score = mg + trunc(Δ × (24 − phase) / 24),
  * where Δ = eg − mg sums EVERY term (`ABC-274`, `ADR-0067` decision 8: material, every square
  * table, doubled, isolated, passed, the three king-file terms, their three queen-on pairs (`ABC-270`,
- * `ADR-0068`, at 0) and mobility). At E1's table only
+ * `ADR-0068`, at 0) and mobility), plus E4a's endgame-only passer terms (`ABC-271`, `ADR-0070`, at 0),
+ * which add to Δ after the walk, outside the packed sum. At E1's table only
  * the king's square and the passed pawns have halves that differ, so the score is the one E1
  * computed, bit for bit. trunc is odd, so the mirror stays exact. `evaluateWithoutTaper` is the
  * pre-`ABC-269` evaluation exactly (the blend at phase 24).
@@ -114,6 +115,15 @@ const HALF_OPEN_QUEEN_AT = 6;
 const OPEN_QUEEN_AT = 7;
 /** Mobility, outside the packed sum: weight mg, weight eg, cap mg, cap eg. */
 const MOBILITY_TERMS = new Int32Array(4);
+/**
+ * E4a (`ABC-271`, `ADR-0070`): the endgame halves of the three by-rank passer terms, and the
+ * unstoppable passer's. Outside the packed sum: they add to Δ only, after the walk. Their
+ * middlegame halves are 0 by `ADR-0070` decision 1 and are not read.
+ */
+const PASSED_KING_ENEMY_EG = new Int32Array(8);
+const PASSED_KING_OWN_EG = new Int32Array(8);
+const PASSED_FREE_EG = new Int32Array(8);
+let passedUnstoppableEg = 0;
 
 /**
  * Fills the packed arrays from `parameters`. Called once at load with `src/evaluate-params.ts`;
@@ -158,6 +168,12 @@ function loadParameters(parameters: EvaluationParameters): void {
   MOBILITY_TERMS[1] = parameters.MOBILITY_WEIGHT.eg;
   MOBILITY_TERMS[2] = parameters.MOBILITY_CAP.mg;
   MOBILITY_TERMS[3] = parameters.MOBILITY_CAP.eg;
+  for (let rank = 0; rank < 8; rank++) {
+    PASSED_KING_ENEMY_EG[rank] = parameters.PASSED_KING_ENEMY.eg[rank] as number;
+    PASSED_KING_OWN_EG[rank] = parameters.PASSED_KING_OWN.eg[rank] as number;
+    PASSED_FREE_EG[rank] = parameters.PASSED_FREE.eg[rank] as number;
+  }
+  passedUnstoppableEg = parameters.PASSED_UNSTOPPABLE.eg;
 }
 loadParameters(PARAMETERS);
 
@@ -327,10 +343,17 @@ const adjacentFiles = (file: number): number => (((1 << file) << 1) | ((1 << fil
  * `pawnStructure`'s three parts, one per pawn term, each packed (`ABC-274`), set by each call
  * beside its return value (their sum) so the memo can store them. The memo keeps three parts, as
  * it did when they were the doubled-and-isolated sum and the passed sum's two halves.
+ *
+ * E4a (`ABC-271`, `ADR-0070` decision 2): the two passer words, one per side, set the same way and
+ * stored by the memo beside the parts: the frontmost passer of each file, 3 bits a file (bits
+ * 3f … 3f + 2 for file f), holding its board rank (1 … 6), 0 for none. A rear passer of a doubled
+ * pair is not recorded. `pawnStructureCached` sets them on a hit too.
  */
 let doubledPart = 0;
 let isolatedPart = 0;
 let passedPart = 0;
+let whitePassersPart = 0;
+let blackPassersPart = 0;
 
 /**
  * The three pawn terms from WHITE's point of view, packed. Two passes over the six ranks a pawn
@@ -348,6 +371,8 @@ function pawnStructure(board: Uint8Array): number {
   let doubled = 0;
   let isolated = 0;
   let passed = 0;
+  let whitePassers = 0;
+  let blackPassers = 0;
 
   for (let rank = 1; rank <= 6; rank++) {
     for (let file = 0; file < 8; file++) {
@@ -369,10 +394,18 @@ function pawnStructure(board: Uint8Array): number {
       const piece = board[square];
       if (piece === PAWN) {
         if ((whiteFiles & adjacentFiles(file)) === 0) isolated -= isolatedPenalty;
-        if (isPassedPawn(board, square)) passed += PACKED_PASSED[rank] as number;
+        if (isPassedPawn(board, square)) {
+          passed += PACKED_PASSED[rank] as number;
+          // Ranks run upward, so a later white passer on the file is the frontmost: overwrite.
+          whitePassers = (whitePassers & ~(7 << (3 * file))) | (rank << (3 * file));
+        }
       } else if (piece === BLACK_PAWN) {
         if ((blackFiles & adjacentFiles(file)) === 0) isolated += isolatedPenalty;
-        if (isPassedPawn(board, square)) passed -= PACKED_PASSED[7 - rank] as number;
+        if (isPassedPawn(board, square)) {
+          passed -= PACKED_PASSED[7 - rank] as number;
+          // Black moves down the ranks: the first black passer found on the file is the frontmost.
+          if (((blackPassers >> (3 * file)) & 7) === 0) blackPassers |= rank << (3 * file);
+        }
       }
     }
   }
@@ -380,6 +413,8 @@ function pawnStructure(board: Uint8Array): number {
   doubledPart = doubled;
   isolatedPart = isolated;
   passedPart = passed;
+  whitePassersPart = whitePassers;
+  blackPassersPart = blackPassers;
   return doubled + isolated + passed;
 }
 
@@ -390,8 +425,9 @@ function pawnStructure(board: Uint8Array): number {
  * black one. A 48-bit integer is exact in a double, so the KEY is the two masks themselves.
  *
  * - Direct-mapped: 2^14 slots in fixed typed arrays, allocated once per process. Each slot holds
- *   both masks and the three packed parts (doubled, isolated, passed; `ABC-274`): 2^14 x (8 + 8 +
- *   4 + 4 + 4) bytes = 448 KiB, fixed (`NFR-009`).
+ *   both masks, the three packed parts (doubled, isolated, passed; `ABC-274`) and the two passer
+ *   words (`ABC-271`, `ADR-0070` decision 2): 2^14 x (8 + 8 + 4 + 4 + 4 + 4 + 4) bytes = 576 KiB,
+ *   fixed (`NFR-009`).
  * - A HIT needs BOTH masks equal — never the slot index alone. Empty slots hold -1, which no
  *   mask equals. A collision only overwrites; it can cost a recomputation, never a wrong score.
  * - Never cleared between searches: no value depends on it. `clearPawnCacheForTest` empties it
@@ -404,6 +440,8 @@ const pawnCacheBlack = new Float64Array(PAWN_CACHE_SLOTS).fill(-1);
 const pawnCacheDoubled = new Int32Array(PAWN_CACHE_SLOTS);
 const pawnCacheIsolated = new Int32Array(PAWN_CACHE_SLOTS);
 const pawnCachePassed = new Int32Array(PAWN_CACHE_SLOTS);
+const pawnCacheWhitePassers = new Int32Array(PAWN_CACHE_SLOTS);
+const pawnCacheBlackPassers = new Int32Array(PAWN_CACHE_SLOTS);
 
 /**
  * Per 0x88 square: the square's bit in a pawn mask (2^0 … 2^47 over ranks 2-7), and a fixed
@@ -432,7 +470,10 @@ const PAWN_SLOT_WORD_BLACK = new Int32Array(128);
   }
 }
 
-/** `pawnStructure(board)`'s packed sum, from the memo when both masks match. */
+/**
+ * `pawnStructure(board)`'s packed sum, from the memo when both masks match. A hit also sets the
+ * two passer words, as the miss's `pawnStructure` call does.
+ */
 function pawnStructureCached(
   board: Uint8Array,
   whiteMask: number,
@@ -441,6 +482,8 @@ function pawnStructureCached(
 ): number {
   const slot = slotWord & PAWN_CACHE_INDEX_MASK;
   if (pawnCacheWhite[slot] === whiteMask && pawnCacheBlack[slot] === blackMask) {
+    whitePassersPart = pawnCacheWhitePassers[slot] as number;
+    blackPassersPart = pawnCacheBlackPassers[slot] as number;
     return (
       (pawnCacheDoubled[slot] as number) +
       (pawnCacheIsolated[slot] as number) +
@@ -453,6 +496,8 @@ function pawnStructureCached(
   pawnCacheDoubled[slot] = doubledPart;
   pawnCacheIsolated[slot] = isolatedPart;
   pawnCachePassed[slot] = passedPart;
+  pawnCacheWhitePassers[slot] = whitePassersPart;
+  pawnCacheBlackPassers[slot] = blackPassersPart;
   return structure;
 }
 
@@ -469,7 +514,9 @@ export function pawnCacheByteLength(): number {
     pawnCacheBlack.byteLength +
     pawnCacheDoubled.byteLength +
     pawnCacheIsolated.byteLength +
-    pawnCachePassed.byteLength
+    pawnCachePassed.byteLength +
+    pawnCacheWhitePassers.byteLength +
+    pawnCacheBlackPassers.byteLength
   );
 }
 
@@ -494,6 +541,75 @@ export function pawnCacheProbeForTest(position: Position): { slot: number; hit: 
   }
   const slot = slotWord & PAWN_CACHE_INDEX_MASK;
   return { slot, hit: pawnCacheWhite[slot] === whiteMask && pawnCacheBlack[slot] === blackMask };
+}
+
+/**
+ * `passerTerms`'s three parts for the side it last scored (`ADR-0070` decision 4's seam reads them):
+ * king distance, free path and the unstoppable passer, each an endgame half in centipawns.
+ */
+let kingDistancePart = 0;
+let freePathPart = 0;
+let unstoppablePart = 0;
+
+/**
+ * E4a (`ABC-271`, `ADR-0070` decisions 1 and 2) for ONE side: the sum of its three endgame parts,
+ * leaving each in the parts above. `passers` is the side's passer word from `pawnStructure`;
+ * `ownKing` / `enemyKing` are the king squares the board walk found; `defenderToMove` is true when
+ * the other side is to move. For the frontmost passer of each file, with R its own rank and Q its
+ * queening square: king distance `PASSED_KING_ENEMY[R]` × min(d(enemy king, Q), 5) −
+ * `PASSED_KING_OWN[R]` × min(d(own king, Q), 5); `PASSED_FREE[R]` when every square ahead up to and
+ * including Q is empty (any piece blocks); and, at phase 0 only, `PASSED_UNSTOPPABLE` once for the
+ * side when a free passer's moves (5 from the start rank, else 7 − R) < d(enemy king, Q), uncapped,
+ * − 1 if the defender is to move. d is the Chebyshev distance. No value is skipped at 0
+ * (`ADR-0070` decision 3).
+ */
+function passerTerms(
+  board: Uint8Array,
+  passers: number,
+  ownKing: number,
+  enemyKing: number,
+  white: boolean,
+  defenderToMove: boolean,
+  phase: number,
+): number {
+  const step = white ? 16 : -16;
+  const queeningRank = white ? 7 : 0;
+  let kingDistance = 0;
+  let freePath = 0;
+  let unstoppable = false;
+  for (let file = 0; file < 8; file++) {
+    const rank = (passers >> (3 * file)) & 7;
+    if (rank === 0) continue;
+    const ownRank = white ? rank : 7 - rank;
+    const queening = queeningRank * 16 + file;
+    const enemyDistance = Math.max(
+      Math.abs((enemyKing >> 4) - queeningRank),
+      Math.abs((enemyKing & 7) - file),
+    );
+    const ownDistance = Math.max(
+      Math.abs((ownKing >> 4) - queeningRank),
+      Math.abs((ownKing & 7) - file),
+    );
+    kingDistance +=
+      (PASSED_KING_ENEMY_EG[ownRank] as number) * (enemyDistance < 5 ? enemyDistance : 5) -
+      (PASSED_KING_OWN_EG[ownRank] as number) * (ownDistance < 5 ? ownDistance : 5);
+    let free = true;
+    for (let at = rank * 16 + file + step; ; at += step) {
+      if (board[at] !== EMPTY) {
+        free = false;
+        break;
+      }
+      if (at === queening) break;
+    }
+    if (!free) continue;
+    freePath += PASSED_FREE_EG[ownRank] as number;
+    const moves = ownRank === 1 ? 5 : 7 - ownRank;
+    if (phase === 0 && moves < enemyDistance - (defenderToMove ? 1 : 0)) unstoppable = true;
+  }
+  kingDistancePart = kingDistance;
+  freePathPart = freePath;
+  unstoppablePart = unstoppable ? passedUnstoppableEg : 0;
+  return kingDistance + freePath + unstoppablePart;
 }
 
 /**
@@ -636,6 +752,17 @@ function whiteMinusBlack(
   let w = (phase > 24 ? 24 : phase) - PHASE_EG;
   if (w < 0) w = 0;
   else if (w > PHASE_SPAN) w = PHASE_SPAN;
+  // E4a (`ADR-0070` decision 2): endgame-only passer terms, outside the memo, into Δ only. Skipped
+  // at w = D, where Δ has no weight (exact while their middlegame halves are 0), and when neither
+  // side has a passer. The king squares are the walk's: no new pass over the pieces.
+  const whitePassers = whitePassersPart;
+  const blackPassers = blackPassersPart;
+  if (w < PHASE_SPAN && (whitePassers | blackPassers) !== 0) {
+    const blackToMove = position.blackToMove;
+    egDelta +=
+      passerTerms(board, whitePassers, whiteKing, blackKing, true, blackToMove, phase) -
+      passerTerms(board, blackPassers, blackKing, whiteKing, false, !blackToMove, phase);
+  }
   return mg + Math.trunc((egDelta * (PHASE_SPAN - w)) / PHASE_SPAN);
 }
 
@@ -751,4 +878,67 @@ export function kingExposureForTest(position: Position): {
     white: halves(kingExposure(board, whiteKing, PAWN, BLACK_PAWN, 1, blackQueen)),
     black: halves(kingExposure(board, blackKing, BLACK_PAWN, PAWN, -1, whiteQueen)),
   };
+}
+
+/**
+ * TEST-ONLY (`ABC-271` K1 (c), `ADR-0070` decision 4, `QE-271-a`): each side's three E4a endgame
+ * parts in centipawns (king distance, free path, unstoppable), per side and never netted, computed
+ * by the same `passerTerms` that `evaluate` sums, from a fresh `pawnStructure` and the position's
+ * own phase. It reads the arrays in force, so inside `withParametersForTest` it reads the test's
+ * table. It computes the parts at every phase; `evaluate` skips them at w = D (phase 24), where they
+ * carry no weight (`QE-271-c`). Nothing in production calls it (the `kingExposureForTest` precedent).
+ */
+export function passerTermsForTest(position: Position): {
+  white: { kd: number; free: number; un: number };
+  black: { kd: number; free: number; un: number };
+} {
+  const board = position.board;
+  let whiteKing = -1;
+  let blackKing = -1;
+  for (let square = 0; square < 128; square++) {
+    if ((square & 0x88) !== 0) continue;
+    const piece = board[square] as number;
+    if (pieceType(piece) !== KING) continue;
+    if (isBlack(piece)) blackKing = square;
+    else whiteKing = square;
+  }
+  pawnStructure(board);
+  const whitePassers = whitePassersPart;
+  const blackPassers = blackPassersPart;
+  const phase = phaseOf(position);
+  const parts = () => ({ kd: kingDistancePart, free: freePathPart, un: unstoppablePart });
+  passerTerms(board, whitePassers, whiteKing, blackKing, true, position.blackToMove, phase);
+  const white = parts();
+  passerTerms(board, blackPassers, blackKing, whiteKing, false, !position.blackToMove, phase);
+  return { white, black: parts() };
+}
+
+/**
+ * TEST-ONLY (`ABC-271` K1 (e)): `pawnStructure`'s packed sum and the two passer words for
+ * `position`, through the memo (`memo` true: a hit or a miss, as `evaluate` reads it) or computed
+ * afresh (`memo` false: the memo neither read nor written), so a test can show that a hit returns
+ * what a fresh call returns, the passer words included. Nothing in production calls it.
+ */
+export function pawnStructureForTest(
+  position: Position,
+  memo: boolean,
+): { structure: number; whitePassers: number; blackPassers: number } {
+  const board = position.board;
+  let whiteMask = 0;
+  let blackMask = 0;
+  let slotWord = 0;
+  for (let square = 0; square < 128; square++) {
+    const piece = board[square];
+    if (piece === PAWN) {
+      whiteMask += PAWN_MASK_BIT[square] as number;
+      slotWord ^= PAWN_SLOT_WORD_WHITE[square] as number;
+    } else if (piece === BLACK_PAWN) {
+      blackMask += PAWN_MASK_BIT[square] as number;
+      slotWord ^= PAWN_SLOT_WORD_BLACK[square] as number;
+    }
+  }
+  const structure = memo
+    ? pawnStructureCached(board, whiteMask, blackMask, slotWord)
+    : pawnStructure(board);
+  return { structure, whitePassers: whitePassersPart, blackPassers: blackPassersPart };
 }

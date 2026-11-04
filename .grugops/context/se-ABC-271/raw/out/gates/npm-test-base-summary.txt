@@ -1,0 +1,6 @@
+main 3a08d244 (src/ 4fb3da04), full git-archive copy in <scratch>, node_modules linked, under the host lock, 2026-11-04T13:56:26Z
+ Test Files  69 passed (69)
+      Tests  2650 passed (2650)
+   Duration  9.15s (transform 0ms, setup 0ms, import 6.48s, tests 6.88s, environment 5ms)
+wall 9.46 s
+(copied from the terminal output; the run log was not kept)

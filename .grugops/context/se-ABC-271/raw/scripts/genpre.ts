@@ -1,0 +1,20 @@
+import { readFileSync, writeFileSync } from "node:fs";
+const M = "<scratch>/se271/main/src";
+const { evaluate } = await import(M + "/evaluate.ts");
+const { parseFen, toFen } = await import(M + "/fen.ts");
+const { buildCorpus, mirrorPosition } = await import(M + "/evaluate.mirror-corpus.ts");
+const { TAPER_DOOR_CORPUS } = await import(M + "/evaluate.taper-corpus.ts");
+const fx = JSON.parse(readFileSync("<worktree>/.grugops/context/qe-ABC-271-freeze/raw/fixtures.json", "utf8"));
+const q = readFileSync(M + "/evaluate.queen-on.test.ts", "utf8");
+const qs = q.slice(q.indexOf("const QUEEN_PAIR_PRE"));
+const qblock = qs.slice(0, qs.indexOf("];") );
+const qpairs = [...qblock.matchAll(/\["([^"]+)", (-?\d+)\]/g)].map((m) => [m[1], Number(m[2])]);
+const g3 = buildCorpus().map(({ position }: any) => evaluate(position));
+const door = TAPER_DOOR_CORPUS.map(({ fen }: any) => evaluate(parseFen(fen)));
+const qcheck = qpairs.filter(([f, v]) => !Object.is(evaluate(parseFen(f as string)), v)).length;
+const passerFens: string[] = [];
+for (const r of [...fx.k1a, ...fx.k1c]) { passerFens.push(r.fen); passerFens.push(toFen(mirrorPosition(parseFen(r.fen)))); }
+const passer = passerFens.map((f) => [f, evaluate(parseFen(f))]);
+const negz = [...g3, ...door, ...passer.map((x) => x[1])].filter((v) => Object.is(v, -0)).length;
+writeFileSync("<scratch>/se271/pre.json", JSON.stringify({ g3, door, qpairs, passer }));
+console.log({ g3: g3.length, door: door.length, qpairs: qpairs.length, qcheck, passer: passer.length, negz });

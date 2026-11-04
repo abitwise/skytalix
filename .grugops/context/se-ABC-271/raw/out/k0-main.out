@@ -1,0 +1,7 @@
+{"rec":"choose","name":"kiwipete","d":8,"nodes":766275,"score":-89,"move":"d5e6"}
+{"rec":"choose","name":"kiwipete","d":9,"nodes":1725150,"score":-114,"move":"e2a6"}
+{"rec":"choose","name":"position-6","d":8,"nodes":87475,"score":71,"move":"c3d5"}
+{"rec":"choose","name":"position-6","d":9,"nodes":253724,"score":78,"move":"c3d5"}
+{"rec":"choose","name":"position-6","d":10,"nodes":533916,"score":79,"move":"c3d5"}
+{"rec":"search","name":"kiwipete","d":8,"nodes":605117,"score":-89,"move":"d5e6"}
+{"rec":"search","name":"position-6","d":8,"nodes":406787,"score":74,"move":"c3d5"}
