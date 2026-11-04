@@ -12,6 +12,15 @@ adr: "ADR-0072 (form M3; ABC-286) and ADR-0073 (form C1; ABC-288) ACCEPTED 2026-
 
 # ABC-303: bundle 1, P4 + the countermove, one branch, one read
 
+> **THE COUNTERMOVE'S TERM OWED IN `NFR-009`'S SUM; A3 (a)'S COMMENT GOES WHEN `main` GOES IN; § OPEN 1, 2 AND 4 ANSWERED BY
+> REFERENCE, OPEN 1 WAITING ON THE OWNER WITH THE STRICT READING IN FORCE, 2026-11-04, by BA/PM** (task `bapm-K0-cut`, records
+> only, at `main` `8527e49f`; nothing run). Sources: `arch-ABC-303-open` `…84f9bae1`, `…e28552ac`, `…5aee89b7`, `ADR-0056`'s dated
+> block of that task, and the Orchestrator's ruling `orch-2026-10-30a` `…681c6363` 2.
+> - **Written at** § Scope item 2, The read, § What happens on a miss, § NFR triggers, test note 4, § Open 1, 2 and 4, and
+>   § Definition of Ready. The block stays word for word.
+> - **`ABC-271` K0's red is not this ticket's** (`ABC-304`): no row of tables 1 or 2 names it, so it gates neither the seal nor the read.
+> - No bar, size or priority moves. **DoR 10/10, unchanged.** The column moves are the Orchestrator's.
+
 > **Cut 2026-11-04 by BA/PM: DoR 10/10, Ready** (task `bapm-bundle-1-cut`, records only, at `main` `3ad21218`; nothing
 > run, built or timed). Sources: the owner's *"1. Bundle 1: (a)"* (`orch-2026-10-30a` `…3e73f9f9`), `ADR-0056` B7 and
 > D5's dated block of 2026-11-04, the Architect's decision `arch-owner-answers-1104b` `…88ca95bd` § 6 item 3 and its
@@ -52,6 +61,10 @@ Each item is built **exactly as its ADR states.** The parts' pages are the desig
 2. **O2c, `ADR-0073` (`ABC-288`), form C1, the countermove alone:** one 3 072-byte table, one tier after the killers, in
    both recursions, cleared with the history table (d1–d5). Switch `countermove`, on in `search()` and `chooseMove` only
    (d6). Doors `searchWithoutCountermove` / `chooseMoveWithoutCountermove` (d7).
+   *2026-11-04 (`bapm-K0-cut`; `ADR-0073` d7's dated line, `…5aee89b7` item 6): **owed under "exactly as its ADR states":
+   `countermoveByteLength()` is a term in `NFR-009` (a)'s sum row of `src/transposition.test.ts`.** The build has the byte row, P5,
+   and that bar is met; the sum omits the table. One line, when `main` goes in, before QE seals. It is no row of tables 1 or
+   2, so it gates nothing.*
 3. **One all-off door:** `searchWithoutQuietBundle` / `chooseMoveWithoutQuietBundle` turn off both parts (`ADR-0072` d6).
 4. **Every older door turns both parts off** (`ADR-0026` decision 3), `searchWithoutHistory` and `searchWithoutBundle`
    included. Rows re-point by `ADR-0072` d6's references. No zugzwang row's depth is re-pinned. The export lists grow by
@@ -135,6 +148,7 @@ are the probe's, on `0cc9afd1`.
 **The read.** One C2′, 100 games at 100 ms, all on against the merge-base, **GAIN ≥ 50.0 / 100**, with 100 of 100 complete,
 0 candidate faults and 0 losses on time. Never re-played, no subset. Then **S′ at E 1 810, a bar:** S-1, S-2 and S-4 (≥ 3.0
 of 10; below that, 10 more games and ≥ 7.0 of 20). Then **the Levels deep lane, a bar:** exit 0, every test passed.
+*2026-11-04 (`bapm-K0-cut`): the sentence stands as copied. On a candidate fault see § Open 1; on E see § Open 2.*
 
 - **The PREREG is sealed first,** by QE, in the shape `…d776c0f0`, before any game. QE adds no bar and drops none. Its
   first line says the premises are not met and were overridden by the owner's word.
@@ -154,6 +168,7 @@ of 10; below that, 10 more games and ≥ 7.0 of 20). Then **the Levels deep lane
   override does not reach them. Any lift is the owner's word.
 - **P7:** a row move first (`…f30bd604` 2).
 - **C2′ below 50.0, or an S′ collapse:** NOT MET, B6. **A fault, a loss on time or a Levels red:** a defect.
+  *2026-11-04 (`bapm-K0-cut`): for now a candidate fault closes the read unpassed. § Open 1.*
 
 - **NOT MET (B6):** nothing merges. QE records a `failed-attempt` naming the bundle. `ADR-0072` and `ADR-0073` return to
   PROPOSED, premise not met, and `ABC-286` and `ABC-288` to held. No re-play, no margin, no change of form, no subset. A part
@@ -168,6 +183,9 @@ of 10; below that, 10 more games and ≥ 7.0 of 20). Then **the Levels deep lane
   ≥ 50 ms go deep. No new default-lane file.
 - **`NFR-009`** (≤ 16 MiB, ≤ 1 MiB growth): row P5. +3 072 bytes, fixed, allocated once; about 4.6 MiB of 16 MiB in all
   (`ADR-0073` § Consequences). P4 adds one 4-entry constant and no table.
+  *2026-11-04 (`bapm-K0-cut`; `…5aee89b7` item 6): the sum row understates by 35 840 bytes on this branch, and no level is near. The
+  countermove's 3 072 is owed here (§ Scope item 2). The history table's 32 768 is `ABC-304`'s, on `main`. Both terms stand in the
+  one sum when `main` goes in.*
 - **`NFR-005`:** row P6, `G6` "≥ base" binding on the bundle, every run ≥ depth 6.
 - **`NFR-004`:** none. Neither rule reads a budget, deadline or environment (R-TC). No time rule changes.
 - **Security:** none.
@@ -182,6 +200,13 @@ of 10; below that, 10 more games and ≥ 7.0 of 20). Then **the Levels deep lane
    the base's production `src/` equals `0cc9afd1`'s.
 4. **Re-points:** rows that pin shipped-path counts re-point to the all-off door, with old and new figures in the PR
    (`ADR-0072` d7).
+   *2026-11-04 (`bapm-K0-cut`; `…84f9bae1`, `ADR-0069` d11 and `ADR-0072` d7's dated lines): **`ABC-279` A3 (a)'s comment at
+   `de15cfb2` is wrong, and it goes when `main` goes in.** It says the row "measures `ABC-279`'s skip". On
+   `…WithoutQuietBundle` it reads Q1 plus history, SEE ordering and aspiration. The door of record is `searchWithoutBundle` /
+   `chooseMoveWithoutBundle`, which `ABC-304` brings on `main`, and this branch takes it from there. As built the row is allowed
+   and green, so this gates neither QE's seal nor the read. The re-point is not a red, a STOP or an owner question. The PR lists the
+   row with 90.91 %, 96 cp, 0 changes beside it. The door behind that figure is six switches behind the shipped path, not the
+   "four changes" `…84f9bae1` says (`…5aee89b7`).*
 5. **UAT is owed,** on production lines. The QE verdict signs it (the 2026-10-22 delegation).
 
 ## Size and priority
@@ -224,9 +249,20 @@ The records do not settle these. This page adds none of them as a bar, and none 
    defect", beside "never re-played". `…d776c0f0` § 6 lists MET, below 50.0, a base fault and a harness error for C2′, and
    no candidate fault. Whether a fixed candidate plays a new C2′, and whether a C2′ already played stands after a fix for an
    S′ fault or a Levels red, is `UNKNOWN - verify`.
+   *2026-11-04 (`bapm-K0-cut`): **answered by reference, WAITING ON THE OWNER.** The Architect's answer is `ADR-0056`'s dated
+   block of `arch-ABC-303-open`, item 1 (`…5aee89b7` item 3). The Orchestrator did not rule its new C2′ against B4: "one read,
+   never re-played" is the rule the owner accepted, so a second read after a candidate fault goes to him (`…681c6363` 2).
+   **Until he answers the strict reading is in force: a candidate fault closes the read unpassed, and B6 governs the return.**
+   Two points the records leave `UNKNOWN - verify`: whether that reading also stops the block's line that a clean C2′ stands
+   and the red S′ runs again, and whether an answer after QE's seal reaches this read.*
 2. **S′'s E, for the Architect.** The block reads E 1 810. `…d776c0f0` § 6 has a blank, "1810, or the re-pinned value and
    its record", and says the block governs a difference. If the S′ pool re-pins E before the read, this page's E needs a
    dated line.
+   *2026-11-04 (`bapm-K0-cut`): **answered by reference:** `ADR-0056`'s dated block of `arch-ABC-303-open`, item 2 (`…5aee89b7`
+   item 4). E is a setting, not a bar. QE fills § 6's blank with the E in force at the seal, 1 810 today. The pool stands at 30
+   games, 18.5 / 30 = 61.7 %, and no step fires. A next merged S′ below 5.5 / 10 leaves the band, and that step is the owner's
+   question. A step before the seal is a dated line in `ADR-0056`, which governs, and a dated line here. A step after the seal
+   does not reach this read.*
 3. **The slot's reading, for the Orchestrator.** That `main` goes into the branch before the PREREG is BA/PM's reading of
    "neither makes that read stale", not his words.
 4. **The moved base, for the Orchestrator.** Two of the block's reasons for reading the bundle first, that P4 stays on the
@@ -234,6 +270,11 @@ The records do not settle these. This page adds none of them as a bar, and none 
    Under the slot a merged `ABC-301` moves the evaluation under both. Rows P3 and P4 are then read on a tree nobody has
    probed, with reach at +0.116 against +0.10. A red on them is a STOP. Whether a figure far from the one the owner was
    shown goes back to him is the Orchestrator's call, by the block. Nothing here moves a bar.
+   *2026-11-04 (`bapm-K0-cut`): **answered by reference:** `ADR-0056`'s dated block of `arch-ABC-303-open`, item 3 (`…5aee89b7`
+   item 5), and `…3c67d3c4` 4. The order stands. Reasons 1 and 2 narrow, and reason 3 reads no base and stands. **One change of
+   practice:** the hop that brings R1 and R2 on the new base brings P3 and P4 too. Whether +0.116 survives a fitted evaluation
+   stays `UNKNOWN - verify`; a red is a STOP and a lift is the owner's. "Materially worse" stays the Orchestrator's, with no
+   figure set.*
 
 ## Definition of Ready
 
@@ -250,4 +291,6 @@ The records do not settle these. This page adds none of them as a bar, and none 
 | 9 | priority | ✅ P3 |
 | 10 | no major unresolved blocker | ✅ `ADR-0072` and `ADR-0073` ACCEPTED over missed premises, which opens the build. The four § Open items do not block it; item 1 is wanted before the read |
 
-**DoR 10/10. Ready.** The column move and the build slot are the Orchestrator's.
+**DoR 10/10. Ready.** The column move and the build slot are the Orchestrator's. *2026-11-04 (`bapm-K0-cut`): row 10 holds. § Open
+1 waits on the owner and blocks neither the build nor the read, because the strict reading stands in the meantime. **DoR 10/10,
+unchanged.***

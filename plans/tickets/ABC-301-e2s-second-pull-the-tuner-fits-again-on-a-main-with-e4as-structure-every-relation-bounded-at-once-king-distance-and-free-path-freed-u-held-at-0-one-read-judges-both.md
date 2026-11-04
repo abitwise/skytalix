@@ -12,6 +12,12 @@ adr: "ADR-0067 (ACCEPTED 2026-11-03, in force as the method; the d6 amendment AD
 
 # ABC-301: E2's second pull, one bounded fit over E4a's structure, one read
 
+> **`ABC-271` K0'S SEVEN ROWS RETIRE AT SCOPE 4, ON AN EMISSION THAT MOVES ANY VALUE; THE PR TABLE LISTS THEM, 2026-11-04, by
+> BA/PM** (task `bapm-K0-cut`, records only, at `main` `8527e49f`; nothing run). Sources: `ADR-0067`'s dated line of
+> `arch-ABC-303-open`, `…e28552ac`, and the Orchestrator's ruling `orch-2026-10-30a` `…681c6363` 1.
+> - **Written at** § Scope item 4 and test note 4. The re-point of those rows is `ABC-304`'s, not this ticket's.
+> - No bar, size or priority moves. **DoR 10/10, unchanged.** The column move is the Orchestrator's.
+
 > **P1'S ROW FORM, PROVISIONAL UNTIL `qe-ABC-301-s0` READS IT; TEST NOTE 4 GAINS TWO PINS AT SCOPE 4, 2026-11-04, by
 > BA/PM** (task `bapm-lines-1104b`, records only, at `main` `732a0cea`; nothing run). Sources: the Orchestrator's ruling
 > `orch-2026-10-30a` `…878035ca` items 1, 3 and 5, and `se-ABC-301-s0` `…8fb36960`, `…534a582c`.
@@ -76,6 +82,8 @@ adr: "ADR-0067 (ACCEPTED 2026-11-03, in force as the method; the d6 amendment AD
    commit.
 4. **B-T4's re-pins, old → new, in one PR table**, plus the rows retired at `ABC-239`, which now retire here (none
    retired there, because it did not merge).
+   *2026-11-04 (`bapm-K0-cut`; `ADR-0067`'s dated line, `…681c6363` 1): **`ABC-271` K0's seven rows retire here, on an emission
+   that moves any value** (test note 4). A retired row inside this scope, not a further `src/` change.*
 5. **The reads** (B-T5–B-T8).
 
 ## Out of scope
@@ -191,6 +199,18 @@ precondition measurable.
    shape, every half 0" and "at the shipped values (every half 0) every part is 0 on every fixture". They pin the
    value-0 table under ruling `…42c82347` and go red as soon as a fit frees king distance and free path. Each is
    re-pinned or retired at scope 4 and listed old → new in the PR table. QE's check above covers these two as well.*
+   *2026-11-04 (`bapm-K0-cut`; `ADR-0067`'s dated line of `arch-ABC-303-open`; `…e28552ac`; `…681c6363` 1): **`ABC-271` K0's seven
+   rows retire at scope 4, by name, on an emission that moves any value:** `kiwipete_chooseMove_d8`, `_d9`;
+   `pos6_chooseMove_d8`, `_d9`, `_d10`; `kiwipete_search_d8`; `pos6_search_d8`, in `src/evaluate.passer.test.ts`.*
+   - *Why: a tuned table moves counts on every door, so no door restores them. K0's sentence, that the terms at 0 changed no
+     node, stops being true. Not a re-pin, and not B-T4's "identity gate", which is d5's tracer gate, B-T1, and is untouched.
+     The Orchestrator has ruled that reading, so scope 4 meets no STOP on it.*
+   - *What goes: only the deep block. `FROZEN.k0` stays in the fixture file, its count row stays, and the JSON is not edited.*
+   - ***The PR table lists the seven as retired, citing that dated line,** one row each. QE's check above covers them.*
+   - *If no value moves, or the pull does not merge, K0 stands, re-pointed (`ABC-304`).*
+   - *Until `ABC-304` reaches this branch, or scope 4 retires them, the seven read red here (`8701a422`). QE does not count that
+     as new. K0 is no row of B-T1–B-T8, and the fit reads no node count. Either order of `ABC-304` and this ticket works: its page
+     states both.*
 5. **Carried from `ABC-239`'s close, not bars** (BA/PM judgment, flagged): `954d44fb` (`QE-270-e`, a test-only change
    to the K1 (e) bite rows) is owed by this pull, since it goes red once a fit frees a queen-on mg. If step 7 is
    reached, K1 (c) takes form (A) (`ABC-239` § Close).
