@@ -108,6 +108,16 @@
  * `chooseMove`'s alone (`src/engine.ts`). Each part has its own TEST-ONLY door
  * (`searchWithoutHistory`, `searchWithoutSeeOrdering`), `searchWithoutBundle` turns both off and is
  * the pre-`ABC-283` `search()` node for node, and every older door turns both off.
+ *
+ * THE QUIET BUNDLE (ABC-303, the owner's word of 2026-11-04): two parts, in BOTH recursions, each
+ * behind its own switch. `moveCount` (`ADR-0072`, form M3): at a null-window node of remaining
+ * depth 1 to 3 with three non-pawn pieces, once 4, 7 or 12 quiet moves have been searched, a later
+ * quiet move with a zero ordering key is skipped (`moveCountNode`, `moveCountFrom`, `futileMove`).
+ * `countermove` (`ADR-0073`, form C1): the last quiet cutter after the node's previous move sorts as
+ * one tier after the killers, from a 3 072-byte table cleared with the history table. Each part has
+ * its own TEST-ONLY door (`searchWithoutMoveCountPruning`, `searchWithoutCountermove`),
+ * `searchWithoutQuietBundle` turns both off and is the pre-`ABC-303` `search()` node for node, and
+ * every older door turns both off.
  */
 
 import { makeMove, makeNullMove, unmakeMove, unmakeNullMove } from "./apply.ts";
@@ -228,7 +238,8 @@ export class KillerTable {
 /**
  * Sort tiers: the hash move above every capture, every capture above every killer, every killer
  * above every losing capture (`ABC-283`, `ADR-0065` decision 3), and every losing capture above
- * every other quiet move. A quiet move's key is max(0, its cell): history promotes, never demotes
+ * every other quiet move. The node's countermove sits after the killers and above the losing
+ * captures (`ABC-303`, `ADR-0073` decision 5). A quiet move's key is max(0, its cell): history promotes, never demotes
  * (`ADR-0063` d4, dated 2026-11-04), so the key is always within [0, `HISTORY_BOUND`] and a move
  * whose cell is at most 0 keeps generation order among the zero keys (the stable sort). With
  * both switches off the keys are 0 below the
@@ -238,6 +249,7 @@ export class KillerTable {
 const HASH_MOVE_KEY = 3_000_000;
 const TACTICAL_KEY = 1_000_000;
 const KILLER_KEY = 500_000;
+const COUNTERMOVE_KEY = 400_000;
 const LOSING_CAPTURE_KEY = 100_000;
 
 /**
@@ -259,6 +271,11 @@ function historyIndex(move: Move): number {
   return (isBlack(move.piece) ? 4096 : 0) + from * 64 + to;
 }
 
+/** A countermove cell's value for `move`: never 0, the empty cell. */
+function packedMove(move: Move): number {
+  return move.from * 128 + move.to + 1;
+}
+
 /** Gravity (`ADR-0063` decision 2): h ← h + b − trunc(h · |b| / 16 384). */
 function addHistory(move: Move, bonus: number): void {
   const index = historyIndex(move);
@@ -266,14 +283,46 @@ function addHistory(move: Move, bonus: number): void {
   HISTORY[index] = value + bonus - Math.trunc((value * Math.abs(bonus)) / HISTORY_BOUND);
 }
 
-/** Zero every cell: at every `search()` entry and every `chooseMove` call with `history` on. */
-export function clearHistory(): void {
+/**
+ * The countermove table (`ABC-303`, `ADR-0073` decision 1): one cell per previous move's coloured
+ * piece × to-square on 0-63, 3 072 bytes. A cell holds the last quiet cutter there as
+ * from × 128 + to + 1; 0 is empty. Data only, never a switch; both recursions share it, and only a
+ * recursion with `countermove` on reads or writes it.
+ */
+const COUNTERMOVE = new Int32Array(12 * 64);
+
+/** `previous`'s cell: its coloured piece, then its to-square on 0-63. */
+function countermoveIndex(previous: Move): number {
+  const colouredPiece = (isBlack(previous.piece) ? 6 : 0) + pieceType(previous.piece) - 1;
+  return colouredPiece * 64 + ((previous.to & 7) | ((previous.to >> 4) << 3));
+}
+
+/**
+ * Zero every history cell, at every `search()` entry and every `chooseMove` call with `history` on;
+ * `countermove` is that search's switch, and zeroes the countermove table with it (`ADR-0073`
+ * decision 4). A door with the switch off leaves that table as it stood (`ADR-0073` F5).
+ */
+export function clearHistory(countermove = false): void {
   HISTORY.fill(0);
+  if (countermove) COUNTERMOVE.fill(0);
 }
 
 /** The history table's fixed size in bytes, for `NFR-009` (a)'s byte-length sum. */
 export function historyByteLength(): number {
   return HISTORY.byteLength;
+}
+
+/** The countermove table's fixed size in bytes, for `NFR-009` (a)'s byte-length sum. */
+export function countermoveByteLength(): number {
+  return COUNTERMOVE.byteLength;
+}
+
+/**
+ * The cell of `previous`, read-only: the packed cutter recorded after that move, or 0. A recursion
+ * with `countermove` on reads the node's countermove here; `orderMoves` takes the answer.
+ */
+export function countermoveAt(previous: Move): number {
+  return COUNTERMOVE[countermoveIndex(previous)] as number;
 }
 
 /** TEST-ONLY read of `move`'s history cell. Not an engine option; nothing in production calls it. */
@@ -289,6 +338,12 @@ export function historyScore(move: Move): number {
  * that was searched gets -d². A move futility skipped was never searched and gets nothing; the
  * test is `futileMove` again, which answers the same on the restored position. Nothing is updated
  * in quiescence, at the root or on a null-move cutoff: no caller there.
+ *
+ * `ABC-303`: `previous` is the node's previous move when `countermove` is on, and null otherwise;
+ * a quiet cutter overwrites its countermove cell (`ADR-0073` decision 2). `firstSkipped` is the
+ * first index the move-count rule skipped, -1 for none: from there on a move `futileMove` answers
+ * for was never searched and gets no malus, so a late checking cutter leaves the skipped moves'
+ * cells alone (`ADR-0072` decision 3).
  */
 export function recordHistoryCutoff(
   position: Position,
@@ -296,15 +351,19 @@ export function recordHistoryCutoff(
   cutIndex: number,
   depth: number,
   futile: boolean,
+  previous: Move | null = null,
+  firstSkipped = -1,
 ): void {
   const cutter = list[cutIndex] as Move;
   if (cutter.captured !== EMPTY || cutter.promotion !== EMPTY) return;
   const bonus = depth * depth;
   addHistory(cutter, bonus);
+  if (previous !== null) COUNTERMOVE[countermoveIndex(previous)] = packedMove(cutter);
   for (let index = 0; index < cutIndex; index++) {
     const move = list[index] as Move;
     if (move.captured !== EMPTY || move.promotion !== EMPTY) continue;
     if (futile && futileMove(position, move, index)) continue;
+    if (firstSkipped !== -1 && index >= firstSkipped && futileMove(position, move, index)) continue;
     addHistory(move, 0 - bonus);
   }
 }
@@ -327,7 +386,8 @@ function losingForOrdering(position: Position, capture: Move): boolean {
 
 /**
  * `move`'s sort key, by the tiers above. A quiet move's key is max(0, its cell): history promotes,
- * never demotes (`ADR-0063` d4, dated 2026-11-04).
+ * never demotes (`ADR-0063` d4, dated 2026-11-04). `countermove` is the node's packed countermove,
+ * 0 for none: a promotion only, so the move it names keeps any higher tier and no move is demoted.
  */
 function orderKey(
   move: Move,
@@ -335,6 +395,7 @@ function orderKey(
   hashMove: Move | null,
   seePosition: Position | null,
   history: boolean,
+  countermove: number,
 ): number {
   if (hashMove !== null && sameMove(move, hashMove)) return HASH_MOVE_KEY;
   if (move.captured !== EMPTY || move.promotion !== EMPTY) {
@@ -345,6 +406,7 @@ function orderKey(
   }
   const killer = killers.findIndex((candidate) => sameMove(candidate, move));
   if (killer !== -1) return KILLER_KEY + killers.length - killer;
+  if (countermove !== 0 && countermove === packedMove(move)) return COUNTERMOVE_KEY;
   return history ? Math.max(0, HISTORY[historyIndex(move)] as number) : 0;
 }
 
@@ -367,7 +429,8 @@ export function orderScratchByteLength(): number {
  * `ABC-283`: `seePosition` is the node's position when `seeOrdering` is on, and `null` otherwise:
  * with it, a losing capture (`losingForOrdering`) sorts after the killers. `history` true orders
  * the other quiet moves by their history cells. Both default off, so a three-argument call is the
- * pre-`ABC-283` comparator, and with both off nothing is computed.
+ * pre-`ABC-283` comparator, and with both off nothing is computed. `countermove` (`ABC-303`) is the
+ * node's packed countermove, default none, so a five-argument call is the pre-`ABC-303` comparator.
  *
  * NO PER-MOVE ALLOCATION (`ABC-240`, the Architect's four conditions): each key is computed once
  * into `ORDER_KEYS`, a fixed float64 module scratch (keys stay float64 — `mvvLvaKey`'s attacker
@@ -382,13 +445,14 @@ export function orderMoves(
   hashMove: Move | null,
   seePosition: Position | null = null,
   history = false,
+  countermove = 0,
 ): Move[] {
   const count = moves.length;
   const out = moves.slice();
   const keys = count <= ORDER_SCRATCH_LENGTH ? ORDER_KEYS : new Float64Array(count);
   for (let i = 0; i < count; i++) {
     const move = out[i] as Move;
-    const key = orderKey(move, killers, hashMove, seePosition, history);
+    const key = orderKey(move, killers, hashMove, seePosition, history, countermove);
     let j = i;
     while (j > 0 && (keys[j - 1] as number) < key) {
       keys[j] = keys[j - 1] as number;
@@ -492,6 +556,18 @@ interface Switches {
    * every older door turn it off, and then no SEE is computed in the full-width search.
    */
   readonly seeOrdering: boolean;
+  /**
+   * Move-count pruning (`ABC-303`, `ADR-0072`), by `moveCountNode`, `moveCountFrom` and `futileMove`.
+   * True on `search()` and `searchWithoutCountermove`; `searchWithoutMoveCountPruning`,
+   * `searchWithoutQuietBundle` and every older door turn it off.
+   */
+  readonly moveCount: boolean;
+  /**
+   * The countermove tier (`ABC-303`, `ADR-0073`). True on `search()` and
+   * `searchWithoutMoveCountPruning`; `searchWithoutCountermove`, `searchWithoutQuietBundle` and
+   * every older door turn it off, and then nothing reads or writes the table.
+   */
+  readonly countermove: boolean;
 }
 
 /** The least remaining depth, and the least 0-based index in the ordered list, a reduced move has. */
@@ -616,6 +692,61 @@ export function futileMove(position: Position, move: Move, index: number): boole
   return !givesCheck(position, move);
 }
 
+/**
+ * The quiet moves searched before the rule acts, by remaining depth (`ADR-0072` decision 2):
+ * 3 + d², 4 at depth 1, 7 at 2 and 12 at 3; index 0 is never read. Never written after load.
+ */
+const MOVE_COUNT_LIMIT: readonly number[] = [0, 4, 7, 12];
+
+/**
+ * THE move-count node test (`ABC-303`, `ADR-0072` decisions 1 and 4): T[d] for a node of remaining
+ * `depth` at `ply`, entered with the window `(alphaIn, beta)`, or 0 for no pruning. Both recursions
+ * call it once per node, with the entry window.
+ *
+ * T[d] exactly when every clause holds: not the root (`ply > 0`); a null window
+ * (`alphaIn + 1 === beta`); remaining depth 1, 2 or 3; alpha and beta both strictly inside
+ * (-`MATE_FLOOR`, `MATE_FLOOR`); the side to move not in check; and at least three non-pawn pieces
+ * for the side to move (`NULL_MOVE_MIN_PIECES`, the null move's guard). Check and material are
+ * derived HERE, from the position. Pure: it reads the position and changes nothing.
+ */
+export function moveCountNode(
+  position: Position,
+  depth: number,
+  ply: number,
+  alphaIn: number,
+  beta: number,
+): number {
+  if (ply === 0 || alphaIn + 1 !== beta) return 0;
+  if (depth < 1 || depth > 3) return 0;
+  if (alphaIn >= MATE_FLOOR || alphaIn <= 0 - MATE_FLOOR) return 0;
+  if (beta >= MATE_FLOOR || beta <= 0 - MATE_FLOOR) return 0;
+  if (isInCheck(position)) return 0;
+  const board = position.board;
+  let pieces = 0;
+  for (let square = 0; square < 128; square++) {
+    if (!isOnBoard(square)) continue;
+    const piece = board[square] as number;
+    if (piece === EMPTY || isBlack(piece) !== position.blackToMove) continue;
+    const type = pieceType(piece);
+    if (type !== PAWN && type !== KING && ++pieces === NULL_MOVE_MIN_PIECES) {
+      return MOVE_COUNT_LIMIT[depth] as number;
+    }
+  }
+  return 0;
+}
+
+/**
+ * The first index of the `count` moves `orderMoves` just sorted whose key is 0, or `count` for none
+ * (`ABC-303`, `ADR-0072` decision 4): K3's zero tier, a tail of the list. Read from `ORDER_KEYS`
+ * straight after the sort, before any recursion overwrites the scratch.
+ */
+export function moveCountFrom(count: number): number {
+  for (let index = 0; index < count; index++) {
+    if (ORDER_KEYS[index] === 0) return index;
+  }
+  return count;
+}
+
 /** The move list in the order `switches.ordering` asks for, at `ply` of `position`. */
 function ordered(
   position: Position,
@@ -624,6 +755,7 @@ function ordered(
   switches: Switches,
   killers: KillerTable,
   hashMove: Move | null,
+  countermove: number,
 ): readonly Move[] {
   if (switches.ordering === "none") return moves;
   if (switches.ordering === "mvv-lva") return orderMoves(moves, NO_KILLERS, null);
@@ -633,6 +765,7 @@ function ordered(
     hashMove,
     switches.seeOrdering ? position : null,
     switches.history,
+    countermove,
   );
 }
 
@@ -706,6 +839,9 @@ function leafScore(
  *
  * `phase` is this node's `phaseOf(position)`, written by the parent as `phaseAfterMove` (`ABC-269`
  * cut C1): an argument like `afterNull`, never state. The null move's child keeps it.
+ *
+ * `previous` is the move that led here, written by the parent (`ABC-303`, `ADR-0073` decision 3):
+ * an argument too, and null at a null move's child.
  */
 function negamax(
   position: Position,
@@ -719,6 +855,7 @@ function negamax(
   keys: BigUint64Array,
   afterNull: boolean,
   phase: number,
+  previous: Move | null,
 ): number {
   counter.nodes++;
 
@@ -755,6 +892,7 @@ function negamax(
           keys,
           true,
           phase,
+          null,
         );
       unmakeNullMove(position, nullUndo);
       // Beta, never the null score: a mate found after a pass is no mate. Nothing is stored.
@@ -778,11 +916,26 @@ function negamax(
   let best = Number.NEGATIVE_INFINITY;
   let bestMove = moves[0] as Move;
   let index = 0;
-  const list = ordered(position, moves, ply, switches, killers, hashMove);
+  const previousCut = switches.countermove ? previous : null;
+  const countermove = previousCut === null ? 0 : countermoveAt(previousCut);
+  const list = ordered(position, moves, ply, switches, killers, hashMove, countermove);
+  // Move-count pruning (`ABC-303`): the tail is read here, before any recursion reuses the keys.
+  const moveLimit = switches.moveCount ? moveCountNode(position, depth, ply, alphaIn, beta) : 0;
+  const zeroFrom = moveLimit > 0 ? moveCountFrom(list.length) : 0;
+  let searchedQuiets = 0;
+  let firstSkipped = -1;
   for (const move of list) {
     if (futile && futileMove(position, move, index)) {
       index++;
       continue;
+    }
+    if (moveLimit > 0) {
+      if (searchedQuiets >= moveLimit && index >= zeroFrom && futileMove(position, move, index)) {
+        if (firstSkipped === -1) firstSkipped = index;
+        index++;
+        continue;
+      }
+      if (move.captured === EMPTY && move.promotion === EMPTY) searchedQuiets++;
     }
     const reduction = switches.reductions
       ? lateMoveReduction(position, move, depth, index, false)
@@ -802,6 +955,7 @@ function negamax(
       killers,
       keys,
       phaseAfterMove(phase, move),
+      move,
     );
     unmakeMove(position, move, undo);
     index++;
@@ -813,7 +967,9 @@ function negamax(
     if (!prune) continue;
     if (best > alpha) alpha = best;
     if (alpha >= beta) {
-      if (switches.history) recordHistoryCutoff(position, list, index - 1, depth, futile);
+      if (switches.history) {
+        recordHistoryCutoff(position, list, index - 1, depth, futile, previousCut, firstSkipped);
+      }
       killers.record(ply, move);
       break; // the opponent would never allow this node; the rest cannot matter
     }
@@ -840,6 +996,7 @@ function negamax(
  * is the line every LMR bug skips, and at a null-window node nothing else would repeat it (`A4`).
  *
  * `childPhase` is the made move's child's phase, `phaseAfterMove` of the node's (`ABC-269` cut C1).
+ * `move` is the move just made, the child's `previous` (`ABC-303`).
  */
 function searchMove(
   position: Position,
@@ -854,6 +1011,7 @@ function searchMove(
   killers: KillerTable,
   keys: BigUint64Array,
   childPhase: number,
+  move: Move,
 ): number {
   const child = ply + 1;
   if (index === 0 || !switches.pvs) {
@@ -871,6 +1029,7 @@ function searchMove(
         keys,
         false,
         childPhase,
+        move,
       )
     );
   }
@@ -888,6 +1047,7 @@ function searchMove(
       keys,
       false,
       childPhase,
+      move,
     );
   if (score > alpha && reduction > 0) {
     score =
@@ -904,6 +1064,7 @@ function searchMove(
         keys,
         false,
         childPhase,
+        move,
       );
   }
   if (score > alpha && score < beta) {
@@ -921,6 +1082,7 @@ function searchMove(
         keys,
         false,
         childPhase,
+        move,
       );
   }
   return score;
@@ -945,7 +1107,7 @@ function searchRoot(position: Position, depth: number, switches: Switches): Sear
   const keys = new BigUint64Array(KEY_ARRAY_CAPACITY + 1);
   keys[0] = zobristKey(position);
   if (switches.table) clearTable();
-  if (switches.history) clearHistory();
+  if (switches.history) clearHistory(switches.countermove);
 
   // `!(depth >= 1)` and not `depth < 1`: a depth-less call's `NaN` must land here too. Before the
   // key array it recursed until the stack overflowed; `KEY_ARRAY_CAPACITY` now stops that
@@ -976,7 +1138,7 @@ function searchRoot(position: Position, depth: number, switches: Switches): Sear
   const hashMove = slot === -1 ? null : entryMove(slot, moves);
   let alpha = Number.NEGATIVE_INFINITY;
   let best = Number.NEGATIVE_INFINITY;
-  const rootMoves = ordered(position, moves, 0, switches, killers, hashMove);
+  const rootMoves = ordered(position, moves, 0, switches, killers, hashMove, 0);
   let bestMove = rootMoves[0] as Move;
 
   let index = 0;
@@ -999,6 +1161,7 @@ function searchRoot(position: Position, depth: number, switches: Switches): Sear
       killers,
       keys,
       phaseAfterMove(rootPhase, move),
+      move,
     );
     unmakeMove(position, move, undo);
     index++;
@@ -1035,6 +1198,84 @@ export function search(position: Position, depth: number): SearchResult {
     seePruning: true,
     history: true,
     seeOrdering: true,
+    moveCount: true,
+    countermove: true,
+  });
+}
+
+/**
+ * TEST-ONLY. `search()` with move-count pruning off (`ABC-303`, `ADR-0072` decision 6), the
+ * countermove and everything older on. Not an engine option; nothing in production calls it.
+ */
+export function searchWithoutMoveCountPruning(position: Position, depth: number): SearchResult {
+  return searchRoot(position, depth, {
+    prune: true,
+    quiescence: true,
+    ordering: "full",
+    table: true,
+    pvs: true,
+    reductions: true,
+    nullMove: true,
+    quiescenceEvasions: true,
+    quietPromotions: true,
+    futility: true,
+    taper: true,
+    seePruning: true,
+    history: true,
+    seeOrdering: true,
+    moveCount: false,
+    countermove: true,
+  });
+}
+
+/**
+ * TEST-ONLY. `search()` with the countermove off (`ABC-303`, `ADR-0073` decision 7), move-count
+ * pruning and everything older on. Not an engine option; nothing in production calls it.
+ */
+export function searchWithoutCountermove(position: Position, depth: number): SearchResult {
+  return searchRoot(position, depth, {
+    prune: true,
+    quiescence: true,
+    ordering: "full",
+    table: true,
+    pvs: true,
+    reductions: true,
+    nullMove: true,
+    quiescenceEvasions: true,
+    quietPromotions: true,
+    futility: true,
+    taper: true,
+    seePruning: true,
+    history: true,
+    seeOrdering: true,
+    moveCount: true,
+    countermove: false,
+  });
+}
+
+/**
+ * TEST-ONLY. The pre-`ABC-303` `search()`, node for node: move-count pruning and the countermove
+ * both off, everything else on. It is the all-off door of the bundle (`ABC-303` P0). Not an engine
+ * option; nothing in production calls it.
+ */
+export function searchWithoutQuietBundle(position: Position, depth: number): SearchResult {
+  return searchRoot(position, depth, {
+    prune: true,
+    quiescence: true,
+    ordering: "full",
+    table: true,
+    pvs: true,
+    reductions: true,
+    nullMove: true,
+    quiescenceEvasions: true,
+    quietPromotions: true,
+    futility: true,
+    taper: true,
+    seePruning: true,
+    history: true,
+    seeOrdering: true,
+    moveCount: false,
+    countermove: false,
   });
 }
 
@@ -1058,6 +1299,8 @@ export function searchWithoutHistory(position: Position, depth: number): SearchR
     seePruning: true,
     history: false,
     seeOrdering: true,
+    moveCount: false,
+    countermove: false,
   });
 }
 
@@ -1081,6 +1324,8 @@ export function searchWithoutSeeOrdering(position: Position, depth: number): Sea
     seePruning: true,
     history: true,
     seeOrdering: false,
+    moveCount: false,
+    countermove: false,
   });
 }
 
@@ -1106,6 +1351,8 @@ export function searchWithoutBundle(position: Position, depth: number): SearchRe
     seePruning: true,
     history: false,
     seeOrdering: false,
+    moveCount: false,
+    countermove: false,
   });
 }
 
@@ -1132,6 +1379,8 @@ export function searchWithoutSeePruning(position: Position, depth: number): Sear
     seePruning: false,
     history: false,
     seeOrdering: false,
+    moveCount: false,
+    countermove: false,
   });
 }
 
@@ -1158,6 +1407,8 @@ export function searchWithoutTaper(position: Position, depth: number): SearchRes
     seePruning: false,
     history: false,
     seeOrdering: false,
+    moveCount: false,
+    countermove: false,
   });
 }
 
@@ -1184,6 +1435,8 @@ export function searchWithoutFutility(position: Position, depth: number): Search
     seePruning: false,
     history: false,
     seeOrdering: false,
+    moveCount: false,
+    countermove: false,
   });
 }
 
@@ -1210,6 +1463,8 @@ export function searchWithoutQuietPromotions(position: Position, depth: number):
     seePruning: false,
     history: false,
     seeOrdering: false,
+    moveCount: false,
+    countermove: false,
   });
 }
 
@@ -1235,6 +1490,8 @@ export function searchWithoutQuiescenceEvasions(position: Position, depth: numbe
     seePruning: false,
     history: false,
     seeOrdering: false,
+    moveCount: false,
+    countermove: false,
   });
 }
 
@@ -1260,6 +1517,8 @@ export function searchWithoutNullMove(position: Position, depth: number): Search
     seePruning: false,
     history: false,
     seeOrdering: false,
+    moveCount: false,
+    countermove: false,
   });
 }
 
@@ -1289,6 +1548,8 @@ export function searchWithoutPruning(position: Position, depth: number): SearchR
     seePruning: false,
     history: false,
     seeOrdering: false,
+    moveCount: false,
+    countermove: false,
   });
 }
 
@@ -1316,6 +1577,8 @@ export function searchWithoutQuiescence(position: Position, depth: number): Sear
     seePruning: false,
     history: false,
     seeOrdering: false,
+    moveCount: false,
+    countermove: false,
   });
 }
 
@@ -1345,6 +1608,8 @@ export function searchWithoutPruningOrQuiescence(position: Position, depth: numb
     seePruning: false,
     history: false,
     seeOrdering: false,
+    moveCount: false,
+    countermove: false,
   });
 }
 
@@ -1370,6 +1635,8 @@ export function searchWithoutOrdering(position: Position, depth: number): Search
     seePruning: false,
     history: false,
     seeOrdering: false,
+    moveCount: false,
+    countermove: false,
   });
 }
 
@@ -1394,6 +1661,8 @@ export function searchWithoutKillers(position: Position, depth: number): SearchR
     seePruning: false,
     history: false,
     seeOrdering: false,
+    moveCount: false,
+    countermove: false,
   });
 }
 
@@ -1419,6 +1688,8 @@ export function searchWithoutTable(position: Position, depth: number): SearchRes
     seePruning: false,
     history: false,
     seeOrdering: false,
+    moveCount: false,
+    countermove: false,
   });
 }
 
@@ -1444,6 +1715,8 @@ export function searchWithoutReductions(position: Position, depth: number): Sear
     seePruning: false,
     history: false,
     seeOrdering: false,
+    moveCount: false,
+    countermove: false,
   });
 }
 
@@ -1469,5 +1742,7 @@ export function searchWithoutPvsOrReductions(position: Position, depth: number):
     seePruning: false,
     history: false,
     seeOrdering: false,
+    moveCount: false,
+    countermove: false,
   });
 }

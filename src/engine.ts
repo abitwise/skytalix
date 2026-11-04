@@ -121,6 +121,10 @@
  * the shipped `chooseMove` with one part off) and `chooseMoveWithoutBundle`, the pre-`ABC-283`
  * `chooseMove`, node for node. Every older door turns all three off. None takes a depth.
  *
+ * THE QUIET BUNDLE (`ABC-303`) reaches it by two switches, `moveCount` and `countermove`, whose rules
+ * are `src/search.ts`'s, one door each and one all-off door (`chooseMoveWithoutQuietBundle`); every
+ * older door turns both off.
+ *
  * NOT HERE, each owned elsewhere: difficulty selection and how a level persists (`EPIC-006`), the
  * budget-to-level mapping (`ABC-087`), and threading (`ADR-0005` F6 leaves it to
  * Architect/Design).
@@ -131,16 +135,19 @@ import { phaseAfterMove, phaseOf } from "./evaluate.ts";
 import { leafEndReason } from "./gameend.ts";
 import { isInCheck, legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
-import type { Position } from "./position.ts";
+import { EMPTY, type Position } from "./position.ts";
 import { type QuiescenceRules, type QuiescenceVisitor, quiesce } from "./quiescence.ts";
 import {
   clearHistory,
+  countermoveAt,
   futileMove,
   futilityNode,
   KEY_ARRAY_CAPACITY,
   KillerTable,
   lateMoveReduction,
   MATE_SCORE,
+  moveCountFrom,
+  moveCountNode,
   nullMoveReduction,
   orderMoves,
   recordHistoryCutoff,
@@ -331,6 +338,16 @@ interface Heuristics {
    * `chooseMoveWithoutHistory` and `chooseMoveWithoutSeeOrdering`.
    */
   readonly aspiration: boolean;
+  /**
+   * Move-count pruning (`ABC-303`, `ADR-0072`): true on `chooseMove` and
+   * `chooseMoveWithoutCountermove`.
+   */
+  readonly moveCount: boolean;
+  /**
+   * The countermove tier (`ABC-303`, `ADR-0073`): true on `chooseMove` and
+   * `chooseMoveWithoutMoveCountPruning`.
+   */
+  readonly countermove: boolean;
 }
 
 /** The quiescence rules this recursion hands `quiesce` (`ADR-0053` decision 6): constants, never built per leaf. */
@@ -464,6 +481,7 @@ function negamax(
   budget: Budget,
   afterNull: boolean,
   phase: number,
+  previous: Move | null,
 ): number {
   countNode(budget);
 
@@ -504,6 +522,7 @@ function negamax(
             budget,
             true,
             phase,
+            null,
           );
       } finally {
         unmakeNullMove(position, nullUndo);
@@ -524,17 +543,32 @@ function negamax(
   let best = Number.NEGATIVE_INFINITY;
   let bestMove = moves[0] as Move;
   let index = 0;
+  const previousCut = budget.countermove ? previous : null;
   const list = orderMoves(
     moves,
     budget.killers.at(ply),
     hashMove,
     budget.seeOrdering ? position : null,
     budget.history,
+    previousCut === null ? 0 : countermoveAt(previousCut),
   );
+  // Move-count pruning (`ABC-303`): the tail is read here, before any recursion reuses the keys.
+  const moveLimit = budget.moveCount ? moveCountNode(position, remaining, ply, alphaIn, beta) : 0;
+  const zeroFrom = moveLimit > 0 ? moveCountFrom(list.length) : 0;
+  let searchedQuiets = 0;
+  let firstSkipped = -1;
   for (const move of list) {
     if (futile && futileMove(position, move, index)) {
       index++;
       continue;
+    }
+    if (moveLimit > 0) {
+      if (searchedQuiets >= moveLimit && index >= zeroFrom && futileMove(position, move, index)) {
+        if (firstSkipped === -1) firstSkipped = index;
+        index++;
+        continue;
+      }
+      if (move.captured === EMPTY && move.promotion === EMPTY) searchedQuiets++;
     }
     const reduction = budget.reductions
       ? lateMoveReduction(position, move, remaining, index, false)
@@ -553,6 +587,7 @@ function negamax(
         reduction,
         budget,
         phaseAfterMove(phase, move),
+        move,
       );
     } finally {
       unmakeMove(position, move, undo);
@@ -565,7 +600,17 @@ function negamax(
     }
     if (best > alpha) alpha = best;
     if (alpha >= beta) {
-      if (budget.history) recordHistoryCutoff(position, list, index - 1, remaining, futile);
+      if (budget.history) {
+        recordHistoryCutoff(
+          position,
+          list,
+          index - 1,
+          remaining,
+          futile,
+          previousCut,
+          firstSkipped,
+        );
+      }
       budget.killers.record(ply, move);
       break;
     }
@@ -583,7 +628,8 @@ function negamax(
  * gets the node's own window; with `pvs` on a later move gets the null window first, `reduction`
  * plies shallower; a reduced search that fails high is repeated at full depth with the same null
  * window; and the full window is searched again only when it fails high inside `(alpha, beta)`.
- * `childPhase` is the made move's child's phase (`ABC-269` cut C1).
+ * `childPhase` is the made move's child's phase (`ABC-269` cut C1); `move` is the move just made,
+ * the child's `previous` (`ABC-303`).
  */
 function searchMove(
   position: Position,
@@ -595,11 +641,13 @@ function searchMove(
   reduction: number,
   budget: Budget,
   childPhase: number,
+  move: Move,
 ): number {
   const child = ply + 1;
   if (index === 0 || !budget.pvs) {
     return (
-      0 - negamax(position, remaining - 1, 0 - beta, 0 - alpha, child, budget, false, childPhase)
+      0 -
+      negamax(position, remaining - 1, 0 - beta, 0 - alpha, child, budget, false, childPhase, move)
     );
   }
   let score =
@@ -613,15 +661,27 @@ function searchMove(
       budget,
       false,
       childPhase,
+      move,
     );
   if (score > alpha && reduction > 0) {
     score =
       0 -
-      negamax(position, remaining - 1, 0 - alpha - 1, 0 - alpha, child, budget, false, childPhase);
+      negamax(
+        position,
+        remaining - 1,
+        0 - alpha - 1,
+        0 - alpha,
+        child,
+        budget,
+        false,
+        childPhase,
+        move,
+      );
   }
   if (score > alpha && score < beta) {
     score =
-      0 - negamax(position, remaining - 1, 0 - beta, 0 - alpha, child, budget, false, childPhase);
+      0 -
+      negamax(position, remaining - 1, 0 - beta, 0 - alpha, child, budget, false, childPhase, move);
   }
   return score;
 }
@@ -694,6 +754,7 @@ function runIteration(
         reduction,
         budget,
         phaseAfterMove(rootPhase, move),
+        move,
       );
     } finally {
       unmakeMove(position, move, undo);
@@ -785,6 +846,87 @@ export function chooseMove(position: Position, options: EngineOptions): EngineCh
     history: true,
     seeOrdering: true,
     aspiration: true,
+    moveCount: true,
+    countermove: true,
+  });
+}
+
+/**
+ * TEST-ONLY. `chooseMove` with move-count pruning off (`ABC-303`, `ADR-0072` decision 6), the
+ * countermove and everything older on. Not an engine option; nothing in production calls it.
+ */
+export function chooseMoveWithoutMoveCountPruning(
+  position: Position,
+  options: EngineOptions,
+): EngineChoice | null {
+  return deepen(position, options, {
+    pvs: true,
+    reductions: true,
+    nullMove: true,
+    priorKeys: true,
+    quiescenceEvasions: true,
+    quietPromotions: true,
+    futility: true,
+    taper: true,
+    seePruning: true,
+    history: true,
+    seeOrdering: true,
+    aspiration: true,
+    moveCount: false,
+    countermove: true,
+  });
+}
+
+/**
+ * TEST-ONLY. `chooseMove` with the countermove off (`ABC-303`, `ADR-0073` decision 7), move-count
+ * pruning and everything older on. Not an engine option; nothing in production calls it.
+ */
+export function chooseMoveWithoutCountermove(
+  position: Position,
+  options: EngineOptions,
+): EngineChoice | null {
+  return deepen(position, options, {
+    pvs: true,
+    reductions: true,
+    nullMove: true,
+    priorKeys: true,
+    quiescenceEvasions: true,
+    quietPromotions: true,
+    futility: true,
+    taper: true,
+    seePruning: true,
+    history: true,
+    seeOrdering: true,
+    aspiration: true,
+    moveCount: true,
+    countermove: false,
+  });
+}
+
+/**
+ * TEST-ONLY. The pre-`ABC-303` `chooseMove`, node for node: move-count pruning and the countermove
+ * both off, everything else on. It is the all-off door of the bundle (`ABC-303` P0). Not an engine
+ * option; nothing in production calls it.
+ */
+export function chooseMoveWithoutQuietBundle(
+  position: Position,
+  options: EngineOptions,
+): EngineChoice | null {
+  return deepen(position, options, {
+    pvs: true,
+    reductions: true,
+    nullMove: true,
+    priorKeys: true,
+    quiescenceEvasions: true,
+    quietPromotions: true,
+    futility: true,
+    taper: true,
+    seePruning: true,
+    history: true,
+    seeOrdering: true,
+    aspiration: true,
+    moveCount: false,
+    countermove: false,
   });
 }
 
@@ -810,6 +952,8 @@ export function chooseMoveWithoutHistory(
     history: false,
     seeOrdering: true,
     aspiration: true,
+    moveCount: false,
+    countermove: false,
   });
 }
 
@@ -835,6 +979,8 @@ export function chooseMoveWithoutSeeOrdering(
     history: true,
     seeOrdering: false,
     aspiration: true,
+    moveCount: false,
+    countermove: false,
   });
 }
 
@@ -860,6 +1006,8 @@ export function chooseMoveWithoutAspiration(
     history: true,
     seeOrdering: true,
     aspiration: false,
+    moveCount: false,
+    countermove: false,
   });
 }
 
@@ -887,6 +1035,8 @@ export function chooseMoveWithoutBundle(
     history: false,
     seeOrdering: false,
     aspiration: false,
+    moveCount: false,
+    countermove: false,
   });
 }
 
@@ -914,6 +1064,8 @@ export function chooseMoveWithoutSeePruning(
     history: false,
     seeOrdering: false,
     aspiration: false,
+    moveCount: false,
+    countermove: false,
   });
 }
 
@@ -941,6 +1093,8 @@ export function chooseMoveWithoutTaper(
     history: false,
     seeOrdering: false,
     aspiration: false,
+    moveCount: false,
+    countermove: false,
   });
 }
 
@@ -968,6 +1122,8 @@ export function chooseMoveWithoutFutility(
     history: false,
     seeOrdering: false,
     aspiration: false,
+    moveCount: false,
+    countermove: false,
   });
 }
 
@@ -995,6 +1151,8 @@ export function chooseMoveWithoutQuietPromotions(
     history: false,
     seeOrdering: false,
     aspiration: false,
+    moveCount: false,
+    countermove: false,
   });
 }
 
@@ -1021,6 +1179,8 @@ export function chooseMoveWithoutQuiescenceEvasions(
     history: false,
     seeOrdering: false,
     aspiration: false,
+    moveCount: false,
+    countermove: false,
   });
 }
 
@@ -1047,6 +1207,8 @@ export function chooseMoveWithoutNullMove(
     history: false,
     seeOrdering: false,
     aspiration: false,
+    moveCount: false,
+    countermove: false,
   });
 }
 
@@ -1073,6 +1235,8 @@ export function chooseMoveWithoutReductions(
     history: false,
     seeOrdering: false,
     aspiration: false,
+    moveCount: false,
+    countermove: false,
   });
 }
 
@@ -1098,6 +1262,8 @@ export function chooseMoveWithoutPvsOrReductions(
     history: false,
     seeOrdering: false,
     aspiration: false,
+    moveCount: false,
+    countermove: false,
   });
 }
 
@@ -1127,7 +1293,7 @@ function deepen(
   };
   budget.keys[0] = zobristKey(position);
   clearTable();
-  if (heuristics.history) clearHistory();
+  if (heuristics.history) clearHistory(heuristics.countermove);
 
   const rootMoves = legalMoves(position);
   if (rootMoves.length === 0) return null;
