@@ -7,10 +7,23 @@ size: M
 priority: P3
 epic: EPIC-011
 feature: —
-adr: "owed (the Architect's): a new ADR (ADR-0026 d10) or an ADR-0063 amendment, the Architect's call: the tables (countermove, continuation history: keys, entry width, size), where they sit in the order after the killers and history, the update and clearing rule, the pay gate (ADR-0063's ≤ 0.95× precedent), the firing figure at 100 ms and the intent. A new ADR or an amendment of an accepted one is the owner's to accept (reading (b))"
+adr: "ADR-0073 PROPOSED, premise not met (arch-bundle-1: form C1, the countermove alone; CH3 missed, F1 fired). The build does not start on PROPOSED; it waits on the owner's word (OQ-0073-1, one answer with OQ-0072-1)"
 ---
 
 # ABC-288: countermove and continuation history (O2c)
+
+> **THE `adr:` LINE NAMES `ADR-0073`, PROPOSED, PREMISE NOT MET; EVERYTHING ELSE WAITS ON THE OWNER'S ANSWER, 2026-11-04,
+> by BA/PM** (task `bapm-lines-1104b`, records only, at `main` `732a0cea`; nothing run). Sources: `arch-bundle-1`
+> `…37b7fb23` and the Orchestrator's `orch-2026-10-30a` `…878035ca` 4.
+> - **The probe has run.** Rule A picks form C1, the countermove alone. On its own door it meets CH2 and misses **CH3**:
+>   1.0031 / 0.9999 / 1.0935 / 0.9989 (≤ 0.95 on each). **F1 fired.** The form narrows this ticket's scope, so that goes
+>   to the owner with the acceptance.
+> - **Open: OQ-0073-1,** one answer with OQ-0072-1, (a), (b) or (c) (`EPIC-011` § Owner questions). (c) is the default
+>   without an answer. The build does not start without his word.
+> - **Waiting on his answer, and not written here:** DoR row 10's text; CH1's bytes and CH3's number; on his yes, the
+>   title and scope 1 dropping continuation history; the F1 disposition as he rules; on (a), the bundle ticket. Lines
+>   below that still read "held on the Architect's probe" or "the ADR is owed" are read with this block.
+> - No bar moves. **DoR 9/10, Backlog, held, unchanged.** The board move is the Orchestrator's.
 
 > **UNHELD FOR ITS PROBE 2026-11-04: `ABC-283` MERGED (`58e90d07`), by BA/PM** (task `bapm-ABC-283-done`, records
 > only, at `main` `fd6b595f`; nothing run). Source: the Orchestrator's disposition `orch-2026-10-30a` `…2409cec9` 5
@@ -89,6 +102,10 @@ The ADR fixes exact counts and bars before Ready. None is loosened after Ready.
   ADR states the bytes. A form over 16 MiB in all is the owner's word (`Q-3K-6`'s shape), not this ticket's.
 - **`NFR-005`** (`G6`): "≥ base" binds.
 - **`NFR-008`** (≤ 10 s): units only in the default lane.
+  - *2026-11-04 (`bapm-lines-1104`; `…f30bd604` 1): **a default-lane budget of ≤ +0.10 s for bundle 1 as a whole**
+    (this ticket and `ABC-286` together, not each; named `…3b15b361` 3), read as the head-minus-base median wall.
+    Aim, not a gate: the rows the bundle adds or changes sum to ≤ 90 ms in-thread, none added to `src/cli.test.ts`.
+    Rows of ≥ 50 ms go deep. No new default-lane file.*
 
 ## Test notes
 

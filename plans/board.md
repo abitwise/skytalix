@@ -1,3 +1,7 @@
+_Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — qe-ABC-301-s0 **GREEN** (…9fd32f43): P1's own-phase form confirmed, tracer accepted, QE-301-b MEDIUM goes into the fit brief. → `se-ABC-301-fit` (scopes 1–4), `arch-records-1104`. Running: qe-ABC-282, se-ABC-301-fit, arch-records-1104. Owner: bundle 1 (a/b/c), OQ-0074-1._
+_Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — ABC-301 scope 0 built (se-ABC-301-s0 704e331f; P1 44/44 in a corrected form, ruling provisional) → `qe-ABC-301-s0` confirms before the fit. `bapm-lines-1104b` (owed lines). Running: qe-ABC-282, qe-ABC-301-s0, bapm-lines-1104b. Owner: bundle 1 (a/b/c), OQ-0074-1._
+_Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — **ABC-282 built** (se-ABC-282 7e4b1006): b stays 2.3; A1 (c) waste 0.3476 → 0.0000; 16/16 mutants; lane +0.075 s ungraded. → In Review → `qe-ABC-282` (A4, A6 games ALONE). Running: se-ABC-301-s0, qe-ABC-282. Owner: bundle 1 (a/b/c), OQ-0074-1._
+_Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `bapm-lines-1104` merged 55e1bede: **ABC-289 Ready** (DoR 10/10, ADR-0074 PROPOSED; build held for the owner's answers). Census gates the second of ABC-282 / ABC-301. Running: se-ABC-282, se-ABC-301-s0. **Owner: bundle 1 (a/b/c), OQ-0074-1.**_
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `arch-bundle-1` merged: bundle read ACCEPTED; **ADR-0072 (P4), ADR-0073 (countermove) PROPOSED, both premises NOT MET; build waits on the owner (a/b/c)**. ABC-301 scope 0 → `se-ABC-301-s0`. **Owner asked: bundle 1 lift, OQ-0074-1.** Running: se-ABC-282, bapm-lines-1104, se-ABC-301-s0._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `arch-ABC-289` merged 028bfeaf: **ADR-0074 PROPOSED** (delta pruning, margin 200, returns the bound; premise MET). **Owner asked: OQ-0074-1.** → `bapm-lines-1104`. Running: arch-bundle-1, se-ABC-282, bapm-lines-1104._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `secnfr-ABC-302-a9` merged 4792ce78: NFR-008 9.505 s on the catalog; R-N8H-1 stays MEDIUM; Q-N8H-1 (a). Rulings …20:38:50Z: lane budgets ≤ +0.10 s each for ABC-282, ABC-301 and bundle 1; row census owed. **ABC-282 → In Development** (`se-ABC-282`). Running: arch-bundle-1, arch-ABC-289, se-ABC-282._
@@ -1353,11 +1357,12 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
     ## In Development (WIP 1/3)
-- [ABC-282] W1 time use under a clock (ADR-0071 ACCEPTED; L, P2). se-ABC-282 running; A6 on ABC-300.
+- [ABC-301] E2s second pull, scopes 1–4 (one bounded fit). se-ABC-301-fit running.
 - ~~[ABC-283]~~ → Blocked. The O1h+O3s+S1 bundle (ABC-233 history, ABC-234 SEE ordering, ABC-236 root aspiration) on one branch; one read of 100 games at 100 ms, GAIN ≥ 50.0 (owner's word, …4c4cb03d). se-ABC-283 running; rulings …3851bf43.
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
-    ## In Review (WIP 0/3)
+    ## In Review (WIP 1/3)
+- [ABC-282] W1. Built 7e4b1006 → qe-ABC-282 (A6 100 games at tc=40/8, GAIN ≥ 50.0; verdict signs UAT).
     - [ABC-012] Portfolio FX conversion  (PR: #41, QE: running)
 
   BOARD <-> TICKET CONTRACT: each ticket file (`plans/tickets/<prefix>-xxx.md`) carries a
@@ -1483,7 +1488,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 ## Ready (WIP 1/8)
-- [ABC-301] (scope 0 in build: se-ABC-301-s0) E2s second pull: one bounded fit on main with E4a's structure; KD/FP freed, U held 0; B-T0–B-T8 (B-T8 two r reads at 0.5 s, ~5 h, owner-approved). Scope 0 preconditions first (after NFR-008 headroom ruling).
+- [ABC-289] Q2 delta pruning (ADR-0074 PROPOSED; DoR 10/10, S, P3). Build held for OQ-0074-1 and the bundle 1 answer.
+- ~~[ABC-301]~~ → In Development. E2s second pull: one bounded fit on main with E4a's structure; KD/FP freed, U held 0; B-T0–B-T8 (B-T8 two r reads at 0.5 s, ~5 h, owner-approved). Scope 0 preconditions first (after NFR-008 headroom ruling).
 - ~~[ABC-271]~~ → In Development E4a structure only at 0 (ADR-0070 ACCEPTED form (a); DoR 10/10, S, P3). QE freeze first (qe-ABC-271-freeze), then se-ABC-271. No games.
 
 
