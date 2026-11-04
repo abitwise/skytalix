@@ -1,3 +1,4 @@
+_Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `bapm-K0-cut` merged: **ABC-304 Ready, DoR 10/10** → `se-ABC-304`. Running: se-ABC-301-fit-2, se-ABC-304. Owner: A4, new C2′ after a candidate fault. Owed at the owner's C2′ answer: one line naming the form QE's § 6 copies, and the two points BA/PM raised (…555a9a9e)._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `arch-ABC-303-open` merged: A3 (a) may re-point (no red); K0 red confirmed, stale rows, no engine defect, re-point owed; the order stands. **se-ABC-301-fit found stalled since 22:12Z** → `se-ABC-301-fit-2`. → `bapm-K0-cut`. Owner: A4, new C2′ after a candidate fault._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — **ABC-303 built** (se-ABC-303 20b85d09, code only): R1, R2 equal the probe; S rows met; lane +0.07 s ungraded, loose. Two finds → `arch-ABC-303-open`: ABC-279 A3 (a) reads 90.91 % vs ≥ 93 % on the shipped path (re-pointed, not yet ruled); ABC-271 K0 seven deep rows reported red on main. Running: se-ABC-301-fit, arch-ABC-303-open. Owner: A4._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — qe-ABC-282 **PASS_WITH_GAPS, one BLOCKING gap, UAT not signed** (…a6a2ba28): A6 56.5/100 MET (45/32/23, no time losses); lane +0.020 s, 9.48 s; offline rows MET; A4 NOT RUN (~3.5 h, over the 1 h line). **Owner asked: A4.** ABC-282 does not merge until A4 reads. Running: se-ABC-301-fit, se-ABC-303._
@@ -1513,7 +1514,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 2/3)
+## In Development (WIP 3/3)
+- [ABC-304] Stale rows re-point, test-only (DoR 10/10, XS, P2): `se-ABC-304`, then a QE hop, UAT waived.
 - [ABC-301] E2s second pull: fit scopes 1–4 (se-ABC-301-fit), then QE's reads.
 - [ABC-303] Bundle 1, ABC-286 + ABC-288 (ADR-0072, 0073 ACCEPTED over missed premises; DoR 10/10, M, P3). Code only for now (`se-ABC-303`); C2′ only after ABC-282 and ABC-301 settle.
 
