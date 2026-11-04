@@ -1,0 +1,6 @@
+{"name":"position-4","label":"door","depth":8,"search":{"nodes":243098,"score":-464,"move":"c4c5"},"choose":{"nodes":110694,"score":-464,"move":"c4c5","depth":8}}
+{"name":"position-4","label":"head","depth":8,"search":{"nodes":130927,"score":-464,"move":"c4c5"},"choose":{"nodes":56086,"score":-464,"move":"c4c5","depth":8}}
+{"name":"position-5","label":"door","depth":8,"search":{"nodes":27844,"score":521,"move":"d7c8"},"choose":{"nodes":53035,"score":519,"move":"d7c8","depth":8}}
+{"name":"position-5","label":"head","depth":8,"search":{"nodes":20465,"score":521,"move":"d7c8"},"choose":{"nodes":41282,"score":519,"move":"d7c8","depth":8}}
+{"name":"startpos","label":"door","depth":8,"search":{"nodes":46775,"score":20,"move":"b1c3"},"choose":{"nodes":76785,"score":20,"move":"b1c3","depth":8}}
+{"name":"startpos","label":"head","depth":8,"search":{"nodes":43212,"score":23,"move":"b1c3"},"choose":{"nodes":77918,"score":20,"move":"b1c3","depth":8}}
