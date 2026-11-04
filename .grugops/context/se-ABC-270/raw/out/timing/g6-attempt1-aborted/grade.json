@@ -1,0 +1,47 @@
+{
+ "runs": 2,
+ "kiwipete": {
+  "B": [
+   9
+  ],
+  "H": [
+   9
+  ],
+  "medB": 9,
+  "medH": 9,
+  "minH": 9,
+  "minB": 9,
+  "warnH": 0,
+  "failH": 0,
+  "nodesMedB": 3402457,
+  "nodesMedH": 3475161,
+  "msMax": 4000.8,
+  "movesH": [
+   "Bxa6"
+  ],
+  "movesB": [
+   "Bxa6"
+  ],
+  "load1": [
+   1.8,
+   1.04
+  ]
+ },
+ "position-6": {
+  "B": [],
+  "H": [],
+  "medB": null,
+  "medH": null,
+  "minH": null,
+  "minB": null,
+  "warnH": 0,
+  "failH": 0,
+  "nodesMedB": null,
+  "nodesMedH": null,
+  "msMax": null,
+  "movesH": [],
+  "movesB": [],
+  "load1": []
+ },
+ "verdict": "FAIL"
+}

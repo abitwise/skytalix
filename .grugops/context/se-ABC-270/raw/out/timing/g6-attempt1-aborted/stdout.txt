@@ -1,0 +1,2 @@
+{"tree":"base","mode":"g6","pos":"kiwipete","budget":4000,"ms":4000.8,"depth":9,"nodes":3402457,"score":-81,"san":"Bxa6","at":"2026-11-03T23:45:35.193Z","label":"g6 r1 kiwipete","load1_before":1.8,"tctl_before":44.5,"tctl_after":74.25}
+{"tree":"head","mode":"g6","pos":"kiwipete","budget":4000,"ms":3999.9,"depth":9,"nodes":3475161,"score":-81,"san":"Bxa6","at":"2026-11-03T23:51:55.048Z","label":"g6 r1 kiwipete","load1_before":1.04,"tctl_before":43.625,"tctl_after":72.75}

@@ -1,0 +1,6 @@
+M2-flag-always-on: Tests 5 failed | 8 passed (13)
+M3-queen-eg-ignored: Tests 4 failed | 9 passed (13)
+M4-slots-swapped: Tests 4 failed | 9 passed (13)
+M5-flag-from-own-queen-walk: Tests 2 failed | 11 passed (13)
+M1-swapped-flags-in-evaluate: Tests 3 failed | 10 passed (13)
+M1b-swapped-flags-in-test-read: Tests 2 failed | 11 passed (13)

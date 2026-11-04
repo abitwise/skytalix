@@ -1422,8 +1422,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 2/3)
-- [ABC-270] **2026-11-03: K1 (c) frozen (qe-ABC-270-freeze …fa82b3f3: 7 queen pairs + 1 control) → In Development → `se-ABC-270` (QE-270-a: test-only per-king read).** **2026-11-03: DoR 10/10, Ready for Dev (bapm-owner-answers-1103b); M → S. QE freezes K1 (c) ≥ 6 queen pairs first (`qe-ABC-270-freeze`), then se-ABC-270.** ADR-0068 ACCEPTED: structure only (3 queen-on pairs at {0,0}, value-identical); K0–K4; no games; S1–S3 → ABC-239 PR report; S2 nps report only. **2026-11-03: design done (arch-ABC-270, merged 9553a772): ADR-0068 PROPOSED — structure only (3 queen-on exposure pairs at 0, value-identical, K0–K4, no games; size M → S); fit by ABC-239. Waits owner acceptance; S2 nps exempt as ABC-274 (Orchestrator).** **2026-11-03: In Design (owner item 8) → `arch-ABC-270` (ADR-0068).** E3a: king safety by phase — exposure endgame halves + the ADR-0031 addendum's queen scale / shelter gate re-read over E1, judged on play (Q-3K-4 b) (EPIC-011 Phase 4; size: M, priority: P2, DoR 9/10; GAIN; waits ABC-269 merged + ADR; S1–S3 its first graded rows) **cut 2026-11-03 (bapm-epic011-cut); design after the owner-ordered ABC-234 → 236 → 239**
+## In Development (WIP 1/3)
 - [ABC-279] **2026-11-03: cut, DoR 10/10 (bapm-owner-answers-1103b) → In Development → `se-ABC-279`.** Q1: quiescence skips SEE-losing captures out of check behind an off-door pair (ADR-0069 ACCEPTED). S–M (M), P2, GAIN. A4 d8 ≤ 0.78× ×4, reach ≥ +0.55; A6 C2′ ≥ 50.0 + S′ E1810 + Levels. Slot: merges or misses before ABC-239's B-T7/B-T8 freeze; miss = closed under S1, not shipped
 
 
@@ -1452,7 +1451,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-270] **2026-11-03: built → In Review (`se-ABC-270`, branch `grugops/ABC-270`, code `795a6b61`); QE next (K3 G2, K4 G6 regrade, UAT).** Value- and node-identical: K0 7/7 exact (+ 4 door counts), cross-build 0/9 120, eval 0/25 620; K1 (a)–(e) green (QE's 7 pairs + control: per-king exactly 3 × at 2 × base; phase-24 twins of ABC-083 A2 (b)/A3 (b) red when zeroed); K2 0 re-pins (npm test 2 604/2 604, every deep lane green); Engineer pre-reads, not ALONE: K3 G2 R 0.9899, K4 G6 9/9 and 10/10 MET (notes se-ABC-270 …007dc90a …15cac083 …bd09c051 …77fd2bd9). ADR-0068: three queen-on pairs at {0,0}; ABC-239's fit owns the values. **2026-11-03: K1 (c) frozen (qe-ABC-270-freeze …fa82b3f3: 7 queen pairs + 1 control) → In Development → `se-ABC-270` (QE-270-a: test-only per-king read).** **2026-11-03: DoR 10/10, Ready for Dev (bapm-owner-answers-1103b); M → S. QE freezes K1 (c) ≥ 6 queen pairs first (`qe-ABC-270-freeze`), then se-ABC-270.** ADR-0068 ACCEPTED: structure only (3 queen-on pairs at {0,0}, value-identical); K0–K4; no games; S1–S3 → ABC-239 PR report; S2 nps report only. **2026-11-03: design done (arch-ABC-270, merged 9553a772): ADR-0068 PROPOSED — structure only (3 queen-on exposure pairs at 0, value-identical, K0–K4, no games; size M → S); fit by ABC-239. Waits owner acceptance; S2 nps exempt as ABC-274 (Orchestrator).** **2026-11-03: In Design (owner item 8) → `arch-ABC-270` (ADR-0068).** E3a: king safety by phase — exposure endgame halves + the ADR-0031 addendum's queen scale / shelter gate re-read over E1, judged on play (Q-3K-4 b) (EPIC-011 Phase 4; size: M, priority: P2, DoR 9/10; GAIN; waits ABC-269 merged + ADR; S1–S3 its first graded rows) **cut 2026-11-03 (bapm-epic011-cut); design after the owner-ordered ABC-234 → 236 → 239**
 
 
 
