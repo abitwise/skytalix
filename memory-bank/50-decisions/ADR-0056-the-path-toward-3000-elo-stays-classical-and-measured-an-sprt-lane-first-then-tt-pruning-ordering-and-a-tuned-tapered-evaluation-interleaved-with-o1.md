@@ -1358,6 +1358,106 @@ The settings in use:
   - *Dated 2026-11-03 (`arch-post-269`): pulled forward. Its first user is R1 (`ABC-273`), not A0. The change is
     `tools/` only, and its shape is in D6's dated line of this date. A0 and A1 later use the same command.*
 
+#### Dated 2026-11-04 (`arch-second-pull-1104`), PROPOSED: the bundle read. Related changes built on one branch and judged by one C2′ read (an amendment of C2′, the per-change rule)
+
+**Status: PROPOSED. Acceptance is the owner's** (`Q-3K-11`): it changes the per-change rule (`EPIC-011` § The
+per-change rule). **Reading (b):** while PROPOSED it may be used only for a bundle the owner names. Records only, at
+`main` `fad72f17`; nothing was run.
+- **His direction, verbatim** (`orch-2026-10-30a` `…dda43b71`): *"super news about ABC-233, 234 and 236 together
+  having very nice impact. This could be approach for future as well, compounds the evidence better."* The guards are
+  the Orchestrator's, drawn from `ABC-283` (`…dda43b71` item 3).
+- **The precedent:** `ABC-283` (O1h + O3s + S1). Three changes, each parked on its own pay gate, were built on one
+  branch, each behind its own door plus one all-off door. They were read once: 66.0 / 100, Elo +115.2 ± 67.0
+  (`…2409cec9`). Its mate-floor red was traced per part, to history's negative cells through LMR, and fixed
+  structurally (K3, `…6c6fb0be`).
+
+**B1. When a bundle is allowed.** Each part is a value-changing change with its own ADR or design page, and the parts
+are related in at least one of these ways:
+- (a) **they share a file**, so they would go one at a time anyway (the tickets' "one at a time" lines);
+- (b) **they share a mechanism:** one part consumes another's output (history → move-count pruning, countermove), or
+  they share one computation and its cost (one attack map, one tuning fit);
+- (c) **a part is parked or marginal** (its pay gate is not met alone, or its value is below C2′'s ± 48), and it is
+  coupled by (a) or (b) to a part in the bundle.
+
+Not allowed:
+- **A value-identical part.** It keeps its own identity and S2 bars, plays no games, and lands on its own.
+- **Unrelated parts bundled to save host time.** The relation is stated in the design note before the PREREG.
+- **A part whose own bar is a deep-depth bar the 100 ms read cannot see**, unless that bar is graded in the bundle too
+  (B2 (d)).
+
+**B2. What each part still shows alone** (before the read, on the bundle's branch):
+- (a) **Its own door:** a test-only off-door pair (`ADR-0026` d10), and its own rule rows.
+- (b) **The all-off door is node-identical to `main`,** exactly (P0). Every older door turns every part off.
+- (c) **Its form is its ADR's, fixed before the build.** No form, margin or table is chosen or re-tuned after the read.
+- (d) **Its own measured bar, where its ADR has one.** For a NEUTRAL (invisible at 100 ms) part, that is C2′'s "C yes"
+  bar. A part's own pay gate is graded, unless the owner's word or that part's own named re-open trigger lifts it (the
+  fourth guard). Then the ratio is reported per part.
+- (e) **The cost rows are read with all parts on:** `G2`, `G6` and `NFR-008`. Each part's node ratio is reported.
+
+**B3. The safety rows: all on, then per part on a red.**
+- **The mate floor, zugzwang 7 / 7 and `G1`** (`ADR-0064` d7's rows) are read with every part on.
+- **When one goes red,** it is read again with each part's own door (that part off, the others on). The cause is named
+  before any fix.
+  - If no single door clears it, the cause is joint: a STOP to Architect/Design.
+  - A fix is structural, written as a dated line in that part's ADR (`ABC-283`'s K3). It is never a re-pin, a deeper
+    depth or a tune.
+  - After the fix, every safety row is read again with all parts on.
+
+**B4. The read: one, pre-registered, never re-played.**
+- **One C2′ read** (100 games at 100 ms), the bundle with all parts on against its merge-base on `main`. S′ and the
+  Levels deep lane follow as C2′ has them, unless the owner's word for that bundle says otherwise (`ABC-283` § Open).
+- **The PREREG is sealed first.** It names the parts, the candidate and base SHAs, the control, the intent and the
+  bar. The intent is GAIN, unless every part qualifies as NEUTRAL (invisible at 100 ms).
+- **It is never re-played.** No part is dropped and no subset is read in its place, before the read or after it.
+- **Before the merge,** `main` is merged into the branch, with no rewrite. The deterministic rows (P0, the safety rows,
+  the gates, `NFR-008`) are read again on the merged tree, as `QE-283-i` did. Games are re-run only under C2′'s stale
+  rule.
+
+**B5. Credit and attribution.**
+- **Credit is to the bundle, not per part.** It counts as one value-changing merge in `EPIC-011`'s G3 and is one
+  suspect in a C3″ NOT MET. No per-part Elo is stated or inferred from the read.
+- **Each part's ADR is accepted as part of the bundle.** Its Status line names the bundle ticket and the read.
+- **Removing one part later** is a value change, and it gets its own read.
+
+**B6. On a miss.**
+- **NOT MET:** nothing merges, and each part returns to the status it held before (parked, held or PROPOSED). QE
+  records a `failed-attempt` naming the bundle.
+- **No re-play, and no subset is read instead.** The same parts with the same forms count as the same bundle.
+- **A part comes back only as a new attempt,** alone on its own premise or in a changed bundle under a new PREREG. A
+  part that only re-opens a not-met premise needs the owner's word, or its own named trigger.
+- **A red row before the read** (B2 or B3) is a defect or a STOP, not a miss. The read does not start until every row
+  is met.
+
+**B7. Who names a bundle.** While PROPOSED, the owner names it. After acceptance, the Architect's design note names
+the parts and shows B1's relation. BA/PM cuts one ticket in `ABC-283`'s form, with the parts' pages kept as design
+pages, and the Orchestrator orders it.
+
+**Candidate bundles in the backlog** (recommendations; the owner names any he wants while this is PROPOSED):
+1. **`ABC-286` (P4) + `ABC-288` (O2c), over history, after `ABC-283` merges.** Both act on the history-ordered quiet
+   list, and O2c changes the order P4 prunes by. Read apart, P4's drift and audit rows would be read on an order that
+   O2c then moves. They share `orderMoves` / `src/search.ts`, and P4 is the parked part (B1 (c)). P4's joint probe
+   (`ADR-0063` decision 11) is its own named trigger. The mate floor is the row to watch (`R-283-LMR`).
+2. **`ABC-290` (E3b, king attack) + `ABC-293` (E6, threats and tempo).** Both need attacked squares, so one attack-map
+   pass pays for both, and its cost is read once. Both land as structure at 0 and are fitted by the pull after the
+   second.
+3. **The pull after the second, over every structure-at-0 term on `main` at its fit** (E3b, E4b, E5, E6: `ABC-290`
+   –`ABC-293`). The tuner fits them jointly anyway, as the second pull judges E4a with its own fit (`ADR-0070` d7).
+   This rule supplies the credit line and the per-part read on a red: one part's weights at 0 inside
+   `withParametersForTest`.
+4. **Later, conditional: `ABC-272` (E7a) + `ABC-294` (E7b),** if `ABC-272`'s probe says E7a builds the scale seam E7b
+   uses (a shared mechanism).
+
+Not recommended as bundles:
+- `ABC-284` (P1) stays apart from bundle 1. It moves LMR, the lever the mate floor rests on (`R-283-LMR`), so it is
+  read alone to keep that row attributable.
+- `ABC-285` (P5): about 0 at 100 ms, and its bar is a deep-depth one.
+- `ABC-287` (P6): its re-measure on the second pull's `main` comes first, on safety rows it failed alone.
+- `ABC-289` (Q2): alone on `src/quiescence.ts`.
+- `ABC-296` / `ABC-297` (X1 / X2): X2's premise probe comes first.
+- `ABC-298` (V3): value-identical.
+- `ABC-282` (W1): its own clock read (`ADR-0071`).
+- The second pull (`ABC-301`): its scope and B-T8 are owner-confirmed as they stand.
+
 ### D6. The order proposed (speed and algorithms interleaved)
 
 Ordered by expected Elo per cost, by file collisions (`ADR-0055` D2), and by what each step needs measured.
