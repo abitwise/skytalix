@@ -240,6 +240,46 @@ export const PASSED: MgEg<readonly number[]> = {
 };
 
 /**
+ * E4a (`ABC-271`, `ADR-0070`): passed pawns read the kings and the path. Endgame terms, indexed like
+ * `PASSED` by the passer's OWN rank R (1 = its starting rank, 6 = one step from promotion; 0 and 7
+ * are never read). Only the frontmost passer of each file is read. Q is its queening square, d the
+ * Chebyshev distance (king steps). Every middlegame half is 0, at the build and at every pull: the
+ * evaluation skips these terms at phase 24, which is exact only while those halves are 0.
+ *
+ * KING_ENEMY / KING_OWN: eg += `KING_ENEMY[R]` × min(d(enemy king, Q), 5) − `KING_OWN[R]` ×
+ * min(d(own king, Q), 5). Rule: start (prior): 0. The rule (below) was probed and not shipped
+ * (`ADR-0070`): `PASSED.eg[R] / 10` and `floor(PASSED.eg[R] / 20)`.
+ */
+export const PASSED_KING_ENEMY: MgEg<readonly number[]> = {
+  mg: [0, 0, 0, 0, 0, 0, 0, 0],
+  eg: [0, 0, 0, 0, 0, 0, 0, 0],
+};
+export const PASSED_KING_OWN: MgEg<readonly number[]> = {
+  mg: [0, 0, 0, 0, 0, 0, 0, 0],
+  eg: [0, 0, 0, 0, 0, 0, 0, 0],
+};
+
+/**
+ * E4a's free path: eg += `PASSED_FREE[R]` when every square ahead of the passer, up to and including
+ * Q, is empty. A piece of either colour blocks, a king included; attacked squares are not read.
+ * Rule: start (prior): 0. The rule (below) was probed and not shipped (`ADR-0070`): `PASSED.eg[R] / 2`.
+ */
+export const PASSED_FREE: MgEg<readonly number[]> = {
+  mg: [0, 0, 0, 0, 0, 0, 0, 0],
+  eg: [0, 0, 0, 0, 0, 0, 0, 0],
+};
+
+/**
+ * E4a's unstoppable passer, the rule of the square: at phase 0 only, a passer with a free path whose
+ * moves < d(defending king, Q) − (1 if the defender is to move), where moves = 5 from the start rank
+ * (the double step), else 7 − R; d is not capped. Added once per side, however many such passers.
+ * Rule: start (prior): 0. The rule (below) was probed and not shipped (`ADR-0070`): `Q − (P +
+ * PASSED.eg[6] + PASSED_FREE.eg[6] + 5 × PASSED_KING_ENEMY.eg[6])` = 400. Held at 0 through the
+ * second pull (`ADR-0070` decision 7): a later attempt with its own PREREG gives it a value.
+ */
+export const PASSED_UNSTOPPABLE: MgEg<number> = { mg: 0, eg: 0 };
+
+/**
  * ABC-082's other two pawn terms. DOUBLED: per pawn beyond the first on a file. ISOLATED: per pawn
  * with no friendly pawn on either adjacent file. Together they stay inside `A2`'s 50 cp cap for
  * two pawns doubled on one file (15 + 2 × 10 = 35). Endgame halves: equal (no rule yet).

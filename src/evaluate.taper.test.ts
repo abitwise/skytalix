@@ -1231,7 +1231,18 @@ describe("ABC-274 A9 — the packed sums fit in int16, bounded from src/evaluate
             Math.abs(params.KING_FILE_HALF_OPEN_QUEEN[half]),
           Math.abs(params.KING_FILE_OPEN[half]) + Math.abs(params.KING_FILE_OPEN_QUEEN[half]),
         ));
-    return sideMax - sideMin + 2 * pawns + 2 * kingFiles;
+    // E4a (`ABC-271` K1 (d), `ADR-0070`): the passer terms add to Δ after the walk, outside the
+    // packed sum, and are counted here anyway, so a fitted table is bounded too: per side at most
+    // eight frontmost passers, each at its largest king-distance pair (both distances capped at 5)
+    // and free bonus, plus the unstoppable passer once.
+    const largest = (values: readonly number[]): number => Math.max(...values.map(Math.abs));
+    const passerTerms =
+      8 *
+        (5 * largest(params.PASSED_KING_ENEMY[half]) +
+          5 * largest(params.PASSED_KING_OWN[half]) +
+          largest(params.PASSED_FREE[half])) +
+      Math.abs(params.PASSED_UNSTOPPABLE[half]);
+    return sideMax - sideMin + 2 * pawns + 2 * kingFiles + 2 * passerTerms;
   };
 
   it("Σ mg and Σ eg, white minus black, each lie inside −32 768 … 32 767", () => {
@@ -1267,5 +1278,24 @@ describe("ABC-274 A9 — the packed sums fit in int16, bounded from src/evaluate
       const light = { ...PARAMS, [name]: { mg: 30, eg: 30 } };
       expect(bound(light, "mg"), name).toBeGreaterThan(bound(PARAMS, "mg"));
     }
+  });
+
+  it("ABC-271 K1 (d): the bound reads the four E4a pairs; an endgame half large enough would turn it red", () => {
+    const byRank = [
+      ["PASSED_KING_ENEMY", PARAMS.PASSED_KING_ENEMY],
+      ["PASSED_KING_OWN", PARAMS.PASSED_KING_OWN],
+      ["PASSED_FREE", PARAMS.PASSED_FREE],
+    ] as const;
+    for (const [name, pair] of byRank) {
+      const heavy = {
+        ...PARAMS,
+        [name]: { mg: pair.mg, eg: pair.eg.map((v, i) => (i === 6 ? 2000 : v)) },
+      };
+      expect(bound(heavy, "eg"), name).toBeGreaterThan(32_767);
+      expect(bound(heavy, "mg"), name).toBe(bound(PARAMS, "mg"));
+    }
+    const heavy = { ...PARAMS, PASSED_UNSTOPPABLE: { mg: 0, eg: 30_000 } };
+    expect(bound(heavy, "eg")).toBeGreaterThan(32_767);
+    expect(bound(heavy, "mg")).toBe(bound(PARAMS, "mg"));
   });
 });

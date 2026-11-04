@@ -1,0 +1,4334 @@
+{
+  "task": "qe-ABC-271-freeze",
+  "ticket": "ABC-271",
+  "adr": "ADR-0070",
+  "srcTree": "4fb3da04",
+  "main": "b274711c",
+  "values": {
+    "PASSED_KING_ENEMY": [
+      0,
+      1,
+      2,
+      4,
+      7,
+      12,
+      20
+    ],
+    "PASSED_KING_OWN": [
+      0,
+      0,
+      1,
+      2,
+      3,
+      6,
+      10
+    ],
+    "PASSED_FREE": [
+      0,
+      5,
+      10,
+      20,
+      35,
+      60,
+      100
+    ],
+    "PASSED_UNSTOPPABLE": 400
+  },
+  "seam": "K1 (c): inside withParametersForTest at ADR-0070 d1's probed values, passerTermsForTest(position) returns per side { kd, free, un } (eg, cp) equal to row.<side>.seam; a pair's A - B per side is the frozen difference. With the values 0 every part is 0 and K1 (b) holds",
+  "k0": {
+    "kiwipete_chooseMove_d8": 766275,
+    "kiwipete_chooseMove_d9": 1725150,
+    "pos6_chooseMove_d8": 87475,
+    "pos6_chooseMove_d9": 253724,
+    "pos6_chooseMove_d10": 533916,
+    "kiwipete_search_d8": 605117,
+    "pos6_search_d8": 406787
+  },
+  "k1c": [
+    {
+      "id": "U1-out",
+      "group": "U",
+      "pair": "U1",
+      "half": "A",
+      "fen": "8/5k2/8/8/P7/8/8/7K w - - 0 1",
+      "phase": 0,
+      "white": {
+        "passers": [
+          {
+            "sq": "a4",
+            "R": 3,
+            "dE": 5,
+            "dO": 7,
+            "free": 1
+          }
+        ],
+        "U": 1,
+        "seam": {
+          "kd": 10,
+          "free": 20,
+          "un": 400
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            5,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            5,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 1
+        }
+      },
+      "black": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "a4, moves 4, attacker to move: 4 < d(f7,a8)=5 -> U"
+    },
+    {
+      "id": "U1-in",
+      "group": "U",
+      "pair": "U1",
+      "half": "B",
+      "fen": "8/4k3/8/8/P7/8/8/7K w - - 0 1",
+      "phase": 0,
+      "white": {
+        "passers": [
+          {
+            "sq": "a4",
+            "R": 3,
+            "dE": 4,
+            "dO": 7,
+            "free": 1
+          }
+        ],
+        "U": 0,
+        "seam": {
+          "kd": 6,
+          "free": 20,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            4,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            5,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "black": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "Kf7 -> Ke7, one step inside: 4 < 4 false"
+    },
+    {
+      "id": "U2-out",
+      "group": "U",
+      "pair": "U2",
+      "half": "A",
+      "fen": "8/8/8/8/8/8/2P5/K5k1 b - - 0 1",
+      "phase": 0,
+      "white": {
+        "passers": [
+          {
+            "sq": "c2",
+            "R": 1,
+            "dE": 7,
+            "dO": 7,
+            "free": 1
+          }
+        ],
+        "U": 1,
+        "seam": {
+          "kd": 5,
+          "free": 5,
+          "un": 400
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            5,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            5,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 1
+        }
+      },
+      "black": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "c2 on its start rank: moves 5 (double step), DEFENDER to move: 5 < d(g1,c8)=7 - 1 -> U. Needs d uncapped; 7 - R = 6 reads 0"
+    },
+    {
+      "id": "U2-in",
+      "group": "U",
+      "pair": "U2",
+      "half": "B",
+      "fen": "8/8/8/8/8/8/2P3k1/K7 b - - 0 1",
+      "phase": 0,
+      "white": {
+        "passers": [
+          {
+            "sq": "c2",
+            "R": 1,
+            "dE": 6,
+            "dO": 7,
+            "free": 1
+          }
+        ],
+        "U": 0,
+        "seam": {
+          "kd": 5,
+          "free": 5,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            5,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            5,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "black": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "Kg1 -> Kg2: 5 < 6 - 1 false. Also a king step beyond the cap (7 -> 6): kd unchanged"
+    },
+    {
+      "id": "U3-out",
+      "group": "U",
+      "pair": "U3",
+      "half": "A",
+      "fen": "7k/8/8/8/5p2/8/1K6/8 b - - 0 1",
+      "phase": 0,
+      "white": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "black": {
+        "passers": [
+          {
+            "sq": "f4",
+            "R": 4,
+            "dE": 4,
+            "dO": 7,
+            "free": 1
+          }
+        ],
+        "U": 1,
+        "seam": {
+          "kd": 13,
+          "free": 35,
+          "un": 400
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            4,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            5,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 1
+        }
+      },
+      "why": "black f4 (R 4), moves 3, attacker to move: 3 < d(b2,f1)=4 -> U"
+    },
+    {
+      "id": "U3-in",
+      "group": "U",
+      "pair": "U3",
+      "half": "B",
+      "fen": "7k/8/8/8/5p2/8/2K5/8 b - - 0 1",
+      "phase": 0,
+      "white": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "black": {
+        "passers": [
+          {
+            "sq": "f4",
+            "R": 4,
+            "dE": 3,
+            "dO": 7,
+            "free": 1
+          }
+        ],
+        "U": 0,
+        "seam": {
+          "kd": 6,
+          "free": 35,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            3,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            5,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "Kb2 -> Kc2: 3 < 3 false"
+    },
+    {
+      "id": "U4-out",
+      "group": "U",
+      "pair": "U4",
+      "half": "A",
+      "fen": "k7/8/8/8/3K4/7p/8/8 w - - 0 1",
+      "phase": 0,
+      "white": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "black": {
+        "passers": [
+          {
+            "sq": "h3",
+            "R": 5,
+            "dE": 4,
+            "dO": 7,
+            "free": 1
+          }
+        ],
+        "U": 1,
+        "seam": {
+          "kd": 18,
+          "free": 60,
+          "un": 400
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            4,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            5,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 1
+        }
+      },
+      "why": "black h3 (R 5), moves 2, DEFENDER (white) to move: 2 < d(d4,h1)=4 - 1 -> U"
+    },
+    {
+      "id": "U4-in",
+      "group": "U",
+      "pair": "U4",
+      "half": "B",
+      "fen": "k7/8/8/8/4K3/7p/8/8 w - - 0 1",
+      "phase": 0,
+      "white": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "black": {
+        "passers": [
+          {
+            "sq": "h3",
+            "R": 5,
+            "dE": 3,
+            "dO": 7,
+            "free": 1
+          }
+        ],
+        "U": 0,
+        "seam": {
+          "kd": 6,
+          "free": 60,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            5,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "Kd4 -> Ke4: 2 < 3 - 1 false"
+    },
+    {
+      "id": "U5-out",
+      "group": "U",
+      "pair": "U5",
+      "half": "A",
+      "fen": "8/4k1P1/8/8/8/8/8/K7 w - - 0 1",
+      "phase": 0,
+      "white": {
+        "passers": [
+          {
+            "sq": "g7",
+            "R": 6,
+            "dE": 2,
+            "dO": 7,
+            "free": 1
+          }
+        ],
+        "U": 1,
+        "seam": {
+          "kd": -10,
+          "free": 100,
+          "un": 400
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            5
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          "PASSED_UNSTOPPABLE": 1
+        }
+      },
+      "black": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "g7 (R 6), moves 1, attacker to move: 1 < d(e7,g8)=2 -> U; kd negative"
+    },
+    {
+      "id": "U5-in",
+      "group": "U",
+      "pair": "U5",
+      "half": "B",
+      "fen": "8/5kP1/8/8/8/8/8/K7 w - - 0 1",
+      "phase": 0,
+      "white": {
+        "passers": [
+          {
+            "sq": "g7",
+            "R": 6,
+            "dE": 1,
+            "dO": 7,
+            "free": 1
+          }
+        ],
+        "U": 0,
+        "seam": {
+          "kd": -30,
+          "free": 100,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            5
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "black": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "Ke7 -> Kf7: 1 < 1 false"
+    },
+    {
+      "id": "U6-stm",
+      "group": "U",
+      "pair": null,
+      "half": null,
+      "fen": "8/5k2/8/8/P7/8/8/7K b - - 0 1",
+      "phase": 0,
+      "white": {
+        "passers": [
+          {
+            "sq": "a4",
+            "R": 3,
+            "dE": 5,
+            "dO": 7,
+            "free": 1
+          }
+        ],
+        "U": 0,
+        "seam": {
+          "kd": 10,
+          "free": 20,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            5,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            5,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "black": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "U1-out with only the side to move flipped: the defender to move -> 4 < 5 - 1 false"
+    },
+    {
+      "id": "U7-both",
+      "group": "U",
+      "pair": null,
+      "half": null,
+      "fen": "7k/8/P7/8/8/7p/8/K7 w - - 0 1",
+      "phase": 0,
+      "white": {
+        "passers": [
+          {
+            "sq": "a6",
+            "R": 5,
+            "dE": 7,
+            "dO": 7,
+            "free": 1
+          }
+        ],
+        "U": 1,
+        "seam": {
+          "kd": 30,
+          "free": 60,
+          "un": 400
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            5,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            5,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 1
+        }
+      },
+      "black": {
+        "passers": [
+          {
+            "sq": "h3",
+            "R": 5,
+            "dE": 7,
+            "dO": 7,
+            "free": 1
+          }
+        ],
+        "U": 1,
+        "seam": {
+          "kd": 30,
+          "free": 60,
+          "un": 400
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            5,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            5,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 1
+        }
+      },
+      "why": "both sides unstoppable: U per side (they cancel only in the net); black's defender (white) is to move: 2 < 7 - 1"
+    },
+    {
+      "id": "U8-two",
+      "group": "U",
+      "pair": null,
+      "half": null,
+      "fen": "8/8/P6P/8/8/3k4/8/4K3 w - - 0 1",
+      "phase": 0,
+      "white": {
+        "passers": [
+          {
+            "sq": "a6",
+            "R": 5,
+            "dE": 5,
+            "dO": 7,
+            "free": 1
+          },
+          {
+            "sq": "h6",
+            "R": 5,
+            "dE": 5,
+            "dO": 7,
+            "free": 1
+          }
+        ],
+        "U": 1,
+        "seam": {
+          "kd": 60,
+          "free": 120,
+          "un": 400
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            10,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            10,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 1
+        }
+      },
+      "black": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "two unstoppable passers, one side: U once (400, not 800)"
+    },
+    {
+      "id": "U9-ownking",
+      "group": "U",
+      "pair": null,
+      "half": null,
+      "fen": "8/8/3K4/8/3P4/8/8/7k w - - 0 1",
+      "phase": 0,
+      "white": {
+        "passers": [
+          {
+            "sq": "d4",
+            "R": 3,
+            "dE": 7,
+            "dO": 2,
+            "free": 0
+          }
+        ],
+        "U": 0,
+        "seam": {
+          "kd": 16,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            5,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            2,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "black": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "outside the square (4 < 7) but its own king stands on d6: path not free -> U 0, free 0"
+    },
+    {
+      "id": "U10-phase1",
+      "group": "U",
+      "pair": null,
+      "half": null,
+      "fen": "8/5k2/8/8/P7/8/7N/7K w - - 0 1",
+      "phase": 1,
+      "white": {
+        "passers": [
+          {
+            "sq": "a4",
+            "R": 3,
+            "dE": 5,
+            "dO": 7,
+            "free": 1
+          }
+        ],
+        "U": 0,
+        "seam": {
+          "kd": 10,
+          "free": 20,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            5,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            5,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "black": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "U1-out plus a white knight: phase 1 -> U 0; kd and free unchanged"
+    },
+    {
+      "id": "KD1-A",
+      "group": "KD",
+      "pair": "KD1",
+      "half": "A",
+      "fen": "r7/8/8/4P3/7k/8/2K5/R7 w - - 0 1",
+      "phase": 4,
+      "white": {
+        "passers": [
+          {
+            "sq": "e5",
+            "R": 4,
+            "dE": 4,
+            "dO": 6,
+            "free": 1
+          }
+        ],
+        "U": 0,
+        "seam": {
+          "kd": 13,
+          "free": 35,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            4,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            5,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "black": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "enemy king h4, d(h4,e8)=4"
+    },
+    {
+      "id": "KD1-B",
+      "group": "KD",
+      "pair": "KD1",
+      "half": "B",
+      "fen": "r7/8/8/4P2k/8/8/2K5/R7 w - - 0 1",
+      "phase": 4,
+      "white": {
+        "passers": [
+          {
+            "sq": "e5",
+            "R": 4,
+            "dE": 3,
+            "dO": 6,
+            "free": 1
+          }
+        ],
+        "U": 0,
+        "seam": {
+          "kd": 6,
+          "free": 35,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            3,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            5,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "black": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "enemy king h4 -> h5 (d 4 -> 3): kd moves by KE[4] = 7"
+    },
+    {
+      "id": "KD2-A",
+      "group": "KD",
+      "pair": "KD2",
+      "half": "A",
+      "fen": "8/7k/8/8/2P1K3/8/8/n7 w - - 0 1",
+      "phase": 1,
+      "white": {
+        "passers": [
+          {
+            "sq": "c4",
+            "R": 3,
+            "dE": 5,
+            "dO": 4,
+            "free": 1
+          }
+        ],
+        "U": 0,
+        "seam": {
+          "kd": 12,
+          "free": 20,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            5,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            4,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "black": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "own king e4, d(e4,c8)=4"
+    },
+    {
+      "id": "KD2-B",
+      "group": "KD",
+      "pair": "KD2",
+      "half": "B",
+      "fen": "8/7k/8/4K3/2P5/8/8/n7 w - - 0 1",
+      "phase": 1,
+      "white": {
+        "passers": [
+          {
+            "sq": "c4",
+            "R": 3,
+            "dE": 5,
+            "dO": 3,
+            "free": 1
+          }
+        ],
+        "U": 0,
+        "seam": {
+          "kd": 14,
+          "free": 20,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            5,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            3,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "black": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "own king e4 -> e5 (d 4 -> 3): kd moves by KO[3] = 2"
+    },
+    {
+      "id": "KD3-A",
+      "group": "KD",
+      "pair": "KD3",
+      "half": "A",
+      "fen": "r7/8/8/8/8/1P4k1/8/2K5 w - - 0 1",
+      "phase": 2,
+      "white": {
+        "passers": [
+          {
+            "sq": "b3",
+            "R": 2,
+            "dE": 5,
+            "dO": 7,
+            "free": 1
+          }
+        ],
+        "U": 0,
+        "seam": {
+          "kd": 5,
+          "free": 10,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            5,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            5,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "black": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "enemy king g3, d(g3,b8)=5 (at the cap)"
+    },
+    {
+      "id": "KD3-B",
+      "group": "KD",
+      "pair": "KD3",
+      "half": "B",
+      "fen": "r7/8/8/8/8/1P5k/8/2K5 w - - 0 1",
+      "phase": 2,
+      "white": {
+        "passers": [
+          {
+            "sq": "b3",
+            "R": 2,
+            "dE": 6,
+            "dO": 7,
+            "free": 1
+          }
+        ],
+        "U": 0,
+        "seam": {
+          "kd": 5,
+          "free": 10,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            5,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            5,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "black": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "enemy king g3 -> h3 (d 5 -> 6), a step beyond the cap: kd moves by 0 (a cap at 6 reads +2)"
+    },
+    {
+      "id": "KD4-A",
+      "group": "KD",
+      "pair": "KD4",
+      "half": "A",
+      "fen": "r7/8/8/8/5k2/1P6/8/2K5 w - - 0 1",
+      "phase": 2,
+      "white": {
+        "passers": [
+          {
+            "sq": "b3",
+            "R": 2,
+            "dE": 4,
+            "dO": 7,
+            "free": 1
+          }
+        ],
+        "U": 0,
+        "seam": {
+          "kd": 3,
+          "free": 10,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            4,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            5,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "black": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "enemy king f4, d(f4,b8)=4"
+    },
+    {
+      "id": "KD4-B",
+      "group": "KD",
+      "pair": "KD4",
+      "half": "B",
+      "fen": "r7/8/8/8/6k1/1P6/8/2K5 w - - 0 1",
+      "phase": 2,
+      "white": {
+        "passers": [
+          {
+            "sq": "b3",
+            "R": 2,
+            "dE": 5,
+            "dO": 7,
+            "free": 1
+          }
+        ],
+        "U": 0,
+        "seam": {
+          "kd": 5,
+          "free": 10,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            5,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            5,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "black": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "enemy king f4 -> g4 (d 4 -> 5), the last step inside the cap: kd moves by KE[2] = 2 (a cap at 4 reads 0)"
+    },
+    {
+      "id": "KD5-A",
+      "group": "KD",
+      "pair": "KD5",
+      "half": "A",
+      "fen": "r7/8/4k3/8/4p3/1K6/8/7R b - - 0 1",
+      "phase": 4,
+      "white": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "black": {
+        "passers": [
+          {
+            "sq": "e4",
+            "R": 4,
+            "dE": 3,
+            "dO": 5,
+            "free": 1
+          }
+        ],
+        "U": 0,
+        "seam": {
+          "kd": 6,
+          "free": 35,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            3,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            5,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "black e4, own king e6, d(e6,e1)=5 (at the cap); the white rook on h1 attacks e1, which is not read"
+    },
+    {
+      "id": "KD5-B",
+      "group": "KD",
+      "pair": "KD5",
+      "half": "B",
+      "fen": "r7/4k3/8/8/4p3/1K6/8/7R b - - 0 1",
+      "phase": 4,
+      "white": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "black": {
+        "passers": [
+          {
+            "sq": "e4",
+            "R": 4,
+            "dE": 3,
+            "dO": 6,
+            "free": 1
+          }
+        ],
+        "U": 0,
+        "seam": {
+          "kd": 6,
+          "free": 35,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            3,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            5,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "own king e6 -> e7 (d 5 -> 6), beyond the cap: kd moves by 0"
+    },
+    {
+      "id": "KD6-A",
+      "group": "KD",
+      "pair": "KD6",
+      "half": "A",
+      "fen": "7N/8/8/8/3k4/2p5/7K/8 b - - 0 1",
+      "phase": 1,
+      "white": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "black": {
+        "passers": [
+          {
+            "sq": "c3",
+            "R": 5,
+            "dE": 5,
+            "dO": 3,
+            "free": 1
+          }
+        ],
+        "U": 0,
+        "seam": {
+          "kd": 42,
+          "free": 60,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            5,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "black c3 (R 5), own king d4, d(d4,c1)=3"
+    },
+    {
+      "id": "KD6-B",
+      "group": "KD",
+      "pair": "KD6",
+      "half": "B",
+      "fen": "7N/8/8/8/8/2pk4/7K/8 b - - 0 1",
+      "phase": 1,
+      "white": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "black": {
+        "passers": [
+          {
+            "sq": "c3",
+            "R": 5,
+            "dE": 5,
+            "dO": 2,
+            "free": 1
+          }
+        ],
+        "U": 0,
+        "seam": {
+          "kd": 48,
+          "free": 60,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            5,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "own king d4 -> d3 (d 3 -> 2): kd moves by KO[5] = 6"
+    },
+    {
+      "id": "KD7-A",
+      "group": "KD",
+      "pair": "KD7",
+      "half": "A",
+      "fen": "r7/2k5/8/7K/4p3/8/8/R7 b - - 0 1",
+      "phase": 4,
+      "white": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "black": {
+        "passers": [
+          {
+            "sq": "e4",
+            "R": 4,
+            "dE": 4,
+            "dO": 6,
+            "free": 1
+          }
+        ],
+        "U": 0,
+        "seam": {
+          "kd": 13,
+          "free": 35,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            4,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            5,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "mirrorPosition(KD1-A): colours swap"
+    },
+    {
+      "id": "KD7-B",
+      "group": "KD",
+      "pair": "KD7",
+      "half": "B",
+      "fen": "r7/2k5/8/8/4p2K/8/8/R7 b - - 0 1",
+      "phase": 4,
+      "white": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "black": {
+        "passers": [
+          {
+            "sq": "e4",
+            "R": 4,
+            "dE": 3,
+            "dO": 6,
+            "free": 1
+          }
+        ],
+        "U": 0,
+        "seam": {
+          "kd": 6,
+          "free": 35,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            3,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            5,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "mirrorPosition(KD1-B)"
+    },
+    {
+      "id": "KD8-A",
+      "group": "KD",
+      "pair": "KD8",
+      "half": "A",
+      "fen": "7r/8/7k/3P4/8/3P4/8/RK6 w - - 0 1",
+      "phase": 4,
+      "white": {
+        "passers": [
+          {
+            "sq": "d5",
+            "R": 4,
+            "dE": 4,
+            "dO": 7,
+            "free": 1
+          }
+        ],
+        "U": 0,
+        "seam": {
+          "kd": 13,
+          "free": 35,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            4,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            5,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "black": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "doubled passers d3 / d5: only the front d5 is read (reading d3 too gives 16)"
+    },
+    {
+      "id": "KD8-B",
+      "group": "KD",
+      "pair": "KD8",
+      "half": "B",
+      "fen": "7r/8/6k1/3P4/8/3P4/8/RK6 w - - 0 1",
+      "phase": 4,
+      "white": {
+        "passers": [
+          {
+            "sq": "d5",
+            "R": 4,
+            "dE": 3,
+            "dO": 7,
+            "free": 1
+          }
+        ],
+        "U": 0,
+        "seam": {
+          "kd": 6,
+          "free": 35,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            3,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            5,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "black": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "enemy king h6 -> g6 (d 4 -> 3): kd moves by KE[4] = 7 (reading d3 too gives 7, a move of 9)"
+    },
+    {
+      "id": "KD9-A",
+      "group": "KD",
+      "pair": "KD9",
+      "half": "A",
+      "fen": "8/7N/8/1P2k3/6p1/8/K7/8 w - - 0 1",
+      "phase": 1,
+      "white": {
+        "passers": [
+          {
+            "sq": "b5",
+            "R": 4,
+            "dE": 3,
+            "dO": 6,
+            "free": 1
+          }
+        ],
+        "U": 0,
+        "seam": {
+          "kd": 6,
+          "free": 35,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            3,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            5,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "black": {
+        "passers": [
+          {
+            "sq": "g4",
+            "R": 4,
+            "dE": 6,
+            "dO": 4,
+            "free": 1
+          }
+        ],
+        "U": 0,
+        "seam": {
+          "kd": 23,
+          "free": 35,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            5,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            4,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "a passer each side: the black king is white's enemy king and black's own king"
+    },
+    {
+      "id": "KD9-B",
+      "group": "KD",
+      "pair": "KD9",
+      "half": "B",
+      "fen": "8/7N/8/1P6/4k1p1/8/K7/8 w - - 0 1",
+      "phase": 1,
+      "white": {
+        "passers": [
+          {
+            "sq": "b5",
+            "R": 4,
+            "dE": 4,
+            "dO": 6,
+            "free": 1
+          }
+        ],
+        "U": 0,
+        "seam": {
+          "kd": 13,
+          "free": 35,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            4,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            5,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "black": {
+        "passers": [
+          {
+            "sq": "g4",
+            "R": 4,
+            "dE": 6,
+            "dO": 3,
+            "free": 1
+          }
+        ],
+        "U": 0,
+        "seam": {
+          "kd": 26,
+          "free": 35,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            5,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            3,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "black king e5 -> e4, one step: white kd +KE[4] = 7 (d 3 -> 4), black kd +KO[4] = 3 (d 4 -> 3)"
+    },
+    {
+      "id": "FP1-A",
+      "group": "FP",
+      "pair": "FP1",
+      "half": "A",
+      "fen": "7r/8/3n3k/3P4/8/8/8/R5K1 w - - 0 1",
+      "phase": 5,
+      "white": {
+        "passers": [
+          {
+            "sq": "d5",
+            "R": 4,
+            "dE": 4,
+            "dO": 7,
+            "free": 0
+          }
+        ],
+        "U": 0,
+        "seam": {
+          "kd": 13,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            4,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            5,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "black": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "a black knight on d6, the stop square: not free"
+    },
+    {
+      "id": "FP1-B",
+      "group": "FP",
+      "pair": "FP1",
+      "half": "B",
+      "fen": "7r/8/7k/3P4/8/8/8/R5K1 w - - 0 1",
+      "phase": 4,
+      "white": {
+        "passers": [
+          {
+            "sq": "d5",
+            "R": 4,
+            "dE": 4,
+            "dO": 7,
+            "free": 1
+          }
+        ],
+        "U": 0,
+        "seam": {
+          "kd": 13,
+          "free": 35,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            4,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            5,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "black": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "no knight: free (the black rook on h8 attacks d8, which is not read)"
+    },
+    {
+      "id": "FP2-A",
+      "group": "FP",
+      "pair": "FP2",
+      "half": "A",
+      "fen": "6n1/1B6/5k2/8/1P6/8/4K3/8 w - - 0 1",
+      "phase": 2,
+      "white": {
+        "passers": [
+          {
+            "sq": "b4",
+            "R": 3,
+            "dE": 4,
+            "dO": 6,
+            "free": 0
+          }
+        ],
+        "U": 0,
+        "seam": {
+          "kd": 6,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            4,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            5,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "black": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "an OWN bishop on b7, mid-path: not free"
+    },
+    {
+      "id": "FP2-B",
+      "group": "FP",
+      "pair": "FP2",
+      "half": "B",
+      "fen": "6n1/8/5k2/8/1P6/8/4K3/8 w - - 0 1",
+      "phase": 1,
+      "white": {
+        "passers": [
+          {
+            "sq": "b4",
+            "R": 3,
+            "dE": 4,
+            "dO": 6,
+            "free": 1
+          }
+        ],
+        "U": 0,
+        "seam": {
+          "kd": 6,
+          "free": 20,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            4,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            5,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "black": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "no bishop: free"
+    },
+    {
+      "id": "FP3-A",
+      "group": "FP",
+      "pair": "FP3",
+      "half": "A",
+      "fen": "n7/8/8/7k/8/1K3p2/8/5R2 b - - 0 1",
+      "phase": 3,
+      "white": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "black": {
+        "passers": [
+          {
+            "sq": "f3",
+            "R": 5,
+            "dE": 4,
+            "dO": 4,
+            "free": 0
+          }
+        ],
+        "U": 0,
+        "seam": {
+          "kd": 24,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            4,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            4,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "black f3: a white rook on f1, the queening square itself: not free (a walk that stops before Q reads 60)"
+    },
+    {
+      "id": "FP3-B",
+      "group": "FP",
+      "pair": "FP3",
+      "half": "B",
+      "fen": "n7/8/8/7k/8/1K3p2/8/8 b - - 0 1",
+      "phase": 1,
+      "white": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "black": {
+        "passers": [
+          {
+            "sq": "f3",
+            "R": 5,
+            "dE": 4,
+            "dO": 4,
+            "free": 1
+          }
+        ],
+        "U": 0,
+        "seam": {
+          "kd": 24,
+          "free": 60,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            4,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            4,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "no rook: free"
+    },
+    {
+      "id": "FP4-A",
+      "group": "FP",
+      "pair": "FP4",
+      "half": "A",
+      "fen": "8/r7/8/4k3/8/7N/P7/2K5 w - - 0 1",
+      "phase": 3,
+      "white": {
+        "passers": [
+          {
+            "sq": "a2",
+            "R": 1,
+            "dE": 4,
+            "dO": 7,
+            "free": 0
+          }
+        ],
+        "U": 0,
+        "seam": {
+          "kd": 4,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            4,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            5,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "black": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "a2 on its start rank: a black rook on a7, the far end of the path: not free (a stop-square-only read says free)"
+    },
+    {
+      "id": "FP4-B",
+      "group": "FP",
+      "pair": "FP4",
+      "half": "B",
+      "fen": "8/8/8/4k3/8/7N/P7/2K5 w - - 0 1",
+      "phase": 1,
+      "white": {
+        "passers": [
+          {
+            "sq": "a2",
+            "R": 1,
+            "dE": 4,
+            "dO": 7,
+            "free": 1
+          }
+        ],
+        "U": 0,
+        "seam": {
+          "kd": 4,
+          "free": 5,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            4,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            5,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "black": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "no rook: free"
+    },
+    {
+      "id": "FP5-A",
+      "group": "FP",
+      "pair": "FP5",
+      "half": "A",
+      "fen": "r7/2k5/8/2P5/8/8/8/6KR w - - 0 1",
+      "phase": 4,
+      "white": {
+        "passers": [
+          {
+            "sq": "c5",
+            "R": 4,
+            "dE": 1,
+            "dO": 7,
+            "free": 0
+          }
+        ],
+        "U": 0,
+        "seam": {
+          "kd": -8,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            5,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "black": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "the ENEMY king on c7, on the path: not free (a king is a blocker)"
+    },
+    {
+      "id": "FP5-B",
+      "group": "FP",
+      "pair": "FP5",
+      "half": "B",
+      "fen": "r7/1k6/8/2P5/8/8/8/6KR w - - 0 1",
+      "phase": 4,
+      "white": {
+        "passers": [
+          {
+            "sq": "c5",
+            "R": 4,
+            "dE": 1,
+            "dO": 7,
+            "free": 1
+          }
+        ],
+        "U": 0,
+        "seam": {
+          "kd": -8,
+          "free": 35,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            5,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "black": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "king c7 -> b7, off the path at the same distance 1 to c8: free; kd unchanged"
+    },
+    {
+      "id": "FP6-ctl",
+      "group": "FP",
+      "pair": null,
+      "half": null,
+      "fen": "7r/8/2n4k/3P4/8/8/8/R5K1 w - - 0 1",
+      "phase": 5,
+      "white": {
+        "passers": [
+          {
+            "sq": "d5",
+            "R": 4,
+            "dE": 4,
+            "dO": 7,
+            "free": 1
+          }
+        ],
+        "U": 0,
+        "seam": {
+          "kd": 13,
+          "free": 35,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            4,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            5,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "black": {
+        "passers": [],
+        "U": 0,
+        "seam": {
+          "kd": 0,
+          "free": 0,
+          "un": 0
+        },
+        "features": {
+          "PASSED_KING_ENEMY": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_KING_OWN": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_FREE": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "PASSED_UNSTOPPABLE": 0
+        }
+      },
+      "why": "control: FP1-B plus a black knight on c6, ahead on the ADJACENT file (attacks d8, d4): still free"
+    }
+  ],
+  "k1a": [
+    {
+      "id": "A01",
+      "fen": "8/3k4/8/4PP2/8/8/8/6K1 b - - 0 1",
+      "phase": 0,
+      "why": "connected passers e5/f5, black to move, phase 0"
+    },
+    {
+      "id": "A02",
+      "fen": "8/8/8/7p/P7/3k4/8/5K2 w - - 0 1",
+      "phase": 0,
+      "why": "a race: a4 against h5, phase 0"
+    },
+    {
+      "id": "A03",
+      "fen": "8/5pk1/6p1/8/P7/6P1/5PK1/8 w - - 0 1",
+      "phase": 0,
+      "why": "an outside passer a4 beside a locked kingside, phase 0"
+    },
+    {
+      "id": "A04",
+      "fen": "8/8/8/2P5/8/2P5/k7/4K3 b - - 0 1",
+      "phase": 0,
+      "why": "doubled passers c3/c5 (the rear one not read), phase 0"
+    },
+    {
+      "id": "A05",
+      "fen": "8/1P6/8/8/5k2/8/2n5/6K1 w - - 0 1",
+      "phase": 1,
+      "why": "a passer on the seventh (R 6) against a knight, phase 1"
+    },
+    {
+      "id": "A06",
+      "fen": "8/5k2/8/1P6/6p1/8/5K2/r6R b - - 0 1",
+      "phase": 4,
+      "why": "rook ending, a passer each side, black to move, phase 4"
+    },
+    {
+      "id": "A07",
+      "fen": "3r2k1/5ppp/8/3P4/4P3/p7/5PPP/2B1R1K1 w - - 0 1",
+      "phase": 5,
+      "why": "protected passer d5 blocked on d8; black a3 passer, phase 5"
+    },
+    {
+      "id": "A08",
+      "fen": "r1bqkb1r/5ppp/2n2n2/1P6/8/2N2N2/P4PPP/R1BQKB1R w KQkq - 0 1",
+      "phase": 24,
+      "why": "passers a2/b5 at phase 24 (the loop is skipped at w = D)"
+    },
+    {
+      "id": "A09",
+      "fen": "6k1/8/8/7n/8/8/1p3K2/1B6 b - - 0 1",
+      "phase": 2,
+      "why": "black b2 (R 6) with its queening square b1 held by a white bishop, phase 2"
+    },
+    {
+      "id": "A10",
+      "fen": "8/p6p/8/8/8/2k5/8/K7 w - - 0 1",
+      "phase": 0,
+      "why": "black passers on both rim files, white to move, phase 0"
+    },
+    {
+      "id": "A11",
+      "fen": "8/8/8/2k5/1pP5/8/5K2/6R1 b - c3 0 1",
+      "phase": 2,
+      "why": "an en-passant square; b4 / c4 side by side, both passed, phase 2"
+    },
+    {
+      "id": "A12",
+      "fen": "8/8/8/8/1p6/8/5PK1/3k4 w - - 0 1",
+      "phase": 0,
+      "why": "both sides unstoppable: black b4 with the defender to move (3 < 5 - 1), white f2 from its start rank (5 < 7), phase 0"
+    }
+  ]
+}
