@@ -1,3 +1,4 @@
+_Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — ABC-281 cut (NFR-008 headroom; DoR 9/10) → `arch-ABC-281`. Owner: ADR-0070 form._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `secnfr-nfr008-headroom` merged: NFR-008 PASS_WITH_RISKS (median 9.77–9.90 s, 0/15 over); R-N8H-1 MEDIUM open (owner Orchestrator); Q-N8H-1 held. → `bapm-nfr008-rows` (move 3 rows to deep lanes, −0.38 s). Owner: ADR-0070 form._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `scribe-see-lane` merged (AGENTS.md SEE + tune deep lanes; 18 429 / 18 432 B; QE-279-g closed). Running: secnfr-nfr008-headroom. Owner: ADR-0070 form._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — **ABC-280 DONE** (tools/tune on main, src/ unchanged; npm test 2 650/2 650). Nothing running. Waiting on the owner: ADR-0070 form (structure-only recommended / values). Owed: Security/NFR on NFR-008 headroom (QE-280-b, QE-279-e); Scribe lane line for see.test.ts (QE-279-g)._
@@ -1430,7 +1431,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## In Analysis (WIP 0/2)
 
 
-## In Design (WIP 0/2)
+## In Design (WIP 1/2)
+- [ABC-281] **2026-11-04: cut (bapm-nfr008-rows), DoR 9/10 → In Design → `arch-ABC-281` (row 11: W/S/K per row).** The default lane sheds ~0.4 s: three named rows move to their files' deep lanes; NFR-008 re-read graded with a twin (test-only; EPIC-011 lane hygiene; S, P2). R-N8H-1 MEDIUM open; Q-N8H-1 held (trigger: median ≥ 9.6 s after).
 
 
 ## Ready for Dev (WIP 0/6)
