@@ -419,7 +419,7 @@ repo's own readings; **[J]** Architect judgement from common practice (lowest co
 | S1 | aspiration windows | +10–30 | [J] | M | low | T1 | `ABC-236`: `ADR-0066` PROPOSED, premise not met on `main` (2026-11-03; A100 d8 0.9836 / 0.9913); fires at 100 ms; parked |
 | X1 | check extension at every depth (not `ABC-210`'s horizon form) | +10–30 | [J]; [R] `ABC-210` −4.8 ± 16.2 (other form) | S | medium | — | `ABC-210` re-cut, other form (owner: scope) |
 | X2 | singular extension (+ IIR) | +20–50 | [B] 8.0, 8.5.5 | M | high | T1 | none — new ticket |
-| W1 | time use: no doomed iteration started; keep a partial iteration's root move when it beat the incumbent; soft/hard limits under a clock | +10–40 | [B] 7.4 time management; [J] | S–M | low | — | none (`EPIC-009` built modes, not this) |
+| W1 | time use: no doomed iteration started; keep a partial iteration's root move when it beat the incumbent; soft/hard limits under a clock | +10–40 | [B] 7.4 time management; [J] | S–M | low | — | `ABC-282`: `ADR-0071` PROPOSED (2026-11-04, `arch-ABC-282`): `uci-clock-mode` under a clock only; soft limit = budget ÷ 2.3 (measured), the budget the hard limit; read 100 games at `tc=40/8` after a harness ticket |
 | V1 | O1-a/b/c speed (1.08–1.35×) | +5–45 | [D], `ADR-0055` | 3–5 tickets | low | — | being cut now (`bapm-goal3000-o1-cut`) |
 | V2 | O1-d lazy legality (1.25–1.85× with O1) | +15–90 total | [D] | M | medium | `ADR-0003` amend (owner) | O1-d (Backlog) |
 | V3 | staged move generation (hash move before generating; captures before quiets) | +10–30 | [J] | M | medium | V1, V2 | none — new ticket |
@@ -656,6 +656,36 @@ copies of `main`'s `src/` `8adb0a18`): rows E2 and E4.*
     turns e1e5 back to e1f1 (+150; not a fit).
   - The row's "depends on E1, E2" now reads "**E1; values by rule, read on play; E2's second pull fits king distance
     and free path after**".
+
+*Dated 2026-11-04 (`arch-ADR-0070-accept`, records only at `main` `7a9ee712`; his word `…e8a3b5df`, "a"): row E4.*
+- **`ADR-0070` is ACCEPTED in form (a), structure only** (`ADR-0068`'s form, the PREREG's choice rule 4, on the
+  Orchestrator's ruling `…e0ff0aeb`). The three terms land at 0, value-identical and node-identical to `main`, with no
+  switch, no doors and no games. They are computed outside the pawn memo, which grows to 576 KiB.
+- The second pull fits the eg halves of king distance and free path. The unstoppable passer is held at 0: its rule
+  value's pre-registered row missed (`ADR-0070` d7).
+- The probe's readings (191 cp on `zugzwang.001`, the firing figure 29.75 %) were rule values, not shipped. They are a
+  forecast for the second pull, not a reading of it.
+- The row's dependency now reads "**E1; structure at 0; values from E2's second pull, judged in its read**".
+- **Superseded:** the line above, "values by rule, read on play", and the 2026-11-04 bullet's "behind an off-door
+  pair".
+
+*Dated 2026-11-04 (`arch-owner-answers-1104`, records only at `main` `5d402485`; his word `…7de79e90`, verbatim
+"Accept the W1 time-use design (ADR-0071); Q-3K-10: yes"): rows W1 and Q2.*
+- **Row W1: `ADR-0071` is ACCEPTED, form (a), as written** (OQ-0071-1). It is not in force until `ABC-282` merges on
+  A6. The row's ticket cell now reads "`ABC-282`: `ADR-0071` ACCEPTED (2026-11-04, `…7de79e90`)", with the rest of the
+  cell unchanged.
+  - The harness ticket is done: `ABC-300` merged at `4ea39135`. A6 plays its `d --tc 40/8`, so "after a harness
+    ticket" now reads "on `ABC-300`'s `d --tc 40/8`".
+  - `ABC-282` stays held until `ABC-283` merges or misses (the Orchestrator, `…7de79e90`; `ADR-0071` D12).
+- **Row Q2: `ADR-0024` d4 is open for design** (`Q-3K-10` answered yes). The row's "depends on" cell, "—", now reads
+  "`ADR-0024` d4 opened for design by `Q-3K-10` yes (`…7de79e90`)". Its ticket cell, "none (fenced out of
+  `EPIC-010`)", now reads "`ABC-289` (`EPIC-011`)".
+  - **Design only,** as for Q1: its own PREREG and its own ADR, which amends d4. What that ADR must show is listed in
+    `ADR-0024` § Status, the fourth block. A build ships on its own read: C2′, with S′ and the Levels lane.
+  - **Its premise is re-measured first,** on `main` with Q1 in it (`ABC-279`, `7b70e268`). The row's basis, "1.5× trim
+    measured", predates futility, the taper and Q1. The row's +5–20 stays an estimate; after Q1 it is
+    `UNKNOWN - verify`.
+  - This line does not set Q2's slot. The order is the Orchestrator's.
 
 ### D3. Is 3 000 reachable without a neural network?
 
@@ -1523,6 +1553,16 @@ the Phase 4 order now.***
    of the square.
 - `ABC-272` (E7a): any order after E1, one at a time on the evaluation files.
 - **Superseded:** the 2026-11-03 line above, item 5 ("`ABC-271` (E4a), after `ABC-239`, unchanged").
+
+*Dated 2026-11-04 (`arch-ADR-0070-accept`; `ADR-0070` accepted in form (a), `…e8a3b5df`): **item 5's step 3
+changes form, not place.***
+3. **`ABC-271` (E4a, `ADR-0070`):** structure only, at 0, value-identical. No games and no read of its own.
+4. **E2's second pull**, a new attempt on a `main` with E4a's structure. It fits king distance and free path, and
+   holds the unstoppable passer at 0. Its read judges E4a's values with its own.
+- The order is unchanged. **Superseded:** step 3's "rule values, read on its own C2′ (GAIN)", and step 4's "holds the
+  rule of the square" where that meant the value 400.
+- Still the owner's before the second pull: `ADR-0067`'s d6 amendment (the margin-aware bound form) and B-T8's
+  re-confirmation.
 
 ### D7. What is the owner's call
 

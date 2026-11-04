@@ -1,8 +1,9 @@
 ---
 id: ABC-278
 title: "The records path check, hardened: it reads every record as text whatever `.gitattributes` says (the verdict no longer depends on which checkout runs it), decompresses `.xz` like `.gz`, catches the foreign-argv shapes it missed (`<pid> <cmd> <flags> <abs>`, an absolute executable alone, `ps -ef` / `ps aux` lines) and a home path followed by `.`, `-` or `_`, prints a git-quoted file name without a stray quote or TAB, and reads both the `$HOME` and the account home. Still exits 0 on its own branch (`ADR-0049` D4; `QE-277-a`…`-f`)"
-status: ready
-column: Ready
+status: done
+column: Done
+closed: "2026-11-03, merged to local main at 3cc43abb (the board card names no SHA; the merge commit read from git log); QE PASS_WITH_GAPS (qe-ABC-278 …2e755100), which signs acceptance (tools and records, no UAT); 278-a / 278-b LOW accepted by the Orchestrator. Front matter only, by bapm-W1-bundle-cut"
 size: S
 priority: P2
 epic: EPIC-011

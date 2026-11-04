@@ -1,0 +1,14 @@
+rows 125 I0 equal 125
+thrown share: base median 0.3766 mean 0.3875 p25 0.2212 p75 0.5254 | head median 0.0000 mean 0.0902 p75 0.0000 p90 0.6257
+rows aborted: base 124 head 16
+head depth - base depth: {"0":103,"-1":22}
+head partial kept 3 of 16 aborted head rows
+moves differ 4 | of which partial 3
+head used: min 0.4375 p10 0.4910 p25 0.5450 median 0.6400 mean 0.6889 p75 0.8200 max 1.0400 | base used median 1.0100 max 1.0400
+firstNotIncumbent sum base 0 head 0
+H 25 base thrown med 0.4495 head 0.0000 base depth med 5 head 5 head used med 0.6000 partial 0 aborted b/h 24 2
+H 50 base thrown med 0.4248 head 0.0000 base depth med 6 head 6 head used med 0.6400 partial 1 aborted b/h 25 5
+H 100 base thrown med 0.3385 head 0.0000 base depth med 7 head 7 head used med 0.6400 partial 0 aborted b/h 25 0
+H 200 base thrown med 0.3533 head 0.0000 base depth med 8 head 8 head used med 0.7000 partial 2 aborted b/h 25 6
+H 400 base thrown med 0.3664 head 0.0000 base depth med 9 head 9 head used med 0.6475 partial 0 aborted b/h 25 3
+mean depth base 7.3520 head 7.1760

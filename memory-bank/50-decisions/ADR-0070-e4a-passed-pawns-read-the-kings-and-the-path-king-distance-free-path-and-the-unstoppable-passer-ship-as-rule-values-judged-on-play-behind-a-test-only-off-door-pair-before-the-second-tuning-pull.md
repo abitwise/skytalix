@@ -2,44 +2,50 @@
 kind: adr
 id: ADR-0070
 ---
-# ADR-0070: E4a (`ABC-271`): passed pawns read the kings and the path. King distance to the queening square, a free path, and the unstoppable passer by the rule of the square, as endgame halves made by stated rules and computed outside the pawn memo. They ship as rule values judged on play, behind a test-only off-door pair, before the second tuning pull, which then fits king distance and free path
+# ADR-0070: E4a (`ABC-271`) lands as structure only, before the second tuning pull. King distance to the queening square, a free path, and the unstoppable passer by the rule of the square are added as endgame terms at 0, computed outside the pawn memo. So the build is value-identical and node-identical to `main`, with no switch, no doors and no games. The second pull fits king distance and free path; the unstoppable passer is held at 0. The probed rule values are not shipped
 
 ## Status
 
-**PROPOSED 2026-11-04.** Recorded by Architect/Design (task `arch-ABC-271`, on `grugops/arch-ABC-271` from `main`
-`ac55ddf6`). ADR-0070 was the next free id after `ADR-0069`; no other record used it.
-- **Acceptance is the owner's.** This is a new ADR, and its values are a requirement-level choice
-  (`memory-bank/45-standing-rulings.md`, 2026-10-22).
-- **Reading (b)** (the `ADR-0064` / `ADR-0068` precedent): the build may start while this ADR is PROPOSED. The
-  100-game read and the merge wait for acceptance.
-- **The answer that settles it:** *"accept ADR-0070"* or *"decline it"*.
-- **Default without an answer:** `main` keeps E1's passer term, and the second pull waits for E4a's disposition.
-- **Why now:** `ABC-239`'s first pull closed NOT MET (`…4c76bf7a`). `arch-ABC-239-f3f4` (`…4eae0fd3`, `…69f22167`)
-  traced `zugzwang.001`'s e1e5 to the fitted endgame halves of the pawn, rook, king and passer terms. It found that no
-  relation on today's features can hold it: the passer part needs free-path and king-distance features. Its path
-  (iii) put E4a before a second pull.
-- **The probe:**
-  - It ran under the PREREG `…eeb25cc6` (commit `029533f0`), sealed before any measured run, and one addendum
-    `…3a9eba86` (commit `904b3fff`), sealed before its diagnostic.
-  - It ran on scratch copies of `main`'s `src/` (tree `8adb0a18`: E1, E2-pre, E3a structure, Q1), outside the
-    repository, under the host lock, about 3 min of runs in all. Nothing was committed to `src/` or `tools/`.
-  - Scripts and outputs: `.grugops/context/arch-ABC-271/raw/`.
-- **The verdict: H, all three terms on their rule values, holds every play-safety and cost row.**
-  - The mirror and phase 24 hold, and so do the mate floor (0 / 163, 0 / 190), zugzwang (7 / 7), `G1` (54 / 58, none
-    newly missed) and `G2` (R = 1.0269).
-  - **E3, the generated relation rows, missed as pre-registered.** The diagnostic classes every failure: the other
-    terms (king exposure), the king leaving the passer's path, or a one-step king distance of 1 cp of eg lost to the
-    blend's trunc at phase 4.
-  - By the addendum, the third class means STOP and restate the rule. The rule is restated in decision 1's
-    resolution clause and decision 5's relation domains. **No value moved.**
-  - **Taking choice rule 1 after an E3 miss is a judgment.** The Orchestrator may overrule it with choice rule 4
-    (structure only), which is named in § Alternatives.
-- **What it amends (dated lines written here, records only):**
-  - `ADR-0056` row E2's status (first pull NOT MET; E4a before a second pull), row E4 and D6's order;
-  - `ADR-0067` § Consequences item 5 (the order);
-  - `ADR-0064` d10 (E4's pointer).
-  - **Owed, not edited here:** the `ABC-271` page and `EPIC-011` (BA/PM). The lines are in decision note `…bbc0a213` of
-    this task, § 4.
+**ACCEPTED 2026-11-04 by the owner, in form (a): structure only, in `ADR-0068`'s form. Not in force until `ABC-271`
+merges.** Recorded by Architect/Design (task `arch-ADR-0070-accept`, records only, on `grugops/arch-ADR-0070-accept`
+from `main` `7a9ee712`). Nothing was run.
+- **His word, verbatim** (`orch-2026-10-30a` `…e8a3b5df`): *"a"*. The question (`…e0ff0aeb`) was "accept ADR-0070 in
+  the structure-only form (Orchestrator recommends), or override to the values route".
+- **The Orchestrator's ruling it accepts** (`…e0ff0aeb`): the PREREG's sealed choice rule governs, not the judgment
+  made after the reading. E3's generated relation rows missed (the square 44 / 404, king distance 312 / 2 123) and stay
+  NOT MET. The restated relation domains apply only to a future attempt with its own PREREG. So choice rule 1 is not
+  taken, and **choice rule 4** is: the fallback this ADR's § Alternatives named.
+- **What it settles:** `ABC-271` is a structure ticket. It adds the three terms at `{ 0, 0 }`, value-identical and
+  node-identical to `main` (K0–K4, decision 5), and plays no games. The second pull fits king distance and free path.
+  One read, the second pull's, judges E4a's values.
+- **The door reading.** The brief for this restatement wrote "behind the off-door pair" and listed "the door pair" among
+  the bars. The accepted form has **no switch and no doors** (`…e0ff0aeb`; this ADR's § Alternatives; `ADR-0068` d4).
+  Both readings are named here. The one taken is the accepted form: "the door pair" is read as **every existing door
+  pair reads its pre-ticket counts** (K0). A new door pair is not added (§ Alternatives).
+- **The file name** keeps the PROPOSED slug ("ship as rule values … behind a test-only off-door pair"), because sealed
+  notes cite the path. The title above is the decision.
+- **Lines written with the acceptance:**
+  - `ADR-0067`: d5 (the tracer) and d6 (the second pull's free set), § Consequences item 5, a log row and a Status line;
+  - `ADR-0056`: row E4 and D6 item 5;
+  - `ADR-0064`: d10.
+  - **Still owed** (BA/PM): the `ABC-271` page and `EPIC-011`. The lines are in this task's decision note.
+- **Still the owner's, and not decided here:** `ADR-0067`'s d6 amendment (every relation bounded at once, the
+  margin-aware form) and the re-confirmation of B-T8 for the second pull (`ADR-0067` d6's dated line of 2026-11-04).
+
+*Before acceptance:* **PROPOSED 2026-11-04** (task `arch-ABC-271`, on `grugops/arch-ABC-271` from `main` `ac55ddf6`;
+text of record `01d2434b`). It proposed choice rule 1: the three terms shipped on their rule values, judged on their
+own 100-game read (GAIN), behind a test-only off-door pair, with P0–P8 as the bars.
+- **Why then:** `ABC-239`'s first pull closed NOT MET (`…4c76bf7a`). `arch-ABC-239-f3f4` (`…4eae0fd3`, `…69f22167`)
+  traced `zugzwang.001`'s e1e5 to the fitted endgame halves of the pawn, rook, king and passer terms. No relation on
+  today's features could hold it: the passer part needs free-path and king-distance features. Its path (iii) put E4a
+  before a second pull.
+- **The probe** ran under the PREREG `…eeb25cc6` (commit `029533f0`), sealed before any measured run, and one
+  addendum `…3a9eba86` (commit `904b3fff`), sealed before its diagnostic. It ran on scratch copies of `main`'s `src/`
+  (tree `8adb0a18`), outside the repository, under the host lock, about 3 min of runs in all. Scripts and outputs:
+  `.grugops/context/arch-ABC-271/raw/`.
+- **Its verdict:** H (all three terms on their rule values) held every play-safety and cost row. E3 missed as
+  pre-registered. The PROPOSED text took choice rule 1 as a flagged judgment and named rule 4 as the fallback. That
+  judgment is the one the Orchestrator overruled.
 
 ## Decision log
 
@@ -48,6 +54,9 @@ id: ADR-0070
 | 2026-11-04 | Architect/Design | PREREG sealed before any measured run | `arch-ABC-271` `…eeb25cc6`, `029533f0` |
 | 2026-11-04 | Architect/Design | Batches A, B read: I1 exact; H holds E1, E2, E4–E6; E3 missed. Addendum before one diagnostic | `…3a9eba86`, `904b3fff` |
 | 2026-11-04 | Architect/Design | Batch D: E3's failures classed (c) 44 F; (d) 196 F, 101 P, 15 R (trunc at phase 4 on rank-2 passers). Batches G, F, C, E read. PROPOSED: rule values ship on play, GAIN | `…c9af6d84` (results), `…bbc0a213` (decision) |
+| 2026-11-04 | Orchestrator | The sealed choice rule governs: E3 stays NOT MET, rule 1 is not taken, rule 4 (structure only, `ADR-0068` form). Owner asked | `orch-2026-10-30a` `…e0ff0aeb` |
+| 2026-11-04 | Owner | **ACCEPTED, form (a)** ("a") | `orch-2026-10-30a` `…e8a3b5df` |
+| 2026-11-04 | Architect/Design | Restated as ACCEPTED in form (a): the terms at 0, K0–K4, U held at 0 at the second pull. `ADR-0067` d5 / d6 / item 5, `ADR-0056` E4 / D6, `ADR-0064` d10 written. No bar moved | `arch-ADR-0070-accept` |
 
 ## Context
 
@@ -60,7 +69,7 @@ id: ADR-0070
   three h-passers alike in both lines, though all three are frozen (h1 holds Black's king, h2 and h3 Black's own
   pawns). No term could tell a frozen passer from a free one.
 
-### The probe (PREREG `…eeb25cc6`, addendum `…3a9eba86`)
+### The probe (PREREG `…eeb25cc6`, addendum `…3a9eba86`). History: the rule values it read are not shipped
 
 **Forms:** BASE (every term off, = `main`); H (all three: the candidate); the singles KD, FP and UN (reports).
 
@@ -110,7 +119,8 @@ record, `qe-ABC-269` b8 and `qe-ABC-279` c2):
 | FP | 31.29 % | 25.20 % | 16.40 % | 84.5 % |
 | UN | 0.58 % | 0.58 % | 0.58 % | 14.5 % |
 
-29.75 % ≥ 5.0 %, so **the intent is GAIN** by the pre-registered rule. NEUTRAL is not open.
+29.75 % ≥ 5.0 %, so the intent was GAIN by the pre-registered rule. *Under form (a) no value ships, so `ABC-271` has
+no intent class and no read. The figure is history and a forecast for the second pull.*
 
 **`zugzwang.001` at depth 9** (v(m) = −`search`(after m, 8), White's view; `arch-ABC-239-f3f4` D2's form):
 
@@ -122,10 +132,11 @@ record, `qe-ABC-269` b8 and `qe-ABC-279` c2):
 | `26d06118` (the first pull's fit), BASE | −464 | −445 | −19 | **e1e5** |
 | `26d06118`, H | −331 | −481 | +150 | e1f1 |
 
-- E4a widens the margin by which the row is held at depth 9 from 29 cp to 191 cp. On the fitted table it turns the
-  failure back to e1f1, by 150 cp.
+- On the rule values, E4a widened the depth-9 margin from 29 cp to 191 cp. On the fitted table it turned the failure
+  back to e1f1, by 150 cp.
 - The last row is not a fit: hand terms were added onto a table fitted without them. It says that E4a's features
   carry the distinction the first pull lacked, not that a refit keeps it (`UNKNOWN - verify`).
+- *Under form (a), `main`'s margin stays 29 cp until the second pull emits.*
 
 **Reports (decide nothing):**
 - Reach at 47 000 nodes: 6.716 → 6.679 (−0.037 ply).
@@ -133,186 +144,178 @@ record, `qe-ABC-269` b8 and `qe-ABC-279` c2):
   differ; 0 mate flips.
 - `G2` on the endgame report set (six positions chosen by rule from the C2′ games, phases 3–8, with passers):
   1.084 / 1.086 ×.
-- **The default lane with H wired in:** 23 reds beside `main`'s one environment red. All are migration, listed in
-  decision 6.
+- **The default lane with H wired in:** 23 reds beside `main`'s one environment red, all migration (batch E,
+  `raw/out/E-lane-summary.md`). At 0 only the two memo-size rows arise (decision 6).
 
 ## Decision
 
-1. **The three terms. Endgame halves only, each by a stated rule** (`ABC-215`; this project's own, `ADR-0048`).
-   - Every middlegame half is 0, so phase 24 is E1 exactly (`ABC-271` P1 (b); E2 0 / 333).
+1. **The three terms: endgame structure, every value 0.** This is the PREREG's choice rule 4.
+   - `src/evaluate-params.ts` gains, in the file's present shape: three by-rank arrays of `{ mg, eg }` pairs,
+     `PASSED_KING_ENEMY`, `PASSED_KING_OWN` and `PASSED_FREE`, and one pair, `PASSED_UNSTOPPABLE`. **Every half of
+     every entry is 0.** `tools/tune` reads and writes them unchanged.
+   - Each comment records its rule as the prior: "start (prior): 0. The rule (below) was probed and not shipped
+     (`ADR-0070`)". A data row pins every E4a middlegame half at 0.
    - Notation: R is the passer's own rank index (1 is its start rank, 6 is one step from promotion). d is the
      Chebyshev distance (king steps). Q is the queening square.
    - **King distance:** eg += `PASSED_KING_ENEMY[R]` × min(d(enemy king, Q), 5) − `PASSED_KING_OWN[R]` ×
-     min(d(own king, Q), 5).
-     - `PASSED_KING_ENEMY` eg = PASSED.eg[R] / 10 = 0, 1, 2, 4, 7, 12, 20.
-     - `PASSED_KING_OWN` eg = floor(PASSED.eg[R] / 20) = 0, 0, 1, 2, 3, 6, 10.
-     - The enemy king counts double, because catching the pawn decides more than escorting it. Both distances are
-       capped at 5.
-     - **Resolution clause (the addendum's restatement):** the term is monotone in each king's capped distance. It
-       is strictly monotone in the eg half, and so in `evaluate` at phase 0. At phase w > 0 the blend's trunc may
-       drop a step worth less than 24 / (24 − w) cp, which is the rank-2 step of 1 cp at phase 4. That is a
-       property of any small endgame-only term under `ADR-0064` d2's trunc, not of these values. No value moves.
-     - **The target is the queening square, not the stop square.** The brief wrote "the stop square"; the ticket's
-       scope 1 and P1 (d) name the queening square. The queening square is taken: the rule of the square reads the
-       same square, and on the seventh rank the two are the same square. Both readings are named here, not picked
-       silently.
-   - **Free path:** eg += `PASSED_FREE[R]` = PASSED.eg[R] / 2 = 0, 5, 10, 20, 35, 60, 100.
-     - It applies when every square ahead of the passer, up to and including Q, is empty. Any piece of either colour
-       blocks, and a king on the path is a blocker.
-     - Attacked squares are not read: that needs an attack map, which the evaluation does not build.
-   - **The unstoppable passer (the rule of the square):**
-     - It applies at phase 0 only, to a passer with a free path, when moves < d(defending king, Q) − (1 if the
-       defender is to move). moves = 5 from the start rank (the double step), else 7 − R.
-     - **U = 400**, once per side, however many unstoppable passers the side has. The rule: Q − (P + PASSED.eg[6] +
-       PASSED_FREE.eg[6] + 5 × PASSED_KING_ENEMY.eg[6]) = 900 − 500. So a pawn's whole score while unstoppable stays
-       at most a queen's.
-     - When both sides have one, they cancel, and the race is the search's.
-   - The values live in `src/evaluate-params.ts` as `{ mg, eg }` pairs in the file's present shape: three by-rank
-     arrays and one scalar, each with its rule in the comment. `tools/tune` reads and writes them unchanged.
-     - A data row pins every E4a middlegame half at 0.
+     min(d(own king, Q), 5). Both distances are capped at 5.
+     - **The target is the queening square, not the stop square.** The `arch-ABC-271` brief wrote "the stop square";
+       the ticket's scope 1 names the queening square. The rule of the square reads the same square, and on the
+       seventh rank the two are the same square.
+   - **Free path:** eg += `PASSED_FREE[R]` when every square ahead of the passer, up to and including Q, is empty. Any
+     piece of either colour blocks, and a king on the path is a blocker. Attacked squares are not read: that needs an
+     attack map, which the evaluation does not build.
+   - **The unstoppable passer (the rule of the square):** at phase 0 only, a passer with a free path, when moves <
+     d(defending king, Q) − (1 if the defender is to move). moves = 5 from the start rank (the double step), else
+     7 − R. It adds `PASSED_UNSTOPPABLE` once per side, however many such passers the side has. When both sides have
+     one, they cancel, and the race is the search's.
+   - **The probed rule values (not shipped; K1 (c)'s seam values):**
+     - `PASSED_KING_ENEMY` eg = PASSED.eg[R] / 10 = 0, 1, 2, 4, 7, 12, 20;
+     - `PASSED_KING_OWN` eg = floor(PASSED.eg[R] / 20) = 0, 0, 1, 2, 3, 6, 10;
+     - `PASSED_FREE` eg = PASSED.eg[R] / 2 = 0, 5, 10, 20, 35, 60, 100;
+     - U = 400 = Q − (P + PASSED.eg[6] + PASSED_FREE.eg[6] + 5 × PASSED_KING_ENEMY.eg[6]) = 900 − 500.
+     - The addendum's resolution clause stays with them as history: the king-distance part is strictly monotone in
+       the eg half; above phase 0 the blend's trunc may drop a step worth less than 24 / (24 − w) cp.
+   - **Every middlegame half stays 0, at the build and at every pull.** Decision 2 skips the loop at w = D, which is
+     exact only while those halves are 0.
 2. **Which passers count, and where.**
    - `pawnStructure` also records, per side, the **frontmost passer of each file** as a 24-bit word (3 bits a file:
      the board rank, 0 for none). The memo stores the two words beside its three parts. A hit still returns what a
      miss computes.
-   - A rear passer of a doubled pair is not read by E4a. Its path is blocked by its own pawn, and its king distances
-     would count the file twice.
-   - **The memo grows from 448 to 576 KiB** (2^14 × 36 bytes). `NFR-009`: +128 KiB, under the 1 MiB growth line and
-     far under 16 MiB.
+   - A rear passer of a doubled pair is not read. Its path is blocked by its own pawn, and its king distances would
+     count the file twice.
+   - **The memo grows from 448 to 576 KiB** (2^14 × 36 bytes), at value 0 as at any value. `NFR-009`: +128 KiB, under
+     the 1 MiB growth line and far under 16 MiB.
    - **After the walk, when w < D and a passer exists**, one loop over the eight files reads the two words, the two
      king squares (already found by the walk), the board squares ahead of each passer, and the side to move. It adds
      its sum to Δ only.
-     - At w = D the loop is skipped. That is value-identical while every E4a middlegame half is 0.
+     - At w = D the loop is skipped (decision 1's last line).
      - The phase stays the recursion's argument (cut C1), and the unstoppable rule reads phase = 0.
-3. **Cost per leaf (`G2`).**
+3. **Cost per leaf (`G2`): paid in full at value 0.**
    - A memo hit adds two typed-array reads. A position with no passer, or at phase 24, pays one compare.
    - A position with passers pays, per passer, two distances and a walk of at most six squares.
-   - **Measured on QE's six roots:** R = 1.0269 (bar 1.05). The endgame report set reads about 1.085 ×. Those
-     positions are where the term acts; the bar's roots are mostly at phase 24.
-   - **F5's single value-identical cost cut, named now:** the two distances from a 128 × 128 `Int8Array`
-     (16 KiB, `NFR-009`), and the loop entered only for files with a set field (bit-scan of the words).
-4. **One switch and a door pair** (`ADR-0026` d10's pattern, by reference to `ADR-0064` d7).
-   - One switch, `passerKings`, in `src/search.ts`'s `Switches` and `src/engine.ts`'s `Heuristics`. It is on in
-     `search()` and `chooseMove` only, and it is never module state.
-   - Three TEST-ONLY exports:
-     - `evaluateWithoutPasserKings(position)`: `main`'s `evaluate`, `Object.is`;
-     - `searchWithoutPasserKings` and `chooseMoveWithoutPasserKings`: node for node the pre-ticket paths.
-   - **Every older door turns it off** (the ladder rule). Rows follow `ADR-0064` d7 by reference. **No zugzwang
-     depth is re-pinned.**
-   - **One test-only seam, `passerTermsForTest(position)`,** returns each side's three eg parts. It follows the
-     `kingExposureForTest` precedent and is called only from test files.
-5. **The bars of `ABC-271`, pre-registered** (fixed here; not loosened after Ready):
-   - **P0, node identity with this design.** If `main`'s `src/` moves before the build, the Engineer applies
-     `patch_e4a.py`'s rules to the new base, re-reads the counts and puts both in the PR. A re-derived count is a
-     dated line here, never a moved bar.
-     - `chooseMove`, frozen clock: kiwipete d8 / d9 **776 478 / 1 696 188**; position-6 d8 / d9 / d10
-       **87 548 / 253 904 / 534 281**.
-     - `search()` d8: **551 487 / 406 807**.
-     - The doors read `main`'s: 766 275 / 1 725 150; 87 475 / 253 724 / 533 916; 605 117 / 406 787.
-   - **P1, relations (default lane, no search).** The fixture conditions are the addendum's restatement. QE freezes
-     the positions before the build.
-     - **(a)** The mirror, `Object.is`: `G3` + `TAPER_MIRROR_POSITIONS` + ≥ 10 new passer positions, 0 mismatches.
-     - **(b)** Phase 24 equals E1 (`evaluateWithoutPasserKings`), exactly, on every full-material position.
-     - **(c)** The square. Twins share the defending king's endgame table cell, its reach, and its exposure (both
-       halves, `kingExposureForTest`). Then outside − inside ≥ U = 400 from the passer's side.
-       - Without the exposure condition the bar is not met by construction: −35 cp on rim twins.
-     - **(d)** King distance:
-       - pairs at phase 0;
-       - the farther distance ≤ 5, and the same unstoppable status;
-       - both defending-king squares off the passer's path;
-       - the same table cell, reach and exposure.
-       - Then the passer side is strictly lower with the king nearer.
-     - **(e)** Free path, read through `passerTermsForTest`: the free part is non-zero only when the path is empty.
-   - **P2, the mate floor:** door d4 → head d5, and d5 → d5, on the 287: **0 violations** each (probe 0 / 0).
-   - **P3, zugzwang:** **7 / 7** at recorded depths (probe 7 / 7, with `zugzwang.001` held by 191 cp).
-   - **P4, `G1`:** **≥ 54 / 58**, none newly missed (probe 54 / 58).
-   - **P5:** `ADR-0061`'s cut audit on this scale: ≤ 0.5 % flips, 0 flips of ≥ 200 cp (QE).
-   - **P6, `G2`:** ≤ **1.05 ×** `main`'s `evaluateAtPhase` per call, in `ABC-274` A5's form (QE). The endgame set is
+   - **At 0 the loop does the same work with zero weights,** so the cost is H's: R = 1.0269 on QE's six roots (bar
+     1.05), about 1.085 × on the endgame report set.
+   - **No fast path skips the loop when every value is 0.** It would hide from K3 the cost that the second pull's
+     emission pays.
+   - **F2's single value-identical cost cut, named now:** the two distances from a 128 × 128 `Int8Array` (16 KiB,
+     `NFR-009`), and the loop entered only for files with a set field (bit-scan of the words).
+4. **No switch and no doors** (`ADR-0068` d4's reason: a door would reproduce a path that does not differ).
+   - `ABC-271`'s scope 5 (a switch and a door pair) is struck. With every value 0 the loop adds 0 on every path, so
+     every existing door, older or newer, reads its pre-ticket counts (K0).
+   - **One test-only seam, `passerTermsForTest(position)`,** returns each side's three eg parts (king distance, free,
+     unstoppable) at the parameters in force. It follows the `kingExposureForTest` precedent, so inside
+     `withParametersForTest` it reads the test's table. It is called only from test files.
+5. **The bars of `ABC-271`, pre-registered** (fixed here; not loosened after Ready). The PROPOSED P0–P8 are not bars.
+   - **K0, node identity:** `chooseMove`, frozen clock, kiwipete d8 / d9 **766 275 / 1 725 150**; position-6 d8 / d9 /
+     d10 **87 475 / 253 724 / 533 916**; `search()` d8 **605 117 / 406 787**.
+     - These are the probe's I1, `main` at `src/` tree `8adb0a18`. `main` `7a9ee712`'s tree `4fb3da04` differs from it
+       in three test files only (`ABC-281`), so they stand.
+     - If `main`'s non-test `src/` moves by the build, the Engineer re-reads them on the new base and puts both in the
+       PR. A re-derived count is a dated line here, never a moved bar.
+     - Every existing door reads its pre-ticket counts.
+   - **K1, units (default lane):**
+     - (a) the mirror, `Object.is`: `G3` + `TAPER_MIRROR_POSITIONS` + ≥ 10 new passer positions (frozen by QE before
+       the build), 0 mismatches;
+     - (b) `evaluate` `Object.is`-equal to the pre-ticket `evaluate` over the frozen corpora (`G3`'s 184,
+       `TAPER_DOOR_CORPUS` with the KP rows, `ABC-270`'s queen pairs, and K1 (a)'s new passer positions), in
+       `ABC-270` K1 (b)'s form. `Object.is` sees the sign of a zero: adding a +0 to a −0 gives +0;
+     - (c) **the structure through the seam.** Inside `withParametersForTest` at decision 1's probed values,
+       `passerTermsForTest` returns, on fixtures QE freezes before the build: a king-distance part that moves by
+       exactly `PASSED_KING_ENEMY[R]` per step of the enemy king's capped distance and by `PASSED_KING_OWN[R]` per
+       step of the own king's; a free part non-zero only when the path is empty; and U on exactly the positions the
+       square names at phase 0, else 0. With the values 0, (b) holds. These rows read E4a's own part, by arithmetic.
+       They are not E3's generated relation rows on `evaluate`, which stay NOT MET on record;
+     - (d) the packed int16 range row (`ABC-274` A9) reads the new pairs;
+     - (e) the memo: a hit returns what a fresh `pawnStructure` returns, the two passer words included.
+   - **K2, two re-pins and no others,** both the memo's byte size, 458 752 → 589 824: `src/evaluate.pawns.test.ts`
+     (`ABC-235` cut 5) and `src/transposition.test.ts` (A7's `NFR-009` sum). They record a structure's size, not a
+     value. Any other re-pin, in any lane, means the build is not value-identical: a defect.
+   - **K3, `G2` ≤ 1.05 ×** `main`'s `evaluateAtPhase` per call. QE reads it under a PREREG sealed before timing, with
+     `ADR-0067` d8's A5 instrument (two sessions, reverse order, a `main`-copy control). The endgame report set is
      reported beside it.
-   - **P7, `G6`** (by `Q-3K-4` (b)): every run ≥ depth 6, depth 7 a WARN; medians reported.
-   - **P8, the read:** C2′ 100 games at 100 ms, **GAIN ≥ 50.0 of 100** (the firing figure, 29.75 %, rules out
-     NEUTRAL); S′ at the E in force; the Levels deep lane. A miss is NOT MET and not re-played.
-6. **Migration** (the probe's batch E, 23 reds; `ADR-0064` d7 and `ADR-0028` d2 by reference; old → new in the PR):
-   - **Pins, re-pinned:**
-     - the memo byte rows, 458 752 → 589 824, in `evaluate.pawns.test.ts` (cut 5) and `transposition.test.ts` (A7);
-     - `engine.test.ts` `ABC-249`, 441 → 447.
-   - **Re-pointed to the new door:**
-     - `ABC-270` K1 (b)'s three value-identity rows (a value-identical ticket's rows read the door);
-     - `ABC-269` B1 (e)'s nine phase-18 rows. They are E1's passer rule, so they read the door;
-     - `ABC-274` A3's five formula rows. A3's oracle is the blend of the table's terms, so it reads the door, or it
-       adds `passerTermsForTest`'s part to its expected value.
-   - **Fixture properties re-found:**
-     - `ABC-083` A8's two isolation rows. Their pawn-ending fixtures now hold an unstoppable passer on one side:
-       317 against 693. Re-found at a phase > 0, or with the passer stopped, then checked red with the term zeroed.
-     - `ABC-269` B1 (a)'s −0 trap `M-negzero-b`. Its "evaluates to exactly 0" check now reads E4a's part at phase 21;
-       a new trap with no passer is found. The mirror row itself is green.
-7. **The order: `ABC-271` (these values, on its own read) → the second pull.**
-   - The second pull is a new attempt under `ADR-0067` F6 with its own PREREG, on a `main` with E4a.
-   - It frees the eg halves of `PASSED_KING_ENEMY`, `PASSED_KING_OWN` and `PASSED_FREE` (eg ≥ 0, mg held at 0). It
-     holds `PASSED_UNSTOPPABLE` as a rule (`ADR-0067` § Consequences 5).
-   - The margin-aware bound form (`…69f22167` § 2) stays the owner's word, then.
-   - If P8 misses: E4a's structure is re-offered at 0, value-identical (`ADR-0068`'s form), as the second pull's
-     base. That is this ADR's F6, not a re-play.
+   - **K4, `G6` "≥ base":** each board's median depth ≥ `main`'s, and every run at depth ≥ 6. `Q-3K-4` (b) does not
+     apply, because no value changes (as `ABC-270`).
+   - **No games.** S2 nps is reported only if the Orchestrator rules as for `ABC-270` and `ABC-274` (`…690d3b30`,
+     `…401c3d09`). That ruling is his.
+   - **A source row:** the king squares come from the walk; there is no new pass over the pieces.
+6. **Migration: K2's two rows only.** The probe's batch E list (23 rows) was read at the rule values. At 0 none of its
+   value rows moves (`UNKNOWN - verify` until built). At the second pull, E4a's value rows follow `ADR-0067` B-T4: pins
+   are re-pinned old → new, and a lost fixture property is re-found under `ADR-0028` d2.
+7. **The order: `ABC-271` (structure) → the second pull, and one read judges both.**
+   - The second pull is a new attempt under `ADR-0067` F6, with its own PREREG, on a `main` with E4a's structure. Its
+     read (C2′, S′, Levels, and B-T8 if the owner re-confirms it) is where E4a's values are judged.
+   - **What it fits:** the eg halves of `PASSED_KING_ENEMY`, `PASSED_KING_OWN` and `PASSED_FREE`, each free and ≥ 0.
+     The mg halves are held at 0 (decision 1). The lines are `ADR-0067` d5 and d6's dated lines of 2026-11-04.
+   - **`PASSED_UNSTOPPABLE` is held at 0. It is not free, and it is not held at 400.** The reasons:
+     1. 400 is a rule value whose pre-registered relation row, E3 (c), missed and stays NOT MET (`…e0ff0aeb`).
+        Holding it through the tuner would ship that value by another route. Its restated domain belongs to a future
+        attempt with its own PREREG.
+     2. `ADR-0067` item 5 keeps the rule of the square a rule, not a fitted weight (`…e0ff0aeb`: "UN stays a rule"),
+        so the tuner may not free it.
+     3. 400 is derived from E1's `PASSED.eg[6]` and the probed `PASSED_FREE` and `PASSED_KING_ENEMY` values. The
+        second pull fits those, so on the fitted table 400 is no longer that rule's output.
+     - **The cost, stated:** on `main`'s table UN alone widened `zugzwang.001`'s depth-9 margin from 29 to 114 cp. The
+       second pull does not get that help. Its F4 row rests on king distance and free path (FP alone: +87 cp).
+     - U gets a value only from a later attempt with its own PREREG (a ticket on its own read, or a later pull that
+       names it). Until then its structure costs the phase-0 check and nothing else.
 
 ## Alternatives
 
-- **Structure only, at 0, value-identical, no games (`ADR-0068` form; the PREREG's choice rule 4).** Not taken.
-  - It is cheaper now: about 0.2 h of host time against about 0.9 h.
-  - But E4a's value then arrives only if a second pull passes F6. That pull needs the owner's word on the bound form,
-    plus B-T7 (about 0.7 h) and B-T8 (about 5 h). The first pull of that design missed.
-  - The hand values pass every play-safety row that killed `ADR-0068`'s rule values. On `zugzwang.001` they widen
-    the very margin the first pull broke.
-  - **This is the fallback if the Orchestrator rules that E3's pre-registered miss bars choice rule 1.** The design
-    is then decisions 1–2 at 0, with no switch and no doors, and K0–K4 in `ADR-0068` d6's form.
-- **The stop square as the king-distance target** (the brief's wording; Stockfish's classical form). It needs a
-  second target square beside the rule of the square's, and P1 (d) names the queening square.
+- **Rule values judged on play (the PROPOSED route; the PREREG's choice rule 1).** Not taken. The Orchestrator ruled
+  that the sealed choice rule governs, so E3's miss bars it (`…e0ff0aeb`), and the owner chose (a). It would have read
+  E4a on its own C2′ for about 0.7 h more host time.
+- **A new door pair at value 0** (`ABC-271` scope 5; "the door pair" in this restatement's brief). Not taken: a door
+  would reproduce a path that does not differ (`ADR-0068` d4). Doors come back with the first value-changing passer
+  ticket that is not the tuner's.
+- **U held at its rule value 400 through the second pull.** Not taken: decision 7's three reasons.
+- **U freed in the second pull.** Not taken: `ADR-0067` item 5. A pawn race decides the game result, so a fitted weight
+  on an indicator that fires on 0.58 % of positions would mostly learn the race's outcome.
+- **A fast path that skips the loop while every value is 0.** Not taken: decision 3.
+- **The stop square as the king-distance target** (Stockfish's classical form). It needs a second target square beside
+  the rule of the square's, and the ticket names the queening square.
 - **One centred king-distance weight on (enemy − own).** Not taken: one feature per rank where the tuner can use two.
 - **Every passer, not the frontmost per file.** Not taken: the rear one is always blocked, and the file counts twice.
   The memo would need a 48-bit mask per side.
 - **A safe path (attacked squares).** Not taken: it needs an attack map pass per call. That is E4b's or the tuner's
   question.
-- **An unstoppable value by rank, or a race model.** Not taken: more rule than the evidence carries. The search reads
-  the race.
 - **Computing passers again outside the memo.** Not taken: it re-runs `isPassedPawn` per pawn per call.
-- **Larger rank-2 king weights, so that (d) holds at phase 4.** Not open: that is a value tuned to pass (the
-  PREREG's rule 2). The relation's domain is restated instead.
 - **Re-tuning a bar, re-pinning a zugzwang depth, or moving the mate floor.** Not open (`ADR-0064` F4, `ABC-271` F3).
 
 ## What would falsify this
 
 | # | clause | what would falsify it | if it fires |
 |---|---|---|---|
-| F1 | 1, 2, 4 as built | P0's counts not reproduced; a mirror, phase-24 or door mismatch | a defect, fixed before any other bar |
-| F2 | 1, the rules | P1 (c)–(e) missed on fixtures that meet decision 5's conditions | STOP to Architect/Design; no value tuned to pass |
-| F3 | play safety | P2–P4 red | defect check; if real, NOT MET and this ADR re-opens; no deeper re-pin |
-| F4 | `ADR-0061` coupling | P5 above its bars | `ADR-0061`'s margins re-read before merge |
-| F5 | 3, cheap | P6 > 1.05 ×, or a P7 run below depth 6 | decision 3's single value-identical cut, then one new reading; a second miss: not merged |
-| F6 | 7, the strength premise | P8 NOT MET | not merged; the structure at 0 is re-offered for the second pull (`ADR-0068` form); E4a's values then come only from the tuner |
+| F1 | 1, 2, 4: value-identical | a node, score or move mismatch against `main`; an `Object.is` miss; a re-pin outside K2 (K0–K2) | a defect, fixed before any cost bar; never re-pinned |
+| F2 | 3: cheap | K3 `G2` > 1.05 ×, or K4 a `G6` median below `main`'s, or a run below depth 6 | STOP to Architect/Design: decision 3's one value-identical cut, then one re-read under a PREREG (`ADR-0067` F8's pattern). A second miss: not merged, and the second pull fits without E4a's features, which `ADR-0067` F4's cause names as missing (a re-plan, its own dated line) |
+| F3 | 1: the rules as built | a K1 (c) seam row: a part that does not match its rule on a frozen fixture | a defect in the structure, fixed before merge; no value is chosen to pass |
+| F4 | 7: the tuner wants the terms | the second pull's fit leaves every E4a eg half at its 0 bound on the accepted data | recorded. The structure is dead weight, and a later ticket may remove it. No re-fit on play |
+| F5 | 7: one read judges both | the second pull's read is NOT MET | `ADR-0067` F6. The tuned set is not merged. The structure stays, value-identical. E4a's values are never fitted on play results |
 
 ## Consequences
 
-- **Host time.**
-  - `ABC-271`: about 0.9 h (C2′ about 0.4 h, measured at 23 min 50 s for 100 games; S′ about 10 min; the Levels lane
-    about 9 min; `G2`, `G6` and the cut audit about 0.2 h). That is about 0.7 h more than the structure route.
-  - What it buys: E4a's value read on its own, with no dependence on the second pull. P(pass | +20 Elo) = 0.79,
-    P(pass | 0) = 0.5 (`ADR-0056` C2′'s table). The slice's +10–30 is BA/PM's estimate, not a reading.
+- **Host time.** `ABC-271`: about 0.2 h (two `G2` sessions, `G6` rounds, the lanes), with no games. That is about
+  0.7 h less than the values route. E4a's play value is read only jointly with the tuner's.
+- **Size:** `ABC-271` goes from M to S (BA/PM): no switch, no doors, two re-pins.
 - **For the second pull:**
-  - Its base is wider on the row that failed: `zugzwang.001`'s depth-9 margin is 191 cp on `main` with E4a.
-  - The tuner gets the feature class that F4 lacked. Whether a fit keeps e1f1 is `UNKNOWN - verify`.
-  - The 26d06118-plus-H reading (+150) is not a fit.
+  - It gets the feature class that F4 lacked. Whether a fit keeps e1f1 is `UNKNOWN - verify`.
+  - `main`'s `zugzwang.001` margin stays 29 cp until then. The 191 cp and +150 readings were rule values, not shipped.
 - **NFRs:**
-  - `NFR-009`: the memo is +128 KiB (576 KiB); if F5's cut is taken, +16 KiB more. The sum stays far under 16 MiB.
-  - `NFR-001` / `G2`: P6. `NFR-005`: P7. `NFR-008`: P1 rows are units with no search.
+  - `NFR-009`: the memo is +128 KiB (576 KiB) from the build on, value or not. If F2's cut is taken, +16 KiB more. The
+    sum stays far under 16 MiB.
+  - `NFR-001` / `G2`: K3. `NFR-005`: K4. `NFR-008`: K1 rows are units with no search.
   - Security: none. No new NFR file; `plans/nfr-catalog.md` is untouched.
 - **Determinism (`ADR-0027`) and licence (`ADR-0048`):** unchanged. The terms are integer and mirror-exact, and the
   rules are this project's own. The rule of the square is classical chess knowledge.
 - **File collisions:** `src/evaluate.ts` and `src/evaluate-params.ts`, with `ABC-272` and the second pull. One at a
   time.
-- **Risk:** the endgame cost of about 8.5 % per call where passers exist. `G2`'s roots under-sample it, and `G6` reads
-  middlegame boards. QE reports the endgame set; F5's cut is named.
+- **Risk:** the cost is paid before any value: about 2.7 % per call on `G2`'s roots and about 8.5 % where passers
+  exist. `G2`'s roots under-sample the second, and `G6` reads middlegame boards. QE reports the endgame set; F2's
+  cut is named. If no pull ever fits the terms, F4 lets a later ticket remove them.
 
 ## Rollback
 
-- **Before acceptance:** mark this ADR `withdrawn`, and strike the dated lines in `ADR-0056`, `ADR-0067` and
-  `ADR-0064`.
-- **After the build merges:** revert the one commit. The doors make it local. If a tuned set has merged on top, revert
-  that first (`ADR-0067` § Rollback).
+- **If `ABC-271` does not merge:** this ADR reads "accepted, not in force". Strike the dated lines of 2026-11-04 in
+  `ADR-0056`, `ADR-0067` and `ADR-0064`.
+- **After the build merges:** revert the one commit. It is value-identical, so nothing else moves. If a tuned set has
+  merged on top, revert that first (`ADR-0067` § Rollback).

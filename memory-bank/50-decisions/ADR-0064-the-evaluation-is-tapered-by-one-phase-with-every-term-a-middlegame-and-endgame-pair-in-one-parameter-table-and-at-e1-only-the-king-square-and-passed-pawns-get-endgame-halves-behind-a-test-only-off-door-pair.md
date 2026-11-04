@@ -526,6 +526,10 @@ measured run.
       - *Dated 2026-11-04 (`arch-ABC-271`):* E4a is `ADR-0070` (PROPOSED). The three terms land as endgame halves
         by rules beside `PASSED`, outside the pawn memo; the memo grows to 576 KiB. They come behind their own door,
         `…WithoutPasserKings`, which every door of this ADR turns off.
+      - *Dated 2026-11-04 (`arch-ADR-0070-accept`):* **`ADR-0070` is ACCEPTED in form (a)** (`…e8a3b5df`). The three
+        terms land at 0, value-identical, with **no switch and no door**; every door of this ADR reads its
+        pre-ticket counts. The second pull fits king distance and free path. **Superseded:** the line above, "behind
+        their own door, `…WithoutPasserKings`".
     - no tuning (E2);
     - no endgame half without a rule, for any other term.
 

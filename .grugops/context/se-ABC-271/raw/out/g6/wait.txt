@@ -1,0 +1,10 @@
+2026-11-04T14:17:29Z G6 session start
+2026-11-04T14:17:29Z g6 r1 kiwipete wait poll=1 load1=2.21 vitest=0 cutechess=0 tctl=45.5
+2026-11-04T14:17:44Z g6 r1 kiwipete wait poll=2 load1=2.24 vitest=0 cutechess=0 tctl=43.0
+2026-11-04T14:17:59Z g6 r1 kiwipete clear after poll 3 load1=1.88 tctl=44.8
+2026-11-04T14:18:40Z g6 r3 position-6 wait poll=1 load1=1.91 vitest=0 cutechess=0 tctl=75.1
+2026-11-04T14:18:55Z g6 r3 position-6 clear after poll 2 load1=1.72 tctl=43.5
+2026-11-04T14:19:28Z g6 r5 position-6 wait poll=1 load1=1.68 vitest=0 cutechess=0 tctl=75.3
+2026-11-04T14:19:43Z g6 r5 position-6 clear after poll 2 load1=1.37 tctl=46.9
+2026-11-04T14:19:52Z G6 session end
+2026-11-04T14:19:52Z tctl over reads: median 73.4 max 75.6

@@ -3,7 +3,7 @@
  * the ABC-204 page's `## Design ruling`, and reads `EPIC-008` § The two readings:
  *
  *   node tools/rating/rating.ts r <sha> <out-dir> [--elo E] [--budget-ms 500|100] [--rounds N] [--concurrency C]
- *   node tools/rating/rating.ts d <candidate-sha> <base-sha> <out-dir> [--budget-ms B] [--rounds N] [--concurrency C]
+ *   node tools/rating/rating.ts d <candidate-sha> <base-sha> <out-dir> [--budget-ms B | --tc 40/8] [--rounds N] [--concurrency C]
  *   node tools/rating/rating.ts rpair <base-sha> <candidate-sha> <out-dir> [--elo E] [--rounds N] [--concurrency C]
  *
  * Any mode takes `--dry-run`: it prints the `cutechess-cli` argument vector(s) (and, for `rpair`, the
@@ -47,6 +47,11 @@
  * `ABC-276` — `r` and `d` seal their records as `rpair` does (`sealRecords`): host paths, user and
  * host name become placeholders before `SHA256SUMS` is written, so the sums verify the committed
  * bytes. The argument vector handed to `cutechess-cli` is unchanged; only its `cmd.txt` record is.
+ *
+ * `ABC-300` — `d --tc 40/8` plays a clock (`ADR-0071` D10): both sides get `tc=40/8`, `timemargin=0`
+ * and `option.TimeMode=uci-clock-mode` in place of `st=` and `timemargin=`, and `machine.txt` a
+ * `control:` line. `40/8` is the only value, and `--tc` with `--budget-ms` is refused. The control
+ * still reaches skytalix only through cutechess-cli and the shipped option (`ADR-0056` R-TC).
  */
 import { execFileSync, spawn } from "node:child_process";
 import { createHash } from "node:crypto";
@@ -117,6 +122,8 @@ const R_SHORT_BUDGET_MS = 100;
 const R_BUDGETS_MS = [R_SMOKE_BUDGET_MS, R_SHORT_BUDGET_MS];
 /** `ABC-275` (`ADR-0056` D5): at 100 ms, an E above this waits for C3′'s probe, so `r` refuses it. */
 const R_SHORT_ELO_MAX = 2600;
+/** `ABC-300` (`ADR-0071` D10): the one clock `d --tc` takes. */
+const D_TC = "40/8";
 /** Stockfish's `st` in `r`: 0.1 at R1's 100 ms (`ABC-275`), else 0.5; its `timemargin` is 2 000 at each. */
 const stockfishSt = (ms: number): number => (ms === R_SHORT_BUDGET_MS ? 0.1 : 0.5);
 const CEILING_MS = 5000;
@@ -156,10 +163,11 @@ const eloNumber = (text: string): number =>
 function usage(): never {
   console.error(
     "usage: node tools/rating/rating.ts r <sha> <out-dir> [--elo E] [--budget-ms 500|100] [--rounds N] [--concurrency C]\n" +
-      "       node tools/rating/rating.ts d <candidate-sha> <base-sha> <out-dir> [--budget-ms B] [--rounds N] [--concurrency C]\n" +
+      "       node tools/rating/rating.ts d <candidate-sha> <base-sha> <out-dir> [--budget-ms B | --tc 40/8] [--rounds N] [--concurrency C]\n" +
       "       node tools/rating/rating.ts rpair <base-sha> <candidate-sha> <out-dir> [--elo E] [--rounds N] [--concurrency C]\n" +
       "       --concurrency: 1–8; default R 2, D 3, rpair 2\n" +
       "       --budget-ms: R 500 or 100 (default 4000); D 3000 (default), 2500, 2000, 1500, 1000 or 100\n" +
+      "       --tc: D only, 40/8: both sides tc=40/8 timemargin=0 TimeMode uci-clock-mode; not with --budget-ms\n" +
       "       rpair: --elo default 1910; --rounds 10–100 in tens, default 100 (10 = one block per build, 40 games)\n" +
       "       --dry-run (any mode): print the cutechess-cli arguments and stop",
   );
@@ -408,6 +416,8 @@ export interface ArgSpec {
   readonly start?: number;
   /** `rpair` only (`ABC-247`): skytalix's `Skill Level`, as `option.Skill Level=L`; absent, none. */
   readonly skill?: number;
+  /** `d --tc` only (`ABC-300`): both sides' clock, in place of `st=` and `timemargin=`; absent, none. */
+  readonly tc?: string | undefined;
 }
 
 /** `ABC-247`: the `Skill Level` `rpair` gives skytalix on both builds. */
@@ -422,10 +432,12 @@ export function cutechessArgs(spec: ArgSpec): string[] {
     `cmd=${process.execPath}`,
     `arg=${join(clone, "dist/uci.js")}`,
     `dir=${clone}`,
-    `st=${ms / 1000}`,
-    `timemargin=${timemarginMs(ms)}`,
+    ...(spec.tc === undefined
+      ? [`st=${ms / 1000}`, `timemargin=${timemarginMs(ms)}`]
+      : [`tc=${spec.tc}`, "timemargin=0"]),
     "restart=on",
     ...(spec.skill === undefined ? [] : [`option.Skill Level=${spec.skill}`]),
+    ...(spec.tc === undefined ? [] : ["option.TimeMode=uci-clock-mode"]),
     `stderr=${join(files, `${name}.stderr`)}`,
   ];
   const opponent =
@@ -833,9 +845,14 @@ async function main(argv: string[]): Promise<void> {
   const mode = positional[0];
   if (mode === "rpair") return rpair(positional, flags, dryRun);
   if ((mode !== "r" && mode !== "d") || positional.length !== (mode === "r" ? 3 : 4)) usage();
-  const allowed = mode === "r" ? ["--elo", "--rounds"] : ["--rounds"];
+  const allowed = mode === "r" ? ["--elo", "--rounds"] : ["--rounds", "--tc"];
   allowed.push("--budget-ms", "--concurrency");
   if ([...flags.keys()].some((flag) => !allowed.includes(flag))) usage();
+  // ABC-300 scope 4: the clock is checked as text before any git, build or process start.
+  const tc = flags.get("--tc");
+  if (tc !== undefined && flags.has("--budget-ms"))
+    throw new Error("--tc and --budget-ms: d takes one or the other, not both");
+  if (tc !== undefined && tc !== D_TC) throw new Error(`--tc ${tc}: d takes only ${D_TC}`);
   const shas = positional
     .slice(1, -1)
     .map((ref) => run("git", ["rev-parse", "--verify", `${ref}^{commit}`]));
@@ -866,7 +883,7 @@ async function main(argv: string[]): Promise<void> {
   const out = resolve(positional.at(-1) as string);
   if (dryRun) {
     const clones = names.map((name) => join(out, `clone-${name}`));
-    const args = cutechessArgs({ mode, files: out, clones, elo, budget, rounds, concurrency });
+    const args = cutechessArgs({ mode, files: out, clones, elo, budget, rounds, concurrency, tc });
     console.log(`${mode} dry run: nothing is built, started or written\ncutechess-cli argv:`);
     console.log(argvText(args));
     return;
@@ -878,6 +895,10 @@ async function main(argv: string[]): Promise<void> {
   const machine = [
     ...(await machineLines(out)),
     `concurrency: ${concurrency} ${concurrency === defaultConcurrency ? "(default)" : `(default ${defaultConcurrency})`}`,
+    // ABC-300 scope 3: the clock is recorded.
+    ...(tc !== undefined
+      ? [`control: skytalix and base tc=${tc} timemargin=0 TimeMode=uci-clock-mode`]
+      : []),
     // ABC-255 scope 3: a short control is recorded; every other run's record is as before.
     ...(SHORT_MARGIN_MS.has(budget)
       ? [
@@ -900,7 +921,7 @@ async function main(argv: string[]): Promise<void> {
   const clones: string[] = [];
   for (const [i, name] of names.entries())
     clones.push(await buildArtifact(out, name, shas[i] as string));
-  const args = cutechessArgs({ mode, files: out, clones, elo, budget, rounds, concurrency });
+  const args = cutechessArgs({ mode, files: out, clones, elo, budget, rounds, concurrency, tc });
   const outFile = join(out, `${mode}.out`);
   writeFileSync(
     join(out, "cmd.txt"),

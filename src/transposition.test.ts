@@ -644,8 +644,9 @@ describe("A7 — the table holds a fixed 4 MiB, whatever the search", () => {
   it("stays inside NFR-009's 16 MiB with the key array, the pawn memo and the ordering scratch", () => {
     const keyArrayBytes = (KEY_ARRAY_CAPACITY + 1) * 8;
     // ABC-235 cut 5: the pawn-structure memo is fixed and counted in (a)'s sum. ABC-269 adds its
-    // third part (`ADR-0064` decision 5): 384 -> 448 KiB.
-    expect(pawnCacheByteLength()).toBe(448 * 1024);
+    // third part (`ADR-0064` decision 5): 384 -> 448 KiB. ABC-271 adds the two passer words
+    // (`ADR-0070` decision 2, K2): 448 -> 576 KiB.
+    expect(pawnCacheByteLength()).toBe(576 * 1024);
     // ABC-240: orderMoves' and quiescence's float64 key scratches are fixed at 256 slots each
     // and counted in (a)'s sum.
     expect(orderScratchByteLength()).toBe(256 * 8);

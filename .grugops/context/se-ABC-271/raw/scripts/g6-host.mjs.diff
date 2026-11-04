@@ -1,0 +1,11 @@
+--- <worktree>/.grugops/context/qe-ABC-270/raw/scripts/host.mjs	2026-11-04 13:41:05.926229798 +0000
++++ host.mjs	2026-11-04 14:17:29.807966132 +0000
+@@ -44,7 +44,7 @@
+       continue;
+     }
+     const l = loadavg()[0], c = cutechessCount(), t = tctl();
+-    if (c === 0 && l <= 2.0 && t <= 60.0) {
++    if (c === 0 && l <= 2.0 && t <= 75.0) {
+       if (i > 1) log(`${label} clear after poll ${i} load1=${l.toFixed(2)} tctl=${t.toFixed(1)}`);
+       return { l, t };
+     }

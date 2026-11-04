@@ -1,0 +1,10 @@
+{
+  "refs": ["qe-ABC-271", "grugops/qe-ABC-271", "grugops/ABC-271", "ABC-271", "EPIC-011", "E4a", "ADR-0070", "ADR-0067", "ADR-0035", "K3", "K4", "G2", "G6", "NFR-001", "NFR-005", "10f29a82", "src/08e56302", "main/d2f01e7c", "src/4fb3da04", "orch-2026-10-30a/…6ccd8243", "se-ABC-271/20261104T142439Z-software-engineer-observation-d3690ae6", "qe-ABC-270", "QE-271-f"],
+  "notes": [
+    {
+      "kind": "decision",
+      "confidence": "high (a pre-registration written before any QE timing read; the instrument is qe-ABC-270's, copied; the SE pre-reads and QE's untimed checks are disclosed)",
+      "bodyFile": "note-prereg.md"
+    }
+  ]
+}

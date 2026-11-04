@@ -1,0 +1,27 @@
+{
+  "refs": [
+    "qe-ABC-271-freeze",
+    "grugops/qe-ABC-271-freeze",
+    "ABC-271",
+    "EPIC-011",
+    "E4a",
+    "ADR-0070",
+    "ADR-0068",
+    "orch-2026-10-30a/\u2026730399e5",
+    "orch-2026-10-30a/\u20266ccd8243",
+    "K1",
+    "K0",
+    "4fb3da04",
+    "b274711c",
+    ".grugops/context/qe-ABC-271-freeze/raw/fixtures.json",
+    "sha256:bf3c205bf4106209e3151717d93542180d90d344cecfdfbb6f2a30c9d5db887a",
+    "qe-ABC-271-freeze/20261104T133856Z-qe-e2e-decision-67b5eeac"
+  ],
+  "notes": [
+    {
+      "kind": "observation",
+      "confidence": "high on the readings stated (each is from the ADR text and the frozen rows); the seam's form is the Engineer's",
+      "bodyFile": "note-gaps.md"
+    }
+  ]
+}

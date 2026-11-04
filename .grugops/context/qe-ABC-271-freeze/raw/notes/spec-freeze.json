@@ -1,0 +1,26 @@
+{
+  "refs": [
+    "qe-ABC-271-freeze",
+    "grugops/qe-ABC-271-freeze",
+    "ABC-271",
+    "EPIC-011",
+    "E4a",
+    "ADR-0070",
+    "ADR-0068",
+    "orch-2026-10-30a/\u2026730399e5",
+    "orch-2026-10-30a/\u20266ccd8243",
+    "K1",
+    "K0",
+    "4fb3da04",
+    "b274711c",
+    ".grugops/context/qe-ABC-271-freeze/raw/fixtures.json",
+    "sha256:bf3c205bf4106209e3151717d93542180d90d344cecfdfbb6f2a30c9d5db887a"
+  ],
+  "notes": [
+    {
+      "kind": "decision",
+      "confidence": "high (a pre-registration: every value derived by hand from ADR-0070 d1/d2, then checked on main by a re-implementation of the ADR text and by main's parseFen / phaseOf / isPassedPawn / evaluate mirror; no ABC-271 code exists; K0 copied from ADR-0070 d5, not re-read)",
+      "bodyFile": "note-freeze.md"
+    }
+  ]
+}

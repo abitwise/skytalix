@@ -30,6 +30,11 @@ Architect/Design (task `arch-owner-answers-1103`, records only, on `grugops/arch
   "yes, accept ADR-0068 and ADR-0069"):* **`ADR-0068` (E3a, `ABC-270`) and `ADR-0069` (Q1) are accepted.** The lines
   `ADR-0068` d8 owes are written here: d4 / d5 and d6 (dated lines), B-T4's re-pin rule and B-T5's risk (under the bars
   table), and § Consequences item 4's order. Decision 9's list number is restored. **No bar moves.**
+- *Dated 2026-11-04 (`arch-ADR-0070-accept`, records only, at `main` `7a9ee712`; his word `…e8a3b5df`, verbatim "a"):*
+  **`ADR-0070` (E4a, `ABC-271`) is accepted in form (a), structure only.** Its terms land at 0, value-identical, before
+  the second pull. The lines it owes are written here: d5's and d6's dated lines of 2026-11-04, and § Consequences
+  item 5's. **No bar moves.** Two items stay the owner's and are open: the d6 amendment (the margin-aware form, every
+  relation bounded at once) and B-T8's re-confirmation for the second pull.
 
 *Before acceptance:* **PROPOSED 2026-11-03.** Recorded by Architect/Design (task `arch-ABC-239`, on `grugops/arch-ABC-239` from `main`
 `af15cbc9`). **Acceptance is the owner's:** this is a new ADR (`memory-bank/45-standing-rulings.md`, 2026-10-22).
@@ -89,6 +94,8 @@ Architect/Design (task `arch-owner-answers-1103`, records only, on `grugops/arch
 | 2026-11-03 | Architect/Design | F3's bound form (the red row as one linear inequality, margin ½ ‖a‖₁) and the one refit; `zugzwang.001` e1e5 a safety failure (Stockfish 19 d26 −633, e1f1 mate in 10), the row stays; 58 probe games enter; two E1 rows retired. No bar moved | `arch-ABC-239-rulings` `…90b469ca` (PREREG), `…2b428ce8` |
 | 2026-11-04 | Architect/Design | Step 6 on `26d06118`: F3 and F4 NOT MET as written. F4's cause is the joint eg halves of P / PASS / K (no single driver); the row reads a 29 cp preference at depth 9. K1 (c) re-found in form (A). Recommended: close the first pull NOT MET, E4a before a second pull. No bar moved | `arch-ABC-239-f3f4` `…9427005b` / `…80a5bd21` (PREREG), `…4eae0fd3`, `…69f22167` |
 | 2026-11-04 | Architect/Design | § Consequences item 5's order: `ABC-271` (E4a, `ADR-0070` PROPOSED, rule values on their own read) → the second pull; the free-set lines owed on acceptance. No bar moved | `arch-ABC-271` |
+| 2026-11-04 | Owner | `ADR-0070` accepted in form (a): E4a lands as structure at 0 before the second pull | `orch-2026-10-30a` `…e8a3b5df` |
+| 2026-11-04 | Architect/Design | `ADR-0070`'s owed lines: d5 tracer (E4a's features), d6 second-pull free set (KD / FP eg ≥ 0, mg 0, U held 0) and how they enter F3, item 5's order. The d6 amendment and B-T8's re-confirmation stay open (the owner's). No bar moved | `arch-ADR-0070-accept` |
 
 ## Context
 
@@ -204,6 +211,24 @@ Architect/Design (task `arch-owner-answers-1103`, records only, on `grugops/arch
           mg halves may be non-zero). A miss is F1, a defect.
      - If `ABC-270` has not merged at fit time, the features are absent and the fit runs without them (`ADR-0068`
        § Status).
+   - *Dated 2026-11-04 (`arch-ADR-0070-accept`; `ADR-0070` accepted in form (a), its d1, d2 and d7): **the second
+     pull's tracer traces `ABC-271`'s features.***
+     - **The features,** per side, white minus black, over each file's frontmost passer (`ADR-0070` d2), by rank R,
+       on the eg half only (× (24 − w) / 24):
+       - for `PASSED_KING_ENEMY[R]`: the sum of min(d(enemy king, Q), 5);
+       - for `PASSED_KING_OWN[R]`: minus the sum of min(d(own king, Q), 5);
+       - for `PASSED_FREE[R]`: the count of passers whose path is empty up to and including Q;
+       - for `PASSED_UNSTOPPABLE`: 1 at phase 0 when the side has a passer the square names, else 0. It is traced so
+         that the gate sees it, and it stays held at 0 (d6's line below).
+     - Each is linear in its weight, so d4's Newton model fits it unchanged. No mg feature is traced: `ADR-0070` skips
+       the loop at w = 24, so an mg weight would break the gate there.
+     - **The identity gate covers them, but B-T1 alone cannot see them:** at the base values every E4a weight is 0.
+       The same two checks as for `ABC-270` close that gap, and neither is a bar:
+       1. **A tracer row** (decision 10's list): on the fixtures `ABC-271` K1 (c) froze, each traced count, times the
+          probed rule value, equals the part `passerTermsForTest` returns at that value inside
+          `withParametersForTest`.
+       2. **The gate runs once more on the emitted file.** A miss is F1, a defect.
+     - If `ABC-271` has not merged at fit time, the features are absent and the fit runs without them.
 6. **The free set at the first pull: bounded.**
    - **Material is frozen** at the classical scale (P 100, N 325, B 325, R 500, Q 900, both halves). The king is 0.
      `PHASE_WEIGHT`, `PHASE_MG` / `PHASE_EG` and `MOBILITY_CAP` (100) are fixed.
@@ -233,6 +258,34 @@ Architect/Design (task `arch-owner-answers-1103`, records only, on `grugops/arch
      - The pairs count only if `ABC-270` has merged at fit time.
    - *Dated 2026-11-03 (`arch-ABC-239-rulings`):* **the bound's form and the one refit** (F3) are written below the
      bars table, with the two rows retired at `ABC-239`. The free set above is unchanged.
+   - *Dated 2026-11-04 (`arch-ADR-0070-accept`; `ADR-0070` accepted in form (a), its d7): **the second pull's free set
+     gains `ABC-271`'s king distance and free path.*** The rest of the set is the first pull's, until the second
+     pull's PREREG says otherwise.
+     - **Free, eg half, ≥ 0:** `PASSED_KING_ENEMY`, `PASSED_KING_OWN` and `PASSED_FREE`, at R = 1–6. ≥ 0 is the
+       passed-bonus sign bound above, read in each term's own sign: `PASSED_KING_OWN` is subtracted per step of the
+       own king, so ≥ 0 keeps "the own king nearer is better".
+     - **Held at 0:** every mg half of the three arrays (`ADR-0070` d1: the loop is skipped at phase 24); the R = 0
+       entries, which no passer can trace; and **`PASSED_UNSTOPPABLE`, both halves.** The rule of the square stays a
+       rule, out of the fit (item 5), and its rule value is not shipped (`ADR-0070` d7: its pre-registered row missed).
+     - **The bounds and relations they enter, by F3's procedure as written** (the dated line below the bars table,
+       ruling (b), steps 1–4):
+       - A relation row of `src/evaluate*.test.ts` enters the bound set only if it is red at step 2. Its vector a gains
+         entries on these weights by the same rule as every term: each position's count difference, × (24 − w) / 24.
+         A row between two positions whose frontmost passers, king distances to Q and paths agree has 0 on them.
+       - **`ABC-271`'s own K1 (c) rows enter no bound.** They run inside `withParametersForTest` at the probed values,
+         so they read no fitted value (as `ABC-270` K1 (c) in form (A)).
+       - **`ABC-271` K1 (b)'s literals are pins** (B-T4), re-pinned old → new, as `ABC-270` K1 (b)'s are. K1 (a), the
+         mirror, holds by construction: every feature is colour-symmetric.
+       - Which existing rows gain non-zero entries is step 2's reading, on the box-only emission
+         (`UNKNOWN - verify`). Rows with passers in an ending, such as `ABC-083` A8's isolation pair, are the likely
+         ones.
+       - **`zugzwang.001` stays B-T5's safety row (F4), not a relation,** at depth 9. E4a's features are what F4's
+         cause lacked. Whether the fit holds e1f1 is `UNKNOWN - verify`.
+     - **Open, the owner's, and not decided here:**
+       1. **The d6 amendment:** the margin-aware form, every relation bounded at once from the first fit, with no
+          refit step (`arch-ABC-239-f3f4`'s dated line). Without his word the second pull runs F3 as written above.
+       2. **B-T8's re-confirmation:** he approved the 200 + 200 outside pair for `ABC-239` (`…af126c04` item 5). The
+          second pull is a new attempt, so whether that approval carries is his.
 7. **Integer emission and provenance.**
    - Values are rounded half away from zero, and the reported loss is the rounded set's.
    - `tools/tune` writes `src/evaluate-params.ts` in its present shape, mg / eg arrays and the same exports, and
@@ -883,6 +936,17 @@ below).
     and `PASSED_FREE` (eg ≥ 0, mg held at 0). It holds `PASSED_UNSTOPPABLE` as a rule, as item 5 says.
   - Those d4 / d6 lines are owed here on acceptance, with the second pull's PREREG. They are not written now.
   - **Superseded:** item 5's "after `ABC-239`".
+- *Dated 2026-11-04 (`arch-ADR-0070-accept`; his word `…e8a3b5df` accepts `ADR-0070` in form (a)):* **order item 5
+  now reads `ABC-271` (E4a, structure only) → the second pull, and one read judges both.**
+  - `ABC-271` lands value-identical, with no switch, no doors and no games (`ADR-0070` K0–K4). The second pull's fit
+    is taken on a `main` that contains it. If `ABC-271` fails (`ADR-0070` F1 / F2), the fit runs without E4a's
+    features.
+  - The second pull fits king distance and free path (d6's dated line of 2026-11-04). The rule of the square stays a
+    rule, held at 0.
+  - The d5 and d6 lines are now written (dated 2026-11-04). The second pull's PREREG still carries its own bound form
+    and B-T8 answer.
+  - **Superseded:** the line above, "`ADR-0070` ships E4a's rule values on their own read", and its "holds
+    `PASSED_UNSTOPPABLE` as a rule" where that meant the value 400.
 
 ## Rollback
 

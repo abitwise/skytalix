@@ -1,8 +1,9 @@
 ---
 id: ABC-279
 title: "Q1: quiescence skips SEE-losing captures out of check, behind an off-door pair. A capture that does not promote, is not made by the king, takes a lesser piece and has a static exchange below 0 is not searched at a quiescence node that stood pat; in check every evasion is searched; the main search is unchanged; a new pure src/see.ts; one switch, seePruning, in both recursions; two test-only doors (ADR-0069)"
-status: ready
-column: Ready
+status: done
+column: Done
+closed: "2026-11-04, merged to local main at 7b70e268; QE PASS_WITH_GAPS (qe-ABC-279 …6e99201a), which signs UAT; C2′ 54.0 / 100 (+27.9 ± 60.0), S′ 5.5 / 10 against E 1 810, Levels 57 / 57; QE-279-a..e LOW accepted (the Orchestrator's board card). ADR-0069 in force from the merge. Front matter only, by bapm-W1-bundle-cut"
 size: M
 priority: P2
 epic: EPIC-011
@@ -92,6 +93,8 @@ The bars are `ADR-0069`'s (d10–d13), pre-registered there and not loosened aft
     the capture losing: a capturing promotion, a king capture, en passant, and a capture of an equal or bigger piece.
     It is **true** for Q×P defended by a pawn (−800) and for B×N defended by a pawn (−10). It is **false** for N×N
     defended (0).
+    *2026-11-04 (`bapm-ABC-271-ready`; pointer only, no bar moved):* how this row is read (`QE-279-a`) is `ADR-0069`
+    d10's dated line of 2026-11-04.
   - **(c) A source row:** `quiesce` with `seePruning` on skips exactly the moves `isLosingCapture` names, only on the
     stand-pat branch, and still sorts the whole list.
   - **(d) An in-check row:** a quiescence node in check with a losing capture among its evasions searches it.

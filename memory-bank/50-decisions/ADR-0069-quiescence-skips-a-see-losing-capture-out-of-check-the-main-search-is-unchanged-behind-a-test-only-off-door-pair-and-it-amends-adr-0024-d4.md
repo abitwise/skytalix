@@ -218,6 +218,19 @@ d8 ratios are head / door. Reach is the mean completed depth at 47 000 nodes on 
     - **The losing test, called directly:** false for a capturing promotion, a king capture, en passant, and a capture
       of an equal or bigger piece, each on a board where SEE alone would call it losing. True for Q×P defended by a
       pawn (−800) and B×N defended by a pawn (−10). False for N×N defended (0).
+      - *Dated 2026-11-04 (`arch-ADR-0070-accept`, records only; `QE-279-a`, `qe-ABC-279` `…c49b050d`): **the
+        wording "each on a board where SEE alone would call it losing" cannot be met, and it reads as follows.***
+        - **Why it cannot be met.** For a capture of an equal or bigger piece, en passant and every capturing
+          promotion, `see ≥ victim − attacker ≥ 0` (the swap list's lower bound), so no such board exists. A king
+          capture has one only on an illegal move: a legal king capture lands on an unattacked square, so its `see`
+          is the victim's value.
+        - **The row as it is read (`ABC-279` A1 (b)):** `isLosingCapture` is `false` for each of the four, on a legal
+          board, with `see(position, move)` stated beside it. That is the row as built, and QE ruled it met.
+        - **What it means for decision 2.** At threshold 0 the four guard clauses decide nothing on a legal move. They
+          only spare a call to `see`. So they are a cost clause, not a behaviour clause, and no row can kill a mutant
+          that deletes one. That is accepted: no row is added, and no code changes.
+        - If a later ticket moves the threshold above 0, the guards decide again, and its rows must show each one
+          biting.
     - **A source row:** `quiesce` with `seePruning` on skips exactly the moves `isLosingCapture` names, only on the
       stand-pat branch, and still sorts the whole list.
     - **An in-check row:** a quiescence node in check with a losing capture among its evasions searches it.

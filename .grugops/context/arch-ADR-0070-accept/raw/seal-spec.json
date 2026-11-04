@@ -1,0 +1,20 @@
+{
+  "refs": ["arch-ADR-0070-accept"],
+  "notes": [
+    { "kind": "decision",
+      "confidence": "high: records only; ADR-0070 restated to the owner's accepted form (a) and the Orchestrator's ruling; the door reading and U = 0 are flagged judgments with their reasons; nothing run",
+      "bodyFile": "note-adr0070.md",
+      "refs": ["arch-ADR-0070-accept", "ABC-271", "EPIC-011", "ADR-0070", "ADR-0067", "ADR-0068", "ADR-0056", "ADR-0064", "E4a", "E2", "NFR-009", "NFR-001", "NFR-005", "G2", "G6",
+               "orch-2026-10-30a/20261104T125139Z-orchestrator-decision-e8a3b5df", "orch-2026-10-30a/20261104T023719Z-orchestrator-decision-e0ff0aeb",
+               "arch-ABC-271/20261104T023519Z-architect-design-decision-bbc0a213", "arch-ABC-271/20261104T023519Z-architect-design-observation-c9af6d84",
+               "arch-ABC-239-f3f4/20261104T020015Z-architect-design-decision-69f22167", "7a9ee712", "01d2434b", "4fb3da04", "8adb0a18"] },
+    { "kind": "decision",
+      "confidence": "high: records only; the rule's commands and counts are the ones QE ran (qe-ABC-248, qe-ABC-281); the per-hop wall is UNKNOWN - verify until the first hop under it; nothing run",
+      "bodyFile": "note-rules.md",
+      "refs": ["arch-ADR-0070-accept", "R-281-a", "QE-279-a", "ADR-0046", "ADR-0069", "ABC-281", "ABC-248", "ABC-279", "NFR-008", "R-N8H-1",
+               "qe-ABC-281/20261104T041512Z-qe-e2e-decision-960d38ff", "qe-ABC-281/20261104T041512Z-qe-e2e-observation-1311443a",
+               "secnfr-ABC-281-a9/20261104T042047Z-security-nfr-decision-2e3b747f", "secnfr-ABC-281-a9/20261104T042047Z-security-nfr-observation-52f74e3c",
+               "qe-ABC-279/20261104T003652Z-qe-e2e-observation-c49b050d", "qe-ABC-279/20261104T003652Z-qe-e2e-decision-6e99201a",
+               "src/search.null-move.test.ts", "src/engine.test.ts", "src/levels.test.ts", "src/uci-session.test.ts"] }
+  ]
+}

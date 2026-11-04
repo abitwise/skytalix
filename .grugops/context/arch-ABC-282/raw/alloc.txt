@@ -1,0 +1,12 @@
+{"periodMs":900000,"f":0.4348,"book":0,"minLeftMs":247432,"periods":[{"period":1,"used":72.51,"leftAtEnd":247432},{"period":2,"used":85.75,"leftAtEnd":375664},{"period":3,"used":91.58,"leftAtEnd":451478}]}
+{"periodMs":900000,"f":0.4348,"book":6,"minLeftMs":278795,"periods":[{"period":1,"used":69.02,"leftAtEnd":278795},{"period":2,"used":87.23,"leftAtEnd":393701},{"period":3,"used":92.34,"leftAtEnd":462614}]}
+{"periodMs":900000,"f":0.64,"book":0,"minLeftMs":64866,"periods":[{"period":1,"used":92.79,"leftAtEnd":64866},{"period":2,"used":98.59,"leftAtEnd":77516},{"period":3,"used":99.72,"leftAtEnd":80015}]}
+{"periodMs":900000,"f":0.64,"book":6,"minLeftMs":80761,"periods":[{"period":1,"used":90.67,"leftAtEnd":83986},{"period":2,"used":100.3,"leftAtEnd":81293},{"period":3,"used":100.06,"leftAtEnd":80761}]}
+{"periodMs":900000,"f":1,"book":0,"minLeftMs":1069,"periods":[{"period":1,"used":99.88,"leftAtEnd":1069},{"period":2,"used":100,"leftAtEnd":1069},{"period":3,"used":100,"leftAtEnd":1069}]}
+{"periodMs":900000,"f":1,"book":6,"minLeftMs":1069,"periods":[{"period":1,"used":99.88,"leftAtEnd":1069},{"period":2,"used":100,"leftAtEnd":1069},{"period":3,"used":100,"leftAtEnd":1069}]}
+{"periodMs":8000,"f":0.4348,"book":0,"minLeftMs":2004,"periods":[{"period":1,"used":74.95,"leftAtEnd":2004},{"period":2,"used":96.81,"leftAtEnd":2259},{"period":3,"used":99.59,"leftAtEnd":2291}]}
+{"periodMs":8000,"f":0.4348,"book":6,"minLeftMs":2033,"periods":[{"period":1,"used":74.59,"leftAtEnd":2033},{"period":2,"used":97.13,"leftAtEnd":2263},{"period":3,"used":99.63,"leftAtEnd":2292}]}
+{"periodMs":8000,"f":0.64,"book":0,"minLeftMs":1406,"periods":[{"period":1,"used":82.43,"leftAtEnd":1406},{"period":2,"used":99.33,"leftAtEnd":1459},{"period":3,"used":99.97,"leftAtEnd":1461}]}
+{"periodMs":8000,"f":0.64,"book":6,"minLeftMs":1419,"periods":[{"period":1,"used":82.26,"leftAtEnd":1419},{"period":2,"used":99.49,"leftAtEnd":1460},{"period":3,"used":99.98,"leftAtEnd":1461}]}
+{"periodMs":8000,"f":1,"book":0,"minLeftMs":1069,"periods":[{"period":1,"used":86.64,"leftAtEnd":1069},{"period":2,"used":100,"leftAtEnd":1069},{"period":3,"used":100,"leftAtEnd":1069}]}
+{"periodMs":8000,"f":1,"book":6,"minLeftMs":1069,"periods":[{"period":1,"used":86.64,"leftAtEnd":1069},{"period":2,"used":100,"leftAtEnd":1069},{"period":3,"used":100,"leftAtEnd":1069}]}

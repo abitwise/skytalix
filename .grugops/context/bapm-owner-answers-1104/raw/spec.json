@@ -1,0 +1,7 @@
+{
+  "refs": ["bapm-owner-answers-1104", "grugops/bapm-owner-answers-1104", "ABC-282", "ABC-289", "ABC-300", "ABC-283", "ABC-279", "EPIC-011", "ADR-0071", "ADR-0024", "ADR-0069", "ADR-0056", "OQ-0071-1", "Q-3K-10", "Q-3K-9", "QE-300-a", "W1", "Q2", "7dd241cf", "b9593f90", "4ea39135", "b3438ca2", "orch-2026-10-30a/20261104T153246Z-orchestrator-decision-7de79e90", "arch-owner-answers-1104/20261104T153847Z-architect-design-decision-d6345b29", "qe-ABC-300/20261104T144414Z-qe-e2e-decision-fbda2ad6"],
+  "notes": [
+    { "kind": "decision", "confidence": "high: every page line is the Architect's owed line (d6345b29 § 4) on the owner's word as the Orchestrator recorded it (7de79e90); pages b9593f90; no bar, size or priority moved; nothing run. Four judgments flagged (J1 four extra ABC-282 lines stating the same facts, J2 ABC-289 adr items renumbered, J3 ABC-289 file slug kept, J4 EPIC-011 Phases row 5 untouched)", "bodyFile": "notes/dec.md" },
+    { "kind": "observation", "confidence": "high for what git, grep and sed show at main 7dd241cf and on b9593f90; nothing run", "bodyFile": "notes/obs.md" }
+  ]
+}
