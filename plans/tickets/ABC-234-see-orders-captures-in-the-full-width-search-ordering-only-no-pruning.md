@@ -11,6 +11,15 @@ adr: "ADR-0065 (PROPOSED 2026-11-03, arch-ABC-234 …a4ed96aa; PREREG …9ac61a7
 
 # ABC-234: SEE for capture ordering
 
+> **2026-11-04, by BA/PM (task `bapm-W1-bundle-cut`, records only): RE-OPENED BY THE OWNER'S WORD AS PART OF
+> `ABC-283`.** The owner said *"merge ABC-233, ABC-234 and ABC-236 into one branch and do one test run"*
+> (`orch-2026-10-30a` `…4c4cb03d` ruling 2). O3s is built exactly as `ADR-0065` states, on `grugops/ABC-283`, behind
+> its own door plus one all-off door. Its F4 (the ≤ 0.95 × pay gate) no longer holds the build. It reuses `src/see.ts`
+> from `ABC-279`. **This page stays the design page.** The bars, the one read (100 games at 100 ms, GAIN ≥ 50.0, never
+> re-played) and the disposition are on `ABC-283`. On a pass, `ADR-0065` is accepted with the other two as a bundle.
+> On a miss, this ticket stays parked. Front matter is unchanged; DoR stays as below, because `ABC-283` carries the
+> Ready state.
+
 > **PARKED 2026-11-03 BY THE ORCHESTRATOR; `ADR-0065` PROPOSED, PREMISE NOT MET ON `main`; A0 RULED; DoR 9/10, by
 > BA/PM** (task `bapm-ABC-234-park`, records only, at `main` `32b807c7`; nothing run). Sources: the Architect's
 > `arch-ABC-234` decision `…a4ed96aa` (§ 5, the page lines, worked item by item below), its results note `…ffe76d35`

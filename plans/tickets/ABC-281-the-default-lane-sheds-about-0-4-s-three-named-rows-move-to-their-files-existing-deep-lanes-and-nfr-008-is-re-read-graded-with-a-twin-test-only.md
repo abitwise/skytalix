@@ -1,8 +1,9 @@
 ---
 id: ABC-281
 title: "The default lane sheds about 0.4 s: three named rows move to their own files' existing deep lanes (`QE-208-a` position-6 to `SEARCH_DEEP`; `ABC-230` A4 and levels A9 to `ENGINE_DEEP`), and QE re-reads `NFR-008` graded, with a twin (test-only)"
-status: ready
-column: Ready
+status: done
+column: Done
+closed: "2026-11-04, merged to local main at 983d16c3; QE PASS_WITH_GAPS (qe-ABC-281 …960d38ff); UAT waived (test-only); NFR-008 graded 9.42 s against base 9.90 s (−0.37 s, 8 / 8); post-merge npm test 2 650 / 2 650 (the Orchestrator's board card). Front matter only, by bapm-W1-bundle-cut"
 size: S
 priority: P2
 epic: EPIC-011

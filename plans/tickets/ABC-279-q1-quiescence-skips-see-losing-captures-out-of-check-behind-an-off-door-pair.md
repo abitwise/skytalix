@@ -1,8 +1,9 @@
 ---
 id: ABC-279
 title: "Q1: quiescence skips SEE-losing captures out of check, behind an off-door pair. A capture that does not promote, is not made by the king, takes a lesser piece and has a static exchange below 0 is not searched at a quiescence node that stood pat; in check every evasion is searched; the main search is unchanged; a new pure src/see.ts; one switch, seePruning, in both recursions; two test-only doors (ADR-0069)"
-status: ready
-column: Ready
+status: done
+column: Done
+closed: "2026-11-04, merged to local main at 7b70e268; QE PASS_WITH_GAPS (qe-ABC-279 …6e99201a), which signs UAT; C2′ 54.0 / 100 (+27.9 ± 60.0), S′ 5.5 / 10 against E 1 810, Levels 57 / 57; QE-279-a..e LOW accepted (the Orchestrator's board card). ADR-0069 in force from the merge. Front matter only, by bapm-W1-bundle-cut"
 size: M
 priority: P2
 epic: EPIC-011

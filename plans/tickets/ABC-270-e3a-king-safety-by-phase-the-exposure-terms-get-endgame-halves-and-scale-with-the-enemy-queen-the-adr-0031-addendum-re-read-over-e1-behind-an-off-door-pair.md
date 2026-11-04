@@ -1,8 +1,9 @@
 ---
 id: ABC-270
 title: "E3a, structure only: three queen-on king-exposure pairs (KING_SHELTER_MISSING_QUEEN, KING_FILE_HALF_OPEN_QUEEN, KING_FILE_OPEN_QUEEN) enter the evaluation at { mg: 0, eg: 0 }, added per file while the enemy has a queen, so the build is value-identical and node-identical to main, with no switch, no doors and no games; ABC-239's first pull fits them (ADR-0068)"
-status: ready
-column: Ready
+status: done
+column: Done
+closed: "2026-11-04, merged to local main at a81a6c7d (onto post-Q1 main); QE PASS_WITH_GAPS (qe-ABC-270 …e4da95d0), which signs UAT; K0-K4 MET, G2 0.9911; post-merge typecheck + npm test 2 647 / 2 647 (the Orchestrator's board card). Front matter only, by bapm-W1-bundle-cut"
 size: S
 priority: P2
 epic: EPIC-011

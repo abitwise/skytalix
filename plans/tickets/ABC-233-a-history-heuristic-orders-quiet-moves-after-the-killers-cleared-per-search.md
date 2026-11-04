@@ -11,6 +11,14 @@ adr: "ADR-0063 (PROPOSED 2026-11-02, arch-ABC-233 …f3a4dac0; PREREG …4d5a0fe
 
 # ABC-233: history heuristic for quiet moves
 
+> **2026-11-04, by BA/PM (task `bapm-W1-bundle-cut`, records only): RE-OPENED BY THE OWNER'S WORD AS PART OF
+> `ABC-283`.** The owner said *"merge ABC-233, ABC-234 and ABC-236 into one branch and do one test run"*
+> (`orch-2026-10-30a` `…4c4cb03d` ruling 2). O1h is built exactly as `ADR-0063` states, on `grugops/ABC-283`, behind
+> its own door plus one all-off door. Its F4 (the ≤ 0.95 × pay gate) no longer holds the build. **This page stays the
+> design page.** The bars, the one read (100 games at 100 ms, GAIN ≥ 50.0, never re-played) and the disposition are on
+> `ABC-283`. On a pass, `ADR-0063` is accepted with the other two as a bundle. On a miss, this ticket stays parked.
+> Front matter is unchanged; DoR stays as below, because `ABC-283` carries the Ready state.
+
 > **PARKED 2026-11-02 BY THE ORCHESTRATOR; `ADR-0063` PROPOSED, PREMISE NOT MET ON `main`; DoR 9/10, by BA/PM** (task
 > `bapm-records-1102c`, records only, at `main` `a6039c5b`; nothing run). Sources: the Architect's `arch-ABC-233`
 > decision `…f3a4dac0` (§ 3, the BA/PM list, worked item by item below), its results note `…9f0b5da7` and PREREG
