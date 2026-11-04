@@ -88,6 +88,7 @@ Architect/Design (task `arch-owner-answers-1103`, records only, on `grugops/arch
 | 2026-11-03 | Orchestrator | B-T4: old-table test values are pins, re-pinned old → new; relations, zugzwang, mate floor, `G1`, identity never | `orch-2026-10-30a` `…42c82347` |
 | 2026-11-03 | Architect/Design | F3's bound form (the red row as one linear inequality, margin ½ ‖a‖₁) and the one refit; `zugzwang.001` e1e5 a safety failure (Stockfish 19 d26 −633, e1f1 mate in 10), the row stays; 58 probe games enter; two E1 rows retired. No bar moved | `arch-ABC-239-rulings` `…90b469ca` (PREREG), `…2b428ce8` |
 | 2026-11-04 | Architect/Design | Step 6 on `26d06118`: F3 and F4 NOT MET as written. F4's cause is the joint eg halves of P / PASS / K (no single driver); the row reads a 29 cp preference at depth 9. K1 (c) re-found in form (A). Recommended: close the first pull NOT MET, E4a before a second pull. No bar moved | `arch-ABC-239-f3f4` `…9427005b` / `…80a5bd21` (PREREG), `…4eae0fd3`, `…69f22167` |
+| 2026-11-04 | Architect/Design | § Consequences item 5's order: `ABC-271` (E4a, `ADR-0070` PROPOSED, rule values on their own read) → the second pull; the free-set lines owed on acceptance. No bar moved | `arch-ABC-271` |
 
 ## Context
 
@@ -874,6 +875,14 @@ below).
     candidate is frozen for B-T7 / B-T8, and never between that freeze and `ABC-239`'s merge. `ABC-239`'s quiet filter
     calls `quiesce` with its own rules record, so a Q1 merge does not move its data (`ADR-0069` d6).
   - Items 5–7 are unchanged.
+- *Dated 2026-11-04 (`arch-ABC-271`, records only; `ADR-0070` PROPOSED):* **order item 5 now reads `ABC-271` (E4a)
+  → the second pull.** The first pull closed NOT MET (`…4c76bf7a`), and `arch-ABC-239-f3f4`'s path (iii) put E4a
+  first.
+  - `ADR-0070` ships E4a's rule values on their own read.
+  - On its acceptance, the second pull's d6 free set gains the eg halves of `PASSED_KING_ENEMY`, `PASSED_KING_OWN`
+    and `PASSED_FREE` (eg ≥ 0, mg held at 0). It holds `PASSED_UNSTOPPABLE` as a rule, as item 5 says.
+  - Those d4 / d6 lines are owed here on acceptance, with the second pull's PREREG. They are not written now.
+  - **Superseded:** item 5's "after `ABC-239`".
 
 ## Rollback
 
