@@ -1,15 +1,33 @@
 ---
 id: ABC-236
 title: "Aspiration windows at the root from depth 5, with a stated widening re-search on a fail, behind an off-door"
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: M
 priority: P3
 epic: EPIC-011
-adr: "ADR-0066 (PROPOSED 2026-11-03, arch-ABC-236 …0886976b; PREREG …69cfcb4a committed d5d360e1 before any run): PREMISE NOT MET on main (F4, A100 chooseMove d8 0.9836 / 0.9913 > 0.95); the build does not start; accept is not put to the owner. Ticket PARKED by the Orchestrator 2026-11-03 (…38f865c3)"
+adr: "ADR-0063 (with K3) / ADR-0065 / ADR-0066 ACCEPTED 2026-11-04 as a bundle by the owner's word (orch-2026-10-30a …4c4cb03d ruling 2) on qe-ABC-283 PASS_WITH_GAPS …de1dc511 (C2′ 66.0 / 100); in force when ABC-283 merges (merged 58e90d07). The premise was overridden, not met. (Was: ADR-0066 PROPOSED 2026-11-03, arch-ABC-236 …0886976b, PREREG …69cfcb4a; premise not met on main, F4; parked by the Orchestrator 2026-11-03, …38f865c3.)"
 ---
 
 # ABC-236: aspiration windows at the root
+
+> **DONE 2026-11-04: DELIVERED BY `ABC-283` (MERGED `58e90d07`); `ADR-0066` ACCEPTED AS A BUNDLE, by BA/PM** (task
+> `bapm-ABC-283-done`, records only, at `main` `fd6b595f`; nothing run). Sources: the Architect's owed lines
+> (`arch-ABC-283-accept` `…cbf0bc7b` § Owed, item 1), the owner's word (`orch-2026-10-30a` `…4c4cb03d` ruling 2), QE's
+> verdict `qe-ABC-283` `…de1dc511` (PASS_WITH_GAPS, no blocking gap; it signs UAT) and the re-read on the merged tree
+> (`se-ABC-283-merge` `…f7f63e1d`).
+> - **Delivered by `ABC-283`.** S1 (A100, in `src/engine.ts` only, door `chooseMoveWithoutAspiration`) was built on
+>   `grugops/ABC-283` with O1h and O3s, and was read once as the bundle: C2′ 59 / 27 / 14 = **66.0 / 100 ≥ 50.0**
+>   (Elo +115.2 ± 67.0), this ticket's GAIN line (A5). No reading isolates aspiration's share; the credit is the
+>   bundle's. The board move is the Orchestrator's (board 2026-11-04: "ABC-233/234/236 delivered by ABC-283"); the
+>   front matter is set to match it.
+> - **`adr:`** `ADR-0063` (with K3), `ADR-0065` and `ADR-0066` ACCEPTED 2026-11-04 as a bundle, in force at the merge.
+>   The premise (F4) was overridden by the owner, not met; it stays fired as measured.
+> - **The KRK mate row finds its mate at iteration 6, not 5** (re-pin 2, ruling `…c7609f51` 1). It is a pin, not a bar
+>   move: `ADR-0066` d9's "iteration 5 or later" holds. QE-283-c (LOW): no committed row now finds a mate at exactly
+>   iteration 5. A row that does is optional, for the Software Engineer on a later touch (test note 3).
+> - **The re-open block and the PARKED banner below are superseded** by this line, which names `ABC-283` as the build.
+>   They stay as written, for the record. DoR row 10 reads "ADR accepted as a bundle (`ABC-283`)": **DoR 10/10.**
 
 > **2026-11-04, by BA/PM (task `bapm-W1-bundle-cut`, records only): RE-OPENED BY THE OWNER'S WORD AS PART OF
 > `ABC-283`.** The owner said *"merge ABC-233, ABC-234 and ABC-236 into one branch and do one test run"*
@@ -124,6 +142,10 @@ adr: "ADR-0066 (PROPOSED 2026-11-03, arch-ABC-236 …0886976b; PREREG …69cfcb4
    `QPLY4` plant and rebuild the fixture before merge; never re-pin both to one value. *QE-249-b (INFO):* no
    default-lane row holds a pre-root draw scored exactly 0 below ply 1; if this ticket changes how such a draw is
    scored or stored, it adds one.
+3. *(2026-11-04, `bapm-ABC-283-done`; QE-283-c, LOW, `qe-ABC-283` `…f8f8c2cc`; `ADR-0066` d9's dated line.)* Under
+   K3 the committed KRK mate row finds its mate at iteration 6. No committed row exercises a mate found at exactly
+   iteration 5, so the iteration-5 fail-high path is covered for a mate by no row (the non-mate row still fails high
+   at 5). **Optional:** a row that finds a mate at exactly iteration 5, on a later touch of this surface. Not owed.
 
 ## Size and priority
 
@@ -152,7 +174,8 @@ adr: "ADR-0066 (PROPOSED 2026-11-03, arch-ABC-236 …0886976b; PREREG …69cfcb4
 | 7 | test notes | ✅ 1 |
 | 8 | size | ✅ M |
 | 9 | priority | ✅ P3 |
-| 10 | no major unresolved blocker | ~~❌ ADR~~ ❌ `ADR-0066`: premise not met on `main` *(2026-11-03, `bapm-ABC-236-park`)* |
+| 10 | no major unresolved blocker | ~~❌ ADR~~ ~~❌ `ADR-0066`: premise not met on `main` *(2026-11-03, `bapm-ABC-236-park`)*~~ ✅ *2026-11-04 (`bapm-ABC-283-done`):* ADR accepted as a bundle (`ABC-283`) |
 
 **DoR 9/10 (re-scored 2026-10-29). Backlog.** *2026-11-03 (`bapm-ABC-236-park`): **PARKED** by the Orchestrator
-(`…38f865c3`); DoR 9/10, row 10 `ADR-0066` F4. Backlog.*
+(`…38f865c3`); DoR 9/10, row 10 `ADR-0066` F4. Backlog.* *2026-11-04 (`bapm-ABC-283-done`): **DoR 10/10. Done,
+delivered by `ABC-283`** (merged `58e90d07`).*

@@ -1,16 +1,37 @@
 ---
 id: ABC-283
 title: "The O1h + O3s + S1 bundle: the history heuristic (ADR-0063), SEE ordering of losing captures (ADR-0065, on src/see.ts) and root aspiration windows (ADR-0066), built on one branch, each behind its own ADR door plus one door that turns all three off; P0 all-off equals main exactly, the ADR-0064 d7 safety rows, NFR-008 ≤ 10 s; then ONE read, 100 games at 100 ms against main, GAIN ≥ 50.0, never re-played"
-status: ready
-column: Ready
+status: done
+column: Done
 size: L
 priority: P2
 epic: EPIC-011
 feature: —
-adr: "ADR-0063 (ABC-233), ADR-0065 (ABC-234) and ADR-0066 (ABC-236), each PROPOSED with its pay premise not met on main, re-opened as one bundle by the owner's word over the three not-met premises (orch-2026-10-30a …4c4cb03d ruling 2). Each is built exactly as its ADR states. On a pass the three are accepted as a bundle; on a miss they stay parked. Doors follow ADR-0026 d10's pattern"
+adr: "ADR-0063 (with K3; ABC-233), ADR-0065 (ABC-234) and ADR-0066 (ABC-236) ACCEPTED as a bundle 2026-11-04, in force at this merge (58e90d07), by the owner's word (orch-2026-10-30a …4c4cb03d ruling 2) on qe-ABC-283 PASS_WITH_GAPS …de1dc511; Status lines arch-ABC-283-accept …cbf0bc7b. The three pay premises were overridden, not met. (Was: each PROPOSED with its pay premise not met on main, re-opened as one bundle by the owner's word; doors follow ADR-0026 d10's pattern.)"
 ---
 
 # ABC-283: the O1h + O3s + S1 bundle, one branch, one read
+
+> **DONE 2026-11-04: MERGED `58e90d07`; B5'S PASS BRANCH APPLIES; THE THREE ADRs ACCEPTED AS A BUNDLE, by BA/PM** (task
+> `bapm-ABC-283-done`, records only, at `main` `fd6b595f`; nothing run). Sources: QE's verdict `qe-ABC-283` `…de1dc511`
+> and gaps `…f8f8c2cc`; the Orchestrator's dispositions `orch-2026-10-30a` `…2409cec9`; the re-read on the merged tree
+> `se-ABC-283-merge` `…f7f63e1d`; the Architect's Status lines `arch-ABC-283-accept` `…cbf0bc7b`; the board (Done).
+> - **The outcome: PASS_WITH_GAPS, no blocking gap.** QE's verdict signs UAT (the owner's delegation, 2026-10-22).
+>   - B1 P0: 6 / 6 byte-equal. B2: mate floor d5 0 / 190 (`search()`) and 0 / 188 (`chooseMove`); zugzwang 7 / 7;
+>     `G1` 54 / 58, none newly missed. B3 `NFR-008`: graded median 9.60 s ≤ 10 s.
+>   - **B4: C2′ 59 / 27 / 14 = 66.0 / 100 ≥ 50.0, MET** (Elo +115.2 ± 67.0), played once. S′ 6.0 / 10 against E 1 810
+>     (information). The Levels deep lane 58 / 58.
+> - **B5, pass:** merged (`58e90d07`, with `ABC-271` in), and `ADR-0063` (with K3), `ADR-0065` and `ADR-0066` are
+>   ACCEPTED as a bundle, in force at this merge. Before it, QE-283-i's re-read on the tree merged with `ABC-271`
+>   (`…f7f63e1d`): every deterministic count equals QE's; `npm test` 2 687 / 2 687; the default lane 9.77 s (quiet read).
+> - **§ Open, as ruled** (`…c7609f51` 4, the rulings in `…3851bf43`): the Levels deep lane a bar; S′ and the per-ADR
+>   drift bars information; `NFR-005` reported; B2 (c) "none newly missed" as written.
+> - **Gaps carried, none a bar:** QE-283-a MEDIUM (`R-N8H-1` → MEDIUM; the Security/NFR hop after the merge,
+>   `secnfr-nfr008-1104`); QE-283-b LOW (R-283-LMR, `ADR-0060` § Status); QE-283-c LOW (the optional iteration-5 mate
+>   row, `ABC-236` test note 3); QE-283-g (this front matter, now fixed).
+> - **Released:** the slot on `src/search.ts` / `src/engine.ts`. `ABC-282` (W1) is unheld; `ABC-286` (P4) and `ABC-288`
+>   (O2c) are unheld for their probes; `ABC-284` (P1) points at R-283-LMR (`…2409cec9` 5).
+> - `ABC-233`, `ABC-234` and `ABC-236` are Done, delivered by this ticket.
 
 > **Cut 2026-11-04 by BA/PM: DoR 10/10, Ready** (task `bapm-W1-bundle-cut`, records only, at `main` `09694a4e`;
 > nothing run, built or timed). Source: the owner's *"merge ABC-233, ABC-234 and ABC-236 into one branch and do one
@@ -157,4 +178,4 @@ The owner's note does not name these. This page adds none of them as a bar.
 | 9 | priority | ✅ P2 |
 | 10 | no major unresolved blocker | ✅ the three ADRs are the design. Their acceptance follows a pass (B5), by the owner's word. The four § Open items do not block the build |
 
-**DoR 10/10. Ready.**
+**DoR 10/10. Ready.** *2026-11-04 (`bapm-ABC-283-done`): **Done** (merged `58e90d07`; QE PASS_WITH_GAPS `…de1dc511`).*

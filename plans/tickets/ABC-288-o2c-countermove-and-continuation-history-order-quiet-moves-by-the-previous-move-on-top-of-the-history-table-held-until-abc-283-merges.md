@@ -1,6 +1,6 @@
 ---
 id: ABC-288
-title: "O2c: countermove and continuation history. Quiet moves are also ordered by the move that answered the opponent's last move and by history keyed on the previous move(s), on top of the history table, behind a test-only off-door pair. Held until ABC-283 (with O1h's history table) merges"
+title: "O2c: countermove and continuation history. Quiet moves are also ordered by the move that answered the opponent's last move and by history keyed on the previous move(s), on top of the history table, behind a test-only off-door pair. Held on the Architect's probe and ADR (ABC-283 merged 58e90d07, putting O1h's history table on main)"
 status: backlog
 column: Backlog
 size: M
@@ -11,6 +11,16 @@ adr: "owed (the Architect's): a new ADR (ADR-0026 d10) or an ADR-0063 amendment,
 ---
 
 # ABC-288: countermove and continuation history (O2c)
+
+> **UNHELD FOR ITS PROBE 2026-11-04: `ABC-283` MERGED (`58e90d07`), by BA/PM** (task `bapm-ABC-283-done`, records
+> only, at `main` `fd6b595f`; nothing run). Source: the Orchestrator's disposition `orch-2026-10-30a` `…2409cec9` 5
+> and the Architect's owed lines (`arch-ABC-283-accept` `…cbf0bc7b` § Owed, item 4).
+> - **Re-open trigger (a) is met:** `ABC-283` merged, so `ADR-0063`'s history table (with K3, max(0, h)) is on `main`,
+>   ACCEPTED as a bundle and in force at the merge. Trigger (b) (the miss branch) is moot.
+> - **What still holds it:** the Architect's pre-registered probe (CH3's pay gate) and the ADR, a new one or an
+>   `ADR-0063` amendment. The probe may now run. DoR row 10 stays ❌ on the probe and the ADR only. **DoR 9/10,
+>   Backlog.** The board move is the Orchestrator's.
+> - **The title** drops "held until `ABC-283` merges"; the file slug is kept (sealed notes cite paths).
 
 > **Cut 2026-11-04 by BA/PM: DoR 9/10, Backlog, HELD** (task `bapm-epic011-areas`, records only, at `main` `b274711c`;
 > nothing run, built or timed). Source: the owner's ruling 3 (`orch-2026-10-30a` `…4c4cb03d`). `EPIC-011` Phase 3,
@@ -91,7 +101,8 @@ The ADR fixes exact counts and bars before Ready. None is loosened after Ready.
 
 ## Dependencies
 
-- **`ABC-283` merged** (re-open (a)), or the Architect's re-open (b). DoR row 10.
+- **`ABC-283` merged** (re-open (a)), or the Architect's re-open (b). DoR row 10. *2026-11-04 (`bapm-ABC-283-done`):
+  **(a) met**, merged `58e90d07`; (b) moot.*
 - **One at a time on `orderMoves` (`src/search.ts`) and `src/engine.ts`** with `ABC-283`, `ABC-286` and `ABC-298`.
 
 ## Definition of Ready
@@ -107,6 +118,6 @@ The ADR fixes exact counts and bars before Ready. None is loosened after Ready.
 | 7 | test notes | ✅ 1–2 |
 | 8 | size | ✅ M |
 | 9 | priority | ✅ P3 |
-| 10 | no major unresolved blocker | ❌ **held on `ABC-283`'s read**; the ADR is owed |
+| 10 | no major unresolved blocker | ❌ ~~**held on `ABC-283`'s read**~~ **held on the Architect's probe**; the ADR is owed *(2026-11-04, `bapm-ABC-283-done`: `ABC-283` merged `58e90d07`)* |
 
 **DoR 9/10. Backlog, held.**

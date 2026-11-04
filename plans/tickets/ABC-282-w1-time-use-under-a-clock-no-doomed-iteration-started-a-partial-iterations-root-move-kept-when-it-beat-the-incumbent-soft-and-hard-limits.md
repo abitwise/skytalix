@@ -12,6 +12,18 @@ adr: "ADR-0071 ACCEPTED 2026-11-04 (owner, OQ-0071-1, form (a), as written; orch
 
 # ABC-282: time use under a clock (W1)
 
+> **UNHELD 2026-11-04: `ABC-283` MERGED (`58e90d07`), by BA/PM** (task `bapm-ABC-283-done`, records only, at `main`
+> `fd6b595f`; nothing run). Source: the Orchestrator's disposition `orch-2026-10-30a` `…2409cec9` 5 ("after the merge,
+> ABC-282 (W1) is unheld") and the Architect's owed lines (`arch-ABC-283-accept` `…cbf0bc7b` § Owed, item 4).
+> - **The hold "until `ABC-283` merges or misses" is lifted.** `ABC-283` merged first, with `ADR-0066`'s root
+>   aspiration (A100) in `chooseMove` and `ADR-0063`'s history (with K3) on `main`. The banner below and its
+>   § Dependencies and DoR lines are superseded by this line on that point only.
+> - **What the merge-first branch carries** (`ADR-0071` D12, already on this page, § Dependencies): D4's test
+>   generalised per aspiration pass; b re-read by P1's method and frozen before A1 (c); A0's counts re-read on the new
+>   merge-base before the change; `ADR-0066` d5's dated line (owed by this ticket, the second to land); the text
+>   conflicts in `deepen` and `runIteration`. None of these is a new bar.
+> - **DoR 10/10, Ready, unchanged.** The column move is the Orchestrator's.
+
 > **`ADR-0071` ACCEPTED (THE OWNER, OQ-0071-1, FORM (a), AS WRITTEN); A6'S HARNESS `ABC-300` MERGED; STILL HELD UNTIL
 > `ABC-283` MERGES OR MISSES, 2026-11-04, by BA/PM** (task `bapm-owner-answers-1104`, records only, at `main`
 > `7dd241cf`; nothing run). Sources: the owner's word as the Orchestrator recorded it (`orch-2026-10-30a`
@@ -274,7 +286,9 @@ Ready.
   by `arch-ABC-282`, merged `9471eb32`). DoR row 10 is met. Not in force until this ticket merges on A6. The merge
   waits on A6 only. *(Was: PROPOSED, the acceptance pending; the merge waited on A6 and on the acceptance.)*
 - **After `ABC-283` (`ADR-0071` D12), one at a time on `src/engine.ts`.** This ticket builds after `ABC-283` merges or
-  misses. *2026-11-04: the page still holds until `ABC-283` merges or misses (the Orchestrator, `…7de79e90`).* If `ABC-283` merges first, this ticket rebases and carries: D4's test generalised per aspiration pass (the
+  misses. *2026-11-04: the page still holds until `ABC-283` merges or misses (the Orchestrator, `…7de79e90`).* *2026-11-04
+  (`bapm-ABC-283-done`): **`ABC-283` merged `58e90d07`, so the hold is lifted** (`…2409cec9` 5) and the merge-first
+  branch below applies.* If `ABC-283` merges first, this ticket rebases and carries: D4's test generalised per aspiration pass (the
   incumbent exact inside the pass's window, M exact or failing high above it); b re-read by P1's method and frozen
   before A1 (c); A0's counts re-read on the new merge-base; `ADR-0066` d5's dated line; the text conflicts in `deepen`
   and `runIteration`.
@@ -292,7 +306,7 @@ Ready.
 | 2 | scope and out-of-scope | ✅ scope 1–5; the modes are reading (a) narrowed to `uci-clock-mode` under a clock (`ADR-0071` D1); pondering, threads, budget formulae and emergency time out |
 | 3 | INVEST | ✅ L; one rule in one loop, one mode; independent of evaluation and ordering; the harness split out as `ABC-300` |
 | 4 | testable, measurable acceptance | ✅ A0 exact counts (D8); A1 0 nodes / started / head median strictly below base on 125 rows; A2 the move named, the mate row stated; A3 node bound, ≤ ceiling, 1 ms floor; A4 0 time losses, ≥ 500 ms, ≥ 75 %; A5 7 / 7, no NEWLY; A6 at `tc=40/8`, ≥ 50.0 of 100, 0 time losses, 0 faults |
-| 5 | dependencies known | ✅ `ADR-0071` ~~PROPOSED (OQ-0071-1 pending, reading (b))~~ ACCEPTED 2026-11-04 (OQ-0071-1, (a)); after `ABC-283` (D12); `ABC-300` (the harness ticket, merged `4ea39135`) before A6 |
+| 5 | dependencies known | ✅ `ADR-0071` ~~PROPOSED (OQ-0071-1 pending, reading (b))~~ ACCEPTED 2026-11-04 (OQ-0071-1, (a)); after `ABC-283` (D12) *(merged `58e90d07`, 2026-11-04: unheld)*; `ABC-300` (the harness ticket, merged `4ea39135`) before A6 |
 | 6 | NFR triggers with targets | ✅ `NFR-004` ceilings, 1 ms floor; `NFR-008` ≤ 10 s, A0-1 / A0-2 / A1 (c) in `ENGINE_DEEP`; `NFR-005` untouched (scope 4); `NFR-009` ≤ 16 MiB, no table |
 | 7 | test notes | ✅ 1–4; note 3 names the old and new A3 rows |
 | 8 | size | ✅ L (was M) |
@@ -302,7 +316,8 @@ Ready.
 **DoR 10/10. Ready** (2026-11-04, `bapm-ABC-282-adr`; was 9/10, Backlog). The column moves are the Orchestrator's.
 Ready for Dev waits on `ABC-283`'s merge or miss (D12); A6 waits on `ABC-300`. *2026-11-04
 (`bapm-owner-answers-1104`): `ABC-300` merged `4ea39135`, so A6 no longer waits on it; `ABC-283`'s merge or miss
-still holds the page.*
+still holds the page.* *2026-11-04 (`bapm-ABC-283-done`): `ABC-283` merged `58e90d07`; nothing holds the page. It
+rebases on the merge-first branch (D12).*
 
 ## As cut (superseded 2026-11-04 by `ADR-0071` PROPOSED; kept unedited for the record)
 

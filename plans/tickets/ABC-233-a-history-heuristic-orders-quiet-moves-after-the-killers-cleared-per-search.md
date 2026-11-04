@@ -1,15 +1,35 @@
 ---
 id: ABC-233
 title: "A history heuristic orders quiet moves after the killers, cleared per search, behind an off-door"
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: M
 priority: P3
 epic: EPIC-011
-adr: "ADR-0063 (PROPOSED 2026-11-02, arch-ABC-233 …f3a4dac0; PREREG …4d5a0fe3 committed ec2ed472 before any run): PREMISE NOT MET on main (F4, the pay gate A4 (a) missed); the build does not start; accept is not put to the owner. Ticket PARKED by the Orchestrator (board, 2026-11-02)"
+adr: "ADR-0063 (with K3) / ADR-0065 / ADR-0066 ACCEPTED 2026-11-04 as a bundle by the owner's word (orch-2026-10-30a …4c4cb03d ruling 2) on qe-ABC-283 PASS_WITH_GAPS …de1dc511 (C2′ 66.0 / 100); in force when ABC-283 merges (merged 58e90d07). The premise was overridden, not met. (Was: ADR-0063 PROPOSED 2026-11-02, arch-ABC-233 …f3a4dac0, PREREG …4d5a0fe3; premise not met on main, F4; parked by the Orchestrator 2026-11-02.)"
 ---
 
 # ABC-233: history heuristic for quiet moves
+
+> **DONE 2026-11-04: DELIVERED BY `ABC-283` (MERGED `58e90d07`); `ADR-0063` (WITH K3) ACCEPTED AS A BUNDLE, by BA/PM**
+> (task `bapm-ABC-283-done`, records only, at `main` `fd6b595f`; nothing run). Sources: the Architect's owed lines
+> (`arch-ABC-283-accept` `…cbf0bc7b` § Owed, item 1), the owner's word (`orch-2026-10-30a` `…4c4cb03d` ruling 2), QE's
+> verdict `qe-ABC-283` `…de1dc511` (PASS_WITH_GAPS, no blocking gap; it signs UAT) and the re-read on the merged tree
+> (`se-ABC-283-merge` `…f7f63e1d`).
+> - **Delivered by `ABC-283`.** O1h was built on `grugops/ABC-283` with O3s and S1, and was read once as the bundle:
+>   C2′ 59 / 27 / 14 = **66.0 / 100 ≥ 50.0** (Elo +115.2 ± 67.0). No reading isolates history's share; the credit is
+>   the bundle's. The board move is the Orchestrator's (board 2026-11-04: "ABC-233/234/236 delivered by ABC-283"); the
+>   front matter is set to match it.
+> - **`adr:`** `ADR-0063` (with K3), `ADR-0065` and `ADR-0066` ACCEPTED 2026-11-04 as a bundle, in force at the merge.
+>   The premise (F4) was overridden by the owner, not met; it stays fired as measured.
+> - **The table is 32 KiB, not 16 KiB** (side × from × to, 32 768 bytes, `ADR-0063` decision 1 and § Consequences).
+>   This page has carried it since 2026-11-02 (§ NFR triggers, DoR row 6); scope 1 gains the as-built line.
+> - **The quiet key is K3's max(0, h)** (`ADR-0063` decision 4 as amended, ruling `…6c6fb0be`): history may promote a
+>   quiet move, never demote one.
+> - **The re-open block and the PARKED banner below are superseded** by this line, which names `ABC-283` as the build.
+>   They stay as written, for the record. DoR row 10 reads "ADR accepted as a bundle (`ABC-283`)": **DoR 10/10.**
+> - **Carried, not owed here:** R-283-LMR (`ADR-0060` § Status, 2026-11-04; QE-283-b, LOW). If the d5 mate floor goes
+>   red again, the lever is LMR (`ABC-284`), not history.
 
 > **2026-11-04, by BA/PM (task `bapm-W1-bundle-cut`, records only): RE-OPENED BY THE OWNER'S WORD AS PART OF
 > `ABC-283`.** The owner said *"merge ABC-233, ABC-234 and ABC-236 into one branch and do one test run"*
@@ -83,7 +103,8 @@ adr: "ADR-0063 (PROPOSED 2026-11-02, arch-ABC-233 …f3a4dac0; PREREG …4d5a0fe
 ## Scope
 
 1. A from-to (or piece-to) history table, raised on a quiet move's beta cutoff by a depth-scaled amount, read by
-   `orderKey` after the killers.
+   `orderKey` after the killers. *2026-11-04 (`bapm-ABC-283-done`), as built in `ABC-283`: side × from × to, 32 KiB
+   (`ADR-0063` decision 1); the quiet key is K3's max(0, h) (`ADR-0063` decision 4 as amended).*
 2. **Cleared at the start of every search** (`ABC-080` `A6`: nothing learned in one search is offered in the next).
 3. An `ADR-0026` d10 off-door pair: an order change changes values under LMR (SA 6c).
 
@@ -143,6 +164,6 @@ adr: "ADR-0063 (PROPOSED 2026-11-02, arch-ABC-233 …f3a4dac0; PREREG …4d5a0fe
 | 7 | test notes | ✅ 1 |
 | 8 | size | ✅ M |
 | 9 | priority | ✅ P3 |
-| 10 | no major unresolved blocker | ❌ ~~ADR~~ *2026-11-02 (`bapm-records-1102c`):* `ADR-0063` PROPOSED, premise not met on `main` (F4); the build does not start. **Parked** (the Orchestrator's ruling) |
+| 10 | no major unresolved blocker | ~~❌~~ ✅ ~~ADR~~ ~~*2026-11-02 (`bapm-records-1102c`):* `ADR-0063` PROPOSED, premise not met on `main` (F4); the build does not start. **Parked** (the Orchestrator's ruling)~~ *2026-11-04 (`bapm-ABC-283-done`):* ADR accepted as a bundle (`ABC-283`) |
 
-**DoR 9/10 (re-scored 2026-10-29). Backlog.** *2026-11-02 (`bapm-records-1102c`): DoR 9/10 stands; row 10 now reads `ADR-0063`'s F4. **Backlog, parked.***
+**DoR 9/10 (re-scored 2026-10-29). Backlog.** *2026-11-02 (`bapm-records-1102c`): DoR 9/10 stands; row 10 now reads `ADR-0063`'s F4. **Backlog, parked.*** *2026-11-04 (`bapm-ABC-283-done`): **DoR 10/10. Done, delivered by `ABC-283`** (merged `58e90d07`).*

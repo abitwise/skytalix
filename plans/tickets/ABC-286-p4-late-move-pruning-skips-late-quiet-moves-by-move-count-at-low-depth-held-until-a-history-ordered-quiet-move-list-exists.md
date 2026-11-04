@@ -12,6 +12,15 @@ adr: "owed (the Architect's): a new ADR (ADR-0026 d10) after a pre-registered jo
 
 # ABC-286: late-move pruning (P4)
 
+> **UNHELD FOR ITS PROBE 2026-11-04: `ABC-283` MERGED (`58e90d07`), by BA/PM** (task `bapm-ABC-283-done`, records
+> only, at `main` `fd6b595f`; nothing run). Source: the Orchestrator's disposition `orch-2026-10-30a` `…2409cec9` 5
+> and the Architect's owed lines (`arch-ABC-283-accept` `…cbf0bc7b` § Owed, item 4).
+> - **The first half of the re-open trigger is met:** a quiet-move order is on `main`, `ADR-0063`'s history table with
+>   K3 (max(0, h)), ACCEPTED as a bundle and in force at the merge.
+> - **What still holds it:** the Architect's pre-registered joint probe with history as its input (`ADR-0063`
+>   decision 11) meeting every bar, and the ADR. The probe may now run. DoR row 10 stays ❌ on the probe and the ADR
+>   only. **DoR 9/10, Backlog.** The board move is the Orchestrator's.
+
 > **Cut 2026-11-04 by BA/PM: DoR 9/10, Backlog, HELD** (task `bapm-epic011-areas`, records only, at `main` `b274711c`;
 > nothing run, built or timed). Source: the owner's ruling 3 (`orch-2026-10-30a` `…4c4cb03d`). `EPIC-011` Phase 2,
 > stub row P4.
@@ -87,7 +96,8 @@ The ADR fixes exact counts and bars before Ready. None is loosened after Ready.
 
 ## Dependencies
 
-- **`ABC-283` merged** (hard): the history table. Its single read decides it.
+- **`ABC-283` merged** (hard): the history table. Its single read decides it. *2026-11-04 (`bapm-ABC-283-done`):
+  **met**, merged `58e90d07` (C2′ 66.0 / 100).*
 - **The joint probe and the ADR** (the Architect's). DoR row 10.
 - **One at a time on `src/search.ts` / `src/engine.ts`** with `ABC-284`, `ABC-285`, `ABC-287`, `ABC-296`, `ABC-297`.
 
@@ -104,6 +114,6 @@ The ADR fixes exact counts and bars before Ready. None is loosened after Ready.
 | 7 | test notes | ✅ 1–2 |
 | 8 | size | ✅ S |
 | 9 | priority | ✅ P3 |
-| 10 | no major unresolved blocker | ❌ **held on `ABC-283` and the joint probe**; the ADR is owed |
+| 10 | no major unresolved blocker | ❌ ~~**held on `ABC-283` and the joint probe**~~ **held on the joint probe**; the ADR is owed *(2026-11-04, `bapm-ABC-283-done`: `ABC-283` merged `58e90d07`)* |
 
 **DoR 9/10. Backlog, held.**
