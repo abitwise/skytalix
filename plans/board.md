@@ -1,3 +1,4 @@
+_Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — **ABC-304 merged 9f481fa5** (QE PASS_WITH_GAPS …e1bb0944, UAT waived). Page status to Done owed to BA/PM; QE-304-a (A4 (b)'s door) owed to the Architect. Running: qe-ABC-301-miss. Owner: A4, new C2′ after a candidate fault._
 _Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — **ABC-301 stopped at scope 3: zugzwang.001 red on the emission (e1e5 at depth 9), defect check clean → F4 reads NOT MET, subject to `qe-ABC-301-miss`.** Fit itself clean (26 bounds, B-T1/2/3 met). B-T6–B-T8 not run. Running: qe-ABC-304, qe-ABC-301-miss. Owner: A4, new C2′ after a candidate fault._
 _Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — **ABC-304 built** (se-ABC-304 e1ac9209): K0 28/28, A3 (a) 96.26 % / 95.72 % on the bundle doors, no figure moved → In Review → `qe-ABC-304`. Running: se-ABC-301-fit-2, qe-ABC-304. Owner: A4, new C2′ after a candidate fault._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `bapm-K0-cut` merged: **ABC-304 Ready, DoR 10/10** → `se-ABC-304`. Running: se-ABC-301-fit-2, se-ABC-304. Owner: A4, new C2′ after a candidate fault. Owed at the owner's C2′ answer: one line naming the form QE's § 6 copies, and the two points BA/PM raised (…555a9a9e)._
@@ -1371,8 +1372,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
 - ~~[ABC-283]~~ → Blocked. The O1h+O3s+S1 bundle (ABC-233 history, ABC-234 SEE ordering, ABC-236 root aspiration) on one branch; one read of 100 games at 100 ms, GAIN ≥ 50.0 (owner's word, …4c4cb03d). se-ABC-283 running; rulings …3851bf43.
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
-    ## In Review (WIP 2/3)
-- [ABC-304] Stale rows re-point, test-only: built e1ac9209, `qe-ABC-304` verifying, UAT waived.
+    ## In Review (WIP 1/3)
 - [ABC-282] W1. Built 7e4b1006 → qe-ABC-282 (A6 100 games at tc=40/8, GAIN ≥ 50.0; verdict signs UAT).
     - [ABC-012] Portfolio FX conversion  (PR: #41, QE: running)
 
