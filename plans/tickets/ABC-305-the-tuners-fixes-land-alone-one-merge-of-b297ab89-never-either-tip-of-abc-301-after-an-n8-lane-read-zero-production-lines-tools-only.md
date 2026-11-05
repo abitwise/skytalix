@@ -120,8 +120,10 @@ adr: "No new ADR. ADR-0067's dated block of arch-owner-answers-1105 (the tools l
 
 ## Open, not bars (for the Orchestrator)
 
-1. **The row census.** `…5ec6c124` gated "the second of `ABC-282` / `ABC-301`", and `ABC-301` will not merge. Whether it still gates this landing
-   is the Orchestrator's (`…2b3440cf`). `UNKNOWN - verify`. It does not block the build.
+1. **The row census.** `…5ec6c124` gated "the second of `ABC-282` / `ABC-301`", and `ABC-301` will not merge. ~~Whether it still gates this landing
+   is the Orchestrator's (`…2b3440cf`). `UNKNOWN - verify`.~~ It does not block the build.
+   *2026-11-05 (`bapm-ABC-282-close`; `…16e0ec2c` ruling 1, `…42f7fd67` item 1): **ruled.** The census gates the next lane-adding merge after
+   `ABC-282`, whichever of this ticket and `ABC-303` that is. It does not gate either build. Its read is `secnfr-census-1105`, not yet reported.*
 
 ## Definition of Ready
 
