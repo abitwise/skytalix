@@ -1,3 +1,4 @@
+_Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — `bapm-rows-cut-1105` merged: **ABC-307** (S, P1, DoR 9/10). It merges alone and first, so A9 reads main. → `arch-ABC-307`. Running: arch-ABC-303-w1-rows, arch-ABC-307._
 _Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — se-ABC-305 STOP: built clean (148c42e9), N8-LANE read VOID on foreign load, no verdict. Re-read, gates and deep lanes after ABC-307 merges. Running: arch-ABC-303-w1-rows, bapm-rows-cut-1105._
 _Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — census merged: **NFR-008 MET 9.515 s; G-WITH: a row move merges before or with the next lane-adding merge**, no exemption for ABC-305. → `bapm-rows-cut-1105` (ABC-307), `se-ABC-305` (build and read, no landing). Running: arch-ABC-303-w1-rows and both._
 _Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — **se-ABC-303-main STOP**: 19 ABC-282 rows read differently with the bundle on (no wiring fault seen; R1, R2, P3, P4 unchanged). QE does not seal. → `arch-ABC-303-w1-rows`. Running: secnfr-census-1105, arch-ABC-303-w1-rows._
@@ -1531,7 +1532,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## In Analysis (WIP 0/2)
 
 
-## In Design (WIP 1/2)
+## In Design (WIP 2/2)
+- [ABC-307] Nine rows to deep lanes, NFR-008 re-graded (S, P1, DoR 9/10). `arch-ABC-307`: remnants and mutant reads. Merges alone and first.
 - [ABC-291] E4b pawn structure (P2, DoR 9/10). ADR-0075 ACCEPTED, in force at merge; hand values fixed. Probe next, K2 list after it; build after ABC-305.
 
 
