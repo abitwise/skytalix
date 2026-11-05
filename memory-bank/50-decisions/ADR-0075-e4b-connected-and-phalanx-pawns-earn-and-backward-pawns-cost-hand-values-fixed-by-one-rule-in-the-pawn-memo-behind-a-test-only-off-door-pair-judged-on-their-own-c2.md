@@ -6,7 +6,17 @@ id: ADR-0075
 
 ## Status
 
-**PROPOSED 2026-11-05.** Recorded by Architect/Design (task `arch-ABC-291`, records only, on `grugops/arch-ABC-291` from `main` `148fd329`).
+**ACCEPTED 2026-11-05 by the owner. In force only at `ABC-291`'s merge.** Recorded by Architect/Design (task `arch-ABC-291-accept`, records only, on
+`grugops/arch-ABC-291-accept` from `main` `a6ae8227`). Nothing was run.
+- **His word, verbatim** (`orch-2026-10-30a` `…c1623ae7`): *"1. yes"*. The question was § The owner's question: "Do you accept ADR-0075?"
+- **What it settles:** d1–d12 as written. **No definition, rule, value, bar or probe row changes with this acceptance.** The probe stays written and not run.
+  F5's "accepted, not in force" now applies to a miss.
+- **d11 (d), no second set of values after a miss:** a rule for this term. It does not yet bind the later terms. Each asks him in its own ADR (`…c1623ae7`).
+- **d11's readings** stay open to overruling at any third-pull call (`…c1623ae7`).
+- **The dated lines of `arch-ABC-291`** in `ADR-0056` and `ADR-0067` stand, and now read accepted.
+- **Still owed, unchanged:** § Consequences' lines. `ABC-305` comes before the build.
+
+*Before acceptance:* **PROPOSED 2026-11-05.** Recorded by Architect/Design (task `arch-ABC-291`, records only, on `grugops/arch-ABC-291` from `main` `148fd329`).
 **Nothing was run:** no test, build, engine or probe. A timing read (`ABC-282`'s A4) held the host. Every figure below is arithmetic on
 `src/evaluate-params.ts` at that commit, or is quoted from a named record. Anything that needs a reading is marked `UNKNOWN - verify`.
 
@@ -26,6 +36,8 @@ dated lines; `ADR-0067`'s dated blocks; `ADR-0070`; `ADR-0064` d3–d8; `ADR-002
 | date (UTC) | by | what | record |
 |---|---|---|---|
 | 2026-11-05 | Architect/Design | PROPOSED: definitions, rule, memo, `G2` ratio, intent, the probe written and not run, the four carried items. Nothing run | `arch-ABC-291` |
+| 2026-11-05 | Owner | ACCEPTED ("1. yes"), in force only at `ABC-291`'s merge | `orch-2026-10-30a` `…c1623ae7` |
+| 2026-11-05 | Architect/Design | Status, this log and the dated lines in `ADR-0056` and `ADR-0067` read accepted. No value, rule, bar or probe row moved. Nothing run | `arch-ABC-291-accept` |
 
 ## Context
 
@@ -266,6 +278,8 @@ Notation: R is the pawn's own rank index, as in `PASSED`. 1 is its start rank, 6
     tool line at the merge; no second set after a miss. Each sets its own ratio. Nothing here binds their values.
 
 ## The owner's question
+
+*Answered 2026-11-05 (`…c1623ae7`): "1. yes". The question stands below as it was asked.*
 
 **Do you accept ADR-0075?**
 
