@@ -28,3 +28,4 @@ by: architect-design (claude-opus-5-5), at: 2026-11-05T13:42:01Z. Measured on sc
 - **To the Orchestrator:** C1's clause (d), recommended ruling (a) in …727e0d0c; AR-154-TWO-POINT-CONTROL's trigger R-a, which ABC-307's page does not carry. **Owner question: none.**
 - **BA/PM's page lines:** in decision …727e0d0c, written once; A7's C1 line waits for the ruling.
 - **Records:** ADR-0046 § Dated 2026-11-05 (`arch-ABC-307-reads`) and Status pointer; PREREG …5c65a408, observation …f8c13d49, decision …727e0d0c, with raw/. No ticket, EPIC, board, src or tool file changed. Nothing is left running.
+- **Path check:** `node tools/grugops/records-path-check.js --base main` exit 0, on this branch before this line.
