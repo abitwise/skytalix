@@ -1,3 +1,4 @@
+_Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — **ABC-307 DoR 10/10** → In Development, `se-ABC-307`. Forecast lane near 9.596 s with all budgets spent, no rows left: ≥ 9.6 s goes straight to the owner. Running: arch-ABC-291-probe, se-ABC-307._
 _Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — `arch-ABC-307-reads` merged: parity holds, eight rows S, B1 k = 7, sum inside slack by 11 ms (thin). Rulings 13:43Z: C1 (d) on M6 with an added QE read; F1–F4 ride on ABC-307. → `bapm-ABC-307-lines`, `arch-ABC-291-probe`._
 _Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — `arch-ABC-307` merged: nine rows form S by design, all predictions. Rulings …12:59:27Z: measured reads close DoR row 10; R-307-c accepted; T-QEHOP-GROWTH armed, backstop 5 900. → `arch-ABC-307-reads`. Running: that hop only._
 _Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — se-ABC-303-rows done (80bc0711): E1–E4, U1, U2 applied, every figure as listed, 2 733 tests and deep lanes green, A10 title fixed. R1, R2 unchanged, so nothing to the owner. ABC-303 waits for ABC-307, then main in, then qe-ABC-303. Running: arch-ABC-307._
@@ -1536,15 +1537,15 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## In Analysis (WIP 0/2)
 
 
-## In Design (WIP 2/2)
-- [ABC-307] Nine rows to deep lanes, NFR-008 re-graded (S, P1, DoR 9/10). `arch-ABC-307`: remnants and mutant reads. Merges alone and first.
+## In Design (WIP 1/2)
 - [ABC-291] E4b pawn structure (P2, DoR 9/10). ADR-0075 ACCEPTED, in force at merge; hand values fixed. Probe next, K2 list after it; build after ABC-305.
 
 
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 2/3)
+## In Development (WIP 3/3)
+- [ABC-307] Nine rows to deep lanes, NFR-008 re-graded (S, P1, DoR 10/10). `se-ABC-307`; merges alone and first.
 - [ABC-305] Tools-only landing from b297ab89: `se-ABC-305` builds and reads N8-LANE; landing waits on the row move.
 - [ABC-303] Bundle 1, ABC-286 + ABC-288 (ADR-0072, 0073 ACCEPTED over missed premises; DoR 10/10, M, P3). Code only for now (`se-ABC-303`); C2′ only after ABC-282 and ABC-301 settle.
 
