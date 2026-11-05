@@ -1,0 +1,15 @@
+## typecheck
+> skytalix@0.0.0 typecheck
+> tsc --noEmit
+
+rc 0
+## lint
+> biome check .
+
+Checked 148 files in 161ms. No fixes applied.
+rc 0
+## build
+> skytalix@0.0.0 build
+> tsc -p tsconfig.build.json
+
+rc 0
