@@ -1,0 +1,17 @@
+{
+ "gateWorst": 0.9583333333334849,
+ "manifestSha256": "027082638eff3f5169d5fc241f3794e641fce8a24f63af01e5f8ded79c4d67cd",
+ "run": {
+  "seconds": 209.544,
+  "maxRssMiB": 1528.078125
+ },
+ "gate.checked": 1532990,
+ "rows": {
+  "rows.ownTrain": 174227,
+  "rows.ownTrain.innerVal": 50330,
+  "rows.ownVal": 47309,
+  "rows.lichess": 1000000
+ },
+ "countsEqualEngineers": true,
+ "baseTableSha256": "8ca6744f28846563872bd09e40ba0fa04c7958ec911968d42e7fd2140745cb06"
+}

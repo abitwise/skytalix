@@ -1,0 +1,6 @@
+cand
+M-negzero-a door -38 evaluate -41 mirror -41 mirror equal true
+M-negzero-b door -7 evaluate -1 mirror -1 mirror equal true
+base
+M-negzero-a door 0 evaluate 0 mirror 0 mirror equal true
+M-negzero-b door 0 evaluate 0 mirror 0 mirror equal true

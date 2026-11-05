@@ -1,0 +1,3 @@
+the tool's own gate on the plant, emitted table:
+identity gate miss (d5): 2r5/4kp1p/p1PR2p1/2P5/8/7P/5PP1/7K b - - 0 37 model differs by 9
+exit 1

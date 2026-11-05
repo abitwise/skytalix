@@ -1,0 +1,18 @@
+
+ RUN  v4.1.12 <cand>
+
+stdout | src/evaluate.taper.test.ts > ABC-269 B2 — the mate floor on the 287: the door's mates are same-sign mates for search() [deep, SEARCH_DEEP=1] > the door's depth-4 mates, search() at depth 5: 0 violations [deep, SEARCH_DEEP=1]
+ABC-269 B2 mate floor, door d4 -> search() d5: 0 of 163 violated
+
+ ✓ src/evaluate.taper.test.ts > ABC-269 B2 — the mate floor on the 287: the door's mates are same-sign mates for search() [deep, SEARCH_DEEP=1] > the door's depth-4 mates, search() at depth 5: 0 violations [deep, SEARCH_DEEP=1] 686ms
+stdout | src/evaluate.taper.test.ts > ABC-269 B2 — the mate floor on the 287: the door's mates are same-sign mates for search() [deep, SEARCH_DEEP=1] > the door's depth-5 mates, search() at depth 5: 0 violations [deep, SEARCH_DEEP=1]
+ABC-269 B2 mate floor, door d5 -> search() d5: 0 of 189 violated
+
+ ✓ src/evaluate.taper.test.ts > ABC-269 B2 — the mate floor on the 287: the door's mates are same-sign mates for search() [deep, SEARCH_DEEP=1] > the door's depth-5 mates, search() at depth 5: 0 violations [deep, SEARCH_DEEP=1] 1189ms
+
+ Test Files  1 passed (1)
+      Tests  2 passed | 168 skipped (170)
+   Start at  00:22:11
+   Duration  1.99s (transform 0ms, setup 0ms, import 51ms, tests 1.88s, environment 0ms)
+
+exit 0
