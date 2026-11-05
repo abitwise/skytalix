@@ -16,3 +16,16 @@ Read PREREG …da060cef, read 3's void …4a8dd8dc, stop note …d5cd6d19 and th
 Check every output file is non-empty before reading it. Record foreign load; never touch it. Every test, build or engine run goes under the host lock named in your dispatch prompt. Leave nothing running; check with ps, not pgrep -f.
 Fences: your records only. No src, test, ticket, ADR, EPIC or board edits. No push, force, amend, rebase or merge into main.
 Publish: sealed notes (contextRoot = the worktree's .grugops/context, `at` from `date -u` run immediately before each note); queue moves; commit; ## Result + trace row; brief + claim to done/. Before your last commit, run `node tools/grugops/records-path-check.js --base main`; it must exit 0.
+
+## Result
+by: qe-e2e (claude-opus-5-5), at: 2026-11-05T21:47:35Z. Branch `grugops/qe-ABC-307`, continued from `f8dfd607`. **The read STANDS. Verdict: PASS.** Nothing of mine left running.
+- **PREREG:** `…01f729cb`, sealed and committed (`e74d2e11`) at 21:41:24Z, before any poll or run. No `ps` look came before it.
+- **Slot:** clear at 21:41:44Z on the first try, 20 s into the clock. Hold 251 s to 21:45:55Z, 8 complete scored rounds, all 27 runs 71 files and 2 709 passed.
+- **Flags:** 0 of 8 rounds, 84 samples, no foreign vitest.
+- **H:** median 9.085 s, interval 9.02 to 9.17 s, max 9.17 s.
+- **H − B:** −0.350 s wall, −1.065 s CPU, paired medians. Target −0.215 s met by 0.135 s.
+- **Twin:** ADMISSIBLE, CPU +0.255 s, 0.82 % of H's CPU, sign 5 of 8, R 1.020 s CPU, 0.210 s wall.
+- **UAT:** waived, and QE's verdict signs. H's median reads G-GO, a figure for routing. Nothing goes to the owner on 9.6 s or 10 s.
+- **Gaps:** `…bec57958`: the read is on the arms, not `main`, with lane inputs equal at `375f6362`; the target's margin is under the twin's wall R; A10 is Security/NFR's.
+- **Notes:** `…01f729cb` (PREREG), `…78d1f873` (read), `…bec57958` (verdict). Raw `raw/n8-r5/`.
+- **Next:** the Orchestrator routes A10 and the board move. Merge is the humans'.
