@@ -1,0 +1,78 @@
+# qe-ABC-282 A4 PREREG, sealed and committed before any game of the read: 5 games at `tc=40/900` on `04ebeb7e`, played once in one lock hold; M1 and M2 graded per side on exact integers; a miss is F5 and is not re-played. The rehearsal was read before this note
+
+QE/E2E, task `qe-ABC-282`, brief `qe-ABC-282-a4`. The owner approved A4 (`orch-2026-10-30a` `…b836b85c`). It adds nothing to the bars. They are ticket `ABC-282` A4 and F5, `ADR-0071` D11, `EPIC-009` M1 and M2. The protocol is `ABC-223`'s (`qe-ABC-223` `…caae8984`), kept where this note does not say otherwise.
+
+## 1. Main, read before this note
+`git log 22931005..main -- src tools/rating data package.json package-lock.json` lists one commit, `9e0d4044` (`ABC-304`). `git diff --stat 22931005 main -- src tools/rating` lists three `*.test.ts` files and nothing else, and `tools/rating` is tree `8f03fe47` on both. Production `src/` and `tools/rating` have not moved, and `ABC-301`'s emission did not land. The read goes ahead. It is checked once more immediately before launch.
+
+## 2. Build
+- **Candidate `04ebeb7e`, `src/` `d235214c`, against itself**, as `ABC-223` read `main` against itself. Both sides run W1.
+- `<scratch>` clone (`--shared`, sparse `src data tools`), detached at the full sha, `npm ci` rc 0, `npm run build` rc 0, under the lock. **dist tree sha256 `c3f8c88d…d304`, 24 files, equal to A6's candidate.**
+- `cutechess-cli` 1.5.1 sha256 `dc776901…f40a`, `openings.epd` `0d7f7a72…2666`, both the pins. Node v26.12.1.
+
+## 3. The command
+```
+flock <scratch>/host-test.lock bash raw/scripts/run-282-a4.sh <tools.env> <clone> <worktree>/games/a4
+```
+The harness calls, per game `n` = 1…5, opening line `n`:
+```
+<cutechess> -engine name=skytalix-a cmd=<node> arg=<clone>/dist/uci.js dir=<clone> stderr=<out>/gNN-a.stderr
+  -engine name=skytalix-b cmd=<node> arg=<clone>/dist/uci.js dir=<clone> stderr=<out>/gNN-b.stderr
+  -each proto=uci tc=40/900 timemargin=0 restart=on option.OwnBook=true option.TimeMode=uci-clock-mode
+  -openings file=<clone>/tools/rating/openings.epd format=epd order=sequential start=<n>
+  -games 1 -rounds 1 -concurrency 1 -maxmoves 80 -pgnout <out>/gNN.pgn -debug all
+```
+- That game command is `ABC-223`'s, token for token. `skytalix-a` is White in every game. One core, one game at a time.
+- **`run-282-a4.sh`** sha256 `babc25de…cf58`, `read282a4.py` `a0df3cef…7214`, `wait-clear.sh` `ca442e43…66a0` (byte-equal to `qe-ABC-223`'s). Any later reader fix corrects parsing only and is listed with its diff.
+- **Changes from `run-223.sh`, all outside the game command:** `TC`, `MAXMOVES`, `WALL_S`, `CLEAR_S` come from the environment, with the read's values as defaults, so the rehearsal ran this file; wait-clear runs inside the hold (at most 900 s); a wall stop; free space and a real write probe; line and byte counts; a refusal of an out dir that already holds a game; TERM stops its own game.
+- **Two departures from `ABC-223`'s protocol, stated:**
+  1. **Launch.** The brief sets it: one `flock`, run by the agent's background runner, not `setsid -f`. `ABC-223`'s reason for detaching was a pause by signal, which this run does not use (§ 7), so nothing depends on it.
+  2. **Output on `/`, not `/tmp`.** `<out>` is the gitignored `<worktree>/games/a4`. QE-282-b: under the `/tmp` quota a write can leave 0 bytes with exit 0, and a lost log would lose the read. The clone stays in `<scratch>`, and play writes nothing there.
+- `ABC-223`'s coverage extension stands: if 5 games complete fewer than 4 side-periods, openings 6, 7 … are played one at a time until 4 are complete, up to 10 games. It is a rule of the protocol, not a second attempt.
+
+## 4. Derivations
+`ABC-223`'s § 4, unchanged, in `read282a4.py`. For a side's k-th move, book moves counted: `elapsed_k = clock(go_k) − clock(go_(k+1)) + 900 000 if k is a multiple of 40`. A side's last move in a game has no next `go`, so it uses the debug stamp delta. Clock left = clock in `go_k` − `elapsed_k`. W1 does not change the hard limit (D3), so the derived budget stands.
+
+## 5. The bars, for each side separately: `skytalix-a` (White), `skytalix-b` (Black)
+- **M1 MET:** 0 losses on time **and** closest call ≥ 500 ms, the minimum clock left over every move of that side in every game.
+- **M2 MET:** **every** completed period of that side, book moves included, used ≥ 75 %: exact integers, `4 × used_ms ≥ 3 × 900 000`, so `used_ms ≥ 675 000`. A period is complete when the side played its moves 40(p−1)+1 … 40p. The figure shown is rounded; the grade never is. No mean, no median, no excuse for a quiet endgame: **one side-period below it is a miss.**
+- **A4 MET:** 5 of 5 games kept, ≥ 4 side-periods, M1 and M2 MET on **both** sides, none of § 6's UNRESOLVED conditions.
+- **Reported, not graded:** each period's use and period-end clock, per-side closest call, longest move (≤ 60 000 ms, `NFR-004`), partial share, mean and largest completed depth (R-0071-2), `go` lines with `movestogo`, `isready` in a search, overhead, host. `moves.tsv` holds every move, so every figure can be read again.
+
+## 6. The miss rule, and what is not a miss
+- **M1 or M2 NOT MET on either side: A4 is NOT MET, F5, STOP to Architect/Design.** QE states which way it went: **M2 below 75 % is too little; M1 below 500 ms or a loss on time is too much.** Nothing is tuned, and there is no margin, re-play or subset read.
+- **A loss on time also fires F4** (a defect; "a loss on time anywhere"), and so does a move over 60 000 ms (A3). Both are named if they happen.
+- **UNRESOLVED, which is neither MET nor a miss:** a named fault in a game (illegal move, engine crash or disconnect, a stall at the 5 400 s watchdog, no result); `ABC-223`'s foreign window rule (a closest call under 1 000 ms or a move ≥ 59 900 ms within 60 s of a foreign vitest sample leaves that row ungraded, since load can cause a forfeit but cannot hide one); a quarter's frequency more than 5 % under Q1's; fewer than 4 side-periods after 10 games. It does not sign UAT and goes to the Orchestrator. This hop does not re-play.
+- **M2 is graded under foreign load as read.** A foreign process is logged, never killed, and is an A7 gap, not a stop. Any overlap with a miss is reported beside it, and does not excuse it.
+
+## 7. Stops
+- **Wall:** 16 200 s (4 h 30 min) from game 1's start, no grace: the harness stops its own game and exits 6. QE reports it. Fewer than 5 games is not a reading; a miss already seen in finished games is still reported as seen.
+- **Thermal:** `ABC-223`'s rule, Tctl median above 85 °C over ≥ 30 samples, by SIGTERM: THERMAL STOP, not read. **Watchdog:** 5 400 s per game. Neither is followed by a re-launch.
+- **Space:** before game 1 the `/tmp` and `<out>` write probes must pass and `/tmp` must show ≥ 1 024 MB by `df`, otherwise exit 7. `df` does not show the per-user quota (hard 11.79 GiB, QE-282-b); `tmp_used_mb` against it is the figure to read. Both probes and both free figures are logged every 60 s. A failed `<out>` probe stops the run (exit 8). A failed `/tmp` probe is logged, since play writes nothing there.
+
+## 8. What counts as a harness error, and the one re-launch
+- **Harness error:** the harness or `cutechess-cli` exits non-zero or dies other than by § 7's stops; a game's `Finished match` line, PGN or log is missing or empty; the log has under 10 lines; the reader exits non-zero. **An empty output with exit 0 is not a reading.**
+- A harness error is **not** an engine fault. An engine's own crash, illegal move or loss on time is a result of the read.
+- **The one case for a re-launch:** a harness error **before any `go` line reaches an engine in game 1**, so no move of the read was searched. Then the failure is recorded, and the same command runs **once** more into a new `<out>`, in a new hold. No fourth attempt, and no re-launch for any other reason.
+- **After the first `go`, the read is the read.** A harness error then ends it unread (VOID), it is reported, and any new run is the Orchestrator's to ask for.
+
+## 9. The verdict, on the rules of `…416a183f`, `…a6a2ba28` and the brief
+- **A4 MET:** QE-282-a closes, F5 did not fire, and the verdict is re-issued **PASS_WITH_GAPS with no blocking gap, which signs UAT**, unless a new blocking gap appears.
+- **A4 NOT MET:** the verdict is re-issued **FAIL on A4 (F5), does not sign UAT, nothing merges**, to Architect/Design, with too little or too much stated. With F4 also fired, it is named as a defect.
+- **UNRESOLVED, VOID, or a stop:** the verdict stays PASS_WITH_GAPS with the blocking gap QE-282-a open, not signing.
+- **A6 and the game read are not re-played either way.**
+
+## 10. Estimate and host
+- **Estimate 3.3–3.7 h** (`qe-ABC-223` 3 h 56 min at ≥ 99.88 %, scaled by D11's 85–95 %). The ceiling is 60 min a game, 5 h; all five games capped at about 90 % would pass 4.5 h, and the stop in § 7 then applies.
+- **ALONE:** by `…b836b85c`, nobody runs a test, build or engine under the lock until this ends. Another repository's vitest is outside that lock (QE-282-d). A7 is read as `ABC-223` read it: on mains, Tctl, frequency quarters, foreign samples.
+
+## 11. The rehearsal, read before this note (`raw/out/a4-rehearsal/`)
+**Not graded and not part of the read.** It ran this harness under one hold at `TC=40/8 MAXMOVES=44 CLEAR_S=120`, 07:49:39Z to 07:53:29Z, chosen over `ABC-223`'s `-maxmoves 4` so a period boundary and all five game loops were exercised.
+- rc 0, `status=done`, 5 of 5 games at the cap (`PlyCount` 88), about 575 log lines each, stderr 0 bytes, reader rc 0, no WARN, `moves.tsv` 440 rows, every `go` with `movestogo`, both `setoption` lines in 5 of 5. The period's 40th-move base addition reads right on 10 side-periods.
+- **Not exercised:** a completed second period, because the cap stopped each game at 44 moves. It is the same code path. The first period at the read's own clock is first seen in the read.
+- **Read for what it is:** 4 PGN mismatches, all on stamp-read last moves, 1 ms each; `stamp − exact` min −23 ms, max +2 ms. **wait-clear gave up** at its 120 s limit (Tctl 56.9–60.8 °C, then one good check) and the games went on, which is the sealed behaviour: if it gives up, that is logged and reported as an A7 gap, and the read starts.
+- **Stops rehearsed:** refused a used out dir (rc 9); wall stop at `WALL_S=25` (rc 6, `WALL STOP`); TERM (rc 143). 0 engines and 0 `cutechess-cli` left. The reader on the wall-stopped dir printed NOT A READING, rc 2.
+- **Disclosed:** the rehearsal's period use, 79.65–85.59 % at 40/8, was seen before this note. It is not A4, and it changed no bar, since all the bars are the ticket's.
+
+## 12. Slip, disclosed
+After the build, QE ran one `uci` handshake on the candidate (no `go`, no search; under a second) outside the lock. The brief wraps every engine run. No result rests on it, and the rehearsal shows the same options. It is carried to the gaps note.

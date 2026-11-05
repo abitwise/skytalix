@@ -1,0 +1,35 @@
+# qe-ABC-282 offline, re-read independently: A0, A1 (a)–(c), A2, A3, A5, the D12 rows and every non-clock mode MET on `04ebeb7e`. A1 (c) base 0.3476, head 0.0000. 600 identity rows byte-equal. Gates green, skip count 0, R-281-a 4 / 1 / 1 / 1, ABC-302's nine 1 each. `ABC-221` A10 is a pin, D12's two readings are pins
+
+Drivers: `raw/scripts/drv282.ts` (QE's own), `drv283.ts` (`qe-ABC-283`'s, unchanged), `drv282c.ts` (the control). Arms B, H, I. Raw: `raw/out/offline/`, `offline2/`, `lanes/`, `tlines/`.
+
+**A disclosure first.** The first pass of `sweep`, `floor`, `zug`, `g1` and R-281-a's four lines produced 0-byte files with exit 0, in a `/tmp` quota window. A first comparison read "floor equal: True" on two empty files. QE caught it, counted none of it, and read those rows for the first time in `offline2/` and `tlines/`, written on `/`, each with a line count. These are deterministic reads, not re-plays.
+
+| row | read | state |
+|---|---|---|
+| A0-1 | 6 rows, B and H byte-equal, equal to `…aadd2d48`; `softMs: 1` reads the same | MET |
+| A0-2 | 4 rows, B and H byte-equal, equal to `…aadd2d48` | MET |
+| A0-3 | 6 rows byte-equal; D3's row differs, 32 165 nodes against 69 705, so `softMs` IS handed in | MET |
+| every non-clock mode | K25 × 19 session rows + 125 `chooseMove` rows = 600 lines, `level` (with the rate path), `simple-tournament`, `uci-clock-mode` with `movetime`, depth, nodes, mate and the other side's clock only: **sha256 equal B to H** | MET |
+| A1 (c) | K25 by hash, 125 rows: **base median 0.3476, head median 0.0000** (means 0.3463, 0.0531), strictly below. Arm I reads H's rows exactly | MET |
+| A1 (a), (b) | 115 rows past the soft limit stopped with nodes = N(depth), 10 started depth + 1; 0 counterexamples | MET |
+| A2 (a)–(c), D12 | QE's oracle from D12's words on every aborted row: 10 of 125, 151 of 2 000, 1 216 of 1 288: **0 disagreements** on move, score and `partial`. Committed rows green | MET |
+| A3 (a) | every aborted head row: nodes equal the base's, elapsed ≤ H + 1 | MET |
+| A3 (b) | **1 140** go lines against QE's D2/D3 oracle, 0 ms to 2^31: 0 bad, 0 above 60 000, 0 above t − 1 100 but the 1 ms floor (360 rows) | MET |
+| A3, real clock | A6: head closest call 1 099 ms. The deep lane's clock row passed; QE has its pass, not a fresh figure (SE's was 27 526 ms) | MET |
+| A5 | mate rows byte-equal B to H (4 rows × 287, d4 to d5 0 of 163 lost); zugzwang 7 / 7; G1 54 / 58, B and H equal, 0 newly missed; null-move 46, PVS/LMR 29, bundle 21, puzzle 18 passed | MET |
+| b (information) | re-read on B: 175 ratios, median 2.3043, rounds to 2.3, equal to SE's | read |
+
+- The mate rows' `search` d5 against `chooseMove` d5 differ on 3 of 191. That was QE's ad-hoc cross-check, no bar, and it is byte-identical on B, so it is `main`'s.
+- A1 (c) moves: 2 of 125 differ from base, 1 kept. Mean completed depth 7.584 → 7.384 at a fixed budget, as D1 expects.
+- **R-TC part 1 item 2, read at review:** no branch in the diff keys on a budget, control, flag or the environment.
+
+## Gates
+Run at `b1e7db39` and `1367de97`-line records only, `src/` `d235214c`, 0 dirty. typecheck, lint, build exit 0. **Skip count 0**, `test-skip-integrity` No findings. `npm test` 71 files, 2 709 / 2 709. `ENGINE_DEEP` engine 105 / 105, uci-session 265 / 265, `UCI_DEEP` 13, `CLI_DEEP` 11. **R-281-a: 4, 1, 1, 1 passed. ABC-302's nine: 1 passed each.** No short count.
+
+`main` moved during the read by records only: `git log 22931005..main -- src tools/rating` is empty, so no re-base is owed today.
+
+## Pin or bar
+- **`ABC-221` A10: PIN.** A10's text asks for 3 positions searched in the mode at a 59 500 ms budget, wall ≤ 60 000, depth logged, memory ≤ 16 MiB, growth ≤ 1 MiB. It names no `go` line. `go movetime 90000` is that budget in that mode, with W1 off by D1, so every assertion keeps its strength, `time >= 59 500` included. The old line cannot reach 59 500 under D3, so the change is forced by W1. The fourth search keeps the clock line, soft ≤ time and wall ≤ 60 000. **Residual, LOW:** the real clock no longer reaches the abort through the clock branch at 59 500, though it is the same `deadline` line and the stub row pins the budget. The row's title still says three.
+- **D12 reading 1, "evidence stands": PIN.** D12 defines evidence as an M beating I, and "newer evidence" is more of that. **Fires 0 of 125** on K25 / A1 (c), 0 of 2 000 on K25 × 80 budgets, and 0 of 1 288 in the control at `softMs = H`. In shipped use it has not been seen. A kept move under it still holds a completed proof from its own pass.
+- **D12 reading 2, "the score stays the lower bound": PIN.** D5 and D12 accept a lower bound. **Fires 0 of 125, 0 of 2 000, and 1 of 1 288**, on SE's own fixture (kept 50, pass 2 exact 75). It moves only the reported score, never the move.
+- **Control:** at the shipped soft limit 0 of 151 aborts were multi-pass, so the zeros needed proof the instrument can see one. At `softMs = H`, a value not shipped, it sees 3 multi-pass aborts and 1 kept across passes, so the zeros are readings. Note what they mean: the shipped rule rarely reaches these paths at all.

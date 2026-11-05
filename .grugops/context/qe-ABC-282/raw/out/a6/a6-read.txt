@@ -1,0 +1,10 @@
+games with logs 100; finished 100
+candidate skytalix: W/L/D 45/32/23 score 56.5 of 100
+time losses: 0 []
+terminations: mates 77; Draw by 3-fold repetition 11; Draw by fifty moves rule 8; Draw by insufficient mating material 4
+skytalix: moves 6510 (book 94), searched 6416, partial 169 = 2.63 % of searched; mean completed depth 8.062 (median 8.0); move ms median 115.0 max 1335; closest call 1099 ms
+  completed side-periods 106: use min 76.72 %, median 82.27 %, max 107.73 %; below 75 %: 0
+  clock left at period end (ms): min 1099, median 1469.5, max 1862
+base: moves 6501 (book 94), searched 6407, partial 0 = 0.00 % of searched; mean completed depth 7.973 (median 8); move ms median 144 max 528; closest call 891 ms
+  completed side-periods 106: use min 86.24 %, median 86.25 %, max 100.03 %; below 75 %: 0
+  clock left at period end (ms): min 891, median 1100.0, max 1101

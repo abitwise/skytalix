@@ -1,0 +1,4 @@
+qe-ABC-282 launch 1 of A6: no game started. `git clone` of the base failed with rc 128 before any engine ran (rating.ts buildArtifact).
+Reproduced by hand: "copy-fd: write returned: Disk quota exceeded". /tmp is a tmpfs with a per-user quota: hard 11.79 GiB, 0.31 GiB free, read with quotactl_fd.
+A match needs two clones of about 0.72 GB. Most of the quota is other hops' scratch, which this hop did not touch.
+Launch 2 is the same command with <qe-dir> = <worktree>/games/qe282 (gitignored, on /), the PREREG's one re-launch after a pre-game error.

@@ -1,0 +1,9 @@
+start 2026-11-04T22:54:31Z  22:54:31 up 5 days, 15:12,  1 user,  load average: 4.77, 3.33, 2.74
+sweep exit=0 1s lines=1
+floor-base exit=0 4s lines=4
+floor-head exit=0 5s lines=4
+zug-head exit=0 2s lines=8
+g1-head exit=0 2s lines=59
+g1-base exit=0 2s lines=59
+r12-control exit=0 385s lines=2
+end 2026-11-04T23:01:12Z  23:01:12 up 5 days, 15:19,  1 user,  load average: 2.14, 2.59, 2.60

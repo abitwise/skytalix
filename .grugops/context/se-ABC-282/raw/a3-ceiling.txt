@@ -1,0 +1,4 @@
+ABC-221 A10 start: wall 59500.2 ms, depth 14, nodes 32565268, time 59500; heapUsed 9.75 MiB, arrayBuffers 4.73 MiB
+ABC-221 A10 italian: wall 59499.4 ms, depth 14, nodes 32312357, time 59500; heapUsed 9.77 MiB, arrayBuffers 4.73 MiB
+ABC-221 A10 kiwipete: wall 59501.0 ms, depth 12, nodes 39125272, time 59500; heapUsed 9.76 MiB, arrayBuffers 4.73 MiB
+ABC-282 A3 at the ceiling: wall 27525.9 ms, depth 12, nodes 18485690, time 27526

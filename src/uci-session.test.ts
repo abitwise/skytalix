@@ -1629,6 +1629,7 @@ function oracleLevelBudget(time: number, movesToGo: number, level: keyof typeof 
 interface Handed {
   readonly budgetMs: number;
   readonly maxDepth?: number;
+  readonly softMs?: number;
 }
 
 /**
@@ -1656,6 +1657,7 @@ function session220({
       handed.push({
         budgetMs: options.budgetMs,
         ...(options.maxDepth === undefined ? {} : { maxDepth: options.maxDepth }),
+        ...(options.softMs === undefined ? {} : { softMs: options.softMs }),
       });
       const move = legalMoves(position)[0] as Move;
       return { move, score: 0, depth: 1, nodes: 1, elapsedMs: options.budgetMs };
@@ -2518,16 +2520,97 @@ describe("ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4)", () => {
   });
 });
 
+describe("ABC-282 — W1 acts in uci-clock-mode under a clock, and nowhere else (ADR-0071 D1, D3, D5)", () => {
+  afterEach(() => {
+    vi.mocked(chooseMove).mockReset();
+  });
+
+  const OFF: ReadonlyArray<readonly [string, string]> = [
+    ["setoption name TimeMode value level", "go movetime 200"],
+    ["setoption name TimeMode value level", "go wtime 4000 btime 4000"],
+    [SIMPLE_TOURNAMENT, "go movetime 200"],
+    [SIMPLE_TOURNAMENT, "go wtime 8000 btime 8000 movestogo 40"],
+    [CLOCK_MODE, "go movetime 200"],
+    [CLOCK_MODE, "go wtime 8000 btime 8000 movestogo 40 movetime 200"],
+    [CLOCK_MODE, "go depth 6"],
+    [CLOCK_MODE, "go btime 8000 movestogo 40"],
+  ];
+  for (const [mode, go] of OFF) {
+    it(`A0-3: ${mode.split(" ").at(-1)}, ${go} hands no soft limit`, () => {
+      const rig = session220();
+      rig.send(mode);
+      rig.send("position startpos moves e2e4 e7e5");
+      rig.send(go);
+      expect(rig.handed).toHaveLength(1);
+      expect(rig.handed[0]?.softMs).toBeUndefined();
+    });
+  }
+
+  const ON: ReadonlyArray<readonly [string, string, number]> = [
+    ["A0-3", "go wtime 8000 btime 8000 movestogo 40", 75],
+    ["A3 (b): the ceiling", "go wtime 3600000 btime 3600000 movestogo 40", CLOCK_MODE_CAP],
+    ["A3 (b): the clock less reserve and overhead", "go wtime 3000 btime 3000 movestogo 1", 1_900],
+    ["A3 (b): D2's 1 ms floor", "go wtime 800 btime 800", 1],
+  ];
+  for (const [row, go, budgetMs] of ON) {
+    it(`${row}: ${go} keeps the hard limit ${budgetMs} and hands budget / 2.3 as the soft one`, () => {
+      const rig = session220();
+      rig.send(CLOCK_MODE);
+      rig.send("position startpos moves e2e4 e7e5");
+      rig.send(go);
+      expect(rig.handed).toEqual([{ budgetMs, softMs: budgetMs / 2.3 }]);
+    });
+  }
+
+  it("the side to move's clock: black's btime is read, and a white clock alone is no clock for it", () => {
+    const rig = session220();
+    rig.send(CLOCK_MODE);
+    rig.send("position startpos moves e2e4");
+    rig.send("go wtime 8000 movestogo 40");
+    rig.send("go btime 8000 movestogo 40");
+    expect(rig.handed).toEqual([{ budgetMs: T_MS }, { budgetMs: 75, softMs: 75 / 2.3 }]);
+  });
+
+  it("D5: a kept move is reported by one line, just before an unchanged info line", () => {
+    // `base/b09#8` at a budget of 5 (`src/engine.test.ts` ABC-282 A2 (a)): 1 105 - 1 100 = 5.
+    const rig = session220({ stub: false, stepMs: 1 });
+    rig.send(CLOCK_MODE);
+    rig.send("setoption name OwnBook value false");
+    rig.send("position fen r1b1k3/pppp2pp/8/8/1PB5/5r2/P2QNb1P/q1BK1R2 b q - 1 13");
+    const lines = rig.send("go wtime 1105 btime 1105 movestogo 1");
+    expect(lines).toHaveLength(3);
+    expect(lines[0]).toBe("info string partial depth 3");
+    expect(lines[1]).toMatch(/^info depth 2 score cp 450 nodes \d+ time \d+ nps \d+ pv a1b1$/);
+    expect(lines[2]).toBe("bestmove a1b1");
+  });
+
+  it("D5: no line without a kept move", () => {
+    const rig = session220({ stub: false, stepMs: 1 });
+    rig.send(CLOCK_MODE);
+    rig.send("setoption name OwnBook value false");
+    rig.send("position startpos");
+    const lines = rig.send("go wtime 1105 btime 1105 movestogo 1");
+    expect(lines.filter((line) => line.includes("partial"))).toEqual([]);
+    expect(lines).toHaveLength(2);
+  });
+});
+
 /**
  * `ABC-221` `A10` — 59 500 ms on the REAL clock. OPT-IN: `ENGINE_DEEP=1`, never in the default
  * lane, run ALONE (~3-4 min: one 1 s warm search and 3 searches of 59.5 s). Unset, it is NOT
  * DEFINED (the `ABC-119` form). One child started with `--expose-gc` (the `ABC-081` `A7` / `NFR-009`
  * instrument, as `ABC-212` read it at 30 s) drives the session in the mode on `Date.now`: a 1 s
- * search, a read after two `gc()`s, then each fixed position once at `go wtime 3600000 btime 3600000
- * movestogo 40` (59 500 ms), each followed by a read. Each must report `time` >= 59 500 (the
+ * search, a read after two `gc()`s, then each fixed position once at `go movetime 90000`
+ * (59 500 ms), each followed by a read. Each must report `time` >= 59 500 (the
  * budget was the cap) and return in <= 60 000 ms of wall, and
  * its `heapUsed` and `arrayBuffers` may grow <= 1 MiB over the first read, with `arrayBuffers`
  * <= 16 MiB. The max completed depth is printed against `KEY_ARRAY_CAPACITY`'s tripwire (100).
+ *
+ * RE-POINTED AT `ABC-282` (`ADR-0071`): these rows read `go wtime 3600000 btime 3600000 movestogo 40`
+ * until W1, which stops that search at an iteration boundary past the soft limit, so `time` no
+ * longer reaches 59 500. `go movetime 90000` has the same 59 500 budget (`A7`) with W1 off, so the
+ * ceiling and the memory still read at the full budget. The clock's own row, `ABC-282` A3 at the
+ * ceiling, is a fourth search: it stops at or past the soft limit and inside the same 60 000.
  */
 if (RUN_ENGINE_DEEP) {
   describe("ABC-221 A10 — three searches at 59 500 ms on the real clock [deep, ENGINE_DEEP=1]", () => {
@@ -2563,11 +2646,15 @@ if (RUN_ENGINE_DEEP) {
           out.length = 0;
           session.handleLine("position fen " + fen);
           const started = performance.now();
-          session.handleLine("go wtime 3600000 btime 3600000 movestogo 40");
+          session.handleLine("go movetime 90000");
           const wall = performance.now() - started;
           runs.push({ name, wall, lines: [...out], memory: read() });
         }
-        console.log(JSON.stringify({ first, runs, clamp: HARD_CEILING_MS }));
+        out.length = 0;
+        const started = performance.now();
+        session.handleLine("go wtime 3600000 btime 3600000 movestogo 40");
+        const clocked = { wall: performance.now() - started, lines: [...out] };
+        console.log(JSON.stringify({ first, runs, clocked, clamp: HARD_CEILING_MS }));
       `;
       const run = spawnSync(
         process.execPath,
@@ -2579,7 +2666,9 @@ if (RUN_ENGINE_DEEP) {
       );
       expect(run.error, String(run.error)).toBeUndefined();
       expect(run.status, run.stderr).toBe(0);
-      const { first, runs, clamp } = JSON.parse(run.stdout.trim().split("\n").pop() as string) as {
+      const { first, runs, clocked, clamp } = JSON.parse(
+        run.stdout.trim().split("\n").pop() as string,
+      ) as {
         first: { heapUsed: number; arrayBuffers: number };
         runs: {
           name: string;
@@ -2587,6 +2676,7 @@ if (RUN_ENGINE_DEEP) {
           lines: string[];
           memory: { heapUsed: number; arrayBuffers: number };
         }[];
+        clocked: { wall: number; lines: string[] };
         clamp: number;
       };
       const MIB = 1024 * 1024;
@@ -2610,6 +2700,13 @@ if (RUN_ENGINE_DEEP) {
         expect(memory.arrayBuffers - first.arrayBuffers).toBeLessThanOrEqual(MIB);
         expect(memory.arrayBuffers).toBeLessThanOrEqual(16 * MIB);
       }
+      const clockedInfo = parseInfo(clocked.lines.find((line) => line.startsWith("info depth")));
+      console.log(
+        `ABC-282 A3 at the ceiling: wall ${clocked.wall.toFixed(1)} ms, depth ${clockedInfo.depth}, ` +
+          `nodes ${clockedInfo.nodes}, time ${clockedInfo.time}`,
+      );
+      expect(clockedInfo.time).toBeGreaterThanOrEqual(CLOCK_MODE_CAP / 2.3);
+      expect(clocked.wall).toBeLessThanOrEqual(CLOCK_MODE_CEILING);
       const maxDepth = Math.max(...depths);
       console.log(
         `ABC-221 A10 first read: heapUsed ${mib(first.heapUsed)} MiB, arrayBuffers ${mib(first.arrayBuffers)} MiB; ` +
@@ -2617,6 +2714,39 @@ if (RUN_ENGINE_DEEP) {
           `(KEY_ARRAY_CAPACITY tripwire 100: ${maxDepth >= 100 ? "REACHED, to the Architect" : "not reached"})`,
       );
     }, 360_000);
+  });
+
+  /** `ADR-0071` D8, A0-3: `main`'s lines, read on the base before the change (`…aadd2d48`). */
+  describe("ABC-282 A0-3 — the session's lines where W1 is off [deep, ENGINE_DEEP=1]", () => {
+    const POSITION_6 = "r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10";
+    const search = (mode: string, go: string): string[] => {
+      const rig = session220({ stub: false, stepMs: 1 });
+      rig.send(`setoption name TimeMode value ${mode}`);
+      rig.send("setoption name OwnBook value false");
+      rig.send(`position fen ${POSITION_6}`);
+      return rig.send(go);
+    };
+    const D8 = "info depth 8 score cp 71 nodes 196681 time 201 nps 978512 pv c3d5";
+    const D7 = "info depth 7 score cp 79 nodes 69705 time 76 nps 917171 pv c3d5";
+    const D6 = "info depth 6 score cp 87 nodes 14570 time 21 nps 693810 pv c3d5";
+    const rows: ReadonlyArray<readonly [string, string, string]> = [
+      ["level", "go movetime 200", D8],
+      ["level", "go wtime 4000 btime 4000", D8],
+      ["simple-tournament", "go movetime 200", D8],
+      ["simple-tournament", "go wtime 8000 btime 8000 movestogo 40", D7],
+      ["uci-clock-mode", "go movetime 200", D8],
+      ["uci-clock-mode", "go depth 6", D6],
+    ];
+    for (const [mode, go, line] of rows) {
+      it(`${mode}, ${go} reads the base's lines`, () => {
+        expect(search(mode, go)).toEqual([line, "bestmove c3d5"]);
+      });
+    }
+
+    it("D3's row reads less than the base did: the soft limit IS handed in", () => {
+      const [line] = search("uci-clock-mode", "go wtime 8000 btime 8000 movestogo 40");
+      expect(parseInfo(line).nodes).toBeLessThan(69_705);
+    });
   });
 }
 
