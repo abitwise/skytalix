@@ -1,0 +1,18 @@
+total 2709 passed 2692 failed 17 pending 0 todo 0 files 71 failedSuites 14
+KILL	engine.test.ts::RF-1 — a budget above the hard ceiling is CAPPED at it, not honoured names the ceiling as an exported constant
+KILL	levels.test.ts::ABC-174 A7 — the time budget, from the data (NFR-004; ADR-0038 decision 3) clause B, per level (ABC-212 A5): budgetMs <= ceiling(L) over 1..7, < 5 000 over 1..5, clamp 60 000 (ABC-221)
+KILL	uci-session.test.ts::ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path setoption name Skill Level value 7 sets 7: a bare go hands the engine 30 000 ms
+KILL	uci-session.test.ts::ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path Skill Level value 0 at 7 keeps 7, with the 1-7 info string
+KILL	uci-session.test.ts::ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path Skill Level value 8 at 7 keeps 7, with the 1-7 info string
+KILL	uci-session.test.ts::ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) A6 — the hard ceiling: no go hands the search more than 22 000 ms the real engine on a step-1 000 clock: a bare go reports time in [22 000, 22 000 + 2 x 1 000]
+KILL	uci-session.test.ts::ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) A8 — levels unchanged (EPIC-009 M3) LEVELS, DEFAULT_LEVEL and the Skill Level default hold their base values; HARD_CEILING_MS is 60 000 (ABC-221)
+KILL	uci-session.test.ts::ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) A13 — busy isready (ADR-0052 D7), default lane isready that arrives mid-search is answered once, after the bestmove, in order
+KILL	uci-session.test.ts::ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A7 — the ceiling: no go hands the search more than 59 500 ms go wtime 3600000 btime 3600000 movestogo 40 -> 59500; the engine's deadline is start + 59500 <= start + 60 000
+KILL	uci-session.test.ts::ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A7 — the ceiling: no go hands the search more than 59 500 ms go movetime 90000 -> 59500; the engine's deadline is start + 59500 <= start + 60 000
+KILL	uci-session.test.ts::ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A7 — the ceiling: no go hands the search more than 59 500 ms go -> 22000; the engine's deadline is start + 22000 <= start + 60 000
+KILL	uci-session.test.ts::ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A7 — the ceiling: no go hands the search more than 59 500 ms go infinite -> 22000; the engine's deadline is start + 22000 <= start + 60 000
+KILL	uci-session.test.ts::ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A7 — the ceiling: no go hands the search more than 59 500 ms the real engine on a step-5 000 clock: go movetime 90000 reports time in [59 500, 59 500 + 2 x 5 000], past the old 32 000 clamp
+KILL	uci-session.test.ts::ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A8 — levels value-identical (EPIC-009 M3) every level budget is under the clamp, so min(budget, 60 000) = min(budget, 32 000) = the budget
+KILL	uci-session.test.ts::ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A8 — levels value-identical (EPIC-009 M3) TimeMode unset: a bare go at Skill Level 1-7 is each level's budget, and go movetime 60000 at 7 is 30 000
+KILL	uci-session.test.ts::ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A8 — levels value-identical (EPIC-009 M3) TimeMode level: a bare go at Skill Level 1-7 is each level's budget, and go movetime 60000 at 7 is 30 000
+KILL	uci-session.test.ts::ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A11 — busy isready in the mode (ADR-0052 D7), default lane isready that arrives mid-search is answered once, after the bestmove, in order

@@ -68,6 +68,10 @@ L2 and L3 go to `src/uci-session.test.ts`'s `ENGINE_DEEP`; the trio and B1 take 
 L3's remnants do not search, so the depth-sensitive floor does not reach them. No NFR level, cap, pin, W, environment
 variable or `AGENTS.md` lane line moves. See the dated section of 2026-11-05 (`arch-ABC-307`) at the end of this file.
 
+**`ABC-307`'s row 10, measured 2026-11-05 (`arch-ABC-307-reads`): not closed.** Parity holds on all 20 mutants and every plant the base kills, k is 7, and eight rows stay S. C1's full row passes alone
+under MC1, at tip and base, which misses one sealed clause, so it goes to the Orchestrator. Saved reads 592 of 750 against 581. No NFR level, cap, pin, W, environment variable or `AGENTS.md` lane line
+moves. See the dated section of 2026-11-05 (`arch-ABC-307-reads`) at the end of this file.
+
 **proposed**, 2026-10-20, by Architect/Design (task `arch-lane-under-10s`). This ADR is the remedy that `R-174-1`
 option (a) asked for. The owner accepted (a) at `…bdff4d33`.
 
@@ -1072,3 +1076,43 @@ ruling 2 keeps with the trio. It goes to the Orchestrator to accept, with the 22
 
 **Not decided here:** row 10, the board, the ticket page and the build. No NFR level, cap, pin, W, environment variable or `AGENTS.md` lane line moves.
 `AGENTS.md` is not edited.
+
+### Dated 2026-11-05 (`arch-ABC-307-reads`): `ABC-307`'s nine rows, measured. Parity holds on every listed mutant and plant, and k is 7. Eight rows stay S, C1 misses one sealed clause, and row 10 does not close
+
+**Architect/Design, on scratch copies of `main` `8d66a706`, under the PREREG `…5c65a408`.** Every run was under the host lock, on one core and one worker, about 25 minutes of lock.
+No `src/`, tool or data file on any branch changed. Readings: `arch-ABC-307-reads`'s observation and `raw/`. This section measures the one above; it changes no form.
+
+| row | form | kept ms (ungraded) | its own mutant: remnant among the killers | full row on its `-t` line |
+|---|---|---:|---|---|
+| Q1 | **S** | 13.9 | `q4a-readNotes-unfiltered-drops-secnfr` and `…-drops-quality-gate`: yes | 1 failed |
+| Q2 | **S** | 7.3 | MQ2: yes | 1 failed |
+| Q3 | **S** | 26.9 | MQ3: yes | 1 failed |
+| L1 | **S** | 84.1 | ML1: yes, the only killer at base and tip | 1 failed; M6, M7 too |
+| L2 | **S** | 0.3 | S241M2: yes | 1 failed; QMATCH1 too |
+| L3 | **S** | 3.5 | S241M1: yes | 1 failed; all ten listed |
+| C1 | **S by (a)–(c); misses (d)** | 12.3 | MC1: yes. M6: yes | **MC1: 1 passed.** M6: 1 failed |
+| C2 | **S** | 1.9 | MC2h: yes; P2a too, which the section above read wrongly | 1 failed; P2a, P2b too |
+| B1 | **S**, k = 7 | 49.6 | MB1: yes. M4, M4z: yes | 1 failed, all three |
+
+- **Parity.** All 20 `src` and `data` mutants are killed at base and tip. Every plant the base file kills, the tip file kills. `QE-154-a`'s two green plants read 0 at both.
+- **`ABC-241` A7's eight hold,** with tip killers F230 7, M2s 6, M4 20, QSEAMRAW 6, QPRIOROFF 15, QMATCH3 19, QTRIM1 29, S241M1 19.
+- **Holders, measured:** `cli` "A4 (slice)", `uci` "A5 (slice)" and `cli` `ABC-230` A1 hold F230, M2s, QSEAMRAW, QPRIOROFF, QMATCH3 and QTRIM1. `cli` "A4 (slice)", `uci` A4 and `ABC-249` hold
+  QMATCH1. `ABC-221`'s A11 row holds P2a and P2b, with `ABC-220` A6, `ABC-221` A7 and `ABC-259` on P2b.
+- **`A5`, measured:** a sentinel that throws on any unfiltered read of the real tree reds 3 rows at base and 0 at the tip.
+- **Counts:** default 2 709 in 71 files at base and tip, 9 names out and 9 in. `ENGINE_DEEP`, base → tip: `uci-session` 265 → 270, `qe-hop` 32 → 35, `book` 35 → 36.
+- **B1's title reads "seeds 1 to 7".** The nine `-t` lines above stand, each read at 1 passed.
+
+**C1 and MC1.** The row kills MC1 in the lane and passes alone on its `-t` line, at the tip and, read after the seal, at base. So the move did not cost it. MC1 adds the session count to the seed, and a
+pair of sessions differs only where salts n and n + 1 take different paths on the first go; salts 1 and 2 do not. The mutant's kill depends on how many sessions ran before it. The PREREG's clause (d)
+still reads "1 failed", so that clause is missed and is not read past. It is the Orchestrator's call.
+
+**The sum.** No K, so 0 of 113. With all nine S, at the sealed scale of 750 ÷ 946.2: kept 158, saved 592, against the 581 that −0.215 s needs at 0.37 ms a ms: about −0.219 s realised, **inside by 11 ms**.
+That is less than the read's noise, and scaled row by row the same read gives 569. `A9` grades it. **At this figure any K but B1 reads past 581, C1 alone at about 555,** so the 113 ms of `A6` is no longer
+there to spend. The estimates above were low on L1 (84 against 35), the trio (48 against 25) and B1 (50 against 20).
+
+**Row 10, 2026-11-05: not closed.** Forms, remnants, lines, counts, kept ms and kills are all measured, and the sealed rule closes it only with all nine S. It waits on the Orchestrator's ruling on C1's clause (d).
+
+**`AR-154-TWO-POINT-CONTROL`.** `ABC-154`'s trigger `R-a` fires on a ticket that edits `tools/grugops/qe-hop-integrity.test.ts`, and `ABC-307`'s page does not carry `F1`–`F4`. `F1` as written would put a whole-tree
+read back in the default lane, against `A5`. It goes to the Orchestrator; no form turns on it.
+
+**Not decided here:** the board, the ticket page and the build. No NFR level, cap, pin, W, environment variable or `AGENTS.md` lane line moves. `ADR-0035` § Addendum 2026-11-05 C6 stands.
