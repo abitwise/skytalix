@@ -263,6 +263,10 @@ and `ADR-0073` are ACCEPTED, not in force. D5's dated block of this task states 
 against `ABC-289`. `ADR-0074` is ACCEPTED ("2. OQ-0074-1: yes accept."), not in force. D2's dated line of this task gives
 the rows. No line of B1–B7 changes.
 
+*2026-11-05, dated line by Architect/Design (task `arch-owner-answers-1105b`, records only at `main` `6ff2554e`; his word `…0f1ab02e`, verbatim "1. yes;
+2. yes; 3. yes").* **CF1–CF10 reach every later C2′ read, of one change or of a bundle. A term merged inside a bundle meets `ADR-0067`'s
+third-pull trigger. CF7 is owner-accepted.** D5's dated block of this task holds the reach. No bar moves.
+
 *Original status, kept:* **PROPOSED** 2026-11-01 by Architect/Design (task `arch-algo-analysis`, records and reading only, at `main` `bae25131`).
 **Nothing is decided here.** Nothing was run, built, benchmarked or played: `qe-ABC-223` holds the host STRICTLY ALONE.
 Every Elo figure below is either quoted from a sealed reading (named) or is an **estimate** with its basis. An
@@ -1034,6 +1038,8 @@ bounds and the overshoot figures upper bounds. Every hour and Elo figure not quo
   - **A miss is NOT MET.** QE records a `failed-attempt`, and the ticket goes back to BA/PM. A miss is not re-played
     for luck, and the 100 games are not extended. A changed form may come back as a new attempt, and that is a new
     read.
+    *Dated 2026-11-05 (`arch-owner-answers-1105b`; his word `…0f1ab02e`, "1. yes"):* a candidate fault or a loss on time is not this line's miss. It is read through
+    CF1–CF10, for every read D5's dated block of that task names. A clean score below the bar is this line's miss, final (CF5).
   - **A stale read** is one whose base another value-changing merge has since moved. It is read again
     (≈ 25 min).
 - **The blind spot, stated honestly.** At the measured draw ratio of 0.50, 100 games resolve **±48 Elo** (95 %),
@@ -1466,6 +1472,8 @@ Not allowed:
 - *Dated 2026-11-05 (`arch-owner-answers-1105`; his word `…b836b85c`, "2. yes"):* **for `ABC-303` only, a new C2′ after a candidate
   fault that could have decided the verdict is not a re-play.** The form is CF1–CF10 in the dated block of that task, below.
   For every other read this line stands as written.
+  *Dated 2026-11-05 (`arch-owner-answers-1105b`; his word `…0f1ab02e`, "1. yes"):* **"for `ABC-303` only" is widened.** The dated line above now holds for every later
+  bundle read that task's dated block, below, reaches.
 - **Before the merge,** `main` is merged into the branch, with no rewrite. The deterministic rows (P0, the safety rows,
   the gates, `NFR-008`) are read again on the merged tree, as `QE-283-i` did. Games are re-run only under C2′'s stale
   rule.
@@ -1486,6 +1494,7 @@ Not allowed:
   is met.
 - *Dated 2026-11-05 (`arch-owner-answers-1105`):* **for `ABC-303` only, this section is read through CF1–CF10** (the dated block
   below). A fixed tree under CF4 is not a new attempt and does not need this section's route back.
+  *Dated 2026-11-05 (`arch-owner-answers-1105b`; his word `…0f1ab02e`, "1. yes"):* the same widening, to every later bundle read that task's dated block, below, reaches.
 
 **B7. Who names a bundle.** While PROPOSED, the owner names it. After acceptance, the Architect's design note names
 the parts and shows B1's relation. BA/PM cuts one ticket in `ABC-283`'s form, with the parts' pages kept as design
@@ -1510,6 +1519,8 @@ pages, and the Orchestrator orders it.
 stands behind them. Item 3 has no pull until a third is asked for. Item 2's "structure at 0" is superseded. `ABC-290` + `ABC-293` as
 a hand-valued bundle stays lawful under B1, but it would not open `ADR-0067`'s third-pull door, and CF1–CF10 would not reach it
 without his word (the dated block below).
+*Dated 2026-11-05 (`arch-owner-answers-1105b`; his word `…0f1ab02e`, "1. yes; 2. yes"):* both halves of that last clause are answered. A term
+merged in such a bundle meets the third-pull trigger, and CF1–CF10 reach its read.
 
 Not recommended as bundles:
 - `ABC-284` (P1) stays apart from bundle 1. It moves LMR, the lever the mate floor rests on (`R-283-LMR`), so it is
@@ -1706,6 +1717,9 @@ as much as under this one, so a moved base favours neither order. Two sentences 
 His answer takes the strict reading's place for `ABC-303`. A read that a candidate fault could have decided gets one new read on
 the fixed tree. CF1–CF10 below are the form.
 
+*Dated 2026-11-05 (`arch-owner-answers-1105b`; his word `…0f1ab02e`):* CF1–CF10's words stand. Their reach is widened and CF7 is owner-accepted: the next
+dated block.
+
 **What QE copies.** QE copies CF1–CF10 word for word into § 6 of `…d776c0f0`'s shape, after § 6 item 3, in every `ABC-303`
 PREREG. There is no blank in them. § 6's "A fault or a loss on time is a defect" and "A failure is a defect" are read through them.
 `…d776c0f0` is sealed and is not rewritten; "QE changes no line outside a blank" does not stop this copy, because the block
@@ -1751,11 +1765,16 @@ records, only "as put to him".
   test; the STOP on a cause nobody can reproduce; CF6's second case; CF7. Each is the block's line, and none contradicts the note.
   CF7 is the widest of these: the note names S′ alone. A Levels re-run has no score to draw again, so it is not what "never
   re-played" guards.
+  *Dated 2026-11-05 (`arch-owner-answers-1105b`; his word `…0f1ab02e`, "3. yes"):* **CF7 is owner-accepted and leaves this list.** Its second case
+  stays here as CF6's: the next dated block, item 3.
 - **New here, the Architect's reading, so that no brief must judge:** games not finished in the count; S-4 read whole in CF2,
   because the block's "S′: S-4" did not say what a fault in a two-stage bar does; "several faults are one event"; the addendum
   in CF6; CF10. None adds a bar.
 
 **How far it reaches.**
+*Dated 2026-11-05 (`arch-owner-answers-1105b`; his word `…0f1ab02e`, "1. yes"):* **"Across tickets: `ABC-303` only" below is superseded, with its first sub-line, and the
+question its last sub-line owed is answered.** The next dated block gives the reach. "In time" and the A4 sub-line stand.
+
 - **In time: every `ABC-303` read not yet sealed.** No `ABC-303` PREREG is sealed today: no `qe-ABC-303` record exists on any local
   branch at this hop. So the first read and any CF4 read carry this form. Both of BA/PM's open points (`…4843d1f2` 1 and 2) are
   answered: the clean C2′ line stands as CF6, and no sealed read exists for the answer to miss.
@@ -1770,6 +1789,71 @@ records, only "as put to him".
   - **If the question as put to him named every bundle read,** the Orchestrator holds that text. One dated line here then widens
     this, with CF's row names re-stated per bundle. Otherwise it is one question for him, owed before the next PREREG that is not
     `ABC-303`'s, which is `ABC-289`'s.
+
+#### Dated 2026-11-05 (`arch-owner-answers-1105b`, records only at `main` `6ff2554e`; his word `…0f1ab02e`, verbatim "1. yes; 2. yes; 3. yes"): CF1–CF10 reach later C2′ reads. CF7 is owner-accepted. A bundle term meets the third-pull trigger. No bar moves
+
+CF1–CF10's words do not change, so `ABC-303`'s form stands as written and needs nothing below. This block says which other reads
+carry them and how their `ABC-303` names read there.
+
+**1. Which reads.** The Orchestrator's record of his answer: the fault rule "also covers later reads, 'like delta pruning and the new
+terms'", and "CF1-CF10 widen from ABC-303 to later single-read reads and bundles". QE copies this line word for word, above CF1, in
+the PREREG of every read it names:
+
+> **Reach.** CF1–CF10 govern this read. It is a C2′ read of one change or of a bundle, with the S′ and the Levels lane that follow it,
+> and this PREREG is sealed after the owner's word `…0f1ab02e` of 2026-11-05. The `ABC-303` names in those lines read as the table
+> below says.
+
+- **Reached:** `ABC-289` (delta pruning) on its own read. E3b, E4b, E5 and E6 (`ABC-290`–`ABC-293`) on hand values, alone or in a
+  bundle. Every other strength-changing ticket or bundle that plays C2′ from now on, on either intent, `ABC-272` among them. No `qe-`
+  context for `ABC-303`, `ABC-289`, `ABC-290`–`ABC-294` or `ABC-272` exists on any local branch at this hop, so no such PREREG needs
+  re-sealing.
+- **Not reached:**
+  - **`ABC-282`.** A4 is not a C2′ read, and its miss rule is F5. A6 is played, and "A6 is not re-played" stands (`…b836b85c` 1).
+  - **Every read that is not a C2′ read.** C3″, with the S′ and the lanes run beside it, the milestone reads R1–R3, B-T8 and the 40/15
+    claim each keep their own validity line. A value-identical ticket plays no games.
+  - **A closed read.** A read with a recorded verdict or `failed-attempt` is not re-opened. "Later" is his word.
+
+**2. A single-part read: which lines adapt.** The rule does not change, but six phrases in the lines were written for `ABC-303`. QE
+copies CF1–CF10 unaltered, then this table with the third column filled from the ticket's page and ADR. The table adds no bar. A name QE cannot fill is a STOP to Architect/Design before the seal (CF10).
+
+| the words | in | on any read but `ABC-303`'s, they read |
+|---|---|---|
+| "50.0" | CF2, CF5 | the read's C-3 bar as sealed: 50.0 for GAIN, 43.0 for NEUTRAL |
+| "B6" | CF2, CF5, CF8 | a bundle: B6. One change: C2′'s miss line: NOT MET, nothing merges, QE records a `failed-attempt`, and the ticket goes back to BA/PM |
+| "no form, T, tier, door, margin or table moves (row P2)" | CF3 | no form, value, threshold, door, margin or table that the ticket's ADR fixed moves. For a hand-valued term that is every value |
+| "Tables 1 and 2" | CF3 | every graded row the PREREG reads before the first game |
+| "§ 6's order" | CF4 | the PREREG's order: C2′, then S′, then the Levels lane |
+| "S1, S2 and R7" | CF6, and CF7 through it | the off-door against the merge-base, every older door, and the head's counts on the ticket's instrument. `ABC-289`: `…WithoutDeltaPruning`, the older doors, `ADR-0074` d12's instrument check. A change with no door: the head's counts alone, on rows its ADR names |
+
+- **No change:** CF1, CF9 and CF10. CF7 changes only through CF6, and CF8 only by "B6". CF2's 3.0 of 10 and 7.0 of 20 are S-4 on every read, and "the sealed
+  E" is the E in force at that read's seal.
+- **Where it goes.** After the line that states the Levels lane. `…d776c0f0` is bundle 1's shape, so no other PREREG has its § 6. Any
+  line there reading "a fault is a defect" is read through CF1–CF10.
+- **NEUTRAL (the Architect's reading).** A miss on the ticket's own measured bar is NOT MET whatever CF2 reads. It is not read on the
+  games, so no game's fault could have decided it.
+- **A later bundle.** The same table. B4's "no part is dropped and no subset" holds through CF3 and CF4: a new read carries every part
+  in its form, all on. B3 still governs a safety red.
+- **What stays.** C-1, C-2 and C-3 are the bars. "Never re-played" still shuts a second draw after a clean score: CF5. `ADR-0074` d13's
+  "not re-played" speaks of a miss, which a read closed by CF3 is not. It takes C2′ by reference, so it needs no line.
+
+**3. CF7.** The Orchestrator's record: "CF7 is confirmed: a clean C2' stands when the Levels test then fails and the fix does not change
+play." It leaves the carried list.
+- That sentence is CF7's first case, and "does not change play" is CF6's value-identical test.
+- CF7's second case, a fix that does change play, is not in the sentence. It is CF6's second case, which stays on the carried list. It
+  leads only to CF4's one new read.
+- His "1. yes" widens CF1–CF10 by name. I read that as their reach. It does not move any other line of `arch-owner-answers-1105`'s
+  sorted list, so those lines keep their labels and still bind as the block's lines.
+
+**4. The bundle term.** A term merged inside a bundle meets `ADR-0067`'s third-pull trigger. That ADR's dated line of this task reads the
+four tests for it. B5 stands: the door reads a merge, not a credit, and no per-part Elo follows from it. The default does not move.
+The next terms go on their own reads (`…b836b85c` 3) in D6's order, and a bundle stays what B1 and B7 allow.
+
+**Not settled by the records.**
+- **A third pull's C2′.** It is a C2′ read, so his restatement's words take it in, but his examples do not name it. No such read exists,
+  and none can without a new word from him. CF4's second read has not been set against test 4's "one fit" or F6. That goes to
+  Architect/Design with any such word (CF10). It is not ruled here.
+- **The question as put to him.** Its verbatim text is not on the records, only his "yes" and the Orchestrator's restatement. Item 1's
+  reach rests on that restatement.
 
 ### D6. The order proposed (speed and algorithms interleaved)
 
@@ -1998,6 +2082,8 @@ changes form, not place.***
    then E5 (`ABC-292`) without its per-piece mobility, then E3b (`ABC-290`), then E6 (`ABC-293`).** The reasons are in
    `arch-owner-answers-1105` `…ba8265e9`. The order is the Orchestrator's by this section's reorder rule, and the owner is told.
 4. **A third pull may be asked for** only after one of those terms has merged on its own read, under `ADR-0067`'s four tests.
+   *Dated 2026-11-05 (`arch-owner-answers-1105b`; his word `…0f1ab02e`, "2. yes"):* or has merged inside a bundle. `ADR-0067`'s dated line of that task
+   reads the four tests for such a term. This order does not change.
 - `ABC-272` (E7a): any order after E1, one at a time on the same files, as before.
 - **The reads queue behind each other.** A value-changing merge stales the read after it, so a term's C2′ follows `ABC-303` and
   `ABC-289`. Its ADR and probe need not wait for them, only for the host.
