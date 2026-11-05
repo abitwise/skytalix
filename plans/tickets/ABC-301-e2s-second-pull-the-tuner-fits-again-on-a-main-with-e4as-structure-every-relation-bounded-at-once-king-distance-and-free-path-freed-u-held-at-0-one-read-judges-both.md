@@ -1,8 +1,9 @@
 ---
 id: ABC-301
 title: "E2's second pull: the tuner fits again on a main with E4a's structure. Every relation is bounded at once (ADR-0067 d6 amendment: one fit, no refit). King distance and free path are freed (eg ≥ 0, mg 0), and U is held at 0. Four preconditions first (QE-271-h, -g, -i, -f). One read judges both E2 and E4a (B-T7, B-T8)"
-status: ready
-column: Ready
+status: dropped
+column: Done
+closed: "2026-11-05, CLOSED NOT MET (second pull), not shipped: ADR-0067 F4 on the emission dd88560f, zugzwang.001 e1e5 at depth 9, real, no defect (qe-ABC-301-miss …d065fee3); B-T6–B-T8 not run. main keeps E1's rule-made table. Records only reached main (c7688712). The emission and the tools stay on grugops/ABC-301, kept as a ref; the tools land alone as ABC-305. Tuning waits, the owner's word …b836b85c item 3 (bapm-wait-lines-1105)"
 size: L
 priority: P2
 epic: EPIC-011
@@ -11,6 +12,17 @@ adr: "ADR-0067 (ACCEPTED 2026-11-03, in force as the method; the d6 amendment AD
 ---
 
 # ABC-301: E2's second pull, one bounded fit over E4a's structure, one read
+
+> **CLOSED NOT MET, 2026-11-05, by BA/PM** (task `bapm-wait-lines-1105`, records only, at `main` `a38315bf`; nothing run). `zugzwang.001`
+> played e1e5 at depth 9 on the emission, the red is real, and no defect was found. Nothing of `src/` or `tools/` reached `main`. See
+> § Close. Status `dropped` in column Done means closed and not shipped, in the form of `ABC-239`'s close. The board move is the
+> Orchestrator's. The sections below stand as the record of what this ticket asked for.
+
+> **`ABC-271` K0'S SEVEN ROWS RETIRE AT SCOPE 4, ON AN EMISSION THAT MOVES ANY VALUE; THE PR TABLE LISTS THEM, 2026-11-04, by
+> BA/PM** (task `bapm-K0-cut`, records only, at `main` `8527e49f`; nothing run). Sources: `ADR-0067`'s dated line of
+> `arch-ABC-303-open`, `…e28552ac`, and the Orchestrator's ruling `orch-2026-10-30a` `…681c6363` 1.
+> - **Written at** § Scope item 4 and test note 4. The re-point of those rows is `ABC-304`'s, not this ticket's.
+> - No bar, size or priority moves. **DoR 10/10, unchanged.** The column move is the Orchestrator's.
 
 > **P1'S ROW FORM, PROVISIONAL UNTIL `qe-ABC-301-s0` READS IT; TEST NOTE 4 GAINS TWO PINS AT SCOPE 4, 2026-11-04, by
 > BA/PM** (task `bapm-lines-1104b`, records only, at `main` `732a0cea`; nothing run). Sources: the Orchestrator's ruling
@@ -76,6 +88,8 @@ adr: "ADR-0067 (ACCEPTED 2026-11-03, in force as the method; the d6 amendment AD
    commit.
 4. **B-T4's re-pins, old → new, in one PR table**, plus the rows retired at `ABC-239`, which now retire here (none
    retired there, because it did not merge).
+   *2026-11-04 (`bapm-K0-cut`; `ADR-0067`'s dated line, `…681c6363` 1): **`ABC-271` K0's seven rows retire here, on an emission
+   that moves any value** (test note 4). A retired row inside this scope, not a further `src/` change.*
 5. **The reads** (B-T5–B-T8).
 
 ## Out of scope
@@ -191,6 +205,18 @@ precondition measurable.
    shape, every half 0" and "at the shipped values (every half 0) every part is 0 on every fixture". They pin the
    value-0 table under ruling `…42c82347` and go red as soon as a fit frees king distance and free path. Each is
    re-pinned or retired at scope 4 and listed old → new in the PR table. QE's check above covers these two as well.*
+   *2026-11-04 (`bapm-K0-cut`; `ADR-0067`'s dated line of `arch-ABC-303-open`; `…e28552ac`; `…681c6363` 1): **`ABC-271` K0's seven
+   rows retire at scope 4, by name, on an emission that moves any value:** `kiwipete_chooseMove_d8`, `_d9`;
+   `pos6_chooseMove_d8`, `_d9`, `_d10`; `kiwipete_search_d8`; `pos6_search_d8`, in `src/evaluate.passer.test.ts`.*
+   - *Why: a tuned table moves counts on every door, so no door restores them. K0's sentence, that the terms at 0 changed no
+     node, stops being true. Not a re-pin, and not B-T4's "identity gate", which is d5's tracer gate, B-T1, and is untouched.
+     The Orchestrator has ruled that reading, so scope 4 meets no STOP on it.*
+   - *What goes: only the deep block. `FROZEN.k0` stays in the fixture file, its count row stays, and the JSON is not edited.*
+   - ***The PR table lists the seven as retired, citing that dated line,** one row each. QE's check above covers them.*
+   - *If no value moves, or the pull does not merge, K0 stands, re-pointed (`ABC-304`).*
+   - *Until `ABC-304` reaches this branch, or scope 4 retires them, the seven read red here (`8701a422`). QE does not count that
+     as new. K0 is no row of B-T1–B-T8, and the fit reads no node count. Either order of `ABC-304` and this ticket works: its page
+     states both.*
 5. **Carried from `ABC-239`'s close, not bars** (BA/PM judgment, flagged): `954d44fb` (`QE-270-e`, a test-only change
    to the K1 (e) bite rows) is owed by this pull, since it goes red once a fit frees a queen-on mg. If step 7 is
    reached, K1 (c) takes form (A) (`ABC-239` § Close).
@@ -216,6 +242,8 @@ precondition measurable.
   ticket (nine rows to deep lanes, about −0.5 s) merges.
 - **File collisions:** `src/evaluate.ts` and `src/evaluate-params.ts` with `ABC-272`, one at a time.
 - **Blocks:** `ABC-287` (P6, after this pull), `ABC-290`–`ABC-293` (after this pull merges or closes).
+  *2026-11-05 (`bapm-wait-lines-1105`): `ABC-290`–`ABC-293`'s trigger fired on the close, and each hold lifts in form (b). `ABC-287`'s
+  trigger is "merges", so it has not fired (§ Close).*
 
 ## Open, not bars (for the Orchestrator)
 
@@ -246,3 +274,55 @@ precondition measurable.
 **DoR 10/10: Ready.** The column move is the Orchestrator's. *2026-11-04 (`bapm-ABC-302-cut`): scope 0 waits on
 `ABC-302`'s merge (`…112cd856` ruling 3). That is an ordering, not a DoR row. Row 6 gains the ≤ +0.10 s default-lane
 budget. **DoR 10/10, unchanged.***
+
+## Close
+
+> **BA/PM, 2026-11-05** (task `bapm-wait-lines-1105`, records only, at `main` `a38315bf`). Inputs: QE's verdict `qe-ABC-301-miss`
+> `…d065fee3`, its readings `…77e088f7` and landing note `…066fadea`; the engineer's `se-ABC-301-fit` `…04dc7cd4`, `…358b29b1`; the
+> Orchestrator's `orch-2026-10-30a` `…aa971f0b` and `…b836b85c`; the Architect's `arch-ABC-301-miss` `…e5a5ac0c`, `…2b3440cf` and
+> `arch-owner-answers-1105` `…5f5833e3`. The tips and ancestry below were read with `git` at this hop.
+
+**The second pull is closed NOT MET under `ADR-0067` F4 and § What happens on a miss.** The engineer stopped at scope 3, and QE confirmed
+on its own runs. Never a re-pin, a deeper depth or a refit on play.
+
+- **The fit itself was clean, on the emission `dd88560f`** (`src/evaluate-params.ts` sha256 `8ca6744f…`):
+  - PREREG `…e33f11bd` sealed first at `b297ab89`, with 26 bounds. One fit, feasible.
+  - B-T1 0 of 1 494 610, and the gate on the emitted file 0 of 1 532 990. B-T2 **0.9872 ×**. B-T3 byte-identical, on QE's own re-run too.
+  - All 26 relation rows green, so F3's defect path did not open.
+- **F4, NOT MET:** at depth 9, on the row, QE's driver, UCI from `src/` and UCI from a fresh `dist/`:
+
+  | tree | move | score | nodes |
+  |---|---|---|---|
+  | `dd88560f` | **e1e5** | −434 | 70 212 |
+  | `b297ab89` | e1f1 | −392 | 62 290 |
+
+- **The defect check was clean** on the tool, the tracer, the emitter, a stale build and a wrong tree. `src/` differs between the two
+  trees in `src/evaluate-params.ts` alone.
+- **Not run:** B-T6, B-T7 and B-T8, by `…aa971f0b`: a read that cannot change the outcome is not spent. B-T8's approval went unused and
+  does not carry to any later pull (`ADR-0067`'s dated block of `arch-owner-answers-1105`). Scope 4 was not taken. Also not read: the
+  futility audit, `G2` and the endgame `G2`.
+- **Record only, not a pass of B-T5:** the other six zugzwang rows green, mate floor 0, `G1` 55 of 58 with 0 newly missed.
+- **The cause is `UNKNOWN - verify`.** Attribution of e1e5 is not run (`…b836b85c`). This is the fourth fitted table to play e1e5:
+  `da3f8599`, the box-only set, `26d06118`, `dd88560f`. No fitted table has played a graded game.
+
+**What landed on `main`.** Records only: the merge `c7688712` of `grugops/ABC-301-records` `7dbb20eb`, copied by path. It carries no
+line of `src/` or `tools/` (read in the diff against its first parent, `48d78985`). So `main` keeps E1's rule-made table. No row is
+re-pinned and none retires. E4a's structure stays at 0, value-identical (`ADR-0070` F5). `ABC-271` K0 stands, re-pointed (`ABC-304`,
+merged `9f481fa5`).
+
+**What stayed on the branch.** Every commit under `src/` and `tools/`:
+- **`dd88560f`, the emission. It must never reach `main`,** and neither may a tip that descends from it: `grugops/ABC-301` (`d5041c54`)
+  and `grugops/qe-ABC-301-miss` (`e9cbeb40`). A merge of either followed by a revert would still put it in `main`'s history (`…066fadea`).
+- **Scope 0 and scope 1, up to `b297ab89`:** the `tools/tune` changes, P1's and P2's rows, the bound set and `e763119c`. QE read these as
+  sound. **They land alone as `ABC-305`,** by a merge of `b297ab89`, after an `N8-LANE` read.
+- **`grugops/ABC-301` is kept as a ref.** The notes cite `dd88560f`, and it is on no other line.
+
+**What passes to `ABC-305`:** this page's default-lane budget (≤ +0.10 s, § NFR triggers), `QE-301-g` and `QE-301-h`. `QE-271-h`, `-g` and
+`-i` close there. `QE-301-i` stands for a later pull, if any. `QE-271-f` was a PREREG row of this pull and lands nothing.
+
+**What comes next is the wait, not a third pull.** The owner's word is "3. wait", and its rules are `ADR-0067`'s dated block of
+`arch-owner-answers-1105`: no third fit and no date, the next terms on hand values on their own reads, at most one more attempt, and **a
+third miss on this row closes tuning.** A new attempt is a new ticket, and asking for one is not a yes.
+
+**Pages moved by this close:** `ABC-303` (its slot waits on `ABC-282` alone), `ABC-290`–`ABC-293` (form (b), the hold lifts), `ABC-287` (the
+hold stands, trigger restated), `ABC-295`, `EPIC-011`. `plans/board.md` is the Orchestrator's.

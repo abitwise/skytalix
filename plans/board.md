@@ -1,3 +1,22 @@
+_Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — **ABC-282 DONE** (merged a6ae8227; gates and arriving deep lanes green; ADR-0071 in force). ADR-0075 ACCEPTED, merged 8b87759d. Running: se-ABC-303-main, secnfr-census-1105, bapm-ABC-282-close. Next: arch-ABC-282-close, AGENTS.md hop, ABC-305 read, ABC-291 probe._
+_Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — **owner: ADR-0075 yes.** → `arch-ABC-291-accept`, `bapm-ABC-291-lines`, records only. Probe after A4; ABC-305 before ABC-291's build._
+_Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — `arch-ABC-291` merged: **ADR-0075 PROPOSED** (E4b, hand values fixed by rule, probe written, not run; build after ABC-305). **Owner asked to accept.** Running: qe-ABC-282-a4._
+_Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — `bapm-pointers-1105` merged: CF and third-pull pointers settled; no bar moved. Owed to the next BA/PM hop: ABC-291 page status to In Design. At ABC-289's seal: E 1 810 against the sealed E. Running: qe-ABC-282-a4, arch-ABC-291._
+_Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — A4 still playing; owner asked what else can go. → `arch-ABC-291` (ADR-0075 PROPOSED, no probe) and `bapm-pointers-1105` (pointers off ABC-282's close hop), records only. Running: qe-ABC-282-a4, both of these._
+_Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — `arch-owner-answers-1105b` merged: CF reaches every later C2′ read; bundle term opens the third-pull door; CF7 owner-accepted. BA/PM pointers (ABC-289 DP4, in-flight pointers, per-change rule) ride with ABC-282's close hop. Running: qe-ABC-282-a4._
+_Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — `bapm-wait-lines-1105` merged: ABC-301 closed NOT MET; ABC-304 Done; **ABC-305** (tools, Ready) and **ABC-306** (per-piece mobility, held) cut; ABC-290–293 on hand values; order E4b first. Rulings …08:10:31Z: census after A4, gating the next lane-adding merge after ABC-282. Running: qe-ABC-282-a4, arch-owner-answers-1105b._
+_Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — **owner: fault rule reaches later reads; a bundle term can open a third pull; CF7 confirmed.** → `arch-owner-answers-1105b`. Running: qe-ABC-282-a4 (lock held alone), bapm-wait-lines-1105. No owner question open._
+_Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — `arch-owner-answers-1105` merged: CF1–CF10 bind ABC-303 only; wait rules in ADR-0067, ADR-0056; next term E4b (ABC-291). → `bapm-wait-lines-1105`. Running: qe-ABC-282-a4 (lock held alone). Owner, not urgent, owed before ABC-289's PREREG: does the fault rule reach later reads, CF7, a bundle term as a third-pull trigger._
+_Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — **owner: A4 yes; new C2′ after a deciding candidate fault yes; tuning WAIT.** → `qe-ABC-282-a4` (~3.5 h, lock held alone; records-only hops beside it), `arch-owner-answers-1105`. Then BA/PM (ABC-301 close, ABC-304 Done, EPIC-011 rows), tools-only ticket after A4._
+_Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — `arch-ABC-301-miss` merged: miss recorded in ADR-0067, 0070; **owner asked: tuning stop / wait / third** (…e5a5ac0c; Architect recommends wait); attribution not run. Tools held for that answer. QE-304-a's one line rides on ABC-303 at its main-merge hop. Nothing running. Owner: A4, new C2′ after a candidate fault, tuning._
+_Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — **ABC-301 NOT MET** (QE …d065fee3: zugzwang.001 e1e5 at depth 9, real, no defect). Records only reached main; the emission and tools stay on grugops/ABC-301, kept. B-T6–B-T8 not run. ABC-303's C2′ now waits on ABC-282 alone. → `arch-ABC-301-miss` (options for the owner). Owner: A4, new C2′ after a candidate fault._
+_Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — **ABC-304 merged 9f481fa5** (QE PASS_WITH_GAPS …e1bb0944, UAT waived). Page status to Done owed to BA/PM; QE-304-a (A4 (b)'s door) owed to the Architect. Running: qe-ABC-301-miss. Owner: A4, new C2′ after a candidate fault._
+_Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — **ABC-301 stopped at scope 3: zugzwang.001 red on the emission (e1e5 at depth 9), defect check clean → F4 reads NOT MET, subject to `qe-ABC-301-miss`.** Fit itself clean (26 bounds, B-T1/2/3 met). B-T6–B-T8 not run. Running: qe-ABC-304, qe-ABC-301-miss. Owner: A4, new C2′ after a candidate fault._
+_Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — **ABC-304 built** (se-ABC-304 e1ac9209): K0 28/28, A3 (a) 96.26 % / 95.72 % on the bundle doors, no figure moved → In Review → `qe-ABC-304`. Running: se-ABC-301-fit-2, qe-ABC-304. Owner: A4, new C2′ after a candidate fault._
+_Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `bapm-K0-cut` merged: **ABC-304 Ready, DoR 10/10** → `se-ABC-304`. Running: se-ABC-301-fit-2, se-ABC-304. Owner: A4, new C2′ after a candidate fault. Owed at the owner's C2′ answer: one line naming the form QE's § 6 copies, and the two points BA/PM raised (…555a9a9e)._
+_Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `arch-ABC-303-open` merged: A3 (a) may re-point (no red); K0 red confirmed, stale rows, no engine defect, re-point owed; the order stands. **se-ABC-301-fit found stalled since 22:12Z** → `se-ABC-301-fit-2`. → `bapm-K0-cut`. Owner: A4, new C2′ after a candidate fault._
+_Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — **ABC-303 built** (se-ABC-303 20b85d09, code only): R1, R2 equal the probe; S rows met; lane +0.07 s ungraded, loose. Two finds → `arch-ABC-303-open`: ABC-279 A3 (a) reads 90.91 % vs ≥ 93 % on the shipped path (re-pointed, not yet ruled); ABC-271 K0 seven deep rows reported red on main. Running: se-ABC-301-fit, arch-ABC-303-open. Owner: A4._
+_Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — qe-ABC-282 **PASS_WITH_GAPS, one BLOCKING gap, UAT not signed** (…a6a2ba28): A6 56.5/100 MET (45/32/23, no time losses); lane +0.020 s, 9.48 s; offline rows MET; A4 NOT RUN (~3.5 h, over the 1 h line). **Owner asked: A4.** ABC-282 does not merge until A4 reads. Running: se-ABC-301-fit, se-ABC-303._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `bapm-bundle-1-cut` merged: **ABC-303 (bundle 1) Ready, DoR 10/10** → In Development, `se-ABC-303` (code only, no game). Owed to the Architect before the read: ABC-303 § Open 1, 2 and the moved-base question. Running: qe-ABC-282, se-ABC-301-fit, se-ABC-303._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `arch-owner-answers-1104b` merged: ADR-0072, 0073, 0074 ACCEPTED (0072/0073 over missed premises, in force only at the bundle's merge); bundle bars ruled in ADR-0056; bundle reads first, ABC-289 alone after it. Slot: bundle code may build now, its C2′ only after ABC-282 and ABC-301 settle. → `bapm-bundle-1-cut`._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — **owner: bundle 1 (a), build both over the missed premises; OQ-0074-1 yes** (…3e73f9f9). → `arch-owner-answers-1104b`. qe-ABC-282 and se-ABC-301-fit: agents ended with no report, their runs still alive; acting on the runs' exits._
@@ -1451,7 +1470,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [ABC-288] O2c: countermove and continuation history. Quiet moves are also ordered by the move that answered the opponent (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page) **2026-11-04: unheld for its probe (ABC-283 merged); recommended bundle 1 with its pair (Q-3K-11).**
 - [ABC-289] Q2: delta pruning in quiescence. Out of check, a capture is skipped when the stand-pat score plus its victim's (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
 - [ABC-290] E3b: king attack. Pieces attacking the enemy king's zone add a weighted, tapered term (a re-try of dropped ABC (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
-- [ABC-291] E4b: pawn structure. Connected and phalanx pawns earn a tapered bonus and backward pawns a tapered penalty; th (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
+- ~~[ABC-291]~~ → In Design. E4b: pawn structure. Connected and phalanx pawns earn a tapered bonus and backward pawns a tapered penalty; th (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
 - [ABC-292] E5: piece terms. A bishop pair bonus, rooks on open and semi-open files, outposts, and mobility weighted per p (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
 - [ABC-293] E6: threats and tempo. A piece attacked by an enemy pawn and a hanging piece (attacked and not defended) cost  (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
 - [ABC-294] E7b: endgame knowledge beyond E7a. Rook-pawn and wrong-coloured-bishop draws and named rook-ending rules scale (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
@@ -1491,7 +1510,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## Ready (WIP 1/8)
+## Ready (WIP 2/8)
+- [ABC-305] Tools-only landing from b297ab89 (DoR 10/10, S, P3). N8-LANE read first, after A4; dd88560f stays out of main.
 - [ABC-289] Q2 delta pruning (ADR-0074 ACCEPTED; DoR 10/10, S, P3). Reads alone after bundle 1; build starts when ABC-303's merge or failed-attempt is recorded.
 - ~~[ABC-301]~~ → In Development. E2s second pull: one bounded fit on main with E4a's structure; KD/FP freed, U held 0; B-T0–B-T8 (B-T8 two r reads at 0.5 s, ~5 h, owner-approved). Scope 0 preconditions first (after NFR-008 headroom ruling).
 - ~~[ABC-271]~~ → In Development E4a structure only at 0 (ADR-0070 ACCEPTED form (a); DoR 10/10, S, P3). QE freeze first (qe-ABC-271-freeze), then se-ABC-271. No games.
@@ -1504,14 +1524,14 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## In Analysis (WIP 0/2)
 
 
-## In Design (WIP 0/2)
+## In Design (WIP 1/2)
+- [ABC-291] E4b pawn structure (P2, DoR 9/10). ADR-0075 ACCEPTED, in force at merge; hand values fixed. Probe next, K2 list after it; build after ABC-305.
 
 
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 2/3)
-- [ABC-301] E2s second pull: fit scopes 1–4 (se-ABC-301-fit), then QE's reads.
+## In Development (WIP 1/3)
 - [ABC-303] Bundle 1, ABC-286 + ABC-288 (ADR-0072, 0073 ACCEPTED over missed premises; DoR 10/10, M, P3). Code only for now (`se-ABC-303`); C2′ only after ABC-282 and ABC-301 settle.
 
 
@@ -1540,8 +1560,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
-- [ABC-282] W1 time use (ADR-0071 ACCEPTED): qe-ABC-282 reading A6, A4 and the lane.
+## In Review (WIP 0/3)
 
 
 
@@ -1601,6 +1620,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+- [ABC-282] W1 time use in uci-clock-mode. Merged a6ae8227 (QE PASS_WITH_GAPS …5191f871 signs UAT; A6 56.5/100, A4 MET, 0 time losses).
 - [ABC-281] **→ Done 2026-11-04 (merged 983d16c3; QE PASS_WITH_GAPS …960d38ff, UAT waived; NFR-008 graded H 9.42 s vs B 9.90 s, −0.37 s 8/8; Q-N8H-1 not triggered; post-merge npm test 2 650/2 650). R-281-a LOW → Architect (deep-lane run frequency); A9 → `secnfr-ABC-281-a9`.** **2026-11-04: built (grugops/ABC-281 frozen ea08d7b6): default 2 650 unchanged, deep 45/83/58 (+1 each), each mutant killed by its remnant; early wall median 9.51 s → In Review → `qe-ABC-281` (A8 twin ALONE).** **2026-11-04: row 11 done (arch-ABC-281 …d7b2b02b): all three rows form S, kill parity on 7 mutants, no owner question; forecast −0.36 s → DoR 10/10 → In Development → `se-ABC-281` (page lines `bapm-ABC-281-dor` in parallel).** **2026-11-04: cut (bapm-nfr008-rows), DoR 9/10 → In Design → `arch-ABC-281` (row 11: W/S/K per row).** The default lane sheds ~0.4 s: three named rows move to their files' deep lanes; NFR-008 re-read graded with a twin (test-only; EPIC-011 lane hygiene; S, P2). R-N8H-1 MEDIUM open; Q-N8H-1 held (trigger: median ≥ 9.6 s after).
 - [ABC-280] **→ Done 2026-11-04 (merged 0c8b385a, merge commit; src/ diff of the real merge empty — QE-280-c met; QE PASS_WITH_GAPS …cf60119e, UAT waived …6b09d896; post-merge npm test 2 650/2 650). QE-280-b (NFR-008 headroom ≈ 0) → Security/NFR before the default lane grows.** **2026-11-04: built (grugops/ABC-280 frozen edb9fddd): A1–A7 met — 7 paths, src/ empty diff, npm test 2 650, TUNE_DEEP 17/17, B-T1 0 misses/1 488 071, B-T3 byte-identical → In Review → `qe-ABC-280`.** **2026-11-04: cut 10/10 (bapm-ABC-239-close) → In Development → `se-ABC-280`.** tools/tune lands alone — ABC-239's tuner from grugops/ABC-239b's 4 tool commits, src/ byte-identical to main; B-T1 0 misses + B-T3 byte-identical on main's table; tools only, UAT waived (EPIC-011 Phase 4; size: S, priority: P3)
 - [ABC-239] **2026-11-04: CLOSED NOT MET (first pull), not shipped — status dropped (ABC-210 precedent)** (bapm-ABC-239-close 2afa9be0; path (iii) …4c76bf7a): F3 pawns A2 53 > 50, F4 zugzwang.001 e1e5 d9–11 on 26d06118; main keeps E1's table; tool → ABC-280; 954d44fb (QE-270-e) owed by the second pull; second pull after ABC-271 (owner word then on the ADR-0067 d6 amendment). **2026-11-04: first pull CLOSES NOT MET — path (iii) (Orchestrator …4c76bf7a on arch-ABC-239-f3f4 a288dd8c): F3/F4 stand; main keeps E1's table; tool to land separately; second pull after ABC-271 (owner word on d6 amendment then). → `bapm-ABC-239-close`.** **2026-11-04: BLOCKED → Architect — step-6 fail-fast (se-ABC-239b …c3f94eab, candidate 26d06118): B-T1/B-T2 0.9905×/B-T3 MET; F3 NOT MET (pawns A2 doubled gap 53 > 50); F4 NOT MET (zugzwang.001 e1e5 at d9–11, 2nd fitted set). 0 re-pins, no games. → `arch-ABC-239-f3f4`.** **2026-11-04: unblocked (ABC-270 and ABC-279 merged) → In Development → `se-ABC-239b` (fit of record, steps 0–9).** **2026-11-03: rulings merged (arch-ABC-239-rulings a77999e7; Orchestrator …912ba57d B1 (e) retires): F3 → linear-inequality bounds + one refit; zugzwang.001 e1e5 = safety failure (SF19 d26: e1e5 −633, e1f1 mate in 10), row stays; own games = six names. Still Blocked only on ABC-270 merge; then se-ABC-239b (steps 1–9).** **2026-11-03: BLOCKED → Architect (se-ABC-239, branch tip 306404ea; failed-attempt …f39f6eb5).** Tool built (tools/tune, own lane 11/11; B-T1 0 misses/1.48 M; B-T2 0.9905× MET; B-T3 byte-reproducible; data stops none fired; one run ~4m51s). Candidate da3f8599 turns 93 default-lane rows red (≈ 90 frozen values on the old table; 1 king-mobility relation F3; 1 zugzwang.001 move F4). Rulings owed: (a) re-pin policy for a tuned table (B-T4/d6), (b) F3 cross-term bound form, (c) F4 reading of zugzwang.001, (d) own-games player set. Refit is owed anyway on a main with ABC-270 (ADR-0068). **2026-11-03: In Development → `se-ABC-239` (build tools/tune + first fit). DoR 10/10, Ready (bapm-owner-answers-1103); P3 → P2.** ADR-0067 ACCEPTED; data = own + Lichess 2017-03 CC0 (≤ 1 M positions, own 0.5 of loss); A6 = B-T7 + B-T8 (approved; one rpair, Orchestrator) before merge; candidate freeze waits owner ADR-0069; 4 data-stage stops → Architect. **2026-11-03: ADR-0067 PROPOSED; waits owner acceptance + Q-3K-7, ABC-269, E2-pre.** Weights tuned offline, constants only, validated against Stockfish (size: L, priority: P3, DoR 8/10; milestone 3; waits ADR-0048 licence, ADR; its batch reads before merge) **→ EPIC-011 2026-11-01 (bapm-epic011-dedupe; id kept)** Fit on a main with ABC-270; freeze after ABC-279 merges or misses; filter names its quiescence rules record; PR reports S1–S3 + game 1 move 13. An earlier fit (da3f8599) counts as a tool proof only (ADR-0068 d7).

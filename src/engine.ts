@@ -23,12 +23,21 @@
  * 1 is one `legalMoves` call plus one evaluation per move; it completes even at a 1 ms budget
  * on an already-expired clock (`A7`), and only from iteration 2 onward is the clock armed.
  *
- * AN ABORTED ITERATION IS DISCARDED WHOLE (`A3`). Its best-so-far is a systematically biased
- * sample — the moves the generator happened to emit first, scored deeper than the rest — so it
- * is worse than not having searched that depth at all. The best-so-far register is written only
- * on a COMPLETED iteration, which is expressed here by assigning the register from the call's
- * return value: an abort throws, the assignment never happens, and there is no partial state to
- * forget to discard.
+ * AN ABORTED ITERATION IS DISCARDED WHOLE (`A3`), EXCEPT UNDER A SOFT LIMIT (`ADR-0071`,
+ * `ABC-282`). Its best-so-far is a systematically biased sample — the moves the generator happened
+ * to emit first, scored deeper than the rest — so it is worse than not having searched that depth
+ * at all. Without a soft limit the best-so-far register is written only on a COMPLETED iteration,
+ * which is expressed here by assigning the register from the call's return value: an abort throws,
+ * the assignment never happens, and there is no partial state to forget to discard.
+ *
+ * WITH A SOFT LIMIT (`EngineOptions.softMs`) no iteration starts once the search has spent it, and
+ * one result of an aborted iteration may be played: a root move that beat the incumbent, iteration
+ * d's best move, at the same depth. Within one pass the incumbent's search COMPLETED with an exact
+ * score, strictly inside the pass's window, and that move's search COMPLETED strictly above it, exact
+ * or failing high: a lower bound above an exact score is proof, not a sample. The latest such move
+ * is played, and a pass in which the incumbent was not exact adds nothing. `budget.beaten` holds it,
+ * written only from a completed root-move return, so an abort throws past it as it does past the
+ * register. Nothing is stored in the table for it. `depth` stays the deepest COMPLETED iteration.
  *
  * WHY THE RECURSION IS HERE AND NOT `src/search.ts`'s. `ABC-077` owns the negamax core and its
  * `A6` pins that module to exactly three exports and to carrying NO clock — `src/search.test.ts`
@@ -248,12 +257,22 @@ export interface EngineOptions {
    * the one without game history, node for node. The test-only doors below ignore it.
    */
   readonly priorKeys?: readonly bigint[];
+  /**
+   * `ABC-282` (`ADR-0071` D2, D4, D6): the soft limit, in milliseconds from this call's entry. No
+   * iteration starts at or after it, and an aborted iteration's root move is played when it beat
+   * the incumbent (the module header). `budgetMs` stays the hard limit. The caller chooses it.
+   * Absent, the search is the one without a soft limit, node for node and move for move.
+   */
+  readonly softMs?: number;
 }
 
 export interface EngineChoice {
-  /** The best move of the deepest COMPLETED iteration. Always a legal move of the position. */
+  /**
+   * The best move of the deepest COMPLETED iteration, or, when `partial` is set, the move of the
+   * next iteration that beat it (`ADR-0071` D5). Always a legal move of the position.
+   */
   readonly move: Move;
-  /** That iteration's score, in `search`'s convention: positive for the side to move. */
+  /** That move's score at that iteration, in `search`'s convention: positive for the side to move. */
   readonly score: number;
   /** The deepest iteration that COMPLETED. Reported, never asked for — hardware decides it. */
   readonly depth: number;
@@ -261,6 +280,8 @@ export interface EngineChoice {
   readonly nodes: number;
   /** `now()` at return minus `now()` at entry, on the caller's clock. */
   readonly elapsedMs: number;
+  /** `ADR-0071` D5: present only when an aborted iteration's move was kept; never `false`. */
+  readonly partial?: true;
 }
 
 /**
@@ -389,6 +410,10 @@ interface Budget extends Heuristics {
   readonly keys: BigUint64Array;
   /** `options.priorKeys` (`ABC-230`), borrowed, or `NO_PRIOR_KEYS` on the doors and when absent. */
   readonly prior: readonly bigint[];
+  /** `ADR-0071` D4: the completed iteration's best move under a soft limit, else `null`. */
+  incumbent: Move | null;
+  /** `ADR-0071` D4: this iteration's latest root move that beat `incumbent`, across its passes. */
+  beaten: Iteration | null;
 }
 
 /**
@@ -734,6 +759,9 @@ function runIteration(
   let alpha = alphaIn;
   let best = Number.NEGATIVE_INFINITY;
   let bestMove = rootMoves[0] as Move;
+  // `ADR-0071` D12 item 2: the incumbent completed with an exact score in THIS pass. Above `alpha`
+  // says so: a score at or above `betaIn` stops the root below, before any other move can read it.
+  let incumbentExact = false;
 
   let index = 0;
   for (const move of rootMoves) {
@@ -761,6 +789,8 @@ function runIteration(
     }
     index++;
 
+    if (move === budget.incumbent) incumbentExact = score > alpha;
+    else if (incumbentExact && score > best) budget.beaten = { move, score, fail: 0 };
     if (score > best) {
       best = score;
       bestMove = move;
@@ -1289,6 +1319,8 @@ function deepen(
     killers: new KillerTable(),
     keys: new BigUint64Array(KEY_ARRAY_CAPACITY + 1),
     prior: heuristics.priorKeys ? (options.priorKeys ?? NO_PRIOR_KEYS) : NO_PRIOR_KEYS,
+    incumbent: null,
+    beaten: null,
     ...heuristics,
   };
   budget.keys[0] = zobristKey(position);
@@ -1305,17 +1337,25 @@ function deepen(
   let best = runIteration(position, rootMoves, 1, budget, rootPhase, 0 - infinity, infinity);
   let reached = 1;
   budget.nextCheck = budget.nodes + NODES_PER_CLOCK_CHECK;
+  const { softMs } = options;
+  // `ADR-0071` D2: the earlier of the two limits, so one clock read answers both, and with no
+  // soft limit it is the deadline itself.
+  const iterationDeadline =
+    softMs === undefined ? budget.deadline : Math.min(budget.deadline, start + softMs);
+  let partial = false;
 
   // The clock FIRST, so it is read exactly as often as before; the two limits (`ABC-170`) are
   // plain comparisons after it, and absent they are `Infinity`, which never stops the loop.
   for (
     let iteration = 2;
-    now() < budget.deadline &&
+    now() < iterationDeadline &&
     iteration <= (options.maxDepth ?? Number.POSITIVE_INFINITY) &&
     budget.nodes < budget.maxNodes;
     iteration++
   ) {
     let deeper: Iteration;
+    if (softMs !== undefined) budget.incumbent = best.move;
+    budget.beaten = null;
     try {
       deeper =
         heuristics.aspiration && iteration >= ASPIRATION_FROM
@@ -1323,8 +1363,15 @@ function deepen(
           : runIteration(position, rootMoves, iteration, budget, rootPhase, 0 - infinity, infinity);
     } catch (error) {
       // The register is written only here, from a value a COMPLETED iteration returned. An
-      // aborted iteration leaves `best` and `reached` untouched, which is `A3`.
-      if (error === ABORTED) break;
+      // aborted iteration leaves `best` and `reached` untouched, which is `A3`, unless a soft limit
+      // is set and a root move beat the incumbent (`ADR-0071` D4): `reached` stays untouched then.
+      if (error === ABORTED) {
+        if (budget.beaten !== null) {
+          best = budget.beaten;
+          partial = true;
+        }
+        break;
+      }
       throw error;
     }
     best = deeper;
@@ -1337,6 +1384,7 @@ function deepen(
     depth: reached,
     nodes: budget.nodes,
     elapsedMs: now() - start,
+    ...(partial ? { partial } : {}),
   };
 }
 

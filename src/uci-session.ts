@@ -23,6 +23,12 @@
  * `CLOCK_MODE_CEILING_MS` (60 000), never at any level's budget. A `movetime x` gets
  * `min(x, 59 500)`, a clock for the side to move `min(59 500, C)`, and no time token T (22 000).
  *
+ * `ABC-282` (`ADR-0071` D1, D3, D5) adds W1 to ONE row, `uci-clock-mode` with the side to move's
+ * clock and no `movetime`: `min(59 500, C)` stays the hard limit, and the engine gets a soft limit
+ * of that budget ÷ `ITERATION_GROWTH`. A move kept from an aborted iteration is reported by
+ * `info string partial depth <d + 1>` just before its `info depth d` line. Every other row hands in
+ * no soft limit, so it searches as it did before.
+ *
  * ONE THREAD (`ADR-0044` D5). `go` searches to its budget inside `handleLine`, so a `stop` that
  * arrives later finds the search already finished; `infinite` and `ponder` only HOLD the answer.
  * So `isready` and `stop` sent during a search are answered at most one budget late: about 5 s at
@@ -111,6 +117,13 @@ const CLOCK_OVERHEAD_MS = 100;
 const CLOCK_MODE_CEILING_MS = 60_000;
 /** `ADR-0052` D4: the most `uci-clock-mode` spends a move, 500 ms under its ceiling. */
 const CLOCK_MODE_MAX_BUDGET_MS = CLOCK_MODE_CEILING_MS - 500;
+/**
+ * `ADR-0071` D2, D3, D12 item 3: b, how many times the time spent through iteration d a completed
+ * iteration d + 1 ends at, so the soft limit is the budget ÷ b. Measured, never tuned: frozen-clock
+ * cumulative node ratios on the K25 corpus, the pooled median over d = 4-10 (175 ratios), rounded
+ * to 0.1. 2.3319 on `main` `5853d17f`, re-read 2.3043 after `ABC-283` on `main` `22931005`.
+ */
+const ITERATION_GROWTH = 2.3;
 
 const PROMOTION_LETTERS: Readonly<Record<number, string>> = {
   [QUEEN]: "q",
@@ -221,6 +234,8 @@ function safeClockShare(time: number, increment: number, movesToGo: number): num
 interface GoRequest {
   /** D4.1's `G` under `TimeMode` `level`, before the level caps it; `ADR-0052` D3's or D4's in a mode. */
   readonly budgetMs: number;
+  /** `ADR-0071` D3: `undefined` on every row but `uci-clock-mode` under a clock. */
+  readonly softMs: number | undefined;
   readonly maxDepth: number | undefined;
   readonly maxNodes: number | undefined;
   /** The accepted `depth` / `nodes` / `mate` keywords, in input order. */
@@ -294,6 +309,7 @@ function parseGo(
   // D4.1: the budget G. With no time token it is `HARD_CEILING_MS`, which D4.2's cap below turns
   // into the level's own budget at every level (`ABC-212`: every budget is under the clamp).
   let budget: number = HARD_CEILING_MS;
+  let softMs: number | undefined;
   const time = clock[blackToMove ? "btime" : "wtime"];
   if (timeMode !== "level") {
     // `ADR-0052` D3 / D4: with no time token T in both modes. Otherwise the mode's cap, T or
@@ -306,6 +322,7 @@ function parseGo(
       const increment = clock[blackToMove ? "binc" : "winc"] ?? 0;
       const movesToGo = clock.movestogo ?? DEFAULT_MOVES_TO_GO;
       budget = Math.min(cap, safeClockShare(time, increment, movesToGo));
+      if (timeMode === "uci-clock-mode") softMs = budget / ITERATION_GROWTH;
     }
   } else if (clock.movetime !== undefined) {
     budget = clock.movetime;
@@ -320,7 +337,7 @@ function parseGo(
   const maxDepth =
     depth === undefined ? mateDepth : mateDepth === undefined ? depth : Math.min(depth, mateDepth);
 
-  return { budgetMs: budget, maxDepth, maxNodes: nodes, limits, hold };
+  return { budgetMs: budget, softMs, maxDepth, maxNodes: nodes, limits, hold };
 }
 
 /**
@@ -413,9 +430,11 @@ export function createUciSession(options: UciSessionOptions): UciSession {
         priorKeys,
         ...(request.maxDepth === undefined ? {} : { maxDepth: request.maxDepth }),
         ...(request.maxNodes === undefined ? {} : { maxNodes: request.maxNodes }),
+        ...(request.softMs === undefined ? {} : { softMs: request.softMs }),
       });
       if (choice !== null) {
         const move = coordinateOf(choice.move);
+        if (choice.partial) info(`partial depth ${choice.depth + 1}`);
         const nps = Math.round((choice.nodes * 1000) / Math.max(1, choice.elapsedMs));
         write(
           `info depth ${choice.depth} score ${scoreOf(choice.score)} nodes ${choice.nodes} ` +

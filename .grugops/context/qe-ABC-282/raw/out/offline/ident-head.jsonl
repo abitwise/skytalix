@@ -1,0 +1,600 @@
+{"name":"start","m":"level","l":["go movetime 60"],"lines":["info depth 7 score cp 48 nodes 54292 time 61 nps 890033 pv g1f3","bestmove g1f3"]}
+{"name":"start","m":"level","l":["go wtime 4000 btime 4000"],"lines":["info depth 9 score cp 21 nodes 195604 time 201 nps 973154 pv b1c3","bestmove b1c3"]}
+{"name":"start","m":"level","l":["go wtime 3000 btime 3000 winc 50 binc 50 movestogo 10"],"lines":["info depth 10 score cp 20 nodes 322580 time 326 nps 989509 pv b1c3","bestmove b1c3"]}
+{"name":"start","m":"level","l":["go depth 5"],"lines":["info depth 5 score cp 38 nodes 2104 time 8 nps 263000 pv b1c3","bestmove b1c3"]}
+{"name":"start","m":"level","l":["go nodes 30000"],"lines":["info depth 6 score cp 0 nodes 30740 time 37 nps 830811 pv b1c3","bestmove b1c3"]}
+{"name":"start","m":"level","l":["setoption name Skill Level value 1","go"],"lines":["info depth 8 nodes 94228 time 101 pv b1c3","bestmove b1c3"]}
+{"name":"start","m":"level","l":["setoption name Skill Level value 3","go wtime 4000 btime 4000"],"lines":["info depth 9 nodes 195604 time 201 pv b1c3","bestmove b1c3"]}
+{"name":"start","m":"simple-tournament","l":["go movetime 60"],"lines":["info depth 7 score cp 48 nodes 54292 time 61 nps 890033 pv g1f3","bestmove g1f3"]}
+{"name":"start","m":"simple-tournament","l":["go wtime 8000 btime 8000 movestogo 40"],"lines":["info depth 7 score cp 48 nodes 69652 time 76 nps 916474 pv g1f3","bestmove g1f3"]}
+{"name":"start","m":"simple-tournament","l":["go wtime 1500 btime 1500"],"lines":["info depth 1 score cp 66 nodes 20 time 2 nps 10000 pv b1c3","bestmove b1c3"]}
+{"name":"start","m":"simple-tournament","l":["go depth 5"],"lines":["info depth 5 score cp 38 nodes 2104 time 8 nps 263000 pv b1c3","bestmove b1c3"]}
+{"name":"start","m":"simple-tournament","l":["go nodes 30000"],"lines":["info depth 6 score cp 0 nodes 30740 time 37 nps 830811 pv b1c3","bestmove b1c3"]}
+{"name":"start","m":"uci-clock-mode","l":["go movetime 60"],"lines":["info depth 7 score cp 48 nodes 54292 time 61 nps 890033 pv g1f3","bestmove g1f3"]}
+{"name":"start","m":"uci-clock-mode","l":["go wtime 8000 btime 8000 movestogo 40 movetime 60"],"lines":["info depth 7 score cp 48 nodes 54292 time 61 nps 890033 pv g1f3","bestmove g1f3"]}
+{"name":"start","m":"uci-clock-mode","l":["go movetime 60 wtime 1500 btime 1500"],"lines":["info depth 7 score cp 48 nodes 54292 time 61 nps 890033 pv g1f3","bestmove g1f3"]}
+{"name":"start","m":"uci-clock-mode","l":["go depth 5"],"lines":["info depth 5 score cp 38 nodes 2104 time 8 nps 263000 pv b1c3","bestmove b1c3"]}
+{"name":"start","m":"uci-clock-mode","l":["go nodes 30000"],"lines":["info depth 6 score cp 0 nodes 30740 time 37 nps 830811 pv b1c3","bestmove b1c3"]}
+{"name":"start","m":"uci-clock-mode","l":["go mate 2"],"lines":["info depth 3 score cp 66 nodes 212 time 4 nps 53000 pv b1c3","bestmove b1c3"]}
+{"name":"start","m":"uci-clock-mode","l":["go btime 8000 movestogo 40 depth 5"],"lines":["info depth 5 score cp 38 nodes 2104 time 8 nps 263000 pv b1c3","bestmove b1c3"]}
+{"name":"start","h":25,"choice":{"move":"b1c3","score":0,"depth":6,"nodes":19476,"partial":null,"elapsedMs":26}}
+{"name":"start","h":50,"choice":{"move":"g1f3","score":48,"depth":7,"nodes":44052,"partial":null,"elapsedMs":51}}
+{"name":"start","h":100,"choice":{"move":"b1c3","score":20,"depth":8,"nodes":94228,"partial":null,"elapsedMs":101}}
+{"name":"start","h":200,"choice":{"move":"b1c3","score":21,"depth":9,"nodes":195604,"partial":null,"elapsedMs":201}}
+{"name":"start","h":400,"choice":{"move":"b1c3","score":20,"depth":10,"nodes":399380,"partial":null,"elapsedMs":401}}
+{"name":"kiwipete","m":"level","l":["go movetime 60"],"lines":["info depth 5 score cp -59 nodes 57624 time 61 nps 944656 pv e2a6","bestmove e2a6"]}
+{"name":"kiwipete","m":"level","l":["go wtime 4000 btime 4000"],"lines":["info depth 6 score cp -59 nodes 199960 time 201 nps 994826 pv e2a6","bestmove e2a6"]}
+{"name":"kiwipete","m":"level","l":["go wtime 3000 btime 3000 winc 50 binc 50 movestogo 10"],"lines":["info depth 6 score cp -59 nodes 327960 time 326 nps 1006012 pv e2a6","bestmove e2a6"]}
+{"name":"kiwipete","m":"level","l":["go depth 5"],"lines":["info depth 5 score cp -59 nodes 46933 time 50 nps 938660 pv e2a6","bestmove e2a6"]}
+{"name":"kiwipete","m":"level","l":["go nodes 30000"],"lines":["info depth 4 score cp 8 nodes 31000 time 34 nps 911765 pv e2a6","bestmove e2a6"]}
+{"name":"kiwipete","m":"level","l":["setoption name Skill Level value 1","go"],"lines":["info depth 5 nodes 98584 time 101 pv e2a6","bestmove e2a6"]}
+{"name":"kiwipete","m":"level","l":["setoption name Skill Level value 3","go wtime 4000 btime 4000"],"lines":["info depth 6 nodes 199960 time 201 pv e2a6","bestmove e2a6"]}
+{"name":"kiwipete","m":"simple-tournament","l":["go movetime 60"],"lines":["info depth 5 score cp -59 nodes 57624 time 61 nps 944656 pv e2a6","bestmove e2a6"]}
+{"name":"kiwipete","m":"simple-tournament","l":["go wtime 8000 btime 8000 movestogo 40"],"lines":["info depth 5 score cp -59 nodes 72984 time 76 nps 960316 pv e2a6","bestmove e2a6"]}
+{"name":"kiwipete","m":"simple-tournament","l":["go wtime 1500 btime 1500"],"lines":["info depth 1 score cp 53 nodes 1304 time 2 nps 652000 pv c3b5","bestmove c3b5"]}
+{"name":"kiwipete","m":"simple-tournament","l":["go depth 5"],"lines":["info depth 5 score cp -59 nodes 46933 time 50 nps 938660 pv e2a6","bestmove e2a6"]}
+{"name":"kiwipete","m":"simple-tournament","l":["go nodes 30000"],"lines":["info depth 4 score cp 8 nodes 31000 time 34 nps 911765 pv e2a6","bestmove e2a6"]}
+{"name":"kiwipete","m":"uci-clock-mode","l":["go movetime 60"],"lines":["info depth 5 score cp -59 nodes 57624 time 61 nps 944656 pv e2a6","bestmove e2a6"]}
+{"name":"kiwipete","m":"uci-clock-mode","l":["go wtime 8000 btime 8000 movestogo 40 movetime 60"],"lines":["info depth 5 score cp -59 nodes 57624 time 61 nps 944656 pv e2a6","bestmove e2a6"]}
+{"name":"kiwipete","m":"uci-clock-mode","l":["go movetime 60 wtime 1500 btime 1500"],"lines":["info depth 5 score cp -59 nodes 57624 time 61 nps 944656 pv e2a6","bestmove e2a6"]}
+{"name":"kiwipete","m":"uci-clock-mode","l":["go depth 5"],"lines":["info depth 5 score cp -59 nodes 46933 time 50 nps 938660 pv e2a6","bestmove e2a6"]}
+{"name":"kiwipete","m":"uci-clock-mode","l":["go nodes 30000"],"lines":["info depth 4 score cp 8 nodes 31000 time 34 nps 911765 pv e2a6","bestmove e2a6"]}
+{"name":"kiwipete","m":"uci-clock-mode","l":["go mate 2"],"lines":["info depth 3 score cp 8 nodes 5781 time 8 nps 722625 pv e2a6","bestmove e2a6"]}
+{"name":"kiwipete","m":"uci-clock-mode","l":["go btime 8000 movestogo 40 depth 5"],"lines":["info depth 5 score cp -59 nodes 46933 time 50 nps 938660 pv e2a6","bestmove e2a6"]}
+{"name":"kiwipete","h":25,"choice":{"move":"e2a6","score":8,"depth":4,"nodes":22808,"partial":null,"elapsedMs":26}}
+{"name":"kiwipete","h":50,"choice":{"move":"e2a6","score":-59,"depth":5,"nodes":47384,"partial":null,"elapsedMs":51}}
+{"name":"kiwipete","h":100,"choice":{"move":"e2a6","score":-59,"depth":5,"nodes":98584,"partial":null,"elapsedMs":101}}
+{"name":"kiwipete","h":200,"choice":{"move":"e2a6","score":-59,"depth":6,"nodes":199960,"partial":null,"elapsedMs":201}}
+{"name":"kiwipete","h":400,"choice":{"move":"d5e6","score":-82,"depth":7,"nodes":403736,"partial":null,"elapsedMs":401}}
+{"name":"position-6","m":"level","l":["go movetime 60"],"lines":["info depth 7 score cp 79 nodes 54345 time 61 nps 890902 pv c3d5","bestmove c3d5"]}
+{"name":"position-6","m":"level","l":["go wtime 4000 btime 4000"],"lines":["info depth 8 score cp 71 nodes 196681 time 201 nps 978512 pv c3d5","bestmove c3d5"]}
+{"name":"position-6","m":"level","l":["go wtime 3000 btime 3000 winc 50 binc 50 movestogo 10"],"lines":["info depth 9 score cp 78 nodes 323657 time 326 nps 992813 pv c3d5","bestmove c3d5"]}
+{"name":"position-6","m":"level","l":["go depth 5"],"lines":["info depth 5 score cp 109 nodes 5614 time 11 nps 510364 pv c3d5","bestmove c3d5"]}
+{"name":"position-6","m":"level","l":["go nodes 30000"],"lines":["info depth 6 score cp 87 nodes 30793 time 37 nps 832243 pv c3d5","bestmove c3d5"]}
+{"name":"position-6","m":"level","l":["setoption name Skill Level value 1","go"],"lines":["info depth 7 nodes 95305 time 101 pv c3d5","bestmove c3d5"]}
+{"name":"position-6","m":"level","l":["setoption name Skill Level value 3","go wtime 4000 btime 4000"],"lines":["info depth 8 nodes 196681 time 201 pv c3d5","bestmove c3d5"]}
+{"name":"position-6","m":"simple-tournament","l":["go movetime 60"],"lines":["info depth 7 score cp 79 nodes 54345 time 61 nps 890902 pv c3d5","bestmove c3d5"]}
+{"name":"position-6","m":"simple-tournament","l":["go wtime 8000 btime 8000 movestogo 40"],"lines":["info depth 7 score cp 79 nodes 69705 time 76 nps 917171 pv c3d5","bestmove c3d5"]}
+{"name":"position-6","m":"simple-tournament","l":["go wtime 1500 btime 1500"],"lines":["info depth 1 score cp 14 nodes 73 time 2 nps 36500 pv g5e3","bestmove g5e3"]}
+{"name":"position-6","m":"simple-tournament","l":["go depth 5"],"lines":["info depth 5 score cp 109 nodes 5614 time 11 nps 510364 pv c3d5","bestmove c3d5"]}
+{"name":"position-6","m":"simple-tournament","l":["go nodes 30000"],"lines":["info depth 6 score cp 87 nodes 30793 time 37 nps 832243 pv c3d5","bestmove c3d5"]}
+{"name":"position-6","m":"uci-clock-mode","l":["go movetime 60"],"lines":["info depth 7 score cp 79 nodes 54345 time 61 nps 890902 pv c3d5","bestmove c3d5"]}
+{"name":"position-6","m":"uci-clock-mode","l":["go wtime 8000 btime 8000 movestogo 40 movetime 60"],"lines":["info depth 7 score cp 79 nodes 54345 time 61 nps 890902 pv c3d5","bestmove c3d5"]}
+{"name":"position-6","m":"uci-clock-mode","l":["go movetime 60 wtime 1500 btime 1500"],"lines":["info depth 7 score cp 79 nodes 54345 time 61 nps 890902 pv c3d5","bestmove c3d5"]}
+{"name":"position-6","m":"uci-clock-mode","l":["go depth 5"],"lines":["info depth 5 score cp 109 nodes 5614 time 11 nps 510364 pv c3d5","bestmove c3d5"]}
+{"name":"position-6","m":"uci-clock-mode","l":["go nodes 30000"],"lines":["info depth 6 score cp 87 nodes 30793 time 37 nps 832243 pv c3d5","bestmove c3d5"]}
+{"name":"position-6","m":"uci-clock-mode","l":["go mate 2"],"lines":["info depth 3 score cp 85 nodes 1514 time 5 nps 302800 pv c3d5","bestmove c3d5"]}
+{"name":"position-6","m":"uci-clock-mode","l":["go btime 8000 movestogo 40 depth 5"],"lines":["info depth 5 score cp 109 nodes 5614 time 11 nps 510364 pv c3d5","bestmove c3d5"]}
+{"name":"position-6","h":25,"choice":{"move":"c3d5","score":87,"depth":6,"nodes":19529,"partial":null,"elapsedMs":26}}
+{"name":"position-6","h":50,"choice":{"move":"c3d5","score":79,"depth":7,"nodes":44105,"partial":null,"elapsedMs":51}}
+{"name":"position-6","h":100,"choice":{"move":"c3d5","score":79,"depth":7,"nodes":95305,"partial":null,"elapsedMs":101}}
+{"name":"position-6","h":200,"choice":{"move":"c3d5","score":71,"depth":8,"nodes":196681,"partial":null,"elapsedMs":201}}
+{"name":"position-6","h":400,"choice":{"move":"c3d5","score":78,"depth":9,"nodes":400457,"partial":null,"elapsedMs":401}}
+{"name":"endgame-cpw3","m":"level","l":["go movetime 60"],"lines":["info depth 8 score cp 50 nodes 53265 time 61 nps 873197 pv b4c4","bestmove b4c4"]}
+{"name":"endgame-cpw3","m":"level","l":["go wtime 4000 btime 4000"],"lines":["info depth 10 score cp 61 nodes 194577 time 201 nps 968045 pv b4f4","bestmove b4f4"]}
+{"name":"endgame-cpw3","m":"level","l":["go wtime 3000 btime 3000 winc 50 binc 50 movestogo 10"],"lines":["info depth 10 score cp 61 nodes 322577 time 326 nps 989500 pv b4f4","bestmove b4f4"]}
+{"name":"endgame-cpw3","m":"level","l":["go depth 5"],"lines":["info depth 5 score cp 86 nodes 2470 time 8 nps 308750 pv b4f4","bestmove b4f4"]}
+{"name":"endgame-cpw3","m":"level","l":["go nodes 30000"],"lines":["info depth 7 score cp 73 nodes 30737 time 38 nps 808868 pv b4c4","bestmove b4c4"]}
+{"name":"endgame-cpw3","m":"level","l":["setoption name Skill Level value 1","go"],"lines":["info depth 9 nodes 93201 time 101 pv b4c4","bestmove b4c4"]}
+{"name":"endgame-cpw3","m":"level","l":["setoption name Skill Level value 3","go wtime 4000 btime 4000"],"lines":["info depth 10 nodes 194577 time 201 pv b4f4","bestmove b4f4"]}
+{"name":"endgame-cpw3","m":"simple-tournament","l":["go movetime 60"],"lines":["info depth 8 score cp 50 nodes 53265 time 61 nps 873197 pv b4c4","bestmove b4c4"]}
+{"name":"endgame-cpw3","m":"simple-tournament","l":["go wtime 8000 btime 8000 movestogo 40"],"lines":["info depth 8 score cp 50 nodes 68625 time 76 nps 902961 pv b4c4","bestmove b4c4"]}
+{"name":"endgame-cpw3","m":"simple-tournament","l":["go wtime 1500 btime 1500"],"lines":["info depth 1 score cp 112 nodes 17 time 2 nps 8500 pv b4f4","bestmove b4f4"]}
+{"name":"endgame-cpw3","m":"simple-tournament","l":["go depth 5"],"lines":["info depth 5 score cp 86 nodes 2470 time 8 nps 308750 pv b4f4","bestmove b4f4"]}
+{"name":"endgame-cpw3","m":"simple-tournament","l":["go nodes 30000"],"lines":["info depth 7 score cp 73 nodes 30737 time 38 nps 808868 pv b4c4","bestmove b4c4"]}
+{"name":"endgame-cpw3","m":"uci-clock-mode","l":["go movetime 60"],"lines":["info depth 8 score cp 50 nodes 53265 time 61 nps 873197 pv b4c4","bestmove b4c4"]}
+{"name":"endgame-cpw3","m":"uci-clock-mode","l":["go wtime 8000 btime 8000 movestogo 40 movetime 60"],"lines":["info depth 8 score cp 50 nodes 53265 time 61 nps 873197 pv b4c4","bestmove b4c4"]}
+{"name":"endgame-cpw3","m":"uci-clock-mode","l":["go movetime 60 wtime 1500 btime 1500"],"lines":["info depth 8 score cp 50 nodes 53265 time 61 nps 873197 pv b4c4","bestmove b4c4"]}
+{"name":"endgame-cpw3","m":"uci-clock-mode","l":["go depth 5"],"lines":["info depth 5 score cp 86 nodes 2470 time 8 nps 308750 pv b4f4","bestmove b4f4"]}
+{"name":"endgame-cpw3","m":"uci-clock-mode","l":["go nodes 30000"],"lines":["info depth 7 score cp 73 nodes 30737 time 38 nps 808868 pv b4c4","bestmove b4c4"]}
+{"name":"endgame-cpw3","m":"uci-clock-mode","l":["go mate 2"],"lines":["info depth 3 score cp 124 nodes 172 time 4 nps 43000 pv b4f4","bestmove b4f4"]}
+{"name":"endgame-cpw3","m":"uci-clock-mode","l":["go btime 8000 movestogo 40 depth 5"],"lines":["info depth 5 score cp 86 nodes 2470 time 8 nps 308750 pv b4f4","bestmove b4f4"]}
+{"name":"endgame-cpw3","h":25,"choice":{"move":"b4f4","score":86,"depth":6,"nodes":19473,"partial":null,"elapsedMs":26}}
+{"name":"endgame-cpw3","h":50,"choice":{"move":"b4c4","score":50,"depth":8,"nodes":43025,"partial":null,"elapsedMs":51}}
+{"name":"endgame-cpw3","h":100,"choice":{"move":"b4c4","score":62,"depth":9,"nodes":93201,"partial":null,"elapsedMs":101}}
+{"name":"endgame-cpw3","h":200,"choice":{"move":"b4f4","score":61,"depth":10,"nodes":194577,"partial":null,"elapsedMs":201}}
+{"name":"endgame-cpw3","h":400,"choice":{"move":"b4f4","score":85,"depth":11,"nodes":398353,"partial":null,"elapsedMs":401}}
+{"name":"in-check","m":"level","l":["go movetime 60"],"lines":["info depth 7 score cp 137 nodes 54277 time 61 nps 889787 pv c2c3","bestmove c2c3"]}
+{"name":"in-check","m":"level","l":["go wtime 4000 btime 4000"],"lines":["info depth 9 score cp 137 nodes 195589 time 201 nps 973080 pv c2c3","bestmove c2c3"]}
+{"name":"in-check","m":"level","l":["go wtime 3000 btime 3000 winc 50 binc 50 movestogo 10"],"lines":["info depth 10 score cp 132 nodes 322565 time 326 nps 989463 pv c2c3","bestmove c2c3"]}
+{"name":"in-check","m":"level","l":["go depth 5"],"lines":["info depth 5 score cp 159 nodes 2509 time 8 nps 313625 pv c2c3","bestmove c2c3"]}
+{"name":"in-check","m":"level","l":["go nodes 30000"],"lines":["info depth 7 score cp 137 nodes 30725 time 38 nps 808553 pv c2c3","bestmove c2c3"]}
+{"name":"in-check","m":"level","l":["setoption name Skill Level value 1","go"],"lines":["info depth 9 nodes 93189 time 101 pv c2c3","bestmove c2c3"]}
+{"name":"in-check","m":"level","l":["setoption name Skill Level value 3","go wtime 4000 btime 4000"],"lines":["info depth 9 nodes 195589 time 201 pv c2c3","bestmove c2c3"]}
+{"name":"in-check","m":"simple-tournament","l":["go movetime 60"],"lines":["info depth 7 score cp 137 nodes 54277 time 61 nps 889787 pv c2c3","bestmove c2c3"]}
+{"name":"in-check","m":"simple-tournament","l":["go wtime 8000 btime 8000 movestogo 40"],"lines":["info depth 8 score cp 126 nodes 68613 time 76 nps 902803 pv c2c3","bestmove c2c3"]}
+{"name":"in-check","m":"simple-tournament","l":["go wtime 1500 btime 1500"],"lines":["info depth 1 score cp 151 nodes 5 time 2 nps 2500 pv b1c3","bestmove b1c3"]}
+{"name":"in-check","m":"simple-tournament","l":["go depth 5"],"lines":["info depth 5 score cp 159 nodes 2509 time 8 nps 313625 pv c2c3","bestmove c2c3"]}
+{"name":"in-check","m":"simple-tournament","l":["go nodes 30000"],"lines":["info depth 7 score cp 137 nodes 30725 time 38 nps 808553 pv c2c3","bestmove c2c3"]}
+{"name":"in-check","m":"uci-clock-mode","l":["go movetime 60"],"lines":["info depth 7 score cp 137 nodes 54277 time 61 nps 889787 pv c2c3","bestmove c2c3"]}
+{"name":"in-check","m":"uci-clock-mode","l":["go wtime 8000 btime 8000 movestogo 40 movetime 60"],"lines":["info depth 7 score cp 137 nodes 54277 time 61 nps 889787 pv c2c3","bestmove c2c3"]}
+{"name":"in-check","m":"uci-clock-mode","l":["go movetime 60 wtime 1500 btime 1500"],"lines":["info depth 7 score cp 137 nodes 54277 time 61 nps 889787 pv c2c3","bestmove c2c3"]}
+{"name":"in-check","m":"uci-clock-mode","l":["go depth 5"],"lines":["info depth 5 score cp 159 nodes 2509 time 8 nps 313625 pv c2c3","bestmove c2c3"]}
+{"name":"in-check","m":"uci-clock-mode","l":["go nodes 30000"],"lines":["info depth 7 score cp 137 nodes 30725 time 38 nps 808553 pv c2c3","bestmove c2c3"]}
+{"name":"in-check","m":"uci-clock-mode","l":["go mate 2"],"lines":["info depth 3 score cp 149 nodes 467 time 4 nps 116750 pv c2c3","bestmove c2c3"]}
+{"name":"in-check","m":"uci-clock-mode","l":["go btime 8000 movestogo 40 depth 5"],"lines":["info depth 5 score cp 159 nodes 2509 time 8 nps 313625 pv c2c3","bestmove c2c3"]}
+{"name":"in-check","h":25,"choice":{"move":"c2c3","score":117,"depth":6,"nodes":19461,"partial":null,"elapsedMs":26}}
+{"name":"in-check","h":50,"choice":{"move":"c2c3","score":137,"depth":7,"nodes":44037,"partial":null,"elapsedMs":51}}
+{"name":"in-check","h":100,"choice":{"move":"c2c3","score":137,"depth":9,"nodes":93189,"partial":null,"elapsedMs":101}}
+{"name":"in-check","h":200,"choice":{"move":"c2c3","score":137,"depth":9,"nodes":195589,"partial":null,"elapsedMs":201}}
+{"name":"in-check","h":400,"choice":{"move":"c2c3","score":142,"depth":11,"nodes":399016,"partial":null,"elapsedMs":401}}
+{"name":"candidate/b04#10","m":"level","l":["go movetime 60"],"lines":["info depth 5 score cp 224 nodes 56416 time 61 nps 924852 pv c5a4","bestmove c5a4"]}
+{"name":"candidate/b04#10","m":"level","l":["go wtime 4000 btime 4000"],"lines":["info depth 7 score cp 193 nodes 197728 time 201 nps 983721 pv c5a4","bestmove c5a4"]}
+{"name":"candidate/b04#10","m":"level","l":["go wtime 3000 btime 3000 winc 50 binc 50 movestogo 10"],"lines":["info depth 8 score cp 184 nodes 324704 time 326 nps 996025 pv c5a4","bestmove c5a4"]}
+{"name":"candidate/b04#10","m":"level","l":["go depth 5"],"lines":["info depth 5 score cp 224 nodes 23237 time 28 nps 829893 pv c5a4","bestmove c5a4"]}
+{"name":"candidate/b04#10","m":"level","l":["go nodes 30000"],"lines":["info depth 5 score cp 224 nodes 30816 time 36 nps 856000 pv c5a4","bestmove c5a4"]}
+{"name":"candidate/b04#10","m":"level","l":["setoption name Skill Level value 1","go"],"lines":["info depth 6 nodes 96352 time 101 pv c5a4","bestmove c5a4"]}
+{"name":"candidate/b04#10","m":"level","l":["setoption name Skill Level value 3","go wtime 4000 btime 4000"],"lines":["info depth 7 nodes 197728 time 201 pv c5a4","bestmove c5a4"]}
+{"name":"candidate/b04#10","m":"simple-tournament","l":["go movetime 60"],"lines":["info depth 5 score cp 224 nodes 56416 time 61 nps 924852 pv c5a4","bestmove c5a4"]}
+{"name":"candidate/b04#10","m":"simple-tournament","l":["go wtime 8000 btime 8000 movestogo 40"],"lines":["info depth 6 score cp 217 nodes 70752 time 76 nps 930947 pv c5a4","bestmove c5a4"]}
+{"name":"candidate/b04#10","m":"simple-tournament","l":["go wtime 1500 btime 1500"],"lines":["info depth 1 score cp 282 nodes 96 time 2 nps 48000 pv h3g2","bestmove h3g2"]}
+{"name":"candidate/b04#10","m":"simple-tournament","l":["go depth 5"],"lines":["info depth 5 score cp 224 nodes 23237 time 28 nps 829893 pv c5a4","bestmove c5a4"]}
+{"name":"candidate/b04#10","m":"simple-tournament","l":["go nodes 30000"],"lines":["info depth 5 score cp 224 nodes 30816 time 36 nps 856000 pv c5a4","bestmove c5a4"]}
+{"name":"candidate/b04#10","m":"uci-clock-mode","l":["go movetime 60"],"lines":["info depth 5 score cp 224 nodes 56416 time 61 nps 924852 pv c5a4","bestmove c5a4"]}
+{"name":"candidate/b04#10","m":"uci-clock-mode","l":["go wtime 8000 btime 8000 movestogo 40 movetime 60"],"lines":["info depth 5 score cp 224 nodes 56416 time 61 nps 924852 pv c5a4","bestmove c5a4"]}
+{"name":"candidate/b04#10","m":"uci-clock-mode","l":["go movetime 60 wtime 1500 btime 1500"],"lines":["info depth 5 score cp 224 nodes 56416 time 61 nps 924852 pv c5a4","bestmove c5a4"]}
+{"name":"candidate/b04#10","m":"uci-clock-mode","l":["go depth 5"],"lines":["info depth 5 score cp 224 nodes 23237 time 28 nps 829893 pv c5a4","bestmove c5a4"]}
+{"name":"candidate/b04#10","m":"uci-clock-mode","l":["go nodes 30000"],"lines":["info depth 5 score cp 224 nodes 30816 time 36 nps 856000 pv c5a4","bestmove c5a4"]}
+{"name":"candidate/b04#10","m":"uci-clock-mode","l":["go mate 2"],"lines":["info depth 3 score cp 216 nodes 2977 time 6 nps 496167 pv c5a4","bestmove c5a4"]}
+{"name":"candidate/b04#10","m":"uci-clock-mode","l":["go wtime 8000 movestogo 40 depth 5"],"lines":["info depth 5 score cp 224 nodes 23237 time 28 nps 829893 pv c5a4","bestmove c5a4"]}
+{"name":"candidate/b04#10","h":25,"choice":{"move":"c5a4","score":219,"depth":4,"nodes":21600,"partial":null,"elapsedMs":26}}
+{"name":"candidate/b04#10","h":50,"choice":{"move":"c5a4","score":224,"depth":5,"nodes":46176,"partial":null,"elapsedMs":51}}
+{"name":"candidate/b04#10","h":100,"choice":{"move":"c5a4","score":217,"depth":6,"nodes":96352,"partial":null,"elapsedMs":101}}
+{"name":"candidate/b04#10","h":200,"choice":{"move":"c5a4","score":193,"depth":7,"nodes":197728,"partial":null,"elapsedMs":201}}
+{"name":"candidate/b04#10","h":400,"choice":{"move":"c5a4","score":184,"depth":8,"nodes":401504,"partial":null,"elapsedMs":401}}
+{"name":"candidate/b08#19","m":"level","l":["go movetime 60"],"lines":["info depth 8 score cp 207 nodes 53278 time 61 nps 873410 pv e1d1","bestmove e1d1"]}
+{"name":"candidate/b08#19","m":"level","l":["go wtime 4000 btime 4000"],"lines":["info depth 9 score cp 219 nodes 195614 time 201 nps 973204 pv e1d1","bestmove e1d1"]}
+{"name":"candidate/b08#19","m":"level","l":["go wtime 3000 btime 3000 winc 50 binc 50 movestogo 10"],"lines":["info depth 10 score cp 212 nodes 322590 time 326 nps 989540 pv e1d1","bestmove e1d1"]}
+{"name":"candidate/b08#19","m":"level","l":["go depth 5"],"lines":["info depth 5 score cp 219 nodes 5616 time 11 nps 510545 pv e1d1","bestmove e1d1"]}
+{"name":"candidate/b08#19","m":"level","l":["go nodes 30000"],"lines":["info depth 6 score cp 187 nodes 30750 time 37 nps 831081 pv e1d1","bestmove e1d1"]}
+{"name":"candidate/b08#19","m":"level","l":["setoption name Skill Level value 1","go"],"lines":["info depth 8 nodes 94238 time 101 pv e1d1","bestmove e1d1"]}
+{"name":"candidate/b08#19","m":"level","l":["setoption name Skill Level value 3","go wtime 4000 btime 4000"],"lines":["info depth 9 nodes 195614 time 201 pv e1d1","bestmove e1d1"]}
+{"name":"candidate/b08#19","m":"simple-tournament","l":["go movetime 60"],"lines":["info depth 8 score cp 207 nodes 53278 time 61 nps 873410 pv e1d1","bestmove e1d1"]}
+{"name":"candidate/b08#19","m":"simple-tournament","l":["go wtime 8000 btime 8000 movestogo 40"],"lines":["info depth 8 score cp 207 nodes 68638 time 76 nps 903132 pv e1d1","bestmove e1d1"]}
+{"name":"candidate/b08#19","m":"simple-tournament","l":["go wtime 1500 btime 1500"],"lines":["info depth 1 score cp 221 nodes 30 time 2 nps 15000 pv e1d1","bestmove e1d1"]}
+{"name":"candidate/b08#19","m":"simple-tournament","l":["go depth 5"],"lines":["info depth 5 score cp 219 nodes 5616 time 11 nps 510545 pv e1d1","bestmove e1d1"]}
+{"name":"candidate/b08#19","m":"simple-tournament","l":["go nodes 30000"],"lines":["info depth 6 score cp 187 nodes 30750 time 37 nps 831081 pv e1d1","bestmove e1d1"]}
+{"name":"candidate/b08#19","m":"uci-clock-mode","l":["go movetime 60"],"lines":["info depth 8 score cp 207 nodes 53278 time 61 nps 873410 pv e1d1","bestmove e1d1"]}
+{"name":"candidate/b08#19","m":"uci-clock-mode","l":["go wtime 8000 btime 8000 movestogo 40 movetime 60"],"lines":["info depth 8 score cp 207 nodes 53278 time 61 nps 873410 pv e1d1","bestmove e1d1"]}
+{"name":"candidate/b08#19","m":"uci-clock-mode","l":["go movetime 60 wtime 1500 btime 1500"],"lines":["info depth 8 score cp 207 nodes 53278 time 61 nps 873410 pv e1d1","bestmove e1d1"]}
+{"name":"candidate/b08#19","m":"uci-clock-mode","l":["go depth 5"],"lines":["info depth 5 score cp 219 nodes 5616 time 11 nps 510545 pv e1d1","bestmove e1d1"]}
+{"name":"candidate/b08#19","m":"uci-clock-mode","l":["go nodes 30000"],"lines":["info depth 6 score cp 187 nodes 30750 time 37 nps 831081 pv e1d1","bestmove e1d1"]}
+{"name":"candidate/b08#19","m":"uci-clock-mode","l":["go mate 2"],"lines":["info depth 3 score cp 213 nodes 865 time 4 nps 216250 pv e1d1","bestmove e1d1"]}
+{"name":"candidate/b08#19","m":"uci-clock-mode","l":["go btime 8000 movestogo 40 depth 5"],"lines":["info depth 5 score cp 219 nodes 5616 time 11 nps 510545 pv e1d1","bestmove e1d1"]}
+{"name":"candidate/b08#19","h":25,"choice":{"move":"e1d1","score":187,"depth":6,"nodes":19486,"partial":null,"elapsedMs":26}}
+{"name":"candidate/b08#19","h":50,"choice":{"move":"e1d1","score":235,"depth":7,"nodes":44062,"partial":null,"elapsedMs":51}}
+{"name":"candidate/b08#19","h":100,"choice":{"move":"e1d1","score":207,"depth":8,"nodes":94238,"partial":null,"elapsedMs":101}}
+{"name":"candidate/b08#19","h":200,"choice":{"move":"e1d1","score":219,"depth":9,"nodes":195614,"partial":null,"elapsedMs":201}}
+{"name":"candidate/b08#19","h":400,"choice":{"move":"e1d1","score":212,"depth":10,"nodes":399390,"partial":null,"elapsedMs":401}}
+{"name":"candidate/b06#2","m":"level","l":["go movetime 60"],"lines":["info depth 6 score cp 157 nodes 55446 time 61 nps 908951 pv g4e5","bestmove g4e5"]}
+{"name":"candidate/b06#2","m":"level","l":["go wtime 4000 btime 4000"],"lines":["info depth 8 score cp 202 nodes 196758 time 201 nps 978896 pv c3b2","bestmove c3b2"]}
+{"name":"candidate/b06#2","m":"level","l":["go wtime 3000 btime 3000 winc 50 binc 50 movestogo 10"],"lines":["info depth 9 score cp 217 nodes 323734 time 326 nps 993049 pv c3b2","bestmove c3b2"]}
+{"name":"candidate/b06#2","m":"level","l":["go depth 5"],"lines":["info depth 5 score cp 179 nodes 10855 time 16 nps 678438 pv c3b2","bestmove c3b2"]}
+{"name":"candidate/b06#2","m":"level","l":["go nodes 30000"],"lines":["info depth 5 score cp 179 nodes 30870 time 36 nps 857500 pv c3b2","bestmove c3b2"]}
+{"name":"candidate/b06#2","m":"level","l":["setoption name Skill Level value 1","go"],"lines":["info depth 7 nodes 95382 time 101 pv c3b2","bestmove c3b2"]}
+{"name":"candidate/b06#2","m":"level","l":["setoption name Skill Level value 3","go wtime 4000 btime 4000"],"lines":["info depth 8 nodes 196758 time 201 pv c3b2","bestmove c3b2"]}
+{"name":"candidate/b06#2","m":"simple-tournament","l":["go movetime 60"],"lines":["info depth 6 score cp 157 nodes 55446 time 61 nps 908951 pv g4e5","bestmove g4e5"]}
+{"name":"candidate/b06#2","m":"simple-tournament","l":["go wtime 8000 btime 8000 movestogo 40"],"lines":["info depth 7 score cp 218 nodes 69782 time 76 nps 918184 pv c3b2","bestmove c3b2"]}
+{"name":"candidate/b06#2","m":"simple-tournament","l":["go wtime 1500 btime 1500"],"lines":["info depth 1 score cp 164 nodes 150 time 2 nps 75000 pv c3b2","bestmove c3b2"]}
+{"name":"candidate/b06#2","m":"simple-tournament","l":["go depth 5"],"lines":["info depth 5 score cp 179 nodes 10855 time 16 nps 678438 pv c3b2","bestmove c3b2"]}
+{"name":"candidate/b06#2","m":"simple-tournament","l":["go nodes 30000"],"lines":["info depth 5 score cp 179 nodes 30870 time 36 nps 857500 pv c3b2","bestmove c3b2"]}
+{"name":"candidate/b06#2","m":"uci-clock-mode","l":["go movetime 60"],"lines":["info depth 6 score cp 157 nodes 55446 time 61 nps 908951 pv g4e5","bestmove g4e5"]}
+{"name":"candidate/b06#2","m":"uci-clock-mode","l":["go wtime 8000 btime 8000 movestogo 40 movetime 60"],"lines":["info depth 6 score cp 157 nodes 55446 time 61 nps 908951 pv g4e5","bestmove g4e5"]}
+{"name":"candidate/b06#2","m":"uci-clock-mode","l":["go movetime 60 wtime 1500 btime 1500"],"lines":["info depth 6 score cp 157 nodes 55446 time 61 nps 908951 pv g4e5","bestmove g4e5"]}
+{"name":"candidate/b06#2","m":"uci-clock-mode","l":["go depth 5"],"lines":["info depth 5 score cp 179 nodes 10855 time 16 nps 678438 pv c3b2","bestmove c3b2"]}
+{"name":"candidate/b06#2","m":"uci-clock-mode","l":["go nodes 30000"],"lines":["info depth 5 score cp 179 nodes 30870 time 36 nps 857500 pv c3b2","bestmove c3b2"]}
+{"name":"candidate/b06#2","m":"uci-clock-mode","l":["go mate 2"],"lines":["info depth 3 score cp 172 nodes 1406 time 5 nps 281200 pv c3b2","bestmove c3b2"]}
+{"name":"candidate/b06#2","m":"uci-clock-mode","l":["go wtime 8000 movestogo 40 depth 5"],"lines":["info depth 5 score cp 179 nodes 10855 time 16 nps 678438 pv c3b2","bestmove c3b2"]}
+{"name":"candidate/b06#2","h":25,"choice":{"move":"c3b2","score":179,"depth":5,"nodes":20630,"partial":null,"elapsedMs":26}}
+{"name":"candidate/b06#2","h":50,"choice":{"move":"g4e5","score":157,"depth":6,"nodes":45206,"partial":null,"elapsedMs":51}}
+{"name":"candidate/b06#2","h":100,"choice":{"move":"c3b2","score":218,"depth":7,"nodes":95382,"partial":null,"elapsedMs":101}}
+{"name":"candidate/b06#2","h":200,"choice":{"move":"c3b2","score":202,"depth":8,"nodes":196758,"partial":null,"elapsedMs":201}}
+{"name":"candidate/b06#2","h":400,"choice":{"move":"c3b2","score":217,"depth":9,"nodes":400534,"partial":null,"elapsedMs":401}}
+{"name":"base/b09#8","m":"level","l":["go movetime 60"],"lines":["info depth 6 score cp 467 nodes 55349 time 61 nps 907361 pv f2e3","bestmove f2e3"]}
+{"name":"base/b09#8","m":"level","l":["go wtime 4000 btime 4000"],"lines":["info depth 7 score cp 467 nodes 197685 time 201 nps 983507 pv f2e3","bestmove f2e3"]}
+{"name":"base/b09#8","m":"level","l":["go wtime 3000 btime 3000 winc 50 binc 50 movestogo 10"],"lines":["info depth 8 score cp 429 nodes 324661 time 326 nps 995893 pv f2e3","bestmove f2e3"]}
+{"name":"base/b09#8","m":"level","l":["go depth 5"],"lines":["info depth 5 score cp 493 nodes 14094 time 19 nps 741789 pv f2e3","bestmove f2e3"]}
+{"name":"base/b09#8","m":"level","l":["go nodes 30000"],"lines":["info depth 5 score cp 493 nodes 30773 time 36 nps 854806 pv f2e3","bestmove f2e3"]}
+{"name":"base/b09#8","m":"level","l":["setoption name Skill Level value 1","go"],"lines":["info depth 7 nodes 95285 time 101 pv f2e3","bestmove f2e3"]}
+{"name":"base/b09#8","m":"level","l":["setoption name Skill Level value 3","go wtime 4000 btime 4000"],"lines":["info depth 7 nodes 197685 time 201 pv f2e3","bestmove f2e3"]}
+{"name":"base/b09#8","m":"simple-tournament","l":["go movetime 60"],"lines":["info depth 6 score cp 467 nodes 55349 time 61 nps 907361 pv f2e3","bestmove f2e3"]}
+{"name":"base/b09#8","m":"simple-tournament","l":["go wtime 8000 btime 8000 movestogo 40"],"lines":["info depth 6 score cp 467 nodes 70709 time 76 nps 930382 pv f2e3","bestmove f2e3"]}
+{"name":"base/b09#8","m":"simple-tournament","l":["go wtime 1500 btime 1500"],"lines":["info depth 1 score cp 540 nodes 53 time 2 nps 26500 pv a1e5","bestmove a1e5"]}
+{"name":"base/b09#8","m":"simple-tournament","l":["go depth 5"],"lines":["info depth 5 score cp 493 nodes 14094 time 19 nps 741789 pv f2e3","bestmove f2e3"]}
+{"name":"base/b09#8","m":"simple-tournament","l":["go nodes 30000"],"lines":["info depth 5 score cp 493 nodes 30773 time 36 nps 854806 pv f2e3","bestmove f2e3"]}
+{"name":"base/b09#8","m":"uci-clock-mode","l":["go movetime 60"],"lines":["info depth 6 score cp 467 nodes 55349 time 61 nps 907361 pv f2e3","bestmove f2e3"]}
+{"name":"base/b09#8","m":"uci-clock-mode","l":["go wtime 8000 btime 8000 movestogo 40 movetime 60"],"lines":["info depth 6 score cp 467 nodes 55349 time 61 nps 907361 pv f2e3","bestmove f2e3"]}
+{"name":"base/b09#8","m":"uci-clock-mode","l":["go movetime 60 wtime 1500 btime 1500"],"lines":["info depth 6 score cp 467 nodes 55349 time 61 nps 907361 pv f2e3","bestmove f2e3"]}
+{"name":"base/b09#8","m":"uci-clock-mode","l":["go depth 5"],"lines":["info depth 5 score cp 493 nodes 14094 time 19 nps 741789 pv f2e3","bestmove f2e3"]}
+{"name":"base/b09#8","m":"uci-clock-mode","l":["go nodes 30000"],"lines":["info depth 5 score cp 493 nodes 30773 time 36 nps 854806 pv f2e3","bestmove f2e3"]}
+{"name":"base/b09#8","m":"uci-clock-mode","l":["go mate 2"],"lines":["info depth 3 score cp 475 nodes 4276 time 8 nps 534500 pv a1f6","bestmove a1f6"]}
+{"name":"base/b09#8","m":"uci-clock-mode","l":["go wtime 8000 movestogo 40 depth 5"],"lines":["info depth 5 score cp 493 nodes 14094 time 19 nps 741789 pv f2e3","bestmove f2e3"]}
+{"name":"base/b09#8","h":25,"choice":{"move":"f2e3","score":493,"depth":5,"nodes":20533,"partial":null,"elapsedMs":26}}
+{"name":"base/b09#8","h":50,"choice":{"move":"f2e3","score":467,"depth":6,"nodes":45109,"partial":null,"elapsedMs":51}}
+{"name":"base/b09#8","h":100,"choice":{"move":"f2e3","score":467,"depth":7,"nodes":95285,"partial":null,"elapsedMs":101}}
+{"name":"base/b09#8","h":200,"choice":{"move":"f2e3","score":467,"depth":7,"nodes":197685,"partial":null,"elapsedMs":201}}
+{"name":"base/b09#8","h":400,"choice":{"move":"f2e3","score":429,"depth":8,"nodes":401461,"partial":null,"elapsedMs":401}}
+{"name":"base/b10#17","m":"level","l":["go movetime 60"],"lines":["info depth 6 score cp 337 nodes 55345 time 61 nps 907295 pv a1c1","bestmove a1c1"]}
+{"name":"base/b10#17","m":"level","l":["go wtime 4000 btime 4000"],"lines":["info depth 8 score cp 309 nodes 196657 time 201 nps 978393 pv a1c1","bestmove a1c1"]}
+{"name":"base/b10#17","m":"level","l":["go wtime 3000 btime 3000 winc 50 binc 50 movestogo 10"],"lines":["info depth 8 score cp 309 nodes 324657 time 326 nps 995880 pv a1c1","bestmove a1c1"]}
+{"name":"base/b10#17","m":"level","l":["go depth 5"],"lines":["info depth 5 score cp 316 nodes 18613 time 24 nps 775542 pv a1c1","bestmove a1c1"]}
+{"name":"base/b10#17","m":"level","l":["go nodes 30000"],"lines":["info depth 5 score cp 316 nodes 30769 time 36 nps 854694 pv a1c1","bestmove a1c1"]}
+{"name":"base/b10#17","m":"level","l":["setoption name Skill Level value 1","go"],"lines":["info depth 7 nodes 95281 time 101 pv a1c1","bestmove a1c1"]}
+{"name":"base/b10#17","m":"level","l":["setoption name Skill Level value 3","go wtime 4000 btime 4000"],"lines":["info depth 8 nodes 196657 time 201 pv a1c1","bestmove a1c1"]}
+{"name":"base/b10#17","m":"simple-tournament","l":["go movetime 60"],"lines":["info depth 6 score cp 337 nodes 55345 time 61 nps 907295 pv a1c1","bestmove a1c1"]}
+{"name":"base/b10#17","m":"simple-tournament","l":["go wtime 8000 btime 8000 movestogo 40"],"lines":["info depth 6 score cp 337 nodes 70705 time 76 nps 930329 pv a1c1","bestmove a1c1"]}
+{"name":"base/b10#17","m":"simple-tournament","l":["go wtime 1500 btime 1500"],"lines":["info depth 1 score cp 371 nodes 49 time 2 nps 24500 pv a1c1","bestmove a1c1"]}
+{"name":"base/b10#17","m":"simple-tournament","l":["go depth 5"],"lines":["info depth 5 score cp 316 nodes 18613 time 24 nps 775542 pv a1c1","bestmove a1c1"]}
+{"name":"base/b10#17","m":"simple-tournament","l":["go nodes 30000"],"lines":["info depth 5 score cp 316 nodes 30769 time 36 nps 854694 pv a1c1","bestmove a1c1"]}
+{"name":"base/b10#17","m":"uci-clock-mode","l":["go movetime 60"],"lines":["info depth 6 score cp 337 nodes 55345 time 61 nps 907295 pv a1c1","bestmove a1c1"]}
+{"name":"base/b10#17","m":"uci-clock-mode","l":["go wtime 8000 btime 8000 movestogo 40 movetime 60"],"lines":["info depth 6 score cp 337 nodes 55345 time 61 nps 907295 pv a1c1","bestmove a1c1"]}
+{"name":"base/b10#17","m":"uci-clock-mode","l":["go movetime 60 wtime 1500 btime 1500"],"lines":["info depth 6 score cp 337 nodes 55345 time 61 nps 907295 pv a1c1","bestmove a1c1"]}
+{"name":"base/b10#17","m":"uci-clock-mode","l":["go depth 5"],"lines":["info depth 5 score cp 316 nodes 18613 time 24 nps 775542 pv a1c1","bestmove a1c1"]}
+{"name":"base/b10#17","m":"uci-clock-mode","l":["go nodes 30000"],"lines":["info depth 5 score cp 316 nodes 30769 time 36 nps 854694 pv a1c1","bestmove a1c1"]}
+{"name":"base/b10#17","m":"uci-clock-mode","l":["go mate 2"],"lines":["info depth 3 score cp 345 nodes 1838 time 5 nps 367600 pv a1c1","bestmove a1c1"]}
+{"name":"base/b10#17","m":"uci-clock-mode","l":["go btime 8000 movestogo 40 depth 5"],"lines":["info depth 5 score cp 316 nodes 18613 time 24 nps 775542 pv a1c1","bestmove a1c1"]}
+{"name":"base/b10#17","h":25,"choice":{"move":"a1c1","score":316,"depth":5,"nodes":20529,"partial":null,"elapsedMs":26}}
+{"name":"base/b10#17","h":50,"choice":{"move":"a1c1","score":337,"depth":6,"nodes":45105,"partial":null,"elapsedMs":51}}
+{"name":"base/b10#17","h":100,"choice":{"move":"a1c1","score":317,"depth":7,"nodes":95281,"partial":null,"elapsedMs":101}}
+{"name":"base/b10#17","h":200,"choice":{"move":"a1c1","score":309,"depth":8,"nodes":196657,"partial":null,"elapsedMs":201}}
+{"name":"base/b10#17","h":400,"choice":{"move":"a1c1","score":309,"depth":8,"nodes":401457,"partial":null,"elapsedMs":401}}
+{"name":"base/b04#6","m":"level","l":["go movetime 60"],"lines":["info depth 7 score cp 75 nodes 54332 time 61 nps 890689 pv d7f6","bestmove d7f6"]}
+{"name":"base/b04#6","m":"level","l":["go wtime 4000 btime 4000"],"lines":["info depth 8 score cp 70 nodes 196668 time 201 nps 978448 pv d7f6","bestmove d7f6"]}
+{"name":"base/b04#6","m":"level","l":["go wtime 3000 btime 3000 winc 50 binc 50 movestogo 10"],"lines":["info depth 9 score cp 81 nodes 323644 time 326 nps 992773 pv d7f6","bestmove d7f6"]}
+{"name":"base/b04#6","m":"level","l":["go depth 5"],"lines":["info depth 5 score cp 75 nodes 4849 time 10 nps 484900 pv d7f6","bestmove d7f6"]}
+{"name":"base/b04#6","m":"level","l":["go nodes 30000"],"lines":["info depth 5 score cp 75 nodes 30780 time 36 nps 855000 pv d7f6","bestmove d7f6"]}
+{"name":"base/b04#6","m":"level","l":["setoption name Skill Level value 1","go"],"lines":["info depth 7 nodes 95292 time 101 pv d7f6","bestmove d7f6"]}
+{"name":"base/b04#6","m":"level","l":["setoption name Skill Level value 3","go wtime 4000 btime 4000"],"lines":["info depth 8 nodes 196668 time 201 pv d7f6","bestmove d7f6"]}
+{"name":"base/b04#6","m":"simple-tournament","l":["go movetime 60"],"lines":["info depth 7 score cp 75 nodes 54332 time 61 nps 890689 pv d7f6","bestmove d7f6"]}
+{"name":"base/b04#6","m":"simple-tournament","l":["go wtime 8000 btime 8000 movestogo 40"],"lines":["info depth 7 score cp 75 nodes 69692 time 76 nps 917000 pv d7f6","bestmove d7f6"]}
+{"name":"base/b04#6","m":"simple-tournament","l":["go wtime 1500 btime 1500"],"lines":["info depth 1 score cp 75 nodes 60 time 2 nps 30000 pv d7f6","bestmove d7f6"]}
+{"name":"base/b04#6","m":"simple-tournament","l":["go depth 5"],"lines":["info depth 5 score cp 75 nodes 4849 time 10 nps 484900 pv d7f6","bestmove d7f6"]}
+{"name":"base/b04#6","m":"simple-tournament","l":["go nodes 30000"],"lines":["info depth 5 score cp 75 nodes 30780 time 36 nps 855000 pv d7f6","bestmove d7f6"]}
+{"name":"base/b04#6","m":"uci-clock-mode","l":["go movetime 60"],"lines":["info depth 7 score cp 75 nodes 54332 time 61 nps 890689 pv d7f6","bestmove d7f6"]}
+{"name":"base/b04#6","m":"uci-clock-mode","l":["go wtime 8000 btime 8000 movestogo 40 movetime 60"],"lines":["info depth 7 score cp 75 nodes 54332 time 61 nps 890689 pv d7f6","bestmove d7f6"]}
+{"name":"base/b04#6","m":"uci-clock-mode","l":["go movetime 60 wtime 1500 btime 1500"],"lines":["info depth 7 score cp 75 nodes 54332 time 61 nps 890689 pv d7f6","bestmove d7f6"]}
+{"name":"base/b04#6","m":"uci-clock-mode","l":["go depth 5"],"lines":["info depth 5 score cp 75 nodes 4849 time 10 nps 484900 pv d7f6","bestmove d7f6"]}
+{"name":"base/b04#6","m":"uci-clock-mode","l":["go nodes 30000"],"lines":["info depth 5 score cp 75 nodes 30780 time 36 nps 855000 pv d7f6","bestmove d7f6"]}
+{"name":"base/b04#6","m":"uci-clock-mode","l":["go mate 2"],"lines":["info depth 3 score cp 82 nodes 923 time 4 nps 230750 pv d7f6","bestmove d7f6"]}
+{"name":"base/b04#6","m":"uci-clock-mode","l":["go wtime 8000 movestogo 40 depth 5"],"lines":["info depth 5 score cp 75 nodes 4849 time 10 nps 484900 pv d7f6","bestmove d7f6"]}
+{"name":"base/b04#6","h":25,"choice":{"move":"d7f6","score":75,"depth":5,"nodes":20540,"partial":null,"elapsedMs":26}}
+{"name":"base/b04#6","h":50,"choice":{"move":"d7f6","score":75,"depth":6,"nodes":45116,"partial":null,"elapsedMs":51}}
+{"name":"base/b04#6","h":100,"choice":{"move":"d7f6","score":75,"depth":7,"nodes":95292,"partial":null,"elapsedMs":101}}
+{"name":"base/b04#6","h":200,"choice":{"move":"d7f6","score":70,"depth":8,"nodes":196668,"partial":null,"elapsedMs":201}}
+{"name":"base/b04#6","h":400,"choice":{"move":"d7f6","score":81,"depth":9,"nodes":400444,"partial":null,"elapsedMs":401}}
+{"name":"candidate/b06#3","m":"level","l":["go movetime 60"],"lines":["info depth 6 score cp 56 nodes 55371 time 61 nps 907721 pv d1a4","bestmove d1a4"]}
+{"name":"candidate/b06#3","m":"level","l":["go wtime 4000 btime 4000"],"lines":["info depth 7 score cp 77 nodes 197707 time 201 nps 983617 pv d1b3","bestmove d1b3"]}
+{"name":"candidate/b06#3","m":"level","l":["go wtime 3000 btime 3000 winc 50 binc 50 movestogo 10"],"lines":["info depth 8 score cp 49 nodes 324683 time 326 nps 995960 pv e2e3","bestmove e2e3"]}
+{"name":"candidate/b06#3","m":"level","l":["go depth 5"],"lines":["info depth 5 score cp 95 nodes 8595 time 14 nps 613929 pv b1c3","bestmove b1c3"]}
+{"name":"candidate/b06#3","m":"level","l":["go nodes 30000"],"lines":["info depth 5 score cp 95 nodes 30795 time 36 nps 855417 pv b1c3","bestmove b1c3"]}
+{"name":"candidate/b06#3","m":"level","l":["setoption name Skill Level value 1","go"],"lines":["info depth 7 nodes 95307 time 101 pv d1b3","bestmove d1b3"]}
+{"name":"candidate/b06#3","m":"level","l":["setoption name Skill Level value 3","go wtime 4000 btime 4000"],"lines":["info depth 7 nodes 197707 time 201 pv d1b3","bestmove d1b3"]}
+{"name":"candidate/b06#3","m":"simple-tournament","l":["go movetime 60"],"lines":["info depth 6 score cp 56 nodes 55371 time 61 nps 907721 pv d1a4","bestmove d1a4"]}
+{"name":"candidate/b06#3","m":"simple-tournament","l":["go wtime 8000 btime 8000 movestogo 40"],"lines":["info depth 7 score cp 77 nodes 69707 time 76 nps 917197 pv d1b3","bestmove d1b3"]}
+{"name":"candidate/b06#3","m":"simple-tournament","l":["go wtime 1500 btime 1500"],"lines":["info depth 1 score cp 102 nodes 75 time 2 nps 37500 pv d1a4","bestmove d1a4"]}
+{"name":"candidate/b06#3","m":"simple-tournament","l":["go depth 5"],"lines":["info depth 5 score cp 95 nodes 8595 time 14 nps 613929 pv b1c3","bestmove b1c3"]}
+{"name":"candidate/b06#3","m":"simple-tournament","l":["go nodes 30000"],"lines":["info depth 5 score cp 95 nodes 30795 time 36 nps 855417 pv b1c3","bestmove b1c3"]}
+{"name":"candidate/b06#3","m":"uci-clock-mode","l":["go movetime 60"],"lines":["info depth 6 score cp 56 nodes 55371 time 61 nps 907721 pv d1a4","bestmove d1a4"]}
+{"name":"candidate/b06#3","m":"uci-clock-mode","l":["go wtime 8000 btime 8000 movestogo 40 movetime 60"],"lines":["info depth 6 score cp 56 nodes 55371 time 61 nps 907721 pv d1a4","bestmove d1a4"]}
+{"name":"candidate/b06#3","m":"uci-clock-mode","l":["go movetime 60 wtime 1500 btime 1500"],"lines":["info depth 6 score cp 56 nodes 55371 time 61 nps 907721 pv d1a4","bestmove d1a4"]}
+{"name":"candidate/b06#3","m":"uci-clock-mode","l":["go depth 5"],"lines":["info depth 5 score cp 95 nodes 8595 time 14 nps 613929 pv b1c3","bestmove b1c3"]}
+{"name":"candidate/b06#3","m":"uci-clock-mode","l":["go nodes 30000"],"lines":["info depth 5 score cp 95 nodes 30795 time 36 nps 855417 pv b1c3","bestmove b1c3"]}
+{"name":"candidate/b06#3","m":"uci-clock-mode","l":["go mate 2"],"lines":["info depth 3 score cp 86 nodes 1744 time 5 nps 348800 pv b1c3","bestmove b1c3"]}
+{"name":"candidate/b06#3","m":"uci-clock-mode","l":["go btime 8000 movestogo 40 depth 5"],"lines":["info depth 5 score cp 95 nodes 8595 time 14 nps 613929 pv b1c3","bestmove b1c3"]}
+{"name":"candidate/b06#3","h":25,"choice":{"move":"b1c3","score":95,"depth":5,"nodes":20555,"partial":null,"elapsedMs":26}}
+{"name":"candidate/b06#3","h":50,"choice":{"move":"d1a4","score":56,"depth":6,"nodes":45131,"partial":null,"elapsedMs":51}}
+{"name":"candidate/b06#3","h":100,"choice":{"move":"d1b3","score":77,"depth":7,"nodes":95307,"partial":null,"elapsedMs":101}}
+{"name":"candidate/b06#3","h":200,"choice":{"move":"d1b3","score":77,"depth":7,"nodes":197707,"partial":null,"elapsedMs":201}}
+{"name":"candidate/b06#3","h":400,"choice":{"move":"e2e3","score":49,"depth":8,"nodes":401483,"partial":null,"elapsedMs":401}}
+{"name":"candidate/b10#7","m":"level","l":["go movetime 60"],"lines":["info depth 7 score cp 127 nodes 54416 time 61 nps 892066 pv f4h5","bestmove f4h5"]}
+{"name":"candidate/b10#7","m":"level","l":["go wtime 4000 btime 4000"],"lines":["info depth 9 score cp 105 nodes 195728 time 201 nps 973771 pv f4h5","bestmove f4h5"]}
+{"name":"candidate/b10#7","m":"level","l":["go wtime 3000 btime 3000 winc 50 binc 50 movestogo 10"],"lines":["info depth 9 score cp 105 nodes 323728 time 326 nps 993031 pv f4h5","bestmove f4h5"]}
+{"name":"candidate/b10#7","m":"level","l":["go depth 5"],"lines":["info depth 5 score cp 132 nodes 10942 time 16 nps 683875 pv f4h5","bestmove f4h5"]}
+{"name":"candidate/b10#7","m":"level","l":["go nodes 30000"],"lines":["info depth 6 score cp 115 nodes 30864 time 37 nps 834162 pv f4h5","bestmove f4h5"]}
+{"name":"candidate/b10#7","m":"level","l":["setoption name Skill Level value 1","go"],"lines":["info depth 8 nodes 94352 time 101 pv f4h5","bestmove f4h5"]}
+{"name":"candidate/b10#7","m":"level","l":["setoption name Skill Level value 3","go wtime 4000 btime 4000"],"lines":["info depth 9 nodes 195728 time 201 pv f4h5","bestmove f4h5"]}
+{"name":"candidate/b10#7","m":"simple-tournament","l":["go movetime 60"],"lines":["info depth 7 score cp 127 nodes 54416 time 61 nps 892066 pv f4h5","bestmove f4h5"]}
+{"name":"candidate/b10#7","m":"simple-tournament","l":["go wtime 8000 btime 8000 movestogo 40"],"lines":["info depth 8 score cp 115 nodes 68752 time 76 nps 904632 pv f4h5","bestmove f4h5"]}
+{"name":"candidate/b10#7","m":"simple-tournament","l":["go wtime 1500 btime 1500"],"lines":["info depth 1 score cp 163 nodes 144 time 2 nps 72000 pv f4g6","bestmove f4g6"]}
+{"name":"candidate/b10#7","m":"simple-tournament","l":["go depth 5"],"lines":["info depth 5 score cp 132 nodes 10942 time 16 nps 683875 pv f4h5","bestmove f4h5"]}
+{"name":"candidate/b10#7","m":"simple-tournament","l":["go nodes 30000"],"lines":["info depth 6 score cp 115 nodes 30864 time 37 nps 834162 pv f4h5","bestmove f4h5"]}
+{"name":"candidate/b10#7","m":"uci-clock-mode","l":["go movetime 60"],"lines":["info depth 7 score cp 127 nodes 54416 time 61 nps 892066 pv f4h5","bestmove f4h5"]}
+{"name":"candidate/b10#7","m":"uci-clock-mode","l":["go wtime 8000 btime 8000 movestogo 40 movetime 60"],"lines":["info depth 7 score cp 127 nodes 54416 time 61 nps 892066 pv f4h5","bestmove f4h5"]}
+{"name":"candidate/b10#7","m":"uci-clock-mode","l":["go movetime 60 wtime 1500 btime 1500"],"lines":["info depth 7 score cp 127 nodes 54416 time 61 nps 892066 pv f4h5","bestmove f4h5"]}
+{"name":"candidate/b10#7","m":"uci-clock-mode","l":["go depth 5"],"lines":["info depth 5 score cp 132 nodes 10942 time 16 nps 683875 pv f4h5","bestmove f4h5"]}
+{"name":"candidate/b10#7","m":"uci-clock-mode","l":["go nodes 30000"],"lines":["info depth 6 score cp 115 nodes 30864 time 37 nps 834162 pv f4h5","bestmove f4h5"]}
+{"name":"candidate/b10#7","m":"uci-clock-mode","l":["go mate 2"],"lines":["info depth 3 score cp 149 nodes 892 time 4 nps 223000 pv f4g6","bestmove f4g6"]}
+{"name":"candidate/b10#7","m":"uci-clock-mode","l":["go btime 8000 movestogo 40 depth 5"],"lines":["info depth 5 score cp 132 nodes 10942 time 16 nps 683875 pv f4h5","bestmove f4h5"]}
+{"name":"candidate/b10#7","h":25,"choice":{"move":"f4h5","score":115,"depth":6,"nodes":20204,"partial":null,"elapsedMs":26}}
+{"name":"candidate/b10#7","h":50,"choice":{"move":"f4h5","score":127,"depth":7,"nodes":44176,"partial":null,"elapsedMs":51}}
+{"name":"candidate/b10#7","h":100,"choice":{"move":"f4h5","score":115,"depth":8,"nodes":94352,"partial":null,"elapsedMs":101}}
+{"name":"candidate/b10#7","h":200,"choice":{"move":"f4h5","score":105,"depth":9,"nodes":195728,"partial":null,"elapsedMs":201}}
+{"name":"candidate/b10#7","h":400,"choice":{"move":"f4h5","score":105,"depth":9,"nodes":400528,"partial":null,"elapsedMs":401}}
+{"name":"base/b08#7","m":"level","l":["go movetime 60"],"lines":["info depth 6 score cp -99 nodes 55340 time 61 nps 907213 pv g2g3","bestmove g2g3"]}
+{"name":"base/b08#7","m":"level","l":["go wtime 4000 btime 4000"],"lines":["info depth 7 score cp -117 nodes 197676 time 201 nps 983463 pv a2a4","bestmove a2a4"]}
+{"name":"base/b08#7","m":"level","l":["go wtime 3000 btime 3000 winc 50 binc 50 movestogo 10"],"lines":["info depth 8 score cp -116 nodes 324652 time 326 nps 995865 pv a2a4","bestmove a2a4"]}
+{"name":"base/b08#7","m":"level","l":["go depth 5"],"lines":["info depth 5 score cp -98 nodes 17099 time 22 nps 777227 pv f3b7","bestmove f3b7"]}
+{"name":"base/b08#7","m":"level","l":["go nodes 30000"],"lines":["info depth 5 score cp -98 nodes 30764 time 36 nps 854556 pv f3b7","bestmove f3b7"]}
+{"name":"base/b08#7","m":"level","l":["setoption name Skill Level value 1","go"],"lines":["info depth 6 nodes 96300 time 101 pv g2g3","bestmove g2g3"]}
+{"name":"base/b08#7","m":"level","l":["setoption name Skill Level value 3","go wtime 4000 btime 4000"],"lines":["info depth 7 nodes 197676 time 201 pv a2a4","bestmove a2a4"]}
+{"name":"base/b08#7","m":"simple-tournament","l":["go movetime 60"],"lines":["info depth 6 score cp -99 nodes 55340 time 61 nps 907213 pv g2g3","bestmove g2g3"]}
+{"name":"base/b08#7","m":"simple-tournament","l":["go wtime 8000 btime 8000 movestogo 40"],"lines":["info depth 6 score cp -99 nodes 70700 time 76 nps 930263 pv g2g3","bestmove g2g3"]}
+{"name":"base/b08#7","m":"simple-tournament","l":["go wtime 1500 btime 1500"],"lines":["info depth 1 score cp -72 nodes 44 time 2 nps 22000 pv b1c2","bestmove b1c2"]}
+{"name":"base/b08#7","m":"simple-tournament","l":["go depth 5"],"lines":["info depth 5 score cp -98 nodes 17099 time 22 nps 777227 pv f3b7","bestmove f3b7"]}
+{"name":"base/b08#7","m":"simple-tournament","l":["go nodes 30000"],"lines":["info depth 5 score cp -98 nodes 30764 time 36 nps 854556 pv f3b7","bestmove f3b7"]}
+{"name":"base/b08#7","m":"uci-clock-mode","l":["go movetime 60"],"lines":["info depth 6 score cp -99 nodes 55340 time 61 nps 907213 pv g2g3","bestmove g2g3"]}
+{"name":"base/b08#7","m":"uci-clock-mode","l":["go wtime 8000 btime 8000 movestogo 40 movetime 60"],"lines":["info depth 6 score cp -99 nodes 55340 time 61 nps 907213 pv g2g3","bestmove g2g3"]}
+{"name":"base/b08#7","m":"uci-clock-mode","l":["go movetime 60 wtime 1500 btime 1500"],"lines":["info depth 6 score cp -99 nodes 55340 time 61 nps 907213 pv g2g3","bestmove g2g3"]}
+{"name":"base/b08#7","m":"uci-clock-mode","l":["go depth 5"],"lines":["info depth 5 score cp -98 nodes 17099 time 22 nps 777227 pv f3b7","bestmove f3b7"]}
+{"name":"base/b08#7","m":"uci-clock-mode","l":["go nodes 30000"],"lines":["info depth 5 score cp -98 nodes 30764 time 36 nps 854556 pv f3b7","bestmove f3b7"]}
+{"name":"base/b08#7","m":"uci-clock-mode","l":["go mate 2"],"lines":["info depth 3 score cp -69 nodes 1647 time 5 nps 329400 pv f3b7","bestmove f3b7"]}
+{"name":"base/b08#7","m":"uci-clock-mode","l":["go btime 8000 movestogo 40 depth 5"],"lines":["info depth 5 score cp -98 nodes 17099 time 22 nps 777227 pv f3b7","bestmove f3b7"]}
+{"name":"base/b08#7","h":25,"choice":{"move":"f3b7","score":-98,"depth":5,"nodes":20524,"partial":null,"elapsedMs":26}}
+{"name":"base/b08#7","h":50,"choice":{"move":"g2g3","score":-99,"depth":6,"nodes":45430,"partial":null,"elapsedMs":51}}
+{"name":"base/b08#7","h":100,"choice":{"move":"g2g3","score":-99,"depth":6,"nodes":96300,"partial":null,"elapsedMs":101}}
+{"name":"base/b08#7","h":200,"choice":{"move":"a2a4","score":-117,"depth":7,"nodes":197676,"partial":null,"elapsedMs":201}}
+{"name":"base/b08#7","h":400,"choice":{"move":"a2a4","score":-116,"depth":8,"nodes":401452,"partial":null,"elapsedMs":401}}
+{"name":"candidate/b03#19","m":"level","l":["go movetime 60"],"lines":["info depth 7 score cp 608 nodes 54324 time 61 nps 890557 pv b7b4","bestmove b7b4"]}
+{"name":"candidate/b03#19","m":"level","l":["go wtime 4000 btime 4000"],"lines":["info depth 8 score cp 608 nodes 196660 time 201 nps 978408 pv b7b4","bestmove b7b4"]}
+{"name":"candidate/b03#19","m":"level","l":["go wtime 3000 btime 3000 winc 50 binc 50 movestogo 10"],"lines":["info depth 9 score cp 594 nodes 323636 time 326 nps 992748 pv b7b4","bestmove b7b4"]}
+{"name":"candidate/b03#19","m":"level","l":["go depth 5"],"lines":["info depth 5 score cp 605 nodes 11083 time 16 nps 692688 pv b7b4","bestmove b7b4"]}
+{"name":"candidate/b03#19","m":"level","l":["go nodes 30000"],"lines":["info depth 6 score cp 576 nodes 30772 time 37 nps 831676 pv b7b4","bestmove b7b4"]}
+{"name":"candidate/b03#19","m":"level","l":["setoption name Skill Level value 1","go"],"lines":["info depth 7 nodes 95284 time 101 pv b7b4","bestmove b7b4"]}
+{"name":"candidate/b03#19","m":"level","l":["setoption name Skill Level value 3","go wtime 4000 btime 4000"],"lines":["info depth 8 nodes 196660 time 201 pv b7b4","bestmove b7b4"]}
+{"name":"candidate/b03#19","m":"simple-tournament","l":["go movetime 60"],"lines":["info depth 7 score cp 608 nodes 54324 time 61 nps 890557 pv b7b4","bestmove b7b4"]}
+{"name":"candidate/b03#19","m":"simple-tournament","l":["go wtime 8000 btime 8000 movestogo 40"],"lines":["info depth 7 score cp 608 nodes 69684 time 76 nps 916895 pv b7b4","bestmove b7b4"]}
+{"name":"candidate/b03#19","m":"simple-tournament","l":["go wtime 1500 btime 1500"],"lines":["info depth 1 score cp 704 nodes 52 time 2 nps 26000 pv b7b4","bestmove b7b4"]}
+{"name":"candidate/b03#19","m":"simple-tournament","l":["go depth 5"],"lines":["info depth 5 score cp 605 nodes 11083 time 16 nps 692688 pv b7b4","bestmove b7b4"]}
+{"name":"candidate/b03#19","m":"simple-tournament","l":["go nodes 30000"],"lines":["info depth 6 score cp 576 nodes 30772 time 37 nps 831676 pv b7b4","bestmove b7b4"]}
+{"name":"candidate/b03#19","m":"uci-clock-mode","l":["go movetime 60"],"lines":["info depth 7 score cp 608 nodes 54324 time 61 nps 890557 pv b7b4","bestmove b7b4"]}
+{"name":"candidate/b03#19","m":"uci-clock-mode","l":["go wtime 8000 btime 8000 movestogo 40 movetime 60"],"lines":["info depth 7 score cp 608 nodes 54324 time 61 nps 890557 pv b7b4","bestmove b7b4"]}
+{"name":"candidate/b03#19","m":"uci-clock-mode","l":["go movetime 60 wtime 1500 btime 1500"],"lines":["info depth 7 score cp 608 nodes 54324 time 61 nps 890557 pv b7b4","bestmove b7b4"]}
+{"name":"candidate/b03#19","m":"uci-clock-mode","l":["go depth 5"],"lines":["info depth 5 score cp 605 nodes 11083 time 16 nps 692688 pv b7b4","bestmove b7b4"]}
+{"name":"candidate/b03#19","m":"uci-clock-mode","l":["go nodes 30000"],"lines":["info depth 6 score cp 576 nodes 30772 time 37 nps 831676 pv b7b4","bestmove b7b4"]}
+{"name":"candidate/b03#19","m":"uci-clock-mode","l":["go mate 2"],"lines":["info depth 3 score cp 618 nodes 1965 time 5 nps 393000 pv b7b4","bestmove b7b4"]}
+{"name":"candidate/b03#19","m":"uci-clock-mode","l":["go btime 8000 movestogo 40 depth 5"],"lines":["info depth 5 score cp 605 nodes 11083 time 16 nps 692688 pv b7b4","bestmove b7b4"]}
+{"name":"candidate/b03#19","h":25,"choice":{"move":"b7b4","score":605,"depth":5,"nodes":20532,"partial":null,"elapsedMs":26}}
+{"name":"candidate/b03#19","h":50,"choice":{"move":"b7b4","score":576,"depth":6,"nodes":45108,"partial":null,"elapsedMs":51}}
+{"name":"candidate/b03#19","h":100,"choice":{"move":"b7b4","score":608,"depth":7,"nodes":95284,"partial":null,"elapsedMs":101}}
+{"name":"candidate/b03#19","h":200,"choice":{"move":"b7b4","score":608,"depth":8,"nodes":196660,"partial":null,"elapsedMs":201}}
+{"name":"candidate/b03#19","h":400,"choice":{"move":"b7b4","score":594,"depth":9,"nodes":400436,"partial":null,"elapsedMs":401}}
+{"name":"candidate/b09#7","m":"level","l":["go movetime 60"],"lines":["info depth 5 score cp 175 nodes 56387 time 61 nps 924377 pv d4b5","bestmove d4b5"]}
+{"name":"candidate/b09#7","m":"level","l":["go wtime 4000 btime 4000"],"lines":["info depth 8 score cp 175 nodes 196675 time 201 nps 978483 pv g2g3","bestmove g2g3"]}
+{"name":"candidate/b09#7","m":"level","l":["go wtime 3000 btime 3000 winc 50 binc 50 movestogo 10"],"lines":["info depth 9 score cp 177 nodes 323651 time 326 nps 992794 pv g2g3","bestmove g2g3"]}
+{"name":"candidate/b09#7","m":"level","l":["go depth 5"],"lines":["info depth 5 score cp 175 nodes 9484 time 15 nps 632267 pv d4b5","bestmove d4b5"]}
+{"name":"candidate/b09#7","m":"level","l":["go nodes 30000"],"lines":["info depth 5 score cp 175 nodes 30787 time 36 nps 855194 pv d4b5","bestmove d4b5"]}
+{"name":"candidate/b09#7","m":"level","l":["setoption name Skill Level value 1","go"],"lines":["info depth 7 nodes 95299 time 101 pv g2g3","bestmove g2g3"]}
+{"name":"candidate/b09#7","m":"level","l":["setoption name Skill Level value 3","go wtime 4000 btime 4000"],"lines":["info depth 8 nodes 196675 time 201 pv g2g3","bestmove g2g3"]}
+{"name":"candidate/b09#7","m":"simple-tournament","l":["go movetime 60"],"lines":["info depth 5 score cp 175 nodes 56387 time 61 nps 924377 pv d4b5","bestmove d4b5"]}
+{"name":"candidate/b09#7","m":"simple-tournament","l":["go wtime 8000 btime 8000 movestogo 40"],"lines":["info depth 6 score cp 175 nodes 70723 time 76 nps 930566 pv g2g3","bestmove g2g3"]}
+{"name":"candidate/b09#7","m":"simple-tournament","l":["go wtime 1500 btime 1500"],"lines":["info depth 1 score cp 201 nodes 67 time 2 nps 33500 pv e6d5","bestmove e6d5"]}
+{"name":"candidate/b09#7","m":"simple-tournament","l":["go depth 5"],"lines":["info depth 5 score cp 175 nodes 9484 time 15 nps 632267 pv d4b5","bestmove d4b5"]}
+{"name":"candidate/b09#7","m":"simple-tournament","l":["go nodes 30000"],"lines":["info depth 5 score cp 175 nodes 30787 time 36 nps 855194 pv d4b5","bestmove d4b5"]}
+{"name":"candidate/b09#7","m":"uci-clock-mode","l":["go movetime 60"],"lines":["info depth 5 score cp 175 nodes 56387 time 61 nps 924377 pv d4b5","bestmove d4b5"]}
+{"name":"candidate/b09#7","m":"uci-clock-mode","l":["go wtime 8000 btime 8000 movestogo 40 movetime 60"],"lines":["info depth 5 score cp 175 nodes 56387 time 61 nps 924377 pv d4b5","bestmove d4b5"]}
+{"name":"candidate/b09#7","m":"uci-clock-mode","l":["go movetime 60 wtime 1500 btime 1500"],"lines":["info depth 5 score cp 175 nodes 56387 time 61 nps 924377 pv d4b5","bestmove d4b5"]}
+{"name":"candidate/b09#7","m":"uci-clock-mode","l":["go depth 5"],"lines":["info depth 5 score cp 175 nodes 9484 time 15 nps 632267 pv d4b5","bestmove d4b5"]}
+{"name":"candidate/b09#7","m":"uci-clock-mode","l":["go nodes 30000"],"lines":["info depth 5 score cp 175 nodes 30787 time 36 nps 855194 pv d4b5","bestmove d4b5"]}
+{"name":"candidate/b09#7","m":"uci-clock-mode","l":["go mate 2"],"lines":["info depth 3 score cp 185 nodes 1215 time 5 nps 243000 pv e6d5","bestmove e6d5"]}
+{"name":"candidate/b09#7","m":"uci-clock-mode","l":["go btime 8000 movestogo 40 depth 5"],"lines":["info depth 5 score cp 175 nodes 9484 time 15 nps 632267 pv d4b5","bestmove d4b5"]}
+{"name":"candidate/b09#7","h":25,"choice":{"move":"d4b5","score":175,"depth":5,"nodes":20547,"partial":null,"elapsedMs":26}}
+{"name":"candidate/b09#7","h":50,"choice":{"move":"d4b5","score":175,"depth":5,"nodes":46147,"partial":null,"elapsedMs":51}}
+{"name":"candidate/b09#7","h":100,"choice":{"move":"g2g3","score":177,"depth":7,"nodes":95299,"partial":null,"elapsedMs":101}}
+{"name":"candidate/b09#7","h":200,"choice":{"move":"g2g3","score":175,"depth":8,"nodes":196675,"partial":null,"elapsedMs":201}}
+{"name":"candidate/b09#7","h":400,"choice":{"move":"g2g3","score":177,"depth":9,"nodes":400451,"partial":null,"elapsedMs":401}}
+{"name":"candidate/b08#15","m":"level","l":["go movetime 60"],"lines":["info depth 7 score cp 127 nodes 54510 time 61 nps 893607 pv g5f6","bestmove g5f6"]}
+{"name":"candidate/b08#15","m":"level","l":["go wtime 4000 btime 4000"],"lines":["info depth 8 score cp 105 nodes 196846 time 201 nps 979333 pv g5f6","bestmove g5f6"]}
+{"name":"candidate/b08#15","m":"level","l":["go wtime 3000 btime 3000 winc 50 binc 50 movestogo 10"],"lines":["info depth 9 score cp 124 nodes 323822 time 326 nps 993319 pv g5f6","bestmove g5f6"]}
+{"name":"candidate/b08#15","m":"level","l":["go depth 5"],"lines":["info depth 5 score cp 129 nodes 11630 time 17 nps 684118 pv g5f6","bestmove g5f6"]}
+{"name":"candidate/b08#15","m":"level","l":["go nodes 30000"],"lines":["info depth 6 score cp 105 nodes 30958 time 37 nps 836703 pv g5f6","bestmove g5f6"]}
+{"name":"candidate/b08#15","m":"level","l":["setoption name Skill Level value 1","go"],"lines":["info depth 7 nodes 95470 time 101 pv g5f6","bestmove g5f6"]}
+{"name":"candidate/b08#15","m":"level","l":["setoption name Skill Level value 3","go wtime 4000 btime 4000"],"lines":["info depth 8 nodes 196846 time 201 pv g5f6","bestmove g5f6"]}
+{"name":"candidate/b08#15","m":"simple-tournament","l":["go movetime 60"],"lines":["info depth 7 score cp 127 nodes 54510 time 61 nps 893607 pv g5f6","bestmove g5f6"]}
+{"name":"candidate/b08#15","m":"simple-tournament","l":["go wtime 8000 btime 8000 movestogo 40"],"lines":["info depth 7 score cp 127 nodes 69870 time 76 nps 919342 pv g5f6","bestmove g5f6"]}
+{"name":"candidate/b08#15","m":"simple-tournament","l":["go wtime 1500 btime 1500"],"lines":["info depth 1 score cp 35 nodes 238 time 2 nps 119000 pv e1a1","bestmove e1a1"]}
+{"name":"candidate/b08#15","m":"simple-tournament","l":["go depth 5"],"lines":["info depth 5 score cp 129 nodes 11630 time 17 nps 684118 pv g5f6","bestmove g5f6"]}
+{"name":"candidate/b08#15","m":"simple-tournament","l":["go nodes 30000"],"lines":["info depth 6 score cp 105 nodes 30958 time 37 nps 836703 pv g5f6","bestmove g5f6"]}
+{"name":"candidate/b08#15","m":"uci-clock-mode","l":["go movetime 60"],"lines":["info depth 7 score cp 127 nodes 54510 time 61 nps 893607 pv g5f6","bestmove g5f6"]}
+{"name":"candidate/b08#15","m":"uci-clock-mode","l":["go wtime 8000 btime 8000 movestogo 40 movetime 60"],"lines":["info depth 7 score cp 127 nodes 54510 time 61 nps 893607 pv g5f6","bestmove g5f6"]}
+{"name":"candidate/b08#15","m":"uci-clock-mode","l":["go movetime 60 wtime 1500 btime 1500"],"lines":["info depth 7 score cp 127 nodes 54510 time 61 nps 893607 pv g5f6","bestmove g5f6"]}
+{"name":"candidate/b08#15","m":"uci-clock-mode","l":["go depth 5"],"lines":["info depth 5 score cp 129 nodes 11630 time 17 nps 684118 pv g5f6","bestmove g5f6"]}
+{"name":"candidate/b08#15","m":"uci-clock-mode","l":["go nodes 30000"],"lines":["info depth 6 score cp 105 nodes 30958 time 37 nps 836703 pv g5f6","bestmove g5f6"]}
+{"name":"candidate/b08#15","m":"uci-clock-mode","l":["go mate 2"],"lines":["info depth 3 score cp 116 nodes 2501 time 6 nps 416833 pv g5f6","bestmove g5f6"]}
+{"name":"candidate/b08#15","m":"uci-clock-mode","l":["go btime 8000 movestogo 40 depth 5"],"lines":["info depth 5 score cp 129 nodes 11630 time 17 nps 684118 pv g5f6","bestmove g5f6"]}
+{"name":"candidate/b08#15","h":25,"choice":{"move":"g5f6","score":129,"depth":5,"nodes":20718,"partial":null,"elapsedMs":26}}
+{"name":"candidate/b08#15","h":50,"choice":{"move":"g5f6","score":105,"depth":6,"nodes":45294,"partial":null,"elapsedMs":51}}
+{"name":"candidate/b08#15","h":100,"choice":{"move":"g5f6","score":127,"depth":7,"nodes":95470,"partial":null,"elapsedMs":101}}
+{"name":"candidate/b08#15","h":200,"choice":{"move":"g5f6","score":105,"depth":8,"nodes":196846,"partial":null,"elapsedMs":201}}
+{"name":"candidate/b08#15","h":400,"choice":{"move":"g5f6","score":124,"depth":9,"nodes":400622,"partial":null,"elapsedMs":401}}
+{"name":"candidate/b03#7","m":"level","l":["go movetime 60"],"lines":["info depth 8 score cp 96 nodes 53258 time 61 nps 873082 pv e3c4","bestmove e3c4"]}
+{"name":"candidate/b03#7","m":"level","l":["go wtime 4000 btime 4000"],"lines":["info depth 10 score cp 71 nodes 194570 time 201 nps 968010 pv e3c4","bestmove e3c4"]}
+{"name":"candidate/b03#7","m":"level","l":["go wtime 3000 btime 3000 winc 50 binc 50 movestogo 10"],"lines":["info depth 10 score cp 71 nodes 322570 time 326 nps 989479 pv e3c4","bestmove e3c4"]}
+{"name":"candidate/b03#7","m":"level","l":["go depth 5"],"lines":["info depth 5 score cp 103 nodes 1756 time 7 nps 250857 pv e3c4","bestmove e3c4"]}
+{"name":"candidate/b03#7","m":"level","l":["go nodes 30000"],"lines":["info depth 8 score cp 96 nodes 30730 time 39 nps 787949 pv e3c4","bestmove e3c4"]}
+{"name":"candidate/b03#7","m":"level","l":["setoption name Skill Level value 1","go"],"lines":["info depth 9 nodes 93194 time 101 pv e3c4","bestmove e3c4"]}
+{"name":"candidate/b03#7","m":"level","l":["setoption name Skill Level value 3","go wtime 4000 btime 4000"],"lines":["info depth 10 nodes 194570 time 201 pv e3c4","bestmove e3c4"]}
+{"name":"candidate/b03#7","m":"simple-tournament","l":["go movetime 60"],"lines":["info depth 8 score cp 96 nodes 53258 time 61 nps 873082 pv e3c4","bestmove e3c4"]}
+{"name":"candidate/b03#7","m":"simple-tournament","l":["go wtime 8000 btime 8000 movestogo 40"],"lines":["info depth 8 score cp 96 nodes 68618 time 76 nps 902868 pv e3c4","bestmove e3c4"]}
+{"name":"candidate/b03#7","m":"simple-tournament","l":["go wtime 1500 btime 1500"],"lines":["info depth 1 score cp 109 nodes 10 time 2 nps 5000 pv e3c4","bestmove e3c4"]}
+{"name":"candidate/b03#7","m":"simple-tournament","l":["go depth 5"],"lines":["info depth 5 score cp 103 nodes 1756 time 7 nps 250857 pv e3c4","bestmove e3c4"]}
+{"name":"candidate/b03#7","m":"simple-tournament","l":["go nodes 30000"],"lines":["info depth 8 score cp 96 nodes 30730 time 39 nps 787949 pv e3c4","bestmove e3c4"]}
+{"name":"candidate/b03#7","m":"uci-clock-mode","l":["go movetime 60"],"lines":["info depth 8 score cp 96 nodes 53258 time 61 nps 873082 pv e3c4","bestmove e3c4"]}
+{"name":"candidate/b03#7","m":"uci-clock-mode","l":["go wtime 8000 btime 8000 movestogo 40 movetime 60"],"lines":["info depth 8 score cp 96 nodes 53258 time 61 nps 873082 pv e3c4","bestmove e3c4"]}
+{"name":"candidate/b03#7","m":"uci-clock-mode","l":["go movetime 60 wtime 1500 btime 1500"],"lines":["info depth 8 score cp 96 nodes 53258 time 61 nps 873082 pv e3c4","bestmove e3c4"]}
+{"name":"candidate/b03#7","m":"uci-clock-mode","l":["go depth 5"],"lines":["info depth 5 score cp 103 nodes 1756 time 7 nps 250857 pv e3c4","bestmove e3c4"]}
+{"name":"candidate/b03#7","m":"uci-clock-mode","l":["go nodes 30000"],"lines":["info depth 8 score cp 96 nodes 30730 time 39 nps 787949 pv e3c4","bestmove e3c4"]}
+{"name":"candidate/b03#7","m":"uci-clock-mode","l":["go mate 2"],"lines":["info depth 3 score cp 113 nodes 296 time 4 nps 74000 pv e3c4","bestmove e3c4"]}
+{"name":"candidate/b03#7","m":"uci-clock-mode","l":["go btime 8000 movestogo 40 depth 5"],"lines":["info depth 5 score cp 103 nodes 1756 time 7 nps 250857 pv e3c4","bestmove e3c4"]}
+{"name":"candidate/b03#7","h":25,"choice":{"move":"e3c4","score":91,"depth":7,"nodes":18442,"partial":null,"elapsedMs":26}}
+{"name":"candidate/b03#7","h":50,"choice":{"move":"e3c4","score":96,"depth":8,"nodes":43018,"partial":null,"elapsedMs":51}}
+{"name":"candidate/b03#7","h":100,"choice":{"move":"e3c4","score":85,"depth":9,"nodes":93194,"partial":null,"elapsedMs":101}}
+{"name":"candidate/b03#7","h":200,"choice":{"move":"e3c4","score":71,"depth":10,"nodes":194570,"partial":null,"elapsedMs":201}}
+{"name":"candidate/b03#7","h":400,"choice":{"move":"e3c4","score":89,"depth":11,"nodes":398346,"partial":null,"elapsedMs":401}}
+{"name":"base/b01#14","m":"level","l":["go movetime 60"],"lines":["info depth 9 score cp 781 nodes 52247 time 61 nps 856508 pv e7f6","bestmove e7f6"]}
+{"name":"base/b01#14","m":"level","l":["go wtime 4000 btime 4000"],"lines":["info depth 11 score cp 753 nodes 193559 time 201 nps 962980 pv e7f6","bestmove e7f6"]}
+{"name":"base/b01#14","m":"level","l":["go wtime 3000 btime 3000 winc 50 binc 50 movestogo 10"],"lines":["info depth 11 score cp 753 nodes 321559 time 326 nps 986377 pv e7f6","bestmove e7f6"]}
+{"name":"base/b01#14","m":"level","l":["go depth 5"],"lines":["info depth 5 score cp 765 nodes 1926 time 7 nps 275143 pv e7f6","bestmove e7f6"]}
+{"name":"base/b01#14","m":"level","l":["go nodes 30000"],"lines":["info depth 8 score cp 774 nodes 30743 time 39 nps 788282 pv e7f6","bestmove e7f6"]}
+{"name":"base/b01#14","m":"level","l":["setoption name Skill Level value 1","go"],"lines":["info depth 10 nodes 92183 time 101 pv e7f6","bestmove e7f6"]}
+{"name":"base/b01#14","m":"level","l":["setoption name Skill Level value 3","go wtime 4000 btime 4000"],"lines":["info depth 11 nodes 193559 time 201 pv e7f6","bestmove e7f6"]}
+{"name":"base/b01#14","m":"simple-tournament","l":["go movetime 60"],"lines":["info depth 9 score cp 781 nodes 52247 time 61 nps 856508 pv e7f6","bestmove e7f6"]}
+{"name":"base/b01#14","m":"simple-tournament","l":["go wtime 8000 btime 8000 movestogo 40"],"lines":["info depth 9 score cp 781 nodes 67607 time 76 nps 889566 pv e7f6","bestmove e7f6"]}
+{"name":"base/b01#14","m":"simple-tournament","l":["go wtime 1500 btime 1500"],"lines":["info depth 1 score cp 1003 nodes 23 time 2 nps 11500 pv e7f6","bestmove e7f6"]}
+{"name":"base/b01#14","m":"simple-tournament","l":["go depth 5"],"lines":["info depth 5 score cp 765 nodes 1926 time 7 nps 275143 pv e7f6","bestmove e7f6"]}
+{"name":"base/b01#14","m":"simple-tournament","l":["go nodes 30000"],"lines":["info depth 8 score cp 774 nodes 30743 time 39 nps 788282 pv e7f6","bestmove e7f6"]}
+{"name":"base/b01#14","m":"uci-clock-mode","l":["go movetime 60"],"lines":["info depth 9 score cp 781 nodes 52247 time 61 nps 856508 pv e7f6","bestmove e7f6"]}
+{"name":"base/b01#14","m":"uci-clock-mode","l":["go wtime 8000 btime 8000 movestogo 40 movetime 60"],"lines":["info depth 9 score cp 781 nodes 52247 time 61 nps 856508 pv e7f6","bestmove e7f6"]}
+{"name":"base/b01#14","m":"uci-clock-mode","l":["go movetime 60 wtime 1500 btime 1500"],"lines":["info depth 9 score cp 781 nodes 52247 time 61 nps 856508 pv e7f6","bestmove e7f6"]}
+{"name":"base/b01#14","m":"uci-clock-mode","l":["go depth 5"],"lines":["info depth 5 score cp 765 nodes 1926 time 7 nps 275143 pv e7f6","bestmove e7f6"]}
+{"name":"base/b01#14","m":"uci-clock-mode","l":["go nodes 30000"],"lines":["info depth 8 score cp 774 nodes 30743 time 39 nps 788282 pv e7f6","bestmove e7f6"]}
+{"name":"base/b01#14","m":"uci-clock-mode","l":["go mate 2"],"lines":["info depth 3 score cp 737 nodes 368 time 4 nps 92000 pv e7f6","bestmove e7f6"]}
+{"name":"base/b01#14","m":"uci-clock-mode","l":["go wtime 8000 movestogo 40 depth 5"],"lines":["info depth 5 score cp 765 nodes 1926 time 7 nps 275143 pv e7f6","bestmove e7f6"]}
+{"name":"base/b01#14","h":25,"choice":{"move":"e7f6","score":774,"depth":8,"nodes":17431,"partial":null,"elapsedMs":26}}
+{"name":"base/b01#14","h":50,"choice":{"move":"e7f6","score":774,"depth":8,"nodes":43031,"partial":null,"elapsedMs":51}}
+{"name":"base/b01#14","h":100,"choice":{"move":"e7f6","score":773,"depth":10,"nodes":92183,"partial":null,"elapsedMs":101}}
+{"name":"base/b01#14","h":200,"choice":{"move":"e7f6","score":753,"depth":11,"nodes":193559,"partial":null,"elapsedMs":201}}
+{"name":"base/b01#14","h":400,"choice":{"move":"e7f6","score":753,"depth":11,"nodes":398359,"partial":null,"elapsedMs":401}}
+{"name":"candidate/b01#17","m":"level","l":["go movetime 60"],"lines":["info depth 7 score cp 1167 nodes 54324 time 61 nps 890557 pv c6e5","bestmove c6e5"]}
+{"name":"candidate/b01#17","m":"level","l":["go wtime 4000 btime 4000"],"lines":["info depth 9 score cp 1155 nodes 195636 time 201 nps 973313 pv c6e5","bestmove c6e5"]}
+{"name":"candidate/b01#17","m":"level","l":["go wtime 3000 btime 3000 winc 50 binc 50 movestogo 10"],"lines":["info depth 10 score cp 1236 nodes 322612 time 326 nps 989607 pv c6e5","bestmove c6e5"]}
+{"name":"candidate/b01#17","m":"level","l":["go depth 5"],"lines":["info depth 5 score cp 1186 nodes 4301 time 10 nps 430100 pv c6e5","bestmove c6e5"]}
+{"name":"candidate/b01#17","m":"level","l":["go nodes 30000"],"lines":["info depth 7 score cp 1167 nodes 30772 time 38 nps 809789 pv c6e5","bestmove c6e5"]}
+{"name":"candidate/b01#17","m":"level","l":["setoption name Skill Level value 1","go"],"lines":["info depth 8 nodes 94260 time 101 pv c6e5","bestmove c6e5"]}
+{"name":"candidate/b01#17","m":"level","l":["setoption name Skill Level value 3","go wtime 4000 btime 4000"],"lines":["info depth 9 nodes 195636 time 201 pv c6e5","bestmove c6e5"]}
+{"name":"candidate/b01#17","m":"simple-tournament","l":["go movetime 60"],"lines":["info depth 7 score cp 1167 nodes 54324 time 61 nps 890557 pv c6e5","bestmove c6e5"]}
+{"name":"candidate/b01#17","m":"simple-tournament","l":["go wtime 8000 btime 8000 movestogo 40"],"lines":["info depth 8 score cp 1167 nodes 68660 time 76 nps 903421 pv c6e5","bestmove c6e5"]}
+{"name":"candidate/b01#17","m":"simple-tournament","l":["go wtime 1500 btime 1500"],"lines":["info depth 1 score cp 1176 nodes 52 time 2 nps 26000 pv c7d7","bestmove c7d7"]}
+{"name":"candidate/b01#17","m":"simple-tournament","l":["go depth 5"],"lines":["info depth 5 score cp 1186 nodes 4301 time 10 nps 430100 pv c6e5","bestmove c6e5"]}
+{"name":"candidate/b01#17","m":"simple-tournament","l":["go nodes 30000"],"lines":["info depth 7 score cp 1167 nodes 30772 time 38 nps 809789 pv c6e5","bestmove c6e5"]}
+{"name":"candidate/b01#17","m":"uci-clock-mode","l":["go movetime 60"],"lines":["info depth 7 score cp 1167 nodes 54324 time 61 nps 890557 pv c6e5","bestmove c6e5"]}
+{"name":"candidate/b01#17","m":"uci-clock-mode","l":["go wtime 8000 btime 8000 movestogo 40 movetime 60"],"lines":["info depth 7 score cp 1167 nodes 54324 time 61 nps 890557 pv c6e5","bestmove c6e5"]}
+{"name":"candidate/b01#17","m":"uci-clock-mode","l":["go movetime 60 wtime 1500 btime 1500"],"lines":["info depth 7 score cp 1167 nodes 54324 time 61 nps 890557 pv c6e5","bestmove c6e5"]}
+{"name":"candidate/b01#17","m":"uci-clock-mode","l":["go depth 5"],"lines":["info depth 5 score cp 1186 nodes 4301 time 10 nps 430100 pv c6e5","bestmove c6e5"]}
+{"name":"candidate/b01#17","m":"uci-clock-mode","l":["go nodes 30000"],"lines":["info depth 7 score cp 1167 nodes 30772 time 38 nps 809789 pv c6e5","bestmove c6e5"]}
+{"name":"candidate/b01#17","m":"uci-clock-mode","l":["go mate 2"],"lines":["info depth 3 score cp 1166 nodes 1355 time 5 nps 271000 pv c7d7","bestmove c7d7"]}
+{"name":"candidate/b01#17","m":"uci-clock-mode","l":["go btime 8000 movestogo 40 depth 5"],"lines":["info depth 5 score cp 1186 nodes 4301 time 10 nps 430100 pv c6e5","bestmove c6e5"]}
+{"name":"candidate/b01#17","h":25,"choice":{"move":"c6e5","score":1186,"depth":6,"nodes":19508,"partial":null,"elapsedMs":26}}
+{"name":"candidate/b01#17","h":50,"choice":{"move":"c6e5","score":1167,"depth":7,"nodes":44084,"partial":null,"elapsedMs":51}}
+{"name":"candidate/b01#17","h":100,"choice":{"move":"c6e5","score":1167,"depth":8,"nodes":94260,"partial":null,"elapsedMs":101}}
+{"name":"candidate/b01#17","h":200,"choice":{"move":"c6e5","score":1155,"depth":9,"nodes":195636,"partial":null,"elapsedMs":201}}
+{"name":"candidate/b01#17","h":400,"choice":{"move":"c6e5","score":1236,"depth":10,"nodes":399412,"partial":null,"elapsedMs":401}}
+{"name":"candidate/b02#19","m":"level","l":["go movetime 60"],"lines":["info depth 7 score cp 1188 nodes 54354 time 61 nps 891049 pv f8e6","bestmove f8e6"]}
+{"name":"candidate/b02#19","m":"level","l":["go wtime 4000 btime 4000"],"lines":["info depth 8 score cp 1171 nodes 196690 time 201 nps 978557 pv f8e6","bestmove f8e6"]}
+{"name":"candidate/b02#19","m":"level","l":["go wtime 3000 btime 3000 winc 50 binc 50 movestogo 10"],"lines":["info depth 8 score cp 1171 nodes 324690 time 326 nps 995982 pv f8e6","bestmove f8e6"]}
+{"name":"candidate/b02#19","m":"level","l":["go depth 5"],"lines":["info depth 5 score cp 1140 nodes 7459 time 13 nps 573769 pv f8e6","bestmove f8e6"]}
+{"name":"candidate/b02#19","m":"level","l":["go nodes 30000"],"lines":["info depth 6 score cp 1140 nodes 30802 time 37 nps 832486 pv f8e6","bestmove f8e6"]}
+{"name":"candidate/b02#19","m":"level","l":["setoption name Skill Level value 1","go"],"lines":["info depth 7 nodes 95314 time 101 pv f8e6","bestmove f8e6"]}
+{"name":"candidate/b02#19","m":"level","l":["setoption name Skill Level value 3","go wtime 4000 btime 4000"],"lines":["info depth 8 nodes 196690 time 201 pv f8e6","bestmove f8e6"]}
+{"name":"candidate/b02#19","m":"simple-tournament","l":["go movetime 60"],"lines":["info depth 7 score cp 1188 nodes 54354 time 61 nps 891049 pv f8e6","bestmove f8e6"]}
+{"name":"candidate/b02#19","m":"simple-tournament","l":["go wtime 8000 btime 8000 movestogo 40"],"lines":["info depth 7 score cp 1188 nodes 69714 time 76 nps 917289 pv f8e6","bestmove f8e6"]}
+{"name":"candidate/b02#19","m":"simple-tournament","l":["go wtime 1500 btime 1500"],"lines":["info depth 1 score cp 1098 nodes 82 time 2 nps 41000 pv f8g6","bestmove f8g6"]}
+{"name":"candidate/b02#19","m":"simple-tournament","l":["go depth 5"],"lines":["info depth 5 score cp 1140 nodes 7459 time 13 nps 573769 pv f8e6","bestmove f8e6"]}
+{"name":"candidate/b02#19","m":"simple-tournament","l":["go nodes 30000"],"lines":["info depth 6 score cp 1140 nodes 30802 time 37 nps 832486 pv f8e6","bestmove f8e6"]}
+{"name":"candidate/b02#19","m":"uci-clock-mode","l":["go movetime 60"],"lines":["info depth 7 score cp 1188 nodes 54354 time 61 nps 891049 pv f8e6","bestmove f8e6"]}
+{"name":"candidate/b02#19","m":"uci-clock-mode","l":["go wtime 8000 btime 8000 movestogo 40 movetime 60"],"lines":["info depth 7 score cp 1188 nodes 54354 time 61 nps 891049 pv f8e6","bestmove f8e6"]}
+{"name":"candidate/b02#19","m":"uci-clock-mode","l":["go movetime 60 wtime 1500 btime 1500"],"lines":["info depth 7 score cp 1188 nodes 54354 time 61 nps 891049 pv f8e6","bestmove f8e6"]}
+{"name":"candidate/b02#19","m":"uci-clock-mode","l":["go depth 5"],"lines":["info depth 5 score cp 1140 nodes 7459 time 13 nps 573769 pv f8e6","bestmove f8e6"]}
+{"name":"candidate/b02#19","m":"uci-clock-mode","l":["go nodes 30000"],"lines":["info depth 6 score cp 1140 nodes 30802 time 37 nps 832486 pv f8e6","bestmove f8e6"]}
+{"name":"candidate/b02#19","m":"uci-clock-mode","l":["go mate 2"],"lines":["info depth 3 score cp 1116 nodes 1230 time 5 nps 246000 pv f8e6","bestmove f8e6"]}
+{"name":"candidate/b02#19","m":"uci-clock-mode","l":["go btime 8000 movestogo 40 depth 5"],"lines":["info depth 5 score cp 1140 nodes 7459 time 13 nps 573769 pv f8e6","bestmove f8e6"]}
+{"name":"candidate/b02#19","h":25,"choice":{"move":"f8e6","score":1140,"depth":6,"nodes":20173,"partial":null,"elapsedMs":26}}
+{"name":"candidate/b02#19","h":50,"choice":{"move":"f8e6","score":1188,"depth":7,"nodes":44114,"partial":null,"elapsedMs":51}}
+{"name":"candidate/b02#19","h":100,"choice":{"move":"f8e6","score":1188,"depth":7,"nodes":95314,"partial":null,"elapsedMs":101}}
+{"name":"candidate/b02#19","h":200,"choice":{"move":"f8e6","score":1171,"depth":8,"nodes":196690,"partial":null,"elapsedMs":201}}
+{"name":"candidate/b02#19","h":400,"choice":{"move":"f8e6","score":1188,"depth":9,"nodes":400466,"partial":null,"elapsedMs":401}}
+{"name":"candidate/b08#6","m":"level","l":["go movetime 60"],"lines":["info depth 8 score cp 290 nodes 53275 time 61 nps 873361 pv g8f8","bestmove g8f8"]}
+{"name":"candidate/b08#6","m":"level","l":["go wtime 4000 btime 4000"],"lines":["info depth 9 score cp 290 nodes 195611 time 201 nps 973189 pv g8f8","bestmove g8f8"]}
+{"name":"candidate/b08#6","m":"level","l":["go wtime 3000 btime 3000 winc 50 binc 50 movestogo 10"],"lines":["info depth 10 score cp 279 nodes 322587 time 326 nps 989531 pv g8f8","bestmove g8f8"]}
+{"name":"candidate/b08#6","m":"level","l":["go depth 5"],"lines":["info depth 5 score cp 281 nodes 3110 time 9 nps 345556 pv a7a5","bestmove a7a5"]}
+{"name":"candidate/b08#6","m":"level","l":["go nodes 30000"],"lines":["info depth 7 score cp 281 nodes 30747 time 38 nps 809132 pv g8h8","bestmove g8h8"]}
+{"name":"candidate/b08#6","m":"level","l":["setoption name Skill Level value 1","go"],"lines":["info depth 8 nodes 94235 time 101 pv g8f8","bestmove g8f8"]}
+{"name":"candidate/b08#6","m":"level","l":["setoption name Skill Level value 3","go wtime 4000 btime 4000"],"lines":["info depth 9 nodes 195611 time 201 pv g8f8","bestmove g8f8"]}
+{"name":"candidate/b08#6","m":"simple-tournament","l":["go movetime 60"],"lines":["info depth 8 score cp 290 nodes 53275 time 61 nps 873361 pv g8f8","bestmove g8f8"]}
+{"name":"candidate/b08#6","m":"simple-tournament","l":["go wtime 8000 btime 8000 movestogo 40"],"lines":["info depth 8 score cp 290 nodes 68635 time 76 nps 903092 pv g8f8","bestmove g8f8"]}
+{"name":"candidate/b08#6","m":"simple-tournament","l":["go wtime 1500 btime 1500"],"lines":["info depth 1 score cp 320 nodes 27 time 2 nps 13500 pv a7a5","bestmove a7a5"]}
+{"name":"candidate/b08#6","m":"simple-tournament","l":["go depth 5"],"lines":["info depth 5 score cp 281 nodes 3110 time 9 nps 345556 pv a7a5","bestmove a7a5"]}
+{"name":"candidate/b08#6","m":"simple-tournament","l":["go nodes 30000"],"lines":["info depth 7 score cp 281 nodes 30747 time 38 nps 809132 pv g8h8","bestmove g8h8"]}
+{"name":"candidate/b08#6","m":"uci-clock-mode","l":["go movetime 60"],"lines":["info depth 8 score cp 290 nodes 53275 time 61 nps 873361 pv g8f8","bestmove g8f8"]}
+{"name":"candidate/b08#6","m":"uci-clock-mode","l":["go wtime 8000 btime 8000 movestogo 40 movetime 60"],"lines":["info depth 8 score cp 290 nodes 53275 time 61 nps 873361 pv g8f8","bestmove g8f8"]}
+{"name":"candidate/b08#6","m":"uci-clock-mode","l":["go movetime 60 wtime 1500 btime 1500"],"lines":["info depth 8 score cp 290 nodes 53275 time 61 nps 873361 pv g8f8","bestmove g8f8"]}
+{"name":"candidate/b08#6","m":"uci-clock-mode","l":["go depth 5"],"lines":["info depth 5 score cp 281 nodes 3110 time 9 nps 345556 pv a7a5","bestmove a7a5"]}
+{"name":"candidate/b08#6","m":"uci-clock-mode","l":["go nodes 30000"],"lines":["info depth 7 score cp 281 nodes 30747 time 38 nps 809132 pv g8h8","bestmove g8h8"]}
+{"name":"candidate/b08#6","m":"uci-clock-mode","l":["go mate 2"],"lines":["info depth 3 score cp 303 nodes 372 time 4 nps 93000 pv a7a5","bestmove a7a5"]}
+{"name":"candidate/b08#6","m":"uci-clock-mode","l":["go wtime 8000 movestogo 40 depth 5"],"lines":["info depth 5 score cp 281 nodes 3110 time 9 nps 345556 pv a7a5","bestmove a7a5"]}
+{"name":"candidate/b08#6","h":25,"choice":{"move":"g8h8","score":281,"depth":7,"nodes":18459,"partial":null,"elapsedMs":26}}
+{"name":"candidate/b08#6","h":50,"choice":{"move":"g8f8","score":290,"depth":8,"nodes":43035,"partial":null,"elapsedMs":51}}
+{"name":"candidate/b08#6","h":100,"choice":{"move":"g8f8","score":290,"depth":8,"nodes":94235,"partial":null,"elapsedMs":101}}
+{"name":"candidate/b08#6","h":200,"choice":{"move":"g8f8","score":290,"depth":9,"nodes":195611,"partial":null,"elapsedMs":201}}
+{"name":"candidate/b08#6","h":400,"choice":{"move":"g8f8","score":290,"depth":11,"nodes":398363,"partial":null,"elapsedMs":401}}
+{"name":"candidate/b04#8","m":"level","l":["go movetime 60"],"lines":["info depth 8 score cp -697 nodes 53297 time 61 nps 873721 pv d5c4","bestmove d5c4"]}
+{"name":"candidate/b04#8","m":"level","l":["go wtime 4000 btime 4000"],"lines":["info depth 9 score cp -747 nodes 195633 time 201 nps 973299 pv d5c4","bestmove d5c4"]}
+{"name":"candidate/b04#8","m":"level","l":["go wtime 3000 btime 3000 winc 50 binc 50 movestogo 10"],"lines":["info depth 10 score cp -745 nodes 322609 time 326 nps 989598 pv d5c4","bestmove d5c4"]}
+{"name":"candidate/b04#8","m":"level","l":["go depth 5"],"lines":["info depth 5 score cp -634 nodes 4923 time 10 nps 492300 pv d5c4","bestmove d5c4"]}
+{"name":"candidate/b04#8","m":"level","l":["go nodes 30000"],"lines":["info depth 7 score cp -700 nodes 30769 time 38 nps 809711 pv d5c4","bestmove d5c4"]}
+{"name":"candidate/b04#8","m":"level","l":["setoption name Skill Level value 1","go"],"lines":["info depth 8 nodes 94257 time 101 pv d5c4","bestmove d5c4"]}
+{"name":"candidate/b04#8","m":"level","l":["setoption name Skill Level value 3","go wtime 4000 btime 4000"],"lines":["info depth 9 nodes 195633 time 201 pv d5c4","bestmove d5c4"]}
+{"name":"candidate/b04#8","m":"simple-tournament","l":["go movetime 60"],"lines":["info depth 8 score cp -697 nodes 53297 time 61 nps 873721 pv d5c4","bestmove d5c4"]}
+{"name":"candidate/b04#8","m":"simple-tournament","l":["go wtime 8000 btime 8000 movestogo 40"],"lines":["info depth 8 score cp -697 nodes 68657 time 76 nps 903382 pv d5c4","bestmove d5c4"]}
+{"name":"candidate/b04#8","m":"simple-tournament","l":["go wtime 1500 btime 1500"],"lines":["info depth 1 score cp -4 nodes 49 time 2 nps 24500 pv d5d4","bestmove d5d4"]}
+{"name":"candidate/b04#8","m":"simple-tournament","l":["go depth 5"],"lines":["info depth 5 score cp -634 nodes 4923 time 10 nps 492300 pv d5c4","bestmove d5c4"]}
+{"name":"candidate/b04#8","m":"simple-tournament","l":["go nodes 30000"],"lines":["info depth 7 score cp -700 nodes 30769 time 38 nps 809711 pv d5c4","bestmove d5c4"]}
+{"name":"candidate/b04#8","m":"uci-clock-mode","l":["go movetime 60"],"lines":["info depth 8 score cp -697 nodes 53297 time 61 nps 873721 pv d5c4","bestmove d5c4"]}
+{"name":"candidate/b04#8","m":"uci-clock-mode","l":["go wtime 8000 btime 8000 movestogo 40 movetime 60"],"lines":["info depth 8 score cp -697 nodes 53297 time 61 nps 873721 pv d5c4","bestmove d5c4"]}
+{"name":"candidate/b04#8","m":"uci-clock-mode","l":["go movetime 60 wtime 1500 btime 1500"],"lines":["info depth 8 score cp -697 nodes 53297 time 61 nps 873721 pv d5c4","bestmove d5c4"]}
+{"name":"candidate/b04#8","m":"uci-clock-mode","l":["go depth 5"],"lines":["info depth 5 score cp -634 nodes 4923 time 10 nps 492300 pv d5c4","bestmove d5c4"]}
+{"name":"candidate/b04#8","m":"uci-clock-mode","l":["go nodes 30000"],"lines":["info depth 7 score cp -700 nodes 30769 time 38 nps 809711 pv d5c4","bestmove d5c4"]}
+{"name":"candidate/b04#8","m":"uci-clock-mode","l":["go mate 2"],"lines":["info depth 3 score cp -151 nodes 1366 time 5 nps 273200 pv d5d2","bestmove d5d2"]}
+{"name":"candidate/b04#8","m":"uci-clock-mode","l":["go wtime 8000 movestogo 40 depth 5"],"lines":["info depth 5 score cp -634 nodes 4923 time 10 nps 492300 pv d5c4","bestmove d5c4"]}
+{"name":"candidate/b04#8","h":25,"choice":{"move":"d5c4","score":-700,"depth":7,"nodes":18481,"partial":null,"elapsedMs":26}}
+{"name":"candidate/b04#8","h":50,"choice":{"move":"d5c4","score":-697,"depth":8,"nodes":43057,"partial":null,"elapsedMs":51}}
+{"name":"candidate/b04#8","h":100,"choice":{"move":"d5c4","score":-697,"depth":8,"nodes":94257,"partial":null,"elapsedMs":101}}
+{"name":"candidate/b04#8","h":200,"choice":{"move":"d5c4","score":-747,"depth":9,"nodes":195633,"partial":null,"elapsedMs":201}}
+{"name":"candidate/b04#8","h":400,"choice":{"move":"d5c4","score":-745,"depth":10,"nodes":399409,"partial":null,"elapsedMs":401}}
+{"name":"base/b03#2","m":"level","l":["go movetime 60"],"lines":["info depth 9 score mate -2 nodes 52226 time 61 nps 856164 pv g8h8","bestmove g8h8"]}
+{"name":"base/b03#2","m":"level","l":["go wtime 4000 btime 4000"],"lines":["info depth 11 score mate -2 nodes 193538 time 201 nps 962876 pv g8h8","bestmove g8h8"]}
+{"name":"base/b03#2","m":"level","l":["go wtime 3000 btime 3000 winc 50 binc 50 movestogo 10"],"lines":["info depth 12 score mate -2 nodes 321303 time 326 nps 985592 pv g8h8","bestmove g8h8"]}
+{"name":"base/b03#2","m":"level","l":["go depth 5"],"lines":["info depth 5 score mate -2 nodes 741 time 6 nps 123500 pv g8h8","bestmove g8h8"]}
+{"name":"base/b03#2","m":"level","l":["go nodes 30000"],"lines":["info depth 9 score mate -2 nodes 30722 time 40 nps 768050 pv g8h8","bestmove g8h8"]}
+{"name":"base/b03#2","m":"level","l":["setoption name Skill Level value 1","go"],"lines":["info depth 10 nodes 92162 time 101 pv g8h8","bestmove g8h8"]}
+{"name":"base/b03#2","m":"level","l":["setoption name Skill Level value 3","go wtime 4000 btime 4000"],"lines":["info depth 11 nodes 193538 time 201 pv g8h8","bestmove g8h8"]}
+{"name":"base/b03#2","m":"simple-tournament","l":["go movetime 60"],"lines":["info depth 9 score mate -2 nodes 52226 time 61 nps 856164 pv g8h8","bestmove g8h8"]}
+{"name":"base/b03#2","m":"simple-tournament","l":["go wtime 8000 btime 8000 movestogo 40"],"lines":["info depth 10 score mate -2 nodes 66562 time 76 nps 875816 pv g8h8","bestmove g8h8"]}
+{"name":"base/b03#2","m":"simple-tournament","l":["go wtime 1500 btime 1500"],"lines":["info depth 1 score cp -612 nodes 2 time 2 nps 1000 pv g8h8","bestmove g8h8"]}
+{"name":"base/b03#2","m":"simple-tournament","l":["go depth 5"],"lines":["info depth 5 score mate -2 nodes 741 time 6 nps 123500 pv g8h8","bestmove g8h8"]}
+{"name":"base/b03#2","m":"simple-tournament","l":["go nodes 30000"],"lines":["info depth 9 score mate -2 nodes 30722 time 40 nps 768050 pv g8h8","bestmove g8h8"]}
+{"name":"base/b03#2","m":"uci-clock-mode","l":["go movetime 60"],"lines":["info depth 9 score mate -2 nodes 52226 time 61 nps 856164 pv g8h8","bestmove g8h8"]}
+{"name":"base/b03#2","m":"uci-clock-mode","l":["go wtime 8000 btime 8000 movestogo 40 movetime 60"],"lines":["info depth 9 score mate -2 nodes 52226 time 61 nps 856164 pv g8h8","bestmove g8h8"]}
+{"name":"base/b03#2","m":"uci-clock-mode","l":["go movetime 60 wtime 1500 btime 1500"],"lines":["info depth 9 score mate -2 nodes 52226 time 61 nps 856164 pv g8h8","bestmove g8h8"]}
+{"name":"base/b03#2","m":"uci-clock-mode","l":["go depth 5"],"lines":["info depth 5 score mate -2 nodes 741 time 6 nps 123500 pv g8h8","bestmove g8h8"]}
+{"name":"base/b03#2","m":"uci-clock-mode","l":["go nodes 30000"],"lines":["info depth 9 score mate -2 nodes 30722 time 40 nps 768050 pv g8h8","bestmove g8h8"]}
+{"name":"base/b03#2","m":"uci-clock-mode","l":["go mate 2"],"lines":["info depth 3 score cp -652 nodes 80 time 4 nps 20000 pv g8h8","bestmove g8h8"]}
+{"name":"base/b03#2","m":"uci-clock-mode","l":["go wtime 8000 movestogo 40 depth 5"],"lines":["info depth 5 score mate -2 nodes 741 time 6 nps 123500 pv g8h8","bestmove g8h8"]}
+{"name":"base/b03#2","h":25,"choice":{"move":"g8h8","score":-29996,"depth":8,"nodes":17410,"partial":null,"elapsedMs":26}}
+{"name":"base/b03#2","h":50,"choice":{"move":"g8h8","score":-29996,"depth":9,"nodes":41986,"partial":null,"elapsedMs":51}}
+{"name":"base/b03#2","h":100,"choice":{"move":"g8h8","score":-29996,"depth":10,"nodes":92162,"partial":null,"elapsedMs":101}}
+{"name":"base/b03#2","h":200,"choice":{"move":"g8h8","score":-29996,"depth":11,"nodes":193538,"partial":null,"elapsedMs":201}}
+{"name":"base/b03#2","h":400,"choice":{"move":"g8h8","score":-29996,"depth":12,"nodes":397314,"partial":null,"elapsedMs":401}}
+{"name":"candidate/b08#10","m":"level","l":["go movetime 60"],"lines":["info depth 7 score mate -2 nodes 54276 time 61 nps 889770 pv a2a3","bestmove a2a3"]}
+{"name":"candidate/b08#10","m":"level","l":["go wtime 4000 btime 4000"],"lines":["info depth 8 score mate -2 nodes 196612 time 201 nps 978169 pv a2a3","bestmove a2a3"]}
+{"name":"candidate/b08#10","m":"level","l":["go wtime 3000 btime 3000 winc 50 binc 50 movestogo 10"],"lines":["info depth 9 score mate -2 nodes 323588 time 326 nps 992601 pv a2a3","bestmove a2a3"]}
+{"name":"candidate/b08#10","m":"level","l":["go depth 5"],"lines":["info depth 5 score mate -2 nodes 2845 time 8 nps 355625 pv a2a3","bestmove a2a3"]}
+{"name":"candidate/b08#10","m":"level","l":["go nodes 30000"],"lines":["info depth 7 score mate -2 nodes 30724 time 38 nps 808526 pv a2a3","bestmove a2a3"]}
+{"name":"candidate/b08#10","m":"level","l":["setoption name Skill Level value 1","go"],"lines":["info depth 8 nodes 94212 time 101 pv a2a3","bestmove a2a3"]}
+{"name":"candidate/b08#10","m":"level","l":["setoption name Skill Level value 3","go wtime 4000 btime 4000"],"lines":["info depth 8 nodes 196612 time 201 pv a2a3","bestmove a2a3"]}
+{"name":"candidate/b08#10","m":"simple-tournament","l":["go movetime 60"],"lines":["info depth 7 score mate -2 nodes 54276 time 61 nps 889770 pv a2a3","bestmove a2a3"]}
+{"name":"candidate/b08#10","m":"simple-tournament","l":["go wtime 8000 btime 8000 movestogo 40"],"lines":["info depth 7 score mate -2 nodes 69636 time 76 nps 916263 pv a2a3","bestmove a2a3"]}
+{"name":"candidate/b08#10","m":"simple-tournament","l":["go wtime 1500 btime 1500"],"lines":["info depth 1 score cp -1761 nodes 4 time 2 nps 2000 pv a2a3","bestmove a2a3"]}
+{"name":"candidate/b08#10","m":"simple-tournament","l":["go depth 5"],"lines":["info depth 5 score mate -2 nodes 2845 time 8 nps 355625 pv a2a3","bestmove a2a3"]}
+{"name":"candidate/b08#10","m":"simple-tournament","l":["go nodes 30000"],"lines":["info depth 7 score mate -2 nodes 30724 time 38 nps 808526 pv a2a3","bestmove a2a3"]}
+{"name":"candidate/b08#10","m":"uci-clock-mode","l":["go movetime 60"],"lines":["info depth 7 score mate -2 nodes 54276 time 61 nps 889770 pv a2a3","bestmove a2a3"]}
+{"name":"candidate/b08#10","m":"uci-clock-mode","l":["go wtime 8000 btime 8000 movestogo 40 movetime 60"],"lines":["info depth 7 score mate -2 nodes 54276 time 61 nps 889770 pv a2a3","bestmove a2a3"]}
+{"name":"candidate/b08#10","m":"uci-clock-mode","l":["go movetime 60 wtime 1500 btime 1500"],"lines":["info depth 7 score mate -2 nodes 54276 time 61 nps 889770 pv a2a3","bestmove a2a3"]}
+{"name":"candidate/b08#10","m":"uci-clock-mode","l":["go depth 5"],"lines":["info depth 5 score mate -2 nodes 2845 time 8 nps 355625 pv a2a3","bestmove a2a3"]}
+{"name":"candidate/b08#10","m":"uci-clock-mode","l":["go nodes 30000"],"lines":["info depth 7 score mate -2 nodes 30724 time 38 nps 808526 pv a2a3","bestmove a2a3"]}
+{"name":"candidate/b08#10","m":"uci-clock-mode","l":["go mate 2"],"lines":["info depth 3 score cp -1889 nodes 165 time 4 nps 41250 pv a2a3","bestmove a2a3"]}
+{"name":"candidate/b08#10","m":"uci-clock-mode","l":["go wtime 8000 movestogo 40 depth 5"],"lines":["info depth 5 score mate -2 nodes 2845 time 8 nps 355625 pv a2a3","bestmove a2a3"]}
+{"name":"candidate/b08#10","h":25,"choice":{"move":"a2a3","score":-29996,"depth":6,"nodes":19460,"partial":null,"elapsedMs":26}}
+{"name":"candidate/b08#10","h":50,"choice":{"move":"a2a3","score":-29996,"depth":7,"nodes":44036,"partial":null,"elapsedMs":51}}
+{"name":"candidate/b08#10","h":100,"choice":{"move":"a2a3","score":-29996,"depth":8,"nodes":94212,"partial":null,"elapsedMs":101}}
+{"name":"candidate/b08#10","h":200,"choice":{"move":"a2a3","score":-29996,"depth":8,"nodes":196612,"partial":null,"elapsedMs":201}}
+{"name":"candidate/b08#10","h":400,"choice":{"move":"a2a3","score":-29996,"depth":9,"nodes":400388,"partial":null,"elapsedMs":401}}

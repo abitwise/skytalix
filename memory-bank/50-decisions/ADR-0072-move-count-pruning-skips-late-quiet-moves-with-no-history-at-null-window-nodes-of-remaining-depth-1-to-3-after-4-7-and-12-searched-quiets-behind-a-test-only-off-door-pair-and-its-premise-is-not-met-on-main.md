@@ -168,6 +168,13 @@ The design of record is M3. It is the form a yes builds. It is not cleared to bu
    - **Deep, the same file, `SEARCH_DEEP=1`:** P0, the head's counts, the same-depth floors in both recursions.
    - Zugzwang and `G1` stay on the shipped path where they stand.
    - The rows that pin shipped-path counts re-point to the all-off door, old and new figures in the PR.
+     *Dated 2026-11-04 (`arch-ABC-303-open`, records only at `main` `c118a5cf`; `se-ABC-303` `…75e4058e` item 4): **`ABC-279`
+     A3 (a) re-points under d6, not under this bullet.** This bullet names count rows, and that row is `ADR-0069` F1's drift
+     bar. Decision 6 is the sentence that governs it: "Rows re-point by `ADR-0050` d4, `ADR-0058` d5, `ADR-0059` d6, `ADR-0061`
+     d6", and those name the d5 drift rows. So the re-point at `de15cfb2` is allowed, its bars stand, and the 90.91 % read on
+     the shipped path is no red, no STOP and no owner question. The override is not what allows it: his word reaches
+     L2 and CH3 and nothing else. The row's final door is `ADR-0069` d11's dated line of this date. The PR lists the row
+     and prints 90.91 %, 96 cp, 0 changes beside it (`ADR-0058` d5).*
 8. **What this part still shows alone** (`ADR-0056` B2).
    - (a) Its door pair and its rule rows. (c) The form above, fixed.
    - (d) **Its measured bar: L2 and L4, on its own door.** L4 is met. L2 is missed, so (d) passes only by the owner's

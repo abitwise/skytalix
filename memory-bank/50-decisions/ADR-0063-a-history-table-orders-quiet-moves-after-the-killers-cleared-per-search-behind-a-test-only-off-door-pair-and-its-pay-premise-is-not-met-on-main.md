@@ -334,6 +334,10 @@ merges (§ Status).
 
 - **NFRs.**
   - `NFR-009`: 32 768 bytes, fixed, summed by `historyByteLength()`. The ticket's "16 KiB" changes to 32 KiB (BA/PM).
+    *Dated 2026-11-04 (`arch-ABC-303-open`, records only at `main` `c118a5cf`): **"summed" was not built.** `NFR-009` (a)'s sum row
+    in `src/transposition.test.ts` has no `historyByteLength()` term, on `main` since `58e90d07`. The row is green and
+    understates by 32 768 bytes, about 4.6 MiB against 16 MiB in all, so no level is near. The term is owed on `main`, by the
+    test-only hop that re-points `ABC-271` K0, not by `ABC-303`: a bundle that misses its read would leave it unwritten.*
   - `NFR-005`: `G6` reads it.
   - `NFR-008`: the table, update and order rows are default-lane units. Drift, mate, zugzwang and reach go behind the
     deep lanes.

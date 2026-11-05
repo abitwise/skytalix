@@ -1,0 +1,18 @@
+
+ RUN  v4.1.12 <base>
+
+ ✓ src/search.null-move.test.ts > A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth > seven rows, each with its source, at depths 8 to 12 1ms
+ ✓ src/search.null-move.test.ts > A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth > zugzwang.001: chooseMove on a frozen clock to depth 9 plays e1f1 124ms
+ ✓ src/search.null-move.test.ts > A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth > zugzwang.004: chooseMove on a frozen clock to depth 11 plays h3h4 [deep, SEARCH_DEEP=1] 751ms
+ ✓ src/search.null-move.test.ts > A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth > zugzwang.005: chooseMove on a frozen clock to depth 12 plays f4d5 [deep, SEARCH_DEEP=1] 1597ms
+ ✓ src/search.null-move.test.ts > A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth > kpk-b6c6: chooseMove on a frozen clock to depth 8 plays b6c6 6ms
+ ✓ src/search.null-move.test.ts > A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth > kpk-c6d6: chooseMove on a frozen clock to depth 8 plays c6d6 5ms
+ ✓ src/search.null-move.test.ts > A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth > kpk-d6e6: chooseMove on a frozen clock to depth 8 plays d6e6 5ms
+ ✓ src/search.null-move.test.ts > A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth > kpk-e6f6: chooseMove on a frozen clock to depth 8 plays e6f6 4ms
+
+ Test Files  1 passed (1)
+      Tests  8 passed | 38 skipped (46)
+   Start at  00:17:54
+   Duration  2.64s (transform 0ms, setup 0ms, import 71ms, tests 2.49s, environment 0ms)
+
+exit 0

@@ -1,13 +1,13 @@
 ---
 id: ABC-287
-title: "P6: razoring. At low remaining depth, a node whose static score is far below alpha is resolved by quiescence instead of a full-width search, behind a test-only off-door pair. Held: rejected on today's evaluation; re-measured only after E2's second pull merges"
+title: "P6: razoring. At low remaining depth, a node whose static score is far below alpha is resolved by quiescence instead of a full-width search, behind a test-only off-door pair. Held: rejected on today's evaluation; re-measured only when a tuned table is on main"
 status: backlog
 column: Backlog
 size: S
 priority: P3
 epic: EPIC-011
 feature: —
-adr: "owed (the Architect's): a re-measure on main after E2's second pull merges, under the rows it failed (zugzwang, drift, audit, mate), then a new ADR (ADR-0026 d10) if it passes: the margins by depth, the exclusions, the door names, the firing figure at 100 ms and the intent. A new ADR is the owner's to accept (reading (b))"
+adr: "owed (the Architect's): a re-measure on main once a tuned table is on main, under the rows it failed (zugzwang, drift, audit, mate), then a new ADR (ADR-0026 d10) if it passes: the margins by depth, the exclusions, the door names, the firing figure at 100 ms and the intent. A new ADR is the owner's to accept (reading (b))"
 ---
 
 # ABC-287: razoring (P6)
@@ -18,7 +18,10 @@ adr: "owed (the Architect's): a re-measure on main after E2's second pull merges
 > - **Hold: rejected on today's evaluation** (`ADR-0061` § Alternatives). Measured alone on `main`: 0.79–0.83× at
 >   depth 8 and +0.305 ply at 47 000 nodes, but it loses `zugzwang.004`, drifts up to 345 cp and shows 1.4–2.0 % audit
 >   flips with one missed mate. Placed "last, not before E1 / E2" (`ADR-0056` D2's dated line of 2026-11-02).
-> - **Re-open trigger:** E2's second pull merges (E1 has merged; E2's first pull closed NOT MET and did not ship).
+> - **Re-open trigger:** ~~E2's second pull merges (E1 has merged; E2's first pull closed NOT MET and did not ship).~~
+>   *2026-11-05 (`bapm-wait-lines-1105`; `…2b3440cf` item 4): **a tuned table is on `main`.** Both pulls closed NOT MET, and neither
+>   shipped. The word was "merges", not "or closes", so it has not fired, it may never fire, and **the hold stands.** A hand-valued
+>   term does not fire it. If tuning closes (a third miss on the row, `ADR-0067`'s dated block), this page is dropped or re-based.*
 >   Then the Architect re-measures razoring on that `main`, on the rows it failed. If it fails them again it is closed
 >   as dropped.
 > - **The board move is the Orchestrator's.**
@@ -86,7 +89,8 @@ The re-measure and the ADR fix exact numbers before Ready. None is loosened afte
 
 ## Dependencies
 
-- **E2's second pull merged** (no ticket id yet; it follows `ABC-271`). Hard.
+- ~~**E2's second pull merged** (no ticket id yet; it follows `ABC-271`). Hard.~~ *2026-11-05: **a tuned table on `main`.** Hard. No pull is
+  open, and there is no date (`ADR-0067`'s dated block of `arch-owner-answers-1105`).*
 - **The re-measure and the ADR** (the Architect's). DoR row 10.
 - **One at a time on `src/search.ts` / `src/engine.ts`** with the other search tickets.
 
@@ -98,11 +102,11 @@ The re-measure and the ADR fix exact numbers before Ready. None is loosened afte
 | 2 | scope and out-of-scope | ✅ scope 1–3 |
 | 3 | INVEST | ✅ S; one rule |
 | 4 | testable, measurable acceptance | ✅ Z0 exact; Z2 7 / 7 and 0; Z3 ≥ 54; Z5 ≥ 50.0 or ≥ 43.0. Drift, audit and pay numbers owed with the ADR (row 10) |
-| 5 | dependencies known | ✅ the second pull; the re-measure; the shared files |
+| 5 | dependencies known | ✅ a tuned table on `main`; the re-measure; the shared files |
 | 6 | NFR triggers with targets | ✅ `NFR-005`, `NFR-008` ≤ 10 s, `NFR-009` none |
 | 7 | test notes | ✅ 1–2 |
 | 8 | size | ✅ S |
 | 9 | priority | ✅ P3 |
-| 10 | no major unresolved blocker | ❌ **held: rejected on today's evaluation**; re-measured after the second pull; the ADR is owed |
+| 10 | no major unresolved blocker | ❌ **held: rejected on today's evaluation**; re-measured once a tuned table is on `main`; the ADR is owed |
 
 **DoR 9/10. Backlog, held.**

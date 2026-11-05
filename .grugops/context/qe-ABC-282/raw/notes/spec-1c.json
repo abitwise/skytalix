@@ -1,0 +1,2 @@
+{"refs":["qe-ABC-282","grugops/qe-ABC-282","ABC-282","A6","701326a5","8f03fe47","qe-ABC-282/20261104T213029Z-qe-e2e-decision-5833fc48"],
+ "notes":[{"kind":"observation","bodyFile":"note-amend-fix.md","confidence":"high: the failed dry run is in this hop's command output; the fixed dry run and cmp were read before this note"}]}

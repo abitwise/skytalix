@@ -1,0 +1,7 @@
+K0 kiwipete chooseMove d8: door 766275 shipped 707548
+K0 kiwipete chooseMove d9: door 1725150 shipped 1595095
+K0 position-6 chooseMove d8: door 87475 shipped 101425
+K0 position-6 chooseMove d9: door 253724 shipped 226171
+K0 position-6 chooseMove d10: door 533916 shipped 471434
+K0 kiwipete search d8: door 605117 shipped 523847
+K0 position-6 search d8: door 406787 shipped 234214

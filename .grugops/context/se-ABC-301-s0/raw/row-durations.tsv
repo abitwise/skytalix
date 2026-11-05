@@ -1,0 +1,6 @@
+base	1	21	the seam passerTermsForT=0.70ms
+base	2	21	the seam passerTermsForT=0.68ms
+base	3	21	the seam passerTermsForT=0.70ms
+tip	1	22	evaluateAtPhase at each =1.12ms	the seams passerTermsFor=3.75ms
+tip	2	22	evaluateAtPhase at each =1.14ms	the seams passerTermsFor=1.97ms
+tip	3	22	evaluateAtPhase at each =1.15ms	the seams passerTermsFor=1.94ms

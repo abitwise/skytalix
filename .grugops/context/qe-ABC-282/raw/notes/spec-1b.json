@@ -1,0 +1,2 @@
+{"refs":["qe-ABC-282","grugops/qe-ABC-282","ABC-282","A6","ADR-0071","QE-204-a","701326a5","8f03fe47","04ebeb7e","22931005","tools/rating/rating.ts","qe-ABC-282/20261104T212617Z-qe-e2e-decision-416a183f"],
+ "notes":[{"kind":"decision","bodyFile":"note-prereg-amend.md","confidence":"high: launch failures reproduced and recorded; no game played before this note; no bar, build or control changed"}]}

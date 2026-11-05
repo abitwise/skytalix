@@ -127,6 +127,10 @@ The design of record is C1. It is the form a yes builds. It is not cleared to bu
    - Every older door turns it off.
    - `ABC-077` A6's growth counts this door, `countermoveByteLength()` for `NFR-009` (a), and `countermoveAt(move)`, a
      read-only probe for the update row.
+     *Dated 2026-11-04 (`arch-ABC-303-open`, records only at `main` `c118a5cf`): **"for `NFR-009` (a)" means a term in the sum
+     row of `src/transposition.test.ts`, and `ABC-303` owes it.** The build has the byte row, P5, and that bar is met. The sum
+     omits the table. The term is one line, it lands when `main` goes in, before QE seals, and no bar rides on it.
+     `ADR-0063` § Consequences' dated line has the history table's half.*
 8. **The rows and the lane budget:** `ADR-0072` d7's terms. Default lane, in the existing `src/search.bundle.test.ts`: the
    update, the read, the clear and the byte size, one row each; the tier row; the source row. All direct calls.
 9. **What this part still shows alone** (`ADR-0056` B2).

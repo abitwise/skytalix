@@ -27,7 +27,6 @@ import { makeMove, unmakeMove } from "./apply.ts";
 import {
   chooseMove,
   chooseMoveWithoutBundle,
-  chooseMoveWithoutQuietBundle,
   chooseMoveWithoutSeePruning,
   type EngineChoice,
 } from "./engine.ts";
@@ -44,7 +43,6 @@ import {
   MATE_SCORE,
   search,
   searchWithoutBundle,
-  searchWithoutQuietBundle,
   searchWithoutSeePruning,
 } from "./search.ts";
 import * as seeModule from "./see.ts";
@@ -567,15 +565,13 @@ if (process.env.SEARCH_DEEP === "1") {
       expect(corpus()).toHaveLength(190);
     });
 
-    // `ABC-303` re-points the head side to the all-off doors, `searchWithoutQuietBundle` /
-    // `chooseMoveWithoutQuietBundle`, the pre-ticket pair (`ADR-0072` d6): this row measures `ABC-279`'s
-    // skip, and bundle 1's drift is its own reported row (`ADR-0056` D5's dated block, R1). The bars
-    // are unchanged. Read on the shipped path chooseMove is 90.91 %, max 96 cp, 0 sign changes.
+    // Both rows' shipped side is the all-off door, one rung above Q1's: `ADR-0069` d11's dated line
+    // of 2026-11-04 (`ADR-0072` d7's). Titles and bars stay.
     it("search() against searchWithoutSeePruning at depth 5: >= 93% within 25 cp, none beyond 144, 0 mate sign changes [deep, SEARCH_DEEP=1]", () => {
       bar(
         "search() d5",
         drift(
-          (fen) => searchWithoutQuietBundle(parseFen(fen), 5).score,
+          (fen) => searchWithoutBundle(parseFen(fen), 5).score,
           (fen) => searchWithoutSeePruning(parseFen(fen), 5).score,
         ),
       );
@@ -585,7 +581,7 @@ if (process.env.SEARCH_DEEP === "1") {
       bar(
         "chooseMove to d5",
         drift(
-          (fen) => deepenTo(chooseMoveWithoutQuietBundle, fen, 5).score,
+          (fen) => deepenTo(chooseMoveWithoutBundle, fen, 5).score,
           (fen) => deepenTo(chooseMoveWithoutSeePruning, fen, 5).score,
         ),
       );

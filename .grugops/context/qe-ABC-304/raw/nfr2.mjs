@@ -1,0 +1,11 @@
+const W = process.argv[2];
+const Se = await import(`${W}/src/search.ts`);
+const { parseFen } = await import(`${W}/src/fen.ts`);
+const { pawnCacheByteLength } = await import(`${W}/src/evaluate.ts`);
+const { captureScratchByteLength } = await import(`${W}/src/quiescence.ts`);
+const { seeScratchByteLength } = await import(`${W}/src/see.ts`);
+const { tableByteLength } = await import(`${W}/src/transposition.ts`);
+Se.search(parseFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"), 2);
+const t = { table: tableByteLength(), keys: (Se.KEY_ARRAY_CAPACITY + 1) * 8, pawn: pawnCacheByteLength(), order: Se.orderScratchByteLength(), capture: captureScratchByteLength(), see: seeScratchByteLength(), history: Se.historyByteLength() };
+const sum = Object.values(t).reduce((a, b) => a + b, 0);
+console.log(JSON.stringify(t), "sum", sum, "without history", sum - t.history, "MiB", (sum / 1048576).toFixed(3), "cap", 16 * 1048576);

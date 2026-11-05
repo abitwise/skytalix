@@ -1,0 +1,7 @@
+{ "refs": ["arch-ABC-291"],
+  "notes": [
+    { "kind": "decision",
+      "confidence": "high that TUNE_DEEP's rows read as stated, from the source at main and b297ab89; medium on the door reading and the ABC-306 route, which are Architect readings open to overruling; all proposed until the owner answers; nothing run",
+      "bodyFile": "notes/note-carried.md",
+      "refs": ["arch-ABC-291", "ABC-291", "ABC-292", "ABC-290", "ABC-293", "ABC-295", "ABC-305", "ABC-306", "EPIC-011", "ADR-0075", "ADR-0056", "ADR-0067", "ADR-0031", "QE-271-h", "b297ab89", "dd88560f", "orch-2026-10-30a/20261105T081031Z-orchestrator-decision-42f7fd67", "bapm-wait-lines-1105/20261105T080806Z-ba-pm-observation-a717244e", "bapm-wait-lines-1105/20261105T080806Z-ba-pm-decision-fbc5050f", "arch-ABC-301-miss/20261105T004230Z-architect-design-decision-2b3440cf"] }
+  ] }

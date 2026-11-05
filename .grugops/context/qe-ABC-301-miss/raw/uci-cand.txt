@@ -1,0 +1,7 @@
+== uci from src/, cand
+info depth 9 score cp -434 nodes 70212 time 134 nps 523970 pv e1e5
+bestmove e1e5
+build exit 0
+== uci from a fresh dist/, cand
+info depth 9 score cp -434 nodes 70212 time 133 nps 527910 pv e1e5
+bestmove e1e5

@@ -1,0 +1,11 @@
+{
+ "gate.checked": 1494610,
+ "gateWorst": 0.9583333333334849,
+ "manifestSha256": "027082638eff3f5169d5fc241f3794e641fce8a24f63af01e5f8ded79c4d67cd",
+ "baseTableSha256": "e74ff3e932271506926734c8eafc83d9d246645b116669930cba9146c320f7a9",
+ "countsEqualEngineers": true,
+ "run": {
+  "seconds": 222.899,
+  "maxRssMiB": 1542.7421875
+ }
+}
