@@ -56,8 +56,12 @@ adr: "owed (the Architect's): a new ADR on main's tapered evaluation, form (b): 
   a yes.
 - **The record against it** (`…ba8265e9`): `ABC-205` died on cost, and `ADR-0068`'s king values lost mates. If he would rather try the
   largest estimate first, this is the term, at a higher risk of both. The order is cheap to change.
-- **If he ever says yes to a third pull,** this term may enter its free set, and each new export is owed to that pull's emitter change
-  (`…6ccd8243` item 3).
+- **If he ever says yes to a third pull,** this term may enter its free set~~, and each new export is owed to that pull's emitter change
+  (`…6ccd8243` item 3)~~. *2026-11-05 (`bapm-ABC-291-lines`): **superseded.** `ADR-0075`, accepted, in force at `ABC-291`'s merge, moves the tool line from a pull to the term's merge. d11 (a) settles it for
+  `ABC-291`. **This term's ADR follows d12's pattern,** in its order: definitions; one rule built on `main`'s own table, fixed before any row and blind to `zugzwang.001`; the memo or per-call seam; one
+  switch and an off-door pair; a `G2` ratio with its reason and its blind spot; a probe with rows, a sealed form, and a line for what it can and cannot change; K rows reading the term's own part; CF's
+  table filled; the tool line at the merge; no second set after a miss. It sets its own ratio, and d12 binds none of its values. "No second set" binds it only if he accepts that in this term's own ADR
+  (`…c1623ae7`). If E2 closes for good, no tool line is owed by any later term.*
 
 ## Scope
 

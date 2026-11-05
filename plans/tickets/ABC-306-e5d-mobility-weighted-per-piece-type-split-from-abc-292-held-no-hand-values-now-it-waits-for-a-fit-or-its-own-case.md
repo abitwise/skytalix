@@ -41,8 +41,12 @@ The ADR governs each line. Mobility weighted per piece type, against `ADR-0031` 
 The ADR fixes exact counts before Ready. None is loosened after Ready.
 
 - **On its own case, by hand values:** `ABC-292`'s form (b) list by reference, `G3`'s relation rows and `ABC-083` A4 (mobility within ± 100 cp) included.
-- **Through a fit:** **how is `UNKNOWN - verify`.** `ADR-0056` D2's dated line supersedes "structure at 0" for row E5, and a fit can weigh only a term on
-  `main`. The Architect's, when the hold lifts.
+- **Through a fit:** ~~**how is `UNKNOWN - verify`.** `ADR-0056` D2's dated line supersedes "structure at 0" for row E5, and a fit can weigh only a term on
+  `main`. The Architect's, when the hold lifts.~~ *2026-11-05 (`bapm-ABC-291-lines`; `ADR-0075` d11 (b), accepted, in force at `ABC-291`'s merge): **only on a yes that names it. The Architect writes the route at that yes.** The hold
+  stands, and nothing is built now. The route: per-piece weights land value-identical, every piece at the shared `MOBILITY_WEIGHT` (not at 0), so the fit has a term on `main` to weigh. It needs its `ADR-0031`
+  change and one dated line beside `ADR-0056` D2's supersession, since it is form (a) in substance. It would have no read of its own, so it fails `ADR-0067` test 2 as written: his yes must name it, or it stays
+  out of the free set. Whether the tracer's single `clamp(W · m)` fits a weight per piece is `UNKNOWN - verify`, that ADR's. **So the re-open trigger's "a third pull he has said yes to" reads "a yes that names
+  this term" on this route; the ADR holds.***
 
 ## NFR triggers
 
