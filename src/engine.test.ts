@@ -1885,8 +1885,10 @@ describe("ABC-282 A1 — no iteration starts that the clock says cannot finish",
     chooseMove(parseFen(fen), { budgetMs: 60_000, now: () => 0, maxDepth: depth }) as EngineChoice;
 
   it("(a) past the soft limit the search returns after iteration d, with 0 nodes of d + 1", () => {
-    const head = search(6, 6 / ITERATION_GROWTH);
-    const base = search(6);
+    // `ABC-303`, 2026-11-05 (`…0f8a4f82` E1): budget 6 -> 5. With the bundle on, the base completes
+    // depth 4 at 6, so it aborts nothing there; at 5 it aborts inside depth 4 again (`ADR-0071` D9).
+    const head = search(5, 5 / ITERATION_GROWTH);
+    const base = search(5);
     expect(head.depth).toBe(3);
     expect(head.nodes).toBe(completed(3).nodes);
     // The base aborts inside d + 1 on this row, so the head saved real work.
@@ -1936,7 +1938,9 @@ describe("ABC-282 A2 — a partial iteration's move is played only if it beat th
       softMs: 5 / ITERATION_GROWTH,
       depth: 2,
       incumbent: ["a1e5", 484],
-      kept: ["a1b1", 450],
+      // `ABC-303`, 2026-11-05 (`…0f8a4f82` E2): pinned from a1b1, 450. Same case, later in the same
+      // aborted iteration: the bundle's smaller tree gets further down the root list by node 3 125.
+      kept: ["a1f6", 475],
     },
     {
       row: "(b) stopped before any root move beat it, the incumbent is played",
@@ -2057,8 +2061,8 @@ const K25: readonly string[] = [
 
 if (RUN_DEEP) {
   describe("ABC-282 A0 — identity where W1 does not act [deep, ENGINE_DEEP=1]", () => {
-    const read = (fen: string, options: EngineOptions) => {
-      const choice = chooseMove(parseFen(fen), options) as EngineChoice;
+    const read = (search: typeof chooseMove, fen: string, options: EngineOptions) => {
+      const choice = search(parseFen(fen), options) as EngineChoice;
       return {
         move: label(choice.move),
         score: choice.score,
@@ -2067,40 +2071,52 @@ if (RUN_DEEP) {
         partial: choice.partial,
       };
     };
+    const door = engineModule.chooseMoveWithoutQuietBundle;
 
     // `main` `22931005`, read on the base before the change (`se-ABC-282` `…aadd2d48`).
-    const FROZEN: ReadonlyArray<readonly [string, number, string, number, number]> = [
-      ["kiwipete", 6, "e2a6", -59, 140_341],
-      ["kiwipete", 7, "d5e6", -82, 330_628],
-      ["kiwipete", 8, "d5e6", -89, 707_548],
-      ["position-6", 6, "c3d5", 87, 14_570],
-      ["position-6", 7, "c3d5", 79, 32_165],
-      ["position-6", 8, "c3d5", 71, 101_425],
+    // `ABC-303`, 2026-11-05 (`…0f8a4f82` E3): split. The all-off door keeps the base's figures, and
+    // takes no `softMs` (`ADR-0072` d11). All on is pinned beside them, with the softMs absent = 1 read.
+    type Figures = readonly [string, number, number];
+    const FROZEN: ReadonlyArray<readonly [string, number, Figures, Figures]> = [
+      ["kiwipete", 6, ["e2a6", -59, 140_341], ["e2a6", -101, 104_780]],
+      ["kiwipete", 7, ["d5e6", -82, 330_628], ["e2a6", -105, 244_677]],
+      ["kiwipete", 8, ["d5e6", -89, 707_548], ["e2a6", -114, 573_518]],
+      ["position-6", 6, ["c3d5", 87, 14_570], ["c3d5", 87, 10_513]],
+      ["position-6", 7, ["c3d5", 79, 32_165], ["c3d5", 43, 39_268]],
+      ["position-6", 8, ["c3d5", 71, 101_425], ["c3d5", 45, 94_911]],
     ];
-    for (const [name, depth, move, score, nodes] of FROZEN) {
-      it(`A0-1: ${name} at maxDepth ${depth} reads the base, with softMs absent and with softMs 1`, () => {
+    for (const [name, depth, off, on] of FROZEN) {
+      it(`A0-1: ${name} at maxDepth ${depth}: the all-off door reads the base; all on reads one line with softMs absent and with softMs 1`, () => {
         const frozen = { budgetMs: 60_000, now: () => 0, maxDepth: depth };
-        const expected = { move, score, depth, nodes, partial: undefined };
-        expect(read(fenOf(name), frozen)).toEqual(expected);
-        expect(read(fenOf(name), { ...frozen, softMs: 1 })).toEqual(expected);
-      });
-    }
-
-    const STEPPING: ReadonlyArray<readonly [string, number, number, string, number, number]> = [
-      ["kiwipete", 50, 5, "e2a6", -59, 47_384],
-      ["kiwipete", 200, 6, "e2a6", -59, 199_960],
-      ["position-6", 50, 7, "c3d5", 79, 44_105],
-      ["position-6", 200, 8, "c3d5", 71, 196_681],
-    ];
-    for (const [name, budgetMs, depth, move, score, nodes] of STEPPING) {
-      it(`A0-2: ${name} at ${budgetMs} virtual ms reads the base with softMs absent`, () => {
-        expect(read(fenOf(name), { budgetMs, now: virtualClock(1) })).toEqual({
+        const expected = ([move, score, nodes]: Figures) => ({
           move,
           score,
           depth,
           nodes,
           partial: undefined,
         });
+        expect(read(door, fenOf(name), frozen)).toEqual(expected(off));
+        expect(read(chooseMove, fenOf(name), frozen)).toEqual(expected(on));
+        expect(read(chooseMove, fenOf(name), { ...frozen, softMs: 1 })).toEqual(expected(on));
+      });
+    }
+
+    // `ABC-303`, 2026-11-05 (`…0f8a4f82` E4): split. The door keeps the base's figures; all on moves
+    // `score` only, and its `nodes` are what a W1 leak would change. Columns: door score, all-on score.
+    const STEPPING: ReadonlyArray<
+      readonly [string, number, number, string, number, number, number]
+    > = [
+      ["kiwipete", 50, 5, "e2a6", -59, -75, 47_384],
+      ["kiwipete", 200, 6, "e2a6", -59, -101, 199_960],
+      ["position-6", 50, 7, "c3d5", 79, 43, 44_105],
+      ["position-6", 200, 8, "c3d5", 71, 45, 196_681],
+    ];
+    for (const [name, budgetMs, depth, move, off, on, nodes] of STEPPING) {
+      it(`A0-2: ${name} at ${budgetMs} virtual ms, softMs absent: the all-off door reads the base; all on stops at the same node`, () => {
+        const stepped = () => ({ budgetMs, now: virtualClock(1) });
+        const expected = (score: number) => ({ move, score, depth, nodes, partial: undefined });
+        expect(read(door, fenOf(name), stepped())).toEqual(expected(off));
+        expect(read(chooseMove, fenOf(name), stepped())).toEqual(expected(on));
       });
     }
   });
