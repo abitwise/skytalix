@@ -4,7 +4,7 @@
 
 This repo runs a file-based agent factory for software delivery. One Orchestrator (the head grug) routes work through the full lifecycle; a few single-job grug agents execute within hard limits. The role is the intelligence. The workflow is the guardrail. The shared verified context is the memory. The board is the state. The gate is the backpressure. Humans decide; agents execute.
 
-**Byte budget: this file targets ≤ 18,432 B.** Why, and the size of every pass: the preamble and the last entry of `memory-bank/90-agents-md-command-log.md`.
+**Byte budget: ≤ 18,432 B** (`src/cli.test.ts` A5). Pass history: `memory-bank/90-agents-md-command-log.md`.
 
 ## How to work here
 
@@ -14,11 +14,9 @@ Read in this order:
 2. `agent-factory/roles/orchestrator.md` — the routing contract. All work starts here; act as the Orchestrator.
 3. `plans/board.md` — the visible state; respect every column's WIP limit before pulling new work.
 
-The Orchestrator classifies the request, activates the right specialist role(s), requires published notes from each, updates the board and traceability, and produces the next action.
-
 ## Role / workflow files
 
-Roles pull the shared verified context they need and publish their work output as typed notes — per Workflow 16 (`agent-factory/workflows/16-context-read-write.md`). The shared context is the inter-role memory; the Orchestrator sequences by decompose→enqueue.
+Roles pull the shared verified context and publish typed notes per Workflow 16 (`agent-factory/workflows/16-context-read-write.md`); the Orchestrator sequences by decompose→enqueue.
 
 - Roles:      `agent-factory/roles/`
 - Workflows:  `agent-factory/workflows/`
@@ -62,8 +60,8 @@ Real commands only, with flags, preferring fast single-file variants. If a comma
   non-terminal stdin skips both. Exit 0 normal session, 1 refused command line, 70 internal error.
   Writing rules and receipts: `memory-bank/90-agents-md-command-log.md` § "Dev / run". -->
 - Perft deep counts (opt-in slow suite): `PERFT_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/perft.test.ts`
-- UCI engine entry (ABC-168): `npm run uci` <!-- `node src/uci.ts`: reads UCI on stdin, writes UCI on stdout; exit 0 on `quit` or end of input, 1 on any argument, 70 on an exception. Receipts: `memory-bank/90-agents-md-command-log.md` § "UCI entry point". -->
-- UCI time mode (ABC-220/221, ADR-0052): `setoption name TimeMode value level|simple-tournament|uci-clock-mode`; default `level`. `simple-tournament` searches a fixed T = 22 s a move, `min(T, C)` under a clock C. `uci-clock-mode` spends `min(59.5 s, C)`, ceiling 60 s. Both ignore `Skill Level`. `HARD_CEILING_MS` = 60 000. `isready` and `stop` mid-search answer up to one budget late (no worker).
+- UCI engine entry (ABC-168): `npm run uci` <!-- `node src/uci.ts`, UCI on stdin and stdout. Exit codes and receipts: `memory-bank/90-agents-md-command-log.md` § "UCI entry point". -->
+- UCI time mode (ABC-220/221, ADR-0052): `setoption name TimeMode value level|simple-tournament|uci-clock-mode`; default `level`. `simple-tournament` searches a fixed T = 22 s a move, `min(T, C)` under a clock C. `uci-clock-mode` spends `min(59.5 s, C)`, ceiling 60 s. Both ignore `Skill Level`. `HARD_CEILING_MS` = 60 000. `isready` and `stop` mid-search answer up to one budget late (no worker). W1 (ABC-282, ADR-0071), `uci-clock-mode` on a `go` with the mover's clock and no `movetime`: no iteration starts past budget ÷ 2.3, so a move can end well short of the budget (still the hard abort); an aborted iteration's move is kept if it beat the incumbent. Other modes and tokens are unchanged. A test that needs the full 59.5 s sends `go movetime`.
 
 ### Test
 
@@ -79,6 +77,7 @@ In a script, poll the job's output file or `kill -0 <pid>`; never `while pgrep -
 - Heap flag (ABC-173): `--max-old-space-size=400` is for ONE-file vitest runs only. Whole-suite or
   multi-file runs use 128, as `npm test` sets itself; the heap guard refuses 400 there.
 - No `npm run` script runs a `*_DEEP` lane. The npx `*_DEEP` lines below are the only verified spelling. A brief that fences out npx cannot run them: route the lane to a hop that may, or record `UNKNOWN - verify`.
+- Merge re-read: it runs the deep lane of any test file arriving from the other side.
 - Worker cap (ABC-144, ADR-0040 addendum 2): `vitest.config.ts` `test.maxWorkers: 2`, pinned by value in
   `src/cli.test.ts`; `isolate` stays on; no `projects`/`poolOptions`. Never raise it or pass a higher
   `--maxWorkers`; env may only lower it: `VITEST_MAX_WORKERS` 1..2. Env note, module
@@ -98,10 +97,11 @@ In a script, poll the job's output file or `kill -0 <pid>`; never `while pgrep -
 - Null-move deep lane (opt-in, ABC-208, 46 rows): `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/search.null-move.test.ts`
 - Futility deep lane (ABC-268, 53 tests): `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/search.futility.test.ts`
 - Taper deep lane (ABC-269, 146 tests): `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/evaluate.taper.test.ts`
+- Passer deep lane (ABC-271 K0, 28 tests): `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/evaluate.passer.test.ts`. K0 reads the `…WithoutBundle` doors.
 - SEE deep lane (ABC-279, ~55 s): `SEARCH_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/see.test.ts`
 - Tune deep lane (ABC-280): `TUNE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run tools/tune/tune.test.ts`
 - Real-engine CLI lane (opt-in, ABC-119): `CLI_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/cli.real-engine.test.ts`
-- UCI session deep lane (opt-in, ABC-220 A11, 22 s walls; ABC-221 A10, 3 x 59.5 s; one row: add `-t "ABC-221 A10"`): `ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/uci-session.test.ts`. A spawn here: `ENGINE_DEEP` only, sync, argument array (ADR-0052 D8).
+- UCI session deep lane (opt-in, ABC-220 A11, 22 s walls; ABC-221 A10, 3 x 59.5 s at `go movetime 90000` plus a clock-line search that stops at 59.5 s ÷ 2.3 (ABC-282 A3); one row: add `-t "ABC-221 A10"`): `ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/uci-session.test.ts`. A spawn here: `ENGINE_DEEP` only, sync, argument array (ADR-0052 D8).
 - Real-engine UCI lane (opt-in, ABC-168): `UCI_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/uci.real-engine.test.ts`
 - Self-play ladder lane (opt-in, ABC-085, ADR-0038): `LADDER_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/ladder.test.ts`
 - Test (single file): `NODE_OPTIONS=--max-old-space-size=400 npx vitest run <path>`
@@ -172,7 +172,7 @@ Owner's rulings in full: `memory-bank/45-standing-rulings.md`, sections "Process
   is `blocking`): run the gates on the branch tip before and on `main` after, and record both.
   Tests and UAT are the agent's on the same terms — see `memory-bank/45-standing-rulings.md` § Test and UAT authority.
 - **Deploy is allowed, and there is nothing to deploy** (the owner, 2026-08-15, one sentence).
-  `production_requires_human_confirmation` stays `true`; the grant did not flip it. See `memory-bank/45-standing-rulings.md` § Deployment posture.
+  `production_requires_human_confirmation` stays `true`. See `memory-bank/45-standing-rulings.md` § Deployment posture.
 - Do not change dependencies without reason. No unrelated refactors. No fake results.
 - A `vitest`/`@vitest/*` bump carries `RISK-ABC143-01` (`ABC-143` § Follow-ups): the result-file reporter uses vitest internals; fails loud at load if one is gone (`ABC-152`).
 
@@ -220,8 +220,7 @@ Andrej Karpathy's coding-agent rules — 12 rules grouped under four principles.
 ## Memory bank & plans
 
 - `memory-bank/*` — the agent-maintained working memory: read on start; `60-progress.md` is the running plan-of-record, `50-decisions/` holds ADRs, plus brief, product, architecture, contributing, runbook, glossary.
-- `memory-bank/45-standing-rulings.md` — the owner's standing rulings in full (process, branching, test and UAT, QE, deployment); `memory-bank/90-agents-md-command-log.md` — on-demand commands, lane triggers and traps, and the receipts behind § Commands.
-- `plans/*` — the delivery state: `board.md` (status), `traceability.md` (requirement→ticket→code→test→UAT→release), `nfr-catalog.md`, plus `sprints/`, `releases/`, `epics/`, `features/`, `tickets/`.
+- `plans/*` — delivery state: `board.md`, `traceability.md`, `nfr-catalog.md`, `sprints/`, `releases/`, `epics/`, `features/`, `tickets/`.
 
 ## When uncertain
 
