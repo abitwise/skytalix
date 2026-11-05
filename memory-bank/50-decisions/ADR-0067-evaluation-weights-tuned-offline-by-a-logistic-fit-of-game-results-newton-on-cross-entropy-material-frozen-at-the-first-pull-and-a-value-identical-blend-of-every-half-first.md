@@ -52,6 +52,9 @@ Architect/Design (task `arch-owner-answers-1103`, records only, on `grugops/arch
 - *Dated 2026-11-05 (`arch-owner-answers-1105`, records only, at `main` `a44aa057`; his word `…b836b85c`, verbatim "1. yes; 2. yes;
   3. wait"):* **he answered: tuning waits.** No third fit now and no date. The rules are the dated block above § What would
   falsify this. The method stays in force for any later pull. **No bar moves.**
+- *Dated 2026-11-05 (`arch-owner-answers-1105b`, records only, at `main` `6ff2554e`; his word `…0f1ab02e`, verbatim "2. yes"):* **a term merged
+  inside a bundle meets the third-pull trigger.** Every other limit stands. The line is at the end of the dated block above § What would
+  falsify this. **No bar moves.**
 
 *Before acceptance:* **PROPOSED 2026-11-03.** Recorded by Architect/Design (task `arch-ABC-239`, on `grugops/arch-ABC-239` from `main`
 `af15cbc9`). **Acceptance is the owner's:** this is a new ADR (`memory-bank/45-standing-rulings.md`, 2026-10-22).
@@ -121,6 +124,8 @@ Architect/Design (task `arch-owner-answers-1103`, records only, on `grugops/arch
 | 2026-11-05 | Architect/Design | The NOT MET recorded; what stands and what does not retire; the tool commits are not barred; attribution's fence; the owner's options. No bar moved | `arch-ABC-301-miss` `…5941f727`, `…e5a5ac0c`, `…2b3440cf` |
 | 2026-11-05 | Owner | **Tuning waits** ("3. wait", as in `…e5a5ac0c`): no third fit now and no date; at most one more attempt; a third miss on this row closes tuning | `orch-2026-10-30a` `…b836b85c` |
 | 2026-11-05 | Architect/Design | The wait written as rules, with the four tests owner-accepted. No bar moved | `arch-owner-answers-1105` |
+| 2026-11-05 | Owner | A term merged inside a bundle meets the third-pull trigger ("2. yes"). Every other limit stands | `orch-2026-10-30a` `…0f1ab02e` |
+| 2026-11-05 | Architect/Design | The four tests read for a bundle term. No bar moved | `arch-owner-answers-1105b` |
 
 ## Context
 
@@ -897,6 +902,8 @@ re-fitted.***
     not blind" stands.
   - **Its own read.** His words are "their own reads", and a bundle's credit is the bundle's (`ADR-0056` B5). So a term that merged
     only inside a bundle does not open this door unless he says so.
+    *Dated 2026-11-05 (`arch-owner-answers-1105b`; his word `…0f1ab02e`, "2. yes"):* **he says so. This line and "on its own read" above are
+    superseded for the door.** The end of this block gives the reading.
 - **The cap.** At most one more attempt. **A third miss on this row closes tuning.**
 - **The four tests.** A third pull must pass all four.
   1. **Named before the miss:** the change is on a record dated before `dd88560f`.
@@ -915,6 +922,33 @@ re-fitted.***
 - **The tools.** They land by a tools-only ticket from `b297ab89`, never either tip, after an N8-LANE read, as `…2b3440cf` shapes it.
   The read holds the host, so it follows A4.
 - **What the wait costs.** E2's gain stays unclaimed. E4a's 1.12 × per-call endgame cost stays paid for no value.
+
+*Dated 2026-11-05 (`arch-owner-answers-1105b`, records only at `main` `6ff2554e`; his word `…0f1ab02e`, verbatim "2. yes"): **a term merged inside a
+bundle meets the trigger. No bar moves, and nothing is fitted.***
+- **The trigger now reads:** a term named before this miss has merged, on its own read or as a part of a bundle that merged under
+  `ADR-0056` B1–B7. A bundle that does not merge opens nothing (B6).
+- **What stands, in his record's words:** named before the miss; at most one more attempt; a third miss on this row closes tuning; the
+  attempt itself stays his call. Asking is still not a yes.
+- **The four tests for a bundle term.** Each is read on the term, not on the bundle.
+  1. **Named before the miss.** The term itself must be on a record dated before `dd88560f`. The bundle need not be. A named part carries
+     no partner through: another part of the same bundle counts only if it passes on its own. `ABC-272` and U still come to
+     Architect/Design first.
+  2. **Stands without the row.** "Its own read" now reads "the read it merged on", the bundle's C2′. "Its own reason" is not relaxed. The
+     term keeps its own ADR or design page (B1), and that reason, and B1's relation between the parts, must hold with `zugzwang.001`
+     removed.
+  3. **Blind.** The test now also covers the bundle: which parts share it, and their values, are not chosen with the row or its
+     attribution in hand. `…e5a5ac0c`'s fence already bars attribution from choosing the next term. Two readings of mine, each open to
+     being overruled at any third-pull call:
+     - The all-on row read every value-changing read owes does not fail the test. A B3 per-part read of `zugzwang.001` is the row in
+       hand for that part: a form or value changed after it fails this test for that term.
+     - Where one bundle holds two such terms, both enter the free set. Keeping one out would be a choice made with the row in hand.
+  4. **Capped.** Unchanged. One door, one fit, one attempt. A bundle with two named terms opens the door once. A miss closes E2, and
+     there is no fourth attempt.
+- **What a bundle term does not bring.** `ADR-0056` B5 stands: the door reads a merge, and no per-part Elo follows from it. So a term's own
+  worth stays unread when the door opens, and under R-BUNDLE-1 a part with a small negative share can open it. B1 bars a value-identical
+  part, so a term at 0 cannot open the door this way.
+- **The default does not move.** The next terms still go on their own reads (`…b836b85c` 3), in `ADR-0056` D6's order. This answer makes
+  a bundle count; it does not make one the route.
 
 ## What would falsify this
 
