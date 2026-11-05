@@ -1481,13 +1481,16 @@ line, id unchanged), **merge into X**, **supersede**, **drop**, **close** (the e
     (`bapm-lines-1104`): that hold is cleared (`ADR-0074` PROPOSED, premise met). The merge waits on OQ-0074-1 and its read.
     **One at a time with `ABC-282` and bundle 1** (`ABC-286` + `ABC-288`, named `…3b15b361` 3): whichever merges second
     re-reads its instrument counts, and the later switch is the top rung (`ADR-0074` § Consequences). Not yet scheduled:
-    after W1 the build order is `ABC-301` scope 0, bundle 1, then `ABC-289`, and the row census gates the second of
-    them (`…085f647c` 5).* *2026-11-04 (`bapm-bundle-1-cut`; `ADR-0056` D5's dated block): OQ-0074-1 answered yes. **Bundle 1 reads first;
+    after W1 the build order is `ABC-301` scope 0, bundle 1, then `ABC-289`~~, and the row census gates the second of
+    them (`…085f647c` 5)~~.* *2026-11-04 (`bapm-bundle-1-cut`; `ADR-0056` D5's dated block): OQ-0074-1 answered yes. **Bundle 1 reads first;
     `ABC-289` reads alone after it,** on top of the bundle if it merged, on `main` without it if NOT MET. Its build starts when
     `ABC-303`'s merge or `failed-attempt` is recorded, not before.*
+    *2026-11-05 (`bapm-lines-1105c`; `…16e0ec2c` ruling 1, `…42f7fd67` item 1): **the row census gates the next lane-adding merge after `ABC-282`,**
+    whichever of `ABC-303` and `ABC-305` that is. It gates neither build. Its read is `secnfr-census-1105`, not yet reported.*
   - **`ABC-303` (bundle 1; `ABC-286` + `ABC-288`):** *2026-11-04 (`bapm-bundle-1-cut`; the Orchestrator's slot):* the code may be built now. Its
     C2′ read runs only after `ABC-282` and `ABC-301` have each merged or been recorded as failed, so neither makes that read
     stale. If `ABC-282` merges, this ticket lands second and carries the re-read of b = 2.3 and A0's counts (`ADR-0072` d11).
+    *2026-11-05 (`bapm-lines-1105c`): both halves are met, `ABC-301` recorded as failed and `ABC-282` merged at `a6ae8227`, so `ABC-303` lands second and carries both.*
   - **Readings:** `ABC-295` (R2) at Phase 4's close, `ABC-299` (R3) at Phase 5's close; which tickets close each phase is
     the Orchestrator's ruling.
 - *2026-11-04 (`bapm-ABC-301-cut`; `arch-second-pull-1104` `…4917f0f7` § 5, `…a5d74f70`):* **`ABC-271` → `ABC-301`
@@ -1508,9 +1511,9 @@ line, id unchanged), **merge into X**, **supersede**, **drop**, **close** (the e
     for a bundle term is `arch-owner-answers-1105b`'s, in flight.~~ *2026-11-05 (`bapm-pointers-1105`): **settled:** `ADR-0067`'s dated line of `arch-owner-answers-1105b` (`…3e6b25fb`), each test read on the
     term, not the bundle.* Another term named before the miss goes to Architect/Design first.
   - **A candidate fault in a term's read or in `ABC-289`'s:** CF1–CF10 reach them (`…0f1ab02e` item 1), ~~in the form that hop states~~ *in the form of `ADR-0056` D5's dated block of `arch-owner-answers-1105b` (`…65557abd`; 2026-11-05, `bapm-pointers-1105`)*.
-  - **`ABC-303`'s C2′ waits on `ABC-282` alone,** and through it on A4. `ABC-289` still follows `ABC-303`, alone, and its base stays the rule-made table.
+  - ~~**`ABC-303`'s C2′ waits on `ABC-282` alone,** and through it on A4.~~ *2026-11-05 (`bapm-lines-1105c`; `…16e0ec2c`): **`ABC-303`'s C2′ no longer waits on `ABC-282`:** it merged at `a6ae8227`, A4 read and MET (`…5191f871`). `main` still goes into `grugops/ABC-303` before QE seals its PREREG (that page's § Dependencies).* `ABC-289` still follows `ABC-303`, alone, and its base stays the rule-made table.
   - **`ABC-287` (P6) waits on a tuned table on `main`,** and may never fire. **`ABC-306` (E5d)** waits for a fit or its own case. *2026-11-05 (`bapm-ABC-291-lines`; `ADR-0075` d11 (b)): to a fit, only on a yes that names it.*
-  - **`ABC-305` (the tools) waits on `ABC-282`'s A4 lock,** then its `N8-LANE` read. It stales no read. *2026-11-05 (`bapm-ABC-291-lines`; `ADR-0075` d11 (a)): `ABC-291`'s build follows its merge.*
+  - ~~**`ABC-305` (the tools) waits on `ABC-282`'s A4 lock,** then its `N8-LANE` read.~~ *2026-11-05 (`bapm-lines-1105c`; `…16e0ec2c`): **`ABC-305` (the tools) no longer waits on A4's lock:** that hold has ended. Its `N8-LANE` read follows the census and comes before its landing.* It stales no read. *2026-11-05 (`bapm-ABC-291-lines`; `ADR-0075` d11 (a)): `ABC-291`'s build follows its merge.*
   - **Not settled:** which tickets close Phase 4 stays the Orchestrator's ruling (the Architect reads `ABC-272` and `ABC-290`–`ABC-294`).
 - *2026-11-03 (`bapm-ABC-236-park`):* `ABC-236` (S1) is parked (`ADR-0066`, premise not met), so it orders nothing.
   On a re-open it edits `src/engine.ts` only and takes its turn after whichever ticket then holds that file; its T1

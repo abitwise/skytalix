@@ -110,10 +110,12 @@ adr: "No new ADR. ADR-0067's dated block of arch-owner-answers-1105 (the tools l
 
 ## Dependencies
 
-- **After `ABC-282`'s A4** (`qe-ABC-282-a4`). It holds the host alone, so no lane or read of this ticket starts until it ends. The `N8-LANE`
-  read then comes before the landing.
-- **Order with `ABC-282`:** either. Whichever lands second reads this page's A4 and A5 on a `main` that holds the first. Scope 2's conflict list is then
-  read again.
+- ~~**After `ABC-282`'s A4** (`qe-ABC-282-a4`). It holds the host alone, so no lane or read of this ticket starts until it ends. The `N8-LANE`
+  read then comes before the landing.~~ *2026-11-05 (`bapm-lines-1105c`; `…16e0ec2c`): **met.** A4's hold has ended. The `N8-LANE` read follows the census
+  and still comes before the landing.*
+- **Order with `ABC-282`:** ~~either. Whichever lands second reads this page's A4 and A5 on a `main` that holds the first. Scope 2's conflict list is then
+  read again.~~ *2026-11-05 (`bapm-lines-1105c`): **`ABC-282` landed first (`a6ae8227`), so this ticket is second.** It reads this page's A4 and A5 on a
+  `main` that holds `ABC-282`, and Scope 2's conflict list is read again.*
 - **Order with `ABC-303`:** none on the read. Zero production lines stale no C2′ (`…2b3440cf`). If this lands first, `ABC-303` takes it when
   `main` goes in.
 - **`ABC-301` closed NOT MET, and the owner's answer is in:** `…2b3440cf`'s hold until his answer is met.
@@ -133,7 +135,7 @@ adr: "No new ADR. ADR-0067's dated block of arch-owner-answers-1105 (the tools l
 | 2 | scope and out-of-scope | ✅ one merge, two conflicts; no emission, no fit, no production line |
 | 3 | INVEST | ✅ S; independent of `ABC-282`'s and `ABC-303`'s verdicts; testable by A1–A9 |
 | 4 | testable, measurable acceptance | ✅ ancestry exit codes; six paths; N + 1; ≤ +0.10 s; two lanes exit 0; path check exit 0 |
-| 5 | dependencies known | ✅ after `ABC-282`'s A4 lock; either order with `ABC-282`; none on `ABC-303`'s read |
+| 5 | dependencies known | ✅ ~~after `ABC-282`'s A4 lock; either order with `ABC-282`;~~ *2026-11-05 (`bapm-lines-1105c`): `ABC-282` landed first (`a6ae8227`), so this ticket is second;* none on `ABC-303`'s read |
 | 6 | NFR triggers with targets | ✅ `NFR-008` ≤ 10 s and ≤ +0.10 s; no others |
 | 7 | test notes | ✅ 1–3 |
 | 8 | size | ✅ S |

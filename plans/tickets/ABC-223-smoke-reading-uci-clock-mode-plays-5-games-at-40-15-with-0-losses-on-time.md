@@ -37,7 +37,7 @@ owner: QE/E2E
 >   - **b (INFO, A3): accepted.** 1 100 − δ at all 12 period ends is `ADR-0052` D2's margin, read live. In this
 >     smoke's scope it closes `RISK-EPIC009-01` for `uci-clock-mode`. A forfeit rate is bounded only by `EPIC-011`'s
 >     40/15 readings (G4; C6).
->   - **c (INFO, A5): accepted, no action.** The cap is not approached at 40/15. Its hard stop is held by `ABC-221`
+>   - **c (INFO, A5): accepted, no action.** ~~The cap is not approached at 40/15.~~ (true until `ABC-282`'s merge `a6ae8227`) *2026-11-05 (`ADR-0071`, QE-282-l): under W1 the cap is reached at 40/15: 13 of 606 budgets at 59 500, longest move 59 501 ms. No bar moved.* Its hard stop is held by `ABC-221`
 >     A10 (59 500.8 ms) and `ABC-246`'s rows.
 >   - **d (INFO, `AR-NFR004-A`): accepted.** +2.5 ms max at 22.4–25.3 s budgets is under ~31 ms. The figure is
 >     Security/NFR's to place at its next catalog hop; no catalog edit is owed here.
