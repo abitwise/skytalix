@@ -1,8 +1,9 @@
 ---
 id: ABC-304
 title: "The rows ABC-283 left behind on main: ABC-271 K0's seven counts and ABC-279 A3 (a) re-point to the …WithoutBundle doors, figures, bars and frozen JSON unchanged, and NFR-009's sum gains the history term (test-only, UAT waived)"
-status: ready
-column: Ready
+status: done
+column: Done
+closed: "2026-11-05, merged to local main at 9f481fa5 (a merge commit); QE PASS_WITH_GAPS, none blocking (qe-ABC-304 …e1bb0944); UAT waived (test-only, zero production lines). K0 stands re-pointed: ABC-301 closed NOT MET, so its scope 4 retirement was not taken. QE-304-a and -b ruled by the Architect (…21a996c9). Front matter only, by bapm-wait-lines-1105"
 size: XS
 priority: P2
 epic: EPIC-011
