@@ -1,0 +1,6 @@
+{
+  "refs": ["secnfr-census-1105", "NFR-008", "R-N8H-1", "ADR-0035", "QE-282-d", "QE-282-k",
+           "secnfr-census-1105/20261105T115526Z-security-nfr-decision-b9038a14",
+           "qe-ABC-282/20261104T230342Z-qe-e2e-observation-dfa196bf", "572edf13", "7117ce75"],
+  "notes": [ { "kind": "observation", "confidence": "high on the flags (ps, sampler and /proc/stat in every scored run); the figures are ungraded by the PREREG's rule", "bodyFile": "read1.md" } ]
+}
