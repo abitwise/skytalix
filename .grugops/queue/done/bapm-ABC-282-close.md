@@ -26,3 +26,4 @@ Publish: sealed notes (task bapm-ABC-282-close, contextRoot = the worktree's .gr
 - **4 (`EPIC-011`):** W1's § Phases row and § Tickets row 34, column Done.
 - **My readings (`…7a2846f2`):** "the three pin rulings" are QE's in `…e4b8527a`; no Orchestrator note re-rules them. "A10's title": the page's row is changed; the test's title in `src/uci-session.test.ts` is fenced out and still says three.
 - **Open (`…77657fed`):** that test title has no hop. `ADR-0071` § Status still reads "Not in force until `ABC-282` merges", and `arch-ABC-282-close` as listed does not name it. `EPIC-011` § Dependencies and `ABC-305` § Dependencies and DoR row 5 still carry waits on `ABC-282` / A4 that are past; the brief did not give me those lines. The census has not reported, so the pages give the gate and not its result.
+- **Path check:** `node tools/grugops/records-path-check.js --base main` exited 0 before the last commit.
