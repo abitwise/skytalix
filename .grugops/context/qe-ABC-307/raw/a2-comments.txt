@@ -1,0 +1,30 @@
+added comment lines: 29
+['ABC-307', 'arch-ABC-307', 'secnfr-census-1105'] // ABC-307 (secnfr-census-1105, arch-ABC-307): the seeds that reach three replies stay here; all ten run under ENGINE_DEEP=1.
+['ABC-307', 'arch-ABC-307', 'secnfr-census-1105'] // ABC-307 (secnfr-census-1105, arch-ABC-307): reached only by its -t line. ENGINE_DEEP names no engine here.
+['ABC-307', 'arch-ABC-307', 'secnfr-census-1105'] // ABC-307 (secnfr-census-1105, arch-ABC-307): two levels stay here; every level runs in src/uci-session.test.ts under ENGINE_DEEP=1.
+['ABC-307', 'arch-ABC-307', 'secnfr-census-1105'] // ABC-307 (secnfr-census-1105, arch-ABC-307): the first two gos stay here; all three, and seed 3, run under ENGINE_DEEP=1.
+['ABC-307', 'arch-ABC-307', 'secnfr-census-1105'] // ABC-307 (secnfr-census-1105, arch-ABC-307): the budget handed stays here; the 30 000 ms search runs under ENGINE_DEEP=1.
+['ABC-307', 'arch-ABC-307', 'secnfr-census-1105'] // ABC-307 (secnfr-census-1105, arch-ABC-307): five full rows, each under ENGINE_DEEP=1 only. Three are src/cli.test.ts's;
+[] // this file's engine spy calls through, and each describe here installs no stub.
+[] /** The bestmove sequence of level 1 under `seededRandom(k)`, each go's info line checked. */
+[] /** One fresh session at `level`, step G ÷ 30; the info line of `go` from the start position. */
+[] // D11: rate 0 is `chooseMove` with a score, and draws no seed.
+['ABC-307'] // biome-ignore format: ABC-307 keeps the moved body byte-identical to base, indent aside
+[] // Seed 7: level 1's first draw is a BLUNDER on the start position (non-vacuity, below).
+[] // Three times on one instance: the seam keeps the level's own generator across calls. Seed 7
+[] // draws 0.0117, 0.0620, 0.9769, so a per-move rebuild at ANY blunder level (1-4) decides
+['ABC-161'] // differently from the kept generator by call 2, without leaning on one level's rate (`ABC-161`).
+[] // The seam borrows the position and hands it back unchanged, as the loop requires.
+[] // NON-VACUITY: on this position and seed, level 1 blunders and the default level does not, and
+[] // they choose different moves — so a seam that ignored the level would red above.
+[] // Base's count is one short: the h7h5 occurrence carries h6 in the hash list.
+[] // And the twin's d8e8 reports no claim: its h7h5 occurrence keeps the file.
+['ABC-307', 'arch-ABC-307', 'secnfr-census-1105'] // ABC-307 (secnfr-census-1105, arch-ABC-307): the whole-tree reads run under ENGINE_DEEP=1 only. No engine is involved.
+['ADR-0046'] /** ADR-0046's five ids, both positive controls and both traps: the folders the remnants read. */
+[] /** A temp root: the real board and snapshot, and the named folders' real notes. A plain sweep runs on it. */
+['QE-105-p'] // QE-105-p: `main --ticket` opens only folders naming T, which masks a coverage() that has lost
+[] // the folder condition. Read the whole context tree so coverage() alone must hold condition 4.
+['ABC-154'] // ABC-154: positive control, so an empty or thinned read cannot pass the two finding checks below.
+['ABC-154'] // ABC-154: positive control on the plain sweep's own whole-tree read.
+['ABC-307'] // biome-ignore format: ABC-307 keeps the moved body byte-identical to base, indent aside
+['ABC-307', 'AR-154-TWO-POINT-CONTROL'] // AR-154-TWO-POINT-CONTROL (ABC-307, F1): two counts, never a literal. The listing opens no note.
