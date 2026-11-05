@@ -1,3 +1,4 @@
+_Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — **ABC-307 built** (797bb1a5): counts as the page, no STOP → In Review, `qe-ABC-307`. Running: qe-ABC-307, bapm-ABC-291-probe-lines._
 _Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — `arch-ABC-291-probe` merged: work goes on; PR8 1.043 above 1.03 spends d5's cut, K4 on the build is the one re-read; size M. → `bapm-ABC-291-probe-lines`. Running: se-ABC-307, that hop._
 _Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — **ABC-307 DoR 10/10** → In Development, `se-ABC-307`. Forecast lane near 9.596 s with all budgets spent, no rows left: ≥ 9.6 s goes straight to the owner. Running: arch-ABC-291-probe, se-ABC-307._
 _Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — `arch-ABC-307-reads` merged: parity holds, eight rows S, B1 k = 7, sum inside slack by 11 ms (thin). Rulings 13:43Z: C1 (d) on M6 with an added QE read; F1–F4 ride on ABC-307. → `bapm-ABC-307-lines`, `arch-ABC-291-probe`._
@@ -1545,8 +1546,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 3/3)
-- [ABC-307] Nine rows to deep lanes, NFR-008 re-graded (S, P1, DoR 10/10). `se-ABC-307`; merges alone and first.
+## In Development (WIP 2/3)
 - [ABC-305] Tools-only landing from b297ab89: `se-ABC-305` builds and reads N8-LANE; landing waits on the row move.
 - [ABC-303] Bundle 1, ABC-286 + ABC-288 (ADR-0072, 0073 ACCEPTED over missed premises; DoR 10/10, M, P3). Code only for now (`se-ABC-303`); C2′ only after ABC-282 and ABC-301 settle.
 
@@ -1576,7 +1576,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-307] Nine rows to deep lanes: built (797bb1a5), no STOP. `qe-ABC-307` reads A7 to A9; A9 graded, host alone.
 
 
 
