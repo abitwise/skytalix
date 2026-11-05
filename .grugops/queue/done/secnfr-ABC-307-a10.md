@@ -26,3 +26,4 @@ by: security-nfr (claude-opus-5-5), 2026-11-05T21:56:21Z. **PASS_WITH_RISKS.** R
 - **Page and record disagree (page not edited):** A9 "reads `main`", but it read the arms before the merge (`…b17275dd`); `R-CEN-1` LOW on the page, MEDIUM here and on the board; `R-N8H-1` MEDIUM in § Risks, LOW now; front matter `status: ready`, `column: Ready`, and the board still has `ABC-307` In Review, though it merged.
 - **INFO, Architect/Design:** the re-arm has no standing check; A5R is not in the tree.
 - **Records:** notes `…f627093d` (readings), `…6c111277` (decision). Commits `1aade31d` (claim), `969c5920` (notes), `4d94e5b6` (catalog).
+- **Path check:** `node tools/grugops/records-path-check.js --base main` exit 0, run over every commit above before this last one.
