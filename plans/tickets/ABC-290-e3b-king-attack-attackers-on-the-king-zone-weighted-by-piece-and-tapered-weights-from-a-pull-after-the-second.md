@@ -52,7 +52,8 @@ adr: "owed (the Architect's): a new ADR on main's tapered evaluation, form (b): 
 - **A stated rule in this term's ADR,** written before any row or game is read, and accepted by the owner. Nothing is adjusted after a
   result is seen.
 - **Not from a pull.** Tuning waits: no third fit and no date (`ADR-0067`'s dated block of `arch-owner-answers-1105`).
-- **Its own read.** If this term merges on its own read, a third pull may be asked for. Asking is not a yes.
+- **Its own read.** If this term merges on its own read, or inside a bundle (`…0f1ab02e` item 2), a third pull may be asked for. Asking is not
+  a yes.
 - **The record against it** (`…ba8265e9`): `ABC-205` died on cost, and `ADR-0068`'s king values lost mates. If he would rather try the
   largest estimate first, this is the term, at a higher risk of both. The order is cheap to change.
 - **If he ever says yes to a third pull,** this term may enter its free set, and each new export is owed to that pull's emitter change
@@ -96,7 +97,8 @@ The ADR fixes exact counts before Ready. None is loosened after Ready. Form (b) 
 | F3 | a safety row red | a defect check first; if real, NOT MET |
 | F4 | C2′ NOT MET | not merged, not re-played; the ticket comes back to BA/PM |
 
-- **A candidate fault in the read:** this is a plain C2′ read, on C-1 as written. CF1–CF10 bind `ABC-303` only (`…4844df37`).
+- **A candidate fault in the read:** CF1–CF10 reach this read, by the owner's word (`…0f1ab02e` item 1). The form QE copies for a single-part read
+  is `arch-owner-answers-1105b`'s, in flight.
 - **Recommended to the ADR, not a rule on any record** (`…ba8265e9`): no second set of values after a miss. New numbers chosen after seeing a
   loss are tuning on play by hand.
 
@@ -121,8 +123,8 @@ The ADR fixes exact counts before Ready. None is loosened after Ready. Form (b) 
   only for the host (`ADR-0056` D6's dated line).
 - **Third of the four, after `ABC-292`'s read.**
 - **The read queues.** A value-changing merge stales the read after it, so this term's C2′ follows `ABC-303` and `ABC-289`.
-- **A bundle with `ABC-293`** (`…a5d74f70`) stays lawful under B1. It would not open `ADR-0067`'s third-pull door, and CF1–CF10 would not reach it,
-  without his word (`ADR-0056`'s dated line under the candidate bundles).
+- **A bundle with `ABC-293`** (`…a5d74f70`) stays lawful under B1. A term merged inside it can open `ADR-0067`'s third-pull door, and CF1–CF10 reach
+  it (`…0f1ab02e` items 1 and 2). How the four tests read for a bundle term is `arch-owner-answers-1105b`'s, in flight.
 - **`ABC-301` closed NOT MET:** the trigger is met. *2026-11-05: "E2's second pull merged or closed" is gone as a wait.*
 - **One at a time on `src/evaluate.ts` / `src/evaluate-params.ts`** with `ABC-272`, `ABC-291`–`ABC-294`.
 

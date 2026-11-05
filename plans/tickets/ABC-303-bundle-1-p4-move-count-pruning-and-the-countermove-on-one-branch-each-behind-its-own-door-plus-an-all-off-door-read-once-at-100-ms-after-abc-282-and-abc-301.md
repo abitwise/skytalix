@@ -15,11 +15,12 @@ adr: "ADR-0072 (form M3; ABC-286) and ADR-0073 (form C1; ABC-288) ACCEPTED 2026-
 > **§ OPEN 1 ANSWERED: THE STRICT READING IS REPLACED BY CF1–CF10; `ABC-301`'S HALF OF THE SLOT IS MET; § OPEN 3 RULED; § OPEN 4'S
 > MOVED-BASE WORRY GONE FOR THAT HALF, 2026-11-05, by BA/PM** (task `bapm-wait-lines-1105`, records only, at `main` `a38315bf`; nothing
 > run). Sources: the owner's word `orch-2026-10-30a` `…b836b85c` item 2, `ADR-0056`'s dated block of `arch-owner-answers-1105`
-> (CF1–CF10), `…4844df37`, `…2b3440cf` item 4 and `…3c67d3c4`.
+> (CF1–CF10), `…4844df37`, `…2b3440cf` item 4, `…3c67d3c4`, and his later word of the same day, `…0f1ab02e`.
 > - **Written at** The read, § What happens on a miss, § Open 1, 3 and 4, § Dependencies and § Definition of Ready. Tables 1–3 stay
 >   word for word. CF1–CF10 are cited, not copied: the block governs, and QE copies from it.
-> - **The form binds this ticket only** (`…4844df37`). `ABC-289` and the term reads of the tuning wait stay plain C2′ reads.
-> - **CF7 stays marked as the Architect's carry until the Orchestrator confirms it** (§ Open 1).
+> - **The form does not stop at this ticket.** `…4844df37` bound it here; the owner then widened it to later single-read reads and bundles
+>   (`…0f1ab02e` item 1). Which reads, and whether a line adapts, is `arch-owner-answers-1105b`'s, in flight. This ticket's form does not change.
+> - **CF7 is owner-accepted** (`…0f1ab02e` item 3), so the Architect's-carry mark the brief asked for is off (§ Open 1).
 > - **The slot:** `ABC-301` closed NOT MET, so C2′ waits on `ABC-282` alone, and through it on A4.
 > - No bar, size or priority moves. **DoR 10/10, unchanged.** The column moves are the Orchestrator's.
 
@@ -192,7 +193,7 @@ and CF4 reads another tree.*
   - *Otherwise it is a defect, fixed with nothing tuned (CF3), then one new read on the fixed tree, final (CF4). A cause nobody can
     reproduce is a STOP to Architect/Design, with no new read.*
   - *A clean low score stays final (CF5). A clean, met C2′ stands after a value-identical fix, and only the faulted S′ is replayed
-    (CF6). A Levels red after a clean C2′ is CF7, marked in § Open 1.*
+    (CF6). A Levels red after a clean C2′ is CF7.*
   - *A second candidate fault is NOT MET (CF8). A case the lines do not name is a STOP to Architect/Design (CF10).*
 
 - **NOT MET (B6):** nothing merges. QE records a `failed-attempt` naming the bundle. `ADR-0072` and `ADR-0073` return to
@@ -291,10 +292,9 @@ The records do not settle these. This page adds none of them as a bar, and none 
    reading is gone for this ticket. Its form is CF1–CF10, `ADR-0056`'s dated block of `arch-owner-answers-1105`.*
    - ***Both open points close** (`…4843d1f2` 1 and 2; `…4844df37`). The clean C2′ line stands as CF6. An answer reaches any read not
      yet sealed, and no `ABC-303` PREREG is sealed, so the first read and any CF4 read carry this form.*
-   - ***CF7, the Levels red, is the Architect's carry and not the owner's word, until the Orchestrator confirms it.** `…b836b85c` names
-     S′ alone; CF7 comes from `arch-ABC-303-open`'s block. If he reads it as past what the owner accepted, it is the one line to take
-     back to him (`…4844df37`). A confirmation or a take-back reaches only a read not yet sealed, so it is wanted before QE seals.*
-   - *The block sorts every line into his, carried, and the Architect's reading. CF7 is the only one this page marks, by the brief.*
+   - ***CF7, the Levels red, is owner-accepted.** `…b836b85c` named S′ alone, so CF7 was the Architect's carry from `arch-ABC-303-open`'s
+     block (`…4844df37`). The owner confirmed it the same day (`…0f1ab02e` item 3): a clean C2′ stands when the Levels test then fails
+     and the fix does not change play. `ADR-0056`'s line moves at `arch-owner-answers-1105b`.*
 2. **S′'s E, for the Architect.** The block reads E 1 810. `…d776c0f0` § 6 has a blank, "1810, or the re-pinned value and
    its record", and says the block governs a difference. If the S′ pool re-pins E before the read, this page's E needs a
    dated line.
@@ -336,7 +336,7 @@ The records do not settle these. This page adds none of them as a bar, and none 
 | 7 | test notes | ✅ 1–5 |
 | 8 | size | ✅ M |
 | 9 | priority | ✅ P3 |
-| 10 | no major unresolved blocker | ✅ `ADR-0072` and `ADR-0073` ACCEPTED over missed premises, which opens the build. ~~The four § Open items do not block it; item 1 is wanted before the read~~ *2026-11-05: § Open 1, 2 and 3 are answered, and § Open 4's `ABC-282` half blocks nothing. CF7's confirmation is wanted before QE seals* |
+| 10 | no major unresolved blocker | ✅ `ADR-0072` and `ADR-0073` ACCEPTED over missed premises, which opens the build. ~~The four § Open items do not block it; item 1 is wanted before the read~~ *2026-11-05: § Open 1, 2 and 3 are answered, and § Open 4's `ABC-282` half blocks nothing* |
 
 **DoR 10/10. Ready.** The column move and the build slot are the Orchestrator's. *2026-11-04 (`bapm-K0-cut`): row 10 holds. § Open
 1 waits on the owner and blocks neither the build nor the read, because the strict reading stands in the meantime. **DoR 10/10,

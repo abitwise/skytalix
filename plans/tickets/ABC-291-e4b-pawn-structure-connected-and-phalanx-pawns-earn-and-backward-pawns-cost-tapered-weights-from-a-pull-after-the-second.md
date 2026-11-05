@@ -47,7 +47,8 @@ adr: "owed (the Architect's): a new ADR on main's tapered evaluation, form (b): 
 - **A stated rule in this term's ADR,** written before any row or game is read, and accepted by the owner. Nothing is adjusted after a
   result is seen.
 - **Not from a pull.** Tuning waits: no third fit and no date (`ADR-0067`'s dated block of `arch-owner-answers-1105`).
-- **Its own read.** If this term merges on its own read, a third pull may be asked for. Asking is not a yes.
+- **Its own read.** If this term merges on its own read, or inside a bundle (`…0f1ab02e` item 2), a third pull may be asked for. Asking is not
+  a yes.
 - **Why first** (`…ba8265e9`): hand values here have failed by cost or by lost mates. This term looks only at pawns, so it may sit in the pawn
   memo, and the smallest job opens the way to a third pull as well as any other. That is reasoned, not read.
 - **What it gives up:** it is not the largest estimate, and if its share of the row is small, 100 games may not show it.
@@ -96,7 +97,8 @@ The ADR fixes exact counts before Ready. None is loosened after Ready. Form (b) 
 | F3 | a safety row red | a defect check first; if real, NOT MET |
 | F4 | C2′ NOT MET | not merged, not re-played; the ticket comes back to BA/PM |
 
-- **A candidate fault in the read:** this is a plain C2′ read, on C-1 as written. CF1–CF10 bind `ABC-303` only (`…4844df37`).
+- **A candidate fault in the read:** CF1–CF10 reach this read, by the owner's word (`…0f1ab02e` item 1). The form QE copies for a single-part read
+  is `arch-owner-answers-1105b`'s, in flight.
 - **Recommended to the ADR, not a rule on any record** (`…ba8265e9`): no second set of values after a miss. New numbers chosen after seeing a
   loss are tuning on play by hand.
 
