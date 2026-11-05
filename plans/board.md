@@ -1,3 +1,4 @@
+_Updated: 2026-11-05T21:57:22Z — A10 and Architect records merged; K5 reading confirmed; R-N8H-1 LOW, R-CEN-1 MEDIUM carried. Timing reads wait on the owner's quiet-host word._
 _Updated: 2026-11-05T21:55:22Z — **ABC-307 Done**, merged bce24018, gates green; A10 and Architect records running; se-ABC-305-main takes main in and stops before its read._
 _Updated: 2026-11-05T20:03:27Z — A9 read 3 VOID on foreign load, re-read unspent; ABC-307 stays In Review; next read needs the owner to hold the whole host._
 _Updated: 2026-11-05T19:18:21Z — qe-ABC-307-a9 dispatched on the owner's word; A9 re-read waits on the slot gate._
