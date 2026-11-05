@@ -26,8 +26,7 @@ Publish: sealed notes (task arch-ABC-303-w1-rows, contextRoot = the worktree's .
 - **3, production and doors (`…0f8a4f82` § 4):** none. No door is handed `softMs`. The read's form does not change.
 - **4, the list (`…0f8a4f82` § 5):** E1–E4, U1, U2, with figures, titles, what stays, the lanes and the STOP rule. Not an owner call. `UNKNOWN - verify` items are § 7.
 - **Dated lines:** `ADR-0071` D8, D9 (two), D12 item 4 and the log; `ADR-0072` d7, d11 and the log. No decision moved. Readings: `…c66a3f5c`.
-- **Two corrections to `…0f8a4f82`, both found after sealing:**
-  - § 5's "about 1.9 M nodes" for the door halves is 1.81 M (1 326 677 + 488 130), about 3.6 s at `ADR-0071`'s rate. It changes nothing.
-  - § 7's door item names A0-2 only, correctly: A0-1's six door figures are already read equal by `se-ABC-303-main` `raw/out/s1.jsonl`.
+- **One correction to `…0f8a4f82`, found after sealing:** § 5's "about 1.9 M nodes" for the door halves is 1.81 M (1 326 677 + 488 130), about 3.6 s at `ADR-0071`'s rate. It changes nothing.
+- **Confirmed after sealing:** A0-1's six door figures are read equal in `se-ABC-303-main` `raw/out/s1.jsonl`, so § 7's door item stands for A0-2 alone.
 - **Owed:** BA/PM, one dated line on `ABC-303` test note 4. Orchestrator, the follow-on engineer brief carrying § 5.
-
+- **Path check:** `node tools/grugops/records-path-check.js --base main` exited 0 before the last commit.
