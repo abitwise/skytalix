@@ -15,6 +15,7 @@ id: ADR-0075
 - **d11's readings** stay open to overruling at any third-pull call (`…c1623ae7`).
 - **The dated lines of `arch-ABC-291`** in `ADR-0056` and `ADR-0067` stand, and now read accepted.
 - **Still owed, unchanged:** § Consequences' lines. `ABC-305` comes before the build.
+- ***Dated 2026-11-05 (`arch-ABC-291-probe`): the probe ran, once. The premise stands under rule 3 and the work does not stop.*** PR1 to PR7 and PR9 hold. PR8 reads R = 1.04287, above 1.03, so the build carries d5's named cut. K2's list is written, and no value, rule, definition, ratio, intent or bar moved. See § The probe's reading.
 
 *Before acceptance:* **PROPOSED 2026-11-05.** Recorded by Architect/Design (task `arch-ABC-291`, records only, on `grugops/arch-ABC-291` from `main` `148fd329`).
 **Nothing was run:** no test, build, engine or probe. A timing read (`ABC-282`'s A4) held the host. Every figure below is arithmetic on
@@ -38,6 +39,7 @@ dated lines; `ADR-0067`'s dated blocks; `ADR-0070`; `ADR-0064` d3–d8; `ADR-002
 | 2026-11-05 | Architect/Design | PROPOSED: definitions, rule, memo, `G2` ratio, intent, the probe written and not run, the four carried items. Nothing run | `arch-ABC-291` |
 | 2026-11-05 | Owner | ACCEPTED ("1. yes"), in force only at `ABC-291`'s merge | `orch-2026-10-30a` `…c1623ae7` |
 | 2026-11-05 | Architect/Design | Status, this log and the dated lines in `ADR-0056` and `ADR-0067` read accepted. No value, rule, bar or probe row moved. Nothing run | `arch-ABC-291-accept` |
+| 2026-11-05 | Architect/Design | The probe, once, under PREREG `…2a579895` (`d033ea0e`): premise stands under rule 3, PR8 R = 1.04287, PR9 14.72 %. K0 (c)'s counts and K2's list by dated line. No value, rule, definition, ratio, intent or bar moved | `arch-ABC-291-probe` `…65c7a9c9`, `…2926c26b` |
 
 ## Context
 
@@ -141,6 +143,7 @@ Notation: R is the pawn's own rank index, as in `PASSED`. 1 is its start rank, 6
    - **What it cannot read, stated now.** `G2` repeats six roots, so it reads the hit path (`ADR-0070` d3's dated line says the same of K3). The
      miss path, and how often it runs in search, are not graded. PR10 reports them, and C2′, played on the clock, prices them in.
    - **Forecast:** under 1 %, `UNKNOWN - verify`.
+     *Dated 2026-11-05 (`arch-ABC-291-probe`): **the forecast was wrong.** PR8 read R = 1.04287 per call, on the hit path. In search, PR10's ns per node read 0.988 of `main`. The forecast is replaced by these readings; the ratio stands.*
    - **F2's one value-identical cut, named now:** `doubled` and `isolated` share one memo word. They are only ever summed on a hit, so that saves a
      read and returns the memo to 576 KiB.
 
@@ -154,6 +157,7 @@ Notation: R is the pawn's own rank index, as in `PASSED`. 1 is its start rank, 6
      - (b) every older door reads its pre-ticket counts;
      - (c) the head reads the probe's P0 counts. If `main`'s `src/` has moved, the Engineer applies the probe's patch to the new base, re-reads, and puts both
        in the PR. A re-derived count is a dated line here, never a moved bar.
+       *Dated 2026-11-05 (`arch-ABC-291-probe`): P0's counts are in § The probe's reading, at `src/` tree `cc6e64d1`.*
    - **K1, units (default lane, no search):**
      - (a) the mirror, `Object.is`: `G3` + `TAPER_MIRROR_POSITIONS` + ≥ 12 new pawn-shape positions, 0 mismatches;
      - (b) `evaluateAtPhaseWithoutPawnShape` and `evaluateWithoutTaper` are `Object.is`-equal to the pre-ticket entries over the frozen corpora;
@@ -169,6 +173,7 @@ Notation: R is the pawn's own rank index, as in `PASSED`. 1 is its start rank, 6
    - **K2, the re-pins.** Two byte rows, 589 824 → 655 360: `src/evaluate.pawns.test.ts` (with its slot formula) and `src/transposition.test.ts`. They
      record a structure's size. **The value rows and the re-point list are `UNKNOWN - verify` until PR11's lane report.** That list joins this
      decision by a dated line before Ready. A re-pin outside it is a defect.
+     *Dated 2026-11-05 (`arch-ABC-291-probe`): the list is in § The probe's reading. With d5's cut in the build, the two byte rows do not move.*
    - **K3, safety (`ADR-0064` d7's rows):** mate floor 0 violations, door d4 → head d5 and d5 → d5 on the 287; zugzwang **7 / 7** at recorded depths with
      `zugzwang.001` among them; `G1` no NEWLY-MISSED line. All read all-on. No depth moves, and no expected result is rewritten.
    - **K4, `G2` ≤ 1.03 ×** (d5). The endgame report set is reported beside it.
@@ -199,6 +204,7 @@ Notation: R is the pawn's own rank index, as in `PASSED`. 1 is its start rank, 6
    term, and it is not added to any forecast. `ADR-0056` D2's +20–60 stays an estimate for all of row E4, E4a included.
 
 10. **The premise probe: written here, not run.** It runs on the host after A4, once, under the host lock, on one core. It plays no games.
+    *Dated 2026-11-05 (`arch-ABC-291-probe`): **run, once.** It cannot be run again. Its reading is § The probe's reading. The rows below stand as sealed.*
     - **The premise, in three parts:** at d2's values the term is **safe** on the rows that have caught hand values before, **cheap** per call, and **fires** at
       100 ms often enough for 100 games to mean something.
     - **Sealed form.** A `decision` note under the probe's own task, sealed and committed **before any measured run**. It names `main`'s tip and `src/` tree, the
@@ -277,6 +283,50 @@ Notation: R is the pawn's own rank index, as in `PASSED`. 1 is its start rank, 6
     per-call seam; one switch and an off-door pair; a `G2` ratio with its reason and its blind spot; a probe with rows, a sealed form, and a line for what it can and cannot change; K rows reading the term's own part; CF's table filled; the
     tool line at the merge; no second set after a miss. Each sets its own ratio. Nothing here binds their values.
 
+## The probe's reading
+
+*Dated 2026-11-05 (`arch-ABC-291-probe`, on `main` `91c21a9f`, `src/` tree `cc6e64d1`). PREREG `…2a579895`, committed at `d033ea0e` before the first measured run. Readings `…65c7a9c9`, decision `…2926c26b`. About 3.5 minutes of lock. No value, rule, definition, ratio, intent or bar moved.*
+
+**The premise stands under rule 3. `ABC-291` is built, and the build carries d5's named cut.**
+
+| row | reading | bar | read |
+|---|---|---|---|
+| PR1 | 7 of 7 rows exact | exact | holds |
+| PR2 | 230 pairs, 0 mismatches | 0 | holds |
+| PR3 | 28 126 positions, 0 mismatches. d1's words stand | 0 | holds |
+| PR4 | 28 126 positions and 1 068 forced collisions, 0 mismatches; OFF equal to `main` on 28 286 | 0 | holds |
+| PR5 | 0 of 163 and 0 of 191 | 0 violations | holds |
+| PR6 | 7 / 7 | 7 / 7 | holds |
+| PR7 | 54 / 58 ON and OFF, no NEWLY-MISSED line | none | holds |
+| PR8 | r₁ 1.02720, r₂ 1.05855, **R 1.04287**; controls 1.00427 and 1.01355, both sessions stand | R ≤ 1.03 | **above: rule 3** |
+| PR9 | 4 106 of 27 896, **14.72 %**, 200 games | ≥ 5.0 % | holds |
+
+- **Reports (PR10), which decide nothing:** reach 6.868 → 6.900; drift at d5 100 % within 25 cp, largest 24; ns per node 0.988 of `main`, on 3.45 % more nodes; memo 906 509 hits to 46 876 misses, 95.083 %; endgame set 1.0195. **The ratio with the memo bypassed is VOID:** both controls fell outside [0.970, 1.030], so the miss path's cost stays `UNKNOWN - verify`.
+- **PR8's shape:** the arm with the term read near 316 ns in some rounds and near 335 in others. `main` held 315. So R mixes about 1.00 and about 1.06. The cause is `UNKNOWN - verify`.
+
+**K0 (c), the head's counts at `cc6e64d1`.** nodes, score, move:
+
+| row | head | row | head |
+|---|---|---|---|
+| `chooseMove` kiwipete d8 | 693 584, −87, d5e6 | `chooseMove` position-6 d9 | 250 777, 74, c3d5 |
+| `chooseMove` kiwipete d9 | 1 517 556, −110, e2a6 | `chooseMove` position-6 d10 | 511 558, 75, c3d5 |
+| `chooseMove` position-6 d8 | 120 104, 74, c3d5 | `search()` kiwipete d8 | 521 532, −87, d5e6 |
+| | | `search()` position-6 d8 | 271 572, 74, c3d5 |
+
+**K2's list, at `cc6e64d1`: the 58 rows PR11 read red, none red on `main` (2 709 green).** Rows follow d4. "Off" means `evaluateAtPhaseWithoutPawnShape`, or `chooseMoveWithoutPawnShape` where the row calls the engine.
+1. **Byte rows (2):** `src/evaluate.pawns.test.ts` "is a fixed 576 KiB…" and `src/transposition.test.ts` A7 "stays inside NFR-009's 16 MiB…". With d5's cut the memo is 589 824 bytes and neither moves. Without it they read 655 360, as d7 has them.
+2. **Value rows, old → new (2):** `src/engine.test.ts` `ABC-249` "Qe5+ at ply 4…", f1e1 441 → 443, f1g1 520 → 522, title with them; `ABC-282` A2 (c) "a completed mate above the incumbent…", e4d3 1 070 → 1 075.
+3. **A lost fixture property (1):** `src/engine.test.ts` `ABC-282` A2 (b) "stopped before any root move beat it…". The incumbent reads a3b4 521, and the head stops at 1 157 nodes against the base's 3 197, so the row no longer reads its title. Re-found under `ADR-0028` d2, by the row's own scan. Not a re-pin.
+4. **Re-points to off, figures unchanged (26):** `src/evaluate.passer.test.ts` `ABC-271` K1 (b), 4; `src/evaluate.queen-on.test.ts` `ABC-270` K1 (b), 3; `src/evaluate.taper.test.ts` `ABC-269` B1 (a) "the frozen rows span phases 0 to 24…", 1, B1 (b), 2, `ABC-274` A3, 13 (one loop body; its two green rows move with it); `src/search.bundle.test.ts` `ABC-283` (a) "iterations 1-4…" and "a non-mate fail high…", 2 (the loop's green mate row moves with it); `src/see.test.ts` `ABC-279` A1 (c) "a node whose every capture is losing…", 1.
+5. **The new door joins a list (14):** exports, `src/engine.test.ts` A4 and `src/search.test.ts` A6; door lists, `src/evaluate.taper.test.ts` 2, `src/quiescence.test.ts` 4, `src/search.futility.test.ts` 2, `src/search.null-move.test.ts` 2, `src/see.test.ts` 2.
+6. **The switch's call sites (13):** `src/evaluate.taper.test.ts` "the call sites…", 1; `src/quiescence.test.ts` "the leaf passes its ply…", 2; `src/search.futility.test.ts` "one futilityNode call gated…", 2, the arity row 7 → 8, 1, the boundary rows, 6, "the mate band's edges", 1. Also on the list, green but wrong: the `futilityNode` calls at `src/search.futility.test.ts` lines 275, 439, 440 and 698, which only `tsc` shows. This group assumes `futilityNode(…, taper, pawnShape, phase)`. If the build passes the switch another way, the same rows change with it.
+
+Applied as edits on a scratch copy, the list leaves 2 708 of 2 709 green and `tsc` clean. The one red is item 3. **The list binds at `cc6e64d1`.** On a later base it is re-derived as K0 (c)'s counts are, by a dated line, never a moved bar. **Deep lanes were not read:** PR11 is the default lane. How d7's "a re-pin outside it is a defect" reads on them is with the Orchestrator (`…2926c26b` call 2).
+
+**The fixture list:** the probe's 16 positions (`raw/scripts/e4bprobe.ts`, `PAWN_SET`) meet K1 (a)'s "at least 12" and are offered to QE.
+
+**F2 after PR8:** with the cut spent before the build, whether K4 on the build is F2's one re-read is with the Orchestrator (`…2926c26b` call 1). My recommendation is that it is.
+
 ## The owner's question
 
 *Answered 2026-11-05 (`…c1623ae7`): "1. yes". The question stands below as it was asked.*
@@ -336,6 +386,7 @@ A pass means "not seen worse", not "proven better". A term worth nothing still p
 
 ### `UNKNOWN - verify`
 - Every reading: whether any row holds, `G2`, `G6`, the firing share, the memo's hit rate, the miss-path cost, and the probe's wall time.
+  *Dated 2026-11-05 (`arch-ABC-291-probe`): read, and now in § The probe's reading: the rows, `G2`, the firing share, the hit rate, the wall time, and K2's list. Still open: `G6`, the miss-path cost, what the cut buys, every play read, and the deep lanes' rows.*
 - Whether this term holds `zugzwang.001`. Whether any hand-valued term pays. This term's share of row E4's estimate.
 - K2's value rows and re-point list. `ABC-291`'s exact default-lane row count.
 - Whether `TUNE_DEEP` is red on `main` today. That the merge reddens it is by reading, not by a run.
