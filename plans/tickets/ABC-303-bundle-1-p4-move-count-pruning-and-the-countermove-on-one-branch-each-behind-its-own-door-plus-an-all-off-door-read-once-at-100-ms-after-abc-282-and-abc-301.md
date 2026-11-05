@@ -12,6 +12,18 @@ adr: "ADR-0072 (form M3; ABC-286) and ADR-0073 (form C1; ABC-288) ACCEPTED 2026-
 
 # ABC-303: bundle 1, P4 + the countermove, one branch, one read
 
+> **`ABC-282`'S HALF OF THE SLOT IS MET, SO BOTH HALVES ARE; THE CENSUS RULED, 2026-11-05, by BA/PM** (task `bapm-ABC-282-close`,
+> records only, at `main` `572edf13`; nothing run). Sources: `orch-2026-10-30a` `…16e0ec2c` (ruling 1 on `…42f7fd67` item 1) and QE's
+> `qe-ABC-282` `…5191f871`.
+> - **The slot:** `ABC-282` merged at `a6ae8227`, with A4 read and MET, so C2′ no longer waits on it. `ABC-301`'s half was met
+>   earlier (§ Dependencies).
+> - **What the slot still asks is unchanged:** `main` goes into `grugops/ABC-303`, with no rewrite, before QE seals its PREREG
+>   (§ Open 3). The base has moved, so `ABC-282`'s line in § Dependencies and § Open 4's apply. That hop is `se-ABC-303-main`, not
+>   yet reported.
+> - **The census** (§ Dependencies) gates the next lane-adding merge after `ABC-282`, whichever of this ticket and `ABC-305` that
+>   is. It does not gate either build. Its read is `secnfr-census-1105`, not yet reported.
+> - No bar, size or priority moves. **DoR 10/10, unchanged.** The column moves are the Orchestrator's.
+
 > **§ OPEN 1 ANSWERED: THE STRICT READING IS REPLACED BY CF1–CF10; `ABC-301`'S HALF OF THE SLOT IS MET; § OPEN 3 RULED; § OPEN 4'S
 > MOVED-BASE WORRY GONE FOR THAT HALF, 2026-11-05, by BA/PM** (task `bapm-wait-lines-1105`, records only, at `main` `a38315bf`; nothing
 > run). Sources: the owner's word `orch-2026-10-30a` `…b836b85c` item 2, `ADR-0056`'s dated block of `arch-owner-answers-1105`
@@ -253,6 +265,7 @@ and CF4 reads another tree.*
   only after `ABC-282` and `ABC-301` have each merged or been recorded as failed,** so neither makes that read stale.
   *2026-11-05 (`bapm-wait-lines-1105`): **`ABC-301`'s half is met:** recorded as failed (`…04dc7cd4`, QE `…d065fee3`), nothing merged.
   The read now waits on `ABC-282` alone, and through it on A4, the owner's yes of `…b836b85c` item 1.*
+  *2026-11-05 (`bapm-ABC-282-close`; `…16e0ec2c`): **`ABC-282`'s half is met:** merged `a6ae8227`, A4 read and MET (`…5191f871`).*
   - **What that asks of the branch** (BA/PM's reading, § Open 3): C2′ reads against the merge-base, and a read is stale when
     another value-changing merge has moved its base. So `main` is merged into the branch, with no rewrite, after the later
     of the two settles and before QE seals its PREREG. Tables 1 and 2 are read on that tree.
@@ -262,6 +275,7 @@ and CF4 reads another tree.*
 - **`ABC-282` (W1, `ADR-0071`).** Both edit `src/engine.ts` and the same `runIteration` (`ADR-0072` d11, `ADR-0073` d12).
   Under the slot, if it merges, this ticket lands second, so it carries: b = 2.3 re-read by P1's method (`ADR-0071` D12
   item 3) and A0's counts, reported to the Orchestrator. Any change to b is its own ticket with its own read.
+  *2026-11-05 (`bapm-ABC-282-close`): it merged (`a6ae8227`), so this ticket lands second and carries both.*
 - ~~**`ABC-301` (the second pull).** B-T7 goes stale on a value-changing merge after its freeze, and a merge of `ABC-301` would
   stale this read. The slot covers both.~~ *2026-11-05 (`bapm-wait-lines-1105`): closed NOT MET, so no such merge comes. Its tools land
   as `ABC-305` with zero production lines, which stales no read (`…2b3440cf`).*
@@ -272,8 +286,10 @@ and CF4 reads another tree.*
 - **One at a time on `src/search.ts` / `src/engine.ts`** with `ABC-284`, `ABC-285`, `ABC-287`, `ABC-296` and `ABC-297`.
 - **The row census** (the Orchestrator's) gates the second of `ABC-282` / `ABC-301` to merge and is sized for this ticket
   and `ABC-289` (`…5ec6c124` 1). A red on row P7 is a row move first.
-  *2026-11-05 (`bapm-wait-lines-1105`; `…2b3440cf`): with `ABC-301` closed there is no second of the two to gate. Whether the census
-  still gates a landing is the Orchestrator's, and the records do not settle it.*
+  *2026-11-05 (`bapm-wait-lines-1105`; `…2b3440cf`): with `ABC-301` closed there is no second of the two to gate.* ~~*Whether the census
+  still gates a landing is the Orchestrator's, and the records do not settle it.*~~
+  *2026-11-05 (`bapm-ABC-282-close`; `…16e0ec2c` ruling 1, `…42f7fd67` item 1): **ruled.** The census gates the next lane-adding merge
+  after `ABC-282`, whichever of this ticket and `ABC-305` that is. It does not gate either build.*
 
 ## Open, not bars (for the Architect and the Orchestrator)
 
@@ -324,6 +340,7 @@ The records do not settle these. This page adds none of them as a bar, and none 
    evaluation arrives. By the Architect's reading R1, R2, P3, P4 and the +0.116 stay near what the owner was shown; none of them is
    read yet. **`ABC-282`'s half stands:** if it merges, the base moves, and `…3c67d3c4` 4 and the change of practice above apply. Any
    red on P3 or P4 is still a STOP.*
+   *2026-11-05 (`bapm-ABC-282-close`): it merged (`a6ae8227`), so that half applies.*
 
 ## Definition of Ready
 
@@ -333,7 +350,7 @@ The records do not settle these. This page adds none of them as a bar, and none 
 | 2 | scope and out-of-scope | ✅ scope 1–5, each as its ADR; L2's drift and audit, CH3, per-part reads, re-tuning and `ABC-289` out |
 | 3 | INVEST | ✅ M, one branch and one read, by the owner's word; independent of `ABC-289`, ordered against `ABC-282` and `ABC-301` |
 | 4 | testable, measurable acceptance | ✅ tables 1 and 2 row by row, each a count, a ratio or an exact equality; C2′ ≥ 50.0 of 100 once; S′ ≥ 3.0 of 10; Levels exit 0; table 3 reported with its figures |
-| 5 | dependencies known | ✅ none hard for the build; the C2′ slot on `ABC-282` alone, `ABC-301`'s half met *(2026-11-05)*; `ABC-289` after; `ABC-298` and the shared files |
+| 5 | dependencies known | ✅ none hard for the build; ~~the C2′ slot on `ABC-282` alone, `ABC-301`'s half met *(2026-11-05)*~~ the C2′ slot met on both halves *(2026-11-05, `bapm-ABC-282-close`)*; `ABC-289` after; `ABC-298` and the shared files |
 | 6 | NFR triggers with targets | ✅ `NFR-008` ≤ 10 s and ≤ +0.10 s; `NFR-009` 3 072 bytes; `NFR-005` "≥ base", every run ≥ depth 6 |
 | 7 | test notes | ✅ 1–5 |
 | 8 | size | ✅ M |

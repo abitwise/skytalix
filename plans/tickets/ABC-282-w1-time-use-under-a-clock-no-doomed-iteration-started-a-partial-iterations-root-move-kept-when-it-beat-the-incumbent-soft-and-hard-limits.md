@@ -1,16 +1,42 @@
 ---
 id: ABC-282
 title: "W1: time use under a clock. No iteration is started that the clock says cannot finish, a partial iteration's root move is kept when it beat the incumbent, and each move has a soft and a hard limit inside the ceilings in force; read under a clock, before the first 40/15 reading"
-status: ready
-column: Ready
+status: done
+column: Done
+closed: "2026-11-05, merged to local main at a6ae8227 (code 04ebeb7e); QE PASS_WITH_GAPS, no blocking gap (qe-ABC-282 …5191f871, superseding …a6a2ba28), which signs UAT"
 size: L
 priority: P2
 epic: EPIC-011
 feature: —
-adr: "ADR-0071 ACCEPTED 2026-11-04 (owner, OQ-0071-1, form (a), as written; orch-2026-10-30a …7de79e90). Not in force until this ticket merges on A6."
+adr: "ADR-0071 ACCEPTED 2026-11-04 (owner, OQ-0071-1, form (a), as written; orch-2026-10-30a …7de79e90). In force since this ticket merged at a6ae8227 (…16e0ec2c)."
 ---
 
 # ABC-282: time use under a clock (W1)
+
+> **DONE 2026-11-05: MERGED `a6ae8227`; `ADR-0071` IN FORCE; QE PASS_WITH_GAPS, NO BLOCKING GAP, WHICH SIGNS UAT; A6 AND A4 MET;
+> THE GAIN IS NOT PROVEN, by BA/PM** (task `bapm-ABC-282-close`, records only, at `main` `572edf13`; nothing run). Sources: QE's
+> verdicts `qe-ABC-282` `…a6a2ba28`, superseded by `…5191f871`; its gaps `…f75e3402` and `…4f8f7f5d`; its pin rulings
+> `…e4b8527a`; A0's re-read `se-ABC-282` `…aadd2d48`; the Orchestrator's `orch-2026-10-30a` `…16e0ec2c`.
+> - **The outcome:** read on `04ebeb7e` (`src/` `d235214c`) against `22931005`. Every bar is MET and F1–F7 did not fire. QE's
+>   verdict signs UAT (the owner's delegation, 2026-10-22). It is PASS_WITH_GAPS and not PASS because A4 was not ALONE
+>   (QE-282-k), on top of the gaps already named.
+> - **A6: 45 / 32 / 23 = 56.5 of 100, MET** (dated line at A6). **The gain is not proven: Elo +45.4 ± 60.7.** The interval
+>   includes 0. The bar is the score, and 56.5 is not a measured gain.
+> - **A4: MET on both sides** (dated line at A4). M1: 0 losses on time, closest call 6 705 ms / 1 100 ms. M2: least
+>   93.16 % / 95.77 %.
+> - **A0:** the numbers on this page are now the re-read ones (QE-282-g). **A1 (c):** base median 0.3476, head 0.0000; b stays
+>   2.3 (175 ratios, median 2.3043). **A1 (a), (b), A2, A3, A5, D12:** MET (`…e4b8527a`).
+> - **`NFR-008`:** H − B +0.020 s, ≤ +0.10 s, MET; 9.48 s graded (`…dfa196bf`).
+> - **At the merge** (`…16e0ec2c`): typecheck 0, lint 0, `npm test` 2 709 passed. The deep lanes of the files arriving from
+>   either side, all rc 0: `evaluate.passer` 28, `see` 52, `transposition` 40 (`SEARCH_DEEP`) and 26 (`ENGINE_DEEP`), `engine`
+>   105, `uci-session` 265. That closes QE-282-j. The default lane's graded time on the merge was not read there;
+>   `secnfr-census-1105` reads it.
+> - **Pins, not bars** (`…e4b8527a`): `ABC-221` A10 (on that page), and D12's two readings (dated line at A2, and `ABC-078` A3).
+> - **Gaps:** QE-282-a closed (A4 read); QE-282-j closed (above); QE-282-g discharged here. Open, none blocking: b, k MEDIUM;
+>   d, f, l, m LOW; c, e LOW as recorded; h, i, n INFO.
+> - **Not on this page:** `ADR-0066` d5's line and QE-282-l (`arch-ABC-282-close`, `…16e0ec2c`); the `AGENTS.md` lines (the
+>   Scribe's). The board is the Orchestrator's, and it already reads Done.
+> - **No bar moves.**
 
 > **A DEFAULT-LANE BUDGET OF ≤ +0.1 s; THE IDENTITY SLICE GOES DEEP; BUILDS AFTER `ABC-302` MERGES, 2026-11-04, by
 > BA/PM** (task `bapm-ABC-302-cut`, records only, at `main` `9ee778b9`; nothing run). Source: the Orchestrator's
@@ -141,24 +167,27 @@ Ready.
 - **A0 (identity where W1 does not act; `ADR-0071` D8).** The rows bind; the numbers are `main` `5853d17f`'s (`src/`
   tree `4fb3da04`). **If `ABC-283` merges first, every value is re-read on the new merge-base by the same rows, before
   the change** (D12).
+  *2026-11-05 (`bapm-ABC-282-close`; QE-282-g): **`ABC-283` merged first, so the numbers below are the re-read ones:** `main`
+  `22931005`, `src/` tree `845f5662` (`se-ABC-282` `…aadd2d48`, sealed before A1 (c) ran). A struck figure is `5853d17f`'s. QE
+  read A0-1, A0-2 and A0-3 MET on `04ebeb7e` (`…e4b8527a`).*
   - **A0-1 (a frozen clock, `maxDepth` reached first;** `now: () => 0`, `budgetMs: 60000`**).** Each row reads the same
     with `softMs` absent and with `softMs: 1`:
 
     | position | d | move | score | nodes |
     |---|---|---|---|---|
-    | kiwipete | 6 | e2a6 | −59 | 144 120 |
-    | kiwipete | 7 | d5e6 | −82 | 346 458 |
-    | kiwipete | 8 | d5e6 | −89 | 766 275 |
-    | position-6 | 6 | c3d5 | 87 | 15 209 |
-    | position-6 | 7 | c3d5 | 79 | 35 436 |
-    | position-6 | 8 | c3d5 | 71 | 87 475 |
+    | kiwipete | 6 | e2a6 | −59 | ~~144 120~~ 140 341 |
+    | kiwipete | 7 | d5e6 | −82 | ~~346 458~~ 330 628 |
+    | kiwipete | 8 | d5e6 | −89 | ~~766 275~~ 707 548 |
+    | position-6 | 6 | c3d5 | 87 | ~~15 209~~ 14 570 |
+    | position-6 | 7 | c3d5 | 79 | ~~35 436~~ 32 165 |
+    | position-6 | 8 | c3d5 | 71 | ~~87 475~~ 101 425 |
 
   - **A0-2 (a stepping virtual clock, W1 off;** `virtualClock(1)`, `softMs` absent**).** The row a frozen clock cannot
     replace, because a frozen clock never fires the rule:
 
     | position | budgetMs | depth | move | score | nodes |
     |---|---|---|---|---|---|
-    | kiwipete | 50 | 4 | e2a6 | 8 | 48 408 |
+    | kiwipete | 50 | ~~4~~ 5 | e2a6 | ~~8~~ −59 | ~~48 408~~ 47 384 |
     | kiwipete | 200 | 6 | e2a6 | −59 | 199 960 |
     | position-6 | 50 | 7 | c3d5 | 79 | 44 105 |
     | position-6 | 200 | 8 | c3d5 | 71 | 196 681 |
@@ -171,6 +200,20 @@ Ready.
     - `uci-clock-mode`: `go movetime 200`; `go depth 6` (no time token).
 
     Plus one row in scope 4's mode (`go wtime 8000 btime 8000 movestogo 40`) that shows `softMs` IS handed in.
+
+    *2026-11-05 (`bapm-ABC-282-close`; `…aadd2d48`): the lines as read on the base, one fresh session a row; `bestmove c3d5` on
+    every row:*
+
+    | mode | go | line |
+    |---|---|---|
+    | `level` | `go movetime 200` | depth 8, cp 71, nodes 196 681, time 201 |
+    | `level` | `go wtime 4000 btime 4000` | depth 8, cp 71, nodes 196 681, time 201 |
+    | `simple-tournament` | `go movetime 200` | depth 8, cp 71, nodes 196 681, time 201 |
+    | `simple-tournament` | `go wtime 8000 btime 8000 movestogo 40` | depth 7, cp 79, nodes 69 705, time 76 |
+    | `uci-clock-mode` | `go movetime 200` | depth 8, cp 71, nodes 196 681, time 201 |
+    | `uci-clock-mode` | `go depth 6` | depth 6, cp 87, nodes 14 570, time 21 |
+
+    *Scope 4's row reads 69 705 nodes on the base and 32 165 at the head (depth 7), so `softMs` IS handed in (`…e4b8527a`).*
 - **A1 (no doomed iteration; default-lane units on a virtual clock, no real time):**
   - (a) **Given** a virtual clock on which the rule predicts that iteration d + 1 cannot finish before the soft limit,
     **then** the search returns after iteration d, and **0 nodes** of iteration d + 1 are visited.
@@ -207,6 +250,16 @@ Ready.
     - The fixture is picked on the base by a scan; the mate corpus (`src/search.mate-corpus.ts`) is the place to look.
       P3's kept rows are candidates for (a) (`candidate/b06#3` at H = 50 and 200, `base/b08#7` at H = 200), and any
       aborted head row without a kept move for (b). The Engineer re-scans on the base the build lands on.
+  - *2026-11-05 (`bapm-ABC-282-close`; QE's pin rulings `…e4b8527a`; `ADR-0071` D12 item 2; no bar moved): `ABC-283` landed first,
+    so the test is D12's, per aspiration pass. Two readings of it are **pins, not bars**:*
+    - ***"Evidence stands."** Evidence from an earlier pass stands until a later pass gives a newer M. Only a later M replaces
+      it. If a later pass shows the incumbent exact and above M and the abort lands with no newer M, the earlier M is still
+      played. It fires 0 of 125 on A1 (c), 0 of 2 000 on K25 × 80 budgets, and 0 of 1 288 in QE's control at `softMs = H`.*
+    - ***"The score stays the lower bound."** The kept score of a pass-1 fail high stays that lower bound, even when pass 2
+      completes M exactly. It fires 0 of 125, 0 of 2 000, and 1 of 1 288, on SE's own fixture (kept 50, pass 2 exact 75). It moves
+      only the reported score, never the move.*
+    - *At the shipped soft limit 0 of 151 aborts were multi-pass, so these paths are almost unreached (QE-282-i). Their committed
+      rows use `softMs = budget`, which is not a shipped value.*
 - **A3 (the limits hold; `NFR-004`):**
   - (a) **Given** any clock and any mode, **then** no move's search runs past its hard limit by more than `ABC-078`
     A2's node bound after the limit.
@@ -221,6 +274,19 @@ Ready.
   - *2026-11-04 (`bapm-ABC-282-adr`; `ADR-0071` D11): **unchanged, 5 games** at `tc=40/900` from `ABC-223`'s scratch
     protocol; no shortening is argued. M1 holds by construction. **M2 is the watched row** (`R-0071-1`): the worst
     case, every move at its soft limit, reads 72.5 % / 69.0 %; measured use gives ≥ 85 %. F5 routes a miss.*
+  - *2026-11-05 (`bapm-ABC-282-close`; `qe-ABC-282` `…1434a7d1`, `…5191f871`; the owner's yes `…b836b85c` item 1): **MET on both
+    sides.** 5 of 5 games at `tc=40/900` on `04ebeb7e`, played once, one lock hold; game 1 start to game 5 end 3 h 35 min 9 s.*
+    - ***M1:** 0 losses on time. Closest call 6 705 ms (White) and 1 100 ms (Black). The 1 100 ms is the game's last move, so it
+      is stamp-read; the true figure is at least about 1 075 ms.*
+    - ***M2:** 12 side-periods. Least 93.16 % (White) and 95.77 % (Black), against ≥ 75 %. F5 did not fire.*
+    - ***Not ALONE (QE-282-k):** another repository's vitest ran in 728 of 1 284 samples (56.7 %). No hop of this repository
+      broke the lock, and the window rule did not fire, so M1 stands and M2 is graded as read. Its effect on depth is
+      `UNKNOWN - verify`.*
+    - ***Near the ceiling (QE-282-l):** longest move 59 501 ms, 499 ms under `NFR-004`'s 60 000 ms. 13 of 606 budgets sat at the
+      59 500 cap. No bar is broken.*
+    - ***What it does not cover (QE-282-n):** five self-play games on one host. Only g04 completed a second period, so later
+      periods are read to P2 only.*
+    - *§ Dependencies' "The merge waits on A6 only" was not read as waiving this row (QE-282-a), and the merge waited on it.*
 - **A5 (safety, unchanged rows):** the mate rows, `ADR-0050` d9's zugzwang rows **7 / 7** at their recorded depths,
   and `G1` with **no NEWLY-MISSED line** stay as on `main` (`ADR-0064` d7's list). No zugzwang depth is re-pinned.
 - **A6 (the read; `ADR-0071` D10; `EPIC-011` § The per-change rule, by reference). Intent GAIN:** W1 acts at this
@@ -239,8 +305,19 @@ Ready.
   - **S′ is a fault smoke only:** it plays `st=0.5`, which is `movetime`, where W1 is off (A0), so it cannot see W1.
     **The Levels deep lane is not owed** (scope 4). `NFR-005` is untouched.
   - R-TC part 1 item 2 is read at review: no branch is chosen by a particular budget or control.
+  - *2026-11-05 (`bapm-ABC-282-close`; `qe-ABC-282` `…b4427cbd`): **MET.** 100 of 100 complete, W1 (`04ebeb7e`) against its
+    merge-base (`22931005`), `skytalix` 45 / 32 / 23 = **56.5 of 100** ≥ 50.0, 0 faults, 0 losses on time. Played once, 35 min
+    41 s. `ABC-300` A6 (QE-300-a) closes here. Not re-played after A4.*
+    - ***The gain is not proven: Elo +45.4 ± 60.7,** LOS 93.1 %. The interval includes 0, so the harness's own label reads
+      NEUTRAL. The label is not the verdict: the bar is the score, and it is met. Nobody should read 56.5 as a measured gain
+      (QE-282-h). 100 games neither confirm nor refute D10's forecast.*
+    - *Foreign vitest in 6 of 137 samples; both sides played through those windows alike (QE-282-d).*
 - **Reports, not bars:** the mean completed depth at the read's control; the share of moves taken from a partial
   iteration; the time left on the clock at each period end.
+  *2026-11-05 (`bapm-ABC-282-close`; `…b4427cbd`, `…1434a7d1`): at `tc=40/8`, mean completed depth 8.062 (head) against 7.973
+  (base); moves from a partial iteration 169 = 2.63 % of searched; clock left at period end, min / median / max, 1 099 / 1 469.5 /
+  1 862 ms (head) against 891 / 1 100 / 1 101 ms (base). At `tc=40/900`, mean completed depth 13.365 / 13.217 and moves from a
+  partial iteration 2.03 % / 3.05 % (White / Black).*
 
 ### Falsifiers
 
@@ -287,7 +364,8 @@ Ready.
    unchanged, as A3 (i). The new rows are A2 (a)–(c), as A3 (ii). Two more lines move with it by the ADR: `ABC-078`
    A4's textual pin of the loop header (re-pointed to the new one-read header) and the `EngineChoice` doc lines on
    `move` and `score`.
-4. **UAT is owed.** The QE verdict signs it (the 2026-10-22 delegation).
+4. **UAT is owed.** The QE verdict signs it (the 2026-10-22 delegation). *2026-11-05 (`bapm-ABC-282-close`): **signed** by
+   `…5191f871`, PASS_WITH_GAPS with no blocking gap.*
 
 ## Size and priority
 
