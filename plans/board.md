@@ -1,3 +1,4 @@
+_Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — `bapm-wait-lines-1105` merged: ABC-301 closed NOT MET; ABC-304 Done; **ABC-305** (tools, Ready) and **ABC-306** (per-piece mobility, held) cut; ABC-290–293 on hand values; order E4b first. Rulings …08:10:31Z: census after A4, gating the next lane-adding merge after ABC-282. Running: qe-ABC-282-a4, arch-owner-answers-1105b._
 _Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — **owner: fault rule reaches later reads; a bundle term can open a third pull; CF7 confirmed.** → `arch-owner-answers-1105b`. Running: qe-ABC-282-a4 (lock held alone), bapm-wait-lines-1105. No owner question open._
 _Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — `arch-owner-answers-1105` merged: CF1–CF10 bind ABC-303 only; wait rules in ADR-0067, ADR-0056; next term E4b (ABC-291). → `bapm-wait-lines-1105`. Running: qe-ABC-282-a4 (lock held alone). Owner, not urgent, owed before ABC-289's PREREG: does the fault rule reach later reads, CF7, a bundle term as a third-pull trigger._
 _Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — **owner: A4 yes; new C2′ after a deciding candidate fault yes; tuning WAIT.** → `qe-ABC-282-a4` (~3.5 h, lock held alone; records-only hops beside it), `arch-owner-answers-1105`. Then BA/PM (ABC-301 close, ABC-304 Done, EPIC-011 rows), tools-only ticket after A4._
@@ -1503,7 +1504,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## Ready (WIP 1/8)
+## Ready (WIP 2/8)
+- [ABC-305] Tools-only landing from b297ab89 (DoR 10/10, S, P3). N8-LANE read first, after A4; dd88560f stays out of main.
 - [ABC-289] Q2 delta pruning (ADR-0074 ACCEPTED; DoR 10/10, S, P3). Reads alone after bundle 1; build starts when ABC-303's merge or failed-attempt is recorded.
 - ~~[ABC-301]~~ → In Development. E2s second pull: one bounded fit on main with E4a's structure; KD/FP freed, U held 0; B-T0–B-T8 (B-T8 two r reads at 0.5 s, ~5 h, owner-approved). Scope 0 preconditions first (after NFR-008 headroom ruling).
 - ~~[ABC-271]~~ → In Development E4a structure only at 0 (ADR-0070 ACCEPTED form (a); DoR 10/10, S, P3). QE freeze first (qe-ABC-271-freeze), then se-ABC-271. No games.
