@@ -27,3 +27,4 @@ by: architect-design (claude-opus-5-5), at: 2026-11-05T12:58:37Z. Records only. 
 - **`T-QEHOP-GROWTH`:** retires at the merge if the trio moves (`ADR-0035` C6). No read at 5,500; the backstop is 5,900.
 - **To the Orchestrator:** how row 10 closes; the `A6` pairs; `R-307-c`; the trigger's dispatch. **Owner question: none.**
 - **Records:** `ADR-0046` § Dated 2026-11-05 (`arch-ABC-307`) and Status pointer; `ADR-0035` § Addendum 2026-11-05 C6; observation `…f246a007`, decision `…838ecf31`, with `raw/`. No ticket, EPIC, board, `src/` or tool file changed. Nothing is left running.
+- **Path check:** `node tools/grugops/records-path-check.js --base main` exit 0, on this branch before this line.
