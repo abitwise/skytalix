@@ -15,8 +15,8 @@
  *   `rows.jsonl` and `extract.json` (counts, manifest, base table).
  * - **fit**: K per source, then Newton on cross-entropy with material frozen and the free set
  *   sign-bounded (d2–d6), C-S or C-F by the inner rule, rounded half away from zero (d7). The rows
- *   of `tools/tune/bounds.ts` (F3's bound set, ruling (b)) enter every fit as linear inequalities,
- *   held exactly by the projected Newton's active set. Writes `fit.json`.
+ *   of `tools/tune/bounds.ts` (the bound set, d6's amendment) enter every fit from the first step as
+ *   linear inequalities, held exactly by the projected Newton's active set. Writes `fit.json`.
  * - **emit**: writes `src/evaluate-params.ts` in its present shape with the provenance header (d7).
  *
  * No random number generator; full batch, fixed order. The same inputs on the same Node major give
@@ -47,14 +47,18 @@ import { parseSan } from "../../src/san.ts";
 import { BOUNDS, type BoundRow } from "./bounds.ts";
 import { type Game, gamesOf, lexMovetext, streamZstGames } from "./pgn.ts";
 import {
+  evaluateAt,
   gateMiss,
   N_TERMS,
   PST_NAMES,
   SHIPPED,
   T_DBL,
+  T_FP,
   T_HALF,
   T_HALFQ,
   T_ISO,
+  T_KE,
+  T_KO,
   T_MAT,
   T_OPEN,
   T_OPENQ,
@@ -62,7 +66,9 @@ import {
   T_PST,
   T_SHEL,
   T_SHELQ,
+  T_UN,
   type Table,
+  type Trace,
   trace,
 } from "./tracer.ts";
 
@@ -665,7 +671,14 @@ const WEG = WMG + 1; // 23
  */
 const QUEEN_TERMS = [T_SHELQ, T_HALFQ, T_OPENQ];
 const QMG = WEG + 1; // 24 … 26
-const NPRE = QMG + QUEEN_TERMS.length; // 27: every one of these is bounded ≥ 0 (d6's sign bounds)
+/**
+ * `ABC-271`'s king distance and free path (d6's dated line of 2026-11-04, `ADR-0070` d7): the eg half
+ * at R = 1 … 6 is free and ≥ 0. The mg halves and `T_UN` have no parameter, so they stay at the base
+ * value 0.
+ */
+const E4A_TERMS = [T_KE, T_KO, T_FP].flatMap((t) => [t, t + 1, t + 2, t + 3, t + 4, t + 5]);
+const E4A = QMG + QUEEN_TERMS.length; // 27 … 44
+const NPRE = E4A + E4A_TERMS.length; // 45: every one of these is bounded ≥ 0 (d6's sign bounds)
 
 const mirrorCell = (idx: number): number => {
   const r = idx >> 3;
@@ -710,6 +723,11 @@ function makeCfg(kind: "C-S" | "C-F", base: Table): Cfg {
     z0[QMG + i] = base.mg[t] as number;
     pm[t] = QMG + i;
     sm[t] = 1;
+  });
+  E4A_TERMS.forEach((t, i) => {
+    z0[E4A + i] = base.eg[t] as number;
+    pe[t] = E4A + i;
+    se[t] = 1;
   });
   for (let j = 0; j < NPRE; j++) bounded[j] = 1;
   let prior: Float64Array | null = null;
@@ -893,6 +911,44 @@ interface BoundData {
   at: Array<Array<{ i: number; coef: number }>>;
 }
 
+/** The term indexes of one `src/evaluate-params.ts` export a bound row reads without. */
+const WITHOUT_TERMS: Readonly<Record<string, number>> = {
+  KING_SHELTER_MISSING: T_SHEL,
+  KING_SHELTER_MISSING_QUEEN: T_SHELQ,
+  KING_FILE_HALF_OPEN: T_HALF,
+  KING_FILE_HALF_OPEN_QUEEN: T_HALFQ,
+};
+
+/** A trace with `without`'s families removed; `MOBILITY_WEIGHT` removes the mobility count. */
+function traceWithout(t: Trace, without: readonly string[]): Trace {
+  const drop = new Set<number>();
+  for (const name of without) {
+    if (name === "MOBILITY_WEIGHT") continue;
+    const term = WITHOUT_TERMS[name];
+    if (term === undefined) throw new Error(`bound row: unknown family ${name}`);
+    drop.add(term);
+  }
+  const f: number[] = [];
+  for (let i = 0; i < t.f.length; i += 2) {
+    if (!drop.has(t.f[i] as number)) f.push(t.f[i] as number, t.f[i + 1] as number);
+  }
+  return { f, m: without.includes("MOBILITY_WEIGHT") ? 0 : t.m, w: t.w };
+}
+
+/**
+ * A bound row read on a table, as its test reads it: Σ coef · `evaluate` from the side to move, by
+ * `evaluateAt`, the integer blend. On an integer table it is the test's own number.
+ */
+export function readBound(row: BoundRow, th: Table): number {
+  let sum = 0;
+  for (const { fen, coef, without } of row.terms) {
+    const p = parseFen(fen);
+    const white = evaluateAt(traceWithout(trace(p), without ?? []), th);
+    sum += coef * (p.blackToMove ? 0 - white : white);
+  }
+  return sum;
+}
+
 /** Traces every bound row's positions and gates each one against `evaluate` (d5). */
 export function boundData(rows: readonly BoundRow[], th: Table = SHIPPED): BoundData {
   const s: number[] = [];
@@ -903,12 +959,13 @@ export function boundData(rows: readonly BoundRow[], th: Table = SHIPPED): Bound
   const at: Array<Array<{ i: number; coef: number }>> = [];
   for (const row of rows) {
     const list: Array<{ i: number; coef: number }> = [];
-    for (const { fen, coef } of row.terms) {
+    for (const { fen, coef, without } of row.terms) {
       const p = parseFen(fen);
-      const t = trace(p);
+      const whole = trace(p);
       const ev = evaluate(p);
-      const g = gateMiss(t, p.blackToMove ? 0 - ev : ev, th);
+      const g = gateMiss(whole, p.blackToMove ? 0 - ev : ev, th);
       if (g.miss) throw new Error(`identity gate miss (d5) on bound position ${fen}: ${g.d}`);
+      const t = traceWithout(whole, without ?? []);
       list.push({ i: s.length, coef: p.blackToMove ? -coef : coef });
       s.push(0);
       w.push(t.w);
@@ -968,6 +1025,15 @@ function marginOf(cfg: Cfg, bd: BoundData, k: number): number {
   let l1 = 0;
   for (const v of sens.values()) l1 += Math.abs(v);
   return 0.5 * l1 + trunc + ((bd.rows[k] as BoundRow).strict ? 1 : 0);
+}
+
+/** Ruling (b)'s margin of every bound under each configuration, for the PREREG's list. */
+export function boundMargins(bd: BoundData, base: Table): Record<"C-S" | "C-F", number[]> {
+  const of = (kind: "C-S" | "C-F"): number[] => {
+    const cfg = makeCfg(kind, base);
+    return bd.rows.map((_, k) => marginOf(cfg, bd, k));
+  };
+  return { "C-S": of("C-S"), "C-F": of("C-F") };
 }
 
 /** The bounds under `cfg`: each row's right side after its margin. */
@@ -1232,7 +1298,11 @@ export function termName(t: number): string {
     [T_SHELQ]: "KING_SHELTER_MISSING_QUEEN",
     [T_HALFQ]: "KING_FILE_HALF_OPEN_QUEEN",
     [T_OPENQ]: "KING_FILE_OPEN_QUEEN",
+    [T_UN]: "PASSED_UNSTOPPABLE",
   };
+  if (t >= T_FP && t < T_UN) return `PASSED_FREE[${t - T_FP + 1}]`;
+  if (t >= T_KO && t < T_FP) return `PASSED_KING_OWN[${t - T_KO + 1}]`;
+  if (t >= T_KE && t < T_KO) return `PASSED_KING_ENEMY[${t - T_KE + 1}]`;
   return names[t] ?? `term${t}`;
 }
 
@@ -1291,6 +1361,7 @@ function newton(
   let steps = 0;
   let mu: Float64Array = new Float64Array(B === null ? 0 : B.bd.rows.length);
   let boundedSteps = 0;
+  let stop = "step cap";
   for (; steps < 50; steps++) {
     const g = new Float64Array(n);
     const H = new Float64Array(n * n);
@@ -1342,6 +1413,8 @@ function newton(
     let zn = z;
     let fn = Number.POSITIVE_INFINITY;
     let useBounded = B !== null && !feasible;
+    // The multipliers of this step: all 0 for a box-only one, which holds no row as an equality.
+    let stepMu: Float64Array = new Float64Array(mu.length);
     if (!useBounded) {
       const dir = cholSolve(H, g, n);
       let t = 1;
@@ -1360,11 +1433,10 @@ function newton(
         t /= 2;
       }
     }
-    if (!useBounded) mu = new Float64Array(mu.length);
     if (useBounded && B !== null) {
       boundedSteps++;
       const step = boundedStep(cfg, B, Hfull, gfull, z, n);
-      mu = step.mu;
+      stepMu = step.mu;
       if (!feasible) {
         // The start breaks a row: the full step lands on it (the rows are linear in z).
         zn = z.map((v, j) => {
@@ -1374,6 +1446,7 @@ function newton(
         fn = objective(cfg, lin, d, groups, zn, lam);
         z = zn;
         f = fn;
+        mu = stepMu;
         continue;
       }
       let t = 1;
@@ -1390,19 +1463,25 @@ function newton(
         t /= 2;
       }
     }
-    if (!(fn <= f)) break;
+    // A rejected step moves nothing, so `z` keeps the multipliers of the step that set it.
+    if (!(fn <= f)) {
+      stop = "line search";
+      break;
+    }
     const rel = (f - fn) / f;
     z = zn;
     f = fn;
+    mu = stepMu;
     if (rel < 1e-9) {
       steps++;
+      stop = "relative change";
       break;
     }
   }
   if (B !== null && worstResidual(B, z, n) > FEAS) {
     throw new Error("bounded fit ended with a bound row broken");
   }
-  return { z, f, steps, mu, boundedSteps };
+  return { z, f, steps, mu, boundedSteps, stop };
 }
 
 /** d7: half away from zero; `+ 0` so no −0 is ever written. */
@@ -1482,7 +1561,7 @@ function fitMix(
   const chosen = bestF < (inner["C-S"] as number) * (1 - 0.001) ? cF : cS;
   const lam = chosen === cF ? bestLam : 0;
   const r = newton(chosen, base, d, groupsFor(own), lam, bd);
-  log.push(`full ${chosen.name} steps ${r.steps} bounded steps ${r.boundedSteps}`);
+  log.push(`full ${chosen.name} steps ${r.steps} bounded steps ${r.boundedSteps} stop ${r.stop}`);
   const table = rounded(chosen.toTable(r.z));
   const B = bd !== null && bd.rows.length > 0 ? boundsFor(chosen, base, bd) : null;
   const bounds =
@@ -1497,7 +1576,7 @@ function fitMix(
           }
           return {
             file: row.file,
-            row: row.row,
+            row: row.part === undefined ? row.row : `${row.row} [${row.part}]`,
             rhs: row.rhs,
             strict: row.strict,
             margin: B.margin[k] as number,
@@ -1612,6 +1691,10 @@ function valuesOf(th: Table) {
   const arr = (from: number, n: number, half: "mg" | "eg"): number[] =>
     Array.from({ length: n }, (_, i) => at(from + i, half));
   const pair = (t: number) => ({ mg: at(t, "mg"), eg: at(t, "eg") });
+  const byRank = (t: number) => ({
+    mg: [0, ...arr(t, 6, "mg"), 0],
+    eg: [0, ...arr(t, 6, "eg"), 0],
+  });
   return {
     MATERIAL: { mg: [0, ...arr(0, 5, "mg"), 0], eg: [0, ...arr(0, 5, "eg"), 0] },
     PST: Object.fromEntries(
@@ -1621,6 +1704,10 @@ function valuesOf(th: Table) {
       ]),
     ),
     PASSED: { mg: [0, ...arr(T_PASS, 6, "mg"), 0], eg: [0, ...arr(T_PASS, 6, "eg"), 0] },
+    PASSED_KING_ENEMY: byRank(T_KE),
+    PASSED_KING_OWN: byRank(T_KO),
+    PASSED_FREE: byRank(T_FP),
+    PASSED_UNSTOPPABLE: pair(T_UN),
     DOUBLED: pair(T_DBL),
     ISOLATED: pair(T_ISO),
     KING_SHELTER_MISSING: pair(T_SHEL),
@@ -1634,12 +1721,16 @@ function valuesOf(th: Table) {
   };
 }
 
-/** JSON of the thirteen value exports, in this order, mg before eg. */
+/** JSON of the seventeen value exports, in this order, mg before eg. */
 export function canonicalValues(v: ReturnType<typeof valuesOf>): string {
   const names = [
     "MATERIAL",
     "PST",
     "PASSED",
+    "PASSED_KING_ENEMY",
+    "PASSED_KING_OWN",
+    "PASSED_FREE",
+    "PASSED_UNSTOPPABLE",
     "DOUBLED",
     "ISOLATED",
     "KING_SHELTER_MISSING",
@@ -1735,7 +1826,7 @@ export function emitSource(info: ExtractInfo, fitted: FitReport, toolCommit: str
     " * TUNED by `tools/tune` (`ADR-0067`, `ABC-239`). Written by `tools/tune/tune.ts emit`; do not edit",
     " * by hand. Re-run `extract`, `fit` and `emit` on the base table to reproduce it byte for byte.",
     ` * - tool: tools/tune at commit ${toolCommit}; values sha256 ${sha256(valuesForHash)}`,
-    ` * - base table: src/evaluate-params.ts sha256 ${info.baseTableSha256} (E1's rule-made values; ABC-270's queen-on pairs at 0)`,
+    ` * - base table: src/evaluate-params.ts sha256 ${info.baseTableSha256} (E1's rule-made values; ABC-270's queen-on pairs and ABC-271's E4a terms at 0)`,
     ` * - data manifest sha256 ${info.manifestSha256} (${info.manifest.length} files; own PGNs`,
     " *   repository-relative, the Lichess export by URL, bytes and sha256)",
   );
@@ -1763,7 +1854,8 @@ export function emitSource(info: ExtractInfo, fitted: FitReport, toolCommit: str
     ` * - outer validation cross-entropy base ${fmtLoss(fitted.val.base.ce)} → fit ${fmtLoss(fitted.val.fit.ce)} (${(fitted.ratio as number).toFixed(4)} ×);`,
     ` *   training ${fmtLoss(fitted.train.base.ce)} → ${fmtLoss(fitted.train.fit.ce)}`,
     " * - frozen (d6): material, PHASE_WEIGHT, PHASE_MG / PHASE_EG, MOBILITY_CAP; the three queen-on",
-    " *   eg halves held at 0 (d6's dated line, `ADR-0068` d8)",
+    " *   eg halves held at 0 (d6's dated line, `ADR-0068` d8); E4a's mg halves and",
+    " *   PASSED_UNSTOPPABLE held at 0 (d6's dated line, `ADR-0070` d1 and d7)",
     ...boundLines(fitted.bounds ?? []),
     " *",
     " * Tables are written from WHITE's point of view and read RANK-8-FIRST (a8 top-left); black reads",
@@ -1830,6 +1922,46 @@ export function emitSource(info: ExtractInfo, fitted: FitReport, toolCommit: str
     `  mg: [0, ${range(T_PASS, 6, "mg").join(", ")}, 0],`,
     `  eg: [0, ${range(T_PASS, 6, "eg").join(", ")}, 0],`,
     "};",
+    "",
+    "/**",
+    " * E4a (`ABC-271`, `ADR-0070`): passed pawns read the kings and the path. Endgame terms, indexed like",
+    " * `PASSED` by the passer's OWN rank R (1 = its starting rank, 6 = one step from promotion; 0 and 7",
+    " * are never read). Only the frontmost passer of each file is read. Q is its queening square, d the",
+    " * Chebyshev distance (king steps). Every middlegame half is 0, at the build and at every pull: the",
+    " * evaluation skips these terms at phase 24, which is exact only while those halves are 0.",
+    " *",
+    " * KING_ENEMY / KING_OWN: eg += `KING_ENEMY[R]` × min(d(enemy king, Q), 5) − `KING_OWN[R]` ×",
+    " * min(d(own king, Q), 5). Rule: start (prior): 0. The rule (below) was probed and not shipped",
+    " * (`ADR-0070`): `PASSED.eg[R] / 10` and `floor(PASSED.eg[R] / 20)`.",
+    " */",
+    "export const PASSED_KING_ENEMY: MgEg<readonly number[]> = {",
+    `  mg: [0, ${range(T_KE, 6, "mg").join(", ")}, 0],`,
+    `  eg: [0, ${range(T_KE, 6, "eg").join(", ")}, 0],`,
+    "};",
+    "export const PASSED_KING_OWN: MgEg<readonly number[]> = {",
+    `  mg: [0, ${range(T_KO, 6, "mg").join(", ")}, 0],`,
+    `  eg: [0, ${range(T_KO, 6, "eg").join(", ")}, 0],`,
+    "};",
+    "",
+    "/**",
+    " * E4a's free path: eg += `PASSED_FREE[R]` when every square ahead of the passer, up to and including",
+    " * Q, is empty. A piece of either colour blocks, a king included; attacked squares are not read.",
+    " * Rule: start (prior): 0. The rule (below) was probed and not shipped (`ADR-0070`): `PASSED.eg[R] / 2`.",
+    " */",
+    "export const PASSED_FREE: MgEg<readonly number[]> = {",
+    `  mg: [0, ${range(T_FP, 6, "mg").join(", ")}, 0],`,
+    `  eg: [0, ${range(T_FP, 6, "eg").join(", ")}, 0],`,
+    "};",
+    "",
+    "/**",
+    " * E4a's unstoppable passer, the rule of the square: at phase 0 only, a passer with a free path whose",
+    " * moves < d(defending king, Q) − (1 if the defender is to move), where moves = 5 from the start rank",
+    " * (the double step), else 7 − R; d is not capped. Added once per side, however many such passers.",
+    " * Rule: start (prior): 0. The rule (below) was probed and not shipped (`ADR-0070`): `Q − (P +",
+    " * PASSED.eg[6] + PASSED_FREE.eg[6] + 5 × PASSED_KING_ENEMY.eg[6])` = 400. Held at 0 through the",
+    " * second pull (`ADR-0070` decision 7): a later attempt with its own PREREG gives it a value.",
+    " */",
+    `export const PASSED_UNSTOPPABLE: MgEg<number> = ${pair(T_UN)};`,
     "",
     "/**",
     " * ABC-082's other two pawn terms. DOUBLED: per pawn beyond the first on a file. ISOLATED: per pawn",
