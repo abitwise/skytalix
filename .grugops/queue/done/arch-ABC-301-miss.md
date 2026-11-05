@@ -16,3 +16,15 @@ QE: NOT MET under ADR-0067 F4, no defect (…d065fee3, readings …77e088f7, lan
 5. QE-304-a: A4 (b)'s door in src/see.test.ts; QE-304-b: the "compare with no door" wording.
 Fences: memory-bank/50-decisions and your records only. No ticket, EPIC, board or src edits. No push, force, amend, rebase or merge into main. Leave nothing running.
 Publish: sealed notes (task arch-ABC-301-miss, contextRoot = the worktree's .grugops/context, `at` from `date -u` run immediately before each note); queue moves; commit; ## Result + trace row; brief + claim to done/. Before your last commit, run `node tools/grugops/records-path-check.js --base main`; it must exit 0.
+
+## Result
+
+**2026-11-05, Architect/Design. All five items done. Records only, on `grugops/arch-ABC-301-miss` from `main` `701ef5bd`. No test, build or engine run; one read-only `git merge-tree`. Nothing pushed or merged, no `src/`, tool, ticket, EPIC or board edit, nothing left running.**
+
+- **1 (`…5941f727`, correction `…0c4be1f9`):** `ADR-0067` and `ADR-0070` carry the NOT MET: F4 and `ADR-0070` F5 fired, F3 and `ADR-0070` F4 did not. The structure stays value-identical at 0; 17 of 18 eg halves moved, `PASSED_KING_OWN` eg R = 1 recorded as dead weight; K0 does not retire.
+- **2 (`…e5a5ac0c`):** the owner's word is **stop**, **wait** or **third**. Recommended **wait**: no third fit now, one more attempt at most, only after a term named before this miss has merged on its own read. Every form available today is a refit by another name. The one clean form does not exist yet. Attribution may run, may not feed a later fit, and is not recommended now.
+- **3 (`…2b3440cf`):** not barred (`ABC-280` is the precedent). Land on **wait** or **third**, not on **stop**: a merge of `b297ab89` under a tools-only ticket, after the N8-LANE read. Conflicts at `701ef5bd` differ from QE's rehearsal.
+- **4 (`…2b3440cf`):** `ABC-303`'s slot half is met and its base stays near what he was shown; `ABC-289` unchanged; E3b to E6 unheld but form (a) has no pull behind it; `ABC-287`'s trigger has not fired; R2 reads a rule-made evaluation; 3 000's estimate stands lower by an unread amount.
+- **5 (`…21a996c9`, `ADR-0069`):** `QE-304-a`: A4 (b)'s head re-points to `chooseMoveWithoutBundle`, level unmoved, gates nothing. `QE-304-b`: the clause is wrong, A3 (b) stays on `search()` on d8's words.
+- **`UNKNOWN - verify`:** why e1e5 stays ahead; the depth-9 margin on today's base; the lane cost of the landing; whether `TUNE_DEEP` is red on `main`; whether any fit holds the row or pays on play.
+- **Slip of mine:** the sealed `…5941f727` named `ABC-279` as merged between the pulls. It was in the first pull's base. Corrected by `…0c4be1f9`; the ADR carries the right form.
