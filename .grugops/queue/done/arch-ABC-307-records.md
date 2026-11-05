@@ -25,3 +25,4 @@ by: architect-design (claude-opus-5-5), at: 2026-11-05T21:56:27Z. Records only, 
 - **To the Orchestrator:** confirm or overrule item 4. Whether a K5 second miss is also a miss under d11 (d), whose list names only a second `G2` miss; I did not add it. **Owner question: none today.**
 - **Owed:** BA/PM's line on `ABC-291`'s F2 note; the board's line; the 23rd line in QE briefs; K5's read and void rule in K4's PREREG.
 - **Notes:** …7cb68537 (decision), …c9edb1e2 (observation).
+- **Path check:** `node tools/grugops/records-path-check.js --base main` exit 0, on this branch before this commit.
