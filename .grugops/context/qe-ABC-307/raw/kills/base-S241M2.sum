@@ -1,0 +1,13 @@
+total 2709 passed 2697 failed 12 pending 0 todo 0 files 71 failedSuites 10
+KILL	cli.test.ts::ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square A4: with a legal ep capture available the same line is not a draw
+KILL	cli.test.ts::ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square A7: the move the search scores 0 is the move after which gameStatusOf reports the claim
+KILL	gameend.test.ts::ABC-241 A1 — repetitionKey, the one helper an ep square with a legal capture: the Zobrist key, file in (legal capture (e5xd6))
+KILL	gameend.test.ts::ABC-241 A1 — repetitionKey, the one helper an ep square with a legal capture: the Zobrist key, file in (legal capture (d4xe3))
+KILL	gameend.test.ts::ABC-241 A1 — repetitionKey, the one helper an ep square with a legal capture: the Zobrist key, file in (one capturer pinned, the other legal)
+KILL	gameend.test.ts::ABC-241 A1 — repetitionKey, the one helper reads the key it is handed rather than re-hashing (one Zobrist read per caller)
+KILL	gameend.test.ts::ABC-241 A1 — repetitionKey, the one helper F8: at every node of a 2-ply walk from three openings that carries an ep square, the key drops the file iff the generator offers no ep capture
+KILL	history.test.ts::ABC-241 A3 — the 1.e4 line: the claim at 5.Ng1 and the fivefold at 9.Ng1 twin: where the double push can be taken legally (d4xe3), the counts stay base's
+KILL	history.test.ts::ABC-241 A3 — the 1.e4 line: the claim at 5.Ng1 and the fivefold at 9.Ng1 A6 (game side): a game with no uncapturable ep square has a repetition-key list equal to its hash list
+KILL	turn-loop.test.ts::ABC-241 A3 — claimShortfall reads the repetition-key count after 3.Ng1 a refused claim reads `repetition 2 of 3`; the twin with a legal d4xe3 reads 1
+KILL	uci-session.test.ts::ABC-241 A4, A5 — UCI: the prior keys are repetition keys A4: the move that makes the third occurrence scores exactly 0; with a legal ep capture, no draw
+KILL	uci-session.test.ts::ABC-241 A4, A5 — UCI: the prior keys are repetition keys A5: the list handed is the repetition-key list, trimmed: the h7h5 key normalised, the rest raw

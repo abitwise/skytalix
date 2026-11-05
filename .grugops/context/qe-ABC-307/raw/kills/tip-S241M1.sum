@@ -1,0 +1,20 @@
+total 2709 passed 2690 failed 19 pending 0 todo 0 files 71 failedSuites 13
+KILL	cli.test.ts::ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square A4 (slice): on a 500 ms virtual step, with repetitionKeyHistory injected the default level plays d8e8 at exactly 0; base does not
+KILL	cli.test.ts::ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square A4 (no search): with a legal ep capture available the two key lists are equal; on the uncapturable line they are not
+KILL	cli.test.ts::ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square A7 (no search): after d8e8, the move A4 (slice) pins, gameStatusOf reports the claim
+KILL	gameend.test.ts::ABC-241 A1 — repetitionKey, the one helper an ep square with no legal capture: the key of the no-ep twin (no capturer (1.e4))
+KILL	gameend.test.ts::ABC-241 A1 — repetitionKey, the one helper an ep square with no legal capture: the key of the no-ep twin (pinned capturer (diagonal))
+KILL	gameend.test.ts::ABC-241 A1 — repetitionKey, the one helper an ep square with no legal capture: the key of the no-ep twin (rank pin)
+KILL	gameend.test.ts::ABC-241 A1 — repetitionKey, the one helper reads the key it is handed rather than re-hashing (one Zobrist read per caller)
+KILL	gameend.test.ts::ABC-241 A1 — repetitionKey, the one helper gameStatus looks the live position up by its repetition key (C3), so the lookup and the counts agree
+KILL	gameend.test.ts::ABC-241 A1 — repetitionKey, the one helper F8: at every node of a 2-ply walk from three openings that carries an ep square, the key drops the file iff the generator offers no ep capture
+KILL	history.test.ts::ABC-241 A3 — the 1.e4 line: the claim at 5.Ng1 and the fivefold at 9.Ng1 the threefold claim after 5.Ng1 (base 7.Ng1) and the fivefold after 9.Ng1 (base 11.Ng1)
+KILL	history.test.ts::ABC-241 A3 — the 1.e4 line: the claim at 5.Ng1 and the fivefold at 9.Ng1 the repetition-key list differs from the hash list at exactly the 1.e4 key, and has its length
+KILL	history.test.ts::ABC-241 A3 — the 1.e4 line: the claim at 5.Ng1 and the fivefold at 9.Ng1 A6 (game side): a game with no uncapturable ep square has a repetition-key list equal to its hash list
+KILL	levels.test.ts::ABC-241 A5 — the blunder path's appended root key is a repetition key every child search is handed the prior keys plus repetitionKey(root), not the raw hash
+KILL	turn-loop.test.ts::ABC-241 A3 — claimShortfall reads the repetition-key count after 3.Ng1 a refused claim reads `repetition 2 of 3`; the twin with a legal d4xe3 reads 1
+KILL	uci-session.test.ts::ABC-230 A2, A3, A5 — the session hands the search the game's prior keys A5: the window starts at the last pawn move; a castling-rights change does not cut it
+KILL	uci-session.test.ts::ABC-241 A4, A5 — UCI: the prior keys are repetition keys A4: the move that makes the third occurrence scores exactly 0; with a legal ep capture, no draw
+KILL	uci-session.test.ts::ABC-241 A4, A5 — UCI: the prior keys are repetition keys A5: the list handed is the repetition-key list, trimmed: the h7h5 key normalised, the rest raw
+KILL	uci-session.test.ts::ABC-241 A4, A5 — UCI: the prior keys are repetition keys A5 (slice): on a 500 ms virtual step, the CLI level seam's injected list equals UCI's, key for key, and both play d8e8
+KILL	uci-session.test.ts::ABC-241 A4, A5 — UCI: the prior keys are repetition keys A6: a FEN carrying an uncapturable ep square: its own key counts, d1e1 scores exactly 0; base's list does not

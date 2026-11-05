@@ -1,0 +1,2 @@
+F4 default: tests 32/32 skipped 0 red 0; readNotes calls 23; unfiltered on the real tree 0 (notes [])
+F4 ENGINE_DEEP: tests 36/36 skipped 0 red 0; readNotes calls 25; unfiltered on the real tree 2 (notes [5050, 5050])

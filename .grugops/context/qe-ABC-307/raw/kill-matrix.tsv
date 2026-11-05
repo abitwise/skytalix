@@ -1,0 +1,22 @@
+mutant	base_n	base_full_rows	tip_n	named_remnants	named_holders	deep_lines	verdict	vs_arch
+ML1	1	L1	1	L1~	-	L1: Tests 1 failed | 269 skipped (270)	killed	same
+M6	21	L1,C1	20	L1~,C1~	-	L1: Tests 1 failed | 269 skipped (270) | C1: Tests 1 failed | 269 skipped (270)	killed	same
+M7	3	L1	3	L1~	-	L1: Tests 1 failed | 269 skipped (270)	killed	same
+S241M2	12	L2,L3	12	L2~,L3~	-	L2: Tests 1 failed | 269 skipped (270) | L3: Tests 1 failed | 269 skipped (270)	killed	same
+QMATCH1	8	L2	7	-	cli A4 (slice), uci A4, ABC-249	L2: Tests 1 failed | 269 skipped (270)	killed	same
+S241M1	18	L3	19	L3~	-	L3: Tests 1 failed | 269 skipped (270)	killed	same
+S241M4	2	L3	2	L3~	-	L3: Tests 1 failed | 269 skipped (270)	killed	same
+M4	19	L3,B1	20	L3~,B1~	-	L3: Tests 1 failed | 269 skipped (270) | B1: Tests 1 failed | 35 skipped (36)	killed	same
+F230	8	L3	7	-	cli A4 (slice), uci A5 (slice), cli ABC-230 A1	L3: Tests 1 failed | 269 skipped (270)	killed	same
+M2s	7	L3	6	-	cli A4 (slice), uci A5 (slice), cli ABC-230 A1	L3: Tests 1 failed | 269 skipped (270)	killed	same
+QSEAMRAW	7	L3	6	-	cli A4 (slice), uci A5 (slice), cli ABC-230 A1	L3: Tests 1 failed | 269 skipped (270)	killed	same
+QPRIOROFF	16	L3	15	-	cli A4 (slice), uci A5 (slice), cli ABC-230 A1	L3: Tests 1 failed | 269 skipped (270)	killed	same
+QMATCH3	20	L3	19	-	cli A4 (slice), uci A5 (slice), cli ABC-230 A1	L3: Tests 1 failed | 269 skipped (270)	killed	same
+QTRIM1	30	L3	29	-	cli A4 (slice), uci A5 (slice), cli ABC-230 A1	L3: Tests 1 failed | 269 skipped (270)	killed	same
+MC1	11	C1	11	C1~	-	lane only	killed	same
+MC2h	9	C2	9	C2~	-	C2: Tests 1 failed | 269 skipped (270)	killed	same
+P2a	17	C2	17	C2~	-	C2: Tests 1 failed | 269 skipped (270)	killed	same
+P2b	6	C2	5	-	ABC-221 A11, ABC-220 A6, ABC-220 A13, ABC-221 A7, ABC-259	C2: Tests 1 failed | 269 skipped (270)	killed	same
+MB1	3	B1	3	B1~	-	B1: Tests 1 failed | 35 skipped (36)	killed	same
+M4z	22	B1	22	B1~	-	B1: Tests 1 failed | 35 skipped (36)	killed	same
+misses or unread: 0
