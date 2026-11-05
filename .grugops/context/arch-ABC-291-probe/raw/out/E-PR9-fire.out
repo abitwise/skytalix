@@ -1,0 +1,1 @@
+{"games":200,"failedGames":0,"positions":27896,"nonzero":17300,"ge10":4106,"ge25":440,"ge10Pct":14.719,"nonzeroPct":62.02,"ge25Pct":1.58,"gamesWithGe25":35,"met":true,"parts":{"connected":{"nonzero":16540,"ge10":3206},"phalanx":{"nonzero":5105,"ge10":364},"backward":{"nonzero":5965,"ge10":5965}}}

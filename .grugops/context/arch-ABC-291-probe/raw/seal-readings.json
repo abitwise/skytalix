@@ -1,0 +1,2 @@
+{ "refs": ["arch-ABC-291-probe","ABC-291","ADR-0075","ADR-0064","ADR-0067","ADR-0028","ADR-0050","G1","G2","G3","NFR-001","NFR-005","NFR-008","NFR-009","cc6e64d1","d033ea0e","arch-ABC-291-probe/20261105T135516Z-architect-design-decision-2a579895"],
+  "notes": [{ "kind": "observation", "confidence": "high on every count and exact row, each read once from raw/out; medium on PR8's R, one instrument near its width, read as sealed; the memo-bypassed ratio is void", "bodyFile": "note-readings.md" }] }

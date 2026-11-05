@@ -1,0 +1,9 @@
+src/search.futility.test.ts(176,14): error TS2554: Expected 8 arguments, but got 7.
+src/search.futility.test.ts(179,14): error TS2554: Expected 8 arguments, but got 7.
+src/search.futility.test.ts(184,9): error TS2554: Expected 8 arguments, but got 7.
+src/search.futility.test.ts(275,14): error TS2554: Expected 8 arguments, but got 7.
+src/search.futility.test.ts(284,7): error TS2554: Expected 8 arguments, but got 7.
+src/search.futility.test.ts(296,7): error TS2554: Expected 8 arguments, but got 7.
+src/search.futility.test.ts(439,7): error TS2554: Expected 8 arguments, but got 7.
+src/search.futility.test.ts(440,7): error TS2554: Expected 8 arguments, but got 7.
+src/search.futility.test.ts(698,7): error TS2554: Expected 8 arguments, but got 7.

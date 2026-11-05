@@ -1,0 +1,2 @@
+{ "refs": ["arch-ABC-291-probe","ABC-291","ADR-0075","ADR-0064","ADR-0067","ADR-0028","ADR-0056","EPIC-011","ABC-305","ABC-303","ABC-289","NFR-001","NFR-008","NFR-009","G2","cc6e64d1","arch-ABC-291-probe/20261105T135516Z-architect-design-decision-2a579895","arch-ABC-291-probe/20261105T141123Z-architect-design-observation-65c7a9c9"],
+  "notes": [{ "kind": "decision", "confidence": "high that the rule reads as stated and on the list at cc6e64d1; medium on the size and on the two recommended readings, open to the Orchestrator", "bodyFile": "note-decision.md" }] }
