@@ -74,6 +74,7 @@ build may start on PROPOSED. Nothing here is in force until `ABC-282` merges on 
 | 2026-11-04 | Architect/Design | Status restated as ACCEPTED, not in force until `ABC-282` merges on A6. `ADR-0056` row W1 written. No decision changed | `arch-owner-answers-1104` |
 | 2026-11-05 | Orchestrator | **IN FORCE.** `ABC-282` merged at `a6ae8227` on QE's verdict `…5191f871` | `orch-2026-10-30a` `…16e0ec2c` |
 | 2026-11-05 | Architect/Design | Status restated as in force. QE-282-l ruled: no decision moves, dated lines under D11 and § Consequences. D12 item 5 written in `ADR-0066` | `arch-ABC-282-close` |
+| 2026-11-05 | Architect/Design | The 19 rows with bundle 1 on: dated lines under D8, D9 and D12 item 4. No decision, bar or production line moves, and F1 and F2 do not fire | `arch-ABC-303-w1-rows` `…0f8a4f82` |
 
 ## Context
 
@@ -320,6 +321,19 @@ on the new merge-base by the same rows, before the change** (§ D12). The rows b
   
   Plus one row in D3's mode (`go wtime 8000 btime 8000 movestogo 40`) that shows `softMs` IS handed in.
 
+*Dated 2026-11-05 (`arch-ABC-303-w1-rows`, records only at `main` `a21136b0`; `…0f8a4f82`, readings `…c66a3f5c`): **bundle 1 lands
+second, so A0 takes this form on `ABC-303`. The rows bind and no decision moves.***
+- **A0-1, A0-2.** The base's figures stay unmoved, read on `chooseMoveWithoutQuietBundle` with `softMs` absent (`ADR-0072` d7).
+  It shares `deepen` with `chooseMove`, so it walks the same W1-off path. The shipped path keeps each row beside them with
+  D12 item 4's re-read figures. A0-1's `softMs: 1` stays on the shipped path, because the doors take no `softMs`.
+- **A0-2's `depth`, `move` and `nodes` do not move on the shipped path; only `score` does.** A leak would stop each row
+  earlier: 33 116, 104 780, 39 268 and 94 911 against 47 384, 199 960, 44 105 and 196 681. So the row keeps reading what a
+  frozen clock cannot.
+- **A0-3.** The session has no door. Five rows re-pin `cp` alone, and `depth`, `nodes`, `time`, `nps` and the move stay, which
+  are what a leak would change. `go depth 6` re-pins its line: no clock reaches it on any tree, and the default-lane row
+  "hands no soft limit" carries its claim. The `69 705` in D3's row stays.
+- **F1 does not fire.** The figures moved because the tree did, not because W1 acted.
+
 ### D9. A1 and A2: fixtures, corpus and clock
 
 - **A1 (a) and (b) (default lane, virtual clock):** `chooseMove(p, { budgetMs: H, now: virtualClock(1), softMs: H / 2.3
@@ -329,6 +343,11 @@ on the new merge-base by the same rows, before the change** (§ D12). The rows b
   - (b) is a row where elapsed after d is under H / 2.3, and `choice.depth` > d.
   - The Engineer picks the rows on the base by a scan, as `ABC-078` A3's fixture was picked. P2's position-6 at H = 50
     is a candidate.
+  - *Dated 2026-11-05 (`arch-ABC-303-w1-rows`, `…0f8a4f82`): with bundle 1 on, A1 (a)'s row at H = 6 stops being the row
+    this section asks for. The shipped base completes depth 4 at 2 197 and aborts nothing, so `base.depth` is not re-pinned.
+    **The budget moves 6 → 5 on the same position.** There the base aborts in iteration 4 at 2 121, 76 nodes short of
+    N(4), and `head.depth` 3 and `base.depth` 3 both stand. H = 5 is arithmetic from sealed N(d), `UNKNOWN - verify` until the
+    row runs. F2 does not fire.*
 - **A1 (c) (deep lane, `ENGINE_DEEP`; QE freezes it before the build, `ABC-282` test note 2):**
   - **Corpus K25:** `qe-tc-depth-probe` R1's 25 positions:
     - `raw/named.json` (5; sha256 `e41a4914…0479`);
@@ -348,6 +367,12 @@ on the new merge-base by the same rows, before the change** (§ D12). The rows b
   - A2 (c) needs a mate fixture picked by the same scan. The mate corpus (`src/search.mate-corpus.ts`) is the place to
     look.
   - The Engineer re-scans on the base the build lands on.
+  - *Dated 2026-11-05 (`arch-ABC-303-w1-rows`, `…0f8a4f82`): with bundle 1 on, A2 (a) keeps its position, budget and
+    `softMs`, and the kept move re-pins `a1b1`, 450 → `a1f6`, 475. `ABC-282` D5's session row follows. It is the same case:
+    iteration 3 is aborted at 3 125 of N(3) = 3 506 on a full window, and the frozen depth-3 line reads `a1f6`, 475 over
+    the incumbent `a1e5`, so that score is strictly above the incumbent's own completed depth-3 score. `main`'s depth 3 reads
+    the same move and score. The bundle's smaller tree reaches it inside the same 3 125 nodes, where the old `a1b1` was an
+    earlier beat. No other A2 row moves.*
 
 ### D10. The read (A6): the control, the intent, and the harness ticket first
 
@@ -445,6 +470,8 @@ is designed against `main`. **Whichever of the two lands second rebases, and doe
    d = 4–10, rounded to 0.1). History, SEE ordering and aspiration all change the tree's growth. The value is frozen
    before A1 (c) runs. Re-reading it by the pre-registered method is not tuning (F3).
 4. **A0's counts are re-read** on the new merge-base (D8), as `ABC-282` § Dependencies says.
+   *Dated 2026-11-05 (`arch-ABC-303-w1-rows`, `…0f8a4f82`): for bundle 1, landing second, the form is D8's dated line. Item 6
+   stands: no row hands a door `softMs`.*
 5. **`ADR-0066` d5** ("`ABC-078` A3 unchanged") reads "A3 as amended by `ADR-0071` D7 (with a soft limit only)" if
    this ADR has merged. A dated line in `ADR-0066` is owed by whichever lands second, not now.
 6. **The doors.** This ADR adds none. `ABC-283`'s doors share `deepen`, so a door handed `softMs` would get D2 and D4.

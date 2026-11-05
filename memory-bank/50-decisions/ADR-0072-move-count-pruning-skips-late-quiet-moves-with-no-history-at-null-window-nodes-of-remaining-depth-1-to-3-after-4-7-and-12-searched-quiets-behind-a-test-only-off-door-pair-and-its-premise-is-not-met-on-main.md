@@ -65,6 +65,7 @@ played.
 | 2026-11-04 | Architect/Design | PROPOSED. M3 carried. L3 and L4 met; L2 missed; F1 fired | `arch-bundle-1` `…ed82b408` (readings), `…37b7fb23` (decision) |
 | 2026-11-04 | Owner | (a): override both missed premises and build both; OQ-0072-1 answered | `orch-2026-10-30a` `…3e73f9f9` |
 | 2026-11-04 | Architect/Design | **ACCEPTED over a missed premise, not in force.** F1 stays fired. The rows the read holds are ruled in `ADR-0056` | `arch-owner-answers-1104b` |
+| 2026-11-05 | Architect/Design | W1's rows with the bundle on: dated lines under d7 and d11. No bar, door or production line moves | `arch-ABC-303-w1-rows` `…0f8a4f82` |
 
 ## Context
 
@@ -175,6 +176,10 @@ The design of record is M3. It is the form a yes builds. It is not cleared to bu
      the shipped path is no red, no STOP and no owner question. The override is not what allows it: his word reaches
      L2 and CH3 and nothing else. The row's final door is `ADR-0069` d11's dated line of this date. The PR lists the row
      and prints 90.91 %, 96 cp, 0 changes beside it (`ADR-0058` d5).*
+     *Dated 2026-11-05 (`arch-ABC-303-w1-rows`, records only at `main` `a21136b0`; `…0f8a4f82`): **this bullet reaches `ABC-282`'s
+     rows only where no `softMs` is needed.** That is A0-1's and A0-2's `softMs`-absent reads, which go to the all-off door with
+     figures unchanged. A0-1's `softMs: 1`, A1 (a), A2 (a) and D5 stay on the shipped path (d11), and A0-3 stays on the session,
+     which has no door. The form is `ADR-0071` D8's and D9's dated lines. Old and new figures go in the PR.*
 8. **What this part still shows alone** (`ADR-0056` B2).
    - (a) Its door pair and its rule rows. (c) The form above, fixed.
    - (d) **Its measured bar: L2 and L4, on its own door.** L4 is met. L2 is missed, so (d) passes only by the owner's
@@ -206,6 +211,9 @@ The design of record is M3. It is the form a yes builds. It is not cleared to bu
         (`ADR-0071` D12 item 3) and A0's counts.
       - If W1 lands first, the bundle's merge moves a frozen constant. The re-read is reported to the Orchestrator, and
         any change to b is its own ticket with its own read, because W1's A6 will have been read on the old one.
+        *Dated 2026-11-05 (`arch-ABC-303-w1-rows`, `…0f8a4f82`): W1 landed first. b re-read 2.2786 on `c0c5b84c`, which rounds to
+        2.3 (`se-ABC-303-main` `…bd60978c`), so no ticket is owed. A0's counts: `ADR-0071` D8's dated line. No production change
+        and no door follows from either.*
       - W1 acts in `uci-clock-mode` only, so it moves no node of C2′'s games. Its merge is still a value-changing merge,
         so C2′'s stale rule applies by its letter.
     - **`ABC-298` (V3).** One at a time on `orderMoves`.
