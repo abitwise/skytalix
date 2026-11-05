@@ -1,3 +1,4 @@
+_Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — census merged: **NFR-008 MET 9.515 s; G-WITH: a row move merges before or with the next lane-adding merge**, no exemption for ABC-305. → `bapm-rows-cut-1105` (ABC-307), `se-ABC-305` (build and read, no landing). Running: arch-ABC-303-w1-rows and both._
 _Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — **se-ABC-303-main STOP**: 19 ABC-282 rows read differently with the bundle on (no wiring fault seen; R1, R2, P3, P4 unchanged). QE does not seal. → `arch-ABC-303-w1-rows`. Running: secnfr-census-1105, arch-ABC-303-w1-rows._
 _Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — `secnfr-nfr004-1105` merged: NFR-004 60 s clause MET, AR-NFR004-A re-accepted, no rating change. **Keep worktree qe-ABC-282: A4's nine logs are gitignored and live only there (QE's "committed" was wrong for them; SHA256SUMS matches).** Small owed: NFR-009 cell, AR-UCI-BUSY bullet. Running: se-ABC-303-main, secnfr-census-1105._
 _Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — `bapm-lines-1105c` merged. Left for the next EPIC-011 pass: rows 43, 55, 57, the reads-queue line, ABC-305 DoR row 10, ABC-291 DoR row 5 (dated wording, no bar). Running: se-ABC-303-main, secnfr-census-1105._
@@ -1516,8 +1517,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## Ready (WIP 2/8)
-- [ABC-305] Tools-only landing from b297ab89 (DoR 10/10, S, P3). N8-LANE read first, after A4; dd88560f stays out of main.
+## Ready (WIP 1/8)
 - [ABC-289] Q2 delta pruning (ADR-0074 ACCEPTED; DoR 10/10, S, P3). Reads alone after bundle 1; build starts when ABC-303's merge or failed-attempt is recorded.
 - ~~[ABC-301]~~ → In Development. E2s second pull: one bounded fit on main with E4a's structure; KD/FP freed, U held 0; B-T0–B-T8 (B-T8 two r reads at 0.5 s, ~5 h, owner-approved). Scope 0 preconditions first (after NFR-008 headroom ruling).
 - ~~[ABC-271]~~ → In Development E4a structure only at 0 (ADR-0070 ACCEPTED form (a); DoR 10/10, S, P3). QE freeze first (qe-ABC-271-freeze), then se-ABC-271. No games.
@@ -1537,7 +1537,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
+## In Development (WIP 2/3)
+- [ABC-305] Tools-only landing from b297ab89: `se-ABC-305` builds and reads N8-LANE; landing waits on the row move.
 - [ABC-303] Bundle 1, ABC-286 + ABC-288 (ADR-0072, 0073 ACCEPTED over missed premises; DoR 10/10, M, P3). Code only for now (`se-ABC-303`); C2′ only after ABC-282 and ABC-301 settle.
 
 
