@@ -18,7 +18,8 @@ owner: BA/PM
 >   with a `G2` line at the ratio the ADR sets, and intent GAIN.
 > - **`ABC-303`:** CF1–CF10 replace the strict reading. Its C2′ waits on `ABC-282` alone.
 > - **His later word of the same day (`…0f1ab02e`):** CF1–CF10 widen to later single-read reads and bundles, a term merged inside a bundle can open the third-pull
->   door, and CF7 is confirmed. The exact lines are `arch-owner-answers-1105b`'s, in flight. Every other limit stands.
+>   door, and CF7 is confirmed. ~~The exact lines are `arch-owner-answers-1105b`'s, in flight.~~ *2026-11-05 (`bapm-pointers-1105`): **settled:** `ADR-0056` D5's dated block of that task (`…65557abd`, `…66724fc9`)
+>   and `ADR-0067`'s dated line of it (`…3e6b25fb`).* Every other limit stands.
 > - **`G1`:** `ADR-0056`'s 2 550–2 800 landing assumed E2 and terms fitted by it. It now stands lower by an amount nobody has read. No target moves; the targets stay his.
 > - **Rows:** § Phases (P6, E2, E3, E4, E5, E6, R2); § Tickets 39, 42–45, 53, 55, 56, new 57 and 58, the id line; § Dependencies. The column moves are the Orchestrator's.
 
@@ -1100,6 +1101,11 @@ reorders made here are named in the "why" column.
   R-BUNDLE-1. It is part of the per-change rule, and `ADR-0056` § Status and the section's heading read so (`arch-bundle-1`).*
   *(2026-11-04, `bapm-ABC-301-cut`: this is the one pointer `arch-second-pull-1104`
   `…a5d74f70` owes; `Q-3K-11` is in § Owner questions.)*
+- *2026-11-05 (`bapm-pointers-1105`), a pointer only; the rule is not written here.* **A candidate fault or a loss on time in a C2′ read or the S′ after it, and a Levels red after a clean C2′, go by
+  CF1–CF10** (`ADR-0056`'s dated block of `arch-owner-answers-1105`; the owner's `…b836b85c` item 2 and `…0f1ab02e` items 1 and 3). **The reach is every later C2′ read, of one change or of a bundle, on
+  either intent, with the S′ and the Levels lane that follow it,** not only the terms and `ABC-289`: any such read whose PREREG is sealed after `…0f1ab02e` (`ADR-0056` D5's dated block of
+  `arch-owner-answers-1105b`, `…65557abd`, with its table for the `ABC-303` names). On those reads this section's miss and defect lines are read through them. It does not reach `ABC-282`'s A4, C3″ and
+  the S′ and lanes beside it, R1–R3, B-T8, the 40/15 claim, a value-identical ticket or a closed read. A third pull's C2′ is not settled: it goes to Architect/Design with any such word. No bar moves.
 
 ## Scope
 
@@ -1498,9 +1504,10 @@ line, id unchanged), **merge into X**, **supersede**, **drop**, **close** (the e
     by the Orchestrator under D6's reorder rule, with the owner told. `ABC-272` (E7a) stays any order, one at a time on the same files.
   - **The reads queue.** A value-changing merge stales the read after it, so a term's C2′ follows `ABC-303` and `ABC-289`. Its ADR and probe wait only for
     the host, after `ABC-282`'s A4.
-  - **A third pull** may be asked for only after one of those four has merged, on its own read or inside a bundle (`…0f1ab02e` item 2). How the four tests read
-    for a bundle term is `arch-owner-answers-1105b`'s, in flight. Another term named before the miss goes to Architect/Design first.
-  - **A candidate fault in a term's read or in `ABC-289`'s:** CF1–CF10 reach them (`…0f1ab02e` item 1), in the form that hop states.
+  - **A third pull** may be asked for only after one of those four has merged, on its own read or inside a bundle (`…0f1ab02e` item 2). ~~How the four tests read
+    for a bundle term is `arch-owner-answers-1105b`'s, in flight.~~ *2026-11-05 (`bapm-pointers-1105`): **settled:** `ADR-0067`'s dated line of `arch-owner-answers-1105b` (`…3e6b25fb`), each test read on the
+    term, not the bundle.* Another term named before the miss goes to Architect/Design first.
+  - **A candidate fault in a term's read or in `ABC-289`'s:** CF1–CF10 reach them (`…0f1ab02e` item 1), ~~in the form that hop states~~ *in the form of `ADR-0056` D5's dated block of `arch-owner-answers-1105b` (`…65557abd`; 2026-11-05, `bapm-pointers-1105`)*.
   - **`ABC-303`'s C2′ waits on `ABC-282` alone,** and through it on A4. `ABC-289` still follows `ABC-303`, alone, and its base stays the rule-made table.
   - **`ABC-287` (P6) waits on a tuned table on `main`,** and may never fire. **`ABC-306` (E5d)** waits for a fit or its own case.
   - **`ABC-305` (the tools) waits on `ABC-282`'s A4 lock,** then its `N8-LANE` read. It stales no read.
