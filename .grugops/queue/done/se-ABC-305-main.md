@@ -16,3 +16,16 @@ ABC-307 merged at bce24018. Read ABC-305's page (A5, § Open), your stop note, �
 STOP and report anything the page does not cover. Check every output file is non-empty before reading it. Record foreign load; never touch it. Every test, build or engine run goes under the host lock named in your dispatch prompt. Leave nothing running; check with ps, not pgrep -f.
 Fences: ABC-305's scope and your records. No ticket, ADR, EPIC or board edits. No push, force, amend or rebase, and no merge into main.
 Publish: sealed notes (task se-ABC-305, contextRoot = the worktree's .grugops/context, `at` from `date -u` run immediately before each note); queue moves; commit; ## Result + trace row; brief + claim to done/. Before your last commit, run `node tools/grugops/records-path-check.js --base main`; it must exit 0.
+
+## Result
+by: software-engineer (claude-opus-5-5), at: 2026-11-05T22:06:16Z. **DONE to the stop: `main` in, gates and lanes green, arms rebuilt, PREREG sealed. The `N8-LANE` read is NOT taken; A5 has no verdict.** Nothing left running. Nothing pushed or merged into `main`.
+- **Merge:** `35a694ee`, parents `148c42e9` and `a8594b50`. One conflict, `plans/traceability.md`, both sides' rows kept.
+- **Proofs:** `dd88560f`, `d5041c54`, `e9cbeb40` exit 1; `b297ab89`, `e763119c` exit 0. The six paths; `src` shows the two test files; `src/evaluate-params.ts` byte-equal. **Zero production lines.**
+- **A4:** `main` 71 / 2 709, tip 71 / 2 710, 0 skipped, 0 failed. Skip capture 0 and 0; `No findings.`; lint, typecheck, build exit 0; `dist/` 24 files, 0 from `tools/`.
+- **Lanes, by count, each exit 0, 0 failed, 0 skipped:** tune 25, passer 29, `uci-session` 270, `book` 36, `qe-hop` 36, `cli` 109.
+- **For the Orchestrator:** `src/cli.test.ts` has no deep lane (`ABC-307` A4), so 109 is its default rows under the flag. `AGENTS.md` has a line for `uci-session` only; `book` and `qe-hop` took `ABC-307` A4's prefix. `CLI_DEEP` on `src/cli.real-engine.test.ts` also ran, 11 of 11.
+- **PREREG:** `…987ae6ca`, committed at `3f676dbd` before any poll. H `35a694ee`, B `a8594b50`, H2 `cp -a`, `diff -r` empty. The 15-minute clock runs from the read hop's launch.
+- **`main` moved to `53bbd275` during the hop, records only;** lane inputs equal, not merged again.
+- **Foreign:** a `marketing` vitest was live before the hold. Nothing touched.
+- **Notes:** `…987ae6ca` (PREREG), `…d0980b3c` (readings).
+- **Path check:** `node tools/grugops/records-path-check.js --base main` exit 0 before this last commit.

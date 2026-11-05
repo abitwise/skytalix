@@ -1,0 +1,34 @@
+hold start 2026-11-05T21:57:55Z head 9f0048de
+pre B exit 0 (5745 B)
+pre-B files 71 total 2709 passed 2709 failed 0 pending 0 todo 0
+pre H exit 0 (5743 B)
+pre-H files 71 total 2710 passed 2710 failed 0 pending 0 todo 0
+npmtest exit 0 (5693 B)
+tip files 71 total 2710 passed 2710 failed 0 pending 0 todo 0
+skip tip [0]
+skip main [0]
+integrity exit 0: No findings.
+lint exit 0 (86 B)
+typecheck exit 0 (44 B)
+build exit 0 (54 B)
+dist files: 24; from tools: 0
+apply.js
+book-file.js
+book.js
+coordinate-move.js
+engine.js
+tune exit 0 (152 B) 21:59:17
+tune files 1 total 25 passed 25 failed 0 pending 0 todo 0
+passer exit 0 (154 B) 21:59:25
+passer files 1 total 29 passed 29 failed 0 pending 0 todo 0
+book exit 0 (152 B) 21:59:26
+book files 1 total 36 passed 36 failed 0 pending 0 todo 0
+qehop exit 0 (153 B) 21:59:27
+qehop files 1 total 36 passed 36 failed 0 pending 0 todo 0
+cli exit 0 (151 B) 21:59:31
+cli files 1 total 109 passed 109 failed 0 pending 0 todo 0
+clireal exit 0 (155 B) 21:59:44
+clireal files 1 total 11 passed 11 failed 0 pending 0 todo 0
+uci exit 0 (151 B) 22:05:07
+uci files 1 total 270 passed 270 failed 0 pending 0 todo 0
+hold end 2026-11-05T22:05:07Z
