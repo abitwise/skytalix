@@ -1,0 +1,26 @@
+tree 28f2811f, emission an ancestor: no, params sha e74ff3e932271506
+ src/evaluate.king-mobility.test.ts |   7 +-
+ src/evaluate.passer.test.ts        |  79 ++++++++--
+ tools/tune/bounds.ts               | 273 +++++++++++++++++++++++++++++++++--
+ tools/tune/tracer.ts               | 104 +++++++++++++-
+ tools/tune/tune.test.ts            | 288 +++++++++++++++++++++++++++++++++----
+ tools/tune/tune.ts                 | 162 +++++++++++++++++++--
+ 6 files changed, 845 insertions(+), 68 deletions(-)
+typecheck exit 0
+Checked 148 files in 179ms. No fixes applied.
+lint exit 0
+build exit 0
+
+ Test Files  1 passed (1)
+      Tests  25 passed (25)
+   Start at  00:23:26
+   Duration  30.84s (transform 0ms, setup 0ms, import 1.40s, tests 29.37s, environment 0ms)
+
+tune deep exit 0
+
+ Test Files  1 passed (1)
+      Tests  29 passed (29)
+   Start at  00:23:57
+   Duration  7.20s (transform 0ms, setup 0ms, import 49ms, tests 7.08s, environment 0ms)
+
+passer deep exit 0

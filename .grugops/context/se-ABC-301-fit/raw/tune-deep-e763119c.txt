@@ -1,0 +1,36 @@
+tsc=0
+Checked 6 files in 39ms. No fixes applied.
+
+ RUN  v4.1.12 <home>/projects/public/skytalix/.claude/worktrees/se-ABC-301
+
+ ✓ tools/tune/tune.test.ts > ABC-239 — tools/tune's source pins > imports no TEST-ONLY export of src/ (ADR-0067 d8, S3) and makes no network call (d9) 1ms
+ ✓ tools/tune/tune.test.ts > ABC-239 — tools/tune's source pins > the quiet filter's rules record has no seePruning field, read from the source (ADR-0069 d6, test note 5) 0ms
+ ✓ tools/tune/tune.test.ts > ABC-239 — tools/tune's source pins > the FEN source row: each bound row's FEN and name appear literally in its src/evaluate*.test.ts file, or its fenFile (ADR-0067 ruling (b)); 26 rows, ABC-301's PREREG 2ms
+ ✓ tools/tune/tune.test.ts > ABC-239 identity gate (ADR-0067 d5, B-T1) [deep, TUNE_DEEP=1] > the traced model is evaluate within 1 cp, exact at phase 24, over G3's 184 at the shipped table 5ms
+ ✓ tools/tune/tune.test.ts > ABC-239 identity gate (ADR-0067 d5, B-T1) [deep, TUNE_DEEP=1] > evaluateAt (the integer blend from the trace) is evaluate exactly over G3's 184 and QE's queen pairs 3ms
+ ✓ tools/tune/tune.test.ts > ABC-239 identity gate (ADR-0067 d5, B-T1) [deep, TUNE_DEEP=1] > the K1 (c) tracer row: on QE's frozen queen pairs each queen-on count is the base count with an enemy queen, 0 without (ADR-0067 d5) 2ms
+ ✓ tools/tune/tune.test.ts > ABC-239 identity gate (ADR-0067 d5, B-T1) [deep, TUNE_DEEP=1] > extract gates every kept row: the fixture's rows pass with 0 misses 151ms
+ ✓ tools/tune/tune.test.ts > ABC-301 QE-271-i: E4a traced and emitted (ADR-0067 d5's dated line) [deep, TUNE_DEEP=1] > the tracer row: on the 44 fixtures each side's traced counts are QE's frozen features, and count × probed value is the seam's frozen part 4ms
+ ✓ tools/tune/tune.test.ts > ABC-301 QE-271-i: E4a traced and emitted (ADR-0067 d5's dated line) [deep, TUNE_DEEP=1] > the trace reaches the model: the probed table moves it by the seam's frozen white minus black × (24 − w) / 24, on all 44 1ms
+ ✓ tools/tune/tune.test.ts > ABC-301 QE-271-i: E4a traced and emitted (ADR-0067 d5's dated line) [deep, TUNE_DEEP=1] > the gate holds on the 44 fixtures and QE's 12 passer positions, evaluateAt exact, at the base values 1ms
+ ✓ tools/tune/tune.test.ts > ABC-301 QE-271-i: E4a traced and emitted (ADR-0067 d5's dated line) [deep, TUNE_DEEP=1] > an emission at the base values has main's exports, 17 value exports and the 3 phase constants, equal value for value 3ms
+ ✓ tools/tune/tune.test.ts > ABC-301 QE-271-i: E4a traced and emitted (ADR-0067 d5's dated line) [deep, TUNE_DEEP=1] > QE-301-b: distinct non-zero E4a halves round-trip: each column reads back its own, and the values hash is over them 2ms
+ ✓ tools/tune/tune.test.ts > ABC-301 QE-271-i: E4a traced and emitted (ADR-0067 d5's dated line) [deep, TUNE_DEEP=1] > the project typechecks with that emission in src/evaluate-params.ts 2567ms
+ ✓ tools/tune/tune.test.ts > ABC-239 the reader (§ Addendum test strategy) [deep, TUNE_DEEP=1] > comment blindness: [%eval], [%clk] and free text give rows byte-identical to the stripped game 593ms
+ ✓ tools/tune/tune.test.ts > ABC-239 the reader (§ Addendum test strategy) [deep, TUNE_DEEP=1] > the export's known issue: no Round or Date tag, and no black move numbers after comments, parses 0ms
+ ✓ tools/tune/tune.test.ts > ABC-239 the reader (§ Addendum test strategy) [deep, TUNE_DEEP=1] > filter counts: one game per drop reason; a replay drop over 0.1 % is the data-stage STOP 127ms
+ ✓ tools/tune/tune.test.ts > ABC-239 the reader (§ Addendum test strategy) [deep, TUNE_DEEP=1] > the sha256 refusal: a byte-changed copy exits non-zero and writes nothing 1ms
+ ✓ tools/tune/tune.test.ts > ABC-239 the reader (§ Addendum test strategy) [deep, TUNE_DEEP=1] > leakage runs one way: a Lichess key equal to an own-validation key leaves the Lichess rows; validation is unchanged 54ms
+ ✓ tools/tune/tune.test.ts > ABC-239 the reader (§ Addendum test strategy) [deep, TUNE_DEEP=1] > the zstd stream: a .pgn.zst fixture streams back every game, tags and moves intact 2ms
+ ✓ tools/tune/tune.test.ts > ABC-239 split, determinism and emission (ADR-0067 d9, d7, B-T2, B-T3) [deep, TUNE_DEEP=1] > the split is disjoint: no key is both own training and own validation; inner rows are training 128ms
+ ✓ tools/tune/tune.test.ts > ABC-239 split, determinism and emission (ADR-0067 d9, d7, B-T2, B-T3) [deep, TUNE_DEEP=1] > extract + fit + emit twice give one byte-identical file, and the file round-trips to the fitted table 8932ms
+ ✓ tools/tune/tune.test.ts > ABC-239 F3's bound and the one refit (ADR-0067 ruling (b), test note 8) [deep, TUNE_DEEP=1] > ABC-301: every bound row holds on the table in place, read as its test reads it, and a plain term is evaluate itself 1ms
+ ✓ tools/tune/tune.test.ts > ABC-239 F3's bound and the one refit (ADR-0067 ruling (b), test note 8) [deep, TUNE_DEEP=1] > ABC-301: a term's without removes its families from a, and the margin counts what is left 2ms
+ ✓ tools/tune/tune.test.ts > ABC-239 F3's bound and the one refit (ADR-0067 ruling (b), test note 8) [deep, TUNE_DEEP=1] > (1) and (3): a row the box-only fit breaks is held on the rounded set by the bounded fit, and two bounded runs give one file 8483ms
+ ✓ tools/tune/tune.test.ts > ABC-239 F3's bound and the one refit (ADR-0067 ruling (b), test note 8) [deep, TUNE_DEEP=1] > (2): a row the box-only fit holds leaves the bounded fit byte-identical to the box-only fit 8738ms
+
+ Test Files  1 passed (1)
+      Tests  25 passed (25)
+   Start at  23:48:53
+   Duration  31.29s (transform 0ms, setup 0ms, import 1.39s, tests 29.81s, environment 0ms)
+

@@ -1,0 +1,61 @@
+exports cand 20 base 20 same names true
+leaves cand 877 base 877 same keys true
+non-integer leaves 0
+DOUBLED.mg: moved 1 of 1
+DOUBLED.eg: moved 1 of 1
+ISOLATED.mg: moved 1 of 1
+ISOLATED.eg: moved 1 of 1
+KING_FILE_HALF_OPEN.mg: moved 1 of 1
+KING_FILE_HALF_OPEN.eg: moved 1 of 1
+KING_FILE_HALF_OPEN_QUEEN.mg: moved 1 of 1
+KING_FILE_HALF_OPEN_QUEEN.eg: moved 0 of 1
+KING_FILE_OPEN.mg: moved 1 of 1
+KING_FILE_OPEN.eg: moved 1 of 1
+KING_FILE_OPEN_QUEEN.mg: moved 0 of 1
+KING_FILE_OPEN_QUEEN.eg: moved 0 of 1
+KING_SHELTER_MISSING.mg: moved 1 of 1
+KING_SHELTER_MISSING.eg: moved 1 of 1
+KING_SHELTER_MISSING_QUEEN.mg: moved 1 of 1
+KING_SHELTER_MISSING_QUEEN.eg: moved 0 of 1
+MATERIAL.mg: moved 0 of 7
+MATERIAL.eg: moved 0 of 7
+MOBILITY_CAP.mg: moved 0 of 1
+MOBILITY_CAP.eg: moved 0 of 1
+MOBILITY_WEIGHT.mg: moved 0 of 1
+MOBILITY_WEIGHT.eg: moved 1 of 1
+PASSED.mg: moved 5 of 8
+PASSED.eg: moved 6 of 8
+PASSED_FREE.mg: moved 0 of 8
+PASSED_FREE.eg: moved 6 of 8
+PASSED_KING_ENEMY.mg: moved 0 of 8
+PASSED_KING_ENEMY.eg: moved 6 of 8
+PASSED_KING_OWN.mg: moved 0 of 8
+PASSED_KING_OWN.eg: moved 5 of 8
+PASSED_UNSTOPPABLE.mg: moved 0 of 1
+PASSED_UNSTOPPABLE.eg: moved 0 of 1
+PHASE_EG: moved 0 of 1
+PHASE_MG: moved 0 of 1
+PHASE_WEIGHT: moved 0 of 7
+PST.pawn.mg: moved 46 of 64
+PST.pawn.eg: moved 46 of 64
+PST.knight.mg: moved 62 of 64
+PST.knight.eg: moved 62 of 64
+PST.bishop.mg: moved 64 of 64
+PST.bishop.eg: moved 60 of 64
+PST.rook.mg: moved 60 of 64
+PST.rook.eg: moved 64 of 64
+PST.queen.mg: moved 64 of 64
+PST.queen.eg: moved 62 of 64
+PST.king.mg: moved 60 of 64
+PST.king.eg: moved 64 of 64
+held MATERIAL: 14 leaves, 0 moved
+held PHASE_*: 9 leaves, 0 moved
+held MOBILITY_CAP: 2 leaves, 0 moved
+held queen-on eg halves: 3 leaves, 0 moved
+held E4a mg halves: 24 leaves, 0 moved
+held E4a R 0 and 7: 6 leaves, 0 moved
+held PASSED_UNSTOPPABLE: 2 leaves, 0 moved
+free non-PST leaves 45, below 0: 0
+PST left/right tied pairs 384, untied 0
+fit.json table vs file, own layout: 0 mismatches 
+fit.json other keys wmg=4 weg=9 cap=100 file MOBILITY_WEIGHT {"mg":4,"eg":9} cap {"mg":100,"eg":100}

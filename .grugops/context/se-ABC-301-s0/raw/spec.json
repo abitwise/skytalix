@@ -1,0 +1,7 @@
+{ "refs": ["se-ABC-301-s0","ABC-301","EPIC-011","ADR-0067","ADR-0070","E2","E4a","QE-271-f","QE-271-g","QE-271-h","QE-271-i","B-T1","NFR-008","R-N8H-1","arch-second-pull-1104/20261104T170627Z-architect-design-decision-4917f0f7","qe-ABC-271/20261104T162300Z-qe-e2e-observation-d0f7af61","qe-ABC-271/20261104T162300Z-qe-e2e-observation-2608eabc","orch-2026-10-30a/20261104T162502Z-orchestrator-decision-264e420e","orch-2026-10-30a/20261104T203850Z-orchestrator-decision-f30bd604","grugops/ABC-301","57e942fb","df7d07a2","src/evaluate.passer.test.ts","tools/tune/tracer.ts","tools/tune/tune.ts","tools/tune/tune.test.ts"],
+  "notes": [
+   {"kind":"decision","confidence":"high: the forced-form read and the own-phase read are both run outputs; the two deviations are the Engineer's and QE grades them","bodyFile":"notes/decision.md"},
+   {"kind":"observation","confidence":"high: every figure read from the runs' outputs in raw/","bodyFile":"notes/results.md"},
+   {"kind":"observation","confidence":"high on item 1 (run); medium on item 2 (read from the rows, the fit not run); item 3 UNKNOWN - verify","bodyFile":"notes/carry.md"},
+   {"kind":"observation","confidence":"high (git commands as run); observation because artifact-ref needs a section-14 gate_run this hop does not have","bodyFile":"notes/artifact.md"}
+  ] }
