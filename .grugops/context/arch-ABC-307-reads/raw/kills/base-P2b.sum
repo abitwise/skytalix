@@ -1,0 +1,7 @@
+total 2709 passed 2703 failed 6 pending 0 todo 0 files 71 failedSuites 10
+KILL	levels.test.ts::ABC-259 — R-TC item 2: the engine core reads the budget only as the deadline budget rule: `budgetMs` is the options field and the deadline in src/engine.ts, nowhere else
+KILL	uci-session.test.ts::ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path setoption name Skill Level value 7 sets 7: a bare go searches 30 000 ms
+KILL	uci-session.test.ts::ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) A6 — the hard ceiling: no go hands the search more than 22 000 ms the real engine on a step-1 000 clock: a bare go reports time in [22 000, 22 000 + 2 x 1 000]
+KILL	uci-session.test.ts::ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) A13 — busy isready (ADR-0052 D7), default lane isready that arrives mid-search is answered once, after the bestmove, in order
+KILL	uci-session.test.ts::ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A7 — the ceiling: no go hands the search more than 59 500 ms the real engine on a step-5 000 clock: go movetime 90000 reports time in [59 500, 59 500 + 2 x 5 000], past the old 32 000 clamp
+KILL	uci-session.test.ts::ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A11 — busy isready in the mode (ADR-0052 D7), default lane isready that arrives mid-search is answered once, after the bestmove, in order

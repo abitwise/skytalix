@@ -1,0 +1,48 @@
+{
+ "refs": [
+  "arch-ABC-307-reads",
+  "arch-ABC-307",
+  "ABC-307",
+  "EPIC-011",
+  "ADR-0046",
+  "ADR-0035",
+  "NFR-008",
+  "T-QEHOP-GROWTH",
+  "R-N8H-1",
+  "R-N8H-2",
+  "R-307-a",
+  "R-307-b",
+  "R-307-c",
+  "QE-244-a",
+  "QE-105-p",
+  "QE-154-a",
+  "AR-154-TWO-POINT-CONTROL",
+  "ABC-105",
+  "ABC-154",
+  "ABC-101",
+  "ABC-241",
+  "ABC-171",
+  "ABC-212",
+  "ABC-220",
+  "ABC-221",
+  "ABC-259",
+  "ABC-094",
+  "src/cli.test.ts",
+  "src/uci-session.test.ts",
+  "src/book.test.ts",
+  "tools/grugops/qe-hop-integrity.test.ts",
+  "arch-ABC-307-reads/20261105T130959Z-architect-design-decision-5c65a408",
+  "arch-ABC-307/20261105T125815Z-architect-design-decision-838ecf31",
+  "arch-ABC-307/20261105T125815Z-architect-design-observation-f246a007",
+  "orch-2026-10-30a/20261105T125927Z-orchestrator-decision-f86e0257",
+  "orch-2026-10-30a/20261105T123040Z-orchestrator-decision-f40ce634",
+  "8d66a706"
+ ],
+ "notes": [
+  {
+   "kind": "decision",
+   "confidence": "high for the forms and the row 10 line, which follow the sealed rules; the 11 ms margin is inside the read's noise",
+   "bodyFile": "note-decision.md"
+  }
+ ]
+}

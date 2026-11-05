@@ -1,0 +1,10 @@
+total 2709 passed 2700 failed 9 pending 0 todo 0 files 71 failedSuites 6
+KILL	uci-session.test.ts::ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path setoption name Skill Level value 7 sets 7: a bare go searches 30 000 ms
+KILL	uci-session.test.ts::ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path go movetime 60000 at 7 hands the engine 30 000 (the level caps G)
+KILL	uci-session.test.ts::ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path go wtime 600000 btime 600000 at 7 hands the engine min(600 000 ÷ 20, 30 000) = 30 000
+KILL	uci-session.test.ts::ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path Skill Level value 0 at 7 keeps 7, with the 1-7 info string
+KILL	uci-session.test.ts::ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path Skill Level value 8 at 7 keeps 7, with the 1-7 info string
+KILL	uci-session.test.ts::ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) A8 — levels unchanged (EPIC-009 M3) TimeMode unset, Skill Level 7: A3's period gives base's budget on every go, row for row
+KILL	uci-session.test.ts::ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) A8 — levels unchanged (EPIC-009 M3) TimeMode level, Skill Level 7: A3's period gives base's budget on every go, row for row
+KILL	uci-session.test.ts::ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A8 — levels value-identical (EPIC-009 M3) TimeMode unset: a bare go at Skill Level 1-7 is each level's budget, and go movetime 60000 at 7 is 30 000
+KILL	uci-session.test.ts::ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A8 — levels value-identical (EPIC-009 M3) TimeMode level: a bare go at Skill Level 1-7 is each level's budget, and go movetime 60000 at 7 is 30 000

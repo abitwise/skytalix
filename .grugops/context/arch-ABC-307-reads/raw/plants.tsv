@@ -1,0 +1,55 @@
+plant	base_red	base_trio	tip_red	tip_remnants	deep_red	deep_rows
+A3-refs-only-full	6	Q1,Q2	6	Q1~,Q2~	8	Q1,Q2
+ticket-filter-removed-only	1	-	1	-	n/r	-
+A3-refs-only	3	Q1,Q2	3	Q1~,Q2~	5	Q1,Q2
+A3-exact-refs	3	-	3	-	n/r	-
+folder-substring	2	-	2	-	n/r	-
+accept-observation	1	-	1	-	n/r	-
+accept-own-t2p	1	-	1	-	n/r	-
+symlink-folder-follow	1	-	1	-	n/r	-
+symlink-notesdir-follow	1	-	1	-	n/r	-
+symlink-notefile-follow	1	-	1	-	n/r	-
+naive-done-all-hits	2	Q3	2	Q3~	3	Q3
+naive-done-distinct	1	-	1	-	n/r	-
+silent-0-missing-board	1	-	1	-	n/r	-
+silent-0-missing-snapshot	1	-	1	-	n/r	-
+flag-force-accepted	1	-	1	-	n/r	-
+flag-snapshot-accepted	1	-	1	-	n/r	-
+any-author	3	Q2	3	Q2~	4	Q2
+malformed-ignored	4	-	4	-	n/r	-
+unreadable-note-skipped	1	-	1	-	n/r	-
+t2p-check-any-folder-substring	1	-	1	-	n/r	-
+A3-refs-only (coverage() only)	3	Q1,Q2	3	Q1~,Q2~	5	Q1,Q2
+symlink-notesdir-refusal-only	1	-	1	-	n/r	-
+q4a-main-sweep-read-drops-secnfr	2	Q1,Q3	1	Q1~	3	Q1,Q3
+q4a-main-sweep-read-drops-quality-gate	2	Q1,Q3	1	Q1~	3	Q1,Q3
+q4a-readNotes-unfiltered-drops-secnfr	2	Q1,Q2	1	Q1~	3	Q1,Q2
+q4a-readNotes-unfiltered-drops-quality-gate	2	Q1,Q2	1	Q1~	3	Q1,Q2
+q4a-readNotes-unfiltered-empty	10	Q1,Q2	9	Q1~	11	Q1,Q2
+q5-readNotes-drops-by-secnfr (every read)	3	Q1,Q2	3	Q1~,Q2~	5	Q1,Q2
+q5-readNotes-drops-by-secnfr (unfiltered only)	2	Q1,Q2	1	Q1~	3	Q1,Q2
+q5-readNotes-drops-hash-half (every read)	11	Q1,Q2	11	Q1~,Q2~	13	Q1,Q2
+q5-readNotes-drops-hash-half (unfiltered only)	8	Q1,Q2	7	Q1~	9	Q1,Q2
+q5x-readNotes-unfiltered-drops-qe-folders	4	-	4	-	n/r	-
+q5x-readNotes-unfiltered-drops-qe-and-qe2-qe3-qe4	4	-	4	-	n/r	-
+q5x-readNotes-unfiltered-drops-qe-folders-real-tree-only	0	-	0	-	n/r	-
+q5x-readNotes-unfiltered-drops-quality-gate-except-ABC-031 (real tree)	0	-	0	-	n/r	-
+MQ2	3	Q1,Q2	3	Q1~,Q2~	5	Q1,Q2
+MQ3	1	Q3	1	Q3~	2	Q3
+A5R	3	Q1,Q2,Q3	0	-	3	Q1,Q2,Q3
+q4b-allNotes-memo-empty	2	Q2,Q3	n/a	-	n/r	-
+q4b-allNotes-memo-empty [tip]	n/a	-	0	-	2	Q2,Q3
+q4b-allNotes-memo-stale-filtered	2	Q2,Q3	n/a	-	n/r	-
+q4b-allNotes-memo-stale-filtered [tip]	n/a	-	0	-	2	Q2,Q3
+q4b-plainSweep-memo-empty-notes	2	Q1,Q3	n/a	-	n/r	-
+q4b-plainSweep-memo-empty-notes [tip]	n/a	-	0	-	2	Q1,Q3
+q4b-both-memos-empty (two faults)	2	Q1,Q2	n/a	-	n/r	-
+q4b-both-memos-empty (two faults) [tip]	n/a	-	0	-	2	Q1,Q2
+q5-allNotes-memo-one-folder quality-gate-ABC-031-qe-2026-08-17	2	Q2,Q3	n/a	-	n/r	-
+q5-allNotes-memo-one-folder quality-gate-ABC-031-qe-2026-08-17 [tip]	n/a	-	0	-	2	Q2,Q3
+q5-allNotes-memo-one-folder secnfr-ABC-072	2	Q2,Q3	n/a	-	n/r	-
+q5-allNotes-memo-one-folder secnfr-ABC-072 [tip]	n/a	-	0	-	2	Q2,Q3
+q4b-tip-named-read-empty	n/a	-	1	Q2~	n/r	-
+q4b-tip-copied-root-empty	n/a	-	1	Q1~	n/r	-
+q4b-tip-both-empty (two faults)	n/a	-	2	Q1~,Q2~	n/r	-
+restored

@@ -1,0 +1,30 @@
+total 2709 passed 2680 failed 29 pending 0 todo 0 files 71 failedSuites 16
+KILL	cli.test.ts::ABC-230 A1, A3 — the CLI's level seam hands the search the game's prior keys A1: with keyHistory injected the default level plays the third occurrence, at 0
+KILL	cli.test.ts::ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square A4 (slice): on a 500 ms virtual step, with repetitionKeyHistory injected the default level plays d8e8 at exactly 0; base does not
+KILL	cli.test.ts::ABC-242 A4 — the CLI seam at level 1: a blunder that reads the third occurrence as 0 A4: the seam plays a direct createLevel(LEVELS[1]) call's move; that call's list carries the 0
+KILL	engine.test.ts::ABC-230 — trimPriorKeys: the reversible window, root excluded, at most 100 keeps the last min(clock, 100) keys before the root, oldest first
+KILL	engine.test.ts::ABC-230 — trimPriorKeys: the reversible window, root excluded, at most 100 A5: never more than 100 keys from a 600-key list, the root's own key excluded
+KILL	engine.test.ts::ABC-230 A1 — a third occurrence scores exactly 0 at the root; base scores it otherwise KQ v K, Black to move: d8e8 at 0 with the prior keys, base's move without them
+KILL	engine.test.ts::ABC-230 A1 — a third occurrence scores exactly 0 at the root; base scores it otherwise K v KQ, White to move: d1e1 at 0 with the prior keys, base's move without them
+KILL	engine.test.ts::ABC-230 A1 — a third occurrence scores exactly 0 at the root; base scores it otherwise KR v K, Black to move: d8e8 at 0 with the prior keys, base's move without them
+KILL	engine.test.ts::ABC-230 A1 — a third occurrence scores exactly 0 at the root; base scores it otherwise K v KR, White to move: d1e1 at 0 with the prior keys, base's move without them
+KILL	engine.test.ts::QE-268-a — chooseMoveWithoutFutility reads prior keys, as chooseMove does KQ v K, Black to move: d8e8 at 0 with the prior keys, another move without them
+KILL	engine.test.ts::QE-268-a — chooseMoveWithoutFutility reads prior keys, as chooseMove does K v KQ, White to move: d1e1 at 0 with the prior keys, another move without them
+KILL	engine.test.ts::QE-268-a — chooseMoveWithoutFutility reads prior keys, as chooseMove does KR v K, Black to move: d8e8 at 0 with the prior keys, another move without them
+KILL	engine.test.ts::QE-268-a — chooseMoveWithoutFutility reads prior keys, as chooseMove does K v KR, White to move: d1e1 at 0 with the prior keys, another move without them
+KILL	engine.test.ts::ABC-249 — a pre-root repetition met four plies deep scores 0 (QE-248-c) Qe5+ at ply 4 stood twice before the root: Ke1 at 441 with the keys, Kg1 at 520 without
+KILL	levels.test.ts::ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A1: the third-occurrence move scores exactly 0, unsearched; base scores it otherwise
+KILL	levels.test.ts::ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A1: on QE's probe, scored[0] is {d8e8, 0} and 4 child searches run for 5 legal moves
+KILL	levels.test.ts::ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A1: with the repeat last in legalMoves order, the list is base's but for its exact 0
+KILL	levels.test.ts::ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A5: on every A1 fixture the move played is the strict second-best of the new list
+KILL	levels.test.ts::ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 ABC-245 — a third occurrence whose earlier two lie more than 50 plies back A1–A3: it scores exactly 0 with legal − 1 child searches at matches −98 and −94; base reads it otherwise
+KILL	uci-session.test.ts::ABC-230 A2, A3, A5 — the session hands the search the game's prior keys A2: `position fen F moves …` then `go depth 4` plays the third occurrence at cp 0
+KILL	uci-session.test.ts::ABC-230 A2, A3, A5 — the session hands the search the game's prior keys A2: bestmove is byte-equal to the CLI level seam's move on the same game and clock
+KILL	uci-session.test.ts::ABC-230 A2, A3, A5 — the session hands the search the game's prior keys A2: `position startpos moves …` hands the replayed keys, trimmed, and the search reads them
+KILL	uci-session.test.ts::ABC-230 A2, A3, A5 — the session hands the search the game's prior keys A5: from a 600-ply move list, only the last 100 keys before the root are handed
+KILL	uci-session.test.ts::ABC-230 A2, A3, A5 — the session hands the search the game's prior keys A5: the window starts at the last pawn move; a castling-rights change does not cut it
+KILL	uci-session.test.ts::ABC-241 A4, A5 — UCI: the prior keys are repetition keys A4: the move that makes the third occurrence scores exactly 0; with a legal ep capture, no draw
+KILL	uci-session.test.ts::ABC-241 A4, A5 — UCI: the prior keys are repetition keys A5: the list handed is the repetition-key list, trimmed: the h7h5 key normalised, the rest raw
+KILL	uci-session.test.ts::ABC-241 A4, A5 — UCI: the prior keys are repetition keys A5 (slice): on a 500 ms virtual step, the CLI level seam's injected list equals UCI's, key for key, and both play d8e8
+KILL	uci-session.test.ts::ABC-241 A4, A5 — UCI: the prior keys are repetition keys A6: a FEN carrying an uncapturable ep square: its own key counts, d1e1 scores exactly 0; base's list does not
+KILL	uci-session.test.ts::ABC-242 A4 — Skill Level 1: the CLI seam, UCI and a direct createLevel call agree A4: the same move from all three; UCI's nodes and depth are the direct call's, whose list carries the 0
