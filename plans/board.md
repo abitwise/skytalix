@@ -1,3 +1,4 @@
+_Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — **ABC-301 NOT MET** (QE …d065fee3: zugzwang.001 e1e5 at depth 9, real, no defect). Records only reached main; the emission and tools stay on grugops/ABC-301, kept. B-T6–B-T8 not run. ABC-303's C2′ now waits on ABC-282 alone. → `arch-ABC-301-miss` (options for the owner). Owner: A4, new C2′ after a candidate fault._
 _Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — **ABC-304 merged 9f481fa5** (QE PASS_WITH_GAPS …e1bb0944, UAT waived). Page status to Done owed to BA/PM; QE-304-a (A4 (b)'s door) owed to the Architect. Running: qe-ABC-301-miss. Owner: A4, new C2′ after a candidate fault._
 _Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — **ABC-301 stopped at scope 3: zugzwang.001 red on the emission (e1e5 at depth 9), defect check clean → F4 reads NOT MET, subject to `qe-ABC-301-miss`.** Fit itself clean (26 bounds, B-T1/2/3 met). B-T6–B-T8 not run. Running: qe-ABC-304, qe-ABC-301-miss. Owner: A4, new C2′ after a candidate fault._
 _Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — **ABC-304 built** (se-ABC-304 e1ac9209): K0 28/28, A3 (a) 96.26 % / 95.72 % on the bundle doors, no figure moved → In Review → `qe-ABC-304`. Running: se-ABC-301-fit-2, qe-ABC-304. Owner: A4, new C2′ after a candidate fault._
@@ -1517,8 +1518,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 2/3)
-- [ABC-301] E2s second pull: fit scopes 1–4 (se-ABC-301-fit), then QE's reads.
+## In Development (WIP 1/3)
 - [ABC-303] Bundle 1, ABC-286 + ABC-288 (ADR-0072, 0073 ACCEPTED over missed premises; DoR 10/10, M, P3). Code only for now (`se-ABC-303`); C2′ only after ABC-282 and ABC-301 settle.
 
 
