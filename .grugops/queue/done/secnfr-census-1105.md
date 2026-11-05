@@ -30,3 +30,4 @@ by: security-nfr (claude-opus-5-5), 2026-11-05T12:29:55Z. **PASS_WITH_RISKS.** P
 - **Owed:** the catalog's `NFR-008` line (outside this fence, not written); the row-move ticket.
 - **Lock:** about 14 min of 50, in four holds, released between stages. `main` moved to `bffb23c4` meanwhile; over the lane inputs only `AGENTS.md` differs.
 - **Notes:** `…b9038a14` (PREREG), `…6315faad` (session 1), `…1d72a218` (probe plan), `…e5e57903` (readings), `…19cea480` (decision). Commits `1ccac7f6` (claim), `a5f68a4d`, `aee5643c`, `fffcb0b3`, `567fab83`. No src, test, config, ticket, ADR, EPIC, board or catalog edit.
+- **Path check:** `node tools/grugops/records-path-check.js --base main` exit 0, run over every commit above before this last one.
