@@ -12,6 +12,18 @@ adr: "ADR-0072 (form M3; ABC-286) and ADR-0073 (form C1; ABC-288) ACCEPTED 2026-
 
 # ABC-303: bundle 1, P4 + the countermove, one branch, one read
 
+> **§ OPEN 1 ANSWERED: THE STRICT READING IS REPLACED BY CF1–CF10; `ABC-301`'S HALF OF THE SLOT IS MET; § OPEN 3 RULED; § OPEN 4'S
+> MOVED-BASE WORRY GONE FOR THAT HALF, 2026-11-05, by BA/PM** (task `bapm-wait-lines-1105`, records only, at `main` `a38315bf`; nothing
+> run). Sources: the owner's word `orch-2026-10-30a` `…b836b85c` item 2, `ADR-0056`'s dated block of `arch-owner-answers-1105`
+> (CF1–CF10), `…4844df37`, `…2b3440cf` item 4, `…3c67d3c4`, and his later word of the same day, `…0f1ab02e`.
+> - **Written at** The read, § What happens on a miss, § Open 1, 3 and 4, § Dependencies and § Definition of Ready. Tables 1–3 stay
+>   word for word. CF1–CF10 are cited, not copied: the block governs, and QE copies from it.
+> - **The form does not stop at this ticket.** `…4844df37` bound it here; the owner then widened it to later single-read reads and bundles
+>   (`…0f1ab02e` item 1). Which reads, and whether a line adapts, is `arch-owner-answers-1105b`'s, in flight. This ticket's form does not change.
+> - **CF7 is owner-accepted** (`…0f1ab02e` item 3), so the Architect's-carry mark the brief asked for is off (§ Open 1).
+> - **The slot:** `ABC-301` closed NOT MET, so C2′ waits on `ABC-282` alone, and through it on A4.
+> - No bar, size or priority moves. **DoR 10/10, unchanged.** The column moves are the Orchestrator's.
+
 > **THE COUNTERMOVE'S TERM OWED IN `NFR-009`'S SUM; A3 (a)'S COMMENT GOES WHEN `main` GOES IN; § OPEN 1, 2 AND 4 ANSWERED BY
 > REFERENCE, OPEN 1 WAITING ON THE OWNER WITH THE STRICT READING IN FORCE, 2026-11-04, by BA/PM** (task `bapm-K0-cut`, records
 > only, at `main` `8527e49f`; nothing run). Sources: `arch-ABC-303-open` `…84f9bae1`, `…e28552ac`, `…5aee89b7`, `ADR-0056`'s dated
@@ -148,10 +160,15 @@ are the probe's, on `0cc9afd1`.
 **The read.** One C2′, 100 games at 100 ms, all on against the merge-base, **GAIN ≥ 50.0 / 100**, with 100 of 100 complete,
 0 candidate faults and 0 losses on time. Never re-played, no subset. Then **S′ at E 1 810, a bar:** S-1, S-2 and S-4 (≥ 3.0
 of 10; below that, 10 more games and ≥ 7.0 of 20). Then **the Levels deep lane, a bar:** exit 0, every test passed.
-*2026-11-04 (`bapm-K0-cut`): the sentence stands as copied. On a candidate fault see § Open 1; on E see § Open 2.*
+*2026-11-04 (`bapm-K0-cut`): the sentence stands as copied. ~~On a candidate fault see § Open 1;~~ on E see § Open 2.*
+*2026-11-05 (`bapm-wait-lines-1105`): **on a candidate fault, a loss on time or a Levels red, the form is CF1–CF10,** `ADR-0056`'s dated
+block of `arch-owner-answers-1105`. "Never re-played" stands: a CF4 read is not a re-play, because the first read returned no verdict
+and CF4 reads another tree.*
 
 - **The PREREG is sealed first,** by QE, in the shape `…d776c0f0`, before any game. QE adds no bar and drops none. Its
   first line says the premises are not met and were overridden by the owner's word.
+  *2026-11-05 (`bapm-wait-lines-1105`; `ADR-0056`'s dated block): QE copies CF1–CF10 word for word into § 6 of that shape, after § 6
+  item 3, in every `ABC-303` PREREG, a CF4 read's included. They hold no blank and add no bar.*
 - **The read does not start until every row of tables 1 and 2 is met** (B6).
 - **Before the merge** (B4): `main` is merged into the branch, with no rewrite. Tables 1 and 2 are read again on the merged
   tree, with no games. Games run again only under C2′'s stale rule.
@@ -168,11 +185,22 @@ of 10; below that, 10 more games and ≥ 7.0 of 20). Then **the Levels deep lane
   override does not reach them. Any lift is the owner's word.
 - **P7:** a row move first (`…f30bd604` 2).
 - **C2′ below 50.0, or an S′ collapse:** NOT MET, B6. **A fault, a loss on time or a Levels red:** a defect.
-  *2026-11-04 (`bapm-K0-cut`): for now a candidate fault closes the read unpassed. § Open 1.*
+  ~~*2026-11-04 (`bapm-K0-cut`): for now a candidate fault closes the read unpassed. § Open 1.*~~
+  *2026-11-05 (`bapm-wait-lines-1105`): **this line is read through CF1–CF10,** `ADR-0056`'s dated block of `arch-owner-answers-1105`.
+  In short, and the block governs:*
+  - *A candidate fault or loss on time ends that read with no pass (CF1). The verdict test comes first (CF2): if each such game
+    counted as a win still leaves it under the bar, NOT MET, final, B6.*
+  - *Otherwise it is a defect, fixed with nothing tuned (CF3), then one new read on the fixed tree, final (CF4). A cause nobody can
+    reproduce is a STOP to Architect/Design, with no new read.*
+  - *A clean low score stays final (CF5). A clean, met C2′ stands after a value-identical fix, and only the faulted S′ is replayed
+    (CF6). A Levels red after a clean C2′ is CF7.*
+  - *A second candidate fault is NOT MET (CF8). A case the lines do not name is a STOP to Architect/Design (CF10).*
 
 - **NOT MET (B6):** nothing merges. QE records a `failed-attempt` naming the bundle. `ADR-0072` and `ADR-0073` return to
   PROPOSED, premise not met, and `ABC-286` and `ABC-288` to held. No re-play, no margin, no change of form, no subset. A part
   comes back only as a new attempt.
+  *2026-11-05 (`bapm-wait-lines-1105`; `ADR-0056` B6's dated line): for this ticket this bullet is read through CF1–CF10. A fixed tree
+  under CF4 is not a new attempt and does not need the route back.*
 - **On MET and the merge (B5):** both ADRs are in force, and the Architect writes the line naming this ticket and the read.
 - **Either way,** the merge or the `failed-attempt` starts `ABC-289`'s build (§ Dependencies).
 
@@ -222,6 +250,8 @@ of 10; below that, 10 more games and ≥ 7.0 of 20). Then **the Levels deep lane
   `58e90d07`). `ABC-302`, which `ADR-0072` d11 puts first, merged `ec4edd92`.
 - **The slot, by the Orchestrator (brief `bapm-bundle-1-cut`):** the bundle's code may be built now, but **its C2′ read runs
   only after `ABC-282` and `ABC-301` have each merged or been recorded as failed,** so neither makes that read stale.
+  *2026-11-05 (`bapm-wait-lines-1105`): **`ABC-301`'s half is met:** recorded as failed (`…04dc7cd4`, QE `…d065fee3`), nothing merged.
+  The read now waits on `ABC-282` alone, and through it on A4, the owner's yes of `…b836b85c` item 1.*
   - **What that asks of the branch** (BA/PM's reading, § Open 3): C2′ reads against the merge-base, and a read is stale when
     another value-changing merge has moved its base. So `main` is merged into the branch, with no rewrite, after the later
     of the two settles and before QE seals its PREREG. Tables 1 and 2 are read on that tree.
@@ -231,8 +261,9 @@ of 10; below that, 10 more games and ≥ 7.0 of 20). Then **the Levels deep lane
 - **`ABC-282` (W1, `ADR-0071`).** Both edit `src/engine.ts` and the same `runIteration` (`ADR-0072` d11, `ADR-0073` d12).
   Under the slot, if it merges, this ticket lands second, so it carries: b = 2.3 re-read by P1's method (`ADR-0071` D12
   item 3) and A0's counts, reported to the Orchestrator. Any change to b is its own ticket with its own read.
-- **`ABC-301` (the second pull).** B-T7 goes stale on a value-changing merge after its freeze, and a merge of `ABC-301` would
-  stale this read. The slot covers both.
+- ~~**`ABC-301` (the second pull).** B-T7 goes stale on a value-changing merge after its freeze, and a merge of `ABC-301` would
+  stale this read. The slot covers both.~~ *2026-11-05 (`bapm-wait-lines-1105`): closed NOT MET, so no such merge comes. Its tools land
+  as `ABC-305` with zero production lines, which stales no read (`…2b3440cf`).*
 - **`ABC-289` (Q2) comes after, alone** (`ADR-0056` D5's dated block). Its build starts when this ticket's merge or
   `failed-attempt` is recorded, not before.
 - **`ABC-298` (V3):** one at a time on `orderMoves`. Whichever lands second re-reads the other's identity rows (`ADR-0072`
@@ -240,6 +271,8 @@ of 10; below that, 10 more games and ≥ 7.0 of 20). Then **the Levels deep lane
 - **One at a time on `src/search.ts` / `src/engine.ts`** with `ABC-284`, `ABC-285`, `ABC-287`, `ABC-296` and `ABC-297`.
 - **The row census** (the Orchestrator's) gates the second of `ABC-282` / `ABC-301` to merge and is sized for this ticket
   and `ABC-289` (`…5ec6c124` 1). A red on row P7 is a row move first.
+  *2026-11-05 (`bapm-wait-lines-1105`; `…2b3440cf`): with `ABC-301` closed there is no second of the two to gate. Whether the census
+  still gates a landing is the Orchestrator's, and the records do not settle it.*
 
 ## Open, not bars (for the Architect and the Orchestrator)
 
@@ -249,12 +282,19 @@ The records do not settle these. This page adds none of them as a bar, and none 
    defect", beside "never re-played". `…d776c0f0` § 6 lists MET, below 50.0, a base fault and a harness error for C2′, and
    no candidate fault. Whether a fixed candidate plays a new C2′, and whether a C2′ already played stands after a fix for an
    S′ fault or a Levels red, is `UNKNOWN - verify`.
-   *2026-11-04 (`bapm-K0-cut`): **answered by reference, WAITING ON THE OWNER.** The Architect's answer is `ADR-0056`'s dated
+   ~~*2026-11-04 (`bapm-K0-cut`): **answered by reference, WAITING ON THE OWNER.** The Architect's answer is `ADR-0056`'s dated
    block of `arch-ABC-303-open`, item 1 (`…5aee89b7` item 3). The Orchestrator did not rule its new C2′ against B4: "one read,
    never re-played" is the rule the owner accepted, so a second read after a candidate fault goes to him (`…681c6363` 2).
    **Until he answers the strict reading is in force: a candidate fault closes the read unpassed, and B6 governs the return.**
    Two points the records leave `UNKNOWN - verify`: whether that reading also stops the block's line that a clean C2′ stands
-   and the red S′ runs again, and whether an answer after QE's seal reaches this read.*
+   and the red S′ runs again, and whether an answer after QE's seal reaches this read.*~~
+   *2026-11-05 (`bapm-wait-lines-1105`): **ANSWERED.** He said yes to the new C2′ (`…b836b85c` item 2, verbatim "2. yes"). The strict
+   reading is gone for this ticket. Its form is CF1–CF10, `ADR-0056`'s dated block of `arch-owner-answers-1105`.*
+   - ***Both open points close** (`…4843d1f2` 1 and 2; `…4844df37`). The clean C2′ line stands as CF6. An answer reaches any read not
+     yet sealed, and no `ABC-303` PREREG is sealed, so the first read and any CF4 read carry this form.*
+   - ***CF7, the Levels red, is owner-accepted.** `…b836b85c` named S′ alone, so CF7 was the Architect's carry from `arch-ABC-303-open`'s
+     block (`…4844df37`). The owner confirmed it the same day (`…0f1ab02e` item 3): a clean C2′ stands when the Levels test then fails
+     and the fix does not change play. `ADR-0056`'s line moves at `arch-owner-answers-1105b`.*
 2. **S′'s E, for the Architect.** The block reads E 1 810. `…d776c0f0` § 6 has a blank, "1810, or the re-pinned value and
    its record", and says the block governs a difference. If the S′ pool re-pins E before the read, this page's E needs a
    dated line.
@@ -265,6 +305,9 @@ The records do not settle these. This page adds none of them as a bar, and none 
    does not reach this read.*
 3. **The slot's reading, for the Orchestrator.** That `main` goes into the branch before the PREREG is BA/PM's reading of
    "neither makes that read stale", not his words.
+   *2026-11-05 (`bapm-wait-lines-1105`): **ruled** (`…3c67d3c4` 3). The reading stands: `main` goes into `grugops/ABC-303`, with no
+   rewrite, after the later of `ABC-282` and `ABC-301` settles and before QE seals its PREREG. `ABC-301` has settled, so the later
+   is `ABC-282`.*
 4. **The moved base, for the Orchestrator.** Two of the block's reasons for reading the bundle first, that P4 stays on the
    tree it was measured on and that R1 and R2 stay comparable with what the owner was shown, assume a base near `0cc9afd1`.
    Under the slot a merged `ABC-301` moves the evaluation under both. Rows P3 and P4 are then read on a tree nobody has
@@ -275,6 +318,10 @@ The records do not settle these. This page adds none of them as a bar, and none 
    practice:** the hop that brings R1 and R2 on the new base brings P3 and P4 too. Whether +0.116 survives a fitted evaluation
    stays `UNKNOWN - verify`; a red is a STOP and a lift is the owner's. "Materially worse" stays the Orchestrator's, with no
    figure set.*
+   *2026-11-05 (`bapm-wait-lines-1105`; `…2b3440cf` item 4): **the worry is gone for `ABC-301`'s half.** It closed NOT MET, so no fitted
+   evaluation arrives. By the Architect's reading R1, R2, P3, P4 and the +0.116 stay near what the owner was shown; none of them is
+   read yet. **`ABC-282`'s half stands:** if it merges, the base moves, and `…3c67d3c4` 4 and the change of practice above apply. Any
+   red on P3 or P4 is still a STOP.*
 
 ## Definition of Ready
 
@@ -284,13 +331,14 @@ The records do not settle these. This page adds none of them as a bar, and none 
 | 2 | scope and out-of-scope | ✅ scope 1–5, each as its ADR; L2's drift and audit, CH3, per-part reads, re-tuning and `ABC-289` out |
 | 3 | INVEST | ✅ M, one branch and one read, by the owner's word; independent of `ABC-289`, ordered against `ABC-282` and `ABC-301` |
 | 4 | testable, measurable acceptance | ✅ tables 1 and 2 row by row, each a count, a ratio or an exact equality; C2′ ≥ 50.0 of 100 once; S′ ≥ 3.0 of 10; Levels exit 0; table 3 reported with its figures |
-| 5 | dependencies known | ✅ none hard for the build; the C2′ slot on `ABC-282` and `ABC-301`; `ABC-289` after; `ABC-298` and the shared files |
+| 5 | dependencies known | ✅ none hard for the build; the C2′ slot on `ABC-282` alone, `ABC-301`'s half met *(2026-11-05)*; `ABC-289` after; `ABC-298` and the shared files |
 | 6 | NFR triggers with targets | ✅ `NFR-008` ≤ 10 s and ≤ +0.10 s; `NFR-009` 3 072 bytes; `NFR-005` "≥ base", every run ≥ depth 6 |
 | 7 | test notes | ✅ 1–5 |
 | 8 | size | ✅ M |
 | 9 | priority | ✅ P3 |
-| 10 | no major unresolved blocker | ✅ `ADR-0072` and `ADR-0073` ACCEPTED over missed premises, which opens the build. The four § Open items do not block it; item 1 is wanted before the read |
+| 10 | no major unresolved blocker | ✅ `ADR-0072` and `ADR-0073` ACCEPTED over missed premises, which opens the build. ~~The four § Open items do not block it; item 1 is wanted before the read~~ *2026-11-05: § Open 1, 2 and 3 are answered, and § Open 4's `ABC-282` half blocks nothing* |
 
 **DoR 10/10. Ready.** The column move and the build slot are the Orchestrator's. *2026-11-04 (`bapm-K0-cut`): row 10 holds. § Open
 1 waits on the owner and blocks neither the build nor the read, because the strict reading stands in the meantime. **DoR 10/10,
+unchanged.*** *2026-11-05 (`bapm-wait-lines-1105`): § Open 1 is answered, so the strict reading no longer stands in. **DoR 10/10,
 unchanged.***

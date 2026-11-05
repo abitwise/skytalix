@@ -20,13 +20,19 @@ adr: "ADR-0056 D5 / D6 item 7 (R milestone readings) and C4's 100 ms outside-rea
 >   `ABC-271`, the second pull, `ABC-272` and `ABC-290`–`ABC-294` are open). Then Ready, by a records hop or the
 >   Orchestrator's move.
 > - **The board move is the Orchestrator's.**
+> - *2026-11-05 (`bapm-wait-lines-1105`; `…2b3440cf` item 4, `ADR-0056` D6's dated line): the second pull no longer holds Phase 4 open. The
+>   Architect reads the close as `ABC-272` and `ABC-290`–`ABC-294` settling. The ruling stays the Orchestrator's. Nothing else on this page
+>   moves: 200 games at 100 ms, the band rule, R1's shape and R1's figure as the base.*
 
 ## Problem
 
 - **User:** the owner, who wants to see where the climb stands (`EPIC-011` G2).
 - **Pain:** R1 read **X = 1 806.5 ± 47.4** at E 1 810 on `main` `85a304ff`, after E1 (`ABC-273`, QE `…07b3c794`).
-  Every read since is self-play except the 10-game S′ smoke, which sees only a collapse (`RISK-EPIC011-04`). The
-  second pull is a tuned set, and a tuned set judged by self-play alone is the failure on record (`RISK-EPIC010-05`).
+  Every read since is self-play except the 10-game S′ smoke, which sees only a collapse (`RISK-EPIC011-04`). ~~The second pull is a tuned set, and a tuned set judged by self-play alone is the failure on record
+  (`RISK-EPIC010-05`).~~
+  *2026-11-05 (`bapm-wait-lines-1105`; `…2b3440cf` item 4): the second pull closed NOT MET, so no tuned set reaches this reading. R2 reads a
+  rule-made evaluation, with any term merged by then on hand values. It reads less of a jump than Phase 4 was planned for: expect no
+  E2 term in the reading.*
 - **Value:** one number on the same scale after Phase 4, so the evaluation block's outside effect can be read against
   R1. No Elo by itself.
 
@@ -84,7 +90,7 @@ adr: "ADR-0056 D5 / D6 item 7 (R milestone readings) and C4's 100 ms outside-rea
 
 | # | check | state |
 |---|---|---|
-| 1 | problem clear | ✅ G2; R1's figure predates the tuner; `RISK-EPIC011-04` |
+| 1 | problem clear | ✅ G2; ~~R1's figure predates the tuner~~ *(2026-11-05: no tuned set reaches this reading)*; `RISK-EPIC011-04` |
 | 2 | scope and out-of-scope | ✅ one reading; no code |
 | 3 | INVEST | ✅ S |
 | 4 | testable, measurable acceptance | ✅ 200 / 200, 0 faults, 0 time losses; every scope-3 figure; ≤ 1 h or asked |
