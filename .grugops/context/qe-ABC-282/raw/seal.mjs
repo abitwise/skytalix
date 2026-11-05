@@ -11,7 +11,7 @@ const plugin = JSON.parse(readFileSync(join(homedir(), ".claude/plugins/installe
 const cio = await import(join(plugin, "scripts/context-io.js"));
 const spec = JSON.parse(readFileSync(specPath, "utf8"));
 for (const n of spec.notes) {
-  const note = { kind: n.kind, by: "qe-e2e", at, verified_by: "", confidence: n.confidence, refs: n.refs ?? spec.refs, supersedes: null };
+  const note = { kind: n.kind, by: "qe-e2e", at, verified_by: "", confidence: n.confidence, refs: n.refs ?? spec.refs, supersedes: n.supersedes ?? null };
   const body = readFileSync(resolve(dirname(specPath), n.bodyFile), "utf8");
   const r = cio.admitAndAppend(task, note, body, resolve(contextRoot));
   console.log(n.kind, JSON.stringify(r));

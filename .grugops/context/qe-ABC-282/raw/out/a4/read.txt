@@ -1,0 +1,106 @@
+== games
+g01: opening FEN side w; plies 103; rule result: Finished game 1 (skytalix-a vs skytalix-b): 1/2-1/2 {Draw by 3-fold repetition}
+g02: opening FEN side w; plies 102; rule result: Finished game 1 (skytalix-a vs skytalix-b): 0-1 {Black mates}
+g03: opening FEN side w; plies 122; rule result: Finished game 1 (skytalix-a vs skytalix-b): 0-1 {Black mates}
+g04: opening FEN side w; plies 160; move cap: Finished game 1 (skytalix-a vs skytalix-b): 1/2-1/2 {Draw by adjudication: maximal game length}
+g05: opening FEN side w; plies 119; rule result: Finished game 1 (skytalix-a vs skytalix-b): 1/2-1/2 {Draw by 3-fold repetition}
+
+== A1 setoption lines (game 1)
+  skytalix-a: setoption name TimeMode value uci-clock-mode
+  skytalix-b: setoption name TimeMode value uci-clock-mode
+games with both engines sent `setoption name TimeMode value uci-clock-mode`: 5 of 5; engine refusals `TimeMode takes`: 0
+
+== A2
+games 5; faults 0 []; engine kill/timeout lines after the result: 0
+
+== A3
+losses on time: 0
+closest call: 1100 ms  (g04 skytalix-b move 80, clock 44963, elapsed 43863 [stamp])
+five least: [('g04', 'skytalix-b', 80, 1100), ('g05', 'skytalix-a', 40, 6705), ('g04', 'skytalix-b', 40, 11648), ('g03', 'skytalix-a', 40, 20709), ('g05', 'skytalix-b', 40, 22774)]
+
+== A4 completed periods (game, engine, side, period, used ms, fraction, clock left after 40th, book moves)
+  g01 skytalix-a w P1: used 838415 ms = 93.16 %; left 61585 ms; book 3
+  g01 skytalix-b b P1: used 873817 ms = 97.09 %; left 26183 ms; book 3
+  g02 skytalix-a w P1: used 853917 ms = 94.88 %; left 46083 ms; book 4
+  g02 skytalix-b b P1: used 872838 ms = 96.98 %; left 27162 ms; book 4
+  g03 skytalix-a w P1: used 879291 ms = 97.70 %; left 20709 ms; book 0
+  g03 skytalix-b b P1: used 861902 ms = 95.77 %; left 38098 ms; book 0
+  g04 skytalix-a w P1: used 854676 ms = 94.96 %; left 45324 ms; book 0
+  g04 skytalix-a w P2: used 912196 ms = 101.36 %; left 33128 ms; book 0
+  g04 skytalix-b b P1: used 888352 ms = 98.71 %; left 11648 ms; book 0
+  g04 skytalix-b b P2: used 910548 ms = 101.17 %; left 1100 ms; book 0
+  g05 skytalix-a w P1: used 893295 ms = 99.26 %; left 6705 ms; book 1
+  g05 skytalix-b b P1: used 877226 ms = 97.47 %; left 22774 ms; book 0
+completed side-periods: 12; min use 93.16 %
+
+== A5
+longest move: 59501 ms (g05 skytalix-b move 39 [clock], PGN '60s'); budget 59500.0 ms; period 1, move 39 of 40; go movestogo 2; book False; <= 60 000: True
+five longest: [('g05', 'skytalix-b', 39, 59501, 59500), ('g05', 'skytalix-a', 40, 59500, 59500), ('g02', 'skytalix-b', 39, 55583, 55582.0), ('g05', 'skytalix-a', 39, 54786, 59500), ('g03', 'skytalix-a', 39, 53506, 53504.5)]
+PGN times present 591 of 606; max PGN time 60.0 s; PGN strings > 60: 0
+moves over 59 500 ms: 1; budgets at the 59 500 cap: 13 of 606; max budget 59500.0 ms
+PGN vs exact mismatches: 0 []
+stamp - exact over 596 moves: min -25 max 2 median 0.0
+
+== A6
+clock left after each period's 40th move: [('g01', 'skytalix-a', 'P1', 61585), ('g01', 'skytalix-b', 'P1', 26183), ('g02', 'skytalix-a', 'P1', 46083), ('g02', 'skytalix-b', 'P1', 27162), ('g03', 'skytalix-a', 'P1', 20709), ('g03', 'skytalix-b', 'P1', 38098), ('g04', 'skytalix-a', 'P1', 45324), ('g04', 'skytalix-a', 'P2', 33128), ('g04', 'skytalix-b', 'P1', 11648), ('g04', 'skytalix-b', 'P2', 1100), ('g05', 'skytalix-a', 'P1', 6705), ('g05', 'skytalix-b', 'P1', 22774)]
+go lines with movestogo 606, without 0; first go: g01 skytalix-a: go wtime 900000 btime 900000 movestogo 40
+isready during a search: 0
+moves 606: book 15, searched 591; searched under budget - 1 000 ms (early returns): 462
+overhead (elapsed - budget) over searched moves: median -7734.2 ms, max 3.9 ms, min -32553.0 ms
+overhead over searched moves >= budget - 1 000 ms: median 0.6 ms, max 3.9 ms; exact-clock only: max 3.9 ms
+period-end moves (game, engine, k, clock in go, budget, elapsed, left): [('g01', 'skytalix-a', 40, 88532, 59500, 26947, 61585), ('g01', 'skytalix-b', 40, 74960, 59500, 48777, 26183), ('g02', 'skytalix-a', 40, 74076, 59500, 27993, 46083), ('g02', 'skytalix-b', 40, 56781, 55681.0, 29619, 27162), ('g03', 'skytalix-a', 40, 54703, 53603.0, 33994, 20709), ('g03', 'skytalix-b', 40, 76498, 59500, 38400, 38098), ('g04', 'skytalix-a', 40, 74354, 59500, 29030, 45324), ('g04', 'skytalix-a', 80, 77613, 59500, 44485, 33128), ('g04', 'skytalix-b', 40, 52377, 51277.0, 40729, 11648), ('g04', 'skytalix-b', 80, 44963, 43863.0, 43863, 1100), ('g05', 'skytalix-a', 40, 66205, 59500, 59500, 6705), ('g05', 'skytalix-b', 40, 68560, 59500, 45786, 22774)]
+book moves: 15, elapsed max 1 ms, total 2 ms
+
+== A7 host (play window: first game start to last game end, harness.log)
+play wall 12909 s; samples 1284; largest gap 11 s
+  Q1: n 321 Tctl median 78.8 max 97.8; fmax median 4991689 kHz (+0.00 % vs Q1); fmean median 1740027 kHz; load1 median 2.1
+  Q2: n 321 Tctl median 76.0 max 84.2; fmax median 5033826 kHz (+0.84 % vs Q1); fmean median 1434069 kHz; load1 median 1.3
+  Q3: n 321 Tctl median 80.5 max 89.9; fmax median 4978934 kHz (-0.26 % vs Q1); fmean median 2015160 kHz; load1 median 2.38
+  Q4: n 321 Tctl median 80.5 max 89.2; fmax median 4977383 kHz (-0.29 % vs Q1); fmean median 1977767 kHz; load1 median 2.22
+Tctl median (all) 79.0; max 97.8
+frequency fall > 5 % from Q1 in any quarter: False
+samples with a foreign vitest: 728; with more than one cutechess-cli: 0
+A3/A5 foreign-window rule: moves with left < 1 000 ms or elapsed >= 59 900 ms: 0; inside a foreign vitest window: 0; closest call inside a window: True; longest move inside a window: True
+foreign.log: vitest lines 262 (distinct pids 118); busy (>= 50 % of a core) lines 68
+   at=2026-11-05T07:57:29Z t=1793865449 busy pid=881002 pcpu=51.0 comm=abtop
+   at=2026-11-05T08:09:46Z t=1793866186 busy pid=881002 pcpu=53.5 comm=abtop
+   at=2026-11-05T08:12:50Z t=1793866370 busy pid=3751982 pcpu=155.4 comm=node-MainThread
+   at=2026-11-05T08:12:50Z t=1793866370 busy pid=881002 pcpu=53.5 comm=abtop
+   at=2026-11-05T08:16:56Z t=1793866616 busy pid=3786078 pcpu=69.3 comm=node-MainThread
+   at=2026-11-05T08:16:56Z t=1793866616 busy pid=3786085 pcpu=63.4 comm=node-MainThread
+   at=2026-11-05T08:17:57Z t=1793866677 busy pid=881002 pcpu=59.4 comm=abtop
+   at=2026-11-05T08:18:58Z t=1793866738 busy pid=3791328 pcpu=52.5 comm=node-MainThread
+   at=2026-11-05T08:20:00Z t=1793866800 busy pid=881002 pcpu=55.4 comm=abtop
+   at=2026-11-05T08:21:01Z t=1793866861 busy pid=3843496 pcpu=188.0 comm=node-MainThread
+   at=2026-11-05T08:24:06Z t=1793867046 busy pid=881002 pcpu=54.5 comm=abtop
+   at=2026-11-05T08:25:07Z t=1793867107 busy pid=3904011 pcpu=116.8 comm=node-MainThread
+   at=2026-11-05T08:25:07Z t=1793867107 busy pid=3904018 pcpu=105.0 comm=node-MainThread
+   at=2026-11-05T08:26:08Z t=1793867168 busy pid=3907421 pcpu=65.0 comm=node-MainThread
+   at=2026-11-05T08:27:10Z t=1793867230 busy pid=881002 pcpu=56.4 comm=abtop
+   at=2026-11-05T08:29:13Z t=1793867353 busy pid=881002 pcpu=53.5 comm=abtop
+   at=2026-11-05T08:30:14Z t=1793867414 busy pid=881002 pcpu=50.5 comm=abtop
+   at=2026-11-05T08:32:58Z t=1793867578 busy pid=881002 pcpu=54.5 comm=abtop
+   at=2026-11-05T08:36:03Z t=1793867763 busy pid=3965849 pcpu=54.0 comm=node-MainThread
+   at=2026-11-05T08:38:05Z t=1793867885 busy pid=3993441 pcpu=196.0 comm=node-MainThread
+
+== A4 of ABC-282
+skytalix-a (w): M1 MET: losses on time 0, closest call 6705 ms (g05 move 40); M2 MET: 6 side-periods
+    g01 P1: used 838415 ms of 900000 = 93.16 %; left 61585 ms; book 3; stamp-read moves 0; ok
+    g02 P1: used 853917 ms of 900000 = 94.88 %; left 46083 ms; book 4; stamp-read moves 0; ok
+    g03 P1: used 879291 ms of 900000 = 97.70 %; left 20709 ms; book 0; stamp-read moves 0; ok
+    g04 P1: used 854676 ms of 900000 = 94.96 %; left 45324 ms; book 0; stamp-read moves 0; ok
+    g04 P2: used 912196 ms of 900000 = 101.36 %; left 33128 ms; book 0; stamp-read moves 1; ok
+    g05 P1: used 893295 ms of 900000 = 99.26 %; left 6705 ms; book 1; stamp-read moves 0; ok
+    use min 93.16 %, median 96.33 %, max 101.36 %
+    moves 304, book 8, searched 296; partial 6 = 2.03 % of searched; mean completed depth 13.365, median 13.0, max 17; longest move 59500 ms
+skytalix-b (b): M1 MET: losses on time 0, closest call 1100 ms (g04 move 80); M2 MET: 6 side-periods
+    g01 P1: used 873817 ms of 900000 = 97.09 %; left 26183 ms; book 3; stamp-read moves 0; ok
+    g02 P1: used 872838 ms of 900000 = 96.98 %; left 27162 ms; book 4; stamp-read moves 0; ok
+    g03 P1: used 861902 ms of 900000 = 95.77 %; left 38098 ms; book 0; stamp-read moves 0; ok
+    g04 P1: used 888352 ms of 900000 = 98.71 %; left 11648 ms; book 0; stamp-read moves 0; ok
+    g04 P2: used 910548 ms of 900000 = 101.17 %; left 1100 ms; book 0; stamp-read moves 1; ok
+    g05 P1: used 877226 ms of 900000 = 97.47 %; left 22774 ms; book 0; stamp-read moves 0; ok
+    use min 95.77 %, median 97.28 %, max 101.17 %
+    moves 302, book 7, searched 295; partial 9 = 3.05 % of searched; mean completed depth 13.217, median 13, max 16; longest move 59501 ms
+games 5 of 5; faults 0; WARN lines 0; side-periods 12 (>= 4: True); moves in a foreign window under the 1 000 ms / 59 900 ms rule 0
+A4 MET
