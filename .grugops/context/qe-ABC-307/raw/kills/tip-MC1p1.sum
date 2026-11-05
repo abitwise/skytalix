@@ -1,0 +1,9 @@
+total 2709 passed 2701 failed 8 pending 0 todo 0 files 71 failedSuites 9
+KILL	uci-session.test.ts::ABC-171 A2 — setoption Skill Level value 8: one info string, the old value (1) kept
+KILL	uci-session.test.ts::ABC-171 A2 — setoption Skill Level value x: one info string, the old value (1) kept
+KILL	uci-session.test.ts::ABC-171 A6 — a level change is observable (EPIC-007 M7) level 1: go wtime 60000 btime 60000 winc 1000 binc 1000 -> 100 ms (within 2 x 100 ms)
+KILL	uci-session.test.ts::ABC-171 A7 — the blunder path two sessions on seededRandom(2), over the first two gos (a blunder, then the engine), write the same bestmove sequence
+KILL	uci-session.test.ts::ABC-171 A13a — the seed oracle floor(random() * 2^32) (QE-171-a) seededRandom(2): level 1's bestmove equals the oracle's
+KILL	uci-session.test.ts::ABC-171 A13a — the seed oracle floor(random() * 2^32) (QE-171-a) seededRandom(4): level 1's bestmove equals the oracle's
+KILL	uci-session.test.ts::ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) A8 — levels unchanged (EPIC-009 M3) TimeMode unset, Skill Level 1: A3's period gives base's budget on every go, row for row
+KILL	uci-session.test.ts::ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A8 — levels value-identical (EPIC-009 M3) TimeMode unset: a bare go at Skill Level 1-7 is each level's budget, and go movetime 60000 at 7 is 30 000

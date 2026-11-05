@@ -1,0 +1,23 @@
+total 2709 passed 2687 failed 22 pending 0 todo 0 files 71 failedSuites 22
+KILL	book-engine.test.ts::ABC-095 — the book in front of the engine's move choice A4 — the frame where the game leaves book has the same rows and no extra message line as the one before it
+KILL	book-engine.test.ts::ABC-095 — the book in front of the engine's move choice A5 (game half) — no book: 10 in-book positions all go to the search, one warning, no throw
+KILL	book.test.ts::ABC-094 A3 — variety after 1. e4 on seeds 1 to 10 ten seeds, one pick each, at least 3 distinct replies
+KILL	gameend.test.ts::ABC-241 A1 — repetitionKey, the one helper an ep square with no legal capture: the key of the no-ep twin (no capturer (1.e4))
+KILL	gameend.test.ts::ABC-241 A1 — repetitionKey, the one helper an ep square with a legal capture: the Zobrist key, file in (legal capture (d4xe3))
+KILL	history.test.ts::ABC-241 A3 — the 1.e4 line: the claim at 5.Ng1 and the fivefold at 9.Ng1 the threefold claim after 5.Ng1 (base 7.Ng1) and the fivefold after 9.Ng1 (base 11.Ng1)
+KILL	history.test.ts::ABC-241 A3 — the 1.e4 line: the claim at 5.Ng1 and the fivefold at 9.Ng1 twin: where the double push can be taken legally (d4xe3), the counts stay base's
+KILL	history.test.ts::ABC-241 A3 — the 1.e4 line: the claim at 5.Ng1 and the fivefold at 9.Ng1 the repetition-key list differs from the hash list at exactly the 1.e4 key, and has its length
+KILL	transposition.test.ts::A1 — table-on and table-off scores are identical position-3 at depth 4 — the same score, and the work changes: 1 377 nodes with the table, 1 533 without
+KILL	transposition.test.ts::A5 — the only non-losing line repeats, and it scores exactly 0 search(), depth 4: the perpetual scores exactly 0 and is played — in 7 295 nodes
+KILL	turn-loop.test.ts::ABC-241 A3 — claimShortfall reads the repetition-key count after 3.Ng1 a refused claim reads `repetition 2 of 3`; the twin with a legal d4xe3 reads 1
+KILL	uci-session.test.ts::ABC-241 A4, A5 — UCI: the prior keys are repetition keys A6: a FEN carrying an uncapturable ep square: its own key counts, d1e1 scores exactly 0; base's list does not
+KILL	zobrist.test.ts::zobristKey separates an ep square no capture can use — ABC-075 A3, the ep-set-no-capture class
+KILL	zobrist.test.ts::zobristKey still separates the pair where the ep capture is real — the ABC-011 regression guard
+KILL	zobrist.test.ts::ABC-075 property — the ep component tracks the ep FIELD, not availability (ADR-0020) holds at every node 1 ply from every perft position
+KILL	zobrist.test.ts::ABC-075 — zobristKey where the board contradicts the ep square (ADR-0020) carries the ep component and returns the position intact (an ep square on the wrong rank for the side to move)
+KILL	zobrist.test.ts::ABC-075 — zobristKey where the board contradicts the ep square (ADR-0020) carries the ep component and returns the position intact (a white pawn standing ON the ep target)
+KILL	zobrist.test.ts::ABC-075 — zobristKey where the board contradicts the ep square (ADR-0020) carries the ep component and returns the position intact (the ep target occupied by an enemy knight)
+KILL	zobrist.test.ts::ABC-075 — zobristKey where the wrong piece contradicts the ep square (ADR-0020) carries the ep component and returns the position intact (an enemy ROOK, not a pawn, on the ep capture square)
+KILL	zobrist.test.ts::ABC-075 — zobristKey where the wrong piece contradicts the ep square (ADR-0020) carries the ep component and returns the position intact (the mover's OWN knight standing on the ep target)
+KILL	book.test.ts::the delivered artifact (data/opening-book/book.json) A2 — every book move is legal in its keyed position, over every entry
+KILL	book.test.ts::the delivered artifact (data/opening-book/book.json) A4 — after 1. e4 the book carries >= 3 distinct replies with non-zero weight

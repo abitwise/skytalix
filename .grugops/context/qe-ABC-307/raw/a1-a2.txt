@@ -1,0 +1,22 @@
+## A1: outside the records
+src/book.test.ts
+src/cli.test.ts
+src/uci-session.test.ts
+tools/grugops/qe-hop-integrity.test.ts
+## A1: added or removed files outside the records
+(end)
+## A1: the waiver grep over base..tip
+rc 1 (1 means empty)
+## A1: the standing rule's form, delivered~1..delivered
+rc 1 (1 means empty)
+## A2: bodies
+Q1 tools/grugops/qe-hop-integrity.test.ts -> tools/grugops/qe-hop-integrity.test.ts: base 6 lines, tip 6; identical after removing the 2-space indent: True
+Q2 tools/grugops/qe-hop-integrity.test.ts -> tools/grugops/qe-hop-integrity.test.ts: base 11 lines, tip 11; identical after removing the 2-space indent: True
+Q3 tools/grugops/qe-hop-integrity.test.ts -> tools/grugops/qe-hop-integrity.test.ts: base 27 lines, tip 27; identical after removing the 2-space indent: True
+L1 src/cli.test.ts -> src/uci-session.test.ts: base 30 lines, tip 30; identical after removing the 2-space indent: True
+L2 src/cli.test.ts -> src/uci-session.test.ts: base 3 lines, tip 3; identical after removing the 2-space indent: True
+L3 src/cli.test.ts -> src/uci-session.test.ts: base 18 lines, tip 18; identical after removing the 2-space indent: True
+C1 src/uci-session.test.ts -> src/uci-session.test.ts: base 4 lines, tip 4; identical after removing the 2-space indent: True
+C2 src/uci-session.test.ts -> src/uci-session.test.ts: base 2 lines, tip 2; identical after removing the 2-space indent: True
+B1 src/book.test.ts -> src/book.test.ts: base 6 lines, tip 6; identical after removing the 2-space indent: True
+A2 bodies: ALL IDENTICAL

@@ -1,0 +1,2 @@
+total 2709 passed 2708 failed 1 pending 0 todo 0 files 71 failedSuites 2
+KILL	cli.test.ts::ABC-101 — --difficulty selects a level, and the played engine is that level A8′ (sample) — levels 1 and the default: the seam moves exactly as `createLevel` does, on one seed and one injected clock

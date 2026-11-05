@@ -1,0 +1,3 @@
+total 2709 passed 2707 failed 2 pending 0 todo 0 files 71 failedSuites 4
+KILL	cli.test.ts::ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square A7 (no search): after d8e8, the move A4 (slice) pins, gameStatusOf reports the claim
+KILL	history.test.ts::ABC-241 A3 — the 1.e4 line: the claim at 5.Ng1 and the fivefold at 9.Ng1 the threefold claim after 5.Ng1 (base 7.Ng1) and the fivefold after 9.Ng1 (base 11.Ng1)

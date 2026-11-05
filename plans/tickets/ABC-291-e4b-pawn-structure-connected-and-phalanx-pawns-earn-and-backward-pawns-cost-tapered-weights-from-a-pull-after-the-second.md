@@ -1,16 +1,24 @@
 ---
 id: ABC-291
 title: "E4b: pawn structure. Connected and phalanx pawns earn a tapered bonus and backward pawns a tapered penalty, with hand values fixed by a stated rule and judged on its own C2′. First of the four terms on the tuning wait"
-status: in-design
-column: In Design
-size: S–M
+status: ready
+column: Ready
+size: M
 priority: P2
 epic: EPIC-011
 feature: —
-adr: "ADR-0075, accepted by the owner 2026-11-05 (…c1623ae7), in force at this ticket's merge: form (b) on main's tapered evaluation. Definitions and hand values d1 and d2, pawn memo at 640 KiB d3, one switch and a test-only off-door pair d4, G2 ≤ 1.03 × d5, intent GAIN d6, bars K0–K7 d7, the probe d10, the tool line d11 (a). Its probe runs on the host after ABC-282's A4. K2's value rows and re-point list join it by a dated line before Ready"
+adr: "ADR-0075, accepted by the owner 2026-11-05 (…c1623ae7), in force at this ticket's merge: form (b) on main's tapered evaluation. Definitions and hand values d1 and d2, pawn memo d3 with d5's named cut carried, so 576 KiB and NFR-009 +0, one switch and a test-only off-door pair d4, G2 ≤ 1.03 × d5, intent GAIN d6, bars K0–K7 d7, the probe d10, the tool line d11 (a). Its probe ran once, 2026-11-05: the premise stands under rule 3 (…2926c26b). K0 (c)'s counts and K2's list are in its § The probe's reading"
 ---
 
 # ABC-291: connected, phalanx and backward pawns (E4b)
+
+> **THE PROBE RAN: THE PREMISE STANDS UNDER RULE 3; THE BUILD CARRIES d5'S CUT; SIZE M; DoR 10/10; READY, 2026-11-05, by BA/PM** (task `bapm-ABC-291-probe-lines`, records only, at `main`
+> `f22de7e8`; nothing run). Sources: `arch-ABC-291-probe` `…65c7a9c9` and `…2926c26b`, `ADR-0075` § The probe's reading, and the Orchestrator's rulings `…69ee96e7`.
+> - **No value, rule, definition, ratio, intent or bar moved.** The line reads "the premise stands under rule 3", not "MET": PR8 read R = 1.04287, above 1.03, so rule 5 does not apply.
+> - **The memo stays 576 KiB and `NFR-009`'s +65 536 reads 0** (ruling 3). `ADR-0075`'s title, d3 and § Consequences still read 640 KiB and +65 536. That is d3's form before the cut, not a disagreement: d5 named the
+>   cut, rule 3 spends it, and ruling 3 reads the result. On these two figures those hold, not the older lines.
+> - **On the page:** the probe's reading, K2's list by pointer, K0 (c)'s counts by pointer, rulings 1 and 2, size M, § `UNKNOWN - verify` trimmed to what stays open.
+> - **DoR row 10 closes** on `…2926c26b`. Status and column read Ready. The board move is the Orchestrator's. **The build stays behind `ABC-303`, `ABC-289` and `ABC-305`.**
 
 > **`ADR-0075` ACCEPTED, IN FORCE AT THIS TICKET'S MERGE; ITS BARS ARE ON THIS PAGE; IN DESIGN, 2026-11-05, by BA/PM** (task `bapm-ABC-291-lines`, records only, at `main`
 > `1d0c7acc`; nothing run). Sources: the owner's "1. yes" (`orch-2026-10-30a` `…c1623ae7`), `ADR-0075`, and `arch-ABC-291`'s § Result.
@@ -89,8 +97,10 @@ adr: "ADR-0075, accepted by the owner 2026-11-05 (…c1623ae7), in force at this
    `PAWN_BACKWARD` = { mg 10, eg 10 }, a penalty held as a positive value, as `ISOLATED` is.
    - **What "tapered" means here** (d2): "tapered" on this page, its title included, reads "a middlegame / endgame pair that enters the blend". The halves come out equal, by the
      rule, so **the blend changes nothing at today's table.**
-3. **In the pawn memo, at 640 KiB** (d3): one new `Int32Array` part, `pawnCacheShape`, the packed sum of the three terms, white minus black. It stays out of `pawnStructure`'s return value,
-   and the caller adds it. 2^14 × 40 bytes = 655 360 bytes, up 65 536 from 589 824 (576 KiB, `ADR-0070` d2). d5's one named cut, if it is carried, returns the memo to 576 KiB.
+3. **In the pawn memo, which stays at 576 KiB** (d3, with d5's named cut): one new `Int32Array` part, `pawnCacheShape`, the packed sum of the three terms, white minus black. It stays out of `pawnStructure`'s return value,
+   and the caller adds it.
+   - **The build carries d5's cut** (the probe's rule 3): `doubled` and `isolated` share one memo word. They are only ever summed on a hit, so the cut is value-identical and saves a read.
+   - **Size:** 2^14 × 36 bytes = 589 824 bytes (576 KiB, `ADR-0070` d2), +0. d3's 640 KiB (2^14 × 40 = 655 360, up 65 536) is the form before the cut, and it is the form the probe read.
 4. **Form (b)** (d4; `ADR-0026` d10, in `ADR-0064` d7's form): one switch, `pawnShape`, on in `search()` and `chooseMove` only; the test-only exports `searchWithoutPawnShape`, `chooseMoveWithoutPawnShape` and
    `evaluateAtPhaseWithoutPawnShape`; the test-only seam `pawnShapeForTest(position)`. Every older door turns it off.
 5. **The tool line, at this term's merge** (d11 (a), read by K7). `tools/tune` gains the three terms' counts in the tracer and the three exports in the emitter, **traced and held, not free**, as `T_UN`
@@ -108,7 +118,7 @@ adr: "ADR-0075, accepted by the owner 2026-11-05 (…c1623ae7), in force at this
 - **Values:** d2's table, fixed before any row is read. K1 (e) reads it.
 - **Intent: GAIN, ≥ 50.0 of 100** (d6). It is never re-classed after a score is seen. NEUTRAL is not open.
 
-**K0–K7, word for word from d7.** "d" numbers are `ADR-0075`'s. "Here", "this decision" and "this ADR" name it, not this page.
+**K0–K7, word for word from d7, with dated lines under them.** "d" numbers are `ADR-0075`'s. "Here", "this decision" and "this ADR" name it, not this page.
 
 - **K0, the doors:**
   - (a) `chooseMoveWithoutPawnShape` and `searchWithoutPawnShape` are node-equal to the merge-base's `chooseMove` and `search()`: nodes, score and move,
@@ -116,6 +126,8 @@ adr: "ADR-0075, accepted by the owner 2026-11-05 (…c1623ae7), in force at this
   - (b) every older door reads its pre-ticket counts;
   - (c) the head reads the probe's P0 counts. If `main`'s `src/` has moved, the Engineer applies the probe's patch to the new base, re-reads, and puts both
     in the PR. A re-derived count is a dated line here, never a moved bar.
+    *2026-11-05 (`bapm-ABC-291-probe-lines`; `…2926c26b`): the counts are the P0 table in `ADR-0075` § The probe's reading, at `src/` tree `cc6e64d1`. `patch_e4b.py`, in `arch-ABC-291-probe`'s `raw/scripts/`, is the probe's
+    patch. Its edits are exact-string, so a new base may need its anchors moved.*
 - **K1, units (default lane, no search):**
   - (a) the mirror, `Object.is`: `G3` + `TAPER_MIRROR_POSITIONS` + ≥ 12 new pawn-shape positions, 0 mismatches;
   - (b) `evaluateAtPhaseWithoutPawnShape` and `evaluateWithoutTaper` are `Object.is`-equal to the pre-ticket entries over the frozen corpora;
@@ -129,11 +141,17 @@ adr: "ADR-0075, accepted by the owner 2026-11-05 (…c1623ae7), in force at this
   - (g) the memo: a hit returns what a fresh `pawnStructure` returns, shape part included, on a forced collision too, and on an on-then-off read of one slot;
   - (h) a source row: `pawnShapeForTest` and `evaluateAtPhaseWithoutPawnShape` are called from test files only.
 - **K2, the re-pins.** Two byte rows, 589 824 → 655 360: `src/evaluate.pawns.test.ts` (with its slot formula) and `src/transposition.test.ts`. They
-  record a structure's size. **The value rows and the re-point list are `UNKNOWN - verify` until PR11's lane report.** That list joins this
-  decision by a dated line before Ready. A re-pin outside it is a defect.
+  record a structure's size. ~~**The value rows and the re-point list are `UNKNOWN - verify` until PR11's lane report.** That list joins this
+  decision by a dated line before Ready.~~ A re-pin outside it is a defect.
+  *Dated 2026-11-05 (`arch-ABC-291-probe`): the list is in § The probe's reading. With d5's cut in the build, the two byte rows do not move.*
+  - **K2's list, by pointer:** `ADR-0075` § The probe's reading, and `…2926c26b` § K2's list. Its 58 rows in six groups, and four more call lines in `src/search.futility.test.ts`, are not restated here.
+  - **It binds at `cc6e64d1`.** On a later base it is re-derived as K0 (c)'s counts are, with both lists in the PR. A re-derived line is a dated line, never a moved bar.
+  - **The deep lanes** (`…69ee96e7` ruling 2): re-points and door joins follow d4 by reference, each named in the PR. Any deep value re-pin or lost fixture goes to the Architect before it lands.
 - **K3, safety (`ADR-0064` d7's rows):** mate floor 0 violations, door d4 → head d5 and d5 → d5 on the 287; zugzwang **7 / 7** at recorded depths with
   `zugzwang.001` among them; `G1` no NEWLY-MISSED line. All read all-on. No depth moves, and no expected result is rewritten.
 - **K4, `G2` ≤ 1.03 ×** (d5). The endgame report set is reported beside it.
+  *2026-11-05 (`bapm-ABC-291-probe-lines`; `…69ee96e7` ruling 1): K4 on the build is F2's one re-read. K4 above 1.03 × is the second miss: not merged, and a miss under d11 (d). K4 runs with the owner holding the other
+  project, so a void cannot be mistaken for a miss.*
 - **K5, `G6` under `Q-3K-4` (b):** every run at depth ≥ 6, depth 7 a WARN, "≥ base" reported, not graded.
 - **K6, the read:** C2′ GAIN ≥ 50.0 of 100 at 100 ms against the merge-base, 100 of 100 complete, 0 candidate faults, 0 losses on time; then S′ at the E
   in force (1 810 today), S-4; then the Levels deep lane.
@@ -143,13 +161,21 @@ adr: "ADR-0075, accepted by the owner 2026-11-05 (…c1623ae7), in force at this
 - **What a pass means (d9):** "not seen worse", not "proven better". By `ADR-0056`'s C2′ table a term truly worth +20 Elo passes 79 % of the time, +10 passes 66 %, 0 passes 50 %, −10 passes 34 %, and
   −20 passes 21 %. The term's Elo stays unknown, and the score is not added to any forecast.
 
-### The premise probe (d10): written, not run
+### The premise probe (d10): run once; the premise stands under rule 3
 
-- **It runs on the host after `ABC-282`'s A4,** once, under the host lock, on one core, under its own task (the Architect's). It plays no games. Its rows are PR1–PR11.
-- **It can change:** K0 (c)'s counts, K2's value-row and re-point list, the forecasts, the fixture list, and whether this ticket is built at all.
-- **It cannot change:** d1's definitions (except by rule 1's STOP, back to him), d2's rule or any value, d3's memo form, d5's ratio, d6's intent, any bar, or the term order. It cannot turn a miss
-  into a pass, and it cannot be re-run after one.
-- **Its rule 2 or 4 fires** (a real miss on PR5, PR6 or PR7; PR9 below 5.0 %): this ticket is not built and comes back to BA/PM. d11 (d) applies. Rule 4 tells the owner.
+*2026-11-05 (`bapm-ABC-291-probe-lines`): the "written, not run" text is out; the old text is in git history.*
+
+- **It ran once,** on 2026-11-05, under PREREG `…2a579895`, on scratch copies of `src/` tree `cc6e64d1`, and it cannot be run again. Readings `…65c7a9c9`, decision `…2926c26b`. `ADR-0075` § The probe's reading holds every row.
+- **Rule 3 fires.** PR8 read r₁ 1.02720 and r₂ 1.05855, R = 1.04287, above 1.03. Both controls stand. So the build carries d5's named cut, and QE reads K4 on the build. d5's forecast, "under 1 %", was wrong, and the reading replaces it.
+- **Rules 1, 2 and 4 do not fire.** PR1 to PR7 hold: 0 mismatches, 0 mate-floor violations, zugzwang 7 / 7, `G1` no NEWLY-MISSED line. PR9 read 14.72 %, 4 106 of 27 896 positions, against ≥ 5.0 %.
+- **Rule 5's words do not apply,** because not every row holds. The line reads "the premise stands under rule 3", not "MET".
+- **PR8's shape:** the arm with the term read near 316 ns in some rounds and near 335 ns in others, and `main` held 315. So R mixes about 1.00 and about 1.06. The cause is `UNKNOWN - verify`. About one core of foreign work ran beside the hold.
+- **Reports, which decide nothing (PR10):** reach 6.868 → 6.900; drift at d5 100 % within 25 cp, largest 24; ns per node 0.988 of `main`, on 3.45 % more nodes; memo hit rate in search 95.083 %; endgame set 1.0195.
+  **The ratio with the memo bypassed is VOID:** both controls fell outside [0.970, 1.030]. It stays unread.
+- **The probe read d3's form.** Its prototype had no cut, so nobody has read the cut. K4 is its first read.
+- **Lock held:** about 3.5 minutes. That is the Architect's report, and the Orchestrator has not checked it (`…69ee96e7`).
+- **What it changed:** K0 (c)'s counts, K2's list, d5's forecast, and the fixture list. **It changed none of** d1's definitions, d2's rule or values, d3's memo form, d5's ratio, d6's intent, any bar, or the term order.
+- **The owner:** no question. Rule 4, the one rule that tells him, did not fire.
 
 ### Falsifiers
 
@@ -159,8 +185,11 @@ adr: "ADR-0075, accepted by the owner 2026-11-05 (…c1623ae7), in force at this
 | F2 | K4 above 1.03 ×, or a run below depth 6 on K5 | STOP to Architect/Design: d5's one value-identical cut, then one re-read under a PREREG. A second miss: not merged |
 | F3 | K3: a mate-floor, zugzwang or `G1` row red | a defect check first. If real, NOT MET. Never a re-pin, a moved depth or a new value |
 | F4 | C2′ NOT MET | not merged, not re-played, back to BA/PM, through CF1–CF10 and d8's table. d11 (d) applies |
-| F5 | the probe's rule 2 or 4 | this ticket is not built. `ADR-0075` reads "accepted, not in force". d11 (d) applies |
+| F5 | the probe's rule 2 or 4 | this ticket is not built. `ADR-0075` reads "accepted, not in force". d11 (d) applies. *Did not fire (2026-11-05, `…2926c26b`)* |
 | F6 | an identity-gate miss at the tip (d11 (a)) | read against d1's words. `evaluate` wrong is F1. The tracer wrong is a tool defect. No production line changes to fit the tool |
+
+- **F2 after the probe** (2026-11-05, `bapm-ABC-291-probe-lines`; `…69ee96e7` ruling 1): rule 3 spends d5's cut before the build. **K4 on the build is F2's one re-read. K4 above 1.03 × is the second miss: not merged, and a miss under d11 (d).**
+  This is the stricter reading, and it stands before QE seals K4's PREREG. The ruling names K4 only. F2's other half, a run below depth 6 on K5, still stops to Architect/Design, but no cut is left for it, and what follows there is not ruled.
 
 - **A candidate fault in the read:** CF1–CF10 reach this read, by the owner's word (`…0f1ab02e` item 1). ~~The form QE copies for a single-part read
   is `arch-owner-answers-1105b`'s, in flight.~~ *2026-11-05 (`bapm-pointers-1105`): **settled.** The form, alone or in a bundle, is `ADR-0056` D5's dated block of
@@ -168,30 +197,31 @@ adr: "ADR-0075, accepted by the owner 2026-11-05 (…c1623ae7), in force at this
   *2026-11-05 (`bapm-ABC-291-lines`): `ADR-0075` d8 is that table, filled for this ticket. It adds no bar.*
 - **No second set of values after a miss** (`ADR-0075` d11 (d)): a rule for this term, on his acceptance (`…c1623ae7`). It does not yet bind the later terms; each asks him in its own ADR.
   - After a miss, `PAWN_CONNECTED`, `PAWN_PHALANX` and `PAWN_BACKWARD` do not get new numbers by hand.
-  - **A miss is:** a real safety red (F3), C2′ below the bar on a clean read, a CF2 or CF8 NOT MET, a second `G2` miss, or the probe's rule 2 or 4.
+  - **A miss is:** a real safety red (F3), C2′ below the bar on a clean read, a CF2 or CF8 NOT MET, a second `G2` miss *(K4 above 1.03 × on the build, ruling 1)*, or the probe's rule 2 or 4.
   - **Not a miss:** a defect fix that restores d1 or d2.
   - A miss here leaves `ABC-292` where it stands.
 
 ## NFR triggers
 
-- **`NFR-009`** (`G7`): +65 536 bytes, 640 KiB, fixed at load; ≤ 16 MiB in all, ≤ 1 MiB growth between a 1 s and a 4 s search.
+- **`NFR-009`** (`G7`): ~~+65 536 bytes, 640 KiB~~ **+0 bytes, 576 KiB, with d5's cut** *(2026-11-05, `bapm-ABC-291-probe-lines`; `…69ee96e7` ruling 3)*, fixed at load; ≤ 16 MiB in all, ≤ 1 MiB growth between a 1 s and a 4 s search.
 - **`NFR-001` / `G2`:** K4, ≤ 1.03 ×. **`NFR-005`:** K5. **`NFR-008`** (≤ 10 s): K1's rows are units with no search. Their cost in the lane is `UNKNOWN - verify`, and the row census the Orchestrator placed
   after A4 gates the merge.
 
 ## Test notes
 
-1. QE freezes the seam fixtures and the (b) rows before the build.
+1. QE freezes the seam fixtures and the (b) rows before the build. The probe's 16 positions (`PAWN_SET`, in `arch-ABC-291-probe`'s `raw/scripts/e4bprobe.ts`) meet K1 (a)'s "at least 12", and they are offered to QE.
 2. UAT is owed (production lines); the QE verdict signs it.
+3. QE's PREREG for K4 states PR8's two levels, about 316 and 335 ns, and expects K4 to read the same way. Their cause is `UNKNOWN - verify`.
 
 ## Size and priority
 
-- **Size: S–M.** **Priority: P2** *(2026-11-05, `bapm-wait-lines-1105`: was P3; first in the accepted order)*.
+- **Size: M** *(2026-11-05, `bapm-ABC-291-probe-lines`; `…2926c26b`: was S–M. Priced from the prototype, 305 lines added and 18 removed in five `src/` files, plus d5's cut, the tool line, QE's frozen fixtures and K1's rows (a) to (h). K2's list touches 58 rows and four more lines in 12 test files, and one fixture is re-found)*. **Priority: P2** *(2026-11-05, `bapm-wait-lines-1105`: was P3; first in the accepted order)*.
 
 ## Dependencies
 
-- **`ADR-0075`: accepted by the owner (`…c1623ae7`), in force at this ticket's merge.** Its probe runs on the host after `ABC-282`'s A4; it need not wait for `ABC-303` or `ABC-289`,
-  only for the host (`ADR-0056` D6's dated line).
-- **K2's list:** the Architect's dated line, after the probe's PR11, before Ready. DoR row 10.
+- **`ADR-0075`: accepted by the owner (`…c1623ae7`), in force at this ticket's merge.** Its probe ran on 2026-11-05 (§ The premise probe).
+- **K2's list:** written, the Architect's dated line in `ADR-0075` § The probe's reading. DoR row 10 is closed. It is re-derived on the build's base.
+- **The build stays behind `ABC-303`, `ABC-289` and `ABC-305`** *(2026-11-05, `bapm-ABC-291-probe-lines`; `…69ee96e7`)*. Each can add a door or a row to K0 (c) and K2.
 - **`ABC-305` merges before this ticket's build** (d11 (a)). `ABC-305` A6 would STOP on a `TUNE_DEEP` lane this merge had reddened. If E2 closes for good, no tool line is owed by any later term.
 - **First of the four.**
 - **The read queues.** A value-changing merge stales the read after it, so this term's C2′ follows `ABC-303` and `ABC-289`.
@@ -200,11 +230,14 @@ adr: "ADR-0075, accepted by the owner 2026-11-05 (…c1623ae7), in force at this
 
 ## `UNKNOWN - verify`
 
-`ADR-0075` § `UNKNOWN - verify` is the list. In short:
+`ADR-0075` § `UNKNOWN - verify` is the list, with its dated line. *2026-11-05 (`bapm-ABC-291-probe-lines`): trimmed to what stays open. The rows, `G2` at the probe, the firing share, the memo's hit rate and K2's list are read, and § The premise probe holds them.* Still open:
 
-- Every reading: whether any row holds, `G2`, `G6`, the firing share, the memo's hit rate, the miss-path cost, and the probe's wall time.
+- `G6`, the miss-path cost (the memo-bypassed ratio is void), what the cut buys, and every play read.
+- The cause of PR8's two levels.
+- The deep lanes' rows. They were not read. Ruling 2 says how a row there is handled, not which rows move.
+- `ABC-282` A2 (b)'s new fixture, which d4 sends to `ADR-0028` d2. It is the one default-lane figure left.
 - Whether this term holds `zugzwang.001`. Whether any hand-valued term pays. Its share of row E4's estimate.
-- K2's value rows and re-point list. This ticket's exact default-lane row count.
+- This ticket's exact default-lane row count.
 - Whether `TUNE_DEEP` is red on `main` today. That the merge reddens it is by reading, not by a run.
 - Whether d2's low ranks push the engine toward flank pawn moves in front of its king. Reasoned as small, and unread.
 
@@ -214,13 +247,13 @@ adr: "ADR-0075, accepted by the owner 2026-11-05 (…c1623ae7), in force at this
 |---|---|---|
 | 1 | problem clear | ✅ no chain or backward terms; the value is an estimate |
 | 2 | scope and out-of-scope | ✅ scope 1–5 |
-| 3 | INVEST | ✅ S–M; pawn-only terms |
-| 4 | testable, measurable acceptance | ✅ form (b): K0–K7 from `ADR-0075` d7. K2's value rows are row 10's |
-| 5 | dependencies known | ✅ `ADR-0075`; the probe after A4; `ABC-305` before the build; first of the four; its read after `ABC-303` and `ABC-289`; the shared files |
-| 6 | NFR triggers with targets | ✅ `NFR-009` 640 KiB, ≤ 16 MiB; `G2` ≤ 1.03 ×; `NFR-008` ≤ 10 s |
+| 3 | INVEST | ✅ M; pawn-only terms |
+| 4 | testable, measurable acceptance | ✅ form (b): K0–K7 from `ADR-0075` d7. K2's list is in § The probe's reading |
+| 5 | dependencies known | ✅ `ADR-0075`; ~~the probe after A4~~ ~~*the probe after the census, which has reported (2026-11-05, `bapm-rows-cut-1105`; `…16e0ec2c`, `…19cea480`)*~~ *the probe has run (2026-11-05, `bapm-ABC-291-probe-lines`)*; the build behind `ABC-303`, `ABC-289` and `ABC-305`; first of the four; its read after `ABC-303` and `ABC-289`; the shared files |
+| 6 | NFR triggers with targets | ✅ `NFR-009` 576 KiB, +0, ≤ 16 MiB; `G2` ≤ 1.03 ×; `NFR-008` ≤ 10 s |
 | 7 | test notes | ✅ 1–2 |
-| 8 | size | ✅ S–M |
+| 8 | size | ✅ M |
 | 9 | priority | ✅ P2 |
-| 10 | no major unresolved blocker | ❌ **`ADR-0075` is accepted; K2's value rows and re-point list are owed: the Architect's dated line, after the probe** |
+| 10 | no major unresolved blocker | ✅ **closed 2026-11-05** (`…2926c26b`): K2's list is written. The deep lanes are ruled (`…69ee96e7` ruling 2). The one default-lane figure left, `ABC-282` A2 (b)'s new fixture, goes to `ADR-0028` d2 |
 
-**DoR 9/10. In Design.**
+**DoR 10/10. Ready.**

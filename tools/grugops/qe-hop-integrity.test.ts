@@ -8,8 +8,11 @@
  */
 import {
   chmodSync,
+  cpSync,
+  lstatSync,
   mkdirSync,
   mkdtempSync,
+  readdirSync,
   readFileSync,
   rmSync,
   symlinkSync,
@@ -18,7 +21,7 @@ import {
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterAll, afterEach, describe, expect, it, vi } from "vitest";
 import { coverage, main, parseDone, readNotes } from "./qe-hop-integrity.js";
 
 const ROOT = fileURLToPath(new URL("../../", import.meta.url));
@@ -55,6 +58,33 @@ const allNotes = () => (allNotesOnce ??= readNotes(join(ROOT, ".grugops/context"
 let plainSweepOnce: ReturnType<typeof run> | undefined;
 /** One plain `--sweep`, nothing injected (the real end-to-end read path): shared by A4 and A9. */
 const plainSweep = () => (plainSweepOnce ??= run(["--sweep"]));
+
+// ABC-307 (secnfr-census-1105, arch-ABC-307): the whole-tree reads run under ENGINE_DEEP=1 only. No engine is involved.
+const RUN_DEEP = process.env.ENGINE_DEEP === "1";
+/** ADR-0046's five ids, both positive controls and both traps: the folders the remnants read. */
+const NAMED = (folder: string) => /abc-?0*(31|62|66|72|73)(?!\d)/i.test(folder);
+let namedRootOnce: string | undefined;
+/** A temp root: the real board and snapshot, and the named folders' real notes. A plain sweep runs on it. */
+const namedRoot = () => {
+  if (namedRootOnce !== undefined) return namedRootOnce;
+  const root = mkdtempSync(join(tmpdir(), "qe-hop-named-"));
+  mkdirSync(join(root, "plans"));
+  cpSync(join(ROOT, "plans/board.md"), join(root, "plans/board.md"));
+  cpSync(SNAPSHOT_FILE, join(root, ".grugops/qe-cutover-2026-08-17.txt"));
+  const context = join(ROOT, ".grugops/context");
+  cpSync(context, join(root, ".grugops/context"), {
+    recursive: true,
+    filter: (source) => {
+      const [folder, part] = source.slice(context.length + 1).split("/");
+      return !folder || (NAMED(folder) && (part === undefined || part === "notes"));
+    },
+  });
+  namedRootOnce = root;
+  return root;
+};
+afterAll(() => {
+  if (namedRootOnce !== undefined) rmSync(namedRootOnce, { recursive: true, force: true });
+});
 
 describe("ABC-105 Test note 5 — the committed cutover snapshot is pinned", () => {
   it("holds the 38 ids, including ABC-061 and ABC-062, excluding ABC-031 and ABC-076", () => {
@@ -118,20 +148,35 @@ describe("ABC-105 A3 — the refs-only false pass is closed (real notes)", () =>
     expect(removed.stdout).not.toContain("quality-gate-ABC-066-qe");
   });
 
-  it("coverage() over EVERY real note (no --ticket folder filter) reads ABC-062 and ABC-073 as findings", () => {
-    // QE-105-p: `main --ticket` opens only folders naming T, which masks a coverage() that has lost
-    // the folder condition. Read the whole context tree so coverage() alone must hold condition 4.
-    const all = allNotes();
-    // ABC-154: positive control, so an empty or thinned read cannot pass the two finding checks below.
-    expect(coverage("ABC-031", all, snapshotIds).status).toBe("covered (qe-e2e)");
-    expect(coverage("ABC-072", all, snapshotIds).status).toBe(
+  it("coverage() over the named folders' real notes reads ABC-062 and ABC-073 as findings", () => {
+    const named = readNotes(join(ROOT, ".grugops/context"), NAMED);
+    expect(coverage("ABC-031", named, snapshotIds).status).toBe("covered (qe-e2e)");
+    expect(coverage("ABC-072", named, snapshotIds).status).toBe(
       "covered (security-nfr substitute — docs-only rule)",
     );
-    expect(coverage("ABC-062", all, minus("ABC-062")).status).toBe("finding");
+    expect(coverage("ABC-062", named, minus("ABC-062")).status).toBe("finding");
     expect(snapshotIds).not.toContain("ABC-073");
-    expect(coverage("ABC-073", all, snapshotIds).status).toBe("finding");
+    expect(coverage("ABC-073", named, snapshotIds).status).toBe("finding");
   });
 });
+
+if (RUN_DEEP) {
+  describe("ABC-105 A3 — the refs-only false pass is closed (real notes) [deep, ENGINE_DEEP=1]", () => {
+    it("coverage() over EVERY real note (no --ticket folder filter) reads ABC-062 and ABC-073 as findings", () => {
+      // QE-105-p: `main --ticket` opens only folders naming T, which masks a coverage() that has lost
+      // the folder condition. Read the whole context tree so coverage() alone must hold condition 4.
+      const all = allNotes();
+      // ABC-154: positive control, so an empty or thinned read cannot pass the two finding checks below.
+      expect(coverage("ABC-031", all, snapshotIds).status).toBe("covered (qe-e2e)");
+      expect(coverage("ABC-072", all, snapshotIds).status).toBe(
+        "covered (security-nfr substitute — docs-only rule)",
+      );
+      expect(coverage("ABC-062", all, minus("ABC-062")).status).toBe("finding");
+      expect(snapshotIds).not.toContain("ABC-073");
+      expect(coverage("ABC-073", all, snapshotIds).status).toBe("finding");
+    });
+  });
+}
 
 describe("ABC-105 A9 — the security-nfr substitute is visible, not silent (real notes)", () => {
   it("ABC-072 exits 0 with the substitute label and its secnfr-ABC-072 note", () => {
@@ -150,19 +195,37 @@ describe("ABC-105 A9 — the security-nfr substitute is visible, not silent (rea
     expect(run(["--ticket", "ABC-073"], { snapshotIds: [...snapshotIds, "ABC-073"] }).code).toBe(0);
   });
 
-  it("--sweep lists ABC-073 as a finding", () => {
-    const r = plainSweep();
+  it("--sweep on a copy of the named folders lists ABC-073 as a finding, with its trap in the copy", () => {
+    const root = namedRoot();
+    const trap = readNotes(join(root, ".grugops/context"), (f) => f === "secnfr-ABC-072");
+    expect(
+      trap.some((n) => n.kind === "decision" && n.refs.some((ref) => ref.includes("ABC-073"))),
+    ).toBe(true);
+    const r = run(["--sweep"], { root });
     expect(r.code).toBe(1);
     expect(r.stdout).toContain("  ABC-073: no QE verdict note was found.\n");
-    // ABC-154: positive control on the plain sweep's own whole-tree read.
     expect(r.stdout).not.toContain("  ABC-031: no QE verdict note was found.");
     expect(r.stdout).not.toContain("  ABC-072: no QE verdict note was found.");
   });
 });
 
+if (RUN_DEEP) {
+  describe("ABC-105 A9 — the security-nfr substitute is visible, not silent (real notes) [deep, ENGINE_DEEP=1]", () => {
+    it("--sweep lists ABC-073 as a finding", () => {
+      const r = plainSweep();
+      expect(r.code).toBe(1);
+      expect(r.stdout).toContain("  ABC-073: no QE verdict note was found.\n");
+      // ABC-154: positive control on the plain sweep's own whole-tree read.
+      expect(r.stdout).not.toContain("  ABC-031: no QE verdict note was found.");
+      expect(r.stdout).not.toContain("  ABC-072: no QE verdict note was found.");
+    });
+  });
+}
+
 describe("ABC-105 A4 — the sweep's counts partition the Done rows (real board)", () => {
-  it("prints each count line and every finding by id, exits 1; 0 when every row is grandfathered", () => {
-    const r = run(["--sweep", "--json"], { notes: allNotes() });
+  it("on a copy of the named folders: prints each count line and every finding by id, exits 1; 0 when every row is grandfathered", () => {
+    const root = namedRoot();
+    const r = run(["--sweep", "--json"], { root });
     expect(r.code).toBe(1);
     const report = JSON.parse(r.stdout);
     const { done, preCutover, coveredQe, coveredSubstitute, findings } = report.counts;
@@ -170,7 +233,7 @@ describe("ABC-105 A4 — the sweep's counts partition the Done rows (real board)
     expect(preCutover + coveredQe + coveredSubstitute + findings).toBe(done);
     expect(findings).toBeGreaterThan(0);
 
-    const text = plainSweep();
+    const text = run(["--sweep"], { root });
     expect(text.code).toBe(1);
     for (const label of [
       `Done rows: ${done}`,
@@ -186,9 +249,7 @@ describe("ABC-105 A4 — the sweep's counts partition the Done rows (real board)
     }
 
     const board = readFileSync(join(ROOT, "plans/board.md"), "utf8");
-    expect(run(["--sweep"], { notes: allNotes(), snapshotIds: parseDone(board) ?? [] }).code).toBe(
-      0,
-    );
+    expect(run(["--sweep"], { root, snapshotIds: parseDone(board) ?? [] }).code).toBe(0);
   });
 
   it("parses only the line-leading `- [ABC-xxx]` rows of `## Done`", () => {
@@ -207,6 +268,58 @@ describe("ABC-105 A4 — the sweep's counts partition the Done rows (real board)
     expect(parseDone("## Backlog\n- [ABC-001] x\n")).toBeNull();
   });
 });
+
+if (RUN_DEEP) {
+  describe("ABC-105 A4 — the sweep's counts partition the Done rows (real board) [deep, ENGINE_DEEP=1]", () => {
+    // biome-ignore format: ABC-307 keeps the moved body byte-identical to base, indent aside
+    it("prints each count line and every finding by id, exits 1; 0 when every row is grandfathered", () => {
+      const r = run(["--sweep", "--json"], { notes: allNotes() });
+      expect(r.code).toBe(1);
+      const report = JSON.parse(r.stdout);
+      const { done, preCutover, coveredQe, coveredSubstitute, findings } = report.counts;
+      expect(preCutover).toBe(38);
+      expect(preCutover + coveredQe + coveredSubstitute + findings).toBe(done);
+      expect(findings).toBeGreaterThan(0);
+
+      const text = plainSweep();
+      expect(text.code).toBe(1);
+      for (const label of [
+        `Done rows: ${done}`,
+        `Pre-cutover (out of scope; .grugops/qe-cutover-2026-08-17.txt): ${preCutover}`,
+        `Covered (qe-e2e): ${coveredQe}`,
+        `Covered (security-nfr substitute — docs-only rule): ${coveredSubstitute}`,
+        `In-scope findings: ${findings}`,
+      ]) {
+        expect(text.stdout).toContain(`${label}\n`);
+      }
+      for (const f of report.results.filter((x: { status: string }) => x.status === "finding")) {
+        expect(text.stdout).toContain(`  ${f.id}: no QE verdict note was found.`);
+      }
+
+      const board = readFileSync(join(ROOT, "plans/board.md"), "utf8");
+      expect(run(["--sweep"], { notes: allNotes(), snapshotIds: parseDone(board) ?? [] }).code).toBe(
+        0,
+      );
+    });
+  });
+}
+
+if (RUN_DEEP) {
+  // AR-154-TWO-POINT-CONTROL (ABC-307, F1): two counts, never a literal. The listing opens no note.
+  describe("AR-154-TWO-POINT-CONTROL F1 — the whole-tree read drops no note [deep, ENGINE_DEEP=1]", () => {
+    it("allNotes() holds one note per *.md name under every non-symlink notes/ folder", () => {
+      const context = join(ROOT, ".grugops/context");
+      let listed = 0;
+      for (const folder of readdirSync(context, { withFileTypes: true })) {
+        if (!folder.isDirectory()) continue;
+        const notesDir = join(context, folder.name, "notes");
+        if (!lstatSync(notesDir, { throwIfNoEntry: false })?.isDirectory()) continue;
+        listed += readdirSync(notesDir).filter((name) => name.endsWith(".md")).length;
+      }
+      expect(allNotes().length).toBe(listed);
+    });
+  });
+}
 
 describe("ABC-105 A5 — id normalisation decides both the folder and the refs condition", () => {
   const note = (folder: string, refs: string[], by = "qe-e2e") => ({

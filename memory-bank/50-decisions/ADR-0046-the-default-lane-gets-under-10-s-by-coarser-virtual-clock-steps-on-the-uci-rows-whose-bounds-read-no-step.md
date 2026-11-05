@@ -62,6 +62,16 @@ touch. Deep-only breadth, R9's reach and the 27-mutant parity stay as they are. 
 variable or `AGENTS.md` lane line moves. See the dated section of 2026-11-04 (`arch-records-1104`) at the end of this
 file.
 
+**`ABC-307`'s row 10, 2026-11-05 (`arch-ABC-307`, records only): form S for all nine rows, by source and recorded kill
+sets. Nothing was run, so parity and every kept figure are `UNKNOWN - verify`, and row 10 is not met by this line.** L1,
+L2 and L3 go to `src/uci-session.test.ts`'s `ENGINE_DEEP`; the trio and B1 take option (ii) on `ENGINE_DEEP`. L2's and
+L3's remnants do not search, so the depth-sensitive floor does not reach them. No NFR level, cap, pin, W, environment
+variable or `AGENTS.md` lane line moves. See the dated section of 2026-11-05 (`arch-ABC-307`) at the end of this file.
+
+**`ABC-307`'s row 10, measured 2026-11-05 (`arch-ABC-307-reads`): not closed.** Parity holds on all 20 mutants and every plant the base kills, k is 7, and eight rows stay S. C1's full row passes alone
+under MC1, at tip and base, which misses one sealed clause, so it goes to the Orchestrator. Saved reads 592 of 750 against 581. No NFR level, cap, pin, W, environment variable or `AGENTS.md` lane line
+moves. See the dated section of 2026-11-05 (`arch-ABC-307-reads`) at the end of this file.
+
 **proposed**, 2026-10-20, by Architect/Design (task `arch-lane-under-10s`). This ADR is the remedy that `R-174-1`
 option (a) asked for. The owner accepted (a) at `…bdff4d33`.
 
@@ -935,3 +945,174 @@ ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run src/engine.ca
 
 **The rest stands.** R3 stays W. `R-281-a` stays closed. No NFR level, cap, pin, W, row, environment variable or lane
 command moves.
+
+### Dated 2026-11-05 (`arch-ABC-307`): `ABC-307`'s nine rows. All take form S by source and recorded kill sets; nothing was measured, so row 10 stays open
+
+**Architect/Design, records only, at `main` `02e6e180`.** No test, build, engine, vitest, `tsc` or lint ran (the brief's
+width). The page asks for measured reads; this section cannot give them. What it rests on:
+- the four test files and `src/` as read at `02e6e180`;
+- `arch-ABC-302`'s recorded tip kill sets. Their `src/` tree is older: `src/engine.ts` and `src/uci-session.ts` have changed
+  since. `.grugops/context/arch-ABC-307/raw/holders.tsv` drops the nine rows from those sets;
+- `qe-ABC-244`'s per-row sets at steps 100 and 1 000.
+
+Every kept ms below is an estimate, and every kill is a prediction. Both are `UNKNOWN - verify` until read at the tip.
+
+| row | form | lane | default-lane remnant (title's sample) | est. kept; saved (the row's ms) |
+|---|---|---|---|---|
+| Q1 `ABC-105` A9 `--sweep` | **S**, option (ii) | `ENGINE_DEEP`, own file | a plain `--sweep` through `{ root }` on a temp copy of the named folders, the real board and the snapshot: the same three asserts, plus the `ABC-073` trap present in the copy | 25 for the trio; 310 (335) |
+| Q2 `ABC-105` A3 `coverage()` | **S**, option (ii) | same | the same five reads over `readNotes(<real context>, NAMED)` | in Q1's |
+| Q3 `ABC-105` A4 partition | **S**, option (ii) | same | the same partition, every count line and the grandfathered exit 0, all through that `{ root }` | in Q1's |
+| L1 `ABC-101` A8′ | **S** | `src/uci-session.test.ts`'s `ENGINE_DEEP` | levels 1 and the default, three calls each, both non-vacuity asserts | 35; 86 (121) |
+| L2 `ABC-241` A4 ep twin | **S** | same, a describe of its own with L3 | **no search:** the twin's two lists are equal, and the `FEN` game's are not | 1; 76 (77) |
+| L3 `ABC-241` A7 | **S** | same describe | **no search:** after d8e8, the move the A4 slice pins, `gameStatusOf` reports the claim; the hash count and the twin as in the row | 1; 61 (62) |
+| C1 `ABC-171` A7 two sessions | **S** | `ENGINE_DEEP`, own file | two sessions on seed 2 over the first two gos, equal, with `firstDraws(2, 2)` straddling the rate. Fallback: the page's form, 36; 18 | 15; 39 (54) |
+| C2 `ABC-212` A9 bare go at 7 | **S** | `ENGINE_DEEP`, own file | `budgetAt(["setoption name Skill Level value 7"], "go")`: `setupLines` `[[]]`, handed `{ budgetMs: 30_000 }` | 2; 49 (51) |
+| B1 `ABC-094` A3 | **S**, option (ii) | `ENGINE_DEEP`, own file | seeds 1 to k, k the first that gives three distinct replies, same assert. k is `UNKNOWN - verify`; the SE reads it at the build | 20; 30 (50) |
+
+- **`NAMED`** is `/abc-?0*(31|62|66|72|73)(?!\d)/i`, on the form of the file's `:93`: 15 folders and 52 notes at `02e6e180`. They
+  hold both positive controls (`quality-gate-ABC-031-qe-2026-08-17`, `secnfr-ABC-072`), `ABC-062`'s trap
+  (`quality-gate-ABC-066-qe`) and `ABC-073`'s (`secnfr-ABC-072`'s decision cites it).
+- **Why a copied root, and not the page's injected notes.** `ABC-154`'s plants fire only when `readNotes` has no filter.
+  Injected or filtered notes never reach that branch, so they would go 0 red in the default lane, which is what `ABC-154` closed.
+  A plain `--sweep` on a copied root does reach it, on real notes, so `q4a-…-drops-secnfr` and `…-drops-quality-gate` should
+  still turn a control red. `A5`'s wording allows it: a root is injected, and no row calls `readNotes` unfiltered.
+- **Estimated sum:** kept 99, saved 651 of 750. With C1's fallback, kept 120, saved 630.
+
+**The four points, from source.**
+1. **L3's imports.** `gameStatusOf` joins the existing `./history.ts` import of `src/uci-session.test.ts`. That module is in the
+   file's graph already, so no module is added and the default lane loads nothing new. `ABC-302`'s "no added runtime import"
+   was about new modules in the graph. This is an `A2` exception by name. `TWIN` is a repeated fixture.
+2. **The floor on L2 and L3.** BA/PM reads it rightly for a remnant that searches. At 500 ms it would trip: `arch-ABC-302`'s probe has
+   the seam at 1.3 ms and the direct call at depth 8, an estimated 450 nodes at step 100's rate, so 0 in-search node checks. And
+   `QE-244-a`'s five need base's search to play something other than d8e8 on the hash list, which is unread at 500 for this row.
+   **So neither remnant searches.** Nothing in them is depth-sensitive, the floor has nothing to read, and both full rows keep step 100, in
+   their lane. The search half stays held in the default lane by R8's remnant, in the same describe, which pins d8e8 at exactly 0.
+   `STEP_MS`, `seamOf` and `scoreWith` leave the default describe with the rows, and the "100 kept" comment with them.
+3. **C2 against P2.** The remnant is blind to P2: `budgetAt` stubs `chooseMove`, and the clamp is inside it (`src/engine.ts`, the
+   `deadline` line). **The default-lane holder is `ABC-221`'s "A11 — busy isready in the mode … isready that arrives mid-search is
+   answered once …"**: a real search at `go movetime 30000`, read by `expectWithin(info.time, 30_000, 5_000)`, so a clamp under 30 000
+   reds it. The constant is also pinned at 60 000 in `src/engine.test.ts`, `src/levels.test.ts` and `src/uci-session.test.ts`, and the
+   `deadline` line by a source row in `src/levels.test.ts`. `A4` level 7 is `[deep]`, so it holds nothing in the default lane.
+4. **Q1's plain `--sweep`.** Confirmed, and it is stronger than the page proposed: the sweep stays plain, on real notes, on a copy. What
+   leaves the default lane is breadth over the whole real tree. See `R-307-c`.
+
+**`ABC-241` A7's own read (`A7`'s named line).** All eight hold by the recorded sets with A7 gone. Left at the tip (`raw/holders.tsv`):
+F230 7, M2s 6, M4 17, QSEAMRAW 6, QPRIOROFF 15, QMATCH3 19, QTRIM1 29, S241M1 17. R8's remnant (`cli` "A4 (slice)") holds all eight, R2's
+(`uci` "A5 (slice)") all but M4, and `cli` `ABC-230` A1 all but M4 and S241M1. Those holders are measured on the older tree: `UNKNOWN - verify`
+on this one. L3's remnant should keep only the game-side kills, the set QE read at step 1 000 (S241M1,
+S241M2, S241M4). The five seam-side kills leave it, and that is why the holders are named.
+
+**`A7`'s mutants** (proposed; QE freezes them). "Only killer at base" is `UNKNOWN - verify` for every line, and by reading it will not hold
+for several, as at `ABC-302`. Tool mutants are on a scratch copy of `tools/grugops/qe-hop-integrity.js`.
+
+| row | mutant | remnant among the killers? |
+|---|---|---|
+| trio | `q4a-readNotes-unfiltered-drops-secnfr` and `…-drops-quality-gate` (`qe4-ABC-105`'s `plants4.py`, verbatim); `q4b-both-memos-empty`, re-anchored at the tip to the remnants' memos | yes, by reading |
+| trio | MQ2, `coverage()` without its `names(note.folder, n)` line (`QE-105-p`); MQ3, the JSON's `coveredSubstitute` plus 1 | yes, by reading |
+| L1 | ML1, `src/level-seam.ts` rebuilds `createLevel` on each call. Plus M6 and M7 | yes, by reading |
+| L2 | S241M2 (`qe-ABC-244`'s `frozen-mutants.json`). QMATCH1 leaves the remnant: 7 holders left | S241M2 yes; QMATCH1 no, holders named |
+| L3 | S241M1, and the eight above | S241M1 yes; the five no, holders named |
+| C1 | MC1, the session's seed salted by a module-level session count. Plus M6 | yes, by reading |
+| C2 | MC2h, `src/uci-session.ts`'s level cap with a third term of 5 000. P2a, `HARD_CEILING_MS = 5_000`. P2b, the `deadline` line with a literal 5 000 | MC2h yes. P2a and P2b no: `ABC-221`'s A11 row, and the pins |
+| B1 | MB1, `data/opening-book/book.json`'s 1. e4 entry cut to two replies. Plus M4 and M4z | yes, by reading |
+
+**Placement.** Each full row is defined only under its constant, its `it` title byte-identical. In `src/uci-session.test.ts` all five go at the end of
+the file, after R8's block: past `RUN_ENGINE_DEEP`, and past every describe that stubs `chooseMove`.
+- **L1 is not option (ii) in `src/cli.test.ts`.** The row needs no new import in `src/uci-session.test.ts`, and that file's lane line reaches it.
+- **L2 and L3 take a describe of their own,** not R8's. Inside R8's, R8's `-t` line would read 3, not 1. This departs from `ABC-302`'s
+  "the original title plus the suffix", by name.
+- **The option (ii) variable is `ENGINE_DEEP`,** under `const RUN_DEEP`, in `tools/grugops/qe-hop-integrity.test.ts` and `src/book.test.ts`.
+  It is R9's precedent, every lane line naming it names one file, and it will outlive `TUNE_DEEP`, the only variable nearer to `tools/`. Neither
+  file's rows touch the engine, so the constant's comment says why. There are two such files, not three, since L1 went to `uci-session`.
+- **`allNotes()` and `plainSweep()` stay,** read only under the constant.
+
+**The `-t` lines** (each "1 passed", 0 failed). The prefix of each is `ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run`.
+
+```
+tools/grugops/qe-hop-integrity.test.ts -t "ABC-105 A9 — the security-nfr substitute is visible, not silent \(real notes\) \[deep, ENGINE_DEEP=1\]"
+tools/grugops/qe-hop-integrity.test.ts -t "ABC-105 A3 — the refs-only false pass is closed \(real notes\) \[deep, ENGINE_DEEP=1\]"
+tools/grugops/qe-hop-integrity.test.ts -t "ABC-105 A4 — the sweep's counts partition the Done rows \(real board\) \[deep, ENGINE_DEEP=1\]"
+src/uci-session.test.ts -t "ABC-101 — --difficulty selects a level, and the played engine is that level \[deep, ENGINE_DEEP=1\]"
+src/uci-session.test.ts -t "ABC-241 A4, A7 — the CLI: the ep twin and the claim \[deep, ENGINE_DEEP=1\] A4: with a legal ep capture available the same line is not a draw"
+src/uci-session.test.ts -t "ABC-241 A4, A7 — the CLI: the ep twin and the claim \[deep, ENGINE_DEEP=1\] A7: the move the search scores 0 is the move after which gameStatusOf reports the claim"
+src/uci-session.test.ts -t "ABC-171 A7 — the blunder path \[deep, ENGINE_DEEP=1\]"
+src/uci-session.test.ts -t "ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path \[deep, ENGINE_DEEP=1\]"
+src/book.test.ts -t "ABC-094 A3 — variety after 1\. e4 on seeds 1 to 10 \[deep, ENGINE_DEEP=1\]"
+```
+
+**Counts, base → tip.** All are defined counts by reading, for QE to confirm.
+- The default lane does not change: no W, so 2 709 stays 2 709 over 71 files at the page's base. Each file has one name out and one in per S row.
+- `uci-session`'s `ENGINE_DEEP`: base + 5 (C1, C2 and the three moved in). It read 243 at `qe-ABC-302`; later tickets may have moved it, so the base is
+  `UNKNOWN - verify`.
+- `ENGINE_DEEP` on `tools/grugops/qe-hop-integrity.test.ts`: base + 3. On `src/book.test.ts`: base + 1. `src/cli.test.ts` has no deep lane.
+
+**The run rule.** The nine join the set, so "every line" is **22**: `ABC-167` A5 reads 4 passed and every other line 1 passed.
+**Its trigger widens by two files**, `tools/grugops/qe-hop-integrity.js` and `data/opening-book/book.json`. Neither is a lane input, so a tool or
+book edit would otherwise run none of the rows that now hold their real-tree and shipped-book breadth.
+
+**The floor's reach.** It binds a row whose step moves. In form S the row keeps its step, in its lane, so a remnant is read by whole-lane parity.
+- **`ABC-302`'s R2 and R8 remnants at 500 ms** have no floor reading on record, and by the estimate above they carry 0 in-search node checks. They stand:
+  parity was measured on 27 mutants, both full rows keep 100, and R8's asserts depth ≥ 5.
+- **BA/PM gave the floor its word and read it wider on `ABC-307`'s page.** This reading is mine to give on condition 2's unit only; if BA/PM holds the wider
+  reading, the R2 and R8 remnants are a question for the Orchestrator. Nothing on `ABC-307` turns on it.
+
+**Forecast (estimates; `A9` grades them).** Saved 630–651 ms of 750, so −0.31 s on the probe's 0.487 ms a ms, and **−0.235 to −0.25 s realised** at `ABC-302`'s 76 %.
+The lane lands at about 9.565–9.58 s with all three budgets spent. The margin on the −0.215 s need is 0.02–0.035 s, still inside the noise.
+
+**`A6`, read against the realised need.** One in-thread ms saved is about 0.37 ms realised, so that margin covers only about 55–95 ms of lost saving, not 113.
+- L3 with B1 loses 91 ms and L3 with C2 loses 110 ms. Realised, those land at about −0.19 to −0.21 s, short of −0.215 s, and no row is left to add.
+- **Recommended to the Orchestrator: read both pairs as past the slack.** A K of L2 or L3 alone lands at about −0.205 to −0.22 s, about on the target.
+- By reading, no row needs K, so this should not arise.
+
+**`R-307-c` (LOW, new; owner Architect/Design).** Three things leave the default lane with no holder there:
+- a malformed note or a symbolic link anywhere outside the named folders. Q3's exit 0 and every plain sweep catch those at base;
+- the wiring of levels 2, 3, 4, 6 and 7 through the seam, which is one table-driven expression;
+- a real level-7 search through the session.
+
+The first is the page's "no holder under any form" case, read strictly, and that takes K. But it is the whole-tree read itself, which `A5` removes and
+ruling 2 keeps with the trio. It goes to the Orchestrator to accept, with the 22 lines and the hand-run `--sweep` as its cover. A K of the trio falls short.
+
+**`T-QEHOP-GROWTH`:** `ADR-0035` § Addendum 2026-11-05, C6.
+
+**Not decided here:** row 10, the board, the ticket page and the build. No NFR level, cap, pin, W, environment variable or `AGENTS.md` lane line moves.
+`AGENTS.md` is not edited.
+
+### Dated 2026-11-05 (`arch-ABC-307-reads`): `ABC-307`'s nine rows, measured. Parity holds on every listed mutant and plant, and k is 7. Eight rows stay S, C1 misses one sealed clause, and row 10 does not close
+
+**Architect/Design, on scratch copies of `main` `8d66a706`, under the PREREG `…5c65a408`.** Every run was under the host lock, on one core and one worker, about 25 minutes of lock.
+No `src/`, tool or data file on any branch changed. Readings: `arch-ABC-307-reads`'s observation and `raw/`. This section measures the one above; it changes no form.
+
+| row | form | kept ms (ungraded) | its own mutant: remnant among the killers | full row on its `-t` line |
+|---|---|---:|---|---|
+| Q1 | **S** | 13.9 | `q4a-readNotes-unfiltered-drops-secnfr` and `…-drops-quality-gate`: yes | 1 failed |
+| Q2 | **S** | 7.3 | MQ2: yes | 1 failed |
+| Q3 | **S** | 26.9 | MQ3: yes | 1 failed |
+| L1 | **S** | 84.1 | ML1: yes, the only killer at base and tip | 1 failed; M6, M7 too |
+| L2 | **S** | 0.3 | S241M2: yes | 1 failed; QMATCH1 too |
+| L3 | **S** | 3.5 | S241M1: yes | 1 failed; all ten listed |
+| C1 | **S by (a)–(c); misses (d)** | 12.3 | MC1: yes. M6: yes | **MC1: 1 passed.** M6: 1 failed |
+| C2 | **S** | 1.9 | MC2h: yes; P2a too, which the section above read wrongly | 1 failed; P2a, P2b too |
+| B1 | **S**, k = 7 | 49.6 | MB1: yes. M4, M4z: yes | 1 failed, all three |
+
+- **Parity.** All 20 `src` and `data` mutants are killed at base and tip. Every plant the base file kills, the tip file kills. `QE-154-a`'s two green plants read 0 at both.
+- **`ABC-241` A7's eight hold,** with tip killers F230 7, M2s 6, M4 20, QSEAMRAW 6, QPRIOROFF 15, QMATCH3 19, QTRIM1 29, S241M1 19.
+- **Holders, measured:** `cli` "A4 (slice)", `uci` "A5 (slice)" and `cli` `ABC-230` A1 hold F230, M2s, QSEAMRAW, QPRIOROFF, QMATCH3 and QTRIM1. `cli` "A4 (slice)", `uci` A4 and `ABC-249` hold
+  QMATCH1. `ABC-221`'s A11 row holds P2a and P2b, with `ABC-220` A6, `ABC-221` A7 and `ABC-259` on P2b.
+- **`A5`, measured:** a sentinel that throws on any unfiltered read of the real tree reds 3 rows at base and 0 at the tip.
+- **Counts:** default 2 709 in 71 files at base and tip, 9 names out and 9 in. `ENGINE_DEEP`, base → tip: `uci-session` 265 → 270, `qe-hop` 32 → 35, `book` 35 → 36.
+- **B1's title reads "seeds 1 to 7".** The nine `-t` lines above stand, each read at 1 passed.
+
+**C1 and MC1.** The row kills MC1 in the lane and passes alone on its `-t` line, at the tip and, read after the seal, at base. So the move did not cost it. MC1 adds the session count to the seed, and a
+pair of sessions differs only where salts n and n + 1 take different paths on the first go; salts 1 and 2 do not. The mutant's kill depends on how many sessions ran before it. The PREREG's clause (d)
+still reads "1 failed", so that clause is missed and is not read past. It is the Orchestrator's call.
+
+**The sum.** No K, so 0 of 113. With all nine S, at the sealed scale of 750 ÷ 946.2: kept 158, saved 592, against the 581 that −0.215 s needs at 0.37 ms a ms: about −0.219 s realised, **inside by 11 ms**.
+That is less than the read's noise, and scaled row by row the same read gives 569. `A9` grades it. **At this figure any K but B1 reads past 581, C1 alone at about 555,** so the 113 ms of `A6` is no longer
+there to spend. The estimates above were low on L1 (84 against 35), the trio (48 against 25) and B1 (50 against 20).
+
+**Row 10, 2026-11-05: not closed.** Forms, remnants, lines, counts, kept ms and kills are all measured, and the sealed rule closes it only with all nine S. It waits on the Orchestrator's ruling on C1's clause (d).
+
+**`AR-154-TWO-POINT-CONTROL`.** `ABC-154`'s trigger `R-a` fires on a ticket that edits `tools/grugops/qe-hop-integrity.test.ts`, and `ABC-307`'s page does not carry `F1`–`F4`. `F1` as written would put a whole-tree
+read back in the default lane, against `A5`. It goes to the Orchestrator; no form turns on it.
+
+**Not decided here:** the board, the ticket page and the build. No NFR level, cap, pin, W, environment variable or `AGENTS.md` lane line moves. `ADR-0035` § Addendum 2026-11-05 C6 stands.

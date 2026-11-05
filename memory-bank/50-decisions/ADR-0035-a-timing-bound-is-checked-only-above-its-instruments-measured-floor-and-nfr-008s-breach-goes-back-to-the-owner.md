@@ -123,6 +123,9 @@ corrected: the addendum paragraph above and two lines in `§ Addendum 2026-10-30
 No level, bound or `N8-LANE` text moved, and nothing was measured. Notes are in
 `.grugops/context/arch-qehop-threshold/notes/`.
 
+`§ Addendum 2026-11-05 (arch-ABC-307)` at the end of this file:
+- **C6:** `T-QEHOP-GROWTH` retires at `ABC-307`'s merge if the qe-hop trio moves. Until then a crossing of 5,500 is not read; the backstop is 5,900 note files.
+
 **Proposal text amended 2026-10-10 (`design-owed-rulings-2026-10-10`).** Decision 3's `F` is keyed
 per narrow set (the block under decision 3). The status is still `proposed`, and the owner's question
 is unchanged.
@@ -974,3 +977,29 @@ admissible reading on this host, the median of the three most recent governs.
 - C3: continue the series instead. The figures do not change (0.030 / 0.020).
 - C4: name `qe-ABC-154`'s method again. It cannot run on the reference, so the next read would need a fresh port.
 - C5 adds nothing to roll back.
+
+## § Addendum 2026-11-05 (`arch-ABC-307`)
+
+**Architect/Design, records only.** Nothing was measured. No level, bound or `N8-LANE` text moves. This role owns the record; the Orchestrator dispatches.
+
+### C6. `T-QEHOP-GROWTH` retires when the trio moves; until then a crossing waits, with a backstop
+
+**If `ABC-307` merges with Q1–Q3 moved.**
+- With the flag unset, the set reads the record whole **0** times (`ABC-307` `A5`). A fixed 52 notes stay in reach, and the only thing left that grows is one
+  top-level listing per read, by folders and not by notes. A3's premise, a set whose cost grows with the record, is gone.
+- So the trigger **retires at that merge. It is not MET, and nothing is read.** The 650 ms bound stands, and this set's last reading stays 4 272 notes.
+- **It re-arms** if a default-lane row reads the record whole again, and this role then sets a mark by C2's rule. `A5`'s check is what shows it.
+- The whole-tree read moves to the three `-t` lines, off `npm test`. `R-N8H-2`'s cost ends with it, so this role reads that risk closed from the merge, for
+  Security/NFR to record at `A10`.
+- `plans/nfr-catalog.md` needs one dated insertion for this. It rides with `A10`, or a records hop after the merge.
+
+**If the count crosses 5,500 first,** which is likely.
+- `main` read 5 434 at `c9ff7ff9`, 66 short. It grew 4 231 → 5 299 over the four days to 2026-11-05, about 267 a day, against C2's 74–104. **At that rate the crossing is
+  about six hours away, and C2's lead time is gone:** 6 229, the projected upper-end crossing of 650 ms, is about three days out, not 7–10.
+- **Do not read at the crossing.** 5,500 is a lead-time mark, not a breach, and "NOT READ: the trigger stays armed" is the record's own outcome. A read would take an ALONE
+  window just before `A9` needs one, to price a cost `ABC-307` removes.
+- **The backstop is 5,900 note files,** the largest multiple of 100 not above 6 229 − 1 × 267. If `ABC-307` has not merged by then, the read runs on C4's method, on `main`'s
+  tip, ALONE. MET: this role sets the next mark. NOT MET: the owner, as the catalog's "Does" line has it, and the lever is the count of whole-tree reads, which is this ticket.
+- If the trio is dropped from `ABC-307`, C2's rule is re-run on the current rate. It gives 4 300, already passed, so the read is due at once.
+
+**Rollback.** Delete this section. C2's 5,500 stands, and a crossing dispatches the read.

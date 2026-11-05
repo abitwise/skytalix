@@ -11,7 +11,7 @@ import { makeMove } from "./apply.ts";
 import { type BookProbe, createBookProbe } from "./book.ts";
 import { chooseMove, HARD_CEILING_MS, trimPriorKeys } from "./engine.ts";
 import { parseFen, toFen } from "./fen.ts";
-import { keyHistory, newGame, playMove, repetitionKeyHistory } from "./history.ts";
+import { gameStatusOf, keyHistory, newGame, playMove, repetitionKeyHistory } from "./history.ts";
 import { isInCheck, legalMoves } from "./legal.ts";
 import { createLevelSeam } from "./level-seam.ts";
 import { createLevel, DEFAULT_LEVEL, HARDEST_LEVEL, LEVELS, seededRandom } from "./levels.ts";
@@ -878,7 +878,7 @@ describe("ABC-171 A7 — the blunder path", () => {
     const { send } = rig({ k, stepMs: 100 });
     send("setoption name Skill Level value 1");
     const moves: string[] = [];
-    for (const line of goes) {
+    for (const line of goes.slice(0, 4)) {
       const written = send(line);
       if (!line.startsWith("go")) continue;
       expect(written).toHaveLength(2);
@@ -896,11 +896,14 @@ describe("ABC-171 A7 — the blunder path", () => {
     expect(draws.some((d) => d >= LEVELS[1].blunderRate)).toBe(true);
   });
 
-  it("two sessions on the same seededRandom(k) write the same bestmove sequence", () => {
+  // ABC-307 (secnfr-census-1105, arch-ABC-307): the first two gos stay here; all three, and seed 3, run under ENGINE_DEEP=1.
+  it("two sessions on seededRandom(2), over the first two gos (a blunder, then the engine), write the same bestmove sequence", () => {
+    const [blunder, engine] = firstDraws(2, 2) as [number, number];
+    expect(blunder).toBeLessThan(LEVELS[1].blunderRate);
+    expect(engine).toBeGreaterThanOrEqual(LEVELS[1].blunderRate);
     const first = levelOneMoves(2);
-    expect(first).toHaveLength(3);
+    expect(first).toHaveLength(2);
     expect(levelOneMoves(2)).toEqual(first);
-    expect(levelOneMoves(3)).toHaveLength(3); // a different k may differ; nothing asserted on it
   });
 
   it("go depth 3 at level 1: one info string naming the dropped limit, then a bestmove", () => {
@@ -1080,9 +1083,11 @@ describe("ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 p
     expect(HARDEST_LEVEL).toBe(7);
   });
 
-  it("setoption name Skill Level value 7 sets 7: a bare go searches 30 000 ms", () => {
-    const { info, step } = searchAt(7, "go", 30_000);
-    expectWithin(info.time, 30_000, step);
+  // ABC-307 (secnfr-census-1105, arch-ABC-307): the budget handed stays here; the 30 000 ms search runs under ENGINE_DEEP=1.
+  it("setoption name Skill Level value 7 sets 7: a bare go hands the engine 30 000 ms", () => {
+    const { handed, setupLines } = budgetAt(["setoption name Skill Level value 7"], "go");
+    expect(setupLines).toEqual([[]]);
+    expect(handed).toEqual({ budgetMs: 30_000 });
   });
 
   it("a bare go at 6 hands the engine 5 000 ms", () => {
@@ -2908,6 +2913,160 @@ if (RUN_ENGINE_DEEP) {
       });
       // `ABC-230`'s injection (the hash list), same clock: no draw seen, a losing score.
       expect(scoreWith(game, keyHistory)?.score).not.toBe(0);
+    });
+  });
+}
+
+// ABC-307 (secnfr-census-1105, arch-ABC-307): five full rows, each under ENGINE_DEEP=1 only. Three are src/cli.test.ts's;
+// this file's engine spy calls through, and each describe here installs no stub.
+if (RUN_ENGINE_DEEP) {
+  describe("ABC-171 A7 — the blunder path [deep, ENGINE_DEEP=1]", () => {
+    const goes = [
+      "position startpos",
+      "go movetime 1000",
+      "position startpos moves e2e4 e7e5",
+      "go movetime 1000",
+      `position fen ${KIWIPETE}`,
+      "go movetime 1000",
+    ];
+
+    /** The bestmove sequence of level 1 under `seededRandom(k)`, each go's info line checked. */
+    function levelOneMoves(k: number): string[] {
+      const { send } = rig({ k, stepMs: 100 });
+      send("setoption name Skill Level value 1");
+      const moves: string[] = [];
+      for (const line of goes) {
+        const written = send(line);
+        if (!line.startsWith("go")) continue;
+        expect(written).toHaveLength(2);
+        expect(written[0]).not.toContain(" score ");
+        const info = parseLevelInfo(written[0]);
+        expect(written[1]).toBe(`bestmove ${info.move}`);
+        moves.push(info.move);
+      }
+      return moves;
+    }
+
+    it("two sessions on the same seededRandom(k) write the same bestmove sequence", () => {
+      const first = levelOneMoves(2);
+      expect(first).toHaveLength(3);
+      expect(levelOneMoves(2)).toEqual(first);
+      expect(levelOneMoves(3)).toHaveLength(3); // a different k may differ; nothing asserted on it
+    });
+  });
+
+  describe("ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path [deep, ENGINE_DEEP=1]", () => {
+    /** One fresh session at `level`, step G ÷ 30; the info line of `go` from the start position. */
+    const searchAt = (level: 6 | 7, go: string, expectedG: number) => {
+      const step = Math.floor(expectedG / 30);
+      const { send, draws } = rig({ stepMs: step });
+      expect(send(`setoption name Skill Level value ${level}`)).toEqual([]);
+      send("position startpos");
+      const lines = send(go);
+      expect(lines).toHaveLength(2);
+      // D11: rate 0 is `chooseMove` with a score, and draws no seed.
+      expect(lines[0]).toContain(" score ");
+      const info = parseInfo(lines[0]);
+      expect(lines[1]).toBe(`bestmove ${info.move}`);
+      expect(draws.count).toBe(0);
+      return { info, step };
+    };
+
+    it("setoption name Skill Level value 7 sets 7: a bare go searches 30 000 ms", () => {
+      const { info, step } = searchAt(7, "go", 30_000);
+      expectWithin(info.time, 30_000, step);
+    });
+  });
+
+  describe("ABC-101 — --difficulty selects a level, and the played engine is that level [deep, ENGINE_DEEP=1]", () => {
+    const LEVEL_WORDS = Object.keys(LEVELS);
+    const startGame = () => newGame(START_FEN);
+
+    // biome-ignore format: ABC-307 keeps the moved body byte-identical to base, indent aside
+    it("A8′ — the seam built for each level moves exactly as `createLevel` does, on one seed and one injected clock", async () => {
+      // Seed 7: level 1's first draw is a BLUNDER on the start position (non-vacuity, below).
+      const SEED = 7;
+      const clockFor = (word: string) =>
+        virtualClock(LEVELS[Number(word) as keyof typeof LEVELS].budgetMs);
+      const played: Record<string, string> = {};
+
+      for (const word of LEVEL_WORDS) {
+        const level = LEVELS[Number(word) as keyof typeof LEVELS];
+        const reference = createLevel(level, { seed: SEED, now: clockFor(word) });
+        const seam = createLevelSeam(Number(word), { seed: SEED, now: clockFor(word) });
+        const history = startGame();
+        // Three times on one instance: the seam keeps the level's own generator across calls. Seed 7
+        // draws 0.0117, 0.0620, 0.9769, so a per-move rebuild at ANY blunder level (1-4) decides
+        // differently from the kept generator by call 2, without leaning on one level's rate (`ABC-161`).
+        for (let call = 0; call < 3; call++) {
+          const expected = reference(parseFen(START_FEN));
+          expect(expected, `createLevel at level ${word}`).not.toBeNull();
+          const move = await seam(history);
+          expect(move, `level ${word}, call ${call}`).toEqual(expected?.move);
+          if (call === 0) played[word] = `${squareName(move.from)}${squareName(move.to)}`;
+        }
+        // The seam borrows the position and hands it back unchanged, as the loop requires.
+        expect(history.position).toEqual(parseFen(START_FEN));
+      }
+
+      // NON-VACUITY: on this position and seed, level 1 blunders and the default level does not, and
+      // they choose different moves — so a seam that ignored the level would red above.
+      const easiest = createLevel(LEVELS[1], { seed: SEED, now: clockFor("1") })(parseFen(START_FEN));
+      expect(easiest?.kind).toBe("blunder");
+      expect(played["1"]).not.toBe(played[String(DEFAULT_LEVEL)]);
+    });
+  });
+
+  describe("ABC-241 A4, A7 — the CLI: the ep twin and the claim [deep, ENGINE_DEEP=1]", () => {
+    const FEN = "4k3/7p/8/8/8/8/8/Q3K3 b - - 0 1";
+    const TWIN = "4k3/7p/8/6P1/8/8/8/Q3K3 b - - 0 1";
+    const MOVES = "h7h5 a1a2 e8d8 a2a1 d8e8 a1a2 e8d8 a2a1";
+    const STEP_MS = 100;
+    const labelOf = (move: { from: number; to: number }) =>
+      `${squareName(move.from)}${squareName(move.to)}`;
+    const gameOf = (fen: string) => {
+      const game = newGame(fen);
+      for (const text of MOVES.split(" ")) {
+        const move = legalMoves(game.position).find((m) => labelOf(m) === text);
+        if (move === undefined) throw new Error(`fixture: ${text} is not legal`);
+        playMove(game, move);
+      }
+      return game;
+    };
+    const seamOf = (injected: typeof keyHistory) =>
+      createLevelSeam(DEFAULT_LEVEL, { seed: 1, now: virtualClock(STEP_MS) }, injected);
+    const scoreWith = (game: ReturnType<typeof gameOf>, list: typeof keyHistory) =>
+      chooseMove(parseFen(toFen(game.position)), {
+        budgetMs: LEVELS[DEFAULT_LEVEL].budgetMs,
+        now: virtualClock(STEP_MS),
+        priorKeys: trimPriorKeys(list(game), game.position.halfmoveClock),
+      });
+
+    it("A4: with a legal ep capture available the same line is not a draw", () => {
+      const twin = gameOf(TWIN);
+      expect(repetitionKeyHistory(twin)).toEqual(keyHistory(twin));
+      expect(scoreWith(twin, repetitionKeyHistory)?.score).not.toBe(0);
+    });
+
+    it("A7: the move the search scores 0 is the move after which gameStatusOf reports the claim", async () => {
+      const game = gameOf(FEN);
+      expect(gameStatusOf(game).claimable).toBeUndefined();
+      const move = await seamOf(repetitionKeyHistory)(game);
+      playMove(game, move);
+      expect(gameStatusOf(game)).toEqual({
+        result: "in-progress",
+        reason: null,
+        claimable: { by: "white", draws: ["threefold-repetition"] },
+      });
+      // Base's count is one short: the h7h5 occurrence carries h6 in the hash list.
+      const hashes = keyHistory(game);
+      expect(hashes.filter((key) => key === hashes.at(-1))).toHaveLength(2);
+      // And the twin's d8e8 reports no claim: its h7h5 occurrence keeps the file.
+      const twin = gameOf(TWIN);
+      const repeat = legalMoves(twin.position).find((m) => labelOf(m) === "d8e8");
+      if (repeat === undefined) throw new Error("fixture: d8e8 is not legal");
+      playMove(twin, repeat);
+      expect(gameStatusOf(twin).claimable).toBeUndefined();
     });
   });
 }
