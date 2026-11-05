@@ -22,13 +22,14 @@ Publish: sealed notes (task bapm-wait-lines-1105, contextRoot = the worktree's .
 
 _by ba-pm (claude-opus-5-5, bapm-wait-lines-1105), 2026-11-05T08:08:30Z, records only, from `main` `a38315bf`; nothing run but `git` reads, the note seals and the records-path check. `src/`, `tools/`, the ADRs and `plans/board.md` are untouched._
 
-- **`ABC-303`:** § Open 1 answered, CF1–CF10 in the strict reading's place, both pointers at CF, CF7 marked as the Architect's carry; `ABC-301`'s half of the slot met, § Open 3 ruled, § Open 4's worry gone for that half. DoR 10/10, unchanged.
+- **`ABC-303`:** § Open 1 answered, CF1–CF10 in the strict reading's place, both pointers at CF, CF7 owner-accepted (`…0f1ab02e`, so the carry mark is off); `ABC-301`'s half of the slot met, § Open 3 ruled, § Open 4's worry gone for that half. DoR 10/10, unchanged.
 - **`ABC-301`:** closed NOT MET, `status: dropped`, column Done, § Close: records only reached `main`, the emission and tools stayed on the branch. **`ABC-304`:** Done. **`ABC-282`:** nothing.
 - **`ABC-290`–`ABC-293`:** form (b), holds lifted, each list with its `G2` line at the ADR's ratio, intent GAIN. Order E4b, E5 without per-piece mobility, E3b, E6. `ABC-291` P2. Each DoR 9/10, Backlog, the ADR owed.
 - **`ABC-292`'s split rule:** per-piece mobility leaves as `ABC-306` (S, P3, DoR 9/10, Backlog, held). The other three stay; the ADR may part them. A second new id, beyond item 6 (J2).
 - **`ABC-287`:** the trigger is a tuned table on `main`; the hold stands. **`ABC-295`:** the Problem sentence, the hold's dated line, DoR row 1's echo.
 - **`EPIC-011`:** a dated block; § Phases P6, E2–E6, R2; § Tickets 39, 42–45, 53, 55, 56, new 57, 58; the id line; § Dependencies.
 - **`ABC-305`, new (S, P3, DoR 10/10, Ready):** one merge of `b297ab89`, never either tip; `N8-LANE` read first, after `ABC-282`'s A4; `ABC-301`'s ≤ +0.10 s budget; `dd88560f` out of `main`'s ancestry; UAT waived.
-- **Notes:** decision `20261105T080806Z-ba-pm-decision-fbc5050f` (J1–J11), observation `20261105T080806Z-ba-pm-observation-a717244e` (ten open points). 2 of 2 read back.
-- **Commits:** claim `1a5311bc`; pages `6cb4fb23`; notes `a81e8efc`. This Result and the trace row follow, then the move to done/. Nothing was pushed or merged.
-- **Orchestrator:** CF7 is wanted before QE seals `ABC-303`, not before `ABC-289`'s PREREG; the census against `ABC-305`; whether held `ABC-306` counts toward Phase 4's close; whether the owner has been told the order; `QE-304-a` is not on `ABC-303`'s page. **Architect:** whether a hand-valued term owes a tracer line at its merge; how `ABC-306` could reach a fit.
+- **`main` moved during this hop:** `6ff2554e` carries `…0f1ab02e`, the owner's later word (the fault rule widens, a bundle term can open the door, CF7 confirmed). The pages follow it; the exact lines are left to `arch-owner-answers-1105b`, in flight.
+- **Notes:** decision `20261105T080806Z-ba-pm-decision-fbc5050f` (J1–J11), observation `20261105T080806Z-ba-pm-observation-a717244e` (ten open points), correction `20261105T080943Z-ba-pm-decision-c3e76e02`.
+- **Commits:** claim `1a5311bc`; pages `6cb4fb23`; notes `a81e8efc`; Result and trace row `e279a50b`; to done/ `a1d2ace2`; pages after `…0f1ab02e` `773e4d02`; correction note `89ee2889`. Nothing was pushed or merged.
+- **Orchestrator:** the census against `ABC-305`; whether held `ABC-306` counts toward Phase 4's close; whether the owner has been told the order; `QE-304-a` is not on `ABC-303`'s page. **Architect:** whether a hand-valued term owes a tracer line at its merge; how `ABC-306` could reach a fit.
