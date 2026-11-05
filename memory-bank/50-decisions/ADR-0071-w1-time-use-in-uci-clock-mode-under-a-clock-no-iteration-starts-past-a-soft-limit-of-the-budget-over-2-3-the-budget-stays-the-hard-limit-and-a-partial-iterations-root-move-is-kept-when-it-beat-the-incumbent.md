@@ -6,8 +6,21 @@ id: ADR-0071
 
 ## Status
 
-**ACCEPTED 2026-11-04 by the owner, in form (a), as written (OQ-0071-1). Not in force until `ABC-282` merges on its
-read (A6, D10).** Recorded by Architect/Design (task `arch-owner-answers-1104`, records only, on
+**IN FORCE 2026-11-05, from `ABC-282`'s merge `a6ae8227`.** Recorded by Architect/Design (task `arch-ABC-282-close`,
+records only, on `grugops/arch-ABC-282-close` from `main` `2e46933f`). Nothing was run.
+- **The read:** QE's verdict `qe-ABC-282` `…5191f871` is PASS_WITH_GAPS, with no blocking gap, and it signs UAT. A6 is
+  MET at 45 / 32 / 23 = 56.5 of 100 (D10). A4 is MET on both sides (D11). F1–F7 did not fire. The score meets the bar;
+  the gain is not proven (Elo +45.4 ± 60.7, `ABC-282`'s page).
+- **What is in force:** D1–D12, as accepted. No decision or value moved. b stays 2.3: D12 item 3's re-read gave a
+  median of 2.3043 (`se-ABC-282` `…aadd2d48`). `ABC-078` A3 is amended in this mode only (D7), and its page says so
+  (`bapm-ABC-282-close`).
+- **D12:** `ABC-282` landed second, so its items fell to it. The build did items 1–4 and 6. This hop wrote item 5, the
+  dated line under `ADR-0066` decision 5.
+- **Two dated lines from QE-282-l** (`…4f8f7f5d`): one under D11 and one under § Consequences, `NFR-004`. They correct
+  the text. No decision moves.
+
+*Before the merge:* **ACCEPTED 2026-11-04 by the owner, in form (a), as written (OQ-0071-1). Not in force until
+`ABC-282` merges on its read (A6, D10).** Recorded by Architect/Design (task `arch-owner-answers-1104`, records only, on
 `grugops/arch-owner-answers-1104` from `main` `5d402485`). Nothing was run.
 - **His words, verbatim** (`orch-2026-10-30a` `…7de79e90`): *"Accept the W1 time-use design (ADR-0071)"*. The
   Orchestrator records it as OQ-0071-1, form (a).
@@ -59,6 +72,8 @@ build may start on PROPOSED. Nothing here is in force until `ABC-282` merges on 
 | 2026-11-04 | BA/PM, tools | Folded into `ABC-282` (Ready, L). D10's harness ticket cut as `ABC-300`, merged on QE PASS_WITH_GAPS | `bapm-ABC-282-adr`; `4ea39135`, `qe-ABC-300` `…fbda2ad6` |
 | 2026-11-04 | Owner | **ACCEPTED, form (a)** ("Accept the W1 time-use design (ADR-0071)") | `orch-2026-10-30a` `…7de79e90` |
 | 2026-11-04 | Architect/Design | Status restated as ACCEPTED, not in force until `ABC-282` merges on A6. `ADR-0056` row W1 written. No decision changed | `arch-owner-answers-1104` |
+| 2026-11-05 | Orchestrator | **IN FORCE.** `ABC-282` merged at `a6ae8227` on QE's verdict `…5191f871` | `orch-2026-10-30a` `…16e0ec2c` |
+| 2026-11-05 | Architect/Design | Status restated as in force. QE-282-l ruled: no decision moves, dated lines under D11 and § Consequences. D12 item 5 written in `ADR-0066` | `arch-ABC-282-close` |
 
 ## Context
 
@@ -399,6 +414,11 @@ on the new merge-base by the same rows, before the change** (§ D12). The rows b
   
   A move can stop before its soft limit only by reaching a `depth` or `nodes` limit first. On the last moves of a period, `C` hands
   out the whole remainder, and W1 spends ≥ 1 / 2.3 of it. Later periods carry the rest (≥ 85.7 %).
+  - *Dated 2026-11-05 (`arch-ABC-282-close`, records only; QE-282-l).* The sentence above is true only up to the cap.
+    The budget is min(59 500, C). When C is above 59 500 the move gets 59 500, W1 spends ≥ 25 870 ms of it, and the
+    clock above the budget carries to the next period. At g01 White's move 40 the clock read 88 532 ms, the budget
+    was 59 500 ms and the move took 26 947 ms, which left 61 585 ms. The figures in this section stand, because both
+    scripts apply the cap (`arch-ABC-282` `raw/alloc-w1.mjs`, `raw/alloc-w1-mc.mjs`).
   - **F5 routes a miss here.** Then b, the soft limit's form, or a last-move rule is the Architect's to re-open, with a
     new read. Nothing is tuned to pass.
 
@@ -461,6 +481,18 @@ is designed against `main`. **Whichever of the two lands second rebases, and doe
 
 - **`NFR-004`:** no ceiling moves. The hard limit is the mode's budget, unchanged. A3 (b) holds by construction, with
   D2's floor of 1 ms stated as an exception (D3).
+  - *Dated 2026-11-05 (`arch-ABC-282-close`, records only; QE-282-l, `qe-ABC-282` `…4f8f7f5d`).* **W1 brings the cap
+    into play at 40/15, which this ADR did not state.** W1 saves time early, and `C` hands it out late. A4 read 13 of
+    606 budgets at 59 500 and seven moves of 50 900–59 501 ms, each at a period's moves 36–40. `ABC-223` read 0 of 629
+    and 25 285 ms. The longest move is 1 ms over its budget and 499 ms under 60 000, on a host under foreign load.
+    - **No ceiling, limit or value moves.** The 500 ms is `ADR-0052` D4's designed margin. Overshoot near the budget
+      read +3.9 ms at most, inside `AR-NFR004-A`'s ≤ ~31 ms.
+    - **`AR-UCI-BUSY`** (owner: Architect/Design) keeps its bound, ≤ 60 s. A busy `isready` or `stop` can now wait
+      about 59.5 s in play, not about 25 s. A4 read 0 `isready` during a search, and no `ADR-0044` D5 trigger fires.
+    - **Owed:** one Security/NFR read, records only and blocking nothing (`arch-ABC-282-close`'s decision note).
+    - **Not decided:** whether these late moves are the best use of the time. Five games show how long they are, not
+      how they spread or what they are worth. Spreading them differently moves a budget formula, which this ADR does
+      not decide (§ Status) and which is the owner's.
 - **`NFR-005`:** untouched under D1. `level` is node-identical.
 - **`NFR-008`** (9.42 s on `main`, 0.58 s of headroom):
   - A0-1 (six frozen searches, about 1.4 M nodes) and A0-2 (about 0.5 M nodes) cost about 2.8 s and 1 s at P1's rate
