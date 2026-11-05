@@ -1,3 +1,4 @@
+_Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — **ABC-304 built** (se-ABC-304 e1ac9209): K0 28/28, A3 (a) 96.26 % / 95.72 % on the bundle doors, no figure moved → In Review → `qe-ABC-304`. Running: se-ABC-301-fit-2, qe-ABC-304. Owner: A4, new C2′ after a candidate fault._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `bapm-K0-cut` merged: **ABC-304 Ready, DoR 10/10** → `se-ABC-304`. Running: se-ABC-301-fit-2, se-ABC-304. Owner: A4, new C2′ after a candidate fault. Owed at the owner's C2′ answer: one line naming the form QE's § 6 copies, and the two points BA/PM raised (…555a9a9e)._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — `arch-ABC-303-open` merged: A3 (a) may re-point (no red); K0 red confirmed, stale rows, no engine defect, re-point owed; the order stands. **se-ABC-301-fit found stalled since 22:12Z** → `se-ABC-301-fit-2`. → `bapm-K0-cut`. Owner: A4, new C2′ after a candidate fault._
 _Updated: 2026-11-04 Orchestrator (orch-2026-10-30a) — **ABC-303 built** (se-ABC-303 20b85d09, code only): R1, R2 equal the probe; S rows met; lane +0.07 s ungraded, loose. Two finds → `arch-ABC-303-open`: ABC-279 A3 (a) reads 90.91 % vs ≥ 93 % on the shipped path (re-pointed, not yet ruled); ABC-271 K0 seven deep rows reported red on main. Running: se-ABC-301-fit, arch-ABC-303-open. Owner: A4._
@@ -1369,7 +1370,8 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
 - ~~[ABC-283]~~ → Blocked. The O1h+O3s+S1 bundle (ABC-233 history, ABC-234 SEE ordering, ABC-236 root aspiration) on one branch; one read of 100 games at 100 ms, GAIN ≥ 50.0 (owner's word, …4c4cb03d). se-ABC-283 running; rulings …3851bf43.
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
-    ## In Review (WIP 1/3)
+    ## In Review (WIP 2/3)
+- [ABC-304] Stale rows re-point, test-only: built e1ac9209, `qe-ABC-304` verifying, UAT waived.
 - [ABC-282] W1. Built 7e4b1006 → qe-ABC-282 (A6 100 games at tc=40/8, GAIN ≥ 50.0; verdict signs UAT).
     - [ABC-012] Portfolio FX conversion  (PR: #41, QE: running)
 
@@ -1514,8 +1516,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 3/3)
-- [ABC-304] Stale rows re-point, test-only (DoR 10/10, XS, P2): `se-ABC-304`, then a QE hop, UAT waived.
+## In Development (WIP 2/3)
 - [ABC-301] E2s second pull: fit scopes 1–4 (se-ABC-301-fit), then QE's reads.
 - [ABC-303] Bundle 1, ABC-286 + ABC-288 (ADR-0072, 0073 ACCEPTED over missed premises; DoR 10/10, M, P3). Code only for now (`se-ABC-303`); C2′ only after ABC-282 and ABC-301 settle.
 
