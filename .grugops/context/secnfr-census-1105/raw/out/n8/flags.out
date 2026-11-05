@@ -1,0 +1,7 @@
+samples 86; sample rows naming a foreign vitest 0; projects []
+foreign_cpu_s, scored runs: median 3.31, min 2.37, max 5.39
+flagged rounds: none
+complete scored rounds 8, unflagged 8
+sensitivity B: unflagged rounds wall median 9.405 s
+sensitivity H: unflagged rounds wall median 9.515 s
+sensitivity H2: unflagged rounds wall median 9.495 s

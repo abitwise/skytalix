@@ -1,0 +1,9 @@
+{
+  "refs": ["secnfr-census-1105", "NFR-008", "NFR-002", "ADR-0046", "ADR-0029", "ADR-0035", "ABC-105", "ABC-171", "ABC-212", "ABC-094", "ABC-101", "ABC-241", "QE-105-p", "QE-244-a",
+           "src/uci-session.test.ts", "src/book.test.ts", "src/cli.test.ts", "tools/grugops/qe-hop-integrity.test.ts",
+           "secnfr-census-1105/20261105T115526Z-security-nfr-decision-b9038a14",
+           "secnfr-census-1105/20261105T120600Z-security-nfr-observation-6315faad",
+           "secnfr-ABC-302-a9/20261104T203737Z-security-nfr-observation-25105dda",
+           "arch-ABC-302/20261104T181301Z-architect-design-decision-bcadd41d", "572edf13"],
+  "notes": [ { "kind": "decision", "confidence": "high: a probe plan fixed before the probe runs; row costs are the re-read's census medians; the remnants are proposals", "bodyFile": "probe-plan.md" } ]
+}
