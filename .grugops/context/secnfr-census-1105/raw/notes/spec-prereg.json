@@ -1,0 +1,16 @@
+{
+  "refs": ["secnfr-census-1105", "NFR-008", "R-N8H-1", "R-N8H-2", "Q-N8H-1", "ADR-0035", "ADR-0046", "ABC-282", "ABC-303", "ABC-289", "ABC-305", "EPIC-011", "QE-282-b",
+           "orch-2026-10-30a/20261104T203850Z-orchestrator-decision-f30bd604",
+           "orch-2026-10-30a/20261105T081031Z-orchestrator-decision-42f7fd67",
+           "orch-2026-10-30a/20261105T114920Z-orchestrator-decision-16e0ec2c",
+           "secnfr-nfr008-1104/20261104T170654Z-security-nfr-decision-c7289371",
+           "secnfr-nfr008-1104/20261104T171458Z-security-nfr-decision-39f73707",
+           "secnfr-nfr008-1104/20261104T172222Z-security-nfr-decision-1184fec4",
+           "secnfr-ABC-302-a9/20261104T203737Z-security-nfr-decision-0089724b",
+           "secnfr-ABC-302-a9/20261104T203737Z-security-nfr-observation-25105dda",
+           "qe-ABC-282/20261104T230342Z-qe-e2e-observation-dfa196bf",
+           "572edf13", "a6ae8227", "7117ce75", "9f481fa5"],
+  "notes": [
+    { "kind": "decision", "confidence": "high: a pre-registration; sealed before any timing run; nothing measured yet", "bodyFile": "prereg.md" }
+  ]
+}
