@@ -1,2 +1,2 @@
 { "refs": ["se-ABC-305", "ABC-305", "ABC-301", "158bb992", "b297ab89", "e763119c", "dd88560f", "a21136b0", "tools/tune/tune.ts", "tools/tune/tracer.ts", "tools/tune/bounds.ts", "tools/tune/tune.test.ts", "src/evaluate.passer.test.ts", "src/evaluate.king-mobility.test.ts"],
-  "notes": [{ "kind": "artifact-ref", "confidence": "high: each line read by its command at 158bb992", "bodyFile": "art.md" }] }
+  "notes": [{ "kind": "observation", "confidence": "high: each line read by its command at 158bb992", "bodyFile": "art.md" }] }
