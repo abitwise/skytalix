@@ -290,6 +290,7 @@ and CF4 reads another tree.*
   still gates a landing is the Orchestrator's, and the records do not settle it.*~~
   *2026-11-05 (`bapm-ABC-282-close`; `…16e0ec2c` ruling 1, `…42f7fd67` item 1): **ruled.** The census gates the next lane-adding merge
   after `ABC-282`, whichever of this ticket and `ABC-305` that is. It does not gate either build.*
+  *2026-11-05 (`bapm-rows-cut-1105`; `…19cea480`, `…f40ce634` 1): **the census read G-WITH.** If this ticket is the next lane-adding merge, `ABC-307` merges before it or with it.*
 
 ## Open, not bars (for the Architect and the Orchestrator)
 

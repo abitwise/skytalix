@@ -119,6 +119,7 @@ adr: "No new ADR. ADR-0067's dated block of arch-owner-answers-1105 (the tools l
 - **Order with `ABC-303`:** none on the read. Zero production lines stale no C2′ (`…2b3440cf`). If this lands first, `ABC-303` takes it when
   `main` goes in.
 - **`ABC-301` closed NOT MET, and the owner's answer is in:** `…2b3440cf`'s hold until his answer is met.
+- **`ABC-307`, the row move:** *2026-11-05 (`bapm-rows-cut-1105`; `…19cea480`, `…f40ce634` 1 and 3): the census read G-WITH, with no exemption here. If this ticket is the next lane-adding merge, `ABC-307` merges before it or with it. The build and the `N8-LANE` read run now; only the landing waits.*
 
 ## Open, not bars (for the Orchestrator)
 
@@ -140,6 +141,6 @@ adr: "No new ADR. ADR-0067's dated block of arch-owner-answers-1105 (the tools l
 | 7 | test notes | ✅ 1–3 |
 | 8 | size | ✅ S |
 | 9 | priority | ✅ P3 |
-| 10 | no major unresolved blocker | ✅ no ADR and no owner item: his word is in. The wait on `ABC-282`'s A4 is an ordering, and the census is a ruling before the merge, not before the build |
+| 10 | no major unresolved blocker | ✅ no ADR and no owner item: his word is in. ~~The wait on `ABC-282`'s A4 is an ordering, and the census is a ruling before the merge, not before the build~~ *2026-11-05 (`bapm-rows-cut-1105`; `…19cea480`, `…f40ce634` 1 and 3): A4's wait is past. The census read G-WITH, so the landing may wait on `ABC-307`; the build and the `N8-LANE` read do not* |
 
 **DoR 10/10. Ready.** The board move is the Orchestrator's.
