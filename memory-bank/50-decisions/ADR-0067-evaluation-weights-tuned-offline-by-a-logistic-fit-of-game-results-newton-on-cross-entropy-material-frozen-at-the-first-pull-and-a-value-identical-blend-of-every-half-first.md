@@ -126,7 +126,7 @@ Architect/Design (task `arch-owner-answers-1103`, records only, on `grugops/arch
 | 2026-11-05 | Architect/Design | The wait written as rules, with the four tests owner-accepted. No bar moved | `arch-owner-answers-1105` |
 | 2026-11-05 | Owner | A term merged inside a bundle meets the third-pull trigger ("2. yes"). Every other limit stands | `orch-2026-10-30a` `…0f1ab02e` |
 | 2026-11-05 | Architect/Design | The four tests read for a bundle term. No bar moved | `arch-owner-answers-1105b` |
-| 2026-11-05 | Architect/Design | Three lines on the wait, as proposed with `ADR-0075`: the tool line at a term's merge, `ABC-306`'s route, "E5" at the door. No bar moved | `arch-ABC-291` |
+| 2026-11-05 | Architect/Design | Three lines on the wait, as accepted with `ADR-0075`: the tool line at a term's merge, `ABC-306`'s route, "E5" at the door. No bar moved | `arch-ABC-291` |
 
 ## Context
 
@@ -951,7 +951,7 @@ bundle meets the trigger. No bar moves, and nothing is fitted.***
 - **The default does not move.** The next terms still go on their own reads (`…b836b85c` 3), in `ADR-0056` D6's order. This answer makes
   a bundle count; it does not make one the route.
 
-*Dated 2026-11-05 (`arch-ABC-291`, records only at `main` `148fd329`; `ADR-0075` PROPOSED, so these lines read as proposed until his answer): **three lines on the wait. No bar moves, and nothing is fitted.***
+*Dated 2026-11-05 (`arch-ABC-291`, records only at `main` `148fd329`; `ADR-0075` ACCEPTED, so these lines read as accepted from his answer): **three lines on the wait. No bar moves, and nothing is fitted.***
 - **A hand-valued term and the tool (`ADR-0075` d11 (a)).** The term's merge carries its tool line: counts in the tracer and exports in the emitter, traced and held, not free, as `T_UN` is. By reading, a term the tracer does
   not model reddens `TUNE_DEEP` at the identity gate. This keeps d5's "`TUNE_DEEP` green at the fit commit" true without a pull. It is not a fit.
 - **`ABC-306` (d11 (b)).** It reaches a fit only on a yes that names it, by a value-identical landing at the shared weight. It would have no read of its own, so test 2 does not pass it by default.
