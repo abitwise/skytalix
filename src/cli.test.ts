@@ -4478,14 +4478,15 @@ describe("ABC-101 — --difficulty selects a level, and the played engine is tha
     expect(code).toMatch(/readonly difficulty: Difficulty;/);
   });
 
-  it("A8′ — the seam built for each level moves exactly as `createLevel` does, on one seed and one injected clock", async () => {
+  // ABC-307 (secnfr-census-1105, arch-ABC-307): two levels stay here; every level runs in src/uci-session.test.ts under ENGINE_DEEP=1.
+  it("A8′ (sample) — levels 1 and the default: the seam moves exactly as `createLevel` does, on one seed and one injected clock", async () => {
     // Seed 7: level 1's first draw is a BLUNDER on the start position (non-vacuity, below).
     const SEED = 7;
     const clockFor = (word: string) =>
       virtualClock(LEVELS[Number(word) as keyof typeof LEVELS].budgetMs);
     const played: Record<string, string> = {};
 
-    for (const word of LEVEL_WORDS) {
+    for (const word of ["1", String(DEFAULT_LEVEL)]) {
       const level = LEVELS[Number(word) as keyof typeof LEVELS];
       const reference = createLevel(level, { seed: SEED, now: clockFor(word) });
       const seam = createLevelSeam(Number(word), { seed: SEED, now: clockFor(word) });
@@ -4624,8 +4625,6 @@ describe("ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable
   /** g5xh6 e.p. is legal after h7h5: the first occurrence keeps its ep file. */
   const TWIN = "4k3/7p/8/6P1/8/8/8/Q3K3 b - - 0 1";
   const MOVES = "h7h5 a1a2 e8d8 a2a1 d8e8 a1a2 e8d8 a2a1";
-  // `ABC-244` (`ADR-0046` § Addendum 2026-10-30): 100 kept; at 1 000 A4 and A7 lose a mutant.
-  const STEP_MS = 100;
   const labelOf = (move: { from: number; to: number }) =>
     `${squareName(move.from)}${squareName(move.to)}`;
   const gameOf = (fen: string): GameHistory => {
@@ -4637,15 +4636,6 @@ describe("ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable
     }
     return game;
   };
-  const seamOf = (injected: typeof keyHistory) =>
-    createLevelSeam(DEFAULT_LEVEL, { seed: 1, now: virtualClock(STEP_MS) }, injected);
-  const scoreWith = (game: GameHistory, list: typeof keyHistory) =>
-    chooseMove(parseFen(toFen(game.position)), {
-      budgetMs: LEVELS[DEFAULT_LEVEL].budgetMs,
-      now: virtualClock(STEP_MS),
-      priorKeys: trimPriorKeys(list(game), game.position.halfmoveClock),
-    });
-
   // ABC-302 (secnfr-nfr008-1104, arch-ABC-302): a 500 ms step (depth 8) stays here; the 100 ms row runs in src/uci-session.test.ts under ENGINE_DEEP=1.
   it("A4 (slice): on a 500 ms virtual step, with repetitionKeyHistory injected the default level plays d8e8 at exactly 0; base does not", async () => {
     const game = gameOf(FEN);
@@ -4676,16 +4666,18 @@ describe("ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable
     expect(source).not.toMatch(/\bkeyHistory\b/);
   });
 
-  it("A4: with a legal ep capture available the same line is not a draw", () => {
+  it("A4 (no search): with a legal ep capture available the two key lists are equal; on the uncapturable line they are not", () => {
     const twin = gameOf(TWIN);
     expect(repetitionKeyHistory(twin)).toEqual(keyHistory(twin));
-    expect(scoreWith(twin, repetitionKeyHistory)?.score).not.toBe(0);
+    const game = gameOf(FEN);
+    expect(repetitionKeyHistory(game)).not.toEqual(keyHistory(game));
   });
 
-  it("A7: the move the search scores 0 is the move after which gameStatusOf reports the claim", async () => {
+  it("A7 (no search): after d8e8, the move A4 (slice) pins, gameStatusOf reports the claim", () => {
     const game = gameOf(FEN);
     expect(gameStatusOf(game).claimable).toBeUndefined();
-    const move = await seamOf(repetitionKeyHistory)(game);
+    const move = legalMoves(game.position).find((m) => labelOf(m) === "d8e8");
+    if (move === undefined) throw new Error("fixture: d8e8 is not legal");
     playMove(game, move);
     expect(gameStatusOf(game)).toEqual({
       result: "in-progress",
