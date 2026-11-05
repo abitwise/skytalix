@@ -17,3 +17,13 @@ Read ABC-307's page (A9, A10, § Open), PREREG …e4ce81fb, stop note …43927eb
 Check every output file is non-empty before reading it. Record foreign load; never touch it. Every test, build or engine run goes under the host lock named in your dispatch prompt. Leave nothing running; check with ps, not pgrep -f, which matches your own shell.
 Fences: your records only. No src, test, ticket, ADR, EPIC or board edits. No push, force, amend, rebase or merge into main.
 Publish: sealed notes (contextRoot = the worktree's .grugops/context, `at` from `date -u` run immediately before each note); queue moves; commit; ## Result + trace row; brief + claim to done/. Before your last commit, run `node tools/grugops/records-path-check.js --base main`; it must exit 0.
+
+## Result
+by: qe-e2e (claude-opus-5-5), at: 2026-11-05T20:02:43Z. Branch `grugops/qe-ABC-307`, continued from `b13ab230`. **STOPPED with A9 unread. No verdict.** Not a FAIL: nothing missed. Nothing of mine left running.
+- **PREREG:** `…da060cef`, sealed and committed (`eb5f6266`) at 19:21:24Z, before any slot poll or run. It states both voids and carries `…b9038a14`'s void rule. Two plain `ps` looks came before the seal; it records them.
+- **Read 3 VOID.** Slot 19:49:50Z, 28 min 26 s into the clock. Hold 260 s, 8 complete scored rounds, all 27 runs 71 files and 2 709 passed. A new foreign `grugops` vitest arrived at 19:51:15Z; rounds 2 to 8 flagged, 7 of 8, over the 2 allowed. `n8-grade.py` not run: H's median, H − B and the twin are unread.
+- **Re-read unspent.** Seven tries from 19:54:50Z, all released on foreign vitest. Deadline at 20:01:24Z, `reread.sh` exit 75, no output directory.
+- **UAT:** the waiver's condition holds; no verdict signs it. ABC-307 stays In Review.
+- **Gaps and process facts:** `…d5cd6d19`. A second project's vitest was also live at 20:01:55Z, so a window must hold every project.
+- **Notes:** `…da060cef` (PREREG), `…4a8dd8dc` (read 3), `…d5cd6d19` (stop).
+- **Next:** the Orchestrator rules how the unspent re-read runs, in a window with the whole host held. Security/NFR's A10 waits on a graded read.
