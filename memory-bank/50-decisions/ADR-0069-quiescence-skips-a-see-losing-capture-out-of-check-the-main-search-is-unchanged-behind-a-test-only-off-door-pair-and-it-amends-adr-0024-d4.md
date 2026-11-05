@@ -261,6 +261,16 @@ d8 ratios are head / door. Reach is the mean completed depth at 47 000 nodes on 
         is `ABC-269`'s `…WithoutTaper`), and none moved at `ABC-283`. The form of record for this row is `searchWithoutBundle` / `chooseMoveWithoutBundle`. It should read
         this ADR's figures. That is `UNKNOWN - verify` until the lane runs; a red there comes back here. The row's bars do
         not move either way.
+    - *Dated 2026-11-05 (`arch-ABC-301-miss`, records only, at `main` `701ef5bd`; `QE-304-b`, `qe-ABC-304` `…9ac0fbda`; this
+      hop's `…21a996c9`): **"which compare with no door" above is wrong. The conclusion stands. No bar moves.***
+      - `ABC-279` A3 (b) compares with `searchWithoutSeePruning`, so the clause is untrue of it. It was never the test.
+      - **A3 (b) stays on `search()` for another reason:** d8 keeps mates on the shipped path by name, and
+        `arch-ABC-283-mate` `…05ef9fc9` has this row turn green "with no re-pin" with all three parts on. A mate floor is a
+        safety bar on the engine that ships. This row went red on the KRK defect on the shipped path, which a door could
+        not have shown.
+      - **The test is what the row guards, not whether its reference is a door.** A3 (a)'s ruling above stands on the
+        rule's own naming of the d5 drift rows, and the older floors that stand on doors stay where they are.
+      - `…84f9bae1` item 3 carries the same clause. It is sealed, and `…21a996c9` corrects it.
 12. **The premise bars (`A3` / `A4`):**
     - **(a)** d8 nodes on kiwipete and position-6, both recursions: **≤ 0.78×** on each of the four readings
       (min(0.95, ⌈100 · (0.7208 + 0.05)⌉ / 100)).
@@ -275,6 +285,16 @@ d8 ratios are head / door. Reach is the mean completed depth at 47 000 nodes on 
       406 787, `chooseMove` d8 766 275 / 87 475 and reach 6.716. Its doors read 839 514 / 1 533 901 / 1 296 788 /
       404 930 and 5.879. If `main` has moved by the build, the Engineer re-reads both on the new base and puts both
       sets in the PR. The bars stay; a re-derived count is a dated line here, never a moved bar.
+    - *Dated 2026-11-05 (`arch-ABC-301-miss`, records only, at `main` `701ef5bd`; `QE-304-a`, `qe-ABC-304` `…9ac0fbda`; this
+      hop's `…21a996c9`): **(b)'s head side re-points to `chooseMoveWithoutBundle`. The level does not move.***
+      - **The row:** `src/see.test.ts`, "ABC-279 A4 (b)". `reach(chooseMove)` becomes `reach(chooseMoveWithoutBundle)`. The door
+        side and the title stay.
+      - **Why:** its shipped side is `chooseMove` and its other side an older door, so d8's four re-point rules reach it. A
+        shipped search passed to a helper by name is still the shipped side. + 0.55 belongs to Q1 alone; on `chooseMove` the
+        row reads Q1 plus the bundle, a level nobody set. A4 (a), under the same F4, stands on this door.
+      - **The figures are QE's:** 6.716, +0.837 on the door, this ADR's own; +0.989 on `chooseMove`. Green on both sides, so
+        this is no red, no STOP and no owner question. A different reading comes back here.
+      - **It gates nothing.** One test line. Who carries it is the Orchestrator's; it collides with `grugops/ABC-303`.
 13. **The read, by reference (`ADR-0056` C2′ as folded):** 100 games at 100 ms against the merge-base. The intent is
     **GAIN, ≥ 50.0 / 100**. Also S′ at E 1 810 and the Levels deep lane. NEUTRAL "invisible at 100 ms" is closed:
     the reach gain is read at the 100 ms node budget. R-TC: the rule reads no budget, deadline or environment.
