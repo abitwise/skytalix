@@ -57,10 +57,18 @@ adr: "owed (the Architect's): a new ADR on main's tapered evaluation, form (b): 
 - **Not from a pull.** Tuning waits: no third fit and no date (`ADR-0067`'s dated block of `arch-owner-answers-1105`).
 - **Its own read.** If this term merges on its own read, or inside a bundle (`…0f1ab02e` item 2), a third pull may be asked for. Asking is not
   a yes.
+- **The third-pull door, without per-piece mobility:** *2026-11-05 (`bapm-ABC-291-lines`; `ADR-0075` d11 (c), accepted, in force at `ABC-291`'s merge; `ADR-0067`'s dated line of `arch-ABC-291`): **this page counts.** His table
+  names "E3b, E4b, E5 or E6", and "E5" names the row. These three terms are that row, split by `ABC-207`'s loss and not by the row. All three are in `ADR-0056` D2's row E5 from 2026-11-01 and on this page
+  from `181da9e3` (2026-11-04, 13:34Z), before `dd88560f` (23:58Z that day), so test 1 holds. If the three split, each part that merges counts on its own: the four tests read on the part, and only merged
+  parts enter the free set. Test 4 is unchanged: one door, one fit. This is the Architect's reading, open to overruling at any third-pull call (`…c1623ae7`).*
 - **Cost** (`…ba8265e9`): the bishop pair and the rook files look cheap; outposts cost per call.
 - **The shared mobility weight stays at its rule value** (`…2b3440cf`). `MOBILITY_CAP` stays fixed.
-- **If he ever says yes to a third pull,** this term may enter its free set, and each new export is owed to that pull's emitter change
-  (`…6ccd8243` item 3).
+- **If he ever says yes to a third pull,** this term may enter its free set~~, and each new export is owed to that pull's emitter change
+  (`…6ccd8243` item 3)~~. *2026-11-05 (`bapm-ABC-291-lines`): **superseded.** `ADR-0075`, accepted, in force at `ABC-291`'s merge, moves the tool line from a pull to the term's merge. d11 (a) settles it for
+  `ABC-291`. **This term's ADR follows d12's pattern,** in its order: definitions; one rule built on `main`'s own table, fixed before any row and blind to `zugzwang.001`; the memo or per-call seam; one
+  switch and an off-door pair; a `G2` ratio with its reason and its blind spot; a probe with rows, a sealed form, and a line for what it can and cannot change; K rows reading the term's own part; CF's
+  table filled; the tool line at the merge; no second set after a miss. It sets its own ratio, and d12 binds none of its values. "No second set" binds it only if he accepts that in this term's own ADR
+  (`…c1623ae7`). If E2 closes for good, no tool line is owed by any later term.*
 
 ## Scope
 
