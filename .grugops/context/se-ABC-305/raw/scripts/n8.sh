@@ -1,6 +1,6 @@
 #!/bin/bash
 # se-ABC-305 N8-LANE read (ABC-305 A5; ADR-0035 D1). secnfr-census-1105's n8.sh, and only the per-arm expected counts differ:
-# B = main a21136b0, 71 files / 2 709; H = the tip and H2 its identity twin, 71 / 2 710 (both read by one preflight run).
+# B = main a8594b50, 71 files / 2 709; H = merge 35a694ee and H2 its identity twin, 71 / 2 710 (both read by one preflight run).
 # Run ONCE, inside ONE flock hold of the host lock. Usage: n8.sh <arms dir holding B H H2> <out dir>
 # Order rotates by round (r mod 3): B H H2 / H H2 B / H2 B H. Round 0 is discarded. Rounds continue until 8
 # complete scored rounds or 12 rounds in all. `npm test` as spelled, one fresh process per run.
