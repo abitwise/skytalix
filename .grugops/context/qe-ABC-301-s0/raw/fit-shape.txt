@@ -1,0 +1,6 @@
+S0 exit=0 pass 1 fail 0 red:  :: 
+S1 exit=0 pass 1 fail 0 red:  :: 
+S2 exit=1 pass 0 fail 1 red: evaluateAtPhase at each fixture's own phase is exact against the seam, :: AssertionError: expected [ 'U10-phase1', 'KD1-A', …(11) ] to deeply equal []
+S1E14 exit=1 pass 0 fail 1 red: evaluateAtPhase at each fixture's own phase is exact against the seam, :: AssertionError: expected [ 'U1-in', 'U2-in', 'U3-out', …(31) ] to deeply equal []
+S1E15 exit=1 pass 0 fail 1 red: evaluateAtPhase at each fixture's own phase is exact against the seam, :: AssertionError: expected [ 'U1-out', 'U2-out', 'U3-out', …(3) ] to deeply equal []
+S1E16 exit=1 pass 0 fail 1 red: evaluateAtPhase at each fixture's own phase is exact against the seam, :: AssertionError: expected [ 'U1-out', 'U2-in', 'U3-out', …(3) ] to deeply equal []

@@ -16,3 +16,13 @@ The first agent stalled at 22:12:13Z with no report. Its brief, se-ABC-301-fit, 
 5. An infeasible relation set is a STOP; a red relation is a defect. One fit, no refit. Stop before QE's reads.
 /tmp has a per-user quota. Check every run's output is non-empty before you read it: files have come out empty with exit 0.
 Publish as the first brief says, with `at` from `date -u` run immediately before each note. Before your last commit, run `node tools/grugops/records-path-check.js --base main`; it must exit 0.
+
+## Result
+by: software-engineer (claude-opus-5-5), at: 2026-11-05T00:12:50Z. **STOPPED at scope 3: zugzwang.001 is red on the emission. Scope 4 not taken.** Branch `grugops/ABC-301`, main `8527e49f` merged, no rewrite. Nothing left running.
+- **Commits:** `48f8134e` the stalled agent's four files; `ef4e5e21` merge of main; `e763119c` the four reds; `b297ab89` PREREG; `dd88560f` the emission; then records (this one).
+- **Four reds:** a defect in the tool's μ report (fixed; the table does not move); a wrong expectation in the rig row, never green (corrected to its true a); two slow rows, plus (1)(3), at a stated 60 s. `…6e874d51`.
+- **The fit:** feasible, C-F, λ 1e-8, 7 steps, 88 s, 491 MiB. B-T1 0 misses; B-T2 0.9872 ×; B-T3 byte-identical; gate on the emission 0 misses; tableOf equals fit.json; 26 of 26 relations green by direct read. `…358b29b1`, `…12103827`.
+- **STOP:** e1e5 at depth 9, e1f1 from depth 10. Defect check clean. F4's disposition is not mine. `…04dc7cd4`.
+- **Pins:** none moved, none retired. K0's seven rows and both "every half 0" rows stand. `FROZEN.k0` untouched.
+- **Branch state:** 115 default-lane reds at `dd88560f`, all from the emission; 2 685 green at `b297ab89`.
+- **Not read:** G2, endgame G2, mate floor, G1, the futility audit, B-T6 to B-T8, the N8-LANE delta.

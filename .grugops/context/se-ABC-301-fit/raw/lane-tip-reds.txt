@@ -1,0 +1,118 @@
+ FAIL  src/engine.test.ts > A3 — an aborted iteration's move is discarded, not returned > aborts INSIDE depth 3 — the run really did enter the iteration it discards
+ FAIL  src/engine.test.ts > A3 — an aborted iteration's move is discarded, not returned > returns the completed depth-2 move, which is NOT the depth-3 move
+ FAIL  src/engine.test.ts > ABC-230 A1 — a third occurrence scores exactly 0 at the root; base scores it otherwise > KQ v K, Black to move: d8e8 at 0 with the prior keys, base's move without them
+ FAIL  src/engine.test.ts > ABC-230 A1 — a third occurrence scores exactly 0 at the root; base scores it otherwise > K v KQ, White to move: d1e1 at 0 with the prior keys, base's move without them
+ FAIL  src/engine.test.ts > ABC-230 A1 — a third occurrence scores exactly 0 at the root; base scores it otherwise > KR v K, Black to move: d8e8 at 0 with the prior keys, base's move without them
+ FAIL  src/engine.test.ts > ABC-230 A1 — a third occurrence scores exactly 0 at the root; base scores it otherwise > K v KR, White to move: d1e1 at 0 with the prior keys, base's move without them
+ FAIL  src/engine.test.ts > ABC-230 A8 — a second occurrence before the root is not a draw (probe H2) > KQ v K, Black to move: d8e8 would stand a second time; node-equal to base
+ FAIL  src/engine.test.ts > ABC-230 A8 — a second occurrence before the root is not a draw (probe H2) > K v KQ, White to move: d1e1 would stand a second time; node-equal to base
+ FAIL  src/engine.test.ts > ABC-249 — a pre-root repetition met four plies deep scores 0 (QE-248-c) > Qe5+ at ply 4 stood twice before the root: Ke1 at 441 with the keys, Kg1 at 520 without
+ FAIL  src/evaluate.king-mobility.test.ts > A4 — mobility: more moves score higher, and the term is bounded by ±100 cp > white, with substantially more moves at equal material, scores strictly higher
+ FAIL  src/evaluate.passer.test.ts > ABC-271 — the E4a terms are data: four exports, every half 0 (ADR-0070 decision 1) > PASSED_KING_ENEMY, PASSED_KING_OWN, PASSED_FREE: by own rank in PASSED's shape, every half 0
+ FAIL  src/evaluate.passer.test.ts > ABC-271 K1 (c) — the structure through the seam, per side (QE-271-a), at ADR-0070 d1's probed values > at the shipped values (every half 0) every part is 0 on every fixture
+ FAIL  src/evaluate.passer.test.ts > ABC-271 K1 (b) — value identity: evaluate is Object.is the pre-ticket evaluate on the frozen corpora > G3's 184 in buildCorpus order
+ FAIL  src/evaluate.passer.test.ts > ABC-271 K1 (b) — value identity: evaluate is Object.is the pre-ticket evaluate on the frozen corpora > QE's ABC-269 door corpus (176; the KP rows among them)
+ FAIL  src/evaluate.passer.test.ts > ABC-271 K1 (b) — value identity: evaluate is Object.is the pre-ticket evaluate on the frozen corpora > ABC-270's queen pairs and their mirrors (28)
+ FAIL  src/evaluate.passer.test.ts > ABC-271 K1 (b) — value identity: evaluate is Object.is the pre-ticket evaluate on the frozen corpora > QE's 12 passer positions and 44 fixtures, each with its mirror (112)
+ FAIL  src/evaluate.queen-on.test.ts > ABC-270 — the queen-on pairs are data: three pairs at { 0, 0 } in src/evaluate-params.ts > each pair is { mg: 0, eg: 0 } (start (prior): 0; the tuner owns the values)
+ FAIL  src/evaluate.queen-on.test.ts > ABC-270 K1 (c) — the queen-on structure through the seam, per king (QE-270-a) and through evaluate > with the pairs at 0, each king's exposure is its base exposure in both halves, queen or no queen
+ FAIL  src/evaluate.queen-on.test.ts > ABC-270 K1 (c) — the queen-on structure through the seam, per king (QE-270-a) and through evaluate > with the pairs at 2 × base: the subject king's exposure is exactly 3 × its queenless exposure in each half, the other king's is equal, and the control moves nothing
+ FAIL  src/evaluate.queen-on.test.ts > ABC-270 K1 (c) — the queen-on structure through the seam, per king (QE-270-a) and through evaluate > each queen-on pair counts its own feature: the king's file count × the enemy-queen flag, mg and eg apart
+ FAIL  src/evaluate.queen-on.test.ts > ABC-270 K1 (c) — the queen-on structure through the seam, per king (QE-270-a) and through evaluate > through evaluate: pairs 0 → 2 × base moves white's view by QE's frozen net, in evaluate and evaluateWithoutTaper
+ FAIL  src/evaluate.queen-on.test.ts > ABC-270 K1 (c) — the queen-on structure through the seam, per king (QE-270-a) and through evaluate > the queen-on endgame halves enter the blend: eg = 24, mg = 0 moves only the phase-0 score, by −24 × (white's queen-on count − black's)
+ FAIL  src/evaluate.queen-on.test.ts > ABC-270 K1 (b) — value identity: evaluate is Object.is the pre-ticket evaluate on the frozen corpora > G3's 184 in buildCorpus order
+ FAIL  src/evaluate.queen-on.test.ts > ABC-270 K1 (b) — value identity: evaluate is Object.is the pre-ticket evaluate on the frozen corpora > QE's ABC-269 door corpus (176; every taper-corpus position, the KP rows among them, and its mirror)
+ FAIL  src/evaluate.queen-on.test.ts > ABC-270 K1 (b) — value identity: evaluate is Object.is the pre-ticket evaluate on the frozen corpora > QE's ABC-270 queen pairs and their mirrors
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (a) — a position and its colour mirror score exactly equal, Object.is, at every phase > the frozen rows span phases 0 to 24, and the -0 traps are real (mg exactly 0 on the door)
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (c) — evaluateWithoutTaper is the pre-ticket evaluate, Object.is > QE's door corpus: 176 positions and their frozen pre-ticket scores
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (c) — evaluateWithoutTaper is the pre-ticket evaluate, Object.is > G3's 184 in buildCorpus order, against the frozen pre-ticket scores
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (d) — the king walks: centre beats corner by >= 20 cp on QE's six graded endings > 'D1': 'white' king, 'd4' over 'a1' (shelter 'none')
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (d) — the king walks: centre beats corner by >= 20 cp on QE's six graded endings > 'D2': 'white' king, 'e5' over 'h1' (shelter 'partial')
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (d) — the king walks: centre beats corner by >= 20 cp on QE's six graded endings > 'D3': 'black' king, 'e4' over 'h8' (shelter 'none')
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (d) — the king walks: centre beats corner by >= 20 cp on QE's six graded endings > 'D4': 'black' king, 'd5' over 'a8' (shelter 'partial')
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (d) — the king walks: centre beats corner by >= 20 cp on QE's six graded endings > 'D5': 'white' king, 'e4' over 'h8' (shelter 'none')
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (d) — the king walks: centre beats corner by >= 20 cp on QE's six graded endings > 'D6': 'black' king, 'd4' over 'a1' (shelter 'none')
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (e) — the passers: >= 1.5 x at phase <= 6, exact at 24, <= 1.25 x at >= 18 > 'E-w2-p0': 'white' passer on 'd2', own rank 2, phase +0
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (e) — the passers: >= 1.5 x at phase <= 6, exact at 24, <= 1.25 x at >= 18 > 'E-w2-p6': 'white' passer on 'd2', own rank 2, phase 6
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (e) — the passers: >= 1.5 x at phase <= 6, exact at 24, <= 1.25 x at >= 18 > 'E-w2-p18': 'white' passer on 'd2', own rank 2, phase 18
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (e) — the passers: >= 1.5 x at phase <= 6, exact at 24, <= 1.25 x at >= 18 > 'E-w2-p24': 'white' passer on 'd2', own rank 2, phase 24
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (e) — the passers: >= 1.5 x at phase <= 6, exact at 24, <= 1.25 x at >= 18 > 'E-b2-p0': 'black' passer on 'e7', own rank 2, phase +0
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (e) — the passers: >= 1.5 x at phase <= 6, exact at 24, <= 1.25 x at >= 18 > 'E-b2-p6': 'black' passer on 'e7', own rank 2, phase 6
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (e) — the passers: >= 1.5 x at phase <= 6, exact at 24, <= 1.25 x at >= 18 > 'E-b2-p18': 'black' passer on 'e7', own rank 2, phase 18
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (e) — the passers: >= 1.5 x at phase <= 6, exact at 24, <= 1.25 x at >= 18 > 'E-b2-p24': 'black' passer on 'e7', own rank 2, phase 24
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (e) — the passers: >= 1.5 x at phase <= 6, exact at 24, <= 1.25 x at >= 18 > 'E-w3-p0': 'white' passer on 'd3', own rank 3, phase +0
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (e) — the passers: >= 1.5 x at phase <= 6, exact at 24, <= 1.25 x at >= 18 > 'E-w3-p6': 'white' passer on 'd3', own rank 3, phase 6
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (e) — the passers: >= 1.5 x at phase <= 6, exact at 24, <= 1.25 x at >= 18 > 'E-w3-p18': 'white' passer on 'd3', own rank 3, phase 18
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (e) — the passers: >= 1.5 x at phase <= 6, exact at 24, <= 1.25 x at >= 18 > 'E-w3-p24': 'white' passer on 'd3', own rank 3, phase 24
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (e) — the passers: >= 1.5 x at phase <= 6, exact at 24, <= 1.25 x at >= 18 > 'E-w4-p0': 'white' passer on 'd4', own rank 4, phase +0
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (e) — the passers: >= 1.5 x at phase <= 6, exact at 24, <= 1.25 x at >= 18 > 'E-w4-p6': 'white' passer on 'd4', own rank 4, phase 6
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (e) — the passers: >= 1.5 x at phase <= 6, exact at 24, <= 1.25 x at >= 18 > 'E-w4-p18': 'white' passer on 'd4', own rank 4, phase 18
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (e) — the passers: >= 1.5 x at phase <= 6, exact at 24, <= 1.25 x at >= 18 > 'E-w4-p24': 'white' passer on 'd4', own rank 4, phase 24
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (e) — the passers: >= 1.5 x at phase <= 6, exact at 24, <= 1.25 x at >= 18 > 'E-w5-p0': 'white' passer on 'd5', own rank 5, phase +0
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (e) — the passers: >= 1.5 x at phase <= 6, exact at 24, <= 1.25 x at >= 18 > 'E-w5-p6': 'white' passer on 'd5', own rank 5, phase 6
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (e) — the passers: >= 1.5 x at phase <= 6, exact at 24, <= 1.25 x at >= 18 > 'E-w5-p18': 'white' passer on 'd5', own rank 5, phase 18
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (e) — the passers: >= 1.5 x at phase <= 6, exact at 24, <= 1.25 x at >= 18 > 'E-w5-p24': 'white' passer on 'd5', own rank 5, phase 24
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (e) — the passers: >= 1.5 x at phase <= 6, exact at 24, <= 1.25 x at >= 18 > 'E-b5-p0': 'black' passer on 'e4', own rank 5, phase +0
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (e) — the passers: >= 1.5 x at phase <= 6, exact at 24, <= 1.25 x at >= 18 > 'E-b5-p6': 'black' passer on 'e4', own rank 5, phase 6
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (e) — the passers: >= 1.5 x at phase <= 6, exact at 24, <= 1.25 x at >= 18 > 'E-b5-p18': 'black' passer on 'e4', own rank 5, phase 18
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (e) — the passers: >= 1.5 x at phase <= 6, exact at 24, <= 1.25 x at >= 18 > 'E-b5-p24': 'black' passer on 'e4', own rank 5, phase 24
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (e) — the passers: >= 1.5 x at phase <= 6, exact at 24, <= 1.25 x at >= 18 > 'E-w6-p18': 'white' passer on 'd6', own rank 6, phase 18
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (e) — the passers: >= 1.5 x at phase <= 6, exact at 24, <= 1.25 x at >= 18 > 'E-w7-p0': 'white' passer on 'd7', own rank 7, phase +0
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (e) — the passers: >= 1.5 x at phase <= 6, exact at 24, <= 1.25 x at >= 18 > 'E-w7-p6': 'white' passer on 'd7', own rank 7, phase 6
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (e) — the passers: >= 1.5 x at phase <= 6, exact at 24, <= 1.25 x at >= 18 > 'E-w7-p18': 'white' passer on 'd7', own rank 7, phase 18
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (e) — the passers: >= 1.5 x at phase <= 6, exact at 24, <= 1.25 x at >= 18 > 'E-w7-p24': 'white' passer on 'd7', own rank 7, phase 24
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (e) — the passers: >= 1.5 x at phase <= 6, exact at 24, <= 1.25 x at >= 18 > 'E-b7-p0': 'black' passer on 'e2', own rank 7, phase +0
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (e) — the passers: >= 1.5 x at phase <= 6, exact at 24, <= 1.25 x at >= 18 > 'E-b7-p6': 'black' passer on 'e2', own rank 7, phase 6
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (e) — the passers: >= 1.5 x at phase <= 6, exact at 24, <= 1.25 x at >= 18 > 'E-b7-p18': 'black' passer on 'e2', own rank 7, phase 18
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (e) — the passers: >= 1.5 x at phase <= 6, exact at 24, <= 1.25 x at >= 18 > 'E-b7-p24': 'black' passer on 'e2', own rank 7, phase 24
+ FAIL  src/evaluate.taper.test.ts > ABC-269 B1 (e) — the passers: >= 1.5 x at phase <= 6, exact at 24, <= 1.25 x at >= 18 > by array: the blended passed bonus at every phase in each bar's range, from VALUE_TABLES_FOR_TEST
+ FAIL  src/evaluate.taper.test.ts > ABC-269 — ABC-215 A2's rule rows for the two endgame halves that differ > KING_TABLE_EG is 40 - 15 m, m the Manhattan distance to the nearest of d4, e4, d5, e5
+ FAIL  src/evaluate.taper.test.ts > ABC-269 — ABC-215 A2's rule rows for the two endgame halves that differ > PASSED_PAWN_BONUS_EG is 2 x the middlegame bonus by rank; the middlegame half is the pre-ticket table
+ FAIL  src/evaluate.taper.test.ts > ABC-269 — src/evaluate-params.ts is the one parameter table, data only (ADR-0064 decision 4) > every pair holds two halves of one shape; only the king's square and the passers differ
+ FAIL  src/evaluate.taper.test.ts > ABC-274 A9 — the packed sums fit in int16, bounded from src/evaluate-params.ts's own maxima > ABC-270 K1 (d): the bound reads the three queen-on pairs' maxima; a queen-on half of 6 000 would turn it red
+ FAIL  src/evaluate.test.ts > ABC-215 A2 — the value arrays are rebuilt from their stated rules > PAWN_TABLE equals its rule over every entry
+ FAIL  src/evaluate.test.ts > ABC-215 A2 — the value arrays are rebuilt from their stated rules > KNIGHT_TABLE equals its rule over every entry
+ FAIL  src/evaluate.test.ts > ABC-215 A2 — the value arrays are rebuilt from their stated rules > BISHOP_TABLE equals its rule over every entry
+ FAIL  src/evaluate.test.ts > ABC-215 A2 — the value arrays are rebuilt from their stated rules > ROOK_TABLE equals its rule over every entry
+ FAIL  src/evaluate.test.ts > ABC-215 A2 — the value arrays are rebuilt from their stated rules > QUEEN_TABLE equals its rule over every entry
+ FAIL  src/evaluate.test.ts > ABC-215 A2 — the value arrays are rebuilt from their stated rules > KING_TABLE equals its rule over every entry
+ FAIL  src/quiescence.test.ts > A2 — stand-pat is a lower bound on the quiescence value, never a replacement > a hanging pawn makes the quiescence value STRICTLY greater than the static evaluation
+ FAIL  src/quiescence.test.ts > ABC-228 A2 — in check, quiesce searches every evasion: Q-SET's in-check rows > Q2 reads −536 where the static score is −548, and the pre-ticket rules stand pat at −548
+ FAIL  src/quiescence.test.ts > ABC-228 QE-228-b — QE's Q-SET rows (qe-ABC-228), in src > QE-C1: knight check, the checker taken by a pawn: reads 131 (static -292, pre-ticket 131), the brute force agrees
+ FAIL  src/quiescence.test.ts > ABC-228 QE-228-b — QE's Q-SET rows (qe-ABC-228), in src > QE-C2: pawn check, evaded by an en-passant capture of the checker: reads 181 (static 14, pre-ticket 181), the brute force agrees
+ FAIL  src/quiescence.test.ts > ABC-228 QE-228-b — QE's Q-SET rows (qe-ABC-228), in src > QE-C3: the checker taken by a capturing promotion: reads 940 (static -349, pre-ticket 938), the brute force agrees
+ FAIL  src/quiescence.test.ts > ABC-228 QE-228-b — QE's Q-SET rows (qe-ABC-228), in src > QE-C4: Nf2+ forks Kh1 and Qd1; Rxf2 is the best evasion, the pre-ticket rule misses it: reads 475 (static 652, pre-ticket 652), the brute force agrees
+ FAIL  src/quiescence.test.ts > ABC-228 QE-228-b — QE's Q-SET rows (qe-ABC-228), in src > QE-C4 discriminates: the shipped rule and the pre-ticket rule read different values
+ FAIL  src/quiescence.test.ts > ABC-228 — the rule rows (`ADR-0053` decision 9; each reds a planted fault) > at the cap a node stands pat, in check or not: Q2 at qply 8 reads its static score, no node entered
+ FAIL  src/quiescence.test.ts > ABC-228 — the doors: searchWithoutQuiescenceEvasions and chooseMoveWithoutQuiescenceEvasions > Q2 through the depth-0 seam: searchWithoutTaper reads −536, its door the pre-ticket −548
+ FAIL  src/quiescence.test.ts > ABC-229 A2 — quiescence sees the queen: Q-SET's quiet-promotion rows (QE-frozen) > QP-1 (Q3, a safe quiet promotion): static 212, pre-ABC-229 212, shipped 977, and the brute force agrees
+ FAIL  src/quiescence.test.ts > ABC-229 A2 — quiescence sees the queen: Q-SET's quiet-promotion rows (QE-frozen) > QP-9 (QP-1 colour-flipped, black promotes): static 212, pre-ABC-229 212, shipped 977, and the brute force agrees
+ FAIL  src/quiescence.test.ts > ABC-229 A2 — quiescence sees the queen: Q-SET's quiet-promotion rows (QE-frozen) > QP-2 (the promotion square is controlled (Rb2 takes on b8)): static -370, pre-ABC-229 -370, shipped -370, and the brute force agrees
+ FAIL  src/quiescence.test.ts > ABC-229 A2 — quiescence sees the queen: Q-SET's quiet-promotion rows (QE-frozen) > QP-3 (in check, a quiet queen promotion blocks (decision 2's path)): static 220, pre-ABC-229 544, shipped 544, and the brute force agrees
+ FAIL  src/quiescence.test.ts > ABC-229 A2 — quiescence sees the queen: Q-SET's quiet-promotion rows (QE-frozen) > QP-4 (only an under-promotion wins (e8=N+), and it stays unseen): static -52, pre-ABC-229 -52, shipped -52, and the brute force agrees
+ FAIL  src/quiescence.test.ts > ABC-229 A2 — quiescence sees the queen: Q-SET's quiet-promotion rows (QE-frozen) > QP-5 (a capturing under-promotion (exf8=N+), unchanged): static -570, pre-ABC-229 1073, shipped 1073, and the brute force agrees
+ FAIL  src/quiescence.test.ts > ABC-229 A2 — quiescence sees the queen: Q-SET's quiet-promotion rows (QE-frozen) > QP-6 (KPK, c8=Q+ defended by Kb7): static 196, pre-ABC-229 196, shipped 947, and the brute force agrees
+ FAIL  src/quiescence.test.ts > ABC-229 A2 — quiescence sees the queen: Q-SET's quiet-promotion rows (QE-frozen) > QP-7 (a quiet queen promotion mates (c8=Q#)): static 186, pre-ABC-229 186, shipped 29999, and the brute force agrees
+ FAIL  src/quiescence.test.ts > ABC-229 A2 — quiescence sees the queen: Q-SET's quiet-promotion rows (QE-frozen) > QP-8 (the quiet promotion arrives at qply 2 (bxa7+, a king move, a8=Q)): static 554, pre-ABC-229 1152, shipped 1885, and the brute force agrees
+ FAIL  src/quiescence.test.ts > ABC-229 A2 — quiescence sees the queen: Q-SET's quiet-promotion rows (QE-frozen) > QP-2: a controlled square is not read as a free queen
+ FAIL  src/quiescence.test.ts > ABC-229 — the doors: searchWithoutQuietPromotions and chooseMoveWithoutQuietPromotions > Q3 through the depth-0 seam: searchWithoutTaper reads 977, its door the pre-ticket 212
+ FAIL  src/quiescence.test.ts > ABC-229 — the doors: searchWithoutQuietPromotions and chooseMoveWithoutQuietPromotions > Q-SET's INFO row kpk-b6c6 through searchWithoutTaper at depth 8: 902 shipped, 186 on the door, both b6c6
+ FAIL  src/quiescence.test.ts > ABC-229 — the doors: searchWithoutQuietPromotions and chooseMoveWithoutQuietPromotions > chooseMoveWithoutTaper reads the INFO row the same way at depth 8; its door does not see the queen
+ FAIL  src/search.bundle.test.ts > ABC-283 (a) — aspiration at the root of chooseMove (ADR-0066 decisions 1-7) > a non-mate fail high: iteration 5 fails high and is re-searched to the door's exact move and score; the door stores no root lower bound
+ FAIL  src/search.futility.test.ts > QE-268-b — a futile node returns the best score among the moves it searched, fail-soft: below its alpha, never alpha itself > the fixture bites: the node is futile at the window its parent hands it, and the skipped moves hold a better score
+ FAIL  src/search.futility.test.ts > QE-268-b — a futile node returns the best score among the moves it searched, fail-soft: below its alpha, never alpha itself > searchWithoutTaper at depth 3: the futile node's entry is an upper bound of -554, Ke2's score, strictly below its alpha of 1010
+ FAIL  src/search.futility.test.ts > QE-268-b — a futile node returns the best score among the moves it searched, fail-soft: below its alpha, never alpha itself > chooseMoveWithoutTaper deepened to 3: the futile node's entry is an upper bound of -554, Ke2's score, strictly below its alpha of 1010
+ FAIL  src/search.null-move.test.ts > A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth > zugzwang.001: chooseMove on a frozen clock to depth 9 plays e1f1
+ FAIL  src/search.ordering.test.ts > Scope — the engine orders its root exactly as search() does > the fixture bites: ordered and unordered depth-1 searches break the tie differently
+ FAIL  src/search.ordering.test.ts > A4 — each heuristic's node count, and the delete rule > position-6 at depth 2: none 10 371, MVV-LVA 3 266, + killers 3 177
+ FAIL  src/search.ordering.test.ts > G1 — chooseMove records a killer only on a beta cutoff > position-3 at 3 injected ticks: depth 3 in exactly 342 nodes
+ FAIL  src/search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one > search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions
+ FAIL  src/search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one > chooseMove(): the same, deepened to depth 4 in the engine's own recursion
+ FAIL  src/transposition.test.ts > A1 — table-on and table-off scores are identical > knight-g1 w K at depth 4 — G6: 939 with the table on and off
+ FAIL  src/transposition.test.ts > A1 — table-on and table-off scores are identical > knight-g1 w - at depth 4 — G6: 939 with the table on and off
+ FAIL  src/transposition.test.ts > A1 — table-on and table-off scores are identical > position-3 at depth 4 — the same score, and the work changes: 1 377 nodes with the table, 1 533 without
+ FAIL  src/transposition.test.ts > A5 — the only non-losing line repeats, and it scores exactly 0 > search(), depth 4: the perpetual scores exactly 0 and is played — in 7 295 nodes
+ FAIL  src/transposition.test.ts > A5 — the only non-losing line repeats, and it scores exactly 0 > the fixture bites: at depth 3 the repetition is past the horizon, and the rook down shows
+ Test Files  13 failed | 58 passed (71)
+      Tests  115 failed | 2570 passed (2685)
+   Duration  18.02s (transform 0ms, setup 0ms, import 6.87s, tests 6.22s, environment 5ms)

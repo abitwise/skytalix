@@ -1,0 +1,27 @@
+1 green engine -278 tool -278 rhs -250  score >= 250
+2 green engine 278 tool 278 rhs 400  score <= 400
+3 green engine -78 tool -78 rhs 0 strict 
+4 green engine -162 tool -162 rhs 0 strict 
+5 green engine -4 tool -4 rhs 0 strict 
+6 green engine -11 tool -11 rhs 0  
+7 green engine -128 tool -128 rhs 0 strict 
+8 green engine -24 tool -24 rhs 0 strict 
+9 green engine -6 tool -6 rhs 0  
+10 green engine -89 tool -89 rhs 0 strict 
+11 green engine -100 tool -100 rhs 0 strict mobilityTerm(rig) > 0
+12 green engine -48 tool -48 rhs 0 strict gap > 0
+13 green engine 48 tool 48 rhs 50  gap <= 50
+14 green engine -375 tool -375 rhs 0 strict 
+15 green engine -116 tool -116 rhs 0 strict 
+16 green engine -52 tool -52 rhs 0 strict 
+17 green engine -19 tool -19 rhs 0 strict 
+18 green engine -82 tool -82 rhs 0 strict 
+19 green engine -48 tool -48 rhs 0 strict a5 > stopped
+20 green engine -130 tool -130 rhs 0 strict a7 > stopped
+21 green engine -197 tool -197 rhs -20  D1
+22 green engine -201 tool -201 rhs -20  D2
+23 green engine -174 tool -174 rhs -20  D3
+24 green engine -192 tool -192 rhs -20  D4
+25 green engine -121 tool -121 rhs -20  D5
+26 green engine -135 tool -135 rhs -20  D6
+red 0 of 26

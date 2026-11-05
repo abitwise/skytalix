@@ -1,0 +1,32 @@
+== row cand HEAD dd88560f dirty 0
+
+ RUN  v4.1.12 <cand>
+
+ × src/search.null-move.test.ts > A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth > zugzwang.001: chooseMove on a frozen clock to depth 9 plays e1f1 154ms
+   → expected 'e1e5' to be 'e1f1' // Object.is equality
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/search.null-move.test.ts > A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth > zugzwang.001: chooseMove on a frozen clock to depth 9 plays e1f1
+AssertionError: expected 'e1e5' to be 'e1f1' // Object.is equality
+
+Expected: "e1f1"
+Received: "e1e5"
+
+ ❯ <anonymous> src/search.null-move.test.ts:698:78
+    696|       expect(choice?.depth).toBe(depth);
+    697|       const played = choice as EngineChoice;
+    698|       expect(`${squareName(played.move.from)}${squareName(played.move.…
+       |                                                                              ^
+    699|       // A side with no non-pawn piece never passes: the K+P rows make…
+    700|       if (name.startsWith("kpk-")) expect(nulls).toHaveLength(0);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 37 skipped (38)
+   Start at  00:17:42
+   Duration  335ms (transform 0ms, setup 0ms, import 95ms, tests 155ms, environment 0ms)
+
+exit 1

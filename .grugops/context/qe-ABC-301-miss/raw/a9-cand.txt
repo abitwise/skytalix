@@ -1,0 +1,41 @@
+
+ RUN  v4.1.12 <cand>
+
+stdout | src/evaluate.taper.test.ts > ABC-274 A9 — the packed sums fit in int16, bounded from src/evaluate-params.ts's own maxima > Σ mg and Σ eg, white minus black, each lie inside −32 768 … 32 767
+ABC-274 A9: |Σ mg| <= 17449 (int16 limit 32767)
+ABC-274 A9: |Σ eg| <= 27835 (int16 limit 32767)
+
+ ✓ src/evaluate.taper.test.ts > ABC-274 A9 — the packed sums fit in int16, bounded from src/evaluate-params.ts's own maxima > Σ mg and Σ eg, white minus black, each lie inside −32 768 … 32 767 1ms
+ ✓ src/evaluate.taper.test.ts > ABC-274 A9 — the packed sums fit in int16, bounded from src/evaluate-params.ts's own maxima > the bound reads the table: a queen endgame half of 3 000 would turn it red 0ms
+ × src/evaluate.taper.test.ts > ABC-274 A9 — the packed sums fit in int16, bounded from src/evaluate-params.ts's own maxima > ABC-270 K1 (d): the bound reads the three queen-on pairs' maxima; a queen-on half of 6 000 would turn it red 2ms
+   → KING_SHELTER_MISSING_QUEEN: expected 17359 to be 17449 // Object.is equality
+ ✓ src/evaluate.taper.test.ts > ABC-274 A9 — the packed sums fit in int16, bounded from src/evaluate-params.ts's own maxima > ABC-271 K1 (d): the bound reads the four E4a pairs; an endgame half large enough would turn it red 0ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/evaluate.taper.test.ts > ABC-274 A9 — the packed sums fit in int16, bounded from src/evaluate-params.ts's own maxima > ABC-270 K1 (d): the bound reads the three queen-on pairs' maxima; a queen-on half of 6 000 would turn it red
+AssertionError: KING_SHELTER_MISSING_QUEEN: expected 17359 to be 17449 // Object.is equality
+
+- Expected
++ Received
+
+- 17449
++ 17359
+
+ ❯ src/evaluate.taper.test.ts:1286:40
+    1284|       const heavy = { ...PARAMS, [name]: { mg: 0, eg: 6000 } };
+    1285|       expect(bound(heavy, "eg"), name).toBeGreaterThan(32_767);
+    1286|       expect(bound(heavy, "mg"), name).toBe(bound(PARAMS, "mg"));
+       |                                        ^
+    1287|       const light = { ...PARAMS, [name]: { mg: 30, eg: 30 } };
+    1288|       expect(bound(light, "mg"), name).toBeGreaterThan(bound(PARAMS, "…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 3 passed | 157 skipped (161)
+   Start at  00:17:46
+   Duration  138ms (transform 0ms, setup 0ms, import 53ms, tests 5ms, environment 0ms)
+
+exit 1

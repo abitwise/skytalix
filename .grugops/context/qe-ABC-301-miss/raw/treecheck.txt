@@ -1,0 +1,6 @@
+cand
+{"positions":43152,"gateMiss":0,"worstGate":0.9583333333333712,"phaseMiss":0,"memoMiss":0,"mirrorMiss":0,"passerNonZero":43152}
+base
+{"positions":43152,"gateMiss":0,"worstGate":0.9583333333333144,"phaseMiss":0,"memoMiss":0,"mirrorMiss":0,"passerNonZero":0}
+plant: enemy distance capped at 4, not 5, in passerTerms, emitted table
+{"positions":43152,"gateMiss":425,"worstGate":39.66666666666663,"phaseMiss":0,"memoMiss":0,"mirrorMiss":0,"passerNonZero":43152}

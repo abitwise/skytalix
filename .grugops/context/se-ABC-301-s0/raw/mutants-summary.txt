@@ -1,0 +1,15 @@
+CLEAN passer.test exit=0 pass 22 fail 0 red: 
+E14 passer.test exit=1 pass 20 fail 2 red: evaluateAtPhase at each fixture's own phase is exact against the seam, | the king squares come from the walk: no new pass over the pieces
+E15 passer.test exit=1 pass 20 fail 2 red: evaluateAtPhase at each fixture's own phase is exact against the seam, | the king squares come from the walk: no new pass over the pieces
+E16 passer.test exit=1 pass 21 fail 1 red: evaluateAtPhase at each fixture's own phase is exact against the seam,
+H1 passer.test exit=1 pass 20 fail 2 red: evaluateAtPhase at each fixture's own phase is exact against the seam, | the king squares come from the walk: no new pass over the pieces
+CLEAN tune.test exit=0 pass 5 fail 0 red: 
+T1 tune.test exit=1 pass 4 fail 1 red: the trace reaches the model: the probed table moves it by the seam's f
+T2 tune.test exit=1 pass 3 fail 2 red: the tracer row: on the 44 fixtures each side's traced counts are QE's  | the trace reaches the model: the probed table moves it by the seam's f
+T3 tune.test exit=1 pass 3 fail 2 red: the tracer row: on the 44 fixtures each side's traced counts are QE's  | the trace reaches the model: the probed table moves it by the seam's f
+T4 tune.test exit=1 pass 3 fail 2 red: the tracer row: on the 44 fixtures each side's traced counts are QE's  | the trace reaches the model: the probed table moves it by the seam's f
+T5 tune.test exit=1 pass 3 fail 2 red: the tracer row: on the 44 fixtures each side's traced counts are QE's  | the trace reaches the model: the probed table moves it by the seam's f
+T6 tune.test exit=1 pass 4 fail 1 red: the trace reaches the model: the probed table moves it by the seam's f
+T7 tune.test exit=1 pass 4 fail 1 red: the trace reaches the model: the probed table moves it by the seam's f
+M1 tune.test exit=1 pass 3 fail 2 red: an emission at the base values has main's exports, 17 value exports an | the project typechecks with that emission in src/evaluate-params.ts
+M2 tune.test exit=1 pass 4 fail 1 red: an emission at the base values has main's exports, 17 value exports an
