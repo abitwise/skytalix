@@ -72,6 +72,10 @@ variable or `AGENTS.md` lane line moves. See the dated section of 2026-11-05 (`a
 under MC1, at tip and base, which misses one sealed clause, so it goes to the Orchestrator. Saved reads 592 of 750 against 581. No NFR level, cap, pin, W, environment variable or `AGENTS.md` lane line
 moves. See the dated section of 2026-11-05 (`arch-ABC-307-reads`) at the end of this file.
 
+**`ABC-307` as merged, 2026-11-05 (`arch-ABC-307-records`, records only).** It merged at `bce24018` on QE's PASS (`…bec57958`). Row 10 is **met** on `…db111535` 1, and where the two lines above read it as open,
+this line wins. `qe-hop`'s `ENGINE_DEEP` reads 32 → **36**, not 35, because `F1` rode in (`…db111535` 2). The run rule reads **23** lines. No NFR level, cap, pin, W, environment variable or `AGENTS.md` lane line
+moves. See the dated section of 2026-11-05 (`arch-ABC-307-records`) at the end of this file.
+
 **proposed**, 2026-10-20, by Architect/Design (task `arch-lane-under-10s`). This ADR is the remedy that `R-174-1`
 option (a) asked for. The owner accepted (a) at `…bdff4d33`.
 
@@ -1045,6 +1049,7 @@ src/book.test.ts -t "ABC-094 A3 — variety after 1\. e4 on seeds 1 to 10 \[deep
 - `uci-session`'s `ENGINE_DEEP`: base + 5 (C1, C2 and the three moved in). It read 243 at `qe-ABC-302`; later tickets may have moved it, so the base is
   `UNKNOWN - verify`.
 - `ENGINE_DEEP` on `tools/grugops/qe-hop-integrity.test.ts`: base + 3. On `src/book.test.ts`: base + 1. `src/cli.test.ts` has no deep lane.
+  *Dated 2026-11-05 (`arch-ABC-307-records`): as merged, QE read passed counts (`…d356030c`): `uci-session` 265 → 270, `qe-hop` 32 → 36 (the three and `F1`), `book` 35 → 36.*
 
 **The run rule.** The nine join the set, so "every line" is **22**: `ABC-167` A5 reads 4 passed and every other line 1 passed.
 **Its trigger widens by two files**, `tools/grugops/qe-hop-integrity.js` and `data/opening-book/book.json`. Neither is a lane input, so a tool or
@@ -1100,6 +1105,7 @@ No `src/`, tool or data file on any branch changed. Readings: `arch-ABC-307-read
   QMATCH1. `ABC-221`'s A11 row holds P2a and P2b, with `ABC-220` A6, `ABC-221` A7 and `ABC-259` on P2b.
 - **`A5`, measured:** a sentinel that throws on any unfiltered read of the real tree reds 3 rows at base and 0 at the tip.
 - **Counts:** default 2 709 in 71 files at base and tip, 9 names out and 9 in. `ENGINE_DEEP`, base → tip: `uci-session` 265 → 270, `qe-hop` 32 → 35, `book` 35 → 36.
+  *Dated 2026-11-05 (`arch-ABC-307-records`): `qe-hop` reads 32 → **36** as merged at `bce24018`. 35 is this hop's `vitest list` count, read before `F1` existed; `…db111535` 2 added it, and QE read 36 passed (`…d356030c`).*
 - **B1's title reads "seeds 1 to 7".** The nine `-t` lines above stand, each read at 1 passed.
 
 **C1 and MC1.** The row kills MC1 in the lane and passes alone on its `-t` line, at the tip and, read after the seal, at base. So the move did not cost it. MC1 adds the session count to the seed, and a
@@ -1112,7 +1118,34 @@ there to spend. The estimates above were low on L1 (84 against 35), the trio (48
 
 **Row 10, 2026-11-05: not closed.** Forms, remnants, lines, counts, kept ms and kills are all measured, and the sealed rule closes it only with all nine S. It waits on the Orchestrator's ruling on C1's clause (d).
 
+*Dated 2026-11-05 (`arch-ABC-307-records`): **row 10 closed** on `…db111535` 1: MC1 is lane-only, C1 (d) reads on M6, and QE adds one order-independent MC1. QE's A7 read M6 at 1 failed and that MC1 killed at base and tip at both parities, with no STOP (`…19f6c80a`). The ticket merged at `bce24018`.*
+
 **`AR-154-TWO-POINT-CONTROL`.** `ABC-154`'s trigger `R-a` fires on a ticket that edits `tools/grugops/qe-hop-integrity.test.ts`, and `ABC-307`'s page does not carry `F1`–`F4`. `F1` as written would put a whole-tree
 read back in the default lane, against `A5`. It goes to the Orchestrator; no form turns on it.
 
 **Not decided here:** the board, the ticket page and the build. No NFR level, cap, pin, W, environment variable or `AGENTS.md` lane line moves. `ADR-0035` § Addendum 2026-11-05 C6 stands.
+
+### Dated 2026-11-05 (`arch-ABC-307-records`): `F1` is the run rule's 23rd line, by name, as the one born-deep row in the set. `qe-hop` 36 and row 10 read as merged
+
+**Architect/Design, records only, at `main` `014b8fa2`.** Nothing was run. This is `…ad217a34` 3, and `ABC-307`'s § Open 4. The test file has not moved since the merge at `bce24018`.
+
+**The line.** It is the set's 23rd, and it lives here. The other 22 are the table's four (`arch-ADR-0070-accept`), the nine of `arch-records-1104` and the nine of `arch-ABC-307`.
+
+```
+ENGINE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run tools/grugops/qe-hop-integrity.test.ts -t "AR-154-TWO-POINT-CONTROL F1 — the whole-tree read drops no note \[deep, ENGINE_DEEP=1\]"
+```
+
+- **It reads 1 passed, by reading, not by a run.** The regular expression matches one describe title, that describe holds one `it`, and none of the trio's three lines matches it. No record runs this line by name: `F1` was read inside the file's whole deep lane, 36 passed (`…d356030c`). The next QE hop the trigger fires on confirms the count, as rule item 3 has a QE do.
+- **Why it needs this line.** Rule item 3 takes in a row *moved* under this ADR, and `F1` was born deep. So "What this rule does not set" leaves it out, and a tool edit would run the trio's three lines and not `F1`.
+- **Why it earns the place.** The whole-tree read left the default lane with the trio, and `F1` is the row that says that read drops no note. `ABC-307`'s two `F2` plants read 0 at base, 0 in the tip's default lane and 1 at head, and that red is `F1`. It was also red in 15 of 15 head draws of the random-half plants (`…19f6c80a`).
+- **It is one row, not a widening.** No other born-deep row joins, and the full deep lanes stay outside the rule.
+
+**The rule after it.** "Every line" is **23**, at every hop the trigger fires on and at each epic's close: `ABC-167` A5 reads 4 passed, and every other line 1 passed. The check is still the count. The trigger gains nothing, since the line names a file already in the set and `tools/grugops/qe-hop-integrity.js` joined at `arch-ABC-307`. The file's whole deep lane took 1 s at QE, so the cost is about a second.
+
+**`ABC-307` is not re-read.** Its A8 read the 22 lines, as written, and its A4 read `F1`. `ABC-303`'s P8 says "the run rule's `-t` lines" with no count, so no page moves.
+
+**`AGENTS.md`: no edit, 0 B.** It holds none of the 22 lines and no `qe-hop` deep line, as `arch-records-1104` found for R9. The run rule reaches `F1` here. Who puts the line in QE briefs stays as `arch-ADR-0070-accept` set it: the Orchestrator.
+
+**Stale lines brought to the merge,** each by a dated line where it stands: § Status; `arch-ABC-307`'s "base + 3"; `arch-ABC-307-reads`' 35 and "not closed". The text under them stands as written.
+
+No NFR level, bar, cap, pin, W, environment variable or `AGENTS.md` lane line moves.
