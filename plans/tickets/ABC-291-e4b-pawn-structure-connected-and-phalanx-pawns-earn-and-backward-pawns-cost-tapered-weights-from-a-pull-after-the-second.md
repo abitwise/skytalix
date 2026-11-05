@@ -97,8 +97,9 @@ The ADR fixes exact counts before Ready. None is loosened after Ready. Form (b) 
 | F3 | a safety row red | a defect check first; if real, NOT MET |
 | F4 | C2′ NOT MET | not merged, not re-played; the ticket comes back to BA/PM |
 
-- **A candidate fault in the read:** CF1–CF10 reach this read, by the owner's word (`…0f1ab02e` item 1). The form QE copies for a single-part read
-  is `arch-owner-answers-1105b`'s, in flight.
+- **A candidate fault in the read:** CF1–CF10 reach this read, by the owner's word (`…0f1ab02e` item 1). ~~The form QE copies for a single-part read
+  is `arch-owner-answers-1105b`'s, in flight.~~ *2026-11-05 (`bapm-pointers-1105`): **settled.** The form, alone or in a bundle, is `ADR-0056` D5's dated block of
+  `arch-owner-answers-1105b` (`…65557abd`): QE copies its Reach line and CF1–CF10 unaltered, then its table, filled from this page and the ADR. The block governs. No bar moves.*
 - **Recommended to the ADR, not a rule on any record** (`…ba8265e9`): no second set of values after a miss. New numbers chosen after seeing a
   loss are tuning on play by hand.
 

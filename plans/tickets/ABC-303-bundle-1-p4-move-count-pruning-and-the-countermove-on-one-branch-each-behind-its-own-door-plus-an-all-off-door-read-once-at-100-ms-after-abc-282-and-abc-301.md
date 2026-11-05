@@ -19,7 +19,8 @@ adr: "ADR-0072 (form M3; ABC-286) and ADR-0073 (form C1; ABC-288) ACCEPTED 2026-
 > - **Written at** The read, § What happens on a miss, § Open 1, 3 and 4, § Dependencies and § Definition of Ready. Tables 1–3 stay
 >   word for word. CF1–CF10 are cited, not copied: the block governs, and QE copies from it.
 > - **The form does not stop at this ticket.** `…4844df37` bound it here; the owner then widened it to later single-read reads and bundles
->   (`…0f1ab02e` item 1). Which reads, and whether a line adapts, is `arch-owner-answers-1105b`'s, in flight. This ticket's form does not change.
+>   (`…0f1ab02e` item 1). ~~Which reads, and whether a line adapts, is `arch-owner-answers-1105b`'s, in flight.~~ *2026-11-05 (`bapm-pointers-1105`): **settled** by `ADR-0056` D5's dated block of
+>   `arch-owner-answers-1105b` (`…65557abd`): every later C2′ read, of one change or of a bundle, and six phrases that read through its table on any read but this one.* This ticket's form does not change.
 > - **CF7 is owner-accepted** (`…0f1ab02e` item 3), so the Architect's-carry mark the brief asked for is off (§ Open 1).
 > - **The slot:** `ABC-301` closed NOT MET, so C2′ waits on `ABC-282` alone, and through it on A4.
 > - No bar, size or priority moves. **DoR 10/10, unchanged.** The column moves are the Orchestrator's.
@@ -294,7 +295,8 @@ The records do not settle these. This page adds none of them as a bar, and none 
      yet sealed, and no `ABC-303` PREREG is sealed, so the first read and any CF4 read carry this form.*
    - ***CF7, the Levels red, is owner-accepted.** `…b836b85c` named S′ alone, so CF7 was the Architect's carry from `arch-ABC-303-open`'s
      block (`…4844df37`). The owner confirmed it the same day (`…0f1ab02e` item 3): a clean C2′ stands when the Levels test then fails
-     and the fix does not change play. `ADR-0056`'s line moves at `arch-owner-answers-1105b`.*
+     and the fix does not change play. ~~`ADR-0056`'s line moves at `arch-owner-answers-1105b`.~~ 2026-11-05 (`bapm-pointers-1105`): **moved** (`…66724fc9`): `ADR-0056`'s dated line in the
+     "Which lines are his" list, and item 3 of that task's dated block. CF7's words do not change. Its second case, a fix that does change play, is CF6's and stays on the carried list.*
 2. **S′'s E, for the Architect.** The block reads E 1 810. `…d776c0f0` § 6 has a blank, "1810, or the re-pinned value and
    its record", and says the block governs a difference. If the S′ pool re-pins E before the read, this page's E needs a
    dated line.
