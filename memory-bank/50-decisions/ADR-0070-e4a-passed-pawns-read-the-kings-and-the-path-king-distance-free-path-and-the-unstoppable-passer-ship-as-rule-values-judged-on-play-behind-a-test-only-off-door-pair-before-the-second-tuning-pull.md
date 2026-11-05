@@ -41,6 +41,21 @@ from `main` `7a9ee712`). Nothing was run.
 - *Dated 2026-11-04 (`arch-records-1104`, records only, at `main` `83894094`; QE `qe-ABC-301-s0` `…9fd32f43`):* **d4's
   hot-path row takes the own-phase form, QE's wording.** The written form reads 31 / 44, and the bar stays exact on
   44 / 44. No bar moves.
+- *Dated 2026-11-05 (`arch-ABC-301-miss`, records only, at `main` `701ef5bd`; QE `qe-ABC-301-miss` `…d065fee3`; this hop's
+  `…5941f727`):* **F5 fires: the second pull is NOT MET, on `ADR-0067` F4 (`zugzwang.001` e1e5 at depth 9 on `dd88560f`, real,
+  no defect). F4 here does not fire. No bar moves.**
+  - **The structure stays on `main`, value-identical, at 0.** No value of `dd88560f` ships. **E4a's values were never judged
+    on play:** B-T7 was not reached, so d7's "one read" did not happen.
+  - **The dead-weight line (F4; `ABC-301`'s falsifier row).** F4 reads "every E4a eg half at its 0 bound", and the fit did
+    not do that: 17 of 18 moved. One half, `PASSED_KING_OWN` eg at R = 1, sits at its 0 bound and is recorded as dead weight
+    on that emission. The emission reads KE 5, 10, 16, 28, 47, 63; KO 0, 3, 6, 24, 33, 52; FP 45, 17, 29, 46, 49, 113, and
+    U 0. So F4's "a later ticket may remove it" is not opened. Only § Consequences' "if no pull ever fits the terms" could
+    open it, and that is the owner's answer (`…e5a5ac0c`).
+  - **K0 does not retire.** `ADR-0067`'s line applies on an emission that merges. K0's seven rows stand on `main`, re-pointed
+    by `ABC-304`, and `FROZEN.k0` is untouched.
+  - **The forecast did not hold on the fit.** The feature class was added, and the fit that used it still plays e1e5.
+    Whether holding U at 0, d7's stated cost, is part of that is `UNKNOWN - verify`: no attribution was run.
+  - **Cost:** the 1.12 × per call on the endgame set stays on `main` with no value behind it.
 
 *Before acceptance:* **PROPOSED 2026-11-04** (task `arch-ABC-271`, on `grugops/arch-ABC-271` from `main` `ac55ddf6`;
 text of record `01d2434b`). It proposed choice rule 1: the three terms shipped on their rule values, judged on their
@@ -70,6 +85,7 @@ own 100-game read (GAIN), behind a test-only off-door pair, with P0–P8 as the 
 | 2026-11-04 | Orchestrator | `ABC-271` Done (merged `872e5ffc`; QE PASS_WITH_GAPS `…74da20bf`). `QE-271-f`, `-g`, `-h` and `-i` carried to the second pull | `orch-2026-10-30a` `…264e420e` |
 | 2026-11-04 | Architect/Design | d3: the endgame cost restated (1.12 × per call against "about 1.085 ×"), graded at the second pull by `ADR-0067` B-T4's endgame row. d4: `pawnStructureForTest` accepted with a caller guard; the hot-path row's form. No bar moved | `arch-second-pull-1104` |
 | 2026-11-04 | Architect/Design | d4: `QE-271-h`'s row takes the own-phase form on QE's confirmation; the forced `evaluateAtPhase(p, 0)` reads 31 / 44 because U fires on the argument. The level did not move | `arch-records-1104` |
+| 2026-11-05 | Architect/Design | F5 fired on `ABC-301`'s NOT MET; F4 did not (17 of 18 eg halves moved; one recorded as dead weight); the structure stays at 0; K0 stands. No bar moved | `arch-ABC-301-miss` `…5941f727` |
 
 ## Context
 
@@ -368,8 +384,8 @@ no intent class and no read. The figure is history and a forecast for the second
 | F1 | 1, 2, 4: value-identical | a node, score or move mismatch against `main`; an `Object.is` miss; a re-pin outside K2 (K0–K2) | a defect, fixed before any cost bar; never re-pinned |
 | F2 | 3: cheap | K3 `G2` > 1.05 ×, or K4 a `G6` median below `main`'s, or a run below depth 6 | STOP to Architect/Design: decision 3's one value-identical cut, then one re-read under a PREREG (`ADR-0067` F8's pattern). A second miss: not merged, and the second pull fits without E4a's features, which `ADR-0067` F4's cause names as missing (a re-plan, its own dated line) |
 | F3 | 1: the rules as built | a K1 (c) seam row: a part that does not match its rule on a frozen fixture | a defect in the structure, fixed before merge; no value is chosen to pass |
-| F4 | 7: the tuner wants the terms | the second pull's fit leaves every E4a eg half at its 0 bound on the accepted data | recorded. The structure is dead weight, and a later ticket may remove it. No re-fit on play |
-| F5 | 7: one read judges both | the second pull's read is NOT MET | `ADR-0067` F6. The tuned set is not merged. The structure stays, value-identical. E4a's values are never fitted on play results |
+| F4 | 7: the tuner wants the terms | the second pull's fit leaves every E4a eg half at its 0 bound on the accepted data | recorded. The structure is dead weight, and a later ticket may remove it. No re-fit on play. *Read 2026-11-05: did not fire. 17 of 18 moved on `dd88560f`; `PASSED_KING_OWN` eg R = 1 is recorded as dead weight (§ Status)* |
+| F5 | 7: one read judges both | the second pull's read is NOT MET | `ADR-0067` F6. The tuned set is not merged. The structure stays, value-identical. E4a's values are never fitted on play results. *Fired 2026-11-05, through `ADR-0067` F4 at B-T5, before any game (§ Status)* |
 
 ## Consequences
 
@@ -379,6 +395,8 @@ no intent class and no read. The figure is history and a forecast for the second
 - **For the second pull:**
   - It gets the feature class that F4 lacked. Whether a fit keeps e1f1 is `UNKNOWN - verify`.
   - `main`'s `zugzwang.001` margin stays 29 cp until then. The 191 cp and +150 readings were rule values, not shipped.
+  - *Read 2026-11-05 (`qe-ABC-301-miss` `…d065fee3`): the fit did not keep e1f1. The margin was last read at 29 cp on an older
+    `main`; it was not re-read on `ABC-301`'s base.*
 - **NFRs:**
   - `NFR-009`: the memo is +128 KiB (576 KiB) from the build on, value or not. If F2's cut is taken, +16 KiB more. The
     sum stays far under 16 MiB.

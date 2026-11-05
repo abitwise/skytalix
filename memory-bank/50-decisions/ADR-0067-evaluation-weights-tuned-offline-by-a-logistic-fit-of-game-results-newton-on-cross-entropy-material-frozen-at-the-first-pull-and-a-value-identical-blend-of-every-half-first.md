@@ -45,6 +45,10 @@ Architect/Design (task `arch-owner-answers-1103`, records only, on `grugops/arch
   - The second pull's carried bars, its four preconditions and its endgame cost row are in the dated line under the
     bars table. **No bar level moves.** Nothing in this ADR waits on him now. The ticket is BA/PM's cut (next id
     `ABC-301`).
+- *Dated 2026-11-05 (`arch-ABC-301-miss`, records only, at `main` `701ef5bd`; QE `qe-ABC-301-miss` `…d065fee3`):* **the
+  second pull (`ABC-301`) is NOT MET under F4.** `main` keeps E1's table. The method stays in force, and no bar moves. The
+  line is under the bars table. **A third attempt is the owner's word** (`…aa971f0b`), and no fit is taken until he gives
+  it. His options are in `…e5a5ac0c`.
 
 *Before acceptance:* **PROPOSED 2026-11-03.** Recorded by Architect/Design (task `arch-ABC-239`, on `grugops/arch-ABC-239` from `main`
 `af15cbc9`). **Acceptance is the owner's:** this is a new ADR (`memory-bank/45-standing-rulings.md`, 2026-10-22).
@@ -110,6 +114,8 @@ Architect/Design (task `arch-owner-answers-1103`, records only, on `grugops/arch
 | 2026-11-04 | Architect/Design | d6's amendment and the second pull's step list; F3 restated; B-T8 re-confirmed; the second pull's carried bars, its four preconditions (`QE-271-f`, `-g`, `-h`, `-i`) and its endgame `G2` row. No bar level moved | `arch-second-pull-1104` |
 | 2026-11-04 | Architect/Design | The two `ABC-271` "every half 0" rows ruled under `…42c82347`: the by-rank row re-pinned on its eg line, "every part is 0" retired by name. No bar moved | `arch-records-1104` |
 | 2026-11-04 | Architect/Design | Precondition 1 reads `ADR-0070` d4's own-phase form. d5: the tracer reads the seam through QE's frozen fixtures, on condition `TUNE_DEEP` is green at the fit commit; check 2 stays a hard step. No bar moved | `arch-records-1104` |
+| 2026-11-05 | QE | **The second pull NOT MET under F4:** `zugzwang.001` e1e5 at depth 9 on `dd88560f`, real, no defect. The emission does not reach `main` | `qe-ABC-301-miss` `…d065fee3` |
+| 2026-11-05 | Architect/Design | The NOT MET recorded; what stands and what does not retire; the tool commits are not barred; attribution's fence; the owner's options. No bar moved | `arch-ABC-301-miss` `…5941f727`, `…e5a5ac0c`, `…2b3440cf` |
 
 ## Context
 
@@ -314,6 +320,8 @@ Architect/Design (task `arch-owner-answers-1103`, records only, on `grugops/arch
          ones.
        - **`zugzwang.001` stays B-T5's safety row (F4), not a relation,** at depth 9. E4a's features are what F4's
          cause lacked. Whether the fit holds e1f1 is `UNKNOWN - verify`.
+         *Read 2026-11-05 (`qe-ABC-301-miss` `…d065fee3`): it does not. The one fit plays e1e5 at depth 9 (the dated block
+         below the bars table).*
      - **Open, the owner's, and not decided here:**
        1. **The d6 amendment:** the margin-aware form, every relation bounded at once from the first fit, with no
           refit step (`arch-ABC-239-f3f4`'s dated line). Without his word the second pull runs F3 as written above.
@@ -831,6 +839,42 @@ moves any value. No bar moves.***
 - **When this applies:** as the line above: on an emission that moves any value. If the pull does not merge, K0 stands,
   re-pointed. The PR table lists the seven as retired, citing this line.
 
+*Dated 2026-11-05 (`arch-ABC-301-miss`, records only, at `main` `701ef5bd`; QE `qe-ABC-301-miss` `…d065fee3`, `…77e088f7`,
+`…066fadea`; the engineer's `se-ABC-301-fit` `…04dc7cd4`, `…358b29b1`, `…12103827`; the Orchestrator's `…aa971f0b`; this hop's
+`…5941f727`, `…0c4be1f9`, `…e5a5ac0c`, `…2b3440cf`): **the second pull reads NOT MET under F4. No bar moves, and nothing is
+re-fitted.***
+- **The miss.** `zugzwang.001` plays e1e5 at depth 9 on the one fit's emission `dd88560f` (`src/evaluate-params.ts` sha256
+  `8ca6744f…`): −434, 70 212 nodes, on the row, on QE's driver, and by UCI from `src/` and a fresh `dist/`. The base
+  `b297ab89` plays e1f1, −392, 62 290 nodes on the same harness. The other six zugzwang rows are green.
+- **No defect.** The gate on the emitted file: 1 532 990 gated, 0 misses. B-T3: byte-identical, re-run by QE. QE read the
+  tool, the tracer, the emitter, a stale build and a wrong tree as causes, and none is one. So F4 fires as written. There
+  is no re-pin, no deeper depth and no refit.
+- **The fit itself held, and F3 did not fire.** Feasible, 3 of 26 rows active, 26 of 26 relation rows green as inequalities
+  (seven of them behind a test row red on a pin or a premise; QE ruled each). B-T1 0 misses, B-T2 **0.9872 ×**. d6's
+  amendment did what it was adopted for, and it stands for every later pull.
+- **Not read, and not a pass:** B-T6, B-T7 and B-T8, `G2`, the endgame `G2` and `ADR-0061`'s audit. QE's record-only rows
+  (mate floor 0, `G1` 55 / 58) are no pass of B-T5. **So no fitted table has yet played a graded game.** B-T8's
+  approval was for this pull. Its about 5 h went unspent, and a later attempt asks again.
+- **Why e1e5 stays ahead: `UNKNOWN - verify`.** No attribution was run. The engineer's single reads have the candidate at
+  e1f1 from depth 10, the base from depth 9 and the first pull's candidate from 12. That is no case for a deeper row. It
+  is no evidence that E4a narrowed the gap either: the data, the tool, the free set and `main`'s search (`ABC-283`) all
+  differ between the pulls.
+- **What stands on `main`:** E1's table, sha256 `e74ff3e9…`. Nothing retires and nothing re-pins: not K0's seven rows
+  (re-pointed by `ABC-304`), not the two "every half 0" rows, not the rows that were to retire at the second pull, and not
+  `FROZEN.k0`. Those lines apply only to a later emission that moves a value.
+- **What does not reach `main`:** `dd88560f`, and so neither tip that descends from it (`QE-301-g`). `grugops/ABC-301` stays as
+  a ref, because notes cite the commit.
+- **The tool commits (`…2b3440cf`):** F6 and `ADR-0070` F5 speak of the tuned set, so they do not bar tool fixes. `ABC-280`
+  is the precedent. Whether they land follows the owner's answer. If they do, it is a merge of `b297ab89`, never of a tip,
+  after the N8-LANE read (`QE-301-h`).
+- **Attribution (`…e5a5ac0c`):** it may run, now the pull is closed, under a sealed PREREG. It may feed the record and the
+  owner's choice. It may feed no value, bound, relation, free set, data choice, λ or configuration of a later fit, and
+  not which term is built next.
+- **A later attempt.** "A new data set or free set" is F6's sentence and `ABC-301`'s B-T7 line. F4 has no such sentence, and
+  the second pull took it by ruling. So a third attempt needs the owner's new ruling. d6's "one fit, no refit" holds within
+  any attempt, and it would not be relaxed. `…e5a5ac0c` gives his options and the four tests such a ruling would carry.
+  **Until he answers, no fit is taken.**
+
 ## What would falsify this
 
 | # | clause | what would falsify it | if it fires |
@@ -838,7 +882,7 @@ moves any value. No bar moves.***
 | **F1** | 4, 5: the traced model is the engine | an identity-gate miss | a defect, fixed before any fit is read |
 | **F2** | 1–3, 9: the data carries the signal | B-T2 ≥ 1.000 × | NOT MET at the data stage: no play read. A re-open needs a changed data set, pre-registered |
 | **F3** | 6: the bounds keep play sane | an `src/evaluate*` relation test red on the emitted set | that relation becomes a bound, one refit. A second red: NOT MET. *Dated 2026-11-04 (`arch-second-pull-1104`; the d6 amendment, `…dda43b71` item 1): from the second pull on, F3 reads: every relation row is a bound from the first fit, with ruling (b)'s margin, in one fit with no refit. A relation red on the emitted set is a defect, as F1: it is fixed and the same procedure re-runs on the fixed tool. An infeasible bound set is a STOP to Architect/Design. The disposition before this line is the first pull's, history* |
-| **F4** | play safety | B-T5 | a defect check first. If real: NOT MET. Never a re-pin. `ADR-0061`'s margins are re-read if the audit fires (`ADR-0064` F5's rule) |
+| **F4** | play safety | B-T5 | a defect check first. If real: NOT MET. Never a re-pin. `ADR-0061`'s margins are re-read if the audit fires (`ADR-0064` F5's rule). *Fired 2026-11-04 on the first pull (`26d06118`), and 2026-11-05 on the second (`dd88560f`, QE `…d065fee3`), both on `zugzwang.001`, each real, no defect* |
 | **F5** | `NFR-005` | a `G6` run below depth 6 | NOT MET. There is no cost cut to take on a constants-only diff |
 | **F6** | 11, the strength premise | C2′ < 50.0, an S′ collapse, or a red Levels lane | NOT MET, not re-played. **No set is ever re-fitted on play results**, and the configuration and λ are never chosen on play. A new attempt is a new data set or free set with a new pre-registration |
 | **F7** | 7: reproducibility | B-T3 not byte-identical | a defect |
@@ -1120,6 +1164,9 @@ below).
     and B-T8 answer.
   - **Superseded:** the line above, "`ADR-0070` ships E4a's rule values on their own read", and its "holds
     `PASSED_UNSTOPPABLE` as a rule" where that meant the value 400.
+- *Dated 2026-11-05 (`arch-ABC-301-miss`; QE `…d065fee3`):* **the second pull closed NOT MET on F4, so item 5's "one read
+  judges both" was never reached.** No read of E2 or of E4a's values took place. The order after it is the owner's answer
+  (`…e5a5ac0c`), and its effect on `EPIC-011` is `…2b3440cf`.
 
 ## Rollback
 
