@@ -1,3 +1,4 @@
+_Updated: 2026-11-05T19:18:21Z — qe-ABC-307-a9 dispatched on the owner's word; A9 re-read waits on the slot gate._
 _Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — qe-ABC-307 STOP at A9: all else holds, both graded reads VOID, no verdict (branch b13ab230, kept unmerged). Read 2 stays void. New read on …b9038a14's rule waits on an owner-held window (~10 min). R-CEN-1 MEDIUM. Running: nothing._
 _Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — `bapm-ABC-291-probe-lines` merged: **ABC-291 Ready**, DoR 10/10, M. Running: qe-ABC-307._
 _Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — **ABC-307 built** (797bb1a5): counts as the page, no STOP → In Review, `qe-ABC-307`. Running: qe-ABC-307, bapm-ABC-291-probe-lines._
