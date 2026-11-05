@@ -750,6 +750,10 @@ Orchestrator's `…5ec6c124` 5 and `…0edae6fd` 1; `arch-bundle-1` released the
 - **The landing.** § Consequences' 2 550–2 800, with 3 000 at the optimistic edge, assumed E2 and terms fitted by it. It now stands
   lower by an amount nobody has read (`…2b3440cf`). No target moves; the targets stay his.
 
+*Dated 2026-11-05 (`arch-ABC-291`, records only at `main` `148fd329`): row E4 (E4b).* **`ADR-0075` is PROPOSED,** form (b), and acceptance is the owner's. Its definitions, rule and values
+are fixed before any row is read, and its probe is written and not run. Row E4's +20–60 stays an estimate. d11 (d), "no second set of values after a miss", narrows C2′'s "a changed form may come back" for this term
+only, and only on his acceptance. It also sets the pattern `ABC-292`, `ABC-290` and `ABC-293` copy. **No bar moves.**
+
 ### D3. Is 3 000 reachable without a neural network?
 
 - **For a classical engine, yes, in principle.** Stockfish 11, the last hand-crafted Stockfish, reads ≈ 3 430 CCRL
