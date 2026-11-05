@@ -1,0 +1,5 @@
+passer-deep exit 0 bytes 7495
+see-deep exit 0 bytes 12344
+transposition-search-deep exit 0 bytes 8382
+transposition-engine-deep exit 0 bytes 5434
+done

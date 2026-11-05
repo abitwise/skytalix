@@ -1,0 +1,19 @@
+passed	2	ABC-271 — QE's frozen fixtures, copied unchanged (PREREG qe-ABC-271-freeze …67b5eeac) 44 seam fixtures (U, KD, FP) and 12 mirror positions; K0's seven counts
+passed	1315	ABC-271 K0 — node identity with main: the seven counts, exact [deep, SEARCH_DEEP=1] kiwipete_chooseMove_d8 = 766275 [deep, SEARCH_DEEP=1]
+passed	2591	ABC-271 K0 — node identity with main: the seven counts, exact [deep, SEARCH_DEEP=1] kiwipete_chooseMove_d9 = 1725150 [deep, SEARCH_DEEP=1]
+passed	147	ABC-271 K0 — node identity with main: the seven counts, exact [deep, SEARCH_DEEP=1] pos6_chooseMove_d8 = 87475 [deep, SEARCH_DEEP=1]
+passed	425	ABC-271 K0 — node identity with main: the seven counts, exact [deep, SEARCH_DEEP=1] pos6_chooseMove_d9 = 253724 [deep, SEARCH_DEEP=1]
+passed	887	ABC-271 K0 — node identity with main: the seven counts, exact [deep, SEARCH_DEEP=1] pos6_chooseMove_d10 = 533916 [deep, SEARCH_DEEP=1]
+passed	942	ABC-271 K0 — node identity with main: the seven counts, exact [deep, SEARCH_DEEP=1] kiwipete_search_d8 = 605117 [deep, SEARCH_DEEP=1]
+passed	671	ABC-271 K0 — node identity with main: the seven counts, exact [deep, SEARCH_DEEP=1] pos6_search_d8 = 406787 [deep, SEARCH_DEEP=1]
+passed	4	ABC-279 A3 (a) — bounded drift against the doors, depth 5, the 190 [deep, SEARCH_DEEP=1] the corpus is the 190
+passed	10615	ABC-279 A3 (a) — bounded drift against the doors, depth 5, the 190 [deep, SEARCH_DEEP=1] search() against searchWithoutSeePruning at depth 5: >= 93% within 25 cp, none beyond 144, 0 mate sign changes [deep, SEARCH_DEEP=1]
+passed	8980	ABC-279 A3 (a) — bounded drift against the doors, depth 5, the 190 [deep, SEARCH_DEEP=1] chooseMove against chooseMoveWithoutSeePruning deepened to 5: >= 93% within 25 cp, none beyond 144, 0 mate sign changes [deep, SEARCH_DEEP=1]
+passed	1477	ABC-279 A3 (b) — the same-depth mate floor on the 287 [deep, SEARCH_DEEP=1] every mate searchWithoutSeePruning scores at depth 5, search() scores as a mate of the same sign at depth 5 [deep, SEARCH_DEEP=1]
+passed	2080	ABC-279 A4 (a) — depth 8 on kiwipete and position-6, nodes <= 0.78x the door's in both recursions [deep, SEARCH_DEEP=1] kiwipete: search() at depth 8 [deep, SEARCH_DEEP=1]
+passed	2936	ABC-279 A4 (a) — depth 8 on kiwipete and position-6, nodes <= 0.78x the door's in both recursions [deep, SEARCH_DEEP=1] kiwipete: chooseMove deepened to 8 on a frozen clock [deep, SEARCH_DEEP=1]
+passed	2848	ABC-279 A4 (a) — depth 8 on kiwipete and position-6, nodes <= 0.78x the door's in both recursions [deep, SEARCH_DEEP=1] position-6: search() at depth 8 [deep, SEARCH_DEEP=1]
+passed	705	ABC-279 A4 (a) — depth 8 on kiwipete and position-6, nodes <= 0.78x the door's in both recursions [deep, SEARCH_DEEP=1] position-6: chooseMove deepened to 8 on a frozen clock [deep, SEARCH_DEEP=1]
+passed	29471	ABC-279 A4 (b) — the mean completed depth at 47 000 nodes on the 190 is >= the door's + 0.55 ply [deep, SEARCH_DEEP=1] chooseMove against chooseMoveWithoutSeePruning, maxNodes 47 000, frozen clock [deep, SEARCH_DEEP=1]
+passed	0	A7 — the table holds a fixed 4 MiB, whatever the search stays inside NFR-009's 16 MiB with the key array, the pawn memo and the ordering scratch
+passed	0	A7 — the table holds a fixed 4 MiB, whatever the search stays inside NFR-009's 16 MiB with the key array, the pawn memo and the ordering scratch

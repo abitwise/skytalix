@@ -1,0 +1,59 @@
+
+ RUN  v4.1.12 <repo>
+
+stdout | src/evaluate.passer.test.ts > ABC-271 K0 — node identity with main: the seven counts, exact [deep, SEARCH_DEEP=1] > kiwipete_chooseMove_d8 = 766275 [deep, SEARCH_DEEP=1]
+ABC-271 K0 kiwipete_chooseMove_d8: 766275
+
+ ✓ src/evaluate.passer.test.ts > ABC-271 — the E4a terms are data: four exports, every half 0 (ADR-0070 decision 1) > PASSED_KING_ENEMY, PASSED_KING_OWN, PASSED_FREE: by own rank in PASSED's shape, every half 0 2ms
+ ✓ src/evaluate.passer.test.ts > ABC-271 — the E4a terms are data: four exports, every half 0 (ADR-0070 decision 1) > every E4a middlegame half is 0: the evaluation skips the terms at phase 24, exact only so 0ms
+ ✓ src/evaluate.passer.test.ts > ABC-271 — the E4a terms are data: four exports, every half 0 (ADR-0070 decision 1) > each comment records its rule as the prior and that it was probed and not shipped 0ms
+ ✓ src/evaluate.passer.test.ts > ABC-271 — QE's frozen fixtures, copied unchanged (PREREG qe-ABC-271-freeze …67b5eeac) > src/evaluate.passer-fixtures.json is byte-identical to QE's fixtures.json (sha256) 0ms
+ ✓ src/evaluate.passer.test.ts > ABC-271 — QE's frozen fixtures, copied unchanged (PREREG qe-ABC-271-freeze …67b5eeac) > 44 seam fixtures (U, KD, FP) and 12 mirror positions; K0's seven counts 2ms
+ ✓ src/evaluate.passer.test.ts > ABC-271 K1 (c) — the structure through the seam, per side (QE-271-a), at ADR-0070 d1's probed values > passerTermsForTest returns exactly QE's frozen { kd, free, un } on every fixture, each side apart 3ms
+ ✓ src/evaluate.passer.test.ts > ABC-271 K1 (c) — the structure through the seam, per side (QE-271-a), at ADR-0070 d1's probed values > U is 400 exactly where the square names it at phase 0, never netted (U7-both: 400 each side), else 0 3ms
+ ✓ src/evaluate.passer.test.ts > ABC-271 K1 (c) — the structure through the seam, per side (QE-271-a), at ADR-0070 d1's probed values > each pair's A − B per side is QE's frozen difference: kd by KE[R] / KO[R] per capped step, 0 past the cap; free only where the path is empty 2ms
+ ✓ src/evaluate.passer.test.ts > ABC-271 K1 (c) — the structure through the seam, per side (QE-271-a), at ADR-0070 d1's probed values > at the shipped values (every half 0) every part is 0 on every fixture 2ms
+ ✓ src/evaluate.passer.test.ts > ABC-271 K1 (e) — the memo: a hit returns what a fresh pawnStructure returns, the two passer words included > cold miss, then hit, each equal to the fresh call; the words name exactly QE's frontmost passers 20ms
+ ✓ src/evaluate.passer.test.ts > ABC-271 K1 (e) — the memo: a hit returns what a fresh pawnStructure returns, the two passer words included > KD8's doubled d-pawns record only the front one (d5), not the rear (d3) 0ms
+ ✓ src/evaluate.passer.test.ts > ABC-271 K1 (a) — the mirror, Object.is, 0 mismatches > G3 + TAPER_MIRROR_POSITIONS + QE's 12 passer positions (+ the 44 fixtures), at the shipped values 9ms
+ ✓ src/evaluate.passer.test.ts > ABC-271 K1 (a) — the mirror, Object.is, 0 mismatches > the same corpus with the terms live at the probed values 4ms
+ ✓ src/evaluate.passer.test.ts > ABC-271 K1 (a) — the mirror, Object.is, 0 mismatches > the seam is colour-symmetric: on the mirror, the white and black parts swap 1ms
+ ✓ src/evaluate.passer.test.ts > ABC-271 K1 (b) — value identity: evaluate is Object.is the pre-ticket evaluate on the frozen corpora > G3's 184 in buildCorpus order 1ms
+ ✓ src/evaluate.passer.test.ts > ABC-271 K1 (b) — value identity: evaluate is Object.is the pre-ticket evaluate on the frozen corpora > QE's ABC-269 door corpus (176; the KP rows among them) 1ms
+ ✓ src/evaluate.passer.test.ts > ABC-271 K1 (b) — value identity: evaluate is Object.is the pre-ticket evaluate on the frozen corpora > ABC-270's queen pairs and their mirrors (28) 0ms
+ ✓ src/evaluate.passer.test.ts > ABC-271 K1 (b) — value identity: evaluate is Object.is the pre-ticket evaluate on the frozen corpora > QE's 12 passer positions and 44 fixtures, each with its mirror (112) 10ms
+ ✓ src/evaluate.passer.test.ts > ABC-271 — the source rows (ADR-0070 decisions 2–4) > the king squares come from the walk: no new pass over the pieces 1ms
+ ✓ src/evaluate.passer.test.ts > ABC-271 — the source rows (ADR-0070 decisions 2–4) > the loop runs after the walk when w < D and a passer exists, with no fast path at value 0 0ms
+ ✓ src/evaluate.passer.test.ts > ABC-271 — the source rows (ADR-0070 decisions 2–4) > the seam passerTermsForTest is called from test files only 1ms
+ ✓ src/evaluate.passer.test.ts > ABC-271 K0 — node identity with main: the seven counts, exact [deep, SEARCH_DEEP=1] > kiwipete_chooseMove_d8 = 766275 [deep, SEARCH_DEEP=1] 1316ms
+stdout | src/evaluate.passer.test.ts > ABC-271 K0 — node identity with main: the seven counts, exact [deep, SEARCH_DEEP=1] > kiwipete_chooseMove_d9 = 1725150 [deep, SEARCH_DEEP=1]
+ABC-271 K0 kiwipete_chooseMove_d9: 1725150
+
+ ✓ src/evaluate.passer.test.ts > ABC-271 K0 — node identity with main: the seven counts, exact [deep, SEARCH_DEEP=1] > kiwipete_chooseMove_d9 = 1725150 [deep, SEARCH_DEEP=1] 2592ms
+stdout | src/evaluate.passer.test.ts > ABC-271 K0 — node identity with main: the seven counts, exact [deep, SEARCH_DEEP=1] > pos6_chooseMove_d8 = 87475 [deep, SEARCH_DEEP=1]
+ABC-271 K0 pos6_chooseMove_d8: 87475
+
+ ✓ src/evaluate.passer.test.ts > ABC-271 K0 — node identity with main: the seven counts, exact [deep, SEARCH_DEEP=1] > pos6_chooseMove_d8 = 87475 [deep, SEARCH_DEEP=1] 148ms
+stdout | src/evaluate.passer.test.ts > ABC-271 K0 — node identity with main: the seven counts, exact [deep, SEARCH_DEEP=1] > pos6_chooseMove_d9 = 253724 [deep, SEARCH_DEEP=1]
+ABC-271 K0 pos6_chooseMove_d9: 253724
+
+ ✓ src/evaluate.passer.test.ts > ABC-271 K0 — node identity with main: the seven counts, exact [deep, SEARCH_DEEP=1] > pos6_chooseMove_d9 = 253724 [deep, SEARCH_DEEP=1] 425ms
+stdout | src/evaluate.passer.test.ts > ABC-271 K0 — node identity with main: the seven counts, exact [deep, SEARCH_DEEP=1] > pos6_chooseMove_d10 = 533916 [deep, SEARCH_DEEP=1]
+ABC-271 K0 pos6_chooseMove_d10: 533916
+
+ ✓ src/evaluate.passer.test.ts > ABC-271 K0 — node identity with main: the seven counts, exact [deep, SEARCH_DEEP=1] > pos6_chooseMove_d10 = 533916 [deep, SEARCH_DEEP=1] 888ms
+stdout | src/evaluate.passer.test.ts > ABC-271 K0 — node identity with main: the seven counts, exact [deep, SEARCH_DEEP=1] > kiwipete_search_d8 = 605117 [deep, SEARCH_DEEP=1]
+ABC-271 K0 kiwipete_search_d8: 605117
+
+ ✓ src/evaluate.passer.test.ts > ABC-271 K0 — node identity with main: the seven counts, exact [deep, SEARCH_DEEP=1] > kiwipete_search_d8 = 605117 [deep, SEARCH_DEEP=1] 943ms
+stdout | src/evaluate.passer.test.ts > ABC-271 K0 — node identity with main: the seven counts, exact [deep, SEARCH_DEEP=1] > pos6_search_d8 = 406787 [deep, SEARCH_DEEP=1]
+ABC-271 K0 pos6_search_d8: 406787
+
+ ✓ src/evaluate.passer.test.ts > ABC-271 K0 — node identity with main: the seven counts, exact [deep, SEARCH_DEEP=1] > pos6_search_d8 = 406787 [deep, SEARCH_DEEP=1] 671ms
+
+ Test Files  1 passed (1)
+      Tests  28 passed (28)
+   Start at  00:03:07
+   Duration  7.24s (transform 0ms, setup 0ms, import 112ms, tests 7.05s, environment 0ms)
+
+JSON report written to <scratch>/qe304/passer-deep.json
