@@ -1,3 +1,4 @@
+_Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — `bapm-ABC-291-probe-lines` merged: **ABC-291 Ready**, DoR 10/10, M. Running: qe-ABC-307._
 _Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — **ABC-307 built** (797bb1a5): counts as the page, no STOP → In Review, `qe-ABC-307`. Running: qe-ABC-307, bapm-ABC-291-probe-lines._
 _Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — `arch-ABC-291-probe` merged: work goes on; PR8 1.043 above 1.03 spends d5's cut, K4 on the build is the one re-read; size M. → `bapm-ABC-291-probe-lines`. Running: se-ABC-307, that hop._
 _Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — **ABC-307 DoR 10/10** → In Development, `se-ABC-307`. Forecast lane near 9.596 s with all budgets spent, no rows left: ≥ 9.6 s goes straight to the owner. Running: arch-ABC-291-probe, se-ABC-307._
@@ -1526,7 +1527,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## Ready (WIP 1/8)
+## Ready (WIP 2/8)
+- [ABC-291] E4b pawn structure (ADR-0075 ACCEPTED, in force at merge; DoR 10/10, M, P2). Build after ABC-303, ABC-289, ABC-305. Before K4's PREREG: rule K5's half of F2; date ADR-0075's 640 KiB lines.
 - [ABC-289] Q2 delta pruning (ADR-0074 ACCEPTED; DoR 10/10, S, P3). Reads alone after bundle 1; build starts when ABC-303's merge or failed-attempt is recorded.
 - ~~[ABC-301]~~ → In Development. E2s second pull: one bounded fit on main with E4a's structure; KD/FP freed, U held 0; B-T0–B-T8 (B-T8 two r reads at 0.5 s, ~5 h, owner-approved). Scope 0 preconditions first (after NFR-008 headroom ruling).
 - ~~[ABC-271]~~ → In Development E4a structure only at 0 (ADR-0070 ACCEPTED form (a); DoR 10/10, S, P3). QE freeze first (qe-ABC-271-freeze), then se-ABC-271. No games.
@@ -1539,8 +1541,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## In Analysis (WIP 0/2)
 
 
-## In Design (WIP 1/2)
-- [ABC-291] E4b pawn structure (P2, DoR 9/10). ADR-0075 ACCEPTED, in force at merge; hand values fixed. Probe next, K2 list after it; build after ABC-305.
+## In Design (WIP 0/2)
 
 
 ## Ready for Dev (WIP 0/6)
