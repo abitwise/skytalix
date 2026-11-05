@@ -1,0 +1,260 @@
+2026-11-05T19:49:50Z	1.21	none
+2026-11-05T19:49:53Z	1.28	none
+2026-11-05T19:49:56Z	1.28	none
+2026-11-05T19:49:59Z	1.41	none
+2026-11-05T19:50:02Z	1.46	none
+2026-11-05T19:50:05Z	1.46	none
+2026-11-05T19:50:08Z	1.83	none
+2026-11-05T19:50:11Z	1.83	none
+2026-11-05T19:50:14Z	2.08	none
+2026-11-05T19:50:17Z	2.39	none
+2026-11-05T19:50:20Z	2.39	none
+2026-11-05T19:50:23Z	2.44	none
+2026-11-05T19:50:26Z	2.44	none
+2026-11-05T19:50:30Z	2.49	none
+2026-11-05T19:50:33Z	2.53	none
+2026-11-05T19:50:36Z	2.53	none
+2026-11-05T19:50:39Z	2.65	none
+2026-11-05T19:50:42Z	2.65	none
+2026-11-05T19:50:45Z	2.59	none
+2026-11-05T19:50:48Z	2.47	none
+2026-11-05T19:50:51Z	2.47	none
+2026-11-05T19:50:54Z	2.51	none
+2026-11-05T19:50:57Z	2.71	none
+2026-11-05T19:51:00Z	2.71	none
+2026-11-05T19:51:03Z	2.97	none
+2026-11-05T19:51:06Z	2.97	none
+2026-11-05T19:51:09Z	2.98	none
+2026-11-05T19:51:12Z	3.46	none
+2026-11-05T19:51:15Z	3.46	3680935	Sl	0	16.3	node-MainThread	grugops
+2026-11-05T19:51:15Z	3.46	3680972	Ssl	0	48.9	npm	grugops
+2026-11-05T19:51:15Z	3.46	3681070	Sl	0	110	node-MainThread	grugops
+2026-11-05T19:51:15Z	3.46	3681131	Rl	0	140	node-MainThread	grugops
+2026-11-05T19:51:18Z	3.42	3680935	Sl	3	2.5	node-MainThread	grugops
+2026-11-05T19:51:18Z	3.42	3680972	Ssl	3	6.5	npm	grugops
+2026-11-05T19:51:18Z	3.42	3681070	Sl	3	31.4	node-MainThread	grugops
+2026-11-05T19:51:18Z	3.42	3681131	Sl	3	93.5	node-MainThread	grugops
+2026-11-05T19:51:21Z	3.42	3680935	Sl	6	1.3	node-MainThread	grugops
+2026-11-05T19:51:21Z	3.42	3680972	Ssl	6	3.5	npm	grugops
+2026-11-05T19:51:21Z	3.42	3681070	Sl	6	16.5	node-MainThread	grugops
+2026-11-05T19:51:21Z	3.42	3681131	Sl	6	52.6	node-MainThread	grugops
+2026-11-05T19:51:24Z	3.55	3680935	Sl	9	0.9	node-MainThread	grugops
+2026-11-05T19:51:24Z	3.55	3680972	Ssl	9	2.3	npm	grugops
+2026-11-05T19:51:24Z	3.55	3681070	Sl	9	11.2	node-MainThread	grugops
+2026-11-05T19:51:24Z	3.55	3681131	Sl	9	38.7	node-MainThread	grugops
+2026-11-05T19:51:27Z	3.66	3680935	Sl	12	0.7	node-MainThread	grugops
+2026-11-05T19:51:27Z	3.66	3680972	Ssl	12	1.8	npm	grugops
+2026-11-05T19:51:27Z	3.66	3681070	Sl	12	8.5	node-MainThread	grugops
+2026-11-05T19:51:27Z	3.66	3681131	Sl	12	31.6	node-MainThread	grugops
+2026-11-05T19:51:30Z	3.66	3680935	Sl	15	0.5	node-MainThread	grugops
+2026-11-05T19:51:30Z	3.66	3680972	Ssl	15	1.4	npm	grugops
+2026-11-05T19:51:30Z	3.66	3681070	Sl	15	6.8	node-MainThread	grugops
+2026-11-05T19:51:30Z	3.66	3681131	Sl	15	27.5	node-MainThread	grugops
+2026-11-05T19:51:33Z	3.69	3680935	Sl	18	0.4	node-MainThread	grugops
+2026-11-05T19:51:33Z	3.69	3680972	Ssl	18	1.2	npm	grugops
+2026-11-05T19:51:33Z	3.69	3681070	Sl	18	5.7	node-MainThread	grugops
+2026-11-05T19:51:33Z	3.69	3681131	Rl	18	24.6	node-MainThread	grugops
+2026-11-05T19:51:36Z	3.69	3680935	Sl	21	0.4	node-MainThread	grugops
+2026-11-05T19:51:36Z	3.69	3680972	Ssl	21	1.0	npm	grugops
+2026-11-05T19:51:36Z	3.69	3681070	Sl	21	4.9	node-MainThread	grugops
+2026-11-05T19:51:36Z	3.69	3681131	Sl	21	22.7	node-MainThread	grugops
+2026-11-05T19:51:39Z	3.72	3680935	Sl	24	0.3	node-MainThread	grugops
+2026-11-05T19:51:39Z	3.72	3680972	Ssl	24	0.9	npm	grugops
+2026-11-05T19:51:39Z	3.72	3681070	Sl	24	4.3	node-MainThread	grugops
+2026-11-05T19:51:39Z	3.72	3681131	Sl	24	21.3	node-MainThread	grugops
+2026-11-05T19:51:42Z	3.66	3680935	Sl	27	0.3	node-MainThread	grugops
+2026-11-05T19:51:42Z	3.66	3680972	Ssl	27	0.8	npm	grugops
+2026-11-05T19:51:42Z	3.66	3681070	Sl	27	3.9	node-MainThread	grugops
+2026-11-05T19:51:42Z	3.66	3681131	Sl	27	20.2	node-MainThread	grugops
+2026-11-05T19:51:45Z	3.66	3680935	Sl	31	0.2	node-MainThread	grugops
+2026-11-05T19:51:45Z	3.66	3680972	Ssl	30	0.7	npm	grugops
+2026-11-05T19:51:45Z	3.66	3681070	Sl	30	3.5	node-MainThread	grugops
+2026-11-05T19:51:45Z	3.66	3681131	Sl	30	19.4	node-MainThread	grugops
+2026-11-05T19:51:48Z	3.53	3680935	Sl	34	0.2	node-MainThread	grugops
+2026-11-05T19:51:48Z	3.53	3680972	Ssl	33	0.6	npm	grugops
+2026-11-05T19:51:48Z	3.53	3681070	Sl	33	3.2	node-MainThread	grugops
+2026-11-05T19:51:48Z	3.53	3681131	Sl	33	18.3	node-MainThread	grugops
+2026-11-05T19:51:51Z	3.53	3680935	Sl	37	0.2	node-MainThread	grugops
+2026-11-05T19:51:51Z	3.53	3680972	Ssl	37	0.6	npm	grugops
+2026-11-05T19:51:51Z	3.53	3681070	Sl	36	2.9	node-MainThread	grugops
+2026-11-05T19:51:51Z	3.53	3681131	Sl	36	17.4	node-MainThread	grugops
+2026-11-05T19:51:54Z	3.64	3680935	Sl	40	0.2	node-MainThread	grugops
+2026-11-05T19:51:54Z	3.64	3680972	Ssl	40	0.5	npm	grugops
+2026-11-05T19:51:54Z	3.64	3681070	Sl	39	2.7	node-MainThread	grugops
+2026-11-05T19:51:54Z	3.64	3681131	Sl	39	16.5	node-MainThread	grugops
+2026-11-05T19:51:58Z	3.67	3680935	Sl	43	0.2	node-MainThread	grugops
+2026-11-05T19:51:58Z	3.67	3680972	Ssl	43	0.5	npm	grugops
+2026-11-05T19:51:58Z	3.67	3681070	Sl	42	2.5	node-MainThread	grugops
+2026-11-05T19:51:58Z	3.67	3681131	Sl	42	15.9	node-MainThread	grugops
+2026-11-05T19:52:01Z	3.67	3680935	Sl	46	0.1	node-MainThread	grugops
+2026-11-05T19:52:01Z	3.67	3680972	Ssl	46	0.4	npm	grugops
+2026-11-05T19:52:01Z	3.67	3681070	Sl	45	2.3	node-MainThread	grugops
+2026-11-05T19:52:01Z	3.67	3681131	Sl	45	15.3	node-MainThread	grugops
+2026-11-05T19:52:04Z	3.70	3680935	Sl	49	0.1	node-MainThread	grugops
+2026-11-05T19:52:04Z	3.70	3680972	Ssl	49	0.4	npm	grugops
+2026-11-05T19:52:04Z	3.70	3681070	Sl	49	2.2	node-MainThread	grugops
+2026-11-05T19:52:04Z	3.70	3681131	Rl	48	14.7	node-MainThread	grugops
+2026-11-05T19:52:07Z	3.70	3680935	Sl	52	0.1	node-MainThread	grugops
+2026-11-05T19:52:07Z	3.70	3680972	Ssl	52	0.4	npm	grugops
+2026-11-05T19:52:07Z	3.70	3681070	Sl	52	2.1	node-MainThread	grugops
+2026-11-05T19:52:07Z	3.70	3681131	Sl	51	15.2	node-MainThread	grugops
+2026-11-05T19:52:10Z	3.72	3680935	Sl	55	0.1	node-MainThread	grugops
+2026-11-05T19:52:10Z	3.72	3680972	Ssl	55	0.4	npm	grugops
+2026-11-05T19:52:10Z	3.72	3681070	Sl	55	1.9	node-MainThread	grugops
+2026-11-05T19:52:10Z	3.72	3681131	Sl	54	14.8	node-MainThread	grugops
+2026-11-05T19:52:13Z	4.31	3680935	Sl	58	0.1	node-MainThread	grugops
+2026-11-05T19:52:13Z	4.31	3680972	Ssl	58	0.3	npm	grugops
+2026-11-05T19:52:13Z	4.31	3681070	Sl	58	1.9	node-MainThread	grugops
+2026-11-05T19:52:13Z	4.31	3681131	Rl	57	18.7	node-MainThread	grugops
+2026-11-05T19:52:16Z	4.31	3680935	Sl	61	0.1	node-MainThread	grugops
+2026-11-05T19:52:16Z	4.31	3680972	Ssl	61	0.3	npm	grugops
+2026-11-05T19:52:16Z	4.31	3681070	Sl	61	1.8	node-MainThread	grugops
+2026-11-05T19:52:16Z	4.31	3681131	Sl	60	20.5	node-MainThread	grugops
+2026-11-05T19:52:19Z	4.20	3680935	Sl	64	0.1	node-MainThread	grugops
+2026-11-05T19:52:19Z	4.20	3680972	Ssl	64	0.3	npm	grugops
+2026-11-05T19:52:19Z	4.20	3681070	Sl	64	1.7	node-MainThread	grugops
+2026-11-05T19:52:19Z	4.20	3681131	Sl	63	19.8	node-MainThread	grugops
+2026-11-05T19:52:22Z	4.35	3680935	Sl	67	0.1	node-MainThread	grugops
+2026-11-05T19:52:22Z	4.35	3680972	Ssl	67	0.3	npm	grugops
+2026-11-05T19:52:22Z	4.35	3681070	Sl	67	1.6	node-MainThread	grugops
+2026-11-05T19:52:22Z	4.35	3681131	Sl	67	19.1	node-MainThread	grugops
+2026-11-05T19:52:25Z	4.35	3680935	Sl	70	0.1	node-MainThread	grugops
+2026-11-05T19:52:25Z	4.35	3680972	Ssl	70	0.3	npm	grugops
+2026-11-05T19:52:25Z	4.35	3681070	Sl	70	1.5	node-MainThread	grugops
+2026-11-05T19:52:25Z	4.35	3681131	Sl	70	18.4	node-MainThread	grugops
+2026-11-05T19:52:28Z	4.56	3680935	Sl	73	0.1	node-MainThread	grugops
+2026-11-05T19:52:28Z	4.56	3680972	Ssl	73	0.3	npm	grugops
+2026-11-05T19:52:28Z	4.56	3681070	Sl	73	1.5	node-MainThread	grugops
+2026-11-05T19:52:28Z	4.56	3681131	Sl	73	17.8	node-MainThread	grugops
+2026-11-05T19:52:31Z	4.56	3680935	Sl	76	0.1	node-MainThread	grugops
+2026-11-05T19:52:31Z	4.56	3680972	Ssl	76	0.3	npm	grugops
+2026-11-05T19:52:31Z	4.56	3681070	Sl	76	1.4	node-MainThread	grugops
+2026-11-05T19:52:31Z	4.56	3681131	Rl	76	17.3	node-MainThread	grugops
+2026-11-05T19:52:34Z	4.51	3680935	Sl	79	0.1	node-MainThread	grugops
+2026-11-05T19:52:34Z	4.51	3680972	Ssl	79	0.2	npm	grugops
+2026-11-05T19:52:34Z	4.51	3681070	Sl	79	1.3	node-MainThread	grugops
+2026-11-05T19:52:34Z	4.51	3681131	Sl	79	16.8	node-MainThread	grugops
+2026-11-05T19:52:37Z	4.47	3680935	Sl	82	0.1	node-MainThread	grugops
+2026-11-05T19:52:37Z	4.47	3680972	Ssl	82	0.2	npm	grugops
+2026-11-05T19:52:37Z	4.47	3681070	Sl	82	1.3	node-MainThread	grugops
+2026-11-05T19:52:37Z	4.47	3681131	Sl	82	16.3	node-MainThread	grugops
+2026-11-05T19:52:40Z	4.47	3680935	Sl	85	0.1	node-MainThread	grugops
+2026-11-05T19:52:40Z	4.47	3680972	Ssl	85	0.2	npm	grugops
+2026-11-05T19:52:40Z	4.47	3681070	Sl	85	1.3	node-MainThread	grugops
+2026-11-05T19:52:40Z	4.47	3681131	Sl	85	15.9	node-MainThread	grugops
+2026-11-05T19:52:43Z	4.67	3680935	Sl	88	0.1	node-MainThread	grugops
+2026-11-05T19:52:43Z	4.67	3680972	Ssl	88	0.2	npm	grugops
+2026-11-05T19:52:43Z	4.67	3681070	Sl	88	1.2	node-MainThread	grugops
+2026-11-05T19:52:43Z	4.67	3681131	Sl	88	15.5	node-MainThread	grugops
+2026-11-05T19:52:46Z	4.67	3680935	Sl	91	0.0	node-MainThread	grugops
+2026-11-05T19:52:46Z	4.67	3680972	Ssl	91	0.2	npm	grugops
+2026-11-05T19:52:46Z	4.67	3681070	Sl	91	1.2	node-MainThread	grugops
+2026-11-05T19:52:46Z	4.67	3681131	Sl	91	15.1	node-MainThread	grugops
+2026-11-05T19:52:49Z	4.86	3680935	Sl	94	0.0	node-MainThread	grugops
+2026-11-05T19:52:49Z	4.86	3680972	Ssl	94	0.2	npm	grugops
+2026-11-05T19:52:49Z	4.86	3681070	Sl	94	1.1	node-MainThread	grugops
+2026-11-05T19:52:49Z	4.86	3681131	Sl	94	14.9	node-MainThread	grugops
+2026-11-05T19:52:52Z	4.71	3680935	Sl	97	0.0	node-MainThread	grugops
+2026-11-05T19:52:52Z	4.71	3680972	Ssl	97	0.2	npm	grugops
+2026-11-05T19:52:52Z	4.71	3681070	Sl	97	1.9	node-MainThread	grugops
+2026-11-05T19:52:52Z	4.71	3692393	Rl	2	37.2	node-MainThread	grugops
+2026-11-05T19:52:55Z	4.71	3680935	Sl	101	0.0	node-MainThread	grugops
+2026-11-05T19:52:55Z	4.71	3680972	Ssl	100	0.2	npm	grugops
+2026-11-05T19:52:55Z	4.71	3681070	Sl	100	1.9	node-MainThread	grugops
+2026-11-05T19:52:55Z	4.71	3692393	Sl	5	62.5	node-MainThread	grugops
+2026-11-05T19:52:58Z	4.65	3680935	Sl	104	0.0	node-MainThread	grugops
+2026-11-05T19:52:58Z	4.65	3680972	Ssl	103	0.2	npm	grugops
+2026-11-05T19:52:58Z	4.65	3681070	Sl	103	2.0	node-MainThread	grugops
+2026-11-05T19:52:58Z	4.65	3692393	Sl	8	44.1	node-MainThread	grugops
+2026-11-05T19:53:01Z	4.65	3680935	Sl	107	0.0	node-MainThread	grugops
+2026-11-05T19:53:01Z	4.65	3680972	Ssl	107	0.2	npm	grugops
+2026-11-05T19:53:01Z	4.65	3681070	Sl	106	2.0	node-MainThread	grugops
+2026-11-05T19:53:01Z	4.65	3692393	Rl	11	34.3	node-MainThread	grugops
+2026-11-05T19:53:04Z	4.68	3680935	Sl	110	0.0	node-MainThread	grugops
+2026-11-05T19:53:04Z	4.68	3680972	Ssl	110	0.2	npm	grugops
+2026-11-05T19:53:04Z	4.68	3681070	Sl	109	2.0	node-MainThread	grugops
+2026-11-05T19:53:04Z	4.68	3692393	Sl	14	28.8	node-MainThread	grugops
+2026-11-05T19:53:08Z	4.63	3680935	Sl	113	0.0	node-MainThread	grugops
+2026-11-05T19:53:08Z	4.63	3680972	Ssl	113	0.2	npm	grugops
+2026-11-05T19:53:08Z	4.63	3681070	Sl	112	1.9	node-MainThread	grugops
+2026-11-05T19:53:08Z	4.63	3692393	Sl	17	25.5	node-MainThread	grugops
+2026-11-05T19:53:11Z	4.63	3680935	Sl	116	0.0	node-MainThread	grugops
+2026-11-05T19:53:11Z	4.63	3680972	Ssl	116	0.2	npm	grugops
+2026-11-05T19:53:11Z	4.63	3681070	Sl	116	1.9	node-MainThread	grugops
+2026-11-05T19:53:11Z	4.63	3692393	Sl	20	23.5	node-MainThread	grugops
+2026-11-05T19:53:14Z	4.50	3680935	Sl	119	0.0	node-MainThread	grugops
+2026-11-05T19:53:14Z	4.50	3680972	Ssl	119	0.2	npm	grugops
+2026-11-05T19:53:14Z	4.50	3681070	Sl	119	1.8	node-MainThread	grugops
+2026-11-05T19:53:14Z	4.50	3692393	Rl	23	24.8	node-MainThread	grugops
+2026-11-05T19:53:17Z	4.70	3680935	Sl	122	0.0	node-MainThread	grugops
+2026-11-05T19:53:17Z	4.70	3680972	Ssl	122	0.2	npm	grugops
+2026-11-05T19:53:17Z	4.70	3681070	Sl	122	2.6	node-MainThread	grugops
+2026-11-05T19:53:17Z	4.70	3696981	Rl	0	142	node-MainThread	grugops
+2026-11-05T19:53:20Z	4.70	3680935	Sl	125	0.0	node-MainThread	grugops
+2026-11-05T19:53:20Z	4.70	3680972	Ssl	125	0.2	npm	grugops
+2026-11-05T19:53:20Z	4.70	3681070	Sl	125	2.6	node-MainThread	grugops
+2026-11-05T19:53:20Z	4.70	3696981	Sl	3	16.7	node-MainThread	grugops
+2026-11-05T19:53:23Z	4.48	3680935	Sl	128	0.0	node-MainThread	grugops
+2026-11-05T19:53:23Z	4.48	3680972	Ssl	128	0.2	npm	grugops
+2026-11-05T19:53:23Z	4.48	3681070	Sl	128	2.5	node-MainThread	grugops
+2026-11-05T19:53:23Z	4.48	3696981	Sl	6	8.7	node-MainThread	grugops
+2026-11-05T19:53:26Z	4.48	3680935	Sl	131	0.0	node-MainThread	grugops
+2026-11-05T19:53:26Z	4.48	3680972	Ssl	131	0.1	npm	grugops
+2026-11-05T19:53:26Z	4.48	3681070	Sl	131	2.4	node-MainThread	grugops
+2026-11-05T19:53:26Z	4.48	3696981	Sl	9	6.1	node-MainThread	grugops
+2026-11-05T19:53:29Z	4.36	3680935	Sl	134	0.0	node-MainThread	grugops
+2026-11-05T19:53:29Z	4.36	3680972	Ssl	134	0.1	npm	grugops
+2026-11-05T19:53:29Z	4.36	3681070	Sl	134	2.4	node-MainThread	grugops
+2026-11-05T19:53:29Z	4.36	3696981	Sl	12	4.6	node-MainThread	grugops
+2026-11-05T19:53:32Z	4.41	3680935	Sl	137	0.0	node-MainThread	grugops
+2026-11-05T19:53:32Z	4.41	3680972	Ssl	137	0.1	npm	grugops
+2026-11-05T19:53:32Z	4.41	3681070	Sl	137	2.5	node-MainThread	grugops
+2026-11-05T19:53:32Z	4.41	3701710	Rl	0	140	node-MainThread	grugops
+2026-11-05T19:53:35Z	4.41	3680935	Sl	140	0.0	node-MainThread	grugops
+2026-11-05T19:53:35Z	4.41	3680972	Ssl	140	0.1	npm	grugops
+2026-11-05T19:53:35Z	4.41	3681070	Sl	140	2.7	node-MainThread	grugops
+2026-11-05T19:53:35Z	4.41	3701710	Rl	3	115	node-MainThread	grugops
+2026-11-05T19:53:38Z	4.78	3680935	Sl	143	0.0	node-MainThread	grugops
+2026-11-05T19:53:38Z	4.78	3680972	Ssl	143	0.1	npm	grugops
+2026-11-05T19:53:38Z	4.78	3681070	Sl	143	2.6	node-MainThread	grugops
+2026-11-05T19:53:38Z	4.78	3701710	Rl	6	119	node-MainThread	grugops
+2026-11-05T19:53:41Z	4.78	3680935	Sl	146	0.0	node-MainThread	grugops
+2026-11-05T19:53:41Z	4.78	3680972	Ssl	146	0.1	npm	grugops
+2026-11-05T19:53:41Z	4.78	3681070	Sl	146	2.6	node-MainThread	grugops
+2026-11-05T19:53:41Z	4.78	3701710	Rl	9	116	node-MainThread	grugops
+2026-11-05T19:53:44Z	5.04	3680935	Sl	149	0.0	node-MainThread	grugops
+2026-11-05T19:53:44Z	5.04	3680972	Ssl	149	0.1	npm	grugops
+2026-11-05T19:53:44Z	5.04	3681070	Sl	149	2.5	node-MainThread	grugops
+2026-11-05T19:53:44Z	5.04	3701710	Rl	12	114	node-MainThread	grugops
+2026-11-05T19:53:47Z	5.04	3680935	Sl	152	0.0	node-MainThread	grugops
+2026-11-05T19:53:47Z	5.04	3680972	Ssl	152	0.1	npm	grugops
+2026-11-05T19:53:47Z	5.04	3681070	Sl	152	2.6	node-MainThread	grugops
+2026-11-05T19:53:47Z	5.04	3703277	Sl	0	46.1	node-MainThread	grugops
+2026-11-05T19:53:50Z	5.04	3680935	Sl	155	0.0	node-MainThread	grugops
+2026-11-05T19:53:50Z	5.04	3680972	Ssl	155	0.1	npm	grugops
+2026-11-05T19:53:50Z	5.04	3681070	Sl	155	2.6	node-MainThread	grugops
+2026-11-05T19:53:50Z	5.04	3703277	Sl	3	7.5	node-MainThread	grugops
+2026-11-05T19:53:53Z	4.79	3680935	Sl	158	0.0	node-MainThread	grugops
+2026-11-05T19:53:53Z	4.79	3680972	Ssl	158	0.1	npm	grugops
+2026-11-05T19:53:53Z	4.79	3681070	Sl	158	2.5	node-MainThread	grugops
+2026-11-05T19:53:53Z	4.79	3703277	Sl	6	4.4	node-MainThread	grugops
+2026-11-05T19:53:56Z	4.79	3680935	Sl	161	0.0	node-MainThread	grugops
+2026-11-05T19:53:56Z	4.79	3680972	Ssl	161	0.1	npm	grugops
+2026-11-05T19:53:56Z	4.79	3681070	Sl	161	2.5	node-MainThread	grugops
+2026-11-05T19:53:56Z	4.79	3703277	Sl	9	3.4	node-MainThread	grugops
+2026-11-05T19:53:59Z	4.65	3680935	Sl	164	0.0	node-MainThread	grugops
+2026-11-05T19:53:59Z	4.65	3680972	Ssl	164	0.1	npm	grugops
+2026-11-05T19:53:59Z	4.65	3681070	Sl	164	2.4	node-MainThread	grugops
+2026-11-05T19:53:59Z	4.65	3703277	Sl	12	2.8	node-MainThread	grugops
+2026-11-05T19:54:02Z	4.68	3680935	Sl	168	0.0	node-MainThread	grugops
+2026-11-05T19:54:02Z	4.68	3680972	Ssl	167	0.1	npm	grugops
+2026-11-05T19:54:02Z	4.68	3681070	Sl	167	2.4	node-MainThread	grugops
+2026-11-05T19:54:02Z	4.68	3703277	Sl	15	2.5	node-MainThread	grugops
+2026-11-05T19:54:05Z	4.68	3680935	Sl	171	0.0	node-MainThread	grugops
+2026-11-05T19:54:05Z	4.68	3680972	Ssl	170	0.1	npm	grugops
+2026-11-05T19:54:05Z	4.68	3681070	Sl	170	2.4	node-MainThread	grugops
+2026-11-05T19:54:05Z	4.68	3703277	Sl	18	2.4	node-MainThread	grugops
+2026-11-05T19:54:08Z	4.54	3680935	Sl	174	0.0	node-MainThread	grugops
+2026-11-05T19:54:08Z	4.54	3680972	Ssl	174	0.1	npm	grugops
+2026-11-05T19:54:08Z	4.54	3681070	Sl	173	2.3	node-MainThread	grugops
+2026-11-05T19:54:08Z	4.54	3703277	Sl	21	2.2	node-MainThread	grugops
