@@ -49,6 +49,9 @@ Architect/Design (task `arch-owner-answers-1103`, records only, on `grugops/arch
   second pull (`ABC-301`) is NOT MET under F4.** `main` keeps E1's table. The method stays in force, and no bar moves. The
   line is under the bars table. **A third attempt is the owner's word** (`…aa971f0b`), and no fit is taken until he gives
   it. His options are in `…e5a5ac0c`.
+- *Dated 2026-11-05 (`arch-owner-answers-1105`, records only, at `main` `a44aa057`; his word `…b836b85c`, verbatim "1. yes; 2. yes;
+  3. wait"):* **he answered: tuning waits.** No third fit now and no date. The rules are the dated block above § What would
+  falsify this. The method stays in force for any later pull. **No bar moves.**
 
 *Before acceptance:* **PROPOSED 2026-11-03.** Recorded by Architect/Design (task `arch-ABC-239`, on `grugops/arch-ABC-239` from `main`
 `af15cbc9`). **Acceptance is the owner's:** this is a new ADR (`memory-bank/45-standing-rulings.md`, 2026-10-22).
@@ -116,6 +119,8 @@ Architect/Design (task `arch-owner-answers-1103`, records only, on `grugops/arch
 | 2026-11-04 | Architect/Design | Precondition 1 reads `ADR-0070` d4's own-phase form. d5: the tracer reads the seam through QE's frozen fixtures, on condition `TUNE_DEEP` is green at the fit commit; check 2 stays a hard step. No bar moved | `arch-records-1104` |
 | 2026-11-05 | QE | **The second pull NOT MET under F4:** `zugzwang.001` e1e5 at depth 9 on `dd88560f`, real, no defect. The emission does not reach `main` | `qe-ABC-301-miss` `…d065fee3` |
 | 2026-11-05 | Architect/Design | The NOT MET recorded; what stands and what does not retire; the tool commits are not barred; attribution's fence; the owner's options. No bar moved | `arch-ABC-301-miss` `…5941f727`, `…e5a5ac0c`, `…2b3440cf` |
+| 2026-11-05 | Owner | **Tuning waits** ("3. wait", as in `…e5a5ac0c`): no third fit now and no date; at most one more attempt; a third miss on this row closes tuning | `orch-2026-10-30a` `…b836b85c` |
+| 2026-11-05 | Architect/Design | The wait written as rules, with the four tests owner-accepted. No bar moved | `arch-owner-answers-1105` |
 
 ## Context
 
@@ -134,6 +139,10 @@ Architect/Design (task `arch-owner-answers-1103`, records only, on `grugops/arch
 - Every table on `main` is made by a stated rule, never fitted (`ABC-215`).
 - The evaluation probe's persistent errors survive two doublings of search (`arch-next-pull` `…d0f1a5fc`; 25 of 38 on
   unique positions, `bapm-epic011-cut` `…0fd882f7`). E1 fixes 1 of those 25.
+
+*Dated 2026-11-05 (`arch-owner-answers-1105`; his word `…b836b85c`, "3. wait"):* this section's reasons stand as the risk, and its
+heading no longer holds as a rule. On the wait the next evaluation terms go on hand values, each on its own read. Every table on
+`main` is still rule-made.
 
 ### The data that exists today (A1: own games, allowed by default)
 - **88 PGN files tracked at `main`** hold 5 438 games.
@@ -875,6 +884,38 @@ re-fitted.***
   any attempt, and it would not be relaxed. `…e5a5ac0c` gives his options and the four tests such a ruling would carry.
   **Until he answers, no fit is taken.**
 
+*Dated 2026-11-05 (`arch-owner-answers-1105`, records only, at `main` `a44aa057`; his word `…b836b85c`, verbatim "3. wait", as in
+`…e5a5ac0c`): **tuning waits. The lines below are owner-accepted rules. No bar moves, and nothing is fitted.***
+- **Now.** No third fit and no date. "Until he answers" above is answered.
+- **The next terms.** The next evaluation terms go on their own reads with hand values. `ADR-0056` D6's dated line of this task
+  gives the order.
+- **When a third pull may be asked for.** Only after a term named before this miss has merged on its own read.
+  - **Asking is not a yes.** It stays a new call for him. B-T8's approval does not carry to it, as it did not carry before, and a new
+    data pin needs his word.
+  - **The term.** `…e5a5ac0c`'s one clean form names E3b, E4b, E5 or E6, in one fit whose free set includes it. Another term named
+    before the miss, such as `ABC-272` or U, is not that form. It comes to Architect/Design first, and for U the table's "lawful but
+    not blind" stands.
+  - **Its own read.** His words are "their own reads", and a bundle's credit is the bundle's (`ADR-0056` B5). So a term that merged
+    only inside a bundle does not open this door unless he says so.
+- **The cap.** At most one more attempt. **A third miss on this row closes tuning.**
+- **The four tests.** A third pull must pass all four.
+  1. **Named before the miss:** the change is on a record dated before `dd88560f`.
+  2. **Stands without the row:** it has its own reason and its own read, and it would be done if `zugzwang.001` did not exist.
+  3. **Blind:** no value, bound, data slice, λ or configuration is chosen with the row or its attribution in hand.
+  4. **Capped:** one fit, sealed, and a miss closes E2. No fourth attempt.
+- **Test 4 and "on this row".** They do not conflict. His sentence names the likely miss. Test 4 covers any NOT MET of that
+  pull, and "at most one more attempt" leaves nothing after it either way. A defect is not a miss: F1, F3 and F7 keep their
+  dispositions.
+- **What "closes tuning" means.** `…e5a5ac0c`'s **stop** row: E2 closes for good, `main` keeps the table it then has, and a later
+  ticket may remove E4a's terms (`ADR-0070` § Consequences).
+- **The forms.** `…e5a5ac0c`'s table reads as the ruling. Every form it calls a refit or barred stays so. `zugzwang.001` stays as it
+  stands: e1f1 at depth 9, no moved depth, no re-pin.
+- **Attribution of e1e5 is not run.** He did not object (`…b836b85c`). If it runs later, the fence above stands, and it may not
+  feed which term is built next.
+- **The tools.** They land by a tools-only ticket from `b297ab89`, never either tip, after an N8-LANE read, as `…2b3440cf` shapes it.
+  The read holds the host, so it follows A4.
+- **What the wait costs.** E2's gain stays unclaimed. E4a's 1.12 × per-call endgame cost stays paid for no value.
+
 ## What would falsify this
 
 | # | clause | what would falsify it | if it fires |
@@ -884,7 +925,7 @@ re-fitted.***
 | **F3** | 6: the bounds keep play sane | an `src/evaluate*` relation test red on the emitted set | that relation becomes a bound, one refit. A second red: NOT MET. *Dated 2026-11-04 (`arch-second-pull-1104`; the d6 amendment, `…dda43b71` item 1): from the second pull on, F3 reads: every relation row is a bound from the first fit, with ruling (b)'s margin, in one fit with no refit. A relation red on the emitted set is a defect, as F1: it is fixed and the same procedure re-runs on the fixed tool. An infeasible bound set is a STOP to Architect/Design. The disposition before this line is the first pull's, history* |
 | **F4** | play safety | B-T5 | a defect check first. If real: NOT MET. Never a re-pin. `ADR-0061`'s margins are re-read if the audit fires (`ADR-0064` F5's rule). *Fired 2026-11-04 on the first pull (`26d06118`), and 2026-11-05 on the second (`dd88560f`, QE `…d065fee3`), both on `zugzwang.001`, each real, no defect* |
 | **F5** | `NFR-005` | a `G6` run below depth 6 | NOT MET. There is no cost cut to take on a constants-only diff |
-| **F6** | 11, the strength premise | C2′ < 50.0, an S′ collapse, or a red Levels lane | NOT MET, not re-played. **No set is ever re-fitted on play results**, and the configuration and λ are never chosen on play. A new attempt is a new data set or free set with a new pre-registration |
+| **F6** | 11, the strength premise | C2′ < 50.0, an S′ collapse, or a red Levels lane | NOT MET, not re-played. **No set is ever re-fitted on play results**, and the configuration and λ are never chosen on play. A new attempt is a new data set or free set with a new pre-registration. *Dated 2026-11-05 (`arch-owner-answers-1105`): after the two misses on F4, a third attempt is only what the wait's rules allow, the dated block above this table* |
 | **F7** | 7: reproducibility | B-T3 not byte-identical | a defect |
 | **F8** | 8: E2-pre (`ABC-274`) is value-identical and cheap. *Added 2026-11-03 (`arch-fold-1103b`)* | (a) `ABC-274` A1 / A2 / A4 / A7: a node, score or move mismatch against the pre-ticket head, an `Object.is` miss, or a test expectation that has to move; (b) A5: `G2` above 1.05 × the pre-ticket head (the mean of two sessions, `ADR-0031` d3); (c) A6: a `G6` board's median depth below the pre-ticket head's, or any run below depth 6 | (a) a defect. It is fixed before any cost bar is read, and never re-pinned. (b) or (c): STOP to Architect/Design. **One value-identical cut is allowed, then one re-read of the bar that missed,** under a PREREG sealed before the re-read. If the build is not packed, the cut is the packed score. If it is already packed, the Architect names the cut. A second miss: **not merged**. No value is tuned to pass, and no bar moves. `ABC-239`'s A3 / A4 then cannot hold as written. Its re-plan (the blend folded into E2, § Alternatives) needs a new dated decision here, and the owner's word for any bar it changes. S2 nps is reported, never graded (`…690d3b30`). *Dated 2026-11-03 (`arch-post-269`, `QE-269-f` / `-g`):* A5's PREREG states the session spread and the round order ahead of the reading (decision 8's dated line). The bar stays 1.0500. *Dated 2026-11-03 (`arch-ABC-274-seam`):* A3's seam is accepted with S1–S3 (decision 8's dated line). A red S1–S3 row is A3's disposition, a defect: it is fixed and never re-pinned |
 
@@ -1167,6 +1208,9 @@ below).
 - *Dated 2026-11-05 (`arch-ABC-301-miss`; QE `…d065fee3`):* **the second pull closed NOT MET on F4, so item 5's "one read
   judges both" was never reached.** No read of E2 or of E4a's values took place. The order after it is the owner's answer
   (`…e5a5ac0c`), and its effect on `EPIC-011` is `…2b3440cf`.
+- *Dated 2026-11-05 (`arch-owner-answers-1105`; his word `…b836b85c`, "3. wait"):* **the order after the second pull is the wait**,
+  the dated block above § What would falsify this. Item 5's "one read judges both" has no pull behind it until a third is asked for
+  and he says yes.
 
 ## Rollback
 
