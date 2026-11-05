@@ -1,0 +1,12 @@
+<!-- GENERATED — do not hand-edit. Re-run: node scripts/context-io.js render <task> -->
+# Context: secnfr-census-1105
+
+## Current state
+
+| at | kind | by | confidence | verified_by | note |
+| --- | --- | --- | --- | --- | --- |
+| 2026-11-05T11:55:26Z | decision | security-nfr | high: a pre-registration; sealed before any timing run; nothing measured yet |  | # PREREG, secnfr-census-1105: `NFR-008` graded on `main` with W1 in, with twin arms (ADR-0035 D1), then a row census and a probe. Sealed before any timing run |
+| 2026-11-05T12:06:00Z | observation | security-nfr | high on the flags (ps, sampler and /proc/stat in every scored run); the figures are ungraded by the PREREG's rule |  | # secnfr-census-1105 session 1 is **not ALONE, so it is reported ungraded.** All 8 scored rounds are flagged: another project's vitest ran through the hold. The PREREG's one re-read applies. It waits for the host to clear, and it is final |
+| 2026-11-05T12:22:13Z | decision | security-nfr | high: a probe plan fixed before the probe runs; row costs are the re-read's census medians; the remnants are proposals |  | # secnfr-census-1105 probe plan, sealed after the graded read's census and before the probe runs. Nine rows, 750 ms in-thread, and one stated change to the PREREG's arms |
+| 2026-11-05T12:28:43Z | observation | security-nfr | high on the grade: twin admissible, n = 8, one hold, ALONE by ps, sampler and /proc/stat; medium-high on the probe: 8 / 8 in one hold, a skip estimate and never a grade; the cause of the two run groups is UNKNOWN - verify |  | # secnfr-census-1105 readings: **`NFR-008` MET, graded, on `main` `572edf13` with W1 in: H median 9.515 s [9.31, 9.63], max 9.64.** Below 9.6 s by 0.085 s, above 9.5 s by 0.015 s. **The probe's nine rows save −0.365 s [−0.49, −0.33], 8 / 8,** which reaches the −0.31 s skip bar |
+| 2026-11-05T12:29:31Z | decision | security-nfr | high on the grade, R-N8H-1 and the gate outcome (rules sealed before the read); medium on the supply (one skip probe, 8 / 8); the remnants, their kept ms and every row's kill parity are UNKNOWN - verify |  | # Security/NFR decision, secnfr-census-1105: **PASS_WITH_RISKS.** `NFR-008` MET, graded, at 9.515 s on `main` with W1 in. **Outcome G-WITH: the next lane-adding merge may go only with a row move merged first or in the same merge.** The supply reaches the bar, with almost no slack. `R-N8H-1` stays MEDIUM. The 9.6 s line did not fire |
