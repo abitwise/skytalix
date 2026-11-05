@@ -1,0 +1,1 @@
+{"table":0,"keys":1032,"pawn":589824,"order":2048,"capture":2048,"see":288,"history":32768} sum 628008 without history 595240 MiB 0.599 cap 16777216

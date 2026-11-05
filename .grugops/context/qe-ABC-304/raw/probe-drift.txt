@@ -1,0 +1,4 @@
+A3(a) on door searchWithoutBundle: 180/187 = 96.26%, max 66 (kiwipete/a1d1: 298 -> 232), flips 0
+A3(a) on shipped search(): 179/187 = 95.72%, max 66 (kiwipete/a1d1: 298 -> 232), flips 0
+A3(a) on door chooseMoveWithoutBundle: 179/187 = 95.72%, max 96 (kiwipete/f3f4: 555 -> 459), flips 0
+A3(a) on shipped chooseMove: 180/187 = 96.26%, max 96 (kiwipete/f3f4: 555 -> 459), flips 0

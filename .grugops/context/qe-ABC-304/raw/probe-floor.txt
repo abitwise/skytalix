@@ -1,0 +1,2 @@
+A3(b) on shipped search(): 0 of 190 violated []
+A3(b) on door searchWithoutBundle: 0 of 190 violated []

@@ -1,0 +1,6 @@
+probe-nfr exit 0 bytes 149
+probe-k0 exit 0 bytes 380
+probe-floor exit 0 bytes 104
+probe-reach exit 0 bytes 206
+probe-drift exit 0 bytes 180
+done

@@ -1,0 +1,2 @@
+A4(b) on shipped chooseMove: door 5.879 -> head 6.868 (+0.989); 143 deeper, 0 shallower, 28 moved
+A4(b) on door chooseMoveWithoutBundle: door 5.879 -> head 6.716 (+0.837); 121 deeper, 1 shallower, 22 moved
