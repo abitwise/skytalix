@@ -1,0 +1,10 @@
+{
+  "refs": ["secnfr-census-1105", "NFR-008", "R-N8H-1", "R-N8H-2", "Q-N8H-1", "T-QEHOP-GROWTH", "ADR-0035", "ADR-0046", "ABC-282", "EPIC-011", "QE-282-k",
+           "secnfr-census-1105/20261105T115526Z-security-nfr-decision-b9038a14",
+           "secnfr-census-1105/20261105T120600Z-security-nfr-observation-6315faad",
+           "secnfr-census-1105/20261105T122213Z-security-nfr-decision-1d72a218",
+           "secnfr-ABC-302-a9/20261104T203737Z-security-nfr-observation-25105dda",
+           "secnfr-nfr008-1104/20261104T172222Z-security-nfr-observation-e2c442d3",
+           "qe-ABC-282/20261104T230342Z-qe-e2e-observation-dfa196bf", "572edf13", "7117ce75", "a6ae8227", "bffb23c4"],
+  "notes": [ { "kind": "observation", "confidence": "high on the grade: twin admissible, n = 8, one hold, ALONE by ps, sampler and /proc/stat; medium-high on the probe: 8 / 8 in one hold, a skip estimate and never a grade; the cause of the two run groups is UNKNOWN - verify", "bodyFile": "readings.md" } ]
+}
