@@ -1,3 +1,4 @@
+_Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — **owner: ADR-0075 yes.** → `arch-ABC-291-accept`, `bapm-ABC-291-lines`, records only. Probe after A4; ABC-305 before ABC-291's build._
 _Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — `arch-ABC-291` merged: **ADR-0075 PROPOSED** (E4b, hand values fixed by rule, probe written, not run; build after ABC-305). **Owner asked to accept.** Running: qe-ABC-282-a4._
 _Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — `bapm-pointers-1105` merged: CF and third-pull pointers settled; no bar moved. Owed to the next BA/PM hop: ABC-291 page status to In Design. At ABC-289's seal: E 1 810 against the sealed E. Running: qe-ABC-282-a4, arch-ABC-291._
 _Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — A4 still playing; owner asked what else can go. → `arch-ABC-291` (ADR-0075 PROPOSED, no probe) and `bapm-pointers-1105` (pointers off ABC-282's close hop), records only. Running: qe-ABC-282-a4, both of these._
