@@ -24,3 +24,4 @@ Publish: sealed notes (task bapm-lines-1105c, contextRoot = the worktree's .grug
 - **3 (`ABC-223`):** disposition c as `…1ce8828d` item 5 words it. Lines 26, 48, 67, 102 left. The figures re-read from `moves.tsv` agree.
 - **My readings (`…c29a3be6`):** J1 the older `ABC-303` bullet is dated, not struck. J2 only the census clause of `ABC-289`'s line. J3 `ABC-305`'s `N8-LANE` read follows the census, from `…16e0ec2c`'s close, an order of work and not a bar. J4 "second" is second of `ABC-282` and this ticket. J5 A5 left.
 - **Open (`…bb3169d7`), outside the brief, none edited:** `ABC-305` DoR row 10; `EPIC-011` § Tickets rows 57 and 55; "The reads queue" line and the "probe after A4" lines on rows E4 and 43 and `ABC-291` DoR row 5, which `…16e0ec2c` now puts after the census. The census has not reported, so the pages give the gate and not its result.
+- **Path check:** `node tools/grugops/records-path-check.js --base main` exited 0 before the last commit.
