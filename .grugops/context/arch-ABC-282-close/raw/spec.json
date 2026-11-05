@@ -1,0 +1,7 @@
+{
+  "refs": ["arch-ABC-282-close","grugops/arch-ABC-282-close","ABC-282","ABC-223","ABC-221","ABC-078","EPIC-009","EPIC-011","ADR-0071","ADR-0066","ADR-0052","ADR-0044","NFR-004","AR-NFR004-A","AR-UCI-BUSY","R-0071-1","R-0071-2","QE-282-f","QE-282-l","QE-282-n","QE-223-c","QE-223-d","a6ae8227","2e46933f","qe-ABC-282/20261105T113544Z-qe-e2e-decision-5191f871","qe-ABC-282/20261105T113544Z-qe-e2e-observation-4f8f7f5d","qe-ABC-282/20261105T113537Z-qe-e2e-observation-1434a7d1","orch-2026-10-30a/20261105T114920Z-orchestrator-decision-16e0ec2c"],
+  "notes": [
+    {"kind":"decision","confidence":"high on the lines and the figures; the Security/NFR ruling is the Architect's judgement and open to challenge; nothing run","bodyFile":"notes/note-decision.md"},
+    {"kind":"observation","confidence":"high for what git and file reads show at main 2e46933f; which branch stopped each move stays UNKNOWN - verify","bodyFile":"notes/note-readings.md"}
+  ]
+}

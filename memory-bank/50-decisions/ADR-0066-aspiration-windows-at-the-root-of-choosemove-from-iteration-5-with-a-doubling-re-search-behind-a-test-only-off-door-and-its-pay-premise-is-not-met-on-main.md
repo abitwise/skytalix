@@ -80,6 +80,7 @@ output are under `.grugops/context/arch-ABC-236/raw/probe/`.
 | 2026-11-04 | Orchestrator | Re-pin 2 accepted as a pin: decision 9's KRK mate row moves from iteration 5 to 6; the bar holds | `…c7609f51` 1 |
 | 2026-11-04 | QE/E2E | The bundle's read: PASS_WITH_GAPS, C2′ 66.0 / 100 ≥ 50.0; the verdict signs UAT | `qe-ABC-283` `…de1dc511`, gaps `…f8f8c2cc` |
 | 2026-11-04 | Architect/Design | **ACCEPTED as a bundle, in force when `ABC-283` merges.** The premise was overridden by the owner, not met. QE-283-c written under decision 9 | `arch-ABC-283-accept`, on the Orchestrator's ruling `…2409cec9` 2 |
+| 2026-11-05 | Architect/Design | Decision 5's dated line: `A3` as amended by `ADR-0071` D7 (with a soft limit only). `ABC-282` landed second, at `a6ae8227` | `arch-ABC-282-close`; `ADR-0071` D12 item 5 |
 
 ## Context
 
@@ -196,6 +197,10 @@ re-measures it under its own PREREG.
 5. **The clock.** No new clock read. The abort stays at the node (`countNode`), so an abort inside any pass aborts the
    iteration, and `best` and `reached` stay the previous completed iteration's (`ABC-078` `A3` unchanged). A re-search
    near the deadline obeys the existing check (`NFR-004`; `G5` reads it).
+   *Dated 2026-11-05 (`arch-ABC-282-close`, records only; `ADR-0071` D12 item 5, `ABC-282` landed second, `a6ae8227`):*
+   "`ABC-078` `A3` unchanged" reads "`A3` as amended by `ADR-0071` D7 (with a soft limit only)". With a soft limit an
+   abort leaves `reached` as it is and may replace `best`, by `ADR-0071` D12 item 2. Without one, this decision stands
+   as written.
 6. **One switch, `aspiration`, in `chooseMove`'s `Heuristics` only.** It is on in `chooseMove` and off in every older
    door (`ADR-0026` decision 3's ladder). `search()` has no previous score, so it gets no switch and no door. The
    ticket's "off-door pair" is therefore one door.
