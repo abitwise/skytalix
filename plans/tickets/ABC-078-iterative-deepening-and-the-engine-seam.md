@@ -64,19 +64,32 @@ satisfies `EngineSeam`, which `turn-loop.ts` has been waiting on since `ABC-019`
   far below one iteration's cost in a complex position — **then** a **legal move is still
   returned**, within **≤ 2x** the budget, because depth 1 always completes. *(This is the criterion
   that proves the clock is checked inside the recursion and not only between iterations.)*
-- **`A3` (a partial iteration is discarded, not used).** **Given** an instrumented run aborted
-  mid-iteration at depth `n`, **then** the returned move equals the best move of the completed
-  depth `n-1` iteration. *(Using a partial iteration's best move is worse than not searching it —
-  it is a systematically biased sample of the move list.)*
-  *2026-11-04 (`bapm-ABC-282-adr`; `ADR-0071` D7, PROPOSED; **in force when `ABC-282` merges**, not before):
-  `A3` as amended reads (i) **Without a soft limit** (every search except `uci-clock-mode` under a clock,
-  `ADR-0071` D1): given an instrumented run aborted mid-iteration at depth `n`, then the returned move
-  equals the best move of the completed depth `n-1` iteration. Unchanged. (ii) **With a soft limit**
-  (`ADR-0071` D4): the returned move is the depth `n-1` best move unless another root move completed its
-  depth-`n` search with a score strictly above the depth `n-1` best move's own completed depth-`n` score.
-  In that case it is the latest such move. Rows: (i) is the old row, unchanged (`src/engine.test.ts` "A3 —
-  an aborted iteration's move is discarded, not returned" and its deep twin); (ii) is `ABC-282` A2
-  (a)–(c). If `ABC-282` misses its read (`ADR-0071` F7), `A3` stays as written above.*
+- **`A3` (a partial iteration is discarded, not used, except under a soft limit; amended by `ADR-0071` D7 and
+  D12, in force since `ABC-282` merged at `a6ae8227`).**
+  - **(i) Without a soft limit** (every search except `uci-clock-mode` under a clock, `ADR-0071` D1): **given**
+    an instrumented run aborted mid-iteration at depth `n`, **then** the returned move equals the best move of
+    the completed depth `n-1` iteration. Unchanged. *(Using a partial iteration's best move is worse than not
+    searching it — it is a systematically biased sample of the move list.)*
+  - **(ii) With a soft limit** (`ADR-0071` D4): the returned move is the depth `n-1` best move unless another
+    root move completed its depth-`n` search with a score strictly above the depth `n-1` best move's own
+    completed depth-`n` score. In that case it is the latest such move.
+  - **(ii) under aspiration windows** (`ADR-0071` D12 item 2; `ABC-283` landed first, so this is how (ii) reads
+    on `main`): a move M beat the incumbent I when, within one pass of iteration `n`, I's completed score was
+    exact (strictly inside the pass's window) and M's completed search returned a score strictly above it, exact
+    or a fail-high lower bound. A pass in which I failed low gives no evidence. On one full-window pass this is
+    (ii) exactly.
+  - **Two pins, not bars** (QE's rulings, `qe-ABC-282` `…e4b8527a`): evidence from an earlier pass stands until
+    a later pass gives a newer M, so only a later M replaces it, even when a later pass shows I exact and above
+    M. The kept score of a pass-1 fail high stays that lower bound, even when pass 2 completes M exactly; that
+    moves the reported score, never the move.
+  - **Rows:** (i) is the old row, unchanged (`src/engine.test.ts` "A3 — an aborted iteration's move is discarded,
+    not returned" and its deep twin); (ii) is `ABC-282` A2 (a)–(c).
+
+  *2026-11-05 (`bapm-ABC-282-close`; `orch-2026-10-30a` `…16e0ec2c`): `ABC-282` met its read, so `ADR-0071` F7
+  did not fire and the amendment is in force. This row folds in the dated line of 2026-11-04 (`bapm-ABC-282-adr`)
+  and adds D12's form and the two pins. No bar moved. Was, as cut: "**Given** an instrumented run aborted
+  mid-iteration at depth `n`, **then** the returned move equals the best move of the completed depth `n-1`
+  iteration."*
 - **`A4` (no fixed depth anywhere — `RISK-002` as a criterion, not a comment).** **Then** the
   delivered engine entry point takes a **time budget** and **no depth argument or depth default**,
   and grep of the delivered `src/` diff finds **no depth constant** driving a per-move decision.

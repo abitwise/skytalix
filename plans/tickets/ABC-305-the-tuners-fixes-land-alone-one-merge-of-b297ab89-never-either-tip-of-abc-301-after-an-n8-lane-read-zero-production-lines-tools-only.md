@@ -110,18 +110,23 @@ adr: "No new ADR. ADR-0067's dated block of arch-owner-answers-1105 (the tools l
 
 ## Dependencies
 
-- **After `ABC-282`'s A4** (`qe-ABC-282-a4`). It holds the host alone, so no lane or read of this ticket starts until it ends. The `N8-LANE`
-  read then comes before the landing.
-- **Order with `ABC-282`:** either. Whichever lands second reads this page's A4 and A5 on a `main` that holds the first. Scope 2's conflict list is then
-  read again.
+- ~~**After `ABC-282`'s A4** (`qe-ABC-282-a4`). It holds the host alone, so no lane or read of this ticket starts until it ends. The `N8-LANE`
+  read then comes before the landing.~~ *2026-11-05 (`bapm-lines-1105c`; `…16e0ec2c`): **met.** A4's hold has ended. The `N8-LANE` read follows the census
+  and still comes before the landing.*
+- **Order with `ABC-282`:** ~~either. Whichever lands second reads this page's A4 and A5 on a `main` that holds the first. Scope 2's conflict list is then
+  read again.~~ *2026-11-05 (`bapm-lines-1105c`): **`ABC-282` landed first (`a6ae8227`), so this ticket is second.** It reads this page's A4 and A5 on a
+  `main` that holds `ABC-282`, and Scope 2's conflict list is read again.*
 - **Order with `ABC-303`:** none on the read. Zero production lines stale no C2′ (`…2b3440cf`). If this lands first, `ABC-303` takes it when
   `main` goes in.
 - **`ABC-301` closed NOT MET, and the owner's answer is in:** `…2b3440cf`'s hold until his answer is met.
+- **`ABC-307`, the row move:** *2026-11-05 (`bapm-rows-cut-1105`; `…19cea480`, `…f40ce634` 1 and 3): the census read G-WITH, with no exemption here. If this ticket is the next lane-adding merge, `ABC-307` merges before it or with it. The build and the `N8-LANE` read run now; only the landing waits.*
 
 ## Open, not bars (for the Orchestrator)
 
-1. **The row census.** `…5ec6c124` gated "the second of `ABC-282` / `ABC-301`", and `ABC-301` will not merge. Whether it still gates this landing
-   is the Orchestrator's (`…2b3440cf`). `UNKNOWN - verify`. It does not block the build.
+1. **The row census.** `…5ec6c124` gated "the second of `ABC-282` / `ABC-301`", and `ABC-301` will not merge. ~~Whether it still gates this landing
+   is the Orchestrator's (`…2b3440cf`). `UNKNOWN - verify`.~~ It does not block the build.
+   *2026-11-05 (`bapm-ABC-282-close`; `…16e0ec2c` ruling 1, `…42f7fd67` item 1): **ruled.** The census gates the next lane-adding merge after
+   `ABC-282`, whichever of this ticket and `ABC-303` that is. It does not gate either build. Its read is `secnfr-census-1105`, not yet reported.*
 
 ## Definition of Ready
 
@@ -131,11 +136,11 @@ adr: "No new ADR. ADR-0067's dated block of arch-owner-answers-1105 (the tools l
 | 2 | scope and out-of-scope | ✅ one merge, two conflicts; no emission, no fit, no production line |
 | 3 | INVEST | ✅ S; independent of `ABC-282`'s and `ABC-303`'s verdicts; testable by A1–A9 |
 | 4 | testable, measurable acceptance | ✅ ancestry exit codes; six paths; N + 1; ≤ +0.10 s; two lanes exit 0; path check exit 0 |
-| 5 | dependencies known | ✅ after `ABC-282`'s A4 lock; either order with `ABC-282`; none on `ABC-303`'s read |
+| 5 | dependencies known | ✅ ~~after `ABC-282`'s A4 lock; either order with `ABC-282`;~~ *2026-11-05 (`bapm-lines-1105c`): `ABC-282` landed first (`a6ae8227`), so this ticket is second;* none on `ABC-303`'s read |
 | 6 | NFR triggers with targets | ✅ `NFR-008` ≤ 10 s and ≤ +0.10 s; no others |
 | 7 | test notes | ✅ 1–3 |
 | 8 | size | ✅ S |
 | 9 | priority | ✅ P3 |
-| 10 | no major unresolved blocker | ✅ no ADR and no owner item: his word is in. The wait on `ABC-282`'s A4 is an ordering, and the census is a ruling before the merge, not before the build |
+| 10 | no major unresolved blocker | ✅ no ADR and no owner item: his word is in. ~~The wait on `ABC-282`'s A4 is an ordering, and the census is a ruling before the merge, not before the build~~ *2026-11-05 (`bapm-rows-cut-1105`; `…19cea480`, `…f40ce634` 1 and 3): A4's wait is past. The census read G-WITH, so the landing may wait on `ABC-307`; the build and the `N8-LANE` read do not* |
 
 **DoR 10/10. Ready.** The board move is the Orchestrator's.

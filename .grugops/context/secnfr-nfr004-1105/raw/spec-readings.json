@@ -1,0 +1,14 @@
+{
+  "refs": ["secnfr-nfr004-1105", "NFR-004", "AR-NFR004-A", "AR-UCI-BUSY", "QE-223-d", "QE-223-a", "QE-221-c", "QE-282-k", "QE-282-l", "ABC-282", "ABC-223", "ABC-221", "ADR-0071", "ADR-0052", "plans/nfr-catalog.md",
+    "arch-ABC-282-close/20261105T120405Z-architect-design-decision-1ce8828d",
+    "qe-ABC-282/20261105T113544Z-qe-e2e-observation-4f8f7f5d",
+    "qe-ABC-282/20261105T113537Z-qe-e2e-observation-1434a7d1",
+    "qe-ABC-282/20261104T230342Z-qe-e2e-observation-e4b8527a",
+    "qe-ABC-221/20261031T060935Z-qe-e2e-observation-b348899a",
+    "qe-ABC-221/20261031T060935Z-qe-e2e-observation-8ad25906",
+    "qe-ABC-223/20261101T125258Z-qe-e2e-observation-5c8f2995",
+    "qe-ABC-223/20261101T125258Z-qe-e2e-observation-2c62a346",
+    "secnfr-ABC-221/20261031T055207Z-security-nfr-decision-ef060512",
+    "04ebeb7e", "c48a6f83", "fefa1601"],
+  "notes": [ { "kind": "observation", "confidence": "high on the figures: recomputed from moves.tsv, 606 of 606 budgets reproduced, logs match SHA256SUMS; medium on the host label, which QE's notes do not spell; nothing run", "bodyFile": "notes/readings.md" } ]
+}

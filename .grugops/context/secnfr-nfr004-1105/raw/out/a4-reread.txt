@@ -1,0 +1,22 @@
+moves 606 searched 591 book 15
+budgets recomputed from clock and movestogo, mismatches: 0
+longest move: 59501 moves >= 59 900 ms: 0 moves > 60 000 ms: 0
+over 59 500 ms: 1 moves >= 50 900 ms: 7
+  long g05 b k 39 elapsed 59501 budget 59500.0 over 1.0 clock
+  long g05 w k 40 elapsed 59500 budget 59500.0 over 0.0 clock
+  long g02 b k 39 elapsed 55583 budget 55582.0 over 1.0 clock
+  long g05 w k 39 elapsed 54786 budget 59500.0 over -4714.0 clock
+  long g03 w k 39 elapsed 53506 budget 53504.5 over 1.5 clock
+  long g04 w k 39 elapsed 51339 budget 59500.0 over -8161.0 clock
+  long g01 w k 36 elapsed 50900 budget 50899.4 over 0.6 clock
+budgets at the cap: 13 ran to it (within 5 ms): 2 ended short by: 4714 to 32553 ms
+searched moves within 1 000 ms of budget: 129 median 0.6 max 3.9
+searched moves at the abort (within 5 ms of budget): 118 budgets 22542.6 to 59500.0 ended 5-1 000 ms short: 11 ended > 1 000 ms short: 462
+overshoot >= 31 ms: 0
+at the abort, exact clock: 113 max 3.9 ; stamp-read: 5 max 2.0 + at most 25 ms stamp error = 27.0
+  over g01 b k 42 elapsed 23036 budget 23032.1 over 3.9 = 0.0169 % clock
+  over g05 w k 8 elapsed 24067 budget 24064.2 over 2.8 = 0.0116 % clock
+  over g03 b k 48 elapsed 24765 budget 24762.4 over 2.6 = 0.0105 % clock
+g05 Black move 39: engine time 59501 debug-log span 59502 samples 6 with foreign vitest 6 vitest max 2 load1 2.56 - 2.8 Tctl 79.1 - 83.5
+g05 White move 40: engine time 59500 debug-log span 59501 samples 6 with foreign vitest 0 vitest max 0 load1 2.03 - 2.39 Tctl 76.4 - 79.2
+g01 Black move 42: engine time 23036 debug-log span 23037 samples 2 with foreign vitest 2 vitest max 2 load1 3.97 - 4.12 Tctl 86.1 - 86.1

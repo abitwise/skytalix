@@ -6,8 +6,21 @@ id: ADR-0071
 
 ## Status
 
-**ACCEPTED 2026-11-04 by the owner, in form (a), as written (OQ-0071-1). Not in force until `ABC-282` merges on its
-read (A6, D10).** Recorded by Architect/Design (task `arch-owner-answers-1104`, records only, on
+**IN FORCE 2026-11-05, from `ABC-282`'s merge `a6ae8227`.** Recorded by Architect/Design (task `arch-ABC-282-close`,
+records only, on `grugops/arch-ABC-282-close` from `main` `2e46933f`). Nothing was run.
+- **The read:** QE's verdict `qe-ABC-282` `…5191f871` is PASS_WITH_GAPS, with no blocking gap, and it signs UAT. A6 is
+  MET at 45 / 32 / 23 = 56.5 of 100 (D10). A4 is MET on both sides (D11). F1–F7 did not fire. The score meets the bar;
+  the gain is not proven (Elo +45.4 ± 60.7, `ABC-282`'s page).
+- **What is in force:** D1–D12, as accepted. No decision or value moved. b stays 2.3: D12 item 3's re-read gave a
+  median of 2.3043 (`se-ABC-282` `…aadd2d48`). `ABC-078` A3 is amended in this mode only (D7), and its page says so
+  (`bapm-ABC-282-close`).
+- **D12:** `ABC-282` landed second, so its items fell to it. The build did items 1–4 and 6. This hop wrote item 5, the
+  dated line under `ADR-0066` decision 5.
+- **Two dated lines from QE-282-l** (`…4f8f7f5d`): one under D11 and one under § Consequences, `NFR-004`. They correct
+  the text. No decision moves.
+
+*Before the merge:* **ACCEPTED 2026-11-04 by the owner, in form (a), as written (OQ-0071-1). Not in force until
+`ABC-282` merges on its read (A6, D10).** Recorded by Architect/Design (task `arch-owner-answers-1104`, records only, on
 `grugops/arch-owner-answers-1104` from `main` `5d402485`). Nothing was run.
 - **His words, verbatim** (`orch-2026-10-30a` `…7de79e90`): *"Accept the W1 time-use design (ADR-0071)"*. The
   Orchestrator records it as OQ-0071-1, form (a).
@@ -59,6 +72,9 @@ build may start on PROPOSED. Nothing here is in force until `ABC-282` merges on 
 | 2026-11-04 | BA/PM, tools | Folded into `ABC-282` (Ready, L). D10's harness ticket cut as `ABC-300`, merged on QE PASS_WITH_GAPS | `bapm-ABC-282-adr`; `4ea39135`, `qe-ABC-300` `…fbda2ad6` |
 | 2026-11-04 | Owner | **ACCEPTED, form (a)** ("Accept the W1 time-use design (ADR-0071)") | `orch-2026-10-30a` `…7de79e90` |
 | 2026-11-04 | Architect/Design | Status restated as ACCEPTED, not in force until `ABC-282` merges on A6. `ADR-0056` row W1 written. No decision changed | `arch-owner-answers-1104` |
+| 2026-11-05 | Orchestrator | **IN FORCE.** `ABC-282` merged at `a6ae8227` on QE's verdict `…5191f871` | `orch-2026-10-30a` `…16e0ec2c` |
+| 2026-11-05 | Architect/Design | Status restated as in force. QE-282-l ruled: no decision moves, dated lines under D11 and § Consequences. D12 item 5 written in `ADR-0066` | `arch-ABC-282-close` |
+| 2026-11-05 | Architect/Design | The 19 rows with bundle 1 on: dated lines under D8, D9 and D12 item 4. No decision, bar or production line moves, and F1 and F2 do not fire | `arch-ABC-303-w1-rows` `…0f8a4f82` |
 
 ## Context
 
@@ -305,6 +321,19 @@ on the new merge-base by the same rows, before the change** (§ D12). The rows b
   
   Plus one row in D3's mode (`go wtime 8000 btime 8000 movestogo 40`) that shows `softMs` IS handed in.
 
+*Dated 2026-11-05 (`arch-ABC-303-w1-rows`, records only at `main` `a21136b0`; `…0f8a4f82`, readings `…c66a3f5c`): **bundle 1 lands
+second, so A0 takes this form on `ABC-303`. The rows bind and no decision moves.***
+- **A0-1, A0-2.** The base's figures stay unmoved, read on `chooseMoveWithoutQuietBundle` with `softMs` absent (`ADR-0072` d7).
+  It shares `deepen` with `chooseMove`, so it walks the same W1-off path. The shipped path keeps each row beside them with
+  D12 item 4's re-read figures. A0-1's `softMs: 1` stays on the shipped path, because the doors take no `softMs`.
+- **A0-2's `depth`, `move` and `nodes` do not move on the shipped path; only `score` does.** A leak would stop each row
+  earlier: 33 116, 104 780, 39 268 and 94 911 against 47 384, 199 960, 44 105 and 196 681. So the row keeps reading what a
+  frozen clock cannot.
+- **A0-3.** The session has no door. Five rows re-pin `cp` alone, and `depth`, `nodes`, `time`, `nps` and the move stay, which
+  are what a leak would change. `go depth 6` re-pins its line: no clock reaches it on any tree, and the default-lane row
+  "hands no soft limit" carries its claim. The `69 705` in D3's row stays.
+- **F1 does not fire.** The figures moved because the tree did, not because W1 acted.
+
 ### D9. A1 and A2: fixtures, corpus and clock
 
 - **A1 (a) and (b) (default lane, virtual clock):** `chooseMove(p, { budgetMs: H, now: virtualClock(1), softMs: H / 2.3
@@ -314,6 +343,11 @@ on the new merge-base by the same rows, before the change** (§ D12). The rows b
   - (b) is a row where elapsed after d is under H / 2.3, and `choice.depth` > d.
   - The Engineer picks the rows on the base by a scan, as `ABC-078` A3's fixture was picked. P2's position-6 at H = 50
     is a candidate.
+  - *Dated 2026-11-05 (`arch-ABC-303-w1-rows`, `…0f8a4f82`): with bundle 1 on, A1 (a)'s row at H = 6 stops being the row
+    this section asks for. The shipped base completes depth 4 at 2 197 and aborts nothing, so `base.depth` is not re-pinned.
+    **The budget moves 6 → 5 on the same position.** There the base aborts in iteration 4 at 2 121, 76 nodes short of
+    N(4), and `head.depth` 3 and `base.depth` 3 both stand. H = 5 is arithmetic from sealed N(d), `UNKNOWN - verify` until the
+    row runs. F2 does not fire.*
 - **A1 (c) (deep lane, `ENGINE_DEEP`; QE freezes it before the build, `ABC-282` test note 2):**
   - **Corpus K25:** `qe-tc-depth-probe` R1's 25 positions:
     - `raw/named.json` (5; sha256 `e41a4914…0479`);
@@ -333,6 +367,12 @@ on the new merge-base by the same rows, before the change** (§ D12). The rows b
   - A2 (c) needs a mate fixture picked by the same scan. The mate corpus (`src/search.mate-corpus.ts`) is the place to
     look.
   - The Engineer re-scans on the base the build lands on.
+  - *Dated 2026-11-05 (`arch-ABC-303-w1-rows`, `…0f8a4f82`): with bundle 1 on, A2 (a) keeps its position, budget and
+    `softMs`, and the kept move re-pins `a1b1`, 450 → `a1f6`, 475. `ABC-282` D5's session row follows. It is the same case:
+    iteration 3 is aborted at 3 125 of N(3) = 3 506 on a full window, and the frozen depth-3 line reads `a1f6`, 475 over
+    the incumbent `a1e5`, so that score is strictly above the incumbent's own completed depth-3 score. `main`'s depth 3 reads
+    the same move and score. The bundle's smaller tree reaches it inside the same 3 125 nodes, where the old `a1b1` was an
+    earlier beat. No other A2 row moves.*
 
 ### D10. The read (A6): the control, the intent, and the harness ticket first
 
@@ -399,6 +439,11 @@ on the new merge-base by the same rows, before the change** (§ D12). The rows b
   
   A move can stop before its soft limit only by reaching a `depth` or `nodes` limit first. On the last moves of a period, `C` hands
   out the whole remainder, and W1 spends ≥ 1 / 2.3 of it. Later periods carry the rest (≥ 85.7 %).
+  - *Dated 2026-11-05 (`arch-ABC-282-close`, records only; QE-282-l).* The sentence above is true only up to the cap.
+    The budget is min(59 500, C). When C is above 59 500 the move gets 59 500, W1 spends ≥ 25 870 ms of it, and the
+    clock above the budget carries to the next period. At g01 White's move 40 the clock read 88 532 ms, the budget
+    was 59 500 ms and the move took 26 947 ms, which left 61 585 ms. The figures in this section stand, because both
+    scripts apply the cap (`arch-ABC-282` `raw/alloc-w1.mjs`, `raw/alloc-w1-mc.mjs`).
   - **F5 routes a miss here.** Then b, the soft limit's form, or a last-move rule is the Architect's to re-open, with a
     new read. Nothing is tuned to pass.
 
@@ -425,6 +470,8 @@ is designed against `main`. **Whichever of the two lands second rebases, and doe
    d = 4–10, rounded to 0.1). History, SEE ordering and aspiration all change the tree's growth. The value is frozen
    before A1 (c) runs. Re-reading it by the pre-registered method is not tuning (F3).
 4. **A0's counts are re-read** on the new merge-base (D8), as `ABC-282` § Dependencies says.
+   *Dated 2026-11-05 (`arch-ABC-303-w1-rows`, `…0f8a4f82`): for bundle 1, landing second, the form is D8's dated line. Item 6
+   stands: no row hands a door `softMs`.*
 5. **`ADR-0066` d5** ("`ABC-078` A3 unchanged") reads "A3 as amended by `ADR-0071` D7 (with a soft limit only)" if
    this ADR has merged. A dated line in `ADR-0066` is owed by whichever lands second, not now.
 6. **The doors.** This ADR adds none. `ABC-283`'s doors share `deepen`, so a door handed `softMs` would get D2 and D4.
@@ -461,6 +508,18 @@ is designed against `main`. **Whichever of the two lands second rebases, and doe
 
 - **`NFR-004`:** no ceiling moves. The hard limit is the mode's budget, unchanged. A3 (b) holds by construction, with
   D2's floor of 1 ms stated as an exception (D3).
+  - *Dated 2026-11-05 (`arch-ABC-282-close`, records only; QE-282-l, `qe-ABC-282` `…4f8f7f5d`).* **W1 brings the cap
+    into play at 40/15, which this ADR did not state.** W1 saves time early, and `C` hands it out late. A4 read 13 of
+    606 budgets at 59 500 and seven moves of 50 900–59 501 ms, each at a period's moves 36–40. `ABC-223` read 0 of 629
+    and 25 285 ms. The longest move is 1 ms over its budget and 499 ms under 60 000, on a host under foreign load.
+    - **No ceiling, limit or value moves.** The 500 ms is `ADR-0052` D4's designed margin. Overshoot near the budget
+      read +3.9 ms at most, inside `AR-NFR004-A`'s ≤ ~31 ms.
+    - **`AR-UCI-BUSY`** (owner: Architect/Design) keeps its bound, ≤ 60 s. A busy `isready` or `stop` can now wait
+      about 59.5 s in play, not about 25 s. A4 read 0 `isready` during a search, and no `ADR-0044` D5 trigger fires.
+    - **Owed:** one Security/NFR read, records only and blocking nothing (`arch-ABC-282-close`'s decision note).
+    - **Not decided:** whether these late moves are the best use of the time. Five games show how long they are, not
+      how they spread or what they are worth. Spreading them differently moves a budget formula, which this ADR does
+      not decide (§ Status) and which is the owner's.
 - **`NFR-005`:** untouched under D1. `level` is node-identical.
 - **`NFR-008`** (9.42 s on `main`, 0.58 s of headroom):
   - A0-1 (six frozen searches, about 1.4 M nodes) and A0-2 (about 0.5 M nodes) cost about 2.8 s and 1 s at P1's rate

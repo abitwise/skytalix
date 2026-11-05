@@ -1,0 +1,7 @@
+{
+  "refs": ["scribe-ABC-282-close","grugops/scribe-ABC-282-close","ABC-282","ABC-221","ABC-304","ABC-271","ABC-301","ADR-0071","ADR-0052","QE-282-f","3e648e72","a6ae8227","9f481fa5","qe-ABC-282/20261105T113544Z-qe-e2e-decision-5191f871","orch-2026-10-30a/20261104T234244Z-orchestrator-decision-681c6363","orch-2026-10-30a/20261105T114920Z-orchestrator-decision-16e0ec2c","src/uci-session.ts","src/uci-session.test.ts","src/evaluate.passer.test.ts","AGENTS.md"],
+  "notes": [
+    {"kind":"decision","confidence":"high: lines checked against the code and the pages; nothing run","bodyFile":"notes/note-decision.md"},
+    {"kind":"observation","confidence":"high for what file reads show at main 3e648e72; the A10 wall total is UNKNOWN - verify","bodyFile":"notes/note-observation.md"}
+  ]
+}

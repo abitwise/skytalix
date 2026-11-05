@@ -1,0 +1,6 @@
+{
+  "refs": ["scribe-ABC-282-close","grugops/scribe-ABC-282-close","ABC-282","ABC-221","ABC-304","ABC-271","ABC-109","ABC-187","ADR-0071","3e648e72","src/cli.test.ts","AGENTS.md","scribe-ABC-282-close/20261105T120713Z-agents-md-scribe-decision-3e1f993c"],
+  "notes": [
+    {"kind":"observation","confidence":"high: wc -c on the landed file; A5 not run","bodyFile":"notes/note-final.md"}
+  ]
+}

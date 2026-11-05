@@ -249,11 +249,23 @@ uci-clock-mode`. The numbers are `ADR-0052`'s arithmetic (`arch-epic009-settings
     recorded as a trigger.** The build's own cost is +0.02 s of wall (CPU +0.62 s on 4 workers). The re-read is at
     `ABC-245`'s QE hop on a clean host; whether tranche 2 is owed is read there. R1 census as the SE recorded it
     (`…563fc63b`): 3 class-P rows, 0 time-blind, so no R2 step was owed.
-- **A10 (wall, depth and memory at 59.5 s, deep lane).** **Given** 3 fixed positions, **when** each is searched once
+- **A10 (wall, depth and memory at 59.5 s, four searches, deep lane).** **Given** 3 fixed positions, **when** each is searched once
   in the mode at a 59 500 ms budget on the real clock, **then** each returns in **≤ 60 000 ms** of wall, the max
   completed depth is logged against `KEY_ARRAY_CAPACITY`'s tripwire (≥ 100 → the Architect), and search-held memory
   stays ≤ 16 MiB, with growth ≤ 1 MiB (`NFR-009`, measured as `ABC-212` measured it). It runs in the `ENGINE_DEEP`
   lane, ALONE (~3–4 min).
+  *2026-11-05 (`bapm-ABC-282-close`; QE's pin ruling `qe-ABC-282` `…e4b8527a`, QE-282-f `…4f8f7f5d`; `ADR-0071` D1, D3; no bar
+  moved): **a pin, not a bar, re-pointed by `ABC-282`.***
+  - *The row names no `go` line. **The three searches send `go movetime 90000`**: the same 59 500 budget (A7), with W1 off, so
+    every assertion keeps its strength, `time` ≥ 59 500 included. They sent `go wtime 3600000 btime 3600000 movestogo 40` until
+    W1, which stops that line at an iteration boundary past the soft limit, so `time` ≥ 59 500 cannot be asserted on it.*
+  - ***A fourth search keeps the clock line,** on the third position, as `ABC-282` A3 at the ceiling: `time` ≥ 59 500 ÷ 2.3 and
+    wall ≤ 60 000. SE read 27 526 ms; QE has the pass, not a fresh figure. Memory is read on the three, not on the fourth.*
+  - ***Residual, LOW (QE-282-f):** this row no longer takes the real clock to the abort through the clock branch at 59 500. It
+    is the same `deadline` line, and the stub row pins the budget. In `ABC-282`'s A4 moves did reach 59 500 in play (longest
+    59 501 ms). No record names which branch stopped them: `UNKNOWN - verify`.*
+  - ***The title:** this row's now says four searches. The test's own title in `src/uci-session.test.ts` still says three. It is
+    outside this hop's fence, so that half of QE-282-f stays owed.*
 - **A11 (busy `isready`; re-worded 2026-10-30, `bapm-ABC-220-merge-fold`).** *(Was: "`ABC-220`'s A13 (default lane)
   and A14 (opt-in real-child lane) pass with `TimeMode` `uci-clock-mode`." `ABC-220`'s A14 was split into A14a and
   A14b on 2026-10-30, `arch-ABC-220-a14`.)* A11 is MET only when all three are met:

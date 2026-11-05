@@ -216,7 +216,7 @@ adr: "ADR-0075, accepted by the owner 2026-11-05 (…c1623ae7), in force at this
 | 2 | scope and out-of-scope | ✅ scope 1–5 |
 | 3 | INVEST | ✅ S–M; pawn-only terms |
 | 4 | testable, measurable acceptance | ✅ form (b): K0–K7 from `ADR-0075` d7. K2's value rows are row 10's |
-| 5 | dependencies known | ✅ `ADR-0075`; the probe after A4; `ABC-305` before the build; first of the four; its read after `ABC-303` and `ABC-289`; the shared files |
+| 5 | dependencies known | ✅ `ADR-0075`; ~~the probe after A4~~ *the probe after the census, which has reported (2026-11-05, `bapm-rows-cut-1105`; `…16e0ec2c`, `…19cea480`)*; `ABC-305` before the build; first of the four; its read after `ABC-303` and `ABC-289`; the shared files |
 | 6 | NFR triggers with targets | ✅ `NFR-009` 640 KiB, ≤ 16 MiB; `G2` ≤ 1.03 ×; `NFR-008` ≤ 10 s |
 | 7 | test notes | ✅ 1–2 |
 | 8 | size | ✅ S–M |
