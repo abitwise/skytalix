@@ -1,0 +1,334 @@
+---
+kind: adr
+id: ADR-0075
+---
+# ADR-0075: E4b (`ABC-291`): connected and phalanx pawns earn, and backward pawns cost, hand values fixed by one rule from `PASSED` and `ISOLATED`. The three terms sit in the pawn memo at 640 KiB, behind one switch and a test-only off-door pair, and are judged on their own C2′, intent GAIN
+
+## Status
+
+**PROPOSED 2026-11-05.** Recorded by Architect/Design (task `arch-ABC-291`, records only, on `grugops/arch-ABC-291` from `main` `148fd329`).
+**Nothing was run:** no test, build, engine or probe. A timing read (`ABC-282`'s A4) held the host. Every figure below is arithmetic on
+`src/evaluate-params.ts` at that commit, or is quoted from a named record. Anything that needs a reading is marked `UNKNOWN - verify`.
+
+**Acceptance is the owner's:** this is a new ADR (`ABC-291`'s front matter, reading (b); `ADR-0056` D6's dated line of
+`arch-owner-answers-1105`). His question is § The owner's question. Not in force until `ABC-291` merges.
+
+**What it sets, in short.** Three pawn-only terms in form (b), on `main`'s tapered evaluation. Values come from one stated rule, fixed
+here before any row or game is read. `G2` ≤ 1.03 ×. Memo 576 → 640 KiB. Intent GAIN. A written premise probe, run on the host after A4.
+**The probe cannot change a value** (d10).
+
+**Inputs read:** `ABC-291`'s page; the Orchestrator's `…ba886714` and `…42f7fd67`; `ADR-0056` D2, D5's dated blocks and D6 with their
+dated lines; `ADR-0067`'s dated blocks; `ADR-0070`; `ADR-0064` d3–d8; `ADR-0026` d10; `…ba8265e9`, `…2b3440cf`, `…e5a5ac0c`, `…a717244e`;
+`src/evaluate.ts`, `src/evaluate-params.ts`, `tools/tune` on `main` and at `b297ab89`.
+
+## Decision log
+
+| date (UTC) | by | what | record |
+|---|---|---|---|
+| 2026-11-05 | Architect/Design | PROPOSED: definitions, rule, memo, `G2` ratio, intent, the probe written and not run, the four carried items. Nothing run | `arch-ABC-291` |
+
+## Context
+
+### What `main` scores today
+- Material, square tables, `PASSED` by rank, `DOUBLED` 15 / 15 and `ISOLATED` 10 / 10 (`src/evaluate-params.ts`).
+- `src/evaluate.ts`'s header leaves backward pawns and chains out. A defended chain and a backward pawn read the same as loose pawns.
+- `pawnStructure` is a pure function of the two pawn masks, memoised 2^14 slots deep at 576 KiB (`ADR-0070` d2).
+- Every table on `main` is rule-made. No fitted table has played a graded game.
+
+### Why hand values, and why this term first
+- Tuning waits: no third fit and no date (`ADR-0067`'s dated block of `arch-owner-answers-1105`). `ADR-0056` D2's dated line supersedes
+  "structure at 0, values from a pull" for rows E3–E6.
+- Form (a) pays its cost now for a pull that does not exist. E4a's 1.12 × endgame cost stays on `main` for no value.
+- Hand values have failed here by cost (`ABC-205`), by a lost read (`ABC-207`), and on pre-registered rows (`ADR-0068`, `ADR-0070`). `…ba8265e9` reasons
+  that a pawn-only term is the least exposed to cost and to lost mates. That is reasoned, not read.
+
+### What this ADR takes from the earlier misses
+- **`ADR-0070`'s E3 missed on whole-evaluation relations:** other terms moved the score, and the term's own part was right. So the rows here
+  read the term's own part by arithmetic (K1 (c), PR3), never a generated relation on `evaluate`.
+- **`QE-271-h`:** seam-only rows passed a colour-symmetric fault on the hot path. So K1 (d) ties the hot path to the seam.
+- **`QE-271-f`:** `G2`'s roots did not read where E4a's loop runs. The same limit is stated here at d5, not found later.
+
+### Blindness to `zugzwang.001`
+`ADR-0067` test 3 reads "no value … chosen with the row or its attribution in hand". **The row played no part in d1 or d2.** I read
+what `ADR-0070` and the wait's notes say of it, because the brief names them. I did not open its FEN, and I worked no term through it. d2's inputs are
+two lines of `src/evaluate-params.ts`. Attribution of e1e5 is not run. Whether this term holds the row is `UNKNOWN - verify`.
+
+## Decision
+
+Notation: R is the pawn's own rank index, as in `PASSED`. 1 is its start rank, 6 is one step from promotion. f is its file. "Friendly" and
+"enemy" are from the pawn's side. All three definitions read pawns only.
+
+1. **The definitions.**
+   - **Connected:** a friendly pawn stands on (f − 1, R − 1) or (f + 1, R − 1), so a friendly pawn defends it. It counts once per pawn, however
+     many defenders it has. At R = 1 it cannot fire.
+   - **Phalanx:** a friendly pawn stands on (f − 1, R) or (f + 1, R), and R ≥ 2. It counts once per pawn, however many neighbours it has. Each
+     pawn of a pair earns it. At R = 1 it does not fire: eight pawns at home are not a formation, and a bonus there would charge every first
+     pawn move.
+   - **Backward:** all three hold:
+     - (a) the side has a pawn on f − 1 or f + 1, on any rank. Otherwise the pawn is isolated, and `ISOLATED` charges it;
+     - (b) no such pawn stands on rank R or behind it. All its neighbours have passed it, and pawns never step back, so none can defend it;
+     - (c) its stop square (f, R + 1) holds an enemy pawn, or an enemy pawn attacks it from (f − 1, R + 2) or (f + 1, R + 2).
+   - **What follows by arithmetic:** backward excludes connected and phalanx by (b), isolated by (a), and passed by (c). Connected and phalanx
+     may both fire on one pawn, and either may fire on a passer. Each adds. A backward rear pawn of a doubled pair pays both `DOUBLED` and
+     `PAWN_BACKWARD`. The double step and en passant are not read.
+
+2. **The rule, and the values it gives.** A pair half h is mg or eg. Division floors. Every other index reads 0.
+   - **Backward costs what isolated costs:** `PAWN_BACKWARD`[h] = `ISOLATED`[h]. Both are a pawn no friendly pawn can ever defend.
+   - **A defended pawn on the first rank of the enemy half earns what an isolated pawn pays, and other ranks follow the passer's shape:**
+     `PAWN_CONNECTED`[h][R] = `PASSED`[h][R] × `ISOLATED`[h] / `PASSED`[h][4], for R = 2 … 6.
+     - R = 4 is the anchor, because it is the first rank where a defended pawn takes squares in the enemy half. Below it, the bonus stays under
+       `ISOLATED`, so a quiet pawn move at home cannot outvote a structural weakness.
+     - The anchor is the rule's one judgment. It is stated here because nothing on the records fixes it.
+   - **A pair earns the same side by side as in a chain:** `PAWN_PHALANX`[h][R] = `PAWN_CONNECTED`[h][R] / 2, for R = 2 … 6. A chain pair earns
+     once, on its front pawn. A phalanx pair earns twice, once per pawn.
+
+   | R | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
+   |---|---:|---:|---:|---:|---:|---:|---:|---:|
+   | `PAWN_CONNECTED` mg = eg | 0 | 0 | 2 | 5 | 10 | 17 | 28 | 0 |
+   | `PAWN_PHALANX` mg = eg | 0 | 0 | 1 | 2 | 5 | 8 | 14 | 0 |
+
+   `PAWN_BACKWARD` = { mg 10, eg 10 }, a penalty held as a positive value, as `ISOLATED` is.
+   - **The halves come out equal, and that is the rule's output.** `PASSED.eg` is 2 × `PASSED.mg` and `ISOLATED`'s halves are equal, so the
+     ratio cancels. So **"tapered" on `ABC-291`'s page reads "a middlegame / endgame pair that enters the blend". The blend changes nothing
+     at today's table.** `ADR-0064` d3's line stands: no endgame value is hand-written without a rule. Equal halves also leave nothing for the
+     blend's trunc to drop (`ADR-0070`'s resolution limit).
+   - **Fixed now.** The values are set here, before any row or game is read. If `PASSED` or `ISOLATED` move before the build, these numbers stay.
+     They are the values, and the rule records how they were made.
+   - **Licence:** the rule is this project's own (`ABC-215`, `ADR-0048`). No value is taken from another engine.
+
+3. **In the pawn memo, at 640 KiB.** All three terms are pure functions of the two pawn masks, so they sit in the memo. They need no king,
+   piece or side to move.
+   - **One new `Int32Array` part, `pawnCacheShape`:** the packed sum of the three terms, white minus black. `pawnStructure` computes it in its
+     second pass. A hit sets it, as a hit sets the passer words. It stays **out** of `pawnStructure`'s return value, and the caller adds it.
+   - **Why a separate part:** the off door reads the same memo, keyed the same way, and simply does not add the part. No second memo, no key salt.
+   - **Size:** 2^14 × 40 bytes = **655 360 bytes, 640 KiB**, up 65 536 bytes from 589 824. It is fixed at load. `NFR-009`: far under 16 MiB, and
+     no growth between a 1 s and a 4 s search.
+   - **The miss path allocates nothing.** The rearmost pawn per file comes from the first pass, in a word and not an array.
+   - **Parameters:** three new exports, `PAWN_CONNECTED`, `PAWN_PHALANX` (by rank) and `PAWN_BACKWARD` (a pair). `src/evaluate-params.ts` stays data
+     only, and each comment carries its rule.
+
+4. **One switch and a test-only off-door pair** (`ADR-0026` d10, in `ADR-0064` d7's form).
+   - **One switch, `pawnShape`,** in `src/search.ts`'s `Switches`, `src/engine.ts`'s `Heuristics` and quiescence's rules record. It is on in `search()`
+     and `chooseMove` only. It is never module state. All three terms share it: they are one structure with one rule, and no row reads them apart.
+   - **Test-only exports:** `searchWithoutPawnShape`, `chooseMoveWithoutPawnShape`, and `evaluateAtPhaseWithoutPawnShape`, the evaluation those doors call.
+   - **One test-only seam, `pawnShapeForTest(position)`:** each side's three parts, mg and eg, per side and never netted, from a fresh
+     `pawnStructure` (the `kingExposureForTest` precedent). `pawnStructureForTest` gains one field, the shape part.
+   - **Every older door turns it off,** including those `ABC-303` and `ABC-289` add. `evaluateWithoutTaper` never adds the part, so `ADR-0064` B1 (c)
+     holds. `evaluateWithoutMobility` and `evaluateWithoutPawnCache` keep it on, because their rows read another term.
+   - **Rows follow `ADR-0064` d7 by reference.** A shipped-side row whose other side is an older door re-points to the new door, with its figures
+     unchanged. A pinned value that moves is re-pinned, old → new in the PR. A lost fixture property is re-found under `ADR-0028` d2. A level
+     that reddens follows `ADR-0028`. **No zugzwang depth is re-pinned.**
+
+5. **Cost: `G2` ≤ 1.03 × the base, per call.**
+   - **What a call adds on a hit:** one typed-array read, one add, one branch. There is no new walk and no new board read.
+   - **Why 1.03.** It is the nearest recorded bar, `ABC-232` A3's 1.03 × for a passer-only change (`ADR-0064` B6). It is also the edge of the instrument's
+     void window, [0.970, 1.030] (`ADR-0067` d8), so a tighter bar would grade noise. 1.05 × was form (a)'s precedent, and it leaves more room than
+     one memo read needs. That a term built outside the memo would miss 1.03 × is my forecast, `UNKNOWN - verify`.
+   - **The instrument:** `ADR-0067` d8's A5 shape, under a PREREG sealed before timing. R = (r₁ + r₂) / 2, on the unrounded value, two sessions in
+     reverse order, a `main`-copy control, rounds 2, 4 and 6 (counted from 1) reversing the session's list, and round 1 the dropped warm-up.
+   - **What it cannot read, stated now.** `G2` repeats six roots, so it reads the hit path (`ADR-0070` d3's dated line says the same of K3). The
+     miss path, and how often it runs in search, are not graded. PR10 reports them, and C2′, played on the clock, prices them in.
+   - **Forecast:** under 1 %, `UNKNOWN - verify`.
+   - **F2's one value-identical cut, named now:** `doubled` and `isolated` share one memo word. They are only ever summed on a hit, so that saves a
+     read and returns the memo to 576 KiB.
+
+6. **Intent: GAIN, ≥ 50.0 of 100.** `ADR-0056` D6's dated line fixes it: evaluation rows fire at 100 ms. It is named here and never re-classed after
+   a score is seen. NEUTRAL is not open. PR9 checks the premise under the word, and it cannot change the intent.
+
+7. **The bars of `ABC-291`, pre-registered** (form (b); no bar is new; none is loosened after Ready).
+   - **K0, the doors:**
+     - (a) `chooseMoveWithoutPawnShape` and `searchWithoutPawnShape` are node-equal to the merge-base's `chooseMove` and `search()`: nodes, score and move,
+       on kiwipete d8 and d9, position-6 d8, d9 and d10, and `search()` d8 on both;
+     - (b) every older door reads its pre-ticket counts;
+     - (c) the head reads the probe's P0 counts. If `main`'s `src/` has moved, the Engineer applies the probe's patch to the new base, re-reads, and puts both
+       in the PR. A re-derived count is a dated line here, never a moved bar.
+   - **K1, units (default lane, no search):**
+     - (a) the mirror, `Object.is`: `G3` + `TAPER_MIRROR_POSITIONS` + ≥ 12 new pawn-shape positions, 0 mismatches;
+     - (b) `evaluateAtPhaseWithoutPawnShape` and `evaluateWithoutTaper` are `Object.is`-equal to the pre-ticket entries over the frozen corpora;
+     - (c) **seam rows, by arithmetic, on fixtures QE freezes before the build:** at least one per definition per colour, and one per edge file per
+       definition. They include each clause of Backward failing alone, and d1's exclusions;
+     - (d) **the hot path:** `evaluate` minus the off-door evaluation equals the seam's white minus black, signed for the side to move, exactly. With
+       equal halves the blend adds nothing, so there is no tolerance. A second row, inside `withParametersForTest` at unequal test halves, reads the blend in
+       `ADR-0070` d4's own-phase form;
+     - (e) the rule: each export equals d2's table, rebuilt in the row from the rule and the anchors' values at this ADR's date;
+     - (f) `ABC-274` A9's bound reads the three pairs (8 × (largest connected + largest phalanx + backward) per side);
+     - (g) the memo: a hit returns what a fresh `pawnStructure` returns, shape part included, on a forced collision too, and on an on-then-off read of one slot;
+     - (h) a source row: `pawnShapeForTest` and `evaluateAtPhaseWithoutPawnShape` are called from test files only.
+   - **K2, the re-pins.** Two byte rows, 589 824 → 655 360: `src/evaluate.pawns.test.ts` (with its slot formula) and `src/transposition.test.ts`. They
+     record a structure's size. **The value rows and the re-point list are `UNKNOWN - verify` until PR11's lane report.** That list joins this
+     decision by a dated line before Ready. A re-pin outside it is a defect.
+   - **K3, safety (`ADR-0064` d7's rows):** mate floor 0 violations, door d4 → head d5 and d5 → d5 on the 287; zugzwang **7 / 7** at recorded depths with
+     `zugzwang.001` among them; `G1` no NEWLY-MISSED line. All read all-on. No depth moves, and no expected result is rewritten.
+   - **K4, `G2` ≤ 1.03 ×** (d5). The endgame report set is reported beside it.
+   - **K5, `G6` under `Q-3K-4` (b):** every run at depth ≥ 6, depth 7 a WARN, "≥ base" reported, not graded.
+   - **K6, the read:** C2′ GAIN ≥ 50.0 of 100 at 100 ms against the merge-base, 100 of 100 complete, 0 candidate faults, 0 losses on time; then S′ at the E
+     in force (1 810 today), S-4; then the Levels deep lane.
+   - **K7, the tool line** (d11 (a)): `TUNE_DEEP` green at the tip, its count reported.
+   - **Reports, not bars:** drift at d5, reach at 47 000, PR10's figures.
+
+8. **The fault rule on this read.** CF1–CF10 reach it (`ADR-0056` D5's dated block of `arch-owner-answers-1105b`). QE copies the Reach line and CF1–CF10
+   unaltered, then this table, which fills that block's third column for this ticket. It adds no bar.
+
+   | the words | in | on `ABC-291`'s read |
+   |---|---|---|
+   | "50.0" | CF2, CF5 | 50.0 (GAIN) |
+   | "B6" | CF2, CF5, CF8 | C2′'s miss line: NOT MET, nothing merges, QE records a `failed-attempt`, and the ticket goes back to BA/PM. d11 (d) applies |
+   | "no form, T, tier, door, margin or table moves (row P2)" | CF3 | no definition (d1), rule or value (d2), memo form (d3), switch or door (d4) moves. Every value of `PAWN_CONNECTED`, `PAWN_PHALANX` and `PAWN_BACKWARD` is fixed |
+   | "Tables 1 and 2" | CF3 | K0–K5 and K7: every graded row the PREREG reads before the first game |
+   | "§ 6's order" | CF4 | C2′, then S′, then the Levels lane |
+   | "S1, S2 and R7" | CF6, and CF7 through it | K0 (a), the off door against the merge-base; K0 (b), every older door; K0 (c), the head's counts |
+
+   - **No change:** CF1, CF9, CF10. CF7 changes only through CF6, and CF8 only by "B6". 3.0 of 10 and 7.0 of 20 are S-4. "The sealed E" is the E in force at this read's seal.
+   - **A defect fix is not a miss.** A fix that restores d1 or d2 as written is CF3's, and CF4's new read follows if CF2 sends it there.
+
+9. **What a pass means: "not seen worse", not "proven better".** C2′ at GAIN keeps a score of 50.0 or more. By `ADR-0056`'s C2′ table a term truly worth
+   +20 Elo passes 79 % of the time, +10 passes 66 %, 0 passes 50 %, −10 passes 34 %, and −20 passes 21 %. So a merged term's Elo stays unknown. A term worth
+   nothing passes half the time. The read keeps clear gains and stops clear losses, and it cannot tell +10 from −10. The score is not a measure of the
+   term, and it is not added to any forecast. `ADR-0056` D2's +20–60 stays an estimate for all of row E4, E4a included.
+
+10. **The premise probe: written here, not run.** It runs on the host after A4, once, under the host lock, on one core. It plays no games.
+    - **The premise, in three parts:** at d2's values the term is **safe** on the rows that have caught hand values before, **cheap** per call, and **fires** at
+      100 ms often enough for 100 games to mean something.
+    - **Sealed form.** A `decision` note under the probe's own task, sealed and committed **before any measured run**. It names `main`'s tip and `src/` tree, the
+      sha256 of each script, the rows and bars below word for word, the batch order, and the rule below. One load-only smoke may run first: the start position
+      with the term on reads 0, by symmetry, which carries no information. Then one results note and one decision note. Scripts and outputs go to the task's
+      `raw/`, with `<scratch>`, `<home>` and `<repo>` as placeholders. **No bar moves after a reading, and a miss is not re-played.**
+    - **The instrument.** Scratch `git archive` copies of `src/` at the sealed tree, outside the repository: `main` (unpatched), `main2` (unpatched, the control), and
+      `cand` (d3 and d4 patched in, with a probe-only switch giving ON and OFF).
+    - **The rows:**
+
+      | row | reads | bar | class |
+      |---|---|---|---|
+      | **PR1**, instrument | OFF against unpatched `main`: nodes, score, move on K0 (a)'s rows | exact | else the probe is void: STOP |
+      | **P0**, counts | ON on the same rows | none, a reading; it becomes K0 (c) | reading |
+      | **PR2**, mirror | K1 (a)'s sets, ON, `Object.is` | 0 mismatches | exact |
+      | **PR3**, arithmetic | the seam's parts against an independent labeller, written from d1's words and sharing no code with the patch, over `G3`, the probe's pawn positions and every position of PR9 | 0 mismatches | exact |
+      | **PR4**, memo and off | a hit equals a fresh call; ON then OFF on one slot; OFF `Object.is`-equal to `main` on the corpora | 0 mismatches | exact |
+      | **PR5**, mate floor | `ADR-0064` B2's two rows on the 287, ON | 0 violations | safe |
+      | **PR6**, zugzwang | `ADR-0050` d9's seven rows at recorded depths, ON, the played move only | 7 / 7 | safe |
+      | **PR7**, `G1` | the 58, ON against OFF | no NEWLY-MISSED line | safe |
+      | **PR8**, `G2` | d5's instrument, ON against `main` | R ≤ 1.03; a void session leaves it `UNKNOWN`, and it moves to the build | cheap |
+      | **PR9**, firing | static evaluate, ON minus OFF, at every position of the 200 C2′ games on record (`qe-ABC-269` b8, `qe-ABC-279` c2, `d.pgn`) | share with \|Δ\| ≥ 10 cp at or above 5.0 % | fires |
+      | **PR10**, reports | reach at 47 000; drift at d5; ns per node on `G2`'s roots at fixed depth; the memo's hit rate in search, as a count; a per-call ratio with the memo bypassed; the endgame report set; PR9 by part | none | decides nothing |
+      | **PR11**, lane report | the default lane with ON hard-wired, against `main`'s copy | none; it lists the value rows and re-points for K2 | decides nothing |
+
+    - **Fenced out of the probe.** No margin on `zugzwang.001`, no v(e1f1) − v(e1e5), no per-part read of it, and no singles on any safety row. Under `ADR-0067` test 3 as read
+      at `…3e6b25fb`, the all-on row owed by every value-changing read does not fail the test, and a per-part read of it does.
+    - **The rule (fixed now):**
+      1. **PR1, PR2, PR3 or PR4 misses:** a defect in the prototype gets one fix under a sealed addendum, and every row is re-read. If PR3 shows d1's words are wrong and not the patch,
+         STOP: this ADR is restated and goes back to him. No value moves.
+      2. **PR5, PR6 or PR7 misses:** a defect check first. If the miss is real, the premise is **NOT MET**. `ABC-291` is not built, and it goes back to BA/PM. d11 (d) applies, so no number is
+         changed to pass. There is no subset fallback: form (a) is superseded, and dropping a term after a safety read is choosing with the row in hand.
+      3. **PR8 above 1.03:** the premise stands. The build carries d5's named cut, and QE reads K4 on the build. This is `ADR-0070`'s rule 5 form.
+      4. **PR9 below 5.0 %:** the premise is **NOT MET for an own read**. 100 games would then read a term that barely moves the score, near a coin flip, at the term's cost. The intent stays
+         GAIN, and no value is raised. The ticket goes back to BA/PM, and the owner is told. A bundle under B1 stays lawful if a later ADR states the relation.
+      5. **Every row holds:** the premise is **MET**, and the ADR gets its dated line.
+    - **What the probe can change in this ADR:** K0 (c)'s counts; K2's value-row and re-point list; the forecasts at d5 and § Consequences, replaced by readings; the fixture list; and whether `ABC-291`
+      is built at all.
+    - **What it cannot change:** d1's definitions (except by rule 1's STOP, back to him), d2's rule or any value, d3's memo form, d5's ratio, d6's intent, any bar, or the term order. It cannot
+      turn a miss into a pass, and it cannot be re-run after one.
+    - **Host:** about 3 min of runs for `ADR-0070`'s probe, plus two `G2` sessions and one lane report. Under 1 h by estimate, `UNKNOWN - verify`. It takes the lock alone, as any timing read does.
+
+11. **The four carried items.**
+    - **(a) `TUNE_DEEP` against a hand-valued term: the tool line lands with the term, at its merge. Settled here, for `ABC-291`.**
+      - **The fact, by reading, nothing run.** `tools/tune/tune.test.ts`'s gate rows compare the shipped `evaluate` with the tracer at the shipped table over `G3`'s 184. A term with real values
+        that the tracer does not model misses wherever it fires. At `b297ab89`, which `ABC-305` lands, a second row reads the emission's exports equal to `main`'s, 17 of them, so a new export
+        reddens that too. So **`ABC-291`'s merge would turn `TUNE_DEEP` red twice over.**
+      - **Why at the merge and not at a pull.** A lane known to be red shows no new fault, and `ABC-305` A6 would STOP on it if it landed later. At real values the tracer is also a second, separate
+        reading of d1 on the hot path, the class `QE-271-h` found. That has worth with no pull at all.
+      - **The form.** `tools/tune` gains the three terms' counts in the tracer and the three exports in the emitter, **traced and held, not free**, as `T_UN` is (`ADR-0070` d7). 17 → 20 exports. No
+        fit, no emission to `src/`, and `src/` gains no tracing code. K7 reads it. The line is the last commit on the branch: it holds no production line, so it stales no read.
+      - **What this supersedes.** On this term, the pages' "each new export is owed to that pull's emitter change". `…6ccd8243` item 3 spoke of E4a at 0, before any row read the exports.
+      - **Order.** `ABC-291`'s build follows `ABC-305`'s merge. If E2 closes for good, no tool line is owed by any later term.
+    - **(b) How `ABC-306` reaches a fit: only on a yes that names it. The Architect writes the route at that yes.**
+      - **The hold stands.** Nothing is built now.
+      - **The route:** per-piece weights land value-identical, every piece at the shared `MOBILITY_WEIGHT` (not at 0), so the fit has a term on `main` to weigh. It needs its `ADR-0031` change and one dated line
+        beside `ADR-0056` D2's supersession, since it is form (a) in substance. The reason for that supersession, "it buys nothing until a pull exists" (`…2b3440cf`), lapses only once he says yes.
+      - **It does not ride in by default.** It would have no read of its own, so it fails `ADR-0067` test 2 as written. His yes must name it, or it stays out of the free set.
+      - **`UNKNOWN - verify`:** whether the tracer's single `clamp(W · m)` fits a weight per piece. That ADR's.
+      - **The Phase 4 ruling (`…42f7fd67` 2).** I find no record against it. `…2b3440cf` lists `ABC-272` and `ABC-290`–`ABC-294`, and `ADR-0056` D6's dated line leaves the list to the Orchestrator.
+        `EPIC-011`'s row 58 labels `ABC-306` "Phase 4" as its home, which is not a closing rule. So a held `ABC-306` does not hold `ABC-295`.
+    - **(c) E5 without per-piece mobility at the third-pull door: it counts. Settled here as a reading, open to overruling at any third-pull call.**
+      - His table names "E3b, E4b, E5 or E6", and "E5" names the row. `ABC-292`'s three terms are that row, split by `ABC-207`'s loss and not by the row. All three are in `ADR-0056` D2's row E5 from 2026-11-01 and on `ABC-292`'s page from `181da9e3` (2026-11-04, 13:34Z), before `dd88560f`
+        (23:58Z that day). So test 1 holds.
+      - If the three split, each part that merges counts on its own. The four tests read on the part, and only merged parts enter the free set. Test 4 is unchanged: one door, one fit.
+      - Its worst case is harmless: the door only lets a pull be **asked for**. Asking is not a yes.
+    - **(d) No second set of values after a miss. Settled here for this term, on his acceptance. Each later term's ADR carries it, and he sees it each time.**
+      - **The line.** After a miss, `PAWN_CONNECTED`, `PAWN_PHALANX` and `PAWN_BACKWARD` do not get new numbers by hand. New numbers chosen after a loss are tuning on play by hand.
+      - **A miss is:** a real safety red (F3), C2′ below the bar on a clean read, a CF2 or CF8 NOT MET, a second `G2` miss, or the probe's rule 2 or 4.
+      - **Not a miss:** a defect fix that restores d1 or d2.
+      - **How it sits with C2′'s line** "a changed form may come back as a new attempt". It narrows that line for a hand-valued term. A change of values alone is not a changed form. A new form needs a new definition,
+        a reason drawn from no missed read, its own ADR and his acceptance.
+      - **What it does not do.** It does not hold the next term: a miss here leaves `ABC-292` where it stands (this answers `…fbc5050f` J10; no record says otherwise). A term that missed is not on `main`, so no pull can fit it.
+
+12. **The pattern for `ABC-292`, `ABC-290` and `ABC-293`** (`…ba886714`: this ADR sets it). Each ADR states, in this order: definitions; one rule built on `main`'s own table, fixed before any row and blind to `zugzwang.001`; the memo or
+    per-call seam; one switch and an off-door pair; a `G2` ratio with its reason and its blind spot; a probe with rows, a sealed form, and a line for what it can and cannot change; K rows reading the term's own part; CF's table filled; the
+    tool line at the merge; no second set after a miss. Each sets its own ratio. Nothing here binds their values.
+
+## The owner's question
+
+**Do you accept ADR-0075?**
+
+In plain words: the engine would learn three pawn ideas. A pawn defended by another pawn earns a small bonus. Two pawns side by side earn half that each. A pawn left behind, which no pawn can ever defend and which cannot safely move, pays the same
+penalty as an isolated pawn. The numbers are 1 to 28 centipawns, worked out by a fixed rule from numbers the engine already has, and nothing has been tested.
+
+A yes locks those numbers before any test sees them. After that:
+1. A short host check runs after A4, under an hour by estimate, with no games. It cannot change a number. It can only stop the work.
+2. The term is built, then read in 100 games at 100 ms, after `ABC-303` and `ABC-289`.
+3. If it loses, it is dropped, with no second try on new numbers.
+
+A pass means "not seen worse", not "proven better". A term worth nothing still passes half the time, and we would not know what it is worth. A merge would also meet your condition for asking about a third tuning pull. Asking would still be a new call for you.
+
+**My recommendation: yes.** By reasoning, not by any reading, it is the cheapest of the four and the least exposed to the failures seen so far. Accepting before the check keeps the numbers honest. If you want the biggest possible gain first, that is E3b, at a higher risk of the failures seen so far. If you would rather see the host check first, the numbers still cannot move, so waiting costs only time.
+
+## Alternatives
+
+- **Form (a), structure at 0.** Superseded (`ADR-0056` D2's dated line).
+- **Flat values for connected and phalanx.** `ABC-291` allows it. Not taken: a flat bonus pays as much for a quiet h3 as for a chain head on the fifth rank, and by-rank costs one table read, in the memo.
+- **Anchor at R = 3 (values 5, 10, 17, 30, 50) or R = 5 (1, 3, 5, 10, 16).** Not taken. R = 3 rewards pawn moves inside the home half as much as `ISOLATED` costs. R = 5 leaves almost nothing on the ranks where most pawns stand.
+- **An endgame half of 2 × the middlegame, E1's passer rule.** Not taken. E1's reason is the promotion race, not support, and it would make a backward pawn dearer than an isolated one in the endgame. No record gives a rule for these halves.
+- **Backward charged more on a half-open file.** The page's Problem mentions it. Not taken: one more feature and one more number, with no anchor. A later fit may ask for it.
+- **Values from another engine.** Not taken: `ADR-0048`, and they were tuned on another table.
+- **A subset fallback in the probe,** as `ADR-0070`'s rule 3. Not taken: d10's rule 2.
+- **A door per term.** Not taken: no row reads the terms apart, and each door costs an export pair across both recursions.
+- **Terms outside the memo.** Not taken: they read pawns only, so that is cost for nothing. `ABC-205` died on cost.
+- **No memo growth, by merging `doubled` and `isolated` now.** Not taken: it changes tested code to save 64 KiB no NFR needs. It stays as F2's named cut.
+- **A second memo, or the on / off flag in the key.** Not taken: the separate part does it for 64 KiB.
+- **`G2` at 1.05 ×, or at 1.02 ×.** Not taken: d5.
+- **The tool line only at a third pull.** Not taken: d11 (a). It is cheaper today and leaves a known-red lane for as long as the wait lasts.
+
+## What would falsify this
+
+| # | clause | what would falsify it | if it fires |
+|---|---|---|---|
+| F1 | d1–d4: the design as built | a seam, mirror, memo or door row red; K0 not reproduced | a defect, fixed before any cost bar |
+| F2 | d5: cheap | K4 above 1.03 ×, or a run below depth 6 on K5 | STOP to Architect/Design: d5's one value-identical cut, then one re-read under a PREREG. A second miss: not merged |
+| F3 | K3: safe | a mate-floor, zugzwang or `G1` row red | a defect check first. If real, NOT MET. Never a re-pin, a moved depth or a new value |
+| F4 | d6: the read | C2′ NOT MET | not merged, not re-played, back to BA/PM, through CF1–CF10 and d8's table. d11 (d) applies |
+| F5 | d10: the premise | the probe's rule 2 or 4 | `ABC-291` is not built. This ADR reads "accepted, not in force", or is withdrawn if not yet accepted. d11 (d) applies |
+| F6 | d11 (a): the tool line | an identity-gate miss at the tip | read against d1's words. `evaluate` wrong is F1. The tracer wrong is a tool defect. No production line changes to fit the tool |
+
+## Consequences
+
+- **Play:** every position with pawns can move. The start position stays 0 by symmetry. No read exists. The bars above are the first.
+- **Host.** The probe, then a build, `G2`, `G6`, safety rows and C2′ at about 25 min, S′ and the Levels lane. Runs over 1 h need his word, as usual. None is planned.
+- **Order.** `ABC-305`'s merge, then the build. C2′ follows `ABC-303` and `ABC-289`, because a value-changing merge stales the read after it. The probe needs only the host.
+- **Third pull.** A merge on its own read meets `ADR-0067`'s trigger. Asking stays a new call for him. If he says yes, the term may enter the free set, and d2's values are its start.
+- **NFRs.** `NFR-009`: +65 536 bytes, 640 KiB. `NFR-001` / `G2`: K4. `NFR-005`: K5. `NFR-008`: K1 rows are units with no search. Their cost in the lane is `UNKNOWN - verify`, and the row census the Orchestrator placed after A4 gates the merge. No new NFR file. `plans/nfr-catalog.md` is untouched.
+- **Determinism (`ADR-0027`) and licence (`ADR-0048`):** integer terms, mirror-exact by construction. The rule is this project's own. Security: none.
+- **File collisions:** `src/evaluate.ts` and `src/evaluate-params.ts`, one at a time with `ABC-272`, `ABC-290` and `ABC-292`–`ABC-294`. `src/search.ts`, `src/engine.ts` and `src/quiescence.ts` take the switch, so the door list is read on the base the build is cut from.
+- **Owed by BA/PM, after his answer:** `ABC-291`'s page: K0–K7 and the bars, `G2` 1.03, 640 KiB, the meaning of "tapered", the tool line, `ABC-305` in § Dependencies, status In Design. `ABC-306`'s "Through a fit" line. The door reading on `ABC-292`. The "emitter change" line on `ABC-290`–`ABC-293`. `EPIC-011`'s rows.
+- **Owed by the Architect:** the probe under its own task after A4; K2's list by a dated line, before Ready.
+
+### `UNKNOWN - verify`
+- Every reading: whether any row holds, `G2`, `G6`, the firing share, the memo's hit rate, the miss-path cost, and the probe's wall time.
+- Whether this term holds `zugzwang.001`. Whether any hand-valued term pays. This term's share of row E4's estimate.
+- K2's value rows and re-point list. `ABC-291`'s exact default-lane row count.
+- Whether `TUNE_DEEP` is red on `main` today. That the merge reddens it is by reading, not by a run.
+- Whether d2's low ranks push the engine toward flank pawn moves in front of its king. Reasoned as small, and unread.
+- Whether a weight per piece fits the tracer's clamp (d11 (b)).
+
+## Rollback
+
+- **Before the merge:** this ADR reads "accepted, not in force", or is withdrawn. Strike the dated lines of `arch-ABC-291` in `ADR-0056` and `ADR-0067`.
+- **After the merge:** revert the one merge. The memo returns to 576 KiB, the doors and the tool line go with it, and every read after it is stale by C2′'s rule. If a fit has merged on top, revert that first (`ADR-0067` § Rollback).

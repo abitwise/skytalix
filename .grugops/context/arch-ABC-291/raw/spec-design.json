@@ -1,0 +1,7 @@
+{ "refs": ["arch-ABC-291"],
+  "notes": [
+    { "kind": "decision",
+      "confidence": "high on the arithmetic and on what the records bind; medium on the anchor rank, equal halves and the 1.03 ratio, which are stated judgments; every play and cost effect is UNKNOWN - verify; nothing run",
+      "bodyFile": "notes/note-design.md",
+      "refs": ["arch-ABC-291", "ABC-291", "EPIC-011", "ADR-0075", "ADR-0056", "ADR-0064", "ADR-0067", "ADR-0070", "ADR-0026", "ADR-0048", "ABC-282", "ABC-303", "ABC-289", "NFR-001", "NFR-005", "NFR-008", "NFR-009", "G1", "G2", "G3", "G6", "b99d10a0", "orch-2026-10-30a/20261105T102159Z-orchestrator-decision-ba886714", "arch-owner-answers-1105/20261105T075329Z-architect-design-decision-ba8265e9", "arch-owner-answers-1105b/20261105T081150Z-architect-design-decision-65557abd"] }
+  ] }

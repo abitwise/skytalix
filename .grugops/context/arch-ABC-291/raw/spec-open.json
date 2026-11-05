@@ -1,0 +1,7 @@
+{ "refs": ["arch-ABC-291"],
+  "notes": [
+    { "kind": "observation",
+      "confidence": "UNKNOWN - verify on every item listed; high that each is open on the records; nothing run",
+      "bodyFile": "notes/note-open.md",
+      "refs": ["arch-ABC-291", "ABC-291", "ABC-292", "ABC-290", "ABC-293", "ABC-305", "ABC-306", "EPIC-011", "ADR-0075"] }
+  ] }
