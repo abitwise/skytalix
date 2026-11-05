@@ -1,3 +1,4 @@
+_Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — A4 still playing; owner asked what else can go. → `arch-ABC-291` (ADR-0075 PROPOSED, no probe) and `bapm-pointers-1105` (pointers off ABC-282's close hop), records only. Running: qe-ABC-282-a4, both of these._
 _Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — `arch-owner-answers-1105b` merged: CF reaches every later C2′ read; bundle term opens the third-pull door; CF7 owner-accepted. BA/PM pointers (ABC-289 DP4, in-flight pointers, per-change rule) ride with ABC-282's close hop. Running: qe-ABC-282-a4._
 _Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — `bapm-wait-lines-1105` merged: ABC-301 closed NOT MET; ABC-304 Done; **ABC-305** (tools, Ready) and **ABC-306** (per-piece mobility, held) cut; ABC-290–293 on hand values; order E4b first. Rulings …08:10:31Z: census after A4, gating the next lane-adding merge after ABC-282. Running: qe-ABC-282-a4, arch-owner-answers-1105b._
 _Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — **owner: fault rule reaches later reads; a bundle term can open a third pull; CF7 confirmed.** → `arch-owner-answers-1105b`. Running: qe-ABC-282-a4 (lock held alone), bapm-wait-lines-1105. No owner question open._
@@ -1465,7 +1466,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [ABC-288] O2c: countermove and continuation history. Quiet moves are also ordered by the move that answered the opponent (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page) **2026-11-04: unheld for its probe (ABC-283 merged); recommended bundle 1 with its pair (Q-3K-11).**
 - [ABC-289] Q2: delta pruning in quiescence. Out of check, a capture is skipped when the stand-pat score plus its victim's (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
 - [ABC-290] E3b: king attack. Pieces attacking the enemy king's zone add a weighted, tapered term (a re-try of dropped ABC (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
-- [ABC-291] E4b: pawn structure. Connected and phalanx pawns earn a tapered bonus and backward pawns a tapered penalty; th (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
+- ~~[ABC-291]~~ → In Design. E4b: pawn structure. Connected and phalanx pawns earn a tapered bonus and backward pawns a tapered penalty; th (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
 - [ABC-292] E5: piece terms. A bishop pair bonus, rooks on open and semi-open files, outposts, and mobility weighted per p (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
 - [ABC-293] E6: threats and tempo. A piece attacked by an enemy pawn and a hanging piece (attacked and not defended) cost  (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
 - [ABC-294] E7b: endgame knowledge beyond E7a. Rook-pawn and wrong-coloured-bishop draws and named rook-ending rules scale (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
@@ -1519,7 +1520,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## In Analysis (WIP 0/2)
 
 
-## In Design (WIP 0/2)
+## In Design (WIP 1/2)
+- [ABC-291] E4b pawn structure (P2, DoR 9/10). `arch-ABC-291`: ADR-0075 PROPOSED, form (b), hand values; probe written, run after A4.
 
 
 ## Ready for Dev (WIP 0/6)
