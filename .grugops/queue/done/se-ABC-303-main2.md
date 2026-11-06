@@ -17,3 +17,21 @@ STOP and report, with nothing tuned: any bar in ADR-0056's tables 1 to 3 red, L4
 Every test, build or engine run goes under the host lock named in your dispatch prompt, one at a time. Leave nothing running; check with ps, not pgrep -f.
 Fences: ABC-303's code and tests, your records. No ticket, ADR, EPIC or board edits. No push, force, amend or rebase, and no merge into main.
 Publish: sealed notes (task se-ABC-303-main2, contextRoot = the worktree's .grugops/context, `at` from `date -u` run immediately before each note); queue moves; commit; ## Result + trace row; brief + claim to done/. Before your last commit, run `node tools/grugops/records-path-check.js --base main`; it must exit 0.
+
+## Result
+
+_by software-engineer (claude-opus-5-5, se-ABC-303-main2), 2026-11-06T13:47:42Z, branch `grugops/ABC-303`, `main` `38914841` merged at `bb0cc134`. Nothing tuned, no game, no graded timing, nothing left running, nothing pushed or merged._
+
+**Done. No STOP fired, no value or pin moved, no `tools/tune` change needed. Every gate and lane green at `bb0cc134`.**
+
+- **Merge:** one conflict, `plans/traceability.md`, rows of both sides kept. No rewrite.
+- **Unchanged production:** every path under `src/` and `data/` not ending `.test.ts` hashes alike on `572edf13`, `c9ff7ff9` and `38914841`; 0 paths differ. Branch side alike on `39a5b912`, `80bc0711`, `bb0cc134`. R1, R2 and A0 stand, not re-read.
+- **Gates:** typecheck 0; lint 0; build 0; `npm test` exit 0, 71 files, 2 734 / 2 734; skip count 0; `No findings.`
+- **Deep lanes, by report, 0 failed, 0 skipped:** passer 29 / 29; tune 25 / 25; book 36 / 36; qe-hop 36 / 36; uci-session 270 / 270; Levels 58 / 58.
+- **Count:** `main` 2 710 + 24 = 2 734, read 2 734. All 24 in `src/search.bundle.test.ts`, 15 → 39.
+- **`tools/tune`:** the bundle has no evaluation parameter, so its bounds have nothing of the bundle's to meet. T and the countermove live in the search, and the tool's imports reach neither `src/search.ts` nor `src/engine.ts`. 26 of 26 bound rows hold, least slack 1 cp on two; the table is byte-identical on `main`. This green shows the merge broke nothing, not that the tuner read the bundle.
+- **`src/evaluate.king-mobility.test.ts`** also arrives from `main`, not in the brief's list: no deep lane.
+- **Not read:** `G6`, `NFR-008`; no row of tables 1 to 3 re-graded. `npm test`'s 10.25 s is no reading: a foreign `marketing` vitest was live about 13:28Z, not touched.
+- **Commits:** merge `bb0cc134`; claim `0799da29`; notes `2c57d0e7`; then this Result and the move to done/.
+- **Notes:** decision `…da7ac82f`; observation `…e6cff498` (readings); observation `…eb34eea6` (artifact record). 3 of 3 read back.
+- **Next:** QE seals its PREREG on this tree; `G6` and the rest of `…bd60978c` § Not read are still owed.
