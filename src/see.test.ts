@@ -442,7 +442,7 @@ describe("ABC-279 — one switch, seePruning, and two test-only doors (ADR-0069 
         const found = literal.match(/seePruning: (true|false),/g);
         const on =
           entry === shipped ||
-          /^(search|chooseMove)Without(MoveCountPruning|Countermove|QuietBundle|History|SeeOrdering|Aspiration|Bundle)$/.test(
+          /^(search|chooseMove)Without(DeltaPruning|MoveCountPruning|Countermove|QuietBundle|History|SeeOrdering|Aspiration|Bundle)$/.test(
             entry,
           );
         expect(found, entry).toEqual([on ? "seePruning: true," : "seePruning: false,"]);

@@ -46,8 +46,19 @@
  * does. The rule is behind a third field, `QuiescenceRules.seePruning`, true only in the record the
  * shipped recursions pass; every test-only door turns it off.
  *
- * Not here, each a recorded decision rather than an omission: quiet checks in quiescence, delta
- * pruning, and QUIET UNDER-promotions (a capturing promotion, under-promotions included, is a
+ * A CAPTURE THAT CANNOT RAISE ALPHA IS SKIPPED OUT OF CHECK (`ABC-289`, `ADR-0074` decisions 1-5).
+ * At a node that stood pat, each capture that does not promote is tested in the loop, after the one
+ * sort, before `isLosingCapture`: when `standPat + ORDER_VALUE[victim] + DELTA_MARGIN` is at or
+ * below the loop's current alpha it is not made, not searched and not counted, and that bound
+ * raises `best`. The bound is load-bearing: a fail-low node returns an upper bound, so the stand pat
+ * alone would claim more than the rule knows. En passant is tested, a checking capture is skipped
+ * like any other, and a capturing promotion or a quiet queen promotion never is. The loop goes on
+ * past a skip, because a quiet queen promotion can sort after it. In check nothing is skipped. The
+ * rule is behind a fourth field, `QuiescenceRules.deltaPruning`, true only in the record the shipped
+ * recursions pass; every test-only door turns it off.
+ *
+ * Not here, each a recorded decision rather than an omission: quiet checks in quiescence, and
+ * QUIET UNDER-promotions (a capturing promotion, under-promotions included, is a
  * capture and is searched like any other; in check every under-promotion is an evasion). Static
  * exchange evaluation is here for pruning only (`ADR-0069`, amending `ADR-0024` decision 4), never
  * for ordering. No stalemate detection: a quiescence node out of check with no captures stands
@@ -73,7 +84,7 @@ import { makeMove, unmakeMove } from "./apply.ts";
 import { evaluateAtPhase, evaluateWithoutTaper, phaseAfterMove } from "./evaluate.ts";
 import { isInCheck, legalCaptures, legalCapturesAndQueenPromotions, legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
-import { type Position, pieceType } from "./position.ts";
+import { EMPTY, type Position, pieceType } from "./position.ts";
 import { isLosingCapture } from "./see.ts";
 
 /**
@@ -84,6 +95,9 @@ import { isLosingCapture } from "./see.ts";
  * an attacker the king is the safest piece to try first, not the most valuable to risk.
  */
 const ORDER_VALUE: readonly number[] = [0, 100, 320, 330, 500, 900, 0];
+
+/** What a capture may gain beyond its victim before `ADR-0074`'s rule gives it up, in centipawns. */
+const DELTA_MARGIN = 200;
 
 /**
  * MVV-LVA key of a capture — HIGHER SEARCHES FIRST. Most valuable victim first (a capturing
@@ -173,6 +187,12 @@ export interface QuiescenceRules {
    * record that predates the switch, and any record a caller builds for itself, is unchanged.
    */
   readonly seePruning?: boolean;
+  /**
+   * Out of check, a capture that cannot raise alpha is skipped (`ABC-289`, `ADR-0074` decisions 1-6).
+   * True only in the record the shipped recursions pass; absent or false searches it, so every
+   * record that predates the switch, and any record a caller builds for itself, is unchanged.
+   */
+  readonly deltaPruning?: boolean;
 }
 
 /**
@@ -207,6 +227,8 @@ export function quiesce(
   let best: number;
   let moves: Move[];
   let skipLosing = false;
+  let skipDelta = false;
+  let deltaBase = 0;
   if (rules.evasions && qply < QUIESCENCE_MAX_PLY && isInCheck(position)) {
     // In check (`ADR-0053` decision 2): no stand pat, so `best` starts below every real score
     // and only a searched move raises it. Every legal move is an evasion; none is mate here.
@@ -222,6 +244,8 @@ export function quiesce(
     best = standPat;
     if (best > alpha) alpha = best;
     skipLosing = rules.seePruning === true;
+    skipDelta = rules.deltaPruning === true;
+    deltaBase = standPat + DELTA_MARGIN;
 
     // The legal captures in generation order (ABC-206): only captures are tested for legality.
     // With quiet promotions on (`ABC-229`), the legal quiet queen promotions are appended after
@@ -234,6 +258,16 @@ export function quiesce(
   orderCaptures(moves);
 
   for (const move of moves) {
+    // Before the SEE test (`ADR-0074` decision 4), so a capture both rules name contributes its
+    // bound. Out of check every move without a promotion is a capture. The bound is at or below
+    // alpha, so alpha does not move and no cutoff comes of it (decision 3).
+    if (skipDelta && move.promotion === EMPTY) {
+      const bound = deltaBase + (ORDER_VALUE[pieceType(move.captured)] as number);
+      if (bound <= alpha) {
+        if (bound > best) best = bound;
+        continue;
+      }
+    }
     // Only on the stand-pat branch (`ADR-0069` decision 1): in check every evasion is searched.
     if (skipLosing && isLosingCapture(position, move)) continue;
     const undo = makeMove(position, move);

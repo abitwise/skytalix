@@ -118,6 +118,11 @@
  * its own TEST-ONLY door (`searchWithoutMoveCountPruning`, `searchWithoutCountermove`),
  * `searchWithoutQuietBundle` turns both off and is the pre-`ABC-303` `search()` node for node, and
  * every older door turns both off.
+ *
+ * DELTA PRUNING (ABC-289, `ADR-0074`): the rule is `src/quiescence.ts`'s, reached through the rules
+ * record as `seePruning` is, by one switch, `deltaPruning`, in BOTH recursions. `search()` holds it
+ * on; the TEST-ONLY door `searchWithoutDeltaPruning` is the pre-`ABC-289` `search()` node for node,
+ * and every older door turns it off.
  */
 
 import { makeMove, makeNullMove, unmakeMove, unmakeNullMove } from "./apply.ts";
@@ -154,12 +159,20 @@ const RULES_NO_EVASIONS: QuiescenceRules = { evasions: false, quietPromotions: t
 const RULES_NEITHER: QuiescenceRules = { evasions: false, quietPromotions: false };
 /** `searchWithoutSeePruning`'s record (`ABC-269`): both rules and the tapered stand pat. */
 const RULES_TAPERED: QuiescenceRules = { evasions: true, quietPromotions: true, taper: true };
-/** `search()`'s record (`ABC-279`, `ADR-0069` decision 6): the tapered record, losing captures skipped. */
+/** `searchWithoutDeltaPruning`'s record (`ABC-279`, `ADR-0069` decision 6): the tapered record, losing captures skipped. */
 const RULES_SEE_PRUNING: QuiescenceRules = {
   evasions: true,
   quietPromotions: true,
   taper: true,
   seePruning: true,
+};
+/** `search()`'s record (`ABC-289`, `ADR-0074` decision 6): the record above, delta skip on. */
+const RULES_DELTA_PRUNING: QuiescenceRules = {
+  evasions: true,
+  quietPromotions: true,
+  taper: true,
+  seePruning: true,
+  deltaPruning: true,
 };
 
 export interface SearchResult {
@@ -534,13 +547,13 @@ interface Switches {
   /**
    * The tapered evaluation (`ABC-269`, `ADR-0064` decision 7) at every call site the recursion has.
    * True on `search()` and `searchWithoutSeePruning`, where both quiescence switches are on too, so
-   * its rules record is `RULES_SEE_PRUNING` or `RULES_TAPERED`; every older door turns it off and
+   * its rules record is `RULES_DELTA_PRUNING`, `RULES_SEE_PRUNING` or `RULES_TAPERED`; every older door turns it off and
    * reads the pre-`ABC-269` evaluation.
    */
   readonly taper: boolean;
   /**
    * Quiescence skips a losing capture out of check (`ABC-279`, `ADR-0069` decisions 1-3, 6, 7). True
-   * on `search()` only, where the taper is on too, so its rules record is `RULES_SEE_PRUNING`;
+   * on `search()` only, where the taper is on too, so its rules record is `RULES_DELTA_PRUNING` or `RULES_SEE_PRUNING`;
    * `searchWithoutSeePruning` and every older door turn it off (decision 8).
    */
   readonly seePruning: boolean;
@@ -568,6 +581,13 @@ interface Switches {
    * every older door turn it off, and then nothing reads or writes the table.
    */
   readonly countermove: boolean;
+  /**
+   * Quiescence skips a capture that cannot raise alpha, out of check (`ABC-289`, `ADR-0074`
+   * decisions 1-7). True on `search()` only, where `seePruning` and the taper are on too, so its
+   * rules record is `RULES_DELTA_PRUNING`; `searchWithoutDeltaPruning` and every older door turn it
+   * off (decision 8).
+   */
+  readonly deltaPruning: boolean;
 }
 
 /** The least remaining depth, and the least 0-based index in the ordered list, a reduced move has. */
@@ -797,7 +817,9 @@ function leafScore(
     // Every capture node the quiescence search enters is a position visited, and is counted.
     const rules = switches.taper
       ? switches.seePruning
-        ? RULES_SEE_PRUNING
+        ? switches.deltaPruning
+          ? RULES_DELTA_PRUNING
+          : RULES_SEE_PRUNING
         : RULES_TAPERED
       : switches.quiescenceEvasions
         ? switches.quietPromotions
@@ -1200,6 +1222,34 @@ export function search(position: Position, depth: number): SearchResult {
     seeOrdering: true,
     moveCount: true,
     countermove: true,
+    deltaPruning: true,
+  });
+}
+
+/**
+ * TEST-ONLY. The pre-`ABC-289` `search()`, node for node: quiescence's delta skip off, everything
+ * else on (`ADR-0074` decision 8). The top rung: every door below turns the switch off, so each
+ * stays node-equal to itself. Not an engine option; nothing in production calls it.
+ */
+export function searchWithoutDeltaPruning(position: Position, depth: number): SearchResult {
+  return searchRoot(position, depth, {
+    prune: true,
+    quiescence: true,
+    ordering: "full",
+    table: true,
+    pvs: true,
+    reductions: true,
+    nullMove: true,
+    quiescenceEvasions: true,
+    quietPromotions: true,
+    futility: true,
+    taper: true,
+    seePruning: true,
+    history: true,
+    seeOrdering: true,
+    moveCount: true,
+    countermove: true,
+    deltaPruning: false,
   });
 }
 
@@ -1225,6 +1275,7 @@ export function searchWithoutMoveCountPruning(position: Position, depth: number)
     seeOrdering: true,
     moveCount: false,
     countermove: true,
+    deltaPruning: false,
   });
 }
 
@@ -1250,6 +1301,7 @@ export function searchWithoutCountermove(position: Position, depth: number): Sea
     seeOrdering: true,
     moveCount: true,
     countermove: false,
+    deltaPruning: false,
   });
 }
 
@@ -1276,6 +1328,7 @@ export function searchWithoutQuietBundle(position: Position, depth: number): Sea
     seeOrdering: true,
     moveCount: false,
     countermove: false,
+    deltaPruning: false,
   });
 }
 
@@ -1301,6 +1354,7 @@ export function searchWithoutHistory(position: Position, depth: number): SearchR
     seeOrdering: true,
     moveCount: false,
     countermove: false,
+    deltaPruning: false,
   });
 }
 
@@ -1326,6 +1380,7 @@ export function searchWithoutSeeOrdering(position: Position, depth: number): Sea
     seeOrdering: false,
     moveCount: false,
     countermove: false,
+    deltaPruning: false,
   });
 }
 
@@ -1353,6 +1408,7 @@ export function searchWithoutBundle(position: Position, depth: number): SearchRe
     seeOrdering: false,
     moveCount: false,
     countermove: false,
+    deltaPruning: false,
   });
 }
 
@@ -1381,6 +1437,7 @@ export function searchWithoutSeePruning(position: Position, depth: number): Sear
     seeOrdering: false,
     moveCount: false,
     countermove: false,
+    deltaPruning: false,
   });
 }
 
@@ -1409,6 +1466,7 @@ export function searchWithoutTaper(position: Position, depth: number): SearchRes
     seeOrdering: false,
     moveCount: false,
     countermove: false,
+    deltaPruning: false,
   });
 }
 
@@ -1437,6 +1495,7 @@ export function searchWithoutFutility(position: Position, depth: number): Search
     seeOrdering: false,
     moveCount: false,
     countermove: false,
+    deltaPruning: false,
   });
 }
 
@@ -1465,6 +1524,7 @@ export function searchWithoutQuietPromotions(position: Position, depth: number):
     seeOrdering: false,
     moveCount: false,
     countermove: false,
+    deltaPruning: false,
   });
 }
 
@@ -1492,6 +1552,7 @@ export function searchWithoutQuiescenceEvasions(position: Position, depth: numbe
     seeOrdering: false,
     moveCount: false,
     countermove: false,
+    deltaPruning: false,
   });
 }
 
@@ -1519,6 +1580,7 @@ export function searchWithoutNullMove(position: Position, depth: number): Search
     seeOrdering: false,
     moveCount: false,
     countermove: false,
+    deltaPruning: false,
   });
 }
 
@@ -1550,6 +1612,7 @@ export function searchWithoutPruning(position: Position, depth: number): SearchR
     seeOrdering: false,
     moveCount: false,
     countermove: false,
+    deltaPruning: false,
   });
 }
 
@@ -1579,6 +1642,7 @@ export function searchWithoutQuiescence(position: Position, depth: number): Sear
     seeOrdering: false,
     moveCount: false,
     countermove: false,
+    deltaPruning: false,
   });
 }
 
@@ -1610,6 +1674,7 @@ export function searchWithoutPruningOrQuiescence(position: Position, depth: numb
     seeOrdering: false,
     moveCount: false,
     countermove: false,
+    deltaPruning: false,
   });
 }
 
@@ -1637,6 +1702,7 @@ export function searchWithoutOrdering(position: Position, depth: number): Search
     seeOrdering: false,
     moveCount: false,
     countermove: false,
+    deltaPruning: false,
   });
 }
 
@@ -1663,6 +1729,7 @@ export function searchWithoutKillers(position: Position, depth: number): SearchR
     seeOrdering: false,
     moveCount: false,
     countermove: false,
+    deltaPruning: false,
   });
 }
 
@@ -1690,6 +1757,7 @@ export function searchWithoutTable(position: Position, depth: number): SearchRes
     seeOrdering: false,
     moveCount: false,
     countermove: false,
+    deltaPruning: false,
   });
 }
 
@@ -1717,6 +1785,7 @@ export function searchWithoutReductions(position: Position, depth: number): Sear
     seeOrdering: false,
     moveCount: false,
     countermove: false,
+    deltaPruning: false,
   });
 }
 
@@ -1744,5 +1813,6 @@ export function searchWithoutPvsOrReductions(position: Position, depth: number):
     seeOrdering: false,
     moveCount: false,
     countermove: false,
+    deltaPruning: false,
   });
 }

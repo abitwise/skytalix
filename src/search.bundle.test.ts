@@ -588,10 +588,12 @@ describe("ABC-303 — the doors (ADR-0072 decision 6, ADR-0073 decision 7)", () 
   };
   for (const [door, moveCount, countermove] of [
     ["search", true, true],
+    ["searchWithoutDeltaPruning", true, true],
     ["searchWithoutMoveCountPruning", false, true],
     ["searchWithoutCountermove", true, false],
     ["searchWithoutQuietBundle", false, false],
     ["chooseMove", true, true],
+    ["chooseMoveWithoutDeltaPruning", true, true],
     ["chooseMoveWithoutMoveCountPruning", false, true],
     ["chooseMoveWithoutCountermove", true, false],
     ["chooseMoveWithoutQuietBundle", false, false],
@@ -600,7 +602,9 @@ describe("ABC-303 — the doors (ADR-0072 decision 6, ADR-0073 decision 7)", () 
       const source = door.startsWith("search") ? SOURCE.search : SOURCE.engine;
       const shipped = door.startsWith("search") ? "search" : "chooseMove";
       const older = (text: string): string =>
-        text.slice(text.indexOf("{\n")).replace(/ {4}(moveCount|countermove): \w+,\n/g, "");
+        text
+          .slice(text.indexOf("{\n"))
+          .replace(/ {4}(moveCount|countermove|deltaPruning): \w+,\n/g, "");
       const body = record(source, door);
       expect(body).toContain(`moveCount: ${moveCount},`);
       expect(body).toContain(`countermove: ${countermove},`);
@@ -614,7 +618,7 @@ describe("ABC-303 — the doors (ADR-0072 decision 6, ADR-0073 decision 7)", () 
       expect(doors.length).toBeGreaterThan(10);
       for (const found of doors) {
         const name = found.replace("export function ", "");
-        if (/MoveCountPruning|Countermove/.test(name)) continue;
+        if (/DeltaPruning|MoveCountPruning|Countermove/.test(name)) continue;
         expect(`${name} ${record(source, name).match(/moveCount: \w+|countermove: \w+/g)}`).toBe(
           `${name} moveCount: false,countermove: false`,
         );

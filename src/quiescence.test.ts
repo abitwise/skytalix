@@ -27,6 +27,10 @@
  * and capture-mate rows, the rule rows, the doors and the source rows in the default lane; the
  * node bar, the bounded drift oracle in both recursions and the mate floor under `SEARCH_DEEP=1`.
  * Direct `quiesce` calls above pass the shipped rules; a work reading passes the pre-ticket record.
+ *
+ * `ABC-289` (`ADR-0074`, delta pruning) has its rows here too: `DP1`, the rule on hand boards calling
+ * `quiesce` directly, and the switch's literals in the default lane; `DP0`, `DP2` and `DP3` against
+ * its doors under `SEARCH_DEEP=1`.
  */
 
 import { readFileSync } from "node:fs";
@@ -34,6 +38,7 @@ import { describe, expect, it } from "vitest";
 import { makeMove, unmakeMove } from "./apply.ts";
 import {
   chooseMove,
+  chooseMoveWithoutDeltaPruning,
   chooseMoveWithoutFutility,
   chooseMoveWithoutQuiescenceEvasions,
   chooseMoveWithoutQuietPromotions,
@@ -59,6 +64,7 @@ import { MATE_CORPUS } from "./search.mate-corpus.ts";
 import {
   MATE_SCORE,
   search,
+  searchWithoutDeltaPruning,
   searchWithoutFutility,
   searchWithoutPvsOrReductions,
   searchWithoutQuiescence,
@@ -1188,8 +1194,12 @@ describe("ABC-228 — the rule rows (`ADR-0053` decision 9; each reds a planted 
       expect(flat).toContain(
         "const RULES_SEE_PRUNING: QuiescenceRules = { evasions: true, quietPromotions: true, taper: true, seePruning: true, };",
       );
+      // `ABC-289` splits the record by `deltaPruning` (on only where the SEE skip is, `ADR-0074` d6).
+      expect(flat).toContain(
+        "const RULES_DELTA_PRUNING: QuiescenceRules = { evasions: true, quietPromotions: true, taper: true, seePruning: true, deltaPruning: true, };",
+      );
       expect(flat).toMatch(
-        /const rules = (switches|budget)\.taper \? \1\.seePruning \? RULES_SEE_PRUNING : RULES_TAPERED : \1\.quiescenceEvasions \? \1\.quietPromotions \? RULES_SHIPPED : RULES_NO_QUIET_PROMOTIONS : \1\.quietPromotions \? RULES_NO_EVASIONS : RULES_NEITHER;/,
+        /const rules = (switches|budget)\.taper \? \1\.seePruning \? \1\.deltaPruning \? RULES_DELTA_PRUNING : RULES_SEE_PRUNING : RULES_TAPERED : \1\.quiescenceEvasions \? \1\.quietPromotions \? RULES_SHIPPED : RULES_NO_QUIET_PROMOTIONS : \1\.quietPromotions \? RULES_NO_EVASIONS : RULES_NEITHER;/,
       );
       const calls = [...flat.matchAll(/quiesce\(([^;]*?)\);/g)].map((m) => m[1]);
       expect(calls).toHaveLength(1);
@@ -1213,6 +1223,7 @@ const SWITCH_MODULES = [
     see: "searchWithoutSeePruning",
     /** `ABC-283`'s and `ABC-303`'s doors: the shipped path less one or all of a bundle, every older switch on. */
     bundle: [
+      "searchWithoutDeltaPruning",
       "searchWithoutMoveCountPruning",
       "searchWithoutCountermove",
       "searchWithoutQuietBundle",
@@ -1230,6 +1241,7 @@ const SWITCH_MODULES = [
     tap: "chooseMoveWithoutTaper",
     see: "chooseMoveWithoutSeePruning",
     bundle: [
+      "chooseMoveWithoutDeltaPruning",
       "chooseMoveWithoutMoveCountPruning",
       "chooseMoveWithoutCountermove",
       "chooseMoveWithoutQuietBundle",
@@ -1593,6 +1605,133 @@ describe("ABC-229 — the doors: searchWithoutQuietPromotions and chooseMoveWith
   }
 });
 
+describe("ABC-289 DP1 — a capture that cannot raise alpha is skipped out of check (ADR-0074 decision 10)", () => {
+  const DELTA: QuiescenceRules = {
+    evasions: true,
+    quietPromotions: true,
+    taper: true,
+    seePruning: true,
+    deltaPruning: true,
+  };
+  const NO_DELTA: QuiescenceRules = {
+    evasions: true,
+    quietPromotions: true,
+    taper: true,
+    seePruning: true,
+  };
+  /** Far above every reachable score here: only the capture's bound decides. */
+  const BETA = 1_000_000;
+
+  /** The stand pat of `fen`, and what `quiesce` at `alpha` over it returns and enters at qply 1. */
+  const read = (fen: string, overStandPat: number, rules: QuiescenceRules = DELTA) => {
+    const position = parseFen(fen);
+    const phase = phaseOf(position);
+    const standPat = evaluate(position);
+    const entered: string[] = [];
+    const value = quiesce(
+      position,
+      standPat + overStandPat,
+      BETA,
+      0,
+      0,
+      rules,
+      (qply) => {
+        if (qply === 1) entered.push(toFen(position));
+      },
+      phase,
+    );
+    return { standPat, value, entered };
+  };
+  /** The FEN after the move `name` from `fen`. */
+  const childOf = (fen: string, name: string): string => {
+    const position = parseFen(fen);
+    makeMove(position, legalMoves(position).find((move) => label(move) === name) as Move);
+    return toFen(position);
+  };
+  /** Rd1xd5 wins a rook outright, so `seePruning` has nothing to say about it. */
+  const ROOK = "4k3/8/8/3r4/8/8/8/3RK3 w - - 0 1";
+
+  it("(a) the margin, both sides of the edge: skipped at the sum, searched with the sum one centipawn over alpha", () => {
+    expect(read(ROOK, 700).entered).toEqual([]);
+    expect(read(ROOK, 699).entered).toEqual([childOf(ROOK, "d1d5")]);
+  });
+
+  it("(b) the bound: a node whose captures are all skipped returns standPat + largest victim + 200", () => {
+    const fen = "4k3/8/8/p2r4/8/8/8/Q2RK3 w - - 0 1"; // Rxd5 and Qxa5, both winning
+    const { standPat, value, entered } = read(fen, 1_000);
+    expect(entered).toEqual([]);
+    expect(value).toBe(standPat + 500 + 200);
+  });
+
+  it("(c) a capturing promotion and a quiet queen promotion are searched where a plain capture is skipped", () => {
+    const fen = "k6n/6P1/8/3p4/8/8/8/K2R4 w - - 0 1";
+    const { entered } = read(fen, 1_500);
+    expect(entered).toHaveLength(5); // gxh8 to the four pieces and g8=Q
+    expect(entered).not.toContain(childOf(fen, "d1d5"));
+  });
+
+  it("(c) the loop goes on past a skip: a quiet queen promotion sorted after a skipped capture is searched", () => {
+    const fen = "k7/6P1/8/3q4/2P5/8/8/K7 w - - 0 1"; // cxd5 ties g8=Q's key, and a tie keeps the capture first
+    const sorted = legalCapturesAndQueenPromotions(parseFen(fen));
+    orderCaptures(sorted);
+    expect(sorted.map((move) => label(move))).toEqual(["c4d5", "g7g8"]);
+    expect(read(fen, 1_100).entered).toEqual([childOf(fen, "g7g8")]);
+  });
+
+  it("(c) en passant is tested, its victim the pawn", () => {
+    const fen = "4k3/8/8/3pP3/8/8/8/4K3 w - d6 0 2";
+    expect(read(fen, 300).entered).toEqual([]);
+    expect(read(fen, 300).value).toBe(read(fen, 300).standPat + 300);
+    expect(read(fen, 299).entered).toHaveLength(1);
+  });
+
+  it("(d) the order: a capture both rules name contributes its bound; one only SEE names adds nothing", () => {
+    const fen = "4k3/8/3p4/4p3/8/8/8/4QK2 w - - 0 1"; // Qxe5 is the only capture, and it loses
+    const both = read(fen, 300);
+    expect(both.entered).toEqual([]);
+    expect(both.value).toBe(both.standPat + 300);
+    const seeOnly = read(fen, 299);
+    expect(seeOnly.entered).toEqual([]);
+    expect(seeOnly.value).toBe(seeOnly.standPat);
+  });
+
+  it("(e) in check every evasion is searched at an alpha that would skip it", () => {
+    const fen = "4k3/8/8/8/8/8/4r3/4K3 w - - 0 1"; // Kxe2, Kd1, Kf1
+    expect(isInCheck(parseFen(fen))).toBe(true);
+    expect(read(fen, 5_000).entered).toHaveLength(3);
+  });
+
+  it("(f) the seam: a record without deltaPruning searches the same board in full", () => {
+    expect(read(ROOK, 700, NO_DELTA).entered).toEqual([childOf(ROOK, "d1d5")]);
+    expect(read(ROOK, 5_000, NO_DELTA).entered).toEqual([childOf(ROOK, "d1d5")]);
+  });
+});
+
+describe("ABC-289 — one switch, deltaPruning, and two test-only doors (ADR-0074 decisions 6-8)", () => {
+  for (const { path, on } of SWITCH_MODULES) {
+    it(`${path}: deltaPruning is on in ${on} alone; every door, the newest included, turns it off`, () => {
+      const literals = switchLiterals(path, "deltaPruning");
+      expect(Object.keys(literals).length).toBeGreaterThanOrEqual(17);
+      for (const [entry, literal] of Object.entries(literals)) {
+        expect(`${entry} ${literal}`).toBe(`${entry} ${entry === on}`);
+      }
+    });
+  }
+
+  it("deltaPruning is a field of Switches, Heuristics and QuiescenceRules, and of nothing else", () => {
+    for (const path of ["./search.ts", "./engine.ts"]) {
+      const source = readFileSync(new URL(path, import.meta.url), "utf8");
+      expect(source.match(/readonly deltaPruning: boolean;/g)).toHaveLength(1);
+      expect(source).not.toMatch(/^(let|var|const)\s+deltaPruning\b/m);
+    }
+    const quiescence = readFileSync(new URL("./quiescence.ts", import.meta.url), "utf8");
+    expect(quiescence.match(/readonly deltaPruning\?: boolean;/g)).toHaveLength(1);
+    const engine = readFileSync(new URL("./engine.ts", import.meta.url), "utf8");
+    const from = engine.indexOf("export interface EngineOptions");
+    expect(engine.slice(from, engine.indexOf("\n}", from))).not.toContain("deltaPruning");
+  });
+});
+
 if (RUN_DEEP) {
   /** `src/engine.test.ts`'s mate- and stalemate-adjacent endgames: the 190's last six. */
   const ENDGAMES = [
@@ -1641,6 +1780,7 @@ if (RUN_DEEP) {
     );
     expect(within25).toBeGreaterThanOrEqual(bars.within25);
     expect(max).toBeLessThanOrEqual(bars.max);
+    return mateFlips;
   };
 
   describe("ABC-228 A4 — search(…, 6).nodes <= 1.5x the door on kiwipete and position-6 [deep, SEARCH_DEEP=1]", () => {
@@ -1734,5 +1874,104 @@ if (RUN_DEEP) {
         bars,
       );
     }, 600_000);
+  });
+
+  describe("ABC-289 DP0 and DP3 — the door is the pre-ticket search, and the rule pays, at depth 8 [deep, SEARCH_DEEP=1]", () => {
+    // `main` `063ca870`'s `search()` and `chooseMove`. `ADR-0074` d12's counts were read on
+    // `0cc9afd1`, before `ABC-303`; the bars stay, and the base's counts are these (d12, § Consequences).
+    const BASE = {
+      kiwipete: { search: 311_546, choose: 573_518 },
+      "position-6": { search: 163_523, choose: 94_911 },
+    } as const;
+    for (const [name, base] of Object.entries(BASE)) {
+      it(`${name}: the doors read ${base.search} / ${base.choose}, and the head is <= 0.88x each [deep, SEARCH_DEEP=1]`, () => {
+        const fen = fenOf(name);
+        expect(searchWithoutDeltaPruning(parseFen(fen), 8).nodes).toBe(base.search);
+        expect(deepenWith(chooseMoveWithoutDeltaPruning, fen, 8).nodes).toBe(base.choose);
+        const head = search(parseFen(fen), 8).nodes;
+        const headChoice = deepenWith(chooseMove, fen, 8).nodes;
+        console.log(
+          `ABC-289 DP3 ${name} d8: search ${head} / ${base.search} = ${(head / base.search).toFixed(4)}x, ` +
+            `chooseMove ${headChoice} / ${base.choose} = ${(headChoice / base.choose).toFixed(4)}x`,
+        );
+        expect(head).toBeLessThanOrEqual(0.88 * base.search);
+        expect(headChoice).toBeLessThanOrEqual(0.88 * base.choose);
+      }, 300_000);
+    }
+
+    it("DP3: reach at 47 000 nodes on the 190 is at least the door's + 0.15 ply [deep, SEARCH_DEEP=1]", () => {
+      const reach = (choose: typeof chooseMove): number => {
+        const rows = corpus190();
+        let total = 0;
+        for (const { fen } of rows) {
+          const choice = choose(parseFen(fen), {
+            budgetMs: 1_000_000_000,
+            now: () => 0,
+            maxNodes: 47_000,
+          }) as EngineChoice;
+          total += choice.depth;
+        }
+        return total / rows.length;
+      };
+      const door = reach(chooseMoveWithoutDeltaPruning);
+      const head = reach(chooseMove);
+      console.log(`ABC-289 DP3 reach: door ${door.toFixed(3)} -> head ${head.toFixed(3)}`);
+      expect(head).toBeGreaterThanOrEqual(door + 0.15);
+    }, 600_000);
+  });
+
+  describe("ABC-289 DP2 — bounded drift and the mate floor against the doors [deep, SEARCH_DEEP=1]", () => {
+    const bars = { within25: 0.98, max: 30, ticket: "ABC-289" };
+
+    it("search against searchWithoutDeltaPruning at fixed depth 5: >= 98% within 25 cp, none beyond 30 cp [deep, SEARCH_DEEP=1]", () => {
+      const flips = drift(
+        (fen) => search(parseFen(fen), 5).score,
+        (fen) => searchWithoutDeltaPruning(parseFen(fen), 5).score,
+        "search() d5",
+        bars,
+      );
+      expect(flips).toBe(0);
+    }, 600_000);
+
+    it("chooseMove against chooseMoveWithoutDeltaPruning deepened to 5: >= 98% within 25 cp, none beyond 30 cp [deep, SEARCH_DEEP=1]", () => {
+      const flips = drift(
+        (fen) => deepenWith(chooseMove, fen, 5).score,
+        (fen) => deepenWith(chooseMoveWithoutDeltaPruning, fen, 5).score,
+        "chooseMove to d5",
+        bars,
+      );
+      expect(flips).toBe(0);
+    }, 600_000);
+
+    const floor = (door: (fen: string) => number, head: (fen: string) => number): void => {
+      let mates = 0;
+      const violations: string[] = [];
+      for (const fen of MATE_CORPUS) {
+        const ref = door(fen);
+        if (!isMate(ref)) continue;
+        mates++;
+        const got = head(fen);
+        if (!isMate(got) || Math.sign(got) !== Math.sign(ref)) {
+          violations.push(`${fen}: ${ref} on the door, ${got} on the head, depth 5`);
+        }
+      }
+      console.log(`ABC-289 mate floor d5: ${violations.length} of ${mates} violated`);
+      expect(mates).toBeGreaterThanOrEqual(100);
+      expect(violations).toEqual([]);
+    };
+
+    it("every mate searchWithoutDeltaPruning scores at depth 5, search scores at depth 5, same sign [deep, SEARCH_DEEP=1]", () => {
+      floor(
+        (fen) => searchWithoutDeltaPruning(parseFen(fen), 5).score,
+        (fen) => search(parseFen(fen), 5).score,
+      );
+    }, 300_000);
+
+    it("every mate chooseMoveWithoutDeltaPruning scores at depth 5, chooseMove scores at depth 5, same sign [deep, SEARCH_DEEP=1]", () => {
+      floor(
+        (fen) => deepenWith(chooseMoveWithoutDeltaPruning, fen, 5).score,
+        (fen) => deepenWith(chooseMove, fen, 5).score,
+      );
+    }, 300_000);
   });
 }

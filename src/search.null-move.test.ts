@@ -444,6 +444,7 @@ describe("QE-208-c — every door's nullMove switch literal is false; only the s
       call: "searchRoot(position, depth, {",
       doors: {
         search: "true",
+        searchWithoutDeltaPruning: "true",
         searchWithoutMoveCountPruning: "true",
         searchWithoutCountermove: "true",
         searchWithoutQuietBundle: "true",
@@ -471,6 +472,7 @@ describe("QE-208-c — every door's nullMove switch literal is false; only the s
       call: "deepen(position, options, {",
       doors: {
         chooseMove: "true",
+        chooseMoveWithoutDeltaPruning: "true",
         chooseMoveWithoutMoveCountPruning: "true",
         chooseMoveWithoutCountermove: "true",
         chooseMoveWithoutQuietBundle: "true",

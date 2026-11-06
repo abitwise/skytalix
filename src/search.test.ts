@@ -582,6 +582,7 @@ describe("A6 — no move is selected without a caller-supplied depth", () => {
     // `searchWithoutCountermove` and the all-off `searchWithoutQuietBundle`; `moveCountNode` and
     // `moveCountFrom`, the rule's two pure tests; `countermoveByteLength` for `NFR-009` (a); and
     // `countermoveAt`, which reads one cell for a move it is handed. None picks a move.
+    // ABC-289 added one (`ADR-0074` d8): the door `searchWithoutDeltaPruning`.
     // Still nothing here picks a move without being told how deep.
     expect(Object.keys(searchModule).sort()).toEqual([
       "KEY_ARRAY_CAPACITY",
@@ -605,6 +606,7 @@ describe("A6 — no move is selected without a caller-supplied depth", () => {
       "search",
       "searchWithoutBundle",
       "searchWithoutCountermove",
+      "searchWithoutDeltaPruning",
       "searchWithoutFutility",
       "searchWithoutHistory",
       "searchWithoutKillers",

@@ -134,6 +134,10 @@
  * are `src/search.ts`'s, one door each and one all-off door (`chooseMoveWithoutQuietBundle`); every
  * older door turns both off.
  *
+ * DELTA PRUNING (`ABC-289`, `ADR-0074`) reaches it by one switch, `deltaPruning`, whose rule is
+ * `src/quiescence.ts`'s: on in `chooseMove`, off on the TEST-ONLY door
+ * `chooseMoveWithoutDeltaPruning` and on every older door.
+ *
  * NOT HERE, each owned elsewhere: difficulty selection and how a level persists (`EPIC-006`), the
  * budget-to-level mapping (`ABC-087`), and threading (`ADR-0005` F6 leaves it to
  * Architect/Design).
@@ -336,12 +340,13 @@ interface Heuristics {
   /**
    * The tapered evaluation (`ABC-269`, `ADR-0064` decision 7): true on `chooseMove` and
    * `chooseMoveWithoutSeePruning`, where both quiescence switches are on too, so its rules record is
-   * `RULES_SEE_PRUNING` or `RULES_TAPERED`.
+   * `RULES_DELTA_PRUNING`, `RULES_SEE_PRUNING` or `RULES_TAPERED`.
    */
   readonly taper: boolean;
   /**
    * Quiescence skips a losing capture out of check (`ABC-279`, `ADR-0069` decisions 1-3, 6, 7): true
-   * on `chooseMove` only, where the taper is on too, so its rules record is `RULES_SEE_PRUNING`.
+   * on `chooseMove` only, where the taper is on too, so its rules record is `RULES_DELTA_PRUNING` or
+   * `RULES_SEE_PRUNING`.
    */
   readonly seePruning: boolean;
   /**
@@ -369,6 +374,12 @@ interface Heuristics {
    * `chooseMoveWithoutMoveCountPruning`.
    */
   readonly countermove: boolean;
+  /**
+   * Quiescence skips a capture that cannot raise alpha, out of check (`ABC-289`, `ADR-0074`
+   * decisions 1-7): true on `chooseMove` only, where `seePruning` and the taper are on too, so its
+   * rules record is `RULES_DELTA_PRUNING`.
+   */
+  readonly deltaPruning: boolean;
 }
 
 /** The quiescence rules this recursion hands `quiesce` (`ADR-0053` decision 6): constants, never built per leaf. */
@@ -378,12 +389,20 @@ const RULES_NO_EVASIONS: QuiescenceRules = { evasions: false, quietPromotions: t
 const RULES_NEITHER: QuiescenceRules = { evasions: false, quietPromotions: false };
 /** `chooseMoveWithoutSeePruning`'s record (`ABC-269`): both rules and the tapered stand pat. */
 const RULES_TAPERED: QuiescenceRules = { evasions: true, quietPromotions: true, taper: true };
-/** `chooseMove`'s record (`ABC-279`, `ADR-0069` decision 6): the tapered record, losing captures skipped. */
+/** `chooseMoveWithoutDeltaPruning`'s record (`ABC-279`, `ADR-0069` decision 6): the tapered record, losing captures skipped. */
 const RULES_SEE_PRUNING: QuiescenceRules = {
   evasions: true,
   quietPromotions: true,
   taper: true,
   seePruning: true,
+};
+/** `chooseMove`'s record (`ABC-289`, `ADR-0074` decision 6): the record above, delta skip on. */
+const RULES_DELTA_PRUNING: QuiescenceRules = {
+  evasions: true,
+  quietPromotions: true,
+  taper: true,
+  seePruning: true,
+  deltaPruning: true,
 };
 
 /** The deepening loop's mutable state: the clock, the deadline, and when to consult again. */
@@ -446,7 +465,9 @@ function leafScore(
   if (reason === null) {
     const rules = budget.taper
       ? budget.seePruning
-        ? RULES_SEE_PRUNING
+        ? budget.deltaPruning
+          ? RULES_DELTA_PRUNING
+          : RULES_SEE_PRUNING
         : RULES_TAPERED
       : budget.quiescenceEvasions
         ? budget.quietPromotions
@@ -878,6 +899,35 @@ export function chooseMove(position: Position, options: EngineOptions): EngineCh
     aspiration: true,
     moveCount: true,
     countermove: true,
+    deltaPruning: true,
+  });
+}
+
+/**
+ * TEST-ONLY. The pre-`ABC-289` `chooseMove`, node for node: quiescence's delta skip off, everything
+ * else on (`ADR-0074` decision 8). The top rung: every door below turns the switch off. Not an
+ * engine option; nothing in production calls it.
+ */
+export function chooseMoveWithoutDeltaPruning(
+  position: Position,
+  options: EngineOptions,
+): EngineChoice | null {
+  return deepen(position, options, {
+    pvs: true,
+    reductions: true,
+    nullMove: true,
+    priorKeys: true,
+    quiescenceEvasions: true,
+    quietPromotions: true,
+    futility: true,
+    taper: true,
+    seePruning: true,
+    history: true,
+    seeOrdering: true,
+    aspiration: true,
+    moveCount: true,
+    countermove: true,
+    deltaPruning: false,
   });
 }
 
@@ -904,6 +954,7 @@ export function chooseMoveWithoutMoveCountPruning(
     aspiration: true,
     moveCount: false,
     countermove: true,
+    deltaPruning: false,
   });
 }
 
@@ -930,6 +981,7 @@ export function chooseMoveWithoutCountermove(
     aspiration: true,
     moveCount: true,
     countermove: false,
+    deltaPruning: false,
   });
 }
 
@@ -957,6 +1009,7 @@ export function chooseMoveWithoutQuietBundle(
     aspiration: true,
     moveCount: false,
     countermove: false,
+    deltaPruning: false,
   });
 }
 
@@ -984,6 +1037,7 @@ export function chooseMoveWithoutHistory(
     aspiration: true,
     moveCount: false,
     countermove: false,
+    deltaPruning: false,
   });
 }
 
@@ -1011,6 +1065,7 @@ export function chooseMoveWithoutSeeOrdering(
     aspiration: true,
     moveCount: false,
     countermove: false,
+    deltaPruning: false,
   });
 }
 
@@ -1038,6 +1093,7 @@ export function chooseMoveWithoutAspiration(
     aspiration: false,
     moveCount: false,
     countermove: false,
+    deltaPruning: false,
   });
 }
 
@@ -1067,6 +1123,7 @@ export function chooseMoveWithoutBundle(
     aspiration: false,
     moveCount: false,
     countermove: false,
+    deltaPruning: false,
   });
 }
 
@@ -1096,6 +1153,7 @@ export function chooseMoveWithoutSeePruning(
     aspiration: false,
     moveCount: false,
     countermove: false,
+    deltaPruning: false,
   });
 }
 
@@ -1125,6 +1183,7 @@ export function chooseMoveWithoutTaper(
     aspiration: false,
     moveCount: false,
     countermove: false,
+    deltaPruning: false,
   });
 }
 
@@ -1154,6 +1213,7 @@ export function chooseMoveWithoutFutility(
     aspiration: false,
     moveCount: false,
     countermove: false,
+    deltaPruning: false,
   });
 }
 
@@ -1183,6 +1243,7 @@ export function chooseMoveWithoutQuietPromotions(
     aspiration: false,
     moveCount: false,
     countermove: false,
+    deltaPruning: false,
   });
 }
 
@@ -1211,6 +1272,7 @@ export function chooseMoveWithoutQuiescenceEvasions(
     aspiration: false,
     moveCount: false,
     countermove: false,
+    deltaPruning: false,
   });
 }
 
@@ -1239,6 +1301,7 @@ export function chooseMoveWithoutNullMove(
     aspiration: false,
     moveCount: false,
     countermove: false,
+    deltaPruning: false,
   });
 }
 
@@ -1267,6 +1330,7 @@ export function chooseMoveWithoutReductions(
     aspiration: false,
     moveCount: false,
     countermove: false,
+    deltaPruning: false,
   });
 }
 
@@ -1294,6 +1358,7 @@ export function chooseMoveWithoutPvsOrReductions(
     aspiration: false,
     moveCount: false,
     countermove: false,
+    deltaPruning: false,
   });
 }
 

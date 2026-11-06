@@ -573,6 +573,7 @@ describe("the doors — searchWithoutFutility and chooseMoveWithoutFutility turn
       call: "searchRoot(position, depth, {",
       on: "search",
       bundle: [
+        "searchWithoutDeltaPruning",
         "searchWithoutMoveCountPruning",
         "searchWithoutCountermove",
         "searchWithoutQuietBundle",
@@ -589,6 +590,7 @@ describe("the doors — searchWithoutFutility and chooseMoveWithoutFutility turn
       call: "deepen(position, options, {",
       on: "chooseMove",
       bundle: [
+        "chooseMoveWithoutDeltaPruning",
         "chooseMoveWithoutMoveCountPruning",
         "chooseMoveWithoutCountermove",
         "chooseMoveWithoutQuietBundle",

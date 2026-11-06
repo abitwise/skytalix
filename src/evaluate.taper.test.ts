@@ -387,6 +387,7 @@ describe("ABC-269 — one switch, taper, and three test-only doors (ADR-0064 dec
       "searchWithoutSeePruning",
       "searchWithoutTaper",
       [
+        "searchWithoutDeltaPruning",
         "searchWithoutMoveCountPruning",
         "searchWithoutCountermove",
         "searchWithoutQuietBundle",
@@ -402,6 +403,7 @@ describe("ABC-269 — one switch, taper, and three test-only doors (ADR-0064 dec
       "chooseMoveWithoutSeePruning",
       "chooseMoveWithoutTaper",
       [
+        "chooseMoveWithoutDeltaPruning",
         "chooseMoveWithoutMoveCountPruning",
         "chooseMoveWithoutCountermove",
         "chooseMoveWithoutQuietBundle",

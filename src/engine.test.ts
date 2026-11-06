@@ -515,7 +515,8 @@ describe("A4 — no fixed depth anywhere in the delivered engine", () => {
     // `chooseMoveWithoutAspiration`; `ADR-0063` d6, `ADR-0065` d7, `ADR-0066` d7) and the all-off
     // `chooseMoveWithoutBundle`, each of `chooseMove`'s shape. `ABC-303` adds three of that shape:
     // `chooseMoveWithoutMoveCountPruning`, `chooseMoveWithoutCountermove` and the all-off
-    // `chooseMoveWithoutQuietBundle` (`ADR-0072` d6, `ADR-0073` d7).
+    // `chooseMoveWithoutQuietBundle` (`ADR-0072` d6, `ADR-0073` d7). `ABC-289` adds one of that
+    // shape: `chooseMoveWithoutDeltaPruning` (`ADR-0074` d8).
     expect(Object.keys(engineModule).sort()).toEqual([
       "DEFAULT_BUDGET_MS",
       "HARD_CEILING_MS",
@@ -524,6 +525,7 @@ describe("A4 — no fixed depth anywhere in the delivered engine", () => {
       "chooseMoveWithoutAspiration",
       "chooseMoveWithoutBundle",
       "chooseMoveWithoutCountermove",
+      "chooseMoveWithoutDeltaPruning",
       "chooseMoveWithoutFutility",
       "chooseMoveWithoutHistory",
       "chooseMoveWithoutMoveCountPruning",
@@ -557,6 +559,7 @@ describe("A4 — no fixed depth anywhere in the delivered engine", () => {
     expect(engineModule.chooseMoveWithoutMoveCountPruning.length).toBe(2);
     expect(engineModule.chooseMoveWithoutCountermove.length).toBe(2);
     expect(engineModule.chooseMoveWithoutQuietBundle.length).toBe(2);
+    expect(engineModule.chooseMoveWithoutDeltaPruning.length).toBe(2);
     expect(createEngine.length).toBe(1);
     expect(source).not.toMatch(/export function \w+\([^)]*depth/i);
   });
