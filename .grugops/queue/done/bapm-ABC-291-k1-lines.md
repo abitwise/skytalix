@@ -27,3 +27,4 @@ Publish: sealed notes (contextRoot = the worktree's .grugops/context, `at` from 
 - **The near point, for the Orchestrator:** K1 (c)'s "before the build" was not met and cannot be. The line records that, does not read the clause as met, and rules nothing. No reading of the clause is on the record, and no note says the owner was told. Test note 1's "(b) rows" have no freeze on the record either (`…cd569ec9`).
 - **Left stale, outside the list (`…cd569ec9`):** K1 (h)'s "lands with the repair", Scope 5's "last commit", `NFR-008`'s line, DoR row 10's wording, `ADR-0075` § `UNKNOWN - verify`'s row count.
 - **Notes:** `…486ad0bd`, `…cd569ec9`. `…486ad0bd`'s line count is corrected in `…cd569ec9`: 27 added, 2 replaced.
+- **Path check:** `node tools/grugops/records-path-check.js --base main` exited 0 before the last commit.
