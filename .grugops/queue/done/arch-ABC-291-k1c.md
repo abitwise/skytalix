@@ -27,3 +27,4 @@ Publish: sealed notes (contextRoot = the worktree's .grugops/context, `at` from 
 - **Corrected premises:** item 2's K1 (b); "cannot be met", which a rebuild would meet in words alone; "the owner was told", which stands in the brief and in no note, `UNKNOWN - verify` until the Orchestrator writes it.
 - **Width:** three dated lines, plus one Status bullet and one log row. `…731671d4` says why.
 - **Owed:** Orchestrator: the owner's question, QE's brief, the freeze check for the next term (fourth miss on record). BA/PM: the page lines in `…731671d4`, and "form (b)'s rows" on `ABC-290`, `ABC-292` and `ABC-293`.
+- **Path check:** `node tools/grugops/records-path-check.js --base main` exit 0 at `6dc52b01`, before this last commit.
