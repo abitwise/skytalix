@@ -1,3 +1,4 @@
+_Updated: 2026-11-06T13:48:53Z — se-ABC-303-main2 done (63667fc8), 2 734 and six deep lanes green; qe-ABC-303 seals bundle 1's read; bapm-lines-1106 closes the pages._
 _Updated: 2026-11-06T13:27:26Z — **ABC-305 Done**, merged d00164ce, gates green; se-ABC-303-main2 takes main into bundle 1._
 _Updated: 2026-11-06T13:12:25Z — ABC-305 N8-LANE read stands, A5 MET → In Review, qe-ABC-305._
 _Updated: 2026-11-05T22:06:46Z — se-ABC-305-main done: ABC-305 ready to read; window asked of the owner._
@@ -1556,7 +1557,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 ## In Development (WIP 1/3)
-- [ABC-303] Bundle 1, ABC-286 + ABC-288 (ADR-0072, 0073 ACCEPTED over missed premises; DoR 10/10, M, P3). `se-ABC-303-main2` takes main in; then `qe-ABC-303` seals the C2′ read.
+- [ABC-303] Bundle 1, ABC-286 + ABC-288 (ADR-0072, 0073 ACCEPTED over missed premises; DoR 10/10, M, P3). Main in at 63667fc8, gates green. `qe-ABC-303` seals and runs the C2′ read.
 
 
 
