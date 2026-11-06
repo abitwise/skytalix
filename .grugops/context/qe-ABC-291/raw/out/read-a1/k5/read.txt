@@ -1,0 +1,11 @@
+samples 127; rows naming a foreign vitest 0; of them busy (pcpu > 1.0) 0; largest load1 0.78
+runs 20 (expected 20)
+flagged rounds (busy): none | rounds with a foreign vitest named, busy or not: none
+P6 STATE by flags: stands
+kiwipete: base depths [10, 10, 10, 10, 10] median 10; head depths [10, 10, 10, 10, 10] median 10; head >= base: True; every head run >= 6: True; WARN depth 7: []; nodes median base 2709784 head 2698449; ms max 4001.9
+  G11 moves: base ['Bxa6'], head ['Bxa6']
+position-6: base depths [12, 12, 12, 12, 12] median 12; head depths [12, 12, 12, 12, 12] median 12; head >= base: True; every head run >= 6: True; WARN depth 7: []; nodes median base 2459721 head 2436169; ms max 4001.5
+  G11 moves: base ['Nd5'], head ['Nd5']
+P6 grade if it stands: MET
+K5 head runs 10 below 6: 0 at 7 (WARN): 0
+K5 floor holds

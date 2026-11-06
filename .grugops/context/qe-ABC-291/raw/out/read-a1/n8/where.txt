@@ -1,0 +1,8 @@
+paired H - B: wall median +0.155 s, deltas [-0.14, 0.04, 0.09, 0.14, 0.17, 0.3, 0.39, 0.41]; CPU median +0.760 s, positive 8/8
+paired H2 - B: wall median +0.180 s, deltas [-0.2, -0.1, 0.04, 0.18, 0.18, 0.19, 0.19, 0.24]; CPU median +0.405 s, positive 7/8
+H and H2 pooled against B, 16 pairs: wall median +0.175 s
+titles: B 2732, H 2812, only in H 81, only in B 1
+added titles, sum of median in-thread ms: H 34, H2 35 (the aim is <= 90 ms)
+shared titles, in-thread sum ms: B 5487, H 5585, H2 5540
+added ms by file: {'evaluate.pawns.test.ts': 28, 'engine.test.ts': 5, 'search.bundle.test.ts': 0, 'evaluate.taper.test.ts': 0}
+shared-title change ms by file, largest: {'uci-session.test.ts': 83, 'search.null-move.test.ts': -32, 'cli.test.ts': 23, 'search.bundle.test.ts': -14, 'history-pane.nfr.test.ts': 11, 'search.ordering.test.ts': 10}
