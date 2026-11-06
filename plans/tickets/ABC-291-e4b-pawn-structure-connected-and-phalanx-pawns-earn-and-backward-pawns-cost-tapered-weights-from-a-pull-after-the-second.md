@@ -12,13 +12,23 @@ adr: "ADR-0075, accepted by the owner 2026-11-05 (…c1623ae7), in force at this
 
 # ABC-291: connected, phalanx and backward pawns (E4b)
 
+> **K1 (c)'S FREEZE CAME AFTER THE BUILD; THE SIX PINS READ GREEN; DRIFT IS NO DEFECT; DoR 10/10, UNCHANGED, 2026-11-06, by BA/PM** (task `bapm-ABC-291-k1-lines`, records only, at `main` `e460342e`, `grugops/ABC-291` read at `9e496e4a`, read only; nothing run).
+> Sources: `qe-ABC-291-k1` `…2e186a33`, `…b850a2ad`, `…a223d29a` and `…5de6a358`, `se-ABC-291-repair` `…fd2ea321` and `…2cddd25a`, `se-ABC-291-k1rows` `…96abeaf8` and `…c4360feb`, and the Orchestrator's `…a7dc99cb` and `…5a2d8753`.
+> - **K1 (c): the freeze was missed at dispatch.** QE froze its fixtures after the build. 0 of the 36 rows' values differed, and 24 rows joined, 60 in all. The bar's words "before the build" were not met, and no later step can meet them. This page records that and does not read the clause as met. K1 (c).
+> - **K2: the figures allowed read green at the repair,** `a3474306`. `cp 88`, `cp 99` and `nodes 10614` are confirmed by run. The run is the Engineer's, and QE's read is owed. K2.
+> - **Drift at d5: no defect.** M3 moved it, and why it reacts is by reading only. C2′ prices it. § Reports, not bars.
+> - **Stale lines dated:** § Dependencies' Order line, `ABC-282` A2 (b)'s fixture and the row count in § `UNKNOWN - verify`, and Scope 4 and K7's `QUIET_RULES` pointer. "K3 is unread" stays until QE closes it.
+> - **No value, rule, definition, ratio, intent or level moved,** and no bar's words changed. This is no verdict and no merge call. **DoR 10/10, unchanged.**
+
 > **`se-ABC-291`'S STOP IS RULED; `G1` HERE IS CLASS B; K1 (h)'S WORDS DO NOT HOLD FOR ONE EXPORT; IN DEVELOPMENT; DoR 10/10, UNCHANGED, 2026-11-06, by BA/PM** (task `bapm-ABC-291-stop-lines`, records only, at `main` `d9a44fe6`; nothing run).
 > Sources: `arch-records-1106` `…860a0dbd`, `arch-ABC-291-stop` `…2d2c2bad` and `…77dd9228`, the Orchestrator's `…5c911039`, and the dated lines of those tasks in `ADR-0075` and `ADR-0071` D8.
 > - **`G1`'s class is ruled:** every `G1` row missed on this ticket is class B, and F3 reads as written. K3.
 > - **K1 (h): one bar's words do not hold as written, for one export.** No build that holds d4 can meet them for `evaluateAtPhaseWithoutPawnShape`. `ADR-0075`'s dated line reads the row for it and adds one real read. The Orchestrator accepts that as a reading, not a loosening, and has told the owner. If he reads it as a loosening, it returns to the Architect. K1 (h).
 > - **K2:** 64 rows at `8e115110`, and six deep pins join the list, `ABC-282` A0-3's. K2.
 > - **The tip stays do-not-merge** until `…2d2c2bad` § 5's list lands (`se-ABC-291-repair`). If `qe-ABC-291-k1` finds a defect whose fix moves a production line, the six pins are void, they return to the Architect, and K0 (c) and K3 are read again.
+> *2026-11-06 (`bapm-ABC-291-k1-lines`; `…2cddd25a`, `…a223d29a`, `…5a2d8753`): § 5's list landed at `a3474306`. QE found no defect and no production line moved, so the void did not fire and `…2d2c2bad` § 1's lines stand. This is no merge call: the tip's merge state is QE's and the Orchestrator's.*
 > - **Not on this page yet:** K1 (c)'s line. `qe-ABC-291-k1` is reading it, after the build, and the line follows its report.
+> *2026-11-06 (`bapm-ABC-291-k1-lines`): written. See K1 (c).*
 > - **No value, rule, definition, ratio, intent or level moved.** K3, F3, d11 (d) and `G1`'s bar are unchanged. **DoR 10/10, unchanged:** row 7 reads 1–5. Status and column read In Development, as the board card does.
 
 > **`ABC-289` COMES OFF THE BUILD; THE READ QUEUE IS MET; K3 IS UNREAD ON A P4 TREE; DoR 10/10, UNCHANGED, 2026-11-06, by BA/PM** (task `bapm-lines-1106b`, records only, at `main` `bc2bb953`; nothing run).
@@ -125,6 +135,7 @@ adr: "ADR-0075, accepted by the owner 2026-11-05 (…c1623ae7), in force at this
    - **Size:** 2^14 × 36 bytes = 589 824 bytes (576 KiB, `ADR-0070` d2), +0. d3's 640 KiB (2^14 × 40 = 655 360, up 65 536) is the form before the cut, and it is the form the probe read.
 4. **Form (b)** (d4; `ADR-0026` d10, in `ADR-0064` d7's form): one switch, `pawnShape`, on in `search()` and `chooseMove` only; the test-only exports `searchWithoutPawnShape`, `chooseMoveWithoutPawnShape` and
    `evaluateAtPhaseWithoutPawnShape`; the test-only seam `pawnShapeForTest(position)`. Every older door turns it off.
+   *2026-11-06 (`bapm-ABC-291-k1-lines`; `ADR-0075` d11 (a)'s dated line of `arch-ABC-291-stop`, `…2d2c2bad` § 3): **`QUIET_RULES` carries `pawnShape: true` too, and that ADR line governs.** d4's "on in `search()` and `chooseMove` only" speaks of the shipped recursions, and a tool's own record is not one. The words above stay. `se-ABC-291-repair`'s source row reads every carrier, K1 (h)'s added read (`…fd2ea321`, `…2cddd25a`).*
 5. **The tool line, at this term's merge** (d11 (a), read by K7). `tools/tune` gains the three terms' counts in the tracer and the three exports in the emitter, **traced and held, not free**, as `T_UN`
    is. 17 → 20 exports. No fit, no emission to `src/`, and `src/` gains no tracing code. The line is the last commit on the branch: it holds no production line, so it stales no read.
 
@@ -156,6 +167,11 @@ adr: "ADR-0075, accepted by the owner 2026-11-05 (…c1623ae7), in force at this
   - (b) `evaluateAtPhaseWithoutPawnShape` and `evaluateWithoutTaper` are `Object.is`-equal to the pre-ticket entries over the frozen corpora;
   - (c) **seam rows, by arithmetic, on fixtures QE freezes before the build:** at least one per definition per colour, and one per edge file per
     definition. They include each clause of Backward failing alone, and d1's exclusions;
+    *2026-11-06 (`bapm-ABC-291-k1-lines`; the Orchestrator's `…a7dc99cb`, `…5a2d8753`, `qe-ABC-291-k1` `…2e186a33`, `…b850a2ad`, `…5de6a358`, `se-ABC-291-k1rows` `…96abeaf8`, `…c4360feb`): **QE's freeze came after the build, not before it. It was missed at dispatch:** the Orchestrator sent the build without it, so `SEAM_ROWS`' first 36 rows are the Engineer's.*
+    - ***The compare:** QE wrote its list blind from d1 and d2, and committed it at `4948aad0` before it opened `SEAM_ROWS`. At `63af973e`, **0 of the 36 rows' values differed.** QE's hand values and labeller have one author, so this catches arithmetic, not a misreading of d1.*
+    - ***The gaps:** d1's double step and en passant had no row, and 13 of QE's 31 labeller mutants passed the 36 unseen. These are missing rows, not faults: no d1–d4 defect was found, and F1 did not fire.*
+    - ***The rows:** the Orchestrator took QE's whole gap table. **24 rows were added at `70d931ab`, 60 in all,** QE's values unchanged, and none read red. The Engineer also made the block read the file flip, a call open to QE (`…96abeaf8`). QE's read of K1 at the tip is owed.*
+    - ***The bar:** the words above stay. "Before the build" was not met, and no later step can meet it. This line records the order. It does not read the clause as met, and it rules nothing. `ADR-0075` K1 (c) has no dated line on it.*
   - (d) **the hot path:** `evaluate` minus the off-door evaluation equals the seam's white minus black, signed for the side to move, exactly. With
     equal halves the blend adds nothing, so there is no tolerance. A second row, inside `withParametersForTest` at unequal test halves, reads the blend in
     `ADR-0070` d4's own-phase form;
@@ -176,6 +192,7 @@ adr: "ADR-0075, accepted by the owner 2026-11-05 (…c1623ae7), in force at this
     *2026-11-06 (`bapm-ABC-291-stop-lines`; `…2d2c2bad` § 1, `ADR-0075` K2's dated line, `ADR-0071` D8's dated line of `arch-ABC-291-stop`): **that hop is made. Six deep pins join K2's list:** `ABC-282` A0-3 in `src/uci-session.test.ts`. `ADR-0071` D8's line holds each literal and governs.*
     - *`D8`, four rows: cp 45 → 74. `D7`, one row: cp 43 → 88. `D6`, one row, `go depth 6`: cp 87 → 99, nodes 10 513 → 10 614, nps 618 412 → 624 353. `depth`, `time` and `bestmove c3d5` stay on all six, and `nodes` and `nps` on the five.*
     - *These are the figures allowed, not yet a green read: the six rows are red at `63af973e`, and the repair lands them. `cp 88`, `cp 99` and `nodes 10614` rest on `…a8daf408` alone (`…77dd9228`). The repair's lane run is their check, and a literal that reads otherwise is its STOP.*
+    - *2026-11-06 (`bapm-ABC-291-k1-lines`; `se-ABC-291-repair` `…fd2ea321`, `…2cddd25a`, `…5a2d8753`): **the figures allowed now read green at the repair.** All six rows are in at `a3474306`, and `ENGINE_DEEP` `src/uci-session.test.ts` read 270 of 270 on that tree. So `cp 88`, `cp 99` and `nodes 10614` are confirmed by run, and no STOP line fired. That test file is unchanged at `9e496e4a`. `…2d2c2bad` § 6's void did not fire. The run is the Engineer's. QE's read of K2 is owed, and so is `D8`'s leak plant (`…77dd9228`).*
     - *Deep re-points, figures unchanged: `ABC-303`'s depth-8 counts, 2 rows, by `ADR-0075` d4's dated line, and `ABC-282` A0-1, 6, and A0-2, 4.*
 - **K3, safety (`ADR-0064` d7's rows):** mate floor 0 violations, door d4 → head d5 and d5 → d5 on the 287; zugzwang **7 / 7** at recorded depths with
   `zugzwang.001` among them; `G1` no NEWLY-MISSED line. All read all-on. No depth moves, and no expected result is rewritten.
@@ -193,7 +210,13 @@ adr: "ADR-0075, accepted by the owner 2026-11-05 (…c1623ae7), in force at this
   in force (1 810 today), S-4; then the Levels deep lane.
   *2026-11-06 (`bapm-lines-1106b`; `…7c297147` § 4 item 6, `…28283e48` § 5): E stays 1 810. `ABC-289` merged nothing and adds no S′, so the pool stands at 27.5 / 40.*
 - **K7, the tool line** (d11 (a)): `TUNE_DEEP` green at the tip, its count reported.
+  *2026-11-06 (`bapm-ABC-291-k1-lines`; `ADR-0075` d11 (a)'s dated line of `arch-ABC-291-stop`, `…2d2c2bad` § 3): **K7 cannot read green without `QUIET_RULES`' `pawnShape: true`, and that ADR line confirms it.** The record follows the evaluation, as its `taper: true` does, and `QUIET_RULES_NAME` changes with it. See Scope 4. The bar is unchanged.*
 - **Reports, not bars:** drift at d5, reach at 47 000, PR10's figures.
+  *2026-11-06 (`bapm-ABC-291-k1-lines`; `qe-ABC-291-k1` `…a223d29a`, `…5de6a358`, `…5a2d8753`): **drift at d5 on the build's base is no defect, and F1 does not fire.** `se-ABC-291` read 96.79 % within 25 cp, largest 89 (position-6/e2d2, 12 → 101), against PR10's 100 % and 24 at `cc6e64d1`.*
+  - ***M3 moved it, read by one short run.** With the bundle off, the figure reads the probe's on every field: 187 rows, 100 %, 24, position-5/e1f2, 4 moves. With M3 off alone it reads 100 %, largest 16. With countermove off it stays 96.79 %, 89. The term's values did not move.*
+  - ***Of the 89, 10 is the static term and 79 is the tree.** A full-width tree reads 12 on both forms, so ON's 101 is a line the search missed. Δ falls to −2 at d6, and the row stays noisy: 23 at d8, 49 at d9.*
+  - ***Why M3 reacts is by reading only.** No control term ran. § `UNKNOWN - verify`.*
+  - ***Whether it costs play is C2′'s to price.** Drift has no bar and decides no merge. § The premise probe's PR10 line stays the reading at `cc6e64d1`. Whether it earns a dated line goes to the next Architect hop.*
 
 - **What a pass means (d9):** "not seen worse", not "proven better". By `ADR-0056`'s C2′ table a term truly worth +20 Elo passes 79 % of the time, +10 passes 66 %, 0 passes 50 %, −10 passes 34 %, and
   −20 passes 21 %. The term's Elo stays unknown, and the score is not added to any forecast.
@@ -254,6 +277,7 @@ adr: "ADR-0075, accepted by the owner 2026-11-05 (…c1623ae7), in force at this
 ## Test notes
 
 1. QE freezes the seam fixtures and the (b) rows before the build. The probe's 16 positions (`PAWN_SET`, in `arch-ABC-291-probe`'s `raw/scripts/e4bprobe.ts`) meet K1 (a)'s "at least 12", and they are offered to QE.
+   *2026-11-06 (`bapm-ABC-291-k1-lines`; `…a7dc99cb`, `…b850a2ad`): the seam fixtures were frozen after the build (K1 (c)). The "(b) rows" were outside `qe-ABC-291-k1`'s brief and are not read, and no freeze of them is on the record.*
 2. UAT is owed (production lines); the QE verdict signs it.
 3. QE's PREREG for K4 states PR8's two levels, about 316 and 335 ns, and expects K4 to read the same way. Their cause is `UNKNOWN - verify`.
 4. *2026-11-06 (`bapm-lines-1106`; `…43e6d8fd` 3 and 5):* K4's PREREG carries K5's read and void rule. QE's briefs carry `ADR-0046`'s 23rd line, `F1`'s, in § Dated 2026-11-05 (`arch-ABC-307-records`), so the run rule's "every line" reads 23. It read 1 passed by name at `qe-ABC-305` (`…482f3e67`). That is the rule's count, not a new bar on this page.
@@ -279,6 +303,7 @@ adr: "ADR-0075, accepted by the owner 2026-11-05 (…c1623ae7), in force at this
 - **First of the four.**
 - **The read queues.** A value-changing merge stales the read after it, so this term's C2′ follows `ABC-303` and `ABC-289`.
   *2026-11-06 (`bapm-lines-1106b`; `…7c297147` § 4, `…40ef8351`): **met.** `ABC-303` merged at `434fa171`, and `ABC-289`'s recorded outcome, NOT MET on an exact build with nothing merged, meets it. OQ-0074-2 blocks nothing. If the owner opens a route there, this read goes first or waits, and the Orchestrator tells him that its going first differs from what he was shown. `ADR-0075` § Consequences' Order line is owed to the next Architect hop.*
+  *2026-11-06 (`bapm-ABC-291-k1-lines`; `…860a0dbd`, `…2d2c2bad` § 4): that line is no longer owed. `arch-records-1106` dated `ADR-0075` § Consequences' Order line, and `arch-ABC-291-stop` dated `ADR-0056` D6's.*
 - **`ABC-301` closed NOT MET:** the trigger is met. *2026-11-05: "E2's second pull merged or closed" is gone as a wait.*
 - **One at a time on `src/evaluate.ts` / `src/evaluate-params.ts`** with `ABC-272`, `ABC-290`, `ABC-292`–`ABC-294`.
 
@@ -290,10 +315,11 @@ adr: "ADR-0075, accepted by the owner 2026-11-05 (…c1623ae7), in force at this
 - ~~*2026-11-06 (`bapm-lines-1106b`):* **Which `ADR-0034` class a `G1` miss by growth takes on this diff:** D by `…7c297147`, B by d2's instrument on `ADR-0075` d4's files (K3). The Architect's, before QE seals.~~ *2026-11-06 (`bapm-ABC-291-stop-lines`; `…860a0dbd`): **ruled, so no longer open:** class B, and F3 reads as written (K3).*
 - `G6`, the miss-path cost (the memo-bypassed ratio is void), what the cut buys, and every play read.
 - The cause of PR8's two levels.
+- *2026-11-06 (`bapm-ABC-291-k1-lines`; `…a223d29a`):* **Why M3 moved drift at d5, and whether that costs play.** Whether M3 reacts this way to any small evaluation change, or to this term more than others, is unread. C2′ prices the play.
 - The deep lanes' rows. They were not read. Ruling 2 says how a row there is handled, not which rows move.
-- `ABC-282` A2 (b)'s new fixture, which d4 sends to `ADR-0028` d2. It is the one default-lane figure left.
+- ~~`ABC-282` A2 (b)'s new fixture, which d4 sends to `ADR-0028` d2. It is the one default-lane figure left.~~ *2026-11-06 (`bapm-ABC-291-k1-lines`; `se-ABC-291` `…d68ef14e` item 6, `…cb124720`): **re-found under `ADR-0028` d2 by the row's own scan, not re-pinned:** `r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/3RK2R b Kkq - 1 1`, b4c3 230, budget 5, depth 2. The Engineer's report. QE's read of K2 is owed.*
 - Whether this term holds `zugzwang.001`. Whether any hand-valued term pays. Its share of row E4's estimate.
-- This ticket's exact default-lane row count.
+- ~~This ticket's exact default-lane row count.~~ *2026-11-06 (`bapm-ABC-291-k1-lines`; `…668c63b4`, `…2cddd25a`, `…c4360feb`): **2 734 → 2 814 at `70d931ab`, +80:** the build 55, the repair 1, K1's rows 24, no new file. The Engineer's counts. A later row moves the figure. The rows' cost stays with § NFR triggers.*
 - Whether `TUNE_DEEP` is red on `main` today. That the merge reddens it is by reading, not by a run.
 - Whether d2's low ranks push the engine toward flank pawn moves in front of its king. Reasoned as small, and unread.
 
@@ -314,3 +340,4 @@ adr: "ADR-0075, accepted by the owner 2026-11-05 (…c1623ae7), in force at this
 
 **DoR 10/10. Ready.** *2026-11-06 (`bapm-lines-1106b`): unchanged. Row 5 follows the build's line. Row 10 holds: OQ-0074-2 blocks nothing, and K3's unread tree and the class question are `UNKNOWN - verify`, not blockers.*
 *2026-11-06 (`bapm-ABC-291-stop-lines`; `…860a0dbd`): the class question is ruled, class B, F3 as written, and it leaves that line. Row 7 reads 1–5. DoR 10/10, unchanged. Status and column read In Development.*
+*2026-11-06 (`bapm-ABC-291-k1-lines`): DoR 10/10, unchanged. Row 10's A2 (b) fixture is re-found (§ `UNKNOWN - verify`). K1 (c)'s order was missed at dispatch, after Ready, and no row here reads it.*
