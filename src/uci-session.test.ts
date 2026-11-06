@@ -2727,6 +2727,8 @@ if (RUN_ENGINE_DEEP) {
    * `ABC-303`, 2026-11-05 (`…0f8a4f82` U2): the session has no door, so the lines are pinned on the
    * bundle's tree. `cp` moves on five, and `go depth 6` is a tree pin; `depth`, `nodes`, `time`,
    * `nps` and the move stay on the five, and those are what a W1 leak would change.
+   * `ABC-291`, 2026-11-06 (`…2d2c2bad` § 1, `ADR-0071` D8's dated line): the evaluation moved the
+   * lines and W1 did not act, so the three constants re-pin on this tree. No row retires.
    */
   describe("ABC-282 A0-3 — the session's lines where W1 is off [deep, ENGINE_DEEP=1]", () => {
     const POSITION_6 = "r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10";
@@ -2737,9 +2739,9 @@ if (RUN_ENGINE_DEEP) {
       rig.send(`position fen ${POSITION_6}`);
       return rig.send(go);
     };
-    const D8 = "info depth 8 score cp 45 nodes 196681 time 201 nps 978512 pv c3d5";
-    const D7 = "info depth 7 score cp 43 nodes 69705 time 76 nps 917171 pv c3d5";
-    const D6 = "info depth 6 score cp 87 nodes 10513 time 17 nps 618412 pv c3d5";
+    const D8 = "info depth 8 score cp 74 nodes 196681 time 201 nps 978512 pv c3d5";
+    const D7 = "info depth 7 score cp 88 nodes 69705 time 76 nps 917171 pv c3d5";
+    const D6 = "info depth 6 score cp 99 nodes 10614 time 17 nps 624353 pv c3d5";
     const rows: ReadonlyArray<readonly [string, string, string]> = [
       ["level", "go movetime 200", D8],
       ["level", "go wtime 4000 btime 4000", D8],

@@ -996,10 +996,8 @@ describe("ABC-291 — the source rows (ADR-0075 d3 and d4; K1 (h))", () => {
   });
 
   /**
-   * NOT K1 (h)'s letter. K1 (h) reads this export "called from test files only", and d4 reads it
-   * "the evaluation those doors call", so the off branch of each switch names it in production
-   * source. This row pins what d4 builds: those three branches, and no other caller. Which reading
-   * holds is the Architect's (`se-ABC-291`).
+   * `ABC-291`, 2026-11-06 (`…2d2c2bad` § 2): this row reads `ADR-0075` K1 (h)'s dated line, which
+   * says how K1 (h) reads for this export beside d4.
    */
   it("evaluateAtPhaseWithoutPawnShape: outside test files, only the three off branches d4 puts it on", () => {
     expect(callers("evaluateAtPhaseWithoutPawnShape")).toEqual([
@@ -1014,5 +1012,39 @@ describe("ABC-291 — the source rows (ADR-0075 d3 and d4; K1 (h))", () => {
     expect(SEARCH).toContain(
       "const staticScore = taper ? pawnShape ? evaluateAtPhase(position, phase) : evaluateAtPhaseWithoutPawnShape(position, phase)",
     );
+  });
+
+  /**
+   * `ABC-291`, 2026-11-06 (`…2d2c2bad` § 5 item 3): the read `ADR-0075` K1 (h)'s dated line adds,
+   * d4's "on in `search()` and `chooseMove` only". Each carrier is named by the top-level
+   * declaration whose body holds it. Source only, no search.
+   */
+  it("d4: pawnShape: true stands in each RULES_PAWN_SHAPE and in search()'s and chooseMove's own bodies, under tools/ in QUIET_RULES and its name, and nowhere else", () => {
+    const root = new URL("../", import.meta.url).pathname;
+    const files = ["src/", "tools/"].flatMap((directory) =>
+      (readdirSync(`${root}${directory}`, { recursive: true }) as string[])
+        .map((name) => `${directory}${name}`)
+        .filter((name) => /\.(ts|js)$/.test(name) && !/\.test\.ts$/.test(name)),
+    );
+    const owner = (source: string, at: number): string => {
+      const before = source.slice(0, at);
+      const opened = [...before.matchAll(/^(?:export )?(?:const|function) (\w+)/gm)].at(-1);
+      if (opened === undefined || before.lastIndexOf("\n}") > opened.index) return "no declaration";
+      return opened[1] ?? "no declaration";
+    };
+    const carriers = files.flatMap((file) => {
+      const source = readFileSync(`${root}${file}`, "utf8");
+      return [...source.matchAll(/pawnShape:\s*true/g)].map(
+        (found) => `${file} ${owner(source, found.index)}`,
+      );
+    });
+    expect(carriers.sort()).toEqual([
+      "src/engine.ts RULES_PAWN_SHAPE",
+      "src/engine.ts chooseMove",
+      "src/search.ts RULES_PAWN_SHAPE",
+      "src/search.ts search",
+      "tools/tune/tune.ts QUIET_RULES",
+      "tools/tune/tune.ts QUIET_RULES_NAME",
+    ]);
   });
 });

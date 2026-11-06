@@ -2079,7 +2079,8 @@ if (RUN_DEEP) {
     const door = engineModule.chooseMoveWithoutQuietBundle;
     // `ABC-291` (`ADR-0075` d4): the all-on figures re-point to the off door, unchanged. The shipped
     // path keeps A0-1's identity itself: softMs absent and softMs 1 read one line.
-    const allOn = engineModule.chooseMoveWithoutPawnShape;
+    // `ABC-291`, 2026-11-06 (`…2d2c2bad` § 5 item 5): named for the tree it reads, which is not all on.
+    const bundleTree = engineModule.chooseMoveWithoutPawnShape;
 
     // `main` `22931005`, read on the base before the change (`se-ABC-282` `…aadd2d48`).
     // `ABC-303`, 2026-11-05 (`…0f8a4f82` E3): split. The all-off door keeps the base's figures, and
@@ -2094,7 +2095,7 @@ if (RUN_DEEP) {
       ["position-6", 8, ["c3d5", 71, 101_425], ["c3d5", 45, 94_911]],
     ];
     for (const [name, depth, off, on] of FROZEN) {
-      it(`A0-1: ${name} at maxDepth ${depth}: the all-off door reads the base; all on reads one line with softMs absent and with softMs 1`, () => {
+      it(`A0-1: ${name} at maxDepth ${depth}: the all-off door reads the base; the bundle's tree reads its figures; chooseMove reads one line with softMs absent and with softMs 1`, () => {
         const frozen = { budgetMs: 60_000, now: () => 0, maxDepth: depth };
         const expected = ([move, score, nodes]: Figures) => ({
           move,
@@ -2104,8 +2105,9 @@ if (RUN_DEEP) {
           partial: undefined,
         });
         expect(read(door, fenOf(name), frozen)).toEqual(expected(off));
-        expect(read(allOn, fenOf(name), frozen)).toEqual(expected(on));
-        expect(read(allOn, fenOf(name), { ...frozen, softMs: 1 })).toEqual(expected(on));
+        expect(read(bundleTree, fenOf(name), frozen)).toEqual(expected(on));
+        // `ABC-291`, 2026-11-06 (`…2d2c2bad` § 5 item 4): a door takes no `softMs` (`ADR-0071` D12
+        // item 6), so the door's `softMs: 1` read is gone and the relation stays on `chooseMove`.
         expect(read(chooseMove, fenOf(name), { ...frozen, softMs: 1 })).toEqual(
           read(chooseMove, fenOf(name), frozen),
         );
@@ -2123,11 +2125,11 @@ if (RUN_DEEP) {
       ["position-6", 200, 8, "c3d5", 71, 45, 196_681],
     ];
     for (const [name, budgetMs, depth, move, off, on, nodes] of STEPPING) {
-      it(`A0-2: ${name} at ${budgetMs} virtual ms, softMs absent: the all-off door reads the base; all on stops at the same node`, () => {
+      it(`A0-2: ${name} at ${budgetMs} virtual ms, softMs absent: the all-off door reads the base; the bundle's tree stops at the same node`, () => {
         const stepped = () => ({ budgetMs, now: virtualClock(1) });
         const expected = (score: number) => ({ move, score, depth, nodes, partial: undefined });
         expect(read(door, fenOf(name), stepped())).toEqual(expected(off));
-        expect(read(allOn, fenOf(name), stepped())).toEqual(expected(on));
+        expect(read(bundleTree, fenOf(name), stepped())).toEqual(expected(on));
       });
     }
   });
