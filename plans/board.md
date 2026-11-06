@@ -1,3 +1,4 @@
+_Updated: 2026-11-06T21:12:15Z — arch-ABC-291-k1c merged: K1 (c) not met to the letter; merge question with the owner; QE owes three items at stage 0._
 _Updated: 2026-11-06T21:01:21Z — bapm-ABC-291-k1-lines merged; arch-ABC-291-k1c reads K1 (c)'s order; qe-ABC-291 at stage 0._
 _Updated: 2026-11-06T20:54:25Z — se-ABC-291-k1rows done (9e496e4a, 2 814): ABC-291 tip ready; qe-ABC-291 seals PREREG and count rows, stops before timing; bapm-ABC-291-k1-lines running._
 _Updated: 2026-11-06T20:40:13Z — bapm-ABC-291-stop-lines merged. se-ABC-291-repair running; K1's rows follow._
