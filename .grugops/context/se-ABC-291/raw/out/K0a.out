@@ -1,0 +1,8 @@
+{"row":"K0a","kind":"chooseMove","name":"kiwipete","d":8,"door":{"nodes":573518,"score":-114,"move":"e2a6"},"base":{"nodes":573518,"score":-114,"move":"e2a6"},"eq":true}
+{"row":"K0a","kind":"chooseMove","name":"kiwipete","d":9,"door":{"nodes":1320857,"score":-128,"move":"e2a6"},"base":{"nodes":1320857,"score":-128,"move":"e2a6"},"eq":true}
+{"row":"K0a","kind":"chooseMove","name":"position-6","d":8,"door":{"nodes":94911,"score":45,"move":"c3d5"},"base":{"nodes":94911,"score":45,"move":"c3d5"},"eq":true}
+{"row":"K0a","kind":"chooseMove","name":"position-6","d":9,"door":{"nodes":234984,"score":34,"move":"c3d5"},"base":{"nodes":234984,"score":34,"move":"c3d5"},"eq":true}
+{"row":"K0a","kind":"chooseMove","name":"position-6","d":10,"door":{"nodes":523610,"score":64,"move":"c3d5"},"base":{"nodes":523610,"score":64,"move":"c3d5"},"eq":true}
+{"row":"K0a","kind":"search","name":"kiwipete","d":8,"door":{"nodes":311546,"score":-81,"move":"e2a6"},"base":{"nodes":311546,"score":-81,"move":"e2a6"},"eq":true}
+{"row":"K0a","kind":"search","name":"position-6","d":8,"door":{"nodes":163523,"score":71,"move":"c3d5"},"base":{"nodes":163523,"score":71,"move":"c3d5"},"eq":true}
+{"K0a":7,"of":7}

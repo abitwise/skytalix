@@ -1,0 +1,78 @@
+{
+ "1 byte": [
+  "evaluate.pawns.test.ts | ABC-235 cut 5 \u2014 the pawn memo returns what a fresh pawnStructure returns is a fixed 576 KiB: 2^14 slots of two",
+  "transposition.test.ts | A7 \u2014 the table holds a fixed 4 MiB, whatever the search stays inside NFR-009's 16 MiB with the key array, the "
+ ],
+ "2 value": [
+  "engine.test.ts | ABC-249 \u2014 a pre-root repetition met four plies deep scores 0 (QE-248-c) Qe5+ at ply 4 stood twice before the r",
+  "engine.test.ts | ABC-282 A2 \u2014 a partial iteration's move is played only if it beat the incumbent (c) a completed mate above the"
+ ],
+ "3 lost fixture": [
+  "engine.test.ts | ABC-282 A2 \u2014 a partial iteration's move is played only if it beat the incumbent (b) stopped before any root mo"
+ ],
+ "4 re-point": [
+  "evaluate.passer.test.ts | ABC-271 K1 (b) \u2014 value identity: evaluate is Object.is the pre-ticket evaluate on the frozen corpora ABC-270's",
+  "evaluate.passer.test.ts | ABC-271 K1 (b) \u2014 value identity: evaluate is Object.is the pre-ticket evaluate on the frozen corpora G3's 184 ",
+  "evaluate.passer.test.ts | ABC-271 K1 (b) \u2014 value identity: evaluate is Object.is the pre-ticket evaluate on the frozen corpora QE's 12 p",
+  "evaluate.passer.test.ts | ABC-271 K1 (b) \u2014 value identity: evaluate is Object.is the pre-ticket evaluate on the frozen corpora QE's ABC-",
+  "evaluate.queen-on.test.ts | ABC-270 K1 (b) \u2014 value identity: evaluate is Object.is the pre-ticket evaluate on the frozen corpora G3's 184 ",
+  "evaluate.queen-on.test.ts | ABC-270 K1 (b) \u2014 value identity: evaluate is Object.is the pre-ticket evaluate on the frozen corpora QE's ABC-",
+  "evaluate.queen-on.test.ts | ABC-270 K1 (b) \u2014 value identity: evaluate is Object.is the pre-ticket evaluate on the frozen corpora QE's ABC-",
+  "evaluate.taper.test.ts | ABC-269 B1 (a) \u2014 a position and its colour mirror score exactly equal, Object.is, at every phase the frozen ro",
+  "evaluate.taper.test.ts | ABC-269 B1 (b) \u2014 at phase 24, evaluate equals evaluateWithoutTaper exactly every G3 position whose phase is >=",
+  "evaluate.taper.test.ts | ABC-269 B1 (b) \u2014 at phase 24, evaluate equals evaluateWithoutTaper exactly every frozen row at raw phase >= 24",
+  "evaluate.taper.test.ts | ABC-274 A3 \u2014 the blend is live for every term family (ADR-0067 decision 8, scope 1) DOUBLED: the score is mg +",
+  "evaluate.taper.test.ts | ABC-274 A3 \u2014 the blend is live for every term family (ADR-0067 decision 8, scope 1) ISOLATED: the score is mg ",
+  "evaluate.taper.test.ts | ABC-274 A3 \u2014 the blend is live for every term family (ADR-0067 decision 8, scope 1) KING_FILE_HALF_OPEN: the s",
+  "evaluate.taper.test.ts | ABC-274 A3 \u2014 the blend is live for every term family (ADR-0067 decision 8, scope 1) KING_SHELTER_MISSING: the ",
+  "evaluate.taper.test.ts | ABC-274 A3 \u2014 the blend is live for every term family (ADR-0067 decision 8, scope 1) MATERIAL: the score is mg ",
+  "evaluate.taper.test.ts | ABC-274 A3 \u2014 the blend is live for every term family (ADR-0067 decision 8, scope 1) MOBILITY_CAP: the score is",
+  "evaluate.taper.test.ts | ABC-274 A3 \u2014 the blend is live for every term family (ADR-0067 decision 8, scope 1) MOBILITY_WEIGHT: the score",
+  "evaluate.taper.test.ts | ABC-274 A3 \u2014 the blend is live for every term family (ADR-0067 decision 8, scope 1) PASSED: the score is mg + ",
+  "evaluate.taper.test.ts | ABC-274 A3 \u2014 the blend is live for every term family (ADR-0067 decision 8, scope 1) PST.bishop: the score is m",
+  "evaluate.taper.test.ts | ABC-274 A3 \u2014 the blend is live for every term family (ADR-0067 decision 8, scope 1) PST.king: the score is mg ",
+  "evaluate.taper.test.ts | ABC-274 A3 \u2014 the blend is live for every term family (ADR-0067 decision 8, scope 1) PST.knight: the score is m",
+  "evaluate.taper.test.ts | ABC-274 A3 \u2014 the blend is live for every term family (ADR-0067 decision 8, scope 1) PST.pawn: the score is mg ",
+  "evaluate.taper.test.ts | ABC-274 A3 \u2014 the blend is live for every term family (ADR-0067 decision 8, scope 1) PST.rook: the score is mg ",
+  "search.bundle.test.ts | ABC-283 (a) \u2014 aspiration at the root of chooseMove (ADR-0066 decisions 1-7) a non-mate fail high: iteration 5 ",
+  "see.test.ts | ABC-279 A1 (c) \u2014 quiesce skips exactly the moves isLosingCapture names, on the stand-pat branch a node whose e"
+ ],
+ "5 door join": [
+  "engine.test.ts | A4 \u2014 no fixed depth anywhere in the delivered engine exports the two entry points and the two named values, an",
+  "evaluate.taper.test.ts | ABC-269 \u2014 one switch, taper, and three test-only doors (ADR-0064 decision 7) engine: taper is on in chooseMove",
+  "evaluate.taper.test.ts | ABC-269 \u2014 one switch, taper, and three test-only doors (ADR-0064 decision 7) search: taper is on in search, th",
+  "quiescence.test.ts | ABC-228 \u2014 the doors: searchWithoutQuiescenceEvasions and chooseMoveWithoutQuiescenceEvasions ./engine.ts: each",
+  "quiescence.test.ts | ABC-228 \u2014 the doors: searchWithoutQuiescenceEvasions and chooseMoveWithoutQuiescenceEvasions ./search.ts: each",
+  "quiescence.test.ts | ABC-229 \u2014 the doors: searchWithoutQuietPromotions and chooseMoveWithoutQuietPromotions ./engine.ts: each expor",
+  "quiescence.test.ts | ABC-229 \u2014 the doors: searchWithoutQuietPromotions and chooseMoveWithoutQuietPromotions ./search.ts: each expor",
+  "search.bundle.test.ts | ABC-303 \u2014 the doors (ADR-0072 decision 6, ADR-0073 decision 7) chooseMoveWithoutCountermove: moveCount true, c",
+  "search.bundle.test.ts | ABC-303 \u2014 the doors (ADR-0072 decision 6, ADR-0073 decision 7) chooseMoveWithoutMoveCountPruning: moveCount fa",
+  "search.bundle.test.ts | ABC-303 \u2014 the doors (ADR-0072 decision 6, ADR-0073 decision 7) chooseMoveWithoutQuietBundle: moveCount false, ",
+  "search.bundle.test.ts | ABC-303 \u2014 the doors (ADR-0072 decision 6, ADR-0073 decision 7) every other door in both modules turns both par",
+  "search.bundle.test.ts | ABC-303 \u2014 the doors (ADR-0072 decision 6, ADR-0073 decision 7) searchWithoutCountermove: moveCount true, count",
+  "search.bundle.test.ts | ABC-303 \u2014 the doors (ADR-0072 decision 6, ADR-0073 decision 7) searchWithoutMoveCountPruning: moveCount false,",
+  "search.bundle.test.ts | ABC-303 \u2014 the doors (ADR-0072 decision 6, ADR-0073 decision 7) searchWithoutQuietBundle: moveCount false, coun",
+  "search.futility.test.ts | the doors \u2014 searchWithoutFutility and chooseMoveWithoutFutility turn futility off, as every older door does ./",
+  "search.futility.test.ts | the doors \u2014 searchWithoutFutility and chooseMoveWithoutFutility turn futility off, as every older door does ./",
+  "search.null-move.test.ts | QE-208-c \u2014 every door's nullMove switch literal is false; only the shipped path and the ABC-228, ABC-229, ABC-",
+  "search.null-move.test.ts | QE-208-c \u2014 every door's nullMove switch literal is false; only the shipped path and the ABC-228, ABC-229, ABC-",
+  "search.test.ts | A6 \u2014 no move is selected without a caller-supplied depth exports exactly the search core and nothing that pick",
+  "see.test.ts | ABC-279 \u2014 one switch, seePruning, and two test-only doors (ADR-0069 decisions 6-8) engine: seePruning is on in",
+  "see.test.ts | ABC-279 \u2014 one switch, seePruning, and two test-only doors (ADR-0069 decisions 6-8) search: seePruning is on in"
+ ],
+ "6 switch site": [
+  "evaluate.taper.test.ts | ABC-269 \u2014 one switch, taper, and three test-only doors (ADR-0064 decision 7) the call sites: futilityNode is h",
+  "quiescence.test.ts | ABC-228 \u2014 the rule rows (`ADR-0053` decision 9; each reds a planted fault) ./engine.ts: the leaf passes its pl",
+  "quiescence.test.ts | ABC-228 \u2014 the rule rows (`ADR-0053` decision 9; each reds a planted fault) ./search.ts: the leaf passes its pl",
+  "search.futility.test.ts | both recursions test the node once, with the entry window, after the table probe and the null move, and skip e",
+  "search.futility.test.ts | both recursions test the node once, with the entry window, after the table probe and the null move, and skip e",
+  "search.futility.test.ts | futilityNode \u2014 eval + 150 / 350 / 550 <= alpha at a null-window node of depth 1-3; false at the root, at a PV ",
+  "search.futility.test.ts | futilityNode \u2014 eval + 150 / 350 / 550 <= alpha at a null-window node of depth 1-3; false at the root, at a PV ",
+  "search.futility.test.ts | futilityNode \u2014 eval + 150 / 350 / 550 <= alpha at a null-window node of depth 1-3; false at the root, at a PV ",
+  "search.futility.test.ts | futilityNode \u2014 eval + 150 / 350 / 550 <= alpha at a null-window node of depth 1-3; false at the root, at a PV ",
+  "search.futility.test.ts | futilityNode \u2014 eval + 150 / 350 / 550 <= alpha at a null-window node of depth 1-3; false at the root, at a PV ",
+  "search.futility.test.ts | futilityNode \u2014 eval + 150 / 350 / 550 <= alpha at a null-window node of depth 1-3; false at the root, at a PV ",
+  "search.futility.test.ts | futilityNode \u2014 eval + 150 / 350 / 550 <= alpha at a null-window node of depth 1-3; false at the root, at a PV ",
+  "search.futility.test.ts | futilityNode \u2014 eval + 150 / 350 / 550 <= alpha at a null-window node of depth 1-3; false at the root, at a PV "
+ ]
+}

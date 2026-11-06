@@ -1,0 +1,15 @@
+load rc=0 s=0 bytes=31
+row1632-head rc=0 s=2 bytes=1158
+row1632-door rc=0 s=2 bytes=1382
+row1632-base rc=0 s=2 bytes=1158
+PR6-zug rc=0 s=2 bytes=497
+PR7-g1 rc=0 s=4 bytes=159
+PR5-mate45 rc=0 s=0 bytes=71
+PR5-mate55 rc=0 s=2 bytes=71
+PR2-mirror rc=0 s=0 bytes=108
+PR3-arith rc=0 s=0 bytes=374
+PR4-memo rc=0 s=1 bytes=90
+reach-ON rc=0 s=15 bytes=60
+reach-OFF rc=0 s=16 bytes=61
+drift rc=0 s=5 bytes=128
+ALLDONE
