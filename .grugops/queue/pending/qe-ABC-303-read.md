@@ -8,9 +8,10 @@ branch: continue grugops/qe-ABC-303 at 7f99a162 — worktree .claude/worktrees/q
 width: bundle 1's timing rows, then its games, then the verdict. Reads only: no src or test change lands.
 ---
 # Read bundle 1 in the owner's window
-The owner has held the whole host: "i can give you, all other sessions are on hold, go ahead". That is W's word and the quiet-host word for both stages. Check with ps first. He gave about 70 minutes.
+The owner's word is to start: "start and don't worry, here we have 24 threads of cpu". A foreign marketing vitest was live at dispatch. Read the Orchestrator's note of 2026-11-06T16:47:59Z in the brief's stead if they differ: W is dropped by that line and FL alone governs the games; the timing rows keep § 6a's slot gate, flags and void line as sealed, one re-read, nothing loosened. No slot, or both reads void, means no game: stop and report.
+Log foreign load by class and count only: foreign command lines can carry credentials and go in no record, raw file included.
 Read PREREG …53858301, STOP …b59650bc, and the Architect's …a5dc0532 and ADR-0056's dated D5 block (on main; not on your branch).
-1. Seal an addendum before any run: FL and W word for word, after CF10; Q2 ruled by the Orchestrator: B6 as written, timing first; a merge of records into the branch is not needed, and main's lane inputs are unchanged since 38914841, so the stale rule does not fire. Say so with the git diff.
+1. Seal an addendum before any run: FL word for word after CF10, and W with the line that dropped it; Q2 ruled by the Orchestrator: B6 as written, timing first; a merge of records into the branch is not needed, and main's lane inputs are unchanged since 38914841, so the stale rule does not fire. Say so with the git diff.
 2. Stage A: PREREG § 6a, P7, P6, R5, one hold, one re-read on a void. G6 or L4 red is a STOP. Any table 2 row not met means no game: go by § What happens on a miss.
 3. Stage B, straight after, if P6 and P7 are met: PREREG § 6 in order, C2′, S′, Levels. Graded as played, by the bars and CF1 to CF10 and FL. Report FL's figures beside the result. A miss is never re-played. Foreign load is recorded and never touched.
 4. Verdict as a qe-e2e decision note when every row is read. On NOT MET, a failed-attempt note as the page says. UAT as the page says.
