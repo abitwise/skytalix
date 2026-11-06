@@ -1,16 +1,29 @@
 ---
 id: ABC-289
-title: "Q2: delta pruning in quiescence. Out of check, a capture is skipped when the stand-pat score plus its victim's value and 200 cp cannot raise alpha, and the skip raises the node's value to that bound, behind a test-only off-door pair. ADR-0074 PROPOSED, premise met; the merge waits on the owner's acceptance and its read"
-status: ready
-column: Ready
+title: "Q2: delta pruning in quiescence. Out of check, a capture is skipped when the stand-pat score plus its victim's value and 200 cp cannot raise alpha, and the skip raises the node's value to that bound, behind a test-only off-door pair. NOT MET on an exact build: with P4 in the tree, DP2 reads drift 34 cp against 30 and G1 53 / 58 against 54. Nothing merged; OQ-0074-2 open"
+status: dropped
+column: Blocked
 size: S
 priority: P3
 epic: EPIC-011
 feature: —
-adr: "ADR-0074 ACCEPTED 2026-11-04 (the owner, OQ-0074-1; orch-2026-10-30a …3e73f9f9; Status line arch-owner-answers-1104b …88ca95bd). Premise met. It amends ADR-0024 d4. Not in force until this ticket merges on its own read (DP4). (Was: PROPOSED, premise met; arch-ABC-289.)"
+adr: "ADR-0074 ACCEPTED 2026-11-04 (the owner, OQ-0074-1; orch-2026-10-30a …3e73f9f9; Status line arch-owner-answers-1104b …88ca95bd). Premise met. It amends ADR-0024 d4. Not in force until this ticket merges on its own read (DP4). (Was: PROPOSED, premise met; arch-ABC-289.) 2026-11-06 (bapm-lines-1106b): NOT MET on an exact build by F1 and F7 (…7c297147, …40ef8351); stays accepted, not in force"
 ---
 
 # ABC-289: delta pruning in quiescence (Q2)
+
+> **NOT MET ON AN EXACT BUILD; NOTHING MERGED; `b42706b3` KEPT; OQ-0074-2 OPEN, 2026-11-06, by BA/PM** (task `bapm-lines-1106b`, records only, at `main` `bc2bb953`; nothing run). Sources: `arch-ABC-289-joint` `…7c297147` and `…d61479af`, the Orchestrator's
+> `…40ef8351`, and `se-ABC-289` `…0e380b06`, `…4ad7c049` and `…8b80f592`, which sit on `grugops/ABC-289`.
+> - **The two reds, DP2, on the joint tree with P4 and the countermove in:** drift at depth 5 reads 34 cp against none beyond 30, on one row, `kiwipete/a2a4`, 290 to 324. 99.47 % within 25 cp is met. `G1` reads 53 / 58 against ≥ 54, with "mate in 3, seed 1632" newly missed.
+> - **By the letter:** `ADR-0074` F1 by its own words. F7 through `ADR-0034` d1, d2 and its table, class B. The defect check is done: with `moveCount` and `countermove` off, every `ADR-0074` figure reproduces, so the build is exact. This page's F4 reads NOT MET.
+> - **The bars did not presume the old tree.** `ADR-0074` § Consequences and d12 and `ADR-0056` D5 said so in advance. No bar moved, nothing was re-pinned, and no row retired.
+> - **The premise did not fail.** Its pay stands, d8 0.6084 to 0.8215 and reach +0.389, and it stands as `0cc9afd1`'s record, not re-read. DP4 was not played, so this ticket adds no S′.
+> - **Branch `grugops/ABC-289` at `b42706b3` is kept, unmerged.** `ADR-0074` stays accepted, not in force. The 21 `W1` rows stay red on that branch and get no form.
+> - **OQ-0074-2 is with the owner and blocks nothing:** (a) close, recommended; (b) override both bars; (c) a new form and read; (d) P4 out, Q2 in. Only he can open (b) to (d). **The ticket closes on (a) or on no answer.** A route opened brings the 21 rows' form back to the Architect, on that build, and DP1 (a)'s wording here.
+> - **Re-open:** a change to P4 on its own ticket, or his word. Never a moved tree alone (`…7c297147` § 3).
+> - **Front matter:** status `dropped`, as a NOT MET ticket reads. **Column Blocked and no `closed:` line,** as the board card has it, because the ticket has not closed: `dropped` in column Done means closed. Both land at the close. The `adr:` line takes a dated clause.
+> - **The title** ended "ADR-0074 PROPOSED, premise met; the merge waits on the owner's acceptance and its read". The first half stands; the end now reads the outcome. The file name keeps its as-cut slug.
+> - No size or priority moves. The board move is the Orchestrator's.
 
 > **`ADR-0074` ACCEPTED (THE OWNER, OQ-0074-1); THE ORDER IS RULED: BUNDLE 1 FIRST, THIS TICKET ALONE AFTER IT, 2026-11-04, by
 > BA/PM** (task `bapm-bundle-1-cut`, records only, at `main` `3ad21218`; nothing run). Sources: the owner's word `orch-2026-10-30a`
@@ -126,6 +139,7 @@ The re-measure and the ADR fix exact counts before Ready. None is loosened after
   on the 287, **in both recursions** (of 191 and of 189); zugzwang 7 / 7 at recorded depths, none re-pinned; `G1` ≥
   54 / 58 with no NEWLY-missed line; drift at depth 5 on the 190 in both recursions, against the doors: **≥ 98 % within
   25 cp, none beyond 30 cp, 0 mate sign changes**.
+  *2026-11-06 (`bapm-lines-1106b`; `…7c297147` § 1): **red twice on `b42706b3`, NOT MET.** Drift none beyond 30 cp read 34. `G1` read 53 / 58 with "mate in 3, seed 1632" newly missed. 99.47 % within 25 cp and 0 mate sign changes were met. No bar moved.*
 - **DP3 (pay; `ADR-0074` d12 (a), (b)):** d8 nodes on kiwipete and position-6, both recursions, **≤ 0.88× on each of the
   four readings**; reach at 47 000 nodes on the 190 **≥ door + 0.15 ply** (≥ 7.018 on 6.868).
 - **DP4 (the read; `EPIC-011` § The per-change rule, by reference; `ADR-0074` d13).** Intent **GAIN**. C2′ **≥ 50.0 /
@@ -146,7 +160,7 @@ The re-measure and the ADR fix exact counts before Ready. None is loosened after
 | F1 | ~~`Q-3K-10` no~~ | ~~closed: fenced by `ADR-0024` d4~~ *(moot 2026-11-04: `Q-3K-10` answered yes)* |
 | F2 | ~~the re-measure shows no trim over `main`~~ | ~~closed as dropped (premise not met)~~ *(did not fire 2026-11-04: premise met, `ADR-0074`; `bapm-lines-1104`)* |
 | F3 | DP0 red | a defect |
-| F4 | DP2 red | a defect check first; if real, NOT MET |
+| F4 | DP2 red | a defect check first; if real, NOT MET *(fired 2026-11-06 on `b42706b3`: the build is exact, so NOT MET; `…7c297147`, `…40ef8351`; `bapm-lines-1106b`)* |
 | F5 | DP4 NOT MET | not merged |
 | F9 (`ADR-0074`'s number) | a build leaves `best` at the stand pat on a skip (`ADR-0074` d3; DP1 (b)) | a defect; it is the failed form D200 |
 
@@ -206,6 +220,7 @@ The re-measure and the ADR fix exact counts before Ready. None is loosened after
     F2 of `ADR-0074` governs.
   - **`ABC-282`, in either case:** whichever of W1 and this ticket lands second re-reads b = 2.3 by P1's method and reports it
     to the Orchestrator. Any change to b is its own ticket.
+- *2026-11-06 (`bapm-lines-1106b`; `…40ef8351`, `…7c297147` § 4):* **OQ-0074-2** (the owner's) is open and blocks nothing. `ABC-291` does not wait on it: `…69ee96e7`'s `ABC-289` clause is lifted, and this ticket's recorded outcome meets the read queue on `ABC-291`, `ABC-292`, `ABC-290` and `ABC-293`.
 
 ## Definition of Ready
 
@@ -225,4 +240,4 @@ The re-measure and the ADR fix exact counts before Ready. None is loosened after
 ~~**DoR 9/10. Backlog, held** (2026-11-04: on the Architect's re-measure over Q1 and its ADR only).~~
 **DoR 10/10: Ready** (2026-11-04, `bapm-lines-1104`). ~~The merge waits on OQ-0074-1 and DP4.~~ *2026-11-04 (`bapm-bundle-1-cut`): the build
 waits on `ABC-303`'s merge or `failed-attempt`; the merge waits on DP4.* The column move and the build slot are the
-Orchestrator's.
+Orchestrator's. *2026-11-06 (`bapm-lines-1106b`): the rows stand as the record of what was Ready. The build was exact, and the ticket reads NOT MET, with OQ-0074-2 open.*

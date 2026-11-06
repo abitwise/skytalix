@@ -120,6 +120,7 @@ The ADR fixes exact counts before Ready. None is loosened after Ready. Form (b) 
   only for the host (`ADR-0056` D6's dated line).
 - **Last of the four, after `ABC-290`'s read.**
 - **The read queues.** A value-changing merge stales the read after it, so this term's C2′ follows `ABC-303` and `ABC-289`.
+  *2026-11-06 (`bapm-lines-1106b`; `…7c297147` § 4 item 2, `…40ef8351`): **met.** `ABC-303` merged at `434fa171`, and `ABC-289`'s recorded outcome, NOT MET on an exact build with nothing merged, meets it. This term's place in the order does not change.*
 - **A bundle with `ABC-290`** (`…a5d74f70`) stays lawful under B1. A term merged inside it can open `ADR-0067`'s third-pull door, and CF1–CF10 reach
   it (`…0f1ab02e` items 1 and 2). ~~How the four tests read for a bundle term is `arch-owner-answers-1105b`'s, in flight.~~ *2026-11-05 (`bapm-pointers-1105`): **settled.** `ADR-0067`'s dated
   line of `arch-owner-answers-1105b`, at the end of the block above § What would falsify this (`…3e6b25fb`): each test is read on the term, not the bundle. A bundle that does
@@ -135,7 +136,7 @@ The ADR fixes exact counts before Ready. None is loosened after Ready. Form (b) 
 | 2 | scope and out-of-scope | ✅ scope 1–4 |
 | 3 | INVEST | ✅ M |
 | 4 | testable, measurable acceptance | ✅ form (b): seam rows, safety rows, `G2` at the ADR's ratio, `G6`, C2′ ≥ 50.0. The tempo relation rows owed with the ADR |
-| 5 | dependencies known | ✅ the ADR; last of the four; its read after `ABC-303` and `ABC-289`; the shared files |
+| 5 | dependencies known | ✅ the ADR; last of the four; its read after `ABC-303` and `ABC-289` *(met 2026-11-06, `bapm-lines-1106b`; `…7c297147` § 4)*; the shared files |
 | 6 | NFR triggers with targets | ✅ `G2` at the ADR's ratio; `NFR-005` `G6`; `NFR-008` ≤ 10 s |
 | 7 | test notes | ✅ 1–2 |
 | 8 | size | ✅ M |
