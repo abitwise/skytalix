@@ -32,3 +32,4 @@ _by architect-design (claude-opus-5-5, arch-ABC-289-joint), 2026-11-06T19:22:40Z
 - **New from these reads:** with `moveCount` off both reds clear; with `countermove` off both stay. Row 1632 is missed at +25 % at equal depth. Drift is wider than the one row at d5 suggests: d6 106 and 103 cp, d7 58 and 110 cp, reports only. On `main` the door misses row 1632 at 0.8× readings, so the row has lost `ADR-0034` d5's margin.
 - **Owner:** one question, OQ-0074-2, drafted in `…7c297147` § 7. It blocks nothing.
 - **Notes:** `…7c297147` (decision), `…d61479af` (observation).
+- **Path check:** `node tools/grugops/records-path-check.js --base main` exit 0 at `00e44761`, before this last commit.
