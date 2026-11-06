@@ -27,3 +27,4 @@ Publish: sealed notes (contextRoot = the worktree's .grugops/context, `at` from 
 - **3 (`ABC-289`):** NOT MET on an exact build, OQ-0074-2 open, `b42706b3` kept. Status `dropped`; title reads the outcome. **Column Blocked and no `closed:` line,** as the board card has it, because `…40ef8351` closes the ticket on (a) or on no answer. Done and `closed:` land at the close.
 - **4 (`ABC-303`, `EPIC-011`):** `ABC-303` Done, merged `434fa171`, QE MET PASS_WITH_GAPS `…ebefbfa2`, B4 `…9e2facfa`, C2′ 55.5, S′ 9.0, Levels 58 / 58. S′ pool row 27.5 / 40 = 68.75 %, no step, E stays 1 810.
 - **Left stale, outside the list (`…710dc7ec`):** `EPIC-011` rows 41, 43, 55, § Dependencies' read-queue and build lines, no OQ-0074-2 row; `ABC-291`'s front matter Ready against the board's In Development.
+- **Path check:** `node tools/grugops/records-path-check.js --base main` exit 0 at `b958ddea`, before this last commit.
