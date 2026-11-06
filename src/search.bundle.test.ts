@@ -65,6 +65,7 @@ import {
   searchWithoutCountermove,
   searchWithoutHistory,
   searchWithoutMoveCountPruning,
+  searchWithoutPawnShape,
   searchWithoutQuietBundle,
   searchWithoutSeeOrdering,
 } from "./search.ts";
@@ -707,14 +708,15 @@ if (RUN_DEEP) {
 
   describe("ABC-303 — the bundle's own counts at depth 8 (the instrument: R7, information, not a bar) [deep, SEARCH_DEEP=1]", () => {
     // arch-bundle-1's probe of C1+M3 on `0cc9afd1`, reproduced by the build.
+    // `ABC-291` (`ADR-0075` d4): re-pointed to the door, figures unchanged; these are the bundle's counts.
     const READ = {
       kiwipete: { fen: KIWIPETE, search: 311_546, choose: 573_518 },
       "position-6": { fen: POSITION_6, search: 163_523, choose: 94_911 },
     } as const;
     for (const [name, { fen, search: searchNodes, choose }] of Object.entries(READ)) {
       it(`${name}: search() and chooseMove at depth 8 read ${searchNodes} / ${choose} [deep, SEARCH_DEEP=1]`, () => {
-        expect(search(parseFen(fen), 8).nodes).toBe(searchNodes);
-        expect(deepenTo(chooseMove, fen, 8).nodes).toBe(choose);
+        expect(searchWithoutPawnShape(parseFen(fen), 8).nodes).toBe(searchNodes);
+        expect(deepenTo(chooseMoveWithoutPawnShape, fen, 8).nodes).toBe(choose);
       }, 300_000);
     }
   });
