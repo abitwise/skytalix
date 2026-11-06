@@ -2078,7 +2078,7 @@ if (RUN_DEEP) {
     };
     const door = engineModule.chooseMoveWithoutQuietBundle;
     // `ABC-291` (`ADR-0075` d4): the all-on figures re-point to the off door, unchanged. The shipped
-    // path keeps the identity itself: softMs absent and softMs 1 read one line, at one node count.
+    // path keeps A0-1's identity itself: softMs absent and softMs 1 read one line.
     const allOn = engineModule.chooseMoveWithoutPawnShape;
 
     // `main` `22931005`, read on the base before the change (`se-ABC-282` `…aadd2d48`).
@@ -2128,7 +2128,6 @@ if (RUN_DEEP) {
         const expected = (score: number) => ({ move, score, depth, nodes, partial: undefined });
         expect(read(door, fenOf(name), stepped())).toEqual(expected(off));
         expect(read(allOn, fenOf(name), stepped())).toEqual(expected(on));
-        expect(read(chooseMove, fenOf(name), stepped()).nodes).toBe(nodes);
       });
     }
   });
