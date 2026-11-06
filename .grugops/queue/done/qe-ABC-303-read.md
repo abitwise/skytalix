@@ -18,3 +18,20 @@ Read PREREG …53858301, STOP …b59650bc, and the Architect's …a5dc0532 and A
 Check every output file is non-empty before reading it. Every test, build or engine run goes under the host lock named in your dispatch prompt, one game at a time. Leave nothing running; check with ps, not pgrep -f.
 Fences: your records only. No src, test, ticket, ADR, EPIC or board edits. No push, force, amend or rebase, and no merge into main.
 Publish: sealed notes (task qe-ABC-303, contextRoot = the worktree's .grugops/context, `at` from `date -u` run immediately before each note); queue moves; commit; ## Result + trace row; brief + claim to done/. Before your last commit, run `node tools/grugops/records-path-check.js --base main`; it must exit 0.
+
+## Result
+
+_by qe-e2e (claude-opus-5-5, qe-ABC-303-read), 2026-11-06T17:53:40Z, branch `grugops/qe-ABC-303`. No src, test, ticket, ADR, EPIC or board edit. Nothing tuned, nothing pushed, nothing merged, nothing left running._
+
+**Verdict: MET. PASS_WITH_GAPS, no blocking gap.** Signs UAT by the page. The merge is the owner's.
+
+- **Addendum:** `…79bd6622`, sealed before any run. FL in, W dropped by `…318c9e3b`, Q2 timing first, stale rule not fired (lane inputs from `38914841` to `main` `55996783`: empty).
+- **P7:** first read VOID, 8 of 8 rounds flagged (`…397a7ec5`). The one re-read stands, 0 of 8 flagged: twin admissible, H 9.14 s, R 0.140 s, H − B −0.010 s. Met (`…f0be43f8`).
+- **P6:** stands, 0 of 5 flagged, kiwipete 10 ≥ 9, position-6 12 ≥ 12, every run ≥ 6. Met.
+- **R5:** 0.9874 / 1.0492, mean 1.0183, 0 of 4 samples flagged. Reported.
+- **C2′:** 47 / 36 / 17, 55.5 / 100, 100 of 100, 0 faults, 0 losses on time. Elo +38.4 ± 63.0. MET. Its first launch stopped on a disk quota before any game, not a read (`…2f8fccef`).
+- **S′:** 9 / 1 / 0, 9.0 / 10, 0 faults, 0 losses on time. MET.
+- **Levels:** exit 0, 58 / 58. MET.
+- **FL:** C2′ 8 of 405 busy, `host.log` 3 of 122, load1 2.08, moves 105 / 105 ms. S′ 70 of 138, 11 of 18, 3.72, 505 / 501 ms. Levels 34 of 191, 4.61. One class, vitest in one project.
+- **Notes:** `…79bd6622`, `…397a7ec5`, `…f0be43f8`, `…2f8fccef`, `…43c7fbb6`, verdict `…ebefbfa2`.
+- **Owed by others:** § 7's re-read on the merged tree, B5's line, `R-N8H-1` LOW at 9.14 s.
