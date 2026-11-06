@@ -1,3 +1,4 @@
+_Updated: 2026-11-06T14:08:04Z — qe-ABC-303 STOP before games, no miss: B6 keeps timing first; arch-ABC-303-load reads foreign load under CF10; window asked._
 _Updated: 2026-11-06T13:54:28Z — bapm-lines-1106 merged; A9's read of main answered by ABC-305's graded read; R-CEN-1 carried. qe-ABC-303 running._
 _Updated: 2026-11-06T13:48:53Z — se-ABC-303-main2 done (63667fc8), 2 734 and six deep lanes green; qe-ABC-303 seals bundle 1's read; bapm-lines-1106 closes the pages._
 _Updated: 2026-11-06T13:27:26Z — **ABC-305 Done**, merged d00164ce, gates green; se-ABC-303-main2 takes main into bundle 1._
@@ -1558,7 +1559,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 ## In Development (WIP 1/3)
-- [ABC-303] Bundle 1, ABC-286 + ABC-288 (ADR-0072, 0073 ACCEPTED over missed premises; DoR 10/10, M, P3). Main in at 63667fc8, gates green. `qe-ABC-303` seals and runs the C2′ read.
+- [ABC-303] Bundle 1, ABC-286 + ABC-288 (ADR-0072, 0073 ACCEPTED over missed premises; DoR 10/10, M, P3). Tables 1 to 3 met but for timing; qe-ABC-303 stopped before any game: timing first (owner window), foreign-load reading with the Architect.
 
 
 
