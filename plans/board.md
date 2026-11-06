@@ -1,3 +1,4 @@
+_Updated: 2026-11-06T13:27:26Z — **ABC-305 Done**, merged d00164ce, gates green; se-ABC-303-main2 takes main into bundle 1._
 _Updated: 2026-11-06T13:12:25Z — ABC-305 N8-LANE read stands, A5 MET → In Review, qe-ABC-305._
 _Updated: 2026-11-05T22:06:46Z — se-ABC-305-main done: ABC-305 ready to read; window asked of the owner._
 _Updated: 2026-11-05T21:57:22Z — A10 and Architect records merged; K5 reading confirmed; R-N8H-1 LOW, R-CEN-1 MEDIUM carried. Timing reads wait on the owner's quiet-host word._
@@ -1555,7 +1556,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 ## In Development (WIP 1/3)
-- [ABC-303] Bundle 1, ABC-286 + ABC-288 (ADR-0072, 0073 ACCEPTED over missed premises; DoR 10/10, M, P3). Code only for now (`se-ABC-303`); C2′ only after ABC-282 and ABC-301 settle.
+- [ABC-303] Bundle 1, ABC-286 + ABC-288 (ADR-0072, 0073 ACCEPTED over missed premises; DoR 10/10, M, P3). `se-ABC-303-main2` takes main in; then `qe-ABC-303` seals the C2′ read.
 
 
 
@@ -1583,8 +1584,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
-- [ABC-305] Tools-only landing from b297ab89: A5 MET (H 9.085 s, H − B −0.110 s, 0 of 8 flagged). `qe-ABC-305` reads the page.
+## In Review (WIP 0/3)
 
 
 
@@ -1644,6 +1644,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+- [ABC-305] Tools-only landing from b297ab89: merged d00164ce. A5 MET, QE PASS …482f3e67, UAT waived by A3. Gates 2 710, tune 25, passer 29 green; dd88560f out of main.
 - [ABC-307] Nine rows to deep lanes: merged bce24018. A9 graded 9.085 s, H − B −0.350 s, QE PASS …bec57958, UAT waived. Gates and four deep lanes green. A10 rides in `secnfr-ABC-307-a10`.
 - [ABC-282] W1 time use in uci-clock-mode. Merged a6ae8227 (QE PASS_WITH_GAPS …5191f871 signs UAT; A6 56.5/100, A4 MET, 0 time losses).
 - [ABC-281] **→ Done 2026-11-04 (merged 983d16c3; QE PASS_WITH_GAPS …960d38ff, UAT waived; NFR-008 graded H 9.42 s vs B 9.90 s, −0.37 s 8/8; Q-N8H-1 not triggered; post-merge npm test 2 650/2 650). R-281-a LOW → Architect (deep-lane run frequency); A9 → `secnfr-ABC-281-a9`.** **2026-11-04: built (grugops/ABC-281 frozen ea08d7b6): default 2 650 unchanged, deep 45/83/58 (+1 each), each mutant killed by its remnant; early wall median 9.51 s → In Review → `qe-ABC-281` (A8 twin ALONE).** **2026-11-04: row 11 done (arch-ABC-281 …d7b2b02b): all three rows form S, kill parity on 7 mutants, no owner question; forecast −0.36 s → DoR 10/10 → In Development → `se-ABC-281` (page lines `bapm-ABC-281-dor` in parallel).** **2026-11-04: cut (bapm-nfr008-rows), DoR 9/10 → In Design → `arch-ABC-281` (row 11: W/S/K per row).** The default lane sheds ~0.4 s: three named rows move to their files' deep lanes; NFR-008 re-read graded with a twin (test-only; EPIC-011 lane hygiene; S, P2). R-N8H-1 MEDIUM open; Q-N8H-1 held (trigger: median ≥ 9.6 s after).
