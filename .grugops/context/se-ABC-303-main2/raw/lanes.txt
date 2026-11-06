@@ -1,0 +1,6 @@
+passer [29,29,0,0,0,true]
+tune [25,25,0,0,0,true]
+book [36,36,0,0,0,true]
+qehop [36,36,0,0,0,true]
+uci [270,270,0,0,0,true]
+levels [58,58,0,0,0,true]
