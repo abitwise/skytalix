@@ -25,3 +25,4 @@ Publish: sealed notes (contextRoot = the worktree's .grugops/context, `at` from 
 - **3 (`ABC-291`):** K5 and F2's note carry K5's reading. d11 (d)'s list carries the second K5 miss, open to the owner's overruling. Test note 4 carries K4's PREREG on K5 and `ADR-0046`'s 23rd line.
 - **Form:** insertions only. The only lines removed are the two pages' status and column pairs; no existing line was struck or reworded.
 - **Near a bar, none moved (`…6bfb0356`):** whether a read of `main` is still owed for `ABC-307` A9 is unruled, and QE's gap stands. The d11 (d) line tightens what follows a miss, not the bar. `ADR-0075`'s d11 (d) list still reads as before the ruling, and a dated line there is the Architect's.
+- **Path check:** `node tools/grugops/records-path-check.js --base main` exited 0 before the last commit.
