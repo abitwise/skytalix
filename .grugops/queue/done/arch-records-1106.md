@@ -22,3 +22,4 @@ Publish: sealed notes (contextRoot = the worktree's .grugops/context, `at` from 
 - **2 (`ABC-289`'s NOT MET):** `ADR-0075`'s Order line; `ADR-0056` D2 row Q2 and D5's order. Each reads recorded NOT MET, not closed, OQ-0074-2 open.
 - **3 (`…28283e48` § 2):** the § Status fold; D2 rows P4 and O2c; the S′ pool line; the Levels line.
 - **Owed:** BA/PM, before QE seals: `ABC-291`'s banner, K3, § `UNKNOWN - verify` and DoR lines read ruled. Orchestrator: QE's brief carries the ruling; `…40ef8351`'s "F7" reads F3 here. Next Architect hop: `ADR-0056` D6's "follows `ABC-303` and `ABC-289`", not on this list, so not written.
+- **Path check:** `node tools/grugops/records-path-check.js --base main` exit 0 at `3a407131`, before this last commit.
