@@ -1,0 +1,19 @@
+runs {'H': 8, 'H2': 8, 'B': 8}
+ADDED/CHANGED by title (H+H2, n=16):
+  1.445 ms n=16 src/evaluate.passer.test.ts :: ABC-301 P1 — the hot path's E4a sum at the probed values (QE-271-h, ADR-0070 d4's dated li
+  2.181 ms n=16 src/evaluate.passer.test.ts :: ABC-271 — the source rows (ADR-0070 decisions 2–4) the seams passerTermsForTest and pawnSt
+  2.899 ms n=16 tools/tune/tune.test.ts :: ABC-239 — tools/tune's source pins the FEN source row: each bound row's FEN and name appea
+sum 6.525 ms (the aim 90 ms)
+GONE from B (their old forms): 1.524 ms; net in-thread +5.000 ms
+rows that call the changed zeroed helper:
+  0.257 ms A2 — a missing shelter pawn scores lower the phase-24 twin bites: with the shelter term ze
+  0.166 ms A3 — a half-open file next to the king scores lower the phase-24 twin bites: with the half
+sum with them 6.947 ms
+H+H2 rows >= 50 ms median, whole lane: 23 ; of them new against B: 0
+rows >= 50 ms in the three files, any single run max: [('A6 — purity: evaluation leaves the position byte-i', 57.23390999999992)]
+max single-run duration of the added/changed rows: {"ABC-301 P1 — the hot path's E4a sum at t": 1.79, 'ABC-271 — the source rows (ADR-0070 deci': 2.89, "ABC-239 — tools/tune's source pins the F": 5.38}
+file slots, ms, median: file H+H2 B delta
+  src/evaluate.passer.test.ts 31.1 30.2 +0.9
+  src/evaluate.king-mobility.test.ts 47.3 41.7 +5.6
+  tools/tune/tune.test.ts 4.8 2.8 +2.0
+lane in-thread sum, ms, median: {'H': 5756.8, 'H2': 5722.4, 'B': 5773.8} H-B -17.0 H2-B -51.5 H2-H -34.5

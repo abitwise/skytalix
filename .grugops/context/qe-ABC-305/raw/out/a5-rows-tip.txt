@@ -1,0 +1,7 @@
+QE's own tip report, ungraded, not a timed hold
+  1.83 ms ABC-301 P1 — the hot path's E4a sum at the probed values (QE-271-h, AD
+  2.19 ms ABC-271 — the source rows (ADR-0070 decisions 2–4) the seams passerTer
+  5.40 ms ABC-239 — tools/tune's source pins the FEN source row: each bound row'
+  rows >= 50 ms: 24 ; in the three files: []
+A6 purity by arm:  {'H': [30.7, 32.0, 34.3, 34.7, 34.8, 35.2, 35.9, 45.2], 'H2': [30.5, 31.7, 31.9, 33.0, 35.6, 44.0, 48.7, 57.2], 'B': [30.7, 31.1, 31.2, 31.4, 33.0, 40.7, 41.6, 41.8]}
+B rows median >= 50: 20

@@ -1,0 +1,20 @@
+--- A7: the 17 in the row's body
+1:    it("an emission at the base values has main's exports, 17 value exports and the 3 phase constants, equal value for value", a
+7:      expect(values).toHaveLength(17);
+--- A7: QE-270-e pairs on the table at the tip
+309:export const KING_SHELTER_MISSING_QUEEN: MgEg<number> = { mg: 0, eg: 0 };
+310:export const KING_FILE_HALF_OPEN_QUEEN: MgEg<number> = { mg: 0, eg: 0 };
+--- 23rd line: test file against main
+0
+--- ADR-0046 block on the branch / on main (lines naming the 23rd line)
+0
+1
+--- run rule trigger: delivered six against the set's named files and lane inputs
+0
+0
+--- merge-tree with main, conflicts
+plans/traceability.md
+
+Auto-merging plans/traceability.md
+CONFLICT (content): Merge conflict in plans/traceability.md
+exit 1
