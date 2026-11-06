@@ -1,3 +1,4 @@
+_Updated: 2026-11-06T18:28:05Z — **ABC-303 Done**, merged 434fa171, gates green; ADR-0072, 0073 in force on B5's line; se-ABC-289 builds._
 _Updated: 2026-11-06T17:54:44Z — **bundle 1 MET**, C2′ 55.5 of 100, verdict …ebefbfa2; qe-ABC-303-b4 reads the merged tree._
 _Updated: 2026-11-06T16:47:16Z — owner holds the whole host; qe-ABC-303-read runs timing, then games._
 _Updated: 2026-11-06T14:16:01Z — arch-ABC-303-load merged: FL logs and reports load, W asks a held host for ABC-303's games; one window asked of the owner._
@@ -1541,9 +1542,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## Ready (WIP 2/8)
+## Ready (WIP 1/8)
 - [ABC-291] E4b pawn structure (ADR-0075 ACCEPTED, in force at merge; DoR 10/10, M, P2). Build after ABC-303 and ABC-289. K5's half of F2 ruled, ADR-0075 dated.
-- [ABC-289] Q2 delta pruning (ADR-0074 ACCEPTED; DoR 10/10, S, P3). Reads alone after bundle 1; build starts when ABC-303's merge or failed-attempt is recorded.
 - ~~[ABC-301]~~ → In Development. E2s second pull: one bounded fit on main with E4a's structure; KD/FP freed, U held 0; B-T0–B-T8 (B-T8 two r reads at 0.5 s, ~5 h, owner-approved). Scope 0 preconditions first (after NFR-008 headroom ruling).
 - ~~[ABC-271]~~ → In Development E4a structure only at 0 (ADR-0070 ACCEPTED form (a); DoR 10/10, S, P3). QE freeze first (qe-ABC-271-freeze), then se-ABC-271. No games.
 
@@ -1562,7 +1562,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 ## In Development (WIP 1/3)
-- [ABC-303] Bundle 1, ABC-286 + ABC-288 (ADR-0072, 0073 ACCEPTED over missed premises; DoR 10/10, M, P3). QE MET …ebefbfa2: C2′ 55.5, S′ 9.0, Levels 58/58, P6, P7 met. B4 re-read on the merged tree, then merge.
+- [ABC-289] Q2 delta pruning (ADR-0074 ACCEPTED, in force at merge; DoR 10/10, S, P3). `se-ABC-289` builds; its own C2′ reads alone after.
 
 
 
@@ -1650,6 +1650,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+- [ABC-303] Bundle 1, ABC-286 + ABC-288: merged 434fa171. C2′ 55.5, S′ 9.0, Levels 58/58, P6, P7 met; QE MET …ebefbfa2, B4 …9e2facfa, UAT signed. Gates 2 734 and bundle, Levels, engine, uci deep lanes green.
 - [ABC-305] Tools-only landing from b297ab89: merged d00164ce. A5 MET, QE PASS …482f3e67, UAT waived by A3. Gates 2 710, tune 25, passer 29 green; dd88560f out of main.
 - [ABC-307] Nine rows to deep lanes: merged bce24018. A9 graded 9.085 s, H − B −0.350 s, QE PASS …bec57958, UAT waived. Gates and four deep lanes green. A10 rides in `secnfr-ABC-307-a10`.
 - [ABC-282] W1 time use in uci-clock-mode. Merged a6ae8227 (QE PASS_WITH_GAPS …5191f871 signs UAT; A6 56.5/100, A4 MET, 0 time losses).
