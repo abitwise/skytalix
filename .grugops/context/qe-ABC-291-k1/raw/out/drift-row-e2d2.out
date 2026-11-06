@@ -1,0 +1,32 @@
+{"row":"position-6/e2d2","fen":"r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PPQ1PPP/R4RK1 b - - 1 10","staticAtRoot":0,"seam":{"white":{"connected":{"mg":9,"eg":9},"phalanx":{"mg":0,"eg":0},"backward":{"mg":0,"eg":0}},"black":{"connected":{"mg":9,"eg":9},"phalanx":{"mg":0,"eg":0},"backward":{"mg":0,"eg":0}}}}
+{"shipped":1,"off":64,"offMove":"g4f3","offNodes":59,"on":74,"onMove":"g4f3","onNodes":59,"delta":10}
+{"shipped":2,"off":64,"offMove":"g4f3","offNodes":286,"on":74,"onMove":"g4f3","onNodes":286,"delta":10}
+{"shipped":3,"off":80,"offMove":"g4f3","offNodes":955,"on":90,"onMove":"g4f3","onNodes":962,"delta":10}
+{"shipped":4,"off":67,"offMove":"g4f3","offNodes":2550,"on":74,"onMove":"g4f3","onNodes":2337,"delta":7}
+{"shipped":5,"off":12,"offMove":"g4f3","offNodes":5401,"on":101,"onMove":"g4f3","onNodes":6582,"delta":89}
+{"shipped":6,"off":6,"offMove":"g4f3","offNodes":17058,"on":4,"onMove":"g4f3","onNodes":21854,"delta":-2}
+{"shipped":7,"off":-27,"offMove":"g4e6","offNodes":56255,"on":-28,"onMove":"g4e6","onNodes":54349,"delta":-1}
+{"shipped":8,"off":39,"offMove":"g4f3","offNodes":121585,"on":62,"onMove":"g4f3","onNodes":120781,"delta":23}
+{"shipped":9,"off":2,"offMove":"g4f3","offNodes":212181,"on":51,"onMove":"g4f3","onNodes":213748,"delta":49}
+{"shipped":10,"off":18,"offMove":"g4f3","offNodes":355386,"on":23,"onMove":"g4f3","onNodes":443284,"delta":5}
+{"cfg":"shipped","depth":5,"off":12,"offMove":"g4f3","offNodes":5401,"on":101,"onMove":"g4f3","onNodes":6582,"delta":89}
+{"cfg":"noMoveCount","depth":5,"off":91,"offMove":"g4f3","offNodes":5459,"on":101,"onMove":"g4f3","onNodes":7415,"delta":10}
+{"cfg":"noCountermove","depth":5,"off":12,"offMove":"g4f3","offNodes":5401,"on":101,"onMove":"g4f3","onNodes":6741,"delta":89}
+{"cfg":"noBundle","depth":5,"off":91,"offMove":"g4f3","offNodes":5459,"on":101,"onMove":"g4f3","onNodes":7367,"delta":10}
+{"cfg":"noFutility","depth":5,"off":12,"offMove":"g4f3","offNodes":5744,"on":101,"onMove":"g4f3","onNodes":6885,"delta":89}
+{"cfg":"noNull","depth":5,"off":12,"offMove":"g4f3","offNodes":9956,"on":101,"onMove":"g4f3","onNodes":10636,"delta":89}
+{"cfg":"noReductions","depth":5,"off":12,"offMove":"g4f3","offNodes":6332,"on":12,"onMove":"g4f3","onNodes":9632,"delta":0}
+{"cfg":"noAspiration","depth":5,"off":12,"offMove":"g4f3","offNodes":6703,"on":101,"onMove":"g4f3","onNodes":6685,"delta":89}
+{"fullWidth":3,"off":80,"offMove":"g4f3","offNodes":2890,"on":90,"onMove":"g4f3","onNodes":2912,"delta":10}
+{"fullWidth":4,"off":67,"offMove":"g4f3","offNodes":12102,"on":74,"onMove":"g4f3","onNodes":12107,"delta":7}
+{"fullWidth":5,"off":12,"offMove":"g4f3","offNodes":89488,"on":12,"onMove":"g4f3","onNodes":90223,"delta":0}
+{"m":"g4f3","off":12,"on":12,"fullOff":12,"fullOn":12,"staticChild":0}
+{"m":"e7d7","off":0,"on":0,"fullOff":0,"fullOn":0,"staticChild":0}
+{"m":"g4e6","off":-13,"on":-7,"fullOff":-11,"fullOn":-9,"staticChild":0}
+{"m":"c6d4","off":-57,"on":-67,"fullOff":-57,"fullOn":-67,"staticChild":0}
+{"m":"e7d8","off":-74,"on":-82,"fullOff":-55,"fullOn":-55,"staticChild":0}
+{"m":"b7b5","off":-101,"on":-108,"fullOff":-71,"fullOn":-61,"staticChild":3}
+{"m":"f8e8","off":-101,"on":-111,"fullOff":-101,"fullOn":-111,"staticChild":0}
+{"m":"c5d4","off":-103,"on":-113,"fullOff":-103,"fullOn":-113,"staticChild":0}
+{"line":"off","moves":"g4f3 c3d5 e7d7 g5f6 d7g4","plies":5,"leafFen":"r4rk1/1pp2ppp/p1np1B2/2bNp3/2B1P1q1/P2P1b2/1PPQ1PPP/R4RK1 w - - 1 13","staticByPly_forSideToMoveThere":[0,0,0,0,0],"leafFromRoot":0}
+{"line":"on","moves":"g4f3 c3d5 e7d7 g5f6 d7g4","plies":5,"leafFen":"r4rk1/1pp2ppp/p1np1B2/2bNp3/2B1P1q1/P2P1b2/1PPQ1PPP/R4RK1 w - - 1 13","staticByPly_forSideToMoveThere":[0,0,0,0,0],"leafFromRoot":0}

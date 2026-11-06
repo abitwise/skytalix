@@ -1,0 +1,4 @@
+190
+tip chooseMoveWithoutPawnShape equals base chooseMove: score, move, nodes, every row
+1e1a8003c64417e2e533df6198e8a9227d1f7102b531aeff8035e4291f5f4e22 doors-tip.txt
+1e1a8003c64417e2e533df6198e8a9227d1f7102b531aeff8035e4291f5f4e22 base-base.txt

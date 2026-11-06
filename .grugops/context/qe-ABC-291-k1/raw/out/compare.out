@@ -1,0 +1,35 @@
+{"seamRows":36,"valuesDiffer":0}
+cells read by my rows and not by SEAM_ROWS: B-a-stop B-h-stop BR3 BR5 P5
+cells read by SEAM_ROWS and not by my rows: none
+unmutated side() against label(), differing rows: 0
+connected-per-defender     SEAM_ROWS   2  mine   8
+phalanx-per-neighbour      SEAM_ROWS   2  mine   4
+phalanx-at-R1              SEAM_ROWS   2  mine  20
+table-phalanx-R2           SEAM_ROWS   4  mine  16
+table-phalanx-R5           SEAM_ROWS   0  mine   4
+table-connected-R2         SEAM_ROWS   8  mine  28
+a-dropped                  SEAM_ROWS  32  mine 124
+a-any-colour               SEAM_ROWS  32  mine 112
+b-dropped                  SEAM_ROWS  16  mine  40
+b-only-R-and-R-1           SEAM_ROWS   0  mine   8
+b-frontmost                SEAM_ROWS   2  mine   4
+b-strict-rank-ok           SEAM_ROWS   4  mine  16
+b-one-side                 SEAM_ROWS   2  mine   8
+c-dropped                  SEAM_ROWS  26  mine 172
+c-no-stop                  SEAM_ROWS   4  mine  32
+c-no-left                  SEAM_ROWS   6  mine  24
+c-no-right                 SEAM_ROWS  12  mine  24
+c-stop-any-pawn            SEAM_ROWS   2  mine   4
+c-enemy-piece-on-stop      SEAM_ROWS   0  mine   4
+c-enemy-piece-attacks      SEAM_ROWS   0  mine   8
+c-friend-on-stop-blocks    SEAM_ROWS   0  mine   8
+c-attacks-pawn-too         SEAM_ROWS   2  mine  12
+c-attack-one-further       SEAM_ROWS   0  mine  28
+c-two-ahead                SEAM_ROWS   0  mine   8
+c-double-step-target       SEAM_ROWS   0  mine  20
+rear-of-doubled-free       SEAM_ROWS   0  mine   8
+doubled-front-only         SEAM_ROWS   2  mine  12
+wrap-connected             SEAM_ROWS   0  mine   6
+wrap-phalanx               SEAM_ROWS   0  mine   6
+wrap-a                     SEAM_ROWS   0  mine   4
+wrap-c                     SEAM_ROWS   0  mine   4
