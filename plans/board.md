@@ -1,3 +1,4 @@
+_Updated: 2026-11-06T22:06:10Z — owner holds the whole host; qe-ABC-291-read runs timing, then games, with W._
 _Updated: 2026-11-06T21:32:11Z — qe-ABC-291 stage 0 done, no red, PREREG sealed; held window and W asked of the owner._
 _Updated: 2026-11-06T21:12:15Z — arch-ABC-291-k1c merged: K1 (c) not met to the letter; merge question with the owner; QE owes three items at stage 0._
 _Updated: 2026-11-06T21:01:21Z — bapm-ABC-291-k1-lines merged; arch-ABC-291-k1c reads K1 (c)'s order; qe-ABC-291 at stage 0._
