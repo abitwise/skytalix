@@ -1,3 +1,4 @@
+_Updated: 2026-11-06T18:35:53Z — B5 merged: ADR-0072, 0073 in force; Levels line confirmed; later reads carry …28283e48. se-ABC-289 building._
 _Updated: 2026-11-06T18:28:05Z — **ABC-303 Done**, merged 434fa171, gates green; ADR-0072, 0073 in force on B5's line; se-ABC-289 builds._
 _Updated: 2026-11-06T17:54:44Z — **bundle 1 MET**, C2′ 55.5 of 100, verdict …ebefbfa2; qe-ABC-303-b4 reads the merged tree._
 _Updated: 2026-11-06T16:47:16Z — owner holds the whole host; qe-ABC-303-read runs timing, then games._
