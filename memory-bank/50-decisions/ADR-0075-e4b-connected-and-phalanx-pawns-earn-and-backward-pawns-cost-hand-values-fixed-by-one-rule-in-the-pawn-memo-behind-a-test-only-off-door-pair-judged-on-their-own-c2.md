@@ -19,6 +19,7 @@ id: ADR-0075
 - **Still owed, unchanged:** § Consequences' lines. `ABC-305` comes before the build.
 - ***Dated 2026-11-05 (`arch-ABC-291-probe`): the probe ran, once. The premise stands under rule 3 and the work does not stop.*** PR1 to PR7 and PR9 hold. PR8 reads R = 1.04287, above 1.03, so the build carries d5's named cut. K2's list is written, and no value, rule, definition, ratio, intent or bar moved. See § The probe's reading.
 - ***Dated 2026-11-05 (`arch-ABC-307-records`, records only): the memo lines are dated, and F2's K5 half is written.*** Every "640 KiB" reads d3's form before the cut. A run below depth 6 on the build is F2's second miss. No value, rule, definition, ratio, intent, bar or level moved. See § What would falsify this.
+- ***Dated 2026-11-06 (`arch-records-1106`, records only at `main` `8e115110`): a `G1` miss on `ABC-291` is class B, and F3 reads as written.*** The Order line is dated for `ABC-289`'s NOT MET. No value, rule, definition, ratio, intent, bar or level moved. See § What would falsify this and § Consequences.
 
 *Before acceptance:* **PROPOSED 2026-11-05.** Recorded by Architect/Design (task `arch-ABC-291`, records only, on `grugops/arch-ABC-291` from `main` `148fd329`).
 **Nothing was run:** no test, build, engine or probe. A timing read (`ABC-282`'s A4) held the host. Every figure below is arithmetic on
@@ -46,6 +47,7 @@ dated lines; `ADR-0067`'s dated blocks; `ADR-0070`; `ADR-0064` d3–d8; `ADR-002
 | 2026-11-05 | Architect/Design | The probe, once, under PREREG `…2a579895` (`d033ea0e`): premise stands under rule 3, PR8 R = 1.04287, PR9 14.72 %. K0 (c)'s counts and K2's list by dated line. No value, rule, definition, ratio, intent or bar moved | `arch-ABC-291-probe` `…65c7a9c9`, `…2926c26b` |
 | 2026-11-05 | Architect/Design | The 640 KiB lines dated; F2's K5 half written, as a reading open to the Orchestrator until K4's PREREG seals. No value, rule, definition, ratio, intent, bar or level moved. Nothing run | `arch-ABC-307-records` |
 | 2026-11-06 | Architect/Design | Dated pointers to `…43e6d8fd` 3 on d11 (d)'s list and on "What stays open". No value, rule, definition, ratio, intent, bar or level moved. Nothing run | `arch-ABC-303-b5` |
+| 2026-11-06 | Architect/Design | `G1`'s class on `ABC-291` ruled from `ADR-0034` d2's letter: class B, F3 as written. The Order line dated for `ABC-289`'s NOT MET. No value, rule, definition, ratio, intent, bar or level moved. Nothing run | `arch-records-1106` |
 
 ## Context
 
@@ -183,6 +185,7 @@ Notation: R is the pawn's own rank index, as in `PASSED`. 1 is its start rank, 6
      *Dated 2026-11-05 (`arch-ABC-291-probe`): the list is in § The probe's reading. With d5's cut in the build, the two byte rows do not move.*
    - **K3, safety (`ADR-0064` d7's rows):** mate floor 0 violations, door d4 → head d5 and d5 → d5 on the 287; zugzwang **7 / 7** at recorded depths with
      `zugzwang.001` among them; `G1` no NEWLY-MISSED line. All read all-on. No depth moves, and no expected result is rewritten.
+     *Dated 2026-11-06 (`arch-records-1106`): a `G1` miss on this diff has no drift class. Every missed row is class B, and F3 governs. See § What would falsify this.*
    - **K4, `G2` ≤ 1.03 ×** (d5). The endgame report set is reported beside it.
    - **K5, `G6` under `Q-3K-4` (b):** every run at depth ≥ 6, depth 7 a WARN, "≥ base" reported, not graded.
      *Dated 2026-11-05 (`arch-ABC-307-records`): the bar stands as written. A run below depth 6 on the build is F2's second miss. See § What would falsify this.*
@@ -397,11 +400,30 @@ A pass means "not seen worse", not "proven better". A term worth nothing still p
   *Dated 2026-11-06 (`arch-ABC-303-b5`): no longer open. `…43e6d8fd` 3 ruled it: a second K5 miss is a miss under d11 (d). See d11 (d)'s dated line. The ruling stays open to the owner's overruling.*
 - **How near.** `G6` on this term is `UNKNOWN - verify`. `qe-ABC-271` read kiwipete at 9 and position-6 at 12 on every run (`…3e1cc3ff`), and PR10, on the form before the cut, read 0.988 of `main`'s ns per node on 3.45 % more nodes. By reading, the floor is far off.
 
+*Dated 2026-11-06 (`arch-records-1106`, records only at `main` `8e115110`; nothing run): **`G1`'s class on `ABC-291`.** BA/PM held it open (`…cd04f470` J1, `…710dc7ec`) against `…7c297147` § 4 item 5. It is ruled from the letter, before QE seals, without opening `se-ABC-291`'s build or figures.*
+
+- **The ruling: every `G1` row missed on `ABC-291` is class B. This diff has no class D and no class L, whatever a ladder would show. F3 reads as written.**
+- **The letter.** `ADR-0034` d2: "A diff that touches any other trigger-list file has **no drift class here**. Every missed row is class B." Its instrument: "Decisions 3 and 4 apply only if every printed line is `src/evaluate*.ts`."
+- **This diff.** d4 puts `pawnShape` in `src/search.ts`'s `Switches`, `src/engine.ts`'s `Heuristics` and quiescence's rules record, and § Consequences names the three files. All three pass the instrument's filter at `8e115110`. `ADR-0034`'s control `ABC-079` prints the same three: "still all B, as decision 2 intends".
+- **No figure can change this.** A build whose instrument printed `src/evaluate*.ts` alone would lack d4's switch, and that is F1's. So on an exact build the class does not wait on the diff.
+- **d2 tests the diff, not the term.** `ADR-0034` § Context's first mark of drift is "the diff touches no search code". The READING under d2 sets aside test files and test-only fixtures, and nothing else. A switch is loaded search code. `ADR-0050`, `ADR-0051` and `ADR-0074`'s F7 line read d2 the same way.
+- **`…7c297147` § 4 item 5's class sentence is withdrawn.** "An evaluation-only diff has a drift class" is true of such a diff, and this is not one. The note's "`G1` is thin" half stands, and so does the rest of the note.
+- **What a miss does.** The red stays a QE FAIL (`ADR-0034` d1). Then F3 runs, with two outcomes:
+  - **A defect.** d2 sends a not-a-defect argument to `ADR-0026` d10's oracle, "not through this ADR". My reading: on this ticket that oracle is d7's K rows, so a red in K3 cannot clear itself. A defect is F1's, and a fix that restores d1 or d2 is not a miss (d8, d11 (d)).
+  - **No defect: the miss is real.** Growth on an exact build is not a defect, and F3 has no third outcome. NOT MET, not merged, and a miss under d11 (d). d10's rule 2 read PR7 the same way.
+- **Not routes on this diff:**
+  - `ADR-0034` d3's table, and its line "Any other row goes to the owner as a depth cost". Decision 3 does not apply here. A rung may be reported beside the red, as evidence for the defect check. It classes nothing.
+  - d4's fixture and level lines. K3 reads `ADR-0064` d7's rows, d7 keeps "zugzwang, the mate rows and `G1`" on the shipped path, and K3 says "no expected result is rewritten".
+- **The row's name.** `…40ef8351`'s "if a later term reds it, F7 governs" is `ADR-0074`'s F7. On `ABC-291` that row is F3.
+- **What it costs, stated.** Row 1632 uses 16 838 of 20 534 nodes on `main`, and `main` misses it at 0.8×. If the build pushes it over, this term can end NOT MET on a row it cannot touch, with no second set of values. Whether it does is `UNKNOWN - verify`. Those are the bars he accepted. His word can still move a count, the corpus or the budget (`ABC-084` A7), but this ADR offers that as no route, and QE puts no D row to him.
+- **What does not move.** K3, F3, d11 (d), `G1`'s bar, and `ADR-0034`. A class is a red's route, not a bar. No value, rule, definition, ratio, intent, bar or level moved.
+
 ## Consequences
 
 - **Play:** every position with pawns can move. The start position stays 0 by symmetry. No read exists. The bars above are the first.
 - **Host.** The probe, then a build, `G2`, `G6`, safety rows and C2′ at about 25 min, S′ and the Levels lane. Runs over 1 h need his word, as usual. None is planned.
 - **Order.** `ABC-305`'s merge, then the build. C2′ follows `ABC-303` and `ABC-289`, because a value-changing merge stales the read after it. The probe needs only the host.
+  *Dated 2026-11-06 (`arch-records-1106`, records only; nothing run): `ABC-305` is Done, and `ABC-303` merged at `434fa171`. `ABC-289` is recorded NOT MET on an exact build and stays unmerged (`…7c297147`, `…40ef8351`), and the Orchestrator lifted `…69ee96e7`'s `ABC-289` clause. So the build goes on `main`, with bundle 1 in and no `…WithoutDeltaPruning`, and d4's "those `ABC-303` and `ABC-289` add" reads `ABC-303`'s only. C2′ waits only for `ABC-289`'s outcome to be recorded, and that record meets this line: no merge is left to stale the read. `ABC-289` is not closed: OQ-0074-2 is with the owner. If he opens a route, `ABC-291`'s read goes first or waits. He was shown "after `ABC-303` and `ABC-289`", so the Orchestrator tells him if it goes first (`…40ef8351`). No value, rule, definition, ratio, intent, bar or level moved.*
 - **Third pull.** A merge on its own read meets `ADR-0067`'s trigger. Asking stays a new call for him. If he says yes, the term may enter the free set, and d2's values are its start.
 - **NFRs.** `NFR-009`: +65 536 bytes, 640 KiB. `NFR-001` / `G2`: K4. `NFR-005`: K5. `NFR-008`: K1 rows are units with no search. Their cost in the lane is `UNKNOWN - verify`, and the row census the Orchestrator placed after A4 gates the merge. No new NFR file. `plans/nfr-catalog.md` is untouched.
   *Dated 2026-11-05 (`arch-ABC-307-records`): `NFR-009` reads +0 bytes, 576 KiB, with d5's cut (`…2926c26b` call 3, `…69ee96e7` ruling 3). No level moves. `plans/nfr-catalog.md` stays untouched.*
