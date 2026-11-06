@@ -1,0 +1,12 @@
+complete scored rounds n = 8 (rounds [1, 2, 3, 4, 5, 6, 7, 8]); k = 2
+B: wall median 9.24 s, interval [9.03, 9.31], max 9.33; CPU median 31.29 s
+H: wall median 9.09 s, interval [9.06, 9.25], max 9.27; CPU median 31.23 s
+H2: wall median 9.23 s, interval [9.04, 9.29], max 9.37; CPU median 31.54 s
+H-B wall_s: median -0.110 s, interval [-0.250, +0.150], positive 3/8, deltas [-0.27, -0.25, -0.24, -0.21, -0.01, 0.12, 0.15, 0.24]
+H-B cpu_s: median -0.025 s, interval [-0.430, +0.440], positive 4/8, deltas [-0.53, -0.43, -0.34, -0.14, 0.09, 0.22, 0.44, 1.04]
+twin H2-H wall_s: median -0.010 s, R 0.220 s, positive 4/8, deltas [-0.07, -0.06, -0.05, -0.04, 0.02, 0.2, 0.22, 0.33]
+twin H2-H cpu_s: median +0.320 s, R 0.620 s, positive 6/8, deltas [-0.3, -0.23, 0.04, 0.24, 0.4, 0.44, 0.62, 0.86]
+twin admissibility: |median CPU delta| 0.320 s = 1.02 % of H CPU 31.23 s (limit 0.469 s); sign 6/8 at chance: True; n >= 8: True -> ADMISSIBLE
+NFR-008 STATE: NFR-008 MET, graded; H median wall 9.09 s; Q-N8H-1 trigger (>= 9.6 s): no; R-N8H-1 trigger (>= 9.5 s): no
+BUDGET (graded, paired H-B median wall): -0.110 s, bar <= +0.10 s: MET; difference of the two arm medians (reported): -0.155 s
+AGAINST: 10 s headroom 0.91 s; 9.6 s line: below (9.09 s)
