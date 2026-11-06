@@ -1,0 +1,1 @@
+2026-11-06T17:13:00Z before load1=2.03 thermal=? power=? foreign_vitest_procs=0

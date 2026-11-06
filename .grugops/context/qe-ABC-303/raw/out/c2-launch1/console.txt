@@ -1,0 +1,32 @@
+chip: AMD Ryzen AI 9 HX 370 w/ Radeon 890M
+linux: 7.0.0-42-generic
+node: <node> v26.12.1
+cutechess-cli: cutechess-cli 1.5.1 sha256 dc77690113d9ae130f5d1b4c76fefb28f42620ac45a2bd4abb7dd8eb2154f40a = pin
+stockfish: id name Stockfish 19 sha256 c78c22a924e8d452e1089ec8d47826f7a276aba69373185e82cbac4593e352d2 = pin
+openings: <repo>/tools/rating/openings.epd sha256 0d7f7a72678cbf54c2c309dc5d664e7aac5de2c15bc54fe4247a437f51e82666
+harness: <repo> at 75ab3f86a92554b9f8934536d1ddf667892c69e7
+concurrency: 1 (default 3)
+control: skytalix and base st=0.1 timemargin=50
+node:internal/errors:999
+  const err = new Error(message);
+              ^
+
+Error: Command failed: git clone --quiet --no-checkout <repo> <scratch>/qe303/games/c2/clone-base
+    at genericNodeError (node:internal/errors:999:15)
+    at wrappedFn (node:internal/errors:544:14)
+    at checkExecSyncError (node:child_process:990:11)
+    at execFileSync (node:child_process:1026:15)
+    at step (file://<repo>/tools/rating/rating.ts:225:5)
+    at buildArtifact (file://<repo>/tools/rating/rating.ts:227:3)
+    at main (file://<repo>/tools/rating/rating.ts:923:23)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file://<repo>/tools/rating/rating.ts:944:3 {
+  status: 128,
+  signal: null,
+  output: [ null, null, null ],
+  pid: 2195057,
+  stdout: null,
+  stderr: null
+}
+
+Node.js v26.12.1
