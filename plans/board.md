@@ -1,3 +1,4 @@
+_Updated: 2026-11-06T19:23:48Z — ABC-289 NOT MET, OQ-0074-2 asked; ABC-291 to build; bapm-lines-1106b first._
 _Updated: 2026-11-06T19:05:19Z — se-ABC-289 STOP: DP2 red on the joint tree, exact build; Architect reads it._
 _Updated: 2026-11-06T18:35:53Z — B5 merged: ADR-0072, 0073 in force; Levels line confirmed; later reads carry …28283e48. se-ABC-289 building._
 _Updated: 2026-11-06T18:28:05Z — **ABC-303 Done**, merged 434fa171, gates green; ADR-0072, 0073 in force on B5's line; se-ABC-289 builds._
@@ -1544,8 +1545,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## Ready (WIP 1/8)
-- [ABC-291] E4b pawn structure (ADR-0075 ACCEPTED, in force at merge; DoR 10/10, M, P2). Build after ABC-303 and ABC-289. K5's half of F2 ruled, ADR-0075 dated.
+## Ready (WIP 0/8)
 - ~~[ABC-301]~~ → In Development. E2s second pull: one bounded fit on main with E4a's structure; KD/FP freed, U held 0; B-T0–B-T8 (B-T8 two r reads at 0.5 s, ~5 h, owner-approved). Scope 0 preconditions first (after NFR-008 headroom ruling).
 - ~~[ABC-271]~~ → In Development E4a structure only at 0 (ADR-0070 ACCEPTED form (a); DoR 10/10, S, P3). QE freeze first (qe-ABC-271-freeze), then se-ABC-271. No games.
 
@@ -1564,7 +1564,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 ## In Development (WIP 1/3)
-- [ABC-289] Q2 delta pruning (ADR-0074 ACCEPTED; DoR 10/10, S, P3). STOP on an exact build (b42706b3, do not merge): DP2 red on the joint tree, drift 34 of 30, G1 53 of 54. `arch-ABC-289-joint` reads F1 and F7.
+- [ABC-291] E4b pawn structure (ADR-0075 ACCEPTED, in force at merge; DoR 10/10, M, P2). `bapm-lines-1106b` first, then `se-ABC-291` builds on main.
 
 
 
@@ -1970,6 +1970,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [ABC-142] `npm test` keeps the failing test's name on disk when the console is truncated  (BA/PM, XS, P2, since: 2026-10-10, DoR 10/10; cut from QE-141-a + QE-093-e, two unnamed one-test flakes) **2026-10-10: cut → Ready → Ready for Dev → pulled → In Development (pass-through); build `ticket-to-pr-ABC-142`; zero `src/` expected.** **2026-10-10: engineer STOPPED pre-code — premise stale: `src/cli.test.ts:1665–1686` (ABC-042 A10) pins `scripts.test`; A5 forbade the one test line. Orchestrator routes option 1 (update the pin, zero production lines) → BA/PM amend `bapm-amend-abc142-2026-10-10`, then the build resumes.** **2026-10-10: A5 amended (merged `a559ca34`, DoR 10/10; new A6 keeps the pin exact) → build resumed.** **2026-10-10: BUILT `41abc389`/`ab8d0088`: A1–A6 met; 53/1680; `.test-results/last-run.json` names the failing test even through `| tail -3`. One deviation: vitest adds one console line (`JSON report written to …`) — Orchestrator reads it as acceptable IF no console consumer breaks (QE to verify) → In Review, QE `qe-ABC-142`.** **2026-10-10: QE PASS_WITH_GAPS (`8b0685de`; no console consumer breaks — the extra `JSON report written to …` line is ACCEPTED by the Orchestrator) → merged `addbc328` → Done (UAT WAIVED: test-only `src/`). Follow-ups next session (BA/PM): QE-142-a MEDIUM (unhandled error → exit 1 but file says success), QE-142-b/c LOW.**
 
 ## Blocked (visible, time-tracked)
+- [ABC-289] Q2 delta pruning: NOT MET on an exact build …7c297147, DP2 red with P4 in. Branch b42706b3 kept, unmerged. OQ-0074-2 with the owner; blocks nothing.
 - ~~[ABC-283]~~ unblocked 2026-11-04T14:25Z (K3). Was: mate floor (ADR-0064 d7) lost on KRK by the history part (se-ABC-283 …0b0b135f); SEE ordering and aspiration clean. → arch-ABC-283-mate (…19583086).
 - [ABC-266] TH-2: Lazy SMP worker pool behind UCI Threads (default 1); read Threads N vs Threads 1 as a hardware gain (EPIC-011 threads; size: L; P2; DoR 9/10 — ADR amending ADR-0044 D3/D5 owed; after ABC-265) **2026-11-02 PARKED (Orchestrator, on evidence): D12 MISS and re-proposal NO WIN (…b6305641) — plain pools run in lockstep (depth 7 = 7); only skip+deeper+perturbation adds a ply and it costs move quality. Threads stay 1. Re-open: owner-funded ~30 min probe (≥ 60 positions, ≥ 1 s load windows) or a new premise.**
 
