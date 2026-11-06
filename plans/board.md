@@ -1,3 +1,4 @@
+_Updated: 2026-11-06T13:54:28Z — bapm-lines-1106 merged; A9's read of main answered by ABC-305's graded read; R-CEN-1 carried. qe-ABC-303 running._
 _Updated: 2026-11-06T13:48:53Z — se-ABC-303-main2 done (63667fc8), 2 734 and six deep lanes green; qe-ABC-303 seals bundle 1's read; bapm-lines-1106 closes the pages._
 _Updated: 2026-11-06T13:27:26Z — **ABC-305 Done**, merged d00164ce, gates green; se-ABC-303-main2 takes main into bundle 1._
 _Updated: 2026-11-06T13:12:25Z — ABC-305 N8-LANE read stands, A5 MET → In Review, qe-ABC-305._
@@ -1537,7 +1538,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 ## Ready (WIP 2/8)
-- [ABC-291] E4b pawn structure (ADR-0075 ACCEPTED, in force at merge; DoR 10/10, M, P2). Build after ABC-303, ABC-289, ABC-305. Before K4's PREREG: rule K5's half of F2; date ADR-0075's 640 KiB lines.
+- [ABC-291] E4b pawn structure (ADR-0075 ACCEPTED, in force at merge; DoR 10/10, M, P2). Build after ABC-303 and ABC-289. K5's half of F2 ruled, ADR-0075 dated.
 - [ABC-289] Q2 delta pruning (ADR-0074 ACCEPTED; DoR 10/10, S, P3). Reads alone after bundle 1; build starts when ABC-303's merge or failed-attempt is recorded.
 - ~~[ABC-301]~~ → In Development. E2s second pull: one bounded fit on main with E4a's structure; KD/FP freed, U held 0; B-T0–B-T8 (B-T8 two r reads at 0.5 s, ~5 h, owner-approved). Scope 0 preconditions first (after NFR-008 headroom ruling).
 - ~~[ABC-271]~~ → In Development E4a structure only at 0 (ADR-0070 ACCEPTED form (a); DoR 10/10, S, P3). QE freeze first (qe-ABC-271-freeze), then se-ABC-271. No games.
